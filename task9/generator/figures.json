@@ -1,1287 +1,2446 @@
 {
- "as_of": "2026-11-09",
- "statement_date": "2026-10-30",
- "policy": {
-  "reference_assets_usd": 1487600000,
-  "reference_assets_usd_m": 1487.6,
-  "settlement_limit_pct": 2.0,
-  "collateral_limit_pct": 3.0,
-  "settlement_limit_usd": 29752000,
-  "collateral_limit_usd": 44628000,
-  "cap_multiple": 2.5,
-  "standing_size_usd": 50000,
-  "confirmation_vega_usd": 25000,
-  "quoted_size_usd": 200000,
-  "per_usd": 100000,
-  "size_step_usd": 100,
-  "hot_level": 35.0,
-  "record_from": "2007-01-01"
+ "R1_alpha": {
+  "Commodities": 9.51,
+  "Credit": 4.31,
+  "Currencies": 6.09,
+  "Equity long/short": 9.17,
+  "Quantitative equity": 8.01,
+  "Rates": 8.58,
+  "Volatility": 9.18
  },
- "open_vols": {
-  "2025-11": 13.58,
-  "2025-12": 13.87,
-  "2026-01": 14.16,
-  "2026-02": 14.39,
-  "2026-03": 14.45,
-  "2026-04": 13.76,
-  "2026-05": 14.13,
-  "2026-06": 13.75,
-  "2026-07": 14.46,
-  "2026-08": 15.19,
-  "2026-09": 17.16,
-  "2026-10": 24.14
- },
- "statement_vols": {
-  "2025-11": 12.61,
-  "2025-12": 12.83,
-  "2026-01": 13.06,
-  "2026-02": 13.17,
-  "2026-03": 13.07,
-  "2026-04": 12.05,
-  "2026-05": 12.19,
-  "2026-06": 11.15,
-  "2026-07": 11.35,
-  "2026-08": 10.57,
-  "2026-09": 10.52,
-  "2026-10": 13.52
- },
- "open_swaps": [
-  {
-   "sale": "2025-11-24",
-   "expiry": "2026-11-20",
-   "strike": 24.66,
-   "days_elapsed": 240,
-   "days_remaining": 9,
-   "realized_vol": 13.58,
-   "implied_vol": 19.89,
-   "value_usd": 421689
-  },
-  {
-   "sale": "2025-12-22",
-   "expiry": "2026-12-18",
-   "strike": 22.3,
-   "days_elapsed": 221,
-   "days_remaining": 28,
-   "realized_vol": 13.87,
-   "implied_vol": 20.24,
-   "value_usd": 314483
-  },
-  {
-   "sale": "2026-01-20",
-   "expiry": "2027-01-15",
-   "strike": 23.54,
-   "days_elapsed": 203,
-   "days_remaining": 46,
-   "realized_vol": 14.16,
-   "implied_vol": 20.68,
-   "value_usd": 330945
-  },
-  {
-   "sale": "2026-02-23",
-   "expiry": "2027-02-19",
-   "strike": 24.71,
-   "days_elapsed": 180,
-   "days_remaining": 69,
-   "realized_vol": 14.39,
-   "implied_vol": 21.1,
-   "value_usd": 341447
-  },
-  {
-   "sale": "2026-03-23",
-   "expiry": "2027-03-19",
-   "strike": 26.52,
-   "days_elapsed": 160,
-   "days_remaining": 89,
-   "realized_vol": 14.45,
-   "implied_vol": 21.65,
-   "value_usd": 378675
-  },
-  {
-   "sale": "2026-04-20",
-   "expiry": "2027-04-16",
-   "strike": 23.95,
-   "days_elapsed": 141,
-   "days_remaining": 108,
-   "realized_vol": 13.76,
-   "implied_vol": 22.0,
-   "value_usd": 267835
-  },
-  {
-   "sale": "2026-05-18",
-   "expiry": "2027-05-21",
-   "strike": 23.69,
-   "days_elapsed": 121,
-   "days_remaining": 133,
-   "realized_vol": 14.13,
-   "implied_vol": 22.29,
-   "value_usd": 217163
-  },
-  {
-   "sale": "2026-06-22",
-   "expiry": "2027-06-17",
-   "strike": 23.54,
-   "days_elapsed": 98,
-   "days_remaining": 151,
-   "realized_vol": 13.75,
-   "implied_vol": 22.48,
-   "value_usd": 183993
-  },
-  {
-   "sale": "2026-07-20",
-   "expiry": "2027-07-16",
-   "strike": 23.67,
-   "days_elapsed": 79,
-   "days_remaining": 170,
-   "realized_vol": 14.46,
-   "implied_vol": 22.63,
-   "value_usd": 152313
-  },
-  {
-   "sale": "2026-08-24",
-   "expiry": "2027-08-20",
-   "strike": 22.69,
-   "days_elapsed": 54,
-   "days_remaining": 195,
-   "realized_vol": 15.19,
-   "implied_vol": 22.78,
-   "value_usd": 64463
-  },
-  {
-   "sale": "2026-09-21",
-   "expiry": "2027-09-17",
-   "strike": 21.8,
-   "days_elapsed": 35,
-   "days_remaining": 214,
-   "realized_vol": 17.16,
-   "implied_vol": 22.87,
-   "value_usd": -17853
-  },
-  {
-   "sale": "2026-10-19",
-   "expiry": "2027-10-15",
-   "strike": 22.3,
-   "days_elapsed": 15,
-   "days_remaining": 234,
-   "realized_vol": 24.14,
-   "implied_vol": 22.94,
-   "value_usd": -36413
-  }
- ],
- "open_sale_months": 12,
- "open_confirmations": 24,
- "confirmations": {
-  "total": 128,
-  "settled": 104,
-  "blotter_rows": 130,
-  "valuation_rows": 28828
- },
- "blotter": {
-  "amended_wrong_vega_usd": 250000,
-  "amended_month": "August 2023",
-  "novated_month": "March 2024",
-  "novation_month": "June 2024",
-  "novation_date": "2024-06-17"
- },
- "book_value_usd": 2619000,
- "book_value_rivals": {
-  "total variance (the golden)": 2619000,
-  "linear in volatility": 2650000,
-  "nearest published term": 2634000
- },
- "book_value_hurried": {
-  "each swap at the 1-year index": 2452000,
-  "each swap at the 30-day index": 3278000,
-  "the statements' total at the month end": 2844000
- },
- "R1_avg_3m_usd": 284000,
- "R1_band": [
-  282000,
-  287000
- ],
- "R1_partly": [
-  276000,
-  292000
- ],
- "R2_worst_year_loss_usd": 16154000,
- "R2_worst_year": 2008,
- "R2_band": [
-  15650000,
-  16390000
- ],
- "R2_partly": [
-  15180000,
-  16890000
- ],
- "ladder_rivals": {
-  "calibrated": {
-   "avg_per_sale_usd": 284000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16154000
-  },
-  "variance": {
-   "avg_per_sale_usd": 283000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16318000
-  },
-  "vol": {
-   "avg_per_sale_usd": 286000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 15850000
-  },
-  "calibrated-log": {
-   "avg_per_sale_usd": 282000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16389000
-  },
-  "calibrated-1y": {
-   "avg_per_sale_usd": 286000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 15652000
-  },
-  "actual": {
-   "avg_per_sale_usd": 286000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16166000
-  }
- },
- "ladder_hurried": {
-  "its index's own history": {
-   "avg_per_sale_usd": 365000,
-   "worst_year": 2020,
-   "worst_year_loss_usd": 5036000,
-   "first_sale": "2009-09-21",
-   "settled": 203
-  },
-  "30-day index as it stands": {
-   "avg_per_sale_usd": 291000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 15247000,
-   "first_sale": "2007-01-22",
-   "settled": 235
-  },
-  "30-day index times the average ratio": {
-   "avg_per_sale_usd": 332000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 11705000,
-   "first_sale": "2007-01-22",
-   "settled": 235
-  },
-  "regression on the 30-day index alone": {
-   "avg_per_sale_usd": 300000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 14125000,
-   "first_sale": "2007-01-22",
-   "settled": 235
-  }
- },
- "ladder_counts": {
-  "settled": 235,
-  "rebuilt": 32
- },
- "rebuild": {
-  "first_published": "2009-09-18",
-  "six_month_first": "2008-01-02",
-  "one_year_first": "2007-01-03",
-  "nine_day_first": "2011-01-04",
-  "overlap_days": 4312,
-  "hot_days": 102,
-  "rmse": 0.43,
-  "rmse_hot": 1.35,
-  "ratio_all_pct": 12.5,
-  "ratio_hot_pct": 7.9,
-  "coef": [
-   -0.806,
-   0.39,
-   0.639
+ "R1_bands": {
+  "Commodities": [
+   9.35,
+   10.11
   ],
-  "proxy_r2": 0.94,
-  "proxy_rmse": 1.41,
-  "proxy_bias_hot": 2.3,
-  "proxy_rmse_hot": 3.97,
-  "ratio_bias_hot": 9.3,
-  "as_stands_bias_hot": 3.8
- },
- "cross_check": {
-  "first": "2007-12-04",
-  "overlap_days": 4311,
-  "max_diff": 0.0,
-  "sale_dates": 21,
-  "mean_abs": {
-   "calibrated": 0.53,
-   "variance": 0.89,
-   "vol": 0.8,
-   "calibrated-log": 0.52,
-   "calibrated-1y": 0.66
-  },
-  "proxy_bias": {
-   "30-day index as it stands": 0.49,
-   "30-day index times the average ratio": 4.7,
-   "regression on the 30-day index alone": 0.4
-  },
-  "stressed": [
-   {
-    "sale": "2008-10-20",
-    "actual": 43.62,
-    "calibrated": 45.54,
-    "variance": 42.91,
-    "proxy": 50.25
-   },
-   {
-    "sale": "2008-11-24",
-    "actual": 59.5,
-    "calibrated": 57.82,
-    "variance": 54.82,
-    "proxy": 60.4
-   },
-   {
-    "sale": "2008-12-22",
-    "actual": 43.71,
-    "calibrated": 45.52,
-    "variance": 45.14,
-    "proxy": 42.97
-   },
-   {
-    "sale": "2009-01-20",
-    "actual": 54.87,
-    "calibrated": 54.09,
-    "variance": 52.36,
-    "proxy": 53.43
-   },
-   {
-    "sale": "2009-02-23",
-    "actual": 50.43,
-    "calibrated": 49.89,
-    "variance": 48.27,
-    "proxy": 49.95
-   },
-   {
-    "sale": "2009-03-23",
-    "actual": 42.33,
-    "calibrated": 42.53,
-    "variance": 41.76,
-    "proxy": 41.82
-   },
-   {
-    "sale": "2009-04-20",
-    "actual": 39.41,
-    "calibrated": 39.65,
-    "variance": 39.33,
-    "proxy": 38.32
-   }
+  "Credit": [
+   3.89,
+   4.7
   ],
-  "actual": {
-   "avg_per_sale_usd": 286000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16166000
+  "Currencies": [
+   5.67,
+   6.57
+  ],
+  "Equity long/short": [
+   8.64,
+   9.49
+  ],
+  "Quantitative equity": [
+   7.8,
+   8.58
+  ],
+  "Rates": [
+   8.09,
+   8.9
+  ],
+  "Volatility": [
+   8.87,
+   9.81
+  ]
+ },
+ "R1_raw": {
+  "Commodities": 9.83,
+  "Credit": 6.4,
+  "Currencies": 7.56,
+  "Equity long/short": 10.91,
+  "Quantitative equity": 8.19,
+  "Rates": 8.42,
+  "Volatility": 9.31
+ },
+ "R1_risk_model": {
+  "Commodities": 9.53,
+  "Credit": 6.42,
+  "Currencies": 6.35,
+  "Equity long/short": 9.18,
+  "Quantitative equity": 8.03,
+  "Rates": 8.64,
+  "Volatility": 9.13
+ },
+ "R1_rivals": {
+  "a four-a-side carry basket": {
+   "Commodities": 9.51,
+   "Credit": 4.32,
+   "Currencies": 6.42,
+   "Equity long/short": 9.17,
+   "Quantitative equity": 8.02,
+   "Rates": 8.59,
+   "Volatility": 9.18
+  },
+  "a two-a-side carry basket": {
+   "Commodities": 9.5,
+   "Credit": 4.31,
+   "Currencies": 5.82,
+   "Equity long/short": 9.16,
+   "Quantitative equity": 8.0,
+   "Rates": 8.57,
+   "Volatility": 9.17
+  },
+  "monthly regression": {
+   "Commodities": 9.96,
+   "Credit": 4.04,
+   "Currencies": 6.13,
+   "Equity long/short": 8.79,
+   "Quantitative equity": 7.95,
+   "Rates": 8.31,
+   "Volatility": 9.66
+  },
+  "one lag of each factor": {
+   "Commodities": 9.56,
+   "Credit": 4.44,
+   "Currencies": 6.09,
+   "Equity long/short": 9.25,
+   "Quantitative equity": 8.22,
+   "Rates": 8.58,
+   "Volatility": 9.02
+  },
+  "one regression for each group's whole book": {
+   "Commodities": 9.55,
+   "Credit": 4.55,
+   "Currencies": 6.23,
+   "Equity long/short": 9.34,
+   "Quantitative equity": 8.43,
+   "Rates": 8.24,
+   "Volatility": 9.26
+  },
+  "only the group's own markets": {
+   "Commodities": 9.73,
+   "Credit": 4.37,
+   "Currencies": 6.07,
+   "Equity long/short": 9.24,
+   "Quantitative equity": 8.14,
+   "Rates": 8.75,
+   "Volatility": 9.3
   }
  },
- "ladders_per_100k": {
-  "3": {
-   "avg_per_sale_usd": 284000,
-   "worst_year": 2008,
-   "worst_year_loss_usd": 16154000,
-   "settled": 235,
-   "rebuilt": 32,
-   "by_year": {
-    "2007": -560000,
-    "2008": -16154000,
-    "2009": 9998000,
-    "2010": 6695000,
-    "2011": 1936000,
-    "2012": 8827000,
-    "2013": 4841000,
-    "2014": 3842000,
-    "2015": 3318000,
-    "2016": 5227000,
-    "2017": 6207000,
-    "2018": 89000,
-    "2019": 3618000,
-    "2020": -5036000,
-    "2021": 10995000,
-    "2022": 3702000,
-    "2023": 7351000,
-    "2024": 4165000,
-    "2025": 898000,
-    "2026": 6676000
-   }
+ "R2_bands": {
+  "Commodities": [
+   1.93,
+   2.37
+  ],
+  "Credit": [
+   4.54,
+   5.2
+  ],
+  "Currencies": [
+   4.2,
+   5.0
+  ],
+  "Equity long/short": [
+   2.24,
+   2.84
+  ],
+  "Quantitative equity": [
+   1.5,
+   1.71
+  ],
+  "Rates": [
+   1.86,
+   2.11
+  ],
+  "Volatility": [
+   2.33,
+   2.76
+  ]
+ },
+ "R2_daily": {
+  "Commodities": 2.06,
+  "Credit": 3.59,
+  "Currencies": 4.46,
+  "Equity long/short": 2.69,
+  "Quantitative equity": 1.86,
+  "Rates": 2.04,
+  "Volatility": 3.23
+ },
+ "R2_risk": {
+  "Commodities": 2.28,
+  "Credit": 4.74,
+  "Currencies": 4.81,
+  "Equity long/short": 2.33,
+  "Quantitative equity": 1.61,
+  "Rates": 2.03,
+  "Volatility": 2.5
+ },
+ "R2_rivals": {
+  "daily P&L with 21 lags of autocovariance": {
+   "Commodities": 2.01,
+   "Credit": 4.73,
+   "Currencies": 4.38,
+   "Equity long/short": 2.34,
+   "Quantitative equity": 1.65,
+   "Rates": 1.97,
+   "Volatility": 2.66
   },
-  "6": {
-   "avg_per_sale_usd": 285000,
-   "worst_year": 2020,
-   "worst_year_loss_usd": 18416000,
-   "settled": 232,
-   "rebuilt": 12,
-   "by_year": {
-    "2007": -1638000,
-    "2008": -10438000,
-    "2009": -6490000,
-    "2010": 7813000,
-    "2011": 5078000,
-    "2012": 10220000,
-    "2013": 7149000,
-    "2014": 5822000,
-    "2015": 3735000,
-    "2016": 6304000,
-    "2017": 8082000,
-    "2018": 2670000,
-    "2019": 2746000,
-    "2020": -18416000,
-    "2021": 12536000,
-    "2022": 6085000,
-    "2023": 9518000,
-    "2024": 5999000,
-    "2025": 1763000,
-    "2026": 7619000
-   }
-  },
-  "12": {
-   "avg_per_sale_usd": 315000,
-   "worst_year": 2009,
-   "worst_year_loss_usd": 22830000,
-   "settled": 226,
-   "rebuilt": 0,
-   "by_year": {
-    "2008": -8475000,
-    "2009": -22830000,
-    "2010": 13043000,
-    "2011": 9648000,
-    "2012": 7327000,
-    "2013": 11624000,
-    "2014": 7827000,
-    "2015": 5645000,
-    "2016": 5337000,
-    "2017": 10522000,
-    "2018": 4857000,
-    "2019": 3281000,
-    "2020": -19601000,
-    "2021": 6875000,
-    "2022": 7327000,
-    "2023": 10003000,
-    "2024": 9743000,
-    "2025": 2568000,
-    "2026": 6489000
-   }
+  "quarterly P&L": {
+   "Commodities": 2.03,
+   "Credit": 5.0,
+   "Currencies": 4.43,
+   "Equity long/short": 2.73,
+   "Quantitative equity": 1.56,
+   "Rates": 1.94,
+   "Volatility": 2.43
   }
  },
- "R3_old_peak_usd": 25876000,
- "R3_old_peak_day": "2020-03-18",
  "R3_band": [
-  25800000,
-  26500000
+  24.8,
+  27.3
  ],
+ "R3_fall": 26.3,
  "R3_partly": [
-  24500000,
-  27900000
+  21.8,
+  30.3
  ],
- "old_peak_rivals": {
-  "total variance": {
-   "peak_usd": 25876000,
-   "day": "2020-03-18"
-  },
-  "linear in volatility": {
-   "peak_usd": 26494000,
-   "day": "2008-11-20"
-  },
-  "nearest published term": {
-   "peak_usd": 26281000,
-   "day": "2008-11-20"
-  },
-  "without the 9-day index": {
-   "peak_usd": 25835000,
-   "day": "2020-03-18"
-  },
-  "rebuilt terms in the gap": {
-   "peak_usd": 25876000,
-   "day": "2020-03-18"
-  },
-  "published 3-month closes in the gap": {
-   "peak_usd": 25876000,
-   "day": "2020-03-18"
-  }
- },
- "old_peak_hurried": {
-  "each swap at the 1-year index": 21774000,
-  "each swap at the 30-day index": 31604000,
-  "no cap in the mark": 30067000,
-  "its worst calendar year of settlements": 11415000,
-  "the sleeve's own ledger": 5160000
- },
- "old_peak_episodes": {
-  "2008": {
-   "peak_usd": 25287000,
-   "day": "2008-11-20"
-  },
-  "2020": {
-   "peak_usd": 25876000,
-   "day": "2020-03-18"
-  }
- },
- "R4_size_usd": 114400,
- "R4_binds": {
-  "limit": "collateral",
-  "day": "2008-11-20"
+ "R3_rivals": {
+  "pod": 26.3,
+  "pod-quarter": 26.0,
+  "pod-weighted": 26.3,
+  "pooled": 5.1,
+  "ramp": 25.8
  },
  "R4_band": [
-  100000,
-  117000
+  643.1,
+  685.7
  ],
+ "R4_net": 665.2,
  "R4_partly": [
-  97000,
-  121000
+  609.8,
+  719.0
  ],
  "R4_rivals": {
-  "calibrated strikes, total variance marks": 114400,
-  "calibrated strikes, linear in volatility marks": 103000,
-  "calibrated strikes, nearest published term marks": 102100,
-  "calibrated strikes, without the 9-day index marks": 114400,
-  "variance strikes, total variance marks": 112300,
-  "variance strikes, linear in volatility marks": 101000,
-  "variance strikes, nearest published term marks": 100000,
-  "variance strikes, without the 9-day index marks": 112300,
-  "vol strikes, total variance marks": 116800,
-  "vol strikes, linear in volatility marks": 105300,
-  "vol strikes, nearest published term marks": 104400,
-  "vol strikes, without the 9-day index marks": 116800,
-  "calibrated-log strikes, total variance marks": 114300,
-  "calibrated-log strikes, linear in volatility marks": 102800,
-  "calibrated-log strikes, nearest published term marks": 101800,
-  "calibrated-log strikes, without the 9-day index marks": 114300,
-  "calibrated-1y strikes, total variance marks": 113700,
-  "calibrated-1y strikes, linear in volatility marks": 102400,
-  "calibrated-1y strikes, nearest published term marks": 101500,
-  "calibrated-1y strikes, without the 9-day index marks": 113700,
-  "actual strikes, total variance marks": 112600,
-  "actual strikes, linear in volatility marks": 101200,
-  "actual strikes, nearest published term marks": 100300,
-  "actual strikes, without the 9-day index marks": 112600,
-  "calibrated strikes, rebuilt terms in the gap": 110300,
-  "published 3-month closes for strikes and terms in the gap": 109300
+  "capacity read on pod-quarters": 670.0,
+  "capacity read on the onboarding steps": 674.9,
+  "capacity read with pod-years weighted by days": 665.2,
+  "group priors fitted by maximum likelihood": 666.3,
+  "markets resampled a month at a time": 675.6,
+  "markets resampled half a year at a time": 653.4,
+  "one spread for every group's prior": 652.9
  },
- "R4_hurried": {
-  "its index's own history": 136600,
-  "marks at each swap's own index": 144400,
-  "marks at the 30-day index": 71500,
-  "no cap in the mark": 38900,
-  "the new ladder on its own": 184100,
-  "the settlement limit alone": 157900,
-  "its index's own history, marks at each swap's own index": 176600,
-  "its index's own history, the new ladder on its own": 325100,
-  "missing strikes from the 30-day index as it stands": 131800,
-  "missing strikes from the 30-day index times the average ratio": 136600,
-  "missing strikes from the regression on the 30-day index alone": 124500
- },
- "R4_rival_binds": [
-  [
-   "collateral",
-   "2008-11-20"
+ "R5_bands": {
+  "P10": [
+   244.5,
+   292.4
+  ],
+  "P90": [
+   962.4,
+   1046.7
   ]
- ],
- "R5_alt_size_usd": 58700,
- "R5_binds": {
-  "limit": "collateral",
-  "day": "2008-11-20"
  },
- "R5_band": [
-  54000,
-  59000
- ],
- "R5_partly": [
-  52000,
-  61000
- ],
+ "R5_range": {
+  "P10": 269.9,
+  "P90": 998.8
+ },
  "R5_rivals": {
-  "calibrated strikes, total variance marks": 58700,
-  "calibrated strikes, linear in volatility marks": 54000,
-  "calibrated strikes, nearest published term marks": 56500,
-  "calibrated strikes, without the 9-day index marks": 58700,
-  "variance strikes, total variance marks": 58700,
-  "variance strikes, linear in volatility marks": 54000,
-  "variance strikes, nearest published term marks": 56500,
-  "variance strikes, without the 9-day index marks": 58700,
-  "vol strikes, total variance marks": 58700,
-  "vol strikes, linear in volatility marks": 54000,
-  "vol strikes, nearest published term marks": 56500,
-  "vol strikes, without the 9-day index marks": 58700,
-  "calibrated-log strikes, total variance marks": 58700,
-  "calibrated-log strikes, linear in volatility marks": 54000,
-  "calibrated-log strikes, nearest published term marks": 56500,
-  "calibrated-log strikes, without the 9-day index marks": 58700,
-  "calibrated-1y strikes, total variance marks": 58700,
-  "calibrated-1y strikes, linear in volatility marks": 54000,
-  "calibrated-1y strikes, nearest published term marks": 56500,
-  "calibrated-1y strikes, without the 9-day index marks": 58700,
-  "actual strikes, total variance marks": 58700,
-  "actual strikes, linear in volatility marks": 54000,
-  "actual strikes, nearest published term marks": 56500,
-  "actual strikes, without the 9-day index marks": 58700,
-  "calibrated strikes, rebuilt terms in the gap": 57000,
-  "published 3-month closes for strikes and terms in the gap": 57300
+  "capacity read on pod-quarters": {
+   "P10": 274.6,
+   "P90": 1003.1
+  },
+  "capacity read on the onboarding steps": {
+   "P10": 280.4,
+   "P90": 1008.5
+  },
+  "capacity read with pod-years weighted by days": {
+   "P10": 269.9,
+   "P90": 998.8
+  },
+  "group priors fitted by maximum likelihood": {
+   "P10": 271.1,
+   "P90": 998.9
+  },
+  "markets resampled a month at a time": {
+   "P10": 277.6,
+   "P90": 1034.7
+  },
+  "markets resampled half a year at a time": {
+   "P10": 278.0,
+   "P90": 974.4
+  },
+  "one spread for every group's prior": {
+   "P10": 256.5,
+   "P90": 987.6
+  }
  },
- "R5_hurried": {
-  "its index's own history": 58700,
-  "marks at each swap's own index": 72600,
-  "marks at the 30-day index": 35800,
-  "no cap in the mark": 28200,
-  "the new ladder on its own": 135500,
-  "the settlement limit alone": 108300,
-  "its index's own history, marks at each swap's own index": 72600,
-  "its index's own history, the new ladder on its own": 135500
- },
- "R5_rival_binds": [
-  [
-   "collateral",
-   "2008-11-20"
-  ]
+ "R6_added": 235.0,
+ "R6_either": [
+  "HC1010",
+  "HC1065",
+  "HC1104",
+  "HC1110",
+  "HC1119"
  ],
- "quoted": {
-  "worst_year": 2008,
-  "worst_usd": 36545000,
-  "peak_usd": 59087000,
-  "peak_day": "2008-11-20",
-  "over_usd": 14459000
- },
- "at_size": {
-  "worst_year": 2008,
-  "worst_usd": 22718000,
-  "peak_usd": 44621000,
-  "peak_day": "2008-11-20",
-  "old_at_peak_usd": 25287000,
-  "new_at_peak_usd": 19334000,
-  "new_per_100k_at_peak_usd": 16900000,
-  "room_usd": 19341000
- },
- "alt_at_size": {
-  "worst_year": 2020,
-  "worst_usd": 20611000,
-  "peak_usd": 44609000,
-  "peak_day": "2008-11-20",
-  "old_at_peak_usd": 25287000,
-  "new_at_peak_usd": 19323000,
-  "new_per_100k_at_peak_usd": 32917000
- },
- "R6_avg_range_12m": {
-  "low_usd": 63000,
-  "high_usd": 552000
- },
- "R6_bands": {
-  "low_usd": [
-   14000,
-   82000
-  ],
-  "high_usd": [
-   537000,
-   616000
-  ]
- },
- "avg_12m": {
-  "n": 226,
-  "avg_per_sale_usd": 315000,
-  "next_sale_correlation": 0.93,
-  "block_sales": 24,
-  "methods": 9,
-  "few_lags": 5,
-  "shared_months": 11,
-  "sound": {
-   "circular blocks of 12 sales": {
-    "low_usd": 71000,
-    "high_usd": 537000
-   },
-   "circular blocks of 18 sales": {
-    "low_usd": 67000,
-    "high_usd": 550000
-   },
-   "circular blocks of 24 sales": {
-    "low_usd": 63000,
-    "high_usd": 552000
-   },
-   "circular blocks of 36 sales": {
-    "low_usd": 66000,
-    "high_usd": 553000
-   },
-   "Newey-West, 11 lags": {
-    "low_usd": 82000,
-    "high_usd": 549000
-   },
-   "Newey-West, 17 lags": {
-    "low_usd": 70000,
-    "high_usd": 560000
-   },
-   "Newey-West, 23 lags": {
-    "low_usd": 66000,
-    "high_usd": 564000
-   },
-   "averages by calendar year of expiry": {
-    "low_usd": 74000,
-    "high_usd": 562000
-   },
-   "counted as swaps that do not overlap": {
-    "low_usd": 14000,
-    "high_usd": 616000
-   }
-  },
-  "hurried": {
-   "single settlements resampled": {
-    "low_usd": 228000,
-    "high_usd": 400000
-   },
-   "normal, the standard error of unrelated sales": {
-    "low_usd": 228000,
-    "high_usd": 402000
-   },
-   "a standard error with too few lags": {
-    "low_usd": 123000,
-    "high_usd": 507000
-   }
-  }
- },
- "R7_avg_range_3m": {
-  "low_usd": 143000,
-  "high_usd": 413000
- },
- "R7_bands": {
-  "low_usd": [
-   131000,
-   159000
-  ],
-  "high_usd": [
-   399000,
-   436000
-  ]
- },
- "avg_3m": {
-  "n": 235,
-  "avg_per_sale_usd": 284000,
-  "next_sale_correlation": 0.64,
-  "block_sales": 6,
-  "methods": 9,
-  "few_lags": 1,
-  "shared_months": 2,
-  "sound": {
-   "circular blocks of 3 sales": {
-    "low_usd": 155000,
-    "high_usd": 404000
-   },
-   "circular blocks of 6 sales": {
-    "low_usd": 143000,
-    "high_usd": 413000
-   },
-   "circular blocks of 12 sales": {
-    "low_usd": 149000,
-    "high_usd": 409000
-   },
-   "circular blocks of 24 sales": {
-    "low_usd": 159000,
-    "high_usd": 399000
-   },
-   "Newey-West, 2 lags": {
-    "low_usd": 158000,
-    "high_usd": 409000
-   },
-   "Newey-West, 5 lags": {
-    "low_usd": 149000,
-    "high_usd": 418000
-   },
-   "Newey-West, 11 lags": {
-    "low_usd": 153000,
-    "high_usd": 414000
-   },
-   "averages by calendar year of expiry": {
-    "low_usd": 139000,
-    "high_usd": 426000
-   },
-   "counted as swaps that do not overlap": {
-    "low_usd": 132000,
-    "high_usd": 435000
-   }
-  },
-  "hurried": {
-   "single settlements resampled": {
-    "low_usd": 194000,
-    "high_usd": 370000
-   },
-   "normal, the standard error of unrelated sales": {
-    "low_usd": 196000,
-    "high_usd": 371000
-   },
-   "a standard error with too few lags": {
-    "low_usd": 171000,
-    "high_usd": 396000
-   }
-  },
-  "proxy": {
-   "hurried": {
-    "low_usd": 215000,
-    "high_usd": 383000
-   },
-   "blocks": {
-    "low_usd": 168000,
-    "high_usd": 422000
-   }
-  }
- },
- "R8_expected_usd": 2494000,
- "R8_band": [
-  2390000,
-  2890000
+ "R6_fail": [
+  "HC1051",
+  "HC1059",
+  "HC1090",
+  "HC1124"
  ],
- "R8_partly": [
-  2270000,
-  2980000
+ "R6_margins": {
+  "HC1002": {
+   "golden": 1.87,
+   "high": 1.94,
+   "low": 1.69
+  },
+  "HC1008": {
+   "golden": 2.8,
+   "high": 2.91,
+   "low": 2.72
+  },
+  "HC1010": {
+   "golden": 1.71,
+   "high": 1.82,
+   "low": 1.47
+  },
+  "HC1016": {
+   "golden": 2.38,
+   "high": 2.51,
+   "low": 2.34
+  },
+  "HC1024": {
+   "golden": 4.01,
+   "high": 4.14,
+   "low": 3.58
+  },
+  "HC1029": {
+   "golden": 2.09,
+   "high": 2.16,
+   "low": 2.09
+  },
+  "HC1034": {
+   "golden": 2.74,
+   "high": 2.83,
+   "low": 2.72
+  },
+  "HC1040": {
+   "golden": 2.45,
+   "high": 2.54,
+   "low": 2.4
+  },
+  "HC1043": {
+   "golden": 2.11,
+   "high": 2.55,
+   "low": 2.04
+  },
+  "HC1051": {
+   "golden": 0.43,
+   "high": 0.69,
+   "low": 0.22
+  },
+  "HC1059": {
+   "golden": 0.79,
+   "high": 0.96,
+   "low": 0.58
+  },
+  "HC1065": {
+   "golden": 1.86,
+   "high": 1.95,
+   "low": 1.59
+  },
+  "HC1067": {
+   "golden": 1.85,
+   "high": 1.96,
+   "low": 1.7
+  },
+  "HC1090": {
+   "golden": 0.12,
+   "high": 0.27,
+   "low": -0.04
+  },
+  "HC1094": {
+   "golden": 2.16,
+   "high": 2.32,
+   "low": 2.15
+  },
+  "HC1104": {
+   "golden": 1.79,
+   "high": 2.01,
+   "low": 1.54
+  },
+  "HC1105": {
+   "golden": 3.33,
+   "high": 3.45,
+   "low": 3.26
+  },
+  "HC1106": {
+   "golden": 3.25,
+   "high": 3.37,
+   "low": 3.09
+  },
+  "HC1107": {
+   "golden": 2.05,
+   "high": 2.14,
+   "low": 2.04
+  },
+  "HC1110": {
+   "golden": 1.6,
+   "high": 1.7,
+   "low": 1.6
+  },
+  "HC1119": {
+   "golden": 1.39,
+   "high": 1.66,
+   "low": 1.19
+  },
+  "HC1122": {
+   "golden": 3.69,
+   "high": 3.83,
+   "low": 3.52
+  },
+  "HC1123": {
+   "golden": 2.16,
+   "high": 2.37,
+   "low": 2.15
+  },
+  "HC1124": {
+   "golden": 0.66,
+   "high": 0.95,
+   "low": 0.41
+  },
+  "HC1131": {
+   "golden": 1.94,
+   "high": 2.04,
+   "low": 1.88
+  },
+  "HC1133": {
+   "golden": 2.37,
+   "high": 2.43,
+   "low": 2.04
+  }
+ },
+ "R6_pass": [
+  "HC1002",
+  "HC1008",
+  "HC1016",
+  "HC1024",
+  "HC1029",
+  "HC1034",
+  "HC1040",
+  "HC1043",
+  "HC1067",
+  "HC1094",
+  "HC1105",
+  "HC1106",
+  "HC1107",
+  "HC1122",
+  "HC1123",
+  "HC1131",
+  "HC1133"
  ],
- "expect_rivals": {
-  "start dates replayed, ratio to implied (the golden)": 2494000,
-  "start dates replayed, realised level": 2536000,
-  "ratio of means at each remaining term": 2816000,
-  "mean of ratios at each remaining term": 2494000,
-  "regression of realised on implied variance": 2665000,
-  "start dates with implied within 4 points": 2437000,
-  "log regression, retransformed": 2588000,
-  "one ratio, measured at one month": 2394000,
-  "one ratio, measured at twelve months": 2888000,
-  "average realised variance since 2007": 2597000
- },
- "expect_hurried": {
-  "average realised variance since 1990 (before the record)": 2984000,
-  "the mark (implied variance for the remaining term)": 1883000,
-  "the median start date": 3545000,
-  "a volatility forecast, squared": 3015000,
-  "a volatility forecast from realised levels, squared": 3039000,
-  "ratio on the sleeve's own years": 3312000,
-  "the record's average per 12-month swap": 1575000,
-  "the last three months' realised variance carried on": 3694000
- },
- "plan_year": 2027,
- "plan_sale_months": 10,
- "open_per_swap": [
-  {
-   "sale": "2026-01-20",
-   "expiry": "2027-01-15",
-   "expected_usd": 345000,
-   "value_usd": 330945
-  },
-  {
-   "sale": "2026-02-23",
-   "expiry": "2027-02-19",
-   "expected_usd": 361000,
-   "value_usd": 341447
-  },
-  {
-   "sale": "2026-03-23",
-   "expiry": "2027-03-19",
-   "expected_usd": 405000,
-   "value_usd": 378675
-  },
-  {
-   "sale": "2026-04-20",
-   "expiry": "2027-04-16",
-   "expected_usd": 307000,
-   "value_usd": 267835
-  },
-  {
-   "sale": "2026-05-18",
-   "expiry": "2027-05-21",
-   "expected_usd": 269000,
-   "value_usd": 217163
-  },
-  {
-   "sale": "2026-06-22",
-   "expiry": "2027-06-17",
-   "expected_usd": 249000,
-   "value_usd": 183993
-  },
-  {
-   "sale": "2026-07-20",
-   "expiry": "2027-07-16",
-   "expected_usd": 229000,
-   "value_usd": 152313
-  },
-  {
-   "sale": "2026-08-24",
-   "expiry": "2027-08-20",
-   "expected_usd": 159000,
-   "value_usd": 64463
-  },
-  {
-   "sale": "2026-09-21",
-   "expiry": "2027-09-17",
-   "expected_usd": 91000,
-   "value_usd": -17853
-  },
-  {
-   "sale": "2026-10-19",
-   "expiry": "2027-10-15",
-   "expected_usd": 81000,
-   "value_usd": -36413
-  }
+ "R7_band": [
+  641.7,
+  684.4
  ],
- "R9_range": {
-  "low_usd": 394000,
-  "high_usd": 4247000
- },
- "R9_bands": {
-  "low_usd": [
-   200000,
-   420000
+ "R7_net": 664.2,
+ "R7_partly": [
+  608.5,
+  717.6
+ ],
+ "R7_with_either_dropped": 658.3,
+ "REC": {
+  "drop": [
+   "HC1051",
+   "HC1059",
+   "HC1090",
+   "HC1124"
   ],
-  "high_usd": [
-   4100000,
-   4430000
-  ]
+  "plan": 665.2
  },
- "open_range_rivals": {
-  "start dates replayed jointly, ratio to implied (the golden)": {
-   "low_usd": 394000,
-   "high_usd": 4247000
-  },
-  "start dates replayed jointly, realised level": {
-   "low_usd": 223000,
-   "high_usd": 4230000
-  },
-  "each swap's own percentile, added": {
-   "low_usd": 313000,
-   "high_usd": 4291000
-  },
-  "every fifth start date": {
-   "low_usd": 399000,
-   "high_usd": 4248000
-  }
+ "conventions": {
+  "c0_usd_m": 150.0,
+  "close_pct": 7.5,
+  "floor_days": 120,
+  "funding_share_pct": 20.0,
+  "funding_spread_pct": 0.35000000000000003,
+  "halve_pct": 5.0,
+  "hurdle_pct": 1.5,
+  "nw_lags": 21,
+  "payout_pct": 18.0
  },
- "open_range_hurried": {
-  "swaps drawn independently": {
-   "low_usd": 990000,
-   "high_usd": 3636000
-  },
-  "normal, the swaps' spreads added in quadrature": {
-   "low_usd": 1063000,
-   "high_usd": 3926000
-  },
-  "the 12-month ladder's calendar years": {
-   "low_usd": -4922000,
-   "high_usd": 4522000
-  }
- },
- "replay": {
-  "start_dates": 4761,
-  "first_start": "2007-01-03",
-  "last_start": "2025-12-03",
-  "median_usd": 3545000,
-  "share_above_mark_pct": 80,
-  "share_below_zero_pct": 8.7,
-  "mark_usd": 1883000,
-  "one_month_ratio": 0.83,
-  "twelve_month_ratio": 0.67
- },
- "R10_plan": {
-  "twelve_month_usd": 2809000,
-  "three_month_usd": 2919000,
-  "total_usd": 5728000,
-  "low_usd": -4203000,
-  "high_usd": 12204000
- },
- "R10_bands": {
-  "twelve_month_usd": [
-   2705000,
-   3205000
-  ],
-  "three_month_usd": [
-   2530000,
-   3030000
-  ],
-  "total_usd": [
-   5235000,
-   6235000
-  ],
-  "low_usd": [
-   -4300000,
-   -1900000
-  ],
-  "high_usd": [
-   11200000,
-   12400000
-  ]
- },
- "plan": {
-  "settlements": 21,
-  "open_sale_months": 10,
-  "unsold_12m": 2,
-  "new_3m": 9,
-  "unsold_12m_usd": 315000,
-  "avg_12m_per_sale_usd": 158000,
-  "avg_12m_per_100k_usd": 315000,
-  "unsold_sales": [
-   "2026-11-23",
-   "2026-12-21"
-  ],
-  "unsold_expiries": [
-   "2027-11-19",
-   "2027-12-17"
-  ],
-  "low_paid_usd": 4203000,
-  "start_dates": 4717,
-  "first_start": "2007-01-03",
-  "last_start": "2025-10-01",
-  "replay_mean_usd": 5800000,
-  "worst_usd": 28122000,
-  "worst_start": "2008-05-16",
-  "share_below_zero_pct": 11,
-  "rivals": {
-   "every settlement from the same start dates (the golden)": {
-    "low_usd": -4203000,
-    "high_usd": 12204000
-   },
-   "open swaps on realised levels": {
-    "low_usd": -1960000,
-    "high_usd": 11269000
-   },
-   "every fifth start date": {
-    "low_usd": -4214000,
-    "high_usd": 12197000
-   },
-   "total-variance strikes": {
-    "low_usd": -4270000,
-    "high_usd": 12206000
-   },
-   "published 3-month closes in the gap": {
-    "low_usd": -4179000,
-    "high_usd": 12204000
-   },
-   "the size at the low end of its band": {
-    "low_usd": -4263000,
-    "high_usd": 11248000
-   },
-   "the size at the high end of its band": {
-    "low_usd": -4204000,
-    "high_usd": 12368000
-   }
-  },
-  "hurried": {
-   "settlements drawn independently": {
-    "low_usd": 498000,
-    "high_usd": 9763000
-   },
-   "unsold swaps drawn one by one from their ladder's record": {
-    "low_usd": -686000,
-    "high_usd": 10434000
-   },
-   "each part's spread added in quadrature": {
-    "low_usd": -2174000,
-    "high_usd": 13775000
-   },
-   "each part's own range, added": {
-    "low_usd": -2130000,
-    "high_usd": 13511000
-   },
-   "the standing ladder's unsold sales left out": {
-    "low_usd": -2567000,
-    "high_usd": 11151000
-   }
-  },
-  "unrelated_low_paid_usd": 686000
- },
- "new_calendar": {
-  "settlements_in_year": 9,
-  "sales_in_year": 12,
-  "first_sale": "2027-01-19",
-  "last_sale_settling_in_year": "2027-09-20",
-  "first_expiry": "2027-04-16",
-  "last_expiry_in_year": "2027-12-17",
-  "per_settlement_usd": 324000,
-  "twelve_usd": 3893000,
-  "rows": [
-   {
-    "sale": "2027-01-19",
-    "expiry": "2027-04-16",
-    "in_year": true
-   },
-   {
-    "sale": "2027-02-22",
-    "expiry": "2027-05-21",
-    "in_year": true
-   },
-   {
-    "sale": "2027-03-22",
-    "expiry": "2027-06-17",
-    "in_year": true
-   },
-   {
-    "sale": "2027-04-19",
-    "expiry": "2027-07-16",
-    "in_year": true
-   },
-   {
-    "sale": "2027-05-24",
-    "expiry": "2027-08-20",
-    "in_year": true
-   },
-   {
-    "sale": "2027-06-21",
-    "expiry": "2027-09-17",
-    "in_year": true
-   },
-   {
-    "sale": "2027-07-19",
-    "expiry": "2027-10-15",
-    "in_year": true
-   },
-   {
-    "sale": "2027-08-23",
-    "expiry": "2027-11-19",
-    "in_year": true
-   },
-   {
-    "sale": "2027-09-20",
-    "expiry": "2027-12-17",
-    "in_year": true
-   },
-   {
-    "sale": "2027-10-18",
-    "expiry": "2028-01-21",
-    "in_year": false
-   },
-   {
-    "sale": "2027-11-22",
-    "expiry": "2028-02-18",
-    "in_year": false
-   },
-   {
-    "sale": "2027-12-20",
-    "expiry": "2028-02-29",
-    "in_year": false
-   }
-  ]
- },
- "R11_call": {
-  "size_usd": 114400,
-  "plan_usd": 5728000,
-  "low_usd": -4203000,
-  "high_usd": 12204000
- },
- "R11_bands": {
-  "size_usd": [
-   100000,
-   117000
-  ],
-  "plan_usd": [
-   5235000,
-   6235000
-  ],
-  "low_usd": [
-   -4300000,
-   -1900000
-  ],
-  "high_usd": [
-   11200000,
-   12400000
-  ]
- },
- "hurried": {
-  "size_usd": 124500,
-  "avg_3m_usd": 300000,
-  "worst_year_loss_usd": 14125000,
-  "new_cash_usd": 3364000,
-  "open_usd": 1883000,
-  "plan_usd": 5562000,
-  "peak_on_record_usd": 46328000,
-  "peak_day": "2008-11-20",
-  "over_usd": 1700000
- },
- "own_history": {
-  "size_usd": 136600,
-  "first_sale": "2009-09-21",
-  "avg_3m_usd": 365000,
-  "worst_year": 2020,
-  "worst_year_loss_usd": 5036000,
-  "peak_on_record_usd": 48373000,
-  "peak_day": "2008-11-20"
- },
- "routes": [
+ "increases": [
   {
-   "route": "the golden",
-   "size_usd": 114400,
-   "plan_usd": 5728000
+   "added": 40.0,
+   "added_net": 0.75,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 295.0,
+   "k2027": 335.0,
+   "per_dollar": 1.87,
+   "pod": "HC1002"
   },
   {
-   "route": "missing strikes from a regression on the 30-day index alone, open swaps at their marks",
-   "size_usd": 124500,
-   "plan_usd": 5562000
+   "added": 10.0,
+   "added_net": 0.28,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 60.0,
+   "k2027": 70.0,
+   "per_dollar": 2.8,
+   "pod": "HC1008"
   },
   {
-   "route": "missing strikes from a regression on the 30-day index alone",
-   "size_usd": 124500,
-   "plan_usd": 6173000
+   "added": 160.0,
+   "added_net": 2.73,
+   "call": "either way",
+   "group": "Equity long/short",
+   "k2026": 640.0,
+   "k2027": 800.0,
+   "per_dollar": 1.71,
+   "pod": "HC1010"
   },
   {
-   "route": "missing strikes from the 30-day index times its average ratio",
-   "size_usd": 136600,
-   "plan_usd": 6891000
+   "added": 40.0,
+   "added_net": 0.95,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 100.0,
+   "k2027": 140.0,
+   "per_dollar": 2.38,
+   "pod": "HC1016"
   },
   {
-   "route": "missing strikes read straight off the 30-day index",
-   "size_usd": 131800,
-   "plan_usd": 6262000
+   "added": 30.0,
+   "added_net": 1.2,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 265.0,
+   "k2027": 295.0,
+   "per_dollar": 4.01,
+   "pod": "HC1024"
   },
   {
-   "route": "the 3-month ladder run only from its index's first date",
-   "size_usd": 136600,
-   "plan_usd": 7298000
+   "added": 55.0,
+   "added_net": 1.15,
+   "call": "passes",
+   "group": "Quantitative equity",
+   "k2026": 470.0,
+   "k2027": 525.0,
+   "per_dollar": 2.09,
+   "pod": "HC1029"
   },
   {
-   "route": "each swap valued at its own index",
-   "size_usd": 144400,
-   "plan_usd": 6494000
+   "added": 20.0,
+   "added_net": 0.55,
+   "call": "passes",
+   "group": "Quantitative equity",
+   "k2026": 165.0,
+   "k2027": 185.0,
+   "per_dollar": 2.74,
+   "pod": "HC1034"
   },
   {
-   "route": "every swap valued at the 30-day index",
-   "size_usd": 71500,
-   "plan_usd": 4634000
+   "added": 35.0,
+   "added_net": 0.86,
+   "call": "passes",
+   "group": "Rates",
+   "k2026": 165.0,
+   "k2027": 200.0,
+   "per_dollar": 2.45,
+   "pod": "HC1040"
   },
   {
-   "route": "no cap in the valuation",
-   "size_usd": 38900,
-   "plan_usd": 3802000
+   "added": 5.0,
+   "added_net": 0.11,
+   "call": "passes",
+   "group": "Currencies",
+   "k2026": 45.0,
+   "k2027": 50.0,
+   "per_dollar": 2.11,
+   "pod": "HC1043"
   },
   {
-   "route": "the new ladder sized on its own",
-   "size_usd": 184100,
-   "plan_usd": 7507000
+   "added": 20.0,
+   "added_net": 0.09,
+   "call": "fails",
+   "group": "Credit",
+   "k2026": 145.0,
+   "k2027": 165.0,
+   "per_dollar": 0.43,
+   "pod": "HC1051"
   },
   {
-   "route": "the settlement limit alone",
-   "size_usd": 157900,
-   "plan_usd": 6839000
+   "added": 15.0,
+   "added_net": 0.12,
+   "call": "fails",
+   "group": "Credit",
+   "k2026": 90.0,
+   "k2027": 105.0,
+   "per_dollar": 0.79,
+   "pod": "HC1059"
   },
   {
-   "route": "open swaps at their marks",
-   "size_usd": 114400,
-   "plan_usd": 5117000
+   "added": 80.0,
+   "added_net": 1.49,
+   "call": "either way",
+   "group": "Commodities",
+   "k2026": 330.0,
+   "k2027": 410.0,
+   "per_dollar": 1.86,
+   "pod": "HC1065"
   },
   {
-   "route": "open swaps on a volatility forecast, squared",
-   "size_usd": 114400,
-   "plan_usd": 6249000
+   "added": 90.0,
+   "added_net": 1.66,
+   "call": "passes",
+   "group": "Commodities",
+   "k2026": 625.0,
+   "k2027": 715.0,
+   "per_dollar": 1.85,
+   "pod": "HC1067"
   },
   {
-   "route": "open swaps at the median start date",
-   "size_usd": 114400,
-   "plan_usd": 6779000
+   "added": 105.0,
+   "added_net": 0.12,
+   "call": "fails",
+   "group": "Credit",
+   "k2026": 600.0,
+   "k2027": 705.0,
+   "per_dollar": 0.12,
+   "pod": "HC1090"
   },
   {
-   "route": "the standing ladder's two sales still to come left out",
-   "size_usd": 114400,
-   "plan_usd": 5413000
+   "added": 70.0,
+   "added_net": 1.51,
+   "call": "passes",
+   "group": "Rates",
+   "k2026": 340.0,
+   "k2027": 410.0,
+   "per_dollar": 2.16,
+   "pod": "HC1094"
   },
   {
-   "route": "twelve settlements counted for the new ladder",
-   "size_usd": 114400,
-   "plan_usd": 6702000
+   "added": 35.0,
+   "added_net": 0.63,
+   "call": "either way",
+   "group": "Credit",
+   "k2026": 90.0,
+   "k2027": 125.0,
+   "per_dollar": 1.79,
+   "pod": "HC1104"
+  },
+  {
+   "added": 30.0,
+   "added_net": 1.0,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 125.0,
+   "k2027": 155.0,
+   "per_dollar": 3.33,
+   "pod": "HC1105"
+  },
+  {
+   "added": 30.0,
+   "added_net": 0.98,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 160.0,
+   "k2027": 190.0,
+   "per_dollar": 3.25,
+   "pod": "HC1106"
+  },
+  {
+   "added": 90.0,
+   "added_net": 1.85,
+   "call": "passes",
+   "group": "Quantitative equity",
+   "k2026": 390.0,
+   "k2027": 480.0,
+   "per_dollar": 2.05,
+   "pod": "HC1107"
+  },
+  {
+   "added": 45.0,
+   "added_net": 0.72,
+   "call": "either way",
+   "group": "Quantitative equity",
+   "k2026": 420.0,
+   "k2027": 465.0,
+   "per_dollar": 1.6,
+   "pod": "HC1110"
+  },
+  {
+   "added": 25.0,
+   "added_net": 0.35,
+   "call": "either way",
+   "group": "Credit",
+   "k2026": 120.0,
+   "k2027": 145.0,
+   "per_dollar": 1.39,
+   "pod": "HC1119"
+  },
+  {
+   "added": 35.0,
+   "added_net": 1.29,
+   "call": "passes",
+   "group": "Equity long/short",
+   "k2026": 130.0,
+   "k2027": 165.0,
+   "per_dollar": 3.69,
+   "pod": "HC1122"
+  },
+  {
+   "added": 40.0,
+   "added_net": 0.86,
+   "call": "passes",
+   "group": "Rates",
+   "k2026": 315.0,
+   "k2027": 355.0,
+   "per_dollar": 2.16,
+   "pod": "HC1123"
+  },
+  {
+   "added": 95.0,
+   "added_net": 0.63,
+   "call": "fails",
+   "group": "Credit",
+   "k2026": 275.0,
+   "k2027": 370.0,
+   "per_dollar": 0.66,
+   "pod": "HC1124"
+  },
+  {
+   "added": 50.0,
+   "added_net": 0.97,
+   "call": "passes",
+   "group": "Commodities",
+   "k2026": 190.0,
+   "k2027": 240.0,
+   "per_dollar": 1.94,
+   "pod": "HC1131"
+  },
+  {
+   "added": 35.0,
+   "added_net": 0.83,
+   "call": "passes",
+   "group": "Commodities",
+   "k2026": 295.0,
+   "k2027": 330.0,
+   "per_dollar": 2.37,
+   "pod": "HC1133"
   }
  ],
- "daily": {
-  "rows": 4995,
-  "first_day": "2007-01-03",
-  "last_day": "2026-11-09",
-  "peak_usd": 44621000,
-  "peak_day": "2008-11-20",
-  "days_with_collateral": 1046
+ "past_gap": 292.8,
+ "past_over": 7,
+ "past_plans": {
+  "2018": {
+   "earned": 378.7,
+   "expected": 620.2,
+   "pods": 60
+  },
+  "2019": {
+   "earned": 956.7,
+   "expected": 842.9,
+   "pods": 61
+  },
+  "2020": {
+   "earned": 350.1,
+   "expected": 1011.4,
+   "pods": 67
+  },
+  "2021": {
+   "earned": 1098.1,
+   "expected": 1212.5,
+   "pods": 70
+  },
+  "2022": {
+   "earned": 354.9,
+   "expected": 1385.1,
+   "pods": 75
+  },
+  "2023": {
+   "earned": 904.6,
+   "expected": 985.2,
+   "pods": 81
+  },
+  "2024": {
+   "earned": 980.0,
+   "expected": 1052.8,
+   "pods": 84
+  },
+  "2025": {
+   "earned": 817.5,
+   "expected": 1072.6,
+   "pods": 88
+  }
+ },
+ "platform": {
+  "bill": 4.01,
+  "capital_2026": 19146.2,
+  "capital_2027": 21510.0,
+  "costs": 218.4,
+  "funding": 170.5,
+  "increases": 26,
+  "payouts": 219.1,
+  "pods": 97,
+  "sims": 10000,
+  "trade": 1273.1
+ },
+ "pods": [
+  {
+   "alpha_2027": 5.82,
+   "change": "unchanged",
+   "edge_c0": 15.54,
+   "funding": 11.48,
+   "group": "Equity long/short",
+   "k2026": 1400.0,
+   "k2027": 1400.0,
+   "net": 52.23,
+   "payout": 12.95,
+   "pod": "HC1001",
+   "trade": 76.67
+  },
+  {
+   "alpha_2027": 6.98,
+   "change": "increase",
+   "edge_c0": 9.95,
+   "funding": 2.59,
+   "group": "Equity long/short",
+   "k2026": 295.0,
+   "k2027": 335.0,
+   "net": 14.33,
+   "payout": 3.54,
+   "pod": "HC1002",
+   "trade": 20.45
+  },
+  {
+   "alpha_2027": 9.22,
+   "change": "unchanged",
+   "edge_c0": 8.51,
+   "funding": 0.95,
+   "group": "Equity long/short",
+   "k2026": 125.0,
+   "k2027": 125.0,
+   "net": 7.18,
+   "payout": 1.7,
+   "pod": "HC1003",
+   "trade": 9.83
+  },
+  {
+   "alpha_2027": 8.71,
+   "change": "unchanged",
+   "edge_c0": 9.32,
+   "funding": 1.48,
+   "group": "Equity long/short",
+   "k2026": 175.0,
+   "k2027": 175.0,
+   "net": 10.81,
+   "payout": 2.43,
+   "pod": "HC1006",
+   "trade": 14.72
+  },
+  {
+   "alpha_2027": 9.16,
+   "change": "increase",
+   "edge_c0": 6.55,
+   "funding": 0.54,
+   "group": "Equity long/short",
+   "k2026": 60.0,
+   "k2027": 70.0,
+   "net": 4.19,
+   "payout": 0.98,
+   "pod": "HC1008",
+   "trade": 5.72
+  },
+  {
+   "alpha_2027": 6.59,
+   "change": "increase",
+   "edge_c0": 13.77,
+   "funding": 6.31,
+   "group": "Equity long/short",
+   "k2026": 640.0,
+   "k2027": 800.0,
+   "net": 31.65,
+   "payout": 8.0,
+   "pod": "HC1010",
+   "trade": 45.96
+  },
+  {
+   "alpha_2027": 8.24,
+   "change": "decrease",
+   "edge_c0": 10.04,
+   "funding": 1.83,
+   "group": "Equity long/short",
+   "k2026": 275.0,
+   "k2027": 235.0,
+   "net": 12.37,
+   "payout": 2.95,
+   "pod": "HC1015",
+   "trade": 17.15
+  },
+  {
+   "alpha_2027": 7.1,
+   "change": "increase",
+   "edge_c0": 6.88,
+   "funding": 1.17,
+   "group": "Equity long/short",
+   "k2026": 100.0,
+   "k2027": 140.0,
+   "net": 6.71,
+   "payout": 1.57,
+   "pod": "HC1016",
+   "trade": 9.45
+  },
+  {
+   "alpha_2027": 7.13,
+   "change": "unchanged",
+   "edge_c0": 10.74,
+   "funding": 3.15,
+   "group": "Equity long/short",
+   "k2026": 380.0,
+   "k2027": 380.0,
+   "net": 18.43,
+   "payout": 4.32,
+   "pod": "HC1022",
+   "trade": 25.91
+  },
+  {
+   "alpha_2027": 11.1,
+   "change": "increase",
+   "edge_c0": 14.95,
+   "funding": 2.49,
+   "group": "Equity long/short",
+   "k2026": 265.0,
+   "k2027": 295.0,
+   "net": 23.92,
+   "payout": 5.32,
+   "pod": "HC1024",
+   "trade": 31.73
+  },
+  {
+   "alpha_2027": 8.27,
+   "change": "unchanged",
+   "edge_c0": 4.62,
+   "funding": 0.35,
+   "group": "Quantitative equity",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 2.38,
+   "payout": 0.53,
+   "pod": "HC1027",
+   "trade": 3.26
+  },
+  {
+   "alpha_2027": 6.15,
+   "change": "increase",
+   "edge_c0": 10.67,
+   "funding": 4.56,
+   "group": "Quantitative equity",
+   "k2026": 470.0,
+   "k2027": 525.0,
+   "net": 22.47,
+   "payout": 5.07,
+   "pod": "HC1029",
+   "trade": 32.11
+  },
+  {
+   "alpha_2027": 5.29,
+   "change": "unchanged",
+   "edge_c0": 11.83,
+   "funding": 8.1,
+   "group": "Quantitative equity",
+   "k2026": 935.0,
+   "k2027": 935.0,
+   "net": 33.18,
+   "payout": 7.7,
+   "pod": "HC1030",
+   "trade": 48.99
+  },
+  {
+   "alpha_2027": 7.53,
+   "change": "increase",
+   "edge_c0": 8.26,
+   "funding": 1.6,
+   "group": "Quantitative equity",
+   "k2026": 165.0,
+   "k2027": 185.0,
+   "net": 10.04,
+   "payout": 2.25,
+   "pod": "HC1034",
+   "trade": 13.89
+  },
+  {
+   "alpha_2027": 7.34,
+   "change": "decrease",
+   "edge_c0": 7.76,
+   "funding": 1.45,
+   "group": "Rates",
+   "k2026": 195.0,
+   "k2027": 170.0,
+   "net": 8.84,
+   "payout": 2.01,
+   "pod": "HC1036",
+   "trade": 12.3
+  },
+  {
+   "alpha_2027": 8.85,
+   "change": "decrease",
+   "edge_c0": 6.33,
+   "funding": 0.61,
+   "group": "Rates",
+   "k2026": 80.0,
+   "k2027": 70.0,
+   "net": 4.56,
+   "payout": 1.01,
+   "pod": "HC1037",
+   "trade": 6.18
+  },
+  {
+   "alpha_2027": 8.9,
+   "change": "unchanged",
+   "edge_c0": 11.62,
+   "funding": 2.23,
+   "group": "Rates",
+   "k2026": 275.0,
+   "k2027": 275.0,
+   "net": 16.67,
+   "payout": 3.84,
+   "pod": "HC1038",
+   "trade": 22.74
+  },
+  {
+   "alpha_2027": 9.19,
+   "change": "unchanged",
+   "edge_c0": 9.33,
+   "funding": 1.33,
+   "group": "Rates",
+   "k2026": 155.0,
+   "k2027": 155.0,
+   "net": 10.47,
+   "payout": 2.33,
+   "pod": "HC1039",
+   "trade": 14.13
+  },
+  {
+   "alpha_2027": 7.17,
+   "change": "increase",
+   "edge_c0": 8.14,
+   "funding": 1.71,
+   "group": "Rates",
+   "k2026": 165.0,
+   "k2027": 200.0,
+   "net": 9.99,
+   "payout": 2.29,
+   "pod": "HC1040",
+   "trade": 13.98
+  },
+  {
+   "alpha_2027": 8.08,
+   "change": "increase",
+   "edge_c0": 4.98,
+   "funding": 0.38,
+   "group": "Currencies",
+   "k2026": 45.0,
+   "k2027": 50.0,
+   "net": 2.48,
+   "payout": 0.6,
+   "pod": "HC1043",
+   "trade": 3.46
+  },
+  {
+   "alpha_2027": 8.04,
+   "change": "unchanged",
+   "edge_c0": 4.96,
+   "funding": 0.38,
+   "group": "Currencies",
+   "k2026": 50.0,
+   "k2027": 50.0,
+   "net": 2.48,
+   "payout": 0.6,
+   "pod": "HC1044",
+   "trade": 3.46
+  },
+  {
+   "alpha_2027": 4.19,
+   "change": "unchanged",
+   "edge_c0": 5.01,
+   "funding": 1.63,
+   "group": "Currencies",
+   "k2026": 225.0,
+   "k2027": 225.0,
+   "net": 4.23,
+   "payout": 1.53,
+   "pod": "HC1046",
+   "trade": 7.39
+  },
+  {
+   "alpha_2027": 6.42,
+   "change": "unchanged",
+   "edge_c0": 4.87,
+   "funding": 0.56,
+   "group": "Currencies",
+   "k2026": 80.0,
+   "k2027": 80.0,
+   "net": 2.67,
+   "payout": 0.75,
+   "pod": "HC1049",
+   "trade": 3.98
+  },
+  {
+   "alpha_2027": 3.71,
+   "change": "unchanged",
+   "edge_c0": 5.0,
+   "funding": 2.2,
+   "group": "Currencies",
+   "k2026": 295.0,
+   "k2027": 295.0,
+   "net": 4.74,
+   "payout": 1.82,
+   "pod": "HC1050",
+   "trade": 8.76
+  },
+  {
+   "alpha_2027": 3.16,
+   "change": "increase",
+   "edge_c0": 3.3,
+   "funding": 1.21,
+   "group": "Credit",
+   "k2026": 145.0,
+   "k2027": 165.0,
+   "net": 2.39,
+   "payout": 1.05,
+   "pod": "HC1051",
+   "trade": 4.65
+  },
+  {
+   "alpha_2027": 1.65,
+   "change": "unchanged",
+   "edge_c0": 0.92,
+   "funding": 0.29,
+   "group": "Credit",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 0.12,
+   "payout": 0.18,
+   "pod": "HC1052",
+   "trade": 0.6
+  },
+  {
+   "alpha_2027": 3.49,
+   "change": "unchanged",
+   "edge_c0": 5.0,
+   "funding": 2.7,
+   "group": "Credit",
+   "k2026": 340.0,
+   "k2027": 340.0,
+   "net": 6.17,
+   "payout": 2.16,
+   "pod": "HC1053",
+   "trade": 11.03
+  },
+  {
+   "alpha_2027": 3.54,
+   "change": "unchanged",
+   "edge_c0": 3.84,
+   "funding": 1.38,
+   "group": "Credit",
+   "k2026": 180.0,
+   "k2027": 180.0,
+   "net": 3.23,
+   "payout": 1.2,
+   "pod": "HC1054",
+   "trade": 5.81
+  },
+  {
+   "alpha_2027": 4.01,
+   "change": "increase",
+   "edge_c0": 3.43,
+   "funding": 0.82,
+   "group": "Credit",
+   "k2026": 90.0,
+   "k2027": 105.0,
+   "net": 2.24,
+   "payout": 0.75,
+   "pod": "HC1059",
+   "trade": 3.8
+  },
+  {
+   "alpha_2027": 10.07,
+   "change": "decrease",
+   "edge_c0": 7.42,
+   "funding": 0.57,
+   "group": "Commodities",
+   "k2026": 90.0,
+   "k2027": 75.0,
+   "net": 4.7,
+   "payout": 1.1,
+   "pod": "HC1064",
+   "trade": 6.37
+  },
+  {
+   "alpha_2027": 7.87,
+   "change": "increase",
+   "edge_c0": 12.24,
+   "funding": 3.04,
+   "group": "Commodities",
+   "k2026": 330.0,
+   "k2027": 410.0,
+   "net": 18.31,
+   "payout": 4.65,
+   "pod": "HC1065",
+   "trade": 26.0
+  },
+  {
+   "alpha_2027": 9.72,
+   "change": "unchanged",
+   "edge_c0": 6.0,
+   "funding": 0.43,
+   "group": "Commodities",
+   "k2026": 50.0,
+   "k2027": 50.0,
+   "net": 3.49,
+   "payout": 0.78,
+   "pod": "HC1066",
+   "trade": 4.69
+  },
+  {
+   "alpha_2027": 6.03,
+   "change": "increase",
+   "edge_c0": 11.98,
+   "funding": 6.09,
+   "group": "Commodities",
+   "k2026": 625.0,
+   "k2027": 715.0,
+   "net": 28.67,
+   "payout": 6.8,
+   "pod": "HC1067",
+   "trade": 41.56
+  },
+  {
+   "alpha_2027": 6.34,
+   "change": "unchanged",
+   "edge_c0": 8.01,
+   "funding": 2.11,
+   "group": "Commodities",
+   "k2026": 255.0,
+   "k2027": 255.0,
+   "net": 10.75,
+   "payout": 2.59,
+   "pod": "HC1071",
+   "trade": 15.46
+  },
+  {
+   "alpha_2027": 7.71,
+   "change": "unchanged",
+   "edge_c0": 10.15,
+   "funding": 2.33,
+   "group": "Commodities",
+   "k2026": 280.0,
+   "k2027": 280.0,
+   "net": 14.87,
+   "payout": 3.44,
+   "pod": "HC1072",
+   "trade": 20.64
+  },
+  {
+   "alpha_2027": 6.09,
+   "change": "unchanged",
+   "edge_c0": 3.41,
+   "funding": 0.3,
+   "group": "Commodities",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 1.41,
+   "payout": 0.38,
+   "pod": "HC1073",
+   "trade": 2.08
+  },
+  {
+   "alpha_2027": 7.44,
+   "change": "unchanged",
+   "edge_c0": 10.67,
+   "funding": 2.82,
+   "group": "Volatility",
+   "k2026": 340.0,
+   "k2027": 340.0,
+   "net": 17.02,
+   "payout": 3.94,
+   "pod": "HC1074",
+   "trade": 23.79
+  },
+  {
+   "alpha_2027": 8.04,
+   "change": "unchanged",
+   "edge_c0": 4.5,
+   "funding": 0.34,
+   "group": "Volatility",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 2.21,
+   "payout": 0.51,
+   "pod": "HC1075",
+   "trade": 3.05
+  },
+  {
+   "alpha_2027": 8.91,
+   "change": "decrease",
+   "edge_c0": 11.54,
+   "funding": 2.29,
+   "group": "Volatility",
+   "k2026": 315.0,
+   "k2027": 270.0,
+   "net": 17.13,
+   "payout": 3.83,
+   "pod": "HC1077",
+   "trade": 23.25
+  },
+  {
+   "alpha_2027": 6.37,
+   "change": "unchanged",
+   "edge_c0": 9.01,
+   "funding": 2.82,
+   "group": "Rates",
+   "k2026": 330.0,
+   "k2027": 330.0,
+   "net": 14.36,
+   "payout": 3.34,
+   "pod": "HC1079",
+   "trade": 20.52
+  },
+  {
+   "alpha_2027": 8.09,
+   "change": "unchanged",
+   "edge_c0": 4.53,
+   "funding": 0.31,
+   "group": "Currencies",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 1.98,
+   "payout": 0.48,
+   "pod": "HC1080",
+   "trade": 2.76
+  },
+  {
+   "alpha_2027": 3.46,
+   "change": "decrease",
+   "edge_c0": 3.19,
+   "funding": 0.97,
+   "group": "Credit",
+   "k2026": 145.0,
+   "k2027": 125.0,
+   "net": 2.19,
+   "payout": 0.82,
+   "pod": "HC1081",
+   "trade": 3.98
+  },
+  {
+   "alpha_2027": 3.88,
+   "change": "decrease",
+   "edge_c0": 2.17,
+   "funding": 0.31,
+   "group": "Credit",
+   "k2026": 50.0,
+   "k2027": 40.0,
+   "net": 0.81,
+   "payout": 0.27,
+   "pod": "HC1082",
+   "trade": 1.4
+  },
+  {
+   "alpha_2027": 9.01,
+   "change": "decrease",
+   "edge_c0": 8.88,
+   "funding": 1.23,
+   "group": "Equity long/short",
+   "k2026": 185.0,
+   "k2027": 145.0,
+   "net": 9.35,
+   "payout": 2.11,
+   "pod": "HC1083",
+   "trade": 12.69
+  },
+  {
+   "alpha_2027": 7.56,
+   "change": "decrease",
+   "edge_c0": 10.62,
+   "funding": 2.41,
+   "group": "Commodities",
+   "k2026": 365.0,
+   "k2027": 325.0,
+   "net": 14.76,
+   "payout": 3.72,
+   "pod": "HC1086",
+   "trade": 20.89
+  },
+  {
+   "alpha_2027": 9.73,
+   "change": "decrease",
+   "edge_c0": 8.49,
+   "funding": 0.92,
+   "group": "Volatility",
+   "k2026": 165.0,
+   "k2027": 110.0,
+   "net": 7.61,
+   "payout": 1.71,
+   "pod": "HC1087",
+   "trade": 10.24
+  },
+  {
+   "alpha_2027": 7.79,
+   "change": "unchanged",
+   "edge_c0": 7.32,
+   "funding": 1.1,
+   "group": "Rates",
+   "k2026": 130.0,
+   "k2027": 130.0,
+   "net": 7.12,
+   "payout": 1.62,
+   "pod": "HC1089",
+   "trade": 9.85
+  },
+  {
+   "alpha_2027": 2.64,
+   "change": "increase",
+   "edge_c0": 5.22,
+   "funding": 5.62,
+   "group": "Credit",
+   "k2026": 600.0,
+   "k2027": 705.0,
+   "net": 7.1,
+   "payout": 3.51,
+   "pod": "HC1090",
+   "trade": 16.22
+  },
+  {
+   "alpha_2027": 4.79,
+   "change": "unchanged",
+   "edge_c0": 3.63,
+   "funding": 0.65,
+   "group": "Credit",
+   "k2026": 80.0,
+   "k2027": 80.0,
+   "net": 2.22,
+   "payout": 0.62,
+   "pod": "HC1092",
+   "trade": 3.49
+  },
+  {
+   "alpha_2027": 2.82,
+   "change": "unchanged",
+   "edge_c0": 2.97,
+   "funding": 1.33,
+   "group": "Credit",
+   "k2026": 170.0,
+   "k2027": 170.0,
+   "net": 2.08,
+   "payout": 0.94,
+   "pod": "HC1093",
+   "trade": 4.35
+  },
+  {
+   "alpha_2027": 6.61,
+   "change": "increase",
+   "edge_c0": 10.29,
+   "funding": 3.46,
+   "group": "Rates",
+   "k2026": 340.0,
+   "k2027": 410.0,
+   "net": 18.49,
+   "payout": 4.34,
+   "pod": "HC1094",
+   "trade": 26.29
+  },
+  {
+   "alpha_2027": 6.19,
+   "change": "unchanged",
+   "edge_c0": 10.47,
+   "funding": 4.05,
+   "group": "Quantitative equity",
+   "k2026": 495.0,
+   "k2027": 495.0,
+   "net": 19.68,
+   "payout": 4.87,
+   "pod": "HC1095",
+   "trade": 28.59
+  },
+  {
+   "alpha_2027": 7.77,
+   "change": "unchanged",
+   "edge_c0": 9.11,
+   "funding": 1.76,
+   "group": "Equity long/short",
+   "k2026": 215.0,
+   "k2027": 215.0,
+   "net": 11.4,
+   "payout": 2.66,
+   "pod": "HC1096",
+   "trade": 15.82
+  },
+  {
+   "alpha_2027": 4.85,
+   "change": "unchanged",
+   "edge_c0": 2.71,
+   "funding": 0.32,
+   "group": "Equity long/short",
+   "k2026": 40.0,
+   "k2027": 40.0,
+   "net": 1.12,
+   "payout": 0.31,
+   "pod": "HC1097",
+   "trade": 1.75
+  },
+  {
+   "alpha_2027": 6.33,
+   "change": "decrease",
+   "edge_c0": 5.74,
+   "funding": 1.02,
+   "group": "Quantitative equity",
+   "k2026": 160.0,
+   "k2027": 120.0,
+   "net": 5.15,
+   "payout": 1.21,
+   "pod": "HC1098",
+   "trade": 7.38
+  },
+  {
+   "alpha_2027": 5.47,
+   "change": "unchanged",
+   "edge_c0": 4.77,
+   "funding": 0.86,
+   "group": "Currencies",
+   "k2026": 110.0,
+   "k2027": 110.0,
+   "net": 3.47,
+   "payout": 0.93,
+   "pod": "HC1099",
+   "trade": 5.27
+  },
+  {
+   "alpha_2027": 6.21,
+   "change": "decrease",
+   "edge_c0": 4.84,
+   "funding": 0.63,
+   "group": "Currencies",
+   "k2026": 95.0,
+   "k2027": 85.0,
+   "net": 2.93,
+   "payout": 0.79,
+   "pod": "HC1100",
+   "trade": 4.35
+  },
+  {
+   "alpha_2027": 2.86,
+   "change": "decrease",
+   "edge_c0": 2.05,
+   "funding": 0.54,
+   "group": "Credit",
+   "k2026": 80.0,
+   "k2027": 70.0,
+   "net": 0.93,
+   "payout": 0.41,
+   "pod": "HC1101",
+   "trade": 1.88
+  },
+  {
+   "alpha_2027": 9.64,
+   "change": "unchanged",
+   "edge_c0": 8.06,
+   "funding": 0.83,
+   "group": "Volatility",
+   "k2026": 100.0,
+   "k2027": 100.0,
+   "net": 6.7,
+   "payout": 1.52,
+   "pod": "HC1102",
+   "trade": 9.04
+  },
+  {
+   "alpha_2027": 5.97,
+   "change": "increase",
+   "edge_c0": 5.51,
+   "funding": 0.99,
+   "group": "Credit",
+   "k2026": 90.0,
+   "k2027": 125.0,
+   "net": 4.57,
+   "payout": 1.21,
+   "pod": "HC1104",
+   "trade": 6.78
+  },
+  {
+   "alpha_2027": 9.27,
+   "change": "increase",
+   "edge_c0": 9.4,
+   "funding": 1.31,
+   "group": "Equity long/short",
+   "k2026": 125.0,
+   "k2027": 155.0,
+   "net": 10.19,
+   "payout": 2.29,
+   "pod": "HC1105",
+   "trade": 13.78
+  },
+  {
+   "alpha_2027": 9.41,
+   "change": "increase",
+   "edge_c0": 10.44,
+   "funding": 1.57,
+   "group": "Equity long/short",
+   "k2026": 160.0,
+   "k2027": 190.0,
+   "net": 12.44,
+   "payout": 2.81,
+   "pod": "HC1106",
+   "trade": 16.82
+  },
+  {
+   "alpha_2027": 6.2,
+   "change": "increase",
+   "edge_c0": 10.34,
+   "funding": 4.11,
+   "group": "Quantitative equity",
+   "k2026": 390.0,
+   "k2027": 480.0,
+   "net": 20.38,
+   "payout": 4.75,
+   "pod": "HC1107",
+   "trade": 29.24
+  },
+  {
+   "alpha_2027": 8.41,
+   "change": "decrease",
+   "edge_c0": 7.34,
+   "funding": 0.9,
+   "group": "Commodities",
+   "k2026": 145.0,
+   "k2027": 110.0,
+   "net": 6.43,
+   "payout": 1.48,
+   "pod": "HC1109",
+   "trade": 8.81
+  },
+  {
+   "alpha_2027": 5.62,
+   "change": "increase",
+   "edge_c0": 9.24,
+   "funding": 3.91,
+   "group": "Quantitative equity",
+   "k2026": 420.0,
+   "k2027": 465.0,
+   "net": 17.0,
+   "payout": 4.18,
+   "pod": "HC1110",
+   "trade": 25.09
+  },
+  {
+   "alpha_2027": 5.02,
+   "change": "unchanged",
+   "edge_c0": 4.87,
+   "funding": 1.09,
+   "group": "Currencies",
+   "k2026": 140.0,
+   "k2027": 140.0,
+   "net": 3.99,
+   "payout": 1.13,
+   "pod": "HC1111",
+   "trade": 6.21
+  },
+  {
+   "alpha_2027": 2.93,
+   "change": "unchanged",
+   "edge_c0": 3.05,
+   "funding": 1.25,
+   "group": "Credit",
+   "k2026": 165.0,
+   "k2027": 165.0,
+   "net": 2.19,
+   "payout": 0.99,
+   "pod": "HC1112",
+   "trade": 4.43
+  },
+  {
+   "alpha_2027": 9.26,
+   "change": "unchanged",
+   "edge_c0": 8.55,
+   "funding": 0.99,
+   "group": "Volatility",
+   "k2026": 125.0,
+   "k2027": 125.0,
+   "net": 7.7,
+   "payout": 1.78,
+   "pod": "HC1114",
+   "trade": 10.47
+  },
+  {
+   "alpha_2027": 6.23,
+   "change": "unchanged",
+   "edge_c0": 4.98,
+   "funding": 0.7,
+   "group": "Equity long/short",
+   "k2026": 90.0,
+   "k2027": 90.0,
+   "net": 3.46,
+   "payout": 0.89,
+   "pod": "HC1116",
+   "trade": 5.05
+  },
+  {
+   "alpha_2027": 4.83,
+   "change": "unchanged",
+   "edge_c0": 4.9,
+   "funding": 1.24,
+   "group": "Currencies",
+   "k2026": 155.0,
+   "k2027": 155.0,
+   "net": 4.31,
+   "payout": 1.19,
+   "pod": "HC1117",
+   "trade": 6.73
+  },
+  {
+   "alpha_2027": 3.25,
+   "change": "unchanged",
+   "edge_c0": 3.44,
+   "funding": 1.38,
+   "group": "Credit",
+   "k2026": 170.0,
+   "k2027": 170.0,
+   "net": 2.77,
+   "payout": 0.98,
+   "pod": "HC1118",
+   "trade": 5.13
+  },
+  {
+   "alpha_2027": 5.23,
+   "change": "increase",
+   "edge_c0": 5.15,
+   "funding": 1.11,
+   "group": "Credit",
+   "k2026": 120.0,
+   "k2027": 145.0,
+   "net": 4.49,
+   "payout": 1.29,
+   "pod": "HC1119",
+   "trade": 6.89
+  },
+  {
+   "alpha_2027": 2.91,
+   "change": "unchanged",
+   "edge_c0": 3.27,
+   "funding": 1.49,
+   "group": "Credit",
+   "k2026": 195.0,
+   "k2027": 195.0,
+   "net": 2.36,
+   "payout": 1.1,
+   "pod": "HC1120",
+   "trade": 4.95
+  },
+  {
+   "alpha_2027": 10.19,
+   "change": "increase",
+   "edge_c0": 10.63,
+   "funding": 1.36,
+   "group": "Equity long/short",
+   "k2026": 130.0,
+   "k2027": 165.0,
+   "net": 11.8,
+   "payout": 2.66,
+   "pod": "HC1122",
+   "trade": 15.82
+  },
+  {
+   "alpha_2027": 7.16,
+   "change": "increase",
+   "edge_c0": 10.46,
+   "funding": 2.9,
+   "group": "Rates",
+   "k2026": 315.0,
+   "k2027": 355.0,
+   "net": 16.81,
+   "payout": 4.01,
+   "pod": "HC1123",
+   "trade": 23.72
+  },
+  {
+   "alpha_2027": 3.61,
+   "change": "increase",
+   "edge_c0": 5.37,
+   "funding": 2.88,
+   "group": "Credit",
+   "k2026": 275.0,
+   "k2027": 370.0,
+   "net": 6.66,
+   "payout": 2.42,
+   "pod": "HC1124",
+   "trade": 11.96
+  },
+  {
+   "alpha_2027": 3.21,
+   "change": "unchanged",
+   "edge_c0": 2.22,
+   "funding": 0.48,
+   "group": "Credit",
+   "k2026": 65.0,
+   "k2027": 65.0,
+   "net": 0.99,
+   "payout": 0.42,
+   "pod": "HC1125",
+   "trade": 1.89
+  },
+  {
+   "alpha_2027": 6.13,
+   "change": "unchanged",
+   "edge_c0": 6.22,
+   "funding": 1.09,
+   "group": "Commodities",
+   "k2026": 155.0,
+   "k2027": 155.0,
+   "net": 3.9,
+   "payout": 1.3,
+   "pod": "HC1127",
+   "trade": 6.3
+  },
+  {
+   "alpha_2027": 7.84,
+   "change": "unchanged",
+   "edge_c0": 7.1,
+   "funding": 1.02,
+   "group": "Volatility",
+   "k2026": 120.0,
+   "k2027": 120.0,
+   "net": 6.71,
+   "payout": 1.53,
+   "pod": "HC1128",
+   "trade": 9.26
+  },
+  {
+   "alpha_2027": 3.44,
+   "change": "unchanged",
+   "edge_c0": 2.75,
+   "funding": 0.7,
+   "group": "Credit",
+   "k2026": 90.0,
+   "k2027": 90.0,
+   "net": 1.53,
+   "payout": 0.57,
+   "pod": "HC1130",
+   "trade": 2.8
+  },
+  {
+   "alpha_2027": 7.57,
+   "change": "increase",
+   "edge_c0": 9.31,
+   "funding": 1.76,
+   "group": "Commodities",
+   "k2026": 190.0,
+   "k2027": 240.0,
+   "net": 10.7,
+   "payout": 2.71,
+   "pod": "HC1131",
+   "trade": 15.18
+  },
+  {
+   "alpha_2027": 5.0,
+   "change": "decrease",
+   "edge_c0": 3.89,
+   "funding": 0.66,
+   "group": "Commodities",
+   "k2026": 120.0,
+   "k2027": 85.0,
+   "net": 2.31,
+   "payout": 0.67,
+   "pod": "HC1132",
+   "trade": 3.64
+  },
+  {
+   "alpha_2027": 8.17,
+   "change": "increase",
+   "edge_c0": 11.56,
+   "funding": 2.48,
+   "group": "Commodities",
+   "k2026": 295.0,
+   "k2027": 330.0,
+   "net": 17.06,
+   "payout": 4.14,
+   "pod": "HC1133",
+   "trade": 23.67
+  },
+  {
+   "alpha_2027": 6.2,
+   "change": "onboarding",
+   "edge_c0": 7.9,
+   "funding": 1.82,
+   "group": "Equity long/short",
+   "k2026": 130.0,
+   "k2027": 260.0,
+   "net": 8.79,
+   "payout": 2.43,
+   "pod": "HC1134",
+   "trade": 13.03
+  },
+  {
+   "alpha_2027": 9.59,
+   "change": "onboarding",
+   "edge_c0": 11.35,
+   "funding": 1.85,
+   "group": "Equity long/short",
+   "k2026": 110.0,
+   "k2027": 220.0,
+   "net": 15.0,
+   "payout": 3.35,
+   "pod": "HC1135",
+   "trade": 20.2
+  },
+  {
+   "alpha_2027": 9.84,
+   "change": "onboarding",
+   "edge_c0": 7.25,
+   "funding": 0.63,
+   "group": "Quantitative equity",
+   "k2026": 37.5,
+   "k2027": 75.0,
+   "net": 5.29,
+   "payout": 1.18,
+   "pod": "HC1136",
+   "trade": 7.1
+  },
+  {
+   "alpha_2027": 8.97,
+   "change": "onboarding",
+   "edge_c0": 9.36,
+   "funding": 1.35,
+   "group": "Commodities",
+   "k2026": 82.5,
+   "k2027": 165.0,
+   "net": 10.05,
+   "payout": 2.3,
+   "pod": "HC1139",
+   "trade": 13.7
+  },
+  {
+   "alpha_2027": 9.25,
+   "change": "onboarding",
+   "edge_c0": 8.97,
+   "funding": 1.18,
+   "group": "Commodities",
+   "k2026": 70.0,
+   "k2027": 140.0,
+   "net": 9.37,
+   "payout": 2.09,
+   "pod": "HC1140",
+   "trade": 12.64
+  },
+  {
+   "alpha_2027": 8.26,
+   "change": "onboarding",
+   "edge_c0": 6.09,
+   "funding": 0.63,
+   "group": "Volatility",
+   "k2026": 37.5,
+   "k2027": 75.0,
+   "net": 4.35,
+   "payout": 0.99,
+   "pod": "HC1141",
+   "trade": 5.97
+  },
+  {
+   "alpha_2027": 10.12,
+   "change": "onboarding",
+   "edge_c0": 12.21,
+   "funding": 1.74,
+   "group": "Equity long/short",
+   "k2026": 115.0,
+   "k2027": 230.0,
+   "net": 16.04,
+   "payout": 3.54,
+   "pod": "HC1142",
+   "trade": 21.32
+  },
+  {
+   "alpha_2027": 10.89,
+   "change": "onboarding",
+   "edge_c0": 12.22,
+   "funding": 1.47,
+   "group": "Equity long/short",
+   "k2026": 97.5,
+   "k2027": 195.0,
+   "net": 14.51,
+   "payout": 3.2,
+   "pod": "HC1143",
+   "trade": 19.18
+  },
+  {
+   "alpha_2027": 9.24,
+   "change": "onboarding",
+   "edge_c0": 8.52,
+   "funding": 0.8,
+   "group": "Rates",
+   "k2026": 31.2,
+   "k2027": 125.0,
+   "net": 7.12,
+   "payout": 1.58,
+   "pod": "HC1144",
+   "trade": 9.51
+  },
+  {
+   "alpha_2027": 8.5,
+   "change": "onboarding",
+   "edge_c0": 10.17,
+   "funding": 1.3,
+   "group": "Commodities",
+   "k2026": 56.2,
+   "k2027": 225.0,
+   "net": 10.37,
+   "payout": 2.42,
+   "pod": "HC1145",
+   "trade": 14.1
+  },
+  {
+   "alpha_2027": 6.6,
+   "change": "onboarding",
+   "edge_c0": 6.97,
+   "funding": 0.88,
+   "group": "Commodities",
+   "k2026": 42.5,
+   "k2027": 170.0,
+   "net": 5.25,
+   "payout": 1.36,
+   "pod": "HC1146",
+   "trade": 7.49
+  },
+  {
+   "alpha_2027": 4.0,
+   "change": "onboarding",
+   "edge_c0": 3.82,
+   "funding": 0.6,
+   "group": "Credit",
+   "k2026": 33.8,
+   "k2027": 135.0,
+   "net": 2.2,
+   "payout": 0.65,
+   "pod": "HC1148",
+   "trade": 3.45
+  },
+  {
+   "alpha_2027": 3.94,
+   "change": "onboarding",
+   "edge_c0": 3.82,
+   "funding": 0.62,
+   "group": "Credit",
+   "k2026": 35.0,
+   "k2027": 140.0,
+   "net": 2.27,
+   "payout": 0.67,
+   "pod": "HC1149",
+   "trade": 3.56
+  },
+  {
+   "alpha_2027": 2.78,
+   "change": "onboarding",
+   "edge_c0": 3.82,
+   "funding": 1.35,
+   "group": "Credit",
+   "k2026": 77.5,
+   "k2027": 310.0,
+   "net": 2.98,
+   "payout": 1.15,
+   "pod": "HC1151",
+   "trade": 5.49
+  }
+ ],
+ "quick": {
+  "fail": [],
+  "mean": 1304.1
+ },
+ "record": {
+  "active": 97,
+  "days": 2473,
+  "dupes": 74,
+  "first": "2017-01-03",
+  "last": "2026-11-06",
+  "left": 101,
+  "missing": [
+   "2018-08-07",
+   "2020-02-19",
+   "2021-09-08"
+  ],
+  "pods": 220,
+  "stopped": 22
+ },
+ "routes": {
+  "average return at the new size": {
+   "fail": [
+    "HC1051",
+    "HC1090"
+   ],
+   "margins": {
+    "HC1002": 4.28,
+    "HC1008": 5.99,
+    "HC1010": 3.96,
+    "HC1016": 4.79,
+    "HC1024": 8.11,
+    "HC1029": 4.28,
+    "HC1034": 5.43,
+    "HC1040": 4.99,
+    "HC1043": 4.96,
+    "HC1051": 1.45,
+    "HC1059": 2.13,
+    "HC1065": 4.47,
+    "HC1067": 4.01,
+    "HC1090": 1.01,
+    "HC1094": 4.51,
+    "HC1104": 3.66,
+    "HC1105": 6.57,
+    "HC1106": 6.55,
+    "HC1107": 4.25,
+    "HC1110": 3.66,
+    "HC1119": 3.1,
+    "HC1122": 7.15,
+    "HC1123": 4.73,
+    "HC1124": 1.8,
+    "HC1131": 4.46,
+    "HC1133": 5.17
+   },
+   "mean": 665.2,
+   "p10": 269.9,
+   "p90": 998.8,
+   "without": 665.0
+  },
+  "capacity across pods": {
+   "fail": [
+    "HC1051"
+   ],
+   "margins": {
+    "HC1002": 4.93,
+    "HC1008": 5.47,
+    "HC1010": 6.54,
+    "HC1016": 5.55,
+    "HC1024": 12.03,
+    "HC1029": 5.0,
+    "HC1034": 6.16,
+    "HC1040": 5.65,
+    "HC1043": 4.46,
+    "HC1051": 1.43,
+    "HC1059": 2.05,
+    "HC1065": 6.01,
+    "HC1067": 6.95,
+    "HC1090": 2.9,
+    "HC1094": 7.99,
+    "HC1104": 6.65,
+    "HC1105": 9.06,
+    "HC1106": 9.19,
+    "HC1107": 7.07,
+    "HC1110": 5.77,
+    "HC1119": 5.91,
+    "HC1122": 11.22,
+    "HC1123": 10.85,
+    "HC1124": 5.33,
+    "HC1131": 7.57,
+    "HC1133": 12.59
+   },
+   "mean": 1135.1,
+   "p10": 727.8,
+   "p90": 1475.4,
+   "without": 1134.8
+  },
+  "careful but hurried": {
+   "fail": [],
+   "margins": {
+    "HC1002": 4.33,
+    "HC1008": 5.93,
+    "HC1010": 4.15,
+    "HC1016": 4.69,
+    "HC1024": 8.19,
+    "HC1029": 4.29,
+    "HC1034": 5.4,
+    "HC1040": 5.08,
+    "HC1043": 5.53,
+    "HC1051": 2.93,
+    "HC1059": 3.76,
+    "HC1065": 4.68,
+    "HC1067": 4.03,
+    "HC1090": 2.26,
+    "HC1094": 4.56,
+    "HC1104": 5.48,
+    "HC1105": 6.53,
+    "HC1106": 6.81,
+    "HC1107": 4.3,
+    "HC1110": 3.69,
+    "HC1119": 4.9,
+    "HC1122": 7.64,
+    "HC1123": 4.83,
+    "HC1124": 3.3,
+    "HC1131": 4.45,
+    "HC1133": 5.12
+   },
+   "mean": 732.8,
+   "p10": 413.8,
+   "p90": 1049.4,
+   "without": 732.8
+  },
+  "careful but hurried, a year's horizon": {
+   "fail": [],
+   "margins": {
+    "HC1002": 4.3,
+    "HC1008": 5.99,
+    "HC1010": 3.99,
+    "HC1016": 4.73,
+    "HC1024": 8.19,
+    "HC1029": 4.29,
+    "HC1034": 5.41,
+    "HC1040": 5.08,
+    "HC1043": 5.45,
+    "HC1051": 2.82,
+    "HC1059": 3.57,
+    "HC1065": 4.5,
+    "HC1067": 4.02,
+    "HC1090": 2.01,
+    "HC1094": 4.58,
+    "HC1104": 5.14,
+    "HC1105": 6.55,
+    "HC1106": 6.66,
+    "HC1107": 4.3,
+    "HC1110": 3.68,
+    "HC1119": 4.69,
+    "HC1122": 7.41,
+    "HC1123": 4.84,
+    "HC1124": 3.09,
+    "HC1131": 4.39,
+    "HC1133": 5.19
+   },
+   "mean": 720.1,
+   "p10": 329.2,
+   "p90": 1055.2,
+   "without": 720.1
+  },
+  "careful but hurried, carry netted": {
+   "fail": [
+    "HC1051",
+    "HC1090"
+   ],
+   "margins": {
+    "HC1002": 4.31,
+    "HC1008": 5.91,
+    "HC1010": 4.12,
+    "HC1016": 4.74,
+    "HC1024": 8.11,
+    "HC1029": 4.28,
+    "HC1034": 5.42,
+    "HC1040": 4.99,
+    "HC1043": 5.25,
+    "HC1051": 1.48,
+    "HC1059": 2.22,
+    "HC1065": 4.65,
+    "HC1067": 4.02,
+    "HC1090": 1.19,
+    "HC1094": 4.5,
+    "HC1104": 3.91,
+    "HC1105": 6.56,
+    "HC1106": 6.7,
+    "HC1107": 4.25,
+    "HC1110": 3.66,
+    "HC1119": 3.19,
+    "HC1122": 7.39,
+    "HC1123": 4.73,
+    "HC1124": 1.92,
+    "HC1131": 4.53,
+    "HC1133": 5.11
+   },
+   "mean": 676.9,
+   "p10": 352.0,
+   "p90": 995.5,
+   "without": 676.5
+  },
+  "careful but hurried, the added dollar": {
+   "fail": [
+    "HC1051",
+    "HC1090"
+   ],
+   "margins": {
+    "HC1002": 1.93,
+    "HC1008": 2.76,
+    "HC1010": 1.87,
+    "HC1016": 2.31,
+    "HC1024": 4.13,
+    "HC1029": 2.1,
+    "HC1034": 2.7,
+    "HC1040": 2.49,
+    "HC1043": 2.54,
+    "HC1051": 1.21,
+    "HC1059": 1.68,
+    "HC1065": 2.09,
+    "HC1067": 1.87,
+    "HC1090": 0.87,
+    "HC1094": 2.19,
+    "HC1104": 2.84,
+    "HC1105": 3.27,
+    "HC1106": 3.39,
+    "HC1107": 2.1,
+    "HC1110": 1.66,
+    "HC1119": 2.33,
+    "HC1122": 3.98,
+    "HC1123": 2.21,
+    "HC1124": 1.5,
+    "HC1131": 1.97,
+    "HC1133": 2.27
+   },
+   "mean": 732.8,
+   "p10": 413.8,
+   "p90": 1049.4,
+   "without": 731.7
+  },
+  "daily resampling": {
+   "fail": [
+    "HC1051",
+    "HC1059",
+    "HC1090",
+    "HC1119",
+    "HC1124"
+   ],
+   "margins": {
+    "HC1002": 1.92,
+    "HC1008": 2.66,
+    "HC1010": 1.85,
+    "HC1016": 2.34,
+    "HC1024": 4.05,
+    "HC1029": 2.09,
+    "HC1034": 2.72,
+    "HC1040": 2.45,
+    "HC1043": 2.38,
+    "HC1051": 0.42,
+    "HC1059": 0.8,
+    "HC1065": 2.07,
+    "HC1067": 1.85,
+    "HC1090": 0.25,
+    "HC1094": 2.14,
+    "HC1104": 1.9,
+    "HC1105": 3.29,
+    "HC1106": 3.31,
+    "HC1107": 2.07,
+    "HC1110": 1.62,
+    "HC1119": 1.43,
+    "HC1122": 3.82,
+    "HC1123": 2.18,
+    "HC1124": 0.7,
+    "HC1131": 2.02,
+    "HC1133": 2.22
+   },
+   "mean": 676.9,
+   "p10": 352.0,
+   "p90": 995.5,
+   "without": 675.4
+  },
+  "each pod's own record": {
+   "fail": [
+    "HC1051",
+    "HC1059",
+    "HC1090"
+   ],
+   "margins": {
+    "HC1002": 1.88,
+    "HC1008": 2.48,
+    "HC1010": 2.32,
+    "HC1016": 2.12,
+    "HC1024": 5.25,
+    "HC1029": 2.34,
+    "HC1034": 2.59,
+    "HC1040": 2.2,
+    "HC1043": 2.65,
+    "HC1051": 0.36,
+    "HC1059": 0.7,
+    "HC1065": 2.37,
+    "HC1067": 2.03,
+    "HC1090": 0.64,
+    "HC1094": 2.85,
+    "HC1104": 2.32,
+    "HC1105": 3.3,
+    "HC1106": 3.48,
+    "HC1107": 2.72,
+    "HC1110": 1.77,
+    "HC1119": 2.16,
+    "HC1122": 4.05,
+    "HC1123": 4.05,
+    "HC1124": 1.75,
+    "HC1131": 2.09,
+    "HC1133": 3.98
+   },
+   "mean": 776.4,
+   "p10": 380.1,
+   "p90": 1109.9,
+   "without": 775.5
+  },
+  "no drawdown rules": {
+   "fail": [
+    "HC1051",
+    "HC1059",
+    "HC1090",
+    "HC1119",
+    "HC1124"
+   ],
+   "margins": {
+    "HC1002": 2.47,
+    "HC1008": 3.54,
+    "HC1010": 2.21,
+    "HC1016": 2.69,
+    "HC1024": 4.48,
+    "HC1029": 2.12,
+    "HC1034": 2.81,
+    "HC1040": 2.62,
+    "HC1043": 2.88,
+    "HC1051": 0.33,
+    "HC1059": 0.76,
+    "HC1065": 2.69,
+    "HC1067": 1.96,
+    "HC1090": 0.16,
+    "HC1094": 2.36,
+    "HC1104": 1.93,
+    "HC1105": 3.64,
+    "HC1106": 3.76,
+    "HC1107": 2.18,
+    "HC1110": 1.76,
+    "HC1119": 1.46,
+    "HC1122": 4.15,
+    "HC1123": 2.5,
+    "HC1124": 0.65,
+    "HC1131": 2.77,
+    "HC1133": 2.98
+   },
+   "mean": 732.7,
+   "p10": 368.9,
+   "p90": 1060.3,
+   "without": 731.4
+  },
+  "risk model's factors": {
+   "fail": [
+    "HC1051",
+    "HC1090",
+    "HC1124"
+   ],
+   "margins": {
+    "HC1002": 1.89,
+    "HC1008": 2.76,
+    "HC1010": 1.72,
+    "HC1016": 2.34,
+    "HC1024": 4.08,
+    "HC1029": 2.09,
+    "HC1034": 2.72,
+    "HC1040": 2.51,
+    "HC1043": 2.46,
+    "HC1051": 1.23,
+    "HC1059": 1.62,
+    "HC1065": 1.89,
+    "HC1067": 1.86,
+    "HC1090": 0.69,
+    "HC1094": 2.21,
+    "HC1104": 2.63,
+    "HC1105": 3.32,
+    "HC1106": 3.3,
+    "HC1107": 2.09,
+    "HC1110": 1.62,
+    "HC1119": 2.29,
+    "HC1122": 3.85,
+    "HC1123": 2.19,
+    "HC1124": 1.42,
+    "HC1131": 1.91,
+    "HC1133": 2.35
+   },
+   "mean": 720.1,
+   "p10": 329.2,
+   "p90": 1055.2,
+   "without": 717.8
+  }
+ },
+ "theta": {
+  "pod": 0.44,
+  "pod-quarter": 0.435,
+  "pod-weighted": 0.44,
+  "pooled": 0.075,
+  "ramp": 0.43
  }
 }

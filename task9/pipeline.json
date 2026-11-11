@@ -1,21 +1,21 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation (client task types: backtesting and alpha research; a multi-manager platform capital plan across its portfolio-manager pods, each pod read net of factor and carry returns, its capacity, the year risk and the 2027 net P&L after payouts)",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
- "call": "(stage 2)",
- "stump": "results chain of nine on real factor returns: R1 the record reconciled to the administrator, R2 each group risk at a year horizon, R3 each group alpha net of factor and carry returns, R4 how fast alpha per dollar falls with capital, R5 past reviews plans against outcomes, R6 the 2027 expected net P&L at the draft plan, R7 its 80 per cent range, R8 the increases that fail the hurdle, R9 the recommended plan",
+ "call": "plan USD 665 million of 2027 net P&L at the draft (80% range USD 270 million to 999 million) and drop the increases for HC1051, HC1059, HC1090 and HC1124",
+ "stump": "results chain of six on real market and carry returns: R1 each group's alpha net of what a passive holding earned (carry), R2 alpha per dollar given up per doubling (within pods), R3 the expected 2027 net P&L at the draft plan, R4 its 80 per cent range (the year's horizon), R5 the increases whose added dollar earns below the 1.5 per cent hurdle, R6 the recommendation",
  "architecture": 9,
  "loops": 0,
  "precut": null,
- "leak": null,
+ "leak": "leak.py REVIEW, no LEAK (2026-11-11, cut 9a328d82); reader: no ranking file, nothing reads as the answer, no single thing settles most of it; rulings in the note",
  "duplicate_check": "guard.py check WARN only (overuse.gate_g, repeat.question_form), answered in the note",
  "judge": null,
- "paper_pair": null,
+ "paper_pair": 28.8,
  "runs": {
   "run1": null,
   "run2": null,
@@ -61,7 +61,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: design note sections after Draw to write from the generator measurements; generator to build on raw/ (FRED and Cboe pulls of 2026-11-11 in generator/raw_new)",
+ "resume": "stage 4: the determinism judge's thread is running on /tmp/determinism-check-task9-051419/judge_brief.md; on its verdict.md, re-invoke the judge for the spec gates and Gate G/H, re-price the careful column on its own_derivation.md, fix findings in one pass, rebuild twice, gates, then READY",
  "approved": null,
  "submitted": null,
  "portal": {

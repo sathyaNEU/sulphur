@@ -1,170 +1,167 @@
-"""task9: the market record as pulled, and the calendar the swaps run on.
+"""task9: the market record as pulled, and the returns the pods ride on.
 
-Every market value here is read from the raw Cboe downloads under raw/ (see raw/manifest.json); nothing is altered or
-simulated. The calendar is the S&P 500's own publishing days to the cut-off, then weekdays less the exchange's
-published holidays.
+Every market value is read from the public files under raw/ (raw/manifest.json holds each file's URL, pull date and
+sha256); nothing is altered, filled into the files or simulated. Two sets of daily returns are built from them:
+
+  RISK_FACTORS   the platform's risk model as its methodology states it: price, yield and spread changes only
+  HOLDING        what a passive holding of each exposure earned: the same moves plus the carry the holding earns
+                 (the bill-financed yield of a duration position, the Baa spread of a credit position, the interest
+                 differential of a G10 carry basket)
+
+The pods' books are authored on HOLDING (world.py); the risk system reports them on RISK_FACTORS.
 """
-import datetime as dt
+import hashlib
+import json
 import os
 
 import numpy as np
 import pandas as pd
 
+import params as P
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = os.path.join(HERE, "raw")
-CUT = pd.Timestamp("2026-11-09")            # the last close in the pull, and the review date
-RECORD_START = pd.Timestamp("2007-01-01")   # the policy's record: sale dates from January 2007
+START = pd.Timestamp("2016-12-30")
 
-# maturity of each Cboe volatility index in calendar days, as its methodology states it
-TERM_DAYS = {"VIX9D": 9, "VIX": 30, "VIX3M": 93, "VIX6M": 184, "VIX1Y": 365}
-MATURITY_INDEX = {1: "VIX", 3: "VIX3M", 6: "VIX6M", 12: "VIX1Y"}
-TMAX = 400                                  # longest remaining term a swap can have, in calendar days
-
-# New York Stock Exchange holidays after the cut-off, as the exchange publishes them
-HOLIDAYS = [
-    ("2026-11-26", "Thanksgiving Day"), ("2026-12-25", "Christmas Day"),
-    ("2027-01-01", "New Year's Day"), ("2027-01-18", "Martin Luther King, Jr. Day"), ("2027-02-15", "Washington's Birthday"),
-    ("2027-03-26", "Good Friday"), ("2027-05-31", "Memorial Day"), ("2027-06-18", "Juneteenth National Independence Day (observed)"),
-    ("2027-07-05", "Independence Day (observed)"), ("2027-09-06", "Labor Day"), ("2027-11-25", "Thanksgiving Day"),
-    ("2027-12-24", "Christmas Day (observed)"),
-    ("2028-01-17", "Martin Luther King, Jr. Day"), ("2028-02-21", "Washington's Birthday"),
-]
+DUR = 8.0        # the risk model's 10-year duration
+SDUR = 6.0       # its spread duration for credit
+CURVE_DV = 4.0   # its steepener's return per unit change in the 10s less 2s spread
+G10 = {"AUD": ("DEXUSAL", False, "IR3TIB01AUM156N"), "NZD": ("DEXUSNZ", False, "IR3TIB01NZM156N"),
+       "GBP": ("DEXUSUK", False, "IR3TIB01GBM156N"), "EUR": ("DEXUSEU", False, "IR3TIB01EZM156N"),
+       "JPY": ("DEXJPUS", True, "IR3TIB01JPM156N"), "CHF": ("DEXSZUS", True, "IR3TIB01CHM156N"),
+       "CAD": ("DEXCAUS", True, "IR3TIB01CAM156N"), "NOK": ("DEXNOUS", True, "IR3TIB01NOM156N"),
+       "SEK": ("DEXSDUS", True, "IR3TIB01SEM156N")}
+# where a monthly rate series stops before the record ends, the next series for the same rate
+RATE_FALLBACK = {"GBP": "IRSTCI01GBM156N", "EUR": "IR3TIB01DEM156N"}
+CARRY_LEGS = 3
+RISK_FACTORS = ["MKT", "TECH", "RATES", "CURVE", "CREDIT", "USD", "OIL", "VOL"]
+HOLDING = RISK_FACTORS + ["FXCARRY"]
 
 
-def _read(name):
-    d = pd.read_csv(os.path.join(RAW, name + "_History.csv"))
+def manifest():
+    return json.load(open(os.path.join(RAW, "manifest.json")))
+
+
+def check_raw():
+    for f in manifest()["files"]:
+        b = open(os.path.join(RAW, f["file"]), "rb").read()
+        assert hashlib.sha256(b).hexdigest() == f["sha256"], "%s differs from its pull" % f["file"]
+
+
+SRC = [RAW]          # where the series are read from: the pull, or a cut pack's copy of it
+
+
+def fred(sid):
+    d = pd.read_csv(os.path.join(SRC[0], sid + ".csv"))
+    d.columns = ["date", "v"]
+    d["date"] = pd.to_datetime(d["date"])
+    d["v"] = pd.to_numeric(d["v"], errors="coerce")
+    return d.set_index("date")["v"]
+
+
+def cboe(sym):
+    d = pd.read_csv(os.path.join(SRC[0], sym + "_History.csv"))
     d.columns = [c.strip().upper() for c in d.columns]
     d["DATE"] = pd.to_datetime(d["DATE"], format="%m/%d/%Y")
     col = "CLOSE" if "CLOSE" in d.columns else d.columns[-1]
-    s = d.set_index("DATE")[col].astype(float)
-    return s[s.index <= CUT].rename(name)
+    return d.set_index("DATE")[col].astype(float)
+
+
+def monthly(sid):
+    s = fred(sid)
+    s.index = s.index.to_period("M")
+    return s
 
 
 class Market:
-    def __init__(self):
-        self.spx = _read("SPX")
-        self.idx_all = pd.concat([_read(n) for n in TERM_DAYS], axis=1, sort=True)
-        self.days = self.spx.index                      # every day the index published a close
-        self.idx = self.idx_all.reindex(self.days)      # the volatility indices on the S&P 500's days
-        self.lr2 = (np.log(self.spx / self.spx.shift(1)) ** 2).fillna(0.0)
-        self.cum = self.lr2.cumsum()                    # running sum of squared log returns
-        hol = {pd.Timestamp(d) for d, _ in HOLIDAYS}
-        fut = pd.bdate_range(CUT + pd.Timedelta(days=1), "2028-02-29")
-        self.future = pd.DatetimeIndex([d for d in fut if d not in hol])
-        self.sched = self.days.append(self.future)      # the schedule: past publishing days, then scheduled days
-        self._pos = {d: i for i, d in enumerate(self.sched)}
-        self._curves = {}
+    def __init__(self, src=RAW):
+        SRC[0] = src
+        spx = cboe("SPX")
+        self.days = spx.loc[START:P.LAST_DAY].index            # the S&P 500's trading days
+        d = self.days
 
-    def actual3m(self):
-        """The 3-month index's published closes before the Cboe download begins (FRED series VXVCLS, from 4 December
-        2007), on the S&P 500's days. A cross-check held outside the pack: only rival runs and checks read it."""
-        if "actual3m" not in self._curves:
-            f = pd.read_csv(os.path.join(HERE, "raw_check", "VXVCLS.csv"), na_values=["."])
-            f.columns = ["DATE", "VXV"]
-            s = f.assign(DATE=pd.to_datetime(f.DATE)).set_index("DATE").VXV.astype(float)
-            self._curves["actual3m"] = s.reindex(self.days)
-        return self._curves["actual3m"]
+        def on_days(s):
+            return s.reindex(s.index.union(d)).ffill().reindex(d)
 
-    # ---- the calendar
-    @staticmethod
-    def third_friday(y, m):
-        d = dt.date(y, m, 15)
-        while d.weekday() != 4:
-            d += dt.timedelta(days=1)
-        return pd.Timestamp(d)
+        self.level = pd.DataFrame({
+            "SPX": spx.reindex(d), "NDX": on_days(fred("NASDAQ100")), "DGS2": on_days(fred("DGS2")), "DGS10": on_days(fred("DGS10")),
+            "DTB3": on_days(fred("DTB3")), "DBAA": on_days(fred("DBAA")), "USD": on_days(fred("DTWEXBGS")),
+            "BRENT": on_days(fred("DCOILBRENTEU")), "VIX": on_days(cboe("VIX"))})
+        L = self.level
+        mkt = L.SPX.pct_change()
+        f = pd.DataFrame(index=d)
+        f["MKT"] = mkt
+        f["TECH"] = L.NDX.pct_change() - mkt
+        f["RATES"] = -DUR * L.DGS10.diff() / 100.0
+        f["CURVE"] = CURVE_DV * (L.DGS10 - L.DGS2).diff() / 100.0
+        spread = L.DBAA - L.DGS10
+        f["CREDIT"] = -SDUR * spread.diff() / 100.0
+        f["USD"] = L.USD.pct_change()
+        f["OIL"] = L.BRENT.pct_change()
+        f["VOL"] = -L.VIX.diff() / 100.0
+        self.risk = f.iloc[1:].fillna(0.0)
+        gap = pd.Series(np.r_[np.nan, (d[1:] - d[:-1]).days], index=d) / 365.0     # the calendar time each return spans
+        h = self.risk.copy()
+        h["RATES"] = h["RATES"] + ((L.DGS10 - L.DTB3).shift(1) / 100.0 * gap).iloc[1:]
+        h["CREDIT"] = h["CREDIT"] + (spread.shift(1) / 100.0 * gap).iloc[1:]
+        h["FXCARRY"] = self.carry_basket(gap)
+        self.hold = h.fillna(0.0)
+        # the same holdings with a carry basket of two or four currencies a side (a rival construction)
+        self.hold_alt = {}
+        for legs in (2, 4):
+            a = self.hold.copy()
+            a["FXCARRY"] = self.carry_basket(gap, legs).fillna(0.0)
+            self.hold_alt[legs] = a
+        self.bill = (L.DTB3 / 100.0).reindex(self.risk.index)
+        SRC[0] = RAW
 
-    def on_or_before(self, d):
-        i = self.sched.searchsorted(d, side="right") - 1
-        return self.sched[i]
-
-    def after(self, d):
-        i = self.sched.searchsorted(d, side="right")
-        return self.sched[i]
-
-    def expiry(self, y, m):
-        """The third Friday of the month, or the scheduled day before it when the exchange is shut."""
-        return self.on_or_before(self.third_friday(y, m))
-
-    def sale_date(self, y, m):
-        """The first scheduled day after the third Friday of the month."""
-        return self.after(self.third_friday(y, m))
-
-    def pos(self, d):
-        return self._pos[d]
-
-    def count(self, a, b):
-        """Scheduled trading days after a up to and including b."""
-        return self._pos[b] - self._pos[a]
-
-    # ---- realised variance
-    def realised_var(self, a, b):
-        """Annualised realised variance in volatility points squared over the closes after a to b (both in the record)."""
-        n = self.count(a, b)
-        return 1e4 * 252.0 * (self.cum[b] - self.cum[a]) / n if n > 0 else np.nan
-
-    # ---- the implied term structure
-    def quoted(self, date, extra=None):
-        row = self.idx.loc[date]
-        pts = {TERM_DAYS[k]: float(row[k]) for k in TERM_DAYS if not np.isnan(row[k])}
-        if extra is not None:
-            for t, s in extra.items():
-                if t not in pts and date in s.index and not np.isnan(s[date]):
-                    pts[t] = float(s[date])
-        return sorted(pts.items())
-
-    def implied(self, date, cal_days, how="variance", points=None, extra=None):
-        """Implied volatility for the next cal_days calendar days from the maturities quoted on the date.
-
-        how: 'variance' interpolates total variance (variance times days) between the neighbouring quoted maturities,
-        'vol' interpolates the volatility itself, 'nearest' takes the nearest quoted maturity; flat outside the quoted
-        range. `points` restricts the maturities used; `extra` adds rebuilt maturities where none is quoted.
-        """
-        pts = [p for p in self.quoted(date, extra) if points is None or p[0] in points]
-        return _interp(pts, cal_days, how)
-
-    def curve(self, how="variance", points=None, extra=None, key=None):
-        """Implied volatility for every day of the record (rows) and every remaining term 0..TMAX days (columns)."""
-        k = (how, tuple(points) if points else None, key)
-        if k in self._curves:
-            return self._curves[k]
-        cols = [c for c in TERM_DAYS if points is None or TERM_DAYS[c] in points]
-        T = np.array([TERM_DAYS[c] for c in cols], dtype=float)
-        V = self.idx[cols].values.copy()
-        if extra is not None:
-            for t, s in extra.items():
-                j = list(T).index(float(t))
-                fill = s.reindex(self.days).values
-                V[:, j] = np.where(np.isnan(V[:, j]), fill, V[:, j])
-        grid = np.arange(TMAX + 1, dtype=float)
-        out = np.full((len(self.days), TMAX + 1), np.nan)
-        for i in range(len(self.days)):
-            ok = ~np.isnan(V[i])
-            if not ok.any():
+    def carry_basket(self, gap, legs=CARRY_LEGS):
+        """A dollar-neutral G10 carry basket: at each month end, long the three currencies with the highest 3-month
+        rate that month and short the three with the lowest, equal weights; each leg earns its spot move against the
+        dollar and its own rate, so the basket earns the spot spread plus the rate differential."""
+        d = self.days
+        spot = {}
+        for c, (sid, per_usd, _) in G10.items():
+            s = fred(sid)
+            s = 1.0 / s if per_usd else s                               # US dollars per unit of the currency
+            spot[c] = s.reindex(s.index.union(d)).ffill().reindex(d)
+        spot = pd.DataFrame(spot)
+        rates = {}
+        for c, (_, _, rid) in G10.items():
+            r = monthly(rid)
+            if c in RATE_FALLBACK:
+                r = r.combine_first(monthly(RATE_FALLBACK[c]))
+            rates[c] = r
+        rates = pd.DataFrame(rates).sort_index().ffill()
+        months = d.to_period("M")
+        ret = spot.pct_change()
+        out = pd.Series(0.0, index=d)
+        self.legs = {}
+        for m in sorted(set(months)):
+            prev = m - 1
+            if prev not in rates.index:
                 continue
-            t, v = T[ok], V[i][ok]
-            if how == "vol":
-                out[i] = np.interp(grid, t, v)
-            elif how == "nearest":
-                out[i] = v[np.abs(grid[:, None] - t[None, :]).argmin(axis=1)]
-            else:
-                g = np.clip(grid, t[0], t[-1])
-                out[i] = np.sqrt(np.interp(g, t, v * v * t) / g)
-        self._curves[k] = out
-        return out
+            rr = rates.loc[prev].dropna().sort_values()
+            lo, hi = list(rr.index[:legs]), list(rr.index[-legs:])
+            if legs == CARRY_LEGS:
+                self.legs[str(m)] = (hi, lo)
+            idx = months == m
+            dr = ret.loc[idx]
+            g = gap[idx]
+            long = (dr[hi] + rr[hi].values / 100.0 * g.values[:, None]).mean(axis=1)
+            short = (dr[lo] + rr[lo].values / 100.0 * g.values[:, None]).mean(axis=1)
+            out.loc[idx] = (long - short).values
+        return out.iloc[1:]
 
 
-def _interp(pts, cal_days, how):
-    if cal_days <= pts[0][0]:
-        return pts[0][1]
-    if cal_days >= pts[-1][0]:
-        return pts[-1][1]
-    if how == "nearest":
-        return min(pts, key=lambda p: abs(p[0] - cal_days))[1]
-    for (t0, v0), (t1, v1) in zip(pts[:-1], pts[1:]):
-        if t0 <= cal_days <= t1:
-            w = (cal_days - t0) / (t1 - t0)
-            if how == "vol":
-                return v0 + (v1 - v0) * w
-            tv = v0 * v0 * t0 + (v1 * v1 * t1 - v0 * v0 * t0) * w
-            return float(np.sqrt(tv / cal_days))
-    raise ValueError("no bracket")
+def annual_sd(x, how="daily"):
+    """The standard deviation of a daily return series over a year, read three ways."""
+    if how == "daily":
+        return float(x.std() * np.sqrt(252))
+    if how == "monthly":
+        m = x.groupby(x.index.to_period("M")).sum()
+        return float(m.std() * np.sqrt(12))
+    if how == "quarterly":
+        q = x.groupby(x.index.to_period("Q")).sum()
+        return float(q.std() * 2.0)
+    raise ValueError(how)

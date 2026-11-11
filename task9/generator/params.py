@@ -1,62 +1,78 @@
-"""task9: the world's paperwork. Positions, sizes, limits, names and dates are authored here; no market value is.
-
-Every market value the build uses is read from raw/ by market.py (public Cboe index histories, used as is).
-"""
+"""task9: the world's paperwork. The platform, its pods, its rules and its people are authored here; no market value
+is. Every market return the pods ride on is computed by market.py from the public series under raw/."""
 import datetime as dt
 
 import pandas as pd
 
-FOUNDATION = "Carrow Fields Foundation"
-FOUNDATION_CITY = "Minneapolis, Minnesota"
-CUSTODIAN = "Larkhill Trust Company"
-ZONE = "America/Chicago"
-CT = dt.timezone(dt.timedelta(hours=-6))          # Central Standard Time in November
-CDT = dt.timezone(dt.timedelta(hours=-5))
+PLATFORM = "Harbourne Capital"
+PLATFORM_LEGAL = "Harbourne Capital Management LP"
+CITY = "New York, New York"
+ADMIN = "Kestrel Fund Services"            # the fund administrator
+ZONE = "America/New_York"
+ET = dt.timezone(dt.timedelta(hours=-5))   # Eastern Standard Time in November
+EDT = dt.timezone(dt.timedelta(hours=-4))
 
-# people (drawn with guard.py names --geo US --seed 908)
-TREASURY = "Stephanie Bowman"                      # director of treasury
-CIO = "Edward Stewart"                             # chief investment officer
-OPS = "Gloria Wilkins"                             # investment operations, keeps the blotter
+# people (drawn with guard.py names --geo US --seed 909)
+CIO = "Christine Owen"                     # chief investment officer, chairs the allocation committee
+CRO = "Nicholas Riddle"                    # chief risk officer
+CFO = "Kathryn Roberts"                    # chief financial officer
 
-# the three dealers of the panel: code, name, how each writes its trade reference and its dates
-DEALERS = {
-    "BSS": dict(name="Brecon Sound Securities LLC", short="Brecon Sound", city="New York", datefmt="%Y-%m-%d", basis="VEGA"),
-    "ACM": dict(name="Altamere Capital Markets", short="Altamere", city="Chicago", datefmt="%m/%d/%Y", basis="VARIANCE"),
-    "WXB": dict(name="Wexcombe Bank, N.A.", short="Wexcombe", city="Charlotte", datefmt="%d-%b-%Y", basis="VEGA"),
-}
-PAIRS = [("BSS", "ACM"), ("ACM", "WXB"), ("WXB", "BSS")]    # the two dealers of a month's sale, in rotation
-
-REVIEW = pd.Timestamp("2026-11-09")               # the review date: closes through this day
-STATEMENT = pd.Timestamp("2026-10-30")            # the dealers' last month-end statements
-SLEEVE_FIRST = (2021, 7)                          # the sleeve's first sale month
-OLD_MAT = 12                                      # the ladder the sleeve runs, months
-OLD_CONF_VEGA = 25_000                            # US dollars a volatility point, each of the two confirmations a month
-OLD_SIZE = 2 * OLD_CONF_VEGA                      # the 12-month ladder's size: US dollars a point per monthly sale
-NEW_MAT = 3                                       # the ladder the investment office wants to add
-ALT_MAT = 6                                       # the alternative on the dealers' term sheet
-PROPOSED = 200_000                                # the size the investment office tabled, US dollars a point
+LAUNCH = pd.Timestamp("2017-01-03")        # the platform's first trading day
+LAST_DAY = pd.Timestamp("2026-11-06")      # the last day in the risk system's export (a Friday)
+REVIEW = pd.Timestamp("2026-11-09")        # the review's as-of date
 PLAN_YEAR = 2027
-FIRST_NEW = (2027, 1)                             # the new ladder's first sale month
-PER = 100_000                                     # the size per-ladder figures are quoted for
+BUDGET_PLAN = 21.50e9     # the capital the draft 2027 plan runs (targets)
+LEAD = 37                 # trading days from the review's as-of date to the plan year's first trading day (4 January 2027)
+PLAN_YEARS = list(range(2018, 2027))     # the plans on file, each made at the January review
 
-REF_ASSETS = 1_487_600_000                        # the endowment's audited value at 30 June 2026
-FY_END = pd.Timestamp("2026-06-30")
-LIM_SETTLE_PCT = 2.0
-LIM_COLL_PCT = 3.0
-LIM_SETTLE = REF_ASSETS * LIM_SETTLE_PCT / 100.0  # US dollars, net settlement paid in a calendar year
-LIM_COLL = REF_ASSETS * LIM_COLL_PCT / 100.0      # US dollars, collateral posted on a day
-SIZE_STEP = 100                                   # sizes are set to USD 100 a point
-HOT = 35.0                                        # the level of the 30-day index the overlap's stressed days are read above
+# the platform's rules (filed in the capital review policy and the PM agreements)
+PAYOUT = 0.18          # share of a pod's positive calendar-year P&L paid to its PM team
+HALVE_DD = 0.05        # a pod's capital is halved when its year-to-date P&L falls this far below its year-to-date peak
+STOP_DD = 0.075        # a pod is closed at this drawdown, measured the same way
+HURDLE = 0.015         # an increase must add this much net P&L a year on the capital it adds, after payout and funding
+PLATFORM_COST_2027 = 218_400_000   # the platform's own costs in the 2027 budget (technology, data, operations, people)
+# the 2027 budget's lines, USD
+COST_LINES_2027 = [("Technology and infrastructure", 61_200_000), ("Market data and research", 38_500_000), ("Operations and finance", 44_900_000),
+                   ("Risk, legal and compliance", 27_600_000), ("Central staff and premises", 46_200_000)]
+# each past plan's platform costs, USD (the budget the plan carried)
+PLATFORM_COST = {2017: 124_900_000, 2018: 131_600_000, 2019: 140_200_000, 2020: 148_000_000, 2021: 158_300_000, 2022: 168_900_000,
+                 2023: 177_100_000, 2024: 185_600_000, 2025: 195_800_000, 2026: 206_300_000}
+FIN_SPREAD = 0.0035    # each pod is charged the 3-month bill rate plus this on 20 per cent of its capital (funding)
+FIN_SHARE = 0.20
 
-# paperwork events in the blotter (authored; they move no result once handled)
-# both sit on swaps that have since expired, so no open position turns on how they are read
-AMENDED = (2023, 8, "ACM", 250_000)               # the August 2023 Altamere confirmation first booked at ten times its size
-NOVATED = (2024, 3, "WXB", "BSS", pd.Timestamp("2024-06-17"))   # the March 2024 Wexcombe confirmation novated to Brecon Sound
-RESENT = ("ACM", pd.Timestamp("2024-03-15"))      # a valuation file delivered twice
-MISSING = {"WXB": [pd.Timestamp("2022-11-25"), pd.Timestamp("2023-11-24"), pd.Timestamp("2025-07-03")]}   # days a dealer sent no file
+# capacity and the allocation process (the world's truth; never filed)
+C0 = 150e6             # the capital at which a pod's base edge is stated
+THETA = 0.40           # alpha per dollar scales with capital to the power -THETA
+KAPPA = 0.25           # the annual review moves capital by exp(KAPPA x the pod's Sharpe ratio over its last three years) before the budget is applied
+HIRE_SKILL = 0.45      # a new pod's starting capital rises with the record the PM brings (its base edge), log scale
+GROUP_TILT = 0.08       # and with the group's own Sharpe ratio over the year just ended (the committee's view of the strategy)
+DISCRETION = 0.08       # the committee's own judgment on top of the record (log scale)
+CYCLE = 0.0           # each group's common edge shock carries this much of itself into the next year
+# the capital the platform runs at each January review (the budget the reviews are scaled to), USD
+# the pods the platform keeps running each year (hiring at the start of each quarter), and the capital it runs
+PODS = {2017: 60, 2018: 64, 2019: 68, 2020: 72, 2021: 77, 2022: 82, 2023: 86, 2024: 90, 2025: 95, 2026: 100}
+BUDGET = {y: round(n * 0.2035e9, -7) for y, n in PODS.items()}
+K_MIN, K_MAX = 40e6, 1_400e6
+BAND = 0.10           # a review leaves a pod's capital alone when its record moves it by less than this
+# a new pod starts at 25 per cent of its target capital, half after six months and its full target after twelve
+RAMP = [(0, 0.25), (126, 0.50), (252, 1.00)]
+LEAVE_RATE = 0.12      # a year: PM teams that leave the platform for reasons of their own
 
-# dealers' valuation differences from the published term structure, in volatility points (authored noise)
-DEALER_BIAS = {"BSS": 0.04, "ACM": -0.06, "WXB": 0.09}
-DEALER_DAY_SD = 0.12
-DEALER_SWAP_SD = 0.05
-COLL_ROUND = 10_000                               # collateral is called in multiples of USD 10,000
+# strategy groups: launch count, factor loadings (mean, sd), idiosyncratic volatility a year, base edge (mean, sd),
+# and the hiring weight (gy, a common edge shock for the group each year, is kept at zero)
+GROUPS = {
+    "EQLS":   dict(name="Equity long/short", n0=15, load={"MKT": (0.10, 0.05), "TECH": (0.0, 0.12)}, iv=0.050, a0=(0.105, 0.030), hire=0.22, gy=0.0),
+    "QEQ":    dict(name="Quantitative equity", n0=5, load={"MKT": (0.0, 0.03)}, iv=0.045, a0=(0.100, 0.025), hire=0.09, gy=0.0),
+    "RATES":  dict(name="Rates", n0=6, load={"RATES": (0.0, 0.22), "CURVE": (0.0, 0.15)}, iv=0.045, a0=(0.090, 0.025), hire=0.11, gy=0.0),
+    "FX":     dict(name="Currencies", n0=7, load={"FXCARRY": (0.75, 0.12), "USD": (0.0, 0.18)}, iv=0.045, a0=(0.050, 0.020), hire=0.14, gy=0.0),
+    "CREDIT": dict(name="Credit", n0=15, load={"CREDIT": (1.15, 0.20), "MKT": (0.03, 0.02)}, iv=0.030, a0=(0.040, 0.015), hire=0.26, gy=0.0),
+    "COMDTY": dict(name="Commodities", n0=6, load={"OIL": (0.0, 0.035)}, iv=0.055, a0=(0.100, 0.030), hire=0.09, gy=0.0),
+    "VOLARB": dict(name="Volatility", n0=6, load={"VOL": (0.05, 0.02), "MKT": (0.02, 0.02)}, iv=0.050, a0=(0.095, 0.025), hire=0.09, gy=0.0),
+}
+GROUP_ORDER = ["EQLS", "QEQ", "RATES", "FX", "CREDIT", "COMDTY", "VOLARB"]
+SEED = 319
+
+# the 2023 risk system migration: the new export reports P&L in USD thousands and capital in USD millions
+MIGRATION = pd.Timestamp("2023-07-03")
+REORG = pd.Timestamp("2022-04-01")         # pod codes re-issued when the platform reorganised its books
+RESENT = pd.Timestamp("2021-03-12")        # a day the old system delivered twice

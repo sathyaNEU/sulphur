@@ -1,10 +1,9 @@
-"""task9: the independent verifier. It reads only the shipped pack under target/ (every format the pack ships: CSV,
-XLSX, PDF) and recomputes every graded figure on its own code path, importing nothing from the generator. The figures
-it compares against are the ones the answer blocks state (generator/figures.json).
+"""task9: the independent verifier. It reads only the shipped pack under target/ (CSV, XLSX and PDF) and recomputes the
+graded figures on its own code path, importing nothing from the generator; it compares against the figures the answer
+blocks state (generator/figures.json) and their bands.
 
     python3 task9/generator/verify.py        (exit 1 on any FAIL)
 """
-import datetime as dt
 import json
 import os
 import subprocess
@@ -18,332 +17,241 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TASK = os.path.dirname(HERE)
 TGT = os.path.join(TASK, "target")
 F = json.load(open(os.path.join(HERE, "figures.json")))
-REVIEW = pd.Timestamp("2026-11-09")
-START = pd.Timestamp("2007-01-01")
-TERM = {"VIX9D": 9, "VIX": 30, "VIX3M": 93, "VIX6M": 184, "VIX1Y": 365}
-OWN = {3: "VIX3M", 6: "VIX6M", 12: "VIX1Y"}
-CAP, OLD, PER, YEAR = 2.5, 50000.0, 100000.0, 2027
 ROWS = []
+GROUPS = ["Equity long/short", "Quantitative equity", "Rates", "Currencies", "Credit", "Commodities", "Volatility"]
+LAST = pd.Timestamp("2026-11-06")
 
 
 def ok(label, cond, detail=""):
     ROWS.append(bool(cond))
-    print("%s  %-84s %s" % ("PASS" if cond else "FAIL", label, str(detail)[:140]))
+    print("%s  %-84s %s" % ("PASS" if cond else "FAIL", label, str(detail)[:160]))
 
 
-def close(a, b, tol):
-    return abs(a - b) <= tol
+def t(name):
+    return os.path.join(TGT, name)
 
 
-def k(x):
-    return int(round(x / 1000.0) * 1000)
+def find(prefix):
+    return [f for f in sorted(os.listdir(TGT)) if f.startswith(prefix)][0]
 
 
-def text(name):
-    out = subprocess.run(["pdftotext", "-layout", os.path.join(TGT, name), "-"], capture_output=True, text=True).stdout
-    return " ".join(out.split())
+# ---------------------------------------------------------------- the record
+def record():
+    old = pd.read_csv(t(find("risk_pnl_daily_legacy")), dtype={"pod_code": str}).drop_duplicates()
+    new = pd.read_csv(t(find("risk_pnl_daily_2023")), dtype={"book_id": str})
+    cm = pd.read_csv(t(find("book_code_map")), dtype=str)
+    m = dict(zip(cm.old_pod_code, cm.new_book_id))
+    a = pd.DataFrame({"date": pd.to_datetime(old.cob_date), "pod": old.pod_code.map(lambda c: m.get(c, c)), "pnl": old.gross_pnl_usd,
+                      "cap": old.capital_usd.astype(float)})
+    b = pd.DataFrame({"date": pd.to_datetime(new.trade_date, format="%m/%d/%Y"), "pod": new.book_id, "pnl": new.pnl_usd_000 * 1000.0,
+                      "cap": new.alloc_capital_usd_mm * 1e6})
+    rec = pd.concat([a, b], ignore_index=True)
+    reg = pd.read_csv(t(find("pod_register")), dtype=str)
+    return rec, reg
 
 
-def series(name):
-    d = pd.read_csv(os.path.join(TGT, name + "_History.csv"))
-    d.columns = [c.strip().upper() for c in d.columns]
+def fred(name):
+    d = pd.read_csv(t(name + ".csv"))
+    d.columns = ["date", "v"]
+    return pd.Series(pd.to_numeric(d.v, errors="coerce").values, index=pd.to_datetime(d.date))
+
+
+def cboe(name):
+    d = pd.read_csv(t(name + "_History.csv"))
+    d.columns = [c.upper() for c in d.columns]
     col = "CLOSE" if "CLOSE" in d.columns else d.columns[-1]
-    s = pd.Series(d[col].astype(float).values, index=pd.to_datetime(d["DATE"], format="%m/%d/%Y"))
-    return s[s.index <= REVIEW]
+    return pd.Series(d[col].astype(float).values, index=pd.to_datetime(d["DATE"], format="%m/%d/%Y"))
 
 
-# ---------------------------------------------------------------------------------------------- the record and calendar
-spx = series("SPX")
-days = spx.index
-vix = pd.DataFrame({n: series(n) for n in TERM}).reindex(days)
-r2 = np.log(spx / spx.shift(1)).fillna(0.0) ** 2
-cum = r2.cumsum().values
-hol = pd.read_csv(os.path.join(TGT, "NYSE_Holidays_2026_2028.csv"))
-closed = set(pd.to_datetime(hol[hol["Market status"] == "Closed"]["Date"]))
-future = [d for d in pd.bdate_range(REVIEW + pd.Timedelta(days=1), "2028-02-29") if d not in closed]
-sched = days.append(pd.DatetimeIndex(future))
-pos = {d: i for i, d in enumerate(sched)}
-i_rev, i_0 = pos[REVIEW], int(days.searchsorted(START))
+def holdings():
+    """What a passive holding of each market earned each S&P 500 trading day, carry included."""
+    spx = cboe("SPX")
+    days = spx.loc["2016-12-30":LAST].index
 
-
-def third_friday(y, m):
-    d = dt.date(y, m, 15)
-    while d.weekday() != 4:
-        d += dt.timedelta(days=1)
-    return pd.Timestamp(d)
-
-
-def sale_date(y, m):
-    return sched[sched.searchsorted(third_friday(y, m), side="right")]
-
-
-def expiry(y, m):
-    return sched[sched.searchsorted(third_friday(y, m), side="right") - 1]
-
-
-def pay(strike, rv):
-    rv = np.minimum(rv, CAP * strike)
-    return (strike * strike - rv * rv) / (2.0 * strike)
-
-
-def rvol(a, b):
-    return float(np.sqrt(1e4 * 252.0 * (cum[pos[b]] - cum[pos[a]]) / (pos[b] - pos[a])))
-
-
-# implied volatility for every record day and every remaining term in calendar days, read in total variance between
-# the maturities published that day
-GRID = np.arange(401, dtype=float)
-CURVE = np.full((len(days), 401), np.nan)
-T_ALL = np.array([TERM[c] for c in vix.columns], dtype=float)
-V_ALL = vix.values
-for i in range(i_0, len(days)):
-    have = ~np.isnan(V_ALL[i])
-    t, v = T_ALL[have], V_ALL[i][have]
-    g = np.clip(GRID, t[0], t[-1])
-    CURVE[i] = np.sqrt(np.interp(g, t, v * v * t) / g)
-
-
-def fit(target, lo, hi):
-    j = vix[[target, lo, hi]].dropna()
-    X = np.column_stack([np.ones(len(j)), j[lo].values, j[hi].values])
-    return np.linalg.lstsq(X, j[target].values, rcond=None)[0], j, X
-
-
-FITS = {}
-
-
-def strike(mat, d):
-    """The maturity's index on the day, or its level rebuilt from the published maturities on both sides."""
-    own = OWN[mat]
-    v = vix.at[d, own]
-    if not np.isnan(v):
-        return float(v), False
-    row = vix.loc[d]
-    lo = max((c for c in TERM if TERM[c] < TERM[own] and TERM[c] >= 30 and not np.isnan(row[c])), key=lambda c: TERM[c])
-    hi = min((c for c in TERM if TERM[c] > TERM[own] and not np.isnan(row[c])), key=lambda c: TERM[c])
-    if (own, lo, hi) not in FITS:
-        FITS[(own, lo, hi)] = fit(own, lo, hi)[0]
-    b = FITS[(own, lo, hi)]
-    return float(b[0] + b[1] * row[lo] + b[2] * row[hi]), True
-
-
-def ladder(mat):
-    rows = []
-    y, m = 2007, 1
-    while True:
-        s = sale_date(y, m)
-        if s > REVIEW:
-            break
-        j = (m - 1) + mat
-        e = expiry(y + j // 12, j % 12 + 1)
-        kk, rebuilt = strike(mat, s)
-        done = e <= REVIEW
-        rows.append(dict(sale=s, expiry=e, k=kk, rebuilt=rebuilt, pay=pay(kk, rvol(s, e)) if done else np.nan))
-        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
-    return pd.DataFrame(rows)
-
-
-def marks(L):
-    """The ladder's open swaps valued together on every record day, per unit of vega."""
-    out = np.zeros(len(days))
-    dnum = days.values.astype("datetime64[D]").astype(int)
-    for s in L.itertuples():
-        a, b = pos[s.sale], pos[s.expiry]
-        j = np.arange(a + 1, min(b, len(days)))
-        if not len(j):
+    def on(s):
+        return s.reindex(s.index.union(days)).ffill().reindex(days)
+    y10, y2, bill, baa = on(fred("DGS10")), on(fred("DGS2")), on(fred("DTB3")), on(fred("DBAA"))
+    dt_ = pd.Series(np.r_[np.nan, (days[1:] - days[:-1]).days], index=days) / 365.0
+    H = pd.DataFrame(index=days)
+    H["MKT"] = spx.reindex(days).pct_change()
+    H["TECH"] = on(fred("NASDAQ100")).pct_change() - H["MKT"]
+    H["RATES"] = -8 * y10.diff() / 100 + (y10 - bill).shift(1) / 100 * dt_
+    H["CURVE"] = 4 * (y10 - y2).diff() / 100
+    H["CREDIT"] = -6 * (baa - y10).diff() / 100 + (baa - y10).shift(1) / 100 * dt_
+    H["USD"] = on(fred("DTWEXBGS")).pct_change()
+    H["OIL"] = on(fred("DCOILBRENTEU")).pct_change()
+    H["VOL"] = -on(cboe("VIX")).diff() / 100
+    # the G10 basket: long the three highest 3-month rates of the month before, short the three lowest
+    fx = {"AUD": ("DEXUSAL", 0, "IR3TIB01AUM156N"), "NZD": ("DEXUSNZ", 0, "IR3TIB01NZM156N"), "GBP": ("DEXUSUK", 0, "IR3TIB01GBM156N"),
+          "EUR": ("DEXUSEU", 0, "IR3TIB01EZM156N"), "JPY": ("DEXJPUS", 1, "IR3TIB01JPM156N"), "CHF": ("DEXSZUS", 1, "IR3TIB01CHM156N"),
+          "CAD": ("DEXCAUS", 1, "IR3TIB01CAM156N"), "NOK": ("DEXNOUS", 1, "IR3TIB01NOM156N"), "SEK": ("DEXSDUS", 1, "IR3TIB01SEM156N")}
+    back = {"GBP": "IRSTCI01GBM156N", "EUR": "IR3TIB01DEM156N"}
+    spot, rate = {}, {}
+    for c, (s, inv, r) in fx.items():
+        x = fred(s)
+        spot[c] = on(1 / x if inv else x)
+        rr = fred(r)
+        rr.index = rr.index.to_period("M")
+        if c in back:
+            b2 = fred(back[c])
+            b2.index = b2.index.to_period("M")
+            rr = rr.combine_first(b2)
+        rate[c] = rr
+    spot, rate = pd.DataFrame(spot), pd.DataFrame(rate).sort_index().ffill()
+    ret = spot.pct_change()
+    mon = days.to_period("M")
+    basket = pd.Series(0.0, index=days)
+    for mth in sorted(set(mon)):
+        if mth - 1 not in rate.index:
             continue
-        ne, nr = (j - a).astype(float), (b - j).astype(float)
-        cal = np.clip(int(np.datetime64(s.expiry, "D").astype(int)) - dnum[j], 0, 400)
-        iv = CURVE[j, cal]
-        w = np.minimum((1e4 * 252.0 * (cum[j] - cum[a]) + nr * iv * iv) / (ne + nr), (CAP * s.k) ** 2)
-        out[j] += (s.k * s.k - w) / (2.0 * s.k)
-    return pd.Series(out, index=days)
-
-
-def room(Ln, mn, yo, mo, ls, lc):
-    done = Ln.dropna(subset=["pay"])
-    yn = done.groupby(done.expiry.dt.year).pay.sum()
-    best, why = np.inf, None
-    for y in yn.index:
-        if yn[y] < 0:
-            r = (ls + float(yo.get(y, 0.0)) * OLD) / -yn[y]
-            if r < best:
-                best, why = r, ("settlement", str(y))
-    neg = mn < 0
-    r = (lc + mo[neg] * OLD) / -mn[neg]
-    if float(r.min()) < best:
-        best, why = float(r.min()), ("collateral", str(r.idxmin().date()))
-    return best, int(np.floor(best / 100.0 + 1e-9) * 100), why
-
-
-def block_range(x, block, seed):
-    n = len(x)
-    nb = int(np.ceil(n / float(block)))
-    st = np.random.default_rng(seed).integers(0, n, size=(20000, nb))
-    idx = ((st[:, :, None] + np.arange(block)[None, None, :]) % n).reshape(20000, nb * block)[:, :n]
-    m = x[idx].mean(axis=1) * PER
-    return float(np.percentile(m, 10)), float(np.percentile(m, 90))
+        r0 = rate.loc[mth - 1].dropna().sort_values()
+        lo, hi = list(r0.index[:3]), list(r0.index[-3:])
+        idx = mon == mth
+        g = dt_[idx].values[:, None]
+        basket[idx] = ((ret.loc[idx, hi] + r0[hi].values / 100 * g).mean(axis=1) - (ret.loc[idx, lo] + r0[lo].values / 100 * g).mean(axis=1)).values
+    H["FXCARRY"] = basket
+    return H.iloc[1:].fillna(0.0)
 
 
 def main():
-    # ------------------------------------------------------------------ the documents (PDF) and what they file
-    pol = text("IPS_Schedule_D_Volatility_Premium_Sleeve.pdf")
-    conf = text("Master_Confirmation_SPX_Variance_Swap.pdf")
-    csa = text("CSA_Summary_Volatility_Sleeve.pdf")
-    terms = text("Indicative_Terms_3M_6M_Variance_Swaps_2027.pdf")
-    assets = text("CFF_Statement_of_Net_Assets_FY2026.pdf")
-    ok("PDF read back: the policy names its schedule (positive control)", "Schedule D: Volatility Premium Sleeve" in pol)
-    ok("policy: both limits and Reference Assets", "shall not exceed 2.0 percent of Reference Assets" in pol and "shall not exceed 3.0 percent of Reference Assets" in pol
-       and "audited net assets at the most recent fiscal year end" in pol)
-    ok("policy: the record from January 2007, every ladder on every sale date, published index or not", "from January 2007 through the review date" in pol and
-       "every ladder of the Sleeve been sold at its size on every monthly sale date of the record" in pol and
-       "whether or not the volatility index for that ladder's maturity was yet being published" in pol)
-    ok("policy: collateral is the open swaps valued together, no discounting", "open swaps taken together are valued against the Sleeve" in pol and "No discounting is applied" in pol)
-    ok("policy: the cash plan's basis and its two ranges", "expected to pay, as estimated at the review date" in pol and "average settlement amount per sale their ladder shows on the record" in pol
-       and "the whole record and not of the Sleeve's own years alone" in pol and "the average itself, as distinct from a single settlement" in pol and
-       "the year's settlements, receipts net of payments" in pol)
-    ok("policy: sizes in multiples of USD 100, the cap at 2.5 times the strike", "multiples of USD 100 a point" in pol and "capped at 2.5 times the strike" in pol)
-    ok("confirmation: realized volatility, observation days, the cap and the settlement amount", "252 divided by N" in conf and "publishes an official closing level" in conf and
-       "2.5 multiplied by the Volatility Strike" in conf and "Variance Units multiplied by" in conf)
-    ok("annex summary: exposure is capped at the capped settlement", "were Final Realized Volatility equal to the Volatility Cap" in csa)
-    ok("term sheet: the size quoted for and the 12-month ladder continuing", "Quoted for up to USD 200,000" in terms and "continues on its present terms" in terms)
-    ok("net assets: USD 1,487.6 million at June 30, 2026", "1,487.6" in assets and "June 30, 2026" in assets)
-    ref = 1487.6e6
-    ls, lc = 0.02 * ref, 0.03 * ref
-    ok("the limits in dollars", k(ls) == F["policy"]["settlement_limit_usd"] and k(lc) == F["policy"]["collateral_limit_usd"], "%.0f and %.0f" % (ls, lc))
+    rec, reg = record()
+    group = dict(zip(reg.pod, reg.strategy_group))
+    ok("every code in the record is in the register once the 2022 map is applied", set(rec.pod) <= set(reg.pod), len(set(rec.pod) - set(reg.pod)))
+    H = holdings()
+    days = pd.DatetimeIndex(sorted(rec.date.unique()))
+    pos = np.searchsorted(days, H.index[(H.index >= days[0]) & (H.index <= days[-1])])
+    Hd = H.loc[(H.index >= days[0]) & (H.index <= days[-1])].groupby(days[pos]).sum()
+    # ---- R1
+    res = {}
+    for pod, d in rec.groupby("pod"):
+        if len(d) < 60:
+            continue
+        d = d.set_index("date").sort_index()
+        r = d.pnl / d.cap
+        X = np.column_stack([np.ones(len(r)), Hd.loc[r.index].values])
+        b = np.linalg.lstsq(X, r.values, rcond=None)[0]
+        e = r.values - Hd.loc[r.index].values @ b[1:]
+        res[pod] = (pd.Series(e, index=r.index), d.cap, float(np.std(r.values - X @ b) * np.sqrt(252)), b[1:])
+    for g in GROUPS:
+        num = sum(float((e * k).sum()) for p, (e, k, _, _) in res.items() if group[p] == g)
+        den = sum(float(k.sum()) / 252 for p, (e, k, _, _) in res.items() if group[p] == g)
+        v = num / den * 100
+        ok("R1 %s alpha a year inside its band" % g, F["R1_bands"][g][0] <= v <= F["R1_bands"][g][1], "%.2f%% against %s" % (v, F["R1_bands"][g]))
+    # ---- R3
+    rows = []
+    for p, (e, k, _, _) in res.items():
+        for y in sorted(set(e.index.year)):
+            mm = e.index.year == y
+            if mm.sum() >= 120:
+                rows.append((p, float(e[mm].mean() * 252), float(k[mm].mean())))
+    D = pd.DataFrame(rows, columns=["p", "a", "k"])
+    best = None
+    for th in np.arange(0.0, 1.0001, 0.005):
+        x = (D.k.values / 150e6) ** (-th)
+        num = pd.Series(D.a.values * x).groupby(D.p.values).transform("sum").values
+        den = pd.Series(x * x).groupby(D.p.values).transform("sum").values
+        sse = float(((D.a.values - num / den * x) ** 2).sum())
+        if best is None or sse < best[1]:
+            best = (th, sse)
+    fall = (1 - 2 ** (-best[0])) * 100
+    ok("R3 fall per doubling within pods inside its band", F["R3_band"][0] <= fall <= F["R3_band"][1], "%.1f%% against %s" % (fall, F["R3_band"]))
+    # ---- the draft, read from the workbook
+    ws = load_workbook(t(find("draft_allocation_plan_2027")), data_only=True)["Draft 2027"]
+    draft = {r[0]: (float(r[2]) * 1e6, float(r[3]) * 1e6, r[4]) for r in ws.iter_rows(min_row=4, values_only=True) if r[0] and r[0] != "Total"}
+    inc = sorted(p for p, v in draft.items() if v[2] == "Increase")
+    ok("the draft's increases are the figures' increases", inc == sorted(x["pod"] for x in F["increases"]), len(inc))
+    # ---- R4 and R6 on a smaller simulation of my own
+    th = best[0]
+    first = dict(zip(reg.pod, pd.to_datetime(reg.first_trading_day)))
+    edge, se = {}, {}
+    for p, (e, k, sd, _) in res.items():
+        x = (k.values / 150e6) ** (-th)
+        bb = float((e.values * x).sum() / (x * x).sum())
+        edge[p] = bb * 252
+        se[p] = float(np.std(e.values - bb * x) * np.sqrt(252)) / np.sqrt((x * x).sum() / 252)
+    prior = {}
+    for g in GROUPS:
+        ps = [p for p in res if group[p] == g and len(res[p][0]) >= 120]
+        a = np.array([edge[p] for p in ps])
+        v = np.array([se[p] ** 2 for p in ps])
+        tau2 = max(0.0, a.var(ddof=1) - v.mean())
+        for _ in range(500):
+            w = 1 / (tau2 + v)
+            mu = float((w * a).sum() / w.sum())
+            tn = max(0.0, float((w * ((a - mu) ** 2 - v)).sum() / w.sum()))
+            if abs(tn - tau2) < 1e-14:
+                break
+            tau2 = tn
+        prior[g] = (mu, tau2)
+    exp = {}
+    for p in draft:
+        g = group[p]
+        if p in res and len(res[p][0]) >= 60:
+            exp[p] = prior[g][0] + prior[g][1] / (prior[g][1] + se[p] ** 2) * (edge[p] - prior[g][0])
+        else:
+            exp[p] = prior[g][0]
+    yr = [d for d in pd.bdate_range("2027-01-01", "2027-12-31") if d.strftime("%m-%d") not in
+          ("01-01", "01-18", "02-15", "03-26", "05-31", "06-18", "07-05", "09-06", "11-25", "12-24")]
+    Hn = len(yr)
+    gap = np.diff(np.r_[pd.Timestamp("2026-12-31").value, [d.value for d in yr]]) / 86400e9 / 365.0
+    Hm = (Hd - Hd.mean()).values
+    rng = np.random.default_rng(7)
+    S = 6000
+    starts = rng.integers(0, len(Hm), size=(S, int(np.ceil(Hn / 63))))
+    idx = ((starts[:, :, None] + np.arange(63)[None, None, :]) % len(Hm)).reshape(S, -1)[:, :Hn]
+    paths = Hm[idx]
+    bill = float(fred("DTB3").dropna().loc[:LAST].iloc[-1]) / 100
+    lead = len([d for d in pd.bdate_range("2026-11-09", "2026-12-31") if d.strftime("%m-%d") not in ("11-26", "12-25")])
+    tday = H.index[(H.index >= "2017-01-03")]
 
-    # ------------------------------------------------------------------ the blotter (XLSX) and the settlements (CSV)
-    ws = load_workbook(os.path.join(TGT, "CFF_VolPremium_Blotter.xlsx"), read_only=True)["Tickets"]
-    rows = list(ws.values)
-    blot = pd.DataFrame(rows[1:], columns=[str(c) for c in rows[0]])
-    ok("XLSX read back: the blotter's header (positive control)", list(blot.columns[:4]) == ["Order No", "Status", "Trade Date", "Expiration Date"], len(blot))
-    live = blot[blot["Status"] == "LIVE"]
-    good = blot[blot["Status"].isin(["LIVE", "SETTLED"])]
-    ok("blotter: 128 confirmations, 24 open in twelve sale months at 50,000 a month", len(good) == F["confirmations"]["total"] and len(live) == F["open_confirmations"]
-       and live.groupby("Trade Date")["Vega Notional (USD/pt)"].sum().eq(OLD).all() and live["Trade Date"].nunique() == 12)
-    ok("blotter: every trade date and expiration follows the program's calendar", all(sale_date(d.year, d.month) == pd.Timestamp(d) for d in good["Trade Date"]) and
-       all(expiry(d.year + 1, d.month) == pd.Timestamp(e) for d, e in zip(good["Trade Date"], good["Expiration Date"])))
-    ok("blotter: every strike is the 1-year index close of its trade date", max(abs(float(s) - vix.at[pd.Timestamp(d), "VIX1Y"]) for d, s in zip(good["Trade Date"], good["Volatility Strike"])) < 1e-9)
-    setl = pd.read_csv(os.path.join(TGT, "CFF_VolPremium_Settlements.csv"))
-    rv = np.array([rvol(pd.Timestamp(a), pd.Timestamp(b)) for a, b in zip(setl.trade_date, setl.expiration_date)])
-    ok("CSV read back: 104 settlements reproduce from the closes by the confirmation's formula", len(setl) == F["confirmations"]["settled"] and
-       float(np.abs(rv - setl.realized_volatility).max()) < 6e-5 and float(np.abs(setl.vega_notional_usd * pay(setl.volatility_strike.values, rv) - setl.settlement_amount_usd).max()) < 500)
-    val = pd.read_csv(os.path.join(TGT, "Larkhill_DealerValuations_Daily.csv"), dtype=str)
-    one = val[(val.dealer == "BSS")].iloc[-1]
-    kk, ne, nt = float(one.strike), float(one.days_elapsed), float(one.days_total)
-    calc = float(one.notional) * (kk * kk - min((ne * float(one.realized_to_date) ** 2 + (nt - ne) * float(one.implied_to_expiration) ** 2) / nt, (CAP * kk) ** 2)) / (2 * kk)
-    ok("valuation file: a dealer's value is realized-to-date and implied-to-expiry variance weighted by days", len(val) > 20000 and abs(calc - float(one.value_usd)) <= 1.0,
-       "%s rows; %.0f against %s" % (len(val), calc, one.value_usd))
+    def year(p, K, seed):
+        g = group[p]
+        if p in res and len(res[p][0]) >= 60:
+            beta, idio = res[p][3], res[p][2]
+        else:
+            peers = [q for q in res if group[q] == g and len(res[q][0]) >= 120]
+            beta, idio = np.mean([res[q][3] for q in peers], axis=0), float(np.mean([res[q][2] for q in peers]))
+        r = paths @ beta + np.random.default_rng(seed).standard_normal((S, Hn)) * idio / np.sqrt(252) + exp[p] * (K / 150e6) ** (-th) * gap
+        cum, peak, cut, alive = np.zeros(S), np.zeros(S), np.ones(S), np.ones(S)
+        tot, capd = np.zeros(S), np.zeros(S)
+        for i in range(Hn):
+            x = K[i] * cut * alive * r[:, i]
+            tot += x
+            cum += x
+            peak = np.maximum(peak, cum)
+            dd = (peak - cum) / K[i]
+            alive = np.where(dd >= 0.075, 0.0, alive)
+            cut = np.where((dd >= 0.05) & (alive > 0), 0.5, cut)
+            capd += K[i] * cut * alive * gap[i]
+        after = tot - 0.2 * (bill + 0.0035) * capd
+        return after - 0.18 * np.maximum(after, 0)
 
-    # ------------------------------------------------------------------ the ladders on the record
-    L3, L6, L12 = ladder(3), ladder(6), ladder(12)
-    d3, d12 = L3.dropna(subset=["pay"]), L12.dropna(subset=["pay"])
-    y3 = d3.groupby(d3.expiry.dt.year).pay.sum()
-    ok("R1 the 3-month ladder's average settlement per sale", k(d3.pay.mean() * PER) == F["R1_avg_3m_usd"] and len(d3) == F["ladder_counts"]["settled"] and
-       int(L3.rebuilt.sum()) == F["ladder_counts"]["rebuilt"], "%.0f over %d swaps, %d strikes rebuilt" % (d3.pay.mean() * PER, len(d3), L3.rebuilt.sum()))
-    ok("R2 its worst calendar year", int(y3.idxmin()) == F["R2_worst_year"] and k(-y3.min() * PER) == F["R2_worst_year_loss_usd"], "%d, %.0f" % (y3.idxmin(), -y3.min() * PER))
-    b, j, X = fit("VIX3M", "VIX", "VIX6M")
-    res = j.VIX3M.values - X @ b
-    hot = j.VIX.values > 35
-    ok("the rebuild's fit on the days all three are published", len(j) == F["rebuild"]["overlap_days"] and round(float(np.sqrt((res ** 2).mean())), 2) == F["rebuild"]["rmse"]
-       and int(hot.sum()) == F["rebuild"]["hot_days"] and round(float(np.sqrt((res[hot] ** 2).mean())), 2) == F["rebuild"]["rmse_hot"])
-    o = vix[["VIX", "VIX3M"]].dropna()
-    b1 = np.linalg.lstsq(np.column_stack([np.ones(len(o)), o.VIX.values]), o.VIX3M.values, rcond=None)[0]
-    e1 = b1[0] + b1[1] * o.VIX.values - o.VIX3M.values
-    ok("the 30-day index alone: a high R-squared and too high on the stressed days", round(1 - (e1 ** 2).sum() / ((o.VIX3M - o.VIX3M.mean()) ** 2).sum(), 2) == F["rebuild"]["proxy_r2"]
-       and round(float(e1[o.VIX.values > 35].mean()), 1) == F["rebuild"]["proxy_bias_hot"])
-    m3, m6, m12 = marks(L3), marks(L6), marks(L12)
-    ok("R3 the 12-month ladder's peak collateral", close(-m12.min() * OLD, F["R3_old_peak_usd"], 600) and str(m12.idxmin().date()) == F["R3_old_peak_day"], "%.0f on %s" % (-m12.min() * OLD, m12.idxmin().date()))
-    y12 = d12.groupby(d12.expiry.dt.year).pay.sum()
-    raw3, size3, why3 = room(L3, m3, y12, m12, ls, lc)
-    raw6, size6, why6 = room(L6, m6, y12, m12, ls, lc)
-    ok("R4 the largest 3-month size, its limit and day", size3 == F["R4_size_usd"] and why3 == (F["R4_binds"]["limit"], F["R4_binds"]["day"]), "%.1f -> %d, %s" % (raw3, size3, why3))
-    ok("R5 the largest 6-month size, its limit and day", size6 == F["R5_alt_size_usd"] and why6 == (F["R5_binds"]["limit"], F["R5_binds"]["day"]), "%.1f -> %d, %s" % (raw6, size6, why6))
-    sleeve = m12 * OLD + m3 * size3
-    ok("at the size the sleeve's collateral peaks under the limit, and 100 more breaches", -sleeve.min() <= lc < -(m12 * OLD + m3 * (size3 + 100)).min() and
-       k(-sleeve.min()) == F["at_size"]["peak_usd"])
-    ok("the size quoted for breaches", k(-(m12 * OLD + m3 * 200000.0).min()) == F["quoted"]["peak_usd"])
-    daily = pd.read_csv(os.path.join(TASK, "golden", "sleeve_collateral_on_record.csv"))
-    rec = sleeve[sleeve.index >= START]
-    ok("the golden daily file is that sleeve, day by day", len(daily) == len(rec) == F["daily"]["rows"] and
-       float(np.abs(daily.collateral_usd.values - np.maximum(0.0, -rec.values)).max()) <= 501)
-
-    # ------------------------------------------------------------------ how well the record pins each average
-    for mat, d_, key, bands, seed in ((12, d12, "R6_avg_range_12m", "R6_bands", 4242), (3, d3, "R7_avg_range_3m", "R7_bands", 4243)):
-        lo, hi = block_range(d_.pay.values, 2 * mat, seed)
-        b_ = F[bands]
-        ok("%s the %d-month average's range, resampled in blocks on another seed" % (key[:2], mat), b_["low_usd"][0] <= lo <= b_["low_usd"][1] and
-           b_["high_usd"][0] <= hi <= b_["high_usd"][1] and close(lo, F[key]["low_usd"], 12000) and close(hi, F[key]["high_usd"], 12000), "%.0f to %.0f" % (lo, hi))
-        x = d_.pay.values
-        e = x - x.mean()
-        ok("   neighbouring sales are tied (%d-month)" % mat, round(float((e[1:] * e[:-1]).sum() / (e * e).sum()), 2) == F["avg_%dm" % mat]["next_sale_correlation"])
-    ok("the 12-month ladder's average per sale", k(d12.pay.mean() * PER) == F["avg_12m"]["avg_per_sale_usd"] and len(d12) == F["avg_12m"]["n"])
-
-    # ------------------------------------------------------------------ the open swaps that expire in the plan year
-    ob = live.groupby("Trade Date").agg(expiry=("Expiration Date", "first"), k=("Volatility Strike", "first")).reset_index()
-    ob["sale"], ob["expiry"] = pd.to_datetime(ob["Trade Date"]), pd.to_datetime(ob["expiry"])
-    ob = ob[ob.expiry.dt.year == YEAR].reset_index(drop=True)
-    ne = np.array([pos[REVIEW] - pos[s] for s in ob.sale], dtype=float)
-    nr = np.array([pos[e] - pos[REVIEW] for e in ob.expiry])
-    acc = np.array([rvol(s, REVIEW) ** 2 for s in ob.sale])
-    cal = np.array([(e - REVIEW).days for e in ob.expiry])
-    iv2 = CURVE[i_rev, cal] ** 2
-    kk = ob.k.values.astype(float)
-
-    def settle(rem):
-        w = np.minimum((ne * acc + nr * rem) / (ne + nr), (CAP * kk) ** 2)
-        return (kk * kk - w) / (2 * kk)
-
-    starts = np.arange(i_0, i_rev - int(nr.max()) + 1)
-    rem = np.column_stack([1e4 * 252.0 * (cum[starts + n_] - cum[starts]) / n_ / CURVE[starts, c] ** 2 * v for n_, c, v in zip(nr, cal, iv2)])
-    tot = settle(rem).sum(axis=1) * OLD
-    mark = float(settle(iv2).sum() * OLD)
-    ok("R8 the open swaps' expected settlement, against their value", len(ob) == 10 and close(tot.mean(), F["R8_expected_usd"], 600) and close(mark, F["replay"]["mark_usd"], 600)
-       and len(starts) == F["replay"]["start_dates"], "%.0f expected, %.0f value, %d start dates" % (tot.mean(), mark, len(starts)))
-    ok("R9 their 80 per cent range", close(np.percentile(tot, 10), F["R9_range"]["low_usd"], 600) and close(np.percentile(tot, 90), F["R9_range"]["high_usd"], 600),
-       "%.0f to %.0f" % (np.percentile(tot, 10), np.percentile(tot, 90)))
-    ok("   the value sits below the outcome from four start dates in five", int(round(100 * (tot > mark).mean())) == F["replay"]["share_above_mark_pct"])
-
-    # ------------------------------------------------------------------ the plan year
-    legs = []
-    for m in range(1, 13):
-        s = sale_date(YEAR - 1, m)
-        if s > REVIEW:
-            legs.append((12, s, expiry(YEAR, m)))
-    for m in range(1, 13):
-        j_ = (m - 1) + 3
-        e = expiry(YEAR + j_ // 12, j_ % 12 + 1)
-        if e.year == YEAR:
-            legs.append((3, sale_date(YEAR, m), e))
-    n12, n3 = sum(g[0] == 12 for g in legs), sum(g[0] == 3 for g in legs)
-    a3, a12 = float(d3.pay.mean()), float(d12.pay.mean())
-    twelve = k(tot.mean()) + k(n12 * a12 * OLD)
-    three = k(n3 * size3 * a3)
-    ok("R10 the plan by ladder", (n12, n3) == (2, 9) and close(twelve, F["R10_plan"]["twelve_month_usd"], 1000) and close(three, F["R10_plan"]["three_month_usd"], 1000)
-       and close(twelve + three, F["R10_plan"]["total_usd"], 1500), "12-month %d, 3-month %d, sleeve %d" % (twelve, three, twelve + three))
-    def level(d_):                      # a day with no longer maturity published carries the day before
-        try:
-            return strike(3, d_)[0]
-        except ValueError:
-            return np.nan
-
-    s3 = pd.Series([level(d_) if d_ >= START else np.nan for d_ in days], index=days).ffill().values
-    s12 = vix.VIX1Y.ffill().values
-    so = [pos[g[1]] - i_rev for g in legs]
-    eo = [pos[g[2]] - i_rev for g in legs]
-    ps = np.arange(i_0, i_rev - max(eo) + 1)
-    total = tot[:len(ps)].copy()
-    for (mat, _, _), a_, b_ in zip(legs, so, eo):
-        kx = (s12 if mat == 12 else s3)[ps + a_]
-        total += pay(kx, np.sqrt(1e4 * 252.0 * (cum[ps + b_] - cum[ps + a_]) / (b_ - a_))) * (OLD if mat == 12 else size3)
-    lo, hi = float(np.percentile(total, 10)), float(np.percentile(total, 90))
-    ok("R10 the plan's range over every settlement together", close(lo, F["R10_plan"]["low_usd"], 2000) and close(hi, F["R10_plan"]["high_usd"], 2000) and
-       len(ps) == F["plan"]["start_dates"], "%.0f to %.0f from %d start dates" % (lo, hi, len(ps)))
-    ok("R11 the recommendation is the size and that plan", F["R11_call"] == dict(size_usd=size3, plan_usd=F["R10_plan"]["total_usd"], low_usd=F["R10_plan"]["low_usd"],
-                                                                                 high_usd=F["R10_plan"]["high_usd"]))
-    fails = ROWS.count(False)
-    print("%s  task9 verify: %d assertions, %d FAIL" % ("PASS" if not fails else "FAIL", len(ROWS), fails))
-    return 1 if fails else 0
+    total = np.zeros(S)
+    for k, (p, (k26, k27, chg)) in enumerate(sorted(draft.items())):
+        if chg == "Onboarding":
+            age = int(np.searchsorted(tday, LAST, side="right")) - int(np.searchsorted(tday, first[p])) + lead + np.arange(Hn)
+            K = k27 * np.where(age >= 252, 1.0, np.where(age >= 126, 0.5, 0.25))
+        else:
+            K = np.full(Hn, k27)
+        total += year(p, K, 100 + k)
+    mean = float(total.mean() - 218.4e6) / 1e6
+    ok("R4 expected 2027 net P&L on my own simulation inside its band", F["R4_band"][0] <= mean <= F["R4_band"][1], "%.1f against %s" % (mean, F["R4_band"]))
+    flag = []
+    for k, p in enumerate(inc):
+        k26, k27, _ = draft[p]
+        a = year(p, np.full(Hn, k26), 500 + k).mean()
+        b = year(p, np.full(Hn, k27), 500 + k).mean()
+        if (b - a) / (k27 - k26) < 0.015:
+            flag.append(p)
+    core, either = set(F["R6_fail"]), set(F["R6_either"])
+    ok("R6 my increases below the hurdle hold every failing one and no clear pass", core <= set(flag) <= core | either, "%s against %s (+ %s)" % (
+        flag, sorted(core), sorted(either)))
+    # ---- the documents say what the blocks rely on
+    pol = " ".join(subprocess.run(["pdftotext", "-layout", t(find("Capital_Review_Policy")), "-"], capture_output=True, text=True).stdout.split())
+    ok("the policy states the hurdle, the payout, the drawdown rules and the planning conventions",
+       all(s in pol for s in ("1.5 per cent", "18 per cent", "5 per cent", "7.5 per cent", "markets themselves to earn nothing", "10th to the 90th percentile")))
+    print("verify: %d of %d PASS" % (sum(ROWS), len(ROWS)))
+    return 0 if all(ROWS) else 1
 
 
 if __name__ == "__main__":

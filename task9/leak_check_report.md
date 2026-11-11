@@ -1,34 +1,31 @@
 # leak check, task9
 
-**Verdict: REVIEW.** 21 files read, 63 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 41 files read, 51 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: settlements, architecture, ostvale, missed, strikes, review, sentence, method, carried, golden, careful, expectation, result, published, closed, recovery, outside, forecast, standing, schedule, estimator, results, priced, dependence, default
+Stump terms swept: million, architecture, record, ostvale, ladder, average, sentence, golden, careful, carried, forecast, return, result, recovery, closed, missed, policy, estimator, review, inside, default, results, platform, carries, method
 
-## 2 author vocabulary (REVIEW 2)
-- **REVIEW** `IPS_Schedule_D_Volatility_Premium_Sleeve.pdf`: \bladder\b x7, a field term declared in metadata.json: ...carries its receipts in the Foundation's cash plan. D.2 Program (a) A ladder is one swap of a given maturity sold on every monthly sale date at a...
-- **REVIEW** `Indicative_Terms_3M_6M_Variance_Swaps_2027.pdf`: \bladder\b x4, a field term declared in metadata.json: ...Capital Markets, Wexcombe Bank, N.A.). November 4, 2026. Term 3-month ladder 6-month ladder Product S&P 500 Index variance swap, Foundation sells...
+## 3 answer figures in the pack (REVIEW 1)
+- **REVIEW** `Capital_Review_Policy_2026.pdf`: carries 4 of 5 distinctive words of the committed call: 'Plan USD 665 million of net P&L for 2027 at the draft capital plan'
 
-## 3 answer figures in the pack (REVIEW 2)
-- **REVIEW** `IPS_Schedule_D_Volatility_Premium_Sleeve.pdf`: carries 5 of 5 distinctive words of the committed call: 'Set the new 3-month ladder at USD 114,400 a point per monthly sale'
-- **REVIEW** `Indicative_Terms_3M_6M_Variance_Swaps_2027.pdf`: carries 4 of 5 distinctive words of the committed call: 'Set the new 3-month ladder at USD 114,400 a point per monthly sale'
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `Capital_Review_Policy_2026.pdf`: 7 of 25 stump-paragraph terms appear (million, record, result, closed, policy, review); read whether the document names the move
+- **REVIEW** `Risk_Model_Methodology_2023.pdf`: 3 of 25 stump-paragraph terms appear (carried, return, method); read whether the document names the move
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `IPS_Schedule_D_Volatility_Premium_Sleeve.pdf`: 5 of 25 stump-paragraph terms appear (settlements, review, published, closed, schedule); read whether the document names the move
-
-## 9 dates after the setting (REVIEW 2)
-- **REVIEW** `CFF_VolPremium_Blotter.xlsx`: 24 ISO dates after 2026-11-10, e.g. 2026-11-20, 2026-12-18, 2027-01-15, 2027-02-19, 2027-03-19
-- **REVIEW** `NYSE_Holidays_2026_2028.csv`: 26 ISO dates after 2026-11-10, e.g. 2026-11-26, 2026-11-27, 2026-12-24, 2026-12-25, 2027-01-01
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 21 usable files (10 or more required)
+- **INFO** `-`: 41 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
+
+## 2 author vocabulary (clean)
 
 ## 5 announcements (clean)
 
@@ -42,55 +39,12 @@ Stump terms swept: settlements, architecture, ostvale, missed, strikes, review, 
 
 ## Solver's-eye read
 
-Stage 4 reader, 2026-11-10, on cut 4a76ff2f (target.zip sha256), one isolated thread that saw only prompt.txt and the
-unzipped pack and solved nothing. Its answers, as returned:
+One isolated reader (general-purpose, sonnet, medium) on fresh copies of prompt.txt and target/ (2026-11-11, cut 9a328d82):
 
-1. Sentences that say how the analysis is done: schedule D.5(b) ("A program is inside the limits if neither would have
-   been exceeded in any calendar year or on any day of the record had every ladder of the Sleeve been sold at its size
-   on every monthly sale date of the record. A monthly sale date of the record counts for a ladder whether or not the
-   volatility index for that ladder's maturity was yet being published on that date."); D.5(a), (c), (d) and (e) (the
-   record from January 2007, a settlement in the calendar year of expiry, collateral as the open swaps taken together
-   valued against the Sleeve "on the basis the dealers use for their daily valuations", no discounting); D.7(a) to
-   (e) (open swaps at their expected settlement, unsold swaps at the ladder's record average per sale "taken over the
-   swaps that would have expired by the review date", "the experience is that of the whole record and not of the
-   Sleeve's own years alone", and the two 80 percent ranges); D.2 and D.8 (sale date, expiry, sizes, the review
-   date); D.3 (the strike index and the cap); the master confirmation's sections 2 to 4 ("contract definitions, not
-   method choices"); the annex summary (exposure never above the capped settlement; one dealer in variance units);
-   the term sheet ("The panel will paper one ladder").
-2. Files that rank, score or size: none. The term sheet's "up to USD 200,000 per monthly sale" is a quote ceiling; the
-   statements carry the open swaps' values and the ledger the posted collateral, "context for the open swaps, not a
-   size or a plan figure".
-3. Files that exist only to help the analyst: none clearly (the term sheet is the request's context, the holiday file
-   a reference calendar, the statement of net assets the source of Reference Assets).
-4. Figures or names that read as the answer: none.
-5. Sentences that fix a graded figure: D.5(b)'s second sentence (sale dates before an index began count; "The quoted
-   sentence does not say what strike applies when the index did not yet exist ... nothing in the files fixes how the
-   missing strike is filled. This is a gap: the quantity cannot be read off the files as they stand"); D.7(b) (the
-   average over swaps expired by the review date, 9 November 2026 being the last close in the files); D.7(c) (the
-   whole record); D.7(d) (the range of the average, not of a single settlement); D.7(e) (the range of the year's
-   settlements); D.4 (2.0 and 3.0 percent of USD 1,487.6 million); D.5(d) ("partly ambiguous": the dealers' basis has
-   to be inferred from the annex and the valuation files); D.2(a); the confirmation's observation days; the annex's
-   cap on a transaction's exposure.
-6. One thing: "Nothing single. The parts need separate work." The size and the binding day turn on analysis (daily
-   valuation through the record) with the dealers' basis as a reading step; the ladder's record before its index
-   existed "needs a fill-in rule, which D.5(b) leaves open"; the ranges turn on uncertainty analysis and on reading
-   D.7(d) and (e); the open swaps' expected settlement turns on analysis; the plan combines a stated rule with
-   analysis for its range. The dealers' date formats, units and references are "conformation, not a planted trap".
-7. Realism: the three statements' date cells wrap inside the date ("11/24/202" then "5"); settlement amounts agree to
-   the cent across the two dealers on a sale date; the blotter is booked by one desk mailbox with order numbers in
-   date order; the VVIX history starts sparse (as Cboe publishes it); the policy's "the experience is that of the
-   whole record" and the term sheet read as written with a reader in mind.
-8. Sweep lines: the policy and the term sheet state no size, plan figure, range or choice of maturity (harmless); the
-   blotter's and the holiday file's later dates are open swaps' expiries and scheduled holidays (harmless).
+1. Method-telling text. Capital_Review_Policy_2026.pdf (a governing document, field-level, not a solution) fixes: s5 "Each pod is charged funding on 20 per cent of its capital, at the 3-month Treasury bill rate plus 0.35 per cent a year, accrued on calendar days at the latest published bill rate"; s6 "A pod's PM team is paid 18 per cent of the pod's P&L for the calendar year after its funding charge, when that P&L is positive, and nothing when it is negative"; s4 drawdown halving at 5% / closure at 7.5% "measured on the capital the pod ran before any halving"; s7 alpha = P&L "beyond what a passive holding of the markets it trades would have earned ... on the published market series the platform keeps"; s8(a)-(e) "The plan budgets alpha only: it expects the markets themselves to earn nothing", whole year at planned capital under drawdown rules, net after funding "at the bill rate on the review date", payouts and platform costs, range = 10th to 90th percentile, capacity = "share of its alpha per dollar a pod gives up when its capital doubles, the same share at any size"; s9 hurdle "at least 1.5 per cent a year of net P&L, after the pod's PM payout and funding, on the capital it adds". Risk_Model_Methodology_2023.pdf: factor definitions (MKT, TECH, RATES, CURVE, CREDIT, VOL...), betas on last 252 days, "On a day a series is not published, its last published level is carried forward", plus the version history (CREDIT moved Aaa to Baa in July 2023). The prompt itself names no method.
+2. No file ranks pods on the question. draft_allocation_plan_2027.xlsx lists draft capital and Increase/Decrease/No change/Onboarding but no verdict on the hurdle. allocation_plans_2018_2026.xlsx holds past plans with "Return on capital, record (%)" and "Expected P&L" per pod (a historical record-based expectation, not alpha or net of payouts). None.
+3. Helper-only files: none obviously. book_code_map_20220401.csv (old pod code to new book id) exists to bridge the legacy and new risk files; the methodology PDF is the only explanatory doc. The ~30 FRED/Cboe series (DAAA, DEX*, IR3TIB01*, DTB3, DGS2...) read as raw inputs and distractors (FX, foreign interbank rates, DAAA are unlisted in the methodology).
+4. Nothing reads as the answer. Closest: draft sheet "Change" column ("Increase") and "Total 19146.2 / 21510" capital; Platform costs sheet "Total 218.4". These are context.
+5. Literal fixing sentences: (a) s8(a) "expects the markets themselves to earn nothing over the plan year" fixes the expected P&L to alpha only (market drift zero). (b) s9 fixes the hurdle test: incremental net P&L after payout and funding divided by the added capital, compared with 1.5% a year. (c) s8(c) "funding at the bill rate on the review date" fixes funding to a single rate (the 3-month bill as of the review, 20% of capital, plus 0.35%) rather than a forecast path. (d) s8(d) fixes the range as 10th-90th percentile of 2027 net P&L; the prompt's "80% range" is the same. (e) s8(b) fixes population: every pod in the draft plan, full year at planned capital, onboarding pods on their scheduled capital (the draft sheet's last column gives the dates), no departures/new pods, drawdown rules applied. (f) s6 fixes payout 18% of positive per-pod calendar-year P&L after funding, pod by pod (no netting). (g) s7 + s5 with s8(e) define alpha per year as % of capital and capacity as a constant proportional loss per doubling. s10 "The risk system's daily P&L and capital are the record ... month-end statements are the books of account" fixes which source is the record (risk system daily files, not the administrator statements). s2/s3 fix onboarding schedule 25/50/100% at 126/252 trading days.
+6. Single thing: none dominates. The nearest candidates are (i) the old-to-new pod code bridge (book_code_map plus the two daily P&L files differing in units, date format and column names: USD vs USD 000, capital in USD vs USD mm) which settles assembly only; (ii) the policy s8(a) "alpha only", which settles the expectation's framing and the market-adjustment need, but not the factor-beta/alpha estimation, simulation, hurdle test or capacity estimation. The policy hands over a lot of the rules (payout, funding, drawdown, onboarding, hurdle), so those parts are rule-following once read; alpha-vs-factor estimation (which series in which regime, e.g. Aaa/Baa switch and carry-forward), the range via simulation, the per-group alpha-since-2017 and the capacity elasticity read as genuine analysis. Per part: expected 2027 net P&L and 80% range: mostly analysis plus following the stated plan rules; pods whose increases fail the 1.5% hurdle: analysis built on the stated rule (rule application for the test itself); strategy-group alpha since 2017: analysis, with the definitions in s7 stated (data semantics: units/code mapping/capital basis); capacity per doubling: analysis (cross-sectional/panel estimation), the "same share at any size" convention filed. Reading-field items (units, dates, code map, the 2022 relabelling, the statements vs risk record) are texture. Nothing visibly planted; the month-end statements file (net_pnl, incentive_accrual) is a possible decoy given s10 names risk system as the record.
 
-Main thread's rulings (2026-11-10):
-- Question 5, the strike where the index was not yet published: intended. D.5(b) files the population (those sale
-  dates count) and no sentence files the method; the two-sided rebuilds agree inside every band, the one-index
-  stand-ins sit 2.3 points high on the overlap's 102 stressed days (named data), and the index's own earlier history
-  on FRED, which is not in the pack, puts the ladder's record inside the same bands. The judge's reading decides.
-- Question 5, the dealers' basis: intended. The statements print accrued and implied variance to expiry swap by swap,
-  and the annex files the cap on exposure; the four readings of the term structure stay inside the bands.
-- Question 7: the statements' date columns are widened in the generator (a layout defect, no figure). Settlement
-  amounts agreeing to the cent are what one formula on published closes gives two dealers, and the 104 settled
-  confirmations reproduce to the cent. The desk mailbox and the ordered order numbers are how the blotter is kept.
-  D.7(c) is a governance sentence that closes a fork (whose experience) and names no method.
