@@ -731,6 +731,7 @@
   4.3
  ],
  "range_level_pct": 80,
+ "plain_interp_spread_pct": 4,
  "resamples": 400,
  "bands": {
   "gap_sales": [

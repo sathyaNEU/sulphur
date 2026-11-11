@@ -143,9 +143,11 @@ def write(F, workbook, note, task_dir=TASK):
       "the day's trade `timeprofil_salg_frisk.csv` puts before that time (format, category and weekday), counting one sale "
       "fewer than made, since the last sale is the S-th of the day's D customers and falls on average at S/(D+1) of the "
       "day's trade: %s units turned away in the pilot stores in the pilot weeks and %s in 2025 (%s and %s per cent of "
-      "demand). Counting every sale gives %s and %s (the careful but hurried reading)."
+      "demand). Counting every sale gives %s and %s (the careful but hurried reading; how the profile is interpolated "
+      "inside the hour moves either by up to %d per cent)."
       % (k(F["lost_units"]["pilot_2026"]), k(F["lost_units"]["pilot_2025"]), p1(F["lost_share_pilot_2026_pct"]),
-         p1(F["lost_share_pilot_2025_pct"]), k(F["lost_units_plain"]["pilot_2026"]), k(F["lost_units_plain"]["pilot_2025"])))
+         p1(F["lost_share_pilot_2025_pct"]), k(F["lost_units_plain"]["pilot_2026"]), k(F["lost_units_plain"]["pilot_2025"]),
+         F["plain_interp_spread_pct"]))
     a("4. Checked both forms where the day's demand is known, on the %s store-item days the shelf did not run out with two "
       "or more sales: counting every sale overstates the day's sales by %s per cent (%s on days with six sales or fewer), "
       "one sale fewer by %s (%s)."
@@ -195,29 +197,34 @@ def write(F, workbook, note, task_dir=TASK):
     a("")
     rc = F["recorded_route_spread"]["Super"]
     sh = F["weekend_pilot_saving_share"]
-    a("No other conclusion survives. By format, To Go's high-street pilot stores stand for the commuter-week stores the "
-      "forecast costs money; counting every sale fails the check on the days the shelf did not run out; the dashboard's "
-      "waste gap leaves out the margin and carries the openings and the mix. Carrying the whole saving on fresh sales "
-      "(Kvarter %s) does not fit the pilot: the weekend-trading pilot stores saved %.2f, %.2f and %.2f per cent of their "
-      "fresh sales in Super, Kvarter and To Go, because waste avoided is a share of waste and a Super store writes off %s "
-      "per cent of its fresh sales against %s for a Kvarter store. Carrying it all on waste (Kvarter %s) fails the other "
-      "way: the weekend-trading Super pilot stores gave up %s times the margin of the Kvarter ones, with %s times their "
-      "fresh sales and %s times their waste. Reading the margin part off the recorded gross margin cannot place any "
-      "format against its licence: its Super figure is %s pooled by trading week and %s format by format, because the "
-      "forecast moves a store's sales only on the days its shelf empties and the recorded margin books to it what the "
-      "shelves did not lose (store %d's recorded margin ran %s below its format's over the 26 weeks while its turned-away "
-      "units account for %s of that). On the stores that kept AutoOrdre that route spreads %s DKK a Super store over the 26 weeks against "
-      "%s for units turned away, so with four Super pilot stores it carries about %s a store and year of noise against %s "
-      "for the turned-away route."
-      % (k(F["routes"]["single_sales_type"]["saving"]["Kvarter"]), sh["Super"]["of_sales_pct"], sh["Kvarter"]["of_sales_pct"],
-         sh["To Go"]["of_sales_pct"], p1(F["waste_to_sales_2025_pct"]["Super"]), p1(F["waste_to_sales_2025_pct"]["Kvarter"]),
-         k(F["routes"]["single_waste_type"]["saving"]["Kvarter"]), p1(F["weekend_pilot_super_over_kvarter"]["margin"]),
+    R_ = F["routes"]
+    sw = lambda x: "none" if not x else (x[0] if len(x) == 1 else ", ".join(x[:-1]) + " and " + x[-1])
+    a("No other conclusion survives, and each of four separate ways of going wrong lands on a wrong set by itself. Counting every "
+      "sale before the last as a sold-out day's demand (refuted by the in-stock days) keeps Super off even by trading "
+      "week (%s against %s): it switches %s. Reading each format off its own pilot stores switches To Go (%s against %s), "
+      "because To Go's high-street pilot stores stand for commuter-week stores the forecast costs money: it switches %s. "
+      "Carrying the whole saving on fresh sales keeps Kvarter off (%s against %s): it switches %s, and it does not fit the "
+      "pilot, where the weekend-trading stores saved %.2f, %.2f and %.2f per cent of their fresh sales in Super, Kvarter and "
+      "To Go, because waste avoided is a share of waste and a Super store writes off %s per cent of its fresh sales against "
+      "%s for a Kvarter store (carrying it all on waste instead, Kvarter %s, fails the other way: the weekend-trading Super "
+      "pilot stores gave up %s times the margin of the Kvarter ones with %s times their fresh sales and %s times their "
+      "waste). Reading the margin part off the recorded gross margin is not agreement 4.2's out-of-stock sales: it books "
+      "to the forecast every other movement in a store's margin (store %d's recorded margin ran %s below its format's over "
+      "the 26 weeks while its turned-away units account for %s of that), spreads %s DKK a Super store over the 26 weeks on "
+      "the stores that kept AutoOrdre against %s for units turned away, and puts Super at %s pooled by trading week and %s "
+      "format by format: it switches %s. The dashboard's waste gap, read as the saving, leaves out the margin and carries "
+      "the openings and the mix: it switches %s."
+      % (k(R_["plain_type"]["saving"]["Super"]), k(F["licence"]["Super"]), sw(R_["plain_type"]["switch"]),
+         k(R_["by_format"]["saving"]["To Go"]), k(F["licence"]["To Go"]), sw(R_["by_format"]["switch"]),
+         k(R_["single_sales_type"]["saving"]["Kvarter"]), k(F["licence"]["Kvarter"]), sw(R_["single_sales_type"]["switch"]),
+         sh["Super"]["of_sales_pct"], sh["Kvarter"]["of_sales_pct"], sh["To Go"]["of_sales_pct"],
+         p1(F["waste_to_sales_2025_pct"]["Super"]), p1(F["waste_to_sales_2025_pct"]["Kvarter"]),
+         k(R_["single_waste_type"]["saving"]["Kvarter"]), p1(F["weekend_pilot_super_over_kvarter"]["margin"]),
          p1(F["weekend_pilot_super_over_kvarter"]["sales"]), p1(F["weekend_pilot_super_over_kvarter"]["waste"]),
-         k(F["routes"]["recorded_type"]["saving"]["Super"]), k(F["routes"]["recorded_fxt"]["saving"]["Super"]),
          F["store_2158_margin_shortfall"]["store"], k(F["store_2158_margin_shortfall"]["recorded"]),
-         k(F["store_2158_margin_shortfall"]["turned_away"]),
-         k(rc["recorded_sd"]), k(rc["turned_away_sd"]), k(F["super_margin_noise_per_year"]["recorded"]),
-         k(F["super_margin_noise_per_year"]["turned_away"])))
+         k(F["store_2158_margin_shortfall"]["turned_away"]), k(rc["recorded_sd"]), k(rc["turned_away_sd"]),
+         k(R_["recorded_type"]["saving"]["Super"]), k(R_["recorded_fxt"]["saving"]["Super"]), sw(R_["recorded_type"]["switch"]),
+         sw(F["quick"]["switch"])))
     a("")
     txt = "\n".join(L)
     open(os.path.join(task_dir, "submission.md"), "w", encoding="utf-8").write(txt)

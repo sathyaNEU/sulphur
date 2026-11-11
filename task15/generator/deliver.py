@@ -220,6 +220,7 @@ def write_workbook(path, R, F):
               ("By trading week, turned-away units from in-stock weekday averages", F["routes"]["instock_type"]["saving"], F["routes"]["instock_type"]["switch"]),
               ("By trading week, waste only", F["routes"]["waste_only_type"]["saving"], F["routes"]["waste_only_type"]["switch"]),
               ("By trading week, the whole saving carried on fresh sales", F["routes"]["single_sales_type"]["saving"], F["routes"]["single_sales_type"]["switch"]),
+              ("By trading week, the margin part read off the recorded gross margin", F["routes"]["recorded_type"]["saving"], F["routes"]["recorded_type"]["switch"]),
               ("The dashboard's waste gap applied to every store's waste", F["quick"]["saving"], F["quick"]["switch"])]
     for lab, sv, sw in routes:
         ws.append([lab, sv["Super"], sv["Kvarter"], sv["To Go"], ", ".join(sw) if sw else "none"])
@@ -411,6 +412,9 @@ def write_deck(path, F, png):
             ["By format, every sale counted", k(c["Super"]), k(c["Kvarter"]), k(c["To Go"]), ", ".join(F["careful"]["switch"])],
             ["By format", k(r["by_format"]["saving"]["Super"]), k(r["by_format"]["saving"]["Kvarter"]),
              k(r["by_format"]["saving"]["To Go"]), ", ".join(r["by_format"]["switch"])],
+            ["By trading week, saving carried on fresh sales", k(r["single_sales_type"]["saving"]["Super"]),
+             k(r["single_sales_type"]["saving"]["Kvarter"]), k(r["single_sales_type"]["saving"]["To Go"]),
+             ", ".join(r["single_sales_type"]["switch"]) or "none"],
             ["By trading week, every sale counted", k(r["plain_type"]["saving"]["Super"]), k(r["plain_type"]["saving"]["Kvarter"]),
              k(r["plain_type"]["saving"]["To Go"]), ", ".join(r["plain_type"]["switch"])],
             ["The dashboard's waste gap on every store", k(F["quick"]["saving"]["Super"]), k(F["quick"]["saving"]["Kvarter"]),

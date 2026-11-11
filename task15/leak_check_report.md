@@ -4,23 +4,20 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, margin, result, licence, inside, kvarter, trading, careful, decision, missed, estimate, comparison, agreement, second, prompt, openings, graded, turned-away, trials, series, reading, lodging, method, in-stock, estimator
+Stump terms swept: margin, record, licence, result, agreement, kvarter, inside, trading, careful, reading, decision, recorded, missed, estimate, comparison, graded, second, prompt, openings, trials, series, turned-away, thread, lodging, hurried
 
 ## 3 answer figures in the pack (REVIEW 8)
-- **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 50,100 appears: ...47,40,0,19 2026-02-21,2179,451819,43,528.90,18:54:50,100,0,76 2026-02-21,2179,451826,45,738.00,13:54:52,30...
-- **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 24,100 appears: ...:34,8,0,17 2026-07-18,2185,451819,80,984.00,20:58:24,100,0,22 2026-07-18,2185,451826,170,2261.00,13:01:53,...
 - **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 36,100 appears: ...,24,0,10 2026-01-02,2104,451819,109,1340.70,21:44:36,100,0,41 2026-01-02,2104,451826,111,1476.30,16:05:32,...
+- **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 50,100 appears: ...47,40,0,19 2026-02-21,2179,451819,43,528.90,18:54:50,100,0,76 2026-02-21,2179,451826,45,738.00,13:54:52,30...
 - **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 33,100 appears: ...18,8,0,8 2026-03-18,3072,451819,106,1028.20,20:47:33,100,0,18 2026-03-18,3072,451826,16,262.40,20:45:31,20...
-- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 014 appears: ...st in Fjordkøb's fresh ordering Agreement FK-2026-014, signed 19 February 2026. Annex 2 replaced on 1 S...
-- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 4.3 appears: ...uding VAT less the cost price of the units sold. 4.3 A year is 52 weeks, taken as twice the 26 weeks o...
+- **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 24,100 appears: ...:34,8,0,17 2026-07-18,2185,451819,80,984.00,20:58:24,100,0,22 2026-07-18,2185,451826,170,2261.00,13:01:53,...
 - **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 4.2 appears: ...taken for all of its stores or for none of them. 4.2 The saving of a store is the change in its fresh...
+- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 014 appears: ...st in Fjordkøb's fresh ordering Agreement FK-2026-014, signed 19 February 2026. Annex 2 replaced on 1 S...
+- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 4.3 appears: ...excluding VAT less the cost price of the units. 4.3 A year is 52 weeks, taken as twice the 26 weeks o...
 - **REVIEW** `pilotaftale_kornblomst_2026.pdf`: carries 9 of 10 distinctive words of the committed call: "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep the To Go stores on AutoOrdre."
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: 6 of 25 stump-paragraph terms appear (margin, result, licence, kvarter, decision, agreement); read whether the document names the move
-
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
+- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: 6 of 25 stump-paragraph terms appear (margin, licence, result, agreement, kvarter, decision); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -43,6 +40,8 @@ Stump terms swept: record, margin, result, licence, inside, kvarter, trading, ca
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
+## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read
@@ -148,3 +147,27 @@ Realism tells:
 - Questions 2 to 4: none; the dashboard is the BI deliverable whose question it states, and the weekly history is BI's own cube.
 - (a), (b): harmless.
 - Realism: the two layouts are the ERP migration the note files; the 2.5 per cent uplift is the chain's price list indexed at the new year, which the register states as two price columns; the Galten opening is logged against both stores it sits near, as market intelligence logs an opening per store it is near; the planned November opening is a log entry for a building permit. No change.
+
+## Solver's-eye read, third (the 4.2 cut)
+
+One isolated reader (general-purpose, sonnet, medium), 2026-11-11, on a fresh copy of prompt.txt and target/ after agreement 4.2's margin part was filed as out-of-stock sales; it saw no design note, generator, submission or report.
+
+1. Method-giving text: none dictates a method. It quotes the prompt's asks (no method named), the agreement's 4.1 (the rule), 4.2 (the saving's two parts: "the fresh waste the store avoids, valued at cost price, and the change in its out-of-stock sales, the fresh units its customers would have bought after a shelf had run empty, valued at their gross margin"), 4.3 (the year and the population), 2.1 to 2.3 (the window, the regional managers' choice of pilot stores, the service factors), and the dashboard's own framing (pilot against the rest, weeks 10 to 35 against the same weeks of 2025: "a naive comparison, not a method").
+2. Ranking or scoring files: none rank the formats; the dashboard is a pilot-against-other view.
+3. Helper-only files: none clearly; the dashboard reads as a real BI weekly report, the weekly BI file duplicates the daily files, the hourly profile could help or be a distractor.
+4. Answer-like figures or names: none; the Annex 2 prices are thresholds, the dashboard's totals are the surface gaps the prompt asks about.
+5. Filed sentences and their literal results: 4.2, the avoided waste at cost plus the change in out-of-stock sales at gross margin, ex-VAT sales less cost; 4.3, twice the 26 weeks, averaged over every store of the format in the register; 4.1, the rule and the unit; 2.3, the service factors as a stated cause; 2.1, selection by regional managers; the header, the 2027 prices; "None of these says how to estimate out-of-stock sales. That stays open."
+6. One settling thing: none. The nearest is 4.2, 4.3 and 2.3 together, which hand over the saving's structure and leave "the out-of-stock demand estimate, the counterfactual for non-pilot stores, and the interval open". Part by part: both splits analysis; the saving mostly the stated procedure with real analysis in the out-of-stock and counterfactual estimate; the switch set the stated rule once the savings are right; nothing reads as planted (the forecasts logged for every store and the 2025 layout drift read as natural).
+
+Mechanical sweep: (a) dagssalg_frisk_2026.csv harmless (a coincidence across two unrelated columns); (b) the agreement's reference numbers harmless, the shared vocabulary low severity (4.1 hands the decision rule, not which formats pass); (c) prompt.txt harmless (style, not content).
+
+Realism tells: section 4 of the agreement is unusually self-contained and reads as written to define the estimand; Annex 2 replaced without an amendment clause (plausible); the board meeting on 6 October and the signing deadline of 1 November 2026 lie after the pack's September setting; the competitor list carries two rows per opening (one per nearby store), a one-off free-text remark, a future opening and a closure; the item register raises every 2026 price and cost by the same 2.5 per cent; the dashboard's forecast accuracy column is tidy; the 2025 and 2026 layouts differ sharply (a deliberate-looking but plausible migration); the staff-hours and hourly-profile files are plausible unlabelled exports; no hidden sheets.
+
+### Main thread's rulings
+
+- Questions 1 to 4: nothing to fix; the agreement files the decision's WHAT (the saving, the year, the population, the rule, the prices) and no method, grouping or comparison.
+- Question 5: every quoted sentence executes to the golden's estimands; 4.2 now reads literally as out-of-stock sales at gross margin, which is the quantity the golden estimates from the units the empty shelves turned away (pass 3's recorded-margin reading is no longer the literal one).
+- Question 6: none found. Its account that the saving mostly follows a stated procedure is an account of a route; executed as written, 4.2 and 4.3 leave the out-of-stock units, their form, the carry to the stores the pilot did not run in and the range open, and four separate wrong routes on the same literal estimand each file a wrong set (asserted in checks.py).
+- (a), (b), (c): harmless, as the reader says.
+- Realism: the uniform 2026 price list is a generator setting in plain sight and is fixed in the generator (each item's prices at shelf price points including VAT, its 2026 change by supplier and price point, its cost by supplier). Section 4's definitions are the go or no-go contract's own terms, filed by design. The October and November dates sit after the September cut inside the fiction. The competitor list's form is a hand-kept list's own. The dashboard answers its own question. The layouts are the ERP migration the note files.
+

@@ -65,9 +65,11 @@ AGREEMENT = [
         "expected saving per store and year in that format is greater than the format's licence price in Annex 2. A "
         "format is taken for all of its stores or for none of them.",
         "4.2 The saving of a store is the change in its fresh result from ordering on Kornblomst's forecast at the "
-        "recommended setting instead of on AutoOrdre: the fresh waste it avoids, valued at cost price, plus the "
-        "gross margin on the fresh units it sells in addition, less the gross margin on the fresh units it no "
-        "longer sells. Gross margin is the sales value excluding VAT less the cost price of the units sold.",
+        "recommended setting instead of on AutoOrdre. An order changes what is on a store's shelves, not what its "
+        "customers come in for, so the saving has two parts: the fresh waste the store avoids, valued at cost price, "
+        "and the change in its out-of-stock sales, the fresh units its customers would have bought after a shelf had "
+        "run empty, valued at their gross margin. Fewer out-of-stock sales add to the saving and more take from it. "
+        "Gross margin is the sales value excluding VAT less the cost price of the units.",
         "4.3 A year is 52 weeks, taken as twice the 26 weeks of the pilot. A format's expected saving per store is "
         "the average over every store of that format in Fjordkøb's store register, pilot stores and other stores "
         "alike.",

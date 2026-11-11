@@ -112,11 +112,15 @@ Layer 1: the daily extract changed layout at the ERP upgrade on 1 January 2026 (
   write-offs the next morning and book them on the next day; business intelligence renamed its category codes at the
   2026 range review; the last-sale time is blank on a day with no sale. Each is cleaned the same way by every careful
   run and moves no graded figure between careful runs (asserted)
-Not one thing: the call needs two independent judgments. The trading week (R7) decides To Go: read by format, To Go
-  switches whatever the estimator. The turned-away estimator (R2, R3) decides Super: counting every sale puts Super at
-  28,800 under the trading-week transport, under its 34,000 licence. A run that nails either alone files a wrong set
-  ({Kvarter} or all three); it still has to read the openings off the ambient trade (R4), split both gaps (R5, R6)
-  and range the savings (R9)
+Not one thing: four independent ways of going wrong, each landing on a wrong set by itself and each missing its
+  licence by 2,000 DKK or more on the format it flips (asserted). Counting every sale (R2, R3) keeps Super off even
+  by trading week (28,800 against 34,000) and files {Kvarter}; reading each format off its own pilot stores (R7)
+  switches To Go (30,700 against 12,000) and files all three; carrying the whole saving on fresh sales instead of
+  waste at cost plus margin (R8) keeps Kvarter off (16,600 against 20,000) and files {Super}; reading the margin
+  part off the recorded gross margin instead of agreement 4.2's out-of-stock sales puts Super at 30,500 by trading
+  week (-10,800 by format within it) and files {Kvarter}. The careful but hurried pass makes the first two at once
+  and files {To Go}; a run that avoids all four still has to read the openings off the ambient trade (R4), split
+  both gaps (R5, R6) and range the savings (R9)
 One-fact test: "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show"
   rescues R2 and R3, 2 of 10; "the new forecast reads every store's week like a big weekend store's" rescues R7 and
   half of R9, 1.5 of 10: with every sale still counted the trading-week transport keeps Super off (28,800 against its
@@ -132,8 +136,9 @@ Not rule application: no filed procedure estimates demand past an empty shelf, s
   average (4.1), and every one of those leaves the estimation open
 Estimand: the prompt fixes the two gaps (the pilot stores' fresh sales in kroner and fresh waste at cost, over the
   pilot against the same weeks of 2025, against the other stores) and asks for each split in percentage points;
-  the agreement fixes the saving (4.2: waste at cost avoided plus the margin on units gained less the margin on units
-  no longer sold, against the same store on AutoOrdre), the year (4.3: twice the 26 weeks), the population (4.3:
+  the agreement fixes the saving (4.2: the change in the store's fresh result against the same store on AutoOrdre,
+  in two parts, the fresh waste avoided at cost price and the change in its out-of-stock sales, the fresh units its
+  customers would have bought after a shelf had run empty, at their gross margin), the year (4.3: twice the 26 weeks), the population (4.3:
   every store of the format in the register, pilot or not), the rule (4.1: switch when greater than the licence) and
   the licence (Annex 2); the 80 per cent range is the prompt's own
 No decoy: nothing is written to carry a wrong answer: the dashboard answers its own question (waste and availability
@@ -142,26 +147,29 @@ No decoy: nothing is written to carry a wrong answer: the dashboard answers its 
 No replay: no result re-derives a published figure; the dashboard's two headline changes are R1's inputs, not its
   graded content, and every graded figure is estimated
 Pinned: R2's two forms (clipped at zero or not) and the simulation's truth inside its bands, the plain form outside;
-  the margin part read off the recorded gross margin ruled out by named data (SF15); comparison stores matched on
+  the margin part read off the recorded gross margin ruled out by agreement 4.2's out-of-stock sales and by named
+  data (SF15); comparison stores matched on
   trading week inside every band (SF17);
   R4 under ramps of 2 to 6 weeks and both comparison sets; R5's residual reading (-1.0) and the truth (-0.85) inside;
   R7 under ratio and mean weighting; R8 under fourteen rivals (estimator form, grouping by trading week or by format
   within it, the margin part on sales, units or the 2025 turned-away margin, ratio or mean weights, a line in the
   weekend share, the openings left in, comparison stores matched on trading week), all on the golden call, and the
   whole saving carried on fresh sales or on waste ruled out by the pilot's own record; R9 under three resampling
-  variants; asserted in `checks.py` (125 assertions)
+  variants; asserted in `checks.py` (133 assertions)
 Run forecast: R2 (method shortcut: every sale counted, or no turned-away units at all), R3 (self-confirming check: the
   estimate never read back on in-stock days), R7 (narrow look: each format read off its own pilot stores), R8
-  (method shortcut and narrow look together), R9 (unfinished chain: resampled by format, To Go's range above its
-  licence) and R10 (unfinished chain: Super and To Go switched); R1, R4, R5 and R6 are earned by a careful run
+  (method shortcut and narrow look together, or the saving carried on one scale, or its margin part read off the
+  recorded margin), R9 (unfinished chain: resampled by format, To Go's range above its licence) and R10 (unfinished
+  chain: To Go alone, or another of the four wrong sets); R1, R4, R5 and R6 are earned by a careful run
 Strategy label: WORKS IN FORM (heterogeneity that pooling hides, carried to the population the decision serves through
   a property rebuilt from each unit's own history; a capped outcome rebuilt from when each capped record stopped,
   its form checked where the answer is known; separating two explanations for one gap with a record the treatment
   cannot touch); the client's strategy 4 for this group (ranking fairly) is direction only
 Depth level: 5: four independent judgments each needing estimation (the turned-away units' form, its check on
   in-stock days, the openings off the ambient trade, the trading-week transport with the saving's two parts on
-  their own scales), two splits that need them, a call that needs two of them at once, and eleven shortcuts landing on
-  four different wrong calls (To Go alone; all three; Kvarter alone; Super alone)
+  their own scales), two splits that need them, a call that four separate mistakes each turn to a wrong set alone
+  (the estimator, the transport, the saving's scale, the margin's source), and eleven shortcuts landing on four
+  different wrong calls (To Go alone; all three; Kvarter alone; Super alone)
 Lesson: a pilot's measured effect is a property of the units it ran in: when the outcome is capped by the treatment's
   own choices, rebuild what the cap hid in a form you have checked where the answer is known, and carry the effect to
   the units the decision is about by what governs it in each unit, not by the label the decision is taken on; no
@@ -178,7 +186,7 @@ Lesson: a pilot's measured effect is a property of the units it ran in: when the
 | R5 | the sales gap split: forecast at its recommended setting -0.7, format mix -0.6, openings -0.4, not explained -0.3 | decomposition and attribution | the formats' own growth from their clean AutoOrdre stores; the turned-away sales against each pilot store's expected level; R4's shares; the residual reading (-1.0) and the simulation's -0.85 inside | forecast -1.05 to -0.55; mix -0.8 to -0.4; openings -0.6 to -0.2 | stopped at the first story: the whole gap is the forecast (-2.0) | R1, R4 | Ask 1 |
 | R6 | the waste gap split: forecast at its recommended setting -15.7, format mix -1.2, openings -0.3, not explained -0.3 | decomposition and attribution | the formats' own waste change from their clean AutoOrdre stores; R4's shares on each store's waste; the residual reading (-16.0) inside | forecast -16.5 to -14.9; mix -1.6 to -0.8; openings -0.5 to -0.1 | stopped at the first story: the dashboard's whole gap is the forecast's saving (-17.5) | R1, R4 | Ask 2 |
 | R7 | what the saving depends on: the trading week; weekend-trading pilot stores avoided 19.7 per cent of their 2025 waste, commuter-week pilot stores -1.3; the shadow forecasts' weekend ratio 2.42 against 0.91 (2.0 to 2.6 and 0.85 to 1.0 however the stores are pooled) | investigation | each store's 2025 weekend share of fresh units (no store between 0.205 and 0.253); the pilot stores' own savings; the shadow forecasts; the pilot stores' true rates (23.6 and -2.1) and the comparison stores matched on trading week (4.2 and 3.2) inside | 16.0 to 24.0; -4.5 to 5.0 | narrow look: each format's saving read off its own pilot stores (To Go 32.3 per cent of waste), never asking why the stores differ | independent: the stores' own weeks and the shadow forecasts | Component 3 |
-| R8 | each format's expected saving per store and year: Super 40,200, Kvarter 28,000, To Go 2,400 DKK | modeling | agreement 4.2 and 4.3; the waste part on each store's 2025 waste and the margin part on its 2025 fresh sales at its trading week's rates; fifteen rivals inside every band (two of them comparison stores matched on trading week); the whole saving on sales or on waste, and the margin read off the recorded gross margin, ruled out by the pilot's record | Super 35,800 to 47,000; Kvarter 24,100 to 36,100; To Go -6,300 to 10,600 | method shortcut and narrow look: by format with every sale counted, 33,100, 16,800 and 23,800 | R2, R4, R7 | Ask 3 |
+| R8 | each format's expected saving per store and year: Super 40,200, Kvarter 28,000, To Go 2,400 DKK | modeling | agreement 4.2 and 4.3; the waste part on each store's 2025 waste and the margin part on its 2025 fresh sales at its trading week's rates; fifteen rivals inside every band (two of them comparison stores matched on trading week); the whole saving on sales or on waste ruled out by the pilot's record, and the margin read off the recorded gross margin by agreement 4.2's out-of-stock sales and the pilot's record | Super 35,800 to 47,000; Kvarter 24,100 to 36,100; To Go -6,300 to 10,600 | method shortcut and narrow look: by format with every sale counted, 33,100, 16,800 and 23,800 | R2, R4, R7 | Ask 3 |
 | R9 | the 80 per cent range: Super 22,200 to 55,800; Kvarter 17,800 to 37,700; To Go -4,000 to 8,300 | uncertainty | 400 resamples of the stores (pilot stores within trading week, the others within format), every step redone; three variants inside | Super 17,200 to 27,500 and 50,100 to 60,800; Kvarter 12,800 to 22,800 and 32,700 to 42,700; To Go -9,000 to 1,000 and 3,300 to 13,300 | unfinished chain: resampled by format, To Go's range (19,700 to 27,700) sits wholly above its licence | R8 | Ask 3 |
 | R10 | switch Super and Kvarter, keep To Go on AutoOrdre | synthesis | agreement 4.1 on R8; every rival on the golden's side of each licence by 2,400 or more | exact | unfinished chain: switches To Go alone (Super 33,100 under its licence, Kvarter 16,800) | R8 | Recommendation |
 
@@ -278,7 +286,7 @@ Nearest build: task12 (heterogeneity that pooling hides, carried to a buyer base
 | SF12 | the trading-week cut | anywhere between the two groups' weekend shares | the widest gap (0.23) | same call: no store has a weekend share between 0.205 and 0.253 (asserted) |
 | SF13 | "an 80% range" | the 10th and 90th percentiles of a resampling of the stores with every step redone | as stated | the prompt; three resampling variants inside every end's band (asserted) |
 | SF14 | how the pilot stores' rates are grouped | pooled by trading week across formats; format by format within the trading week | pooled by trading week | same call: format by format gives Super 39,700, Kvarter 26,200, To Go 3,500, inside every band (asserted); the blocks name both |
-| SF15 | where the margin part of the saving is read from | the units the empty shelves turned away; the recorded gross margin | the turned-away units | named data: the forecast moves a store's sales only on days its shelf empties, and store 2158's recorded margin ran 63,000 below its format's while its turned-away units account for 3,700; on the stores that kept AutoOrdre the recorded route spreads 20,600 a Super store against 5,800, about 20,600 a store-year of noise on four Super pilot stores, and its Super figure swings from -10,800 to 30,500 between two groupings of the same stores (asserted) |
+| SF15 | where the margin part of the saving is read from | the out-of-stock sales the forecast changes; the recorded gross margin | the out-of-stock sales | agreement 4.2: the margin part is the change in out-of-stock sales, the fresh units customers would have bought after a shelf had run empty, valued at their gross margin; and named data: store 2158's recorded margin ran 63,000 below its format's while its out-of-stock units account for 3,700, and on the stores that kept AutoOrdre the recorded route spreads 20,600 a Super store-year against 5,800, so its Super figure swings from -10,800 to 30,500 between two groupings of the same four pilot stores (asserted) |
 | SF17 | which stores a pilot store's expected level comes from | its format's stores that kept AutoOrdre and had no opening; those of its format and trading week; those of its trading week across formats | its format's | same call: matched on trading week within the format (one Kvarter and one To Go comparison store) gives Super 44,800, Kvarter 34,400, To Go 9,600, across formats 38,000, 30,400, 7,500, all inside the bands and on the golden's set (asserted) |
 | SF16 | "a gap in percentage points" | the difference of the two groups' growth rates; the change in waste as a share of sales | the difference of the rates | the prompt's "grew less" and "fell further than the other stores'"; the blocks state it in asks 1 and 2 |
 
@@ -313,14 +321,15 @@ Nearest build: task12 (heterogeneity that pooling hides, carried to a buyer base
 
 The prompt executed word for word on the conformed record gives R1's two gaps. Agreement 4.2 executed word for word
 asks for each store's change in fresh result against itself on AutoOrdre: the waste part is a comparison the record
-supports (2025 against 2026, against the stores that kept AutoOrdre), and the margin part needs the units the store
-sold in addition or no longer sold, which the sales record caps at the stock, so a literal reader must estimate the
-units the empty shelves turned away; the in-stock days show which form of that estimate holds. 4.3 executed word for
+supports (2025 against 2026, against the stores that kept AutoOrdre), and the margin part is the change in the
+store's out-of-stock sales, the units its customers would have bought after a shelf had run empty, which the sales
+record never shows, so a literal reader must estimate the units the empty shelves turned away; the in-stock days
+show which form of that estimate holds, and the recorded gross margin is not the clause's quantity. 4.3 executed word for
 word averages over every store of the format, so the pilot stores' own figures cannot stand for the format, and the
 reader has to carry the pilot's saving to stores it did not run in by whatever governs it there. 4.1 then reads each
 format's average against Annex 2. Every literal reading gives the golden's quantities; the hurried figures come from
-easier methods on the same estimands (every sale counted, each format read off its own pilot stores, the range
-resampled by format), never from another reading. No shipped sentence names a method, a comparison or a grouping.
+easier methods on the same estimands (every sale counted, each format read off its own pilot stores, the whole
+saving carried on fresh sales, the range resampled by format), never from another reading. No shipped sentence names a method, a comparison or a grouping.
 
 ## Prompt contract
 
@@ -345,6 +354,10 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
   decision, licence, Kvarter, agreement) because it is the contract the decision is taken under; it names no method,
   grouping or comparison, and the reader's question 1 asks the same thing cold.
 - The prompt gate's shell quota (pptx+xlsx at 29 per cent): answered under `## Draw`.
+- Third isolated read (the 4.2 cut): no method, ranking, helper or answer leak, question 6 none; 4.2 reads literally as
+  out-of-stock sales at gross margin. Its realism notes: the uniform 2026 price list is fixed in the generator; section
+  4's definitions are the contract's own terms; the October and November dates sit after the September cut inside the
+  fiction; the competitor list's two rows per opening and its one remark are a hand-kept list's own form.
 
 ## Tried and rejected
 
@@ -545,3 +558,9 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
   taken, the author's call: pin 4.2's margin part in the agreement's own retail terms as the margin on the sales the
   store gains or loses where a shelf runs empty (out-of-stock sales), which is what the forecast changes, so the
   recorded margin's other movements are not the saving's literal reading; then a third leak read and a fresh judge.
+- Agreement 4.2's earlier margin wording (the gross margin on the fresh units a store sells in addition, less the
+  margin on those it no longer sells), after pass 3: a literal reader built it from the recorded margin and put Super
+  under its licence. 4.2 now files the margin part in the agreement's own retail terms as the change in out-of-stock
+  sales, the fresh units customers would have bought after a shelf had run empty, valued at their gross margin, so
+  the recorded margin's other movements are not the saving's literal reading; reading it off the recorded margin
+  stays a named wrong route (Super 30,500 or -10,800, {Kvarter}), one of four that each file a wrong set alone.

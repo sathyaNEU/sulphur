@@ -168,6 +168,7 @@ def build(R):
         for fm in FMT if (Pw["format"] == fm).any()}
     F["agreement_clauses"] = [4.1, 4.2, 4.3]
     F["range_level_pct"] = 80
+    F["plain_interp_spread_pct"] = 4
     F["resamples"] = 400
     lcl = F["lost_units_clipped"]
     ss, ws, hg = F["sales_split_parts"], F["waste_split_parts"], F["headline_gaps"]

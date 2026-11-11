@@ -173,6 +173,13 @@ def run(w, R, F, E, target):
        "%s and %s" % (F["routes"]["recorded_type"]["saving"]["Super"], F["routes"]["recorded_fxt"]["saving"]["Super"]))
     ok("the call needs both judgments: by trading week with every sale counted keeps Super off, by format with the right estimator switches To Go",
        F["routes"]["plain_type"]["switch"] != G["switch"] and F["routes"]["by_format"]["switch"] != G["switch"])
+    for nm_, why_ in (("plain_type", "every sale counted"), ("by_format", "each format off its own pilot stores"),
+                      ("single_sales_type", "the saving carried on fresh sales"), ("recorded_type", "the margin off the recorded gross margin")):
+        r_ = R["routes"][nm_]
+        ok("failure way alone (%s) lands on a wrong set" % why_, r_["switch"] != G["switch"], str(r_["switch"]))
+        f_ = [f for f in W.FORMATS if (f in r_["switch"]) != (f in G["switch"])]
+        ok("failure way alone (%s) misses its licence by 2,000 DKK or more on the format it flips" % why_,
+           all(abs(r_["format_saving"][f] - GD.LICENCE[f]) >= 2000 for f in f_), str({f: round(r_["format_saving"][f]) for f in f_}))
     ok("SF15 the recorded margin books to the forecast what a store's shelves did not lose (store 2158)",
        F["store_2158_margin_change"]["recorded"] < F["store_2158_margin_change"]["turned_away"] - 40000, str(F["store_2158_margin_change"]))
     ok("SF14 the pilot stores' rates taken format by format within the trading week stay inside every band",

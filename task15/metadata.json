@@ -116,7 +116,7 @@
   {
    "path": "pilotaftale_kornblomst_2026.pdf",
    "format": "pdf",
-   "bytes": 58369,
+   "bytes": 58560,
    "covers": "the pilot agreement with Kornblomst Analytics, with the 2027 price list",
    "made": "written by task15/generator/build.py from the simulated process (deterministic)"
   },
