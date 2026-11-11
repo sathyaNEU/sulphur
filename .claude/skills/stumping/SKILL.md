@@ -50,8 +50,9 @@ column cell is priced lost only when a precedent shows a frontier run losing tha
 3.2), and the next draw is built where Part 1b says the runs lose.
 
 **What the two approved builds share** (the author's report of 2026-11-11: task6 v7, the latency error budgets, and
-task457, the conflict-of-interest docket shipped as task14 architecture 1). Their skeletons share nothing (the
-selftest in `fingerprint/skeleton.py` holds them apart), so this is an anatomy, not a template:
+task457, the conflict-of-interest docket shipped as task14 architecture 1 and filed as `task457/`).
+Their skeletons share nothing (the selftest in `fingerprint/skeleton.py` holds them apart), so this is an anatomy,
+not a template:
 - the answer is a quantity the primary record does not hold: a sample whose inclusion another unit set, a store that
   no longer covers the month, a self-report that saw only the payments made before the day it was filed;
 - the correction comes from the relation between two records at different grains or times (each kept span's root
@@ -218,7 +219,8 @@ date on (`precut.py`; a WARN for builds filed before it):
 - `Forcing:` the golden family's spread and its nearest distance to the line, the shortcuts' distances on the other
   side, and each fitted input moved by its defensible spread (20 per cent when none is known) with the call holding;
 - `Noun swap:` the nearest task on file or in the client's library (`skeleton.py check taskNN`), its nouns swapped
-  into this one, and the elements that carry across unchanged; any severity 1 to 3 is a redraw.
+  into this one, and the elements that carry across unchanged; any skeleton BLOCK is a redraw, and a severity 3 the
+  guard only warns on is answered here in one line.
 
 ## Part 2. The one-thing screen
 
@@ -421,13 +423,16 @@ chain and answer shape repeated anywhere on file, the weight of either of the la
 of the last one, then `register`. Personas from `guard.py names`.
 
 **The skeleton before the chain.** `python3 .claude/skills/fingerprint/skeleton.py lessons --min 2` lists every
-lesson the client's dataset and our builds already teach twice; the lesson the call turns on is never one of them,
-and no more than half of the chain's lessons may be. Write the card's `skeleton` (decision form, lessons with the
-deciding one first, mechanisms, detection, moves, file roles, answer pattern) and run `skeleton.py check` on the draft:
-any severity 1 to 3 against a build on file, a client task or this slot's own lineage is a redraw of the element it
-names, and a new setting never clears it (the client swaps the nouns and counts what carries across). The decision
-form is drawn from the decision's own unit; a form already on four live builds (the house's set over a line is on
-several) is refused.
+lesson already taught twice (by the client's accepted and level 3 tasks and our approved builds,
+`fingerprint/corpus/approved.json`): a chain of one or two lessons never turns on one of them, and no chain may have
+more than half its lessons taught. Write the card's `skeleton` (decision form, lessons with the deciding one first,
+mechanisms, detection, moves, file roles, answer pattern) and run `skeleton.py check` on the draft: every BLOCK is a
+redraw of the element it names (a severity 1 or 2 against anything on file, a client task or this slot's own
+lineage; a severity 3 against a task that teaches when the chain is thin or the pair shares two lessons), and a new
+setting never clears one (the client swaps the nouns and counts what carries across). The decision form and the
+answer's shape are drawn from the decision's own unit: a specific form with a specific answer pattern already on two
+live builds is refused as a house shell, a common form on four live builds is a warning, and so is a lesson two of
+our own live builds already carry.
 
 **Where a chain comes from.** Read the client's strategies for the domain group (`references/sulfur-strategies.md`
 points into the export): each names its analysis type, answer shape, where the weight sits, the chain of hard
@@ -481,8 +486,9 @@ measurements.
 
 - [ ] Card registered with analysis type, answer shape, weight and chain signature; `guard.py mechanisms` and `slots`
       read; the abstraction sentence written and not writable against a build on file
-- [ ] The card's skeleton clear in `skeleton.py check` (no severity 1 to 3 against a build on file, a client task or
-      the slot's lineage; the deciding lesson not taught twice already); the `## Frontier check` written (precedents
+- [ ] The card's skeleton clear in `skeleton.py check` (no BLOCK: no severity 1 or 2 against anything on file, a
+      client task or the slot's lineage, no severity 3 on a thin chain, a thin chain's deciding lesson not taught
+      twice, no more than half the chain taught, no house shell); the `## Frontier check` written (precedents
       for every careful-column loss, the shallow path's own checks, the assumption made false, forcing on both sides,
       the noun swap); the cited pair estimate 50 or under
 - [ ] The process behind the files written before any result; the weight named and rotated
