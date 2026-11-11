@@ -1,36 +1,35 @@
 {
  "task": "task13",
- "status": "READY",
+ "status": "DRAWING",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "anomaly-detection",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 1,
+ "stage_name": "draw",
  "updated": "2026-11-11",
- "call": "BGS-F3-R1, CLB-F1, CLB-F2, CLB-F2-R1, LRD-F1-R2, MLN-F2, MLN-F4, MLN-F4-R2, PGP-F2, PGP-F4-R3 and TGP-F3-R1 for the 2027 refit, on a rule that judges each zone at its own sound level learned from its inspection-confirmed seasons, carried uncertain into the chance, at 1 in 715 a zone a season; rejects the season-by-season scatter's 13 and the known-level rule's 17",
- "stump": "four analytical judgments: each zone's own sound level learned from its inspection-confirmed seasons (a scatter taken season by season refers 13), that level carried with its uncertainty into the tail (taken as known it refers 17 and would refer a sound zone 1.2 times a season against the terms' 0.2), the state each failure had reached by the end of 2026 for the refit's value (the record since inspection averaged gives 72 against 116), and the reconstruction of the radio-less records beneath them",
- "architecture": 3,
- "loops": 2,
+ "call": "to be set at stage 2: the 2026 net sustained interruptions the 22 automated loops avoided (against the dashboard's gross), the controls to re-battery before the winter, the transfer directions to run without summer auto-transfer in 2027, and 2027's net avoided",
+ "stump": "",
+ "architecture": 4,
+ "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-11",
-  "checks": "92 of 92, the next-level Frontier check included"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (2026-11-11, final cut): no LEAK; sweep 4 (the terms' own nouns) and sweep 11 (corpus shell quota) ruled harmless in the design note",
-  "reader": "clean (2026-11-11, full read of architecture 3 and re-read of the revised terms and register): Q1 and Q5 the filed WHAT, the revised 4(c) \"fixes the estimand ... not the method\"; Q2 to Q4 none; Q6 none"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (overuse.forum, repeat.gate_g and repeat.decision against task15, answered in Draw); no BLOCK",
-  "nearest": "task13 lineage 0.11, task9 0.06, mark253 0.05 (drivers); surface exit 0"
+  "heart": "",
+  "nearest": "mark196 and task10 v5 0.05 (drivers); skeleton severity none against everything on file; guard WARN (answered in the Draw)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "gate_h": "domain pass, layers pass, 10 results across 6 areas, one thing none (borderline); first pass landed nothing the careful column prices below Right (pair stays 35.2), lost the refit to the record since inspection averaged (66)",
-  "report": "task13/determinism_check_report.md (p4; p3 on revision 1 recorded as history)"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": 35.2,
+ "paper_pair": null,
  "runs": {
   "run1": null,
   "run2": null,
@@ -42,7 +41,17 @@
   },
   "triage": "",
   "recorded": "",
-  "history": []
+  "history": [
+   {
+    "architecture": 3,
+    "run1": null,
+    "run1_note": "not reported; on the golden (the author: 'model identified the ground truth'); task13/runs/run1.md",
+    "run2": null,
+    "run2_note": "not pasted",
+    "verdict": "REDESIGN (landed)",
+    "recorded": "2026-11-11"
+   }
+  ]
  },
  "returned": [
   {
@@ -99,9 +108,48 @@
     "report": "/tmp/determinism-check-task13-p3/verdict.md (summarised in determinism_check_report.md)"
    },
    "commit": ""
+  },
+  {
+   "date": "2026-11-11",
+   "source": "run (platform run pasted by the author)",
+   "repair": "design (re-root to architecture 4: a new world, dataset and shell, new deciding lessons and decision form, at depth level 5)",
+   "what": "architecture 3 (READY 17912c6, uploaded) landed: the pasted platform run filed the same 11 zones and every graded figure inside its band (task13/runs/run1.md); its reflexes and named assumptions are filed as precedents R26 to R32 and N09 to N14 (543d886); the lightning world spent architectures 2 and 3",
+   "arch3": {
+    "call": "BGS-F3-R1, CLB-F1, CLB-F2, CLB-F2-R1, LRD-F1-R2, MLN-F2, MLN-F4, MLN-F4-R2, PGP-F2, PGP-F4-R3 and TGP-F3-R1 for the 2027 refit, on a rule that judges each zone at its own sound level learned from its inspection-confirmed seasons, carried uncertain into the chance, at 1 in 715 a zone a season; rejects the season-by-season scatter's 13 and the known-level rule's 17",
+    "stump": "four analytical judgments: each zone's own sound level learned from its inspection-confirmed seasons (a scatter taken season by season refers 13), that level carried with its uncertainty into the tail (taken as known it refers 17 and would refer a sound zone 1.2 times a season against the terms' 0.2), the state each failure had reached by the end of 2026 for the refit's value (the record since inspection averaged gives 72 against 116), and the reconstruction of the radio-less records beneath them",
+    "paper_pair": 35.2,
+    "cited_pair": 35.2,
+    "judge": {
+     "verdict": "DETERMINISTIC",
+     "disposition": "APPROVE",
+     "gate_h": "domain pass, layers pass, 10 results across 6 areas, one thing none (borderline); first pass landed nothing the careful column prices below Right (pair stays 35.2), lost the refit to the record since inspection averaged (66)",
+     "report": "task13/determinism_check_report.md (p4; p3 on revision 1 recorded as history)"
+    },
+    "leak": {
+     "leak_py": "REVIEW (2026-11-11, final cut): no LEAK; sweep 4 (the terms' own nouns) and sweep 11 (corpus shell quota) ruled harmless in the design note",
+     "reader": "clean (2026-11-11, full read of architecture 3 and re-read of the revised terms and register): Q1 and Q5 the filed WHAT, the revised 4(c) \"fixes the estimand ... not the method\"; Q2 to Q4 none; Q6 none"
+    },
+    "precut": {
+     "exit": 0,
+     "date": "2026-11-11",
+     "checks": "92 of 92, the next-level Frontier check included"
+    },
+    "duplicate_check": {
+     "heart": "WARN (overuse.forum, repeat.gate_g and repeat.decision against task15, answered in Draw); no BLOCK",
+     "nearest": "task13 lineage 0.11, task9 0.06, mark253 0.05 (drivers); surface exit 0"
+    },
+    "effort": {
+     "quick": 7.0,
+     "careful": 47.2,
+     "thorough": 100.0,
+     "largest_hint": "a zone that runs high when its protection is sound runs high every season: 2 of 7 (R4, R6)"
+    },
+    "chain": "R1 the network's lightning faults per season with the radio-less zones' 2026 restored; R2 the faults the refit avoids at the state each failure had reached; R3 2026's faults failed protection caused at each zone's own level; R4 the zones referred for the 2027 refit; R5 the referred zones' record since inspection against sound protection at their own levels; R6 the alert load and the rule's sound referrals; R7 referrals against the following cyclic inspections"
+   },
+   "commit": ""
   }
  ],
- "resume": "READY (2026-11-11): the author rewrites prompt.txt for voice (voice-check.py --rewrite and leak.py on the rewrite), uploads it with target.zip, then /triage-runs task13 once both runs are graded",
+ "resume": "stage 2: the full results chain, hidden factor record, effort test on paper, Frontier check, fork and closure tables and the prompt for architecture 4 (Blue Earth Valley Power's 22 FLISR loops); then the generator in a new world (the arch 3 generator is at 17912c6)",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -109,14 +157,14 @@
   "date": "",
   "note": ""
  },
- "notes": "architecture 2: the likely-failed-part result (R7 in the draw) was dropped at the build as an open fork (signatures within noise on 8 of 15 zones); terms 3(c) removed, 2(f) and 5 added or rewritten to pin R3 and the inspection check; arch-1 scripts ceiling.py, deliver.py and rivals.py removed, tells.py kept as the authoring-tell sweep; stage 4 on 2026-11-11: block repairs applied per the judge (bands on the inspection check and the season totals, the false-referral reading, the observed-months test), terms 2(g) filed the lightning near a zone, OMS and register columns renamed from device to equipment",
+ "notes": "architecture 4 drawn 2026-11-11 after the platform run landed architecture 3; work in worktree .claude/worktrees/task13-arch4 (the main tree carries another session's uncommitted task7 edits)",
  "doctrine": "throughout",
- "chain": "R1 the network's lightning faults per season with the radio-less zones' 2026 restored; R2 the faults the refit avoids at the state each failure had reached; R3 2026's faults failed protection caused at each zone's own level; R4 the zones referred for the 2027 refit; R5 the referred zones' record since inspection against sound protection at their own levels; R6 the alert load and the rule's sound referrals; R7 referrals against the following cyclic inspections",
+ "chain": "R1 FLISR sequences and customers restored within five minutes each year 2022-2026, the storm days the archive lost restored; R2 2026's bridge from the dashboard's figure to the net sustained interruptions avoided; R3 2025-26's failed and blocked restorations by cause; R4 the controls to re-battery before the winter; R5 the transfer directions to run without summer auto-transfer on 1 July 2027; R6 2027's net avoided with the changes, with its range",
  "effort": {
-  "quick": 7.0,
-  "careful": 47.2,
-  "thorough": 100.0,
-  "largest_hint": "a zone that runs high when its protection is sound runs high every season: 2 of 7 (R4, R6)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
- "cited_pair": 35.2
+ "cited_pair": null
 }
