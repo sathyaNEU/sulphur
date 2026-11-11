@@ -177,24 +177,26 @@ def write(path, pk, g, f):
              "shortfall) and Model (the pilot's per-km energy by block with its electric days and diesel figure, the bridge, the "
              "heating figures, the charging split). The slides (niittyla_ebus_order_2027.pptx) carry the order, a bar chart of the "
              "48 energies against the limit in priority order, and what the figures rest on.\n")
-    L.append("1. Diesel use per weekday block over November 2025 to October 2026, litres per 100 scheduled km to one decimal "
+    L.append("1. Estimated diesel use per weekday block over November 2025 to October 2026, litres per 100 scheduled km to one decimal "
              "(workbook sheet Blocks, column \"Diesel l/100 km\"; graded within %.1f l/100 km): %s. The 48 figures run from %.1f to "
              "%.1f; each block's figure is the litres on the fuel-card statement between the fills of every bus that ran it, "
              "spread over the blocks the dispatch log shows between those fills, so a block that shared its buses' fills with "
              "other blocks gets its own rate and not its buses' average.\n"
              % (R1_TOL, "; ".join("%s %.1f" % (c, f["diesel"][c]) for c in sorted(pk.weekday)), f["diesel_min"], f["diesel_max"]))
-    L.append("2. Design-day energy per weekday block for the 2027 model, kWh to the nearest 10 (sheet Blocks, \"Design-day energy "
-             "kWh\"; graded within %d kWh): %s.\n" % (E_TOL, "; ".join("%s %d" % (c, f["energy"][c]) for c in sorted(pk.weekday))))
-    L.append("3. Whether each weekday block qualifies under DES-1 4.1, its design-day energy against %d kWh (85 per cent of %d kWh "
+    L.append("2. Forecast design-day energy per weekday block for a 2027 bus, kWh to the nearest 10, from the company's own "
+             "operating records: the pilot buses' energy per km outside heating, carried to every block by its diesel use, and the "
+             "heating the 2027 model takes from its battery on a -15 C day (sheet Blocks, \"Design-day energy kWh\"; graded within %d "
+             "kWh): %s.\n" % (E_TOL, "; ".join("%s %d" % (c, f["energy"][c]) for c in sorted(pk.weekday))))
+    L.append("3. Whether each weekday block's forecast qualifies under DES-1 4.1, its design-day energy against %d kWh (85 per cent of %d kWh "
              "usable after the first winter): %s. %d blocks qualify; the %d assigned are those the night period recharges in "
              "priority order (sheet Blocks, \"Qualifies\" and \"Assigned 2027\").\n"
              % (round(g["limit"]), round(f["usable_y1"]), "; ".join("%s %s" % (c, f["verdict"][c]) for c in sorted(pk.weekday)),
                 f["qualifying_count"], f["call_count"]))
-    L.append("4. The share of usable battery the company's own electric buses lose for good in their first twelve months in service: "
+    L.append("4. The estimated share of usable battery the company's own electric buses lose for good in their first twelve months in service: "
              "%.1f per cent (sheet Order; graded within the band %.1f to %.1f, which every age form a fit could take spans, a straight "
              "line in age included; no reading inside it moves a verdict or the order). Usable battery for planning %d kWh, limit %d "
              "kWh.\n" % (f["loss_pct"], LOSS_BAND[0], LOSS_BAND[1], round(f["usable_y1"]), round(g["limit"])))
-    L.append("5. The energy the charging installation would draw at the connection point on the design night with the bus of every "
+    L.append("5. The forecast energy the charging installation would draw at the connection point on the design night with the bus of every "
              "qualifying block on charge: %.1f MWh for the %d qualifying blocks (sheet Night; graded within %.1f MWh), each bus's "
              "recharge over the chargers' efficiency and the steady draw it takes beside it to keep its battery warm over its %.1f to "
              "%.1f hours on charge. The night period's %d kW gives at most %.2f MWh between 21:00 and 07:00, which is why the plan's "

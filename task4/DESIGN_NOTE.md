@@ -208,15 +208,20 @@ every qualifying block on charge" is the 23.
 
 ## Prompt contract
 
-A voice rewrite keeps: the question (how many buses to order for the Niittylä depot for 2027 and which weekday blocks
-they take under the depot electrification standard), every weekday block's diesel use over the last twelve months
-per 100 scheduled kilometres, its design-day energy in kWh for the quoted 2027 model, a yes or no on whether it
-qualifies under the standard (never "goes electric" or "passes"), the first-year loss as a share of usable battery on
-the company's own electric buses, the energy in MWh the charging installation would draw at the connection point on
-the design night with the bus of every qualifying block on charge, a workbook and slides for the board. It never
-adds: a rounding instruction, a fuel heater, a bridge, a selection, a pilot block, a covariate, a schedule, a
-regression, a tank, a fill, a temperature form, a holdout, state of charge, battery conditioning, a charging
-efficiency, a file name, the standard by its code, the capacity figure, or who is asking.
+A voice rewrite keeps: the question (how many battery-electric buses to order for the Niittylä depot's 2027 weekday
+blocks and which blocks they take, when most of those blocks have never been run by an electric bus: the forecast's
+population includes the blocks no electric bus has run), every weekday block's ESTIMATED diesel use over the last
+twelve months per 100 scheduled kilometres, a FORECAST from the company's own operating records of the battery energy
+in kWh a 2027 bus would use on the standard's design day, whether that forecast qualifies under the standard (never
+"goes electric" or "passes"), an ESTIMATE of the first-year loss as a share of usable battery on the company's own
+electric buses, a FORECAST of the energy in MWh the charging installation would draw at the connection point on the
+design night with the bus of every qualifying block on charge, a workbook and slides for the board. The words
+estimate and forecast and "from our own operating records" stay (H20: without them the platform's Domains Fit review
+read every ask as a lookup or a certified figure applied to a rule); they name what each result is and the data it
+stands on, as DES-1 3.1 does, never the model. It never adds: a rounding instruction, a fuel heater, a bridge, a
+selection, a pilot block, a covariate, a schedule, a regression, a tank, a fill, a temperature form, a holdout, state
+of charge, battery conditioning, a charging efficiency, a file name, the standard by its code, the capacity figure, a
+count of the blocks or the buses, or who is asking.
 
 Leak sweeps answered (leak.py REVIEW lines, 2026-11-10; the third reader's lines: the standard's 2.4 now names the airport station, the outlets line reads as the 2027 to 2029 rollout, the prompt's loss ask is plural like DES-1 2.3, each asserted as SF28 and SF29): the agreement's 690 kW is the filed capacity the prompt's
 standard runs on, named in `stated_inputs`; the standard's clause numbers 4.1 and 4.3 are section labels, not the
@@ -570,3 +575,14 @@ Architecture 2 and earlier, carried from the agro-climatic note:
   at 0.04 per cent a degree (1 per cent at -15 C, a pack its thermal management keeps warm) every capacity basis but the
   bare quoted 480 kWh lands 17 with M145 refused (SF42), and the loss, the verdicts, the energies and the order do not
   move (the limit 390.5 to 390.3 kWh). The APPROVE was scoped to the earlier pack, so the judge runs once more.
+- 2026-11-10, architecture 10 loop 1, the platform's Domains Fit return on the READY prompt (979f04f): it read every ask as
+  a lookup or a certified figure applied to a stated rule ("look up diesel use per 100 km, compare a quoted kWh figure
+  against a design-day threshold, count qualifying blocks, and sum connection-point energy ... nothing needs to be
+  estimated, modelled, forecast or validated"), the "quoted 2027 model" taken for a quoted energy. The prompt now leads
+  with the forecast's population (most of the blocks never run by an electric bus) and names each result as what it is
+  (an estimate of the diesel use, a forecast from the company's own operating records of the design-day energy, an
+  estimate of the loss, a forecast of the night's draw), as this slot's architecture 5 did when the same review read it
+  as route arithmetic; the answer blocks say the same. A 90 per cent interval on the loss, the review's own example, was
+  measured and not built: the iid, by-bus clustered and per-bus intervals all read 4.2 to 4.5 on this pack, so it would
+  grade nothing, and its bounds would inherit the age-form fork the band was widened for. No graded figure and neither
+  zip moved.

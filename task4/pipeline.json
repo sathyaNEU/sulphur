@@ -21,7 +21,7 @@
  },
  "leak": {
   "leak_py": "REVIEW, no LEAK (2026-11-10, as-of 2026-11-06): the clause labels 4.1 and 4.3, the standard's and the quotation's own nouns, the plan's 2027 dates",
-  "reader": "loop 1 reader (2026-11-10, on 133243bf): no process sentence for any graded result, no helper file, no one thing, every literal reading the golden; its realism lines fixed (the statement closes at 31 October, the two heater-fault orders in two mechanics' words, the plan's 'move to Kauppala' row); not re-run since (no document or the prompt changed)"
+  "reader": "loop 1 reader (2026-11-10, on 133243bf): no process sentence for any graded result, no helper file, no one thing; not re-run for the Domains Fit reword, on the author's call (wording only, the pack unchanged)"
  },
  "duplicate_check": {
   "heart": "WARN (2026-11-10, loop 1; overuse.weight, repeat.deliverables, repeat.question_form, answered in the note)",
@@ -33,7 +33,7 @@
   "gate_g": "method_or_model_selection with binding_constraint and forecasting; analytical_non_defect; no surface read; no sole defect",
   "gate_h": "pass: 8 to 9 results over 4 or more areas, one_thing none, careful about 2 to 4 of 9, the largest hint 2 to 3",
   "report": "task4/determinism_check_report.md",
-  "history": "pass 8 (loop 1, 133243bf) DETERMINISTIC APPROVE, order broken and nothing recomputed, not counted; pass 9 (8a51114e) clean, DETERMINISTIC FIX_NOW (the loss band, ask 1 unconfirmed); pass 10 (8a51114e) DETERMINISTIC APPROVE, voided by the main thread's capacity-basis fork, fixed (SF42); pass 11 (8bb29ac7) DETERMINISTIC APPROVE, order kept; its argued (not recomputed) capacity bases are recomputed in checks.py SF42"
+  "history": "pass 8 (loop 1, 133243bf) DETERMINISTIC APPROVE, order broken and nothing recomputed, not counted; pass 9 (8a51114e) clean, DETERMINISTIC FIX_NOW (the loss band, ask 1 unconfirmed); pass 10 (8a51114e) DETERMINISTIC APPROVE, voided by the main thread's capacity-basis fork, fixed (SF42); pass 11 (8bb29ac7) DETERMINISTIC APPROVE, order kept; its argued (not recomputed) capacity bases are recomputed in checks.py SF42; not re-run for the Domains Fit reword, on the author's call (the pack pass 11 approved is unchanged)"
  },
  "paper_pair": 49.5,
  "effort": {
@@ -66,9 +66,17 @@
    "moves": "forks closed by WHAT pins (DES-1 3.2 the charging lane's chargers, the workshop's outlets for buses under repair, the draw as the chargers take it session by session; 2.4 the design night; the agreement and the plan on the outlets; the plan moves the six pilot buses to Kauppala; the prompt's 'qualifies under the standard' and 'with the bus of every qualifying block on charge' at the connection point); a third independent judgment added on the charging side (what a bus on charge draws beside its recharge on a cold night, split from the charger meters, component 3); the order 18 to 17; R1 to R6 unmoved; the reversible cold capacity cut from 0.16 to 0.04 per cent a degree so the gain's capacity basis stays off the call (SF42)",
    "freeze": "freeze.py check --mode rubric exit 1 by design: the call (18 to 17), the components, the stump and the results chain moved with the added result; no mode's contract covers a design repair, recorded rather than forced",
    "commit": ""
+  },
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "surface",
+   "portal": "Domains Fit on the READY prompt (979f04f): every ask read as a lookup or a quoted figure certified against a stated rule ('apply criteria, count, certify'); no estimation, modelling, forecasting or uncertainty seen",
+   "moves": "prompt reworded (H20): the forecast's population stated (most of those blocks never run by an electric bus), each result named as an estimate or a forecast from the company's own operating records, the 'quoted 2027 model' dropped; the answer blocks say the same; no graded figure, pack file or zip moved",
+   "commit": ""
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py task4 --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
+ "resume": "READY: the author rewrites prompt.txt in their own voice, keeping 'estimate', 'forecast', 'from our own operating records' and 'most of those blocks have never been run by an electric bus' (voice-check.py task4 --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -111,6 +119,10 @@
   {
    "date": "2026-11-10",
    "event": "architecture 10 loop 1 READY on 8bb29ac7570199f9: order 17 (M145 refused), the charging split as component 3; judge pass 11 DETERMINISTIC APPROVE (order kept); 178 checks, verify PASS, two byte-identical builds, every free gate green"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "Domains Fit return: the prompt names each result as an estimate or a forecast from the company's own operating records with the forecast's population stated; no graded figure, pack file or zip moved; READY on 8bb29ac7570199f9"
   }
  ],
  "runs": {
