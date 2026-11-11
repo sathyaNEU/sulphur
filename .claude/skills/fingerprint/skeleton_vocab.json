@@ -123,7 +123,8 @@
     "common_error_benchmark": "the benchmark an estimate is checked against shares one of its errors (the same unrecorded leavers on both), so their agreement validates nothing and the benchmark's own gap is sized from a third source",
     "calendar_grid_shift": "a profile keyed to a calendar grid's numbering (week or period number) drifts against the date-anchored events that drive it, and a long year moves the grid a whole step, so the profile is rebuilt on the events' dates",
     "exposure_basis_decoupled": "an event rate is carried on an exposure that moved in step with its true driver in the record (flight hours with landings), so every in-sample check passes on the conventional basis, and the forward plan decouples the two",
-    "staggered_conversion_at_renewal": "a fix is embodied unit by unit at each unit's next shop visit, so the population converts at the pace of its own removals and the forward rate is neither the pooled rate nor the fixed one"
+    "staggered_conversion_at_renewal": "a fix is embodied unit by unit at each unit's next shop visit, so the population converts at the pace of its own removals and the forward rate is neither the pooled rate nor the fixed one",
+    "scheduled_completion_slippage": "a plan's dated works are carried into the forward window at the completion the organisation's own record of comparable past works supports, not at the planned date, so a benefit the plan books for the window is only partly there"
   },
   "detections": {
     "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -201,7 +202,8 @@
     "instrument_on_assignment": "assignment used as the instrument for receipt",
     "ratio_benchmark_adjustment": "a raising factor set so the estimate's ratio between two groups matches an independent benchmark built at another grain (births by sex rolled forward with survival)",
     "rekey_profile_to_event_dates": "a seasonal profile rebuilt on the dates of the events that drive it (a holiday, a cut-off), then summed onto the target calendar's grid",
-    "rate_on_driver_exposure": "each event rate fitted on every exposure that could drive it (hours, landings, calendar time) across units whose exposures diverge, then carried on the forward plan's own exposures"
+    "rate_on_driver_exposure": "each event rate fitted on every exposure that could drive it (hours, landings, calendar time) across units whose exposures diverge, then carried on the forward plan's own exposures",
+    "empirical_completion_from_past_works": "each planned in-service date carried at the slip distribution of the organisation's comparable completed works, and the forward value weighted by the chance each is in service in time"
   },
   "file_roles": {
     "governing_standard": "a standard, policy, rule or terms that file the WHAT",
