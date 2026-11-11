@@ -14,7 +14,7 @@ import world as W
 
 NY = ZoneInfo("America/New_York")
 SEED = 17
-STREET_GROWTH = 0.0396           # the street consensus over the fourth quarter of fiscal 2024
+STREET_GROWTH = 0.05             # the street's retail growth for the quarter
 ISSUER_CODES = {"A": "KS-01", "B": "KS-02", "C": "KS-03", "D": "KS-04", "E": "KS-05", "F": "KS-06"}
 MERCH = {"M0412": "BRINDLE & MOSS", "M0413": "BRINDLEMOSS.COM", "M2290": "FERNHOLLOW OUTFITTERS"}
 F_PANEL = "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv"
@@ -113,6 +113,11 @@ def write_descriptors(path, w):
     rows = []
     tot = w.spend.sum(1)                                       # week x merchant (panel-wide, complete)
     split_store = rd.dirichlet(np.ones(24) * 6)
+    studio_names = ["BRINDLE & MOSS DESIGN STUDIO %s" % c for c in
+                    ("BOSTON MA", "PHILADELPHIA PA", "ATLANTA GA", "CHARLOTTE NC", "TAMPA FL", "CHICAGO IL",
+                     "MINNEAPOLIS MN", "DENVER CO", "SEATTLE WA", "PHOENIX AZ")]
+    split_studio = rd.dirichlet(np.ones(10) * 6)
+    mto = w.spend.sum(1)[:, [0, 2]] * w.mto_share[:, None]          # week x (stores, site): made-to-order spend
     store_names = ["BRINDLE & MOSS #%04d %s" % (100 + 7 * k, c) for k, c in
                    enumerate([c for reg in W.REGIONS for c in STORE_CITIES[reg]])]
     outlet_names = ["BRINDLE MOSS OUTLET #%02d %s" % (k + 1, c) for k, c in enumerate(["PRIMM NV", "LEESBURG VA", "WRENTHAM MA", "AURORA IL"])]
@@ -126,14 +131,17 @@ def write_descriptors(path, w):
         if not sel.any():
             continue
         s = tot[sel].sum(0)
+        m_ = mto[sel].sum(0)
         jitter = lambda n: np.exp(rd.normal(0, 0.03, n))
-        for names, base, split in ((store_names, s[0], split_store), (outlet_names, s[1], split_out),
+        for names, base, split in ((store_names, s[0] - m_[0], split_store), (studio_names, m_[0], split_studio),
+                                   (outlet_names, s[1], split_out),
                                    (lic_names, s[4], split_lic), (cafe_names, s[5], split_cafe)):
             v = base * split * jitter(len(names))
             v = v * base / v.sum()
             for nm, x in zip(names, v):
                 rows.append([str(m), "M0412", nm, "%.2f" % x])
-        for nm, x in zip(["BRINDLEMOSS.COM", "PAYPAL *BRINDLEMOSS"], s[2] * np.array([0.86, 0.14])):
+        for nm, x in zip(["BRINDLEMOSS.COM", "PAYPAL *BRINDLEMOSS", "BRINDLEMOSS.COM CUSTOM"],
+                         np.r_[(s[2] - m_[1]) * np.array([0.86, 0.14]), m_[1]]):
             rows.append([str(m), "M0413", nm, "%.2f" % x])
         for nm, x in zip(["FERNHOLLOW OUTFITTERS #%02d" % (k + 1) for k in range(5)] + ["FERNHOLLOW.COM"],
                          s[3] * np.r_[rd.dirichlet(np.ones(5) * 5) * 0.8, 0.2]):
@@ -149,12 +157,12 @@ def write_results(path, w):
         en = W.CAL.week_end[sel].iloc[-1].date()
         fern = w.fern[sel & w.consolidated].sum() if (sel & w.consolidated).any() else 0.0
         rows.append([qk.replace("Q", " Q"), st.isoformat(), en.isoformat(), int(sel.sum()), "%.1f" % w.rev_q[q],
-                     ("%.1f" % fern) if fern else ""])
+                     ("%.1f" % fern) if fern else "", "%.1f" % w.wholesale_q[q]])
     sel = W.QIDX == len(W.QKEYS) - 1
     rows.append(["FY2025 Q4", W.CAL.week_start[sel].iloc[0].date().isoformat(), W.CAL.week_end[sel].iloc[-1].date().isoformat(),
-                 int(sel.sum()), "", ""])
+                 int(sel.sum()), "", "", ""])
     return write_csv(path, ["fiscal_quarter", "period_start", "period_end", "weeks", "net_sales_usd_m",
-                            "fernhollow_net_sales_usd_m"], rows)
+                            "fernhollow_net_sales_usd_m", "wholesale_net_sales_usd_m"], rows)
 
 
 def write_street(path, street_mid):
@@ -201,7 +209,7 @@ def pl_by_quarter(w):
     out = {}
     for q, qk in enumerate(W.QKEYS):
         sel = W.QIDX == q
-        out[qk] = round(100 * (w.own[sel] * w.rev_w[sel]).sum() / w.rev_w[sel].sum(), 1)
+        out[qk] = round(100 * (w.own[sel] * w.orders_w[sel]).sum() / w.orders_w[sel].sum(), 1)
     return out
 
 
@@ -213,14 +221,27 @@ def regions_by_year(w):
         tot = np.zeros(4)
         for q in [n for n, k in enumerate(W.QKEYS) if k.startswith(fy)]:
             sel = W.QIDX == q
-            banner = w.rev_q[q] - w.fern[sel & w.consolidated].sum()
+            banner = w.rev_q[q] - w.fern[sel & w.consolidated].sum() - w.wholesale_q[q]
             tot += w.rev_q_region[q] * banner / w.rev_q_region[q].sum()
         out[fy] = [round(float(x), 1) for x in tot]
     return out
 
 
+def wholesale_by_year(w):
+    out = {}
+    for fy in W.FY_NAMES[:-1]:
+        out[fy] = round(float(sum(round(float(w.wholesale_q[n]), 1) for n, k in enumerate(W.QKEYS) if k.startswith(fy))), 1)
+    return out
+
+
+def deposits_by_quarter(w):
+    """customer deposits at each fiscal quarter end (USD million, one decimal), and at the end of fiscal 2020"""
+    return {k: round(float(v), 1) for k, v in zip(W.QKEYS[:-1], w.dep_q[:-1])}, round(float(w.deposits_open), 1)
+
+
 def street_mid(w):
-    return round(float(w.rev_q[-5]) * (1 + STREET_GROWTH))
+    """the sell-side's figure: retail net sales grown at fiscal 2025's pace, wholesale at its run rate"""
+    return round(float(w.retail_q[-5]) * (1 + STREET_GROWTH) + float(np.median(w.wholesale_q[-9:-1])))
 
 
 def write_all(tgt, w, street_mid):

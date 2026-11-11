@@ -62,12 +62,49 @@ def season_index():
     return idx
 
 
+def season_of(d):
+    month = {1: 0.84, 2: 0.94, 3: 1.0, 4: 0.98, 5: 1.02, 6: 0.95, 7: 0.96, 8: 1.0, 9: 1.0, 10: 1.02, 11: 1.07, 12: 1.13}
+    f = month[d.month]
+    e = d + pd.Timedelta(days=6)
+    for day, m in holidays(d.year) + holidays(d.year - 1):
+        if d <= day <= e:
+            f *= m
+    return f
+
+
+def lead_path(P, pre):
+    """made-to-order weeks from order to delivery, by the week the order is placed (pre weeks before the panel's first):
+    the 2021 backlog building, its unwind in fiscal 2022, normal from fiscal 2023, lengthening in fiscal 2025"""
+    out = np.empty(pre + W)
+    for n in range(pre + W):
+        t = n - pre
+        if t < 0:
+            out[n] = P["lead_start"]
+        elif t <= 51:
+            out[n] = P["lead_start"] + (P["lead_peak"] - P["lead_start"]) * t / 51.0
+        elif t <= P["unwind_end"]:
+            out[n] = P["lead_peak"] + (P["lead_norm"] - P["lead_peak"]) * (t - 51) / float(P["unwind_end"] - 51)
+        elif t < P["late_from"]:
+            out[n] = P["lead_norm"]
+        elif t < P["late_full"]:
+            out[n] = P["lead_norm"] + (P["lead_late"] - P["lead_norm"]) * (t - P["late_from"]) / float(P["late_full"] - P["late_from"])
+        else:
+            out[n] = P["lead_late"]
+    return out
+
+
 def default_params():
     return dict(
         base={"Northeast": 23.0, "Southeast": 13.0, "Midwest": 20.0, "West": 15.0},     # USD m a week, FY2021
         growth={"Northeast": -0.04, "Southeast": 0.13, "Midwest": -0.02, "West": 0.07},
         year_growth=[0.06, 0.02, 0.0, 0.025, 0.03],                                   # the category's trend by fiscal year
-        turn_week=248, turn=-0.05, turn_weeks=3,                                      # the holiday quarter's demand turn
+        turn_week=248, turn=-0.07, turn_weeks=4,                                      # the holiday quarter's softer demand
+        mto=0.30,                                  # made-to-order share of the banner's store and site orders
+        lead_start=8.0, lead_peak=8.0, unwind_end=95, lead_norm=8.0,             # weeks from order to delivery
+        late_from=900, late_full=901, lead_late=8.0,
+        mto_event=[0.10, 0.14, 0.0, 0.03, 0.60],   # the December to January made-to-order event's lift, by fiscal year
+        ws_base=13.0, ws_trend=0.25, ws_noise=1.6,  # wholesale contract sales, USD m a quarter (invoiced, not on cards)
+        ws_lumps={"FY2022Q2": 8.0, "FY2023Q3": 10.0, "FY2024Q4": 36.0},
         web0=0.17, web1=0.27, fern=0.085, lic0=0.055, lic_growth=0.16, cafe=0.006,
         own0=0.245, own_drift=0.010, own_drift_late=0.040, late_drift_from=209, other=0.12,
         issuers={"A": dict(join=0, leave=None, size=1.00, mix=[0.15, 0.32, 0.15, 0.38]),
@@ -113,19 +150,59 @@ def simulate(seed, **kw):
     cafe = P["cafe"] * total * np.exp(r.normal(0, 0.05, W))
     consolidated = (CAL.week_start >= ACQUIRED).values
     # merchant sales by region (USD m a week): what each merchant id in the panel sells to everyone
+    ev = np.ones(W)
+    for n, d in enumerate(CAL.week_start):
+        if CAL.fq.iloc[n] == 4 and (d.month == 12 or d.month == 1 or (d.month == 11 and d.day >= 28)):
+            ev[n] = 1.0 + P["mto_event"][fyi[n]]
+    w.event = ev
+    lift = (1 - P["mto"]) + P["mto"] * ev                 # store and site orders with the event's made-to-order lift
+    w.mto_share = P["mto"] * ev / lift                    # made-to-order share of store and site orders, by week
     msales = np.zeros((W, 4, len(MERCHANTS)))
-    msales[:, :, 0] = reg_sales * (1 - web[:, None]) * (1 - outlet)
+    msales[:, :, 0] = reg_sales * (1 - web[:, None]) * (1 - outlet) * lift[:, None]
     msales[:, :, 1] = reg_sales * (1 - web[:, None]) * outlet
-    msales[:, :, 2] = reg_sales * web[:, None]
+    msales[:, :, 2] = reg_sales * web[:, None] * lift[:, None]
     msales[:, :, 3] = fern[:, None] * share_r
     msales[:, :, 4] = lic[:, None] * share_r
     msales[:, :, 5] = cafe[:, None] * share_r
     w.reg_sales, w.msales, w.web, w.fern, w.lic, w.consolidated = reg_sales, msales, web, fern, lic, consolidated
-    rev_w = total + np.where(consolidated, fern, 0.0)
+    # revenue is recognised on delivery: in-stock and outlet orders the week they are placed, made-to-order orders after
+    # the lead time of the week they were placed; customers pay in full at order, so undelivered orders are deposits
+    pre = 60
+    pre_level = level[0] * np.exp(-np.log1p(P["year_growth"][0]) / 52.0 * np.arange(pre, 0, -1))
+    pre_dates = [FY_START - pd.Timedelta(days=7 * k) for k in range(pre, 0, -1)]
+    pre_season = np.array([season_of(d) for d in pre_dates])
+    mto_r = np.zeros((pre + W, 4))
+    for j, reg in enumerate(REGIONS):
+        pre_reg = P["base"][reg] * np.exp(P["growth"][reg] * (np.arange(-pre, 0) / 52.0)) * pre_level * pre_season
+        mto_r[:pre, j] = P["mto"] * pre_reg * (1 - web[0]) * (1 - outlet) + P["mto"] * pre_reg * web[0]
+    mto_r[pre:] = w.mto_share[:, None] * (msales[:, :, 0] + msales[:, :, 2])
+    lead = lead_path(P, pre)
+    dlv = np.zeros((pre + W + 40, 4))
+    for n in range(pre + W):
+        d = n + lead[n]
+        lo = int(np.floor(d))
+        fr = d - lo
+        dlv[lo] += mto_r[n] * (1 - fr)
+        dlv[lo + 1] += mto_r[n] * fr
+    instock = (1 - w.mto_share[:, None]) * (msales[:, :, 0] + msales[:, :, 2]) + msales[:, :, 1]
+    banner = instock + dlv[pre:pre + W]
+    dep = np.cumsum(mto_r.sum(1))[pre:] - np.cumsum(dlv.sum(1))[pre:pre + W]
+    w.lead = lead[pre:]
+    w.orders_w = msales[:, :, :3].sum((1, 2)) + np.where(consolidated, fern, 0.0)
+    w.deposits_w = dep
+    w.deposits_open = float(np.cumsum(mto_r.sum(1))[pre - 1] - np.cumsum(dlv.sum(1))[pre - 1])
+    rev_w = banner.sum(1) + np.where(consolidated, fern, 0.0)
     w.rev_w = rev_w
     rev_q = np.array([rev_w[QIDX == q].sum() for q in range(len(QKEYS))]) * np.exp(r.normal(0, P["rev_noise"], len(QKEYS)))
+    rw = np.random.default_rng(seed + 991)
+    ws = np.array([P["ws_base"] + P["ws_trend"] * q + rw.normal(0, P["ws_noise"]) + P["ws_lumps"].get(k, 0.0)
+                   for q, k in enumerate(QKEYS)])
+    w.wholesale_q = ws
+    w.retail_q = rev_q
+    rev_q = rev_q + ws
     w.rev_q = rev_q
-    w.rev_q_region = np.array([reg_sales[QIDX == q].sum(0) for q in range(len(QKEYS))])
+    w.rev_q_region = np.array([banner[QIDX == q].sum(0) for q in range(len(QKEYS))])
+    w.dep_q = np.array([dep[np.where(QIDX == q)[0][-1]] for q in range(len(QKEYS))])
     tl = np.maximum(np.arange(W) - P["late_drift_from"], 0) / 52.0
     own = P["own0"] - P["own_drift"] * t - (P["own_drift_late"] - P["own_drift"]) * tl + r.normal(0, 0.002, W)
     bank = 1.0 - own - P["other"]

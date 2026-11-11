@@ -109,9 +109,52 @@ def main():
     ok("private-label share carried (%)", plt, F["pl_target_pct"], 0.005)
     d = (1 - pl["FY2024 Q4"] / 100 - 0.12) / (1 - plt / 100 - 0.12)
     g = (1 + g_idx) * d - 1
-    ok("growth (%)", 100 * g, F["growth_pct"], 0.01)
+    ok("customer payments growth (%)", 100 * g, F["payments_growth_pct"], 0.01)
+    # deposits: last year's closing deposits scaled by the last eight weeks' retail payments and made-to-order share
+    dep = {}
+    for fy, qq, v, dd in re.findall(r"Fiscal (\d{4}) Q(\d)\s+(\d+\.\d)\s+([\d,]+\.\d)", txt):
+        dep["FY%s Q%s" % (fy, qq)] = float(dd.replace(",", ""))
+    ws = res.wholesale_net_sales_usd_m
+    fern = res.fernhollow_net_sales_usd_m.fillna(0)
+    retail = lambda k: float(res.net_sales_usd_m[k]) - float(ws[k])
+    bpay = lambda k, kp: float(res.net_sales_usd_m[k]) - float(ws[k]) - float(fern[k]) + dep[k] - dep[kp]
+    pay_b = retail("FY2024 Q4") + dep["FY2024 Q4"] - dep["FY2024 Q3"]
+    pay_q = pay_b * (1 + g)
+    bpay_q = pay_q * bpay("FY2024 Q4", "FY2024 Q3") / pay_b
+
+    def last8(lo, hi, wk0):
+        s_ = wk0[(wk0.index > hi - pd.Timedelta(days=56)) & (wk0.index <= hi)].sum()
+        return s_ / wk0[(wk0.index >= lo) & (wk0.index <= hi)].sum()
+
+    def banner_weeks(lo, hi):
+        sub = pan[(pan.week_start >= lo) & (pan.week_start <= hi) & (pan.merchant_id != "M2290")]
+        nw = sub.week_start.nunique()
+        cov = sub.groupby("issuer_code").week_start.nunique()
+        return sub[sub.issuer_code.isin(cov[cov == nw].index)].groupby("week_start").spend_usd.sum()
+
+    def mto(end):
+        win = pd.date_range(end - pd.Timedelta(days=55), end, freq="D")
+        wts = pd.Series(1.0, index=win).groupby(win.strftime("%Y-%m")).sum()
+        b2 = desc[desc.merchant_id.isin(["M0412", "M0413"]) & ~desc.descriptor.str.contains("HOLLISTERS|CAFE")]
+        b2 = b2[b2.month.isin(wts.index)]
+        m_ = b2[b2.descriptor.str.contains("DESIGN STUDIO|CUSTOM")].groupby("month").spend_usd.sum()
+        a_ = b2.groupby("month").spend_usd.sum()
+        wd = pd.Series({k: wts[k] / pd.Period(k).days_in_month for k in wts.index})
+        return float((m_.reindex(wd.index).fillna(0) * wd).sum() / (a_.reindex(wd.index).fillna(0) * wd).sum())
+
+    end_q, end_b = pd.Timestamp("2026-01-31"), pd.Timestamp("2025-02-01")
+    tq = last8(pd.Timestamp("2025-11-02"), pd.Timestamp("2026-01-25"), banner_weeks(pd.Timestamp("2025-11-02"), pd.Timestamp("2026-01-25")))
+    tb = last8(pd.Timestamp("2024-11-03"), pd.Timestamp("2025-01-26"), banner_weeks(pd.Timestamp("2024-11-03"), pd.Timestamp("2025-01-26")))
+    dep_q4 = dep["FY2024 Q4"] * (bpay_q * tq * mto(end_q)) / (bpay("FY2024 Q4", "FY2024 Q3") * tb * mto(end_b))
+    ok("customer deposits at the quarter's end (USD m)", dep_q4, F["deposits_q4_m"], 0.6)
+    rev_ret = pay_q - (dep_q4 - dep["FY2025 Q3"])
+    ws_hat = float(np.median([float(ws[k]) for k in res.index[-9:-1]]))
+    ok("wholesale run rate (USD m)", ws_hat, F["wholesale_q4_m"], 0.05)
+    total = rev_ret + ws_hat
     base = float(res.net_sales_usd_m["FY2024 Q4"])
-    ok("net sales estimate (USD m)", base * (1 + g), F["forecast_m"], 0.1)
+    ok("growth (%)", 100 * (total / base - 1), F["growth_pct"], 0.05)
+    ok("net sales estimate (USD m)", total, F["forecast_m"], 0.6)
+    g = total / base - 1
     st = pd.read_csv(f("bmh_q4fy25_street"))
     ok("street mean (USD m)", st.q4_fy2025_net_sales_usd_m.mean(), F["street_m"], 0.05)
     ok("range top (USD m)", base * (1 + g + 1.2816 * F["golden_rmse_pp"] / 100), F["range_high_m"], 0.15)

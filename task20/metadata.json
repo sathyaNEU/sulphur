@@ -24,7 +24,17 @@
   "14",
   "53",
   "52",
-  "31"
+  "31",
+  "1,448.6",
+  "1448.6",
+  "17.9",
+  "19.0",
+  "20.0",
+  "20.6",
+  "20.9",
+  "205.5",
+  "210.6",
+  "52.5"
  ],
  "field_terms": [
   "net sales",
@@ -38,7 +48,7 @@
  "rows": {
   "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": 110040,
   "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": 909,
-  "kestrel_bmh_descriptor_detail_monthly.csv": 2820,
+  "kestrel_bmh_descriptor_detail_monthly.csv": 3480,
   "bmh_quarterly_results_fy2021q1_fy2025q3.csv": 20,
   "bmh_q4fy25_street_estimates.csv": 11,
   "kestrel_web_visits_bmh_weekly.csv": 261,

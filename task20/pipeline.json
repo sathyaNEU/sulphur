@@ -1,17 +1,17 @@
 {
  "task": "task20",
- "status": "PAUSED",
+ "status": "BUILD",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,412.5 million (+1.30%), 80% range USD 1,400.0 to 1,425.0 million, wholly below the street's USD 1,450.0 million",
- "chain": "R1 the licensed shops' and cafes' share of the brand id (14.71%); R2 the immature weeks completed (+1.27%); R3 the panel's own steps to like-for-like growth (10.84%); R4 card-visible growth at the company's regional mix (6.71%); R5 the private-label share carried (17.00%) and the bank-card reach (+5.07%); R6 the record (RMSE 0.70 points over 15 quarters); R7 net sales and range (USD 1,412.5 million, 1,400.0 to 1,425.0); R8 the company steps (mix -4.13, bank-card share -5.41 points); R9 the call (short)",
+ "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,439.5 million (-0.63%), 80% range USD 1,418.6 to 1,460.3 million, wholly below the street's USD 1,484.0 million",
+ "chain": "R1 the panel's own steps (like-for-like 19.48%); R2 card-visible growth at the company's mix (15.00%); R3 the private-label share (17.00%) and customer payments (+9.17%); R4 deposits at the quarter's end (USD 318.9 million) and revenue on delivery (-7.33 points); R5 wholesale at its run rate (USD 17.7 million against 52.5; -2.47 points); R6 the record (1.12 points over 15 quarters); R7 net sales and range (USD 1,439.5 million, 1,418.6 to 1,460.3); R8 the company steps; R9 short",
  "architecture": 2,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-11"
@@ -25,17 +25,17 @@
   "nearest": "task5 v4 (severity none); task18 by chain"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC (pre-hardening build)",
+  "disposition": "FIX_NOW: the bridge order and the regression-calibrated range; both closed (order bands, SF14)",
+  "gate_h": "pass on the pre-hardening build; its first pass landed the textbook steps, so the chain was hardened",
+  "report": "determinism_check_report.md (pre-hardening)"
  },
- "paper_pair": 32.8,
+ "paper_pair": 46.5,
  "effort": {
   "quick": 14.0,
-  "careful": 32.8,
+  "careful": 46.5,
   "thorough": 100.0,
-  "largest_hint": "the private-label card's faster fall and the panel's coverage: rescues R5 (1 of 9)"
+  "largest_hint": "revenue on delivery with the December custom orders in deposits: rescues R4 (1 of 9)"
  },
  "runs": {
   "run1": null,
@@ -56,9 +56,15 @@
    "source": "judge",
    "repair": "design",
    "commit": "e483b2e"
+  },
+  {
+   "date": "2026-11-11",
+   "source": "judge first pass",
+   "repair": "design",
+   "commit": "the judge thread's own derivation priced the careful column near 72; hardened with revenue on delivery and wholesale"
   }
  ],
- "resume": "stage 4: the judge's isolated thread (brief at /tmp/determinism-check-task20-220603/) is running; collect verdict.md, price its own_derivation against the careful column (over 50: back to stage 2), fix findings in one generator pass, re-run gates.py task20 --full, then stage 5 READY on main",
+ "resume": "stage 3 to 4: gates.py task20 --full green, then the leak reader and the judge on the hardened build; price the judge's first pass against the careful column before READY",
  "approved": null,
  "submitted": null,
  "portal": {

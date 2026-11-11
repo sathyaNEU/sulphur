@@ -1,20 +1,17 @@
 # leak check, task20
 
-**Verdict: REVIEW.** 10 files read, 74 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 10 files read, 88 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: regional, private-label, record, missed, coverage, issuer, regression, quarters, filing, issuers, results, penetration, vendor, careful, leaves, bulletin, dropped, tender, licensed, history, engine, bank-card, reported, back-test, inside
+Stump terms swept: deposits, wholesale, record, revenue, delivery, payments, missed, results, coverage, bank-card, regional, careful, customer, paragraph, inside, issuer, made-to-order, contract, descriptor, dropped, engine, tender, carries, recognised, december
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `kestrel_client_bulletin_bmh_2025-11-10.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
-## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf`: golden figure 17.9 appears: ...l 2025 Q1 20.0 Fiscal 2025 Q2 19.0 Fiscal 2025 Q3 17.9 Larkhill Partners | Research | Internal |...
-
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf`: 8 of 25 stump-paragraph terms appear (private-label, quarters, filing, results, penetration, tender); read whether the document names the move
-- **REVIEW** `kestrel_client_bulletin_bmh_2025-11-10.txt`: 6 of 25 stump-paragraph terms appear (private-label, coverage, issuer, issuers, bulletin, history); read whether the document names the move
+- **REVIEW** `bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf`: 12 of 25 stump-paragraph terms appear (deposits, wholesale, record, revenue, delivery, payments); read whether the document names the move
+- **REVIEW** `kestrel_client_bulletin_bmh_2025-11-10.txt`: 5 of 25 stump-paragraph terms appear (delivery, coverage, issuer, descriptor, carries); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -31,6 +28,8 @@ Stump terms swept: regional, private-label, record, missed, coverage, issuer, re
 
 ## 2 author vocabulary (clean)
 
+## 3 answer figures in the pack (clean)
+
 ## 5 announcements (clean)
 
 ## 6 ranking artifacts (clean)
@@ -38,6 +37,7 @@ Stump terms swept: regional, private-label, record, missed, coverage, issuer, re
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
 
 ## Solver's-eye read
 

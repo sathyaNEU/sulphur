@@ -40,19 +40,21 @@ def money(x):
     return "{:,.1f}".format(x)
 
 
-def filing(path, pl, regions, fern_fy2024, acq_date):
+def filing(path, pl, regions, fern_fy2024, acq_date, deposits, dep_open, wholesale):
     body, h1, h2, small, cell = _styles()
     yrs = list(regions)
     reg_rows = [["USD million"] + ["Fiscal %s" % y[2:] for y in yrs]]
     for j, r in enumerate(W.REGIONS):
         reg_rows.append([r] + [money(regions[y][j]) for y in yrs])
-    reg_rows.append(["Brindle & Moss banner"] + [money(sum(regions[y])) for y in yrs])
+    reg_rows.append(["Brindle & Moss banner, retail"] + [money(sum(regions[y])) for y in yrs])
     reg_rows.append(["Fernhollow"] + ["" for _ in yrs[:-1]] + [money(fern_fy2024)])
-    reg_rows.append(["Total net sales"] + [money(sum(regions[y]) + (fern_fy2024 if y == yrs[-1] else 0)) for y in yrs])
+    reg_rows.append(["Wholesale"] + [money(wholesale[y]) for y in yrs])
+    reg_rows.append(["Total net sales"] + [money(sum(regions[y]) + wholesale[y] + (fern_fy2024 if y == yrs[-1] else 0))
+                                           for y in yrs])
     keys = [k for k in W.QKEYS[:-1]]
-    pl_rows = [["Fiscal quarter", "Private-label card share of net sales (%)"]]
+    pl_rows = [["Fiscal quarter", "Private-label card share of sales (%)", "Customer deposits at quarter end (USD million)"]]
     for k in keys:
-        pl_rows.append([k.replace("FY", "Fiscal ").replace("Q", " Q"), "%.1f" % pl[k]])
+        pl_rows.append([k.replace("FY", "Fiscal ").replace("Q", " Q"), "%.1f" % pl[k], money(deposits[k])])
     s = [Paragraph("Brindle & Moss, Inc.: research desk copy", small),
          Paragraph("Brindle & Moss, Inc.: excerpts from the Form 10-K for fiscal 2024 and the Form 10-Q for the third "
                    "quarter of fiscal 2025", h1),
@@ -65,8 +67,10 @@ def filing(path, pl, regions, fern_fy2024, acq_date):
                    "weeks ended February 3, 2024; its fourth quarter had 14 weeks. Each fiscal quarter otherwise has 13 "
                    "weeks.", body),
          Paragraph("Net sales by region", h2),
-         Paragraph("We report the net sales of the Brindle & Moss banner by the region of the store or, for online orders, "
-                   "the ship-to address. Fernhollow is reported separately from its acquisition.", body),
+         Paragraph("We report the retail net sales of the Brindle & Moss banner by the region of the store or, for online "
+                   "orders, the ship-to address. Fernhollow is reported separately from its acquisition. Wholesale is our "
+                   "contract business with hotels, offices and other commercial customers, invoiced on delivery under each "
+                   "contract; it is reported separately each quarter.", body),
          _grid(reg_rows, [130] + [80] * len(yrs), cell),
          Spacer(1, 3),
          Paragraph("Acquisition of Fernhollow Outfitters", h2),
@@ -74,6 +78,12 @@ def filing(path, pl, regions, fern_fy2024, acq_date):
                    "an online business. Its results are included in our consolidated results from the date of "
                    "acquisition; it contributed net sales of USD %s million in fiscal 2024. The quarterly contribution is "
                    "reported in each Form 10-Q." % (acq_date.strftime("%B %-d, %Y"), money(fern_fy2024)), body),
+         Paragraph("Revenue recognition", h2),
+         Paragraph("We recognize revenue when merchandise is delivered to the customer or picked up at a store or outlet. "
+                   "Customers pay for an order in full when they place it, and payments for merchandise not yet delivered "
+                   "are recorded as customer deposits, a current liability. Customer deposits consist mainly of payments for "
+                   "made-to-order upholstery and case goods. Customer deposits were USD %s million at the end of fiscal "
+                   "2020." % money(dep_open), body),
          Paragraph("Licensed operations", h2),
          Paragraph("Brindle & Moss shop-in-shops in Hollister's department stores and the Brindle Café locations are "
                    "operated by licensees under the Brindle & Moss name. Their sales are not our net sales; we recognize "
@@ -82,11 +92,11 @@ def filing(path, pl, regions, fern_fy2024, acq_date):
          Paragraph("In fiscal 2024 approximately 67 per cent of net sales were paid with bank-issued credit and debit "
                    "cards, 21 per cent with the Brindle & Moss private-label credit card, which our card program partner "
                    "issues and services, and 12 per cent with cash, checks, consumer financing and other tenders.", body),
-         Paragraph("Private-label credit card (Form 10-Q, third quarter of fiscal 2025)", h2),
-         Paragraph("Penetration of the private-label card, the share of net sales paid with it, declined in the first "
-                   "three quarters of fiscal 2025 after our card program partner tightened approval standards for new "
-                   "accounts at the start of the first quarter. Penetration by quarter:", body),
-         _grid(pl_rows, [130, 200], cell),
+         Paragraph("Quarterly items (Forms 10-Q and 10-K, through the third quarter of fiscal 2025)", h2),
+         Paragraph("Penetration of the private-label card, the share of sales paid with it, declined in the first three "
+                   "quarters of fiscal 2025 after our card program partner tightened approval standards for new accounts "
+                   "at the start of the first quarter. Penetration and customer deposits by quarter:", body),
+         _grid(pl_rows, [110, 150, 170], cell),
          Spacer(1, 6),
          Paragraph("Source: Brindle & Moss, Inc., Form 10-K for the fiscal year ended February 1, 2025, and Form 10-Q for the "
                    "quarter ended November 1, 2025.", small)]

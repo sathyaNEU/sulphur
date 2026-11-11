@@ -113,6 +113,51 @@ def workbook(F, R, path):
                                       "net sales less the private-label card and the 10-K's 12% of other tenders.")
     _widths(t, [44, 30, 20])
 
+    dp = wb.create_sheet("Deposits")
+    _head(dp, 1, ["Fiscal quarter end", "Customer deposits (USD m)", "Deposits in weeks of retail payments"])
+    P = R["P"]
+    ks = [k for k in P["keys"][:-1] if k >= "FY2023 Q1"]
+    for i, k in enumerate(ks, 2):
+        dp.cell(row=i, column=1, value=_q(k))
+        dp.cell(row=i, column=2, value=P["deposits"][k]).number_format = "#,##0.0"
+        dp.cell(row=i, column=3, value=F["deposit_weeks"][k]).number_format = "0.00"
+    n = len(ks) + 3
+    rows = [("Made-to-order share of the banner's panel spend, last eight weeks of Q4 fiscal 2024 (%)", F["mto_share_base_pct"], "0.00"),
+            ("Made-to-order share, last eight weeks of Q4 fiscal 2025 (%)", F["mto_share_q4_pct"], "0.00"),
+            ("Customer deposits, end of Q4 fiscal 2024 (USD m)", F["deposits_base_m"], "#,##0.0"),
+            ("Customer deposits, end of Q3 fiscal 2025 (USD m)", F["deposits_q3_m"], "#,##0.0"),
+            ("Customer deposits, end of Q4 fiscal 2025, estimated (USD m)", F["deposits_q4_m"], "#,##0.0"),
+            ("Change in deposits in Q4 fiscal 2025 (USD m)", F["deposit_change_m"], "#,##0.0"),
+            ("Change in deposits in Q4 fiscal 2024 (USD m)", F["deposit_change_base_m"], "#,##0.0"),
+            ("Retail payments, Q4 fiscal 2024 (USD m)", F["payments_base_m"], "#,##0.0"),
+            ("Retail payments, Q4 fiscal 2025, estimated (USD m)", F["payments_q4_m"], "#,##0.0"),
+            ("Retail net sales, Q4 fiscal 2025, estimated (USD m)", F["retail_q4_m"], "#,##0.0")]
+    for i, (k, v, fmt) in enumerate(rows, n):
+        dp.cell(row=i, column=1, value=k)
+        dp.cell(row=i, column=2, value=v).number_format = fmt
+    dp.cell(row=n + len(rows) + 1, column=1,
+            value="Deposits at the quarter's end: last year's, scaled by retail payments in the last eight weeks of each "
+                  "quarter (the panel's weekly profile) and by the made-to-order share of the banner's spend over the same "
+                  "weeks (design studios and the site's custom orders, descriptor detail). Retail net sales are retail "
+                  "payments less the quarter's change in deposits.")
+    _widths(dp, [70, 22, 26])
+
+    wsh = wb.create_sheet("Wholesale")
+    _head(wsh, 1, ["Fiscal quarter", "Wholesale net sales (USD m)"])
+    res = P["results"].set_index("fiscal_quarter")
+    kw = [k for k in P["keys"][:-1] if k >= "FY2023 Q1"]
+    for i, k in enumerate(kw, 2):
+        wsh.cell(row=i, column=1, value=_q(k))
+        wsh.cell(row=i, column=2, value=float(res.wholesale_net_sales_usd_m[k])).number_format = "#,##0.0"
+    n = len(kw) + 3
+    wsh.cell(row=n, column=1, value="Q4 fiscal 2025, run rate: median of the last eight quarters (USD m)")
+    wsh.cell(row=n, column=2, value=F["wholesale_q4_m"]).number_format = "#,##0.0"
+    wsh.cell(row=n + 1, column=1, value="Q4 fiscal 2024, as reported (USD m)")
+    wsh.cell(row=n + 1, column=2, value=F["wholesale_base_m"]).number_format = "#,##0.0"
+    wsh.cell(row=n + 3, column=1, value="Wholesale is invoiced to commercial customers and never appears in the card panel; "
+                                        "retail is estimated from the panel and wholesale added at its run rate.")
+    _widths(wsh, [62, 26])
+
     rc = wb.create_sheet("Record")
     _head(rc, 1, ["Fiscal quarter", "Estimate, growth (%)", "Reported growth (%)", "Error (points)", "Inside the 80% range"])
     G = R["golden"]
@@ -131,9 +176,10 @@ def workbook(F, R, path):
     rc.cell(row=n + 1, column=2, value="%d of %d" % (F["coverage_in"], F["origins"]))
     rc.cell(row=n + 3, column=1, value="Each quarter built as it would have been three weeks before its release: issuers "
                                        "in both years, the prior fiscal year's regional weights, the private-label share "
-                                       "carried from the quarters reported before it. Reported growth: weekly averages, "
+                                       "carried from the quarters reported before it, deposits from last year's, wholesale "
+                                       "at the median of the eight quarters before it. Reported growth: weekly averages, "
                                        "Fernhollow out unless in both quarters.")
-    rc.cell(row=n + 5, column=1, value="For comparison, reported growth regressed on the panel at its own mix")
+    rc.cell(row=n + 5, column=1, value="For comparison, net sales taken as what the panel shows (no deposits, no wholesale)")
     rc.cell(row=n + 6, column=1, value="Root mean square error (points)")
     rc.cell(row=n + 6, column=2, value=F["shortcut_rmse_pp"]["careful"]).number_format = "0.00"
     rc.cell(row=n + 7, column=1, value="Fiscal 2025 Q3 error (points)")
@@ -187,10 +233,11 @@ def note(F, R, path):
 
     p = doc.add_paragraph()
     p.add_run("Short into the 26 February print. ").bold = True
-    p.add_run("The panel puts fourth quarter net sales at USD %s million, %.2f%% above last year's USD %s million, with an "
+    p.add_run("The panel puts fourth quarter net sales at USD %s million, %.2f%% %s last year's USD %s million, with an "
               "80%% range of USD %s to %s million. The street's figure, the mean of %d estimates, is USD %s million "
-              "(%.2f%%), USD %.1f million above the top of the range."
-              % ("{:,.1f}".format(F["forecast_m"]), F["growth_pct"], "{:,.1f}".format(F["base_net_sales_m"]),
+              "(%+.2f%%), USD %.1f million above the top of the range."
+              % ("{:,.1f}".format(F["forecast_m"]), abs(F["growth_pct"]), "below" if F["growth_pct"] < 0 else "above",
+                 "{:,.1f}".format(F["base_net_sales_m"]),
                  "{:,.1f}".format(F["range_low_m"]), "{:,.1f}".format(F["range_high_m"]), F["street_n"],
                  "{:,.1f}".format(F["street_m"]), F["street_growth_pct"], F["range_gap_m"]))
 
@@ -212,43 +259,45 @@ def note(F, R, path):
         row.cells[2].width = Cm(3.0)
 
     rg, cw, pw = F["regional_pct"], F["company_weights_pct"], F["panel_weights_pct"]
+    br = dict(F["bridge_pp"])
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
-    p.add_run("Why not the panel's own read. ").bold = True
-    p.add_run("On issuers in both years and cards of the same age the panel grew %.2f%%, and reported growth regressed on "
-              "it over past quarters gives %.2f%% (USD %s million), a beat. The regression cannot see two things that "
-              "moved this quarter. KS-06, a Midwest issuer, left the panel after the week of 26 October, so the cards left "
-              "are %.0f%% Southeast and %.0f%% West against the company's %.0f%% and %.0f%%, and those regions grew %.2f%% "
-              "and %.2f%% against %.2f%% in the Northeast and %.2f%% in the Midwest; at the company's fiscal 2024 mix the "
-              "panel's growth is %.2f%%. And the private-label card, which the panel does not hold, fell from %.1f%% of "
-              "net sales a year ago to %.1f%% in the third quarter, a little faster each quarter since the partner "
-              "tightened approvals; carried at fiscal 2025's pace it is %.2f%% this quarter, so bank cards pay for %.1f%% "
-              "of net sales against %.1f%% a year ago and each dollar the panel sees stands for %.2f%% less net sales "
-              "(%.2f points of growth)."
-              % (F["pooled_growth_pct"], F["shortcut_pct"]["careful"], "{:,.1f}".format(F["shortcut_m"]["careful"]),
-                 pw["Southeast"], pw["West"], cw["Southeast"], cw["West"], rg["Southeast"], rg["West"],
-                 rg["Northeast"], rg["Midwest"], F["visible_growth_pct"], F["pl_q4fy24_pct"], F["pl_q3fy25_pct"],
-                 F["pl_target_pct"], F["bank_target_pct"], F["bank_q4fy24_pct"], F["drift_less_pct"], F["bridge_pp"][5][1]))
+    p.add_run("Why the panel reads a beat and the quarter is not one. ").bold = True
+    p.add_run("Re-weighted to the company's regions and to the bank cards' %.1f%% share of sales (the private-label card, "
+              "which the panel does not hold, carried to %.2f%%), the panel says customers paid %.2f%% more than a year "
+              "ago, USD %s million against %s. Two things in that figure are not this quarter's net sales. First, the "
+              "December custom event: the design studios' and the site's made-to-order orders were %.2f%% of the banner's "
+              "spend in the quarter's last eight weeks against %.2f%% a year earlier, and those sofas are delivered, and "
+              "recognised, after the quarter. Deposits should end the quarter near USD %s million against %s at the end "
+              "of October, which takes %.2f points off growth. Second, last year's quarter carried USD %s million of "
+              "wholesale, a hotel contract the panel never sees; at its run rate of USD %s million this year, applying "
+              "the panel's growth to all of last year's net sales overstates the quarter by %.2f points."
+              % (F["bank_target_pct"], F["pl_target_pct"], F["payments_growth_pct"], "{:,.1f}".format(F["payments_q4_m"]),
+                 "{:,.1f}".format(F["payments_base_m"]), F["mto_share_q4_pct"], F["mto_share_base_pct"],
+                 "{:,.1f}".format(F["deposits_q4_m"]), "{:,.1f}".format(F["deposits_q3_m"]), -br["revenue on delivery"],
+                 "{:,.1f}".format(F["wholesale_base_m"]), "{:,.1f}".format(F["wholesale_q4_m"]),
+                 -br["wholesale at its run rate"]))
 
     p = doc.add_paragraph()
     p.add_run("How the range has held. ").bold = True
     e = F["errors_pp"]
     p.add_run("Built the same way at each of the %d quarters from %s to %s, on what was known three weeks before each "
               "release, the estimate missed reported growth by %.2f points (root mean square) and %d of the %d quarters "
-              "fell inside their ranges. It ran high in all three quarters of fiscal 2025 (%.2f, %.2f and %.2f points), "
-              "so if anything this quarter's figure leans high. The regression on the panel's own mix missed the third "
-              "quarter by %.2f points."
-              % (F["origins"], _q(F["first_origin"]).lower(), _q(F["last_origin"]).lower(), F["golden_rmse_pp"], F["coverage_in"],
-                 F["origins"], e["FY2025 Q1"], e["FY2025 Q2"], e["FY2025 Q3"], F["careful_q3_error_pp"]))
+              "fell inside their ranges; the largest miss, %.2f points, was last year's fourth quarter, when the hotel "
+              "contract could not have been foreseen. Taking net sales as what the panel shows, with no deposits and no "
+              "wholesale, would have missed by %.2f points and now reads USD %s million."
+              % (F["origins"], _q(F["first_origin"]).lower(), _q(F["last_origin"]).lower(), F["golden_rmse_pp"],
+                 F["coverage_in"], F["origins"], e["FY2024 Q4"], F["shortcut_rmse_pp"]["careful"],
+                 "{:,.1f}".format(F["shortcut_m"]["careful"])))
 
     hi = F["family_high_m"]
     p = doc.add_paragraph()
     p.add_run("What would change it. ").bold = True
-    p.add_run("The other reasonable ways to carry the private-label share, the fiscal 2023 regional mix or fiscal 2024's "
-              "rolled forward, and the chain calibrated by regression put the top of the range between USD %s and %s "
-              "million; none reaches the street. A Midwest or Northeast holiday quarter far stronger than the panel's "
-              "cardholders there showed would, and so would a private-label share that stopped falling in November, "
-              "which only the release will show."
+    p.add_run("The other reasonable choices (the private-label rules, the fiscal 2023 or rolled-forward regional mix, a "
+              "seven- or nine-week deposit window, wholesale at a four-quarter run rate, the chain calibrated by "
+              "regression) put the top of the range between USD %s and %s million; none reaches the street. A second "
+              "hotel contract in the quarter, or custom orders delivered far faster than usual, would; neither shows in "
+              "anything filed so far."
               % ("{:,.1f}".format(min(hi.values())), "{:,.1f}".format(max(hi.values()))))
     fp = sec.footer.paragraphs[0]
     fp.text = "Larkhill Partners  |  Research  |  Internal"

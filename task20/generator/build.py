@@ -65,6 +65,16 @@ SOURCES = {
 }
 
 
+def reported_inputs(F):
+    """figures the answer blocks quote from the filed records (inputs, not results), as the records print them"""
+    out = set()
+    for k in ("deposits_q3_m", "deposits_base_m", "wholesale_base_m", "base_net_sales_m", "pl_q4fy24_pct",
+              "pl_q3fy24_pct", "pl_q1fy25_pct", "pl_q2fy25_pct", "pl_q3fy25_pct"):
+        out.add("%.1f" % F[k])
+        out.add("{:,.1f}".format(F[k]))
+    return sorted(out)
+
+
 def sha(path):
     return hashlib.sha256(open(path, "rb").read()).hexdigest()
 
@@ -73,8 +83,9 @@ def write_pack(tgt):
     w = W.simulate(PK.SEED)
     o = PK.write_all(tgt, w, PK.street_mid(w))
     fy24 = np.isin(W.QIDX, [n for n, k in enumerate(W.QKEYS) if k.startswith("FY2024")])
+    dep, dep_open = PK.deposits_by_quarter(w)
     DC.filing(os.path.join(tgt, DC.F_FILING), PK.pl_by_quarter(w), PK.regions_by_year(w),
-              float(w.fern[fy24 & w.consolidated].sum()), W.ACQUIRED)
+              float(w.fern[fy24 & w.consolidated].sum()), W.ACQUIRED, dep, dep_open, PK.wholesale_by_year(w))
     cal = W.CAL
     joins = [(PK.ISSUER_CODES[k], cal.week_start.iloc[d["join"]].date().isoformat())
              for k, d in w.P["issuers"].items() if d["join"] > 0]
@@ -122,7 +133,7 @@ def build_into(root):
                         "sell-side consensus, and the position to take into the print",
             "deliverables": [GD.XLSX, GD.NOTE],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
-            "stated_inputs": ["80", "12", "67", "21", "13", "14", "53", "52", "31"],
+            "stated_inputs": ["80", "12", "67", "21", "13", "14", "53", "52", "31"] + reported_inputs(F),
             "field_terms": ["net sales", "penetration", "panel", "issuer", "descriptor", "comparable", "consensus"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),

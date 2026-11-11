@@ -1,105 +1,121 @@
 {
  "as_of": "2026-02-05",
- "band_pp": 0.9,
+ "band_pp": 1.44,
  "bands": {
   "bridge_pp": {
    "issuers in both years, cards of the same age": [
-    24.79,
-    26.04
+    27.08,
+    28.21
+   ],
+   "revenue on delivery": [
+    -9.75,
+    -6.45
    ],
    "the bank-card share of net sales": [
-    -6.02,
-    -4.22
+    -6.36,
+    -4.17
    ],
    "the company's regional mix": [
-    -4.96,
-    -3.29
+    -5.36,
+    -2.96
    ],
    "the delivered panel, every issuer": [
-    -14.97,
-    -14.37
+    -9.2,
+    -8.6
    ],
    "the latest weeks completed": [
-    0.77,
-    1.39
+    0.91,
+    1.87
    ],
    "the licensed shops and cafes taken out": [
-    -1.62,
-    -1.0
+    -1.04,
+    -0.27
+   ],
+   "wholesale at its run rate": [
+    -3.41,
+    -2.17
    ]
   },
-  "completion_pct": [
-   0.97,
-   1.57
+  "deposits_q4_m": [
+   307.8,
+   326.7
   ],
   "drift_pct": [
    -5.64,
    -3.96
   ],
-  "excluded_share_pct": [
-   14.21,
-   15.21
-  ],
   "forecast_m": [
-   1402.5,
-   1427.6
+   1430.4,
+   1455.2
   ],
   "golden_rmse_pp": [
-   0.54,
-   1.07
+   0.89,
+   1.59
   ],
   "pl_target_pct": [
    16.6,
    17.8
   ],
   "q3_error_pp": [
-   0.47,
-   1.95
+   0.38,
+   1.69
   ],
   "range_high_m": [
-   1417.1,
-   1442.7
+   1453.8,
+   1481.9
   ],
   "range_low_m": [
-   1387.9,
-   1412.4
+   1406.3,
+   1430.1
   ],
   "visible_growth_pct": [
-   5.88,
-   7.55
+   14.12,
+   15.88
+  ],
+  "wholesale_q4_m": [
+   16.7,
+   19.5
   ]
  },
  "bank_q4fy24_pct": 67.4,
  "bank_target_pct": 71.0,
- "base_net_sales_m": 1394.4,
+ "base_net_sales_m": 1448.6,
  "bridge_pp": [
   [
    "the delivered panel, every issuer",
-   -14.67
+   -8.9
   ],
   [
    "the latest weeks completed",
-   1.09
+   1.21
   ],
   [
    "the licensed shops and cafes taken out",
-   -1.32
+   -0.57
   ],
   [
    "issuers in both years, cards of the same age",
-   25.74
+   27.74
   ],
   [
    "the company's regional mix",
-   -4.13
+   -4.48
   ],
   [
    "the bank-card share of net sales",
-   -5.41
+   -5.83
+  ],
+  [
+   "revenue on delivery",
+   -7.33
+  ],
+  [
+   "wholesale at its run rate",
+   -2.47
   ]
  ],
  "call": "short",
- "careful_q3_error_pp": 3.31,
+ "careful_q3_error_pp": 1.22,
  "cf_last_week_pct": {
   "KS-01": 80.96,
   "KS-02": 79.2,
@@ -109,91 +125,129 @@
   "KS-06": 87.73
  },
  "company_weights_pct": {
-  "Midwest": 23.81,
-  "Northeast": 25.47,
-  "Southeast": 26.19,
-  "West": 24.52
+  "Midwest": 23.87,
+  "Northeast": 25.55,
+  "Southeast": 26.09,
+  "West": 24.5
  },
- "completion_pct": 1.27,
+ "completion_pct": 1.33,
  "constants": {
+  "deposit_window_days": 56,
+  "deposit_window_weeks": 8,
   "fy2024_tender": "67, 21 and 12",
   "other_tender_pct": 12,
   "range_pct": 80,
   "section_refs": "1 2 3 4 5 6 7 8 9",
   "weeks": 13,
+  "wholesale_quarters": 8,
   "z80": 1.2816
  },
- "coverage_in": 11,
+ "coverage_in": 13,
+ "deposit_change_base_m": 5.5,
+ "deposit_change_m": 108.3,
+ "deposit_weeks": {
+  "FY2021 Q1": 2.29,
+  "FY2021 Q2": 2.17,
+  "FY2021 Q3": 2.3,
+  "FY2021 Q4": 2.21,
+  "FY2022 Q1": 2.31,
+  "FY2022 Q2": 2.18,
+  "FY2022 Q3": 2.34,
+  "FY2022 Q4": 2.3,
+  "FY2023 Q1": 2.3,
+  "FY2023 Q2": 2.18,
+  "FY2023 Q3": 2.3,
+  "FY2023 Q4": 2.04,
+  "FY2024 Q1": 2.27,
+  "FY2024 Q2": 2.19,
+  "FY2024 Q3": 2.24,
+  "FY2024 Q4": 2.07,
+  "FY2025 Q1": 2.28,
+  "FY2025 Q2": 2.2,
+  "FY2025 Q3": 2.27
+ },
+ "deposits_base_m": 205.5,
+ "deposits_q3_m": 210.6,
+ "deposits_q4_m": 318.9,
  "drift_less_pct": 5.07,
  "drift_pct": -5.07,
  "errors_pp": {
-  "FY2022 Q1": 0.06,
-  "FY2022 Q2": 0.62,
+  "FY2022 Q1": 0.51,
+  "FY2022 Q2": -0.57,
   "FY2022 Q3": 0.83,
-  "FY2022 Q4": 0.27,
-  "FY2023 Q1": -0.41,
-  "FY2023 Q2": -0.41,
-  "FY2023 Q3": -1.22,
-  "FY2023 Q4": -1.2,
+  "FY2022 Q4": 0.22,
+  "FY2023 Q1": -0.55,
+  "FY2023 Q2": -0.23,
+  "FY2023 Q3": -2.07,
+  "FY2023 Q4": -1.18,
   "FY2024 Q1": -0.26,
-  "FY2024 Q2": 0.28,
-  "FY2024 Q3": 0.47,
-  "FY2024 Q4": -0.02,
-  "FY2025 Q1": 0.92,
-  "FY2025 Q2": 0.53,
-  "FY2025 Q3": 1.22
+  "FY2024 Q2": 0.43,
+  "FY2024 Q3": 0.11,
+  "FY2024 Q4": -3.17,
+  "FY2025 Q1": 0.46,
+  "FY2025 Q2": -0.0,
+  "FY2025 Q3": 1.04
  },
- "excluded_share_pct": 14.71,
+ "excluded_share_pct": 13.48,
  "family_high_m": {
-  "fiscal 2024's regional mix rolled forward a year": 1434.5,
-  "private-label share carried at the third quarter's own change": 1420.8,
-  "private-label share carried by the third quarter's year-on-year change": 1439.7,
-  "private-label share on a straight line through fiscal 2025's three quarters": 1422.3,
-  "the chain calibrated by regression on past quarters": 1437.9,
-  "the golden route": 1425.0,
-  "the record from fiscal 2023 only": 1426.0,
-  "the regional mix of fiscal 2023": 1420.1
+  "fiscal 2024's regional mix rolled forward a year": 1465.0,
+  "private-label share carried at the third quarter's own change": 1456.8,
+  "private-label share carried by the third quarter's year-on-year change": 1472.4,
+  "private-label share on a straight line through fiscal 2025's three quarters": 1458.3,
+  "the chain calibrated by regression on past quarters": 1478.9,
+  "the deposit window at nine weeks": 1468.7,
+  "the deposit window at seven weeks": 1460.2,
+  "the golden route": 1460.3,
+  "the record from fiscal 2023 only": 1463.0,
+  "the regional mix of fiscal 2023": 1457.5,
+  "wholesale at the median of the last four quarters": 1461.6
  },
  "family_m": {
-  "fiscal 2024's regional mix rolled forward a year": 1419.6,
-  "private-label share carried at the third quarter's own change": 1408.5,
-  "private-label share carried by the third quarter's year-on-year change": 1424.6,
-  "private-label share on a straight line through fiscal 2025's three quarters": 1409.9,
-  "the chain calibrated by regression on past quarters": 1421.4,
-  "the golden route": 1412.5,
-  "the record from fiscal 2023 only": 1412.5,
-  "the regional mix of fiscal 2023": 1405.5
+  "fiscal 2024's regional mix rolled forward a year": 1445.6,
+  "private-label share carried at the third quarter's own change": 1436.1,
+  "private-label share carried by the third quarter's year-on-year change": 1449.8,
+  "private-label share on a straight line through fiscal 2025's three quarters": 1437.2,
+  "the chain calibrated by regression on past quarters": 1452.2,
+  "the deposit window at nine weeks": 1445.1,
+  "the deposit window at seven weeks": 1439.0,
+  "the golden route": 1439.5,
+  "the record from fiscal 2023 only": 1439.5,
+  "the regional mix of fiscal 2023": 1433.4,
+  "wholesale at the median of the last four quarters": 1440.3
  },
  "first_origin": "FY2022 Q1",
- "forecast_m": 1412.5,
- "golden_rmse_pp": 0.7,
- "growth_pct": 1.3,
+ "forecast_m": 1439.5,
+ "golden_rmse_pp": 1.12,
+ "growth_abs_pct": 0.63,
+ "growth_pct": -0.63,
  "incumbent": {
-  "intercept_pp": 1.95,
-  "q3_actual_m": 1310.3,
-  "q3_forecast_m": 1342.9,
-  "q3_growth_pct": 6.76,
+  "intercept_pp": 1.62,
+  "q3_actual_m": 1314.9,
+  "q3_forecast_m": 1355.1,
+  "q3_growth_pct": 7.32,
   "q3_x_pct": 11.83,
-  "rmse_pp": 1.53,
-  "slope": 0.407
+  "rmse_pp": 2.13,
+  "slope": 0.483
  },
  "last_origin": "FY2025 Q3",
+ "mto_share_base_pct": 29.01,
+ "mto_share_q4_pct": 38.9,
  "organic_pct": {
-  "FY2022 Q1": 6.03,
-  "FY2022 Q2": 5.21,
-  "FY2022 Q3": 5.32,
-  "FY2022 Q4": 6.23,
-  "FY2023 Q1": 8.37,
-  "FY2023 Q2": 5.83,
-  "FY2023 Q3": 5.85,
-  "FY2023 Q4": 5.08,
-  "FY2024 Q1": 4.63,
-  "FY2024 Q2": 3.51,
-  "FY2024 Q3": 5.65,
-  "FY2024 Q4": 4.97,
-  "FY2025 Q1": 4.16,
-  "FY2025 Q2": 5.51,
-  "FY2025 Q3": 4.17
+  "FY2022 Q1": 7.66,
+  "FY2022 Q2": 6.64,
+  "FY2022 Q3": 4.67,
+  "FY2022 Q4": 5.69,
+  "FY2023 Q1": 9.32,
+  "FY2023 Q2": 4.98,
+  "FY2023 Q3": 6.97,
+  "FY2023 Q4": 4.96,
+  "FY2024 Q1": 2.12,
+  "FY2024 Q2": 3.37,
+  "FY2024 Q3": 5.27,
+  "FY2024 Q4": 8.05,
+  "FY2025 Q1": 4.82,
+  "FY2025 Q2": 5.75,
+  "FY2025 Q3": 4.14
  },
  "origins": 15,
  "panel_weights_pct": {
@@ -202,14 +256,17 @@
   "Southeast": 41.86,
   "West": 37.34
  },
+ "payments_base_m": 1401.6,
+ "payments_growth_pct": 9.17,
+ "payments_q4_m": 1530.1,
  "perturb_m": {
-  "other tenders at 10 per cent of net sales": 1427.5,
-  "other tenders at 14 per cent of net sales": 1422.5,
-  "the last week's completeness +3 per cent": 1422.7,
-  "the last week's completeness -3 per cent": 1427.5,
-  "the licensed shops' and cafes' share +20 per cent": 1420.2,
-  "the licensed shops' and cafes' share -20 per cent": 1431.6,
-  "the range from the record's 10th and 90th percentile errors": 1424.8
+  "other tenders at 10 per cent of net sales": 1462.0,
+  "other tenders at 14 per cent of net sales": 1458.5,
+  "the last week's completeness +3 per cent": 1458.6,
+  "the last week's completeness -3 per cent": 1462.1,
+  "the licensed shops' and cafes' share +20 per cent": 1459.8,
+  "the licensed shops' and cafes' share -20 per cent": 1461.6,
+  "the range from the record's 10th and 90th percentile errors": 1464.3
  },
  "pl_q1fy25_pct": 20.0,
  "pl_q2fy25_pct": 19.0,
@@ -217,106 +274,170 @@
  "pl_q3fy25_pct": 17.9,
  "pl_q4fy24_pct": 20.6,
  "pl_target_pct": 17.0,
- "pooled_growth_pct": 10.84,
- "q3_error_pp": 1.22,
- "r1_entity": 14.71,
- "r2_completion": 1.27,
- "r3_panel": {
-  "issuers in both years, cards of the same age": 25.74,
-  "the delivered panel, every issuer": -14.67,
-  "the latest weeks completed": 1.09,
-  "the licensed shops and cafes taken out": -1.32
+ "pooled_growth_pct": 19.48,
+ "q3_error_pp": 1.04,
+ "r1_panel": {
+  "issuers in both years, cards of the same age": 27.74,
+  "the delivered panel, every issuer": -8.9,
+  "the latest weeks completed": 1.21,
+  "the licensed shops and cafes taken out": -0.57
  },
- "r4_visible": 6.71,
- "r5_tender": {
+ "r2_visible": 15.0,
+ "r3_tender": {
   "drift_pct": -5.07,
   "pl_target_pct": 17.0
  },
+ "r4_deposits": {
+  "deposits_q4_m": 318.9,
+  "revenue on delivery": -7.33
+ },
+ "r5_wholesale": {
+  "wholesale at its run rate": -2.47,
+  "wholesale_q4_m": 17.7
+ },
  "r6_record": {
-  "golden_rmse_pp": 0.7,
-  "q3_error_pp": 1.22
+  "golden_rmse_pp": 1.12,
+  "q3_error_pp": 1.04
  },
  "r7_forecast": {
-  "forecast_m": 1412.5,
-  "range_high_m": 1425.0,
-  "range_low_m": 1400.0
+  "forecast_m": 1439.5,
+  "range_high_m": 1460.3,
+  "range_low_m": 1418.6
  },
  "r8_bridge": {
-  "the bank-card share of net sales": -5.41,
-  "the company's regional mix": -4.13
+  "revenue on delivery": -7.33,
+  "the bank-card share of net sales": -5.83,
+  "the company's regional mix": -4.48,
+  "wholesale at its run rate": -2.47
  },
  "r9_call": {
   "call": "short",
-  "range_high_m": 1425.0
+  "range_high_m": 1460.3
  },
- "range_gap_m": 25.0,
- "range_high_m": 1425.0,
- "range_low_m": 1400.0,
+ "range_gap_m": 23.7,
+ "range_high_m": 1460.3,
+ "range_low_m": 1418.6,
  "regional_pct": {
-  "Midwest": 0.44,
-  "Northeast": -1.45,
-  "Southeast": 16.98,
-  "West": 10.3
+  "Midwest": 8.22,
+  "Northeast": 6.23,
+  "Southeast": 26.1,
+  "West": 18.91
  },
  "release": "26 February 2026",
+ "retail_base_m": 1396.1,
+ "retail_growth_pct": 1.84,
+ "retail_q4_m": 1421.8,
+ "ruled_out_high_m": {
+  "deposits at the third quarter's weeks of payments": 1546.2,
+  "deposits from a lead time carried from the third quarter": 1542.0,
+  "private-label share held at the third quarter's level": 1476.5,
+  "spend per card instead of cards of the same age": 1460.1,
+  "the made-to-order share over the whole quarter": 1504.4,
+  "the record with each quarter's own reported private-label share": 1461.1,
+  "wholesale at the mean of the last four quarters, last year's contract included": 1471.7
+ },
+ "ruled_out_rmse_pp": {
+  "deposits at the third quarter's weeks of payments": 1.82,
+  "deposits from a lead time carried from the third quarter": 1.39,
+  "private-label share held at the third quarter's level": 1.16,
+  "spend per card instead of cards of the same age": 1.52,
+  "the made-to-order share over the whole quarter": 1.24,
+  "the record with each quarter's own reported private-label share": 1.17,
+  "wholesale at the mean of the last four quarters, last year's contract included": 1.25
+ },
  "shortcut_call": {
   "careful": "long",
-  "desk_model": "no position",
-  "drift_only": "no position",
-  "drift_regressed": "no position",
-  "mix_only": "no position",
+  "careful_regressed": "long",
+  "deposit_ratio": "no position",
+  "deposits_only": "no position",
+  "desk_model": "long",
+  "last_year_deposits": "long",
+  "no_mix": "no position",
+  "no_tender": "no position",
+  "panel_regressed": "long",
   "quick": "short",
-  "raw_regressed": "long",
-  "trend": "long"
+  "trend": "no position",
+  "trend_retail": "no position",
+  "wholesale_only": "long"
  },
  "shortcut_high_m": {
-  "careful": 1508.5,
-  "desk_model": 1503.9,
-  "drift_only": 1493.1,
-  "drift_regressed": 1465.5,
-  "mix_only": 1491.0,
-  "raw_regressed": 1485.2
+  "careful": 1611.3,
+  "careful_regressed": 1604.9,
+  "deposit_ratio": 1546.2,
+  "deposits_only": 1497.8,
+  "desk_model": 1604.7,
+  "last_year_deposits": 1570.1,
+  "no_mix": 1508.8,
+  "no_tender": 1538.9,
+  "panel_regressed": 1633.3,
+  "trend": 1562.2,
+  "trend_retail": 1519.4,
+  "wholesale_only": 1570.1
  },
  "shortcut_low_m": {
-  "careful": 1454.8,
-  "desk_model": 1443.8,
-  "drift_only": 1441.2,
-  "drift_regressed": 1433.3,
-  "mix_only": 1440.2,
-  "raw_regressed": 1457.1
+  "careful": 1551.5,
+  "careful_regressed": 1530.5,
+  "deposit_ratio": 1478.6,
+  "deposits_only": 1452.6,
+  "desk_model": 1520.5,
+  "last_year_deposits": 1513.4,
+  "no_mix": 1464.5,
+  "no_tender": 1469.4,
+  "panel_regressed": 1550.5,
+  "trend": 1477.1,
+  "trend_retail": 1439.7,
+  "wholesale_only": 1513.4
  },
  "shortcut_m": {
-  "careful": 1481.6,
-  "desk_model": 1473.9,
-  "drift_only": 1467.2,
-  "drift_regressed": 1449.4,
-  "mix_only": 1465.6,
-  "quick": 1189.8,
-  "raw_regressed": 1471.2,
-  "trend": 1458.7
+  "careful": 1581.4,
+  "careful_regressed": 1567.7,
+  "deposit_ratio": 1512.4,
+  "deposits_only": 1475.2,
+  "desk_model": 1562.6,
+  "last_year_deposits": 1541.8,
+  "no_mix": 1486.7,
+  "no_tender": 1504.1,
+  "panel_regressed": 1591.9,
+  "quick": 1319.7,
+  "trend": 1519.6,
+  "trend_retail": 1479.5,
+  "wholesale_only": 1541.8
  },
  "shortcut_pct": {
-  "careful": 6.26,
-  "desk_model": 5.7,
-  "drift_only": 5.22,
-  "drift_regressed": 3.94,
-  "mix_only": 5.11,
-  "quick": -14.67,
-  "raw_regressed": 5.51,
-  "trend": 4.61
+  "careful": 9.17,
+  "careful_regressed": 8.22,
+  "deposit_ratio": 4.4,
+  "deposits_only": 1.84,
+  "desk_model": 7.87,
+  "last_year_deposits": 6.43,
+  "no_mix": 2.63,
+  "no_tender": 3.83,
+  "panel_regressed": 9.89,
+  "quick": -8.9,
+  "trend": 4.9,
+  "trend_retail": 2.13,
+  "wholesale_only": 6.43
  },
  "shortcut_rmse_pp": {
-  "careful": 1.5,
-  "desk_model": 1.68,
-  "drift_only": 1.45,
-  "drift_regressed": 0.9,
-  "mix_only": 1.42,
-  "raw_regressed": 0.79
+  "careful": 1.61,
+  "careful_regressed": 2.0,
+  "deposit_ratio": 1.82,
+  "deposits_only": 1.22,
+  "desk_model": 2.27,
+  "last_year_deposits": 1.53,
+  "no_mix": 1.19,
+  "no_tender": 1.87,
+  "panel_regressed": 2.23,
+  "trend": 2.29,
+  "trend_retail": 2.15,
+  "wholesale_only": 1.53
  },
- "street_growth_pct": 3.99,
- "street_m": 1450.0,
- "street_median_m": 1448.4,
+ "street_growth_pct": 2.44,
+ "street_m": 1484.0,
+ "street_median_m": 1482.4,
  "street_n": 11,
  "target_quarter": "FY2025 Q4",
- "visible_growth_pct": 6.71
+ "visible_growth_pct": 15.0,
+ "wholesale_base_m": 52.5,
+ "wholesale_q4_m": 17.7
 }

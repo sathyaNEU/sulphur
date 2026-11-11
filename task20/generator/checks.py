@@ -68,8 +68,9 @@ def main():
     worst = 0.0
     for fy in reg.index:
         qs = [k for k in res.index if k.startswith(fy) and pd.notna(res.net_sales_usd_m[k])]
-        banner_q = sum(float(res.net_sales_usd_m[k]) - (float(res.fernhollow_net_sales_usd_m[k])
-                                                         if pd.notna(res.fernhollow_net_sales_usd_m[k]) else 0) for k in qs)
+        banner_q = sum(float(res.net_sales_usd_m[k]) - float(res.wholesale_net_sales_usd_m[k])
+                       - (float(res.fernhollow_net_sales_usd_m[k]) if pd.notna(res.fernhollow_net_sales_usd_m[k]) else 0)
+                       for k in qs)
         worst = max(worst, abs(banner_q - float(reg.loc[fy].sum())))
     check("C6 the 10-K's regional table adds to the quarters' banner net sales within rounding", worst <= 0.35,
           "largest gap USD %.2f m" % worst)
@@ -96,24 +97,23 @@ def main():
     check("R2b the site's payment-facilitator descriptor is in every month of both quarters (neutral to growth)",
           paypal.month.isin(["2024-11", "2024-12", "2025-01", "2025-11", "2025-12", "2026-01"]).sum() == 6)
     # each result's hurried figure
-    by = {r["id"]: r for r in E["results"]}
     c = R["shortcuts"]["careful"]
     check("R3a the careful pass's figures sit outside R4 to R9's bands",
-          not inside(F["pooled_growth_pct"], B["visible_growth_pct"])
-          and not inside(F["pl_q3fy25_pct"], B["pl_target_pct"])
+          not inside(0.0, B["bridge_pp"]["revenue on delivery"])
+          and not inside(0.0, B["bridge_pp"]["wholesale at its run rate"])
           and not inside(round(100 * c["rmse"], 2), B["golden_rmse_pp"])
           and not inside(round(c["forecast"], 1), B["forecast_m"])
-          and not inside(0.0, B["bridge_pp"]["the company's regional mix"])
           and A.call_of(c, street) != "short")
     q = R["shortcuts"]["quick"]
-    check("R3b the quick pass's figures sit outside R1, R2, R4 and R7's bands",
-          not inside(0.0, B["excluded_share_pct"]) and not inside(0.0, B["completion_pct"])
+    check("R3b the quick pass's figures sit outside R1, R2 and R7's bands",
+          not inside(0.0, B["bridge_pp"]["the latest weeks completed"])
           and not inside(round(100 * q["growth"], 2), B["visible_growth_pct"]) and not inside(round(q["forecast"], 1), B["forecast_m"]))
-    # no one thing: each single correction leaves the call wrong
-    for k in ("mix_only", "drift_only", "drift_regressed"):
-        s = R["shortcuts"][k]
-        check("R4 no one thing: %s leaves the range across the street" % k, A.call_of(s, street) != "short",
-              "%.1f to %.1f against %.1f" % (s["low"], s["high"], street))
+    # no one thing: each correction left out leaves the call wrong
+    for k in ("deposits_only", "wholesale_only", "no_mix", "no_tender", "deposit_ratio", "last_year_deposits",
+              "careful_regressed", "trend", "trend_retail"):
+        s_ = R["shortcuts"][k]
+        check("R4 no one thing: %s leaves the range at or across the street" % k, A.call_of(s_, street) != "short",
+              "%.1f to %.1f against %.1f" % (s_["low"], s_["high"], street))
     # the one-fact test computed from effort.json
     n = len(E["results"])
     worst_hint = max(len(h["rescues"]) for h in E["hints"])
@@ -128,20 +128,20 @@ def main():
           all(inside(round(100 * v["rmse"], 2), B["golden_rmse_pp"]) and inside(round(100 * v["errs"]["FY2025 Q3"], 2), B["q3_error_pp"])
               for v in fam.values()))
     V = R["variants"]
-    check("R6d R2, R4 and R5's rivals inside their bands",
-          all(inside(round(100 * v, 2), B["completion_pct"]) for v in V["completion"].values())
-          and all(inside(round(100 * v, 2), B["visible_growth_pct"]) for v in V["visible"].values())
+    check("R6d R2 and R3's rivals inside their bands",
+          all(inside(round(100 * v, 2), B["visible_growth_pct"]) for v in V["visible"].values())
           and all(inside(round(v, 2), B["pl_target_pct"]) for v in V["pl"].values())
           and all(inside(round(100 * v, 2), B["drift_pct"]) for v in V["drift"].values()))
-    check("R6e R3 and R8's step rivals inside their bands",
-          all(inside(round(100 * v, 2), B["bridge_pp"]["the company's regional mix"]) for v in V["mix_step"].values())
-          and all(inside(round(100 * v, 2), B["bridge_pp"]["the bank-card share of net sales"]) for v in V["tender_step"].values())
-          and inside(round(100 * (V["comparable"]["spend per card"]), 2), B["bridge_pp"]["issuers in both years, cards of the same age"]))
+    check("R6e every order of the bridge's steps inside each step's band",
+          all(inside(round(100 * v, 2), B["bridge_pp"][k]) for k, vs in R["bridge_orders"].items() for v in vs))
+    check("R6f R4 and R5's rivals inside their bands",
+          all(inside(round(P["deposits"]["FY2025 Q3"] + v, 1), B["deposits_q4_m"]) for v in V["dep_change"].values())
+          and all(inside(round(A.ws_hat(P, A.TQ, r_), 1), B["wholesale_q4_m"]) for r_ in ("median8", "median4")))
     # forcing
     check("R7a forcing: every golden-family range tops out below the street", all(v["high"] < street for v in fam.values()),
           "highest %.1f against %.1f" % (max(v["high"] for v in fam.values()), street))
     check("R7b forcing: every shortcut's range reaches the street or above",
-          all(s.get("high", s["forecast"]) >= street for k, s in R["shortcuts"].items() if k != "quick"))
+          all(s_.get("high", s_["forecast"]) >= street for k, s_ in R["shortcuts"].items() if k != "quick"))
     check("R7c forcing: every perturbation keeps the top of the range below the street", all(v < street for v in R["perturb"].values()),
           "highest %.1f" % max(R["perturb"].values()))
 
@@ -161,15 +161,15 @@ def main():
           R["excluded_share"] > 0.05 and R["bridge"][2][1] < 0)
     pre = R["pan"][(R["pan"].merchant_id == "M2290") & (R["pan"].week_start < A.ACQUIRED)]
     check("SF6 Fernhollow enters the panel's entity from its acquisition only", pre.empty)
-    check("SF7 completion by medians, means or the last thirteen deliveries: inside R2's band",
-          all(inside(round(100 * v, 2), B["completion_pct"]) for v in V["completion"].values()))
-    check("SF8 the regional weights: fiscal 2024, fiscal 2023 or fiscal 2024 rolled forward, inside R4's band and the call holds",
+    check("SF7 completion by medians, means or the last thirteen deliveries: within 0.3 points of the golden's uplift",
+          all(abs(round(100 * v, 2) - F["completion_pct"]) <= 0.3 for v in V["completion"].values()))
+    check("SF8 the regional weights: fiscal 2024, fiscal 2023 or fiscal 2024 rolled forward, inside R2's band and the call holds",
           all(inside(round(100 * v, 2), B["visible_growth_pct"]) for v in V["visible"].values())
           and fam["the regional mix of fiscal 2023"]["high"] < street and fam["fiscal 2024's regional mix rolled forward a year"]["high"] < street)
     flat = R["ruled_out"]["private-label share held at the third quarter's level"]
     falls = [P["pl"]["FY2024 Q4"] - P["pl"]["FY2025 Q1"], P["pl"]["FY2025 Q1"] - P["pl"]["FY2025 Q2"],
              P["pl"]["FY2025 Q2"] - P["pl"]["FY2025 Q3"]]
-    check("SF9 the private-label rules inside R5's band; holding the third quarter flat is ruled out by three successive "
+    check("SF9 the private-label rules inside R3's band; holding the third quarter flat is ruled out by three successive "
           "and growing falls", all(inside(round(v, 2), B["pl_target_pct"]) for v in V["pl"].values())
           and not inside(P["pl"]["FY2025 Q3"], B["pl_target_pct"]) and falls[0] < falls[1] < falls[2],
           "falls %s; flat would give %.1f" % ([round(x, 1) for x in falls], flat["forecast"]))
@@ -192,6 +192,23 @@ def main():
           iss == ["KS-01", "KS-02", "KS-03", "KS-04", "KS-05"])
     check("SF17 the site's payment-facilitator descriptor stays with the site (online orders are net sales)",
           (P["desc"][P["desc"].descriptor.str.startswith("PAYPAL")].merchant_id == "M0413").all())
+    win = R["ruled_out"]["the made-to-order share over the whole quarter"]
+    wk = np.mean([v for k_, v in R["dep_weeks_hist"].items() if k_ < "FY2025 Q4"])
+    check("SF18 the deposit window: seven to nine weeks inside the bands; the whole quarter ruled out (deposits average "
+          "%.2f weeks of retail payments, about eight weeks of a 30 per cent made-to-order share)" % wk,
+          7.0 <= wk / 0.30 <= 9.0 and win["rmse"] > G["rmse"],
+          "whole-quarter window record %.2f against %.2f" % (100 * win["rmse"], 100 * G["rmse"]))
+    m4 = R["ruled_out"]["wholesale at the mean of the last four quarters, last year's contract included"]
+    check("SF19 wholesale at the median of eight or of four quarters: inside R5's band, the call holds; the mean of four "
+          "carries last year's one contract into the run rate and still calls short",
+          fam["wholesale at the median of the last four quarters"]["high"] < street and m4["high"] < street,
+          "mean of four tops at %.1f" % m4["high"])
+    ly = R["shortcuts"]["last_year_deposits"]
+    check("SF20 deposits moved as they did a year earlier are ruled out by the descriptor detail's made-to-order share",
+          A.mto_share_last(P, A.TQ) > 1.3 * A.mto_share_last(P, A.BQ) and A.call_of(ly, street) != "short",
+          "%.2f%% against %.2f%%" % (100 * A.mto_share_last(P, A.TQ), 100 * A.mto_share_last(P, A.BQ)))
+    check("SF21 net sales include wholesale (the filing's total net sales; the results file's column is part of it)",
+          abs(float(res.net_sales_usd_m["FY2024 Q4"]) - float(res.wholesale_net_sales_usd_m["FY2024 Q4"]) - A.retail(P, "FY2024 Q4")) < 1e-9)
 
     # ---------------------------------------------------------------------------------------------- realism sweep
     txt = open(os.path.join(TASK, "submission.md")).read()
