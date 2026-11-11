@@ -95,3 +95,56 @@ Realism tells:
 - Question 6: none found. Its note on 2.3 (the service factor changing with the forecast) is taken: the forecast's part of each gap is now labelled the forecast at its recommended setting, the package 4.2 prices.
 - (a), (b), (c): harmless, as the reader says.
 - Realism: the To Go stores no longer carry raw meat (fixed in the generator); the 2025 and 2026 layouts are the ERP migration the note files; the order log and the 2026 extract match row for row because both are the ERP's own log of every ranged store, item and day.
+
+## Solver's-eye read, second (the redesigned cut)
+
+One isolated reader (general-purpose, sonnet, medium), 2026-11-11, on a fresh copy of prompt.txt and target/ after the price list, the register's hours and the prompt changed; it saw no design note, generator, submission or report.
+
+1. Method/step/population/window statements: 
+- pilotaftale 4.2: "The saving of a store is the change in its fresh result from ordering on Kornblomst's forecast at the recommended setting instead of on AutoOrdre: the fresh waste it avoids, valued at cost price, plus the gross margin on the fresh units it sells in addition, less the gross margin on the fresh units it no longer sells. Gross margin is the sales value excluding VAT less the cost price of the units sold."
+- 4.3: "A year is 52 weeks, taken as twice the 26 weeks of the pilot. A format's expected saving per store is the average over every store of that format in Fjordkøb's store register, pilot stores and other stores alike."
+- 4.1: "A format is taken for all of its stores or for none of them." (saving greater than Annex 2 licence price)
+- 2.1/2.3: window "2 March 2026 ... 30 August 2026 (26 weeks)"; "pilot stores were chosen by Fjordkøb's regional managers"; service factor 0.75 for pilot vs 1.05 for others.
+- pilot_dashboard_uge35.xlsx question line: "uge 10 til 35 2026 mod samme uger 2025" (the comparison window and design).
+- ordreforslag_2026.csv carries Kornblomst forecast beside AutoOrdre for every store from March, which implies the counterfactual route, but no sentence says so.
+
+2. No file ranks formats or recommends a switch. pilot_dashboard_uge35.xlsx ranks pilot vs other stores on waste % and sales (a crude raw comparison) but not formats or the switch decision. Closest: none for the decision.
+
+3. pilot_dashboard_uge35.xlsx (a BI summary of the raw pilot vs other gap) and, partly, bi_uge_butik_kategori.csv (pre-aggregated weekly store/category table). The agreement PDF is context but also a rule file.
+
+4. No figure reads as the answer. Licence prices (34,000 / 20,000 / 12,000 DKK) are thresholds, not results. Dashboard totals (waste 4.58% vs 5.27% pilot, 7.02% vs 6.89% other; sales totals) are the raw gap, context.
+
+5. Literal fixings:
+- 4.2: fixes the saving's definition: avoided waste at cost + gross margin on extra units sold - gross margin on units no longer sold, margin = ex-VAT sales less cost.
+- 4.3: fixes year = 2 x 26 weeks, and the population = every store of the format in the register (pilot and other stores), per-store average.
+- 4.1: decision rule: saving > licence price, whole format in or out.
+- 2.1: pilot window 2 Mar to 30 Aug 2026; dashboard: weeks 10-35 vs same weeks 2025 (the grading window of the "why" gaps).
+- 2.3: the recommended setting is service factor 0.75 (so saving is at that setting).
+These fix the estimand and decision rule heavily; method of getting counterfactual stays open.
+
+6. Single thing: the agreement's section 4 (saving formula, 52 weeks, whole-register average, licence threshold) makes the second half (per-format saving and switch list) largely a procedure once the counterfactual is in hand; and ordreforslag's logged Kornblomst forecast for all stores plus the 0.75 vs 1.05 service factor in 2.3 point at forecast vs safety-stock as the causes. The pilot-store selection note (2.1, "chosen by regional managers") plus konkurrentaabninger.csv and kampagneplan point at selection/competitor/promotion confounding. None alone settles everything; the gap decomposition still needs analysis, but the agreement hands over the pilot/other contrast and savings definition.
+Part by part:
+- Why sales grew less (pp split into causes): analysis (selection, competitor openings, availability, weather, promotions), with some reliance on noticing the competitor file and chosen-store note.
+- Why waste fell further (pp split): analysis; the service factor 0.75 vs 1.05 in 2.3 is a stated difference the analyst must separate from forecast accuracy.
+- Saving per format per store per year with 80% range: mostly analysis (counterfactual simulation from logged forecasts, extrapolating to non-pilot stores) but the valuation, x2 annualisation and averaging population follow the stated rule in 4.2/4.3.
+- Formats to switch: following the stated rule 4.1 once the saving ranges exist.
+- Reading-field items: data semantics (2025 file semicolon/Danish headers vs 2026 comma/English, 'Sidste salg' time, units, old item numbers 451348/451355 -> 451819/451826 in vareregister "Tidligere varenr", price/cost changes 2025 vs 2026) are reading/reconciliation chores; konkurrentaabninger duplicates for one opening and one "åbner 2. november 2026" future row are catch-it items.
+
+(a) pilotaftale_kornblomst_2026.pdf: harmless as context, with a caveat. It is a real-looking contract; its definitions (4.2, 4.3) are shared words with the answer because they are the estimand. It states no figures beyond the licence prices and the store list. But it does hand over the saving formula and population (see Q5): a rule leak of the "what", not of results.
+(b) dagssalg_frisk_2026.csv: harmless; digit runs are plain item/store/sales values in a 310k-row file (I could not find them to be anything other than ordinary numeric values; max sales 6572, max units 302; no embedded notes or text columns).
+
+Realism tells:
+- 2025 and 2026 daily files differ in delimiter, decimal mark, header language, date format, and time precision (HH:MM vs HH:MM:SS), and 2025 is latin-1 encoded; plausible for a system change but both extracts are in the same fresh-extract grain; mild.
+- last_sale blank for 16,584 rows only (consistent with zero sales; fine).
+- Dashboard "Version 26 · ... ejer: BI, Elna Johnsen" and spreadsheets with clean round numbers; ordreforslag has Kornblomst forecast populated for every store (as agreement 2.4 says) with order_basis exactly flipping at pilot start; fine.
+- vareregister price 2026 = 2025 x ~1.025 and cost x ~1.0245 almost uniformly across all items (mechanical uplift); slight tell.
+- konkurrentaabninger.csv is tiny (10 rows) and contains a duplicated Galten line with a note "nærmeste Fjordkøb er Galten" and a note about a not-yet-opened store; reads curated.
+- File mtimes of source csvs cluster at Sep 2 06:05-06:21 (export-like); timeprofil dated Sep 2025; fine.
+- Pilot dashboard totals are rounded to 2 decimals and per-week figures are suspiciously stable; mild.
+
+### Main thread's rulings
+
+- Questions 1, 5 and 6: the agreement's section 4 files the decision's WHAT (the saving, the year, the population, the rule); the counterfactual, the turned-away units and the carrying to stores the pilot did not run in stay open, as the reader says. Nothing to fix.
+- Questions 2 to 4: none; the dashboard is the BI deliverable whose question it states, and the weekly history is BI's own cube.
+- (a), (b): harmless.
+- Realism: the two layouts are the ERP migration the note files; the 2.5 per cent uplift is the chain's price list indexed at the new year, which the register states as two price columns; the Galten opening is logged against both stores it sits near, as market intelligence logs an opening per store it is near; the planned November opening is a log entry for a building permit. No change.

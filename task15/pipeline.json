@@ -17,8 +17,8 @@
   "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "REVIEW (every line ruled harmless in the note's Pre-ship check), 2026-11-11",
-  "reader": "one isolated read 2026-11-11: no method, ranking, helper or answer leak, question 6 none; realism tell (To Go carried raw meat) and the service-factor label fixed in the generator"
+  "leak_py": "REVIEW on the redesigned cut (every line ruled harmless in the note's Pre-ship check), 2026-11-11",
+  "reader": "two isolated reads 2026-11-11, the second on the redesigned cut: no method, ranking, helper or answer leak, question 6 none; first read's realism tells fixed, second read's ruled harmless"
  },
  "duplicate_check": {
   "heart": "",
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4 on the redesigned cut: a second isolated leak read (scratchpad leak2-task15) and a fresh judge brief from the determinism-judge agent are in progress; spawn the judge thread from the agent's new run folder, re-invoke the agent with its verdict.md for determinism_check_report_pass3.md, fix findings in one pass, gates.py task15 --full, then READY.",
+ "resume": "stage 4 on the redesigned cut: the leak read is done (clean); the judge thread runs on /tmp/determinism-check-task15-383420/; re-invoke the determinism-judge agent with its verdict.md for determinism_check_report_pass3.md, fix findings in one pass, gates.py task15 --full, then READY.",
  "approved": null,
  "submitted": null,
  "portal": {
