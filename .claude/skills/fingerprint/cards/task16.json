@@ -1,105 +1,158 @@
 {
- "task": "task16",
- "project": "sulfur",
- "architecture": "v1",
- "drawn": "2026-11-10",
- "slot_note": "",
- "domain": "general-statistics-data-science",
- "subdomain": "scaling-laws",
- "niche": "a Norwegian university machine-learning group choosing which shortlisted training configuration to name in a national compute proposal for its seabed sediment classifier, forecasting each one's loss on the mapping programme's verified benchmark from a five-week pilot sweep of real training runs: an expert-label size ladder run at tabled learning rates, a learning-rate check, a few wide runs, and trials of a contractor's labels and of labels transferred from a legacy sediment map that the benchmark never scored",
- "objective": "forecasting",
- "shape": "other",
- "decision_type": "pick_one_of_n",
- "answer_unit": "named_option",
- "answer": "B",
- "answer_source": "task16/generator/figures.json (call)",
- "gap": [
-  "objective",
-  "population"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G1",
-  "G14",
-  "G16",
-  "G6"
- ],
- "gate_g": "forecasting",
- "calibration_form": "parallel_run_overlap",
- "stump_strategy": "other",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "planning_thread",
- "stump_class": "analytical",
- "analyst_test": "A careful but hurried analyst cleans every export, opens the per-item scores, scores each run on the expert-labelled development items and calibrates that to the benchmark, then fits the field's textbook object, one scaling-law regression over every finished run (a curve in examples, a term in width, each label route's share, a learning-rate term), chooses its form on the largest runs held back, reports the held-back misses although they all fall on one side, and names the configuration trained on every label it can get, at a loss the routes' costs and the bent return do not support.",
- "domain_test": "Every result is a scaling-study quantity the field estimates from a sweep of training runs (a score on the target yardstick for runs that yardstick never saw, the loss a noisier label route costs at matched examples and learning rate, the return to more examples past the range run, the learning rate a wider model needs, run-to-run spread, a forecast with a range for configurations larger than any run, chosen because it holds when the largest runs are held out); swap in hospital or retail nouns and learning-rate tuning by width, a development split scored on vendor labels, examples seen and seeds stop making sense.",
- "layer2_family": "forecast_uncertainty",
- "layer2_pattern": "own:scale-up-forecast-from-a-staged-pilot-sweep",
- "layer1": [
-  "trainer logs that repeat step ranges after a preempted job resumes from its last checkpoint",
-  "two logger versions with different scalar names and logging cadence",
-  "relaunched runs that share a name with a cancelled or failed first launch",
-  "benchmark uploads keyed by a truncated checkpoint digest, with repeats and part-way checkpoints",
-  "scheduler job attempts, requeues and cancelled jobs for one run",
-  "a re-delivered contractor shard whose first receipt stays in the register",
-  "an item dump lost to a scratch quota"
- ],
- "stakeholder_role": "the group lead who signs the compute proposal",
- "role_family": "research_desk",
- "scoring_unit": "index points",
- "spine": {
-  "file": "tracking_metrics_export_2026-11-04.csv",
-  "rows": 190531,
-  "entity": "one logged training or evaluation scalar of one run",
-  "grain": "run x logged step x scalar",
-  "source": "synthetic"
- },
- "forum": "funder_or_donor",
- "forcing_event": "budget_or_appropriation",
- "org_family": "university_or_school",
- "world": {
-  "geography": "Norway (the northern coast), a national seabed mapping programme with its own compute call",
-  "currency": "NOK",
-  "org_type": "a university machine-learning research group preparing a national compute allocation proposal",
-  "invented_names": [
-   "Lyngvær Geodata",
-   "MML group",
-   "National Seabed Sediment Mapping Programme"
+  "task": "task16",
+  "project": "sulfur",
+  "architecture": "v2",
+  "drawn": "2026-11-11",
+  "slot_note": "",
+  "domain": "general-statistics-data-science",
+  "subdomain": "data-integration-record-linkage-entity-resolution",
+  "niche": "an Austrian parcel carrier's customer contact division deciding which enquiry types its chat assistant keeps taking first through the peak season: each reason family's resolution rate (no further contact about the same consignment through any channel within seven days) rebuilt for the assistant's third version by linking assistant, live chat, telephone and written-case records on the tracking number, with the follow-ups the linked record cannot see estimated, then carried to the conversations the season plan's parcels and service levels will generate",
+  "objective": "etl",
+  "shape": "07",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "to be filled when the pack is cut: the reason families the assistant keeps first through peak and those handed to advisers first, each with its expected resolution rate",
+  "answer_source": "task16/generator/figures.json (call)",
+  "gap": [
+    "population",
+    "time"
   ],
-  "people": [
-   "Helene Svendsen",
-   "Magne Aas",
-   "Tor Fredriksen"
-  ]
- },
- "deliverables": [
-  "scale_up_forecast.xlsx",
-  "proposal_evidence_note.docx"
- ],
- "opening_move": "question-first",
- "question_form": "what",
- "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
- "driver_concrete": "Each shortlisted configuration's loss on the programme's benchmark is forecast from the pilot by scoring every final checkpoint on the expert-labelled development items calibrated to the benchmark's own scores, reading what the contractor's and the map-transfer labels cost against expert-label runs of the same size, width and learning rate, taking the level at each total past the expert pool as its own unknown once those costs are out, carrying it past the largest trial no faster than the last doubling's gain and no slower than none, with the curve checked on the largest runs held back, and stating a range that carries run-to-run spread, the forecast's own error and the yardstick's error.",
- "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead.",
- "answer_shape": "ranked-list-cap",
- "weight": "investigation",
- "chain_signature": [
-  "missingness-measurement",
-  "investigation-loops",
-  "modeling",
-  "forecasting",
-  "uncertainty",
-  "synthesis"
- ],
- "results": "R1 the benchmark loss the largest map-transfer trial corresponds to; R2 what each tenth of a training set moved from expert to contractor or map-transfer labels adds to the benchmark loss; R3 the loss 512,000 expert labels would give; R4 each shortlisted configuration's expected benchmark loss; R5 the four-in-five range round the named one; R6 the configuration to name",
- "one_fact_test": "past the expert pool, take the level at each total as its own unknown, read off the vendor trials once each route's cost is taken out; rescues R3 and R6 (2 of 6): the forecasts past the pilot's largest trial and the range still have to be worked",
- "strategy_label": "WORKS IN FORM",
- "mechanism_source": "design_note",
- "differentiation": {},
- "lineage": [],
- "notes": "strategy other: a staged-pilot scale-up forecast in which no one family carries the pick (a yardstick carried to runs it never scored, a route's cost read at matched examples and learning rate, a return to more examples that bends past the range, chosen by holding out the largest runs); calibration organ: the pilot's benchmark submissions overlap the trainer's development scores on the same final checkpoints (two yardsticks over the same runs); context artifact: the group's meeting notes that carry the shortlist; overuse.objective answered in the design note; prompt shape redrawn from 01 to other on 2026-11-10 when the window moved (another build's card was re-filed after this draw and pulled task15, a true ranked slate under a cap, into the last two): the answer is a results chain behind a pick of one in four, with twelve gradable cells of which four come from the ranked list (the four expected losses), three from the range, four from the drivers (the trial's loss, the two routes' costs, the level) and one from the call; no cap runs out mid-list and nothing is trimmed, so the library's ranked list under a cap was the looser label",
- "registered": "2026-11-10T03:15:10Z"
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G12",
+    "G3",
+    "G6",
+    "G14",
+    "G17"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "gold_standard_subsample",
+  "stump_strategy": "other",
+  "decisive_rule_filed": true,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried analyst cleans the four contact logs, links every assistant conversation to later contacts on the tracking number and reads version 3's resolution rate off the linked record; it restores telephone follow-ups that carry no tracking number at a pooled capture share and counts open written cases where the status shows them, then carries the weeks observed into the season as they stand or reweights them by the plan's parcel service levels as if parcels were conversations, leaves the delay alerts' effect on who contacts unmeasured, and ranges the result by resampling conversations; it keeps families the assistant should hand back, and each shortcut keeps a different set.",
+  "domain_test": "Every result is a record-linkage and missing-data quantity: a linked contact record reconciled to control totals, events the link cannot see restored by the inverse of a capture probability that moves with load, open cases completed from a count at another grain, a rate standardised to a target population whose mix is exposure times a class-specific contact rate, an intervention's effect on that rate measured from a staggered roll-out, and a range that carries day-level dependence; swap in hospital or energy nouns and the tracking-number key, the IVR capture, the case backlog and parcels generating conversations by delivery outcome all stop meaning anything.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:follow-ups-the-linked-record-cannot-see-carried-to-a-season",
+  "layer1": [
+    "telephone legs repeated for transferred calls, outbound calls and a test queue in the call export",
+    "tracking numbers typed with spaces, lower case and a missing prefix",
+    "assistant exports that overlap by a week and carry tester sessions",
+    "one log in UTC across the end of daylight saving time, the others in local time",
+    "three code lists (assistant intents, adviser wrap-up codes, case categories) mapped to one set of reason families",
+    "written cases opened by advisers beside those customers raised",
+    "consignments still in transit at the extract"
+  ],
+  "stakeholder_role": "the carrier's head of customer contact, who fixes which reason families the assistant takes first through peak",
+  "role_family": "operations_director",
+  "scoring_unit": "per resolved case",
+  "spine": {
+    "file": "to be filled when the pack is cut",
+    "rows": 0,
+    "entity": "one handled inbound telephone leg",
+    "grain": "call x leg",
+    "source": "synthetic"
+  },
+  "forum": "operations_desk",
+  "forcing_event": "season_or_peak",
+  "org_family": "logistics_or_3pl",
+  "world": {
+    "geography": "Austria (a national parcel carrier with ten depots)",
+    "currency": "EUR",
+    "org_type": "the customer contact division of a parcel carrier",
+    "invented_names": [
+      "Quellstein Paket",
+      "Hub Traunfeld"
+    ],
+    "people": [
+      "Helena Neumann",
+      "Simon Pertl",
+      "Theresa Jovanovic",
+      "Alena Blümel"
+    ]
+  },
+  "deliverables": [
+    "peak_assistant_scope.xlsx",
+    "peak_assistant_scope_note.docx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "The share of first-line handlings that needed no further contact is read by linking each handling to later contacts on the same item across four channel records, and the linked record misses follow-ups in two unrelated ways that each have to be estimated (one channel takes the item's key only when its line is quiet, so the keyed share falls exactly when follow-ups surge; one channel's cases are counted in the link only once finished, while the open ones sit in a weekly count by age); the season to be planned then draws its handlings from items in a worse state mix than the weeks observed, in proportions set by how often items in each state generate a handling at all, less an intervention that cuts that rate and has to be measured from a staggered roll-out; each estimate moves different categories across the line and none alone lands the set.",
+  "driver_concrete": "Each reason family's resolution rate for Quellstein's assistant is rebuilt for version 3 by linking conversations to later assistant, live chat, telephone and written contacts on the tracking number within seven days; telephone follow-ups whose tracking number the IVR never captured are restored by weighting each keyed call's conversation by the inverse of the capture share at its own queue and wait, written follow-ups still open at the extract are added from the weekly backlog count by queue and age at the follow-up share of the closed cases raised the same week, and the peak rate is each family's rate by delivery outcome weighted by the conversations the season plan's parcels will generate at each outcome's own contact rate, late parcels' contact rate cut by the delay alerts' measured effect at the pilot depots; families at 75 per cent or more stay with the assistant.",
+  "stump": "A careful but hurried analyst links the four logs on the tracking number and reads version 3's rate off the linked record with pooled or no repair for unkeyed calls and open cases, then carries the observed weeks into the season as they stand (or weights by the plan's parcel service levels as if parcels were conversations) with the delay alerts unmeasured, and keeps families whose expected rate falls under 75 per cent once the season's own conversations are counted.",
+  "answer_shape": "reconciled-table",
+  "weight": "assembly",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "missingness-measurement",
+    "synthesis",
+    "causal-reasoning",
+    "causal-reasoning",
+    "forecasting",
+    "forecasting",
+    "uncertainty",
+    "synthesis"
+  ],
+  "results": "R1 the linked record of version 3 conversations and their follow-ups by channel, reconciled to the telephony and case totals; R2 the telephone follow-ups, with those the tracking number never captured; R3 the written follow-ups still open at the extract; R4 each family's resolution rate achieved under version 3; R5 what version 3 changed against version 2 on the conversations it handled; R6 the delay alerts' effect on conversations per late parcel; R7 the assistant conversations a week the season plan will generate and the share from late or exception parcels; R8 each family's expected peak resolution rate; R9 its 90 per cent range; R10 the families to keep and to hand back",
+  "one_fact_test": "the season's conversations come from its parcels at each delivery outcome's own contact rate, so weight the plan by those rates: rescues R7 in part and no composite, because the alerts' effect (R6) is still unmeasured; counted on the built pack by effort.py",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "mark196": "there a hidden total came from the overlap of two capture channels, one of them produced by the unit's own follow-up; here no overlap estimate is made: a capture probability that moves with load is read call by call and inverted, and it is one of five estimates (open cases counted at another grain, a season mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, a day-level range) that the set needs together",
+    "task6": "there a record kept by collectors who choose where to sample was set against a fixed probability sample of the same stock; here every log is a census of its own channel, the gaps are in what a channel keys under load and what it has finished, and the answer is a season's rate for a population the plan's parcels generate"
+  },
+  "architecture_spent": false,
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-11-10",
+      "fate": "spent 2026-11-11 on the platform: one run earned every graded result in 28 minutes (two candidate calibrations compared by leave-one-out error, the slowdown read in matched cells, a response surface with a fitted breakpoint validated on held-out configurations, configurations and calibration pairs resampled separately); six results sat on one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities, and bands wide enough for every sound method graded nothing (REDESIGN, re-rooted to another world)",
+      "domain": "general-statistics-data-science",
+      "subdomain": "scaling-laws",
+      "objective": "forecasting",
+      "shape": "other",
+      "decision_type": "pick_one_of_n",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G1",
+        "G14",
+        "G16",
+        "G6"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "other",
+      "answer_shape": "ranked-list-cap",
+      "weight": "investigation",
+      "chain_signature": [
+        "missingness-measurement",
+        "investigation-loops",
+        "modeling",
+        "forecasting",
+        "uncertainty",
+        "synthesis"
+      ],
+      "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
+      "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead."
+    }
+  ],
+  "lineage_shells": [],
+  "notes": "strategy other: no one family carries the set (events a link cannot see under a load-dependent capture, open cases at another grain, a target mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, day-level dependence in the range); calibration organ: the keyed calls, where the link and the capture are both seen; context artifact: the season plan and the weekly backlog report.",
+  "registered": "2026-11-11T03:35:38Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "in",
+    "deliverable set": "xlsx"
+  }
 }

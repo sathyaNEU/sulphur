@@ -1,60 +1,41 @@
 {
  "task": "task16",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "general-statistics-data-science",
- "subdomain": "scaling-laws",
- "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-10",
+ "subdomain": "data-integration-record-linkage-entity-resolution",
+ "objective": "etl",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "name configuration B (512 wide on the 128,000 expert and 128,000 contractor labels) and state 0.625, range 0.604 to 0.645; not C, which one scaling curve through every run puts first at 0.624 and which comes out at 0.670 (no lower than 0.653 with the last doubling's gain carried on undiminished)",
- "chain": "R1 the benchmark loss the largest map trial corresponds to (0.685); R2 what each tenth of a training set moved to contractor or map-transfer labels costs (0.0020, 0.0114); R3 the loss 512,000 expert labels would give (0.600); R4 each configuration's expected loss (A 0.661, B 0.625, C 0.670, D 0.680); R5 the four-in-five range (0.604 to 0.645, half-width 0.021); R6 the configuration to name (B)",
- "architecture": 1,
+ "call": "to be filled when the pack is cut: the reason families Quellstein's assistant keeps first through the 2026 peak season and those handed to advisers first, each with its expected resolution rate against the 75 per cent rule",
+ "chain": "R1 the linked record reconciled to the telephony and case totals; R2 the telephone follow-ups with those never keyed; R3 the written follow-ups still open; R4 each family's resolution rate under version 3; R5 what version 3 changed on like conversations; R6 the delay alerts' effect on conversations per late parcel; R7 the season's conversations a week and their late share; R8 each family's expected peak rate; R9 its 90 per cent range; R10 the families to keep and to hand back",
+ "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-10"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-05",
-  "reader": "2026-11-10, second read on the six-ask prompt: question 1 none, no ranking file, no helping file, question 5 sentences execute to the golden's estimand, question 6 no one thing; two shortlist-sheet headers renamed (data only)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-10 (repeat.gate_g against task4: the assigned analysis type's own mechanism, answered in the note); ban.shape against task15 appeared after another build's card was filed again and was cleared by redrawing the prompt shape to other, the honester label for a results chain behind a pick; nearest driver task11 at 0.06",
-  "surface": "exit 0"
+  "heart": "",
+  "nearest": "guard.py check WARN 2026-11-11 (overuse.gate_g, repeat.decision, both answered in the note); nearest driver task2 and mark196 at 0.06"
  },
  "judge": {
-  "pass1": {
-   "verdict": "NOT_DETERMINISTIC (narrow: competing_defensible_answer on four asks)",
-   "disposition": "FIX_NOW",
-   "report": "task16/determinism_check_report_pass1.md",
-   "finding": "the main call forced, Gates G and H passing; the bands on the contractor's cost, the 512,000 level and option A excluded the judge's own data-direct readings, and the held-back gap proved a property of the solver's method",
-   "repair": "bands reset on a family of 49 run analyses that holds the judge's readings; the held-back gap, the run counts and the widest configuration's learning rate made working; the prompt cut from nine asks to six"
-  },
-  "pass2": {
-   "verdict": "DETERMINISTIC SOLUTION_WRONG (minor, point values only; every band closes the rivals run)",
-   "disposition": "FIX_NOW",
-   "report": "task16/determinism_check_report_pass2.md",
-   "finding": "Gates A to E, G and H passing, one_thing none, four traps named; three restatements asked for in the answer blocks (the contractor's cost on the same-total reading, B's range wider with its width step said to be carried, the cost linear in the share)",
-   "repair": "the same-total reading of the routes made the golden's own (contractor 0.0020, B 0.625, range 0.604 to 0.645); pack and prompt byte-identical"
-  },
-  "pass3": {
-   "verdict": "DETERMINISTIC",
-   "disposition": "APPROVE",
-   "report": "task16/determinism_check_report.md",
-   "finding": "no repair; the thread's own cold derivation fitted one curve through every run and named C (the analytical failure, not a fork); stump power high; advisory only: option A's learning rate is the solver's to choose, B's point leans on averaged width steps, the bands on C and D are extrapolation judgments"
-  },
-  "gate_g": "mechanism forecasting (with method_or_model_selection and decomposition_attribution), stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, results 6 graded across 5 areas, one_thing none, effort quick 1, careful 3, thorough 5 of 6, one_fact 'score only the expert-labelled dev items' rescues 2 of 6",
-  "shipped": "the pass-3 form, approved as judged: nothing graded moved after the verdict; target.zip abdda1af"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": 46.5,
+ "paper_pair": null,
  "effort": {
-  "quick": 7.0,
-  "careful": 46.5,
-  "thorough": 100.0,
-  "largest_hint": "a level of its own at every total, the routes' costs from mixes at one total: rescues 3 of 6 (R3, R4, R6), a sentence of method with nothing hidden; stopped at the pool it rescues 2 (R3, R6)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -67,10 +48,50 @@
   },
   "triage": "",
   "recorded": "",
-  "history": []
+  "history": [
+   {
+    "architecture": 1,
+    "date": "2026-11-11",
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "note": "one run supplied without scores or rubric; estimated 93 to 100: every graded figure inside its band (trial 0.6848, costs 0.0021 and 0.0115, level 0.5953, A 0.6751, B 0.6341, C 0.6533, D 0.6657, range 0.618 to 0.650, pick B); the one loss the missing note file",
+    "first_wrong_step": {
+     "run1": "none (surface only: one requested file not produced)",
+     "run2": "not supplied"
+    },
+    "triage": "REDESIGN (re-root)",
+    "report": "task16/runs/arch1_triage.md",
+    "judge_at_ship": {
+     "pass1": {
+      "verdict": "NOT_DETERMINISTIC (narrow: competing_defensible_answer on four asks)",
+      "disposition": "FIX_NOW",
+      "report": "task16/determinism_check_report_pass1.md",
+      "finding": "the main call forced, Gates G and H passing; the bands on the contractor's cost, the 512,000 level and option A excluded the judge's own data-direct readings, and the held-back gap proved a property of the solver's method",
+      "repair": "bands reset on a family of 49 run analyses that holds the judge's readings; the held-back gap, the run counts and the widest configuration's learning rate made working; the prompt cut from nine asks to six"
+     },
+     "pass2": {
+      "verdict": "DETERMINISTIC SOLUTION_WRONG (minor, point values only; every band closes the rivals run)",
+      "disposition": "FIX_NOW",
+      "report": "task16/determinism_check_report_pass2.md",
+      "finding": "Gates A to E, G and H passing, one_thing none, four traps named; three restatements asked for in the answer blocks (the contractor's cost on the same-total reading, B's range wider with its width step said to be carried, the cost linear in the share)",
+      "repair": "the same-total reading of the routes made the golden's own (contractor 0.0020, B 0.625, range 0.604 to 0.645); pack and prompt byte-identical"
+     },
+     "pass3": {
+      "verdict": "DETERMINISTIC",
+      "disposition": "APPROVE",
+      "report": "task16/determinism_check_report.md",
+      "finding": "no repair; the thread's own cold derivation fitted one curve through every run and named C (the analytical failure, not a fork); stump power high; advisory only: option A's learning rate is the solver's to choose, B's point leans on averaged width steps, the bands on C and D are extrapolation judgments"
+     },
+     "gate_g": "mechanism forecasting (with method_or_model_selection and decomposition_attribution), stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain pass, layers pass, results 6 graded across 5 areas, one_thing none, effort quick 1, careful 3, thorough 5 of 6, one_fact 'score only the expert-labelled dev items' rescues 2 of 6",
+     "shipped": "the pass-3 form, approved as judged: nothing graded moved after the verdict; target.zip abdda1af"
+    }
+   }
+  ]
  },
  "returned": [],
- "resume": "READY: the author rewrites prompt.txt in their own words and re-gates it (voice-check.py task16 --rewrite, then leak.py), uploads the prompt and target.zip, and /triage-runs task16 reads the two runs",
+ "resume": "DESIGN, architecture 2 (re-rooted 2026-11-11 after the platform run on architecture 1, runs/arch1_triage.md): write the generator for the Quellstein world, run the rivals, complete the design note to precut.py exit 0, then build",
  "approved": null,
  "submitted": null,
  "portal": {

@@ -1,419 +1,77 @@
-# task16: which shortlisted training configuration the MML group names in its 2027 compute proposal, and the benchmark loss it states
+# task16: which enquiry types Quellstein Paket's assistant keeps taking first through the 2026 peak season
 
 ## Draw
 
-Subdomain: General Statistics & Data Science, scaling laws (performance trends across model, data, and compute size) (`scaling-laws`)
-Analysis type: Forecasting & Predictive Modeling (each shortlisted configuration's loss on the national benchmark,
-  for configurations larger than any the pilot ran, with a range, the forecast chosen because it lands on the pilot's
-  largest runs when it has not seen them)
-Answer shape: a ranked list under a cap (the shortlisted configurations ranked by expected benchmark loss, the one
-  configuration the proposal may name for its single slot, and the range it states), with the drivers behind the
-  ranking as results of their own: the benchmark loss a vendor-label trial corresponds to, what each label route
-  costs, what more examples return past the expert pool
-Weight: investigation: every stage of the pilot tells a plain story that is partly an artefact of how that stage was
-  run or scored, and the forecast rests on testing each story against its rival (the logged development loss rewards
-  fitting the vendors' own labels; the vendor trials sit above the ladder's curve for two reasons at once, what the
-  labels cost and a return that bends; the size ladder ran at other learning rates than the trials read against it);
-  `guard.py recent` shows the last three builds on file leaning elsewhere
-Data-native sentence: the pilot is a staged sweep of real training runs in which the benchmark scored only
-  expert-label runs before the quota ran out and the expert pool stops at 128,000 examples, so what a vendor's label is
-  worth and what more examples return past the pool are tangled together in the same handful of large trials, and
-  have to be pulled apart from trials at or under the pool before any scaling law can be carried to the shortlist
-People: Helene Svendsen (group lead, signs the proposal), Magne Aas (PhD candidate, ran the pilot), Tor Fredriksen
-  (research engineer, cluster and tracking server), from `guard.py names --geo Norway --seed 15`; none is named in the
-  prompt
-Card: `.claude/skills/fingerprint/cards/task16.json`, v1, registered 2026-11-10 at WARN. WARN answered:
-  `overuse.objective` (forecasting in 6 of the last 12): the pairing General Statistics with Forecasting is new, the
-  task type scaling laws serves only Forecasting in the taxonomy, and the client lists forecasting among its most
-  wanted; `repeat.gate_g` and `overuse.gate_g` (forecasting): the assigned analysis type's own mechanism, a forecast
-  the correctly read pilot does not pin. The build was first drawn as task15; a parallel session filed that number
-  and four cards while the pilot trained, so the number moved to task16 and the window moved with it. Redrawn on the
-  moved window, each to an honest label and none to a passing one: the answer shape to a ranked list under a cap (the
-  proposal names one configuration from a ranked shortlist, which is what the answer is); the prompt shape to a
-  ranked list; the strategy to other, named on the card, because no one family carries the pick; the decisive
-  pattern back to G1 with the objective gap (the score the trainer logs is not the score the proposal is held to);
-  the context artifact to the group's own meeting notes, where the shortlist lives. Nearest driver task11 at 0.06.
-  The shell: what, a spreadsheet and a short note. Prompt shape redrawn once more at READY, from 01 to other: after
-  this draw another build's card was filed again and pulled task15 (a true ranked slate under a cap) into the last
-  two builds, and `guard.py heart` read `ban.shape`. The redraw is the honester label and not only the passing one:
-  the shape names where the rubric's criteria come from, and after the cut to six asks they come from a results
-  chain behind a pick of one in four. Criteria arithmetic: twelve gradable cells, four from the ranked list (the
-  four expected losses), three from the range (its two ends and its half-width), four from the drivers (the
-  trial's loss, the two routes' costs, the level at 512,000 expert labels) and one from the call, with the two
-  deliverables present and named. No cap runs out part-way down a list and nothing is trimmed, which is what
-  the library's shape 01 takes its criteria from. The client's answer shape (a ranked list under a cap, with its
-  drivers) is unchanged.
+Subdomain: General Statistics & Data Science
+Analysis type: Data Extraction & Conformation (ETL / Pipeline Build)
+Answer shape: A reconciled table plus findings (each reason family's resolution rate achieved and expected, tied back
+  to a linked contact record that reconciles to the telephony and case totals, with the keep or hand-back call on top)
+Weight: assembly: most of the work is building one contact record that can be trusted across four channel logs and
+  estimating the follow-ups that record cannot see; the last two live builds lean on investigation (task18) and
+  modeling (task1), and architecture 1 of this slot leaned on investigation
+Data-native sentence: a customer who is not helped comes back through whichever channel is open, and each channel
+  loses sight of the consignment in its own way (the telephone line stops asking for the tracking number when it is
+  busy, a written case is counted against a conversation only once it is closed), while the season being planned draws
+  its conversations from parcels in proportions set by how often an on-time, a late or a held parcel makes its
+  recipient ask at all
+People: Helena Neumann, Simon Pertl, Theresa Jovanovic, Alena Blümel (guard.py names --geo Austria --seed 1602)
 
-Data route: generated by really running it. Every training run in the pack is a real optimisation run (a
-  two-hidden-layer classifier trained with Adam on a cosine schedule, `generator/trainer.py`) on one population of
-  points with three labelling routes (`generator/world.py`); every loss, gradient norm, development score, per-item
-  score and checkpoint hash is what the arithmetic produced, and a preempted job really loses its steps since the
-  last checkpoint and resumes on a fresh data order. Nothing is drawn or edited after the fact. The four shortlisted
-  configurations were then run for real, three seeds each, as the author's check of the forecast (they do not ship):
-  A 0.662 at the best of three learning rates, B 0.6335, C 0.6600, D 0.6700, against the forecast's 0.661, 0.625,
-  0.670 and 0.680.
+Architecture 2, drawn 2026-11-11 after architecture 1 was spent on the platform (`runs/arch1_triage.md`). The careful
+but hurried column is calibrated to that run: it reads every file, reconciles record counts, compares candidate
+methods by held-out error, fits any pattern one table shows, validates on held-out groups and resamples clusters.
+So no result here is priced on a pattern one table shows or a choice a hold-out settles. The chain's weight is on
+estimates the data in hand cannot flag when they are left out: who is missing from a linked record, and who the
+season's conversations will come from.
 
-### The process behind the files
+The world. Quellstein Paket is an Austrian parcel carrier with ten depots. Its contact division runs a chat
+assistant, live chat, a telephone line with an IVR, and written cases (web forms and e-mail). The division's service
+standard counts an assistant conversation as resolved when nobody makes a further contact about the same consignment,
+through any channel, in the seven days after it ends, and makes a reason family assistant-first for a season when its
+expected resolution rate, given the season plan, is at least 75 per cent. Version 3 of the assistant went live on
+Monday 28 September 2026. The extract is cut on Monday 9 November 2026; the peak plan covers 16 November 2026 to
+3 January 2027 and is fixed this week.
 
-Written before any result was named. The group trains a small sediment classifier on survey points whose class comes
-by one of three routes: its own interpreters (128,000 points, all it has), a contractor's first lot (128,000 points,
-delivered in the pilot's last week) and labels carried over from a legacy sediment map (1,024,000 points, cheap and
-wrong more often). Over five weeks it ran a size ladder on expert labels at three widths, at the learning rates it
-had tabled for each width; then a learning-rate check, which moved every width's rate; then a few wider jobs, one of
-which ran out of walltime; then trials that swap expert labels for a vendor's at a fixed total, or add a vendor's
-labels to the expert ones. The trainer logs one development loss, over a development split drawn from every shard on
-hand, so a quarter of its items carry a vendor's label. The tracking server keeps whatever each job logged, twice
-where a job was taken back by the scheduler and resumed. The benchmark server scored 30 uploads before the quota ran
-out, every one from an expert-label run, two of them part-way checkpoints. An error-analysis script dumped each final
-checkpoint's loss on every development item. What nobody in the group has seen: what the benchmark would say of a
-run trained on vendor labels, and what 256,000 or 512,000 expert-quality labels would have given.
+Guard WARNs answered. `overuse.gate_g` (method or model selection in six of the last twelve): the label is the
+honest one, because each estimate has a shortcut and a sound form and the data in the pack say which (the keyed
+calls for the capture, the backlog counts for the open cases, the pilot depots for the alerts); nothing here is a
+forecast the past does not pin. `repeat.decision` (a designation set, as task1's last build): the standard's rule
+makes the answer a set of families by construction; the shape differs (a reconciled table by family, no cap, no
+ranking) and the question asks what rate to expect. `test.same_driver_older` is differentiated on the card against
+mark196 and task6's second architecture.
 
 ## Deep reasoning
 
-Task type: scaling laws (performance trends across model, data, and compute size), which serves Forecasting &
-  Predictive Modeling
-Domain test: the results are the field's own quantities (a benchmark loss as a function of examples, width and label
-  quality; the learning rate at which each width does best and how it moves with width; the return to a doubling of
-  examples and where it gives out; what a noisy label is worth beside a clean one), and the analyst does what the
-  field does with them: puts every run on the yardstick the claim is held to, reads each lever at matched settings,
-  fits the law, checks it on the largest runs held back, and carries it past them
-Swap: "which marketing channel mix do we name in the budget, and what conversion rate do we state" keeps the grammar
-  and loses the work: nothing in it has a learning rate whose best value moves with model width, a development split
-  whose items carry the vendors' own labels, a loss that keeps falling on a law in examples until the model's width
-  can no longer use them, or a forecast for a model wider and a training set larger than any yet run
-Where the weight sits: R2 to R4, the investigation of why the large vendor trials sit above the ladder's curve. The
-  work is long, not clever: twelve trial cells and their expert-label counterparts are put on one learning rate and
-  one yardstick, the routes' costs are read from mixes at one total, the level at 256,000 and 512,000 examples is
-  then whatever the larger trials leave once those costs are taken off, every candidate
-  curve is made to predict the 512,000-example runs from the smaller ones before it is trusted further out, and what
-  the examples past the largest trial return is bounded by what the last doublings were seen to return
-Layer 1: two logger versions name the same scalars differently (the trainer's revision changed in week 42); a job the
-  scheduler took back logs its repeated steps twice (the tracking server appends); five jobs never finished (two
-  cancelled, two node failures, one out of walltime); one item dump was lost to a scratch quota; two benchmark
-  uploads were part-way checkpoints and two rows are re-uploads the server counted; the shard register keeps a
-  superseded receipt of one contractor shard; the benchmark keeps a 12-character digest and the store listing the
-  full one. Each is cleaned the same way by every careful analyst and none decides a result on its own (the golden's
-  first step counts them: 129 of the 134 run records finished, 28 of the 32 benchmark rows score a final checkpoint)
-Not one thing: the strongest single piece is the yardstick (the logged development loss is scored partly on the
-  vendors' own labels). A run that nails it, and the careful pass does, still names the wrong configuration (C, at
-  0.624 on a scaling curve fitted through every run, against 0.670) and still has to earn R3 (the level past the
-  pool), the two map-transfer forecasts of R4, R5 (the range) and R6
-One-fact test: no hidden or planted fact rescues the careful pass. The two facts a file does not state (the logged
-  loss is scored partly on the vendors' own labels; the ladder ran at other learning rates than the trials) it finds
-  for itself, and given to the quick pass the first rescues one result of six. The most useful single sentence is a
-  sentence of method, "give every total the trials ran a level of its own and read each route's cost from the mixes
-  at one total": it rescues 3 of 6 results (R3, R4 and R6; R5 stays at Partly), which is half and no more. Nothing
-  in it was hidden or planted (the bend is what the training runs did), so by the client's test a method choice
-  that is the hardest step does not fail; it makes the task thinner round that step, and the results built round it
-  are R1 and R2 before it and R5 after it
-Not semantics: every field, unit and clause read correctly (the benchmark is the outcome, the final checkpoint is
-  what is scored, one run, the stated recipe) still leaves the careful pass at C, because nothing it misreads is a
-  field: it fits one curve where the data hold two effects
-Not rule application: the notes file a ranking rule (the lowest expected benchmark loss is named) and the recipe; no
-  filed procedure produces an expected loss for a configuration nobody ran, a cost for a label route, a level past
-  the pool or a range. Once every filed rule is applied, R1 to R5 are all still to estimate
-Estimand: filed in the group's meeting notes of 5 November (section 1: one slot, the configuration trained once with
-  the stated recipe, the final checkpoint scored on the benchmark as mean log loss over 20,000 points, the expected
-  value and a range the result falls in four times out of five, teams ranked on the expected value; section 2: the
-  four configurations with width, labelled points by route and learning rate) and in the prompt's asking sentences
-  (each result's population, outcome and unit); the method is filed nowhere. Option A's learning rate, which the
-  notes leave open, is working: A stays inside its band at every rate from 1.8e-4 to 5e-4 (the truth runs) and is
-  named at none
-No decoy: nothing in the pack ranks the configurations or states a loss for one. The notes carry no forecast, no
-  belief and no draft; the shortlist workbook carries timings only. No wrong number exists to be corrected
-No replay: no result re-derives a published figure. The benchmark's own scores for 28 expert-label runs enter as
-  measurements, and none of the six results is one of them
-Pinned: the rivals were run on the built pack and against the truth runs (`generator/results.py`, `rivals()` and
-  `also_ran()`). The 49 members of the defensible family land every result inside its band and name B: the benchmark
-  calibration as a line or an offset, the width gap read at the largest totals or averaged, a level of its own past
-  the pool or at every total, a scored run on its own benchmark score or on the carried loss, and the continuation
-  past the largest runs as the gain shrinking as it did, the last gain carried on undiminished or no gain at all,
-  with a quadratic through the levels between those two. B leads by 0.027 to 0.039 on the golden's continuation and
-  by 0.010 at the least. The determinism judge's own readings on its first pass (a level of its own at every total
-  with the costs from contrasts between mixes, and every run on the carried loss) are members, which is where the
-  bands on the costs, the level, A and the range come from. A least-squares floor through the levels names B as well
-  and lands at the first of the two bounds (C at 0.650); on the levels of the other reading it falls just below it
-  (0.643)
-Run forecast: R3, R6 and the map-transfer half of R4 to a method shortcut (one scaling curve through every run) with
-  the back-test's one-sided misses reported and set aside (dismissed own evidence); R5 to an unfinished chain (the
-  yardstick's and the forecast's error never reach the range) or to a range drawn round the wrong configuration; R2
-  to the first story in runs that read the vendor trials against the ladder as it ran; R1 to a narrow look in runs
-  that never open the per-item scores. Two runs are expected to lose in different places: one on the curve, one on
-  the yardstick or the range
-Strategy label: a forecast that has to earn its place (WORKS IN FORM: the solver's own check on runs held back
-  chooses the curve, nothing shipped enumerates it), resting on separating two explanations for one pattern (WORKS IN
-  FORM: only the like-for-like trials at or under the pool separate what a label costs from a return that bends)
-Depth level: 4, with level 5's mark on the shortcuts. Connected judgments, each needing estimation and each moving a
-  graded figure or the pick: the yardstick (the logged loss names C at 0.42 and turns both routes' costs negative),
-  the benchmark calibration (expert items read raw put the trial at 0.672), the stale ladder rates (a trial read
-  against the ladder as it ran turns the contractor's cost negative and puts the 512,000 level at 0.616), the level
-  past the pool (one curve through every run names C at 0.624), the two vendor routes kept apart (read as one they
-  name C at 0.645) and the three sources in the range (seed spread alone gives 0.618 to 0.631, which the realised
-  0.6335 falls outside). Five shortcuts commit to five different wrong answers: C at 0.42, 0.56, 0.62 and 0.65, and
-  A when only the scored runs are used. It is not a 5 because, for a run that already has the yardstick, one
-  modelling choice (the level past the pool) carries half the chain, which the one-fact line states. The width step
-  and the form of the curve past the largest runs, which the first cut priced, move their figures by less than
-  sound methods differ (the determinism judge's passes showed it) and are working now
-Lesson: a scaling law fitted to a staged pilot is only as good as the comparison under each point; the model has to
-  ask what else differed between the runs it is about to join with one curve (the yardstick, the learning rate, the
-  label route) before it extrapolates, and believe its own held-back check when every miss falls on one side. No
-  build on file forecasts beyond the largest observed unit from runs whose scores are not yet on the outcome's scale
+Task type: Data integration, record linkage & entity resolution
+Domain test: every result is a record-linkage and missing-data quantity (a linked record reconciled to control
+  totals, events the link cannot see restored by the inverse of a capture probability that moves with load, open
+  cases completed from a count at another grain, a rate standardised to a population whose mix is exposure times a
+  class-specific contact rate, an intervention's effect on that rate from a staggered roll-out, a range that carries
+  day-level dependence)
+Depth level: 5 on the client's depth scale, to be confirmed on the built pack: five independent judgments (the
+  capture-weighted telephone follow-ups, the open written cases, the like-for-like version comparison, the season's
+  conversation mix with the alerts' measured effect, the day-level range), each moving different families across
+  the 75 per cent line, with the shortcuts landing on different sets
 
 ## Results chain
 
-| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
-|---|---|---|---|---|---|---|---|
-| R1 | the benchmark loss the width-128 trial on 128,000 expert plus 384,000 map-transfer labels corresponds to: 0.685 | missingness and measurement | the per-item scores of the final checkpoints, the label route of each development item, and the 28 final checkpoints the benchmark scored | 0.680 to 0.690 | narrow look at broad data: carries the one logged development loss to the benchmark on the scored runs (0.548), never opening the per-item scores by route; the careful pass earns it | - | Ask 3 |
-| R2 | what each tenth of a training set moved from expert labels adds to the benchmark loss: contractor 0.0020, map transfer 0.0114 | investigation loops | the contrasts between mixes at one total, width and learning rate, with a level of its own at every total the trials ran | contractor 0.0005 to 0.0032; map transfer 0.0095 to 0.0125 | first story: reads the routes off the logged loss, on which a vendor's labels look better than expert labels (-0.0115 and -0.0036), or against the ladder as it ran (contractor -0.0003, map 0.0094); the careful pass earns it | R1 | Component 1 (Ask 4) |
-| R3 | the benchmark loss 512,000 expert labels would give at width 128 and learning rate 0.002: 0.600 | modeling | the two width-128 trials on 512,000 examples with each route's cost from R2 taken out | 0.595 to 0.613 | method shortcut: one scaling curve through every run gives 0.585, the ladder's straight line 0.552 | R1, R2 | Component 2 (Ask 5) |
-| R4 | each shortlisted configuration's expected benchmark loss for one run: A 0.661, B 0.625, C 0.670, D 0.680 | forecasting | the levels of R3 carried past the largest trial no faster than the last doubling's gain and no slower than no gain at all, R2's costs at each configuration's shares, the width steps the pilot shows | A 0.650 to 0.720; B 0.615 to 0.650; C 0.648 to 0.689; D 0.660 to 0.697 | dismissed own evidence: the pooled curve misses the largest runs held back on one side (0.027), is kept, and puts C at 0.624 and D at 0.639, below what the last doubling's gain carried on gives; its A and B land inside and are priced as earned | R2, R3 | Component 3 (Ask 1) |
-| R5 | the four-in-five range round the named configuration's loss: 0.604 to 0.645 for B, a half-width of 0.021 | uncertainty | run-to-run spread within cells (0.0051), the forecast's held-back error (0.0140) and the yardstick's error on the scored runs (0.0059) | drawn round B; low 0.580 to 0.640; high 0.625 to 0.690; half-width 0.010 to 0.040 | unfinished chain: the yardstick's and the forecast's error never reach the range (seed spread alone gives 0.618 to 0.631, a half-width of 0.0065), or the range is drawn round another configuration | R1, R4 | Ask 2 |
-| R6 | the configuration to name: B, 512 wide on the expert and contractor labels | synthesis | the lowest expected loss in R4, under every member of the family | exact (B under all 49 members, by 0.027 to 0.039 on the golden's continuation and 0.010 at the least) | self-confirming check: names C because the curve that puts it first also fits the runs it was fitted to | R4 | Recommendation |
+Sketch at the draw; pins, bands and the measured hurried figures are written at stage 2 from the built pack.
 
-Carry-forward: the grader compares every figure to the golden, so R3, the two map-transfer cells of R4, R5 and R6
-fall together for a run that never separates the level from the routes' costs, which is why no more of the chain
-hangs there than that. R1 and R2 are earned on inputs of their own (R2 on the trials at or under the pool and on the
-contrasts between mixes at one total), and so are the A and B cells of R4, which sit at totals the pilot ran. A run
-that takes the level right and then carries it past the largest trial faster than the last doubling's gain keeps R3
-and R6 and loses the two map-transfer cells of R4; a run that takes everything right but builds the range from seed
-spread alone loses R5 only. The run counts, the check on the largest runs held back and the learning rate option A
-is forecast at are working the six rest on: computed, shown in the golden workbook and graded nowhere.
+| ID | Result (checkable) | Area |
+|---|---|---|
+| R1 | the linked record: version 3 conversations with seven full days behind them and their follow-ups by channel, reconciled to the telephony and case totals | assembly and reconciliation |
+| R2 | the telephone follow-ups, with those the tracking number never captured | missingness and measurement |
+| R3 | the written follow-ups still open at the extract | missingness and measurement |
+| R4 | each reason family's resolution rate achieved under version 3 | synthesis |
+| R5 | what version 3 changed against version 2 on the conversations it handled | causal reasoning |
+| R6 | the delay alerts' effect on conversations per late parcel | causal reasoning |
+| R7 | the assistant conversations a week the season plan will generate, and the share from late or held parcels | forecasting |
+| R8 | each family's expected resolution rate over the peak plan's weeks | forecasting |
+| R9 | the 90 per cent range around it | uncertainty |
+| R10 | the families to keep assistant-first and those to hand to advisers first | synthesis |
 
-## Hidden factor record
-
-| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
-|---|---|---|---|---|---|
-| the logged development loss is scored on a split a quarter of whose items carry a vendor's label | constructed (a simulated lab's own practice: the split was drawn from every shard on hand) | no: it lifts the logged loss of all 128 runs, by 0.08 to 0.20 for expert-label runs, 0.09 to 0.10 for contractor mixes and 0.04 to 0.06 for map mixes | a targeted query (the development split joined to the shard register), then the per-item scores of the final checkpoints | modelling: the expert-item loss is carried to the benchmark on the 28 scored runs and its residual error enters the range | keep, one result of six and earned by the careful pass |
-| the size ladder ran at tabled learning rates, the trials at the rates the later check chose | constructed (a staged pilot: the check came after the ladder) | no: every ladder run at every width and size carries it (0.020 to 0.033 by width), and it decides nothing for the pick | a targeted query (learning rate by stage and width) | modelling: the trials are read against each other at one total and against the expert-label run at their own rate; where the ladder is used it is put on the trials' rate, its gap measured at two sizes and carried between them | keep, moves R2 and R3 for a run that reads the trials against the ladder as it ran |
-| the return to more examples bends just past the expert pool | emergent in real training runs of this model family (nothing sets it; the generator simulates the process and the curve is what training produced) | no: it shows in all eight trial cells above 128,000 examples at both widths, and in the clean-label runs the author made as a check | modelling: it is visible only once each route's cost, read from mixes at one total, is taken out of the larger trials | modelling and judgment: a level per total past the pool, a curve chosen on runs held back | keep, the investigation the chain is built round |
-| widening buys nothing at 32,000 examples and a little more at each larger total | emergent in the same runs | no: every width pair at every total carries it (0.006 at 32,000 to 0.014 at 512,000) | modelling: matched width pairs at each total | modelling: the step is read at the totals the shortlist sits at | keep, moves cells of R4 inside their bands and decides none |
-
-## Effort test
-
-| Result | Quick pass | Careful but hurried | Thorough |
-|---|---|---|---|
-| R1 the largest map trial on the benchmark's scale | Missed | Right | Right |
-| R2 what each route's labels cost | Missed | Right | Right |
-| R3 the level at 512,000 expert labels | Missed | Missed | Right |
-| R4 each configuration's expected loss | Missed | Partly | Right |
-| R5 the range round the named configuration | Missed | Missed | Right |
-| R6 the configuration to name | Missed | Missed | Right |
-| Roughly | 0 of 6 | 2.5 of 6 | 6 of 6 |
-
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: "give every total the trials ran a level of its own and read each route's cost from the mixes
-  at one total"; rescues 3 of 6 results (R3, R4 and R6; R5 goes from Missed to Partly). It is a sentence of method,
-  with nothing hidden or planted behind it. The same sentence stopped at the pool ("past the expert pool, take the
-  level at each total as its own unknown") rescues 2 (R3 and R6): the careful pass then carries the levels on with a
-  least-squares floor, the best of its three forms on the runs held back, and puts C at 0.643
-Pair estimate: 46.5
-
-The passes are the generator's own implementations, run on the built pack (`generator/results.py`). Quick: the logged
-development loss carried to the benchmark by a line on the scored runs, the ladder's straight line; it names C at
-0.416 and reads both routes' labels as better than expert labels. Careful but hurried, calibrated to the run record:
-every file cleaned, the per-item scores opened and the expert-item loss calibrated to the benchmark, then the field's
-textbook move, one scaling-law regression over every finished run (a curve in examples, a term in width, each route's
-share, a learning-rate term), its form chosen among a straight line, a quadratic and a power law with a floor by its
-own miss on the largest runs held back, and a range from its residuals. It keeps the quadratic (held-back miss 0.027,
-every miss on one side) and names C at 0.624, by 0.011 over B; its route terms (0.0013 and 0.0115) and its A and B
-(0.679 and 0.635) land inside their bands and are priced as earned. Thorough: the golden. The hinted passes are the
-careful pass given the levels, carrying them on with the best of its own three forms on the runs held back and
-keeping its residual range. Two cold derivations stand beside the careful column, neither of them a solver run (each
-is what the determinism judge wrote before it opened the answers): on the nine-ask prompt, whose held-back ask named
-the check, it took a level at every total and named B; on the six-ask prompt it read the costs pair by pair, carried
-the ladder to 512,000 examples (0.55 to 0.64, "floor not identifiable"), put C at 0.643 and B at 0.645 and called
-the order not forced, which is the careful column result for result.
-
-## Data provenance
-
-Source: generated by the generator from a simulated process, with nothing drawn where it could be computed: 134 real
-  training runs (`generator/trainer.py`) on a simulated population and three simulated labelling routes
-  (`generator/world.py`), logged, scheduled, stored and scored by simulated lab systems (`generator/pack.py`,
-  `generator/infra.py`)
-Behaves like the real thing: the process simulated is a research group's five-week pilot on a shared cluster. The
-  losses are real optimisation outcomes, so they carry what published scaling studies report (a loss falling on a
-  law in examples that flattens once the model's width can no longer use them, a best learning rate that falls
-  roughly in inverse proportion to width, noisy labels that help a small clean set and hurt a large one) with the
-  seed-to-seed scatter real training has; nothing was tuned to a result after the routes' error rates were set
-Genuine patterns: (1) loss falls about 0.06 for each doubling of examples up to 128,000 and by 0.048 and 0.024 for
-  the next two doublings; (2) each width has its own best learning rate, falling as width to the power -1.1; (3)
-  run-to-run spread of about 0.005 from initialisation and data order, larger at high learning rates; (4) widening
-  buys nothing at 32,000 examples and 0.006 to 0.014 at larger totals; (5) a model trained on a route's labels scores
-  better on that route's development items, so the logged loss favours vendor mixes; (6) the benchmark sits about
-  0.012 above the expert development items, a finite-sample offset that varies by run with a spread of 0.006; (7)
-  map-transfer labels help a 32,000-example expert set and cost a 128,000-example one; (8) the cost of a low learning
-  rate shrinks as examples grow
-Problems by process: the trainer's logger was renamed between weeks 41 and 42 (two key vocabularies); the scheduler
-  preempts long jobs, which resume from the last checkpoint and log their repeated steps again (16 jobs); two jobs
-  were cancelled by hand, two lost their node and one ran out of walltime; an item dump hit the scratch quota; two
-  part-way checkpoints were uploaded to the benchmark and two uploads repeated; a contractor shard was re-delivered
-  and its first receipt kept; the benchmark server truncates digests to 12 characters
-Breadth: 16 files; 134 run records over four stages, four widths, five sizes and fifteen label mixes; 190,531 logged
-  scalar rows; 8,000 development items scored for each of 128 final checkpoints (1.02 million item scores); 839
-  checkpoint files; 239 scheduler rows; 325 shard receipts. Deciding which runs are comparable with which is the work
-
-## Template check
-
-Chain signature: missingness-measurement, investigation-loops, modeling, forecasting, uncertainty, synthesis
-Question form: what (what configuration, loss and range belong in the proposal)
-Nearest build: task10 (a forecast with drivers, the same analysis type) and task1 (a forecast chosen on held-back
-  periods). The sentence a reviewer could say of this build and either is only "a forecast is validated on data held
-  back"; the rest does not transfer: here the outcome is not observed for the units that decide (it is carried from
-  a proxy), the lever's effect is tangled with the scale it is read at, and the forecast runs past the largest unit
-  ever observed
-
-## Semantic fork table
-
-| ID | Term or convention | Readings | Golden | Ruled out by |
-|---|---|---|---|---|
-| SF1 | benchmark log loss | the benchmark's mean log loss of the final checkpoint; the logged development loss | the benchmark's | the meeting notes, section 1 (the final checkpoint is scored on the benchmark, mean log loss over 20,000 points); the benchmark file's own scores differ from the logged loss of the same checkpoints by 0.08 to 0.20 |
-| SF2 | expected, for one run | the mean result of the configuration trained once; the best of several seeds | the mean of one run | the notes, section 1 (trained once, with the recipe the proposal states) |
-| SF3 | four-in-five range | an interval the single run's result falls in four times out of five; an interval for the mean | the single run's | the notes, section 1 (a range we expect the result to fall in four times out of five) |
-| SF4 | a finished run (which runs enter the analysis) | status FINISHED with the last logged step equal to the schedule; any run record | the former, 129 | the five others stop short of their schedule and the scheduler marks them CANCELLED, NODE_FAIL or TIMEOUT; none has a final checkpoint in the store |
-| SF5 | a final checkpoint the benchmark scored (which rows carry the yardstick) | a SCORED row whose digest is a final checkpoint file; any SCORED row; any row | the first, 28 | the store listing (two scored digests belong to part-way checkpoint files) and the server's own DUPLICATE_OF status on two rows |
-| SF6 | examples | labelled points in the run's training set, from the shard register over the run's shard ranges; shards times 4,000 | either: same call | every shard holds 4,000 points; the superseded receipt of one contractor shard is marked and counted once (asserted equal) |
-| SF7 | a tenth of a training set moved from expert to a route's labels | the route's labels in place of expert labels at the same total, width and recipe; the route's labels added to a fixed expert set | in place of | the prompt's wording (moved from expert to); adding labels changes the total, which R3 prices |
-| SF8 | the loss 512,000 expert labels would give at width 128 and learning rate 0.002 | a run of the group's recipe on 512,000 expert-quality labels at that width and rate; the same at the ladder's tabled rate | at 0.002 | the prompt states the rate |
-| SF9 | the pilot's width-128 trial on 128,000 expert plus 384,000 map-transfer labels | the three runs of that cell, averaged; one of its runs | the three averaged, 0.685 | same call: each of the three alone gives 0.682, 0.684 or 0.689, inside the band (asserted) |
-| SF10 | the learning rate option A is forecast at | the rate each width's best rate points to one doubling on (2.7e-4); the rate of the job that ran out of walltime (5e-4); any rate between | 2.7e-4 | same call: the notes leave it open (option A still needs a learning rate); on the truth runs A stays inside its band at every rate from 1.8e-4 to 5e-4 and is named at none (asserted) |
-| SF11 | a run's benchmark loss | its own benchmark score where its final checkpoint was scored and the carried expert-item loss elsewhere; the carried loss for every run | its own score where it has one | same call: the carried reading names B as well (by 0.028), moves A most (0.691) and lands every result inside its band (asserted) |
-| SF12 | a step logged twice by a resumed job | the later row; the earlier row | the later | same call: the final step of every finished run is logged once (asserted) |
-| SF13 | the two logger vocabularies | val_loss and dev/loss are one scalar; they are two | one | the runs export's code revision by week and the trainer's defaults file (one development split, one loss); same call |
-| SF14 | the configuration to name | the lowest expected benchmark loss; the best range; the cheapest that fits | the lowest expected loss | the notes, section 1 (teams are ranked on the expected value) and section 2 (all four fit the slot) |
-| SF15 | rounding | losses to three decimals, the per-tenth costs to four | as asked | the prompt's last sentence |
-| SF16 | expert labels | the register's EXP route; any label on a development item | the EXP route | the routes file (interpreted by the group's own staff) and the notes (the benchmark is verified) |
-
-## Closure table
-
-| Axis | Closure |
-|---|---|
-| 1 Population | the four configurations of the notes' section 2; the pilot's finished runs with a final-checkpoint item dump (128); members not yet observed (the shortlist) are the population of R4 by the notes |
-| 2 Unit of account | one training run of one configuration; the pilot's cells average their seeds (SF9) |
-| 3 Attribution window | none: every pilot run ended before the exports of 4 November; the slot is February 2027 |
-| 4 As-of dating | the exports of 4 November 2026 and the notes of 5 November; no later state is used |
-| 5 Version basis | the final checkpoint (notes, section 1); part-way checkpoints are neither calibration points nor results (SF5) |
-| 6 Denominator | a route's share is its labelled points over all labelled points in the training set (SF6, SF7) |
-| 7 Weighting | the benchmark's mean over its 20,000 points (notes); development items of the expert route weigh equally; cells are weighted by their runs in the route model, and an unweighted fit moves R2 by 0.0003 a tenth, inside the bands (asserted) |
-| 8 Window length | none: no rate is measured over a window |
-| 9 Boundary inclusivity | above 256,000 examples (the check on the runs held back, working): no pilot configuration sits between 256,000 and 512,000, so strict or not selects the same three |
-| 10 Rounding path | each figure is rounded once, at the end, from unrounded working (SF15) |
-| 11 Tie-break | none needed: B leads under every member of the family (by 0.036 here, 0.010 at the least); the order of the other three is not graded (they sit within 0.018) |
-| 12 Maturity and censoring | unfinished runs have no final checkpoint and enter nothing (SF4); a resumed run is finished |
-| 13 Order of operations | the routes' costs are read from mixes at one total with a level of its own at every total, or at or under the pool before the levels past it (both inside the bands); one curve in examples through every run is the order the held-back runs rule out |
-| 14 Row order | none: every figure is a mean or a fit over a set |
-| 15 Duplicate resolution | repeated steps of resumed jobs: the later row, same call (SF12); re-uploads carry no second score (SF5); the superseded shard receipt is counted once (SF6) |
-| 16 Identity normalisation | a benchmark row joins its run through the 12-character digest and the store listing's full digest and path, one match each (asserted unique) |
-| 17 Netting against gross | none |
-| 18 Dimensional units | log loss in nats throughout (the trainer and the benchmark both report mean natural-log loss); learning rates as logged |
-| 19 Code and status semantics | run status and scheduler state by their own vocabularies (SF4); benchmark status SCORED or DUPLICATE_OF (SF5); label route by the register's route code (SF16) |
-| 20 Integerisation | none: no graded figure is a count |
-| 21 Clause scope | the recipe of the notes' section 1 applies to every shortlisted configuration; the ranking rule applies to the expected value alone (SF14) |
-| 22 Forward window contents | the slot's run is the configuration as the notes' section 2 states it (width, labelled points by route, learning rate, with A's rate from the learning-rate check, SF10); the map-transfer shards for all 1,024,000 points are prepared (notes) |
-
-## Literal reader
-
-Executed word for word, the shipped sentences give the golden's quantity and no easier one. The notes' "the programme
-scores the final checkpoint on the verified benchmark: mean log loss over the 20,000 grab-sample points" makes the
-outcome the benchmark's loss, which the pack holds for 28 runs and for no vendor-label run, so a literal reader cannot
-take the logged loss for it (the two differ on every scored run). "It is trained once, with the recipe the proposal
-states" makes each forecast one run of the configuration in section 2's table. "Teams are ranked on the expected
-value" makes the named configuration the one with the lowest expected loss. "A range we expect the result to fall in
-four times out of five" makes the range an interval for that single result. "Option A still needs a learning rate"
-leaves A's rate to the analyst, and A's band holds every rate the pilot's check supports (SF10). The trainer's
-defaults file says the development loss is computed on the development
-split and that item losses are dumped for the final checkpoint; it says nothing of what the split contains. No shipped
-sentence says how a loss is to be forecast, which runs to compare, what a label route costs or how the range is built.
-The prompt's asking sentences fix each result's population and unit (the trial named for R1, the direction of the swap
-for R2, the size, width and rate for R3) and no method.
-
-Leak rulings (`leak.py`, 2026-11-10, `--asof 2026-11-05`, REVIEW, no LEAK). `launch_vendor_trials.sh` is the lab's own
-batch script, one submit line per trial: it carries widths, rates and shard ranges, which the runs export also
-carries, and computes nothing. `mml_group_meeting_2026-11-05.md` is the group's meeting notes, the organisation's own
-record of the slot's rules and the shortlist; it describes no file and no column. Eight four-decimal values among the
-1.02 million item scores equal a figure of the answer blocks by coincidence, on no item or run a result names. The
-notes share five everyday words with this note (scored, nothing, result, scores, ranked): the programme's rule and the
-agenda's own nouns, no sentence about a step. The runs export's `seed` column is the field's word for a training
-run's random seed, declared under `field_terms` in `metadata.json`.
-
-Leak reader (one isolated read on the six-ask prompt, 2026-11-10, `leak_check_report.md`; the first read, on the
-nine-ask prompt, returned the same answers): nothing quoted for question 1, no file that ranks the options, no file
-that exists to help, no figure that reads as the answer; the filed sentences it quoted for question 5 (trained once,
-the final checkpoint on the benchmark, a range the result falls in four times out of five, the contractor's lot
-stopping at 128,000 points, option A's rate left open) execute to the golden's estimand and to no easier figure;
-question 6, no one thing ("real modelling over many runs, with several separate pieces ... I do not see anything
-built only to be caught"), every ask turning on analysis. Realism: two headers of the shortlist sheet renamed in the
-generator (data only, read back by `leak.py`, no sentence added or reworded, so no further read); the notes' action
-for the forecast mirrors the request because it is where the request comes from, and stays.
-
-## Prompt contract
-
-A voice rewrite may not drop or change: the question (the shortlisted configuration to name for the February slot);
-each configuration's expected benchmark log loss for one run; a four-in-five range for the named one; the benchmark
-loss matching the width-128 trial on 128,000 expert plus 384,000 map-transfer labels; what each tenth of a training
-set moved from expert to contractor labels adds to the benchmark loss, and the same for map-transfer labels; the loss
-512,000 expert labels would give at width 128 and learning rate 0.002; a spreadsheet and a short note; the rounding
-(losses to three decimals, the per-tenth costs to four). It must never add: a method, comparison or correction by
-name; a warning; a file in the ZIP by name; who is asking; the number of configurations on the shortlist or any other
-count the files hold; a word on what the logged scores, the development split or the label routes are; a request for
-the run counts, a held-back check or a learning rate (each was an ask in the first cut and is working now).
-
-## Pre-ship check
-
-Written at stage 5 on the final cut (2026-11-10).
-
-- The bar, re-read against the built pack. Six results in six areas, each asked for and graded on a band that a
-  family of 49 run analyses sets. The careful but hurried pass is the field's textbook object on the right yardstick
-  (one scaling-law regression over every finished run, its form chosen among a line, a quadratic and a floor on the
-  largest runs held back): it earns R1 and R2 and two of R4's four cells, names C under each of its three forms, and
-  prices at 46.5 on `effort.py`; the quick pass earns nothing (7.0). Five shortcuts commit to five different wrong
-  answers (C at 0.42, 0.56, 0.62 and 0.65, and A at 0.67). The one-fact test is a WARN and is stated as one: no
-  hidden fact rescues the careful pass, and the most useful sentence of method (a level of its own at every total)
-  rescues 3 of 6, half and no more; stopped at the pool it rescues 2.
-- The hidden factor record against the cut data (`checks.py`, the bar block's label R5): the logged loss sits above
-  the benchmark-equivalent loss in all 128 runs; the tabled rate costs every ladder width at every size measured; the
-  level sits above the ladder's line at both totals past the pool (0.007 and 0.043) and every one of the six
-  width-128 trials and three width-256 trials above 128,000 examples carries it; the width step is in every total.
-  Given alone, the yardstick rescues one result of the quick pass and the matched rate none of the straight line's.
-- The answer against what happens. The four configurations were run for real after the forecast was fixed (three
-  seeds each, the widest at five learning rates): A 0.6622 at the golden's rate, B 0.6335, C 0.6600, D 0.6700,
-  against 0.661, 0.625, 0.670 and 0.680. B is really the lowest, by 0.027, and its real score falls inside the stated
-  range (0.604 to 0.645); seed spread alone would have missed it. 512,000 clean labels really give 0.605 (the golden
-  says 0.600). Each route's real cost, from the benchmark's own scores of the trials against runs on as many
-  expert-quality labels, is 0.0017 a tenth for the contractor's labels (the golden says 0.0020) and 0.0105 to 0.0116
-  for the map-transfer labels (0.0114). C and D really fall between the two bounds on what more examples return
-  (0.660 between 0.653 and 0.686, 0.670 between 0.664 and 0.694), and A stays inside its band at every rate run. The
-  careful pass's C is 0.036 below what C scores.
-- Gates on the final cut: `precut.py` exit 0 (two WARN: the yardstick sits upstream of the five other results, each
-  of which the careful pass shows needs work of its own, since that pass has the yardstick and loses three and a
-  half of them; and the largest single hint at 3 of 6); `effort.py` exit 0 (the same WARN); the prompt gate PASS (661
-  characters); `leak.py` REVIEW, no LEAK; `figures_check.py` PASS; `audit_containers.py` PASS on the pack, the golden
-  and both zips; `guard.py` heart WARN (the assigned analysis type's frequency, answered in the Draw) and surface
-  PASS; 101 generator checks; the independent verifier 30 of 30; two byte-identical builds of the pack, the goldens
-  and both zips.
-- The judge. Pass 1 (the nine-ask cut): NOT_DETERMINISTIC on a narrow footing, FIX_NOW, the main call forced and
-  Gates G and H passing; fixed in one generator pass (bands reset on the family; the held-back gap, the run counts
-  and the widest configuration's rate made working; the prompt cut to six asks). Pass 2 (the six-ask cut):
-  DETERMINISTIC, every band closing the rivals it ran, Gates A to E, G and H passing ("one_thing: none", four traps
-  named), FIX_NOW on three restatements in the answer blocks: the contractor's cost headlined on the same-total
-  reading, B's range widened with its width step said to be carried, and the sentence that the cost is the same at
-  every share. All three were taken by making the same-total reading the golden's own; the pack and the prompt did
-  not change. Pass 3 (the same pack and prompt, the restated blocks): DETERMINISTIC, APPROVE, no repair. The
-  thread's own cold derivation fitted one curve through every run and named C, which it classes as the analytical
-  failure and not a fork; stump power high; Gate G analytical_non_defect with no surface-read dependency; Gate H
-  passing, "one_thing: none", its own effort count quick 1, careful 3, thorough 5 of 6. Advisory only: option A's
-  learning rate is the solver's to choose (its band holds the defensible rates), B's point leans on averaged width
-  steps (0.640 on the other reading, inside its band), and the bands on C and D are extrapolation judgments
-- What a reviewer may still mark. The data is generated (real training runs on a simulated population). The
-  yardstick shows in one group-by of the development split, so R1 is priced as earned. The order of options 2 to 4
-  is not separable and is not graded. Three and a half results fall together for a run that never separates the
-  level past the pool from the routes' costs: that is the investigation the chain is built round, a method choice
-  with nothing hidden behind it, and it makes the task thinner round that step (the one-fact line). A run that
-  takes the level at every total as its own unknown from the start earns the chain: the careful column prices the
-  run that fits the scaling law first, one cold derivation went each way, and the platform's two runs are the
-  measurement. The bands on A and on the range are wide because sound methods differ there, so those cells price
-  nothing on their own.
-- The run cache is not in the repository: `make.py` retrains the pilot and the truth runs when it is absent (about
-  twenty minutes on four cores), and the figures are those of this machine's arithmetic.
+Carry-forward: R2, R3 and R6 each read an input of their own (the call log, the backlog counts, the pilot depots);
+R4 and R5 fall with R2 or R3; R7 falls with R6; R8 and R10 need R2, R3 and R7 together; R9 is graded on the range's
+width.
 
 ## Tried and rejected
 
@@ -468,3 +126,11 @@ Written at stage 5 on the final cut (2026-11-10).
 - The levels sentence priced at two results, with a least-squares floor fixed as the hinted pass's continuation:
   given a level at every total and left to choose its own form on the runs held back, the careful pass lands C and
   D as well, so the count is three of six and the note says so.
+- Architecture 1 as shipped (the Norwegian group's scale-up forecast from a staged pilot sweep, six results, name
+  configuration B at 0.625): spent on the platform on 2026-11-11. One run earned every graded result in 28 minutes
+  (`runs/arch1_triage.md`): it compared two candidate calibrations by leave-one-out error, read the slowdown in
+  matched cells (0.0471 then 0.0274 a doubling at one mix), fitted a response surface with a fitted breakpoint and
+  validated it on held-out configurations, and resampled configurations and calibration pairs separately. The six
+  results were one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities,
+  and bands wide enough for every sound method (C from 0.648 to 0.689) graded nothing. No tighter honest band fails
+  that run, so the world is spent: re-rooted to another world, dataset and shell as architecture 2.
