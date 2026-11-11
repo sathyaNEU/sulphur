@@ -1,14 +1,14 @@
 {
  "task": "task14",
- "status": "DRAWING",
+ "status": "DESIGN",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
  "stage": 2,
  "stage_name": "design",
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "stump": "",
- "architecture": 2,
- "loops": 1,
+ "architecture": 3,
+ "loops": 0,
  "precut": {},
  "leak": {},
  "duplicate_check": {},
@@ -31,11 +31,11 @@
    "commit": "RETURNED (task14)"
   }
  ],
- "resume": "Architecture 2 drawn (card registered 2026-11-10, WARN only): a coverage statement for 2025 (manufacturers checked against Open Payments, companies outside it estimated from the tax forms faculty uploaded, the forms' completeness measured on the manufacturer side over every faculty member, by named status, with agency-paid speaker fees traced to the manufacturers). Prototype in memory showed the estimate near the truth on average and six shortcuts between 0.4 and 1.25 times it. Next: stage 2 (results chain, fork and closure tables, prompt, precut.py exit 0), then the generator rebuilt from the prototype (people, register, disclosures, tax forms, documents through the house writers), goldens, effort.json.",
+ "resume": "Architecture 3 drawn 2026-11-11 (card v3 registered at WARN): Penmarra Statistics Office's bond-based private rents measure from the Tenancy Bond Board register and the 2018 rent panel. Next: stage 2 (results chain with bands and dependencies, hidden factor record, effort test on paper, fork and closure tables, the methods note's WHAT, the asks, prompt.txt), the world prototyped and every rival run on the clean truth, precut.py exit 0; then the generator (world, register events, panel, documents through the house writers), goldens, effort.json.",
  "approved": null,
  "delivered": null,
  "portal": null,
- "source_note": "seed ET14 (analytical_tasks/07_data_extraction_conformation): the world, decision and quantity kept (a COI office's docket of fifteen, highest single-manufacturer remuneration first); the decoy-era traps are not used; pairing in Survey Research & Official Statistics, census-register-administrative-data-quality (see ## Draw)",
+ "source_note": "architecture 3: a new world drawn at the author's word (2026-11-11); architectures 1 and 2 (Marrowfield's conflict-of-interest office) kept in the card's lineage and the note's Tried and rejected",
  "gates": {},
  "history": [
   {
@@ -49,6 +49,10 @@
   {
    "date": "2026-11-10",
    "event": "architecture 2 drawn in the same world: Survey Research & Official Statistics, census-register-administrative-data-quality, ETL; weight assembly, answer shape bridge; the question moved from a docket under a threshold to the registry's coverage (card v2 registered, WARN only)"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 3 drawn at the author's word in a new world (Penmarra's bond-based private rents measure: Survey Research & Official Statistics, official time-series production, ETL; weight measurement, answer shape a forecast path with bands and drivers); architecture 2 set aside before any data was cut; card v3 registered at PASS after five axes were redrawn against task9 v9 and task16 v2"
   }
  ],
  "migrated_from": {
@@ -58,5 +62,8 @@
   "date": "2026-11-09",
   "note": "moved from Project Mark at the author's word: architecture 1 shipped there on 2026-10-31, pending, never run on the platform; carried on here for the Sulfur bar"
  },
- "call": "to be filled when the pack is cut: the departments that go to verification on the 2025 coverage statement"
+ "call": "to be filled when the pack is cut: the December 2026 quarter's annual change on the bond-based private rents measure, nationally and by region",
+ "subdomain": "seasonal-adjustment-official-time-series-production",
+ "doctrine": "throughout",
+ "chain": "R1 bonded tenancies held at 30 September 2026 by region; R2 dwellings re-let in the year to September 2026; R3 continuing tenancies' rises (share and average); R4 the average rise at re-letting over the earlier tenancy's paying rent; R5 the measure's annual change to September 2026 by region with the back series from March 2022; R6 the 90 per cent interval on the national figure; R7 the December 2026 quarter's annual change with its range; R8 the bridge from the survey-based figure"
 }
