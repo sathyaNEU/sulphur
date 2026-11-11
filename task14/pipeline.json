@@ -83,6 +83,10 @@
   {
    "date": "2026-11-11",
    "event": "READY: stage 4 closed (two leak reads, judge passes 1 and 2 with every FIX_NOW applied), zips cut, container gate PASS"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "the author reported architecture 1 (the conflict-of-interest docket, Mark's task457) approved on the platform under a rewritten prompt; it is filed as task457 from commit 01238fa, and this slot keeps architecture 3"
   }
  ],
  "migrated_from": {

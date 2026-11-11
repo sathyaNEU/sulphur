@@ -1,7 +1,18 @@
 {
   "_about": "Our builds the client has approved, the only ones of ours that count as teaching a lesson in skeleton.py's lesson count (the client's 'already taught' means accepted tasks in its dataset). A card records identity, never outcome, so approvals live here; the build-pipeline's APPROVED commit adds a row. Every other live build of ours still meets the pair severities, and a lesson two of our live builds share is a WARN (a house lesson).",
   "approved": [
-    {"task": "task6", "architecture": "7", "date": "2026-11-11", "source": "the author's report of 2026-11-11 (Rotalinha's latency error budgets, the levelled-up architecture 7 on file)"},
-    {"task": "task14", "architecture": "1", "alias": "task457", "date": "2026-11-11", "source": "the author's report of 2026-11-11 with the approved prompt pasted (Marrowfield's conflict-of-interest docket, Mark's task457)"}
+    {
+      "task": "task6",
+      "architecture": "7",
+      "date": "2026-11-11",
+      "source": "the author's report of 2026-11-11 (Rotalinha's latency error budgets, the levelled-up architecture 7 on file)"
+    },
+    {
+      "task": "task457",
+      "architecture": "1",
+      "alias": "Sulfur task14 architecture 1 on the platform",
+      "date": "2026-11-11",
+      "source": "the author's report of 2026-11-11 with the approved prompt pasted (Marrowfield's conflict-of-interest docket, uploaded as Sulfur task14 architecture 1, filed as task457)"
+    }
   ]
 }
