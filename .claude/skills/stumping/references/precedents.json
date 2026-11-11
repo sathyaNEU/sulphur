@@ -560,6 +560,110 @@
    "move": "a pilot's selected assortment read at the target population's own mix",
    "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
    "quote": "At the forecast peak mix, Huippu averages 1.371 TASK minutes per line, versus Kotikaari's 1.320, a difference of +0.051 minutes per line. Holding zone and density comparable gives +0.129 minutes."
+  },
+  {
+   "id": "R26",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a level per unit fitted as a random effect, with the parameters' uncertainty integrated into each unit's predictive tail",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Fitted a gamma-Poisson model incorporating construction, surroundings, fitted line arresters and persistent zone differences ... Integrated parameter uncertainty when calculating predictive tails and integer referral cutoffs."
+  },
+  {
+   "id": "R27",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "an alarm threshold's false-alarm rate checked by simulating the all-sound population",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "An all-sound simulation produced 0.157 referrals per run, with Monte Carlo standard error 0.006, consistent with the integrated 0.152 expectation."
+  },
+  {
+   "id": "R28",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "each device's clock rebuilt from event pairs it shares with upstream and downstream devices, checked on a whole-visit hold-out",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Corrected offline clocks using upstream lockout/restoration and downstream supply-loss/restoration evidence. ... Whole-visit holdout gave a 1.2693-second 95th-percentile absolute error"
+  },
+  {
+   "id": "R29",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "repeated memory reads removed and trips, recloses and backup operations folded into one initiating episode",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Removed 95,092 repeated download rows, with 0 conflicting payloads. Reconstructed initiating sequences rather than counting trips and recloses separately"
+  },
+  {
+   "id": "R30",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "documented gaps and unread tails excluded from the fit's exposure and carried into the totals at the observed rate",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "These windows were excluded from calibration exposure. Referral tests retained full-period exposure, while planning estimates separately adjusted for missing coverage."
+  },
+  {
+   "id": "R31",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "several windows tried for a forward value and the latest state preferred over the long average",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Using the entire post-inspection average for current benefit: it gives 75.8 avoided faults, versus 104.2 using two seasons and the selected 121.1 using 2026. Longer windows can dilute recent failure."
+  },
+  {
+   "id": "R32",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a sweep of matching windows, exclusions and partial records showing the call holds",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "All 11 referrals survived wider SCADA matching, narrower offline matching, exclusion of partial sequences and exclusion of downstream-coverage warnings."
+  },
+  {
+   "id": "N09",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the current network topology assumed for the whole history",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Historical analysis uses the 2026 routes and topology."
+  },
+  {
+   "id": "N10",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "missing periods assumed to run at the observed rate per unit of exposure",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Missing-period estimates assume the same fault rate per unit of exposure as observed periods. They are not measured counts."
+  },
+  {
+   "id": "N11",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a passed inspection or test assumed to certify the unit sound for the interval",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "A zero-defect cyclic inspection is assumed to certify the preceding reference interval as sound. The files do not establish every intervening protection state."
+  },
+  {
+   "id": "N12",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a rate learned in one season or condition carried to another",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Sound fault rates learned during lightning seasons are transported to dry-season ground-stroke exposure."
+  },
+  {
+   "id": "N13",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the latest observed rate taken as the state at the decision date",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Year-end benefit assumes the observed 2026 rate represents endpoint condition."
+  },
+  {
+   "id": "N14",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a second record set aside once its linkage check failed",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "No transformer-ID linkage survived contextual validation, so no OMS-only lightning faults were added."
   }
  ]
 }
