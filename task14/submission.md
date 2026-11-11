@@ -1,68 +1,43 @@
-# task14 submission
-
 ## Tags
 
-**Domain:** Survey Research & Official Statistics, census, register and administrative data quality (the clinical faculty's annual disclosures, a timely self-report, validated against the Open Payments register on the years both cover: each disclosure compared with the payments the register shows made by the day it was submitted, each faculty member's amount-reporting error weighted by how many matched manufacturer-years they have, and carried to 2026, which the register has not yet published).
-**Analytical objective:** Data Extraction & Conformation (ETL) (Open Payments payment records tied to the faculty through covered-recipient profiles, the disclosure system's versions, submission times, typed company names and two form editions, and the roster's appointments across the 2025 reorganisation and changed employee numbers conformed to one row per faculty member, manufacturer and year).
+**Domain:** Other, Survey Research & Official Statistics (seasonal adjustment and official time-series production).  
+**Analytical objective:** Data Extraction & Conformation (ETL / Pipeline Build).
 
-## 1. Final Recommendation
+## Final Recommendation
 
-**The docket for the committee's meeting of 11 February 2027 is Adam Andersen, Kyle Avery, Fernando Baldwin, Stacie Black, Alexis Drake, Henry Grimes, Pedro Hampton, Johnathan Kaiser, Kerry Leach, Jillian Luna, Kirsten Middleton, Vickie Nolan, Ruth Rosario, Judith Valenzuela and Traci Ware.**
+**Expect the bond-based measure to show private rents up 3.1 per cent in the year to the December 2026 quarter (90 per cent range 3.0 to 3.2), down from 4.0 in the year to September 2026**, because the build-to-rent landlord LL15069488, which reviews every 1 December and is not yet on file, will raise its rents 3.2 per cent (the September CPI plus 1.0) against 6.1 a year earlier, landlord LL36031376's 1 November review is 2.7 against 5.6, and going rents have eased since July. Reject the 4.0 that carrying September forward gives, the 3.5 of a straight trend through the quarters, and the 3.0 that carrying the rent survey's rises to every landlord and reading the register as it stands on 31 December gives.
 
-Stacie Black, Pedro Hampton, Kerry Leach, Jillian Luna and Judith Valenzuela submitted their 2026 disclosures in December 2026, before the year's last payments, and are estimated with the share of the year each manufacturer had paid by that date; Fernando Baldwin, Johnathan Kaiser, Vickie Nolan, Ruth Rosario and Traci Ware disclose about half of what the register publishes for them. Not Melvin Blackwell, Angelica Gentry, Cory Harper, Hector Mahoney and Carly Singleton, whom the corrections that read every disclosure as covering its whole year put on the docket: their earlier December disclosures make them look like under-reporters, and those corrections reproduce 2025 less closely. Not faculty with a single matched manufacturer-year reported low, whom an unweighted personal ratio promotes, nor faculty who leave small relationships out, whom the share of all published remuneration disclosed promotes.
+## Supplementary Questions
 
-## 2. Critical Components
+### private_rents_measure_2026Q4.xlsx
 
-1. **279** faculty members holding an appointment on 31 December 2026 filed a 2026 disclosure naming a manufacturer that reports to Open Payments, and each is estimated.
-2. **Five** of the fifteen submitted the 2026 disclosure in force in December 2026, before part of the year's payments were made.
-3. Compared on 2025 with the largest single-manufacturer remuneration the register published for each of the **309** faculty members estimated, the estimate that counts each disclosure to the day it was submitted comes closer than any that reads a disclosure as covering its whole year.
+1. A "Measure" sheet with one row per quarter from 2022Q1 to 2026Q3 and a projected 2026Q4 row; the national annual change in per cent, each quarter within 0.3 point: 2022Q1 3.3; 2022Q2 3.9; 2022Q3 4.5; 2022Q4 5.3; 2023Q1 5.9; 2023Q2 6.5; 2023Q3 7.0; 2023Q4 7.5; 2024Q1 7.4; 2024Q2 7.3; 2024Q3 7.1; 2024Q4 6.8; 2025Q1 6.5; 2025Q2 6.1; 2025Q3 5.7; 2025Q4 5.5; 2026Q1 5.0; 2026Q2 4.5; 2026Q3 4.0. The September 2026 quarter by region, each within 0.25 point (Penmarra 4.0, within 0.15): Hallam Central 4.4, Hallam North 4.4, Hallam East 3.9, Hallam South 4.1, Kerrow Coast 3.7, Midvale 3.2, Westerly 3.9.
+2. Bonded tenancies in place on 30 September 2026 (a "Year to Sep 2026" sheet, one row per region and a Penmarra row), each within 0.3 per cent: Penmarra 68,993; Hallam Central 12,737, Hallam North 11,099, Hallam East 11,242, Hallam South 8,982, Kerrow Coast 8,951, Midvale 8,045, Westerly 7,937.
+3. Dwellings re-let in the year to 30 September 2026, beside the tenancies in place, each within 2 per cent: Penmarra 14,963; Hallam Central 2,985, Hallam North 3,959, Hallam East 2,144, Hallam South 1,525, Kerrow Coast 1,728, Midvale 1,333, Westerly 1,289.
+4. Continuing tenancies, year to September 2026: rent payable up 2.5 per cent (within 0.15 point), with 62.4 per cent of them seeing a rise (within 2.0 points; the survey's share of anniversaries with a rise, by year and region, for small landlords' tenancies, and the operators' recorded reviews for theirs).
+5. Dwellings re-let: rent up 9.4 per cent on what the earlier tenancies were paying on 30 September 2025 (within 0.5 point).
 
-## 3. Step-by-Step Solution
+### private_rents_launch_briefing.pptx
 
-1. Tied each record in open_payments_general_2021-2025_jan2027_extract.csv to a faculty member through its covered-recipient profile's NPI (open_payments_covered_recipient_profiles.csv; a profile without one through the profile with an NPI, the same name and the same address) and the NPI in clinical_faculty_appointments.csv, and kept the five remuneration natures paid to the faculty member personally (policy 2.1 and 2.2), each payment with its Open Payments manufacturer ID and date of payment.
-2. Took the version in force of each disclosure in coi_disclosures_2021-2026_export.xlsx with the Eastern date it was submitted, kept its remuneration items and gave each company its Open Payments ID from coi_entity_list.csv, a typed name or a listed company without an ID (under any name the list has shown for it) through the names manufacturers reported under in the register.
-3. On the manufacturer-years from 2021 to 2025 that both sources carry, took each faculty member's total disclosed over the total the register shows paid by the day each of those disclosures was submitted, and weighted it toward the same ratio of totals over the whole faculty by n/(n+2), n their manufacturer-years: of whole-number weightings, the one at which this estimate comes closest under policy 5.4 when the 309 faculty members' 2025 estimates are compared with their largest 2025 single-manufacturer remuneration in the January 2027 publication; the forms of the estimate that come closer still name the same fifteen.
-4. Divided each 2026 amount disclosed for a manufacturer by the faculty member's weighted ratio and, where the disclosure in force was submitted in December 2026, by the share of the same manufacturer's 2025 payments to them made by that month and day (the faculty-wide share where it paid them nothing by then in 2025); took the largest for each of the 279 faculty members and ranked them: the fifteen above lead.
-5. Counted the faculty holding an appointment on 31 December 2026 in clinical_faculty_appointments.csv, one per NPI, and those with no submission of the 2026 disclosure under any of their employee numbers in coi_submission_history.csv by 11:59 p.m. Eastern on 15 January 2027 (04:59:59 UTC on 16 January): 1,696 owed, 91 not submitted.
-6. Summed by nature the 2025 remuneration records tied through the profiles to the faculty holding an appointment at any time in 2025, payments made to the university excluded: consulting fees the largest, $4,463,000.
-7. Summed by relationship type the 2026 remuneration items in force whose company appears in the register under no name, the names a listed company has carried on the list included: expert testimony the largest, $97,000.
-8. Recommendation: the fifteen above form the docket for 11 February 2027.
+6. Three slides. The first gives the December 2026 figure for Penmarra, 3.1 per cent (within 0.1 point), with its 90 per cent range of 3.0 to 3.2 (each end within 0.1 point, a half-width between 0.05 and 0.2 point), and a bar chart of the regions, each within 0.2 point: Hallam Central 3.1, Hallam North 3.6, Hallam East 2.9, Hallam South 3.2, Kerrow Coast 2.9, Midvale 2.7, Westerly 3.2. The second charts the national measure from 2022Q1 with the projected December point.
+7. The third slide splits the change from 4.0 per cent in the year to September 2026 to 3.1 in the year to December between the two groups: a fall of 0.89 points (within 0.12), of which continuing tenancies 0.43 and re-lettings 0.46 (each within 0.1 point), each group's contribution to the measure in both (1.94 and 2.06 points to September, 1.51 and 1.60 to December), with the year to September by group (answers 4 and 5).
 
-## 4. Deliverable Answers
+## Critical Components
 
-### coi_committee_docket_2027-02.docx
+1. The national measure for the year to September 2026 is **4.0 per cent** (Hallam Central **4.4**, Midvale **3.2**), every quarter back to 2022Q1 on the same footing, with a peak of **7.5** in 2023Q4.
+2. Continuing tenancies' rent payable rose **2.5 per cent**, with **62.4 per cent** of them seeing a rise; the register's additional bonds show a rise for only **20.6 per cent**, while the block operators' own bonds record every review they make.
+3. **14,963** dwellings were re-let in the year, their rent up **9.4 per cent** on what the earlier tenancies were paying; tying re-lettings by property identifier alone finds **9,978**.
+4. Of the **0.89**-point fall from the year to September to the year to December, continuing tenancies account for **0.43** point and re-lettings **0.46**.
 
-1. The fifteen faculty members on the docket, each with the manufacturer of their largest 2026 remuneration:
-   - Adam Andersen: Glenarde Joint Technologies, Inc.
-   - Kyle Avery: Norvell Therapeutics, Inc.
-   - Fernando Baldwin: Ambrell Biologics, Inc.
-   - Stacie Black: Clevedon Surgical, Inc.
-   - Alexis Drake: Fallowfield Therapeutics, Inc.
-   - Henry Grimes: Dunmere Neurotherapeutics, Inc.
-   - Pedro Hampton: Morvanne Pharmaceuticals, Inc.
-   - Johnathan Kaiser: Pinewold Vascular, LLC
-   - Kerry Leach: Kelsall Vascular, LLC
-   - Jillian Luna: Varrick Pharmaceuticals, Inc.
-   - Kirsten Middleton: Tilbrook Heart Technologies, Inc.
-   - Vickie Nolan: Carrowmore Pharmaceuticals, Inc.
-   - Ruth Rosario: Pallister Neurotherapeutics, Inc.
-   - Judith Valenzuela: Yarrowby Oncology, Inc.
-   - Traci Ware: Saltmere Joint Technologies, Inc.
-2. Horizontal bar chart on page 2: the fifteen members' estimated 2026 remuneration from a single manufacturer, largest first, the December 2026 submissions in a lighter shade.
-3. Faculty who owed a 2026 disclosure: 1,696
-4. Of them, faculty who had not submitted it by 11:59 p.m. Eastern on 15 January 2027: 91
-5. The 2025 remuneration Open Payments last published to faculty with appointments in 2025, by nature of payment, to the nearest thousand dollars:
-   - Consulting fees: $4,463,000
-   - Services other than consulting, including speaking outside continuing education: $1,366,000
-   - Honoraria: $819,000
-   - Faculty or speaker, accredited or certified continuing education: $325,000
-   - Faculty or speaker, unaccredited continuing education: $198,000
-6. 2026 remuneration the faculty disclosed from companies that do not report to Open Payments, by relationship type, to the nearest thousand dollars:
-   - Consulting or advisory board: $56,000
-   - Speaking or teaching: $11,000
-   - Expert testimony: $97,000
-   - Other paid services: $3,000
+## Step-by-Step
 
-### faculty_remuneration_2026_conformed.csv
+1. Conformed the register from tbb_legacy_register_extract_2023-03-05.csv and tbb_bond_events_2023-03-06_to_2026-11-27.csv: re-sent legacy rows dropped, each migrated bond joined to its legacy record by legacy_bond_no, rents made weekly (PS-2026-07 2.3), extra-zero rents found against their bond amounts, landlords followed through tbb_landlord_id_crosswalk_2023-03-06.csv and regions taken from pso_suburb_region_concordance_2024.csv; a tenancy covers each day from its start until its refund or the next tenancy's start (2.2): 68,993 held on 30 September 2026.
+2. Found each tenancy's dwelling: the property identifier where the bond has one (bonds with different identifiers are different dwellings, 2.1), otherwise the premises text parsed to unit, number and street and matched to the validated address of a later lodgement in the same postcode (a one-letter street slip or a reversed unit and number allowed): 14,963 dwellings re-let in the year to September 2026. Joining on the property identifier alone finds 9,978, because every bond migrated in March 2023 lacks one and those are the longest tenancies with the largest catch-up; identical address strings alone find 13,054.
+3. Measured continuing tenancies' rises on pso_rent_survey_2018q1_2026q3.csv: 23,769 anniversaries with the rent reported either side, design-weighted by year and region, carried from each tenancy's starting rent. The additional bonds show a rise for 20.6 per cent of continuing tenancies where the survey's rates put it at 59.0 per cent for the same tenancies, so a missing additional bond is not a record of no rise. Tied to the register by address (3,479 of the survey's 3,536 dwellings), the survey's anniversaries with an additional bond lodged rose 5.8 per cent in 2025 against 2.9 without and 3.3 overall, so the rises the bonds record are the larger ones. Checked on the 2,841 small-landlord tenancies both sources held on the survey's August 2026 reference day, the rents carried from each starting rent come within 0.2 per cent of the rents the survey reports, the recorded rents fall 5.4 per cent short, the latest recorded rent carried forward at the survey's rate overshoots by 0.9 per cent and the recorded rent wherever a bond exists falls 1.4 per cent short. The block operators lodge an additional bond at every review and the survey, drawn from dwellings let at the end of 2017, holds none of their blocks, so their rents come from their own bonds. Carrying the survey's rises to every landlord gives 3.7 per cent for September; carrying each tenancy's latest recorded rent forward gives 3.9 for September but runs up to 0.3 point high through 2023 and 2024 and puts the re-letting rise at 8.6.
+4. Priced each re-letting against what the earlier tenancy was paying on 30 September 2025 (2.4): up 9.4 per cent; against the earlier starting rent it reads 17.6, counting the earlier tenancy's own rises twice.
+5. Computed the measure for every quarter: 4.0 per cent in the year to September 2026, from a peak of 7.5 in 2023Q4; reading the additional bonds as every rise gives 4.2, and property identifiers alone 2.8.
+6. Projected 31 December 2026 from the register as it stood on 27 November, each tenancy carried at the rates the same weeks of 2023 to 2025 showed when the register is read as it stood on their own 27 November (by age and landlord class), with December re-lettings at going rents from the register's repeat-letting index: landlord LL36031376's 1 November review (2.7 per cent on the 1,942 bonds lodged) completed for its 2,091 eligible tenancies not yet on file, and landlord LL15069488's 1 December review applied to 4,752 tenancies at 3.2 per cent, its rule read off its earlier reviews (6.2, 4.4 and 6.1 in 2023 to 2025, each the September CPI in pso_cpi_2026q3.xlsx plus 1.0): 3.1 per cent nationally; Hallam Central 3.1, Hallam North 3.6, Hallam East 2.9, Hallam South 3.2, Kerrow Coast 2.9, Midvale 2.7, Westerly 3.2. The same projection missed December 2023, 2024 and 2025 by 0.0, 0.1 and 0.0 point; a straight trend through the quarters missed them by 0.1, 0.1 and 0.2 and gives 3.5 now. Read as it stands on 31 December the register gives 2.7; on the earlier Decembers that reading fell short by 0.59, 0.62 and 0.75, of which the reviews not yet on file were 0.20, 0.26 and 0.51 and the December re-lettings 0.39, 0.36 and 0.24, and in 2026 the reviews still add 0.31 but the re-lettings only 0.08: about 1,600 tenancies end between 27 November and 31 December, 1,190 of them re-let, and 710 of the 2,049 dwellings empty on the cut day let again, at going rents 2.8 per cent above the rents they replace against 10.1 and 8.1 in 2024 and 2025, as the register's repeat-letting index eased. Correcting the register as it stands by its past errors gives 3.4; reading it on 27 November (3.4) and adding the earlier years' change to December gives 3.6, and missed December 2024 by 0.24 point, because both parts of that change shrink in 2026.
+7. Split the change from 4.0 to 3.1 into each group's contribution to the measure (its change in rent over the whole base) in the two years: continuing tenancies 0.43 point, re-lettings 0.46 (0.89 together).
+8. Set the 90 per cent range from the survey resampled by dwelling within its strata (400 draws) and the same projection's error on December 2023, 2024 and 2025 (projected 7.4, 6.8 and 5.5 against 7.5, 6.8 and 5.5): 3.0 to 3.2.
 
-1. 9,994 rows, one per faculty member and year from 2021 to 2026 in which they owed a disclosure, under the employee number holding the appointment that 31 December, each with the remuneration disclosed, the number of manufacturers disclosed, the remuneration published (blank for 2026) and the number of manufacturers published.
+No other December figure survives. Carrying September forward (4.0) and a trend through the quarters (3.5) cannot see the two operator reviews that fall after September, each about half the one it replaces, which is why the trend's errors on earlier Decembers (up to 0.2 point) double now; the register read as it stands (2.7) leaves out the review not yet on file and every December re-letting, and correcting it by its past errors (3.4), or adding the earlier years' change to the 27 November reading (3.6), borrows a re-letting premium the easing market no longer pays. For September, the additional bonds read as every rise (4.2), property identifiers alone (2.8), the earlier starting rent (5.6), the survey's rises given to the operators (3.7) and recorded rents carried forward at the survey's rate (re-letting rise 8.6) each fail on a fact the files show: the survey's rises with no bond lodged, the migrated bonds' missing identifiers, 2.4's rent on the earlier day, the operators' complete records, and the recorded rises being the larger ones, which the survey's own reported rents confirm.

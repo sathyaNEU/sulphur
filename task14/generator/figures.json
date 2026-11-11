@@ -1,167 +1,1957 @@
 {
- "call": [
-  "Adam Andersen",
-  "Alexis Drake",
-  "Fernando Baldwin",
-  "Henry Grimes",
-  "Jillian Luna",
-  "Johnathan Kaiser",
-  "Judith Valenzuela",
-  "Kerry Leach",
-  "Kirsten Middleton",
-  "Kyle Avery",
-  "Pedro Hampton",
-  "Ruth Rosario",
-  "Stacie Black",
-  "Traci Ware",
-  "Vickie Nolan"
+ "a_landlord": "LL15069488",
+ "a_margin": 1.0,
+ "a_review": {
+  "2023": 6.2,
+  "2024": 4.4,
+  "2025": 6.1
+ },
+ "a_review_2026": 3.2,
+ "analog": {
+  "dec26": 3.6,
+  "errors": [
+   -0.1,
+   0.2,
+   0.1
+  ],
+  "max_error": 0.24,
+  "mean_change": 0.19,
+  "nov26": 3.4
+ },
+ "asstands_adj_dec26": 3.4,
+ "asstands_backtest_err": [
+  -0.6,
+  -0.6,
+  -0.8
  ],
- "call_members": [
+ "asstands_dec26": 2.7,
+ "asstands_short": [
+  0.59,
+  0.62,
+  0.75
+ ],
+ "b_landlord": "LL36031376",
+ "b_margin": 0.5,
+ "b_review": {
+  "2023": 5.7,
+  "2024": 3.9,
+  "2025": 5.6
+ },
+ "b_review_2026": 2.7,
+ "backtest": [
   {
-   "name": "Adam Andersen",
-   "department": "Orthopaedic Surgery",
-   "manufacturer": "Glenarde Joint Technologies, Inc.",
-   "disclosed_2026": 128000
+   "actual": 7.5,
+   "projected": 7.4,
+   "year": 2023
   },
   {
-   "name": "Kyle Avery",
-   "department": "Hematology and Oncology",
-   "manufacturer": "Norvell Therapeutics, Inc.",
-   "disclosed_2026": 92000
+   "actual": 6.8,
+   "projected": 6.8,
+   "year": 2024
   },
   {
-   "name": "Fernando Baldwin",
-   "department": "Hematology and Oncology",
-   "manufacturer": "Ambrell Biologics, Inc.",
-   "disclosed_2026": 41000
-  },
-  {
-   "name": "Stacie Black",
-   "department": "Orthopaedic Surgery",
-   "manufacturer": "Clevedon Surgical, Inc.",
-   "disclosed_2026": 54000
-  },
-  {
-   "name": "Alexis Drake",
-   "department": "Gastroenterology and Hepatology",
-   "manufacturer": "Fallowfield Therapeutics, Inc.",
-   "disclosed_2026": 102000
-  },
-  {
-   "name": "Henry Grimes",
-   "department": "Neurology",
-   "manufacturer": "Dunmere Neurotherapeutics, Inc.",
-   "disclosed_2026": 115000
-  },
-  {
-   "name": "Pedro Hampton",
-   "department": "Gastroenterology and Hepatology",
-   "manufacturer": "Morvanne Pharmaceuticals, Inc.",
-   "disclosed_2026": 53000
-  },
-  {
-   "name": "Johnathan Kaiser",
-   "department": "Cardiovascular Medicine",
-   "manufacturer": "Pinewold Vascular, LLC",
-   "disclosed_2026": 48000
-  },
-  {
-   "name": "Kerry Leach",
-   "department": "Cardiovascular Medicine",
-   "manufacturer": "Kelsall Vascular, LLC",
-   "disclosed_2026": 54000
-  },
-  {
-   "name": "Jillian Luna",
-   "department": "Dermatology",
-   "manufacturer": "Varrick Pharmaceuticals, Inc.",
-   "disclosed_2026": 53000
-  },
-  {
-   "name": "Kirsten Middleton",
-   "department": "Cardiovascular Medicine",
-   "manufacturer": "Tilbrook Heart Technologies, Inc.",
-   "disclosed_2026": 109000
-  },
-  {
-   "name": "Vickie Nolan",
-   "department": "Urology",
-   "manufacturer": "Carrowmore Pharmaceuticals, Inc.",
-   "disclosed_2026": 51000
-  },
-  {
-   "name": "Ruth Rosario",
-   "department": "Neurology",
-   "manufacturer": "Pallister Neurotherapeutics, Inc.",
-   "disclosed_2026": 41000
-  },
-  {
-   "name": "Judith Valenzuela",
-   "department": "Hematology and Oncology",
-   "manufacturer": "Yarrowby Oncology, Inc.",
-   "disclosed_2026": 53000
-  },
-  {
-   "name": "Traci Ware",
-   "department": "Orthopaedic Surgery",
-   "manufacturer": "Saltmere Joint Technologies, Inc.",
-   "disclosed_2026": 51000
+   "actual": 5.5,
+   "projected": 5.5,
+   "year": 2025
   }
  ],
- "faculty_estimated_2026": 279,
- "faculty_estimated_2025": 309,
- "weighting_k_lines": 2,
- "december_filers_on_docket": [
-  "Stacie Black",
-  "Pedro Hampton",
-  "Kerry Leach",
-  "Jillian Luna",
-  "Judith Valenzuela"
- ],
- "under_reporters": [
-  "Fernando Baldwin",
-  "Johnathan Kaiser",
-  "Vickie Nolan",
-  "Ruth Rosario",
-  "Traci Ware"
- ],
- "whole_year_reading_instead": [
-  "Melvin Blackwell",
-  "Angelica Gentry",
-  "Cory Harper",
-  "Hector Mahoney",
-  "Carly Singleton"
- ],
- "whole_year_reading_drops": [
-  "Stacie Black",
-  "Pedro Hampton",
-  "Kerry Leach",
-  "Jillian Luna",
-  "Judith Valenzuela"
- ],
- "ask_a": {
-  "owed": 1696,
-  "not_submitted": 91
+ "band_table": {
+  "R1": {
+   "HC": [
+    12698.789,
+    12775.211
+   ],
+   "HE": [
+    11208.274,
+    11275.726
+   ],
+   "HN": [
+    11065.703,
+    11132.297
+   ],
+   "HS": [
+    8955.054,
+    9008.946
+   ],
+   "KC": [
+    8924.147,
+    8977.853
+   ],
+   "MV": [
+    8020.865,
+    8069.135
+   ],
+   "NAT": [
+    68786.021,
+    69199.979
+   ],
+   "WS": [
+    7913.189,
+    7960.811
+   ]
+  },
+  "R2": {
+   "HC": [
+    2925.3,
+    3044.7
+   ],
+   "HE": [
+    2101.12,
+    2186.88
+   ],
+   "HN": [
+    3879.82,
+    4038.18
+   ],
+   "HS": [
+    1494.5,
+    1555.5
+   ],
+   "KC": [
+    1693.44,
+    1762.56
+   ],
+   "MV": [
+    1306.34,
+    1359.66
+   ],
+   "NAT": [
+    14663.74,
+    15262.26
+   ],
+   "WS": [
+    1263.22,
+    1314.78
+   ]
+  },
+  "R3": {
+   "change": [
+    2.327,
+    2.627
+   ],
+   "share": [
+    60.412,
+    64.412
+   ]
+  },
+  "R4": [
+   8.929,
+   9.929
+  ],
+  "R5": {
+   "2022Q1": [
+    2.959,
+    3.559
+   ],
+   "2022Q2": [
+    3.57,
+    4.17
+   ],
+   "2022Q3": [
+    4.221,
+    4.821
+   ],
+   "2022Q4": [
+    5.021,
+    5.621
+   ],
+   "2023Q1": [
+    5.639,
+    6.239
+   ],
+   "2023Q2": [
+    6.189,
+    6.789
+   ],
+   "2023Q3": [
+    6.676,
+    7.276
+   ],
+   "2023Q4": [
+    7.153,
+    7.753
+   ],
+   "2024Q1": [
+    7.085,
+    7.685
+   ],
+   "2024Q2": [
+    6.967,
+    7.567
+   ],
+   "2024Q3": [
+    6.769,
+    7.369
+   ],
+   "2024Q4": [
+    6.549,
+    7.149
+   ],
+   "2025Q1": [
+    6.167,
+    6.767
+   ],
+   "2025Q2": [
+    5.8,
+    6.4
+   ],
+   "2025Q3": [
+    5.356,
+    5.956
+   ],
+   "2025Q4": [
+    5.181,
+    5.781
+   ],
+   "2026Q1": [
+    4.695,
+    5.295
+   ],
+   "2026Q2": [
+    4.205,
+    4.805
+   ],
+   "2026Q3": [
+    3.842,
+    4.142
+   ],
+   "HC": [
+    4.14,
+    4.64
+   ],
+   "HE": [
+    3.653,
+    4.153
+   ],
+   "HN": [
+    4.144,
+    4.644
+   ],
+   "HS": [
+    3.81,
+    4.31
+   ],
+   "KC": [
+    3.426,
+    3.926
+   ],
+   "MV": [
+    2.906,
+    3.406
+   ],
+   "WS": [
+    3.676,
+    4.176
+   ]
+  },
+  "R6": {
+   "half": [
+    0.05,
+    0.2
+   ],
+   "hi": [
+    3.099,
+    3.299
+   ],
+   "lo": [
+    2.917,
+    3.117
+   ]
+  },
+  "R7": [
+   3.008,
+   3.208
+  ],
+  "R7b": {
+   "HC": [
+    2.856,
+    3.256
+   ],
+   "HE": [
+    2.733,
+    3.133
+   ],
+   "HN": [
+    3.421,
+    3.821
+   ],
+   "HS": [
+    3.039,
+    3.439
+   ],
+   "KC": [
+    2.732,
+    3.132
+   ],
+   "MV": [
+    2.513,
+    2.913
+   ],
+   "WS": [
+    2.992,
+    3.392
+   ]
+  },
+  "R8": {
+   "continuing": [
+    -0.524,
+    -0.324
+   ],
+   "fall": [
+    -1.004,
+    -0.764
+   ],
+   "relet": [
+    -0.56,
+    -0.36
+   ]
+  }
  },
- "ask_b": {
-  "Consulting fees": 4463000,
-  "Services other than consulting, including speaking outside continuing education": 1366000,
-  "Honoraria": 819000,
-  "Faculty or speaker, accredited or certified continuing education": 325000,
-  "Faculty or speaker, unaccredited continuing education": 198000
+ "bands": {
+  "change_pts": 0.15,
+  "contrib": 0.1,
+  "dec_national": 0.1,
+  "dec_region": 0.2,
+  "fall": 0.12,
+  "half_hi": 0.2,
+  "half_lo": 0.05,
+  "held_pct": 0.3,
+  "national": 0.15,
+  "range_end": 0.1,
+  "region": 0.25,
+  "relet_change": 0.5,
+  "relet_pct": 2,
+  "series": 0.3,
+  "share_pts": 2.0
  },
- "ask_c": {
-  "Consulting or advisory board": 56000,
-  "Speaking or teaching": 11000,
-  "Expert testimony": 97000,
-  "Other paid services": 3000
+ "boot_n": 400,
+ "careful_cont_change": 2.1,
+ "careful_dec26": 3.0,
+ "careful_name": "the panel's rises carried to every landlord",
+ "careful_relet_n": 14913,
+ "careful_sep26": 3.7,
+ "careful_share": 59.0,
+ "carry_dec26": 4.0,
+ "cont": {
+  "change": 2.5,
+  "share": 62.4
  },
- "conformed_rows": 9994,
- "deadline_eastern": "11:59",
- "policy_sections_cited": [
-  "2.1",
-  "2.2",
-  "5.2",
-  "5.4"
- ]
+ "cont_change": 2.5,
+ "cont_share": 62.4,
+ "contrib26": {
+  "continuing": 1.94,
+  "relet": 2.06
+ },
+ "contrib_dec": {
+  "continuing": 1.51,
+  "relet": 1.6
+ },
+ "conventions": {
+  "paper_sections": [
+   2.2,
+   2.3,
+   2.4,
+   2.5,
+   2.6
+  ],
+  "quarter_end_day": 30,
+  "range_pct": 90
+ },
+ "cpi_sep": {
+  "2023": 5.2,
+  "2024": 3.4,
+  "2025": 5.1,
+  "2026": 2.2
+ },
+ "dec26": {
+  "HC": 3.1,
+  "HE": 2.9,
+  "HN": 3.6,
+  "HS": 3.2,
+  "KC": 2.9,
+  "MV": 2.7,
+  "NAT": 3.1,
+  "WS": 3.2
+ },
+ "dec26_half": 0.09,
+ "dec26_nat": 3.1,
+ "dec26_range": [
+  3.0,
+  3.2
+ ],
+ "dec26_rangecells": {
+  "half": 0.09,
+  "hi": 3.2,
+  "lo": 3.0
+ },
+ "dec26_reg": {
+  "HC": 3.1,
+  "HE": 2.9,
+  "HN": 3.6,
+  "HS": 3.2,
+  "KC": 2.9,
+  "MV": 2.7,
+  "WS": 3.2
+ },
+ "dec_backtests": [
+  {
+   "actual": 7.45,
+   "as_stands": 6.86,
+   "carried": 6.98,
+   "rest_part": 0.39,
+   "reviews_part": 0.2,
+   "trend": 7.56,
+   "year": 2023
+  },
+  {
+   "actual": 6.85,
+   "as_stands": 6.23,
+   "carried": 7.07,
+   "rest_part": 0.36,
+   "reviews_part": 0.26,
+   "trend": 6.98,
+   "year": 2024
+  },
+  {
+   "actual": 5.48,
+   "as_stands": 4.73,
+   "carried": 5.66,
+   "rest_part": 0.24,
+   "reviews_part": 0.51,
+   "trend": 5.28,
+   "year": 2025
+  },
+  {
+   "as_stands": 2.71,
+   "carried": 3.99,
+   "reviews_part": 0.31,
+   "trend": 3.5,
+   "year": 2026
+  }
+ ],
+ "dec_churn": {
+  "2024": {
+   "empty": 1949,
+   "ending": 1430,
+   "let_from_empty": 620,
+   "margin": 10.1,
+   "relet": 1050
+  },
+  "2025": {
+   "empty": 2076,
+   "ending": 1570,
+   "let_from_empty": 670,
+   "margin": 8.1,
+   "relet": 1180
+  },
+  "2026": {
+   "empty": 2049,
+   "ending": 1600,
+   "let_from_empty": 710,
+   "margin": 2.8,
+   "relet": 1190
+  }
+ },
+ "exact_relet_n": 13054,
+ "flow_sep26": 3.0,
+ "held": {
+  "HC": 12737,
+  "HE": 11242,
+  "HN": 11099,
+  "HS": 8982,
+  "KC": 8951,
+  "MV": 8045,
+  "NAT": 68993,
+  "WS": 7937
+ },
+ "measure_cells": {
+  "2022Q1": 3.3,
+  "2022Q2": 3.9,
+  "2022Q3": 4.5,
+  "2022Q4": 5.3,
+  "2023Q1": 5.9,
+  "2023Q2": 6.5,
+  "2023Q3": 7.0,
+  "2023Q4": 7.5,
+  "2024Q1": 7.4,
+  "2024Q2": 7.3,
+  "2024Q3": 7.1,
+  "2024Q4": 6.8,
+  "2025Q1": 6.5,
+  "2025Q2": 6.1,
+  "2025Q3": 5.7,
+  "2025Q4": 5.5,
+  "2026Q1": 5.0,
+  "2026Q2": 4.5,
+  "2026Q3": 4.0,
+  "HC": 4.4,
+  "HE": 3.9,
+  "HN": 4.4,
+  "HS": 4.1,
+  "KC": 3.7,
+  "MV": 3.2,
+  "WS": 3.9
+ },
+ "noreview_dec26": 2.9,
+ "panel_link": {
+  "dwellings": 3536,
+  "linked": 3479,
+  "years": {
+   "2022": {
+    "all": 3.3,
+    "n_with": 400,
+    "n_without": 2389,
+    "with": 5.2,
+    "without": 3.0
+   },
+   "2023": {
+    "all": 5.2,
+    "n_with": 527,
+    "n_without": 2231,
+    "with": 8.0,
+    "without": 4.5
+   },
+   "2024": {
+    "all": 4.6,
+    "n_with": 515,
+    "n_without": 2304,
+    "with": 7.4,
+    "without": 4.0
+   },
+   "2025": {
+    "all": 3.3,
+    "n_with": 360,
+    "n_without": 2404,
+    "with": 5.8,
+    "without": 2.9
+   }
+  }
+ },
+ "panel_pairs": 23769,
+ "peak": 7.5,
+ "peak_q": "2023Q4",
+ "pending_n": 2091,
+ "pid_relet_n": 9978,
+ "pid_sep26": 2.8,
+ "proj_bt_err": [
+  -0.0,
+  -0.1,
+  -0.0
+ ],
+ "published_sep26": 4,
+ "range_rivals": {
+  "a t multiplier for three back-test years": {
+   "half": 0.138,
+   "hi": 3.246,
+   "lo": 2.97
+  },
+  "the back-test bias removed": {
+   "half": 0.076,
+   "hi": 3.184,
+   "lo": 3.032
+  },
+  "the panel's error alone": {
+   "half": 0.057,
+   "hi": 3.165,
+   "lo": 3.051
+  },
+  "the projection's error alone": {
+   "half": 0.071,
+   "hi": 3.179,
+   "lo": 3.037
+  },
+  "the two errors added": {
+   "half": 0.128,
+   "hi": 3.236,
+   "lo": 2.981
+  }
+ },
+ "range_variants": {
+  "a t multiplier for three back-test years": 0.138,
+  "the back-test bias removed": 0.076,
+  "the panel's error alone": 0.057,
+  "the projection's error alone": 0.071,
+  "the two errors added": 0.128
+ },
+ "relet_change": 9.4,
+ "relet_n": {
+  "HC": 2985,
+  "HE": 2144,
+  "HN": 3959,
+  "HS": 1525,
+  "KC": 1728,
+  "MV": 1333,
+  "NAT": 14963,
+  "WS": 1289
+ },
+ "relet_start_change": 17.6,
+ "rest_part": [
+  0.39,
+  0.36,
+  0.24
+ ],
+ "rest_part_2026": 0.08,
+ "reviewed_onfile_n": 1942,
+ "reviews_part": [
+  0.2,
+  0.26,
+  0.51,
+  0.31
+ ],
+ "rival_values": {
+  "December going rents held at November": {
+   "R7": 3.114,
+   "R7b": {
+    "HC": 3.067,
+    "HE": 2.932,
+    "HN": 3.623,
+    "HS": 3.256,
+    "KC": 2.939,
+    "MV": 2.723,
+    "WS": 3.187
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.878,
+    "relet": -0.453
+   }
+  },
+  "December rates from 2024 and 2025 only": {
+   "R7": 3.109,
+   "R7b": {
+    "HC": 3.058,
+    "HE": 2.935,
+    "HN": 3.622,
+    "HS": 3.239,
+    "KC": 2.933,
+    "MV": 2.713,
+    "WS": 3.193
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.883,
+    "relet": -0.458
+   }
+  },
+  "December rates read with hindsight": {
+   "R7": 3.137,
+   "R7b": {
+    "HC": 3.081,
+    "HE": 2.971,
+    "HN": 3.661,
+    "HS": 3.245,
+    "KC": 2.956,
+    "MV": 2.739,
+    "WS": 3.239
+   },
+   "R8": {
+    "continuing": -0.437,
+    "fall": -0.855,
+    "relet": -0.418
+   }
+  },
+  "December rates without landlord class": {
+   "R7": 3.117,
+   "R7b": {
+    "HC": 3.069,
+    "HE": 2.946,
+    "HN": 3.629,
+    "HS": 3.244,
+    "KC": 2.939,
+    "MV": 2.716,
+    "WS": 3.199
+   },
+   "R8": {
+    "continuing": -0.422,
+    "fall": -0.875,
+    "relet": -0.453
+   }
+  },
+  "panel rates pooled across regions": {
+   "R3": {
+    "change": 2.473,
+    "share": 62.406
+   },
+   "R4": 9.467,
+   "R5": {
+    "2022Q1": 3.263,
+    "2022Q2": 3.871,
+    "2022Q3": 4.517,
+    "2022Q4": 5.316,
+    "2023Q1": 5.93,
+    "2023Q2": 6.48,
+    "2023Q3": 6.965,
+    "2023Q4": 7.439,
+    "2024Q1": 7.376,
+    "2024Q2": 7.259,
+    "2024Q3": 7.062,
+    "2024Q4": 6.843,
+    "2025Q1": 6.463,
+    "2025Q2": 6.1,
+    "2025Q3": 5.658,
+    "2025Q4": 5.486,
+    "2026Q1": 5.0,
+    "2026Q2": 4.511,
+    "2026Q3": 3.997,
+    "HC": 4.405,
+    "HE": 4.064,
+    "HN": 4.364,
+    "HS": 3.989,
+    "KC": 3.615,
+    "MV": 3.247,
+    "WS": 3.807
+   },
+   "R7": 3.112,
+   "R7b": {
+    "HC": 3.091,
+    "HE": 3.102,
+    "HN": 3.617,
+    "HS": 3.125,
+    "KC": 2.847,
+    "MV": 2.719,
+    "WS": 3.138
+   },
+   "R8": {
+    "continuing": -0.425,
+    "fall": -0.885,
+    "relet": -0.461
+   }
+  },
+  "panel rates unweighted": {
+   "R3": {
+    "change": 2.472,
+    "share": 62.345
+   },
+   "R4": 9.426,
+   "R5": {
+    "2022Q1": 3.26,
+    "2022Q2": 3.872,
+    "2022Q3": 4.522,
+    "2022Q4": 5.323,
+    "2023Q1": 5.941,
+    "2023Q2": 6.49,
+    "2023Q3": 6.976,
+    "2023Q4": 7.452,
+    "2024Q1": 7.386,
+    "2024Q2": 7.269,
+    "2024Q3": 7.072,
+    "2024Q4": 6.853,
+    "2025Q1": 6.468,
+    "2025Q2": 6.099,
+    "2025Q3": 5.652,
+    "2025Q4": 5.475,
+    "2026Q1": 4.99,
+    "2026Q2": 4.501,
+    "2026Q3": 3.988,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.151,
+    "WS": 3.885
+   },
+   "R7": 3.104,
+   "R7b": {
+    "HC": 3.056,
+    "HE": 2.933,
+    "HN": 3.621,
+    "HS": 3.239,
+    "KC": 2.932,
+    "MV": 2.711,
+    "WS": 3.15
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.883,
+    "relet": -0.459
+   }
+  },
+  "premises matched without the slip and reversal allowances": {
+   "R1": {
+    "HC": 12738,
+    "HE": 11242,
+    "HN": 11099,
+    "HS": 8982,
+    "KC": 8951,
+    "MV": 8046,
+    "NAT": 68995,
+    "WS": 7937
+   },
+   "R2": {
+    "HC": 2976,
+    "HE": 2139,
+    "HN": 3955,
+    "HS": 1512,
+    "KC": 1719,
+    "MV": 1327,
+    "NAT": 14913,
+    "WS": 1285
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.388,
+   "R5": {
+    "2022Q1": 3.24,
+    "2022Q2": 3.848,
+    "2022Q3": 4.495,
+    "2022Q4": 5.296,
+    "2023Q1": 5.912,
+    "2023Q2": 6.463,
+    "2023Q3": 6.953,
+    "2023Q4": 7.428,
+    "2024Q1": 7.366,
+    "2024Q2": 7.245,
+    "2024Q3": 7.049,
+    "2024Q4": 6.832,
+    "2025Q1": 6.449,
+    "2025Q2": 6.08,
+    "2025Q3": 5.638,
+    "2025Q4": 5.465,
+    "2026Q1": 4.977,
+    "2026Q2": 4.491,
+    "2026Q3": 3.979,
+    "HC": 4.376,
+    "HE": 3.891,
+    "HN": 4.388,
+    "HS": 4.036,
+    "KC": 3.664,
+    "MV": 3.15,
+    "WS": 3.911
+   },
+   "R7": 3.099,
+   "R7b": {
+    "HC": 3.046,
+    "HE": 2.924,
+    "HN": 3.617,
+    "HS": 3.217,
+    "KC": 2.922,
+    "MV": 2.706,
+    "WS": 3.195
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.88,
+    "relet": -0.456
+   }
+  }
+ },
+ "rivals": {
+  "December going rents held at November": {
+   "R7": 3.1
+  },
+  "December rates from 2024 and 2025 only": {
+   "R7": 3.1
+  },
+  "December rates read with hindsight": {
+   "R7": 3.1
+  },
+  "December rates without landlord class": {
+   "R7": 3.1
+  },
+  "panel rates pooled across regions": {
+   "R7": 3.1
+  },
+  "panel rates unweighted": {
+   "R7": 3.1
+  },
+  "premises matched without the slip and reversal allowances": {
+   "R7": 3.1
+  }
+ },
+ "route_values": {
+  "December projected without the review not yet on file": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R6": {
+    "half": 0.091,
+    "hi": 3.199,
+    "lo": 3.017
+   },
+   "R7": 2.887,
+   "R7b": {
+    "HC": 2.592,
+    "HE": 2.577,
+    "HN": 3.478,
+    "HS": 3.093,
+    "KC": 2.757,
+    "MV": 2.713,
+    "WS": 3.192
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.884,
+    "relet": -0.46
+   }
+  },
+  "careful but hurried: the latest recorded rent carried forward at the panel's rate": {
+   "R1": {
+    "HC": 12738.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8046.0,
+    "NAT": 68995.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2976.0,
+    "HE": 2139.0,
+    "HN": 3955.0,
+    "HS": 1512.0,
+    "KC": 1719.0,
+    "MV": 1327.0,
+    "NAT": 14913.0,
+    "WS": 1285.0
+   },
+   "R3": {
+    "change": 2.57,
+    "share": 59.049
+   },
+   "R4": 8.611,
+   "R5": {
+    "2022Q1": 3.237,
+    "2022Q2": 3.898,
+    "2022Q3": 4.594,
+    "2022Q4": 5.403,
+    "2023Q1": 6.093,
+    "2023Q2": 6.71,
+    "2023Q3": 7.276,
+    "2023Q4": 7.735,
+    "2024Q1": 7.662,
+    "2024Q2": 7.54,
+    "2024Q3": 7.341,
+    "2024Q4": 6.989,
+    "2025Q1": 6.594,
+    "2025Q2": 6.2,
+    "2025Q3": 5.737,
+    "2025Q4": 5.5,
+    "2026Q1": 4.97,
+    "2026Q2": 4.445,
+    "2026Q3": 3.881,
+    "HC": 4.322,
+    "HE": 3.652,
+    "HN": 4.357,
+    "HS": 3.953,
+    "KC": 3.51,
+    "MV": 3.168,
+    "WS": 3.79
+   },
+   "R6": {
+    "half": 0.062,
+    "hi": 2.868,
+    "lo": 2.744
+   },
+   "R7": 2.806,
+   "R7b": {
+    "HC": 2.603,
+    "HE": 2.515,
+    "HN": 3.336,
+    "HS": 3.082,
+    "KC": 2.684,
+    "MV": 2.623,
+    "WS": 2.876
+   },
+   "R8": {
+    "continuing": -0.514,
+    "fall": -1.076,
+    "relet": -0.561
+   }
+  },
+  "careful but hurried: the panel's rises carried to every landlord": {
+   "R1": {
+    "HC": 12738.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8046.0,
+    "NAT": 68995.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2976.0,
+    "HE": 2139.0,
+    "HN": 3955.0,
+    "HS": 1512.0,
+    "KC": 1719.0,
+    "MV": 1327.0,
+    "NAT": 14913.0,
+    "WS": 1285.0
+   },
+   "R3": {
+    "change": 2.117,
+    "share": 59.049
+   },
+   "R4": 9.302,
+   "R5": {
+    "2022Q1": 3.206,
+    "2022Q2": 3.828,
+    "2022Q3": 4.492,
+    "2022Q4": 5.209,
+    "2023Q1": 5.84,
+    "2023Q2": 6.406,
+    "2023Q3": 6.941,
+    "2023Q4": 7.435,
+    "2024Q1": 7.361,
+    "2024Q2": 7.244,
+    "2024Q3": 7.088,
+    "2024Q4": 6.908,
+    "2025Q1": 6.496,
+    "2025Q2": 6.114,
+    "2025Q3": 5.679,
+    "2025Q4": 5.225,
+    "2026Q1": 4.702,
+    "2026Q2": 4.199,
+    "2026Q3": 3.679,
+    "HC": 3.815,
+    "HE": 3.457,
+    "HN": 4.171,
+    "HS": 3.837,
+    "KC": 3.375,
+    "MV": 3.15,
+    "WS": 3.775
+   },
+   "R6": {
+    "half": 0.068,
+    "hi": 3.032,
+    "lo": 2.897
+   },
+   "R7": 2.965,
+   "R7b": {
+    "HC": 2.943,
+    "HE": 2.708,
+    "HN": 3.428,
+    "HS": 3.206,
+    "KC": 2.806,
+    "MV": 2.606,
+    "WS": 2.988
+   },
+   "R8": {
+    "continuing": -0.226,
+    "fall": -0.715,
+    "relet": -0.489
+   }
+  },
+  "careful but hurried: the recorded rent where an additional bond exists, the model otherwise": {
+   "R1": {
+    "HC": 12738.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8046.0,
+    "NAT": 68995.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2976.0,
+    "HE": 2139.0,
+    "HN": 3955.0,
+    "HS": 1512.0,
+    "KC": 1719.0,
+    "MV": 1327.0,
+    "NAT": 14913.0,
+    "WS": 1285.0
+   },
+   "R3": {
+    "change": 2.22,
+    "share": 59.049
+   },
+   "R4": 10.308,
+   "R5": {
+    "2022Q1": 3.246,
+    "2022Q2": 3.817,
+    "2022Q3": 4.426,
+    "2022Q4": 5.207,
+    "2023Q1": 5.84,
+    "2023Q2": 6.377,
+    "2023Q3": 6.846,
+    "2023Q4": 7.306,
+    "2024Q1": 7.219,
+    "2024Q2": 7.077,
+    "2024Q3": 6.865,
+    "2024Q4": 6.628,
+    "2025Q1": 6.289,
+    "2025Q2": 5.947,
+    "2025Q3": 5.521,
+    "2025Q4": 5.357,
+    "2026Q1": 4.905,
+    "2026Q2": 4.457,
+    "2026Q3": 3.983,
+    "HC": 4.402,
+    "HE": 3.93,
+    "HN": 4.397,
+    "HS": 4.01,
+    "KC": 3.562,
+    "MV": 3.235,
+    "WS": 3.881
+   },
+   "R6": {
+    "half": 0.036,
+    "hi": 2.713,
+    "lo": 2.642
+   },
+   "R7": 2.677,
+   "R7b": {
+    "HC": 2.339,
+    "HE": 2.405,
+    "HN": 3.232,
+    "HS": 2.93,
+    "KC": 2.522,
+    "MV": 2.67,
+    "WS": 2.852
+   },
+   "R8": {
+    "continuing": -0.653,
+    "fall": -1.306,
+    "relet": -0.653
+   }
+  },
+  "new-letting rents for the measure": {
+   "R1": {
+    "HC": 12634.0,
+    "HE": 11149.0,
+    "HN": 11003.0,
+    "HS": 8920.0,
+    "KC": 8883.0,
+    "MV": 7990.0,
+    "NAT": 68475.0,
+    "WS": 7896.0
+   },
+   "R2": {
+    "HC": 2043.0,
+    "HE": 1395.0,
+    "HN": 3299.0,
+    "HS": 797.0,
+    "KC": 1091.0,
+    "MV": 662.0,
+    "NAT": 9978.0,
+    "WS": 691.0
+   },
+   "R3": {
+    "change": 1.584,
+    "share": 20.649
+   },
+   "R4": 6.383,
+   "R5": {
+    "2022Q1": -2.105,
+    "2022Q2": 6.796,
+    "2022Q3": 7.619,
+    "2022Q4": 8.505,
+    "2023Q1": 12.903,
+    "2023Q2": 7.273,
+    "2023Q3": 4.425,
+    "2023Q4": 7.812,
+    "2024Q1": 3.81,
+    "2024Q2": 8.475,
+    "2024Q3": 6.78,
+    "2024Q4": 6.452,
+    "2025Q1": 9.174,
+    "2025Q2": 6.25,
+    "2025Q3": 6.349,
+    "2025Q4": 4.545,
+    "2026Q1": 0.84,
+    "2026Q2": 1.471,
+    "2026Q3": 2.985,
+    "HC": 0.0,
+    "HE": 2.74,
+    "HN": 9.774,
+    "HS": 4.286,
+    "KC": 3.125,
+    "MV": 6.667,
+    "WS": 2.564
+   },
+   "R6": {
+    "half": 0.0,
+    "hi": 2.985,
+    "lo": 2.985
+   },
+   "R7": 2.985,
+   "R7b": {
+    "HC": 0.0,
+    "HE": 2.74,
+    "HN": 9.774,
+    "HS": 4.286,
+    "KC": 3.125,
+    "MV": 6.667,
+    "WS": 2.564
+   },
+   "R8": {
+    "continuing": 0.0,
+    "fall": 0.0,
+    "relet": 0.0
+   }
+  },
+  "re-lettings against the earlier tenancy's starting rent": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 17.615,
+   "R5": {
+    "2022Q1": 4.535,
+    "2022Q2": 5.105,
+    "2022Q3": 5.724,
+    "2022Q4": 6.512,
+    "2023Q1": 7.171,
+    "2023Q2": 7.771,
+    "2023Q3": 8.271,
+    "2023Q4": 8.822,
+    "2024Q1": 8.805,
+    "2024Q2": 8.724,
+    "2024Q3": 8.593,
+    "2024Q4": 8.513,
+    "2025Q1": 8.114,
+    "2025Q2": 7.748,
+    "2025Q3": 7.299,
+    "2025Q4": 7.218,
+    "2026Q1": 6.667,
+    "2026Q2": 6.142,
+    "2026Q3": 5.594,
+    "HC": 5.94,
+    "HE": 5.427,
+    "HN": 5.874,
+    "HS": 5.877,
+    "KC": 5.189,
+    "MV": 4.909,
+    "WS": 5.606
+   },
+   "R7": 5.056,
+   "R7b": {
+    "HC": 5.19,
+    "HE": 4.931,
+    "HN": 5.336,
+    "HS": 5.429,
+    "KC": 4.634,
+    "MV": 4.513,
+    "WS": 5.099
+   },
+   "R8": {
+    "continuing": -0.189,
+    "fall": -0.538,
+    "relet": -0.349
+   }
+  },
+  "re-lettings tied by property identifier alone": {
+   "R1": {
+    "HC": 12754.0,
+    "HE": 11250.0,
+    "HN": 11110.0,
+    "HS": 8990.0,
+    "KC": 8959.0,
+    "MV": 8055.0,
+    "NAT": 69061.0,
+    "WS": 7943.0
+   },
+   "R2": {
+    "HC": 2043.0,
+    "HE": 1395.0,
+    "HN": 3299.0,
+    "HS": 797.0,
+    "KC": 1091.0,
+    "MV": 662.0,
+    "NAT": 9978.0,
+    "WS": 691.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.417
+   },
+   "R4": 4.788,
+   "R5": {
+    "2022Q1": 1.846,
+    "2022Q2": 2.373,
+    "2022Q3": 2.864,
+    "2022Q4": 3.457,
+    "2023Q1": 3.964,
+    "2023Q2": 4.42,
+    "2023Q3": 4.808,
+    "2023Q4": 5.235,
+    "2024Q1": 5.108,
+    "2024Q2": 5.044,
+    "2024Q3": 4.979,
+    "2024Q4": 4.988,
+    "2025Q1": 4.732,
+    "2025Q2": 4.43,
+    "2025Q3": 4.087,
+    "2025Q4": 4.079,
+    "2026Q1": 3.674,
+    "2026Q2": 3.262,
+    "2026Q3": 2.84,
+    "HC": 3.293,
+    "HE": 2.775,
+    "HN": 3.18,
+    "HS": 2.784,
+    "KC": 2.686,
+    "MV": 2.037,
+    "WS": 2.621
+   },
+   "R7": 2.431,
+   "R7b": {
+    "HC": 2.863,
+    "HE": 2.35,
+    "HN": 2.739,
+    "HS": 2.428,
+    "KC": 2.274,
+    "MV": 1.713,
+    "WS": 2.116
+   },
+   "R8": {
+    "continuing": -0.301,
+    "fall": -0.409,
+    "relet": -0.108
+   }
+  },
+  "the September figure carried into December": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R7": 3.992,
+   "R7b": {
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R8": {
+    "continuing": 0.0,
+    "fall": 0.0,
+    "relet": 0.0
+   }
+  },
+  "the additional bonds read as every rise": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 1.583,
+    "share": 62.412
+   },
+   "R4": 13.432,
+   "R5": {
+    "2022Q1": 3.209,
+    "2022Q2": 3.536,
+    "2022Q3": 3.945,
+    "2022Q4": 4.518,
+    "2023Q1": 5.126,
+    "2023Q2": 5.595,
+    "2023Q3": 5.981,
+    "2023Q4": 6.391,
+    "2024Q1": 6.461,
+    "2024Q2": 6.464,
+    "2024Q3": 6.39,
+    "2024Q4": 6.253,
+    "2025Q1": 6.049,
+    "2025Q2": 5.795,
+    "2025Q3": 5.451,
+    "2025Q4": 5.377,
+    "2026Q1": 5.004,
+    "2026Q2": 4.626,
+    "2026Q3": 4.198,
+    "HC": 4.619,
+    "HE": 4.127,
+    "HN": 4.625,
+    "HS": 4.163,
+    "KC": 3.741,
+    "MV": 3.545,
+    "WS": 4.118
+   },
+   "R7": 3.823,
+   "R7b": {
+    "HC": 4.105,
+    "HE": 3.76,
+    "HN": 4.284,
+    "HS": 3.826,
+    "KC": 3.286,
+    "MV": 3.292,
+    "WS": 3.818
+   },
+   "R8": {
+    "continuing": -0.11,
+    "fall": -0.375,
+    "relet": -0.265
+   }
+  },
+  "the golden": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R6": {
+    "half": 0.091,
+    "hi": 3.199,
+    "lo": 3.017
+   },
+   "R7": 3.108,
+   "R7b": {
+    "HC": 3.056,
+    "HE": 2.933,
+    "HN": 3.621,
+    "HS": 3.239,
+    "KC": 2.932,
+    "MV": 2.713,
+    "WS": 3.192
+   },
+   "R8": {
+    "continuing": -0.424,
+    "fall": -0.884,
+    "relet": -0.46
+   }
+  },
+  "the quarterly figures carried on a straight trend": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R7": 3.504,
+   "R7b": {
+    "HC": 3.787,
+    "HE": 3.437,
+    "HN": 3.885,
+    "HS": 3.657,
+    "KC": 3.18,
+    "MV": 2.768,
+    "WS": 3.389
+   },
+   "R8": {
+    "continuing": -0.237,
+    "fall": -0.488,
+    "relet": -0.251
+   }
+  },
+  "the register as it stands, corrected by its own back-test": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R7": 3.368,
+   "R7b": {
+    "HC": 2.407,
+    "HE": 2.389,
+    "HN": 3.244,
+    "HS": 2.991,
+    "KC": 2.622,
+    "MV": 2.611,
+    "WS": 2.936
+   },
+   "R8": {
+    "continuing": -0.644,
+    "fall": -1.278,
+    "relet": -0.634
+   }
+  },
+  "the register read as it stands on 31 December": {
+   "R1": {
+    "HC": 12737.0,
+    "HE": 11242.0,
+    "HN": 11099.0,
+    "HS": 8982.0,
+    "KC": 8951.0,
+    "MV": 8045.0,
+    "NAT": 68993.0,
+    "WS": 7937.0
+   },
+   "R2": {
+    "HC": 2985.0,
+    "HE": 2144.0,
+    "HN": 3959.0,
+    "HS": 1525.0,
+    "KC": 1728.0,
+    "MV": 1333.0,
+    "NAT": 14963.0,
+    "WS": 1289.0
+   },
+   "R3": {
+    "change": 2.477,
+    "share": 62.412
+   },
+   "R4": 9.429,
+   "R5": {
+    "2022Q1": 3.259,
+    "2022Q2": 3.87,
+    "2022Q3": 4.521,
+    "2022Q4": 5.321,
+    "2023Q1": 5.939,
+    "2023Q2": 6.489,
+    "2023Q3": 6.976,
+    "2023Q4": 7.453,
+    "2024Q1": 7.385,
+    "2024Q2": 7.267,
+    "2024Q3": 7.069,
+    "2024Q4": 6.849,
+    "2025Q1": 6.467,
+    "2025Q2": 6.1,
+    "2025Q3": 5.656,
+    "2025Q4": 5.481,
+    "2026Q1": 4.995,
+    "2026Q2": 4.505,
+    "2026Q3": 3.992,
+    "HC": 4.39,
+    "HE": 3.903,
+    "HN": 4.394,
+    "HS": 4.06,
+    "KC": 3.676,
+    "MV": 3.156,
+    "WS": 3.926
+   },
+   "R7": 2.714,
+   "R7b": {
+    "HC": 2.407,
+    "HE": 2.389,
+    "HN": 3.244,
+    "HS": 2.991,
+    "KC": 2.622,
+    "MV": 2.611,
+    "WS": 2.936
+   },
+   "R8": {
+    "continuing": -0.644,
+    "fall": -1.278,
+    "relet": -0.634
+   }
+  }
+ },
+ "routes_dec": {
+  "December projected without the review not yet on file": 2.9,
+  "careful but hurried: the latest recorded rent carried forward at the panel's rate": 2.8,
+  "careful but hurried: the panel's rises carried to every landlord": 3.0,
+  "careful but hurried: the recorded rent where an additional bond exists, the model otherwise": 2.7,
+  "new-letting rents for the measure": 3.0,
+  "re-lettings against the earlier tenancy's starting rent": 5.1,
+  "re-lettings tied by property identifier alone": 2.4,
+  "the September figure carried into December": 4.0,
+  "the additional bonds read as every rise": 3.8,
+  "the golden": 3.1,
+  "the quarterly figures carried on a straight trend": 3.5,
+  "the register as it stands, corrected by its own back-test": 3.4,
+  "the register read as it stands on 31 December": 2.7
+ },
+ "routes_sep": {
+  "December projected without the review not yet on file": 4.0,
+  "careful but hurried: the latest recorded rent carried forward at the panel's rate": 3.9,
+  "careful but hurried: the panel's rises carried to every landlord": 3.7,
+  "careful but hurried: the recorded rent where an additional bond exists, the model otherwise": 4.0,
+  "new-letting rents for the measure": 3.0,
+  "re-lettings against the earlier tenancy's starting rent": 5.6,
+  "re-lettings tied by property identifier alone": 2.8,
+  "the September figure carried into December": 4.0,
+  "the additional bonds read as every rise": 4.2,
+  "the golden": 4.0,
+  "the quarterly figures carried on a straight trend": 4.0,
+  "the register as it stands, corrected by its own back-test": 4.0,
+  "the register read as it stands on 31 December": 4.0
+ },
+ "scheduled_n": 4752,
+ "sep25": 5.7,
+ "sep26": {
+  "HC": 4.4,
+  "HE": 3.9,
+  "HN": 4.4,
+  "HS": 4.1,
+  "KC": 3.7,
+  "MV": 3.2,
+  "NAT": 4.0,
+  "WS": 3.9
+ },
+ "series": {
+  "2022Q1": 3.3,
+  "2022Q2": 3.9,
+  "2022Q3": 4.5,
+  "2022Q4": 5.3,
+  "2023Q1": 5.9,
+  "2023Q2": 6.5,
+  "2023Q3": 7.0,
+  "2023Q4": 7.5,
+  "2024Q1": 7.4,
+  "2024Q2": 7.3,
+  "2024Q3": 7.1,
+  "2024Q4": 6.8,
+  "2025Q1": 6.5,
+  "2025Q2": 6.1,
+  "2025Q3": 5.7,
+  "2025Q4": 5.5,
+  "2026Q1": 5.0,
+  "2026Q2": 4.5,
+  "2026Q3": 4.0
+ },
+ "slow": {
+  "continuing": -0.43,
+  "fall": -0.89,
+  "relet": -0.46
+ },
+ "slow_pts": {
+  "continuing": 0.43,
+  "fall": 0.89,
+  "relet": 0.46
+ },
+ "start_sep26": 5.6,
+ "survey_share": 59.0,
+ "topup_share": 20.6,
+ "topups_sep26": 4.2,
+ "trend_bt_err": [
+  0.1,
+  0.1,
+  -0.2
+ ],
+ "trend_dec26": 3.5,
+ "validation": {
+  "2024": {
+   "carry": 1.0,
+   "hybrid": -1.2,
+   "model": 0.3,
+   "n": 2848,
+   "recorded": -5.8
+  },
+  "2025": {
+   "carry": 1.0,
+   "hybrid": -1.4,
+   "model": 0.2,
+   "n": 2816,
+   "recorded": -6.0
+  },
+  "2026": {
+   "carry": 0.9,
+   "hybrid": -1.4,
+   "model": 0.2,
+   "n": 2841,
+   "recorded": -5.4
+  }
+ },
+ "validation_gap": {
+  "2024": {
+   "carry_over": 1.0,
+   "hybrid_short": 1.2,
+   "model": 0.3,
+   "recorded_short": 5.8
+  },
+  "2025": {
+   "carry_over": 1.0,
+   "hybrid_short": 1.4,
+   "model": 0.2,
+   "recorded_short": 6.0
+  },
+  "2026": {
+   "carry_over": 0.9,
+   "hybrid_short": 1.4,
+   "model": 0.2,
+   "recorded_short": 5.4
+  }
+ },
+ "variant_scores": {
+  "the latest recorded rent carried forward at the panel's rate": 37.0,
+  "the panel's rises carried to every landlord": 49.5,
+  "the recorded rent where an additional bond exists, the model otherwise": 37.0
+ },
+ "variants_cont_change": {
+  "the latest recorded rent carried forward at the panel's rate": 2.6,
+  "the panel's rises carried to every landlord": 2.1,
+  "the recorded rent where an additional bond exists, the model otherwise": 2.2
+ },
+ "variants_dec26": {
+  "the latest recorded rent carried forward at the panel's rate": 2.8,
+  "the panel's rises carried to every landlord": 3.0,
+  "the recorded rent where an additional bond exists, the model otherwise": 2.7
+ },
+ "variants_relet_change": {
+  "the latest recorded rent carried forward at the panel's rate": 8.6,
+  "the panel's rises carried to every landlord": 9.3,
+  "the recorded rent where an additional bond exists, the model otherwise": 10.3
+ },
+ "variants_sep26": {
+  "the latest recorded rent carried forward at the panel's rate": 3.9,
+  "the panel's rises carried to every landlord": 3.7,
+  "the recorded rent where an additional bond exists, the model otherwise": 4.0
+ }
 }

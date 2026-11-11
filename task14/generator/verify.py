@@ -1,221 +1,237 @@
-"""An independent check of task14's goldens from the bundle alone, on its own code path (pandas): the docket under
-the matched-line weighting chosen on 2025 with each disclosure counted to the day it was submitted, the whole-year
-reading's docket, the disclosure cycle's two counts and every figure of the two supporting tables, each compared with
-the deliverables."""
+"""task14: an independent path from the shipped files to the graded figures. It shares only the conformed register
+(conform.py: the two systems joined, rents weekly, dwellings linked); every step after it is written again here
+without measure.py or project.py: each tenancy's span (2.2), the rent panel's anniversary pairs and rates, the rent
+payable on a day, the matched dwellings and their ratio of totals (2.4, 2.5), the counts, the group contributions,
+the register read as it stands on 31 December, and the operators' review rules from their own bonds and the CPI
+release. Every figure is compared with figures.json at the precision the answer blocks state.
+
+    python3 task14/generator/verify.py
+"""
 import datetime as dt
+import json
 import os
 import sys
 
 import numpy as np
 import pandas as pd
 
-REMUN = {"Consulting Fee",
-         "Compensation for services other than consulting, including serving as faculty or as a speaker at a venue other "
-         "than a continuing education program",
-         "Honoraria",
-         "Compensation for serving as faculty or as a speaker for an accredited or certified continuing education program",
-         "Compensation for serving as faculty or as a speaker for an unaccredited and non-certified continuing education "
-         "program"}
-TYPES = {"Consulting", "Speaking", "Advisory board", "Honoraria", "Other paid services", "Consulting or advisory board",
-         "Speaking or teaching", "Expert testimony"}
+HERE = os.path.dirname(os.path.abspath(__file__))
+TASK = os.path.dirname(HERE)
+sys.path.insert(0, HERE)
+for _v in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
+import warnings  # noqa: E402
+
+warnings.filterwarnings("ignore")
+import conform as CF  # noqa: E402
+
+REG = ["HC", "HN", "HE", "HS", "KC", "MV", "WS"]
+EP0 = dt.date(1970, 1, 1)
+FAILS = []
 
 
-def load(t):
-    reg = pd.read_csv(os.path.join(t, "open_payments_general_2021-2025_jan2027_extract.csv"), dtype=str, keep_default_na=False)
-    prof = pd.read_csv(os.path.join(t, "open_payments_covered_recipient_profiles.csv"), dtype=str, keep_default_na=False)
-    ros = pd.read_csv(os.path.join(t, "clinical_faculty_appointments.csv"), dtype=str, keep_default_na=False)
-    ent = pd.read_csv(os.path.join(t, "coi_entity_list.csv"), dtype=str, keep_default_na=False)
-    disc = pd.read_excel(os.path.join(t, "coi_disclosures_2021-2026_export.xlsx"), sheet_name="Disclosures", dtype=str)
-    items = pd.read_excel(os.path.join(t, "coi_disclosures_2021-2026_export.xlsx"), sheet_name="Items", dtype=str).fillna("")
-    hist = pd.read_csv(os.path.join(t, "coi_submission_history.csv"), dtype=str)
-    depts = pd.read_csv(os.path.join(t, "department_codes.csv"), dtype=str, keep_default_na=False)
-    return reg, prof, ros, ent, disc, items, hist, depts
+def d(y, m, dd):
+    return (dt.date(y, m, dd) - EP0).days
 
 
-def profile_npi(prof):
-    """Each profile's NPI; a profile without one takes the NPI of the profile that has one under the same name and
-    address, where exactly one does."""
-    p = prof.copy()
-    p["k"] = (p["Covered_Recipient_Profile_First_Name"].str.strip().str.lower() + "|"
-              + p["Covered_Recipient_Profile_Last_Name"].str.strip().str.lower() + "|"
-              + p["Covered_Recipient_Profile_Address_Line_1"].str.strip().str.lower() + "|"
-              + p["Covered_Recipient_Profile_Zipcode"].str.strip())
-    has = p[p["Covered_Recipient_NPI"] != ""]
-    n = has.groupby("k")["Covered_Recipient_NPI"].nunique()
-    one = has[has["k"].isin(n[n == 1].index)].drop_duplicates("k").set_index("k")["Covered_Recipient_NPI"]
-    p["npi"] = np.where(p["Covered_Recipient_NPI"] != "", p["Covered_Recipient_NPI"], p["k"].map(one).fillna(""))
-    return p.set_index("Covered_Recipient_Profile_ID")["npi"]
+def check(name, ok, detail=""):
+    print("%s  %s%s" % ("PASS" if ok else "FAIL", name, (": " + str(detail)) if detail != "" else ""))
+    if not ok:
+        FAILS.append(name)
 
 
-def register_names(reg, ent):
-    names = dict(zip(reg["Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_Name"].str.strip().str.lower(),
-                     reg["Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_ID"]))
-    names.update(dict(zip(ent.loc[ent["open_payments_id"] != "", "entity_name"].str.strip().str.lower(),
-                          ent.loc[ent["open_payments_id"] != "", "open_payments_id"])))
-    return names
+def r1(x):
+    return float(round(x + 1e-12, 1))
 
 
-def entity_ids(reg, ent, items):
-    """Each listed company's Open Payments ID: the list's own, else any name the list has shown for it (today or on an
-    earlier item) that the register carries."""
-    names = register_names(reg, ent)
-    shown = pd.concat([ent[["entity_id", "entity_name"]], items.loc[items["entity_id"] != "", ["entity_id", "entity_name"]]])
-    shown["op"] = shown["entity_name"].str.strip().str.lower().map(names).fillna("")
-    found = shown[shown["op"] != ""].sort_values(["entity_id", "op"]).drop_duplicates("entity_id").set_index("entity_id")["op"]
-    own = ent.set_index("entity_id")["open_payments_id"]
-    return {e: (own[e] or found.get(e, "")) for e in own.index}
+def anniv_days(start, y):
+    s = EP0 + dt.timedelta(days=int(start))
+    try:
+        return (dt.date(y, s.month, s.day) - EP0).days
+    except ValueError:
+        return (dt.date(y, s.month, 28) - EP0).days
 
 
-def conformed(reg, prof, ros, ent, disc, items):
-    npi_emp = ros.drop_duplicates("npi").set_index("npi")["emp_id"]
-    pnpi = profile_npi(prof)
-    r = reg[reg["Nature_of_Payment_or_Transfer_of_Value"].isin(REMUN)
-            & (reg["Third_Party_Payment_Recipient_Indicator"] == "No Third Party Payment")].copy()
-    r["emp"] = r["Covered_Recipient_Profile_ID"].map(pnpi).map(npi_emp)
-    r = r.dropna(subset=["emp"])
-    r["amt"] = r["Total_Amount_of_Payment_USDollars"].astype(float)
-    r["op"] = r["Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_ID"]
-    r["year"] = r["Program_Year"].astype(int)
-    r["date"] = pd.to_datetime(r["Date_of_Payment"], format="%m/%d/%Y")
-    pay = r[["emp", "op", "year", "date", "amt"]]
-    pub = r.groupby(["emp", "op", "year"])["amt"].sum().reset_index()
-    names = register_names(reg, ent)
-    eid = entity_ids(reg, ent, items)
-    it = items.merge(disc[["disclosure_id", "emp_id", "disclosure_year", "current_version"]], on="disclosure_id")
-    it = it[(it["version"] == it["current_version"]) & it["relationship_type"].isin(TYPES)].copy()
-    listed = it["entity_id"].map(eid).fillna("")
-    by_name = it["entity_name"].str.strip().str.lower().map(names).fillna("")
-    it["op"] = np.where(listed != "", listed, by_name)
-    it = it[it["op"] != ""]
-    it["amt"] = it["amount_usd"].astype(float)
-    dis = it.groupby(["emp_id", "op", "disclosure_year"])["amt"].sum().reset_index()
-    dis.columns = ["emp", "op", "year", "dis"]
-    dis["year"] = dis["year"].astype(int)
-    m = dis.merge(pub.rename(columns={"amt": "pub"}), on=["emp", "op", "year"], how="left")
-    d = disc.copy()
-    d["day"] = (pd.to_datetime(d["last_submitted_utc"]) - pd.Timedelta(hours=5)).dt.normalize()
-    d["year"] = d["disclosure_year"].astype(int)
-    day = d.set_index(["emp_id", "year"])["day"]
-    m["day"] = [day.get((e, y)) for e, y in zip(m["emp"], m["year"])]
-    m["dec"] = [x.year == y for x, y in zip(m["day"], m["year"])]
-    got = pay.merge(m[["emp", "op", "year", "day"]], on=["emp", "op", "year"])
-    got = got[got["date"] <= got["day"]].groupby(["emp", "op", "year"])["amt"].sum()
-    m["pub_to_day"] = [(got.get((e, o, y), 0.0) if dec else p) for e, o, y, dec, p in
-                       zip(m["emp"], m["op"], m["year"], m["dec"], m["pub"])]
-    return m, pub, pay
+def main():
+    target = os.path.join(TASK, "target")
+    F = json.load(open(os.path.join(HERE, "figures.json")))
+    D = CF.load(target)
+    T, tops, _ = CF.conform(D, "golden")
+    T = T.reset_index(drop=True)
+    # ------------------------------------------------------------ spans (2.2), written again
+    T = T.sort_values(["dwelling", "start", "lodged"], kind="stable").reset_index(drop=True)
+    end = np.full(len(T), np.inf)
+    ref = T["refund"].values
+    st = T["start"].values
+    dw = T["dwelling"].values
+    for i in range(len(T)):
+        e = ref[i] - 1 if not np.isnan(ref[i]) else np.inf
+        if i + 1 < len(T) and dw[i + 1] == dw[i]:
+            e = min(e, st[i + 1] - 1)
+        end[i] = e
+    T["vend"] = end
 
+    def on(t):
+        m = T[(T["start"] <= t) & (T["vend"] >= t)]
+        return m.sort_values(["dwelling", "start"]).drop_duplicates("dwelling", keep="last")
 
-def estimate(m, pub, pay, year, K, aligned=True):
-    col = "pub_to_day" if aligned else "pub"
-    hist = m[(m["year"] < year) & (m["pub"] > 0) & (m["dis"] > 0) & (m[col] > 0)]
-    pool = hist["dis"].sum() / hist[col].sum()
-    g = hist.groupby("emp").agg(d=("dis", "sum"), p=(col, "sum"), n=("dis", "size"))
-    g["c"] = g["n"] / (g["n"] + K) * g["d"] / g["p"] + K / (g["n"] + K) * pool
-    cur = m[m["year"] == year].copy()
-    cur["c"] = cur["emp"].map(g["c"]).fillna(pool)
-    cur["q"] = 1.0
-    if aligned:
-        prev = pay[pay["year"] == year - 1].copy()
-        prev["md"] = prev["date"].dt.month * 100 + prev["date"].dt.day
-        allprev = prev["amt"].sum()
-        for i in cur.index[cur["dec"]]:
-            md = cur.at[i, "day"].month * 100 + cur.at[i, "day"].day
-            pp = prev[(prev["emp"] == cur.at[i, "emp"]) & (prev["op"] == cur.at[i, "op"])]
-            tot, hit = pp["amt"].sum(), pp.loc[pp["md"] <= md, "amt"].sum()
-            cur.at[i, "q"] = hit / tot if tot > 0 and hit > 0 else prev.loc[prev["md"] <= md, "amt"].sum() / allprev
-    cur["est"] = cur["dis"] / cur["c"] / cur["q"]
-    return cur.sort_values(["emp", "est"], ascending=[True, False]).groupby("emp").head(1).set_index("emp")
+    # ------------------------------------------------------------ the panel's anniversary pairs and rates
+    PN = D["PN"]
+    R = PN[PN["response"] == "R"].copy()
+    R["rd"] = (pd.to_datetime(R["reference_date"]) - pd.Timestamp("1970-01-01")).dt.days
+    R["sd"] = (pd.to_datetime(R["tenancy_start"]) - pd.Timestamp("1970-01-01")).dt.days
+    R = R.sort_values(["dwelling_ref", "rd"])
+    rows = []
+    for ref_, g in R.groupby("dwelling_ref"):
+        rd, sd, rent = g["rd"].values, g["sd"].values, g["weekly_rent"].astype(float).values
+        reg, w = g["region"].values, g["design_weight"].astype(float).values
+        for k in range(len(g) - 1):
+            if sd[k] != sd[k + 1]:
+                continue
+            y0 = (EP0 + dt.timedelta(days=int(sd[k]))).year
+            hits = [y for y in range((EP0 + dt.timedelta(days=int(rd[k]))).year,
+                                     (EP0 + dt.timedelta(days=int(rd[k + 1]))).year + 1)
+                    if y > y0 and rd[k] < anniv_days(sd[k], y) <= rd[k + 1]]
+            if len(hits) == 1:
+                rows.append((hits[0], reg[k], w[k], rent[k + 1] / rent[k]))
+    PP = pd.DataFrame(rows, columns=["year", "region", "w", "f"])
+    check("panel anniversary pairs", len(PP) == F["panel_pairs"], "%d against %d" % (len(PP), F["panel_pairs"]))
+    m, p = {}, {}
+    for y in range(2018, 2027):
+        s = PP[PP["year"] == y]
+        nm = np.average(s["f"], weights=s["w"])
+        npr = np.average(s["f"] > 1 + 1e-9, weights=s["w"])
+        for rg in REG:
+            ss = s[s["region"] == rg]
+            m[(y, rg)] = np.average(ss["f"], weights=ss["w"]) if len(ss) >= 20 else nm
+            p[(y, rg)] = np.average(ss["f"] > 1 + 1e-9, weights=ss["w"]) if len(ss) >= 20 else npr
 
+    def mf(y, rg):
+        return m[(min(max(y, 2018), 2026), rg)]
 
-def docket(m, pub, pay, K, aligned=True):
-    e = estimate(m, pub, pay, 2026, K, aligned)
-    top = e.sort_values("est", ascending=False)
-    return list(top.index[:15]), top
+    def pr(y, rg):
+        return p[(min(max(y, 2018), 2026), rg)]
 
+    # ------------------------------------------------------------ rent payable on a day
+    tops = tops.copy()
+    tops["when"] = np.where(tops["effective"].notna(), tops["effective"], tops["day"])
+    tops = tops.sort_values(["key", "when"], kind="stable")
+    tk = {k: (g["when"].values, g["rent"].values) for k, g in tops.groupby("key")}
 
-def backtest(m, pub, pay, K, aligned=True):
-    e = estimate(m, pub, pay, 2025, K, aligned)
-    tr = pub[pub["year"] == 2025].groupby("emp")["amt"].max()
-    return float((e["est"] - tr.reindex(e.index).fillna(0.0)).abs().sum())
+    def recorded(key, rent0, t):
+        if key not in tk:
+            return rent0
+        wh, rr = tk[key]
+        j = np.searchsorted(wh, t, side="right") - 1
+        return rr[j] if j >= 0 else rent0
 
+    def rent(row, t):
+        if row.operator:
+            return recorded(row.key, row.rent0, t)
+        y0 = (EP0 + dt.timedelta(days=int(row.start))).year
+        f = 1.0
+        for y in range(y0 + 1, (EP0 + dt.timedelta(days=int(t))).year + 1):
+            if anniv_days(row.start, y) <= t:
+                f *= mf(y, row.region)
+        return row.rent0 * f
 
-def main(target, golden_dir):
-    reg, prof, ros, ent, disc, items, hist, depts = load(target)
-    m, pub, pay = conformed(reg, prof, ros, ent, disc, items)
-    grid = [0.5, 1, 1.5, 2, 3, 4, 6, 8, 12, 20]
-    scores = {K: backtest(m, pub, pay, K) for K in grid}
-    K = min(scores, key=scores.get)
-    plain = {K2: backtest(m, pub, pay, K2, aligned=False) for K2 in grid}
-    K_plain = min(plain, key=plain.get)
-    dk, top = docket(m, pub, pay, K)
-    pdk, _ = docket(m, pub, pay, K_plain, aligned=False)
-    names = ros.drop_duplicates("emp_id").set_index("emp_id")
-    golden_names = sorted("%s %s" % (names.loc[e, "first_name"], names.loc[e, "last_name"]) for e in dk)
-    from docx import Document
-    doc = Document(os.path.join(golden_dir, "coi_committee_docket_2027-02.docx"))
-    table_names = sorted(row.cells[0].text.replace(" *", "") for row in doc.tables[0].rows[1:])
-    checks = []
-    import json
-    figs = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures.json")))
-    checks.append(("verify: the weighting chosen on 2025 is the one the deliverable used", K == figs["weighting_k_lines"], K))
-    checks.append(("verify: counted to each submission, the chosen weighting comes closer to 2025 than every whole-year "
-                   "weighting", scores[K] < min(plain.values()), (round(scores[K]), round(min(plain.values())))))
-    checks.append(("verify: the docket's fifteen match the deliverable", golden_names == table_names, golden_names[:3]))
-    checks.append(("verify: the whole-year reading files a different fifteen", set(pdk) != set(dk), len(set(pdk) & set(dk))))
-    checks.append(("verify: the fifteenth stands clear of the sixteenth", top["est"].iloc[14] / top["est"].iloc[15] > 1.13,
-                   round(top["est"].iloc[14] / top["est"].iloc[15], 3)))
-    # ask A: a faculty member is a person, the employee numbers sharing an NPI one faculty member
-    import re
-    ros["s"] = pd.to_datetime(ros["term_start"])
-    ros["e"] = pd.to_datetime(ros["term_end"])
-    day = pd.Timestamp("2026-12-31")
-    owed = set(ros[(ros["s"] <= day) & (ros["e"] >= day)]["npi"])
-    emp_npi = ros.drop_duplicates("emp_id").set_index("emp_id")["npi"]
-    d26 = disc[disc["disclosure_year"] == "2026"].set_index("disclosure_id")["emp_id"]
-    h = hist[(hist["event"] == "Submitted") & hist["disclosure_id"].isin(d26.index)].copy()
-    h["t"] = pd.to_datetime(h["event_time_utc"].str.replace("Z", ""))
-    h["npi"] = h["disclosure_id"].map(d26).map(emp_npi)
-    first = h.groupby("npi")["t"].min()
-    deadline = pd.Timestamp("2027-01-16 04:59:59")
-    late = {p for p in owed if p not in first.index or first[p] > deadline}
-    text = "\n".join(p.text for p in doc.paragraphs)
-    hit = re.search(r"([\d,]+) faculty members owed a 2026 disclosure, and ([\d,]+) of them had not submitted it", text)
-    tA = (int(hit.group(1).replace(",", "")), int(hit.group(2).replace(",", ""))) if hit else None
-    checks.append(("verify: ask A's two counts match the deliverable", (len(owed), len(late)) == tA, ((len(owed), len(late)), tA)))
-    checks.append(("verify: ask A's counts are the figures file's", tA == (figs["ask_a"]["owed"], figs["ask_a"]["not_submitted"]), tA))
-    # ask B
-    npi_emp = ros.drop_duplicates("npi").set_index("npi")["emp_id"]
-    pnpi = profile_npi(prof)
-    r = reg[(reg["Program_Year"] == "2025") & reg["Nature_of_Payment_or_Transfer_of_Value"].isin(REMUN)
-            & (reg["Third_Party_Payment_Recipient_Indicator"] == "No Third Party Payment")].copy()
-    r["emp"] = r["Covered_Recipient_Profile_ID"].map(pnpi).map(npi_emp)
-    held = set(ros[(ros["s"] <= pd.Timestamp("2025-12-31")) & (ros["e"] >= pd.Timestamp("2025-01-01"))]["emp_id"])
-    r = r[r["emp"].isin(held)]
-    vB = r.assign(a=r["Total_Amount_of_Payment_USDollars"].astype(float)).groupby("Nature_of_Payment_or_Transfer_of_Value")["a"].sum()
-    tB = [int(row.cells[1].text.replace("$", "").replace(",", "")) for row in doc.tables[1].rows[1:]]
-    order = ["Consulting Fee", "Compensation for services other than consulting, including serving as faculty or as a speaker "
-             "at a venue other than a continuing education program", "Honoraria",
-             "Compensation for serving as faculty or as a speaker for an accredited or certified continuing education program",
-             "Compensation for serving as faculty or as a speaker for an unaccredited and non-certified continuing education program"]
-    checks.append(("verify: ask B's five natures match the deliverable", [int(round(vB[k] / 1000.0)) * 1000 for k in order] == tB, tB))
-    # ask C
-    it = items.merge(disc[["disclosure_id", "disclosure_year", "current_version"]], on="disclosure_id")
-    it = it[(it["disclosure_year"] == "2026") & (it["version"] == it["current_version"]) & it["relationship_type"].isin(TYPES)].copy()
-    names_op = set(register_names(reg, ent))
-    eid = entity_ids(reg, ent, items)
-    listed_op = it["entity_id"].map(eid).fillna("") != ""
-    nr = it[~listed_op & ~it["entity_name"].str.strip().str.lower().isin(names_op)]
-    vC = nr.assign(a=nr["amount_usd"].astype(float)).groupby("relationship_type")["a"].sum()
-    tC = {row.cells[0].text: int(row.cells[1].text.replace("$", "").replace(",", "")) for row in doc.tables[2].rows[1:]}
-    checks.append(("verify: ask C's four types match the deliverable",
-                   len(tC) == 4 and all(int(round(vC.get(k, 0.0) / 1000.0)) * 1000 == v for k, v in tC.items()), tC))
-    bad = [c for c in checks if not c[1]]
-    for c in checks:
-        print("%s  %s%s" % ("PASS" if c[1] else "FAIL", c[0], ("  [%s]" % (c[2],)) if not c[1] and len(c) > 2 else ""))
-    print("verify: %d of %d pass" % (len(checks) - len(bad), len(checks)))
-    if bad:
-        raise SystemExit("verify failed")
+    def compare(t2, t1, groups=False, share=False):
+        A, B = on(t1).set_index("dwelling"), on(t2).set_index("dwelling")
+        c = A.index.intersection(B.index)
+        A, B = A.loc[c], B.loc[c]
+        r1_ = np.array([rent(x, t1) for x in A.itertuples()])
+        r2_ = np.array([rent(x, t2) for x in B.itertuples()])
+        same = A["key"].values == B["key"].values
+        out = {"NAT": 100 * (r2_.sum() / r1_.sum() - 1), "n_relet": int((~same).sum()),
+               "same": 100 * (r2_[same].sum() / r1_[same].sum() - 1),
+               "relet": 100 * (r2_[~same].sum() / r1_[~same].sum() - 1),
+               "c_same": 100 * (r2_[same] - r1_[same]).sum() / r1_.sum(),
+               "c_relet": 100 * (r2_[~same] - r1_[~same]).sum() / r1_.sum()}
+        if groups:
+            reg = B["region"].values
+            for rg in REG:
+                k = reg == rg
+                out[rg] = 100 * (r2_[k].sum() / r1_[k].sum() - 1)
+                out["relet_" + rg] = int((k & ~same).sum())
+        if share:
+            S = A[same]
+            sh = []
+            for x, rr2, rr1 in zip(S.itertuples(), r2_[same], r1_[same]):
+                if x.operator:
+                    sh.append(float(rr2 > rr1 + 1e-9))
+                else:
+                    md = (EP0 + dt.timedelta(days=int(x.start)))
+                    yy = (EP0 + dt.timedelta(days=int(t2))).year
+                    ya = yy if anniv_days(x.start, yy) <= t2 else yy - 1
+                    ya = max(ya, md.year)
+                    sh.append(pr(ya, x.region))
+            out["share"] = 100 * float(np.mean(sh))
+        return out
+
+    s26, s25, s24 = d(2026, 9, 30), d(2025, 9, 30), d(2024, 9, 30)
+    held = on(s26)
+    check("tenancies held on 30 September 2026", len(held) == F["held"]["NAT"], "%d against %d" % (len(held),
+                                                                                                F["held"]["NAT"]))
+    for rg in REG:
+        n = int((held["region"] == rg).sum())
+        check("held in %s" % rg, n == F["held"][rg], "%d against %d" % (n, F["held"][rg]))
+    c = compare(s26, s25, groups=True, share=True)
+    check("re-lettings", c["n_relet"] == F["relet_n"]["NAT"], "%d against %d" % (c["n_relet"], F["relet_n"]["NAT"]))
+    for rg in REG:
+        check("re-lettings in %s" % rg, c["relet_" + rg] == F["relet_n"][rg])
+    check("September 2026 national", r1(c["NAT"]) == F["sep26"]["NAT"], "%.3f" % c["NAT"])
+    for rg in REG:
+        check("September 2026 %s" % rg, abs(r1(c[rg]) - F["sep26"][rg]) <= 0.1 + 1e-9, "%.3f against %.1f" % (
+            c[rg], F["sep26"][rg]))
+    check("continuing change", r1(c["same"]) == F["cont_change"], "%.3f" % c["same"])
+    check("continuing share with a rise", abs(c["share"] - F["cont_share"]) <= 0.1, "%.2f" % c["share"])
+    check("re-letting change", r1(c["relet"]) == F["relet_change"], "%.3f" % c["relet"])
+    c25 = compare(s25, s24)
+    check("contributions to September 2026", abs(round(c["c_same"], 2) - F["contrib26"]["continuing"]) <= 0.011 and
+          abs(round(c["c_relet"], 2) - F["contrib26"]["relet"]) <= 0.011, "%.3f, %.3f" % (c["c_same"], c["c_relet"]))
+    check("September 2025 national", r1(c25["NAT"]) == F["sep25"], "%.3f" % c25["NAT"])
+    for q in ("2022Q1", "2023Q4", "2024Q4"):
+        y, qq = int(q[:4]), int(q[-1])
+        t2 = {1: d(y, 3, 31), 2: d(y, 6, 30), 3: d(y, 9, 30), 4: d(y, 12, 31)}[qq]
+        t1 = {1: d(y - 1, 3, 31), 2: d(y - 1, 6, 30), 3: d(y - 1, 9, 30), 4: d(y - 1, 12, 31)}[qq]
+        v = compare(t2, t1)["NAT"]
+        check("back series %s" % q, abs(r1(v) - F["series"][q]) <= 0.1 + 1e-9, "%.3f against %.1f" % (v, F["series"][q]))
+    st31 = compare(d(2026, 12, 31), d(2025, 12, 31))["NAT"]
+    check("the register read as it stands on 31 December 2026", r1(st31) == F["asstands_dec26"], "%.3f" % st31)
+    # ------------------------------------------------------------ the operators' review rules
+    O = D["O"]
+    tu = O[(O["event"] == "TOPUP") & (O["rent_effective_from"].fillna("") != "")].copy()
+    tu["eff"] = pd.to_datetime(tu["rent_effective_from"])
+    tu["md"] = tu["eff"].dt.strftime("%m-%d")
+    ops = set(T[T["operator"]]["landlord_id"].unique())
+    owner = O[O["event"].isin(["LODGE", "MIGRATED"])].set_index("bond_id")["landlord_id"].to_dict()
+    tu = tu[tu["bond_id"].map(owner).isin(ops)]
+    cpi = D["CPI"]
+    lodge = O[O["event"].isin(["LODGE", "MIGRATED"])].set_index("bond_id")["weekly_rent"].astype(float).to_dict()
+    tu = tu.sort_values(["bond_id", "eff"])
+    tu["prev"] = tu.groupby("bond_id")["weekly_rent"].shift(1).astype(float)
+    tu["prev"] = tu["prev"].fillna(tu["bond_id"].map(lodge))
+    tu["rise"] = 100 * (tu["weekly_rent"].astype(float) / tu["prev"] - 1)
+    for md, label in (("12-01", "a"), ("11-01", "b")):
+        s = tu[tu["md"] == md]
+        by = s.groupby(s["eff"].dt.year)["rise"].median()
+        for y in (2023, 2024, 2025):
+            check("%s review %d" % (label, y), abs(r1(by[y]) - F["%s_review" % label][str(y)]) <= 0.1,
+                  "%.2f against %.1f" % (by[y], F["%s_review" % label][str(y)]))
+        marg = np.mean([by[y] - cpi[(y, 3)] for y in (2023, 2024, 2025)])
+        check("%s review margin over the September CPI" % label, abs(r1(marg) - F["%s_margin" % label]) <= 0.1,
+              "%.2f" % marg)
+        if label == "a":
+            check("Harbourline's 2026 review from its rule", r1(cpi[(2026, 3)] + marg) == F["a_review_2026"],
+                  "%.2f" % (cpi[(2026, 3)] + marg))
+            check("no Harbourline review of 1 December 2026 on file", int((s["eff"].dt.year == 2026).sum()) == 0)
+        else:
+            check("Quayside's 2026 review on its lodged bonds", abs(r1(by[2026]) - F["b_review_2026"]) <= 0.1,
+                  "%.2f" % by[2026])
+            check("Quayside's 2026 bonds on file", int((s["eff"].dt.year == 2026).sum()) == F["reviewed_onfile_n"])
+    print("%d failed" % len(FAILS))
+    return 1 if FAILS else 0
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    sys.exit(main())

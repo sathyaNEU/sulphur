@@ -1,0 +1,761 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "bonded tenancies held on 30 September 2026, by region",
+   "graded_as": "Ask 2",
+   "figure": "held",
+   "depends": [],
+   "independent": "the two register extracts",
+   "golden": {
+    "NAT": 68993,
+    "HC": 12737,
+    "HN": 11099,
+    "HE": 11242,
+    "HS": 8982,
+    "KC": 8951,
+    "MV": 8045,
+    "WS": 7937
+   },
+   "passes": {
+    "quick": {
+     "NAT": 68475.0,
+     "HC": 12634.0,
+     "HN": 11003.0,
+     "HE": 11149.0,
+     "HS": 8920.0,
+     "KC": 8883.0,
+     "MV": 7990.0,
+     "WS": 7896.0
+    },
+    "careful": {
+     "NAT": 68995.0,
+     "HC": 12738.0,
+     "HN": 11099.0,
+     "HE": 11242.0,
+     "HS": 8982.0,
+     "KC": 8951.0,
+     "MV": 8046.0,
+     "WS": 7937.0
+    },
+    "thorough": {
+     "NAT": 68993.0,
+     "HC": 12737.0,
+     "HN": 11099.0,
+     "HE": 11242.0,
+     "HS": 8982.0,
+     "KC": 8951.0,
+     "MV": 8045.0,
+     "WS": 7937.0
+    }
+   },
+   "bands": {
+    "NAT": [
+     68786.021,
+     69199.979
+    ],
+    "HC": [
+     12698.789,
+     12775.211
+    ],
+    "HN": [
+     11065.703,
+     11132.297
+    ],
+    "HE": [
+     11208.274,
+     11275.726
+    ],
+    "HS": [
+     8955.054,
+     9008.946
+    ],
+    "KC": [
+     8924.147,
+     8977.853
+    ],
+    "MV": [
+     8020.865,
+     8069.135
+    ],
+    "WS": [
+     7913.189,
+     7960.811
+    ]
+   }
+  },
+  {
+   "id": "R2",
+   "name": "dwellings re-let in the year to 30 September 2026, by region",
+   "graded_as": "Ask 3",
+   "figure": "relet_n",
+   "depends": [],
+   "independent": "the two register extracts",
+   "golden": {
+    "NAT": 14963,
+    "HC": 2985,
+    "HN": 3959,
+    "HE": 2144,
+    "HS": 1525,
+    "KC": 1728,
+    "MV": 1333,
+    "WS": 1289
+   },
+   "passes": {
+    "quick": {
+     "NAT": 9978.0,
+     "HC": 2043.0,
+     "HN": 3299.0,
+     "HE": 1395.0,
+     "HS": 797.0,
+     "KC": 1091.0,
+     "MV": 662.0,
+     "WS": 691.0
+    },
+    "careful": {
+     "NAT": 14913.0,
+     "HC": 2976.0,
+     "HN": 3955.0,
+     "HE": 2139.0,
+     "HS": 1512.0,
+     "KC": 1719.0,
+     "MV": 1327.0,
+     "WS": 1285.0
+    },
+    "thorough": {
+     "NAT": 14963.0,
+     "HC": 2985.0,
+     "HN": 3959.0,
+     "HE": 2144.0,
+     "HS": 1525.0,
+     "KC": 1728.0,
+     "MV": 1333.0,
+     "WS": 1289.0
+    }
+   },
+   "bands": {
+    "NAT": [
+     14663.74,
+     15262.26
+    ],
+    "HC": [
+     2925.3,
+     3044.7
+    ],
+    "HN": [
+     3879.82,
+     4038.18
+    ],
+    "HE": [
+     2101.12,
+     2186.88
+    ],
+    "HS": [
+     1494.5,
+     1555.5
+    ],
+    "KC": [
+     1693.44,
+     1762.56
+    ],
+    "MV": [
+     1306.34,
+     1359.66
+    ],
+    "WS": [
+     1263.22,
+     1314.78
+    ]
+   }
+  },
+  {
+   "id": "R3",
+   "name": "continuing tenancies: the change in their rent payable and the share whose rent rose",
+   "graded_as": "Component 2",
+   "figure": "cont",
+   "depends": [],
+   "independent": "the additional bonds and the rent panel",
+   "golden": {
+    "change": 2.5,
+    "share": 62.4
+   },
+   "passes": {
+    "quick": {
+     "change": 1.584,
+     "share": 20.649
+    },
+    "careful": {
+     "change": 2.117,
+     "share": 59.049
+    },
+    "thorough": {
+     "change": 2.477,
+     "share": 62.412
+    }
+   },
+   "bands": {
+    "change": [
+     2.327,
+     2.627
+    ],
+    "share": [
+     60.412,
+     64.412
+    ]
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the change in rent at re-letting",
+   "graded_as": "Ask 5",
+   "figure": "relet_change",
+   "depends": [
+    "R2"
+   ],
+   "independent": "",
+   "golden": 9.4,
+   "passes": {
+    "quick": 6.383,
+    "careful": 9.302,
+    "thorough": 9.429
+   },
+   "band": [
+    8.929,
+    9.929
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the measure: every quarter nationally from March 2022, and September 2026 by region",
+   "graded_as": "Component 1",
+   "figure": "measure_cells",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "2022Q1": 3.3,
+    "2022Q2": 3.9,
+    "2022Q3": 4.5,
+    "2022Q4": 5.3,
+    "2023Q1": 5.9,
+    "2023Q2": 6.5,
+    "2023Q3": 7.0,
+    "2023Q4": 7.5,
+    "2024Q1": 7.4,
+    "2024Q2": 7.3,
+    "2024Q3": 7.1,
+    "2024Q4": 6.8,
+    "2025Q1": 6.5,
+    "2025Q2": 6.1,
+    "2025Q3": 5.7,
+    "2025Q4": 5.5,
+    "2026Q1": 5.0,
+    "2026Q2": 4.5,
+    "2026Q3": 4.0,
+    "HC": 4.4,
+    "HN": 4.4,
+    "HE": 3.9,
+    "HS": 4.1,
+    "KC": 3.7,
+    "MV": 3.2,
+    "WS": 3.9
+   },
+   "passes": {
+    "quick": {
+     "2022Q1": -2.105,
+     "2022Q2": 6.796,
+     "2022Q3": 7.619,
+     "2022Q4": 8.505,
+     "2023Q1": 12.903,
+     "2023Q2": 7.273,
+     "2023Q3": 4.425,
+     "2023Q4": 7.812,
+     "2024Q1": 3.81,
+     "2024Q2": 8.475,
+     "2024Q3": 6.78,
+     "2024Q4": 6.452,
+     "2025Q1": 9.174,
+     "2025Q2": 6.25,
+     "2025Q3": 6.349,
+     "2025Q4": 4.545,
+     "2026Q1": 0.84,
+     "2026Q2": 1.471,
+     "2026Q3": 2.985,
+     "HC": 0.0,
+     "HN": 9.774,
+     "HE": 2.74,
+     "HS": 4.286,
+     "KC": 3.125,
+     "MV": 6.667,
+     "WS": 2.564
+    },
+    "careful": {
+     "2022Q1": 3.206,
+     "2022Q2": 3.828,
+     "2022Q3": 4.492,
+     "2022Q4": 5.209,
+     "2023Q1": 5.84,
+     "2023Q2": 6.406,
+     "2023Q3": 6.941,
+     "2023Q4": 7.435,
+     "2024Q1": 7.361,
+     "2024Q2": 7.244,
+     "2024Q3": 7.088,
+     "2024Q4": 6.908,
+     "2025Q1": 6.496,
+     "2025Q2": 6.114,
+     "2025Q3": 5.679,
+     "2025Q4": 5.225,
+     "2026Q1": 4.702,
+     "2026Q2": 4.199,
+     "2026Q3": 3.679,
+     "HC": 3.815,
+     "HN": 4.171,
+     "HE": 3.457,
+     "HS": 3.837,
+     "KC": 3.375,
+     "MV": 3.15,
+     "WS": 3.775
+    },
+    "thorough": {
+     "2022Q1": 3.259,
+     "2022Q2": 3.87,
+     "2022Q3": 4.521,
+     "2022Q4": 5.321,
+     "2023Q1": 5.939,
+     "2023Q2": 6.489,
+     "2023Q3": 6.976,
+     "2023Q4": 7.453,
+     "2024Q1": 7.385,
+     "2024Q2": 7.267,
+     "2024Q3": 7.069,
+     "2024Q4": 6.849,
+     "2025Q1": 6.467,
+     "2025Q2": 6.1,
+     "2025Q3": 5.656,
+     "2025Q4": 5.481,
+     "2026Q1": 4.995,
+     "2026Q2": 4.505,
+     "2026Q3": 3.992,
+     "HC": 4.39,
+     "HN": 4.394,
+     "HE": 3.903,
+     "HS": 4.06,
+     "KC": 3.676,
+     "MV": 3.156,
+     "WS": 3.926
+    }
+   },
+   "bands": {
+    "2022Q1": [
+     2.959,
+     3.559
+    ],
+    "2022Q2": [
+     3.57,
+     4.17
+    ],
+    "2022Q3": [
+     4.221,
+     4.821
+    ],
+    "2022Q4": [
+     5.021,
+     5.621
+    ],
+    "2023Q1": [
+     5.639,
+     6.239
+    ],
+    "2023Q2": [
+     6.189,
+     6.789
+    ],
+    "2023Q3": [
+     6.676,
+     7.276
+    ],
+    "2023Q4": [
+     7.153,
+     7.753
+    ],
+    "2024Q1": [
+     7.085,
+     7.685
+    ],
+    "2024Q2": [
+     6.967,
+     7.567
+    ],
+    "2024Q3": [
+     6.769,
+     7.369
+    ],
+    "2024Q4": [
+     6.549,
+     7.149
+    ],
+    "2025Q1": [
+     6.167,
+     6.767
+    ],
+    "2025Q2": [
+     5.8,
+     6.4
+    ],
+    "2025Q3": [
+     5.356,
+     5.956
+    ],
+    "2025Q4": [
+     5.181,
+     5.781
+    ],
+    "2026Q1": [
+     4.695,
+     5.295
+    ],
+    "2026Q2": [
+     4.205,
+     4.805
+    ],
+    "2026Q3": [
+     3.842,
+     4.142
+    ],
+    "HC": [
+     4.14,
+     4.64
+    ],
+    "HN": [
+     4.144,
+     4.644
+    ],
+    "HE": [
+     3.653,
+     4.153
+    ],
+    "HS": [
+     3.81,
+     4.31
+    ],
+    "KC": [
+     3.426,
+     3.926
+    ],
+    "MV": [
+     2.906,
+     3.406
+    ],
+    "WS": [
+     3.676,
+     4.176
+    ]
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the 90 per cent range on the national December 2026 figure",
+   "graded_as": "Ask 7",
+   "figure": "dec26_rangecells",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "lo": 3.0,
+    "hi": 3.2,
+    "half": 0.09
+   },
+   "passes": {
+    "quick": {
+     "lo": 2.985,
+     "hi": 2.985,
+     "half": 0.0
+    },
+    "careful": {
+     "lo": 2.897,
+     "hi": 3.032,
+     "half": 0.068
+    },
+    "thorough": {
+     "lo": 3.017,
+     "hi": 3.199,
+     "half": 0.091
+    }
+   },
+   "bands": {
+    "lo": [
+     2.917,
+     3.117
+    ],
+    "hi": [
+     3.099,
+     3.299
+    ],
+    "half": [
+     0.05,
+     0.2
+    ]
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the national measure for the year to December 2026",
+   "graded_as": "Recommendation",
+   "figure": "dec26_nat",
+   "depends": [
+    "R3",
+    "R5"
+   ],
+   "independent": "",
+   "golden": 3.1,
+   "passes": {
+    "quick": 2.985,
+    "careful": 2.965,
+    "thorough": 3.108
+   },
+   "band": [
+    3.008,
+    3.208
+   ]
+  },
+  {
+   "id": "R7b",
+   "name": "the regional measures for the year to December 2026",
+   "graded_as": "Ask 7",
+   "figure": "dec26_reg",
+   "depends": [
+    "R3",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "HC": 3.1,
+    "HN": 3.6,
+    "HE": 2.9,
+    "HS": 3.2,
+    "KC": 2.9,
+    "MV": 2.7,
+    "WS": 3.2
+   },
+   "passes": {
+    "quick": {
+     "HC": 0.0,
+     "HN": 9.774,
+     "HE": 2.74,
+     "HS": 4.286,
+     "KC": 3.125,
+     "MV": 6.667,
+     "WS": 2.564
+    },
+    "careful": {
+     "HC": 2.943,
+     "HN": 3.428,
+     "HE": 2.708,
+     "HS": 3.206,
+     "KC": 2.806,
+     "MV": 2.606,
+     "WS": 2.988
+    },
+    "thorough": {
+     "HC": 3.056,
+     "HN": 3.621,
+     "HE": 2.933,
+     "HS": 3.239,
+     "KC": 2.932,
+     "MV": 2.713,
+     "WS": 3.192
+    }
+   },
+   "bands": {
+    "HC": [
+     2.856,
+     3.256
+    ],
+    "HN": [
+     3.421,
+     3.821
+    ],
+    "HE": [
+     2.733,
+     3.133
+    ],
+    "HS": [
+     3.039,
+     3.439
+    ],
+    "KC": [
+     2.732,
+     3.132
+    ],
+    "MV": [
+     2.513,
+     2.913
+    ],
+    "WS": [
+     2.992,
+     3.392
+    ]
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the change from September to December 2026 split between continuing tenancies and re-lettings",
+   "graded_as": "Component 3",
+   "figure": "slow",
+   "depends": [
+    "R3",
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "continuing": -0.43,
+    "relet": -0.46,
+    "fall": -0.89
+   },
+   "passes": {
+    "quick": {
+     "continuing": 0.0,
+     "relet": 0.0,
+     "fall": 0.0
+    },
+    "careful": {
+     "continuing": -0.226,
+     "relet": -0.489,
+     "fall": -0.715
+    },
+    "thorough": {
+     "continuing": -0.424,
+     "relet": -0.46,
+     "fall": -0.884
+    }
+   },
+   "bands": {
+    "continuing": [
+     -0.524,
+     -0.324
+    ],
+    "relet": [
+     -0.56,
+     -0.36
+    ],
+    "fall": [
+     -1.004,
+     -0.764
+    ]
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "small landlords lodge additional bond for only some of their rent rises",
+   "rescues": []
+  },
+  {
+   "sentence": "the bonds migrated in March 2023 carry no property identifier; find their dwellings by address",
+   "rescues": []
+  },
+  {
+   "sentence": "the rent panel holds none of the operators' dwellings, and their additional bonds record every review",
+   "rescues": [
+    "R3",
+    "R5"
+   ]
+  },
+  {
+   "sentence": "project December from what the register showed at the same point of earlier years, operators' scheduled reviews included",
+   "rescues": [
+    "R6",
+    "R7",
+    "R7b"
+   ]
+  },
+  {
+   "sentence": "a re-let dwelling's earlier rent is what the earlier tenancy was paying, not what it started at",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": 3.1,
+   "golden": true
+  },
+  {
+   "name": "careful but hurried: the panel's rises carried to every landlord",
+   "answer": 3.0,
+   "golden": false
+  },
+  {
+   "name": "careful but hurried: the latest recorded rent carried forward at the panel's rate",
+   "answer": 2.8,
+   "golden": false
+  },
+  {
+   "name": "careful but hurried: the recorded rent where an additional bond exists, the model otherwise",
+   "answer": 2.7,
+   "golden": false
+  },
+  {
+   "name": "the additional bonds read as every rise",
+   "answer": 3.8,
+   "golden": false
+  },
+  {
+   "name": "re-lettings tied by property identifier alone",
+   "answer": 2.4,
+   "golden": false
+  },
+  {
+   "name": "re-lettings against the earlier tenancy's starting rent",
+   "answer": 5.1,
+   "golden": false
+  },
+  {
+   "name": "the quarterly figures carried on a straight trend",
+   "answer": 3.5,
+   "golden": false
+  },
+  {
+   "name": "the September figure carried into December",
+   "answer": 4.0,
+   "golden": false
+  },
+  {
+   "name": "the register read as it stands on 31 December",
+   "answer": 2.7,
+   "golden": false
+  },
+  {
+   "name": "the register as it stands, corrected by its own back-test",
+   "answer": 3.4,
+   "golden": false
+  },
+  {
+   "name": "December projected without the review not yet on file",
+   "answer": 2.9,
+   "golden": false
+  },
+  {
+   "name": "new-letting rents for the measure",
+   "answer": 3.0,
+   "golden": false
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ },
+ "careful_variants": {
+  "the panel's rises carried to every landlord": 49.5,
+  "the latest recorded rent carried forward at the panel's rate": 37.0,
+  "the recorded rent where an additional bond exists, the model otherwise": 37.0
+ },
+ "careful_pass": "the panel's rises carried to every landlord"
+}

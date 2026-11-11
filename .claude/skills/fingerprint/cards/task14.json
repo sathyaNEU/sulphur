@@ -1,147 +1,149 @@
 {
-  "task": "task14",
-  "project": "sulfur",
-  "architecture": "v3",
-  "drawn": "2026-11-11",
-  "slot_note": "",
-  "domain": "survey-research-official-statistics",
-  "subdomain": "seasonal-adjustment-official-time-series-production",
-  "client_domain": "survey-research-official-statistics",
-  "client_subdomain": "Survey Research & Official Statistics (Other)",
-  "niche": "a national statistics office's new private rents measure compiled from the tenancy bond register: the weekly rent payable on every bonded dwelling at quarter ends for the same dwellings a year apart, continuing tenancies' rises seen only through optional bond top-ups and a small rent panel drawn in 2018, re-lettings priced against the tenancy before them across the register's March 2023 migration, the December 2026 quarter projected and the figure bridged to the survey-based series",
-  "objective": "etl",
-  "shape": "15",
-  "decision_type": "conformed_dataset",
-  "answer_unit": "dataset",
-  "answer": "to be filled from generator/figures.json when the pack is cut",
-  "answer_source": "task14/submission.md block 1; generator/figures.json",
-  "gap": [
-    "population",
-    "time"
+ "task": "task14",
+ "project": "sulfur",
+ "architecture": "v3",
+ "drawn": "2026-11-11",
+ "slot_note": "",
+ "domain": "survey-research-official-statistics",
+ "subdomain": "seasonal-adjustment-official-time-series-production",
+ "client_domain": "survey-research-official-statistics",
+ "client_subdomain": "Survey Research & Official Statistics (Other)",
+ "niche": "a national statistics office's new private rents measure compiled from the tenancy bond register: the weekly rent payable on every bonded dwelling at quarter ends for the same dwellings a year apart, continuing tenancies' rises seen only through optional bond top-ups and a small rent panel drawn in 2018, re-lettings priced against the tenancy before them across the register's March 2023 migration, the December 2026 quarter projected and the figure bridged to the survey-based series",
+ "objective": "etl",
+ "shape": "15",
+ "decision_type": "conformed_dataset",
+ "answer_unit": "dataset",
+ "answer": "3.1 per cent for the year to the December 2026 quarter (90 per cent range 3.0 to 3.2), down from 4.0 to September 2026; 68,993 tenancies in place and 14,963 dwellings re-let; continuing tenancies up 2.5 per cent (62.4 per cent with a rise), re-lettings up 9.4; the 0.89-point move to December split 0.43 and 0.46",
+ "answer_source": "task14/submission.md block 1; generator/figures.json",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G13",
+  "G3",
+  "G12"
+ ],
+ "gate_g": "etl_conformance",
+ "calibration_form": "parallel_run_overlap",
+ "stump_strategy": "population_selection",
+ "decisive_rule_filed": true,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "register",
+ "stump_class": "analytical",
+ "analyst_test": "The careful pass, graded up, conforms the register, ties every re-letting to the tenancy before it by parsed address, fits a rise model on the rent panel and prices each re-letting against the earlier tenancy's paying rent, then gives the panel's rises to every landlord (or carries each tenancy's latest recorded rent forward at the panel's rate), reads December off the register as it stands on 31 December and resamples the panel for a range; it lands the counts and the re-letting change, misses the operators' reviews or double counts the larger recorded rises, and misses the review not yet on file, the half-lodged one and every December re-letting, so the September measure, the split of the slowdown, the December figure and its range fall outside their bands in different directions (49.5, 37.0 and 33.0 on the rubric for its three variants).",
+ "domain_test": "Every result is a quantity an official statistics office produces when it compiles a price series from an administrative register: a register conformed across a system migration, the completeness of its optional change records measured on a linked survey panel and carried to the register's landlord mix, a matched-dwelling ratio of totals with its sampling interval, a projection from the reviews that fall due, and a bridge to the survey-based figure; swap tenancies for employees and the payroll register records every pay change, there is no optional record to measure, no panel to calibrate it against and nothing left to estimate.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:a-stock-price-change-built-from-entry-records-and-optional-change-records-whose-completeness-is-measured-on-a-linked-panel",
+ "layer1": [
+  "two register extracts in two schemas: the legacy system to 5 March 2023 (free-text addresses, legacy bond and landlord numbers, rent as an amount with a frequency) and the online system from 6 March 2023 (property identifiers for new lodgements, re-keyed landlord identifiers, weekly rent), with the active bonds migrated keeping their free-text addresses",
+  "one tenancy across several records: bond transfers when a property is sold with the tenant in place, changes of tenant parties, re-sent lodgements, refunds that close a bond weeks after the tenancy ends",
+  "rents as weekly, fortnightly or monthly amounts, a few keyed in error by a factor of ten, rounded to five or ten dollars",
+  "areas recoded to the July 2024 regions through a concordance, three old areas split between two regions",
+  "the rent panel's own record: quarterly rents on the fifteenth of the middle month, missed quarters, replacements drawn from the 2017 frame, reported landlord type",
+  "a published survey-based series and a release calendar beside unrelated housing series"
+ ],
+ "stakeholder_role": "the manager of prices statistics at the national statistics office, preparing the launch of the bond-based private rents measure with the December 2026 quarter",
+ "role_family": "statistical_office_head",
+ "scoring_unit": "index points",
+ "spine": {
+  "file": "tbb_bond_events_2023-03-06_2026-10-31.csv",
+  "rows": 0,
+  "entity": "one bond event in the Tenancy Bond Board's online system (lodgement, top-up, transfer, change of parties, refund), migrated active bonds included",
+  "grain": "bond event (bond identifier, event date, event type)",
+  "source": "synthetic (simulated tenancies, landlords, reviews and lodgement behaviour)"
+ },
+ "forum": "line_manager_or_team",
+ "forcing_event": "launch_or_rollout",
+ "org_family": "research_or_statistics_office",
+ "world": {
+  "geography": "Penmarra, a fictional self-governing island state in the South Pacific (New Zealand-style setting and names)",
+  "currency": "PMD (Penmarra dollar, fictional)",
+  "org_type": "national statistics office, prices division",
+  "invented_names": [
+   "Penmarra",
+   "Penmarra Statistics Office",
+   "Tenancy Bond Board"
   ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G3",
-    "G12",
-    "G6"
-  ],
-  "gate_g": "etl_conformance",
-  "calibration_form": "parallel_run_overlap",
-  "stump_strategy": "population_selection",
-  "decisive_rule_filed": true,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "register",
-  "stump_class": "analytical",
-  "analyst_test": "The careful pass conforms the register, links each re-letting to the tenancy before it by property identifier, reads the bond top-ups as the record of every rent rise or carries the old panel's continuing rents to every tenancy, prices each re-letting against the earlier tenancy's starting rent and carries the September figure into December, so it drops the longest tenancies' catch-up, prices the rises small landlords never lodged at nothing or the build-to-rent operators' reviews at the panel's, double counts the earlier tenancy's own rises and misses the quarter that leaves the year, landing the measure, its projection and its bridge outside the golden's ranges in different directions.",
-  "domain_test": "Every result is a quantity an official statistics office produces when it compiles a price series from an administrative register: a register conformed across a system migration, the completeness of its optional change records measured on a linked survey panel and carried to the register's landlord mix, a matched-dwelling ratio of totals with its sampling interval, a projection from the reviews that fall due, and a bridge to the survey-based figure; swap tenancies for employees and the payroll register records every pay change, there is no optional record to measure, no panel to calibrate it against and nothing left to estimate.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:a-stock-price-change-built-from-entry-records-and-optional-change-records-whose-completeness-is-measured-on-a-linked-panel",
-  "layer1": [
-    "two register extracts in two schemas: the legacy system to 5 March 2023 (free-text addresses, legacy bond and landlord numbers, rent as an amount with a frequency) and the online system from 6 March 2023 (property identifiers for new lodgements, re-keyed landlord identifiers, weekly rent), with the active bonds migrated keeping their free-text addresses",
-    "one tenancy across several records: bond transfers when a property is sold with the tenant in place, changes of tenant parties, re-sent lodgements, refunds that close a bond weeks after the tenancy ends",
-    "rents as weekly, fortnightly or monthly amounts, a few keyed in error by a factor of ten, rounded to five or ten dollars",
-    "areas recoded to the July 2024 regions through a concordance, three old areas split between two regions",
-    "the rent panel's own record: quarterly rents on the fifteenth of the middle month, missed quarters, replacements drawn from the 2017 frame, reported landlord type",
-    "a published survey-based series and a release calendar beside unrelated housing series"
-  ],
-  "stakeholder_role": "the manager of prices statistics at the national statistics office, preparing the launch of the bond-based private rents measure with the December 2026 quarter",
-  "role_family": "statistical_office_head",
-  "scoring_unit": "index points",
-  "spine": {
-    "file": "tbb_bond_events_2023-03-06_2026-10-31.csv",
-    "rows": 0,
-    "entity": "one bond event in the Tenancy Bond Board's online system (lodgement, top-up, transfer, change of parties, refund), migrated active bonds included",
-    "grain": "bond event (bond identifier, event date, event type)",
-    "source": "synthetic (simulated tenancies, landlords, reviews and lodgement behaviour)"
+  "people": [
+   "Christine Buckley",
+   "Kim Chandler"
+  ]
+ },
+ "deliverables": [
+  "private_rents_measure_2026Q4.xlsx",
+  "private_rents_launch_briefing.pptx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "what",
+ "driver": "A change in the amount every member of a stock pays is wanted, but the register records a member's amount only when it enters and, by choice, when it rises: small holders' members are recorded for a minority of rises, mostly the large ones, while large holders record every rise on fixed review days; the unrecorded rises are measured on a small panel drawn before the large holders' members existed, so each holder class takes its own source; each unit that changed members is priced against the amount the member before was paying, found across a key change that left the longest-held units without a key; and the next period is projected from an extract that closes before one large holder's review and halfway through recording another's, the review's size read off the holder's own earlier reviews and a published index.",
+ "driver_concrete": "Private rents on the bond measure compare total weekly rent payable on bonded dwellings at quarter ends a year apart; small landlords lodge a bond top-up for about a fifth of their rent rises, mostly the large ones, while the build-to-rent operators lodge every review, so continuing tenancies' rises come from the Statistics Office's rent panel for small landlords and from the operators' own top-ups for theirs; each re-letting is priced against the earlier tenancy's paying rent, found by address for the tenancies migrated in March 2023; and the December 2026 quarter is projected from the 27 November extract, Quayside's 1 November review completed from the bonds lodged so far and Harbourline's 1 December review applied at the September CPI plus a point.",
+ "stump": "The careful pass gives the panel's rises to every landlord and reads December off the register as it stands, filing September at 3.7 and December at 3.0 against 4.0 and 3.1; carrying the latest recorded rent forward instead files the right September but a back series up to 0.3 point high and a re-letting rise of 8.6; each correction alone leaves other results outside their bands, and each shortcut moves them a different way.",
+ "answer_shape": "forecast-bands-drivers",
+ "weight": "measurement",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "missingness-measurement",
+  "synthesis",
+  "uncertainty",
+  "forecasting",
+  "forecasting",
+  "decomposition-attribution"
+ ],
+ "results": "R1 bonded tenancies in place at 30 September 2026 by region on one tenancy record; R2 dwellings re-let in the year to September 2026 by region; R3 continuing tenancies' change in rent payable and the share with a rise; R4 the change at re-letting over the earlier tenancy's paying rent; R5 the measure for every quarter from March 2022 nationally and September 2026 by region; R6 the 90 per cent range on the national December 2026 figure; R7 the national annual change to the December 2026 quarter; R7b the regional December 2026 figures; R8 the move from the September figure to the December one split between continuing tenancies and re-lettings",
+ "one_fact_test": "the December sentence rescues R6, R7 and R7b; the operators' records sentence R3 and R5; for a run reading the bonds as every rise, the unlodged-rises sentence R3, R4 and R5 at most; three of nine at most, and the split of the move to December is rescued by none of them",
+ "strategy_label": "WORKS IN FORM (heterogeneity that pooling hides, rebuilt from the register's landlord portfolios and weighted to each region's mix; selection on the outcome measured on a validation panel; outcomes not yet recorded projected from the review schedule)",
+ "mechanism_source": "design_note",
+ "deep_chain": "six judgments: the unlodged rises measured on the panel; the operators' complete records against the panel's coverage; the recorded rises being the larger ones; the migrated bonds tied by address; the reviews not yet on file in December; December's re-lettings at the rates the register showed at the same point of earlier years; with the range from the panel and the projection's back-test",
+ "judgment": "how completely an administrative register's optional change records capture the changes, measured on a linked survey panel, carried to a stock whose holder mix the panel never covered",
+ "differentiation": {
+  "task5": "task5 completes an administrative census caught early, report by report, by the cause of each outstanding report; here nothing is late: every bond event is in, and what the register never records (rent rises not lodged) is measured on a linked panel and carried to the register's landlord mix, beside a re-letting linkage across a migration and a projection.",
+  "task6": "task6 weights trace samples by an inherited inclusion probability, fills hours a store dropped and dates incident onsets; here there is no sample weight to recover and no gap in time: the register is complete for what it records, and the work is the completeness of an optional record, the linkage of tenancies across a key change, and a forward projection.",
+  "task14_v2": "architecture 2 grossed a voluntary document list up by its completeness measured where an outside register covers it; here a register's optional change records are corrected by a survey panel linked to it, inside a matched-unit price measure with a projection and a bridge, and the two share no result.",
+  "mark196": "Mark's 196 recovers scam cases neither of two capture channels saw from their overlap, with one channel produced by the unit's own follow-up; here there is no capture-recapture: a register's optional change records are corrected by a linked survey panel inside a matched-dwelling price measure, and the answer is a conformed series with a projection.",
+  "task8": "task8's architecture 13 carried a per-member rate on a payer's interim attribution to the period's end by each practice's own run-out after the same cut, to designate the practices that clear a bar; task14 measures a matched-dwelling rent ratio whose continuing rents the register records only by choice (completed from a survey panel that never held the operators' blocks), prices each re-letting across a migration that dropped the key, and carries December past the extract through two operators' scheduled reviews and the month's re-lettings; no unit run-out of an assignment, no designation set, and the horizon is closed by scheduled events and re-letting rates rather than a late-joining cohort's run-out."
+ },
+ "lineage": [
+  {
+   "architecture": "v1 (first decisive step, replaced at stage 4 before ship)",
+   "fate": "landed: the stage-4 leak reader, reading blind, filed the golden docket with a matched-line ratio shrunk by dollars; judge stump power moderate",
+   "driver": "Each unit's amount in the latest period is seen only through its own report, which leaves some items out entirely and understates the amounts of those it keeps, each unit at its own rate; the correction for a kept item's amount is the unit's understatement measured on the items its report kept in the closed periods, not its overall share reported (which carries the items it left out), and that measure is noise on a short record, so it is weighted toward the common rate by the number of items the record holds; the grain alone or the weighting alone each reproduce the last closed period worse than no correction.",
+   "stump": "A competent analyst measures each faculty member's completeness as the share of their 2021 to 2025 register remuneration they disclosed, back-tests it on 2025 against the faculty-wide ratio and the disclosures at face value, finds face value closest and sends five faithful disclosers in place of five long-record under-reporters; each person's matched-line ratio unweighted sends thin-record faculty instead, and the overall share weighted by the record sends the faculty who leave small relationships out."
   },
-  "forum": "line_manager_or_team",
-  "forcing_event": "launch_or_rollout",
-  "org_family": "research_or_statistics_office",
-  "world": {
-    "geography": "Penmarra, a fictional self-governing island state in the South Pacific (New Zealand-style setting and names)",
-    "currency": "PMD (Penmarra dollar, fictional)",
-    "org_type": "national statistics office, prices division",
-    "invented_names": [
-      "Penmarra",
-      "Penmarra Statistics Office",
-      "Tenancy Bond Board"
-    ],
-    "people": [
-      "Christine Buckley",
-      "Kim Chandler"
-    ]
+  {
+   "architecture": "v1 (shipped under the retired single-deep-step design; uploaded 2026-11-10)",
+   "fate": "returned by the platform on 2026-11-10 before any run: the domain fit read the docket of fifteen under a stated threshold, the count of filers and the two tabulations as compliance lookups with no estimation, and the prompt test read the slices as method spelled out (runs/review_2026-11-10.md)",
+   "driver": "Each unit's amount in the latest period is seen only through its own report, which covers only what had happened by the day the report was made, while the closed periods' records date every event in the full period; the unit's reporting error must be measured with each earlier report compared against the events up to its own date, and the latest report grossed up for the part of the period it could not yet see, so units that reported early look like under-reporters and units that reported early this time look small to the natural full-period comparison.",
+   "stump": "A strong analyst builds each faculty member's matched-line ratio weighted toward the faculty's, compares every disclosure with the register's whole program year, finds it closest to 2025 among the whole-year corrections and sends five faculty whose earlier December disclosures made them look like under-reporters in place of five who submitted their 2026 disclosures in early December, before their retainers' December installments."
   },
-  "deliverables": [
-    "private_rents_measure_2026Q4.xlsx",
-    "private_rents_launch_briefing.pptx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "A change in the amount every member of a stock pays is wanted, but the register records a member's amount only when it enters and, by choice, when it rises: small holders' members are recorded for a minority of rises, mostly the large ones, while large holders record every rise; the unrecorded rises are measured on a small panel drawn before the large holders' members existed, so each holder class takes its own rate carried to each area's mix; each unit that changed members is priced against the amount the member before was paying, found across a key change that left the longest-held units without a key; and the next period is projected from when each member's rise falls due.",
-  "driver_concrete": "Private rents on the bond measure compare total weekly rent payable on bonded dwellings at quarter ends a year apart; small landlords lodge a bond top-up for about a quarter of their rent rises, mostly the large ones, while the build-to-rent operators lodge every one, so continuing tenancies' rises are measured on the Penmarra Statistics Office's 2018 rent panel linked to the register for small landlords and on the operators' complete top-ups for theirs, weighted to each region's mix; each re-letting is priced against the earlier tenancy's paying rent, found by address for the earlier tenancies that predate the March 2023 migration (the longest, with the largest catch-up); and the December 2026 quarter is projected from the anniversaries and portfolio reviews that fall in it.",
-  "stump": "The careful pass links re-lettings by property identifier, reads the top-ups as every rise and prices re-lettings from the earlier starting rent, filing a September 2026 measure well away from the golden and a December figure carried from September; correcting any one of the three still leaves the measure outside its range, and each correction moves it a different way.",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "measurement",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "missingness-measurement",
-    "synthesis",
-    "uncertainty",
-    "forecasting",
-    "decomposition-attribution"
-  ],
-  "results": "R1 bonded tenancies held at 30 September 2026 by region and landlord class on one tenancy record; R2 dwellings re-let in the year to September 2026 and the share whose earlier tenancy is identified; R3 continuing tenancies' rises (share with a rise, average rise) by landlord class; R4 the average rise at re-letting over the earlier tenancy's paying rent; R5 the measure's annual change to September 2026 by region and nationally, with the back series from March 2022; R6 the 90 per cent interval on the national September 2026 figure; R7 the annual change to the December 2026 quarter with its range; R8 the bridge from the survey-based September 2026 figure to the new measure",
-  "one_fact_test": "to be filled from effort.py",
-  "strategy_label": "WORKS IN FORM (heterogeneity that pooling hides, rebuilt from the register's landlord portfolios and weighted to each region's mix; selection on the outcome measured on a validation panel; outcomes not yet recorded projected from the review schedule)",
-  "mechanism_source": "design_note",
-  "deep_chain": "to be filled when the results chain is measured",
-  "judgment": "how completely an administrative register's optional change records capture the changes, measured on a linked survey panel, carried to a stock whose holder mix the panel never covered",
-  "differentiation": {
-    "task5": "task5 completes an administrative census caught early, report by report, by the cause of each outstanding report; here nothing is late: every bond event is in, and what the register never records (rent rises not lodged) is measured on a linked panel and carried to the register's landlord mix, beside a re-letting linkage across a migration and a projection.",
-    "task6": "task6 weights trace samples by an inherited inclusion probability, fills hours a store dropped and dates incident onsets; here there is no sample weight to recover and no gap in time: the register is complete for what it records, and the work is the completeness of an optional record, the linkage of tenancies across a key change, and a forward projection.",
-    "task14_v2": "architecture 2 grossed a voluntary document list up by its completeness measured where an outside register covers it; here a register's optional change records are corrected by a survey panel linked to it, inside a matched-unit price measure with a projection and a bridge, and the two share no result.",
-    "mark196": "Mark's 196 recovers scam cases neither of two capture channels saw from their overlap, with one channel produced by the unit's own follow-up; here there is no capture-recapture: a register's optional change records are corrected by a linked survey panel inside a matched-dwelling price measure, and the answer is a conformed series with a projection."
-  },
-  "lineage": [
-    {
-      "architecture": "v1 (first decisive step, replaced at stage 4 before ship)",
-      "fate": "landed: the stage-4 leak reader, reading blind, filed the golden docket with a matched-line ratio shrunk by dollars; judge stump power moderate",
-      "driver": "Each unit's amount in the latest period is seen only through its own report, which leaves some items out entirely and understates the amounts of those it keeps, each unit at its own rate; the correction for a kept item's amount is the unit's understatement measured on the items its report kept in the closed periods, not its overall share reported (which carries the items it left out), and that measure is noise on a short record, so it is weighted toward the common rate by the number of items the record holds; the grain alone or the weighting alone each reproduce the last closed period worse than no correction.",
-      "stump": "A competent analyst measures each faculty member's completeness as the share of their 2021 to 2025 register remuneration they disclosed, back-tests it on 2025 against the faculty-wide ratio and the disclosures at face value, finds face value closest and sends five faithful disclosers in place of five long-record under-reporters; each person's matched-line ratio unweighted sends thin-record faculty instead, and the overall share weighted by the record sends the faculty who leave small relationships out."
-    },
-    {
-      "architecture": "v1 (shipped under the retired single-deep-step design; uploaded 2026-11-10)",
-      "fate": "returned by the platform on 2026-11-10 before any run: the domain fit read the docket of fifteen under a stated threshold, the count of filers and the two tabulations as compliance lookups with no estimation, and the prompt test read the slices as method spelled out (runs/review_2026-11-10.md)",
-      "driver": "Each unit's amount in the latest period is seen only through its own report, which covers only what had happened by the day the report was made, while the closed periods' records date every event in the full period; the unit's reporting error must be measured with each earlier report compared against the events up to its own date, and the latest report grossed up for the part of the period it could not yet see, so units that reported early look like under-reporters and units that reported early this time look small to the natural full-period comparison.",
-      "stump": "A strong analyst builds each faculty member's matched-line ratio weighted toward the faculty's, compares every disclosure with the register's whole program year, finds it closest to 2025 among the whole-year corrections and sends five faculty whose earlier December disclosures made them look like under-reporters in place of five who submitted their 2026 disclosures in early December, before their retainers' December installments."
-    },
-    {
-      "architecture": "v2 (Marrowfield University Health's 2025 coverage statement, drawn 2026-11-10)",
-      "fate": "spent at the author's word on 2026-11-11 before any data was cut: re-rooted to a new world and dataset for a design with at least three independent analytical failure points, the author ruling task6 the only build at the bar and asking for a harder chain that does not reuse its strategy",
-      "driver": "A total is wanted for the part of a population that no outside record covers, and the only evidence is a second list its members supplied voluntarily; the share of that list that was supplied is measured on the part of the population an outside record does cover, over every member and not only those who supplied something, separately for the items each member had and had not already declared, after the outside record's items paid through an intermediary are traced to the intermediary's entry on the list; the supplied items for the uncovered part are then raised by those shares, and the result is checked where declared items can be compared across the two parts.",
-      "stump": "The careful pass grosses the uploaded outside forms up by the completeness of the faculty who uploaded something, taking a confirmation that no form was received at its word, pools named and left-off companies in one rate, and counts a manufacturer whose fees an agency paid as a form never uploaded; each of the three moves the estimate of remuneration not shown by a different amount in a different direction, and a run that corrects one still files a figure outside the range."
-    }
-  ],
-  "lineage_shells": [
-    {
-      "question form": "who",
-      "second-sentence opener": "the",
-      "rounding opener": "the",
-      "deliverable set": "csv+docx"
-    }
-  ],
-  "notes": "Architecture 3 moves task14 to a new world and dataset at the author's word (2026-11-11): Penmarra's statistics office compiling a private rents measure from the Tenancy Bond Board's register. Subdomain seasonal-adjustment-official-time-series-production because the deliverable is a new official quarterly series with its back series and a projection of its next quarter; the register-quality work (optional top-ups, the migration) serves that series. Redrawn at registration against the window task1, task9 v9, task16 v2 (both drawn on main earlier on 2026-11-11 by another session): weight assembly to measurement (the register records rises selectively and the panel that measures them has its own design, which is where most of the work sits; assembly was task16 v2's), answer shape reconciled-table to forecast-bands-drivers (the measure's path through the December 2026 quarter with its range and its drivers, re-lettings and continuing tenancies by landlord class; reconciled-table was task16 v2's), generators G12 first to G3 first (record versus operation: the register's lodgements and optional top-ups against the rents actually payable, with G12, a missing top-up is not a record of no rise, second; G12 was task16 v2's decisive pattern), calibration gold_standard_subsample to parallel_run_overlap (the top-ups and the rent panel observe the same rises over the same years; the panel linked to the register measures what the top-ups miss), forum committee_or_panel to line_manager_or_team (the Government Statistician signs the launch release; committee_or_panel was task9 v9's). decision_type conformed_dataset: the deliverable is the conformed measure's series (back series, components, projection and bridge), the call one figure in it; quantity_figure with G12 and gap population had repeated task9 v8 and mark196 v2. gate_g etl_conformance: the register is conformed to the measure's estimand, which takes estimation. forcing_event launch_or_rollout: the measure goes live with the December 2026 quarter in January 2027. Personas from guard.py names --geo 'New Zealand' --seed 14 (Nigel Walsh set aside: first name in mark111).",
-  "depth_level": 5,
-  "doctrine": "results-chain-2026-11-09",
-  "registered": "2026-11-11T04:44:48Z",
-  "shell": {
-    "question form": "whether",
-    "second-sentence opener": "i",
-    "deliverable set": "pptx+xlsx"
+  {
+   "architecture": "v2 (Marrowfield University Health's 2025 coverage statement, drawn 2026-11-10)",
+   "fate": "spent at the author's word on 2026-11-11 before any data was cut: re-rooted to a new world and dataset for a design with at least three independent analytical failure points, the author ruling task6 the only build at the bar and asking for a harder chain that does not reuse its strategy",
+   "driver": "A total is wanted for the part of a population that no outside record covers, and the only evidence is a second list its members supplied voluntarily; the share of that list that was supplied is measured on the part of the population an outside record does cover, over every member and not only those who supplied something, separately for the items each member had and had not already declared, after the outside record's items paid through an intermediary are traced to the intermediary's entry on the list; the supplied items for the uncovered part are then raised by those shares, and the result is checked where declared items can be compared across the two parts.",
+   "stump": "The careful pass grosses the uploaded outside forms up by the completeness of the faculty who uploaded something, taking a confirmation that no form was received at its word, pools named and left-off companies in one rate, and counts a manufacturer whose fees an agency paid as a form never uploaded; each of the three moves the estimate of remuneration not shown by a different amount in a different direction, and a run that corrects one still files a figure outside the range."
   }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "who",
+   "second-sentence opener": "the",
+   "rounding opener": "the",
+   "deliverable set": "csv+docx"
+  }
+ ],
+ "notes": "Architecture 3 moves task14 to a new world and dataset at the author's word (2026-11-11): Penmarra's statistics office compiling a private rents measure from the Tenancy Bond Board's register. Subdomain seasonal-adjustment-official-time-series-production because the deliverable is a new official quarterly series with its back series and a projection of its next quarter; the register-quality work (optional top-ups, the migration) serves that series. Redrawn at registration against the window task1, task9 v9, task16 v2 (both drawn on main earlier on 2026-11-11 by another session): weight assembly to measurement (the register records rises selectively and the panel that measures them has its own design, which is where most of the work sits; assembly was task16 v2's), answer shape reconciled-table to forecast-bands-drivers (the measure's path through the December 2026 quarter with its range and its drivers, re-lettings and continuing tenancies by landlord class; reconciled-table was task16 v2's), generators G12 first to G3 first (record versus operation: the register's lodgements and optional top-ups against the rents actually payable, with G12, a missing top-up is not a record of no rise, second; G12 was task16 v2's decisive pattern), calibration gold_standard_subsample to parallel_run_overlap (the top-ups and the rent panel observe the same rises over the same years; the panel linked to the register measures what the top-ups miss), forum committee_or_panel to line_manager_or_team (the Government Statistician signs the launch release; committee_or_panel was task9 v9's). decision_type conformed_dataset: the deliverable is the conformed measure's series (back series, components, projection and bridge), the call one figure in it; quantity_figure with G12 and gap population had repeated task9 v8 and mark196 v2. gate_g etl_conformance: the register is conformed to the measure's estimand, which takes estimation. forcing_event launch_or_rollout: the measure goes live with the December 2026 quarter in January 2027. Personas from guard.py names --geo 'New Zealand' --seed 14 (Nigel Walsh set aside: first name in mark111). Strengthened at stage 3 (2026-11-11), the card's axes unchanged: the operators given blocks in five regions from 2019, Harbourline's review moved to 1 December at the September CPI plus a point, Quayside's review bonds lodged over six weeks, December's rates read as the register stood at each earlier cut; the September interval and the survey bridge replaced by the December range and the split of the slowdown, the regional December figures their own ask. Stage 4 (2026-11-11), the determinism judge's pass 1 (NOT_DETERMINISTIC, FIX_NOW) answered: the rent estimators ranked on the dwellings both sources hold, the December shortcuts ranked by back-tests, the operator blocks' wrapped unit numbers fixed in the world, held made in place, and the split moved to September to December so no sentence rescues more than three results. Decisive generator redrawn G3 to G13 (horizon mismatch) at READY on 2026-11-11, after task9's re-draw moved task18 (G3, drawn 2026-11-10) into this card's three-card window: since stage 3 the call turns on carrying the register past its 27 November extract (one operator's review after it, another's half lodged, December's re-lettings not on file), which every rejected December route misses; G3 and G12 carry the September chain.",
+ "depth_level": 5,
+ "doctrine": "results-chain-2026-11-09",
+ "registered": "2026-11-11T04:44:48Z",
+ "shell": {
+  "question form": "whether",
+  "second-sentence opener": "i",
+  "deliverable set": "pptx+xlsx"
+ }
 }

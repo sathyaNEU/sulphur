@@ -1,73 +1,52 @@
-"""Write task14/metadata.json from the built pack."""
-import json
+"""task14: metadata.json (outside target/): the decision, the deliverables, the distractors and each file's provenance.
+It names no method, link or mechanism."""
 import os
-import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-import pack as P    # noqa: E402
+import golden as GD
+import pack as PK
 
-TASK = os.path.dirname(HERE)
-F = P.FILES
-SOURCES = {
-    F["register"]: "an academic medical center's extract of Open Payments general payments, program years 2021 to 2025, January 2027 publication, for the covered recipients matched to its clinical faculty since 2021, in the Open Payments public file layout",
-    F["register_june"]: "the same office's earlier extract of program year 2025 as Open Payments first published it (June 2026)",
-    F["profiles"]: "the covered-recipient profiles of every profile the extracts carry, in the Open Payments profile supplement layout",
-    F["research"]: "Open Payments research payments naming a faculty member as principal investigator, in the public file layout",
-    F["roster"]: "the human resources system's clinical faculty appointment terms since July 2019",
-    F["depts"]: "the clinical department codes, with the Department of Medicine's divisions that became departments on 1 July 2025",
-    F["entities"]: "the conflict-of-interest disclosure system's company list",
-    F["export"]: "the disclosure system's export of every annual disclosure for 2021 to 2026 and every submitted version's items",
-    F["history"]: "the disclosure system's submission history",
-    F["nih"]: "NIH awards for fiscal year 2025 with a faculty member as contact principal investigator, in the RePORTER export layout",
-    F["policy"]: "the medical center's conflict-of-interest policy for the clinical faculty (June 2024)",
-    F["guide"]: "the office's guide to the 2026 edition of the annual disclosure form",
+TITLE = "Penmarra Statistics Office: what the bond-based private rents measure will show for the December 2026 quarter"
+COVERS = {
+    "legacy": "the Tenancy Bond Board's legacy register: every bond held on or after 1 January 2019 with its records, to "
+              "5 March 2023",
+    "online": "the Tenancy Bond Board's online system: events from 6 March 2023 to the close of 27 November 2026",
+    "xwalk": "landlord identifiers in the two systems, for landlords holding a bond on 5 March 2023",
+    "codes": "the Board's code lists: record and event types, rent frequencies, dwelling types, rental areas, regions",
+    "conc": "the Statistics Office's suburb concordance: rental areas and the regions in use from 1 July 2024",
+    "panel": "the Statistics Office's Rent Survey: quarterly reports from its panel of rental dwellings, 2018 to the "
+             "September 2026 quarter",
+    "pcodes": "the Rent Survey's code list",
+    "series": "the private rents index the Statistics Office published from the Rent Survey, to the September 2026 quarter",
+    "cpi": "the consumers price index release for the September 2026 quarter",
+    "method": "Methods paper PS-2026-07: the private rents measure's definition and scope",
+    "hpi": "the house price index from settled sales, to the September 2026 quarter",
+    "consents": "dwellings consented by month, region and type, January 2019 to September 2026",
 }
-DISTRACTORS = [F["research"], F["nih"], F["register_june"]]
-DELIVERABLES = ["coi_committee_docket_2027-02.docx", "faculty_remuneration_2026_conformed.csv"]
 
 
-def rows_of(path):
-    if path.endswith(".csv"):
-        with open(path, encoding="utf-8", errors="replace") as fh:
-            return sum(1 for _ in fh) - 1
-    return None
-
-
-def write(target, out_path):
-    files = []
-    for f in sorted(os.listdir(target)):
-        p = os.path.join(target, f)
-        files.append({"path": f, "format": f.rsplit(".", 1)[1], "bytes": os.path.getsize(p), "rows": rows_of(p),
-                      "source": "Constructed: " + SOURCES[f], "date": "2027-01-21",
-                      "license": "CC0-1.0 (original work, constructed for this task)"})
-    big = max((x for x in files if x["rows"]), key=lambda x: x["rows"])
-    meta = {
-        "task": "task14",
-        "architecture": 1,
-        "title": "Conflict of interest committee docket, February 2027",
-        "domain": "Survey Research & Official Statistics",
-        "subdomain": "census-register-administrative-data-quality (faculty disclosures and the Open Payments register)",
-        "objective": "Data Extraction & Conformation (ETL)",
-        "prompt_shape": "01: a ranked list under the committee's cap, with a chart, supporting tables and a conformed "
-                        "faculty-by-year file",
-        "as_of": "2027-01-27",
-        "deliverables": DELIVERABLES,
-        "distractor_files": DISTRACTORS,
-        "stated_inputs": ["15", "2026", "2027", "2025", "2021", "11:59", "1,000"],
-        "input_gates": {"files": len(files), "formats": sorted({x["format"] for x in files}),
-                        "largest_file": big["path"], "largest_file_rows": big["rows"]},
+def metadata(target, counts):
+    files = sorted(os.listdir(target))
+    key_of = {v: k for k, v in PK.FILES.items()}
+    return {
+        "task": "task14", "title": TITLE,
+        "domain": "Other, Survey Research & Official Statistics",
+        "task_type": "seasonal adjustment and official time-series production",
+        "objective": "Data Extraction & Conformation (ETL / Pipeline Build)", "as_of": "2026-12-03",
+        "deliverables": [GD.WORKBOOK, GD.SLIDES],
+        "distractor_files": [PK.FILES[k] for k in PK.DISTRACTORS] + [PK.FILES["series"]],
+        "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
+                        "categories": ["spreadsheet", "text"],
+                        "largest_file": PK.FILES["online"], "largest_file_rows": counts["online"],
+                        "long_file": PK.FILES["legacy"], "long_file_rows": counts["legacy"]},
         "sources": [{"files": "all files under target/",
-                     "origin": "constructed for this task by task14/generator/build.py (seeded, deterministic) in the "
-                               "public layouts of Open Payments general and research payments and its covered-recipient "
-                               "profile supplement, an NIH RePORTER export, a human resources appointment extract and a "
-                               "conflict-of-interest disclosure system's export; the medical center, its office, faculty, "
-                               "manufacturers, companies and people are fictional.",
-                     "date": "2027-01-21", "license": "CC0-1.0 (original work)"}],
-        "created": "2027-01-21",
-        "generator": "task14/generator/build.py",
-        "files": files,
+                     "origin": "generated for this task by simulating the process that makes the files: dwellings "
+                               "entering and leaving Penmarra's rental market, landlords letting them, tenancies starting "
+                               "at the going rent, running and ending, rents reviewed by landlords and operators, bonds "
+                               "lodged, topped up, transferred and refunded at the Tenancy Bond Board, the Board's move to "
+                               "a new system, and the Statistics Office's quarterly Rent Survey. Penmarra, its agencies, "
+                               "its places and its people are invented.",
+                     "date": "2026-11-11", "license": "CC BY 4.0 (original work)"}],
+        "files": [{"path": f, "format": os.path.splitext(f)[1][1:], "bytes": os.path.getsize(os.path.join(target, f)),
+                   "covers": COVERS[key_of[f]], "made": "written by task14/generator/make.py from the simulated process "
+                                                        "(deterministic)"} for f in files],
     }
-    json.dump(meta, open(out_path, "w"), indent=1)
-    open(out_path, "a").write("\n")
-    return meta

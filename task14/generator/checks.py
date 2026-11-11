@@ -1,537 +1,396 @@
-"""task14's assertions, run on every build: the input gates; the golden from the bundle against the generator's truth;
-every rung by name; the whole estimator family with its margins; every semantic-fork row; the three-rules block on the
-clean truth; mess neutrality per Layer 1 item; the asks' goldens, stops and cracker; the separation of the asks from
-the main call; the distractors' deletion test; the bins; the realism sweep."""
-import collections
-import csv
-import datetime as dt
+"""task14: the generator's assertions on the cut pack: the input gates, the realism sweep, the bar block (each result's
+golden inside its band, every rival inside, every shortcut route and the hurried passes outside where the note says,
+nothing planted, the one-fact test computed), every semantic fork row (SF1 to SF19), each hidden factor's footprint
+across the data, the distractor deletion and the golden against the simulated truth.
+
+    python3 task14/generator/checks.py
+"""
 import json
 import os
-import random
 import re
+import shutil
+import subprocess
+import sys
+import tempfile
 
-import asks as A
-import conform as CF
-import golden as GD
-import methods as M
-import pack as P
-import world as W
+import numpy as np
+import pandas as pd
 
-RESULTS = []
+HERE = os.path.dirname(os.path.abspath(__file__))
+TASK = os.path.dirname(HERE)
+sys.path.insert(0, HERE)
+for _v in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ.setdefault(_v, "1")
+import warnings  # noqa: E402
+
+warnings.filterwarnings("ignore")
+import analysis as AN  # noqa: E402
+import conform as CF  # noqa: E402
+import docs as DC  # noqa: E402
+import measure as MS  # noqa: E402
+import pack as PK  # noqa: E402
+import params as P  # noqa: E402
+import project as PJ  # noqa: E402
+
+FAILS = []
+COUNT = [0]
 
 
-def ok(label, cond, detail=""):
-    RESULTS.append((label, bool(cond), detail))
+def check(name, ok, detail=""):
+    COUNT[0] += 1
+    print("%s  %s%s" % ("PASS" if ok else "FAIL", name, (": " + str(detail)) if detail != "" else ""))
+    if not ok:
+        FAILS.append(name)
+
+
+def inside(v, b):
+    if isinstance(b, dict):
+        return all(k in v and b[k][0] - 1e-9 <= v[k] <= b[k][1] + 1e-9 for k in b)
+    return b[0] - 1e-9 <= v <= b[1] + 1e-9
+
+
+def cells_in(v, b):
+    return sum(1 for k in b if k in v and b[k][0] - 1e-9 <= v[k] <= b[k][1] + 1e-9), len(b)
 
 
 def pdf_text(path):
-    from pypdf import PdfReader
-    return "\n".join(p.extract_text() or "" for p in PdfReader(path).pages)
+    try:
+        return subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True, timeout=60).stdout
+    except Exception:
+        return ""
 
 
-class TruthCF(M.Conformed):
-    """The conformed data straight from the generator's world: every relationship-year as paid (with its payments' dates)
-    and as first disclosed, the day each disclosure was first submitted, with no record attached to the wrong person,
-    no amendment, no typed name and no vintage."""
-
-    def __init__(self, fac):
-        import people as PE
-        self.pub, self.dis, self.pay, self.day = {}, {}, {}, {}
-        self.fac = {f.emp_id: None for f in fac}
-        self.filed = set()
-        self._mcache, self._ocache, self._fw = {}, {}, {}
-        for f in fac:
-            for y, t in getattr(f, "filing", {}).items():
-                if t is not None:
-                    self.filed.add((f.emp_id, y))
-                    self.day[(f.emp_id, y)] = PE.eastern_day(t)
-            for rel in f.rels:
-                if rel["mfr"] is None:
-                    continue
-                for y, a in rel["years"].items():
-                    if y <= 2025:
-                        self.pub[(f.emp_id, rel["mfr"], y)] = self.pub.get((f.emp_id, rel["mfr"], y), 0.0) + a
-                        self.pay.setdefault((f.emp_id, rel["mfr"], y), []).extend(rel["pay"][y])
-                    d = f.lines.get((rel["mfr"], y))
-                    if d and (f.emp_id, y) in self.filed:
-                        self.dis[(f.emp_id, rel["mfr"], y)] = d
-        self.by_person_year = collections.defaultdict(dict)
-        for (e, m, y), d in self.dis.items():
-            self.by_person_year[(e, y)][m] = d
-        self.pub_by_person_year = collections.defaultdict(dict)
-        for (e, m, y), a in self.pub.items():
-            self.pub_by_person_year[(e, y)][m] = a
-
-
-NATURAL = ([("line", "face", 0.0), ("line", "pool", 0.0), ("all", "own", 0.0), ("line", "own", 0.0)] +
-           [("all", "usd", K) for K in M.GRIDS["usd"]] + [("all", "n", K) for K in M.GRIDS["n"]] +
-           [("line", "n", K) for K in M.GRIDS["n"]] + [("line", "usd", K) for K in M.GRIDS["usd"]])
-
-
-def default_path(cf):
-    """The analyst's route: the natural corrections (face value, the faculty-wide ratio, each faculty member's overall
-    share or matched-line ratio, own or weighted toward the faculty's), every disclosure read as covering its whole year,
-    compared on 2025 by the filed criterion, the closest applied."""
-    scored = sorted((M.backtest(cf, g, h, K), g, h, K) for g, h, K in NATURAL)
-    best = scored[0]
-    dk, ranked = M.docket(cf, best[1], best[2], best[3])
-    return best, dk, ranked, scored
-
-
-def run(target, golden_dir, world=None, meta_path=None):
-    RESULTS.clear()
-    data = CF.load(target)
-    cf = M.Conformed(data)
-    fac_w = world["fac"]
-    grp = {f.emp_id: f.group for f in fac_w}
-    members = lambda kinds: {f.emp_id for f in fac_w if f.group in kinds}
-    G = M.golden(cf)
-    gold = set(G["docket"])
-    label = lambda dk: " ".join("%s%d" % kv for kv in sorted(collections.Counter(grp[e] for e in dk).items()))
-
-    # ------------------------------------------------------------------ input gates
+def main():
+    target = os.path.join(TASK, "target")
+    F = json.load(open(os.path.join(HERE, "figures.json")))
+    E = json.load(open(os.path.join(HERE, "effort.json")))
+    meta = json.load(open(os.path.join(TASK, "metadata.json")))
     files = sorted(os.listdir(target))
-    meta = json.load(open(meta_path)) if meta_path else {}
-    ok("gate: 10 or more files", len(files) >= 10, len(files))
-    ok("gate: 3 or more formats", len({f.rsplit(".", 1)[1] for f in files}) >= 3, sorted({f.rsplit(".", 1)[1] for f in files}))
-    ok("gate: one file of 25,000 rows or more", len(data["register"]) >= 25000, len(data["register"]))
-    ok("gate: two or more distractors named in metadata.json and shipped",
-       len(meta.get("distractor_files", [])) >= 2 and all(d in files for d in meta.get("distractor_files", [])))
-    ok("gate: no distractor named as such in a file name", not any("distractor" in f for f in files))
+    B = F["band_table"]
 
-    # ------------------------------------------------------------------ the golden
-    ok("golden: the docket is the five large faithful disclosers, the five long-record under-reporters and the five "
-       "December filers whose retainers' December installments came after their disclosures",
-       gold == members({"F", "U", "C"}), label(gold))
-    ok("golden: the weighting chosen on 2025 is the grid's closest (K=%s matched lines)" % G["K"],
-       G["K"] == min(M.GRIDS["n"], key=lambda K: M.backtest(cf, "line", "n", K, "sum", align="both")))
-    ok("golden: K=%s is also the closest whole-number weighting from 1 to 20" % G["K"],
-       G["K"] == min(range(1, 21), key=lambda K: M.backtest(cf, "line", "n", K, "sum", align="both")))
-    gap = G["ranked"][14][1][0] / G["ranked"][15][1][0]
-    ok("golden: the fifteenth stands at least 1.25 times the sixteenth", gap >= 1.25, round(gap, 3))
-    ok("golden: the long-standing faithful filer below the cut stays off it",
-       not members({"S"}) & gold and all(grp[e] != "S" for e, _ in G["ranked"][:20]))
-    truth = TruthCF(fac_w)
-    filed26 = {d["emp_id"] for d in data["disc"] if int(d["disclosure_year"]) == 2026}
-    paid26 = {}
-    for f in fac_w:
-        if f.emp_id in filed26 and f.owes(2026):
-            v = [rel["years"][2026] for rel in f.rels if rel["mfr"] and 2026 in rel["years"]
-                 and f.lines.get((rel["mfr"], 2026))]
-            if v:
-                paid26[f.emp_id] = max(v)
-    top_truth = set(sorted(paid26, key=lambda e: -paid26[e])[:15])
-    ok("golden: the docket is the fifteen largest 2026 single-manufacturer remunerations the manufacturers paid "
-       "(the generator's truth, unpublished)", top_truth == gold, label(top_truth))
-    an = world["golden"]
-    ok("golden: golden.py's docket is the checks' docket", {m["emp_id"] for m in an["members"][:15]} == gold)
-    dec_gold = {e for e in gold if cf.day[(e, 2026)].year == 2026}
-    ok("golden: the docket's December filers are the five C members", dec_gold == members({"C"}), label(dec_gold))
+    # ---------------------------------------------------------------- input gates
+    check("ten or more usable files", len(files) >= 10, len(files))
+    exts = {os.path.splitext(f)[1] for f in files}
+    cats = set()
+    for e in exts:
+        cats.add({".csv": "spreadsheet", ".xlsx": "spreadsheet", ".pdf": "text"}.get(e, "other"))
+    check("two or more file categories", len(cats - {"other"}) >= 2, sorted(cats))
+    rows = {f: sum(1 for _ in open(os.path.join(target, f), encoding="utf-8")) - 1 for f in files if f.endswith(".csv")}
+    big = max(rows.values())
+    check("a CSV of 20,000 rows or more", big >= 20000, big)
+    long_csv = [f for f, n in rows.items() if n >= 1000 and f != max(rows, key=rows.get)]
+    check("a second large CSV of ten printed pages or more", len(long_csv) >= 1, long_csv)
+    dis = meta["distractor_files"]
+    check("two or more distractors", len(dis) >= 2, dis)
+    src = "".join(open(os.path.join(HERE, m)).read() for m in ("conform.py", "measure.py", "project.py", "analysis.py"))
+    for d in dis:
+        stem = d.split("_20")[0].split(".")[0]
+        check("distractor %s read by no golden step" % d, stem not in src and d not in src)
+    check("no file name names a trap", not any(re.search(r"readme|dictionary|manifest|notes|known|issue|trap|decoy",
+                                                         f, re.I) for f in files))
+    check("metadata outside target/", not os.path.exists(os.path.join(target, "metadata.json")))
 
-    # ------------------------------------------------------------------ rungs
-    face = set(M.docket(cf, "line", "face")[0])
-    ok("R0 face value: the under-reporters and the December filers partly give way", face != gold, label(face))
-    ok("R0' the faculty-wide ratio: another docket", set(M.docket(cf, "line", "pool")[0]) != gold)
-    best, dk, ranked, scored = default_path(cf)
-    ok("R3 the default path's comparison on 2025 picks a matched-line ratio weighted toward the faculty's, every disclosure "
-       "read as its whole year, and it files the five censored-history faculty in place of the five December filers",
-       best[1] == "line" and best[2] in ("n", "usd") and set(dk) == members({"F", "U", "X"}),
-       "%s %s" % (best[1:], label(dk)))
-    ok("R3 the default path's choice beats face value by 25 per cent or more on 2025",
-       best[0] <= 0.75 * M.backtest(cf, "line", "face"), round(best[0] / M.backtest(cf, "line", "face"), 3))
-    all_own = set(M.docket(cf, "all", "own")[0])
-    ok("R1 each faculty member's overall share: the omitters join", members({"O"}) <= all_own and all_own != gold,
-       label(all_own))
-    for h, K in (("usd", 2e4), ("n", 3), ("yrs", 2)):
-        s = set(M.docket(cf, "all", h, K)[0])
-        ok("R1' the overall share weighted by %s (K=%s): the omitters join" % (h, K), len(members({"O"}) & s) >= 3 and s != gold,
-           label(s))
-    line_own = set(M.docket(cf, "line", "own")[0])
-    ok("R2 the matched-line ratio unweighted: the thin records join", members({"T"}) <= line_own and line_own != gold,
-       label(line_own))
-    hist_only = set(M.docket(cf, "line", "n", G["K"], align="hist")[0])
-    target_only = set(M.docket(cf, "line", "n", G["K"], align="target")[0])
-    ok("R4 either half of the alignment alone (the earlier years counted to their submission, or the 2026 December "
-       "disclosures grossed up) files the golden docket at the golden weighting", hist_only == gold and target_only == gold,
-       "%s / %s" % (label(hist_only), label(target_only)))
-    face_al = set(M.docket(cf, "line", "face", align="both")[0])
-    ok("R4' the December disclosures grossed up with no reporting correction: the under-reporters stay off",
-       face_al != gold and not members({"U"}) <= face_al, label(face_al))
-
-    # ------------------------------------------------------------------ the family
-    fam = M.family(cf, aligns=M.ALIGNS, covers=M.COVERS)
-    hyb = M.hybrid_rows(cf, aligns=M.ALIGNS, covers=M.COVERS)
-    gold_t = tuple(sorted(gold))
-    weighted = lambda r: (r[1] == "line" or (r[1] == "pair" and r[5] == "line")) and r[2] not in ("face", "pool", "own")
-    unal = [r for r in fam if r[8] == "none"]
-    un_best = {}
-    for r in unal:
-        k = (r[1], r[2], r[4], r[5])
-        un_best[k] = min(un_best.get(k, r[0]), r[0])
-    un_chosen = [r for r in unal if r[0] == un_best[(r[1], r[2], r[4], r[5])]]
-    ok("family: read as covering its whole year, every construction at its chosen weighting files another docket "
-       "(%d constructions)" % len(un_chosen), all(r[6] != gold_t for r in un_chosen),
-       [r[1:6] for r in un_chosen if r[6] == gold_t][:3])
-    ok("family: the closest whole-year construction files another docket and stands 1.15 times the golden or more",
-       min(unal)[6] != gold_t and min(unal)[0] >= 1.15 * G["bt"], round(min(unal)[0] / G["bt"], 3))
-    both_line = [r for r in fam if r[8] == "both" and weighted(r) and r[9] in ("pair", "add")]
-    ok("family: every aligned matched-line construction with a short-record weighting files the golden docket (%d cells)"
-       % len(both_line), all(r[6] == gold_t for r in both_line), [r[1:6] + r[8:] for r in both_line if r[6] != gold_t][:3])
-    every = fam + hyb
-    closer = [r for r in every if r[0] <= G["bt"]]
-    ok("family+: every construction coming closer to 2025 than the golden files the golden docket (%d cells)" % len(closer),
-       all(r[6] == gold_t for r in closer), [r[1:6] + r[8:] for r in closer if r[6] != gold_t][:3])
-    ok("family+: the closest construction of all files the golden docket", min(every)[6] == gold_t, min(every)[1:6])
-    wrong = min(r[0] for r in every if r[6] != gold_t)
-    ok("family+: every construction filing another docket stands 1.08 times the golden or more (the half-aligned ones "
-       "closest)", wrong >= 1.08 * G["bt"], round(wrong / G["bt"], 3))
-    ok("family+: every construction filing another docket stands 1.2 times the closest construction or more",
-       wrong >= 1.2 * min(every)[0], round(wrong / min(every)[0], 3))
-    whole = min(r[0] for r in every if r[8] == "none")
-    ok("family+: every construction reading disclosures as whole years stands 1.15 times the golden and 1.3 times the "
-       "closest construction or more", whole >= 1.15 * G["bt"] and whole >= 1.3 * min(every)[0],
-       "%.3f / %.3f" % (whole / G["bt"], whole / min(every)[0]))
-    best_of = {}
-    for r in both_line:
-        k = (r[1], r[2], r[4], r[5], r[9])
-        best_of[k] = min(best_of.get(k, r[0]), r[0])
-    chosen = [r for r in both_line if r[0] == best_of[(r[1], r[2], r[4], r[5], r[9])]]
-    near = [r for r in every if r[0] <= 1.1 * G["bt"]]
-    ok("family: every construction closer to 2025 than the golden (%d cells) holds the fifteenth at least 1.10 times the "
-       "sixteenth (%.3f at the thinnest)" % (len(closer), min(r[7] for r in closer)), min(r[7] for r in closer) >= 1.10,
-       round(min(r[7] for r in closer), 3))
-    near_full = [r for r in near if r[8] == "both"]
-    ok("family: every fully aligned construction within 10 per cent of the golden on 2025 (%d cells) files the golden "
-       "docket with the fifteenth at least 1.10 times the sixteenth" % len(near_full),
-       all(r[6] == gold_t for r in near_full) and min(r[7] for r in near_full) >= 1.10,
-       round(min(r[7] for r in near_full), 3))
-    fw = [r for r in fam if r[8] == "both" and r[9] == "fw" and weighted(r)]
-    fw_best = {}
-    for r in fw:
-        k = (r[1], r[2], r[4], r[5])
-        fw_best[k] = min(fw_best.get(k, r[0]), r[0])
-    fw_chosen = [r for r in fw if r[0] == fw_best[(r[1], r[2], r[4], r[5])]]
-    ok("family: grossed up by the faculty-wide share instead, every construction's chosen weighting files the golden "
-       "docket (%d constructions)" % len(fw_chosen), all(r[6] == gold_t for r in fw_chosen),
-       [r[1:6] for r in fw_chosen if r[6] != gold_t][:3])
-    umin, cmin, tmax = [], [], []
-    for r in [x for x in chosen + fw_chosen if x[0] <= 1.1 * G["bt"]]:
-        est = M.estimates(cf, 2026, r[1], r[2], r[3], r[4], r[5], align=r[8], cover=r[9])
-        ranked_r = sorted(est.values(), key=lambda v: -v[0])
-        sixteenth, fifteenth = ranked_r[15][0], ranked_r[14][0]
-        umin.append(min(est[e][0] for e in members({"U"})) / sixteenth)
-        cmin.append(min(est[e][0] for e in members({"C"})) / sixteenth)
-        tmax.append(max(est[e][0] for e in members({"T", "X", "P", "O"})) / fifteenth)
-    ok("family: within 10 per cent of the golden, every under-reporter stands at least 1.1 times the sixteenth at each "
-       "chosen weighting", min(umin) >= 1.1, round(min(umin), 3))
-    ok("family: within 10 per cent of the golden, every December filer stands at least 1.1 times the sixteenth at each "
-       "chosen weighting and share", min(cmin) >= 1.1, round(min(cmin), 3))
-    ok("family: within 10 per cent of the golden, the thin records, censored histories, faculty just below and omitters "
-       "sit under the fifteenth place", max(tmax) < 1.0, round(max(tmax), 3))
-
-    # ------------------------------------------------------------------ semantic forks
-    def docket_under(cls=M.Conformed, **kw):
-        c2 = cls(data, **kw)
-        g2 = M.golden(c2)
-        return set(g2["docket"]), c2
-
-    d1, _ = docket_under(natures="all")
-    ok("SF1 remuneration: every nature on the register side files the same docket", d1 == gold, label(d1))
-    d2, _ = docket_under(personal=False)
-    ok("SF2 personally: payments to the university kept files the same docket", d2 == gold)
-    ok("SF3 a single manufacturer: every docket member's 2026 manufacturers are distinct Open Payments IDs",
-       all(len(cf.by_person_year[(e, 2026)]) == len(set(cf.by_person_year[(e, 2026)])) for e in gold))
-    ok("SF4 the calendar year: the disclosures' year is the register's program year (2026 disclosures cover calendar 2026)",
-       all(int(d["disclosure_year"]) in W.YEARS for d in data["disc"]))
-    region_all = {f.emp_id for f in fac_w if f.group != "bg"}
-    amended_region = [d for d in data["disc"] if d["emp_id"] in region_all and d["current_version"] != 1]
-    ok("SF5 the disclosure in force: no docket-region member amended a disclosure, so latest, first and summed versions agree",
-       not amended_region and docket_under(version="first")[0] == gold and docket_under(version="sum")[0] == gold)
-    departed = [e for e in cf.fac if (e, 2026) in cf.by_person_year and not CF.holds(cf.fac[e], dt.date(2026, 12, 31))]
-    ok("SF6 faculty estimated: nobody without an appointment on 31 December 2026 carries a 2026 manufacturer line",
-       not departed, departed[:3])
-    d7, _ = docket_under(vintage="jun")
-    ok("SF7 the latest published year: the June 2026 publication of 2025 files the same docket", d7 == gold, label(d7))
-    for metric in ("rmse", "rel"):
-        best_cells = []
-        for r in fam:
-            est = M.estimates(cf, 2025, r[1], r[2], r[3], r[4], r[5], align=r[8], cover=r[9])
-            tr = M.truth(cf, 2025, est)
-            if metric == "rmse":
-                s = (sum((est[e][0] - tr[e]) ** 2 for e in est) / len(est)) ** 0.5
-            else:
-                s = sum(abs(est[e][0] - tr[e]) / max(tr[e], 1.0) for e in est) / len(est)
-            best_cells.append((s, r[6]))
-        ok("SF8 closest by %s: the closest construction still files the golden docket" % metric, min(best_cells)[1] == gold_t)
-    est25 = M.estimates(cf, 2025, "line", "n", G["K"], "sum", align="both")
-    tr_disc = {e: max(cf.pub_by_person_year.get((e, 2025), {}).get(m, 0.0) for m in cf.by_person_year[(e, 2025)]) for e in est25}
-    btd = lambda al, h, K: sum(abs(M.estimates(cf, 2025, "line", h, K, "sum", align=al)[e][0] - tr_disc[e]) for e in est25)
-    ok("SF9 the comparison on disclosed manufacturers only: the aligned weighting still beats every whole-year reading",
-       btd("both", "n", G["K"]) < min(btd("none", h, K) for h, K in (("face", 0.0), ("n", 2), ("n", 4), ("usd", 1e4))))
-    d10, _ = docket_under(attribution="matcher")
-    d10b, _ = docket_under(attribution="npi")
-    ok("SF10 records of the faculty: the office's matcher and NPI-only attribution file the same docket", d10 == gold and d10b == gold)
-    ok("SF11 a matched line needs both sources: the docket unchanged with disclosed lines the register lacks counted at zero",
-       _sf11(data, gold))
-    ok("SF12 the fifteen: no tie at the fifteenth in any golden cell", min(r[7] for r in every if r[6] == gold_t) > 1.0)
-    d13, _ = docket_under(cls=_UtcDay)
-    ok("SF13 the submission's day: read in UTC rather than Eastern time the same docket", d13 == gold, label(d13))
-    d14, _ = docket_under(cls=_StrictDay)
-    ok("SF14 a payment dated the day of the submission left out: the same docket", d14 == gold, label(d14))
-    d15, _ = docket_under(cls=_FirstDay)
-    ok("SF15 the first submission's day instead of the version in force: the same docket", d15 == gold, label(d15))
-
-    # ------------------------------------------------------------------ three rules on the clean truth
-    tb = default_path(truth)
-    ok("R3a analyst test: on the clean truth the default path's comparison picks a weighted matched-line ratio and files "
-       "the censored-history faculty in place of the December filers",
-       tb[0][1] == "line" and set(tb[1]) == members({"F", "U", "X"}), "%s %s" % (tb[0][1:], label(tb[1])))
-    tg = M.golden(truth)
-    ok("R3b the decisive step alone: the clean truth with each disclosure counted to its submission files the golden docket",
-       set(tg["docket"]) == gold, label(tg["docket"]))
-    ok("R3b the grain alone on the clean truth (aligned, matched lines unweighted) stays wrong",
-       set(M.docket(truth, "line", "own", align="both")[0]) != gold)
-    ok("R3b the weighting alone on the clean truth (aligned overall share weighted) stays wrong",
-       all(set(M.docket(truth, "all", h, K, align="both")[0]) != gold for h, K in (("usd", 2e4), ("n", 3), ("yrs", 2))))
-    ok("R3b the alignment alone on the clean truth (no reporting correction) stays wrong",
-       set(M.docket(truth, "line", "face", align="both")[0]) != gold)
-    cols = {f: hdr for f, hdr in _headers(target).items()}
-    banned = re.compile(r"(ratio|complete|estimate|credib|weight|share|omit|understat|flag|is_|coverage|received)", re.I)
-    ok("R1 the raw material ships: payment records with their dates and disclosure versions with their submission times",
-       len(data["register"]) > 50000 and len(data["items"]) > 3000 and len(data["history"]) > 5000 and G["docket"])
-    ok("R1 no shipped column holds a ratio, an estimate, a weight, a share received or a flag",
-       not [(f, c) for f, hs in cols.items() for c in hs if banned.search(c)],
-       [(f, c) for f, hs in cols.items() for c in hs if banned.search(c)][:4])
-    docs_text = pdf_text(os.path.join(target, P.FILES["policy"])) + pdf_text(os.path.join(target, P.FILES["guide"]))
-    names_g = [m["last"] for m in an["members"][:15]]
-    ok("R3c no plant: no document names a docket member, a ratio, a weighting, an estimator or a disclosure's reach",
-       not any(n in docs_text for n in names_g) and not re.search(
-           r"\b(credib\w*|shrink\w*|weighted|ratio|matched|installment\w*|retainer\w*|so far|to date|received by|"
-           r"payments? (?:made|received) (?:after|before))\b", docs_text, re.I))
-    for item, kw in (("the office's matcher", {"attribution": "matcher"}), ("records carrying an NPI only", {"attribution": "npi"}),
-                     ("payments to the university kept", {"personal": False}), ("every nature", {"natures": "all"}),
-                     ("the first version", {"version": "first"}), ("every version summed", {"version": "sum"}),
-                     ("typed names left out", {"typed": "list"}), ("typed names against present names only", {"typed": "present"}),
-                     ("the June 2026 publication", {"vintage": "jun"})):
-        d, _ = docket_under(**kw)
-        ok("R2 %s: the golden method files the same docket" % item, d == gold, label(d))
-    rows = list(data["register"])
-    random.Random(457).shuffle(rows)
-    shuffled = {k: v for k, v in data.items() if not isinstance(k, tuple) and k not in ("faculty",)}
-    shuffled["register"] = rows
-    ok("R2 row order: the register shuffled files the same docket", set(M.golden(M.Conformed(shuffled))["docket"]) == gold)
-
-    # ------------------------------------------------------------------ asks
-    st = A.stops(data)
-    a, b, c = st["A"]["golden"], st["B"]["golden"], st["C"]["golden"]
-    ok("A golden equals the docket's counts", a == an["asks"]["A"]["golden"])
-    for name, v in st["A"].items():
-        if name == "golden":
-            continue
-        need = (0, 1) if name == "everyone on the roster at the pull" else (1,)
-        ok("A stop '%s' moves %s" % (name, " and ".join(("the owed count", "the late count")[k] for k in need)),
-           all(v[k] != a[k] for k in need), v)
-    ok("A: the late count is a few per cent of those owed and every stop moves it by 20 or more",
-       0.03 <= a[1] / a[0] <= 0.08 and all(abs(v[1] - a[1]) >= 20 for k, v in st["A"].items() if k != "golden"), a)
-    for name, v in st["B"].items():
-        if name == "golden":
-            continue
-        moved = sum(1 for k in b if GD.thousand(b[k]) != GD.thousand(v[k]))
-        ok("B stop '%s' moves %d of 5 natures" % (name, moved), moved >= {"the office's matched employee number": 5,
-           "every record in the extract": 5, "profiles with an NPI only": 4,
-           "profiles without an NPI matched by name alone": 5}.get(name, 1))
-    need_c = {"the list's present names checked against the register": 4,
-              "the list's blank identifier trusted": 4, "typed names against the list's present names": 3,
-              "every typed name": 3, "the first version": 1, "every version": 1}
-    for name, v in st["C"].items():
-        if name == "golden":
-            continue
-        moved = sum(1 for k in c if GD.thousand(c[k]) != GD.thousand(v[k]))
-        ok("C stop '%s' moves %d of 4 types" % (name, moved), moved >= need_c[name])
-    for k, v in b.items():
-        edge = abs((v % 1000) - 500)
-        ok("bin: B %s sits %d dollars from a rounding edge" % (A.NATURE_LABEL[k][:20], edge), edge >= 70, round(v, 2))
-    for k, v in c.items():
-        edge = abs((v % 1000) - 500)
-        ok("bin: C %s sits %d dollars from a rounding edge" % (k, edge), edge >= 70, round(v, 2))
-    ok("bin: B total sits 70 dollars or more from a rounding edge", abs((sum(b.values()) % 1000) - 500) >= 70)
-    ok("bin: C total sits 70 dollars or more from a rounding edge", abs((sum(c.values()) % 1000) - 500) >= 70)
-
-    # ------------------------------------------------------------------ separation of the asks from the main call
-    region = region_all
-    att_m = CF.attribute(data, "matcher")
-    att_p = CF.attribute(data, "profile")
-    wrong_att = [rid for rid, e in att_m.items() if att_p.get(rid) != e and e in region]
-    ok("separation: no other physician's record is attached to a docket-region member", not wrong_att, len(wrong_att))
-    blank_region = [r for r in data["register"] if att_p.get(r["Record_ID"]) in region and not r["Covered_Recipient_NPI"]]
-    ok("separation: no docket-region record lacks its NPI", not blank_region, len(blank_region))
-    third_region = [r for r in data["register"] if att_p.get(r["Record_ID"]) in region and r["Third_Party_Payment_Recipient_Indicator"] != "No Third Party Payment"]
-    ok("separation: no docket-region payment was made to a third party", not third_region)
-    dids = {d["disclosure_id"]: d["emp_id"] for d in data["disc"]}
-    typed_region = [it for it in data["items"] if dids[it["disclosure_id"]] in region and not it["entity_id"]]
-    ok("separation: every docket-region item names a listed company", not typed_region, len(typed_region))
-    late_region = [e for e in members({"F", "P", "U", "O", "T", "C", "X"}) if CF.dept_on(data, cf.fac[e], dt.date(2026, 12, 31)) is None]
-    ok("separation: every docket-region member holds a primary appointment on 31 December 2026 under a current code",
-       not late_region and all(t[2] != "MED" for e in members({"F", "P", "U", "O", "T", "C", "X"}) for t in cf.fac[e]["terms"]
-                               if t[1] >= dt.date(2026, 12, 31)))
-    rekeyed = [f for f in fac_w if getattr(f, "rekey_day", None)]
-    ok("separation: the faculty whose employee number changed hold no industry relationship and none is in the docket region",
-       rekeyed and all(not f.rels and f.group == "bg" for f in rekeyed), len(rekeyed))
-    nowrep_ids = {m["id"] for m in world["mfrs"] if m.get("now_reporting")}
-    nr_people = {e for (e, m, y) in cf.dis if m in nowrep_ids}
-    ok("separation: no line with a company that began reporting is a faculty member's largest, and none is in the region",
-       all(cf.by_person_year[(e, 2026)][m] < max(v for mm, v in cf.by_person_year[(e, 2026)].items() if mm not in nowrep_ids)
-           for (e, m, y) in cf.dis if m in nowrep_ids) and not (nr_people & region))
-    cf_list = M.Conformed(data, listed="list")
-    ok("separation: read through the list's blank identifiers, the estimated faculty and the docket are unchanged",
-       {e for (e, y) in cf_list.by_person_year if y == 2026} == {e for (e, y) in cf.by_person_year if y == 2026}
-       and set(M.golden(cf_list)["docket"]) == gold)
-
-    dup_world = {f.dup_profile: f.emp_id for f in fac_w if getattr(f, "dup_profile", None)}
-    att_np = CF.attribute(data, "profile_npi")
-    prof_of = {r["Record_ID"]: r["Covered_Recipient_Profile_ID"] for r in data["register"]}
-    via_name = {rid: e for rid, e in att_p.items() if att_np.get(rid) != e}
-    ok("separation: the records the name and address tie to a faculty member through a profile without an NPI are the "
-       "duplicate profiles' (%d profiles), each to its own faculty member, none in the docket region" % len(dup_world),
-       via_name and all(dup_world.get(prof_of[rid]) == e and e not in region for rid, e in via_name.items())
-       and {prof_of[rid] for rid in via_name} == set(dup_world), len(via_name))
-    ns_blank = {r["Covered_Recipient_Profile_ID"] for r in data["profiles"] if not r["Covered_Recipient_NPI"]} - set(dup_world)
-    ok("separation: no namesake's profile without an NPI is tied to a faculty member by name and address",
-       not [rid for rid, e in att_p.items() if prof_of[rid] in ns_blank], len(ns_blank))
-    ok("separation: the docket is unchanged with profiles without an NPI left out or matched by name alone",
-       docket_under(attribution="profile_npi")[0] == gold and docket_under(attribution="profile_name")[0] == gold)
-    blank_ents = [x["entity_id"] for x in data["entities"] if not x["open_payments_id"]]
-    renamed_ents = {x for x in blank_ents if CF.listed_op(data, x, "resolve") != CF.listed_op(data, x, "present")}
-    quorvia = {x["entity_id"] for x in data["entities"] if x["entity_name"] in W.NOW_REPORTING_FORMER}
-    ok("separation: the one listed company resolved only through an earlier name on the list is the renamed company that "
-       "began reporting", renamed_ents == quorvia and len(quorvia) == 1, sorted(renamed_ents))
-    cf_pres = M.Conformed(data, listed="present")
-    ok("separation: read through the list's present names, the estimated faculty and the docket are unchanged",
-       {e for (e, y) in cf_pres.by_person_year if y == 2026} == {e for (e, y) in cf.by_person_year if y == 2026}
-       and set(M.golden(cf_pres)["docket"]) == gold)
-
-    # ------------------------------------------------------------------ cracker: the readings a careful analyst takes
-    crack_a = A.ask_a(data, link="emp")
-    ok("cracker A: employee numbers joined as they stand misses the late count", crack_a[1] != a[1], crack_a)
-    crack_b2 = A.ask_b(data, attribution="profile_npi")
-    ok("cracker B: the profiles' NPIs alone miss four natures and the total",
-       sum(GD.thousand(b[k]) != GD.thousand(crack_b2[k]) for k in b) >= 4
-       and GD.thousand(sum(b.values())) != GD.thousand(sum(crack_b2.values())))
-    crack_c2 = A.ask_c(data, listed="present")
-    ok("cracker C: the list's present names checked against the register miss every type and the total",
-       all(GD.thousand(c[k]) != GD.thousand(crack_c2[k]) for k in c)
-       and GD.thousand(sum(c.values())) != GD.thousand(sum(crack_c2.values())))
-    crack_b = A.ask_b(data, attribution="matcher")
-    ok("cracker B: the office's matched column trusted misses every nature", all(GD.thousand(b[k]) != GD.thousand(crack_b[k]) for k in b))
-    crack_c = A.ask_c(data, listed="list")
-    ok("cracker C: the list's blank identifiers trusted miss every type", all(GD.thousand(c[k]) != GD.thousand(crack_c[k]) for k in c))
-
-    # ------------------------------------------------------------------ distractors
-    used = {"register", "profiles", "roster", "depts", "entities", "export", "history"}
-    ok("distractors: the golden reads none of the research extract, the NIH awards or the June 2026 publication",
-       not ({"research", "nih", "register_june"} & used) and all(P.FILES[k] in meta.get("distractor_files", [])
-                                                                    for k in ("research", "nih", "register_june")))
-
-    # ------------------------------------------------------------------ realism sweep
-    amts = [float(it["amount_usd"]) for it in data["items"] if it["amount_usd"] not in (None, "")]
-    top_amt = max(collections.Counter(amts).values())
-    ok("realism: self-reported amounts heap on round figures as reports do (a third or more on whole $500s, no one amount "
-       "above 15 per cent)", sum(1 for x in amts if x % 500 == 0) >= len(amts) / 3 and top_amt <= 0.15 * len(amts), top_amt)
-    amounts = [float(r["Total_Amount_of_Payment_USDollars"]) for r in data["register"]]
-    ok("realism: register amounts are not round (under 6 per cent whole hundreds)",
-       sum(1 for x in amounts if x % 100 == 0) < 0.06 * len(amounts), round(sum(1 for x in amounts if x % 100 == 0) / len(amounts), 3))
-    ok("realism: the personas are the card's", all(p in (W.PEOPLE.values()) for p in ("Karen Shea", "Diana Hickman", "Herbert Dean")))
-    rid = [int(r["Record_ID"]) for r in data["register"]]
-    diffs = collections.Counter(y - x for x, y in zip(sorted(rid), sorted(rid)[1:]))
-    ok("realism: Record_IDs advance irregularly", max(diffs.values()) < 0.03 * len(rid))
-    dates = [dt.datetime.strptime(r["Date_of_Payment"], "%m/%d/%Y").date() for r in data["register"]]
-    ok("realism: no register date after the extract", max(dates) <= dt.date(2025, 12, 31))
-    hist_t = [dt.datetime.strptime(e["event_time_utc"], "%Y-%m-%dT%H:%M:%SZ") for e in data["history"]]
-    ok("realism: no submission after the export's pull", max(hist_t) <= dt.datetime(2027, 1, 21, 15, 0))
-    secs = collections.Counter(t.second for t in hist_t)
-    ok("realism: submission times carry no favoured second", max(secs.values()) < 0.04 * len(hist_t), max(secs.values()))
-    emp_bg = sorted(int(f.emp_id) for f in fac_w if f.group == "bg")
-    ok("realism: the docket region's employee numbers sit inside the roster's own range",
-       all(emp_bg[0] < int(e) < emp_bg[-1] for e in region))
-    d26 = sorted(cf.by_person_year[(e, 2026)][m] for e in gold for m in [G["ranked"][[x[0] for x in G["ranked"]].index(e)][1][1]])
-    steps = collections.Counter(round(y - x, -2) for x, y in zip(d26, d26[1:]))
-    ok("realism: the docket's disclosed amounts follow no arithmetic progression", max(steps.values()) <= 3, steps.most_common(2))
-    addr = collections.Counter(r["Recipient_Primary_Business_Street_Address_Line1"] for r in data["register"])
-    ok("realism: no one business address on more than 40 per cent of the register's rows",
-       max(addr.values()) < 0.4 * len(data["register"]), addr.most_common(1))
-    prods = {r["Name_of_Drug_or_Biological_or_Device_or_Medical_Supply_1"] for r in data["register"]} - {""}
-    ok("realism: product names are words, not codes", not [p for p in prods if re.search(r"\d", p)])
-    figs = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures.json")))
-    ok("figures.json carries the docket", sorted(figs["call"]) == sorted(m["name"] for m in an["members"][:15]))
-
-    failed = [r for r in RESULTS if not r[1]]
-    for lbl, good, det in RESULTS:
-        print("%s  %s%s" % ("PASS" if good else "FAIL", lbl, ("  [%s]" % det) if det not in ("", None) and not good else ""))
-    print("checks: %d of %d pass" % (len(RESULTS) - len(failed), len(RESULTS)))
-    return not failed
-
-
-class _ZeroPublished(M.Conformed):
-    """A disclosed manufacturer-year the register lacks taken as a line with nothing published."""
-
-    def matched(self, e, before, aligned=False):
-        key = (e, before, aligned)
-        if key in self._mcache:
-            return self._mcache[key]
-        out = []
-        for y in range(2021, before):
-            for m, d in self.by_person_year.get((e, y), {}).items():
-                a = self.pub_by_person_year.get((e, y), {}).get(m, 0.0)
-                if aligned and a:
-                    a = self.to_day(e, m, y)
-                if d:
-                    out.append((a, d, m, y))
-        self._mcache[key] = out
-        return out
-
-
-class _UtcDay(M.Conformed):
-    """The submission's day read in UTC."""
-
-    def __init__(self, data, **kw):
-        super().__init__(data, **kw)
-        self.day = dict(self.day)
-        for d in data["disc"]:
-            v = d["last_submitted_utc"]
-            t = v if isinstance(v, dt.datetime) else dt.datetime.strptime(v, "%Y-%m-%d %H:%M:%S")
-            self.day[(d["emp_id"], int(d["disclosure_year"]))] = t.date()
-
-
-class _StrictDay(M.Conformed):
-    """A payment dated the day of the submission not yet received."""
-
-    def __init__(self, data, **kw):
-        super().__init__(data, **kw)
-        self.day = {k: v - dt.timedelta(days=1) for k, v in self.day.items()}
-
-
-class _FirstDay(M.Conformed):
-    """The day the disclosure was first submitted, whatever version is in force."""
-
-    def __init__(self, data, **kw):
-        super().__init__(data, **kw)
-        self.day = dict(CF.in_force_day(data, "first"))
-
-
-def _sf11(data, gold):
-    cf = _ZeroPublished(data)
-    return set(M.golden(cf)["docket"]) == gold
-
-
-def _headers(target):
-    from openpyxl import load_workbook
-    out = {}
-    for f in sorted(os.listdir(target)):
+    # ---------------------------------------------------------------- realism sweep
+    texts = {}
+    for f in files:
         p = os.path.join(target, f)
         if f.endswith(".csv"):
-            with open(p, encoding="utf-8") as fh:
-                out[f] = next(csv.reader(fh))
-        elif f.endswith(".xlsx"):
-            wb = load_workbook(p, read_only=True)
-            out[f] = sorted({str(x) for ws in wb.worksheets for x in next(ws.iter_rows(max_row=1, values_only=True))})
-    return out
+            texts[f] = open(p, encoding="utf-8").read()
+        elif f.endswith(".pdf"):
+            texts[f] = pdf_text(p)
+    alltext = "\n".join(texts.values())
+    check("no em or en dash in any shipped text", "\u2014" not in alltext and "\u2013" not in alltext)
+    meth = texts.get(PK.FILES["method"], "")
+    check("methods paper carries its definitions", all(DC.DEFS[k][:40].split()[0] in meth for k in DC.DEFS) and
+          "2.4" in meth, "pdftotext %d chars" % len(meth))
+    lw = meth.lower()
+    check("methods paper names no method, source or mechanism", not any(w in lw for w in (
+        "additional bond", "top-up", "topup", "panel", "operator", "harbourline", "quayside", "migrat", "impute",
+        "bootstrap", "project", "survey's rises", "anniversar")), "")
+    for f in files:
+        if f.endswith(".csv"):
+            head = texts[f].splitlines()[0].lower()
+            check("%s header describes no process" % f, not re.search(r"impute|derived|adjusted|corrected|flag", head))
+    goldnums = ["%.1f per cent" % F["dec26"]["NAT"], "%.1f per cent" % F["sep26"]["NAT"]]
+    check("no golden figure sentence in the pack", not any(g in alltext for g in goldnums))
+
+    # ---------------------------------------------------------------- the bar block
+    res = {r["id"]: r for r in E["results"]}
+    for rid, r in res.items():
+        band = r.get("bands") or r.get("band")
+        check("%s golden inside its band" % rid, inside(r["golden"], band) if isinstance(band, dict) else
+              band[0] - 1e-9 <= r["golden"] <= band[1] + 1e-9)
+    # every rival inside its band on every result it touches
+    for name, vals in F["rival_values"].items():
+        for rid, v in vals.items():
+            check("rival '%s' inside %s's band" % (name, rid), inside(v, B[rid]),
+                  "%s of %s cells" % cells_in(v, B[rid]) if isinstance(v, dict) else round(v, 3))
+    defensible = ["a t multiplier for three back-test years", "the two errors added", "the back-test bias removed",
+                  "the projection's error alone"]
+    for name in defensible:
+        check("range rival '%s' inside R6's band" % name, inside(F["range_rivals"][name], B["R6"]),
+              F["range_rivals"][name]["half"])
+    check("range rival 'the panel's error alone' inside R6's band (a sampling-error-only range)",
+          inside(F["range_rivals"]["the panel's error alone"], B["R6"]),
+          F["range_rivals"]["the panel's error alone"]["half"])
+    for y, v in F["validation"].items():
+        check("on the dwellings both sources hold, rents carried from each starting rent match the survey's reported "
+              "rents best (%s)" % y, abs(v["model"]) < 0.5 and v["carry"] > 0.5 and v["recorded"] < -3.0 and
+              v["hybrid"] < -0.5 and v["n"] > 2000, v)
+    bts = [d for d in F["dec_backtests"] if d["year"] < 2026]
+    check("the projection missed each earlier December by 0.1 point or less", all(abs(e) <= 0.1 for e in
+                                                                                  F["proj_bt_err"]), F["proj_bt_err"])
+    check("a straight trend missed the earlier Decembers by more than the projection did",
+          max(abs(e) for e in F["trend_bt_err"]) > max(abs(e) for e in F["proj_bt_err"]), F["trend_bt_err"])
+    check("the register as it stands fell short of every earlier December by half a point or more",
+          all(s_ >= 0.5 for s_ in F["asstands_short"]), F["asstands_short"])
+    check("December 2026's re-letting part is smaller than any earlier December's", F["rest_part_2026"] <
+          min(F["rest_part"]), "%.2f against %s" % (F["rest_part_2026"], F["rest_part"]))
+    check("the reviews not yet on file add to December 2026 as they did before", F["reviews_part"][-1] > 0.1,
+          F["reviews_part"])
+    dc = F["dec_churn"]
+    check("December 2026's re-lettings let at a smaller margin over the rents they replace than in 2024 or 2025",
+          dc["2026"]["margin"] < min(dc["2024"]["margin"], dc["2025"]["margin"]) - 2.0,
+          "%.1f against %.1f and %.1f" % (dc["2026"]["margin"], dc["2024"]["margin"], dc["2025"]["margin"]))
+    check("the 27 November reading plus earlier years' change to December back-tests worse than the projection",
+          F["analog"]["max_error"] > max(abs(e) for e in F["proj_bt_err"]) + 0.05 and
+          abs(F["analog"]["dec26"] - F["dec26"]["NAT"]) > B["R7"][1] - F["dec26"]["NAT"],
+          "max error %.2f; December %.1f" % (F["analog"]["max_error"], F["analog"]["dec26"]))
+    pl = F["panel_link"]
+    check("the panel links to the register by address", pl["linked"] >= 0.95 * pl["dwellings"],
+          "%d of %d" % (pl["linked"], pl["dwellings"]))
+    for y, d in pl["years"].items():
+        check("panel anniversaries with an additional bond rose more, and those without less, than the survey's "
+              "average in %s" % y, d["with"] > d["all"] > d["without"] and d["n_with"] > 200,
+              "%.1f, %.1f, %.1f" % (d["with"], d["all"], d["without"]))
+    # every shortcut route's December figure outside R7's band
+    for name, d in F["routes_dec"].items():
+        if name == "the golden":
+            continue
+        rv = F["route_values"][name]["R7"]
+        check("route '%s' files a December figure outside R7's band" % name, not inside(rv, B["R7"]), round(rv, 3))
+    wrong = {v for k, v in F["routes_dec"].items() if k != "the golden" and v != F["routes_dec"]["the golden"]}
+    check("shortcuts land on five or more different wrong December figures", len(wrong) >= 5, sorted(wrong))
+    # September: the engine shortcuts outside R5's national band
+    for name in ("the additional bonds read as every rise", "re-lettings tied by property identifier alone",
+                 "re-lettings against the earlier tenancy's starting rent",
+                 "careful but hurried: the panel's rises carried to every landlord"):
+        v = F["route_values"][name]["R5"]["2026Q3"]
+        check("route '%s' outside the September national band" % name, not inside(v, B["R5"]["2026Q3"]), round(v, 3))
+    cf = "careful but hurried: the latest recorded rent carried forward at the panel's rate"
+    gaps = [F["route_values"][cf]["R5"][q] - F["series"][q] for q in F["series"] if q.startswith(("2023", "2024"))]
+    check("recorded rents carried forward run above the measure through 2023 and 2024", max(gaps) > 0.2 and
+          min(gaps) > 0.0, "%.2f to %.2f" % (min(gaps), max(gaps)))
+    check("recorded rents carried forward miss the re-letting change", not inside(F["route_values"][cf]["R4"], B["R4"]),
+          F["route_values"][cf]["R4"])
+    # the passes
+    care = {rid: r["passes"]["careful"] for rid, r in res.items()}
+    quick = {rid: r["passes"]["quick"] for rid, r in res.items()}
+    for rid in ("R3", "R6", "R7", "R8"):
+        band = res[rid].get("bands") or res[rid].get("band")
+        check("careful pass misses %s" % rid, not inside(care[rid], band))
+    check("careful pass not right on R5", not inside(care["R5"], res["R5"]["bands"]))
+    check("quick pass misses every result", all(not inside(quick[rid], res[rid].get("bands") or res[rid].get("band"))
+                                                for rid in res))
+    worst = max(len(h["rescues"]) for h in E["hints"])
+    check("no single sentence rescues more than a third of the results", worst <= len(res) / 3.0,
+          "%d of %d" % (worst, len(res)))
+    check("every careful variant scores 50 or under", max(E["careful_variants"].values()) <= 50.0, E["careful_variants"])
+    check("the careful pass is the best-scoring variant", E["careful_variants"][E["careful_pass"]] ==
+          max(E["careful_variants"].values()), E["careful_pass"])
+
+    # ---------------------------------------------------------------- the files themselves
+    D = CF.load(target)
+    G = AN.Golden(target, "golden")
+    Eng = G.E
+    T = Eng.T
+    O = D["O"]
+    # SF rows
+    check("SF1 unbonded tenancies are outside (2.7): the register holds only bonds", "2.7" in DC.DEFS and
+          "without a bond" in DC.DEFS["2.7"])
+    sep26, sep25 = MS.quarter_end(2026, 3), MS.quarter_end(2025, 3)
+    check("SF2 the quarter's day is its last day (2.4)", "last day of the quarter" in DC.DEFS["2.4"])
+    check("SF3 rent payable as the agreement stands (2.3)", "as it stands" in DC.DEFS["2.3"])
+    fr = D["L"]["RENT_FREQ"].value_counts().to_dict()
+    check("SF4 fortnightly and monthly rents ship and convert by 2.3", fr.get("F", 0) > 0 and fr.get("M", 0) > 0 and
+          "twelve and divided by fifty-two" in DC.DEFS["2.3"], fr)
+    a, b = Eng.matched(sep26, sep25)
+    check("SF5 the comparison holds only dwellings let on both days", len(a) == len(b) and len(a) > 50000, len(a))
+    overl = T.sort_values(["dwelling", "start"]).groupby("dwelling")["start"].shift(-1)
+    n_over = int(((overl.notna()) & (T.sort_values(["dwelling", "start"])["refund"] - 1 >= overl)).sum())
+    check("SF6 refunds pending when the next tenancy starts occur and resolve to the later tenancy", n_over > 1000, n_over)
+    Ts = T.sort_values(["dwelling", "start", "lodged"], kind="stable")
+    nx = Ts.groupby("dwelling")["start"].shift(-1)
+    want = np.fmin(Ts["refund"].fillna(np.inf).values - 1, nx.fillna(np.inf).values - 1)
+    got = np.where(Ts["end"].values >= 1e9, np.inf, Ts["end"].values)
+    never = int((Eng.end < Eng.start).sum())
+    check("SF7 a tenancy ends the day before its refund or the next start (2.2)", "day before its bond is refunded" in
+          DC.DEFS["2.2"] and bool(np.all(np.isclose(got, want) | (np.isinf(got) & np.isinf(want)))) and
+          never < 0.0005 * Eng.n, "%d tenancies at merged room keys never cover a day" % never)
+    check("SF8 a re-let dwelling's earlier rent is its own day's rent (2.4)", "rent payable on its own day" in
+          DC.DEFS["2.4"])
+    conc = D["C"]
+    check("SF9 regions by suburb from the concordance for every quarter (2.6)", conc["region_code"].nunique() == 7 and
+          "including those before July 2024" in DC.DEFS["2.6"])
+    r = Eng.measure(sep26, sep25, G.CL)
+    w = np.array([r[g]["n"] for g in MS.REGIONS])
+    avg = float(np.average([r[g]["measure"] for g in MS.REGIONS], weights=w))
+    check("SF10 the national figure is the ratio of all totals, not the regions' average", abs(avg - r["NAT"]["measure"])
+          > 1e-6 and abs(F["sep26"]["NAT"] - round(r["NAT"]["measure"] + 1e-12, 1)) < 1e-9, round(avg, 3))
+    check("SF11 rooms let under their own agreement are dwellings", (T["dtype"] == "room").sum() > 1000)
+    ev = O["event"].value_counts().to_dict()
+    opened = set(O[O["event"].isin(["LODGE", "MIGRATED"])]["bond_id"])
+    check("SF12 transfers and changes of parties are events on one bond", ev.get("TRANSFER", 0) > 0 and
+          ev.get("PARTIES", 0) > 0 and O[O["event"].isin(["TRANSFER", "PARTIES"])]["bond_id"].isin(opened).all(), ev)
+    rr = Eng.measure(sep26, sep25, G.CL, P=G.p)
+    check("SF13 the share of continuing tenancies is a count of tenancies", abs(F["cont_share"] - round(
+        rr["NAT"]["share_rose"] + 1e-12, 1)) < 1e-9, rr["NAT"]["share_rose"])
+    check("SF14 each group's change is its own ratio of totals (2.5)", "computed in the same way" in DC.DEFS["2.5"] and
+          abs(F["cont_change"] - round(rr["NAT"]["same"] + 1e-12, 1)) < 1e-9)
+    check("SF15 re-let dwellings are let on both days under different tenancies (2.5)",
+          F["relet_n"]["NAT"] == rr["NAT"]["n_relet"], rr["NAT"]["n_relet"])
+    check("SF16 tenancies held are those covering 30 September 2026 (2.2)", F["held"]["NAT"] == Eng.held_on(sep26)["NAT"])
+    check("SF17 the range combines the panel's sampling error and the projection's back-test error",
+          abs(F["dec26_half"] - round(1.645 * np.hypot(json.load(open(os.path.join(HERE, "figures.json")))
+                                                       ["range_variants"]["the panel's error alone"] / 1.645,
+                                                       F["range_variants"]["the projection's error alone"] / 1.645),
+                                      2)) <= 0.011, F["dec26_half"])
+    c26, cdec = F["contrib26"], F["contrib_dec"]
+    check("SF18 the two groups' contributions add back to the measure, in September and in December",
+          abs(c26["continuing"] + c26["relet"] - F["sep26"]["NAT"]) < 0.06 and
+          abs(cdec["continuing"] + cdec["relet"] - F["dec26"]["NAT"]) < 0.06,
+          "%.2f, %.2f" % (c26["continuing"] + c26["relet"], cdec["continuing"] + cdec["relet"]))
+    check("SF18 the split is the change in each group's contribution and adds to the change in the measure",
+          abs(F["slow"]["fall"] - (F["slow"]["continuing"] + F["slow"]["relet"])) < 1e-9 and
+          abs(F["slow"]["fall"] - (F["dec26"]["NAT"] - F["sep26"]["NAT"])) < 0.11, F["slow"])
+    lod = O[O["event"] == "LODGE"]
+    pk = [(pc,) + tuple(CF.parse_address(a_) or ()) for pc, a_ in zip(lod["postcode"], lod["address"])]
+    npid = pd.DataFrame({"k": pk, "pid": lod["property_id"].values}).groupby("k")["pid"].nunique()
+    check("SF20 a dwelling's address and its property identifier name the same dwelling (no address carries two)",
+          int((npid > 1).sum()) == 0 and len(npid) > 40000, "%d of %d addresses" % (int((npid > 1).sum()), len(npid)))
+    check("SF19 the December quarter is 31 December 2026 against 31 December 2025 (2.4)",
+          MS.quarter_end(2026, 4) == AN.DEC26 and MS.quarter_end(2025, 4) == AN.DEC25)
+
+    # ---------------------------------------------------------------- hidden factors, across the data
+    small = ~Eng.op
+    same = a == b
+    ii = a[same]
+    rec1 = Eng.recorded_rent(ii, sep25)
+    rec2 = Eng.recorded_rent(ii, sep26)
+    up = rec2 > rec1 + 1e-9
+    for gi, g in enumerate(MS.REGIONS):
+        k = (Eng.ri[ii] == gi) & small[ii]
+        check("additional bonds record under a third of small landlords' continuing tenancies in %s" % g,
+              k.sum() > 300 and up[k].mean() < 0.33, round(float(up[k].mean()), 3))
+    pairs = G.pairs
+    for y in (2019, 2022, 2025):
+        check("the panel shows rises for most anniversaries in %d" % y, pairs[pairs["year"] == y]["rose"].mean() > 0.4,
+              round(float(pairs[pairs["year"] == y]["rose"].mean()), 3))
+    sched = PJ.review_schedule(Eng, cpi=G.cpi)
+    check("two operators review on fixed days every year", sorted((v[0], v[1]) for v in sched.values()) ==
+          [(11, 1), (12, 1)], {k: v[:3] for k, v in sched.items()})
+    for lid, (mo, dd, sh, rule, rises) in sched.items():
+        check("operator %s reviews in each of 2023 to 2025" % lid, len(rises) == 3, rises)
+        check("operator %s's reviews follow the September CPI plus a fixed margin" % lid,
+              rule is not None and rule[0] == 1 and all(abs(rises[y] - G.cpi[(y, 3)] - rule[1]) < 0.06 for y in rises),
+              rule)
+    a_lid = [k for k, v in sched.items() if (v[0], v[1]) == (12, 1)][0]
+    b_lid = [k for k, v in sched.items() if (v[0], v[1]) == (11, 1)][0]
+    land = T["landlord_id"].values
+    n_a26 = int(((Eng.tops["effective"] == MS.day(2026, 12, 1)) & (land[Eng.tops["i"].values] == a_lid)).sum())
+    check("no 1 December 2026 review is on file at the extract's close", n_a26 == 0, n_a26)
+    on = F["reviewed_onfile_n"]
+    pend = F["pending_n"]
+    check("Quayside's 1 November 2026 review is partly on file (between a third and two thirds)",
+          0.33 < on / float(on + pend) < 0.67, "%d lodged, %d pending" % (on, pend))
+    mig = O[O["event"] == "MIGRATED"]
+    by_reg = mig.groupby(mig["postcode"].map(dict(zip(conc["postcode"], conc["region_code"]))))["property_id"].apply(
+        lambda s: (s.fillna("") == "").mean())
+    check("every migrated bond lacks a property identifier, in every region", len(by_reg) == 7 and
+          bool((by_reg > 0.999).all()), by_reg.round(3).to_dict())
+    lod = O[O["event"] == "LODGE"]
+    check("online lodgements carry property identifiers", (lod["property_id"].fillna("") != "").mean() > 0.99)
+    PN = D["PN"]
+    blk = {s.upper() for (_o, _r, _d, _u, s, _n, _m) in P.BLOCKS}
+    pstreets = PN["address"].str.upper().str.extract(r"\d+[A-Z]?\s+(.+?)\s+(?:STREET|ROAD|AVENUE|TERRACE|CRESCENT|PLACE|"
+                                                     r"DRIVE|LANE|GROVE|PARADE|CLOSE|WAY)$")[0]
+    opn = {(s.upper(), str(n)) for (_o, _r, _d, _u, s, n, _m) in P.BLOCKS}
+    hits = PN["address"].str.upper().apply(lambda s: any(("%s %s " % (n, st)) in s + " " for st, n in opn))
+    check("the rent panel holds no operator block", int(hits.sum()) == 0, int(hits.sum()))
+    check("operators hold a material share of the bonds held", 0.08 < Eng.op[Eng.in_place(sep26).values].mean() < 0.25,
+          round(float(Eng.op[Eng.in_place(sep26).values].mean()), 3))
+    ix = G.ix
+    gj, gn = [], []
+    for ri, g in enumerate(MS.REGIONS):
+        s = ix[ri]
+        gj.append(s.loc[pd.Period("2026-05", "M"):pd.Period("2026-07", "M")].mean() -
+                  s.loc[pd.Period("2025-05", "M"):pd.Period("2025-07", "M")].mean())
+        gn.append(s.loc[pd.Period("2026-09", "M"):pd.Period("2026-11", "M")].mean() -
+                  s.loc[pd.Period("2025-09", "M"):pd.Period("2025-11", "M")].mean())
+    falls = sum(1 for a_, b_ in zip(gj, gn) if b_ < a_)
+    check("going rents' annual growth fell from July to November 2026 in most regions", falls >= 5,
+          "%d of 7" % falls)
+    check("going rents' annual growth fell by a point or more on the regions' average",
+          float(np.mean(gj) - np.mean(gn)) >= 0.01, "%.3f to %.3f" % (np.mean(gj), np.mean(gn)))
+
+    # ---------------------------------------------------------------- house fixes on the write-up and golden
+    held_by = pd.Series(land[Eng.in_place(sep26).values]).value_counts()
+    check("the prompt asks for tenancies in place and the move from September to December",
+          "in place at 30 September 2026" in open(os.path.join(TASK, "prompt.txt")).read() and
+          "from the September figure to the December one" in open(os.path.join(TASK, "prompt.txt")).read())
+    check("the 1 December landlord is the larger build-to-rent landlord (slide 1)", F["a_landlord"] == a_lid and
+          F["b_landlord"] == b_lid and held_by.get(a_lid, 0) > held_by.get(b_lid, 0) > 2000,
+          "%d against %d bonds held" % (held_by.get(a_lid, 0), held_by.get(b_lid, 0)))
+    sub = open(os.path.join(TASK, "submission.md")).read()
+    named = set(re.findall(r"\b(?:tbb|pso)_[\w.-]+\.(?:csv|xlsx|pdf)", sub))
+    check("every file the write-up names ships in the pack", named <= set(files) and len(named) >= 5, sorted(named))
+    cited = set(re.findall(r"\b2\.[1-7]\b", sub))
+    check("every methods paper section the write-up cites exists", cited <= set(DC.DEFS), sorted(cited))
+    check("the write-up and golden name no business", not re.search(r"Harbourline|Quayside|Student Halls", sub))
+    check("one submission.md and one prompt.txt in the task tree",
+          sum(1 for r_, _d, fs in os.walk(TASK) for f_ in fs if f_ == "submission.md") == 1 and
+          sum(1 for r_, _d, fs in os.walk(TASK) for f_ in fs if f_ in ("prompt.txt", "prompt.md")) == 1)
+
+    # ---------------------------------------------------------------- distractor deletion
+    tmp = tempfile.mkdtemp(prefix="task14-nodis-")
+    try:
+        for f in files:
+            if f not in dis:
+                shutil.copy(os.path.join(target, f), tmp)
+        G2 = AN.Golden(tmp, "golden")
+        r2 = G2.E.measure(sep26, sep25, G2.CL)
+        d2 = PJ.project(G2.E, G2.CL, ix=G2.ix, cpi=G2.cpi)
+        check("deleting the distractors leaves September unchanged", abs(r2["NAT"]["measure"] - r["NAT"]["measure"])
+              < 1e-9)
+        check("deleting the distractors leaves December unchanged", abs(round(d2["NAT"] + 1e-12, 1) -
+                                                                         F["dec26"]["NAT"]) < 1e-9, round(d2["NAT"], 3))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # ---------------------------------------------------------------- the golden against the simulated truth
+    sys.path.insert(0, HERE)
+    import truth as TR
+    tr = TR.truth()
+    check("September 2026 within 0.1 of the truth", abs(r["NAT"]["measure"] - tr["sep26"]["NAT"]) < 0.1,
+          "%.3f against %.3f" % (r["NAT"]["measure"], tr["sep26"]["NAT"]))
+    check("December 2026 within 0.15 of the truth", abs(F["dec26"]["NAT"] - tr["dec26"]["NAT"]) < 0.15,
+          "%.1f against %.3f" % (F["dec26"]["NAT"], tr["dec26"]["NAT"]))
+    dev = max(abs(F["series"][q] - tr["series"][q]) for q in F["series"])
+    check("every quarter of the back series within 0.15 of the truth", dev < 0.15, round(dev, 3))
+    check("tenancies held within 0.3 per cent of the truth", abs(F["held"]["NAT"] / tr["held"] - 1) < 0.003,
+          "%d against %d" % (F["held"]["NAT"], tr["held"]))
+    check("re-lettings within 2 per cent of the truth", abs(F["relet_n"]["NAT"] / tr["sep26"]["n_relet"] - 1) < 0.02,
+          "%d against %d" % (F["relet_n"]["NAT"], tr["sep26"]["n_relet"]))
+    check("continuing change within its band of the truth", abs(F["cont_change"] - tr["sep26"]["same"]) < 0.15,
+          "%.1f against %.3f" % (F["cont_change"], tr["sep26"]["same"]))
+    check("re-letting change within its band of the truth", abs(F["relet_change"] - tr["sep26"]["relet"]) < 0.5,
+          "%.1f against %.3f" % (F["relet_change"], tr["sep26"]["relet"]))
+    print("%d checks, %d failed" % (COUNT[0], len(FAILS)))
+    if COUNT[0] < 40:
+        print("FAIL  fewer than forty assertions")
+        return 1
+    return 1 if FAILS else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,18 +1,34 @@
 {
  "task": "task14",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
- "stump": "",
+ "stump": "results chain of nine across seven areas: the unlodged rises, the operators' complete records against the panel's coverage, the recorded rises' size, the migrated bonds tied by address, the reviews not yet on file and December's re-lettings, with the range from the panel and the back-test",
  "architecture": 3,
  "loops": 0,
- "precut": {},
- "leak": {},
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-11",
+  "note": "85 checks, 0 FAIL, 1 WARN (R3 upstream of five results; the largest single hint rescues three of nine)"
+ },
+ "leak": {
+  "date": "2026-11-11",
+  "mechanical": "REVIEW, no LEAK",
+  "reader": "two isolated reads: nothing planted, no ranking or helper file, every literal sentence executes to the golden's estimand; question 6 overruled by measurement; realism notes on bond multiples and suburb endings fixed"
+ },
  "duplicate_check": {},
- "judge": {},
+ "judge": {
+  "date": "2026-11-11",
+  "pass1": "NOT_DETERMINISTIC, FIX_NOW (estimators unranked, dwelling identity, December rivals by argument, one-fact from a record-only run): fixed in the world and the generator",
+  "pass2": "DETERMINISTIC, FIX_NOW (series band, December term sizing, share construction): fixed in the answer blocks; the one re-judge spent",
+  "reports": [
+   "determinism_check_report.md",
+   "determinism_check_report_pass2.md"
+  ]
+ },
  "returned": [
   {
    "date": "2026-10-31",
@@ -31,12 +47,18 @@
    "commit": "RETURNED (task14)"
   }
  ],
- "resume": "Architecture 3 drawn 2026-11-11 (card v3 registered at WARN): Penmarra Statistics Office's bond-based private rents measure from the Tenancy Bond Board register and the 2018 rent panel. Next: stage 2 (results chain with bands and dependencies, hidden factor record, effort test on paper, fork and closure tables, the methods note's WHAT, the asks, prompt.txt), the world prototyped and every rival run on the clean truth, precut.py exit 0; then the generator (world, register events, panel, documents through the house writers), goldens, effort.json.",
+ "resume": "READY. Next: the author rewrites prompt.txt in their own words (voice-check.py task14 --rewrite, then leak.py), sets prompt_rewritten in this file, uploads the prompt and target.zip, and runs /triage-runs task14 when the platform's two runs are graded.",
  "approved": null,
  "delivered": null,
  "portal": null,
  "source_note": "architecture 3: a new world drawn at the author's word (2026-11-11); architectures 1 and 2 (Marrowfield's conflict-of-interest office) kept in the card's lineage and the note's Tried and rejected",
- "gates": {},
+ "gates": {
+  "date": "2026-11-11",
+  "result": "11 gates, 0 FAIL, 3 WARN (R3 upstream of five results; the spreadsheet-and-slides quota; leak REVIEW)",
+  "checks": "169 PASS",
+  "verify": "PASS",
+  "rebuild": "two builds byte-identical"
+ },
  "history": [
   {
    "date": "2026-11-09",
@@ -53,6 +75,14 @@
   {
    "date": "2026-11-11",
    "event": "architecture 3 drawn at the author's word in a new world (Penmarra's bond-based private rents measure: Survey Research & Official Statistics, official time-series production, ETL; weight measurement, answer shape a forecast path with bands and drivers); architecture 2 set aside before any data was cut; card v3 registered at PASS after five axes were redrawn against task9 v9 and task16 v2"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "stage 3 complete: generator, pack, goldens, effort.json, submission.md; checks.py 147 PASS, verify.py 47 PASS, effort.py PASS (pair 49.5), precut 0 FAIL; strengthened world (operators in five regions, December review after the extract, half-lodged November review)"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "READY: stage 4 closed (two leak reads, judge passes 1 and 2 with every FIX_NOW applied), zips cut, container gate PASS"
   }
  ],
  "migrated_from": {
@@ -62,8 +92,25 @@
   "date": "2026-11-09",
   "note": "moved from Project Mark at the author's word: architecture 1 shipped there on 2026-10-31, pending, never run on the platform; carried on here for the Sulfur bar"
  },
- "call": "to be filled when the pack is cut: the December 2026 quarter's annual change on the bond-based private rents measure, nationally and by region",
+ "call": "private rents up 3.1 per cent in the year to the December 2026 quarter (90 per cent range 3.0 to 3.2), down from 4.0 to September, on the bond-based measure",
  "subdomain": "seasonal-adjustment-official-time-series-production",
  "doctrine": "throughout",
- "chain": "R1 bonded tenancies held at 30 September 2026 by region; R2 dwellings re-let in the year to September 2026; R3 continuing tenancies' rises (share and average); R4 the average rise at re-letting over the earlier tenancy's paying rent; R5 the measure's annual change to September 2026 by region with the back series from March 2022; R6 the 90 per cent interval on the national figure; R7 the December 2026 quarter's annual change with its range; R8 the bridge from the survey-based figure"
+ "chain": "R1 bonded tenancies held at 30 September 2026 by region; R2 dwellings re-let in the year to September 2026; R3 continuing tenancies' rises (share and average); R4 the average rise at re-letting over the earlier tenancy's paying rent; R5 the measure's annual change to September 2026 by region with the back series from March 2022; R6 the 90 per cent interval on the national figure; R7 the December 2026 quarter's annual change with its range; R8 the bridge from the survey-based figure",
+ "effort": {
+  "date": "2026-11-11",
+  "quick": 7.0,
+  "careful": 49.5,
+  "thorough": 100.0,
+  "largest_hint": "3 of 9",
+  "careful_variants": {
+   "survey rises to every landlord": 49.5,
+   "recorded rent carried forward": 37.0,
+   "recorded rent where a bond exists": 33.0
+  },
+  "distinct_wrong_december": 10
+ },
+ "zips": {
+  "target.zip": "8ec2d285a3402837",
+  "golden.zip": "ae6f4d0c23b0cff9"
+ }
 }

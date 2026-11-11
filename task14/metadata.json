@@ -1,29 +1,18 @@
 {
  "task": "task14",
- "architecture": 1,
- "title": "Conflict of interest committee docket, February 2027",
- "domain": "Survey Research & Official Statistics",
- "subdomain": "census-register-administrative-data-quality (faculty disclosures and the Open Payments register)",
- "objective": "Data Extraction & Conformation (ETL)",
- "prompt_shape": "01: a ranked list under the committee's cap, with a chart, supporting tables and a conformed faculty-by-year file",
- "as_of": "2027-01-27",
+ "title": "Penmarra Statistics Office: what the bond-based private rents measure will show for the December 2026 quarter",
+ "domain": "Other, Survey Research & Official Statistics",
+ "task_type": "seasonal adjustment and official time-series production",
+ "objective": "Data Extraction & Conformation (ETL / Pipeline Build)",
+ "as_of": "2026-12-03",
  "deliverables": [
-  "coi_committee_docket_2027-02.docx",
-  "faculty_remuneration_2026_conformed.csv"
+  "private_rents_measure_2026Q4.xlsx",
+  "private_rents_launch_briefing.pptx"
  ],
  "distractor_files": [
-  "open_payments_research_2021-2025_extract.csv",
-  "nih_awards_marrowfield_fy2025.csv",
-  "open_payments_general_py2025_jun2026_extract.csv"
- ],
- "stated_inputs": [
-  "15",
-  "2026",
-  "2027",
-  "2025",
-  "2021",
-  "11:59",
-  "1,000"
+  "pso_house_price_index_2026q3.xlsx",
+  "pso_building_consents_2019-01_2026-09.csv",
+  "pso_private_rents_index_survey_2026q3.xlsx"
  ],
  "input_gates": {
   "files": 12,
@@ -32,127 +21,107 @@
    "pdf",
    "xlsx"
   ],
-  "largest_file": "open_payments_general_2021-2025_jan2027_extract.csv",
-  "largest_file_rows": 90140
+  "categories": [
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "tbb_bond_events_2023-03-06_to_2026-11-27.csv",
+  "largest_file_rows": 247228,
+  "long_file": "tbb_legacy_register_extract_2023-03-05.csv",
+  "long_file_rows": 239776
  },
  "sources": [
   {
    "files": "all files under target/",
-   "origin": "constructed for this task by task14/generator/build.py (seeded, deterministic) in the public layouts of Open Payments general and research payments and its covered-recipient profile supplement, an NIH RePORTER export, a human resources appointment extract and a conflict-of-interest disclosure system's export; the medical center, its office, faculty, manufacturers, companies and people are fictional.",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work)"
+   "origin": "generated for this task by simulating the process that makes the files: dwellings entering and leaving Penmarra's rental market, landlords letting them, tenancies starting at the going rent, running and ending, rents reviewed by landlords and operators, bonds lodged, topped up, transferred and refunded at the Tenancy Bond Board, the Board's move to a new system, and the Statistics Office's quarterly Rent Survey. Penmarra, its agencies, its places and its people are invented.",
+   "date": "2026-11-11",
+   "license": "CC BY 4.0 (original work)"
   }
  ],
- "created": "2027-01-21",
- "generator": "task14/generator/build.py",
  "files": [
   {
-   "path": "clinical_faculty_appointments.csv",
+   "path": "pso_building_consents_2019-01_2026-09.csv",
    "format": "csv",
-   "bytes": 995339,
-   "rows": 11096,
-   "source": "Constructed: the human resources system's clinical faculty appointment terms since July 2019",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 51445,
+   "covers": "dwellings consented by month, region and type, January 2019 to September 2026",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "coi_disclosure_form_guide_2026.pdf",
-   "format": "pdf",
-   "bytes": 42296,
-   "rows": null,
-   "source": "Constructed: the office's guide to the 2026 edition of the annual disclosure form",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
-  },
-  {
-   "path": "coi_disclosures_2021-2026_export.xlsx",
+   "path": "pso_cpi_2026q3.xlsx",
    "format": "xlsx",
-   "bytes": 568152,
-   "rows": null,
-   "source": "Constructed: the disclosure system's export of every annual disclosure for 2021 to 2026 and every submitted version's items",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 8023,
+   "covers": "the consumers price index release for the September 2026 quarter",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "coi_entity_list.csv",
-   "format": "csv",
-   "bytes": 10243,
-   "rows": 130,
-   "source": "Constructed: the conflict-of-interest disclosure system's company list",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "path": "pso_house_price_index_2026q3.xlsx",
+   "format": "xlsx",
+   "bytes": 8224,
+   "covers": "the house price index from settled sales, to the September 2026 quarter",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "coi_policy_2024.pdf",
+   "path": "pso_private_rents_index_survey_2026q3.xlsx",
+   "format": "xlsx",
+   "bytes": 10423,
+   "covers": "the private rents index the Statistics Office published from the Rent Survey, to the September 2026 quarter",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "pso_private_rents_measure_definition.pdf",
    "format": "pdf",
-   "bytes": 67896,
-   "rows": null,
-   "source": "Constructed: the medical center's conflict-of-interest policy for the clinical faculty (June 2024)",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 38428,
+   "covers": "Methods paper PS-2026-07: the private rents measure's definition and scope",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "coi_submission_history.csv",
+   "path": "pso_rent_survey_2018q1_2026q3.csv",
    "format": "csv",
-   "bytes": 634834,
-   "rows": 11277,
-   "source": "Constructed: the disclosure system's submission history",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 12012474,
+   "covers": "the Statistics Office's Rent Survey: quarterly reports from its panel of rental dwellings, 2018 to the September 2026 quarter",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "department_codes.csv",
+   "path": "pso_rent_survey_codes.csv",
    "format": "csv",
-   "bytes": 958,
-   "rows": 21,
-   "source": "Constructed: the clinical department codes, with the Department of Medicine's divisions that became departments on 1 July 2025",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 316,
+   "covers": "the Rent Survey's code list",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "nih_awards_marrowfield_fy2025.csv",
+   "path": "pso_suburb_region_concordance_2024.csv",
    "format": "csv",
-   "bytes": 30282,
-   "rows": 310,
-   "source": "Constructed: NIH awards for fiscal year 2025 with a faculty member as contact principal investigator, in the RePORTER export layout",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 5901,
+   "covers": "the Statistics Office's suburb concordance: rental areas and the regions in use from 1 July 2024",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "open_payments_covered_recipient_profiles.csv",
+   "path": "tbb_bond_events_2023-03-06_to_2026-11-27.csv",
    "format": "csv",
-   "bytes": 227889,
-   "rows": 2363,
-   "source": "Constructed: the covered-recipient profiles of every profile the extracts carry, in the Open Payments profile supplement layout",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 22528677,
+   "covers": "the Tenancy Bond Board's online system: events from 6 March 2023 to the close of 27 November 2026",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "open_payments_general_2021-2025_jan2027_extract.csv",
-   "format": "csv",
-   "bytes": 44593652,
-   "rows": 90140,
-   "source": "Constructed: an academic medical center's extract of Open Payments general payments, program years 2021 to 2025, January 2027 publication, for the covered recipients matched to its clinical faculty since 2021, in the Open Payments public file layout",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "path": "tbb_code_lists.xlsx",
+   "format": "xlsx",
+   "bytes": 11452,
+   "covers": "the Board's code lists: record and event types, rent frequencies, dwelling types, rental areas, regions",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "open_payments_general_py2025_jun2026_extract.csv",
+   "path": "tbb_landlord_id_crosswalk_2023-03-06.csv",
    "format": "csv",
-   "bytes": 9085731,
-   "rows": 18558,
-   "source": "Constructed: the same office's earlier extract of program year 2025 as Open Payments first published it (June 2026)",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 897432,
+   "covers": "landlord identifiers in the two systems, for landlords holding a bond on 5 March 2023",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   },
   {
-   "path": "open_payments_research_2021-2025_extract.csv",
+   "path": "tbb_legacy_register_extract_2023-03-05.csv",
    "format": "csv",
-   "bytes": 175932,
-   "rows": 656,
-   "source": "Constructed: Open Payments research payments naming a faculty member as principal investigator, in the public file layout",
-   "date": "2027-01-21",
-   "license": "CC0-1.0 (original work, constructed for this task)"
+   "bytes": 16678095,
+   "covers": "the Tenancy Bond Board's legacy register: every bond held on or after 1 January 2019 with its records, to 5 March 2023",
+   "made": "written by task14/generator/make.py from the simulated process (deterministic)"
   }
  ]
 }
