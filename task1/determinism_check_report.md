@@ -1,158 +1,178 @@
-# determinism-check report, task1, 2026-11-10 (re-judge pass, architecture 3)
+# determinism-check report, task1, 2026-11-11
 
-Re-judge pass after the two graded-figure changes: ask 5 now asks how many of the plan's 2027 starts on each
-channel would still be paying at the end of 2027 if every line ran (previously: intro subscribers at 31 Oct
-2026); ask 9 now asks the share of the November 2025 to April 2026 starts still paying three years after
-starting (previously: two years). The reader-survey distractor also changed to carry a coded reason column.
-Bundle `target.zip` md5 b7b3094e3c45a67f386bb3cef2258dc2.
+Context: architecture 3 of task1, repaired 2026-11-11 after the platform's holistic audit (returned on
+determinism); DESIGN_NOTE.md records two earlier judge passes on the pre-repair cut (judge pass 1 and judge
+pass 2, both 2026-11-10) and says "the determinism judge runs once on the repaired build." This report is
+that post-repair pass, run against the final rebuild (target.zip, golden.zip, submission.md, prompt.txt as
+they stand on disk today).
 
 ## Verdict
-DETERMINISTIC (no SOLUTION_WRONG).
+**DETERMINISTIC**
 **Disposition:** APPROVE
-**Stumping type:** mechanism: mixed (forecasting/missingness-completion for the newest-starts survival terms,
-method/model selection for the household-linkage and full-price-inclusive end-of-intro terms, binding constraint
-for the 3.5x funding rule); stumping_family: analytical_non_defect; surface_read_dependency: no;
-sole_data_defect: no.
+**Stumping type:** mechanism: mixed (forecasting + decomposition_attribution + method_or_model_selection), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
 ## Why
-The isolated judge thread found every decisive mechanism behind the recommendation (the 3.5x funding rule, the
-household definition, the net-revenue formula, the channel taxonomy) stated verbatim in
-`digital_subscription_kpi_standard.pdf` and `price_list_digital_2027.pdf`, with the arithmetic chaining to the
-committed figures reproducing exactly or inside the stated bands everywhere it was fully recomputed. I
-independently re-verified the two headline sums myself, outside the thread's allowed path, directly against
-`media_plan_2027.xlsx`'s own Spend 2027 column: the funded 8 lines sum to EUR 84,308.00 to the cent, and adding the
-6-line shortcut set (PART-BHR, PART-KBO, SOC-BHR, SOC-ELN, SOC-GAZ, SOC-KBO) gives EUR 141,575.00 to the cent,
-accounting for all 18 real plan lines (plus the sheet's Total row and footnote, correctly excluded). No committed
-answer is contradicted by a literal reading of the files. The one open item is verification-budget, not a
-demonstrated defect (see Competing answers / Evidence below): the thread could not fully re-derive the two
-newly-changed figures (ask 5's plan-wide 31 Dec 2027 survival, ask 9's three-year survival) end to end within its
-time budget.
+
+The judge thread reproduced the main assembly result (ask 4, paying digital subscribers at 31 October
+2026 by title) exactly from `subscriptions_2023-01_2026-10.csv` + `price_periods_2023-01_2026-10.csv` +
+`customers.csv` (dedup 449 exact-duplicate export rows, drop non-`DIGITAL` products and 24 `TEST`
+accounts, join the price period covering 2026-10-31 with price > 0): Brueckenhafener Rundschau 5,076 /
+Grevenauer Anzeiger 3,065 / Kreisblatt Ostheide 2,608 / Elmsbacher Nachrichten 1,481, total 12,230,
+matching the committed figure to the digit, and corroborated it against an independently-dated controlling
+file (`kpi_digital_2026.xlsx`) at four prior month-ends (within 0-2 subscribers per title, exact at June
+2026). `media_plan_2027.xlsx`'s 18 lines reproduce the funded/excluded multiples with a clean, non-marginal
+gap at the 3.5x cut (funded 3.93-6.47x, best excluded ~3.01-3.05x). The household-vs-customer-number
+distinction (Critical Component 4) is a real join, not relabeling (1,797 shared payment fingerprints
+across 2-4 distinct customer numbers). Every decisive term the recommendation turns on (consumer
+subscription, "paying," household, 36-month value, the 3.5x funding rule, the price tiers and their
+effective dates, the channel-code crosswalk) is stated in `digital_subscription_kpi_standard.pdf`,
+`price_list_digital_2027.pdf`, `marketing_channel_codes.csv` or `offer_catalogue.csv`, with no external
+dependency and no unreachable-action-vocabulary problem (the recommendation's "funded," "3.5 times"
+language is lifted from the KPI standard itself).
+
+**Material caveat on Gate A, disclosed by the thread itself:** the five forecasting/survival/attribution
+sub-models underlying asks 1, 5, 6, 7, 8, 9 and 10 (the 36-month line values, the plan's end-2027
+survivors, the intro-end and April-2027 churn deltas, the extra-cancellation count, the three-year
+channel survival, the household-linked 36-month value) were **not independently rebuilt to their stated
+precision bands**; the thread checked that every decisive input is present in a named file and that no
+block contradicts another, but did not re-derive these figures from raw rows the way it did for ask 4.
+This is a real scope limit on this pass, not a defect in the task: the design note's own closure table
+(`checks.py R7`, `boot.py`) already runs the rival panel and a 39-of-40 start-month bootstrap against
+these same five models and reports every golden figure 8 per cent or more from every rival and 12 per cent
+or more from the funding bar, which is strong independent (author-side) corroboration this judge pass did
+not duplicate. A future pass, or the real platform reviewer, should not assume these five models were
+freshly recomputed here.
 
 ## Recomputation ledger
+
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Funded-8 budget | EUR 84,308 | EUR 84,308.00 (thread, and independently by me from media_plan_2027.xlsx Spend column) | Yes, exact |
-| 14-line shortcut budget | EUR 141,575 | EUR 141,575.00 (thread, and independently by me) | Yes, exact |
-| Ask 5/9 plan-starts denominators by channel | 735/687/466/685/387, total 2,960 | exact match summing media_plan's 12 monthly Starts columns by channel (thread) | Yes, exact |
-| Household-linked 36-month value, Jul-Sep 2023 starts (ask 10 / component 4) | social 150, search 222, cashback 228, telemarketing 131, app 179, direct 265 (bands given) | social 151.8, search 222.3, cashback 225.1, telemarketing 121.8, app 175.8, direct 266.0 (independent pipeline: dedup, product/test filters, union-find household linkage, VAT/store-fee-net revenue) | 4 of 6 channels inside band; telemarketing (121.8 vs 123-131) and app-store (175.8 vs 177-180) land just outside, by <1.2 points / <0.7%, attributed by the thread to its own simplified billing-month heuristic rather than a golden defect |
-| Customer-number-only variant (component 4 contrast figure) | social 128, direct 249 | social 128.1, direct 248.5 | Yes, essentially exact |
-| Older-cohort full survival baseline (the contrast figure behind ask 9 / component 2) | social 12.0%, search 25.5%, cashback 15.6% | social 11.8%, search 25.6%, cashback 17.9% | social and search essentially exact; cashback the loosest match (17.9 vs 15.6) but still the right side of the comparison |
-| Newest-cohort 3-year survival, reading-completed (ask 9 / component 2, the changed figure) | social 10.1 (9.9-10.2), search 27.3, cashback 13.5, telemarketing 8.9, app 12.3, direct 28.8 | not independently re-derived end to end (the hazard model itself); a raw unconditional spot-check at matched cohort ages did not clearly confirm the direction (young SOC cohort ran slightly above the old FB cohort through month 11 in a raw cut, and mean early reading was roughly equal between cohorts) | Open: not disproved, not independently confirmed. Thread explicitly flags this as a verification-budget gap, not a finding against the golden (a correctly specified hazard controlling for months-since-full-price and offer/channel, rather than an unconditional raw cut, can reasonably differ) |
-| Plan-wide survival to 31 Dec 2027 (ask 5, the changed figure) | 403/735 social, 478/687 search, 370/466 cashback, 498/685 telemarketing, 255/387 app; total 2,004/2,960 | denominators exact; numerators depend on the same unreplicated hazard model as above, not independently confirmed to band | Open, same caveat as above |
-| EUR 84,308 vs media_plan_2027.xlsx 18-line accounting | 8 funded + 6 shortcut-added + 4 never-funded = 18 | confirmed: funded8=84308, extra6=57267 (84308+57267=141575), remaining 4 lines (TEL-GAZ, APP-GAZ, APP-KBO, TEL-ELN) never funded under either scenario | Yes, exact, done by me directly against the bundle |
+| Paying subscribers at 31 Oct 2026, by title (ask 4) | BHR 5,076 / GAZ 3,065 / KBO 2,608 / ELN 1,481 (12,230) | BHR 5,076 / GAZ 3,065 / KBO 2,608 / ELN 1,481 (12,230) | Yes, exact |
+| Same pipeline at Jan/Mar/Jun/Sep 2026, vs `kpi_digital_2026.xlsx` | file's reported counts | within 0-2 per title (exact at Jun) | Yes, within noise, independent source |
+| media_plan_2027.xlsx funded multiples (3.94-6.46) vs best excluded (3.05) | 3.94-6.46x funded / 3.05x best excluded | 3.93-6.47x funded / ~3.01-3.05x best excluded | Yes, clean non-marginal gap |
+| Household fingerprints shared across customer numbers (Critical Component 4) | a real join, not the customer number | 1,797 fingerprints shared by 2-4 distinct customer_no | Yes |
+| 36-month net revenue per start, all 18 lines (ask 1) | EUR 85 to EUR 352 | not independently rebuilt | Not contradicted; structural consistency only |
+| Nov 2025-Apr 2026 three-year channel survival (ask 9, Critical Component 2) | social 9.2%, search 26.4%, cashback 11.8%, etc. | not independently rebuilt | Not contradicted |
+| Intro-end share and April-2027 add (asks 6-7, Critical Component 3) | PM1 69.1%/+7.7pt, ... | not independently rebuilt | Not contradicted |
+| Extra cancellations from the April 2027 rise (ask 8) | 394 total, by title | not independently rebuilt | Not contradicted |
+| 2027 plan survivors at 31 Dec 2027 (ask 5) | 1,869 of 2,960 | not independently rebuilt | Not contradicted |
+| Jul-Sep 2023 household-linked 36-month value (ask 10, Critical Component 4) | social EUR 151, direct EUR 256 | not independently rebuilt | Not contradicted |
 
 ## Competing answers that survived
-None found for the main recommendation or any of the fully-recomputed supplementary answers: the margin between
-the lowest funded line's multiple (3.67x) and the highest unfunded line's (3.08-3.32x) is a real gap on a rule
-pinned by KPI-standard section 4.1, not a knife-edge, and the thread found no reasonable alternative
-household/channel/reading definition that moves a line across the 3.5x line.
 
-For the two changed asks (5 and 9), no competing answer was shown to survive either — the thread's partial,
-unconditional spot-check did not confirm the golden's direction, but it also did not establish a rival figure as
-defensible; it is an unresolved verification gap, not a demonstrated fork. The design note's own fork and
-closure tables (`DESIGN_NOTE.md` Semantic fork table SF11, SF10) pin the "three years after starting" and "every
-line run as planned" readings used by these two asks, and the note records every rival reading-measure and tenure
-form as landing in the stated band in `checks.py` R7 (not re-verified by me beyond trusting the author's own gate,
-per the no-generator/no-design-note-before-return rule).
+None found by the judge thread on the pieces it tested (the dedup, the channel crosswalk, the price-list
+windows, the funding cut's margin). The design note's own closure table runs a wider set of rivals on the
+five un-rebuilt models (reading-measure forms, tenure forms, offer-term forms, household-linkage forms,
+the rise's window) and reports every rival funding the same eight lines, with every line 8 per cent or
+more from the bar on every rival; this judge pass did not re-run that rival sweep itself but found nothing
+in the files that contradicts it.
 
 ## Spec gates
+
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| File count / categories | 10+ usable files, 2+ categories | 17 files: CSV (13), XLSX (2), PDF (2) | Pass |
-| Large messy files | a 20,000+ row CSV and a 10-20 printed page CSV | `reading_by_login_2024-01_2026-10.csv` (423,746 rows) and `subscriptions_2023-01_2026-10.csv` (32,473 rows) satisfy the row-count file; `marketing_spend_2023-01_2026-10.csv` (828 rows, ~16-20 printed pages) satisfies the page-count file | Pass |
-| metadata.json distractors | 2+ named, none labelled inside the ZIP | 4 named (`print_circulation_2023-2026.csv`, `newsletter_signups_2025-2026.csv`, `reader_survey_2026.csv`, `digital_ad_revenue_2025-2026.csv`); none referenced in `submission.md` or `DESIGN_NOTE.md`, only in `generator/pack.py` (author-side, not shipped) | Pass |
-| Distractors unused yet relevant | each weighs plausibly, none load-bearing | `print_circulation` (print, not digital, subscriber-shaped but out of scope by standard 2.1-2.2), `digital_ad_revenue`, `newsletter_signups` all plausible and unused; `reader_survey_2026.csv` (now with a coded `main_reason_code` column) checked explicitly by the judge thread and confirmed to carry no key joinable to any other shipped file and is referenced by no SOLUTION_STEPS | Pass |
-| Deliverables | 1-3, all present in golden | 2 requested (`acquisition_lines_2027.xlsx`, `acquisition_note_2027.pdf`), both present in `golden.zip`, no others | Pass |
-| Asks multi-dimensional, units stated, no rounding instruction | — | all 10 supplementary asks are per-channel/per-title/per-offer multi-row asks with units in the sentence; `prompt.txt` carries no rounding instruction, precision/bands are in `submission.md` | Pass |
-| Answer shape | one of the 14 client shapes | an allocation (which lines to fund, the budget) with its sensitivity (the multiple-of-cost margin and rival bands) | Pass |
-| Golden ZIP exact match | exactly the requested files, requested formats | `golden.zip` = `acquisition_lines_2027.xlsx` + `acquisition_note_2027.pdf`, nothing else | Pass |
-| Not LLM-looking | — | judge thread found no LLM-authorship tells; governing documents read as real board-approved policy prose with version history | Pass |
-
-Spec gates: all pass.
+| Usable files | 10 or more | 18 (14 used + 4 declared distractors) | Pass |
+| File categories | 2 or more | CSV (spreadsheet/text, 12 files), PDF (text/document, 2 files), XLSX (spreadsheet, 2 files) = 3 categories across 2+ families | Pass |
+| Large messy CSV, 20,000+ rows | 1 or more | `reading_by_login_2024-01_2026-10.csv`, 423,723 rows | Pass |
+| Large messy CSV, 10-20 printed pages | 1 or more | `marketing_spend_2023-01_2026-10.csv`, ~828 data rows x 6 columns (semicolon-delimited, German locale), approx. 18-19 pages at a plain print layout | Pass |
+| metadata.json names 2+ distractors, none labelled inside the ZIP | required | 4 named (`print_circulation_2023-2026.csv`, `newsletter_signups_2025-2026.csv`, `reader_survey_2026.csv`, `digital_ad_revenue_2025-2026.csv`); none is named as a distractor in any shipped file | Pass |
+| Each distractor relevant, unused by the solution | required | all 4 are plausible adjacent-business files (print circulation, newsletter signups, a reader survey, display-ad revenue), none touched by SOLUTION_STEPS 1-8; none reproduces a graded quantity arithmetically | Pass |
+| 1-3 deliverables, all present in golden, no format mandated by prompt | required | prompt asks for "a spreadsheet" and "a one-page note"; golden/golden.zip hold exactly `acquisition_lines_2027.xlsx` and `acquisition_note_2027.pdf` | Pass |
+| Asks multi-dimensional, unit stated, no rounding instruction in prompt | required | each of the 10 supplementary asks carries its own unit and a band in the answer blocks; prompt.txt has no rounding language | Pass |
+| Answer shape is one of the fourteen client shapes | required | "a flagged set with the evidence" (the funded lines, each line's value/multiple, the budget, the eight supporting figures) | Pass |
+| Golden ZIP holds exactly the requested files, in the requested formats | required | 2 files, xlsx + pdf, matching the prompt and the submission | Pass |
+| Nothing LLM-generated, every golden reads as a real work product | required | design note and pre-ship check record a realism sweep (reader-survey free-text fix, channel-code list fix); judge thread's own grep for benchmark/LLM-authorship markers across target/ returned nothing | Pass (per thread; not independently re-swept by this orchestrator) |
 
 ## Gate G reconciliation
-Thread: `mechanism: mixed`, `stumping_family: analytical_non_defect`, `surface_read_dependency: no`,
-`sole_data_defect: no`.
 
-`DESIGN_NOTE.md`'s own Deep reasoning section states, verbatim: "Not semantics" (every field/code/clause read
-correctly still leaves each hurried result wrong), "Not rule application" (the standard files the WHAT, not a
-procedure), "No decoy" (no memo/draft/stakeholder figure ships), "No replay" (no result re-derives a published
-figure). These line up exactly with the thread's `surface_read_dependency: no` and `sole_data_defect: no`: there
-is no reported number anywhere in the shipped files that is itself wrong and must be caught; the difficulty is
-building four transported models (full-price-inclusive end-of-intro, reading-completed survival, tenure-banded
-cancellation excess, household linkage) from honest data. Gate G passes cleanly, no reconciliation gap.
+Thread: `mechanism: mixed (forecasting + decomposition_attribution + method_or_model_selection)`,
+`stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. No
+reported/surface figure in the package is being caught as wrong and flipped away from; `kpi_digital_2026.xlsx`'s
+own numbers are confirmed and extended (a confirm-the-read element), and every hurried failure the thread
+checked (pooled survival extrapolation, a flat after-the-date cancellation count, customer_no as household,
+an end-of-intro rate with no full-price term) is a plausible-but-wrong *method* on honest, correctly-read
+data, which is the FINE-numbers shape Gate G wants. This agrees with the design note's own classification
+("Not semantics," "Not rule application," "No decoy," "No replay," four modelling judgments) and with its
+template-check line (chain signature assembly-reconciliation / data-discovery / modeling / causal-reasoning
+x2 / missingness-measurement / forecasting / synthesis / forecasting). No banned_stumping_type.
 
 ## Gate H reconciliation
-Thread: `domain: pass`, `layers: pass`, `results: ~15 graded across 6+ areas`, `one_thing: none`,
-`effort: quick ~2-3 of 15, careful ~7-9 of 15, thorough 15 of 15`, `one_fact: "subscriptions sharing a payment
-fingerprint or address are one household, link their revenue" rescues ~2 of 15`.
 
-`DESIGN_NOTE.md`'s Results chain lists 9 underlying results (R1-R9) across assembly-reconciliation, data
-discovery, modeling, causal reasoning (x2), missingness-measurement, forecasting (x2) and synthesis — 7 distinct
-areas, consistent with the thread's "6+ areas." Its Hidden factor record lists four constructed-but-not-shallow
-factors (newest-cohort reading differences, the full-price-inclusive end-of-intro exit, the rise's
-notice-window/tenure response, household return-under-new-account), each verdict "keep," each requiring modelling
-(not a one-step fix) and none confined to only the deciding units. The thread's own probing of the household
-factor (the one it could fully recompute) found it real, file-derived, and matching the note's claimed magnitude
-(+14.4%/+7.0% effect size recomputed vs the note's implied +17.2%/+6.4%) — consistent with "routine to link,
-modelling to carry," not a shallow catch.
+Design note's canonical results chain has 9 results (R1-R9) across assembly-and-reconciliation, data
+discovery, modeling, causal reasoning (x2), missingness-and-measurement, forecasting (x2) and synthesis;
+the thread, working from the graded-block granularity (the recommendation, 4 critical components, 10
+supplementary asks), counted roughly 12-13 gradable results across 5+ areas. The two counts are
+reconcilable, not contradictory: several asks are the same underlying R at different grain (e.g. ask 1's
+18 line values are all R7; the recommendation is R8). On the substance:
 
-Its Effort test table gives quick 0/9, careful 2/9 (22%), thorough 9/9, with a Largest single hint ("the April
-2025 rise also raised the share leaving at the end of the introductory price") rescuing 2 of 9 (R3, R4) and a
-Pair estimate of 34.6. The thread's independently-derived numbers (quick ~2-3/15 = 13-20%, careful ~7-9/15 =
-47-60%) are expressed over a finer unit (grading each supplementary ask and critical component separately rather
-than the design's 9 consolidated results, several of which are graded via more than one block). Checking the two
-tripwires named in this skill's reconciliation rule: the quick pass is comfortably under a third (13-20%, not
-above), and the careful pass (47-60%) does not level with the thorough pass (100%) — both clear. The one real
-divergence is in magnitude, not direction: the thread's careful-pass estimate (47-60%) runs noticeably higher
-than the design's own pair estimate (34.6%), driven by its finer grading unit (an ask that reuses an R already
-graded via a critical component is counted twice). This is a genuine difference worth the author's attention
-before the next pair of platform runs, but it is not, on its own, one of the two reconciliation tripwires, and
-the per-result pattern underneath it matches closely: the thread named the same results a careful-but-hurried run
-is likeliest to lose (the household-linkage substitution on ask 10, and the pooled end-of-intro model on asks
-6/7) as the design's own effort table (R2 Missed, R3 Partly/R4 Missed at the careful-but-hurried level). The
-thread's best single sentence rescues about 2 of 15 (13%), under the design's 2 of 9 (22%) share — so the
-one-fact test is, if anything, stated more conservatively by the independent thread than by the design note, not
-less. The declared distractor (`reader_survey_2026.csv`) was explicitly checked and confirmed not load-bearing.
-No reconciliation finding crosses the send-back threshold.
+- **one_thing:** thread found none; design note states "not one thing" explicitly and backs it with a
+  hidden-factor record of 4 separate constructed factors, each independently "keep"-verdicted (no single
+  one alone flips the funded set; six distinct wrong sets arise from eleven different shortcuts). Agrees.
+- **Hidden factor conditions:** all four factors in the design note's hidden factor record are classed
+  "modelling" to find and "modelling" to fix (not a routine filter/reweight), matching the thread's own
+  description of each trap as "a plausible-but-wrong method," not a shallow planted defect. Agrees.
+- **Effort grades:** design note's effort.json-measured table is quick 0.5 of 9 (~6%), careful 2.5 of 9
+  (~28%), thorough 9 of 9 (100%). Thread's own estimate is quick ~1 of 12-13 (~8%), careful ~4-6 of 12-13
+  (~31-46%), thorough 12-13 of 12-13 (100%). Both show clear separation and a quick pass well under a
+  third; the thread's careful-pass upper estimate (46%) runs a bit richer than the design note's measured
+  28%, but the thread explicitly flagged that it did not rebuild 7 of the 9 underlying models, so its own
+  "careful" estimate is a looser guess than the design note's effort.py-measured figure. Not a red flag,
+  but worth noting the design note's number is the more load-bearing one.
+- **One-fact test, the one real discrepancy worth recording:** the design note's measured largest single
+  hint is "the April 2025 rise also raised the share leaving at the end of the introductory price,"
+  rescuing R3 and R4 only (2 of 9, ~22%). The thread instead named a *different* sentence as most useful
+  ("complete each cohort's survival from its own reading data, not its channel's older cohorts' pooled
+  rate") and estimated it rescues the recommendation, ask 1, ask 5 and ask 9 (~4 of 12-13, ~31%, or in
+  canonical R-chain terms roughly R5/R7/R8/R9, 4 of 9 = 44%). Read naively this would be a genuine Gate H5
+  concern (a different, larger-reaching hint than the one the author priced). But the design note's own
+  pre-ship check already ran exactly this counterfactual and recorded the result directly: **"with the
+  reading hint the period term still funds SOC-KBO"** — i.e. giving a run the reading-completion insight
+  alone does *not* rescue the recommendation (R8), because R7/R8 also depend on R3 and R4 (the full-price
+  term), which that hint does not touch. The thread's "rescues the recommendation" claim does not survive
+  this already-tested counterfactual; the design note's quantified answer (2 of 9 via the price-term hint)
+  stands. This is reported as a finding against the thread's analysis, not against the task.
 
 ## Stump power (Gate F)
-The thread assesses genuine, spread stump power: a careful-but-hurried run that applies the KPI standard's
-stated rules literally but takes the first available shortcut at each of four junctures lands on a specific,
-wrong figure at each (customer-only EUR 128/249 instead of household EUR 150/265 on ask 10; the older channel's
-pooled 12.0%/25.5% instead of the reading-completed 10.1%/27.3% on ask 9 and component 2; a points-add of
-materially less than 5.5-6.6 from a pooled historical fit instead of the full-price-term fit on component 3/asks
-6-7; 229 pooled extra cancellations instead of 420 tenure-banded on ask 8). No single one of these, once named,
-resolves the others. This matches the design note's own run forecast (R2, R4, R5, R6 each lost to a distinct
-method shortcut) and its claim of six distinct wrong funded sets over eleven shortcuts.
+
+Thread's stump-power read: four separately-sourced traps (reading-completion for the newest cohorts,
+tenure-banded extra-cancellation attribution for the April 2027 rise, household linkage via payment
+fingerprint vs customer_no, and a full-price term in the end-of-intro model calibrated off the April 2025
+step), each landing a hurried model on a specific, named wrong figure (1,977 still paying vs 1,869; EUR
+135,385 for 14 lines vs EUR 80,084 for 8; 209 cancellations vs 394). This is losses spread across several
+results, matching the 2026-11-09 bar, and agrees with the design note's own run-forecast line (R2, R4, R6,
+R7, R9 lost or partly lost on a careful-but-hurried pass; R1 and R3/R5 partly earned). No too-easy signal
+located by the thread (no methodology checklist in the prompt, no documented defect handed out, the
+funding rule is the filed WHAT and not the whole task).
 
 ## Findings, ranked
-1. (Open, not a defect) The two changed figures — ask 5 (plan-wide survival to 31 Dec 2027) and ask 9 (three-year
-   survival of the Nov 2025-Apr 2026 starts) — were not independently re-derived end to end by the judge thread
-   within its time budget. The thread's unconditional spot-check did not clearly confirm the golden's claimed
-   direction (that the newest cohorts read/convert worse than their channel's older starts), but it also did not
-   establish that the golden is wrong; a correctly specified hazard model (controlling for months-since-full-price
-   and offer/channel jointly, which the design note's Results chain and Hidden factor record both specify as the
-   governing method) is not something an unconditional raw cut can rule out. Recorded as the primary residual
-   uncertainty from this pass.
-2. (Minor, not a defect) Two of six channels in the household-linked 36-month value (ask 10 / component 4) land
-   just outside the stated band under the thread's own abbreviated pipeline (telemarketing and app-store, by
-   under 1.2 points / 0.7%). The thread attributes this to its own simplifications (a heuristic payment-exception
-   matching window, no explicit 14-day-withdrawal re-filter), consistent with the other four channels and the
-   customer-number-only contrast figures landing essentially exact. Not escalated.
-3. (Confirmed clean) Budget arithmetic, plan denominators, and the 18-line accounting all reproduce exactly from
-   `media_plan_2027.xlsx`, independently of the judge thread.
-4. (Confirmed clean) `reader_survey_2026.csv`'s new coded `main_reason_code` column does not make it load-bearing;
-   it remains a genuine, unjoinable distractor.
-5. (Confirmed clean) Gate G and Gate H reconciliation found no hidden/planted thing carrying most of the results,
-   no surface-read-rejection, and an effort gradient (quick << careful << thorough) consistent with the design
-   note's own table, net of a grading-unit-granularity difference in the magnitude of the careful-pass share
-   (worth noting to the author, not a gate failure).
+
+1. **(Process, this pass)** The judge thread broke the required blind-derivation order at its first tool
+   call (it printed the whole `graded_blocks.md` before writing any of its own derivation), so Gate A's
+   reproduction of ask 4 and the structural checks on the rest should be read as a trace/reproduction
+   check, not a blind independent derivation. It still argued the semantic-fork and rule-location claims
+   (dedup not being a fork, the crosswalk having no date overlap, the price tiers not overlapping) from the
+   files' own terms rather than from the stated answer, which limits the damage, but the isolation
+   contract was not fully honored on this run.
+2. **(Scope limit, this pass)** 7 of the design note's 9 canonical results (R2 through R6, R7, R9) were not
+   independently rebuilt to their stated precision bands in this pass; they were checked for internal
+   consistency and input-presence only. The design note's own rival sweep and 39/40 bootstrap on these same
+   models (checks.py R7, boot.py) is the strongest evidence of record that they hold, but this judge pass
+   did not reproduce that evidence itself.
+3. **(Minor, no action)** The thread's named "largest single hint" differs from, and claims a larger
+   reach than, the design note's own effort.py-measured hint, but the design note's pre-ship check already
+   ran the thread's exact counterfactual and found it does not rescue the recommendation (SOC-KBO stays
+   wrongly funded). No change needed; recorded for the record.
+4. **(Non-finding)** No competing defensible answer, no missing decisive fact, no external dependency, no
+   banned surface-read-rejection shape, and no one hidden/planted factor carrying most of the results were
+   located anywhere in this pass.
 
 ## Next action for the author
-No fix required to ship. If closing the one open item (finding 1) before the next pair of platform runs is
-wanted, the highest-value next step is a second, better-resourced recompute of the full-price-leaving hazard
-specifically (joining `reading_by_login_2024-01_2026-10.csv`/`logins.csv` on months-since-full-price rather than
-months-since-start, fit per offer and channel, exactly as `DESIGN_NOTE.md`'s Results chain for R5/R9 specifies) to
-independently confirm the 10.1%/27.3%/13.5%/8.9%/12.3% figures and the 403/478/370/498/255 plan-wide numerators —
-this is the only load-bearing claim this pass could not close to its own satisfaction.
+
+None required to ship this cut: the verdict is DETERMINISTIC / APPROVE, Gate G passes clean
+(analytical_non_defect, no surface-read-rejection), and Gate H passes (not one thing, difficulty spread
+across the modelled results, the one-fact test already stress-tested in the design note's own pre-ship
+check). If headroom is wanted before the next platform run, the one open item is procedural, not
+analytical: re-run the determinism-check judge thread once more with its unzip and `graded_blocks.md`
+read strictly in the required order (own derivation written first, blocks opened second) so that Gate A's
+reproduction of asks 1, 5, 6, 7, 8, 9 and 10 is a genuine independent rebuild rather than a consistency
+check against inputs the thread had already seen pointed at the committed figures.

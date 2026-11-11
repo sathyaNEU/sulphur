@@ -2,257 +2,258 @@
  "bands": {
   "R2": {
    "APP": [
-    177.0,
+    178.0,
     180.0
    ],
    "DIR": [
-    262.0,
-    265.0
+    254.0,
+    256.0
    ],
    "PART": [
-    219.0,
-    229.0
+    222.0,
+    226.0
    ],
    "SEA": [
-    217.0,
-    223.0
+    222.0,
+    226.0
    ],
    "SOC": [
-    149.0,
-    150.0
+    150.0,
+    152.0
    ],
    "TEL": [
-    123.0,
+    128.0,
     131.0
    ]
   },
   "R3": {
    "G3": [
-    71.9,
-    72.5
+    74.2,
+    75.3
    ],
    "H6": [
-    25.7,
-    29.2
+    28.0,
+    32.3
    ],
    "J12": [
-    21.0,
-    26.7
+    23.5,
+    30.8
    ],
    "M3E1": [
-    57.5,
-    57.9
+    60.2,
+    61.7
    ],
    "PM1": [
-    66.7,
-    67.0
+    68.8,
+    70.0
    ]
   },
   "R4": {
    "G3": [
-    5.1,
-    5.7
+    5.4,
+    7.0
    ],
    "H6": [
-    5.9,
-    8.1
+    6.6,
+    10.7
    ],
    "J12": [
-    5.4,
-    7.6
+    6.3,
+    10.1
    ],
    "M3E1": [
-    6.3,
-    6.7
+    6.7,
+    8.7
    ],
    "PM1": [
-    5.8,
-    6.1
+    5.9,
+    7.7
    ]
   },
   "R5": {
    "APP": [
-    12.1,
-    12.4
+    11.0,
+    12.2
    ],
    "DIR": [
-    28.5,
-    29.0
+    27.8,
+    29.3
    ],
    "PART": [
-    13.3,
-    13.6
+    11.3,
+    12.9
    ],
    "SEA": [
-    27.1,
-    27.6
+    25.8,
+    27.4
    ],
    "SOC": [
-    9.9,
-    10.2
+    8.8,
+    9.8
    ],
    "TEL": [
-    8.7,
-    9.1
+    7.1,
+    8.2
    ]
   },
   "R6": {
    "BHR": [
-    170.0,
-    176.0
+    160.0,
+    171.0
    ],
    "ELN": [
-    49.0,
-    51.0
+    46.0,
+    50.0
    ],
    "GAZ": [
-    101.0,
-    105.0
+    96.0,
+    102.0
    ],
    "KBO": [
-    88.0,
-    92.0
+    81.0,
+    87.0
    ]
   },
   "R7": {
    "APP-BHR": [
-    284.0,
-    290.0
+    275.0,
+    283.0
    ],
    "APP-GAZ": [
-    109.0,
-    114.0
+    100.0,
+    106.0
    ],
    "APP-KBO": [
-    134.0,
-    139.0
+    116.0,
+    123.0
    ],
    "PART-BHR": [
-    221.0,
-    227.0
-   ],
-   "PART-GAZ": [
-    259.0,
-    268.0
-   ],
-   "PART-KBO": [
-    204.0,
-    211.0
-   ],
-   "SEA-BHR": [
-    370.0,
-    375.0
-   ],
-   "SEA-ELN": [
-    182.0,
-    187.0
-   ],
-   "SEA-GAZ": [
-    203.0,
+    199.0,
     209.0
    ],
+   "PART-GAZ": [
+    247.0,
+    257.0
+   ],
+   "PART-KBO": [
+    189.0,
+    199.0
+   ],
+   "SEA-BHR": [
+    350.0,
+    359.0
+   ],
+   "SEA-ELN": [
+    161.0,
+    169.0
+   ],
+   "SEA-GAZ": [
+    184.0,
+    192.0
+   ],
    "SEA-KBO": [
-    333.0,
-    338.0
+    315.0,
+    324.0
    ],
    "SOC-BHR": [
-    126.0,
-    132.0
+    108.0,
+    115.0
    ],
    "SOC-ELN": [
-    192.0,
-    201.0
+    171.0,
+    181.0
    ],
    "SOC-GAZ": [
-    216.0,
-    225.0
+    197.0,
+    209.0
    ],
    "SOC-KBO": [
-    111.0,
-    118.0
+    94.0,
+    102.0
    ],
    "TEL-BHR": [
-    301.0,
-    314.0
+    284.0,
+    296.0
    ],
    "TEL-ELN": [
-    96.0,
-    100.0
+    83.0,
+    90.0
    ],
    "TEL-GAZ": [
-    98.0,
-    103.0
+    85.0,
+    91.0
    ],
    "TEL-KBO": [
-    272.0,
-    282.0
+    253.0,
+    263.0
    ]
   },
   "R9": {
    "APP": [
-    254.0,
-    255.0
+    248.0,
+    250.0
    ],
    "PART": [
-    369.0,
-    372.0
+    361.0,
+    364.0
    ],
    "SEA": [
-    478.0,
-    480.0
+    460.0,
+    465.0
    ],
    "SOC": [
-    402.0,
-    407.0
+    382.0,
+    387.0
    ],
    "TEL": [
-    497.0,
-    498.0
+    414.0,
+    417.0
    ]
   }
  },
- "budget": 84308,
+ "best_left_out": 3.05,
+ "budget": 80084,
  "careful": {
   "line_value": {
-   "APP-BHR": 295,
-   "APP-GAZ": 114,
-   "APP-KBO": 142,
-   "PART-BHR": 256,
-   "PART-GAZ": 290,
-   "PART-KBO": 238,
-   "SEA-BHR": 354,
-   "SEA-ELN": 180,
-   "SEA-GAZ": 203,
-   "SEA-KBO": 327,
-   "SOC-BHR": 156,
-   "SOC-ELN": 227,
-   "SOC-GAZ": 257,
-   "SOC-KBO": 150,
-   "TEL-BHR": 314,
-   "TEL-ELN": 98,
-   "TEL-GAZ": 111,
-   "TEL-KBO": 289
+   "APP-BHR": 289,
+   "APP-GAZ": 109,
+   "APP-KBO": 133,
+   "PART-BHR": 250,
+   "PART-GAZ": 286,
+   "PART-KBO": 231,
+   "SEA-BHR": 347,
+   "SEA-ELN": 171,
+   "SEA-GAZ": 195,
+   "SEA-KBO": 319,
+   "SOC-BHR": 148,
+   "SOC-ELN": 220,
+   "SOC-GAZ": 250,
+   "SOC-KBO": 141,
+   "TEL-BHR": 305,
+   "TEL-ELN": 92,
+   "TEL-GAZ": 105,
+   "TEL-KBO": 279
   },
-  "plan_paying_total": 2083,
-  "rise_extra_total": 229,
+  "plan_paying_total": 1977,
+  "rise_extra_total": 209,
   "survival_36": {
-   "APP": 12.1,
-   "DIR": 28.6,
-   "PART": 15.6,
-   "SEA": 25.5,
-   "SOC": 12.0,
-   "TEL": 9.1
+   "APP": 11.3,
+   "DIR": 28.1,
+   "PART": 14.0,
+   "SEA": 24.5,
+   "SOC": 11.3,
+   "TEL": 7.9
   },
   "value_2023q3": {
-   "APP": 171,
-   "DIR": 249,
-   "PART": 217,
-   "SEA": 204,
+   "APP": 169,
+   "DIR": 242,
+   "PART": 218,
+   "SEA": 209,
    "SOC": 128,
-   "TEL": 111
+   "TEL": 118
   }
  },
- "careful_budget": 141575,
+ "careful_budget": 135385,
  "careful_funded": [
   "APP-BHR",
   "PART-BHR",
@@ -279,104 +280,112 @@
   "TEL-BHR",
   "TEL-KBO"
  ],
+ "horizon_months": 36,
  "hurdle": 3.5,
  "line_cost": {
   "APP-BHR": 58.5,
   "APP-GAZ": 53.0,
-  "APP-KBO": 41.51,
+  "APP-KBO": 39.0,
   "PART-BHR": 67.5,
   "PART-GAZ": 52.0,
-  "PART-KBO": 62.51,
+  "PART-KBO": 63.49,
   "SEA-BHR": 60.0,
-  "SEA-ELN": 50.49,
-  "SEA-GAZ": 56.0,
+  "SEA-ELN": 41.51,
+  "SEA-GAZ": 44.51,
   "SEA-KBO": 49.0,
-  "SOC-BHR": 41.0,
-  "SOC-ELN": 59.0,
-  "SOC-GAZ": 67.5,
-  "SOC-KBO": 36.5,
-  "TEL-BHR": 72.5,
+  "SOC-BHR": 38.0,
+  "SOC-ELN": 57.5,
+  "SOC-GAZ": 66.0,
+  "SOC-KBO": 31.5,
+  "TEL-BHR": 71.0,
   "TEL-ELN": 69.5,
   "TEL-GAZ": 63.0,
-  "TEL-KBO": 69.49
+  "TEL-KBO": 63.0
  },
  "line_multiple": {
-  "APP-BHR": 4.92,
-  "APP-GAZ": 2.12,
-  "APP-KBO": 3.27,
-  "PART-BHR": 3.3,
-  "PART-GAZ": 5.09,
-  "PART-KBO": 3.29,
-  "SEA-BHR": 6.2,
-  "SEA-ELN": 3.67,
-  "SEA-GAZ": 3.69,
-  "SEA-KBO": 6.82,
-  "SOC-BHR": 3.13,
-  "SOC-ELN": 3.32,
-  "SOC-GAZ": 3.29,
-  "SOC-KBO": 3.08,
-  "TEL-BHR": 4.19,
-  "TEL-ELN": 1.41,
-  "TEL-GAZ": 1.61,
-  "TEL-KBO": 3.93
+  "APP-BHR": 4.74,
+  "APP-GAZ": 1.92,
+  "APP-KBO": 3.03,
+  "PART-BHR": 2.98,
+  "PART-GAZ": 4.82,
+  "PART-KBO": 3.0,
+  "SEA-BHR": 5.86,
+  "SEA-ELN": 3.94,
+  "SEA-GAZ": 4.19,
+  "SEA-KBO": 6.46,
+  "SOC-BHR": 2.88,
+  "SOC-ELN": 3.0,
+  "SOC-GAZ": 3.04,
+  "SOC-KBO": 3.05,
+  "TEL-BHR": 4.01,
+  "TEL-ELN": 1.23,
+  "TEL-GAZ": 1.38,
+  "TEL-KBO": 4.03
  },
  "line_spend": {
   "APP-BHR": 10588,
   "APP-GAZ": 5777,
-  "APP-KBO": 4026,
+  "APP-KBO": 3783,
   "PART-BHR": 13636,
   "PART-GAZ": 7540,
-  "PART-KBO": 7439,
+  "PART-KBO": 7555,
   "SEA-BHR": 16680,
-  "SEA-ELN": 4898,
-  "SEA-GAZ": 9408,
+  "SEA-ELN": 4026,
+  "SEA-GAZ": 7477,
   "SEA-KBO": 7056,
-  "SOC-BHR": 11849,
-  "SOC-ELN": 6431,
-  "SOC-GAZ": 12218,
-  "SOC-KBO": 5694,
-  "TEL-BHR": 16602,
+  "SOC-BHR": 10982,
+  "SOC-ELN": 6268,
+  "SOC-GAZ": 11946,
+  "SOC-KBO": 4914,
+  "TEL-BHR": 16259,
   "TEL-ELN": 7576,
   "TEL-GAZ": 11403,
-  "TEL-KBO": 11536
+  "TEL-KBO": 10458
  },
  "line_value": {
-  "APP-BHR": 288,
-  "APP-GAZ": 113,
-  "APP-KBO": 136,
-  "PART-BHR": 223,
-  "PART-GAZ": 265,
-  "PART-KBO": 205,
-  "SEA-BHR": 372,
-  "SEA-ELN": 185,
-  "SEA-GAZ": 207,
-  "SEA-KBO": 334,
-  "SOC-BHR": 129,
-  "SOC-ELN": 196,
-  "SOC-GAZ": 222,
-  "SOC-KBO": 113,
-  "TEL-BHR": 303,
-  "TEL-ELN": 98,
-  "TEL-GAZ": 101,
-  "TEL-KBO": 273
+  "APP-BHR": 277,
+  "APP-GAZ": 102,
+  "APP-KBO": 118,
+  "PART-BHR": 201,
+  "PART-GAZ": 251,
+  "PART-KBO": 191,
+  "SEA-BHR": 352,
+  "SEA-ELN": 163,
+  "SEA-GAZ": 187,
+  "SEA-KBO": 317,
+  "SOC-BHR": 109,
+  "SOC-ELN": 172,
+  "SOC-GAZ": 200,
+  "SOC-KBO": 96,
+  "TEL-BHR": 285,
+  "TEL-ELN": 85,
+  "TEL-GAZ": 87,
+  "TEL-KBO": 254
  },
  "lines_in_plan": 18,
+ "margin_min_pct": 12,
  "n_funded": 8,
+ "newest_own": {
+  "cancellations": 139,
+  "cancellations_max": 18,
+  "cancellations_min": 3,
+  "expected": 146
+ },
  "paying_oct": {
-  "BHR": 5112,
-  "ELN": 1491,
-  "GAZ": 3060,
-  "KBO": 2667
+  "BHR": 5076,
+  "ELN": 1481,
+  "GAZ": 3065,
+  "KBO": 2608
  },
- "paying_oct_total": 12330,
+ "paying_oct_total": 12230,
  "plan_paying": {
-  "APP": 255,
-  "PART": 370,
-  "SEA": 478,
-  "SOC": 403,
-  "TEL": 498
+  "APP": 248,
+  "PART": 362,
+  "SEA": 461,
+  "SOC": 383,
+  "TEL": 415
  },
- "plan_paying_total": 2004,
+ "plan_paying_total": 1869,
  "plan_starts": {
   "APP": 387,
   "PART": 466,
@@ -385,14 +394,220 @@
   "TEL": 685
  },
  "plan_starts_total": 2960,
- "plan_total": 170357,
- "rise_extra": {
-  "BHR": 174,
-  "ELN": 51,
-  "GAZ": 104,
-  "KBO": 91
+ "plan_total": 163924,
+ "resampled": {
+  "draws": 40,
+  "high": {
+   "APP-BHR": 4.98,
+   "APP-GAZ": 2.07,
+   "APP-KBO": 3.38,
+   "PART-BHR": 3.2,
+   "PART-GAZ": 5.06,
+   "PART-KBO": 3.26,
+   "SEA-BHR": 6.15,
+   "SEA-ELN": 4.34,
+   "SEA-GAZ": 4.58,
+   "SEA-KBO": 6.81,
+   "SOC-BHR": 3.14,
+   "SOC-ELN": 3.21,
+   "SOC-GAZ": 3.27,
+   "SOC-KBO": 3.39,
+   "TEL-BHR": 4.17,
+   "TEL-ELN": 1.36,
+   "TEL-GAZ": 1.54,
+   "TEL-KBO": 4.16
+  },
+  "low": {
+   "APP-BHR": 4.57,
+   "APP-GAZ": 1.79,
+   "APP-KBO": 2.73,
+   "PART-BHR": 2.83,
+   "PART-GAZ": 4.61,
+   "PART-KBO": 2.82,
+   "SEA-BHR": 5.7,
+   "SEA-ELN": 3.76,
+   "SEA-GAZ": 3.96,
+   "SEA-KBO": 6.24,
+   "SOC-BHR": 2.54,
+   "SOC-ELN": 2.77,
+   "SOC-GAZ": 2.76,
+   "SOC-KBO": 2.74,
+   "TEL-BHR": 3.86,
+   "TEL-ELN": 1.13,
+   "TEL-GAZ": 1.27,
+   "TEL-KBO": 3.88
+  },
+  "same_lines": 39
  },
- "rise_extra_total": 420,
+ "rise_extra": {
+  "BHR": 164,
+  "ELN": 48,
+  "GAZ": 98,
+  "KBO": 84
+ },
+ "rise_extra_total": 394,
+ "rivals_funded": {
+  "a time trend in the end-of-intro model": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "discount depth and intro length": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading against the month's average": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading in bands": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading in the end-of-intro model": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading over the first two months": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading taken linearly": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "reading with a square term": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "returns on the address": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "returns on the payment fingerprint": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "tenure as a smooth decay": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "the offer in the leaving model": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "the price at the intro's end in the leaving model": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "the rise against the same months a year before": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "the rise's window to June": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "titles in the hazard": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ]
+ },
  "routes_funded": {
   "careful": [
    "APP-BHR",
@@ -412,13 +627,10 @@
   ],
   "careful, full price carried": [
    "APP-BHR",
-   "PART-BHR",
    "PART-GAZ",
-   "PART-KBO",
    "SEA-BHR",
+   "SEA-GAZ",
    "SEA-KBO",
-   "SOC-ELN",
-   "SOC-GAZ",
    "SOC-KBO",
    "TEL-BHR",
    "TEL-KBO"
@@ -442,14 +654,12 @@
   ],
   "careful, reading used": [
    "APP-BHR",
-   "PART-BHR",
    "PART-GAZ",
    "SEA-BHR",
    "SEA-ELN",
    "SEA-GAZ",
    "SEA-KBO",
-   "SOC-ELN",
-   "SOC-GAZ",
+   "SOC-KBO",
    "TEL-BHR",
    "TEL-KBO"
   ],
@@ -487,14 +697,11 @@
   ],
   "completion on each channel's older starts": [
    "APP-BHR",
-   "PART-BHR",
    "PART-GAZ",
-   "PART-KBO",
    "SEA-BHR",
+   "SEA-ELN",
    "SEA-GAZ",
    "SEA-KBO",
-   "SOC-ELN",
-   "SOC-GAZ",
    "SOC-KBO",
    "TEL-BHR",
    "TEL-KBO"
@@ -502,16 +709,11 @@
   "no full-price term at the intro's end": [
    "APP-BHR",
    "APP-KBO",
-   "PART-BHR",
    "PART-GAZ",
-   "PART-KBO",
    "SEA-BHR",
    "SEA-ELN",
    "SEA-GAZ",
    "SEA-KBO",
-   "SOC-BHR",
-   "SOC-ELN",
-   "SOC-GAZ",
    "SOC-KBO",
    "TEL-BHR",
    "TEL-KBO"
@@ -528,6 +730,8 @@
    "APP-BHR",
    "PART-GAZ",
    "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
    "SEA-KBO",
    "TEL-BHR",
    "TEL-KBO"
@@ -544,33 +748,33 @@
   ]
  },
  "stepup_added": {
-  "G3": 5.6,
-  "H6": 5.9,
-  "J12": 5.5,
-  "M3E1": 6.6,
-  "PM1": 6.0
+  "G3": 7.0,
+  "H6": 8.5,
+  "J12": 8.0,
+  "M3E1": 8.6,
+  "PM1": 7.7
  },
  "stepup_share": {
-  "G3": 72.2,
-  "H6": 29.2,
-  "J12": 26.7,
-  "M3E1": 57.8,
-  "PM1": 67.0
+  "G3": 74.6,
+  "H6": 31.5,
+  "J12": 29.6,
+  "M3E1": 60.6,
+  "PM1": 69.1
  },
  "survival_36": {
-  "APP": 12.3,
-  "DIR": 28.8,
-  "PART": 13.5,
-  "SEA": 27.3,
-  "SOC": 10.1,
-  "TEL": 8.9
+  "APP": 11.6,
+  "DIR": 28.6,
+  "PART": 11.8,
+  "SEA": 26.4,
+  "SOC": 9.2,
+  "TEL": 7.5
  },
  "value_2023q3": {
-  "APP": 179,
-  "DIR": 265,
-  "PART": 228,
-  "SEA": 222,
-  "SOC": 150,
+  "APP": 180,
+  "DIR": 256,
+  "PART": 225,
+  "SEA": 225,
+  "SOC": 151,
   "TEL": 131
  }
 }

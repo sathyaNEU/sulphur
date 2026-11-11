@@ -78,6 +78,8 @@ def su_design(ch, ti, offer, L, ip, m_step, o, proxy=None):
         cols.append(np.log(fp / BASE_PRICE[ti])[:, None])
     elif o["su_price"] == "period":
         cols.append((m_step >= P.RISE_2025)[:, None].astype(float))
+    if o.get("su_trend"):
+        cols.append(((np.asarray(m_step, float) - 24.0) / 12.0)[:, None])
     if o.get("su_proxy"):
         px = np.full(len(ch), SU_PROXY_FILL[0]) if proxy is None else np.asarray(proxy, float)
         cols.append(np.nan_to_num(px, nan=SU_PROXY_FILL[0])[:, None])
@@ -100,8 +102,10 @@ def su_prob(model, ch, ti, offer, m_start, m_step, proxy=None):
     L = sim.intro_months(offer)
     ip = sim.intro_price(offer, ti, m_start)
     X = su_design(ch, ti, offer, L, ip, m_step, o, proxy)
-    if o["su_price"] == "period":
-        X[:, -1] = (m_step >= P.RISE_2025).astype(float)
+    if o.get("su_trend"):
+        # the trend is held at the last month of the record when carried forward
+        j = X.shape[1] - 1 - (1 if o.get("su_proxy") else 0)
+        X[:, j] = np.minimum(X[:, j], (P.CUT - 24.0) / 12.0)
     return sim.sig(X @ model["b"])
 
 
@@ -160,7 +164,7 @@ def proxy_cols(px, form):
 CAL = np.array([sim.cal_month(m) for m in range(0, 200)])
 
 
-def hz_design(ch, j, proxy, m, o, ti=None):
+def hz_design(ch, j, proxy, m, o, ti=None, off=None):
     j = np.atleast_1d(j)
     m = np.broadcast_to(np.atleast_1d(m), j.shape)
     if o.get("tenure_form", "bins") == "decay":
@@ -172,6 +176,13 @@ def hz_design(ch, j, proxy, m, o, ti=None):
         cols.append(onehot(np.broadcast_to(np.atleast_1d(ti), j.shape), len(TI)))
     if o["completion"] == "proxy":
         cols.append(proxy_cols(np.broadcast_to(np.atleast_1d(proxy), j.shape), o.get("proxy_form", "log")))
+    if o.get("hz_offer"):
+        oo = np.full(j.shape, -1) if off is None else np.broadcast_to(np.atleast_1d(off), j.shape)
+        cols.append(np.column_stack([(oo == q).astype(float) for q in [-1] + list(range(1, len(sim.OFFER_CODES)))]))
+    if o.get("hz_price") and ti is not None:
+        tt = np.broadcast_to(np.atleast_1d(ti), j.shape).astype(int)
+        su_m = (m - j + 1).astype(int)
+        cols.append(np.log(sim.full_price(tt, su_m) / BASE_PRICE[tt])[:, None])
     summer = np.isin(CAL[m.astype(int)], [7, 8]).astype(float)
     cols.append(summer[:, None])
     return np.column_stack(cols)
@@ -181,15 +192,15 @@ def fit_hazard(pn, o):
     ii, mm, y = hazard_rows(pn, o)
     j = mm - pn["stepup"][ii] + 1
     px = proxy_of(pn, o)[ii] if o["completion"] == "proxy" else np.zeros(len(ii))
-    X = hz_design(pn["channel"][ii], j, px, mm, o, pn["title"][ii])
+    X = hz_design(pn["channel"][ii], j, px, mm, o, pn["title"][ii], pn["offer"][ii])
     b = fit_logit(X, y)
     return {"b": b, "o": o, "mean_proxy": float(np.nanmean(pn["proxy"]))}
 
 
-def hazard(model, ch, j, proxy, m, ti=None):
+def hazard(model, ch, j, proxy, m, ti=None, off=None):
     o = model["o"]
     X = hz_design(np.atleast_1d(ch), np.atleast_1d(j), np.atleast_1d(proxy) if o["completion"] == "proxy"
-                  else np.zeros(np.size(j)), m, o, ti)
+                  else np.zeros(np.size(j)), m, o, ti, off)
     return sim.sig(X @ model["b"])
 
 
@@ -230,7 +241,8 @@ def rise_model(pn, hz, o):
         obs = sum(((pn["end"] == m) & (pn["reason"] == "CANCELLED") & sel).sum() for m in win)
         # the band's monthly rate outside the window
         rate_rows, rate_ev = 0, 0
-        for m in list(range(14, 25)) + list(range(30, 41)):
+        months = [14, 15, 16] if o.get("rise_baseline") == "yoy" else list(range(14, 25)) + list(range(30, 41))
+        for m in months:
             if sim.cal_month(m) in (7, 8):
                 continue
             ten_m = m - pn["start"] + 1 + pn["tenure0"]
@@ -321,7 +333,7 @@ def net_factor(route, paid_idx):
 
 
 def spell(M, ch, ti, offer, m_start, proxy, route, H, rise_on=True, k0=None, alive0=None, ten0=None,
-          no_rise_price=False):
+          no_rise_price=False, line=None):
     """Expected net revenue by month, the chance of leaving at each month's end and the chance of paying each
     month, for subscriptions starting at m_start (one per row), over H months. k0 starts the arithmetic part-way
     through a subscription (the months already billed), ten0 adds months paid before the record began (the
@@ -379,7 +391,10 @@ def spell(M, ch, ti, offer, m_start, proxy, route, H, rise_on=True, k0=None, ali
             if "settled" in M and M["settled"] is not None:
                 hz[full] = settled_or_young(M, ch[full], j, proxy[full], m[full], ti[full])
             else:
-                hz[full] = hazard(M["hz"], ch[full], j, proxy[full], m[full], ti[full])
+                hz[full] = hazard(M["hz"], ch[full], j, proxy[full], m[full], ti[full], offer[full])
+            if M.get("line_mult") is not None:
+                mult = np.array([M["line_mult"].get((int(a), int(b)), 1.0) for a, b in zip(ch[full], ti[full])])
+                hz[full] = np.minimum(hz[full] * mult, 0.6)
         c = alive * hz
         alive = alive - c
         leave[:, h] += c
@@ -452,8 +467,32 @@ def line_value(M, line, starts_by_month, offer_code, proxies, routes, o):
     return tot_v / tot_w
 
 
+def line_multipliers(pn, hz, o):
+    """Each line's newest starts (the twelve months to the cut) against the channel hazard: observed over expected
+    cancellations in their full-price months, shrunk toward one by a pseudo-count of 20 expected events."""
+    out = {}
+    for c in range(len(CH)):
+        for t in range(len(TI)):
+            sel = ((pn["channel"] == c) & (pn["title"] == t) & (pn["kind"] == "new") & ~pn["withdrawn"]
+                   & (pn["start"] > P.CUT - 12) & (pn["stepup"] <= P.CUT - 1) & (pn["last"] >= pn["stepup"]))
+            idx = np.where(sel)[0]
+            if len(idx) == 0:
+                continue
+            O, E = 0.0, 0.0
+            for i in idx:
+                a, b = pn["stepup"][i], min(pn["last"][i], P.CUT - 1)
+                mm = np.arange(a, b + 1)
+                jj = mm - a + 1
+                E += hazard(hz, np.full(len(mm), c), jj, np.zeros(len(mm)), mm).sum()
+                O += float(((pn["end"][i] >= a) & (pn["end"][i] <= b) & (pn["reason"][i] == "CANCELLED")))
+            out[(c, t)] = (O + 20.0) / (E + 20.0)
+    return out
+
+
 def fit_all(pn, o):
     M = {"su": fit_su(pn, o), "hz": fit_hazard(pn, o), "inv": invol_rates(pn), "intro": intro_rate(pn), "o": o}
+    if o.get("completion_cohort"):
+        M["line_mult"] = line_multipliers(pn, M["hz"], o)
     M["rise"] = rise_model(pn, M["hz"], o)
     if o["returns"]:
         r = fit_returns(pn, o)

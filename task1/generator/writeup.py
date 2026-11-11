@@ -15,7 +15,7 @@ def pct(x):
 
 def figures(G):
     g, b = G["golden"], G["bands"]
-    F = {"hurdle": P.HURDLE, "budget": g["budget"], "plan_total": int(sum(G["spend"].values())),
+    F = {"hurdle": P.HURDLE, "horizon_months": P.HORIZON, "budget": g["budget"], "plan_total": int(sum(G["spend"].values())),
          "lines_in_plan": len(G["plan"]), "funded": [GD.key(l) for l in g["R8"]], "n_funded": len(g["R8"]),
          "careful_funded": [GD.key(l) for l in G["routes"]["careful"]["R8"]],
          "careful_budget": int(sum(G["spend"][l] for l in G["routes"]["careful"]["R8"])),
@@ -47,6 +47,20 @@ def figures(G):
                     "value_2023q3": {c: int(round(v)) for c, v in G["routes"]["careful"]["R2"].items()},
                     "plan_paying_total": int(round(sum(G["routes"]["careful"]["R9"].values())))}
     F["routes_funded"] = {nm: [GD.key(l) for l in r["R8"]] for nm, r in G["routes"].items()}
+    F["rivals_funded"] = {nm: [GD.key(l) for l in r["R8"]] for nm, r in G["rivals"].items()}
+    if "boot" in G:
+        B = G["boot"]
+        F["resampled"] = {"draws": B["reps"], "same_lines": B["same"],
+                          "low": {GD.key(l): round(v, 2) for l, v in B["lo"].items()},
+                          "high": {GD.key(l): round(v, 2) for l, v in B["hi"].items()}}
+    own = G["newest_own"]
+    F["newest_own"] = {"cancellations_min": min(o for o, e in own.values()),
+                       "cancellations_max": max(o for o, e in own.values()),
+                       "cancellations": int(sum(o for o, e in own.values())),
+                       "expected": int(round(sum(e for o, e in own.values())))}
+    unf = [l for l in G["plan"] if l not in g["R8"]]
+    F["best_left_out"] = round(max(g["R7"][l] / G["cps"][l] for l in unf), 2)
+    F["margin_min_pct"] = int(100 * min(abs(g["R7"][l] / G["cps"][l] / P.HURDLE - 1) for l in G["plan"]))
     return F
 
 
@@ -62,20 +76,19 @@ def submission(F, path):
     funded = [k for k in order if k in F["funded"]]
     extra = [k for k in F["careful_funded"] if k not in F["funded"]]
     unf = [k for k in order if k not in F["funded"]]
-    near = [k for k in unf if F["line_multiple"][k] >= 3.0]
+
     L = ["# task1: Medienhaus Brückenhafen, 2027 digital acquisition lines\n", "## Tags\n",
          "**Domain:** Product Analytics, Product Analytics (Cohort and LTV modeling: retention curves, customer "
          "lifetime value).", "**Analytical objective:** Forecasting & Predictive Modeling.\n"]
     L.append("## Final Recommendation\n")
     L.append("Fund %d of the plan's %d lines (%s) for a budget of EUR %s: each is expected to bring at least %.1f "
-             "times its planned cost per start over 36 months (%.2f to %.2f), while the closest lines left out run "
-             "%.2f to %.2f. Not the %d lines for EUR %s that a reading of each line's newest starts on its older "
-             "starts' survival, of the end of the introductory price without the April 2027 list prices and of "
-             "returns on the customer number puts over the bar, which adds %s." % (
+             "times its planned cost per start over 36 months (%.2f to %.2f), while the best line left out runs %.2f. "
+             "Not the %d lines for EUR %s that a reading of each line's newest starts on its older starts' "
+             "survival, of the end of the introductory price without the April 2027 list prices and of returns on "
+             "the customer number puts over the bar, which adds %s." % (
                  F["n_funded"], F["lines_in_plan"], ", ".join(funded), f"{F['budget']:,}", F["hurdle"],
                  min(F["line_multiple"][k] for k in funded), max(F["line_multiple"][k] for k in funded),
-                 min(F["line_multiple"][k] for k in near), max(F["line_multiple"][k] for k in near),
-                 len(F["careful_funded"]), f"{F['careful_budget']:,}", ", ".join(extra)))
+                 F["best_left_out"], len(F["careful_funded"]), f"{F['careful_budget']:,}", ", ".join(extra)))
     L.append("\n## Supplementary Questions\n")
     L.append("### acquisition_lines_2027.xlsx\n")
     L.append("1. Sheet Lines 2027 has one row per line of the plan, %d rows ordered by multiple of cost, highest "
@@ -140,13 +153,22 @@ def submission(F, path):
     for i, s_ in enumerate(STEPS(F), 1):
         L.append("%d. %s" % (i, s_))
     L.append("")
-    L.append("No other conclusion survives the records. Completing the newest starts on their channel's older "
+    close = ("No other conclusion survives the records. Completing the newest starts on their channel's older "
              "survival is ruled out by the reading log, where the starts of the twelve months to October 2026 read "
-             "less (paid social, cashback) or more (paid search) and the leaving rate follows reading; an "
+             "less (paid social, cashback) or more (paid search) and the leaving rate follows reading; calibrating "
+             "each line on its own newest starts instead rests on %d to %d full-price cancellations a line so far "
+             "(%d in all, against %d the reading-based model expects of them), too few to set a line's rate; an "
              "end-of-intro model without the full price is ruled out by the step-ups either side of April 2025; the "
              "customer number as the household is ruled out by the payment fingerprints and addresses that customer "
              "numbers share; and every reasonable variant of the reading measure, the tenure terms, the offer terms "
-             "and the household links funds the same %d lines." % F["n_funded"])
+             "in either model and the household links funds the same %d lines, every line at least %d per cent "
+             "from the bar." % (F["newest_own"]["cancellations_min"], F["newest_own"]["cancellations_max"],
+                                F["newest_own"]["cancellations"], F["newest_own"]["expected"], F["n_funded"],
+                                F["margin_min_pct"]))
+    if "resampled" in F:
+        close += (" Drawing whole start months again within each line and refitting every model, %d of %d draws "
+                  "fund the same lines." % (F["resampled"]["same_lines"], F["resampled"]["draws"]))
+    L.append(close)
     open(path, "w").write("\n".join(L) + "\n")
 
 
@@ -163,11 +185,11 @@ def STEPS(F):
             F["value_2023q3"]["SOC"], F["careful"]["value_2023q3"]["SOC"]),
         "Fit the end of the introductory price on every step-up in the record by offer, channel and title with a "
         "term for the full price the start steps up to (offer_catalogue.csv, price_list_digital_2027.pdf), which "
-        "the step-ups either side of the April 2025 rise identify: at 2026 prices the 2027 offers lose %.1f "
-        "(Probemonat) to %.1f per cent (free quarter), and the April 2027 prices add %.1f to %.1f points, where a "
-        "period term for the 2025 jump adds nothing." % (F["stepup_share"]["PM1"], F["stepup_share"]["G3"],
-                                                         min(F["stepup_added"].values()),
-                                                         max(F["stepup_added"].values())),
+        "the step-ups either side of the April 2025 rise identify: at 2026 prices the 2027 offers lose %.1f per "
+        "cent of their starts (the annual offer) to %.1f (the free quarter), and the April 2027 prices add %.1f to "
+        "%.1f points, where a period term for the 2025 jump adds nothing." % (
+            min(F["stepup_share"].values()), max(F["stepup_share"].values()), min(F["stepup_added"].values()),
+            max(F["stepup_added"].values())),
         "Join reading_by_login_2024-01_2026-10.csv to logins.csv and sum each customer's logins; fit the "
         "full-price leaving rate on months since the step-up, channel and the first three months' reading, and "
         "complete the young starts on their own reading: %.1f per cent of the paid social starts of November 2025 "

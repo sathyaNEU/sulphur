@@ -21,6 +21,8 @@ PAIRS = {
     "careful, the 2025 rise read in full": dict(su_price="period", completion="channel", link=(), ret_proxy=False),
 }
 RIVALS = {
+    "a time trend in the end-of-intro model": dict(su_trend=True),
+    "the rise against the same months a year before": dict(rise_baseline="yoy"),
     "tenure as a smooth decay": dict(tenure_form="decay"),
     "titles in the hazard": dict(hz_title=True),
     "reading in the end-of-intro model": dict(su_proxy=True),
@@ -31,7 +33,13 @@ RIVALS = {
     "discount depth and intro length": dict(su_form="depth"),
     "returns on the payment fingerprint": dict(link=("fingerprint",)),
     "returns on the address": dict(link=("address",)),
+    "the offer in the leaving model": dict(hz_offer=True),
+    "the price at the intro's end in the leaving model": dict(hz_price=True),
 }
+
+
+PROBES = {"the newest starts calibrated on their own months, no reading": dict(completion="channel",
+                                                                             completion_cohort=True)}
 
 
 def route(name):
@@ -43,4 +51,6 @@ def route(name):
         return models.opts(**SINGLE[name])
     if name in PAIRS:
         return models.opts(**PAIRS[name])
+    if name in PROBES:
+        return models.opts(**PROBES[name])
     return models.opts(**RIVALS[name])

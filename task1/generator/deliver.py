@@ -130,9 +130,30 @@ def workbook(path, G):
         drop = [GD.key(l) for l in g["R8"] if l not in S]
         w3.append([label, len(S), ", ".join(add) or "-", ", ".join(drop) or "-"])
     w3.append([])
-    w3.append(["Other reasonable specifications (reading in bands or linear, two months of reading, titles in the "
-               "leaving model, the offers by discount and length, households linked by payment method or by "
-               "address alone) fund the same eight lines."])
+    w3.append(["Other reasonable specifications (reading in bands or linear, two months of reading, titles, the offer "
+               "or the price stepped up to in the leaving model, a time trend at the end of the intro, the offers by "
+               "discount and length, households linked by payment method or by address alone) fund the same eight "
+               "lines."])
+    own = G["newest_own"]
+    w3.append(["Calibrating each line on its own starts of November 2025 to October 2026 instead of their reading "
+               "rests on %d to %d full-price cancellations a line so far (%d in all; the leaving model on their "
+               "reading expects %d of them)." % (min(o for o, e in own.values()), max(o for o, e in own.values()),
+                                                 sum(o for o, e in own.values()),
+                                                 int(round(sum(e for o, e in own.values()))))])
+    if "boot" in G:
+        B = G["boot"]
+        w3.append([])
+        w3.append(["Start months drawn again within each line (%d draws, every model refitted): %d draws fund the "
+                   "same eight lines" % (B["reps"], B["same"])])
+        w3.cell(w3.max_row, 1).font = Font(bold=True)
+        w3.append(["Line", "Multiple of cost", "5th percentile of the draws", "95th percentile of the draws"])
+        for c in w3[w3.max_row]:
+            c.font = Font(bold=True)
+        for line in sorted(plan, key=lambda l: -g["R7"][l] / cps[l]):
+            w3.append([GD.key(line), round(g["R7"][line] / cps[line], 2), round(B["lo"][line], 2),
+                       round(B["hi"][line], 2)])
+            for col in (2, 3, 4):
+                w3.cell(w3.max_row, col).number_format = "0.00"
     w3.column_dimensions["A"].width = 58
     w3.column_dimensions["C"].width = 44
     w3.column_dimensions["D"].width = 22
@@ -171,7 +192,7 @@ def note(path, G):
         rows.append([GD.key(l), plan[l]["offer"], "%.2f" % cps[l], eur(g["R7"][l]), "%.2f" % (g["R7"][l] / cps[l])])
     t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=[60, 50, 70, 75, 55])
     t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB"))]))
-    near = [l for l in unf if g["R7"][l] / cps[l] >= 0.9 * P.HURDLE]
+    near = [l for l in unf if g["R7"][l] / cps[l] >= 0.8 * P.HURDLE]
     s = [Paragraph("Controlling · To: Rosa-Maria Herrmann, head of controlling · From: Tamara Naser · 6 November 2026",
                    small),
          Paragraph("Fund eight acquisition lines in 2027, for EUR %s" % eur(g["budget"]), h1),
@@ -189,7 +210,8 @@ def note(path, G):
                        ", ".join(GD.key(l) for l in near), min(g["R7"][l] / cps[l] for l in near),
                        max(g["R7"][l] / cps[l] for l in near), pct(g["R5"]["SOC"])), body),
          Paragraph("The April 2027 list prices add %.1f to %.1f points to the share leaving when an introductory "
-                   "price ends, as the April 2025 rise did; the 2025 rise's own cancellations began with the notice "
+                   "price ends, as the April 2025 rise did (at today's prices APP-KBO and SOC-KBO would clear the "
+                   "bar); the 2025 rise's own cancellations began with the notice "
                    "letters in February and were heaviest among subscribers in their first year, and on today's base "
                    "the April 2027 rise brings about %s extra cancellations by the end of 2027. A household that "
                    "leaves and comes back often does so under a new customer number: counted by household, the "
@@ -200,10 +222,13 @@ def note(path, G):
                    "Nachrichten %s). Run in full, the plan's %s starts in 2027 would leave about %s paying at the "
                    "end of the year." % (
                        eur(sum(g["R1"].values())), eur(g["R1"]["BHR"]), eur(g["R1"]["GAZ"]), eur(g["R1"]["KBO"]),
-                       eur(g["R1"]["ELN"]), eur(sum(G["n_plan_starts"].values())), eur(sum(g["R9"].values()))), body),
+                       eur(g["R1"]["ELN"]), eur(sum(G["n_plan_starts"].values())),
+                       eur(sum(int(round(v)) for v in g["R9"].values()))), body),
          Paragraph("The figures assume each line's 2027 starts are like its starts of the twelve months to October "
                    "2026 at the offer in the plan (standard 3.3). Every line keeps its side of the bar under the "
-                   "other reasonable specifications in the workbook's Checks sheet.", small),
+                   "other reasonable specifications in the workbook's Checks sheet%s." % (
+                       (", and %d of %d redraws of the start months fund the same eight lines" % (
+                           G["boot"]["same"], G["boot"]["reps"])) if "boot" in G else ""), small),
          Paragraph("Starts are counted after the 14-day withdrawal period (standard 2.3); telemarketing's "
                    "withdrawals run well above the other channels'.", small)]
     O.build(path, s, "Fund eight acquisition lines in 2027", "Tamara Naser", "Controlling note",

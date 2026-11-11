@@ -34,7 +34,41 @@ def run_route(pn, plan, o):
     return R
 
 
-def compute(target, with_rivals=True, with_routes=True):
+def resampled(pn, plan, cps, golden_set):
+    """The forcing check: whole start months drawn again within each line (boot.py), every model refitted; each
+    line's multiple at the 5th and 95th percentile of the draws and the number of draws funding the same lines."""
+    import boot
+    vals = boot.run(pn, plan, P.BOOT_REPS, seed=P.SEED + 13)
+    mult = {l: np.array([v[l] / cps[l] for v in vals]) for l in plan}
+    same = sum(1 for v in vals if funded(v, cps) == golden_set)
+    return {"reps": len(vals), "same": int(same),
+            "lo": {l: float(np.percentile(mult[l], 5)) for l in plan},
+            "hi": {l: float(np.percentile(mult[l], 95)) for l in plan}}
+
+
+def newest_own(pn):
+    """What a calibration of each line on its own newest starts would rest on: the full-price cancellations so far
+    of the line's starts of the twelve months to the cut, against what the golden's leaving model expects of them."""
+    import sim
+    M = models.fit_hazard(pn, models.GOLD)
+    out = {}
+    for (c, t) in P.LINES:
+        ci, tj = sim.C_IDX[c], sim.T_IDX[t]
+        sel = ((pn["channel"] == ci) & (pn["title"] == tj) & (pn["kind"] == "new") & ~pn["withdrawn"]
+               & (pn["start"] > P.CUT - 12) & (pn["stepup"] <= P.CUT - 1) & (pn["last"] >= pn["stepup"]))
+        O, E = 0, 0.0
+        for i in np.where(sel)[0]:
+            a, b = pn["stepup"][i], min(pn["last"][i], P.CUT - 1)
+            mm = np.arange(a, b + 1)
+            if not np.isnan(pn["proxy"][i]):
+                E += float(models.hazard(M, np.full(len(mm), ci), mm - a + 1, np.full(len(mm), pn["proxy"][i]), mm,
+                                         np.full(len(mm), tj)).sum())
+            O += int((a <= pn["end"][i] <= b) and pn["reason"][i] == "CANCELLED")
+        out[(c, t)] = (O, E)
+    return out
+
+
+def compute(target, with_rivals=True, with_routes=True, with_boot=False):
     pn = panel.from_pack(target)
     plan = world.plan_2027()
     spend, cps = plan_cost(plan)
@@ -58,6 +92,9 @@ def compute(target, with_rivals=True, with_routes=True):
             rt[nm] = run_route(pn, plan, routes.route(nm))
             rt[nm]["R8"] = funded(rt[nm]["R7"], cps)
         out["routes"] = rt
+    if with_boot:
+        out["boot"] = resampled(pn, plan, cps, out["golden"]["R8"])
+    out["newest_own"] = newest_own(pn)
     out["n_households"] = int(len(set(pn["household"])))
     out["n_plan_starts"] = {c: int(sum(sum(s["starts"]) for (cc, t), s in plan.items() if cc == c)) for c in P.PAID}
     out["quick"] = quick(pn, plan, cps, target)

@@ -12,7 +12,7 @@
   "shape": "01",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for a budget of EUR 84,308, each at least 3.5 times its planned cost per start over 36 months; not the 14 lines for EUR 141,575 the careful but hurried reading funds",
+  "answer": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for a budget of EUR 80,084, each at least 3.5 times its planned cost per start over 36 months; not the 14 lines for EUR 135,385 the careful but hurried reading funds",
   "answer_source": "task1/generator/figures.json funded, budget, careful_funded",
   "gap": [
     "time",

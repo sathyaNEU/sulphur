@@ -20,8 +20,8 @@
   {
    "path": "subscriptions_2023-01_2026-10.csv",
    "format": "csv",
-   "bytes": 2636902,
-   "rows": 32473,
+   "bytes": 2639207,
+   "rows": 32491,
    "covers": "subscription system export: one row per subscription (digital consumer, staff, gift, company licence), January 2023 to October 2026, with the subscriptions running in January 2023",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -30,8 +30,8 @@
   {
    "path": "price_periods_2023-01_2026-10.csv",
    "format": "csv",
-   "bytes": 2062329,
-   "rows": 50859,
+   "bytes": 2054124,
+   "rows": 50644,
    "covers": "subscription system export: each subscription's price periods",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -40,8 +40,8 @@
   {
    "path": "payment_exceptions_2023-01_2026-10.csv",
    "format": "csv",
-   "bytes": 140897,
-   "rows": 3515,
+   "bytes": 140283,
+   "rows": 3497,
    "covers": "subscription system export: returned or declined debits, collections, write-offs and refunds",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -50,8 +50,8 @@
   {
    "path": "customers.csv",
    "format": "csv",
-   "bytes": 3050517,
-   "rows": 30229,
+   "bytes": 3056388,
+   "rows": 30280,
    "covers": "subscription system export: customer accounts with their postal address",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -60,8 +60,8 @@
   {
    "path": "payment_methods.csv",
    "format": "csv",
-   "bytes": 1616865,
-   "rows": 29072,
+   "bytes": 1613148,
+   "rows": 29005,
    "covers": "subscription system export: each customer's payment methods with the payment service provider's fingerprint",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -70,8 +70,8 @@
   {
    "path": "reading_by_login_2024-01_2026-10.csv",
    "format": "csv",
-   "bytes": 10788306,
-   "rows": 423746,
+   "bytes": 10786625,
+   "rows": 423723,
    "covers": "analytics platform: reading days, articles and app days by login and month, January 2024 to October 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -80,8 +80,8 @@
   {
    "path": "logins.csv",
    "format": "csv",
-   "bytes": 1042754,
-   "rows": 32585,
+   "bytes": 1040418,
+   "rows": 32512,
    "covers": "analytics platform: logins and the customer account each belongs to",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-04",
@@ -90,7 +90,7 @@
   {
    "path": "marketing_spend_2023-01_2026-10.csv",
    "format": "csv",
-   "bytes": 39320,
+   "bytes": 39297,
    "rows": 828,
    "covers": "marketing system export: spend, attributed starts and clicks by channel, title and month",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -120,7 +120,7 @@
   {
    "path": "media_plan_2027.xlsx",
    "format": "xlsx",
-   "bytes": 10445,
+   "bytes": 10441,
    "rows": null,
    "covers": "digital marketing: the 2027 acquisition plan, version 2.1",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -150,7 +150,7 @@
   {
    "path": "kpi_digital_2026.xlsx",
    "format": "xlsx",
-   "bytes": 6927,
+   "bytes": 6935,
    "rows": null,
    "covers": "controlling: monthly digital KPI, January to September 2026",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -170,7 +170,7 @@
   {
    "path": "newsletter_signups_2025-2026.csv",
    "format": "csv",
-   "bytes": 8390,
+   "bytes": 8372,
    "rows": 264,
    "covers": "editorial: newsletter sign-ups by month",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -190,7 +190,7 @@
   {
    "path": "digital_ad_revenue_2025-2026.csv",
    "format": "csv",
-   "bytes": 2887,
+   "bytes": 2884,
    "rows": 88,
    "covers": "advertising sales: digital display revenue by month",
    "source": "Constructed (seeded generator, task1/generator)",

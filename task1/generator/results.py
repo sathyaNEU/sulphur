@@ -172,13 +172,18 @@ def r9_plan(M, pn, plan):
     for (c, t), spec in plan.items():
         px, rt = LN.line_inputs(pn, (c, t))
         K = len(px)
+        L = P.OFFERS[spec["offer"]]["months"]
+        free = P.OFFERS[spec["offer"]].get("fixed", 1.0) == 0.0
         for mi, n in enumerate(spec["starts"]):
             if n <= 0:
                 continue
             m0 = P.PLAN0 + mi
+            # paying on 31 December 2027: charged above zero, so a start still in a free month is not paying
+            if free and (P.BASE_END - m0) < L:
+                continue
             _, _, pay = models.spell(M, np.full(K, sim.C_IDX[c]), np.full(K, sim.T_IDX[t]),
                                      np.full(K, sim.O_IDX[spec["offer"]]), np.full(K, m0), px, rt,
-                                     P.BASE_END - m0 + 1)
+                                     P.BASE_END - m0 + 1, line=(c, t))
             out[c] += n * float(pay[:, -1].mean())
     return out
 

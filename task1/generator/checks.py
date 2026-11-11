@@ -132,9 +132,31 @@ def main():
     sets = {nm: tuple(GD.key(l) for l in G["routes"][nm]["R8"]) for nm in G["routes"]}
     wrong = {s for s in sets.values() if list(s) != F["funded"]}
     check("level 5: four or more distinct wrong sets over the shortcuts", len(wrong) >= 4, "%d" % len(wrong))
-    for nm in ["completion on each channel's older starts", "no full-price term at the intro's end",
-               "returns on the customer number only"]:
+    for nm in ["completion on each channel's older starts", "no full-price term at the intro's end", "no returns"]:
         check("level 5: '%s' alone funds a wrong set" % nm, list(sets[nm]) != F["funded"])
+    check("note: the full-price sentence names the lines the period term alone adds (APP-KBO, SOC-KBO)",
+          sorted(set(sets["no full-price term at the intro's end"]) - set(F["funded"])) == ["APP-KBO", "SOC-KBO"])
+    check("write-up: the offers' exit range runs from the annual offer to the free quarter",
+          min(F["stepup_share"], key=F["stepup_share"].get) == "J12" and
+          max(F["stepup_share"], key=F["stepup_share"].get) == "G3")
+    check("level 5: the three single shortcuts that move the call fund three different wrong sets",
+          len({sets[nm] for nm in ["completion on each channel's older starts", "no full-price term at the intro's end",
+                                   "no returns"]}) == 3)
+    # forcing: the clean truth, the start-month redraws and the newest starts' own record
+    tr = world.truth_lines(G["plan"])
+    t_set = sorted(l for l in G["plan"] if tr[l]["ltv"] / G["cps"][l] >= P.HURDLE)
+    check("forcing: the simulator's clean truth funds the golden's lines", t_set == g["R8"],
+          ", ".join(GD.key(l) for l in sorted(set(t_set) ^ set(g["R8"]))))
+    rs = F["resampled"]
+    check("forcing: nine in ten start-month redraws or more fund the golden's lines",
+          rs["same_lines"] >= 0.9 * rs["draws"], "%d of %d" % (rs["same_lines"], rs["draws"]))
+    check("forcing: every line's 5th to 95th percentile multiple sits on its side of the bar",
+          all((rs["low"][k] >= P.HURDLE) if k in F["funded"] else (rs["high"][k] < P.HURDLE) for k in rs["low"]))
+    check("forcing: a line's own newest starts carry too few full-price cancellations to set its rate",
+          F["newest_own"]["cancellations_max"] <= 25, "%d to %d" % (F["newest_own"]["cancellations_min"],
+                                                                    F["newest_own"]["cancellations_max"]))
+    check("forcing: every golden multiple is at least 10 per cent from the bar", F["margin_min_pct"] >= 10,
+          "%d per cent" % F["margin_min_pct"])
     for nm in routes.PAIRS:
         check("level 5: '%s' funds a wrong set" % nm, list(sets[nm]) != F["funded"])
     # R5 no one thing and R6 the one-fact test

@@ -164,7 +164,7 @@ def main(T):
     fund = sorted(k for k, v in mult.items() if v >= P.HURDLE)
     chk("R8 the funded lines from the values and the workbook's costs", fund == sorted(F["funded"]), ", ".join(fund))
     chk("R7 every line's value", all(abs(int(round(R["R7"][l])) - F["line_value"][GD.key(l)]) <= 1 for l in R["R7"]))
-    chk("R5 two-year survival by channel", all(abs(100 * R["R5"][c] - F["survival_36"][c]) <= 0.15 for c in P.CHANNELS))
+    chk("R5 three-year survival by channel", all(abs(100 * R["R5"][c] - F["survival_36"][c]) <= 0.15 for c in P.CHANNELS))
     chk("R6 extra cancellations by title", all(abs(R["R6"][t] - F["rise_extra"][t]) <= 1 for t in P.TITLES))
     chk("R9 the plan's 2027 starts paying at December 2027", all(abs(R["R9"][c] - F["plan_paying"][c]) <= 1
                                                                  for c in P.PAID))

@@ -305,6 +305,8 @@ class Pack:
             if S["end"][i] == -1:
                 rows.append([self.sid[i], iso(self.end_date[i] + dt.timedelta(days=int(rng.integers(1, 5)))),
                              "REFUND_WITHDRAWAL", "%.2f" % S["ip"][i]])
+        # the export holds what the billing system had booked when it ran (3 November 2026, early morning)
+        rows = [r for r in rows if r[1] <= "2026-11-02"]
         rows.sort(key=lambda r: (r[1], r[0]))
         return rows
 
@@ -332,6 +334,7 @@ class Pack:
             fp = hexid("fp", int(S["fingerprint"][i]), r, n=20)
             sd = self.start_date[i] if S["kind"][i] != "base" else dt.date(2023, 1, 1)
             ed = self.end_date[i] if self.end_date[i] is not None else dt.date(2026, 10, 31)
+            ed = min(ed, dt.date(2026, 10, 31))
             if key not in seen:
                 seen[key] = [c, r, fp, sd, ed]
             else:
@@ -357,8 +360,10 @@ class Pack:
             if rng.random() < P.SECOND_LOGIN:
                 b = "u%d" % next(it)
                 self.login_of[c].append(b)
-                rows.append([b, c, iso(self.cust_created[c] + dt.timedelta(days=int(rng.integers(0, 200)))),
-                             "APP"])
+                d0 = self.cust_created[c]
+                x = int(rng.integers(0, 200))
+                month_end = (dt.date(d0.year + d0.month // 12, d0.month % 12 + 1, 1) - dt.timedelta(days=1))
+                rows.append([b, c, iso(min(d0 + dt.timedelta(days=x % 5), month_end, dt.date(2026, 11, 1))), "APP"])
         rows.sort(key=lambda r: r[0])
         return rows
 

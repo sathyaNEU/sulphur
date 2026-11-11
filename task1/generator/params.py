@@ -54,9 +54,9 @@ LINES = {
     ("SEA", "KBO"): ([(0, "PM1"), (24, "M3E1")], "H6", 12),
     ("SEA", "ELN"): ([(0, "M3E1")], "M3E1", 8),
     ("PART", "BHR"): ([(0, "H6")], "H6", 17),
-    ("PART", "GAZ"): ([(0, "PM1"), (21, "H6")], "J12", 11),
+    ("PART", "GAZ"): ([(0, "PM1"), (12, "J12"), (21, "H6")], "J12", 11),
     ("PART", "KBO"): ([(0, "H6")], "H6", 10),
-    ("TEL", "BHR"): ([(0, "M3E1"), (10, "G3")], "J12", 19),
+    ("TEL", "BHR"): ([(0, "M3E1"), (10, "G3"), (16, "J12"), (26, "G3")], "J12", 19),
     ("TEL", "GAZ"): ([(0, "G3")], "G3", 15),
     ("TEL", "KBO"): ([(0, "M3E1"), (14, "G3")], "J12", 13),
     ("TEL", "ELN"): ([(0, "G3")], "G3", 9),
@@ -75,10 +75,11 @@ START_SEASON = {1: 1.30, 2: 1.08, 3: 1.12, 4: 1.0, 5: 0.95, 6: 0.85, 7: 0.72, 8:
 NEWS = {13: 0.25, 17: 0.20, 18: 0.18, 24: 0.30, 25: 0.42, 26: 0.12, 44: 0.10}   # starts and reading lift
 
 # the 2027 plan's planned cost per net start by line (euros); 2026's realised cost per start ran about CPA_2027 below
-PLAN_CPA = {("SOC", "BHR"): 41.0, ("SOC", "GAZ"): 67.5, ("SOC", "KBO"): 36.5, ("SOC", "ELN"): 59.0, ("SEA", "BHR"):
-            60.0, ("SEA", "GAZ"): 56.0, ("SEA", "KBO"): 49.0, ("SEA", "ELN"): 50.5, ("PART", "BHR"): 67.5, ("PART",
-            "GAZ"): 52.0, ("PART", "KBO"): 62.5, ("TEL", "BHR"): 72.5, ("TEL", "GAZ"): 63.0, ("TEL", "KBO"): 69.5,
-            ("TEL", "ELN"): 69.5, ("APP", "BHR"): 58.5, ("APP", "GAZ"): 53.0, ("APP", "KBO"): 41.5}
+PLAN_CPA = {("SOC", "BHR"): 38.0, ("SOC", "GAZ"): 66.0, ("SOC", "KBO"): 31.5, ("SOC", "ELN"): 57.5,
+            ("SEA", "BHR"): 60.0, ("SEA", "GAZ"): 44.5, ("SEA", "KBO"): 49.0, ("SEA", "ELN"): 41.5,
+            ("PART", "BHR"): 67.5, ("PART", "GAZ"): 52.0, ("PART", "KBO"): 63.5, ("TEL", "BHR"): 71.0,
+            ("TEL", "GAZ"): 63.0, ("TEL", "KBO"): 63.0, ("TEL", "ELN"): 69.5, ("APP", "BHR"): 58.5,
+            ("APP", "GAZ"): 53.0, ("APP", "KBO"): 39.0}
 HURDLE = 3.5               # a line is funded when its expected 36-month net revenue per start is at least this
                            # many times its planned cost per start
 # cost per start (2026 level, euros) by line, from which the marketing spend history is drawn
@@ -93,7 +94,7 @@ H_MEAN = {"SOC": -0.15, "SEA": 0.20, "PART": -0.30, "TEL": -0.10, "APP": 0.00, "
 P_MEAN = {"SOC": 0.30, "SEA": -0.10, "PART": 0.50, "TEL": 0.20, "APP": 0.00, "DIR": -0.30}
 HP_CORR = -0.30
 # drifts in the reading habit of new starts: channel -> (ramp start month, ramp end month, shift)
-DRIFT = {"SOC": (32, 35, -0.65), "PART": (28, 30, -0.50), "SEA": (24, 26, +0.45)}
+DRIFT = {"SOC": (32, 35, -0.90), "PART": (28, 30, -0.70), "SEA": (24, 26, +0.45)}
 COHORT_SD = 0.20          # a line-month's shared habit shift
 COHORT_SU_SD = 0.15       # a line-month's shared shift on the end-of-intro exit (logit)
 
@@ -103,7 +104,7 @@ SU_CH = {"SOC": 0.30, "SEA": 0.05, "PART": 0.30, "TEL": 0.55, "APP": 0.20, "DIR"
 SU_TITLE = {"BHR": 0.05, "GAZ": 0.0, "KBO": -0.05, "ELN": 0.0}
 SU_DEPTH = 2.40           # per unit of discount depth (1 - intro / full)
 SU_LEN = -0.38            # per log intro month
-SU_PRICE = 2.20           # per log of the full price against the title's pre-2025 full price
+SU_PRICE = 3.00           # per log of the full price against the title's pre-2025 full price
 SU_P = 0.50               # per unit of price sensitivity
 SU_H = 0.0               # the decision rides on price, not on reading habit
 INTRO_HAZ = 0.004         # a month during the introductory price
@@ -168,3 +169,4 @@ CPA_2027 = 1.04
 CPA = {k: round(v / CPA_2027, 1) for k, v in PLAN_CPA.items()}
 
 REPS = 60
+BOOT_REPS = 40           # the start-month resamples behind the forcing check

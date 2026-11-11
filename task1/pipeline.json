@@ -1,6 +1,6 @@
 {
  "task": "task1",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
@@ -8,18 +8,18 @@
  "stage_name": "ready",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 84,308, each at least 3.5 times its planned cost per start in expected 36-month net revenue; not the 14 lines for EUR 141,575 the careful but hurried reading funds",
+ "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 80,084, each at least 3.5 times its planned cost per start in expected 36-month net revenue (3.94 to 6.46, the best line left out 3.05); not the 14 lines for EUR 135,385 the careful but hurried reading funds",
  "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month value of the Jul-Sep 2023 starts by channel with household returns; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 points the April 2027 prices add; R5 three-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start per line; R8 the funded lines and budget; R9 the plan's 2027 starts paying on 31 Dec 2027 by channel",
  "architecture": 3,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
-  "date": "2026-11-10",
+  "date": "2026-11-11",
   "checks": "85 checks, 0 FAIL, 2 WARN"
  },
  "leak": {
-  "leak_py": "REVIEW (answer figure 3.5 is the filed bar; ranking flags rank nothing), 2026-11-10",
-  "reader": "pass 1 and pass 2 clean of process sentences and ranking files; no one thing; survey free text, channel code list and plan formulas fixed, 2026-11-10"
+  "leak_py": "REVIEW (answer figure 3.5 is the filed bar; ranking flags rank nothing; dates after the setting are scheduled billing dates, the post-export login, payment-method and exception dates fixed), 2026-11-11",
+  "reader": "not re-run on the audit repair: no sentence under target/ or in the prompt changed; passes 1 and 2 (2026-11-10) clean"
  },
  "duplicate_check": {
   "heart": "WARN (overuse.weight, overuse.forum, repeat.deliverables; answered in the card's notes)",
@@ -28,13 +28,13 @@
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "gate_h": "pass (one_thing none; one fact rescues about 2 of 15 graded units)",
-  "report": "task1/determinism_check_report.md (re-judge after the R5 and R9 change; order not kept by the thread, its own first pass priced accordingly)"
+  "gate_h": "pass (one_thing none; the measured largest hint rescues 2 of 9, none rescues the funded set)",
+  "report": "task1/determinism_check_report.md (pass 3, on the repaired cut; order not kept by the thread, R2 to R7 and R9 left to verify.py)"
  },
- "paper_pair": 34.6,
+ "paper_pair": 37.6,
  "effort": {
-  "quick": 7.0,
-  "careful": 34.6,
+  "quick": 14.0,
+  "careful": 37.6,
   "thorough": 100.0,
   "largest_hint": "the April 2025 rise also raised the share leaving at the end of the introductory price; rescues 2 of 9 (R3, R4)"
  },
@@ -80,10 +80,10 @@
    "source": "review",
    "repair": "determinism",
    "commit": "",
-   "note": "the platform's holistic audit of architecture 3 (runs/arch3/holistic_audit.md): R9 counted the telemarketing free quarter as paying; nine lines 5 to 7 per cent from the 3.5 bar and J12 never run on telemarketing or cashback, so the bands did not show the call forced"
+   "note": "the platform's holistic audit of architecture 3 (runs/arch3/holistic_audit.md): R9 counted the telemarketing free quarter as paying; nine lines 5 to 7 per cent from the 3.5 bar and J12 never run on telemarketing or cashback, so the bands did not show the call forced; repaired in the generator (R9 counts no free month; J12 history on TEL-BHR and PART-GAZ; a stronger reading drift and price response so each judgment moves lines alone; the plan's costs re-placed, every line 12 per cent or more from the bar and every rival 8; the clean truth and 39 of 40 start-month redraws fund the same eight; the newest-starts calibration ruled out on its 3 to 18 cancellations a line; post-export dates fixed)"
   }
  ],
- "resume": "RETURNED: repair in the generator (R9 without free months; call forcing), rebuild, gates, one re-judge, RESHIPPED",
+ "resume": "READY: the author re-uploads target.zip with the prompt unchanged (or rewrites it in their own words and re-gates it with voice-check.py task1 --rewrite), generates the two runs, then /triage-runs task1",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -123,6 +123,10 @@
   {
    "date": "2026-11-11",
    "event": "RETURNED by the platform's holistic audit on determinism (R9's free months; margins 5 to 7 per cent; J12 transported to telemarketing and cashback)"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "RESHIPPED: fund the same 8 lines for EUR 80,084, every line 12 per cent or more from the bar, every rival 8; R9 1,869 with no free month; careful pass 37.6 (14 lines for EUR 135,385), no hint rescues the set; checks 89 of 89, verify 15 of 15, judge pass 3 DETERMINISTIC APPROVE"
   }
  ]
 }

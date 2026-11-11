@@ -1,17 +1,16 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 18 files read, 140 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 134 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: million, trailing, golden, pooled, carries, reading, accounts, creation, chosen, priced, family, commitment, graded, carried, hurried, missed, uploaded, history, nearest, careful, social, account, growth, standard, inside
+Stump terms swept: million, reading, golden, trailing, pooled, carries, accounts, nearest, creation, chosen, uploaded, social, priced, family, commitment, graded, carried, careful, hurried, inside, history, standard, missed, account, growth
 
-## 3 answer figures in the pack (REVIEW 2)
+## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 3.5 appears: ...xpected 36-month value of its starts is at least 3.5 times its planned cost per start, the plan's spen...
-- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 5.1 appears: ...d is not a line of the plan. 5. Monthly reporting 5.1 Controlling reports, for each title and month, th...
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `digital_subscription_kpi_standard.pdf`: 4 of 25 stump-paragraph terms appear (carries, accounts, account, standard); read whether the document names the move
+- **REVIEW** `digital_subscription_kpi_standard.pdf`: 4 of 25 stump-paragraph terms appear (carries, accounts, standard, account); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 3, INFO 2)
 - **REVIEW** `marketing_spend_2023-01_2026-10.csv`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
@@ -20,12 +19,8 @@ Stump terms swept: million, trailing, golden, pooled, carries, reading, accounts
 - **INFO** `digital_subscription_kpi_standard.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
 - **INFO** `price_list_digital_2027.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
 
-## 9 dates after the setting (REVIEW 5)
-- **REVIEW** `logins.csv`: 173 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
-- **REVIEW** `payment_exceptions_2023-01_2026-10.csv`: 16 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-08, 2026-11-09, 2026-11-11
-- **REVIEW** `payment_methods.csv`: 148 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
-- **REVIEW** `price_periods_2023-01_2026-10.csv`: 251 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
-- **REVIEW** `subscriptions_2023-01_2026-10.csv`: 1794 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)

@@ -86,7 +86,7 @@ def one(target, gold, full=True):
     if os.path.exists(target):
         shutil.rmtree(target)
     BD.run(target)
-    G = GD.compute(target, with_rivals=full, with_routes=full)
+    G = GD.compute(target, with_rivals=full, with_routes=full, with_boot=full)
     if gold:
         deliver.write(gold, G)
     return G
