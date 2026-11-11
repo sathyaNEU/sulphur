@@ -158,10 +158,10 @@ est_sheet = [r for r in gw["Estimates"].iter_rows(values_only=True) if r and isi
 check("golden workbook read back (positive control)", len(est_sheet) == 13, "%d rows" % len(est_sheet))
 for r in est_sheet[:12]:
     check("workbook estimate %s" % r[0], r[2] == F["district_estimates"][r[0]], "%s against %s" % (r[2], F["district_estimates"][r[0]]))
-from docx import Document  # noqa: E402
+import subprocess  # noqa: E402
 
-doc = Document(os.path.join(GOLD, [f for f in os.listdir(GOLD) if f.endswith(".docx")][0]))
-dtext = " ".join(p.text for p in doc.paragraphs)
+npdf = os.path.join(GOLD, [f for f in os.listdir(GOLD) if f.endswith(".pdf")][0])
+dtext = " ".join(subprocess.run(["pdftotext", "-layout", npdf, "-"], capture_output=True, text=True).stdout.split())
 check("memo read back (positive control)", "Mid-2026 district estimates" in dtext and len(dtext) > 1500, "%d chars" % len(dtext))
 check("memo states the national estimate", "{:,}".format(F["national_estimate"]) in dtext)
 for d in F["call"]["too close to call"]:

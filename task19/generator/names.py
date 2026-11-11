@@ -4,6 +4,7 @@ Nationals take Irish and English names; residents from abroad take the names of 
 some systems drop, compound surnames some systems shorten, and two or three romanisations of names written in another
 script. Each system records the same person its own way: a nickname, a surname changed at marriage, a slip of the
 keyboard, a day and month swapped, a date of birth one system only knows as the first of January."""
+import re
 import unicodedata
 
 import numpy as np
@@ -165,11 +166,18 @@ class Names:
         # names a reader of this pack would take for something other than a person's name are swapped in place,
         # so every other draw is unchanged
         swap = {"Claude": "Clement", "Claudie": "Clemence", "Whitney": "Winifred", "Handshake": "Hanshaw"}
-        self.nat_m = [swap.get(x, x) for x in self.nat_m]
-        self.nat_f = [swap.get(x, x) for x in self.nat_f]
-        self.nat_l = [swap.get(x, x) for x in self.nat_l]
+        part = {"Claude": "Charles", "Claudie": "Clemence", "Whitney": "Winifred"}
+
+        def fix(x):
+            if x in swap:
+                return swap[x]
+            # inside a compound name (Jean-Claude, Marie Claude) the part is swapped in place
+            return re.sub(r"[^\s-]+", lambda m: part.get(m.group(0), m.group(0)), x)
+        self.nat_m = [fix(x) for x in self.nat_m]
+        self.nat_f = [fix(x) for x in self.nat_f]
+        self.nat_l = [fix(x) for x in self.nat_l]
         for code in self.pools:
-            self.pools[code] = tuple([swap.get(x, x) for x in pool] for pool in self.pools[code])
+            self.pools[code] = tuple([fix(x) for x in pool] for pool in self.pools[code])
         # Faker weights its pools by frequency; a Zipf-like draw keeps common surnames common
         self._w = {}
 

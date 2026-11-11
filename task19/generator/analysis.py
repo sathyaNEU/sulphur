@@ -30,9 +30,23 @@ def call_key(r):
     return {"qualifies": sorted(c["qualifies"]), "too close to call": sorted(c["too close to call"])}
 
 
+def lr10(values, total):
+    """Each value to the nearest 10 so the rounded values add to the rounded total (largest remainder)."""
+    keys = list(values)
+    fl = {k: int(np.floor(values[k] / 10.0)) * 10 for k in keys}
+    left = int(round((total - sum(fl.values())) / 10.0))
+    order = sorted(keys, key=lambda k: values[k] - fl[k], reverse=True)
+    for k in (order[:left] if left > 0 else []):
+        fl[k] += 10
+    for k in (order[::-1][:-left] if left < 0 else []):
+        fl[k] -= 10
+    return fl
+
+
 def summary(r):
     """The figures one run files, in the units the answer blocks use."""
-    s = {"national": r10(r["national"]), "districts": {d: r10(e) for d, e in zip(r["dists"], r["est"])}}
+    nat = r10(r["national"])
+    s = {"national": nat, "districts": lr10({d: float(e) for d, e in zip(r["dists"], r["est"])}, nat)}
     if "sd" in r:
         s["nat_half_pct"] = round(100 * 1.6449 * r["sd_national"] / r["national"], 2)
         s["nat_interval"] = [r100(r["nat_lo"]), r100(r["nat_hi"])]
@@ -47,9 +61,13 @@ def summary(r):
     br = r["bridge"]
     s["over"] = {d: r10(br[d]["over_total"]) for d in r["dists"]}
     s["listed_elsewhere"] = {d: r10(br[d]["listed_elsewhere"]) for d in r["dists"]}
-    s["on_no_list"] = {d: r10(br[d]["on_no_list"]) for d in r["dists"]}
     s["register"] = {d: int(round(br[d]["register"])) for d in r["dists"]}
-    s["over_parts"] = {d: {k: r10(v) for k, v in br[d]["over"].items()} for d in r["dists"]}
+    s["over_parts"] = {d: lr10(dict(br[d]["over"]), s["over"][d]) for d in r["dists"]}
+    # the last part takes the rounding, so each district's bridge adds to its estimate exactly
+    fz = int(r["forces"]["total"]) if r.get("forces_added") else 0
+    s["serving_personnel"] = fz
+    s["on_no_list"] = {d: s["districts"][d] - (fz if d == "D04" else 0) - s["register"][d] + s["over"][d]
+                       - s["listed_elsewhere"][d] for d in r["dists"]}
     acc = r["accounts"]
     s["official"] = int(acc["official_2026"])
     s["gap"] = r10(acc["official_2026"] - r["national"])
@@ -65,17 +83,26 @@ def compute(target):
     gold = G.run(prepared=prep, bootstrap="full", B=B_GOLDEN)
     out["golden_raw"] = gold
     out["golden"] = summary(gold)
-    # the careful but hurried pass: the matcher's own links read as the register's coverage, independence within age
-    # and sex, the survey blocks resampled on their own, the gap to the rolled-forward figure read as emigration
-    car = G.run(prepared=prep, linkage="none", dependence="none", bootstrap="survey", B=B_GOLDEN)
+    # the careful but hurried pass, as the judge's own first pass worked: the links corrected on the clerical review and
+    # every step repeated in the bootstrap, but independence within age and sex kept and the gap to the rolled-forward
+    # figure read as emigration
+    car = G.run(prepared=prep, dependence="none", bootstrap="full", B=B_GOLDEN)
     cs = summary(car)
     cs["unrecorded_emigration"] = r10(max(0, cs["gap"] + cs["imm_not_in_accounts"]))
     cs["remainder"] = r10(cs["gap"] - cs["unrecorded_emigration"] + cs["imm_not_in_accounts"])
     out["careful_raw"], out["careful"] = car, cs
+    # the survey blocks resampled on their own, the linkage correction and the factors held fixed
+    out["survey_only"] = summary(G.run(prepared=prep, bootstrap="survey", B=B_GOLDEN, seed=2026))
+    # how well the sample blocks' entries, expanded by their selection probabilities, reproduce each district's count
+    D_, A_, _, _ = prep
+    fu_, reg_ = A_["fu"], A_["reg"]
+    exp_ = fu_.groupby("district")["w"].sum()
+    cnt_ = reg_.groupby("district").size()
+    out["ht_register_ratio"] = {d: round(float(exp_[d] / cnt_[d]), 3) for d in gold["dists"]}
     # the quick pass: the register's own counts, the register's correct-looking share as coverage, no interval
     reg = gold["bridge"]
-    q = {"national": r10(sum(reg[d]["register"] for d in gold["dists"])),
-         "districts": {d: r10(reg[d]["register"]) for d in gold["dists"]}}
+    q = {"national": int(round(sum(reg[d]["register"] for d in gold["dists"]))),
+         "districts": {d: int(round(reg[d]["register"])) for d in gold["dists"]}}
     q["call"] = {"qualifies": sorted(d for d in gold["dists"] if reg[d]["register"] >= G.LINE), "too close to call": []}
     q["coverage"] = {"nationals": 100.0, "others": 100.0}
     q["k"] = {"18-29": 1.0, "30-44": 1.0}
@@ -105,6 +132,7 @@ def compute(target):
         "the estimate scaled to the rolled-forward total": dict(calibrate_official=True),
         "serving personnel in the dual-system estimate": dict(forces_mode="in_dse"),
         "the sex ratio taken without serving personnel on the estimate's side": dict(dependence="births_no_domain"),
+        "the sample blocks' estimate expanded by their selection probabilities": dict(estimator="ht"),
     }
     out["shortcuts"] = {}
     for name, o in shortcuts.items():
@@ -112,12 +140,8 @@ def compute(target):
         out["shortcuts"][name] = summary(r)
     # the one-fact test: the careful pass given each hint, run end to end
     hinted = {
-        "the register and the coverage survey miss the same young men": dict(linkage="none", bootstrap="survey"),
-        "missed links look like people the register missed": dict(dependence="none", bootstrap="survey"),
-        "the interval has to carry the errors every district shares": dict(linkage="none", dependence="none",
-                                                                           bootstrap="full"),
-        "the rolled-forward estimate misses the same emigrants": dict(linkage="none", dependence="none",
-                                                                      bootstrap="survey"),
+        "the register and the coverage survey miss the same young men": dict(dependence="births", bootstrap="full"),
+        "the rolled-forward estimate misses the same emigrants": dict(dependence="none", bootstrap="full"),
     }
     out["hinted"] = {}
     for name, o in hinted.items():
@@ -127,6 +151,14 @@ def compute(target):
             s["unrecorded_emigration"] = r10(max(0, s["gap"] + s["imm_not_in_accounts"]))
             s["remainder"] = r10(s["gap"] - s["unrecorded_emigration"] + s["imm_not_in_accounts"])
         out["hinted"][name] = s
+    # rivals on the emigration the accounts never recorded: the border matcher's threshold either way, the undated
+    # leavers shared at the national dated share
+    D0, A0 = prep[0], prep[1]
+    out["emig_rivals"] = {}
+    for name, kw in (("the border match taken at a lower weight", dict(thr=4.0)),
+                     ("the border match taken at a higher weight", dict(thr=6.0)),
+                     ("the undated leavers shared at the national dated share", dict(undated="national"))):
+        out["emig_rivals"][name] = r10(G.emigration_still_listed(A0, D0, gold["ce"], **kw)["unrecorded"])
     # perturbations: each fitted input moved by its defensible spread
     out["perturb"] = perturbations(prep, gold)
     return out

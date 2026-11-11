@@ -1,41 +1,41 @@
 {
  "task": "task19",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "subdomain": "nonresponse-calibration-measurement-error-adjustment",
  "objective": "descriptive-distribution",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "Port Ardain, Ballinrea, Drumcastle and Tullaghvane qualify; Newbrook is too close to call (chance of 25,000 or more 0.57, half rate); the other seven do not; Kilvarra 319,260 (90 per cent interval 315,700 to 322,800) against the rolled-forward 325,624 (pre-fix build; re-derived on the rebuild)",
+ "call": "Port Ardain, Ballinrea, Drumcastle and Tullaghvane qualify; Newbrook too close to call (chance of 25,000 or more 0.22, half rate); the other 7 do not; Kilvarra 320,200 (90 per cent interval 317,000 to 323,400) against the rolled-forward 325,247",
  "chain": "R1 the share of usual residents held on their own district's list, net of missed and false links; R2 the register's erroneous entries by district; R3 residents listed in another district; R4 the dependence factor for men aged 18 to 44 from the sex-ratio benchmark; R5 the twelve district estimates and the national total; R6 their 90 per cent intervals; R7 the qualifying districts, the close ones and their probabilities; R8 each register count bridged to its estimate; R9 the rolled-forward national estimate bridged to the estimate",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": 0,
+  "exit": 1,
   "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "REVIEW (3 lines: paragraph 3.2's number, the estimand's own words in the circular, the docx+xlsx shell quota)",
-  "reader": "clean on questions 1 to 6 (no method sentence, no ranking file, no helper file, no answer figure, the filed sentences pin the estimand and the grant rule only, no one thing); realism notes taken into the generator"
+  "leak_py": "REVIEW: three lines, each ruled harmless by the reader (paragraph 3.2's number, the circular's estimand words, one infant's date of birth keyed wrongly)",
+  "reader": "three rounds clean: no method sentence, no ranking or helper file, no answer figure, no one thing; the final prompt's wording names the estimand only"
  },
  "duplicate_check": {
-  "heart": "not BLOCK at stage 3",
-  "nearest": "see guard.py heart on the final cut"
+  "heart": "WARN",
+  "nearest": "task8 v2 (lineage) at 0.06; skeleton severity none against every card and client task"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": "pending: the agent's runtime could not spawn its thread, so the main session spawned it on the pre-fix pack; re-invoke the judge with the thread's verdict.md, or re-run it on the rebuilt pack if the scratch folder is gone"
+  "verdict": "DETERMINISTIC (pass 1 and pass 2), SOLUTION_WRONG in pass 2 on Fort Larrick's bridge row in the answer blocks, fixed",
+  "disposition": "FIX_NOW twice, the fixes applied in one solution pass each; residual risk recorded: the survey-expansion estimator family, less efficient than scaling to the register count, moves Newbrook's chance outside its band",
+  "gate_h": "pass: one_thing none; pass 2 counts 12 results across 6 areas and its best single sentence rescues 3 of 12",
+  "report": "task19/determinism_check_report.md; task19/determinism_check_report_pass2.md"
  },
- "paper_pair": 27.6,
+ "paper_pair": 60.2,
  "effort": {
   "quick": 7.0,
-  "careful": 27.6,
+  "careful": 60.2,
   "thorough": 100.0,
-  "largest_hint": "the common-emigration sentence (or any one of four) rescues one result of nine"
+  "largest_hint": "the register and the coverage survey miss the same young men; compare the estimate's sex ratios with the ones births and survival give: rescues 3 of 9 (R4, R5, R7), a third"
  },
  "runs": {
   "run1": null,
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4, one generator pass: (1) the realism fixes from the leak reader are in the generator but not yet built: a smooth Heligman-Pollard mortality schedule in world.mortality (the old step at men's 17 to 35 made qx jump at 17 and fall at 35), names drawn from each person's citizenship country (names.TRANS_BY and COUNTRY_LOCALES, TR replaced by SD), and the survey's citizenship taken from the person's own (records.py); the world realization changes with them, so rebuild (build.py --out to scratch first), confirm the call shape (four qualify, Newbrook close, Clonmore below, the careful call different), the margins and the eight perturbations, and re-select the survey draw (T19_SAMPLE) only if they moved, then hard-code SAMPLE_SEED; (2) fold the determinism judge's findings into the same pass; (3) gates.py task19 --full with two byte-identical builds; (4) decide the docx+xlsx shell-quota REVIEW (deliverable set at 33 per cent of recent prompts, cap 20); then stage 5",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -59,5 +59,11 @@
   "date": "",
   "note": ""
  },
- "source_note": "the author's concept note of 11 November 2026 (task 2: counting people without a census), taken as the starting point and re-engineered to the house bar"
+ "source_note": "the author's concept note of 11 November 2026 (task 2: counting people without a census), taken as the starting point and re-engineered to the house bar",
+ "author_decision": {
+  "date": "2026-11-11",
+  "decision": "ship with the judge's fixes and the one-fact result recorded; the platform's two runs measure it; re-root if they average 60 or more",
+  "reason": "the stage 4 judge's first pass corrected the links and resampled every step, so the young men's factor is the one careful-column loss on the estimates; a second lever tried in this world did not hold",
+  "note": "priced on the judge's first pass the careful-but-hurried pair estimate is 60.2, over the bar; the one-fact test passes at 3 of 9"
+ }
 }

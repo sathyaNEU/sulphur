@@ -251,6 +251,39 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     open(path, "wb").write(b)
 
 
+def from_docx(src, path, created, modified, producer=None):
+    """A finished Word document exported by Writer, with the same content cache and date fixing as build()."""
+    import zipfile
+    h = hashlib.sha256()
+    with zipfile.ZipFile(src) as zz:
+        for nm in sorted(zz.namelist()):
+            h.update(nm.encode())
+            h.update(zz.read(nm))
+    h.update(repr((producer, created.isoformat(), modified.isoformat(), "from_docx")).encode())
+    cdir = os.path.join(_repo(), ".cache", "officepdf")
+    cpath = os.path.join(cdir, h.hexdigest() + ".pdf")
+    if os.path.exists(cpath):
+        open(path, "wb").write(open(cpath, "rb").read())
+        return
+    work = tempfile.mkdtemp(prefix="officepdf-")
+    try:
+        doc_in = os.path.join(work, "document.docx")
+        shutil.copyfile(src, doc_in)
+        prof = "file://" + os.path.join(work, "profile")
+        subprocess.run(["soffice", "-env:UserInstallation=" + prof, "--headless", "--convert-to",
+                        "pdf:writer_pdf_Export", "--outdir", work, doc_in],
+                       check=True, capture_output=True, timeout=180, env=dict(os.environ, TZ="UTC"))
+        b = open(os.path.join(work, "document.pdf"), "rb").read()
+    finally:
+        shutil.rmtree(work, ignore_errors=True)
+    if producer:
+        b = _producer(b, producer)
+    b = _fix(b, created, modified)
+    os.makedirs(cdir, exist_ok=True)
+    open(cpath, "wb").write(b)
+    open(path, "wb").write(b)
+
+
 def _repo():
     d = os.path.dirname(os.path.abspath(__file__))
     while d != os.path.dirname(d):

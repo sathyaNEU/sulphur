@@ -8,17 +8,17 @@
    "depends": [],
    "independent": "the survey, the register and the clerical review",
    "golden": {
-    "nationals": 95.0,
-    "others": 84.7
+    "nationals": 94.9,
+    "others": 85.1
    },
    "bands": {
     "nationals": [
-     94.4,
-     95.6
+     94.30000000000001,
+     95.5
     ],
     "others": [
-     82.2,
-     87.2
+     82.6,
+     87.6
     ]
    },
    "passes": {
@@ -27,12 +27,12 @@
      "others": 100.0
     },
     "careful": {
-     "nationals": 92.2,
-     "others": 71.8
+     "nationals": 94.9,
+     "others": 85.1
     },
     "thorough": {
-     "nationals": 95.0,
-     "others": 84.7
+     "nationals": 94.9,
+     "others": 85.1
     }
    },
    "precedent": [
@@ -48,67 +48,67 @@
    "depends": [],
    "independent": "the follow-up and the register",
    "golden": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "bands": {
     "D01": [
-     8418.0,
-     9882.0
+     8464.0,
+     9936.0
     ],
     "D02": [
-     5188.8,
-     6091.2
+     5244.0,
+     6156.0
     ],
     "D03": [
-     3983.6,
-     4676.4
+     3772.0,
+     4428.0
     ],
     "D04": [
-     2189.6,
-     2570.4
+     2244.8,
+     2635.2
     ],
     "D05": [
+     3137.2,
+     3682.8
+    ],
+    "D06": [
      3367.2,
      3952.8
     ],
-    "D06": [
-     3164.8,
-     3715.2
-    ],
     "D07": [
-     2824.4,
-     3315.6
+     2861.2,
+     3358.8
     ],
     "D08": [
-     2152.8,
-     2527.2
+     1573.2,
+     1846.8
     ],
     "D09": [
-     1435.2,
-     1684.8
+     1656.0,
+     1944.0
     ],
     "D10": [
-     2226.4,
-     2613.6
+     2419.6,
+     2840.4
     ],
     "D11": [
-     1490.4,
-     1749.6
+     1048.8,
+     1231.2
     ],
     "D12": [
-     2162.0,
-     2538.0
+     2171.2,
+     2548.8
     ]
    },
    "partly_share": 0.5,
@@ -128,32 +128,32 @@
      "D12": 0
     },
     "careful": {
-     "D01": 9150,
-     "D02": 5640,
-     "D03": 4330,
-     "D04": 2380,
-     "D05": 3660,
-     "D06": 3440,
-     "D07": 3070,
-     "D08": 2340,
-     "D09": 1560,
-     "D10": 2420,
-     "D11": 1620,
-     "D12": 2350
+     "D01": 9200,
+     "D02": 5700,
+     "D03": 4100,
+     "D04": 2440,
+     "D05": 3410,
+     "D06": 3660,
+     "D07": 3110,
+     "D08": 1710,
+     "D09": 1800,
+     "D10": 2630,
+     "D11": 1140,
+     "D12": 2360
     },
     "thorough": {
-     "D01": 9150,
-     "D02": 5640,
-     "D03": 4330,
-     "D04": 2380,
-     "D05": 3660,
-     "D06": 3440,
-     "D07": 3070,
-     "D08": 2340,
-     "D09": 1560,
-     "D10": 2420,
-     "D11": 1620,
-     "D12": 2350
+     "D01": 9200,
+     "D02": 5700,
+     "D03": 4100,
+     "D04": 2440,
+     "D05": 3410,
+     "D06": 3660,
+     "D07": 3110,
+     "D08": 1710,
+     "D09": 1800,
+     "D10": 2630,
+     "D11": 1140,
+     "D12": 2360
     }
    }
   },
@@ -167,67 +167,67 @@
    ],
    "independent": "the survey's links by district",
    "golden": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
    },
    "bands": {
     "D01": [
-     1102.5,
-     1837.5
+     787.5,
+     1312.5
     ],
     "D02": [
-     862.5,
-     1437.5
+     607.5,
+     1012.5
     ],
     "D03": [
-     1462.5,
-     2437.5
+     1305.0,
+     2175.0
     ],
     "D04": [
-     502.5,
-     837.5
+     472.5,
+     787.5
     ],
     "D05": [
-     1357.5,
-     2262.5
+     1057.5,
+     1762.5
     ],
     "D06": [
-     517.5,
-     862.5
+     435.0,
+     725.0
     ],
     "D07": [
-     922.5,
-     1537.5
+     682.5,
+     1137.5
     ],
     "D08": [
-     405.0,
-     675.0
+     442.5,
+     737.5
     ],
     "D09": [
-     412.5,
-     687.5
+     360.0,
+     600.0
     ],
     "D10": [
-     735.0,
-     1225.0
+     420.0,
+     700.0
     ],
     "D11": [
-     345.0,
-     575.0
+     330.0,
+     550.0
     ],
     "D12": [
-     637.5,
-     1062.5
+     435.0,
+     725.0
     ]
    },
    "passes": {
@@ -246,32 +246,32 @@
      "D12": 0
     },
     "careful": {
-     "D01": 1090,
-     "D02": 790,
-     "D03": 1890,
-     "D04": 560,
-     "D05": 1760,
-     "D06": 550,
-     "D07": 1110,
-     "D08": 420,
-     "D09": 510,
-     "D10": 870,
-     "D11": 380,
-     "D12": 740
+     "D01": 1050,
+     "D02": 810,
+     "D03": 1740,
+     "D04": 630,
+     "D05": 1410,
+     "D06": 580,
+     "D07": 910,
+     "D08": 590,
+     "D09": 480,
+     "D10": 560,
+     "D11": 440,
+     "D12": 580
     },
     "thorough": {
-     "D01": 1470,
-     "D02": 1150,
-     "D03": 1950,
-     "D04": 670,
-     "D05": 1810,
-     "D06": 690,
-     "D07": 1230,
-     "D08": 540,
-     "D09": 550,
-     "D10": 980,
-     "D11": 460,
-     "D12": 850
+     "D01": 1050,
+     "D02": 810,
+     "D03": 1740,
+     "D04": 630,
+     "D05": 1410,
+     "D06": 580,
+     "D07": 910,
+     "D08": 590,
+     "D09": 480,
+     "D10": 560,
+     "D11": 440,
+     "D12": 580
     }
    },
    "precedent": [
@@ -286,17 +286,17 @@
    "depends": [],
    "independent": "births by sex, the life table and the survey",
    "golden": {
-    "18-29": 1.086,
-    "30-44": 1.116
+    "18-29": 1.095,
+    "30-44": 1.048
    },
    "bands": {
     "18-29": [
-     1.046,
-     1.1260000000000001
+     1.055,
+     1.135
     ],
     "30-44": [
-     1.076,
-     1.1560000000000001
+     1.008,
+     1.088
     ]
    },
    "passes": {
@@ -309,8 +309,8 @@
      "30-44": 1.0
     },
     "thorough": {
-     "18-29": 1.086,
-     "30-44": 1.116
+     "18-29": 1.095,
+     "30-44": 1.048
     }
    },
    "precedent": [
@@ -330,119 +330,119 @@
    ],
    "independent": "",
    "golden": {
-    "D01": 55480,
-    "D02": 40000,
-    "D03": 32830,
-    "D04": 22540,
-    "D05": 26000,
-    "D06": 24200,
-    "D07": 25050,
-    "D08": 18800,
-    "D09": 16860,
-    "D10": 21910,
-    "D11": 14670,
-    "D12": 20910,
-    "national": 319260
+    "D01": 55710,
+    "D02": 39560,
+    "D03": 33650,
+    "D04": 22690,
+    "D05": 26260,
+    "D06": 23930,
+    "D07": 24730,
+    "D08": 19730,
+    "D09": 16590,
+    "D10": 21530,
+    "D11": 15140,
+    "D12": 20680,
+    "national": 320200
    },
    "bands": {
     "D01": [
-     54925.2,
-     56034.8
+     55152.9,
+     56267.1
     ],
     "D02": [
-     39600.0,
-     40400.0
+     39164.4,
+     39955.6
     ],
     "D03": [
-     32501.7,
-     33158.3
+     33313.5,
+     33986.5
     ],
     "D04": [
-     22314.6,
-     22765.4
+     22463.1,
+     22916.9
     ],
     "D05": [
-     25740.0,
-     26260.0
+     25997.4,
+     26522.6
     ],
     "D06": [
-     23958.0,
-     24442.0
+     23690.7,
+     24169.3
     ],
     "D07": [
-     24799.5,
-     25300.5
+     24482.7,
+     24977.3
     ],
     "D08": [
-     18612.0,
-     18988.0
+     19532.7,
+     19927.3
     ],
     "D09": [
-     16691.4,
-     17028.6
+     16424.1,
+     16755.9
     ],
     "D10": [
-     21690.9,
-     22129.1
+     21314.7,
+     21745.3
     ],
     "D11": [
-     14523.3,
-     14816.7
+     14988.6,
+     15291.4
     ],
     "D12": [
-     20700.9,
-     21119.1
+     20473.2,
+     20886.8
     ],
     "national": [
-     317344.44,
-     321175.56
+     318278.8,
+     322121.2
     ]
    },
    "passes": {
     "quick": {
-     "D01": 60390,
-     "D02": 42670,
-     "D03": 33710,
-     "D04": 22580,
-     "D05": 26770,
-     "D06": 25950,
-     "D07": 25800,
-     "D08": 19970,
-     "D09": 17380,
-     "D10": 22620,
-     "D11": 15360,
-     "D12": 21580,
-     "national": 334790
+     "D01": 60836,
+     "D02": 42663,
+     "D03": 34090,
+     "D04": 22807,
+     "D05": 26824,
+     "D06": 25997,
+     "D07": 25720,
+     "D08": 20153,
+     "D09": 17407,
+     "D10": 22739,
+     "D11": 15292,
+     "D12": 21622,
+     "national": 336150
     },
     "careful": {
-     "D01": 57380,
-     "D02": 41440,
-     "D03": 33790,
-     "D04": 23030,
-     "D05": 26830,
-     "D06": 24900,
-     "D07": 25890,
-     "D08": 19240,
-     "D09": 17060,
-     "D10": 22310,
+     "D01": 55020,
+     "D02": 39060,
+     "D03": 33110,
+     "D04": 22450,
+     "D05": 25840,
+     "D06": 23650,
+     "D07": 24420,
+     "D08": 19510,
+     "D09": 16410,
+     "D10": 21280,
      "D11": 14960,
-     "D12": 21560,
-     "national": 328400
+     "D12": 20440,
+     "national": 316150
     },
     "thorough": {
-     "D01": 55480,
-     "D02": 40000,
-     "D03": 32830,
-     "D04": 22540,
-     "D05": 26000,
-     "D06": 24200,
-     "D07": 25050,
-     "D08": 18800,
-     "D09": 16860,
-     "D10": 21910,
-     "D11": 14670,
-     "D12": 20910,
-     "national": 319260
+     "D01": 55710,
+     "D02": 39560,
+     "D03": 33650,
+     "D04": 22690,
+     "D05": 26260,
+     "D06": 23930,
+     "D07": 24730,
+     "D08": 19730,
+     "D09": 16590,
+     "D10": 21530,
+     "D11": 15140,
+     "D12": 20680,
+     "national": 320200
     }
    },
    "precedent": [
@@ -457,7 +457,7 @@
    "figure": "national_halfwidth_pct",
    "depends": [],
    "independent": "the bootstrap of the survey blocks",
-   "golden": 1.1,
+   "golden": 1.0,
    "band": [
     0.75,
     1.45
@@ -468,8 +468,8 @@
    ],
    "passes": {
     "quick": null,
-    "careful": 0.6,
-    "thorough": 1.1
+    "careful": 0.8,
+    "thorough": 1.0
    },
    "precedent": [
     "L35",
@@ -498,12 +498,12 @@
       "D07"
      ]
     },
-    "p_D07": 0.57
+    "p_D07": 0.22
    },
    "bands": {
     "p_D07": [
-     0.4099999999999999,
-     0.73
+     0.07,
+     0.48
     ]
    },
    "passes": {
@@ -527,14 +527,11 @@
        "D01",
        "D02",
        "D03",
-       "D05",
-       "D07"
+       "D05"
       ],
-      "too close to call": [
-       "D06"
-      ]
+      "too close to call": []
      },
-     "p_D07": 1.0
+     "p_D07": 0.04
     },
     "thorough": {
      "call": {
@@ -548,7 +545,7 @@
        "D07"
       ]
      },
-     "p_D07": 0.57
+     "p_D07": 0.22
     }
    },
    "precedent": [
@@ -566,67 +563,67 @@
    ],
    "independent": "",
    "golden": {
-    "D01": 2770,
-    "D02": 1810,
-    "D03": 1500,
-    "D04": 840,
-    "D05": 1080,
-    "D06": 1000,
-    "D07": 1090,
-    "D08": 630,
-    "D09": 480,
-    "D10": 740,
-    "D11": 480,
-    "D12": 830
+    "D01": 3024,
+    "D02": 1787,
+    "D03": 1920,
+    "D04": 836,
+    "D05": 1436,
+    "D06": 1013,
+    "D07": 1210,
+    "D08": 697,
+    "D09": 503,
+    "D10": 861,
+    "D11": 548,
+    "D12": 838
    },
    "bands": {
     "D01": [
-     2077.5,
-     3462.5
+     2064,
+     3984
     ],
     "D02": [
-     1357.5,
-     2262.5
+     1147,
+     2427
     ],
     "D03": [
-     1125.0,
-     1875.0
+     1270,
+     2570
     ],
     "D04": [
-     630.0,
-     1050.0
+     496,
+     1176
     ],
     "D05": [
-     810.0,
-     1350.0
+     916,
+     1956
     ],
     "D06": [
-     750.0,
-     1250.0
+     603,
+     1423
     ],
     "D07": [
-     817.5,
-     1362.5
+     790,
+     1630
     ],
     "D08": [
-     472.5,
-     787.5
+     407,
+     987
     ],
     "D09": [
-     360.0,
-     600.0
+     243,
+     763
     ],
     "D10": [
-     555.0,
-     925.0
+     521,
+     1201
     ],
     "D11": [
-     360.0,
-     600.0
+     338,
+     758
     ],
     "D12": [
-     622.5,
-     1037.5
+     518,
+     1158
     ]
    },
    "passes": {
@@ -645,32 +642,32 @@
      "D12": 0
     },
     "careful": {
-     "D01": 5050,
-     "D02": 3610,
-     "D03": 2510,
-     "D04": 1450,
-     "D05": 1970,
-     "D06": 1840,
-     "D07": 2040,
-     "D08": 1190,
-     "D09": 730,
-     "D10": 1250,
-     "D11": 830,
-     "D12": 1580
+     "D01": 2334,
+     "D02": 1287,
+     "D03": 1380,
+     "D04": 596,
+     "D05": 1016,
+     "D06": 733,
+     "D07": 900,
+     "D08": 477,
+     "D09": 323,
+     "D10": 611,
+     "D11": 368,
+     "D12": 598
     },
     "thorough": {
-     "D01": 2770,
-     "D02": 1810,
-     "D03": 1500,
-     "D04": 840,
-     "D05": 1080,
-     "D06": 1000,
-     "D07": 1090,
-     "D08": 630,
-     "D09": 480,
-     "D10": 740,
-     "D11": 480,
-     "D12": 830
+     "D01": 3024,
+     "D02": 1787,
+     "D03": 1920,
+     "D04": 836,
+     "D05": 1436,
+     "D06": 1013,
+     "D07": 1210,
+     "D08": 697,
+     "D09": 503,
+     "D10": 861,
+     "D11": 548,
+     "D12": 838
     }
    },
    "precedent": [
@@ -685,35 +682,35 @@
    "depends": [],
    "independent": "the follow-up, the border record and the accounts",
    "golden": {
-    "gap": 6360,
-    "unrecorded_emigration": 6920,
-    "remainder": 50
+    "gap": 5050,
+    "unrecorded_emigration": 7140,
+    "remainder": -1490
    },
    "bands": {
     "gap": [
-     4444.4400000000005,
-     8275.56
+     3128.8,
+     6971.2
     ],
     "unrecorded_emigration": [
-     5882.0,
-     7957.999999999999
+     6783.0,
+     7497.0
     ],
     "remainder": [
-     -1865.56,
-     1965.56
+     -3411.2,
+     431.20000000000005
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
-     "gap": -2780,
-     "unrecorded_emigration": 0,
-     "remainder": -2170
+     "gap": 9100,
+     "unrecorded_emigration": 9700,
+     "remainder": 0
     },
     "thorough": {
-     "gap": 6360,
-     "unrecorded_emigration": 6920,
-     "remainder": 50
+     "gap": 5050,
+     "unrecorded_emigration": 7140,
+     "remainder": -1490
     }
    },
    "precedent": [
@@ -726,26 +723,14 @@
   {
    "sentence": "the register and the coverage survey miss the same young men; compare the estimate's sex ratios with the ones births and survival give",
    "rescues": [
-    "R4"
-   ]
-  },
-  {
-   "sentence": "a survey person the matcher could not link may still be on the register; measure what the matcher misses on the clerical review",
-   "rescues": [
-    "R1"
-   ]
-  },
-  {
-   "sentence": "the interval has to carry the errors every district shares, such as the linkage correction and the raising factors",
-   "rescues": [
-    "R6"
+    "R4",
+    "R5",
+    "R7"
    ]
   },
   {
    "sentence": "the rolled-forward estimate misses the same emigrants the register still lists, so its closeness to an estimate is no check",
-   "rescues": [
-    "R9"
-   ]
+   "rescues": []
   }
  ],
  "routes": [
@@ -765,18 +750,15 @@
    "golden": true
   },
   {
-   "name": "careful but hurried: linked share as coverage, independence, survey-only intervals",
+   "name": "careful but hurried: links corrected and every step resampled, independence kept",
    "answer": {
     "qualifies": [
      "D01",
      "D02",
      "D03",
-     "D05",
-     "D07"
+     "D05"
     ],
-    "too close to call": [
-     "D06"
-    ]
+    "too close to call": []
    }
   },
   {
@@ -814,11 +796,10 @@
     "qualifies": [
      "D01",
      "D02",
-     "D03"
-    ],
-    "too close to call": [
+     "D03",
      "D05"
-    ]
+    ],
+    "too close to call": []
    }
   },
   {
@@ -829,7 +810,9 @@
      "D02",
      "D03"
     ],
-    "too close to call": []
+    "too close to call": [
+     "D05"
+    ]
    }
   },
   {
@@ -839,13 +822,12 @@
      "D01",
      "D02",
      "D03",
+     "D04",
      "D05",
      "D06",
      "D07"
     ],
-    "too close to call": [
-     "D04"
-    ]
+    "too close to call": []
    }
   },
   {
@@ -866,11 +848,10 @@
      "D01",
      "D02",
      "D03",
-     "D05",
-     "D07"
+     "D05"
     ],
     "too close to call": [
-     "D06"
+     "D07"
     ]
    }
   },
@@ -898,6 +879,21 @@
      "D05"
     ],
     "too close to call": [
+     "D07"
+    ]
+   }
+  },
+  {
+   "name": "the sample blocks' estimate expanded by their selection probabilities",
+   "answer": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D06",
      "D07"
     ]
    }
@@ -1024,11 +1020,10 @@
      "qualifies": [
       "D01",
       "D02",
-      "D03"
-     ],
-     "too close to call": [
+      "D03",
       "D05"
-     ]
+     ],
+     "too close to call": []
     }
    },
    {
@@ -1039,7 +1034,9 @@
       "D02",
       "D03"
      ],
-     "too close to call": []
+     "too close to call": [
+      "D05"
+     ]
     }
    },
    {
@@ -1049,13 +1046,12 @@
       "D01",
       "D02",
       "D03",
+      "D04",
       "D05",
       "D06",
       "D07"
      ],
-     "too close to call": [
-      "D04"
-     ]
+     "too close to call": []
     }
    },
    {
@@ -1076,11 +1072,10 @@
       "D01",
       "D02",
       "D03",
-      "D05",
-      "D07"
+      "D05"
      ],
      "too close to call": [
-      "D06"
+      "D07"
      ]
     }
    },
@@ -1108,6 +1103,21 @@
       "D05"
      ],
      "too close to call": [
+      "D07"
+     ]
+    }
+   },
+   {
+    "name": "the sample blocks' estimate expanded by their selection probabilities",
+    "answer": {
+     "qualifies": [
+      "D01",
+      "D02",
+      "D03",
+      "D05"
+     ],
+     "too close to call": [
+      "D06",
       "D07"
      ]
     }
@@ -1234,557 +1244,77 @@
   "asks": 55,
   "instruction": 7
  },
- "careful_pass": "the matcher's links read as the register's coverage, independence within age and sex, the survey blocks resampled alone, the gap to the rolled-forward figure read as emigration",
+ "careful_pass": "the links corrected on the clerical review and every step repeated in the bootstrap (as the judge's first pass worked), independence within age and sex kept, the gap to the rolled-forward figure read as emigration",
  "rivals": {
   "unresolved records imputed within district and dwelling type": {
-   "national": 319280,
+   "national": 320180,
    "districts": {
-    "D01": 55530,
-    "D02": 40010,
-    "D03": 32860,
-    "D04": 22540,
-    "D05": 25940,
-    "D06": 24220,
-    "D07": 25050,
-    "D08": 18790,
-    "D09": 16850,
-    "D10": 21900,
-    "D11": 14650,
-    "D12": 20930
+    "D01": 55670,
+    "D02": 39510,
+    "D03": 33660,
+    "D04": 22670,
+    "D05": 26260,
+    "D06": 23980,
+    "D07": 24750,
+    "D08": 19730,
+    "D09": 16600,
+    "D10": 21570,
+    "D11": 15130,
+    "D12": 20650
    },
-   "nat_half_pct": 1.25,
+   "nat_half_pct": 0.95,
    "nat_interval": [
-    315300,
-    323300
+    317100,
+    323200
    ],
    "intervals": {
     "D01": [
-     54600,
-     56450
+     54850,
+     56500
     ],
     "D02": [
-     39200,
-     40820
+     38810,
+     40200
     ],
     "D03": [
-     32150,
-     33580
+     32950,
+     34360
     ],
     "D04": [
-     22140,
-     22940
+     22230,
+     23110
     ],
     "D05": [
-     25280,
-     26610
+     25630,
+     26880
     ],
     "D06": [
-     23760,
-     24680
+     23540,
+     24420
     ],
     "D07": [
-     24480,
-     25630
+     24150,
+     25350
     ],
     "D08": [
-     18380,
-     19200
+     19350,
+     20110
     ],
     "D09": [
-     16520,
-     17180
+     16250,
+     16950
     ],
     "D10": [
-     21370,
-     22440
+     21060,
+     22080
     ],
     "D11": [
-     14340,
-     14960
+     14780,
+     15490
     ],
     "D12": [
-     20390,
-     21470
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 0.99,
-    "D06": 0.0,
-    "D07": 0.56,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05"
-    ],
-    "too close to call": [
-     "D07"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.083,
-    "30-44": 1.113
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9090,
-    "D02": 5620,
-    "D03": 4300,
-    "D04": 2370,
-    "D05": 3710,
-    "D06": 3420,
-    "D07": 3060,
-    "D08": 2350,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1640,
-    "D12": 2330
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1160,
-    "D03": 1960,
-    "D04": 680,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 550,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 860
-   },
-   "on_no_list": {
-    "D01": 2760,
-    "D02": 1800,
-    "D03": 1490,
-    "D04": 830,
-    "D05": 1070,
-    "D06": 990,
-    "D07": 1090,
-    "D08": 620,
-    "D09": 480,
-    "D10": 740,
-    "D11": 470,
-    "D12": 820
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5510,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2190
-    },
-    "D02": {
-     "left Kilvarra or died": 3130,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1500
-    },
-    "D03": {
-     "left Kilvarra or died": 2110,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1270
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1780,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1270
-    },
-    "D06": {
-     "left Kilvarra or died": 2190,
-     "duplicate registrations": 560,
-     "living elsewhere in Kilvarra": 670
-    },
-    "D07": {
-     "left Kilvarra or died": 1600,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1020
-    },
-    "D08": {
-     "left Kilvarra or died": 1180,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 730,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 680,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 600
-    },
-    "D12": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 650
-    }
-   },
-   "official": 325624,
-   "gap": 6340,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6900,
-   "remainder": 50
-  },
-  "unresolved records imputed at their district's resolved rate": {
-   "national": 319030,
-   "districts": {
-    "D01": 55430,
-    "D02": 39960,
-    "D03": 32840,
-    "D04": 22530,
-    "D05": 25940,
-    "D06": 24210,
-    "D07": 25040,
-    "D08": 18780,
-    "D09": 16850,
-    "D10": 21900,
-    "D11": 14650,
-    "D12": 20930
-   },
-   "nat_half_pct": 1.25,
-   "nat_interval": [
-    315000,
-    323000
-   ],
-   "intervals": {
-    "D01": [
-     54500,
-     56350
-    ],
-    "D02": [
-     39140,
-     40770
-    ],
-    "D03": [
-     32120,
-     33550
-    ],
-    "D04": [
-     22130,
-     22930
-    ],
-    "D05": [
-     25270,
-     26600
-    ],
-    "D06": [
-     23750,
-     24660
-    ],
-    "D07": [
-     24470,
-     25610
-    ],
-    "D08": [
-     18370,
-     19180
-    ],
-    "D09": [
-     16520,
-     17180
-    ],
-    "D10": [
-     21360,
-     22430
-    ],
-    "D11": [
-     14340,
-     14960
-    ],
-    "D12": [
-     20380,
-     21470
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 0.99,
-    "D06": 0.0,
-    "D07": 0.55,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05"
-    ],
-    "too close to call": [
-     "D07"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.083,
-    "30-44": 1.112
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9190,
-    "D02": 5670,
-    "D03": 4320,
-    "D04": 2380,
-    "D05": 3710,
-    "D06": 3430,
-    "D07": 3070,
-    "D08": 2360,
-    "D09": 1560,
-    "D10": 2430,
-    "D11": 1640,
-    "D12": 2340
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1960,
-    "D04": 680,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 860
-   },
-   "on_no_list": {
-    "D01": 2750,
-    "D02": 1800,
-    "D03": 1490,
-    "D04": 830,
-    "D05": 1070,
-    "D06": 990,
-    "D07": 1090,
-    "D08": 620,
-    "D09": 480,
-    "D10": 730,
-    "D11": 470,
-    "D12": 820
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5580,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2210
-    },
-    "D02": {
-     "left Kilvarra or died": 3160,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1520
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1780,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1270
-    },
-    "D06": {
-     "left Kilvarra or died": 2200,
-     "duplicate registrations": 560,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1190,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 670
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 730,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 680,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 600
-    },
-    "D12": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 650
-    }
-   },
-   "official": 325624,
-   "gap": 6590,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6950,
-   "remainder": 250
-  },
-  "linkage measured by nationality alone": {
-   "national": 319730,
-   "districts": {
-    "D01": 55520,
-    "D02": 40070,
-    "D03": 32860,
-    "D04": 22540,
-    "D05": 26040,
-    "D06": 24240,
-    "D07": 25110,
-    "D08": 18840,
-    "D09": 16880,
-    "D10": 21960,
-    "D11": 14710,
-    "D12": 20960
-   },
-   "nat_half_pct": 0.99,
-   "nat_interval": [
-    316600,
-    322900
-   ],
-   "intervals": {
-    "D01": [
-     54700,
-     56340
-    ],
-    "D02": [
-     39370,
-     40780
-    ],
-    "D03": [
-     32190,
-     33520
-    ],
-    "D04": [
-     22140,
-     22940
-    ],
-    "D05": [
-     25410,
-     26670
-    ],
-    "D06": [
-     23810,
-     24680
-    ],
-    "D07": [
-     24580,
-     25650
-    ],
-    "D08": [
-     18460,
-     19230
-    ],
-    "D09": [
-     16560,
-     17190
-    ],
-    "D10": [
-     21470,
-     22460
-    ],
-    "D11": [
-     14410,
-     15000
-    ],
-    "D12": [
-     20440,
-     21470
+     20240,
+     21070
     ]
    },
    "p_line": {
@@ -1794,7 +1324,7 @@
     "D04": 0.0,
     "D05": 1.0,
     "D06": 0.0,
-    "D07": 0.64,
+    "D07": 0.25,
     "D08": 0.0,
     "D09": 0.0,
     "D10": 0.0,
@@ -1814,217 +1344,218 @@
    },
    "coverage": {
     "nationals": 94.9,
-    "others": 84.9
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
     "18-29": 1.088,
-    "30-44": 1.123
+    "30-44": 1.041
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9190,
+    "D02": 5710,
+    "D03": 4060,
+    "D04": 2450,
+    "D05": 3400,
+    "D06": 3600,
+    "D07": 3080,
+    "D08": 1700,
+    "D09": 1780,
+    "D10": 2570,
+    "D11": 1130,
+    "D12": 2370
    },
    "listed_elsewhere": {
-    "D01": 1440,
-    "D02": 1100,
-    "D03": 1930,
-    "D04": 670,
-    "D05": 1780,
-    "D06": 670,
-    "D07": 1200,
-    "D08": 520,
-    "D09": 550,
-    "D10": 950,
-    "D11": 450,
-    "D12": 830
-   },
-   "on_no_list": {
-    "D01": 2840,
-    "D02": 1940,
-    "D03": 1540,
-    "D04": 840,
-    "D05": 1150,
-    "D06": 1060,
-    "D07": 1180,
-    "D08": 690,
-    "D09": 510,
-    "D10": 820,
-    "D11": 520,
-    "D12": 890
+    "D01": 1060,
+    "D02": 810,
+    "D03": 1750,
+    "D04": 630,
+    "D05": 1420,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6160,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3420,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2220,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1050
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 550,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1700,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1940,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1070
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1740,
+     "duplicate registrations": 620,
+     "living elsewhere in Kilvarra": 720
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 840,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 950,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1070,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 830
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 430,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1300,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": 5890,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -420
-  },
-  "one raising factor for men aged 18 to 44": {
-   "national": 319310,
-   "districts": {
-    "D01": 55470,
-    "D02": 40000,
-    "D03": 32850,
-    "D04": 22540,
-    "D05": 26020,
-    "D06": 24200,
-    "D07": 25060,
-    "D08": 18810,
-    "D09": 16860,
-    "D10": 21910,
-    "D11": 14680,
-    "D12": 20920
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2964,
+    "D02": 1747,
+    "D03": 1880,
+    "D04": 826,
+    "D05": 1416,
+    "D06": 1003,
+    "D07": 1200,
+    "D08": 687,
+    "D09": 493,
+    "D10": 841,
+    "D11": 528,
+    "D12": 818
    },
-   "nat_half_pct": 1.25,
+   "official": 325247,
+   "gap": 5070,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7090,
+   "remainder": -1420
+  },
+  "unresolved records imputed at their district's resolved rate": {
+   "national": 319940,
+   "districts": {
+    "D01": 55590,
+    "D02": 39470,
+    "D03": 33650,
+    "D04": 22670,
+    "D05": 26220,
+    "D06": 23970,
+    "D07": 24730,
+    "D08": 19720,
+    "D09": 16590,
+    "D10": 21550,
+    "D11": 15130,
+    "D12": 20650
+   },
+   "nat_half_pct": 0.95,
    "nat_interval": [
-    315300,
-    323300
+    316900,
+    323000
    ],
    "intervals": {
     "D01": [
-     54530,
+     54770,
      56420
     ],
     "D02": [
-     39190,
-     40800
+     38770,
+     40170
     ],
     "D03": [
-     32140,
-     33560
+     32940,
+     34350
     ],
     "D04": [
-     22140,
-     22940
+     22230,
+     23110
     ],
     "D05": [
-     25360,
-     26680
+     25590,
+     26850
     ],
     "D06": [
-     23750,
-     24660
+     23530,
+     24410
     ],
     "D07": [
-     24490,
-     25620
+     24130,
+     25330
     ],
     "D08": [
-     18400,
-     19220
+     19340,
+     20110
     ],
     "D09": [
-     16540,
-     17190
+     16240,
+     16940
     ],
     "D10": [
-     21380,
-     22440
+     21040,
+     22060
     ],
     "D11": [
-     14370,
-     14990
+     14780,
+     15490
     ],
     "D12": [
-     20370,
-     21460
+     20240,
+     21070
     ]
    },
    "p_line": {
@@ -2032,9 +1563,9 @@
     "D02": 1.0,
     "D03": 1.0,
     "D04": 0.0,
-    "D05": 0.99,
+    "D05": 1.0,
     "D06": 0.0,
-    "D07": 0.57,
+    "D07": 0.23,
     "D08": 0.0,
     "D09": 0.0,
     "D10": 0.0,
@@ -2053,218 +1584,460 @@
     ]
    },
    "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
+    "nationals": 94.9,
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
-    "18-29": 1.103,
-    "30-44": 1.103
+    "18-29": 1.089,
+    "30-44": 1.041
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9270,
+    "D02": 5750,
+    "D03": 4070,
+    "D04": 2450,
+    "D05": 3440,
+    "D06": 3610,
+    "D07": 3090,
+    "D08": 1700,
+    "D09": 1790,
+    "D10": 2590,
+    "D11": 1130,
+    "D12": 2370
    },
    "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2770,
-    "D02": 1810,
-    "D03": 1520,
-    "D04": 840,
-    "D05": 1100,
-    "D06": 1000,
-    "D07": 1100,
-    "D08": 630,
-    "D09": 490,
-    "D10": 740,
-    "D11": 480,
-    "D12": 830
+    "D01": 1060,
+    "D02": 810,
+    "D03": 1750,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6220,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1930
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3450,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1490
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2230,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1050
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 550,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1720,
+     "duplicate registrations": 740,
+     "living elsewhere in Kilvarra": 980
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1940,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1080
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1750,
+     "duplicate registrations": 620,
+     "living elsewhere in Kilvarra": 720
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 320
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1080,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 840
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 430,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1300,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": 6310,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": 0
-  },
-  "the 2021 Census as the sex-ratio benchmark": {
-   "national": 319310,
-   "districts": {
-    "D01": 55510,
-    "D02": 40010,
-    "D03": 32820,
-    "D04": 22540,
-    "D05": 25990,
-    "D06": 24210,
-    "D07": 25060,
-    "D08": 18810,
-    "D09": 16860,
-    "D10": 21920,
-    "D11": 14680,
-    "D12": 20920
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2964,
+    "D02": 1747,
+    "D03": 1880,
+    "D04": 826,
+    "D05": 1426,
+    "D06": 1003,
+    "D07": 1190,
+    "D08": 677,
+    "D09": 493,
+    "D10": 841,
+    "D11": 528,
+    "D12": 818
    },
-   "nat_half_pct": 1.25,
+   "official": 325247,
+   "gap": 5300,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7130,
+   "remainder": -1230
+  },
+  "linkage measured by nationality alone": {
+   "national": 321450,
+   "districts": {
+    "D01": 55890,
+    "D02": 39720,
+    "D03": 33810,
+    "D04": 22790,
+    "D05": 26440,
+    "D06": 24020,
+    "D07": 24850,
+    "D08": 19780,
+    "D09": 16630,
+    "D10": 21590,
+    "D11": 15210,
+    "D12": 20720
+   },
+   "nat_half_pct": 0.8,
    "nat_interval": [
-    315300,
+    318900,
+    324000
+   ],
+   "intervals": {
+    "D01": [
+     55090,
+     56690
+    ],
+    "D02": [
+     39030,
+     40400
+    ],
+    "D03": [
+     33130,
+     34490
+    ],
+    "D04": [
+     22370,
+     23210
+    ],
+    "D05": [
+     25830,
+     27050
+    ],
+    "D06": [
+     23570,
+     24470
+    ],
+    "D07": [
+     24270,
+     25420
+    ],
+    "D08": [
+     19410,
+     20150
+    ],
+    "D09": [
+     16280,
+     16970
+    ],
+    "D10": [
+     21100,
+     22090
+    ],
+    "D11": [
+     14860,
+     15560
+    ],
+    "D12": [
+     20320,
+     21120
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.33,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.4
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.122,
+    "30-44": 1.073
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1020,
+    "D02": 810,
+    "D03": 1700,
+    "D04": 630,
+    "D05": 1460,
+    "D06": 580,
+    "D07": 920,
+    "D08": 590,
+    "D09": 460,
+    "D10": 560,
+    "D11": 440,
+    "D12": 570
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3234,
+    "D02": 1947,
+    "D03": 2120,
+    "D04": 936,
+    "D05": 1566,
+    "D06": 1103,
+    "D07": 1320,
+    "D08": 747,
+    "D09": 563,
+    "D10": 921,
+    "D11": 618,
+    "D12": 888
+   },
+   "official": 325247,
+   "gap": 3800,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -2740
+  },
+  "one raising factor for men aged 18 to 44": {
+   "national": 320260,
+   "districts": {
+    "D01": 55750,
+    "D02": 39570,
+    "D03": 33630,
+    "D04": 22710,
+    "D05": 26240,
+    "D06": 23940,
+    "D07": 24740,
+    "D08": 19730,
+    "D09": 16590,
+    "D10": 21530,
+    "D11": 15140,
+    "D12": 20690
+   },
+   "nat_half_pct": 0.96,
+   "nat_interval": [
+    317200,
     323300
    ],
    "intervals": {
     "D01": [
-     54570,
-     56450
+     54930,
+     56570
     ],
     "D02": [
-     39210,
-     40810
+     38860,
+     40280
     ],
     "D03": [
-     32110,
-     33530
+     32930,
+     34330
     ],
     "D04": [
-     22140,
-     22940
+     22270,
+     23150
     ],
     "D05": [
-     25330,
-     26650
+     25620,
+     26870
     ],
     "D06": [
-     23760,
-     24660
+     23470,
+     24410
     ],
     "D07": [
-     24490,
-     25630
+     24130,
+     25340
     ],
     "D08": [
-     18400,
-     19220
+     19340,
+     20120
     ],
     "D09": [
-     16530,
-     17180
+     16240,
+     16940
     ],
     "D10": [
-     21390,
-     22450
+     21010,
+     22050
     ],
     "D11": [
-     14370,
-     14990
+     14780,
+     15490
     ],
     "D12": [
-     20370,
-     21460
+     20270,
+     21120
     ]
    },
    "p_line": {
@@ -2272,9 +2045,9 @@
     "D02": 1.0,
     "D03": 1.0,
     "D04": 0.0,
-    "D05": 0.99,
+    "D05": 1.0,
     "D06": 0.0,
-    "D07": 0.57,
+    "D07": 0.24,
     "D08": 0.0,
     "D09": 0.0,
     "D10": 0.0,
@@ -2293,218 +2066,219 @@
     ]
    },
    "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
+    "nationals": 94.9,
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
-    "18-29": 1.065,
-    "30-44": 1.135
+    "18-29": 1.07,
+    "30-44": 1.07
    },
    "da": {
-    "18-29": 1.0493,
-    "30-44": 1.0582
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2810,
-    "D02": 1820,
-    "D03": 1490,
-    "D04": 840,
-    "D05": 1070,
-    "D06": 1010,
-    "D07": 1100,
-    "D08": 630,
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
     "D09": 480,
-    "D10": 750,
-    "D11": 480,
-    "D12": 830
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": 6310,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": 0
-  },
-  "raising Kilvarran men only": {
-   "national": 318060,
-   "districts": {
-    "D01": 55180,
-    "D02": 39820,
-    "D03": 32710,
-    "D04": 22480,
-    "D05": 25910,
-    "D06": 24100,
-    "D07": 24940,
-    "D08": 18760,
-    "D09": 16830,
-    "D10": 21840,
-    "D11": 14640,
-    "D12": 20850
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3064,
+    "D02": 1797,
+    "D03": 1900,
+    "D04": 856,
+    "D05": 1416,
+    "D06": 1023,
+    "D07": 1220,
+    "D08": 697,
+    "D09": 503,
+    "D10": 861,
+    "D11": 548,
+    "D12": 848
    },
-   "nat_half_pct": 1.18,
+   "official": 325247,
+   "gap": 4990,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -1550
+  },
+  "the 2021 Census as the sex-ratio benchmark": {
+   "national": 320390,
+   "districts": {
+    "D01": 55760,
+    "D02": 39580,
+    "D03": 33650,
+    "D04": 22710,
+    "D05": 26270,
+    "D06": 23950,
+    "D07": 24750,
+    "D08": 19740,
+    "D09": 16600,
+    "D10": 21540,
+    "D11": 15140,
+    "D12": 20700
+   },
+   "nat_half_pct": 0.96,
    "nat_interval": [
-    314300,
-    321800
+    317300,
+    323400
    ],
    "intervals": {
     "D01": [
-     54270,
-     56090
+     54940,
+     56580
     ],
     "D02": [
-     39050,
-     40600
+     38880,
+     40290
     ],
     "D03": [
-     32010,
-     33400
+     32950,
+     34360
     ],
     "D04": [
-     22090,
-     22880
+     22270,
+     23150
     ],
     "D05": [
-     25260,
-     26560
+     25640,
+     26890
     ],
     "D06": [
-     23660,
-     24550
+     23470,
+     24420
     ],
     "D07": [
-     24390,
-     25500
+     24140,
+     25350
     ],
     "D08": [
-     18350,
-     19160
+     19350,
+     20130
     ],
     "D09": [
-     16500,
-     17150
+     16250,
+     16950
     ],
     "D10": [
-     21320,
-     22360
+     21020,
+     22060
     ],
     "D11": [
-     14330,
-     14940
+     14790,
+     15500
     ],
     "D12": [
-     20320,
-     21380
+     20270,
+     21130
     ]
    },
    "p_line": {
@@ -2512,9 +2286,9 @@
     "D02": 1.0,
     "D03": 1.0,
     "D04": 0.0,
-    "D05": 0.99,
+    "D05": 1.0,
     "D06": 0.0,
-    "D07": 0.43,
+    "D07": 0.25,
     "D08": 0.0,
     "D09": 0.0,
     "D10": 0.0,
@@ -2533,1415 +2307,461 @@
     ]
    },
    "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
+    "nationals": 94.9,
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
-    "18-29": 1.086,
-    "30-44": 1.116
+    "18-29": 1.081,
+    "30-44": 1.065
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0516,
+    "30-44": 1.0617
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2480,
-    "D02": 1640,
-    "D03": 1380,
-    "D04": 780,
-    "D05": 990,
-    "D06": 900,
-    "D07": 980,
-    "D08": 580,
-    "D09": 460,
-    "D10": 670,
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
     "D11": 440,
-    "D12": 760
+    "D12": 580
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": 7560,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": 1250
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3074,
+    "D02": 1807,
+    "D03": 1920,
+    "D04": 856,
+    "D05": 1446,
+    "D06": 1033,
+    "D07": 1230,
+    "D08": 707,
+    "D09": 513,
+    "D10": 871,
+    "D11": 548,
+    "D12": 858
+   },
+   "official": 325247,
+   "gap": 4860,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -1680
+  },
+  "raising Kilvarran men only": {
+   "national": 319420,
+   "districts": {
+    "D01": 55500,
+    "D02": 39440,
+    "D03": 33560,
+    "D04": 22670,
+    "D05": 26190,
+    "D06": 23870,
+    "D07": 24670,
+    "D08": 19700,
+    "D09": 16570,
+    "D10": 21490,
+    "D11": 15110,
+    "D12": 20650
+   },
+   "nat_half_pct": 0.87,
+   "nat_interval": [
+    316600,
+    322200
+   ],
+   "intervals": {
+    "D01": [
+     54720,
+     56280
+    ],
+    "D02": [
+     38760,
+     40130
+    ],
+    "D03": [
+     32870,
+     34250
+    ],
+    "D04": [
+     22240,
+     23100
+    ],
+    "D05": [
+     25570,
+     26810
+    ],
+    "D06": [
+     23420,
+     24330
+    ],
+    "D07": [
+     24080,
+     25270
+    ],
+    "D08": [
+     19320,
+     20070
+    ],
+    "D09": [
+     16210,
+     16920
+    ],
+    "D10": [
+     20970,
+     22000
+    ],
+    "D11": [
+     14760,
+     15470
+    ],
+    "D12": [
+     20230,
+     21070
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.18,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.095,
+    "30-44": 1.048
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2814,
+    "D02": 1667,
+    "D03": 1830,
+    "D04": 816,
+    "D05": 1366,
+    "D06": 953,
+    "D07": 1150,
+    "D08": 667,
+    "D09": 483,
+    "D10": 821,
+    "D11": 518,
+    "D12": 808
+   },
+   "official": 325247,
+   "gap": 5820,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -720
   }
  },
  "shortcut_figures": {
   "linked share read as coverage": {
-   "national": 332710,
+   "national": 334440,
    "districts": {
-    "D01": 58180,
-    "D02": 41970,
-    "D03": 34310,
-    "D04": 23320,
-    "D05": 27220,
-    "D06": 25220,
-    "D07": 26240,
-    "D08": 19450,
-    "D09": 17250,
-    "D10": 22590,
-    "D11": 15130,
-    "D12": 21830
-   },
-   "nat_half_pct": 0.58,
-   "nat_interval": [
-    330800,
-    334600
-   ],
-   "intervals": {
-    "D01": [
-     57350,
-     59010
-    ],
-    "D02": [
-     41310,
-     42630
-    ],
-    "D03": [
-     33610,
-     35000
-    ],
-    "D04": [
-     22940,
-     23690
-    ],
-    "D05": [
-     26530,
-     27910
-    ],
-    "D06": [
-     24860,
-     25570
-    ],
-    "D07": [
-     25660,
-     26820
-    ],
-    "D08": [
-     19020,
-     19880
-    ],
-    "D09": [
-     16970,
-     17540
-    ],
-    "D10": [
-     22100,
-     23090
-    ],
-    "D11": [
-     14800,
-     15470
-    ],
-    "D12": [
-     21280,
-     22370
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 1.0,
-    "D06": 0.84,
-    "D07": 1.0,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05",
-     "D07"
-    ],
-    "too close to call": [
-     "D06"
-    ]
-   },
-   "coverage": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.06,
-    "30-44": 1.074
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1090,
-    "D02": 790,
-    "D03": 1890,
-    "D04": 560,
-    "D05": 1760,
-    "D06": 550,
-    "D07": 1110,
-    "D08": 420,
-    "D09": 510,
-    "D10": 870,
-    "D11": 380,
-    "D12": 740
-   },
-   "on_no_list": {
-    "D01": 5850,
-    "D02": 4150,
-    "D03": 3030,
-    "D04": 1730,
-    "D05": 2350,
-    "D06": 2150,
-    "D07": 2400,
-    "D08": 1390,
-    "D09": 920,
-    "D10": 1530,
-    "D11": 1010,
-    "D12": 1850
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": -7080,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -13390
-  },
-  "independence within age and sex": {
-   "national": 313360,
-   "districts": {
-    "D01": 54390,
-    "D02": 39270,
-    "D03": 32130,
-    "D04": 22160,
-    "D05": 25480,
-    "D06": 23780,
-    "D07": 24570,
-    "D08": 18520,
-    "D09": 16600,
-    "D10": 21510,
-    "D11": 14430,
-    "D12": 20550
-   },
-   "nat_half_pct": 0.47,
-   "nat_interval": [
-    311900,
-    314800
-   ],
-   "intervals": {
-    "D01": [
-     53780,
-     55000
-    ],
-    "D02": [
-     38800,
-     39730
-    ],
-    "D03": [
-     31600,
-     32660
-    ],
-    "D04": [
-     21880,
-     22430
-    ],
-    "D05": [
-     24970,
-     25980
-    ],
-    "D06": [
-     23470,
-     24080
-    ],
-    "D07": [
-     24180,
-     24960
-    ],
-    "D08": [
-     18210,
-     18820
-    ],
-    "D09": [
-     16390,
-     16800
-    ],
-    "D10": [
-     21080,
-     21940
-    ],
-    "D11": [
-     14180,
-     14670
-    ],
-    "D12": [
-     20160,
-     20940
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 0.94,
-    "D06": 0.0,
-    "D07": 0.03,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03"
-    ],
-    "too close to call": [
-     "D05"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.0,
-    "30-44": 1.0
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 1680,
-    "D02": 1080,
-    "D03": 800,
-    "D04": 460,
-    "D05": 560,
-    "D06": 570,
-    "D07": 610,
-    "D08": 340,
-    "D09": 220,
-    "D10": 340,
-    "D11": 230,
-    "D12": 460
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": 12260,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": 5950
-  },
-  "a survey person found anywhere on the register counted as matched": {
-   "national": 306330,
-   "districts": {
-    "D01": 53960,
-    "D02": 38810,
-    "D03": 30790,
-    "D04": 21830,
-    "D05": 24090,
-    "D06": 23480,
-    "D07": 23750,
-    "D08": 18240,
-    "D09": 16290,
-    "D10": 20890,
-    "D11": 14190,
-    "D12": 20010
-   },
-   "nat_half_pct": 0.39,
-   "nat_interval": [
-    305100,
-    307500
-   ],
-   "intervals": {
-    "D01": [
-     53440,
-     54490
-    ],
-    "D02": [
-     38420,
-     39200
-    ],
-    "D03": [
-     30420,
-     31150
-    ],
-    "D04": [
-     21600,
-     22060
-    ],
-    "D05": [
-     23700,
-     24490
-    ],
-    "D06": [
-     23160,
-     23800
-    ],
-    "D07": [
-     23430,
-     24060
-    ],
-    "D08": [
-     17990,
-     18490
-    ],
-    "D09": [
-     16110,
-     16460
-    ],
-    "D10": [
-     20550,
-     21230
-    ],
-    "D11": [
-     14020,
-     14370
-    ],
-    "D12": [
-     19740,
-     20280
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 0.0,
-    "D06": 0.0,
-    "D07": 0.0,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03"
-    ],
-    "too close to call": []
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.081,
-    "30-44": 1.13
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 0,
-    "D02": 0,
-    "D03": 0,
-    "D04": 0,
-    "D05": 0,
-    "D06": 0,
-    "D07": 0,
-    "D08": 0,
-    "D09": 0,
-    "D10": 0,
-    "D11": 0,
-    "D12": 0
-   },
-   "on_no_list": {
-    "D01": 2720,
-    "D02": 1770,
-    "D03": 1410,
-    "D04": 810,
-    "D05": 990,
-    "D06": 970,
-    "D07": 1020,
-    "D08": 610,
-    "D09": 460,
-    "D10": 700,
-    "D11": 460,
-    "D12": 780
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": 19290,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": 12980
-  },
-  "every register entry taken as correct": {
-   "national": 365350,
-   "districts": {
-    "D01": 65430,
-    "D02": 46090,
-    "D03": 37810,
-    "D04": 25120,
-    "D05": 30210,
-    "D06": 27930,
-    "D07": 28500,
-    "D08": 21320,
-    "D09": 18520,
-    "D10": 24510,
-    "D11": 16410,
-    "D12": 23510
-   },
-   "nat_half_pct": 0.3,
-   "nat_interval": [
-    364200,
-    366500
-   ],
-   "intervals": {
-    "D01": [
-     65050,
-     65820
-    ],
-    "D02": [
-     45750,
-     46420
-    ],
-    "D03": [
-     37260,
-     38360
-    ],
-    "D04": [
-     24900,
-     25340
-    ],
-    "D05": [
-     29790,
-     30640
-    ],
-    "D06": [
-     27690,
-     28160
-    ],
-    "D07": [
-     28150,
-     28850
-    ],
-    "D08": [
-     21110,
-     21530
-    ],
-    "D09": [
-     18320,
-     18720
-    ],
-    "D10": [
-     24190,
-     24820
-    ],
-    "D11": [
-     16230,
-     16600
-    ],
-    "D12": [
-     23180,
-     23830
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.82,
-    "D05": 1.0,
-    "D06": 1.0,
-    "D07": 1.0,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.01,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05",
-     "D06",
-     "D07"
-    ],
-    "too close to call": [
-     "D04"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.066,
-    "30-44": 1.102
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 0,
-    "D02": 0,
-    "D03": 0,
-    "D04": 0,
-    "D05": 0,
-    "D06": 0,
-    "D07": 0,
-    "D08": 0,
-    "D09": 0,
-    "D10": 0,
-    "D11": 0,
-    "D12": 0
-   },
-   "listed_elsewhere": {
-    "D01": 1800,
-    "D02": 1370,
-    "D03": 2390,
-    "D04": 790,
-    "D05": 2210,
-    "D06": 840,
-    "D07": 1460,
-    "D08": 640,
-    "D09": 620,
-    "D10": 1110,
-    "D11": 530,
-    "D12": 1000
-   },
-   "on_no_list": {
-    "D01": 3240,
-    "D02": 2040,
-    "D03": 1710,
-    "D04": 920,
-    "D05": 1240,
-    "D06": 1140,
-    "D07": 1240,
-    "D08": 710,
-    "D09": 510,
-    "D10": 780,
-    "D11": 520,
-    "D12": 920
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D02": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D03": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D04": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D05": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D06": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D07": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D08": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D09": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D10": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D11": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    },
-    "D12": {
-     "left Kilvarra or died": 0,
-     "duplicate registrations": 0,
-     "living elsewhere in Kilvarra": 0
-    }
-   },
-   "official": 325624,
-   "gap": -39730,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -46040
-  },
-  "movers with no district recorded counted as gone": {
-   "national": 293730,
-   "districts": {
-    "D01": 50830,
-    "D02": 36760,
-    "D03": 30430,
-    "D04": 20770,
-    "D05": 23680,
-    "D06": 22140,
-    "D07": 23030,
-    "D08": 17350,
-    "D09": 15700,
-    "D10": 20170,
-    "D11": 13680,
-    "D12": 19200
-   },
-   "nat_half_pct": 0.62,
-   "nat_interval": [
-    291900,
-    295500
-   ],
-   "intervals": {
-    "D01": [
-     50090,
-     51570
-    ],
-    "D02": [
-     36200,
-     37320
-    ],
-    "D03": [
-     29780,
-     31090
-    ],
-    "D04": [
-     20390,
-     21140
-    ],
-    "D05": [
-     23130,
-     24220
-    ],
-    "D06": [
-     21700,
-     22590
-    ],
-    "D07": [
-     22560,
-     23500
-    ],
-    "D08": [
-     16950,
-     17740
-    ],
-    "D09": [
-     15350,
-     16040
-    ],
-    "D10": [
-     19640,
-     20710
-    ],
-    "D11": [
-     13410,
-     13940
-    ],
-    "D12": [
-     18730,
-     19660
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 0.0,
-    "D06": 0.0,
-    "D07": 0.0,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03"
-    ],
-    "too close to call": []
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.103,
-    "30-44": 1.139
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 13500,
-    "D02": 8670,
-    "D03": 6490,
-    "D04": 4010,
-    "D05": 5720,
-    "D06": 5380,
-    "D07": 4880,
-    "D08": 3720,
-    "D09": 2660,
-    "D10": 4030,
-    "D11": 2560,
-    "D12": 3920
-   },
-   "listed_elsewhere": {
-    "D01": 1300,
-    "D02": 1030,
-    "D03": 1750,
-    "D04": 590,
-    "D05": 1610,
-    "D06": 620,
-    "D07": 1090,
-    "D08": 490,
-    "D09": 500,
-    "D10": 870,
-    "D11": 410,
-    "D12": 750
-   },
-   "on_no_list": {
-    "D01": 2630,
-    "D02": 1720,
-    "D03": 1460,
-    "D04": 770,
-    "D05": 1020,
-    "D06": 950,
-    "D07": 1020,
-    "D08": 610,
-    "D09": 480,
-    "D10": 720,
-    "D11": 470,
-    "D12": 780
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 7820,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 4280
-    },
-    "D02": {
-     "left Kilvarra or died": 4730,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 2950
-    },
-    "D03": {
-     "left Kilvarra or died": 3180,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 2390
-    },
-    "D04": {
-     "left Kilvarra or died": 1760,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 1650
-    },
-    "D05": {
-     "left Kilvarra or died": 2660,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 2400
-    },
-    "D06": {
-     "left Kilvarra or died": 3280,
-     "duplicate registrations": 560,
-     "living elsewhere in Kilvarra": 1540
-    },
-    "D07": {
-     "left Kilvarra or died": 2440,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 2000
-    },
-    "D08": {
-     "left Kilvarra or died": 1830,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 1380
-    },
-    "D09": {
-     "left Kilvarra or died": 900,
-     "duplicate registrations": 730,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D10": {
-     "left Kilvarra or died": 1830,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 1480
-    },
-    "D11": {
-     "left Kilvarra or died": 1030,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 1170
-    },
-    "D12": {
-     "left Kilvarra or died": 1890,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 1420
-    }
-   },
-   "official": 325624,
-   "gap": 31900,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 10480,
-   "remainder": 22030
-  },
-  "the estimate scaled to the rolled-forward total": {
-   "national": 325620,
-   "districts": {
-    "D01": 56590,
-    "D02": 40790,
-    "D03": 33490,
-    "D04": 22990,
-    "D05": 26520,
-    "D06": 24690,
-    "D07": 25550,
-    "D08": 19180,
-    "D09": 17190,
-    "D10": 22350,
-    "D11": 14970,
+    "D01": 58920,
+    "D02": 41270,
+    "D03": 35620,
+    "D04": 23500,
+    "D05": 27740,
+    "D06": 24960,
+    "D07": 25920,
+    "D08": 20280,
+    "D09": 16970,
+    "D10": 22300,
+    "D11": 15630,
     "D12": 21330
    },
-   "nat_half_pct": 0.0,
+   "nat_half_pct": 0.5,
    "nat_interval": [
-    325600,
-    325600
+    332800,
+    336100
    ],
    "intervals": {
     "D01": [
-     56030,
-     57140
+     58100,
+     59730
     ],
     "D02": [
-     40340,
-     41250
+     40700,
+     41840
     ],
     "D03": [
-     32980,
-     34000
+     34980,
+     36250
     ],
     "D04": [
-     22700,
-     23280
+     23090,
+     23920
     ],
     "D05": [
-     26010,
-     27020
+     27030,
+     28450
     ],
     "D06": [
-     24370,
-     25000
+     24520,
+     25390
     ],
     "D07": [
-     25140,
-     25960
+     25380,
+     26470
     ],
     "D08": [
-     18870,
-     19490
+     19850,
+     20710
     ],
     "D09": [
-     16970,
-     17410
+     16640,
+     17310
     ],
     "D10": [
-     21910,
-     22780
+     21740,
+     22860
     ],
     "D11": [
-     14700,
-     15230
+     15280,
+     15980
     ],
     "D12": [
-     20940,
+     20950,
      21720
     ]
    },
@@ -3951,730 +2771,7 @@
     "D03": 1.0,
     "D04": 0.0,
     "D05": 1.0,
-    "D06": 0.05,
-    "D07": 0.99,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05",
-     "D07"
-    ],
-    "too close to call": [
-     "D06"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.086,
-    "30-44": 1.116
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2770,
-    "D02": 1810,
-    "D03": 1500,
-    "D04": 840,
-    "D05": 1080,
-    "D06": 1000,
-    "D07": 1090,
-    "D08": 630,
-    "D09": 480,
-    "D10": 740,
-    "D11": 480,
-    "D12": 830
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": 0,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -6310
-  },
-  "serving personnel in the dual-system estimate": {
-   "national": 319420,
-   "districts": {
-    "D01": 55660,
-    "D02": 40120,
-    "D03": 32950,
-    "D04": 21770,
-    "D05": 26090,
-    "D06": 24270,
-    "D07": 25140,
-    "D08": 18850,
-    "D09": 16900,
-    "D10": 21980,
-    "D11": 14720,
-    "D12": 20970
-   },
-   "nat_half_pct": 0.48,
-   "nat_interval": [
-    317900,
-    321000
-   ],
-   "intervals": {
-    "D01": [
-     55030,
-     56290
-    ],
-    "D02": [
-     39640,
-     40600
-    ],
-    "D03": [
-     32390,
-     33510
-    ],
-    "D04": [
-     21490,
-     22060
-    ],
-    "D05": [
-     25560,
-     26620
-    ],
-    "D06": [
-     23960,
-     24590
-    ],
-    "D07": [
-     24720,
-     25550
-    ],
-    "D08": [
-     18540,
-     19160
-    ],
-    "D09": [
-     16690,
-     17120
-    ],
-    "D10": [
-     21530,
-     22420
-    ],
-    "D11": [
-     14460,
-     14970
-    ],
-    "D12": [
-     20570,
-     21380
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 1.0,
-    "D06": 0.0,
-    "D07": 0.71,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05"
-    ],
-    "too close to call": [
-     "D07"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.105,
-    "30-44": 1.131
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2950,
-    "D02": 1930,
-    "D03": 1620,
-    "D04": 900,
-    "D05": 1170,
-    "D06": 1070,
-    "D07": 1180,
-    "D08": 680,
-    "D09": 530,
-    "D10": 810,
-    "D11": 520,
-    "D12": 890
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": 6200,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -110
-  },
-  "the sex ratio taken without serving personnel on the estimate's side": {
-   "national": 320250,
-   "districts": {
-    "D01": 55660,
-    "D02": 40120,
-    "D03": 32950,
-    "D04": 22600,
-    "D05": 26090,
-    "D06": 24270,
-    "D07": 25140,
-    "D08": 18850,
-    "D09": 16900,
-    "D10": 21980,
-    "D11": 14720,
-    "D12": 20970
-   },
-   "nat_half_pct": 0.48,
-   "nat_interval": [
-    318700,
-    321800
-   ],
-   "intervals": {
-    "D01": [
-     55030,
-     56290
-    ],
-    "D02": [
-     39640,
-     40600
-    ],
-    "D03": [
-     32390,
-     33510
-    ],
-    "D04": [
-     22310,
-     22890
-    ],
-    "D05": [
-     25560,
-     26620
-    ],
-    "D06": [
-     23960,
-     24590
-    ],
-    "D07": [
-     24720,
-     25550
-    ],
-    "D08": [
-     18540,
-     19160
-    ],
-    "D09": [
-     16690,
-     17120
-    ],
-    "D10": [
-     21530,
-     22420
-    ],
-    "D11": [
-     14460,
-     14970
-    ],
-    "D12": [
-     20570,
-     21380
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 1.0,
-    "D06": 0.0,
-    "D07": 0.71,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05"
-    ],
-    "too close to call": [
-     "D07"
-    ]
-   },
-   "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.105,
-    "30-44": 1.131
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 2950,
-    "D02": 1930,
-    "D03": 1620,
-    "D04": 900,
-    "D05": 1170,
-    "D06": 1070,
-    "D07": 1180,
-    "D08": 680,
-    "D09": 530,
-    "D10": 810,
-    "D11": 520,
-    "D12": 890
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": 5370,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -940
-  }
- },
- "hinted": {
-  "the register and the coverage survey miss the same young men": {
-   "national": 332710,
-   "districts": {
-    "D01": 58180,
-    "D02": 41970,
-    "D03": 34310,
-    "D04": 23320,
-    "D05": 27220,
-    "D06": 25220,
-    "D07": 26240,
-    "D08": 19450,
-    "D09": 17250,
-    "D10": 22590,
-    "D11": 15130,
-    "D12": 21830
-   },
-   "nat_half_pct": 0.59,
-   "nat_interval": [
-    330700,
-    334700
-   ],
-   "intervals": {
-    "D01": [
-     57410,
-     58960
-    ],
-    "D02": [
-     41280,
-     42670
-    ],
-    "D03": [
-     33640,
-     34970
-    ],
-    "D04": [
-     22910,
-     23720
-    ],
-    "D05": [
-     26450,
-     27980
-    ],
-    "D06": [
-     24860,
-     25570
-    ],
-    "D07": [
-     25700,
-     26780
-    ],
-    "D08": [
-     19010,
-     19890
-    ],
-    "D09": [
-     16950,
-     17550
-    ],
-    "D10": [
-     22100,
-     23090
-    ],
-    "D11": [
-     14830,
-     15430
-    ],
-    "D12": [
-     21330,
-     22330
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 1.0,
-    "D06": 0.84,
+    "D06": 0.44,
     "D07": 1.0,
     "D08": 0.0,
     "D09": 0.0,
@@ -4695,218 +2792,219 @@
     ]
    },
    "coverage": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
-    "18-29": 1.06,
-    "30-44": 1.074
+    "18-29": 1.103,
+    "30-44": 1.029
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "listed_elsewhere": {
-    "D01": 1090,
-    "D02": 790,
-    "D03": 1890,
-    "D04": 560,
-    "D05": 1760,
-    "D06": 550,
-    "D07": 1110,
-    "D08": 420,
-    "D09": 510,
-    "D10": 870,
-    "D11": 380,
-    "D12": 740
-   },
-   "on_no_list": {
-    "D01": 5850,
-    "D02": 4150,
-    "D03": 3030,
-    "D04": 1730,
-    "D05": 2350,
-    "D06": 2150,
-    "D07": 2400,
-    "D08": 1390,
-    "D09": 920,
-    "D10": 1530,
-    "D11": 1010,
-    "D12": 1850
+    "D01": 960,
+    "D02": 810,
+    "D03": 1940,
+    "D04": 720,
+    "D05": 1710,
+    "D06": 650,
+    "D07": 1000,
+    "D08": 650,
+    "D09": 520,
+    "D10": 620,
+    "D11": 480,
+    "D12": 620
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": -7080,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 0,
-   "remainder": -6470
-  },
-  "missed links look like people the register missed": {
-   "national": 313360,
-   "districts": {
-    "D01": 54390,
-    "D02": 39270,
-    "D03": 32130,
-    "D04": 22160,
-    "D05": 25480,
-    "D06": 23780,
-    "D07": 24570,
-    "D08": 18520,
-    "D09": 16600,
-    "D10": 21510,
-    "D11": 14430,
-    "D12": 20550
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 6324,
+    "D02": 3497,
+    "D03": 3690,
+    "D04": 1556,
+    "D05": 2616,
+    "D06": 1973,
+    "D07": 2310,
+    "D08": 1187,
+    "D09": 843,
+    "D10": 1571,
+    "D11": 998,
+    "D12": 1448
    },
-   "nat_half_pct": 0.46,
+   "official": 325247,
+   "gap": -9200,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -15740
+  },
+  "independence within age and sex": {
+   "national": 316150,
+   "districts": {
+    "D01": 55020,
+    "D02": 39060,
+    "D03": 33110,
+    "D04": 22450,
+    "D05": 25840,
+    "D06": 23650,
+    "D07": 24420,
+    "D08": 19510,
+    "D09": 16410,
+    "D10": 21280,
+    "D11": 14960,
+    "D12": 20440
+   },
+   "nat_half_pct": 0.41,
    "nat_interval": [
-    311900,
-    314800
+    314900,
+    317400
    ],
    "intervals": {
     "D01": [
-     53810,
-     54970
+     54460,
+     55580
     ],
     "D02": [
-     38790,
-     39740
+     38620,
+     39510
     ],
     "D03": [
-     31640,
-     32620
+     32660,
+     33560
     ],
     "D04": [
-     21850,
-     22460
+     22120,
+     22770
     ],
     "D05": [
-     24940,
-     26010
+     25330,
+     26350
     ],
     "D06": [
-     23500,
-     24050
+     23310,
+     24000
     ],
     "D07": [
-     24200,
-     24930
+     23990,
+     24840
     ],
     "D08": [
-     18180,
-     18850
+     19210,
+     19810
     ],
     "D09": [
-     16380,
-     16810
+     16130,
+     16690
     ],
     "D10": [
-     21080,
-     21940
+     20870,
+     21680
     ],
     "D11": [
-     14220,
-     14640
+     14690,
+     15230
     ],
     "D12": [
-     20190,
-     20900
+     20140,
+     20740
     ]
    },
    "p_line": {
@@ -4914,9 +3012,248 @@
     "D02": 1.0,
     "D03": 1.0,
     "D04": 0.0,
-    "D05": 0.93,
+    "D05": 1.0,
     "D06": 0.0,
-    "D07": 0.03,
+    "D07": 0.01,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": []
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.0,
+    "30-44": 1.0
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2334,
+    "D02": 1287,
+    "D03": 1380,
+    "D04": 596,
+    "D05": 1016,
+    "D06": 733,
+    "D07": 900,
+    "D08": 477,
+    "D09": 323,
+    "D10": 611,
+    "D11": 368,
+    "D12": 598
+   },
+   "official": 325247,
+   "gap": 9100,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": 2560
+  },
+  "a survey person found anywhere on the register counted as matched": {
+   "national": 309830,
+   "districts": {
+    "D01": 54620,
+    "D02": 38700,
+    "D03": 31760,
+    "D04": 22030,
+    "D05": 24720,
+    "D06": 23330,
+    "D07": 23770,
+    "D08": 19110,
+    "D09": 16100,
+    "D10": 20950,
+    "D11": 14670,
+    "D12": 20070
+   },
+   "nat_half_pct": 0.36,
+   "nat_interval": [
+    308700,
+    310900
+   ],
+   "intervals": {
+    "D01": [
+     54120,
+     55120
+    ],
+    "D02": [
+     38300,
+     39110
+    ],
+    "D03": [
+     31440,
+     32080
+    ],
+    "D04": [
+     21760,
+     22310
+    ],
+    "D05": [
+     24390,
+     25050
+    ],
+    "D06": [
+     23000,
+     23650
+    ],
+    "D07": [
+     23400,
+     24150
+    ],
+    "D08": [
+     18880,
+     19350
+    ],
+    "D09": [
+     15860,
+     16330
+    ],
+    "D10": [
+     20610,
+     21290
+    ],
+    "D11": [
+     14440,
+     14910
+    ],
+    "D12": [
+     19840,
+     20300
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 0.08,
+    "D06": 0.0,
+    "D07": 0.0,
     "D08": 0.0,
     "D09": 0.0,
     "D10": 0.0,
@@ -4934,468 +3271,228 @@
     ]
    },
    "coverage": {
-    "nationals": 95.0,
-    "others": 84.7
+    "nationals": 94.9,
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
-    "18-29": 1.0,
-    "30-44": 1.0
+    "18-29": 1.092,
+    "30-44": 1.056
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "listed_elsewhere": {
-    "D01": 1470,
-    "D02": 1150,
-    "D03": 1950,
-    "D04": 670,
-    "D05": 1810,
-    "D06": 690,
-    "D07": 1230,
-    "D08": 540,
-    "D09": 550,
-    "D10": 980,
-    "D11": 460,
-    "D12": 850
-   },
-   "on_no_list": {
-    "D01": 1680,
-    "D02": 1080,
-    "D03": 800,
-    "D04": 460,
-    "D05": 560,
-    "D06": 570,
-    "D07": 610,
-    "D08": 340,
-    "D09": 220,
-    "D10": 340,
-    "D11": 230,
-    "D12": 460
+    "D01": 0,
+    "D02": 0,
+    "D03": 0,
+    "D04": 0,
+    "D05": 0,
+    "D06": 0,
+    "D07": 0,
+    "D08": 0,
+    "D09": 0,
+    "D10": 0,
+    "D11": 0,
+    "D12": 0
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": 12260,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 12870,
-   "remainder": 0
-  },
-  "the interval has to carry the errors every district shares": {
-   "national": 328400,
-   "districts": {
-    "D01": 57380,
-    "D02": 41440,
-    "D03": 33790,
-    "D04": 23030,
-    "D05": 26830,
-    "D06": 24900,
-    "D07": 25890,
-    "D08": 19240,
-    "D09": 17060,
-    "D10": 22310,
-    "D11": 14960,
-    "D12": 21560
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2984,
+    "D02": 1737,
+    "D03": 1770,
+    "D04": 806,
+    "D05": 1306,
+    "D06": 993,
+    "D07": 1160,
+    "D08": 667,
+    "D09": 493,
+    "D10": 841,
+    "D11": 518,
+    "D12": 808
    },
-   "nat_half_pct": 0.67,
+   "official": 325247,
+   "gap": 15420,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": 8880
+  },
+  "every register entry taken as correct": {
+   "national": 364430,
+   "districts": {
+    "D01": 65570,
+    "D02": 45590,
+    "D03": 38210,
+    "D04": 25270,
+    "D05": 30070,
+    "D06": 27830,
+    "D07": 28080,
+    "D08": 21500,
+    "D09": 18500,
+    "D10": 24310,
+    "D11": 16320,
+    "D12": 23180
+   },
+   "nat_half_pct": 0.27,
    "nat_interval": [
-    326200,
-    330600
+    363400,
+    365400
    ],
    "intervals": {
     "D01": [
-     56540,
-     58230
+     65140,
+     65990
     ],
     "D02": [
-     40660,
-     42220
+     45330,
+     45860
     ],
     "D03": [
-     33080,
-     34500
+     37810,
+     38610
     ],
     "D04": [
-     22590,
-     23480
+     25030,
+     25500
     ],
     "D05": [
-     26030,
-     27640
+     29590,
+     30560
     ],
     "D06": [
-     24500,
-     25310
+     27650,
+     28000
     ],
     "D07": [
-     25310,
-     26460
+     27840,
+     28310
     ],
     "D08": [
-     18730,
-     19750
+     21220,
+     21790
     ],
     "D09": [
-     16720,
-     17400
+     18290,
+     18710
     ],
     "D10": [
-     21730,
-     22890
+     24000,
+     24610
     ],
     "D11": [
-     14640,
-     15270
+     16130,
+     16520
     ],
     "D12": [
-     21020,
-     22100
+     22890,
+     23460
     ]
    },
    "p_line": {
     "D01": 1.0,
     "D02": 1.0,
     "D03": 1.0,
-    "D04": 0.0,
+    "D04": 0.97,
     "D05": 1.0,
-    "D06": 0.35,
-    "D07": 0.99,
-    "D08": 0.0,
-    "D09": 0.0,
-    "D10": 0.0,
-    "D11": 0.0,
-    "D12": 0.0
-   },
-   "call": {
-    "qualifies": [
-     "D01",
-     "D02",
-     "D03",
-     "D05",
-     "D07"
-    ],
-    "too close to call": [
-     "D06"
-    ]
-   },
-   "coverage": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "linked": {
-    "nationals": 92.2,
-    "others": 71.8
-   },
-   "recall": {
-    "nationals": 97.0,
-    "others": 83.0
-   },
-   "k": {
-    "18-29": 1.0,
-    "30-44": 1.0
-   },
-   "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
-   },
-   "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
-   },
-   "listed_elsewhere": {
-    "D01": 1090,
-    "D02": 790,
-    "D03": 1890,
-    "D04": 560,
-    "D05": 1760,
-    "D06": 550,
-    "D07": 1110,
-    "D08": 420,
-    "D09": 510,
-    "D10": 870,
-    "D11": 380,
-    "D12": 740
-   },
-   "on_no_list": {
-    "D01": 5050,
-    "D02": 3610,
-    "D03": 2510,
-    "D04": 1450,
-    "D05": 1970,
-    "D06": 1840,
-    "D07": 2040,
-    "D08": 1190,
-    "D09": 730,
-    "D10": 1250,
-    "D11": 830,
-    "D12": 1580
-   },
-   "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
-   },
-   "over_parts": {
-    "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
-    },
-    "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
-    },
-    "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
-    },
-    "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
-    },
-    "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
-    },
-    "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
-    },
-    "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
-    },
-    "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
-    },
-    "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
-    },
-    "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
-    },
-    "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
-    },
-    "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
-    }
-   },
-   "official": 325624,
-   "gap": -2780,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 0,
-   "remainder": -2170
-  },
-  "the rolled-forward estimate misses the same emigrants": {
-   "national": 328400,
-   "districts": {
-    "D01": 57380,
-    "D02": 41440,
-    "D03": 33790,
-    "D04": 23030,
-    "D05": 26830,
-    "D06": 24900,
-    "D07": 25890,
-    "D08": 19240,
-    "D09": 17060,
-    "D10": 22310,
-    "D11": 14960,
-    "D12": 21560
-   },
-   "nat_half_pct": 0.59,
-   "nat_interval": [
-    326500,
-    330300
-   ],
-   "intervals": {
-    "D01": [
-     56620,
-     58140
-    ],
-    "D02": [
-     40760,
-     42120
-    ],
-    "D03": [
-     33140,
-     34440
-    ],
-    "D04": [
-     22640,
-     23430
-    ],
-    "D05": [
-     26090,
-     27580
-    ],
-    "D06": [
-     24560,
-     25250
-    ],
-    "D07": [
-     25360,
-     26410
-    ],
-    "D08": [
-     18810,
-     19680
-    ],
-    "D09": [
-     16770,
-     17350
-    ],
-    "D10": [
-     21830,
-     22800
-    ],
-    "D11": [
-     14660,
-     15250
-    ],
-    "D12": [
-     21070,
-     22050
-    ]
-   },
-   "p_line": {
-    "D01": 1.0,
-    "D02": 1.0,
-    "D03": 1.0,
-    "D04": 0.0,
-    "D05": 1.0,
-    "D06": 0.32,
+    "D06": 1.0,
     "D07": 1.0,
     "D08": 0.0,
     "D09": 0.0,
@@ -5408,156 +3505,1844 @@
      "D01",
      "D02",
      "D03",
+     "D04",
      "D05",
+     "D06",
      "D07"
     ],
+    "too close to call": []
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.059,
+    "30-44": 1.029
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 0,
+    "D02": 0,
+    "D03": 0,
+    "D04": 0,
+    "D05": 0,
+    "D06": 0,
+    "D07": 0,
+    "D08": 0,
+    "D09": 0,
+    "D10": 0,
+    "D11": 0,
+    "D12": 0
+   },
+   "listed_elsewhere": {
+    "D01": 1300,
+    "D02": 980,
+    "D03": 2080,
+    "D04": 730,
+    "D05": 1700,
+    "D06": 710,
+    "D07": 1060,
+    "D08": 660,
+    "D09": 570,
+    "D10": 660,
+    "D11": 500,
+    "D12": 680
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D02": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D03": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D04": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D05": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D06": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D07": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D08": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D09": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D10": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D11": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    },
+    "D12": {
+     "left Kilvarra or died": 0,
+     "duplicate registrations": 0,
+     "living elsewhere in Kilvarra": 0
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3434,
+    "D02": 1947,
+    "D03": 2040,
+    "D04": 876,
+    "D05": 1546,
+    "D06": 1123,
+    "D07": 1300,
+    "D08": 687,
+    "D09": 523,
+    "D10": 911,
+    "D11": 528,
+    "D12": 878
+   },
+   "official": 325247,
+   "gap": -39190,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -45730
+  },
+  "movers with no district recorded counted as gone": {
+   "national": 293850,
+   "districts": {
+    "D01": 50550,
+    "D02": 36500,
+    "D03": 30520,
+    "D04": 20860,
+    "D05": 24250,
+    "D06": 21720,
+    "D07": 22900,
+    "D08": 18140,
+    "D09": 15440,
+    "D10": 19910,
+    "D11": 13800,
+    "D12": 19260
+   },
+   "nat_half_pct": 0.52,
+   "nat_interval": [
+    292300,
+    295400
+   ],
+   "intervals": {
+    "D01": [
+     49890,
+     51220
+    ],
+    "D02": [
+     35950,
+     37050
+    ],
+    "D03": [
+     29980,
+     31060
+    ],
+    "D04": [
+     20370,
+     21350
+    ],
+    "D05": [
+     23610,
+     24900
+    ],
+    "D06": [
+     21280,
+     22160
+    ],
+    "D07": [
+     22370,
+     23430
+    ],
+    "D08": [
+     17800,
+     18470
+    ],
+    "D09": [
+     15100,
+     15790
+    ],
+    "D10": [
+     19410,
+     20410
+    ],
+    "D11": [
+     13460,
+     14140
+    ],
+    "D12": [
+     18950,
+     19560
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 0.03,
+    "D06": 0.0,
+    "D07": 0.0,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03"
+    ],
+    "too close to call": []
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.101,
+    "30-44": 1.064
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 13970,
+    "D02": 8530,
+    "D03": 6840,
+    "D04": 4140,
+    "D05": 5160,
+    "D06": 5700,
+    "D07": 4780,
+    "D08": 3200,
+    "D09": 2860,
+    "D10": 4120,
+    "D11": 2370,
+    "D12": 3670
+   },
+   "listed_elsewhere": {
+    "D01": 930,
+    "D02": 720,
+    "D03": 1530,
+    "D04": 560,
+    "D05": 1260,
+    "D06": 510,
+    "D07": 820,
+    "D08": 530,
+    "D09": 420,
+    "D10": 500,
+    "D11": 390,
+    "D12": 520
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 8910,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 3940
+    },
+    "D02": {
+     "left Kilvarra or died": 4940,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 2780
+    },
+    "D03": {
+     "left Kilvarra or died": 3610,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 2440
+    },
+    "D04": {
+     "left Kilvarra or died": 1620,
+     "duplicate registrations": 550,
+     "living elsewhere in Kilvarra": 1970
+    },
+    "D05": {
+     "left Kilvarra or died": 2560,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 1870
+    },
+    "D06": {
+     "left Kilvarra or died": 2960,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 2150
+    },
+    "D07": {
+     "left Kilvarra or died": 2660,
+     "duplicate registrations": 620,
+     "living elsewhere in Kilvarra": 1500
+    },
+    "D08": {
+     "left Kilvarra or died": 1610,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D09": {
+     "left Kilvarra or died": 1480,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 1070
+    },
+    "D10": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 1680
+    },
+    "D11": {
+     "left Kilvarra or died": 980,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 1010
+    },
+    "D12": {
+     "left Kilvarra or died": 1950,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 1180
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2754,
+    "D02": 1647,
+    "D03": 1740,
+    "D04": 776,
+    "D05": 1326,
+    "D06": 913,
+    "D07": 1140,
+    "D08": 657,
+    "D09": 473,
+    "D10": 791,
+    "D11": 488,
+    "D12": 788
+   },
+   "official": 325247,
+   "gap": 31400,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 10910,
+   "remainder": 21090
+  },
+  "the estimate scaled to the rolled-forward total": {
+   "national": 325250,
+   "districts": {
+    "D01": 56590,
+    "D02": 40180,
+    "D03": 34180,
+    "D04": 23050,
+    "D05": 26680,
+    "D06": 24310,
+    "D07": 25120,
+    "D08": 20040,
+    "D09": 16850,
+    "D10": 21860,
+    "D11": 15380,
+    "D12": 21010
+   },
+   "nat_half_pct": 0.0,
+   "nat_interval": [
+    325200,
+    325200
+   ],
+   "intervals": {
+    "D01": [
+     56060,
+     57130
+    ],
+    "D02": [
+     39730,
+     40630
+    ],
+    "D03": [
+     33710,
+     34640
+    ],
+    "D04": [
+     22730,
+     23380
+    ],
+    "D05": [
+     26170,
+     27180
+    ],
+    "D06": [
+     23960,
+     24650
+    ],
+    "D07": [
+     24690,
+     25550
+    ],
+    "D08": [
+     19740,
+     20340
+    ],
+    "D09": [
+     16560,
+     17140
+    ],
+    "D10": [
+     21460,
+     22270
+    ],
+    "D11": [
+     15090,
+     15660
+    ],
+    "D12": [
+     20710,
+     21310
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.67,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
     "too close to call": [
-     "D06"
+     "D07"
     ]
    },
    "coverage": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 94.9,
+    "others": 85.1
    },
    "linked": {
-    "nationals": 92.2,
-    "others": 71.8
+    "nationals": 92.3,
+    "others": 72.3
    },
    "recall": {
-    "nationals": 97.0,
-    "others": 83.0
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.095,
+    "30-44": 1.048
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3904,
+    "D02": 2407,
+    "D03": 2450,
+    "D04": 1196,
+    "D05": 1856,
+    "D06": 1393,
+    "D07": 1600,
+    "D08": 1007,
+    "D09": 763,
+    "D10": 1191,
+    "D11": 788,
+    "D12": 1168
+   },
+   "official": 325247,
+   "gap": 0,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -6540
+  },
+  "serving personnel in the dual-system estimate": {
+   "national": 320310,
+   "districts": {
+    "D01": 55880,
+    "D02": 39680,
+    "D03": 33770,
+    "D04": 21900,
+    "D05": 26360,
+    "D06": 24000,
+    "D07": 24800,
+    "D08": 19780,
+    "D09": 16630,
+    "D10": 21590,
+    "D11": 15180,
+    "D12": 20740
+   },
+   "nat_half_pct": 0.41,
+   "nat_interval": [
+    319000,
+    321600
+   ],
+   "intervals": {
+    "D01": [
+     55310,
+     56460
+    ],
+    "D02": [
+     39220,
+     40130
+    ],
+    "D03": [
+     33300,
+     34240
+    ],
+    "D04": [
+     21560,
+     22230
+    ],
+    "D05": [
+     25830,
+     26900
+    ],
+    "D06": [
+     23640,
+     24350
+    ],
+    "D07": [
+     24370,
+     25240
+    ],
+    "D08": [
+     19470,
+     20090
+    ],
+    "D09": [
+     16340,
+     16920
+    ],
+    "D10": [
+     21170,
+     22000
+    ],
+    "D11": [
+     14900,
+     15460
+    ],
+    "D12": [
+     20430,
+     21060
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.23,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.116,
+    "30-44": 1.061
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 0,
+   "on_no_list": {
+    "D01": 3194,
+    "D02": 1907,
+    "D03": 2040,
+    "D04": 903,
+    "D05": 1536,
+    "D06": 1083,
+    "D07": 1280,
+    "D08": 747,
+    "D09": 543,
+    "D10": 921,
+    "D11": 588,
+    "D12": 898
+   },
+   "official": 325247,
+   "gap": 4930,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -1610
+  },
+  "the sex ratio taken without serving personnel on the estimate's side": {
+   "national": 321170,
+   "districts": {
+    "D01": 55880,
+    "D02": 39680,
+    "D03": 33770,
+    "D04": 22760,
+    "D05": 26360,
+    "D06": 24000,
+    "D07": 24800,
+    "D08": 19780,
+    "D09": 16630,
+    "D10": 21590,
+    "D11": 15180,
+    "D12": 20740
+   },
+   "nat_half_pct": 0.41,
+   "nat_interval": [
+    319800,
+    322500
+   ],
+   "intervals": {
+    "D01": [
+     55310,
+     56460
+    ],
+    "D02": [
+     39220,
+     40130
+    ],
+    "D03": [
+     33300,
+     34240
+    ],
+    "D04": [
+     22420,
+     23090
+    ],
+    "D05": [
+     25830,
+     26900
+    ],
+    "D06": [
+     23640,
+     24350
+    ],
+    "D07": [
+     24370,
+     25240
+    ],
+    "D08": [
+     19470,
+     20090
+    ],
+    "D09": [
+     16340,
+     16920
+    ],
+    "D10": [
+     21170,
+     22000
+    ],
+    "D11": [
+     14900,
+     15460
+    ],
+    "D12": [
+     20430,
+     21060
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.23,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.116,
+    "30-44": 1.061
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3194,
+    "D02": 1907,
+    "D03": 2040,
+    "D04": 906,
+    "D05": 1536,
+    "D06": 1083,
+    "D07": 1280,
+    "D08": 747,
+    "D09": 543,
+    "D10": 921,
+    "D11": 588,
+    "D12": 898
+   },
+   "official": 325247,
+   "gap": 4080,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -2460
+  },
+  "the sample blocks' estimate expanded by their selection probabilities": {
+   "national": 323820,
+   "districts": {
+    "D01": 56600,
+    "D02": 40080,
+    "D03": 33560,
+    "D04": 23500,
+    "D05": 26610,
+    "D06": 24290,
+    "D07": 25050,
+    "D08": 20010,
+    "D09": 16920,
+    "D10": 22050,
+    "D11": 14720,
+    "D12": 20430
+   },
+   "nat_half_pct": 1.23,
+   "nat_interval": [
+    319800,
+    327800
+   ],
+   "intervals": {
+    "D01": [
+     55070,
+     58130
+    ],
+    "D02": [
+     38870,
+     41300
+    ],
+    "D03": [
+     32400,
+     34720
+    ],
+    "D04": [
+     22520,
+     24470
+    ],
+    "D05": [
+     25540,
+     27680
+    ],
+    "D06": [
+     23230,
+     25350
+    ],
+    "D07": [
+     23950,
+     26150
+    ],
+    "D08": [
+     19150,
+     20880
+    ],
+    "D09": [
+     16030,
+     17800
+    ],
+    "D10": [
+     21160,
+     22940
+    ],
+    "D11": [
+     13790,
+     15650
+    ],
+    "D12": [
+     19590,
+     21260
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.01,
+    "D05": 0.99,
+    "D06": 0.14,
+    "D07": 0.53,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D06",
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.132,
+    "30-44": 1.07
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9220,
+    "D02": 5770,
+    "D03": 4010,
+    "D04": 2580,
+    "D05": 3470,
+    "D06": 3700,
+    "D07": 3160,
+    "D08": 1720,
+    "D09": 1830,
+    "D10": 2670,
+    "D11": 1100,
+    "D12": 2300
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 820,
+    "D03": 1710,
+    "D04": 660,
+    "D05": 1390,
+    "D06": 590,
+    "D07": 920,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 420,
+    "D12": 560
+   },
+   "register": {
+    "D01": 61500,
+    "D02": 42976,
+    "D03": 33771,
+    "D04": 23550,
+    "D05": 27104,
+    "D06": 26287,
+    "D07": 25899,
+    "D08": 20386,
+    "D09": 17701,
+    "D10": 23211,
+    "D11": 14812,
+    "D12": 21270
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6180,
+     "duplicate registrations": 1130,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3450,
+     "duplicate registrations": 820,
+     "living elsewhere in Kilvarra": 1500
+    },
+    "D03": {
+     "left Kilvarra or died": 2200,
+     "duplicate registrations": 770,
+     "living elsewhere in Kilvarra": 1040
+    },
+    "D04": {
+     "left Kilvarra or died": 1010,
+     "duplicate registrations": 580,
+     "living elsewhere in Kilvarra": 990
+    },
+    "D05": {
+     "left Kilvarra or died": 1740,
+     "duplicate registrations": 740,
+     "living elsewhere in Kilvarra": 990
+    },
+    "D06": {
+     "left Kilvarra or died": 2000,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1110
+    },
+    "D07": {
+     "left Kilvarra or died": 1790,
+     "duplicate registrations": 630,
+     "living elsewhere in Kilvarra": 740
+    },
+    "D08": {
+     "left Kilvarra or died": 860,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 980,
+     "duplicate registrations": 320,
+     "living elsewhere in Kilvarra": 530
+    },
+    "D10": {
+     "left Kilvarra or died": 1120,
+     "duplicate registrations": 680,
+     "living elsewhere in Kilvarra": 870
+    },
+    "D11": {
+     "left Kilvarra or died": 420,
+     "duplicate registrations": 370,
+     "living elsewhere in Kilvarra": 310
+    },
+    "D12": {
+     "left Kilvarra or died": 1260,
+     "duplicate registrations": 520,
+     "living elsewhere in Kilvarra": 520
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3270,
+    "D02": 2054,
+    "D03": 2089,
+    "D04": 1013,
+    "D05": 1586,
+    "D06": 1113,
+    "D07": 1391,
+    "D08": 754,
+    "D09": 569,
+    "D10": 949,
+    "D11": 588,
+    "D12": 900
+   },
+   "official": 325247,
+   "gap": 1430,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": -5110
+  }
+ },
+ "hinted": {
+  "the register and the coverage survey miss the same young men": {
+   "national": 320200,
+   "districts": {
+    "D01": 55710,
+    "D02": 39560,
+    "D03": 33650,
+    "D04": 22690,
+    "D05": 26260,
+    "D06": 23930,
+    "D07": 24730,
+    "D08": 19730,
+    "D09": 16590,
+    "D10": 21530,
+    "D11": 15140,
+    "D12": 20680
+   },
+   "nat_half_pct": 0.98,
+   "nat_interval": [
+    317100,
+    323300
+   ],
+   "intervals": {
+    "D01": [
+     54950,
+     56480
+    ],
+    "D02": [
+     38880,
+     40230
+    ],
+    "D03": [
+     32910,
+     34380
+    ],
+    "D04": [
+     22280,
+     23110
+    ],
+    "D05": [
+     25660,
+     26860
+    ],
+    "D06": [
+     23480,
+     24380
+    ],
+    "D07": [
+     24100,
+     25360
+    ],
+    "D08": [
+     19300,
+     20160
+    ],
+    "D09": [
+     16250,
+     16930
+    ],
+    "D10": [
+     20990,
+     22060
+    ],
+    "D11": [
+     14790,
+     15480
+    ],
+    "D12": [
+     20300,
+     21070
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 1.0,
+    "D06": 0.0,
+    "D07": 0.24,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
+   },
+   "k": {
+    "18-29": 1.095,
+    "30-44": 1.048
+   },
+   "da": {
+    "18-29": 1.0652,
+    "30-44": 1.0448
+   },
+   "over": {
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
+   },
+   "listed_elsewhere": {
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
+   },
+   "register": {
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
+   },
+   "over_parts": {
+    "D01": {
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
+    },
+    "D02": {
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
+    },
+    "D03": {
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
+    },
+    "D04": {
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
+    },
+    "D05": {
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
+    },
+    "D06": {
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
+    },
+    "D07": {
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
+    },
+    "D08": {
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
+    },
+    "D09": {
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
+    },
+    "D10": {
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
+    },
+    "D11": {
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
+    },
+    "D12": {
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
+    }
+   },
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 3024,
+    "D02": 1787,
+    "D03": 1920,
+    "D04": 836,
+    "D05": 1436,
+    "D06": 1013,
+    "D07": 1210,
+    "D08": 697,
+    "D09": 503,
+    "D10": 861,
+    "D11": 548,
+    "D12": 838
+   },
+   "official": 325247,
+   "gap": 5050,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 5650,
+   "remainder": 0
+  },
+  "the rolled-forward estimate misses the same emigrants": {
+   "national": 316150,
+   "districts": {
+    "D01": 55020,
+    "D02": 39060,
+    "D03": 33110,
+    "D04": 22450,
+    "D05": 25840,
+    "D06": 23650,
+    "D07": 24420,
+    "D08": 19510,
+    "D09": 16410,
+    "D10": 21280,
+    "D11": 14960,
+    "D12": 20440
+   },
+   "nat_half_pct": 0.79,
+   "nat_interval": [
+    313700,
+    318600
+   ],
+   "intervals": {
+    "D01": [
+     54270,
+     55760
+    ],
+    "D02": [
+     38460,
+     39670
+    ],
+    "D03": [
+     32440,
+     33770
+    ],
+    "D04": [
+     22060,
+     22830
+    ],
+    "D05": [
+     25290,
+     26390
+    ],
+    "D06": [
+     23230,
+     24080
+    ],
+    "D07": [
+     23830,
+     25000
+    ],
+    "D08": [
+     19100,
+     19930
+    ],
+    "D09": [
+     16090,
+     16740
+    ],
+    "D10": [
+     20770,
+     21780
+    ],
+    "D11": [
+     14650,
+     15280
+    ],
+    "D12": [
+     20080,
+     20800
+    ]
+   },
+   "p_line": {
+    "D01": 1.0,
+    "D02": 1.0,
+    "D03": 1.0,
+    "D04": 0.0,
+    "D05": 0.99,
+    "D06": 0.0,
+    "D07": 0.05,
+    "D08": 0.0,
+    "D09": 0.0,
+    "D10": 0.0,
+    "D11": 0.0,
+    "D12": 0.0
+   },
+   "call": {
+    "qualifies": [
+     "D01",
+     "D02",
+     "D03",
+     "D05"
+    ],
+    "too close to call": [
+     "D07"
+    ]
+   },
+   "coverage": {
+    "nationals": 94.9,
+    "others": 85.1
+   },
+   "linked": {
+    "nationals": 92.3,
+    "others": 72.3
+   },
+   "recall": {
+    "nationals": 96.5,
+    "others": 87.9
    },
    "k": {
     "18-29": 1.0,
     "30-44": 1.0
    },
    "da": {
-    "18-29": 1.0694,
-    "30-44": 1.0407
+    "18-29": 1.0652,
+    "30-44": 1.0448
    },
    "over": {
-    "D01": 9150,
-    "D02": 5640,
-    "D03": 4330,
-    "D04": 2380,
-    "D05": 3660,
-    "D06": 3440,
-    "D07": 3070,
-    "D08": 2340,
-    "D09": 1560,
-    "D10": 2420,
-    "D11": 1620,
-    "D12": 2350
+    "D01": 9200,
+    "D02": 5700,
+    "D03": 4100,
+    "D04": 2440,
+    "D05": 3410,
+    "D06": 3660,
+    "D07": 3110,
+    "D08": 1710,
+    "D09": 1800,
+    "D10": 2630,
+    "D11": 1140,
+    "D12": 2360
    },
    "listed_elsewhere": {
-    "D01": 1090,
-    "D02": 790,
-    "D03": 1890,
-    "D04": 560,
-    "D05": 1760,
-    "D06": 550,
-    "D07": 1110,
-    "D08": 420,
-    "D09": 510,
-    "D10": 870,
-    "D11": 380,
-    "D12": 740
-   },
-   "on_no_list": {
-    "D01": 5050,
-    "D02": 3610,
-    "D03": 2510,
-    "D04": 1450,
-    "D05": 1970,
-    "D06": 1840,
-    "D07": 2040,
-    "D08": 1190,
-    "D09": 730,
-    "D10": 1250,
-    "D11": 830,
-    "D12": 1580
+    "D01": 1050,
+    "D02": 810,
+    "D03": 1740,
+    "D04": 630,
+    "D05": 1410,
+    "D06": 580,
+    "D07": 910,
+    "D08": 590,
+    "D09": 480,
+    "D10": 560,
+    "D11": 440,
+    "D12": 580
    },
    "register": {
-    "D01": 60393,
-    "D02": 42672,
-    "D03": 33714,
-    "D04": 22581,
-    "D05": 26770,
-    "D06": 25952,
-    "D07": 25796,
-    "D08": 19971,
-    "D09": 17383,
-    "D10": 22615,
-    "D11": 15360,
-    "D12": 21582
+    "D01": 60836,
+    "D02": 42663,
+    "D03": 34090,
+    "D04": 22807,
+    "D05": 26824,
+    "D06": 25997,
+    "D07": 25720,
+    "D08": 20153,
+    "D09": 17407,
+    "D10": 22739,
+    "D11": 15292,
+    "D12": 21622
    },
    "over_parts": {
     "D01": {
-     "left Kilvarra or died": 5550,
-     "duplicate registrations": 1400,
-     "living elsewhere in Kilvarra": 2200
+     "left Kilvarra or died": 6170,
+     "duplicate registrations": 1120,
+     "living elsewhere in Kilvarra": 1910
     },
     "D02": {
-     "left Kilvarra or died": 3140,
-     "duplicate registrations": 990,
-     "living elsewhere in Kilvarra": 1510
+     "left Kilvarra or died": 3410,
+     "duplicate registrations": 810,
+     "living elsewhere in Kilvarra": 1480
     },
     "D03": {
-     "left Kilvarra or died": 2130,
-     "duplicate registrations": 910,
-     "living elsewhere in Kilvarra": 1280
+     "left Kilvarra or died": 2250,
+     "duplicate registrations": 790,
+     "living elsewhere in Kilvarra": 1060
     },
     "D04": {
-     "left Kilvarra or died": 1070,
-     "duplicate registrations": 600,
-     "living elsewhere in Kilvarra": 710
+     "left Kilvarra or died": 960,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 940
     },
     "D05": {
-     "left Kilvarra or died": 1750,
-     "duplicate registrations": 660,
-     "living elsewhere in Kilvarra": 1250
+     "left Kilvarra or died": 1710,
+     "duplicate registrations": 730,
+     "living elsewhere in Kilvarra": 970
     },
     "D06": {
-     "left Kilvarra or died": 2210,
-     "duplicate registrations": 550,
-     "living elsewhere in Kilvarra": 680
+     "left Kilvarra or died": 1980,
+     "duplicate registrations": 590,
+     "living elsewhere in Kilvarra": 1090
     },
     "D07": {
-     "left Kilvarra or died": 1610,
-     "duplicate registrations": 430,
-     "living elsewhere in Kilvarra": 1030
+     "left Kilvarra or died": 1770,
+     "duplicate registrations": 610,
+     "living elsewhere in Kilvarra": 730
     },
     "D08": {
-     "left Kilvarra or died": 1170,
-     "duplicate registrations": 510,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 850,
+     "duplicate registrations": 530,
+     "living elsewhere in Kilvarra": 330
     },
     "D09": {
-     "left Kilvarra or died": 470,
-     "duplicate registrations": 740,
-     "living elsewhere in Kilvarra": 360
+     "left Kilvarra or died": 970,
+     "duplicate registrations": 310,
+     "living elsewhere in Kilvarra": 520
     },
     "D10": {
-     "left Kilvarra or died": 1060,
-     "duplicate registrations": 720,
-     "living elsewhere in Kilvarra": 640
+     "left Kilvarra or died": 1110,
+     "duplicate registrations": 670,
+     "living elsewhere in Kilvarra": 850
     },
     "D11": {
-     "left Kilvarra or died": 670,
-     "duplicate registrations": 360,
-     "living elsewhere in Kilvarra": 590
+     "left Kilvarra or died": 440,
+     "duplicate registrations": 380,
+     "living elsewhere in Kilvarra": 320
     },
     "D12": {
-     "left Kilvarra or died": 1080,
-     "duplicate registrations": 610,
-     "living elsewhere in Kilvarra": 660
+     "left Kilvarra or died": 1290,
+     "duplicate registrations": 540,
+     "living elsewhere in Kilvarra": 530
     }
    },
-   "official": 325624,
-   "gap": -2780,
-   "imm_not_in_accounts": 608,
-   "unrecorded_emigration": 6920,
-   "remainder": -9090
+   "serving_personnel": 857,
+   "on_no_list": {
+    "D01": 2334,
+    "D02": 1287,
+    "D03": 1380,
+    "D04": 596,
+    "D05": 1016,
+    "D06": 733,
+    "D07": 900,
+    "D08": 477,
+    "D09": 323,
+    "D10": 611,
+    "D11": 368,
+    "D12": 598
+   },
+   "official": 325247,
+   "gap": 9100,
+   "imm_not_in_accounts": 603,
+   "unrecorded_emigration": 7140,
+   "remainder": 2560
   }
  },
  "perturbation_figures": {
@@ -5572,18 +5357,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55790,
-    "D02": 40210,
-    "D03": 33040,
-    "D04": 22650,
-    "D05": 26160,
-    "D06": 24330,
-    "D07": 25190,
-    "D08": 18890,
-    "D09": 16930,
-    "D10": 22030,
-    "D11": 14750,
-    "D12": 21020
+    "D01": 56000,
+    "D02": 39750,
+    "D03": 33850,
+    "D04": 22800,
+    "D05": 26420,
+    "D06": 24040,
+    "D07": 24850,
+    "D08": 19810,
+    "D09": 16660,
+    "D10": 21630,
+    "D11": 15210,
+    "D12": 20780
    }
   },
   "raising factors down by one bootstrap standard deviation": {
@@ -5597,18 +5382,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55170,
-    "D02": 39790,
-    "D03": 32620,
-    "D04": 22430,
-    "D05": 25840,
-    "D06": 24080,
-    "D07": 24910,
-    "D08": 18720,
-    "D09": 16780,
-    "D10": 21800,
-    "D11": 14600,
-    "D12": 20810
+    "D01": 55430,
+    "D02": 39360,
+    "D03": 33440,
+    "D04": 22600,
+    "D05": 26100,
+    "D06": 23820,
+    "D07": 24600,
+    "D08": 19640,
+    "D09": 16520,
+    "D10": 21430,
+    "D11": 15070,
+    "D12": 20590
    }
   },
   "missed links 20 per cent fewer": {
@@ -5622,18 +5407,18 @@
     "D07"
    ],
    "est": {
-    "D01": 56020,
-    "D02": 40390,
-    "D03": 33110,
-    "D04": 22690,
-    "D05": 26230,
-    "D06": 24400,
-    "D07": 25280,
-    "D08": 18930,
-    "D09": 16930,
-    "D10": 22040,
-    "D11": 14760,
-    "D12": 21090
+    "D01": 56300,
+    "D02": 39870,
+    "D03": 34000,
+    "D04": 22830,
+    "D05": 26510,
+    "D06": 24110,
+    "D07": 24950,
+    "D08": 19830,
+    "D09": 16660,
+    "D10": 21660,
+    "D11": 15230,
+    "D12": 20810
    }
   },
   "missed links 20 per cent more": {
@@ -5647,18 +5432,18 @@
     "D07"
    ],
    "est": {
-    "D01": 54960,
-    "D02": 39620,
-    "D03": 32550,
-    "D04": 22390,
-    "D05": 25780,
-    "D06": 24010,
-    "D07": 24830,
-    "D08": 18680,
-    "D09": 16780,
-    "D10": 21780,
-    "D11": 14590,
-    "D12": 20740
+    "D01": 55150,
+    "D02": 39250,
+    "D03": 33300,
+    "D04": 22560,
+    "D05": 26020,
+    "D06": 23750,
+    "D07": 24510,
+    "D08": 19630,
+    "D09": 16520,
+    "D10": 21390,
+    "D11": 15050,
+    "D12": 20570
    }
   },
   "no-contact records' chance of being resident up by one bootstrap standard deviation": {
@@ -5672,18 +5457,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55500,
-    "D02": 40010,
-    "D03": 32840,
-    "D04": 22540,
-    "D05": 26010,
-    "D06": 24210,
-    "D07": 25060,
-    "D08": 18810,
-    "D09": 16860,
-    "D10": 21920,
-    "D11": 14680,
-    "D12": 20920
+    "D01": 55740,
+    "D02": 39570,
+    "D03": 33660,
+    "D04": 22700,
+    "D05": 26270,
+    "D06": 23940,
+    "D07": 24740,
+    "D08": 19740,
+    "D09": 16590,
+    "D10": 21540,
+    "D11": 15140,
+    "D12": 20690
    }
   },
   "no-contact records' chance of being resident down by one bootstrap standard deviation": {
@@ -5697,18 +5482,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55450,
-    "D02": 39980,
-    "D03": 32820,
-    "D04": 22530,
-    "D05": 25990,
-    "D06": 24200,
-    "D07": 25050,
-    "D08": 18800,
-    "D09": 16850,
-    "D10": 21900,
-    "D11": 14670,
-    "D12": 20910
+    "D01": 55690,
+    "D02": 39540,
+    "D03": 33630,
+    "D04": 22690,
+    "D05": 26250,
+    "D06": 23920,
+    "D07": 24720,
+    "D08": 19720,
+    "D09": 16580,
+    "D10": 21520,
+    "D11": 15130,
+    "D12": 20680
    }
   },
   "intervals 20 per cent wider": {
@@ -5722,18 +5507,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55480,
-    "D02": 40000,
-    "D03": 32830,
-    "D04": 22540,
-    "D05": 26000,
-    "D06": 24200,
-    "D07": 25050,
-    "D08": 18800,
-    "D09": 16860,
-    "D10": 21910,
-    "D11": 14670,
-    "D12": 20910
+    "D01": 55710,
+    "D02": 39560,
+    "D03": 33650,
+    "D04": 22700,
+    "D05": 26260,
+    "D06": 23930,
+    "D07": 24730,
+    "D08": 19730,
+    "D09": 16590,
+    "D10": 21530,
+    "D11": 15140,
+    "D12": 20680
    }
   },
   "intervals 20 per cent narrower": {
@@ -5747,18 +5532,18 @@
     "D07"
    ],
    "est": {
-    "D01": 55480,
-    "D02": 40000,
-    "D03": 32830,
-    "D04": 22540,
-    "D05": 26000,
-    "D06": 24200,
-    "D07": 25050,
-    "D08": 18800,
-    "D09": 16860,
-    "D10": 21910,
-    "D11": 14670,
-    "D12": 20910
+    "D01": 55710,
+    "D02": 39560,
+    "D03": 33650,
+    "D04": 22700,
+    "D05": 26260,
+    "D06": 23930,
+    "D07": 24730,
+    "D08": 19730,
+    "D09": 16590,
+    "D10": 21530,
+    "D11": 15140,
+    "D12": 20680
    }
   }
  },
@@ -5776,7 +5561,7 @@
   ],
   "on_no_list_pct": 25.0,
   "p": 0.16,
-  "emig_pct": 15.0,
+  "emig_pct": 5.0,
   "gap_pct_of_national": 0.6
  }
 }

@@ -247,7 +247,7 @@ def build(seed=PR.SEED):
     lage = np.clip(rng.normal(36, 13, nleg), 1, 90).astype(int)
     lsex = (rng.random(nleg) < 0.54).astype(np.int8)
     ldob = PR.T0 - (lage * 365.25).astype(np.int32) - rng.integers(0, 365, nleg)
-    lleave = PR.T0 - (rng.uniform(1.5, 10.5, nleg) * 365).astype(np.int32)
+    lleave = PR.T0 - (rng.uniform(0.05, 10.5, nleg) * 365).astype(np.int32)
     lpid = P.add(sex=lsex, dob=ldob, nat=lnat,
                  origin=np.where(lnat == 1, 1 + rng.choice(len(PR.ORIGINS), size=nleg, p=[o[1] for o in PR.ORIGINS]), 0),
                  v=rng.normal(0, PR.VIS_SD, nleg).astype(np.float32), offgrid=np.zeros(nleg, bool), dist=np.full(nleg, -1),

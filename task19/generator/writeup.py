@@ -12,6 +12,22 @@ def ptxt(p):
     return "above 0.99" if p > 0.99 else ("below 0.01" if p < 0.01 else "%.2f" % p)
 
 
+def and_join(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else (", ".join(xs[:-1]) + " and " + xs[-1] if xs else "")
+
+
+def status(d, call):
+    return "qualifying" if d in call["qualifies"] else ("too close to call" if d in call["too close to call"] else
+                                                         "not qualifying")
+
+
+def call_diff(alt, gold, dists):
+    """The districts whose status another reading changes, as words."""
+    out = ["%s %s" % (NAMES[d], status(d, alt)) for d in dists if status(d, alt) != status(d, gold)]
+    return " and ".join(out) if out else "no district"
+
+
 def write(F, path, workbook, note):
     dists = list(F["district_estimates"].keys())
     call = F["call"]
@@ -31,16 +47,14 @@ def write(F, path, workbook, note):
     rec = ("**Certify %s as qualifying for the 2027/28 urban-services supplement, report %s as too close to call (chance "
            "of 25,000 or more %s, so half rate under circular 2026/14 paragraph 3.2), and %s as not qualifying**, on "
            "estimated usual residents of %s for Kilvarra (90 per cent interval %s to %s). "
-           % (", ".join(NAMES[d] for d in q), " and ".join(NAMES[d] for d in tc),
-              " and ".join(ptxt(F["p_line"][d]) for d in tc), ", ".join(NAMES[d] for d in nq),
+           % (and_join(NAMES[d] for d in q), and_join(NAMES[d] for d in tc),
+              and_join(ptxt(F["p_line"][d]) for d in tc), and_join(NAMES[d] for d in nq),
               n0(F["national_estimate"]), n0(lo), n0(hi)))
-    rec += ("Reject the register's counts, which put %s over the line; the %s that reading the matcher's links as the "
-            "register's coverage and assuming independence gives, with %s qualifying on a national interval of plus or "
-            "minus %.1f per cent; and the rolled-forward %s as a check on either, because it misses the same emigrants "
-            "the register still lists."
+    rec += ("Reject the register's counts, which put %s over the line; the %s that assuming the register and the survey "
+            "miss people independently gives, which leaves %s; and the rolled-forward %s as a check on either, because "
+            "it misses the same emigrants the register still lists."
             % (" and ".join(NAMES[d] for d in dists if F["register_counts"][d] >= 25000 and d not in q) or "no other district",
-               n0(F["careful_national"]), " and ".join(NAMES[d] for d in car_q_extra) or "the same districts",
-               F["careful_halfwidth_pct"], n0(F["official_2026"])))
+               n0(F["careful_national"]), call_diff(car, call, dists), n0(F["official_2026"])))
     L.append(rec + "\n")
     L.append("## Supplementary Questions\n")
     L.append("### %s\n" % workbook)
@@ -53,23 +67,29 @@ def write(F, path, workbook, note):
                  n0(lo), n0(hi), F["national_halfwidth_pct"],
                  "; ".join("%s %s to %s" % (NAMES[d], n0(F["district_intervals"][d][0]), n0(F["district_intervals"][d][1]))
                            for d in dists if d in tc or d in ("D05", "D06"))))
-    L.append("3. The supplement column: %s qualify; %s too close to call, with a chance of 25,000 or more of %s (within "
-             "0.16); %s do not qualify." % (", ".join(NAMES[d] for d in q), " and ".join(NAMES[d] for d in tc),
-                                           " and ".join(ptxt(F["p_line"][d]) for d in tc),
-                                           ", ".join(NAMES[d] for d in nq)))
-    L.append("4. A \"Register to estimate\" sheet: for each district its register count, the entries that are not correct "
-             "for the district (people who left Kilvarra or died, duplicate registrations and people living elsewhere in "
-             "Kilvarra), the residents listed in another district and the residents on no list, adding to the estimate. "
-             "Entries not correct for the district, each within 8 per cent: " +
+    L.append("3. The supplement column: %s qualify; %s too close to call, with a chance of 25,000 or more of %s; %s do not "
+             "qualify." % (and_join(NAMES[d] for d in q), and_join(NAMES[d] for d in tc),
+                           " and ".join("%s (between %.2f and %.2f, the chance any estimate within 1.0 per cent of it gives)"
+                                        % (ptxt(F["p_line"][d]), F["p_band"][d][0], F["p_band"][d][1]) for d in tc),
+                           and_join(NAMES[d] for d in nq)))
+    L.append("4. A \"Register to estimate\" sheet: for each district its register count, the entries that should not count "
+             "for the district (people who left Kilvarra or died, duplicate registrations and people living in another "
+             "district), the district's residents listed in another district and its residents on no list, adding to the "
+             "estimate (Fort Larrick's with a fourth part, the %s serving personnel the Defence Forces' return places at "
+             "Larrick Barracks). Entries that should not count for the district, each within 8 per cent: " % n0(F["serving_personnel"]) +
              "; ".join("%s %s" % (NAMES[d], n0(F["register_not_correct"][d])) for d in dists) + ".")
     L.append("5. Residents listed in another district, each within 25 per cent (or 40 people): " +
              "; ".join("%s %s" % (NAMES[d], n0(F["listed_elsewhere"][d])) for d in dists) +
-             ". Residents on no list, each within 25 per cent (or 40 people): " +
-             "; ".join("%s %s" % (NAMES[d], n0(F["on_no_list"][d])) for d in dists) + ".")
-    L.append("6. A \"National bridge\" sheet from the rolled-forward %s to the estimate: a gap of %s (within 0.6 per cent "
-             "of the national figure), of which emigrants since mid-2021 never recorded in the accounts %s (within 15 per "
-             "cent), arrivals on the border record missing from the accounts %s (exact), and a remainder of %s."
-             % (n0(F["official_2026"]), n0(F["official_gap"]), n0(F["unrecorded_emigration"]),
+             ". Residents on no list, each within the band shown (the wider of 25 per cent and what the bands of the "
+             "estimate, the entries that should not count and the residents listed elsewhere give together): " +
+             "; ".join("%s %s (plus or minus %s)" % (NAMES[d], n0(F["on_no_list"][d]), n0(F["on_no_list_band"][d]))
+                       for d in dists) + ".")
+    L.append("6. A \"National bridge\" sheet from the rolled-forward %s to the estimate, component by component: a gap of "
+             "%s (within 0.6 per cent of the national figure), of which emigration the accounts never recorded (emigrants "
+             "since mid-2021 still listed) %s (within %d per cent), immigration they missed (arrivals on the border record "
+             "missing from the accounts) %s (exact), births and deaths none, and a remainder of %s for the 2021 base and the "
+             "estimate's own sampling error (within 0.6 per cent of the national figure)."
+             % (n0(F["official_2026"]), n0(F["official_gap"]), n0(F["unrecorded_emigration"]), int(F["emig_band_pct"]),
                 n0(F["immigration_not_in_accounts"]), n0(F["official_remainder"])))
     L.append("7. The share of the coverage survey's residents (serving personnel aside) on their own district's list, "
              "missed and false links counted: Kilvarran citizens %.1f per cent (within 0.6 point), others %.1f per cent "
@@ -89,7 +109,7 @@ def write(F, path, workbook, note):
                  F["raising_factor"]["18-29"], F["raising_factor"]["30-44"], F["constants"]["band_k"]))
     L.append("3. Kilvarra's 90 per cent interval is **%s to %s** (plus or minus %.1f per cent); resampling the survey "
              "blocks with the linkage correction and the raising factors held fixed gives plus or minus %.1f." % (
-                 n0(lo), n0(hi), F["national_halfwidth_pct"], F["careful_halfwidth_pct"]))
+                 n0(lo), n0(hi), F["national_halfwidth_pct"], F["survey_only_halfwidth_pct"]))
     L.append("4. The rolled-forward estimate of %s is **%s** above the estimate; **%s** emigrants since mid-2021 are still "
              "listed and missing from the accounts, against %s arrivals the accounts left out." % (
                  n0(F["official_2026"]), n0(F["official_gap"]), n0(F["unrecorded_emigration"]),
@@ -114,29 +134,45 @@ def write(F, path, workbook, note):
         "district). Entries not correct: " +
         ", ".join("%s %s" % (NAMES[d], n0(F["register_not_correct"][d])) for d in ("D05", "D06", "D07")) + ".",
         "Divided each district's correct entries, by age group and sex, by the share of the survey's people in that "
-        "cell on the district's list; serving personnel came from the Defence Forces' return instead.",
+        "cell on the district's list (each district's own register count carrying its figure, not the sample blocks' "
+        "entries expanded by their selection probabilities), serving personnel left out of both sides and students counted "
+        "where the survey found them, at their term-time addresses (the enrolment return is not added on top, which would "
+        "count them twice); the Defence Forces' return's %s at Larrick "
+        "Barracks were added to Fort Larrick, because paragraph 2.2 counts personnel at the base where they are "
+        "stationed, and a serving member's civilian entry at another address is an entry that should not count there."
+        % n0(F["serving_personnel"]),
         "Built men per woman for Kilvarrans aged 18 to 29 and 30 to 44 from births by sex and the life table's survival, "
-        "and compared it with the estimate's (serving personnel added back on that side): raising factors %.3f and %.3f "
+        "taking Kilvarrans' net migration since birth as the same for men and women, and compared it with the "
+        "estimate's (serving personnel added back on that side): raising factors %.3f and %.3f "
         "applied to every district's men of those ages. Independence leaves Kilvarra %s lower." % (
             F["raising_factor"]["18-29"], F["raising_factor"]["30-44"], n0(F["independence_gap"])),
         "Resampled the survey's blocks within districts and repeated every step, the clerical review's table and the "
         "raising factors included: Kilvarra %s (%s to %s); each district's chance of 25,000 or more from its estimate and "
         "spread, and the call under paragraph 3.2." % (n0(F["national_estimate"]), n0(lo), n0(hi)),
         "Bridged each register count to its estimate, the parts adding up, and the rolled-forward figure to the "
-        "estimate: emigrants since mid-2021 still listed (the follow-up's people who left Kilvarra, dated by the year "
-        "they left, those not known at the address shared out as the district's known outcomes are) less those whose "
-        "departure the border system recorded: %s." % n0(F["unrecorded_emigration"]),
+        "estimate: emigrants since mid-2021 still listed (the follow-up's people who left Kilvarra in July 2021 or "
+        "later by the month the household gave, no leaving month falling after June 2026, the undated shared as the "
+        "dated are and those not known at the address shared out as the district's known outcomes are) less those whose "
+        "departure the border system recorded, which the accounts already hold: %s." % n0(F["unrecorded_emigration"]),
     ]
     for i, s in enumerate(steps, 1):
         L.append("%d. %s" % (i, s))
     L.append("")
     a1, b1 = F["linked_share_effect_pct"]
     a4, b4 = F["independence_effect_pct"]
-    L.append("No other call survives. Reading the matcher's links as coverage lifts the districts by %.1f to %.1f per "
-             "cent, and independence lowers them by %.1f to %.1f per cent; with both, and with the survey alone "
-             "resampled (plus or minus %.1f per cent for Kilvarra against %.1f), %s reads as qualifying. Calibrating to the "
-             "rolled-forward total, or reading the register's own counts, carries the emigrants both still hold, and puts "
-             "%s over the line." % (a1, b1, -b4, -a4, F["careful_halfwidth_pct"], F["national_halfwidth_pct"],
-                                    " and ".join(NAMES[d] for d in car_q_extra) or "the close district",
-                                    " and ".join(NAMES[d] for d in dists if F["register_counts"][d] >= 25000 and d not in q) or "another district"))
+    ratios = F["ht_register_ratio"]
+    rlo, rhi = min(ratios.values()), max(ratios.values())
+    L.append("No other call survives. Independence lowers the districts by %.1f to %.1f per cent and on its own leaves %s; "
+             "reading the matcher's links as coverage lifts them by %.1f to %.1f per cent and leaves %s. Expanding the "
+             "sample blocks by their selection probabilities instead of scaling each district's register count carries the "
+             "sample's own sampling error into each figure: the expanded entries miss the known list by %.1f to %.1f per "
+             "cent, which scaling to the list removes. Calibrating to the rolled-forward total carries the emigrants the "
+             "accounts never recorded into every district (Kilvarra %s, %s); reading the register's own counts carries "
+             "them and the duplicates too, and puts %s over the line."
+             % (-b4, -a4, call_diff(car, call, dists), a1, b1, call_diff(F["linked_share_call"], call, dists),
+                100 * (rlo - 1), 100 * (rhi - 1), n0(F["calibrated_national"]),
+                ("which leaves " + call_diff(F["calibrated_call"], call, dists)) if F["calibrated_call"] != call
+                else "the call unchanged only because Newbrook's interval straddles the line either way, while every "
+                     "district's figure carries the emigrants",
+                and_join(NAMES[d] for d in dists if F["register_counts"][d] >= 25000 and d not in q) or "another district"))
     open(path, "w").write("\n".join(L) + "\n")

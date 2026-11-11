@@ -512,7 +512,7 @@ def census_ratio(D, groups=((18, 29), (30, 44))):
 
 # ---------------------------------------------------------------------------------------------- estimation
 def estimate(A, ce, Lst, T, sv_rows=None, fu_rows=None, dependence="births", da=None, forces=None,
-             scope="district", ce_mode="followup", poststrata="age_sex", grp=None, k_override=None):
+             scope="district", ce_mode="followup", poststrata="age_sex", grp=None, k_override=None, ht=False):
     """District estimates by age group and sex; returns dict with the pieces the bridges need."""
     reg, sv, fu = A["reg"], A["sv"], A["fu"]
     dists = sorted(A["blocks"]["district_code"].unique())
@@ -527,6 +527,9 @@ def estimate(A, ce, Lst, T, sv_rows=None, fu_rows=None, dependence="births", da=
     fw = fu_rows if fu_rows is not None and fu_rows.dtype != bool else np.where(fsel, 1.0, 0.0)
     num = np.bincount(fk, weights=fw * ce, minlength=nD * 12).reshape(nD, 12)
     den = np.bincount(fk, weights=fw, minlength=nD * 12).reshape(nD, 12)
+    if ht:
+        # the sample blocks' entries expanded by their selection probabilities, in place of the district's own count
+        L = np.bincount(fk, weights=fw * fu["w"].values, minlength=nD * 12).reshape(nD, 12).astype(float)
     if ce_mode == "one":
         rate = np.ones((nD, 12))
     else:
@@ -664,14 +667,14 @@ def register_bridge(A, E, ce, fu_rows=None):
     return rows
 
 
-def emigration_still_listed(A, D, ce=None):
+def emigration_still_listed(A, D, ce=None, thr=5.0, undated="district"):
     """Emigrants since 30 June 2021 still on the register and missing from the accounts: the follow-up's people who
-    left Kilvarra, dated by the year they left (a 2021 departure counted as half inside the window), with those the
+    left Kilvarra from July 2021, dated by the month they left, with the undated shared as the dated are and those the
     household could not place, at vacant addresses and the no-contact entries not resident shared in as the district's
     placed outcomes are; less the share of those leavers whose departure the border system recorded."""
     fu = A["fu"]
     out = fu["outcome"].values
-    ly = fu["left_kilvarra_year"].values
+    ly = fu["left_kilvarra_month"].values
     dist = fu["district"].values
     L = A["reg"].groupby("district").size()
     S = outcome_shares(fu)
@@ -700,9 +703,13 @@ def emigration_still_listed(A, D, ce=None):
         n = m.sum()
         left = m & (out == "left Kilvarra")
         known = left & (ly != "")
-        ky = np.array([int(y) for y in ly[known]]) if known.any() else np.array([], int)
-        w_known = np.where(ky >= 2022, 1.0, np.where(ky == 2021, 0.5, 0.0))
+        ky = np.array([int(y[:4]) * 12 + int(y[5:7]) - 1 for y in ly[known]]) if known.any() else np.array([], int)
+        w_known = np.where(ky >= 2021 * 12 + 6, 1.0, 0.0)
         recent_share = w_known.mean() if len(ky) else 0.5
+        if undated == "national":
+            kn_all = (out == "left Kilvarra") & (ly != "")
+            ky_all = np.array([int(y[:4]) * 12 + int(y[5:7]) - 1 for y in ly[kn_all]])
+            recent_share = float((ky_all >= 2021 * 12 + 6).mean())
         w = np.zeros(len(fu))
         w[known] = w_known
         w[left & (ly == "")] = recent_share
@@ -724,7 +731,7 @@ def emigration_still_listed(A, D, ce=None):
             cand |= set(bidx.get(("jan", sp["y"], sx_), []))
             best = max((score(sp, brow[c]) for c in cand), default=-99)
             recent_left += w[i]
-            matched += w[i] * (best >= 5.0)
+            matched += w[i] * (best >= thr)
     rec_share = matched / recent_left if recent_left else 0.0
     return {"still_listed_recent": total, "border_recorded_share": rec_share,
             "of_which_border_recorded": total * rec_share, "unrecorded": total * (1 - rec_share), "by_district": detail}
@@ -751,7 +758,8 @@ def prepare(target, threshold=7.0):
 
 def run(target=None, prepared=None, linkage="gold", impute="model", mv_unknown="share", dependence="births",
         forces_mode="defence", scope="district", ce_mode="followup", bootstrap="full", B=300, seed=2026,
-        calibrate_official=False, benchmark="births", k_override=None, miss_scale=None, nc_scale=None):
+        calibrate_official=False, benchmark="births", k_override=None, miss_scale=None, nc_scale=None,
+        estimator="ratio"):
     D, A, Lst, G = prepared if prepared is not None else prepare(target)
     sv, fu = A["sv"], A["fu"]
     nat = sv["nat"].values
@@ -774,8 +782,9 @@ def run(target=None, prepared=None, linkage="gold", impute="model", mv_unknown="
     F = forces_from_return(D)
     da = da_ratio(D) if benchmark == "births" else census_ratio(D)
     dep = dependence
+    ht = estimator == "ht"
     E = estimate(A, ce, Lst, T, fu_rows=fu_w, dependence=dep, da=da, forces=F if forces_mode == "defence" else None,
-                 scope=scope, ce_mode=ce_mode, grp=grp, k_override=k_override)
+                 scope=scope, ce_mode=ce_mode, grp=grp, k_override=k_override, ht=ht)
     est = E["est"].copy()
     dists = E["dists"]
     gar = dists.index("D04")
@@ -785,7 +794,7 @@ def run(target=None, prepared=None, linkage="gold", impute="model", mv_unknown="
     if calibrate_official:
         est = est * acc["official_2026"] / est.sum()
     res = {"dists": dists, "est": est, "national": est.sum(), "k": E["k"], "da": da, "dse_ratio": E["dse_ratio"],
-           "E": E, "T": T, "forces": F}
+           "E": E, "T": T, "forces": F, "ce": ce, "forces_added": forces_mode == "defence"}
     # coverage of the survey's people by their own district's list, by nationality
     keep = ~sv["forces"].values
     pin = T[grp, Lst, 0]
@@ -828,10 +837,10 @@ def run(target=None, prepared=None, linkage="gold", impute="model", mv_unknown="
                 if impute == "drop":
                     ceb = np.nan_to_num(ceb)
                 Eb = estimate(A, ceb, Lst, Tb, sv_rows=sw, fu_rows=fwb, dependence=dep, da=da,
-                              forces=F if forces_mode == "defence" else None, scope=scope, ce_mode=ce_mode, grp=grp)
+                              forces=F if forces_mode == "defence" else None, scope=scope, ce_mode=ce_mode, grp=grp, ht=ht)
             else:
                 fwb = fw * ((~nc).astype(float) if impute == "drop" else 1.0)
-                Eb = _estimate_fixed_k(A, ce, Lst, T, sw, fwb, E["k"], dep, scope, ce_mode, grp)
+                Eb = _estimate_fixed_k(A, ce, Lst, T, sw, fwb, E["k"], dep, scope, ce_mode, grp, ht)
             eb = Eb["est"].copy()
             if forces_mode == "defence":
                 eb[gar] += F["total"]
@@ -859,8 +868,8 @@ def run(target=None, prepared=None, linkage="gold", impute="model", mv_unknown="
     return res
 
 
-def _estimate_fixed_k(A, ce, Lst, T, sw, fw, k, dep, scope, ce_mode, grp):
-    E = estimate(A, ce, Lst, T, sv_rows=sw, fu_rows=fw, dependence="none", scope=scope, ce_mode=ce_mode, grp=grp)
+def _estimate_fixed_k(A, ce, Lst, T, sw, fw, k, dep, scope, ce_mode, grp, ht=False):
+    E = estimate(A, ce, Lst, T, sv_rows=sw, fu_rows=fw, dependence="none", scope=scope, ce_mode=ce_mode, grp=grp, ht=ht)
     if dep != "none":
         N = E["N"].copy()
         for j, g in enumerate((2, 3)):

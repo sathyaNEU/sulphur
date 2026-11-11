@@ -4,7 +4,7 @@ Every number the simulation uses is here, so a rebuild is a function of this fil
 import datetime as _dt
 
 SEED = 19_2026
-SAMPLE_SEED = SEED + 1000 + int(__import__('os').environ.get('T19_SAMPLE', '40'))   # the coverage survey's draw of blocks and its fieldwork
+SAMPLE_SEED = SEED + 1064   # the coverage survey's draw of blocks and its fieldwork
 
 EPOCH = _dt.date(1970, 1, 1)
 

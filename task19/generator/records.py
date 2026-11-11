@@ -334,14 +334,14 @@ def build(W):
             mv_to = PR.DISTRICTS[int(P.dist[p])][0] if known_draw < 0.80 else ""
         elif c == 3:
             out = "left Kilvarra"
-            left_y = str(PR.date_of(int(P.leave[p])).year) if year_draw < 0.70 else ""
+            left_y = PR.date_of(int(P.leave[p])).strftime("%Y-%m") if year_draw < 0.70 else ""
         else:
             out = "died"
         ftype = dwell["type"][dwi]
         fd = PR.FOLLOW_START + int(rng.integers(0, PR.FOLLOW_END - PR.FOLLOW_START))
         frows.append([numbers[rid], bcode[b], ftype, visits, out, mv_to, left_y, dup_of, iso(fd)])
     fol = pd.DataFrame(frows, columns=["khs_number", "block_id", "dwelling_type", "visits", "outcome",
-                                       "moved_to_district", "left_kilvarra_year", "duplicate_of", "followup_date"])
+                                       "moved_to_district", "left_kilvarra_month", "duplicate_of", "followup_date"])
     fol = fol.sort_values(["block_id", "khs_number"]).reset_index(drop=True)
     W["followup_df"] = fol
 

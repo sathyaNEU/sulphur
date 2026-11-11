@@ -1,9 +1,14 @@
 """task19: figures.json (every figure the answer blocks state) and effort.json (each result's golden, band and the value
 each pass files), written from the analysis of the cut pack."""
 import json
+import math
 import os
+import sys
 
 import analysis as AN
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".claude", "skills", "stumping"))
+import effort as EF  # noqa: E402
 
 # bands: where reasonable methods differ, the range the golden family spans with a margin; set from the rivals run on
 # the cut pack (checks.py asserts every rival inside and every shortcut outside)
@@ -61,7 +66,14 @@ def write(res, gen_out):
         "careful_call": c["call"],
         "careful_halfwidth_pct": round(c["nat_half_pct"], 1),
         "careful_gap": c["gap"],
-        "register_national": q["national"],
+        "survey_only_halfwidth_pct": round(res["survey_only"]["nat_half_pct"], 1),
+        "linked_share_call": res["shortcuts"]["linked share read as coverage"]["call"],
+        "calibrated_call": res["shortcuts"]["the estimate scaled to the rolled-forward total"]["call"],
+        "calibrated_national": res["shortcuts"]["the estimate scaled to the rolled-forward total"]["national"],
+        "ht_districts": res["shortcuts"]["the sample blocks' estimate expanded by their selection probabilities"]["districts"],
+        "serving_personnel": int(res["golden_raw"]["forces"]["total"]),
+        "ht_register_ratio": res["ht_register_ratio"],
+        "register_national": int(sum(g["register"].values())),
         "district_names": AN.DNAME,
     }
     F = jsonable(F)
@@ -77,6 +89,13 @@ def write(res, gen_out):
         t["national"] = s["national"]
         return t
     gap_band = BAND["gap_pct_of_national"] / 100 * g["national"]
+    # the emigration band from its rivals: one and a half times the farthest, five per cent at least
+    ue = g["unrecorded_emigration"]
+    dev = max(abs(v - ue) / ue * 100 for v in res["emig_rivals"].values()) if res["emig_rivals"] else 0.0
+    emig_pct = float(max(5, math.ceil(1.5 * dev)))
+    BAND["emig_pct"] = emig_pct
+    F["emig_band_pct"] = emig_pct
+    F["emig_rivals"] = res["emig_rivals"]
     r9_gold = {"gap": g["gap"], "unrecorded_emigration": g["unrecorded_emigration"], "remainder": g["remainder"]}
     r9_bands = {"gap": [g["gap"] - gap_band, g["gap"] + gap_band],
                 "unrecorded_emigration": [g["unrecorded_emigration"] * (1 - BAND["emig_pct"] / 100),
@@ -84,9 +103,18 @@ def write(res, gen_out):
                 "remainder": [g["remainder"] - gap_band, g["remainder"] + gap_band]}
     r7_gold = {"call": g["call"]}
     r7_bands = {}
+    p_band = {}
     for d in close:
+        # the chance any estimate inside the district's band gives with the golden's spread
+        lo_i, hi_i = g["intervals"][d]
+        sd = (hi_i - lo_i) / (2 * 1.6449)
+        phi = lambda x: 0.5 * (1 + math.erf((x - 25000) / sd / math.sqrt(2)))
+        pl = math.floor(100 * phi(g["districts"][d] * (1 - BAND["district_pct"] / 100))) / 100
+        ph = math.ceil(100 * phi(g["districts"][d] * (1 + BAND["district_pct"] / 100))) / 100
         r7_gold["p_" + d] = g["p_line"][d]
-        r7_bands["p_" + d] = [g["p_line"][d] - BAND["p"], g["p_line"][d] + BAND["p"]]
+        r7_bands["p_" + d] = [pl, ph]
+        p_band[d] = [pl, ph]
+    F["p_band"] = p_band
 
     def r7_of(s):
         if s.get("call") is None:
@@ -101,13 +129,23 @@ def write(res, gen_out):
             return None
         return {"gap": s["gap"], "unrecorded_emigration": s["unrecorded_emigration"], "remainder": s["remainder"]}
 
+    # residents on no list are what the estimate leaves after the correct entries and the residents listed elsewhere:
+    # their band is at least what their inputs' bands give together
+    nol_bands = {}
+    for d in dists:
+        own = max(40.0, abs(g["on_no_list"][d]) * BAND["on_no_list_pct"] / 100)
+        stack = math.sqrt((g["districts"][d] * BAND["district_pct"] / 100) ** 2 + (g["over"][d] * BAND["over_pct"] / 100) ** 2
+                          + (max(40.0, g["listed_elsewhere"][d] * BAND["elsewhere_pct"] / 100)) ** 2)
+        w = math.ceil(max(own, stack) / 10.0) * 10
+        nol_bands[d] = [g["on_no_list"][d] - w, g["on_no_list"][d] + w]
+    F["on_no_list_band"] = {d: int((b[1] - b[0]) / 2) for d, b in nol_bands.items()}
     results = [
         {"id": "R1", "name": "share of survey residents on their own district's list", "graded_as": "Component 1",
          "figure": "coverage_pct", "depends": [], "independent": "the survey, the register and the clerical review",
          "golden": g["coverage"],
          "bands": {"nationals": [g["coverage"]["nationals"] - BAND["coverage_nat"], g["coverage"]["nationals"] + BAND["coverage_nat"]],
                    "others": [g["coverage"]["others"] - BAND["coverage_oth"], g["coverage"]["others"] + BAND["coverage_oth"]]},
-         "passes": {"quick": q["coverage"], "careful": c["linked"], "thorough": g["coverage"]},
+         "passes": {"quick": q["coverage"], "careful": c["coverage"], "thorough": g["coverage"]},
          "precedent": ["L01", "L06"]},
         {"id": "R2", "name": "register entries not correct for their district", "graded_as": "Ask 3",
          "figure": "register_not_correct", "depends": [], "independent": "the follow-up and the register",
@@ -137,7 +175,7 @@ def write(res, gen_out):
          "passes": {"quick": r7_of(q), "careful": r7_of(c), "thorough": r7_gold}, "precedent": ["L35", "L22"]},
         {"id": "R8", "name": "residents on no district's list, by district", "graded_as": "Ask 3c",
          "figure": "on_no_list", "depends": ["R5"], "independent": "",
-         "golden": g["on_no_list"], "bands": table_bands(g["on_no_list"], BAND["on_no_list_pct"], 40),
+         "golden": g["on_no_list"], "bands": nol_bands,
          "passes": {"quick": {d: 0 for d in dists}, "careful": c["on_no_list"], "thorough": g["on_no_list"]},
          "precedent": ["L28"]},
         {"id": "R9", "name": "the rolled-forward estimate bridged to the estimate", "graded_as": "Component 4",
@@ -154,7 +192,7 @@ def write(res, gen_out):
     F["constants"] = {"line": 25000, "interval_pct": 90, "band_district_pct": 1.0, "band_national_pct": 0.6,
                       "band_cov_nat": 0.6, "band_cov_oth": 2.5, "band_over_pct": 8, "band_else_pct": 25,
                       "band_people": 40, "band_k": 0.04, "band_half": [0.75, 1.45], "band_p": 0.16,
-                      "band_emig_pct": 15, "band_gap_pct": 0.6, "ages": [18, 29, 30, 44],
+                      "band_emig_pct": emig_pct, "band_gap_pct": 0.6, "ages": [18, 29, 30, 44],
                       "circular_paragraphs": ["2.1", "2.2", "2.3", "3.1", "3.2"], "circular": "2026/14",
                       "supplement_pct_of_pool": 1.2}
     F["linked_share_effect_pct"] = [round(min(eff1), 1), round(max(eff1), 1)]
@@ -175,18 +213,28 @@ def write(res, gen_out):
             r["figure"] = "estimates_with_national"
         if r["id"] == "R6":
             r["golden"] = F["national_halfwidth_pct"]
-    hints = [
-        {"sentence": "the register and the coverage survey miss the same young men; compare the estimate's sex ratios "
-                     "with the ones births and survival give", "rescues": ["R4"]},
-        {"sentence": "a survey person the matcher could not link may still be on the register; measure what the matcher "
-                     "misses on the clerical review", "rescues": ["R1"]},
-        {"sentence": "the interval has to carry the errors every district shares, such as the linkage correction and the "
-                     "raising factors", "rescues": ["R6"]},
-        {"sentence": "the rolled-forward estimate misses the same emigrants the register still lists, so its closeness "
-                     "to an estimate is no check", "rescues": ["R9"]},
-    ]
+    # the one-fact test, computed: a hint rescues each result the careful pass misses and the hinted pass earns,
+    # graded by effort.py's own grader
+    def pass_values(s):
+        return {"R1": s["coverage"], "R2": s["over"], "R3": s["listed_elsewhere"], "R4": s["k"], "R5": est_of(s),
+                "R6": round(s["nat_half_pct"], 1), "R7": r7_of(s), "R8": s["on_no_list"], "R9": r9_of(s)}
+    sentences = {
+        "the register and the coverage survey miss the same young men":
+            "the register and the coverage survey miss the same young men; compare the estimate's sex ratios with the "
+            "ones births and survival give",
+        "the rolled-forward estimate misses the same emigrants":
+            "the rolled-forward estimate misses the same emigrants the register still lists, so its closeness to an "
+            "estimate is no check",
+    }
+    cv = pass_values(c)
+    hints = []
+    for key, sh in res["hinted"].items():
+        hv = pass_values(sh)
+        rescued = [r["id"] for r in results
+                   if EF.grade(cv[r["id"]], r)[0] != "right" and EF.grade(hv[r["id"]], r)[0] == "right"]
+        hints.append({"sentence": sentences[key], "rescues": rescued})
     routes = [{"name": "the golden", "answer": g["call"], "golden": True},
-              {"name": "careful but hurried: linked share as coverage, independence, survey-only intervals",
+              {"name": "careful but hurried: links corrected and every step resampled, independence kept",
                "answer": c["call"]},
               {"name": "the register's own counts", "answer": q["call"]}]
     for name, s in res["shortcuts"].items():
@@ -198,8 +246,9 @@ def write(res, gen_out):
                                  for n, v in res["perturb"].items()]}
     E = {"results": results, "hints": hints, "routes": routes, "forcing": forcing,
          "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7},
-         "careful_pass": "the matcher's links read as the register's coverage, independence within age and sex, the "
-                         "survey blocks resampled alone, the gap to the rolled-forward figure read as emigration",
+         "careful_pass": "the links corrected on the clerical review and every step repeated in the bootstrap (as the "
+                         "judge's first pass worked), independence within age and sex kept, the gap to the rolled-forward "
+                         "figure read as emigration",
          "rivals": res["rivals"], "shortcut_figures": res["shortcuts"], "hinted": res["hinted"],
          "perturbation_figures": res["perturb"], "bands": {k: (list(v) if isinstance(v, tuple) else v) for k, v in BAND.items()}}
     E = jsonable(E)

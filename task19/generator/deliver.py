@@ -12,7 +12,7 @@ from openpyxl.styles import Alignment, Font, PatternFill
 import postprocess
 
 WORKBOOK = "kilvarra_district_population_mid2026.xlsx"
-NOTE = "memo_district_estimates_mid2026.docx"
+NOTE = "memo_district_estimates_mid2026.pdf"
 ORG = "Kilvarra Statistics Office"
 AUTHOR = "Grainne Grennan"
 SAVED_XL = ("2026-11-24T09:41:00Z", "2026-12-02T16:18:00Z")
@@ -23,6 +23,11 @@ SHADE = PatternFill("solid", fgColor="DDE6F0")
 
 def n0(x):
     return "{:,}".format(int(round(x)))
+
+
+def and_join(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else (", ".join(xs[:-1]) + " and " + xs[-1] if xs else "")
 
 
 def write(F, out_dir):
@@ -82,14 +87,14 @@ def write(F, out_dir):
     r = 4
     for d in dists:
         pp = F["register_not_correct_parts"][d]
-        forces = F["district_estimates"][d] - (F["register_counts"][d] - F["register_not_correct"][d] +
-                                               F["listed_elsewhere"][d] + F["on_no_list"][d]) if d == "D04" else 0
+        forces = F["serving_personnel"] if d == "D04" else 0
         vals = [names[d], F["register_counts"][d]] + [pp[p] for p in parts] + [F["listed_elsewhere"][d], F["on_no_list"][d],
                                                                                 forces, F["district_estimates"][d]]
         for j, v in enumerate(vals, 1):
             ws.cell(row=r, column=j, value=v).number_format = "#,##0"
         r += 1
-    ws.cell(row=r + 1, column=1, value="Parts rounded to the nearest 10; they add to the estimate within rounding. Entries the "
+    ws.cell(row=r + 1, column=1, value="Parts rounded to the nearest 10, residents on no list taking the rounding so each row adds "
+                                        "to the estimate. Entries the "
                                         "follow-up could not place (not known at the address, vacant, no contact) are shared "
                                         "as the district's placed outcomes are.").font = Font(italic=True, size=8)
     for j, w in enumerate([14, 11, 12, 12, 13, 13, 12, 11, 11], 1):
@@ -101,7 +106,8 @@ def write(F, out_dir):
     rows = [["Rolled-forward estimate, 30 June 2026", F["official_2026"]],
             ["less: emigrants since mid-2021 the accounts did not record", -F["unrecorded_emigration"]],
             ["plus: arrivals on the border record missing from the accounts", F["immigration_not_in_accounts"]],
-            ["less: remainder (the 2021 base and other components)", -F["official_remainder"]],
+            [("plus" if -F["official_remainder"] >= 0 else "less") + ": remainder (the 2021 base and the estimate's own "
+             "sampling error)", -F["official_remainder"]],
             ["This estimate", F["national_estimate"]]]
     for i, (a, b) in enumerate(rows, 3):
         ws.cell(row=i, column=1, value=a)
@@ -148,7 +154,7 @@ def write(F, out_dir):
         "Kilvarra had an estimated %s usual residents on 30 June 2026 (90 per cent interval %s to %s). %s qualify for the "
         "urban-services supplement. %s is too close to call: its interval includes 25,000, so under paragraph 3.2 of "
         "circular 2026/14 it is paid at half rate for 2027/28. %s do not qualify." % (
-            n0(F["national_estimate"]), n0(lo), n0(hi), ", ".join(q), " and ".join(tc), ", ".join(nq)))
+            n0(F["national_estimate"]), n0(lo), n0(hi), and_join(q), and_join(tc), and_join(nq)))
     for d in [x for x in dists if x in call["too close to call"] or x in ("D05", "D06")]:
         lo_, hi_ = F["district_intervals"][d]
         pr = F["p_line"][d]
@@ -170,7 +176,7 @@ def write(F, out_dir):
         "How sure. The intervals come from resampling the survey's blocks and repeating every step, the clerical review's "
         "measure of the matching and the raising factors included, because those errors move every district together. "
         "Resampling the survey alone gives a national interval of plus or minus %.1f per cent; the full one is plus or "
-        "minus %.1f per cent." % (F["careful_halfwidth_pct"], F["national_halfwidth_pct"]))
+        "minus %.1f per cent." % (F["survey_only_halfwidth_pct"], F["national_halfwidth_pct"]))
     doc.add_paragraph(
         "Why the figures differ from the register. Every district's register count is higher than its estimate: the lists "
         "still hold people who have left Kilvarra or died, duplicate registrations and people now living in another "
@@ -179,14 +185,24 @@ def write(F, out_dir):
     doc.add_paragraph(
         "Why the figures differ from the rolled-forward estimate. The population accounts put Kilvarra at %s on 30 June "
         "2026, %s above this estimate. About %s emigrants since mid-2021 are still on the register and were never "
-        "recorded in the accounts; %s arrivals on the border record are missing from them; the remaining %s sits in the "
-        "2021 base and the other components. The accounts and the register share the same unrecorded emigrants, so the "
-        "closeness of a register-based figure to the accounts is no check on it." % (
+        "recorded in the accounts; %s arrivals on the border record are missing from them; the remaining %s %s. The "
+        "accounts and the register share the same unrecorded emigrants, so the closeness of a register-based figure to "
+        "the accounts is no check on it." % (
             n0(F["official_2026"]), n0(F["official_gap"]), n0(F["unrecorded_emigration"]),
-            n0(F["immigration_not_in_accounts"]), n0(abs(F["official_remainder"]))))
-    npath = os.path.join(out_dir, NOTE)
-    doc.save(npath)
-    postprocess.normalize_docx(npath, AUTHOR, AUTHOR, SAVED_DOC[0], SAVED_DOC[1], revision=4, total_time=96,
+            n0(F["immigration_not_in_accounts"]), n0(abs(F["official_remainder"])),
+            "is well within the estimate's own sampling error" if abs(F["official_remainder"]) < 0.5 * (hi - lo) / 2
+            else "sits in the 2021 base and the accounts' other components"))
+    # the note is written in the word processor and sent to the Commission as the PDF Writer exports
+    import tempfile
+    import officepdf
+    work = tempfile.mkdtemp(prefix="t19note-")
+    dpath = os.path.join(work, "memo_district_estimates_mid2026.docx")
+    doc.save(dpath)
+    postprocess.normalize_docx(dpath, AUTHOR, AUTHOR, SAVED_DOC[0], SAVED_DOC[1], revision=4, total_time=96,
                                seed=19, title="Mid-2026 district estimates", company=ORG)
+    iso = lambda x: dt.datetime.strptime(x, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
+    officepdf.from_docx(dpath, os.path.join(out_dir, NOTE), iso(SAVED_DOC[0]), iso(SAVED_DOC[1]))
+    import shutil
+    shutil.rmtree(work, ignore_errors=True)
     postprocess.own_mtimes(out_dir, {})
     return [WORKBOOK, NOTE]
