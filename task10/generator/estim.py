@@ -714,28 +714,173 @@ def replay(profile, delivered, ramp, reb):
     return p
 
 
-def predictive(profile, delivered, cv, ramp, reb, sd_day, reb_rel=None, cap=None, firm=None, n=120000, seed=20261110):
+IO = [i for i in range(48) if i not in IW and i not in IP]
+DRAWS = 120000        # guideline 7: at least 100,000 design days
+
+
+class DesignDays:
+    """The design days of guideline 7 for one primary, drawn once: the day's demand above or below its usual level by
+    the same proportion in every half-hour, the share of its sites' megawatts the provider has available that evening
+    (independently of the demand), and the load that comes back after the window, each varying as the record shows it.
+    Every question about the day (the contract in full, a further contract, a shorter schedule, a customer added) is
+    answered on the same days."""
+
+    def __init__(self, profile, sd_day, cv, ramp, reb, reb_rel=None, n=DRAWS, seed=20261110):
+        rng = np.random.default_rng(seed)
+        self.r = rng.normal(0, sd_day, n)
+        self.a = np.exp(cv * rng.normal(0, 1, n) - 0.5 * cv * cv)
+        self.rb = 1.0 + (np.asarray(reb_rel if reb_rel is not None else np.zeros(4))[None, :] * rng.normal(0, 1, (n, 4)))
+        self.profile = np.asarray(profile, float)
+        self.ramp, self.reb = np.asarray(ramp, float), np.asarray(reb, float)
+        self.rescale(1.0)
+
+    def rescale(self, scale):
+        """Every half-hour of the day grown in one proportion (a customer added, guideline 4)."""
+        B = (self.profile * scale)[None, :] * (1 + self.r[:, None])
+        self.bo, self.bw, self.bp = B[:, IO].max(axis=1), B[:, IW], B[:, IP]
+        return self
+
+    def peaks(self, delivered, cap=None, sched=None, fixed=None):
+        d = delivered * self.a
+        if cap is not None:
+            d = np.minimum(d, cap)
+        if sched is not None:      # scheduled short of what is available: the provider delivers the schedule
+            d = np.minimum(d, sched)
+        w = (self.bw - d[:, None] * self.ramp[None, :]).max(axis=1)
+        if fixed is None:
+            p = (self.bp + d[:, None] * self.reb[None, :] * self.rb).max(axis=1)
+        else:                      # the hurried reading: the come-back as the megawatts the record's events show
+            p = (self.bp + np.asarray(fixed, float)[None, :]).max(axis=1)
+        return np.maximum(np.maximum(self.bo, w), p)
+
+    def stats(self, delivered, firm=None, **kw):
+        pk = self.peaks(delivered, **kw)
+        return float(pk.mean()), float(np.quantile(pk, ASSURANCE)), (float((pk > firm).mean()) if firm is not None else None)
+
+
+def predictive(profile, delivered, cv, ramp, reb, sd_day, reb_rel=None, cap=None, firm=None, n=DRAWS, seed=20261110):
     """Design days drawn from the day-to-day spread of demand, of what the provider has available and of what comes
     back: each day's highest half-hour with the service delivered through its window; the mean, the level the
     highest half-hour stays under on nine days in ten, and the share of days it is over firm capacity."""
-    rng = np.random.default_rng(seed)
-    r = rng.normal(0, sd_day, n)
-    d = delivered * np.exp(cv * rng.normal(0, 1, n) - 0.5 * cv * cv)
-    if cap is not None:
-        d = np.minimum(d, cap)
-    rb = 1.0 + (np.asarray(reb_rel if reb_rel is not None else np.zeros(4))[None, :] * rng.normal(0, 1, (n, 4)))
-    Pm = np.asarray(profile, float)[None, :] * (1 + r[:, None])
-    Pm[:, IW] -= d[:, None] * np.asarray(ramp)[None, :]
-    Pm[:, IP] += d[:, None] * np.asarray(reb)[None, :] * rb
-    pk = Pm.max(axis=1)
-    return float(pk.mean()), float(np.quantile(pk, ASSURANCE)), (float((pk > firm).mean()) if firm is not None else None)
+    return DesignDays(profile, sd_day, cv, ramp, reb, reb_rel, n=n, seed=seed).stats(delivered, firm=firm, cap=cap)
+
+
+# ------------------------------------------------------------------------------------------------ R12 to R14 the choices
+def step_per_mw(X, code, method="class"):
+    """Megawatts in service on the assessment date for each megawatt of the zone's 2027/28 step, the terms a further
+    megawatt would be signed on: the register's sites signed for that winter at the zone, each on its chance of being in
+    service by then (the golden), or the hurried readings of the same."""
+    name = X["names"][code]
+    hist = X["previous"].get(name, {})
+    contracted = X["contracts_code"][code]
+    step_mw = contracted - float(hist.get("2026/27", 0.0))
+    if method in ("every", "contract"):   # every further megawatt contracted taken as a megawatt in service
+        return 1.0
+    if method == "zone_ratio":            # the whole contract's megawatts in service over its megawatts contracted
+        comm, _, _ = expected_commissioned(X["assets"], code, X["register_date"], ASSESS, method="class")
+        return comm / contracted
+    reg = register_as_at(X["assets"], X["register_date"])
+    step = reg[(reg["zone"] == code) & (reg["winter"] == "2027/28")]
+    if method in ("planned", "slip", "class_median"):
+        done = reg[np.array([_isdate(c) for c in reg["commissioned"]], bool)]
+        if method == "planned":
+            lag = {c: 0.0 for c in CLASSES_SEEN(reg)}
+        elif method == "slip":
+            med = float(np.median([(c - p).days for c, p in zip(done["commissioned"], done["planned"])]))
+            lag = {c: med for c in CLASSES_SEEN(reg)}
+        else:
+            lag = {cls: float(np.median([(c - p).days for c, p in zip(d["commissioned"], d["planned"])]))
+                   for cls, d in done.groupby("cls")}
+        kw_in = float(sum(r.kw for r in step.itertuples() if r.planned + dt.timedelta(days=lag.get(r.cls, 60.0)) <= ASSESS))
+        return kw_in / 1000.0 / step_mw
+    _, _, rows = expected_commissioned(X["assets"], code, X["register_date"], ASSESS, method=method,
+                                       contracted=contracted, history=hist)
+    pr = {r[0]: r[4] for r in rows}
+    kw_in = float(sum(r.kw * pr.get(r.site, 0.0) for r in step.itertuples()))
+    return kw_in / 1000.0 / step_mw
+
+
+def CLASSES_SEEN(reg):
+    return sorted(set(reg["cls"]))
+
+
+def further_mw(days, z, per_mw, top=40.0, fixed=None):
+    """The further megawatts a primary would have to contract on its 2027/28 award's terms for its peak to exceed firm
+    capacity on no more than one design day in ten: (megawatts, None) when an amount up to `top` does it, (None, (the
+    lowest share any amount reaches, where)) when none does."""
+    def share(x):
+        comm, cap = z["commissioned"] + x * per_mw, z["contracted"] + x
+        return days.stats(min(z["share"] * comm, cap), firm=z["firm"], cap=cap, fixed=fixed)[2]
+    if share(0.0) <= 1.0 - ASSURANCE:
+        return 0.0, None
+    coarse = [(x, share(x)) for x in np.arange(1.0, top + 1e-9, 1.0)]
+    hit = next((x for x, s in coarse if s <= 1.0 - ASSURANCE), None)
+    if hit is not None:
+        for x in np.arange(hit - 0.9, hit + 1e-9, 0.1):
+            if share(x) <= 1.0 - ASSURANCE:
+                return round(float(x), 1), None
+        return float(hit), None
+    x0 = min(coarse, key=lambda t: t[1])[0]
+    fine = [(x, share(x)) for x in np.arange(max(x0 - 1.0, 0.0), x0 + 1.0 + 1e-9, 0.1)]
+    xb, sb = min(fine, key=lambda t: (t[1], t[0]))
+    return None, (sb, round(float(xb), 1))
+
+
+def linear_further(z, per_mw):
+    """The hurried reading of the same: the nine-days-in-ten level's excess over firm capacity divided by what a
+    further megawatt delivers."""
+    if z["p90"] <= z["firm"]:
+        return 0.0
+    return round(float((z["p90"] - z["firm"]) / max(z["share"] * per_mw, 1e-9)), 1)
+
+
+def best_schedule(days, z, fixed=None):
+    """The megawatts to schedule for the whole window, at most the contract, that make the share of design days over
+    firm capacity smallest (the lower nine-days-in-ten level breaking a tie, then the larger schedule): the schedule,
+    its mean peak, nine-days-in-ten level and share."""
+    def at(s):
+        m, p90, ex = days.stats(z["delivered"], firm=z["firm"], cap=z["contracted"], sched=s, fixed=fixed)
+        return (ex, round(p90, 9), -s, m)
+    coarse = [(s,) + at(s) for s in list(np.arange(0.0, z["contracted"], 0.5)) + [z["contracted"]]]
+    s0 = min(coarse, key=lambda t: t[1:4])[0]
+    fine = [(s,) + at(s) for s in np.arange(max(s0 - 0.5, 0.0), min(s0 + 0.5, z["contracted"]) + 1e-9, 0.1)]
+    s, ex, p90, _, m = min(coarse + fine, key=lambda t: t[1:4])
+    return dict(schedule=round(float(s), 1), mean=m, p90=p90, exceed=ex, full=bool(s >= z["contracted"] - 1e-9))
+
+
+CUSTOMER = dict(type="Data hall", kva=4000, energised=dt.date(2027, 8, 2))    # the prompt's customer at Hartwell Common
+
+
+def customer_adds(fits, M=None, how="type", c=CUSTOMER):
+    """Megawatts a customer energised before the assessment date adds to its primary's evening peak by then: on its
+    type's level and build-up (the golden), or the hurried readings of the same."""
+    f = fits.get(c["type"], fits["_pooled"])
+    age = months_between(c["energised"], ASSESS)
+    if how == "pooled":
+        f = fits["_pooled"]
+        return c["kva"] * f["U"] * float(_g(age, f["tau"], f["k"])) / 1000.0
+    if how == "mature":
+        return c["kva"] * f["U"] / 1000.0
+    if how == "full":
+        return c["kva"] * 0.95 / 1000.0
+    if how == "ratio":
+        last = M.sort_values("month").groupby("conn").tail(1)
+        return c["kva"] * float(last["ratio"].mean()) / 1000.0
+    return c["kva"] * f["U"] * float(_g(age, f["tau"], f["k"])) / 1000.0
 
 
 # ------------------------------------------------------------------------------------------------ the whole analysis
 DEFAULT = dict(baseline="anchored", anchor="ratio", mform="spline", morning="full", winters=None, trend=False,
                conn="own", conn_shape="weibull", conn_by_type=True, conn_months=3,
                comm="class", avail_form="linear", avail_base="commissioned", censor=True,
-               replay=True, tail=True)
+               replay=True, tail=True, comeback="scaled", further=None, customer=None, scan=True)
+SCHEDULE_AT = ("Ashcombe Road",)      # the primary whose schedule the review asks about
+CUSTOMER_AT = "Hartwell Common"       # the primary the prompt's customer would connect to
+# how each reading of the register's customers carries a customer not yet connected
+CUSTOMER_HOW = {"own": "type", "type": "type", "new_buildup": "type", "pooled": "pooled", "mature": "mature",
+                "observed": "mature", "full": "full", "ratio": "ratio"}
+# how each reading of the sites still to come carries a further megawatt on the award's terms
+FURTHER_HOW = {"contract": "contract", "zone_ratio": "zone_ratio"}
 
 
 def analyse(X, **opt):
@@ -766,6 +911,12 @@ def analyse(X, **opt):
         evs.append(ev)
     EV = pd.concat(evs, ignore_index=True)
     out["events"] = EV
+    # the come-back as the megawatts each zone's events showed after the window, whatever they delivered (the hurried
+    # reading); the golden carries it per megawatt delivered
+    back_mw = {}
+    for code in codes:
+        e = EV[(EV["code"] == code) & (EV["delivered"] > 0.5)]
+        back_mw[code] = np.vstack(e["post"].values).mean(axis=0) if len(e) else np.zeros(4)
     prov_of = {code: X["provider_of"][code] for code in codes}
     share, cvs, ramps, rebs, rebrel = {}, {}, {}, {}, {}
     for prov in sorted(set(prov_of.values())):
@@ -796,8 +947,11 @@ def analyse(X, **opt):
                                                  contracted=contracted, history=X["previous"].get(X["names"][code]))
         prov = prov_of[code]
         delivered = min(share[prov] * comm, contracted)
+        fixed = back_mw[code] if o["comeback"] == "fixed" else None
         if o["replay"]:
-            with_ = replay(prof28, delivered, ramps[prov], rebs[prov])
+            with_ = replay(prof28, delivered, ramps[prov], rebs[prov] if fixed is None else np.zeros(4))
+            if fixed is not None:
+                with_[IP] += fixed
             peak = float(with_.max())
             peak_hh = H48[int(with_.argmax())]
         else:
@@ -805,9 +959,10 @@ def analyse(X, **opt):
             peak = before28 - delivered
             peak_hh = H48[int(prof28.argmax())]
         firm = X["firm"][code]
+        days = None
         if o["tail"] and o["replay"]:
-            mean_pk, p90, exceed = predictive(prof28, delivered, cvs[prov], ramps[prov], rebs[prov], sd_day, rebrel[prov],
-                                              cap=contracted, firm=firm)
+            days = DesignDays(prof28, sd_day, cvs[prov], ramps[prov], rebs[prov], rebrel[prov])
+            mean_pk, p90, exceed = days.stats(delivered, firm=firm, cap=contracted, fixed=fixed)
         elif o["tail"]:
             sd = math.hypot(sd_day * before28, cvs[prov] * delivered)
             mean_pk, p90 = peak, peak + 1.2815515655446004 * sd
@@ -824,7 +979,35 @@ def analyse(X, **opt):
                                   clean_days=mdl["efit"]["n_latest"], coldest_clean=mdl["efit"]["coldest_latest"],
                                   clean_all=mdl["efit"]["n"], coldest_all=mdl["efit"]["coldest"],
                                   morning_days=mdl["mfit"]["n"], morning_cold=int((mdl["mfit"]["T"] <= 0.0).sum()),
-                                  knee=mdl["mfit"].get("knee"), reb_total=float(np.sum(rebs[prov])))
+                                  knee=mdl["mfit"].get("knee"), reb_total=float(np.sum(rebs[prov])),
+                                  back_mw=[float(v) for v in back_mw[code]])
+        z = out["zones"][code]
+        if not o["scan"]:
+            continue
+        # R12: what a further contract on the 2027/28 award's terms would do
+        how = o["further"] or FURTHER_HOW.get(o["comm"], o["comm"])
+        per = step_per_mw(X, code, method="class" if how == "linear" else how)
+        z["further_per_mw"] = per
+        if days is None or how == "linear":
+            z["further"], z["further_low"] = linear_further(z, per), None
+        else:
+            z["further"], z["further_low"] = further_mw(days, z, per, fixed=fixed)
+        # R13: the schedule that makes the share of design days over firm capacity smallest
+        if X["names"][code] in SCHEDULE_AT:
+            if days is None:
+                z["schedule"] = dict(schedule=float(contracted), mean=mean_pk, p90=p90, exceed=exceed, full=True)
+            else:
+                z["schedule"] = best_schedule(days, z, fixed=fixed)
+        # R14: the prompt's customer added to the primary it would connect to
+        if X["names"][code] == CUSTOMER_AT:
+            adds = customer_adds(fits, M, how=o["customer"] or CUSTOMER_HOW.get(o["conn"], "type"))
+            scale = (before28 + adds) / before28
+            if days is None:
+                cm, cp, ce = mean_pk + adds, p90 + adds, (1.0 if p90 + adds > firm else 0.0)
+            else:
+                cdays = DesignDays(prof28, sd_day, cvs[prov], ramps[prov], rebs[prov], rebrel[prov]).rescale(scale)
+                cm, cp, ce = cdays.stats(delivered, firm=firm, cap=contracted, fixed=fixed)
+            z["customer"] = dict(adds=adds, mean=cm, p90=cp, exceed=ce, holds=bool(cp <= firm))
     out["commit"] = [X["names"][c] for c in codes if out["zones"][c]["commit"]]
     return out
 

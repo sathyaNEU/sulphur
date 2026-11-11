@@ -87,6 +87,9 @@ def band_pct(vals, gold, pad=3, floor=4):
     return [max(0, min(lo, pct(gold) - floor)), min(100, max(hi, pct(gold) + floor))]
 
 
+verdicts, further_tab = EP.verdicts, EP.further_tab
+
+
 def family(X, G):
     """The golden and every reasonable variant of its choices, run on the pack."""
     runs = {"golden": G}
@@ -121,6 +124,23 @@ def figures(X, G, FAM, info):
     B = dict(R1=bands("before26", floor=0.3), R2=bands("conn_add"), R3=bands("before28", floor=0.3),
              R4=bands("commissioned"), R5=share_b, R6=bands("delivered"), R7=back_b,
              R8=bands("mean_peak", floor=0.3), R9=bands("p90", floor=0.3), R10=over_b)
+    call = [n for n in names if Z[n]["commit"]]
+    reg_now = E.register_as_at(X["assets"], X["register_date"])
+    step_f = reg_now[(reg_now["zone"] == [c for c in codes if G["zones"][c]["name"] == "Fenwick Street"][0])
+                     & (reg_now["winter"] == "2027/28")]
+    sched_at = E.SCHEDULE_AT[0]
+    cust_at = E.CUSTOMER_AT
+    # R12: every variant's further megawatts; a primary where no amount does it has no band, only "none"
+    B["R11"] = {n: (band_mw([fam[k][n]["further"] for k in fam], Z[n]["further"], pad=0.3, floor=0.5)
+                    if Z[n].get("further") is not None else None) for n in call}
+    B["R12"] = dict(schedule=band_mw([fam[k][sched_at]["schedule"]["schedule"] for k in fam],
+                                     Z[sched_at]["schedule"]["schedule"], pad=0.1, floor=0.2),
+                    one_in_ten=band_mw([fam[k][sched_at]["schedule"]["p90"] for k in fam],
+                                       Z[sched_at]["schedule"]["p90"], floor=0.3))
+    B["R13"] = dict(adds=band_mw([fam[k][cust_at]["customer"]["adds"] for k in fam], Z[cust_at]["customer"]["adds"],
+                                 pad=0.05, floor=0.1),
+                    one_in_ten=band_mw([fam[k][cust_at]["customer"]["p90"] for k in fam], Z[cust_at]["customer"]["p90"],
+                                       floor=0.3))
     # the customers behind each primary's connections figure, and the sites still to come behind its megawatts in service
     conn_rows, site_rows = {}, {}
     for n in names:
@@ -150,9 +170,13 @@ def figures(X, G, FAM, info):
         cold[G["zones"][c]["name"]] = dict(knee_c=round(h["knee"], 1), per_degree_above=round(-float(h["coef"][0]), 2),
                                            per_degree_below=round(-float(h["coef"][0]) + float(h["coef"][1]), 2))
     zones = {}
+    zones_code = {G["zones"][c]["name"]: c for c in codes}
     for n in names:
         q = Z[n]
-        zones[n] = dict(code=[c for c in codes if G["zones"][c]["name"] == n][0], provider=disp[q["provider"]],
+        ev_n = G["events"][(G["events"]["code"] == zones_code[n]) & (G["events"]["delivered"] > 0.5)]
+        zones[n] = dict(code=zones_code[n], provider=disp[q["provider"]],
+                        events=int(len(ev_n)), event_mean_delivered=r2(ev_n["delivered"].mean()),
+                        back_2000_record=r2(q["back_mw"][0]), back_2000_design=r2(G["fits"][q["provider"]]["reb"][0] * q["delivered"]),
                         firm=q["firm"], contracted=q["contracted"], peak_hh=q["peak_hh"], commit=bool(q["commit"]),
                         margin=r1(q["p90"] - q["firm"]), over_or_under_by=r1(abs(q["p90"] - q["firm"])),
                         off_peak=r1(q["off_peak"]), in_service_now=r1(q["commissioned_now"]),
@@ -162,6 +186,7 @@ def figures(X, G, FAM, info):
                         days_without_service=int(q["clean_all"]), coldest_without_service=round(q["coldest_all"], 1),
                         working_weekdays=int(q["morning_days"]), at_or_below_freezing=int(q["morning_cold"]),
                         in_service_share_of_contract_pct=pct(q["commissioned"] / q["contracted"]),
+                        award_step=r1(q["contracted"] - X["previous"][n]["2026/27"]),
                         customers=len(q["conn_rows"]))
     F = dict(
         call=[n for n in names if Z[n]["commit"]], hold=[n for n in names if not Z[n]["commit"]],
@@ -170,6 +195,27 @@ def figures(X, G, FAM, info):
         r4_in_service=tab("commissioned"), r5_share=share, r6_delivered=tab("delivered"), r7_comeback=back,
         r8_peak=tab("mean_peak"), r9_one_in_ten=tab("p90"), r10_share_over={n: pct(Z[n]["exceed"]) for n in names},
         bands_by_result={k: v for k, v in B.items()},
+        r11_verdicts=verdicts(Z, names),
+        r12_further=further_tab(Z, call),
+        r12_lowest={n: dict(share_pct=pct(Z[n]["further_low"][0]), at_mw=Z[n]["further_low"][1])
+                    for n in call if Z[n].get("further") is None},
+        r12_per_mw={n: r2(Z[n]["further_per_mw"]) for n in call},
+        r13_schedule=dict(schedule=r1(Z[sched_at]["schedule"]["schedule"]), one_in_ten=r1(Z[sched_at]["schedule"]["p90"])),
+        r13_detail=dict(primary=sched_at, mean_peak=r1(Z[sched_at]["schedule"]["mean"]),
+                        share_pct=pct(Z[sched_at]["schedule"]["exceed"]), firm=Z[sched_at]["firm"],
+                        contracted=Z[sched_at]["contracted"], delivered_in_full=r1(Z[sched_at]["delivered"]),
+                        holds=bool(Z[sched_at]["schedule"]["p90"] <= Z[sched_at]["firm"])),
+        r14_customer=dict(adds=r1(Z[cust_at]["customer"]["adds"]), one_in_ten=r1(Z[cust_at]["customer"]["p90"])),
+        fenwick_process_pct=pct(float(step_f[step_f["cls"] == "Process load"]["kw"].sum()) / float(step_f["kw"].sum())),
+        customer_age_months=r1(E.months_between(E.CUSTOMER["energised"], E.ASSESS)),
+        customer_type_n=int(G["buildup"][E.CUSTOMER["type"]]["n_conn"]),
+        r14_detail=dict(primary=cust_at, type=E.CUSTOMER["type"], kva=E.CUSTOMER["kva"],
+                        energised=E.CUSTOMER["energised"].strftime("%d %B %Y").lstrip("0"),
+                        adds_kw=int(round(1000 * Z[cust_at]["customer"]["adds"])),
+                        share_pct=pct(Z[cust_at]["customer"]["exceed"]), firm=Z[cust_at]["firm"],
+                        holds=bool(Z[cust_at]["customer"]["holds"]),
+                        build_up_pct=pct(Z[cust_at]["customer"]["adds"] / (E.CUSTOMER["kva"] / 1000.0) / G["buildup"][E.CUSTOMER["type"]]["U"]),
+                        established_share=r2(G["buildup"][E.CUSTOMER["type"]]["U"])),
         zones=zones, customers=conn_rows, sites=site_rows, classes=classes, cold_end=cold,
         providers={pname[p]: dict(key=p, legal=disp[p], share=r2(G["fits"][p]["share"]), spread_pct=pct(G["fits"][p]["cv"]),
                                   back_first=r2(G["fits"][p]["reb"][0]), back_total=r2(float(np.sum(G["fits"][p]["reb"]))),
@@ -177,13 +223,17 @@ def figures(X, G, FAM, info):
                                   met=int(G["fits"][p]["n_met"]),
                                   zones=[n for n in names if Z[n]["provider"] == p]) for p in provs},
         family_sets={k: [n for n in names if fam[k][n]["commit"]] for k in fam},
+        family_verdicts={k: verdicts(fam[k], names) for k in fam},
+        family_further={k: further_tab(fam[k], call) for k in fam},
+        family_lowest={k: {n: round(fam[k][n]["further_low"][0], 3) for n in call if fam[k][n].get("further") is None}
+                       for k in fam},
         family=dict(one_in_ten={k: {n: round(fam[k][n]["p90"], 2) for n in names} for k in fam},
                     margin={k: {n: round(fam[k][n]["p90"] - Z[n]["firm"], 2) for n in names} for k in fam}),
         variants=dict(n=len(VARIANTS), names=[n for n, _ in VARIANTS]),
         totals=dict(contracted=r1(sum(Z[n]["contracted"] for n in names)),
                     in_service=r1(sum(r1(Z[n]["commissioned"]) for n in names)),
                     delivered=r1(sum(r1(Z[n]["delivered"]) for n in names))),
-        conventions=dict(design_day_degrees_below_zero=3.0, assurance_days_in_ten=9, credited_half_hours=["17:30", "18:00"],
+        conventions=dict(draws=E.DRAWS, design_day_degrees_below_zero=3.0, assurance_days_in_ten=9, credited_half_hours=["17:30", "18:00"],
                          assessment_date="15 January 2028", latest_winter_date="15 January 2026",
                          register_extract=X["register_date"].strftime("%d %B %Y").lstrip("0"), winters=3,
                          window="16:00 to 19:30", post_window_half_hours=4),
@@ -261,12 +311,27 @@ def main(out=None):
     names = F["order"]
     pmap = {v["key"]: d for d, v in F["providers"].items()}
     F["routes"] = {r["name"]: r["answer"] for r in eff["routes"]}
-    F["careful"] = EP.results_of(C, names, pmap)
-    F["quick"] = EP.results_of(Q, names, pmap, quick=True)
-    F["route_figures"] = {name: {n: dict(before=r1(q["before28"]), in_service=r1(q["commissioned"]), delivered=r1(q["delivered"]), peak=r1(q["mean_peak"]),
+    F["route_sets"] = {name: [q["name"] for q in sorted(run["zones"].values(), key=lambda q: q["name"]) if q["commit"]]
+                       for name, run in runs.items()}
+    F["careful"] = EP.results_of(C, names, pmap, F["call"])
+    F["quick"] = EP.results_of(Q, names, pmap, F["call"], quick=True)
+    F["route_figures"] = {name: {n: dict(demand_2526=r1(q["before26"]), connections=r1(q["conn_add"]), before=r1(q["before28"]),
+                                         in_service=r1(q["commissioned"]), delivered=r1(q["delivered"]), peak=r1(q["mean_peak"]),
                                          one_in_ten=r1(q["p90"]), share_over=pct(q["exceed"]), commit=bool(q["commit"]))
                                  for q in run["zones"].values() for n in [q["name"]]} for name, run in runs.items()}
     F["route_margins"] = {name: {q["name"]: q["p90"] - q["firm"] for q in run["zones"].values()} for name, run in runs.items()}
+    F["route_choices"] = {}
+    for name, run in runs.items():
+        rz = {q["name"]: q for q in run["zones"].values()}
+        sa, ca = rz[E.SCHEDULE_AT[0]], rz[E.CUSTOMER_AT]
+        F["route_choices"][name] = dict(further=further_tab(rz, F["call"]), verdicts=verdicts(rz, names),
+                                        schedule=r1(sa["schedule"]["schedule"]), schedule_one_in_ten=r1(sa["schedule"]["p90"]),
+                                        schedule_full=bool(sa["schedule"]["full"]),
+                                        customer_adds=r1(ca["customer"]["adds"]), customer_one_in_ten=r1(ca["customer"]["p90"]),
+                                        customer_holds=bool(ca["customer"]["holds"]))
+    F["compound"] = [dict(sentence=h["sentence"], rescues=h["rescues"], commits=h["commits"]) for h in eff["compound"]]
+    for h in eff["compound"]:
+        h.pop("commits", None)
     F["sensitivity"] = eff["sensitivity"]
     F["hints"] = [dict(sentence=h["sentence"], rescues=h["rescues"], commits=h["commits"]) for h in eff["hints"]]
     for h in eff["hints"]:

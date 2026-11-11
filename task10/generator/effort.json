@@ -1,47 +1,46 @@
 {
+ "compound": [
+  {
+   "rescues": [
+    "R1",
+    "R3",
+    "R6",
+    "R7",
+    "R8",
+    "R9",
+    "R10",
+    "R11",
+    "R12",
+    "R14"
+   ],
+   "sentence": "the come-back and the cold-end sentences together"
+  }
+ ],
  "hints": [
   {
    "rescues": [
-    "R1"
+    "R7",
+    "R11",
+    "R12",
+    "R14"
    ],
-   "sentence": "the days without a service stop near 2 C and are the low-running ones, and the heating load steepens below freezing: read the cold end from the hours before the window, which every day carries"
-  },
-  {
-   "rescues": [
-    "R2"
-   ],
-   "sentence": "a customer draws a share of its agreed capacity that depends on its type and takes two to three years to reach it: count every register customer's rise between the two assessment dates"
-  },
-  {
-   "rescues": [
-    "R4",
-    "R6"
-   ],
-   "sentence": "a provider's availability follows the megawatts in service, and the sites still to come commission as late as their class has across the register, not on the planned dates"
+   "sentence": "the load that comes back after the window is in proportion to what the window delivered, and the design day delivers several times what the record's events did"
   },
   {
    "rescues": [
     "R1",
-    "R2",
-    "R3"
-   ],
-   "sentence": "both of the first two sentences (the cold end and the customers' build-up)"
-  },
-  {
-   "rescues": [
-    "R1",
-    "R4",
+    "R3",
     "R6"
    ],
-   "sentence": "both the cold end and the commissioning sentences"
+   "sentence": "the heating load steepens below freezing, so a straight line through the mornings reads the cold mornings low"
   },
   {
-   "rescues": [
-    "R2",
-    "R4",
-    "R6"
-   ],
-   "sentence": "both the build-up and the commissioning sentences"
+   "rescues": [],
+   "sentence": "a further megawatt on the award's terms is mostly process load still to be commissioned"
+  },
+  {
+   "rescues": [],
+   "sentence": "a data hall takes two years and more to build up to its established draw"
   }
  ],
  "results": [
@@ -83,11 +82,11 @@
    "name": "design-day demand in winter 2025/26, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 29.0,
-     "Charlecote Way": 24.8,
-     "Dunmore Street": 20.2,
-     "Fenwick Street": 36.4,
-     "Hartwell Common": 22.6
+     "Ashcombe Road": 29.9,
+     "Charlecote Way": 25.0,
+     "Dunmore Street": 21.5,
+     "Fenwick Street": 36.8,
+     "Hartwell Common": 22.7
     },
     "quick": {
      "Ashcombe Road": 29.0,
@@ -143,11 +142,11 @@
    "name": "megawatts the register's customers add by 15 January 2028",
    "passes": {
     "careful": {
-     "Ashcombe Road": 0.6,
-     "Charlecote Way": 0.0,
+     "Ashcombe Road": 0.7,
+     "Charlecote Way": 4.5,
      "Dunmore Street": 0.2,
-     "Fenwick Street": 0.6,
-     "Hartwell Common": 2.7
+     "Fenwick Street": 0.7,
+     "Hartwell Common": 0.7
     },
     "quick": {
      "Ashcombe Road": 1.7,
@@ -206,11 +205,11 @@
    "name": "design-day demand before flexibility in winter 2027/28, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 30.9,
-     "Charlecote Way": 25.5,
-     "Dunmore Street": 21.0,
-     "Fenwick Street": 38.4,
-     "Hartwell Common": 26.2
+     "Ashcombe Road": 31.9,
+     "Charlecote Way": 30.2,
+     "Dunmore Street": 22.3,
+     "Fenwick Street": 38.8,
+     "Hartwell Common": 24.3
     },
     "quick": {
      "Ashcombe Road": 32.0,
@@ -266,11 +265,11 @@
    "name": "megawatts each provider will have in service on the assessment date",
    "passes": {
     "careful": {
-     "Ashcombe Road": 23.2,
-     "Charlecote Way": 9.4,
-     "Dunmore Street": 6.4,
-     "Fenwick Street": 14.3,
-     "Hartwell Common": 3.8
+     "Ashcombe Road": 17.8,
+     "Charlecote Way": 8.8,
+     "Dunmore Street": 6.2,
+     "Fenwick Street": 7.6,
+     "Hartwell Common": 3.6
     },
     "quick": {
      "Ashcombe Road": 21.0,
@@ -311,8 +310,8 @@
    "name": "the share of its megawatts in service each provider has available on the design day",
    "passes": {
     "careful": {
-     "Corvane Flex": 0.42,
-     "Quillon Energy Services": 0.51
+     "Corvane Flex": 0.46,
+     "Quillon Energy Services": 0.52
     },
     "quick": {
      "Corvane Flex": 0.37,
@@ -365,11 +364,11 @@
    "name": "megawatts each contract delivers between 17:00 and 18:00",
    "passes": {
     "careful": {
-     "Ashcombe Road": 9.9,
-     "Charlecote Way": 4.8,
-     "Dunmore Street": 2.7,
-     "Fenwick Street": 7.4,
-     "Hartwell Common": 1.6
+     "Ashcombe Road": 8.2,
+     "Charlecote Way": 4.6,
+     "Dunmore Street": 2.9,
+     "Fenwick Street": 3.9,
+     "Hartwell Common": 1.7
     },
     "quick": {
      "Ashcombe Road": 7.9,
@@ -409,10 +408,7 @@
    "independent": "the half-hours after the window on the event days themselves",
    "name": "megawatts that come back after the window per megawatt delivered",
    "passes": {
-    "careful": {
-     "Corvane Flex": 0.67,
-     "Quillon Energy Services": 0.31
-    },
+    "careful": null,
     "quick": null,
     "thorough": {
      "Corvane Flex": 0.67,
@@ -462,11 +458,11 @@
    "name": "the day's expected peak with the service instructed in full, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 28.1,
-     "Charlecote Way": 21.4,
-     "Dunmore Street": 18.3,
-     "Fenwick Street": 31.6,
-     "Hartwell Common": 24.6
+     "Ashcombe Road": 26.4,
+     "Charlecote Way": 25.7,
+     "Dunmore Street": 19.4,
+     "Fenwick Street": 34.9,
+     "Hartwell Common": 22.6
     },
     "quick": {
      "Ashcombe Road": 24.2,
@@ -526,11 +522,11 @@
    "name": "the level the peak stays under on nine design days in ten, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 29.3,
-     "Charlecote Way": 22.1,
-     "Dunmore Street": 18.9,
-     "Fenwick Street": 32.9,
-     "Hartwell Common": 25.3
+     "Ashcombe Road": 27.1,
+     "Charlecote Way": 26.9,
+     "Dunmore Street": 20.5,
+     "Fenwick Street": 36.1,
+     "Hartwell Common": 23.3
     },
     "quick": {
      "Ashcombe Road": 24.2,
@@ -590,11 +586,11 @@
    "name": "the share of design days over firm capacity, per cent",
    "passes": {
     "careful": {
-     "Ashcombe Road": 76,
-     "Charlecote Way": 0,
-     "Dunmore Street": 0,
-     "Fenwick Street": 0,
-     "Hartwell Common": 62
+     "Ashcombe Road": 2,
+     "Charlecote Way": 54,
+     "Dunmore Street": 24,
+     "Fenwick Street": 47,
+     "Hartwell Common": 0
     },
     "quick": {
      "Ashcombe Road": 0,
@@ -613,33 +609,167 @@
    }
   },
   {
+   "bands": {
+    "Fenwick Street": [
+     6.7,
+     9.9
+    ]
+   },
    "depends": [
+    "R4",
+    "R5",
+    "R7",
     "R9"
    ],
-   "figure": "call",
-   "golden": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street",
-    "Fenwick Street"
-   ],
-   "graded_as": "Recommendation",
+   "figure": "r12_further",
+   "golden": {
+    "Ashcombe Road": "none",
+    "Charlecote Way": "none",
+    "Dunmore Street": "none",
+    "Fenwick Street": 7.8
+   },
+   "graded_as": "Ask 6",
    "id": "R11",
    "independent": "",
-   "name": "the primaries to reinforce",
+   "name": "the further megawatts each primary to reinforce would need on its award's terms, or none",
+   "passes": {
+    "careful": {
+     "Ashcombe Road": 0.0,
+     "Charlecote Way": 3.5,
+     "Dunmore Street": 1.2,
+     "Fenwick Street": 7.1
+    },
+    "quick": {
+     "Ashcombe Road": 0.0,
+     "Charlecote Way": 0.0,
+     "Dunmore Street": 0.0,
+     "Fenwick Street": 0.0
+    },
+    "thorough": {
+     "Ashcombe Road": "none",
+     "Charlecote Way": "none",
+     "Dunmore Street": "none",
+     "Fenwick Street": 7.8
+    }
+   }
+  },
+  {
+   "bands": {
+    "one_in_ten": [
+     28.1,
+     29.0
+    ],
+    "schedule": [
+     4.6,
+     5.0
+    ]
+   },
+   "depends": [
+    "R3",
+    "R6",
+    "R7"
+   ],
+   "figure": "r13_schedule",
+   "golden": {
+    "one_in_ten": 28.4,
+    "schedule": 4.8
+   },
+   "graded_as": "Ask 7",
+   "id": "R12",
+   "independent": "",
+   "name": "Ashcombe Road's schedule for the lowest share over firm, and its nine-days-in-ten level there",
+   "passes": {
+    "careful": {
+     "one_in_ten": 27.1,
+     "schedule": 21.0
+    },
+    "quick": {
+     "one_in_ten": 24.2,
+     "schedule": 21.0
+    },
+    "thorough": {
+     "one_in_ten": 28.4,
+     "schedule": 4.8
+    }
+   }
+  },
+  {
+   "bands": {
+    "adds": [
+     0.3,
+     0.6
+    ],
+    "one_in_ten": [
+     23.5,
+     24.3
+    ]
+   },
+   "depends": [
+    "R2",
+    "R9"
+   ],
+   "figure": "r14_customer",
+   "golden": {
+    "adds": 0.4,
+    "one_in_ten": 23.8
+   },
+   "graded_as": "Ask 8",
+   "id": "R13",
+   "independent": "",
+   "name": "the data hall's megawatts by the assessment date, and Hartwell Common's nine-days-in-ten level with it",
+   "passes": {
+    "careful": {
+     "adds": 0.4,
+     "one_in_ten": 23.7
+    },
+    "quick": {
+     "adds": 3.8,
+     "one_in_ten": 32.8
+    },
+    "thorough": {
+     "adds": 0.4,
+     "one_in_ten": 23.8
+    }
+   }
+  },
+  {
+   "depends": [
+    "R9",
+    "R11"
+   ],
+   "figure": "r11_verdicts",
+   "golden": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "graded_as": "Recommendation",
+   "id": "R14",
+   "independent": "",
+   "name": "each primary's call: hold, reinforce, or reinforce unless more flexibility is contracted",
    "passes": {
     "careful": [
-     "Ashcombe Road",
-     "Hartwell Common"
+     "Ashcombe Road: hold",
+     "Charlecote Way: reinforce, or contract more flexibility",
+     "Dunmore Street: reinforce, or contract more flexibility",
+     "Fenwick Street: reinforce, or contract more flexibility",
+     "Hartwell Common: hold"
     ],
     "quick": [
-     "Hartwell Common"
+     "Ashcombe Road: hold",
+     "Charlecote Way: hold",
+     "Dunmore Street: hold",
+     "Fenwick Street: hold",
+     "Hartwell Common: reinforce, or contract more flexibility"
     ],
     "thorough": [
-     "Ashcombe Road",
-     "Charlecote Way",
-     "Dunmore Street",
-     "Fenwick Street"
+     "Ashcombe Road: reinforce, no further flexibility would do",
+     "Charlecote Way: reinforce, no further flexibility would do",
+     "Dunmore Street: reinforce, no further flexibility would do",
+     "Fenwick Street: reinforce, or contract more flexibility",
+     "Hartwell Common: hold"
     ]
    }
   }
@@ -647,340 +777,414 @@
  "routes": [
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "golden": true,
    "name": "every result of the chain"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: hold",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "each evening half-hour on a straight line through the days no service ran, three winters"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: hold",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "the same line through the latest winter's days alone"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: hold",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "every working weekday with the megawatts scheduled as a regressor"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Dunmore Street",
-    "Fenwick Street",
-    "Hartwell Common"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: hold",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: reinforce, no further flexibility would do"
    ],
    "name": "customers due after the latest winter, agreed capacity in full"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Dunmore Street",
-    "Fenwick Street",
-    "Hartwell Common"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: hold",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: reinforce, or contract more flexibility"
    ],
    "name": "the same customers at the average share today's customers draw"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Dunmore Street",
-    "Fenwick Street",
-    "Hartwell Common"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: hold",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: reinforce, or contract more flexibility"
    ],
    "name": "the same customers at their type's established share"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Dunmore Street",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: hold",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "the same customers on their type's build-up"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Dunmore Street",
-    "Fenwick Street",
-    "Hartwell Common"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: hold",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: reinforce, or contract more flexibility"
    ],
    "name": "every customer at what the latest months show, no further build-up"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the megawatts contracted, at the share the events delivered of their contract"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the megawatts contracted, at the share of megawatts in service"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the sites still to come on their planned dates"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the zone's own past share of its contract in service in mid January"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the sites still to come on the provider's record across its classes"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: hold",
+    "Hartwell Common: hold"
    ],
    "name": "the sites still to come on the register's record across every class"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Charlecote Way",
-    "Dunmore Street",
-    "Fenwick Street"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "each class's record read from the sites commissioned alone"
   },
   {
    "answer": [
-    "Charlecote Way",
-    "Dunmore Street",
-    "Fenwick Street"
+    "Ashcombe Road: hold",
+    "Charlecote Way: reinforce, or contract more flexibility",
+    "Dunmore Street: reinforce, or contract more flexibility",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "name": "the delivery taken off the 17:00 to 18:00 peak"
   },
   {
    "answer": [
-    "Ashcombe Road",
-    "Hartwell Common"
+    "Ashcombe Road: hold",
+    "Charlecote Way: reinforce, or contract more flexibility",
+    "Dunmore Street: reinforce, or contract more flexibility",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
-   "name": "careful but hurried: the line, the type's established share, the planned dates"
+   "name": "the come-back as the megawatts the record's events showed, whatever they delivered"
   },
   {
    "answer": [
-    "Hartwell Common"
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "the mornings on a straight line in temperature"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "a further megawatt at the share of its contract the zone will have in service"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "every further megawatt in service"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, or contract more flexibility",
+    "Charlecote Way: reinforce, or contract more flexibility",
+    "Dunmore Street: reinforce, or contract more flexibility",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "a further contract read straight off the nine-days-in-ten level's margin"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "the data hall at its type's established share"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "the data hall at its agreed capacity"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: reinforce, no further flexibility would do",
+    "Charlecote Way: reinforce, no further flexibility would do",
+    "Dunmore Street: reinforce, no further flexibility would do",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "the data hall on one build-up for every type"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: hold",
+    "Charlecote Way: reinforce, or contract more flexibility",
+    "Dunmore Street: reinforce, or contract more flexibility",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
+   ],
+   "name": "careful but hurried: the mornings on a straight line, the come-back as the record's megawatts"
+  },
+  {
+   "answer": [
+    "Ashcombe Road: hold",
+    "Charlecote Way: hold",
+    "Dunmore Street: hold",
+    "Fenwick Street: hold",
+    "Hartwell Common: reinforce, or contract more flexibility"
    ],
    "name": "quick: the latest winter's line, agreed capacity in full, the contract at face value, the expected day"
   }
  ],
  "sensitivity": {
   "commits": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Ashcombe Road: hold",
+   "Charlecote Way: reinforce, or contract more flexibility",
+   "Dunmore Street: reinforce, or contract more flexibility",
+   "Fenwick Street: reinforce, or contract more flexibility",
+   "Hartwell Common: hold"
   ],
-  "earned": 3.5,
+  "earned": 8.5,
   "grades": {
-   "R1": "missed",
-   "R10": "missed",
+   "R1": "right",
+   "R10": "partly",
    "R11": "missed",
-   "R2": "partly",
-   "R3": "missed",
-   "R4": "partly",
+   "R12": "missed",
+   "R13": "right",
+   "R14": "missed",
+   "R2": "right",
+   "R3": "right",
+   "R4": "right",
    "R5": "right",
-   "R6": "partly",
-   "R7": "right",
-   "R8": "missed",
-   "R9": "missed"
+   "R6": "right",
+   "R7": "missed",
+   "R8": "partly",
+   "R9": "partly"
   },
   "hints": [
    {
     "commits": [
-     "Ashcombe Road",
-     "Dunmore Street",
-     "Fenwick Street",
-     "Hartwell Common"
+     "Ashcombe Road: reinforce, no further flexibility would do",
+     "Charlecote Way: reinforce, no further flexibility would do",
+     "Dunmore Street: reinforce, no further flexibility would do",
+     "Fenwick Street: reinforce, or contract more flexibility",
+     "Hartwell Common: hold"
     ],
     "rescues": [
-     "R1"
-    ],
-    "sentence": "the cold end read from the hours before the window"
-   },
-   {
-    "commits": [
-     "Ashcombe Road",
-     "Charlecote Way",
-     "Fenwick Street"
-    ],
-    "rescues": [
-     "R2"
-    ],
-    "sentence": "every register customer's rise on its type's build-up"
-   },
-   {
-    "commits": [
-     "Ashcombe Road",
-     "Fenwick Street",
-     "Hartwell Common"
-    ],
-    "rescues": [
-     "R4",
-     "R6"
-    ],
-    "sentence": "the sites still to come and the sites withdrawn counted in each class's record"
-   },
-   {
-    "commits": [
-     "Ashcombe Road",
-     "Charlecote Way",
-     "Dunmore Street",
-     "Fenwick Street"
-    ],
-    "rescues": [
-     "R1",
-     "R2",
-     "R3",
+     "R7",
+     "R8",
      "R9",
-     "R11"
+     "R10",
+     "R11",
+     "R12",
+     "R14"
     ],
-    "sentence": "the cold end and the build-up together"
-   },
-   {
-    "commits": [
-     "Ashcombe Road",
-     "Dunmore Street",
-     "Fenwick Street",
-     "Hartwell Common"
-    ],
-    "rescues": [
-     "R1",
-     "R4",
-     "R6"
-    ],
-    "sentence": "the cold end and the sites still to come together"
-   },
-   {
-    "commits": [
-     "Ashcombe Road",
-     "Charlecote Way",
-     "Fenwick Street"
-    ],
-    "rescues": [
-     "R2",
-     "R4",
-     "R6"
-    ],
-    "sentence": "the build-up and the sites still to come together"
+    "sentence": "the load that comes back is in proportion to what the window delivered"
    }
   ],
   "margins": {
-   "Ashcombe Road": 1.034779,
-   "Charlecote Way": -3.386893,
-   "Dunmore Street": -1.053993,
-   "Fenwick Street": 0.396235,
-   "Hartwell Common": 0.885951
+   "Ashcombe Road": -0.097464,
+   "Charlecote Way": 1.420909,
+   "Dunmore Street": 1.057254,
+   "Fenwick Street": 1.201249,
+   "Hartwell Common": -0.954776
   },
-  "name": "the careful but hurried pass with each class's lateness read from the sites commissioned alone",
+  "name": "the careful but hurried pass with the cold end read as a curve (the come-back still the record's megawatts)",
   "results": {
    "R1": {
-    "Ashcombe Road": 29.0,
-    "Charlecote Way": 24.8,
-    "Dunmore Street": 20.2,
-    "Fenwick Street": 36.4,
-    "Hartwell Common": 22.6
+    "Ashcombe Road": 30.2,
+    "Charlecote Way": 25.0,
+    "Dunmore Street": 22.2,
+    "Fenwick Street": 36.8,
+    "Hartwell Common": 22.7
    },
    "R10": {
-    "Ashcombe Road": 51,
-    "Charlecote Way": 0,
-    "Dunmore Street": 0,
-    "Fenwick Street": 19,
-    "Hartwell Common": 64
+    "Ashcombe Road": 7,
+    "Charlecote Way": 58,
+    "Dunmore Street": 75,
+    "Fenwick Street": 50,
+    "Hartwell Common": 0
    },
-   "R11": [
-    "Ashcombe Road",
-    "Fenwick Street",
-    "Hartwell Common"
+   "R11": {
+    "Ashcombe Road": 0.0,
+    "Charlecote Way": 3.9,
+    "Dunmore Street": 2.7,
+    "Fenwick Street": 7.8
+   },
+   "R12": {
+    "one_in_ten": 27.4,
+    "schedule": 21.0
+   },
+   "R13": {
+    "adds": 0.4,
+    "one_in_ten": 23.8
+   },
+   "R14": [
+    "Ashcombe Road: hold",
+    "Charlecote Way: reinforce, or contract more flexibility",
+    "Dunmore Street: reinforce, or contract more flexibility",
+    "Fenwick Street: reinforce, or contract more flexibility",
+    "Hartwell Common: hold"
    ],
    "R2": {
-    "Ashcombe Road": 0.6,
-    "Charlecote Way": 0.0,
+    "Ashcombe Road": 0.7,
+    "Charlecote Way": 4.5,
     "Dunmore Street": 0.2,
-    "Fenwick Street": 0.6,
-    "Hartwell Common": 2.7
+    "Fenwick Street": 0.7,
+    "Hartwell Common": 0.7
    },
    "R3": {
-    "Ashcombe Road": 30.9,
-    "Charlecote Way": 25.5,
-    "Dunmore Street": 21.0,
-    "Fenwick Street": 38.4,
-    "Hartwell Common": 26.2
+    "Ashcombe Road": 32.2,
+    "Charlecote Way": 30.3,
+    "Dunmore Street": 23.0,
+    "Fenwick Street": 38.9,
+    "Hartwell Common": 24.3
    },
    "R4": {
-    "Ashcombe Road": 18.9,
-    "Charlecote Way": 9.0,
-    "Dunmore Street": 6.3,
-    "Fenwick Street": 8.4,
-    "Hartwell Common": 3.7
+    "Ashcombe Road": 17.8,
+    "Charlecote Way": 8.8,
+    "Dunmore Street": 6.2,
+    "Fenwick Street": 7.6,
+    "Hartwell Common": 3.6
    },
    "R5": {
     "Corvane Flex": 0.42,
     "Quillon Energy Services": 0.51
    },
    "R6": {
-    "Ashcombe Road": 8.0,
-    "Charlecote Way": 4.6,
-    "Dunmore Street": 2.7,
-    "Fenwick Street": 4.3,
-    "Hartwell Common": 1.6
+    "Ashcombe Road": 7.6,
+    "Charlecote Way": 4.5,
+    "Dunmore Street": 2.6,
+    "Fenwick Street": 3.9,
+    "Hartwell Common": 1.5
    },
-   "R7": {
-    "Corvane Flex": 0.67,
-    "Quillon Energy Services": 0.31
-   },
+   "R7": null,
    "R8": {
-    "Ashcombe Road": 27.5,
-    "Charlecote Way": 21.5,
-    "Dunmore Street": 18.3,
-    "Fenwick Street": 34.1,
-    "Hartwell Common": 24.6
+    "Ashcombe Road": 26.7,
+    "Charlecote Way": 25.8,
+    "Dunmore Street": 20.4,
+    "Fenwick Street": 35.0,
+    "Hartwell Common": 22.8
    },
    "R9": {
-    "Ashcombe Road": 28.5,
-    "Charlecote Way": 22.2,
-    "Dunmore Street": 18.9,
-    "Fenwick Street": 35.4,
-    "Hartwell Common": 25.3
+    "Ashcombe Road": 27.4,
+    "Charlecote Way": 27.0,
+    "Dunmore Street": 21.1,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.4
    }
   },
-  "score": 26.9
+  "score": 57.1
  }
 }

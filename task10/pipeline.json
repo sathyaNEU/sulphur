@@ -1,43 +1,41 @@
 {
  "task": "task10",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
  "stage": 5,
  "stage_name": "ready",
  "updated": "2026-11-10",
- "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 (peaks under 29.5, 27.0, 21.1, 36.2 MW on nine design days in ten against 27.5, 25.6, 20.0, 35.0 MW of firm capacity); Hartwell Common stays within firm capacity (23.4 MW against 24.4)",
+ "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 and hold Hartwell Common (nine days in ten under 29.5, 27.0, 21.1, 36.2 and 23.4 MW against 27.5, 25.6, 20.0, 35.0 and 24.4); more flexibility is no substitute at Ashcombe Road, Charlecote Way or Dunmore Street, Fenwick Street would need 7.8 MW more on its 2027/28 award's terms, Ashcombe Road's best schedule (4.8 MW, 28.4 MW nine days in ten) is still over firm, and Hartwell Common holds a 4,000 kVA data hall energised on 2 August 2027 (adds 0.4 MW, 23.8 against 24.4)",
  "architecture": 7,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-10",
-  "note": "85 checks, 0 FAIL, 1 WARN (nearest chains: task17, answered in the note's Template check)"
+  "note": "86 checks, 0 FAIL, 2 WARN (R1 upstream of 8 results; nearest chains task17, task2, task4), each answered in the note"
  },
  "leak": {
-  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-04, 16 lines, each ruled in the note's Leak rulings",
-  "reader": "2026-11-10 on cut a40205c5: no ranking file, no answer figure, nothing planted; it read the guideline as a recipe (answered against the generator's careful pass and the judge's first pass, neither of which reaches the list); its realism note on the growth register's acceptance dates fixed, with one acceptance date that postdated the register; data-only change since, checked by leak.py",
+  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-04, each line ruled in the note's Leak rulings (the first run's LEAK, the blocks quoting the guideline's 100,000 design days, fixed in the blocks)",
+  "reader": "2026-11-10 on cut 15f8ba39: no ranking file, no answer figure, nothing planted; it read the guideline as the method's skeleton (section 7's pin is the reviewer's request; it settles which things vary, not their size), flagged guideline 6's in-service sentence (a forecast to the assessment date, as intended) and Dunmore Street's low cyclic uplift (the zone's one mismatched transformer pair); ruled in the note",
   "report": "task10/leak_check_report.md"
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-10 on the registered architecture 7 card (template.chain_near and overuse.weight against task17, driver.near against this slot's architectures 6 and 5, overuse.forum, repeat.decision, repeat.question_form), each answered in the Draw",
-  "heart": "WARN 2026-11-10 on the final cut against the corpus at origin/main as fetched for the PAUSED commit, no BLOCK; surface exit 0 with one pair promoted (task14, read side by side in the note's Draw)"
+  "guard_check": "WARN 2026-11-10 on the levelled-up card, no BLOCK: the decisive generator redrawn from G6 to G7 (task4's re-registered card had taken G6 into this card's window), with differentiation from this slot's architecture 4 and mark162; template.chain_near and overuse.weight (task17), overuse.forum, repeat.decision (task14), repeat.deliverables (task4), repeat.question_form (task3), each answered in the Draw",
+  "heart": "WARN 2026-11-10 on the final cut, no BLOCK; surface exit 0"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
   "date": "2026-11-10",
-  "cut": "a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99",
-  "order_kept": true,
-  "gate_g": "mechanism: forecasting; stumping_family: analytical_non_defect; surface_read_dependency: no; sole_data_defect: no",
-  "gate_h": "domain: pass; layers: pass; results: 12 graded across 7 areas; one_thing: none; effort: quick 3, careful 7, thorough 11 of 12; one_fact: rescues 3 of 12",
-  "first_pass": "before the blocks were opened it committed Charlecote Way and Dunmore Street (one lateness record across every class, one share for both providers, no load coming back); it earned R1 at four primaries of five, R2 and R3",
-  "notes": "corrected re-run inside or at the edge of every band except three Ashcombe Road figures (expected peak, nine days in ten, share), where the call has 1.9 MW of margin; two optional notes, no repair required",
-  "scope": "APPROVE is on cut a40205c5; the final cut 505a8deb differs in the growth register's printed acceptance dates (no result reads them) and the Final Recommendation's wording; figures.json differs only in ten customer references",
-  "report": "task10/determinism_check_report.md"
+  "cut": "15f8ba39cfb270b7",
+  "gate_g": "mechanism: method_or_model_selection; stumping_family: analytical_non_defect; surface_read_dependency: no; sole_data_defect: no",
+  "gate_h": "domain: pass; layers: pass; results: 14 graded across 7 or more areas; one_thing: none; one_fact: the come-back sentence rescues 4 of 14 (its own best, the cold end, 1 or 2)",
+  "notes": "its thread re-derived the three decisions and forced the five-primary scope before opening the blocks; its one flag, the data hall's band top 24.3 against firm 24.4, is the band's padding over a weakest variant at 24.15 (checks.py R14 row)",
+  "scope": "APPROVE is on cut 15f8ba39; the final cut 627cff47 differs in the PDFs' XMP dates (the house writer sets them to each document's issue date), the Step-by-Step's hurried figures and two phrases on the deck's sixth slide; no graded figure moved",
+  "report": "task10/determinism_check_report_pass2.md"
  },
- "paper_pair": 24.5,
+ "paper_pair": 47.9,
  "runs": {
   "run1": null,
   "run2": null,
@@ -114,10 +112,11 @@
    "portal": "holistic audit: not stumped for an analytical reason (the commit and hold split reproduced on all five zone primaries; the runs also assessed the four non-zone primaries); the shares loosely pinned (Charlecote Way 45 to 72, Ashcombe Road 54 against 91); add a checkable decision the trap does not settle (the contracted MW Fenwick Street needs to fall under one day in ten; whether Hartwell Common holds if its accepted connections energise on time) and say how the share is estimated",
    "runs": "arch7_run1.md (the golden split on the five, 54/84/84/51/0 per cent) and arch7_run2.md (Ashcombe Road held at 5 per cent, 53/22/45/0 at the other four); both rebuilt the cold evening, matured the customers, forecast commissioning with censoring, capped availability and replayed the come back; both took availability as independent of the day's demand",
    "repair": "design (level-up in the same world at the reviewer's direction)",
-   "commit": ""
+   "commit": "RESHIPPED (task10)",
+   "fix": "architecture 7 levelled up in the same world: three decisions the commit list does not settle, each with a judgment of its own (the further MW on each award's terms, none at Ashcombe Road, Charlecote Way and Dunmore Street where the come-back caps any contract, 7.8 at Fenwick Street where a further MW is mostly late process load; Ashcombe Road's best schedule, 4.8 MW and still over firm; Hartwell Common with a 4,000 kVA data hall, holding at 15 per cent of its type's draw); guideline 7 states the three variations, the 100,000 design days and the estimates held at their central values; the prompt names the constraint managed zone primaries and sets no rounding; the careful column calibrated to Response 2 cell for cell (47.9 on paper); the house PDF writer carried in (XMP dates at each document's issue date)"
   }
  ],
- "resume": "stage 2: level the chain up at the reviewer's direction (a decision the trap does not settle, the share's estimation pinned) on the architecture 7 generator; back up the READY cut first",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -416,26 +415,19 @@
   }
  ],
  "doctrine": "throughout",
- "chain": "R1 design-day demand in winter 2025/26 by primary (Dunmore Street 22.2 MW, Ashcombe Road 30.2); R2 megawatts the register's customers add by 15 January 2028 (Charlecote Way 4.5, Hartwell Common 0.7); R3 demand before flexibility in winter 2027/28 (32.2, 30.3, 23.0, 38.9, 24.3); R4 megawatts each provider will have in service on the assessment date (Fenwick Street 7.6 of 13.0 contracted, Ashcombe Road 17.8 of 21.0); R5 the share of them available at minus 3 C (0.42 and 0.51); R6 megawatts delivered between 17:00 and 18:00 (7.6, 4.5, 2.6, 3.9, 1.5); R7 megawatts coming back after the window per megawatt delivered (0.67 and 0.31); R8 expected peaks (28.5, 25.9, 20.4, 35.0, 22.8; Ashcombe Road's in the half-hour ending 20:00); R9 nine-days-in-ten levels (29.5, 27.0, 21.1, 36.2, 23.4) against firm capacity (27.5, 25.6, 20.0, 35.0, 24.4); R10 the share of design days over firm capacity (91, 62, 75, 50, 0 per cent); R11 reinforce Ashcombe Road, Charlecote Way, Dunmore Street, Fenwick Street, hold Hartwell Common",
+ "chain": "R1 design-day demand in winter 2025/26 (Dunmore Street 22.2 MW, Ashcombe Road 30.2); R2 megawatts the register's customers add (Charlecote Way 4.5, Hartwell Common 0.7); R3 demand before flexibility in winter 2027/28 (32.2, 30.3, 23.0, 38.9, 24.3); R4 megawatts in service on 15 January 2028 (Fenwick Street 7.6 of 13.0, Ashcombe Road 17.8 of 21.0); R5 the share available at minus 3 C (0.42, 0.51); R6 delivered 17:00 to 18:00 (7.6, 4.5, 2.6, 3.9, 1.5); R7 come-back per MW delivered (0.67, 0.31), carried to the design day's delivery; R8 expected peaks (28.5 at 20:00, 25.9, 20.4, 35.0, 22.8); R9 nine days in ten (29.5, 27.0, 21.1, 36.2, 23.4); R10 shares over firm (91, 62, 75, 50, 0 per cent); R11 further MW on the award's terms (none at Ashcombe Road, Charlecote Way and Dunmore Street, 7.8 at Fenwick Street); R12 Ashcombe Road's schedule (4.8 MW, 28.4 against 27.5); R13 the data hall at Hartwell Common (0.4 MW, 23.8 against 24.4); R14 each primary's call (three reinforced with no flexibility alternative, Fenwick Street reinforced or held by more flexibility, Hartwell Common held)",
  "effort": {
-  "quick": 17.3,
-  "careful": 24.5,
+  "quick": 15.2,
+  "careful": 47.9,
   "thorough": 100.0,
-  "results_earned": {
-   "quick": "1.5 of 11",
-   "careful": "3 of 11",
-   "thorough": "11 of 11"
-  },
-  "largest_single_hint": "2 of 11 (R4, R6)",
-  "strongest_compound_sentence": "3 of 11",
-  "wrong_lists": "7 different wrong lists over 18 shortcut routes",
-  "sensitivity": "if a run also groups the asset register by class and reads the commissioned sites alone: 3.5 of 11 results, 26.9, commits Ashcombe Road, Fenwick Street, Hartwell Common; single sentences rescue at most 2, the two remaining judgments named together rescue 5 of 11",
-  "judge_first_pass": "a medium-effort judge thread earned R1 to R3 unprompted and lost R4, R5 and R7: R1 and R2 are not certain losses, R4 is the likeliest"
+  "largest_hint": "the load that comes back after the window is in proportion to what the window delivered, and the design day delivers several times what the record's events did: rescues 4 of 14 (R7, R11, R12, R14)",
+  "calibration": "careful column = Response 2 of architecture 7 cell for cell (the mornings on a straight line, the come-back as the record's megawatts); sensitivity with the cold end as a curve scores 57.1",
+  "routes": "26 shortcuts, 8 different wrong answers"
  },
  "zips": {
-  "target.zip": "505a8debbc22afd79da7bf383c64e87a295e181fe65816422824d0e92619d3a5",
-  "golden.zip": "4f0468e4c94e0b7ec10876f45500ae0dfc42f80d7b76f61c27bc7709416e8d4e"
+  "target.zip": "627cff47df4c1ecb",
+  "golden.zip": "c3071026273cf521"
  },
  "prompt_rewritten": false,
- "gates": "gates.py task10 --full on the final cut 505a8deb (2026-11-10): 11 gates, 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW, heart WARN with no BLOCK); checks.py 77 of 77; verify.py 15 of 15; two builds byte-identical; figures_check PASS; leak.py --asof 2026-11-04 REVIEW with no LEAK; audit_containers --asof 2026-11-04 PASS"
+ "gates": "gates.py task10 --full on the final cut 627cff47 (2026-11-10): 11 gates, 0 FAIL, 3 WARN (precut, leak REVIEW, heart WARN with no BLOCK); checks.py 85 of 85; verify.py 18 of 18; two builds byte-identical; figures_check PASS; audit_containers PASS"
 }

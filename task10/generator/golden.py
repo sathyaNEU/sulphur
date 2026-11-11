@@ -1,6 +1,6 @@
 """task10 architecture 7: the golden deliverables, as Wealdmoor's DSO planning team would hand them to the December
-capital expenditure review: the assessment workbook (the primaries with a chart, the demand side, the customers, the
-sites still to come, what each shortcut would have committed) and five slides."""
+capital expenditure review: the assessment workbook (the primaries with a chart, whether more flexibility could stand in,
+the demand side, the customers, the sites still to come, what each shortcut would have committed) and six slides."""
 import datetime as dt
 import os
 
@@ -29,6 +29,7 @@ HEAD_FILL = PatternFill("solid", fgColor="DDEBF7")
 # demand before flexibility, expected peak, nine design days in ten, firm capacity (a fixed order, checked for
 # colour-blind separation; every bar carries its value)
 PALETTE = ("2A78D6", "EB6834", "1BAF7A", "EDA100")
+TOTAL = 6     # slides in the deck
 
 
 def _z(t):
@@ -75,17 +76,20 @@ def write_workbook(G, F, path):
                "In service on 15 January 2028 (MW)", "Share of MW in service available on the design day",
                "Delivered 17:00 to 18:00, design day (MW)", "Half-hour of the day's peak with flexibility (ending)",
                "Expected peak with flexibility (MW)", "Peak not exceeded on nine design days in ten (MW)",
-               "Firm capacity (MW)", "Design days over firm capacity (%)", "Reinforce"],
-          [24, 18, 26, 13, 15, 15, 12, 13, 13, 13, 13, 13, 14, 10, 12, 10], height=62)
+               "Firm capacity (MW)", "Design days over firm capacity (%)", "Reinforce",
+               "Further flexibility on the 2027/28 award's terms that would hold it within one design day in ten (MW)"],
+          [24, 18, 26, 13, 15, 15, 12, 13, 13, 13, 13, 13, 14, 10, 12, 10, 20], height=76)
     for n in names:
         z = Z[n]
         prov = [p for p in F["providers"] if n in F["providers"][p]["zones"]][0]
+        fu = F["r12_further"].get(n)
         ws.append(["%s CMZ" % n, n, z["provider"], F["r1_demand_2526"][n], F["r2_connections"][n], F["r3_before"][n],
                    z["contracted"], F["r4_in_service"][n], F["r5_share"][prov], F["r6_delivered"][n], z["peak_hh"],
-                   F["r8_peak"][n], F["r9_one_in_ten"][n], z["firm"], F["r10_share_over"][n], "Yes" if z["commit"] else "No"])
+                   F["r8_peak"][n], F["r9_one_in_ten"][n], z["firm"], F["r10_share_over"][n], "Yes" if z["commit"] else "No",
+                   "Not needed" if fu is None else ("No amount" if fu == "none" else fu)])
     k = len(names)
     _formats(ws, {"D": "0.0", "E": "0.0", "F": "0.0", "G": "0.0", "H": "0.0", "I": "0.00", "J": "0.0", "L": "0.0", "M": "0.0",
-                  "N": "0.0", "O": "0"})
+                  "N": "0.0", "O": "0", "Q": "0.0"})
     notes = [
         "Design day: a working weekday at a daily mean of minus 3.0 C at Halverton weather station, assessed as at "
         "15 January, with the 2027/28 contract instructed in full for the service window (WPN-NP-G-014, issue 5).",
@@ -115,6 +119,60 @@ def write_workbook(G, F, path):
     ch.legend.position = "b"
     ch.height, ch.width = 10.5, 24
     ws.add_chart(ch, "A%d" % (k + 9))
+
+    fx = wb.create_sheet("Flexibility")
+    call = F["call"]
+    _head(fx, ["Primary substation", "Provider", "Contracted 2027/28 (MW)", "2027/28 award, of which the step over 2026/27 (MW)",
+               "In service by 15 January 2028 per MW of that step", "Delivered at 17:00 to 18:00 per further MW",
+               "Further MW on the award's terms for one design day in ten or fewer",
+               "Lowest share of design days over firm any further contract reaches (%)", "Reached with a further (MW)"],
+          [18, 26, 12, 14, 14, 14, 18, 18, 12], height=76)
+    for n in call:
+        z = Z[n]
+        prov = [p for p in F["providers"] if n in F["providers"][p]["zones"]][0]
+        fu, lo = F["r12_further"][n], F["r12_lowest"].get(n)
+        fx.append([n, z["provider"], z["contracted"], z["award_step"], F["r12_per_mw"][n],
+                   round(F["r12_per_mw"][n] * F["r5_share"][prov], 2), "No amount" if fu == "none" else fu,
+                   lo["share_pct"] if lo else None, lo["at_mw"] if lo else None])
+    _formats(fx, {"C": "0.0", "D": "0.0", "E": "0.00", "F": "0.00", "G": "0.0", "H": "0", "I": "0.0"})
+    r0 = fx.max_row + 2
+    fx.cell(row=r0, column=1, value="Each further megawatt is signed as the 2027/28 award was: the same kinds of site in the "
+                                    "same proportions, planned for the same dates. The load that comes back after the window "
+                                    "grows with every megawatt delivered, so beyond a point a larger contract raises the "
+                                    "day's peak instead of lowering it.")
+    sd = F["r13_detail"]
+    r0 += 2
+    fx.cell(row=r0, column=1, value="%s scheduled short of its contract for the whole window" % sd["primary"]).font = HEAD_FONT
+    rows = [("Schedule giving the fewest design days over firm capacity (MW)", F["r13_schedule"]["schedule"], "0.0"),
+            ("Expected peak at that schedule (MW)", sd["mean_peak"], "0.0"),
+            ("Peak not exceeded on nine design days in ten at that schedule (MW)", F["r13_schedule"]["one_in_ten"], "0.0"),
+            ("Design days over firm capacity at that schedule (%)", sd["share_pct"], "0"),
+            ("Firm capacity (MW)", sd["firm"], "0.0"),
+            ("Within one design day in ten at that schedule", "Yes" if sd["holds"] else "No", None),
+            ("Contracted 2027/28 (MW), delivered when instructed in full (MW)", "%.1f, %.1f" % (sd["contracted"], sd["delivered_in_full"]), None)]
+    for i, (label, val, fmt) in enumerate(rows):
+        fx.cell(row=r0 + 1 + i, column=1, value=label)
+        c = fx.cell(row=r0 + 1 + i, column=4, value=val)
+        if fmt:
+            c.number_format = fmt
+            c.alignment = Alignment(horizontal="right")
+    cd_ = F["r14_detail"]
+    r0 += len(rows) + 3
+    fx.cell(row=r0, column=1, value="%s with a %s kVA %s energised %s" % (cd_["primary"], "{:,}".format(cd_["kva"]),
+                                                                          cd_["type"].lower(), cd_["energised"])).font = HEAD_FONT
+    rows = [("Adds to the evening peak by 15 January 2028 (MW)", F["r14_customer"]["adds"], "0.0"),
+            ("Of its type's established draw reached by then (%)", cd_["build_up_pct"], "0"),
+            ("Type's established draw (kW per kVA of agreed capacity)", cd_["established_share"], "0.00"),
+            ("Peak not exceeded on nine design days in ten with it (MW)", F["r14_customer"]["one_in_ten"], "0.0"),
+            ("Firm capacity (MW)", cd_["firm"], "0.0"),
+            ("Design days over firm capacity with it (%)", cd_["share_pct"], "0"),
+            ("Within one design day in ten", "Yes" if cd_["holds"] else "No", None)]
+    for i, (label, val, fmt) in enumerate(rows):
+        fx.cell(row=r0 + 1 + i, column=1, value=label)
+        c = fx.cell(row=r0 + 1 + i, column=4, value=val)
+        if fmt:
+            c.number_format = fmt
+            c.alignment = Alignment(horizontal="right")
 
     dm = wb.create_sheet("Demand")
     _head(dm, ["Primary substation", "Working weekdays on record, three winters", "Of which at or below 0 C",
@@ -239,8 +297,12 @@ def write_deck(G, F, path):
         % _join("%.1f MW at %s (firm %.1f)" % (F["r9_one_in_ten"][n], n, Z[n]["firm"]) for n in commit),
         "%s: %.1f MW against %.1f MW firm." % (_join(hold), F["r9_one_in_ten"][hold[0]], Z[hold[0]]["firm"]) if len(hold) == 1
         else "The others stay under firm capacity.",
+        "More flexibility is no substitute at %s; %s would need %.1f MW more on its 2027/28 award's terms."
+        % (_join(n for n in commit if F["r12_further"][n] == "none"),
+           _join(n for n in commit if F["r12_further"][n] != "none"),
+           sum(F["r12_further"][n] for n in commit if F["r12_further"][n] != "none")),
         "DSO capital expenditure review, December 2026. Prepared by the Halverton DSO planning team."], size=18)
-    _strip(s, 1, 5)
+    _strip(s, 1, TOTAL)
 
     s = prs.slides.add_slide(blank)
     _title(s, "%s go over firm capacity on more than one design day in ten" % _join(commit), 22)
@@ -267,7 +329,7 @@ def write_deck(G, F, path):
         ser.data_labels.number_format = "0.0"
         ser.data_labels.number_format_is_linked = False
         ser.data_labels.font.size = Pt(9)
-    _strip(s, 2, 5)
+    _strip(s, 2, TOTAL)
 
     s = prs.slides.add_slide(blank)
     _title(s, "Demand: the cold end and the customers still building up carry %s" % _join(
@@ -282,7 +344,7 @@ def write_deck(G, F, path):
                  % (_join("%.1f C at %s" % (Z[n]["coldest_without_service_2526"], n) for n in ("Dunmore Street",) if n in Z),
                     Z["Dunmore Street"]["working_weekdays"]))
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=16)
-    _strip(s, 3, 5)
+    _strip(s, 3, TOTAL)
 
     s = prs.slides.add_slide(blank)
     _title(s, "Flexibility: %.1f MW contracted, %.1f MW in service by 15 January 2028, %.1f MW delivered at the peak"
@@ -300,7 +362,34 @@ def write_deck(G, F, path):
                  "made of them." % (_join(c for c, _ in slow).replace("Process load", "Process load sites").replace(
                      "Battery storage", "battery sites"), _join(str(v["median_days_late"]) for _, v in slow)))
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=16)
-    _strip(s, 4, 5)
+    _strip(s, 4, TOTAL)
+
+    s = prs.slides.add_slide(blank)
+    none_ = [n for n in commit if F["r12_further"][n] == "none"]
+    some = [n for n in commit if F["r12_further"][n] != "none"]
+    _title(s, "More flexibility would not hold %s: the load that comes back after the window caps it" % _join(none_), 22)
+    sd, cd_ = F["r13_detail"], F["r14_detail"]
+    lines = []
+    for n in none_:
+        lo = F["r12_lowest"][n]
+        if lo["at_mw"] > 0:
+            lines.append("%s: no further contract on its 2027/28 terms brings it within one design day in ten; the best any "
+                         "size does is %d per cent of design days over firm (at %.1f MW more)." % (n, lo["share_pct"], lo["at_mw"]))
+        else:
+            lines.append("%s: every further MW on its 2027/28 terms only raises the peak after the window; as awarded it is "
+                         "over firm on %d per cent of design days." % (n, lo["share_pct"]))
+    for n in some:
+        lines.append("%s: %.1f MW more on its 2027/28 terms would hold it within one design day in ten; about %.2f MW of "
+                     "each further MW would be in service by 15 January 2028." % (n, F["r12_further"][n], F["r12_per_mw"][n]))
+    lines.append("%s scheduled at %.1f MW for the whole window, not its %.1f MW in full, gives its lowest peak; nine days "
+                 "in ten it still reaches %.1f MW against %.1f MW firm." % (
+                     sd["primary"], F["r13_schedule"]["schedule"], sd["contracted"], F["r13_schedule"]["one_in_ten"], sd["firm"]))
+    lines.append("%s would stay within firm capacity with a %s kVA %s energised %s: it adds %.1f MW by 15 January "
+                 "2028 (%.1f MW nine days in ten against %.1f)." % (
+                     cd_["primary"], "{:,}".format(cd_["kva"]), cd_["type"].lower(), cd_["energised"],
+                     F["r14_customer"]["adds"], F["r14_customer"]["one_in_ten"], cd_["firm"]))
+    _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=16)
+    _strip(s, 5, TOTAL)
 
     s = prs.slides.add_slide(blank)
     _title(s, "Commit %s; keep %s on its flexibility contract" % (_join(commit), _join(hold)), 22)
@@ -310,7 +399,7 @@ def write_deck(G, F, path):
         "Share of design days over firm capacity: %s." % _join("%s %d per cent" % (n, F["r10_share_over"][n]) for n in names),
         "Re-run after winter 2026/27, with the 2027/28 sites' commissioning tests and another winter of customer "
         "readings on record."], size=18)
-    _strip(s, 5, 5)
+    _strip(s, 6, TOTAL)
     prs.save(path)
     PP.normalize_pptx(path, "Marion Todd", "Marion Todd", _z(DECK_CREATED), _z(DECK_SAVED),
                       "Halverton zone: reinforcement for winter 2027/28", ORG, revision=11, total_time=134)

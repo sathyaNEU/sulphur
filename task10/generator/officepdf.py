@@ -1,7 +1,10 @@
-"""task127: the issuing office's PDF, written the way an office writes it. A document's story (paragraphs,
-spacers, tables and page breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's
-dates and file identifier are set to the issue date at equal length, so the cross-reference table holds and two
-builds are byte-identical. Producer and Creator stay as Writer wrote them."""
+"""The house PDF writer (reduce-house-fixes H1): the issuing office's PDF, written the way an office writes it. A
+document's story (reportlab flowables used only as a description: paragraphs, spacers, tables, KeepTogether, page
+breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's dates and file identifier are
+set to the issue date at equal length, so the cross-reference table holds and two builds are byte-identical.
+Creator (Writer) and Producer (LibreOffice x.y) are what Writer wrote; producer= may name the release the office ran
+at the document's date (never one released after it). Copy this file into a build's generator; never write a
+shipped PDF with FPDF, ReportLab's canvas, matplotlib or any other library, and never relabel one."""
 import datetime as dt
 import hashlib
 import html
@@ -108,6 +111,11 @@ def _keep(doc, flowables):
 def _table(doc, t):
     rows = t._cellvalues
     widths = list(getattr(t, "_colWidths", []) or [])
+    if not widths or any(w is None for w in widths):
+        # no widths given: the text width shared evenly, as Word lays out an autofit table on first insert
+        sec = doc.sections[0]
+        text_pt = (sec.page_width - sec.left_margin - sec.right_margin) / 12700.0
+        widths = [text_pt / len(rows[0])] * len(rows[0])
     tab = doc.add_table(rows=len(rows), cols=len(rows[0]))
     tab.autofit = False
     tblpr = tab._tbl.tblPr
@@ -212,6 +220,22 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     try:
         src = os.path.join(work, "document.docx")
         doc.save(src)
+        # Writer orders a document's embedded font subsets differently from run to run (26.x releases), so the
+        # same document can export to different bytes. The export is kept by its content (the Word document's
+        # parts, the producer and the two dates) under the repository's .cache, and the same content gives the
+        # same file on every build.
+        import zipfile
+        h = hashlib.sha256()
+        with zipfile.ZipFile(src) as zz:
+            for nm in sorted(zz.namelist()):
+                h.update(nm.encode())
+                h.update(zz.read(nm))
+        h.update(repr((producer, created.isoformat(), modified.isoformat())).encode())
+        cdir = os.path.join(_repo(), ".cache", "officepdf")
+        cpath = os.path.join(cdir, h.hexdigest() + ".pdf")
+        if os.path.exists(cpath):
+            open(path, "wb").write(open(cpath, "rb").read())
+            return
         prof = "file://" + os.path.join(work, "profile")
         subprocess.run(["soffice", "-env:UserInstallation=" + prof, "--headless", "--convert-to",
                         "pdf:writer_pdf_Export", "--outdir", work, src],
@@ -222,7 +246,18 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     if producer:
         b = _producer(b, producer)
     b = _fix(b, created, modified)
+    os.makedirs(cdir, exist_ok=True)
+    open(cpath, "wb").write(b)
     open(path, "wb").write(b)
+
+
+def _repo():
+    d = os.path.dirname(os.path.abspath(__file__))
+    while d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, ".git")):
+            return d
+        d = os.path.dirname(d)
+    return tempfile.gettempdir()
 
 
 def _pdfdate(d):
@@ -245,6 +280,24 @@ def _producer(b, name):
     offs = [int(o) for o in re.findall(rb"^(\d{10}) \d{5} n", b[x:], re.M)]
     assert max(offs) < m.start(1), "an object after the info dictionary"
     b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases repeat the Producer in the XMP packet: it is set to the same name there, the packet's own
+    # whitespace padding (before <?xpacket end) taking up the difference, so the stream keeps its length and every
+    # offset holds whatever the release token's length
+    xp = re.search(rb"<pdf:Producer>([^<]*)</pdf:Producer>", b)
+    if xp:
+        val = name.encode()
+        d = len(val) - len(xp.group(1))
+        end = b.find(b"<?xpacket end", xp.end())
+        assert end > 0, "no xpacket end after the XMP producer"
+        pad = re.search(rb"[ \n]+$", b[xp.end():end])
+        assert pad and len(pad.group(0)) > d + 2, "the XMP packet's padding cannot absorb the producer"
+        ps = xp.end() + pad.start()
+        padding = b[ps:end]
+        if d > 0:
+            padding = padding[:-d] if padding.endswith(b" " * d) else padding.replace(b" " * d, b"", 1)
+        else:
+            padding = b" " * (-d) + padding
+        b = b[:xp.start(1)] + val + b[xp.end(1):ps] + padding + b[end:]
     s = re.search(rb"startxref\n(\d+)\n%%EOF", b)
     old = int(s.group(1))
     assert old == x + 1, (old, x)
@@ -261,6 +314,12 @@ def _fix(b, created, modified):
         new = created.astimezone(dt.timezone.utc).strftime("D:%Y%m%d%H%M%SZ'").encode()
         assert len(new) == len(m.group(1)), (new, m.group(1))
         b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases write the export clock into the XMP stream too: set from the document's own times
+    xc = created.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    xm = modified.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    for tag, val in ((rb"rdf:li", xc), (rb"xmp:CreateDate", xc), (rb"xmp:ModifyDate", xm), (rb"xmp:MetadataDate", xm)):
+        b = re.sub(rb"(<" + tag + rb">)(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ)(</" + tag + rb">)",
+                   lambda m: m.group(1) + val + m.group(3), b)
     core = re.sub(rb"/ID\s*\[[^\]]*\]", b"", re.sub(rb"/DocChecksum\s*/[0-9A-Fa-f]+", b"", b))
     digest = hashlib.sha256(core).hexdigest().upper().encode()
     b = re.sub(rb"(/DocChecksum\s*/)([0-9A-Fa-f]+)", lambda m: m.group(1) + digest[-len(m.group(2)):], b)

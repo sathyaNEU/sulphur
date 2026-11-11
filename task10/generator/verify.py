@@ -11,7 +11,10 @@ python3 task10/generator/verify.py
   in service  each site still to come at the share of its class's sites that were in service that many days after
               their planned date, among sites watched at least that long
   share       a straight line through the events at or below 1 C that fell short of their instruction
-  the day     the reduction through the window and the load coming back as ratios of sums; ten thousand design days
+  the day     the reduction through the window and the load coming back as ratios of sums; twenty thousand design days
+  the choices a further contract on the award's terms scanned in half-megawatt steps on the same days, each step site
+              given its class's share in service by its planned date's distance from the assessment date; the schedule
+              scanned in tenths; the data hall at its type's mean share of agreed capacity at its age
 """
 import datetime as dt
 import json
@@ -220,7 +223,7 @@ def main():
         back[prov] = np.vstack(big["post"].values).sum(axis=0) / big["deliv"].sum()
     key = {v["key"]: k for k, v in F["providers"].items()}
     rng = np.random.default_rng(7)
-    res = {}
+    res, days = {}, {}
     for n in names:
         c = code[n]
         prov = X["provider_of"][c]
@@ -236,6 +239,51 @@ def main():
         firm = X["firm"][c]
         res[n] = dict(R1=d26[n], R2=conn[n], R3=before[n], R4=insvc[n], R6=deliv, R8=float(pk.mean()), R9=float(np.quantile(pk, 0.9)),
                       R10=100.0 * float((pk > firm).mean()), commit=bool(np.quantile(pk, 0.9) > firm))
+        z_a = rng.normal(0, 1, N)
+        rb = 1 + 0.18 * rng.normal(0, 1, (N, 4))
+        days[n] = (p28, r, z_a, rb, prov, firm, deliv)
+
+    def day_stats(n, deliv, cap, sched=None, scale=1.0):
+        p28, r, z_a, rb, prov, firm, _ = days[n]
+        dl = np.minimum(deliv * np.exp(cv[prov] * z_a - 0.5 * cv[prov] ** 2), cap)
+        if sched is not None:
+            dl = np.minimum(dl, sched)
+        Pm = (p28 * scale)[None, :] * (1 + r[:, None])
+        Pm[:, [HH.index(h) for h in WIN]] -= dl[:, None] * ramp[prov][None, :]
+        Pm[:, [HH.index(h) for h in POST]] += dl[:, None] * back[prov][None, :] * rb
+        pk = Pm.max(axis=1)
+        return float(np.quantile(pk, 0.9)), float((pk > firm).mean())
+
+    # R12: a further contract on the award's terms, each step site at its class's share in service by then
+    further, low = {}, {}
+    for n in F["call"]:
+        c = code[n]
+        step = reg[(reg["zone"] == c) & (reg["winter"] == "2027/28")]
+        per = sum(r.kw * share_by(r.cls, (ASSESS - r.planned).days)[0] for r in step.itertuples()) / 1000.0 / \
+            (X["contracts_code"][c] - X["previous"][n]["2026/27"])
+        prov = X["provider_of"][c]
+        curve = [(x, day_stats(n, min(share[prov] * (insvc[n] + x * per), X["contracts_code"][c] + x), X["contracts_code"][c] + x)[1])
+                 for x in np.arange(0.0, 40.01, 0.5)]
+        hit = next((x for x, sh in curve if sh <= 0.10), None)
+        if hit is not None and hit > 0:
+            fine = [x for x in np.arange(hit - 0.4, hit + 1e-9, 0.1)
+                    if day_stats(n, min(share[prov] * (insvc[n] + x * per), X["contracts_code"][c] + x), X["contracts_code"][c] + x)[1] <= 0.10]
+            hit = float(fine[0]) if fine else hit
+        further[n], low[n] = hit, min(sh for _, sh in curve)
+    ok12 = all((further[n] is None and low[n] >= 0.15) if F["r12_further"][n] == "none" else
+               (further[n] is not None and B["R11"][n][0] - 0.3 <= further[n] <= B["R11"][n][1] + 0.3) for n in F["call"])
+    # R13: Ashcombe Road's schedule
+    sa = "Ashcombe Road"
+    c = code[sa]
+    sched = [(s_, *day_stats(sa, res[sa]["R6"], X["contracts_code"][c], sched=s_)) for s_ in np.arange(0.0, X["contracts_code"][c] + 1e-9, 0.1)]
+    s_best = min(sched, key=lambda t: (t[2], t[1], -t[0]))
+    ok13 = B["R12"]["schedule"][0] - 0.1 <= s_best[0] <= B["R12"]["schedule"][1] + 0.1 and s_best[1] > X["firm"][c]
+    # R14: Hartwell Common with the data hall, at the type's mean share of agreed capacity at its age
+    ca = "Hartwell Common"
+    det = F["r14_detail"]
+    adds = det["kva"] * level(det["type"], months(dt.date(2027, 8, 2), ASSESS)) / 1000.0
+    p90c, shc = day_stats(ca, res[ca]["R6"], X["contracts_code"][code[ca]], scale=(before[ca] + adds) / before[ca])
+    ok14 = B["R13"]["adds"][0] - 0.05 <= adds <= B["R13"]["adds"][1] + 0.05 and p90c <= X["firm"][code[ca]]
     for rid, label, fmt in (("R1", "demand 2025/26", "%.2f"), ("R2", "customers add", "%.2f"), ("R3", "before flexibility", "%.2f"),
                             ("R4", "in service", "%.2f"), ("R6", "delivered", "%.2f"), ("R8", "expected peak", "%.2f"),
                             ("R9", "nine days in ten", "%.2f"), ("R10", "days over firm", "%.0f")):
@@ -248,6 +296,11 @@ def main():
         "; ".join("%s %.3f [%s to %s]" % (key[p], back[p].sum(), B["R7"][key[p]][0], B["R7"][key[p]][1]) for p in back))
     mine = [n for n in names if res[n]["commit"]]
     say(mine == F["call"], "the list", "independent: %s" % ", ".join(mine))
+    say(ok12, "further contract", "; ".join("%s %s" % (n.split()[0], ("none (lowest %.0f%%)" % (100 * low[n])) if further[n] is None
+                                                       else "%.1f MW" % further[n]) for n in F["call"]))
+    say(ok13, "schedule", "%s %.1f MW, nine days in ten %.2f MW [%s to %s]" % (sa, s_best[0], s_best[1], *B["R12"]["schedule"]))
+    say(ok14, "data hall", "adds %.2f MW [%s to %s]; %s nine days in ten %.2f MW against %.1f" % (
+        adds, *B["R13"]["adds"], ca, p90c, X["firm"][code[ca]]))
     say(len(E) == sum(v["events"] for v in F["providers"].values()), "events measured", "%d completed events" % len(E))
     print("verify: %s (%d of %d)" % ("PASS" if all(OUT) else "FAIL", sum(OUT), len(OUT)))
     return 0 if all(OUT) else 1

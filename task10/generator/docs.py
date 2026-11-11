@@ -58,7 +58,8 @@ def write_guideline(target):
           "firm capacity on the design day of the winter after next, and recommends to the December capital expenditure "
           "review the primaries whose reinforcement must be committed then. A reinforcement committed at the December review "
           "is energised by the end of the following October, so a primary committed in December 2026 is reinforced for "
-          "winter 2027/28.",
+          "winter 2027/28. Where more flexibility could hold a primary within its firm capacity instead, the review "
+          "weighs that against the reinforcement before committing it.",
           BODY),
         P("2. Design condition", H2),
         P("The design day is a working weekday on which the daily mean air temperature at Halverton weather station is "
@@ -99,13 +100,17 @@ def write_guideline(target):
           "with flexibility is its highest half-hourly demand on the design day with the service delivered through its "
           "window, whichever half-hour that falls in. No flexibility other than the contracted service is credited.", BODY),
         P("7. Recommendation", H2),
-        P("Design days are not alike: a primary's demand runs above or below its usual level for the temperature from one "
-          "day to the next, and what a provider has available varies from evening to evening. Network Planning recommends "
-          "that reinforcement be committed for each primary whose peak with flexibility would exceed its firm capacity on "
-          "more than one design day in ten, and reports for each primary the share of design days on which it would. The "
-          "one day in ten is taken over the variation from one design day to another as the record shows it, not over the "
-          "uncertainty of the assessment's own estimates. The recommendation is reviewed by the Head of DSO before the "
-          "capital expenditure review.", BODY),
+        P("Design days are not alike. From one day to the next a primary's demand runs above or below its usual level for "
+          "the temperature, by the same proportion in every half-hour of the day; from one evening to the next a provider "
+          "has more or less of its sites' megawatts available, whatever the day's demand; and the load that comes back "
+          "after a window varies from one evening to the next. Network Planning recommends that reinforcement be committed "
+          "for each primary whose peak with flexibility would exceed its firm capacity on more than one design day in ten, "
+          "and reports for each primary the share of design days on which it would. The one day in ten and the share are "
+          "taken over those three variations together, as the primary's working weekdays and the provider's completed "
+          "events of the three winters on record show them, by drawing not fewer than 100,000 design days; the "
+          "assessment's own estimates (design-day demand, what the customers add, the megawatts in service and the share "
+          "of them available) are held at their central values. The recommendation is reviewed by the Head of DSO before "
+          "the capital expenditure review.", BODY),
         P("Appendix A. Firm capacity", H2),
         T(firm_rows, [46, 24, 42, 34]),
         P("Transformer ratings from the primary substation register; winter cyclic ratings from the 2025 thermal "
