@@ -13,7 +13,7 @@
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
   "answer": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 and hold Hartwell Common (nine days in ten under 29.5, 27.0, 21.1, 36.2 and 23.4 MW against 27.5, 25.6, 20.0, 35.0 and 24.4); more flexibility is no substitute at Ashcombe Road, Charlecote Way or Dunmore Street, Fenwick Street would need 7.8 MW more on its award's terms, Ashcombe Road's best schedule (5.0 MW) still leaves it over firm, and Hartwell Common holds a 4,000 kVA data hall energised on 2 August 2027",
-  "answer_source": "task10/submission.md, Final Recommendation (generator/figures.json r11_verdicts, r12_further, r13_schedule, r14_customer)",
+  "answer_source": "task10/submission.md, Final Recommendation (generator/figures.json r11_verdicts, r12_further, r13_schedule, r14_customer) (task10 removed from the tree; in git at 3d6b8ec)",
   "gap": [
     "time",
     "population"

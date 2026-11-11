@@ -6,7 +6,7 @@
    "kind": "loss",
    "class": "dismissed own evidence",
    "move": "measured the decisive quantity, then set it aside because it did not prove itself alone",
-   "source": "task10/runs/arch5_round1_run2.md (Assumptions and judgment calls)",
+   "source": "task10/runs/arch5_round1_run2.md (Assumptions and judgment calls) (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "show event-associated increases of 1.271, 0.997 and 1.680 MW at the design temperature. They were excluded as controls. These associations do not prove physical transfers."
   },
   {
@@ -294,7 +294,7 @@
    "kind": "named_assumption",
    "class": "dismissed own evidence",
    "move": "an enlarged contract or fleet assumed to scale in proportion",
-   "source": "task10/runs/arch6_run1.md, arch6_run2.md, arch5_round2_run2.md",
+   "source": "task10/runs/arch6_run1.md, arch6_run2.md, arch5_round2_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "Portfolio scaling: Availability and mean service shape are assumed to scale with contracted capacity"
   },
   {
@@ -302,7 +302,7 @@
    "kind": "named_assumption",
    "class": "dismissed own evidence",
    "move": "history assumed informative of the forward window",
-   "source": "task10/runs/arch4_run2.md",
+   "source": "task10/runs/arch4_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "Historical repair response, DSO patterns and reset effectiveness are assumed to remain informative."
   },
   {
@@ -310,7 +310,7 @@
    "kind": "named_assumption",
    "class": "dismissed own evidence",
    "move": "scheduled works and dates assumed to happen as planned",
-   "source": "task10/runs/arch4_run1.md",
+   "source": "task10/runs/arch4_run1.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "Renewal execution: approved works are assumed to finish on their scheduled dates."
   },
   {
@@ -358,7 +358,7 @@
    "kind": "reflex",
    "class": "breadth",
    "move": "reads every file and sets the distractors aside with reasons",
-   "source": "task10/runs/arch6_triage.md",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "the distractors were inspected and set aside with reasons"
   },
   {
@@ -366,7 +366,7 @@
    "kind": "reflex",
    "class": "validation",
    "move": "chronological hold-out, leave-one-out or held-out groups to choose the model family",
-   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1, task3 arch 6)",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1, task3 arch 6) (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "the model family chosen by chronological validation and the tail's coverage checked on held-out days"
   },
   {
@@ -374,7 +374,7 @@
    "kind": "reflex",
    "class": "uncertainty",
    "move": "joint, block or circular bootstrap; predictive rather than confidence intervals",
-   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task9 arch 8)",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task9 arch 8) (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "The P90 is the predictive percentile of daily maxima, not a confidence limit for mean demand"
   },
   {
@@ -382,7 +382,7 @@
    "kind": "reflex",
    "class": "modeling",
    "move": "a capped availability ceiling, min of the call and what is available",
-   "source": "task10/runs/arch6_triage.md",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "Fitted a temperature-dependent available-capacity ceiling, capped by scheduled MW"
   },
   {
@@ -390,7 +390,7 @@
    "kind": "reflex",
    "class": "modeling",
    "move": "the rebound after a window, the day's maximum over every interval",
-   "source": "task10/runs/arch6_triage.md",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "Applied the estimated service shape and post-window rebound, then found the maximum across all 48 half-hours"
   },
   {
@@ -398,7 +398,7 @@
    "kind": "reflex",
    "class": "modeling",
    "move": "competing risks with censoring",
-   "source": "task10/runs/arch7_review_2026-11-10.md; depth-scale detail (b9efebd1)",
+   "source": "task10/runs/arch7_review_2026-11-10.md; depth-scale detail (b9efebd1) (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "forecast commissioning with competing risks and censoring"
   },
   {
@@ -510,7 +510,7 @@
    "kind": "reflex",
    "class": "measurement",
    "move": "the demand an intervention masks rebuilt from the intervals it never touched (the cold evening from the same day's unaffected half-hours)",
-   "source": "task10/runs/arch7_run1.md, arch7_run2.md; task10/runs/arch7_review_2026-11-10.md",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md; task10/runs/arch7_review_2026-11-10.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "cold-window demand transferred from unaffected half-hours"
   },
   {
@@ -518,7 +518,7 @@
    "kind": "reflex",
    "class": "modeling",
    "move": "a register's young members matured to their type's established level (build-up curves by type, scaled to each member's own level)",
-   "source": "task10/runs/arch7_run1.md, arch7_run2.md",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "customer-type saturation curves (held-out error 0.0415 kW/kVA against 0.1498 for constant utilisation), 8.8 MW registered increment with 7.0 MW from maturation"
   }
  ]
