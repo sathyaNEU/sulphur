@@ -1,18 +1,22 @@
-"""task7 architecture 8: the golden analysis and its rivals, on a season-by-building table of normalised gas use read
-from the pack (verify.py), with each building's 2025 week of electricity and its roof per square metre of floor. The same
-code runs on the generator's clean truth and on the cleaned pack, so a figure in the golden is the figure the pack yields.
+"""task7 architecture 9: the golden analysis and its rivals, on a season-by-building table of normalised gas use read
+from the pack (verify.py), with each building's owner, its service visits, its 2025 week of electricity and its roof per
+square metre of floor. The same code runs on the generator's clean truth and on the cleaned pack, so a figure in the
+golden is the figure the pack yields.
 
-The pilot's places were drawn by lot among the owners who answered the May 2019 offer, within each measure, so for each
-measure and each season since the works the drawn buildings that had them are set against the owners the draw passed
-over, both against their own 2018/19 season (the notice season). What a measure saves depends on the building: roof
-insulation saves with how much roof a building has for its floor, and none of its hot water; controls save while a
-building stands empty, nothing in one lived in round the clock; heating optimisation's saving falls as heating curves
-are turned back up. This year's owners chose their measures knowing their buildings, so the golden takes the saving
-along what each measure's saving follows (the empty week read off the building's load profile, the roof per floor off
-the solar cadastre and the register), fitted on the lottery's own buildings, and prices every 2026 application at its
-own building's, faded over the measure's life as its saving fades; heating optimisation is priced at its own use's
-saving. The round once the offer closes is projected measure by measure from the 2019 answers: how many were in by the
-same day after the notice, how much larger the late ones were, and how many drawn owners withdrew, early and late."""
+The pilot's places were drawn by lot among the owners who answered the May 2019 offer, within each measure, an owner's
+buildings together, so for each measure and each season since the works the drawn buildings that had them are set
+against the owners the draw passed over, both against their own 2018/19 season. What a measure saves depends on the
+building (roof insulation on its roof per floor and none of its hot water, controls on the share of the week it stands
+empty, nothing where it is lived in round the clock) and on its owner, whose facility manager runs every one of its
+buildings the same way. Heating optimisation's saving falls as the heating curve creeps back up; from September 2022 the
+state campaign's heating checks set the curve back down in every building that took one, and a balanced system holds
+what the check gives it, so the pilot's works buildings saved more after their check than their works alone would have
+kept. The campaign closed in March 2026, so the 2026 works will keep only what their own balancing holds: the golden
+reads heating optimisation's saving off each works building's seasons before its campaign check (and the owners who
+declined it), against the passed-over owners outside the season of their own check. Every 2026 application is priced on
+its own building, each measure's grant per lifetime tonne carries the 90 per cent range a fresh draw of the pilot's
+owners would give, every step repeated, and the committee funds a measure only where that range's upper end is within
+the limit."""
 import datetime as dt
 import math
 
@@ -34,10 +38,11 @@ CUT_DAY = (RECEIVED_TO - NOTICE[PIPELINE]).days                              # 2
 
 class Panel:
     """seasons, si; U: buildings x seasons normalised use in kWh (nan where not connected); typ: the use on the
-    building's 2019 notice (the register's use where it had none); answered, drawn, works, withdrawn, measure: the 2019
-    pilot; answers19: the pilot's responses (b, measure, date, cost, grant, drawn, withdrawn, works); tune_season: the
-    season of the building's service visit (0 if none); pipe: the 2026 applications received by 12 June, a revised
-    application replacing the earlier one (no, b, measure, grant, ref_kwh, date, typ)."""
+    building's 2019 notice (the register's use where it had none); owner: the owner number on the register; answered,
+    drawn, works, withdrawn, measure: the 2019 pilot; answers19: the pilot's responses (b, measure, date, cost, grant,
+    drawn, withdrawn, works, owner); visits: the days of the service team's reads at a check, building by building;
+    pipe: the 2026 applications received by 12 June, a revised application replacing the earlier one (no, b, measure,
+    grant, ref_kwh, date, typ)."""
     pass
 
 
@@ -291,15 +296,94 @@ def apps(P, m):
     return [a for a in P.pipe if a["measure"] == m]
 
 
+# ---------------------------------------------------------------- the campaign's checks and what the works keep
+
+CAMPAIGN_FROM = dt.date(2022, 9, 1)        # the state campaign's heating checks, September 2022 to March 2026
+CAMPAIGN_TO = dt.date(2026, 3, 31)
+
+
+def campaign_season(P):
+    """the season of each building's campaign check (its first service read on or after 1 September 2022), 0 if none"""
+    out = np.zeros(len(P.typ), int)
+    for i, vs in enumerate(P.visits):
+        cs = [d for d in vs if d >= CAMPAIGN_FROM]
+        if cs:
+            d = min(cs)
+            out[i] = d.year + 1 if d.month >= 5 else d.year
+    return out
+
+
+def own_savings(P, m="heating optimisation", rows=None, how="ratio_of_totals", exclude_check_season=True,
+                works_rule="before_check", with_sizes=False):
+    """the measure's saving in each season 2019/20 to 2025/26 as its works alone keep it: each works building counted
+    only in the seasons before its campaign check (all of them if it took none), each passed-over building in every
+    season but the one of its own check (works_rule "declined": only the works buildings that took no campaign check)"""
+    g, c = _arms(P, m) if rows is None else rows
+    cs = P.check_season
+    k0 = P.si[PILOT]
+    out, sizes = [], []
+    for k in range(k0 + 1, len(P.seasons)):
+        s = P.seasons[k]
+        if works_rule == "declined":
+            gg = g[cs[g] == 0]
+        else:
+            gg = g[(cs[g] == 0) | (cs[g] > s)]
+        cc = c[cs[c] != s] if exclude_check_season else c
+        gg = gg[np.isfinite(P.U[gg, k0]) & np.isfinite(P.U[gg, k])]
+        cc = cc[np.isfinite(P.U[cc, k0]) & np.isfinite(P.U[cc, k])]
+        if how == "mean_log":
+            out.append(1.0 - math.exp(np.log(P.U[gg, k] / P.U[gg, k0]).mean() - np.log(P.U[cc, k] / P.U[cc, k0]).mean()))
+        else:
+            out.append(1.0 - (P.U[gg, k].sum() / P.U[gg, k0].sum()) / (P.U[cc, k].sum() / P.U[cc, k0].sum()))
+        sizes.append(float(P.U[gg, k0].sum()))
+    if with_sizes:
+        return np.array(out), np.array(sizes)
+    return np.array(out)
+
+
+def own_lifetime(s, sizes, m="heating optimisation", how="settled"):
+    """the measure's saving over its life from the seasons its works alone keep: each observed season as it came, then
+    the level it settles at (the last three seasons weighted by the 2018/19 gas of the works buildings each rests on)
+    over the rest of the life; "floor": the fitted approach to a level instead"""
+    L = LIFE[m]
+    if how == "floor":
+        return lifetime(s, m, "floor")
+    level = float(np.average(s[-3:], weights=sizes[-3:]))
+    if how == "settled_last2":
+        level = float(np.average(s[-2:], weights=sizes[-2:]))
+    return float((s[:min(len(s), L)].sum() + max(0, L - len(s)) * level) / L)
+
+
+def heat_share(P, idx, wts=None):
+    """the gas-weighted heating share (1 less the benchmarking method's hot-water share by use) of the buildings idx"""
+    idx = np.asarray(idx, int)
+    return float(np.average(1.0 - P.hvec[idx], weights=wts)) if len(idx) else float("nan")
+
+
 def app_rates(P, m, route="golden", persist="floor", how="ratio_of_totals", base="notice", nb=DOSE_BINS, form=None,
-              empty=None, heat_part=True):
-    """each 2026 application's saving over the measure's life, as a share of its reference consumption"""
-    s = season_savings(P, m, how, base)
-    life_factor = lifetime(s, m, persist) / s.mean()
+              empty=None, heat_part=True, rows=None, s_given=None):
+    """each 2026 application's saving over the measure's life, as a share of its reference consumption. Heating
+    optimisation (golden): the saving its works alone keep, fitted over its life, carried from the pilot's works buildings'
+    heating share to each application's; route "measured": the pilot's seasons as measured, the campaign's lift and all"""
     A = apps(P, m)
+    if m == "heating optimisation":
+        g, c = _arms(P, m) if rows is None else rows
+        if route in ("golden", "pooled_own"):
+            s, sz = own_savings(P, m, rows=(g, c), how=how, with_sizes=True)
+            life = own_lifetime(s, sz, m, "settled" if persist == "floor" else persist)
+        else:
+            s = season_savings(P, m, how, base, rows=(g, c)) if s_given is None else s_given
+            life = lifetime(s, m, "flat" if route == "flat" else persist)
+        if route in ("golden", "measured", "flat"):
+            k0 = P.si[PILOT]
+            hp = heat_share(P, g, np.nan_to_num(P.U[g, k0]))
+            return np.array([life * (1.0 - P.hvec[a["b"]]) / hp for a in A])
+        return np.full(len(A), life)
+    s = season_savings(P, m, how, base, rows=rows)
+    life_factor = lifetime(s, m, persist) / s.mean()
     if route == "golden" and m in DRIVEN:   # its own building's saving along the measure's driver, faded
         x = driver(P, m, empty)
-        fit = dose_fit(dose_points(P, m, nb, x=x, heat_part=heat_part), m, form)
+        fit = dose_fit(dose_points(P, m, nb, rows=rows, x=x, heat_part=heat_part), m, form)
         r = dose_at(fit, np.array([x[a["b"]] for a in A]))
         if m == "insulation" and heat_part:
             r = r * np.array([1.0 - P.hvec[a["b"]] for a in A])
@@ -308,17 +392,10 @@ def app_rates(P, m, route="golden", persist="floor", how="ratio_of_totals", base
         lv = type_levels(P, m, how, base)
         pooled = float(s.mean())
         return np.array([lv.get(TYPES[a["typ"]], pooled) * life_factor for a in A])
-    if route == "class":                    # intermittent against round-the-clock buildings
-        lv = class_levels(P, m, how)
-        return np.array([lv["round the clock" if TYPES[a["typ"]] in ROUND_CLOCK else "intermittent"] * life_factor
-                         for a in A])
     if route == "pooled":                   # the pilot's own mix, faded
         return np.full(len(A), lifetime(s, m, persist))
     if route == "pooled_flat":              # the pilot's seven-season average, carried flat
         return np.full(len(A), float(s.mean()))
-    if route == "type_flat":
-        lv = type_levels(P, m, how, base)
-        return np.array([lv.get(TYPES[a["typ"]], float(s.mean())) for a in A])
     raise ValueError(route)
 
 
@@ -334,51 +411,50 @@ def appraisal(P, m, rates):
             "app_tonnes": tonnes, "app_grant": gr}
 
 
-def funded_set(P, rate_fn):
-    out = []
-    for m in MEASURES:
-        if appraisal(P, m, rate_fn(m))["eur_t"] <= LIMIT:
-            out.append(m)
-    return tuple(out)
+# ---------------------------------------------------------------- the range a fresh draw of the pilot would give
+
+def arm_owners(P, m):
+    """the measure's drawn owners (their works buildings) and passed-over owners (their answering buildings): the
+    draw's own unit"""
+    g, c = _arms(P, m)
+    og, oc = {}, {}
+    for i in g:
+        og.setdefault(int(P.owner[i]), []).append(int(i))
+    for i in c:
+        oc.setdefault(int(P.owner[i]), []).append(int(i))
+    return [np.array(v) for _, v in sorted(og.items())], [np.array(v) for _, v in sorted(oc.items())]
 
 
-def bootstrap(P, m, B=400, seed=2026, persist="floor", route="golden"):
-    """the grant per tonne's spread when the pilot's buildings are drawn again within each use and arm, every step
-    repeated (the seasons' savings, their fit, the driver's bands and their fit or the uses' savings, the applications
-    priced)"""
-    rng = np.random.default_rng(seed + MEASURES.index(m))
-    A = apps(P, m)
-    ref = np.array([a["ref_kwh"] for a in A])
-    gr = np.array([a["grant"] for a in A])
-    L = LIFE[m]
-    g_all, c_all = _arms(P, m)
-    tg, tc = P.typ[g_all], P.typ[c_all]
-    types_g = {t: g_all[tg == t] for t in np.unique(tg)}
-    types_c = {t: c_all[tc == t] for t in np.unique(tc)}
-    x = driver(P, m)
-    hw_a = np.array([1.0 - P.hvec[a["b"]] for a in A])
-    xa = np.array([x[a["b"]] for a in A]) if m in DRIVEN else None
-    vals = []
-    for _ in range(B):
-        gi = np.concatenate([rng.choice(v, len(v)) for v in types_g.values()])
-        ci = np.concatenate([rng.choice(v, len(v)) for v in types_c.values()])
-        s = season_savings(P, m, rows=(gi, ci))
-        lf = float(profile(s, L, persist).mean() / s.mean())
-        if m in DRIVEN and route == "golden":
-            fit = dose_fit(dose_points(P, m, rows=(gi, ci)), m)
-            r = dose_at(fit, xa) * lf
-            if m == "insulation":
-                r = r * hw_a
-        else:
-            lv = {}
-            for t in range(len(TYPES)):
-                a_, b_ = gi[P.typ[gi] == t], ci[P.typ[ci] == t]
-                if len(a_) >= 3 and len(b_) >= 3:
-                    lv[t] = float(season_savings(P, m, rows=(a_, b_)).mean())
-            r = np.array([lv.get(a["typ"], float(s.mean())) * lf for a in A])
-        vals.append(gr.sum() / (r * ref / 1000.0 * EF * L).sum())
-    vals = np.array(vals)
+def draw_rows(P, m, rng, unit="owner"):
+    """one fresh draw of the pilot's arms: owners resampled within each arm (unit "owner", the draw's unit), or
+    buildings within each use and arm (unit "building")"""
+    if unit == "owner":
+        og, oc = arm_owners(P, m)
+        gi = np.concatenate([og[j] for j in rng.integers(0, len(og), len(og))])
+        ci = np.concatenate([oc[j] for j in rng.integers(0, len(oc), len(oc))])
+        return gi, ci
+    g, c = _arms(P, m)
+    tg, tc = P.typ[g], P.typ[c]
+    gi = np.concatenate([rng.choice(g[tg == t], (tg == t).sum()) for t in np.unique(tg)])
+    ci = np.concatenate([rng.choice(c[tc == t], (tc == t).sum()) for t in np.unique(tc)])
+    return gi, ci
+
+
+def eur_t_on_rows(P, m, rows, route="golden"):
+    r = app_rates(P, m, route=route, rows=rows)
+    return appraisal(P, m, r)["eur_t"]
+
+
+def draw_range(P, m, B=400, seed=2026, unit="owner", route="golden"):
+    """the grant per tonne's 5th and 95th percentiles over B fresh draws, every step repeated"""
+    rng = np.random.default_rng(seed + MEASURES.index(m) + (0 if unit == "owner" else 100))
+    vals = np.array([eur_t_on_rows(P, m, draw_rows(P, m, rng, unit), route) for _ in range(B)])
     return float(np.percentile(vals, 5)), float(np.percentile(vals, 95)), vals
+
+
+def funded(eur_t_hi):
+    """the committee's rule: a measure is funded where the upper end of its 90 per cent range is within the limit"""
+    return eur_t_hi <= LIMIT
 
 
 # ---------------------------------------------------------------- the round once the offer closes
@@ -420,155 +496,6 @@ def at_close(P, m, how="golden"):
     return {"n": n, "grant": G, "share": share, "size": float(size), "w_early": float(w_e), "w_late": float(w_l),
             "n_close": n_close, "grant_close": grant_close, "paid": paid}
 
-
-# ---------------------------------------------------------------- what the round pays: the works done by 30 September
-
-BUDGET = 8200000.0         # euro the council has budgeted for the grants the round pays this year
-WORK_FROM = {PILOT: dt.date(2019, 7, 15), PIPELINE: dt.date(2026, 7, 13)}   # the Monday after the draw, the meeting
-WORK_BY = {PILOT: dt.date(2019, 9, 30), PIPELINE: dt.date(2026, 9, 30)}
-
-
-def workdays(d0, d1):
-    """the working days (Monday to Friday) from d0 to d1, both counted"""
-    n, d = 0, d0
-    while d <= d1:
-        n += d.weekday() < 5
-        d += dt.timedelta(days=1)
-    return n
-
-
-def firm_rates(P, m, unit="m2", start=None):
-    """each firm's rate of work on the pilot, from the start of the works to its last completion: a roofer's square
-    metres of roof (the cadastre's) a working day, or jobs a working day (unit "jobs", and every heating firm)"""
-    roof = m == "insulation"
-    jobs = {}
-    for a in P.answers19:
-        if a["works"] and (a["measure"] == "insulation") == roof:
-            jobs.setdefault(a["firm"], []).append(a)
-    out = {}
-    for f, js in jobs.items():
-        nd = workdays(start or WORK_FROM[PILOT], max(a["done"] for a in js))
-        size = sum(P.roof[a["b"]] for a in js) if (roof and unit == "m2") else float(len(js))
-        out[f] = size / nd
-    return out
-
-
-def round_paid(P, m, how="golden", start=None):
-    """what the measure's applications at close would be paid once the works are done: each firm takes its jobs in the
-    order its owners applied (the applications received, then its share of the late ones, each counted net of the
-    2019 withdrawal rates), and a job is paid only if the firm's 2019 rate of work fits it into the working days from
-    13 July to 30 September. how: "golden" (a roofer by square metres of roof), "jobs" (by jobs, whatever their size),
-    "pooled" (the firms' work summed into one queue), "late by rate" (the late applications shared by the firms' rates
-    of work), "none" (every job done, as in 2019), "quoted roof" (each roof's area read off its quote at the median
-    price a square metre), "late by grant" (the late roofs larger by the 2019 late answers' grant, not their roofs).
-    Returns {"paid", "share" (of the grant net of withdrawals), "n_paid" (the applications paid, expected)}"""
-    r = at_close(P, m)
-    if how == "none":
-        return {"paid": r["paid"], "share": 1.0,
-                "n_paid": r["n"] * (1 - r["w_early"]) + (r["n_close"] - r["n"]) * (1 - r["w_late"])}
-    unit_jobs = how == "jobs" or m != "insulation"
-    rate = firm_rates(P, m, "jobs" if unit_jobs else "m2")
-    nd = workdays(start or WORK_FROM[PIPELINE], WORK_BY[PIPELINE])
-    A = sorted(apps(P, m), key=lambda a: (a["date"], a["no"]))
-
-    if how == "quoted roof" and m == "insulation":
-        per = float(np.median([a["cost"] / P.roof[a["b"]] for a in P.answers19 if a["measure"] == m]))
-        quote = {a["b"]: a["cost"] / per for a in P.answers19 if a["measure"] == m}
-        quote.update({a["b"]: a["cost"] / per for a in apps(P, m)})
-        P = _with_roof(P, quote)
-        rate = firm_rates(P, m, "m2")
-
-    def size(a):
-        return 1.0 if unit_jobs else float(P.roof[a["b"]])
-    _, e_m, l_m = pilot_timing(P, m)
-    if unit_jobs:
-        ratio = 1.0
-    elif how == "late by grant":
-        ratio = float(np.mean([a["grant"] for a in l_m]) / np.mean([a["grant"] for a in e_m]))
-    else:
-        ratio = float(np.mean([P.roof[a["b"]] for a in l_m]) / np.mean([P.roof[a["b"]] for a in e_m]))
-    n = len(A)
-    late_n = r["n_close"] - n
-    late_size = float(np.mean([size(a) for a in A])) * ratio
-    late_grant = r["grant_close"] - r["grant"]
-    we, wl = r["w_early"], r["w_late"]
-    firms = sorted({a["firm"] for a in A})
-    mean_rate = float(np.mean(list(rate.values())))
-    cap = {f: rate.get(f, mean_rate) * nd for f in firms}
-    if how == "late by rate":
-        tot = sum(rate.get(f, mean_rate) for f in firms)
-        share = {f: rate.get(f, mean_rate) / tot for f in firms}
-    else:
-        share = {f: sum(1 for a in A if a["firm"] == f) / float(n) for f in firms}
-    queues = {"all": A} if how == "pooled" else {f: [a for a in A if a["firm"] == f] for f in firms}
-    if how == "pooled":
-        cap, share = {"all": sum(cap.values())}, {"all": 1.0}
-    paid = n_paid = 0.0
-    detail = []
-    for f, js in queues.items():
-        used, full = 0.0, False
-        e_paid = e_n = 0.0
-        for a in js:
-            need = size(a) * (1 - we)
-            if used + need > cap[f] + 1e-9:
-                full = True
-                break
-            used += need
-            e_paid += a["grant"] * (1 - we)
-            e_n += 1 - we
-        late_need = late_n * share[f] * late_size * (1 - wl)
-        frac = 0.0 if full else (min(1.0, (cap[f] - used) / late_need) if late_need > 0 else 1.0)
-        l_paid = late_grant * share[f] * (1 - wl) * frac
-        l_n = late_n * share[f] * (1 - wl) * frac
-        paid += e_paid + l_paid
-        n_paid += e_n + l_n
-        detail.append({"firm": f, "rate": cap[f] / nd, "room": cap[f], "received": len(js),
-                       "received_size": float(sum(size(a) for a in js)), "late_size": late_need / (1 - wl) if wl < 1 else 0.0,
-                       "late_done": frac, "paid": e_paid + l_paid, "n_paid": e_n + l_n})
-    return {"paid": paid, "share": paid / r["paid"], "n_paid": n_paid, "firms": detail, "workdays": nd,
-            "late_size_each": late_size, "late_n": late_n}
-
-
-def _with_roof(P, roof_by_b):
-    """a copy of the panel with each pilot answer's and application's roof read from elsewhere"""
-    import copy
-    Q = copy.copy(P)
-    Q.roof = P.roof.copy()
-    for b, v in roof_by_b.items():
-        Q.roof[b] = v
-    return Q
-
-
-def heating_joint_load(P):
-    """the heating firms' work were both heating measures funded: each firm's controls and heating optimisation
-    applications at close (the received ones and its share of the late ones, net of the 2019 withdrawal rates) against
-    its 2019 jobs a working day from 13 July to 30 September; the largest firm's load as a share of its room"""
-    rate = firm_rates(P, "heating controls", "jobs")
-    nd = workdays(WORK_FROM[PIPELINE], WORK_BY[PIPELINE])
-    mean_rate = float(np.mean(list(rate.values())))
-    load = {}
-    for m in ("heating optimisation", "heating controls"):
-        A = apps(P, m)
-        r = at_close(P, m)
-        n = len(A)
-        for f in {a["firm"] for a in A}:
-            c = sum(1 for a in A if a["firm"] == f)
-            load[f] = load.get(f, 0.0) + c * (1 - r["w_early"]) + (r["n_close"] - n) * c / float(n) * (1 - r["w_late"])
-    return max(load[f] / (rate.get(f, mean_rate) * nd) for f in load)
-
-
-def funded_within_budget(passing, eur_t, paid, budget=BUDGET):
-    """the measures that meet the limit, taken from the lowest grant per tonne up, each only where the budget still
-    covers what its applications will be paid"""
-    out, spent = [], 0.0
-    for m in sorted(passing, key=lambda x: eur_t[x]):
-        if spent + paid[m] <= budget:
-            out.append(m)
-            spent += paid[m]
-    return tuple(x for x in MEASURES if x in out)
-
-
-# ---------------------------------------------------------------- the pilot's saving in the season to April 2026
 
 def season_saving_2026(P, how="golden", rates=None):
     """tonnes of CO2: what the pilot's works buildings would have used in 2025/26 without the works, less what they

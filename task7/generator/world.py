@@ -1,4 +1,4 @@
-"""task7 architecture 8: Stadtwerke Haldenau's commercial customers, the council's 2019 retrofit pilot and the 2026
+"""task7 architecture 9: Stadtwerke Haldenau's commercial customers, the council's 2019 retrofit pilot and the 2026
 round, season by season from 2013/14 to 2025/26.
 
 A season runs from 1 May to 30 April and is named by the year it ends (season 2019 is May 2018 to April 2019). Each
@@ -31,23 +31,29 @@ An answer or an application comes with a contractor's quote, roof insulation pri
 measures on the floor's. A quote for insulation needs a survey of the roof, longer on a larger building, so insulation
 answers come late in the offer's six weeks and the large ones latest; a drawn owner can still withdraw, likelier on a
 large job and on an answer sent close to the deadline. The quote comes from a roofer for insulation and from a heating
-firm for the others, the larger firms quoting more often, and a granted job waits its turn: each firm takes its jobs in
-the order its owners answered, a roofer insulating so many square metres of roof a working day, a heating firm giving
-each job to its first free fitter. In 2019 every firm was done well before 30 September; under half the roofers who
-quoted then still take council work in 2026, and this year's insulation applicants have larger roofs, so the roofers
-cannot finish every roof the round grants by 30 September, and a job not finished then is not paid. The pandemic
-winters and the 2022 gas price shock moved every
-building's use. From August 2019 the utility's service team offered its commercial customers a burner check district by
-district, free of charge, whatever their place in the pilot; most owners accepted, and a checked burner burns less gas
-for the same heat from the visit on, by however far out of tune it was. The May 2026 notice carries the offer of the
-2026 round, open to 30 June; the applications received by 12 June are what the utility holds when the climate committee
-decides the round, and an owner who revises a quote sends the application again."""
+firm for the others, and each firm works through its granted jobs in the order its owners answered.
+
+Many buildings belong to owners with several of them (a chain of shops, a hotel group, a care operator, a landlord);
+such an owner answers an offer for all its buildings at once, with one measure, and its facility manager runs their
+heating the same way: whether the setback times a controller is given are kept or overridden, how far the heating curve
+is let creep back up. The pilot's places were drawn by lot among the owners who answered, within each measure, an
+owner's buildings together. A building's heating curve tends to sit higher than the building needs; heating
+optimisation balances the system and sets the curve right, and a balanced system keeps part of that when the caretakers
+nudge the curve back up over the winters that follow. The pandemic winters and the 2022 gas price shock moved every
+building's use. From August 2019 to March 2022 the utility's service team offered every commercial customer a free
+burner check district by district, and from September 2022 to March 2026, under the state's energy-saving campaign, a
+heating check: the campaign's check also set the heating curve back down to what the building needs, and in a building
+whose system was never balanced the curve was soon turned up again, while a balanced one held it. Since 2023 the check report recommends balancing
+where it finds the system unbalanced, and owners checked in the campaign's last two winters asked for heating
+optimisation in 2026 more often. The May 2026 notice carries the offer of the 2026 round, open to 30 June; the
+applications received by 12 June are what the utility holds when the climate committee decides the round, and an owner
+who revises a quote sends the application again."""
 import datetime as dt
 import math
 
 import numpy as np
 
-SEED = 70707
+SEED = 70706
 SEASONS = list(range(2014, 2027))          # season Y: 1 May Y-1 to 30 April Y
 K = len(SEASONS)
 SI = {s: i for i, s in enumerate(SEASONS)}
@@ -80,10 +86,16 @@ MEASURE_P_2019 = {"office": [0.26, 0.40, 0.34], "retail": [0.28, 0.38, 0.34], "h
                   "workshop": [0.32, 0.36, 0.32], "care home": [0.10, 0.17, 0.73], "restaurant": [0.22, 0.38, 0.40]}
 MEASURE_P_2026 = {"office": [0.20, 0.22, 0.58], "retail": [0.27, 0.27, 0.46], "hotel": [0.38, 0.54, 0.08],
                   "workshop": [0.34, 0.28, 0.38], "care home": [0.38, 0.57, 0.05], "restaurant": [0.27, 0.33, 0.40]}
-# heating optimisation's cut in the heating part of a building's use (the hot-water part is untouched), as the type's
-# mean in the first season after the works; each building's own cut spreads around it
-EFFECT = {"heating optimisation": {"office": 0.158, "retail": 0.138, "hotel": 0.170, "workshop": 0.135,
-                                   "care home": 0.178, "restaurant": 0.150}}
+# a building's heating curve sits above what it needs by CURVE of its heating (the type's mean; each building's own
+# spreads around it); heating optimisation balances the system (a lasting cut of BALANCE of the heating) and sets the
+# curve right, and a balanced building keeps a share f of the curve's cut once the caretakers have nudged it back up
+# (f by the owner's facility management), creeping back with TAU_BAL seasons; a building set right by a service check
+# alone, never balanced, creeps back with TAU_UNBAL seasons all the way
+CURVE = {"office": 0.130, "retail": 0.120, "hotel": 0.150, "workshop": 0.120, "care home": 0.160, "restaurant": 0.130}
+CURVE_SD = 0.28
+BALANCE, BALANCE_SD = 0.012, 0.30
+KEEP_BAL, KEEP_BAL_OWNER, KEEP_BAL_SD = 0.03, 0.02, 0.015
+TAU_BAL, TAU_UNBAL = 2.2, 0.5
 EFFECT_SD = 0.26                           # log spread of a building's own cut around its expected cut
 # insulation of the roof or top-floor ceiling cuts INS_C of the heating where the roof is as large as the floor, less
 # where there is less roof per floor; controls cut CTRL_C of the heating per unit of the week a building stands empty
@@ -128,9 +140,20 @@ DAY_SHAPE = {"office": {7: 0.80, 8: 0.92, 12: 0.88, 13: 0.90, 16: 0.92, 17: 0.82
 # 2025's public holidays in Baden-Wuerttemberg by weekday (Monday first), and the weekdays' counts in 2025
 HOLIDAYS_2025 = [3, 0, 1, 4, 3, 1, 0]
 WEEKDAYS_2025 = [52, 52, 53, 52, 52, 52, 52]
-# how much of the first season's cut a building keeps once its caretakers have turned the heating curve back up
-# (heating optimisation) or overridden the timers (controls), and how fast it falls there; insulation keeps it all
-KEEP = {"heating optimisation": (0.05, 0.04, 1.0), "heating controls": (0.80, 0.07, 2.0)}
+# heating controls: how much of the first season's cut a building keeps once its staff have overridden the timers (the
+# owner's facility management sets the mean), and how fast it falls there; insulation keeps it all
+KEEP_CTRL, KEEP_CTRL_OWNER, KEEP_CTRL_SD, TAU_CTRL = 0.80, 0.18, 0.04, 2.0
+# owners: the share of each use's buildings held in portfolios (chains, groups, operators, landlords), the portfolios'
+# sizes (a discrete Pareto from PF_MIN), and the facility manager's spread on what controls save; a portfolio's
+# buildings share one weekly schedule and part of their level
+PORTFOLIO_SHARE = {"office": 0.40, "retail": 0.62, "hotel": 0.55, "workshop": 0.18, "care home": 0.60,
+                   "restaurant": 0.45}
+PF_MIN, PF_ALPHA, PF_MAX = 4, 0.95, 320
+OWNER_LEVEL_SD = 0.13
+OWNER_DRIFT_SD = 0.012                     # a portfolio's buildings drift together (one operator, one policy)
+CTRL_OWNER_SD, CTRL_SINGLE_SD = 1.1, 0.12
+CTRL_BUILDING_SD = 0.14                    # a building's own spread on what controls save, beyond its owner's
+INS_OWNER_SD = 0.06
 # the day an answer or application comes in: it carries a contractor's quote, so most come in the fortnight after the
 # notice or in the last ten days before the offer closes, few in between; shares of the early fortnight, the weeks
 # between and the last ten days, and how much a larger building pushes an answer later (per log-sd of floor area)
@@ -142,13 +165,18 @@ LATE_SIZE = {"insulation": 0.13, "heating optimisation": 0.05, "heating controls
 WITHDRAW = {"insulation": 0.052, "heating optimisation": 0.022, "heating controls": 0.011}
 WITHDRAW_SIZE, WITHDRAW_DAY = 0.45, 0.028
 RESUBMIT_P = 0.035                         # a 2026 applicant sends a revised quote with a second application
-# the service team's burner checks: districts in a fixed order from August 2019 to March 2026, most of them in the
-# first two winters, every commercial gas customer offered a visit; a checked burner's cut, by how far out of tune it was
+# the service team's free heating checks: districts in a fixed order, a first round from August 2019 to March 2022 and a
+# second, under the state's energy-saving campaign, from September 2022 to March 2026; an owner takes the check for all
+# its buildings or none; a check tunes the burner (a lasting cut of the whole use) and sets the curve right
 N_DISTRICTS = 42
-DISTRICTS_PER_SEASON = {2020: 16, 2021: 10, 2022: 6, 2023: 4, 2024: 3, 2025: 2, 2026: 1}
+VISIT_ROUNDS = [{2020: 14, 2021: 16, 2022: 12}, {2023: 12, 2024: 12, 2025: 12, 2026: 6}]
+VISIT_ACCEPT = [0.70, 0.90]
 TUNE_START = 2020
-TUNE_ACCEPT = 0.70
-TUNE_MEAN, TUNE_SD, TUNE_MAX = 0.034, 0.022, 0.10
+BURNER_MEAN, BURNER_SD, BURNER_MAX = 0.012, 0.006, 0.03
+CURVE_ROUND = 1                            # the campaign's checks (the second round) also set the heating curve right
+CHECK_LEAVES = 0.25                        # the share of its crept-back excess a campaign check leaves
+REPORT_FROM = 2025                         # checks from the 2024/25 winter on recommend balancing in their report
+REPORT_PICK = 2.2                          # how much more often such an owner asks for heating optimisation in 2026
 # buildings change: an extension adds heated floor area from the next season, the new space using about half the gas
 # a square metre of the old does; a floor stands empty for one to three seasons and is let again
 EXTEND_P, EXTEND_GAIN = 0.0055, 0.55
@@ -159,7 +187,7 @@ COVID = {2020: {"office": 0.02, "retail": 0.03, "hotel": 0.06, "workshop": 0.01,
          2022: {"office": 0.05, "retail": 0.03, "hotel": 0.08, "workshop": 0.01, "care home": 0.0, "restaurant": 0.08}}
 CRISIS = {2022: 0.020, 2023: 0.140, 2024: 0.110, 2025: 0.090, 2026: 0.072}
 # quoted cost per square metre (median, euro): of roof for insulation, of heated floor for the others; the grant terms
-COST_M2 = {"insulation": 119.0, "heating optimisation": 7.4, "heating controls": 10.6}   # insulation per m2 of roof
+COST_M2 = {"insulation": 92.0, "heating optimisation": 7.2, "heating controls": 18.0}   # insulation per m2 of roof
 COST_SD = 0.22
 GRANT_SHARE, GRANT_CAP = 0.30, 40000.0
 # the contractors: a quote for roof insulation comes from a roofer, one for heating optimisation or controls from a
@@ -182,7 +210,7 @@ HEATING_FIRMS = ["Siering Haustechnik GmbH", "Mies Heizung Sanitär", "SHK Barkh
                  "SHK Eckbauer", "Wärmetechnik Lachmann GmbH", "Wulff Gebäudetechnik", "Mentzel Heizungsbau GmbH",
                  "Hecker Haustechnik", "Plath Heizung Sanitär", "SHK Kuhl GmbH", "Wärmetechnik Jäkel", "Stumpf Gebäudetechnik",
                  "Wilms Heizungsbau GmbH"]
-STILL_TRADING = {"roofers": 12, "heating": 27}
+STILL_TRADING = {"roofers": 24, "heating": 28}
 ROOF_PACE = (380.0, 0.30)                  # square metres of roof a firm insulates a working day: median, log sd
 FITTERS = ([1, 2, 3], [0.15, 0.45, 0.40])
 # a roofer loses the days it rains (one working day in seven over the summer, the same days for every firm), starts its
@@ -261,24 +289,56 @@ def build(seed=SEED):
     area0 = np.round(np.exp(rng.normal(math.log(880.0), 0.62, N)) / 5.0) * 5.0
     area0 = np.clip(area0, 120.0, 14000.0)
     w.size_z = (np.log(area0) - math.log(880.0)) / 0.62
-    w.level = rng.normal(0, SD_LEVEL, N)
-    # each building's week and storeys
+    lev_b = rng.normal(0, SD_LEVEL, N)
+    # owners: each use's portfolios (chains, groups, operators, landlords) and the buildings held alone
+    rng_o = np.random.default_rng(seed + 61)
+    w.owner = np.full(N, -1, int)
+    w.portfolio = np.zeros(N, bool)
+    n_own = 0
+    for t in range(len(TYPES)):
+        idx = rng_o.permutation(np.where(w.typ == t)[0])
+        target = int(round(PORTFOLIO_SHARE[TYPES[t]] * len(idx)))
+        pos = 0
+        while pos < target:
+            size = int(min(PF_MAX, math.floor(PF_MIN * (1.0 - rng_o.random()) ** (-1.0 / PF_ALPHA))))
+            size = min(size, target - pos)
+            w.owner[idx[pos:pos + size]] = n_own
+            w.portfolio[idx[pos:pos + size]] = size > 1
+            n_own += 1
+            pos += size
+        for i in idx[pos:]:
+            w.owner[i] = n_own
+            n_own += 1
+    w.n_owners = n_own
+    own_lvl = rng_o.normal(0, OWNER_LEVEL_SD, n_own)
+    w.level = np.where(w.portfolio, own_lvl[w.owner] + lev_b * math.sqrt(1.0 - (OWNER_LEVEL_SD / SD_LEVEL) ** 2), lev_b)
+    # each building's week and storeys: a portfolio's buildings keep one schedule, each with a little of its own
     rng_s = np.random.default_rng(seed + 29)
     w.days_open = np.zeros((N, 7), bool)
     w.open_h = np.zeros(N)
     w.len_h = np.zeros(N)
     w.arch = np.zeros(N, int)
+    own_arch = {}
     for i in range(N):
         opts = SCHEDULES[TYPES[w.typ[i]]]
-        j = int(rng_s.choice(len(opts), p=[o[0] for o in opts]))
+        o_ = int(w.owner[i])
+        if w.portfolio[i] and o_ in own_arch:
+            j, o0, l0 = own_arch[o_]
+        else:
+            j = int(rng_s.choice(len(opts), p=[o[0] for o in opts]))
+            o0 = opts[j][2] + rng_s.normal(0, 0.45)
+            l0 = opts[j][3] + rng_s.normal(0, 0.8)
+            if w.portfolio[i]:
+                own_arch[o_] = (j, o0, l0)
         _, days, o, ln = opts[j]
         w.arch[i] = j
         w.days_open[i] = [c == "1" for c in days]
         if ln >= 24.0:
             w.open_h[i], w.len_h[i] = 0.0, 24.0
         else:
-            w.open_h[i] = round(float(np.clip(o + rng_s.normal(0, 0.45), 4.0, 18.0)) * 2) / 2
-            w.len_h[i] = round(float(np.clip(ln + rng_s.normal(0, 0.8), 4.0, 19.0)) * 2) / 2
+            jit = 0.25 if w.portfolio[i] else 0.0
+            w.open_h[i] = round(float(np.clip(o0 + rng_s.normal(0, jit), 4.0, 18.0)) * 2) / 2
+            w.len_h[i] = round(float(np.clip(l0 + rng_s.normal(0, 2 * jit), 4.0, 19.0)) * 2) / 2
     w.lived_in = np.isin(tname, LIVED_IN) & (w.len_h >= 24.0)
     w.hours = np.where(w.lived_in, 168.0, w.days_open.sum(1) * w.len_h)
     w.empty = 1.0 - w.hours / 168.0
@@ -304,6 +364,13 @@ def build(seed=SEED):
     slow[:, 0] = rng.normal(0, SD_SLOW / math.sqrt(1 - PHI_SLOW ** 2), N)
     for k in range(1, K):
         slow[:, k] = PHI_SLOW * slow[:, k - 1] + rng.normal(0, SD_SLOW, N)
+    # a portfolio's buildings share part of their slow drift (opening hours, temperatures, refits set by the operator)
+    rng_d = np.random.default_rng(seed + 71)
+    od = np.zeros((n_own, K))
+    od[:, 0] = rng_d.normal(0, OWNER_DRIFT_SD / math.sqrt(1 - PHI_SLOW ** 2), n_own)
+    for k in range(1, K):
+        od[:, k] = PHI_SLOW * od[:, k - 1] + rng_d.normal(0, OWNER_DRIFT_SD, n_own)
+    slow = slow + np.where(w.portfolio[:, None], od[w.owner], 0.0)
     w.slow, w.fast = slow, fast
     # extensions and empty floors, season by season: the floor area each season and the use they add or take away
     rng_c = np.random.default_rng(seed + 7)
@@ -332,35 +399,47 @@ def build(seed=SEED):
         w.area[:, k] = a
         w.change[:, k] = ch * (1.0 - vac_cut)
     w.area0 = area0
-    # the service team's burner checks
+    # the service team's heating checks: two rounds district by district, each owner taking or declining a round's
+    # check for all its buildings
     w.district = rng.integers(0, N_DISTRICTS, N)
-    order = list(rng.permutation(N_DISTRICTS))
-    w.district_season = {}
-    for s_, n_ in DISTRICTS_PER_SEASON.items():
-        for _ in range(n_):
-            w.district_season[int(order.pop(0))] = s_
-    w.accept = rng.random(N) < TUNE_ACCEPT
-    w.tune_day = rng.random(N)
-    w.tune_cut = np.clip(rng.normal(TUNE_MEAN, TUNE_SD, N), 0.0, TUNE_MAX)
-    w.tune_date = [None] * N
+    rv = np.random.default_rng(seed + 67)
+    w.visit_plan = []
+    for plan in VISIT_ROUNDS:
+        order = list(rv.permutation(N_DISTRICTS))
+        dsn = {}
+        for s_, n_ in plan.items():
+            for _ in range(n_):
+                dsn[int(order.pop(0))] = s_
+        w.visit_plan.append(dsn)
+    w.accept = [(rv.random(n_own) < VISIT_ACCEPT[r])[w.owner] for r in range(len(VISIT_ROUNDS))]
+    w.visit_day = rv.random((N, len(VISIT_ROUNDS)))
+    w.visits = [[] for _ in range(N)]
+    w.visit_round = [[] for _ in range(N)]
+    w.burner = np.clip(rv.normal(BURNER_MEAN, BURNER_SD, N), 0.0, BURNER_MAX)
     lvl = np.array([TYPE_LEVEL[TYPES[t]] for t in w.typ])
     w.base = lvl * area0 * np.exp(w.level)
     h_type = np.array([HW_SHARE[TYPES[t]] for t in w.typ])
-    # each building's own cut for each measure (drawn once, used only if its works are done) and how much it keeps
+    # each building's heating curve and what each measure would cut in it (used only if its works are done)
     rng_e = np.random.default_rng(seed + 3)
     noise = {m: np.exp(rng_e.normal(-0.5 * EFFECT_SD ** 2, EFFECT_SD, N)) for m in MEASURES}
-    w.cut = {"insulation": INS_C * w.roof_ratio ** INS_X * noise["insulation"],
-             "heating optimisation": np.array([EFFECT["heating optimisation"][t] for t in tname])
-             * noise["heating optimisation"],
+    noise["heating controls"] = noise["heating controls"] ** (CTRL_BUILDING_SD / EFFECT_SD)
+    w.curve_c = np.array([CURVE[t] for t in tname]) * np.exp(rng_e.normal(-0.5 * CURVE_SD ** 2, CURVE_SD, N))
+    w.balance = BALANCE * np.exp(rng_e.normal(-0.5 * BALANCE_SD ** 2, BALANCE_SD, N))
+    kb = rng_e.normal(KEEP_BAL, KEEP_BAL_OWNER, n_own)
+    w.keep_bal = np.clip(kb[w.owner] + rng_e.normal(0, KEEP_BAL_SD, N), 0.05, 0.90)
+    kc = rng_e.normal(KEEP_CTRL, KEEP_CTRL_OWNER, n_own)
+    w.keep_ctrl = np.clip(kc[w.owner] + rng_e.normal(0, KEEP_CTRL_SD, N), 0.30, 1.0)
+    u_ctrl = rng_e.normal(-0.5 * CTRL_OWNER_SD ** 2, CTRL_OWNER_SD, n_own)
+    u_single = rng_e.normal(-0.5 * CTRL_SINGLE_SD ** 2, CTRL_SINGLE_SD, N)
+    u_ins = rng_e.normal(-0.5 * INS_OWNER_SD ** 2, INS_OWNER_SD, n_own)
+    w.cut = {"insulation": INS_C * w.roof_ratio ** INS_X * noise["insulation"]
+                           * np.exp(np.where(w.portfolio, u_ins[w.owner], 0.0)),
+             "heating optimisation": w.balance,
              "heating controls": np.where(w.lived_in, CTRL_LIVED, CTRL_C * np.clip(w.empty - CTRL_E0, 0.0, None)
-                                          + CTRL_LIVED) * noise["heating controls"]}
-    w.keep_f = {m: np.ones(N) for m in MEASURES}
-    for m, (fm, fs, tau) in KEEP.items():
-        w.keep_f[m] = np.clip(rng_e.normal(fm, fs, N), 0.0, 1.0)
-    mi19 = pick_measures(w, MEASURE_P_2019, PICK[2019], np.random.default_rng(seed + 37))
-    mi26 = pick_measures(w, MEASURE_P_2026, PICK[2026], np.random.default_rng(seed + 41))
+                                          + CTRL_LIVED) * noise["heating controls"]
+                                 * np.exp(np.where(w.portfolio, u_ctrl[w.owner], u_single))}
     w.normal = np.zeros((N, K))                # the building's own normal-weather use (kWh)
-    w.underlying = np.zeros((N, K))            # use before any works or visit, in the season's own state (kWh)
+    w.underlying = np.zeros((N, K))            # use before any works or check, in the season's own state (kWh)
     w.actual = np.zeros((N, K))                # metered use in the season's weather (kWh)
     w.flag = np.zeros((N, K), bool)
     w.offer = np.zeros((N, K), bool)
@@ -372,50 +451,34 @@ def build(seed=SEED):
     w.measure = np.array([""] * N, dtype=object)  # the measure a pilot answer asked for
     w.measure26 = np.array([""] * N, dtype=object)  # the measure a 2026 application asks for
     w.norm_intensity = np.full((N, K), np.nan)
-    w.heat_factor = np.ones((N, K))            # the works' factor on the heating part in each season
-    tuned = np.zeros(N, bool)
-    rng2 = np.random.default_rng(seed + 1)
+    w.f_hw = np.ones((N, K))
+    w.f_heat = np.ones((N, K))
     w.answer_date = {PILOT: [None] * N, PIPELINE: [None] * N}
+    mi19 = pick_by_owner(w, MEASURE_P_2019, PICK[2019], np.random.default_rng(seed + 37))
     for k, s in enumerate(SEASONS):
         live = (w.first <= s) & (w.last >= s)
         ds = w.days[s]
         heat = np.where(w.temp[s] < 15.0, 20.0 - w.temp[s], 0.0)
-        nd = float(len(ds))
-        f_hw = np.ones(N)
-        f_heat = np.ones(N)
-
-        def step(i, j, e, hot_water):
-            """a cut of e from day j of the season on, on the days (hot water) and the degree days (heating)"""
-            if hot_water:
-                f_hw[i] *= 1.0 - e * (nd - j) / nd
-            f_heat[i] *= 1.0 - e * heat[j:].sum() / heat.sum()
         if s >= TUNE_START:
-            months = (8, 9, 10, 11) if s == TUNE_START else (9, 10, 11, 12, 1, 2, 3)
-            window = [i for i, d in enumerate(ds) if d.month in months]
-            for i in np.where(live & ~tuned & w.accept)[0]:
-                if w.district_season[int(w.district[i])] != s:
-                    continue
-                j = window[min(len(window) - 1, int(w.tune_day[i] * len(window)))]
-                w.tune_date[i] = ds[j]
-                step(i, j, w.tune_cut[i], True)
-                tuned[i] = True
-        for i in np.where(tuned)[0]:
-            if w.tune_date[i] is not None and season_of(w.tune_date[i]) < s:
-                f_hw[i] *= 1.0 - w.tune_cut[i]
-                f_heat[i] *= 1.0 - w.tune_cut[i]
-        for i in np.where(w.works)[0]:
-            m = w.measure[i]
-            age = s - PILOT
-            e = w.cut[m][i] * (keep_curve(w.keep_f[m][i], KEEP[m][2], age) if m in KEEP else 1.0)
-            if s == PILOT + 1:
-                step(i, ds.index(w.done_date[i]), e, False)
-            elif s > PILOT + 1:
-                f_heat[i] *= 1.0 - e
-            w.heat_factor[i, k] = 1.0 - e
+            for r, plan in enumerate(w.visit_plan):
+                first_season = min(plan.values())
+                months = (8, 9, 10, 11) if s == first_season and s == TUNE_START else (9, 10, 11, 12, 1, 2, 3)
+                window = [j for j, d in enumerate(ds) if d.month in months]
+                for i in np.where(live & w.accept[r])[0]:
+                    if plan.get(int(w.district[i])) != s:
+                        continue
+                    j = window[min(len(window) - 1, int(w.visit_day[i, r] * len(window)))]
+                    w.visits[i].append(ds[j])
+                    w.visit_round[i].append(r)
+        for i in np.where(live)[0]:
+            if w.visits[i] or w.works[i]:
+                hw_d, ht_d = day_mults(w, int(i), s)
+                w.f_hw[i, k] = float(hw_d.mean())
+                w.f_heat[i, k] = float((heat * ht_d).sum() / heat.sum())
         shock = np.array([COVID.get(s, {}).get(t, 0.0) for t in tname]) + CRISIS.get(s, 0.0)
         ratio = w.G[s] / w.G_LT
         w.underlying[:, k] = np.where(live, w.base * w.change[:, k] * np.exp(slow[:, k] + fast[:, k]) * (1 - shock), 0.0)
-        w.actual[:, k] = w.underlying[:, k] * (w.hw * f_hw + (1 - w.hw) * ratio * f_heat)
+        w.actual[:, k] = w.underlying[:, k] * (w.hw * w.f_hw[:, k] + (1 - w.hw) * ratio * w.f_heat[:, k])
         w.normal[:, k] = w.actual[:, k] / (w.hw + (1 - w.hw) * ratio)
         if s >= PILOT:
             nrm = w.actual[:, k] * (h_type + (1 - h_type) / ratio) / w.area[:, k]
@@ -427,18 +490,29 @@ def build(seed=SEED):
                 w.flag[m_, k] = nrm[m_] > cut
             if s == PILOT:
                 w.offer[:, k] = w.flag[:, k]
-                ans = w.offer[:, k] & (rng.random(N) < INTEREST_P)
+                ans = w.offer[:, k] & (rng.random(n_own) < INTEREST_P)[w.owner]
                 w.applied[:, k] = ans
                 idx = np.where(ans)[0]
                 for i in idx:
                     w.measure[i] = MEASURES[mi19[i]]
                 answer_dates(w, PILOT, seed + ANSWER_SEED_OFFSET)
-                # the places drawn by lot within each measure, so each measure's share of places matches its answers
+                # the places drawn by lot among the owners who answered, within each measure, an owner's buildings
+                # together, until each measure's places (its share of the answers) are filled
                 rd = np.random.default_rng(seed + DRAW_SEED_OFFSET)
                 for m in MEASURES:
-                    im = np.array([i for i in idx if w.measure[i] == m])
-                    pick = rd.permutation(len(im))[:int(round(PLACES * len(im)))]
-                    w.drawn[im[pick]] = True
+                    im = [int(i) for i in idx if w.measure[i] == m]
+                    by_owner = {}
+                    for i in im:
+                        by_owner.setdefault(int(w.owner[i]), []).append(i)
+                    owners_m = sorted(by_owner)
+                    places = int(round(PLACES * len(im)))
+                    got = 0
+                    for oi in rd.permutation(len(owners_m)):
+                        if got >= places:
+                            break
+                        b_ = by_owner[owners_m[int(oi)]]
+                        w.drawn[b_] = True
+                        got += len(b_)
                 rw = np.random.default_rng(seed + 5)
                 day0 = dt.date(PILOT, *NOTICE_MD)
                 for i in np.where(w.drawn)[0]:
@@ -461,8 +535,9 @@ def build(seed=SEED):
                     w.done_date[i] = done[int(i)]
             elif s == PIPELINE:
                 w.offer[:, k] = w.flag[:, k] & ~w.works
-                take = w.offer[:, k] & (rng.random(N) < APPLY_2026)
+                take = w.offer[:, k] & (rng.random(n_own) < APPLY_2026)[w.owner]
                 w.applied[:, k] = take
+                mi26 = pick_by_owner(w, MEASURE_P_2026, PICK[2026], np.random.default_rng(seed + 41), report=True)
                 for i in np.where(take)[0]:
                     w.measure26[i] = MEASURES[mi26[i]]
                 answer_dates(w, PIPELINE, seed + ANSWER_SEED_OFFSET + 1)
@@ -589,23 +664,107 @@ def schedule(w, jobs, year):
     return done
 
 
-def pick_measures(w, shares, pick, rng):
-    """the measure each building's owner would name if it answered: its use's shares, leaning towards controls the
-    longer the building stands empty and towards insulation the more roof it has per floor, by the strength in pick;
-    each use's shares are kept on average"""
+def pick_by_owner(w, shares, pick, rng, report=False):
+    """the measure each owner would name if it answered, for all its buildings at once: its use's shares, leaning
+    towards controls the longer its buildings stand empty and towards insulation the more roof they have per floor, by
+    the strength in pick (each use's shares kept on average over its buildings); with report, an owner whose buildings
+    had a check from the 2024/25 winter on leans towards heating optimisation as the check report recommends"""
     out = np.zeros(w.N, int)
+    members = {}
+    for i in range(w.N):
+        members.setdefault(int(w.owner[i]), []).append(i)
+    lr = np.log(w.roof_ratio)
     for t in range(len(TYPES)):
         idx = np.where(w.typ == t)[0]
         p = np.array(shares[TYPES[t]])
-        zc = np.exp(pick["heating controls"] * (w.empty[idx] - w.empty[idx].mean()))
-        pc = np.clip(p[2] * zc / zc.mean(), 0.0, 0.95)
-        lr = np.log(w.roof_ratio[idx])
-        zi = np.exp(pick["insulation"] * (lr - lr.mean()))
-        pi = np.minimum(np.clip(p[0] * zi / zi.mean(), 0.0, 0.95), 0.97 - pc)
-        pp = np.column_stack([pi, 1.0 - pc - pi, pc])
-        u = rng.random(len(idx))
-        out[idx] = (u[:, None] > np.cumsum(pp, 1)).sum(1)
+        e_mean, r_mean = w.empty[idx].mean(), lr[idx].mean()
+        owners_t = sorted({int(w.owner[i]) for i in idx})
+        e_o = np.array([w.empty[members[o]].mean() for o in owners_t])
+        r_o = np.array([lr[members[o]].mean() for o in owners_t])
+        n_o = np.array([len(members[o]) for o in owners_t], float)
+        zc = np.exp(pick["heating controls"] * (e_o - e_mean))
+        pc = np.clip(p[2] * zc / np.average(zc, weights=n_o), 0.0, 0.95)
+        zi = np.exp(pick["insulation"] * (r_o - r_mean))
+        pi = np.minimum(np.clip(p[0] * zi / np.average(zi, weights=n_o), 0.0, 0.95), 0.97 - pc)
+        po = 1.0 - pc - pi
+        if report:
+            rec = np.array([np.mean([any(season_of(d) >= REPORT_FROM and r >= CURVE_ROUND for d, r in zip(w.visits[i], w.visit_round[i])) for i in members[o]])
+                            for o in owners_t])
+            po_new = np.clip(po * (1.0 + (REPORT_PICK - 1.0) * rec), 0.0, None)
+            po_new = po_new * np.average(po, weights=n_o) / np.average(po_new, weights=n_o)
+            po_new = np.minimum(po_new, 1.0 - 1e-6)
+            rest = pc + pi
+            scale = np.where(rest > 0, (1.0 - po_new) / np.where(rest > 0, rest, 1.0), 0.0)
+            pc, pi, po = pc * scale, pi * scale, po_new
+        pp = np.column_stack([pi, po, pc])
+        u = rng.random(len(owners_t))
+        pick_o = (u[:, None] > np.cumsum(pp, 1)).sum(1)
+        for o, m in zip(owners_t, pick_o):
+            out[members[o]] = min(int(m), 2)
     return out
+
+
+def curve_state(w, i, days):
+    """the share of the building's curve excess wasted on each day (1 untouched): the pilot's heating optimisation sets
+    it to nothing and a campaign check to CHECK_LEAVES of what it had crept back to; from each reset it creeps back
+    towards all of it in a building never balanced (TAU_UNBAL) or towards what a balanced building lets go (1 less its
+    kept share, TAU_BAL)"""
+    opt = bool(w.works[i] and w.measure[i] == "heating optimisation")
+    ev = ([(w.done_date[i], "works")] if opt else []) + \
+         [(d, "check") for d, r in zip(w.visits[i], w.visit_round[i]) if r >= CURVE_ROUND]
+    s = np.ones(len(days))
+    if not ev:
+        return s
+    ev.sort()
+    dn = np.array([d.toordinal() for d in days], float)
+    t0, s0, bal = None, 1.0, False
+    out = np.ones(len(days))
+    for d, kind in ev + [(None, None)]:
+        upto = d.toordinal() if d is not None else 10 ** 9
+        if t0 is not None:
+            target = 1.0 - w.keep_bal[i] if bal else 1.0
+            tau = TAU_BAL if bal else TAU_UNBAL
+            seg = (dn >= t0) & (dn < upto)
+            out[seg] = target - (target - s0) * np.exp(-(dn[seg] - t0) / 365.25 / tau)
+        if d is None:
+            break
+        if t0 is not None:
+            target = 1.0 - w.keep_bal[i] if bal else 1.0
+            tau = TAU_BAL if bal else TAU_UNBAL
+            before = target - (target - s0) * math.exp(-(upto - t0) / 365.25 / tau)
+        else:
+            before = 1.0
+        if kind == "works":
+            bal, s0 = True, 0.0
+        else:
+            s0 = CHECK_LEAVES * before
+        t0 = float(upto)
+    return out
+
+
+def day_mults(w, i, s):
+    """building i's day-by-day factors in season s on its hot water and on its heating: the burner tuned at its first
+    check, the heating curve as it stands, and its pilot works' cut from the day they were done"""
+    ds = w.days[s]
+    nd = len(ds)
+    hw = np.ones(nd)
+    ht = np.ones(nd)
+    if w.visits[i]:
+        v0 = w.visits[i][0]
+        on = np.array([d >= v0 for d in ds])
+        hw = np.where(on, 1.0 - w.burner[i], 1.0)
+        ht = ht * hw
+    ht = ht * (1.0 - w.curve_c[i] * (1.0 - curve_state(w, i, ds)))
+    if w.works[i]:
+        m = w.measure[i]
+        after = np.array([d >= w.done_date[i] for d in ds])
+        age = s - PILOT
+        if m == "heating controls":
+            e = w.cut[m][i] * keep_curve(w.keep_ctrl[i], TAU_CTRL, age)
+        else:
+            e = w.cut[m][i]
+        ht = ht * np.where(after, 1.0 - e, 1.0)
+    return hw, ht
 
 
 def load_week(w, i, seed):
@@ -692,31 +851,17 @@ def answer_dates(w, s, seed):
 
 def daily_kwh(w, i, s):
     """building i's metered gas use, day by day, in season s (kWh): its use spread over the days (hot water) and the
-    season's degree days (heating), with the works' cut on the heating from the day they were done and the burner
-    check's cut on both from the day of the visit"""
+    season's degree days (heating), with the burner, the heating curve and the works as they stood each day"""
     k = SI[s]
     ds = w.days[s]
     heat = np.where(w.temp[s] < 15.0, 20.0 - w.temp[s], 0.0)
     nd = float(len(ds))
     hwv = np.full(len(ds), w.hw[i] / nd)
     htv = (1 - w.hw[i]) * heat / w.G_LT
-    if w.works[i]:
-        e = 1.0 - w.heat_factor[i, k]
-        if s == PILOT + 1:
-            htv[ds.index(w.done_date[i]):] *= 1 - e
-        elif s > PILOT + 1:
-            htv *= 1 - e
-    td = w.tune_date[i]
-    if td is not None:
-        st = season_of(td)
-        v = w.tune_cut[i]
-        if st == s:
-            j = ds.index(td)
-            hwv[j:] *= 1 - v
-            htv[j:] *= 1 - v
-        elif st < s:
-            hwv *= 1 - v
-            htv *= 1 - v
+    if w.visits[i] or w.works[i]:
+        hw_d, ht_d = day_mults(w, i, s)
+        hwv = hwv * hw_d
+        htv = htv * ht_d
     return w.underlying[i, k] * (hwv + htv)
 
 

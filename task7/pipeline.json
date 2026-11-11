@@ -1,13 +1,13 @@
 {
  "task": "task7",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-11",
  "stump": "",
- "architecture": 8,
+ "architecture": 9,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -124,7 +124,7 @@
    "feedback": "task7/runs/review_2026-11-11.md"
   }
  ],
- "resume": "re-root at stage 1 (architecture 9): the call on the service checks reaching the passed-over owners (heating optimisation, the forward window without them) and the owner-level draw (the 90 per cent range), capacity out of the decision",
+ "resume": "stage 2/3: rebuild pack.py (owners, check reads), docs.py (rules 3 owner draw, committee rule, heat plan campaign), verify.py, golden, checks, deliver, writeup on seed 70706; then gates",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -342,9 +342,9 @@
  },
  "paper_pair": 46.0,
  "subdomain": "efficiency-savings-verification",
- "call": "Fund insulation and heating controls in the 2026 round, not heating optimisation: EUR 108.69, 103.25 and 193.18 of grant per lifetime tonne on the applications received against EUR 120, each priced on its own building; once the works are done by 30 September the pair pays EUR 6,992,958 (EUR 6.3 to 7.7 million), within the EUR 8.2 million budget, the 12 roofers still quoting finishing about 172 of 275 roofs; paid in full (EUR 10,759,494) or with the roofers' work counted in jobs (EUR 8,930,359) the budget funds controls alone",
+ "call": "fund insulation alone in the 2026 round (provisional): heating optimisation's saving without the closed campaign's held lift and controls' range at the owner both sit over EUR 120 at the upper end",
  "doctrine": "throughout",
- "chain": "R1 each measure's saving by season against the passed-over owners; R2 its saving over its service life; R3 its saving by building type; R4 its lifetime saving rate on this year's applications; R5 grant per tonne and the funded set; R6 each grant per tonne's range and flip rate; R7 each measure's applications, grant and grant paid at close; R8 the pilot's 2025/26 CO2",
+ "chain": "R1 seasons; R2 optimisation's own saving; R3 its life rate; R4 controls along the empty week; R5 insulation along the roof; R6 their rates; R7 each grant per tonne with its owner-level range; R8 the funded set; R9 the round at close and funded tonnes; R10 every application; R11 the 2025/26 CO2",
  "effort": {
   "quick": 16.8,
   "careful": 46.0,
