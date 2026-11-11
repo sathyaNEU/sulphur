@@ -45,8 +45,12 @@ class Record:
         self._mes()
         self._pm()
         self._counters()
+        self._stores()
         self.d = self.sort.merge(self.fdc, on="wafer_id", how="left").merge(self.mes, on="wafer_id", how="left")
         self.d["group"] = self.d.unit.map(GROUP)
+        lots = {s: self.lot_of(s) for s in self.d.disk_serial.dropna().unique()}
+        self.d["disk_lot"] = self.d.disk_serial.map(lots)
+        self._ft()
 
     def _sort(self):
         s = pd.read_csv(os.path.join(self.tgt, PK.F["sort"]))
@@ -110,6 +114,9 @@ class Record:
             ev.at[i, "counter"] = int(f.platen.min()) if len(f) else np.nan
         ev["counter"] = pd.to_numeric(ev.counter)
         ev = ev[ev.counter.notna()]
+        # the serial of the disk an entry fitted, from its parts text
+        ev["disk_serial"] = [int(m.group(1)) if ("disk" in p and m) else np.nan
+                             for p, m in zip(ev.parts, (re.search(r"s/n\s*(\d+)", str(t)) for t in ev.parts_text))]
         self.events = ev.sort_values(["unit", "counter"]).reset_index(drop=True)
 
     def _counters(self):
@@ -126,6 +133,29 @@ class Record:
                 k = np.searchsorted(c, g.platen.values, side="right") - 1
                 val = np.where(k >= 0, g.platen.values - c[np.clip(k, 0, None)], np.nan)
                 f.loc[g.index, part] = val
-                if part == "disk":   # each disk's own life on the unit, named by the counter it was fitted at
+                if part == "disk":   # each disk's own life on the unit, named by the counter it was fitted at, and its serial
                     f.loc[g.index, "disk_life"] = ["%s#%d" % (u, int(c[i])) if i >= 0 else "%s#pre" % u for i in k]
+                    ser = ev[ev.parts.map(lambda s: "disk" in s)].sort_values("counter").disk_serial.values
+                    f.loc[g.index, "disk_serial"] = [ser[i] if i >= 0 else np.nan for i in k]
         self.fdc = f
+
+
+    def _stores(self):
+        s = pd.read_csv(os.path.join(self.tgt, PK.F["stores"]), dtype={"serial_first": "Int64", "serial_last": "Int64"})
+        self.stores = s
+        self.disk_lots = s[s.part_no == "CMP-CD-A165"][["supplier_lot", "receipt_date", "serial_first", "serial_last", "qty"]].reset_index(drop=True)
+
+    def lot_of(self, serial):
+        if serial != serial or serial is None:
+            return None
+        for _, r in self.disk_lots.iterrows():
+            if r.serial_first <= serial <= r.serial_last:
+                return r.supplier_lot
+        return None
+
+    def _ft(self):
+        ft = pd.read_csv(os.path.join(self.tgt, PK.F["ft"]), dtype={"sub_lot": str}, keep_default_na=False)
+        ft["ft_date"] = pd.to_datetime(ft.ft_end_date)
+        g = ft.groupby("lot_id").agg(units_in=("units_in", "sum"), ft1_fail=("ft1_fail", "sum"), burnin_fail=("burnin_fail", "sum"),
+                                     ft2_fail=("ft2_fail", "sum"), ft_date=("ft_date", "max"), assy_part=("assy_part", "first"))
+        self.ft = g.reset_index()

@@ -35,9 +35,9 @@ review names the part and sets each unit's count.
 
 Raised by {maint} on 2026-05-29. Approved for 2026-06-01 to 2026-08-14.
 
-Conditioner disk supply is short until the supplier's August shipment. At full PMs on PU-1 to PU-4 during the waiver
-period the installed conditioner disk may be retained if it passes visual inspection, for at most four full PMs in
-total. Pad and retaining ring are replaced as normal. The technician records the retained disk in the PM entry.
+Trial of conditioner disk life past the full PM interval. At full PMs on PU-1 to PU-4 during the waiver period the
+installed conditioner disk may be retained if it passes visual inspection, for at most two full PMs in total. Pad and
+retaining ring are replaced as normal. The technician records the retained disk in the PM entry.
 """.format(cmp=P.PEOPLE["cmp"], maint=P.PEOPLE["maint"])
 
 TICKET = """YIELD EXCURSION TICKET  YE-2026-031
@@ -115,11 +115,15 @@ def costs_yaml():
          "  full_pm: %d                      # pad, disk and ring together" % full_all,
          "# Rev G review: a part taken off the full PM is charged its own change's all_in each time it is changed, and the",
          "# full PM is then charged at full_pm less that part's price.",
-         "volume:",
+         "volume:                             # FY27 plan",
          "  wafers_per_year_ild_cmp: %d" % c["wafers_per_year"],
+         "  wafers_per_year_by_unit:"] + ["    %s: %d" % (u, v) for u, v in c["by_unit"].items()] + [
+         "  product_mix:                      # share of ILD-CMP wafers"] + ["    %s: %.2f" % (k, v) for k, v in c["mix_plan"].items()] + [
          "die:"]
+    L.append("  # a unit scrapped at final test costs its die value and its assembly and test")
     for prod, p in P.PRODUCTS.items():
         L.append("  %s:" % prod)
         L.append("    value_per_good_die: %.2f" % p["value"])
+        L.append("    assembly_and_test_per_unit: %.2f" % p["assembly"])
     L.append("")
     return "\n".join(L), dict(pad=pad_all, disk=disk_all, ring=ring_all, full=full_all)

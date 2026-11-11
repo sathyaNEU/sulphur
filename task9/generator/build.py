@@ -45,6 +45,8 @@ EXPORT_TIMES = {
     PK.F["particles"]: dt.datetime(2026, 8, 31, 6, 30, 41, tzinfo=AZ),
     PK.F["sc4"]: dt.datetime(2026, 8, 30, 13, 17, 55, tzinfo=AZ),
     PK.F["slurry"]: dt.datetime(2026, 8, 24, 8, 44, 12, tzinfo=AZ),
+    PK.F["stores"]: dt.datetime(2026, 8, 31, 17, 5, 48, tzinfo=AZ),
+    PK.F["ft"]: dt.datetime(2026, 8, 31, 19, 52, 26, tzinfo=AZ),
 }
 COVERS = {
     PK.F["sort"]: "the sort database's wafer records: zone fail and tested counts, bins, the classifier's label, retests",
@@ -61,6 +63,8 @@ COVERS = {
     PK.F["particles"]: "hourly particle counts by bay",
     PK.F["sc4"]: "scanner SC-4's edge-field focus and levelling data for its lots",
     PK.F["slurry"]: "slurry lot certificates of analysis",
+    PK.F["stores"]: "the CMP consumables' receiving log by part and lot",
+    PK.F["ft"]: "the back-end site's per-lot summary of units in and out at each step",
 }
 CATEGORY = {"csv": "spreadsheet", "xlsx": "spreadsheet", "sqlite": "database", "py": "code", "md": "text", "txt": "text",
             "yaml": "code", "png": "image"}
@@ -138,9 +142,11 @@ def metadata(tgt, info):
              "people and paperwork are invented; the fab is simulated wafer by wafer (weekly lot starts at a shifting product "
              "mix, a forty-step flow with six chamber steps and one deposition chamber's affinity for two polish units, "
              "dispatch around each unit's downtime, clustered random defects with a weekly drift and a particle week, the "
-             "outermost zone's fallout, conditioner-disk wear at each unit's and each disk's own rate with a pad term, the "
-             "maintenance the spec, waiver EW-118 and the floor's unscheduled swaps produced, removal-rate metrology, the "
-             "ring classifier and the yield team's review pulls), and every record is written from that process.",
+             "outermost zone's fallout, conditioner-disk wear at each unit's, each supplier lot's and each disk's own rate "
+             "with a pad term, thinned edge dielectric that passes sort and fails burn-in, the maintenance the spec, waiver "
+             "EW-118 and the floor's unscheduled swaps produced, stores issuing the oldest disk lot first, removal-rate "
+             "metrology, the ring classifier, the yield team's review pulls, assembly loss and final test at the assembly "
+             "house), and every record is written from that process.",
              "date": AS_OF, "license": "CC BY 4.0 (original work)"},
         ],
         "files": files,

@@ -28,11 +28,11 @@ import params as P
 import postprocess as PP
 import world as WD
 
-F = {"sort": "wafer_sort_zones.csv", "mes": "process_history.csv", "pm": "cmp_unit_pm_log.xlsx", "fdc": "cmp_wafer_fdc.csv",
+F = {"stores": "stores_receipts_cmp.csv", "ft": "pen2_backend_lot_summary.csv", "sort": "wafer_sort_zones.csv", "mes": "process_history.csv", "pm": "cmp_unit_pm_log.xlsx", "fdc": "cmp_wafer_fdc.csv",
      "diemaps": "die_maps.sqlite", "geometry": "die_geometry.py", "examples": "wafer_map_examples", "spec": "pm_spec_history.md",
      "ticket": "excursion_ticket_YE-2026-031.txt", "costs": "cost_inputs.yaml", "rf": "dep_chamber_rf_hours.csv",
      "particles": "facility_particle_counts.csv", "sc4": "scanner_sc4_edge_focus.csv", "slurry": "slurry_lot_coa.csv"}
-DISTRACTORS = [F["sc4"], F["slurry"]]
+DISTRACTORS = [F["sc4"], F["slurry"], F["particles"]]
 T0 = dt.datetime.combine(P.START, dt.time(0, 0))
 
 
@@ -74,7 +74,79 @@ class Pack:
         info["particle_rows"] = self.particles(os.path.join(tgt, F["particles"]))
         info["sc4_rows"] = self.sc4(os.path.join(tgt, F["sc4"]))
         info["slurry_rows"] = self.slurry(os.path.join(tgt, F["slurry"]))
+        info["stores_rows"] = self.stores(os.path.join(tgt, F["stores"]))
+        info["ft_rows"] = self.final_test(os.path.join(tgt, F["ft"]))
         return info
+
+    # ---- stores' receiving log for the CMP consumables (all CMP modules draw on it)
+    def stores(self, path):
+        rng = self.rng
+        rows = []
+        po = 45110
+        for L in P.DISK_LOTS:
+            po += int(rng.integers(3, 30))
+            rows.append([L["received"].isoformat(), "PO%d" % po, "CMP-CD-A165", "COND DISK A165 DIAMOND 4.25IN", "Abrion Tools", L["lot"],
+                         L["qty"], "EA", L["first"], L["first"] + L["qty"] - 1, str(rng.choice(["M. Okafor", "L. Brandt", "P. Sato"])), "ACCEPT"])
+        d = dt.date(2025, 9, 3)
+        a140_next = 61012
+        while d <= P.PULL:
+            for part, desc, sup, lotp, qty, uom in (("CMP-PAD-IC1010", "POLISH PAD IC1010 30IN", "Kelvar Materials", "IC", (40, 64), "EA"),
+                                                     ("CMP-FLT-05U", "SLURRY FILTER 0.5UM", "Purecore", "PF", (20, 30), "EA"),
+                                                     ("CMP-BRSH-PVA", "PVA BRUSH ROLL", "Purecore", "PB", (16, 24), "EA")):
+                if rng.random() < 0.85:
+                    po += int(rng.integers(3, 30))
+                    dd = d + dt.timedelta(days=int(rng.integers(0, 20)))
+                    if dd <= P.PULL:
+                        rows.append([dd.isoformat(), "PO%d" % po, part, desc, sup, "%s%s%02d" % (lotp, dd.strftime("%y%m"), int(rng.integers(1, 40))),
+                                     int(rng.integers(*qty)), uom, "", "", str(rng.choice(["M. Okafor", "L. Brandt", "P. Sato"])), "ACCEPT"])
+            if d.month in (9, 12, 3, 6):
+                for part, desc, first in (("CMP-RR-300", "RETAINING RING RR-300", 3000 + 40 * d.month), ("CMP-CD-A140", "COND DISK A140 DIAMOND 4.25IN", None)):
+                    po += int(rng.integers(3, 30))
+                    dd = d + dt.timedelta(days=int(rng.integers(5, 25)))
+                    q = int(rng.integers(10, 18))
+                    lotno = ("RR%s" % dd.strftime("%y%m")) if part == "CMP-RR-300" else ("A140-L%s" % dd.strftime("%y%m"))
+                    sf = ""
+                    if part == "CMP-CD-A140":                 # the supplier's serials run on; the gap went to its other customers
+                        sf = a140_next + int(rng.integers(0, 900)) // 6
+                        a140_next = sf + q
+                    rows.append([dd.isoformat(), "PO%d" % po, part, desc, "Abrion Tools" if "CD" in part else "Kelvar Materials", lotno, q, "EA",
+                                 sf, (sf + q - 1) if sf != "" else "", str(rng.choice(["M. Okafor", "L. Brandt", "P. Sato"])),
+                                 "ACCEPT" if rng.random() > 0.08 else "ACCEPT-DEV"])
+            d = (d.replace(day=1) + dt.timedelta(days=32)).replace(day=3)
+        rows.sort(key=lambda r: (r[0], r[2]))
+        po = 45108
+        for r in rows:          # purchase orders run in the order the receipts came in
+            po += int(rng.integers(2, 25))
+            r[1] = "PO%d" % po
+        with open(path, "w", newline="") as fh:
+            wr = csv.writer(fh)
+            wr.writerow(["receipt_date", "po_number", "part_no", "description", "supplier", "supplier_lot", "qty", "uom", "serial_first",
+                         "serial_last", "received_by", "inspection"])
+            wr.writerows(rows)
+        return len(rows)
+
+    # ---- the assembly house's final-test summary, one row per lot (or sub-lot where the house split it)
+    def final_test(self, path):
+        rng = self.rng
+        rows = []
+        for r in self.fab.ft:
+            lot, prod = r["lot"], r["lot"]["product"]
+            split = rng.random() < 0.08
+            parts = [(r["units"], r["ft1"], r["burnin"], r["ft2"])]
+            if split:
+                f = rng.uniform(0.35, 0.65)
+                a = [int(round(x * f)) for x in parts[0]]
+                parts = [tuple(a), tuple(x - y for x, y in zip(parts[0], a))]
+            for k, (units, ft1, bi, ft2) in enumerate(parts):
+                rows.append([lot["lot_id"], ("ABCD"[k] if split else ""), P.PRODUCTS[prod]["package"], "PEN-2",
+                             ts(r["t"] + 0.02 * k, "%Y-%m-%d"), units, ft1, bi, ft2, units - ft1 - bi - ft2])
+        rows.sort(key=lambda x: (x[4], x[0], x[1]))
+        with open(path, "w", newline="") as fh:
+            wr = csv.writer(fh)
+            wr.writerow(["lot_id", "sub_lot", "assy_part", "test_site", "ft_end_date", "units_in", "ft1_fail", "burnin_fail", "ft2_fail",
+                         "units_out"])
+            wr.writerows(rows)
+        return len(rows)
 
     # ---- the sort database: every sort record, retests included
     def sort(self, path):
@@ -168,7 +240,7 @@ class Pack:
             if "pad" in e["parts"]:
                 p.append(str(rng.choice(pad_names)))
             if "disk" in e["parts"]:
-                p.append("%s s/n %d" % (rng.choice(disk_names), int(rng.integers(7000, 9900))))
+                p.append("%s s/n %d" % (rng.choice(disk_names), e["serial"]))
             if "ring" in e["parts"]:
                 p.append(str(rng.choice(ring_names)))
             text = ", ".join(p)
@@ -189,12 +261,13 @@ class Pack:
             ini = P.INITIAL[u]
             t_full = -ini["full"] / 40.0 - rng.uniform(0.2, 0.8)
             rows.append([u, ts(t_full, "%Y-%m-%d %H:%M"), "FULL_PM", "%s, %s s/n %d, %s; platen and carrier inspected" % (
-                rng.choice(pad_names), rng.choice(disk_names), int(rng.integers(7000, 9900)), rng.choice(ring_names)),
+                rng.choice(pad_names), rng.choice(disk_names), self.fab.pre_disk[u][1], rng.choice(ring_names)),
                 base[u] - ini["full"], str(rng.choice(P.TECHS)), "", ""])
             if ini["pad"] < ini["full"]:
                 rows.append([u, ts(-ini["pad"] / 40.0 - rng.uniform(0.05, 0.2), "%Y-%m-%d %H:%M"), "PAD_CHANGE", str(rng.choice(pad_names)),
                              base[u] - ini["pad"], str(rng.choice(P.TECHS)), "", ""])
         n_days = WD.day(P.LAST_POLISH) + 1
+        routine_from = len(rows)
         for u in WD.UNITS:
             for d0 in range(2, n_days, 7):
                 rows.append([u, ts(d0 + rng.uniform(0.3, 0.6), "%Y-%m-%d %H:%M"), "PM_CHECK", str(rng.choice(
@@ -206,6 +279,20 @@ class Pack:
             for d0 in range(9, n_days, 14):
                 rows.append([u, ts(d0 + rng.uniform(0.1, 0.9), "%Y-%m-%d %H:%M"), "ENDPOINT_CAL", "endpoint sensor calibration", "",
                              str(rng.choice(P.TECHS)), "", ""])
+        # the floor's own record of its routine work: a check missed on a short-staffed shift, a follow-up check after an
+        # alarm (drawn on their own stream so the rest of the log is as it was)
+        side = np.random.default_rng(P.SEED + 404)
+        kept = rows[:routine_from]
+        for r in rows[routine_from:]:
+            if side.random() < 0.04:
+                continue
+            kept.append(r)
+            if r[2] == "PM_CHECK" and side.random() < 0.03:
+                t = dt.datetime.strptime(r[1], "%Y-%m-%d %H:%M") + dt.timedelta(hours=float(side.uniform(20, 30)))
+                kept.append([r[0], t.strftime("%Y-%m-%d %H:%M"), "PM_CHECK", str(side.choice(
+                    ["follow-up check after pad temp alarm, ok", "re-check after slurry flow alarm, cleared", "follow-up check, no findings"])),
+                    "", str(side.choice(P.TECHS)), "", ""])
+        rows = kept
         rows.sort(key=lambda r: (r[1], r[0]))
         wb = openpyxl.Workbook()
         ws = wb.active

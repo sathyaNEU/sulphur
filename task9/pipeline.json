@@ -4,12 +4,12 @@
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 4,
+  "stage_name": "check",
   "updated": "2026-11-11",
   "doctrine": "throughout",
-  "call": "take the conditioner disk out of the full PM and change it at about 1,570 wafers on PU-1 and PU-2 and 1,200 on PU-3 and PU-4, saving about USD 288,000 a year against Rev F",
-  "chain": "R1 the ring's loss on wafers sorted 1 April to 31 August (1.31 points of mean sort yield); R2 the same in good die by product; R3 each candidate cause's share (the disk 96 per cent, the pad 4, the retaining ring, DEP-3, SC-4 and RF hours at none); R4 each unit's onset and slope; R5 the shares the 2,000-wafer rule, Rev F and EW-118 account for (22, 34, 43 per cent); R6 each unit's count under Rev G (the call); R7 the yearly saving against Rev F",
+  "call": "take the conditioner disk out of the full PM under Rev G and change it after 1,010 wafers of its own use on PU-1 and PU-2 and 840 on PU-3 and PU-4, saving about USD 519,000 a year against Rev F",
+  "chain": "R1 the ring's loss at sort on wafers sorted 1 April to 31 August (0.90 points; good die by product); R2 each candidate cause's share (the disk 96.3 per cent, the pad 3.7, the rest none); R3 the units final test lost on lots finished in the window (114,900 by product); R4 each unit's onset and climb on lot A165-L2603, the disks in stores (840 and 640 wafers; 15.8 and 23.5 points per 1,000); R5 each unit's count under Rev G with sort and final test priced (1,010 and 840, the call); R6 the yearly saving against Rev F (USD 519,000)",
   "architecture": 2,
   "loops": 0,
   "precut": {
@@ -17,27 +17,26 @@
     "date": "2026-11-11"
   },
   "leak": {
-    "leak_py": "REVIEW (4 lines ruled in the note's pre-ship check)",
-    "reader": "run 2026-11-11: no method or answer handed over; two realism tells fixed; re-run owed after the judge's fixes"
+    "leak_py": "REVIEW (4 lines: three in-fiction documents, one coincidental digit string in the sort record)",
+    "reader": "run 2026-11-11: nothing handed over (Q1 pins only, Q6 no one thing); two realism tells fixed in the generator, figures unchanged"
   },
   "duplicate_check": {
-    "heart": "WARN (repeat.gate_g, repeat.decision, repeat.question_form)",
-    "nearest": "task15 (shape), mark115 skeleton (severity none)"
+    "heart": "WARN (overuse.weight, repeat.decision, repeat.question_form, skeleton.house_lesson, skeleton.house_shell)",
+    "nearest": "task1 v3, task21 v1, depth:b9efebd1, mark179 v5, task18 v1 (skeleton severity none)"
   },
   "judge": {
-    "verdict": "DETERMINISTIC",
-    "disposition": "FIX_NOW",
-    "gate_h": "domain pass, layers pass, 7 results in 5 areas, one_thing none; stump power moderate with a too-easy risk",
+    "verdict": "",
+    "disposition": "",
+    "gate_h": "",
     "report": "task9/determinism_check_report.md",
-    "first_pass": "landed R1 to R7 inside their bands (R4's PU-4 onset 768 against a floor of 770)"
+    "first_pass": "running"
   },
-  "paper_pair": 96,
+  "paper_pair": 23.0,
   "effort": {
     "quick": 7.0,
-    "careful": 38.2,
+    "careful": 23.0,
     "thorough": 100.0,
-    "largest_hint": "the ring already costing yield before April (rescues R1, R2: 2 of 7)",
-    "careful_repriced_on_judge": 96
+    "largest_hint": "the disks fitted since May come from a faster-wearing supplier lot (rescues R4, R6: 2 of 6)"
   },
   "runs": {
     "run1": null,
@@ -53,7 +52,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 2: the stage 4 judge's blind first pass landed R1 to R7 inside their bands (careful column re-priced to about 96); redesign the chain around judgments a blind careful pass does not make, or re-root at the author's word; the judge's answer-block fixes (PU-3 and PU-4 lower bands, per-pair saving bands, ask 3's candidate list, the volume split) carry into whichever chain follows; the author's choice is pending: redesign this chain at stage 2, re-root to Concept 3, or ship to measure",
+  "resume": "stage 4: the leak reader has reported (nothing handed over; two realism tells fixed in the generator, figures unchanged); the determinism judge's isolated thread is running from /tmp/determinism-check-task9-224350/ (judge_brief.md); when its verdict.md and own_derivation.md land, re-invoke the determinism-judge wrapper for the report, read the first pass against the careful column (READY only if the re-priced pair stays at or under 50), fix any finding in the generator, re-run gates.py --full, then stage 5",
   "approved": null,
   "submitted": null,
   "portal": {

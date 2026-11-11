@@ -70,6 +70,7 @@ class Fab:
         self._flow()
         self._defects()
         self._sort_and_label()
+        self._final_test()
 
     # ---- lots and wafers, with the time each wafer reaches ILD-CMP and the unit dispatch would send it to
     def _lots(self):
@@ -118,16 +119,33 @@ class Fab:
                        [(day(d) + rng.uniform(0.25, 0.75), u, "ring") for u, d in P.RING_ONLY_SWAPS])
         reuses_left = P.EW118_REUSES
         self.by_unit = {u: [] for u in UNITS}
-        disk_m = {u: float(rng.lognormal(0.0, P.DISK_SPREAD)) for u in UNITS}   # each disk's own wear rate
+        nxt = {L["lot"]: L["first"] for L in P.DISK_LOTS}
+        wear = {L["lot"]: L["wear"] for L in P.DISK_LOTS}
+
+        last = {L["lot"]: L["first"] + L["qty"] - 1 for L in P.DISK_LOTS}
+
+        def issue(t):
+            """The next conditioner disk stores issue at time t: the oldest lot on the shelf, its next serial, and the
+            disk's own wear rate. Serials skipped went to the fab's other CMP modules."""
+            d = P.START + dt.timedelta(days=float(t))
+            lot = next(L["lot"] for L in P.DISK_LOTS if (L["received"] <= d or t < 0) and nxt[L["lot"]] <= last[L["lot"]])
+            serial = min(last[lot], nxt[lot] + int(rng.integers(0, 2)))
+            nxt[lot] = serial + 1
+            return lot, serial, wear[lot] * float(rng.lognormal(0.0, P.DISK_SPREAD))
+        disk = {u: issue(-1.0) for u in UNITS}       # the disks on the units on 5 January, fitted in the autumn
+        self.pre_disk = dict(disk)
         for w in sorted(self.wafers, key=lambda x: x["polish_t"]):
             t = w["polish_t"]
             while swaps and swaps[0][0] <= t:
                 ts, u, part = swaps.pop(0)
                 ts = max(ts, down[u])
                 st[u][part] = 0
+                serial = None
                 if part == "disk":
-                    disk_m[u] = float(rng.lognormal(0.0, P.DISK_SPREAD))
-                self._event(u, ts, "UNSCHED", platen[u], parts=[part], why="disk damage" if part == "disk" else "ring wear")
+                    disk[u] = issue(ts)
+                    serial = disk[u][1]
+                self._event(u, ts, "UNSCHED", platen[u], parts=[part], why="disk damage" if part == "disk" else "ring wear",
+                            serial=serial)
                 down[u] = ts + hours["disk" if part == "disk" else "ring"] / 24.0
             u = w["pref"]
             for cand in (u, partner[u], other[u], partner[other[u]]):
@@ -140,7 +158,8 @@ class Fab:
                 w["polish_t"] = t
             s = st[u]
             w["chambers"]["ILD-CMP"] = u
-            w.update(unit=u, platen_count=platen[u], disk=s["disk"], pad=s["pad"], ring=s["ring"], since_full=s["full"], disk_m=disk_m[u])
+            w.update(unit=u, platen_count=platen[u], disk=s["disk"], pad=s["pad"], ring=s["ring"], since_full=s["full"],
+                     disk_m=disk[u][2], disk_lot=disk[u][0], disk_serial=disk[u][1])
             self.by_unit[u].append(w)
             platen[u] += 1
             for k in ("disk", "pad", "ring", "full"):
@@ -152,13 +171,15 @@ class Fab:
                 reuse = reuses_left > 0 and P.EW118[0] <= d <= P.EW118[1]
                 parts = ["pad", "ring"] + ([] if reuse else ["disk"])
                 s["full"], s["pad"], s["ring"] = 0, 0, 0
+                serial = None
                 if reuse:
                     reuses_left -= 1
                 else:
                     s["disk"] = 0
-                    disk_m[u] = float(rng.lognormal(0.0, P.DISK_SPREAD))
+                    disk[u] = issue(t0)
+                    serial = disk[u][1]
                 target[u] = int(rng.normal(*P.PAD_LIFE))
-                self._event(u, t0, "FULL_PM", platen[u], parts=parts, waiver="EW-118" if reuse else "")
+                self._event(u, t0, "FULL_PM", platen[u], parts=parts, waiver="EW-118" if reuse else "", serial=serial)
                 down[u] = t0 + hours["full"] / 24.0
             elif s["pad"] >= target[u]:
                 s["pad"] = 0
@@ -166,8 +187,9 @@ class Fab:
                 self._event(u, t0, "PAD_CHANGE", platen[u], parts=["pad"])
                 down[u] = t0 + hours["pad"] / 24.0
 
-    def _event(self, unit, t, cls, counter, parts, why="", waiver=""):
-        self.events.append(dict(unit=unit, t=float(t), cls=cls, counter=int(counter), parts=list(parts), why=why, waiver=waiver))
+    def _event(self, unit, t, cls, counter, parts, why="", waiver="", serial=None):
+        self.events.append(dict(unit=unit, t=float(t), cls=cls, counter=int(counter), parts=list(parts), why=why, waiver=waiver,
+                                serial=serial))
 
     # ---- defects, the band's roll-off, the ring, metrology
     def _defects(self):
@@ -186,6 +208,8 @@ class Fab:
             r = P.UNIT_WEAR[w["unit"]] * w["disk_m"]
             e = min(P.RING_CAP, P.RING_SCALE * max(0.0, r * w["disk"] - P.RING_ONSET) / P.RING_SPAN) * (1 + P.PAD_TERM * w["pad"] / 600.0)
             w["ring_excess"] = min(e, 0.95)
+            # thinned edge dielectric that still passes sort: a share of the outer band's good die fail burn-in later
+            w["latent_rate"] = P.LAT_SCALE * min(1.0, max(0.0, r * w["disk"] - P.LAT_ONSET) / P.LAT_SPAN)
             area = P.PRODUCTS[w["product"]]["area"]
             m = rng.gamma(P.CLUSTER_SHAPE, 1.0 / P.CLUSTER_SHAPE, 8)
             p = 1.0 - np.exp(-area * d0 * m)
@@ -224,6 +248,31 @@ class Fab:
             w["adc"] = lab
             gross = int(self.zone_n[w["product"]].sum())
             w["yield"] = 1 - w["fail"].sum() / gross
+            w["good"] = gross - int(w["fail"].sum())
+            w["latent"] = int(rng.binomial(int(self.zone_n[w["product"]][7] - w["fail"][7]), w["latent_rate"]))
             pull = (lab == "EDGE_RING" and rng.random() < P.DIEMAP["flagged"]) or \
                 (w["yield"] < P.DIEMAP["low_yield"] and rng.random() < P.DIEMAP["low_yield_share"]) or rng.random() < P.DIEMAP["random"]
             w["diemap"] = bool(pull and not w["scrapped"] and w["sort_t"] <= day(P.PULL))
+
+    # ---- final test at the assembly house: each lot's good die, packaged, through FT1, burn-in and FT2
+    def _final_test(self):
+        rng = self.rng
+        by_lot = {}
+        for w in self.wafers:
+            if not w["scrapped"] and w["sort_t"] <= day(P.PULL) + 0.999:
+                by_lot.setdefault(w["lot"]["lot_id"], []).append(w)
+        self.ft = []
+        for lot in self.lots:
+            ws = by_lot.get(lot["lot_id"])
+            if not ws:
+                continue
+            t = max(w["sort_t"] for w in ws) + rng.uniform(*P.FT_LAG)
+            if t > day(P.PULL) + 0.999:
+                continue
+            good = sum(w["good"] for w in ws)
+            units = good - int(rng.binomial(good, P.ASSY_LOSS))
+            ft1 = int(rng.binomial(units, P.FT_BASE["ft1"]))
+            latent = int(rng.binomial(sum(w["latent"] for w in ws), 1 - P.ASSY_LOSS))
+            bi = min(units - ft1, latent + int(rng.binomial(units - ft1, P.FT_BASE["burnin"])))
+            ft2 = int(rng.binomial(units - ft1 - bi, P.FT_BASE["ft2"]))
+            self.ft.append(dict(lot=lot, t=float(t), units=units, ft1=ft1, burnin=bi, ft2=ft2, latent=latent))

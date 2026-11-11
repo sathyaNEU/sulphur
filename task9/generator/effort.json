@@ -2,20 +2,20 @@
  "forcing": {
   "bands": {
    "PU-1": [
-    1440,
-    1700
+    930,
+    1090
    ],
    "PU-2": [
-    1440,
-    1700
+    930,
+    1090
    ],
    "PU-3": [
-    1100,
-    1300
+    770,
+    910
    ],
    "PU-4": [
-    1100,
-    1300
+    770,
+    910
    ]
   },
   "golden_answer": {
@@ -28,28 +28,35 @@
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "name": "the golden (each downforce pair's fit)"
+    "name": "the golden (each downforce pair's fit on the current lot, final test's rise on the disk's wear)"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "name": "each unit's own fit"
+    "name": "each unit's own fit on the current lot"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "name": "the April to August mix"
+    "name": "final test's rise on the disk's raw use"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "name": "the pair fit with the ring's usage beside it"
+    "name": "each pair's own final-test level"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "name": "the pad's term left out"
    },
    {
     "answer": {
@@ -63,7 +70,21 @@
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "name": "the pair fit below 2,800 wafers"
+    "name": "the pair fit with the ring's usage beside it"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "name": "the pair fit below 3,000 wafers"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "name": "the pair fit with the rivals beside it"
    }
   ],
   "kind": "set",
@@ -73,14 +94,14 @@
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "input": "every slope 20 per cent higher"
+    "input": "every climb 15 per cent steeper"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "input": "every slope 20 per cent lower"
+    "input": "every climb 15 per cent flatter"
    },
    {
     "answer": {
@@ -108,21 +129,42 @@
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "input": "the pad's term removed"
+    "input": "final test's level 15 per cent higher"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "input": "die value at risk 10 per cent higher"
+    "input": "final test's level 15 per cent lower"
    },
    {
     "answer": {
      "high PU-3/PU-4": "inside",
      "low PU-1/PU-2": "inside"
     },
-    "input": "die value at risk 10 per cent lower"
+    "input": "final test's rise starting 8 per cent sooner"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "input": "final test's rise starting 8 per cent later"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "input": "final test's rise 20 per cent shorter"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "input": "final test's rise 20 per cent longer"
    },
    {
     "answer": {
@@ -137,36 +179,71 @@
      "low PU-1/PU-2": "inside"
     },
     "input": "the disk change 10 per cent cheaper"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "input": "die values 10 per cent higher"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "inside",
+     "low PU-1/PU-2": "inside"
+    },
+    "input": "die values 10 per cent lower"
    }
   ],
   "shortcuts": [
    {
     "answer": {
      "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "below"
+     "low PU-1/PU-2": "above"
     },
-    "name": "one fit for the fleet"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "below",
-     "low PU-1/PU-2": "below"
-    },
-    "name": "a dose straight from zero"
+    "name": "every disk lot pooled"
    },
    {
     "answer": {
      "high PU-3/PU-4": "above",
      "low PU-1/PU-2": "above"
     },
-    "name": "the full PM moved to its own best interval"
+    "name": "final test in proportion to the ring's die"
    },
    {
     "answer": {
-     "high PU-3/PU-4": "below",
-     "low PU-1/PU-2": "none"
+     "high PU-3/PU-4": "above",
+     "low PU-1/PU-2": "above"
     },
-    "name": "the pad as the part"
+    "name": "final test left out"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "above",
+     "low PU-1/PU-2": "above"
+    },
+    "name": "every lot pooled and final test in proportion"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "above",
+     "low PU-1/PU-2": "above"
+    },
+    "name": "the earlier lots' curve"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "above",
+     "low PU-1/PU-2": "above"
+    },
+    "name": "one fit for the fleet, sort only"
+   },
+   {
+    "answer": {
+     "high PU-3/PU-4": "above",
+     "low PU-1/PU-2": "above"
+    },
+    "name": "a dose straight from zero"
    }
   ],
   "what": "each downforce pair's count for the disk on its own count, read against the pair's band (the golden's count less and more 8 per cent): every sound method inside it, every shortcut outside"
@@ -174,392 +251,372 @@
  "hints": [
   {
    "rescues": [
-    "R1",
-    "R2"
+    "R4",
+    "R6"
    ],
-   "sentence": "The edge ring was already costing yield before April, on the high-downforce pair under the 2,000-wafer rule"
+   "sentence": "The disks fitted since May come from a supplier lot that wears faster than the ones before it"
   },
   {
    "rescues": [
     "R3"
    ],
-   "sentence": "Each disk wears at its own rate, so read the retaining ring off its six ring-only swaps"
+   "sentence": "Burn-in failures start well before the ring shows at sort, and level off"
+  },
+  {
+   "rescues": [
+    "R3"
+   ],
+   "sentence": "Final test's extra failures come from the outer band's good die on each lot's own wafers"
   },
   {
    "rescues": [
     "R5"
    ],
-   "sentence": "What the old rule would have cost needs that rule run on each unit's own wafers"
+   "sentence": "A part off the full PM pays its own change each time, so the count has to price both stages of loss"
   },
   {
    "rescues": [
-    "R7"
+    "R6"
    ],
-   "sentence": "The summer's loss rate carries the waiver's retained disks, and the waiver has ended"
-  },
-  {
-   "rescues": [],
-   "sentence": "The two downforce pairs wear their disks at different rates"
+   "sentence": "Rev F as it stands runs the disks in stores, not the ones it ran"
   }
  ],
  "results": [
   {
-   "band": [
-    1.23,
-    1.41
-   ],
-   "depends": [
-    "R4"
-   ],
-   "figure": "R1_points",
-   "golden": 1.32,
-   "graded_as": "Component 1",
-   "id": "R1",
-   "independent": "the sort record's zone counts and the band's fallout at a fresh disk",
-   "name": "the ring's loss on wafers sorted 1 April to 31 August, points of mean sort yield",
-   "partly": [
-    1.164,
-    1.476
-   ],
-   "passes": {
-    "careful": 1.06,
-    "quick": 1.13,
-    "thorough": 1.32
-   },
-   "precedent": [
-    "L27"
-   ]
-  },
-  {
    "bands": {
-    "P-A": [
-     192000,
-     226000
+    "P-A die": [
+     128000,
+     150000
     ],
-    "P-B": [
-     19000,
-     23000
+    "P-B die": [
+     13000,
+     15000
     ],
-    "P-C": [
-     291000,
-     341000
+    "P-C die": [
+     208000,
+     244000
+    ],
+    "points": [
+     0.84,
+     0.96
     ]
    },
-   "depends": [
-    "R1"
-   ],
-   "figure": "R2_die",
+   "depends": [],
+   "figure": "R1_loss",
    "golden": {
-    "P-A": 209000,
-    "P-B": 21000,
-    "P-C": 316000
+    "P-A die": 139000,
+    "P-B die": 14000,
+    "P-C die": 226000,
+    "points": 0.9
    },
-   "graded_as": "Ask 1",
-   "id": "R2",
-   "independent": "",
-   "name": "the same loss in good die for each product",
+   "graded_as": "Component 1",
+   "id": "R1",
+   "independent": "the sort record's zone counts and the band's fallout on young disks",
+   "name": "the ring's loss at sort on wafers sorted 1 April to 31 August: points of mean sort yield and good die by product",
    "passes": {
     "careful": {
-     "P-A": 166823,
-     "P-B": 16881,
-     "P-C": 251204
+     "P-A die": 134000,
+     "P-B die": 14000,
+     "P-C die": 218000,
+     "points": 0.87
     },
     "quick": {
-     "P-A": 177865,
-     "P-B": 18247,
-     "P-C": 269280
+     "P-A die": 108000,
+     "P-B die": 11000,
+     "P-C die": 172000,
+     "points": 0.7
     },
     "thorough": {
-     "P-A": 209000,
-     "P-B": 21000,
-     "P-C": 316000
+     "P-A die": 139000,
+     "P-B die": 14000,
+     "P-C die": 226000,
+     "points": 0.9
     }
-   },
-   "precedent": [
-    "L27"
-   ]
+   }
   },
   {
    "bands": {
     "dep3": [
-     -0.02,
-     0.02
+     0.0,
+     0.03
     ],
     "disk": [
-     0.92,
+     0.88,
      1.0
     ],
     "pad": [
      0.0,
-     0.08
+     0.1
     ],
     "rf": [
-     -0.02,
-     0.02
+     0.0,
+     0.03
     ],
     "ring": [
-     -0.025,
-     0.025
+     0.0,
+     0.03
     ],
     "sc4": [
-     -0.02,
-     0.02
+     0.0,
+     0.03
     ]
    },
    "depends": [],
-   "figure": "R3_shares",
+   "figure": "R2_shares",
    "golden": {
-    "dep3": 0.002,
-    "disk": 0.965,
-    "pad": 0.035,
-    "rf": 0.004,
-    "ring": -0.01,
-    "sc4": -0.001
+    "dep3": 0.0,
+    "disk": 0.963,
+    "pad": 0.037,
+    "rf": 0.002,
+    "ring": 0.0,
+    "sc4": 0.004
    },
-   "graded_as": "Ask 2",
-   "id": "R3",
+   "graded_as": "Component 2",
+   "id": "R2",
    "independent": "",
-   "name": "each candidate cause's share of the loss",
+   "name": "each candidate cause's share of that loss",
    "passes": {
     "careful": {
-     "dep3": 0.001,
-     "disk": 0.966,
-     "pad": 0.034,
-     "rf": 0.005,
-     "ring": 0.046,
-     "sc4": -0.001
+     "dep3": 0.0,
+     "disk": 0.984,
+     "pad": 0.016,
+     "rf": 0.01,
+     "ring": 0.0,
+     "sc4": 0.026
     },
     "quick": {
-     "dep3": 0.155,
+     "dep3": 0.063,
      "disk": null,
      "pad": null,
      "rf": null,
      "ring": null,
-     "sc4": 0.071
+     "sc4": 0.126
     },
     "thorough": {
-     "dep3": 0.002,
-     "disk": 0.965,
-     "pad": 0.035,
-     "rf": 0.004,
-     "ring": -0.01,
-     "sc4": -0.001
+     "dep3": 0.0,
+     "disk": 0.963,
+     "pad": 0.037,
+     "rf": 0.002,
+     "ring": 0.0,
+     "sc4": 0.004
+    }
+   }
+  },
+  {
+   "bands": {
+    "P-A": [
+     39000,
+     49600
+    ],
+    "P-B": [
+     3100,
+     3900
+    ],
+    "P-C": [
+     59000,
+     75200
+    ]
+   },
+   "depends": [],
+   "figure": "R3_ft_units",
+   "golden": {
+    "P-A": 44300,
+    "P-B": 3500,
+    "P-C": 67100
+   },
+   "graded_as": "Ask 1",
+   "id": "R3",
+   "independent": "the final-test lot summary and each lot's wafers at sort",
+   "name": "the units final test lost to the ring on lots it finished 1 April to 31 August, by product",
+   "passes": {
+    "careful": {
+     "P-A": 11100,
+     "P-B": 1100,
+     "P-C": 17100
+    },
+    "quick": {
+     "P-A": 14800,
+     "P-B": -1700,
+     "P-C": 30900
+    },
+    "thorough": {
+     "P-A": 44300,
+     "P-B": 3500,
+     "P-C": 67100
     }
    },
    "precedent": [
-    "L19"
+    "L15"
    ]
   },
   {
    "bands": {
-    "PU-1 onset": [
-     1100,
-     1490
+    "PU-1 climb": [
+     13.4,
+     18.2
     ],
-    "PU-1 slope": [
-     14.4,
-     19.5
+    "PU-1 onset": [
+     760,
+     920
+    ],
+    "PU-2 climb": [
+     13.4,
+     18.2
     ],
     "PU-2 onset": [
-     1100,
-     1490
+     760,
+     920
     ],
-    "PU-2 slope": [
-     14.4,
-     19.5
+    "PU-3 climb": [
+     20.0,
+     27.0
     ],
     "PU-3 onset": [
-     770,
-     1050
+     580,
+     700
     ],
-    "PU-3 slope": [
-     18.0,
-     24.4
+    "PU-4 climb": [
+     20.0,
+     27.0
     ],
     "PU-4 onset": [
-     770,
-     1050
-    ],
-    "PU-4 slope": [
-     18.0,
-     24.4
+     580,
+     700
     ]
    },
    "depends": [],
    "figure": "R4_dose",
    "golden": {
-    "PU-1 onset": 1300,
-    "PU-1 slope": 17.0,
-    "PU-2 onset": 1300,
-    "PU-2 slope": 17.0,
-    "PU-3 onset": 910,
-    "PU-3 slope": 21.2,
-    "PU-4 onset": 910,
-    "PU-4 slope": 21.2
-   },
-   "graded_as": "Component 2",
-   "id": "R4",
-   "independent": "",
-   "name": "each unit's onset and the slope after it",
-   "passes": {
-    "careful": {
-     "PU-1 onset": 1340,
-     "PU-1 slope": 15.2,
-     "PU-2 onset": 1240,
-     "PU-2 slope": 17.0,
-     "PU-3 onset": 1010,
-     "PU-3 slope": 21.9,
-     "PU-4 onset": 820,
-     "PU-4 slope": 20.7
-    },
-    "quick": {
-     "PU-1 onset": 280,
-     "PU-1 slope": -4.9,
-     "PU-2 onset": 280,
-     "PU-2 slope": -4.9,
-     "PU-3 onset": 0,
-     "PU-3 slope": 6.5,
-     "PU-4 onset": 0,
-     "PU-4 slope": 6.5
-    },
-    "thorough": {
-     "PU-1 onset": 1300,
-     "PU-1 slope": 17.0,
-     "PU-2 onset": 1300,
-     "PU-2 slope": 17.0,
-     "PU-3 onset": 910,
-     "PU-3 slope": 21.2,
-     "PU-4 onset": 910,
-     "PU-4 slope": 21.2
-    }
-   }
-  },
-  {
-   "bands": {
-    "ew118": [
-     0.4,
-     0.46
-    ],
-    "old_rule": [
-     0.2,
-     0.26
-    ],
-    "rev_f": [
-     0.31,
-     0.37
-    ]
-   },
-   "depends": [
-    "R4"
-   ],
-   "figure": "R5_bridge",
-   "golden": {
-    "ew118": 0.43,
-    "old_rule": 0.23,
-    "rev_f": 0.34
+    "PU-1 climb": 15.8,
+    "PU-1 onset": 840,
+    "PU-2 climb": 15.8,
+    "PU-2 onset": 840,
+    "PU-3 climb": 23.5,
+    "PU-3 onset": 640,
+    "PU-4 climb": 23.5,
+    "PU-4 onset": 640
    },
    "graded_as": "Component 3",
-   "id": "R5",
-   "independent": "",
-   "name": "the shares from the 2,000-wafer rule's own exposure, Rev F's extension and the EW-118 retained disks",
+   "id": "R4",
+   "independent": "the stores receipts' serial ranges and the PM log's fitted serials",
+   "name": "each unit's onset and climb on the disks it will be fitted with from September",
    "passes": {
     "careful": {
-     "ew118": 0.42,
-     "old_rule": 0.18,
-     "rev_f": 0.4
+     "PU-1 climb": 18.9,
+     "PU-1 onset": 1540,
+     "PU-2 climb": 18.9,
+     "PU-2 onset": 1540,
+     "PU-3 climb": 18.2,
+     "PU-3 onset": 850,
+     "PU-4 climb": 18.2,
+     "PU-4 onset": 850
     },
     "quick": {
-     "ew118": 0.0,
-     "old_rule": 0.0,
-     "rev_f": 1.0
+     "PU-1 climb": 16.0,
+     "PU-1 onset": 1050,
+     "PU-2 climb": 16.0,
+     "PU-2 onset": 1050,
+     "PU-3 climb": 16.0,
+     "PU-3 onset": 1050,
+     "PU-4 climb": 16.0,
+     "PU-4 onset": 1050
     },
     "thorough": {
-     "ew118": 0.43,
-     "old_rule": 0.23,
-     "rev_f": 0.34
+     "PU-1 climb": 15.8,
+     "PU-1 onset": 840,
+     "PU-2 climb": 15.8,
+     "PU-2 onset": 840,
+     "PU-3 climb": 23.5,
+     "PU-3 onset": 640,
+     "PU-4 climb": 23.5,
+     "PU-4 onset": 640
     }
    },
    "precedent": [
-    "L26"
+    "L12"
    ]
   },
   {
    "bands": {
     "PU-1": [
-     1440,
-     1700
+     930,
+     1090
     ],
     "PU-2": [
-     1440,
-     1700
+     930,
+     1090
     ],
     "PU-3": [
-     1100,
-     1300
+     770,
+     910
     ],
     "PU-4": [
-     1100,
-     1300
+     770,
+     910
     ]
    },
    "depends": [
+    "R3",
     "R4"
    ],
-   "figure": "R6_counts",
+   "figure": "REC_counts",
    "golden": {
-    "PU-1": 1570,
-    "PU-2": 1570,
-    "PU-3": 1200,
-    "PU-4": 1200
+    "PU-1": 1010,
+    "PU-2": 1010,
+    "PU-3": 840,
+    "PU-4": 840
    },
    "graded_as": "Recommendation",
-   "id": "R6",
+   "id": "R5",
    "independent": "",
-   "name": "each unit's count for the disk under Rev G",
+   "name": "each unit's count for the disk under Rev G, the ring costed at sort and at final test",
    "passes": {
     "careful": {
-     "PU-1": 1620,
-     "PU-2": 1520,
-     "PU-3": 1270,
-     "PU-4": 1140
+     "PU-1": 1730,
+     "PU-2": 1730,
+     "PU-3": 1170,
+     "PU-4": 1170
     },
     "quick": {
-     "PU-1": null,
-     "PU-2": null,
-     "PU-3": 840,
-     "PU-4": 840
+     "PU-1": 1400,
+     "PU-2": 1400,
+     "PU-3": 1400,
+     "PU-4": 1400
     },
     "thorough": {
-     "PU-1": 1570,
-     "PU-2": 1570,
-     "PU-3": 1200,
-     "PU-4": 1200
+     "PU-1": 1010,
+     "PU-2": 1010,
+     "PU-3": 840,
+     "PU-4": 840
     }
-   }
+   },
+   "precedent": [
+    "L11"
+   ]
   },
   {
    "band": [
-    265000,
-    311000
+    467000,
+    571000
    ],
    "depends": [
     "R4",
-    "R6"
+    "R5"
    ],
-   "figure": "R7_saving",
-   "golden": 288000,
-   "graded_as": "Ask 3",
-   "id": "R7",
+   "figure": "R5_saving",
+   "golden": 519000,
+   "graded_as": "Ask 2",
+   "id": "R6",
    "independent": "",
-   "name": "the yearly saving against Rev F as it stands",
+   "name": "the yearly saving of those counts against Rev F as it stands",
    "partly": [
-    236200.0,
-    339800.0
+    415100.0,
+    622900.0
    ],
    "passes": {
-    "careful": 781000,
-    "quick": null,
-    "thorough": 288000
+    "careful": 274000,
+    "quick": 204000,
+    "thorough": 519000
    },
    "precedent": [
     "N02"
@@ -570,12 +627,11 @@
   {
    "answer": {
     "counts": {
-     "PU-1": 1570,
-     "PU-2": 1570,
-     "PU-3": 1200,
-     "PU-4": 1200
+     "high": 840,
+     "low": 1010
     },
-    "loss": 1.32
+    "final test": 115000,
+    "loss": 0.9
    },
    "golden": true,
    "name": "the golden"
@@ -583,98 +639,101 @@
   {
    "answer": {
     "counts": {
-     "PU-1": null,
-     "PU-2": null,
-     "PU-3": 840,
-     "PU-4": 840
+     "high": 1400,
+     "low": 1400
     },
-    "loss": 1.13
+    "final test": 44000,
+    "loss": 0.7
    },
-   "name": "the ticket's view: the classifier's wafers and the pad"
+   "name": "the ticket's view: the classifier's wafers, the lots with no ring label as final test's base, one fleet fit"
   },
   {
    "answer": {
     "counts": {
-     "PU-1": 1620,
-     "PU-2": 1520,
-     "PU-3": 1270,
-     "PU-4": 1140
+     "high": 1170,
+     "low": 1730
     },
-    "loss": 1.06
+    "final test": 29000,
+    "loss": 0.87
    },
-   "name": "careful but hurried: the band before April as the baseline, each unit's own fit"
+   "name": "careful but hurried: every disk lot pooled, burn-in in proportion to the ring's die"
   },
   {
    "answer": {
     "counts": {
-     "PU-1": 1370,
-     "PU-2": 1370,
-     "PU-3": 1370,
-     "PU-4": 1370
+     "high": 940,
+     "low": 1210
     },
-    "loss": 1.32
+    "final test": 29000,
+    "loss": 0.9
    },
-   "name": "one fit for the fleet"
+   "name": "the current lot found, burn-in in proportion to the ring's die"
   },
   {
    "answer": {
     "counts": {
-     "PU-1": 1100,
-     "PU-2": 1100,
-     "PU-3": 870,
-     "PU-4": 870
+     "high": 990,
+     "low": 1220
     },
-    "loss": 1.32
+    "final test": 115000,
+    "loss": 0.87
+   },
+   "name": "final test's rise measured, every disk lot pooled"
+  },
+  {
+   "answer": {
+    "counts": {
+     "high": 970,
+     "low": 1240
+    },
+    "final test": 115000,
+    "loss": 0.9
+   },
+   "name": "the current lot found, final test left out of the count"
+  },
+  {
+   "answer": {
+    "counts": {
+     "high": 890,
+     "low": 1260
+    },
+    "final test": 115000,
+    "loss": 0.9
+   },
+   "name": "the summer's wafers as the current state"
+  },
+  {
+   "answer": {
+    "counts": {
+     "high": 1020,
+     "low": 1110
+    },
+    "final test": 115000,
+    "loss": 0.9
+   },
+   "name": "the earlier lots' curve"
+  },
+  {
+   "answer": {
+    "counts": {
+     "high": 990,
+     "low": 1140
+    },
+    "final test": 115000,
+    "loss": 0.9
    },
    "name": "a dose straight from zero"
   },
   {
    "answer": {
     "counts": {
-     "PU-1": 2030,
-     "PU-2": 2030,
-     "PU-3": 1780,
-     "PU-4": 1780
+     "high": 1200,
+     "low": 1750
     },
-    "loss": 1.32
+    "final test": -5000,
+    "loss": 1.33
    },
-   "name": "the full PM moved to its own best interval"
-  },
-  {
-   "answer": {
-    "counts": {
-     "PU-1": 1570,
-     "PU-2": 1570,
-     "PU-3": 1200,
-     "PU-4": 1200
-    },
-    "loss": 1.56
-   },
-   "name": "no fallout taken out of the band"
-  },
-  {
-   "answer": {
-    "counts": {
-     "PU-1": 1570,
-     "PU-2": 1570,
-     "PU-3": 1200,
-     "PU-4": 1200
-    },
-    "loss": 2.08
-   },
-   "name": "the yield team's die-map sample read as the fab"
-  },
-  {
-   "answer": {
-    "counts": {
-     "PU-1": 1570,
-     "PU-2": 1570,
-     "PU-3": 1200,
-     "PU-4": 1200
-    },
-    "loss": 1.59
-   },
-   "name": "the fab's yield before and after April"
+   "name": "the first quarter's burn-in as final test's base, the fab's yield before and after April"
   }
  ]
 }
