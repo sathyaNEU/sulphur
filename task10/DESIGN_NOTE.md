@@ -308,6 +308,10 @@ requires. Each REVIEW line is ruled below; the stage 4 reader's answers and the 
   nine-days-in-ten level, a coincidence of one decimal place with Wexley Hill's firm capacity.
 - "100" in the guideline (section 7's "not fewer than 100,000 design days"): the convention the reviewer asked to be
   stated; R10's band reaches 100 per cent at Ashcombe Road, which is where the sweep's figure comes from.
+- 0.5 and 5.5 in the award notice (the final cut's run): the service terms' instruction step ("in steps of 0.5 MW from
+  1.0 MW up to the megawatts contracted"), which the blocks quote as the terms Ashcombe Road's schedule obeys, and
+  Ashcombe Road's 2023/24 contract (5.5 MW), the same figure as the top of the schedule's band; both are the notice's own
+  terms and history, read for what they are.
 - 2.0, 5.0 and 3.5 in the award notice: the contracted megawatts of earlier winters (Hartwell Common 2.0 in 2023/24,
   Dunmore Street 5.0 in 2025/26) and the service window's 3.5 hours. The blocks' 2.0 is Ashcombe Road's mean delivery on
   its events (rounded), 5.0 the top of the schedule's band, 3.5 the careful pass's further contract at Charlecote Way;
