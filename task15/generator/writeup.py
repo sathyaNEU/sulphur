@@ -167,9 +167,10 @@ def write(F, workbook, note, task_dir=TASK):
       "with no opening and by the trade an opening took, less what it wrote off, plus the change in margin on the units its "
       "shelves turned away against the same expectation. Reading each format's rate off its own pilot stores (Super %s, "
       "Kvarter %s, To Go %s per cent of waste) with every sale counted is the careful but hurried reading: Super %s, "
-      "Kvarter %s, To Go %s, switching Super and To Go."
+      "Kvarter %s, To Go %s, switching %s."
       % (p1(F["careful_waste_rate_by_format_pct"]["Super"]), p1(F["careful_waste_rate_by_format_pct"]["Kvarter"]),
-         p1(F["careful_waste_rate_by_format_pct"]["To Go"]), k(c["Super"]), k(c["Kvarter"]), k(c["To Go"])))
+         p1(F["careful_waste_rate_by_format_pct"]["To Go"]), k(c["Super"]), k(c["Kvarter"]), k(c["To Go"]),
+         " and ".join(F["careful"]["switch"]) if F["careful"]["switch"] else "none"))
     a("8. The pilot stores' savings follow their weekend share, not their format. The 2025 weekend share of each store's "
       "fresh units splits the stores at its widest gap (%.2f): weekend-trading pilot stores saved %s per cent of their "
       "waste, the commuter-week ones (all Kvarter) %s. The shadow forecasts in `ordreforslag_2026.csv` show why: "

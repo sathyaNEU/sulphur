@@ -535,3 +535,13 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
   rival family (SF17); the commuter rate's band widened to 5.0. The register now gives every store the hours it
   trades every day. The thread's other suggestion, a commuter-week To Go store in the pilot, is not taken: it would
   print the answer for To Go in the pilot's own record. Pass 1's conventions stay named in the blocks.
+- The first judge pass on the redesigned cut (pass 3, `determinism_check_report_pass3.md`): NOT_DETERMINISTIC, SEND_BACK,
+  with Gate H now passing (one_thing none, analytical, no surface read). Its thread read agreement 4.2's "gross margin
+  on the fresh units it sells in addition ... no longer sells" literally as the recorded margin, built it item by item
+  against the format's AutoOrdre stores and put Super under its 34,000 licence (its pilot stores at -91,000 a store
+  over 26 weeks), so the named data ruling that route out did not hold a literal reader; Super's 6,200 over its
+  licence is also thin against the hurried 33,100. It also caught Step 7 calling the hurried reading's set "Super and
+  To Go" where its own Super figure sits under the licence (fixed: the set now comes from figures.json). Not yet
+  taken, the author's call: pin 4.2's margin part in the agreement's own retail terms as the margin on the sales the
+  store gains or loses where a shelf runs empty (out-of-stock sales), which is what the forecast changes, so the
+  recorded margin's other movements are not the saving's literal reading; then a third leak read and a fresh judge.

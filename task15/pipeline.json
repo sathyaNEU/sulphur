@@ -25,10 +25,10 @@
   "nearest": "guard.py check WARN 2026-11-11 on the registered card after the rebase (overuse.forum, answered in the note); test.same_puzzle and test.same_driver BLOCKs on two drafts cleared by redrawing the gap and the decision type, and ban.pattern against task14 v3 cleared by moving the decisive generator to G6; nearest driver task13 at 0.06"
  },
  "judge": {
-  "verdict": "pass 1 DETERMINISTIC FIX_NOW (applied); pass 2 DETERMINISTIC SEND_BACK on Gate H (the trading week carried the call)",
+  "verdict": "pass 1 DETERMINISTIC FIX_NOW (applied); pass 2 DETERMINISTIC SEND_BACK on Gate H (redesigned); pass 3 on the redesigned cut NOT_DETERMINISTIC SEND_BACK (Gate H passes; the margin route fork on Super)",
   "disposition": "back to the decision layer 2026-11-11: Super licence 34,000 and To Go 12,000 so the call needs the estimator and the trading week together, the recorded-margin route ruled out by named data, matched comparison stores in the rival family, the register's hours fixed; a fresh stage 4 (leak read and judge) on the new cut is running",
   "gate_h": "pass 2: one_thing shallow_hidden_factor, one_fact 5 of 12; the redesign's own measure: each hint alone leaves the call wrong, largest hint 2 of 10",
-  "report": "task15/determinism_check_report.md, task15/determinism_check_report_pass2.md"
+  "report": "task15/determinism_check_report.md, _pass2.md, _pass3.md"
  },
  "paper_pair": 46.0,
  "effort": {
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4 on the redesigned cut: the leak read is done (clean); the judge thread runs on /tmp/determinism-check-task15-383420/; re-invoke the determinism-judge agent with its verdict.md for determinism_check_report_pass3.md, fix findings in one pass, gates.py task15 --full, then READY.",
+ "resume": "the author's call after pass 3: (a) pin agreement 4.2's margin part as the margin on sales gained or lost where a shelf runs empty (out-of-stock sales), rebuild, a third leak read and a fresh judge; or (b) another direction. Step 7's switch set is already fixed in writeup.py. Nothing is READY.",
  "approved": null,
  "submitted": null,
  "portal": {
