@@ -211,13 +211,15 @@ From `strategies.md` Part 6 and `../SKILL.md` Part 9, in one place. Each is a fo
 ## Measured in Sulfur (the run record to 2026-11-11)
 
 Two `sulfur-record.md` rows move a label; the forms below were landed by both runs in two rounds or more, so each is a
-reflex in the careful column whatever its label above (`precedents.json` R01 to R20 carry the runs' own words):
+reflex in the careful column whatever its label above (`precedents.json` R01 to R22 carry the runs' own words):
 
 | Form | Sulfur rows | Now |
 |---|---|---|
 | A forecast form chosen by a hold-out the run builds itself (two calibrations by leave-one-out, a family by a chronological winter, a breakpoint on held-out configurations) | task16 arch 1, task10 arch 6, task4 arch 9 | DOES NOT WORK as a result's difficulty; it lives only where the record's hold-out cannot see the condition the forecast window has (`validation_cannot_see_condition`) |
 | A mechanism one plot or one group-by of one file shows | task2 arch 3, task3 arch 2 and 3, task5 arch 2, task7 arch 4 round 2, task8 arch 17 | DOES NOT WORK |
-| A capped availability ceiling, the rebound after a window, a predictive tail, commissioning by competing risks | task10 arch 6, task10 arch 7 | DOES NOT WORK (R05 to R07) |
+| A capped availability ceiling, the rebound after a window, a predictive tail, commissioning by competing risks, the interval an intervention masks rebuilt from the hours it never touched, a register's young members matured by type | task10 arch 6, task10 arch 7 (and its level-up, not stumped on the author's report) | DOES NOT WORK (R05 to R07, R21, R22): four of them stacked in one chain were four reflexes, not depth |
+| A concurrent action hidden in the record with a discrete signature (load moved across an open point on event days), netted by pairing the unit with its neighbour | task10 arch 5, two rounds | DOES NOT WORK: the holistic audit read it as a planted factor ("spotting the plant, not analysis"), whatever the netting |
+| Decisions added beside a call the runs already landed, in the same world and chain (a further contract's size, a best schedule, a new connection's effect) | task10 arch 7 levelled up (the author's report, 2026-11-11; one row, noted) | DOES NOT WORK: the same scaffold; the slot was retired on it |
 | A trial's effect carried to the target along a modifier one join or one second file away | task7 arch 7, task16 arch 2 (the judge's first pass) | DOES NOT WORK alone; `transport_effect_modifiers` is on five of our live builds and one accepted client task (`skeleton.py check` warns on it) |
 | One more correction inside a scaffold the runs already landed | task4 arch 6 to 10, task10 arch 4 to 7 | DOES NOT WORK; the skeleton guard blocks it on the slot's lineage |
 

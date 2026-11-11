@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, twenty reflexes and forty-three losses and waved-through assumptions from our runs and the client's pages), built on the six places runs lose (the split carried to the decision, the assumption a run names and waves through made false, selected units, a measured response, the system's net, a shallow path that passes its own checks), forced on both sides, and never a reskin of a client task or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, twenty-two reflexes and forty-three losses and waved-through assumptions from our runs and the client's pages), built on the six places runs lose (the split carried to the decision, the assumption a run names and waves through made false, selected units, a measured response, the system's net, a shallow path that passes its own checks), forced on both sides, and never a reskin of a client task or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -38,7 +38,7 @@ does in a hurry, by the client's table and our runs: stops at the first account 
 rival explanation, looks at a handful of series where the question needs all of them, estimates a quantity and never
 carries it into the decision, reports pieces that do not add back to the total, and checks robustness only by
 varying nearby choices. **Every result that prices the task lives in that second list**, and only where a run has
-been seen to lose there: `references/precedents.json` holds twenty reflexes the runs made unprompted and forty-three
+been seen to lose there: `references/precedents.json` holds twenty-two reflexes the runs made unprompted and forty-three
 places they lost or waved an assumption through, each with its run or client page.
 
 **Thirty Sulfur rounds, measured.** No Sulfur round has yet come back under 60 with analytical losses spread across
@@ -203,7 +203,7 @@ plan needs the same figure"); Gate G still refuses a shipped artifact that ranks
   architectures 4 to 7, the client's severity 2 "templated" pattern): the skeleton guard refuses it on the slot's own
   lineage;
 - a mechanism one plot or one group-by of one file shows; a textbook method on a clean series; one table that one
-  flexible fit absorbs; the field's standard data repairs (R01 to R20);
+  flexible fit absorbs; the field's standard data repairs (R01 to R22);
 - a factor placed where it decides (task10 arch 5, task7 arch 6, task6 arch 6, task5 arch 3, returned as one thing);
 - a call a few per cent from its line, or bands loosely pinned (task1 arch 2 and 3, task4 arch 7 and 10, task9 arch 8,
   task10 arch 7, returned on determinism or forcing).

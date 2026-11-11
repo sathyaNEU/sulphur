@@ -504,6 +504,22 @@
    "move": "the textbook instrument or estimator for the question",
    "source": "guidelines/client/examples/7.txt; depth-scale detail (b9efebd1)",
    "quote": "every run chose the right instrument (state operating-aid cuts) and still called it wrong"
+  },
+  {
+   "id": "R21",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "the demand an intervention masks rebuilt from the intervals it never touched (the cold evening from the same day's unaffected half-hours)",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md; task10/runs/arch7_review_2026-11-10.md",
+   "quote": "cold-window demand transferred from unaffected half-hours"
+  },
+  {
+   "id": "R22",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a register's young members matured to their type's established level (build-up curves by type, scaled to each member's own level)",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md",
+   "quote": "customer-type saturation curves (held-out error 0.0415 kW/kVA against 0.1498 for constant utilisation), 8.8 MW registered increment with 7.0 MW from maturation"
   }
  ]
 }
