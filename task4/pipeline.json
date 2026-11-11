@@ -1,204 +1,194 @@
 {
- "task": "task4",
- "status": "READY",
- "domain": "supply-chain-logistics",
- "subdomain": "regression-classification-model-diagnostics",
- "client_domain": "general-statistics-data-science",
- "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-10",
- "doctrine": "throughout",
- "architecture": 10,
- "loops": 1,
- "call": "Order 17 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M125, M129, M134, M135, M137, M140, M142, M146 and M148; the plan's priority list is cut at M145, the 18th, which the 690 kW night cannot recharge with the 17 above it once every bus on charge also draws about 3.5 kW to keep its battery warm",
- "chain": "R1 each weekday block's diesel use, l/100 scheduled km, tank to tank over the dispatch log (37.2 to 62.4); R2 the pilot blocks' gap to the rest (46.2 against 49.1, 2.9 l/100 km); R3 the pilot heaters' heat at -15 C (4.3 kW); R4 the 48 design-day energies through the diesel bridge and the 2027 heating (12.4 kW an hour out); R5 the first-winter loss (4.3 per cent); R6 the verdicts against 390.5 kWh (23 qualify); R7 what a bus on charge draws beside its recharge on a -15 C night (3.5 kW, the chargers' efficiency 0.949, the pooled ratio 0.920); R8 the night's draw with every qualifying block on charge (9.1 MWh against 6.90); R9 the order (17, the plan's priority order cut at M145)",
- "stump": "The careful pass (graded up: the heaters read from the HVO fills) carries the pilot's fit on kilometres, climb and hours per km, forecasts the hard blocks about 33 kWh light, passes 29 blocks, charges the night at the sessions' pooled ratio (0.920) and orders 18 under the night's capacity (29 without it); the pilot's cold-day consumption times kilometres orders 33; the diesel bridge put right alone orders 18, the conditioning alone 17 of another set, the heaters' share left out 19; the verdicts summed order 23, the night on battery energy 19",
- "precut": {
-  "exit": 0,
-  "date": "2026-11-10",
-  "checks": "84 of 84, 0 WARN"
- },
- "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-10, as-of 2026-11-06): the clause labels 4.1 and 4.3, the standard's and the quotation's own nouns, the plan's 2027 dates",
-  "reader": "loop 1 reader (2026-11-10, on 133243bf): no process sentence for any graded result, no helper file, no one thing; not re-run for the Domains Fit reword, on the author's call (wording only, the pack unchanged)"
- },
- "duplicate_check": {
-  "heart": "BLOCK on 2026-11-11 (test.same_puzzle against mark175, which entered the window when task9 and task16 were re-drawn after task4); recorded in the note's Template check, the author's call on a redraw",
-  "nearest": "mark175 (differentiated on the card)"
- },
- "judge": {
-  "verdict": "DETERMINISTIC (pass 11, 2026-11-10, target.zip 8bb29ac7570199f9, order kept)",
-  "disposition": "APPROVE",
-  "gate_g": "method_or_model_selection with binding_constraint and forecasting; analytical_non_defect; no surface read; no sole defect",
-  "gate_h": "pass: 8 to 9 results over 4 or more areas, one_thing none, careful about 2 to 4 of 9, the largest hint 2 to 3",
-  "report": "task4/determinism_check_report.md",
-  "history": "pass 8 (loop 1, 133243bf) DETERMINISTIC APPROVE, order broken and nothing recomputed, not counted; pass 9 (8a51114e) clean, DETERMINISTIC FIX_NOW (the loss band, ask 1 unconfirmed); pass 10 (8a51114e) DETERMINISTIC APPROVE, voided by the main thread's capacity-basis fork, fixed (SF42); pass 11 (8bb29ac7) DETERMINISTIC APPROVE, order kept; its argued (not recomputed) capacity bases are recomputed in checks.py SF42; not re-run for the Domains Fit reword, on the author's call (the pack pass 11 approved is unchanged)"
- },
- "paper_pair": 49.5,
- "effort": {
-  "quick": 19.5,
-  "careful": 49.5,
-  "thorough": 100.0,
-  "largest_hint": "the pilot blocks were chosen for their low diesel use; rescues 3 of 9 (R2, R4, R6), the order still 18",
-  "column": "careful graded up on R3 (a leak reader noticed the heaters); under the earlier column about 37"
- },
- "returned": [
-  {
-   "date": "2026-11-10",
-   "source": "triage",
-   "repair": "design",
-   "portal": "architecture 9 platform runs (author's account): both runs landed the golden (order 8; run 1 payload 2.00, loss 5.08 by a square-root-age model, a winter driving-time model, unloading by pallet share, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps); every estimate the design priced as a step the runs named and did not take was a mechanism one plot or one join carried",
-   "moves": "re-rooted in a new world as architecture 10: a Finnish municipal bus operator's depot, the pilot's blocks selected on the diesel record (the evidence in the fuel-card file the runs dismiss), the pilot heaters' share of the design day's heat (a structure across the register, the statement and the quotation that nothing names), the night supply over 48 blocks (the accumulation of small sign-consistent shortfalls into buses), each moving the count; new shell (how-many | every | pptx+xlsx)"
+  "task": "task4",
+  "status": "DESIGN",
+  "domain": "supply-chain-logistics",
+  "subdomain": "regression-classification-model-diagnostics",
+  "client_domain": "general-statistics-data-science",
+  "objective": "forecasting",
+  "stage": 2,
+  "stage_name": "design",
+  "updated": "2026-11-11",
+  "doctrine": "throughout",
+  "architecture": 11,
+  "loops": 0,
+  "call": "",
+  "chain": "R1 the 2025 peak's paid picker hours by zone; R2 Kotikaari's pooled year-ahead peak overstatement 2022 to 2025; R3 the aisle-congestion term at the zone-hour grain, the mix held fixed; R4 Huippu Sport's extra minutes a line at its full peak mix; R5 the 2027 forecasts' overstatement from the growth each plans; R6 the 2027 profile re-keyed to Black Friday and the Christmas cut-offs; R7 each zone's paid picker hours for weeks 46 to 51 of 2027; R8 their 80 per cent ranges; R9 the evening-shift weeks by small-parts zone; R10 the agency hours each week",
+  "stump": "the careful pass measures the pooled overstatement right and applies it week by week to the client's week-numbered 2027 forecast (a week late after the 53-week 2026, its large planned growth priced at the pooled rate), fits time per line on the mix without the aisle density the peak's lighter lines hide, and reads Huippu Sport's lines off the polybag pilot",
+  "precut": null,
+  "leak": null,
+  "duplicate_check": {
+    "heart": "not run (architecture 11 drawn 2026-11-11)",
+    "guard_check": "WARN only (overuse.gate_g; skeleton.house_lesson composition_versus_behaviour on task2 v6 and task15 v2)",
+    "skeleton": "severity none against every build, lineage entry and client task"
   },
-  {
-   "date": "2026-11-10",
-   "source": "triage",
-   "repair": "design",
-   "commit": "",
-   "note": "architecture 9 landed by both platform runs (order 8 exact); re-rooted to architecture 10, the Niittyla depot"
-  },
-  {
-   "date": "2026-11-10",
-   "source": "review",
-   "repair": "design",
-   "portal": "holistic audit (0 of 1 items addressed): the order count not forced (the workshop's two 22 kW outlets outside the night period beside DES-1 3.2 and the 22 kW AC inlet fit M124, 19 for 18); 'a yes or no on going electric' (23 or 18), 'every block that passes' (8.7 or 6.7 MWh) and 'deliver' (8.0 or 8.7 MWh) each read two ways",
-   "moves": "forks closed by WHAT pins (DES-1 3.2 the charging lane's chargers, the workshop's outlets for buses under repair, the draw as the chargers take it session by session; 2.4 the design night; the agreement and the plan on the outlets; the plan moves the six pilot buses to Kauppala; the prompt's 'qualifies under the standard' and 'with the bus of every qualifying block on charge' at the connection point); a third independent judgment added on the charging side (what a bus on charge draws beside its recharge on a cold night, split from the charger meters, component 3); the order 18 to 17; R1 to R6 unmoved; the reversible cold capacity cut from 0.16 to 0.04 per cent a degree so the gain's capacity basis stays off the call (SF42)",
-   "freeze": "freeze.py check --mode rubric exit 1 by design: the call (18 to 17), the components, the stump and the results chain moved with the added result; no mode's contract covers a design repair, recorded rather than forced",
-   "commit": ""
-  },
-  {
-   "date": "2026-11-10",
-   "source": "review",
-   "repair": "surface",
-   "portal": "Domains Fit on the READY prompt (979f04f): every ask read as a lookup or a quoted figure certified against a stated rule ('apply criteria, count, certify'); no estimation, modelling, forecasting or uncertainty seen",
-   "moves": "prompt reworded (H20): the forecast's population stated (most of those blocks never run by an electric bus), each result named as an estimate or a forecast from the company's own operating records, the 'quoted 2027 model' dropped; the answer blocks say the same; no graded figure, pack file or zip moved",
-   "commit": ""
-  }
- ],
- "resume": "READY: the author rewrites prompt.txt in their own voice, keeping 'estimate', 'forecast', 'from our own operating records' and 'most of those blocks have never been run by an electric bus' (voice-check.py task4 --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
- "approved": null,
- "delivered": null,
- "portal": null,
- "portal_id": "",
- "portal_status": "",
- "portal_status_date": "",
- "history": [
-  {
-   "date": "2026-10-20",
-   "event": "architecture 1 spent at stage 4 (reader 1 landed the network re-run, 4.0 at 9 a year; judge DETERMINISTIC APPROVE); re-rooted to architecture 2 (two keys) and redrawn"
-  },
-  {
-   "date": "2026-10-31",
-   "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK; DRAWN architecture 3 (a regional parcel carrier's October missed sort scans by hub)"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "architecture 3 spent on the platform (both runs on the golden); architecture 4 (the Irish retailer's districts) drawn, built, READY, spent on the platform (not stumped)"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "architecture 5 (the Fryele tractor order, one deep step) READY on ce9fbb1b; RETURNED on Domains Fit, prompt reworded"
-  },
-  {
-   "date": "2026-11-09",
-   "event": "architecture 5 returned by the portal (reward 68.5, one thing); architectures 6, 7 and 8 built in the same world as results chains; 6 and 8 landed by the runs, 7 lost on one duty by 1 to 3 kWh"
-  },
-  {
-   "date": "2026-11-10",
-   "event": "architecture 9 (the calibration's transfer, the early-life loss, the winter speed) READY on 19b6bec9; both platform runs landed the golden exactly (runs/arch9/)"
-  },
-  {
-   "date": "2026-11-10",
-   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
-  },
-  {
-   "date": "2026-11-10",
-   "event": "architecture 10 loop 1 after the holistic audit: four forks closed by WHAT pins, the charging split added as a third independent judgment, order 17; 170 checks, verify PASS, two byte-identical builds, precut 84 of 84, effort careful 49.5 (graded up), every free gate green; stage 4 reader and judge running"
-  },
-  {
-   "date": "2026-11-10",
-   "event": "architecture 10 loop 1 READY on 8bb29ac7570199f9: order 17 (M145 refused), the charging split as component 3; judge pass 11 DETERMINISTIC APPROVE (order kept); 178 checks, verify PASS, two byte-identical builds, every free gate green"
-  },
-  {
-   "date": "2026-11-10",
-   "event": "Domains Fit return: the prompt names each result as an estimate or a forecast from the company's own operating records with the forecast's population stated; no graded figure, pack file or zip moved; READY on 8bb29ac7570199f9"
-  }
- ],
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
-  },
-  "triage": "",
-  "recorded": "",
+  "judge": null,
+  "paper_pair": null,
+  "effort": null,
+  "returned": [
+    {
+      "date": "2026-11-10",
+      "source": "triage",
+      "repair": "design",
+      "portal": "architecture 9 platform runs (author's account): both runs landed the golden (order 8; run 1 payload 2.00, loss 5.08 by a square-root-age model, a winter driving-time model, unloading by pallet share, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps); every estimate the design priced as a step the runs named and did not take was a mechanism one plot or one join carried",
+      "moves": "re-rooted in a new world as architecture 10: a Finnish municipal bus operator's depot, the pilot's blocks selected on the diesel record (the evidence in the fuel-card file the runs dismiss), the pilot heaters' share of the design day's heat (a structure across the register, the statement and the quotation that nothing names), the night supply over 48 blocks (the accumulation of small sign-consistent shortfalls into buses), each moving the count; new shell (how-many | every | pptx+xlsx)"
+    },
+    {
+      "date": "2026-11-10",
+      "source": "triage",
+      "repair": "design",
+      "commit": "",
+      "note": "architecture 9 landed by both platform runs (order 8 exact); re-rooted to architecture 10, the Niittyla depot"
+    },
+    {
+      "date": "2026-11-10",
+      "source": "review",
+      "repair": "design",
+      "portal": "holistic audit (0 of 1 items addressed): the order count not forced (the workshop's two 22 kW outlets outside the night period beside DES-1 3.2 and the 22 kW AC inlet fit M124, 19 for 18); 'a yes or no on going electric' (23 or 18), 'every block that passes' (8.7 or 6.7 MWh) and 'deliver' (8.0 or 8.7 MWh) each read two ways",
+      "moves": "forks closed by WHAT pins (DES-1 3.2 the charging lane's chargers, the workshop's outlets for buses under repair, the draw as the chargers take it session by session; 2.4 the design night; the agreement and the plan on the outlets; the plan moves the six pilot buses to Kauppala; the prompt's 'qualifies under the standard' and 'with the bus of every qualifying block on charge' at the connection point); a third independent judgment added on the charging side (what a bus on charge draws beside its recharge on a cold night, split from the charger meters, component 3); the order 18 to 17; R1 to R6 unmoved; the reversible cold capacity cut from 0.16 to 0.04 per cent a degree so the gain's capacity basis stays off the call (SF42)",
+      "freeze": "freeze.py check --mode rubric exit 1 by design: the call (18 to 17), the components, the stump and the results chain moved with the added result; no mode's contract covers a design repair, recorded rather than forced",
+      "commit": ""
+    },
+    {
+      "date": "2026-11-10",
+      "source": "review",
+      "repair": "surface",
+      "portal": "Domains Fit on the READY prompt (979f04f): every ask read as a lookup or a quoted figure certified against a stated rule ('apply criteria, count, certify'); no estimation, modelling, forecasting or uncertainty seen",
+      "moves": "prompt reworded (H20): the forecast's population stated (most of those blocks never run by an electric bus), each result named as an estimate or a forecast from the company's own operating records, the 'quoted 2027 model' dropped; the answer blocks say the same; no graded figure, pack file or zip moved",
+      "commit": ""
+    },
+    {
+      "date": "2026-11-11",
+      "source": "platform runs (the author's paste, target.zip of 0c3b7fc)",
+      "repair": "redesign",
+      "portal": "architecture 10: both runs landed the order (17, the same blocks, M145 refused, 23 qualifying) and every graded figure inside its band; runs/arch10/triage.md, REDESIGN"
+    }
+  ],
+  "resume": "stage 2 to 3: write the architecture 11 generator (sim, pack, docs, analysis, golden, writeup, effort_passes, checks, verify, make) for the Saarnela world in the note's Draw and Results chain; calibrate so the four judgments each move the evening-shift cells, every golden cell sits clear of the line under the golden family, and the shortcuts land on different weeks; then the full note (Hidden factor record, Effort test, Frontier check, fork and closure tables, Literal reader, Prompt contract), precut.py, gates.py",
+  "approved": null,
+  "delivered": null,
+  "portal": null,
+  "portal_id": "",
+  "portal_status": "",
+  "portal_status_date": "",
   "history": [
-   {
-    "architecture": 3,
+    {
+      "date": "2026-10-20",
+      "event": "architecture 1 spent at stage 4 (reader 1 landed the network re-run, 4.0 at 9 a year; judge DETERMINISTIC APPROVE); re-rooted to architecture 2 (two keys) and redrawn"
+    },
+    {
+      "date": "2026-10-31",
+      "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK; DRAWN architecture 3 (a regional parcel carrier's October missed sort scans by hub)"
+    },
+    {
+      "date": "2026-11-08",
+      "event": "architecture 3 spent on the platform (both runs on the golden); architecture 4 (the Irish retailer's districts) drawn, built, READY, spent on the platform (not stumped)"
+    },
+    {
+      "date": "2026-11-08",
+      "event": "architecture 5 (the Fryele tractor order, one deep step) READY on ce9fbb1b; RETURNED on Domains Fit, prompt reworded"
+    },
+    {
+      "date": "2026-11-09",
+      "event": "architecture 5 returned by the portal (reward 68.5, one thing); architectures 6, 7 and 8 built in the same world as results chains; 6 and 8 landed by the runs, 7 lost on one duty by 1 to 3 kWh"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "architecture 9 (the calibration's transfer, the early-life loss, the winter speed) READY on 19b6bec9; both platform runs landed the golden exactly (runs/arch9/)"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "architecture 10 loop 1 after the holistic audit: four forks closed by WHAT pins, the charging split added as a third independent judgment, order 17; 170 checks, verify PASS, two byte-identical builds, precut 84 of 84, effort careful 49.5 (graded up), every free gate green; stage 4 reader and judge running"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "architecture 10 loop 1 READY on 8bb29ac7570199f9: order 17 (M145 refused), the charging split as component 3; judge pass 11 DETERMINISTIC APPROVE (order kept); 178 checks, verify PASS, two byte-identical builds, every free gate green"
+    },
+    {
+      "date": "2026-11-10",
+      "event": "Domains Fit return: the prompt names each result as an estimate or a forecast from the company's own operating records with the forecast's population stated; no graded figure, pack file or zip moved; READY on 8bb29ac7570199f9"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
+    }
+  ],
+  "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "counterfactual_average": null,
+    "first_wrong_step": {
+      "run1": "",
+      "run2": ""
+    },
+    "triage": "",
+    "recorded": "",
+    "history": [
+      {
+        "architecture": 3,
+        "date": "2026-11-08",
+        "graded": false,
+        "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
+        "texts": "runs/arch3_run1.md, runs/arch3_run2.md"
+      },
+      {
+        "architecture": 4,
+        "date": "2026-11-08",
+        "graded": false,
+        "verdict": "not stumped (author's report); run texts not in the repo",
+        "texts": ""
+      },
+      {
+        "architecture": 6,
+        "date": "2026-11-09",
+        "graded": false,
+        "verdict": "run 1 on the golden call and every graded figure (author supplied); run 2 not supplied",
+        "texts": "runs/arch6/run1.md"
+      },
+      {
+        "architecture": 7,
+        "date": "2026-11-09",
+        "graded": false,
+        "verdict": "both runs off the call (5 of 6), V14 alone at 444.4 and 443.0 against 442; the year's speed ratio",
+        "texts": "runs/arch7/run1.md, runs/arch7/run2.md (summaries)"
+      },
+      {
+        "architecture": 8,
+        "date": "2026-11-10",
+        "graded": false,
+        "verdict": "both runs landed the golden exactly (order 7)",
+        "texts": "runs/arch8/run1.md, runs/arch8/run2.md (summaries)"
+      },
+      {
+        "architecture": 9,
+        "date": "2026-11-10",
+        "graded": false,
+        "verdict": "both runs landed the golden exactly (order 8; payload 2.00 and 1.92, loss 5.08 and 4.51, the winter speed modelled by both)",
+        "texts": "runs/arch9/run1.md, runs/arch9/run2.md (summaries)"
+      },
+      {
+        "architecture": 10,
+        "date": "2026-11-11",
+        "graded": false,
+        "verdict": "not stumped: both runs on the golden call (order 17) and every graded figure in band",
+        "texts": "runs/arch10/run1.md, runs/arch10/run2.md",
+        "triage": "runs/arch10/triage.md"
+      }
+    ]
+  },
+  "gates": null,
+  "zip_sha256_16": null,
+  "golden_zip_sha256_16": null,
+  "migrated_from": {
+    "project": "Mark",
+    "task": "task250",
+    "status_in_mark": "SHIPPED",
     "date": "2026-11-08",
-    "graded": false,
-    "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
-    "texts": "runs/arch3_run1.md, runs/arch3_run2.md"
-   },
-   {
-    "architecture": 4,
-    "date": "2026-11-08",
-    "graded": false,
-    "verdict": "not stumped (author's report); run texts not in the repo",
-    "texts": ""
-   },
-   {
-    "architecture": 6,
-    "date": "2026-11-09",
-    "graded": false,
-    "verdict": "run 1 on the golden call and every graded figure (author supplied); run 2 not supplied",
-    "texts": "runs/arch6/run1.md"
-   },
-   {
-    "architecture": 7,
-    "date": "2026-11-09",
-    "graded": false,
-    "verdict": "both runs off the call (5 of 6), V14 alone at 444.4 and 443.0 against 442; the year's speed ratio",
-    "texts": "runs/arch7/run1.md, runs/arch7/run2.md (summaries)"
-   },
-   {
-    "architecture": 8,
-    "date": "2026-11-10",
-    "graded": false,
-    "verdict": "both runs landed the golden exactly (order 7)",
-    "texts": "runs/arch8/run1.md, runs/arch8/run2.md (summaries)"
-   },
-   {
-    "architecture": 9,
-    "date": "2026-11-10",
-    "graded": false,
-    "verdict": "both runs landed the golden exactly (order 8; payload 2.00 and 1.92, loss 5.08 and 4.51, the winter speed modelled by both)",
-    "texts": "runs/arch9/run1.md, runs/arch9/run2.md (summaries)"
-   }
-  ]
- },
- "gates": {
-  "checks": "178 assertions, 0 failed",
-  "verify": "PASS (its own UTC rule, normal equations, a whole-degree knot grid for the charging split, the least-slack schedule with the steady loads)",
-  "byte_identical": "two builds (target 45dba65098c23178, golden 037885edcbf8dcd0)",
-  "effort": "quick 19.5, careful 49.5, thorough 100.0",
-  "figures_check": "exit 0 (gates.py)",
-  "voice_check": "PASS, 762 characters",
-  "precut": "84 of 84",
-  "containers": "audit_containers exit 0",
-  "guard": "validate 0 invalid, heart WARN, surface exit 0"
- },
- "zip_sha256_16": "8bb29ac7570199f9",
- "golden_zip_sha256_16": "a7f7bf6ab59a4af8",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task250",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- }
+    "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+  },
+  "prompt_rewritten": false
 }
