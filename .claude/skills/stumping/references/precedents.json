@@ -664,6 +664,14 @@
    "move": "a second record set aside once its linkage check failed",
    "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
    "quote": "No transformer-ID linkage survived contextual validation, so no OMS-only lightning faults were added."
+  },
+  {
+   "id": "N15",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a trial's seasonal pattern assumed to recur for new works, age and calendar named as inseparable and left untested",
+   "source": "task7/runs/arch7/run1.md (platform run on architecture 7, pasted by the author 2026-11-09)",
+   "quote": "Age and calendar effects cannot be separated completely. The lifetime calculation assumes the pilot’s initial seasonal pattern recurs for new works. The uncertainty ranges do not cover this structural assumption."
   }
  ]
 }
