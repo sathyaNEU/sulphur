@@ -672,6 +672,86 @@
    "move": "a trial's seasonal pattern assumed to recur for new works, age and calendar named as inseparable and left untested",
    "source": "task7/runs/arch7/run1.md (platform run on architecture 7, pasted by the author 2026-11-09)",
    "quote": "Age and calendar effects cannot be separated completely. The lifetime calculation assumes the pilot’s initial seasonal pattern recurs for new works. The uncertainty ranges do not cover this structural assumption."
+  },
+  {
+   "id": "R33",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a range resampled at the unit the draw was filed by (owners), every step refitted",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Ran 5,000 owner-cluster bootstrap resamples, refitting the causal estimates, applicant transport and lifetime decay."
+  },
+  {
+   "id": "R34",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a documented concurrent programme separated from the measure's own ageing",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Check-campaign effects were separated from retrofit ageing, particularly for heating optimisation."
+  },
+  {
+   "id": "R35",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "a round's close projected measure by measure from the pilot's early-to-final ratios, with the late answers' larger sizes",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Used each measure's 2019 early-to-final response ratio rather than uniform calendar extrapolation. ... Grant-value maturation was estimated separately because later applications, especially insulation, requested larger grants."
+  },
+  {
+   "id": "R36",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a persistence profile's form chosen by held-out error",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The constant-profile validation error is 2.8253 percentage points, compared with 0.2385 for exponential decay."
+  },
+  {
+   "id": "R37",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "an effect carried to new applicants along an operating-schedule modifier built from load profiles",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Controls applicants average 57.36 active-equivalent hours/week, versus 102.56 among drawn pilot controls buildings and 96.31 among those not drawn."
+  },
+  {
+   "id": "L38",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a record carrying the effect's modifier set aside as unrelated to the effect",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Solar-cadastre data were inspected but excluded because rooftop photovoltaic potential does not identify these retrofit effects."
+  },
+  {
+   "id": "N16",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a modifier measured after treatment taken as a stable proxy",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The 2025 electricity profiles are treated as proxies for stable operating patterns. They are post-pilot measurements, so this assumption is disclosed."
+  },
+  {
+   "id": "N17",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a planned change of fuel or supply left out of the forward life",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The statutory lives and carbon factor are used without discounting or speculative building-level fuel-switch dates. The heat plan does not mandate connection dates for individual applications."
+  },
+  {
+   "id": "N18",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a past round's timing and sizes assumed to transfer, withdrawals and completion left unforecast",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Closing-demand forecasts assume the historical timing and late-grant-value patterns transfer to 2026. Further quote revisions, withdrawals and failures to complete are not forecast."
+  },
+  {
+   "id": "N19",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an effect measured on a trial's participants assumed to transport to the new applicants",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Converting the fitted log-IV effects into gas-saving percentages assumes a conditional multiplicative effect model and transportability from pilot compliers to current applicants."
   }
  ]
 }
