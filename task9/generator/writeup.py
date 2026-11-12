@@ -169,13 +169,14 @@ def build(F):
       "%s, and with the summer's own loss rate taken as Rev F's about %s." % (
           usd(S["R5_saving"]), usd(round(R["R5_pooled"], -3)), usd(round(R["R5_summer_rate"], -3))))
     a("")
+    ft_pct = str(int(round(100 * (1 - B["R3_ft_units"]["P-A"][0] / S["R3_ft_units"]["P-A"]))))
     a("No other conclusion survives: every sound reading of the fallout, the pairs, the weights and final test's rise keeps the "
-      "loss at sort between %s and %s points, final test's units within 12 per cent, the counts inside 8 per cent and the saving "
+      "loss at sort between %s and %s points, final test's units within %s per cent, the counts inside 8 per cent and the saving "
       "between %s and %s, while each shortcut lands outside: the classifier and the pre-April baseline under-measure the loss, "
       "burn-in in proportion to the sort loss misses most of final test's, and pooling the disk lots or leaving final test out "
       "of the count puts the counts %d per cent or more too long." % (
-          dec(B["R1_loss"]["points"][0]), dec(B["R1_loss"]["points"][1]), usd(B["R5_saving"][0]), usd(B["R5_saving"][1]),
+          dec(B["R1_loss"]["points"][0]), dec(B["R1_loss"]["points"][1]), ft_pct, usd(B["R5_saving"][0]), usd(B["R5_saving"][1]),
           F["shortcut_range"][0]))
-    _say("8", "12", str(F["shortcut_range"][0]))
+    _say("8", ft_pct, str(F["shortcut_range"][0]))
     a("")
     return "\n".join(L)
