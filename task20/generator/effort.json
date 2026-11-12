@@ -213,7 +213,7 @@
   },
   {
    "id": "R6",
-   "name": "the range's record: rolling-origin error, the third quarter's miss and the quarters inside",
+   "name": "the range's record: each past quarter's error, the record's root mean square error and the quarters inside",
    "graded_as": "Ask 2",
    "figure": "r6_record",
    "depends": [
@@ -223,34 +223,132 @@
    ],
    "independent": "",
    "golden": {
+    "FY2022 Q1": 0.51,
+    "FY2022 Q2": -1.29,
+    "FY2022 Q3": 0.45,
+    "FY2022 Q4": -0.06,
+    "FY2023 Q1": -0.27,
+    "FY2023 Q2": 0.05,
+    "FY2023 Q3": -2.37,
+    "FY2023 Q4": -1.11,
+    "FY2024 Q1": -0.55,
+    "FY2024 Q2": 0.5,
+    "FY2024 Q3": -0.42,
+    "FY2024 Q4": -3.44,
+    "FY2025 Q1": -0.59,
+    "FY2025 Q2": -0.97,
+    "FY2025 Q3": 0.01,
     "golden_rmse_pp": 1.24,
-    "q3_error_pp": 0.01,
     "coverage_in": 13
    },
    "bands": {
+    "FY2022 Q1": [
+     0.34,
+     1.53
+    ],
+    "FY2022 Q2": [
+     -1.46,
+     -0.48
+    ],
+    "FY2022 Q3": [
+     0.3,
+     1.21
+    ],
+    "FY2022 Q4": [
+     -0.22,
+     0.61
+    ],
+    "FY2023 Q1": [
+     -1.27,
+     0.28
+    ],
+    "FY2023 Q2": [
+     -0.51,
+     0.63
+    ],
+    "FY2023 Q3": [
+     -2.91,
+     -1.82
+    ],
+    "FY2023 Q4": [
+     -1.68,
+     -0.53
+    ],
+    "FY2024 Q1": [
+     -1.1,
+     0.11
+    ],
+    "FY2024 Q2": [
+     -0.01,
+     1.39
+    ],
+    "FY2024 Q3": [
+     -1.11,
+     0.13
+    ],
+    "FY2024 Q4": [
+     -4.37,
+     -2.88
+    ],
+    "FY2025 Q1": [
+     -1.11,
+     -0.06
+    ],
+    "FY2025 Q2": [
+     -1.55,
+     -0.39
+    ],
+    "FY2025 Q3": [
+     -0.57,
+     0.64
+    ],
     "golden_rmse_pp": [
      0.92,
      1.61
     ],
-    "q3_error_pp": [
-     -0.62,
-     0.64
-    ],
     "coverage_in": [
-     9,
-     14
+     7,
+     13
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
+     "FY2022 Q1": -0.38,
+     "FY2022 Q2": -1.71,
+     "FY2022 Q3": 1.04,
+     "FY2022 Q4": 1.57,
+     "FY2023 Q1": -2.08,
+     "FY2023 Q2": 2.49,
+     "FY2023 Q3": -1.04,
+     "FY2023 Q4": 1.4,
+     "FY2024 Q1": -0.67,
+     "FY2024 Q2": 0.37,
+     "FY2024 Q3": -0.0,
+     "FY2024 Q4": -1.49,
+     "FY2025 Q1": -2.63,
+     "FY2025 Q2": -0.91,
+     "FY2025 Q3": 0.99,
      "golden_rmse_pp": 1.45,
-     "q3_error_pp": 0.99,
      "coverage_in": 12
     },
     "thorough": {
+     "FY2022 Q1": 0.51,
+     "FY2022 Q2": -1.29,
+     "FY2022 Q3": 0.45,
+     "FY2022 Q4": -0.06,
+     "FY2023 Q1": -0.27,
+     "FY2023 Q2": 0.05,
+     "FY2023 Q3": -2.37,
+     "FY2023 Q4": -1.11,
+     "FY2024 Q1": -0.55,
+     "FY2024 Q2": 0.5,
+     "FY2024 Q3": -0.42,
+     "FY2024 Q4": -3.44,
+     "FY2025 Q1": -0.59,
+     "FY2025 Q2": -0.97,
+     "FY2025 Q3": 0.01,
      "golden_rmse_pp": 1.24,
-     "q3_error_pp": 0.01,
      "coverage_in": 13
     }
    },
@@ -278,16 +376,16 @@
    },
    "bands": {
     "forecast_m": [
-     1462.3,
-     1480.2
+     1460.3,
+     1483.4
     ],
     "range_low_m": [
-     1434.5,
-     1459.8
+     1432.5,
+     1461.8
     ],
     "range_high_m": [
-     1485.7,
-     1504.9
+     1483.7,
+     1510.8
     ]
    },
    "passes": {
@@ -382,8 +480,8 @@
    },
    "bands": {
     "range_high_m": [
-     1485.7,
-     1504.9
+     1483.7,
+     1510.8
     ]
    },
    "passes": {
@@ -591,16 +689,20 @@
     "value": 1497.3
    },
    {
-    "name": "KS-01's Midwest cards set aside",
-    "value": 1498.3
+    "name": "the re-issued book's region set aside",
+    "value": 1500.8
    },
    {
-    "name": "KS-01's newest open years set aside",
-    "value": 1497.1
+    "name": "the re-issued book's newest open years set aside",
+    "value": 1497.3
    },
    {
-    "name": "KS-01 set aside in every quarter",
-    "value": 1496.6
+    "name": "an issuer with a re-issued book left out of every quarter",
+    "value": 1496.8
+   },
+   {
+    "name": "retail growth calibrated by regression on past quarters, contract at its run rate",
+    "value": 1505.8
    }
   ],
   "shortcuts": [

@@ -1,5 +1,5 @@
 """task20 checks: the cut pack against the clean truth (the simulated world before any file was written), the bar
-block R1 to R7 (dataset-generation 7.1), every fork in the design note's fork table (SF1 to SF23), and the realism
+block R1 to R7 (dataset-generation 7.1), every fork in the design note's fork table (SF1 to SF24), and the realism
 sweep. Exit 1 on any failure.
 
     python3 task20/generator/checks.py
@@ -154,9 +154,13 @@ def main():
     check("R6b every golden-family range inside R7's low and high bands",
           all(inside(round(v["low"], 1), B["range_low_m"]) and inside(round(v["high"], 1), B["range_high_m"])
               for v in fam.values()))
-    check("R6c every golden-family record inside R6's bands",
-          all(inside(round(100 * v["rmse"], 2), B["golden_rmse_pp"]) and inside(round(100 * v["errs"]["FY2025 Q3"], 2),
-                                                                                B["q3_error_pp"]) for v in fam.values()))
+    check("R6c every golden-family record inside R6's bands, quarter by quarter",
+          all(inside(round(100 * v["rmse"], 2), B["golden_rmse_pp"])
+              and all(inside(round(100 * e_, 2), B["errors_pp"][q_]) for q_, e_ in v["errs"].items())
+              for v in fam.values()))
+    cin = sum(inside(round(100 * e_, 2), B["errors_pp"][q_]) for q_, e_ in c["errs"].items())
+    check("R6g the careful pass's record lands inside fewer than half of R6's quarter bands",
+          cin < len(c["errs"]) / 2.0, "%d of %d" % (cin, len(c["errs"])))
     check("R6d R2's rivals inside its bands (the Midwest per card, issuer by issuer or on same-age cards; the visible "
           "growth at each mix)",
           all(inside(round(100 * V["regional"][h]["Midwest"], 2), B["midwest_pct"]) for h in ("lfl", "same_age"))
@@ -253,6 +257,10 @@ def main():
     check("SF22 the oldest open-year bucket is one bucket in every week (per-card routes need no open year)",
           old.card_open_year.nunique() == 1)
 
+    check("SF24 the record's information set: the panel as delivered on 2 February 2026 at every origin (its weeks "
+          "before the latest are complete), the releases before each quarter's; the latest weeks' restatement replayed "
+          "or not moves no past quarter (their weeks are complete in the history)",
+          all(abs(100 * (fam["the golden route"]["errs"][q_] - G["errs"][q_])) < 1e-9 for q_ in G["errs"]))
     check("SF23 how the range would have held: at the record's own error and built only on the errors before each, "
           "both counts inside their stated bands",
           inside(G["inside"], B["coverage_in"]) and inside(G["inside_asof"], B["coverage_asof_in"])

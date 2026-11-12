@@ -1,6 +1,6 @@
 # leak check, task20
 
-**Verdict: REVIEW.** 27 files read, 88 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 27 files read, 125 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
@@ -27,8 +27,9 @@ Stump terms swept: record, contract, deposits, delivery, missed, quarters, issue
 - **REVIEW** `bmh_8k_ex99-1_2025-09-10.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `bmh_8k_ex99-1_2025-12-10.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
-## 3 answer figures in the pack (REVIEW 8)
+## 3 answer figures in the pack (REVIEW 9)
 - **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: golden figure 1.61 appears: ...$ 1.61 $ 1.40 $ 2.60 $ 2.09 Di...
+- **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: golden figure 1.39 appears: ...r diluted share, compared with $72.7 million, or $1.39 per diluted share, a year ago. At the end of the...
 - **REVIEW** `bmh_8k_ex99-1_2021-12-08.txt`: golden figure 1.71 appears: ...$ 1.71 $ 1.59 $ 4.33 $ 3.68 Di...
 - **REVIEW** `bmh_8k_ex99-1_2022-09-07.txt`: golden figure 1.61 appears: ...$ 1.92 $ 1.61 $ 3.11 $ 2.60 Diluted...
 - **REVIEW** `bmh_8k_ex99-1_2022-12-07.txt`: golden figure 1.71 appears: ...$ 1.82 $ 1.71 $ 4.94 $ 4.33 Diluted...

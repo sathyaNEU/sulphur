@@ -25,16 +25,18 @@
   "nearest": "task5 v4 (severity none)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (hardened build), FIX_NOW (the bridge's order, the record's coverage count)",
-  "disposition": "back to stage 2 under the house rule: its first pass landed the estimate and the call",
-  "gate_h": "narrow pass (the event and the base contract flagged as constructed, neither alone flips the call)",
-  "report": "determinism_check_report.md"
+  "verdict": "DETERMINISTIC (pass 1), FIX_NOW: Ask 3's baseline and order, the estimate band, the record's information set, contract's run rate argued",
+  "disposition": "FIX_NOW made in the generator; re-judge running (scratch /tmp/determinism-check-task20-h3)",
+  "gate_h": "pass (one_thing none; a note on KS-01 as constructed, answered by KS-02's 2023 book now graded in the record)",
+  "report": "determinism_check_report.md",
+  "first_pass": "missed KS-01's book and the deposits, filed USD 1,539.2 million (no position or long); careful column priced on it 39.6"
  },
- "paper_pair": 33.6,
+ "paper_pair": 26.8,
  "effort": {
   "quick": 7.0,
-  "careful": 33.6,
+  "careful": 26.8,
   "thorough": 100.0,
+  "careful_on_judge_first_pass": 39.6,
   "largest_hint": "any one of the three deep steps (KS-01's book, revenue on delivery, last year's contract): rescues 1 of 9"
  },
  "runs": {
@@ -76,7 +78,7 @@
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
   }
  ],
- "resume": "stage 4: the determinism judge is running on the second hardening (scratch /tmp/determinism-check-task20-h2; if the container was reclaimed, rebuild with build.py and re-spawn it from a fresh judge_brief.md); collect its verdict, price its own first pass against the careful column, fix findings in the generator, re-run gates.py task20 --full, then READY with target.zip, golden.zip and golden/ force-added",
+ "resume": "stage 4: the re-judge after FIX_NOW is running (scratch /tmp/determinism-check-task20-h3); on its verdict, price its first pass against the careful column, append it to determinism_check_report.md, re-run gates.py task20 --full, then READY with target.zip, golden.zip and golden/ force-added",
  "approved": null,
  "submitted": null,
  "portal": {

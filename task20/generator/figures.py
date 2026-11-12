@@ -151,13 +151,14 @@ def make(R):
     B["deposits_q4_m"] = span([m1(v) for v in V["dep_q4"].values()], 3.0, 1)
     B["contract_base_m"] = span([F["contract_base_m"]], 0.2, 1)
     B["contract_q4_m"] = span([m1(V["ct_hat"][r]) for r in ("median8", "median4")], 1.0, 1)
+    B["errors_pp"] = {q: span([p2(v["errs"][q]) for v in fam.values() if q in v["errs"]], 0.15) for q in G["origins"]}
     B["golden_rmse_pp"] = span([p2(v["rmse"]) for v in fam.values()], 0.15)
     B["q3_error_pp"] = span([p2(v["errs"]["FY2025 Q3"]) for v in fam.values()], 0.2)
     B["coverage_in"] = [min(v["inside"] for v in fam.values()), max(v["inside"] for v in fam.values())]
     B["coverage_asof_in"] = [min(v["inside_asof"] for v in fam.values()), max(v["inside_asof"] for v in fam.values())]
-    B["forecast_m"] = span([m1(v["forecast"]) for v in fam.values()], 3.0, 1)
-    B["range_low_m"] = span([m1(v["low"]) for v in fam.values()], 3.0, 1)
-    B["range_high_m"] = span([m1(v["high"]) for v in fam.values()], 3.0, 1)
+    B["forecast_m"] = span([m1(v["forecast"]) for v in fam.values()], 5.0, 1)
+    B["range_low_m"] = span([m1(v["low"]) for v in fam.values()], 5.0, 1)
+    B["range_high_m"] = span([m1(v["high"]) for v in fam.values()], 5.0, 1)
     F["bands"] = B
     # one key per result: the result's golden as effort.json carries it
     F["r1_panel"] = {k: v for k, v in F["bridge_pp"][:4]}
@@ -167,8 +168,8 @@ def make(R):
     F["r4_deposits"] = {"deposits_q4_m": F["deposits_q4_m"], "revenue on delivery": p2(br["revenue on delivery"])}
     F["r5_contract"] = {"contract_base_m": F["contract_base_m"], "contract_q4_m": F["contract_q4_m"],
                         "contract at its run rate": p2(br["contract at its run rate"])}
-    F["r6_record"] = {"golden_rmse_pp": F["golden_rmse_pp"], "q3_error_pp": F["q3_error_pp"],
-                      "coverage_in": F["coverage_in"]}
+    F["r6_record"] = dict(F["errors_pp"])
+    F["r6_record"].update(golden_rmse_pp=F["golden_rmse_pp"], coverage_in=F["coverage_in"])
     F["r7_forecast"] = {"forecast_m": F["forecast_m"], "range_low_m": F["range_low_m"], "range_high_m": F["range_high_m"]}
     F["r8_bridge"] = {k: v for k, v in F["bridge_pp"][4:]}
     F["r9_call"] = {"call": F["call"], "range_high_m": F["range_high_m"]}
@@ -222,12 +223,13 @@ def effort(F, R):
                                                 "contract at its run rate": 0.0},
                      "thorough": F["r5_contract"]},
              precedent=["L10", "L11"]),
-        dict(id="R6", name="the range's record: rolling-origin error, the third quarter's miss and the quarters inside",
-             graded_as="Ask 2", figure="r6_record", depends=["R2", "R4", "R5"], independent="", golden=F["r6_record"],
-             bands={"golden_rmse_pp": B["golden_rmse_pp"], "q3_error_pp": B["q3_error_pp"],
-                    "coverage_in": B["coverage_in"]},
-             passes={"quick": None, "careful": {"golden_rmse_pp": p2(c["rmse"]), "q3_error_pp": F["careful_q3_error_pp"],
-                                                "coverage_in": F["careful_inside"]},
+        dict(id="R6", name="the range's record: each past quarter's error, the record's root mean square error and the "
+                           "quarters inside", graded_as="Ask 2", figure="r6_record", depends=["R2", "R4", "R5"],
+             independent="", golden=F["r6_record"],
+             bands=dict(B["errors_pp"], golden_rmse_pp=B["golden_rmse_pp"], coverage_in=B["coverage_in"]),
+             passes={"quick": None,
+                     "careful": dict({q: p2(v) for q, v in c["errs"].items()}, golden_rmse_pp=p2(c["rmse"]),
+                                     coverage_in=F["careful_inside"]),
                      "thorough": F["r6_record"]},
              precedent=["L28", "L37"]),
         dict(id="R7", name="the quarter's net sales with its 80 per cent range", graded_as="Ask 1", figure="r7_forecast",

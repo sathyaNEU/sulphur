@@ -118,10 +118,10 @@ Lesson: a panel issuer's code is not a fixed set of cardholders: a book re-issue
 | R3 | the company's regional mix: the 10-K's fiscal 2024 weights (Midwest 23.87%) against the panel's own (Southeast 45.01%, West 37.88% once KS-06 has left), the re-weight worth -2.04 points in the order applied | modeling | the 10-K's Brindle & Moss net sales by region | re-weight -4.81 to -1.33; Midwest weight exact | Right in the careful column (the textbook re-weight); quick: method shortcut, the panel's own mix pooled | independent: the 10-K's net sales by region | Component 2 |
 | R4 | customer deposits at the quarter's end near USD 335.2 million (USD 220.7 million at the end of October; the custom-order share of the last eight weeks 40.43% against 35.93%), revenue on delivery worth -2.19 points | missingness and measurement | the releases' customer deposits; the descriptor detail; the panel's weekly profile | deposits 326.8 to 340.2; points -3.4 to -1.54 | dismissed own evidence: reads the customer deposits line and grows last year's net sales at the payments' rate (or scales last year's deposits by payments), so this year's larger custom event stays in net sales | R2, R3 | Component 3 |
 | R5 | contract: last year's fourth quarter USD 54.5 million (the fiscal year's USD 100.4 million less the nine months' USD 45.9 million), this quarter's run rate USD 17.7 million, separating them worth -2.55 points | assembly and reconciliation | the releases' net sales by brand (fourth quarters for the year only) | base 54.3 to 54.7; run rate 16.7 to 19.5; points -3.12 to -2.25 | method shortcut: one growth rate for retail and contract, so last year's contract delivery carries into the quarter | independent: the earnings releases | Component 4 |
-| R6 | the record: the chain rebuilt at each of 15 quarters from fiscal 2022 Q1 on what was known then, root mean square error 1.24 points, the third quarter's error +0.01, 13 of 15 inside at that error (9 of 11 from fiscal 2023 Q1 inside a range built only on the errors before each) | validation | the prompt's record ask; the releases; the panel's history | RMSE 0.92 to 1.61; Q3 error -0.62 to 0.64; inside 9 to 14; as built 6 to 9 | self-confirming check: a record of the comparable panel taken to net sales (1.45 points, the third quarter +0.99) that looks sound because no past comparison held a re-issued book this size, a custom event this large and a base with a contract this large | R2, R4, R5 | Ask 2 |
-| R7 | net sales USD 1,471.2 million (-0.84% on USD 1,483.7 million), 80% range USD 1,447.7 to 1,494.7 million | forecasting | the prompt's quantity and range; the record's error | estimate 1,462.3 to 1,480.2; low 1,434.5 to 1,459.8; high 1,485.7 to 1,504.9 | dismissed own evidence: USD 1,590.2 million with a range from its own record (USD 1,562.6 to 1,617.9 million), the history assumed to speak for this quarter | R2, R4, R5, R6 | Ask 1 |
+| R6 | the record: the chain rebuilt at each of 15 quarters from fiscal 2022 Q1 on what was known then, each quarter's error graded in its own band (from +0.51 in fiscal 2022 Q1 to -3.44 in fiscal 2024 Q4, the contract delivery no panel sees), root mean square error 1.24 points, 13 of 15 inside at that error (9 of 11 from fiscal 2023 Q1 inside a range built only on the errors before each) | validation | the prompt's record ask (each past quarter); the releases; the panel's history | each quarter's error within its band (the family's errors at that quarter, plus or minus 0.15); RMSE 0.92 to 1.61; inside 7 to 13; as built 4 to 9 | self-confirming check: a record of the comparable panel taken to net sales (1.45 points) that looks sound in summary because no past comparison held a re-issued book this size, a custom event this large and a base with a contract this large, while its quarter-by-quarter errors miss KS-02's 2023 book and every fourth and first quarter's deposits | R2, R4, R5 | Ask 2 |
+| R7 | net sales USD 1,471.2 million (-0.84% on USD 1,483.7 million), 80% range USD 1,447.7 to 1,494.7 million | forecasting | the prompt's quantity and range; the record's error | estimate 1,460.3 to 1,483.4; low 1,432.5 to 1,461.8; high 1,483.7 to 1,510.8 | dismissed own evidence: USD 1,590.2 million with a range from its own record (USD 1,562.6 to 1,617.9 million), the history assumed to speak for this quarter | R2, R4, R5, R6 | Ask 1 |
 | R8 | the company steps: the regional mix -2.04, KS-01's book -3.28, revenue on delivery -2.19, contract at its run rate -2.55 points | decomposition and attribution | the bridge's order as applied; R2 to R5 | mix -4.81 to -1.33; KS-01 -3.58 to -0.35; delivery -3.4 to -1.54; contract -3.12 to -2.25 | unfinished chain: a bridge that stops at the comparable panel re-weighted to the company's regions | R2, R3, R4, R5 | Ask 3 (company steps) |
-| R9 | short: the top of the range (USD 1,494.7 million) sits USD 23.3 million below the street's USD 1,518.0 million | synthesis | the prompt's call rule; the street's eleven estimates | the call exact; the top 1,485.7 to 1,504.9 | self-confirming check: long, the range wholly above the street, certified by its own record | R7 | Recommendation |
+| R9 | short: the top of the range (USD 1,494.7 million) sits USD 23.3 million below the street's USD 1,518.0 million | synthesis | the prompt's call rule; the street's eleven estimates | the call exact; the top 1,483.7 to 1,510.8 | self-confirming check: long, the range wholly above the street, certified by its own record | R7 | Recommendation |
 
 Carry-forward: R1, R3 and R5 are graded on inputs of their own (the panel's files, the 10-K, the releases); R2 on the
 panel's cards and spend by issuer and region; R4 on the payments R2 and R3 give, so a slip at R2 moves R4's step a
@@ -151,15 +151,15 @@ handled at R1 and priced Right; they are not factors a run has to find.
 | R3 the company's regional mix and what the re-weight is worth | Missed | Right | Right |
 | R4 customer deposits at the quarter's end and what revenue on delivery is worth | Missed | Missed | Right |
 | R5 contract sales: last year's fourth quarter rebuilt from the fiscal year and the nine months, this quarter's run rate, and what separating them is worth | Missed | Missed | Right |
-| R6 the range's record: rolling-origin error, the third quarter's miss and the quarters inside | Missed | Partly | Right |
+| R6 the range's record: each past quarter's error, the record's root mean square error and the quarters inside | Missed | Missed | Right |
 | R7 the quarter's net sales with its 80 per cent range | Missed | Missed | Right |
 | R8 what the regional mix, KS-01's book, revenue on delivery and contract are worth | Missed | Missed | Right |
 | R9 the call against the street | Missed | Missed | Right |
-| Roughly | 0 of 9 | 2.5 of 9 | 9 of 9 |
+| Roughly | 0 of 9 | 2 of 9 | 9 of 9 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
 Largest single hint: "from October 2025 KS-01's cards include part of KS-06's book, re-issued"; rescues 1 of 9 results (R2); the deposits and the contract hints rescue one each
-Pair estimate: 33.6 (the careful but hurried pass computed end to end on the cut pack: the comparable panel and the regional re-weight earned, KS-01 kept, the deposits and the contract left inside one growth rate, USD 1,590.2 million, long); the quick pass scores 7.0
+Pair estimate: 26.8 (the careful but hurried pass computed end to end on the cut pack: the comparable panel and the regional re-weight earned, KS-01 kept, the deposits and the contract left inside one growth rate, USD 1,590.2 million, long, its record quarter by quarter outside most bands); the quick pass scores 7.0; priced on the stage 4 judge's own first pass instead (R1, R3 and R5 Right, R8 Partly), 39.6
 
 ## Data provenance
 
@@ -224,7 +224,7 @@ Assumption made false: a run lists "issuers present in both quarters are compara
   the quarter's end; last year's quarter held a USD 38 million contract delivery above the run rate), and the pack tests
   each from another file (the cards by week; the deposits line and the descriptor detail; the year and the nine months).
 Forcing: the line is the street's USD 1,518.0 million (the mean of eleven estimates; the median 1,516.3 gives the same call);
-  the golden family's range tops run USD 1,488.7 to 1,501.9 million, nearest 16.1 below the line; the shortcuts' range tops run USD
+  the golden family's range tops run USD 1,488.7 to 1,505.8 million, nearest 12.2 below the line; the shortcuts' range tops run USD
   1,529.9 to 1,637.5 million, nearest 11.9 above; the last week's completeness 3 per cent either way, the licensed share a fifth
   either way and the range from the record's error percentiles keep the top between USD 1,493.0 and 1,500.0 million, all below the
   line.
@@ -260,6 +260,7 @@ Noun swap: the nearest by skeleton.py check is task5 v4 (severity none): its cou
 | SF20 | contract in fourth quarters | the fiscal year less the nine months / left out | the fiscal year less the nine months (the fourth-quarter releases give the year only) | the releases' fiscal-year and nine-month columns |
 | SF21 | the site's payment-facilitator descriptor | the site / not the site | the site (online orders are net sales) | same call |
 | SF22 | the oldest open-year bucket | one bucket / split | one bucket | per-card routes need no open year; same call |
+| SF24 | the record's information set | the panel as delivered on 2 February 2026 / each quarter's panel as it stood three weeks after it | the panel as delivered on 2 February 2026 (its weeks before the latest three are complete), the releases before each quarter's release, the prior fiscal year's regions | stated in Ask 2; the restatement of a quarter's latest weeks touches only the target quarter, which is completed by the delivery history |
 | SF23 | how the range would have held | inside the range at the record's own error / inside a range built only on the errors before each quarter | both stated: 13 of 15, and 9 of the 11 quarters from fiscal 2023 Q1 | both graded in Ask 2 with their own bands; the call does not use the count |
 
 ## Closure table
@@ -315,8 +316,16 @@ licensed shops, the posting lags, a count of issuers or estimates.
 
 - Stage 3 on the second hardening: `checks.py` (C1 to C10, R1 to R7, SF1 to SF22, S1 to S4) all pass; `verify.py`
   recomputes every load-bearing figure on its own code path; `effort.py` scores quick 7.0, careful 33.6, thorough 100.
-- Stage 4 pending: the leak reader and the determinism judge on this cut; the judge's own first pass prices the careful
-  column before READY.
+- Stage 4 on the second hardening: the leak reader found no data dictionary, no ranking file, no answer figure and
+  nothing planted; it flagged the desk model's three method notes, now removed. The determinism judge returned
+  DETERMINISTIC with FIX_NOW (the bridge's baseline and order stated, the estimate band widened for a calibrated path,
+  the record's information set stated, contract's run rate argued from the data), all made in the generator.
+- The judge's own first pass, written before it opened the blocks, priced against the careful column: it kept KS-01
+  ("KS-02 jumps 2023" noted, KS-01's October book not found), named the deposits lag and left it as a sensitivity, set
+  contract at a run rate as one of two forks, and filed USD 1,539.2 million (no position or long). Inside the bands: R1,
+  R3, R5 and R8's mix and contract steps; outside: R2, R4, R6's quarter-by-quarter record (a nine-quarter calibrated
+  back-test on brand growth), R7 and R9. Priced that way the careful column is 39.6 (R1, R3 and R5 Right, R8 Partly),
+  under 50, so the build goes on to READY.
 
 ## Tried and rejected
 
@@ -351,4 +360,5 @@ licensed shops, the posting lags, a count of issuers or estimates.
 - 2026-11-12, second hardening prototype: a 14 per cent share of KS-06's whole book moved to KS-01 lifted KS-01's Midwest raw spend 51 per cent, a number any group-by flags; the move was cut to KS-06's premium cards (4 per cent of its accounts, spending 2.4 times the panel's average), which lifts KS-01's Midwest cards 18 per cent and its spend per card with them.
 - 2026-11-12, second hardening: a look-ahead record (each origin with the quarter's reported deposits) was dropped as a shortcut because it lands on the golden's own range (RMSE 1.25 against 1.24); the regression calibration moved to the rivals the data rule out because its intercept is the three contract deliveries, and it still calls short.
 - 2026-11-12, stage 4 leak reader on the second hardening: the desk model's three Fit-sheet notes (its own method: spend per open card on the issuers in both quarters, the brand ids as delivered, the regression and its back-test) read as a recipe; removed, the workbook keeps its series, coefficients and third-quarter line under field labels only.
+- 2026-11-12, stage 4 judge on the second hardening: its first pass landed R1, R3, R5 and the record's summary (its calibrated back-test's residual error happened to equal the golden's 1.24 points), which priced the careful column at 53.4 under the house rule; the record is now graded quarter by quarter, as the prompt asks ("how that range would have held in each past quarter"), each quarter's error in its own band, so a record that misses KS-02's 2023 book or the deposits misses most quarters; with the judge's FIX_NOW items made, the careful column on its first pass is 39.6.
 - 2026-11-12, second hardening: the bridge's KS-01 step measured at the panel's own regional weights swung from -0.5 to -2.9 points with the order of the steps; the company steps (the regional mix, KS-01's book, revenue on delivery, contract) are bridged at the company's weights after the panel's own three steps, and every order of each group sits inside each step's band.

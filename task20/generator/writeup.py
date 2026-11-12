@@ -60,23 +60,29 @@ def text(F):
                 usd(F["base_net_sales_m"]), mn(F["range_low_m"]), mn(B["range_low_m"][0]), mn(B["range_low_m"][1]),
                 mn(F["range_high_m"]), mn(B["range_high_m"][0]), mn(B["range_high_m"][1]), F["band_pp"],
                 usd(F["street_m"]), F["street_n"], usd(F["street_median_m"])))
-    L.append("2. How the range would have held, on a Record sheet with one row per quarter from %s to %s (the estimate "
-             "built as it would have been three weeks before each release, reported growth, the error, and whether it "
-             "fell inside): root mean square error %.2f points (%.2f to %.2f), %d of %d quarters inside the range at that "
-             "error (%d to %d), and %d of the %d quarters from %s inside a range built only on the errors before each "
-             "(%d to %d); the third quarter of fiscal 2025 missed by %.2f points (%.2f to %.2f), and the largest miss "
-             "%.2f points in %s. "
+    errs = "; ".join("%s %+.2f (%.2f to %.2f)" % (q(k), v, B["errors_pp"][k][0], B["errors_pp"][k][1])
+                     for k, v in e.items())
+    L.append("2. How the range would have held, on a Record sheet with one row per quarter from %s to %s: the estimate "
+             "built as it would have been three weeks before each release (the panel as delivered on 2 February 2026, "
+             "whose weeks before the latest are complete; the issuers in every week of both quarters less any with a "
+             "re-issued book between them; the regional mix of the fiscal year before; deposits and contract from the "
+             "releases before that quarter's), reported growth, the error in points of year-on-year growth, and whether "
+             "it fell inside. The errors: %s. Root mean square error %.2f points (%.2f to %.2f); %d of %d quarters "
+             "inside the range at that error (%d to %d), and %d of the %d quarters from %s inside a range built only on "
+             "the errors before each (%d to %d); the largest miss %.2f points in %s. "
              "The panel's like-for-like growth taken straight to net sales, set beside it, has a root mean square error "
              "of %.2f points and misses the third quarter of fiscal 2025 by %.2f."
-             % (q(F["first_origin"]), q(F["last_origin"]), F["golden_rmse_pp"], B["golden_rmse_pp"][0],
+             % (q(F["first_origin"]), q(F["last_origin"]), errs, F["golden_rmse_pp"], B["golden_rmse_pp"][0],
                 B["golden_rmse_pp"][1], F["coverage_in"], F["origins"], B["coverage_in"][0], B["coverage_in"][1],
                 F["coverage_asof_in"], F["coverage_asof_n"], q(F["first_asof_origin"]), B["coverage_asof_in"][0],
-                B["coverage_asof_in"][1], F["q3_error_pp"], B["q3_error_pp"][0], B["q3_error_pp"][1], F["largest_miss_pp"], q(F["largest_miss_q"]),
+                B["coverage_asof_in"][1], F["largest_miss_pp"], q(F["largest_miss_q"]),
                 F["shortcut_rmse_pp"]["careful"], F["careful_q3_error_pp"]))
     steps = "; ".join("%s %+.2f (%.2f to %.2f)" % (k, v, bb[k][0], bb[k][1]) for k, v in bl)
-    L.append("3. What each step from the card data to net sales is worth in points of year-on-year growth, on a Bridge "
-             "sheet, in the order applied (the panel's steps at its own regional weights with KS-01 kept, the company "
-             "steps at the company's): %s; growth after the panel's own steps %.2f%%, at the company's mix %.2f%%, "
+    L.append("3. What each step from the card data to net sales is worth in points of year-on-year growth (weekly "
+             "averages), on a Bridge sheet, from the delivered panel's growth on the same quarter a year earlier (every "
+             "issuer, raw spend, the panel's own regional weights) to net sales, in the order applied: the panel's three "
+             "steps first, at the panel's own regional weights with KS-01 kept, then the company's four at the company's "
+             "weights; each band covers every order of the steps within its group: %s; growth after the panel's own steps %.2f%%, at the company's mix %.2f%%, "
              "without KS-01's book %.2f%%, retail net sales %.2f%%, net sales %.2f%%. A Regions sheet gives each billing "
              "region's growth per open card with KS-01 kept and without it (Northeast %.2f%% and %.2f%%, Southeast "
              "%.2f%% and %.2f%%, Midwest %.2f%% and %.2f%%, West %.2f%% and %.2f%%) beside the company's fiscal 2024 "
@@ -160,12 +166,17 @@ def text(F):
              % (usd(F["deposits_base_m"]), F["trail_q4_pct"], F["trail_base_pct"], F["custom_q4_pct"],
                 F["custom_base_pct"], usd(F["deposits_q4_m"]), usd(F["deposits_q3_m"]), usd(F["retail_q4_m"]),
                 F["retail_growth_pct"], br["revenue on delivery"]))
+    cq = F["contract_by_q"]
     L.append("6. The fourth-quarter releases give contract sales for the fiscal year only: last year's fourth quarter is "
-             "%s less the nine months' %s, %s, against a run rate of %s (the median of the last eight quarters); no card "
-             "carries it, so retail grows with the panel and contract is added at its run rate: net sales %s, %.2f%% "
-             "(%+.2f points)."
+             "%s less the nine months' %s, %s, against a run rate of %s (the median of the last eight quarters). Such "
+             "deliveries do not recur: %s in fiscal 2022 Q2 was followed by %s a year on, %s in fiscal 2023 Q3 by %s, and "
+             "fourth quarters ran %s to %s in fiscal 2021 to 2023. No card carries contract, so retail grows with the "
+             "panel and contract is added at its run rate: net sales %s, %.2f%% (%+.2f points)."
              % (usd(F["contract_fy2024_m"]), usd(F["contract_9m_fy2024_m"]), usd(F["contract_base_m"]),
-                usd(F["contract_q4_m"]), usd(F["forecast_m"]), F["growth_pct"], br["contract at its run rate"]))
+                usd(F["contract_q4_m"]), usd(cq["FY2022 Q2"]), usd(cq["FY2023 Q2"]), usd(cq["FY2023 Q3"]),
+                usd(cq["FY2024 Q3"]), usd(min(cq["FY2021 Q4"], cq["FY2022 Q4"], cq["FY2023 Q4"])),
+                usd(max(cq["FY2021 Q4"], cq["FY2022 Q4"], cq["FY2023 Q4"])), usd(F["forecast_m"]), F["growth_pct"],
+                br["contract at its run rate"]))
     L.append("7. The same chain at each of the %d quarters from %s to %s, on what was known then (KS-02 left out of the "
              "comparisons its May 2023 book touches): root mean square error %.2f points, %d inside; the range is the "
              "estimate plus and minus %.2f points, USD %s to %s million, below the street's %s."

@@ -45,20 +45,82 @@
    19.5
   ],
   "coverage_asof_in": [
-   6,
+   4,
    9
   ],
   "coverage_in": [
-   9,
-   14
+   7,
+   13
   ],
   "deposits_q4_m": [
    326.8,
    340.2
   ],
+  "errors_pp": {
+   "FY2022 Q1": [
+    0.34,
+    1.53
+   ],
+   "FY2022 Q2": [
+    -1.46,
+    -0.48
+   ],
+   "FY2022 Q3": [
+    0.3,
+    1.21
+   ],
+   "FY2022 Q4": [
+    -0.22,
+    0.61
+   ],
+   "FY2023 Q1": [
+    -1.27,
+    0.28
+   ],
+   "FY2023 Q2": [
+    -0.51,
+    0.63
+   ],
+   "FY2023 Q3": [
+    -2.91,
+    -1.82
+   ],
+   "FY2023 Q4": [
+    -1.68,
+    -0.53
+   ],
+   "FY2024 Q1": [
+    -1.1,
+    0.11
+   ],
+   "FY2024 Q2": [
+    -0.01,
+    1.39
+   ],
+   "FY2024 Q3": [
+    -1.11,
+    0.13
+   ],
+   "FY2024 Q4": [
+    -4.37,
+    -2.88
+   ],
+   "FY2025 Q1": [
+    -1.11,
+    -0.06
+   ],
+   "FY2025 Q2": [
+    -1.55,
+    -0.39
+   ],
+   "FY2025 Q3": [
+    -0.57,
+    0.64
+   ]
+  },
   "forecast_m": [
-   1462.3,
-   1480.2
+   1460.3,
+   1483.4
   ],
   "golden_rmse_pp": [
    0.92,
@@ -70,15 +132,15 @@
   ],
   "q3_error_pp": [
    -0.62,
-   0.64
+   0.69
   ],
   "range_high_m": [
-   1485.7,
-   1504.9
+   1483.7,
+   1510.8
   ],
   "range_low_m": [
-   1434.5,
-   1459.8
+   1432.5,
+   1461.8
   ],
   "visible_growth_pct": [
    3.1,
@@ -262,34 +324,36 @@
  },
  "excluded_share_pct": 13.28,
  "family_high_m": {
-  "KS-01 set aside in every quarter": 1496.6,
-  "KS-01's Midwest cards set aside": 1498.3,
-  "KS-01's newest open years set aside": 1497.1,
   "a re-issued book read at a ten per cent rise": 1494.7,
   "a re-issued book read at a three per cent rise": 1494.7,
+  "an issuer with a re-issued book left out of every quarter": 1496.8,
   "cards of the same age": 1488.7,
   "contract at the median of the last four quarters": 1495.4,
   "fiscal 2024's regional mix rolled forward a year": 1497.6,
+  "retail growth calibrated by regression on past quarters, contract at its run rate": 1505.8,
   "spend per open card issuer by issuer": 1493.6,
   "the deposit window at nine weeks": 1501.9,
   "the deposit window at seven weeks": 1495.1,
   "the golden route": 1494.7,
+  "the re-issued book's newest open years set aside": 1497.3,
+  "the re-issued book's region set aside": 1500.8,
   "the record from fiscal 2023 only": 1497.3,
   "the regional mix of fiscal 2023": 1493.1
  },
  "family_m": {
-  "KS-01 set aside in every quarter": 1471.5,
-  "KS-01's Midwest cards set aside": 1477.0,
-  "KS-01's newest open years set aside": 1474.2,
   "a re-issued book read at a ten per cent rise": 1471.2,
   "a re-issued book read at a three per cent rise": 1471.2,
+  "an issuer with a re-issued book left out of every quarter": 1471.9,
   "cards of the same age": 1465.9,
   "contract at the median of the last four quarters": 1472.0,
   "fiscal 2024's regional mix rolled forward a year": 1477.2,
+  "retail growth calibrated by regression on past quarters, contract at its run rate": 1478.4,
   "spend per open card issuer by issuer": 1471.3,
   "the deposit window at nine weeks": 1475.0,
   "the deposit window at seven weeks": 1470.8,
   "the golden route": 1471.2,
+  "the re-issued book's newest open years set aside": 1473.9,
+  "the re-issued book's region set aside": 1477.3,
   "the record from fiscal 2023 only": 1471.2,
   "the regional mix of fiscal 2023": 1465.3
  },
@@ -389,9 +453,23 @@
   "contract_q4_m": 17.7
  },
  "r6_record": {
+  "FY2022 Q1": 0.51,
+  "FY2022 Q2": -1.29,
+  "FY2022 Q3": 0.45,
+  "FY2022 Q4": -0.06,
+  "FY2023 Q1": -0.27,
+  "FY2023 Q2": 0.05,
+  "FY2023 Q3": -2.37,
+  "FY2023 Q4": -1.11,
+  "FY2024 Q1": -0.55,
+  "FY2024 Q2": 0.5,
+  "FY2024 Q3": -0.42,
+  "FY2024 Q4": -3.44,
+  "FY2025 Q1": -0.59,
+  "FY2025 Q2": -0.97,
+  "FY2025 Q3": 0.01,
   "coverage_in": 13,
-  "golden_rmse_pp": 1.24,
-  "q3_error_pp": 0.01
+  "golden_rmse_pp": 1.24
  },
  "r7_forecast": {
   "forecast_m": 1471.2,

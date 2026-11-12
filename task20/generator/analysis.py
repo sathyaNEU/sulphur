@@ -233,50 +233,81 @@ def card_series(P):
 def reissues(P, jump=JUMP):
     """weeks in which an issuer's cards in a region rose by more than `jump` over four weeks, outside the issuer's first
     eight weeks: a book of accounts re-issued under the issuer's codes"""
+    return reissue_flags(P, jump)[0]
+
+
+def reissue_flags(P, jump=JUMP):
+    """the re-issued books' weeks by issuer, and by issuer and region"""
     key = ("reissues", jump)
     if key not in _CACHE:
         cs = card_series(P)
-        out = {}
+        out, by_reg = {}, {}
         for (iss, reg), s in cs.groupby(level=[0, 1]):
             s = s.droplevel([0, 1]).sort_index()
             r4 = s / s.shift(4) - 1
             hit = r4[(r4 > jump) & (np.arange(len(r4)) >= 8)]
             for wk in hit.index:
                 out.setdefault(iss, set()).add(pd.Timestamp(wk))
-        _CACHE[key] = {k: sorted(v) for k, v in out.items()}
+                by_reg.setdefault((iss, reg), set()).add(pd.Timestamp(wk))
+        _CACHE[key] = ({k: sorted(v) for k, v in out.items()}, {k: sorted(v) for k, v in by_reg.items()})
     return _CACHE[key]
 
 
-def issuers_for(P, sub, q, b, how, conv=True, jump=JUMP):
+def issuers_for(P, sub, q, b, how, conv=True, jump=JUMP, book="issuer"):
     """the issuers compared: every issuer (all), those reporting in every week of both quarters, less (conv) any issuer
-    whose cards took a re-issued book between the base quarter's start and the target quarter's end"""
+    whose cards took a re-issued book between the base quarter's start and the target quarter's end (book "issuer"),
+    or that ever took one (book "always"); books "region" and "newest" keep the issuer and set aside part of it later"""
     if how == "all":
         return sorted(sub.issuer_code.unique())
     weeks = sub.groupby("fq").week_start.nunique()
     cov = sub.groupby(["issuer_code", "fq"]).week_start.nunique().unstack()
     keep = [i for i in cov.index if cov.loc[i].get(q, 0) == weeks.get(q, 0) and cov.loc[i].get(b, 0) == weeks.get(b, 0)]
-    if conv:
+    if conv and book in ("issuer", "always"):
         lo, hi = P["start"][b], P["end"][q]
         rs = reissues(P, jump)
-        keep = [i for i in keep if not any(lo <= wk <= hi for wk in rs.get(i, []))]
+        keep = [i for i in keep if not any((book == "always") or (lo <= wk <= hi) for wk in rs.get(i, []))]
     return keep
 
 
+def set_aside(P, sc, q, b, jump=JUMP, book="region"):
+    """part of an issuer set aside for a re-issued book between the two quarters: the region whose cards jumped
+    (region), or the open years from the book's own year on in the target quarter and from the year before in the base
+    (newest)"""
+    lo, hi = P["start"][b], P["end"][q]
+    out = sc
+    if book == "region":
+        for (iss, reg), wks in reissue_flags(P, jump)[1].items():
+            if any(lo <= wk <= hi for wk in wks):
+                out = out[~((out.issuer_code == iss) & (out.billing_region == reg))]
+    elif book == "newest":
+        for iss, wks in reissue_flags(P, jump)[0].items():
+            w = [wk for wk in wks if lo <= wk <= hi]
+            if not w:
+                continue
+            y = min(wk.year for wk in w)
+            yr = pd.to_numeric(out.card_open_year.str.replace("<=", "", regex=False), errors="coerce")
+            drop = (out.issuer_code == iss) & (((out.fq == q) & (yr >= y)) | ((out.fq == b) & (yr >= y - 1)))
+            out = out[~drop]
+    return out
+
+
 # ------------------------------------------------------------------------------------------------ growth on the panel
-def regional(P, pan, q, b, how="per_card", issuers="const", conv=True, fern_ok=True, jump=JUMP):
+def regional(P, pan, q, b, how="per_card", issuers="const", conv=True, fern_ok=True, jump=JUMP, book="issuer"):
     """year-on-year growth of quarter q over quarter b (weekly averages) by billing region, and the base quarter's
     panel spend by region. how: per_card (spend per open card, pooled over the issuers), lfl (spend per open card issuer
     by issuer, weighted by the base quarter's spend), same_age (each open year against the open year one later, on the
     base quarter's cards), total (spend)"""
-    key = ("regional", pan.attrs.get("tok"), q, b, how, issuers, conv, fern_ok, jump)
+    key = ("regional", pan.attrs.get("tok"), q, b, how, issuers, conv, fern_ok, jump, book)
     if key in _CACHE:
         return _CACHE[key]
     sub = pan[pan.fq.isin([q, b])]
     if not fern_ok:
         sub = sub[sub.merchant_id != "M2290"]
     n = {k: sub[sub.fq == k].week_start.nunique() for k in (q, b)}
-    keep = issuers_for(P, sub, q, b, issuers, conv, jump)
+    keep = issuers_for(P, sub, q, b, issuers, conv, jump, book)
     sc = sub[sub.issuer_code.isin(keep)]
+    if conv and book in ("region", "newest"):
+        sc = set_aside(P, sc, q, b, jump, book)
     s = sc.groupby(["fq", "billing_region"]).spend_usd.sum()
     pw = {r: float(s[b][r]) for r in REGIONS}
     out = {}
@@ -337,9 +368,10 @@ def rolled_weights(P, fy):
     return dict(zip(REGIONS, v / v.sum()))
 
 
-def growth(P, pan, q, b, how="per_card", mix="company", fern_ok=True, wfy=None, issuers="const", conv=True, jump=JUMP):
+def growth(P, pan, q, b, how="per_card", mix="company", fern_ok=True, wfy=None, issuers="const", conv=True, jump=JUMP,
+           book="issuer"):
     """card-visible growth of q over b: regional growth at the company's prior-year mix (or the panel's own)"""
-    rg, pw = regional(P, pan, q, b, how, issuers, conv, fern_ok, jump)
+    rg, pw = regional(P, pan, q, b, how, issuers, conv, fern_ok, jump, book)
     if mix == "company":
         w = company_weights(P, wfy or "FY%d" % (int(q[2:6]) - 1))
     elif mix == "rolled":
@@ -494,7 +526,7 @@ def origins_of(P, first="FY2022 Q1", last=None):
 
 
 def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep="mto", ct="median8", reg=False,
-          origins=None, wfy_lag=1, target=TQ, jump=JUMP, record_dep=None):
+          origins=None, wfy_lag=1, target=TQ, jump=JUMP, record_dep=None, book="issuer"):
     """the route's growth for the target quarter and its rolling-origin record: at each past quarter the same method on
     what was known then (the issuers and re-issued books seen by that quarter's end, the prior fiscal year's regional
     mix, the deposits estimated, contract from the quarters before); with reg, reported growth regressed on the route
@@ -506,25 +538,48 @@ def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep
     wfy = lambda q: "FY%d" % max(int(q[2:6]) - wfy_lag, first_fy)
 
     def one(q, b, fo, dep_rule):
-        x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump)
+        x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump, book)
         g = x
         if dep_rule:
             g, _ = convert(P, q, b, x, fo, dep_rule, pan)
-        return x, to_total(P, q, b, g, fo, ct)
+        return x, to_total(P, q, b, g, fo, ct), g
     fo_t = True
-    pay_t, xt = one(target, bq, fo_t, dep)
+    pay_t, xt, gt = one(target, bq, fo_t, dep)
+    if reg == "retail":
+        # reported retail growth (net sales less contract) regressed on the route's retail growth over the origins
+        # before the target; contract added at its run rate
+        rx, ry = [], []
+        errs = {}
+        for q in origins:
+            b = keys[keys.index(q) - 4]
+            fo = fern_both(P, q, b)
+            _, xq, gq = one(q, b, fo, dep)
+            yr = (retail(P, q, fo) / weeks_of(P, q)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
+            if len(rx) >= 6:
+                c = np.linalg.lstsq(np.column_stack([np.ones(len(rx)), rx]), ry, rcond=None)[0]
+                errs[q] = float(to_total(P, q, b, c[0] + c[1] * gq, fo, ct) - organic_growth(P, q, b, fo))
+            rx.append(float(gq))
+            ry.append(float(yr))
+        fit = np.linalg.lstsq(np.column_stack([np.ones(len(rx)), rx]), ry, rcond=None)[0]
+        g = float(to_total(P, target, bq, fit[0] + fit[1] * gt, fo_t, ct))
+        e = np.array(list(errs.values()))
+        rmse = float(np.sqrt(np.mean(e ** 2)))
+        asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
+        return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=rx, ys=ry, fit=fit,
+                    origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
+                    inside_asof=int(sum(asof)), n_asof=len(asof))
     xs, ys, errs = [], [], {}
     for q in origins:
         b = keys[keys.index(q) - 4]
         fo = fern_both(P, q, b)
         if record_dep == "actual":
-            x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump)
+            x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump, book)
             rev = payments(P, b, fo) / weeks_of(P, b) * (1 + x) * weeks_of(P, q) - (
                 P["deposits"][q] - P["deposits"][prev_q(P, q)])
             g = (rev / weeks_of(P, q)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
             x = to_total(P, q, b, g, fo, ct)
         else:
-            _, x = one(q, b, fo, dep)
+            _, x, _ = one(q, b, fo, dep)
         y = organic_growth(P, q, b, fo)
         if reg:
             if len(xs) >= 6:
@@ -707,19 +762,13 @@ def family(out):
     F["a re-issued book read at a three per cent rise"] = with_range(route(P, pan, jump=0.03), base)
     F["a re-issued book read at a ten per cent rise"] = with_range(route(P, pan, jump=0.10), base)
     F["the record from fiscal 2023 only"] = with_range(route(P, pan, origins=origins_of(P, "FY2023 Q1")), base)
-    # other ways to set KS-01's book aside: its Midwest cards only, its newest open years only (same age), or KS-01 in
-    # every quarter
-    def without(mask, tok):
-        p2 = pan[~mask].copy()
-        p2.attrs["tok"] = tok
-        return p2
-    ks01 = pan.issuer_code == "KS-01"
-    F["KS-01's Midwest cards set aside"] = with_range(route(P, without(ks01 & (pan.billing_region == "Midwest"),
-                                                                      "fam-ks01-mw"), conv=False), base)
-    newest = ks01 & (((pan.fq == TQ) & pan.card_open_year.isin(["2025", "2026"]))
-                     | ((pan.fq == BQ) & pan.card_open_year.isin(["2024", "2025"])))
-    F["KS-01's newest open years set aside"] = with_range(route(P, without(newest, "fam-ks01-new"), conv=False), base)
-    F["KS-01 set aside in every quarter"] = with_range(route(P, without(ks01, "fam-ks01-all"), conv=False), base)
+    # other ways to set a re-issued book aside, the same way at every origin of the record (KS-02 in fiscal 2023 to
+    # 2024, KS-01 at the end): the region whose cards jumped, the newest open years, or the issuer in every quarter
+    F["the re-issued book's region set aside"] = with_range(route(P, pan, book="region"), base)
+    F["the re-issued book's newest open years set aside"] = with_range(route(P, pan, book="newest"), base)
+    F["an issuer with a re-issued book left out of every quarter"] = with_range(route(P, pan, book="always"), base)
+    F["retail growth calibrated by regression on past quarters, contract at its run rate"] = with_range(
+        route(P, pan, reg="retail"), base)
     return F
 
 
