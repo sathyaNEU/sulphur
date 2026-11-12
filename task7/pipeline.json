@@ -1,34 +1,31 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-11",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-12",
  "stump": "",
- "architecture": 9,
+ "architecture": 10,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-11",
-  "note": "2 WARN answered in the note: R2 upstream of four results (each needs work of its own; the largest hint rescues 2 of 6); nearest chains task17 and task2 (shape only)"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-11, --asof 2026-06-24): six stump-vocabulary lines, ruled harmless in the note's Leak rulings",
-  "reader": "2026-11-11 isolated reader (Sonnet, medium): questions 2 to 4 none; question 1 the plan's WHAT and the committee's range estimand (kept); question 5 literal readings the golden's; question 6 names the lottery as the closest single fact (about two results) and never the campaign; nothing to fix"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-11 (driver.near own lineage 0.20 and 0.12; repeat.question_form; skeleton lesson_taught and house_lesson), answered in the note",
-  "surface": "exit 0"
+  "heart": "",
+  "surface": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "gate_g": "analytical_non_defect; surface_read_dependency no; sole_data_defect no",
-  "gate_h": "pass: four areas or more, one_thing none, the best single hint rescues 2 to 3 of 7",
-  "first_pass": "blind, before the blocks: funded insulation and heating optimisation; landed R9's counts and insulation's rate and point, missed R2, optimisation's and controls' rates and ranges, the call and the listing (careful column about 25 on it); insulation's upper end at 102.4 against the then 8 per cent band, widened to 10",
-  "report": "task7/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
  "returned": [
   {
@@ -89,9 +86,16 @@
    "portal": "returned at review: the deciding step (insulation's payout under roofer capacity, 12 of the 26 roofers on this year's larger roofs) is one constructed hidden factor whose fix is routine once named, and it bit only in insulation; the test responses reproduced the pilot seasons, both per-building transports, the fade, the close counts and every carbon call. The holistic audit on the same version had passed it (level 5, DEEP, pinned; loss concentration high, information only).",
    "repair": "design (re-root to architecture 9 in the same world at the reviewer's direction: the call moved onto analysis, the capacity out of the decision)",
    "feedback": "task7/runs/review_2026-11-11.md"
+  },
+  {
+   "date": "2026-11-12",
+   "source": "triage",
+   "repair": "design",
+   "commit": "",
+   "note": "the platform run landed architecture 9; re-rooted to another world"
   }
  ],
- "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip and pastes the four blocks; then the two platform runs and /triage-runs",
+ "resume": "stage 2: write the results chain, effort test on paper with the architecture 9 run's route as the careful pass, forks and prompt; then the generator (world.py simulating the program: homes, devices by provider and channel, weather, test and alert events, overrides, 15-minute loads, ERCOT 4CP), the pack, documents, golden, checks; prototype calibration in the session scratchpad (dr/proto2.py)",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -251,6 +255,34 @@
    "verdict": "READY, judge APPROVE (determinism_check_report_pass2.md, target.zip 00c9970f)",
    "platform": "the author's test run (task7/runs/arch7/run1.md) landed the call at 87, 95 and 139 euro a tonne; lost only the round's insulation count and heating optimisation's figure; read by the author as not stumped",
    "fate": "re-rooted as architecture 8 at the author's choice: the transport rebuilt on each measure's driver, read from the electricity load profiles and the solar cadastre"
+  },
+  "architecture_9": {
+   "call": "fund roof insulation alone in the 2026 round: EUR 85.53 a lifetime tonne, its 90 per cent range EUR 79.67 to 94.17; heating optimisation (upper end EUR 233.08, its works' own saving without the closed campaign) and heating controls (upper end EUR 158.03, the pilot's owners drawn again) fail the committee's rule",
+   "chain": "R2 optimisation's own saving in the last three seasons (Component 1); R6 each measure's rate over its life on this year's applications (Ask 1); R7 each grant per tonne and its range's upper end at the owner (Ask 2, Components 2 and 3); R8 the funded set (Recommendation); R9 each measure's round at close (Ask 3); R10 the funded measure's applications and their lifetime tonnes (Ask 4)",
+   "effort": {
+    "quick": 14.0,
+    "careful": 40.5,
+    "thorough": 100.0,
+    "largest_hint": "the closed campaign's held checks: rescues 2 of 6 (R2, R6); the owner sentence none whole"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "gate_g": "analytical_non_defect; surface_read_dependency no; sole_data_defect no",
+    "gate_h": "pass: four areas or more, one_thing none, the best single hint rescues 2 to 3 of 7",
+    "first_pass": "blind, before the blocks: funded insulation and heating optimisation; landed R9's counts and insulation's rate and point, missed R2, optimisation's and controls' rates and ranges, the call and the listing (careful column about 25 on it); insulation's upper end at 102.4 against the then 8 per cent band, widened to 10",
+    "report": "task7/determinism_check_report.md"
+   },
+   "leak": {
+    "leak_py": "REVIEW, no LEAK (2026-11-11, --asof 2026-06-24): six stump-vocabulary lines, ruled harmless in the note's Leak rulings",
+    "reader": "2026-11-11 isolated reader (Sonnet, medium): questions 2 to 4 none; question 1 the plan's WHAT and the committee's range estimand (kept); question 5 literal readings the golden's; question 6 names the lottery as the closest single fact (about two results) and never the campaign; nothing to fix"
+   },
+   "zips": {
+    "target.zip": "5231b1fb3e29fbc65f91a253ffc01e2751362fd05a0d2ec0a1b9d29c2f35953d",
+    "golden.zip": "86668f64581a1ddebc8b72a73ecc7753578037c1036fde89ad83635253d90e50"
+   },
+   "commit": "aa6a526",
+   "fate": "landed by the platform run of 2026-11-12 (runs/arch9/run1.md)"
   }
  },
  "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
@@ -304,42 +336,33 @@
     "verdict": "REDESIGN",
     "note": "the author reported the platform not stumped and pasted run 1 (runs/run1.md); scores and rubric not pasted",
     "run1_class": "none: on the call; it fitted the golden's own model (the log ratio on inspection age and lending book with book-specific smearing), index-adjusted the prior inspections, validated on 122 held-out recent pairs and bootstrapped by customer"
+   },
+   {
+    "round": "arch9 run 1",
+    "date": "2026-11-12",
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "verdict": "REDESIGN",
+    "note": "landed the call (insulation alone); both deciding judgments reflexes; lost insulation's transport only"
    }
   ]
  },
- "paper_pair": 40.5,
+ "paper_pair": null,
  "subdomain": "efficiency-savings-verification",
- "call": "fund roof insulation alone in the 2026 round: EUR 85.53 a lifetime tonne, its 90 per cent range EUR 79.67 to 94.17; heating optimisation (upper end EUR 233.08, its works' own saving without the closed campaign) and heating controls (upper end EUR 158.03, the pilot's owners drawn again) fail the committee's rule",
+ "call": "renew three of the six thermostat providers (provisional)",
  "doctrine": "throughout",
- "chain": "R2 optimisation's own saving in the last three seasons (Component 1); R6 each measure's rate over its life on this year's applications (Ask 1); R7 each grant per tonne and its range's upper end at the owner (Ask 2, Components 2 and 3); R8 the funded set (Recommendation); R9 each measure's round at close (Ask 3); R10 the funded measure's applications and their lifetime tonnes (Ask 4)",
+ "chain": "R1 each provider's test-event impact per assigned device around its window; R2 the share of enrolled devices still in the event at the 4CP intervals on the 4CP days; R3 each provider's 2027 fleet and its mix; R4 the shed per device for each fleet's homes; R5 each provider's kW per 2027 device at the 4CP intervals; R6 the providers renewed; R7 the renewed providers' MW and net saving",
  "effort": {
-  "quick": 14.0,
-  "careful": 40.5,
-  "thorough": 100.0,
-  "largest_hint": "the closed campaign's held checks: rescues 2 of 6 (R2, R6); the owner sentence none whole"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "prompt_rewritten": false,
- "gates_stage3": {
-  "date": "2026-11-11",
-  "checks": "107 of 107",
-  "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
-  "figures_check": "PASS",
-  "effort": "exit 0, careful 40.5, 3 distinct wrong funded sets over 5 shortcuts, 8 golden-family variants and 6 perturbations on the golden's side",
-  "voice_check": "PASS (815 characters)",
-  "audit_containers": "exit 0"
- },
- "zips": {
-  "target.zip": "5231b1fb3e29fbc65f91a253ffc01e2751362fd05a0d2ec0a1b9d29c2f35953d",
-  "golden.zip": "86668f64581a1ddebc8b72a73ecc7753578037c1036fde89ad83635253d90e50"
- },
- "gates_stage5": {
-  "date": "2026-11-11",
-  "checks": "106 of 106",
-  "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
-  "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart; answered in the note)",
-  "effort_check_note": "PASS (careful 40.5, the note agreeing)",
-  "audit_containers": "PASS: 0 FAIL, 0 WARN"
- },
+ "gates_stage3": {},
+ "zips": {},
+ "gates_stage5": {},
  "level_up": {
   "date": "2026-11-10",
   "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",

@@ -1,236 +1,44 @@
-# task7: which retrofit measures Haldenau's 2026 grant round can fund at the committee's confidence (architecture 9)
+# task7: which thermostat providers Cedar Brake Electric Cooperative renews for summer 2027 (architecture 10)
 
-Architecture 8 (each measure's lottery saving carried along the empty week and the roof per floor, the call on the
-roofers' capacity in square metres) was returned at review on 2026-11-11: the deciding step was one constructed factor
-that bit only in insulation, and the runs reproduced every other step (`runs/review_2026-11-11.md`; agreed, no rebuttal).
-Its note, generator and goldens are in git at commit b355e5c. This architecture keeps the world, the pilot, the meter
-work and both transports (now earned steps the runs make), takes the roofers out of the decision, and moves the call
-onto two judgments the runs have been seen to lose: heating optimisation's saving without the state campaign's heating
-checks that held it up in the pilot's late seasons, the campaign having closed, and each measure's 90 per cent range at
-the unit the pilot was drawn by, the owner, whose facility manager runs every one of its buildings the same way.
+Architecture 9 (Haldenau's retrofit grants) was landed by the platform run of 2026-11-12: both of its deciding judgments
+were moves a frontier run makes unprompted once a document files their trigger (`runs/arch9/run1.md`). This architecture
+moves to another world, dataset and shell in the same assigned subdomain, where the client's own text says the depth
+lies ("coincidence of peaks across customers or feeders"): a Texas electric cooperative renews its bring-your-own-
+thermostat providers on what each provider's 2027 devices take off its load in ERCOT's four coincident-peak (4CP)
+intervals. The careful pass is coded as the architecture 9 run's own route, so a result is priced lost only where that
+run's behaviour would lose it.
 
 ## Draw
 
 Subdomain: Energy Systems & Utilities, energy efficiency and demand response evaluation (`efficiency-savings-verification`)
-Analysis type: Experiment & Causal Analysis (assigned on the platform task: what each measure's works did to a
-  building's normal-weather gas use, against the comparison the 2019 lottery supports, carried over the 2026 works' life
-  and to the 2026 applicants, with the range the lottery's own design gives)
-Answer shape: a distribution and where it is cut (each measure's grant per lifetime tonne on this year's applications
-  as the spread a fresh draw of the pilot's owners would give, cut at €120 at its upper end, the committee's rule), with
-  the round at close and the funded measure's applications listed beside it
-Weight: investigation (what held heating optimisation's measured saving level from 2022/23 on, when its works alone were
-  still letting it fall: its own persistence, the state campaign's checks that balanced systems held, the 2022 price
-  shock that moved every building alike; the three told apart by the campaign's district-by-district timing), beside
-  uncertainty at the draw's unit; the last builds sit on validation (task20), measurement (task8), attribution (task9)
-  and modeling (task21)
-Data-native sentence: the pilot's places were drawn by lot among the owners who answered, an owner's buildings together,
-  and an owner's facility manager runs every one of its buildings' heating the same way, so the pilot's evidence is as
-  many owners as it holds, not buildings; and from September 2022 to March 2026 the state campaign's checks set every
-  taker's heating curve back down district by district, which a balanced system holds and an unbalanced one soon loses,
-  so heating optimisation's works buildings saved more after their check than their works alone keep, and the campaign
-  has closed for the 2026 works' life
-As of: 24 June 2026 (the applications received by 12 June, the exports of 12 to 16 June, the committee's request of 15
-  June; the offer closes on 30 June and the committee meets on 9 July)
-People: Magda Peukert (chair, Committee for Climate and Environment) and Torben Römer (head of Energy Services,
-  Stadtwerke Haldenau), from `guard.py names --geo Germany --seed 11`; neither is named in the prompt
-Card: `.claude/skills/fingerprint/cards/task7.json`, v9, registered 2026-11-11 (stamp 2026-11-11T22:54:30Z) at WARN; v8
-  moved into lineage with its fate; brought current at stage 4 (answer, results, chain signature, the meter file's
-  413,033 reads). Redrawn axes against the last three live cards: the forum to council_or_assembly (the climate
-  committee prepares, the council votes the round), the role to policy_adviser (the request is the committee chair's),
-  the decisive generator to G13 horizon mismatch (the pilot's late seasons carried a campaign the 2026 works' life
-  lacks), the calibration form to `other` (the deciding calibration is each works building's own check date inside the
-  meter reads; the lottery is the earned comparison, and pilot_log and physical_verification are both on the last
-  three cards). WARNs answered (guard.py check, re-run on the registered card after the pull of 2026-11-11):
-  `skeleton.lesson_taught` on uncertainty_at_shared_unit (four tasks teach it; here it decides controls only and sits
-  beside a deciding lesson no task on file teaches, forward_window_structure_change) and on
-  concurrent_change_in_comparison (two); `skeleton.house_lesson` on validation_cannot_see_condition,
-  concurrent_change_in_comparison and transport_effect_modifiers (each one step of six here, and the transports are
-  earned, not priced); `repeat.question_form` which against task4 (the form follows the decision: which measures the
-  round funds); `driver.near` against this slot's v7 and v6 (0.20, 0.12; their deciding steps were each use's saving
-  and the visits in the comparison arm, neither of which decides here). The shell: which, the, xlsx (v8's was which,
-  i, xlsx).
+Analysis type: Experiment & Causal Analysis (assigned: what each provider's thermostat events do to the co-op's load,
+  against the randomised comparison the test events give, carried to the moments that set transmission cost)
+Answer shape: scenarios with the flip point (each provider's kW per 2027 device at the 4CP intervals against the kW its
+  quoted price needs, renewed where it clears), with the 2027 fleets, their cost and the renewed providers' total beside it
+Weight: modeling (carrying a randomised test-event impact to selected peak days, next summer's fleet and the fleet's
+  homes); the last builds sit on validation (task20), hard-to-measure (task13), triage (task4) and attribution (task9)
+Data-native sentence: the co-op measures each provider's impact on randomised test events, called on single hot days in
+  a research sample of homes with 15-minute meters, but transmission cost is set in four 15-minute intervals that fall on
+  the hottest days late in heat waves, when members override, and next summer's devices are an older fleet with a new
+  retail cohort that is often offline, in homes larger and older than the research sample's
+As of: 20 November 2026 (the provider quotes of November, the 2026 summer's reports and ERCOT's 2026 4CP notice; the
+  board meets on 8 December)
+People: Renee Henry (manager of energy programs, Cedar Brake) and Charles Hardin (board chair), from `guard.py names
+  --geo USA --seed 27`; neither is named in the prompt
+Card: `.claude/skills/fingerprint/cards/task7.json`, v10, registered 2026-11-12 (stamp 2026-11-12T06:45:42Z) at WARN; v9
+  moved into lineage with its fate. Redrawn against the last three live cards and the slot's lineage: the decisive
+  pattern to G8 reachability against magnitude (G6 repeated task20; the devices reachable at the peak, online and not
+  overridden, decide, not the shed per device), the decision type to renew_replace_lapse (the honest label for contract
+  renewals; designation_set with the same gap and pattern repeated v7), differentiation lines for mark253, mark258 and
+  task3. WARNs answered: `skeleton.house_lesson` vintage_or_cohort_drift (one judgment of four here, deciding one
+  provider); `skeleton.house_shell` set_over_threshold (each provider is held to its own quoted price, the form the
+  renewal takes); `template.chain_near` task21 (shares the weight only: a rate change against loss ratios, no lesson in
+  common); `repeat.deliverables` docx+xlsx against task20 (a board memo in Word and the workbook the renewals are priced in).
+  The shell: which, we, docx+xlsx.
 
-## Deep reasoning
-
-Task type: efficiency-savings-verification (energy efficiency and demand response evaluation), which serves Experiment & Causal Analysis
-Domain test: every result is a measurement and verification quantity on weather-normalised metered gas: an operational measure's persistence against the counterfactual its life will actually face; the interaction of a heating check with hydraulic balancing (a lowered heating curve sticks only in a balanced system); a setback saving that grows with the hours a building stands empty and is nil where people live round the clock; a roof insulation saving bounded by the roof's share of the heat loss and untouched by the hot water; lifetime tonnes of gas CO2 per euro of grant, and an evidence standard a grant committee can hold a measure to at the unit its pilot was drawn by
-Swap: "fund insulation alone, because optimisation's saving levelled only while the campaign's checks lasted and controls' evidence rests on a few owners" read with a hospital's nouns keeps a skeleton and loses what decides: a heating curve a check resets and a balanced system holds, a campaign's building-by-building check dates as the record that separates it from the measure's own fade and from the price shock, a setback that saves nothing until empty spells outlast the reheating, degree-day normalisation and lifetime tonnes of gas CO2
-Where the weight sits: investigation, in R2 and R6: heating optimisation's measured saving levels at about 3.3 per cent from 2022/23 on (3.20, 3.30, 3.34 and 3.46 per cent), and a run that fits its fade to the seasons as measured carries 3.54 per cent over fifteen years; the works' own saving, read off each works building's seasons before its campaign check (and the owners who declined it) against the passed-over owners outside the season of their own check, keeps falling (1.81, 1.36 and 1.25 per cent in the last three seasons) and settles at 1.60, so the works save 2.33 per cent of this year's applications' reference use over their life; the 2022 price shock moved works and passed-over buildings alike and so explains none of it; and uncertainty, in R7: the pilot's evidence for controls rests on a handful of owners whose facility managers kept or overrode their timers across all their buildings, so its range at the owner runs to €158.03 where a building-level range stops at €109.36
-Layer 1: cumulative index reads at 30 April with late and early periodic reads, meter exchanges, five-digit counters that roll over, estimates replaced by corrections, customer typos corrected, rows imported twice, meters in tens of cubic metres, z-numbers and calorific values (the L-gas to H-gas change of 2017), second meter points, connections and disconnections, the service team's reads at a visit (both rounds), extensions and empty floors, revised applications sent twice, a contractor typed without its legal form; in the electricity profiles, a second market location per customer, a meter exchanged during 2025, public holidays averaged into their weekdays; in the cadastre, one row per roof face, "str." for "straße", a garage or shed beside the main roof; each is the producing system's own and none decides a result
-Not one thing: the call needs two unrelated judgments, each deciding a different measure: heating optimisation's saving without the closed campaign's held lift (golden €100.92 a tonne, upper end €233.02 at the owner and €131.98 even at the building; the measured seasons carried give €66.35, upper end €106.68 at the owner and €74.90 at the building, and fund it) and controls' range at the owner the pilot was drawn by (upper end €158.03; a building-level range stops at €109.36 and funds it); insulation passes on every route (upper end €94.17). A run that makes neither funds all three, one that makes only the first funds insulation and controls, one that makes only the second funds insulation and optimisation; the transports along the empty week and the roof per floor and the round at close are earned or lost on their own, and the funded listing follows the call
-One-fact test: the strongest single sentence ("the state campaign's heating checks from September 2022 set heating curves back down, the pilot's balanced works buildings held it while the passed-over owners' systems did not, and the campaign has closed") rescues R2 and R6 (2 of 6, a third); it leaves controls' range, and so the call and the listing, wrong; the owner sentence ("the pilot was drawn by owner and an owner's facility manager runs all its buildings alike") rescues no result whole, since R7 also prices optimisation on its own saving (effort.json, measured)
-Not semantics: every field read correctly (the read reasons, the draw by owner, the measure, the notices' use and floor area, the reference consumption, the revised application, the profiles' weekdays and hours, the roof faces) and every Layer 1 item handled, the careful pass still files R2, optimisation's rate in R6, R7, the call and the listing wrong, because none of them is a reading: one is an investigation of what held a saving up, the other the spread a design gives
-Not rule application: no filed procedure performs a result; the plan files what a saving is, what lifetime tonnes and a round's saving rate are and the limit, and the committee's request files the €120 test's basis (the applications received by 12 June) and its rule (each measure judged at the upper end of its 90 per cent range); how the pilot's saving is estimated, what held it up, how it carries over the life and to a building, and how the range is built are left to the analysis
-Estimand: plan 4.2 (a saving as a share of the gas the buildings that had the works would have used, normal weather), 4.3, 4.4 (lifetime tonnes in the building applied for, over the measure's life, against the gas it would burn without the works, on the application's reference consumption; the round's saving rate as their lifetime tonnes over the tonnes their reference consumption carries; grant per tonne; the limit; every application of a funded measure funded), 4.5 (reference consumption); the 2026 terms (applications to 30 June, a revised application replacing the earlier one); the committee's request (the €120 test on the applications that came in by 12 June, each measure funded only where the upper end of its 90 per cent range, the range the estimate would have if the pilot had been drawn again, is within it); the heat plan summary (the campaign's checks, September 2022 to March 2026, closed); the pilot rules (the draw among the owners who answered, an owner's buildings together); the prompt
-No decoy: no memo, draft, stakeholder figure or copied block; no shipped file states a saving, a rate, a grant per tonne, a range or a recommendation; no shipped sentence links the campaign to a measure's saving or a facility manager to a range; the committee request asks and states nothing
-No replay: no result re-derives a published figure and no stated number is wrong
-Pinned: every rival in the fork table run on the cut pack by checks.py lands inside its result's band or is ruled out by a filed sentence or named data; each hurried route lands outside by an asserted margin; every measure's call holds by 8 per cent or more of the limit under every rival and falls 6 per cent or more on the other side under its shortcut
-Run forecast: R2 and optimisation's rate in R6 stopped at the first story or dismissed own evidence (the fade fitted to the seasons as measured, its back-test on the later seasons passing because every one carried the campaign, or the levelling read as the price shock's; the architecture 7 run named age and calendar as inseparable and carried the pilot's pattern); R7 method shortcut (buildings resampled, as the architecture 7 run did); the call and the listing follow; the transports behind insulation's and controls' rates and R9 earned
-Strategy label: a randomised effect read net of a later programme that the treated units' own physics held (a forward window without it), beside ranges at the draw's unit (sulfur-strategies.md, causal_design)
-Depth level: 4 on the client's scale, with level 5's mark: two independent judgments each decide a different measure, every combination of shortcuts lands on a different funded set (all three; insulation and controls; insulation and optimisation; the golden insulation alone), and around them both transports, the lived-in buildings and the round at close each move a graded figure. Not 5: a strong run on file earns the transports and the round at close, so two judgments, not four, decide the call for it
-Lesson: an operational measure's measured persistence is only the persistence it had under the conditions of the trial's seasons; when a later programme re-applied part of the treatment and the treated units' own physics held it, the trial's late seasons overstate what the measure keeps in a forward window without that programme, and each unit's own date of that programme is what separates the two; and a trial drawn by group carries the evidence of its groups, so its range is built at the group
-
-## Results chain
-
-| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
-|---|---|---|---|---|---|---|---|
-| R2 | heating optimisation's saving each of the last three seasons as its works alone keep it: 1.81, 1.36 and 1.25 per cent in 2023/24 to 2025/26, against 3.30, 3.34 and 3.46 as measured | investigation loops | the campaign's dates (heat plan summary); each building's check read (meter file); the draw (rules 3); plan 4.2 | 0.6 points a season (the average of the buildings' shares; only the works buildings that took no check) | stopped at the first story and dismissed own evidence: the seasons as measured read as the measure's own fade, or the levelling read as the price shock's; age and calendar named inseparable and left untested | - | Component 1 |
-| R6 | each measure's saving rate over its life on the applications received by 12 June: insulation 20.73, heating optimisation 2.33, heating controls 13.89 per cent; insulation's and controls' carried from the lottery along each building's roof per floor and share of the week empty (hotels and care homes lived in round the clock), optimisation's on its works' own saving | forecasting | plan 4.4 and 4.5; the heat plan summary (the campaign closed); the 2025 profiles, the cadastre over the register and the lottery's bands (data) | 1.2, 0.4 and 1 point (the level from the last two seasons, a fitted approach to a level, the buildings' own shares, the decliners alone, four or eight bands, a straight line, steps, a two-season baseline, an empty hour read 40 or 60 per cent of the way up the week, the lived-in hotels and care homes read off their weekends or off their load alone) | dismissed own evidence and self-confirming check: optimisation's measured seasons carried (3.54 per cent), the fade's back-test passing on seasons that all carried the campaign; the transports earned by the runs | R2 | Ask 1 |
-| R7 | each measure's grant per lifetime tonne with its 90 per cent range as a fresh draw of the pilot's owners would give it, every step repeated: insulation €85.53 (€79.67 to €94.17), heating optimisation €100.92 (€64.85 to €233.02), heating controls €98.90 (€78.04 to €158.03) | uncertainty | the draw among owners (rules 3); the committee's request (the range the estimate would have if the pilot had been drawn again); plan 4.4 | points 5 per cent (optimisation 15); upper ends 10 per cent for insulation, 15 for controls, 30 for optimisation (another draw of the owners, owners drawn within their use, owners left out one at a time, a symmetric range from the draws' spread); the low ends shown, not graded | method shortcut: buildings resampled within use and arm (controls' upper end €109.36, as the architecture 7 run's building bootstrap) and optimisation's range around the measured seasons | R6 | Ask 2, Components 2 and 3 |
-| R8 | the funded set: insulation alone | synthesis | the committee's rule; plan 4.4 | the set exact | method shortcut and dismissed own evidence: all three funded (the measured seasons carried, buildings resampled) | R6, R7 | Recommendation |
-| R9 | each measure's applications once the offer closes on 30 June and the grant they ask: insulation 198 asking €5,813,088, heating optimisation 801 asking €1,208,872, heating controls 515 asking €3,091,923 | forecasting | the 2026 terms; the 2019 answers' dates, sizes and withdrawals | 10 per cent (the same day read by the calendar or by the days since the notice, one cut: both offers went out on 20 May and closed on 30 June) | method shortcut: the applications received so far, or one share and one size for every measure | independent: the 2019 responses and the 2026 applications | Ask 3 |
-| R10 | every application received by 12 June for the funded measure, each with its grant and lifetime tonnes, and their total: insulation's 69 asking €1,553,940 for 18,168 lifetime tonnes | synthesis | plan 4.4 (every application of a funded measure funded) and 4.5; the 2026 terms (a revised application replaces the earlier one) | the list exact; each application's tonnes 5 per cent, the total 10 per cent | method shortcut carried down: funding all three, the careful pass lists all 924 applications received | R8 | Ask 4 |
-
-Carry-forward: R9 is graded on inputs of its own (the 2019 responses and the 2026 applications) and stands whatever the rates; R2 stands on the meter work alone; optimisation's rate in R6 falls with R2, insulation's and controls' stand on the transports alone; R7's points and upper ends are graded measure by measure, so controls' upper end stands or falls on the draw's unit alone and optimisation's needs both its own saving and the unit; the call R8 needs optimisation's own saving (R2, R6) and the owner-level ranges (R7), two unrelated judgments; R10 falls with R8.
-
-## Hidden factor record
-
-| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
-|---|---|---|---|---|---|
-| the state campaign's heating checks (September 2022 to March 2026) set heating curves back down; a balanced system holds it, an unbalanced one soon loses it (the state's real 2022 heating-check and balancing rules are its model) | constructed (every taker's curve reset; the hold set by each building's balancing) | no: every district, both arms of every measure and the whole stock took checks; they move insulation's and controls' arms alike and every non-pilot building; only in heating optimisation's works buildings, balanced by their works, does the check stick | investigation: the levelling against the works' own fade, each building's check date in the meter file's service reads, the works buildings before and after their own check, the price shock ruled out because it moved both arms alike | modelling: the works' own saving read off the seasons before each building's check, its settled level over the life, and the forward window without the campaign | keep: one of two judgments the call needs |
-| an owner's facility manager runs all its buildings' heating one way (controls' timers kept or overridden; how far a curve creeps) and a portfolio's buildings drift together | constructed (an owner effect on every portfolio) | no: every owner of every use and both arms; the draw itself was by owner (rules 3) | the pilot rules and the data (an owner's buildings move together) | method: the range at the owner, every step repeated | keep: one of two judgments the call needs |
-| controls' saving growing with the share of the week a building stands empty, nil where people live round the clock | constructed | no: every building has a week | modelling: the profiles at another grain | measurement and modelling | keep, earned by the runs on architectures 7 and 8 |
-| roof insulation's saving growing with the roof per floor | constructed | no: every building has a roof | modelling: the cadastre over the register | assembly and modelling | keep, earned by the runs on architectures 7 and 8 |
-| this year's owners choosing their measure on those properties, and owners checked in the campaign's last two winters asking for optimisation more often | constructed | no: every 2019 answer and 2026 application is a choice | only by measuring the properties | none beyond the transports in R6 | keep |
-| heating optimisation's own saving falling back as heating curves are turned up | constructed | no: every heating optimisation works building | the seasons before each building's check | modelling: the level it settles at | keep |
-| the 2022 price shock | constructed | no: every building, both arms alike | the arms' own seasons | none: a rival explanation the data rule out | keep, texture |
-| the first round's burner checks (August 2019 to March 2022) | constructed | no: every district, both arms alike | a read reason in the meter file | none | keep, texture |
-| late insulation answers larger and more often withdrawn | constructed | no | a query on the 2019 responses | modelling: count, size and withdrawal projected measure by measure | keep |
-| extensions and empty floors | constructed | no: across the stock | the floor area on the notices | none | keep, texture |
-
-## Effort test
-
-| Result | Quick pass | Careful but hurried | Thorough |
-|---|---|---|---|
-| R2 heating optimisation's saving as its works alone keep it | Missed | Missed | Right |
-| R6 each measure's saving rate over its life on this year's applications | Missed | Partly | Right |
-| R7 each grant per tonne and the upper end of its 90 per cent range | Missed | Partly | Right |
-| R8 the funded set | Partly | Missed | Right |
-| R9 each measure's round at close | Missed | Right | Right |
-| R10 the funded measures' applications and their lifetime tonnes | Missed | Missed | Right |
-| Roughly | 0.5 of 6 | 2 of 6 | 6 of 6 |
-
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json, computed on the cut pack by checks.py (each pass is the generator's own implementation of a named method: the quick pass each use's saving with the measured seasons and building ranges, the careful but hurried pass the lottery carried along both drivers with optimisation's measured seasons and building-level ranges)
-Largest single hint: "the state campaign's heating checks from September 2022 set heating curves back down, the pilot's balanced works buildings held it while the passed-over owners' systems did not, and the campaign has closed"; rescues 2 of 6 results (R2 and R6); the owner sentence rescues none whole
-Pair estimate: 40.5 (measured)
-Judge's first pass (stage 4, 2026-11-11, blind, before it opened the answer blocks): it rebuilt normal-weather use from the
-reads, then funded insulation and heating optimisation (one of the four funded sets the routes predict), landing R9's
-counts and insulation's rate and point inside their bands and missing R2, optimisation's and controls' rates, both
-measures' grant per tonne and upper ends, the call and the listing; insulation's upper end came out at €102.4 against a
-then 8 per cent band (€101.7), so insulation's band became 10 per cent (no route lands insulation elsewhere). Priced on
-that pass the careful column sits under the note's (about 25 against 40.5), so the pricing stands.
-
-## Frontier check
-
-Precedents: R2 lost: N15 (the architecture 7 run on this world: "Age and calendar effects cannot be separated completely. The lifetime calculation assumes the pilot's initial seasonal pattern recurs for new works."), N13 (the latest observed rate taken as the state at the decision date), L26 (a plausible shallower explanation that passes its own segment checks); R6 partly (optimisation's rate): N15, N12 (a rate learned under one condition carried to another), L28 (an estimator certified by checks that cannot see the problem); R7 partly: L19 (default intervals although the allocation register was read), L35 (an independence model where units share shocks), and the architecture 7 run's own "2,000 building-bootstrap replicates per measure"; R8 and the funded listing lost: L19 and N15, since each needs both judgments; the transports, the round at close and insulation's and controls' rates earned (the architecture 7 run carried the lottery to the applications by effect modifiers and checked its round at close five ways). Against: the architecture 5 run on another world bootstrapped by customer when the customer key sat on every row it modelled; here the owner number sits in the register and the pilot file beside each building's own response number, and the rows a saving is computed on are buildings
-Shallow path checks: R2 and R6: the fade fitted to the measured seasons fits them closely and a back-test on the last three seasons passes, because every one of those seasons carried the campaign (validation_cannot_see_condition); the price-shock story fits the calendar; the campaign reached both arms alike (checked shares within 12 points), so a run that asks whether it touched the comparison finds it balanced; the check of another kind is each works building's seasons before and after its own check, dated by the service team's reads in the meter file (a second record at another grain: the read, not the season), which shows the saving stepping up at each building's check while a passed-over building's falls back within a winter, and the price shock moving both arms alike. R7: a building-level bootstrap is stable across seeds and B and its intervals look tight; the check of another kind is the draw itself (rules 3: owners drawn, an owner's buildings together) and an owner's buildings moving together, from the register's owner numbers against the gas file
-Assumption made false: "the pilot's seasonal pattern recurs for new works" and "the campaign touched both arms alike, so the lottery comparison stands" (the first named and waved through by the architecture 7 run); false here because the pilot's late seasons carried a campaign whose checks the works buildings' balanced systems held and the 2026 works' life will not see, tested from the meter file's check reads and the heat plan summary's dates; and "buildings are independent" (the architecture 7 run's bootstrap), false because the draw and the facility management are by owner, tested from the register's owners and the pilot rules
-Forcing: the golden family (the golden and seven variants: another draw of the owners, owners drawn within their use, owners left out one at a time, and four readings of optimisation's own saving and the level it settles at) all file insulation alone; insulation's upper end €94.17 (every construction €91.86 to €94.17, a symmetric range €92.95; 21 per cent or more under €120), optimisation's €233.08 (rivals about €182 to €235, the leave-one-owner-out spread the lowest; €131.98 even with buildings drawn again), controls' €158.03 (rivals about €137 to €157, the symmetric range the lowest; 14 per cent or more over); the shortcuts land across the line: the measured seasons put optimisation's upper end at €106.68 with owners and €74.90 with buildings drawn again, buildings drawn again put controls' at €109.36, each 6 per cent or more under; the reflected range (controls €119.75) is ruled out by the committee's definition, not by distance; perturbations: optimisation's settled level and controls' and insulation's saving rates each moved 20 per cent either way leave the call (insulation's upper end €117.71 at minus 20 per cent, controls' €131.69 at plus 20)
-Noun swap: nearest on file html:nursing-home-citations and html:county-pairs-network (act only if the interval clears, the interval at the shared unit): swapped in, the interval at the owner carries across and decides controls here, but the deciding lesson (a measured persistence held up by a closed campaign, separated by each unit's own check date) and the decision's other two measures do not; nearest in this slot, v8 (the transports and a capacity replay) and v6 (visits in the comparison arm only, one exclusion): the transports carry across as earned steps, the capacity and the comparison-only visits do not
-
-## Data provenance
-
-Source: generated by task7/generator (world.py simulates the utility's commercial customers, their owners and portfolios, each building's week, storeys, electricity and heating curve, the weather station, the benchmarking notices, the 2019 lottery drawn by owner, the service team's two rounds of checks and the 2026 offer; pack.py writes each system's export; docs.py the council's, the state's and the utility's documents)
-Behaves like the real thing: buildings carry their own level and envelope, a slow drift (shared within a portfolio) and season noise, weather through degree days on the type's hot-water share, the pandemic winters and the 2022 price shock by use, extensions and empty floors, a heating curve that sits above need and creeps back after any reset, faster where the system was never balanced, burner checks, a week of their own whose electricity follows it, roofs set by storeys and pitch, quotes priced on the roof or the floor and answer dates driven by job size; owners answer for all their buildings with one measure and their facility managers run them alike
-Genuine patterns: (1) degree-day weather response with use-specific hot-water shares (2) a slow drift, shared within a portfolio, and season noise (3) the pandemic winters and the price shock, different by use (4) each measure's saving varying building by building along its driver and by owner (5) a heating curve's creep back after a reset, held by balancing (6) electricity load following each building's week, shaped through the day (7) answer timing and quote size scaling with the job (8) checks rolled out district by district in two rounds
-Problems by process: periodic reads taken days off 30 April, meter exchanges, counter rollovers, estimates later corrected, customer typos, re-imported rows, meters counting tens of cubic metres, the 2017 gas-quality change in one network area, second meter points, connections and disconnections, revised applications sent twice, a contractor typed without its legal form, second market locations per customer, a meter exchanged mid-2025, roof faces per address with outbuildings and an abbreviated street spelling
-Breadth: 24,000 buildings in about 13,900 owners and 25,900 gas meter points over thirteen seasons, about 400,000 reads, the 2025 typical weeks of 25,500 market locations, 46,900 roof faces, 37,000 notices, 3,057 pilot answers across six uses and three measures, 924 applications; choosing which comparison, which seasons, which buildings, which property and which unit carries each result is the work
-
-## Template check
-
-Chain signature: investigation loops, forecasting, uncertainty, synthesis, forecasting, synthesis
-Question form: which (the measures that clear the committee's rule), with the round at close and the funded measure's applications beside it
-Precut's nearest chains (WARN, task17 and task2): both cut a distribution too, but both are descriptive, their weight
-  sits on modeling and on a hard-to-measure quantity and their chains open on assembly; this one is causal, its weight
-  is investigation, its chain opens on it, and its cut is a committee's rule at the upper end of a design-based range
-Nearest build: task7 v8 (the same world, the call on capacity); task15 (a field trial with a concurrent change in the comparison and a transport); the client's nursing-home-citations and county-pairs-network (the interval at the shared unit); no build on file reads a randomised effect's persistence net of a later programme that the treated units' physics held
-
-## Semantic fork table
-
-| ID | Term or convention | Readings | Golden | Ruled out by |
-|---|---|---|---|---|
-| SF1 | "saving" in a season | the share of the gas the works buildings would have used (aggregate); the average building's share | aggregate (the average of shares lands inside R2's band) | plan 4.2 |
-| SF2 | heating optimisation's saving over its life | against the gas the building would burn without the works over the life (the campaign closed); against the seasons as measured | without the works, campaign closed | plan 4.4 and the heat plan summary (the campaign closed at the end of March 2026) |
-| SF3 | a round's saving rate | the applications' lifetime tonnes over the tonnes their reference consumption carries over the same life; the average of the applications' rates | the ratio | plan 4.4 |
-| SF4 | the 90 per cent range's unit | owners drawn again within each measure's drawn and passed-over owners, every step repeated; buildings drawn again | owners | the committee's request (the range the estimate would have if the pilot had been drawn again) and rules 3 (the draw among owners, an owner's buildings together) |
-| SF5 | the range's construction | the 5th and 95th percentiles of the estimate over fresh draws; a symmetric range from the draws' spread or a leave-one-owner-out spread; the reflected range | the percentiles (the symmetric constructions land inside every upper-end band, same call) | the reflected range by the committee's request: it is not the range the estimate itself would have over fresh draws |
-| SF6 | a draw whose works save nothing | no tonnes bought, over the limit; a negative grant per tonne | no tonnes | plan 4.4 (grant per tonne of CO2 saved); one draw in 1,000 |
-| SF7 | the committee's rule | funded where the range's upper end is within €120; where the point is | the upper end | the committee's request |
-| SF8 | the applications the test and the listing are taken on | received by 12 June; projected to 30 June | received by 12 June | the committee's request; the prompt ("the applications received so far") |
-| SF9 | the round at close | every application the round will have once the offer closes on 30 June, a revised application replacing the earlier one; the applications received so far | at close | the 2026 terms; the prompt ("once the offer closes") |
-
-## Closure table
-
-| # | Axis | Reading | Move |
-|---|---|---|---|
-| 1 | Population | the pilot's works buildings and passed-over owners by measure; the applications received by 12 June for the test and the listing; the round's applications to 30 June for the round at close | filed: rules 3, terms 1 to 3, the committee's request, the prompt |
-| 2 | Unit of account | the building for a saving and an application; the owner for the draw | filed: plan 4.4, terms 2, rules 3 |
-| 3 | Attribution window | the season, 1 May to 30 April; the week of 2025 for the electricity | filed: plan 4.3 |
-| 4 | As-of dating | the applications received by 12 June; the campaign's dates | the request; the heat plan summary |
-| 5 | Version basis | a revised application replaces the earlier one | filed: terms 2 |
-| 6 | Denominator | the gas the works buildings would have used; the tonnes the reference consumption carries | filed: plan 4.2 and 4.4 |
-| 7 | Weighting | the gas | filed: plan 4.2 and 4.4 |
-| 8 | Window length | seven seasons observed, the service lives filed | filed: plan 4.4 |
-| 9 | Boundary inclusivity | €120 or less at the upper end funds | filed: the committee's request |
-| 10 | Rounding path | none in the prompt; figures at their natural precision | the answer blocks |
-| 11 | Tie-break | none needed | - |
-| 12 | Maturity and censoring | the round open to 30 June; seasons after the seventh unobserved | the prompt; plan 4.4 |
-| 13 | Order of operations | normalise, compare, carry, weight; the range around the whole chain | plan; the committee's request |
-| 14 | Row order | application order | - |
-| 15 | Duplicate resolution | re-imported reads once; a revised application replaces the earlier | terms 2 |
-| 16 | Identity normalisation | meter points to buildings; market locations to buildings; roof faces to buildings by address; owners by the register's owner number | the files' keys |
-| 17 | Netting against gross | none | - |
-| 18 | Dimensional units | cubic metres to kWh by z-number and calorific value | method 2 |
-| 19 | Code and status semantics | read reasons (a check read in either round); drawn, withdrawn and completed | the files' own columns |
-| 20 | Integerisation | applications at close whole, as an estimate | - |
-| 21 | Clause scope | plan 4.4 for each measure in the round, every application of a funded measure funded | filed |
-| 22 | Forward window contents | the 2026 works' life without the campaign (closed March 2026); the applications still to come | the heat plan summary; the 2019 responses |
-
-## Literal reader
-
-Executed word for word, plan 4.2 and 4.3 with the pilot rules give each season's saving against the passed-over owners;
-plan 4.4 asks for each application's saving in the building applied for over the measure's life against what the
-building would burn without the works, which the heat plan summary's closed campaign sets without further checks (R2,
-R6), and defines a round's saving rate and grant per tonne (R6, R7); the committee's request funds a measure only where
-the upper end of its 90 per cent range, the range the estimate would have if the pilot had been drawn again, is within
-€120, and rules 3 says the draw was among owners (R7, R8); plan 4.4 funds every application of a funded measure (R10);
-the 2026 terms and the 2019 responses bound the round at close (R9). No sentence names the campaign's effect on a
-measure, a balanced system, a facility manager, a resampling unit, a persistence model or a comparison.
-
-## Prompt contract
-
-May not drop or change: the question (which of the pilot's measures the 2026 round can fund, under €120 of grant per lifetime tonne of CO2 and the committee's rule of judging each at the top of its 90 per cent range); that the figures are estimates because the works go on saving long past the seasons the pilot has seen; a one-page PDF note with the answer and a workbook behind it; for each measure its saving rate over its life on the applications received so far, their grant per lifetime tonne with its 90 per cent range, and how many applications it will have once the offer closes with the grant they ask; every application received so far for the measures funded, with its grant and lifetime tonnes, and their lifetime tonnes in all. Must never add: a method (a comparison, a fade, a campaign, a check, a balanced system, an owner or facility manager, a resampling unit, a driver, a load profile, a roof, a projection), a warning, an attached file's name, a role, a rounding instruction or a count the data hold.
-
-## Leak rulings
-
-leak.py on the cut pack (as of 24 June 2026): REVIEW, every line a stump-vocabulary match, ruled here and kept out of the
-reader's brief; the as-of, answer-figure, announcement, ranking, hidden-content, column-name and prompt sweeps clean.
-- `benchmarking_method_2022.pdf` (building, season, spread): the utility's normalisation method in its own words; it
-  names no comparison, no campaign and no range. Harmless.
-- `climate_action_plan_2023_extract.pdf` (the measures' names, heating, buildings): the plan files WHAT a saving, a
-  round's saving rate, lifetime tonnes and grant per tonne are, and the limit; it says nothing of how the pilot's
-  saving is estimated, carried or ranged. Harmless.
-- `federal_funding_overview_2025.pdf` (the measures' names, funded): the regional agency's sheet on federal grants, a
-  distractor that never mentions the pilot, a check, balancing or an owner's buildings. Harmless.
-- `grant_offer_2026_terms.pdf` (the measures' names): the offer's terms (eligibility, the close, a revised application
-  replacing the earlier one), WHAT only. Harmless.
-- `municipal_heat_plan_2026_summary.pdf` (campaign, checks, owners): the paragraph "Measures already under way" dates
-  the burner checks and the campaign's heating checks and says the campaign closed; it does not say what a check does
-  to a heating curve, that a balanced system holds it, or that it touches the pilot. The reader's question 1 and 6
-  answers on it are the test. Harmless as written.
-- `pilot_2019_rules.pdf` (the measures' names, buildings): rule 3 files the draw by lot among owners, the design (WHAT
-  the comparison is); it does not say how a range is built. Harmless.
-
-The isolated reader (stage 4, 2026-11-11; its answers and the rulings in leak_check_report.md): questions 2 to 4
-none; question 1 quotes the plan's WHAT definitions and the committee's range estimand ("the range your estimate would
-have if the pilot had been drawn again"), kept because it pins what the range is and names no unit or method; question 5's
-literal readings (plan 4.4 and 4.5, terms 3, method 1) are the golden's; question 6 names the lottery as the closest
-single fact and says it settles about two results, lists the owner unit, the notices' survivorship, the round at close
-and the revised applications as separate catches, and never names the campaign. The Office files' 1980 entry stamps are
-what the applications write. Nothing to fix.
+@@DESIGN@@
 
 ## Tried and rejected
-
 - The note's decisive rung, per feeder the smaller of expected buyers and hosting slots: a stated connection standard, a per-feeder hosting map and a neighbourhood-to-feeder join whose keys line up hand it to any solver who reads them, its driver sits nearest task106's, and as labelled it BLOCKs on ban.pattern C (task119), ban.calibration pilot_log (task122) and test.same_driver_older (a signature spent in nine builds); kept as rung 2.
 - Resistance-to-heat-pump netting (each resistance conversion frees feeder headroom for oil or propane conversions): the connection standard either states a per-heat-pump assessment, which contradicts the netting and is a counter-pin, or states a net-change rule, which hands it over; a corpus of past approvals would refute the stop rung, which L1 forbids.
 - Heat pumps per home (large ducted homes taking two outdoor units, so two feeder draws per slot): visible at heat-pump grain in any connection or rebate record, and found by any solver who counts rebates per buyer; moves only the saturated feeders, too little to change a leader.
@@ -566,3 +374,10 @@ what the applications write. Nothing to fix.
 - 2026-11-11, stage 4: the judge read the feeder, hosting and heat-pump lines at the head of this section as another
   build's; they are this slot's own earlier draws (the co-op heat-pump architectures retired in October), kept under
   the append-only rule.
+- 2026-11-12, architecture 9 at the platform: the run landed the call (insulation alone) and both deciding judgments by
+  reflex: it clustered its bootstrap at the owner because the pilot rules filed the draw by owner, and separated the
+  check campaign from the measure's ageing because the heat plan filed it (task7/runs/arch9/run1.md). It lost only
+  insulation's transport (it set the solar cadastre aside as unrelated) and second-decimal figures. A judgment whose
+  trigger a document files is executed; the world is spent, and architecture 10 moves to another world, dataset and
+  shell.
+
