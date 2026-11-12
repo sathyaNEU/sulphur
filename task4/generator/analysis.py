@@ -1,767 +1,1079 @@
-"""Every owed figure computed from the shipped files (frames read from target/, or the same frames built in memory for
-calibration): the golden route, the careful but hurried route and the quick route, and the rivals each result's band
-is measured on."""
+"""Everything owed, computed from the shipped files alone (target/): the cleaned records, each part's removals on the
+exposure that drives them, the 2027 exposures from the programme, the propeller control's conversion, the Bodø
+shop's turnaround at the 2027 load, the pool's fill rate by spares held, the 80 per cent ranges, and the watch list
+read serial by serial. The hurried and quick routes the effort test scores live beside the golden, each a complete
+pipeline, so every pass is run end to end on the same pack."""
 import datetime as dt
 import math
+import os
+import re
 
 import numpy as np
 import pandas as pd
 
-import cal
 import params as P
 
-CL = list(P.CLASSES)
-Z_SMALL = ["P1", "P2"]
-LS_KEYS_DAY = list(range(6, 15))
-LS_KEYS_EVE = list(range(14, 23))
+PARTS = [p["k"] for p in P.PARTS]
+BY_PN = {p["pn"]: p["k"] for p in P.PARTS}
+ICAO_BASE = {"ENBO": "BOO", "ENTC": "TOS", "ENBR": "BGO", "ENVA": "TRD"}
+Y26 = (pd.Timestamp("2025-11-01"), pd.Timestamp("2026-10-31"))     # the report's twelve months
+HIST = (pd.Timestamp("2023-01-01"), pd.Timestamp("2026-11-30"))
 
 
-# ----------------------------------------------------------------------------------------------------- assembly
-def aisles_on(zone, dates):
-    """The standard's zone table: the small-parts zones' aisles before and after the January 2024 extension."""
-    new = pd.Series(dates).ge(pd.Timestamp(P.EXTENSION)).to_numpy()
-    return np.where(new, P.AISLES[zone], P.AISLES_OLD[zone])
-
-
-def zone_hours(f):
-    z = f["zone_hours"].drop_duplicates().copy()
-    z["date"] = pd.to_datetime(z["date"])
-    iso = z["date"].dt.isocalendar()
-    z["iy"], z["iw"] = iso["year"].astype(int), iso["week"].astype(int)
-    z["ais"] = 0
-    for zz in P.ZONES:
-        m = z["zone"] == zz
-        z.loc[m, "ais"] = aisles_on(zz, z.loc[m, "date"])
-    z["dpa"] = z["pickers_logged"] / z["ais"]
-    z["extra"] = z["units"] - z["lines"]
-    z["kot"] = z["lines"] - z["lines_hui"]
-    return z
-
-
-def timesheet(f):
-    t = f["timesheets"].copy()
-    t["date"] = pd.to_datetime(t["date"])
-    t = t.drop_duplicates(subset=["date", "person", "zone", "shift", "paid", "absence"])
-    iso = t["date"].dt.isocalendar()
-    t["iy"], t["iw"] = iso["year"].astype(int), iso["week"].astype(int)
-    return t
-
-
-def budgets(f):
-    b = f["forecasts"]
-    b = b[b["round"].str.startswith("budget")].copy()
-    b["issued"] = pd.to_datetime(b["issued"])
-    b = b.sort_values("issued").groupby(["round", "brand", "group", "iso_year", "iso_week"], as_index=False).tail(1)
-    return b
-
-
-# ----------------------------------------------------------------------------------------------------- R1
-def r1_paid_hours(t, year=2025):
-    w = t[(t["iy"] == year) & t["iw"].isin(P.PEAK_WEEKS) & (t["absence"] == "")]
-    return w.groupby("zone")["paid"].sum().round(0).to_dict()
-
-
-def logged_pattern(z, t, years=(2024, 2025)):
-    """Minutes of each paid hour a picker is logged in to the zone, by hour of the day shift and of the evening
-    shift, read from peak days: the WMS's pickers logged against the day's crew on the timesheets."""
-    w = t[(t["absence"] == "") & t["iy"].isin(years) & t["iw"].isin(P.PEAK_WEEKS)]
-    crew = w.groupby(["date", "zone", "shift"]).size().unstack("shift", fill_value=0).reset_index()
-    if "EVE" not in crew:
-        crew["EVE"] = 0
-    zz = z[z["iy"].isin(years) & z["iw"].isin(P.PEAK_WEEKS) & z["zone"].isin(Z_SMALL)]
-    m = zz.merge(crew, on=["date", "zone"])
-    day = {}
-    for h in LS_KEYS_DAY:
-        r = m[(m["hour"] == h) & (m["EVE"] == 0)]
-        day[h] = float(r["pickers_logged"].sum() / r["DAY"].sum()) if len(r) else 0.0
-    eve = {}
-    me = m[m["EVE"] > 0]
-    for h in LS_KEYS_EVE:
-        r = me[me["hour"] == h]
-        if h == 14:
-            eve[h] = float((r["pickers_logged"].sum() - day[14] * r["DAY"].sum()) / r["EVE"].sum())
-        else:
-            eve[h] = float(r["pickers_logged"].sum() / r["EVE"].sum()) if len(r) else 0.0
-    return day, eve
-
-
-# ----------------------------------------------------------------------------------------------------- R2
-def picked_by_week(z):
-    k = z.groupby(["iy", "iw", "zone"])[["kot", "lines_hui"]].sum().reset_index()
-    return k
-
-
-def placed_by_week(f):
-    """Kotikaari's order lines by the ISO week they were placed (the WMS's order import: web and showroom lines),
-    the quantity the budgets forecast."""
-    k = f["k_orders"].copy()
-    d = pd.to_datetime(k["received"])
-    iso = d.dt.isocalendar()
-    k["iy"], k["iw"] = iso["year"].astype(int), iso["week"].astype(int)
-    k["lines"] = k["web_lines"] + k["store_lines"]
-    return k.groupby(["iy", "iw", "group"])["lines"].sum().reset_index()
-
-
-def r2_overstatement(z, f, years=range(2022, 2026), basis="placed"):
-    b = budgets(f)
-    b = b[(b["brand"] == P.BRAND_K) & b["iso_year"].isin(list(years)) & b["iso_week"].isin(P.PEAK_WEEKS)]
-    if basis == "picked":
-        k = picked_by_week(z)
-        k = k[k["iy"].isin(list(years)) & k["iw"].isin(P.PEAK_WEEKS)]
-        return float(b["order_lines"].sum() / k["kot"].sum() - 1.0)
-    k = placed_by_week(f)
-    k = k[k["iy"].isin(list(years)) & k["iw"].isin(P.PEAK_WEEKS)]
-    return float(b["order_lines"].sum() / k["lines"].sum() - 1.0)
-
-
-def overstatement_by_year(z, f, years=range(2022, 2026), weeks=None):
-    b = budgets(f)
-    b = b[b["brand"] == P.BRAND_K]
-    k = placed_by_week(f)
-    out = []
-    for y in years:
-        for grp in ("small parts", "bulky"):
-            fb = b[(b["iso_year"] == y) & (b["group"] == grp)]
-            kk = k[(k["iy"] == y) & (k["group"] == grp)]
-            if weeks is not None:
-                fb = fb[fb["iso_week"].isin(weeks)]
-                kk = kk[kk["iw"].isin(weeks)]
-            out.append({"year": y, "group": grp, "forecast": fb["order_lines"].sum(), "placed": kk["lines"].sum()})
-    o = pd.DataFrame(out)
-    o["over"] = o["forecast"] / o["placed"] - 1.0
-    return o
-
-
-def plan_growth(f):
-    """The commercial plan's growth each budget states (the note on its first row)."""
-    b = f["forecasts"]
-    out = {}
-    for _, r in b[b["note"].fillna("") != ""].iterrows():
-        txt = r["note"]
-        if not txt.startswith("Budget"):
-            continue
-        y = int(txt.split()[1].rstrip(":"))
-        brand = r["brand"]
-        nums = [float(x.replace(",", ".")) for x in __import__("re").findall(r"\+(\d+(?:[.,]\d+)?) ?%", txt)]
-        out[(brand, y)] = (nums[0] / 100.0, nums[1] / 100.0)
-    return out
-
-
-# ----------------------------------------------------------------------------------------------------- R5
-def calibration(z, f, form="loglog", weeks=None, intercept=True):
-    o = overstatement_by_year(z, f, weeks=weeks)
-    g = plan_growth(f)
-    o["plan"] = [g[(P.BRAND_K, y)][0 if grp == "small parts" else 1] for y, grp in zip(o["year"], o["group"])]
-    x = np.log1p(o["plan"].to_numpy()) if form == "loglog" else o["plan"].to_numpy()
-    yv = np.log1p(o["over"].to_numpy()) if form == "loglog" else o["over"].to_numpy()
-    if intercept:
-        A = np.c_[np.ones_like(x), x]
-    else:
-        A = x[:, None]
-    coef, *_ = np.linalg.lstsq(A, yv, rcond=None)
-    res = yv - A @ coef
-
-    def pred(plan):
-        xx = math.log1p(plan) if form == "loglog" else plan
-        v = (coef[0] + coef[1] * xx) if intercept else coef[0] * xx
-        return math.expm1(v) if form == "loglog" else v
-
-    sd = float(np.sqrt((res ** 2).sum() / max(1, len(res) - A.shape[1])))
-    return {"coef": coef.tolist(), "pred": pred, "sd": sd, "table": o}
-
-
-# ----------------------------------------------------------------------------------------------------- R3 and R4
-def design(zz, with_density=True, knot=0.8, power=2.0):
-    n = zz["lines"].to_numpy(float)
-    X = [zz["lines_cls_%s" % c.lower()].to_numpy(float) for c in CL]
-    X.append(zz["extra"].to_numpy(float))
-    X.append(np.where(zz["zone"] == "P1", n, 0.0))
-    X.append(zz["lines_hui"].to_numpy(float))
-    names = ["A", "B", "C", "D", "F", "unit", "P1", "HUI"]
-    if with_density:
-        X.append(n * np.maximum(0.0, zz["dpa"].to_numpy() - knot) ** power)
-        names.append("gamma")
-    return np.column_stack(X), names
-
-
-def fit_time(z, years=None, with_density=True, knot=None, power=None, min_lines=30, grid=True):
-    """Task minutes of each small-parts zone-hour on its lines by handling class, the extra units, the zone, the
-    pilot's Huippu lines and the aisle congestion gamma * max(0, d - knot) ** power at d pickers logged an aisle,
-    by least squares on per-line times weighted by lines; knot and power by grid on the residual sum of squares."""
-    zz = z[z["zone"].isin(Z_SMALL) & (z["lines"] >= min_lines)]
-    if years is not None:
-        zz = zz[zz["iy"].isin(list(years))]
-    y = zz["task_min"].to_numpy(float)
-    n = zz["lines"].to_numpy(float)
-    w = 1.0 / n
-
-    def one(k, p):
-        X, names = design(zz, with_density, k, p)
-        sw = np.sqrt(w)
-        coef, *_ = np.linalg.lstsq(X * sw[:, None], y * sw, rcond=None)
-        r = (y - X @ coef) * sw
-        return float(r @ r), dict(zip(names, coef))
-
-    if not with_density:
-        s, c = one(0.0, 1.0)
-        return {"coef": c, "knot": None, "power": None, "sse": s, "n": len(zz)}
-    if knot is not None and power is not None and not grid:
-        s, c = one(knot, power)
-        return {"coef": c, "knot": knot, "power": power, "sse": s, "n": len(zz)}
-    best = None
-    for k in np.arange(0.40, 1.41, 0.05):
-        for p in np.arange(1.0, 3.01, 0.1):
-            s, c = one(float(k), float(p))
-            if best is None or s < best[0]:
-                best = (s, c, float(k), float(p))
-    return {"coef": best[1], "knot": round(best[2], 2), "power": round(best[3], 1), "sse": best[0], "n": len(zz)}
-
-
-def cong(fit, d):
-    if fit.get("knot") is None:
-        return 0.0
-    return float(fit["coef"]["gamma"] * max(0.0, d - fit["knot"]) ** fit["power"])
-
-
-def t_line(fit, shares, upl, p1, hui):
-    c = fit["coef"]
-    return float(sum(shares[k] * c[k] for k in CL) + c["unit"] * (upl - 1.0) + c["P1"] * p1 + c["HUI"] * hui)
-
-
-def kot_mix(z, zone, year=2025):
-    """Kotikaari's lines in a zone over the peak weeks of a year: class shares and units a line."""
-    r = z[(z["zone"] == zone) & (z["iy"] == year) & z["iw"].isin(P.PEAK_WEEKS)]
-    c = np.array([r["lines_cls_%s" % k.lower()].sum() for k in CL], float)
-    c[0] -= r["lines_hui"].sum()
-    upl = (r["units"].sum() - r["lines_hui"].sum() * 1.0) / max(1.0, r["kot"].sum())
-    return dict(zip(CL, c / c.sum())), float(upl)
-
-
-def hui_mix(f, months=("2025-11", "2025-12")):
-    """Huippu Sport's small-parts lines in the peak months by their 2027 zone: class shares, units a line, share."""
-    a = f["h_monthly"]
-    a = a[a["month"].isin(list(months))]
-    im = f["item_master"]
-    im = im[im["owner"] == "HUI"][["owner_article", "handling_class"]]
-    sl = f["slotting"][["owner_article", "zone"]]
-    m = a.merge(im, left_on="article_no", right_on="owner_article").merge(sl, on="owner_article")
-    out = {}
-    tot = m[m["zone"].isin(Z_SMALL)]["order_lines"].sum()
-    for zz in P.ZONES:
-        r = m[m["zone"] == zz]
-        c = r.groupby("handling_class")["order_lines"].sum().reindex(CL, fill_value=0).to_numpy(float)
-        out[zz] = {"shares": dict(zip(CL, c / c.sum())), "upl": float(r["units"].sum() / r["order_lines"].sum()),
-                   "share": float(r["order_lines"].sum() / tot) if zz in Z_SMALL else 1.0}
-    return out
-
-
-def r4_extra_minutes(fit, z, f, months=("2025-11", "2025-12"), year=2025):
-    hm = hui_mix(f, months)
-    th = sum(hm[zz]["share"] * t_line(fit, hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0)
-             for zz in Z_SMALL)
-    kz = picked_by_week(z)
-    kz = kz[(kz["iy"] == year) & kz["iw"].isin(P.PEAK_WEEKS)]
-    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
-    tk = 0.0
-    for zz, sh in (("P1", kp1), ("P2", 1.0 - kp1)):
-        s, u = kot_mix(z, zz, year)
-        tk += sh * t_line(fit, s, u, 1.0 if zz == "P1" else 0.0, 0.0)
-    return float(th - tk), th, tk
-
-
-# ----------------------------------------------------------------------------------------------------- R6
-def kot_daily_picks(z, zones):
-    d = z[z["zone"].isin(zones)].groupby("date")["kot"].sum()
-    d.index = pd.to_datetime(d.index)
-    return d
-
-
-def week_days(y, w):
-    return [dt.date.fromisocalendar(y, w, k) for k in range(1, 8)]
-
-
-def rekeyed_weeks(daily, shift_days=728, src_year=2025, target_year=2027, how="weekday"):
-    """Lines a working-day series puts into each target-year peak week once the source year's days are moved onto
-    the target year's: by the same weekday two years on (728 days, Black Friday onto Black Friday), or by date.
-    A source day's lines landing on a closed target day go to the next working day of the same week."""
-    out = {}
-    s = daily.to_dict()
-    for w in P.PEAK_WEEKS:
-        tot = 0.0
-        for d in week_days(target_year, w):
-            if how == "weekday":
-                src = d - dt.timedelta(days=shift_days)
-            else:
-                src = dt.date(src_year, d.month, d.day)
-            tot += float(s.get(pd.Timestamp(src), 0.0))
-        out[w] = tot
-    return out
-
-
-def copied_weeks(daily, src_year=2025):
-    out = {}
-    s = daily.to_dict()
-    for w in P.PEAK_WEEKS:
-        out[w] = sum(float(s.get(pd.Timestamp(d), 0.0)) for d in week_days(src_year, w))
-    return out
-
-
-def huippu_daily_series(f, grp="small parts"):
-    h = f["h_daily"]
-    h = h[h["group"] == grp].copy()
-    s = pd.Series(h["order_lines"].to_numpy(float), index=pd.to_datetime(h["order_date"]))
-    return s
-
-
-def to_pickdays(s):
-    """Orders onto pick days by the site's release (before noon the same working day, the rest the next)."""
-    out = {}
-    for d, v in s.items():
-        dd = d.date()
-        same = cal.next_working(dd)
-        nxt = cal.next_working(dd + dt.timedelta(days=1))
-        out[same] = out.get(same, 0.0) + 0.38 * v
-        out[nxt] = out.get(nxt, 0.0) + 0.62 * v
-    return pd.Series(out).sort_index().rename(lambda x: pd.Timestamp(x))
-
-
-def budget_totals(f, brand, grp, year):
-    b = budgets(f)
-    b = b[(b["brand"] == brand) & (b["group"] == grp) & (b["iso_year"] == year)]
-    return b.set_index("iso_week")["order_lines"].to_dict()
-
-
-# ----------------------------------------------------------------------------------------------------- the plan
-def capacity(zone, n, t, fit, ls, days):
-    return days * sum(n * 60.0 * v / (t + cong(fit, n * v / P.AISLES[zone])) for v in ls.values())
-
-
-def crew(zone, lines, t, fit, ls, days, top):
-    if lines <= 0:
-        return 0.0
-    lo, hi = 0.0, float(top)
-    for _ in range(60):
-        n = (lo + hi) / 2
-        lo, hi = (n, hi) if capacity(zone, n, t, fit, ls, days) < lines else (lo, n)
-    return hi
-
-
-def week_plan(zone, lines, t, fit, ls_day, ls_eve, days, evenings, limit=None):
-    """The standard's rule: the day shifts at the zone's limit pick what they can; if lines remain, the evening shift
-    of every working weekday picks them; paid hours are the crews times eight paid hours."""
-    lim = limit or P.LIMIT[zone]
-    cap = capacity(zone, lim, t, fit, ls_day, days)
-    if lines > cap:
-        ne = crew(zone, lines - cap, t, fit, ls_eve, evenings, lim)
-        return {"evening": True, "cap": cap, "hours": (lim * days + ne * evenings) * P.SHIFT_PAID, "n_day": lim,
-                "n_eve": ne, "ratio": lines / cap}
-    nd = crew(zone, lines, t, fit, ls_day, days, lim)
-    return {"evening": False, "cap": cap, "hours": nd * days * P.SHIFT_PAID, "n_day": nd, "n_eve": 0.0,
-            "ratio": lines / cap}
-
-
-def days_2027(w):
-    ds = week_days(2027, w)
-    wd = [d for d in ds if cal.working(d)]
-    return len(wd), len([d for d in wd if d.weekday() < 5])
-
-
-def own_hours(f, t, week):
-    """The standard 4.1: own pickers on the day shift of every working weekday in their home zone, less the zone's
-    sickness absence in the same weeks of the last peak (2025)."""
-    ro = f["roster"]
-    a, b = dt.date.fromisocalendar(2027, week, 1), dt.date.fromisocalendar(2027, week, 7)
-    wk = [d for d in week_days(2027, week) if cal.working(d) and d.weekday() < 5]
-    out = {}
-    for zz in P.ZONES:
-        r = ro[ro["home_zone"] == zz]
-        n = 0
-        for _, x in r.iterrows():
-            st = pd.Timestamp(x["employment_start"]).date()
-            en = pd.Timestamp(x["leave_until"]).date() if isinstance(x.get("leave_until"), str) and x["leave_until"] else None
-            on = sum(1 for d in wk if d >= st and not (en and d <= en))
-            n += on
-        sick = sickness(t, zz)
-        out[zz] = n * P.SHIFT_PAID * (1.0 - sick)
-    return out
-
-
-def sickness(t, zone, year=2025):
-    w = t[(t["iy"] == year) & t["iw"].isin(P.PEAK_WEEKS) & (t["zone"] == zone) & (t["employer"] == P.ORG)
-          & (t["date"].dt.weekday < 5)]
-    s = (w["absence"] == "SICK").sum()
-    worked = (w["absence"] == "").sum()
-    return float(s / (s + worked))
-
-
-# ----------------------------------------------------------------------------------------------------- the routes
-def plans_2027(f):
-    g = plan_growth(f)
-    return g[(P.BRAND_K, 2027)], g[(P.BRAND_H, 2027)]
-
-
-def b1_rate(z, year=2025):
-    r = z[(z["zone"] == "B1") & (z["iy"] == year) & z["iw"].isin(P.PEAK_WEEKS) & (z["lines"] > 0)]
-    X = np.c_[r["lines"].to_numpy(float), r["extra"].to_numpy(float)]
-    coef, *_ = np.linalg.lstsq(X, r["task_min"].to_numpy(float), rcond=None)
-    return float(coef[0]), float(coef[1])
-
-
-def to_pickdays(s):
-    """Web orders onto the day the WMS releases them: 06:00 on the next working day of the 2027 calendar."""
-    out = {}
-    for d, v in s.items():
-        p = cal.next_working(d.date() + dt.timedelta(days=1))
-        out[p] = out.get(p, 0.0) + v
-    return out
-
-
-def order_series(f, brand, grp):
-    if brand == P.BRAND_K:
-        k = f["k_orders"]
-        k = k[k["group"] == grp]
-        return pd.Series(k["web_lines"].to_numpy(float), index=pd.to_datetime(k["received"])), \
-            pd.Series(k["store_lines"].to_numpy(float), index=pd.to_datetime(k["received"]))
-    h = f["h_daily"]
-    h = h[h["group"] == grp]
-    return pd.Series(h["order_lines"].to_numpy(float), index=pd.to_datetime(h["order_date"])), None
-
-
-def volumes(z, f, over_k, over_h, how="weekday", shift=728, src=2025):
-    """Each 2027 peak week's lines by brand and group: the source year's orders moved onto 2027's days (the same
-    weekday two years on, which puts Black Friday on Black Friday), released by 2027's calendar, grown by the growth
-    the 2027 budget carries over the source year and divided by the overstatement it is expected to carry."""
-    out = {}
-    for brand, grp in ((P.BRAND_K, "small parts"), (P.BRAND_K, "bulky"), (P.BRAND_H, "small parts"),
-                       (P.BRAND_H, "bulky")):
-        bud = budget_totals(f, brand, grp, 2027)
-        web, store = order_series(f, brand, grp)
-        iso = web.index.isocalendar()
-        base = float(web[(iso["year"] == src).to_numpy()].sum())
-        if store is not None:
-            base += float(store[(store.index.isocalendar()["year"] == src).to_numpy()].sum())
-        growth = sum(bud.values()) / base
-        ov = (over_k if brand == P.BRAND_K else over_h)[0 if grp == "small parts" else 1]
-        if how == "copy":
-            out[(brand, grp)] = {w: bud[w] / (1.0 + ov) for w in P.PEAK_WEEKS}
-            continue
-        moved = {}
-        for d, v in web.items():
-            if d.year < src - 1 or d.year > src + 1:
-                continue
-            nd = d + pd.Timedelta(days=shift) if how == "weekday" else pd.Timestamp(d.year + 2, d.month, d.day) \
-                if not (d.month == 2 and d.day == 29) else None
-            if nd is None:
-                continue
-            moved[nd] = moved.get(nd, 0.0) + v
-        picks = to_pickdays(pd.Series(moved))
-        if store is not None:
-            for d, v in store.items():
-                if d.year != src:
-                    continue
-                nd = (d + pd.Timedelta(days=shift)).date() if how == "weekday" else dt.date(d.year + 2, d.month, d.day)
-                if cal.working(nd) and nd.weekday() < 5:
-                    picks[nd] = picks.get(nd, 0.0) + v
-                elif v:
-                    q = cal.next_working(nd)
-                    while q.weekday() >= 5:
-                        q = cal.next_working(q + dt.timedelta(days=1))
-                    picks[q] = picks.get(q, 0.0) + v
-        wk = {}
-        for p_, v in picks.items():
-            if cal.isoyear(p_) == 2027 and cal.isoweek(p_) in P.PEAK_WEEKS:
-                wk[cal.isoweek(p_)] = wk.get(cal.isoweek(p_), 0.0) + v
-        out[(brand, grp)] = {w: wk.get(w, 0.0) * growth / (1.0 + ov) for w in P.PEAK_WEEKS}
-    return out
-
-
-def golden(f, opts=None):
-    o = {"how": "weekday", "fit_years": None, "months": ("2025-11", "2025-12"), "form": "loglog", "cal_weeks": None,
-         "intercept": True, "ls": "measured", "src": 2025, "shift": 728}
-    o.update(opts or {})
-    z = zone_hours(f)
-    t = timesheet(f)
-    R = {}
-    R["r1"] = {k: v for k, v in r1_paid_hours(t).items() if k in P.ZONES}
-    ls_day, ls_eve = logged_pattern(z, t)
-    if o["ls"] == "flat":
-        m = sum(ls_day.values()) / len(ls_day)
-        ls_day = {h: m for h in ls_day}
-        me = sum(ls_eve.values()) / len(ls_eve)
-        ls_eve = {h: me for h in ls_eve}
-    R["ls_day"], R["ls_eve"] = ls_day, ls_eve
-    R["logged_share"] = sum(ls_day.values()) / P.SHIFT_PAID
-    if o.get("cong") == "quad":
-        best = None
-        for k in np.arange(0.40, 1.41, 0.05):
-            c = fit_time(z, years=o["fit_years"], knot=float(k), power=2.0, grid=False)
-            if best is None or c["sse"] < best["sse"]:
-                best = c
-        fit = best
-    elif o.get("cong") == "linear":
-        best = None
-        for k in np.arange(0.40, 1.41, 0.05):
-            c = fit_time(z, years=o["fit_years"], knot=float(k), power=1.0, grid=False)
-            if best is None or c["sse"] < best["sse"]:
-                best = c
-        fit = best
-    else:
-        fit = fit_time(z, years=o["fit_years"])
-    if o.get("gamma_mult"):
-        fit = dict(fit, coef=dict(fit["coef"], gamma=fit["coef"]["gamma"] * o["gamma_mult"]))
-    R["fit"] = fit
-    R["r3"] = cong(fit, 1.8)
-    R["r4"], R["t_hui"], R["t_kot"] = r4_extra_minutes(fit, z, f, o["months"])
-    R["r2"] = r2_overstatement(z, f)
-    cl = calibration(z, f, o["form"], o["cal_weeks"], o["intercept"])
-    pk, ph = plans_2027(f)
-    om = o.get("over_mult", 1.0)
-    over_k = (cl["pred"](pk[0]) * om, cl["pred"](pk[1]) * om)
-    over_h = (cl["pred"](ph[0]) * om, cl["pred"](ph[1]) * om)
-    R["r5"] = {"K_sp": over_k[0], "K_bu": over_k[1], "H_sp": over_h[0], "H_bu": over_h[1]}
-    R["cal"] = cl
-    if o["src"] == "avg":
-        V25 = volumes(z, f, over_k, over_h, o["how"], 728, 2025)
-        V24 = volumes(z, f, over_k, over_h, o["how"], 1092, 2024)
-        V = {k: {w: 0.5 * (V25[k][w] + V24[k][w]) for w in V25[k]} for k in V25}
-    else:
-        V = volumes(z, f, over_k, over_h, o["how"], o["shift"], o["src"])
-    R["vol"] = V
-    ks = V[(P.BRAND_K, "small parts")]
-    bud = budget_totals(f, P.BRAND_K, "small parts", 2027)
-    R["r6"] = ks[47] / sum(ks.values())
-    R["r6_budget"] = bud[47] / sum(bud[w] for w in P.PEAK_WEEKS)
-    kz = picked_by_week(z)
-    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
-    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
-    hm = hui_mix(f, o["months"])
-    b1a, b1u = b1_rate(z)
-    plan = {}
-    for w in P.PEAK_WEEKS:
-        days, eves = days_2027(w)
-        for zz in P.ZONES:
-            if zz == "B1":
-                L = V[(P.BRAND_K, "bulky")][w] + V[(P.BRAND_H, "bulky")][w]
-                tk = b1a + b1u * 0.10
-                th = b1a + b1u * (hm["B1"]["upl"] - 1.0)
-                t_ = (V[(P.BRAND_K, "bulky")][w] * tk + V[(P.BRAND_H, "bulky")][w] * th) / L
-                hrs = L * t_ / 60.0 / (sum(ls_day.values()) / P.SHIFT_PAID)
-                plan[(zz, w)] = {"lines": L, "t": t_, "hours": hrs, "evening": False, "ratio": None}
-                continue
-            sh_k = kp1 if zz == "P1" else 1.0 - kp1
-            lk = V[(P.BRAND_K, "small parts")][w] * sh_k
-            lh = V[(P.BRAND_H, "small parts")][w] * hm[zz]["share"]
-            s, u = kot_mix(z, zz)
-            tk = t_line(fit, s, u, 1.0 if zz == "P1" else 0.0, 0.0)
-            th = t_line(fit, hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0)
-            if o.get("hui_mult"):
-                th = tk + (th - tk) * o["hui_mult"]
-            L = lk + lh
-            t_ = (lk * tk + lh * th) / L
-            wp = week_plan(zz, L, t_, fit, ls_day, ls_eve, days, eves)
-            wp.update({"lines": L, "t": t_, "lines_k": lk, "lines_h": lh})
-            plan[(zz, w)] = wp
-    R["plan"] = plan
-    own = {w: own_hours(f, t, w) for w in P.PEAK_WEEKS}
-    R["own"] = own
-    R["agency"] = {w: sum(max(0.0, plan[(zz, w)]["hours"] - own[w][zz]) for zz in P.ZONES) for w in P.PEAK_WEEKS}
-    R["evening"] = {(zz, w): plan[(zz, w)]["evening"] for zz in Z_SMALL for w in P.PEAK_WEEKS}
-    return R
-
-
-def pilot_times(f):
-    """The pilot's Huippu lines: minutes from one pick confirmation to the next by the same picker in the same hour
-    (the draft's and the pilot review's reading), and P2's other lines in the same weeks from the labour log."""
-    c = f["pilot_conf"].copy()
-    c["t"] = pd.to_datetime(c["confirmed_at"])
-    c = c.drop_duplicates(subset=["task_id"]).sort_values(["picker_id", "t"])
-    g = c.groupby("picker_id")["t"].diff().dt.total_seconds() / 60.0
-    g = g[(g > 0) & (g < 5)]
-    return float(g.mean())
-
-
-def paid_per_line(z, t, year, weeks, zone):
-    tt = t[(t["iy"] == year) & t["iw"].isin(weeks) & (t["zone"] == zone) & (t["absence"] == "")]
-    zz = z[(z["iy"] == year) & z["iw"].isin(weeks) & (z["zone"] == zone)]
-    return float(tt["paid"].sum() / zz["lines"].sum())
-
-
-def hurried(f, fix=()):
-    """The careful but hurried route (the site manager's draft method with the pooled overstatement): the 2027
-    budget's weeks as issued over the pooled overstatement of past budgets, the 2025 peak's paid hours a line by
-    zone, Huippu Sport's lines at the pilot's time a line against P2's; `fix` puts one or more judgments right."""
-    z = zone_hours(f)
-    t = timesheet(f)
-    R = {}
-    R["r2"] = r2_overstatement(z, f)
-    g = golden(f) if fix else None
-    ov = (R["r2"], R["r2"])
-    over_k, over_h = (ov, ov)
-    if "calibration" in fix:
-        over_k = (g["r5"]["K_sp"], g["r5"]["K_bu"])
-        over_h = (g["r5"]["H_sp"], g["r5"]["H_bu"])
-    V = volumes(z, f, over_k, over_h, how="weekday" if "calendar" in fix else "copy")
-    R["vol"] = V
-    rate = {zz: paid_per_line(z, t, 2025, P.PEAK_WEEKS, zz) for zz in P.ZONES}
-    R["rate"] = rate
-    zp = z[(z["zone"] == "P2") & (z["date"] >= pd.Timestamp(P.PILOT[0])) & (z["date"] <= pd.Timestamp(P.PILOT[1]))]
-    tp = pilot_times(f)
-    kot_t = float((zp["task_min"].sum() - tp * zp["lines_hui"].sum()) / zp["kot"].sum())
-    R["pilot_t"], R["p2_t"] = tp, kot_t
-    R["r4"] = tp - kot_t
-    kz = picked_by_week(z)
-    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
-    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
-    hm = hui_mix(f)
-    plan = {}
-    for w in P.PEAK_WEEKS:
-        days, eves = days_2027(w)
-        for zz in P.ZONES:
-            if zz == "B1":
-                L = V[(P.BRAND_K, "bulky")][w] + V[(P.BRAND_H, "bulky")][w]
-                plan[(zz, w)] = {"lines": L, "hours": L * rate["B1"], "evening": False}
-                continue
-            lk = V[(P.BRAND_K, "small parts")][w] * (kp1 if zz == "P1" else 1.0 - kp1)
-            lh = V[(P.BRAND_H, "small parts")][w] * hm[zz]["share"]
-            hpl_k = rate[zz]
-            hpl_h = rate[zz] * tp / kot_t
-            if "huippu" in fix:
-                hpl_h = rate[zz] * g["t_hui"] / g["t_kot"]
-            L = lk + lh
-            hours = lk * hpl_k + lh * hpl_h
-            cap_hours = P.LIMIT[zz] * days * P.SHIFT_PAID
-            if "congestion" in fix:
-                s_, u_ = kot_mix(z, zz)
-                tk = t_line(g["fit"], s_, u_, 1.0 if zz == "P1" else 0.0, 0.0)
-                th = t_line(g["fit"], hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0) \
-                    if "huippu" in fix else tk * tp / kot_t
-                t_ = (lk * tk + lh * th) / L
-                wp = week_plan(zz, L, t_, g["fit"], g["ls_day"], g["ls_eve"], days, eves)
-                plan[(zz, w)] = {"lines": L, "hours": wp["hours"], "evening": wp["evening"], "ratio": wp["ratio"]}
-                continue
-            plan[(zz, w)] = {"lines": L, "hours": hours, "evening": hours > cap_hours, "ratio": hours / cap_hours}
-    R["plan"] = plan
-    own = {w: own_hours(f, t, w) for w in P.PEAK_WEEKS}
-    R["agency"] = {w: sum(max(0.0, plan[(zz, w)]["hours"] - own[w][zz]) for zz in P.ZONES) for w in P.PEAK_WEEKS}
-    R["evening"] = {(zz, w): plan[(zz, w)]["evening"] for zz in Z_SMALL for w in P.PEAK_WEEKS}
-    return R
-
-
-# ----------------------------------------------------------------------------------------------------- reading the pack
-OLD_CC = {"4111": "P1", "4112": "P2", "4113": "B1", "4150": "PACK"}
-
+# ----------------------------------------------------------------------------------------------- loading
 
 def load(target):
-    """The shipped files read as they are and conformed: the two payroll layouts onto one, the archive's budgets with
-    the 2027 workbook's Huippu Sport sheet, Huippu's own day-first dates."""
-    import os
-    import pack
-    F = {k: os.path.join(target, v) for k, v in pack.FILES.items()}
-    f = {}
-    f["zone_hours"] = pd.read_csv(F["zone_hours"])
-    o = pd.read_csv(F["pay_old"], sep=";", dtype=str, keep_default_na=False)
-    old = pd.DataFrame({"date": pd.to_datetime(o["pvm"], format="%d.%m.%Y").dt.date, "person": o["henkilonumero"],
-                        "employer": o["tyonantaja"], "zone": o["kustannuspaikka"].map(OLD_CC),
-                        "shift": o["vuoro"].map({"A": "DAY", "I": "EVE"}), "start": o["alkoi"], "end": o["paattyi"],
-                        "paid": o["tunnit"].str.replace(",", ".").astype(float),
-                        "absence": o["poissaolo"].map({"S": "SICK", "L": "VAC", "": ""}),
-                        "absence_hours": pd.to_numeric(o["poissaolotunnit"].str.replace(",", "."), errors="coerce").fillna(0.0)})
-    n = pd.read_csv(F["pay_new"], dtype=str, keep_default_na=False)
-    new = pd.DataFrame({"date": pd.to_datetime(n["work_date"]).dt.date, "person": n["person_id"],
-                        "employer": n["employer"], "zone": n["cost_centre"].str.replace("SAA-", "", regex=False),
-                        "shift": n["shift"], "start": n["start"], "end": n["end"], "paid": n["paid_hours"].astype(float),
-                        "absence": n["absence_code"],
-                        "absence_hours": pd.to_numeric(n["absence_hours"], errors="coerce").fillna(0.0)})
-    f["timesheets"] = pd.concat([old, new], ignore_index=True)
-    a = pd.read_csv(F["archive"], keep_default_na=False)
-    a["issued"] = pd.to_datetime(a["issued"]).dt.date
-    from openpyxl import load_workbook
-    wb = load_workbook(F["budget27"], data_only=False)
-    extra = []
-    for sheet, brand in (("Huippu Sport", P.BRAND_H),):
-        ws = wb[sheet]
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            if isinstance(row[0], int):
-                extra.append((dt.date(2026, 10, 15), "budget 2027", brand, "small parts", 2027, row[0], row[1], ""))
-                extra.append((dt.date(2026, 10, 15), "budget 2027", brand, "bulky", 2027, row[0], row[2], ""))
-    cov = {r[0]: r[1] for r in wb["Cover"].iter_rows(values_only=True) if r[0]}
-    hp = cov["Commercial plan 2027, Huippu Sport"]
-    extra[0] = extra[0][:-1] + ("Budget 2027: commercial plan %s" % hp,)
-    a = pd.concat([a, pd.DataFrame(extra, columns=a.columns)], ignore_index=True)
-    f["forecasts"] = a
-    f["k_orders"] = pd.read_csv(F["k_orders"])
-    h = pd.read_csv(F["h_daily"])
-    h["order_date"] = pd.to_datetime(h["order_date"], format="%d/%m/%Y").dt.date
-    f["h_daily"] = h.rename(columns={"product_line": "group"})
-    f["h_monthly"] = pd.read_csv(F["h_monthly"], dtype={"month": str})
-    f["item_master"] = pd.read_excel(F["item_master"], dtype={"owner_article": str})
-    f["slotting"] = pd.read_excel(F["slotting"], header=2, dtype={"owner_article": str})
-    f["pilot_conf"] = pd.read_csv(F["pilot"], dtype={"picker_id": str})
-    f["roster"] = pd.read_excel(F["roster"], dtype={"leave_until": str}).fillna({"leave_until": ""})
-    return f
+    F = {}
+    F["legs"] = pd.read_csv(os.path.join(target, "flight_legs_2023-01_2026-11.csv"), dtype=str)
+    F["changes"] = pd.read_csv(os.path.join(target, "component_changes_2023-01_2026-11.csv"), dtype=str, keep_default_na=False)
+    F["shop"] = pd.read_csv(os.path.join(target, "bodo_shop_work_orders_2023-2026.csv"), dtype=str, keep_default_na=False)
+    F["roster"] = pd.read_csv(os.path.join(target, "bodo_shop_roster_2023-2026.csv"), dtype=str, keep_default_na=False)
+    F["vendor"] = pd.read_excel(os.path.join(target, "vendor_repair_orders_2023-2026.xlsx"), dtype=object)
+    nu = pd.read_excel(os.path.join(target, "vendor_repair_orders_2023-2026.xlsx"), sheet_name="New units")
+    nu.columns = ["po", "pn", "desc", "serial", "ordered", "delivered"]
+    F["newunits"] = nu
+    F["fleet"] = pd.read_excel(os.path.join(target, "fleet_register.xlsx"), sheet_name="Fleet")
+    F["bases"] = pd.read_excel(os.path.join(target, "fleet_register.xlsx"), sheet_name="Base history")
+    F["checks"] = pd.read_excel(os.path.join(target, "fleet_register.xlsx"), sheet_name="Heavy checks")
+    F["pool"] = pd.read_excel(os.path.join(target, "rotable_stores_snapshot_2026-11-30.xlsx"), dtype=str)
+    F["prog"] = pd.read_excel(os.path.join(target, "flying_programme_2027.xlsx"), sheet_name="Programme 2027")
+    F["acbase"] = pd.read_excel(os.path.join(target, "flying_programme_2027.xlsx"), sheet_name="Aircraft by base")
+    F["wx"] = pd.read_csv(os.path.join(target, "station_weather_daily_2023-2026.csv"), dtype=str, keep_default_na=False)
+    return clean(F)
 
 
-# ----------------------------------------------------------------------------------------------------- R8
-def profile_error(f, z):
-    """How far a re-keyed profile misses a peak's weeks: 2024's orders moved onto 2025's days by the Black Friday
-    step (364 days), grown to 2025's year, against 2025's own peak weeks, as log errors."""
-    errs = []
-    for brand, grp in ((P.BRAND_K, "small parts"), (P.BRAND_K, "bulky")):
-        web, store = order_series(f, brand, grp)
-        tot = {}
-        for y in (2024, 2025):
-            sel = web[web.index.year == y].sum() + (store[store.index.year == y].sum() if store is not None else 0.0)
-            tot[y] = float(sel)
-        g = tot[2025] / tot[2024]
-        moved = {}
-        for d, v in web.items():
-            if d.year == 2024:
-                nd = d + pd.Timedelta(days=364)
-                moved[nd] = moved.get(nd, 0.0) + v
-        picks = {}
-        for d, v in moved.items():
-            p = cal.next_working(d.date() + dt.timedelta(days=1))
-            picks[p] = picks.get(p, 0.0) + v
-        act = {}
-        for d, v in web.items():
-            if d.year in (2025,):
-                p = cal.next_working(d.date() + dt.timedelta(days=1))
-                act[p] = act.get(p, 0.0) + v
-        for w in P.PEAK_WEEKS:
-            ds = week_days(2025, w)
-            pr = sum(picks.get(d, 0.0) for d in ds) * g
-            ac = sum(act.get(d, 0.0) for d in ds)
-            errs.append(math.log(ac / pr))
-    e = np.array(errs)
-    return float(np.sqrt(((e - e.mean()) ** 2).mean()))
+def _base_of(F):
+    rows = []
+    for _, r in F["bases"].iterrows():
+        a = pd.Timestamp(r["From"])
+        b = pd.Timestamp(r["To"]) if pd.notna(r["To"]) else HIST[1]
+        rows.append((r["Registration"], r["Base"], a, b))
+    return rows
 
 
-def model_error(z, fit):
-    """The time model's error on whole peak zone-weeks of 2024 and 2025, as log errors of task minutes."""
-    zz = z[z["zone"].isin(Z_SMALL) & z["iy"].isin([2024, 2025]) & z["iw"].isin(P.PEAK_WEEKS) & (z["lines"] > 0)]
-    X, names = design(zz, True, fit["knot"], fit["power"])
-    pred = X @ np.array([fit["coef"][k] for k in names])
-    g = pd.DataFrame({"k": list(zip(zz["iy"], zz["iw"], zz["zone"])), "a": zz["task_min"].to_numpy(), "p": pred})
-    s = g.groupby("k")[["a", "p"]].sum()
-    e = np.log(s["a"] / s["p"]).to_numpy()
-    return float(np.sqrt((e ** 2).mean()))
+def clean(F):
+    # legs: the re-sent days' second copies dropped; air time from off and on, or block less the field's usual taxi
+    L = F["legs"].drop_duplicates().copy()
+    for c in ("out_utc", "off_utc", "on_utc", "in_utc"):
+        L[c] = pd.to_datetime(L[c], format="%Y-%m-%dT%H:%MZ", errors="coerce")
+    L["date"] = pd.to_datetime(L["flight_date"])
+    L["block"] = (L["in_utc"] - L["out_utc"]).dt.total_seconds() / 60.0
+    L["air"] = (L["on_utc"] - L["off_utc"]).dt.total_seconds() / 60.0
+    L["taxi_out"] = (L["off_utc"] - L["out_utc"]).dt.total_seconds() / 60.0
+    L["taxi_in"] = (L["in_utc"] - L["on_utc"]).dt.total_seconds() / 60.0
+    tout = L.groupby("dep")["taxi_out"].median()
+    tin = L.groupby("arr")["taxi_in"].median()
+    miss = L["air"].isna()
+    L.loc[miss, "air"] = L.loc[miss, "block"] - L.loc[miss, "dep"].map(tout) - L.loc[miss, "arr"].map(tin)
+    L["fh"] = L["air"] / 60.0
+    F["legs"] = L
+    F["taxi"] = {"out": tout.to_dict(), "in": tin.to_dict()}
+    # base each aircraft-day from the register
+    B = _base_of(F)
+    day = L.groupby(["aircraft", "date"]).agg(cyc=("fh", "size"), fh=("fh", "sum")).reset_index()
+    day["base"] = None
+    for t, b, a, z in B:
+        m = (day["aircraft"] == t) & (day["date"] >= a) & (day["date"] <= z)
+        day.loc[m, "base"] = b
+    F["day"] = day
+    # weather: each base's daily minimum, gaps filled from the day before
+    W = F["wx"].copy()
+    W["base"] = W["station"].map(ICAO_BASE)
+    W["date"] = pd.to_datetime(W["date"])
+    W["tmin"] = pd.to_numeric(W["tmin_c"], errors="coerce")
+    W = W.sort_values(["base", "date"])
+    W["tmin"] = W.groupby("base")["tmin"].ffill()
+    F["wx"] = W[["base", "date", "tmin"]]
+    day = day.merge(F["wx"], on=["base", "date"], how="left")
+    day["frost"] = (-day["tmin"]).clip(lower=0)
+    F["day"] = day
+    # component changes: a corrected entry replaces the one it corrects; serials as the stores know them; the two
+    # reason vocabularies on one footing; part numbers on their current form
+    C = F["changes"].copy()
+    C["base_no"] = C["change_no"].str.replace(r"-R\d+$", "", regex=True)
+    corrected = set(C.loc[C["change_no"].str.contains(r"-R\d+$"), "base_no"])
+    C = C[~((C["change_no"] == C["base_no"]) & C["base_no"].isin(corrected))].copy()
+    C["serial_off"] = C["serial_off"].str.replace(r"^S/N\s*", "", regex=True).str.upper()
+    C["serial_on"] = C["serial_on"].str.upper()
+    C["reason"] = C["reason"].replace({"U": "UNSCH", "S": "SCHED", "C": "CONV"})
+    desc_k = {p["name"].upper(): p["k"] for p in P.PARTS}
+    C["k"] = C["description"].map(desc_k)
+    C["date"] = pd.to_datetime(C["change_date"])
+    F["changes"] = C
+    # findings: the shop's and the repairers' orders, each matched to the removal that sent the unit
+    S = F["shop"]
+    S = S[S["order_type"] == "ROTABLE"].copy()
+    for c in ("received", "parts_received", "work_started", "completed"):
+        S[c] = pd.to_datetime(S[c].replace("", np.nan))
+    S["parts_wait"] = (S["parts_received"] - S["received"]).dt.days
+    S["k"] = S["part_no"].map(BY_PN)
+    S["finding_n"] = S.apply(_shop_finding, axis=1)
+    S["hours"] = pd.to_numeric(S["hours_booked"].replace("", np.nan))
+    V = F["vendor"].copy()
+    V.columns = ["order", "vendor", "pn", "serial", "shipped", "at_vendor", "returned", "finding", "amount", "ccy", "fx"]
+    V["k"] = V["pn"].map(BY_PN)
+    for c in ("shipped", "at_vendor", "returned"):
+        V[c] = pd.to_datetime(V[c])
+    V["finding"] = V["finding"].fillna("")
+    V["finding_n"] = V["finding"].map(_vendor_finding)
+    V["sb"] = V["finding"].str.contains("SB 61-0042")
+    F["shopr"], F["vendorr"] = S, V
+    F["removals"] = _match_findings(C, S, V)
+    return F
 
 
-def ranges(f, z, R, q=1.2815515655446004):
-    sl = R["cal"]["sd"]
-    sw = profile_error(f, z)
-    sm = model_error(z, R["fit"])
-    sL = math.sqrt(sl ** 2 + sw ** 2)
-    out = {}
-    for (zz, w), p in R["plan"].items():
-        days, eves = days_2027(w)
-        h = p["hours"]
-        if zz == "B1":
-            lo, hi = h * math.exp(-q * sL), h * math.exp(q * sL)
+def _shop_finding(r):
+    if r["finding_code"]:
+        return {"CONF": "CF", "NFF": "NFF", "BER": "BER"}[r["finding_code"]]
+    t = r["finding"].lower()
+    if not t:
+        return ""
+    if "no fault found" in t or "serviceable" in t and "replaced" not in t:
+        return "NFF"
+    if "beyond economic repair" in t or "scrapped" in t:
+        return "BER"
+    return "CF"
+
+
+def _vendor_finding(t):
+    t = (t or "").lower()
+    if not t:
+        return ""
+    if t.startswith("sb 27-0089"):
+        return "SB"
+    if "no fault found" in t:
+        return "NFF"
+    if "beyond economic repair" in t:
+        return "BER"
+    return "CF"
+
+
+def _match_findings(C, S, V):
+    """Each removal's shop or repairer order: the first order for that serial received within ten days of the
+    removal; the finding, the date the unit was serviceable again, and the work hours."""
+    R = C[C["reason"].isin(["UNSCH", "SCHED", "CONV"]) & (C["serial_off"] != "")].copy()
+    R["finding"] = ""
+    R["back"] = pd.NaT
+    R["hours"] = np.nan
+    R["shop"] = ""
+    shop_by = {sn: g.sort_values("received") for sn, g in S.groupby("serial")}
+    ven_by = {sn: g.sort_values("shipped") for sn, g in V.groupby("serial")}
+    for i, r in R.iterrows():
+        sn, d = r["serial_off"], r["date"]
+        k = r["k"]
+        if P.PART[k]["shop"] == "BOO":
+            g = shop_by.get(sn)
+            if g is not None:
+                m = g[(g["received"] >= d) & (g["received"] <= d + pd.Timedelta(days=10))]
+                if len(m):
+                    o = m.iloc[0]
+                    R.at[i, "finding"] = o["finding_n"]
+                    R.at[i, "back"] = o["completed"] + pd.Timedelta(days=1) if pd.notna(o["completed"]) else pd.NaT
+                    R.at[i, "hours"] = o["hours"]
+                    R.at[i, "shop"] = "BOO"
         else:
-            lo = week_plan(zz, p["lines"] * math.exp(-q * sL), p["t"], R["fit"], R["ls_day"], R["ls_eve"], days, eves)["hours"]
-            hi = week_plan(zz, p["lines"] * math.exp(q * sL), p["t"], R["fit"], R["ls_day"], R["ls_eve"], days, eves)["hours"]
-        dl = math.sqrt(math.log(h / lo) ** 2 + (q * sm) ** 2)
-        du = math.sqrt(math.log(hi / h) ** 2 + (q * sm) ** 2)
-        out[(zz, w)] = (h * math.exp(-dl), h * math.exp(du))
-    return out, {"level": sl, "week": sw, "model": sm, "lines": sL}
+            g = ven_by.get(sn)
+            if g is not None:
+                m = g[(g["shipped"] >= d) & (g["shipped"] <= d + pd.Timedelta(days=10))]
+                if len(m):
+                    o = m.iloc[0]
+                    R.at[i, "finding"] = o["finding_n"]
+                    R.at[i, "back"] = o["returned"]
+                    R.at[i, "shop"] = "VND"
+    return R
+
+
+# ----------------------------------------------------------------------------------------------- exposure panels
+
+def panel(F, k, cause="CF"):
+    """Aircraft-month counts of a part's unscheduled removals of one kind, beside the aircraft's landings, flight
+    hours, calendar days and frost (degree-days below zero on flying days), with the base it flew from."""
+    D = F["day"].copy()
+    D["ym"] = D["date"].dt.to_period("M")
+    g = D.groupby(["aircraft", "ym"]).agg(cyc=("cyc", "sum"), fh=("fh", "sum"), fly=("cyc", "size"),
+                                          frost=("frost", "sum"), base=("base", lambda s: s.mode().iat[0] if len(s.mode()) else None)).reset_index()
+    pos = P.PART[k]["pos"]
+    g["days"] = g["ym"].map(lambda p: p.days_in_month)
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH")]
+    if cause == "CF":
+        R = R[R["finding"].isin(["CF", "BER"])]
+    elif cause == "NFF":
+        R = R[R["finding"] == "NFF"]
+    cnt = R.assign(ym=R["date"].dt.to_period("M")).groupby(["aircraft", "ym"]).size().rename("n")
+    g = g.merge(cnt, left_on=["aircraft", "ym"], right_index=True, how="left").fillna({"n": 0})
+    g = g[(g["ym"] >= pd.Period("2023-01", "M")) & (g["ym"] <= pd.Period("2026-10", "M"))]
+    for c in ("cyc", "fh", "days"):
+        g[c] = g[c] * pos
+    g["frost_rate"] = g["frost"] / g["fly"].clip(lower=1)
+    return g
+
+
+def poisson_fit(y, X, offset, iters=60):
+    """Poisson regression with an offset by iteratively reweighted least squares; returns coefficients and the
+    log-likelihood."""
+    beta = np.zeros(X.shape[1])
+    beta[0] = math.log(max(y.sum(), 0.5) / np.exp(offset).sum())
+    for _ in range(iters):
+        eta = X @ beta + offset
+        mu = np.exp(eta)
+        z = eta - offset + (y - mu) / mu
+        W = mu
+        XtW = X.T * W
+        try:
+            nb = np.linalg.solve(XtW @ X + 1e-9 * np.eye(X.shape[1]), XtW @ z)
+        except np.linalg.LinAlgError:
+            break
+        if np.max(np.abs(nb - beta)) < 1e-9:
+            beta = nb
+            break
+        beta = nb
+    mu = np.exp(X @ beta + offset)
+    ll = float(np.sum(y * np.log(np.where(mu > 0, mu, 1e-300)) - mu - np.array([math.lgamma(v + 1) for v in y])))
+    return beta, ll
+
+
+DRIVERS = ("cyc", "fh", "days")
+
+
+def drivers(F, cold=True):
+    """For each part, the exposure its confirmed failures follow: a Poisson fit of aircraft-month counts on each
+    exposure in turn (with frost), the best by likelihood, and the rates."""
+    out = {}
+    for k in PARTS:
+        g = panel(F, k, "CF")
+        y = g["n"].values.astype(float)
+        res = {}
+        for drv in DRIVERS:
+            e = g[drv].values.astype(float)
+            ok = e > 0
+            X = np.column_stack([np.ones(ok.sum())] + ([g["frost_rate"].values[ok]] if cold else []))
+            b, ll = poisson_fit(y[ok], X, np.log(e[ok]))
+            res[drv] = {"beta": b, "ll": ll}
+        best = max(res, key=lambda d: res[d]["ll"])
+        out[k] = {"driver": best, "fits": res, "beta": res[best]["beta"],
+                  "ll_gap": res[best]["ll"] - max(v["ll"] for d, v in res.items() if d != best)}
+    return out
+
+
+def nff_rates(F, k, drv):
+    """No-fault-found removals per unit of the driving exposure, by the station that made the removal."""
+    D = F["day"]
+    pos = P.PART[k]["pos"]
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["finding"] == "NFF") & (R["date"] <= Y26[1])]
+    ex = D[D["date"] <= Y26[1]].groupby("base").agg(cyc=("cyc", "sum"), fh=("fh", "sum"), days=("date", "size"))
+    ex = ex * pos
+    n = R.groupby("station").size()
+    return {b: float(n.get(b, 0)) / float(ex.loc[b, drv]) for b in ex.index}
+
+
+# ----------------------------------------------------------------------------------------------- 2027 exposure
+
+def expo_2027(F):
+    """2027 landings, flight hours and aircraft-days by month and operating group (each base, and the Helgeland
+    routes flown from Bodø), from the programme's departures and block minutes less each field's usual taxi."""
+    G = F["prog"].copy()
+    G.columns = ["season", "group", "dep", "arr", "from", "to", "per_week", "block"]
+    tout, tin = F["taxi"]["out"], F["taxi"]["in"]
+    gmap = {"Bodø": "BOO", "Tromsø": "TOS", "Bergen": "BGO", "Trondheim": "TRD", "Bodø (Helgeland routes)": "HEL"}
+    G["grp"] = G["group"].map(gmap)
+    # a field the record has never seen takes the taxi times of the record's quieter fields
+    so, si = float(np.percentile(list(tout.values()), 25)), float(np.percentile(list(tin.values()), 25))
+    rows = []
+    for _, r in G.iterrows():
+        a, b = pd.Timestamp(r["from"]), pd.Timestamp(r["to"])
+        days = pd.date_range(a, b, freq="D")
+        per_day = float(r["per_week"]) / 7.0
+        air = (float(r["block"]) - tout.get(r["dep"], so) - tin.get(r["arr"], si)) / 60.0
+        for m, n in pd.Series(1, index=days).groupby(days.month).sum().items():
+            rows.append((r["grp"], int(m), per_day * n, per_day * n * air))
+    X = pd.DataFrame(rows, columns=["grp", "month", "cyc", "fh"]).groupby(["grp", "month"]).sum().reset_index()
+    A = F["acbase"].copy()
+    A.columns = ["month", "BOO", "TOS", "BGO", "TRD", "HEL"]
+    A["m"] = pd.to_datetime(A["month"]).dt.month
+    ad = []
+    for _, r in A.iterrows():
+        nd = pd.Period("2027-%02d" % r["m"], "M").days_in_month
+        for g in ("BOO", "TOS", "BGO", "TRD", "HEL"):
+            n = r[g] - (r["HEL"] if g == "BOO" else 0)
+            ad.append((g, int(r["m"]), n * nd))
+    X = X.merge(pd.DataFrame(ad, columns=["grp", "month", "acdays"]), on=["grp", "month"], how="outer").fillna(0)
+    return X
+
+
+def frost_clim(F):
+    """Each base's expected frost on a flying day, by calendar month, from the four winters on record."""
+    W = F["wx"].copy()
+    W["frost"] = (-W["tmin"]).clip(lower=0)
+    W["m"] = W["date"].dt.month
+    return W.groupby(["base", "m"])["frost"].mean().to_dict()
+
+
+def station_of(grp):
+    return "BOO" if grp == "HEL" else grp
+
+
+# ----------------------------------------------------------------------------------------------- forecasts
+
+def pec_split(F):
+    """The propeller control's removals per flight hour installed, with and without SB 61-0042: each serial's
+    installed spells rebuilt from the changes, its embodiment date from the repairer's returns."""
+    k = "PEC"
+    V = F["vendorr"]
+    moddate = V[V["sb"]].groupby("serial")["returned"].min().to_dict()
+    snap = F["pool"]
+    snap = snap[snap["Part number"] == P.PART[k]["pn"]]
+    D = F["day"].set_index(["aircraft", "date"])["fh"].sort_index()
+    spl = [(sn, (tt, pos), a0, b0) for sn, tt, pos, a0, b0 in spells(F, k)]
+    fh_by_ac = {t: g.droplevel(0) for t, g in D.groupby(level=0)}
+    exp_mod, exp_un = 0.0, 0.0
+    for sn, (t, pos), a, b in spl:
+        s = fh_by_ac.get(t)
+        if s is None:
+            continue
+        md = moddate.get(sn)
+        seg = s[(s.index >= a) & (s.index < b)]
+        if md is not None:
+            exp_mod += float(seg[seg.index >= md].sum())
+            exp_un += float(seg[seg.index < md].sum())
+        else:
+            exp_un += float(seg.sum())
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["date"] >= pd.Timestamp(P.SB_DATE))]
+    exp_mod_s, exp_un_s = 0.0, 0.0
+    for sn, (t, pos), a, b in spl:
+        s = fh_by_ac.get(t)
+        if s is None:
+            continue
+        md = moddate.get(sn)
+        seg = s[(s.index >= max(a, pd.Timestamp(P.SB_DATE))) & (s.index < b)]
+        if md is not None:
+            exp_mod_s += float(seg[seg.index >= md].sum())
+            exp_un_s += float(seg[seg.index < md].sum())
+        else:
+            exp_un_s += float(seg.sum())
+    n_mod = n_un = 0
+    nff_mod = nff_un = 0
+    for _, r in R.iterrows():
+        md = moddate.get(r["serial_off"])
+        cf = r["finding"] in ("CF", "BER")
+        if md is not None and r["date"] >= md:
+            n_mod += cf
+            nff_mod += r["finding"] == "NFF"
+        else:
+            n_un += cf
+            nff_un += r["finding"] == "NFF"
+    installed = snap[snap["Condition"] == "Installed"]
+    mod_now = int((installed["SB 61-0042"] == "Incorporated").sum())
+    spare = snap[snap["Condition"] != "Installed"]
+    return {"rate_mod": n_mod / max(exp_mod_s, 1.0), "rate_un": n_un / max(exp_un_s, 1.0),
+            "nff_rate": (nff_mod + nff_un) / max(exp_mod_s + exp_un_s, 1.0),
+            "installed": len(installed), "mod_installed": mod_now,
+            "spare_mod": int((spare["SB 61-0042"] == "Incorporated").sum()), "spare_n": len(spare),
+            "exp_mod": exp_mod_s, "exp_un": exp_un_s, "n_mod": n_mod, "n_un": n_un}
+
+
+def pec_forecast(F, fh_month, nff_per_fh, split=None):
+    """2027 removals of the propeller control as the fleet converts: a removed unit goes to the repairer and comes
+    back modified; the spare fitted in its place is modified at the pool's own share, which rises as the removed
+    units come back."""
+    s = split or pec_split(F)
+    n_inst = float(s["installed"])
+    mod_inst = float(s["mod_installed"])
+    pool_n = float(max(s["spare_n"], 1))
+    pool_mod = float(s["spare_mod"])
+    total, cf_tot = 0.0, 0.0
+    by_m = {}
+    for m in range(1, 13):
+        fh = fh_month[m]
+        f = mod_inst / n_inst
+        rem_un = (1 - f) * fh * (s["rate_un"] + nff_per_fh)
+        rem_md = f * fh * (s["rate_mod"] + nff_per_fh)
+        cf_tot += (1 - f) * fh * s["rate_un"] + f * fh * s["rate_mod"]
+        rem = rem_un + rem_md
+        q = pool_mod / pool_n
+        mod_inst = min(n_inst, mod_inst - rem_md + rem * q)
+        pool_mod = min(pool_n, pool_mod - rem * q + rem)
+        by_m[m] = rem
+        total += rem
+    return total, cf_tot, by_m
+
+
+def forecast(F, D=None):
+    """Each part's expected 2027 unscheduled removals: confirmed failures on the driving exposure with frost, by
+    month and operating group, and no-fault-found removals at each station's own rate; the propeller control by
+    its conversion."""
+    D = D or drivers(F)
+    X = expo_2027(F)
+    fr = frost_clim(F)
+    out = {}
+    for k in PARTS:
+        p = P.PART[k]
+        d = D[k]
+        b = d["beta"]
+        drv = d["driver"]
+        nr = nff_rates(F, k, drv)
+        cf, nff = 0.0, 0.0
+        by_m = {m: 0.0 for m in range(1, 13)}
+        for _, r in X.iterrows():
+            st = station_of(r["grp"])
+            e = {"cyc": r["cyc"], "fh": r["fh"], "days": r["acdays"]}[drv] * p["pos"]
+            frost = fr.get((st, int(r["month"])), 0.0)
+            lam = e * math.exp(b[0] + (b[1] * frost if len(b) > 1 else 0.0))
+            cf += lam
+            nn = e * nr.get(st, np.mean(list(nr.values())))
+            nff += nn
+            by_m[int(r["month"])] += lam + nn
+        out[k] = {"cf": cf, "nff": nff, "total": cf + nff, "by_month": by_m, "driver": drv}
+    # the propeller control converts through its own removals
+    fhm = X.groupby("month")["fh"].sum().to_dict()
+    fhm = {m: fhm.get(m, 0.0) * P.PART["PEC"]["pos"] for m in range(1, 13)}
+    sp = pec_split(F)
+    nff_fh = out["PEC"]["nff"] / max(sum(fhm.values()), 1.0)
+    tot, cf, bym = pec_forecast(F, fhm, nff_fh, sp)
+    out["PEC"].update({"total": tot, "cf": cf, "nff": tot - cf, "by_month": bym, "split": sp})
+    return out
+
+
+# ----------------------------------------------------------------------------------------------- turnaround
+
+def findings_mix(F, k, since="2024-01-01"):
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["date"] >= pd.Timestamp(since)) & (R["finding"] != "")]
+    n = R["finding"].value_counts()
+    tot = float(n.sum())
+    return {f: float(n.get(f, 0)) / tot for f in ("CF", "NFF", "BER")} if tot else {"CF": 1.0, "NFF": 0.0, "BER": 0.0}
+
+
+def vendor_tat(F, k, since="2025-01-01"):
+    """Days from removal to the unit's return to serviceable stock, by the repairer's finding."""
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["date"] >= pd.Timestamp(since)) & R["back"].notna()]
+    out = {}
+    for f in ("CF", "NFF"):
+        x = (R[R["finding"] == f]["back"] - R[R["finding"] == f]["date"]).dt.days.values
+        out[f] = x if len(x) else (R["back"] - R["date"]).dt.days.values
+    return out
+
+
+def shop_inputs(F):
+    """What the Bodø shop's history says about its own process: the transit from each station, the hours a job of
+    each kind books, the hours technicians on duty give to rotables once the other work is done."""
+    S = F["shopr"]
+    R = F["removals"]
+    R = R[(R["shop"] == "BOO") & (R["reason"] == "UNSCH")]
+    hours = {}
+    for k in P.IN_HOUSE:
+        for f in ("CF", "NFF", "BER"):
+            x = R[(R["k"] == k) & (R["finding"] == f)]["hours"].dropna().values
+            hours[(k, f)] = x if len(x) >= 3 else R[(R["k"] == k)]["hours"].dropna().values
+    sh = F["shop"]
+    oth = sh[sh["order_type"] == "OTHER"].copy()
+    oth["date"] = pd.to_datetime(oth["received"])
+    oth["h"] = pd.to_numeric(oth["hours_booked"])
+    ro = F["roster"].copy()
+    ro["date"] = pd.to_datetime(ro["date"])
+    ro["h"] = pd.to_numeric(ro["hours_on_duty"])
+    duty = ro.groupby("date")["h"].sum()
+    rot = S.copy()
+    # productive share of duty hours: the hours booked (rotables and other work) against the hours on duty, on
+    # weeks the shop had a queue
+    booked = (rot.groupby(rot["work_started"].dt.to_period("W"))["hours"].sum().add(
+        oth.groupby(oth["date"].dt.to_period("W"))["h"].sum(), fill_value=0))
+    dutyw = duty.groupby(duty.index.to_period("W")).sum()
+    ratio = (booked / dutyw).dropna()
+    prod = float(ratio.quantile(0.9))
+    other_share = float((oth.groupby("date")["h"].sum() / duty.reindex(oth["date"].unique()).values).median()) if len(oth) else 0.5
+    other_share = float((oth.set_index("date")["h"] / (duty.reindex(oth["date"]).values * prod)).median())
+    # roster pattern: technicians and the share absent by month, the July weeks and Christmas
+    ro["m"] = ro["date"].dt.month
+    absent = ro[ro["date"] >= pd.Timestamp("2025-01-01")].groupby("m")["h"].apply(lambda s: float((s == 0).mean())).to_dict()
+    techs = ro["technician"].nunique()
+    pw = S[S["finding_n"] == "CF"]["parts_wait"].dropna().values
+    r25 = ro[(ro["date"] >= pd.Timestamp("2025-01-01")) & (ro["absence"] != "FERIE")]
+    sick = float((r25["absence"] == "SYK").mean())
+    trans = {}
+    for st in ("BOO", "TOS", "BGO", "TRD"):
+        rr = R[R["station"] == st]
+        m = []
+        for _, r in rr.iterrows():
+            g = S[(S["serial"] == r["serial_off"]) & (S["received"] >= r["date"]) & (S["received"] <= r["date"] + pd.Timedelta(days=10))]
+            if len(g):
+                m.append((g["received"].iloc[0] - r["date"]).days)
+        trans[st] = np.array(m) if m else np.array([0])
+    # the other work's hours per technician on duty, day by day, over the last two years of the record
+    od = oth.groupby("date")["h"].sum()
+    on_day = ro[ro["h"] > 0].groupby("date").size()
+    opt = (od / on_day.reindex(od.index)).dropna()
+    opt = opt[opt.index >= pd.Timestamp("2025-01-01")].values
+    rd = ro.assign(d=ro["date"].dt.date)
+    duty = rd[rd["h"] > 0].groupby("d").size().reindex(sorted(rd["d"].unique()), fill_value=0).to_dict()
+    ferie = rd[rd["absence"] == "FERIE"].groupby("d").size().to_dict()
+    return {"hours": hours, "prod": prod, "other": other_share, "absent": absent, "techs": techs, "trans": trans,
+            "parts": pw if len(pw) else np.array([0]), "sick": sick, "other_per_tech": opt, "duty": duty,
+            "ferie": ferie}
+
+
+def calibrate_shop(F, inputs, since="2024-06-01", until="2026-09-30", reps=12):
+    """The productive hours a technician on duty gives in a day, set so the replay of the shop's own recent removals
+    (their findings, their booked hours, their parts waits, each day's other work as the shop booked it) reproduces
+    the turnarounds the shop actually ran."""
+    R = F["removals"]
+    U = R[(R["reason"] == "UNSCH") & (R["shop"] == "BOO") & (R["date"] <= pd.Timestamp(until)) & R["finding"].isin(["CF", "NFF"])
+          & R["back"].notna()]
+    a0 = pd.Timestamp(since)
+    actual = float((U[U["date"] >= a0]["back"] - U[U["date"] >= a0]["date"]).dt.days.mean())
+    # every job the shop took in, beyond-repair assessments too, from five months before the window so the replay
+    # meets the window with the queue the shop had
+    W = R[(R["reason"] == "UNSCH") & (R["shop"] == "BOO") & (R["date"] >= a0 - pd.DateOffset(months=5)) &
+          (R["date"] <= pd.Timestamp(until)) & R["finding"].isin(["CF", "NFF", "BER"])]
+    arr = {k: [(r["date"].date(), r["finding"], r["station"]) for _, r in W[W["k"] == k].iterrows()] for k in P.IN_HOUSE}
+    best = None
+    for cap in np.arange(5.6, 7.61, 0.05):
+        inp = dict(inputs)
+        inp["h_tech"] = float(cap)
+        tats = []
+        for r in range(reps):
+            done = shop_replay(F, arr, inp, np.random.default_rng(900 + r), year=None)
+            tats += [x[2] for x in done if x[3] != "BER" and x[1] >= a0.date()]
+        m = float(np.mean(tats)) if tats else 0.0
+        if best is None or abs(m - actual) < best[1]:
+            best = (float(cap), abs(m - actual), m)
+    return best[0], actual, best[2]
+
+
+def _same_day(d, dates):
+    """The same ISO week and weekday one year earlier, or two where the roster does not reach one."""
+    y, w, wd = d.isocalendar()
+    for back in (1, 2):
+        try:
+            ref = dt.date.fromisocalendar(y - back, w, wd)
+        except ValueError:
+            ref = dt.date.fromisocalendar(y - back, w - 1, wd)
+        if ref in dates:
+            return ref
+    return None
+
+
+def shop_replay(F, arrivals_by_k, inputs, rng, year=2027):
+    """The Bodø shop replayed day by day: the removals arriving after their transit, first come first served; on a
+    day of the record the technicians the roster has on duty, on a later day the technicians less those the roster
+    had on holiday on the same week and weekday a year before, less sickness at the roster's rate; each day's other
+    work as the shop booked it."""
+    from sim import HOL
+    jobs = []
+    for k, lst in arrivals_by_k.items():
+        for (d, f, st) in lst:
+            tr = inputs["trans"].get(st, np.array([0]))
+            arrive = d + dt.timedelta(days=int(rng.choice(tr)))
+            hrs = inputs["hours"][(k, f)]
+            ready = arrive + dt.timedelta(days=int(rng.choice(inputs["parts"]))) if f == "CF" else arrive
+            jobs.append({"k": k, "removed": d, "arrive": ready, "left": float(rng.choice(hrs)), "f": f})
+    jobs.sort(key=lambda j: (j["arrive"], j["k"]))
+    out = []
+    i = 0
+    queue = []
+    if not jobs:
+        return out
+    d = dt.date(year - 1, 12, 1) if year else min(j["removed"] for j in jobs)
+    end = dt.date(year + 1, 3, 31) if year else max(j["arrive"] for j in jobs) + dt.timedelta(days=200)
+    T = inputs["techs"]
+    while d <= end and (i < len(jobs) or queue):
+        while i < len(jobs) and jobs[i]["arrive"] <= d:
+            queue.append(jobs[i])
+            i += 1
+        if d.weekday() < 5 and d not in HOL:
+            if year is None and d in inputs["duty"]:
+                on = inputs["duty"][d]
+            else:
+                ref = _same_day(d, inputs["duty"])
+                on = T - (inputs["ferie"].get(ref, 0) if ref else 0)
+                on = sum(1 for _ in range(on) if rng.random() > inputs["sick"])
+            if "h_tech" in inputs:
+                cap = on * max(0.0, inputs["h_tech"] - float(rng.choice(inputs["other_per_tech"]))) * inputs.get("cap_mult", 1.0)
+            else:
+                cap = on * inputs.get("cap_tech", 7.5 * inputs["prod"] * (1 - inputs["other"]))
+            for j in list(queue):
+                if cap <= 1e-9:
+                    break
+                take = min(cap, j["left"])
+                j["left"] -= take
+                cap -= take
+                if j["left"] <= 1e-9:
+                    queue.remove(j)
+                    out.append((j["k"], j["removed"], (d - j["removed"]).days + 1, j["f"]))
+        d += dt.timedelta(days=1)
+    return out
+
+
+# ----------------------------------------------------------------------------------------------- the 2027 year, many times
+
+def lead_times(F):
+    """Days from a unit's scrapping to its replacement's delivery, from the purchasing sheet of new units."""
+    try:
+        N = F["newunits"]
+        x = (pd.to_datetime(N["delivered"]) - pd.to_datetime(N["ordered"])).dt.days.dropna().values
+        return x if len(x) else np.array([75])
+    except KeyError:
+        return np.array([75])
+
+
+def nff_dispersion(F, k):
+    """How much more the monthly no-fault-found count varies than a Poisson count with the same mean."""
+    R = F["removals"]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["finding"] == "NFF") & (R["date"] <= Y26[1])]
+    m = R.groupby(R["date"].dt.to_period("M")).size().reindex(pd.period_range("2023-01", "2026-10", freq="M"), fill_value=0)
+    mu = float(m.mean())
+    return max(1.0, float(m.var()) / mu) if mu > 0 else 1.0
+
+
+def frost_years(F):
+    """The record's own years of daily frost at each base, December 2026 taken from December 2025."""
+    W = F["wx"].copy()
+    W["frost"] = (-W["tmin"]).clip(lower=0)
+    out = []
+    for y in (2023, 2024, 2025, 2026):
+        g = W[W["date"].dt.year == y]
+        if y == 2026:
+            dec = W[(W["date"] >= "2025-12-01") & (W["date"] <= "2025-12-31")].copy()
+            dec["date"] = dec["date"] + pd.DateOffset(years=1)
+            g = pd.concat([g, dec])
+        g = g.assign(doy=g["date"].dt.dayofyear.clip(upper=365))
+        out.append({b: g[g["base"] == b].groupby("doy")["frost"].mean().reindex(range(1, 366)).ffill().bfill().values for b in ("BOO", "TOS", "BGO", "TRD")})
+    return out
+
+
+_CALCACHE = {}
+
+
+def simulate(F, fc, D, reps=300, seed=20271, no_disp=False, no_frost=False, cap_since=None, cap_mult=1.0, frost_mult=1.0):
+    """The 2027 year replayed: each part's daily removals (its rate on its own exposure, frost from one of the record's
+    winters, the rate's own sampling spread, the no-fault-found bursts' month-to-month overdispersion), each
+    removal's return through the Bodø shop's queue or the repairer's own turnaround, and the pool replayed to read the
+    fill rate at every number of spares."""
+    import bisect
+    X = expo_2027(F)
+    fr = frost_clim(F)
+    years = frost_years(F)
+    inputs = shop_inputs(F)
+    ck = (id(F), cap_since)
+    if ck not in _CALCACHE:
+        _CALCACHE[ck] = calibrate_shop(F, inputs, since=cap_since)[0] if cap_since else calibrate_shop(F, inputs)[0]
+    inputs["h_tech"] = _CALCACHE[ck]
+    inputs["cap_mult"] = cap_mult
+    lead = lead_times(F)
+    alld = pd.date_range("2026-12-01", "2027-12-31", freq="D")
+    nd_all = len(alld)
+    months = alld.month.values.copy()
+    months[alld.year == 2026] = 0                      # December 2026 on the record's own December networks
+    doy = np.clip(alld.dayofyear.values, 1, 365) - 1
+    dim = np.array([pd.Period(d, "M").days_in_month for d in alld])
+    sts = ("BOO", "TOS", "BGO", "TRD")
+    mix = {k: findings_mix(F, k) for k in PARTS}
+    vt = {k: vendor_tat(F, k) for k in PARTS if P.PART[k]["shop"] != "BOO"}
+    disp = {k: (1.0 if no_disp else nff_dispersion(F, k)) for k in PARTS}
+    n_events = {k: int(((F["removals"]["k"] == k) & (F["removals"]["reason"] == "UNSCH")).sum()) for k in PARTS}
+    snap = F["pool"]
+    unsv = {k: int(((snap["Part number"] == P.PART[k]["pn"]) & snap["Condition"].isin(["Unserviceable", "On order"])).sum()) for k in PARTS}
+    # expected confirmed and no-fault-found removals by month and station; December 2026 (slot 0) on December 2025's
+    # own flying by base, before the Helgeland routes and the moves
+    dd = F["day"][(F["day"]["date"] >= pd.Timestamp("2025-12-01")) & (F["day"]["date"] <= pd.Timestamp("2025-12-31"))]
+    dec = dd.groupby("base").agg(cyc=("cyc", "sum"), fh=("fh", "sum"), acdays=("date", "size")).to_dict("index")
+    base = {}
+    for k in PARTS:
+        drv = D[k]["driver"]
+        b = D[k]["beta"]
+        nr = nff_rates(F, k, drv)
+        cf = {st: np.zeros(13) for st in sts}
+        nf = {st: np.zeros(13) for st in sts}
+        for _, r in X.iterrows():
+            st = station_of(r["grp"])
+            e = {"cyc": r["cyc"], "fh": r["fh"], "days": r["acdays"]}[drv] * P.PART[k]["pos"]
+            m = int(r["month"])
+            frost = fr.get((st, m), 0.0)
+            cf[st][m] += e * math.exp(b[0] + (b[1] * frost if len(b) > 1 else 0.0))
+            nf[st][m] += e * nr.get(st, np.mean(list(nr.values())))
+        for st, r in dec.items():
+            e = {"cyc": r["cyc"], "fh": r["fh"], "days": r["acdays"]}[drv] * P.PART[k]["pos"]
+            frost = fr.get((st, 12), 0.0)
+            cf[st][0] += e * math.exp(b[0] + (b[1] * frost if len(b) > 1 else 0.0))
+            nf[st][0] += e * nr.get(st, np.mean(list(nr.values())))
+        # the replay carries the forecast it is given: its confirmed and no-fault-found 2027 totals (the propeller
+        # control's conversion, a rival's removals or a perturbed rate), on the month and station profile above
+        tot_cf = sum(cf[s][1:].sum() for s in sts)
+        tot_nf = sum(nf[s][1:].sum() for s in sts)
+        sc_cf = fc[k]["cf"] / tot_cf if tot_cf > 0 else 1.0
+        sc_nf = fc[k]["nff"] / tot_nf if tot_nf > 0 else 1.0
+        for s in sts:
+            cf[s] *= sc_cf
+            nf[s] *= sc_nf
+        base[k] = (cf, nf)
+    exp27 = {k: float(sum(base[k][0][s][1:].sum() + base[k][1][s][1:].sum() for s in sts)) for k in PARTS}
+    counts = {k: [] for k in PARTS}
+    counts_u = {k: [] for k in PARTS}
+    fills = {k: np.zeros(26) for k in PARTS}
+    ndem = {k: 0 for k in PARTS}
+    tat_in = []
+    for rep in range(reps):
+        fy = years[rep % len(years)]
+        events = {}
+        rk = {k: np.random.default_rng([seed, rep, ip]) for ip, k in enumerate(PARTS)}
+        for k in PARTS:
+            rng = rk[k]
+            p = P.PART[k]
+            cf, nf = base[k]
+            g = 1.0
+            phi = disp[k]
+            gm = np.ones(13)
+            if phi > 1.0:
+                mu_m = np.array([sum(nf[s][m] for s in sts) for m in range(13)])
+                for m in range(0, 13):
+                    if mu_m[m] > 0:
+                        a_m = mu_m[m] / (phi - 1.0)
+                        gm[m] = rng.gamma(a_m, 1.0 / a_m)
+            ev_d, ev_f, ev_s = [], [], []
+            for st in sts:
+                lam_cf = cf[st][months] / dim * g
+                if len(D[k]["beta"]) > 1 and not no_frost:
+                    clim = np.array([fr.get((st, m if m else 12), 0.0) for m in range(13)])[months]
+                    lam_cf = lam_cf * np.exp(D[k]["beta"][1] * frost_mult * (fy[st][doy] - clim))
+                lam_nf = nf[st][months] / dim * gm[months]
+                n_cf = rng.poisson(lam_cf)
+                n_nf = rng.poisson(lam_nf)
+                for idx in np.nonzero(n_cf)[0]:
+                    for _ in range(n_cf[idx]):
+                        pb = mix[k]["BER"] / max(mix[k]["CF"] + mix[k]["BER"], 1e-9)
+                        ev_d.append(idx); ev_f.append("BER" if rng.random() < pb else "CF"); ev_s.append(st)
+                for idx in np.nonzero(n_nf)[0]:
+                    for _ in range(n_nf[idx]):
+                        ev_d.append(idx); ev_f.append("NFF"); ev_s.append(st)
+            events[k] = [(alld[i].date(), f, s) for i, f, s in sorted(zip(ev_d, ev_f, ev_s))]
+        arrivals_in = {k: list(events[k]) for k in P.IN_HOUSE}
+        done = shop_replay(F, arrivals_in, inputs, np.random.default_rng([seed, rep, 99]))
+        done = [x for x in done if x[3] != "BER"]
+        tat_map = {}
+        for k, rem, tat, f in done:
+            tat_map.setdefault((k, rem), []).append(tat)
+            if rem.year == 2027:
+                tat_in.append((k, rem.month, tat, rep))
+        for k in PARTS:
+            rng = rk[k]
+            outs = []
+            used = {}
+            for (d, f, st) in events[k]:
+                if f == "BER":
+                    back = d + dt.timedelta(days=int(rng.choice(lead)))
+                elif P.PART[k]["shop"] == "BOO":
+                    lst = tat_map.get((k, d), [])
+                    i = used.get(d, 0)
+                    used[d] = i + 1
+                    back = d + dt.timedelta(days=int(lst[i] if i < len(lst) else 30))
+                else:
+                    pool_t = vt[k][f] if len(vt[k][f]) else vt[k]["CF"]
+                    back = d + dt.timedelta(days=int(rng.choice(pool_t)))
+                outs.append((d, back))
+            init = [(dt.date(2026, 11, 30), dt.date(2026, 12, 1) + dt.timedelta(days=int(rng.integers(0, 30)))) for _ in range(unsv[k])]
+            allo = sorted(init + outs)
+            starts = [a for a, b in allo]
+            backs = sorted(b for a, b in allo)
+            y27 = [(a, b) for a, b in outs if a.year == 2027]
+            counts[k].append(len(y27))
+            # the year's count with the expected rate's own uncertainty, for the range: the replay's count moved by
+            # the year's expected removals times the rate's own error
+            gg = rng.gamma(max(n_events[k], 1), 1.0 / max(n_events[k], 1))
+            counts_u[k].append(max(0, int(round(len(y27) + exp27[k] * (gg - 1.0)))))
+            for a, b in y27:
+                pipe = bisect.bisect_left(starts, a) - bisect.bisect_right(backs, a)
+                fills[k][max(pipe, 0) + 1:] += 1
+                ndem[k] += 1
+    out = {}
+    for k in PARTS:
+        fr_k = fills[k] / max(ndem[k], 1)
+        need = int(np.argmax(fr_k >= P.FILL)) if (fr_k >= P.FILL).any() else 25
+        c = np.array(counts[k])
+        cu = np.array(counts_u[k])
+        out[k] = {"fill": fr_k, "need": need, "p10": int(np.floor(np.percentile(cu, 10))),
+                  "p90": int(np.ceil(np.percentile(cu, 90))), "mean": float(c.mean())}
+    out["_tat_in"] = tat_in
+    return out
+
+
+# ----------------------------------------------------------------------------------------------- the watch list
+
+def listed(F, end=None):
+    """The October watch list: serials with three or more unscheduled removals in the twelve months to the report's
+    month end."""
+    end = end or Y26[1]
+    a = end - pd.DateOffset(years=1) + pd.Timedelta(days=1)
+    U = F["removals"]
+    U = U[(U["reason"] == "UNSCH") & (U["date"] >= a) & (U["date"] <= end)]
+    c = U.groupby("serial_off").agg(n=("date", "size"), k=("k", "first"))
+    return c[c["n"] >= 3].sort_values(["k", "n"], ascending=[True, False])
+
+
+def spells(F, k):
+    """Each serial's installed spells, (serial, aircraft, position, from, to), rebuilt from the changes: a unit is on
+    a position from the change that fitted it to the change that took it off; the first unit on each position was
+    there before the record starts."""
+    C = F["changes"]
+    C = C[C["k"] == k]
+    out = []
+    for (t, pos), g in C.groupby(["aircraft", "position"]):
+        g = g.sort_values(["date", "change_no"])
+        cur, start, first = None, HIST[0], True
+        for _, r in g.iterrows():
+            if r["serial_off"]:
+                if first or cur is None:
+                    out.append((r["serial_off"], t, pos, HIST[0] if first else start, r["date"]))
+                else:
+                    out.append((cur, t, pos, start, r["date"]))
+                cur = None
+            first = False
+            if r["serial_on"]:
+                cur, start = r["serial_on"], r["date"]
+        if cur:
+            out.append((cur, t, pos, start, HIST[1]))
+    return out
+
+
+def aircraft_driven(F, k, window=120, size=3):
+    """No-fault-found removals the aircraft drove: one of a run of three or more removals from the same aircraft
+    position, by two or more serials, each found serviceable, inside the window."""
+    U = F["removals"]
+    U = U[(U["k"] == k) & (U["reason"] == "UNSCH")].copy()
+    flag = pd.Series(False, index=U.index)
+    nff = U[U["finding"] == "NFF"]
+    for (t, pos), g in nff.groupby(["aircraft", "position"]):
+        g = g.sort_values("date")
+        idx, dates, sns = list(g.index), list(g["date"]), list(g["serial_off"])
+        for i in range(len(idx)):
+            j = i
+            while j + 1 < len(idx) and (dates[j + 1] - dates[i]).days <= window:
+                j += 1
+            if j - i + 1 >= size and len(set(sns[i:j + 1])) >= 2:
+                for q in range(i, j + 1):
+                    flag[idx[q]] = True
+    U["by_aircraft"] = flag
+    return U
+
+
+def fault_windows(U, pad=30):
+    """The spans an aircraft position was driving removals: from the first to the last removal of each run, padded."""
+    win = {}
+    for (t, pos), g in U[U["by_aircraft"]].groupby(["aircraft", "position"]):
+        ds = sorted(g["date"])
+        spans = []
+        a = b = ds[0]
+        for d in ds[1:]:
+            if (d - b).days <= 120:
+                b = d
+            else:
+                spans.append((a - pd.Timedelta(days=pad), b + pd.Timedelta(days=pad)))
+                a = b = d
+        spans.append((a - pd.Timedelta(days=pad), b + pd.Timedelta(days=pad)))
+        win[(t, pos)] = spans
+    return win
+
+
+def serial_exposure(F, k, win=None):
+    """Each serial's installed exposure since January 2023 on the part's own driving exposure, the days its position
+    was driving removals set aside."""
+    drv = drivers_cache(F)[k]["driver"]
+    D = F["day"]
+    col = {"cyc": "cyc", "fh": "fh", "days": None}[drv]
+    by_ac = {}
+    for t, g in D.groupby("aircraft"):
+        s = g.set_index("date")[col] if col else g.set_index("date")["cyc"] * 0 + 1
+        by_ac[t] = s.sort_index()
+    win = win or {}
+    out = {}
+    for sn, t, pos, a, b in spells(F, k):
+        s = by_ac.get(t)
+        if s is None:
+            continue
+        seg = s[(s.index >= a) & (s.index < b)] if col else pd.Series(1.0, index=pd.date_range(a, b - pd.Timedelta(days=1)))
+        for wa, wb in win.get((t, pos), []):
+            seg = seg[(seg.index < wa) | (seg.index > wb)]
+        out[sn] = out.get(sn, 0.0) + float(seg.sum())
+    return out
+
+
+_DCACHE = {}
+
+
+def drivers_cache(F):
+    key = id(F)
+    if key not in _DCACHE:
+        _DCACHE[key] = drivers(F)
+    return _DCACHE[key]
+
+
+def mixture_rates(n, e, iters=400):
+    """Two groups of serials, each with its own removal rate per unit of exposure, fitted by EM on the serials' own
+    counts and exposures; each serial's expected rate is its two group rates weighted by its chance of each."""
+    mu = n.sum() / e.sum()
+    lo, hi, pi = mu * 0.8, mu * 6.0, 0.05
+    for _ in range(iters):
+        l1 = n * np.log(max(lo, 1e-12)) - lo * e
+        l2 = n * np.log(max(hi, 1e-12)) - hi * e
+        a = np.log(1 - pi) + l1
+        b = np.log(pi) + l2
+        mx = np.maximum(a, b)
+        w2 = np.exp(b - mx) / (np.exp(a - mx) + np.exp(b - mx))
+        pi = float(np.clip(w2.mean(), 1e-4, 0.5))
+        lo = float(((1 - w2) * n).sum() / max(((1 - w2) * e).sum(), 1e-9))
+        hi = float((w2 * n).sum() / max((w2 * e).sum(), 1e-9))
+        if hi < lo:
+            lo, hi = hi, lo
+    l1 = n * np.log(max(lo, 1e-12)) - lo * e
+    l2 = n * np.log(max(hi, 1e-12)) - hi * e
+    a = np.log(1 - pi) + l1
+    b = np.log(pi) + l2
+    mx = np.maximum(a, b)
+    w2 = np.exp(b - mx) / (np.exp(a - mx) + np.exp(b - mx))
+    return lo, hi, pi, w2
+
+
+def watch_golden(F, fc=None, estimator="mixture"):
+    """Each listed serial's expected 2027 removals over a new unit in its place: its own removals (those its
+    aircraft drove set aside) over its installed exposure, shrunk toward the part's rate by the spread the part's
+    serials show beyond chance; the saving the whole list's scrapping buys, and the serials worth scrapping."""
+    L = listed(F)
+    X = expo_2027(F)
+    res = []
+    for k, g in L.groupby("k"):
+        U = aircraft_driven(F, k)
+        win = fault_windows(U)
+        inwin = U.apply(lambda r: any(a <= r["date"] <= b for a, b in win.get((r["aircraft"], r["position"]), [])), axis=1) if len(U) else U["by_aircraft"]
+        own = U[~U["by_aircraft"] & ~inwin].groupby("serial_off").size()
+        ex = serial_exposure(F, k, win)
+        sns = [s for s in ex if ex[s] > 0]
+        n = np.array([float(own.get(s, 0)) for s in sns])
+        e = np.array([ex[s] for s in sns])
+        healthy = np.array([s not in L.index for s in sns])
+        mu = n.sum() / e.sum()
+        mu_new = n[healthy].sum() / e[healthy].sum()
+        m = mu * e
+        denom = float(np.sum((n - m) ** 2 - m))
+        alpha = float(np.sum(m ** 2) / denom) if denom > 0 else 1e6
+        lo, hi, pi, w2 = mixture_rates(n, e)
+        post = dict(zip(sns, w2))
+        if estimator == "mixture":
+            mu_new = lo
+        drv = drivers_cache(F)[k]["driver"]
+        e27 = float({"cyc": X["cyc"].sum(), "fh": X["fh"].sum(), "days": 365.0 * P.FLEET_N}[drv]) / P.FLEET_N
+        Rk = F["removals"]
+        Rk = Rk[(Rk["k"] == k) & (Rk["reason"] == "UNSCH") & Rk["back"].notna() & (Rk["date"] >= pd.Timestamp("2025-01-01"))]
+        tat_k = float((Rk["back"] - Rk["date"]).dt.days.mean()) if len(Rk) else 20.0
+        for sn in g.index:
+            ns, es = float(own.get(sn, 0)), ex.get(sn, 0.0)
+            if estimator == "mixture":
+                q = post.get(sn, 0.0)
+                lam = q * hi + (1 - q) * lo
+            elif estimator == "raw":
+                lam = ns / es if es > 0 else mu
+            else:
+                lam = (alpha + ns) / (alpha / mu + es) if es > 0 else mu
+            # the position's removals over a year with the serial kept: the serial installed between its repairs, a
+            # healthy unit in the position while it is away; against a new unit there all year
+            per_year = lam * e27
+            on_wing = 1.0 / (1.0 + per_year * tat_k / 365.0)
+            saving = on_wing * (lam - mu_new) * e27
+            res.append({"serial": sn, "k": k, "n12": int(g.loc[sn, "n"]), "own": int(ns), "exposure": es,
+                        "rate": lam, "excess": saving, "per_installed_year": (lam - mu_new) * e27, "on_wing": on_wing,
+                        "tat": tat_k, "by_aircraft": int(U[(U["serial_off"] == sn) & U["by_aircraft"]].shape[0])})
+    W = pd.DataFrame(res).set_index("serial")
+    W["scrap"] = W["excess"] >= P.SCRAP_EXCESS
+    return W, float(W["excess"].sum())
+
+
+def watch_hurried(F):
+    """The hurried readings of the list: every listed removal at face value against the part's average; and the
+    confirmed failures alone, the no-fault-found removals set aside, read off the same twelve months."""
+    L = listed(F)
+    a = Y26[1] - pd.DateOffset(years=1) + pd.Timedelta(days=1)
+    U = F["removals"]
+    U = U[(U["reason"] == "UNSCH") & (U["date"] >= a) & (U["date"] <= Y26[1])]
+    out = {}
+    face, cf_only, cf_set, face_set = 0.0, 0.0, [], []
+    for k, g in L.groupby("k"):
+        units = P.FLEET_N * P.PART[k]["pos"] + P.POOL[k]
+        avg = (U["k"] == k).sum() / units
+        avg_cf = ((U["k"] == k) & U["finding"].isin(["CF", "BER"])).sum() / units
+        for sn in g.index:
+            face += g.loc[sn, "n"] - avg
+            face_set.append(sn)
+            ncf = int(((U["serial_off"] == sn) & U["finding"].isin(["CF", "BER"])).sum())
+            cf_only += ncf - avg_cf
+            if ncf - avg_cf >= P.SCRAP_EXCESS:
+                cf_set.append(sn)
+    return {"face": face, "face_set": face_set, "cf_only": cf_only, "cf_set": cf_set}
+
+
+
+# ----------------------------------------------------------------------------------------------- the hurried routes
+
+def palm(lam_per_day, tat_days, target=P.FILL):
+    """The spares Palm's theorem gives: the least stock whose Poisson pipeline is under it with the target chance."""
+    m = lam_per_day * tat_days
+    s, cdf, term = 0, math.exp(-m), math.exp(-m)
+    while cdf < target:
+        s += 1
+        term *= m / s
+        cdf += term
+    return s + 1
+
+
+def pec_current_mix(F, n27_fh_pos, nff_fh):
+    """The propeller control as a careful run reads it from the repairers' orders: the modified and unmodified rates
+    split by one group-by, applied at the fleet's mix at the snapshot, with no conversion through 2027."""
+    s = pec_split(F)
+    f = s["mod_installed"] / s["installed"]
+    return n27_fh_pos * (f * s["rate_mod"] + (1 - f) * s["rate_un"] + nff_fh)
+
+
+def hurried(F, exposure="fh", tat="avg", D=None, fc=None):
+    """The careful but hurried route and its variants: each part on its twelve months' unscheduled removals per
+    flight hour (or on the driving exposure, or the golden forecast), the 2026 average turnaround (or the golden's),
+    Palm's spares on a Poisson pipeline."""
+    R = F["removals"]
+    U = R[(R["reason"] == "UNSCH")]
+    Dd = F["day"]
+    m12 = (Dd["date"] >= Y26[0]) & (Dd["date"] <= Y26[1])
+    X = expo_2027(F)
+    tot27 = {"fh": X["fh"].sum(), "cyc": X["cyc"].sum(), "days": X["acdays"].sum()}
+    tot12 = {"fh": Dd[m12]["fh"].sum(), "cyc": Dd[m12]["cyc"].sum(), "days": float(P.FLEET_N * 365)}
+    out = {}
+    for k in PARTS:
+        n12 = int(((U["k"] == k) & (U["date"] >= Y26[0]) & (U["date"] <= Y26[1])).sum())
+        if exposure == "fh":
+            proj = n12 / tot12["fh"] * tot27["fh"]
+        elif exposure == "golden":
+            proj = fc[k]["total"]
+        else:
+            drv = (D or drivers_cache(F))[k]["driver"]
+            proj = n12 / tot12[drv] * tot27[drv]
+        if k == "PEC" and exposure == "fh":
+            nff12 = int(((U["k"] == k) & (U["date"] >= Y26[0]) & (U["date"] <= Y26[1]) & (U["finding"] == "NFF")).sum())
+            proj = pec_current_mix(F, tot27["fh"] * P.PART[k]["pos"], nff12 / (tot12["fh"] * P.PART[k]["pos"]))
+        r26 = U[(U["k"] == k) & (U["date"] >= pd.Timestamp("2026-01-01")) & U["back"].notna()]
+        t_avg = float((r26["back"] - r26["date"]).dt.days.mean()) if len(r26) else 20.0
+        # the range a careful run bootstraps unprompted: the twelve months' removals resampled month by month, scaled
+        # to 2027's exposure as the projection is
+        mm = U[(U["k"] == k) & (U["date"] >= Y26[0]) & (U["date"] <= Y26[1])]
+        mc = mm.groupby(mm["date"].dt.to_period("M")).size().reindex(pd.period_range(Y26[0], Y26[1], freq="M"), fill_value=0).values
+        rng = np.random.default_rng(1000 + PARTS.index(k))
+        boot = np.array([rng.choice(mc, size=12, replace=True).sum() for _ in range(2000)]) * (proj / max(n12, 1))
+        out[k] = {"n12": n12, "proj": proj, "tat": t_avg, "spares": palm(proj / 365.0, t_avg),
+                  "p10": float(np.floor(np.percentile(boot, 10))), "p90": float(np.ceil(np.percentile(boot, 90)))}
+    return out
+
+
+def _pois_q(m, q):
+    k, cdf, term = 0, math.exp(-m), math.exp(-m)
+    while cdf < q:
+        k += 1
+        term *= m / k
+        cdf += term
+    return k

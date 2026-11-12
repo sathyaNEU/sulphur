@@ -1,126 +1,136 @@
 # determinism-check report, task4, 2026-11-11
 
-Architecture 11 (Saarnela's 2027 peak plan, evening shifts and agency hours). This pass runs beside the leak
-reader at /build stage 4, licensed by the author. It supersedes the architecture-10-era reports on file
-(determinism_check_report_pass3.md to pass10.md, left untouched) with the current cut's own report.
+Architecture 12 (Havørn Regional's 2027 rotable spares plan, watch-list withdrawals). This pass runs at /build
+stage 4, licensed by the author. It supersedes every earlier architecture's report on file (the architecture-10-era
+and architecture-11 reports, `determinism_check_report_pass3.md` through the prior `determinism_check_report.md`,
+left untouched as history of a different slot's run) with the current cut's own report.
 
 ## Verdict
-
-**DETERMINISTIC, partial verification.** The isolated judge thread independently reproduced component 4 (the
-2025 peak's picker hours) exactly, the Black Friday / 53-ISO-week calendar mechanism exactly, and reproduced
-component 1 (aisle congestion, 0.46 min/line at 1.8 pickers/aisle) and ask 4 (the pooled 14.8 per cent
-overstatement) inside their stated bands, but did not have the time budget in this one-shot pass to fully
-re-derive asks 1, 2, 3, 5 and component 2 to their numeric bands. It traced every input those asks need to a
-specific shipped file and found nothing in that trace that contradicts the committed figures. No competing
-defensible answer and no missing or external fact was found anywhere in the pass.
-
-**Disposition:** APPROVE, with one open item for the author's own records, not a FIX_NOW or SEND_BACK: re-verify
-asks 1/2/3/5 and component 2 (the zone-week hours and ranges, the agency hours, the shift verdicts, the
-Huippu-vs-Kotikaari minutes gap, and the growth-conditioned budget overstatement) end to end against the bundle
-in a future pass with a larger time budget. Nothing found in this pass points to a defect; the gap is coverage,
-not a located problem.
-
-**Stumping type:** mechanism: mixed (forecasting + decomposition_attribution + binding_constraint),
-stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no.
+**DETERMINISTIC**
+**Disposition:** APPROVE
+**Stumping type:** mechanism: forecasting (plus method_or_model_selection on the Bodø queue and causal attribution
+on the watch list), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
 ## Why
-
-The thread derived its own answer from target/ before opening graded_blocks.md (confirmed in verdict.md and
-own_derivation.md) and kept that order. The two figures it worried about most going in, the congestion
-coefficient and the pooled forecast overstatement, both required a specific non-obvious method choice to land
-in-band and both did once that choice was made from the files (an interacted density term for congestion, the
-standard's next-working-day release rule for the overstatement), which is the "method stays open, WHAT is filed"
-shape the spec licenses, not an unpinned ambiguity. No file in the bundle argues for a different set of
-evening-shift weeks, and the site manager's own draft sheet (saarnela_peak_2027_staffing.xlsx) reproduces by its
-own stated method and answers a shallower quantity (2025's floor rate), never the 2027 one.
+The isolated judge thread derived its own answer from `target/` alone before opening the graded blocks (order of
+work confirmed, `own_derivation.md` written first), then recomputed every load-bearing figure in the solution. The
+main recommendation and every supplementary answer are forced from the shipped files: the reliability report's own
+per-flight-hour "2027 outlook" (41/36/34 for starter-generator/brake/bleed valve) reproduces exactly from
+`component_changes_2023-01_2026-11.csv` once two real grain issues are resolved (installation-completion rows with
+a null `serial_off` are not a second removal; one literal duplicate row for 822-1123-002), but it is rejected by a
+mechanism the files do not state anywhere: these three parts wear by landings and engine starts, not flight hours,
+which the judge itself re-derived from `flight_legs_2023-01_2026-11.csv` and `fleet_register.xlsx` by comparing
+removal rates per 1,000 cycles against per 1,000 flight hours across the fleet's four existing bases (which already
+differ 0.29 to 1.05 hours per cycle). `flying_programme_2027.xlsx` independently gives 2027 cycles +18.5% against
+flight hours -13.1%, matching the solution's "landings 19 per cent up, flight hours 13 per cent down" exactly. This
+is the client's permitted forecasting shape (a correctly-read past that a genuine regime change, the Helgeland
+routes, does not pin), not a catch-the-wrong-number stump. The Bodø shop queue sizing (R6/R8), the SB 61-0042
+propeller-control forecast (R4) and the watch-list serial-vs-position attribution (R3/R3b) all independently
+reproduced from their own files.
 
 ## Recomputation ledger
-
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Component 4, 2025 peak picker hours (P1/P2/B1) | 3,384 / 3,104 / 2,280 | 3,384.0 / 3,104.0 / 2,280.0 from timesheets_2024-01_2026-10.csv, ISO weeks 46-50 of 2025, by cost centre | Yes, exact |
-| Black Friday ISO week, 2025 vs 2027 | week 48 (2025), week 47 (2027), via 2026's 53rd ISO week | week 48 (2025-11-28), week 48 (2026-11-27), week 47 (2027-11-26); 2026-12-28 falls in ISO week 53 | Yes, exact |
-| Standard's aisle counts and floor limits | P1 8->12 aisles/limit 24; P2 7->11/limit 22, at 8 Jan 2024 | Matched from a real table extraction of the standard PDF (not dropped by a naive text read) | Yes, exact |
-| Critical component 1, congestion at 1.8 pickers/aisle | 0.46 min/line (band 0.40-0.51) | ~0.41 min/line under an interacted lines x ppa / ppa^2 spec, R^2 ~0.992; an additive-only spec misfits badly and is rejected on sign/fit, matching SOLUTION_STEPS's own claim | Yes, inside band |
-| Ask 4, pooled year-ahead overstatement | 14.8 per cent (band 13.8-17.3) | ~13.2 per cent on raw received-date bucketing; ~16.5 per cent once the standard's clause 2.4 release rule is applied | Yes, inside band only under the filed release rule |
-| Asks 1, 2, 3, 5; component 2 | per submission.md | inputs located and structurally consistent with SOLUTION_STEPS; not numerically re-derived in this pass | Not verified this pass (traced, not closed) |
+| Trailing-12mo cycles (Nov 2025-Oct 2026) | 60,830 (implicit basis) | 60,830 | Yes, exact |
+| Trailing-12mo flight hours | 28,810 (report basis) | 28,685 | Yes, within ~0.3-0.8%/month, immaterial |
+| Per-part removal counts / MTBUR, Oct 2026 report | as in `reliability_report_2026-10.pdf` | matched exactly after dedup of one duplicate row and exclusion of "fitted, unit awaited" install-completion rows | Yes, exact once two grain fixes applied |
+| 2027 cycles vs trailing | +19% | +18.5% from `flying_programme_2027.xlsx` | Yes |
+| 2027 flight hours vs trailing | -13% | -13.1% | Yes |
+| Starter-generator / brake 2027 removals | 59 / 51 | ≈56 / ≈50 by a simple ratio-scaled cycle forecast (golden uses a fitted model, inside band 55-66 / 49-55) | Yes, within band |
+| SB 61-0042 bulletin incorporation | ~75% of installed units at snapshot | ~78% from `rotable_stores_snapshot_2026-11-30.xlsx`'s SB column on 816534-3 | Yes, consistent |
+| Bodø shop 2027 summer queue | ~29 days (Jul-Aug) vs 13 (2026 avg) | seasonal pattern confirmed in `bodo_shop_work_orders_2023-2026.csv` + `bodo_shop_roster_2023-2026.csv` (worst observed ~9 days in Aug 2025, consistent direction) | Yes, directionally; exact replay not independently re-run to the day |
+| Figure consistency across FINAL_RECOMMENDATION / CRITICAL_COMPONENTS / SUPPLEMENTARY_ANSWERS | - | no disagreement found on any cross-checked figure | Yes |
 
 ## Competing answers that survived
-
-None found. The thread found no reading of the files that drives a different main recommendation, and
-specifically checked and rejected the naive alternatives SOLUTION_STEPS itself names (the 2025 rate carried
-forward, the pilot's polybag-only mix, the pooled 14.8 per cent applied to a budget that never planned that much
-growth, and the week-numbered calendar phasing), finding each pulls the evening-shift weeks in a different
-direction, consistent with the design note's "Not one thing" claim and its enumerated single-lever wrong routes
-(SOLUTION_STEPS step 8).
+None disqualifying. One watch item (not a Gate C failure): the "8 of 23" watch-list withdrawal split depends on a
+shrinkage/credibility estimate of each sparse serial's own removal rate (3-5 removals each) that no shipped file
+specifies a method for. The judge could not, in its time budget, build a rival shrinkage estimator and show it
+moves a borderline serial across the design note's 1.5-removals/year threshold, so this is reported as the single
+place in the chain most likely to admit a reasonable alternative statistical choice, not as a demonstrated fork.
 
 ## Spec gates
-
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| Usable files | 10 or more | 18 files in target/ (no system files, no __MACOSX) | Pass |
-| File categories | 2 or more | spreadsheet (5 xlsx), text/document (10 csv, 2 pdf, 1 docx) | Pass |
-| Large messy CSVs | a CSV >= 20,000 rows, and a CSV of 10-20 printed pages or more | huippu_article_lines (93,580 rows), wms_zone_hours (34,078), timesheets (27,406), wms_pick_confirmations_HUI (26,672) all clear 20,000 rows; several mid-size CSVs (2,000-16,500 rows, multi-column) clear a 10-20 page print easily | Pass |
-| Distractors named outside the ZIP | metadata.json names 2+, nothing inside the ZIP labels one | saarnela_packing_benches_2026-01_2026-10.csv and kotikaari_returns_received_2024-01_2026-10.csv named in task4/metadata.json only; neither file name nor any file content inside target.zip marks either as unused | Pass |
-| Distractors relevant but unused | each should be plausible and unused | both read as genuine 3PL operational exports (a packing-bench log, a returns feed) that no SOLUTION_STEPS step references; judge thread independently flagged both as "likely-unused" before being told | Pass |
-| Deliverables | 1-3, all present in golden, no forced format family | 2 (saarnela_peak_plan_2027.xlsx, saarnela_peak_plan_2027.docx), both present in golden.zip, matching metadata.json's deliverables list exactly | Pass |
-| Asks multidimensional, unit stated, no rounding instruction | required | prompt.txt gives no rounding instruction (precision and bands live in submission.md); asks carry their own units (minutes, hours, per cent) and resolve to many gradable figures (15 zone-week hours, 5 agency figures, 6 shift verdicts) | Pass |
-| Answer shape | one of the client's fourteen | "a schedule under capacity" (per zone-week lines vs. day-shift capacity at the limit, with hours, ranges, shift verdict and agency hours), four or more results each independently checkable | Pass |
-| Golden ZIP contents | exactly the requested files, in the requested formats | golden.zip holds exactly saarnela_peak_plan_2027.docx and saarnela_peak_plan_2027.xlsx, nothing else | Pass |
-| Realism / not LLM-authored | required | judge thread found a real payroll-system-migration seam (semicolon/decimal-comma era vs. the new export, different cost-centre codes), a genuine WMS double-export artifact, no LLM tells, no authoring/benchmark disclosures anywhere in target/; a direct check of the golden memo's XML shows plain operational prose (a dated memo, a table, a stated recommendation), not generic padding | Pass |
+| File count / categories | 10+ usable files, 2+ categories | 13 files: 6 CSV, 4 xlsx, 3 PDF (spreadsheet, tabular/text, document categories) | Pass |
+| Large messy CSVs | one 20,000+ rows, one 10-20 printed pages | `flight_legs_2023-01_2026-11.csv` 240,432 rows; `bodo_shop_work_orders_2023-2026.csv` (1,633 rows x 12 cols) and `component_changes_2023-01_2026-11.csv` (1,692 rows x 14 cols) both estimate to roughly 17-20 printed pages at typical wide-table density | Pass (page count is an estimate, not a rendered print) |
+| metadata.json distractors | 2+ named, none labelled inside the ZIP | `engine_trend_monitoring_2025-2026.csv`, `pool_support_offer_2026.pdf`; neither is named as a distractor anywhere inside `target/` | Pass |
+| Distractor relevance/use | unused yet relevant; one reproduces a graded quantity and a shipped fact rules it out | `pool_support_offer_2026.pdf` is a live-looking third-party pool-access cost sheet covering 13 of the 16 part numbers (plausible as a buy-vs-pool alternative) that the prompt's fill-rate/spares-holding ask does not call for; `engine_trend_monitoring_2025-2026.csv` is engine ITT/torque trend data with no tie to any of the 16 rotable part numbers. Both confirmed unused by the judge's own derivation. The stronger "arithmetically reproduces a graded figure" sub-clause was not independently verified against `pool_support_offer_2026.pdf`'s fee table within this pass's budget | Pass, with one unverified sub-clause |
+| Deliverables | 1-3, all present in golden, no format family required | 2 requested (xlsx, pptx); `golden.zip` holds exactly `havorn_rotable_spares_2027.xlsx` and `havorn_rotable_spares_2027.pptx`, nothing else | Pass |
+| Asks multi-dimensional, unit stated, no rounding in prompt | - | 16-part-number table with removals/ranges/spares-needed/change per ask 1-3; slide asks 4-6 name buy/cut lines, watch-list savings and serials; prompt names no rounding | Pass |
+| Answer shape, 4+ checkable results | one of 14 shapes, 4+ independently checkable | buy/cut/hold allocation with its sensitivity (fill-rate sizing) plus a forecast with bands; design note's chain carries 9 results (R2-R9) across 6 areas, judge independently confirmed ~6 distinctly graded results | Pass |
+| Golden ZIP contents | exactly the requested files | `havorn_rotable_spares_2027.xlsx`, `havorn_rotable_spares_2027.pptx`, nothing else | Pass |
+| Realism / no LLM tells | - | judge's hygiene check: PASS, genuine MRO/engineering artifacts, schema drift, duplicate row, mixed reason-code eras; no LLM authorship tells, no benchmark/authoring disclosure, no public-data contamination (fictional carrier) | Pass |
 
 ## Gate G reconciliation
-
-The thread's classification (mechanism: mixed [forecasting + decomposition_attribution + binding_constraint],
-surface_read_dependency: no, sole_data_defect: no) matches the design note's own account. DESIGN_NOTE.md's "Not
-rule application," "Not semantics" and "No decoy" sections argue the same four independent levers the thread
-found by its own reading (the 2025 density vs. 2027's doubled zone limit; the pilot's polybag-only mix vs. the
-brand's full assortment; the pooled vs. growth-conditioned overstatement; the week-numbered vs. date-anchored
-Black Friday phasing), and the thread arrived at the same four without having read the note. No reported figure
-in the bundle is wrong and the task does not turn on catching that one is; this passes Gate G cleanly as the
-note intends (the design note's own "Strategy label: own" line and the Frontier check's "Forcing" row name the
-same shortcuts and the same partial-fix routes the thread independently rediscovered).
+Judge: `mechanism: forecasting` (+ `method_or_model_selection`, causal attribution on the watch list),
+`stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`.
+Design note's `## Frontier check`: precedents cited for every careful-column loss (R2 N04/N01, R3 L03/L13, R3b L14,
+R5 L12/L36, R6 L15/L16, R7 L35, R8/R9 L11); `Shallow path checks:` names the per-flight-hour outlook's own
+back-test and the refuting cross-base panel fit, Palm-on-average's own 2026 fit and the refuting shop replay, and
+the confirmed-failure-only watch list's own check and the refuting runs-of-serviceable-removals test;
+`Assumption made false:` the flight-hour scaling assumption and the 2026-turnaround assumption, both tested from a
+named file; `Forcing:` the buy/cut lines hold across all seven golden-family members and across every fitted input
+moved by its spread; `Noun swap:` task20 architecture 1, severity none. These line up with the judge's own
+`mechanism`/`stumping_family` line: the judge reached forecasting and honest-data method/attribution selection
+independently, with no surface-read-rejection core, matching the note's claim that the per-flight-hour and
+average-turnaround readings are rejected by named data, not by a planted defect.
 
 ## Stump power (Gate F)
+Judge: stump power "high and spread across several independent moves" (the flight-hour-vs-landings transfer, the
+average-turnaround-vs-replay choice, the pooled-vs-split SB 61-0042 cohort, the watch list's raw counts vs.
+serial-driven attribution), "no single one of these, caught alone, fixes the whole deliverable."
 
-The thread's own read: the result a careful-but-hurried strong model is likeliest to lose is the evening-shift
-plan (asks 1-3), by filing a day-shift congestion rate close to 2025's observed ~1.15 pickers/aisle instead of
-recomputing it at 2027's doubled-limit density (24/22 pickers), understating hours and likely missing the
-evening shift in one or more weeks, matching the design note's effort table (R3, "method shortcut," Missed at
-both quick and careful-hurried). This is a genuine forecasting/binding-constraint trap on honest numbers, not a
-reported-figure catch.
+Design note's `## Effort test`: quick 1 of 9, careful-but-hurried 3 of 9, thorough 9 of 9; pair estimate 40.6
+(quick 20.8, thorough 100); largest single hint rescues 1 of 9 (R2 alone), and even then leaves the in-house spares
+at 0 of 5 lines in band on the careful pass.
+
+Judge's own Gate H line: `effort: quick ~2 of 6, careful-but-hurried ~3-4 of 6, thorough 6 of 6`; `one_fact: "use
+2027 landings, not flight hours" rescues about 2 of 6`.
+
+**Reconciliation finding (the one worth the author's attention):** the judge's own unprompted derivation reached
+the landings-vs-flight-hours mechanism (R2) through a single cross-base rate comparison (cycles vs. flight hours
+per 1,000, across the fleet's four existing bases) and then recovered 2027 removals for starter-generator and brake
+with a simple ratio-scaled forecast that landed inside the golden's band (≈56 and ≈50 against 55-66 and 49-55) on
+its own first pass, without reproducing the design note's full cross-base log-likelihood model selection. The
+design note's `## Effort test` grades R2 Missed for both the quick and the careful-but-hurried column, Right only
+at the thorough column, on the view that identifying the driver requires the panel fit with the likelihood-ratio
+comparison (2 dlogL 23.8/17.5/18.2). The judge's unprompted result suggests the mechanism itself (landings, not
+hours, drive these three parts) is closer to "modelled on sight" (a cross-base ratio comparison, the kind of
+one-look group-by the house's own cautions treat as earned by a careful pass) than to a result that needs the
+full statistical fit to land in band. This nudges the judge's own quick/careful shares (~2/6 and ~3-4/6 of 6) above
+the design note's 1/9 and 3/9 of 9 shares (note the different denominators: 6 distinctly-graded results the judge
+could independently confirm vs. the note's full 9-row chain, which also carries R6/R8/R9 downstream of R2). The
+quick-pass share (~2/6 = 33%) and the one-fact share (~2/6 = 33%) both sit right at, not clearly over, the
+house's "about a third" ceiling, and the careful-but-hurried share stays clearly below the thorough column in both
+tellings, so this is not a Gate H failure on its own. It is the single most useful lever if the task needs
+hardening later: either tighten R2's band so a simple ratio-scaled forecast (once the driver is spotted) falls
+outside it, or make the driver identification itself require crossing more than one base's worth of evidence
+before it resolves.
+
+No `one_thing` finding: the judge's H line is `one_thing: none`, consistent with the design note's hidden-factor
+record (six constructed factors, all marked `keep`, none sitting only in the deciding units; every one found by a
+plot/group-by, runs-of-serviceable-removals, a targeted query or a replay, i.e. modelling work, not a single-sentence
+giveaway). No banned_stumping_type: the judge found no surface-read-rejection core; the per-flight-hour and
+average-turnaround readings are rejected by data the files carry independently of the recommended methods, which is
+the note's own framing in `Shallow path checks:`.
 
 ## Findings, ranked
-
-1. **Coverage gap, not a defect (primary finding).** The judge thread's one-shot time budget did not stretch to
-   numerically closing asks 1, 2, 3, 5 or component 2; it traced their inputs and found no contradiction, but
-   this pass cannot certify those five results to the stated bands the way it certified component 4, component 1,
-   the Black Friday mechanism and ask 4. Recommend a follow-up determinism pass (or a longer single pass) that
-   starts its own derivation from the own-pickers/staffing workbooks, the article-lines/item-master/slotting
-   join for Huippu's mix, and the log-log growth fit for component 2, specifically to close this gap.
-
-2. **Effort-table divergence, flagged but unconfirmed.** The thread's own (admittedly partial) effort estimate
-   puts the careful-but-hurried pass at roughly 4-6 of 10 results, above DESIGN_NOTE.md's Effort test table (2 of
-   10: R1 and R2 only). Because the thread did not finish deriving R7-R10, this cannot be treated as a confirmed
-   contradiction of the note's effort grading, only as a signal the author should re-check once the coverage gap
-   above is closed: if a fuller pass confirms the careful-but-hurried solver reaches more than a third of the
-   results, that would move the note's own effort test (H4) toward a borderline reading.
-
-3. **One-fact claim, same caveat.** The thread names "recompute 2027's congestion at the zone's current limit
-   (24/22), not 2025's logged density" as the single most rescuing sentence, and estimates it rescues "roughly
-   the shift-verdict/hours asks (1-3)" (which, read generously, could be 4-5 of the 10 chain results: R3, R7, R8,
-   R9, R10) against DESIGN_NOTE.md's own "Largest single hint... rescues 1 of 10 results" (R3 alone). This reads
-   wider than the note's claim, but it rests on the same unclosed computation as finding 2: R7, R9 and R10 also
-   depend on R4, R5 and R6 (the pilot mix, the growth-conditioned overstatement, the calendar re-key) per the
-   design note's own carry-forward rule, so a single congestion fact should not, on the note's own chain logic,
-   rescue the full hours/evening/agency set. Worth the author's own check once asks 1-3 are closed, not a basis
-   for SEND_BACK on this pass's evidence alone.
-
-4. Hygiene, Gate G and the spec-gate table above are all clean with no caveats.
+1. (Medium, non-blocking) The landings-vs-flight-hours mechanism (R2) may be reachable by a careful-but-hurried
+   solver via a single cross-base rate comparison plus a simple ratio-scaled forecast, which already lands inside
+   the golden's band for starter-generator and brake. The design note's effort test currently grades this Missed at
+   the careful-but-hurried column; the judge's independent, unprompted pass reached it there. See Gate G/H
+   reconciliation above for the detail and the two hardening options.
+2. (Low, watch item, not a fork) The watch-list "8 of 23" split depends on an unspecified shrinkage/credibility
+   choice for each sparse serial. No rival estimator was shown to flip a serial in this pass; flag for one check
+   the next time the build is touched.
+3. (Low, hygiene) The "distractor arithmetically reproduces a graded figure" sub-clause of the spec's distractor
+   gate was not independently re-verified against `pool_support_offer_2026.pdf`'s fee table in this pass; both
+   distractors are confirmed unused and plausible, but this specific sub-clause is unconfirmed rather than failed.
 
 ## Next action for the author
-
-Run one more determinism pass (or extend this one with a larger time budget) focused narrowly on closing asks 1,
-2, 3, 5 and component 2 end to end against the bundle, specifically to confirm or correct the effort-table and
-one-fact divergences flagged above; nothing in this pass's completed recomputation changed the verdict, the
-disposition, or the Gate G/H classification.
+None required to ship architecture 12 as-is (APPROVE stands). If the build is revisited before upload, the one
+concrete step worth taking is re-running `effort.py`'s careful-but-hurried pass for R2 with a simple ratio-scaled
+cross-base-rate forecast (no likelihood-ratio model fit) and checking whether it lands inside R2's stated band; if
+it does, either widen R2's "hurried analyst's failure" classification to reflect that it is partly earned at the
+careful-but-hurried level, or narrow the band so the ratio-scaled shortcut misses it, before the next platform
+round.

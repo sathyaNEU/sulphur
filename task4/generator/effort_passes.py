@@ -1,222 +1,145 @@
-"""effort.json: the golden, the careful but hurried route and the quick route run end to end on the cut pack,
-result by result, with each result's band measured on the golden family's rivals, the precedents behind every
-result the careful pass loses, the hints, the routes and the forcing on both sides."""
+"""effort.json, written from results.compute: each result's golden and band, the value the quick, careful-but-hurried
+and thorough passes file, each pass computed end to end by its own method on the cut pack; the one-fact hint run
+literally; the routes' calls; the forcing block (the golden family, the shortcuts, each fitted input perturbed)."""
+import copy
 import json
-import math
-
-import numpy as np
-import pandas as pd
 
 import analysis as A
-import golden as GD
+import docs
 import params as P
+import results as RS
 
-W = list(P.PEAK_WEEKS)
-VARIANTS = {"a quadratic congestion term, its knot by fit": {"cong": "quad"},
-            "the logged share flat over the day": {"ls": "flat"},
-            "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": {"src": "avg"},
-            "a linear calibration on the plan's growth": {"form": "linear"},
-            "the calibration through the origin": {"intercept": False},
-            "the calibration on the peak weeks alone": {"cal_weeks": P.PEAK_WEEKS},
-            "Huippu Sport's mix over two peaks": {"months": ("2024-11", "2024-12", "2025-11", "2025-12")},
-            "the time model fitted on 2024 to 2026": {"fit_years": (2024, 2025, 2026)}}
-PERTURB = {"congestion gamma -20%": {"gamma_mult": 0.8}, "congestion gamma +20%": {"gamma_mult": 1.2},
-           "Huippu Sport's extra time -20%": {"hui_mult": 0.8}, "Huippu Sport's extra time +20%": {"hui_mult": 1.2},
-           "the 2027 overstatement -20%": {"over_mult": 0.8}, "the 2027 overstatement +20%": {"over_mult": 1.2}}
+CYC_PRICED = ("SG", "BRK", "BAV")
 
 
-def cells(R):
-    return sorted("%s-%d" % (zz, w) for zz in A.Z_SMALL for w in W if R["evening"][(zz, w)])
+def _tab(d, keys):
+    return {k: d[k] for k in keys}
 
 
-def hours_tab(R):
-    return {"%s-%d" % (zz, w): R["plan"][(zz, w)]["hours"] for zz in P.ZONES for w in W}
+def build(G):
+    fc, MC, H, Hw, W = G["fc"], G["MC"], G["H"], G["Hw"], G["W"]
+    rem = {k: round(fc[k]["total"]) for k in A.PARTS}
+    hproj = {k: round(H[k]["proj"]) for k in A.PARTS}
+    # the quick pass reads the October report's own 2027 outlook: every part at October's MTBUR, pooled
+    qproj = {k: round(v) for k, v in G["qproj"].items()}
+    rb = G["rem_band"]
+    need = G["need"]
+    nb = {k: list(G["need_band"][k]) for k in A.PARTS}
+    E = {"results": [], "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
+    R = E["results"]
+    R.append({"id": "R2", "name": "the landing-driven parts' 2027 unscheduled removals", "graded_as": "Component 1",
+              "figure": "rem_cyc", "golden": _tab(rem, CYC_PRICED), "depends": [], "independent": "the legs and the changes",
+              "bands": {k: [rb[k][0], rb[k][1]] for k in CYC_PRICED},
+              "passes": {"quick": _tab(qproj, CYC_PRICED),
+                         "careful": {"value": _tab(hproj, CYC_PRICED), "grade": "partly",
+                                     "why": "the computed careful pass carries every part per flight hour and misses all three; "
+                                            "the stage 4 determinism judge's blind derivation found the landings driver by "
+                                            "comparing the bases' rates, so a careful run may too"},
+                         "thorough": _tab(rem, CYC_PRICED)},
+              "precedent": ["N04", "N01"], "partly_share": 0.5})
+    R.append({"id": "R3", "name": "the watch-list serials worth withdrawing", "graded_as": "Component 3",
+              "figure": "scrap_set", "golden": G["scrap"], "depends": [], "independent": "the changes and the findings",
+              "passes": {"quick": sorted(Hw["face_set"]), "careful": sorted(Hw["cf_set"]), "thorough": G["scrap"]},
+              "precedent": ["L03", "L13"]})
+    R.append({"id": "R3b", "name": "the removals withdrawing the whole watch list saves", "graded_as": "Ask 3",
+              "figure": "saving", "golden": round(G["saving"]), "depends": [], "independent": "the changes and the findings",
+              "band": [G["saving_band"][0], G["saving_band"][1]], "partly": [G["saving_band"][0] * 0.85, G["saving_band"][1] * 1.15],
+              "passes": {"quick": round(Hw["face"]), "careful": round(Hw["cf_only"]), "thorough": round(G["saving"])},
+              "precedent": ["L03", "L14"]})
+    R.append({"id": "R4", "name": "the propeller control's 2027 removals and spares", "graded_as": "Component 4",
+              "figure": "pec", "golden": {"removals": rem["PEC"], "spares": need["PEC"]}, "depends": [],
+              "independent": "the repairers' orders and the stores snapshot",
+              "bands": {"removals": [rb["PEC"][0], rb["PEC"][1]], "spares": nb["PEC"]},
+              "passes": {"quick": {"removals": qproj["PEC"], "spares": P.POOL["PEC"]},
+                         "careful": {"removals": hproj["PEC"], "spares": H["PEC"]["spares"]},
+                         "thorough": {"removals": rem["PEC"], "spares": need["PEC"]}},
+              "precedent": ["L12", "L11"], "partly_share": 0.5})
+    R.append({"id": "R5", "name": "every part number's expected 2027 unscheduled removals", "graded_as": "Ask 1",
+              "figure": "rem", "golden": rem, "depends": [], "independent": "the legs, the changes and the programme",
+              "bands": {k: [rb[k][0], rb[k][1]] for k in A.PARTS},
+              "passes": {"quick": qproj, "careful": hproj, "thorough": rem}, "precedent": ["L12", "L36"], "partly_share": 0.5})
+    inh = list(P.IN_HOUSE)
+    R.append({"id": "R6", "name": "the in-house lines' spares through the Bodø shop's 2027 queue", "graded_as": "Component 2",
+              "figure": "need_inhouse", "golden": _tab(need, inh), "depends": ["R2"], "independent": "",
+              "bands": {k: nb[k] for k in inh},
+              "passes": {"quick": _tab(P.POOL, inh), "careful": {k: H[k]["spares"] for k in inh}, "thorough": _tab(need, inh)},
+              "precedent": ["L15", "L16"], "partly_share": 0.5})
+    p10 = {k: int(MC[k]["p10"]) for k in A.PARTS}
+    p90 = {k: int(MC[k]["p90"]) for k in A.PARTS}
+    gold_rng = {**{k + "_lo": p10[k] for k in A.PARTS}, **{k + "_hi": p90[k] for k in A.PARTS}}
+    hr = {**{k + "_lo": int(H[k]["p10"]) for k in A.PARTS}, **{k + "_hi": int(H[k]["p90"]) for k in A.PARTS}}
+    # the quick pass's range: Poisson quantiles around the October outlook
+    qr = {**{k + "_lo": A._pois_q(qproj[k], 0.10) for k in A.PARTS}, **{k + "_hi": A._pois_q(qproj[k], 0.90) for k in A.PARTS}}
+    rbands = {**{k + "_lo": list(G["p10_band"][k]) for k in A.PARTS}, **{k + "_hi": list(G["p90_band"][k]) for k in A.PARTS}}
+    R.append({"id": "R7", "name": "the 80 per cent ranges", "graded_as": "Ask 1", "figure": "range", "golden": gold_rng,
+              "depends": ["R5"], "independent": "", "bands": rbands,
+              "passes": {"quick": qr, "careful": hr, "thorough": gold_rng}, "precedent": ["L35"], "partly_share": 0.5})
+    R.append({"id": "R8", "name": "the spares each line needs", "graded_as": "Ask 2", "figure": "need", "golden": dict(need),
+              "depends": ["R5", "R6"], "independent": "", "bands": nb,
+              "passes": {"quick": dict(P.POOL), "careful": {k: H[k]["spares"] for k in A.PARTS}, "thorough": dict(need)},
+              "precedent": ["L11"], "partly_share": 0.5})
+    rob = sorted(G["robust"])
+    gch = {k: G["calls"][k] for k in rob}
+    cch = {k: H[k]["spares"] - P.POOL[k] for k in rob}
+    fam_ch = [{k: v[k] for k in rob} for v in G["fam_calls"].values()]
+    R.append({"id": "R9", "name": "the lines to buy and to cut, with how many", "graded_as": "Recommendation",
+              "figure": "call_units", "golden": gch, "depends": ["R8"], "independent": "",
+              "bands": {k: [min([gch[k]] + [c[k] for c in fam_ch]), max([gch[k]] + [c[k] for c in fam_ch])] for k in rob},
+              "passes": {"quick": {k: 0 for k in rob}, "careful": cch, "thorough": gch}, "precedent": ["L11"],
+              "partly_share": 0.5})
+    # the one-fact test: the strongest sentence, executed on the careful pass
+    Hd = G["Hd"]
+    E["hints"] = [{"sentence": "the starter-generators, brakes and bleed valves wear by landings and engine starts, which the "
+                               "2027 programme raises while flight hours fall", "rescues": ["R2"]},
+                  {"sentence": "a no-fault-found removal is often the aircraft's fault, not the unit's", "rescues": []},
+                  {"sentence": "the Bodø shop's turnaround depends on its load", "rescues": []}]
+    E["hint_values"] = {"exposure": {"R2": {k: round(Hd[k]["proj"]) for k in CYC_PRICED},
+                                     "R8": {k: Hd[k]["spares"] for k in A.PARTS}}}
+    E["routes"] = G["routes"]
+    return E
 
 
-def first_issue(f):
-    b = f["forecasts"]
-    return b[~((b["round"] == "budget 2024") & (b["group"] == "bulky") & (b["issued"].astype(str) == "2023-10-27"))]
+def forcing(G, target):
+    """The golden family's calls, the shortcuts' calls, and each fitted input moved by its spread."""
+    F, D, fc = G["F"], G["D"], G["fc"]
+    robust_keys = sorted(G["robust"])
 
+    def answer(need):
+        ch = RS.calls(need)
+        out = []
+        for k in robust_keys:
+            if ch[k] > 0:
+                out.append("BUY:%s" % k)
+            elif ch[k] < 0:
+                out.append("CUT:%s" % k)
+        return sorted(out)
+    fam = [{"name": n, "answer": answer(v)} for n, v in G["fam_need"].items()]
+    sc = [{"name": r["name"], "answer": r["answer"]} for r in G["routes"][1:]]
+    pert = []
 
-def r2_variants(z, f):
-    o = A.overstatement_by_year(z, f, weeks=P.PEAK_WEEKS)
-    by_year = o.groupby("year")[["forecast", "placed"]].sum()
-    mean_ratio = float((by_year["forecast"] / by_year["placed"] - 1.0).mean())
-    sp = o[o["group"] == "small parts"]
-    sp_only = float(sp["forecast"].sum() / sp["placed"].sum() - 1.0)
-    return {"mean of the years' ratios": mean_ratio, "small parts only": sp_only}
-
-
-def quick(f, z, t, G):
-    """Ten minutes: the budget as issued, the latest forecast for each week as the record, the draft's rates."""
-    fc = f["forecasts"].copy()
-    fc["issued"] = pd.to_datetime(fc["issued"])
-    k = fc[fc["brand"] == P.BRAND_K].sort_values("issued").groupby(["group", "iso_year", "iso_week"]).tail(1)
-    k = k[k["iso_year"].between(2022, 2025) & k["iso_week"].isin(P.PEAK_WEEKS)]
-    pk = A.placed_by_week(f)
-    pk = pk[pk["iy"].between(2022, 2025) & pk["iw"].isin(P.PEAK_WEEKS)]
-    r2 = float(k["order_lines"].sum() / pk["lines"].sum() - 1.0)
-    rate = {zz: A.paid_per_line(z, t, 2025, P.PEAK_WEEKS, zz) for zz in P.ZONES}
-    tp = A.pilot_times(f)
-    zp = z[(z["zone"] == "P2") & (z["date"] >= pd.Timestamp(P.PILOT[0])) & (z["date"] <= pd.Timestamp(P.PILOT[1]))]
-    kot_t = float((zp["task_min"].sum() - tp * zp["lines_hui"].sum()) / zp["kot"].sum())
-    V = A.volumes(z, f, (0.0, 0.0), (0.0, 0.0), how="copy")
-    kz = A.picked_by_week(z)
-    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
-    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(A.Z_SMALL)]["kot"].sum())
-    hm = A.hui_mix(f)
-    plan, ev = {}, {}
-    for w in W:
-        days, _ = A.days_2027(w)
-        for zz in P.ZONES:
-            if zz == "B1":
-                L = V[(P.BRAND_K, "bulky")][w] + V[(P.BRAND_H, "bulky")][w]
-                plan[(zz, w)] = L * rate[zz]
-                continue
-            lk = V[(P.BRAND_K, "small parts")][w] * (kp1 if zz == "P1" else 1.0 - kp1)
-            lh = V[(P.BRAND_H, "small parts")][w] * hm[zz]["share"]
-            plan[(zz, w)] = lk * rate[zz] + lh * rate[zz] * tp / kot_t
-            ev[(zz, w)] = False                      # the draft books no evening shift ("to confirm")
-    own = G["own"]
-    agency = {w: sum(max(0.0, plan[(zz, w)] - own[w][zz]) for zz in P.ZONES) for w in W}
-    bud = A.budget_totals(f, P.BRAND_K, "small parts", 2027)
-    return {"r1": G["r1"], "r2": r2, "r3": 0.0, "r4": tp - kot_t, "r5": 0.0,
-            "r6": bud[47] / sum(bud[w] for w in W), "hours": {"%s-%d" % k: v for k, v in plan.items()},
-            "cells": sorted("%s-%d" % k for k, v in ev.items() if v), "agency": agency}
-
-
-def d_2025(z, t):
-    w = t[(t["iy"] == 2025) & t["iw"].isin(P.PEAK_WEEKS) & (t["shift"] == "DAY") & (t["absence"] == "")
-          & t["zone"].isin(A.Z_SMALL)]
-    crew = w.groupby(["date", "zone"]).size().reset_index(name="n")
-    crew["a"] = crew["zone"].map(P.AISLES)
-    return float((crew["n"] / crew["a"]).mean())
-
-
-def build(f, G, figs, rg):
-    z = A.zone_hours(f)
-    t = A.timesheet(f)
-    H = A.hurried(f)
-    Q = quick(f, z, t, G)
-    fam = {k: A.golden(f, o) for k, o in VARIANTS.items()}
-    pert = {k: A.golden(f, o) for k, o in PERTURB.items()}
-    gold_cells = cells(G)
-    # bands from the rivals
-    r2v = dict(r2_variants(z, f))
-    r2v["golden"] = G["r2"]
-    hrs = {k: hours_tab(R) for k, R in fam.items()}
-    gh = hours_tab(G)
-    spread = max(abs(h[c] / gh[c] - 1.0) for h in hrs.values() for c in gh)
-    hb = math.ceil((spread + 0.01) * 100) / 100.0
-    agv = {k: R["agency"] for k, R in fam.items()}
-    sp_ag = max(abs(a[w] / G["agency"][w] - 1.0) for a in agv.values() for w in W)
-    ab = math.ceil((sp_ag + 0.01) * 100) / 100.0
-    rivals = {"r2": {k: round(100 * v, 2) for k, v in r2v.items()},
-              "r3": {k: round(R["r3"], 3) for k, R in fam.items()},
-              "r4": {k: round(R["r4"], 3) for k, R in fam.items()},
-              "r5_K_sp": {k: round(100 * R["r5"]["K_sp"], 2) for k, R in fam.items()},
-              "r6": {k: round(100 * R["r6"], 2) for k, R in fam.items()},
-              "cells": {k: cells(R) for k, R in fam.items()},
-              "hours_band_pct": round(100 * hb), "agency_band_pct": round(100 * ab),
-              "d_2025_peak": round(d_2025(z, t), 2),
-              "lines_k_47": GD.r10(G["vol"][(P.BRAND_K, "small parts")][47]),
-              "budget_k_47": int(A.budget_totals(f, P.BRAND_K, "small parts", 2027)[47])}
-    def band(vals, pad, nd):
-        return [round(min(vals) - pad, nd), round(max(vals) + pad, nd)]
-
-    r2_all = list(rivals["r2"].values()) + [round(100 * A.r2_overstatement(z, dict(f, forecasts=first_issue(f))), 2)]
-    bands = {"r2": band(r2_all, 1.0, 1),
-             "r3": band(list(rivals["r3"].values()) + [figs["r3"]], 0.05, 2),
-             "r4": band(list(rivals["r4"].values()) + [figs["r4"]], 0.03, 2),
-             "r5_K_sp": band(list(rivals["r5_K_sp"].values()) + [figs["r5"]["K_sp"]], 1.0, 1),
-             "r6": band(list(rivals["r6"].values()) + [figs["r6"]], 1.2, 1)}
-    rivals["bands"] = bands
-    gr = {"%s-%d" % (zz, w): GD.r10(G["plan"][(zz, w)]["hours"]) for zz in P.ZONES for w in W}
-    res = []
-
-    def add(rid, name, graded, figure, golden, passes, band=None, partly=None, bands=None, depends=(), indep="",
-            precedent=(), partly_share=None):
-        r = {"id": rid, "name": name, "graded_as": graded, "figure": figure, "golden": golden, "depends": list(depends),
-             "independent": indep, "passes": passes}
-        if band:
-            r["band"] = band
-        if partly:
-            r["partly"] = partly
-        if bands:
-            r["bands"] = bands
-        if precedent:
-            r["precedent"] = list(precedent)
-        if partly_share:
-            r["partly_share"] = partly_share
-        res.append(r)
-
-    r1g = {k: int(v) for k, v in figs["r1"].items()}
-    add("R1", "the 2025 peak's picker hours by zone", "Component 4", "r1", r1g,
-        {"quick": {k: int(round(v)) for k, v in Q["r1"].items()}, "careful": r1g, "thorough": r1g},
-        bands={k: [v * 0.99, v * 1.01] for k, v in r1g.items()}, indep="the two payroll exports and the WMS zone hours")
-    add("R2", "the pooled year-ahead peak overstatement", "Ask 4", "r2", figs["r2"],
-        {"quick": round(100 * Q["r2"], 1), "careful": round(100 * H["r2"], 1), "thorough": figs["r2"]},
-        band=bands["r2"], partly=[bands["r2"][0] - 1.5, bands["r2"][1] + 1.5], indep="the forecast archive and the WMS lines")
-    add("R3", "aisle congestion at 1.8 pickers an aisle", "Component 1", "r3", figs["r3"],
-        {"quick": 0.0, "careful": 0.0, "thorough": figs["r3"]}, band=bands["r3"], partly=[bands["r3"][0] - 0.1, bands["r3"][1] + 0.1],
-        indep="the WMS zone hours", precedent=("N01", "L15", "L26"))
-    add("R4", "Huippu Sport's extra minutes a line", "Ask 5", "r4", figs["r4"],
-        {"quick": round(Q["r4"], 2), "careful": round(H["r4"], 2), "thorough": figs["r4"]}, band=bands["r4"],
-        partly=[bands["r4"][0] - 0.04, bands["r4"][1] + 0.04], indep="the pilot, the article lines, the item master and the slotting",
-        precedent=("L25", "L14", "N04"))
-    add("R5", "the 2027 budget's expected overstatement, Kotikaari small parts", "Component 2", "r5_K_sp",
-        figs["r5"]["K_sp"], {"quick": 0.0, "careful": round(100 * H["r2"], 1), "thorough": figs["r5"]["K_sp"]},
-        band=bands["r5_K_sp"], partly=[bands["r5_K_sp"][0] - 1.5, bands["r5_K_sp"][1] + 1.5], indep="the forecast archive",
-        precedent=("L09", "N02"))
-    add("R6", "week 47's share of the 2027 peak's Kotikaari small-parts lines", "Component 3", "r6", figs["r6"],
-        {"quick": round(100 * Q["r6"], 1), "careful": figs["r6_budget"], "thorough": figs["r6"]}, band=bands["r6"],
-        partly=[bands["r6"][0] - 1.5, bands["r6"][1] + 1.5], indep="the order imports and the 2027 budget",
-        precedent=("N02", "N06"))
-    hband = {c: [v * (1 - hb), v * (1 + hb)] for c, v in gr.items()}
-    add("R7", "each zone's picker hours, weeks 46 to 50", "Ask 1", "hours_cells", gr,
-        {"quick": {c: round(v) for c, v in Q["hours"].items()},
-         "careful": {"%s-%d" % (zz, w): round(H["plan"][(zz, w)]["hours"]) for zz in P.ZONES for w in W},
-         "thorough": gr}, bands=hband, depends=("R3", "R4", "R5", "R6"), precedent=("L11",), partly_share=0.5)
-    rcells = {"%s-%d-%s" % (zz, w, e): figs["range"][zz][w][i] for zz in P.ZONES for w in W
-              for i, e in enumerate(("lo", "hi"))}
-    rband = {c: [v * 0.92, v * 1.08] for c, v in rcells.items()}
-    hr_lo = {}
-    for zz in P.ZONES:
-        for w in W:
-            v = H["plan"][(zz, w)]["hours"]
-            hr_lo["%s-%d-lo" % (zz, w)] = round(v * 0.97)
-            hr_lo["%s-%d-hi" % (zz, w)] = round(v * 1.03)
-    add("R8", "the 80 per cent ranges", "Ask 1", "range_cells", rcells,
-        {"quick": None, "careful": hr_lo, "thorough": rcells}, bands=rband, depends=("R7",), precedent=("L28",),
-        partly_share=0.5)
-    add("R9", "the evening-shift weeks by small-parts zone", "Recommendation", "call_cells", gold_cells,
-        {"quick": Q["cells"], "careful": cells(H), "thorough": gold_cells}, depends=("R3", "R4", "R5", "R6", "R7"),
-        precedent=("L11",))
-    ag = {str(w): figs["agency"][w] for w in W}
-    add("R10", "the agency hours to book each week", "Ask 2", "agency_cells", ag,
-        {"quick": {str(w): round(Q["agency"][w]) for w in W}, "careful": {str(w): round(H["agency"][w]) for w in W},
-         "thorough": ag}, bands={c: [v * (1 - ab), v * (1 + ab)] for c, v in ag.items()}, depends=("R7",),
-        precedent=("L11",), partly_share=0.5)
-    hints = [{"sentence": "time a line rises with the pickers logged in an aisle once the handling-class mix is held "
-                          "fixed, and 2027's day shifts run at the zone limit", "rescues": ["R3"]},
-             {"sentence": "2026 has 53 ISO weeks, so a budget phased by 2025's week numbers puts Black Friday in week "
-                          "48 of 2027 instead of week 47", "rescues": ["R6"]},
-             {"sentence": "the pilot carried only Huippu Sport's polybag apparel", "rescues": ["R4"]},
-             {"sentence": "a budget's overstatement grows with the growth its commercial plan states", "rescues": ["R5"]}]
-    routes = [{"name": "golden", "answer": gold_cells, "golden": True},
-              {"name": "careful but hurried (the draft's route)", "answer": cells(H)},
-              {"name": "quick", "answer": Q["cells"]}]
-    for fx in GD.FIXES:
-        routes.append({"name": "the draft's route with %s only" % GD.FIX_NAME[fx], "answer": cells(A.hurried(f, (fx,)))})
-    forcing = {"kind": "set", "golden_answer": gold_cells,
-               "golden_family": [{"name": k, "answer": cells(R)} for k, R in fam.items()],
-               "shortcuts": [{"name": r["name"], "answer": r["answer"]} for r in routes if not r.get("golden")],
-               "perturbations": [{"input": k, "answer": cells(R)} for k, R in pert.items()]}
-    E = {"results": res, "hints": hints, "routes": routes, "forcing": forcing,
-         "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
-    return E, rivals, {"hours_cells": gr, "range_cells": rcells, "call_cells": gold_cells, "agency_cells": ag,
-                       "r5_K_sp": figs["r5"]["K_sp"]}
+    def run(name, fc2=None, **kw):
+        M = A.simulate(F, fc2 or fc, D, reps=RS.REPS, seed=20271, **kw)
+        pert.append({"input": name, "answer": answer({k: M[k]["need"] for k in A.PARTS})})
+    def scaled(f, k, m, parts=("cf", "nff")):
+        for c in parts:
+            f[k]["total"] += (m - 1.0) * f[k][c]
+            f[k][c] *= m
+    for k in CYC_PRICED:
+        f2 = copy.deepcopy(fc)
+        scaled(f2, k, 0.8)
+        run("%s rate on landings -20%%" % k, f2)
+    run("the Bodø shop's calibrated capacity +5%", cap_mult=1.05)
+    run("the Bodø shop's calibrated capacity -5%", cap_mult=0.95)
+    f2 = copy.deepcopy(fc)
+    scaled(f2, "PEC", 1.2)
+    run("the propeller control's 2027 rate +20%", f2)
+    run("the frost terms +20%", frost_mult=1.2)
+    f2 = copy.deepcopy(fc)
+    for k in A.PARTS:
+        scaled(f2, k, 1.2, ("nff",))
+    run("every no-fault-found rate +20%", f2)
+    return {"kind": "set", "golden_answer": answer(G["need"]), "golden_family": fam, "shortcuts": sc, "perturbations": pert}
 
 
 def write(path, E):
-    json.dump(E, open(path, "w"), indent=1, default=float)
+    json.dump(E, open(path, "w"), indent=1, default=lambda o: o.item() if hasattr(o, "item") else str(o))

@@ -1,665 +1,987 @@
 {
  "results": [
   {
-   "id": "R1",
-   "name": "the 2025 peak's picker hours by zone",
-   "graded_as": "Component 4",
-   "figure": "r1",
+   "id": "R2",
+   "name": "the landing-driven parts' 2027 unscheduled removals",
+   "graded_as": "Component 1",
+   "figure": "rem_cyc",
    "golden": {
-    "P1": 3384,
-    "P2": 3104,
-    "B1": 2280
+    "SG": 59,
+    "BRK": 51,
+    "BAV": 40
    },
    "depends": [],
-   "independent": "the two payroll exports and the WMS zone hours",
+   "independent": "the legs and the changes",
+   "bands": {
+    "SG": [
+     55.13171555388553,
+     65.35963747582059
+    ],
+    "BRK": [
+     49.16025645240835,
+     54.06767427255449
+    ],
+    "BAV": [
+     38.07265586450279,
+     47.57738099152203
+    ]
+   },
    "passes": {
     "quick": {
-     "B1": 2280,
-     "P1": 3384,
-     "P2": 3104
+     "SG": 41,
+     "BRK": 36,
+     "BAV": 34
     },
     "careful": {
-     "P1": 3384,
-     "P2": 3104,
-     "B1": 2280
+     "value": {
+      "SG": 41,
+      "BRK": 36,
+      "BAV": 34
+     },
+     "grade": "partly",
+     "why": "the computed careful pass carries every part per flight hour and misses all three; the stage 4 determinism judge's blind derivation found the landings driver by comparing the bases' rates, so a careful run may too"
     },
     "thorough": {
-     "P1": 3384,
-     "P2": 3104,
-     "B1": 2280
+     "SG": 59,
+     "BRK": 51,
+     "BAV": 40
     }
    },
-   "bands": {
-    "P1": [
-     3350.16,
-     3417.84
-    ],
-    "P2": [
-     3072.96,
-     3135.04
-    ],
-    "B1": [
-     2257.2,
-     2302.8
-    ]
-   }
-  },
-  {
-   "id": "R2",
-   "name": "the pooled year-ahead peak overstatement",
-   "graded_as": "Ask 4",
-   "figure": "r2",
-   "golden": 10.0,
-   "depends": [],
-   "independent": "the forecast archive and the WMS lines",
-   "passes": {
-    "quick": 1.6,
-    "careful": 10.0,
-    "thorough": 10.0
-   },
-   "band": [
-    8.8,
-    11.6
+   "precedent": [
+    "N04",
+    "N01"
    ],
-   "partly": [
-    7.300000000000001,
-    13.1
-   ]
+   "partly_share": 0.5
   },
   {
    "id": "R3",
-   "name": "aisle congestion at 1.8 pickers an aisle",
-   "graded_as": "Component 1",
-   "figure": "r3",
-   "golden": 0.46,
+   "name": "the watch-list serials worth withdrawing",
+   "graded_as": "Component 3",
+   "figure": "scrap_set",
+   "golden": [
+    "ADC9270",
+    "C3880",
+    "FD7205",
+    "RT4534",
+    "SG6792",
+    "V210070",
+    "V2715",
+    "WH1688"
+   ],
    "depends": [],
-   "independent": "the WMS zone hours",
+   "independent": "the changes and the findings",
    "passes": {
-    "quick": 0.0,
-    "careful": 0.0,
-    "thorough": 0.46
+    "quick": [
+     "ADC7694",
+     "ADC7843",
+     "ADC9270",
+     "BT70286",
+     "C2568",
+     "C3880",
+     "FD4650",
+     "FD4995",
+     "FD6368",
+     "FD6703",
+     "FD7032",
+     "FD7205",
+     "RT4534",
+     "RT5479",
+     "SG5990",
+     "SG6792",
+     "V210070",
+     "V210279",
+     "V211535",
+     "V211776",
+     "V2715",
+     "V29424",
+     "WH1688"
+    ],
+    "careful": [
+     "C2568",
+     "RT4534",
+     "SG6792",
+     "V2715"
+    ],
+    "thorough": [
+     "ADC9270",
+     "C3880",
+     "FD7205",
+     "RT4534",
+     "SG6792",
+     "V210070",
+     "V2715",
+     "WH1688"
+    ]
    },
+   "precedent": [
+    "L03",
+    "L13"
+   ]
+  },
+  {
+   "id": "R3b",
+   "name": "the removals withdrawing the whole watch list saves",
+   "graded_as": "Ask 3",
+   "figure": "saving",
+   "golden": 35,
+   "depends": [],
+   "independent": "the changes and the findings",
    "band": [
-    0.4,
-    0.51
+    33.703626799078066,
+    46.75217491229829
    ],
    "partly": [
-    0.30000000000000004,
-    0.61
+    28.648082779216356,
+    53.765001149143025
    ],
+   "passes": {
+    "quick": 64,
+    "careful": 14,
+    "thorough": 35
+   },
    "precedent": [
-    "N01",
-    "L15",
-    "L26"
+    "L03",
+    "L14"
    ]
   },
   {
    "id": "R4",
-   "name": "Huippu Sport's extra minutes a line",
-   "graded_as": "Ask 5",
-   "figure": "r4",
-   "golden": 0.13,
-   "depends": [],
-   "independent": "the pilot, the article lines, the item master and the slotting",
-   "passes": {
-    "quick": -0.1,
-    "careful": -0.1,
-    "thorough": 0.13
+   "name": "the propeller control's 2027 removals and spares",
+   "graded_as": "Component 4",
+   "figure": "pec",
+   "golden": {
+    "removals": 19,
+    "spares": 5
    },
-   "band": [
-    0.09,
-    0.16
-   ],
-   "partly": [
-    0.049999999999999996,
-    0.2
-   ],
+   "depends": [],
+   "independent": "the repairers' orders and the stores snapshot",
+   "bands": {
+    "removals": [
+     17.662327454713076,
+     20.321913399212633
+    ],
+    "spares": [
+     5,
+     5
+    ]
+   },
+   "passes": {
+    "quick": {
+     "removals": 14,
+     "spares": 7
+    },
+    "careful": {
+     "removals": 20,
+     "spares": 5
+    },
+    "thorough": {
+     "removals": 19,
+     "spares": 5
+    }
+   },
    "precedent": [
-    "L25",
-    "L14",
-    "N04"
-   ]
+    "L12",
+    "L11"
+   ],
+   "partly_share": 0.5
   },
   {
    "id": "R5",
-   "name": "the 2027 budget's expected overstatement, Kotikaari small parts",
-   "graded_as": "Component 2",
-   "figure": "r5_K_sp",
-   "golden": 3.7,
-   "depends": [],
-   "independent": "the forecast archive",
-   "passes": {
-    "quick": 0.0,
-    "careful": 10.0,
-    "thorough": 3.7
+   "name": "every part number's expected 2027 unscheduled removals",
+   "graded_as": "Ask 1",
+   "figure": "rem",
+   "golden": {
+    "SG": 59,
+    "BRK": 51,
+    "BAV": 40,
+    "NWS": 13,
+    "BAT": 26,
+    "CPC": 24,
+    "FLA": 6,
+    "ADC": 23,
+    "WXR": 29,
+    "VHF": 25,
+    "PEC": 19,
+    "PDT": 8,
+    "HYP": 3,
+    "FBP": 7,
+    "WHC": 15,
+    "FDU": 16
    },
-   "band": [
-    2.6,
-    6.1
-   ],
-   "partly": [
-    1.1,
-    7.6
-   ],
+   "depends": [],
+   "independent": "the legs, the changes and the programme",
+   "bands": {
+    "SG": [
+     55.13171555388553,
+     65.35963747582059
+    ],
+    "BRK": [
+     49.16025645240835,
+     54.06767427255449
+    ],
+    "BAV": [
+     38.07265586450279,
+     47.57738099152203
+    ],
+    "NWS": [
+     10.710763825089664,
+     14.08019144397252
+    ],
+    "BAT": [
+     23.712304422980907,
+     31.0
+    ],
+    "CPC": [
+     22.890844129719817,
+     30.85729550738592
+    ],
+    "FLA": [
+     4.54136543910828,
+     11.0
+    ],
+    "ADC": [
+     21.10502382059203,
+     29.67189847112149
+    ],
+    "WXR": [
+     25.159235790820226,
+     32.52459505717401
+    ],
+    "VHF": [
+     24.363599801207897,
+     35.753816328632105
+    ],
+    "PEC": [
+     17.662327454713076,
+     20.321913399212633
+    ],
+    "PDT": [
+     6.468914995564857,
+     10.644941854041246
+    ],
+    "HYP": [
+     2.062193950103468,
+     4.548000134920099
+    ],
+    "FBP": [
+     4.213072449294816,
+     8.066144943827055
+    ],
+    "WHC": [
+     12.03268112323704,
+     17.071871880302016
+    ],
+    "FDU": [
+     14.838853661373344,
+     32.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "SG": 41,
+     "BRK": 36,
+     "BAV": 34,
+     "NWS": 9,
+     "BAT": 26,
+     "CPC": 22,
+     "FLA": 9,
+     "ADC": 29,
+     "WXR": 30,
+     "VHF": 35,
+     "PEC": 14,
+     "PDT": 8,
+     "HYP": 3,
+     "FBP": 5,
+     "WHC": 13,
+     "FDU": 27
+    },
+    "careful": {
+     "SG": 41,
+     "BRK": 36,
+     "BAV": 34,
+     "NWS": 9,
+     "BAT": 26,
+     "CPC": 22,
+     "FLA": 9,
+     "ADC": 29,
+     "WXR": 30,
+     "VHF": 35,
+     "PEC": 20,
+     "PDT": 8,
+     "HYP": 3,
+     "FBP": 5,
+     "WHC": 13,
+     "FDU": 27
+    },
+    "thorough": {
+     "SG": 59,
+     "BRK": 51,
+     "BAV": 40,
+     "NWS": 13,
+     "BAT": 26,
+     "CPC": 24,
+     "FLA": 6,
+     "ADC": 23,
+     "WXR": 29,
+     "VHF": 25,
+     "PEC": 19,
+     "PDT": 8,
+     "HYP": 3,
+     "FBP": 7,
+     "WHC": 15,
+     "FDU": 16
+    }
+   },
    "precedent": [
-    "L09",
-    "N02"
-   ]
+    "L12",
+    "L36"
+   ],
+   "partly_share": 0.5
   },
   {
    "id": "R6",
-   "name": "week 47's share of the 2027 peak's Kotikaari small-parts lines",
-   "graded_as": "Component 3",
-   "figure": "r6",
-   "golden": 21.4,
-   "depends": [],
-   "independent": "the order imports and the 2027 budget",
-   "passes": {
-    "quick": 14.0,
-    "careful": 14.0,
-    "thorough": 21.4
+   "name": "the in-house lines' spares through the Bod\u00f8 shop's 2027 queue",
+   "graded_as": "Component 2",
+   "figure": "need_inhouse",
+   "golden": {
+    "SG": 9,
+    "BRK": 9,
+    "BAV": 7,
+    "NWS": 4,
+    "BAT": 5
    },
-   "band": [
-    20.2,
-    22.7
+   "depends": [
+    "R2"
    ],
-   "partly": [
-    18.7,
-    24.2
-   ],
+   "independent": "",
+   "bands": {
+    "SG": [
+     9,
+     11
+    ],
+    "BRK": [
+     9,
+     10
+    ],
+    "BAV": [
+     7,
+     8
+    ],
+    "NWS": [
+     4,
+     4
+    ],
+    "BAT": [
+     5,
+     6
+    ]
+   },
+   "passes": {
+    "quick": {
+     "SG": 5,
+     "BRK": 5,
+     "BAV": 4,
+     "NWS": 2,
+     "BAT": 3
+    },
+    "careful": {
+     "SG": 5,
+     "BRK": 4,
+     "BAV": 4,
+     "NWS": 2,
+     "BAT": 3
+    },
+    "thorough": {
+     "SG": 9,
+     "BRK": 9,
+     "BAV": 7,
+     "NWS": 4,
+     "BAT": 5
+    }
+   },
    "precedent": [
-    "N02",
-    "N06"
-   ]
+    "L15",
+    "L16"
+   ],
+   "partly_share": 0.5
   },
   {
    "id": "R7",
-   "name": "each zone's picker hours, weeks 46 to 50",
+   "name": "the 80 per cent ranges",
    "graded_as": "Ask 1",
-   "figure": "hours_cells",
+   "figure": "range",
    "golden": {
-    "P1-46": 780,
-    "P1-47": 1300,
-    "P1-48": 1320,
-    "P1-49": 1140,
-    "P1-50": 1360,
-    "P2-46": 690,
-    "P2-47": 1200,
-    "P2-48": 1220,
-    "P2-49": 1060,
-    "P2-50": 1250,
-    "B1-46": 490,
-    "B1-47": 610,
-    "B1-48": 590,
-    "B1-49": 520,
-    "B1-50": 610
+    "SG_lo": 48,
+    "BRK_lo": 42,
+    "BAV_lo": 31,
+    "NWS_lo": 9,
+    "BAT_lo": 19,
+    "CPC_lo": 16,
+    "FLA_lo": 2,
+    "ADC_lo": 15,
+    "WXR_lo": 21,
+    "VHF_lo": 18,
+    "PEC_lo": 12,
+    "PDT_lo": 4,
+    "HYP_lo": 1,
+    "FBP_lo": 4,
+    "WHC_lo": 9,
+    "FDU_lo": 9,
+    "SG_hi": 71,
+    "BRK_hi": 61,
+    "BAV_hi": 49,
+    "NWS_hi": 19,
+    "BAT_hi": 36,
+    "CPC_hi": 32,
+    "FLA_hi": 10,
+    "ADC_hi": 31,
+    "WXR_hi": 38,
+    "VHF_hi": 33,
+    "PEC_hi": 25,
+    "PDT_hi": 12,
+    "HYP_hi": 6,
+    "FBP_hi": 11,
+    "WHC_hi": 21,
+    "FDU_hi": 24
    },
    "depends": [
-    "R3",
-    "R4",
-    "R5",
-    "R6"
+    "R5"
    ],
    "independent": "",
-   "passes": {
-    "quick": {
-     "P1-46": 717,
-     "P2-46": 688,
-     "B1-46": 475,
-     "P1-47": 688,
-     "P2-47": 662,
-     "B1-47": 455,
-     "P1-48": 1324,
-     "P2-48": 1262,
-     "B1-48": 743,
-     "P1-49": 972,
-     "P2-49": 932,
-     "B1-49": 567,
-     "P1-50": 1063,
-     "P2-50": 1013,
-     "B1-50": 601
-    },
-    "careful": {
-     "P1-46": 652,
-     "P1-47": 626,
-     "P1-48": 1204,
-     "P1-49": 884,
-     "P1-50": 967,
-     "P2-46": 626,
-     "P2-47": 602,
-     "P2-48": 1148,
-     "P2-49": 848,
-     "P2-50": 921,
-     "B1-46": 432,
-     "B1-47": 414,
-     "B1-48": 676,
-     "B1-49": 515,
-     "B1-50": 547
-    },
-    "thorough": {
-     "P1-46": 780,
-     "P1-47": 1300,
-     "P1-48": 1320,
-     "P1-49": 1140,
-     "P1-50": 1360,
-     "P2-46": 690,
-     "P2-47": 1200,
-     "P2-48": 1220,
-     "P2-49": 1060,
-     "P2-50": 1250,
-     "B1-46": 490,
-     "B1-47": 610,
-     "B1-48": 590,
-     "B1-49": 520,
-     "B1-50": 610
-    }
-   },
    "bands": {
-    "P1-46": [
-     733.1999999999999,
-     826.8000000000001
+    "SG_lo": [
+     44,
+     54
     ],
-    "P1-47": [
-     1222.0,
-     1378.0
+    "BRK_lo": [
+     39,
+     44
     ],
-    "P1-48": [
-     1240.8,
-     1399.2
+    "BAV_lo": [
+     30,
+     38
     ],
-    "P1-49": [
-     1071.6,
-     1208.4
+    "NWS_lo": [
+     6,
+     10
     ],
-    "P1-50": [
-     1278.3999999999999,
-     1441.6000000000001
+    "BAT_lo": [
+     17,
+     24
     ],
-    "P2-46": [
-     648.5999999999999,
-     731.4000000000001
+    "CPC_lo": [
+     15,
+     22
     ],
-    "P2-47": [
-     1128.0,
-     1272.0
+    "FLA_lo": [
+     1,
+     6
     ],
-    "P2-48": [
-     1146.8,
-     1293.2
+    "ADC_lo": [
+     14,
+     21
     ],
-    "P2-49": [
-     996.4,
-     1123.6000000000001
+    "WXR_lo": [
+     18,
+     23
     ],
-    "P2-50": [
-     1175.0,
-     1325.0
+    "VHF_lo": [
+     16,
+     26
     ],
-    "B1-46": [
-     460.59999999999997,
-     519.4
+    "PEC_lo": [
+     11,
+     14
     ],
-    "B1-47": [
-     573.4,
-     646.6
+    "PDT_lo": [
+     3,
+     6
     ],
-    "B1-48": [
-     554.6,
-     625.4
+    "HYP_lo": [
+     0,
+     2
     ],
-    "B1-49": [
-     488.79999999999995,
-     551.2
+    "FBP_lo": [
+     1,
+     5
     ],
-    "B1-50": [
-     573.4,
-     646.6
+    "WHC_lo": [
+     7,
+     11
+    ],
+    "FDU_lo": [
+     8,
+     22
+    ],
+    "SG_hi": [
+     66,
+     78
+    ],
+    "BRK_hi": [
+     60,
+     64
+    ],
+    "BAV_hi": [
+     48,
+     59
+    ],
+    "NWS_hi": [
+     16,
+     20
+    ],
+    "BAT_hi": [
+     32,
+     41
+    ],
+    "CPC_hi": [
+     30,
+     41
+    ],
+    "FLA_hi": [
+     8,
+     16
+    ],
+    "ADC_hi": [
+     28,
+     40
+    ],
+    "WXR_hi": [
+     33,
+     39
+    ],
+    "VHF_hi": [
+     30,
+     45
+    ],
+    "PEC_hi": [
+     24,
+     26
+    ],
+    "PDT_hi": [
+     10,
+     14
+    ],
+    "HYP_hi": [
+     4,
+     7
+    ],
+    "FBP_hi": [
+     7,
+     12
+    ],
+    "WHC_hi": [
+     17,
+     23
+    ],
+    "FDU_hi": [
+     21,
+     44
     ]
    },
+   "passes": {
+    "quick": {
+     "SG_lo": 33,
+     "BRK_lo": 28,
+     "BAV_lo": 27,
+     "NWS_lo": 5,
+     "BAT_lo": 20,
+     "CPC_lo": 16,
+     "FLA_lo": 5,
+     "ADC_lo": 22,
+     "WXR_lo": 23,
+     "VHF_lo": 28,
+     "PEC_lo": 9,
+     "PDT_lo": 5,
+     "HYP_lo": 1,
+     "FBP_lo": 2,
+     "WHC_lo": 9,
+     "FDU_lo": 20,
+     "SG_hi": 49,
+     "BRK_hi": 44,
+     "BAV_hi": 42,
+     "NWS_hi": 13,
+     "BAT_hi": 33,
+     "CPC_hi": 28,
+     "FLA_hi": 13,
+     "ADC_hi": 36,
+     "WXR_hi": 37,
+     "VHF_hi": 43,
+     "PEC_hi": 19,
+     "PDT_hi": 12,
+     "HYP_hi": 5,
+     "FBP_hi": 8,
+     "WHC_hi": 18,
+     "FDU_hi": 34
+    },
+    "careful": {
+     "SG_lo": 34,
+     "BRK_lo": 29,
+     "BAV_lo": 28,
+     "NWS_lo": 6,
+     "BAT_lo": 19,
+     "CPC_lo": 16,
+     "FLA_lo": 5,
+     "ADC_lo": 18,
+     "WXR_lo": 22,
+     "VHF_lo": 26,
+     "PEC_lo": 14,
+     "PDT_lo": 4,
+     "HYP_lo": 1,
+     "FBP_lo": 3,
+     "WHC_lo": 7,
+     "FDU_lo": 19,
+     "SG_hi": 48,
+     "BRK_hi": 44,
+     "BAV_hi": 40,
+     "NWS_hi": 12,
+     "BAT_hi": 34,
+     "CPC_hi": 27,
+     "FLA_hi": 14,
+     "ADC_hi": 40,
+     "WXR_hi": 38,
+     "VHF_hi": 43,
+     "PEC_hi": 29,
+     "PDT_hi": 12,
+     "HYP_hi": 6,
+     "FBP_hi": 7,
+     "WHC_hi": 19,
+     "FDU_hi": 34
+    },
+    "thorough": {
+     "SG_lo": 48,
+     "BRK_lo": 42,
+     "BAV_lo": 31,
+     "NWS_lo": 9,
+     "BAT_lo": 19,
+     "CPC_lo": 16,
+     "FLA_lo": 2,
+     "ADC_lo": 15,
+     "WXR_lo": 21,
+     "VHF_lo": 18,
+     "PEC_lo": 12,
+     "PDT_lo": 4,
+     "HYP_lo": 1,
+     "FBP_lo": 4,
+     "WHC_lo": 9,
+     "FDU_lo": 9,
+     "SG_hi": 71,
+     "BRK_hi": 61,
+     "BAV_hi": 49,
+     "NWS_hi": 19,
+     "BAT_hi": 36,
+     "CPC_hi": 32,
+     "FLA_hi": 10,
+     "ADC_hi": 31,
+     "WXR_hi": 38,
+     "VHF_hi": 33,
+     "PEC_hi": 25,
+     "PDT_hi": 12,
+     "HYP_hi": 6,
+     "FBP_hi": 11,
+     "WHC_hi": 21,
+     "FDU_hi": 24
+    }
+   },
    "precedent": [
-    "L11"
+    "L35"
    ],
    "partly_share": 0.5
   },
   {
    "id": "R8",
-   "name": "the 80 per cent ranges",
-   "graded_as": "Ask 1",
-   "figure": "range_cells",
+   "name": "the spares each line needs",
+   "graded_as": "Ask 2",
+   "figure": "need",
    "golden": {
-    "P1-46-lo": 710,
-    "P1-46-hi": 880,
-    "P1-47-lo": 1230,
-    "P1-47-hi": 1360,
-    "P1-48-lo": 1250,
-    "P1-48-hi": 1390,
-    "P1-49-lo": 1090,
-    "P1-49-hi": 1200,
-    "P1-50-lo": 1290,
-    "P1-50-hi": 1430,
-    "P2-46-lo": 620,
-    "P2-46-hi": 780,
-    "P2-47-lo": 1150,
-    "P2-47-hi": 1260,
-    "P2-48-lo": 1160,
-    "P2-48-hi": 1280,
-    "P2-49-lo": 1010,
-    "P2-49-hi": 1110,
-    "P2-50-lo": 1190,
-    "P2-50-hi": 1310,
-    "B1-46-lo": 460,
-    "B1-46-hi": 520,
-    "B1-47-lo": 570,
-    "B1-47-hi": 660,
-    "B1-48-lo": 550,
-    "B1-48-hi": 630,
-    "B1-49-lo": 490,
-    "B1-49-hi": 560,
-    "B1-50-lo": 580,
-    "B1-50-hi": 660
+    "SG": 9,
+    "BRK": 9,
+    "BAV": 7,
+    "NWS": 4,
+    "BAT": 5,
+    "CPC": 5,
+    "FLA": 3,
+    "ADC": 5,
+    "WXR": 6,
+    "VHF": 4,
+    "PEC": 5,
+    "PDT": 3,
+    "HYP": 3,
+    "FBP": 3,
+    "WHC": 3,
+    "FDU": 4
    },
    "depends": [
-    "R7"
+    "R5",
+    "R6"
    ],
    "independent": "",
-   "passes": {
-    "quick": null,
-    "careful": {
-     "P1-46-lo": 633,
-     "P1-46-hi": 672,
-     "P1-47-lo": 607,
-     "P1-47-hi": 645,
-     "P1-48-lo": 1168,
-     "P1-48-hi": 1240,
-     "P1-49-lo": 858,
-     "P1-49-hi": 911,
-     "P1-50-lo": 938,
-     "P1-50-hi": 996,
-     "P2-46-lo": 607,
-     "P2-46-hi": 644,
-     "P2-47-lo": 584,
-     "P2-47-hi": 620,
-     "P2-48-lo": 1113,
-     "P2-48-hi": 1182,
-     "P2-49-lo": 822,
-     "P2-49-hi": 873,
-     "P2-50-lo": 894,
-     "P2-50-hi": 949,
-     "B1-46-lo": 419,
-     "B1-46-hi": 445,
-     "B1-47-lo": 402,
-     "B1-47-hi": 427,
-     "B1-48-lo": 656,
-     "B1-48-hi": 696,
-     "B1-49-lo": 500,
-     "B1-49-hi": 531,
-     "B1-50-lo": 530,
-     "B1-50-hi": 563
-    },
-    "thorough": {
-     "P1-46-lo": 710,
-     "P1-46-hi": 880,
-     "P1-47-lo": 1230,
-     "P1-47-hi": 1360,
-     "P1-48-lo": 1250,
-     "P1-48-hi": 1390,
-     "P1-49-lo": 1090,
-     "P1-49-hi": 1200,
-     "P1-50-lo": 1290,
-     "P1-50-hi": 1430,
-     "P2-46-lo": 620,
-     "P2-46-hi": 780,
-     "P2-47-lo": 1150,
-     "P2-47-hi": 1260,
-     "P2-48-lo": 1160,
-     "P2-48-hi": 1280,
-     "P2-49-lo": 1010,
-     "P2-49-hi": 1110,
-     "P2-50-lo": 1190,
-     "P2-50-hi": 1310,
-     "B1-46-lo": 460,
-     "B1-46-hi": 520,
-     "B1-47-lo": 570,
-     "B1-47-hi": 660,
-     "B1-48-lo": 550,
-     "B1-48-hi": 630,
-     "B1-49-lo": 490,
-     "B1-49-hi": 560,
-     "B1-50-lo": 580,
-     "B1-50-hi": 660
-    }
-   },
    "bands": {
-    "P1-46-lo": [
-     653.2,
-     766.8000000000001
+    "SG": [
+     9,
+     11
     ],
-    "P1-46-hi": [
-     809.6,
-     950.4000000000001
+    "BRK": [
+     9,
+     10
     ],
-    "P1-47-lo": [
-     1131.6000000000001,
-     1328.4
+    "BAV": [
+     7,
+     8
     ],
-    "P1-47-hi": [
-     1251.2,
-     1468.8000000000002
+    "NWS": [
+     4,
+     4
     ],
-    "P1-48-lo": [
-     1150.0,
-     1350.0
+    "BAT": [
+     5,
+     6
     ],
-    "P1-48-hi": [
-     1278.8,
-     1501.2
+    "CPC": [
+     5,
+     5
     ],
-    "P1-49-lo": [
-     1002.8000000000001,
-     1177.2
+    "FLA": [
+     3,
+     4
     ],
-    "P1-49-hi": [
-     1104.0,
-     1296.0
+    "ADC": [
+     4,
+     5
     ],
-    "P1-50-lo": [
-     1186.8,
-     1393.2
+    "WXR": [
+     6,
+     6
     ],
-    "P1-50-hi": [
-     1315.6000000000001,
-     1544.4
+    "VHF": [
+     4,
+     5
     ],
-    "P2-46-lo": [
-     570.4,
-     669.6
+    "PEC": [
+     5,
+     5
     ],
-    "P2-46-hi": [
-     717.6,
-     842.4000000000001
+    "PDT": [
+     3,
+     3
     ],
-    "P2-47-lo": [
-     1058.0,
-     1242.0
+    "HYP": [
+     2,
+     3
     ],
-    "P2-47-hi": [
-     1159.2,
-     1360.8000000000002
+    "FBP": [
+     3,
+     3
     ],
-    "P2-48-lo": [
-     1067.2,
-     1252.8000000000002
+    "WHC": [
+     3,
+     3
     ],
-    "P2-48-hi": [
-     1177.6000000000001,
-     1382.4
-    ],
-    "P2-49-lo": [
-     929.2,
-     1090.8000000000002
-    ],
-    "P2-49-hi": [
-     1021.2,
-     1198.8000000000002
-    ],
-    "P2-50-lo": [
-     1094.8,
-     1285.2
-    ],
-    "P2-50-hi": [
-     1205.2,
-     1414.8000000000002
-    ],
-    "B1-46-lo": [
-     423.20000000000005,
-     496.8
-    ],
-    "B1-46-hi": [
-     478.40000000000003,
-     561.6
-    ],
-    "B1-47-lo": [
-     524.4,
-     615.6
-    ],
-    "B1-47-hi": [
-     607.2,
-     712.8000000000001
-    ],
-    "B1-48-lo": [
-     506.0,
-     594.0
-    ],
-    "B1-48-hi": [
-     579.6,
-     680.4000000000001
-    ],
-    "B1-49-lo": [
-     450.8,
-     529.2
-    ],
-    "B1-49-hi": [
-     515.2,
-     604.8000000000001
-    ],
-    "B1-50-lo": [
-     533.6,
-     626.4000000000001
-    ],
-    "B1-50-hi": [
-     607.2,
-     712.8000000000001
+    "FDU": [
+     3,
+     5
     ]
    },
+   "passes": {
+    "quick": {
+     "SG": 5,
+     "BRK": 5,
+     "BAV": 4,
+     "NWS": 2,
+     "BAT": 3,
+     "CPC": 4,
+     "FLA": 3,
+     "ADC": 8,
+     "WXR": 7,
+     "VHF": 8,
+     "PEC": 7,
+     "PDT": 4,
+     "HYP": 4,
+     "FBP": 4,
+     "WHC": 6,
+     "FDU": 6
+    },
+    "careful": {
+     "SG": 5,
+     "BRK": 4,
+     "BAV": 4,
+     "NWS": 2,
+     "BAT": 3,
+     "CPC": 4,
+     "FLA": 4,
+     "ADC": 5,
+     "WXR": 6,
+     "VHF": 4,
+     "PEC": 5,
+     "PDT": 3,
+     "HYP": 2,
+     "FBP": 3,
+     "WHC": 3,
+     "FDU": 4
+    },
+    "thorough": {
+     "SG": 9,
+     "BRK": 9,
+     "BAV": 7,
+     "NWS": 4,
+     "BAT": 5,
+     "CPC": 5,
+     "FLA": 3,
+     "ADC": 5,
+     "WXR": 6,
+     "VHF": 4,
+     "PEC": 5,
+     "PDT": 3,
+     "HYP": 3,
+     "FBP": 3,
+     "WHC": 3,
+     "FDU": 4
+    }
+   },
    "precedent": [
-    "L28"
+    "L11"
    ],
    "partly_share": 0.5
   },
   {
    "id": "R9",
-   "name": "the evening-shift weeks by small-parts zone",
+   "name": "the lines to buy and to cut, with how many",
    "graded_as": "Recommendation",
-   "figure": "call_cells",
-   "golden": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
+   "figure": "call_units",
+   "golden": {
+    "ADC": -3,
+    "BAT": 2,
+    "BAV": 3,
+    "BRK": 4,
+    "CPC": 1,
+    "FBP": -1,
+    "FDU": -2,
+    "HYP": -1,
+    "NWS": 2,
+    "PDT": -1,
+    "PEC": -2,
+    "SG": 4,
+    "VHF": -4,
+    "WHC": -3,
+    "WXR": -1
+   },
    "depends": [
-    "R3",
-    "R4",
-    "R5",
-    "R6",
-    "R7"
+    "R8"
    ],
    "independent": "",
-   "passes": {
-    "quick": [],
-    "careful": [
-     "P1-48",
-     "P2-48"
+   "bands": {
+    "ADC": [
+     -4,
+     -3
     ],
-    "thorough": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
+    "BAT": [
+     2,
+     3
+    ],
+    "BAV": [
+     3,
+     4
+    ],
+    "BRK": [
+     4,
+     5
+    ],
+    "CPC": [
+     1,
+     1
+    ],
+    "FBP": [
+     -1,
+     -1
+    ],
+    "FDU": [
+     -3,
+     -1
+    ],
+    "HYP": [
+     -2,
+     -1
+    ],
+    "NWS": [
+     2,
+     2
+    ],
+    "PDT": [
+     -1,
+     -1
+    ],
+    "PEC": [
+     -2,
+     -2
+    ],
+    "SG": [
+     4,
+     6
+    ],
+    "VHF": [
+     -4,
+     -3
+    ],
+    "WHC": [
+     -3,
+     -3
+    ],
+    "WXR": [
+     -1,
+     -1
     ]
    },
-   "precedent": [
-    "L11"
-   ]
-  },
-  {
-   "id": "R10",
-   "name": "the agency hours to book each week",
-   "graded_as": "Ask 2",
-   "figure": "agency_cells",
-   "golden": {
-    "46": 760,
-    "47": 1910,
-    "48": 1930,
-    "49": 1760,
-    "50": 2030
-   },
-   "depends": [
-    "R7"
-   ],
-   "independent": "",
    "passes": {
     "quick": {
-     "46": 684,
-     "47": 609,
-     "48": 2133,
-     "49": 1514,
-     "50": 1482
+     "ADC": 0,
+     "BAT": 0,
+     "BAV": 0,
+     "BRK": 0,
+     "CPC": 0,
+     "FBP": 0,
+     "FDU": 0,
+     "HYP": 0,
+     "NWS": 0,
+     "PDT": 0,
+     "PEC": 0,
+     "SG": 0,
+     "VHF": 0,
+     "WHC": 0,
+     "WXR": 0
     },
     "careful": {
-     "46": 514,
-     "47": 446,
-     "48": 1831,
-     "49": 1290,
-     "50": 1239
+     "ADC": -3,
+     "BAT": 0,
+     "BAV": 0,
+     "BRK": -1,
+     "CPC": 0,
+     "FBP": -1,
+     "FDU": -2,
+     "HYP": -2,
+     "NWS": 0,
+     "PDT": -1,
+     "PEC": -2,
+     "SG": 0,
+     "VHF": -4,
+     "WHC": -3,
+     "WXR": -1
     },
     "thorough": {
-     "46": 760,
-     "47": 1910,
-     "48": 1930,
-     "49": 1760,
-     "50": 2030
+     "ADC": -3,
+     "BAT": 2,
+     "BAV": 3,
+     "BRK": 4,
+     "CPC": 1,
+     "FBP": -1,
+     "FDU": -2,
+     "HYP": -1,
+     "NWS": 2,
+     "PDT": -1,
+     "PEC": -2,
+     "SG": 4,
+     "VHF": -4,
+     "WHC": -3,
+     "WXR": -1
     }
-   },
-   "bands": {
-    "46": [
-     706.8,
-     813.2
-    ],
-    "47": [
-     1776.3,
-     2043.7
-    ],
-    "48": [
-     1794.8999999999999,
-     2065.1
-    ],
-    "49": [
-     1636.8,
-     1883.2
-    ],
-    "50": [
-     1887.8999999999999,
-     2172.1
-    ]
    },
    "precedent": [
     "L11"
@@ -667,337 +989,613 @@
    "partly_share": 0.5
   }
  ],
- "hints": [
-  {
-   "sentence": "time a line rises with the pickers logged in an aisle once the handling-class mix is held fixed, and 2027's day shifts run at the zone limit",
-   "rescues": [
-    "R3"
-   ]
-  },
-  {
-   "sentence": "2026 has 53 ISO weeks, so a budget phased by 2025's week numbers puts Black Friday in week 48 of 2027 instead of week 47",
-   "rescues": [
-    "R6"
-   ]
-  },
-  {
-   "sentence": "the pilot carried only Huippu Sport's polybag apparel",
-   "rescues": [
-    "R4"
-   ]
-  },
-  {
-   "sentence": "a budget's overstatement grows with the growth its commercial plan states",
-   "rescues": [
-    "R5"
-   ]
-  }
- ],
- "routes": [
-  {
-   "name": "golden",
-   "answer": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "golden": true
-  },
-  {
-   "name": "careful but hurried (the draft's route)",
-   "answer": [
-    "P1-48",
-    "P2-48"
-   ]
-  },
-  {
-   "name": "quick",
-   "answer": []
-  },
-  {
-   "name": "the draft's route with the 2027 weeks re-keyed to their dates only",
-   "answer": []
-  },
-  {
-   "name": "the draft's route with the overstatement read from the plan's growth only",
-   "answer": [
-    "P1-48",
-    "P2-48",
-    "P2-49"
-   ]
-  },
-  {
-   "name": "the draft's route with the time a line at the zone limit only",
-   "answer": [
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ]
-  },
-  {
-   "name": "the draft's route with Huippu Sport at its full assortment only",
-   "answer": [
-    "P1-48",
-    "P2-48",
-    "P2-49"
-   ]
-  }
- ],
- "forcing": {
-  "kind": "set",
-  "golden_answer": [
-   "P1-47",
-   "P1-48",
-   "P1-49",
-   "P1-50",
-   "P2-47",
-   "P2-48",
-   "P2-49",
-   "P2-50"
-  ],
-  "golden_family": [
-   {
-    "name": "a quadratic congestion term, its knot by fit",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the logged share flat over the day",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "a linear calibration on the plan's growth",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the calibration through the origin",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the calibration on the peak weeks alone",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "Huippu Sport's mix over two peaks",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the time model fitted on 2024 to 2026",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   }
-  ],
-  "shortcuts": [
-   {
-    "name": "careful but hurried (the draft's route)",
-    "answer": [
-     "P1-48",
-     "P2-48"
-    ]
-   },
-   {
-    "name": "quick",
-    "answer": []
-   },
-   {
-    "name": "the draft's route with the 2027 weeks re-keyed to their dates only",
-    "answer": []
-   },
-   {
-    "name": "the draft's route with the overstatement read from the plan's growth only",
-    "answer": [
-     "P1-48",
-     "P2-48",
-     "P2-49"
-    ]
-   },
-   {
-    "name": "the draft's route with the time a line at the zone limit only",
-    "answer": [
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "name": "the draft's route with Huippu Sport at its full assortment only",
-    "answer": [
-     "P1-48",
-     "P2-48",
-     "P2-49"
-    ]
-   }
-  ],
-  "perturbations": [
-   {
-    "input": "congestion gamma -20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "input": "congestion gamma +20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "input": "Huippu Sport's extra time -20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "input": "Huippu Sport's extra time +20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "input": "the 2027 overstatement -20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   },
-   {
-    "input": "the 2027 overstatement +20%",
-    "answer": [
-     "P1-47",
-     "P1-48",
-     "P1-49",
-     "P1-50",
-     "P2-47",
-     "P2-48",
-     "P2-49",
-     "P2-50"
-    ]
-   }
-  ]
- },
  "weights": {
   "recommendation": 14,
   "components": 24,
   "asks": 55,
   "instruction": 7
+ },
+ "hints": [
+  {
+   "sentence": "the starter-generators, brakes and bleed valves wear by landings and engine starts, which the 2027 programme raises while flight hours fall",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "a no-fault-found removal is often the aircraft's fault, not the unit's",
+   "rescues": []
+  },
+  {
+   "sentence": "the Bod\u00f8 shop's turnaround depends on its load",
+   "rescues": []
+  }
+ ],
+ "hint_values": {
+  "exposure": {
+   "R2": {
+    "SG": 56,
+    "BRK": 50,
+    "BAV": 47
+   },
+   "R8": {
+    "SG": 6,
+    "BRK": 5,
+    "BAV": 5,
+    "NWS": 3,
+    "BAT": 4,
+    "CPC": 5,
+    "FLA": 4,
+    "ADC": 5,
+    "WXR": 6,
+    "VHF": 4,
+    "PEC": 4,
+    "PDT": 3,
+    "HYP": 2,
+    "FBP": 3,
+    "WHC": 3,
+    "FDU": 4
+   }
+  }
+ },
+ "routes": [
+  {
+   "name": "golden",
+   "label": "This plan",
+   "answer": [
+    "BUY:BAT",
+    "BUY:BAV",
+    "BUY:BRK",
+    "BUY:CPC",
+    "BUY:NWS",
+    "BUY:SG",
+    "CUT:ADC",
+    "CUT:FBP",
+    "CUT:FDU",
+    "CUT:HYP",
+    "CUT:PDT",
+    "CUT:PEC",
+    "CUT:VHF",
+    "CUT:WHC",
+    "CUT:WXR"
+   ],
+   "golden": true,
+   "changes": {
+    "SG": 4,
+    "BRK": 4,
+    "BAV": 3,
+    "NWS": 2,
+    "BAT": 2,
+    "CPC": 1,
+    "FLA": 0,
+    "ADC": -3,
+    "WXR": -1,
+    "VHF": -4,
+    "PEC": -2,
+    "PDT": -1,
+    "HYP": -1,
+    "FBP": -1,
+    "WHC": -3,
+    "FDU": -2
+   }
+  },
+  {
+   "name": "careful but hurried: each part per flight hour, the 2026 average turnaround, Palm's spares",
+   "label": "Every part per flight hour, the 2026 turnaround, Palm's formula",
+   "answer": [
+    "BUY:FLA",
+    "CUT:ADC",
+    "CUT:BRK",
+    "CUT:FBP",
+    "CUT:FDU",
+    "CUT:HYP",
+    "CUT:PDT",
+    "CUT:PEC",
+    "CUT:VHF",
+    "CUT:WHC",
+    "CUT:WXR"
+   ],
+   "changes": {
+    "SG": 0,
+    "BRK": -1,
+    "BAV": 0,
+    "NWS": 0,
+    "BAT": 0,
+    "CPC": 0,
+    "FLA": 1,
+    "ADC": -3,
+    "WXR": -1,
+    "VHF": -4,
+    "PEC": -2,
+    "PDT": -1,
+    "HYP": -2,
+    "FBP": -1,
+    "WHC": -3,
+    "FDU": -2
+   }
+  },
+  {
+   "name": "quick: the October outlook and the pool as it stands",
+   "label": "The pool as it stands",
+   "answer": [],
+   "changes": {
+    "SG": 0,
+    "BRK": 0,
+    "BAV": 0,
+    "NWS": 0,
+    "BAT": 0,
+    "CPC": 0,
+    "FLA": 0,
+    "ADC": 0,
+    "WXR": 0,
+    "VHF": 0,
+    "PEC": 0,
+    "PDT": 0,
+    "HYP": 0,
+    "FBP": 0,
+    "WHC": 0,
+    "FDU": 0
+   }
+  },
+  {
+   "name": "the landing-driven parts on landings alone, the average turnaround",
+   "label": "Landings for the landing-driven parts, the 2026 turnaround, Palm's formula",
+   "answer": [
+    "BUY:BAT",
+    "BUY:BAV",
+    "BUY:CPC",
+    "BUY:FLA",
+    "BUY:NWS",
+    "BUY:SG",
+    "CUT:ADC",
+    "CUT:FBP",
+    "CUT:FDU",
+    "CUT:HYP",
+    "CUT:PDT",
+    "CUT:PEC",
+    "CUT:VHF",
+    "CUT:WHC",
+    "CUT:WXR"
+   ],
+   "changes": {
+    "SG": 1,
+    "BRK": 0,
+    "BAV": 1,
+    "NWS": 1,
+    "BAT": 1,
+    "CPC": 1,
+    "FLA": 1,
+    "ADC": -3,
+    "WXR": -1,
+    "VHF": -4,
+    "PEC": -3,
+    "PDT": -1,
+    "HYP": -2,
+    "FBP": -1,
+    "WHC": -3,
+    "FDU": -2
+   }
+  },
+  {
+   "name": "the golden removals on the 2026 average turnaround, Palm's spares",
+   "label": "This plan's removals, the 2026 turnaround, Palm's formula",
+   "answer": [
+    "BUY:BAV",
+    "BUY:CPC",
+    "BUY:NWS",
+    "BUY:SG",
+    "CUT:ADC",
+    "CUT:FBP",
+    "CUT:FDU",
+    "CUT:HYP",
+    "CUT:PDT",
+    "CUT:PEC",
+    "CUT:VHF",
+    "CUT:WHC",
+    "CUT:WXR"
+   ],
+   "changes": {
+    "SG": 1,
+    "BRK": 0,
+    "BAV": 1,
+    "NWS": 1,
+    "BAT": 0,
+    "CPC": 1,
+    "FLA": 0,
+    "ADC": -4,
+    "WXR": -1,
+    "VHF": -4,
+    "PEC": -2,
+    "PDT": -1,
+    "HYP": -2,
+    "FBP": -1,
+    "WHC": -3,
+    "FDU": -3
+   }
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "BUY:BAT",
+   "BUY:BAV",
+   "BUY:BRK",
+   "BUY:CPC",
+   "BUY:NWS",
+   "BUY:SG",
+   "CUT:ADC",
+   "CUT:FBP",
+   "CUT:FDU",
+   "CUT:HYP",
+   "CUT:PDT",
+   "CUT:PEC",
+   "CUT:VHF",
+   "CUT:WHC",
+   "CUT:WXR"
+  ],
+  "golden_family": [
+   {
+    "name": "a second stream of replays",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "no-fault-found removals without their monthly spread",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "every winter at its average frost",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "the shop calibrated on 2025 to 2026 alone",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "the both-exposures removals",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "the last twelve months' removals",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "Palm's theorem on the golden removals for the repairers' lines",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "careful but hurried: each part per flight hour, the 2026 average turnaround, Palm's spares",
+    "answer": [
+     "BUY:FLA",
+     "CUT:ADC",
+     "CUT:BRK",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "quick: the October outlook and the pool as it stands",
+    "answer": []
+   },
+   {
+    "name": "the landing-driven parts on landings alone, the average turnaround",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:CPC",
+     "BUY:FLA",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "the golden removals on the 2026 average turnaround, Palm's spares",
+    "answer": [
+     "BUY:BAV",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "SG rate on landings -20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "BRK rate on landings -20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "BAV rate on landings -20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "the Bod\u00f8 shop's calibrated capacity +5%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "the Bod\u00f8 shop's calibrated capacity -5%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "the propeller control's 2027 rate +20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "the frost terms +20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "input": "every no-fault-found rate +20%",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   }
+  ]
  }
 }

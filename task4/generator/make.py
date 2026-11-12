@@ -1,6 +1,6 @@
-"""Build the pack, compute every owed figure from it, write the goldens, figures.json, effort.json, submission.md
-and metadata.json, run the checks and the independent verifier, rebuild into a scratch folder and require
-byte-identical output, then cut target.zip and the golden ZIP.
+"""Build the pack, compute every owed figure from it, write the goldens, figures.json, effort.json, submission.md and
+metadata.json, run the checks and the independent verifier, rebuild into a scratch folder and require byte-identical
+output, then cut target.zip and the golden ZIP.
 
     python3 task4/generator/make.py            (full: two builds, both zips)
     python3 task4/generator/make.py --once     (one build, no zips)
@@ -8,6 +8,7 @@ byte-identical output, then cut target.zip and the golden ZIP.
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,7 @@ import build as B  # noqa: E402
 import effort_passes as EP  # noqa: E402
 import golden as GD  # noqa: E402
 import params as P  # noqa: E402
+import results as RS  # noqa: E402
 import writeup as WU  # noqa: E402
 
 TASK = os.path.dirname(HERE)
@@ -47,60 +49,61 @@ def metadata(target, n):
         p = os.path.join(target, f)
         rows = sum(1 for _ in open(p, encoding="utf-8")) - 1 if f.endswith(".csv") else None
         files.append({"path": f, "format": f.rsplit(".", 1)[1], "bytes": os.path.getsize(p), "rows": rows,
-                      "source": "Constructed (seeded generator, task4/generator)", "pull_date": "2026-11-06",
+                      "source": "Constructed (seeded generator, task4/generator)", "pull_date": "2026-12-01",
                       "license": "CC0-1.0 (original work)"})
-    return {
-        "task": "task4", "architecture": 11,
-        "title": "Which weeks of the 2027 peak a fulfilment centre's two small-parts zones need the evening shift, and "
-                 "how many agency picker hours to book each peak week, once a second brand's orders share the zones",
-        "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
-        "subdomain": "regression, classification & model diagnostics (an e-commerce fulfilment centre's peak labour plan)",
-        "objective": "Forecasting & Predictive Modeling",
-        "as_of": "2026-11-06", "deliverables": [GD.XLSX, GD.DOCX],
-        "distractor_files": [B.FILES[k] for k in B.DISTRACTORS],
-        "files": files,
-        "provenance": "Every file is constructed by the seeded generator in task4/generator; the logistics provider, "
-                      "the retailer, its brands, the agency, the people, the articles and every record are invented "
-                      "(Finnish names from a name generator, Finnish warehouse and payroll vocabulary). No real "
-                      "organisation's records are used.",
-    }
+    return {"task": "task4", "architecture": 12,
+            "title": "Which of a regional airline's rotable part numbers will be short of spares in 2027 and which "
+                     "over-stocked, how many spares each should hold, and which watch-list serials to withdraw",
+            "domain": "General Statistics & Data Science (house domain Supply Chain & Logistics, inventory planning)",
+            "subdomain": "Regression, classification & model diagnostics",
+            "objective": "Forecasting & Predictive Modeling", "as_of": "2026-11-30",
+            "deliverables": [GD.XLSX, GD.PPTX],
+            "distractor_files": [B.FILES[k] for k in B.DISTRACTORS],
+            # identifiers every file carries and the write-up cites line by line: the part numbers' digit groups and
+            # the propeller control's bulletin number, never a graded figure
+            "stated_inputs": sorted(set(g for p in P.PARTS for g in re.findall(r"\d+", p["pn"])) | {"61", "0042"}),
+            "field_terms": ["starter-generator"],
+            "files": files,
+            "provenance": "Every file is constructed by the seeded generator in task4/generator from a simulated "
+                          "regional airline: the flying, the weather, each component's wear and the aircraft's own "
+                          "faults, the stations' troubleshooting, the Bodø shop's queue, the repairers and the pool. The "
+                          "airline, its people, the pool provider and every record are invented; airport codes and the "
+                          "aircraft type are real names used as setting. No real organisation's records are used."}
 
 
 def one(target, gold):
-    if os.path.exists(target):
-        shutil.rmtree(target)
-    if os.path.exists(gold):
-        shutil.rmtree(gold)
-    w, n = B.run(target)
-    f, G, figs = GD.write(target, gold)
-    postprocess.normalize_ooxml(os.path.join(gold, GD.XLSX), P.PEOPLE["director"], P.PEOPLE["director"],
-                                "2026-11-09T07:40:00Z", "2026-11-10T13:21:00Z", excel=True, company=P.ORG)
-    postprocess.normalize_docx(os.path.join(gold, GD.DOCX), P.PEOPLE["director"], P.PEOPLE["director"],
-                               "2026-11-09T12:05:00Z", "2026-11-10T14:02:00Z", revision=6, total_time=118,
-                               seed="task4-memo", title="Saarnela peak 2027: evening shifts and agency booking",
-                               company=P.ORG)
+    for d in (target, gold):
+        if os.path.exists(d):
+            shutil.rmtree(d)
+    w, n, rep = B.run(target)
+    G = RS.compute(target)
+    GD.write(G, gold)
+    postprocess.normalize_ooxml(os.path.join(gold, GD.XLSX), P.PEOPLE["analyst"], P.PEOPLE["analyst"],
+                                "2026-12-03T08:12:00Z", "2026-12-07T14:46:00Z", excel=True, company=P.ORG)
+    postprocess.normalize_pptx(os.path.join(gold, GD.PPTX), P.PEOPLE["analyst"], P.PEOPLE["analyst"],
+                               "2026-12-04T09:30:00Z", "2026-12-07T15:22:00Z",
+                               "2027 rotable spares plan", P.ORG, revision=9, total_time=142)
     postprocess.own_mtimes(gold, {})
-    return f, G, figs, n
+    return G, n
 
 
 def main():
     once = "--once" in sys.argv
-    f, G, figs, n = one(TARGET, GOLDEN)
-    rg = GD.compute(TARGET)[3]
-    E, rivals, extra = EP.build(f, G, figs, rg)
-    flat = WU.flat(figs, G, f, rivals)
-    flat.update(extra)
-    WU.write_figures(os.path.join(HERE, "figures.json"), flat)
+    G, n = one(TARGET, GOLDEN)
+    E = EP.build(G)
+    E["forcing"] = EP.forcing(G, TARGET)
+    f = WU.flat(G)
+    WU.write_figures(os.path.join(HERE, "figures.json"), f)
     EP.write(os.path.join(HERE, "effort.json"), E)
-    open(os.path.join(TASK, "submission.md"), "w").write(WU.submission(flat))
+    open(os.path.join(TASK, "submission.md"), "w").write(WU.submission(f, G))
     json.dump(metadata(TARGET, n), open(os.path.join(TASK, "metadata.json"), "w"), indent=1)
     for script in ("checks.py", "verify.py"):
         p = os.path.join(HERE, script)
         if os.path.exists(p):
             r = subprocess.run([sys.executable, p], capture_output=True, text=True)
-            print(r.stdout[-2500:])
+            print(r.stdout[-3000:])
             if r.returncode:
-                print(r.stderr[-2500:])
+                print(r.stderr[-3000:])
                 sys.exit("%s failed" % script)
     d1, g1 = digest(TARGET), digest(GOLDEN)
     print("target %s golden %s" % (d1[:16], g1[:16]))
@@ -112,8 +115,8 @@ def main():
     assert (d1, g1) == (d2, g2), "the two builds differ"
     print("byte-identical rebuild")
     shutil.rmtree(tmp)
-    postprocess.zip_folder(TARGET, os.path.join(TASK, "target.zip"), zone="Europe/Helsinki")
-    postprocess.zip_folder(GOLDEN, os.path.join(TASK, "golden.zip"), zone="Europe/Helsinki")
+    postprocess.zip_folder(TARGET, os.path.join(TASK, "target.zip"), zone="Europe/Oslo")
+    postprocess.zip_folder(GOLDEN, os.path.join(TASK, "golden.zip"), zone="Europe/Oslo")
     for z in ("target.zip", "golden.zip"):
         print(z, hashlib.sha256(open(os.path.join(TASK, z), "rb").read()).hexdigest()[:16])
 

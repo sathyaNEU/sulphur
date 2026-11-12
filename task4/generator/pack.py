@@ -1,355 +1,417 @@
-"""The data files under target/, each in the form the system that exports it writes: the WMS's zone-hour labour log
-and its pick confirmations, the two payroll exports (the old system's semicolon file with decimal commas, the new
-one's), the forecast archive and the client's 2027 budget workbook, the order imports, Huippu Sport's own exports,
-the item master, the slotting, the roster and the site manager's draft plan. Distractors: the packing benches' log
-and the returns register."""
+"""The data files under target/, written the way Havørn's systems export them: the flight data feed's legs, the
+maintenance system's component changes, the Bodø shop's work orders and roster, the repair vendors' orders, the fleet
+register, the stores snapshot, the 2027 flying programme, the stations' weather, and two files that sit beside the
+work (the engine trend export and a pool provider's offer). Each carries its system's own conventions and mess."""
 import csv
 import datetime as dt
 import os
 
 import numpy as np
-import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
-import cal
 import params as P
-import records as RC
 import sim
 
 FILES = {
-    "zone_hours": "wms_zone_hours_2022-01_2026-10.csv",
-    "pay_old": "palkka_tuntikirjaukset_2022-2023.csv",
-    "pay_new": "timesheets_2024-01_2026-10.csv",
-    "archive": "kotikaari_forecast_archive_2021-10_2026-10.csv",
-    "budget27": "kotikaari_budget_2027.xlsx",
-    "k_orders": "wms_order_import_kotikaari_2022-01_2026-10.csv",
-    "h_daily": "huippu_orders_daily_2024-01_2026-10.csv",
-    "h_monthly": "huippu_article_lines_2024-11_2026-10.csv",
-    "item_master": "wms_item_master_2026-11-02.xlsx",
-    "slotting": "huippu_slotting_2027.xlsx",
-    "pilot": "wms_pick_confirmations_HUI_2026w37-w44.csv",
-    "roster": "saarnela_own_pickers_2027.xlsx",
-    "draft": "saarnela_peak_2027_staffing.xlsx",
-    "standard": "saarnela_labour_planning_standard_issue4.pdf",
-    "agreement": "tyopiste_framework_agreement_2025.pdf",
-    "review": "huippu_pilot_review_2026-11.docx",
-    "benches": "saarnela_packing_benches_2026-01_2026-10.csv",
-    "returns": "kotikaari_returns_received_2024-01_2026-10.csv",
+    "legs": "flight_legs_2023-01_2026-11.csv",
+    "changes": "component_changes_2023-01_2026-11.csv",
+    "shop": "bodo_shop_work_orders_2023-2026.csv",
+    "roster": "bodo_shop_roster_2023-2026.csv",
+    "vendor": "vendor_repair_orders_2023-2026.xlsx",
+    "register": "fleet_register.xlsx",
+    "pool": "rotable_stores_snapshot_2026-11-30.xlsx",
+    "programme": "flying_programme_2027.xlsx",
+    "weather": "station_weather_daily_2023-2026.csv",
+    "report": "reliability_report_2026-10.pdf",
+    "standard": "reliability_programme_and_spares_standard.pdf",
+    "ecm": "engine_trend_monitoring_2025-2026.csv",
+    "offer": "pool_support_offer_2026.pdf",
 }
-DISTRACTORS = ["benches", "returns"]
-FI_W = dt.timezone(dt.timedelta(hours=2))
-FI_S = dt.timezone(dt.timedelta(hours=3))
-OLD_CC = {"P1": "4111", "P2": "4112", "B1": "4113", "PACK": "4150"}
-OLD_ABS = {"SICK": "S", "VAC": "L"}
+DISTRACTORS = ["ecm", "offer"]
+ICAO = {"BOO": "ENBO", "TOS": "ENTC", "BGO": "ENBR", "TRD": "ENVA"}
+PN_ALT = {"23085-016": "23085016", "2-1577-3": "2-1577-3", "822-1081-003": "8221081-003", "816534-3": "816534-3"}
 
 
-def fi(x, nd=2):
-    return ("%.*f" % (nd, x)).replace(".", ",")
+def _iso(t):
+    return t.strftime("%Y-%m-%dT%H:%MZ")
 
 
-def write_csv(path, header, rows, delim=","):
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        w = csv.writer(fh, delimiter=delim, lineterminator="\r\n")
-        w.writerow(header)
-        w.writerows(rows)
+def legs(w, path):
+    """The flight data feed: one row a leg, block and air times in UTC, the flight date local. The feed re-sent three
+    days in March 2025 (both copies kept) and lost the air times on some legs when the ACARS link dropped."""
+    rng = np.random.default_rng(P.SEED + 21)
+    E = w.E
+    resent = {dt.date(2025, 3, 11), dt.date(2025, 3, 12), dt.date(2025, 3, 18)}
+    rows = 0
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["flight_date", "flight_no", "aircraft", "dep", "arr", "out_utc", "off_utc", "on_utc", "in_utc"])
+        batch = []
+        for l in E.legs:
+            gap = rng.random() < 0.004
+            row = [l["date"].isoformat(), l["flight"], l["tail"], l["dep"], l["arr"], _iso(l["out"]),
+                   "" if gap else _iso(l["off"]), "" if gap else _iso(l["on"]), _iso(l["in"])]
+            wr.writerow(row)
+            rows += 1
+            if l["date"] in resent:
+                batch.append(row)
+            elif batch:
+                for b in batch:
+                    wr.writerow(b)
+                    rows += 1
+                batch = []
+    return rows
+
+
+def _sn_variant(rng, sn, d):
+    """Serials as technicians typed them: the maintenance system took the label as scanned (with the 'S/N' prefix)
+    from the 2024 handheld scanners until a fix in October 2024."""
+    if dt.date(2024, 2, 1) <= d <= dt.date(2024, 10, 14) and rng.random() < 0.31:
+        return "S/N " + sn
+    if rng.random() < 0.012:
+        return sn.lower()
+    return sn
+
+
+def reason_code(r, d):
+    if d < dt.date(2024, 5, 6):
+        return {"UNSCH": "U", "SCHED": "S", "CONV": "C"}[r]
+    return r
+
+
+def changes(w, path):
+    """The maintenance system's component changes: one row a change, the unit off and the unit on. A corrected
+    change is sent again as a new row with its number suffixed, the original kept."""
+    rng = np.random.default_rng(P.SEED + 22)
+    E = w.E
+    n = 0
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["change_no", "change_date", "station", "aircraft", "ata", "part_no", "description", "position",
+                     "serial_off", "serial_on", "reason", "defect", "tsn_off", "csn_off"])
+        for c in sorted(E.changes, key=lambda x: (x["date"], x["no"])):
+            p = P.PART[c["k"]]
+            pn = PN_ALT.get(p["pn"], p["pn"]) if c["date"] < dt.date(2023, 9, 1) and rng.random() < 0.5 else p["pn"]
+            tsn = "" if not c["known"] else "%.0f" % c["tsn"]
+            csn = "" if not c["known"] else "%.0f" % c["csn"]
+            row = [c["no"], c["date"].isoformat(), c["station"], c["tail"], p["ata"], pn, p["name"].upper(), c["pos"],
+                   _sn_variant(rng, c["sn_off"], c["date"]) if c["sn_off"] else "", c["sn_on"],
+                   reason_code(c["reason"], c["date"]), c["defect"], tsn if c["sn_off"] else "", csn if c["sn_off"] else ""]
+            if rng.random() < 0.013:
+                # the first entry carried a slip (the unit on typed one digit out, or the wrong position), corrected
+                # the same day by a second entry under the change number with -R1
+                bad = list(row)
+                if c["sn_on"] and c["sn_on"][-1].isdigit() and rng.random() < 0.6:
+                    bad[9] = c["sn_on"][:-1] + str((int(c["sn_on"][-1]) + 1) % 10)
+                else:
+                    names = sim.pos_names(c["k"])
+                    bad[7] = names[(names.index(c["pos"]) + 1) % len(names)] if len(names) > 1 else c["pos"]
+                wr.writerow(bad)
+                row[0] = row[0] + "-R1"
+                n += 1
+            wr.writerow(row)
+            n += 1
+    return n
+
+
+def shop(w, path):
+    """The Bodø shop's work orders: rotable repairs and the shop's other work. A finding code was added to the form
+    in March 2024; before that the finding is in the text alone."""
+    E = w.E
+    n = 0
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["work_order", "order_type", "part_no", "serial", "received", "parts_received", "work_started",
+                     "completed", "finding_code", "finding", "hours_booked", "technician"])
+        for j in sorted(E.shop_jobs, key=lambda x: x["wo"]):
+            if j["arrive"] > P.ASOF:
+                continue
+            if j["type"] == "other":
+                wr.writerow([j["wo"], "OTHER", "", "", j["arrive"].isoformat(), "", j["start"].isoformat(),
+                             j["done"].isoformat(), "", j["text"], "%.1f" % j["hours"], j["tech"]])
+                n += 1
+                continue
+            done = j["done"] if j["done"] and j["done"] <= P.ASOF else None
+            code = ""
+            if j["arrive"] >= dt.date(2024, 3, 4) and done:
+                code = {"CF": "CONF", "NFF": "NFF", "BER": "BER"}[j["finding"]]
+            pr = j["parts"] if j["parts"] != j["arrive"] and j["parts"] <= P.ASOF else None
+            wr.writerow([j["wo"], "ROTABLE", P.PART[j["k"]]["pn"], j["sn"], j["arrive"].isoformat(),
+                         pr.isoformat() if pr else "",
+                         j["start"].isoformat() if j["start"] and j["start"] <= P.ASOF else "",
+                         done.isoformat() if done else "", code, j["text"] if done else "",
+                         "%.1f" % (j["hours"] - (j["left"] if not done else 0)) if j["start"] else "",
+                         j.get("tech") or ""])
+            n += 1
+    return n
+
+
+def roster(w, path):
+    E = w.E
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["date", "technician", "hours_on_duty", "absence"])
+        for r in E.roster:
+            wr.writerow([r["date"].isoformat(), r["tech"], "%.1f" % r["hours"], r["absence"]])
+    return len(E.roster)
+
+
+def _sheet(ws, header, rows, widths=None, money=()):
+    ws.append(header)
+    for c in ws[1]:
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="DCE6F1")
+        c.alignment = Alignment(vertical="top", wrap_text=True)
+    for r in rows:
+        ws.append(r)
+    for i, wdt in enumerate(widths or [], start=1):
+        ws.column_dimensions[get_column_letter(i)].width = wdt
+    ws.freeze_panes = "A2"
+
+
+def vendor(w, path):
+    """The repair vendors' orders, as the purchasing team keeps them: one row an order, the invoice in the vendor's
+    currency at the invoice date's rate. Orders still at the vendor at the export have no return date."""
+    rng = np.random.default_rng(P.SEED + 23)
+    E = w.E
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Repair orders"
+    rows = []
+    for j in sorted(E.vendor_jobs, key=lambda x: x["order"]):
+        if j["sent"] > P.ASOF:
+            continue
+        back = j["back"] if j["back"] <= P.ASOF else None
+        p = P.PART[j["k"]]
+        if j["finding"] == "SB":
+            cost = p["price"] * 0.035
+        elif j["finding"] == "NFF":
+            cost = p["price"] * float(rng.uniform(0.025, 0.045))
+        elif j["finding"] == "BER":
+            cost = p["price"] * 0.02
+        else:
+            cost = p["price"] * float(rng.uniform(0.08, 0.19))
+        ccy = j["ccy"]
+        fx = 1.0 if ccy == "NOK" else P.FX[ccy] * float(rng.uniform(0.97, 1.03))
+        amount = cost / fx
+        text = j["text"] if back else ""
+        if back and j["mod"]:
+            text = (text + "; " if text else "") + "SB 61-0042 embodied"
+        rows.append([j["order"], j["vendor"], p["pn"], j["sn"], j["sent"], j["at_vendor"] if j["at_vendor"] <= P.ASOF else None,
+                     back, text, round(amount, 2) if back else None, ccy if back else None, round(fx, 4) if back and ccy != "NOK" else None])
+    _sheet(ws, ["Order", "Repairer", "Part number", "Serial", "Shipped to repairer", "Received by repairer",
+                "Returned to Bodø stores", "Repairer's finding", "Invoice amount", "Currency", "NOK per unit"],
+           rows, [10, 30, 14, 10, 12, 12, 14, 60, 12, 8, 10])
+    for row in ws.iter_rows(min_row=2):
+        for c in (row[4], row[5], row[6]):
+            c.number_format = "yyyy-mm-dd"
+    ws2 = wb.create_sheet("New units")
+    rows2 = []
+    for b in sorted(E.purchases, key=lambda x: (x["ordered"], x["sn"])):
+        if b["ordered"] > P.ASOF:
+            continue
+        p = P.PART[b["k"]]
+        rows2.append(["PO-%s-%s" % (b["ordered"].strftime("%y%m"), b["sn"][-3:]), p["pn"], p["name"], b["sn"], b["ordered"],
+                      b["delivered"] if b["delivered"] <= P.ASOF else None])
+    _sheet(ws2, ["Purchase order", "Part number", "Description", "Serial", "Ordered", "Delivered to Bodø stores"],
+           rows2, [16, 14, 34, 11, 12, 16])
+    for row in ws2.iter_rows(min_row=2):
+        row[4].number_format = row[5].number_format = "yyyy-mm-dd"
+    wb.save(path)
     return len(rows)
 
 
-def zone_hours(w, path):
-    df = RC.zone_hours(w)
-    df = df[df["date"] >= P.DATA_START].sort_values(["date", "hour", "zone"])
-    rows = [list(r) for r in df.itertuples(index=False)]
-    out = []
-    for r in rows:
-        r[0] = r[0].isoformat()
-        out.append(r)
-        if r[0] in ("2023-03-14", "2023-03-15", "2025-06-02"):    # the nightly export run twice
-            out.append(list(r))
-    return write_csv(path, RC.ZH_COLS, out)
+def register(w, path):
+    """The fleet register: aircraft, their base history and heavy checks."""
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Fleet"
+    rows = []
+    for a in w.ac:
+        rows.append([a["tail"], P.TYPE, a["msn"], a["delivered"], "PW123"])
+    _sheet(ws, ["Registration", "Type", "MSN", "Delivered", "Engines"], rows, [13, 11, 7, 12, 9])
+    for row in ws.iter_rows(min_row=2):
+        row[3].number_format = "yyyy-mm-dd"
+    ws2 = wb.create_sheet("Base history")
+    rows = []
+    for t, h in w.hist.items():
+        for i, (when, b) in enumerate(h):
+            to = h[i + 1][0] - sim.DAY if i + 1 < len(h) else None
+            rows.append([t, b, when, to])
+    _sheet(ws2, ["Registration", "Base", "From", "To"], rows, [13, 7, 12, 12])
+    for row in ws2.iter_rows(min_row=2):
+        row[2].number_format = row[3].number_format = "yyyy-mm-dd"
+    ws3 = wb.create_sheet("Heavy checks")
+    rows = []
+    for t, lst in w.checks.items():
+        for i, (a, b) in enumerate(lst):
+            if a <= P.ASOF:
+                rows.append([t, "C%d" % (1 + (i % 2)), "BOO", a, b if b <= P.ASOF else None])
+            elif a <= dt.date(2027, 12, 31):
+                rows.append([t, "C%d (planned)" % (1 + (i % 2)), "BOO", a, b])
+    _sheet(ws3, ["Registration", "Check", "Station", "Start", "End"], rows, [13, 14, 8, 12, 12])
+    for row in ws3.iter_rows(min_row=2):
+        row[3].number_format = row[4].number_format = "yyyy-mm-dd"
+    wb.save(path)
 
 
-def payroll(w, old_path, new_path):
-    ts = RC.timesheets(w)
-    ts = ts[ts["date"] >= P.DATA_START].sort_values(["date", "zone", "shift", "employer", "person"], kind="mergesort")
-    old, new = [], []
-    for r in ts.itertuples(index=False):
-        if r.date < P.PAYROLL_SWITCH:
-            old.append((r.date.strftime("%-d.%-m.%Y"), r.person, r.employer, OLD_CC[r.zone],
-                        "A" if r.shift == "DAY" else "I", r.start, r.end, fi(r.paid, 1) if r.paid else "0",
-                        OLD_ABS.get(r.absence, ""), fi(r.absence_hours, 1) if r.absence_hours else ""))
+def pool(w, path):
+    """The stores snapshot at the end of 30 November 2026: every serial of the pooled part numbers, where it is."""
+    E = w.E
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Rotables 2026-11-30"
+    rows = []
+    inst = {sn: key for key, sn in E.install.items() if sn}
+    kit = {}
+    for (s, k), lst in E.kits.items():
+        for sn in lst:
+            kit[sn] = s
+    shop_open = {j["sn"] for j in E.queue}
+    for sn, u in sorted(E.units.items(), key=lambda x: (P.PART[x[1]["k"]]["pn"], x[0])):
+        p = P.PART[u["k"]]
+        if u["status"] == "scrap":
+            continue
+        if sn in inst:
+            t, k, pos = inst[sn]
+            st, loc = "Installed", "%s %s" % (t, pos)
+        elif sn in kit:
+            st, loc = "Serviceable", "Station kit %s" % kit[sn]
+        elif sn in E.pool[u["k"]]:
+            st, loc = "Serviceable", "Bodø main stores"
+        elif sn in shop_open:
+            st, loc = "Unserviceable", "Bodø component shop"
+        elif u["status"] == "order":
+            st, loc = "On order", "New from manufacturer"
+        elif u["status"] == "repair":
+            st, loc = "Unserviceable", "At repairer"
         else:
-            run = "PR-%s" % r.date.strftime("%Y%m")
-            row = (r.date.isoformat(), r.person, r.employer, "SAA-" + r.zone, r.shift, r.start, r.end,
-                   "%.2f" % r.paid, r.absence, "%.2f" % r.absence_hours if r.absence_hours else "", run)
-            new.append(row)
-            if r.date.year == 2024 and r.date.month == 3:          # March 2024's correction run re-sent the month
-                new.append(row[:-1] + ("PR-202403-K",))
-    n1 = write_csv(old_path, ["pvm", "henkilonumero", "tyonantaja", "kustannuspaikka", "vuoro", "alkoi", "paattyi",
-                              "tunnit", "poissaolo", "poissaolotunnit"], old, delim=";")
-    n2 = write_csv(new_path, ["work_date", "person_id", "employer", "cost_centre", "shift", "start", "end",
-                              "paid_hours", "absence_code", "absence_hours", "payroll_run"], new)
-    return n1, n2
+            st, loc = "Serviceable", "Bodø main stores"
+        sb = ""
+        if u["k"] == "PEC":
+            sb = "Incorporated" if u["mod"] else "Not incorporated"
+        rows.append([p["pn"], p["name"], sn, st, loc, sb])
+    _sheet(ws, ["Part number", "Description", "Serial", "Condition", "Location", "SB 61-0042"], rows,
+           [14, 34, 11, 14, 26, 14])
+    wb.save(path)
+    return rows
 
 
-def archive(w, path):
-    f = RC.forecasts(w)
-    f = f[~((f["round"] == "budget 2027") & (f["brand"] == P.BRAND_H))]   # the archive's import was set up for Kotikaari
-    f = f.sort_values(["issued", "round", "brand", "group", "iso_year", "iso_week"], kind="mergesort")
-    rows = [(r.issued.isoformat(), r.round, r.brand, r.group, r.iso_year, r.iso_week, r.order_lines, r.note)
-            for r in f.itertuples(index=False)]
-    return write_csv(path, ["issued", "round", "brand", "group", "iso_year", "iso_week", "order_lines", "note"], rows)
-
-
-def _head(ws, row, fill="DCE6F0"):
-    for c in ws[row]:
-        c.font = Font(bold=True)
-        c.fill = PatternFill("solid", fgColor=fill)
-        c.alignment = Alignment(vertical="top", wrap_text=True)
-
-
-def _widths(ws, widths):
-    for i, wd in enumerate(widths, 1):
-        ws.column_dimensions[get_column_letter(i)].width = wd
-
-
-def budget27(w, path):
-    f = RC.forecasts(w)
-    b = f[f["round"] == "budget 2027"]
-    meta_k = w["fmeta"][(P.BRAND_K, 2027)]
-    meta_h = w["fmeta"][(P.BRAND_H, 2027)]
+def programme(w, path):
+    """The 2027 flying programme, as network planning issued it: each leg's departures a week and scheduled block
+    minutes by season and operating base, and the aircraft each base is planned to hold month by month."""
     wb = Workbook()
     ws = wb.active
-    ws.title = "Cover"
-    cover = [("Kotikaari Oy, demand planning", ""),
-             ("Year-ahead order line forecast (budget) 2027", ""),
-             ("", ""),
-             ("Issued", "15.10.2026"),
-             ("Prepared by", P.PEOPLE["planning"]),
-             ("For", "%s, %s fulfilment centre" % (P.ORG, P.SITE)),
-             ("Brands", "Kotikaari; Huippu Sport (fulfilled at %s from 1.3.2027)" % P.SITE),
-             ("Unit", "order lines, by ISO week of order"),
-             ("Commercial plan 2027, Kotikaari", "small parts +%d %%, bulky +%d %%" % tuple(round(v * 100) for v in meta_k["g"])),
-             ("Commercial plan 2027, Huippu Sport", "small parts +%d %%, bulky +%d %%" % tuple(round(v * 100) for v in meta_h["g"])),
-             ("Weekly phasing", "as in 2025; volumes brought forward by the 2026 year-to-date trend and the 2027 commercial plan"),
-             ("Huippu Sport", "forecast on the same basis as Kotikaari by the same team since the integration in 2025")]
-    for r in cover:
-        ws.append(list(r))
-    ws["A1"].font = Font(bold=True, size=12)
-    ws["A2"].font = Font(bold=True, size=11)
-    _widths(ws, [36, 88])
-    for brand, title in ((P.BRAND_K, "Kotikaari"), (P.BRAND_H, "Huippu Sport")):
-        ws = wb.create_sheet(title)
-        ws.append(["ISO week 2027", "Small parts, order lines", "Bulky, order lines"])
-        _head(ws, 1)
-        sp = b[(b["brand"] == brand) & (b["group"] == "small parts")].set_index("iso_week")["order_lines"]
-        bu = b[(b["brand"] == brand) & (b["group"] == "bulky")].set_index("iso_week")["order_lines"]
-        for wk in sorted(sp.index):
-            ws.append([int(wk), int(sp[wk]), int(bu[wk])])
-        ws.append(["Total", int(sum(int(sp[w]) for w in sp.index)), int(sum(int(bu[w]) for w in bu.index))])
-        ws.freeze_panes = "A2"
-        _widths(ws, [14, 24, 20])
-        for row in ws.iter_rows(min_row=2, min_col=2, max_col=3):
-            for c in row:
-                c.number_format = "#,##0"
-    wb.save(path)
-
-
-def k_orders(w, path):
-    k = RC.k_orders(w)
-    k = k[k["received"] >= dt.date(2022, 1, 1)]
-    rows = [(r.received.isoformat(), r.group, r.web_orders, r.web_lines, r.store_lines) for r in k.itertuples(index=False)]
-    return write_csv(path, ["received", "group", "web_orders", "web_lines", "store_lines"], rows)
-
-
-def h_daily(w, path):
-    h = RC.h_daily(w)
-    rows = [(r.order_date.strftime("%d/%m/%Y"), r.group, r.orders, r.order_lines, r.units) for r in h.itertuples(index=False)]
-    return write_csv(path, ["order_date", "product_line", "orders", "order_lines", "units"], rows)
-
-
-def h_monthly(w, path):
-    h = RC.h_monthly(w).sort_values(["month", "article_no"])
-    rows = [(r.month, r.article_no, r.order_lines, r.units) for r in h.itertuples(index=False)]
-    return write_csv(path, ["month", "article_no", "order_lines", "units"], rows)
-
-
-def item_master(im, path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Items"
-    cols = list(im.columns)
-    ws.append(cols)
-    _head(ws, 1)
-    for r in im.itertuples(index=False):
-        ws.append([v.isoformat() if isinstance(v, dt.date) else v for v in r])
-    ws.freeze_panes = "A2"
-    _widths(ws, [11, 7, 12, 40, 30, 14, 14, 10, 10, 10, 10, 11])
-    wb.save(path)
-
-
-def slotting(sl, path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Slotting 2027"
-    ws.append(["Huippu Sport articles: pick locations for the March 2027 move (slotting run 30.10.2026)"])
-    ws["A1"].font = Font(bold=True)
-    ws.append([])
-    ws.append(["owner_article", "sku", "zone", "aisle", "bay", "level", "velocity_class"])
-    _head(ws, 3)
-    for r in sl.sort_values(["zone", "aisle", "bay", "level", "owner_article"]).itertuples(index=False):
-        ws.append(list(r))
-    ws.freeze_panes = "A4"
-    _widths(ws, [14, 11, 7, 7, 7, 7, 14])
-    wb.save(path)
-
-
-def pilot(w, im, path, rng):
-    sku = dict(zip(im[im["owner"] == "HUI"]["owner_article"], im[im["owner"] == "HUI"]["sku"]))
-    loc = {}
-    for a in sorted(w["pilot"]):
-        loc[a] = "P2-%02d-%02d-%d" % (int(rng.integers(1, 5)), int(rng.integers(1, 25)), int(rng.choice([1, 2, 2, 3, 3, 4])))
-    staff = [x for x in w["staff"] if x["zone"] == "P2"]
-    badges = sorted(str(x["emp"]) for x in staff if x["end"] is None)
-    pickers = badges[:6]
+    ws.title = "Programme 2027"
     rows = []
-    tid = 88412000
-    order = 5100000
-    for (tm, d, h, art, u, k) in w["pilot_conf"]:
-        tid += int(rng.integers(1, 4))
-        if rng.random() < 0.55:
-            order += int(rng.integers(1, 30))
-        picker = pickers[(k + d.toordinal()) % len(pickers)]
-        stamp = tm.replace(microsecond=0).isoformat(sep=" ")
-        rows.append((stamp, tid, picker, "P2", loc[art], sku[art], u, "HS-%07d" % order))
-        if rng.random() < 0.006:                         # the scanner confirmed twice
-            t2 = (tm + dt.timedelta(seconds=int(rng.integers(2, 9)))).replace(microsecond=0).isoformat(sep=" ")
-            rows.append((t2, tid, picker, "P2", loc[art], sku[art], u, "HS-%07d" % order))
-    return write_csv(path, ["confirmed_at", "task_id", "picker_id", "zone", "location", "sku", "qty", "order_no"], rows)
-
-
-def roster(ro, path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Own pickers 2027"
-    ws.append(["employee_no", "name", "home_zone", "contract_hours_week", "employment_start", "leave_until"])
-    _head(ws, 1)
-    for r in ro.itertuples(index=False):
-        ws.append([int(r.employee_no), r.name, r.home_zone, int(r.contract_hours_week),
-                   r.employment_start.isoformat() if isinstance(r.employment_start, dt.date) else r.employment_start,
-                   r.leave_until])
-    ws.freeze_panes = "A2"
-    _widths(ws, [13, 24, 11, 20, 17, 14])
-    wb.save(path)
-
-
-def benches(w, path, rng):
+    for r in plan_2027(w):
+        grp = "Bodø (Helgeland routes)" if r["grp"] == "HEL" else P.BASES[r["grp"]]["name"]
+        rows.append([r["season"], grp, r["dep"], r["arr"], r["from"], r["to"], round(r["per_week"], 1), int(round(r["block"]))])
+    _sheet(ws, ["Season", "Operated from", "From", "To", "Valid from", "Valid to", "Departures a week",
+                "Block minutes"], rows, [13, 24, 7, 7, 12, 12, 16, 13])
+    for row in ws.iter_rows(min_row=2):
+        row[4].number_format = row[5].number_format = "yyyy-mm-dd"
+    ws2 = wb.create_sheet("Aircraft by base")
     rows = []
-    for d in cal.days(dt.date(2026, 1, 2), dt.date(2026, 10, 30)):
-        if not cal.working(d):
-            continue
-        for b in range(1, 19):
-            for sh in ("DAY",):
-                parcels = int(rng.normal(310, 45))
-                rows.append((d.isoformat(), "PK-%02d" % b, sh, parcels, int(parcels * rng.normal(1.31, 0.08)),
-                             round(float(rng.normal(7.1, 0.4)), 2)))
-    return write_csv(path, ["date", "bench", "shift", "parcels_closed", "items_packed", "bench_hours"], rows)
-
-
-def returns(w, path, rng):
-    D = w["D"]
-    rows = []
-    for i, d in enumerate(D["days"]):
-        if d < dt.date(2024, 1, 1) or d > dt.date(2026, 10, 31) or not cal.working(d) or d.weekday() >= 5:
-            continue
-        lag = D["web_s"][max(0, i - 12)]
-        n = int(lag * 0.081 * float(np.exp(rng.normal(0, 0.12))))
-        for reason, sh in (("wrong size or colour", 0.21), ("not as described", 0.18), ("damaged", 0.09),
-                           ("changed mind", 0.52)):
-            rows.append((d.isoformat(), reason, int(round(n * sh))))
-    return write_csv(path, ["received", "reason", "return_lines"], rows)
-
-
-def draft(w, f, path):
-    """The site manager's draft: the 2025 peak's paid hours a line by zone carried to the 2027 budget's weeks, Huippu
-    Sport's lines at the pilot's time a line against P2's, and its check of the rate on days of 2025."""
-    import analysis as A
-    z = A.zone_hours(f)
-    t = A.timesheet(f)
-    rate = {zz: A.paid_per_line(z, t, 2025, P.PEAK_WEEKS, zz) for zz in P.ZONES}
-    zp = z[(z["zone"] == "P2") & (z["date"] >= pd.Timestamp(P.PILOT[0])) & (z["date"] <= pd.Timestamp(P.PILOT[1]))]
-    tp = A.pilot_times(f)
-    kot_t = float((zp["task_min"].sum() - tp * zp["lines_hui"].sum()) / zp["kot"].sum())
-    ratio = round(tp / kot_t, 2)
-    bud_k = {g: A.budget_totals(f, P.BRAND_K, g, 2027) for g in ("small parts", "bulky")}
-    bud_h = {g: A.budget_totals(f, P.BRAND_H, g, 2027) for g in ("small parts", "bulky")}
-    kz = A.picked_by_week(z)
-    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
-    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(A.Z_SMALL)]["kot"].sum())
-    hm = A.hui_mix(f)
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Plan 2027"
-    ws.append(["Saarnela peak 2027, picker hours: DRAFT (T. Nieminen, 2.11.2026)"])
-    ws["A1"].font = Font(bold=True, size=12)
-    ws.append(["Volumes: Kotikaari budget 2027 (15.10.2026). Hours a line: peak 2025 (weeks 46 to 50), paid hours over "
-               "lines picked, by zone. Huippu Sport lines at the pilot's time a line against P2 (%s)." % fi(ratio)])
-    ws.append([])
-    ws.append(["ISO week", "Zone", "Kotikaari lines", "Huippu Sport lines", "Paid minutes a line (2025)",
-               "Picker hours", "Evening shift"])
-    _head(ws, 4)
-    for wk in P.PEAK_WEEKS:
-        for zz in P.ZONES:
-            if zz == "B1":
-                lk, lh = bud_k["bulky"][wk], bud_h["bulky"][wk]
-            else:
-                lk = bud_k["small parts"][wk] * (kp1 if zz == "P1" else 1.0 - kp1)
-                lh = bud_h["small parts"][wk] * hm[zz]["share"]
-            r = round(rate[zz] * 60.0, 3)
-            hrs = (lk * r + lh * r * (ratio if zz != "B1" else 1.0)) / 60.0
-            ws.append([wk, zz, int(round(lk)), int(round(lh)), r, int(round(hrs)), "to confirm"])
-    _widths(ws, [10, 7, 16, 18, 22, 14, 14])
-    ws2 = wb.create_sheet("Rate check")
-    ws2.append(["The 2025 rates against the 2025 peak's own days, paid hours as booked"])
-    ws2["A1"].font = Font(bold=True)
-    ws2.append(["Date", "Zone", "Lines", "Hours at the rate", "Paid hours booked", "Difference %"])
-    _head(ws2, 2)
-    rng = np.random.default_rng(P.SEED + 11)
-    days = sorted(set(z[(z["iy"] == 2025) & z["iw"].isin(P.PEAK_WEEKS)]["date"].dt.date))
-    pick = list(range(len(days)))
-    tt = t[(t["absence"] == "")]
-    for i in pick:
-        d = days[i]
-        for zz in ("P1", "P2"):
-            lines = int(z[(z["date"] == pd.Timestamp(d)) & (z["zone"] == zz)]["lines"].sum())
-            booked = float(tt[(tt["date"] == pd.Timestamp(d)) & (tt["zone"] == zz)]["paid"].sum())
-            at = lines * rate[zz]
-            ws2.append([d.isoformat(), zz, lines, round(at, 1), round(booked, 1),
-                        round(100.0 * (at - booked) / booked, 1) if booked else None])
-    _widths(ws2, [12, 7, 10, 18, 18, 14])
+    for m in range(1, 13):
+        d = dt.date(2027, m, 15)
+        cnt = P.BASE_2027_Q1 if d < P.HELGELAND else P.BASE_2027_AP
+        rows.append([dt.date(2027, m, 1), cnt["BOO"], cnt["TOS"], cnt["BGO"], cnt["TRD"],
+                     P.HELGELAND_N if d >= P.HELGELAND else 0])
+    _sheet(ws2, ["Month", "Bodø", "Tromsø", "Bergen", "Trondheim", "of which on the Helgeland routes"],
+           rows, [11, 8, 8, 8, 10, 28])
+    for row in ws2.iter_rows(min_row=2):
+        row[0].number_format = "mmm yyyy"
     wb.save(path)
-    return {"rate": rate, "ratio": ratio}
+    return rows
 
 
-def write_tables(w, target):
-    F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    rng = np.random.default_rng(P.SEED + 5)
-    n = {}
-    n["zone_hours"] = zone_hours(w, F["zone_hours"])
-    n["pay_old"], n["pay_new"] = payroll(w, F["pay_old"], F["pay_new"])
-    n["archive"] = archive(w, F["archive"])
-    budget27(w, F["budget27"])
-    n["k_orders"] = k_orders(w, F["k_orders"])
-    n["h_daily"] = h_daily(w, F["h_daily"])
-    n["h_monthly"] = h_monthly(w, F["h_monthly"])
-    im = RC.item_master(w, rng)
-    item_master(im, F["item_master"])
-    sl = RC.slotting(w, im, rng)
-    slotting(sl, F["slotting"])
-    n["pilot"] = pilot(w, im, F["pilot"], rng)
-    ro = RC.roster(w, rng)
-    roster(ro, F["roster"])
-    n["benches"] = benches(w, F["benches"], rng)
-    n["returns"] = returns(w, F["returns"], rng)
+def plan_2027(w, draws=24):
+    """The programme the replays fly: each leg's expected departures a week and its block minutes, by season, base
+    and route, averaged over many draws of the 2027 flying (the aircraft each base holds, the planned checks, the
+    seasons and the weekends)."""
+    rng = np.random.default_rng(P.SEED + 26)
+    seasons = [("Winter 26/27", dt.date(2027, 1, 1), dt.date(2027, 3, 27)),
+               ("Summer 27", dt.date(2027, 3, 28), dt.date(2027, 10, 30)),
+               ("Winter 27/28", dt.date(2027, 10, 31), dt.date(2027, 12, 31))]
+    acc = {}
+    for _ in range(draws):
+        d = dt.date(2027, 1, 1)
+        while d <= dt.date(2027, 12, 31):
+            sname = [s for s, a, b in seasons if a <= d <= b][0]
+            for a in w.ac:
+                t = a["tail"]
+                if sim.check_on(w.checks, t, d) is not None:
+                    continue
+                base = sim.base_2027(w.hist, w.movers, t, d)
+                net, lm = sim.network_for(base, d, t, w.movers)
+                grp = "HEL" if (d >= P.HELGELAND and w.movers.get(t) == "HEL") else base
+                for dep, arr, blk in sim.rotation(rng, net, lm, sim.season(d)):
+                    dep = base if dep == "BASE" else dep
+                    arr = base if arr == "BASE" else arr
+                    blk_eff = blk * (1.04 if d.month in (12, 1, 2) else 1.0)
+                    key = (sname, grp, dep, arr)
+                    c = acc.setdefault(key, [0, 0.0])
+                    c[0] += 1
+                    c[1] += blk_eff
+            d += sim.DAY
+    out = []
+    for (sname, grp, dep, arr), (n, bsum) in sorted(acc.items()):
+        a, b = [(x[1], x[2]) for x in seasons if x[0] == sname][0]
+        if grp == "HEL":
+            a = max(a, P.HELGELAND)
+        weeks = ((b - a).days + 1) / 7.0
+        out.append({"season": sname, "grp": grp, "dep": dep, "arr": arr, "from": a, "to": b,
+                    "per_week": n / draws / weeks, "block": bsum / n})
+    return out
+
+
+def weather(w, path):
+    """The stations' daily climate summaries as the airports' met offices publish them; a few days missing where a
+    sensor was down."""
+    rng = np.random.default_rng(P.SEED + 24)
+    n = 0
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["station", "date", "tmin_c", "tmax_c"])
+        for b in ("BOO", "TOS", "BGO", "TRD"):
+            for i, d in enumerate(w.dates):
+                if d > P.ASOF:
+                    break
+                if rng.random() < 0.003:
+                    wr.writerow([ICAO[b], d.isoformat(), "", ""])
+                else:
+                    wr.writerow([ICAO[b], d.isoformat(), "%.1f" % w.wx[b]["tmin"][i], "%.1f" % w.wx[b]["tmax"][i]])
+                n += 1
+    return n
+
+
+def ecm(w, path):
+    """Engine condition trend data (the engine shop's export): take-off and cruise snapshots per engine. Nothing in the
+    spares work reads it."""
+    rng = np.random.default_rng(P.SEED + 25)
+    n = 0
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["aircraft", "engine_pos", "engine_sn", "date", "phase", "itt_c", "itt_margin_c", "torque_pct",
+                     "np_pct", "oat_c", "altitude_ft"])
+        esn = {(a["tail"], e): "PCE-FA%04d" % int(rng.integers(1000, 9999)) for a in w.ac for e in (1, 2)}
+        for a in w.ac:
+            for e in (1, 2):
+                drift = float(rng.uniform(-0.04, 0.02))
+                margin = float(rng.uniform(28, 61))
+                d = dt.date(2025, 1, 3)
+                while d <= P.ASOF:
+                    if rng.random() < 0.55:
+                        margin += drift + float(rng.normal(0, 0.6))
+                        for ph, tq, alt in (("TO", 92 + rng.normal(0, 2), 0), ("CRZ", 74 + rng.normal(0, 3), 17000 + 2000 * rng.random())):
+                            oat = float(rng.normal(4 if ph == "TO" else -18, 7))
+                            itt = 765 - margin + 0.9 * oat + (40 if ph == "TO" else 0) + float(rng.normal(0, 4))
+                            wr.writerow([a["tail"], e, esn[(a["tail"], e)], d.isoformat(), ph, "%.0f" % itt,
+                                         "%.0f" % margin, "%.1f" % tq, "%.1f" % (100 if ph == "TO" else 85),
+                                         "%.0f" % oat, "%.0f" % alt])
+                            n += 1
+                    d += dt.timedelta(days=int(rng.integers(3, 9)))
     return n

@@ -1,233 +1,250 @@
 {
-  "task": "task4",
-  "status": "DESIGN",
-  "domain": "supply-chain-logistics",
-  "subdomain": "regression-classification-model-diagnostics",
-  "client_domain": "general-statistics-data-science",
-  "objective": "forecasting",
-  "stage": 2,
-  "stage_name": "design",
-  "updated": "2026-11-11",
-  "doctrine": "throughout",
-  "architecture": 12,
-  "loops": 0,
-  "call": "pending build: which rotable part numbers are short of spares for 2027 and which over-stocked, the spares each should hold, and the watch-list serials worth scrapping",
-  "chain": "R1 the 2026 unscheduled removals by part number reconciled to the October reliability report; R2 the parts whose removals follow landings or engine starts and the 2027 schedule's cycles and hours; R3 the watch-list serials that are genuinely rogue and the 2027 removals scrapping the whole list would save; R4 the propeller control's 2027 removals through the bulletin's unit-by-unit embodiment; R5 every part number's 2027 unscheduled removals; R6 the Bodø shop's turnaround at the 2027 load; R7 the 80 per cent ranges; R8 the spares each line needs for the 95 per cent fill rate and the lines to change; R9 what moves each changed line",
-  "stump": "the careful pass projects each part on its twelve-month removals per flight hour, sizes spares by Palm's formula on the 2026 average turnaround, reads the propeller control at its 2026 rate and scraps every watch-list serial",
-  "precut": {
-    "exit": null,
-    "date": ""
+ "task": "task4",
+ "status": "READY",
+ "domain": "supply-chain-logistics",
+ "subdomain": "regression-classification-model-diagnostics",
+ "client_domain": "general-statistics-data-science",
+ "objective": "forecasting",
+ "stage": 5,
+ "stage_name": "ready",
+ "updated": "2026-11-12",
+ "doctrine": "throughout",
+ "architecture": 12,
+ "loops": 0,
+ "call": "buy 16 rotable spares on 6 lines (starter-generators 4, brake assemblies 4, bleed air shutoff valves 3, nose wheel steering actuators 2, main batteries 2, cabin pressure controllers 1) and cut 18 on 9 (the flight-hour avionics, the propeller control and the hydraulic and fuel pumps); withdraw 8 of the 23 watch-list serials; the whole list saves about 35 removals",
+ "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bodø shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
+ "stump": "the careful pass carries every part per flight hour from the October report, sizes spares by Palm's formula on the 2026 average turnaround and withdraws the watch-list serials with confirmed failures: it holds 5 starter-generators and cuts the brakes to 4 where the plan needs 9 and 9, and withdraws 4 serials where 8 repeat on their own record",
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-12",
+  "note": "93 checks, 0 FAIL, 1 WARN (nearest chains: task6 shares the shape and the weight)"
+ },
+ "leak": {
+  "leak_py": "REVIEW (2026-11-12, repaired cut 8bd9892f7f054b07): part-number digit groups declared as stated inputs, the starter-generator's name as a field term; rulings in the note's Leak rulings",
+  "reader": "reader 1 (cut 183ee655a14c4f36): no file describes the data and no one thing settles the asks; it read the report's 2027 outlook section as a ready-made forecast, so the section came out of the report; flight hours as air time asserted (SF17). Reader 2 on the repaired cut (8bd9892f7f054b07): clean, no forecast or ranking artifact, no describing file, no one-thing finding; the standard's filed definitions ruled harmless"
+ },
+ "duplicate_check": {
+  "heart": "WARN only (2026-11-12, after the final pull; the stump strategy and forum redrawn to forecast_method_backtest and line_manager_or_team when the shifted window blocked composition_mix and executive_team against task21)",
+  "guard_check": "WARN only",
+  "skeleton": "severity none against every card, lineage entry and client task; nearest task20 arch 1"
+ },
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_g": "mechanism forecasting (with method selection on the Bodø queue and attribution on the watch list), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "pass: about six graded results over five areas, one_thing none; quick about 2 of 6, careful 3 to 4 of 6",
+  "report": "determinism_check_report.md (2026-11-12, cut 183ee655a14c4f36)",
+  "notes": "its blind derivation found the landings driver by a cross-base rate comparison (R2 now graded Partly in the careful column); the watch list's two-group estimator left a watch item, now asserted against a one-gamma rival (SF18, 2 dlogL 9.3 to 34.3 on every listed part with a second group)"
+ },
+ "paper_pair": 43.6,
+ "effort": {
+  "quick": 20.8,
+  "careful": 43.6,
+  "thorough": 100.0,
+  "largest_hint": "the landing-driven parts wear by landings and starts: rescues 1 of 9 (R2)"
+ },
+ "returned": [
+  {
+   "date": "2026-11-10",
+   "source": "triage",
+   "repair": "design",
+   "portal": "architecture 9 platform runs (author's account): both runs landed the golden (order 8; run 1 payload 2.00, loss 5.08 by a square-root-age model, a winter driving-time model, unloading by pallet share, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps); every estimate the design priced as a step the runs named and did not take was a mechanism one plot or one join carried",
+   "moves": "re-rooted in a new world as architecture 10: a Finnish municipal bus operator's depot, the pilot's blocks selected on the diesel record (the evidence in the fuel-card file the runs dismiss), the pilot heaters' share of the design day's heat (a structure across the register, the statement and the quotation that nothing names), the night supply over 48 blocks (the accumulation of small sign-consistent shortfalls into buses), each moving the count; new shell (how-many | every | pptx+xlsx)"
   },
-  "leak": {
-    "leak_py": "",
-    "reader": ""
+  {
+   "date": "2026-11-10",
+   "source": "triage",
+   "repair": "design",
+   "commit": "",
+   "note": "architecture 9 landed by both platform runs (order 8 exact); re-rooted to architecture 10, the Niittyla depot"
   },
-  "duplicate_check": {
-    "heart": "",
-    "guard_check": "WARN only (registered 2026-11-11T22:27:56Z)",
-    "skeleton": "severity none against every card, lineage entry and client task"
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "design",
+   "portal": "holistic audit (0 of 1 items addressed): the order count not forced (the workshop's two 22 kW outlets outside the night period beside DES-1 3.2 and the 22 kW AC inlet fit M124, 19 for 18); 'a yes or no on going electric' (23 or 18), 'every block that passes' (8.7 or 6.7 MWh) and 'deliver' (8.0 or 8.7 MWh) each read two ways",
+   "moves": "forks closed by WHAT pins (DES-1 3.2 the charging lane's chargers, the workshop's outlets for buses under repair, the draw as the chargers take it session by session; 2.4 the design night; the agreement and the plan on the outlets; the plan moves the six pilot buses to Kauppala; the prompt's 'qualifies under the standard' and 'with the bus of every qualifying block on charge' at the connection point); a third independent judgment added on the charging side (what a bus on charge draws beside its recharge on a cold night, split from the charger meters, component 3); the order 18 to 17; R1 to R6 unmoved; the reversible cold capacity cut from 0.16 to 0.04 per cent a degree so the gain's capacity basis stays off the call (SF42)",
+   "freeze": "freeze.py check --mode rubric exit 1 by design: the call (18 to 17), the components, the stump and the results chain moved with the added result; no mode's contract covers a design repair, recorded rather than forced",
+   "commit": ""
   },
-  "judge": {
-    "verdict": "",
-    "disposition": "",
-    "gate_g": "",
-    "gate_h": "",
-    "report": ""
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "surface",
+   "portal": "Domains Fit on the READY prompt (979f04f): every ask read as a lookup or a quoted figure certified against a stated rule ('apply criteria, count, certify'); no estimation, modelling, forecasting or uncertainty seen",
+   "moves": "prompt reworded (H20): the forecast's population stated (most of those blocks never run by an electric bus), each result named as an estimate or a forecast from the company's own operating records, the 'quoted 2027 model' dropped; the answer blocks say the same; no graded figure, pack file or zip moved",
+   "commit": ""
   },
-  "paper_pair": null,
-  "effort": {
-    "quick": null,
-    "careful": null,
-    "thorough": null,
-    "largest_hint": ""
+  {
+   "date": "2026-11-11",
+   "source": "platform runs (the author's paste, target.zip of 0c3b7fc)",
+   "repair": "redesign",
+   "portal": "architecture 10: both runs landed the order (17, the same blocks, M145 refused, 23 qualifying) and every graded figure inside its band; runs/arch10/triage.md, REDESIGN"
   },
-  "returned": [
-    {
-      "date": "2026-11-10",
-      "source": "triage",
-      "repair": "design",
-      "portal": "architecture 9 platform runs (author's account): both runs landed the golden (order 8; run 1 payload 2.00, loss 5.08 by a square-root-age model, a winter driving-time model, unloading by pallet share, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps); every estimate the design priced as a step the runs named and did not take was a mechanism one plot or one join carried",
-      "moves": "re-rooted in a new world as architecture 10: a Finnish municipal bus operator's depot, the pilot's blocks selected on the diesel record (the evidence in the fuel-card file the runs dismiss), the pilot heaters' share of the design day's heat (a structure across the register, the statement and the quotation that nothing names), the night supply over 48 blocks (the accumulation of small sign-consistent shortfalls into buses), each moving the count; new shell (how-many | every | pptx+xlsx)"
-    },
-    {
-      "date": "2026-11-10",
-      "source": "triage",
-      "repair": "design",
-      "commit": "",
-      "note": "architecture 9 landed by both platform runs (order 8 exact); re-rooted to architecture 10, the Niittyla depot"
-    },
-    {
-      "date": "2026-11-10",
-      "source": "review",
-      "repair": "design",
-      "portal": "holistic audit (0 of 1 items addressed): the order count not forced (the workshop's two 22 kW outlets outside the night period beside DES-1 3.2 and the 22 kW AC inlet fit M124, 19 for 18); 'a yes or no on going electric' (23 or 18), 'every block that passes' (8.7 or 6.7 MWh) and 'deliver' (8.0 or 8.7 MWh) each read two ways",
-      "moves": "forks closed by WHAT pins (DES-1 3.2 the charging lane's chargers, the workshop's outlets for buses under repair, the draw as the chargers take it session by session; 2.4 the design night; the agreement and the plan on the outlets; the plan moves the six pilot buses to Kauppala; the prompt's 'qualifies under the standard' and 'with the bus of every qualifying block on charge' at the connection point); a third independent judgment added on the charging side (what a bus on charge draws beside its recharge on a cold night, split from the charger meters, component 3); the order 18 to 17; R1 to R6 unmoved; the reversible cold capacity cut from 0.16 to 0.04 per cent a degree so the gain's capacity basis stays off the call (SF42)",
-      "freeze": "freeze.py check --mode rubric exit 1 by design: the call (18 to 17), the components, the stump and the results chain moved with the added result; no mode's contract covers a design repair, recorded rather than forced",
-      "commit": ""
-    },
-    {
-      "date": "2026-11-10",
-      "source": "review",
-      "repair": "surface",
-      "portal": "Domains Fit on the READY prompt (979f04f): every ask read as a lookup or a quoted figure certified against a stated rule ('apply criteria, count, certify'); no estimation, modelling, forecasting or uncertainty seen",
-      "moves": "prompt reworded (H20): the forecast's population stated (most of those blocks never run by an electric bus), each result named as an estimate or a forecast from the company's own operating records, the 'quoted 2027 model' dropped; the answer blocks say the same; no graded figure, pack file or zip moved",
-      "commit": ""
-    },
-    {
-      "date": "2026-11-11",
-      "source": "platform runs (the author's paste, target.zip of 0c3b7fc)",
-      "repair": "redesign",
-      "portal": "architecture 10: both runs landed the order (17, the same blocks, M145 refused, 23 qualifying) and every graded figure inside its band; runs/arch10/triage.md, REDESIGN"
-    },
-    {
-      "date": "2026-11-11",
-      "source": "platform runs (the author's paste)",
-      "repair": "design",
-      "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
-      "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
-    }
-  ],
-  "resume": "stage 2: write the design note's results chain, hidden factor record, effort test, frontier check, fork and closure tables for architecture 12 and pass precut.py; then stage 3 (the generator simulating the fleet, the legs, the removals, the shop and the pool)",
-  "approved": null,
-  "delivered": null,
-  "portal": null,
-  "portal_id": "",
-  "portal_status": "",
-  "portal_status_date": "",
+  {
+   "date": "2026-11-11",
+   "source": "platform runs (the author's paste)",
+   "repair": "design",
+   "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
+   "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
+  }
+ ],
+ "resume": "stage 6: the author rewrites prompt.txt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip (8bd9892f7f054b07), and the two platform runs go to /triage-runs",
+ "approved": null,
+ "delivered": null,
+ "portal": null,
+ "portal_id": "",
+ "portal_status": "",
+ "portal_status_date": "",
+ "history": [
+  {
+   "date": "2026-10-20",
+   "event": "architecture 1 spent at stage 4 (reader 1 landed the network re-run, 4.0 at 9 a year; judge DETERMINISTIC APPROVE); re-rooted to architecture 2 (two keys) and redrawn"
+  },
+  {
+   "date": "2026-10-31",
+   "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK; DRAWN architecture 3 (a regional parcel carrier's October missed sort scans by hub)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 3 spent on the platform (both runs on the golden); architecture 4 (the Irish retailer's districts) drawn, built, READY, spent on the platform (not stumped)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 5 (the Fryele tractor order, one deep step) READY on ce9fbb1b; RETURNED on Domains Fit, prompt reworded"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "architecture 5 returned by the portal (reward 68.5, one thing); architectures 6, 7 and 8 built in the same world as results chains; 6 and 8 landed by the runs, 7 lost on one duty by 1 to 3 kWh"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 9 (the calibration's transfer, the early-life loss, the winter speed) READY on 19b6bec9; both platform runs landed the golden exactly (runs/arch9/)"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 10 loop 1 after the holistic audit: four forks closed by WHAT pins, the charging split added as a third independent judgment, order 17; 170 checks, verify PASS, two byte-identical builds, precut 84 of 84, effort careful 49.5 (graded up), every free gate green; stage 4 reader and judge running"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 10 loop 1 READY on 8bb29ac7570199f9: order 17 (M145 refused), the charging split as component 3; judge pass 11 DETERMINISTIC APPROVE (order kept); 178 checks, verify PASS, two byte-identical builds, every free gate green"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "Domains Fit return: the prompt names each result as an estimate or a forecast from the company's own operating records with the forecast's population stated; no graded figure, pack file or zip moved; READY on 8bb29ac7570199f9"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 11 built and checked: Saarnela's 2027 peak plan (evening shifts weeks 47 to 50 in P1 and P2, 8,390 agency hours); judge DETERMINISTIC APPROVE; leak reader no leak; ask 4 pinned to the order lines placed after the judge found two readings"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Havørn Regional AS, 30 twin turboprops, the Bodø component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
+  },
+  {
+   "date": "2026-11-12",
+   "event": "architecture 12 built (seed 41239, the Bodø shop at 52 per cent other work with staggered summer holidays, the avionics pools sized on 2026's flying): checks 66 of 66, verify 9 of 9, effort quick 20.8 / careful 40.6 / thorough 100 with every careful loss cited, 7 golden-family members and 8 perturbations holding the 15-line call; stage 4 next"
+  },
+  {
+   "date": "2026-11-12",
+   "event": "stage 4: judge DETERMINISTIC, APPROVE (Gate G analytical); reader 1 clean of describing files and one-thing findings; repair pass in the generator: the report's 2027 outlook section out, flight hours as air time asserted (SF17), the one-gamma watch-list rival rejected by the serials' own counts (SF18), R2 graded Partly in the careful column after the judge found the landings driver blind (pair 43.6)"
+  },
+  {
+   "date": "2026-11-12",
+   "event": "READY: reader 2 clean on the repaired cut; gates.py 0 FAIL; target.zip 8bd9892f7f054b07, golden.zip 7459e2f2b331c98c"
+  }
+ ],
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
   "history": [
-    {
-      "date": "2026-10-20",
-      "event": "architecture 1 spent at stage 4 (reader 1 landed the network re-run, 4.0 at 9 a year; judge DETERMINISTIC APPROVE); re-rooted to architecture 2 (two keys) and redrawn"
-    },
-    {
-      "date": "2026-10-31",
-      "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK; DRAWN architecture 3 (a regional parcel carrier's October missed sort scans by hub)"
-    },
-    {
-      "date": "2026-11-08",
-      "event": "architecture 3 spent on the platform (both runs on the golden); architecture 4 (the Irish retailer's districts) drawn, built, READY, spent on the platform (not stumped)"
-    },
-    {
-      "date": "2026-11-08",
-      "event": "architecture 5 (the Fryele tractor order, one deep step) READY on ce9fbb1b; RETURNED on Domains Fit, prompt reworded"
-    },
-    {
-      "date": "2026-11-09",
-      "event": "architecture 5 returned by the portal (reward 68.5, one thing); architectures 6, 7 and 8 built in the same world as results chains; 6 and 8 landed by the runs, 7 lost on one duty by 1 to 3 kWh"
-    },
-    {
-      "date": "2026-11-10",
-      "event": "architecture 9 (the calibration's transfer, the early-life loss, the winter speed) READY on 19b6bec9; both platform runs landed the golden exactly (runs/arch9/)"
-    },
-    {
-      "date": "2026-11-10",
-      "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittylä depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
-    },
-    {
-      "date": "2026-11-10",
-      "event": "architecture 10 loop 1 after the holistic audit: four forks closed by WHAT pins, the charging split added as a third independent judgment, order 17; 170 checks, verify PASS, two byte-identical builds, precut 84 of 84, effort careful 49.5 (graded up), every free gate green; stage 4 reader and judge running"
-    },
-    {
-      "date": "2026-11-10",
-      "event": "architecture 10 loop 1 READY on 8bb29ac7570199f9: order 17 (M145 refused), the charging split as component 3; judge pass 11 DETERMINISTIC APPROVE (order kept); 178 checks, verify PASS, two byte-identical builds, every free gate green"
-    },
-    {
-      "date": "2026-11-10",
-      "event": "Domains Fit return: the prompt names each result as an estimate or a forecast from the company's own operating records with the forecast's population stated; no graded figure, pack file or zip moved; READY on 8bb29ac7570199f9"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "architecture 11 built and checked: Saarnela's 2027 peak plan (evening shifts weeks 47 to 50 in P1 and P2, 8,390 agency hours); judge DETERMINISTIC APPROVE; leak reader no leak; ask 4 pinned to the order lines placed after the judge found two readings"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Havørn Regional AS, 30 twin turboprops, the Bodø component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
-    }
-  ],
-  "runs": {
-    "run1": null,
-    "run2": null,
-    "average": null,
-    "counterfactual_average": null,
-    "first_wrong_step": {
-      "run1": "",
-      "run2": ""
-    },
-    "triage": "",
-    "recorded": "",
-    "history": [
-      {
-        "architecture": 3,
-        "date": "2026-11-08",
-        "graded": false,
-        "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
-        "texts": "runs/arch3_run1.md, runs/arch3_run2.md"
-      },
-      {
-        "architecture": 4,
-        "date": "2026-11-08",
-        "graded": false,
-        "verdict": "not stumped (author's report); run texts not in the repo",
-        "texts": ""
-      },
-      {
-        "architecture": 6,
-        "date": "2026-11-09",
-        "graded": false,
-        "verdict": "run 1 on the golden call and every graded figure (author supplied); run 2 not supplied",
-        "texts": "runs/arch6/run1.md"
-      },
-      {
-        "architecture": 7,
-        "date": "2026-11-09",
-        "graded": false,
-        "verdict": "both runs off the call (5 of 6), V14 alone at 444.4 and 443.0 against 442; the year's speed ratio",
-        "texts": "runs/arch7/run1.md, runs/arch7/run2.md (summaries)"
-      },
-      {
-        "architecture": 8,
-        "date": "2026-11-10",
-        "graded": false,
-        "verdict": "both runs landed the golden exactly (order 7)",
-        "texts": "runs/arch8/run1.md, runs/arch8/run2.md (summaries)"
-      },
-      {
-        "architecture": 9,
-        "date": "2026-11-10",
-        "graded": false,
-        "verdict": "both runs landed the golden exactly (order 8; payload 2.00 and 1.92, loss 5.08 and 4.51, the winter speed modelled by both)",
-        "texts": "runs/arch9/run1.md, runs/arch9/run2.md (summaries)"
-      },
-      {
-        "architecture": 10,
-        "date": "2026-11-11",
-        "graded": false,
-        "verdict": "not stumped: both runs on the golden call (order 17) and every graded figure in band",
-        "texts": "runs/arch10/run1.md, runs/arch10/run2.md",
-        "triage": "runs/arch10/triage.md"
-      },
-      {
-        "architecture": 11,
-        "date": "2026-11-11",
-        "graded": false,
-        "verdict": "not stumped (the author's report): the pasted run on the golden call (evening shift weeks 47 to 50 in P1 and P2), agency 7,744 against 8,390 hours, the pooled overstatement 9.97 per cent against 3.7 (its one analytical loss); the second run not supplied",
-        "texts": "runs/arch11/run1.md"
-      }
-    ]
-  },
-  "gates": {},
-  "zip_sha256_16": "",
-  "golden_zip_sha256_16": "",
-  "migrated_from": {
-    "project": "Mark",
-    "task": "task250",
-    "status_in_mark": "SHIPPED",
+   {
+    "architecture": 3,
     "date": "2026-11-08",
-    "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
-  },
-  "prompt_rewritten": false
+    "graded": false,
+    "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
+    "texts": "runs/arch3_run1.md, runs/arch3_run2.md"
+   },
+   {
+    "architecture": 4,
+    "date": "2026-11-08",
+    "graded": false,
+    "verdict": "not stumped (author's report); run texts not in the repo",
+    "texts": ""
+   },
+   {
+    "architecture": 6,
+    "date": "2026-11-09",
+    "graded": false,
+    "verdict": "run 1 on the golden call and every graded figure (author supplied); run 2 not supplied",
+    "texts": "runs/arch6/run1.md"
+   },
+   {
+    "architecture": 7,
+    "date": "2026-11-09",
+    "graded": false,
+    "verdict": "both runs off the call (5 of 6), V14 alone at 444.4 and 443.0 against 442; the year's speed ratio",
+    "texts": "runs/arch7/run1.md, runs/arch7/run2.md (summaries)"
+   },
+   {
+    "architecture": 8,
+    "date": "2026-11-10",
+    "graded": false,
+    "verdict": "both runs landed the golden exactly (order 7)",
+    "texts": "runs/arch8/run1.md, runs/arch8/run2.md (summaries)"
+   },
+   {
+    "architecture": 9,
+    "date": "2026-11-10",
+    "graded": false,
+    "verdict": "both runs landed the golden exactly (order 8; payload 2.00 and 1.92, loss 5.08 and 4.51, the winter speed modelled by both)",
+    "texts": "runs/arch9/run1.md, runs/arch9/run2.md (summaries)"
+   },
+   {
+    "architecture": 10,
+    "date": "2026-11-11",
+    "graded": false,
+    "verdict": "not stumped: both runs on the golden call (order 17) and every graded figure in band",
+    "texts": "runs/arch10/run1.md, runs/arch10/run2.md",
+    "triage": "runs/arch10/triage.md"
+   },
+   {
+    "architecture": 11,
+    "date": "2026-11-11",
+    "graded": false,
+    "verdict": "not stumped (the author's report): the pasted run on the golden call (evening shift weeks 47 to 50 in P1 and P2), agency 7,744 against 8,390 hours, the pooled overstatement 9.97 per cent against 3.7 (its one analytical loss); the second run not supplied",
+    "texts": "runs/arch11/run1.md"
+   }
+  ]
+ },
+ "gates": {
+  "date": "2026-11-12",
+  "summary": "gates.py 8 gates, 0 FAIL, 4 WARN after the final pull (precut nearest chains, the prompt's deliverable-set quota, leak REVIEW, heart WARNs); checks 68 of 68, verify 9 of 9, figures 144 of 144, containers PASS, byte-identical rebuild"
+ },
+ "zip_sha256_16": "8bd9892f7f054b07",
+ "golden_zip_sha256_16": "7459e2f2b331c98c",
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task250",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+ },
+ "prompt_rewritten": false
 }

@@ -1,701 +1,428 @@
 {
- "agency": {
-  "46": 760,
-  "47": 1910,
-  "48": 1930,
-  "49": 1760,
-  "50": 2030
- },
- "agency_cells": {
-  "46": 760,
-  "47": 1910,
-  "48": 1930,
-  "49": 1760,
-  "50": 2030
- },
- "agency_total": 8390,
- "aisles": {
-  "B1": 6,
-  "P1": 12,
-  "P2": 11
- },
- "aisles_old": {
-  "B1": 6,
-  "P1": 8,
-  "P2": 7
- },
- "bands": {
-  "r1_pct": 1,
-  "r2": [
-   8.8,
-   11.6
-  ],
-  "r3": [
-   0.4,
-   0.51
-  ],
-  "r4": [
-   0.09,
-   0.16
-  ],
-  "r5_K_sp": [
-   2.6,
-   6.1
-  ],
-  "r6": [
-   20.2,
-   22.7
-  ],
-  "range_pct": 8
- },
- "budget_k_2027_wk47": 58087,
- "call_cells": [
-  "P1-47",
-  "P1-48",
-  "P1-49",
-  "P1-50",
-  "P2-47",
-  "P2-48",
-  "P2-49",
-  "P2-50"
+ "rem_SG": 59,
+ "rem_lo_SG": 55,
+ "rem_hi_SG": 66,
+ "p10_SG": 48,
+ "p90_SG": 71,
+ "need_SG": 9,
+ "need_lo_SG": 9,
+ "need_hi_SG": 11,
+ "pool_SG": 5,
+ "change_SG": 4,
+ "hproj_SG": 41,
+ "hneed_SG": 5,
+ "qproj_SG": 41,
+ "installed_SG": 60,
+ "rem_BRK": 51,
+ "rem_lo_BRK": 49,
+ "rem_hi_BRK": 55,
+ "p10_BRK": 42,
+ "p90_BRK": 61,
+ "need_BRK": 9,
+ "need_lo_BRK": 9,
+ "need_hi_BRK": 10,
+ "pool_BRK": 5,
+ "change_BRK": 4,
+ "hproj_BRK": 36,
+ "hneed_BRK": 4,
+ "qproj_BRK": 36,
+ "installed_BRK": 120,
+ "rem_BAV": 40,
+ "rem_lo_BAV": 38,
+ "rem_hi_BAV": 48,
+ "p10_BAV": 31,
+ "p90_BAV": 49,
+ "need_BAV": 7,
+ "need_lo_BAV": 7,
+ "need_hi_BAV": 8,
+ "pool_BAV": 4,
+ "change_BAV": 3,
+ "hproj_BAV": 34,
+ "hneed_BAV": 4,
+ "qproj_BAV": 34,
+ "installed_BAV": 60,
+ "rem_NWS": 13,
+ "rem_lo_NWS": 10,
+ "rem_hi_NWS": 15,
+ "p10_NWS": 9,
+ "p90_NWS": 19,
+ "need_NWS": 4,
+ "need_lo_NWS": 4,
+ "need_hi_NWS": 4,
+ "pool_NWS": 2,
+ "change_NWS": 2,
+ "hproj_NWS": 9,
+ "hneed_NWS": 2,
+ "qproj_NWS": 9,
+ "installed_NWS": 30,
+ "rem_BAT": 26,
+ "rem_lo_BAT": 23,
+ "rem_hi_BAT": 31,
+ "p10_BAT": 19,
+ "p90_BAT": 36,
+ "need_BAT": 5,
+ "need_lo_BAT": 5,
+ "need_hi_BAT": 6,
+ "pool_BAT": 3,
+ "change_BAT": 2,
+ "hproj_BAT": 26,
+ "hneed_BAT": 3,
+ "qproj_BAT": 26,
+ "installed_BAT": 60,
+ "rem_CPC": 24,
+ "rem_lo_CPC": 22,
+ "rem_hi_CPC": 31,
+ "p10_CPC": 16,
+ "p90_CPC": 32,
+ "need_CPC": 5,
+ "need_lo_CPC": 5,
+ "need_hi_CPC": 5,
+ "pool_CPC": 4,
+ "change_CPC": 1,
+ "hproj_CPC": 22,
+ "hneed_CPC": 4,
+ "qproj_CPC": 22,
+ "installed_CPC": 30,
+ "rem_FLA": 6,
+ "rem_lo_FLA": 4,
+ "rem_hi_FLA": 11,
+ "p10_FLA": 2,
+ "p90_FLA": 10,
+ "need_FLA": 3,
+ "need_lo_FLA": 3,
+ "need_hi_FLA": 4,
+ "pool_FLA": 3,
+ "change_FLA": 0,
+ "hproj_FLA": 9,
+ "hneed_FLA": 4,
+ "qproj_FLA": 9,
+ "installed_FLA": 60,
+ "rem_ADC": 23,
+ "rem_lo_ADC": 21,
+ "rem_hi_ADC": 30,
+ "p10_ADC": 15,
+ "p90_ADC": 31,
+ "need_ADC": 5,
+ "need_lo_ADC": 4,
+ "need_hi_ADC": 5,
+ "pool_ADC": 8,
+ "change_ADC": -3,
+ "hproj_ADC": 29,
+ "hneed_ADC": 5,
+ "qproj_ADC": 29,
+ "installed_ADC": 60,
+ "rem_WXR": 29,
+ "rem_lo_WXR": 25,
+ "rem_hi_WXR": 33,
+ "p10_WXR": 21,
+ "p90_WXR": 38,
+ "need_WXR": 6,
+ "need_lo_WXR": 6,
+ "need_hi_WXR": 6,
+ "pool_WXR": 7,
+ "change_WXR": -1,
+ "hproj_WXR": 30,
+ "hneed_WXR": 6,
+ "qproj_WXR": 30,
+ "installed_WXR": 30,
+ "rem_VHF": 25,
+ "rem_lo_VHF": 24,
+ "rem_hi_VHF": 36,
+ "p10_VHF": 18,
+ "p90_VHF": 33,
+ "need_VHF": 4,
+ "need_lo_VHF": 4,
+ "need_hi_VHF": 5,
+ "pool_VHF": 8,
+ "change_VHF": -4,
+ "hproj_VHF": 35,
+ "hneed_VHF": 4,
+ "qproj_VHF": 35,
+ "installed_VHF": 60,
+ "rem_PEC": 19,
+ "rem_lo_PEC": 17,
+ "rem_hi_PEC": 21,
+ "p10_PEC": 12,
+ "p90_PEC": 25,
+ "need_PEC": 5,
+ "need_lo_PEC": 5,
+ "need_hi_PEC": 5,
+ "pool_PEC": 7,
+ "change_PEC": -2,
+ "hproj_PEC": 20,
+ "hneed_PEC": 5,
+ "qproj_PEC": 14,
+ "installed_PEC": 60,
+ "rem_PDT": 8,
+ "rem_lo_PDT": 6,
+ "rem_hi_PDT": 11,
+ "p10_PDT": 4,
+ "p90_PDT": 12,
+ "need_PDT": 3,
+ "need_lo_PDT": 3,
+ "need_hi_PDT": 3,
+ "pool_PDT": 4,
+ "change_PDT": -1,
+ "hproj_PDT": 8,
+ "hneed_PDT": 3,
+ "qproj_PDT": 8,
+ "installed_PDT": 30,
+ "rem_HYP": 3,
+ "rem_lo_HYP": 2,
+ "rem_hi_HYP": 5,
+ "p10_HYP": 1,
+ "p90_HYP": 6,
+ "need_HYP": 3,
+ "need_lo_HYP": 2,
+ "need_hi_HYP": 3,
+ "pool_HYP": 4,
+ "change_HYP": -1,
+ "hproj_HYP": 3,
+ "hneed_HYP": 2,
+ "qproj_HYP": 3,
+ "installed_HYP": 60,
+ "rem_FBP": 7,
+ "rem_lo_FBP": 4,
+ "rem_hi_FBP": 9,
+ "p10_FBP": 4,
+ "p90_FBP": 11,
+ "need_FBP": 3,
+ "need_lo_FBP": 3,
+ "need_hi_FBP": 3,
+ "pool_FBP": 4,
+ "change_FBP": -1,
+ "hproj_FBP": 5,
+ "hneed_FBP": 3,
+ "qproj_FBP": 5,
+ "installed_FBP": 60,
+ "rem_WHC": 15,
+ "rem_lo_WHC": 12,
+ "rem_hi_WHC": 18,
+ "p10_WHC": 9,
+ "p90_WHC": 21,
+ "need_WHC": 3,
+ "need_lo_WHC": 3,
+ "need_hi_WHC": 3,
+ "pool_WHC": 6,
+ "change_WHC": -3,
+ "hproj_WHC": 13,
+ "hneed_WHC": 3,
+ "qproj_WHC": 13,
+ "installed_WHC": 60,
+ "rem_FDU": 16,
+ "rem_lo_FDU": 14,
+ "rem_hi_FDU": 32,
+ "p10_FDU": 9,
+ "p90_FDU": 24,
+ "need_FDU": 4,
+ "need_lo_FDU": 3,
+ "need_hi_FDU": 5,
+ "pool_FDU": 6,
+ "change_FDU": -2,
+ "hproj_FDU": 27,
+ "hneed_FDU": 4,
+ "qproj_FDU": 27,
+ "installed_FDU": 30,
+ "buy_units": 16,
+ "cut_units": 18,
+ "n_buy": 6,
+ "n_cut": 9,
+ "saving": 35,
+ "saving_lo": 33,
+ "saving_hi": 47,
+ "saving_face": 64,
+ "saving_cf": 14,
+ "saving_eb": 13,
+ "n_listed": 23,
+ "n_scrap": 8,
+ "n_cf_set": 4,
+ "cyc_ch_pct": 19,
+ "fh_ch_pct": 13,
+ "tat_summer_SG": 29,
+ "tat_2026_SG": 13,
+ "tat_summer_BRK": 29,
+ "tat_2026_BRK": 13,
+ "tat_summer_BAV": 28,
+ "tat_2026_BAV": 14,
+ "tat_summer_NWS": 30,
+ "tat_2026_NWS": 14,
+ "tat_summer_BAT": 25,
+ "tat_2026_BAT": 11,
+ "tat_summer": 29,
+ "tat_2026": 13,
+ "pec_cut_pct": 78,
+ "pec_mod_now_pct": 75,
+ "gap_SG": 23.8,
+ "gap_BRK": 17.5,
+ "gap_BAV": 18.2,
+ "scrap_list": "ADC9270, C3880, FD7205, RT4534, SG6792, V210070, V2715, WH1688",
+ "scrap_set": [
+  "ADC9270",
+  "C3880",
+  "FD7205",
+  "RT4534",
+  "SG6792",
+  "V210070",
+  "V2715",
+  "WH1688"
  ],
- "conventions": {
-  "aisles_after": [
-   12,
-   11
-  ],
-  "aisles_before": [
-   8,
-   7
-  ],
-  "bf_days": [
-   26,
-   28
-  ],
-  "black_friday": {
-   "2025": "28 November",
-   "2027": "26 November"
-  },
-  "cost_centres": [
-   4111,
-   4112,
-   4113,
-   4150
-  ],
-  "density_reported": 1.8,
-  "iso_weeks_2026": 53,
-  "range_coverage_pct": 80,
-  "shift_days_2025_2027": 728,
-  "week_after_peak": 51,
-  "years": [
-   2022,
-   2023,
-   2024,
-   2025,
-   2026,
-   2027
-  ]
- },
- "d_2025_peak": 1.15,
- "day_only": {
-  "P1": [
-   46
-  ],
-  "P2": [
-   46
-  ]
- },
- "evening": {
-  "P1": [
-   47,
-   48,
-   49,
-   50
-  ],
-  "P2": [
-   47,
-   48,
-   49,
-   50
-  ]
- },
- "fit": {
-  "coef": {
-   "A": 0.6004,
-   "B": 0.7592,
-   "C": 1.0315,
-   "D": 1.3449,
-   "F": 1.1565,
-   "HUI": 0.0624,
-   "P1": 0.0425,
-   "gamma": 0.3231,
-   "unit": 0.1082
-  },
-  "knot": 0.6,
-  "power": 1.9
- },
- "hours": {
-  "B1": {
-   "46": 490,
-   "47": 610,
-   "48": 590,
-   "49": 520,
-   "50": 610
-  },
-  "P1": {
-   "46": 780,
-   "47": 1300,
-   "48": 1320,
-   "49": 1140,
-   "50": 1360
-  },
-  "P2": {
-   "46": 690,
-   "47": 1200,
-   "48": 1220,
-   "49": 1060,
-   "50": 1250
-  }
- },
- "hours_cells": {
-  "B1-46": 490,
-  "B1-47": 610,
-  "B1-48": 590,
-  "B1-49": 520,
-  "B1-50": 610,
-  "P1-46": 780,
-  "P1-47": 1300,
-  "P1-48": 1320,
-  "P1-49": 1140,
-  "P1-50": 1360,
-  "P2-46": 690,
-  "P2-47": 1200,
-  "P2-48": 1220,
-  "P2-49": 1060,
-  "P2-50": 1250
- },
- "hurried": {
-  "agency": {
-   "46": 510,
-   "47": 450,
-   "48": 1830,
-   "49": 1290,
-   "50": 1240
-  },
-  "agency_total": 5320,
-  "evening": {
-   "P1": [
-    48
-   ],
-   "P2": [
-    48
-   ]
-  },
-  "hours": {
-   "B1": {
-    "46": 430,
-    "47": 410,
-    "48": 680,
-    "49": 520,
-    "50": 550
-   },
-   "P1": {
-    "46": 650,
-    "47": 630,
-    "48": 1200,
-    "49": 880,
-    "50": 970
-   },
-   "P2": {
-    "46": 630,
-    "47": 600,
-    "48": 1150,
-    "49": 850,
-    "50": 920
-   }
-  },
-  "p2_t": 0.82,
-  "pilot_t": 0.73,
-  "r2_applied": 10.0,
-  "r4": -0.1,
-  "rate": {
-   "B1": 0.044,
-   "P1": 0.02,
-   "P2": 0.016
-  }
- },
- "limits": {
-  "P1": 24,
-  "P2": 22
- },
- "lines": {
-  "B1": {
-   "46": 11450,
-   "47": 14320,
-   "48": 13700,
-   "49": 12150,
-   "50": 14340
-  },
-  "P1": {
-   "46": 38580,
-   "47": 53860,
-   "48": 54910,
-   "49": 48350,
-   "50": 57440
-  },
-  "P2": {
-   "46": 44510,
-   "47": 61700,
-   "48": 63080,
-   "49": 55430,
-   "50": 65510
-  }
- },
- "lines_k_2027_wk47": 92980,
- "lines_split": {
-  "P1": {
-   "46": [
-    30469,
-    8106
-   ],
-   "47": [
-    44282,
-    9577
-   ],
-   "48": [
-    44478,
-    10436
-   ],
-   "49": [
-    39583,
-    8765
-   ],
-   "50": [
-    48362,
-    9076
-   ]
-  },
-  "P2": {
-   "46": [
-    33510,
-    11004
-   ],
-   "47": [
-    48702,
-    13001
-   ],
-   "48": [
-    48917,
-    14166
-   ],
-   "49": [
-    43533,
-    11898
-   ],
-   "50": [
-    53188,
-    12321
-   ]
-  }
- },
- "logged_share": 0.921,
- "over_by_year": {
-  "2022 bulky": 8.8,
-  "2022 small parts": 15.5,
-  "2023 bulky": 0.8,
-  "2023 small parts": 3.0,
-  "2024 bulky": 1.0,
-  "2024 small parts": 14.0,
-  "2025 bulky": 8.8,
-  "2025 small parts": 5.5
- },
- "own": {
-  "46": {
-   "B1": 180,
-   "P1": 570,
-   "P2": 440
-  },
-  "47": {
-   "B1": 180,
-   "P1": 570,
-   "P2": 440
-  },
-  "48": {
-   "B1": 180,
-   "P1": 570,
-   "P2": 440
-  },
-  "49": {
-   "B1": 150,
-   "P1": 460,
-   "P2": 350
-  },
-  "50": {
-   "B1": 180,
-   "P1": 570,
-   "P2": 440
-  }
- },
- "peak_weeks": [
-  46,
-  47,
-  48,
-  49,
-  50
+ "call": [
+  "BUY:BAT",
+  "BUY:BAV",
+  "BUY:BRK",
+  "BUY:CPC",
+  "BUY:NWS",
+  "BUY:SG",
+  "CUT:ADC",
+  "CUT:FBP",
+  "CUT:FDU",
+  "CUT:HYP",
+  "CUT:PDT",
+  "CUT:PEC",
+  "CUT:VHF",
+  "CUT:WHC",
+  "CUT:WXR"
  ],
- "plan_growth": {
-  "H": [
-   26.0,
-   18.0
-  ],
-  "K": [
-   7.0,
-   4.0
-  ]
+ "call_units": {
+  "ADC": -3,
+  "BAT": 2,
+  "BAV": 3,
+  "BRK": 4,
+  "CPC": 1,
+  "FBP": -1,
+  "FDU": -2,
+  "HYP": -1,
+  "NWS": 2,
+  "PDT": -1,
+  "PEC": -2,
+  "SG": 4,
+  "VHF": -4,
+  "WHC": -3,
+  "WXR": -1
  },
- "r1": {
-  "B1": 2280,
-  "P1": 3384,
-  "P2": 3104
+ "fill_pct": 95,
+ "range_pct": 80,
+ "window_days": 120,
+ "pn": {
+  "SG": "23085-016",
+  "BRK": "2-1577-3",
+  "BAV": "3214552-2",
+  "NWS": "4405-3",
+  "BAT": "4078-1",
+  "CPC": "7022AJ01",
+  "FLA": "12B9010-4",
+  "ADC": "822-1123-002",
+  "WXR": "622-5132-512",
+  "VHF": "822-1081-003",
+  "PEC": "816534-3",
+  "PDT": "3E2210",
+  "HYP": "66158-7",
+  "FBP": "2C7-1",
+  "WHC": "1131-4",
+  "FDU": "34-7320-2"
  },
- "r2": 10.0,
- "r3": 0.46,
- "r4": 0.13,
- "r5": {
-  "H_bu": 9.8,
-  "H_sp": 14.1,
-  "K_bu": 1.9,
-  "K_sp": 3.7
+ "rem": {
+  "SG": 59,
+  "BRK": 51,
+  "BAV": 40,
+  "NWS": 13,
+  "BAT": 26,
+  "CPC": 24,
+  "FLA": 6,
+  "ADC": 23,
+  "WXR": 29,
+  "VHF": 25,
+  "PEC": 19,
+  "PDT": 8,
+  "HYP": 3,
+  "FBP": 7,
+  "WHC": 15,
+  "FDU": 16
  },
- "r5_K_sp": 3.7,
- "r6": 21.4,
- "r6_budget": 14.0,
+ "rem_cyc": {
+  "SG": 59,
+  "BRK": 51,
+  "BAV": 40
+ },
+ "need": {
+  "SG": 9,
+  "BRK": 9,
+  "BAV": 7,
+  "NWS": 4,
+  "BAT": 5,
+  "CPC": 5,
+  "FLA": 3,
+  "ADC": 5,
+  "WXR": 6,
+  "VHF": 4,
+  "PEC": 5,
+  "PDT": 3,
+  "HYP": 3,
+  "FBP": 3,
+  "WHC": 3,
+  "FDU": 4
+ },
+ "need_inhouse": {
+  "SG": 9,
+  "BRK": 9,
+  "BAV": 7,
+  "NWS": 4,
+  "BAT": 5
+ },
+ "pec": {
+  "removals": 19,
+  "spares": 5
+ },
  "range": {
-  "B1": {
-   "46": [
-    460,
-    520
-   ],
-   "47": [
-    570,
-    660
-   ],
-   "48": [
-    550,
-    630
-   ],
-   "49": [
-    490,
-    560
-   ],
-   "50": [
-    580,
-    660
-   ]
-  },
-  "P1": {
-   "46": [
-    710,
-    880
-   ],
-   "47": [
-    1230,
-    1360
-   ],
-   "48": [
-    1250,
-    1390
-   ],
-   "49": [
-    1090,
-    1200
-   ],
-   "50": [
-    1290,
-    1430
-   ]
-  },
-  "P2": {
-   "46": [
-    620,
-    780
-   ],
-   "47": [
-    1150,
-    1260
-   ],
-   "48": [
-    1160,
-    1280
-   ],
-   "49": [
-    1010,
-    1110
-   ],
-   "50": [
-    1190,
-    1310
-   ]
-  }
+  "SG_lo": 48,
+  "BRK_lo": 42,
+  "BAV_lo": 31,
+  "NWS_lo": 9,
+  "BAT_lo": 19,
+  "CPC_lo": 16,
+  "FLA_lo": 2,
+  "ADC_lo": 15,
+  "WXR_lo": 21,
+  "VHF_lo": 18,
+  "PEC_lo": 12,
+  "PDT_lo": 4,
+  "HYP_lo": 1,
+  "FBP_lo": 4,
+  "WHC_lo": 9,
+  "FDU_lo": 9,
+  "SG_hi": 71,
+  "BRK_hi": 61,
+  "BAV_hi": 49,
+  "NWS_hi": 19,
+  "BAT_hi": 36,
+  "CPC_hi": 32,
+  "FLA_hi": 10,
+  "ADC_hi": 31,
+  "WXR_hi": 38,
+  "VHF_hi": 33,
+  "PEC_hi": 25,
+  "PDT_hi": 12,
+  "HYP_hi": 6,
+  "FBP_hi": 11,
+  "WHC_hi": 21,
+  "FDU_hi": 24
  },
- "range_cells": {
-  "B1-46-hi": 520,
-  "B1-46-lo": 460,
-  "B1-47-hi": 660,
-  "B1-47-lo": 570,
-  "B1-48-hi": 630,
-  "B1-48-lo": 550,
-  "B1-49-hi": 560,
-  "B1-49-lo": 490,
-  "B1-50-hi": 660,
-  "B1-50-lo": 580,
-  "P1-46-hi": 880,
-  "P1-46-lo": 710,
-  "P1-47-hi": 1360,
-  "P1-47-lo": 1230,
-  "P1-48-hi": 1390,
-  "P1-48-lo": 1250,
-  "P1-49-hi": 1200,
-  "P1-49-lo": 1090,
-  "P1-50-hi": 1430,
-  "P1-50-lo": 1290,
-  "P2-46-hi": 780,
-  "P2-46-lo": 620,
-  "P2-47-hi": 1260,
-  "P2-47-lo": 1150,
-  "P2-48-hi": 1280,
-  "P2-48-lo": 1160,
-  "P2-49-hi": 1110,
-  "P2-49-lo": 1010,
-  "P2-50-hi": 1310,
-  "P2-50-lo": 1190
- },
- "ratio": {
-  "P1": {
-   "46": 0.85,
-   "47": 1.17,
-   "48": 1.2,
-   "49": 1.26,
-   "50": 1.25
-  },
-  "P2": {
-   "46": 0.87,
-   "47": 1.21,
-   "48": 1.23,
-   "49": 1.3,
-   "50": 1.28
-  }
- },
- "rivals": {
-  "agency_band_pct": 7,
-  "bands": {
-   "r2": [
-    8.8,
-    11.6
-   ],
-   "r3": [
-    0.4,
-    0.51
-   ],
-   "r4": [
-    0.09,
-    0.16
-   ],
-   "r5_K_sp": [
-    2.6,
-    6.1
-   ],
-   "r6": [
-    20.2,
-    22.7
-   ]
-  },
-  "budget_k_47": 58087,
-  "cells": {
-   "Huippu Sport's mix over two peaks": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "a linear calibration on the plan's growth": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "a quadratic congestion term, its knot by fit": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "the calibration on the peak weeks alone": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "the calibration through the origin": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "the logged share flat over the day": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ],
-   "the time model fitted on 2024 to 2026": [
-    "P1-47",
-    "P1-48",
-    "P1-49",
-    "P1-50",
-    "P2-47",
-    "P2-48",
-    "P2-49",
-    "P2-50"
-   ]
-  },
-  "d_2025_peak": 1.15,
-  "hours_band_pct": 6,
-  "lines_k_47": 92980,
-  "r2": {
-   "golden": 9.97,
-   "mean of the years' ratios": 9.82,
-   "small parts only": 10.57
-  },
-  "r3": {
-   "Huippu Sport's mix over two peaks": 0.457,
-   "a linear calibration on the plan's growth": 0.457,
-   "a quadratic congestion term, its knot by fit": 0.454,
-   "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": 0.457,
-   "the calibration on the peak weeks alone": 0.457,
-   "the calibration through the origin": 0.457,
-   "the logged share flat over the day": 0.457,
-   "the time model fitted on 2024 to 2026": 0.457
-  },
-  "r4": {
-   "Huippu Sport's mix over two peaks": 0.129,
-   "a linear calibration on the plan's growth": 0.129,
-   "a quadratic congestion term, its knot by fit": 0.119,
-   "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": 0.129,
-   "the calibration on the peak weeks alone": 0.129,
-   "the calibration through the origin": 0.129,
-   "the logged share flat over the day": 0.129,
-   "the time model fitted on 2024 to 2026": 0.123
-  },
-  "r5_K_sp": {
-   "Huippu Sport's mix over two peaks": 3.65,
-   "a linear calibration on the plan's growth": 3.7,
-   "a quadratic congestion term, its knot by fit": 3.65,
-   "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": 3.65,
-   "the calibration on the peak weeks alone": 5.1,
-   "the calibration through the origin": 3.88,
-   "the logged share flat over the day": 3.65,
-   "the time model fitted on 2024 to 2026": 3.65
-  },
-  "r6": {
-   "Huippu Sport's mix over two peaks": 21.37,
-   "a linear calibration on the plan's growth": 21.37,
-   "a quadratic congestion term, its knot by fit": 21.37,
-   "the 2024 and 2025 profiles averaged (2024's orders 1,092 days on)": 21.5,
-   "the calibration on the peak weeks alone": 21.37,
-   "the calibration through the origin": 21.37,
-   "the logged share flat over the day": 21.37,
-   "the time model fitted on 2024 to 2026": 21.37
-  }
- },
- "routes": {
-  "calendar": {
-   "agency_total": 6150,
-   "evening": {
-    "P1": [],
-    "P2": []
-   }
-  },
-  "calibration": {
-   "agency_total": 5850,
-   "evening": {
-    "P1": [
-     48
-    ],
-    "P2": [
-     48,
-     49
-    ]
-   }
-  },
-  "congestion": {
-   "agency_total": 6100,
-   "evening": {
-    "P1": [
-     48,
-     49,
-     50
-    ],
-    "P2": [
-     48,
-     49,
-     50
-    ]
-   }
-  },
-  "huippu": {
-   "agency_total": 5840,
-   "evening": {
-    "P1": [
-     48
-    ],
-    "P2": [
-     48,
-     49
-    ]
-   }
-  }
- },
- "sd": {
-  "level": 0.0213,
-  "lines": 0.0516,
-  "model": 0.0042,
-  "week": 0.047
- },
- "t_hui": 0.97,
- "t_kot": 0.85
+ "why": {
+  "SG": "wears by landings and starts, +19% in 2027 while flight hours fall 13%; Bodø shop turnaround about 29 days in July and August 2027 against 13 across 2026",
+  "BRK": "wears by landings and starts, +19% in 2027 while flight hours fall 13%; Bodø shop turnaround about 29 days in July and August 2027 against 13 across 2026",
+  "BAV": "wears by landings and starts, +19% in 2027 while flight hours fall 13%; Bodø shop turnaround about 28 days in July and August 2027 against 14 across 2026",
+  "NWS": "wears by landings and starts, +19% in 2027 while flight hours fall 13%; Bodø shop turnaround about 30 days in July and August 2027 against 14 across 2026",
+  "BAT": "ages by calendar time; Bodø shop turnaround about 25 days in July and August 2027 against 11 across 2026",
+  "CPC": "wears by landings and starts, +19% in 2027 while flight hours fall 13%; most removals find no fault, fewer once more of the flying is based at Bodø",
+  "FLA": "ages by calendar time; its rate over the four years of record, below the last twelve months'",
+  "ADC": "follows flight hours, 13% fewer in 2027; most removals find no fault, fewer once more of the flying is based at Bodø",
+  "WXR": "follows flight hours, 13% fewer in 2027",
+  "VHF": "follows flight hours, 13% fewer in 2027; most removals find no fault, fewer once more of the flying is based at Bodø; its rate over the four years of record, below the last twelve months'",
+  "PEC": "follows flight hours, 13% fewer in 2027; SB 61-0042 cuts the confirmed failures by about 78% and reaches more of the fleet at every removal",
+  "PDT": "follows flight hours, 13% fewer in 2027",
+  "HYP": "follows flight hours, 13% fewer in 2027",
+  "FBP": "follows flight hours, 13% fewer in 2027",
+  "WHC": "follows flight hours, 13% fewer in 2027; most removals find no fault, fewer once more of the flying is based at Bodø",
+  "FDU": "ages by calendar time; most removals find no fault, fewer once more of the flying is based at Bodø; its rate over the four years of record, below the last twelve months'"
+ }
 }

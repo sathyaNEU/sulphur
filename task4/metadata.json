@@ -1,182 +1,173 @@
 {
  "task": "task4",
- "architecture": 11,
- "title": "Which weeks of the 2027 peak a fulfilment centre's two small-parts zones need the evening shift, and how many agency picker hours to book each peak week, once a second brand's orders share the zones",
- "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
- "subdomain": "regression, classification & model diagnostics (an e-commerce fulfilment centre's peak labour plan)",
+ "architecture": 12,
+ "title": "Which of a regional airline's rotable part numbers will be short of spares in 2027 and which over-stocked, how many spares each should hold, and which watch-list serials to withdraw",
+ "domain": "General Statistics & Data Science (house domain Supply Chain & Logistics, inventory planning)",
+ "subdomain": "Regression, classification & model diagnostics",
  "objective": "Forecasting & Predictive Modeling",
- "as_of": "2026-11-06",
+ "as_of": "2026-11-30",
  "deliverables": [
-  "saarnela_peak_plan_2027.xlsx",
-  "saarnela_peak_plan_2027.docx"
+  "havorn_rotable_spares_2027.xlsx",
+  "havorn_rotable_spares_2027.pptx"
  ],
  "distractor_files": [
-  "saarnela_packing_benches_2026-01_2026-10.csv",
-  "kotikaari_returns_received_2024-01_2026-10.csv"
+  "engine_trend_monitoring_2025-2026.csv",
+  "pool_support_offer_2026.pdf"
+ ],
+ "stated_inputs": [
+  "002",
+  "003",
+  "0042",
+  "01",
+  "016",
+  "1",
+  "1081",
+  "1123",
+  "1131",
+  "12",
+  "1577",
+  "2",
+  "2210",
+  "23085",
+  "3",
+  "3214552",
+  "34",
+  "4",
+  "4078",
+  "4405",
+  "512",
+  "5132",
+  "61",
+  "622",
+  "66158",
+  "7",
+  "7022",
+  "7320",
+  "816534",
+  "822",
+  "9010"
+ ],
+ "field_terms": [
+  "starter-generator"
  ],
  "files": [
   {
-   "path": "wms_zone_hours_2022-01_2026-10.csv",
+   "path": "flight_legs_2023-01_2026-11.csv",
    "format": "csv",
-   "bytes": 2262652,
-   "rows": 34077,
+   "bytes": 24478389,
+   "rows": 240432,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "palkka_tuntikirjaukset_2022-2023.csv",
+   "path": "component_changes_2023-01_2026-11.csv",
    "format": "csv",
-   "bytes": 1080145,
-   "rows": 16583,
+   "bytes": 230161,
+   "rows": 1692,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "timesheets_2024-01_2026-10.csv",
+   "path": "bodo_shop_work_orders_2023-2026.csv",
    "format": "csv",
-   "bytes": 2230255,
-   "rows": 27405,
+   "bytes": 176449,
+   "rows": 1633,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "kotikaari_forecast_archive_2021-10_2026-10.csv",
+   "path": "bodo_shop_roster_2023-2026.csv",
    "format": "csv",
-   "bytes": 134904,
-   "rows": 2238,
+   "bytes": 60543,
+   "rows": 2958,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "kotikaari_budget_2027.xlsx",
+   "path": "vendor_repair_orders_2023-2026.xlsx",
    "format": "xlsx",
-   "bytes": 10518,
+   "bytes": 65687,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "wms_order_import_kotikaari_2022-01_2026-10.csv",
-   "format": "csv",
-   "bytes": 117898,
-   "rows": 3532,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "huippu_orders_daily_2024-01_2026-10.csv",
-   "format": "csv",
-   "bytes": 71048,
-   "rows": 2070,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "huippu_article_lines_2024-11_2026-10.csv",
-   "format": "csv",
-   "bytes": 2157299,
-   "rows": 93579,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "wms_item_master_2026-11-02.xlsx",
+   "path": "fleet_register.xlsx",
    "format": "xlsx",
-   "bytes": 665468,
+   "bytes": 11674,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "huippu_slotting_2027.xlsx",
+   "path": "rotable_stores_snapshot_2026-11-30.xlsx",
    "format": "xlsx",
-   "bytes": 150710,
+   "bytes": 32273,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "wms_pick_confirmations_HUI_2026w37-w44.csv",
+   "path": "flying_programme_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 41393,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "station_weather_daily_2023-2026.csv",
    "format": "csv",
-   "bytes": 1947046,
-   "rows": 26671,
+   "bytes": 149571,
+   "rows": 5720,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "saarnela_own_pickers_2027.xlsx",
-   "format": "xlsx",
-   "bytes": 7694,
-   "rows": null,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "saarnela_peak_2027_staffing.xlsx",
-   "format": "xlsx",
-   "bytes": 9865,
-   "rows": null,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "saarnela_labour_planning_standard_issue4.pdf",
+   "path": "reliability_report_2026-10.pdf",
    "format": "pdf",
-   "bytes": 84982,
+   "bytes": 178210,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "tyopiste_framework_agreement_2025.pdf",
+   "path": "reliability_programme_and_spares_standard.pdf",
    "format": "pdf",
-   "bytes": 56641,
+   "bytes": 75232,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "huippu_pilot_review_2026-11.docx",
-   "format": "docx",
-   "bytes": 9730,
+   "path": "engine_trend_monitoring_2025-2026.csv",
+   "format": "csv",
+   "bytes": 505376,
+   "rows": 8392,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "pool_support_offer_2026.pdf",
+   "format": "pdf",
+   "bytes": 85935,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "saarnela_packing_benches_2026-01_2026-10.csv",
-   "format": "csv",
-   "bytes": 131957,
-   "rows": 3780,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "kotikaari_returns_received_2024-01_2026-10.csv",
-   "format": "csv",
-   "bytes": 86092,
-   "rows": 2852,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
+   "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   }
  ],
- "provenance": "Every file is constructed by the seeded generator in task4/generator; the logistics provider, the retailer, its brands, the agency, the people, the articles and every record are invented (Finnish names from a name generator, Finnish warehouse and payroll vocabulary). No real organisation's records are used."
+ "provenance": "Every file is constructed by the seeded generator in task4/generator from a simulated regional airline: the flying, the weather, each component's wear and the aircraft's own faults, the stations' troubleshooting, the Bod\u00f8 shop's queue, the repairers and the pool. The airline, its people, the pool provider and every record are invented; airport codes and the aircraft type are real names used as setting. No real organisation's records are used."
 }

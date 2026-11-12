@@ -1,11 +1,13 @@
-"""The documents: Saarnela's labour planning standard (issue 4) and the agency's framework agreement, each a Word
-document exported to PDF by LibreOffice Writer through the house writer, and the pilot review, a Word document."""
+"""The documents: Havørn Regional's reliability programme and spares standard, the October 2026 reliability report and
+a pool provider's 2027 offer, each a Word document exported to PDF by LibreOffice Writer through the house writer. The
+report's figures are read off the shipped records by the same cleaning the analysis uses, so it reproduces from the
+pack by its own stated method."""
 import datetime as dt
 import os
 import sys
 
-from docx import Document
-from docx.shared import Mm, Pt
+import numpy as np
+import pandas as pd
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
@@ -16,151 +18,184 @@ sys.path.insert(0, WRITERS)
 import officepdf as O  # noqa: E402
 import params as P  # noqa: E402
 
-FI_W = dt.timezone(dt.timedelta(hours=2))
-FI_S = dt.timezone(dt.timedelta(hours=3))
+CET = dt.timezone(dt.timedelta(hours=1))
+MM = 2.835
 
 
 def _styles():
     ss = getSampleStyleSheet()
-    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.4, spaceAfter=6)
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.4, leading=13.0, spaceAfter=5)
     h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=4)
-    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.4, leading=14,
-                        spaceBefore=8, spaceAfter=4, keepWithNext=1)
-    small = ParagraphStyle("small", parent=body, fontSize=8.2, leading=10.8, textColor=colors.HexColor("#444444"))
-    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.6, leading=10.4)
+    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.2, leading=13.6,
+                        spaceBefore=7, spaceAfter=3, keepWithNext=1)
+    small = ParagraphStyle("small", parent=body, fontSize=8.0, leading=10.4, textColor=colors.HexColor("#444444"))
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=7.8, leading=9.4)
     return body, h1, h2, small, cell
 
 
 def _grid(rows, widths, cell):
-    t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=widths, repeatRows=1)
+    t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=[w * MM for w in widths], repeatRows=1)
     t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")), ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     return t
 
 
 STANDARD = [
     ("1. Scope", [
-        "This standard sets how the Saarnela fulfilment centre plans its pickers for the peak and how the peak plan "
-        "put to the operations director is stated. It applies to the pick zones P1, P2 and B1 and to every client "
-        "the centre picks for."]),
+        "This standard sets how Havørn Regional's continuing airworthiness organisation reports the reliability of the "
+        "repairable components it pools (rotables) and how the rotable pool is planned. It applies to every pooled "
+        "part number on the DHC-8-315 fleet."]),
     ("2. Terms", [
-        "2.1 The peak is ISO weeks 46 to 50 of a year.",
-        "2.2 Picker hours are the paid hours of pickers working in a pick zone, as the payroll records them against "
-        "the zone's cost centre. Absence is not picker hours, and hours booked to the packing cost centre are not "
-        "picker hours of any zone.",
-        "2.3 Lines are the order lines a zone picks, as the WMS counts them. The time a line takes to pick is the WMS "
-        "task time of the pick.",
-        "2.4 The WMS releases the web orders it receives on a day for picking at 06:00 on the next working day. The "
-        "showrooms' replenishment orders are released and picked on the weekday they are placed."]),
-    ("3. Zones and shifts", [
-        "3.1 The pick zones are those in the table below.",
-        "TABLE",
-        "3.2 A small-parts zone never has more pickers on its floor in a shift than its limit.",
-        "3.3 The day shift runs 06:00 to 14:30 with eight paid hours and an unpaid half hour, Monday to Saturday in "
-        "the peak and Monday to Friday outside it. The evening shift runs 14:30 to 23:00 with eight paid hours, Monday "
-        "to Friday. The centre is closed on public holidays.",
-        "3.4 A small-parts zone works the evening shift in a peak week when the lines it is expected to pick that week "
-        "cannot be picked on that week's day shifts with the zone's limit of pickers on the floor. The day shifts are "
-        "then worked at the limit and the evening shifts of the week's working weekdays pick the rest.",
-        "3.5 The peak plan states each zone's picker hours for each peak week with a range the planner would put 80 "
-        "per cent on. The range covers both how the client's volumes turn out and the zone's time a line."]),
-    ("4. Staffing", [
-        "4.1 Own pickers are planned on the day shift of every working weekday in their home zone, less the zone's "
-        "sickness absence over the same weeks of the last peak.",
-        "4.2 Every other picker hour is booked from the agency under the framework agreement, week by week."]),
-    ("5. Volumes", [
-        "5.1 The plan is made on the lines the centre expects to pick. A client's forecasts are an input to that "
-        "expectation."]),
+        "2.1 An unscheduled removal is a removal of a unit for a suspected or confirmed defect, recorded in the "
+        "maintenance system with reason UNSCH (U before 6 May 2024), whatever the shop or repairer later finds. A "
+        "removal for scheduled maintenance or a modification (SCHED, formerly S) and a removal for fitment to another "
+        "aircraft (CONV, formerly C) are not unscheduled removals.",
+        "2.2 A unit found serviceable by the shop or the repairer is recorded as no fault found.",
+        "2.3 A part number's pool is its units beyond those installed on the fleet: serviceable units in Bodø main "
+        "stores or a station kit, unserviceable units at the Bodø component shop or a repairer, and new units on "
+        "order. The pool's size is its spares.",
+        "2.4 A unit's turnaround runs from its removal to its return to serviceable stock."]),
+    ("3. Reliability reporting", [
+        "3.1 The reliability report is issued monthly for the twelve months to the end of the report month.",
+        "3.2 A part number's mean time between unscheduled removals is the flight hours its installed positions flew "
+        "in the twelve months divided by its unscheduled removals in the same twelve months.",
+        "3.3 The watch list holds every serial with three or more unscheduled removals in the twelve months to the "
+        "end of the report month."]),
+    ("4. Spares planning", [
+        "4.1 Each part number's spares for the coming calendar year are set in the December plan, for the units in "
+        "service at the plan date under the flying programme issued for that year.",
+        "4.2 A part number's fill rate over a year is the share of its unscheduled removals in that year for which a "
+        "serviceable unit was held in the pool, in Bodø main stores or a station kit, when the unit was removed.",
+        "4.3 A part number holds the fewest spares that give an expected fill rate over the year of at least 95 per "
+        "cent, with the year's unscheduled removals at their expected rate.",
+        "4.4 The plan states each part number's expected unscheduled removals in the year with an 80 per cent range: "
+        "the 10th to the 90th percentile of the year's removals, carrying both the year's chance variation and the "
+        "uncertainty in the expected rate itself."]),
+    ("5. Withdrawal of serials", [
+        "5.1 A serial is withdrawn and replaced by a new unit when its position would see at least 1.5 more "
+        "unscheduled removals over a year with the serial kept in service than with a new unit fitted in its place.",
+        "5.2 The removals a withdrawal saves are counted for the position over the year: while a serial is away for "
+        "repair its position carries another unit."]),
+    ("6. Responsibilities", [
+        "6.1 The reliability engineer issues the monthly report and the watch list. The rotables and stores "
+        "controller keeps the pool records. The technical director approves the December plan and every withdrawal."]),
 ]
 
 
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, %s fulfilment centre" % (P.ORG, P.SITE), small),
-         Paragraph("Labour planning standard", h1),
-         Paragraph("Issue 4, approved by the operations director 21 September 2026. Replaces issue 3 (January 2024). "
-                   "Owner: the site manager.", small), Spacer(1, 4)]
+    s = [Paragraph("%s, continuing airworthiness" % P.ORG, small),
+         Paragraph("Reliability programme and rotable spares standard", h1),
+         Paragraph("CAME part 1.10, issue 6, approved by the technical director 2 September 2026. Replaces issue 5 "
+                   "(March 2024). Owner: the reliability engineer.", small), Spacer(1, 4)]
     for head, paras in STANDARD:
         s.append(Paragraph(head, h2))
         for t in paras:
-            if t == "TABLE":
-                s.append(_grid([["Zone", "Use", "Aisles", "Limit of pickers on the floor"],
-                                ["P1", "small parts", "12 (8 before 8 January 2024)", "24"],
-                                ["P2", "small parts", "11 (7 before 8 January 2024)", "22"],
-                                ["B1", "bulky, reach trucks", "6", "none set"]], [18 * 2.835, 42 * 2.835, 60 * 2.835, 52 * 2.835], cell))
-                s.append(Spacer(1, 6))
-                continue
             s.append(Paragraph(t, body))
     s.append(Paragraph("Revisions", h2))
     s.append(_grid([["Issue", "Date", "Change"],
-                    ["1", "March 2021", "first issue, at the start of operations for Kotikaari Oy"],
-                    ["2", "August 2022", "2.2 the packing cost centre; 4.1 the absence allowance"],
-                    ["3", "January 2024", "3.1 the zones after the mezzanine extension; 3.2 the zone limits after the 2023 safety review"],
-                    ["4", "September 2026", "2.1 and 2.4 restated; 3.4 revised; 3.5 and 5.1 added"]],
-                   [16 * 2.835, 30 * 2.835, 126 * 2.835], cell))
-    O.build(path, s, "Labour planning standard, issue 4", P.PEOPLE["site"], "Saarnela fulfilment centre",
-            "%s, Saarnela. Labour planning standard, issue 4." % P.ORG,
-            dt.datetime(2026, 9, 21, 13, 42, tzinfo=FI_S), dt.datetime(2026, 9, 21, 14, 5, tzinfo=FI_S), producer="LibreOffice 7.6")
+                    ["4", "January 2023", "monthly reporting; the watch list at three removals in twelve months"],
+                    ["5", "March 2024", "2.1 reason codes after the maintenance system upgrade; 2.3 station kits"],
+                    ["6", "September 2026", "4.2 to 4.4 restated for the December plan; 5.1 and 5.2 added"]],
+                   [16, 30, 126], cell))
+    O.build(path, s, "Reliability programme and rotable spares standard, issue 6", P.PEOPLE["reliability"],
+            "%s continuing airworthiness" % P.ORG, "%s. Reliability programme and rotable spares standard, issue 6." % P.ORG,
+            dt.datetime(2026, 9, 2, 10, 14, tzinfo=dt.timezone(dt.timedelta(hours=2))),
+            dt.datetime(2026, 9, 2, 10, 41, tzinfo=dt.timezone(dt.timedelta(hours=2))), producer="LibreOffice 7.6")
 
 
-def agreement(path):
+def report_figures(F):
+    """The October report's figures, read off the shipped records: each part number's twelve months of unscheduled
+    removals, its installed positions' flight hours, the mean time between them, the share found serviceable, the 2027
+    outlook at that rate on the programme's planned flight hours, and the watch list."""
+    import analysis as A
+    R = F["removals"]
+    U = R[(R["reason"] == "UNSCH") & (R["date"] >= A.Y26[0]) & (R["date"] <= A.Y26[1])]
+    D = F["day"]
+    fh12 = float(D[(D["date"] >= A.Y26[0]) & (D["date"] <= A.Y26[1])]["fh"].sum())
+    cyc12 = int(D[(D["date"] >= A.Y26[0]) & (D["date"] <= A.Y26[1])]["cyc"].sum())
+    X = A.expo_2027(F)
+    fh27 = float(X["fh"].sum())
+    rows = []
+    for p in P.PARTS:
+        k = p["k"]
+        u = U[U["k"] == k]
+        n = len(u)
+        pos_fh = fh12 * p["pos"]
+        found = u[u["finding"] != ""]
+        nff = float((found["finding"] == "NFF").mean() * 100) if len(found) else 0.0
+        rows.append({"k": k, "pn": p["pn"], "name": p["name"], "qpa": p["pos"], "pool": P.POOL[k], "n12": n,
+                     "mtbur": pos_fh / n if n else float("nan"), "nff": nff,
+                     "proj": n * fh27 / fh12 if fh12 else 0.0})
+    L = A.listed(F)
+    wl = []
+    for sn, r in L.iterrows():
+        u = U[U["serial_off"] == sn]
+        wl.append({"serial": sn, "k": r["k"], "pn": P.PART[r["k"]]["pn"], "name": P.PART[r["k"]]["name"],
+                   "n12": int(r["n"]), "last": u["date"].max().date(), "aircraft": ", ".join(sorted(u["aircraft"].unique()))})
+    months = []
+    for m in pd.period_range("2025-11", "2026-10", freq="M"):
+        g = D[D["date"].dt.to_period("M") == m]
+        months.append((m.strftime("%b %Y"), float(g["fh"].sum()), int(g["cyc"].sum())))
+    return {"rows": rows, "watch": wl, "fh12": fh12, "cyc12": cyc12, "fh27": fh27, "months": months}
+
+
+def report(path, F):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s and %s" % (P.AGENCY, P.ORG), small),
-         Paragraph("Framework agreement for agency pickers, Saarnela fulfilment centre", h1),
-         Paragraph("Signed 12 February 2025, in force 1 March 2025 to 28 February 2028.", small), Spacer(1, 4)]
-    sec = [
-        ("1. Services", ["%s supplies trained warehouse pickers to the Saarnela fulfilment centre of %s for its pick "
-                         "zones, on the day and evening shifts the centre runs." % (P.AGENCY, P.ORG)]),
-        ("2. Booking", ["2.1 The centre books agency picker hours by week and pick zone, by the Thursday two weeks "
-                        "before the week. Bookings for the peak weeks are confirmed by 15 October of the year.",
-                        "2.2 A booked shift is eight paid hours. A booking may be cut by up to 10 per cent of the "
-                        "week's hours until 72 hours before the shift; later cuts are invoiced.",
-                        "2.3 The agency's pickers wear the agency's badge. The badges were re-issued on 1 April 2025 "
-                        "with new numbers; the agency keeps the register of old and new numbers."]),
-        ("3. Prices", ["3.1 The hourly price is EUR 31.40 on the day shift and EUR 37.05 on the evening shift, Monday "
-                       "to Friday; Saturday hours are priced at EUR 39.25. Prices are indexed on 1 March each year to "
-                       "the collective agreement for the logistics sector.",
-                       "3.2 A picker's first shift at the centre includes a two-hour induction, priced as picker hours."]),
-        ("4. Quality", ["4.1 The agency replaces a picker the centre asks it to replace within two working days.",
-                        "4.2 Pick accuracy and safety incidents are reviewed by the parties each quarter."]),
-        ("5. Contacts", ["For %s: %s, account manager. For %s: %s, site manager." % (
-            P.AGENCY, P.PEOPLE["agency"], P.ORG, P.PEOPLE["site"])]),
-    ]
-    for head, paras in sec:
-        s.append(Paragraph(head, h2))
-        for t in paras:
-            s.append(Paragraph(t, body))
-    O.build(path, s, "Framework agreement, agency pickers", P.PEOPLE["agency"], "Saarnela fulfilment centre",
-            "%s / %s, framework agreement 2025" % (P.AGENCY, P.ORG),
-            dt.datetime(2025, 2, 12, 10, 18, tzinfo=FI_W), dt.datetime(2025, 2, 12, 11, 2, tzinfo=FI_W), producer="LibreOffice 7.6")
+    R = report_figures(F)
+    s = [Paragraph("%s, continuing airworthiness" % P.ORG, small),
+         Paragraph("Reliability report, October 2026", h1),
+         Paragraph("Rotables on the DHC-8-315 fleet, twelve months to 31 October 2026. Issued 9 November 2026 by the "
+                   "reliability engineer.", small), Spacer(1, 4),
+         Paragraph("1. Fleet utilisation", h2),
+         Paragraph("The fleet flew %s flight hours and %s cycles in the twelve months." %
+                   ("{:,.0f}".format(R["fh12"]), "{:,}".format(R["cyc12"])), body)]
+    s.append(_grid([["Month", "Flight hours", "Cycles"]] +
+                   [[m, "{:,.0f}".format(fh), "{:,}".format(c)] for m, fh, c in R["months"]], [30, 30, 30], cell))
+    s.append(Paragraph("2. Rotable reliability", h2))
+    s.append(Paragraph("Mean time between unscheduled removals is the installed positions' flight hours over the "
+                       "unscheduled removals (standard 3.2). No fault found is the share of the removals the shop or "
+                       "repairer has reported on.", body))
+    rows = [["Part number", "Description", "QPA", "Pool", "Unscheduled removals", "MTBUR (FH)", "No fault found"]]
+    for r in R["rows"]:
+        rows.append([r["pn"], r["name"], r["qpa"], r["pool"], r["n12"], "{:,.0f}".format(r["mtbur"]), "%.0f%%" % r["nff"]])
+    s.append(_grid(rows, [22, 50, 10, 11, 24, 20, 20], cell))
+    s.append(Paragraph("3. Watch list", h2))
+    s.append(Paragraph("Serials with three or more unscheduled removals in the twelve months (standard 3.3). "
+                       "Engineering has entered the replacement of the listed serials in the 2027 budget.", body))
+    rows = [["Serial", "Part number", "Description", "Removals", "Last removal", "Aircraft"]]
+    for w in R["watch"]:
+        rows.append([w["serial"], w["pn"], w["name"], w["n12"], w["last"].isoformat(), w["aircraft"]])
+    s.append(_grid(rows, [17, 20, 44, 16, 20, 40], cell))
+    O.build(path, s, "Reliability report, October 2026", P.PEOPLE["reliability"], "%s continuing airworthiness" % P.ORG,
+            "%s. Reliability report, October 2026." % P.ORG,
+            dt.datetime(2026, 11, 9, 8, 52, tzinfo=CET), dt.datetime(2026, 11, 9, 9, 37, tzinfo=CET), producer="LibreOffice 7.6")
+    return R
 
 
-def review(path, figs):
-    doc = Document()
-    sec = doc.sections[0]
-    sec.page_width, sec.page_height = Mm(210), Mm(297)
-    sec.left_margin = sec.right_margin = Mm(22)
-    st = doc.styles["Normal"]
-    st.font.name = "Calibri"
-    st.font.size = Pt(10.5)
-    doc.add_heading("Huippu Sport pilot at Saarnela, weeks 37 to 44: review", level=1)
-    doc.add_paragraph("%s, continuous improvement, 3 November 2026" % P.PEOPLE["ci"])
-    doc.add_heading("Scope", level=2)
-    doc.add_paragraph("From 7 September to 1 November 2026 Saarnela picked Huippu Sport's web orders for %d of its "
-                      "fastest-moving articles, stocked in P2 aisles 1 to 4. The lines were picked in Huippu tours by "
-                      "six trained P2 pickers and packed on two benches; the other articles stayed at the current "
-                      "warehouse." % figs["articles"])
-    doc.add_heading("Volumes", level=2)
-    doc.add_paragraph("%s Huippu Sport lines were picked over the eight weeks, %s a working day on average." % (
-        "{:,}".format(figs["lines"]).replace(",", " "), "{:,}".format(figs["per_day"]).replace(",", " ")))
-    doc.add_heading("Pick time", level=2)
-    doc.add_paragraph("A Huippu Sport line took %s minutes, scanner confirmation to confirmation in the tours. P2's "
-                      "other lines took %s minutes a line in the same weeks (the WMS zone report, task time over "
-                      "lines)." % (("%.2f" % figs["pilot_t"]).replace(".", ","), ("%.2f" % figs["p2_t"]).replace(".", ",")))
-    doc.add_heading("Accuracy and damages", level=2)
-    doc.add_paragraph("Pick accuracy was 99.6 per cent against 99.7 for P2 as a whole. Two lines were damaged in "
-                      "picking. Size and colour labels on the polybags were checked at every pick, as agreed with "
-                      "Huippu Sport's customer service.")
-    doc.add_heading("Next", level=2)
-    doc.add_paragraph("The slotting run of 30 October 2026 places the whole assortment for the move on 1 March 2027. "
-                      "Bench layout for the Huippu Sport packaging to be agreed by January.")
-    doc.save(path)
+def offer(path):
+    """A pool provider's 2027 proposal: exchange access per part number at a monthly fee, sent to the technical
+    director in October. The spares plan does not read it."""
+    body, h1, h2, small, cell = _styles()
+    prov = "Nordkapp Component Pool AS"
+    s = [Paragraph(prov, small), Paragraph("Pool access proposal for %s, 2027" % P.ORG, h1),
+         Paragraph("Reference NCP-2027-114, 21 October 2026. Valid until 31 January 2027.", small), Spacer(1, 4),
+         Paragraph("1. Service", h2),
+         Paragraph("Access to %s's DHC-8 rotable pool at Bodø and Tromsø: an exchange unit dispatched within 24 hours "
+                   "of an unscheduled removal for AOG requests and 72 hours otherwise, the removed unit returned to us "
+                   "within 10 days. Units are supplied with an EASA Form 1." % prov, body),
+         Paragraph("2. Monthly access fees", h2)]
+    rows = [["Part number", "Description", "Monthly fee per aircraft (NOK)", "Exchange fee per unit (NOK)"]]
+    rng = np.random.default_rng(P.SEED + 31)
+    for p in P.PARTS:
+        if p["k"] in ("NWS", "FLA", "HYP"):
+            continue
+        rows.append([p["pn"], p["name"], "{:,.0f}".format(p["price"] * float(rng.uniform(0.0011, 0.0019))),
+                     "{:,.0f}".format(p["price"] * float(rng.uniform(0.09, 0.16)))])
+    s.append(_grid(rows, [24, 60, 40, 40], cell))
+    s.append(Paragraph("3. Terms", h2))
+    s.append(Paragraph("Fees are fixed for 2027 and invoiced monthly in arrears. The agreement runs for three years "
+                       "with a twelve-month notice. Units lost or beyond economic repair through misuse are charged at "
+                       "list price.", body))
+    O.build(path, s, "Pool access proposal 2027", "Jorunn Christensen", prov, "%s, proposal NCP-2027-114." % prov,
+            dt.datetime(2026, 10, 21, 14, 3, tzinfo=dt.timezone(dt.timedelta(hours=2))),
+            dt.datetime(2026, 10, 21, 14, 25, tzinfo=dt.timezone(dt.timedelta(hours=2))), producer="LibreOffice 7.5")
