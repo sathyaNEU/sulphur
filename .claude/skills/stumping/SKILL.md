@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, thirty-seven reflexes and fifty-seven losses and waved-through assumptions from our runs and the client's pages), built on the six places runs lose (the split carried to the decision, the assumption a run names and waves through made false, selected units, a measured response, the system's net, a shallow path that passes its own checks), forced on both sides, and never a reskin of a client task or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, thirty-seven reflexes and fifty-seven losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 34 closed strategies (2026-11-12, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (the assumption a run names and waves through made false, a measured response and the marginal unit, a shallow path that passes its own checks, and the open dimensions: conservation, changing structure, non-additive and nonlinear quantities, position on a network, hidden state, the recording algorithm), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -10,8 +10,10 @@ description: Design where a task is hard, to the client's bar of 2026-11-09 (dif
 > once caught, flips the whole answer." (`guidelines/client/deep-reasoning.md`)
 
 This skill decides where a task is hard. Work Part 7 first (the draw), then Parts 1 to 6. Read before designing:
-`guidelines/client/depth-scale-2026-11-09-detail.md` (the client's level 4 and 5 tasks in full, the bar to beat and
-never a skeleton to copy), `references/precedents.json` (where the runs lose and what they do by reflex),
+`guidelines/client/learning-modules/overused-strategies-2026-11-12.md` (the 34 closed strategies) with
+`references/open-ground.md` (our record read against them, the four approved builds' anatomy and the open
+dimensions), `guidelines/client/depth-scale-2026-11-09-detail.md` (the client's level 4 and 5 tasks in full, the bar
+to beat and never a skeleton to copy), `references/precedents.json` (where the runs lose and what they do by reflex),
 `guidelines/client/project-lead-review-2026-11-09.md` (why tasks that passed every check here came back),
 `guidelines/client/deep-reasoning.md` (the standard, the fourteen areas, the effort test, the shallow hidden
 factor), the strategies for the assigned domain group in `guidelines/client/learning-modules/stumping-strategies.md`
@@ -49,24 +51,43 @@ levelled-up task10 arch 7 and task4 arch 10 went the same way (the author's repo
 column cell is priced lost only when a precedent shows a frontier run losing that kind of move (`effort.py`, Part
 3.2), and the next draw is built where Part 1b says the runs lose.
 
-**What the two approved builds share** (the author's report of 2026-11-11: task6 v7, the latency error budgets, and
-task457, the conflict-of-interest docket shipped as task14 architecture 1 and filed as `task457/`).
-Their skeletons share nothing (the selftest in `fingerprint/skeleton.py` holds them apart), so this is an anatomy,
-not a template:
+**What the four approved builds share** (the author's reports of 2026-11-11 and 2026-11-12: task6 v7, the latency
+error budgets; task457, the conflict-of-interest docket shipped as task14 architecture 1; task2 v6, the
+heavy-correction ceiling for a speech recognizer's 2027 deployment; task14 v3, the bond-based private rents
+measure). Their skeletons share nothing (the selftest in `fingerprint/skeleton.py` holds every pair apart), so this
+is an anatomy, not a template (`references/open-ground.md` Part 3):
 - the answer is a quantity the primary record does not hold: a sample whose inclusion another unit set, a store that
-  no longer covers the month, a self-report that saw only the payments made before the day it was filed;
+  no longer covers the month, a self-report that saw only the payments made before the day it was filed, the error
+  tail of staff who have mostly never used the system, the rents payable on dwellings a register saw only at entry;
+- several partial instruments see that quantity, each with a different blind spot, and the work is assigning each
+  part of the estimand to the instrument that sees it (task14: the register by choice, the operators completely, a
+  panel that never held the operators' blocks; task2: the volunteers, another hospital's compelled staff, the
+  movers); the runs lost by taking the instrument closest in appearance or most complete in rows and checking it
+  with a hold-out from the same instrument;
+- the target reaches units or periods no instrument covers (the starters, the December quarter), so a check on the
+  observed data passes by construction;
 - the correction comes from the relation between two records at different grains or times (each kept span's root
   against the balancer's hourly counts; each disclosure's submission day against the register's payment dates),
   never from a column, a document or one cross-tab;
 - every factor runs across the data the way the process makes it (a third of the faculty file in December by habit;
   every internal service inherits several edge services' keep shares);
 - the shortcuts file different wrong answers (five wrong lists on task6; every rung of task457's ladder a different
-  docket), and the margin holds against every defensible variant (task457: every construction within 10 per cent of
-  the golden files the golden docket, the fifteenth at 1.44 times the sixteenth);
+  docket; four wrong ceilings on task2; ten wrong December figures on task14), and the margin holds against every
+  defensible variant (task457: every construction within 10 per cent of the golden files the golden docket, the
+  fifteenth at 1.44 times the sixteenth);
 - task457 was first returned on domain fit (2026-11-10, "compliance lookups ... under a stated rule") and approved
   after a prompt that opens on why the answer must be an estimate: "Open Payments won't publish 2026 until after the
   Conflict of Interest Committee's February 2027 docket, so the docket has to rest on estimates of each faculty
-  member's 2026 remuneration from a single manufacturer, built from what they self-reported" (`guide-to-prompt`).
+  member's 2026 remuneration from a single manufacturer, built from what they self-reported" (`guide-to-prompt`);
+- the careful columns of task2 v6 (26.0) and task14 v3 (49.5) were priced on design, and both passed: the cited rule
+  (Part 3.2) would have graded them 100, because no run had yet been recorded losing at source assignment. Their
+  runs, once pasted, add those precedents; until then a careful-column loss of that kind is cited by the nearest
+  loss class on file (L03, L08, N14), never asserted.
+
+Copy the anatomy, never a chain: task14's register, panel, migration and nowcast, task2's volunteers, compelled
+staff, movers and ramp, task6's sampled spans, retention and dated causes and task457's self-reports read to the
+filing day are each one skeleton on file, and the guard refuses a reskin of any of them. task2's deciding lesson
+(transport) is closed by the client's page of 2026-11-12, so a draw like it today is refused (Part 1c).
 
 **What changed on 2026-11-09.** The project lead returned the pattern this harness built for fourteen builds: one
 deep step, hidden in a constructed world, with a ladder of rungs below it and asks coupled to it. Those builds passed
@@ -147,29 +168,32 @@ The client's ten level 4 and 5 tasks (`guidelines/client/depth-scale-2026-11-09-
 inputs, reference solution and review notes), its fifteen examples and our thirty rounds put the runs' losses in six
 recurring places. Each is a kind of judgment to build from this world's own process, never a skeleton to copy: every
 one of those tasks is in `fingerprint/corpus/client_skeletons.json`, and the guard refuses a draw that reskins one
-(`fingerprint` Part 1b). Ids in brackets are `references/precedents.json`.
+(`fingerprint` Part 1b). Ids in brackets are `references/precedents.json`. **Places 1, 3 and 5 are closed as deciding
+lessons by the client's page of 2026-11-12** (the transport card; the regression, survivorship and intervention cards;
+the neighbours card): they stay as supporting steps only, and the deciding lesson comes from places 2, 4 and 6 or
+from the open dimensions of Part 1c.
 
-1. **The split carried through to the decision** (L09 to L12, L24, L25). The client's words on example 7: "runs that
+1. **The split carried through to the decision** (closed as a deciding lesson; L09 to L12, L24, L25). The client's words on example 7: "runs that
    saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying
    heterogeneity through to the decision, not in spotting a fact." The runs see the subgroup difference and decide on
    the pooled figure, or carry the split into one step and drop it in the next (the buyer split kept for trial and
    dropped for volume; the competing-risk curve right and the vintages pooled; one crime trend for a robbery surge and
    an assault fall). Price the later step the split has to reach, where the target's mix differs from the estimation
    sample's; the split on its own is a reflex.
-2. **The assumption the run names and waves through** (N01 to N07, L04, L06, L07, L13, L35). Every frontier run writes
+2. **The assumption the run names and waves through** (N01 to N19, L04, L06, L07, L13, L35; open while the assumption is not a closed card's). Every frontier run writes
    an "Assumptions and judgment calls" list: the contract scales in proportion, history stays informative, the works
    finish on schedule, the network rate applies to the picks, the response is smooth. In our worlds those were true
    (task10 arch 6's triage: "each thing the runs named as an untested assumption ... was true in the world"), so
    naming them cost nothing. Make one false through the world's own process, testable from a second file at another
    grain, and large enough to force the call; the run that names it and moves on loses the result.
-3. **The units in hand were selected** (L13, L14; the client's a5a5efb1, 17adb5ca, 4e9c0a39, example 6). Claims picked
+3. **The units in hand were selected** (closed as a deciding lesson where the selection is a peak, survival or an intervention; L13, L14; the client's a5a5efb1, 17adb5ca, 4e9c0a39, example 6). Claims picked
    because they still pay, the riskiest shops on the list, segments picked on their peak year, an option opened on the
    busy days: the run prices them at population rates or reads their own history. The correction needs a comparison
    built from the wider record by the same selection rule.
 4. **The response measured, and the marginal unit** (L15, L17; 279e74f2, 35842bf8). A response with its own shape (a
    step at an hour, a threshold a queue crosses) decides where added capacity pays; the run assumes a smooth response
    and spends the capacity where the problem looks largest.
-5. **The system's net, not the unit's own** (L16; 8ec45b05). An action's gain at one unit is partly undone at the
+5. **The system's net, not the unit's own** (closed as a deciding lesson; L16; 8ec45b05). An action's gain at one unit is partly undone at the
    units it touches (a wake recovered downwind, incidents displaced next door, a launch's take from its own lines); the
    run prices the unit alone.
 6. **The shallow path passes its own checks** (L26 to L31; every strong client example carries the section). The
@@ -220,7 +244,52 @@ date on (`precut.py`; a WARN for builds filed before it):
   side, and each fitted input moved by its defensible spread (20 per cent when none is known) with the call holding;
 - `Noun swap:` the nearest task on file or in the client's library (`skeleton.py check taskNN`), its nouns swapped
   into this one, and the elements that carry across unchanged; any skeleton BLOCK is a redraw, and a severity 3 the
-  guard only warns on is answered here in one line.
+  guard only warns on is answered here in one line;
+- `Closed strategies:` (cards registered from `skeleton.CLOSED_FROM`, 2026-11-12) the lesson the call turns on and
+  why the client's closed page does not hold it (the card nearest it, and how the mechanism or the fix differs), and
+  each closed lesson the chain keeps as a supporting step, with the `effort.json` route that applies it alone and the
+  answer that route files (the golden call must stand).
+
+## Part 1c. The closed strategies and the open ground
+
+The client's Overused stumping strategies page (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`)
+closes 34 lessons, each already deciding two or more accepted tasks: "if your task's answer only flips because of one
+of these, it will be returned as a repeated lesson, even in a new domain and with new data." The guard holds them as
+lesson keys (`fingerprint/skeleton_vocab.json` `closed_lessons`, twelve neighbours in `closed_near`), and
+`skeleton.py closed` prints them with every card on file read against them. The rules, mechanical in `skeleton.py`
+and `precut.py` for every card registered from 2026-11-12:
+
+- **The lesson the call turns on is never closed** (`skeleton.lesson_closed`, BLOCK). Same mechanism and the same
+  kind of fix is the same lesson: a new domain, new data or a new way of detecting it does not make it new. A deciding
+  lesson next to a closed card (`closed_near`) is a WARN answered in the note's `Closed strategies:` line.
+- **Closed lessons are supporting steps only**, each one's omission alone leaving the golden call standing (an
+  `effort.json` route per closed lesson, asserted in `checks.py`).
+- **No stack**: a chain whose lessons are all closed is refused (`skeleton.lesson_closed_stack`), and a closed lesson
+  counts as taught, so a chain more than half closed or taught is refused (`skeleton.lesson_taught`).
+- **Never accepted however rare**, from the same page: one planted factor, a stated rule applied, a field read
+  correctly, a hindsight replay. And two tasks may not analyse the same records: a public release already used on
+  file is used again only on different records.
+
+**What is still open** (`references/open-ground.md`, with the evidence):
+- **Kinds of loss the page does not touch**: the assumption a run names and waves through, when it is not a card's
+  (N09 today's structure for all history, N10 gaps at the observed rate, N11 a passed test certifying the unit, N13
+  the latest rate as the end state, N14 a second record set aside on a failed link, N01 proportional scaling, N02
+  and N17 a forward window the history does not carry); a response assumed instead of measured (L15) and the
+  marginal unit (L17, supporting only, taught twice); a published formula whose generating process the data
+  contradict (L22); a shallow path whose own checks cannot see the condition (L37, the common-error benchmark).
+- **Dimensions the page's five families never reach** (their keys are untaught on file): conservation and balance
+  (`conservation_residual_attribution`); structure that changes (`time_varying_membership`); aggregation algebra
+  (`non_additive_aggregation`); nonlinear functionals of a path (`nonlinear_functional_of_path`); position on a
+  network (`position_on_network_effect`); hidden state (`stock_flow_accounting`, `latent_structure_estimation`); the
+  recording algorithm (`record_algorithm_inversion`, never decided by one field read); support and units of account
+  (`support_effect`).
+- **The approved anatomy** (Part 0): a quantity no record holds, instruments with different blind spots assigned part
+  by part, a target no instrument covers. It is a way of placing new lessons, never a chain to copy.
+
+**Our own live builds against the page** (`skeleton.py closed`, 2026-11-12): task1 v3, task5 v4, task8 v19, task12
+v1, task13 v4, task15 v2, task19 v1, task20 v2 and task21 v1 turn on a lesson the page now closes, and task12 and
+task15 are stacks of closed lessons. They were registered before the page and meet the rule as a WARN; each is a
+return risk at review, and a re-root moves its deciding lesson to the open ground.
 
 ## Part 2. The one-thing screen
 
@@ -422,6 +491,10 @@ type), `answer_shape`, `weight` and `chain_signature` (the areas of the results 
 chain and answer shape repeated anywhere on file, the weight of either of the last two builds and the answer shape
 of the last one, then `register`. Personas from `guard.py names`.
 
+**The closed page first.** `python3 .claude/skills/fingerprint/skeleton.py closed` lists the client's 34 closed
+strategies and every card on file against them: the lesson the call will turn on is chosen off that list, from the
+open ground (Part 1c, `references/open-ground.md` Parts 2 and 4), before anything else is drawn.
+
 **The skeleton before the chain.** `python3 .claude/skills/fingerprint/skeleton.py lessons --min 2` lists every
 lesson already taught twice (by the client's accepted and level 3 tasks and our approved builds,
 `fingerprint/corpus/approved.json`): a chain of one or two lessons never turns on one of them, and no chain may have
@@ -486,9 +559,12 @@ measurements.
 
 - [ ] Card registered with analysis type, answer shape, weight and chain signature; `guard.py mechanisms` and `slots`
       read; the abstraction sentence written and not writable against a build on file
+- [ ] The deciding lesson off the client's closed page (`skeleton.py closed`; no `skeleton.lesson_closed` or
+      `lesson_closed_stack`), every closed lesson a supporting step with its own route leaving the call standing,
+      and the Frontier check's `Closed strategies:` line written
 - [ ] The card's skeleton clear in `skeleton.py check` (no BLOCK: no severity 1 or 2 against anything on file, a
       client task or the slot's lineage, no severity 3 on a thin chain, a thin chain's deciding lesson not taught
-      twice, no more than half the chain taught, no house shell); the `## Frontier check` written (precedents
+      twice, no more than half the chain taught or closed, no house shell); the `## Frontier check` written (precedents
       for every careful-column loss, the shallow path's own checks, the assumption made false, forcing on both sides,
       the noun swap); the cited pair estimate 50 or under
 - [ ] The process behind the files written before any result; the weight named and rotated

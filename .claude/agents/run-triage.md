@@ -64,6 +64,12 @@ If a run file or the scores are missing, stop and say which.
    across several results, with the two runs losing in different places, is the strongest evidence. Most of both
    runs' lost weight on one result is `one_legitimate_step` at best, and if that result turns on a built-in factor,
    a surface stump.
+5b. **The closed page.** For the result the runs' scores turn on (the call and the largest lost weight), name the
+   correction that separates the runs' figure from the golden and read it against the client's closed strategies
+   (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`; `python3 .claude/skills/fingerprint/
+   skeleton.py closed <task>` gives the card's own reading). If most of both runs' lost weight sits on closed
+   lessons, write `closed_risk: <the card>` in the Spread line: the reviewer returns that as a repeated lesson even
+   under 60, so it routes as `SURFACE_RISK` with the card named and the deciding judgment rebuilt off the page.
 6. **The counterfactual average.** Give each run back every point it lost to a surface, formatting or
    wrong-criterion cause, and recompute both scores and the average. This is the number a reviewer reasons about:
    runs that lost on a formatting slip fail the bar even under 60.
@@ -76,7 +82,8 @@ If a run file or the scores are missing, stop and say which.
 **Precedence.** `FIX_DETERMINISM` first (any `defensible_alternative`); then `SURFACE_RISK` when any of these hold:
 a run's first wrong step is a surface class; any result is lost as `missed_planted_defect` or
 `missed_shallow_hidden_factor` (a design defect, not a slip, whatever else the run lost); the counterfactual average
-reaches 60. Otherwise the score routes below, and a minor surface loss among deep ones is noted, not routed.
+reaches 60; most of both runs' lost weight sits on lessons the client's closed page holds (`closed_risk`). Otherwise
+the score routes below, and a minor surface loss among deep ones is noted, not routed.
 
 - `SUBMIT`: the average is under 60, the counterfactual average is under 60, and no surface condition above holds.
   Say whether the losses are spread (strongest) or concentrated on one legitimate step (thinner, still submitted;
@@ -100,7 +107,7 @@ Write `<task>/runs/triage.md` (or `triage_pass<n>.md` when one exists; never ove
 # Run triage, <task>, <ISO date>
 **Verdict:** <SUBMIT | FIX_DETERMINISM | SURFACE_RISK | FIX_ASKS | REDESIGN | RUBRIC_EDIT>
 **Scores:** run 1 <x>, run 2 <y>, average <z>; counterfactual <x'>, <y'>, average <z'>
-**Spread:** run 1 lost <k1> results to <c1> deep classes, run 2 <k2> to <c2>; <spread | concentrated on R<n>>
+**Spread:** run 1 lost <k1> results to <c1> deep classes, run 2 <k2> to <c2>; <spread | concentrated on R<n>>; closed_risk <none | the card>
 
 ## Loss map
 <one line per result: id, weight, run 1 earned/partly/lost (class), run 2 earned/partly/lost (class)>

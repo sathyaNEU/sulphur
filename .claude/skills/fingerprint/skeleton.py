@@ -3,6 +3,7 @@
 
     python3 .claude/skills/fingerprint/skeleton.py check task19            # or a scratch card .json
     python3 .claude/skills/fingerprint/skeleton.py lessons [--min 2]       # how often each lesson is already taught
+    python3 .claude/skills/fingerprint/skeleton.py closed [taskNN|card]    # the client's 34 closed strategies; live cards on them
     python3 .claude/skills/fingerprint/skeleton.py matrix                  # every pair on file at severity 1 to 3
     python3 .claude/skills/fingerprint/skeleton.py selftest                # the calibration the rule is held to
     python3 .claude/skills/fingerprint/skeleton.py validate                # every skeleton against the vocabulary
@@ -18,6 +19,12 @@ back:
                   estimator)
   3 variant       real new work, but the step that decides the answer, or the decision skeleton around it, is
                   already in the dataset; and a lesson two accepted tasks already turn on is not taught a third time
+
+The client's Overused stumping strategies page (guidelines/client/learning-modules/overused-strategies-2026-11-12.md)
+closes 34 lessons that already decide two or more accepted tasks (skeleton_vocab.json `closed_lessons`): none may be
+the lesson a new card's call turns on (lessons[0]), a chain whose lessons are all closed is a stack of repeats, and a
+closed lesson counts as taught for the half-taught rule. Same mechanism and the same kind of fix is the same lesson,
+whatever the domain, the data or the detection. A card registered before CLOSED_FROM meets these as WARN.
 
 A card carries `skeleton` (skeleton_vocab.json keys; `mechanisms` are the build's own physics as free slugs, so a near
 copy that keeps the mechanism is told from a templated build that re-points it). Lineage entries carry theirs, so a
@@ -40,6 +47,7 @@ LIBRARY = os.path.join(HERE, "corpus", "client_skeletons.json")
 APPROVED = os.path.join(HERE, "corpus", "approved.json")
 CARDS = os.path.join(HERE, "cards")
 RULE_FROM = "2026-11-11T15:58:00Z"
+CLOSED_FROM = "2026-11-12T14:25:00Z"   # the client's closed strategies page, read into the guard
 LIST_KEYS = ("lessons", "mechanisms", "detection", "moves", "file_roles")
 VOCAB_OF = {"decision_form": "decision_forms", "answer_pattern": "answer_patterns", "lessons": "lessons",
             "detection": "detections", "moves": "moves", "file_roles": "file_roles"}
@@ -187,16 +195,35 @@ def grandfathered(cand):
     return bool(reg) and reg < RULE_FROM
 
 
-def findings(cand, cards, vocab=None):
-    """Guard findings for a candidate card: [{level, rule, msg, against, fix}]. Never cleared by differentiation."""
+def closed_grandfathered(cand):
+    reg = cand.get("registered") or ""
+    return bool(reg) and reg < CLOSED_FROM
+
+
+def closed_maps(vocab=None):
+    """The client's closed lessons and the lessons that sit next to a closed card: ({key: info}, {key: info})."""
+    vocab = vocab or load_vocab()
+    c = {k: v for k, v in (vocab.get("closed_lessons") or {}).items() if not k.startswith("_")}
+    n = {k: v for k, v in (vocab.get("closed_near") or {}).items() if not k.startswith("_")}
+    return c, n
+
+
+def findings(cand, cards, vocab=None, closed=True):
+    """Guard findings for a candidate card: [{level, rule, msg, against, fix}]. Never cleared by differentiation.
+    closed=False leaves the client's closed strategies out (the selftest's calibration on tasks the client accepted
+    before it closed them)."""
     vocab = vocab or load_vocab()
     out = []
     gf = grandfathered(cand)
+    cgf = closed_grandfathered(cand)
     me = cand.get("task")
+    shut, near = closed_maps(vocab) if closed else ({}, {})
 
     def add(level, rule, msg, against=(), fix=""):
         if gf and level == "BLOCK":
             level, msg = "WARN", msg + " (registered before the skeleton rule of %s: WARN, not BLOCK)" % RULE_FROM[:10]
+        elif cgf and level == "BLOCK" and rule.startswith("skeleton.lesson_closed"):
+            level, msg = "WARN", msg + " (registered before the closed strategies of %s: WARN, not BLOCK)" % CLOSED_FROM[:10]
         out.append({"level": level, "rule": rule, "msg": msg, "against": list(against), "fix": fix})
 
     sk = cand.get("skeleton")
@@ -235,11 +262,48 @@ def findings(cand, cards, vocab=None):
         elif r["severity"] == 3:
             add("WARN", "skeleton.own_lineage", "severity 3 against this slot's own %s: %s" % (e["id"], r["why"]), [e["id"]])
     lessons = list(sk.get("lessons") or [])
+    if shut and lessons:
+        if lessons[0] in shut:
+            add("BLOCK", "skeleton.lesson_closed",
+                "the call turns on %s, closed by the client's Overused stumping strategies page (\"%s\", %d accepted "
+                "tasks): a task whose answer flips on it is returned as a repeated lesson, in any domain and with any data"
+                % (lessons[0], shut[lessons[0]]["card"], shut[lessons[0]]["accepted_tasks"]), ["client:closed-strategies"],
+                "make a judgment that is not on the page the one the call turns on (stumping Part 1c, the open ground); the "
+                "closed lesson may stay as a supporting step whose omission alone does not flip the call")
+        elif lessons[0] in near:
+            add("WARN", "skeleton.lesson_closed_near",
+                "the call turns on %s, next to the client's closed card \"%s\": the page counts the same mechanism with "
+                "the same kind of fix as the same lesson, so the note's Closed strategies line says how the mechanism or the "
+                "fix differs" % (lessons[0], near[lessons[0]]["card"]), ["client:closed-strategies"])
+        opened = [les for les in lessons if les not in shut]
+        if not opened:
+            add("BLOCK", "skeleton.lesson_closed_stack",
+                "every lesson in the chain (%s) is closed by the client's page: stacking closed strategies with nothing "
+                "new is still a repeat" % ", ".join(lessons), ["client:closed-strategies"],
+                "add judgments no closed card describes and make one of them the lesson the call turns on")
+        sup = [les for les in lessons[1:] if les in shut]
+        if sup and lessons[0] not in shut:
+            add("WARN", "skeleton.lesson_closed_support",
+                "closed strategies as supporting steps (%s): fine while the call never flips on any one of them alone "
+                "(effort.json routes: each alone must leave the golden call standing)" % ", ".join(sup),
+                ["client:closed-strategies"])
     everyone = pool + own_entries
     sat = {}
     for les in lessons:
         cs = carriers(les, everyone, exclude_task=me)
         sat[les] = [c["id"] for c in cs]
+    # A closed lesson is taught by definition (two or more accepted tasks decide on it), so it counts as taught for
+    # the half-taught rule; a card filed before the page keeps the old count and is warned instead.
+    satc = {les: (ids + ["client:closed (%d accepted)" % shut[les]["accepted_tasks"]]
+                  if les in shut and len(ids) < 2 else ids) for les, ids in sat.items()}
+    if shut and cgf:
+        tc = [les for les in lessons if len(satc[les]) >= 2]
+        if lessons and (2 * len(tc) > len(lessons) or (len(lessons) <= 2 and lessons[0] in tc)):
+            add("WARN", "skeleton.lesson_closed_half",
+                "%d of the chain's %d lessons are closed or taught once the client's closed strategies count (%s); "
+                "filed before the page, so a WARN" % (len(tc), len(lessons), ", ".join(tc)), ["client:closed-strategies"])
+    else:
+        sat = satc
     taught = [les for les in lessons if len(sat[les]) >= 2]
     if lessons and len(lessons) <= 2 and lessons[0] in taught:
         add("BLOCK", "skeleton.lesson_taught",
@@ -365,6 +429,55 @@ def cmd_lessons(min_n):
     return 0
 
 
+def chain_closed(sk, shut, near):
+    les = list(sk.get("lessons") or [])
+    first = les[0] if les else None
+    state = "CLOSED" if first in shut else ("near" if first in near else "open")
+    return first, state, [x for x in les[1:] if x in shut], sum(1 for x in les if x in shut), len(les)
+
+
+def cmd_closed(arg=None):
+    """The client's 34 closed strategies by family, and every card on file read against them: the lesson its call
+    turns on (CLOSED, near or open), the closed lessons it carries as supporting steps, and how much of its chain is
+    closed. With a task or a card path, that card alone."""
+    vocab = load_vocab()
+    shut, near = closed_maps(vocab)
+    cards = load_cards()
+    if arg:
+        cand = load_candidate(arg, cards)
+        first, state, sup, n, tot = chain_closed(cand.get("skeleton") or {}, shut, near)
+        print("%s v%s: the call turns on %s (%s%s); closed supporting steps %s; %d of %d lessons closed" % (
+            cand.get("task"), arch_num(cand.get("architecture")), first, state,
+            (": " + (shut.get(first) or near.get(first) or {}).get("card", "")) if state != "open" else "",
+            ", ".join(sup) or "none", n, tot))
+        fs = [f for f in findings(cand, cards) if f["rule"].startswith("skeleton.lesson_closed")]
+        for f in fs:
+            print("  %-5s %-30s %s" % (f["level"], f["rule"], f["msg"]))
+        return 1 if any(f["level"] == "BLOCK" for f in fs) else 0
+    fams = {}
+    for k, v in shut.items():
+        fams.setdefault(v["family"], {}).setdefault(v["card"], {"n": v["accepted_tasks"], "keys": [], "near": []})["keys"].append(k)
+    for k, v in near.items():
+        fams.setdefault(v["family"], {}).setdefault(v["card"], {"n": 0, "keys": [], "near": []})["near"].append(k)
+    print("the client's closed strategies (guidelines/client/learning-modules/overused-strategies-2026-11-12.md):")
+    for fam, cs in fams.items():
+        print("  %s" % fam)
+        for card, d in cs.items():
+            print("    %2d  %-74s closed: %s%s" % (d["n"], card[:74], ", ".join(d["keys"]),
+                  ("; near: " + ", ".join(d["near"])) if d["near"] else ""))
+    print("\nevery card on file against them (deciding lesson first; spent architectures left out):")
+    appr = approved_set()
+    for c in cards:
+        sk = c.get("skeleton") or {}
+        if not sk or c.get("architecture_spent"):
+            continue
+        first, state, sup, n, tot = chain_closed(sk, shut, near)
+        tag = "approved" if (c.get("task"), arch_num(c.get("architecture"))) in appr else "live"
+        print("  %-8s v%-3s %-8s %-6s %-36s closed %d of %d%s" % (c.get("task"), arch_num(c.get("architecture")), tag,
+              state, first, n, tot, ("; supporting " + ", ".join(sup)) if sup else ""))
+    return 0
+
+
 def cmd_matrix():
     cards = load_cards()
     ours = entries_from_cards(cards)
@@ -461,7 +574,7 @@ def cmd_selftest():
         if not sk:
             continue
         probe = {"task": "probe_selftest", "architecture": 1, "skeleton": sk}
-        blocks = [f for f in findings(probe, [c for c in allc if c.get("task") != task]) if f["level"] == "BLOCK"]
+        blocks = [f for f in findings(probe, [c for c in allc if c.get("task") != task], closed=False) if f["level"] == "BLOCK"]
         good = not blocks
         ok &= good
         print("  %s  %-58s %s" % ("PASS" if good else "FAIL", label + " as a new draw meets no skeleton BLOCK",
@@ -485,7 +598,7 @@ def cmd_selftest():
         load_library = (lambda rest=rest: rest)
         try:
             probe = {"task": "probe_" + re.sub(r"\W", "_", e["id"]), "architecture": 1, "skeleton": e["skeleton"]}
-            blocks = [f for f in findings(probe, allc) if f["level"] == "BLOCK"]
+            blocks = [f for f in findings(probe, allc, closed=False) if f["level"] == "BLOCK"]
         finally:
             load_library = _load_library_file
         rules = {f["rule"] for f in blocks}
@@ -497,8 +610,9 @@ def cmd_selftest():
     print("  %s  every other accepted client task clears as a new draw" % ("PASS" if ok else "FAIL"))
     # A plain forecast with lessons no task on file uses passes: the guard never refuses a form for being common.
     vocab = load_vocab()
+    shut, near = closed_maps(vocab)
     used = {les for x in (library_entries() + entries_from_cards(allc)) for les in (x["skeleton"].get("lessons") or [])}
-    fresh = [les for les in vocab["lessons"] if les not in used][:3]
+    fresh = [les for les in vocab["lessons"] if les not in used and les not in shut and les not in near][:3]
     probe = {"task": "probe_forecast", "architecture": 1, "skeleton": {
         "decision_form": "forecast_figure_with_range", "answer_pattern": "robust_call_figures_graded", "lessons": fresh,
         "mechanisms": ["probe_mechanism"], "detection": ["second_source_at_other_grain"],
@@ -508,6 +622,42 @@ def cmd_selftest():
     ok &= good
     print("  %s  %-58s %s" % ("PASS" if good else "FAIL", "a plain forecast with untaught lessons (%s)" % ", ".join(fresh),
           "no BLOCK" if not blocks else "; ".join(f["rule"] for f in blocks)))
+    # The client's closed strategies (2026-11-12): a call that turns on a closed lesson is refused, a stack of closed
+    # lessons is refused, a closed lesson as one supporting step beside a new deciding lesson is not; and an approved
+    # build whose deciding lesson the page has since closed would be refused as a new draw today.
+    print("the client's closed strategies (%s):" % CLOSED_FROM[:10])
+    base = probe["skeleton"]
+    teach = library_entries() + entries_from_cards(allc)
+    fresh = [les for les in vocab["lessons"] if les not in shut and les not in near and not carriers(les, teach)][:3]
+
+    def closed_probe(label, lessons, want_rules, absent_rules=()):
+        nonlocal ok
+        pr = {"task": "probe_closed", "architecture": 1, "skeleton": dict(base, lessons=lessons)}
+        rules = {f["rule"] for f in findings(pr, allc) if f["level"] == "BLOCK"}
+        good = set(want_rules) <= rules and not (set(absent_rules) & rules)
+        ok &= good
+        print("  %s  %-58s %s" % ("PASS" if good else "FAIL", label, "; ".join(sorted(rules)) or "no BLOCK"))
+
+    if len(fresh) >= 2:
+        closed_probe("a call that turns on a closed lesson (competing_risks)", ["competing_risks"] + fresh[:2],
+                     {"skeleton.lesson_closed"})
+        closed_probe("a stack of closed lessons with nothing new", ["competing_risks", "reporting_lag_nowcast"],
+                     {"skeleton.lesson_closed", "skeleton.lesson_closed_stack"})
+        closed_probe("a new deciding lesson with one closed supporting step", fresh[:2] + ["competing_risks"],
+                     set(), {"skeleton.lesson_closed", "skeleton.lesson_closed_stack", "skeleton.lesson_taught"})
+        closed_probe("more than half the chain closed behind a new deciding lesson",
+                     fresh[:1] + ["competing_risks", "reporting_lag_nowcast"], {"skeleton.lesson_taught"})
+    for label, task, sk in appr:
+        if not sk:
+            continue
+        pr = {"task": "probe_closed_" + task, "architecture": 1, "skeleton": sk}
+        rules = {f["rule"] for f in findings(pr, [c for c in allc if c.get("task") != task]) if f["level"] == "BLOCK"}
+        first = (sk.get("lessons") or [None])[0]
+        want = first in shut
+        good = ("skeleton.lesson_closed" in rules) == want
+        ok &= good
+        print("  %s  %-58s %s" % ("PASS" if good else "FAIL", label + " as a draw today",
+              ("refused: its deciding lesson %s is now closed" % first) if want else "its deciding lesson is open"))
     print("SELFTEST %s" % ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 
@@ -524,6 +674,8 @@ def main(argv):
         if "--min" in argv:
             n = int(argv[argv.index("--min") + 1])
         return cmd_lessons(n)
+    if cmd == "closed":
+        return cmd_closed(argv[1] if len(argv) > 1 else None)
     if cmd == "matrix":
         return cmd_matrix()
     if cmd == "validate":

@@ -105,6 +105,9 @@ Forcing: <the line; the golden family's spread and its nearest distance to the l
 Noun swap: <the nearest task on file or in the client's library by skeleton.py check, its nouns swapped into this
   one, and the elements that carry across unchanged (decision form, lessons, detection, moves, file roles, answer
   pattern); severity none>
+Closed strategies: <the lesson the call turns on, the client's closed card nearest it (skeleton.py closed) and how its
+  mechanism or fix differs; each closed lesson the chain keeps as a supporting step, the effort.json route that
+  applies it alone and the answer that route files, the golden call standing>
 
 ## Semantic fork table
 
@@ -145,8 +148,9 @@ Noun swap: <the nearest task on file or in the client's library by skeleton.py c
 - The same chain of areas in the same order with the same answer shape as a build on file.
 - For a card registered from `skeleton.RULE_FROM` on (a WARN before it): a missing `## Frontier check` label, a
   precedent id that is unknown or a reflex, or a skeleton BLOCK (severity 1 to 3 against a build on file, a client
-  task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught;
-  a decision form on four live builds).
+  task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught
+  or closed; a decision form on four live builds). From `skeleton.CLOSED_FROM` on: a missing `Closed strategies:`
+  line, a deciding lesson on the client's closed page, or a chain of closed lessons only.
 - In `effort.py`: a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
   block missing, a golden-family variant across the line, a shortcut on the golden's side, or a perturbation that
   moves the call.

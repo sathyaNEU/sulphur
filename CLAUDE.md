@@ -24,8 +24,9 @@ never solves it; the determinism judge recomputes the golden and never searches 
 
 The client's own text is in `guidelines/client/`: `deep-reasoning.md` (2026-11-09) and
 `learning-modules/stumping-strategies.md` (2026-11-09) are the bar, with the project lead's review of the same day
-verbatim in `project-lead-review-2026-11-09.md`; `latest_update.txt`, `overview.txt`, the learning modules, the
-examples and the quality checks sit beside them. Read the review before every draw.
+verbatim in `project-lead-review-2026-11-09.md` and the closed strategies of 2026-11-12 in
+`learning-modules/overused-strategies-2026-11-12.md`; `latest_update.txt`, `overview.txt`, the learning modules, the
+examples and the quality checks sit beside them. Read the review and the closed page before every draw.
 
 **Why the bar moved.** The project lead reviewed about 500 tasks and returned the pattern this harness used to
 build: "most tasks hinge on one thing. Usually it's a hidden factor built into the data: a subgroup, an event that
@@ -75,6 +76,19 @@ answer):
 6. **Single-fact surface stump**: one sentence of help makes the task routine.
 7. **Unpinned ambiguity**: two defensible readings or methods give different answers on any result.
 
+**The closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`): 34 analytical
+lessons that already decide two or more accepted tasks are closed (regression to the mean, survivorship, outcomes
+hidden by the intervention, self-selection, occurrence sampling, shrinkage, clustered intervals, overdispersion,
+attenuation, placebo baselines, censoring, competing risks, late entry, the settled level, reporting lag, repeated
+exposure, limits as bounds, young cohorts, payback, used-up easy cases, transport to a new mix, spillover,
+displacement, assignment odds, composition, closure diversion, fixed-count rescaling, instrument change, survey
+change, fieldwork seasons, billing location, dependent capture, a co-occurring change, hindsight). **None may be the
+step that flips a new build's answer**, whatever the domain, data or detection ("same mechanism and the same kind of
+fix counts as the same lesson"); each may be a supporting step whose omission alone leaves the call standing; two of
+them stacked with nothing new is a repeat. `skeleton.py closed` lists them as the guard holds them, the guard blocks
+a card that turns on one or stacks them, and the note's Frontier check carries a `Closed strategies:` line
+(`stumping` Part 1c; the open ground is `stumping/references/open-ground.md`).
+
 **The depth scale** (`guidelines/client/depth-scale-2026-11-09.md`, the client's reading of 17 real submitted tasks):
 levels 1 and 2 are sent back, level 3 (one real method step) is a judgment call kept about half the time, levels 4
 (two or three connected judgments) and 5 (many independent judgments, different shortcuts landing on different wrong
@@ -123,18 +137,26 @@ Each was paid for by a landed or returned build (`stumping/references/evidence.m
 
 Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
 
-- **No round has yet come back under 60 with losses spread across the results**, and the paper pair estimates were
-  40 to 60 points high (38.4 measured about 97; 46.5 about 95). So a careful-column loss counts only where a frontier
-  run has been seen to lose that kind of move (`stumping/references/precedents.json`, from our runs and the client's
-  pages); `effort.py` grades every uncited cell Right and holds the cited pair estimate to 50.
+- **Most rounds came back landed, and the paper pair estimates were 40 to 60 points high** (38.4 measured about 97;
+  46.5 about 95). So a careful-column loss counts only where a frontier run has been seen to lose that kind of move
+  (`stumping/references/precedents.json`, from our runs and the client's pages); `effort.py` grades every uncited cell
+  Right and holds the cited pair estimate to 50. The exceptions are the approved builds: task2 v6 (26.0 on paper) and
+  task14 v3 (49.5) passed, though the cited rule would have priced both at 100, because they lost where no run had
+  yet been recorded losing (which partial source answers which part of the estimand); their runs' own lines are added
+  to `precedents.json` once pasted.
 - **The runs lose in six places** (`stumping` Part 1b): the split they see and then drop before the decision; the
   assumption they name and wave through, made false by the world's process and testable from another file; units
   selected by the outcome's own history; a response they assume instead of measuring, and the marginal unit; the
-  system's net against the unit's own; a shallow path that passes its own checks. Build there.
-- **The two approved builds** (task6 v7 and task457, shipped as task14 architecture 1) share an anatomy, never a
-  skeleton: the answer is a quantity the primary record does not hold, rebuilt from the relation between two records
-  at different grains or times, every factor across the data, the shortcuts on different wrong answers, the margin
-  held against every variant; task457 was approved once its prompt opened on why the answer has to be an estimate.
+  system's net against the unit's own; a shallow path that passes its own checks. The first, third and fifth are now
+  closed as deciding lessons (the client's page of 2026-11-12), so the deciding lesson comes from the other three and
+  from the open dimensions (conservation, changing structure, non-additive and nonlinear quantities, position on a
+  network, hidden state, the recording algorithm; `stumping` Part 1c).
+- **The four approved builds** (task6 v7; task457, shipped as task14 architecture 1; task2 v6; task14 v3) share an
+  anatomy, never a skeleton: the answer is a quantity the primary record does not hold; several partial instruments
+  see it, each with its own blind spot, and the work is assigning each part of the estimand to the one that sees it
+  (the runs took the closest-looking or most complete one); the target reaches units or periods no instrument covers;
+  every factor across the data, the shortcuts on different wrong answers, the margin held against every variant;
+  task457 was approved once its prompt opened on why the answer has to be an estimate. No chain of theirs is copied.
 - **A landed scaffold is never re-pointed** (task4 architectures 6 to 10, task10 architectures 4 to 7, all landed): a
   re-root changes the deciding lessons and the decision form, and the skeleton guard checks the slot's lineage.
 - **Forcing has two sides** (six returns on determinism or forcing): every defensible rival on the golden's side, the

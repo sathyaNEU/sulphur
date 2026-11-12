@@ -87,7 +87,7 @@
     "behavioural_response_measured": "a behavioural response is measured from unit-level traces and its own shape used (a step, a threshold), not assumed smooth",
     "marginal_not_average": "the decision buys the marginal unit (the case an extra hour serves, the minutes that cross a threshold), not the average one",
     "queue_or_capacity_replay": "outcomes are replayed event by event through a capacity or queue model under each option",
-    "rebound_after_window": "what an intervention removes inside its window comes back after it",
+    "rebound_after_window": "what an intervention removes or adds inside its window comes back or is borrowed from after it (a demand-response come-back, purchases pulled forward by a rebate or offer), so the effect is measured through the payback window and the later shortfall netted",
     "normal_period_correction": "a figure from an unusual period is corrected to a normal period with a long record",
     "renewal_resets_hazard": "a replaced item restarts its hazard, so the old item's rate is not carried past its likely failure",
     "route_pre_emption": "an outcome reached through two routes, one of which pre-empted the other and is now closed",
@@ -113,7 +113,7 @@
     "stock_flow_accounting": "a draw is inflow less what accumulated inside the system, so reading inflow as draw misses the peak exactly when the reserve is drawn down",
     "asynchronous_measurement_covariance": "components struck at different times take a shock in different intervals, so same-interval covariances miss part of it",
     "exposure_seen_only_in_linked_record": "the outcome's driver is recorded only by another body, so only linking the two records unit by unit shows a period when it surged",
-    "length_biased_sampling": "items enter the record with probability proportional to their duration (snapshots of work in progress), so the recorded distribution is duration-weighted",
+    "length_biased_sampling": "items or people enter the record with probability proportional to their duration or their frequency (snapshots of work in progress, intercepts by visit, votes by repeat voters, notices by repeat notifiers), so each record is weighted by one over its multiplicity",
     "dependent_capture_channels": "two capture channels are not independent (the second follows up what the first caught), so the two-source estimate inflates the overlap",
     "validation_cannot_see_condition": "every past case a back-test runs on carried a condition the forward cases lack, so the back-test passes by construction",
     "unmetered_component": "part of what the decision unit will draw or lose was supplied or lost through a source no meter records, so the recorded figure misses it",
@@ -124,7 +124,25 @@
     "calendar_grid_shift": "a profile keyed to a calendar grid's numbering (week or period number) drifts against the date-anchored events that drive it, and a long year moves the grid a whole step, so the profile is rebuilt on the events' dates",
     "exposure_basis_decoupled": "an event rate is carried on an exposure that moved in step with its true driver in the record (flight hours with landings), so every in-sample check passes on the conventional basis, and the forward plan decouples the two",
     "staggered_conversion_at_renewal": "a fix is embodied unit by unit at each unit's next shop visit, so the population converts at the pace of its own removals and the forward rate is neither the pooled rate nor the fixed one",
-    "scheduled_completion_slippage": "a plan's dated works are carried into the forward window at the completion the organisation's own record of comparable past works supports, not at the planned date, so a benefit the plan books for the window is only partly there"
+    "scheduled_completion_slippage": "a plan's dated works are carried into the forward window at the completion the organisation's own record of comparable past works supports, not at the planned date, so a benefit the plan books for the window is only partly there",
+    "intervention_masks_outcome": "the units flagged as risky were rescued, treated, expedited or audited, so their recorded outcome is the intervention's, not the underlying risk; what would have happened is rebuilt from units the intervention could not reach",
+    "chance_coincidence_baseline": "events linked only by time and place include chance matches and background exposure, so a placebo baseline from shifted days or windows is subtracted",
+    "open_follow_up_censoring": "units have not had the full follow-up window yet, so unfinished cases are censored and completed by survival curves (by cohort where cohorts differ), never counted as non-events",
+    "immortal_time_exposure": "an exposure or registration only units that survived long enough could receive credits the waiting time to the exposed, so each clock starts at entry or at a landmark among those still active",
+    "repeated_exposure_response": "a trial measured isolated exposures but the decision is a run of consecutive ones (fatigue, carryover, saturation), so the effect is split by prior exposure and carried through the target schedule",
+    "depleting_stock_of_easy_cases": "a trial's yield came from a one-off stock of easy cases that has run out, so the forward rate is projected from the replenishment flow",
+    "assignment_odds_by_group": "randomisation or serving odds differed by tier, grade or segment, so the arms are compared within each assignment group and weighted to the target",
+    "closure_diversion": "a closing unit's demand is split among the remaining units by a diversion share measured on past closures or sold-out periods, not in proportion to their size",
+    "fixed_count_effect_rescaled": "a past intervention removed or added a fixed number of things, so its effect is rescaled to each unit's own base before it is applied",
+    "survey_design_change": "a survey redesign, rotating panel or recall change moved the headline, so the two designs are bridged (first interviews, entering panel group, contact-schedule step) before the change is read",
+    "fieldwork_season_mix": "groups were surveyed or exposed in different seasons, so the month profile is estimated within fixed units and everyone is adjusted to an average month",
+    "recorded_at_billing_location": "activity is recorded where a supplier or lab bills, not where people live, so the national supplier is stripped out of the local figures",
+    "hindsight_in_evaluation": "a rule or controller is judged with information it could not have had at the time, so it is replayed on what was known at each decision date (never the deciding step on its own)",
+    "conservation_residual_attribution": "the quantity wanted is the residual of an account the physics or the books must close (an energy, mass or cash balance), so every metered, deemed and unmetered term is rebuilt on one basis and window before the residual is read and attributed",
+    "time_varying_membership": "units' membership in a parent (a feeder, territory, portfolio or hierarchy) changed over the history, so each period's members are rebuilt from the dated operations record, not from today's register, and checked against the flows the changes moved",
+    "nonlinear_functional_of_path": "the outcome is a convex or threshold function of a load or exposure path (losses with the square of current, ageing exponential in temperature, a charge on the maximum), so it is computed on the path, never on its mean or as a percentage carried from another level",
+    "position_on_network_effect": "the same load or fault has a different effect by where it sits on a radial or graph structure (voltage drop and losses grow with distance, delay with hops), so an equivalent factor calibrated on an old spatial mix misstates a new one",
+    "record_algorithm_inversion": "the stored record is the output of a recording algorithm (exception reporting, estimation and editing, a rolling register, a billing cycle), so the algorithm is inverted before anything is measured; never decided by reading one field"
   },
   "detections": {
     "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -143,7 +161,10 @@
     "layout_or_physics": "the physical layout or mechanism implies an interaction the per-unit view misses",
     "natural_experiment_in_record": "the record holds episodes (outages, pauses, a test) that show the effect directly",
     "back_test_on_held_out_period": "a chronological back-test separates the readings",
-    "document_defines_estimand": "the governing document defines the quantity in a way the incumbent figure does not meet"
+    "document_defines_estimand": "the governing document defines the quantity in a way the incumbent figure does not meet",
+    "conservation_residual_sign": "a balance's residual takes a sign or size the physics or the books do not allow, somewhere in the history",
+    "flow_step_at_dated_operation": "a parent's flow steps at the time of a dated operation that moved members between parents, mirrored at the receiving parent",
+    "measurement_at_another_network_point": "a measurement taken at another point of the network (an end-of-line voltage, a downstream meter) that the hurried model must also reproduce"
   },
   "moves": {
     "fixed_plus_covariate_fit": "a fixed component plus a covariate term fitted across all tests, then re-ranked",
@@ -203,7 +224,12 @@
     "ratio_benchmark_adjustment": "a raising factor set so the estimate's ratio between two groups matches an independent benchmark built at another grain (births by sex rolled forward with survival)",
     "rekey_profile_to_event_dates": "a seasonal profile rebuilt on the dates of the events that drive it (a holiday, a cut-off), then summed onto the target calendar's grid",
     "rate_on_driver_exposure": "each event rate fitted on every exposure that could drive it (hours, landings, calendar time) across units whose exposures diverge, then carried on the forward plan's own exposures",
-    "empirical_completion_from_past_works": "each planned in-service date carried at the slip distribution of the organisation's comparable completed works, and the forward value weighted by the chance each is in service in time"
+    "empirical_completion_from_past_works": "each planned in-service date carried at the slip distribution of the organisation's comparable completed works, and the forward value weighted by the chance each is in service in time",
+    "rebuild_membership_from_operations_log": "each period's members rebuilt by replaying the dated operations (switching, transfers, re-parenting) on the structure, checked against the steps they cause in the parents' flows",
+    "weighted_balance_reconciliation": "every term of the balance rebuilt on one basis and window, the residual reconciled with each instrument weighted by its own accuracy, and its sign and size checked against physics",
+    "compute_on_joint_path": "the non-additive or nonlinear quantity computed interval by interval on the joint path, never from the parts' own summaries",
+    "allocate_by_network_position": "each load placed at its position on the network and its effect computed segment by segment (a backward sweep), validated on a measurement taken at another point of the network",
+    "invert_recording_algorithm": "the recording rule (deadband, estimation, cycle, rolling window) applied in reverse to recover the quantity at the decision's grain"
   },
   "file_roles": {
     "governing_standard": "a standard, policy, rule or terms that file the WHAT",
@@ -229,5 +255,274 @@
     "selection_note": "a note or log of how units were picked",
     "unused_distractor": "files that look relevant and are unused",
     "notes_file_or_email": "a notes file or email"
+  },
+  "closed_lessons": {
+    "_about": "The client's Overused stumping strategies page (guidelines/client/learning-modules/overused-strategies-2026-11-12.md): 34 lessons that already decide the answer in two or more accepted tasks, all closed. A lesson keyed here may be a supporting step of a new task, never the step that flips its answer; a chain whose lessons are all closed is a stack of repeats; same mechanism and the same kind of fix is the same lesson whatever the domain, data or detection. skeleton.py findings() blocks a card whose deciding lesson (lessons[0]) is closed, or whose chain is closed or taught for more than half its lessons, and counts every closed lesson as taught.",
+    "selection_on_peak_baseline": {
+      "card": "Units picked at an extreme fall back anyway (regression to the mean)",
+      "family": "who ended up in the data",
+      "accepted_tasks": 7
+    },
+    "normal_period_correction": {
+      "card": "Units picked at an extreme fall back anyway (regression to the mean)",
+      "family": "who ended up in the data",
+      "accepted_tasks": 7
+    },
+    "survivor_selected_sample": {
+      "card": "Today's file has lost the ones that died or left (survivorship)",
+      "family": "who ended up in the data",
+      "accepted_tasks": 6
+    },
+    "intervention_masks_outcome": {
+      "card": "Outcomes are hidden by the intervention itself",
+      "family": "who ended up in the data",
+      "accepted_tasks": 5
+    },
+    "self_selection_into_treatment": {
+      "card": "Self-selection into exposure: compare a unit with itself",
+      "family": "who ended up in the data",
+      "accepted_tasks": 4
+    },
+    "length_biased_sampling": {
+      "card": "Rows are occurrences, not the people you care about",
+      "family": "who ended up in the data",
+      "accepted_tasks": 3
+    },
+    "shrinkage_small_samples": {
+      "card": "Small units top the ranking by chance (shrinkage)",
+      "family": "noise and small numbers",
+      "accepted_tasks": 8
+    },
+    "selection_on_noisy_means": {
+      "card": "Small units top the ranking by chance (shrinkage)",
+      "family": "noise and small numbers",
+      "accepted_tasks": 8
+    },
+    "uncertainty_at_shared_unit": {
+      "card": "Outcomes cluster, so item-level intervals are far too narrow",
+      "family": "noise and small numbers",
+      "accepted_tasks": 6
+    },
+    "serial_or_common_shock_dependence": {
+      "card": "Outcomes cluster, so item-level intervals are far too narrow",
+      "family": "noise and small numbers",
+      "accepted_tasks": 6
+    },
+    "variance_beyond_sampling_noise": {
+      "card": "Units vary more than the stated error, so alert bars are too tight",
+      "family": "noise and small numbers",
+      "accepted_tasks": 4
+    },
+    "measurement_error_attenuation": {
+      "card": "A noisy explanatory variable flattens the slope",
+      "family": "noise and small numbers",
+      "accepted_tasks": 4
+    },
+    "errors_in_covariate": {
+      "card": "A noisy explanatory variable flattens the slope",
+      "family": "noise and small numbers",
+      "accepted_tasks": 4
+    },
+    "chance_coincidence_baseline": {
+      "card": "Chance coincidences counted as caused (placebo baseline)",
+      "family": "noise and small numbers",
+      "accepted_tasks": 2
+    },
+    "open_follow_up_censoring": {
+      "card": "Follow-up is still open, so unfinished cases are not failures (censoring)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 8
+    },
+    "completion_of_young_cohorts": {
+      "card": "Follow-up is still open, so unfinished cases are not failures (censoring)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 8
+    },
+    "competing_risks": {
+      "card": "Another exit ends the clock first (competing risks)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 5
+    },
+    "left_truncated_ages": {
+      "card": "Late entry and immortal time",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 4
+    },
+    "immortal_time_exposure": {
+      "card": "Late entry and immortal time",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 4
+    },
+    "effect_fade_with_time": {
+      "card": "An early spike inflates the average (use the settled level)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 4
+    },
+    "reporting_lag_nowcast": {
+      "card": "Recent counts are still filling in (reporting lag)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 3
+    },
+    "repeated_exposure_response": {
+      "card": "Repeated exposure behaves differently from a one-off",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 3
+    },
+    "censored_or_capped_observation": {
+      "card": "Values at a measurement limit are bounds, not numbers",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 2
+    },
+    "vintage_or_cohort_drift": {
+      "card": "Young cohorts look different only because they are young",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 2
+    },
+    "rebound_after_window": {
+      "card": "Purchases pulled forward from later (payback)",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 2
+    },
+    "depleting_stock_of_easy_cases": {
+      "card": "The easy cases get used up first",
+      "family": "time, follow-up and timing",
+      "accepted_tasks": 2
+    },
+    "transport_effect_modifiers": {
+      "card": "The pooled effect does not transfer to a target with a different mix",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 9
+    },
+    "heterogeneity_carried_to_decision": {
+      "card": "The pooled effect does not transfer to a target with a different mix",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 9
+    },
+    "interference_spillover": {
+      "card": "Controls were partly treated (spillover or shared resource)",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 9
+    },
+    "displacement_netting": {
+      "card": "Gains taken from neighbours (displacement, cannibalisation, cross-border)",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 5
+    },
+    "cannibalisation_with_pretrend": {
+      "card": "Gains taken from neighbours (displacement, cannibalisation, cross-border)",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 5
+    },
+    "downstream_offset": {
+      "card": "Gains taken from neighbours (displacement, cannibalisation, cross-border)",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 5
+    },
+    "assignment_odds_by_group": {
+      "card": "Arms differ in mix because assignment odds differed by group",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 3
+    },
+    "composition_versus_behaviour": {
+      "card": "A crude gap is just composition (age or mix standardisation)",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 3
+    },
+    "closure_diversion": {
+      "card": "Where does a closed unit's demand go",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 2
+    },
+    "fixed_count_effect_rescaled": {
+      "card": "A fixed-count effect has to be rescaled to each unit's size",
+      "family": "carrying an effect to a new place",
+      "accepted_tasks": 2
+    },
+    "measurement_basis_break": {
+      "card": "The instrument changed (drift or step change)",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 5
+    },
+    "survey_design_change": {
+      "card": "The survey changed, not the world",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 4
+    },
+    "fieldwork_season_mix": {
+      "card": "Seasons fall in different places (fieldwork timing)",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 2
+    },
+    "recorded_at_billing_location": {
+      "card": "Activity recorded where it is billed, not where people live",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 2
+    },
+    "dependent_capture_channels": {
+      "card": "Two sources that are not independent (capture-recapture)",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 2
+    },
+    "concurrent_change_in_comparison": {
+      "card": "A co-occurring change is tangled with the treatment",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 2
+    },
+    "hindsight_in_evaluation": {
+      "card": "Hindsight leaks into the evaluation",
+      "family": "how it was measured or recorded",
+      "accepted_tasks": 2
+    }
+  },
+  "closed_near": {
+    "_about": "Lessons that share a closed card's mechanism family but differ in mechanism or fix as written here. As the deciding lesson they WARN: the design note's Frontier check answers, in its Closed strategies line, why the mechanism or the fix differs from the card named.",
+    "treatment_changes_who_is_observed": {
+      "card": "Outcomes are hidden by the intervention itself",
+      "family": "who ended up in the data"
+    },
+    "confounded_history_of_use": {
+      "card": "Self-selection into exposure: compare a unit with itself",
+      "family": "who ended up in the data"
+    },
+    "design_weights": {
+      "card": "Rows are occurrences, not the people you care about",
+      "family": "who ended up in the data"
+    },
+    "planned_design_noise": {
+      "card": "Units vary more than the stated error, so alert bars are too tight",
+      "family": "noise and small numbers"
+    },
+    "observation_window_coverage": {
+      "card": "Recent counts are still filling in (reporting lag)",
+      "family": "time, follow-up and timing"
+    },
+    "customer_specific_response": {
+      "card": "The pooled effect does not transfer to a target with a different mix",
+      "family": "carrying an effect to a new place"
+    },
+    "pilot_unrepresentative_selection": {
+      "card": "The pooled effect does not transfer to a target with a different mix",
+      "family": "carrying an effect to a new place"
+    },
+    "leader_follower_spillover": {
+      "card": "Controls were partly treated (spillover or shared resource)",
+      "family": "carrying an effect to a new place"
+    },
+    "device_clock_drift": {
+      "card": "The instrument changed (drift or step change)",
+      "family": "how it was measured or recorded"
+    },
+    "detection_rate_changes_outcome": {
+      "card": "The instrument changed (drift or step change)",
+      "family": "how it was measured or recorded"
+    },
+    "seasonal_shift_calibration": {
+      "card": "Seasons fall in different places (fieldwork timing)",
+      "family": "how it was measured or recorded"
+    },
+    "fixed_nuisance_component": {
+      "card": "A co-occurring change is tangled with the treatment",
+      "family": "how it was measured or recorded"
+    }
   }
 }

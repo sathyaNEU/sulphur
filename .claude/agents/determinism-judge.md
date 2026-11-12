@@ -110,8 +110,8 @@ Read `verdict.md`, then do two things the thread cannot.
 
 **2. Gate G and Gate H reconciliation.** Compare the thread's `mechanism`, `stumping_family`,
 `surface_read_dependency`, `sole_data_defect` and its Gate H line (`domain`, `layers`, `results`, `one_thing`,
-`effort`, `one_fact`) with the design note's `## Results chain`, `## Hidden factor record` and `## Effort test`
-and the card. **Read the design note and `metadata.json` for this purpose only, and only after the thread has
+`effort`, `one_fact`, `closed`) with the design note's `## Results chain`, `## Hidden factor record`, `## Effort
+test` and the Frontier check's `Closed strategies:` line, and the card. **Read the design note and `metadata.json` for this purpose only, and only after the thread has
 returned.** The findings that most reliably predict a send-back under the client's bar of 2026-11-09:
 
 - the thread finds one hidden or planted thing carrying most of the graded results (`one_thing` not `none`)
@@ -123,7 +123,11 @@ returned.** The findings that most reliably predict a send-back under the client
 - the thread's best single sentence rescues more results than the note's `Largest single hint:` says;
 - a result whose band excludes a rival the thread ran (Gate C on that result), or a band too wide to separate the
   hurried figure from the golden (it grades nothing);
-- the thread names the declared distractor as carrying a result (the distractor is too load-bearing).
+- the thread names the declared distractor as carrying a result (the distractor is too load-bearing);
+- the thread's `closed` field names a card from the client's closed page (`guidelines/client/learning-modules/
+  overused-strategies-2026-11-12.md`) as the step that decides the call, or finds the call needs only closed lessons,
+  where the note's `Closed strategies:` line says the deciding lesson is open (H6: a SEND_BACK, the deciding judgment
+  rebuilt off the page; `python3 .claude/skills/fingerprint/skeleton.py closed <task>` gives the card's own reading).
 
 A thread that reached a result itself by applying the field's standard method with no judgment the data had to
 settle is describing a result the runs will earn: record which ones under stump power, because the price of the

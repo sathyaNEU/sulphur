@@ -303,6 +303,7 @@
    "tariff-demand-response-evaluation",
    "asset-condition-maintenance",
    "efficiency-savings-verification",
+   "distribution-losses-energy-balance",
    "other"
   ],
   "human-factors-ergonomics": [
@@ -1262,6 +1263,11 @@
     "efficiency-savings-verification": [
      "experiment-causal",
      "comparative-explanation"
+    ],
+    "distribution-losses-energy-balance": [
+     "etl",
+     "anomaly-detection",
+     "data-quality-monitoring"
     ]
    }
   },

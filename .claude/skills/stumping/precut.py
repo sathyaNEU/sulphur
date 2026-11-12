@@ -30,14 +30,17 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
   ## Template check        `Chain signature:`, `Question form:`, `Nearest build:`; refused when another build on
                            file has the same chain of areas in the same order and the same answer shape
   ## Semantic fork table, ## Closure table (22 axes), ## Literal reader, ## Prompt contract, ## Tried and rejected
-  ## Frontier check        the next-level contract (stumping Part 1b), required in full for a build whose card was
+  ## Frontier check        the next-level contract (stumping Part 1b and 1c), required in full for a build whose card was
                            registered from skeleton.RULE_FROM on: `Precedents:` (each result the careful pass loses,
                            with the precedents.json ids behind it), `Shallow path checks:` (the checks the hurried
                            route passes and the check of another kind that refutes it), `Assumption made false:`
                            (the assumption a run lists and waves through, false here, and the file that tests it),
                            `Forcing:` (the golden family, the shortcuts and the perturbations against the line),
                            `Noun swap:` (the nearest task on file or in the client's library, nouns swapped, and the
-                           elements that carry across); and the card's skeleton screen (fingerprint Part 1b) clear
+                           elements that carry across); from skeleton.CLOSED_FROM on, `Closed strategies:` (the
+                           deciding lesson and why the client's closed page does not hold it, each closed lesson kept
+                           as a supporting step and the route showing it alone leaves the call standing); and the
+                           card's skeleton screen (fingerprint Part 1b, the closed rule included) clear
 
 A build already READY, in runs or shipped under the retired single-deep-step design meets its old contract and a
 WARN naming the retirement: it is not re-shipped until it is re-rooted to the results chain.
@@ -75,6 +78,10 @@ DEEP_LABELS = ("Task type", "Domain test", "Swap", "Where the weight sits", "Lay
                "Pinned", "Run forecast", "Strategy label", "Lesson")
 TEMPLATE_LABELS = ("Chain signature", "Question form", "Nearest build")
 FRONTIER_LABELS = ("Precedents", "Shallow path checks", "Assumption made false", "Forcing", "Noun swap")
+# From skeleton.CLOSED_FROM (the client's closed strategies page, 2026-11-12): the deciding lesson and why it is not on
+# the page, and every closed lesson the chain keeps as a supporting step with the route showing it alone does not flip
+# the call.
+CLOSED_LABEL = "Closed strategies"
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
 PAIR_TARGET = 50.0
@@ -1111,10 +1118,22 @@ def next_level(task_dir):
     return not reg or reg >= SK.RULE_FROM
 
 
+def closed_level(task_dir):
+    """True when the card was registered from skeleton.CLOSED_FROM on, or no card is registered yet."""
+    sys.path.insert(0, FINGERPRINT)
+    import skeleton as SK
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= SK.CLOSED_FROM
+
+
 def frontier_rows(task_dir, secs):
     """The next-level contract: the Frontier check section and the card's skeleton screen."""
     rows = []
     nl = next_level(task_dir)
+    cl = closed_level(task_dir)
 
     def row(check, ok, detail):
         rows.append((check, "PASS" if ok else ("FAIL" if nl else "WARN"), detail))
@@ -1125,6 +1144,11 @@ def frontier_rows(task_dir, secs):
     for label in FRONTIER_LABELS:
         v = labelled(fc or "", label)
         row("frontier check: %s" % label, bool(v) and len(v) >= 20, (v or "missing")[:110])
+    v = labelled(fc or "", CLOSED_LABEL)
+    ok = bool(v) and len(v) >= 20
+    rows.append(("frontier check: %s" % CLOSED_LABEL, "PASS" if ok else ("FAIL" if cl else "WARN"),
+                 (v or "missing (stumping Part 1c: the deciding lesson off the client's closed list, closed lessons "
+                  "only as supporting steps)%s" % ("" if cl else ", registered before the closed strategies"))[:110]))
     pv = labelled(fc or "", "Precedents") or ""
     if pv:
         ids = set(re.findall(r"\b([LNR]\d{2})\b", pv))

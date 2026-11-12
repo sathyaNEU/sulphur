@@ -77,7 +77,7 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 |---|---|
 | `decision_form` | what is chosen and how (rank and name one; the k largest over a screen with a runner-up; act only if an interval clears a line; a set over a filed line; a count to a standard ...) |
 | `answer_pattern` | the result's shape (the winner climbs from far down; k of n pass with budget slack; the point says act and the interval says no ...); generic patterns identify nothing |
-| `lessons` | the deciding lessons, **the one the call turns on first** (83 keys at the grain the client's page uses: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
+| `lessons` | the deciding lessons, **the one the call turns on first** (106 keys, 43 of them closed by the client's page of 2026-11-12, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
 | `mechanisms` | the build's own physics as free slugs, so a near copy that keeps the mechanism is told from a templated build that re-points it |
 | `detection` | how the solver notices each |
 | `moves` | the resolving moves |
@@ -107,20 +107,33 @@ everything the client has shown us (`corpus/client_skeletons.json`: the five pai
   accepted, a third reads as a re-set.
 - **The house shell:** a specific decision form with a specific answer pattern already on two live builds BLOCKs (the
   client's "a third task with the ... shell reads as a house template"); a form on four live builds WARNs.
+- **The client's closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`, held as
+  `closed_lessons` in `skeleton_vocab.json`, with twelve neighbours in `closed_near`): 34 lessons that already decide
+  two or more accepted tasks. A card whose deciding lesson is closed BLOCKs (`skeleton.lesson_closed`: "same mechanism
+  and the same kind of fix counts as the same lesson", so a new domain, new data or a new detection never clears it); a
+  chain of closed lessons only BLOCKs (`skeleton.lesson_closed_stack`); a closed lesson counts as taught for the
+  half-taught rule; a closed lesson as a supporting step WARNs (`skeleton.lesson_closed_support`: its route alone must
+  leave the call standing); a deciding lesson next to a closed card WARNs (`skeleton.lesson_closed_near`, answered in
+  the note's `Closed strategies:` line). A card registered before `skeleton.CLOSED_FROM` (2026-11-12) meets these as
+  WARN.
 - A card registered before `skeleton.RULE_FROM` meets every skeleton rule as WARN, so no build already past design
   flips; every later card and every unfiled draft meets it in full, and a card with no skeleton BLOCKs.
 
 ```
 python3 .claude/skills/fingerprint/skeleton.py check <taskNN or scratch card>   # the element-by-element read
 python3 .claude/skills/fingerprint/skeleton.py lessons --min 2                  # lessons already taught twice
+python3 .claude/skills/fingerprint/skeleton.py closed [taskNN]                  # the client's closed page, cards against it
 python3 .claude/skills/fingerprint/skeleton.py matrix                           # every pair on file at 1 to 3
 python3 .claude/skills/fingerprint/skeleton.py selftest                         # the calibration below
 ```
 
 **The calibration it is held to** (`selftest`): the client's five pairs come back at 1, 2, 2, 3 and 3, its own
 reading; task4 architecture 7 against architecture 6 is flagged (one term added to the same chain); the two builds
-the client approved (task6 v7 and task457, shipped as task14 architecture 1) stay apart and each passes as a new
-draw; every accepted client task at level 4 or 5 and every example passes as a new draw against the rest, except the
+the client approved (task6 v7, task457 shipped as task14 architecture 1, task2 v6 and task14 v3) stay apart pairwise
+and each passes as a new draw on the pair and lesson rules (the closed rule left out, since the page was drawn from
+accepted tasks), while the closed probes hold: a call on a closed lesson and a stack of them are refused, one closed
+supporting step beside a new deciding lesson is not, and task2 v6, whose deciding lesson the page has since closed,
+would be refused as a draw today; every accepted client task at level 4 or 5 and every example passes as a new draw against the rest, except the
 overlaps the client's corpus itself holds (example 14 is the recipe app's interval-unit lesson in its k-of-n shell;
 three or four accepted tasks already turn on interference, the interval unit and the split carried to the decision,
 so a new draw on one of them is the third copy); and a plain forecast with untaught lessons passes. Change a rule
@@ -267,6 +280,8 @@ BLOCK if any rule blocks, else WARN, else PASS; exit 1 on BLOCK.
 | `skeleton.own_lineage` | BLOCK at 1 and 2, WARN at 3 | the slot's own earlier architectures: a landed scaffold re-pointed |
 | `skeleton.lesson_taught`, `skeleton.lesson_once` | BLOCK, else WARN | the deciding lesson taught twice on a thin chain, or more than half the chain taught; once is a WARN |
 | `skeleton.house_shell` | BLOCK at four live builds, WARN at three | the decision form's use across live builds |
+| `skeleton.lesson_closed`, `skeleton.lesson_closed_stack` | BLOCK (WARN before `skeleton.CLOSED_FROM`) | the deciding lesson is on the client's closed page, or every lesson is |
+| `skeleton.lesson_closed_near`, `skeleton.lesson_closed_support`, `skeleton.lesson_closed_half` | WARN | the deciding lesson next to a closed card; closed lessons as supporting steps; a card filed before the page that the closed count would refuse |
 | `skeleton.missing`, `skeleton.vocab` | BLOCK | no skeleton, or a key not in `skeleton_vocab.json` (WARN for a card registered before `skeleton.RULE_FROM`) |
 | `shell.lineage` | BLOCK | a re-root keeps a dead architecture's shell (task118 kept one across four worlds) |
 | `tell.names` | BLOCK | a shared multi-word invented name |

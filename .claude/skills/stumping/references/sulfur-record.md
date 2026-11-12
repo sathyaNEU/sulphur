@@ -144,6 +144,20 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   In the client's level 4 and 5 tasks the named assumption is false and testable from another file (vintage drift,
   network rates on risk-selected picks, an instrument change flagged and never tested). Moved into `../SKILL.md` Part
   1b, lever 2.
+- **Both approved builds of 2026-11-12 lost where no precedent stood** (task2 arch 6, task14 arch 3). Each careful
+  column was priced on design (26.0 and 49.5) and both builds passed, while `effort.py`'s cited rule, which grades an
+  uncited loss Right, would have priced both at 100. Their losses sit on **source assignment**: which of several
+  partial instruments answers which part of the estimand (the compelled clinicians taken as the closest group; the
+  register read as it stands; lodged rises read as every rise), with a target no instrument covers. Moved into
+  `../SKILL.md` Part 0 and `open-ground.md` Part 3: the anatomy is borrowed, never a chain; their runs, once pasted,
+  add the precedents in the runs' own words, and until then a loss of that kind is cited by the nearest loss class on
+  file (L03, L08, N14).
+- **The client has closed the lessons this harness leaned on most** (its Overused stumping strategies page, read
+  2026-11-12: 34 lessons, each deciding two or more accepted tasks). Nine of our live builds turn on one (task1 v3,
+  task5 v4, task8 v19, task12 v1, task13 v4, task15 v2, task19 v1, task20 v2, task21 v1; task12 and task15 are stacks
+  of them), and three of the six places Part 1b names (the split carried, selected units, the system's net) are closed
+  as deciding lessons. Moved into `../SKILL.md` Part 1c, `../../fingerprint/skeleton.py` (the closed rule) and
+  `open-ground.md` (the open dimensions).
 - **The domain fit is read off the prompt's framing** (task2 arch 4, "summing tabulated blocks against stated tiers";
   task14 arch 1, "compliance lookups ... under a stated rule", approved on the same cut once the prompt opened on why
   the docket must rest on estimates). Moved into `../../guide-to-prompt/SKILL.md`.
