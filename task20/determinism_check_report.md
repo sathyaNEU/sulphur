@@ -143,3 +143,125 @@ Options where the text is silent (literal readings): street = mean vs median; co
 - House rule: pass 1's own derivation landed R1, R3, R5 (contract at a run rate as one of two forks) and R8's mix and
   contract steps inside their bands, and missed R2, R4, R6 (quarter by quarter), R7 and R9: priced that way the careful
   column is 39.6, under 50.
+
+## Verdict (pass 2, the re-judge after the FIX_NOW repairs)
+
+# Verdict, task20 (Brindle & Moss Q4 FY25 nowcast)
+
+Order kept: own_derivation.md was written before graded_blocks.md was opened. Only /tmp/determinism-check-task20-h3/ was read.
+
+- **Verdict:** DETERMINISTIC (no SOLUTION_WRONG; every load-bearing figure I could rebuild reproduced, a few within rounding).
+- **Disposition:** APPROVE. No rerun needed. Optional tidy-ups (not required): state in the answer blocks that the street figure is the mean of the 11 latest estimates (mean 1,518.0 and median 1,516.3 give the same call), and tighten the asymmetric "13 of 15 (7 to 13)" band on the in-range count.
+- **Why:** The short call rests on three independent corrections the shipped files force: KS-01's Midwest card base jumps 61,377 to 72,596 in the four weeks to 26 Oct 2025 (cohort 2025 cards, 9.6k to 21.6k) while KS-06's Midwest cards fall and its feed ends, which the other issuers' Midwest cards do not show (without KS-01 the Midwest is -2.09% against 9.51%); customer deposits on every 8-K balance sheet track the last eight weeks of custom-order payments at a stable ratio (0.0269 to 0.0283 over 19 quarters) and the custom share of those weeks jumps to 40.4% (36.0% a year earlier), so revenue on delivery lags payments by about 2.2 points; and last year's Q4 Contract of USD 54.5 million (annual 100.4 less nine months 45.9) is a one-off against Q4s of 14.3 to 16.4 in FY21 to FY23. Left out singly, each puts the range across the street (golden says USD 1,502 to 1,510 estimates, no position), so the task is hard and forced at the same time, and the call survives every rival I ran.
+
+## Evidence (recomputed from target/)
+
+| Item | Golden | My recomputation | Status |
+|---|---|---|---|
+| Raw delivered panel growth, all issuers, total spend | -21.86 | -21.86 | reproduced |
+| Completion of three late weeks (issuer medians over 27 vintages) | +1.22 (0.91 to 1.99) | +1.22 (pooled factors +1.48) | in band |
+| Licensee shops and cafes out (monthly descriptor share) | -0.87 (-1.52 to -0.56) | -0.87 (my order -1.21) | in band |
+| Regional growth with KS-01 / without (NE, SE, MW, W) | -2.57/-3.79, 13.77/13.29, 9.51/-2.09, 8.08/7.77 | identical to the hundredth | reproduced |
+| Growth at company FY24 mix (23.87% MW) | 7.18 | 7.18 (weekly avg 7.177) | reproduced |
+| Growth without KS-01 | 3.90 | 3.90 | reproduced |
+| Matched-issuer per-card growth before mix | 9.22 | 9.06 | small gap (0.16), inside bridge band, not load-bearing for the call |
+| Custom share of last 8 weeks / share of payments in them | 40.43 vs 35.93; 57.00 vs 56.09 | 40.43 vs 36.05; 56.95 vs 56.13 | reproduced to rounding |
+| Closing deposits | 335.2 (326.8 to 340.2) | 333.5 (ratio chain), 334.7 (deposit/custom8 ratio) | in band |
+| Retail net sales after deposits | 1,453.5 | 1,454.1 | in band |
+| Contract run rate / last year Q4 contract | 17.7 (16.7 to 19.5) / 54.5 | 17.69 (median of last eight quarters) / 54.545 | reproduced |
+| Estimate | 1,471.2 (1,460.3 to 1,483.4) | 1,471.8 | in band |
+| 80% range | 1,447.7 (1,432.5 to 1,461.8) to 1,494.7 (1,483.7 to 1,510.8) | 1,448.3 to 1,495.3 on the golden's own error of 1.58 points | in band |
+| Street | 1,518.0 mean, 1,516.3 median | 1,517.99 / 1,516.3 | reproduced |
+| Hurried path (like-for-like growth to net sales) | 1,590.2 | 1,483.678 x 1.0718 = 1,590.2 | reproduced |
+| Record errors, RMSE, in-range count | RMSE 1.24, 13 of 15 | from the golden's listed errors: RMSE 1.236, 13 of 15 inside +/-1.58 | arithmetic holds; I did not rebuild each quarter's as-built estimate to the second decimal |
+
+Own derivation (written first, before the three corrections were found): B&M 1,402 to 1,415 (80% 1,380 to 1,437), plus Fernhollow 113.5, plus Contract 18 to 65, total 1,540 (1,518 to 1,563) at Contract 18.2, 1,577 at 54.5; call long or no position (knife edge at the street). It used completion, matched issuers, licensee out, region reweight and a 15-quarter regression; it explained the Midwest step-up as the new Columbus studio and missed deposits. That first-pass answer lies outside the bands for the estimate (1,460.3 to 1,483.4), the range ends and the call, which is the intended hurried failure; the pieces it did find (completion +1.48, licensee -1.21, regional reweight -1.9, contract level 18.2 and its -2.45 points, RMSE 1.15, street 1,518.0) fall inside their bands.
+
+Extra rivals I ran on the corrected chain, all keep the top below the street: bias-corrected estimate 1,480.6 with the error standard deviation gives top 1,501.5; the error 10th percentile gives top 1,500.0; deposits from the deposit/custom-payments ratio gives 1,471.8; contract at the mean of FY25 Q1 to Q3 (18.2) moves the estimate +0.5. Deposit ratio checked quarter by quarter: 26.9 to 28.3 (scaled units), no break.
+
+Forks examined, none flips the call on the corrected chain: street mean vs median vs latest-only (1,516 to 1,518, and the lowest broker 1,506.4 to highest 1,532.1 still leaves the top below the median); completion factors pooled vs by issuer vs medians; weights FY24 vs rolled; range from RMSE vs percentiles; window of 7 vs 9 weeks for deposits (golden lists it). The one judgement left in the chain is Contract: grown with retail or repeated, the range straddles the street (golden's own 1,509.0 rival), so the call depends on reading the Q4 FY24 Contract delivery as non-recurring. The files support that reading (Q4 FY21 to FY23 at 16.4, 14.3, 14.5; earlier spikes of 23.8 and 23.2 not followed by repeats; FY25 Q1 to Q3 run at 17.5, 19.1, 17.9), so I treat it as forced, with a margin of 12 to 23 million to the street.
+
+## Files and hygiene: PASS
+27 files: 6 CSV (panel 163,620 rows; descriptor 3,276 rows; delivery history; web visits; app daily; street), 19 txt 8-K exhibits, 1 xlsx (3 sheets, no formulas, plausible Excel properties), 1 PDF (LibreOffice export, one page). Four formats; two large messy CSVs; unused look-alikes (web visits, app daily) unlabelled. Mess is process-like (11 region spellings, 8 merchant-name spellings, descriptor drift in Aug 2024, KS-06 feed ending, incomplete latest weeks, one calendar-month tail in the descriptor file). No authoring or benchmark disclosure found, no README. Temporal: the street file carries one estimate dated 3 Feb 2026, a day after the 2 Feb panel delivery, and the file copy is dated 4 Feb; harmless to the call. The fact that deposits are recognised on delivery is not written in any file; it is the standard reading of a customer-deposit liability and is confirmed by the data (stable deposit-to-custom-payments ratio), so not a Gate B failure. No public-data contamination (fictional company). No exclusion-level finding.
+
+## Stump power (Gate F)
+Strong. The ladder from the delivered panel to net sales has 8 steps of 1 to 31 points; a run that stops at the like-for-like panel growth files 1,590 (a beat) with a record that looks clean (RMSE 1.45); the desk's model carried forward files 1,611. Leaving out any one of KS-01, deposits or Contract turns the short into no position, two out turns it long. A careful but hurried frontier run likely does completion, licensee, issuer matching and the regional reweight (it saw the Midwest bump) but is likeliest to lose the deposit-timing step (-2.19 points, deposits 335 against 220.7, a step it would have to infer from the balance sheet line plus custom descriptors) and to explain KS-01's book as a real Midwest studio effect, filing about 1,500 to 1,540 and a long or no-position call.
+
+## Stumping type (Gate G)
+`mechanism: decomposition_attribution` (with modeling and forecasting layers), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. The reported figures are fine; the difficulty is bridging a sampled payments panel to recognised net sales and a record of how that bridge held. Not a banned type. Caveat: part of the work does consist of catching that the panel's growth is inflated (KS-01 book, deposits), but three separate corrections, a bridge, a record and a range each need their own work and the clean-data test still leaves a hard forecasting task.
+
+## Deep reasoning (Gate H)
+`domain: pass` (card-panel nowcast of a retailer's quarter, panel-to-reported mapping, record of intervals, street comparison, which is what an equity research analyst estimates; swap-test fails when "net sales" and "street" are replaced), `layers: pass` (layer 1: region and name drift, licensee descriptors, incomplete latest weeks, departing issuer, 14-week quarter; layer 2: bridge, re-issued book, deposit timing, contract base, record), `results: 11 graded across 7 areas` (call, estimate and range, record, regions and KS-01, completion, licensee, deposits, contract, mix, bridge totals, note), `one_thing: none`, `effort: quick 3, careful 7, thorough 11 of 11`, `one_fact: "KS-01 took over KS-06's Midwest cards" rescues 2 of 11` (the KS-01 step and the regional table; the other two big corrections remain). The weight sits in the bridge and the as-built record; the result a careful but hurried run is likeliest to lose is the deposit step, filing retail growth about 3.9 points and net sales near 1,500 to 1,540 against 1,471.
+
+H3 watch item (does not fail): three of the constructed effects sit mostly in the deciding quarter (KS-01 migration, the Dec to Jan custom-share jump to 40.4%, Q4 FY24 Contract is in the base). Each has an in-history analogue the data shows (KS-02's May 2023 book jump with the same signature, earlier Dec custom bulges of 32 to 36%, earlier one-off Contract quarters), and no single sentence rescues more than 2 of 11, so I count them as analysis, not a planted flip.
+
+## Fix
+none (solution, prompt and input files stand). If the author wants more margin against a reviewer who prefers a regression mapping: add one sentence to the Record block that the identity mapping has a mean error of -0.64 points and that a bias-corrected range still tops out at about 1,501 to 1,506 million, below the street.
+
+## Own derivation (pass 2, written before the blocks were opened)
+
+# Own derivation (written before opening graded_blocks.md)
+
+Source: prompt.txt and target/ only. Scripts in work/ (load.py, fq.py, build.py, growth.py, reg.py, model.py).
+
+## Files and what they hold
+- panel weekly (163,620 rows, 2021-01-31 to 2026-01-25, 261 weeks, 6 issuers KS-01..06, 3 merchants M0412 stores, M0413 web, M2290 Fernhollow). Region labels in 11 spellings (NE, North East, MW, Mid-West, ...) fold to 4 regions; merchant_name in 8 spellings fold to 3 ids. No duplicate keys. panel_cards repeats identically over merchants for the same week-issuer-region-cohort cell.
+- delivery history: 27 weekly vintages x 6 weeks x issuer. Newest week of a vintage is ~80 per cent complete (issuer range 0.75-0.88), next ~96 per cent, third ~99.5 per cent, then final. The panel file (delivered 2026-02-02) equals the lag-0 vintage, so weeks 2026-01-25, 01-18, 01-11 are incomplete.
+- descriptor monthly: same panel by calendar month of week_start (matches panel totals to the cent except 2026-01 which is 1.0709x the panel, i.e. it is the completed month). Contains licensee descriptors inside M0412 (B&M AT HOLLISTERS x8, BRINDLE CAFE / SQ CAFE x3) = shop-in-shops and cafes whose sales are NOT net sales (10-K). Licensee share of M0412 spend rises from 6.9% (2021-02) to 13-14% (2025).
+- 10-K excerpt: fiscal calendar (FY24 52 wks to 1 Feb 2025; FY23 53 wks with 14-week Q4), licensee exclusion, region table FY21-FY24 (annual B&M net sales by store/delivery region), Fernhollow acquired 2 Jun 2024.
+- 19 8-Ks: quarterly total net sales and brand splits (Q4 brand = annual minus 9M). Q4 FY24: B&M 1320.1, Fernhollow 109.1, Contract 54.5, total 1483.7.
+- Larkhill xlsx: Index of card growth vs reported "comparable" growth (comparable = ex-Fernhollow, 14-week Q4 FY23 scaled 13/14, Contract included), Fit (intercept 0.77, slope 0.737, RMSE 1.3), Q3 FY25 call (model 1333.7 vs reported 1306.9, miss -2.0%). I reproduced the fit from Index (a=0.757, b=0.738, resid sd 1.52 with n-2, 1.41 RMSE).
+- street: 11 brokers, latest figures mean 1518.0, median 1516.3, range 1506.4-1532.1, prior figures mean about 1522.
+- web visits, app daily: not used in my chain (looked relevant, no fit improvement tested beyond not needed).
+
+## Findings that change the card measure (each a step)
+1. Newest three weeks incomplete (factors by lag pooled 0.807/0.960/0.995; issuer-specific 0.75-0.86 for lag 0). Check: completed Jan-2026 M0412 spend 8.80M (pooled) / 8.85M (issuer-specific) vs descriptor file 8.87M.
+2. Issuer KS-06 left after week 2025-10-26 (no Q4 FY25 rows). Issuers are regionally concentrated (KS-06 88% Midwest, KS-02 80% Southeast, KS-03 82% West, KS-01/KS-05 balanced) and grow at very different rates (KS-06 about 0-3%, others 5-15%). So the issuer set must be matched across years.
+3. Licensee spend (Hollister shop-in-shops, cafes) inside M0412 to be removed; its share keeps rising, so including it overstates growth by about 1.2 points of card growth in Q4 FY25.
+4. Panel is skewed to Southeast and West versus the 10-K net sales split (panel cards SE 39-41%, W 34-35%, NE 12%, MW 13%; B&M sales FY24 NE 26%, SE 26%, MW 24%, W 25%). Per-card growth by billing region in FY25 is SE +14-15, W +6-9, NE -3, MW -1 (till Q3) so unweighted per-card growth overstates national growth by about 2 points. Reweight regions to prior-year 10-K sales shares (FY24 for FY25).
+5. Midwest per-card spend steps up about +10 points YoY from week 2025-10-19 (Columbus design studio first appears 2025-11; Tampa 2025-09, Phoenix 2025-10). Studios 8->11 in the Q3 8-K. Midwest now rests on the small Midwest cards of the other issuers since KS-06 left.
+6. Contract (and Fernhollow) are separate: Contract is not on the cards at all. Contract by quarter: FY24 14.5, 13.3, 18.1, **54.5**; FY25 17.5, 19.1, 17.9, ?. Q4 of FY21-23 was 16.4, 14.3, 14.5. Q4 FY24 Contract is about 4x any earlier Q4, and it contaminates the Larkhill "comparable" growth for FY24 Q4 (8.41 reported incl. Contract vs B&M-only 5.22) and so its fitted line.
+7. Fiscal calendar: Q4 FY23 had 14 weeks; Larkhill scales 13/14. Weeks align on Sunday starts; FY24 Q1+ compare against a quarter 53 weeks earlier by calendar but same fiscal week.
+
+## Ladder for Q4 FY25 card growth (pooled per card-week, YoY; Nov 2 2025 - Jan 31 2026 vs Nov 3 2024 - Feb 1 2025)
+- as delivered, all issuers, all merchants: +4.54 
+- complete the three late weeks (pooled factors): 6.02 (+1.48)
+- match issuers (drop KS-06 from base year): 10.11 (+4.09)
+- remove licensee spend: 8.90 (-1.21)
+- B&M scope only (store ex licensee + web): 9.27 ; Fernhollow card growth +4.15 (pooled) 
+- reweight regions to company sales shares: 7.35 (-1.9 vs 9.27)
+- map to reported B&M growth by regression of reported B&M growth (13-wk basis) on this measure, 15 quarters FY22Q1-FY25Q3: a=1.57, b=0.731, resid sd 1.15 (corr 0.71) -> B&M growth +6.9 (6.7 with five-issuer-only history)
+Order of the steps is not pinned; points per step depend on order (listed in the order above).
+
+## Estimate (primary chain: pooled completion, five matched issuers all quarters, ex licensee, region reweight, 15-quarter OLS, t-based 80% prediction interval)
+- B&M Q4 FY25: 1408.7 (80%: 1386.4 - 1431.0) [variants over completion/issuers/weights/spend scope: point 1402-1415, interval half width 21-22].
+- Fernhollow: 109.05 x (1.037 to 1.042) = 113.1-113.6 (card growth 4.15, Q3 reported growth 3.7). Small.
+- Contract: no card information. Scenarios: recent run-rate 18.2 (FY25 Q1-Q3 mean); Q4 FY21-23 average 15; flat at 54.5 (Q4 FY24 repeat); 54.5 x YTD growth 18.7% = 64.7.
+- Total: Contract 18.2 -> 1540.4 (80%: 1518.1 - 1562.7), growth +3.8%; Contract 54.5 -> 1576.7 (1554.4 - 1599.0), +6.3%; Contract 64.7 -> 1587 (1565-1609).
+- Street: mean of latest 1518.0 (median 1516.3; with priors about 1522; Pell & Sutter estimate dated 2026-02-03 is after the 2026-02-02 delivery).
+- Call: point is above street in every variant (1540 to 1587). Whole range above street only if Contract is placed at or above about 20 (low end 1518.1 vs 1518.0, i.e. a knife edge at Contract 18.2); with Contract 54.5 or 64.7 the range sits above by 36-50M (long). If Contract is given its own uncertainty (15 to 65) the range widens to about 1500-1610 and straddles the street (no position). Variants without the region reweight (B&M 1392-1398 / low 1370-1376) put the low end at 1505-1510, below street (no position).
+
+## Record (how the 80% interval would have held)
+Expanding-window OLS on B&M reported growth, t interval, B&M only, first 8 quarters as training: 7 quarters FY24Q1-FY25Q3, 5 of 7 inside (misses FY24Q4 5.22 vs [5.30, 8.25], FY25Q1 6.26 vs [2.30, 5.70]); with 6 training quarters 7/9; with 10 training quarters 3/5. Window choice moves the count; the quarters that miss are the same ones (FY24 Q4, FY25 Q1). Larkhill-style unadjusted index (no clean-up) in-sample residual sd 1.4-1.5 -> its interval is wider but misses Q3 FY25 by -2.0 per cent.
+
+## Literal-reading forks recorded where the text is silent
+- Street figure: mean vs median vs include Pell & Sutter/dated after panel; prior vs latest.
+- Contract in Q4 FY25 (no data): 18 vs 54.5 vs 65 -> up to 47M difference, 3 points of growth; decides long vs no position.
+- Whether region reweighting is applied (and weights prior-year vs current-year, FY25 weights not published).
+- Completion factors pooled vs by issuer; whether descriptor Jan-2026 is used.
+- Backtest minimum training length and whether history is rebuilt with vintage panels (only Aug 2025+ vintages exist) and whether Contract-contaminated FY24 Q4 is in the training target.
+- Order of ladder steps (points per step).
+- 80% band: t vs normal, prediction vs confidence interval, whole-sales vs B&M-only residual.
+
+## Dispositions after pass 2 (main thread)
+
+- APPROVE stands. The optional tidy-ups are made: the street figure stated as the mean of the eleven estimates (the
+  median gives the same call); the in-range counts' bands taken from the routes whose record covers every quarter, one
+  either side because a count moves by one when an error near the range's edge crosses it (13 of 15, band 12 to 14);
+  the count built only on the errors before each stated from four errors (9 of 11, band 8 to 10) and from six (7 of 9,
+  band 6 to 8); the record's mean error (-0.64 points) added back with the range from the errors' standard deviation
+  tops out at USD 1,500.8 million, below the street, stated in Ask 2 and the closing.
+- House rule on pass 2's own first pass: inside the bands it landed the panel steps, the regional mix and the contract
+  run rate; it explained KS-01's Midwest step-up as the new Columbus studio, missed the deposits and filed USD 1,540
+  million (long or no position). Priced that way the careful column is 39.6, under 50: READY.
+

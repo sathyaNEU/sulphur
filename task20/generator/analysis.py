@@ -565,9 +565,10 @@ def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep
         e = np.array(list(errs.values()))
         rmse = float(np.sqrt(np.mean(e ** 2)))
         asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
+        asof6 = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(6, len(e))]
         return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=rx, ys=ry, fit=fit,
                     origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
-                    inside_asof=int(sum(asof)), n_asof=len(asof))
+                    inside_asof=int(sum(asof)), n_asof=len(asof), inside_asof6=int(sum(asof6)), n_asof6=len(asof6))
     xs, ys, errs = [], [], {}
     for q in origins:
         b = keys[keys.index(q) - 4]
@@ -599,9 +600,10 @@ def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep
     rmse = float(np.sqrt(np.mean(e ** 2)))
     # the range as it could have been built at each quarter: the errors of the quarters before it (four or more)
     asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
+    asof6 = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(6, len(e))]
     return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=xs, ys=ys, fit=fit,
                 origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
-                inside_asof=int(sum(asof)), n_asof=len(asof))
+                inside_asof=int(sum(asof)), n_asof=len(asof), inside_asof6=int(sum(asof6)), n_asof6=len(asof6))
 
 
 def with_range(R, base):
@@ -896,6 +898,8 @@ def perturbations(out):
     G = out["golden"]
     e = np.array(list(G["errs"].values()))
     res["the range from the record's 10th and 90th percentile errors"] = base * (1 + G["growth"] - float(np.quantile(e, 0.1)))
+    res["the record's mean error added back, the range from its standard deviation"] = base * (
+        1 + G["growth"] - float(e.mean()) + Z80 * float(e.std()))
     return res
 
 

@@ -261,11 +261,15 @@ def main():
           "before the latest are complete), the releases before each quarter's; the latest weeks' restatement replayed "
           "or not moves no past quarter (their weeks are complete in the history)",
           all(abs(100 * (fam["the golden route"]["errs"][q_] - G["errs"][q_])) < 1e-9 for q_ in G["errs"]))
-    check("SF23 how the range would have held: at the record's own error and built only on the errors before each, "
-          "both counts inside their stated bands",
+    full = [v for v in fam.values() if v["n"] == G["n"]]
+    check("SF23 how the range would have held: at the record's own error and built only on the errors before each (from "
+          "four or six errors before), every count inside its stated band",
           inside(G["inside"], B["coverage_in"]) and inside(G["inside_asof"], B["coverage_asof_in"])
-          and all(inside(v["inside_asof"], B["coverage_asof_in"]) for v in fam.values()),
-          "%d of %d; %d of %d" % (G["inside"], G["n"], G["inside_asof"], G["n_asof"]))
+          and inside(G["inside_asof6"], B["coverage_asof6_in"])
+          and all(inside(v["inside"], B["coverage_in"]) and inside(v["inside_asof"], B["coverage_asof_in"])
+                  and inside(v["inside_asof6"], B["coverage_asof6_in"]) for v in full),
+          "%d of %d; %d of %d; %d of %d" % (G["inside"], G["n"], G["inside_asof"], G["n_asof"], G["inside_asof6"],
+                                            G["n_asof6"]))
 
     # ---------------------------------------------------------------------------------------------- realism sweep
     txt = open(os.path.join(TASK, "submission.md")).read()

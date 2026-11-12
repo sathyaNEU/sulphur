@@ -44,13 +44,17 @@
    16.7,
    19.5
   ],
+  "coverage_asof6_in": [
+   6,
+   8
+  ],
   "coverage_asof_in": [
-   4,
-   9
+   8,
+   10
   ],
   "coverage_in": [
-   7,
-   13
+   12,
+   14
   ],
   "deposits_q4_m": [
    326.8,
@@ -235,6 +239,8 @@
  },
  "contract_fy2024_m": 100.4,
  "contract_q4_m": 17.7,
+ "coverage_asof6_in": 7,
+ "coverage_asof6_n": 9,
  "coverage_asof_in": 9,
  "coverage_asof_n": 11,
  "coverage_in": 13,
@@ -358,6 +364,7 @@
   "the regional mix of fiscal 2023": 1465.3
  },
  "fern_base_m": 109.1,
+ "first_asof6_origin": "FY2023 Q3",
  "first_asof_origin": "FY2023 Q1",
  "first_origin": "FY2022 Q1",
  "forecast_m": 1471.2,
@@ -424,7 +431,8 @@
   "the last week's completeness -3 per cent": 1496.5,
   "the licensed shops' and cafes' share +20 per cent": 1494.1,
   "the licensed shops' and cafes' share -20 per cent": 1495.9,
-  "the range from the record's 10th and 90th percentile errors": 1500.0
+  "the range from the record's 10th and 90th percentile errors": 1500.0,
+  "the record's mean error added back, the range from its standard deviation": 1500.8
  },
  "pooled_growth_pct": 8.41,
  "pooled_with_ks01_pct": 9.22,
@@ -489,6 +497,7 @@
  "range_gap_m": 23.3,
  "range_high_m": 1494.7,
  "range_low_m": 1447.7,
+ "record_mean_error_pp": -0.64,
  "regional_pct": {
   "Midwest": -2.09,
   "Northeast": -3.79,

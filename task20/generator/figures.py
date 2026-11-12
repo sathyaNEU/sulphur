@@ -4,6 +4,7 @@ routes and the forcing), from one analysis run on the cut pack."""
 import json
 import os
 
+import numpy as np
 import pandas as pd
 
 import analysis as A
@@ -63,6 +64,10 @@ def make(R):
         "coverage_asof_in": G["inside_asof"],
         "coverage_asof_n": G["n_asof"],
         "first_asof_origin": G["origins"][G["n"] - G["n_asof"]],
+        "coverage_asof6_in": G["inside_asof6"],
+        "coverage_asof6_n": G["n_asof6"],
+        "first_asof6_origin": G["origins"][G["n"] - G["n_asof6"]],
+        "record_mean_error_pp": p2(float(np.mean(list(errs.values())))),
         "first_origin": G["origins"][0],
         "last_origin": G["origins"][-1],
         "errors_pp": {k: p2(v) for k, v in errs.items()},
@@ -154,8 +159,14 @@ def make(R):
     B["errors_pp"] = {q: span([p2(v["errs"][q]) for v in fam.values() if q in v["errs"]], 0.15) for q in G["origins"]}
     B["golden_rmse_pp"] = span([p2(v["rmse"]) for v in fam.values()], 0.15)
     B["q3_error_pp"] = span([p2(v["errs"]["FY2025 Q3"]) for v in fam.values()], 0.2)
-    B["coverage_in"] = [min(v["inside"] for v in fam.values()), max(v["inside"] for v in fam.values())]
-    B["coverage_asof_in"] = [min(v["inside_asof"] for v in fam.values()), max(v["inside_asof"] for v in fam.values())]
+    full_rec = [v for v in fam.values() if v["n"] == G["n"]]          # the routes whose record covers every quarter
+    def count_band(key, n_key):        # a count moves by one when an error near the range's edge crosses it
+        lo = min(v[key] for v in full_rec)
+        hi = max(v[key] for v in full_rec)
+        return [max(0, lo - 1), min(G[n_key], hi + 1)]
+    B["coverage_in"] = count_band("inside", "n")
+    B["coverage_asof_in"] = count_band("inside_asof", "n_asof")
+    B["coverage_asof6_in"] = count_band("inside_asof6", "n_asof6")
     B["forecast_m"] = span([m1(v["forecast"]) for v in fam.values()], 5.0, 1)
     B["range_low_m"] = span([m1(v["low"]) for v in fam.values()], 5.0, 1)
     B["range_high_m"] = span([m1(v["high"]) for v in fam.values()], 5.0, 1)

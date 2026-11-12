@@ -307,8 +307,8 @@
      1.61
     ],
     "coverage_in": [
-     7,
-     13
+     12,
+     14
     ]
    },
    "passes": {
@@ -783,6 +783,10 @@
    {
     "input": "the range from the record's 10th and 90th percentile errors",
     "value": 1500.0
+   },
+   {
+    "input": "the record's mean error added back, the range from its standard deviation",
+    "value": 1500.8
    }
   ],
   "notes": "Values are the top of each route's 80 per cent range (the call is short only while the whole range sits below the street's figure). Each deep step left out on its own leaves the range across the line (no position); two or three left out land long."

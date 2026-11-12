@@ -68,14 +68,20 @@ def text(F):
              "re-issued book between them; the regional mix of the fiscal year before; deposits and contract from the "
              "releases before that quarter's), reported growth, the error in points of year-on-year growth, and whether "
              "it fell inside. The errors: %s. Root mean square error %.2f points (%.2f to %.2f); %d of %d quarters "
-             "inside the range at that error (%d to %d), and %d of the %d quarters from %s inside a range built only on "
-             "the errors before each (%d to %d); the largest miss %.2f points in %s. "
+             "inside the range at that error (%d to %d); inside a range built only on the errors before each, %d of the %d "
+             "quarters from %s (with at least four errors before it; %d to %d) and %d of the %d from %s (with at least "
+             "six; %d to %d); "
+             "the largest miss %.2f points in %s; the mean error %+.2f points, and with it added back and the range set "
+             "from the errors' standard deviation the top of the range is USD %s million, still below the street. "
              "The panel's like-for-like growth taken straight to net sales, set beside it, has a root mean square error "
              "of %.2f points and misses the third quarter of fiscal 2025 by %.2f."
              % (q(F["first_origin"]), q(F["last_origin"]), errs, F["golden_rmse_pp"], B["golden_rmse_pp"][0],
                 B["golden_rmse_pp"][1], F["coverage_in"], F["origins"], B["coverage_in"][0], B["coverage_in"][1],
                 F["coverage_asof_in"], F["coverage_asof_n"], q(F["first_asof_origin"]), B["coverage_asof_in"][0],
-                B["coverage_asof_in"][1], F["largest_miss_pp"], q(F["largest_miss_q"]),
+                B["coverage_asof_in"][1], F["coverage_asof6_in"], F["coverage_asof6_n"], q(F["first_asof6_origin"]),
+                B["coverage_asof6_in"][0], B["coverage_asof6_in"][1], F["largest_miss_pp"], q(F["largest_miss_q"]),
+                F["record_mean_error_pp"],
+                mn(F["perturb_m"]["the record's mean error added back, the range from its standard deviation"]),
                 F["shortcut_rmse_pp"]["careful"], F["careful_q3_error_pp"]))
     steps = "; ".join("%s %+.2f (%.2f to %.2f)" % (k, v, bb[k][0], bb[k][1]) for k, v in bl)
     L.append("3. What each step from the card data to net sales is worth in points of year-on-year growth (weekly "
@@ -191,8 +197,8 @@ def text(F):
              "window, contract at a four-quarter run rate, a re-issued book read at 3 or 10 per cent, KS-01's Midwest "
              "cards or its newest open years set aside instead of KS-01, KS-01 left out of every quarter, the record "
              "from fiscal 2023) keeps the top between USD %s and %s million; and the last week's completeness 3%% either way, "
-             "the licensed share a fifth either way and the range from the record's error percentiles keep it between "
-             "USD %s and %s million."
+             "the licensed share a fifth either way, the range from the record's error percentiles and the record's mean "
+             "error added back keep it between USD %s and %s million."
              % (mn(sl["no_reissue"]), mn(sh["no_reissue"]), mn(sl["no_deposits"]), mn(sh["no_deposits"]),
                 mn(sl["no_contract"]), mn(sh["no_contract"]), mn(sl["only_reissue"]), mn(sh["only_reissue"]),
                 mn(min(hi.values())), mn(max(hi.values())),

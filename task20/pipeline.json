@@ -1,11 +1,11 @@
 {
  "task": "task20",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,471.2 million (-0.84%), 80% range USD 1,447.7 to 1,494.7 million, wholly below the street's USD 1,518.0 million",
@@ -17,19 +17,19 @@
   "date": "2026-11-12"
  },
  "leak": {
-  "leak_py": "REVIEW (0 LEAK; the releases' labels and per-share lines answered harmless)",
-  "reader": "no data dictionary, no ranking file, no answer figure, nothing planted; the desk model's three method notes removed on its finding"
+  "leak_py": "REVIEW (0 LEAK; the releases and their labels answered harmless)",
+  "reader": "no data dictionary, no ranking file, no answer figure, nothing planted; the desk model's method notes removed on its finding"
  },
  "duplicate_check": {
   "heart": "WARN (validation_cannot_see_condition on 3 live builds; forum other)",
   "nearest": "task5 v4 (severity none)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (pass 1), FIX_NOW: Ask 3's baseline and order, the estimate band, the record's information set, contract's run rate argued",
-  "disposition": "FIX_NOW made in the generator; re-judge running (scratch /tmp/determinism-check-task20-h3)",
-  "gate_h": "pass (one_thing none; a note on KS-01 as constructed, answered by KS-02's 2023 book now graded in the record)",
+  "verdict": "pass 1 DETERMINISTIC, FIX_NOW (made); pass 2 DETERMINISTIC, APPROVE",
+  "disposition": "APPROVE after the FIX_NOW repairs; optional tidy-ups made",
+  "gate_h": "pass (one_thing none; H3 watch item answered by KS-02's 2023 book, the earlier December bulges and the earlier contract deliveries, all graded in the record)",
   "report": "determinism_check_report.md",
-  "first_pass": "missed KS-01's book and the deposits, filed USD 1,539.2 million (no position or long); careful column priced on it 39.6"
+  "first_pass": "both passes missed KS-01's book (pass 2 read it as a new studio) and the deposits; filed USD 1,539 to 1,540 million, long or no position; careful column priced on them 39.6"
  },
  "paper_pair": 26.8,
  "effort": {
@@ -78,7 +78,7 @@
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
   }
  ],
- "resume": "stage 4: the re-judge after FIX_NOW is running (scratch /tmp/determinism-check-task20-h3); on its verdict, price its first pass against the careful column, append it to determinism_check_report.md, re-run gates.py task20 --full, then READY with target.zip, golden.zip and golden/ force-added",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
