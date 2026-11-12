@@ -26,3 +26,9 @@
   call (evening shift weeks 47 to 50 in P1 and P2); the aisle density, the acquired brand's full mix and the 53-week
   re-key taken unprompted; lost the growth-conditioned overstatement (pooled 9.97 against 3.7 per cent) and the agency
   hours (7,744 against 8,390). Run 2 and the rubric not supplied. Route: REDESIGN in a new world (architecture 12).
+- `arch12/runs.md`, `arch12/holistic_audit.md`: architecture 12 (Havørn Regional's 2027 rotable spares, READY 3795da7,
+  target.zip 8bd9892f7f054b07), both platform runs and the holistic audit pasted by the author on 2026-11-12; run scores
+  not supplied. Both runs found the landings driver and the watch list's aircraft-driven removals, and split on the Bodø
+  shop (pool 90 against 71); the audit returned the build because the holdings were not forced (the shop's capacity
+  calibrated near saturation with no 2027 roster, the record window and the aircraft's repeat removals unfiled). Route:
+  repair in place (the shop's 2027 plan shipped, standard 4.3 and 4.5 filed, the careful column graded from the runs).

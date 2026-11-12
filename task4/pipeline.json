@@ -1,12 +1,12 @@
 {
  "task": "task4",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "repair",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 12,
@@ -87,9 +87,16 @@
    "repair": "design",
    "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
    "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
+  },
+  {
+   "date": "2026-11-12",
+   "source": "holistic audit",
+   "repair": "determinism",
+   "portal": "holdings not forced: the in-house lines rode a Bodø shop turnaround calibrated near saturation with no 2027 roster shipped (the audit's replay 12 to 17 days in the summer against the golden's 29; the starter-generator 6, 9 or 13 spares by reading); the VHF transceiver's 25 removals rested on an unfiled four-year window and an unfiled reading of repeat removals traced to one aircraft; fix: ship the 2027 roster and absence plan, file the capacity basis, the rate window and the repeat-removal treatment, re-derive the holdings and the saving",
+   "runs": "runs/arch12/runs.md (both platform runs pasted, scores not supplied): both found the landings driver and the watch list's aircraft-driven removals; pools 90 and 71 against the golden's 78"
   }
  ],
- "resume": "stage 6: the author rewrites prompt.txt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip (8bd9892f7f054b07), and the two platform runs go to /triage-runs",
+ "resume": "repair in place: ship the shop's 2027 plan, file standard 4.3 and 4.5, grade the careful column from the runs, re-run stage 4, RESHIPPED",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -160,6 +167,10 @@
   {
    "date": "2026-11-12",
    "event": "READY: reader 2 clean on the repaired cut; gates.py 0 FAIL; target.zip 8bd9892f7f054b07, golden.zip 7459e2f2b331c98c"
+  },
+  {
+   "date": "2026-11-12",
+   "event": "RETURNED by the holistic audit: holdings not forced (shop capacity, record window, repeat removals); both platform runs filed under runs/arch12/"
   }
  ],
  "runs": {
@@ -230,6 +241,13 @@
     "graded": false,
     "verdict": "not stumped (the author's report): the pasted run on the golden call (evening shift weeks 47 to 50 in P1 and P2), agency 7,744 against 8,390 hours, the pooled overstatement 9.97 per cent against 3.7 (its one analytical loss); the second run not supplied",
     "texts": "runs/arch11/run1.md"
+   },
+   {
+    "architecture": 12,
+    "date": "2026-11-12",
+    "graded": false,
+    "verdict": "returned by the holistic audit (determinism of the holdings); runs found the exposure and the watch list, split on the shop",
+    "file": "runs/arch12/runs.md"
    }
   ]
  },
