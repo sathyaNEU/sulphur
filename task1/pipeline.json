@@ -1,12 +1,12 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-11",
+ "updated": "2026-11-12",
  "doctrine": "throughout",
  "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 80,084, each at least 3.5 times its planned cost per start in expected 36-month net revenue (3.94 to 6.46, the best line left out 3.05); not the 14 lines for EUR 135,385 the careful but hurried reading funds",
  "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month value of the Jul-Sep 2023 starts by channel with household returns; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 points the April 2027 prices add; R5 three-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start per line; R8 the funded lines and budget; R9 the plan's 2027 starts paying on 31 Dec 2027 by channel",
@@ -57,6 +57,10 @@
    {
     "date": "2026-11-11",
     "event": "one platform run on the architecture 3 upload (runs/arch3/run1.md): funded the careful set exactly (14 lines for EUR 141,575), excluding the reading log as uneven in coverage and leaky; no score; the holistic audit (runs/arch3/holistic_audit.md) returned the task on determinism"
+   },
+   {
+    "date": "2026-11-12",
+    "event": "one platform run on the reshipped cut (runs/arch3/run2.md): funded 15 lines for EUR 139,168, the careful route with households linked (the effort model's 'careful, households linked' set); dismissed the reading log as leaky; landed R1 and R2; no score"
    }
   ]
  },
@@ -81,9 +85,16 @@
    "repair": "determinism",
    "commit": "",
    "note": "the platform's holistic audit of architecture 3 (runs/arch3/holistic_audit.md): R9 counted the telemarketing free quarter as paying; nine lines 5 to 7 per cent from the 3.5 bar and J12 never run on telemarketing or cashback, so the bands did not show the call forced; repaired in the generator (R9 counts no free month; J12 history on TEL-BHR and PART-GAZ; a stronger reading drift and price response so each judgment moves lines alone; the plan's costs re-placed, every line 12 per cent or more from the bar and every rival 8; the clean truth and 39 of 40 start-month redraws fund the same eight; the newest-starts calibration ruled out on its 3 to 18 cancellations a line; post-export dates fixed)"
+  },
+  {
+   "date": "2026-11-12",
+   "source": "review",
+   "repair": "design",
+   "commit": "",
+   "note": "the platform's review of the 2026-11-11 reshipped cut returned it on determinism (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection are open modelling choices no file pins, and a return rate not tied to early reading funds 9 to 13 lines; the base window reads as October 2025 to September 2026 off the plan's 28 October date; KPI 2.6 counts every later subscription, the golden only the first. Architecture 3 spent (two returns on forcing; its deciding lessons vintage_or_cohort_drift and completion_of_young_cohorts are on the client's closed page of 2026-11-12); re-rooted to architecture 4 in a new world"
   }
  ],
- "resume": "READY: the author re-uploads target.zip with the prompt unchanged (or rewrites it in their own words and re-gates it with voice-check.py task1 --rewrite), generates the two runs, then /triage-runs task1",
+ "resume": "RETURNED 2026-11-12: architecture 3 spent; re-root to architecture 4 at stage 1 (new world, new shell, deciding lesson off the closed page)",
  "approved": null,
  "submitted": null,
  "portal": {
