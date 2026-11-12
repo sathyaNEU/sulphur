@@ -1,11 +1,15 @@
-"""task20 architecture 2 analysis: Brindle & Moss's fourth-quarter fiscal 2025 net sales nowcast, computed from the
+"""task20 architecture 2 analysis (second hardening): Brindle & Moss's fourth-quarter fiscal 2025 net sales nowcast, computed from the
 shipped files in target/ alone, with the rivals that set each band and the hurried routes effort.json prices.
 
-One route function carries every method: the panel's normalisation (cards of the same age, per card, raw spend), the
-regional weights (the company's prior-year net sales by region, or the panel's own spend), the bank-card share's change
-(carried by a rule for the private-label card's share, or left out), and the calibration (the chain as built, or a
-regression of reported growth on it over past quarters). The golden is the same-age chain at the company's regional mix
-with the bank-card share carried at the pace of fiscal 2025's first three quarters, as built."""
+One route function carries every method: the panel's normalisation (spend per open card, per issuer, cards of the same
+age, or raw spend), the issuers compared (every issuer, those in every week of both quarters, and those less any issuer
+whose cards took a re-issued book between the two quarters), the regional weights (the company's prior-year brand net
+sales by region, or the panel's own spend), the step from customer payments to net sales (revenue on delivery through
+the customer deposits at the quarter's end, or none), and contract sales (at the run rate of the quarters before, or
+inside one growth rate for all of net sales). The golden is spend per open card on the issuers in every week of both
+quarters less KS-01 (whose cards took KS-06's re-issued book in October 2025), at the company's fiscal 2024 regional
+mix, with the quarter-end deposits scaled from last year's by the last eight weeks' payments and custom-order share,
+and contract at the median of the eight quarters before."""
 import os
 import re
 import subprocess
@@ -17,26 +21,104 @@ import docs as DC
 import pack as PK
 
 REGIONS = ["Northeast", "Southeast", "Midwest", "West"]
-OTHER_TENDER = 0.12           # the 10-K's cash, checks, financing and other tenders' share of net sales
 Z80 = 1.2816                  # the two-sided 80 per cent normal quantile
 ACQUIRED = pd.Timestamp("2024-06-02")
 TQ, BQ = "FY2025 Q4", "FY2024 Q4"
+JUMP = 0.05                   # a four-week rise in an issuer's cards in a region larger than this is a re-issued book
+NUM = {"thirteen": 13, "fourteen": 14}
+ORDN = {"first": 1, "second": 2, "third": 3, "fourth": 4}
+
+
+def norm_region(x):
+    k = re.sub(r"[^A-Z]", "", str(x).upper())
+    return {"NE": "Northeast", "NORTHEAST": "Northeast", "SE": "Southeast", "SOUTHEAST": "Southeast",
+            "MW": "Midwest", "MIDWEST": "Midwest", "W": "West", "WEST": "West"}[k]
 
 
 # ---------------------------------------------------------------------------------------------------------- the files
+def _nums(s):
+    out = []
+    for tok in re.findall(r"\(?[\d,]+\)?|--", s):
+        if tok == "--":
+            out.append(0.0)
+            continue
+        neg = tok.startswith("(")
+        v = float(tok.strip("()").replace(",", ""))
+        out.append(-v if neg else v)
+    return out
+
+
+def _row(block, label):
+    for ln in block.splitlines():
+        if ln[:52].strip() == label:
+            return _nums(ln[52:])
+    return None
+
+
+def read_release(path):
+    txt = open(path).read()
+    m = re.search(r"results for the (\w+) quarter of fiscal (\d{4}), the (\w+) weeks ended (\w+ \d+, \d{4})", txt)
+    fq, fy, weeks, end = ORDN[m.group(1)], int(m.group(2)), NUM[m.group(3)], pd.Timestamp(m.group(4))
+    inc = txt.split("STATEMENTS OF INCOME")[1].split("NET SALES BY BRAND")[0]
+    brand = txt.split("NET SALES BY BRAND")[1].split("BALANCE SHEETS")[0]
+    bs = txt.split("BALANCE SHEETS")[1]
+    ns = _row(inc, "Net sales")
+    ct = _row(brand, "Contract") or _row(brand, "B&M Contract")
+    fern = _row(brand, "Fernhollow") or [0.0] * len(ct)
+    dep = _row(bs, "Customer deposits")
+    return dict(key="FY%d Q%d" % (fy, fq), fy=fy, fq=fq, weeks=weeks, end=end, ns=ns, ct=ct, fern=fern, dep=dep)
+
+
+def read_releases(tgt):
+    rel = {}
+    for f in sorted(os.listdir(tgt)):
+        if f.startswith("bmh_8k_ex99-1_"):
+            r = read_release(os.path.join(tgt, f))
+            r["file"] = f
+            rel[r["key"]] = r
+    rows, dep = [], {}
+    for k, r in rel.items():
+        q_ns = r["ns"][0] / 1000.0
+        if r["fq"] < 4:
+            ct, fern = r["ct"][0] / 1000.0, r["fern"][0] / 1000.0
+        else:
+            q3 = rel["FY%d Q3" % r["fy"]]
+            ct = (r["ct"][0] - q3["ct"][2]) / 1000.0
+            fern = (r["fern"][0] - q3["fern"][2]) / 1000.0
+        rows.append(dict(fiscal_quarter=k, period_end=r["end"], weeks=r["weeks"],
+                         period_start=r["end"] - pd.Timedelta(days=7 * r["weeks"] - 1), net_sales=q_ns,
+                         contract=round(ct, 3), fern=round(fern, 3), release=r["file"]))
+        dep[k] = r["dep"][0] / 1000.0
+        if k == "FY2021 Q1":
+            dep["FY2020 Q4"] = r["dep"][1] / 1000.0
+    res = pd.DataFrame(rows).sort_values("period_end").reset_index(drop=True)
+    last = res.iloc[-1]
+    res.loc[len(res)] = dict(fiscal_quarter=TQ, period_end=last.period_end + pd.Timedelta(days=91), weeks=13,
+                             period_start=last.period_end + pd.Timedelta(days=1), net_sales=np.nan, contract=np.nan,
+                             fern=np.nan, release="")
+    return res, dep, rel
+
+
+def read_regions(path):
+    txt = subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
+    block = txt.split("Net sales by brand and region")[1].split("Acquisition")[0]
+    years = [int(y) for y in re.findall(r"Fiscal (\d{4})", block)]
+    reg = pd.DataFrame({"fiscal_year": ["FY%d" % y for y in years]})
+    for r in REGIONS:
+        m = re.search(r"^\s*%s\s+([\d,\.\s]+)$" % r, block, re.M)
+        reg[r] = [float(x.replace(",", "")) for x in m.group(1).split()][:len(years)]
+    return reg
+
+
 def load(tgt):
-    _TOKENS[0] = 0
-    _PROFILE.clear()
-    _LEAD.clear()
-    _MTO.clear()
+    _CACHE.clear()
     P = {}
-    res = pd.read_csv(os.path.join(tgt, PK.F_RESULTS))
-    res["period_start"] = pd.to_datetime(res.period_start)
-    res["period_end"] = pd.to_datetime(res.period_end)
-    P["results"] = res
-    P["regions"], P["pl"], P["deposits"] = filing_tables(os.path.join(tgt, DC.F_FILING))
-    pan = pd.read_csv(os.path.join(tgt, PK.F_PANEL))
+    P["results"], P["deposits"], P["releases"] = read_releases(tgt)
+    P["regions"] = read_regions(os.path.join(tgt, DC.F_FILING))
+    pan = pd.read_csv(os.path.join(tgt, PK.F_PANEL), dtype={"card_open_year": str})
     pan["week_start"] = pd.to_datetime(pan.week_start)
+    codes = {c: norm_region(c) for c in pan.billing_region.unique()}
+    pan["billing_region"] = pan.billing_region.map(codes)
     P["panel"] = pan
     hist = pd.read_csv(os.path.join(tgt, PK.F_HIST))
     hist["delivery_date"] = pd.to_datetime(hist.delivery_date)
@@ -44,41 +126,32 @@ def load(tgt):
     P["hist"] = hist
     P["desc"] = pd.read_csv(os.path.join(tgt, PK.F_DESC))
     P["street"] = pd.read_csv(os.path.join(tgt, PK.F_STREET))
+    res = P["results"]
     P["keys"] = list(res.fiscal_quarter)
     P["qyear"] = {r.fiscal_quarter: r.period_start.year for r in res.itertuples()}
+    P["start"] = dict(zip(res.fiscal_quarter, res.period_start))
+    P["end"] = dict(zip(res.fiscal_quarter, res.period_end))
     return P
 
 
-def filing_tables(path):
-    """the regional net sales table and the private-label card's share of net sales by quarter, from the excerpts"""
-    txt = subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
-    num = lambda s: float(s.replace(",", ""))
-    block = txt.split("Net sales by region")[1].split("Acquisition")[0]
-    years = [int(y) for y in re.findall(r"Fiscal (\d{4})", block)]
-    rows = {}
-    for r in REGIONS:
-        m = re.search(r"^\s*%s\s+([\d,\.\s]+)$" % r, block, re.M)
-        rows[r] = [num(x) for x in m.group(1).split()]
-    reg = pd.DataFrame({"fiscal_year": ["FY%d" % y for y in years[:len(rows[REGIONS[0]])]]})
-    for r in REGIONS:
-        reg[r] = rows[r][:len(reg)]
-    pl, dep = {}, {}
-    for fy, q, v, d in re.findall(r"Fiscal (\d{4}) Q(\d)\s+(\d+\.\d)\s+([\d,]+\.\d)", txt):
-        pl["FY%s Q%s" % (fy, q)] = float(v)
-        dep["FY%s Q%s" % (fy, q)] = num(d)
-    m = re.search(r"Customer deposits were USD ([\d,]+\.\d) million at the end of fiscal (\d{4})", re.sub(r"\s+", " ", txt))
-    dep["FY%s Q4" % m.group(2)] = num(m.group(1))
-    return reg, pl, dep
+_CACHE = {}
 
 
-def quarter_of(P, weeks):
-    out = pd.Series(index=weeks.index, dtype=object)
-    for r in P["results"].itertuples():
-        out[(weeks >= r.period_start) & (weeks <= r.period_end)] = r.fiscal_quarter
-    return out
+def res_of(P, k, col):
+    return float(P["results"].set_index("fiscal_quarter")[col][k])
 
 
-# ------------------------------------------------------------------------------------------- R2: the immature weeks
+def prev_q(P, k):
+    keys = P["keys"]
+    i = keys.index(k)
+    return keys[i - 1] if i > 0 else "FY2020 Q4"
+
+
+def weeks_of(P, k):
+    return res_of(P, k, "weeks")
+
+
+# ------------------------------------------------------------------------------------------- the immature weeks
 def completion_factors(P, stat="median", last_n=None):
     """each issuer's first-delivered share of a week's final spend at lags 0, 1 and 2: the week as first delivered
     against the same week three or more weeks later, over the delivery history"""
@@ -103,29 +176,32 @@ def completion_factors(P, stat="median", last_n=None):
     return {k: float(agg(v)) for k, v in f.items()}
 
 
-# ------------------------------------------------------------------------------------- R1: the reporting entity
+# ------------------------------------------------------------------------------------- the reporting entity
+LICENSED = "HOLLISTERS|CAFE"
+CUSTOM = "DESIGN STUDIO|CUSTOM"
+
+
 def excluded_share(P):
     """the licensed shop-in-shops' and cafes' share of the brand merchant id's spend, by month"""
     b = P["desc"][P["desc"].merchant_id == "M0412"].copy()
-    b["out"] = b.descriptor.str.contains("HOLLISTERS|CAFE", regex=True)
+    b["out"] = b.descriptor.str.contains(LICENSED, regex=True)
     tot = b.groupby("month").spend_usd.sum()
     return b[b.out].groupby("month").spend_usd.sum().reindex(tot.index).fillna(0) / tot
 
 
-_TOKENS = [0]
-
-
-def _token(pan):
-    """a stable identity for a panel frame within a run (object ids are reused once a frame is freed)"""
-    if "tok" not in pan.attrs:
-        _TOKENS[0] += 1
-        pan.attrs["tok"] = _TOKENS[0]
-    return pan.attrs["tok"]
+def quarter_of(P, weeks):
+    out = pd.Series(index=weeks.index, dtype=object)
+    for r in P["results"].itertuples():
+        out[(weeks >= r.period_start) & (weeks <= r.period_end)] = r.fiscal_quarter
+    return out
 
 
 def panel_entity(P, cf, complete=True, exclude=True, share_scale=1.0):
     """the reporting entity's panel spend: the brand id less the licensed shops and cafes, the site, and Fernhollow
     from its acquisition; the latest weeks completed by each issuer's completion factors"""
+    key = ("entity", id(cf) if cf else None, tuple(sorted(cf.items())) if cf else None, complete, exclude, share_scale)
+    if key in _CACHE:
+        return _CACHE[key]
     pan = P["panel"].copy()
     if exclude:
         sh = excluded_share(P) * share_scale
@@ -139,44 +215,109 @@ def panel_entity(P, cf, complete=True, exclude=True, share_scale=1.0):
         fac = np.array([cf.get((i, l), 1.0) if l < 3 else 1.0 for i, l in zip(pan.issuer_code, lag)])
         pan["spend_usd"] = pan.spend_usd / fac
     pan["fq"] = quarter_of(P, pan.week_start).values
-    pan.loc[pan.week_start > P["results"].period_end.iloc[-2], "fq"] = TQ
+    pan.attrs["tok"] = len(_CACHE) + 1
+    _CACHE[key] = pan
     return pan
 
 
-# ------------------------------------------------------------------------------ R3 and R4: growth on the panel
-def regional(P, pan, q, b, how, fern_ok=True):
+# ------------------------------------------------------------------------------- the panel's issuers and their books
+def card_series(P):
+    """each issuer's panel cards by billing region and week (cards are repeated on each merchant row)"""
+    if "cards" not in _CACHE:
+        pan = P["panel"]
+        c = pan.drop_duplicates(["week_start", "issuer_code", "billing_region", "card_open_year"])
+        _CACHE["cards"] = c.groupby(["issuer_code", "billing_region", "week_start"]).panel_cards.sum()
+    return _CACHE["cards"]
+
+
+def reissues(P, jump=JUMP):
+    """weeks in which an issuer's cards in a region rose by more than `jump` over four weeks, outside the issuer's first
+    eight weeks: a book of accounts re-issued under the issuer's codes"""
+    key = ("reissues", jump)
+    if key not in _CACHE:
+        cs = card_series(P)
+        out = {}
+        for (iss, reg), s in cs.groupby(level=[0, 1]):
+            s = s.droplevel([0, 1]).sort_index()
+            r4 = s / s.shift(4) - 1
+            hit = r4[(r4 > jump) & (np.arange(len(r4)) >= 8)]
+            for wk in hit.index:
+                out.setdefault(iss, set()).add(pd.Timestamp(wk))
+        _CACHE[key] = {k: sorted(v) for k, v in out.items()}
+    return _CACHE[key]
+
+
+def issuers_for(P, sub, q, b, how, conv=True, jump=JUMP):
+    """the issuers compared: every issuer (all), those reporting in every week of both quarters, less (conv) any issuer
+    whose cards took a re-issued book between the base quarter's start and the target quarter's end"""
+    if how == "all":
+        return sorted(sub.issuer_code.unique())
+    weeks = sub.groupby("fq").week_start.nunique()
+    cov = sub.groupby(["issuer_code", "fq"]).week_start.nunique().unstack()
+    keep = [i for i in cov.index if cov.loc[i].get(q, 0) == weeks.get(q, 0) and cov.loc[i].get(b, 0) == weeks.get(b, 0)]
+    if conv:
+        lo, hi = P["start"][b], P["end"][q]
+        rs = reissues(P, jump)
+        keep = [i for i in keep if not any(lo <= wk <= hi for wk in rs.get(i, []))]
+    return keep
+
+
+# ------------------------------------------------------------------------------------------------ growth on the panel
+def regional(P, pan, q, b, how="per_card", issuers="const", conv=True, fern_ok=True, jump=JUMP):
     """year-on-year growth of quarter q over quarter b (weekly averages) by billing region, and the base quarter's
-    panel spend by region. how: tenure (issuers in both quarters; each open year against the open year one later, on
-    the base quarter's cards), per_card (issuers in both, spend per open card), const_raw (issuers in both, spend),
-    all_issuers (every issuer, spend)"""
+    panel spend by region. how: per_card (spend per open card, pooled over the issuers), lfl (spend per open card issuer
+    by issuer, weighted by the base quarter's spend), same_age (each open year against the open year one later, on the
+    base quarter's cards), total (spend)"""
+    key = ("regional", pan.attrs.get("tok"), q, b, how, issuers, conv, fern_ok, jump)
+    if key in _CACHE:
+        return _CACHE[key]
     sub = pan[pan.fq.isin([q, b])]
     if not fern_ok:
         sub = sub[sub.merchant_id != "M2290"]
-    weeks = sub.groupby("fq").week_start.nunique()
-    n = {q: weeks.get(q, 13), b: weeks.get(b, 13)}
-    cov = sub.groupby(["issuer_code", "fq"]).week_start.nunique().unstack()
-    const = [i for i in cov.index if cov.loc[i].get(q, 0) == n[q] and cov.loc[i].get(b, 0) == n[b]]
-    sc = sub if how == "all_issuers" else sub[sub.issuer_code.isin(const)]
+    n = {k: sub[sub.fq == k].week_start.nunique() for k in (q, b)}
+    keep = issuers_for(P, sub, q, b, issuers, conv, jump)
+    sc = sub[sub.issuer_code.isin(keep)]
     s = sc.groupby(["fq", "billing_region"]).spend_usd.sum()
     pw = {r: float(s[b][r]) for r in REGIONS}
-    if how in ("const_raw", "all_issuers"):
-        return {r: (s[q][r] / n[q]) / (s[b][r] / n[b]) - 1 for r in REGIONS}, pw
-    cards = sc.drop_duplicates(["week_start", "issuer_code", "billing_region", "card_open_year"])
-    if how == "per_card":
-        c = cards.groupby(["fq", "billing_region"]).panel_cards.sum()
-        return {r: (s[q][r] / c[q][r]) / (s[b][r] / c[b][r]) - 1 for r in REGIONS}, pw
-    A = cards.groupby(["fq", "billing_region", "card_open_year"]).panel_cards.sum()
-    S = sc.groupby(["fq", "billing_region", "card_open_year"]).spend_usd.sum()
-    dy = P["qyear"][q] - P["qyear"][b]
     out = {}
-    for r in REGIONS:
-        num = den = 0.0
-        for (rr, y), ab in A[b].items():
-            if rr != r or ab <= 0 or (r, y + dy) not in A[q].index or A[q][(r, y + dy)] <= 0:
-                continue
-            num += ab * S[q][(r, y + dy)] / A[q][(r, y + dy)]
-            den += S[b][(r, y)]
-        out[r] = num / den - 1
+    if how == "total":
+        out = {r: (s[q][r] / n[q]) / (s[b][r] / n[b]) - 1 for r in REGIONS}
+    else:
+        cards = sc.drop_duplicates(["week_start", "issuer_code", "billing_region", "card_open_year"])
+        if how == "per_card":
+            c = cards.groupby(["fq", "billing_region"]).panel_cards.sum()
+            out = {r: (s[q][r] / c[q][r]) / (s[b][r] / c[b][r]) - 1 for r in REGIONS}
+        elif how == "lfl":
+            si = sc.groupby(["fq", "billing_region", "issuer_code"]).spend_usd.sum()
+            ci = cards.groupby(["fq", "billing_region", "issuer_code"]).panel_cards.sum()
+            for r in REGIONS:
+                num = den = 0.0
+                for i in keep:
+                    if (r, i) not in si[b].index or (r, i) not in si[q].index:
+                        continue
+                    num += si[b][(r, i)] * (si[q][(r, i)] / ci[q][(r, i)]) / (si[b][(r, i)] / ci[b][(r, i)])
+                    den += si[b][(r, i)]
+                out[r] = num / den - 1
+        elif how == "same_age":
+            A = cards.groupby(["fq", "billing_region", "card_open_year"]).panel_cards.sum()
+            S = sc.groupby(["fq", "billing_region", "card_open_year"]).spend_usd.sum()
+            dy = P["qyear"][q] - P["qyear"][b]
+
+            def older(y, d):
+                if y.startswith("<="):
+                    return y
+                v = int(y) + d
+                return "<=%d" % PK.OLDEST if v <= PK.OLDEST else str(v)
+            for r in REGIONS:
+                num = den = 0.0
+                for (rr, y), ab in A[b].items():
+                    y2 = older(y, dy) if not y.startswith("<=") else y
+                    if rr != r or ab <= 0 or (r, y2) not in A[q].index:
+                        continue
+                    num += ab * S[q][(r, y2)] / A[q][(r, y2)]
+                    den += S[b][(r, y)]
+                out[r] = num / den - 1
+    _CACHE[key] = (out, pw)
     return out, pw
 
 
@@ -196,92 +337,35 @@ def rolled_weights(P, fy):
     return dict(zip(REGIONS, v / v.sum()))
 
 
-# ------------------------------------------------------------------------------- R5: the bank-card share's change
-def bank_share(pl, other=None):
-    return 1 - pl / 100.0 - (OTHER_TENDER if other is None else other)
-
-
-def pl_target(pl, keys, q, rule="pace"):
-    """the private-label card's share of quarter q's net sales from the quarters reported before it. pace: the latest
-    quarter plus a third of the change over the last three quarters; yoy: the same quarter a year earlier plus the latest
-    year-on-year change; line: a straight line through the last three quarters; last: the latest quarter plus its own
-    change; flat: the latest quarter held; hindsight: the quarter's own reported share"""
-    i = keys.index(q)
-    k1, k2, k3, k4 = keys[i - 1], keys[i - 2], keys[i - 3], keys[i - 4]
-    if rule == "pace":
-        return pl[k1] + (pl[k1] - pl[k4]) / 3.0
-    if rule == "yoy":
-        if i < 5:
-            return pl_target(pl, keys, q, "pace")
-        return pl[k4] + (pl[k1] - pl[keys[i - 5]])
-    if rule == "line":
-        return float(np.polyval(np.polyfit([1, 2, 3], [pl[k3], pl[k2], pl[k1]], 1), 4))
-    if rule == "last":
-        return pl[k1] + (pl[k1] - pl[k2])
-    if rule == "flat":
-        return pl[k1]
-    if rule == "hindsight":
-        return pl[q] if q in pl else pl_target(pl, keys, q, "pace")
-    raise ValueError(rule)
-
-
-# --------------------------------------------------------------------------------------------- the chain and routes
-def growth(P, pan, q, b, how="tenure", mix="company", drift=True, fern_ok=True, plrule="pace", wfy=None, other=None):
-    rg, pw = regional(P, pan, q, b, how, fern_ok)
+def growth(P, pan, q, b, how="per_card", mix="company", fern_ok=True, wfy=None, issuers="const", conv=True, jump=JUMP):
+    """card-visible growth of q over b: regional growth at the company's prior-year mix (or the panel's own)"""
+    rg, pw = regional(P, pan, q, b, how, issuers, conv, fern_ok, jump)
     if mix == "company":
         w = company_weights(P, wfy or "FY%d" % (int(q[2:6]) - 1))
     elif mix == "rolled":
-        w = rolled_weights(P, "FY%d" % (int(q[2:6]) - 1))
+        w = rolled_weights(P, wfy or "FY%d" % (int(q[2:6]) - 1))
     else:
         t = sum(pw.values())
         w = {r: pw[r] / t for r in REGIONS}
-    g = sum(rg[r] * w[r] for r in REGIONS)
-    if drift:
-        g = (1 + g) * bank_share(P["pl"][b], other) / bank_share(pl_target(P["pl"], P["keys"], q, plrule), other) - 1
-    return g
+    return sum(rg[r] * w[r] for r in REGIONS)
 
 
-def organic_growth(P, q, b, fern_in_both):
-    """reported net sales growth of q over b, weekly averages, Fernhollow taken out unless consolidated in both"""
-    res = P["results"].set_index("fiscal_quarter")
-
-    def ns(k):
-        v = float(res.net_sales_usd_m[k])
-        f = res.fernhollow_net_sales_usd_m[k]
-        if not fern_in_both and pd.notna(f):
-            v -= float(f)
-        return v / float(res.weeks[k])
-    return ns(q) / ns(b) - 1
-
-
+# ------------------------------------------------------------------------------ the company's quarters
 def fern_both(P, q, b):
-    res = P["results"].set_index("fiscal_quarter")
-    return res.period_start[q] >= ACQUIRED and res.period_start[b] >= ACQUIRED
-
-
-def prev_q(P, k):
-    keys = P["keys"]
-    i = keys.index(k)
-    return keys[i - 1] if i > 0 else "FY%d Q4" % (int(k[2:6]) - 1)
-
-
-def weeks_of(P, k):
-    return float(P["results"].set_index("fiscal_quarter").weeks[k])
+    return P["start"][q] >= ACQUIRED and P["start"][b] >= ACQUIRED
 
 
 def net_sales(P, k, fern_ok=True):
-    res = P["results"].set_index("fiscal_quarter")
-    v = float(res.net_sales_usd_m[k])
-    f = res.fernhollow_net_sales_usd_m[k]
-    return v - (float(f) if (not fern_ok and pd.notna(f)) else 0.0)
+    v = res_of(P, k, "net_sales")
+    return v - (0.0 if fern_ok else res_of(P, k, "fern"))
 
 
-def wholesale(P, k):
-    return float(P["results"].set_index("fiscal_quarter").wholesale_net_sales_usd_m[k])
+def contract(P, k):
+    return res_of(P, k, "contract")
 
 
 def retail(P, k, fern_ok=True):
-    return net_sales(P, k, fern_ok) - wholesale(P, k)
+    return net_sales(P, k, fern_ok) - contract(P, k)
 
 
 def payments(P, k, fern_ok=True):
@@ -289,41 +373,41 @@ def payments(P, k, fern_ok=True):
     return retail(P, k, fern_ok) + P["deposits"][k] - P["deposits"][prev_q(P, k)]
 
 
-def ws_hat(P, q, rule="median8"):
-    """wholesale for quarter q from the quarters reported before it"""
+def organic_growth(P, q, b, fern_in_both):
+    """reported net sales growth of q over b, weekly averages, Fernhollow taken out unless consolidated in both"""
+    return (net_sales(P, q, fern_in_both) / weeks_of(P, q)) / (net_sales(P, b, fern_in_both) / weeks_of(P, b)) - 1
+
+
+def ct_hat(P, q, rule="median8"):
+    """contract sales for quarter q from the quarters reported before it"""
     keys = P["keys"]
     i = keys.index(q)
-    hist = [wholesale(P, k) for k in keys[max(0, i - 8):i]]
+    hist = [contract(P, k) for k in keys[max(0, i - 8):i]]
     if rule == "median8":
         return float(np.median(hist))
     if rule == "median4":
         return float(np.median(hist[-4:]))
     if rule == "mean4":
         return float(np.mean(hist[-4:]))
+    if rule == "mean8":
+        return float(np.mean(hist))
     if rule == "last_year":
-        return wholesale(P, keys[i - 4])
+        return contract(P, keys[i - 4])
     raise ValueError(rule)
 
 
-def deposit_weeks(P, k):
-    """customer deposits at the quarter's end in weeks of the banner's payments that quarter"""
-    return P["deposits"][k] / (payments(P, k, False) / weeks_of(P, k))
-
-
-_PROFILE = {}
-
-
+# ----------------------------------------------------------------------------------- revenue on delivery
 def banner_profile(P, pan, q):
-    """the panel's weekly spend at the banner's ids (stores and site, not Fernhollow) over quarter q's weeks, on the
+    """the panel's weekly spend at the brand's ids (stores and site, not Fernhollow) over quarter q's weeks, on the
     issuers present in every week of it, as shares of the quarter"""
-    key = (_token(pan), q)
-    if key not in _PROFILE:
+    key = ("profile", pan.attrs.get("tok"), q)
+    if key not in _CACHE:
         sub = pan[(pan.fq == q) & (pan.merchant_id != "M2290")]
         nw = sub.week_start.nunique()
         cov = sub.groupby("issuer_code").week_start.nunique()
         wk = sub[sub.issuer_code.isin(cov[cov == nw].index)].groupby("week_start").spend_usd.sum().sort_index()
-        _PROFILE[key] = (wk / wk.sum()).values
-    return _PROFILE[key]
+        _CACHE[key] = (wk / wk.sum()).values
+    return _CACHE[key]
 
 
 def trailing(profile, L):
@@ -334,131 +418,74 @@ def trailing(profile, L):
     return float(v[:n].sum() + (fr * v[n] if n < len(v) else 0.0))
 
 
-def fit_lead(P, pan, quarters):
-    """the made-to-order share s and the weeks from order to delivery L that best explain the deposits at these quarter
-    ends as s times the banner's payments in the quarter's last L weeks (least squares over a grid of L)"""
-    y = np.array([P["deposits"][k] for k in quarters])
-    best = None
-    for L in np.arange(2.0, 13.001, 0.05):
-        x = np.array([payments(P, k, False) * trailing(banner_profile(P, pan, k), L) for k in quarters])
-        sh = float(x @ y / (x @ x))
-        sse = float(((y - sh * x) ** 2).sum())
-        if best is None or sse < best[0]:
-            best = (sse, sh, float(L))
-    return best[1], best[2]
+def custom_share(P, q, days=56):
+    """the custom-order share of the brand's panel spend over the last `days` of quarter q, from the monthly descriptor
+    detail (months weighted by their days in the window): the design studios and the site's custom orders against the
+    brand ids less the licensed shops and cafes"""
+    key = ("custom", q, days)
+    if key not in _CACHE:
+        d = P["desc"]
+        end = P["end"][q]
+        win = pd.date_range(end - pd.Timedelta(days=days - 1), end, freq="D")
+        wts = pd.Series(1.0, index=win).groupby(win.strftime("%Y-%m")).sum()
+        b = d[d.merchant_id.isin(["M0412", "M0413"]) & ~d.descriptor.str.contains(LICENSED, regex=True)]
+        b = b[b.month.isin(wts.index)]
+        mt = b[b.descriptor.str.contains(CUSTOM, regex=True)].groupby("month").spend_usd.sum()
+        al = b.groupby("month").spend_usd.sum()
+        w_ = pd.Series({m: wts[m] / pd.Period(m).days_in_month for m in wts.index})
+        _CACHE[key] = float((mt.reindex(w_.index).fillna(0) * w_).sum() / (al.reindex(w_.index).fillna(0) * w_).sum())
+    return _CACHE[key]
 
 
-def solve_lead(P, pan, k, sh):
-    """the weeks from order to delivery that give the deposits at quarter k's end with made-to-order share sh"""
-    prof = banner_profile(P, pan, k)
-    target = P["deposits"][k] / (sh * payments(P, k, False))
-    lo, hi = 0.0, float(len(prof))
-    for _ in range(60):
-        mid = (lo + hi) / 2
-        if trailing(prof, mid) < target:
-            lo = mid
-        else:
-            hi = mid
-    return (lo + hi) / 2
+def deposit_weeks(P, k):
+    """customer deposits at the quarter's end in weeks of the brand's payments that quarter"""
+    return P["deposits"][k] / (payments(P, k, False) / weeks_of(P, k))
 
 
-_LEAD = {}
+DEP_DAYS = {"mto": 56, "mto_7w": 49, "mto_9w": 63, "mto_q": 91}
 
 
-def lead_rolling(P, pan, q):
-    """as known before quarter q: s and L fitted together on the four quarter ends before q"""
-    key = (_token(pan), q, "rolling")
-    if key not in _LEAD:
-        ks = [prev_q(P, q)]
-        for _ in range(3):
-            ks.append(prev_q(P, ks[-1]))
-        sh, L = fit_lead(P, pan, [k for k in ks if k in P["keys"]])
-        _LEAD[key] = (sh, L, L)
-    return _LEAD[key]
-
-
-def lead_asof(P, pan, q, rule="persist"):
-    """as known before quarter q: s fitted on the quarter ends of the complete fiscal years before q's, L solved at the
-    end of the quarter before q (persist) or moved on by its latest change (trend)"""
-    key = (_token(pan), q, rule)
-    if key not in _LEAD:
-        fy = int(q[2:6])
-        fit_q = [k for k in P["keys"][:-1] if int(k[2:6]) < fy]
-        sh, L0 = fit_lead(P, pan, fit_q)
-        q1 = prev_q(P, q)
-        L = solve_lead(P, pan, q1, sh)
-        if rule == "trend":
-            L = L + (L - solve_lead(P, pan, prev_q(P, q1), sh))
-        _LEAD[key] = (sh, L, L0)
-    return _LEAD[key]
-
-
-def convert(P, q, b, x, fern_ok, rule="ratio", pan=None):
-    """net sales growth of q over b from payments growth x: payments rebuilt from b's, the deposits at q's end from the
-    deposits-to-payments weeks at the end of the quarter before q (ratio), that figure moved on by its latest change
-    (trend), its mean over the last four quarter ends (mean4), or last year's change in the same quarter scaled to the
-    payments (persist_change); net sales are the payments less the change in deposits"""
+def convert(P, q, b, x, fern_ok, rule="mto", pan=None):
+    """net sales growth of q over b (retail, contract aside) from payments growth x: payments rebuilt from b's, the
+    deposits at q's end estimated, net sales the payments less the change in deposits. Rules: mto (last year's deposits
+    scaled by the brand's payments, the share of them in the last eight weeks and the custom-order share of those
+    weeks; mto_7w, mto_9w and mto_q the same over seven weeks, nine weeks and the whole quarter), ratio (last year's
+    deposits scaled by the payments), flat (the deposits' change a year earlier scaled by the payments, which is what
+    growing last year's net sales at the payments' rate assumes), none (net sales grow with the payments)"""
     wq, wb = weeks_of(P, q), weeks_of(P, b)
+    if rule == "none":
+        rq = retail(P, b, fern_ok) / wb * (1 + x) * wq
+        return (rq / wq) / (retail(P, b, fern_ok) / wb) - 1, dict(rev_q=rq, dep_change=None, pay_q=None, dep_q=None)
     pay_b = payments(P, b, fern_ok)
     pay_q = pay_b / wb * (1 + x) * wq
     bshare = payments(P, b, False) / pay_b
-    bp_q = pay_q * bshare
+    bp_q, bp_b = pay_q * bshare, payments(P, b, False)
     q1 = prev_q(P, q)
-    if rule in ("mto", "mto_7w", "mto_9w", "mto_q"):
-        dy = {"mto": 56, "mto_7w": 49, "mto_9w": 63, "mto_q": 91}[rule]
-        tq = trailing(banner_profile(P, pan, q), dy / 7.0)
-        tb = trailing(banner_profile(P, pan, b), dy / 7.0)
-        dep_q = P["deposits"][b] * (bp_q * tq * mto_share_last(P, q, dy)) / (payments(P, b, False) * tb * mto_share_last(P, b, dy))
-        chg = dep_q - P["deposits"][q1]
-    elif rule in ("lead", "lead_trend", "lead4"):
-        if rule == "lead4":
-            sh, L, _ = lead_rolling(P, pan, q)
-        else:
-            sh, L, _ = lead_asof(P, pan, q, "persist" if rule == "lead" else "trend")
-        dep_q = sh * bp_q * trailing(banner_profile(P, pan, q), L)
-        chg = dep_q - P["deposits"][q1]
-    elif rule == "persist_change":
-        chg = (P["deposits"][b] - P["deposits"][prev_q(P, b)]) * bp_q / payments(P, b, False)
+    dep_b = P["deposits"][b]
+    if rule in DEP_DAYS:
+        L = DEP_DAYS[rule] / 7.0
+        tq = trailing(banner_profile(P, pan, q), L)
+        tb = trailing(banner_profile(P, pan, b), L)
+        dep_q = dep_b * (bp_q * tq * custom_share(P, q, DEP_DAYS[rule])) / (bp_b * tb * custom_share(P, b, DEP_DAYS[rule]))
+    elif rule == "ratio":
+        dep_q = dep_b * bp_q / bp_b
+    elif rule == "flat":
+        dep_q = P["deposits"][q1] + (dep_b - P["deposits"][prev_q(P, b)]) * bp_q / bp_b
     else:
-        if rule == "ratio":
-            r = deposit_weeks(P, q1)
-        elif rule == "trend":
-            r = deposit_weeks(P, q1) + (deposit_weeks(P, q1) - deposit_weeks(P, prev_q(P, q1)))
-        elif rule == "mean4":
-            ks = [q1]
-            for _ in range(3):
-                ks.append(prev_q(P, ks[-1]))
-            r = float(np.mean([deposit_weeks(P, k) for k in ks]))
-        else:
-            raise ValueError(rule)
-        chg = r * bp_q / wq - P["deposits"][q1]
+        raise ValueError(rule)
+    chg = dep_q - P["deposits"][q1]
     rev_q = pay_q - chg
-    return (rev_q / wq) / (retail(P, b, fern_ok) / wb) - 1, dict(pay_q=pay_q, dep_change=chg, rev_q=rev_q)
+    return (rev_q / wq) / (retail(P, b, fern_ok) / wb) - 1, dict(pay_q=pay_q, dep_change=chg, rev_q=rev_q, dep_q=dep_q)
 
 
-_MTO = {}
-
-
-def mto_share_last(P, q, days=56):
-    key = (q, days)
-    """the made-to-order share of the banner's panel spend over the last eight weeks of quarter q, from the monthly
-    descriptor detail (months weighted by their days in the window): the design studios and the site's custom orders
-    against the brand ids less the licensed shops and cafes"""
-    if key not in _MTO:
-        d = P["desc"]
-        res = P["results"].set_index("fiscal_quarter")
-        end = res.period_end[q]
-        start = end - pd.Timedelta(days=days - 1)
-        win = pd.date_range(start, end, freq="D")
-        wts = pd.Series(1.0, index=win).groupby(win.strftime("%Y-%m")).sum()
-        mdays = {m: pd.Period(m).days_in_month for m in wts.index}
-        b = d[d.merchant_id.isin(["M0412", "M0413"]) & ~d.descriptor.str.contains("HOLLISTERS|CAFE", regex=True)]
-        b = b[b.month.isin(wts.index)]
-        mt = b[b.descriptor.str.contains("DESIGN STUDIO|CUSTOM", regex=True)].groupby("month").spend_usd.sum()
-        al = b.groupby("month").spend_usd.sum()
-        w_ = pd.Series({m: wts[m] / mdays[m] for m in wts.index})
-        _MTO[key] = float((mt.reindex(w_.index).fillna(0) * w_).sum() / (al.reindex(w_.index).fillna(0) * w_).sum())
-    return _MTO[key]
+def to_total(P, q, b, g_ret, fern_ok, ct):
+    """net sales growth of q over b: retail from its growth, contract from its run rate (ct), or the retail growth
+    applied to all of net sales (ct None)"""
+    if not ct:
+        return g_ret
+    wq, wb = weeks_of(P, q), weeks_of(P, b)
+    tot_q = retail(P, b, fern_ok) / wb * (1 + g_ret) * wq + ct_hat(P, q, ct)
+    return (tot_q / wq) / (net_sales(P, b, fern_ok) / wb) - 1
 
 
 def origins_of(P, first="FY2022 Q1", last=None):
@@ -466,40 +493,38 @@ def origins_of(P, first="FY2022 Q1", last=None):
     return keys[keys.index(first):(keys.index(last) + 1 if last else -1)]
 
 
-def to_total(P, q, b, g_ret, fern_ok, ws):
-    """net sales growth of q over b: retail from its growth, wholesale from its run rate (ws), or the retail growth
-    applied to all of net sales (ws None)"""
-    if not ws:
-        return g_ret
-    wq, wb = weeks_of(P, q), weeks_of(P, b)
-    tot_q = retail(P, b, fern_ok) / wb * (1 + g_ret) * wq + ws_hat(P, q, ws)
-    return (tot_q / wq) / (net_sales(P, b, fern_ok) / wb) - 1
-
-
-def route(P, pan, how="tenure", mix="company", drift=True, reg=False, plrule="pace", origins=None, bt_plrule=None,
-          wfy_lag=1, other=None, target=TQ, dep=None, ws=None):
-    """the route's growth for the target quarter and its rolling-origin record: at each past quarter the same method
-    on what was known then (the prior fiscal year's regional mix, the private-label rule on the quarters reported
-    before it); with reg, reported growth regressed on the chain over the origins before it (six or more)"""
+def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep="mto", ct="median8", reg=False,
+          origins=None, wfy_lag=1, target=TQ, jump=JUMP, record_dep=None):
+    """the route's growth for the target quarter and its rolling-origin record: at each past quarter the same method on
+    what was known then (the issuers and re-issued books seen by that quarter's end, the prior fiscal year's regional
+    mix, the deposits estimated, contract from the quarters before); with reg, reported growth regressed on the route
+    over the origins before it (six or more). record_dep: the deposits as later reported in the record (a look-ahead)"""
     keys = P["keys"]
     origins = origins or origins_of(P)
     bq = keys[keys.index(target) - 4]
     first_fy = int(P["regions"].fiscal_year.iloc[0][2:])
     wfy = lambda q: "FY%d" % max(int(q[2:6]) - wfy_lag, first_fy)
-    fo_t = fern_both(P, target, bq) or target == TQ
-    xt = growth(P, pan, target, bq, how, mix, drift, fo_t, plrule, wfy(target), other)
-    pay_t = xt
-    if dep:
-        xt, _ = convert(P, target, bq, xt, fo_t, dep, pan)
-    xt = to_total(P, target, bq, xt, fo_t, ws)
+
+    def one(q, b, fo, dep_rule):
+        x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump)
+        g = x
+        if dep_rule:
+            g, _ = convert(P, q, b, x, fo, dep_rule, pan)
+        return x, to_total(P, q, b, g, fo, ct)
+    fo_t = True
+    pay_t, xt = one(target, bq, fo_t, dep)
     xs, ys, errs = [], [], {}
     for q in origins:
         b = keys[keys.index(q) - 4]
         fo = fern_both(P, q, b)
-        x = growth(P, pan, q, b, how, mix, drift, fo, bt_plrule or plrule, wfy(q), other)
-        if dep:
-            x, _ = convert(P, q, b, x, fo, dep, pan)
-        x = to_total(P, q, b, x, fo, ws)
+        if record_dep == "actual":
+            x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump)
+            rev = payments(P, b, fo) / weeks_of(P, b) * (1 + x) * weeks_of(P, q) - (
+                P["deposits"][q] - P["deposits"][prev_q(P, q)])
+            g = (rev / weeks_of(P, q)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
+            x = to_total(P, q, b, g, fo, ct)
+        else:
+            _, x = one(q, b, fo, dep)
         y = organic_growth(P, q, b, fo)
         if reg:
             if len(xs) >= 6:
@@ -517,8 +542,11 @@ def route(P, pan, how="tenure", mix="company", drift=True, reg=False, plrule="pa
         g = float(xt)
     e = np.array(list(errs.values()))
     rmse = float(np.sqrt(np.mean(e ** 2)))
+    # the range as it could have been built at each quarter: the errors of the quarters before it (four or more)
+    asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
     return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=xs, ys=ys, fit=fit,
-                origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e))
+                origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
+                inside_asof=int(sum(asof)), n_asof=len(asof))
 
 
 def with_range(R, base):
@@ -534,93 +562,103 @@ def call_of(R, street):
 # -------------------------------------------------------------------------------------------------------- the run
 def run(tgt):
     P = load(tgt)
-    res = P["results"]
     keys = P["keys"]
-    base = float(res.set_index("fiscal_quarter").net_sales_usd_m[BQ])
+    base = net_sales(P, BQ)
     est = P["street"].q4_fy2025_net_sales_usd_m
     street = float(np.mean(est))
     cf = completion_factors(P)
     pan = panel_entity(P, cf)
     out = dict(P=P, cf=cf, pan=pan, base=base, street=street, street_median=float(np.median(est)),
                street_n=int(len(est)))
-    # comparable growth by region, at the panel's mix and at the company's
-    rg, pw = regional(P, pan, TQ, BQ, "tenure")
+    # the base quarter rebuilt from the releases: contract and Fernhollow by subtraction, the deposits
+    q3fy24 = P["releases"]["FY2024 Q3"]
+    q4fy24 = P["releases"][BQ]
+    out.update(ct_fy2024=q4fy24["ct"][0] / 1000.0, ct_9m_fy2024=q3fy24["ct"][2] / 1000.0, ct_base=contract(P, BQ),
+               fern_base=res_of(P, BQ, "fern"), retail_base=retail(P, BQ), dep_base=P["deposits"][BQ],
+               dep_q3fy24=P["deposits"]["FY2024 Q3"], dep_q3=P["deposits"]["FY2025 Q3"],
+               pay_base=payments(P, BQ, True))
+    # the issuers: who reports in both quarters, and whose cards took a re-issued book
+    out["reissues"] = reissues(P)
+    sub = pan[pan.fq.isin([TQ, BQ])]
+    out["issuers_both"] = issuers_for(P, sub, TQ, BQ, "const", conv=False)
+    out["issuers_used"] = issuers_for(P, sub, TQ, BQ, "const", conv=True)
+    cs = card_series(P)
+    out["ks01_mw_cards"] = {str(k.date()): float(v) for k, v in cs[("KS-01", "Midwest")].items()
+                            if pd.Timestamp("2025-09-21") <= k <= pd.Timestamp("2025-11-16")}
+    # comparable growth by region, with and without KS-01's book, at the panel's mix and at the company's
+    rg, pw = regional(P, pan, TQ, BQ)
+    rg_in, _ = regional(P, pan, TQ, BQ, conv=False)
     cw = company_weights(P, "FY2024")
     tot = sum(pw.values())
-    out.update(regional=rg, company_w=cw, panel_w={r: pw[r] / tot for r in REGIONS},
-               g_idx=sum(rg[r] * cw[r] for r in REGIONS), g_pooled=sum(rg[r] * pw[r] / tot for r in REGIONS))
-    # the private-label card's fourth-quarter share and net sales per bank-card dollar
-    pl = P["pl"]
-    out["pl_target"] = pl_target(pl, keys, TQ, "pace")
-    out["drift"] = bank_share(pl[BQ]) / bank_share(out["pl_target"])
-    out["g_pay"] = (1 + out["g_idx"]) * out["drift"] - 1
+    out.update(regional=rg, regional_with_ks01=rg_in, company_w=cw, panel_w={r: pw[r] / tot for r in REGIONS},
+               g_idx=sum(rg[r] * cw[r] for r in REGIONS), g_pooled=sum(rg[r] * pw[r] / tot for r in REGIONS),
+               g_idx_with_ks01=sum(rg_in[r] * cw[r] for r in REGIONS))
     # payments to net sales: the deposits at the quarter's end
-    q3 = prev_q(P, TQ)
-    _, cv = convert(P, TQ, BQ, out["g_pay"], True, "mto", pan)
-    out["dep_weeks_q3"] = deposit_weeks(P, q3)
-    out["lead_share"], out["lead_weeks"], out["lead_fit_weeks"] = lead_asof(P, pan, TQ, "persist")
-    out["lead_by_quarter"] = {k: solve_lead(P, pan, k, out["lead_share"]) for k in keys[:-1]}
-    out["dep_weeks_hist"] = {k: deposit_weeks(P, k) for k in keys[:-1]}
-    out["dep_q4_est"] = P["deposits"][q3] + cv["dep_change"]
-    out["dep_change"] = cv["dep_change"]
-    out["dep_change_base"] = P["deposits"][BQ] - P["deposits"][prev_q(P, BQ)]
-    out["pay_q4"] = cv["pay_q"]
-    out["pay_base"] = payments(P, BQ, True)
+    g_ret, cv = convert(P, TQ, BQ, out["g_idx"], True, "mto", pan)
+    out.update(retail_growth=g_ret, retail_q4=cv["rev_q"], pay_q4=cv["pay_q"], dep_q4_est=cv["dep_q"],
+               dep_change=cv["dep_change"], dep_change_base=P["deposits"][BQ] - P["deposits"]["FY2024 Q3"],
+               custom_q=custom_share(P, TQ), custom_b=custom_share(P, BQ),
+               trail_q=trailing(banner_profile(P, pan, TQ), 8.0), trail_b=trailing(banner_profile(P, pan, BQ), 8.0),
+               dep_weeks={k: deposit_weeks(P, k) for k in keys[:-1]})
+    # contract at its run rate
+    out["ct_hat"] = ct_hat(P, TQ, "median8")
+    out["ct_hist"] = {k: contract(P, k) for k in keys[:-1]}
     # the golden route, its record and range
-    G = with_range(route(P, pan, dep="mto", ws="median8"), base)
+    G = with_range(route(P, pan), base)
     out["golden"] = G
-    out["ws_hat"] = ws_hat(P, TQ, "median8")
-    out["ws_base"] = wholesale(P, BQ)
-    out["retail_base"] = retail(P, BQ, True)
-    out["retail_growth"], _cv = convert(P, TQ, BQ, out["g_pay"], True, "mto", pan)
-    out["retail_q4"] = _cv["rev_q"]
     out["growth"] = G["growth"]
     out["forecast"], out["range"] = G["forecast"], (G["low"], G["high"])
     out["call"] = call_of(G, street)
     # the entity and the immature weeks as figures
     d = P["desc"]
-    days = pd.date_range(res.period_start.iloc[-1], res.period_end.iloc[-1], freq="D")
+    days = pd.date_range(P["start"][TQ], P["end"][TQ], freq="D")
     qm = sorted(set(days.strftime("%Y-%m")))
     b = d[(d.merchant_id == "M0412") & d.month.isin(qm)]
     out["excluded_months"] = qm
-    out["excluded_share"] = float(b[b.descriptor.str.contains("HOLLISTERS|CAFE", regex=True)].spend_usd.sum()
-                                  / b.spend_usd.sum())
+    out["excluded_share"] = float(b[b.descriptor.str.contains(LICENSED, regex=True)].spend_usd.sum() / b.spend_usd.sum())
     raw_c = panel_entity(P, cf, complete=False)
     out["completion_uplift"] = float(pan[pan.fq == TQ].spend_usd.sum() / raw_c[raw_c.fq == TQ].spend_usd.sum() - 1)
     out["cf_last_week"] = {k[0]: v for k, v in cf.items() if k[1] == 0}
-    # the bridge, in the order the panel is processed, and every order of its steps for the bands
     out["bridge"], out["bridge_orders"] = bridge(out)
     return out
 
 
 PANEL_STEPS = ("the latest weeks completed", "the licensed shops and cafes taken out",
-               "issuers in both years, cards of the same age")
-COMPANY_STEPS = ("the company's regional mix", "the bank-card share of net sales", "revenue on delivery",
-                 "wholesale at its run rate")
+               "issuers in every week of both quarters, spend per open card")
+COMPANY_STEPS = ("the company's regional mix", "KS-01's re-issued book taken out", "revenue on delivery",
+                 "contract at its run rate")
 
 
 def bridge(out):
-    """growth after each step from the delivered panel (every issuer, every merchant id) to net sales; the panel's three
-    steps and the company's three in the golden's order, and each step's worth under every order of its group"""
+    """growth after each step from the delivered panel (every issuer, every merchant id, raw spend, the panel's own
+    regional mix) to net sales: the panel's three steps (KS-01 kept, the panel's own mix) and the company's four, in the
+    golden's order, and each step's worth under every order of its group"""
     import itertools
     P, cf = out["P"], out["cf"]
 
     def panel_state(S):
         pan = panel_entity(P, cf, complete="the latest weeks completed" in S,
                            exclude="the licensed shops and cafes taken out" in S)
-        if "issuers in both years, cards of the same age" in S:
-            rg, pw = regional(P, pan, TQ, BQ, "tenure")
-            t = sum(pw.values())
-            return sum(rg[r] * pw[r] / t for r in REGIONS)
-        return growth(P, pan, TQ, BQ, "all_issuers", "panel", False)
+        lfl = "issuers in every week of both quarters, spend per open card" in S
+        rg, pw = regional(P, pan, TQ, BQ, "per_card" if lfl else "total", "const" if lfl else "all", False)
+        t = sum(pw.values())
+        return sum(rg[r] * pw[r] / t for r in REGIONS)
+
+    _, pw_in = regional(P, out["pan"], TQ, BQ, conv=False)
+    _, pw_ex = regional(P, out["pan"], TQ, BQ, conv=True)
 
     def company_state(S):
-        x = out["g_idx"] if "the company's regional mix" in S else out["g_pooled"]
-        if "the bank-card share of net sales" in S:
-            x = (1 + x) * out["drift"] - 1
+        conv = "KS-01's re-issued book taken out" in S
+        rg, pw = (out["regional"], pw_ex) if conv else (out["regional_with_ks01"], pw_in)
+        if "the company's regional mix" in S:
+            w = out["company_w"]
+        else:
+            t = sum(pw.values())
+            w = {r: pw[r] / t for r in REGIONS}
+        x = sum(rg[r] * w[r] for r in REGIONS)
         if "revenue on delivery" in S:
             x, _ = convert(P, TQ, BQ, x, True, "mto", out["pan"])
-        if "wholesale at its run rate" in S:
+        if "contract at its run rate" in S:
             x = to_total(P, TQ, BQ, x, True, "median8")
         return x
 
@@ -651,6 +689,7 @@ def bridge(out):
         v = cache[tuple(sorted(done)) + ("company_state",)]
         vals.append((st, v - prev))
         prev = v
+    out["g_pooled_with_ks01"] = cache[("company_state",)]
     return vals, orders
 
 
@@ -658,17 +697,29 @@ def family(out):
     """the golden family: defensible rivals of the golden route, each with its range"""
     P, pan, base = out["P"], out["pan"], out["base"]
     F = {"the golden route": out["golden"]}
-    for rule, name in (("yoy", "private-label share carried by the third quarter's year-on-year change"),
-                       ("line", "private-label share on a straight line through fiscal 2025's three quarters"),
-                       ("last", "private-label share carried at the third quarter's own change")):
-        F[name] = with_range(route(P, pan, plrule=rule, dep="mto", ws="median8"), base)
-    F["the regional mix of fiscal 2023"] = with_range(route(P, pan, wfy_lag=2, dep="mto", ws="median8"), base)
-    F["fiscal 2024's regional mix rolled forward a year"] = with_range(route(P, pan, mix="rolled", dep="mto", ws="median8"), base)
-    F["the deposit window at seven weeks"] = with_range(route(P, pan, dep="mto_7w", ws="median8"), base)
-    F["wholesale at the median of the last four quarters"] = with_range(route(P, pan, dep="mto", ws="median4"), base)
-    F["the deposit window at nine weeks"] = with_range(route(P, pan, dep="mto_9w", ws="median8"), base)
-    F["the chain calibrated by regression on past quarters"] = with_range(route(P, pan, reg=True, dep="mto", ws="median8"), base)
-    F["the record from fiscal 2023 only"] = with_range(route(P, pan, origins=origins_of(P, "FY2023 Q1"), dep="mto", ws="median8"), base)
+    F["spend per open card issuer by issuer"] = with_range(route(P, pan, how="lfl"), base)
+    F["cards of the same age"] = with_range(route(P, pan, how="same_age"), base)
+    F["the regional mix of fiscal 2023"] = with_range(route(P, pan, wfy_lag=2), base)
+    F["fiscal 2024's regional mix rolled forward a year"] = with_range(route(P, pan, mix="rolled"), base)
+    F["the deposit window at seven weeks"] = with_range(route(P, pan, dep="mto_7w"), base)
+    F["the deposit window at nine weeks"] = with_range(route(P, pan, dep="mto_9w"), base)
+    F["contract at the median of the last four quarters"] = with_range(route(P, pan, ct="median4"), base)
+    F["a re-issued book read at a three per cent rise"] = with_range(route(P, pan, jump=0.03), base)
+    F["a re-issued book read at a ten per cent rise"] = with_range(route(P, pan, jump=0.10), base)
+    F["the record from fiscal 2023 only"] = with_range(route(P, pan, origins=origins_of(P, "FY2023 Q1")), base)
+    # other ways to set KS-01's book aside: its Midwest cards only, its newest open years only (same age), or KS-01 in
+    # every quarter
+    def without(mask, tok):
+        p2 = pan[~mask].copy()
+        p2.attrs["tok"] = tok
+        return p2
+    ks01 = pan.issuer_code == "KS-01"
+    F["KS-01's Midwest cards set aside"] = with_range(route(P, without(ks01 & (pan.billing_region == "Midwest"),
+                                                                      "fam-ks01-mw"), conv=False), base)
+    newest = ks01 & (((pan.fq == TQ) & pan.card_open_year.isin(["2025", "2026"]))
+                     | ((pan.fq == BQ) & pan.card_open_year.isin(["2024", "2025"])))
+    F["KS-01's newest open years set aside"] = with_range(route(P, without(newest, "fam-ks01-new"), conv=False), base)
+    F["KS-01 set aside in every quarter"] = with_range(route(P, without(ks01, "fam-ks01-all"), conv=False), base)
     return F
 
 
@@ -676,49 +727,70 @@ def rivals_ruled_out(out):
     """rivals the data rule out, run to show where they land"""
     P, pan, base = out["P"], out["pan"], out["base"]
     R = {}
-    R["spend per card instead of cards of the same age"] = with_range(route(P, pan, how="per_card", dep="mto", ws="median8"), base)
-    R["private-label share held at the third quarter's level"] = with_range(route(P, pan, plrule="flat", dep="mto", ws="median8"), base)
-    R["the record with each quarter's own reported private-label share"] = with_range(
-        route(P, pan, bt_plrule="hindsight", dep="mto", ws="median8"), base)
-    R["deposits at the third quarter's weeks of payments"] = with_range(route(P, pan, dep="ratio", ws="median8"), base)
-    R["the made-to-order share over the whole quarter"] = with_range(route(P, pan, dep="mto_q", ws="median8"), base)
-    R["wholesale at the mean of the last four quarters, last year's contract included"] = with_range(
-        route(P, pan, dep="mto", ws="mean4"), base)
-    R["deposits from a lead time carried from the third quarter"] = with_range(route(P, pan, dep="lead", ws="median8"), base)
+    R["raw spend on the issuers in both quarters"] = with_range(route(P, pan, how="total"), base)
+    R["deposits at last year's ratio to payments"] = with_range(route(P, pan, dep="ratio"), base)
+    R["the deposits' change moved as a year earlier"] = with_range(route(P, pan, dep="flat"), base)
+    R["the custom-order share over the whole quarter"] = with_range(route(P, pan, dep="mto_q"), base)
+    R["contract at the mean of the last four quarters, last year's contract included"] = with_range(
+        route(P, pan, ct="mean4"), base)
+    R["contract at last year's fourth quarter"] = with_range(route(P, pan, ct="last_year"), base)
+    R["KS-01 kept"] = with_range(route(P, pan, conv=False), base)
+    R["the chain calibrated by regression on past quarters"] = with_range(route(P, pan, reg=True), base)
     return R
 
 
 def shortcuts(out):
     """the hurried routes: what each files for the quarter, with its own record and range"""
     P, pan, base, cf = out["P"], out["pan"], out["base"], out["cf"]
-    inc_pan = panel_entity(P, cf, complete=True, exclude=False)
     S = {}
-    S["careful"] = with_range(route(P, pan), base)
-    S["careful_regressed"] = with_range(route(P, pan, reg=True), base)
-    S["panel_regressed"] = with_range(route(P, pan, mix="panel", drift=False, reg=True), base)
-    S["deposit_ratio"] = with_range(route(P, pan, dep="ratio", ws="median8"), base)
-    S["last_year_deposits"] = with_range(route(P, pan, dep="persist_change", ws="median8"), base)
-    S["deposits_only"] = with_range(route(P, pan, dep="mto"), base)
-    S["wholesale_only"] = with_range(route(P, pan, ws="median8"), base)
-    S["no_mix"] = with_range(route(P, pan, mix="panel", dep="mto", ws="median8"), base)
-    S["no_tender"] = with_range(route(P, pan, drift=False, dep="mto", ws="median8"), base)
-    S["desk_model"] = with_range(route(P, inc_pan, how="per_card", mix="panel", drift=False, reg=True), base)
+    # the careful but hurried pass: the textbook panel work and the company's mix, then net sales grown with it
+    S["careful"] = with_range(route(P, pan, conv=False, dep=None, ct=None), base)
+    S["careful_regressed"] = with_range(route(P, pan, conv=False, dep=None, ct=None, reg=True), base)
+    # one deep step at a time on top of the careful pass, and every pair
+    S["only_reissue"] = with_range(route(P, pan, conv=True, dep=None, ct=None), base)
+    S["only_deposits"] = with_range(route(P, pan, conv=False, dep="mto", ct=None), base)
+    S["only_contract"] = with_range(route(P, pan, conv=False, dep=None, ct="median8"), base)
+    S["no_reissue"] = with_range(route(P, pan, conv=False), base)
+    S["no_deposits"] = with_range(route(P, pan, dep=None), base)
+    S["no_contract"] = with_range(route(P, pan, ct=None), base)
+    S["deposit_ratio"] = with_range(route(P, pan, dep="ratio"), base)
+    S["deposit_flat"] = with_range(route(P, pan, dep="flat"), base)
+    S["contract_last_year"] = with_range(route(P, pan, ct="last_year"), base)
+    S["panel_mix"] = with_range(route(P, pan, mix="panel"), base)
+    inc_pan = panel_entity(P, cf, complete=True, exclude=False)
+    S["desk_model"] = with_range(route(P, inc_pan, mix="panel", conv=False, dep=None, ct=None, reg=True), base)
     keys = P["keys"]
-    org = {q: organic_growth(P, q, keys[keys.index(q) - 4], fern_both(P, q, keys[keys.index(q) - 4]))
-           for q in origins_of(P)}
-    S["trend"] = with_range(trend_route(P, False), base)
-    S["trend_retail"] = with_range(trend_route(P, True), base)
+    S["trend"] = with_range(trend_route(P), base)
     p0 = panel_entity(P, cf, complete=False, exclude=False)
-    S["quick"] = dict(growth=growth(P, p0, TQ, BQ, "all_issuers", "panel", False))
+    S["quick"] = dict(growth=growth(P, p0, TQ, BQ, "total", "panel", True, None, "const", False))
     S["quick"]["forecast"] = base * (1 + S["quick"]["growth"])
-    out["organic"] = org
+    S["delivered"] = dict(growth=growth(P, p0, TQ, BQ, "total", "panel", True, None, "all", False))
+    S["delivered"]["forecast"] = base * (1 + S["delivered"]["growth"])
+    out["organic"] = {q: organic_growth(P, q, keys[keys.index(q) - 4], fern_both(P, q, keys[keys.index(q) - 4]))
+                      for q in origins_of(P)}
     return S
+
+
+def trend_route(P):
+    """reported growth carried: the mean of the last three quarters' year-on-year growth, with the same rule's record"""
+    keys = P["keys"]
+
+    def yoy(k):
+        b = keys[keys.index(k) - 4]
+        return organic_growth(P, k, b, fern_both(P, k, b))
+
+    def forecast(q):
+        prev = keys[keys.index(q) - 3:keys.index(q)]
+        return float(np.mean([yoy(k) for k in prev]))
+    errs = {q: forecast(q) - yoy(q) for q in origins_of(P, "FY2022 Q4")}
+    e = np.array(list(errs.values()))
+    return dict(growth=forecast(TQ), rmse=float(np.sqrt(np.mean(e ** 2))), errs=errs, n=len(e),
+                inside=int(sum(abs(v) <= Z80 * np.sqrt(np.mean(e ** 2)) for v in e)))
 
 
 def variants(out):
     """each supporting result's rivals, for its band"""
     P, cf, pan = out["P"], out["cf"], out["pan"]
-    keys = P["keys"]
     V = {}
     raw_c = panel_entity(P, cf, complete=False)
     tot_raw = raw_c[raw_c.fq == TQ].spend_usd.sum()
@@ -726,82 +798,52 @@ def variants(out):
         c2 = completion_factors(P, **kw)
         p2 = panel_entity(P, c2)
         V.setdefault("completion", {})[name] = float(p2[p2.fq == TQ].spend_usd.sum() / tot_raw - 1)
-    rgp, pw = regional(P, pan, TQ, BQ, "per_card")
-    t = sum(pw.values())
-    V["comparable_per_card"] = sum(rgp[r] * pw[r] / t for r in REGIONS)
+    V["regional"] = {}
+    for how in ("lfl", "same_age"):
+        rg, _ = regional(P, pan, TQ, BQ, how)
+        V["regional"][how] = rg
     rg = out["regional"]
     V["visible"] = {"fiscal 2024 mix": out["g_idx"],
                     "fiscal 2023 mix": sum(rg[r] * company_weights(P, "FY2023")[r] for r in REGIONS),
                     "fiscal 2024 mix rolled forward": sum(rg[r] * rolled_weights(P, "FY2024")[r] for r in REGIONS)}
-    pl = P["pl"]
-    V["pl"] = {rule: pl_target(pl, keys, TQ, rule) for rule in ("pace", "yoy", "line", "last")}
-    V["drift"] = {rule: bank_share(pl[BQ]) / bank_share(v) - 1 for rule, v in V["pl"].items()}
-    V["dep_change"] = {}
-    V["dep_points"] = {}
+    for how in ("lfl", "same_age"):
+        V["visible"]["%s at fiscal 2024 mix" % how] = sum(V["regional"][how][r] * out["company_w"][r] for r in REGIONS)
+    V["dep_q4"], V["dep_points"] = {}, {}
     for rule in ("mto", "mto_7w", "mto_9w"):
         for vk, vg in V["visible"].items():
-            for pk, pd_ in V["drift"].items():
-                x = (1 + vg) * (1 + pd_) - 1
-                g, cv = convert(P, TQ, BQ, x, True, rule, pan)
-                V["dep_change"]["%s, %s, %s" % (rule, vk, pk)] = cv["dep_change"]
-                V["dep_points"]["%s, %s, %s" % (rule, vk, pk)] = g - x
+            g, cv = convert(P, TQ, BQ, vg, True, rule, pan)
+            V["dep_q4"]["%s, %s" % (rule, vk)] = cv["dep_q"]
+            V["dep_points"]["%s, %s" % (rule, vk)] = g - vg
+    V["ct_hat"] = {r: ct_hat(P, TQ, r) for r in ("median8", "median4", "mean8", "mean4", "last_year")}
+    V["reissue_jump"] = {j: issuers_for(P, pan[pan.fq.isin([TQ, BQ])], TQ, BQ, "const", True, j)
+                         for j in (0.02, 0.03, 0.05, 0.08, 0.10, 0.12)}
     return V
 
 
-def trend_route(P, retail_only):
-    """reported growth carried: the mean of the last three quarters' year-on-year growth (net sales, or retail with
-    wholesale at its run rate), with the same rule's record from the first quarter it can be built for"""
-    keys = P["keys"]
-
-    def yoy(k, ret):
-        b = keys[keys.index(k) - 4]
-        fo = fern_both(P, k, b)
-        if ret:
-            return (retail(P, k, fo) / weeks_of(P, k)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
-        return organic_growth(P, k, b, fo)
-
-    def forecast(q):
-        prev = keys[keys.index(q) - 3:keys.index(q)]
-        g = float(np.mean([yoy(k, retail_only) for k in prev]))
-        return to_total(P, q, keys[keys.index(q) - 4], g, fern_both(P, q, keys[keys.index(q) - 4]) or q == TQ,
-                        "median8" if retail_only else None)
-
-    errs = {}
-    for q in origins_of(P, "FY2022 Q4"):
-        errs[q] = forecast(q) - organic_growth(P, q, keys[keys.index(q) - 4], fern_both(P, q, keys[keys.index(q) - 4]))
-    e = np.array(list(errs.values()))
-    rmse = float(np.sqrt(np.mean(e ** 2)))
-    return dict(growth=forecast(TQ), rmse=rmse, errs=errs, n=len(e), inside=int(sum(abs(v) <= Z80 * rmse for v in e)))
-
-
 def incumbent(out):
-    """the desk's third-quarter model as its workbook states it: spend per open card on the issuers in both years, the
-    brand ids as delivered, reported growth regressed on it over the quarters to the second quarter of fiscal 2025"""
+    """the desk's third-quarter model as its workbook states it: spend per open card on the issuers in both quarters,
+    the brand ids as delivered, reported growth regressed on it over the quarters to the second quarter of fiscal 2025"""
     P, cf = out["P"], out["cf"]
     inc_pan = panel_entity(P, cf, complete=True, exclude=False)
     org = origins_of(P, "FY2022 Q1", "FY2025 Q2")
-    R = route(P, inc_pan, how="per_card", mix="panel", drift=False, reg=True, target="FY2025 Q3", origins=org)
-    res = P["results"].set_index("fiscal_quarter")
-    q3_base = float(res.net_sales_usd_m["FY2024 Q3"])
+    R = route(P, inc_pan, mix="panel", conv=False, dep=None, ct=None, reg=True, target="FY2025 Q3", origins=org)
+    q3_base = net_sales(P, "FY2024 Q3")
     return dict(rows=list(zip(org, R["xs"], R["ys"])), fit=R["fit"], rmse=R["rmse"], errs=R["errs"], x_q3=R["x"],
                 g_q3=R["growth"], q3_base=q3_base, q3_forecast=q3_base * (1 + R["growth"]),
-                q3_actual=float(res.net_sales_usd_m["FY2025 Q3"]))
+                q3_actual=net_sales(P, "FY2025 Q3"))
 
 
 def perturbations(out):
     """each fitted or stated input moved by its defensible spread; the value is the top of the golden's 80 per cent range"""
     P, pan, base = out["P"], out["pan"], out["base"]
     res = {}
-    for o in (0.10, 0.14):
-        res["other tenders at %d per cent of net sales" % round(100 * o)] = with_range(
-            route(P, pan, other=o, dep="mto", ws="median8"), base)["high"]
     for f in (0.97, 1.03):
         cf = {k: min(1.0, v * f) if k[1] == 0 else v for k, v in out["cf"].items()}
         res["the last week's completeness %+d per cent" % round(100 * (f - 1))] = with_range(
-            route(P, panel_entity(P, cf), dep="mto", ws="median8"), base)["high"]
+            route(P, panel_entity(P, cf)), base)["high"]
     for f in (0.8, 1.2):
         res["the licensed shops' and cafes' share %+d per cent" % round(100 * (f - 1))] = with_range(
-            route(P, panel_entity(P, out["cf"], share_scale=f), dep="mto", ws="median8"), base)["high"]
+            route(P, panel_entity(P, out["cf"], share_scale=f)), base)["high"]
     G = out["golden"]
     e = np.array(list(G["errs"].values()))
     res["the range from the record's 10th and 90th percentile errors"] = base * (1 + G["growth"] - float(np.quantile(e, 0.1)))

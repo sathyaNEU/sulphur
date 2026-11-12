@@ -17,42 +17,57 @@
  },
  "stated_inputs": [
   "80",
-  "12",
-  "67",
-  "21",
   "13",
   "14",
   "53",
   "52",
   "31",
-  "1,448.6",
-  "1448.6",
-  "17.9",
-  "19.0",
-  "20.0",
-  "20.6",
-  "20.9",
-  "205.5",
-  "210.6",
-  "52.5"
+  "27",
+  "1,483.7",
+  "100.4",
+  "109.1",
+  "1483.7",
+  "202.0",
+  "220.7",
+  "282.1",
+  "45.9"
  ],
  "field_terms": [
   "net sales",
-  "penetration",
   "panel",
   "issuer",
   "descriptor",
   "comparable",
-  "consensus"
+  "consensus",
+  "deposits",
+  "contract"
  ],
  "rows": {
-  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": 110040,
+  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": 163620,
   "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": 909,
-  "kestrel_bmh_descriptor_detail_monthly.csv": 3480,
-  "bmh_quarterly_results_fy2021q1_fy2025q3.csv": 20,
+  "kestrel_bmh_descriptor_detail_monthly.csv": 3275,
   "bmh_q4fy25_street_estimates.csv": 11,
   "kestrel_web_visits_bmh_weekly.csv": 261,
   "appmetric_bmh_app_daily.csv": 1068,
+  "bmh_8k_ex99-1_2021-06-09.txt": 85,
+  "bmh_8k_ex99-1_2021-09-08.txt": 85,
+  "bmh_8k_ex99-1_2021-12-08.txt": 85,
+  "bmh_8k_ex99-1_2022-02-24.txt": 87,
+  "bmh_8k_ex99-1_2022-06-08.txt": 85,
+  "bmh_8k_ex99-1_2022-09-07.txt": 85,
+  "bmh_8k_ex99-1_2022-12-07.txt": 85,
+  "bmh_8k_ex99-1_2023-02-23.txt": 87,
+  "bmh_8k_ex99-1_2023-06-07.txt": 85,
+  "bmh_8k_ex99-1_2023-09-06.txt": 85,
+  "bmh_8k_ex99-1_2023-12-06.txt": 85,
+  "bmh_8k_ex99-1_2024-02-29.txt": 89,
+  "bmh_8k_ex99-1_2024-06-12.txt": 85,
+  "bmh_8k_ex99-1_2024-09-11.txt": 87,
+  "bmh_8k_ex99-1_2024-12-11.txt": 87,
+  "bmh_8k_ex99-1_2025-02-27.txt": 91,
+  "bmh_8k_ex99-1_2025-06-11.txt": 87,
+  "bmh_8k_ex99-1_2025-09-10.txt": 87,
+  "bmh_8k_ex99-1_2025-12-10.txt": 87,
   "larkhill_bmh_card_model_q3fy25.xlsx": 14
  },
  "files": {
@@ -62,22 +77,130 @@
    "pull_date": "2026-02-03",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
-  "bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf": {
-   "source": "Brindle & Moss 10-K and 10-Q excerpts compiled by the desk (written for this task, figures simulated)",
+  "bmh_10k_fy2024_excerpts.pdf": {
+   "source": "Brindle & Moss 10-K excerpts compiled by the desk (written for this task, figures simulated)",
    "role": "evidence",
-   "pull_date": "2025-12-11",
+   "pull_date": "2025-03-27",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2021-06-09.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2021Q1 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2021-06-09",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2021-09-08.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2021Q2 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2021-09-08",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2021-12-08.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2021Q3 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2021-12-08",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2022-02-24.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2021Q4 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2022-02-24",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2022-06-08.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2022Q1 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2022-06-08",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2022-09-07.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2022Q2 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2022-09-07",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2022-12-07.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2022Q3 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2022-12-07",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2023-02-23.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2022Q4 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2023-02-23",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2023-06-07.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2023Q1 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2023-06-07",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2023-09-06.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2023Q2 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2023-09-06",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2023-12-06.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2023Q3 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2023-12-06",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2024-02-29.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2023Q4 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2024-02-29",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2024-06-12.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2024Q1 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2024-06-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2024-09-11.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2024Q2 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2024-09-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2024-12-11.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2024Q3 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2024-12-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2025-02-27.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2024Q4 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2025-02-27",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2025-06-11.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2025Q1 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2025-06-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2025-09-10.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2025Q2 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2025-09-10",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_8k_ex99-1_2025-12-10.txt": {
+   "source": "Simulated Brindle & Moss earnings release for FY2025Q3 (8-K exhibit 99.1 as saved from EDGAR)",
+   "role": "evidence",
+   "pull_date": "2025-12-10",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "bmh_q4fy25_street_estimates.csv": {
    "source": "Simulated sell-side estimates of fourth-quarter fiscal 2025 net sales",
    "role": "evidence",
    "pull_date": "2026-02-04",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_quarterly_results_fy2021q1_fy2025q3.csv": {
-   "source": "Simulated Brindle & Moss quarterly net sales, fiscal 2021 Q1 to fiscal 2025 Q3",
-   "role": "evidence",
-   "pull_date": "2025-12-11",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": {
@@ -87,21 +210,15 @@
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "kestrel_bmh_descriptor_detail_monthly.csv": {
-   "source": "Simulated Kestrel monthly spend by raw merchant descriptor",
+   "source": "Simulated Kestrel monthly spend and transactions by raw merchant descriptor",
    "role": "evidence",
    "pull_date": "2026-02-02",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": {
-   "source": "Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids",
+   "source": "Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids, the issuers' feeds as concatenated",
    "role": "evidence",
    "pull_date": "2026-02-02",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "kestrel_client_bulletin_bmh_2025-11-10.txt": {
-   "source": "Kestrel Spend Panel client bulletin for the merchant coverage file (written for this task)",
-   "role": "governing",
-   "pull_date": "2025-11-10",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "kestrel_web_visits_bmh_weekly.csv": {
@@ -111,7 +228,7 @@
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
   },
   "larkhill_bmh_card_model_q3fy25.xlsx": {
-   "source": "The desk's third-quarter card model (simulated, reproducible from the panel and the results)",
+   "source": "The desk's third-quarter card model (simulated, reproducible from the panel and the releases)",
    "role": "incumbent",
    "pull_date": "2025-12-11",
    "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"

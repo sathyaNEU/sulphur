@@ -24,6 +24,7 @@ import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
 import pack as PK  # noqa: E402
 import postprocess as PP  # noqa: E402
+import releases as RL  # noqa: E402
 import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
@@ -35,8 +36,6 @@ SAVED = {
     PK.F_PANEL: (2026, 2, 2, 9, 41, 7),
     PK.F_HIST: (2026, 2, 2, 9, 41, 52),
     PK.F_DESC: (2026, 2, 2, 9, 43, 10),
-    DC.F_NOTES: (2025, 11, 10, 15, 20, 36),
-    PK.F_RESULTS: (2025, 12, 11, 7, 55, 31),
     PK.F_STREET: (2026, 2, 4, 17, 12, 3),
     PK.F_WEB: (2026, 2, 2, 11, 5, 44),
     PK.F_APP: (2026, 2, 3, 8, 30, 15),
@@ -48,17 +47,14 @@ DISTRACTORS = {
               "read on customer engagement and bears on no result",
 }
 SOURCES = {
-    PK.F_PANEL: ("Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids",
-                 "evidence"),
+    PK.F_PANEL: ("Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids, "
+                 "the issuers' feeds as concatenated", "evidence"),
     PK.F_HIST: ("Simulated Kestrel delivery history: the trailing weeks of each weekly delivery as first delivered",
                 "evidence"),
-    PK.F_DESC: ("Simulated Kestrel monthly spend by raw merchant descriptor", "evidence"),
-    DC.F_NOTES: ("Kestrel Spend Panel client bulletin for the merchant coverage file (written for this task)", "governing"),
-    PK.F_RESULTS: ("Simulated Brindle & Moss quarterly net sales, fiscal 2021 Q1 to fiscal 2025 Q3", "evidence"),
-    DC.F_FILING: ("Brindle & Moss 10-K and 10-Q excerpts compiled by the desk (written for this task, figures simulated)",
-                  "evidence"),
+    PK.F_DESC: ("Simulated Kestrel monthly spend and transactions by raw merchant descriptor", "evidence"),
+    DC.F_FILING: ("Brindle & Moss 10-K excerpts compiled by the desk (written for this task, figures simulated)", "evidence"),
     PK.F_STREET: ("Simulated sell-side estimates of fourth-quarter fiscal 2025 net sales", "evidence"),
-    DC.F_MODEL: ("The desk's third-quarter card model (simulated, reproducible from the panel and the results)",
+    DC.F_MODEL: ("The desk's third-quarter card model (simulated, reproducible from the panel and the releases)",
                  "incumbent"),
     PK.F_WEB: ("Simulated weekly site visit estimates for brindlemoss.com", "distractor"),
     PK.F_APP: ("Simulated daily app category rank and download estimates", "distractor"),
@@ -68,8 +64,8 @@ SOURCES = {
 def reported_inputs(F):
     """figures the answer blocks quote from the filed records (inputs, not results), as the records print them"""
     out = set()
-    for k in ("deposits_q3_m", "deposits_base_m", "wholesale_base_m", "base_net_sales_m", "pl_q4fy24_pct",
-              "pl_q3fy24_pct", "pl_q1fy25_pct", "pl_q2fy25_pct", "pl_q3fy25_pct"):
+    for k in ("deposits_q3_m", "deposits_base_m", "deposits_q3fy24_m", "contract_fy2024_m", "contract_9m_fy2024_m",
+              "base_net_sales_m", "fern_base_m"):
         out.add("%.1f" % F[k])
         out.add("{:,.1f}".format(F[k]))
     return sorted(out)
@@ -82,16 +78,7 @@ def sha(path):
 def write_pack(tgt):
     w = W.simulate(PK.SEED)
     o = PK.write_all(tgt, w, PK.street_mid(w))
-    fy24 = np.isin(W.QIDX, [n for n, k in enumerate(W.QKEYS) if k.startswith("FY2024")])
-    dep, dep_open = PK.deposits_by_quarter(w)
-    DC.filing(os.path.join(tgt, DC.F_FILING), PK.pl_by_quarter(w), PK.regions_by_year(w),
-              float(w.fern[fy24 & w.consolidated].sum()), W.ACQUIRED, dep, dep_open, PK.wholesale_by_year(w))
-    cal = W.CAL
-    joins = [(PK.ISSUER_CODES[k], cal.week_start.iloc[d["join"]].date().isoformat())
-             for k, d in w.P["issuers"].items() if d["join"] > 0]
-    leave = [(PK.ISSUER_CODES[k], cal.week_start.iloc[d["leave"] - 1].date().isoformat())
-             for k, d in w.P["issuers"].items() if d["leave"]]
-    DC.release_notes(os.path.join(tgt, DC.F_NOTES), joins, leave)
+    DC.filing(os.path.join(tgt, DC.F_FILING), PK.regions_by_year(w), PK.by_year(w, w.fern_q), PK.by_year(w, w.contract_q))
     # the desk's third-quarter model, from the shipped files by its own stated method
     R0 = A.run(tgt)
     inc = A.incumbent(R0)
@@ -106,7 +93,7 @@ def write_pack(tgt):
                        "2025-12-11T22:37:41Z", excel=True, company="Larkhill Partners LP")
     rows_n = dict(o["rows"])
     rows_n[DC.F_MODEL] = len(rows)
-    return w, rows_n
+    return w, rows_n, o["releases"]
 
 
 def build_into(root):
@@ -114,7 +101,7 @@ def build_into(root):
     gld = os.path.join(root, "golden")
     for d in (tgt, gld):
         os.makedirs(d, exist_ok=True)
-    w, rows = write_pack(tgt)
+    w, rows, rel = write_pack(tgt)
     R = A.full(tgt)
     F, E = FG.write(R, root)
     GD.workbook(F, R, os.path.join(gld, GD.XLSX))
@@ -126,20 +113,25 @@ def build_into(root):
                       company="Larkhill Partners LP")
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F))
     pulled = {n: dt.date(*SAVED[n][:3]).isoformat() for n in SAVED}
-    pulled[DC.F_FILING] = "2025-12-11"
+    pulled[DC.F_FILING] = "2025-03-27"
     pulled[DC.F_MODEL] = "2025-12-11"
+    sources = dict(SOURCES)
+    for fn, (k, d) in rel.items():
+        pulled[fn] = d.isoformat()
+        sources[fn] = ("Simulated Brindle & Moss earnings release for %s (8-K exhibit 99.1 as saved from EDGAR)" % k,
+                       "evidence")
     meta = {"task": "task20", "architecture": 2, "as_of": AS_OF,
             "decision": "whether Brindle & Moss's fourth-quarter fiscal 2025 net sales land above or below the "
                         "sell-side consensus, and the position to take into the print",
             "deliverables": [GD.XLSX, GD.NOTE],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
-            "stated_inputs": ["80", "12", "67", "21", "13", "14", "53", "52", "31"] + reported_inputs(F),
-            "field_terms": ["net sales", "penetration", "panel", "issuer", "descriptor", "comparable", "consensus"],
+            "stated_inputs": ["80", "13", "14", "53", "52", "31", "27"] + reported_inputs(F),
+            "field_terms": ["net sales", "panel", "issuer", "descriptor", "comparable", "consensus", "deposits", "contract"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
                           "license": "generated for this task by task20/generator (a seeded simulation of the retailer, "
                                      "the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"}
-                      for n, (s, r) in sorted(SOURCES.items())}}
+                      for n, (s, r) in sorted(sources.items())}}
     json.dump(meta, open(os.path.join(root, "metadata.json"), "w"), indent=1)
     return F
 
@@ -165,6 +157,9 @@ def install(root):
     for f in ("submission.md", "metadata.json"):
         shutil.copy(os.path.join(root, f), os.path.join(TASK, f))
     fallback = {n: dt.datetime(*v, tzinfo=NY) for n, v in SAVED.items()}
+    for k_, fn in enumerate(sorted(f for f in os.listdir(os.path.join(TASK, "target")) if f.startswith("bmh_8k_"))):
+        d = dt.date.fromisoformat(fn[-14:-4])
+        fallback[fn] = dt.datetime(d.year, d.month, d.day, 8, 2 + (7 * k_) % 50, (13 * k_) % 60, tzinfo=NY)
     PP.own_mtimes(os.path.join(TASK, "target"), fallback)
     PP.own_mtimes(os.path.join(TASK, "golden"), {})
     PP.zip_folder(os.path.join(TASK, "target"), os.path.join(TASK, "target.zip"), zone=ZONE)

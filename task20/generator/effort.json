@@ -2,106 +2,127 @@
  "results": [
   {
    "id": "R1",
-   "name": "the panel's own steps: delivered growth, the latest weeks completed, the licensed shops and cafes out, issuers in both years and cards of the same age",
+   "name": "the panel's own steps: the delivered panel, the latest weeks completed, the licensed shops and cafes out, issuers in every week of both quarters on spend per open card",
    "graded_as": "Ask 3 (panel steps)",
    "figure": "r1_panel",
    "depends": [],
    "independent": "the panel, its delivery history and descriptor detail",
    "golden": {
-    "the delivered panel, every issuer": -8.9,
-    "the latest weeks completed": 1.21,
-    "the licensed shops and cafes taken out": -0.57,
-    "issuers in both years, cards of the same age": 27.74
+    "the delivered panel, every issuer": -21.86,
+    "the latest weeks completed": 1.22,
+    "the licensed shops and cafes taken out": -0.87,
+    "issuers in every week of both quarters, spend per open card": 30.74
    },
    "bands": {
     "the delivered panel, every issuer": [
-     -9.2,
-     -8.6
+     -22.16,
+     -21.56
     ],
     "the latest weeks completed": [
      0.91,
-     1.87
+     1.99
     ],
     "the licensed shops and cafes taken out": [
-     -1.04,
-     -0.27
+     -1.52,
+     -0.56
     ],
-    "issuers in both years, cards of the same age": [
-     27.08,
-     28.21
+    "issuers in every week of both quarters, spend per open card": [
+     29.97,
+     31.38
     ]
    },
    "passes": {
     "quick": {
-     "the delivered panel, every issuer": -8.9,
+     "the delivered panel, every issuer": -21.86,
      "the latest weeks completed": 0.0,
      "the licensed shops and cafes taken out": 0.0,
-     "issuers in both years, cards of the same age": 0.0
+     "issuers in every week of both quarters, spend per open card": 0.0
     },
     "careful": {
-     "the delivered panel, every issuer": -8.9,
-     "the latest weeks completed": 1.21,
-     "the licensed shops and cafes taken out": -0.57,
-     "issuers in both years, cards of the same age": 27.74
+     "the delivered panel, every issuer": -21.86,
+     "the latest weeks completed": 1.22,
+     "the licensed shops and cafes taken out": -0.87,
+     "issuers in every week of both quarters, spend per open card": 30.74
     },
     "thorough": {
-     "the delivered panel, every issuer": -8.9,
-     "the latest weeks completed": 1.21,
-     "the licensed shops and cafes taken out": -0.57,
-     "issuers in both years, cards of the same age": 27.74
+     "the delivered panel, every issuer": -21.86,
+     "the latest weeks completed": 1.22,
+     "the licensed shops and cafes taken out": -0.87,
+     "issuers in every week of both quarters, spend per open card": 30.74
     }
    }
   },
   {
    "id": "R2",
-   "name": "card-visible growth at the company's regional mix",
+   "name": "KS-01's re-issued book: the Midwest's like-for-like growth without it and card-visible growth at the company's mix",
    "graded_as": "Component 1",
-   "figure": "r2_visible",
+   "figure": "r2_reissue",
    "depends": [
     "R1"
    ],
    "independent": "",
-   "golden": 15.0,
-   "band": [
-    14.12,
-    15.88
-   ],
-   "passes": {
-    "quick": -8.9,
-    "careful": 15.0,
-    "thorough": 15.0
-   }
-  },
-  {
-   "id": "R3",
-   "name": "the private-label card's fourth-quarter share and net sales per bank-card dollar",
-   "graded_as": "Component 2",
-   "figure": "r3_tender",
-   "depends": [],
-   "independent": "the filing excerpts and the panel's coverage",
    "golden": {
-    "pl_target_pct": 17.0,
-    "drift_pct": -5.07
+    "midwest_pct": -2.09,
+    "visible_growth_pct": 3.9
    },
    "bands": {
-    "pl_target_pct": [
-     16.6,
-     17.8
+    "midwest_pct": [
+     -2.75,
+     -1.59
     ],
-    "drift_pct": [
-     -5.64,
-     -3.96
+    "visible_growth_pct": [
+     3.1,
+     4.7
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
-     "pl_target_pct": 17.0,
-     "drift_pct": -5.07
+     "midwest_pct": 9.51,
+     "visible_growth_pct": 7.18
     },
     "thorough": {
-     "pl_target_pct": 17.0,
-     "drift_pct": -5.07
+     "midwest_pct": -2.09,
+     "visible_growth_pct": 3.9
+    }
+   },
+   "precedent": [
+    "N01",
+    "N07"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the company's regional mix and what the re-weight is worth",
+   "graded_as": "Component 2",
+   "figure": "r3_mix",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the 10-K's net sales by region",
+   "golden": {
+    "the company's regional mix": -2.04,
+    "company_weight_midwest_pct": 23.87
+   },
+   "bands": {
+    "the company's regional mix": [
+     -4.81,
+     -1.33
+    ],
+    "company_weight_midwest_pct": [
+     23.82,
+     23.92
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "the company's regional mix": -2.04,
+     "company_weight_midwest_pct": 23.87
+    },
+    "thorough": {
+     "the company's regional mix": -2.04,
+     "company_weight_midwest_pct": 23.87
     }
    }
   },
@@ -116,17 +137,17 @@
    ],
    "independent": "",
    "golden": {
-    "deposits_q4_m": 318.9,
-    "revenue on delivery": -7.33
+    "deposits_q4_m": 335.2,
+    "revenue on delivery": -2.19
    },
    "bands": {
     "deposits_q4_m": [
-     307.8,
-     326.7
+     326.8,
+     340.2
     ],
     "revenue on delivery": [
-     -9.75,
-     -6.45
+     -3.4,
+     -1.54
     ]
    },
    "passes": {
@@ -136,45 +157,53 @@
      "revenue on delivery": 0.0
     },
     "thorough": {
-     "deposits_q4_m": 318.9,
-     "revenue on delivery": -7.33
+     "deposits_q4_m": 335.2,
+     "revenue on delivery": -2.19
     }
    },
    "precedent": [
     "N02",
-    "L07"
+    "L07",
+    "N12"
    ]
   },
   {
    "id": "R5",
-   "name": "wholesale at its run rate and what separating it is worth",
+   "name": "contract sales: last year's fourth quarter rebuilt from the fiscal year and the nine months, this quarter's run rate, and what separating them is worth",
    "graded_as": "Component 4",
-   "figure": "r5_wholesale",
+   "figure": "r5_contract",
    "depends": [],
-   "independent": "the quarterly results",
+   "independent": "the earnings releases",
    "golden": {
-    "wholesale_q4_m": 17.7,
-    "wholesale at its run rate": -2.47
+    "contract_base_m": 54.5,
+    "contract_q4_m": 17.7,
+    "contract at its run rate": -2.55
    },
    "bands": {
-    "wholesale_q4_m": [
+    "contract_base_m": [
+     54.3,
+     54.7
+    ],
+    "contract_q4_m": [
      16.7,
      19.5
     ],
-    "wholesale at its run rate": [
-     -3.41,
-     -2.17
+    "contract at its run rate": [
+     -3.12,
+     -2.25
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
-     "wholesale_q4_m": null,
-     "wholesale at its run rate": 0.0
+     "contract_base_m": null,
+     "contract_q4_m": null,
+     "contract at its run rate": 0.0
     },
     "thorough": {
-     "wholesale_q4_m": 17.7,
-     "wholesale at its run rate": -2.47
+     "contract_base_m": 54.5,
+     "contract_q4_m": 17.7,
+     "contract at its run rate": -2.55
     }
    },
    "precedent": [
@@ -184,41 +213,50 @@
   },
   {
    "id": "R6",
-   "name": "the range's record: rolling-origin error and the third quarter's miss",
+   "name": "the range's record: rolling-origin error, the third quarter's miss and the quarters inside",
    "graded_as": "Ask 2",
    "figure": "r6_record",
    "depends": [
+    "R2",
     "R4",
     "R5"
    ],
    "independent": "",
    "golden": {
-    "golden_rmse_pp": 1.12,
-    "q3_error_pp": 1.04
+    "golden_rmse_pp": 1.24,
+    "q3_error_pp": 0.01,
+    "coverage_in": 13
    },
    "bands": {
     "golden_rmse_pp": [
-     0.89,
-     1.59
+     0.92,
+     1.61
     ],
     "q3_error_pp": [
-     0.38,
-     1.69
+     -0.62,
+     0.64
+    ],
+    "coverage_in": [
+     9,
+     14
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
-     "golden_rmse_pp": 1.61,
-     "q3_error_pp": 1.22
+     "golden_rmse_pp": 1.45,
+     "q3_error_pp": 0.99,
+     "coverage_in": 12
     },
     "thorough": {
-     "golden_rmse_pp": 1.12,
-     "q3_error_pp": 1.04
+     "golden_rmse_pp": 1.24,
+     "q3_error_pp": 0.01,
+     "coverage_in": 13
     }
    },
    "precedent": [
-    "L28"
+    "L28",
+    "L37"
    ]
   },
   {
@@ -227,55 +265,56 @@
    "graded_as": "Ask 1",
    "figure": "r7_forecast",
    "depends": [
+    "R2",
     "R4",
     "R5",
     "R6"
    ],
    "independent": "",
    "golden": {
-    "forecast_m": 1439.5,
-    "range_low_m": 1418.6,
-    "range_high_m": 1460.3
+    "forecast_m": 1471.2,
+    "range_low_m": 1447.7,
+    "range_high_m": 1494.7
    },
    "bands": {
     "forecast_m": [
-     1430.4,
-     1455.2
+     1462.3,
+     1480.2
     ],
     "range_low_m": [
-     1406.3,
-     1430.1
+     1434.5,
+     1459.8
     ],
     "range_high_m": [
-     1453.8,
-     1481.9
+     1485.7,
+     1504.9
     ]
    },
    "passes": {
     "quick": {
-     "forecast_m": 1319.7,
+     "forecast_m": 1671.9,
      "range_low_m": null,
      "range_high_m": null
     },
     "careful": {
-     "forecast_m": 1581.4,
-     "range_low_m": 1551.5,
-     "range_high_m": 1611.3
+     "forecast_m": 1590.2,
+     "range_low_m": 1562.6,
+     "range_high_m": 1617.9
     },
     "thorough": {
-     "forecast_m": 1439.5,
-     "range_low_m": 1418.6,
-     "range_high_m": 1460.3
+     "forecast_m": 1471.2,
+     "range_low_m": 1447.7,
+     "range_high_m": 1494.7
     }
    },
    "precedent": [
-    "L28",
-    "N02"
+    "N02",
+    "N05"
    ]
   },
   {
    "id": "R8",
-   "name": "what the regional mix, the bank-card share, revenue on delivery and wholesale are worth",
+   "name": "what the regional mix, KS-01's book, revenue on delivery and contract are worth",
    "graded_as": "Ask 3 (company steps)",
    "figure": "r8_bridge",
    "depends": [
@@ -286,47 +325,46 @@
    ],
    "independent": "",
    "golden": {
-    "the company's regional mix": -4.48,
-    "the bank-card share of net sales": -5.83,
-    "revenue on delivery": -7.33,
-    "wholesale at its run rate": -2.47
+    "the company's regional mix": -2.04,
+    "KS-01's re-issued book taken out": -3.28,
+    "revenue on delivery": -2.19,
+    "contract at its run rate": -2.55
    },
    "bands": {
     "the company's regional mix": [
-     -5.36,
-     -2.96
+     -4.81,
+     -1.33
     ],
-    "the bank-card share of net sales": [
-     -6.36,
-     -4.17
+    "KS-01's re-issued book taken out": [
+     -3.58,
+     -0.35
     ],
     "revenue on delivery": [
-     -9.75,
-     -6.45
+     -3.4,
+     -1.54
     ],
-    "wholesale at its run rate": [
-     -3.41,
-     -2.17
+    "contract at its run rate": [
+     -3.12,
+     -2.25
     ]
    },
    "passes": {
     "quick": null,
     "careful": {
-     "the company's regional mix": -4.48,
-     "the bank-card share of net sales": -5.83,
+     "the company's regional mix": -2.04,
+     "KS-01's re-issued book taken out": 0.0,
      "revenue on delivery": 0.0,
-     "wholesale at its run rate": 0.0
+     "contract at its run rate": 0.0
     },
     "thorough": {
-     "the company's regional mix": -4.48,
-     "the bank-card share of net sales": -5.83,
-     "revenue on delivery": -7.33,
-     "wholesale at its run rate": -2.47
+     "the company's regional mix": -2.04,
+     "KS-01's re-issued book taken out": -3.28,
+     "revenue on delivery": -2.19,
+     "contract at its run rate": -2.55
     }
    },
    "precedent": [
-    "L11",
-    "N02"
+    "L11"
    ]
   },
   {
@@ -340,26 +378,26 @@
    "independent": "",
    "golden": {
     "call": "short",
-    "range_high_m": 1460.3
+    "range_high_m": 1494.7
    },
    "bands": {
     "range_high_m": [
-     1453.8,
-     1481.9
+     1485.7,
+     1504.9
     ]
    },
    "passes": {
     "quick": {
-     "call": "short",
+     "call": "long",
      "range_high_m": null
     },
     "careful": {
      "call": "long",
-     "range_high_m": 1611.3
+     "range_high_m": 1617.9
     },
     "thorough": {
      "call": "short",
-     "range_high_m": 1460.3
+     "range_high_m": 1494.7
     }
    },
    "precedent": [
@@ -370,20 +408,22 @@
  ],
  "hints": [
   {
-   "sentence": "net sales are recognised on delivery, and the December made-to-order orders are still in customer deposits at the quarter's end",
+   "sentence": "from October 2025 KS-01's cards include part of KS-06's book, re-issued, and those accounts spend more at the brand than KS-01's own",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "custom orders are paid when placed and recognised when delivered, and the design studios' December and January orders are still in customer deposits at the quarter's end",
    "rescues": [
     "R4"
    ]
   },
   {
-   "sentence": "last year's fourth quarter carried a large wholesale contract the card panel cannot see",
+   "sentence": "last year's fourth quarter held a large contract delivery that no card carries",
    "rescues": [
     "R5"
    ]
-  },
-  {
-   "sentence": "the private-label card's share of sales has fallen faster in fiscal 2025, and the panel holds no private-label cards",
-   "rescues": []
   }
  ],
  "routes": [
@@ -391,232 +431,258 @@
    "name": "golden",
    "golden": true,
    "answer": [
-    1439.5,
+    1471.2,
     "short"
    ]
   },
   {
-   "name": "issuers in both years, cards of the same age, the company's regional mix and the bank-card share, net sales taken as what the panel shows (careful but hurried)",
+   "name": "issuers in every week of both quarters on spend per open card, the company's regional mix, net sales grown with it (careful but hurried)",
    "answer": [
-    1581.4,
+    1590.2,
     "long"
    ]
   },
   {
    "name": "the same, reported growth regressed on it over past quarters",
    "answer": [
-    1567.7,
+    1588.2,
     "long"
    ]
   },
   {
-   "name": "the panel's own mix regressed on past quarters",
+   "name": "KS-01's book taken out, nothing else",
    "answer": [
-    1591.9,
-    "long"
-   ]
-  },
-  {
-   "name": "revenue on delivery without separating wholesale",
-   "answer": [
-    1475.2,
+    1541.5,
     "no position"
    ]
   },
   {
-   "name": "wholesale separated, net sales taken as payments",
+   "name": "revenue on delivery, nothing else",
    "answer": [
-    1541.8,
+    1549.4,
     "long"
    ]
   },
   {
-   "name": "deposits at the third quarter's weeks of payments",
+   "name": "contract at its run rate, nothing else",
    "answer": [
-    1512.4,
+    1549.5,
+    "long"
+   ]
+  },
+  {
+   "name": "everything but KS-01's book",
+   "answer": [
+    1510.2,
     "no position"
    ]
   },
   {
-   "name": "deposits moved as they did a year earlier",
+   "name": "everything but revenue on delivery",
    "answer": [
-    1541.8,
-    "long"
+    1502.5,
+    "no position"
+   ]
+  },
+  {
+   "name": "everything but contract at its run rate",
+   "answer": [
+    1509.0,
+    "no position"
+   ]
+  },
+  {
+   "name": "deposits at last year's ratio to payments",
+   "answer": [
+    1513.3,
+    "no position"
+   ]
+  },
+  {
+   "name": "the deposits' change moved as a year earlier",
+   "answer": [
+    1502.5,
+    "no position"
+   ]
+  },
+  {
+   "name": "contract at last year's fourth quarter",
+   "answer": [
+    1508.1,
+    "no position"
    ]
   },
   {
    "name": "everything but the company's regional mix",
    "answer": [
-    1486.7,
-    "no position"
-   ]
-  },
-  {
-   "name": "everything but the bank-card share",
-   "answer": [
-    1504.1,
+    1524.7,
     "no position"
    ]
   },
   {
    "name": "the desk's third-quarter model carried to the fourth quarter",
    "answer": [
-    1562.6,
+    1610.7,
     "long"
    ]
   },
   {
    "name": "fiscal 2025's reported growth carried into the quarter",
    "answer": [
-    1519.6,
+    1561.4,
     "no position"
    ]
   },
   {
-   "name": "fiscal 2025's retail growth carried, wholesale at its run rate",
+   "name": "the issuers in both quarters, raw spend, on last year's net sales (quick)",
    "answer": [
-    1479.5,
-    "no position"
-   ]
-  },
-  {
-   "name": "the delivered panel's change on last year's quarter (quick)",
-   "answer": [
-    1319.7,
-    "short"
+    1671.9,
+    "long"
    ]
   }
  ],
  "forcing": {
   "kind": "numeric",
-  "line": 1484.0,
+  "line": 1518.0,
   "golden_side": "below",
   "golden_family": [
    {
     "name": "the golden route",
-    "value": 1460.3
+    "value": 1494.7
    },
    {
-    "name": "private-label share carried by the third quarter's year-on-year change",
-    "value": 1472.4
+    "name": "spend per open card issuer by issuer",
+    "value": 1493.6
    },
    {
-    "name": "private-label share on a straight line through fiscal 2025's three quarters",
-    "value": 1458.3
-   },
-   {
-    "name": "private-label share carried at the third quarter's own change",
-    "value": 1456.8
+    "name": "cards of the same age",
+    "value": 1488.7
    },
    {
     "name": "the regional mix of fiscal 2023",
-    "value": 1457.5
+    "value": 1493.1
    },
    {
     "name": "fiscal 2024's regional mix rolled forward a year",
-    "value": 1465.0
+    "value": 1497.6
    },
    {
     "name": "the deposit window at seven weeks",
-    "value": 1460.2
-   },
-   {
-    "name": "wholesale at the median of the last four quarters",
-    "value": 1461.6
+    "value": 1495.1
    },
    {
     "name": "the deposit window at nine weeks",
-    "value": 1468.7
+    "value": 1501.9
    },
    {
-    "name": "the chain calibrated by regression on past quarters",
-    "value": 1478.9
+    "name": "contract at the median of the last four quarters",
+    "value": 1495.4
+   },
+   {
+    "name": "a re-issued book read at a three per cent rise",
+    "value": 1494.7
+   },
+   {
+    "name": "a re-issued book read at a ten per cent rise",
+    "value": 1494.7
    },
    {
     "name": "the record from fiscal 2023 only",
-    "value": 1463.0
+    "value": 1497.3
+   },
+   {
+    "name": "KS-01's Midwest cards set aside",
+    "value": 1498.3
+   },
+   {
+    "name": "KS-01's newest open years set aside",
+    "value": 1497.1
+   },
+   {
+    "name": "KS-01 set aside in every quarter",
+    "value": 1496.6
    }
   ],
   "shortcuts": [
    {
-    "name": "issuers in both years, cards of the same age, the company's regional mix and the bank-card share, net sales taken as what the panel shows (careful but hurried)",
-    "value": 1611.3
+    "name": "issuers in every week of both quarters on spend per open card, the company's regional mix, net sales grown with it (careful but hurried)",
+    "value": 1617.9
    },
    {
     "name": "the same, reported growth regressed on it over past quarters",
-    "value": 1604.9
+    "value": 1613.0
    },
    {
-    "name": "the panel's own mix regressed on past quarters",
-    "value": 1633.3
+    "name": "KS-01's book taken out, nothing else",
+    "value": 1570.0
    },
    {
-    "name": "revenue on delivery without separating wholesale",
-    "value": 1497.8
+    "name": "revenue on delivery, nothing else",
+    "value": 1573.8
    },
    {
-    "name": "wholesale separated, net sales taken as payments",
-    "value": 1570.1
+    "name": "contract at its run rate, nothing else",
+    "value": 1574.1
    },
    {
-    "name": "deposits at the third quarter's weeks of payments",
-    "value": 1546.2
+    "name": "everything but KS-01's book",
+    "value": 1531.6
    },
    {
-    "name": "deposits moved as they did a year earlier",
-    "value": 1570.1
+    "name": "everything but revenue on delivery",
+    "value": 1529.9
+   },
+   {
+    "name": "everything but contract at its run rate",
+    "value": 1533.6
+   },
+   {
+    "name": "deposits at last year's ratio to payments",
+    "value": 1531.8
+   },
+   {
+    "name": "the deposits' change moved as a year earlier",
+    "value": 1529.9
+   },
+   {
+    "name": "contract at last year's fourth quarter",
+    "value": 1532.8
    },
    {
     "name": "everything but the company's regional mix",
-    "value": 1508.8
-   },
-   {
-    "name": "everything but the bank-card share",
-    "value": 1538.9
+    "value": 1548.9
    },
    {
     "name": "the desk's third-quarter model carried to the fourth quarter",
-    "value": 1604.7
+    "value": 1637.5
    },
    {
     "name": "fiscal 2025's reported growth carried into the quarter",
-    "value": 1562.2
-   },
-   {
-    "name": "fiscal 2025's retail growth carried, wholesale at its run rate",
-    "value": 1519.4
+    "value": 1605.4
    }
   ],
   "perturbations": [
    {
-    "input": "other tenders at 10 per cent of net sales",
-    "value": 1462.0
-   },
-   {
-    "input": "other tenders at 14 per cent of net sales",
-    "value": 1458.5
-   },
-   {
     "input": "the last week's completeness -3 per cent",
-    "value": 1462.1
+    "value": 1496.5
    },
    {
     "input": "the last week's completeness +3 per cent",
-    "value": 1458.6
+    "value": 1493.0
    },
    {
     "input": "the licensed shops' and cafes' share -20 per cent",
-    "value": 1461.6
+    "value": 1495.9
    },
    {
     "input": "the licensed shops' and cafes' share +20 per cent",
-    "value": 1459.8
+    "value": 1494.1
    },
    {
     "input": "the range from the record's 10th and 90th percentile errors",
-    "value": 1464.3
+    "value": 1500.0
    }
   ],
-  "notes": "Values are the top of each route's 80 per cent range (the call is short only while the whole range sits below the street's figure). The quick route (1319.7) lands short for the wrong reason, the issuer that left, and is graded at R1 to R8."
+  "notes": "Values are the top of each route's 80 per cent range (the call is short only while the whole range sits below the street's figure). Each deep step left out on its own leaves the range across the line (no position); two or three left out land long."
  }
 }

@@ -1,6 +1,5 @@
-"""task20 architecture 2 documents: the company's 10-K and 10-Q excerpts the desk keeps (a Word document exported to
-PDF by LibreOffice Writer), the panel vendor's client bulletin (a text file), and the desk's own model from the third
-quarter (an Excel workbook)."""
+"""task20 architecture 2 documents (second hardening): the company's 10-K excerpts the desk keeps (a Word document exported to PDF by
+LibreOffice Writer) and the desk's own card model from the third quarter (an Excel workbook)."""
 import datetime as dt
 
 import numpy as np
@@ -14,8 +13,7 @@ import officepdf as O
 import world as W
 
 EST = dt.timezone(dt.timedelta(hours=-5))
-F_FILING = "bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf"
-F_NOTES = "kestrel_client_bulletin_bmh_2025-11-10.txt"
+F_FILING = "bmh_10k_fy2024_excerpts.pdf"
 F_MODEL = "larkhill_bmh_card_model_q3fy25.xlsx"
 
 
@@ -40,106 +38,46 @@ def money(x):
     return "{:,.1f}".format(x)
 
 
-def filing(path, pl, regions, fern_fy2024, acq_date, deposits, dep_open, wholesale):
+def filing(path, regions, fern, contract):
     body, h1, h2, small, cell = _styles()
     yrs = list(regions)
     reg_rows = [["USD million"] + ["Fiscal %s" % y[2:] for y in yrs]]
     for j, r in enumerate(W.REGIONS):
         reg_rows.append([r] + [money(regions[y][j]) for y in yrs])
-    reg_rows.append(["Brindle & Moss banner, retail"] + [money(sum(regions[y])) for y in yrs])
-    reg_rows.append(["Fernhollow"] + ["" for _ in yrs[:-1]] + [money(fern_fy2024)])
-    reg_rows.append(["Wholesale"] + [money(wholesale[y]) for y in yrs])
-    reg_rows.append(["Total net sales"] + [money(sum(regions[y]) + wholesale[y] + (fern_fy2024 if y == yrs[-1] else 0))
-                                           for y in yrs])
-    keys = [k for k in W.QKEYS[:-1]]
-    pl_rows = [["Fiscal quarter", "Private-label card share of sales (%)", "Customer deposits at quarter end (USD million)"]]
-    for k in keys:
-        pl_rows.append([k.replace("FY", "Fiscal ").replace("Q", " Q"), "%.1f" % pl[k], money(deposits[k])])
+    reg_rows.append(["Brindle & Moss"] + [money(sum(regions[y])) for y in yrs])
+    reg_rows.append(["Fernhollow"] + [money(fern[y]) if fern[y] else "" for y in yrs])
+    reg_rows.append(["Contract"] + [money(contract[y]) for y in yrs])
+    reg_rows.append(["Total net sales"] + [money(sum(regions[y]) + contract[y] + fern[y]) for y in yrs])
     s = [Paragraph("Brindle & Moss, Inc.: research desk copy", small),
-         Paragraph("Brindle & Moss, Inc.: excerpts from the Form 10-K for fiscal 2024 and the Form 10-Q for the third "
-                   "quarter of fiscal 2025", h1),
-         Paragraph("Compiled from the company's filings of 26 March 2025 (10-K) and 10 December 2025 (10-Q). Page "
-                   "references omitted.", small),
+         Paragraph("Brindle & Moss, Inc.: excerpts from the Form 10-K for fiscal 2024", h1),
+         Paragraph("Filed 26 March 2025. Page references omitted.", small),
          Spacer(1, 4),
          Paragraph("Fiscal year", h2),
-         Paragraph("Our fiscal year ends on the Saturday closest to January 31. Fiscal 2025 is the 52 weeks ending "
-                   "January 31, 2026, and fiscal 2024 was the 52 weeks ended February 1, 2025. Fiscal 2023 was the 53 "
-                   "weeks ended February 3, 2024; its fourth quarter had 14 weeks. Each fiscal quarter otherwise has 13 "
-                   "weeks.", body),
-         Paragraph("Net sales by region", h2),
-         Paragraph("We report the retail net sales of the Brindle & Moss banner by the region of the store or, for online "
-                   "orders, the ship-to address. Fernhollow is reported separately from its acquisition. Wholesale is our "
-                   "contract business with hotels, offices and other commercial customers, invoiced on delivery under each "
-                   "contract; it is reported separately each quarter.", body),
+         Paragraph("Our fiscal year ends on the Saturday closest to January 31. Fiscal 2024 was the 52 weeks ended "
+                   "February 1, 2025, and fiscal 2025 is the 52 weeks ending January 31, 2026. Fiscal 2023 was the 53 "
+                   "weeks ended February 3, 2024; its fourth quarter had 14 weeks.", body),
+         Paragraph("Business", h2),
+         Paragraph("We sell furniture and home furnishings under the Brindle & Moss brand through our stores, our design "
+                   "studios, four outlets and brindlemoss.com. Fernhollow Outfitters, acquired in fiscal 2024, sells "
+                   "outdoor furniture through 31 stores and fernhollow.com. B&M Contract furnishes hotels, offices and "
+                   "senior living communities.", body),
+         Paragraph("Brindle & Moss shop-in-shops in Hollister's department stores and the Brindle Cafe locations are "
+                   "operated by licensees under the Brindle & Moss name. Their sales are not our net sales; the license "
+                   "royalties are recorded in other income.", body),
+         Paragraph("Net sales by brand and region", h2),
+         Paragraph("Brindle & Moss net sales by region of the store or, for orders shipped from brindlemoss.com, of the "
+                   "delivery address:", body),
          _grid(reg_rows, [130] + [80] * len(yrs), cell),
          Spacer(1, 3),
          Paragraph("Acquisition of Fernhollow Outfitters", h2),
-         Paragraph("On %s we acquired Fernhollow Outfitters, a specialty retailer of outdoor furniture with 31 stores and "
-                   "an online business. Its results are included in our consolidated results from the date of "
-                   "acquisition; it contributed net sales of USD %s million in fiscal 2024. The quarterly contribution is "
-                   "reported in each Form 10-Q." % (acq_date.strftime("%B %-d, %Y"), money(fern_fy2024)), body),
-         Paragraph("Revenue recognition", h2),
-         Paragraph("We recognize revenue when merchandise is delivered to the customer or picked up at a store or outlet. "
-                   "Customers pay for an order in full when they place it, and payments for merchandise not yet delivered "
-                   "are recorded as customer deposits, a current liability. Customer deposits consist mainly of payments for "
-                   "made-to-order upholstery and case goods. Customer deposits were USD %s million at the end of fiscal "
-                   "2020." % money(dep_open), body),
-         Paragraph("Licensed operations", h2),
-         Paragraph("Brindle & Moss shop-in-shops in Hollister's department stores and the Brindle Café locations are "
-                   "operated by licensees under the Brindle & Moss name. Their sales are not our net sales; we recognize "
-                   "the license royalties in other income.", body),
-         Paragraph("Tender", h2),
-         Paragraph("In fiscal 2024 approximately 67 per cent of net sales were paid with bank-issued credit and debit "
-                   "cards, 21 per cent with the Brindle & Moss private-label credit card, which our card program partner "
-                   "issues and services, and 12 per cent with cash, checks, consumer financing and other tenders.", body),
-         Paragraph("Quarterly items (Forms 10-Q and 10-K, through the third quarter of fiscal 2025)", h2),
-         Paragraph("Penetration of the private-label card, the share of sales paid with it, declined in the first three "
-                   "quarters of fiscal 2025 after our card program partner tightened approval standards for new accounts "
-                   "at the start of the first quarter. Penetration and customer deposits by quarter:", body),
-         _grid(pl_rows, [110, 150, 170], cell),
+         Paragraph("On June 2, 2024 we acquired Fernhollow Outfitters for USD 286 million, funded with cash and a USD 250 "
+                   "million term loan. Its results are included in our consolidated results from the date of "
+                   "acquisition.", body),
          Spacer(1, 6),
-         Paragraph("Source: Brindle & Moss, Inc., Form 10-K for the fiscal year ended February 1, 2025, and Form 10-Q for the "
-                   "quarter ended November 1, 2025.", small)]
-    O.build(path, s, "Brindle & Moss filing excerpts", "Larkhill Partners research", "BMH 10-K FY2024 and 10-Q Q3 FY2025",
-            "Larkhill Partners  |  Research  |  Internal", dt.datetime(2025, 12, 11, 8, 40, 12, tzinfo=EST),
-            dt.datetime(2025, 12, 11, 9, 2, 47, tzinfo=EST))
-
-
-def release_notes(path, joins, leave):
-    lines = [
-        "KESTREL SPEND PANEL  -  CLIENT BULLETIN",
-        "Merchant coverage file: Brindle & Moss (merchant ids M0412, M0413, M2290)",
-        "",
-        "DELIVERY",
-        "Weekly, on Mondays, for fiscal weeks running Sunday to Saturday. Each delivery restates the full history.",
-        "Recent weeks are provisional: issuers post late transactions for up to three weeks after a week ends,",
-        "and each delivery restates the trailing weeks. A history of the trailing weeks as first delivered is",
-        "supplied with each merchant coverage file.",
-        "",
-        "COVERAGE",
-        "The panel holds the general-purpose credit and debit cards (Visa, Mastercard, American Express,",
-        "Discover) of its contributing issuers' cardholders in the United States. Store-branded private-label",
-        "cards and prepaid cards are not in the panel.",
-        "",
-        "WHAT EACH ROW CARRIES",
-        "Each row is one fiscal week, one contributing issuer, one billing region of the cardholder (Northeast,",
-        "Southeast, Midwest, West), one year in which the card accounts were opened at the issuer and one",
-        "merchant id. It gives the settled value in US dollars of the panel's card transactions matched to the",
-        "merchant, the number of those transactions, and the panel cards open on the issuer's file that week",
-        "for that region and opening year.",
-        "",
-        "MERCHANT MATCHING",
-        "Descriptors are matched to merchants by name. A descriptor carrying the merchant's trade name is",
-        "rolled into that merchant's id. Monthly spend by raw descriptor is supplied for each merchant id.",
-        "",
-        "ISSUER CHANGES",
-    ]
-    for code, d in joins:
-        lines.append("%s  first delivered week beginning %s" % (code, d))
-    for code, d in leave:
-        lines.append("%s  last delivered week beginning %s; the issuer's data agreement ended" % (code, d))
-    lines += ["", "Kestrel Spend Panel, client services. A bulletin is sent with each change to the panel."]
-    open(path, "w").write("\n".join(lines) + "\n")
+         Paragraph("Source: Brindle & Moss, Inc., Form 10-K for the fiscal year ended February 1, 2025.", small)]
+    O.build(path, s, "Brindle & Moss 10-K excerpts", "Larkhill Partners research", "BMH 10-K FY2024",
+            "Larkhill Partners  |  Research  |  Internal", dt.datetime(2025, 3, 27, 8, 40, 12, tzinfo=EST),
+            dt.datetime(2025, 3, 27, 9, 2, 47, tzinfo=EST))
 
 
 def model(path, rows, fit, rmse, q3):
@@ -154,13 +92,7 @@ def model(path, rows, fit, rmse, q3):
     f.append(["Term", "Value"])
     f.append(["Intercept (pp)", round(100 * fit[0], 2)])
     f.append(["Slope", round(fit[1], 3)])
-    f.append(["Back-test RMSE, rolling origins (pp)", round(100 * rmse, 2)])
-    f.append([])
-    f.append(["Per-card spend: Kestrel spend per open panel card, merchant ids M0412, M0413 and M2290 (from 2 June 2024) "
-              "as delivered, issuers in the panel in both quarters, weekly averages."])
-    f.append(["Reported growth: net sales per week, Fernhollow taken out unless in both quarters."])
-    f.append(["Fit: least squares, fiscal 2022 Q1 to fiscal 2025 Q2. Back-test: from the seventh quarter, each fitted on "
-              "the quarters before it."])
+    f.append(["Back-test RMSE (pp)", round(100 * rmse, 2)])
     b = wb.create_sheet("Q3 FY2025 call")
     b.append(["Item", "Value"])
     for k, v in q3:
