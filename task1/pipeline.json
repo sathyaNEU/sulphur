@@ -1,42 +1,41 @@
 {
  "task": "task1",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 80,084, each at least 3.5 times its planned cost per start in expected 36-month net revenue (3.94 to 6.46, the best line left out 3.05); not the 14 lines for EUR 135,385 the careful but hurried reading funds",
- "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month value of the Jul-Sep 2023 starts by channel with household returns; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 points the April 2027 prices add; R5 three-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start per line; R8 the funded lines and budget; R9 the plan's 2027 starts paying on 31 Dec 2027 by channel",
- "architecture": 3,
- "loops": 1,
+ "call": "provisional: lead the spring 2027 campaign with Standaard, not Onbeperkt",
+ "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan, Nov 2025-Oct 2026; R3 share of each plan's counted hours reported only at licence renewal; R4 each plan's spring 2024 campaign sign-ups over 24 months (conversion, paying months, net revenue at 2027 prices); R5 each plan's 24-month contribution per spring 2027 sign-up; R6 the 2027 remuneration owed on the Oct 2026 base; R7 the lead plan",
+ "architecture": 4,
+ "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-11",
-  "checks": "85 checks, 0 FAIL, 2 WARN"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (answer figure 3.5 is the filed bar; ranking flags rank nothing; dates after the setting are scheduled billing dates, the post-export login, payment-method and exception dates fixed), 2026-11-11",
-  "reader": "not re-run on the audit repair: no sentence under target/ or in the prompt changed; passes 1 and 2 (2026-11-10) clean"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (overuse.weight, overuse.forum, repeat.deliverables; answered in the card's notes)",
-  "nearest": "task8 v4 lineage 0.09"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "gate_h": "pass (one_thing none; the measured largest hint rescues 2 of 9, none rescues the funded set)",
-  "report": "task1/determinism_check_report.md (pass 3, on the repaired cut; order not kept by the thread, R2 to R7 and R9 left to verify.py)"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": 37.6,
+ "paper_pair": null,
  "effort": {
-  "quick": 14.0,
-  "careful": 37.6,
-  "thorough": 100.0,
-  "largest_hint": "the April 2025 rise also raised the share leaving at the end of the introductory price; rescues 2 of 9 (R3, R4)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -94,7 +93,7 @@
    "note": "the platform's review of the 2026-11-11 reshipped cut returned it on determinism (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection are open modelling choices no file pins, and a return rate not tied to early reading funds 9 to 13 lines; the base window reads as October 2025 to September 2026 off the plan's 28 October date; KPI 2.6 counts every later subscription, the golden only the first. Architecture 3 spent (two returns on forcing; its deciding lessons vintage_or_cohort_drift and completion_of_young_cohorts are on the client's closed page of 2026-11-12); re-rooted to architecture 4 in a new world"
   }
  ],
- "resume": "RETURNED 2026-11-12: architecture 3 spent; re-root to architecture 4 at stage 1 (new world, new shell, deciding lesson off the closed page)",
+ "resume": "DESIGN: architecture 4 drawn (Kraanvogel Luisterboeken, the spring 2027 campaign's lead plan); next the full design note to precut.py exit 0, then the generator",
  "approved": null,
  "submitted": null,
  "portal": {
