@@ -12,7 +12,7 @@
     "2023": 25796,
     "2024": 28781,
     "2025": 22561,
-    "2026": 25056
+    "2026": 25508
    },
    "bands": {
     "2022": [
@@ -32,8 +32,8 @@
      23012
     ],
     "2026": [
-     24555,
-     25557
+     24998,
+     26018
     ]
    },
    "partly_share": 0.6,
@@ -51,7 +51,7 @@
       "2023": 25796,
       "2024": 28781,
       "2025": 22561,
-      "2026": 25056
+      "2026": 25508
      },
      "why": "every log reconciled by reflex (R01, R29): the device record's closes timed from the first trip; the gap-filled archive route is a shortcut in routes"
     },
@@ -60,7 +60,7 @@
      "2023": 25796,
      "2024": 28781,
      "2025": 22561,
-     "2026": 25056
+     "2026": 25508
     }
    },
    "precedent": []
@@ -72,22 +72,22 @@
    "figure": "net_2026",
    "depends": [],
    "independent": "the dashboard and the 2026 records",
-   "golden": 21328,
+   "golden": 21780,
    "band": [
-    20795,
-    21861
+    21236,
+    22324
    ],
    "partly": [
-    20048,
-    22608
+    20473,
+    23087
    ],
    "passes": {
     "quick": 27370,
     "careful": {
-     "value": 25056,
+     "value": 25508,
      "why": "the restored loop priced alone: no receiving recloser's trip netted (L16), only the visible closes onto a fault taken off (L06)"
     },
-    "thorough": 21328
+    "thorough": 21780
    },
    "precedent": [
     "L16",
@@ -171,14 +171,14 @@
    "figure": "summer_2027_receiving",
    "depends": [],
    "independent": "the hourly amps, the register and the capital works",
-   "golden": 388,
+   "golden": 381,
    "band": [
-    318,
-    455
+    311,
+    445
    ],
    "partly": [
-    270,
-    524
+    264,
+    512
    ],
    "passes": {
     "quick": 0,
@@ -186,7 +186,7 @@
      "value": 582,
      "why": "the 2025-26 summers' trips averaged as the coming summer (N02), the reinforcements in service on the plan's dates (N03)"
     },
-    "thorough": 388
+    "thorough": 381
    },
    "precedent": [
     "N02",
@@ -202,22 +202,22 @@
     "R4"
    ],
    "independent": "",
-   "golden": 24679,
+   "golden": 25741,
    "band": [
-    23712,
-    25405
+    24784,
+    26551
    ],
    "partly": [
-    22526,
-    26676
+    23544,
+    27879
    ],
    "passes": {
     "quick": 32180,
     "careful": {
-     "value": 28729,
+     "value": 29666,
      "why": "the restored loop priced alone (L16), the plan's dates as given (N03), the archive's success rate (N10)"
     },
-    "thorough": 24679
+    "thorough": 25741
    },
    "precedent": [
     "L16",
@@ -232,8 +232,8 @@
     "R2"
    ],
    "values": {
-    "R2": 21328,
-    "R5": 26482,
+    "R2": 21780,
+    "R5": 27523,
     "R4": 582
    }
   },
@@ -241,7 +241,7 @@
    "sentence": "the dashboard counts every completed sequence whatever its duration, and the archive misses the storm overflows",
    "rescues": [],
    "values": {
-    "R2": 25056
+    "R2": 25508
    }
   },
   {
@@ -250,7 +250,7 @@
     "R3"
    ],
    "values": {
-    "R5": 28014
+    "R5": 28937
    }
   },
   {
@@ -258,7 +258,7 @@
    "rescues": [],
    "values": {
     "R4": 938,
-    "R5": 28729
+    "R5": 29666
    }
   }
  ],
@@ -266,10 +266,10 @@
   {
    "name": "the golden",
    "answer": [
-    "2026 net 21328",
+    "2026 net 21780",
     "re-battery 16 controls",
-    "receiving 2027 388",
-    "2027 24679"
+    "receiving 2027 381",
+    "2027 25741"
    ],
    "golden": true
   },
@@ -288,25 +288,25 @@
     "2026 net 27654",
     "re-battery 2 controls",
     "receiving 2027 582",
-    "2027 28729"
+    "2027 29666"
    ]
   },
   {
    "name": "the careful but hurried pass",
    "answer": [
-    "2026 net 25056",
+    "2026 net 25508",
     "re-battery 2 controls",
     "receiving 2027 582",
-    "2027 28729"
+    "2027 29666"
    ]
   },
   {
    "name": "the receiving trips netted, the plan trusted",
    "answer": [
-    "2026 net 21328",
+    "2026 net 21780",
     "re-battery 2 controls",
-    "receiving 2027 237",
-    "2027 25232"
+    "receiving 2027 236",
+    "2027 26253"
    ]
   }
  ],
@@ -317,15 +317,15 @@
   "golden_family": [
    {
     "name": "lost sequences counted from the configuration's customers",
-    "value": 21328
+    "value": 21780
    },
    {
     "name": "lost sequences counted from the outage record's steps",
-    "value": 21328
+    "value": 21780
    },
    {
     "name": "receiving trips read from the outage record alone",
-    "value": 21328
+    "value": 21780
    }
   ],
   "shortcuts": [
@@ -337,11 +337,11 @@
   "perturbations": [
    {
     "input": "section customers +10%",
-    "value": 23461
+    "value": 23958
    },
    {
     "input": "section customers -10%",
-    "value": 19195
+    "value": 19602
    }
   ]
  },
@@ -442,15 +442,17 @@
    ]
   },
   "R4": {
-   "pickup at 1.05 of the hourly average": 440.7178608736052,
-   "every summer hour alike": 327.560748813052,
-   "slip from reconductoring alone": 408.56317852634936
+   "pickup at 1.05 of the hourly average": 432.4330110388952,
+   "every summer hour alike": 320.6493444262603,
+   "slip from reconductoring alone": 400.22019014847194,
+   "unlocated breaker lockouts as section 1 faults": 388.2730711120886
   },
   "R5": {
-   "pickup at 1.05 of the hourly average": 24197,
-   "every hour alike": 24907,
-   "slip from reconductoring alone": 24585,
-   "the radio outage kept in the success rate": 24679
+   "pickup at 1.05 of the hourly average": 25290,
+   "every hour alike": 25962,
+   "slip from reconductoring alone": 25654,
+   "the radio outage kept in the success rate": 25741,
+   "unlocated breaker lockouts as section 1 faults": 26029
   }
  },
  "ruled_out": {
@@ -486,19 +488,25 @@
     "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.43 V at 30 A against 0.12 V"
    }
   },
+  "R5": {
+   "without the breaker's own section": {
+    "value": 24394,
+    "ruled_out_by": "the record's breaker lockouts for a section 2 fault, re-closed onto section 1 within five minutes in 11 of 15"
+   }
+  },
   "R4": {
    "June to August": {
-    "value": 364,
+    "value": 357,
     "inside_band": true,
     "ruled_out_by": "the design basis files summer as 1 June to 30 September"
    },
    "May to September": {
-    "value": 432,
+    "value": 423,
     "inside_band": true,
     "ruled_out_by": "the design basis files summer as 1 June to 30 September"
    },
    "July to August": {
-    "value": 241,
+    "value": 236,
     "inside_band": false,
     "ruled_out_by": "the design basis files summer as 1 June to 30 September"
    }

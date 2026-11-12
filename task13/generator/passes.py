@@ -183,10 +183,15 @@ def write(target, path):
                                                    rr['f_tests']['control_age_slopes']['F'], rr['oos_rmse_v'][name],
                                                    rr['oos_rmse_v'][golden_r3])}
                         for name, n in rr['counts'].items() if not name.startswith(('each battery', 'a mixed'))}}
+    G.CB_TYPING['repair'] = False
+    r4_loc = float(G.forward(P, ops)['harm'].sum())
+    r5_loc = G.forecast(P, ops, sims=300)['mean']
+    G.CB_TYPING['repair'] = True
     fam_r4 = {
         'pickup at 1.05 of the hourly average': float(G.forward(P, ops, pk=1.05)['harm'].sum()),
         'every summer hour alike': float(G.forward(P, ops, weighting='hours')['harm'].sum()),
         'slip from reconductoring alone': float(G.forward(P, ops, reinf_cats=('Reconductor',))['harm'].sum()),
+        'unlocated breaker lockouts as section 1 faults': r4_loc,
     }
     fam_r5 = {
         'pickup at 1.05 of the hourly average': None,
@@ -226,6 +231,10 @@ def write(target, path):
     r4 = gold['R4']
     lo4 = math.floor(min(round(r4), *[round(v) for v in fam_r4.values()]) * 0.97)
     hi4 = math.ceil(max(round(r4), *[round(v) for v in fam_r4.values()]) * 1.03)
+    ruled_out['R5'] = {'without the breaker\'s own section': {
+        'value': round(G.forecast(P, ops, sims=300, upstream=False)['mean']),
+        'ruled_out_by': 'the record\'s breaker lockouts for a section 2 fault, re-closed onto section 1 within five '
+                        'minutes in %d of %d' % (FJ['breaker_section']['reclosed'], FJ['breaker_section']['lockouts'])}}
     ruled_out['R4'] = {name: {'value': v, 'inside_band': bool(lo4 <= v <= hi4),
                               'ruled_out_by': 'the design basis files summer as 1 June to 30 September'}
                        for name, v in FJ['summer_windows'].items()}
@@ -242,7 +251,8 @@ def write(target, path):
     fam5 = {'pickup at 1.05 of the hourly average': G.forecast(P, ops, pk=1.05, sims=300)['mean'],
             'every hour alike': G.forecast(P, ops, weighting='hours', sims=300)['mean'],
             'slip from reconductoring alone': G.forecast(P, ops, reinf_cats=('Reconductor',), sims=300)['mean'],
-            'the radio outage kept in the success rate': G.forecast(P, ops, skyline_fixed=False, sims=300)['mean']}
+            'the radio outage kept in the success rate': G.forecast(P, ops, skyline_fixed=False, sims=300)['mean'],
+            'unlocated breaker lockouts as section 1 faults': r5_loc}
     lo5 = math.floor(min(r5, *fam5.values()) * 0.98)
     hi5 = math.ceil(max(r5, *fam5.values()) * 1.02)
     res.append({'id': 'R5', 'name': '2027 customer interruptions avoided as the schemes stand', 'graded_as': 'Component 2',

@@ -4,18 +4,19 @@
   "2023": 25796,
   "2024": 28781,
   "2025": 22561,
-  "2026": 25056
+  "2026": 25508
  },
  "bridge_2026": {
   "dashboard": 27370,
   "lost": 0,
+  "failed_upstream": 452,
   "after_five": 2314,
   "reinterrupted": 2407,
   "recv_trips_own": 1321,
   "closes_own": 0,
-  "net": 21328
+  "net": 21780
  },
- "net_2026": 21328,
+ "net_2026": 21780,
  "dashboard_2026": 27370,
  "rebattery_set": [
   "RCL-20149",
@@ -36,11 +37,11 @@
   "RCL-21710"
  ],
  "rebattery_n": 16,
- "summer_2027_receiving": 388,
+ "summer_2027_receiving": 381,
  "summer_directions": "EGL212 to EGL292, EGL292 to EGL212, GTH587 to RPD436, RPD436 to GTH587, KST234 to MNP352, MNP352 to KST234, KST254 to LMV593, LMV593 to KST254, KST259 to LMV562, LMV562 to KST259, KST273 to LMV582, LMV582 to KST273, LMV580 to KST217, KST217 to LMV580, MDL330 to EGL259, EGL259 to MDL330",
- "forecast_2027": 24679,
- "forecast_2027_p10": 17912,
- "forecast_2027_p90": 31580,
+ "forecast_2027": 25741,
+ "forecast_2027_p10": 18889,
+ "forecast_2027_p90": 32894,
  "slip_median_months": 3.9,
  "years": {
   "2022": {
@@ -73,7 +74,7 @@
   },
   "2026": {
    "lockouts": 75,
-   "restored_5": 25056,
+   "restored_5": 25508,
    "restored_after": 2979,
    "not_in_archive": 7,
    "dashboard": 27370
@@ -91,10 +92,10 @@
  "book_rebattery_n": 27,
  "quick_rebattery_n": 11,
  "careful_summer_2027": 582,
- "summer_2027_plan_trusted": 237,
- "summer_2027_no_new_load": 337,
- "careful_forecast_2027": 28729,
- "forecast_2027_gross": 27476,
+ "summer_2027_plan_trusted": 236,
+ "summer_2027_no_new_load": 329,
+ "careful_forecast_2027": 29666,
+ "forecast_2027_gross": 28393,
  "reinforcements": [
   {
    "feeder": "LMV593",
@@ -353,9 +354,9 @@
   }
  },
  "summer_windows": {
-  "June to August": 364,
-  "May to September": 432,
-  "July to August": 241
+  "June to August": 357,
+  "May to September": 423,
+  "July to August": 236
  },
  "rebattery_core": [
   "RCL-20149",
@@ -413,7 +414,7 @@
  "supervised_now": [
   "L01"
  ],
- "lockout_rate_total": 49.3,
+ "lockout_rate_total": 49.0,
  "success_rate": 0.609,
  "battery_v": {
   "RCL-21316": 18.08,
@@ -434,9 +435,17 @@
   "RCL-20188": 21.13,
   "RCL-21281": 21.22
  },
+ "forecast_2027_location_typing": 26029,
+ "forecast_2027_no_breaker_section": 24394,
+ "breaker_section": {
+  "events_a_year": 3.1,
+  "reclosed_share": 0.733,
+  "lockouts": 15,
+  "reclosed": 11
+ },
  "forecast_2027_band": [
-  23712,
-  25405
+  24784,
+  26551
  ],
  "lockouts_total": 405,
  "not_in_archive_total": 35,
@@ -445,8 +454,8 @@
   0.23
  ],
  "summer_2027_band": [
-  318,
-  455
+  311,
+  445
  ],
  "constants": {
   "test_a": 5,

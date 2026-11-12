@@ -65,8 +65,16 @@ def main():
     check('realism: the dashboard figure is not round', F['dashboard_2026'] % 100 != 0)
     # ------------------------------------------------------------------------------------ semantic fork rows
     br = F['bridge_2026']
-    check('SF1 avoided is net: the walk closes', br['dashboard'] + br['lost'] - br['after_five'] - br['reinterrupted'] -
-          br['recv_trips_own'] - br['closes_own'] == br['net'])
+    check('SF1 avoided is net: the walk closes', br['dashboard'] + br['lost'] + br['failed_upstream'] - br['after_five'] -
+          br['reinterrupted'] - br['recv_trips_own'] - br['closes_own'] == br['net'])
+    check('SF1 the walk ends where the restorations less the netting do',
+          F['r1_by_year']['2026'] - br['reinterrupted'] - br['recv_trips_own'] - br['closes_own'] == br['net'])
+    au = P.oms[P.oms['Step Type'] == 'Automatic'].copy()
+    au = au[(au['step_t'] - au['start']).dt.total_seconds() <= 300]
+    oms_route = au.groupby(au['start'].dt.tz_convert(A.CENTRAL).dt.year)['Customers Restored'].sum()
+    check('SF2 the outage record\'s automatic steps within five minutes of its start give every year the same',
+          all(int(oms_route.get(y, 0)) == F['r1_by_year'][str(y)] for y in range(2022, 2027)),
+          str({int(k): int(v) for k, v in oms_route.items()}))
     check('SF1 the gross reading lands outside the band', abs(F['r1_by_year']['2026'] - br['net']) / br['net'] > 0.05)
     partial = F['r1_by_year']['2026'] - br['recv_trips_own'] - br['closes_own']
     check('SF9 partial netting (restored customers a trip put out again still counted) lands outside 2.5 per cent',
@@ -86,10 +94,13 @@ def main():
     check('SF8 all days are in: no exclusion applied', True)
     # --------------------------------------------------------------------------------------------- the bar block
     seqs = w['seqs']
+    # the world's own restorations: every section the scheme put back, the breaker's re-close included whatever
+    # became of the transfer, within five minutes of the fault
     truth = collections.Counter()
-    for s in seqs:
-        if s.get('t_rest') is not None and (s['t_rest'] - s['when']).total_seconds() < 300:
-            truth[C.to_local(s['when']).year] += s['restored'] + s.get('restored_up', 0)
+    for x in w['oms']:
+        for st in x['steps']:
+            if st[2] == 'flisr' and st[0] < 5.0:
+                truth[C.to_local(x['true_start']).year] += st[1]
     for y in range(2022, 2027):
         g = F['r1_by_year'][str(y)]
         check('R1 raw material: %d restorations agree with the world within 1 per cent' % y,

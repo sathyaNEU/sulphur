@@ -7,7 +7,7 @@
  "stage": 5,
  "stage_name": "ready",
  "updated": "2026-11-11",
- "call": "re-battery 16 recloser controls before December; move the receiving reclosers on the 16 unswitched transfer directions to transfer settings before June without waiting for the four reinforcements; 24,679 customer interruptions avoided in 2027 as the loops stand (80 per cent range 17,912 to 31,580); 21,328 avoided January to October 2026 on the commission's definition",
+ "call": "re-battery 16 recloser controls before December (14 to 17 with the three at the 21.2 V line, led by RCL-21316, RCL-20466 and RCL-20542); move the receiving reclosers on the 16 transfer directions the ADMS does not switch to settings that carry a transfer before June, without waiting for the four reinforcements; 25,741 customer interruptions avoided in 2027 as the loops stand (80 per cent range 18,889 to 32,894); 21,780 avoided January to October 2026 on the commission's definition",
  "stump": "the storm overflows' operations read from the device record (R1), the receiving reclosers' trips netted by the order (R2), each battery carried to -27 C and to February (R3), the reinforcements at the completion the record supports (R4), all carried into 2027 (R5)",
  "architecture": 4,
  "loops": 0,
@@ -26,8 +26,8 @@
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "gate_h": "domain pass; layers pass; 5 results over 5 areas; one thing none; effort quick 0 of 5, careful 1 of 5, thorough 5 of 5; one fact rescues 1 of 5 (measured end to end)",
-  "report": "p3 in determinism_check_report.md (APPROVE; p2's Gate C on R3 and Gate E on the summer window closed); p2 in determinism_check_report_p2.md (FIX_NOW); p1 in determinism_check_report_p1.md (SEND_BACK on Gate G, closed by the re-frame)"
+  "gate_h": "judge p3: domain pass; layers pass; 5 results over 5 areas; one thing none; effort quick about 0 to 1 of 5, careful 1 of 5 by the design note (its own thread drifted to about 2 to 3 of 5), thorough 5 of 5; one fact \"rescues at most 2 of 5\". Measured end to end (effort.json): the transfer-trip sentence rescues R2 only, R5 moving to 27,523, outside 24,784 to 26,551",
+  "report": "p3 in determinism_check_report.md (APPROVE; p2's Gate C on R3 and Gate E on the summer window closed); p2 in determinism_check_report_p2.md (FIX_NOW); p1 in determinism_check_report_p1.md (SEND_BACK on Gate G, closed by the re-frame); after p3 APPROVE the golden was corrected (the breaker's re-close onto section 1 counted whatever became of the transfer; the forecast carries it, and unlocated breaker lockouts typed by their repair step): R1 2026 25,056 to 25,508, R2 21,328 to 21,780, R5 24,679 to 25,741, R4 388 to 381; no judge pass recomputed the new figures; /fix-determinism task13 licenses one if wanted"
  },
  "paper_pair": 34.5,
  "runs": {
@@ -176,9 +176,9 @@
  "cited_pair": 34.5,
  "cut": {
   "target_zip": "2b4cbfaac8e6aa2f",
-  "golden_zip": "ea3bc2c97c148ef1",
+  "golden_zip": "5b08e090d8bf9a4b",
   "target_digest": "549db717796cb938",
-  "golden_digest": "a20cf7a5ac4995ab"
+  "golden_digest": "5bd257c0e18766ab"
  },
  "prompt_rewritten": false
 }

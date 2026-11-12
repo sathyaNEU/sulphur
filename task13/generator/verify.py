@@ -54,6 +54,7 @@ def main():
     opens = ev[(ev['Event'] == 'OPEN') & (ev['Source'] == 'ADMS')]
     auto = oms[oms['Step Type'] == 'Automatic']
     by_year = {}
+    counted = set()
     for _, c in closes.iterrows():
         lid = tie_loop[c['Device']]
         fa, fb = loop_feeders[lid]
@@ -73,12 +74,36 @@ def main():
         if (c['t'] - first).total_seconds() >= 300:
             continue
         o = auto[(auto['Interrupting Device'] == lo['Device']) & ((auto['start'] - first).abs() < pd.Timedelta(minutes=40))]
+        counted.add((lo['Device'], lo['t']))
         if len(o):
             n = int(o['Customers Restored'].sum())
         else:
             op = opens[(opens['t'] >= lo['t']) & (opens['t'] <= c['t']) & (opens['Device'].map(feeder_of) == f)]
             k = max(int(str(reg.loc[reg['Asset No'] == d, 'Position'].iloc[0])[-1]) for d in op['Device'])
             n = sum(cust[(f, s)] for s in ([2, 3] if k == 1 else [3]))
+        y = first.tz_convert(CT).year
+        by_year[y] = by_year.get(y, 0) + n
+    # a breaker that re-closed onto its own first section within five minutes, where no transfer restored anyone
+    # in time: the outage record's automatic steps inside the five minutes
+    cb_closes = ev[(ev['Event'] == 'CLOSE') & (ev['Source'] == 'ADMS') & ev['Device'].str.endswith(' CB')]
+    for _, lo in lock[lock['Device'].str.endswith(' CB')].iterrows():
+        if (lo['Device'], lo['t']) in counted:
+            continue
+        lids = [l for l, ff in loop_feeders.items() if lo['feeder'] in ff]
+        if not lids:
+            continue
+        lid = lids[0]
+        if lo['t'].tz_convert(CT).tz_localize(None) < in_service[lid]:
+            continue
+        tr = trips[(trips['Device'] == lo['Device']) & (trips['t'] <= lo['t']) & (trips['t'] >= lo['t'] - pd.Timedelta(minutes=3))]
+        first = tr['t'].min()
+        cc = cb_closes[(cb_closes['Device'] == lo['Device']) & (cb_closes['t'] > lo['t']) & (cb_closes['t'] <= lo['t'] + pd.Timedelta(minutes=60))]
+        if not len(cc) or (cc['t'].iloc[0] - first).total_seconds() >= 300:
+            continue
+        o = auto[(auto['Interrupting Device'] == lo['Device']) & ((auto['start'] - first).abs() < pd.Timedelta(minutes=40))]
+        o = o[pd.to_datetime(o['Step Restored'], format='%m/%d/%Y %H:%M').dt.tz_localize(CT, ambiguous=True,
+              nonexistent='shift_forward').dt.tz_convert('UTC') <= first + pd.Timedelta(minutes=5)]
+        n = int(o['Customers Restored'].sum()) if len(o) else cust[(lo['feeder'], 1)]
         y = first.tz_convert(CT).year
         by_year[y] = by_year.get(y, 0) + n
     for y in range(2022, 2027):
@@ -113,7 +138,8 @@ def main():
                 '%d against %d' % (own, F['bridge_2026']['recv_trips_own'])))
     out.append(('R2 restorations undone 2026', abs(undone - F['bridge_2026']['reinterrupted']) <= 0.03 * F['bridge_2026']['reinterrupted'] + 1,
                 '%d against %d' % (undone, F['bridge_2026']['reinterrupted'])))
-    net = d26 - F['bridge_2026']['after_five'] + F['bridge_2026']['lost'] - own - undone - F['bridge_2026']['closes_own']
+    net = d26 - F['bridge_2026']['after_five'] + F['bridge_2026']['lost'] + F['bridge_2026']['failed_upstream'] - own - \
+        undone - F['bridge_2026']['closes_own']
     out.append(('R2 the net', abs(net - F['net_2026']) <= 0.025 * F['net_2026'], '%d against %d' % (net, F['net_2026'])))
     # ---- R3: each current battery's ln R regressed on (25 - T) and age, its own coefficients, at -27 C on 28 Feb 2027
     wx = read(tmp, 'kmkt_hourly_weather_2022-2026.csv', na_values=['M'])

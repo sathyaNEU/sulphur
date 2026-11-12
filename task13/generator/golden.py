@@ -112,9 +112,14 @@ def operations(P):
                 rec['restored'] = n
                 rec['secs'] = (tc - r['t_first']).total_seconds()
                 rec['restored_5'] = n if rec['secs'] < FIVE_MIN else 0
-                if len(cb_cl):
-                    s_up = (cb_cl['t'].iloc[0] - r['t_first']).total_seconds()
-                    rec['upstream'] = up if s_up < FIVE_MIN else 0
+        # the breaker re-closed onto the sections above an isolated fault: restored whatever became of the transfer
+        if len(cb_cl) and (cb_cl['t'].iloc[0] - r['t_first']).total_seconds() < FIVE_MIN:
+            if rec['restored'] or (len(tie_cl) and not rec['recv_trip_on_close']):
+                rec['upstream'] = P.customers(f, 1, tie_cl['t'].iloc[0].date())
+            else:
+                # no transfer restored anyone: the outage record's automatic steps are the breaker's alone
+                rec['upstream'] = int(a_steps['Customers Restored'].sum()) if len(a_steps) else \
+                    P.customers(f, 1, cb_cl['t'].iloc[0].date())
         out.append(rec)
     return pd.DataFrame(out)
 
@@ -194,14 +199,17 @@ def bridge_2026(P, ops, rt, cf):
     A_ = int(lost['restored_5'].sum() + lost['upstream'].sum())
     kept = o[o['in_archive']]
     B = int(kept.loc[kept['secs'] >= FIVE_MIN, 'restored'].sum())
+    # sequences the archive logs as failed after the breaker had re-closed: the dashboard counts none of them
+    failed = kept[kept['tie_close'].isna() | kept['recv_trip_on_close']]
+    U = int(failed['upstream'].sum())
     r26 = rt[rt['year'] == 2026] if len(rt) else rt
     Cc = int(r26['restored_before'].sum()) if len(r26) else 0
     E1 = int(r26['own'].sum()) if len(r26) else 0
     c26 = cf[cf['year'] == 2026] if len(cf) else cf
     E2 = int(c26['own'].sum()) if len(c26) else 0
-    net = D + A_ - B - Cc - E1 - E2
-    return {'dashboard': D, 'lost': A_, 'after_five': B, 'reinterrupted': Cc, 'recv_trips_own': E1,
-            'closes_own': E2, 'net': net}
+    net = D + A_ + U - B - Cc - E1 - E2
+    return {'dashboard': D, 'lost': A_, 'failed_upstream': U, 'after_five': B, 'reinterrupted': Cc,
+            'recv_trips_own': E1, 'closes_own': E2, 'net': net}
 
 
 # --------------------------------------------------------------------------------------------- batteries (R3)
@@ -440,6 +448,34 @@ def directions(P):
     return pd.DataFrame(out)
 
 
+CB_TYPING = {'repair': True}
+
+
+def cb_section(P, r):
+    """the section a breaker lockout's fault lay in: where the scheme located it, else the section the outage
+    record's repair restored, else section 1"""
+    cache = P.__dict__.setdefault('_cb_section_%s' % CB_TYPING['repair'], {})
+    key = (r['device'], r['t_lo'])
+    if key in cache:
+        return cache[key]
+    loc = P.adms[P.adms['kind'] == 'LOCATED']
+    m = loc[(loc['loop'] == r['loop']) & (loc['t'] >= r['t_lo']) & (loc['t'] <= r['t_lo'] + pd.Timedelta(minutes=10))]
+    if len(m):
+        sec = int(m['n'].iloc[0])
+    elif not CB_TYPING['repair']:
+        sec = 1
+    else:
+        rep = P.oms[(P.oms['Step Type'] == 'Repair') & (P.oms['Interrupting Device'] == r['device'])]
+        rep = rep[(rep['start'] - r['t_first']).abs() < pd.Timedelta(minutes=40)]
+        sec = 1
+        if len(rep):
+            n = int(rep['Customers Restored'].iloc[0])
+            c = {k: P.customers(r['feeder'], k, r['t_lo'].date()) for k in (1, 2, 3)}
+            sec = min(c, key=lambda kk: abs(c[kk] - n))
+    cache[key] = sec
+    return sec
+
+
 def lockout_rates(P, ops_all):
     """main-line lockouts a year per loop feeder by what the scheme would transfer (sections 2 and 3 for a fault in
     section 1, section 3 for a fault in section 2), at the record's average annual rate since 1 January 2022"""
@@ -455,9 +491,8 @@ def lockout_rates(P, ops_all):
         if r['kind'] == 'R1':
             typ = 'S2'
         elif r['kind'] == 'CB':
-            # a breaker lockout is a section 1 fault unless the scheme located it in section 2
-            m = loc[(loc['loop'] == r['loop']) & (loc['t'] >= r['t_lo']) & (loc['t'] <= r['t_lo'] + pd.Timedelta(minutes=10))]
-            typ = 'S2' if (len(m) and m['n'].iloc[0] == 2) else 'S1'
+            # a breaker lockout transfers what lies beyond its fault: sections 2 and 3, or section 3
+            typ = {1: 'S1', 2: 'S2'}.get(cb_section(P, r))
         if typ:
             rate[(f, typ)] = rate.get((f, typ), 0) + 1.0 / years
             mm = r['t_lo'].tz_convert(A.CENTRAL).month
@@ -465,6 +500,25 @@ def lockout_rates(P, ops_all):
     tot = sum(month.values())
     mshare = {m: month.get(m, 0) / tot for m in range(1, 13)}
     return rate, mshare, lo
+
+
+def upstream_rates(P, ops):
+    """breaker lockouts for a section 2 fault a year per loop feeder, at the record's average annual rate since
+    1 January 2022, and the share the scheme re-closed within five minutes: the breaker's own section, restored
+    before any transfer is tried"""
+    lo = lockouts(P)
+    years = (pd.Timestamp('2026-11-01', tz='UTC') - pd.Timestamp('2022-01-01', tz='UTC')).days / 365.25
+
+    def sec2(r):
+        return cb_section(P, r) == 2
+    rate = {}
+    for _, r in lo[lo['kind'] == 'CB'].iterrows():
+        if sec2(r):
+            rate[r['feeder']] = rate.get(r['feeder'], 0) + 1.0 / years
+    o = ops[ops['kind'] == 'CB']
+    o = o[o.apply(sec2, axis=1)]
+    q_up = float((o['upstream'] > 0).mean()) if len(o) else 0.0
+    return rate, q_up, len(o)
 
 
 def fault_hours(P, lo):
@@ -617,7 +671,8 @@ def battery_fail_temp(br, v_rest_fn, k):
 
 
 def forecast(P, ops, plan_trusted=False, net=True, skyline_fixed=True, battery=True, supervised=True, sims=4000,
-             months_all=tuple(range(1, 13)), success_from='record', pk=1.0, weighting='faults', reinf_cats=None):
+             months_all=tuple(range(1, 13)), success_from='record', pk=1.0, weighting='faults', reinf_cats=None,
+             upstream=True):
     """R5: 2027 customer interruptions avoided if the schemes are operated as they stand"""
     D = directions(P)
     rate, mshare, lo = lockout_rates(P, ops)
@@ -660,6 +715,7 @@ def forecast(P, ops, plan_trusted=False, net=True, skyline_fixed=True, battery=T
     if battery:
         cold_fail_seen = 0.0
         q_nb = q
+    rate_up, q_up, _ = upstream_rates(P, ops)
     rng = np.random.default_rng(11)
     units = []
     mean = 0.0
@@ -690,6 +746,15 @@ def forecast(P, ops, plan_trusted=False, net=True, skyline_fixed=True, battery=T
                     ev += mshare[m] * (T * (1 - p) - p * Bd)
                 mean += r_ * qq * ev
                 units.append((r_, qq, ev / max(1e-9, sum(mshare[m] for m in months_all)), T, Bd))
+            # a breaker lockout for a section 2 fault: the breaker re-closes onto section 1 once R2 and then R1 have
+            # opened on their batteries, before the capacity check, the settings and any operator confirmation
+            ru = rate_up.get(fa, 0.0) if upstream else 0.0
+            if ru:
+                U1 = P.customers(fa, 1, dt.date(2027, 1, 1))
+                t_w = max(tfail.get(P.dev_at[(fa, 'R1')], -99), tfail.get(P.dev_at[(fa, 'R2')], -99))
+                qu = q_up * (1 - (float(np.mean(T_ev < t_w)) if battery else 0.0))
+                mean += ru * qu * U1
+                units.append((ru, qu, float(U1), U1, 0))
     # the 80 per cent range: the year's lockouts and outcomes drawn as they fall
     tot = np.zeros(sims)
     for r_, qq, evu, T, Bd in units:
@@ -873,9 +938,17 @@ def build(target, gold_dir, figures=None):
         bt = R['battery_table']
         F['battery_v'] = {r['asset']: round(r['v_op'], 2) for _, r in bt.iterrows() if r['asset'] in gold | set(F['rebattery_margin'])}
         r5 = R['forecast']['mean']
+        CB_TYPING['repair'] = False
+        r5_loc, r4_loc = forecast(P, ops, sims=300)['mean'], round(float(forward(P, ops)['harm'].sum()))
+        CB_TYPING['repair'] = True
         fam5 = [forecast(P, ops, pk=1.05, sims=300)['mean'], forecast(P, ops, weighting='hours', sims=300)['mean'],
                 forecast(P, ops, reinf_cats=('Reconductor',), sims=300)['mean'],
-                forecast(P, ops, skyline_fixed=False, sims=300)['mean']]
+                forecast(P, ops, skyline_fixed=False, sims=300)['mean'], r5_loc]
+        F['forecast_2027_location_typing'] = round(r5_loc)
+        F['forecast_2027_no_breaker_section'] = round(forecast(P, ops, sims=300, upstream=False)['mean'])
+        ru_, qu_, nu_ = upstream_rates(P, ops)
+        F['breaker_section'] = {'events_a_year': round(sum(ru_.values()), 2), 'reclosed_share': round(qu_, 3),
+                                'lockouts': nu_, 'reclosed': int(round(qu_ * nu_))}
         F['forecast_2027_band'] = [math.floor(min(r5, *fam5) * 0.98), math.ceil(max(r5, *fam5) * 1.02)]
         F['lockouts_total'] = sum(v['lockouts'] for v in R['years'].values())
         F['not_in_archive_total'] = sum(v['not_in_archive'] for v in R['years'].values())
@@ -883,7 +956,7 @@ def build(target, gold_dir, figures=None):
         F['p_jun1_range'] = [min(ps), max(ps)]
         fam = [F['summer_2027_receiving'], round(float(forward(P, ops, pk=1.05)['harm'].sum())),
                round(float(forward(P, ops, weighting='hours')['harm'].sum())),
-               round(float(forward(P, ops, reinf_cats=('Reconductor',))['harm'].sum()))]
+               round(float(forward(P, ops, reinf_cats=('Reconductor',))['harm'].sum())), r4_loc]
         F['summer_2027_band'] = [math.floor(min(fam) * 0.97), math.ceil(max(fam) * 1.03)]
         F['constants'] = {'test_a': 5, 'op_a': 30, 'v_min': 21.2, 'design_c': -27, 'new_load_mw': 2.2,
                           'margin_v': 0.1, 'band_r1_pct': 2, 'band_r2_pct': 2.5, 'band_r5_pct': 4, 'range_pct': 80,
