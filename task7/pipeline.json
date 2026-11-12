@@ -1,31 +1,39 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "stump": "",
  "architecture": 10,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12",
+  "note": "1 WARN: nearest chains task21 (the weight only)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-12, --asof 2026-11-02): stump-vocabulary lines on the documents' ordinary words, ruled harmless",
+  "reader": "2026-11-12 isolated reader: questions 2 to 4 none; question 6 no one thing, the appraisal roll judged unneeded (the carry the build prices); stamps after today moved: as-of 2 November 2026"
  },
  "duplicate_check": {
   "heart": "",
   "surface": ""
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "pass1": {
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "note": "set aside: the thread opened the blocks before deriving; its one finding (the interval-boundary reading of Lumivale's share) closed as rivals in the generator (SF11)"
+  },
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "pass: 9 graded across 5 areas or more, one_thing none, the best single hint rescues about 1 to 2 of 9",
+  "report": "task7/determinism_check_report.md",
+  "order_kept": true,
+  "first_pass": "blind: renewed Corvane, Lumivale, Ardena and Pinecrest Home (the careful but hurried set); counts within 1 per cent for five providers; none of the three carries; careful column about 20 on it"
  },
  "returned": [
   {
@@ -95,7 +103,7 @@
    "note": "the platform run landed architecture 9; re-rooted to another world"
   }
  ],
- "resume": "stage 2: write the results chain, effort test on paper with the architecture 9 run's route as the careful pass, forks and prompt; then the generator (world.py simulating the program: homes, devices by provider and channel, weather, test and alert events, overrides, 15-minute loads, ERCOT 4CP), the pack, documents, golden, checks; prototype calibration in the session scratchpad (dr/proto2.py)",
+ "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip and pastes the four blocks; then the two platform runs and /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -348,21 +356,37 @@
    }
   ]
  },
- "paper_pair": null,
+ "paper_pair": 40.5,
  "subdomain": "efficiency-savings-verification",
- "call": "renew three of the six thermostat providers (provisional)",
+ "call": "renew Corvane, Ardena and Kitebrook for summer 2027; not Lumivale, Ondera or Pinecrest Home (3.76 MW at the 4CP intervals, USD 42,500 net)",
  "doctrine": "throughout",
- "chain": "R1 each provider's test-event impact per assigned device around its window; R2 the share of enrolled devices still in the event at the 4CP intervals on the 4CP days; R3 each provider's 2027 fleet and its mix; R4 the shed per device for each fleet's homes; R5 each provider's kW per 2027 device at the 4CP intervals; R6 the providers renewed; R7 the renewed providers' MW and net saving",
+ "chain": "R1 Ondera at the 4CP intervals after its window (Component 4); R2 Lumivale's share in the event on the 4CP days (Component 1); R3 each provider's 2027 devices and cost (Ask 2); R3b Pinecrest Home's 2027 fleet in the event (Component 2); R4 Kitebrook's homes against the research sample (Component 3); R5 each provider's kW per 2027 device (Ask 1); R6 the renewed set (Recommendation); R7 the renewed providers' MW and net (Ask 3)",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 14.0,
+  "careful": 40.5,
+  "thorough": 100.0,
+  "largest_hint": "each of the three carries rescues 1 of 8 (R2, R3b, R4)"
  },
  "prompt_rewritten": false,
- "gates_stage3": {},
- "zips": {},
- "gates_stage5": {},
+ "gates_stage3": {
+  "date": "2026-11-12",
+  "checks": "69 of 69",
+  "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
+  "effort": "careful 40.5, the note agreeing",
+  "make_twice": "SAME"
+ },
+ "zips": {
+  "target.zip": "574e569c612f0e26a8fc6eda748d64e58750349ba3adcbaf50ac0299438cc206",
+  "golden.zip": "0ffdf239d80073de7d35572b09c7a4be23420f5cc9dfda3fea4ff2a8dfe97bed"
+ },
+ "gates_stage5": {
+  "date": "2026-11-12",
+  "checks": "69 of 69",
+  "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
+  "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
+  "effort_check_note": "PASS (careful 40.5)",
+  "audit_containers": "PASS"
+ },
  "level_up": {
   "date": "2026-11-10",
   "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",

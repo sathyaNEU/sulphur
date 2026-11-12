@@ -1,0 +1,554 @@
+{
+ "results": [
+  {
+   "id": "R5",
+   "name": "each provider's kW per 2027 device at the 4CP intervals",
+   "graded_as": "Ask 1",
+   "figure": "kw",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "Corvane": 0.63,
+    "Lumivale": 0.306,
+    "Ardena": 1.015,
+    "Ondera": -0.125,
+    "Kitebrook": 0.749,
+    "Pinecrest Home": 0.306
+   },
+   "bands": {
+    "Corvane": [
+     0.574,
+     0.686
+    ],
+    "Lumivale": [
+     0.286,
+     0.326
+    ],
+    "Ardena": [
+     0.954,
+     1.076
+    ],
+    "Ondera": [
+     -0.197,
+     -0.053
+    ],
+    "Kitebrook": [
+     0.704,
+     0.794
+    ],
+    "Pinecrest Home": [
+     0.286,
+     0.326
+    ]
+   },
+   "partly_share": 0.5,
+   "precedent": [
+    "N12",
+    "L12",
+    "L38"
+   ],
+   "passes": {
+    "quick": {
+     "Corvane": 0.772,
+     "Lumivale": 0.75,
+     "Ardena": 0.88,
+     "Ondera": 0.944,
+     "Kitebrook": 0.663,
+     "Pinecrest Home": 0.605
+    },
+    "careful": {
+     "Corvane": 0.682,
+     "Lumivale": 0.552,
+     "Ardena": 0.971,
+     "Ondera": -0.123,
+     "Kitebrook": 0.505,
+     "Pinecrest Home": 0.454
+    },
+    "thorough": {
+     "Corvane": 0.63,
+     "Lumivale": 0.306,
+     "Ardena": 1.015,
+     "Ondera": -0.125,
+     "Kitebrook": 0.749,
+     "Pinecrest Home": 0.306
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the providers renewed",
+   "graded_as": "Recommendation",
+   "figure": "renewed",
+   "depends": [
+    "R5"
+   ],
+   "independent": "",
+   "golden": [
+    "Corvane",
+    "Ardena",
+    "Kitebrook"
+   ],
+   "precedent": [
+    "N12",
+    "L12"
+   ],
+   "passes": {
+    "quick": [
+     "Corvane",
+     "Lumivale",
+     "Ardena",
+     "Ondera",
+     "Kitebrook",
+     "Pinecrest Home"
+    ],
+    "careful": [
+     "Corvane",
+     "Lumivale",
+     "Ardena",
+     "Pinecrest Home"
+    ],
+    "thorough": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   }
+  },
+  {
+   "id": "R3",
+   "name": "each provider's devices on 1 July 2027 and the quote's cost",
+   "graded_as": "Ask 2",
+   "figure": "n27",
+   "depends": [],
+   "independent": "the roster and the quotes",
+   "golden": {
+    "Corvane": 2127,
+    "Lumivale": 1984,
+    "Ardena": 1268,
+    "Ondera": 1253,
+    "Kitebrook": 1511,
+    "Pinecrest Home": 2760
+   },
+   "bands": {
+    "Corvane": [
+     2063,
+     2191
+    ],
+    "Lumivale": [
+     1924,
+     2044
+    ],
+    "Ardena": [
+     1230,
+     1306
+    ],
+    "Ondera": [
+     1215,
+     1291
+    ],
+    "Kitebrook": [
+     1466,
+     1556
+    ],
+    "Pinecrest Home": [
+     2677,
+     2843
+    ]
+   },
+   "passes": {
+    "quick": {
+     "Corvane": 1903,
+     "Lumivale": 1886,
+     "Ardena": 1332,
+     "Ondera": 1215,
+     "Kitebrook": 1284,
+     "Pinecrest Home": 1147
+    },
+    "careful": {
+     "Corvane": 2127,
+     "Lumivale": 1984,
+     "Ardena": 1268,
+     "Ondera": 1253,
+     "Kitebrook": 1511,
+     "Pinecrest Home": 2760
+    },
+    "thorough": {
+     "Corvane": 2127,
+     "Lumivale": 1984,
+     "Ardena": 1268,
+     "Ondera": 1253,
+     "Kitebrook": 1511,
+     "Pinecrest Home": 2760
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the renewed providers' MW at the 4CP intervals and the net saving",
+   "graded_as": "Ask 3",
+   "figure": "totals",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "MW": 3.76,
+    "net USD": 42500
+   },
+   "bands": {
+    "MW": [
+     3.4592,
+     4.0608
+    ],
+    "net USD": [
+     39100.0,
+     45900.0
+    ]
+   },
+   "precedent": [
+    "N12",
+    "L12"
+   ],
+   "passes": {
+    "quick": {
+     "MW": null,
+     "net USD": null
+    },
+    "careful": {
+     "MW": 5.03,
+     "net USD": 57800
+    },
+    "thorough": {
+     "MW": 3.76,
+     "net USD": 42500
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "Lumivale's share in the event at the 4CP intervals on the 4CP days",
+   "graded_as": "Component 1",
+   "figure": "lumivale_share_cp",
+   "depends": [],
+   "independent": "the providers' reports and the 4CP list",
+   "golden": 0.33,
+   "band": [
+    0.29,
+    0.38
+   ],
+   "precedent": [
+    "N12",
+    "L13"
+   ],
+   "passes": {
+    "quick": null,
+    "careful": 0.64,
+    "thorough": 0.33
+   }
+  },
+  {
+   "id": "R4",
+   "name": "Kitebrook's fleet's homes against its research-sample devices'",
+   "graded_as": "Component 3",
+   "figure": "kitebrook_transport",
+   "depends": [],
+   "independent": "the appraisal roll and the research sample",
+   "golden": 1.54,
+   "band": [
+    1.48,
+    1.6
+   ],
+   "precedent": [
+    "L38"
+   ],
+   "passes": {
+    "quick": null,
+    "careful": 1.0,
+    "thorough": 1.54
+   }
+  },
+  {
+   "id": "R3b",
+   "name": "Pinecrest Home's 2027 fleet's share in the event",
+   "graded_as": "Component 2",
+   "figure": "pinecrest_share27_2027",
+   "depends": [],
+   "independent": "the roster, the quotes and the reports",
+   "golden": 0.59,
+   "band": [
+    0.5599999999999999,
+    0.62
+   ],
+   "precedent": [
+    "L11",
+    "L12"
+   ],
+   "passes": {
+    "quick": null,
+    "careful": 0.85,
+    "thorough": 0.59
+   }
+  },
+  {
+   "id": "R1",
+   "name": "Ondera's devices at the 4CP intervals after its window",
+   "graded_as": "Component 4",
+   "figure": "ondera_kw",
+   "depends": [],
+   "independent": "the test events and the 4CP list",
+   "golden": -0.125,
+   "band": [
+    -0.155,
+    -0.095
+   ],
+   "passes": {
+    "quick": 0.944,
+    "careful": -0.123,
+    "thorough": -0.125
+   }
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Corvane",
+    "Ardena",
+    "Kitebrook"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the test events' reduction read at the 4CP intervals (careful but hurried)",
+   "answer": [
+    "Corvane",
+    "Lumivale",
+    "Ardena",
+    "Pinecrest Home"
+   ],
+   "golden": false
+  },
+  {
+   "name": "... and the 4CP days' own share in the event",
+   "answer": [
+    "Corvane",
+    "Ardena",
+    "Pinecrest Home"
+   ],
+   "golden": false
+  },
+  {
+   "name": "... and the 2027 fleet's cohorts",
+   "answer": [
+    "Corvane",
+    "Lumivale",
+    "Ardena"
+   ],
+   "golden": false
+  },
+  {
+   "name": "... and the fleet's homes",
+   "answer": [
+    "Corvane",
+    "Lumivale",
+    "Ardena",
+    "Kitebrook",
+    "Pinecrest Home"
+   ],
+   "golden": false
+  },
+  {
+   "name": "the test events' average over the window (quick)",
+   "answer": [
+    "Corvane",
+    "Lumivale",
+    "Ardena",
+    "Ondera",
+    "Kitebrook",
+    "Pinecrest Home"
+   ],
+   "golden": false
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the 4CP days come late in heat waves, when members leave events, so read the share still in the event on those days, not on the test events",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "Pinecrest Home's 2027 growth is a retail cohort that is often offline and leaves events",
+   "rescues": [
+    "R3b"
+   ]
+  },
+  {
+   "sentence": "the research sample's homes are newer and smaller than the fleets', so carry the shed to the fleet's homes off the appraisal roll",
+   "rescues": [
+    "R4"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "golden_family": [
+   {
+    "name": "the golden",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "name": "still in the event read at the interval's start",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "name": "still in the event read at the interval's end",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "name": "a linear home model with a size-by-age term",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "name": "one attrition rate for every channel",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "name": "the test halves compared without the pre-event load",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the test events' reduction read at the 4CP intervals (careful but hurried)",
+    "answer": [
+     "Corvane",
+     "Lumivale",
+     "Ardena",
+     "Pinecrest Home"
+    ]
+   },
+   {
+    "name": "... and the 4CP days' own share in the event",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Pinecrest Home"
+    ]
+   },
+   {
+    "name": "... and the 2027 fleet's cohorts",
+    "answer": [
+     "Corvane",
+     "Lumivale",
+     "Ardena"
+    ]
+   },
+   {
+    "name": "... and the fleet's homes",
+    "answer": [
+     "Corvane",
+     "Lumivale",
+     "Ardena",
+     "Kitebrook",
+     "Pinecrest Home"
+    ]
+   },
+   {
+    "name": "the test events' average over the window (quick)",
+    "answer": [
+     "Corvane",
+     "Lumivale",
+     "Ardena",
+     "Ondera",
+     "Kitebrook",
+     "Pinecrest Home"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the shed per device in the event -10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "input": "the shed per device in the event +10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "input": "the share in the event -10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "input": "the share in the event +10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "input": "the homes' transport -10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   },
+   {
+    "input": "the homes' transport +10 per cent",
+    "answer": [
+     "Corvane",
+     "Ardena",
+     "Kitebrook"
+    ]
+   }
+  ]
+ },
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

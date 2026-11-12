@@ -21,8 +21,8 @@ Data-native sentence: the co-op measures each provider's impact on randomised te
   a research sample of homes with 15-minute meters, but transmission cost is set in four 15-minute intervals that fall on
   the hottest days late in heat waves, when members override, and next summer's devices are an older fleet with a new
   retail cohort that is often offline, in homes larger and older than the research sample's
-As of: 20 November 2026 (the provider quotes of November, the 2026 summer's reports and ERCOT's 2026 4CP notice; the
-  board meets on 8 December)
+As of: 2 November 2026 (the provider quotes of October, the roster of 30 October, the 2026 summer's reports and ERCOT's
+  2026 4CP notice; Energy Programs' memo of 9 November for the board's meeting of 17 November)
 People: Renee Henry (manager of energy programs, Cedar Brake) and Charles Hardin (board chair), from `guard.py names
   --geo USA --seed 27`; neither is named in the prompt
 Card: `.claude/skills/fingerprint/cards/task7.json`, v10, registered 2026-11-12 (stamp 2026-11-12T06:45:42Z) at WARN; v9
@@ -36,7 +36,169 @@ Card: `.claude/skills/fingerprint/cards/task7.json`, v10, registered 2026-11-12 
   common); `repeat.deliverables` docx+xlsx against task20 (a board memo in Word and the workbook the renewals are priced in).
   The shell: which, we, docx+xlsx.
 
-@@DESIGN@@
+## Deep reasoning
+
+Task type: efficiency-savings-verification (energy efficiency and demand response evaluation), which serves Experiment & Causal Analysis
+Domain test: every result is a demand-response evaluation quantity at a coincident peak: a randomised test-event impact on 15-minute metered load (held-back half against called half, the home's own pre-event load as the covariate), the timing of each provider's window against the four 15-minute intervals that set transmission cost (pre-cool, coast, partial shed, snapback after the window), members leaving events as the house warms on the days of a heat wave, devices offline at dispatch, the air-conditioning load a home's size and age set, and the transmission rate per kW of 4CP load against a price per enrolled device
+Swap: "renew Corvane, Ardena and Kitebrook because Lumivale's members leave its long, deep event late in a heat wave, Pinecrest Home's 2027 fleet is a retail cohort often offline, and Kitebrook's homes shed more than the research sample's" read with a retailer's nouns keeps a set over a line and loses what decides: the 4CP intervals, the run of alert days a 4CP day ends, the indoor drift that drives a member to leave, the snapback after a window and the cooling slope of a home
+Where the weight sits: modeling, carrying one measured impact three ways before it meets a price: to the 4CP days (the third or later alert day of a heat wave, when the share of enrolled devices still in Lumivale's event at the 4CP interval is 33% against 64% on the test events), to the devices enrolled on 1 July 2027 (Pinecrest Home's fleet 65% retail, keeping 59% in the event against today's 85%) and to the fleet's homes (Kitebrook's fleet sheds 1.54 times its research-sample devices'); each carry alone moves its own provider across its line
+Layer 1: six report layouts (two on UTC, three leaving unreached devices out, one with re-sent rows), thermostats swapped under new ids, research-sample meters exchanged in 2025, the roster's re-imported rows, county-road and FM-road addresses in two forms between the appraisal roll and the accounts, interval reads missing or doubled, an ERCOT file in its own date and interval-ending format; each is the producing system's own and none decides a result
+Not one thing: the call needs three unrelated carries, each deciding a different provider: the 4CP days' own share in the event (Lumivale 0.306 kW per device against the 0.431 its price needs; the test events give 0.552 and renew it), the 2027 fleet's cohorts (Pinecrest Home 0.306 against 0.380; 0.454 on the test events), the fleet's homes (Kitebrook 0.749 against 0.602; 0.505 on the research sample's homes); Ondera's window (it ends at 17:00, before 10 of the twelve intervals) is read right by any careful pass. A run that makes none renews Corvane, Lumivale, Ardena and Pinecrest Home; each single carry lands a different wrong set; only all three renew the golden set
+One-fact test: the strongest single sentence ("the 4CP days come late in heat waves, when members leave events, so read the share still in the event on those days") rescues R2 alone and moves Lumivale; the call stays wrong on Pinecrest Home and Kitebrook; the other two sentences rescue R3b and R4 alone (effort.json, measured: 1 of 8 each)
+Not semantics: every field read correctly (the report layouts and clocks, the roster's channels and swaps, the assignment halves, the 4CP list, the roll's addresses) and every Layer 1 item handled, the careful pass still files Lumivale, Pinecrest Home and Kitebrook wrong, because none of the three carries is a reading: one is a selection of days, one a change in who the devices are, one a transport across homes
+Not rule application: Board Policy 412 files what a reduction is (against no event, per device enrolled on 1 July, at the 4CP intervals of a summer like the last three with the alerts as called and the quoted settings) and the rate; the M&V plan files how the test halves and the research sample were drawn; nothing files how an impact is measured, carried to the 4CP days, to the 2027 fleet or to the fleet's homes
+Estimand: Board Policy 412 sections 3 to 5; the 2027 transmission charge notice (USD 54.80 per kW of 4CP load a year); the quotes (price per enrolled device, planned enrolments, settings); the prompt
+No decoy: no memo, draft or stakeholder figure; the statewide potential study gives ranges for other programmes and ranks nothing of ours; no shipped file states a reduction, a share, a transport or a renewal
+No replay: no result re-derives a published figure and no stated number is wrong
+Pinned: every rival run on the cut pack by checks.py (still in the event read at the interval's start or its end, a linear home model with a size-by-age term, one leaving rate for every channel, the test halves compared without the pre-event load) lands inside each provider's band and 8 per cent or more on the golden's side of its line; each provider's golden is 12 per cent or more from its line; each single carry moves its provider 6 per cent or more across
+Run forecast: the architecture 9 run's route (it reads every file, compares randomised halves, fits temperature, reads each interval's place in the window, projects counts) renews Corvane, Lumivale, Ardena and Pinecrest Home; each of the three carries is a move that run did not make there (it set aside the record carrying the effect's modifier, carried a rate from one condition to another, and left the 2027 mix's behaviour at the history's)
+Strategy label: a randomised impact carried to selected peak days, next year's fleet and the fleet's homes (sulfur-strategies.md, population_selection)
+Depth level: 5 on the client's scale: three independent judgments each decide a different provider, all eight combinations of them land on different renewal sets, and around them the timing at the 4CP intervals, the 2027 counts and the totals each move a graded figure
+Lesson: an impact measured on randomised test days in a research sample is the impact of those days, those devices and those homes; the decision's own days (selected by the system's peak, late in heat waves), devices (next summer's mix) and homes (the fleet's) each move it, and each needs a second record at another grain
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | Ondera's devices at the 4CP intervals: its event ends at 17:00, before 10 of the twelve intervals, when its homes recover: -0.125 kW per device | causal reasoning | the test events' randomised halves around each window; the 4CP list; the event settings | 0.02 kW | method shortcut (the quick read): the test events' average over the window renews Ondera; a careful pass reads each interval's place in the window | - | Component 4 |
+| R2 | Lumivale's share of enrolled devices still in its event at the 4CP intervals on the 4CP days: 33% at the interval's middle (31% to 36% from its end to its start) against 64% of its called devices on the test events at 17:30 | investigation loops | the providers' reports (unreached devices out); the 4CP list against the event log's runs | 2 points beyond the interval's start and end readings | dismissed own evidence: the test events' reduction carried to the 4CP intervals as if the 4CP days were test days (each 4CP day is the third or later alert day of a heat wave) | - | Component 1 |
+| R3 | each provider's devices enrolled on 1 July 2027 and what its quote costs: Corvane 2,127, USD 61,683; Lumivale 1,984, USD 46,822; Ardena 1,268, USD 51,988; Ondera 1,253, USD 32,578; Kitebrook 1,511, USD 49,863; Pinecrest Home 2,760, USD 57,408 | forecasting | the roster (enrolments, leavers by channel), the quotes; Board Policy 412 (devices on 1 July) | 3 per cent | unfinished chain: today's count carried without leavers or without the quoted enrolments (earned by the careful pass) | independent: the roster and the quotes | Ask 2 |
+| R3b | Pinecrest Home's 2027 fleet: 65% retail-rebate devices, keeping 59% in the event at the 4CP intervals against today's 85% | forecasting | the roster's channels and years enrolled, the quotes, the reports on the 4CP days | 3 points | unfinished chain: the 2027 count projected by channel and the per-device impact left at the history's fleet | independent: the roster, the quotes and the reports | Component 2 |
+| R4 | Kitebrook's 2027 fleet sheds 1.54 times its research-sample devices' (each home's cooling slope from living area and year built) | modeling | the appraisal roll matched by address; the research sample's quiet days | 0.06 | dismissed own evidence: the appraisal roll set aside; the research sample's homes taken as the fleet's | independent: the appraisal roll and the research sample | Component 3 |
+| R5 | each provider's kW per 2027 device at the 4CP intervals: Corvane 0.630, Lumivale 0.306, Ardena 1.015, Ondera -0.125, Kitebrook 0.749, Pinecrest Home 0.306 | synthesis | Board Policy 412 sections 4.1 to 4.3 | each provider's band, the rivals' spread with a fifth to spare: 0.056, 0.020, 0.061, 0.072, 0.045, 0.020 | method shortcut and dismissed own evidence: the test events' reduction read at the 4CP intervals (Corvane 0.682, Lumivale 0.552, Ardena 0.971, Ondera -0.123, Kitebrook 0.505, Pinecrest Home 0.454) | R1, R2, R3, R3b, R4 | Ask 1 |
+| R6 | renewed: Corvane, Ardena and Kitebrook | synthesis | Board Policy 412 sections 3 and 5; the quotes; the 2027 rate | the set exact | method shortcut and dismissed own evidence: Corvane, Lumivale, Ardena and Pinecrest Home | R5 | Recommendation |
+| R7 | the renewed providers: 3.76 MW off the 4CP load, USD 206,000 saved, USD 42,500 net of their quotes | synthesis | Board Policy 412; the notice | 8 per cent | method shortcut carried down: 5.03 MW and USD 57,800 net on the hurried set | R6 | Ask 3 |
+
+Carry-forward: R1, R2, R3, R3b and R4 are each graded on inputs of their own (the test events and the 4CP list; the reports; the roster and the quotes; the appraisal roll and the research sample); R5 needs all of them and each provider's figure falls only with the carry that moves it; R6 needs R5; R7 falls with R6.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| members leave an event as the house warms, more on the later days of a run of alert days | constructed (a hazard on the indoor drift, the run of event days, the channel and years enrolled) | no: every provider and every event; a deep, long setback (Lumivale) loses most | investigation: the reports on the 4CP days against the test events, the event log's runs | modelling: the share in the event on each 4CP day, device by device | keep: one of three carries the call needs |
+| devices enrolled through retail instant rebates are often offline and leave events | constructed | no: Corvane, Lumivale and Pinecrest Home carry the channel today; Pinecrest Home's quote makes it most of its 2027 fleet | the roster's channel against the reports | modelling: the share by channel and years enrolled, weighted to the 2027 fleet | keep: one of three carries |
+| a home's air-conditioning load set by its size and age; the research sample's homes in the north, newer and smaller | constructed (the M&V plan files where the sample is) | no: every home; Kitebrook's dealers install in larger, older homes in the south | the appraisal roll against the research sample's quiet days | modelling: a cooling slope from living area and year built, carried to each fleet | keep: one of three carries |
+| snapback after a window and pre-cool before it | constructed | no: every provider's devices | the test events' halves around each window | none beyond reading the 4CP interval's place | keep, earned |
+| the 4CP intervals moving later each summer | constructed (ERCOT's file) | no | the 4CP file | none: the policy files the twelve intervals | keep, texture |
+| one 4CP day without an alert (18 September 2025) | constructed | no | the 4CP file against the event log | none: the policy files the alerts as called | keep, texture |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R5 each provider's kW per 2027 device at the 4CP intervals | Missed | Partly | Right |
+| R6 the providers renewed | Partly | Missed | Right |
+| R3 each provider's devices on 1 July 2027 and the quote's cost | Missed | Right | Right |
+| R7 the renewed providers' MW at the 4CP intervals and the net saving | Missed | Missed | Right |
+| R2 Lumivale's share in the event at the 4CP intervals on the 4CP days | Missed | Missed | Right |
+| R4 Kitebrook's fleet's homes against its research-sample devices' | Missed | Missed | Right |
+| R3b Pinecrest Home's 2027 fleet's share in the event | Missed | Missed | Right |
+| R1 Ondera's devices at the 4CP intervals after its window | Missed | Right | Right |
+| Roughly | 0.5 of 8 | 2.5 of 8 | 8 of 8 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json, computed on the cut pack by checks.py (each pass is the generator's own route: the quick pass the test events' average over each window; the careful but hurried pass the architecture 9 run's moves on this pack, the randomised halves' reduction fitted in temperature and read at each 4CP interval's place in the window, the 2027 counts projected; the thorough pass the golden)
+Largest single hint: "the 4CP days come late in heat waves, when members leave events, so read the share still in the event on those days"; rescues 1 of 8 results (R2), the other two sentences 1 of 8 each (R3b, R4)
+Pair estimate: 40.5 (measured)
+Judge's first pass (stage 4 re-judge, 2026-11-12, blind, the order kept): its own derivation renewed Corvane, Lumivale,
+Ardena and Pinecrest Home with a temperature-adjusted reading of the test events (the careful but hurried set exactly),
+landed the 1 July 2027 counts within 1 per cent for five providers, and made none of the three carries (Lumivale's share
+on the 4CP days at 39%, Kitebrook's homes not joined, Pinecrest Home's cohorts not weighted); priced on it the careful
+column sits near 20, under the note's 40.5, so the pricing stands. The first pass of the day opened the blocks before
+deriving and was set aside; its one finding (the interval-boundary reading) is SF11.
+
+## Frontier check
+
+Precedents: R2 lost: N12 (a rate learned in one season or condition carried to another), L13 (population rates applied to a subset the decision selects: the 4CP days are the system's peak days); R3b lost: L11 (built the split for the first step and dropped it for the next: the 2027 count by channel, the impact at the history's), L12 (pooled cohorts whose rates drift); R4 lost: L38 (the architecture 9 run on this slot: "Solar-cadastre data were inspected but excluded because rooftop photovoltaic potential does not identify these retrofit effects", the record carrying the effect's modifier set aside); R5, R6 and R7 lost: N12, L12, L38 (each needs all three carries). Against: the architecture 9 run carried its applicants along a load-profile schedule it recognised and clustered at a filed draw unit; here no document names the 4CP days' run, the retail channel's behaviour or the homes' slope, and the second records are a provider's report, the roster's channel column and a county tax roll
+Shallow path checks: R2: the test events' reduction fits each interval's temperature well and a hold-out of test events confirms it, because every test event is a single quiet day (validation on test days cannot see the 4CP days' runs); the check of another kind is the reports on the 4CP days themselves, device by device at the 4CP interval. R3b: the 2027 count reconciles to the roster and the quotes exactly; the check of another kind is the share in the event by channel on the 4CP days. R4: the research sample's impact is precise and stable across test events; the check of another kind is the appraisal roll's homes for the fleet against the sample's
+Assumption made false: "the test events represent the 4CP days" (false: the 4CP day is the third or later alert day of a heat wave, tested from the reports on those days), "next summer's devices behave like this summer's" (false: Pinecrest Home's quoted growth is the retail channel, tested from the roster and the reports by channel), "the research sample represents the fleet" (false: north, newer, smaller homes, tested from the appraisal roll)
+Forcing: the golden family (the golden; still in the event read at the interval's start or its end; a linear home model with a size-by-age term; one leaving rate for every channel; the test halves without the pre-event load) all renew Corvane, Ardena and Kitebrook, every provider 8 per cent or more from its line under each; the golden 12 per cent or more from each line (Corvane +19%, Lumivale -29%, Ardena +36%, Ondera far under, Kitebrook +25%, Pinecrest Home -19%); the five shortcuts land on five different wrong sets; the shed, the share and the homes' transport each moved 10 per cent either way leave the set (twice the rivals' spread)
+Noun swap: nearest on file task21 (shares the weight only) and the client's 17adb5ca (a trial's effect carried by group to selected picks, aged to a send date): swapped in, the transport by modifiers and the selected subset carry across as one lesson each, but the peak days' run of alert days, the snapback at the 4CP interval and the per-provider bars do not; the guard reads the skeleton at severity none against everything on file
+
+## Data provenance
+
+Source: generated by task7/generator (world.py simulates Cedar Brake's members and the county's homes, six providers' fleets by channel and year, the summers' weather with a heat wave each month and ERCOT's peak on its hottest day, the 4CP alerts on statewide heat and eight randomised test events a summer, each device's offline draw and override on each event, the research sample's 15-minute loads; pack.py writes each system's export; docs.py the board's, finance's and Energy Programs' documents)
+Behaves like the real thing: homes carry their own air-conditioning load from size and age, a base load and noise; the heat waves build over several days and ERCOT peaks on their hottest; members leave events as the house warms and more on the later days of a run; devices drop offline; providers run their own windows and setbacks; thermostats are swapped, meters exchanged and members leave the programme at their channel's rate
+Genuine patterns: (1) the weather's diurnal shape and heat waves (2) a home's cooling slope from its size and age (3) pre-cool, coast, partial shed and snapback around each window (4) members leaving events with the indoor drift and the run of event days (5) offline devices by channel (6) enrolment and leaving by channel and year (7) the 4CP intervals moving later each summer
+Problems by process: six report layouts and two clocks, unreached devices listed or left out, re-sent rows, swapped thermostats, exchanged meters, roster rows imported twice, addresses in two forms, missing and doubled interval reads
+Breadth: 52,000 parcels and 44,000 accounts, about 10,900 devices ever enrolled with six providers, 193,000 research-sample meter-days over 114 days, about 590,000 report rows, 183,000 test assignments, 67 alerts and 24 test events; which days, which devices and which homes carry each result is the work
+
+## Template check
+
+Chain signature: causal reasoning, investigation loops, forecasting, forecasting, modeling, synthesis, synthesis, synthesis
+Question form: which (the providers to renew), with each provider's figure, its 2027 devices and cost, and the renewed providers' total
+Nearest build: task7 v9 (another world: retrofit grants per tonne); task13 (the same domain's grid-reliability build); the client's 17adb5ca (a trial carried to selected picks); no build on file judges demand-response providers at a coincident peak
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | the reduction | against no event in that interval; against the provider's average event | against no event | Board Policy 412, 4.2 |
+| SF2 | per device | per device enrolled on 1 July, reached or not; per device that took part | enrolled | Board Policy 412, 4.2 ("whether or not the device takes part") |
+| SF3 | a summer like the last three | the twelve 4CP intervals of 2024 to 2026 with the alerts as called; only the days an alert was called | all twelve, an uncalled day at nothing | Board Policy 412, 4.3 |
+| SF4 | the settings | the quoted 2027 settings; the 2026 settings | quoted (the same for every provider) | Board Policy 412, 4.3; the quotes; same call |
+| SF5 | devices on 1 July 2027 | today's survivors and the quotes' new enrolments; today's count | survivors and new | Board Policy 412, 4.2 and 5; the quotes |
+| SF6 | the rate | USD 54.80 per kW of 4CP load a year | the notice | the 2027 transmission charge notice |
+| SF7 | the pre-event adjustment | each home's own 13:00 to 14:30 load as the covariate; the halves compared raw | the covariate; the raw comparison inside every band, same call | checks.py |
+| SF8 | the leaving rate | by channel since 2021; one rate for all | by channel; one rate inside every band, same call | checks.py |
+| SF9 | the home model | log slope on log area and age; linear with a size-by-age term | log; linear inside every band, same call | checks.py |
+| SF10 | the home model's covariates | living area and year built; living area alone | both | the research sample's own homes: the year lifts the fit from R2 0.78 to 0.88 with a large age term (checks.py); living area alone leaves Kitebrook under its line, the half of the carry it misses |
+| SF11 | still in the event at a 4CP interval | at the interval's middle; at its start; at its end | the middle; the start and the end inside every band, the same set, Lumivale's share 31% to 36% across the interval | checks.py |
+
+## Closure table
+
+| # | Axis | Reading | Move |
+|---|---|---|---|
+| 1 | Population | devices enrolled with each provider on 1 July 2027, reached or not | filed: Board Policy 412, 4.2 |
+| 2 | Unit of account | kW per enrolled device; USD per enrolled device | filed: 4.1, 5 |
+| 3 | Attribution window | the twelve 4CP intervals of 2024 to 2026 | filed: 4.3 |
+| 4 | As-of dating | the roster of 30 October 2026; the quotes of October | the files' dates |
+| 5 | Version basis | a swapped thermostat's reports under its old id before the swap | the roster's columns |
+| 6 | Denominator | every enrolled device | filed: 4.2 |
+| 7 | Weighting | the twelve intervals equally | filed: 4.1 ("averaged over the four") |
+| 8 | Window length | the quoted event settings | filed: 4.3 |
+| 9 | Boundary inclusivity | renewed when the saving is more than the cost | filed: 3 |
+| 10 | Rounding path | none in the prompt; figures at their natural precision | the answer blocks |
+| 11 | Tie-break | none needed | - |
+| 12 | Maturity and censoring | 2027 not observed; the 2027 fleet projected | the prompt; 4.2 |
+| 13 | Order of operations | measure, split, carry to the days, the fleet and the homes, read at the intervals, set against the price | the analysis |
+| 14 | Row order | provider order of the event log | - |
+| 15 | Duplicate resolution | re-sent report rows and re-imported roster rows once | the files |
+| 16 | Identity normalisation | report ids to programme ids through swaps; meters to accounts through exchanges; addresses to the roll | the files' keys |
+| 17 | Netting against gross | the pre-cool and the snapback counted where they fall | filed: 4.2 (against no event) |
+| 18 | Dimensional units | kWh in 15 minutes to kW | the export's header |
+| 19 | Code and status semantics | each layout's reached, left and offline codes | the files |
+| 20 | Integerisation | devices whole | - |
+| 21 | Clause scope | section 4 for each provider | filed |
+| 22 | Forward window contents | 2027: the quoted settings and enrolments; a summer like the last three | filed: 4.3; the quotes |
+
+## Literal reader
+
+Executed word for word, Board Policy 412 asks for each provider the reduction of the co-op's load in each 4CP interval
+against no event, per device enrolled on 1 July 2027, over the twelve intervals of 2024 to 2026 with the alerts as called
+and the quoted settings (R1, R5), times the rate in the notice, against the quoted price per enrolled device (R6); the
+devices on 1 July 2027 are today's survivors and the quotes' enrolments (R3). No sentence names the 4CP days' runs, a
+member leaving an event, the retail channel's behaviour, a home's cooling slope, a transport or a comparison.
+
+## Prompt contract
+
+May not drop or change: the question (which of the six providers to renew for summer 2027, when the board renews only where the transmission cost its devices save at ERCOT's 4CP intervals is worth more than its quoted price); that the answer has to be an estimate (2027's peaks and devices are not observed); a short memo with the call and a workbook behind it; for each provider the kW a device enrolled for summer 2027 takes off the co-op's load in the 4CP intervals of a summer like 2024 to 2026, its devices enrolled and what its quote costs; for the renewed providers the MW off the 4CP load in all and the transmission saving net of what is paid. Must never add: a method (a test event, a share, a heat wave, a retail channel, a home, a transport, a model), a warning, an attached file's name, a role, a rounding instruction or a count the data hold.
+
+
+## Leak rulings
+
+leak.py on the cut pack (as of 2 November 2026): REVIEW, every line a stump-vocabulary match on the documents' ordinary
+words (provider, device, event, enrolled), ruled harmless: the policy files what a reduction is and the population, the
+M&V plan how the test halves and the research sample were drawn, the guide what an event does, the notice the rate; none
+names a heat wave's run, a member leaving an event, a channel's behaviour, a home's slope or a transport.
+The isolated reader (stage 4, 2026-11-12; its answers in leak_check_report.md): questions 2 to 4 none (the potential
+study's "0.7 to 1.1 kW" is a first-hour range for other programmes, not about these providers or the 4CP intervals);
+question 1 quotes the policy's WHAT and the M&V plan's design, and notes that no device is held back on an alert day and
+that nothing says how to bridge that gap; question 5's literal readings (4.2's every enrolled device, 4.3's twelve
+intervals, 5's devices on 1 July, the notice's rate) are the golden's; question 6 finds no one thing, names the 4CP
+times' drift against the shorter windows, the 1 July count to forecast and Pinecrest Home's retail plan against the
+channel's history, and judges the appraisal roll unneeded (the record the homes carry is the one a run sets aside, L38).
+Its two stamp notes: the 1980 entry stamps inside the Office files are what Excel writes (H1, the container audit
+passes); the as-of moved to 2 November 2026 so no stamp sits after the day the build ships. Nothing else to fix.
 
 ## Tried and rejected
 - The note's decisive rung, per feeder the smaller of expected buyers and hosting slots: a stated connection standard, a per-feeder hosting map and a neighbourhood-to-feeder join whose keys line up hand it to any solver who reads them, its driver sits nearest task106's, and as labelled it BLOCKs on ban.pattern C (task119), ban.calibration pilot_log (task122) and test.same_driver_older (a signature spent in nine builds); kept as rung 2.

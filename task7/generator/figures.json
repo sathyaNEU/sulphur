@@ -1,0 +1,337 @@
+{
+ "providers": [
+  "Corvane",
+  "Lumivale",
+  "Ardena",
+  "Ondera",
+  "Kitebrook",
+  "Pinecrest Home"
+ ],
+ "rate": 54.8,
+ "price": {
+  "Corvane": 29.0,
+  "Lumivale": 23.6,
+  "Ardena": 41.0,
+  "Ondera": 26.0,
+  "Kitebrook": 33.0,
+  "Pinecrest Home": 20.8
+ },
+ "bar_kw": {
+  "Corvane": 0.529,
+  "Lumivale": 0.431,
+  "Ardena": 0.748,
+  "Ondera": 0.474,
+  "Kitebrook": 0.602,
+  "Pinecrest Home": 0.38
+ },
+ "kw": {
+  "Corvane": 0.63,
+  "Lumivale": 0.306,
+  "Ardena": 1.015,
+  "Ondera": -0.125,
+  "Kitebrook": 0.749,
+  "Pinecrest Home": 0.306
+ },
+ "kw_band": {
+  "Corvane": 0.056,
+  "Lumivale": 0.02,
+  "Ardena": 0.061,
+  "Ondera": 0.072,
+  "Kitebrook": 0.045,
+  "Pinecrest Home": 0.02
+ },
+ "breakeven_price": {
+  "Corvane": 34.52,
+  "Lumivale": 16.77,
+  "Ardena": 55.65,
+  "Ondera": -6.87,
+  "Kitebrook": 41.06,
+  "Pinecrest Home": 16.76
+ },
+ "renewed": [
+  "Corvane",
+  "Ardena",
+  "Kitebrook"
+ ],
+ "n27": {
+  "Corvane": 2127,
+  "Lumivale": 1984,
+  "Ardena": 1268,
+  "Ondera": 1253,
+  "Kitebrook": 1511,
+  "Pinecrest Home": 2760
+ },
+ "n_now": {
+  "Corvane": 1903,
+  "Lumivale": 1886,
+  "Ardena": 1332,
+  "Ondera": 1215,
+  "Kitebrook": 1284,
+  "Pinecrest Home": 1147
+ },
+ "cost": {
+  "Corvane": 61683,
+  "Lumivale": 46822,
+  "Ardena": 51988,
+  "Ondera": 32578,
+  "Kitebrook": 49863,
+  "Pinecrest Home": 57408
+ },
+ "mw": 3.76,
+ "saving_usd": 206000,
+ "paid_usd": 163534,
+ "renewed_devices": 4906,
+ "net_usd": 42500,
+ "share_cp": {
+  "Corvane": 0.82,
+  "Lumivale": 0.33,
+  "Ardena": 0.89,
+  "Ondera": 0.7,
+  "Kitebrook": 0.87,
+  "Pinecrest Home": 0.85
+ },
+ "share_test": {
+  "Corvane": 0.89,
+  "Lumivale": 0.64,
+  "Ardena": 0.92,
+  "Ondera": 0.87,
+  "Kitebrook": 0.92,
+  "Pinecrest Home": 0.9
+ },
+ "transport": {
+  "Corvane": 1.05,
+  "Lumivale": 1.06,
+  "Ardena": 1.08,
+  "Ondera": 1.05,
+  "Kitebrook": 1.54,
+  "Pinecrest Home": 1.06
+ },
+ "retail_share27": {
+  "Corvane": 0.08,
+  "Lumivale": 0.06,
+  "Ardena": 0.0,
+  "Ondera": 0.0,
+  "Kitebrook": 0.0,
+  "Pinecrest Home": 0.65
+ },
+ "share27": {
+  "Pinecrest Home": [
+   0.59,
+   0.85
+  ],
+  "Lumivale": [
+   0.29,
+   0.33
+  ]
+ },
+ "routes": {
+  "the golden": [
+   "Corvane",
+   "Ardena",
+   "Kitebrook"
+  ],
+  "the test events' reduction read at the 4CP intervals (careful but hurried)": [
+   "Corvane",
+   "Lumivale",
+   "Ardena",
+   "Pinecrest Home"
+  ],
+  "... and the 4CP days' own share in the event": [
+   "Corvane",
+   "Ardena",
+   "Pinecrest Home"
+  ],
+  "... and the 2027 fleet's cohorts": [
+   "Corvane",
+   "Lumivale",
+   "Ardena"
+  ],
+  "... and the fleet's homes": [
+   "Corvane",
+   "Lumivale",
+   "Ardena",
+   "Kitebrook",
+   "Pinecrest Home"
+  ],
+  "the test events' average over the window (quick)": [
+   "Corvane",
+   "Lumivale",
+   "Ardena",
+   "Ondera",
+   "Kitebrook",
+   "Pinecrest Home"
+  ]
+ },
+ "routes_kw": {
+  "the test events' reduction read at the 4CP intervals (careful but hurried)": {
+   "Corvane": 0.682,
+   "Lumivale": 0.552,
+   "Ardena": 0.971,
+   "Ondera": -0.123,
+   "Kitebrook": 0.505,
+   "Pinecrest Home": 0.454
+  },
+  "... and the 4CP days' own share in the event": {
+   "Corvane": 0.627,
+   "Lumivale": 0.333,
+   "Ardena": 0.946,
+   "Ondera": -0.122,
+   "Kitebrook": 0.489,
+   "Pinecrest Home": 0.417
+  },
+  "... and the 2027 fleet's cohorts": {
+   "Corvane": 0.656,
+   "Lumivale": 0.519,
+   "Ardena": 0.966,
+   "Ondera": -0.122,
+   "Kitebrook": 0.504,
+   "Pinecrest Home": 0.328
+  },
+  "... and the fleet's homes": {
+   "Corvane": 0.717,
+   "Lumivale": 0.587,
+   "Ardena": 1.049,
+   "Ondera": -0.128,
+   "Kitebrook": 0.78,
+   "Pinecrest Home": 0.48
+  },
+  "the test events' average over the window (quick)": {
+   "Corvane": 0.772,
+   "Lumivale": 0.75,
+   "Ardena": 0.88,
+   "Ondera": 0.944,
+   "Kitebrook": 0.663,
+   "Pinecrest Home": 0.605
+  }
+ },
+ "care_kw": {
+  "Corvane": 0.682,
+  "Lumivale": 0.552,
+  "Ardena": 0.971,
+  "Ondera": -0.123,
+  "Kitebrook": 0.505,
+  "Pinecrest Home": 0.454
+ },
+ "care_set": [
+  "Corvane",
+  "Lumivale",
+  "Ardena",
+  "Pinecrest Home"
+ ],
+ "care_mw": 5.03,
+ "care_net_usd": 57800,
+ "after_window": {
+  "Corvane": 0,
+  "Lumivale": 0,
+  "Ardena": 0,
+  "Ondera": 10,
+  "Kitebrook": 0,
+  "Pinecrest Home": 0
+ },
+ "cps": [
+  [
+   "2024-06-13",
+   "17:00",
+   true
+  ],
+  [
+   "2024-07-10",
+   "17:15",
+   true
+  ],
+  [
+   "2024-08-14",
+   "17:30",
+   true
+  ],
+  [
+   "2024-09-11",
+   "17:00",
+   true
+  ],
+  [
+   "2025-06-18",
+   "17:15",
+   true
+  ],
+  [
+   "2025-07-09",
+   "17:30",
+   true
+  ],
+  [
+   "2025-08-15",
+   "17:45",
+   true
+  ],
+  [
+   "2025-09-18",
+   "17:15",
+   false
+  ],
+  [
+   "2026-06-10",
+   "17:30",
+   true
+  ],
+  [
+   "2026-07-22",
+   "17:45",
+   true
+  ],
+  [
+   "2026-08-13",
+   "18:00",
+   true
+  ],
+  [
+   "2026-09-09",
+   "17:30",
+   true
+  ]
+ ],
+ "missed_cp": [
+  "18 September 2025"
+ ],
+ "cp_run_min": 3,
+ "window_end": {
+  "Corvane": "19:00",
+  "Lumivale": "19:00",
+  "Ardena": "18:30",
+  "Ondera": "17:00",
+  "Kitebrook": "19:00",
+  "Pinecrest Home": "19:00"
+ },
+ "ondera_kw": -0.125,
+ "pct": {
+  "lumivale_cp": 33,
+  "lumivale_test": 64,
+  "pinecrest_retail27": 65,
+  "pinecrest_2027": 59,
+  "pinecrest_now": 85,
+  "lumivale_cp_start": 36,
+  "lumivale_cp_end": 31
+ },
+ "lumivale_share_cp": 0.33,
+ "lumivale_share_cp_ends": [
+  0.36,
+  0.31
+ ],
+ "kitebrook_transport": 1.54,
+ "pinecrest_share27_2027": 0.59,
+ "pinecrest_share27": [
+  0.59,
+  0.85
+ ],
+ "totals": {
+  "MW": 3.76,
+  "net USD": 42500
+ },
+ "conventions": {
+  "kw_band_pct": 6,
+  "kw_band_floor": 0.02,
+  "n_band_pct": 3,
+  "total_band_pct": 8,
+  "intervals": 12
+ }
+}
