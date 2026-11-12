@@ -129,6 +129,11 @@ def compute(target, reps=REPS):
     W, saving = A.watch_golden(F, fc, "mixture")
     Wr, saving_raw = A.watch_golden(F, fc, "raw")
     We, saving_eb = A.watch_golden(F, fc, "eb")
+    # the saving's rivals: a new unit at the healthy group's rate, and the run that marks a position's own fault read
+    # over 90 or 180 days rather than 120
+    watch_riv = {"a new unit at the healthy group's rate": A.watch_golden(F, fc, "mixture", new_unit="healthy"),
+                 "runs read over 90 days": A.watch_golden(F, fc, "mixture", window=90),
+                 "runs read over 180 days": A.watch_golden(F, fc, "mixture", window=180)}
     Hw = A.watch_hurried(F)
     H = A.hurried(F)                                   # careful but hurried: per flight hour, average turnaround
     Hd = A.hurried(F, exposure="drv", D=D)             # the exposure put right alone
@@ -138,37 +143,27 @@ def compute(target, reps=REPS):
     riv = {"both exposures": _forecast_with(F, D, both=bf),
            "no frost term": {k: v["total"] for k, v in A.forecast(F, A.drivers(F, cold=False)).items()},
            "no-fault-found pooled over stations": _forecast_with(F, D, nff_pooled=True)}
-    # the window rival: the fits on 2024 to 2026
-    F2 = copy.copy(F)
-    F2["removals"] = F["removals"][F["removals"]["date"] >= pd.Timestamp("2024-01-01")]
-    F2["day"] = F["day"][F["day"]["date"] >= pd.Timestamp("2024-01-01")]
-    A._DCACHE.pop(id(F2), None)
-    riv["fitted on 2024 to 2026"] = {k: v["total"] for k, v in A.forecast(F2, A.drivers(F2)).items()}
-    # the last twelve months alone (the report's window) on each part's own exposure; the propeller control keeps its
-    # conversion, which the repairers' bulletin dates force whatever the window
-    riv["the last twelve months on each part's own exposure"] = {k: (fc[k]["total"] if k == "PEC" else Hd[k]["proj"])
-                                                                for k in A.PARTS}
+    # the record's window is filed (standard 4.3: January 2023 to the end of the latest report's months), so no
+    # window rival enters the bands
     # rivals for the spares (the golden family): another stream of replays, the no-fault-found removals without
-    # their month-to-month spread, the frost of an average winter, the queue calibrated on the last eighteen months,
+    # their month-to-month spread, the frost of an average winter, the third-party work day by day as the record shows it,
     # the removals of the both-exposures fit
     MC2 = A.simulate(F, fc, D, reps=reps, seed=31337)
     need2 = {k: MC2[k]["need"] for k in A.PARTS}
     fam = {"a second stream of replays": MC2,
            "no-fault-found removals without their monthly spread": A.simulate(F, fc, D, reps=reps, seed=4242, no_disp=True),
            "every winter at its average frost": A.simulate(F, fc, D, reps=reps, seed=5151, no_frost=True),
-           "the shop calibrated on 2025 to 2026 alone": A.simulate(F, fc, D, reps=reps, seed=6161, cap_since="2025-01-01")}
+           "the shop's third-party work day by day as the 2025 and 2026 record shows it":
+               A.simulate(F, fc, D, reps=reps, seed=6161, other_resample=True),
+           "the jobs ready for the bench taken in the order of their removal":
+               A.simulate(F, fc, D, reps=reps, seed=6363, queue_order="removed")}
     fc_both = copy.deepcopy(fc)
     for k in A.PARTS:
         m = riv["both exposures"][k] / fc[k]["total"] if fc[k]["total"] > 0 else 1.0
         for c in ("total", "cf", "nff"):
             fc_both[k][c] = fc[k][c] * m
     fam["the both-exposures removals"] = A.simulate(F, fc_both, D, reps=reps, seed=7171)
-    fc_12 = copy.deepcopy(fc)
-    for k in A.PARTS:
-        m = riv["the last twelve months on each part's own exposure"][k] / fc[k]["total"] if fc[k]["total"] > 0 else 1.0
-        for c in ("total", "cf", "nff"):
-            fc_12[k][c] = fc[k][c] * m
-    fam["the last twelve months' removals"] = A.simulate(F, fc_12, D, reps=reps, seed=8282)
+
     fam_need = {n: {k: m[k]["need"] for k in A.PARTS} for n, m in fam.items()}
     # a repairer's line has no shared queue, so Palm's theorem on the golden removals and the repairer's own
     # turnaround is a defensible method there; the in-house lines keep the replay
@@ -221,9 +216,14 @@ def compute(target, reps=REPS):
                          max([MC[k]["p10"], nb[k][0]] + [m[k]["p10"] for m in fam.values()]) + 1) for k in A.PARTS}
     G["p90_band"] = {k: (min([MC[k]["p90"], nb[k][1]] + [m[k]["p90"] for m in fam.values()]) - 1,
                          max([MC[k]["p90"], nb[k][1]] + [m[k]["p90"] for m in fam.values()]) + 1) for k in A.PARTS}
-    G["saving_band"] = (min(saving, saving_raw) * 0.95, max(saving, saving_raw) * 1.05)
+    sv = [saving] + [v[1] for v in watch_riv.values()]
+    # the count for the position over the year moves a few removals with how the pool's rotation is carried (the
+    # per-position count here, a fleet replay of the list kept and replaced): the lower edge takes a tenth for it
+    G["saving_band"] = (min(sv) * 0.90, max(sv) * 1.05)
+    G["watch_riv"] = {n: (sorted(v[0].index[v[0]["scrap"]]), v[1]) for n, v in watch_riv.items()}
     G["scrap"] = sorted(W.index[W["scrap"]])
     G["tat_in"] = MC["_tat_in"]
+    G["validation"] = A.validate_shop(F, A.shop_inputs(F))
     import docs
     G["qproj"] = {x["k"]: x["proj"] for x in docs.report_figures(F)["rows"]}
     return G

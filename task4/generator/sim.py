@@ -436,7 +436,8 @@ class Engine:
                 on.append(tch)
         if not on:
             return
-        other = len(on) * P.SHOP_HOURS * P.OTHER_WORK * float(r.uniform(0.85, 1.15))
+        share = P.OTHER_WORK_2027 if d >= P.OTHER_FROM else P.OTHER_WORK
+        other = len(on) * P.SHOP_HOURS * share * float(r.uniform(0.85, 1.15))
         cap = len(on) * P.SHOP_HOURS - other
         if self.record:
             self.seq["wo"] += 1

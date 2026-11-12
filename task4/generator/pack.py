@@ -28,6 +28,7 @@ FILES = {
     "standard": "reliability_programme_and_spares_standard.pdf",
     "ecm": "engine_trend_monitoring_2025-2026.csv",
     "offer": "pool_support_offer_2026.pdf",
+    "shopplan": "bodo_shop_plan_2027.xlsx",
 }
 DISTRACTORS = ["ecm", "offer"]
 ICAO = {"BOO": "ENBO", "TOS": "ENTC", "BGO": "ENBR", "TRD": "ENVA"}
@@ -221,6 +222,50 @@ def vendor(w, path):
         row[4].number_format = row[5].number_format = "yyyy-mm-dd"
     wb.save(path)
     return len(rows)
+
+
+def shop_plan(w, path):
+    """The Bodø component shop's plan for 2027, issued by the shop supervisor in November: each technician's planned
+    absences from December 2026 through 2027 (the staggered summer weeks, Christmas) and the bench hours the shop
+    plans month by month, the contracted third-party work taken out."""
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Roster plan"
+    techs = ["SE", "KH", "MB"][:P.SHOP_TECHS]
+    rows = []
+    for t in techs:
+        days = []
+        d = dt.date(2026, 12, 1)
+        while d <= dt.date(2027, 12, 31):
+            if d.weekday() < 5 and d not in sim.HOL and sim.on_holiday(t, d):
+                days.append(d)
+            d += sim.DAY
+        run = []
+        for x in days + [None]:
+            if run and (x is None or (x - run[-1]).days > 4):
+                kind = "Summer holiday" if run[0].month in (6, 7, 8, 9) else "Christmas"
+                rows.append([t, kind, run[0], run[-1], len(run)])
+                run = []
+            if x is not None:
+                run.append(x)
+    rows.sort(key=lambda r: (r[2], r[0]))
+    _sheet(ws, ["Technician", "Absence", "From", "To", "Working days"], rows, [12, 16, 12, 12, 13])
+    for row in ws.iter_rows(min_row=2):
+        row[2].number_format = row[3].number_format = "yyyy-mm-dd"
+    ws2 = wb.create_sheet("Bench hours")
+    rows2 = []
+    for y, m in [(2026, 12)] + [(2027, k) for k in range(1, 13)]:
+        share = P.OTHER_WORK_2027 if dt.date(y, m, 1) >= P.OTHER_FROM else P.OTHER_WORK
+        week = int(round(P.SHOP_HOURS * share * 5 * P.SHOP_TECHS))
+        rows2.append([dt.date(y, m, 1), P.SHOP_TECHS, P.SHOP_HOURS, week,
+                      round(P.SHOP_HOURS - week / (5.0 * P.SHOP_TECHS), 1)])
+    _sheet(ws2, ["Month", "Technicians rostered", "Bench hours a technician on duty",
+                 "Contracted third-party work (hours a week, full roster)", "Rotable bench hours a technician on duty"],
+           rows2, [10, 12, 14, 22, 18])
+    for row in ws2.iter_rows(min_row=2):
+        row[0].number_format = "mmm yyyy"
+    wb.save(path)
+    return rows
 
 
 def register(w, path):

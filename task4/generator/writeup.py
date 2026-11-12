@@ -55,6 +55,11 @@ def flat(G):
         f["tat_2026_%s" % k] = int(round(H[k]["tat"]))
     allsum = [t for k, m, t, rep in G["tat_in"] if m in (7, 8)]
     f["tat_summer"] = int(round(float(np.mean(allsum))))
+    f["val_replay"], f["val_actual"] = round(G["validation"][0], 1), round(G["validation"][1], 1)
+    pb = G["F"]["plan_bench"]
+    f["bench"] = round(float(pb.iloc[:, 2].mean()), 1)
+    f["bench_rot_q1"] = round(float(pb.iloc[1, 4]), 1)
+    f["bench_rot_apr"] = round(float(pb.iloc[4, 4]), 1)
     f["tat_2026"] = int(round(float(np.mean([H[k]["tat"] for k in P.IN_HOUSE]))))
     sp = fc["PEC"]["split"]
     f["pec_cut_pct"] = int(round((1 - sp["rate_mod"] / sp["rate_un"]) * 100))
@@ -183,9 +188,13 @@ def submission(f, G):
              "at Bodø, where troubleshooting finds the aircraft's faults before units are swapped, and the flight-hour "
              "parts on 2027's %d per cent fewer hours: the air data computer expects %d removals, the VHF transceiver %d "
              "and the windshield heat controller %d." % (f["fh_ch_pct"], f["rem_ADC"], f["rem_VHF"], f["rem_WHC"]))
-    L.append("7. Replayed the Bodø shop day by day on its roster with its capacity set so the replay reproduces its own "
-             "2024 to 2026 turnarounds, then fed it 2027's removals: about %d days in July and August against a 2026 "
-             "average of %d, which the average-turnaround route never sees." % (f["tat_summer"], f["tat_2026"]))
+    L.append("7. Replayed the Bodø shop day by day: on its own record (the roster's staffing, the third-party work booked "
+             "each day, %.1f bench hours a technician) it turns its 2024 to 2026 work round in %.1f days against %.1f "
+             "recorded; on bodo_shop_plan_2027.xlsx (the staggered summer weeks, %.1f rotable bench hours a technician on "
+             "duty to March and %.1f from April) with 2027's removals it runs about %d days in July and August against a "
+             "2026 average of %d, which the average-turnaround route never sees."
+             % (f["bench"], f["val_replay"], f["val_actual"], f["bench_rot_q1"], f["bench_rot_apr"], f["tat_summer"],
+                f["tat_2026"]))
     L.append("8. Replayed each part's pool through 2027 (each removal's return from the shop replay or the repairer's own "
              "turnaround, the winters on record, the no-fault-found months' spread) and read the fewest spares giving a "
              "95 per cent fill rate: the starter-generator needs %d and the brake %d, where Palm's formula on the average "

@@ -1,17 +1,17 @@
 {
  "task": "task4",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "repair",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 12,
  "loops": 0,
- "call": "buy 16 rotable spares on 6 lines (starter-generators 4, brake assemblies 4, bleed air shutoff valves 3, nose wheel steering actuators 2, main batteries 2, cabin pressure controllers 1) and cut 18 on 9 (the flight-hour avionics, the propeller control and the hydraulic and fuel pumps); withdraw 8 of the 23 watch-list serials; the whole list saves about 35 removals",
+ "call": "buy 12 rotable spares on 6 lines (starter-generators 3, brake assemblies 2, bleed air shutoff valves 2, nose wheel steering actuators 2, main batteries 2, cabin pressure controllers 1) and cut 18 on 9; withdraw 8 of the 23 watch-list serials; the whole list saves about 34 removals",
  "chain": "R2 the starter-generator, brake and bleed valve 2027 removals on landings; R3 the watch-list serials worth withdrawing; R3b the removals withdrawing the whole list saves; R4 the propeller control's 2027 removals and spares through SB 61-0042's conversion; R5 every part number's 2027 removals; R6 the in-house lines' spares through the Bodø shop's 2027 queue; R7 the 80 per cent ranges; R8 the spares each line needs; R9 the lines to buy and to cut with how many",
  "stump": "the careful pass carries every part per flight hour from the October report, sizes spares by Palm's formula on the 2026 average turnaround and withdraws the watch-list serials with confirmed failures: it holds 5 starter-generators and cuts the brakes to 4 where the plan needs 9 and 9, and withdraws 4 serials where 8 repeat on their own record",
  "precut": {
@@ -20,8 +20,8 @@
   "note": "93 checks, 0 FAIL, 1 WARN (nearest chains: task6 shares the shape and the weight)"
  },
  "leak": {
-  "leak_py": "REVIEW (2026-11-12, repaired cut 8bd9892f7f054b07): part-number digit groups declared as stated inputs, the starter-generator's name as a field term; rulings in the note's Leak rulings",
-  "reader": "reader 1 (cut 183ee655a14c4f36): no file describes the data and no one thing settles the asks; it read the report's 2027 outlook section as a ready-made forecast, so the section came out of the report; flight hours as air time asserted (SF17). Reader 2 on the repaired cut (8bd9892f7f054b07): clean, no forecast or ranking artifact, no describing file, no one-thing finding; the standard's filed definitions ruled harmless"
+  "leak_py": "REVIEW (repair cut): stated inputs and field terms as before, the standard's own field words, the plans' future dates; rulings in the note",
+  "reader": "reader 3 on the repair cut 09cd473ce2a120aa: clean; its one realism note (the shop plan's mirrored columns) fixed by stating the contracted work in hours a week, the capacity unchanged, ruled by leak.py"
  },
  "duplicate_check": {
   "heart": "WARN only (2026-11-12, after the final pull; the stump strategy and forum redrawn to forecast_method_backtest and line_manager_or_team when the shifted window blocked composition_mix and executive_team against task21)",
@@ -31,17 +31,17 @@
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "gate_g": "mechanism forecasting (with method selection on the Bodø queue and attribution on the watch list), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "pass: about six graded results over five areas, one_thing none; quick about 2 of 6, careful 3 to 4 of 6",
-  "report": "determinism_check_report.md (2026-11-12, cut 183ee655a14c4f36)",
-  "notes": "its blind derivation found the landings driver by a cross-base rate comparison (R2 now graded Partly in the careful column); the watch list's two-group estimator left a watch item, now asserted against a one-gamma rival (SF18, 2 dlogL 9.3 to 34.3 on every listed part with a second group)"
+  "gate_g": "method_or_model_selection (with decomposition_attribution, statistical_rigor, forecasting), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "pass: 9 graded results, one_thing none; quick 0 of 9, careful 4 of 9",
+  "report": "determinism_check_report.md (repair cut 09cd473ce2a120aa)",
+  "notes": "its thin margins closed by run rivals: the ready jobs in removal order joined the golden family, the serials' record to the snapshot withdraws the same eight (SF21); the withdrawal test's citation corrected to 5.1 and 5.2"
  },
- "paper_pair": 43.6,
+ "paper_pair": 46.6,
  "effort": {
-  "quick": 20.8,
-  "careful": 43.6,
+  "quick": 7.0,
+  "careful": 46.6,
   "thorough": 100.0,
-  "largest_hint": "the landing-driven parts wear by landings and starts: rescues 1 of 9 (R2)"
+  "largest_hint": "rescues 0 of 9 beyond the careful column, which the platform runs already earn R2 in"
  },
  "returned": [
   {
@@ -96,7 +96,7 @@
    "runs": "runs/arch12/runs.md (both platform runs pasted, scores not supplied): both found the landings driver and the watch list's aircraft-driven removals; pools 90 and 71 against the golden's 78"
   }
  ],
- "resume": "repair in place: ship the shop's 2027 plan, file standard 4.3 and 4.5, grade the careful column from the runs, re-run stage 4, RESHIPPED",
+ "resume": "stage 6: the author rewrites prompt.txt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip, and the two platform runs go to /triage-runs",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -171,6 +171,10 @@
   {
    "date": "2026-11-12",
    "event": "RETURNED by the holistic audit: holdings not forced (shop capacity, record window, repeat removals); both platform runs filed under runs/arch12/"
+  },
+  {
+   "date": "2026-11-12",
+   "event": "RESHIPPED: the shop's 2027 plan shipped and filed as the capacity basis (standard 4.5), the expected rate's record filed (4.3), the saving's band over the new-unit, run-window, record-end and fleet-replay readings, a queue-order rival in the golden family; judge DETERMINISTIC APPROVE, reader 3 clean; careful column graded from the two platform runs (pair 46.6)"
   }
  ],
  "runs": {
@@ -253,10 +257,10 @@
  },
  "gates": {
   "date": "2026-11-12",
-  "summary": "gates.py 8 gates, 0 FAIL, 4 WARN after the final pull (precut nearest chains, the prompt's deliverable-set quota, leak REVIEW, heart WARNs); checks 68 of 68, verify 9 of 9, figures 144 of 144, containers PASS, byte-identical rebuild"
+  "summary": "gates.py 8 gates, 0 FAIL, 4 WARN; checks 71 of 71, verify 9 of 9, figures 0 absent, containers PASS, byte-identical rebuild"
  },
- "zip_sha256_16": "8bd9892f7f054b07",
- "golden_zip_sha256_16": "7459e2f2b331c98c",
+ "zip_sha256_16": "684dc3d10c44f52e",
+ "golden_zip_sha256_16": "fc80d3d217fb25ad",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",

@@ -22,7 +22,8 @@ CET = dt.timezone(dt.timedelta(hours=1))
 OFFICE = {"vendor": ("2026-11-27T13:02:00Z", "2026-12-01T15:47:00Z", "Erik Aasen", P.ORG),
           "register": ("2026-11-30T09:12:00Z", "2026-12-01T07:58:00Z", P.PEOPLE["stores"], P.ORG),
           "pool": ("2026-11-30T21:04:00Z", "2026-11-30T21:04:00Z", P.PEOPLE["stores"], P.ORG),
-          "programme": ("2026-10-14T11:36:00Z", "2026-11-18T08:21:00Z", "Irene Brekke", P.ORG)}
+          "programme": ("2026-10-14T11:36:00Z", "2026-11-18T08:21:00Z", "Irene Brekke", P.ORG),
+          "shopplan": ("2026-11-04T12:20:00Z", "2026-11-19T10:06:00Z", P.PEOPLE["shop"], P.ORG)}
 EXPORTED = {"legs": dt.datetime(2026, 12, 1, 6, 41, 18, tzinfo=CET),
             "changes": dt.datetime(2026, 12, 1, 7, 3, 55, tzinfo=CET),
             "shop": dt.datetime(2026, 12, 1, 7, 15, 9, tzinfo=CET),
@@ -45,6 +46,7 @@ def run(target):
     pack.register(w, Fp["register"])
     pack.pool(w, Fp["pool"])
     pack.programme(w, Fp["programme"])
+    pack.shop_plan(w, Fp["shopplan"])
     n["weather"] = pack.weather(w, Fp["weather"])
     n["ecm"] = pack.ecm(w, Fp["ecm"])
     docs.standard(Fp["standard"])

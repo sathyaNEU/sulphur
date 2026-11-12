@@ -1,29 +1,33 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 13 files read, 17 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 14 files read, 17 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, exposure, blocks, landings, golden, careful, standard, record, counts, in-house, missed, method, removal, aircraft, winter, replay, result, partly, shortcut, modelling, carried, programme, graded, component, energy
+Stump terms swept: architecture, record, blocks, golden, standard, replay, platform, removal, exposure, aircraft, in-house, capacity, months, careful, station, landings, report, nothing, stations, missed, reader, counts, method, graded, carries
 
 ## 2 author vocabulary (REVIEW 2)
 - **REVIEW** `pool_support_offer_2026.pdf`: \bdesign note\b|\bgenerator\b x1: ...fee per aircraft (NOK) Exchange fee per unit (NOK) 23085-016 Starter-generator 673 48,842 2-1577-3 Main wheel brake assembly 232 23,867 3214552-2 Bl...
 - **REVIEW** `reliability_report_2026-10.pdf`: \bdesign note\b|\bgenerator\b x3: ...ol Unscheduled removals MTBUR (FH) No fault found 23085-016 Starter-generator 2 5 47 1,226 28% 2-1577-3 Main wheel brake assembly 4 5 42 2,744 5% 3...
 
-## 4 design-note vocabulary (REVIEW 3)
-- **REVIEW** `pool_support_offer_2026.pdf`: 3 of 25 stump-paragraph terms appear (removal, aircraft, component); read whether the document names the move
-- **REVIEW** `reliability_programme_and_spares_standard.pdf`: 6 of 25 stump-paragraph terms appear (standard, record, removal, aircraft, programme, component); read whether the document names the move
-- **REVIEW** `reliability_report_2026-10.pdf`: 3 of 25 stump-paragraph terms appear (standard, removal, aircraft); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `reliability_programme_and_spares_standard.pdf`: 8 of 25 stump-paragraph terms appear (record, standard, removal, aircraft, months, station); read whether the document names the move
+- **REVIEW** `reliability_report_2026-10.pdf`: 5 of 25 stump-paragraph terms appear (standard, removal, aircraft, months, report); read whether the document names the move
 
-## 9 dates after the setting (REVIEW 2)
-- **REVIEW** `fleet_register.xlsx`: 36 ISO dates after 2026-11-30, e.g. 2026-12-19, 2026-12-31, 2027-01-12, 2027-01-14, 2027-01-19
-- **REVIEW** `flying_programme_2027.xlsx`: 2300 ISO dates after 2026-11-30, e.g. 2027-01-01, 2027-02-01, 2027-03-01, 2027-03-27, 2027-03-28
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 21% of 19 prompts (cap 20%); reword at the role level, not the verb
+
+## 12 describing content (REVIEW 1)
+- **REVIEW** `reliability_programme_and_spares_standard.pdf`: names 8 column(s) of the data files verbatim (aircraft, date, defect, position, reason, serial): confirm it is the organisation's own record and not a note written for the analyst
+
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 13 usable files (10 or more required)
+- **INFO** `-`: 14 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
@@ -38,8 +42,13 @@ Stump terms swept: architecture, exposure, blocks, landings, golden, careful, st
 
 ## 8 column names (clean)
 
-## 11 prompt gate (clean)
 
+## Solver's-eye read, reader 3 (architecture 12 repair after the holistic audit, 2026-11-12, one isolated reader on target.zip 09cd473ce2a120aa; condensed, rulings by the main thread)
+
+1 and 5. The standard's 2.1, 2.3, 3.3, 4.1, 4.3 (the expected rate's record, January 2023 to the end of the latest report's months, every unscheduled removal counted), 4.4, 5.1 and 5.2, read as fixing the shape of each calculation and supplying no numbers. Ruling: the filed WHAT, 4.3 and 4.5 added at the audit's request, each executing to the golden's estimand (SF1, SF4, SF5, SF6, SF7, SF9, SF14, SF16); harmless.
+2 to 4. None: the report states no 2027 figure, spares number or call; no file only helps the analyst; nothing reads as the answer.
+6. No single fact: the base mix and route change from April has to be built part by part and serial by serial; the snapshot's SB 61-0042 column points the wrong way on raw counts (incorporated serials carry more past removals), so it rescues nothing without each serial's spells. Ruling: analysis throughout, no banned finding.
+Realism: nothing reads as generated; the shop plan is the thinnest file, its bench-hours sheet a flat monthly assumption whose two columns mirrored each other at April (3.6 and 3.3 to 3.3 and 3.6). Fixed: the contracted third-party work is stated as the shop plans it, in hours a week (54 to March, 50 from April), the capacity unchanged.
 
 ## Solver's-eye read (architecture 12, stage 4, 2026-11-12, one isolated reader on target.zip 183ee655a14c4f36; answers condensed, rulings by the main thread)
 

@@ -131,6 +131,8 @@ SHOP_TECHS = 3
 PARTS_WAIT = 8.0                      # days a confirmed repair waits for its piece parts (median)
 SHOP_HOURS = 6.9
 OTHER_WORK = 0.52
+OTHER_WORK_2027 = 0.48                # from April 2027 the shop's third-party contract shrinks as the Helgeland work starts
+OTHER_FROM = dt.date(2027, 4, 1)
 
 # the standard's targets
 FILL = 0.95

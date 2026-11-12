@@ -39,6 +39,8 @@ def load(target):
     F["prog"] = pd.read_excel(os.path.join(target, "flying_programme_2027.xlsx"), sheet_name="Programme 2027")
     F["acbase"] = pd.read_excel(os.path.join(target, "flying_programme_2027.xlsx"), sheet_name="Aircraft by base")
     F["wx"] = pd.read_csv(os.path.join(target, "station_weather_daily_2023-2026.csv"), dtype=str, keep_default_na=False)
+    F["plan_roster"] = pd.read_excel(os.path.join(target, "bodo_shop_plan_2027.xlsx"), sheet_name="Roster plan")
+    F["plan_bench"] = pd.read_excel(os.path.join(target, "bodo_shop_plan_2027.xlsx"), sheet_name="Bench hours")
     return clean(F)
 
 
@@ -340,14 +342,14 @@ def pec_split(F):
         else:
             exp_un += float(seg.sum())
     R = F["removals"]
-    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["date"] >= pd.Timestamp(P.SB_DATE))]
+    R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["date"] >= pd.Timestamp(P.SB_DATE)) & (R["date"] <= Y26[1])]
     exp_mod_s, exp_un_s = 0.0, 0.0
     for sn, (t, pos), a, b in spl:
         s = fh_by_ac.get(t)
         if s is None:
             continue
         md = moddate.get(sn)
-        seg = s[(s.index >= max(a, pd.Timestamp(P.SB_DATE))) & (s.index < b)]
+        seg = s[(s.index >= max(a, pd.Timestamp(P.SB_DATE))) & (s.index < min(b, Y26[1] + pd.Timedelta(days=1)))]
         if md is not None:
             exp_mod_s += float(seg[seg.index >= md].sum())
             exp_un_s += float(seg[seg.index < md].sum())
@@ -510,37 +512,43 @@ def shop_inputs(F):
     rd = ro.assign(d=ro["date"].dt.date)
     duty = rd[rd["h"] > 0].groupby("d").size().reindex(sorted(rd["d"].unique()), fill_value=0).to_dict()
     ferie = rd[rd["absence"] == "FERIE"].groupby("d").size().to_dict()
+    other_day = {k.date(): float(v) for k, v in oth.groupby("date")["h"].sum().items()}
+    # the 2027 plan: each technician's planned absences, the rotable bench hours a technician on duty gives
+    planned = {}
+    for _, r in F["plan_roster"].iterrows():
+        a0, a1 = pd.Timestamp(r["From"]).date(), pd.Timestamp(r["To"]).date()
+        d = a0
+        while d <= a1:
+            planned[d] = planned.get(d, 0) + 1
+            d += dt.timedelta(days=1)
+    pb = F["plan_bench"]
+    bench = float(pb.iloc[:, 2].mean())
+    bench_rot = {(pd.Timestamp(r.iloc[0]).year, pd.Timestamp(r.iloc[0]).month): float(r.iloc[4]) for _, r in pb.iterrows()}
+    other_plan = {(pd.Timestamp(r.iloc[0]).year, pd.Timestamp(r.iloc[0]).month): float(r.iloc[3]) / (5.0 * float(r.iloc[1]))
+                  for _, r in pb.iterrows()}
     return {"hours": hours, "prod": prod, "other": other_share, "absent": absent, "techs": techs, "trans": trans,
             "parts": pw if len(pw) else np.array([0]), "sick": sick, "other_per_tech": opt, "duty": duty,
-            "ferie": ferie}
+            "ferie": ferie, "planned": planned, "bench": bench, "bench_rot": bench_rot, "other_plan": other_plan,
+            "other_day": other_day}
 
 
-def calibrate_shop(F, inputs, since="2024-06-01", until="2026-09-30", reps=12):
-    """The productive hours a technician on duty gives in a day, set so the replay of the shop's own recent removals
-    (their findings, their booked hours, their parts waits, each day's other work as the shop booked it) reproduces
-    the turnarounds the shop actually ran."""
+def validate_shop(F, inputs, since="2024-06-01", until="2026-09-30", reps=12):
+    """The shop's filed bench hours checked on its own record: the replay of every job it took in (from five months
+    before the window, so the queue it had comes with it) on the roster's own staffing and the other work it booked
+    each day, against the turnarounds it actually ran."""
     R = F["removals"]
     U = R[(R["reason"] == "UNSCH") & (R["shop"] == "BOO") & (R["date"] <= pd.Timestamp(until)) & R["finding"].isin(["CF", "NFF"])
           & R["back"].notna()]
     a0 = pd.Timestamp(since)
     actual = float((U[U["date"] >= a0]["back"] - U[U["date"] >= a0]["date"]).dt.days.mean())
-    # every job the shop took in, beyond-repair assessments too, from five months before the window so the replay
-    # meets the window with the queue the shop had
     W = R[(R["reason"] == "UNSCH") & (R["shop"] == "BOO") & (R["date"] >= a0 - pd.DateOffset(months=5)) &
           (R["date"] <= pd.Timestamp(until)) & R["finding"].isin(["CF", "NFF", "BER"])]
     arr = {k: [(r["date"].date(), r["finding"], r["station"]) for _, r in W[W["k"] == k].iterrows()] for k in P.IN_HOUSE}
-    best = None
-    for cap in np.arange(5.6, 7.61, 0.05):
-        inp = dict(inputs)
-        inp["h_tech"] = float(cap)
-        tats = []
-        for r in range(reps):
-            done = shop_replay(F, arr, inp, np.random.default_rng(900 + r), year=None)
-            tats += [x[2] for x in done if x[3] != "BER" and x[1] >= a0.date()]
-        m = float(np.mean(tats)) if tats else 0.0
-        if best is None or abs(m - actual) < best[1]:
-            best = (float(cap), abs(m - actual), m)
-    return best[0], actual, best[2]
+    tats = []
+    for r in range(reps):
+        done = shop_replay(F, arr, inputs, np.random.default_rng(900 + r), year=None)
+        tats += [x[2] for x in done if x[3] != "BER" and x[1] >= a0.date()]
+    return float(np.mean(tats)), actual
 
 
 def _same_day(d, dates):
@@ -585,15 +593,23 @@ def shop_replay(F, arrivals_by_k, inputs, rng, year=2027):
             i += 1
         if d.weekday() < 5 and d not in HOL:
             if year is None and d in inputs["duty"]:
+                # a day of the record: the technicians the roster had on duty, less the other work the shop booked
                 on = inputs["duty"][d]
+                cap = max(0.0, on * inputs["bench"] - inputs["other_day"].get(d, 0.0))
             else:
-                ref = _same_day(d, inputs["duty"])
-                on = T - (inputs["ferie"].get(ref, 0) if ref else 0)
+                # a day of the plan: the technicians not on planned leave, less sickness at the roster's own rate
+                on = T - inputs["planned"].get(d, 0)
                 on = sum(1 for _ in range(on) if rng.random() > inputs["sick"])
-            if "h_tech" in inputs:
-                cap = on * max(0.0, inputs["h_tech"] - float(rng.choice(inputs["other_per_tech"]))) * inputs.get("cap_mult", 1.0)
-            else:
-                cap = on * inputs.get("cap_tech", 7.5 * inputs["prod"] * (1 - inputs["other"]))
+                ym = (d.year, d.month)
+                if inputs.get("other_resample"):
+                    # the record's own day-to-day spread of third-party work, at the plan's level for the month
+                    lvl = inputs["other_plan"].get(ym, 3.6) / max(float(np.mean(inputs["other_per_tech"])), 1e-9)
+                    cap = on * max(0.0, inputs["bench"] - lvl * float(rng.choice(inputs["other_per_tech"])))
+                else:
+                    cap = on * inputs["bench_rot"].get(ym, 3.3)
+                cap *= inputs.get("cap_mult", 1.0)
+            if inputs.get("queue_order") == "removed":
+                queue.sort(key=lambda j: (j["removed"], j["k"]))
             for j in list(queue):
                 if cap <= 1e-9:
                     break
@@ -647,7 +663,8 @@ def frost_years(F):
 _CALCACHE = {}
 
 
-def simulate(F, fc, D, reps=300, seed=20271, no_disp=False, no_frost=False, cap_since=None, cap_mult=1.0, frost_mult=1.0):
+def simulate(F, fc, D, reps=300, seed=20271, no_disp=False, no_frost=False, other_resample=False, cap_mult=1.0,
+             frost_mult=1.0, queue_order="ready"):
     """The 2027 year replayed: each part's daily removals (its rate on its own exposure, frost from one of the record's
     winters, the rate's own sampling spread, the no-fault-found bursts' month-to-month overdispersion), each
     removal's return through the Bodø shop's queue or the repairer's own turnaround, and the pool replayed to read the
@@ -657,11 +674,9 @@ def simulate(F, fc, D, reps=300, seed=20271, no_disp=False, no_frost=False, cap_
     fr = frost_clim(F)
     years = frost_years(F)
     inputs = shop_inputs(F)
-    ck = (id(F), cap_since)
-    if ck not in _CALCACHE:
-        _CALCACHE[ck] = calibrate_shop(F, inputs, since=cap_since)[0] if cap_since else calibrate_shop(F, inputs)[0]
-    inputs["h_tech"] = _CALCACHE[ck]
     inputs["cap_mult"] = cap_mult
+    inputs["other_resample"] = other_resample
+    inputs["queue_order"] = queue_order
     lead = lead_times(F)
     alld = pd.date_range("2026-12-01", "2027-12-31", freq="D")
     nd_all = len(alld)
@@ -858,7 +873,7 @@ def aircraft_driven(F, k, window=120, size=3):
     return U
 
 
-def fault_windows(U, pad=30):
+def fault_windows(U, pad=30, gap=120):
     """The spans an aircraft position was driving removals: from the first to the last removal of each run, padded."""
     win = {}
     for (t, pos), g in U[U["by_aircraft"]].groupby(["aircraft", "position"]):
@@ -866,7 +881,7 @@ def fault_windows(U, pad=30):
         spans = []
         a = b = ds[0]
         for d in ds[1:]:
-            if (d - b).days <= 120:
+            if (d - b).days <= gap:
                 b = d
             else:
                 spans.append((a - pd.Timedelta(days=pad), b + pd.Timedelta(days=pad)))
@@ -876,7 +891,7 @@ def fault_windows(U, pad=30):
     return win
 
 
-def serial_exposure(F, k, win=None):
+def serial_exposure(F, k, win=None, upto=None):
     """Each serial's installed exposure since January 2023 on the part's own driving exposure, the days its position
     was driving removals set aside."""
     drv = drivers_cache(F)[k]["driver"]
@@ -888,9 +903,13 @@ def serial_exposure(F, k, win=None):
         by_ac[t] = s.sort_index()
     win = win or {}
     out = {}
+    end = (upto or Y26[1]) + pd.Timedelta(days=1)
     for sn, t, pos, a, b in spells(F, k):
         s = by_ac.get(t)
         if s is None:
+            continue
+        b = min(b, end)
+        if b <= a:
             continue
         seg = s[(s.index >= a) & (s.index < b)] if col else pd.Series(1.0, index=pd.date_range(a, b - pd.Timedelta(days=1)))
         for wa, wb in win.get((t, pos), []):
@@ -935,32 +954,34 @@ def mixture_rates(n, e, iters=400):
     return lo, hi, pi, w2
 
 
-def watch_golden(F, fc=None, estimator="mixture"):
+def watch_golden(F, fc=None, estimator="mixture", new_unit="pooled", window=120, upto=None):
     """Each listed serial's expected 2027 removals over a new unit in its place: its own removals (those its
-    aircraft drove set aside) over its installed exposure, shrunk toward the part's rate by the spread the part's
-    serials show beyond chance; the saving the whole list's scrapping buys, and the serials worth scrapping."""
+    aircraft drove set aside) over its installed exposure, to the end of the latest report's months, read through the
+    two groups the part's serials form; a new unit at the part's expected rate; the saving the whole list's scrapping
+    buys, and the serials worth scrapping."""
     L = listed(F)
     X = expo_2027(F)
     res = []
     for k, g in L.groupby("k"):
-        U = aircraft_driven(F, k)
-        win = fault_windows(U)
+        U = aircraft_driven(F, k, window=window)
+        win = fault_windows(U, gap=window)
         inwin = U.apply(lambda r: any(a <= r["date"] <= b for a, b in win.get((r["aircraft"], r["position"]), [])), axis=1) if len(U) else U["by_aircraft"]
-        own = U[~U["by_aircraft"] & ~inwin].groupby("serial_off").size()
-        ex = serial_exposure(F, k, win)
+        end = upto or Y26[1]
+        own = U[~U["by_aircraft"] & ~inwin & (U["date"] <= end)].groupby("serial_off").size()
+        ex = serial_exposure(F, k, win, upto=end)
         sns = [s for s in ex if ex[s] > 0]
         n = np.array([float(own.get(s, 0)) for s in sns])
         e = np.array([ex[s] for s in sns])
-        healthy = np.array([s not in L.index for s in sns])
         mu = n.sum() / e.sum()
-        mu_new = n[healthy].sum() / e[healthy].sum()
         m = mu * e
         denom = float(np.sum((n - m) ** 2 - m))
         alpha = float(np.sum(m ** 2) / denom) if denom > 0 else 1e6
         lo, hi, pi, w2 = mixture_rates(n, e)
         post = dict(zip(sns, w2))
-        if estimator == "mixture":
-            mu_new = lo
+        # a new unit fitted in the serial's place (standard 5.1): the part's own removals pooled over its serials'
+        # exposure, the removals the aircraft drove set aside on both sides (they come with the position whichever unit
+        # is fitted); the healthy group's rate is the rival reading
+        mu_new = lo if new_unit == "healthy" else mu
         drv = drivers_cache(F)[k]["driver"]
         e27 = float({"cyc": X["cyc"].sum(), "fh": X["fh"].sum(), "days": 365.0 * P.FLEET_N}[drv]) / P.FLEET_N
         Rk = F["removals"]

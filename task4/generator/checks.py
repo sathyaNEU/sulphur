@@ -202,6 +202,19 @@ def main():
     ok("SF7 the 2027 exposure is the issued programme's: its landings against the twelve months' give the change the plan states",
        abs(X27["cyc"].sum() / F["day"][(F["day"]["date"] >= A.Y26[0]) & (F["day"]["date"] <= A.Y26[1])]["cyc"].sum() - 1
            - Fg["cyc_ch_pct"] / 100) < 0.006)
+    G_watch = {"a new unit at the healthy group's rate": (lambda r: (sorted(r[0].index[r[0]["scrap"]]), r[1]))(
+                   A.watch_golden(F, fc, "mixture", new_unit="healthy")),
+               "runs read over 90 days": (lambda r: (sorted(r[0].index[r[0]["scrap"]]), r[1]))(
+                   A.watch_golden(F, fc, "mixture", window=90)),
+               "runs read over 180 days": (lambda r: (sorted(r[0].index[r[0]["scrap"]]), r[1]))(
+                   A.watch_golden(F, fc, "mixture", window=180))}
+    ok("SF20 the run that marks a position's own fault, read over 90 or 180 days: the same serials withdrawn, the saving "
+       "in the band", all(v[0] == sorted(Fg["scrap_set"]) and Fg["saving_lo"] - 1 <= v[1] <= Fg["saving_hi"] + 1
+                         for n, v in G_watch.items() if "runs" in n), str({n: round(v[1], 1) for n, v in G_watch.items()}))
+    Wsnap, ssnap = A.watch_golden(F, fc, "mixture", upto=pd.Timestamp(P.ASOF))
+    ok("SF21 the serials' record to the end of the October report's months or to the snapshot: the same serials withdrawn, "
+       "the saving in the band", sorted(Wsnap.index[Wsnap["scrap"]]) == sorted(Fg["scrap_set"]) and
+       Fg["saving_lo"] - 1 <= ssnap <= Fg["saving_hi"] + 1, "%.1f to the snapshot" % ssnap)
     lows = []
     for k in sorted(set(Wg["k"])):
         U_ = A.aircraft_driven(F, k)
@@ -214,7 +227,9 @@ def main():
         e_ = np.array([ex[x] for x in sns])
         lo, hi, pi, w2 = A.mixture_rates(n_, e_)
         lows.append(lo < n_.sum() / e_.sum())
-    ok("SF8 a new unit is compared at the healthy serials' rate, below every listed part's pooled rate", all(lows))
+    ok("SF8 a new unit fitted in a serial's place: the pooled own rate and the healthy group's rate withdraw the same "
+       "serials and both savings sit in the band", sorted(G_watch["a new unit at the healthy group's rate"][0]) == sorted(Fg["scrap_set"])
+       and Fg["saving_lo"] <= G_watch["a new unit at the healthy group's rate"][1] <= Fg["saving_hi"] + 1)
     from scipy import optimize as OPT, special as SPC
     gaps18 = {}
     for k in sorted(set(Wg["k"])):
@@ -255,9 +270,10 @@ def main():
        all(all((v[k] > 0) == (Fg["call_units"][k] > 0) and v[k] != 0 for v in RS2.calls_family(E)) for k in Fg["call_units"]))
     ok("SF13 the exposure is forced by the record (landings over hours and days, 2 dlogL over 6)",
        all(2 * D[k]["ll_gap"] > 6 and D[k]["driver"] == "cyc" for k in ("SG", "BRK", "BAV")))
-    r5 = {r["id"]: r for r in E["results"]}["R5"]
-    ok("SF14 the window the rates are fitted on (the whole record, 2024 to 2026, the last twelve months) inside every band",
-       all(r5["bands"][k][0] <= Fg["rem_%s" % k] <= r5["bands"][k][1] for k in A.PARTS))
+    pan = A.panel(F, "SG", "CF")
+    ok("SF14 the record the rates are read from is standard 4.3's: January 2023 to the end of the October report's months",
+       str(pan["ym"].min()) == "2023-01" and str(pan["ym"].max()) == "2026-10" and "January 2023" in re.sub(r"\s+", " ", std)
+       and "latest reliability report" in re.sub(r"\s+", " ", std), "%s to %s" % (pan["ym"].min(), pan["ym"].max()))
     taxi = []
     for so in (3.0, 8.0):
         F2 = dict(F)
@@ -268,7 +284,11 @@ def main():
         taxi.append(A.expo_2027(F2)["fh"].sum() / X27["fh"].sum() - 1)
     ok("SF15 the unseen Helgeland fields' taxi time moves 2027's flight hours by under 1.5 per cent from 3 to 8 minutes",
        all(abs(x) < 0.015 for x in taxi), str([round(x, 4) for x in taxi]))
-    ok("SF16 the shop's staffing and capacity: the call holds with the calibrated capacity 5 per cent either side",
+    val = A.validate_shop(F, A.shop_inputs(F))
+    ok("SF19 the shop's bench hours are the plan's (standard 4.5), and the same replay on the shop's 2024 to 2026 record "
+       "reproduces its turnarounds within a day", abs(val[0] - val[1]) < 1.0 and "bench hours" in re.sub(r"\s+", " ", std),
+       "%.1f replayed against %.1f recorded" % val)
+    ok("SF16 the shop's staffing and capacity: the call holds with the plan's capacity 5 per cent either side",
        all(sorted(x["answer"]) == sorted(E["forcing"]["golden_answer"]) for x in E["forcing"]["perturbations"]
            if "capacity" in x["input"]))
     Lr = F["legs"]

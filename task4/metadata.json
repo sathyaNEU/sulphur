@@ -144,7 +144,7 @@
   {
    "path": "reliability_programme_and_spares_standard.pdf",
    "format": "pdf",
-   "bytes": 75232,
+   "bytes": 75787,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
@@ -163,6 +163,15 @@
    "path": "pool_support_offer_2026.pdf",
    "format": "pdf",
    "bytes": 85935,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "bodo_shop_plan_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 7680,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",

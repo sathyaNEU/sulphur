@@ -66,10 +66,14 @@ STANDARD = [
         "4.2 A part number's fill rate over a year is the share of its unscheduled removals in that year for which a "
         "serviceable unit was held in the pool, in Bodø main stores or a station kit, when the unit was removed.",
         "4.3 A part number holds the fewest spares that give an expected fill rate over the year of at least 95 per "
-        "cent, with the year's unscheduled removals at their expected rate.",
+        "cent, with the year's unscheduled removals at their expected rate: the rate the record from January 2023 to "
+        "the end of the latest reliability report's twelve months shows for units like those in service, every "
+        "unscheduled removal counted.",
         "4.4 The plan states each part number's expected unscheduled removals in the year with an 80 per cent range: "
         "the 10th to the 90th percentile of the year's removals, carrying both the year's chance variation and the "
-        "uncertainty in the expected rate itself."]),
+        "uncertainty in the expected rate itself.",
+        "4.5 The Bodø component shop's annual plan sets the days each technician is rostered and the bench hours a "
+        "technician on duty gives to rotable repair once the contracted third-party work is done."]),
     ("5. Withdrawal of serials", [
         "5.1 A serial is withdrawn and replaced by a new unit when its position would see at least 1.5 more "
         "unscheduled removals over a year with the serial kept in service than with a new unit fitted in its place.",
@@ -95,7 +99,7 @@ def standard(path):
     s.append(_grid([["Issue", "Date", "Change"],
                     ["4", "January 2023", "monthly reporting; the watch list at three removals in twelve months"],
                     ["5", "March 2024", "2.1 reason codes after the maintenance system upgrade; 2.3 station kits"],
-                    ["6", "September 2026", "4.2 to 4.4 restated for the December plan; 5.1 and 5.2 added"]],
+                    ["6", "September 2026", "4.2 to 4.5 restated for the December plan; 5.1 and 5.2 added"]],
                    [16, 30, 126], cell))
     O.build(path, s, "Reliability programme and rotable spares standard, issue 6", P.PEOPLE["reliability"],
             "%s continuing airworthiness" % P.ORG, "%s. Reliability programme and rotable spares standard, issue 6." % P.ORG,

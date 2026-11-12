@@ -337,7 +337,7 @@ def watch(F, X, drv, lst):
             spans.append((a - pd.Timedelta(days=30), b + pd.Timedelta(days=30)))
             win[(ac, pos)] = spans
         inwin = u.apply(lambda r: any(a <= r["date"] <= b for a, b in win.get((r["aircraft"], r["position"]), [])), axis=1)
-        own = u[~u["air_drv"] & ~inwin].groupby("sn").size()
+        own = u[~u["air_drv"] & ~inwin & (u["date"] <= M12[1])].groupby("sn").size()
         # exposure by serial on the part's own driver
         e_col = drv[p]
         D = F["day"].copy()
@@ -346,15 +346,17 @@ def watch(F, X, drv, lst):
         s_by = {ac: g.set_index("date")[col].sort_index() for ac, g in D.groupby("aircraft")}
         cc = C[C["pn"] == p].sort_values(["date", "change_no"])
         expo = {}
+        stop = M12[1] + pd.Timedelta(days=1)
         for (ac, pos), g in cc.groupby(["aircraft", "position"]):
             cur, start, first = None, pd.Timestamp("2023-01-01"), True
             for _, r in g.iterrows():
                 if r["sn"]:
                     sn = r["sn"] if (first or cur is None) else cur
                     a0 = pd.Timestamp("2023-01-01") if first else start
-                    seg = s_by[ac][(s_by[ac].index >= a0) & (s_by[ac].index < r["date"])] if ac in s_by else pd.Series(dtype=float)
+                    z0 = min(r["date"], stop)
+                    seg = s_by[ac][(s_by[ac].index >= a0) & (s_by[ac].index < z0)] if ac in s_by else pd.Series(dtype=float)
                     if e_col == "days":
-                        seg = pd.Series(1.0, index=pd.date_range(a0, r["date"] - pd.Timedelta(days=1)))
+                        seg = pd.Series(1.0, index=pd.date_range(a0, z0 - pd.Timedelta(days=1))) if z0 > a0 else pd.Series(dtype=float)
                     for wa, wb in win.get((ac, pos), []):
                         seg = seg[(seg.index < wa) | (seg.index > wb)]
                     expo[sn] = expo.get(sn, 0.0) + float(seg.sum())
@@ -362,8 +364,9 @@ def watch(F, X, drv, lst):
                 first = False
                 if r["serial_on"]:
                     cur, start = r["serial_on"].upper(), r["date"]
-            if cur and ac in s_by:
-                seg = s_by[ac][s_by[ac].index >= start] if e_col != "days" else pd.Series(1.0, index=pd.date_range(start, "2026-11-29"))
+            if cur and ac in s_by and start < stop:
+                seg = (s_by[ac][(s_by[ac].index >= start) & (s_by[ac].index < stop)] if e_col != "days"
+                       else pd.Series(1.0, index=pd.date_range(start, stop - pd.Timedelta(days=1))))
                 for wa, wb in win.get((ac, pos), []):
                     seg = seg[(seg.index < wa) | (seg.index > wb)]
                 expo[cur] = expo.get(cur, 0.0) + float(seg.sum())
@@ -394,7 +397,7 @@ def watch(F, X, drv, lst):
             q = post.get(sn, 0.0)
             lam = q * hi + (1 - q) * lo
             on = 1 / (1 + lam * e27 * tat / 365)
-            res[sn] = on * (lam - lo) * e27
+            res[sn] = on * (lam - n.sum() / e.sum()) * e27
     scrap = [s for s, v in res.items() if v >= 1.5]
     return scrap, float(sum(res.values()))
 

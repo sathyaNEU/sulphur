@@ -31,33 +31,46 @@ def build(G):
               "figure": "rem_cyc", "golden": _tab(rem, CYC_PRICED), "depends": [], "independent": "the legs and the changes",
               "bands": {k: [rb[k][0], rb[k][1]] for k in CYC_PRICED},
               "passes": {"quick": _tab(qproj, CYC_PRICED),
-                         "careful": {"value": _tab(hproj, CYC_PRICED), "grade": "partly",
-                                     "why": "the computed careful pass carries every part per flight hour and misses all three; "
-                                            "the stage 4 determinism judge's blind derivation found the landings driver by "
-                                            "comparing the bases' rates, so a careful run may too"},
+                         "careful": {"value": _tab(hproj, CYC_PRICED), "grade": "right",
+                                     "why": "both platform runs on the architecture 12 cut landed all three inside their bands "
+                                            "(59.9, 50.8, 39.8 and 63.6, 51.9, 39.6), as the stage 4 judge's blind pass did"},
                          "thorough": _tab(rem, CYC_PRICED)},
               "precedent": ["N04", "N01"], "partly_share": 0.5})
     R.append({"id": "R3", "name": "the watch-list serials worth withdrawing", "graded_as": "Component 3",
               "figure": "scrap_set", "golden": G["scrap"], "depends": [], "independent": "the changes and the findings",
-              "passes": {"quick": sorted(Hw["face_set"]), "careful": sorted(Hw["cf_set"]), "thorough": G["scrap"]},
+              "passes": {"quick": sorted(Hw["face_set"]),
+                         "careful": {"value": sorted(Hw["cf_set"]), "grade": "partly",
+                                     "why": "the platform runs set the aircraft's repeat removals apart: one named the eight, the "
+                                            "other seven of them and a victim; the computed confirmed-failure pass names four"},
+                         "thorough": G["scrap"]},
               "precedent": ["L03", "L13"]})
     R.append({"id": "R3b", "name": "the removals withdrawing the whole watch list saves", "graded_as": "Ask 3",
               "figure": "saving", "golden": round(G["saving"]), "depends": [], "independent": "the changes and the findings",
               "band": [G["saving_band"][0], G["saving_band"][1]], "partly": [G["saving_band"][0] * 0.85, G["saving_band"][1] * 1.15],
-              "passes": {"quick": round(Hw["face"]), "careful": round(Hw["cf_only"]), "thorough": round(G["saving"])},
+              "passes": {"quick": round(Hw["face"]),
+                         "careful": {"value": round(Hw["cf_only"]), "grade": "partly",
+                                     "why": "the platform runs' fleet replays saved 31.3 and 30.2, one inside the band and one "
+                                            "at its edge; the computed confirmed-failure pass saves 14"},
+                         "thorough": round(G["saving"])},
               "precedent": ["L03", "L14"]})
     R.append({"id": "R4", "name": "the propeller control's 2027 removals and spares", "graded_as": "Component 4",
               "figure": "pec", "golden": {"removals": rem["PEC"], "spares": need["PEC"]}, "depends": [],
               "independent": "the repairers' orders and the stores snapshot",
               "bands": {"removals": [rb["PEC"][0], rb["PEC"][1]], "spares": nb["PEC"]},
               "passes": {"quick": {"removals": qproj["PEC"], "spares": P.POOL["PEC"]},
-                         "careful": {"removals": hproj["PEC"], "spares": H["PEC"]["spares"]},
+                         "careful": {"value": {"removals": hproj["PEC"], "spares": H["PEC"]["spares"]}, "grade": "partly",
+                                     "why": "both platform runs read the bulletin from the snapshot and held five spares, with "
+                                            "removals at 15.9 and 17.4, under the band"},
                          "thorough": {"removals": rem["PEC"], "spares": need["PEC"]}},
               "precedent": ["L12", "L11"], "partly_share": 0.5})
     R.append({"id": "R5", "name": "every part number's expected 2027 unscheduled removals", "graded_as": "Ask 1",
               "figure": "rem", "golden": rem, "depends": [], "independent": "the legs, the changes and the programme",
               "bands": {k: [rb[k][0], rb[k][1]] for k in A.PARTS},
-              "passes": {"quick": qproj, "careful": hproj, "thorough": rem}, "precedent": ["L12", "L36"], "partly_share": 0.5})
+              "passes": {"quick": qproj,
+                         "careful": {"value": hproj, "grade": "partly",
+                                     "why": "the platform runs landed ten and twelve of the sixteen lines, the landing-driven "
+                                            "ones right and the no-fault-found avionics high"},
+                         "thorough": rem}, "precedent": ["L12", "L36"], "partly_share": 0.5})
     inh = list(P.IN_HOUSE)
     R.append({"id": "R6", "name": "the in-house lines' spares through the Bodø shop's 2027 queue", "graded_as": "Component 2",
               "figure": "need_inhouse", "golden": _tab(need, inh), "depends": ["R2"], "independent": "",
@@ -128,8 +141,8 @@ def forcing(G, target):
         f2 = copy.deepcopy(fc)
         scaled(f2, k, 0.8)
         run("%s rate on landings -20%%" % k, f2)
-    run("the Bodø shop's calibrated capacity +5%", cap_mult=1.05)
-    run("the Bodø shop's calibrated capacity -5%", cap_mult=0.95)
+    run("the Bodø shop's planned capacity +5%", cap_mult=1.05)
+    run("the Bodø shop's planned capacity -5%", cap_mult=0.95)
     f2 = copy.deepcopy(fc)
     scaled(f2, "PEC", 1.2)
     run("the propeller control's 2027 rate +20%", f2)

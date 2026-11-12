@@ -14,16 +14,16 @@
    "independent": "the legs and the changes",
    "bands": {
     "SG": [
-     55.13171555388553,
+     57.538411526798555,
      65.35963747582059
     ],
     "BRK": [
-     49.16025645240835,
-     54.06767427255449
+     50.48793405151539,
+     53.726138259381656
     ],
     "BAV": [
-     38.07265586450279,
-     47.57738099152203
+     38.98723543532417,
+     43.600155367071146
     ]
    },
    "passes": {
@@ -38,8 +38,8 @@
       "BRK": 36,
       "BAV": 34
      },
-     "grade": "partly",
-     "why": "the computed careful pass carries every part per flight hour and misses all three; the stage 4 determinism judge's blind derivation found the landings driver by comparing the bases' rates, so a careful run may too"
+     "grade": "right",
+     "why": "both platform runs on the architecture 12 cut landed all three inside their bands (59.9, 50.8, 39.8 and 63.6, 51.9, 39.6), as the stage 4 judge's blind pass did"
     },
     "thorough": {
      "SG": 59,
@@ -96,12 +96,16 @@
      "V29424",
      "WH1688"
     ],
-    "careful": [
-     "C2568",
-     "RT4534",
-     "SG6792",
-     "V2715"
-    ],
+    "careful": {
+     "value": [
+      "C2568",
+      "RT4534",
+      "SG6792",
+      "V2715"
+     ],
+     "grade": "partly",
+     "why": "the platform runs set the aircraft's repeat removals apart: one named the eight, the other seven of them and a victim; the computed confirmed-failure pass names four"
+    },
     "thorough": [
      "ADC9270",
      "C3880",
@@ -123,21 +127,25 @@
    "name": "the removals withdrawing the whole watch list saves",
    "graded_as": "Ask 3",
    "figure": "saving",
-   "golden": 35,
+   "golden": 34,
    "depends": [],
    "independent": "the changes and the findings",
    "band": [
-    33.703626799078066,
-    46.75217491229829
+    30.452196557947655,
+    37.17064281943548
    ],
    "partly": [
-    28.648082779216356,
-    53.765001149143025
+    25.884367074255508,
+    42.746239242350796
    ],
    "passes": {
     "quick": 64,
-    "careful": 14,
-    "thorough": 35
+    "careful": {
+     "value": 14,
+     "grade": "partly",
+     "why": "the platform runs' fleet replays saved 31.3 and 30.2, one inside the band and one at its edge; the computed confirmed-failure pass saves 14"
+    },
+    "thorough": 34
    },
    "precedent": [
     "L03",
@@ -157,8 +165,8 @@
    "independent": "the repairers' orders and the stores snapshot",
    "bands": {
     "removals": [
-     17.662327454713076,
-     20.321913399212633
+     18.158017078644612,
+     20.817686658210256
     ],
     "spares": [
      5,
@@ -171,8 +179,12 @@
      "spares": 7
     },
     "careful": {
-     "removals": 20,
-     "spares": 5
+     "value": {
+      "removals": 21,
+      "spares": 6
+     },
+     "grade": "partly",
+     "why": "both platform runs read the bulletin from the snapshot and held five spares, with removals at 15.9 and 17.4, under the band"
     },
     "thorough": {
      "removals": 19,
@@ -212,36 +224,36 @@
    "independent": "the legs, the changes and the programme",
    "bands": {
     "SG": [
-     55.13171555388553,
+     57.538411526798555,
      65.35963747582059
     ],
     "BRK": [
-     49.16025645240835,
-     54.06767427255449
+     50.48793405151539,
+     53.726138259381656
     ],
     "BAV": [
-     38.07265586450279,
-     47.57738099152203
+     38.98723543532417,
+     43.600155367071146
     ],
     "NWS": [
      10.710763825089664,
      14.08019144397252
     ],
     "BAT": [
-     23.712304422980907,
-     31.0
+     24.389856213321398,
+     27.575392870308907
     ],
     "CPC": [
      22.890844129719817,
-     30.85729550738592
+     26.872712648231115
     ],
     "FLA": [
-     4.54136543910828,
-     11.0
+     4.668630174259547,
+     6.83505051390625
     ],
     "ADC": [
      21.10502382059203,
-     29.67189847112149
+     24.542151831748924
     ],
     "WXR": [
      25.159235790820226,
@@ -249,31 +261,31 @@
     ],
     "VHF": [
      24.363599801207897,
-     35.753816328632105
+     32.612058596260994
     ],
     "PEC": [
-     17.662327454713076,
-     20.321913399212633
+     18.158017078644612,
+     20.817686658210256
     ],
     "PDT": [
      6.468914995564857,
-     10.644941854041246
+     9.669605196565632
     ],
     "HYP": [
      2.062193950103468,
-     4.548000134920099
+     4.2919644337209135
     ],
     "FBP": [
-     4.213072449294816,
+     5.000587400680817,
      8.066144943827055
     ],
     "WHC": [
-     12.03268112323704,
+     13.85944432212691,
      17.071871880302016
     ],
     "FDU": [
      14.838853661373344,
-     32.0
+     20.744757257569333
     ]
    },
    "passes": {
@@ -296,22 +308,26 @@
      "FDU": 27
     },
     "careful": {
-     "SG": 41,
-     "BRK": 36,
-     "BAV": 34,
-     "NWS": 9,
-     "BAT": 26,
-     "CPC": 22,
-     "FLA": 9,
-     "ADC": 29,
-     "WXR": 30,
-     "VHF": 35,
-     "PEC": 20,
-     "PDT": 8,
-     "HYP": 3,
-     "FBP": 5,
-     "WHC": 13,
-     "FDU": 27
+     "value": {
+      "SG": 41,
+      "BRK": 36,
+      "BAV": 34,
+      "NWS": 9,
+      "BAT": 26,
+      "CPC": 22,
+      "FLA": 9,
+      "ADC": 29,
+      "WXR": 30,
+      "VHF": 35,
+      "PEC": 21,
+      "PDT": 8,
+      "HYP": 3,
+      "FBP": 5,
+      "WHC": 13,
+      "FDU": 27
+     },
+     "grade": "partly",
+     "why": "the platform runs landed ten and twelve of the sixteen lines, the landing-driven ones right and the no-fault-found avionics high"
     },
     "thorough": {
      "SG": 59,
@@ -344,9 +360,9 @@
    "graded_as": "Component 2",
    "figure": "need_inhouse",
    "golden": {
-    "SG": 9,
-    "BRK": 9,
-    "BAV": 7,
+    "SG": 8,
+    "BRK": 7,
+    "BAV": 6,
     "NWS": 4,
     "BAT": 5
    },
@@ -356,24 +372,24 @@
    "independent": "",
    "bands": {
     "SG": [
-     9,
-     11
+     8,
+     9
     ],
     "BRK": [
-     9,
-     10
-    ],
-    "BAV": [
      7,
      8
     ],
+    "BAV": [
+     6,
+     6
+    ],
     "NWS": [
-     4,
+     3,
      4
     ],
     "BAT": [
-     5,
-     6
+     4,
+     5
     ]
    },
    "passes": {
@@ -392,9 +408,9 @@
      "BAT": 3
     },
     "thorough": {
-     "SG": 9,
-     "BRK": 9,
-     "BAV": 7,
+     "SG": 8,
+     "BRK": 7,
+     "BAV": 6,
      "NWS": 4,
      "BAT": 5
     }
@@ -421,7 +437,7 @@
     "ADC_lo": 15,
     "WXR_lo": 21,
     "VHF_lo": 18,
-    "PEC_lo": 12,
+    "PEC_lo": 13,
     "PDT_lo": 4,
     "HYP_lo": 1,
     "FBP_lo": 4,
@@ -437,7 +453,7 @@
     "ADC_hi": 31,
     "WXR_hi": 38,
     "VHF_hi": 33,
-    "PEC_hi": 25,
+    "PEC_hi": 26,
     "PDT_hi": 12,
     "HYP_hi": 6,
     "FBP_hi": 11,
@@ -450,16 +466,16 @@
    "independent": "",
    "bands": {
     "SG_lo": [
-     44,
+     46,
      54
     ],
     "BRK_lo": [
-     39,
+     40,
      44
     ],
     "BAV_lo": [
-     30,
-     38
+     29,
+     33
     ],
     "NWS_lo": [
      6,
@@ -467,19 +483,19 @@
     ],
     "BAT_lo": [
      17,
-     24
+     21
     ],
     "CPC_lo": [
      15,
-     22
+     18
     ],
     "FLA_lo": [
      1,
-     6
+     4
     ],
     "ADC_lo": [
      14,
-     21
+     17
     ],
     "WXR_lo": [
      18,
@@ -487,11 +503,11 @@
     ],
     "VHF_lo": [
      16,
-     26
+     20
     ],
     "PEC_lo": [
-     11,
-     14
+     12,
+     15
     ],
     "PDT_lo": [
      3,
@@ -502,19 +518,19 @@
      2
     ],
     "FBP_lo": [
-     1,
+     2,
      5
     ],
     "WHC_lo": [
-     7,
+     8,
      11
     ],
     "FDU_lo": [
      8,
-     22
+     11
     ],
     "SG_hi": [
-     66,
+     68,
      78
     ],
     "BRK_hi": [
@@ -523,7 +539,7 @@
     ],
     "BAV_hi": [
      48,
-     59
+     54
     ],
     "NWS_hi": [
      16,
@@ -531,31 +547,31 @@
     ],
     "BAT_hi": [
      32,
-     41
+     37
     ],
     "CPC_hi": [
      30,
-     41
+     36
     ],
     "FLA_hi": [
      8,
-     16
+     11
     ],
     "ADC_hi": [
      28,
-     40
+     33
     ],
     "WXR_hi": [
      33,
-     39
+     40
     ],
     "VHF_hi": [
      30,
-     45
+     35
     ],
     "PEC_hi": [
      24,
-     26
+     27
     ],
     "PDT_hi": [
      10,
@@ -566,16 +582,16 @@
      7
     ],
     "FBP_hi": [
-     7,
+     8,
      12
     ],
     "WHC_hi": [
-     17,
+     20,
      23
     ],
     "FDU_hi": [
      21,
-     44
+     25
     ]
    },
    "passes": {
@@ -658,7 +674,7 @@
      "ADC_lo": 15,
      "WXR_lo": 21,
      "VHF_lo": 18,
-     "PEC_lo": 12,
+     "PEC_lo": 13,
      "PDT_lo": 4,
      "HYP_lo": 1,
      "FBP_lo": 4,
@@ -674,7 +690,7 @@
      "ADC_hi": 31,
      "WXR_hi": 38,
      "VHF_hi": 33,
-     "PEC_hi": 25,
+     "PEC_hi": 26,
      "PDT_hi": 12,
      "HYP_hi": 6,
      "FBP_hi": 11,
@@ -693,9 +709,9 @@
    "graded_as": "Ask 2",
    "figure": "need",
    "golden": {
-    "SG": 9,
-    "BRK": 9,
-    "BAV": 7,
+    "SG": 8,
+    "BRK": 7,
+    "BAV": 6,
     "NWS": 4,
     "BAT": 5,
     "CPC": 5,
@@ -717,24 +733,24 @@
    "independent": "",
    "bands": {
     "SG": [
-     9,
-     11
+     8,
+     9
     ],
     "BRK": [
-     9,
-     10
-    ],
-    "BAV": [
      7,
      8
     ],
+    "BAV": [
+     6,
+     6
+    ],
     "NWS": [
-     4,
+     3,
      4
     ],
     "BAT": [
-     5,
-     6
+     4,
+     5
     ],
     "CPC": [
      5,
@@ -742,7 +758,7 @@
     ],
     "FLA": [
      3,
-     4
+     3
     ],
     "ADC": [
      4,
@@ -754,7 +770,7 @@
     ],
     "VHF": [
      4,
-     5
+     4
     ],
     "PEC": [
      5,
@@ -778,7 +794,7 @@
     ],
     "FDU": [
      3,
-     5
+     4
     ]
    },
    "passes": {
@@ -811,7 +827,7 @@
      "ADC": 5,
      "WXR": 6,
      "VHF": 4,
-     "PEC": 5,
+     "PEC": 6,
      "PDT": 3,
      "HYP": 2,
      "FBP": 3,
@@ -819,9 +835,9 @@
      "FDU": 4
     },
     "thorough": {
-     "SG": 9,
-     "BRK": 9,
-     "BAV": 7,
+     "SG": 8,
+     "BRK": 7,
+     "BAV": 6,
      "NWS": 4,
      "BAT": 5,
      "CPC": 5,
@@ -850,8 +866,8 @@
    "golden": {
     "ADC": -3,
     "BAT": 2,
-    "BAV": 3,
-    "BRK": 4,
+    "BAV": 2,
+    "BRK": 2,
     "CPC": 1,
     "FBP": -1,
     "FDU": -2,
@@ -859,7 +875,7 @@
     "NWS": 2,
     "PDT": -1,
     "PEC": -2,
-    "SG": 4,
+    "SG": 3,
     "VHF": -4,
     "WHC": -3,
     "WXR": -1
@@ -874,16 +890,16 @@
      -3
     ],
     "BAT": [
-     2,
-     3
+     1,
+     2
     ],
     "BAV": [
-     3,
-     4
+     2,
+     2
     ],
     "BRK": [
-     4,
-     5
+     2,
+     3
     ],
     "CPC": [
      1,
@@ -895,14 +911,14 @@
     ],
     "FDU": [
      -3,
-     -1
+     -2
     ],
     "HYP": [
      -2,
      -1
     ],
     "NWS": [
-     2,
+     1,
      2
     ],
     "PDT": [
@@ -914,12 +930,12 @@
      -2
     ],
     "SG": [
-     4,
-     6
+     3,
+     4
     ],
     "VHF": [
      -4,
-     -3
+     -4
     ],
     "WHC": [
      -3,
@@ -959,7 +975,7 @@
      "HYP": -2,
      "NWS": 0,
      "PDT": -1,
-     "PEC": -2,
+     "PEC": -1,
      "SG": 0,
      "VHF": -4,
      "WHC": -3,
@@ -968,8 +984,8 @@
     "thorough": {
      "ADC": -3,
      "BAT": 2,
-     "BAV": 3,
-     "BRK": 4,
+     "BAV": 2,
+     "BRK": 2,
      "CPC": 1,
      "FBP": -1,
      "FDU": -2,
@@ -977,7 +993,7 @@
      "NWS": 2,
      "PDT": -1,
      "PEC": -2,
-     "SG": 4,
+     "SG": 3,
      "VHF": -4,
      "WHC": -3,
      "WXR": -1
@@ -1061,9 +1077,9 @@
    ],
    "golden": true,
    "changes": {
-    "SG": 4,
-    "BRK": 4,
-    "BAV": 3,
+    "SG": 3,
+    "BRK": 2,
+    "BAV": 2,
     "NWS": 2,
     "BAT": 2,
     "CPC": 1,
@@ -1106,7 +1122,7 @@
     "ADC": -3,
     "WXR": -1,
     "VHF": -4,
-    "PEC": -2,
+    "PEC": -1,
     "PDT": -1,
     "HYP": -2,
     "FBP": -1,
@@ -1295,7 +1311,27 @@
     ]
    },
    {
-    "name": "the shop calibrated on 2025 to 2026 alone",
+    "name": "the shop's third-party work day by day as the 2025 and 2026 record shows it",
+    "answer": [
+     "BUY:BAT",
+     "BUY:BAV",
+     "BUY:BRK",
+     "BUY:CPC",
+     "BUY:NWS",
+     "BUY:SG",
+     "CUT:ADC",
+     "CUT:FBP",
+     "CUT:FDU",
+     "CUT:HYP",
+     "CUT:PDT",
+     "CUT:PEC",
+     "CUT:VHF",
+     "CUT:WHC",
+     "CUT:WXR"
+    ]
+   },
+   {
+    "name": "the jobs ready for the bench taken in the order of their removal",
     "answer": [
      "BUY:BAT",
      "BUY:BAV",
@@ -1316,26 +1352,6 @@
    },
    {
     "name": "the both-exposures removals",
-    "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
-    ]
-   },
-   {
-    "name": "the last twelve months' removals",
     "answer": [
      "BUY:BAT",
      "BUY:BAV",
@@ -1497,7 +1513,7 @@
     ]
    },
    {
-    "input": "the Bod\u00f8 shop's calibrated capacity +5%",
+    "input": "the Bod\u00f8 shop's planned capacity +5%",
     "answer": [
      "BUY:BAT",
      "BUY:BAV",
@@ -1517,7 +1533,7 @@
     ]
    },
    {
-    "input": "the Bod\u00f8 shop's calibrated capacity -5%",
+    "input": "the Bod\u00f8 shop's planned capacity -5%",
     "answer": [
      "BUY:BAT",
      "BUY:BAV",

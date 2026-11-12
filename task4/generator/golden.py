@@ -197,8 +197,11 @@ def workbook(G, path):
     _fmt(ws4, h + 1, ws4.max_row, {"B": "0.0", "C": "0.0"})
     ws4.append([])
     ws4.append(["Starter-generators, brakes, bleed valves, nose wheel steering actuators and batteries; turnaround from "
-                "removal to serviceable stock (standard 2.4). The shop's capacity is set so the replay of its own "
-                "2024 to 2026 work reproduces the turnarounds it ran."])
+                "removal to serviceable stock (standard 2.4). 2027 on the shop's own plan (the staggered summer weeks, "
+                "%.1f rotable bench hours a technician on duty to March and %.1f from April, standard 4.5); the same "
+                "replay on the shop's 2024 to 2026 record turns its work round in %.1f days against %.1f recorded."
+                % (float(F["plan_bench"].iloc[1, 4]), float(F["plan_bench"].iloc[4, 4]), G["validation"][0],
+                   G["validation"][1])])
     ws4["A%d" % ws4.max_row].font = Font(italic=True, color=MUTED, size=9)
     # routes: each method's change line by line
     ws5 = wb.create_sheet("Routes")
