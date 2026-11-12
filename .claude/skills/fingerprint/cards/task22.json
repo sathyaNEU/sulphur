@@ -8,13 +8,13 @@
   "subdomain": "distribution-losses-energy-balance",
   "client_domain": "energy-systems-utilities",
   "client_subdomain": "Energy Systems & Utilities (distribution losses and the feeder energy balance; closest client task types: load forecasting, grid reliability)",
-  "niche": "a city-owned electric utility's feeder energy balance: the non-technical loss each of fourteen 12.47 kV feeders carried in the twelve months to October 2026, for the 2027 revenue protection sweep of four feeders, and the lines' and transformers' own losses in 2027",
+  "niche": "a city-owned electric utility's feeder energy balance: the non-technical loss each of fourteen 12.47 kV feeders carried in the twelve months to September 2026, for the 2027 revenue protection sweep of four feeders, and the lines' and transformers' own losses in 2027",
   "objective": "etl",
   "shape": "03",
   "decision_type": "ranked_slate_under_cap",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Sweep CHL-2, APT-4, NTH-4 and CHL-3 in 2027 (non-technical loss 1,310, 1,122, 700 and 699 MWh in the twelve months to September 2026; NTH-3 next at 503); 2027 technical losses 13,455 MWh on the fourteen feeders",
+  "answer_source": "task22/submission.md block 1; generator/figures.json",
   "gap": [
     "objective",
     "population"
@@ -35,26 +35,26 @@
   "validated_decoy": false,
   "context_artifact": "filed_model",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass conforms every meter and bill, ties each feeder's purchases to the delivery points and reproduces the utility's annual line loss exactly, but subtracts the 2019 loss study's technical losses scaled to 2026 energy, keeps today's GIS feeder for every member and carries the feeder metering's missing hours at the feeder's own average, so the residual it ranks still holds the far-end loads' extra network losses, a lateral moved between feeders in April 2026 and the load one feeder carried for its neighbour through the January ice storm, and it sweeps the wrong four.",
+  "analyst_test": "The careful but hurried pass conforms every meter and bill, ties each feeder's purchases to the delivery points and reproduces the utility's annual line loss exactly, but subtracts the 2019 loss study's technical losses scaled to 2026 energy, keeps today's GIS feeder for every customer and carries the feeder metering's missing hours at the feeder's own average, so the residual it ranks still holds the far-end loads' extra network losses, a lateral moved between feeders in April 2026 and the load one feeder carried for its neighbour through the January ice storm, and it sweeps the wrong four.",
   "domain_test": "Every result is a quantity a distribution utility computes from its own metering: a feeder energy balance closed against the wholesale delivery points, technical losses as the square of each segment's current at the loads' positions on the network plus the transformers' core and load losses, and the 2027 losses from the planned connections at their measured demand; swap feeders for water zones and the losses stop following the square of the flow through each shared segment, so the deciding judgment has no counterpart.",
   "layer2_family": "field_method",
   "layer2_pattern": "own:a-feeder-energy-balance-whose-technical-term-is-the-square-of-each-segment-current-at-the-loads-positions",
   "layer1": [
     "feeder breaker metering hourly from the substation SCADA historian with communication gaps, frozen values and daylight-saving duplicates",
     "wholesale delivery point meters hourly in hour-ending local time",
-    "billing reads on twenty AMR cycles with estimated reads and their true-ups, and AMI members read at month ends",
+    "billing reads on twenty AMR cycles with estimated reads and their true-ups, and AMI meters read at month ends",
     "a GIS export that holds today's connectivity and an OMS switching log whose device names follow the pre-2024 scheme for older switches",
     "streetlight and area-light inventory with LED conversions billed at the old lamp's deemed kWh until the account is updated",
-    "net-metered members with delivered and received registers",
-    "large-power members on hourly interval meters",
+    "net-metered customers with delivered and received registers",
+    "large power customers on hourly interval meters",
     "transformer register with installs and changeouts"
   ],
   "stakeholder_role": "the electric utility's engineering manager, preparing the 2027 revenue protection plan and the 2027 power cost budget's loss figure for the utility director",
   "role_family": "operations_director",
   "scoring_unit": "other",
   "spine": {
-    "file": "cis_meter_reads_2023-10_2026-11.csv",
-    "rows": 0,
+    "file": "cis_meter_reads_2023-08-01_2026-11-01.csv",
+    "rows": 364982,
     "entity": "one meter read on one service point (AMI month-end or AMR cycle read, actual or estimated), with the kWh delivered and received since the previous read",
     "grain": "service point x read",
     "source": "synthetic"
@@ -77,14 +77,14 @@
     ]
   },
   "deliverables": [
-    "dpl_feeder_energy_balance_2023-11_2026-10.xlsx",
-    "revenue_protection_2027_memo.docx"
+    "dpl_feeder_energy_balance_2023-10_2026-09.xlsx",
+    "revenue_protection_2027_memo.pdf"
   ],
   "opening_move": "question-first",
   "question_form": "where",
   "driver": "The quantity wanted for each unit is the residual of a balance the physics must close, and the largest term subtracted before it is a network loss that grows with the square of the flow through each shared segment, so it depends on where along the network each unit's load now sits rather than on a percentage set at an older load and layout; the units' membership changed over the window by dated operations, and their own input record is missing in the hours those operations were busiest.",
-  "driver_concrete": "Each feeder's non-technical loss is what is left of the energy that entered it after its members' metered use, the co-op's unmetered lights and own use, and its technical losses; the technical losses are the square of each segment's current at the 2026 positions of its loads (far-end licensed grows and a cold store raise them well beyond the 2019 study's percentage), the members on each feeder change with the switching log (a lateral moved in April 2026, the January ice storm's emergency tie), and the feeder metering's missing hours are filled from the delivery point balance, not at the feeder's average.",
-  "stump": "The careful but hurried pass ranks the feeders on what is left after the 2019 study's technical percentages at 2026 energy, today's GIS feeder for every member and the metering gaps carried at each feeder's own average, so it sweeps the feeder whose excess is the far-end loads' network losses (WLJ-1) and the donor of the April 2026 lateral (PNR-3) in place of PNR-4 and BJK-4, the feeder that carried its neighbour through the January ice storm with its own metering down.",
+  "driver_concrete": "Each feeder's non-technical loss is what is left of the energy that entered it after its customers' metered use, the city's unmetered lights and its technical losses; the technical losses are the square of each segment's current at the 2026 positions of its loads (far-end licensed grows and a cold store raise them well beyond the 2019 study's percentage), the customers on each feeder change with the switching log (a lateral moved in April 2026, the January ice storm's emergency tie), and the breaker metering's missing hours are filled from the delivery point balance, not at the feeder's average.",
+  "stump": "The careful but hurried pass ranks the feeders on what is left after the 2019 study's technical percentages at 2026 energy, today's GIS feeder for every customer and the metering gaps carried at each feeder's own average, so it sweeps the feeder whose excess is the far-end loads' network losses (APT-3) and the donor of the April 2026 lateral (NTH-3) in place of NTH-4 and CHL-3, the feeder that carried its neighbour through the January ice storm with its own metering down.",
   "answer_shape": "bridge",
   "weight": "assembly",
   "chain_signature": [
@@ -98,8 +98,8 @@
     "forecasting",
     "synthesis"
   ],
-  "results": "R1 each feeder's energy in over the twelve months to October 2026 with the metering gaps filled from the delivery point balance; R2 each feeder's members and metered use month by month with the switching log replayed on the network; R3 the unmetered lights' and own use's real consumption against what is billed; R4 each feeder's technical losses at the 2026 load positions; R5 each feeder's non-technical loss; R6 the rise in line loss from the twelve months to October 2024 bridged to technical, non-technical, lights and billing timing; R7 the 2027 large loads' demand as a share of their applied kW, measured on the comparable members already connected; R8 each feeder's 2027 technical losses; R9 the four feeders the sweep covers",
-  "one_fact_test": "",
+  "results": "R1 each feeder's energy in over the twelve months to September 2026 with the metering gaps filled from the delivery point balance; R2 each feeder's customers and metered use month by month with the switching log replayed on the network; R3 the unmetered lights' and own use's real consumption against what is billed; R4 each feeder's technical losses at the 2026 load positions; R5 each feeder's non-technical loss; R6 the rise in line loss from the twelve months to September 2024 bridged to technical, non-technical, lights and billing timing; R7 the 2027 large loads' demand as a share of their applied kW, measured on the comparable connections already in service; R8 each feeder's 2027 technical losses; R9 the four feeders the sweep covers",
+  "one_fact_test": "the switching-log sentence rescues R2 alone; the delivery-point, positions and measured-demand sentences one result each: 1 of 9 at most (effort.json hints, computed on the careful pass)",
   "strategy_label": "OWN (no client strategy carries a feeder energy balance; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
   "doctrine": "results-chain-2026-11-09",
   "depth_level": 5,

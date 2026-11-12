@@ -1,0 +1,317 @@
+{
+ "R1_energy_in": {
+  "CHL-3, January 2026": 1340.5,
+  "CHL-3, twelve months to September 2026": 12232.6,
+  "fourteen feeders, twelve months to September 2026": 248001.4
+ },
+ "R2_membership": {
+  "NTH-3 metered use, twelve months": 6707.5,
+  "NTH-4 customers, 31 March 2026": 374,
+  "NTH-4 customers, 31 May 2026": 441,
+  "NTH-4 metered use, twelve months": 9377.7
+ },
+ "R3_lights": {
+  "deemed kWh billed": 1145.7,
+  "real use": 874.1
+ },
+ "R4_technical": {
+  "APT-3": 1786.6,
+  "APT-4": 1189.0,
+  "fourteen feeders": 13002.6
+ },
+ "R5_ntl": {
+  "APT-3": 456.6,
+  "APT-4": 1121.9,
+  "CHL-2": 1310.4,
+  "CHL-3": 698.9,
+  "NTH-3": 502.7,
+  "NTH-4": 700.3
+ },
+ "R6_bridge": {
+  "everything else, points": -0.24,
+  "line loss, twelve months to September 2024": 7.74,
+  "line loss, twelve months to September 2026": 8.24,
+  "non-technical losses, points": 0.3,
+  "technical losses, points": 0.44
+ },
+ "R7_new_peaks": {
+  "LL-2026-433": 521.6,
+  "LL-2026-722": 931.4,
+  "LL-2026-964": 541.2
+ },
+ "R8_tech2027": {
+  "APT-3": 1694.1,
+  "APT-4": 1720.9,
+  "fourteen feeders": 13455.3
+ },
+ "R9_sweep": [
+  "CHL-2",
+  "APT-4",
+  "NTH-4",
+  "CHL-3"
+ ],
+ "bands": {
+  "R1_energy_in": {
+   "CHL-3, January 2026": [
+    1300.3,
+    1380.7
+   ],
+   "CHL-3, twelve months to September 2026": [
+    12159.2,
+    12306.0
+   ],
+   "fourteen feeders, twelve months to September 2026": [
+    247703.8,
+    248299.0
+   ]
+  },
+  "R2_membership": {
+   "NTH-3 metered use, twelve months": [
+    6606.9,
+    6808.1
+   ],
+   "NTH-4 customers, 31 March 2026": [
+    371,
+    377
+   ],
+   "NTH-4 customers, 31 May 2026": [
+    438,
+    444
+   ],
+   "NTH-4 metered use, twelve months": [
+    9237.0,
+    9518.4
+   ]
+  },
+  "R3_lights": {
+   "deemed kWh billed": [
+    1142.3,
+    1149.1
+   ],
+   "real use": [
+    839.1,
+    909.1
+   ]
+  },
+  "R4_technical": {
+   "APT-3": [
+    1661.5,
+    1911.7
+   ],
+   "APT-4": [
+    1105.8,
+    1272.2
+   ],
+   "fourteen feeders": [
+    12482.5,
+    13522.7
+   ]
+  },
+  "R5_ntl": {
+   "APT-3": [
+    381.6,
+    531.6
+   ],
+   "APT-4": [
+    1020.9,
+    1222.9
+   ],
+   "CHL-2": [
+    1192.5,
+    1428.3
+   ],
+   "CHL-3": [
+    623.9,
+    773.9
+   ],
+   "NTH-3": [
+    427.7,
+    577.7
+   ],
+   "NTH-4": [
+    625.3,
+    775.3
+   ]
+  },
+  "R6_bridge": {
+   "everything else, points": [
+    -0.34,
+    -0.14
+   ],
+   "line loss, twelve months to September 2024": [
+    7.69,
+    7.79
+   ],
+   "line loss, twelve months to September 2026": [
+    8.19,
+    8.29
+   ],
+   "non-technical losses, points": [
+    0.2,
+    0.4
+   ],
+   "technical losses, points": [
+    0.34,
+    0.54
+   ]
+  },
+  "R7_new_peaks": {
+   "LL-2026-433": [
+    495.5,
+    547.7
+   ],
+   "LL-2026-722": [
+    884.8,
+    978.0
+   ],
+   "LL-2026-964": [
+    514.1,
+    568.3
+   ]
+  },
+  "R8_tech2027": {
+   "APT-3": [
+    1575.5,
+    1812.7
+   ],
+   "APT-4": [
+    1600.4,
+    1841.4
+   ],
+   "fourteen feeders": [
+    13051.6,
+    13859.0
+   ]
+  }
+ },
+ "bridge_parts_2024": {
+  "billing": 0.298,
+  "lights": 0.052,
+  "nontechnical": 2.01,
+  "substation": 0.607,
+  "technical": 4.772
+ },
+ "bridge_parts_2026": {
+  "billing": 0.237,
+  "lights": -0.109,
+  "nontechnical": 2.307,
+  "substation": 0.588,
+  "technical": 5.212
+ },
+ "careful_d_nontechnical": 0.56,
+ "careful_d_technical": 0.02,
+ "careful_e_in_chl3_26": 11866.2,
+ "careful_e_in_chl3_jan26": 1033.6,
+ "careful_nth3_metered_26": 6213.3,
+ "careful_nth4_cust_mar26": 440,
+ "careful_nth4_metered_26": 9871.9,
+ "careful_ntl": {
+  "APT-1": 21.4,
+  "APT-2": 105.4,
+  "APT-3": 1402.8,
+  "APT-4": 1573.9,
+  "CHL-1": 148.1,
+  "CHL-2": 1335.3,
+  "CHL-3": 687.7,
+  "IND-1": 170.1,
+  "IND-2": 95.3,
+  "IND-3": 544.3,
+  "NTH-1": 92.0,
+  "NTH-2": 18.3,
+  "NTH-3": 977.3,
+  "NTH-4": 316.1
+ },
+ "careful_sweep": [
+  "APT-4",
+  "APT-3",
+  "CHL-2",
+  "NTH-3"
+ ],
+ "careful_tech27_apt3": 960.3,
+ "careful_tech27_apt4": 889.5,
+ "careful_tech27_system": 11105.3,
+ "careful_tech_apt3_26": 832.9,
+ "careful_tech_system_26": 10787.0,
+ "chl2_metered_26": 11480.529,
+ "d_nontechnical": 0.297,
+ "d_other": -0.241,
+ "d_technical": 0.44,
+ "df_cold": 0.66,
+ "df_grow": 0.745,
+ "e_in_chl3_26": 12232.57,
+ "e_in_chl3_jan26": 1340.515,
+ "e_in_system_26": 248001.404,
+ "fifth_feeder": "NTH-3",
+ "fifth_ntl": 502.7,
+ "lights_actual_26": 874.136,
+ "lights_deemed_26": 1145.725,
+ "loss_change": 0.497,
+ "loss_pct_24": 7.739,
+ "loss_pct_26": 8.235,
+ "margin_4_5": 196.2,
+ "monthly_rows": 504,
+ "moved_metered_26": 494.2,
+ "nameplate_tech27_apt4": 2433.8,
+ "nameplate_tech27_system": 14581.5,
+ "new_peaks": {
+  "LL-2026-433": 521.6019832189169,
+  "LL-2026-722": 931.432112890923,
+  "LL-2026-964": 541.2
+ },
+ "new_peaks_nameplate": {
+  "LL-2026-433": 700.0,
+  "LL-2026-722": 1250.0,
+  "LL-2026-964": 820.0
+ },
+ "nth3_cust_mar26": 420,
+ "nth3_cust_may26": 354,
+ "nth3_metered_26": 6707.541,
+ "nth4_cust_mar26": 374,
+ "nth4_cust_may26": 441,
+ "nth4_metered_26": 9377.705,
+ "ntl_all": {
+  "APT-1": 15.7,
+  "APT-2": 114.7,
+  "APT-3": 456.6,
+  "APT-4": 1121.9,
+  "CHL-1": 130.3,
+  "CHL-2": 1310.4,
+  "CHL-3": 698.9,
+  "IND-1": 68.1,
+  "IND-2": 106.1,
+  "IND-3": 427.9,
+  "NTH-1": 86.9,
+  "NTH-2": 14.9,
+  "NTH-3": 502.7,
+  "NTH-4": 700.3
+ },
+ "perturbation_pcts": [
+  5,
+  10,
+  20
+ ],
+ "purchases_26": 249467.829,
+ "secondary_pct": 0.7,
+ "single_phase_factor": 6,
+ "study_apt3_pct": 4.78,
+ "study_system_pct": 4.23,
+ "substation_26": 1466.425,
+ "tech27_apt3": 1694.092,
+ "tech27_apt4": 1720.862,
+ "tech27_system": 13455.254,
+ "tech_apt3_26": 1786.558,
+ "tech_apt4_26": 1188.974,
+ "tech_system_26": 13002.622,
+ "tech_system_pct_26": 5.243,
+ "tolerances_pct": [
+  3,
+  0.6,
+  0.12,
+  1.5,
+  4,
+  7,
+  0.05,
+  0.1,
+  5
+ ]
+}

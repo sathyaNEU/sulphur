@@ -1,0 +1,860 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "each feeder's energy in, the breaker metering's missing hours rebuilt",
+   "graded_as": "Component 3",
+   "figure": "R1_energy_in",
+   "depends": [],
+   "independent": "the delivery point meters and the breakers' telemetry",
+   "golden": {
+    "CHL-3, twelve months to September 2026": 12232.6,
+    "CHL-3, January 2026": 1340.5,
+    "fourteen feeders, twelve months to September 2026": 248001.4
+   },
+   "bands": {
+    "CHL-3, twelve months to September 2026": [
+     12159.2,
+     12306.0
+    ],
+    "CHL-3, January 2026": [
+     1300.3,
+     1380.7
+    ],
+    "fourteen feeders, twelve months to September 2026": [
+     247703.8,
+     248299.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "CHL-3, twelve months to September 2026": 11404.2,
+     "CHL-3, January 2026": 752.9,
+     "fourteen feeders, twelve months to September 2026": 244586.4
+    },
+    "careful": {
+     "CHL-3, twelve months to September 2026": 11866.2,
+     "CHL-3, January 2026": 1033.6,
+     "fourteen feeders, twelve months to September 2026": 247587.0
+    },
+    "thorough": {
+     "CHL-3, twelve months to September 2026": 12232.6,
+     "CHL-3, January 2026": 1340.5,
+     "fourteen feeders, twelve months to September 2026": 248001.4
+    }
+   },
+   "precedent": [
+    "N10"
+   ]
+  },
+  {
+   "id": "R2",
+   "name": "who each feeder served, month by month, and what their meters recorded",
+   "graded_as": "Component 2",
+   "figure": "R2_membership",
+   "depends": [],
+   "independent": "the GIS, the switching log and the meter reads",
+   "golden": {
+    "NTH-4 customers, 31 March 2026": 374,
+    "NTH-4 customers, 31 May 2026": 441,
+    "NTH-4 metered use, twelve months": 9377.7,
+    "NTH-3 metered use, twelve months": 6707.5
+   },
+   "bands": {
+    "NTH-4 customers, 31 March 2026": [
+     371,
+     377
+    ],
+    "NTH-4 customers, 31 May 2026": [
+     438,
+     444
+    ],
+    "NTH-4 metered use, twelve months": [
+     9237.0,
+     9518.4
+    ],
+    "NTH-3 metered use, twelve months": [
+     6606.9,
+     6808.1
+    ]
+   },
+   "passes": {
+    "quick": {
+     "NTH-4 customers, 31 March 2026": 440,
+     "NTH-4 customers, 31 May 2026": 441,
+     "NTH-4 metered use, twelve months": 9871.9,
+     "NTH-3 metered use, twelve months": null
+    },
+    "careful": {
+     "NTH-4 customers, 31 March 2026": 440,
+     "NTH-4 customers, 31 May 2026": 441,
+     "NTH-4 metered use, twelve months": 9871.9,
+     "NTH-3 metered use, twelve months": 6213.3
+    },
+    "thorough": {
+     "NTH-4 customers, 31 March 2026": 374,
+     "NTH-4 customers, 31 May 2026": 441,
+     "NTH-4 metered use, twelve months": 9377.7,
+     "NTH-3 metered use, twelve months": 6707.5
+    }
+   },
+   "precedent": [
+    "N09",
+    "N14"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the unmetered lights' real use against their deemed kWh",
+   "graded_as": "Ask 3",
+   "figure": "R3_lights",
+   "depends": [],
+   "independent": "the lighting inventory, the lamp watts and burning hours, the lighting bills",
+   "golden": {
+    "real use": 874.1,
+    "deemed kWh billed": 1145.7
+   },
+   "bands": {
+    "real use": [
+     839.1,
+     909.1
+    ],
+    "deemed kWh billed": [
+     1142.3,
+     1149.1
+    ]
+   },
+   "passes": {
+    "quick": {
+     "real use": 1145.7,
+     "deemed kWh billed": 1145.7
+    },
+    "careful": {
+     "real use": 874.4,
+     "deemed kWh billed": 1145.7
+    },
+    "thorough": {
+     "real use": 874.1,
+     "deemed kWh billed": 1145.7
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "each feeder's technical losses at its loads' positions",
+   "graded_as": "Component 1",
+   "figure": "R4_technical",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "APT-3": 1786.6,
+    "APT-4": 1189.0,
+    "fourteen feeders": 13002.6
+   },
+   "bands": {
+    "APT-3": [
+     1661.5,
+     1911.7
+    ],
+    "APT-4": [
+     1105.8,
+     1272.2
+    ],
+    "fourteen feeders": [
+     12482.5,
+     13522.7
+    ]
+   },
+   "passes": {
+    "quick": {
+     "APT-3": 0.0,
+     "APT-4": 0.0,
+     "fourteen feeders": 0.0
+    },
+    "careful": {
+     "APT-3": 832.9,
+     "APT-4": 731.5,
+     "fourteen feeders": 10787.0
+    },
+    "thorough": {
+     "APT-3": 1786.6,
+     "APT-4": 1189.0,
+     "fourteen feeders": 13002.6
+    }
+   },
+   "precedent": [
+    "L22",
+    "L36"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "each feeder's non-technical loss, twelve months to September 2026",
+   "graded_as": "Ask 1",
+   "figure": "R5_ntl",
+   "depends": [
+    "R1",
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "CHL-2": 1310.4,
+    "APT-4": 1121.9,
+    "NTH-4": 700.3,
+    "CHL-3": 698.9,
+    "NTH-3": 502.7,
+    "APT-3": 456.6
+   },
+   "bands": {
+    "CHL-2": [
+     1192.5,
+     1428.3
+    ],
+    "APT-4": [
+     1020.9,
+     1222.9
+    ],
+    "NTH-4": [
+     625.3,
+     775.3
+    ],
+    "CHL-3": [
+     623.9,
+     773.9
+    ],
+    "NTH-3": [
+     427.7,
+     577.7
+    ],
+    "APT-3": [
+     381.6,
+     531.6
+    ]
+   },
+   "passes": {
+    "quick": {
+     "CHL-2": 1921.2,
+     "APT-4": 2158.7,
+     "NTH-4": 844.0,
+     "CHL-3": 853.6,
+     "NTH-3": 1323.0,
+     "APT-3": 2116.9
+    },
+    "careful": {
+     "CHL-2": 1335.3,
+     "APT-4": 1573.9,
+     "NTH-4": 316.1,
+     "CHL-3": 687.7,
+     "NTH-3": 977.3,
+     "APT-3": 1402.8
+    },
+    "thorough": {
+     "CHL-2": 1310.4,
+     "APT-4": 1121.9,
+     "NTH-4": 700.3,
+     "CHL-3": 698.9,
+     "NTH-3": 502.7,
+     "APT-3": 456.6
+    }
+   },
+   "precedent": [
+    "L11",
+    "L32"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "the rise in line loss bridged to its causes",
+   "graded_as": "Component 4",
+   "figure": "R6_bridge",
+   "depends": [
+    "R1",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "line loss, twelve months to September 2024": 7.74,
+    "line loss, twelve months to September 2026": 8.24,
+    "technical losses, points": 0.44,
+    "non-technical losses, points": 0.3,
+    "everything else, points": -0.24
+   },
+   "bands": {
+    "line loss, twelve months to September 2024": [
+     7.69,
+     7.79
+    ],
+    "line loss, twelve months to September 2026": [
+     8.19,
+     8.29
+    ],
+    "technical losses, points": [
+     0.34,
+     0.54
+    ],
+    "non-technical losses, points": [
+     0.2,
+     0.4
+    ],
+    "everything else, points": [
+     -0.34,
+     -0.14
+    ]
+   },
+   "passes": {
+    "quick": {
+     "line loss, twelve months to September 2024": null,
+     "line loss, twelve months to September 2026": null,
+     "technical losses, points": 0.0,
+     "non-technical losses, points": 0.5,
+     "everything else, points": 0.0
+    },
+    "careful": {
+     "line loss, twelve months to September 2024": 7.74,
+     "line loss, twelve months to September 2026": 8.24,
+     "technical losses, points": 0.02,
+     "non-technical losses, points": 0.56,
+     "everything else, points": -0.08
+    },
+    "thorough": {
+     "line loss, twelve months to September 2024": 7.74,
+     "line loss, twelve months to September 2026": 8.24,
+     "technical losses, points": 0.44,
+     "non-technical losses, points": 0.3,
+     "everything else, points": -0.24
+    }
+   },
+   "precedent": [
+    "L26",
+    "L27"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "the peak hourly demand each approved 2027 connection adds",
+   "graded_as": "Ask 4",
+   "figure": "R7_new_peaks",
+   "depends": [],
+   "independent": "the large power interval meters and the applications",
+   "golden": {
+    "LL-2026-433": 521.6,
+    "LL-2026-722": 931.4,
+    "LL-2026-964": 541.2
+   },
+   "bands": {
+    "LL-2026-433": [
+     495.5,
+     547.7
+    ],
+    "LL-2026-722": [
+     884.8,
+     978.0
+    ],
+    "LL-2026-964": [
+     514.1,
+     568.3
+    ]
+   },
+   "passes": {
+    "quick": {
+     "LL-2026-433": 700.0,
+     "LL-2026-722": 1250.0,
+     "LL-2026-964": 820.0
+    },
+    "careful": {
+     "LL-2026-433": 700.0,
+     "LL-2026-722": 1250.0,
+     "LL-2026-964": 820.0
+    },
+    "thorough": {
+     "LL-2026-433": 521.6,
+     "LL-2026-722": 931.4,
+     "LL-2026-964": 541.2
+    }
+   },
+   "precedent": [
+    "L15"
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "each feeder's technical losses in 2027",
+   "graded_as": "Ask 5",
+   "figure": "R8_tech2027",
+   "depends": [
+    "R4",
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "APT-4": 1720.9,
+    "APT-3": 1694.1,
+    "fourteen feeders": 13455.3
+   },
+   "bands": {
+    "APT-4": [
+     1600.4,
+     1841.4
+    ],
+    "APT-3": [
+     1575.5,
+     1812.7
+    ],
+    "fourteen feeders": [
+     13051.6,
+     13859.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "APT-4": 0.0,
+     "APT-3": 0.0,
+     "fourteen feeders": 0.0
+    },
+    "careful": {
+     "APT-4": 889.5,
+     "APT-3": 960.3,
+     "fourteen feeders": 11105.3
+    },
+    "thorough": {
+     "APT-4": 1720.9,
+     "APT-3": 1694.1,
+     "fourteen feeders": 13455.3
+    }
+   },
+   "precedent": [
+    "N13",
+    "N01"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "the four feeders the 2027 sweep covers",
+   "graded_as": "Recommendation",
+   "figure": "R9_sweep",
+   "depends": [
+    "R5"
+   ],
+   "independent": "",
+   "golden": [
+    "CHL-2",
+    "APT-4",
+    "NTH-4",
+    "CHL-3"
+   ],
+   "passes": {
+    "quick": [
+     "APT-4",
+     "APT-3",
+     "CHL-2",
+     "NTH-3"
+    ],
+    "careful": [
+     "APT-4",
+     "APT-3",
+     "CHL-2",
+     "NTH-3"
+    ],
+    "thorough": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   "precedent": [
+    "L11"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ },
+ "routes": [
+  {
+   "name": "the golden: breaker gaps from the delivery point balance, the switching log replayed, technical losses at each node's monthly metered load",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "NTH-4",
+    "CHL-3"
+   ],
+   "golden": true
+  },
+  {
+   "name": "technical losses at the 2019 study's percentage of each feeder's energy",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "APT-3",
+    "NTH-4"
+   ]
+  },
+  {
+   "name": "technical losses on the 2019 study's equivalent resistance with 2026's current",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "APT-3",
+    "NTH-4"
+   ]
+  },
+  {
+   "name": "technical losses with load placed by transformer rating (the study's load-flow convention)",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "APT-3",
+    "NTH-4"
+   ]
+  },
+  {
+   "name": "today's GIS feeder for every month",
+   "answer": [
+    "APT-4",
+    "CHL-2",
+    "CHL-3",
+    "NTH-3"
+   ]
+  },
+  {
+   "name": "breaker gaps carried at the feeder's own average for the hour",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "NTH-4",
+    "NTH-3"
+   ]
+  },
+  {
+   "name": "breaker gaps interpolated across",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "NTH-4",
+    "NTH-3"
+   ]
+  },
+  {
+   "name": "the careful but hurried pass: today's GIS, gaps at the feeder's average, the 2019 percentages",
+   "answer": [
+    "APT-4",
+    "APT-3",
+    "CHL-2",
+    "NTH-3"
+   ]
+  },
+  {
+   "name": "today's GIS with the study's resistance and interpolated gaps",
+   "answer": [
+    "APT-4",
+    "CHL-2",
+    "NTH-3",
+    "APT-3"
+   ]
+  },
+  {
+   "name": "only the switching log replayed",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "APT-3",
+    "NTH-4"
+   ]
+  },
+  {
+   "name": "only the breaker gaps from the balance",
+   "answer": [
+    "APT-4",
+    "APT-3",
+    "CHL-2",
+    "CHL-3"
+   ]
+  },
+  {
+   "name": "only technical losses at the loads' positions",
+   "answer": [
+    "APT-4",
+    "CHL-2",
+    "NTH-3",
+    "CHL-3"
+   ]
+  },
+  {
+   "name": "the log and the gaps, the 2019 percentages kept",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "APT-3",
+    "NTH-4"
+   ]
+  },
+  {
+   "name": "the log and the positions, gaps at the average",
+   "answer": [
+    "CHL-2",
+    "APT-4",
+    "NTH-4",
+    "NTH-3"
+   ]
+  },
+  {
+   "name": "the gaps and the positions, today's GIS",
+   "answer": [
+    "APT-4",
+    "CHL-2",
+    "CHL-3",
+    "NTH-3"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "Each substation's delivery point meter covers every hour the feeder breakers' telemetry missed.",
+   "rescues": [
+    "R1"
+   ]
+  },
+  {
+   "sentence": "The GIS shows today's network; the switching log moved customers between feeders.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "Technical losses follow the square of each segment's current where the loads sit now, not the 2019 study's percentages.",
+   "rescues": [
+    "R4"
+   ]
+  },
+  {
+   "sentence": "New connections draw what comparable connected members draw, not the load they applied for.",
+   "rescues": [
+    "R7"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "golden_family": [
+   {
+    "name": "the golden",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   {
+    "name": "load placed by each node's twelve-month metered energy",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "CHL-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "each read period spread evenly over its days",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "CHL-3",
+     "NTH-4"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "technical losses at the 2019 study's percentage of each feeder's energy",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "APT-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "technical losses on the 2019 study's equivalent resistance with 2026's current",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "APT-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "technical losses with load placed by transformer rating (the study's load-flow convention)",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "APT-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "today's GIS feeder for every month",
+    "answer": [
+     "APT-4",
+     "CHL-2",
+     "CHL-3",
+     "NTH-3"
+    ]
+   },
+   {
+    "name": "breaker gaps carried at the feeder's own average for the hour",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "NTH-3"
+    ]
+   },
+   {
+    "name": "breaker gaps interpolated across",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "NTH-3"
+    ]
+   },
+   {
+    "name": "the careful but hurried pass: today's GIS, gaps at the feeder's average, the 2019 percentages",
+    "answer": [
+     "APT-4",
+     "APT-3",
+     "CHL-2",
+     "NTH-3"
+    ]
+   },
+   {
+    "name": "today's GIS with the study's resistance and interpolated gaps",
+    "answer": [
+     "APT-4",
+     "CHL-2",
+     "NTH-3",
+     "APT-3"
+    ]
+   },
+   {
+    "name": "only the switching log replayed",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "APT-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "only the breaker gaps from the balance",
+    "answer": [
+     "APT-4",
+     "APT-3",
+     "CHL-2",
+     "CHL-3"
+    ]
+   },
+   {
+    "name": "only technical losses at the loads' positions",
+    "answer": [
+     "APT-4",
+     "CHL-2",
+     "NTH-3",
+     "CHL-3"
+    ]
+   },
+   {
+    "name": "the log and the gaps, the 2019 percentages kept",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "APT-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "name": "the log and the positions, gaps at the average",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "NTH-3"
+    ]
+   },
+   {
+    "name": "the gaps and the positions, today's GIS",
+    "answer": [
+     "APT-4",
+     "CHL-2",
+     "CHL-3",
+     "NTH-3"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "conductor R at 25 C",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   {
+    "input": "conductor R plus 5 per cent",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "CHL-3",
+     "NTH-4"
+    ]
+   },
+   {
+    "input": "transformer losses plus 10 per cent",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   {
+    "input": "transformer losses less 10 per cent",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   {
+    "input": "burning hours less 5 per cent",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   },
+   {
+    "input": "substation transformer losses plus 20 per cent",
+    "answer": [
+     "CHL-2",
+     "APT-4",
+     "NTH-4",
+     "CHL-3"
+    ]
+   }
+  ]
+ }
+}
