@@ -1,0 +1,507 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "customers restored within five minutes, each year 2022 to 2026",
+   "graded_as": "Ask 1",
+   "figure": "r1_by_year",
+   "depends": [],
+   "independent": "the device event record and the outage record",
+   "golden": {
+    "2022": 32875,
+    "2023": 25796,
+    "2024": 28781,
+    "2025": 22561,
+    "2026": 25056
+   },
+   "bands": {
+    "2022": [
+     32218,
+     33532
+    ],
+    "2023": [
+     25280,
+     26312
+    ],
+    "2024": [
+     28205,
+     29357
+    ],
+    "2025": [
+     22110,
+     23012
+    ],
+    "2026": [
+     24555,
+     25557
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "2022": 32875,
+     "2023": 25796,
+     "2024": 29797,
+     "2025": 23166,
+     "2026": 27370
+    },
+    "careful": {
+     "value": {
+      "2022": 32875,
+      "2023": 25796,
+      "2024": 28781,
+      "2025": 22561,
+      "2026": 25056
+     },
+     "why": "every log reconciled by reflex (R01, R29): the device record's closes timed from the first trip; the gap-filled archive route is a shortcut in routes"
+    },
+    "thorough": {
+     "2022": 32875,
+     "2023": 25796,
+     "2024": 28781,
+     "2025": 22561,
+     "2026": 25056
+    }
+   },
+   "precedent": []
+  },
+  {
+   "id": "R2",
+   "name": "2026's customer interruptions avoided on the order's definition",
+   "graded_as": "Component 1",
+   "figure": "net_2026",
+   "depends": [],
+   "independent": "the dashboard and the 2026 records",
+   "golden": 21328,
+   "band": [
+    20795,
+    21861
+   ],
+   "partly": [
+    20048,
+    22608
+   ],
+   "passes": {
+    "quick": 27370,
+    "careful": {
+     "value": 25056,
+     "why": "the restored loop priced alone: no receiving recloser's trip netted (L16), only the visible closes onto a fault taken off (L06)"
+    },
+    "thorough": 21328
+   },
+   "precedent": [
+    "L16",
+    "L06"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the controls to re-battery before the winter",
+   "graded_as": "Recommendation",
+   "figure": "rebattery_set",
+   "depends": [],
+   "independent": "the weekly load tests and the airport temperatures",
+   "golden": [
+    "RCL-20149",
+    "RCL-20188",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21643",
+    "RCL-21710"
+   ],
+   "passes": {
+    "quick": [
+     "RCL-20508",
+     "RCL-20536",
+     "RCL-20542",
+     "RCL-20547",
+     "RCL-21299",
+     "RCL-21357",
+     "RCL-21377",
+     "RCL-21396",
+     "RCL-21434",
+     "RCL-21527",
+     "RCL-21545"
+    ],
+    "careful": {
+     "value": [
+      "RCL-20542",
+      "RCL-21316"
+     ],
+     "why": "each battery judged at its coldest test of last winter, the condition it was tested in carried as the condition it will meet (N12) and the battery as it stood as its state at the winter's end (N13)"
+    },
+    "thorough": [
+     "RCL-20149",
+     "RCL-20188",
+     "RCL-20205",
+     "RCL-20275",
+     "RCL-20355",
+     "RCL-20466",
+     "RCL-20536",
+     "RCL-20542",
+     "RCL-20547",
+     "RCL-20732",
+     "RCL-20977",
+     "RCL-21316",
+     "RCL-21357",
+     "RCL-21377",
+     "RCL-21643",
+     "RCL-21710"
+    ]
+   },
+   "precedent": [
+    "N12",
+    "N13"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the receiving feeders' customers June to September 2027 transfers would interrupt",
+   "graded_as": "Ask 3",
+   "figure": "summer_2027_receiving",
+   "depends": [],
+   "independent": "the hourly amps, the register and the capital works",
+   "golden": 388,
+   "band": [
+    318,
+    455
+   ],
+   "partly": [
+    270,
+    524
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": {
+     "value": 582,
+     "why": "the 2025-26 summers' trips averaged as the coming summer (N02), the reinforcements in service on the plan's dates (N03)"
+    },
+    "thorough": 388
+   },
+   "precedent": [
+    "N02",
+    "N03"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "2027 customer interruptions avoided as the schemes stand",
+   "graded_as": "Component 2",
+   "figure": "forecast_2027",
+   "depends": [
+    "R4"
+   ],
+   "independent": "",
+   "golden": 24679,
+   "band": [
+    23712,
+    25405
+   ],
+   "partly": [
+    22526,
+    26676
+   ],
+   "passes": {
+    "quick": 32180,
+    "careful": {
+     "value": 28729,
+     "why": "the restored loop priced alone (L16), the plan's dates as given (N03), the archive's success rate (N10)"
+    },
+    "thorough": 24679
+   },
+   "precedent": [
+    "L16",
+    "N03"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "a transfer onto a receiving feeder whose reclosers the ADMS does not switch can trip them later, with no fault found",
+   "rescues": [
+    "R2"
+   ],
+   "values": {
+    "R2": 21328,
+    "R5": 26482,
+    "R4": 582
+   }
+  },
+  {
+   "sentence": "the dashboard counts every completed sequence whatever its duration, and the archive misses the storm overflows",
+   "rescues": [],
+   "values": {
+    "R2": 25056
+   }
+  },
+  {
+   "sentence": "a battery that passes in mild weather can fail to crank at the design minimum",
+   "rescues": [
+    "R3"
+   ],
+   "values": {
+    "R5": 28014
+   }
+  },
+  {
+   "sentence": "comparable projects finish months after their planned dates",
+   "rescues": [],
+   "values": {
+    "R4": 938,
+    "R5": 28729
+   }
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "2026 net 21328",
+    "re-battery 16 controls",
+    "receiving 2027 388",
+    "2027 24679"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the dashboard",
+   "answer": [
+    "2026 net 27370",
+    "re-battery 11 controls",
+    "receiving 2027 0",
+    "2027 32180"
+   ]
+  },
+  {
+   "name": "the archive with its storm gaps filled at its own rate",
+   "answer": [
+    "2026 net 27654",
+    "re-battery 2 controls",
+    "receiving 2027 582",
+    "2027 28729"
+   ]
+  },
+  {
+   "name": "the careful but hurried pass",
+   "answer": [
+    "2026 net 25056",
+    "re-battery 2 controls",
+    "receiving 2027 582",
+    "2027 28729"
+   ]
+  },
+  {
+   "name": "the receiving trips netted, the plan trusted",
+   "answer": [
+    "2026 net 21328",
+    "re-battery 2 controls",
+    "receiving 2027 237",
+    "2027 25232"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "numeric",
+  "line": 27370,
+  "golden_side": "below",
+  "golden_family": [
+   {
+    "name": "lost sequences counted from the configuration's customers",
+    "value": 21328
+   },
+   {
+    "name": "lost sequences counted from the outage record's steps",
+    "value": 21328
+   },
+   {
+    "name": "receiving trips read from the outage record alone",
+    "value": 21328
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the dashboard",
+    "value": 27371
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "section customers +10%",
+    "value": 23461
+   },
+   {
+    "input": "section customers -10%",
+    "value": 19195
+   }
+  ]
+ },
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ },
+ "rivals": {
+  "R3": {
+   "per-battery cold coefficient": [
+    "RCL-20149",
+    "RCL-20188",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21710"
+   ],
+   "end of January": [
+    "RCL-20149",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21710"
+   ],
+   "design minimum -26 C": [
+    "RCL-20149",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21643",
+    "RCL-21710"
+   ],
+   "design minimum -28 C": [
+    "RCL-20149",
+    "RCL-20188",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21281",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21643",
+    "RCL-21710"
+   ],
+   "a mixed model, each control drawn around the fleet": [
+    "RCL-20149",
+    "RCL-20188",
+    "RCL-20205",
+    "RCL-20275",
+    "RCL-20355",
+    "RCL-20466",
+    "RCL-20536",
+    "RCL-20542",
+    "RCL-20547",
+    "RCL-20732",
+    "RCL-20977",
+    "RCL-21316",
+    "RCL-21357",
+    "RCL-21377",
+    "RCL-21643",
+    "RCL-21710"
+   ]
+  },
+  "R4": {
+   "pickup at 1.05 of the hourly average": 440.7178608736052,
+   "every summer hour alike": 327.560748813052,
+   "slip from reconductoring alone": 408.56317852634936
+  },
+  "R5": {
+   "pickup at 1.05 of the hourly average": 24197,
+   "every hour alike": 24907,
+   "slip from reconductoring alone": 24585,
+   "the radio outage kept in the success rate": 24679
+  }
+ },
+ "ruled_out": {
+  "R3": {
+   "one fleet fit of log resistance": {
+    "count": 8,
+    "oos_rmse_v": 0.53,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.53 V at 30 A against 0.12 V"
+   },
+   "one fleet fit of resistance": {
+    "count": 0,
+    "oos_rmse_v": 0.641,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.64 V at 30 A against 0.12 V"
+   },
+   "a fit per control type, log resistance": {
+    "count": 5,
+    "oos_rmse_v": 0.523,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.52 V at 30 A against 0.12 V"
+   },
+   "a fit per control type, resistance": {
+    "count": 0,
+    "oos_rmse_v": 0.623,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.62 V at 30 A against 0.12 V"
+   },
+   "each control's level, fleet ageing": {
+    "count": 11,
+    "oos_rmse_v": 0.31,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.31 V at 30 A against 0.12 V"
+   },
+   "each control's own resistance, linear": {
+    "count": 4,
+    "oos_rmse_v": 0.427,
+    "ruled_out_by": "control intercepts F 218.3 and ageing F 101.2; last winter's cold tests missed by 0.43 V at 30 A against 0.12 V"
+   }
+  },
+  "R4": {
+   "June to August": {
+    "value": 364,
+    "inside_band": true,
+    "ruled_out_by": "the design basis files summer as 1 June to 30 September"
+   },
+   "May to September": {
+    "value": 432,
+    "inside_band": true,
+    "ruled_out_by": "the design basis files summer as 1 June to 30 September"
+   },
+   "July to August": {
+    "value": 241,
+    "inside_band": false,
+    "ruled_out_by": "the design basis files summer as 1 June to 30 September"
+   }
+  }
+ }
+}

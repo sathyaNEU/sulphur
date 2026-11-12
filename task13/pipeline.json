@@ -1,35 +1,35 @@
 {
  "task": "task13",
- "status": "DRAWING",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "anomaly-detection",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
- "call": "to be set at stage 2: the 2026 net sustained interruptions the 22 automated loops avoided (against the dashboard's gross), the controls to re-battery before the winter, the transfer directions to run without summer auto-transfer in 2027, and 2027's net avoided",
- "stump": "",
+ "call": "re-battery 16 recloser controls before December; move the receiving reclosers on the 16 unswitched transfer directions to transfer settings before June without waiting for the four reinforcements; 24,679 customer interruptions avoided in 2027 as the loops stand (80 per cent range 17,912 to 31,580); 21,328 avoided January to October 2026 on the commission's definition",
+ "stump": "the storm overflows' operations read from the device record (R1), the receiving reclosers' trips netted by the order (R2), each battery carried to -27 C and to February (R3), the reinforcements at the completion the record supports (R4), all carried into 2027 (R5)",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (--asof 2026-11-04): asset numbers, the design basis's 21.2 V rating and its seasons line, the forward plans' 2027 dates, the commission's figure in the prompt; no LEAK; each ruled in the design note",
+  "reader": "three readers, all clean on leaks (no method, no ranking, nothing for the analyst, no one thing); realism tells fixed in the generator (order paragraph sequence, US Letter, US spelling, stamps with seconds)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "mark196 and task10 v5 0.05 (drivers); skeleton severity none against everything on file; guard WARN (answered in the Draw)"
+  "heart": "WARN (repeat.decision, repeat.deliverables, skeleton.lesson_once; answered in the Draw)",
+  "nearest": "mark196 and task10 v5 0.05 (drivers); surface clean"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "domain pass; layers pass; 5 results over 5 areas; one thing none; effort quick 0 of 5, careful 1 of 5, thorough 5 of 5; one fact rescues 1 of 5 (measured end to end)",
+  "report": "p3 in determinism_check_report.md (APPROVE; p2's Gate C on R3 and Gate E on the summer window closed); p2 in determinism_check_report_p2.md (FIX_NOW); p1 in determinism_check_report_p1.md (SEND_BACK on Gate G, closed by the re-frame)"
  },
- "paper_pair": null,
+ "paper_pair": 34.5,
  "runs": {
   "run1": null,
   "run2": null,
@@ -147,9 +147,16 @@
     "chain": "R1 the network's lightning faults per season with the radio-less zones' 2026 restored; R2 the faults the refit avoids at the state each failure had reached; R3 2026's faults failed protection caused at each zone's own level; R4 the zones referred for the 2027 refit; R5 the referred zones' record since inspection against sound protection at their own levels; R6 the alert load and the rule's sound referrals; R7 referrals against the following cyclic inspections"
    },
    "commit": ""
+  },
+  {
+   "date": "2026-11-11",
+   "source": "judge (stage 4)",
+   "repair": "design (re-frame the call and asks in the same world)",
+   "what": "DETERMINISTIC, SEND_BACK on Gate G: the walk from the dashboard headed the call; its five-minute and coverage bars read as a surface-read rejection",
+   "commit": ""
   }
  ],
- "resume": "stage 2: the full results chain, hidden factor record, effort test on paper, Frontier check, fork and closure tables and the prompt for architecture 4 (Blue Earth Valley Power's 22 FLISR loops); then the generator in a new world (the arch 3 generator is at 17912c6)",
+ "resume": "upload: the author rewrites prompt.txt in their own voice (never naming the receiving feeders, the archive's losses, the reinforcements, the dashboard or its figure, a method, a file or a rounding), runs voice-check.py task13 --rewrite and leak.py, uploads it with target.zip; then /triage-runs task13",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -159,12 +166,19 @@
  },
  "notes": "architecture 4 drawn 2026-11-11 after the platform run landed architecture 3; work in worktree .claude/worktrees/task13-arch4 (the main tree carries another session's uncommitted task7 edits)",
  "doctrine": "throughout",
- "chain": "R1 FLISR sequences and customers restored within five minutes each year 2022-2026, the storm days the archive lost restored; R2 2026's bridge from the dashboard's figure to the net sustained interruptions avoided; R3 2025-26's failed and blocked restorations by cause; R4 the controls to re-battery before the winter; R5 the transfer directions to run without summer auto-transfer on 1 July 2027; R6 2027's net avoided with the changes, with its range",
+ "chain": "R1 customers restored within five minutes each year 2022 to 2026; R2 2026 walk from the dashboard to the net; R3 the controls to re-battery; R4 the receiving feeders' customers summer 2027 transfers would interrupt as set; R5 2027 as the loops stand with its 80 per cent range",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 34.5,
+  "thorough": 100.0,
+  "largest_hint": "the archive lost its busiest storm hours, and the devices' own event record holds what the scheme did in them: 1 of 5 (R1)"
  },
- "cited_pair": null
+ "cited_pair": 34.5,
+ "cut": {
+  "target_zip": "2b4cbfaac8e6aa2f",
+  "golden_zip": "ea3bc2c97c148ef1",
+  "target_digest": "549db717796cb938",
+  "golden_digest": "a20cf7a5ac4995ab"
+ },
+ "prompt_rewritten": false
 }

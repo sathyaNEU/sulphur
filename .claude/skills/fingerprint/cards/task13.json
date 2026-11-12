@@ -9,11 +9,11 @@
   "client_domain": "energy-systems-utilities",
   "niche": "a Minnesota investor-owned utility's review of its 22 automated feeder loops (fault location, isolation and service restoration) for the commission's 2026 grid modernization report: the sustained customer interruptions the automation really avoided net of the ones its own switching caused, which loops, devices and transfer directions are not performing and why, what to change before the 2026-27 winter and the 2027 summer, and what it will avoid in 2027",
   "objective": "anomaly-detection",
-  "shape": "03",
+  "shape": "other",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "re-battery 16 recloser controls before December; move the receiving reclosers on the 16 unswitched transfer directions to transfer settings before June without waiting for the four reinforcements; 24,679 customer interruptions avoided in 2027 as the loops stand (80 per cent range 17,912 to 31,580); 21,328 avoided January to October 2026 on the commission's definition",
+  "answer_source": "task13/generator/figures.json: net_2026, bridge_2026, r1_by_year, rebattery_set, summer_2027_receiving, forecast_2027",
   "gap": [
     "objective",
     "population",
@@ -55,7 +55,7 @@
   "scoring_unit": "per episode",
   "spine": {
     "file": "adms_flisr_event_log_2022-2026.csv",
-    "rows": 0,
+    "rows": 31653,
     "entity": "one message the ADMS logged for a FLISR sequence or a scheme state change",
     "grain": "sequence x step",
     "source": "synthetic (a fictional Minnesota investor-owned utility's ADMS archive export, outage record, SCADA historian and maintenance records, January 2022 to October 2026; seeded world in task13/generator)"
@@ -87,19 +87,18 @@
   "question_form": "how-many",
   "driver": "The decisive quantity is what an automatic action changed across the whole system, which its own log overstates three ways: the log loses the busiest periods' records exactly when the action fails most, the action's gain at one unit is partly undone hours later at the neighbouring unit that absorbs it, a harm no record links back to the action, and the devices that carry it out fail under a condition their periodic tests never meet; the forward value then rests on works the plan dates earlier than the organisation's own record of past works supports.",
   "driver_concrete": "FLISR's 2026 sustained interruptions avoided are the customers it restored within five minutes, with the sequences the ADMS archive dropped on storm days read back from the outage record's restoration steps and the devices' own operation records, less the customers its own switching put out: closes onto mislocated faults, and the receiving feeder's midline recloser tripping on the combined load hours after a summer transfer, coded no cause found; the controls whose batteries cannot crank at the design cold are read from weekly self-test sag against temperature, since spring and autumn functional tests pass them; and summer auto-transfer stays off on the directions whose reinforcement the capital works history says will not be in service by the 2027 summer.",
-  "stump": "A careful run that reconciles the automation log with the outage record but fills the storm days' lost sequences at the observed success rate, nets only the closes onto mislocated faults the log shows, reads every no-response timeout as a radio fault, re-batteries the controls by battery age and past cold failures and takes the four 2027 reinforcements on their planned dates files a 2026 net figure near the dashboard's, keeps summer auto-transfer on in every direction, re-batteries a different set of controls and forecasts 2027 well above the golden, each shortcut by its own route.",
-  "answer_shape": "bridge",
+  "stump": "A careful run that reconciles every log prices each restoration at its own loop and files 25056 for 2026 against 21328, judges each battery at last winter's coldest test and names 2 controls against 16, carries the 2025-26 summers forward with the reinforcements on their planned dates (582 or 237 receiving customers against 388) and forecasts 28729 for 2027 against 24679, each by its own route",
+  "answer_shape": "flagged-set",
   "weight": "hard-to-measure",
   "chain_signature": [
     "assembly-reconciliation",
     "decomposition-attribution",
-    "investigation-loops",
     "missingness-measurement",
     "causal-reasoning",
     "forecasting"
   ],
-  "results": "R1 FLISR sequences and customers restored within five minutes each year 2022 to 2026, the storm days' lost sequences restored; R2 2026's bridge from the dashboard's figure to the net sustained interruptions avoided; R3 2025-26's failed and blocked restorations by cause; R4 the controls to re-battery before the winter; R5 the transfer directions to run without summer auto-transfer in 2027; R6 2027's net sustained interruptions avoided with the changes, with its range",
-  "one_fact_test": "'a summer transfer can trip the receiving feeder's midline recloser hours later, with no fault found' rescues the 2026 net and the summer restriction set at most (2 of 6); the lost sequences, the cold batteries and the reinforcements' slip each carry their own result",
+  "results": "R1 customers restored within five minutes each year 2022 to 2026, the storm overflows' operations read from the device record; R2 2026's walk from the dashboard to the customer interruptions avoided, net of the receiving reclosers' trips; R3 the controls whose batteries fail at -27 C by the end of February 2027; R4 the receiving feeders' customers June to September 2027 transfers would interrupt with the settings as they stand (the design basis's summer); R5 2027 customer interruptions avoided as the loops stand, with its 80 per cent range",
+  "one_fact_test": "\"a transfer onto a receiving feeder whose reclosers the ADMS does not switch can trip them later, with no fault found\" rescues R2 only (1 of 5; executed end to end the careful forecast moves to 26,482, outside R5's band, and R4 stays at 582); the battery sentence rescues R3 alone; the slip and archive sentences rescue nothing the careful pass lacks",
   "strategy_label": "UNTESTED",
   "mechanism_source": "design_note",
   "differentiation": {},
@@ -245,7 +244,7 @@
       "fate": "spent 2026-11-11 after upload: a platform run landed every result (the same 11 zones, the season totals, the failed-protection count, the alert load, the inspection check and the avoided faults inside their bands; task13/runs/run1.md): a level per zone as a random effect with its uncertainty in the predictive tail, the all-sound simulation, the clocks rebuilt from upstream and downstream pairs and the latest window for the refit were all reflexes (precedents R26 to R32); the lightning world has now spent two architectures, so architecture 4 moves to another world, dataset and shell"
     }
   ],
-  "notes": "Architecture 4 drawn 2026-11-11 in a new world after the platform run on architecture 3 (task13/runs/run1.md) landed every result; the lightning world spent architectures 2 and 3. Axes chosen against the window of task7 v9, task9 v2 and task4 v12: forum regulator_or_inspector, org_family utility_or_infrastructure, forcing_event statutory_or_regulatory_filing, role compliance_or_audit, calibration parallel_run_overlap (the ADMS log and the outage record observe the same operations), strategy and Gate G binding_constraint (the receiving midline recloser's pickup binds the transfer and removes the naive keep-everything-on pick).",
+  "notes": "Architecture 4 drawn 2026-11-11 in a new world after the platform run on architecture 3 (task13/runs/run1.md) landed every result; the lightning world spent architectures 2 and 3. Axes chosen against the window of task7 v9, task9 v2 and task4 v12: forum regulator_or_inspector, org_family utility_or_infrastructure, forcing_event statutory_or_regulatory_filing, role compliance_or_audit, calibration parallel_run_overlap (the ADMS log and the outage record observe the same operations), strategy and Gate G binding_constraint (the receiving midline recloser's pickup binds the transfer and removes the naive keep-everything-on pick). Stage 4 (2026-11-11): the judge sent the dashboard-walk headline back on Gate G; re-framed in the same world to a flagged set (controls and directions) with the 2026 and 2027 figures; shape other, answer shape flagged-set. Stage 4 round 2 (2026-11-11): the judge's FIX_NOW closed in the generator: R3's model structure ruled on the load tests themselves (control levels F 218.3, control ageing F 101.2, cold slopes F 1.2; fleet, per-type and linear fits miss last winter's cold tests by 0.31 to 0.64 V at 30 A against 0.12 V; the mixed model names the same 16), R4's summer filed by the design basis's seasons, R4 graded in the memo's ask and R5 as the second component. READY 2026-11-11: judge p3 DETERMINISTIC, APPROVE; three leak readers clean; effort pair 34.5.",
   "skeleton": {
     "decision_form": "per_unit_diagnosis",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",

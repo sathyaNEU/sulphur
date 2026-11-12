@@ -1,0 +1,145 @@
+{
+ "task": "task13",
+ "architecture": "v4",
+ "decision": "the sustained customer interruptions Blue Earth Valley Power's automated distribution loops avoided in 2026 on the commission's definition, what to change before the 2026-27 winter and the 2027 summer, and what the loops will avoid in 2027",
+ "deliverables": [
+  "flisr_review_2026.xlsx",
+  "flisr_2026_memo.pdf"
+ ],
+ "pull_date": "2026-11-04",
+ "as_of": "2026-11-04",
+ "files": [
+  {
+   "path": "target/adms_flisr_event_archive_2022-2026.csv",
+   "source": "Blue Earth Valley Power ADMS FLISR event archive export (constructed)",
+   "covers": "one row per FLISR or scheme-state message the archive holds, 2022 to October 2026, UTC",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/oms_outage_events_2022-2026.csv",
+   "source": "Blue Earth Valley Power outage management system export (constructed)",
+   "covers": "one row per restoration step of every outage on the 74 feeders, 2022 to October 2026, Central time",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/scada_hourly_amps_2025-2026.csv",
+   "source": "SCADA historian hourly export (constructed)",
+   "covers": "hourly average phase A current at each loop feeder breaker and midline recloser, 2025 to October 2026, Central Standard Time",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/scada_device_events_2022-2026.csv",
+   "source": "SCADA front-end sequence of events export (constructed)",
+   "covers": "trips, lockouts, recloses, opens, closes, settings group changes, control alarms and weekly battery load tests, 2022 to October 2026, Central Standard Time",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/da_device_register_2026.xlsx",
+   "source": "distribution automation device register (constructed)",
+   "covers": "every automated recloser and tie switch: control, tags, radio site, battery installed, pickups; the loop breakers",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/flisr_loop_configuration_2026.xlsx",
+   "source": "FLISR loop configuration workbook (constructed)",
+   "covers": "loops, sections with customers, feeder limits, configuration changes",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/da_maintenance_records_2019-2026.xlsx",
+   "source": "distribution automation maintenance records (constructed)",
+   "covers": "annual functional tests, battery replacements, repairs, 2019 to October 2026",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/kmkt_hourly_weather_2022-2026.csv",
+   "source": "Mankato Regional Airport hourly observations (constructed in the ASOS export form)",
+   "covers": "hourly temperature, dew point, wind, gust, precipitation and weather codes, 2022 to October 2026, UTC",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/comms_and_control_system_incidents_2022-2026.csv",
+   "source": "communications and control system incident log (constructed)",
+   "covers": "radio site, ADMS and historian incidents, 2022 to October 2026",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/distribution_capital_works_2019-2027.xlsx",
+   "source": "distribution capital works register (constructed)",
+   "covers": "projects 2019 to 2027 with planned and actual in-service dates",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/large_load_requests_2026-2027.xlsx",
+   "source": "large load requests (constructed)",
+   "covers": "customer load requests 2026 to 2027",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/mpuc_grid_modernization_metrics_order.pdf",
+   "source": "state commission order on grid modernization metrics (constructed excerpt)",
+   "covers": "the reporting definitions for automatic restoration",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/da_design_basis_rev3.pdf",
+   "source": "distribution automation design basis, revision 3 (constructed)",
+   "covers": "the design range and control power basis",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/adms_flisr_kpi_dashboard_2022-2026.xlsx",
+   "source": "vendor FLISR KPI dashboard export (constructed)",
+   "covers": "monthly sequences and customers restored from the event archive",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/ami_outage_notifications_daily_2025-2026.csv",
+   "source": "AMI head-end daily notification counts (constructed)",
+   "covers": "daily last-gasp and restoral message counts per feeder, 2025 to 2026",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/vegetation_cycle_status_2026.xlsx",
+   "source": "vegetation cycle status workbook (constructed)",
+   "covers": "trim cycle status per feeder",
+   "origin": "made by task13/generator from a seeded simulation of the utility (network, loads, weather, faults, protection, automation, radio, batteries, maintenance, capital works); no LLM-written data",
+   "pulled_on": "2026-11-04",
+   "license": "constructed for this task; CC BY 4.0"
+  }
+ ],
+ "distractor_files": [
+  "target/ami_outage_notifications_daily_2025-2026.csv",
+  "target/vegetation_cycle_status_2026.xlsx"
+ ]
+}
