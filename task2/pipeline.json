@@ -1,11 +1,11 @@
 {
  "task": "task2",
- "status": "READY",
+ "status": "APPROVED",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-10",
+ "stage": 7,
+ "stage_name": "approved",
+ "updated": "2026-11-12",
  "architecture": 6,
  "loops": 0,
  "precut": {
@@ -71,7 +71,8 @@
   }
  ],
  "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py task2 --rewrite), uploads it with target.zip, generates the two runs, and runs /triage-runs task2",
- "approved": null,
+ "approved": "2026-11-12",
+ "approval_source": "the author's report of 2026-11-12 (approved on review; the run scores are not in the repo)",
  "delivered": "2026-11-01",
  "portal": null,
  "portal_id": "",
