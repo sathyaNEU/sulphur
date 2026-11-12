@@ -166,7 +166,7 @@ def write_deck(path, F):
         "Final test scrapped %s more units of the same wafers at burn-in on the lots it finished in those months: %s of P-A, "
         "%s of P-B and %s of P-C, about %s with their assembly and test." % (
             n(S["R3_total"]), n(S["R3_ft_units"]["P-A"]), n(S["R3_ft_units"]["P-B"]), n(S["R3_ft_units"]["P-C"]), usd(S["R3_usd"])),
-        "The disks stores issue now are lot %s, the lot on all four units since %s, and they wear faster than the lots before "
+        "Every unit has run lot %s's disks since %s, the latest the stores have received, and they wear faster than the lots before "
         "them: the loss at sort starts at %s wafers of a disk's use on %s and %s and at %s on %s and %s, and climbs %s and %s "
         "points of the outer zone's fail rate per 1,000 wafers after it." % (
             lotn, F["fwd_all_since"], n(dose["%s onset" % lo[0]]), lo[0], lo[1], n(dose["%s onset" % hi[0]]), hi[0], hi[1],
@@ -234,8 +234,9 @@ def write_deck(path, F):
         "The six ring-only swaps leave the outer zone where it was: the step at each runs from %+.3f to %+.3f." % (min(steps), max(steps)),
         "One fit per pair over every disk gives the retaining ring a share below zero, with a t of %.1f at most once each disk's "
         "life is the unit that varies; fitted on each disk lot it has none." % t_cl,
-        "DEP-3 sends most of its wafers to %s and %s, which is all its apparent link; SC-4 joined M1 a week after Rev F. "
-        "Neither moves the outer zone on wafers with the same disk use." % (hi[0], hi[1]),
+        "DEP-3 sends most of its wafers to %s and %s, which is all its apparent link; SC-4's first lots reached M1 on %s, %d "
+        "days after Rev F. Neither moves the outer zone on wafers with the same disk use." % (hi[0], hi[1], F["sc4_first"],
+                                                                                            F["sc4_after_rev_f"]),
     ], size=13)
     _source(s, "Shares of the April to August loss, one model per downforce pair and disk lot with every candidate beside it; a "
                "share below zero is shown as none.")
@@ -260,8 +261,8 @@ def write_deck(path, F):
     _text(s, Inches(8.3), Inches(3.4), Inches(4.4), Inches(3.3), [
         "Climb: points of the outermost zone's fail rate per 1,000 wafers of disk use past the onset, at a pad half through its life.",
         "Each disk's lot comes from the serial its PM entry fitted, in the serial range stores received. The earlier lots start "
-        "the ring at %s wafers on %s and %s and %s on %s and %s; the %s receipt is the only lot left on the shelf (%s disks)." % (
-            n(old["low"]), lo[0], lo[1], n(old["high"]), hi[0], hi[1], F["fwd_received"], n(F["stock_left"][lot])),
+        "the ring at %s wafers on %s and %s and %s on %s and %s; their last serials are fitted, and no disk has been received "
+        "since this lot came in on %s." % (n(old["low"]), lo[0], lo[1], n(old["high"]), hi[0], hi[1], F["fwd_received"]),
         "Each pair is fitted together: its two units run one downforce recipe (%.2f and %.2f psi), and %s and %s have run one "
         "short disk each from this lot." % (psi["low"], psi["high"], F["short_units"][0], F["short_units"][1]),
     ], size=12)

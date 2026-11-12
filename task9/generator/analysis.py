@@ -27,6 +27,7 @@ import record as RC
 
 WIN = ("2026-04-01", "2026-09-01")
 SUMMER = "2026-06-01"
+REV_F = pd.Timestamp("2026-04-02")
 GRID = np.arange(300, 2001, 5)
 UNITS = ["PU-1", "PU-2", "PU-3", "PU-4"]
 PAD_LIFE = 600.0

@@ -1,15 +1,15 @@
 {
   "task": "task9",
-  "status": "PAUSED",
+  "status": "READY",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 4,
-  "stage_name": "check",
-  "updated": "2026-11-11",
+  "stage": 5,
+  "stage_name": "ready",
+  "updated": "2026-11-12",
   "doctrine": "throughout",
   "call": "take the conditioner disk out of the full PM under Rev G and change it after 1,010 wafers of its own use on PU-1 and PU-2 and 840 on PU-3 and PU-4, saving about USD 519,000 a year against Rev F",
-  "chain": "R1 the ring's loss at sort on wafers sorted 1 April to 31 August (0.90 points; good die by product); R2 each candidate cause's share (the disk 96.3 per cent, the pad 3.7, the rest none); R3 the units final test lost on lots finished in the window (114,900 by product); R4 each unit's onset and climb on lot A165-L2603, the disks in stores (840 and 640 wafers; 15.8 and 23.5 points per 1,000); R5 each unit's count under Rev G with sort and final test priced (1,010 and 840, the call); R6 the yearly saving against Rev F (USD 519,000)",
+  "chain": "R1 the ring's loss at sort on wafers sorted 1 April to 31 August (0.90 points; good die P-A 139,000, P-B 14,000, P-C 226,000); R2 the parts' and tools' shares (the disk 96.3 per cent, the pad 3.7, the rest none); R3 the units final test lost on lots finished in the window (P-A 44,300, P-B 3,500, P-C 67,100); R4 each unit's onset and climb on lot A165-L2603, the disks every unit runs now (840 and 640 wafers; 15.8 and 23.5 points per 1,000); R5 each unit's count under Rev G with sort and final test priced (1,010 and 840, the call); R6 the yearly saving against Rev F (USD 519,000)",
   "architecture": 2,
   "loops": 0,
   "precut": {
@@ -17,19 +17,19 @@
     "date": "2026-11-11"
   },
   "leak": {
-    "leak_py": "REVIEW (4 lines: three in-fiction documents, one coincidental digit string in the sort record)",
-    "reader": "run 2026-11-11: nothing handed over (Q1 pins only, Q6 no one thing); two realism tells fixed in the generator, figures unchanged"
+    "leak_py": "REVIEW (4 lines ruled in the note's pre-ship check)",
+    "reader": "two reads (2026-11-11, and 2026-11-12 after the prompt fix): nothing handed over, no one thing; two realism tells fixed in the generator"
   },
   "duplicate_check": {
     "heart": "WARN (overuse.weight, repeat.decision, repeat.question_form, skeleton.house_lesson, skeleton.house_shell)",
     "nearest": "task1 v3, task21 v1, depth:b9efebd1, mark179 v5, task18 v1 (skeleton severity none)"
   },
   "judge": {
-    "verdict": "",
-    "disposition": "",
-    "gate_h": "",
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW, applied in one pass (the causes' frame pinned in the prompt, the stores wording, the low pair's climb floor and the high pair's onset floor, final test's bands, the saving by pair, the side figures)",
+    "gate_h": "domain pass, layers pass, one_thing none; stump power 45 to 60",
     "report": "task9/determinism_check_report.md",
-    "first_pass": "running"
+    "first_pass": "blind: R1 inside, R2 the disk named (no share table), R3 outside (final test in proportion to the sort excess), R4 lot found (7 of 8 cells), R5 outside (1,244, 1,235, 937, 896), R6 inside (about 556,000)"
   },
   "paper_pair": 23.0,
   "effort": {
@@ -52,7 +52,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 4: the leak reader has reported (nothing handed over; two realism tells fixed in the generator, figures unchanged); the determinism judge's isolated thread is running from /tmp/determinism-check-task9-224350/ (judge_brief.md); when its verdict.md and own_derivation.md land, re-invoke the determinism-judge wrapper for the report, read the first pass against the careful column (READY only if the re-priced pair stays at or under 50), fix any finding in the generator, re-run gates.py --full, then stage 5",
+  "resume": "stage 6: the author rewrites the prompt in their own words (voice-check.py task9 --rewrite), uploads it with target.zip, generates the two runs, then /triage-runs task9",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -100,5 +100,7 @@
       "date": "2026-11-11",
       "event": "stage 4: leak reader clean of method and answer leaks (two realism tells fixed); judge DETERMINISTIC FIX_NOW, but its blind first pass landed every result, so back to stage 2"
     }
-  ]
+  ],
+  "careful_repriced_on_judge": "about 51 to 58",
+  "author_override": "2026-11-12: the author chose to ship to measure over the house's 50 line (the judge's blind first pass re-priced at about 51 to 58; the client's bar is 60)"
 }

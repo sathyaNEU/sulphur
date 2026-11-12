@@ -57,7 +57,7 @@ def build(F):
     a("Take the conditioner disk out of the full PM under Rev G and change it after %s wafers of its own use on %s and %s and "
       "after %s on %s and %s, which saves about %s a year against Rev F as it stands: the disk's own wear carries %s of the edge "
       "ring's loss at sort (%s points of mean wafer sort yield from April to August) and cost %s more units at final test, and "
-      "the disks stores now issue (lot %s) start the ring at %s and %s wafers. Rejected: counts set on every disk lot's curve "
+      "the disks every unit runs now (lot %s) start the ring at %s and %s wafers. Rejected: counts set on every disk lot's curve "
       "(%s and %s wafers), counts that leave final test out (%s and %s) or take it in proportion to the sort loss (%s and %s), "
       "and any change to the pad or the retaining ring." % (
           n(c[lo[0]]), lo[0], lo[1], n(c[hi[0]]), hi[0], hi[1], usd(S["R5_saving"]), pct(sh["disk"], 1), dec(L1["points"]),
@@ -80,13 +80,14 @@ def build(F):
       "to %s), about %s at the cost inputs' die values." % tuple(
           sum([[n(L1["%s die" % p]), n(B["R1_loss"]["%s die" % p][0]), n(B["R1_loss"]["%s die" % p][1])] for p in ("P-A", "P-B", "P-C")], [])
           + [usd(S["R1_usd"])]))
-    a("3. The causes ranked by their share of the loss at sort, in a table of the candidates the records carry: the conditioner "
-      "disk's wear %s (band %s to %s), the pad's life on top of it %s (%s to %s), and the retaining ring's wear, deposition "
-      "chamber DEP-3, scanner SC-4 at M1 and the deposition chambers' RF hours at none, each under %s (a fitted share below zero "
-      "is none), with the evidence that rules each out (the six ring-only swaps, DEP-3's routing to %s and %s, SC-4's start a "
-      "week after Rev F)." % (
+    a("3. The parts and tools behind the loss at sort ranked by their share of it, in a table of the candidates the records "
+      "carry: the conditioner disk's wear %s (band %s to %s), the pad's life on top of it %s (%s to %s), and the retaining ring's "
+      "wear, deposition chamber DEP-3, scanner SC-4 at M1 and the deposition chambers' RF hours at none, each under %s (a fitted "
+      "share below zero is none), with the evidence that rules each out (the six ring-only swaps, DEP-3's routing to %s and %s, "
+      "SC-4's first lots at M1 on %s, %s days after Rev F took effect)." % (
           pct(sh["disk"], 1), pct(B["R2_shares"]["disk"][0]), pct(B["R2_shares"]["disk"][1]), pct(sh["pad"], 1),
-          pct(B["R2_shares"]["pad"][0]), pct(B["R2_shares"]["pad"][1]), pct(B["R2_shares"]["ring"][1]), hi[0], hi[1]))
+          pct(B["R2_shares"]["pad"][0]), pct(B["R2_shares"]["pad"][1]), pct(B["R2_shares"]["ring"][1]), hi[0], hi[1],
+          F["sc4_first"], n(F["sc4_after_rev_f"])))
     a("4. The units final test lost to the ring on the lots it finished 1 April to 31 August, by product, in a table beside a "
       "chart of burn-in failures by month: P-A %s (band %s to %s), P-B %s (%s to %s), P-C %s (%s to %s), %s in all, about %s at "
       "die value plus assembly and test. Each lot's burn-in failures above its units' base rate of %s per cent come from its "
@@ -100,28 +101,33 @@ def build(F):
             u, n(dose["%s onset" % u]), n(B["R4_dose"]["%s onset" % u][0]), n(B["R4_dose"]["%s onset" % u][1]),
             dec(dose["%s climb" % u], 1), dec(B["R4_dose"]["%s climb" % u][0], 1), dec(B["R4_dose"]["%s climb" % u][1], 1)))
     a("5. Each unit's usage at which the loss at sort starts, in wafers of the disk's own use, and the climb after it in points of "
-      "the outermost sort zone's fail rate per 1,000 wafers, on the disks the units will be fitted with from September (lot %s, "
-      "the only disk lot left in stores): %s; charted as the zone's excess against disk use for each downforce pair, this lot "
-      "beside the earlier ones. A unit's own fit inside these bands is accepted." % (lot, "; ".join(rows)))
+      "the outermost sort zone's fail rate per 1,000 wafers, on the disks the units will be fitted with from September (lot %s: "
+      "every unit runs it now, the earlier lots' last serials are fitted, and no disk has been received since): %s; charted as "
+      "the zone's excess against disk use for each downforce pair, this lot beside the earlier ones. The bands' floors reach a "
+      "unit's own fit on its one short disk of the lot and a fit that carries the lot's effect as one multiplier on every "
+      "unit." % (lot, "; ".join(rows)))
     a("6. Each unit's change count for the disk once Rev G takes it out of the full PM, the ring costed at sort and at final test, "
       "in a table: %s and %s %s wafers (band %s to %s), %s and %s %s (%s to %s); a unit's own count inside these bands is "
       "accepted." % (lo[0], lo[1], n(c[lo[0]]), n(B["REC_counts"][lo[0]][0]), n(B["REC_counts"][lo[0]][1]),
                      hi[0], hi[1], n(c[hi[0]]), n(B["REC_counts"][hi[0]][0]), n(B["REC_counts"][hi[0]][1])))
-    a("7. The yearly saving against Rev F as it stands: %s (band %s to %s), %s on %s and %s and %s on %s and %s, at the FY27 "
-      "plan's wafers per unit and product mix in the cost inputs, beside each unit's cost per wafer under both specs." % (
+    a("7. The yearly saving against Rev F as it stands: %s (band %s to %s), %s on %s and %s (%s to %s) and %s on %s and %s "
+      "(%s to %s), at the FY27 plan's wafers per unit and product mix in the cost inputs, beside each unit's cost per wafer "
+      "under both specs." % (
           usd(S["R5_saving"]), usd(B["R5_saving"][0]), usd(B["R5_saving"][1]), usd(S["R5_pair"]["low"]), lo[0], lo[1],
-          usd(S["R5_pair"]["high"]), hi[0], hi[1]))
+          usd(B["R5_pair"]["low"][0]), usd(B["R5_pair"]["low"][1]), usd(S["R5_pair"]["high"]), hi[0], hi[1],
+          usd(B["R5_pair"]["high"][0]), usd(B["R5_pair"]["high"][1])))
     a("")
 
     # ---- 3. Critical Components
     a("## Critical Components")
     a("")
     a("1. The ring's loss at sort, %s points of mean wafer sort yield from April to August, measured on every wafer against the "
-      "fallout a disk short of its onset leaves, not against the band's level before April (%s) or the classifier's wafers "
-      "(%s)." % (dec(L1["points"]), dec(R["R1_q1_baseline"]), dec(R["R1_labels"])))
+      "fallout a disk short of its onset leaves, not against the band's level before April (about %s points) or on the "
+      "classifier's EDGE_RING wafers alone, which carry %s of it." % (dec(L1["points"]), dec(R["R1_q1_baseline"], 1),
+                                                                     pct(1 - G["unflagged_share"])))
     a("2. The cause: the conditioner disk's own wear, %s of that loss with the pad's life adding %s on top of it; the retaining "
       "ring, DEP-3, SC-4 and the RF hours carry none." % (pct(sh["disk"], 1), pct(sh["pad"], 1)))
-    a("3. The curve the count rests on is lot %s's, the disks in stores: the loss starts at %s wafers on %s and %s and climbs %s "
+    a("3. The curve the count rests on is lot %s's, the disks every unit runs now: the loss starts at %s wafers on %s and %s and climbs %s "
       "points per 1,000 wafers, and at %s and %s on %s and %s; every lot fitted together puts the onsets at %s and %s." % (
           lot, n(dose["%s onset" % lo[0]]), lo[0], lo[1], dec(dose["%s climb" % lo[0]], 1), n(dose["%s onset" % hi[0]]),
           dec(dose["%s climb" % hi[0]], 1), hi[0], hi[1], n(round(R["R4_pooled"][lo[0]][0], -1)), n(round(R["R4_pooled"][hi[0]][0], -1))))
@@ -135,17 +141,17 @@ def build(F):
       "text (the EW-118 PMs keep the disk, the unscheduled swaps change one part), blank counters placed on the unit's polish "
       "record, and each disk's supplier lot read from the serial its entry fitted against the stores receipts' serial ranges.")
     a("2. Measure the ring at sort on every wafer as the outermost zone's fails above its interior rate plus the zone's fallout "
-      "on disks short of their onset: %s points. The classifier's EDGE_RING wafers alone give %s, and the band's level before "
-      "April as the baseline gives %s, because the ring already cost %s points from January to March." % (
-          dec(L1["points"]), dec(R["R1_labels"]), dec(R["R1_q1_baseline"]), dec(G["R1_q1"])))
+      "on disks short of their onset: %s points. The classifier's EDGE_RING wafers carry only %s of it, and the band's level "
+      "before April as the baseline gives about %s points, because the ring already cost %s points from January to March." % (
+          dec(L1["points"]), pct(1 - G["unflagged_share"]), dec(R["R1_q1_baseline"], 1), dec(G["R1_q1"])))
     a("3. Attribute that loss with one model per downforce pair and disk lot, the retaining ring, DEP-3, SC-4 and the RF hours "
       "beside the disk's hinge: the disk %s, the pad %s, the rest none. Tool commonality points at %s, which is routing and "
       "timing." % (pct(sh["disk"], 1), pct(sh["pad"], 1), ", ".join(x.split()[-1] for x in R["R2_commonality_top"][:-1]) + " and " +
                    R["R2_commonality_top"][-1].split()[-1]))
     a("4. Fit the outermost zone's excess on a hinge in the disk's own use, the pad's life on the slope, one fit per downforce "
       "pair and disk lot. Lot %s starts the ring at %s and %s wafers against %s and %s for the earlier lots, and it is the lot "
-      "every unit runs now and the only one left in stores; one fit per pair over every disk gives %s and %s, and one fit for "
-      "the fleet %s." % (lot, n(dose["%s onset" % lo[0]]), n(dose["%s onset" % hi[0]]), n(F["old_onsets"]["low"]),
+      "every unit runs now, the earlier lots' last serials fitted and no disk received since; one fit per pair over every disk "
+      "gives %s and %s, and one fit for the fleet %s." % (lot, n(dose["%s onset" % lo[0]]), n(dose["%s onset" % hi[0]]), n(F["old_onsets"]["low"]),
                          n(F["old_onsets"]["high"]), n(round(R["R4_pooled"][lo[0]][0], -1)), n(round(R["R4_pooled"][hi[0]][0], -1)),
                          n(round(R["R4_fleet"][lo[0]][0], -1))))
     a("5. Model final test's burn-in failures lot by lot, sub-lots added back: a base rate on the lot's units plus a share of "

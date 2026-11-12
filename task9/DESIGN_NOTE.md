@@ -115,10 +115,10 @@ Lesson: a part's dose-response is read on the supplier lot the units will run, w
 |---|---|---|---|---|---|---|---|
 | R1 | The ring's loss at sort on wafers sorted 1 April to 31 August: 0.90 points of mean wafer sort yield; good die P-A 139,000, P-B 14,000, P-C 226,000 | missingness and measurement | the prompt's window and unit; the sort record's zone counts on every wafer; the band's fallout on disks short of their onset | points 0.84 to 0.96, die each within 8 per cent | stopped at the first story: measured against the band's level before April as if the ring started then, 0.69 (the classifier's wafers 0.70) | independent: the sort record's zone counts and the band's fallout on young disks | Component 1 |
 | R2 | Each candidate's share of that loss: the disk's wear 96.3 per cent, the pad's life on top of it 3.7, the retaining ring, DEP-3, SC-4 and the RF hours none | causal reasoning | the maintenance log's decoupled entries; one model per pair and lot with every candidate beside the disk; the six ring-only swaps | disk 88 to 100, pad 0 to 10, every other candidate under 3 | stopped at the first story: tool commonality puts PU-2, PU-4, SC-4 and DEP-3 on top, which is routing and timing | independent: the sort record, the MES routes and the maintenance log | Component 2 |
-| R3 | The units final test lost to the ring on lots it finished 1 April to 31 August: P-A 44,300, P-B 3,500, P-C 67,100 | modeling | the prompt's window, by final test's own date; each lot's units and burn-in failures, sub-lots added back; its wafers' outer-zone good die and their disks' wear at sort | each within 12 per cent | method shortcut: burn-in taken in proportion to the ring's die at sort assumes the response's shape, 11,100, 1,100 and 17,100 | independent: the final-test lot summary and each lot's wafers at sort | Ask 1 |
-| R4 | Each unit's onset and climb on the disks it will be fitted with from September (lot A165-L2603): PU-1 and PU-2 at 840 wafers and 15.8 points per 1,000; PU-3 and PU-4 at 640 and 23.5 | assembly and reconciliation | each disk's lot from the serial its PM entry fitted and the stores receipts' serial ranges; the lot every unit runs now and the only one with stock left; the hinge fit by pair on that lot | onset within 10 per cent, climb within 15 per cent | method shortcut: one fit per pair over every disk lot reads the current disks off the old ones, 1,540 and 850 wafers | independent: the stores receipts' serial ranges and the PM log's fitted serials | Component 3 |
+| R3 | The units final test lost to the ring on lots it finished 1 April to 31 August: P-A 44,300, P-B 3,500, P-C 67,100 | modeling | the prompt's window, by final test's own date; each lot's units and burn-in failures, sub-lots added back; its wafers' outer-zone good die and their disks' wear at sort | each within 15 per cent | method shortcut: burn-in taken in proportion to the ring's die at sort assumes the response's shape, 11,100, 1,100 and 17,100 | independent: the final-test lot summary and each lot's wafers at sort | Ask 1 |
+| R4 | Each unit's onset and climb on the disks it will be fitted with from September (lot A165-L2603): PU-1 and PU-2 at 840 wafers and 15.8 points per 1,000; PU-3 and PU-4 at 640 and 23.5 | assembly and reconciliation | each disk's lot from the serial its PM entry fitted and the stores receipts' serial ranges; the lot every unit runs now, the earlier lots' last serials fitted and no disk received since; the hinge fit by pair on that lot | onset 15 per cent under to 10 over; climb 15 per cent either way, 30 per cent under on the low pair | method shortcut: one fit per pair over every disk lot reads the current disks off the old ones, 1,540 and 850 wafers | independent: the stores receipts' serial ranges and the PM log's fitted serials | Component 3 |
 | R5 | Each unit's count for the disk under Rev G, the ring costed at sort and at final test: PU-1 and PU-2 at 1,010 wafers, PU-3 and PU-4 at 840 | synthesis | the spec's Rev G draft; the cost inputs' disk change, Rev G costing note, die values with assembly and test and the plan's mix; R4's curves and R3's rise | each within 8 per cent | unfinished chain: final test's loss estimated and then carried into the count in proportion to the sort loss on every lot's curve, 1,730 and 1,170 | R3, R4 | Recommendation |
-| R6 | The yearly saving of those counts against Rev F as it stands: USD 519,000 | forecasting | the prompt's comparison; the cost inputs' plan volume by unit and costing; R5's counts on R4's curves | 467,000 to 571,000 | dismissed own evidence: Rev F priced on the disks it ran before (every lot's curve), USD 274,000 | R4, R5 | Ask 2 |
+| R6 | The yearly saving of those counts against Rev F as it stands: USD 519,000 | forecasting | the prompt's comparison; the cost inputs' plan volume by unit and costing; R5's counts on R4's curves | 467,000 to 571,000, each pair within 12 per cent | dismissed own evidence: Rev F priced on the disks it ran before (every lot's curve), USD 274,000 | R4, R5 | Ask 2 |
 
 Carry-forward: R1, R2, R3 and R4 are graded on their own work (R3 on the final-test summary and each lot's wafers, R4 on
   the receipts and the log); R5 needs R3's rise and R4's curve together, and either alone leaves it 13 per cent or more
@@ -133,7 +133,7 @@ Carry-forward: R1, R2, R3 and R4 are graded on their own work (R3 on the final-t
 | The March disk lot wears faster (its onset 28 to 38 per cent earlier on both pairs) | constructed (simulated supplier lot) | no: the lot ran on all four units from May, beside the earlier lot on PU-1 and PU-3 through the summer, and the misreading decides nothing at the loss (one fit over every lot keeps R1 inside its band) | modelling: each disk's lot linked from its fitted serial to the receipts' serial ranges, then a hinge fit per pair and lot | modelling | keep: R4's judgment and half of R5's |
 | Thinned edge dielectric failing burn-in from about half the ring's onset and levelling off | constructed (simulated reliability mechanism) | no: every lot, every product, every month from February, the first quarter included | modelling: a lot-level Poisson model on each lot's wafers' outer-zone good die and their disks' wear | modelling | keep: R3's judgment and the other half of R5's |
 | DEP-3's wafers routed mostly to PU-3 and PU-4 | constructed (simulated dispatch) | no: every DEP-3 wafer in the record, deciding no result | modelling: DEP-3 beside the disk's dose in one fit | modelling | keep, a supporting step inside R2 |
-| SC-4 arriving on 10 April beside Rev F | constructed (simulated) | no: every SC-4 lot from April | modelling: SC-4 beside the dose | modelling | keep, a supporting step inside R2 |
+| SC-4 reaching M1 from 7 April, five days after Rev F | constructed (simulated) | no: every SC-4 lot from April | modelling: SC-4 beside the dose | modelling | keep, a supporting step inside R2 |
 | Each disk wears at its own rate within its lot (lognormal spread 0.05) | constructed (simulated) | no: all 21 disk lives on the four units | modelling: the hinge per pair and lot with the disk lives as texture | modelling | keep, texture inside R4 |
 
 ## Effort test
@@ -198,8 +198,8 @@ Shallow path checks: R3's proportional reading passes its own regression (burn-i
   test's level from about 0.84 of the onset on; R6's pooled saving passes a reconciliation with the April to August loss
   and is refuted by the stores receipts, which show the earlier lots' last serials fitted.
 Assumption made false: a run lists "the disks stores will issue wear like the ones in the record" and waves it through;
-  the PM log's serials and the stores receipts make it false (the earlier lots are used up, the March lot holds the
-  remaining stock and starts the ring 28 to 38 per cent sooner), and the final-test summary tests the run's other
+  the PM log's serials and the stores receipts make it false (the earlier lots' last serials are fitted, no disk has
+  been received since the March lot, and it starts the ring 28 to 38 per cent sooner), and the final-test summary tests the run's other
   assumption, that final test's loss scales with the ring at sort.
 Forcing: the call is each pair's count inside its band (the golden less and more 8 per cent): nine sound methods (each
   unit's own fit on the current lot, final test's rise on the disk's raw use, each pair's own final-test level, the pad's
@@ -222,8 +222,8 @@ Noun swap: nearest by skeleton task1 v3 (a newspaper group's pricing on cohort c
 | SF3 | the window at sort | by polish date; by sort date | wafers sorted 1 April to 31 August | the prompt's "wafers sorted" |
 | SF4 | the window at final test | lots whose wafers were sorted in the window; lots final-tested in it | lots final-tested 1 April to 31 August, sub-lots added back to their lot | the prompt's "lots final-tested" |
 | SF5 | a part's usage | wafers since the full PM; the polish record's pad counter; wafers since the part itself was replaced | wafers since the part itself was replaced, from the log's parts text | the log's EW-118 and unscheduled entries, which reset one part and not the others |
-| SF6 | the parts the units will be fitted with from September | the A165 disk as a part number; the lot stores now issue | the lot every unit runs now and the only one with serials left on the shelf (A165-L2603) | the stores receipts' serial ranges against the log's fitted serials |
-| SF7 | each unit's onset and climb | each unit's own fit; its downforce pair's | the pair's fit on the current lot, reported for each unit | same call where a unit ran a long disk of the lot (PU-2, PU-4); PU-1's and PU-3's current-lot disks ran under 1,200 wafers, and each unit's own count still lands inside its band |
+| SF6 | the parts the units will be fitted with from September | the A165 disk as a part number; the lot stores now issue | the lot every unit runs now (A165-L2603), the earlier lots' last serials fitted and no disk received since | the stores receipts' serial ranges against the log's fitted serials |
+| SF7 | each unit's onset and climb | each unit's own fit; its downforce pair's | the pair's fit on the current lot, reported for each unit | same call: the bands' floors reach a unit's own fit on its one short disk of the lot (PU-1, PU-3) and a fit carrying the lot's effect as one multiplier on every unit (PU-4 at 560), and each unit's own count lands inside its band |
 | SF8 | the count's lever | the part inside the full PM; on its own count | on its own count, out of the full PM from September | the spec's Rev G draft and the prompt |
 | SF9 | the count's costing | the full PM's all-in; the part's own change | the disk change's all-in each time, the full PM less the disk's price | the cost inputs' Rev G costing note |
 | SF10 | a unit lost at final test | its die value; its die value plus assembly and test | die value plus assembly and test | the cost inputs' die section |
@@ -264,7 +264,7 @@ Noun swap: nearest by skeleton task1 v3 (a newspaper group's pricing on cohort c
 
 A reader executing the prompt word for word measures, on every wafer sorted from 1 April to 31 August, the outermost
 zone's fails above what that zone fails with no ring, averages them as points of mean wafer sort yield and sums them as
-good die by product; ranks the causes by their share of that loss; counts the units final test lost to the ring on the
+good die by product; ranks the parts and tools behind it by their share of that loss; counts the units final test lost to the ring on the
 lots it finished in those months, by product; gives each unit the usage in wafers of the responsible part's own use at
 which the loss at sort starts and the climb after it, for the parts the units will be fitted with from September; and
 sets each unit's count once Rev G takes the part out of the full PM, the ring costed at sort and at final test, with the
@@ -275,7 +275,7 @@ yearly saving against Rev F at the cost inputs: each of these is the golden's es
 A voice rewrite may not drop or change: the three questions (the cause, the cost on wafers sorted and lots final-tested
 1 April to 31 August 2026, the count once Rev G takes the part responsible out of the full PM from September, counting
 what the ring costs at sort and at final test); the loss at sort in points of mean wafer sort yield and in good die for
-each product; the causes ranked by their share of that loss; the units final test lost to it for each product; each
+each product; the parts and tools behind it ranked by their share of that loss; the units final test lost to it for each product; each
 unit's usage at which the loss at sort starts and the climb after it in points of the outermost sort zone's fail rate per
 1,000 wafers, on the parts it will be fitted with from September; each unit's change count and the yearly saving in
 dollars against Rev F as it stands; a short deck. It must never add a rounding instruction, a method (a hinge, a
@@ -299,7 +299,10 @@ Leak reader (stage 4, one isolated Sonnet agent at medium on fresh copies of the
   nothing pointed at the disk lots or at final test's shape. Questions 2 to 4: none beyond the Rev G draft's form, which
   the prompt asks for. Question 5: every quoted sentence executes to the golden. Question 6: no one thing. Its two
   realism tells (overlapping A140 serial ranges, routine log rows at exact weekly multiples) are fixed in the generator
-  on their own random streams, and figures.json is unchanged by them.
+  on their own random streams, and figures.json is unchanged by them. After the judge's fix pinned the causes' frame in
+  the prompt, a second reader on fresh copies found nothing handed over either (question 6: no one thing; the waiver's
+  retained disks point at the disk as the cause, which the careful column earns), and read the cost file's costing
+  note and the Rev G draft's brackets as tidy: both stay, the note closing a determinism fork.
 Realism: the deck rendered and read at speed; findings as titles, the charts as the slides, counts and onsets to ten
   wafers, die to the thousand, units to the hundred, dollars to the hundred or the thousand with each table's rows adding
   to its total, tables styled, slide numbers, source strips with the rounding stated.
@@ -309,7 +312,24 @@ Figures: figures_check exit 0; checks.py 89 of 89; verify.py 24 of 24 inside the
   sawtooth in the count); two builds byte-identical.
 Caution on the paper: the cited pair is 23.0, and paper estimates have come back 40 to 60 points high; the lot link and
   final test's shape are each a judgment a careful run can make, and a run that makes the lot link earns R4 and R6 (35.5
-  points on the house split). The judge thread's own first pass is read against the careful column before READY.
+  points on the house split).
+Judge (stage 4, 2026-11-11): DETERMINISTIC, FIX_NOW (answer blocks): every graded figure reproduced inside its band;
+  Gate G decomposition_attribution, analytical_non_defect, no surface-read dependency, no sole data defect; Gate H domain
+  pass, layers pass, one_thing none; stump power 45 to 60. Fixed in one pass: the causes' frame pinned in the prompt ("the
+  parts and tools behind it"), so the leak reader ran again; "the only lot left in stores" reworded to what the files
+  show (the earlier lots' last serials fitted, no disk received since); the low pair's climb floor and the high pair's
+  onset floor widened to reach a unit's own fit on its one short disk of the lot and the one-multiplier lot model (PU-4
+  at 560); final test's bands widened to 15 per cent for a base read on young lots; the saving banded by pair; the side
+  figures restated from the data (the classifier's wafers as a share of the loss, the pre-April baseline to one
+  decimal, SC-4's first lots at M1 on 7 April).
+Judge's blind first pass against the careful column: written before it opened the blocks, it landed the loss at sort
+  (0.909 points, die by product), named the disk as the cause with every rival null but filed no share table, found the
+  lot on its own (a hinge per unit with the lot as a multiplier: onsets 913, 900, 628 and 560, climbs 16.3 to 24.1) and
+  the saving's total (about 556,000); it took final test in proportion to the sort hinge's excess (P-A 9,300 to 11,500,
+  P-B 700, P-C 13,100 to 16,400) and so set the counts long (1,244, 1,235, 937 and 896). Re-priced on that pass the
+  careful column earns R1, R4 and R6 with R2 in substance, about 51 to 58 on the house split, over the house's line of
+  50 and under the client's 60. The author chose on 2026-11-12 to ship to measure, overriding the house's 50 line: the
+  platform's two runs decide, and a run that models final test on the disk's wear lands nearly every result.
 
 ## Tried and rejected
 

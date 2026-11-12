@@ -113,7 +113,7 @@ def main():
     check("SF5 the disk's own usage and wafers since the full PM part on a share of wafers", diff > 0.05, "%.1f per cent" % (100 * diff))
     past = d[d.disk > 650]
     check("SF5 the polish record's pad counter is not the disk's usage", (past.pad_life_ctr != past.disk).mean() > 0.99)
-    check("SF6 every unit's current disk is from one lot, the only lot with stock left", bool(A.fwd_lot) and
+    check("SF6 every unit's current disk is from one lot, the earlier lots' last serials fitted", bool(A.fwd_lot) and
           all(v <= 0 for k, v in A.stock_left.items() if k != A.fwd_lot) and A.stock_left[A.fwd_lot] > 10, str(A.stock_left))
     check("SF7 each disk lot ran on both pairs", all(d[d.disk_lot == L].pair.nunique() == 2 for L in A.lot_names))
     spec = open(os.path.join(TGT, PK.F["spec"])).read()

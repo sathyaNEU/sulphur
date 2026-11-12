@@ -5,6 +5,7 @@ with the golden family of rival methods behind each band and the fitted inputs' 
 """
 import datetime as dt
 import json
+import os
 
 import numpy as np
 import pandas as pd
@@ -150,14 +151,17 @@ def compute(tgt):
                          for p in PRODS})
     B["R2_shares"] = {"disk": [0.88, 1.0], "pad": [0.0, 0.10], "ring": [0.0, 0.03], "dep3": [0.0, 0.03], "sc4": [0.0, 0.03],
                       "rf": [0.0, 0.03]}
-    B["R3_ft_units"] = {p: [int(round(v * 0.88, -2)), int(round(v * 1.12, -2))] for p, v in S["R3_ft_units"].items()}
+    B["R3_ft_units"] = {p: [int(round(v * 0.85, -2)), int(round(v * 1.15, -2))] for p, v in S["R3_ft_units"].items()}
     B["R4_dose"] = {}
     for u in UNITS:
         on, sl = S["R4_dose"]["%s onset" % u], S["R4_dose"]["%s climb" % u]
-        B["R4_dose"]["%s onset" % u] = [int(round(on * 0.90, -1)), int(round(on * 1.10, -1))]
-        B["R4_dose"]["%s climb" % u] = [round(sl * 0.85, 1), round(sl * 1.15, 1)]
+        # the onset floor reaches a model with the lot's effect as one multiplier on every unit (15 per cent under); the low
+        # pair's climb floor reaches PU-1's own fit on its one short disk of the lot (30 per cent under)
+        B["R4_dose"]["%s onset" % u] = [int(round(on * 0.85, -1)), int(round(on * 1.10, -1))]
+        B["R4_dose"]["%s climb" % u] = [round(sl * (0.70 if A.pair_of[u] == "low" else 0.85), 1), round(sl * 1.15, 1)]
     B["REC_counts"] = {u: [int(round(v * 0.92, -1)), int(round(v * 1.08, -1))] for u, v in S["REC_counts"].items()}
     B["R5_saving"] = [int(round(S["R5_saving"] * 0.90, -3)), int(round(S["R5_saving"] * 1.10, -3))]
+    B["R5_pair"] = {p: [int(round(v * 0.88, -3)), int(round(v * 1.12, -3))] for p, v in S["R5_pair"].items()}
     F["bands"] = B
 
     # ---------------------------------------------------------------- the passes
@@ -241,6 +245,10 @@ def compute(tgt):
     F["fwd_all_since"] = max(d[(d.unit == u) & d.fwd].polish_ts.min() for u in UNITS).strftime("%-d %B")
     ex = [o[k][u] / A.REC[u] - 1 for k in ("REC_pooled", "REC_sort_only", "REC_proportional") for u in UNITS]
     F["shortcut_range"] = (int(np.floor(100 * min(ex))), int(np.ceil(100 * max(ex))))
+    m1 = pd.read_csv(os.path.join(tgt, AN.PK.F["mes"]), usecols=["step_name", "tool_id", "track_in_ts"], dtype=str)
+    first_sc4 = pd.Timestamp(m1[(m1.step_name == "M1-LITHO") & (m1.tool_id == "SC-4")].track_in_ts.min())
+    F["sc4_first"] = first_sc4.strftime("%-d %B")
+    F["sc4_after_rev_f"] = int((first_sc4.normalize() - AN.REV_F).days)
     F["short_units"] = sorted(u for u in UNITS if d[(d.unit == u) & d.fwd].disk.max() < 1500)
     F["record"] = {"sorted": int(len(d)), "window": A.n_win, "retests": int(A.R.retests), "first_sort": str(d.sort_ts.min())[:10],
                    "last_sort": str(d.sort_ts.max())[:10], "ft_lots": int(len(ft)), "ft_lots_window": A.n_ft_win,
