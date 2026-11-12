@@ -80,6 +80,7 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
     kwh = np.zeros((N, len(seasons)))
     seen = np.zeros((N, len(seasons)), bool)
     tune = np.zeros(N, int)
+    visits = [set() for _ in range(N)]
     for mp, rs in reads.items():
         b = mp_b[mp]
         h = HW[use[b]]
@@ -90,6 +91,7 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
             if why == "service visit":
                 s = season_of(day)
                 tune[b] = s if tune[b] == 0 else min(tune[b], s)
+                visits[b].add(day)
             if why == "meter fitted":
                 last = (num, val)
                 if not pts:
@@ -139,6 +141,12 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
     P.typ = np.array([TYPES.index(u) for u in use])
     P.ntype = len(TYPES)
     P.tune_season = tune
+    P.visits = [sorted(x) for x in visits]
+    onum = sorted({str(r["owner_number"]) for r in reg})
+    oidx = {o: k for k, o in enumerate(onum)}
+    P.owner = np.array([oidx[str(r["owner_number"])] for r in reg])
+    P.owner_no = onum
+    P.check_season = GD.campaign_season(P)
     P.bid = [r["building_id"] for r in reg]
     P.area = np.array([float(r["heated_floor_area_m2"]) for r in reg])
     # the use each building had on its 2019 notice, the register's use where it had none
@@ -167,6 +175,7 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
         P.answers19.append({"b": b, "measure": r["measure"], "date": d_(str(r["received"])[:10]),
                             "cost": float(r["quoted_cost_eur"]), "grant": float(r["grant_eur"]), "drawn": drawn,
                             "withdrawn": wd, "works": works, "firm": firm_key(r["contractor"]),
+                            "owner": oidx[str(r["owner_number"])],
                             "done": d_(str(r["works_completed"])[:10]) if works else None})
         P.answered[b] = True
         P.measure[b] = r["measure"]

@@ -1,4 +1,4 @@
-"""task7 architecture 8 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
+"""task7 architecture 9 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
 submission.md, metadata.json and both zips. `python3 make.py` builds in place; `python3 make.py --twice` builds twice
 into scratch folders and fails unless the two packs, goldens and zips are byte-identical."""
 import filecmp
@@ -23,15 +23,14 @@ import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
 ZIP_TIME = (2026, 6, 24, 17, 20, 0)
-DISTRACTORS = ["electricity_customers_annual_2019_2025.csv", "municipal_heat_plan_2026_summary.pdf",
-               "federal_funding_overview_2025.pdf"]
+DISTRACTORS = ["electricity_customers_annual_2019_2025.csv", "federal_funding_overview_2025.pdf"]
 COVERS = {
     "gas_meter_reads_2013_2026.csv": "every read of every commercial gas meter point, 30 April 2013 to 30 April 2026",
     "meter_points_2026.csv": "meter points, their buildings, meters, factors, z-numbers and network areas",
     "calorific_values_2013_2026.csv": "the billing calorific value by network area and season",
-    "buildings_register_2026.xlsx": "commercial buildings supplied with gas: address, district, use, floor area",
+    "buildings_register_2026.xlsx": "commercial buildings supplied with gas: address, district, use, floor area, customer and owner",
     "benchmarking_notices_2019_2026.csv": "every benchmarking notice sent, May 2019 to May 2026, with the grant offer",
-    "pilot_2019_responses_and_draw.xlsx": "the 2019 pilot's responses, the draw, withdrawals and completion dates",
+    "pilot_2019_responses_and_draw.xlsx": "the 2019 pilot's responses by owner, the draw, withdrawals and completion dates",
     "applications_2026.xlsx": "the 2026 round's applications received by 12 June, with their reference consumption",
     "weather_haldenau_daily_2013_2026.csv": "the Haldenau station's daily mean temperature",
     "degree_days_haldenau.csv": "monthly G20/15 degree days by season and the 1991 to 2020 means",
@@ -43,7 +42,7 @@ COVERS = {
     "electricity_customers_annual_2019_2025.csv": "the utility's commercial electricity customers' annual use",
     "solar_cadastre_rooftops_2024.xlsx": "the state solar cadastre's roof faces by address: area, tilt, orientation, solar potential",
     "electricity_load_profiles_2025.csv": "the meter operator's 2025 typical weeks for every commercial market location: mean kW by weekday and hour",
-    "municipal_heat_plan_2026_summary.pdf": "the municipal heat plan's summary",
+    "municipal_heat_plan_2026_summary.pdf": "the municipal heat plan's summary, with the service checks already under way",
     "federal_funding_overview_2025.pdf": "the regional energy agency's overview of federal grants",
 }
 
@@ -83,6 +82,10 @@ def build(task_dir, gen_dir):
     DC.write_all(target, w)
     CK.RESULTS.clear()
     C = CK.run(target, gen_dir)
+    if os.environ.get("T7_CHECK_LOG"):
+        with open(os.environ["T7_CHECK_LOG"], "w", encoding="utf-8") as fh:
+            for name, ok, d in CK.RESULTS:
+                fh.write("%s  %s  %s\n" % ("PASS" if ok else "FAIL", name, d))
     bad = [r for r in CK.RESULTS if not r[1]]
     if bad:
         for name, ok, d in bad:
@@ -96,10 +99,10 @@ def build(task_dir, gen_dir):
     WU.write(F, os.path.join(task_dir, "submission.md"))
     files = sorted(os.listdir(target))
     meta = {
-        "task": "task7", "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round funds, and what it will pay",
+        "task": "task7", "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round can fund at the committee's confidence",
         "domain": "Energy Systems & Utilities", "task_type": "energy efficiency and demand response evaluation",
-        "objective": "Experiment & Causal Analysis", "as_of": "2026-06-15",
-        "deliverables": ["grant_round_2026_note.docx", "grant_round_2026_appraisal.xlsx"],
+        "objective": "Experiment & Causal Analysis", "as_of": "2026-06-24",
+        "deliverables": ["grant_round_2026_note.pdf", "grant_round_2026_appraisal.xlsx"],
         "distractor_files": DISTRACTORS,
         "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
                         "largest_file": "gas_meter_reads_2013_2026.csv", "largest_file_rows": counts["reads"],
@@ -153,12 +156,10 @@ def main():
         sys.exit(0 if ok else 1)
     F, C, counts = build(TASK, HERE)
     print(json.dumps(counts, indent=1))
-    print("funded %s; eur/t %s; by use %s; ranges %s; flip %s; rates %s; HO life %s; controls threshold %s, at 70 %s; "
-          "insulation heating at a full roof %s; empty week %s; roof %s; at close paid EUR %s; 2025/26 %s t"
-          % (F["funded"], F["R6_eur_per_tonne"], F["R6_by_use_eur_per_tonne"], F["R7_range_eur"], F["R7_break_even_pct"],
-             F["R5_rate_on_applications_pct"], F["R2_life_saving_pct"]["heating optimisation"],
-             F["R3_threshold_empty_pct"], F["R3_controls_at_empty_pct"]["70"], F["R4_heating_at_roof_pct"]["1"],
-             F["R3_empty_week_pct"], F["R4_roof_per_floor"], F["R8_funded_paid_eur"], F["R10_tonnes"]))
+    print("funded %s; eur/t %s; ranges at the owner %s; at the building %s; rates %s; optimisation's own seasons %s "
+          "against measured %s; measured route %s (range %s); at close %s; funded tonnes %s; routes %s"
+          % (F["funded"], F["eur_t"], F["range"], F["range_building"], F["rates"], F["R2_own"], F["R1"]["heating optimisation"],
+             F["measured_opt_eur_t"], F["measured_opt_range"], F["close"], F["funded_tonnes"], F["routes"]))
     print("%d checks passed" % len(CK.RESULTS))
 
 

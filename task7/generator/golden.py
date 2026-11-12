@@ -346,7 +346,7 @@ def own_lifetime(s, sizes, m="heating optimisation", how="settled"):
     the level it settles at (the last three seasons weighted by the 2018/19 gas of the works buildings each rests on)
     over the rest of the life; "floor": the fitted approach to a level instead"""
     L = LIFE[m]
-    if how == "floor":
+    if how in ("floor", "floor_own"):
         return lifetime(s, m, "floor")
     level = float(np.average(s[-3:], weights=sizes[-3:]))
     if how == "settled_last2":
@@ -358,6 +358,17 @@ def heat_share(P, idx, wts=None):
     """the gas-weighted heating share (1 less the benchmarking method's hot-water share by use) of the buildings idx"""
     idx = np.asarray(idx, int)
     return float(np.average(1.0 - P.hvec[idx], weights=wts)) if len(idx) else float("nan")
+
+
+def opt_rates_from(P, s, sizes, persist="settled", rows=None):
+    """heating optimisation's rate on each 2026 application from a season series of its saving: over its life as
+    own_lifetime reads it, carried from the pilot's works buildings' heating share to each application's"""
+    m = "heating optimisation"
+    g, _ = _arms(P, m) if rows is None else rows
+    life = own_lifetime(s, sizes, m, persist) if sizes is not None else lifetime(s, m, persist)
+    k0 = P.si[PILOT]
+    hp = heat_share(P, g, np.nan_to_num(P.U[g, k0]))
+    return np.array([life * (1.0 - P.hvec[a["b"]]) / hp for a in apps(P, m)])
 
 
 def app_rates(P, m, route="golden", persist="floor", how="ratio_of_totals", base="notice", nb=DOSE_BINS, form=None,
@@ -449,6 +460,7 @@ def draw_range(P, m, B=400, seed=2026, unit="owner", route="golden"):
     """the grant per tonne's 5th and 95th percentiles over B fresh draws, every step repeated"""
     rng = np.random.default_rng(seed + MEASURES.index(m) + (0 if unit == "owner" else 100))
     vals = np.array([eur_t_on_rows(P, m, draw_rows(P, m, rng, unit), route) for _ in range(B)])
+    vals = np.where(vals > 0, vals, np.inf)  # a draw whose works save nothing buys no tonnes
     return float(np.percentile(vals, 5)), float(np.percentile(vals, 95)), vals
 
 

@@ -1,67 +1,34 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
  "stump": "",
  "architecture": 9,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-09",
-  "checks": 85,
-  "note": "2 WARN: the both-drivers hint rescues 6 of 13 (over a third, under half; the build's level-4 risk, recorded at the author's choice); the batch's 'which' quota"
+  "date": "2026-11-11",
+  "note": "2 WARN answered in the note: R2 upstream of four results (each needs work of its own; the largest hint rescues 2 of 6); nearest chains task17 and task2 (shape only)"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-09, --asof 2026-06-24): the measures' names in the plan, the 2019 rules and the 2026 terms; the field's ordinary words; no rounding sentence at the author's word",
-  "reader": "2026-11-09 isolated reader (Sonnet, medium): questions 1 to 4 none beyond the filed WHAT; question 5 the golden's reading; question 6 analysis throughout, the profiles and the cadastre read as usable cross-file material; the profiles' standard-looking shapes repaired afterwards (data only)",
-  "reader_2026_11_10": "clean after the level-up: no sentence hands over a step, no ranking or helper file, no figure reads as the answer, no one thing ('There is no single fact that unlocks most of this'); it read the payment as the pilot's completion pattern carried over, the hurried route; realism tells fixed: weekday-shaped received dates (none at weekends in 2019, about a third of the weekday rate in 2026), each issuer's PDFs in their own style; the committee letter's list of asks mirroring the prompt ruled natural"
+  "leak_py": "REVIEW, no LEAK (2026-11-11, --asof 2026-06-24): six stump-vocabulary lines, ruled harmless in the note's Leak rulings",
+  "reader": "2026-11-11 isolated reader (Sonnet, medium): questions 2 to 4 none; question 1 the plan's WHAT and the committee's range estimand (kept); question 5 literal readings the golden's; question 6 names the lottery as the closest single fact (about two results) and never the campaign; nothing to fix"
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-09 (overuse.strategy, driver.near own lineage 0.13, overuse.gate_g), answered in the note",
+  "heart": "WARN 2026-11-11 (driver.near own lineage 0.20 and 0.12; repeat.question_form; skeleton lesson_taught and house_lesson), answered in the note",
   "surface": "exit 0"
  },
  "judge": {
-  "pass1": {
-   "verdict": "DETERMINISTIC",
-   "disposition": "APPROVE",
-   "report": "task7/determinism_check_report_pass1.md",
-   "finding": "Gate H open: a sentence naming both drivers rescued about half the chain; repaired by the lived-in buildings' honest activity, so controls also need the lived-in step (read off the load alone 156.47 euro a tonne)"
-  },
-  "pass2": {
-   "verdict": "NOT_DETERMINISTIC",
-   "disposition": "SEND_BACK",
-   "report": "task7/determinism_check_report_pass2.md",
-   "finding": "Gate B/C: the lived-in test (weekend days above nights) carried no margin; strict dominance held 2 per cent of hotels and care homes lived in and flipped controls",
-   "repair": "every hotel and care home lived in round the clock by its use on the register; the weekend test a rival family inside the band at every margin to 15 per cent (honest base loads for lived-in buildings); strict dominance inside R3's band, same call"
-  },
-  "pass3": {
-   "verdict": "NOT_DETERMINISTIC",
-   "disposition": "SEND_BACK",
-   "report": "task7/determinism_check_report.md",
-   "finding": "the lived-in step decisive for controls with no filed sentence making hotels and care homes lived in (load alone 159.57); the line through the lived-in band at 120.02"
-  },
-  "shipped": "at the author's choice (2026-11-09) the pass-1 form: the lived-in step moves controls' figures, not the call (load alone 114.12), every hotel and care home held lived in by use (no margin), the weekend test and strict dominance inside the band, the line through the lived-in band (120.02) ruled out by its sixfold misfit; no fourth pass was run; target.zip e9bdaf43",
-  "pass4": {
-   "verdict": "DETERMINISTIC, SOLUTION_WRONG (ask 7 and Component 4 only)",
-   "disposition": "FIX_NOW",
-   "report": "task7/determinism_check_report_pass4.md",
-   "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no",
-   "gate_h": "pass: one_thing none, one-fact about 4 of 13",
-   "finding": "the round-at-close and works-by-30-September figures stated as bare points; the start date and the queue rivals land within the design's tenth but no band was published",
-   "repair": "the bands published in Supplementary 7, Component 4, the workbook's round-at-close sheet and the note; the works' start stated (13 July, as the 2019 works began the Monday after the draw)"
-  },
-  "pass5": {
-   "verdict": "DETERMINISTIC",
-   "disposition": "APPROVE",
-   "report": "task7/determinism_check_report_pass5.md",
-   "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no",
-   "gate_h": "pass: one_thing none, one-fact about 3 of 9",
-   "note": "read the cut before the data-only realism pass that followed it (the 2019 roofing record's rain days, late starts and per-roof pace; more heating fitters); the generator's assertions, leak.py and every gate re-run after it, every graded figure inside its published band"
-  }
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_g": "analytical_non_defect; surface_read_dependency no; sole_data_defect no",
+  "gate_h": "pass: four areas or more, one_thing none, the best single hint rescues 2 to 3 of 7",
+  "first_pass": "blind, before the blocks: funded insulation and heating optimisation; landed R9's counts and insulation's rate and point, missed R2, optimisation's and controls' rates and ranges, the call and the listing (careful column about 25 on it); insulation's upper end at 102.4 against the then 8 per cent band, widened to 10",
+  "report": "task7/determinism_check_report.md"
  },
  "returned": [
   {
@@ -124,7 +91,7 @@
    "feedback": "task7/runs/review_2026-11-11.md"
   }
  ],
- "resume": "stage 2/3: rebuild pack.py (owners, check reads), docs.py (rules 3 owner draw, committee rule, heat plan campaign), verify.py, golden, checks, deliver, writeup on seed 70706; then gates",
+ "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip and pastes the four blocks; then the two platform runs and /triage-runs",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -340,41 +307,38 @@
    }
   ]
  },
- "paper_pair": 46.0,
+ "paper_pair": 40.5,
  "subdomain": "efficiency-savings-verification",
- "call": "fund insulation alone in the 2026 round (provisional): heating optimisation's saving without the closed campaign's held lift and controls' range at the owner both sit over EUR 120 at the upper end",
+ "call": "fund roof insulation alone in the 2026 round: EUR 85.53 a lifetime tonne, its 90 per cent range EUR 79.67 to 94.17; heating optimisation (upper end EUR 233.08, its works' own saving without the closed campaign) and heating controls (upper end EUR 158.03, the pilot's owners drawn again) fail the committee's rule",
  "doctrine": "throughout",
- "chain": "R1 seasons; R2 optimisation's own saving; R3 its life rate; R4 controls along the empty week; R5 insulation along the roof; R6 their rates; R7 each grant per tonne with its owner-level range; R8 the funded set; R9 the round at close and funded tonnes; R10 every application; R11 the 2025/26 CO2",
+ "chain": "R2 optimisation's own saving in the last three seasons (Component 1); R6 each measure's rate over its life on this year's applications (Ask 1); R7 each grant per tonne and its range's upper end at the owner (Ask 2, Components 2 and 3); R8 the funded set (Recommendation); R9 each measure's round at close (Ask 3); R10 the funded measure's applications and their lifetime tonnes (Ask 4)",
  "effort": {
-  "quick": 16.8,
-  "careful": 46.0,
+  "quick": 14.0,
+  "careful": 40.5,
   "thorough": 100.0,
-  "largest_hint": "both drivers: rescues 5 of 15"
+  "largest_hint": "the closed campaign's held checks: rescues 2 of 6 (R2, R6); the owner sentence none whole"
  },
  "prompt_rewritten": false,
  "gates_stage3": {
-  "checks": "119 of 119",
-  "figures_check": "PASS, 152 figures",
-  "effort": "exit 0, pair 46.5, 3 distinct wrong funded sets",
-  "voice_check": "PASS (998 characters)",
-  "leak_py": "REVIEW, no LEAK (--asof 2026-06-24)",
-  "audit_containers": "exit 0",
-  "heart": "WARN (overuse.strategy, driver.near own lineage, overuse.gate_g)",
-  "surface": "exit 0",
-  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
-  "date": "2026-11-09"
+  "date": "2026-11-11",
+  "checks": "107 of 107",
+  "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart)",
+  "figures_check": "PASS",
+  "effort": "exit 0, careful 40.5, 3 distinct wrong funded sets over 5 shortcuts, 8 golden-family variants and 6 perturbations on the golden's side",
+  "voice_check": "PASS (815 characters)",
+  "audit_containers": "exit 0"
  },
  "zips": {
-  "target.zip": "6deffed9ceb38157a1f7579ddecd068ec39b2d18f98b429dc74c400ab98748f8",
-  "golden.zip": "97def1b903b90b7d4a2a8216379f65edbc7ae2c8e38a02766cd97b5e7633e82b"
+  "target.zip": "5231b1fb3e29fbc65f91a253ffc01e2751362fd05a0d2ec0a1b9d29c2f35953d",
+  "golden.zip": "86668f64581a1ddebc8b72a73ecc7753578037c1036fde89ad83635253d90e50"
  },
  "gates_stage5": {
-  "date": "2026-11-10",
-  "checks": "237 of 237",
+  "date": "2026-11-11",
+  "checks": "106 of 106",
   "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
-  "gates_py": "0 FAIL, 4 WARN (precut R1 upstream; voice no rounding sentence at the author's word; leak REVIEW no LEAK; heart WARN as before)",
-  "effort": "careful 46.0, quick 16.8, hint 5 of 15, 4 wrong funded sets",
-  "pdf_readers": "pypdf strict and pymupdf agree on all six PDFs"
+  "gates_py": "0 FAIL, 3 WARN (precut, leak REVIEW, heart; answered in the note)",
+  "effort_check_note": "PASS (careful 40.5, the note agreeing)",
+  "audit_containers": "PASS: 0 FAIL, 0 WARN"
  },
  "level_up": {
   "date": "2026-11-10",

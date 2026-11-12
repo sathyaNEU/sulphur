@@ -71,6 +71,8 @@ def assemble(w):
     P.bid = ["HB-%06d" % x for x in ids]
     P.cust = ["%09d" % x for x in rng.choice(np.arange(100000000, 999999999), N, replace=False)]
     P.district = [DISTRICTS[int(d)] for d in w.district]
+    onums = rng.choice(np.arange(2000000, 2999999), w.n_owners, replace=False)
+    P.owner_no = ["%07d" % x for x in onums]
     streets = {}
     for d in range(len(DISTRICTS)):
         n = 9 + int(rng.integers(0, 8))
@@ -195,10 +197,10 @@ def meter_reads(P):
                 ds = W.season_days(s)
                 d = ds[int(rng.integers(5, len(ds) - 5))]
                 out.append((d, device_on(d), "interim", "customer" if rng.random() < 0.5 else "utility"))
-        # the service team's read at its visit
-        td = w.tune_date[i]
-        if td is not None:
-            out.append((td, device_on(td), "service visit", "utility"))
+        # the service team's read at each of its checks
+        for td in w.visits[i]:
+            if start_day <= td <= days[-1]:
+                out.append((td, device_on(td), "service visit", "utility"))
         for d, dv, why, by in sorted(out, key=lambda x: (x[0], x[2] != "meter removed")):
             if d < start_day - dt.timedelta(days=1):
                 continue
@@ -273,10 +275,11 @@ def write_register(P, target):
     rows = []
     for i in np.argsort(P.bid):
         rows.append([P.bid[i], P.address[i], P.postcode[int(w.district[i])], P.district[i], TYPE_LABEL[W.TYPES[w.typ[i]]],
-                     float(w.area[i, -1]), int(P.built[i]), P.cust[i]])
+                     float(w.area[i, -1]), int(P.built[i]), P.cust[i], P.owner_no[int(w.owner[i])]])
     wb = Workbook()
     wb_sheet(wb, "buildings", ["building_id", "address", "postcode", "district", "use", "heated_floor_area_m2",
-                               "year_built", "customer_number"], rows, [12, 26, 9, 20, 12, 12, 10, 14], first=True)
+                               "year_built", "customer_number", "owner_number"], rows, [12, 26, 9, 20, 12, 12, 10, 14, 12],
+             first=True)
     path = os.path.join(target, "buildings_register_2026.xlsx")
     wb.save(path)
     office(path, "Stadtwerke Haldenau", "2026-06-15T07:40:00Z", "2026-06-15T07:52:00Z")
@@ -324,13 +327,13 @@ def write_pilot(P, target):
             wd = ymd(W.DRAW_DATE + dt.timedelta(days=int(rng.integers(3, 45))))
         elif w.works[i]:
             done = ymd(w.done_date[i])
-        rows.append(["P19-%04d" % n, P.bid[i], ymd(ans), w.measure[i], contractor(w, i, W.PILOT),
-                     float(w.cost[W.PILOT][i]), float(w.grant[W.PILOT][i]), "drawn" if w.drawn[i] else "not drawn", wd,
-                     done])
+        rows.append(["P19-%04d" % n, P.owner_no[int(w.owner[i])], P.bid[i], ymd(ans), w.measure[i],
+                     contractor(w, i, W.PILOT), float(w.cost[W.PILOT][i]), float(w.grant[W.PILOT][i]),
+                     "drawn" if w.drawn[i] else "not drawn", wd, done])
     wb = Workbook()
-    wb_sheet(wb, "responses", ["response_no", "building_id", "received", "measure", "contractor", "quoted_cost_eur",
-                             "grant_eur", "draw_8_july_2019", "withdrawn", "works_completed"], rows,
-             [11, 12, 11, 20, 30, 14, 11, 16, 11, 14], first=True)
+    wb_sheet(wb, "responses", ["response_no", "owner_number", "building_id", "received", "measure", "contractor",
+                             "quoted_cost_eur", "grant_eur", "draw_8_july_2019", "withdrawn", "works_completed"], rows,
+             [11, 12, 12, 11, 20, 30, 14, 11, 16, 11, 14], first=True)
     path = os.path.join(target, "pilot_2019_responses_and_draw.xlsx")
     wb.save(path)
     office(path, "Stadt Haldenau", "2019-07-08T15:05:00Z", "2019-10-07T08:31:00Z")

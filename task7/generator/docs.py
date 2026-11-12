@@ -58,12 +58,13 @@ def climate_plan(target):
            "normalised as Stadtwerke Haldenau normalises it for its benchmarking notices."),
          P("4.4 Appraisal of a round", H2),
          P("An application's lifetime tonnes are the CO2 in the gas its measure's works would save in the building "
-           "applied for over the measure's service life, each year's saving taken on the application's reference "
-           "consumption, at 0.201 tonnes of CO2 per MWh of gas. A measure's saving rate on a round's applications is "
+           "applied for over the measure's service life, against what the building would burn in each of those years "
+           "without them, each year's saving taken on the application's reference consumption, at 0.201 tonnes of CO2 "
+           "per MWh of gas. A measure's saving rate on a round's applications is "
            "their lifetime tonnes as a share of the tonnes their reference consumption carries over the same life. A "
            "measure's grant per tonne in a round is the grant of the round's applications for it divided by their "
-           "lifetime tonnes. The council funds a measure in a round when its grant per tonne is €120 or less, and then "
-           "funds every application for that measure in the round."),
+           "lifetime tonnes. The council funds a measure in a round when its grant per tonne is €120 or less, as the "
+           "committee judges it, and then funds every application for that measure in the round."),
          T(lives, [140, 120]),
          P("4.5 Reference consumption", H2),
          P("An application's reference consumption is the normalised use per square metre printed on the notice that "
@@ -88,11 +89,13 @@ def pilot_rules(target):
            "notice places it in the top fifth of its use type."),
          P("2 How to respond", H2),
          P("An owner responds by 30 June 2019, naming one measure (insulation, heating optimisation or heating controls) "
-           "and enclosing a contractor's quote. The grant is 30 per cent of the quoted cost, at most €40,000."),
+           "for all the buildings the notices offered it and enclosing a contractor's quote for each. The grant is 30 "
+           "per cent of the quoted cost, at most €40,000."),
          P("3 The places", H2),
          P("The pilot's budget funds a little under half of the responses for each measure. Places are drawn by lot "
-           "among the responses for each measure at a public draw at the town hall on 8 July 2019, under the eye of the "
-           "city's legal office. Owners not drawn may apply in a later round."),
+           "among the owners who responded for each measure, an owner who responded for several buildings taking part "
+           "once with all of them, at a public draw at the town hall on 8 July 2019, under the eye of the city's legal "
+           "office, until each measure's places are filled. Owners not drawn may apply in a later round."),
          P("4 The works", H2),
          P("A drawn owner has the works done by 30 September 2019, before the heating season, and sends the "
            "contractor's invoice. The grant is paid on completion; an owner who withdraws loses the place."),
@@ -180,7 +183,12 @@ def heat_plan(target):
            "to individual heat supply. It does not oblige any building to connect."),
          T(rows, [85, 155, 150, 85]),
          P("Owners of gas-heated buildings in the priority areas should weigh a connection before replacing a boiler. "
-           "Elsewhere the plan expects heat pumps to carry most new installations from 2028.")]
+           "Elsewhere the plan expects heat pumps to carry most new installations from 2028."),
+         P("Measures already under way", H2),
+         P("Since 2019 Stadtwerke Haldenau's service team has offered its commercial gas customers free checks, district "
+           "by district: a burner check from August 2019 to March 2022 and, under the state's energy-saving campaign from "
+           "September 2022 to March 2026, a heating check. The campaign closed at the end of March 2026. The council's "
+           "efficiency grants (section 4 of the climate action plan) continue.")]
     path = os.path.join(target, "municipal_heat_plan_2026_summary.pdf")
     officepdf.build(path, s, "Municipal heat plan 2026: summary", "Stadtplanungsamt Haldenau", "Heat plan",
                     "Stadtplanungsamt Haldenau, Kommunale Wärmeplanung, March 2026",
@@ -228,16 +236,12 @@ def committee_request(target):
         "The committee sets the 2026 round at its meeting on 9 July. The May notices carried the offer again, open to 30 "
         "June, and the Climate Protection Office has passed you the applications that came in by 12 June. Your paper goes "
         "out with the agenda on 26 June.",
-        "We set the round on the applications that came in by 12 June: under the climate action plan we fund a measure "
-        "only where its grant per tonne of CO2 on them is €120 or less. The council has budgeted €8.2 million for the "
-        "grants the round pays out this year. If the measures that meet the limit would together pay more than that, we "
-        "fund them from the lowest grant per tonne up, each only where the budget still covers what its applications "
-        "will be paid once the offer has closed and the works are done.",
-        "Before the meeting we need your view of which measures to fund and how sure you are of each, with what the "
-        "pilot showed season by season, the workbook the office will use to issue the grants, and what the round will "
-        "actually pay.",
-        "The plan's annual report also needs the CO2 the pilot's works saved in the season to April 2026, as section 4.6 "
-        "sets it out.",
+        "We set the round on the applications that came in by 12 June. Under the climate action plan we fund a measure "
+        "only where its grant per tonne of CO2 on them is €120 or less, and the committee will only fund one it can be "
+        "confident about: where the upper end of its 90 per cent range, the range your estimate would have if the pilot "
+        "had been drawn again, is €120 or less.",
+        "Before the meeting we need your view of which measures to fund and how sure you are of each, the workbook the "
+        "office will use to issue the grants, and what the round will ask once the offer closes.",
         "With thanks and best wishes,",
         "Magda Peukert"]
     for t in paras:

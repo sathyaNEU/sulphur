@@ -19,7 +19,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
-from reportlab.platypus import KeepTogether, PageBreak, Paragraph, Spacer, Table
+from reportlab.platypus import Image, KeepTogether, PageBreak, Paragraph, Spacer, Table
 
 FONT = "Liberation Sans"
 
@@ -192,6 +192,9 @@ def build(path, story, title, author, subject, footer, created, modified, margin
             sp.paragraph_format.line_spacing = Pt(max(1, fl.height))
         elif isinstance(fl, PageBreak):
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
+        elif isinstance(fl, Image):
+            doc.add_picture(fl.filename, width=Pt(fl.drawWidth))
+            doc.paragraphs[-1].paragraph_format.space_after = Pt(2)
         first = False
     if header:
         hp = sec.header.paragraphs[0]

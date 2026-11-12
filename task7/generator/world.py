@@ -94,8 +94,8 @@ MEASURE_P_2026 = {"office": [0.20, 0.22, 0.58], "retail": [0.27, 0.27, 0.46], "h
 CURVE = {"office": 0.130, "retail": 0.120, "hotel": 0.150, "workshop": 0.120, "care home": 0.160, "restaurant": 0.130}
 CURVE_SD = 0.28
 BALANCE, BALANCE_SD = 0.012, 0.30
-KEEP_BAL, KEEP_BAL_OWNER, KEEP_BAL_SD = 0.03, 0.02, 0.015
-TAU_BAL, TAU_UNBAL = 2.2, 0.5
+KEEP_BAL, KEEP_BAL_OWNER, KEEP_BAL_SD = 0.04, 0.02, 0.015
+TAU_BAL, TAU_UNBAL = 1.5, 0.5
 EFFECT_SD = 0.26                           # log spread of a building's own cut around its expected cut
 # insulation of the roof or top-floor ceiling cuts INS_C of the heating where the roof is as large as the floor, less
 # where there is less roof per floor; controls cut CTRL_C of the heating per unit of the week a building stands empty
@@ -169,12 +169,12 @@ RESUBMIT_P = 0.035                         # a 2026 applicant sends a revised qu
 # second, under the state's energy-saving campaign, from September 2022 to March 2026; an owner takes the check for all
 # its buildings or none; a check tunes the burner (a lasting cut of the whole use) and sets the curve right
 N_DISTRICTS = 42
-VISIT_ROUNDS = [{2020: 14, 2021: 16, 2022: 12}, {2023: 12, 2024: 12, 2025: 12, 2026: 6}]
+VISIT_ROUNDS = [{2020: 14, 2021: 16, 2022: 12}, {2023: 10, 2024: 11, 2025: 11, 2026: 10}]
 VISIT_ACCEPT = [0.70, 0.90]
 TUNE_START = 2020
 BURNER_MEAN, BURNER_SD, BURNER_MAX = 0.012, 0.006, 0.03
 CURVE_ROUND = 1                            # the campaign's checks (the second round) also set the heating curve right
-CHECK_LEAVES = 0.25                        # the share of its crept-back excess a campaign check leaves
+CHECK_LEAVES = 0.30                        # the share of its crept-back excess a campaign check leaves
 REPORT_FROM = 2025                         # checks from the 2024/25 winter on recommend balancing in their report
 REPORT_PICK = 2.2                          # how much more often such an owner asks for heating optimisation in 2026
 # buildings change: an extension adds heated floor area from the next season, the new space using about half the gas
@@ -187,7 +187,7 @@ COVID = {2020: {"office": 0.02, "retail": 0.03, "hotel": 0.06, "workshop": 0.01,
          2022: {"office": 0.05, "retail": 0.03, "hotel": 0.08, "workshop": 0.01, "care home": 0.0, "restaurant": 0.08}}
 CRISIS = {2022: 0.020, 2023: 0.140, 2024: 0.110, 2025: 0.090, 2026: 0.072}
 # quoted cost per square metre (median, euro): of roof for insulation, of heated floor for the others; the grant terms
-COST_M2 = {"insulation": 92.0, "heating optimisation": 7.2, "heating controls": 18.0}   # insulation per m2 of roof
+COST_M2 = {"insulation": 92.0, "heating optimisation": 4.85, "heating controls": 18.0}   # insulation per m2 of roof
 COST_SD = 0.22
 GRANT_SHARE, GRANT_CAP = 0.30, 40000.0
 # the contractors: a quote for roof insulation comes from a roofer, one for heating optimisation or controls from a

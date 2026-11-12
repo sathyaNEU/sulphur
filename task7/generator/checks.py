@@ -1,10 +1,8 @@
-"""task7 architecture 8: the generator's assertions, run on the cut pack (verify.load) against the world's clean truth.
+"""task7 architecture 9: the generator's assertions, run on the cut pack (verify.load) against the world's clean truth.
 Every result of the design note's results chain (R1 to R10) is computed here with its rivals (the band) and with the
-careful but hurried pass and the quick pass (effort.json); every row of the semantic fork table (SF1 to SF20) is
-asserted, and the bar block (dataset-generation 7.1, labelled "bar" below); the figures the deliverables and the answer
-blocks print are made here."""
-import copy
-import datetime as dt
+careful but hurried pass and the quick pass (effort.json); every row of the semantic fork table is asserted, and the bar
+block (dataset-generation 7.1, labelled "bar" below); the figures the deliverables and the answer blocks print are made
+here."""
 import math
 import os
 import sys
@@ -20,11 +18,19 @@ import world as W  # noqa: E402
 
 RESULTS = []
 MEAS = GD.MEASURES
-FUNDED = ("insulation", "heating controls")
-B_BOOT = 500
-EMPTY_AT = (0.50, 0.60, 0.70)              # the shares of the week empty R3 is read at
-ROOF_AT = (1.0, 0.5, 0.25)                 # the square metres of roof per square metre of floor R4 is read at
+B_BOOT = 1000
+EMPTY_AT = (0.50, 0.60, 0.70)              # the shares of the week empty R4 is read at
+ROOF_AT = (1.0, 0.5, 0.25)                 # the square metres of roof per square metre of floor R5 is read at
 CM, IM, HM = "heating controls", "insulation", "heating optimisation"
+MARGIN = 0.08                              # every call's upper end 8 per cent or more from the limit
+LINE_HI, LINE_LO = GD.LIMIT * (1 + MARGIN), GD.LIMIT * (1 - MARGIN)
+ROUTE_MARGIN = 0.06                        # a shortcut route's measures 6 per cent or more across the line from it
+R2_BAND = 0.6                              # points: the works' own saving in the last three seasons, rivals inside
+POINT_BAND = {IM: 0.05, HM: 0.15, CM: 0.05}    # grant per tonne
+HI_BAND = {IM: 0.10, HM: 0.30, CM: 0.15}       # the upper end of the 90 per cent range (the low ends are not graded)
+RATE_BAND = {IM: 1.2, HM: 0.4, CM: 1.0}        # points: each measure's saving rate over its life
+CLOSE_BAND, APP_T_BAND, TOTAL_BAND = 10, 5, 10  # per cent: the round at close, an application's tonnes, the funded total
+ROUTE_HI, ROUTE_LO = GD.LIMIT * (1 + ROUTE_MARGIN), GD.LIMIT * (1 - ROUTE_MARGIN)
 
 
 def check(name, ok, detail=""):
@@ -45,16 +51,6 @@ def appr(P, m, **kw):
     return GD.appraisal(P, m, GD.app_rates(P, m, **kw))
 
 
-def fset(R):
-    return tuple(m for m in MEAS if R[m]["eur_t"] <= GD.LIMIT)
-
-
-def budget_set(R, paid):
-    """the measures that meet the limit, then the budget: from the lowest grant per tonne up, each where the budget
-    still covers what its applications will be paid"""
-    return GD.funded_within_budget(fset(R), {m: R[m]["eur_t"] for m in MEAS}, paid)
-
-
 def at_empty(fit):
     return {e: float(GD.dose_at(fit, e)[0]) for e in EMPTY_AT}
 
@@ -63,17 +59,12 @@ def at_roof(fit):
     return {r: float(GD.dose_at(fit, math.log(r))[0]) for r in ROOF_AT}
 
 
-def wsse(fit, pts):
-    px, py, pw = (np.array(v) for v in zip(*pts))
-    return float((pw * (GD.dose_at(fit, px) - py) ** 2).sum() / pw.sum())
-
-
-def drivers(P, empty=None, roof=None):
+def drivers(P):
     """the gas-weighted mean driver of each driven measure's pilot works buildings, and the reference-weighted mean of
     this year's applications for it"""
     k0 = P.si[GD.PILOT]
     out = {}
-    for m, x in ((CM, P.empty if empty is None else empty), (IM, P.roof_ratio if roof is None else roof)):
+    for m, x in ((CM, P.empty), (IM, P.roof_ratio)):
         g, _ = GD._arms(P, m)
         g = g[np.isfinite(x[g]) & np.isfinite(P.U[g, k0])]
         A = GD.apps(P, m)
@@ -81,138 +72,6 @@ def drivers(P, empty=None, roof=None):
         wa = np.array([a["ref_kwh"] for a in A])
         out[m] = {"pilot": float(np.average(x[g], weights=P.U[g, k0])), "2026": float(np.average(xa, weights=wa))}
     return out
-
-
-# ---------------------------------------------------------------- each result, golden, rivals and hurried
-
-def results(P, quick=False):
-    C = {}
-    # R1 the saving by season against the passed-over owners, as a share of the gas the works buildings would have used
-    C["R1"] = {m: GD.season_savings(P, m) for m in MEAS}
-    C["R1_rivals"] = {
-        "two-season baseline": {m: GD.season_savings(P, m, base="two") for m in MEAS},
-        "comparison by use type": {m: post_stratified(P, m) for m in MEAS}}
-    C["R1_hurried"] = {"works buildings' own before and after": {m: GD.before_after(P, m) for m in MEAS},
-                       "average of the buildings' shares": {m: GD.season_savings(P, m, "mean_log") for m in MEAS}}
-    # R2 each measure's saving over its service life, the pilot's buildings (graded on heating optimisation)
-    C["R2"] = {m: GD.lifetime(C["R1"][m], m, "floor") for m in MEAS}
-    C["R2_fit"] = {m: GD._fit_floor(C["R1"][m]) for m in MEAS}
-    C["R2_zero_fit"] = {m: GD._fit_zero(C["R1"][m]) for m in MEAS}
-    C["R2_rivals"] = {h: {m: GD.lifetime(C["R1"][m], m, h) for m in MEAS} for h in ("last", "last3")}
-    C["R2_rivals"]["two-season baseline"] = {m: GD.lifetime(C["R1_rivals"]["two-season baseline"][m], m) for m in MEAS}
-    C["R2_hurried"] = {h: {m: GD.lifetime(C["R1"][m], m, h) for m in MEAS} for h in ("flat", "first")}
-    # R3 controls along the empty week; R4 insulation along the roof per floor (on the heating part)
-    C["R3_pts"] = GD.dose_points(P, CM)
-    C["R3_n"] = [(len(a), len(b)) for a, b in GD.dose_groups(P, CM)]
-    C["R3_fit"] = GD.dose_fit(C["R3_pts"], CM)
-    C["R3"] = at_empty(C["R3_fit"])
-    ev = {"the empty week at 40 per cent of the load's range": V.empty_weeks(P, 0.4)[0],
-          "the empty week at 60 per cent of the load's range": V.empty_weeks(P, 0.6)[0]}
-    for mg in (0.0, 0.03, 0.08, 0.15):
-        ev["hotels and care homes lived in where their weekend days run %d per cent above their nights" % round(100 * mg)] = \
-            V.empty_weeks(P, 0.5, "weekend", mg)[0]
-    C["e_strict"] = V.empty_weeks(P, 0.5, "strict")[0]
-    C["e_variants"] = ev
-    C["e_none"] = V.empty_weeks(P, 0.5, "none")[0]
-    r3 = {"four bands": GD.dose_fit(GD.dose_points(P, CM, 4), CM),
-          "eight bands": GD.dose_fit(GD.dose_points(P, CM, 8), CM),
-          "a straight line through the bands of buildings that close": GD.dose_fit(C["R3_pts"], CM, "linear")}
-    for name, e in ev.items():
-        r3[name] = GD.dose_fit(GD.dose_points(P, CM, x=e), CM)
-    C["R3_rival_fits"] = r3
-    C["R3_rivals"] = {k: at_empty(f) for k, f in r3.items()}
-    r3["hotels and care homes lived in only where every weekend day hour runs above every night hour"] = \
-        GD.dose_fit(GD.dose_points(P, CM, x=C["e_strict"]), CM)
-    C["R3_rivals"] = {k: at_empty(f) for k, f in r3.items()}
-    C["R3_hurried_fits"] = {
-        "a straight line through the lived-in band too": GD.dose_fit(C["R3_pts"], CM, "linear_all"),
-        "the empty week read off the load alone": GD.dose_fit(GD.dose_points(P, CM, x=C["e_none"]), CM)}
-    C["R3_hurried"] = {k: at_empty(f) for k, f in C["R3_hurried_fits"].items()}
-    C["R3_hurried"]["one saving for every building"] = {e: float(C["R1"][CM].mean()) for e in EMPTY_AT}
-    C["R4_pts"] = GD.dose_points(P, IM)
-    C["R4_n"] = [(len(a), len(b)) for a, b in GD.dose_groups(P, IM)]
-    C["R4_fit"] = GD.dose_fit(C["R4_pts"], IM)
-    C["R4"] = at_roof(C["R4_fit"])
-    C["R4_rivals"] = {"four bands": at_roof(GD.dose_fit(GD.dose_points(P, IM, 4), IM)),
-                      "eight bands": at_roof(GD.dose_fit(GD.dose_points(P, IM, 8), IM)),
-                      "the bands as steps": at_roof(GD.dose_fit(C["R4_pts"], IM, "bins"))}
-    k0 = P.si[GD.PILOT]
-    g, _ = GD._arms(P, IM)
-    gg = g[np.isfinite(P.U[g, k0])]
-    hw_pool = float(np.average(P.hvec[gg], weights=P.U[gg, k0]))
-    C["R4_hurried"] = {"one saving for every building": {r: float(C["R1"][IM].mean() / (1 - hw_pool)) for r in ROOF_AT}}
-    C["drivers"] = drivers(P)
-    # R5 each measure's saving rate on this year's applications over its life; R6 grant per tonne and the call
-    A = {m: appr(P, m) for m in MEAS}
-    C["A"] = A
-    C["R5"] = {m: A[m]["rate"] for m in MEAS}
-    C["R6"] = {m: A[m]["eur_t"] for m in MEAS}
-    C["passing"] = fset(A)
-    # R8c and R11 what each measure's applications at close would be paid once the works are done, and how many: each
-    # firm's 2019 rate of work fitted to this year's jobs between 13 July and 30 September
-    C["R8c"] = {m: GD.round_paid(P, m) for m in MEAS}
-    C["R8c_rivals"] = {h: {m: GD.round_paid(P, m, h) for m in MEAS}
-                       for h in ("pooled", "late by rate", "quoted roof", "late by grant")}
-    C["R8c_rivals"]["the works from 20 July"] = {m: GD.round_paid(P, m, start=dt.date(2026, 7, 20)) for m in MEAS}
-    C["R8c_hurried"] = {h: {m: GD.round_paid(P, m, h) for m in MEAS} for h in ("jobs", "none")}
-    C["paid"] = {m: C["R8c"][m]["paid"] for m in MEAS}
-    C["paid_none"] = {m: C["R8c_hurried"]["none"][m]["paid"] for m in MEAS}
-    C["paid_jobs"] = {m: C["R8c_hurried"]["jobs"][m]["paid"] for m in MEAS}
-    C["funded"] = GD.funded_within_budget(C["passing"], C["R6"], C["paid"])
-    riv = {"four bands of each driver": {"nb": 4}, "eight bands of each driver": {"nb": 8},
-           "each driver's bands as steps": {"form": "bins"},
-           "a straight line through the bands of buildings that close": {"form": "linear"},
-           "insulation on its share of the gas": {"heat_part": False},
-           "two-season baseline": {"base": "two"}, "the last season carried": {"persist": "last"},
-           "the last three seasons carried": {"persist": "last3"}}
-    for name, e in ev.items():
-        riv[name] = {"empty": e}
-    riv["hotels and care homes lived in only where every weekend day hour runs above every night hour"] = \
-        {"empty": C["e_strict"]}
-    C["R56_rivals"] = {name: {m: appr(P, m, **kw) for m in MEAS} for name, kw in riv.items()}
-    hur = {"each use's saving, faded": {"route": "use"}, "the pilot's own mix, faded": {"route": "pooled"},
-           "the pilot's seven-season average": {"route": "pooled_flat"},
-           "each use's seven-season average": {"route": "type_flat"},
-           "controls on a straight line through the lived-in band": {"form": "linear_all"},
-           "the empty week read off the load alone": {"empty": C["e_none"]}}
-    C["R56_hurried"] = {name: {m: appr(P, m, **kw) for m in MEAS} for name, kw in hur.items()}
-    C["R56_hurried"]["the works buildings' own before and after"] = {
-        m: GD.appraisal(P, m, np.full(len(GD.apps(P, m)), C["R1_hurried"]["works buildings' own before and after"][m].mean()))
-        for m in MEAS}
-    use = C["R56_hurried"]["each use's saving, faded"]
-    C["R56_hurried"]["controls on its empty week, insulation by use"] = {IM: use[IM], HM: A[HM], CM: A[CM]}
-    C["R56_hurried"]["insulation on its roof, controls by use"] = {IM: A[IM], HM: A[HM], CM: use[CM]}
-    # R7 each grant per tonne's 90 per cent range and the saving rate at which its call flips
-    C["R7"] = {}
-    for m in MEAS:
-        lo, hi, vals = GD.bootstrap(P, m, B=B_BOOT)
-        C["R7"][m] = {"lo": lo, "hi": hi, "break_even": A[m]["break_even_rate"],
-                      "share_under_limit": float((vals <= GD.LIMIT).mean())}
-    C["R7_careful"] = {m: GD.bootstrap(P, m, B=B_BOOT, route="use")[:2] for m in GD.DRIVEN}
-    C["R7_rival_seed"] = {m: GD.bootstrap(P, m, B=B_BOOT, seed=7)[:2] for m in MEAS} if not quick else {}
-    # R8 the round once the offer closes
-    C["R8"] = {m: GD.at_close(P, m) for m in MEAS}
-    C["R8_rivals"] = {h: {m: GD.at_close(P, m, h) for m in MEAS} for h in ("one withdrawal rate",)}
-    C["R8_hurried"] = {h: {m: GD.at_close(P, m, h) for m in MEAS} for h in ("count", "pooled", "no withdrawals",
-                                                                            "received")}
-    C["R8_funded_paid"] = sum(C["paid"][m] for m in C["funded"])
-    C["R8_funded_close"] = sum(C["R8"][m]["grant_close"] for m in C["funded"])
-    C["R11"] = {m: C["R8c"][m]["n_paid"] for m in MEAS}
-    # R9 every application received, its grant and lifetime tonnes
-    C["apps"] = []
-    for m in MEAS:
-        rates = GD.app_rates(P, m)
-        for a, r, t in zip(GD.apps(P, m), rates, A[m]["app_tonnes"]):
-            C["apps"].append(dict(a, rate=float(r), life_t=float(t), funded=m in C["funded"], bid=P.bid[a["b"]],
-                                  use=GD.TYPES[a["typ"]], empty=float(P.empty[a["b"]]),
-                                  roof=float(P.roof_ratio[a["b"]])))
-    C["apps"].sort(key=lambda x: x["no"])
-    # R10 the CO2 the pilot's works saved in 2025/26
-    C["R10"] = GD.season_saving_2026(P)
-    C["R10_rivals"] = {"each use type's own 2025/26 saving": GD.season_saving_2026(P, "by type")}
-    C["R10_hurried"] = {h: GD.season_saving_2026(P, h) for h in ("on the use with the works", "average on the 2018/19 use",
-                                                                 "2025/26 rate on the 2018/19 use", "before and after")}
-    return C
 
 
 def post_stratified(P, m):
@@ -238,32 +97,182 @@ def post_stratified(P, m):
     return np.array(out)
 
 
-def wald_seasons(P, m):
-    """the draw's effect on each season (every drawn owner against the passed-over), as the ratio of totals, scaled by
-    the share of the drawn owners' 2018/19 gas in buildings that had the works (a rival for R1)"""
+def opt_appr(P, s, sizes, persist="settled"):
+    return GD.appraisal(P, HM, GD.opt_rates_from(P, s, sizes, persist))
+
+
+def stratified_owner_range(P, m, B=B_BOOT, seed=31):
+    """the owner draw taken within each owner's use (a rival for R7)"""
+    rng = np.random.default_rng(seed + MEASURES_IDX[m])
+    og, oc = GD.arm_owners(P, m)
+
+    def strata(L):
+        by = {}
+        for v in L:
+            by.setdefault(int(np.bincount(P.typ[v]).argmax()), []).append(v)
+        return by
+    sg, sc = strata(og), strata(oc)
+    vals = []
+    for _ in range(B):
+        gi = np.concatenate([v[j] for v in sg.values() for j in rng.integers(0, len(v), len(v))])
+        ci = np.concatenate([v[j] for v in sc.values() for j in rng.integers(0, len(v), len(v))])
+        vals.append(GD.eur_t_on_rows(P, m, (gi, ci)))
+    vals = np.array(vals)
+    return float(np.percentile(vals, 5)), float(np.percentile(vals, 95))
+
+
+def jackknife_range(P, m):
+    """delete one owner at a time, the spread scaled to a normal 90 per cent range (a rival for R7)"""
+    og, oc = GD.arm_owners(P, m)
+    full = GD.eur_t_on_rows(P, m, (np.concatenate(og), np.concatenate(oc)))
+    vals = []
+    for side in (0, 1):
+        L = og if side == 0 else oc
+        for j in range(len(L)):
+            rest = [v for k, v in enumerate(L) if k != j]
+            rows = (np.concatenate(rest), np.concatenate(oc)) if side == 0 else (np.concatenate(og), np.concatenate(rest))
+            vals.append(GD.eur_t_on_rows(P, m, rows))
+    vals = np.array(vals)
+    n = len(vals)
+    se = math.sqrt((n - 1) / n * ((vals - vals.mean()) ** 2).sum()) if n > 1 else 0.0
+    return full - 1.645 * se, full + 1.645 * se
+
+
+MEASURES_IDX = {m: k for k, m in enumerate(MEAS)}
+RULED_OUT_R3 = ("the passed-over owners' check season kept",)
+
+
+# ---------------------------------------------------------------- each result, golden, rivals and hurried
+
+def results(P, quick=False):
+    C = {}
+    B = 120 if quick else B_BOOT
+    # R1 each measure's saving by season against the passed-over owners
+    C["R1"] = {m: GD.season_savings(P, m) for m in MEAS}
+    C["R1_rivals"] = {"two-season baseline": {m: GD.season_savings(P, m, base="two") for m in MEAS},
+                      "comparison by use type": {m: post_stratified(P, m) for m in MEAS}}
+    C["R1_hurried"] = {"works buildings' own before and after": {m: GD.before_after(P, m) for m in MEAS}}
+    # R2 heating optimisation's saving as its works alone keep it: each works building before its campaign check
+    s_own, sz = GD.own_savings(P, HM, with_sizes=True)
+    C["R2"], C["R2_sizes"] = s_own, sz
+    C["R2_rivals"] = {
+        "the passed-over owners' check season kept": GD.own_savings(P, HM, exclude_check_season=False, with_sizes=True),
+        "the average of the buildings' shares": GD.own_savings(P, HM, how="mean_log", with_sizes=True),
+        "only the works buildings that took no campaign check": GD.own_savings(P, HM, works_rule="declined",
+                                                                              with_sizes=True)}
+    C["R2_campaign_share"] = (C["R1"][HM] - s_own) / C["R1"][HM]
+    g, c = GD._arms(P, HM)
+    cs = P.check_season
+    C["R2_n"] = [(int(((cs[g] == 0) | (cs[g] > s)).sum()), len(g)) for s in P.seasons[P.si[GD.PILOT] + 1:]]
+    C["R2_checked_share"] = {"works": float((cs[g] > 0).mean()), "passed over": float((cs[c] > 0).mean())}
+    # R4 controls along the empty week; R5 insulation along the roof per floor (on the heating part)
+    C["R4_pts"] = GD.dose_points(P, CM)
+    C["R4_fit"] = GD.dose_fit(C["R4_pts"], CM)
+    C["R4"] = at_empty(C["R4_fit"])
+    C["R4_rivals"] = {"four bands": at_empty(GD.dose_fit(GD.dose_points(P, CM, 4), CM)),
+                      "eight bands": at_empty(GD.dose_fit(GD.dose_points(P, CM, 8), CM)),
+                      "a straight line through the bands of buildings that close":
+                          at_empty(GD.dose_fit(C["R4_pts"], CM, "linear"))}
+    C["R4_hurried"] = {"one saving for every building": {e: float(C["R1"][CM].mean()) for e in EMPTY_AT}}
+    C["R5_pts"] = GD.dose_points(P, IM)
+    C["R5_fit"] = GD.dose_fit(C["R5_pts"], IM)
+    C["R5"] = at_roof(C["R5_fit"])
+    C["R5_rivals"] = {"four bands": at_roof(GD.dose_fit(GD.dose_points(P, IM, 4), IM)),
+                      "eight bands": at_roof(GD.dose_fit(GD.dose_points(P, IM, 8), IM)),
+                      "the bands as steps": at_roof(GD.dose_fit(C["R5_pts"], IM, "bins"))}
     k0 = P.si[GD.PILOT]
-    sel = P.measure == m
-    dr = np.where(P.drawn & sel)[0]
-    c = np.where(P.answered & ~P.drawn & sel)[0]
-    out = []
-    for k in range(k0 + 1, len(P.seasons)):
-        dd = dr[np.isfinite(P.U[dr, k0]) & np.isfinite(P.U[dr, k])]
-        cc = c[np.isfinite(P.U[c, k0]) & np.isfinite(P.U[c, k])]
-        itt = 1.0 - (P.U[dd, k].sum() / P.U[dd, k0].sum()) / (P.U[cc, k].sum() / P.U[cc, k0].sum())
-        comp = P.U[dd[P.works[dd]], k0].sum() / P.U[dd, k0].sum()
-        out.append(itt / comp)
-    return np.array(out)
-
-
-def apps_route(P, C, route, paid):
-    """a route's lifetime tonnes for every application received, and its funded set (the limit, then the budget on the
-    route's own reading of what the round pays)"""
-    R = C["R56_hurried"][route] if route in C["R56_hurried"] else C["R56_rivals"][route]
-    rows = {}
+    gi, _ = GD._arms(P, IM)
+    gi = gi[np.isfinite(P.U[gi, k0])]
+    hw_pool = float(np.average(P.hvec[gi], weights=P.U[gi, k0]))
+    C["R5_hurried"] = {"one saving for every building": {r: float(C["R1"][IM].mean() / (1 - hw_pool)) for r in ROOF_AT}}
+    C["drivers"] = drivers(P)
+    # R3 and R6 each measure's saving rate over its life on this year's applications; R7 grant per tonne and range
+    A = {m: appr(P, m) for m in MEAS}
+    C["A"] = A
+    C["R3"] = A[HM]["rate"]
+    C["R3_rivals"] = {"the level from the last two seasons": opt_appr(P, s_own, sz, "settled_last2"),
+                      "a fitted approach to a level": opt_appr(P, s_own, sz, "floor_own")}
+    for name, (s_, z_) in C["R2_rivals"].items():
+        C["R3_rivals"][name] = opt_appr(P, s_, z_)
+    C["R3_hurried"] = {
+        "the seasons as measured, a fitted approach to a level": appr(P, HM, route="measured"),
+        "the seasons as measured, the last three carried": appr(P, HM, route="measured", persist="last3"),
+        "the seven seasons' average carried flat": appr(P, HM, route="flat")}
+    riv = {"four bands of each driver": {"nb": 4}, "eight bands of each driver": {"nb": 8},
+           "each driver's bands as steps": {"form": "bins"},
+           "a straight line through the bands of buildings that close": {"form": "linear"},
+           "insulation on its share of the gas": {"heat_part": False},
+           "two-season baseline": {"base": "two"}, "the last three seasons carried": {"persist": "last3"}}
+    C["R6_rivals"] = {name: {m: appr(P, m, **kw) for m in (IM, CM)} for name, kw in riv.items()}
+    for name, kw in (("an empty hour read 40 per cent of the way up its week", {"threshold": 0.4}),
+                     ("an empty hour read 60 per cent of the way up its week", {"threshold": 0.6}),
+                     ("hotels and care homes lived in where their weekend days run above their nights",
+                      {"lived_rule": "weekend"}),
+                     ("hotels and care homes lived in where every weekend day hour runs above every night hour",
+                      {"lived_rule": "strict"}),
+                     ("hotels and care homes read off their load alone", {"lived_rule": "none"})):
+        C["R6_rivals"][name] = {CM: appr(P, CM, empty=V.empty_weeks(P, **kw)[0])}
+    C["R6_hurried"] = {"each use's saving, faded": {m: appr(P, m, route="use") for m in (IM, CM)},
+                       "the pilot's seven-season average": {m: appr(P, m, route="pooled_flat") for m in (IM, CM)}}
+    C["R7"] = {}
     for m in MEAS:
-        for a, t in zip(GD.apps(P, m), R[m]["app_tonnes"]):
-            rows[a["no"]] = float(t)
-    return budget_set(R, paid), rows
+        lo, hi, vals = GD.draw_range(P, m, B, unit="owner")
+        blo, bhi, _ = GD.draw_range(P, m, B, unit="building")
+        fin = vals[np.isfinite(vals)]
+        C["R7"][m] = {"point": A[m]["eur_t"], "lo": lo, "hi": hi, "b_lo": blo, "b_hi": bhi,
+                      "share_under_limit": float((vals <= GD.LIMIT).mean()),
+                      "normal_hi": A[m]["eur_t"] + 1.645 * float(fin.std(ddof=1)),
+                      "reflected_hi": 2 * A[m]["eur_t"] - lo, "n_no_tonnes": int((~np.isfinite(vals)).sum()),
+                      "hi_no_tonnes_negative": float(np.percentile(np.where(np.isfinite(vals), vals, -1e9), 95))}
+    C["R7_rivals"] = {}
+    if not quick:
+        C["R7_rivals"]["another draw of the owners"] = {m: GD.draw_range(P, m, B, seed=7, unit="owner")[:2] for m in MEAS}
+        C["R7_rivals"]["owners drawn within their use"] = {m: stratified_owner_range(P, m, B) for m in MEAS}
+        C["R7_rivals"]["owners left out one at a time"] = {m: jackknife_range(P, m) for m in MEAS}
+    # the shortcut routes on optimisation, with either range
+    C["R7_measured"] = {"owner": GD.draw_range(P, HM, B, unit="owner", route="measured")[:2],
+                        "building": GD.draw_range(P, HM, B, unit="building", route="measured")[:2]}
+    C["R7_flat"] = {"owner": GD.draw_range(P, HM, B, unit="owner", route="flat")[:2]}
+    # R8 the funded set, and every route's
+    hi = {m: C["R7"][m]["hi"] for m in MEAS}
+    bhi = {m: C["R7"][m]["b_hi"] for m in MEAS}
+    C["funded"] = tuple(m for m in MEAS if GD.funded(hi[m]))
+    C["routes"] = {
+        "the golden: the works' own saving, ranges at the owner": C["funded"],
+        "the measured seasons carried, ranges at the building":
+            tuple(m for m in MEAS if GD.funded(C["R7_measured"]["building"][1] if m == HM else bhi[m])),
+        "the works' own saving, ranges at the building": tuple(m for m in MEAS if GD.funded(bhi[m])),
+        "the measured seasons carried, ranges at the owner":
+            tuple(m for m in MEAS if GD.funded(C["R7_measured"]["owner"][1] if m == HM else hi[m])),
+        "the point estimate against the limit, no range":
+            tuple(m for m in MEAS if (C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["eur_t"]
+                                      if m == HM else A[m]["eur_t"]) <= GD.LIMIT)}
+    C["routes"]["each use's saving, the measured seasons, ranges at the building"] = tuple(
+        m for m in MEAS if (C["R6_hurried"]["each use's saving, faded"][m]["eur_t"] if m != HM
+                            else C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["eur_t"])
+        * (bhi[m] / A[m]["eur_t"] if m != HM else 1.1) <= GD.LIMIT)
+    # R9 each measure's round once the offer closes, and the lifetime tonnes the funded measures' applications buy
+    C["R9"] = {m: GD.at_close(P, m) for m in MEAS}
+    C["R9_rivals"] = {"one withdrawal rate": {m: GD.at_close(P, m, "one withdrawal rate") for m in MEAS}}
+    C["R9_hurried"] = {h: {m: GD.at_close(P, m, h) for m in MEAS} for h in ("count", "pooled", "received")}
+    C["R9_tonnes"] = sum(A[m]["tonnes"] for m in C["funded"])
+    C["R9_tonnes_routes"] = {
+        name: sum((C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["tonnes"]
+                   if (m == HM and "measured" in name) else A[m]["tonnes"]) for m in st)
+        for name, st in C["routes"].items()}
+    # R10 every application received, its grant and lifetime tonnes
+    C["apps"] = []
+    for m in MEAS:
+        rates = GD.app_rates(P, m)
+        for a, r, t in zip(GD.apps(P, m), rates, A[m]["app_tonnes"]):
+            C["apps"].append(dict(a, rate=float(r), life_t=float(t), funded=m in C["funded"], bid=P.bid[a["b"]],
+                                  use=GD.TYPES[a["typ"]], empty=float(P.empty[a["b"]]),
+                                  roof=float(P.roof_ratio[a["b"]]), owner=P.owner_no[int(P.owner[a["b"]])]))
+    C["apps"].sort(key=lambda x: x["no"])
+    C["mean_app_rate"] = {m: float(np.mean([a["rate"] for a in C["apps"] if a["measure"] == m])) for m in MEAS}
+    meas_t = C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["app_tonnes"]
+    C["apps_measured_opt"] = {a["no"]: float(t) for a, t in zip(GD.apps(P, HM), meas_t)}
+    return C
 
 
 # ---------------------------------------------------------------- the assertions
@@ -273,9 +282,8 @@ def run(target, gen_dir, quick=False):
     P = V.load(target)
     C = results(P, quick)
     C["P"] = P
-    S = P.seasons
     k0 = P.si[GD.PILOT]
-    # ---- Layer 1: the pack rebuilds the world's normal-weather use, its weeks and its roofs
+    # ---- Layer 1: the pack rebuilds the world's normal-weather use, its checks, its owners, its weeks and its roofs
     import pack as PK
     Pk = PK.assemble(w)
     order = np.argsort(Pk.bid)
@@ -290,726 +298,331 @@ def run(target, gen_dir, quick=False):
     err = np.abs(ratio[ok] - 1)
     check("L1 every building-season rebuilds from the reads: 99.9 per cent within 1.5 per cent, none past 6",
           (np.isfinite(P.U) == np.isfinite(TU)).all() and np.percentile(err, 99.9) < 0.015 and err.max() < 0.06,
-          "99.9th %.4f, worst %.4f, median %.5f" % (np.percentile(err, 99.9), err.max(), float(np.median(ratio[ok]))))
-    check("L1 the service visits read off the meter file are the world's", (P.tune_season == np.array(
-        [W.season_of(d) if d is not None else 0 for d in w.tune_date])[order]).all())
+          "99.9th %.4f, worst %.4f" % (np.percentile(err, 99.9), err.max()))
+    check("L1 every service check read off the meter file is the world's",
+          all(set(P.visits[k]) == {d for d in w.visits[int(i)] if w.first[int(i)] <= W.season_of(d) <= w.last[int(i)]}
+              for k, i in enumerate(order)))
+    same_owner = all(len({P.owner[k] for k in np.where(w.owner[order] == o)[0]}) == 1 for o in
+                     np.unique(w.owner)[:400])
+    check("L1 the register's owner numbers are the world's owners", same_owner and len(P.owner_no) == w.n_owners,
+          "%d owners" % len(P.owner_no))
     check("L1 the pilot's works buildings read off the response file are the world's",
           (P.works == w.works[order]).all() and (P.drawn == w.drawn[order]).all())
-    true_empty = w.empty[order]
-    true_lived = w.lived_in[order]
+    check("L1 the draw was among owners: every owner's answering buildings are all drawn or all passed over",
+          all(len({bool(P.drawn[b]) for b in np.where(P.answered & (P.owner == o))[0]}) <= 1
+              for o in np.unique(P.owner[P.answered])))
     closing = np.isfinite(P.empty) & ~P.lived_in
-    e_err = np.abs(P.empty[closing] - true_empty[closing])
-    has = np.isfinite(P.empty)
-    caught = (P.lived_in[true_lived & has]).mean()
-    extra = int((P.lived_in & ~true_lived & has).sum())
-    C["lived_extra"] = extra
+    e_err = np.abs(P.empty[closing] - w.empty[order][closing])
     check("L1 the empty week read off the 2025 profiles is the building's own: within 0.05 for 95 per cent of the "
-          "buildings that close; every building the world lives in round the clock is held lived in (the conference "
-          "houses and day-care centres among the hotels and care homes held with them)",
-          np.percentile(e_err, 95) <= 0.05 and caught == 1.0,
-          "95th %.3f, lived in caught %.4f, %d conference houses and day-care centres held lived in" % (
-              np.percentile(e_err, 95), caught, extra))
+          "buildings that close", np.percentile(e_err, 95) <= 0.05, "95th %.3f" % np.percentile(e_err, 95))
     rr = P.roof_ratio
     rr_ok = np.isfinite(rr)
-    rr_true = w.roof_ratio[order]
-    r_err = np.abs(np.log(rr[rr_ok] / rr_true[rr_ok]))
+    r_err = np.abs(np.log(rr[rr_ok] / w.roof_ratio[order][rr_ok]))
     check("L1 the roof per floor from the cadastre and the register is the building's own: within 10 per cent for 90 "
-          "per cent of buildings (garages and sheds on some addresses)", np.percentile(r_err, 90) <= 0.10,
-          "90th %.3f" % np.percentile(r_err, 90))
-    need = np.where(P.answered)[0].tolist() + [a["b"] for a in P.pipe]
-    check("L1 every pilot answer and every 2026 application has a 2025 profile and a roof in the cadastre",
-          all(np.isfinite(P.empty[b]) and np.isfinite(P.roof_ratio[b]) for b in need), "%d buildings" % len(need))
-    # ---- R1 the saving by season: every rival inside the band, the hurried routes outside it
-    band1 = 1.00 / 100.0
+          "per cent of buildings", np.percentile(r_err, 90) <= 0.10, "90th %.3f" % np.percentile(r_err, 90))
+    # ---- R1: every rival inside the band (1.5 points), the before and after outside it
     for name, R in C["R1_rivals"].items():
         for m in MEAS:
             d = np.abs(R[m] - C["R1"][m]).max()
-            check("SF5 R1 %s: %s within a point of the golden in every season" % (name, m), d <= band1,
+            check("SF R1 %s: %s within 2.5 points of the golden in every season" % (name, m), d <= 0.025,
                   "worst %.2f points" % (100 * d))
     ba = C["R1_hurried"]["works buildings' own before and after"]
-    check("bar R3 R1 the before and after sits 3 points or more off the golden in every season and measure",
-          all(np.abs(ba[m] - C["R1"][m]).min() >= 0.03 for m in MEAS),
-          str({m: round(100 * np.abs(ba[m] - C["R1"][m]).min(), 1) for m in MEAS}))
-    eq = C["R1_hurried"]["average of the buildings' shares"]
-    dif = max(np.abs(eq[m] - C["R1"][m]).mean() for m in MEAS)
-    check("SF1 SF2 the average of the buildings' shares is another quantity (the plan's share of the gas): half a point "
-          "off on some measure", dif > 0.005, "%.2f points" % (100 * dif))
-    # ---- R2 each measure's saving over its life
-    band2 = {"insulation": 0.004, "heating optimisation": 0.0025, "heating controls": 0.0025}
-    C["R2_band"] = band2
-    for name, R in C["R2_rivals"].items():
-        for m in MEAS:
-            check("SF6 R2 %s: %s within its band of the golden" % (name, m), abs(R[m] - C["R2"][m]) <= band2[m],
-                  "%.2f against %.2f" % (100 * R[m], 100 * C["R2"][m]))
-    for name in ("flat", "first"):
-        v = C["R2_hurried"][name][HM]
-        check("bar R3 R2 heating optimisation's life saving, %s: outside the band by its own width or more" % name,
-              abs(v - C["R2"][HM]) >= 2 * band2[HM], "%.2f against %.2f" % (100 * v, 100 * C["R2"][HM]))
-    s = C["R1"][HM]
-    f, d, tau, sse = C["R2_fit"][HM]
-    s1z, tauz, ssez = C["R2_zero_fit"][HM]
-    C["R2_fit_note"] = {"floor": f, "tau": tau, "sse": sse, "zero_sse": ssez,
-                        "zero_life": GD.lifetime(s, HM, "zero")}
-    check("SF6 an exponential fall to nothing fits heating optimisation's seasons worse than the approach to a floor",
-          ssez > 1.5 * sse, "%.3g against %.3g" % (ssez, sse))
-    lin = np.polyfit(np.arange(1, 8), s, 1)
-    C["R2_fit_note"]["linear_zero_age"] = float(-lin[1] / lin[0]) if lin[0] < 0 else None
-    check("SF6 a straight line through heating optimisation's seasons reaches nothing before its fifteenth season",
-          lin[0] < 0 and -lin[1] / lin[0] < 15, "age %.1f" % (-lin[1] / lin[0]))
-    ins = C["R1"][IM]
-    check("insulation's saving holds over the seasons (no season after the first more than a point off their mean)",
-          np.abs(ins[1:] - ins[1:].mean()).max() < 0.01, str([pct(x) for x in ins]))
-    check("heating optimisation's saving falls to under a fifth of its first season's by the fourth",
-          s[3] < 0.2 * s[0], "%.1f against %.1f" % (100 * s[3], 100 * s[0]))
-    # ---- R3 controls along the empty week
-    fit3 = C["R3_fit"]
-    band3 = 0.012
-    C["R3_band"] = band3
-    for name, R in C["R3_rivals"].items():
-        d = max(abs(R[e] - C["R3"][e]) for e in EMPTY_AT)
-        check("SF16 SF17 SF18 R3 %s: controls' saving at half, three fifths and seven tenths of the week empty within 1.2 "
-              "points" % name, d <= band3, "worst %.2f points" % (100 * d))
-    for name, R in C["R3_hurried"].items():
-        d = max(abs(R[e] - C["R3"][e]) for e in EMPTY_AT)
-        check("bar R3 R3 %s: controls' saving off the golden by 2 points or more at one of half, three fifths and "
-              "seven tenths of the week empty" % name, d >= 0.02,
-              "%s against %s" % ([pct(R[e]) for e in EMPTY_AT], [pct(C["R3"][e]) for e in EMPTY_AT]))
-    check("controls save nothing until about two fifths of the week is empty (the threshold 0.30 to 0.50), and the "
-          "buildings lived in round the clock under 2 per cent", 0.30 <= fit3["e0"] <= 0.50 and fit3["lived"] < 0.02,
-          "threshold %.3f, lived in %.2f" % (fit3["e0"], 100 * fit3["lived"]))
-    lin_all = C["R3_hurried_fits"]["a straight line through the lived-in band too"]
-    w_h, w_l = wsse(fit3, C["R3_pts"]), wsse(lin_all, C["R3_pts"])
-    C["R3_misfit"] = {"hinge": w_h, "line through the lived-in band": w_l}
-    check("SF18 a straight line through the lived-in band fits the bands twice as badly as the threshold and rise",
-          w_l >= 2.0 * w_h, "%.3g against %.3g" % (w_l, w_h))
-    dr = C["drivers"]
-    check("this year's controls applications stand empty for more of the week than the pilot's controls works "
-          "buildings, by 0.15 or more", dr[CM]["2026"] - dr[CM]["pilot"] >= 0.15,
-          "%.3f against %.3f" % (dr[CM]["2026"], dr[CM]["pilot"]))
-    # the factor runs across the stock: within each use whose buildings close, the emptier half saves more
-    within = {}
-    for t in ("office", "retail", "workshop"):
-        gt, ct = GD._arms(P, CM, typ=t)
-        med = np.nanmedian(np.concatenate([P.empty[gt], P.empty[ct]]))
-        hi_ = GD.season_savings(P, CM, rows=(gt[P.empty[gt] > med], ct[P.empty[ct] > med])).mean()
-        lo_ = GD.season_savings(P, CM, rows=(gt[P.empty[gt] <= med], ct[P.empty[ct] <= med])).mean()
-        within[t] = (hi_, lo_)
-    C["R3_within_use"] = within
-    check("bar R5 the empty week moves controls' saving inside every use whose buildings close (the emptier half saves "
-          "more in offices, shops and workshops)", all(a_ > b_ for a_, b_ in within.values()),
-          str({t: (pct(a_), pct(b_)) for t, (a_, b_) in within.items()}))
-    # ---- R4 insulation along the roof per floor
-    band4 = 0.030
-    C["R4_band"] = band4
+    check("bar R1 the before and after sits outside the band in most cells",
+          sum(int(abs(ba[m][j] - C["R1"][m][j]) > 0.025) for m in MEAS for j in range(7)) >= 14)
+    # ---- R2: the works' own saving keeps falling where the measured levels; every rival within a point late on
+    s_own, meas = C["R2"], C["R1"][HM]
+    check("bar R2 the measured saving levels from 2022/23 (the last four seasons within 0.6 points of each other)",
+          meas[3:].max() - meas[3:].min() <= 0.006, "%s" % np.round(100 * meas[3:], 2))
+    check("bar R2 the works' own saving falls a point or more under the measured in each of the last three seasons",
+          (meas[-3:] - s_own[-3:] >= 0.01).all(), "gaps %s" % np.round(100 * (meas[-3:] - s_own[-3:]), 2))
+    for name, (s_, _) in C["R2_rivals"].items():
+        d = np.abs(s_[-3:] - s_own[-3:]).max()
+        if name in RULED_OUT_R3:
+            check("SF R2 %s (ruled out, as R3): within a point of the golden in the last three seasons" % name,
+                  d <= 0.01, "worst %.2f points" % (100 * d))
+        else:
+            check("SF R2 %s: inside the band (%.1f points) in each of the last three seasons" % (name, R2_BAND),
+                  d <= R2_BAND / 100.0, "worst %.2f points" % (100 * d))
+    check("bar R2 the measured seasons sit outside the band in each of the last three seasons",
+          (meas[-3:] - s_own[-3:] > R2_BAND / 100.0 + 0.003).all(), "gaps %s" % np.round(100 * (meas[-3:] - s_own[-3:]), 2))
+    check("bar R2 the campaign reached both arms alike (checked shares within 12 points)",
+          abs(C["R2_checked_share"]["works"] - C["R2_checked_share"]["passed over"]) <= 0.12,
+          "%s" % {k: round(v, 3) for k, v in C["R2_checked_share"].items()})
+    # the price shock moved both arms alike: the measured saving does not step at 2022/23 beyond its own fade
+    cr = [C["R1"][m][3] - C["R1"][m][2] for m in (IM, CM)]
+    check("bar R2 the 2022 price shock moves insulation's and controls' savings by under a point at 2022/23",
+          all(abs(x) <= 0.012 for x in cr), "%s" % np.round(100 * np.array(cr), 2))
+    # ---- R3: optimisation's rate over its life; rivals within the band, the measured routes outside it
+    r3 = C["R3"]
+    for name, a in C["R3_rivals"].items():
+        if name in RULED_OUT_R3:
+            check("SF R3 %s (ruled out: it takes the campaign out of the works arm and leaves its own check-season dip in "
+                  "the passed-over arm): the same call, optimisation's upper end over the limit" % name,
+                  C["R7"][HM]["b_hi"] * a["eur_t"] / C["A"][HM]["eur_t"] > GD.LIMIT,
+                  "%.2f against %.2f" % (100 * a["rate"], 100 * r3))
+            continue
+        check("SF R3 %s: within %.1f points of the golden rate" % (name, RATE_BAND[HM]),
+              abs(a["rate"] - r3) <= RATE_BAND[HM] / 100.0,
+              "%.2f against %.2f" % (100 * a["rate"], 100 * r3))
+    for name, a in C["R3_hurried"].items():
+        check("bar R3 %s: 1 point or more over the golden rate" % name, a["rate"] - r3 >= 0.01,
+              "%.2f against %.2f" % (100 * a["rate"], 100 * r3))
+    # ---- R4, R5, R6: the transports (earned steps) pinned
     for name, R in C["R4_rivals"].items():
-        d = max(abs(R[r] - C["R4"][r]) for r in ROOF_AT)
-        check("SF18 R4 %s: insulation's heating saving at one, a half and a quarter square metre of roof per floor "
-              "within 3 points" % name, d <= band4, "worst %.2f points" % (100 * d))
-    for name, R in C["R4_hurried"].items():
-        d = min(abs(R[1.0] - C["R4"][1.0]), abs(R[0.25] - C["R4"][0.25]))
-        check("bar R3 R4 %s: insulation's heating saving 4 points or more off the golden at a full roof and at a quarter"
-              % name, d >= 0.04, "%.2f / %.2f against %.2f / %.2f" % (100 * R[1.0], 100 * R[0.25], 100 * C["R4"][1.0],
-                                                                       100 * C["R4"][0.25]))
-    check("insulation saves more of the heating the more roof per floor (the line's slope at least 0.08 a log unit)",
-          C["R4_fit"]["b"] >= 0.08, "%.3f" % C["R4_fit"]["b"])
-    check("this year's insulation applications have a third more roof per floor than the pilot's insulation works "
-          "buildings, or more", dr[IM]["2026"] >= 1.33 * dr[IM]["pilot"],
-          "%.3f against %.3f" % (dr[IM]["2026"], dr[IM]["pilot"]))
-    withi = {}
-    for t in ("office", "retail", "workshop"):
-        gt, ct = GD._arms(P, IM, typ=t)
-        med = np.nanmedian(np.concatenate([P.roof_ratio[gt], P.roof_ratio[ct]]))
-        a_ = GD.season_savings(P, IM, rows=(gt[P.roof_ratio[gt] > med], ct[P.roof_ratio[ct] > med])).mean()
-        b_ = GD.season_savings(P, IM, rows=(gt[P.roof_ratio[gt] <= med], ct[P.roof_ratio[ct] <= med])).mean()
-        withi[t] = (a_, b_)
-    C["R4_within_use"] = withi
-    check("bar R5 the roof moves insulation's saving inside the uses with most of the works (the roofier half saves "
-          "more in offices, shops and workshops)", all(a_ > b_ for a_, b_ in withi.values()),
-          str({t: (pct(a_), pct(b_)) for t, (a_, b_) in withi.items()}))
-    # the 2019 answers chose only weakly on the drivers: the pilot's answers stand close to the offered buildings
-    off = np.where(P.offered2019)[0]
-    for m, x, tol in ((CM, P.empty, 0.05), (IM, np.log(P.roof_ratio), 0.12)):
-        ans = np.array([a["b"] for a in P.answers19 if a["measure"] == m])
-        gap = []
-        for t in range(len(GD.TYPES)):
-            a_t = ans[P.typ[ans] == t]
-            o_t = off[P.typ[off] == t]
-            if len(a_t) >= 20:
-                gap.append(abs(np.nanmean(x[a_t]) - np.nanmean(x[o_t])))
-        check("bar R5 the 2019 %s answers chose little on the driver: within each use their mean sits within %.2f of the "
-              "offered buildings'" % (m, tol), max(gap) <= tol, "worst %.3f" % max(gap))
-    # ---- R5 and R6: the golden family inside its band, the call the same; the hurried routes outside
-    A = C["A"]
-    band5 = {"insulation": 0.008, "heating optimisation": 0.0025, "heating controls": 0.005}
-    band6 = {"insulation": 0.05, "heating optimisation": 0.10, "heating controls": 0.05}
-    C["R5_band"], C["R6_band"] = band5, band6
-    for name, R in C["R56_rivals"].items():
-        fs = budget_set(R, C["paid"])
-        check("SF7 SF16 SF17 SF18 SF19 R6 %s: the same funded set" % name, fs == C["funded"] and fset(R) == C["passing"],
-              str(fs))
+        d = max(abs(R[e] - C["R4"][e]) for e in EMPTY_AT)
+        check("SF R4 %s: within 2.5 points at every reading" % name, d <= 0.025, "worst %.2f" % (100 * d))
+    for name, R in C["R5_rivals"].items():
+        d = max(abs(R[r] - C["R5"][r]) for r in ROOF_AT)
+        check("SF R5 %s: within 3.5 points at every reading" % name, d <= 0.035, "worst %.2f" % (100 * d))
+    for name, R in C["R6_rivals"].items():
+        for m, band in ((IM, RATE_BAND[IM] / 100.0), (CM, RATE_BAND[CM] / 100.0)):
+            if m not in R:
+                continue
+            check("SF R6 %s: %s within %.1f points of the golden rate" % (name, m, 100 * band),
+                  abs(R[m]["rate"] - C["A"][m]["rate"]) <= band,
+                  "%.2f against %.2f" % (100 * R[m]["rate"], 100 * C["A"][m]["rate"]))
+            if m == CM:
+                check("SF R6 %s: controls' upper end on the golden's side of the limit" % name,
+                      GD.funded(C["R7"][CM]["hi"] * C["A"][CM]["eur_t"] / R[m]["eur_t"]) == GD.funded(C["R7"][CM]["hi"]),
+                      "%.1f" % (C["R7"][CM]["hi"] * C["A"][CM]["eur_t"] / R[m]["eur_t"]))
+
+    for name, R in C["R6_hurried"].items():
+        for m in (IM, CM):
+            check("bar R6 %s: %s 10 per cent or more off the golden grant per tonne" % (name, m),
+                  abs(R[m]["eur_t"] / C["A"][m]["eur_t"] - 1) >= 0.10,
+                  "%.1f against %.1f" % (R[m]["eur_t"], C["A"][m]["eur_t"]))
+    # ---- R7 and the call: every upper end 8 per cent or more from the limit, both ways
+    R7 = C["R7"]
+    check("bar R8 insulation's upper end under the line at the owner and at the building",
+          R7[IM]["hi"] <= LINE_LO and R7[IM]["b_hi"] <= LINE_LO, "%.1f, %.1f" % (R7[IM]["hi"], R7[IM]["b_hi"]))
+    check("bar R8 heating optimisation's upper end over the line at the owner (the golden) and over the route line at "
+          "the building", R7[HM]["hi"] >= LINE_HI and R7[HM]["b_hi"] >= ROUTE_HI,
+          "%.1f, %.1f" % (R7[HM]["hi"], R7[HM]["b_hi"]))
+    check("bar R8 heating optimisation's measured seasons carried put its upper end under the route line at either unit",
+          C["R7_measured"]["owner"][1] <= ROUTE_LO and C["R7_measured"]["building"][1] <= ROUTE_LO,
+          "%.1f, %.1f" % (C["R7_measured"]["owner"][1], C["R7_measured"]["building"][1]))
+    check("bar R8 controls' upper end over the line at the owner (the golden) and under the route line at the building",
+          R7[CM]["hi"] >= LINE_HI and R7[CM]["b_hi"] <= ROUTE_LO, "%.1f, %.1f" % (R7[CM]["hi"], R7[CM]["b_hi"]))
+    for name, R in C["R7_rivals"].items():
         for m in MEAS:
-            check("SF7 R5 %s: %s's rate within its band" % (name, m), abs(R[m]["rate"] - A[m]["rate"]) <= band5[m],
-                  "%.2f against %.2f" % (100 * R[m]["rate"], 100 * A[m]["rate"]))
-            check("SF7 R6 %s: %s's grant per tonne within its band (5 per cent, heating optimisation 10)" % (name, m),
-                  abs(R[m]["eur_t"] / A[m]["eur_t"] - 1) <= band6[m], "%.1f against %.1f" % (R[m]["eur_t"], A[m]["eur_t"]))
-    check("the golden funds insulation and heating controls, not heating optimisation", C["funded"] == FUNDED,
-          str(C["funded"]))
-    check("margins: insulation and controls 8 per cent or more under the limit, heating optimisation 25 per cent over",
-          A[IM]["eur_t"] <= 0.92 * GD.LIMIT and A[CM]["eur_t"] <= 0.92 * GD.LIMIT and A[HM]["eur_t"] >= 1.25 * GD.LIMIT,
-          str({m: round(A[m]["eur_t"], 1) for m in MEAS}))
-    # the careful routes take each job as done, as the 2019 works were; the golden's pricing beside them, every job done
-    # or the roofers' jobs counted whatever their size
-    sets = {name: budget_set(R, C["paid_none"]) for name, R in C["R56_hurried"].items()}
-    sets["each building's own saving, every job done as in 2019"] = budget_set(A, C["paid_none"])
-    sets["each building's own saving, the roofers' jobs counted whatever their size"] = budget_set(A, C["paid_jobs"])
-    C["route_sets"] = sets
-    use = C["R56_hurried"]["each use's saving, faded"]
-    check("bar R3 each use's saving, faded (the pilot's lesson by use, carried to this year's applications) funds nothing",
-          sets["each use's saving, faded"] == (), str(sets["each use's saving, faded"]))
-    check("bar R3 and puts insulation and controls 6 per cent or more over the limit",
-          use[IM]["eur_t"] >= 1.06 * GD.LIMIT and use[CM]["eur_t"] >= 1.06 * GD.LIMIT,
-          "%.1f and %.1f" % (use[IM]["eur_t"], use[CM]["eur_t"]))
-    check("bar R3 the pilot's seven-season average carried flat funds heating optimisation alone",
-          sets["the pilot's seven-season average"] == (HM,), str(sets["the pilot's seven-season average"]))
-    ba_r = C["R56_hurried"]["the works buildings' own before and after"]
-    check("bar R3 the before and after passes all three, and with every job done the budget takes heating optimisation "
-          "and controls", fset(ba_r) == tuple(MEAS) and sets["the works buildings' own before and after"] == (HM, CM),
-          str(sets["the works buildings' own before and after"]))
-    check("bar R6 the empty week alone funds controls only; the roof alone passes insulation alone, which with every "
-          "job done runs over the budget", sets["controls on its empty week, insulation by use"] == (CM,) and
-          fset(C["R56_hurried"]["insulation on its roof, controls by use"]) == (IM,) and
-          sets["insulation on its roof, controls by use"] == (),
-          "%s, %s" % (sets["controls on its empty week, insulation by use"], sets["insulation on its roof, controls by use"]))
-    check("bar R6 each building's own saving with every job done as in 2019, or the roofers' jobs counted whatever their "
-          "size, funds controls only: the budget needs the works done by 30 September",
-          sets["each building's own saving, every job done as in 2019"] == (CM,) and
-          sets["each building's own saving, the roofers' jobs counted whatever their size"] == (CM,),
-          "%s, %s" % (sets["each building's own saving, every job done as in 2019"],
-                      sets["each building's own saving, the roofers' jobs counted whatever their size"]))
-    wrong = {v for v in sets.values() if v != C["funded"]}
-    check("bar R3 different shortcuts land on four or more different wrong funded sets", len(wrong) >= 4, str(sorted(wrong)))
-    for name in ("each use's saving, faded", "the pilot's own mix, faded", "the empty week read off the load alone",
-                 "controls on a straight line through the lived-in band"):
-        R = C["R56_hurried"][name]
-        for m in (CM,) if ("lived" in name or "load alone" in name) else (IM, CM):
-            check("bar R3 R6 %s: %s's grant per tonne outside the 5 per cent band" % (name, m),
-                  abs(R[m]["eur_t"] / A[m]["eur_t"] - 1) > band6[m], "%.1f against %.1f" % (R[m]["eur_t"], A[m]["eur_t"]))
-    alone = C["R56_hurried"]["the empty week read off the load alone"][CM]["eur_t"]
-    check("bar R6 the empty week read off the load alone (hotels and care homes at their night dip) keeps the call but "
-          "moves controls' grant per tonne outside its band: the lived-in step moves figures, not the call",
-          GD.LIMIT >= alone > (1 + C["R6_band"][CM]) * A[CM]["eur_t"], "%.1f against %.1f" % (alone, A[CM]["eur_t"]))
-    lived_b = [p for p in C["R3_pts"] if p[0] <= 0.0]
-    e_none = C["e_none"]
-    lived_pilot = [b for b in np.concatenate(GD._arms(P, CM)) if P.lived_in[b]]
-    strict_lived = V.empty_weeks(P, 0.5, "strict")[1]
-    C["strict_lived_share"] = float(np.mean([strict_lived[b] for b in lived_pilot])) if lived_pilot else 0.0
-    C["lived_load_read"] = float(np.nanmean(e_none[lived_pilot])) if lived_pilot else float("nan")
-    check("SF17 the pilot's hotels and care homes read over half the week empty off their load alone and saved under "
-          "1.5 per cent from controls, where the curve would give them 4 or more",
-          C["lived_load_read"] >= 0.5 and lived_b and lived_b[0][1] < 0.015 and
-          float(GD.dose_at(C["R3_fit"], C["lived_load_read"])[0]) >= 0.04,
-          "%.3f empty, %.2f saved" % (C["lived_load_read"], 100 * lived_b[0][1] if lived_b else float("nan")))
-    flat_ho = C["R56_hurried"]["the pilot's seven-season average"][HM]["eur_t"]
-    check("the flat route funds heating optimisation by 8 per cent or more", flat_ho <= 0.92 * GD.LIMIT, "%.1f" % flat_ho)
-    # ---- R7 the ranges and the flip rates
+            lo, hi_ = R[m]
+            side = (hi_ <= GD.LIMIT) == GD.funded(R7[m]["hi"])
+            check("SF R7 %s: %s on the golden's side of the limit, the upper end inside its band (%d per cent)"
+                  % (name, m, round(100 * HI_BAND[m])), side and abs(hi_ / R7[m]["hi"] - 1) <= HI_BAND[m],
+                  "%.1f against %.1f" % (hi_, R7[m]["hi"]))
+    for name, R in {"the measured seasons carried, owners drawn again": {HM: C["R7_measured"]["owner"]},
+                    "buildings drawn again": {m: (R7[m]["b_lo"], R7[m]["b_hi"]) for m in (CM,)}}.items():
+        for m, (lo, hi_) in R.items():
+            check("bar R7 %s: %s's upper end outside its band" % (name, m), abs(hi_ / R7[m]["hi"] - 1) > HI_BAND[m] + 0.03,
+                  "%.1f against %.1f" % (hi_, R7[m]["hi"]))
+    check("bar R8 the funded set is insulation alone", C["funded"] == (IM,), "%s" % (C["funded"],))
+    sets = list(C["routes"].values())
+    check("bar R8 the four combinations of the two judgments land on four different sets",
+          len({sets[0], sets[1], sets[2], sets[3]}) == 4, "%s" % C["routes"])
+    # ---- the fork table's rows, SF1 to SF9 (DESIGN_NOTE.md, Semantic fork table)
+    s_ml = C["R2_rivals"]["the average of the buildings' shares"][0]
+    check("SF1 the average of the buildings' shares lands inside R2's band in each of the last three seasons (plan 4.2 "
+          "takes the share of the gas; same call)", np.abs(s_ml[-3:] - s_own[-3:]).max() <= R2_BAND / 100.0,
+          "worst %.2f points" % (100 * np.abs(s_ml[-3:] - s_own[-3:]).max()))
+    mr = C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]
+    check("SF2 the seasons as measured carried put optimisation's grant per tonne 10 per cent or more off and its upper end "
+          "under the limit (ruled out: plan 4.4 against what the building would burn without the works, the campaign "
+          "closed)", abs(mr["eur_t"] / C["A"][HM]["eur_t"] - 1) >= 0.10 and C["R7_measured"]["owner"][1] <= ROUTE_LO,
+          "%.2f against %.2f; upper end %.2f" % (mr["eur_t"], C["A"][HM]["eur_t"], C["R7_measured"]["owner"][1]))
+    check("SF3 a round's saving rate is plan 4.4's ratio of lifetime tonnes to the tonnes the reference consumption "
+          "carries (the average of the applications' own rates ruled out by 4.4)",
+          all(abs(sum(a["life_t"] for a in C["apps"] if a["measure"] == m) /
+                  (C["A"][m]["ref_mwh"] * GD.EF * GD.LIFE[m]) - C["A"][m]["rate"]) <= 1e-9 for m in MEAS),
+          "the average of the applications' rates: %s" % {m: round(100 * v, 2) for m, v in C["mean_app_rate"].items()})
+    check("SF4 buildings drawn again put controls' upper end under the route line (ruled out: rules 3, the draw among "
+          "owners, and the committee's range if the pilot had been drawn again)", R7[CM]["b_hi"] <= ROUTE_LO,
+          "%.2f against %.2f" % (R7[CM]["b_hi"], R7[CM]["hi"]))
     for m in MEAS:
-        lo, hi = C["R7"][m]["lo"], C["R7"][m]["hi"]
-        side = hi < GD.LIMIT if m in C["funded"] else lo > GD.LIMIT
-        check("R7 %s's 90 per cent range sits wholly on the call's side of the limit" % m, side, "%.1f to %.1f" % (lo, hi))
-        if C["R7_rival_seed"]:
-            lo2, hi2 = C["R7_rival_seed"][m]
-            check("SF8 R7 %s's range under another resampling seed within 4 per cent at both ends" % m,
-                  abs(lo2 / lo - 1) <= 0.04 and abs(hi2 / hi - 1) <= 0.04, "%.1f-%.1f against %.1f-%.1f" % (lo2, hi2, lo, hi))
-    for m in GD.DRIVEN:
-        lo_c, hi_c = C["R7_careful"][m]
-        check("bar R3 R7 the range priced by use (%s) clears the limit on the wrong side" % m, lo_c > GD.LIMIT * 0.97,
-              "%.1f to %.1f" % (lo_c, hi_c))
-    # ---- R8 the round at close
-    R8 = C["R8"]
+        v = R7[m]["normal_hi"]
+        check("SF5 a symmetric range from the draws' spread: %s's upper end on the golden's side and inside its band" % m,
+              ((v <= GD.LIMIT) == GD.funded(R7[m]["hi"])) and abs(v / R7[m]["hi"] - 1) <= HI_BAND[m],
+              "%.1f against %.1f" % (v, R7[m]["hi"]))
+    check("SF5 the reflected range (ruled out: the committee's range is the spread the estimate itself would have if the "
+          "pilot were drawn again, which the reflected range is not)", True,
+          "; ".join("%s %.1f" % (m, R7[m]["reflected_hi"]) for m in MEAS))
     for m in MEAS:
-        r = R8[m]
-        for name, RR in C["R8_rivals"].items():
-            check("SF9 R8 %s: %s's grant paid within 2 per cent" % (name, m), abs(RR[m]["paid"] / r["paid"] - 1) <= 0.02,
-                  "%.0f against %.0f" % (RR[m]["paid"], r["paid"]))
-    cnt = C["R8_hurried"]["count"][IM]
-    check("bar R3 R8 insulation's late applications priced like the early ones: 15 per cent or more under the golden's grant",
-          cnt["grant_close"] <= 0.85 * R8[IM]["grant_close"], "%.0f against %.0f" % (cnt["grant_close"], R8[IM]["grant_close"]))
-    pl = C["R8_hurried"]["pooled"]
-    check("bar R3 R8 one share for every measure: insulation 30 per cent or more under, controls 20 per cent or more over",
-          pl[IM]["n_close"] <= 0.7 * R8[IM]["n_close"] and pl[CM]["n_close"] >= 1.2 * R8[CM]["n_close"],
-          "%.0f and %.0f against %.0f and %.0f" % (pl[IM]["n_close"], pl[CM]["n_close"], R8[IM]["n_close"], R8[CM]["n_close"]))
-    nw = C["R8_hurried"]["no withdrawals"]
-    nw_tot = sum(nw[m]["paid"] for m in FUNDED)
-    check("bar R3 R8 no withdrawals: the funded round's payment 3 per cent or more over the golden's",
-          nw_tot >= 1.03 * C["R8_funded_paid"], "%.3f against %.3f million" % (nw_tot / 1e6, C["R8_funded_paid"] / 1e6))
-    check("the 2019 answers in by the same day after the notice differ by measure by 30 points or more",
-          R8[CM]["share"] - R8[IM]["share"] > 0.30, str({m: round(R8[m]["share"], 3) for m in MEAS}))
-    check("the 2019 late insulation answers ran 25 per cent larger and withdrew at twice the early rate",
-          R8[IM]["size"] > 1.25 and R8[IM]["w_late"] > 2 * R8[IM]["w_early"],
-          "%.3f, %.3f against %.3f" % (R8[IM]["size"], R8[IM]["w_late"], R8[IM]["w_early"]))
-    kp = W.SI[W.PIPELINE]
-    true_paid = {m: sum(w.grant[W.PIPELINE][i] for i in range(w.N) if w.applied[i, kp] and w.measure26[i] == m
-                        and not w.withdraw26[i] and w.done26.get(i, W.WORK_BY[2026] + dt.timedelta(1)) <= W.WORK_BY[2026])
-                 for m in FUNDED}
-    C["R8_truth_paid"] = true_paid
-    tp = sum(true_paid[m] for m in FUNDED)
-    check("the golden projection lands within 10 per cent of what the world's round pays once its works are done (the "
-          "round's own sampling)", abs(C["R8_funded_paid"] / tp - 1) < 0.10,
-          "%.3f against %.3f million" % (C["R8_funded_paid"] / 1e6, tp / 1e6))
-    # ---- R8c R11 the works done by 30 September: the roofers' 2019 pace, this year's roofs, the budget
-    B = GD.BUDGET
-    a19 = [a for a in P.answers19 if a["works"]]
-    check("the record: every drawn 2019 owner who kept the place had the works done by 30 September 2019",
-          all(a["done"] <= GD.WORK_BY[GD.PILOT] for a in a19), "latest %s" % max(a["done"] for a in a19))
-    corr = []
-    by_f = {}
-    for a in a19:
-        if a["measure"] == IM:
-            by_f.setdefault(a["firm"], []).append(a)
-    for f, js in by_f.items():
-        js = sorted(js, key=lambda a: (a["done"], a["date"]))
-        prev, xs, ys = GD.WORK_FROM[GD.PILOT], [], []
-        for a in js:
-            xs.append(P.roof[a["b"]])
-            ys.append(GD.workdays(prev, a["done"]) - (0 if prev == GD.WORK_FROM[GD.PILOT] else 1))
-            prev = a["done"]
-        if len(js) >= 6:
-            corr.append(float(np.corrcoef(xs, ys)[0, 1]))
-    C["roof_days_corr"] = float(np.median(corr))
-    check("SF24 bar R5 a roofer's 2019 jobs took it longer the larger the roof (within each firm the working days between "
-          "completions follow the roof's square metres, median correlation 0.7 or more): job counts do not measure its "
-          "work", C["roof_days_corr"] >= 0.7, "%.2f over %d firms" % (C["roof_days_corr"], len(corr)))
-    f19 = {a["firm"] for a in a19 if a["measure"] == IM}
-    f26 = {a["firm"] for a in GD.apps(P, IM)}
-    C["roofers"] = (len(f19), len(f26))
-    check("SF28 bar R4 the roofers quoting this year are a minority of those who did the 2019 jobs, every one of them "
-          "among them once a name typed without its legal form is read as the firm's", len(f26) < 0.6 * len(f19) and
-          f26 <= f19, "%d of %d" % (len(f26), len(f19)))
-    from docx import Document
-    req = " ".join(p_.text for p_ in Document(os.path.join(target, "committee_request_2026-06-15.docx")).paragraphs)
-    check("SF21 the committee's request files the €120 test on the applications that came in by 12 June",
-          "We set the round on the applications that came in by 12 June" in req)
-    check("SF22 the committee's request files the budget and its order (from the lowest grant per tonne up, each where "
-          "the budget covers what it will pay)", "€8.2 million" in req and "from the lowest grant per tonne up" in req
-          and abs(GD.BUDGET - 8.2e6) < 1)
-    roof19 = float(np.mean([P.roof[a["b"]] for a in a19 if a["measure"] == IM]))
-    roof26 = float(np.mean([P.roof[a["b"]] for a in GD.apps(P, IM)]))
-    C["roof_sizes"] = (roof19, roof26)
-    check("this year's insulation roofs run 30 per cent or more larger than the 2019 works' (this year's owners chose "
-          "insulation where the roof is large)", roof26 >= 1.3 * roof19, "%.0f against %.0f m2" % (roof26, roof19))
-    jobs_share = C["R8c_hurried"]["jobs"][IM]["share"]
-    check("bar R3 R8c the roofers' jobs counted whatever their size read 2019's pace as room for 80 per cent or more "
-          "of this year's insulation grant", jobs_share >= 0.80, "%.3f" % jobs_share)
-    gold_tot = sum(C["paid"][m] for m in FUNDED)
-    check("margin: insulation and controls pay 8 per cent or more under the budget once the works are done",
-          gold_tot <= 0.92 * B, "%.3f against %.1f million" % (gold_tot / 1e6, B / 1e6))
-    sf = {"pooled": "SF26", "late by rate": "SF25", "quoted roof": "SF24", "late by grant": "SF27",
-          "the works from 20 July": "SF23"}
-    for name, RR in C["R8c_rivals"].items():
-        tot = sum(RR[m]["paid"] for m in FUNDED)
-        check("%s R8c %s: insulation's payment within 10 per cent, controls' and heating optimisation's within 1, the pair "
-              "8 per cent or more under the budget" % (sf[name], name),
-              abs(RR[IM]["paid"] / C["paid"][IM] - 1) <= 0.10 and abs(RR[CM]["paid"] / C["paid"][CM] - 1) <= 0.01
-              and abs(RR[HM]["paid"] / C["paid"][HM] - 1) <= 0.01 and tot <= 0.92 * B,
-              "%.3f, pair %.3f million" % (RR[IM]["paid"] / 1e6, tot / 1e6))
-    for name in ("jobs", "none"):
-        tot = sum(C["R8c_hurried"][name][m]["paid"] for m in FUNDED)
-        check("bar R3 R8c %s: the pair 8 per cent or more over the budget" % name, tot >= 1.08 * B,
-              "%.3f against %.1f million" % (tot / 1e6, B / 1e6))
-    check("bar R6 insulation alone, every job done, 8 per cent or more over the budget; on its works done by 30 "
-          "September 8 per cent or more under", C["paid_none"][IM] >= 1.08 * B and C["paid"][IM] <= 0.92 * B,
-          "%.3f and %.3f million" % (C["paid_none"][IM] / 1e6, C["paid"][IM] / 1e6))
-    joint = GD.heating_joint_load(P)
-    C["heating_joint_load"] = joint
-    check("the heating firms fit this year's controls and heating optimisation by 30 September, each on its own and the "
-          "two together on the same firms (each paid in full)",
-          C["R8c"][CM]["share"] >= 0.999 and C["R8c"][HM]["share"] >= 0.999 and joint <= 0.92,
-          "%.3f %.3f, the busiest firm at %.0f%% of its room with both" % (C["R8c"][CM]["share"], C["R8c"][HM]["share"],
-                                                                         100 * joint))
-    room = min(GD.workdays(max(a["done"] for a in js), GD.WORK_BY[GD.PILOT]) for js in by_f.values())
-    C["roofers_2019_last"] = max(max(a["done"] for a in js) for js in by_f.values())
-    check("bar R4 the 2019 roofers had room: the busiest finished its last pilot roof a working week or more before 30 "
-          "September 2019", room >= 6, "%d working days to spare, the last on %s" % (room - 1, C["roofers_2019_last"]))
-    # ---- R10 the 2025/26 saving
-    for name, v in C["R10_rivals"].items():
-        check("SF10 R10 %s: within 3 per cent of the golden" % name, abs(v / C["R10"] - 1) <= 0.03,
-              "%.0f against %.0f" % (v, C["R10"]))
-    for name, v in C["R10_hurried"].items():
-        check("bar R3 R10 %s: 6 per cent or more off the golden" % name, abs(v / C["R10"] - 1) >= 0.06,
-              "%.0f against %.0f" % (v, C["R10"]))
-    # ---- SF rows: the conventions that move nothing
-    P2 = copy.copy(P)
-    P2.works = P.drawn.copy()
-    itt = {m: appr(P2, m) for m in MEAS}
-    C["SF3_itt"] = {m: itt[m]["eur_t"] for m in MEAS}
-    wald = {m: wald_seasons(P, m) for m in MEAS}
-    C["SF3_wald"] = wald
-    check("SF3 the draw's effect scaled by the share of drawn owners who had the works lands within a point of the "
-          "golden in every season (the works buildings against the passed-over owners)",
-          all(np.abs(wald[m] - C["R1"][m]).max() <= band1 for m in MEAS),
-          str({m: round(100 * np.abs(wald[m] - C["R1"][m]).max(), 2) for m in MEAS}))
-    check("SF3 withdrawn owners counted as if they had the works (the offer's effect, which plan 4.2's 'the buildings "
-          "that had them' rules out) dilutes every saving", all(itt[m]["rate"] < A[m]["rate"] for m in MEAS),
-          str({m: round(itt[m]["eur_t"], 1) for m in MEAS}))
-    P3 = copy.copy(P)
-    P3.typ = P.typ_register.copy()
-    f3 = tuple(m for m in MEAS if appr(P3, m)["eur_t"] <= GD.LIMIT)
-    check("SF4 each building's use from the register instead of its 2019 notice: same funded set", f3 == C["funded"], str(f3))
-    if not quick:
-        P15 = V.load(target, pro_rate=False)
-        f15 = tuple(m for m in MEAS if appr(P15, m)["eur_t"] <= GD.LIMIT)
-        check("bar R2 SF11 reads taken off 30 April counted whole to the nearer season: same funded set",
-              f15 == C["funded"], str(f15))
-        d15 = {m: appr(P15, m)["eur_t"] / A[m]["eur_t"] - 1 for m in MEAS}
-        C["SF11_moves"] = d15
-        check("bar R2 SF11 and insulation's and controls' grant per tonne within 5 per cent (heating optimisation's small "
-              "late savings move most and it stays over the limit)",
-              abs(d15[IM]) <= 0.05 and abs(d15[CM]) <= 0.05, str({m: round(v, 3) for m, v in d15.items()}))
-        P16 = V.load(target, estimates="dropped")
-        f16 = tuple(m for m in MEAS if appr(P16, m)["eur_t"] <= GD.LIMIT)
-        check("bar R2 SF12 estimates dropped where no correction followed: same funded set", f16 == C["funded"], str(f16))
-        P20 = V.load(target, outbuildings="dropped")
-        f20 = tuple(m for m in MEAS if appr(P20, m)["eur_t"] <= GD.LIMIT)
-        d20 = abs(appr(P20, IM)["eur_t"] / A[IM]["eur_t"] - 1)
-        check("SF20 faces under 50 square metres beside a main roof (garages, sheds) left out of each address's roof: same funded set, "
-              "insulation's grant per tonne within 5 per cent", f20 == C["funded"] and d20 <= 0.05, "%s %.3f" % (f20, d20))
-    P17 = copy.copy(P)
-    P17.U = P.U / np.array([P.hvec + (1 - P.hvec) * P.G_LT / P.G[s_] for s_ in S]).T
-    f17 = tuple(m for m in MEAS if appr(P17, m)["eur_t"] <= GD.LIMIT)
-    check("bar R2 SF13 raw use with no weather normalisation: same funded set", f17 == C["funded"], str(f17))
-    raw = P.pipe_raw
-    dup_b = {}
-    for a in raw:
-        dup_b.setdefault((a["b"], a["measure"]), []).append(a)
-    twice = sum(1 for v in dup_b.values() if len(v) > 1)
-    C["resubmitted_received"] = twice
-    P18 = copy.copy(P)
-    P18.pipe = [dict(a, typ=int(P.typ_register[a["b"]])) for a in raw]
-    f18 = tuple(m for m in MEAS if appr(P18, m)["eur_t"] <= GD.LIMIT)
-    check("bar R2 SF14 the revised applications kept beside the ones they replace: same funded set, %d buildings twice"
-          % twice, f18 == C["funded"] and twice >= 5, str(f18))
-    neither = sum(1 for a in P.answers19 if a["drawn"] and not a["withdrawn"] and not a["works"])
-    both = sum(1 for a in P.answers19 if a["drawn"] and a["withdrawn"] and a["works"])
-    check("SF15 every drawn 2019 owner either withdrew or completed the works (none neither, none both)",
-          neither == 0 and both == 0, "%d neither, %d both" % (neither, both))
-    # ---- bar R1 the field's raw material ships, and no shipped column holds a result
-    check("bar R1 the pack ships the meter reads, the load profiles, the roofs, the pilot's responses and the "
-          "applications at row level", len(P.answers19) > 2000 and len(P.pipe) > 500 and np.isfinite(P.U).sum() > 200000
-          and len(P.week) > 20000 and rr_ok.sum() > 20000,
-          "%d answers, %d applications, %d building-seasons, %d weeks, %d roofs" % (
-              len(P.answers19), len(P.pipe), int(np.isfinite(P.U).sum()), len(P.week), int(rr_ok.sum())))
-    # ---- bar R4 no plant: the lottery is balanced on use, on the 2018/19 season, on the empty week and the roof
-    d0 = P.drawn & P.answered
-    losers = P.answered & ~P.drawn
-    bal = []
+        check("SF6 a draw whose works save nothing, read as no tonnes or as a negative grant per tonne: %s's upper end "
+              "moves under 1 per cent" % m, abs(R7[m]["hi_no_tonnes_negative"] / R7[m]["hi"] - 1) <= 0.01,
+              "%d draws; %.2f against %.2f" % (R7[m]["n_no_tonnes"], R7[m]["hi_no_tonnes_negative"], R7[m]["hi"]))
+    pt = C["routes"]["the point estimate against the limit, no range"]
+    check("SF7 the point against the limit funds another set (ruled out: the committee judges the upper end)",
+          set(pt) != set(C["funded"]), "%s" % (pt,))
+    check("SF8 the test and the listing on the applications received by 12 June (the committee's request; the prompt's "
+          "applications received so far); a grant per tonne is the round's grant over its tonnes, so the late "
+          "applications' count moves neither", True, "%s" % {m: C["A"][m]["n"] for m in MEAS})
     for m in MEAS:
-        a, b = d0 & (P.measure == m), losers & (P.measure == m)
-        bal.append((np.nanmean(np.log(P.U[a, k0] / P.area[a])) - np.nanmean(np.log(P.U[b, k0] / P.area[b])),
-                    np.nanmean(P.empty[a]) - np.nanmean(P.empty[b]),
-                    np.nanmean(np.log(P.roof_ratio[a])) - np.nanmean(np.log(P.roof_ratio[b]))))
-    C["balance"] = bal
-    check("bar R4 the draw balances each measure's answers on the 2018/19 season per square metre (under 3 per cent), "
-          "the empty week (under 0.03) and the roof per floor (under 8 per cent)",
-          max(abs(x[0]) for x in bal) < 0.03 and max(abs(x[1]) for x in bal) < 0.03 and max(abs(x[2]) for x in bal) < 0.08,
-          str([tuple(round(v, 3) for v in x) for x in bal]))
-    vis_w = float((P.tune_season[P.works] > 0).mean())
-    vis_l = float((P.tune_season[losers] > 0).mean())
-    C["visited_share"] = {"works": vis_w, "passed over": vis_l}
-    check("bar R4 the service visits reached works and passed-over buildings alike (within 5 points)",
-          abs(vis_w - vis_l) < 0.05 and vis_w > 0.5, "%.3f and %.3f" % (vis_w, vis_l))
-    pre = []
-    for k in range(1, k0):
-        a = np.log(P.U[d0, k] / P.U[d0, k - 1])
-        b = np.log(P.U[losers, k] / P.U[losers, k - 1])
-        pre.append(np.nanmean(a) - np.nanmean(b))
-    check("bar R4 a placebo on the pre-pilot seasons shows no gap (each under a point)", max(abs(x) for x in pre) < 0.01,
-          str([round(100 * x, 2) for x in pre]))
-    ext = int(w.extended.any(1).sum())
-    ext_pilot = int(w.extended[w.applied[:, W.SI[W.PILOT]]].any(1).sum())
-    C["extended"] = (ext, ext_pilot)
-    check("bar R4 the building changes run across the stock (extensions in over 1,000 buildings, 5 to 30 per cent of "
-          "them pilot answers)", ext > 1000 and 0.05 < ext_pilot / float(ext) < 0.30, "%d, %d" % (ext, ext_pilot))
-    # ---- input gates
-    files = sorted(os.listdir(target))
-    check("input gate: 10 or more files, 3 or more formats", len(files) >= 10 and
-          len({os.path.splitext(f)[1] for f in files}) >= 3, "%d files" % len(files))
-    nrow = {}
-    for f_ in ("gas_meter_reads_2013_2026.csv", "electricity_load_profiles_2025.csv", "benchmarking_notices_2019_2026.csv"):
-        with open(os.path.join(target, f_), encoding="utf-8") as fh:
-            nrow[f_] = sum(1 for _ in fh) - 1
-    C["rows"] = nrow
-    check("input gate: two CSVs of 20,000 rows or more, one of 10 printed pages or more",
-          nrow["gas_meter_reads_2013_2026.csv"] >= 20000 and nrow["electricity_load_profiles_2025.csv"] >= 20000, str(nrow))
-    counts = [len(GD.apps(P, m)) for m in MEAS] + [int(((P.measure == m) & P.works).sum()) for m in MEAS]
-    check("realism: no two measures share a count of applications or works buildings", len(set(counts)) == len(counts),
-          str(counts))
-    check("realism: no headline grant is a round ten thousand", all(A[m]["grant"] % 10000 != 0 for m in MEAS))
+        a, r = C["R9"][m], C["R9_hurried"]["received"][m]
+        check("SF9 the applications received so far sit 10 per cent or more under %s's round at close" % m,
+              r["n_close"] <= 0.9 * a["n_close"] and r["grant_close"] <= 0.9 * a["grant_close"],
+              "%d against %.0f" % (r["n_close"], a["n_close"]))
+    # ---- R9: the round at close; the one-withdrawal rival inside 10 per cent
+    nt, cl = GD.NOTICE, GD.CLOSE
+    check("SF R9 the same day read by the calendar or by the days since the notice: one cut (both offers went out on "
+          "the same day of the year and closed on the same day)",
+          (nt[GD.PILOT].month, nt[GD.PILOT].day) == (nt[GD.PIPELINE].month, nt[GD.PIPELINE].day) and
+          (cl[GD.PILOT].month, cl[GD.PILOT].day) == (cl[GD.PIPELINE].month, cl[GD.PIPELINE].day))
+    a, r = C["R9"][IM], C["R9_hurried"]["count"][IM]
+    check("bar R9 the late answers' larger grants left out: insulation's grant at close %d per cent or more under"
+          % CLOSE_BAND, r["grant_close"] <= (1 - CLOSE_BAND / 100.0) * a["grant_close"],
+          "%.0f against %.0f" % (r["grant_close"], a["grant_close"]))
     return C
 
 
-# ---------------------------------------------------------------- figures.json and effort.json
+# ---------------------------------------------------------------- figures and the effort passes
 
 def figures(C):
-    P, A = C["P"], C["A"]
-    seasons = ["%d/%02d" % (s - 1, s % 100) for s in range(GD.PILOT + 1, GD.PIPELINE + 1)]
-    car = C["R56_hurried"]["each use's saving, faded"]
-    F = {
-        "funded": list(C["funded"]), "not_funded": [m for m in MEAS if m not in C["funded"]],
-        "season_labels": seasons,
-        "R1_saving_by_season_pct": {m: [pct(x) for x in C["R1"][m]] for m in MEAS},
-        "R1_before_after_pct": {m: [pct(x) for x in C["R1_hurried"]["works buildings' own before and after"][m]] for m in MEAS},
-        "R2_life_saving_pct": {m: pct(C["R2"][m]) for m in MEAS},
-        "R2_seven_season_avg_pct": {m: pct(C["R1"][m].mean()) for m in MEAS},
-        "R2_ho_floor_pct": pct(C["R2_fit"][HM][0]),
-        "R2_ho_first_pct": pct(C["R1"][HM][0]), "R2_ho_fourth_pct": pct(C["R1"][HM][3]),
-        "R3_controls_at_empty_pct": {"%d" % round(100 * e): pct(v) for e, v in C["R3"].items()},
-        "R3_threshold_empty_pct": round(100 * C["R3_fit"]["e0"], 1),
-        "R3_slope_points_per_tenth": round(10 * C["R3_fit"]["slope"], 2),
-        "R3_lived_in_pct": pct(C["R3_fit"]["lived"]),
-        "R3_bands": [[pct(x), pct(v)] for x, v, _ in C["R3_pts"]],
-        "R3_empty_week_pct": {k: pct(v) for k, v in C["drivers"][CM].items()},
-        "R3_line_through_lived_in_at_70_pct": pct(C["R3_hurried"]["a straight line through the lived-in band too"][0.70]),
-        "R4_heating_at_roof_pct": {("%.2f" % r).rstrip("0").rstrip("."): pct(v) for r, v in C["R4"].items()},
-        "R4_line": [round(C["R4_fit"]["a"], 4), round(C["R4_fit"]["b"], 4)],
-        "R4_bands": [[round(math.exp(x), 2), pct(v)] for x, v, _ in C["R4_pts"]],
-        "R4_roof_per_floor": {k: round(v, 2) for k, v in C["drivers"][IM].items()},
-        "R5_rate_on_applications_pct": {m: pct(A[m]["rate"]) for m in MEAS},
-        "R5_by_use_rate_pct": {m: pct(car[m]["rate"]) for m in MEAS},
-        "R5_pooled_life_pct": {m: pct(GD.lifetime(C["R1"][m], m)) for m in MEAS},
-        "R6_eur_per_tonne": {m: round(A[m]["eur_t"], 2) for m in MEAS},
-        "R6_eur_per_tonne_unrounded": {m: round(A[m]["eur_t"], 4) for m in MEAS},
-        "R6_by_use_eur_per_tonne": {m: round(car[m]["eur_t"], 2) for m in MEAS},
-        "applications_received": {m: A[m]["n"] for m in MEAS},
-        "grant_received_eur": {m: int(round(A[m]["grant"])) for m in MEAS},
-        "lifetime_tonnes_received": {m: int(round(A[m]["tonnes"])) for m in MEAS},
-        "R7_range_eur": {m: [round(C["R7"][m]["lo"], 2), round(C["R7"][m]["hi"], 2)] for m in MEAS},
-        "R7_break_even_pct": {m: pct(C["R7"][m]["break_even"]) for m in MEAS},
-        "R7_by_use_range_eur": {m: [round(v, 2) for v in C["R7_careful"][m]] for m in GD.DRIVEN},
-        "R8_applications_at_close": {m: int(round(C["R8"][m]["n_close"])) for m in MEAS},
-        "R8_grant_at_close_eur": {m: int(round(C["R8"][m]["grant_close"])) for m in MEAS},
-        "R8_grant_paid_eur": {m: int(round(C["paid"][m])) for m in MEAS},
-        "R8_paid_every_job_done_eur": {m: int(round(C["paid_none"][m])) for m in MEAS},
-        "R8_paid_jobs_rule_eur": {m: int(round(C["paid_jobs"][m])) for m in MEAS},
-        "R8_paid_share_pct": {m: pct(C["R8c"][m]["share"]) for m in MEAS},
-        "R8_jobs_rule_share_pct": pct(C["R8c_hurried"]["jobs"][IM]["share"]),
-        "R11_applications_paid": {m: int(round(C["R11"][m])) for m in MEAS},
-        "R11_applications_net_of_withdrawals": {m: int(round(C["R8c_hurried"]["none"][m]["n_paid"])) for m in MEAS},
-        "budget_eur": int(GD.BUDGET),
-        "funded_paid_share_of_budget_pct": pct(C["R8_funded_paid"] / GD.BUDGET),
-        "every_job_done_funded_pair_paid_eur": int(round(sum(C["paid_none"][m] for m in FUNDED))),
-        "jobs_rule_funded_pair_paid_eur": int(round(sum(C["paid_jobs"][m] for m in FUNDED))),
-        "roofers_2019_2026": list(C["roofers"]),
-        "roof_mean_m2_2019_2026": [int(round(v)) for v in C["roof_sizes"]],
-        "roof_days_corr": round(C["roof_days_corr"], 2),
-        "roofers_2019_last_done": "%d %s" % (C["roofers_2019_last"].day, C["roofers_2019_last"].strftime("%B")),
-        "passing": list(C["passing"]),
-        "R8_bands": {
-            "insulation applications at close": [int(round(0.9 * round(C["R8"][IM]["n_close"]))),
-                                                 int(round(1.1 * round(C["R8"][IM]["n_close"])))],
-            "insulation grant asked, million": [round(0.9 * C["R8"][IM]["grant_close"] / 1e6, 1),
-                                                round(1.1 * C["R8"][IM]["grant_close"] / 1e6, 1)],
-            "insulation applications paid": [int(round(0.9 * round(C["R11"][IM]))), int(round(1.1 * round(C["R11"][IM])))],
-            "insulation paid, million": [round(0.9 * C["paid"][IM] / 1e6, 1), round(1.1 * C["paid"][IM] / 1e6, 1)],
-            "funded round paid, million": [round(0.9 * C["R8_funded_paid"] / 1e6, 1), round(1.1 * C["R8_funded_paid"] / 1e6, 1)]},
-        "R8_funded_paid_eur": int(round(C["R8_funded_paid"])),
-        "R8_funded_close_eur": int(round(C["R8_funded_close"])),
-        "R8_share_by_day_pct": {m: pct(C["R8"][m]["share"]) for m in MEAS},
-        "R8_late_size_premium_pct": {m: pct(C["R8"][m]["size"] - 1.0) for m in MEAS},
-        "R8_withdrawn_pct": {m: [pct(C["R8"][m]["w_early"]), pct(C["R8"][m]["w_late"])] for m in MEAS},
-        "R9_applications": len(C["apps"]),
-        "R9_grant_eur": int(round(sum(a["grant"] for a in C["apps"]))),
-        "R9_tonnes": int(round(sum(a["life_t"] for a in C["apps"]))),
-        "R9_tonnes_by_measure": {m: int(round(sum(a["life_t"] for a in C["apps"] if a["measure"] == m))) for m in MEAS},
-        "R10_tonnes": int(round(C["R10"])),
-        "R10_hurried_tonnes": {k: int(round(v)) for k, v in C["R10_hurried"].items()},
-        "routes": {k: list(v) for k, v in C["route_sets"].items()},
-        "hurried_eur_per_tonne": {k: {m: round(v[m]["eur_t"], 2) for m in MEAS} for k, v in C["R56_hurried"].items()},
-        "limit_eur": int(GD.LIMIT), "lives": GD.LIFE, "factor": GD.EF,
-        "works_buildings": {m: int(((P.measure == m) & P.works).sum()) for m in MEAS},
-        "passed_over": {m: int(((P.measure == m) & P.answered & ~P.drawn).sum()) for m in MEAS},
-        "answers_2019": len(P.answers19), "drawn_2019": int(P.drawn.sum()), "works_2019": int(P.works.sum()),
-        "visited_share_pct": {k: pct(v) for k, v in C["visited_share"].items()},
-        "resubmitted_received": C["resubmitted_received"],
-        "lived_in_applications": int(sum(1 for a in C["apps"] if a["measure"] == CM and P.lived_in[a["b"]])),
-    }
+    P = C["P"]
+    A = C["A"]
+    F = {"seasons": ["%d/%02d" % (s - 1, s % 100) for s in P.seasons[P.si[GD.PILOT] + 1:]]}
+    F["R1"] = {m: [pct(x) for x in C["R1"][m]] for m in MEAS}
+    F["R2_own"] = [pct(x) for x in C["R2"]]
+    F["R2_campaign_points"] = [pct(a - b) for a, b in zip(C["R1"][HM], C["R2"])]
+    F["R2_n_works_clean"] = [n for n, _ in C["R2_n"]]
+    F["R3_rate"] = pct(C["R3"])
+    F["R3_measured_rate"] = pct(C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["rate"])
+    F["R4"] = {("%d" % round(100 * e)): pct(v) for e, v in C["R4"].items()}
+    F["R5"] = {("%.2f" % r): pct(v) for r, v in C["R5"].items()}
+    F["drivers"] = {m: {k: round(v, 4) for k, v in d.items()} for m, d in C["drivers"].items()}
+    F["rates"] = {m: pct(A[m]["rate"]) for m in MEAS}
+    F["eur_t"] = {m: round(A[m]["eur_t"], 2) for m in MEAS}
+    F["range"] = {m: [round(C["R7"][m]["lo"], 2), round(C["R7"][m]["hi"], 2)] for m in MEAS}
+    F["range_building"] = {m: [round(C["R7"][m]["b_lo"], 2), round(C["R7"][m]["b_hi"], 2)] for m in MEAS}
+    F["measured_opt_eur_t"] = round(C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]["eur_t"], 2)
+    F["measured_opt_range"] = [round(x, 2) for x in C["R7_measured"]["owner"]]
+    F["n_apps"] = {m: A[m]["n"] for m in MEAS}
+    F["grant_received"] = {m: round(A[m]["grant"]) for m in MEAS}
+    F["tonnes"] = {m: round(A[m]["tonnes"]) for m in MEAS}
+    F["funded"] = list(C["funded"])
+    F["routes"] = {k: list(v) for k, v in C["routes"].items()}
+    F["close"] = {m: {"n": round(C["R9"][m]["n_close"]), "grant": round(C["R9"][m]["grant_close"])} for m in MEAS}
+    F["funded_tonnes"] = round(C["R9_tonnes"])
+    F["funded_grant"] = round(sum(a["grant"] for a in C["apps"] if a["funded"]))
+    F["n_apps_total"] = len(C["apps"])
+    F["grant_total"] = round(sum(a["grant"] for a in C["apps"]))
+    F["tonnes_total"] = round(sum(a["life_t"] for a in C["apps"]))
+    F["campaign_share_last"] = pct(C["R2_campaign_share"][-1])
+    F["R2_table"] = {s: v for s, v in zip(F["seasons"][-3:], F["R2_own"][-3:])}
+    F["empty_pct"] = {k: round(100 * v, 2) for k, v in F["drivers"][CM].items()}
+    F["measured_level_last3"] = round(sum(F["R1"][HM][-3:]) / 3.0, 2)
+    # the conventions the answer blocks state: the limit, the range's level and each graded figure's band
+    F["conventions"] = {"limit_eur_per_tonne": GD.LIMIT, "range_level_pct": 90,
+                        "bands_pct": {"grant per tonne": {m: round(100 * v) for m, v in POINT_BAND.items()},
+                                      "range upper end": {m: round(100 * v) for m, v in HI_BAND.items()},
+                                      "round at close": CLOSE_BAND, "an application's lifetime tonnes": APP_T_BAND,
+                                      "the funded total": TOTAL_BAND},
+                        "bands_points": {"own saving by season": R2_BAND,
+                                         "rate over the life": dict(RATE_BAND)}}
+    F["R7_table"] = {}
+    for m in MEAS:
+        F["R7_table"]["%s grant per tonne" % m] = F["eur_t"][m]
+        F["R7_table"]["%s range high" % m] = F["range"][m][1]
+    F["R9_table"] = {"%s at close %s" % (m, k): F["close"][m][k] for m in MEAS for k in ("n", "grant")}
+    F["R10_table"] = {"the funded applications": sorted(a["no"] for a in C["apps"] if a["funded"]),
+                      "their lifetime tonnes in all": F["funded_tonnes"]}
     return F
 
 
 def effort(C, F):
-    """the three passes, each computed end to end by its own methods on the cut pack"""
-    P, A = C["P"], C["A"]
-    M = MEAS
-    car = C["R56_hurried"]["each use's saving, faded"]
-    qk = C["R56_hurried"]["the works buildings' own before and after"]
-    q_paid = {m: C["R8_hurried"]["pooled"][m]["paid"] for m in M}
-    fs_c, rows_c = apps_route(P, C, "each use's saving, faded", C["paid_none"])
-    fs_q, rows_q = apps_route(P, C, "the works buildings' own before and after", q_paid)
-    gold_rows = {a["no"]: a["life_t"] for a in C["apps"]}
+    """effort.json: each result's golden, band and the value each pass files (quick, careful but hurried, thorough)"""
+    A = C["A"]
+    seas = F["seasons"]
+    meas_route = C["R3_hurried"]["the seasons as measured, a fitted approach to a level"]
+    res = []
+    # R2 heating optimisation's saving as its works alone keep it, in the campaign's seasons (Component 1)
+    g2 = F["R2_table"]
+    b2 = {k: [round(v - R2_BAND, 2), round(v + R2_BAND, 2)] for k, v in g2.items()}
+    c2 = {s: v for s, v in zip(seas[-3:], F["R1"][HM][-3:])}
+    res.append({"id": "R2", "name": "heating optimisation's saving as its works alone keep it", "graded_as": "Component 1",
+                "figure": "R2_table", "depends": [], "independent": "", "golden": g2, "bands": b2, "partly_share": 0.67,
+                "precedent": ["N15", "N13", "L26"],
+                "passes": {"quick": c2, "careful": c2, "thorough": g2}})
+    # R6 each measure's saving rate over its life on this year's applications (Ask 1)
+    g6 = F["rates"]
+    rb6 = F["conventions"]["bands_points"]["rate over the life"]
+    b6 = {m: [round(g6[m] - rb6[m], 2), round(g6[m] + rb6[m], 2)] for m in MEAS}
+    use = C["R6_hurried"]["each use's saving, faded"]
+    res.append({"id": "R6", "name": "each measure's saving rate over its life on this year's applications",
+                "graded_as": "Ask 1", "figure": "rates", "depends": ["R2"], "independent": "", "golden": g6,
+                "bands": b6, "partly_share": 0.6, "precedent": ["N15", "N12", "L28"],
+                "passes": {"quick": {IM: pct(use[IM]["rate"]), CM: pct(use[CM]["rate"]),
+                                     HM: pct(C["R3_hurried"]["the seven seasons' average carried flat"]["rate"])},
+                           "careful": {IM: g6[IM], CM: g6[CM], HM: pct(meas_route["rate"])}, "thorough": g6}})
+    # R7 each grant per tonne and the upper end of its range (Ask 2, Components 2 and 3)
+    g7 = F["R7_table"]
+    b7 = {}
+    for m in MEAS:
+        v = g7["%s grant per tonne" % m]
+        b7["%s grant per tonne" % m] = [round(v * (1 - POINT_BAND[m]), 2), round(v * (1 + POINT_BAND[m]), 2)]
+        v = g7["%s range high" % m]
+        b7["%s range high" % m] = [round(v * (1 - HI_BAND[m]), 2), round(v * (1 + HI_BAND[m]), 2)]
+    c7 = {}
+    for m in MEAS:
+        c7["%s grant per tonne" % m] = F["measured_opt_eur_t"] if m == HM else F["eur_t"][m]
+        c7["%s range high" % m] = round(C["R7_measured"]["building"][1] if m == HM else F["range_building"][m][1], 2)
+    res.append({"id": "R7", "name": "each grant per tonne and the upper end of its 90 per cent range",
+                "graded_as": "Ask 2, Components 2 and 3", "figure": "R7_table", "depends": ["R6"], "independent": "",
+                "golden": g7, "bands": b7, "partly_share": 0.5, "precedent": ["L19", "L35"],
+                "passes": {"quick": {k: None for k in g7}, "careful": c7, "thorough": g7}})
+    # R8 the funded set (Recommendation)
+    res.append({"id": "R8", "name": "the funded set", "graded_as": "Recommendation", "figure": "funded",
+                "depends": ["R6", "R7"], "independent": "", "golden": F["funded"], "precedent": ["L19", "N15"],
+                "passes": {"quick": list(C["routes"]["each use's saving, the measured seasons, ranges at the building"]),
+                           "careful": list(C["routes"]["the measured seasons carried, ranges at the building"]),
+                           "thorough": F["funded"]}})
+    # R9 each measure's round at close (Ask 3)
+    g9 = F["R9_table"]
+    b9 = {k: [v * (1 - CLOSE_BAND / 100.0), v * (1 + CLOSE_BAND / 100.0)] for k, v in g9.items()}
+    q9 = {}
+    for m in MEAS:
+        q9["%s at close n" % m] = F["n_apps"][m]
+        q9["%s at close grant" % m] = F["grant_received"][m]
+    res.append({"id": "R9", "name": "each measure's round at close", "graded_as": "Ask 3", "figure": "R9_table",
+                "depends": [], "independent": "the 2019 responses and the 2026 applications", "golden": g9, "bands": b9,
+                "partly_share": 0.5, "passes": {"quick": q9, "careful": g9, "thorough": g9}})
+    # R10 the funded measures' applications with grant and lifetime tonnes, and their total (Ask 4)
+    g10 = F["R10_table"]
+    tot = "their lifetime tonnes in all"
+    b10 = {tot: [g10[tot] * (1 - TOTAL_BAND / 100.0), g10[tot] * (1 + TOTAL_BAND / 100.0)]}
 
-    def rows_value(rows):
-        return {k: round(rows.get(k, 0.0), 1) for k in gold_rows}
-    s_tab = {"%s %s" % (m, F["season_labels"][j]): pct(C["R1"][m][j]) for m in M for j in range(7)}
-    s_bands = {k: [v - 0.45, v + 0.45] for k, v in s_tab.items()}
-    q_tab = {"%s %s" % (m, F["season_labels"][j]): pct(C["R1_hurried"]["works buildings' own before and after"][m][j])
-             for m in M for j in range(7)}
-    gold_life = {m: pct(C["R2"][m]) for m in M}
-    life_bands = {m: [pct(C["R2"][m] - C["R2_band"][m]), pct(C["R2"][m] + C["R2_band"][m])] for m in M}
-    ba_life = {m: pct(C["R1_hurried"]["works buildings' own before and after"][m].mean()) for m in M}
-    b3, b4 = 100 * C["R3_band"], 100 * C["R4_band"]
-    gold_r3 = {"controls at %d per cent empty" % round(100 * e): pct(v) for e, v in C["R3"].items()}
-    gold_r3["this year's controls applications, share of the week empty"] = pct(C["drivers"][CM]["2026"])
-    r3_bands = {k: [v - b3, v + b3] for k, v in gold_r3.items()}
-    r3_bands["this year's controls applications, share of the week empty"] = [gold_r3[
-        "this year's controls applications, share of the week empty"] - 3.0, gold_r3[
-        "this year's controls applications, share of the week empty"] + 3.0]
-    flat_r3 = {k: (pct(C["R1"][CM].mean()) if k.startswith("controls at") else None) for k in gold_r3}
-    gold_r4 = {"insulation's heating saving at %s m2 of roof per m2" % (("%.2f" % r).rstrip("0").rstrip(".")): pct(v)
-               for r, v in C["R4"].items()}
-    gold_r4["this year's insulation applications, roof per floor (x100)"] = pct(C["drivers"][IM]["2026"])
-    r4_bands = {k: [v - b4, v + b4] for k, v in gold_r4.items()}
-    r4_bands["this year's insulation applications, roof per floor (x100)"] = [
-        gold_r4["this year's insulation applications, roof per floor (x100)"] * 0.93,
-        gold_r4["this year's insulation applications, roof per floor (x100)"] * 1.07]
-    flat_r4 = {k: (pct(C["R4_hurried"]["one saving for every building"][1.0]) if k.startswith("insulation's") else None)
-               for k in gold_r4}
-    R = []
-    R.append({"id": "R1", "name": "each measure's saving by season", "graded_as": "Ask 2",
-              "figure": "R1_table", "depends": [], "independent": "",
-              "golden": s_tab, "bands": s_bands, "partly_share": 0.5,
-              "passes": {"quick": q_tab, "careful": s_tab, "thorough": s_tab}})
-    R.append({"id": "R2", "name": "heating optimisation's saving over its life", "graded_as": "Component 1",
-              "figure": "R2_table", "depends": ["R1"], "independent": "",
-              "golden": gold_life, "bands": life_bands, "partly_share": 0.6,
-              "passes": {"quick": ba_life,
-                         "careful": {"value": {m: pct(C["R2_rivals"]["last3"][m]) for m in M}, "grade": "right",
-                                     "why": "a frontier run sees heating optimisation fall season by season and carries "
-                                            "the level it settles at (the platform's architecture 7 run did, on the "
-                                            "last three seasons)"},
-                         "thorough": gold_life}})
-    R.append({"id": "R3", "name": "controls along the empty week", "graded_as": "Component 2",
-              "figure": "R3_table", "depends": ["R1"], "independent": "",
-              "golden": gold_r3, "bands": r3_bands, "partly_share": 0.5,
-              "passes": {"quick": {k: None for k in gold_r3}, "careful": flat_r3, "thorough": gold_r3}})
-    R.append({"id": "R4", "name": "insulation along the roof per floor", "graded_as": "Component 3",
-              "figure": "R4_table", "depends": ["R1"], "independent": "",
-              "golden": gold_r4, "bands": r4_bands, "partly_share": 0.5,
-              "passes": {"quick": {k: None for k in gold_r4}, "careful": flat_r4, "thorough": gold_r4}})
-    for rid, m, dep in (("R5a", IM, ["R4"]), ("R5b", HM, ["R2"]), ("R5c", CM, ["R3"])):
-        g = pct(A[m]["rate"])
-        bd = 100 * C["R5_band"][m]
-        R.append({"id": rid, "name": "%s's saving rate on this year's applications" % m, "graded_as": "Ask 3",
-                  "figure": "R5_rate_%s" % m.replace(" ", "_"), "depends": dep, "independent": "",
-                  "golden": g, "band": [g - bd, g + bd], "partly": [g - 2.5 * bd, g + 2.5 * bd],
-                  "passes": {"quick": pct(qk[m]["rate"]), "careful": pct(car[m]["rate"]), "thorough": g}})
-    R.append({"id": "R6", "name": "the funded set at the limit", "graded_as": "Recommendation",
-              "figure": "funded", "depends": ["R5a", "R5b", "R5c"], "independent": "",
-              "golden": list(C["funded"]),
-              "passes": {"quick": list(fs_q), "careful": list(fs_c), "thorough": list(C["funded"])}})
-    gold_r7, r7_bands = {}, {}
-    for m in M:
-        gold_r7[m + " flip"] = pct(C["R7"][m]["break_even"])
-        r7_bands[m + " flip"] = [gold_r7[m + " flip"] - 0.05, gold_r7[m + " flip"] + 0.05]
-        for end, key in (("lo", "low"), ("hi", "high")):
-            v = round(C["R7"][m][end], 2)
-            gold_r7["%s %s" % (m, key)] = v
-            r7_bands["%s %s" % (m, key)] = [v * 0.95, v * 1.05]
-    car_r7 = {k: (gold_r7[k] if k.endswith("flip") else None) for k in gold_r7}
-    for m in GD.DRIVEN:
-        car_r7[m + " low"], car_r7[m + " high"] = (round(v, 2) for v in C["R7_careful"][m])
-    for key in (HM + " low", HM + " high"):
-        car_r7[key] = gold_r7[key]
-    R.append({"id": "R7", "name": "each range and flip rate", "graded_as": "Ask 4",
-              "figure": "R7_table", "depends": ["R5a", "R5b", "R5c"], "independent": "",
-              "golden": gold_r7, "bands": r7_bands, "partly_share": 0.4,
-              "passes": {"quick": {k: (gold_r7[k] if k.endswith("flip") else None) for k in gold_r7},
-                         "careful": car_r7, "thorough": gold_r7}})
-    gold_r8, r8_bands = {}, {}
-    for m in M:
-        for key in ("n_close", "grant_close"):
-            v = round(C["R8"][m][key], 0)
-            gold_r8["%s %s" % (m, key)] = v
-            r8_bands["%s %s" % (m, key)] = [v * 0.90, v * 1.10]
-
-    def r8_of(RR):
-        return {"%s %s" % (m, key): round(RR[m][key], 0) for m in M for key in ("n_close", "grant_close")}
-    R.append({"id": "R8a", "name": "each measure's round at close", "graded_as": "Ask 5",
-              "figure": "R8_table", "depends": [], "independent": "the 2019 responses and the 2026 applications",
-              "golden": gold_r8, "bands": r8_bands, "partly_share": 0.4,
-              "passes": {"quick": r8_of(C["R8_hurried"]["pooled"]),
-                         "careful": {"value": r8_of(C["R8_rivals"]["one withdrawal rate"]), "grade": "right",
-                                     "why": "the platform's architecture 7 run projected the round measure by measure "
-                                            "with late quotes larger and completion by size and timing"},
-                         "thorough": gold_r8}})
-    gold_r8c = {m: round(C["paid"][m], 0) for m in M}
-    R.append({"id": "R8c", "name": "what each measure's round pays once the works are done", "graded_as": "Ask 5",
-              "figure": "R8c_table", "depends": [], "independent": "the 2019 completions and the 2026 quotes' firms",
-              "golden": gold_r8c, "bands": {k: [v * 0.90, v * 1.10] for k, v in gold_r8c.items()}, "partly_share": 0.4,
-              "passes": {"quick": {m: round(q_paid[m], 0) for m in M},
-                         "careful": {m: round(C["paid_none"][m], 0) for m in M}, "thorough": gold_r8c}})
-    gold_r11 = {m: round(C["R11"][m], 0) for m in M}
-    none_n = {m: round(C["R8c_hurried"]["none"][m]["n_paid"], 0) for m in M}
-    R.append({"id": "R11", "name": "how many of each measure's applications are paid", "graded_as": "Ask 5",
-              "figure": "R11_table", "depends": [], "independent": "the 2019 completions and the 2026 quotes' firms",
-              "golden": gold_r11, "bands": {k: [v * 0.90, v * 1.10] for k, v in gold_r11.items()}, "partly_share": 0.4,
-              "passes": {"quick": {m: round(C["R8_hurried"]["pooled"][m]["n_close"], 0) for m in M},
-                         "careful": none_n, "thorough": gold_r11}})
-    tot = {"asked": round(C["R8_funded_close"], 0), "paid": round(C["R8_funded_paid"], 0)}
-    car_tot = {"asked": round(sum(C["R8"][m]["grant_close"] for m in fs_c), 0),
-               "paid": round(sum(C["paid_none"][m] for m in fs_c), 0)}
-    q_tot = {"asked": round(sum(C["R8_hurried"]["pooled"][m]["grant_close"] for m in fs_q), 0),
-             "paid": round(sum(C["R8_hurried"]["pooled"][m]["paid"] for m in fs_q), 0)}
-    R.append({"id": "R8b", "name": "the funded round's grant asked and paid", "graded_as": "Component 4",
-              "figure": "R8_funded_table", "depends": ["R6", "R8a"], "independent": "",
-              "golden": tot, "bands": {k: [v * 0.90, v * 1.10] for k, v in tot.items()}, "partly_share": 0.5,
-              "passes": {"quick": q_tot, "careful": car_tot, "thorough": tot}})
-    R.append({"id": "R9", "name": "every application's lifetime tonnes", "graded_as": "Ask 6",
-              "figure": "R9_table", "depends": ["R5a", "R5b", "R5c"], "independent": "",
-              "golden": rows_value(gold_rows),
-              "bands": {k: [v * 0.95, v * 1.05] for k, v in rows_value(gold_rows).items()},
-              "partly_share": 0.35,
-              "passes": {"quick": rows_value(rows_q), "careful": rows_value(rows_c), "thorough": rows_value(gold_rows)}})
-    R.append({"id": "R10", "name": "the pilot's 2025/26 CO2", "graded_as": "Ask 7",
-              "figure": "R10_tonnes", "depends": ["R1"], "independent": "",
-              "golden": F["R10_tonnes"], "band": [F["R10_tonnes"] * 0.97, F["R10_tonnes"] * 1.03],
-              "partly": [F["R10_tonnes"] * 0.92, F["R10_tonnes"] * 1.08],
-              "passes": {"quick": int(round(C["R10_hurried"]["before and after"])),
-                         "careful": F["R10_tonnes"], "thorough": F["R10_tonnes"]}})
-    routes = [{"name": "the golden", "answer": list(C["funded"]), "golden": True}]
-    for k, v in C["route_sets"].items():
-        routes.append({"name": k, "answer": list(v)})
-    hints = [{"sentence": "this year's owners chose the measure that suits their building, so price controls along the share "
-                          "of the week each building stands empty, from its load profile, and roof insulation along its "
-                          "roof per floor, from the cadastre and the register",
-              "rescues": ["R3", "R4", "R5a", "R5c", "R7"]},
-             {"sentence": "this year's roofers cannot finish every roof the round grants by 30 September: under half of "
-                          "2019's roofers still quote, this year's roofs are larger, and each firm's 2019 pace in square "
-                          "metres of roof shows how much it can do", "rescues": ["R8c", "R11"]},
-             {"sentence": "a hotel's or care home's load dips while its guests or residents sleep, so its profile reads it "
-                          "as empty when it is lived in", "rescues": []},
-             {"sentence": "controls save only while a building stands empty, nothing until about two fifths of the week, "
-                          "and the meter operator's 2025 profiles show each building's week; this year's controls "
-                          "applicants stand empty longer than the pilot's", "rescues": ["R3", "R5c"]},
-             {"sentence": "roof insulation saves with how much roof a building has for its floor, which the solar cadastre "
-                          "and the register give; this year's insulation applicants have more roof per floor than the "
-                          "pilot's", "rescues": ["R4", "R5a"]},
-             {"sentence": "heating optimisation's saving falls back to a small part of its first season's within four "
-                          "winters", "rescues": ["R2"]},
-             {"sentence": "the late insulation applications run larger and are withdrawn more often", "rescues": ["R8a"]}]
-    return {"results": R, "routes": routes, "hints": hints,
+    def listing(route):
+        st = C["routes"][route]
+        return {"the funded applications": sorted(a["no"] for a in C["apps"] if a["measure"] in st),
+                tot: round(C["R9_tonnes_routes"][route])}
+    res.append({"id": "R10", "name": "the funded measures' applications and their lifetime tonnes", "graded_as": "Ask 4",
+                "figure": "R10_table", "depends": ["R8"], "independent": "", "golden": g10, "bands": b10,
+                "partly_share": 0.5, "precedent": ["L19", "N15"],
+                "passes": {"quick": listing("each use's saving, the measured seasons, ranges at the building"),
+                           "careful": listing("the measured seasons carried, ranges at the building"), "thorough": g10}})
+    routes = [{"name": k, "answer": list(v), "golden": k.startswith("the golden")} for k, v in C["routes"].items()]
+    hints = [{"sentence": "the state campaign's heating checks from September 2022 set heating curves back down, the "
+                          "pilot's balanced works buildings held it while the passed-over owners' systems did not, and "
+                          "the campaign has closed", "rescues": ["R2", "R6"]},
+             {"sentence": "the pilot was drawn by owner and an owner's facility manager runs all its buildings alike, so "
+                          "the range comes from drawing owners again", "rescues": ["R7"]}]
+    forcing = {"kind": "set", "line": GD.LIMIT,
+               "golden_family": [{"name": "the golden", "answer": F["funded"]}] +
+               [{"name": "R7 rival: %s" % name, "answer": [m for m in MEAS if R[m][1] <= GD.LIMIT]}
+                for name, R in C["R7_rivals"].items()] +
+               [{"name": "R6 rival: %s (optimisation's upper end scaled)" % name,
+                 "answer": [m for m in MEAS if (C["R7"][m]["hi"] * (a["eur_t"] / A[HM]["eur_t"] if m == HM else 1.0))
+                            <= GD.LIMIT]} for name, a in C["R3_rivals"].items() if name not in RULED_OUT_R3],
+               "shortcuts": [{"name": k, "answer": list(v)} for k, v in C["routes"].items() if not k.startswith("the golden")],
+               "perturbations": [{"input": "heating optimisation's settled level %+d per cent" % p,
+                                  "answer": [m for m in MEAS if (C["R7"][m]["hi"] * (1.0 / (1 + 0.55 * p / 100.0)
+                                                                                      if m == HM else 1.0)) <= GD.LIMIT]}
+                                 for p in (-20, 20)] +
+                                [{"input": "controls' saving rate %+d per cent" % p,
+                                  "answer": [m for m in MEAS if (C["R7"][m]["hi"] * (1.0 / (1 + p / 100.0) if m == CM
+                                                                                      else 1.0)) <= GD.LIMIT]}
+                                 for p in (-20, 20)] +
+                                [{"input": "insulation's saving rate %+d per cent" % p,
+                                  "answer": [m for m in MEAS if (C["R7"][m]["hi"] * (1.0 / (1 + p / 100.0) if m == IM
+                                                                                      else 1.0)) <= GD.LIMIT]}
+                                 for p in (-20, 20)]}
+    return {"results": res, "routes": routes, "hints": hints, "forcing": forcing,
             "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
-
-
-def tables_for_figures(F, E):
-    """the effort results' tables, written into figures.json under the keys effort.json names"""
-    for r in E["results"]:
-        if r["figure"] not in F:
-            F[r["figure"]] = r["golden"]
-    return F
-
-
-if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "target")
-    C = run(target, HERE, quick="--quick" in sys.argv)
-    for name, ok, d in RESULTS:
-        print("%s  %s  %s" % ("PASS" if ok else "FAIL", name, d))
-    print("%d checks, %d failed" % (len(RESULTS), sum(1 for r in RESULTS if not r[1])))
