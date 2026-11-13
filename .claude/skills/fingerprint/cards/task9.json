@@ -13,8 +13,8 @@
   "shape": "03",
   "decision_type": "root_cause_named",
   "answer_unit": "rate_or_share",
-  "answer": "",
-  "answer_source": "",
+  "answer": "VR90 sorts at 45.4 per cent in Q1 2027 under the ramp plan as filed and 65.3 per cent with four changes made before its first lots reach the affected steps (SDS-OX1's pump back to its spring setpoint, tank T3 back to the spring chemical life, SH-300-B on DP2B with CM3 back to its standard recipe the same day, ET1B and ET3A wet-cleaned every 1,420 wafers), so the 412,000-unit commitment needs 3,520 wafer starts rather than 5,070; on VX40 the June to September shortfall of 25.2 good die a wafer (VP12 34.8) ranks the DP2B and CM3 edge pair (10.6), the slurry loop (7.3), the bench's chemical life (4.3) and the deep-etch polymer (2.1)",
+  "answer_source": "task9/generator/figures.json (R1 to R7), the golden of the cut pack",
   "gap": [
     "objective",
     "time"
@@ -58,13 +58,13 @@
   "scoring_unit": "other",
   "spine": {
     "file": "fab2_yield.sqlite (wafer table)",
-    "rows": 0,
+    "rows": 13978,
     "entity": "one wafer at sort",
     "grain": "wafer",
     "source": "synthetic, simulated from the fab's dispatch, tool states, a slurry distribution loop, a wet bench's chemistry, film profiles, etch polymer and clustered defects"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "purchase_order_or_contract",
+  "forum": "executive_team",
+  "forcing_event": "launch_or_rollout",
   "org_family": "manufacturer",
   "world": {
     "geography": "Germany, Saxony (Dresden)",
@@ -86,7 +86,17 @@
       "Detlev Lindau",
       "Isabelle Hamann",
       "Gunhild Scheibe",
-      "Oswald Dobes"
+      "Oswald Dobes",
+      "Werner Zimmer",
+      "Holger Kaul",
+      "Egon Schacht",
+      "Charlotte Mülichen",
+      "Fredo Döring",
+      "Arne Bohlander",
+      "Raimund Walter",
+      "Danilo Mende",
+      "Lisbeth Roskoth",
+      "Kreszenz Trubin"
     ]
   },
   "deliverables": [
@@ -843,7 +853,7 @@
       "deliverable set": "pptx"
     }
   ],
-  "notes": "re-root on 2026-11-13 at the author's word; five lessons, none closed or next to a closed card, each graded on its own result, and a synthesis that needs all five; the move compute_on_joint_path is used for both the route pairs and the block yields (a block is good only when every die in it is good), no new vocabulary key",
+  "notes": "re-root on 2026-11-13 at the author's word; five lessons, none closed or next to a closed card, each graded on its own result, and a synthesis that needs all five; the move compute_on_joint_path is used for both the route pairs and the block yields (a block is good only when every die in it is good), no new vocabulary key | 2026-11-13: forcing event redrawn to launch_or_rollout after task22 v2 filed budget_or_appropriation; org_family manufacturer kept by the author's override of the ban.org_family BLOCK against task4 architecture 13 (registered 02:07 UTC, after this world's first registration at 01:31 UTC, and sorted ahead of it by its card's local draw date of 2026-11-12); a semiconductor fab cannot honestly be another kind of organisation",
   "skeleton": {
     "decision_form": "ranked_causes_bridge",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
@@ -885,10 +895,16 @@
       "unused_distractor"
     ]
   },
-  "registered": "2026-11-13T01:31:54Z",
   "shell": {
     "question form": "which",
     "second-sentence opener": "vr",
     "deliverable set": "xlsx"
+  },
+  "registered": "2026-11-13T04:28:32Z",
+  "author_override": {
+    "date": "2026-11-13",
+    "gate": "guard.py heart ban.org_family",
+    "against": "task4 (13)",
+    "decision": "ship with the ban recorded (the author's choice)"
   }
 }

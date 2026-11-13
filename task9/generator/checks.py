@@ -1,283 +1,188 @@
-"""task9: the generator's assertions on the built pack (task9/target) and its figures. Run after build.py:
-
-    python3 checks.py            # every assertion; exit 1 on any failure
-
-The bar block (dataset-generation 7.1) carries labels R1 to R7; the semantic fork table's rows are asserted as SF1 to
-SF15; the input gates and the results' margins follow.
-"""
+"""task9: the generator's assertions on a built output folder (python3 checks.py <out>): the input gates, the bar block
+(R1 to R7 of dataset-generation 7.1), mess neutrality, the bands and the hurried figures, distractors, the realism sweep."""
+import csv
 import json
 import os
+import re
+import sqlite3
 import sys
+import zipfile
 
 import numpy as np
-import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
-import analysis as AN  # noqa: E402
+import analysis as A  # noqa: E402
+import effort_passes as EP  # noqa: E402
 import pack as PK  # noqa: E402
-import record as RC  # noqa: E402
 
-TGT = os.path.join(TASK, "target")
-FAILS, PASSES = [], []
+RES = []
 
 
-def check(label, ok, detail=""):
-    (PASSES if ok else FAILS).append(label)
-    print("%s  %s%s" % ("PASS" if ok else "FAIL", label, ("  (%s)" % detail) if detail else ""))
+def ok(label, cond, detail=""):
+    RES.append((label, bool(cond), detail))
 
 
 def inside(v, b):
-    return v is not None and v == v and b[0] <= v <= b[1]
+    return b[0] <= v <= b[1]
 
 
-def cells_inside(vals, bands):
-    return sum(1 for k, b in bands.items() if inside(vals.get(k), b)), len(bands)
-
-
-def variant(patch):
-    """The golden method run with one mess item mishandled: the record class patched, the analysis rerun."""
-    orig = {k: getattr(RC.Record, k) for k in patch}
-    for k, f in patch.items():
-        setattr(RC.Record, k, f)
-    try:
-        A = AN.Analysis(TGT)
-    finally:
-        for k, f in orig.items():
-            setattr(RC.Record, k, f)
-    return A
-
-
-def r1_of(A):
-    out = {"points": round(A.R1, 2)}
-    out.update({"%s die" % p: round(v, -3) for p, v in A.R1_die.items()})
-    return out
-
-
-def r4_of(fits, A):
-    out = {}
-    for u in AN.UNITS:
-        f = fits[A.pair_of[u]] if A.pair_of[u] in fits else fits[u]
-        out["%s onset" % u] = int(round(f["w0"], -1))
-        out["%s climb" % u] = round(f["beta"] * 1e5, 1)
-    return out
-
-
-def main():
-    F = json.load(open(os.path.join(HERE, "figures.json")))
-    E = json.load(open(os.path.join(HERE, "effort.json")))
-    B, R, riv = F["bands"], F["routes"], F["rivals"]
-    A = AN.Analysis(TGT)
-
-    # ------------------------------------------------------------------ input gates
-    names = sorted(os.listdir(TGT))
-    files = [n for n in names if os.path.isfile(os.path.join(TGT, n))] + \
-        [os.path.join(n, x) for n in names if os.path.isdir(os.path.join(TGT, n)) for x in os.listdir(os.path.join(TGT, n))]
-    check("gate: ten or more usable files", len(files) >= 10, "%d files" % len(files))
-    cats = {("spreadsheet" if f.endswith((".csv", ".xlsx")) else "database" if f.endswith(".sqlite") else "code" if
-             f.endswith((".py", ".yaml")) else "image" if f.endswith(".png") else "text") for f in files}
-    check("gate: two or more file categories", len(cats) >= 2, ", ".join(sorted(cats)))
-    rows = {n: sum(1 for _ in open(os.path.join(TGT, n))) - 1 for n in names if n.endswith(".csv")}
-    big = sorted(rows.items(), key=lambda kv: -kv[1])
-    check("gate: a CSV of 20,000 rows or more", big[0][1] >= 20000, "%s %d" % big[0])
-    check("gate: a second large CSV (10 to 20 printed pages or more)", big[1][1] >= 1000, "%s %d" % big[1])
-    check("gate: two or more distractors shipped", all(d in names for d in PK.DISTRACTORS) and len(PK.DISTRACTORS) >= 2,
-          ", ".join(PK.DISTRACTORS))
-    src = open(os.path.join(HERE, "analysis.py")).read() + open(os.path.join(HERE, "record.py")).read()
-    check("gate: the distractors are never read by the golden", not any(('F["%s"]' % k) in src for k in ("sc4", "slurry", "particles")))
-    check("gate: no file describes the data (readme, dictionary, manifest, notes)",
-          not any(w in n.lower() for n in names for w in ("readme", "dictionary", "manifest", "notes", "codebook", "schema")))
-    check("gate: no file name carries the trap or the word distractor",
-          not any(w in n.lower() for n in names for w in ("distractor", "decoy", "trap", "answer", "ring_loss", "latent", "lot_wear")))
-
-    # ------------------------------------------------------------------ the semantic forks
-    d = A.d
-    check("SF1 the ring was already costing yield before April", A.R1_q1 > 0.15, "January to March %.3f points" % A.R1_q1)
-    young = d[d.wear < 0.5]
-    check("SF1 the fallout on disks short of their onset is the fits' no-ring level",
-          abs(np.average(young.y, weights=young.tested_band) - np.average(d.r0, weights=d.tested_band)) < 0.004)
-    raw = pd.read_csv(os.path.join(TGT, PK.F["sort"]), usecols=["wafer_id", "retest"])
-    check("SF2 retests supersede the first pass", (raw.retest == "Y").sum() > 300 and raw.wafer_id.duplicated().sum() == (raw.retest == "Y").sum())
-    pol = d[(d.polish_ts >= "2026-04-01") & (d.polish_ts < "2026-09-01")]
-    check("SF3 the window is by sort date, and polish dates would select other wafers", abs(len(pol) - A.n_win) > 500,
-          "%d sorted against %d polished" % (A.n_win, len(pol)))
-    ft_raw = pd.read_csv(os.path.join(TGT, PK.F["ft"]), dtype={"sub_lot": str}, keep_default_na=False)
-    sorted_lots = set(d[d.win].lot_id)
-    tested = set(A.R.ft[(A.R.ft.ft_date >= AN.WIN[0]) & (A.R.ft.ft_date < AN.WIN[1])].lot_id)
-    check("SF4 final test's window is by its own date, sub-lots added back", (ft_raw.sub_lot != "").sum() > 40 and
-          len(sorted_lots - set(A.R.ft.lot_id)) > 20 and len(tested - sorted_lots) > 20,
-          "%d split rows, %d window lots not yet tested, %d tested lots sorted before April" % (
-              (ft_raw.sub_lot != "").sum(), len(sorted_lots - set(A.R.ft.lot_id)), len(tested - sorted_lots)))
-    diff = (d.disk != d.full).mean()
-    check("SF5 the disk's own usage and wafers since the full PM part on a share of wafers", diff > 0.05, "%.1f per cent" % (100 * diff))
-    past = d[d.disk > 650]
-    check("SF5 the polish record's pad counter is not the disk's usage", (past.pad_life_ctr != past.disk).mean() > 0.99)
-    check("SF6 every unit's current disk is from one lot, the earlier lots' last serials fitted", bool(A.fwd_lot) and
-          all(v <= 0 for k, v in A.stock_left.items() if k != A.fwd_lot) and A.stock_left[A.fwd_lot] > 10, str(A.stock_left))
-    check("SF7 each disk lot ran on both pairs", all(d[d.disk_lot == L].pair.nunique() == 2 for L in A.lot_names))
-    spec = open(os.path.join(TGT, PK.F["spec"])).read()
-    check("SF8 the spec's Rev G draft takes the part out of the full PM", "comes out of the full PM scope" in spec)
-    costs = open(os.path.join(TGT, PK.F["costs"])).read()
-    check("SF9 the cost inputs file the costing of a part moved out of the full PM, and the plan's volume and mix",
-          "Rev G review" in costs and "less that part's price" in costs and "wafers_per_year_by_unit" in costs and "product_mix" in costs)
-    check("SF10 the cost inputs file what a unit scrapped at final test costs", "assembly_and_test_per_unit" in costs and
-          "scrapped at final test" in costs)
-    check("SF11 the summer's own rate as Rev F's lands outside the saving's band", not inside(R["R5_summer_rate"], B["R5_saving"]))
-    check("SF12 the summer's unit shares keep the saving inside its band", inside(riv["R5"]["each unit's share of the summer's wafers"], B["R5_saving"]))
-    uf = R["R4_unit_fwd"]
-    short = [u for u in AN.UNITS if d[(d.unit == u) & d.fwd].disk.max() < 1500]
-    check("SF13 each unit's own fit on the current lot is inside R4's bands where the unit ran a long disk of it",
-          all(inside(int(round(uf[u][0], -1)), B["R4_dose"]["%s onset" % u]) and inside(round(uf[u][1] * 100, 1), B["R4_dose"]["%s climb" % u])
-              for u in AN.UNITS if u not in short) and len(short) == 2, "short: %s" % ", ".join(short))
-    check("SF13 every unit's own count on the current lot is inside the count's band",
-          all(inside(R["REC_unit_fwd"][u], B["REC_counts"][u]) for u in AN.UNITS))
-    check("SF14 one joint fit over every lot gives the retaining ring a share below zero (read as none)", R["R2_joint"]["ring"] < 0)
-    check("SF15 every final-test lot is one product at sort", d.groupby("lot_id")["product"].nunique().max() == 1)
-
-    # ------------------------------------------------------------------ the bar block
-    sort_cols = pd.read_csv(os.path.join(TGT, PK.F["sort"]), nrows=2).columns
-    check("R1 the sort record ships zone fail and tested counts on every wafer",
-          all("fail_z%d" % k in sort_cols and "tested_z%d" % k in sort_cols for k in range(1, 9)))
-    shipped = " ".join(pd.read_csv(os.path.join(TGT, n), nrows=1).columns.str.lower().str.cat(sep=" ") for n in names if n.endswith(".csv"))
-    check("R1 no shipped column holds a result", not any(w in shipped for w in ("ring_loss", "excess", "disk_life", "disk_usage", "share",
-                                                                                  "latent", "disk_lot", "wear")))
-    check("R1 each part's usage exists only as the log's free-text entries", "disk" not in " ".join(pd.read_csv(os.path.join(TGT, PK.F["fdc"]), nrows=1).columns))
-    check("R1 a disk's lot exists only as its fitted serial and the receipts' serial ranges",
-          "lot" not in " ".join(pd.read_csv(os.path.join(TGT, PK.F["fdc"]), nrows=1).columns) and
-          "supplier_lot" in pd.read_csv(os.path.join(TGT, PK.F["stores"]), nrows=1).columns)
-    check("R1 final test ships lot totals only", "wafer_id" not in ft_raw.columns)
-
-    def first_record(self):
-        s = pd.read_csv(os.path.join(self.tgt, PK.F["sort"]))
-        s["sort_ts"] = pd.to_datetime(s.sort_end_ts)
-        s = s.sort_values(["wafer_id", "sort_ts"]).groupby("wafer_id", as_index=False).first()
-        s["product"] = s["product"].str.strip().map(RC.CANON)
-        self._finish_sort(s)
-
-    def unmapped(self):
-        s = pd.read_csv(os.path.join(self.tgt, PK.F["sort"]))
-        s["sort_ts"] = pd.to_datetime(s.sort_end_ts)
-        s = s.sort_values(["wafer_id", "sort_ts"]).groupby("wafer_id", as_index=False).last()
-        s = s[s["product"].isin(["P-A", "P-B", "P-C"])].copy()
-        self._finish_sort(s)
-
-    def dropped(self):
-        RC.Record._pm_rows(self, drop_blank=True)
-
-    def by_time(self):
-        RC.Record._pm_rows(self, back_by_time=True)
-    # each mess item mishandled moves at most the assembly result that grades it (R4: each disk's life and lot are
-    # assembled from the log's entries and the receipts) and leaves every other result inside its band
-    for label, patch, grades in (("R2 retests mishandled (the first pass kept)", {"_sort": first_record}, None),
-                                 ("R2 aliases left unmapped (their wafers dropped)", {"_sort": unmapped}, None),
-                                 ("R2 blank maintenance counters dropped", {"_pm": dropped}, "R4"),
-                                 ("R2 back-entered rows placed by their entry time", {"_pm": by_time}, "R4")):
-        V = variant(patch)
-        vals = {"R1": cells_inside(r1_of(V), B["R1_loss"])[0] == len(B["R1_loss"]),
-                "R3": all(inside(round(V.R3.get(p, 0), -2), B["R3_ft_units"][p]) for p in B["R3_ft_units"]),
-                "R4": cells_inside(r4_of(V.fwd_fit, V), B["R4_dose"])[0] == len(B["R4_dose"]),
-                "REC": all(inside(V.REC[u], B["REC_counts"][u]) for u in AN.UNITS),
-                "R5": inside(V.R5, B["R5_saving"])}
-        moved = [k for k, v in vals.items() if not v]
-        check(label + " leaves every result %sinside its band" % ("but the assembly result it grades (%s) " % grades if grades else ""),
-              all(k == grades for k in moved), ", ".join(moved) or "none moved out")
-
-    for r in E["results"]:
-        g = r["passes"]["careful"]
-        ok_in = inside(g, r["band"]) if "band" in r else cells_inside(g, r["bands"])[0] == len(r["bands"])
-        if r["id"] in ("R1", "R2"):
-            check("R3 the careful pass lands inside %s's band (earned)" % r["id"], ok_in)
-        else:
-            check("R3 the careful pass lands outside %s's band (%s)" % (r["id"], ",".join(r.get("precedent", []))), not ok_in)
-    blobs = {}
-    for f in files:
-        h = hash(open(os.path.join(TGT, f), "rb").read())
-        blobs.setdefault(h, []).append(f)
-    check("R4 no file is a copy of another", all(len(v) == 1 for v in blobs.values()))
-    tick = open(os.path.join(TGT, PK.F["ticket"])).read()
-    check("R4 the ticket states no loss figure and names no suspect", not any(w in tick for w in ("points", "disk", "PU-3", "DEP-3", "SC-4", "Rev F",
-                                                                                                "burn-in", "final test", "lot A165")))
-    docs = spec + tick + costs
-    check("R4 no document ranks a cause, proposes a count, names a lot's wear or ties burn-in to the ring",
-          not any(w in docs for w in ("1,0", "L2603", "L2511", "L2509", "burn-in", "latent", "faster")) and "count" not in tick)
-    slopes = {u: A.unit_fit[u]["beta"] for u in AN.UNITS}
-    check("R5 the disk's effect shows on every unit", all(v > 0 for v in slopes.values()), ", ".join("%s %.2e" % kv for kv in slopes.items()))
-    dep3 = d[d.dep == "DEP-3"].unit.value_counts(normalize=True)
-    check("R5 DEP-3's wafers reach every unit, not only the high pair", all(dep3.get(u, 0) > 0.05 for u in AN.UNITS))
-    sc4 = d[d.sc4 == 1].unit.value_counts(normalize=True)
-    check("R5 SC-4's lots reach every unit", all(sc4.get(u, 0) > 0.1 for u in AN.UNITS))
-    check("R5 every disk lot ran on at least three units, the current lot on all four",
-          all(d[d.disk_lot == L].unit.nunique() >= 3 for L in A.lot_names) and d[d.fwd].unit.nunique() == 4)
-    ratio = {p: A.old_fit[p]["w0"] / A.fwd_fit[p]["w0"] for p in A.pairs}
-    check("R5 the current lot's earlier onset shows on both pairs", all(v > 1.25 for v in ratio.values()),
-          ", ".join("%s %.2f" % kv for kv in ratio.items()))
-    check("R5 the lots' split decides nothing at the loss: one fit over every lot keeps it inside its band",
-          cells_inside({"points": round(R["R1_pooled"], 2), **{"%s die" % p: round(v, -3) for p, v in R["R1_die_pooled"].items()}},
-                       B["R1_loss"])[0] == len(B["R1_loss"]))
-    ftm = F["ft_monthly"]
-    check("R5 final test's losses show in every month and every product, the first quarter included",
-          all(v["ring_pct"] > 0.05 for m, v in ftm.items() if m >= "2026-02") and all(v > 1000 for v in A.R3.values()),
-          ", ".join("%s %.2f" % (m, v["ring_pct"]) for m, v in sorted(ftm.items())))
-    q1 = d[d.q1]
-    q1p = {p: float(np.mean(g.ring_die / g.gross) * 100) for p, g in q1.groupby("pair")}
-    check("R5 the ring before April shows on both pairs", all(v > 0.05 for v in q1p.values()), ", ".join("%s %.3f" % kv for kv in q1p.items()))
-    rescue = max(len(h["rescues"]) for h in E["hints"])
-    check("R6 no single hint rescues more than a third of the results", rescue <= len(E["results"]) / 3.0, "%d of %d" % (rescue, len(E["results"])))
-    gold = {r["id"]: r for r in E["results"]}
-    check("R6 each hint's rescued results land inside their bands at the golden", all(
-        (inside(gold[x]["golden"], gold[x]["band"]) if "band" in gold[x] else cells_inside(gold[x]["golden"], gold[x]["bands"])[0] == len(gold[x]["bands"]))
-        for h in E["hints"] for x in h["rescues"]))
-    r1v = [v[0] for v in riv["R1"].values()]
-    check("R7 every fallout rival lands inside R1's band", all(
-        cells_inside({"points": round(v[0], 2), **{"%s die" % p: round(x, -3) for p, x in v[1].items()}}, B["R1_loss"])[0] == len(B["R1_loss"])
-        for v in riv["R1"].values()), ", ".join("%.3f" % v for v in r1v))
-    check("R7 every share rival lands inside R2's bands", all(cells_inside({k: round(x, 3) for k, x in v.items()}, B["R2_shares"])[0] == 6
-                                                            for v in riv["R2"].values()))
-    check("R7 every final-test rival lands inside R3's bands", all(all(inside(round(v[p], -2), B["R3_ft_units"][p]) for p in B["R3_ft_units"])
-                                                                for v in riv["R3"].values()))
-    check("R7 every dose rival lands inside R4's bands", all(
-        all(inside(int(round(v[u][0], -1)), B["R4_dose"]["%s onset" % u]) and inside(round(v[u][1] * 100, 1), B["R4_dose"]["%s climb" % u])
-            for u in AN.UNITS) for v in riv["R4"].values()))
-    check("R7 every count rival lands inside the count's bands", all(inside(v[u], B["REC_counts"][u]) for v in riv["REC"].values() for u in AN.UNITS))
-    check("R7 every saving rival lands inside R5's band", all(inside(v, B["R5_saving"]) for v in riv["R5"].values()),
-          ", ".join("%.0f" % v for v in riv["R5"].values()))
-
-    # ------------------------------------------------------------------ the results' own margins
-    check("result: the shortcuts on the loss all land outside its band", not any(inside(round(R[k], 2), B["R1_loss"]["points"]) for k in (
-        "R1_q1_baseline", "R1_labels", "R1_no_rolloff", "R1_diemap_sample", "R1_before_after")))
-    check("result: the shortcuts on final test all land outside its bands", all(
-        not all(inside(round(R[k][p], -2), B["R3_ft_units"][p]) for p in B["R3_ft_units"]) for k in ("R3_proportional", "R3_clean_lot_base", "R3_q1_base")))
-    for k in ("R4_pooled", "R4_old_lots", "R4_unit", "R4_fleet", "R4_linear"):
-        cells = r4_of({u: dict(w0=v[0], beta=v[1] / 1000) for u, v in R[k].items()}, A)
-        check("result: %s puts every unit's onset outside its band" % k, not any(inside(cells["%s onset" % u], B["R4_dose"]["%s onset" % u])
-                                                                                 for u in AN.UNITS), str(cells))
-    for k in ("REC_pooled", "REC_sort_only", "REC_proportional", "REC_pooled_proportional", "REC_pooled_sort_only", "REC_old_lots",
-              "REC_fleet_sort_only", "REC_linear"):
-        check("result: %s lands outside both pairs' count bands" % k, not any(inside(R[k][u], B["REC_counts"][u]) for u in AN.UNITS),
-              ", ".join("%s %d" % (u, R[k][u]) for u in AN.UNITS))
-    for k in ("R5_pooled", "R5_sort_only", "R5_pooled_proportional", "R5_pooled_sort_only", "R5_summer_rate"):
-        check("result: %s lands outside the saving's band" % k, not inside(R[k], B["R5_saving"]), "%.0f" % R[k])
-    t = R["R2_joint_ring_t"]
-    check("result: the retaining ring's t is large on the wafers and small on the disk lives",
-          all(abs(v[0]) > 5 and abs(v[1]) < 2 for v in t.values()), str(t))
-    steps = [s[2] for s in A.ring_swaps]
-    check("result: the ring-only swaps show no step", len(steps) == 6 and abs(np.mean(steps)) < 0.005 and max(abs(x) for x in steps) < 0.012,
-          ", ".join("%+.4f" % x for x in steps))
-    check("result: the two pairs' onsets differ by more than a fifth", A.onset["PU-1"] / A.onset["PU-3"] > 1.2)
-    check("result: final test's loss starts before the ring at sort on both pairs", A.ft["u0"] < 0.8 and A.ft["u0"] + A.ft["us"] < 1.0)
-    check("result: final test's model reads the observed burn-in to within 3 per cent", all(
-        abs(A.R3_observed[p] - A.R3[p]) / A.R3[p] < 0.03 for p in A.R3))
-    check("result: Rev G beats Rev F on both pairs and the counts beat counts set on every lot's curve",
-          all(F["cost_per_wafer"][p]["Rev F as it stands"] > F["cost_per_wafer"][p]["Rev G at the pair's count"] for p in A.pairs)
-          and F["pooled_vs_g"] > 0)
-    check("result: every perturbation keeps each count inside its band", all(inside(v[u], B["REC_counts"][u]) for v in F["perturbations"].values()
-                                                                           for u in AN.UNITS))
-    check("result: the counters rebuild every reset the log records", (A.R.fdc.disk.isna().sum() == 0) and (A.R.fdc.pad.isna().sum() == 0))
-    check("result: every wafer's disk maps to a received lot", d.disk_lot.notna().all())
-    print("%d passed, %d failed" % (len(PASSES), len(FAILS)))
-    return 1 if FAILS else 0
+def main(out=None):
+    """out: a build folder (build.py --out), or None for the installed task folder"""
+    gen = HERE if out is None else out
+    out = os.path.dirname(HERE) if out is None else out
+    tgt = os.path.join(out, "target")
+    fg = json.load(open(os.path.join(gen, "figures.json")))
+    E = json.load(open(os.path.join(gen, "effort.json")))
+    B = fg["bands"]
+    names = sorted(os.listdir(tgt))
+    exts = {n.rsplit(".", 1)[1] for n in names}
+    cats = {"csv": "spreadsheet", "xlsx": "spreadsheet", "sqlite": "database", "jsonl": "text", "txt": "text",
+            "pdf": "text", "yaml": "code"}
+    # ---- input gates
+    ok("gate: ten or more usable files", len(names) >= 10, "%d files" % len(names))
+    ok("gate: two or more file categories", len({cats[x] for x in exts}) >= 2, str(sorted({cats[x] for x in exts})))
+    n_mes = sum(1 for _ in open(os.path.join(tgt, PK.F["mes"]))) - 1
+    ok("gate: a CSV of 20,000 rows or more", n_mes >= 20000, "%s %d rows" % (PK.F["mes"], n_mes))
+    n_sds = sum(1 for _ in open(os.path.join(tgt, PK.F["sds"]))) - 1
+    ok("gate: a long CSV (10 to 20 printed pages or more)", n_sds >= 1000, "%s %d rows" % (PK.F["sds"], n_sds))
+    ok("gate: two or more distractors", len(PK.DISTRACTORS) >= 2 and all(d in names for d in PK.DISTRACTORS))
+    ok("gate: no file names a distractor or a readme", not any(re.search(r"distract|readme|dictionary|manifest|notes_on", n, re.I) for n in names))
+    con = sqlite3.connect(os.path.join(tgt, PK.F["sort"]))
+    tabs = [r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")]
+    ok("gate: the yield database carries its six tables", len(tabs) == 6, str(tabs))
+    size = sum(os.path.getsize(os.path.join(tgt, n)) for n in names)
+    ok("gate: the pack is about 40 MB", 30e6 <= size <= 60e6, "%.1f MB" % (size / 1e6))
+    cut = PK.P.PULL.strftime("%Y-%m-%d %H:%M:%S")
+    late_sort = con.execute("SELECT COUNT(*) FROM sort_wafer WHERE end_time >= ?", (cut,)).fetchone()[0]
+    late_mes = sum(1 for r in csv.DictReader(open(os.path.join(tgt, PK.F["mes"]), newline=""))
+                   if r["TRACK_IN"] >= cut or (r["TRACK_OUT"] or "") >= cut)
+    late_wat = sum(1 for r in csv.DictReader(open(os.path.join(tgt, PK.F["wat"]), newline="")) if r["test_time"] >= cut)
+    ok("gate: no sort, MES or e-test record falls after the pull", late_sort == late_mes == late_wat == 0,
+       "sort %d, MES %d, WAT %d" % (late_sort, late_mes, late_wat))
+    # ---- R1: the raw material ships, no result precomputed
+    ok("R1 raw: die maps for every sorted wafer", con.execute("SELECT COUNT(DISTINCT wafer_key) FROM sort_map").fetchone()[0] > 10000)
+    heads = []
+    for n in names:
+        if n.endswith(".csv"):
+            heads += next(csv.reader(open(os.path.join(tgt, n), newline="", encoding="utf-8")))
+    bad = [h for h in heads if re.search(r"cause|yield_loss|bath_ppb|polymer|attribut|scratch_kill|edge_offset|loop_cost", h, re.I)]
+    ok("R1 raw: no shipped column holds a result", not bad, str(bad))
+    ok("R1 raw: the bench log carries every batch, spike and drain", sum(1 for _ in open(os.path.join(tgt, PK.F["bench"]))) > 15000)
+    # ---- the golden from the cut pack, and its rivals and hurried routes
+    F, X = A.run_all(tgt)
+    R, H = EP.rivals(F, X), EP.hurried(F, X)
+    ok("R7 rivals: every rival's VR90 plan yield inside its band", all(inside(100 * v["y_plan"], B["R7"]["plan"]) for v in R.values()),
+       str([round(100 * v["y_plan"], 2) for v in R.values()]))
+    ok("SF9 R7 rivals: every rival's VR90 yield with every cause fixed inside its band (the cluster fit read three ways)",
+       all(inside(100 * v["y_fixed"], B["R6"]) for v in R.values()))
+    ok("SF5 R7 rivals: VR90 split evenly on CM1 and CM3 inside every band",
+       inside(R["VR90 split evenly between CM1 and CM3"]["cost"]["loop"], B["R2"]["VR90"]) and
+       inside(100 * R["VR90 split evenly between CM1 and CM3"]["y_plan"], B["R7"]["plan"]))
+    g0 = X["vr"]
+    ok("SF3 each fix alone is read on the plan: the four gains sum to less than the plan-to-fixed gap (they do not add)",
+       sum(g0["cost"].values()) < 100 * (g0["y_fixed"] - g0["y_plan"]), "%.2f against %.2f" % (sum(g0["cost"].values()), 100 * (g0["y_fixed"] - g0["y_plan"])))
+    late = A.vr90_etch(X["pk"], X["ec"], g0["no_flake"] + 150, 0.21)["p"]
+    ok("SF4 a clean 150 wafers past the flaking point keeps VR90's fixed yield inside its band",
+       inside(100 * g0["y_fixed"] * (1 - late), B["R6"]), "%.2f" % (100 * g0["y_fixed"] * (1 - late)))
+    import subprocess as _sp
+    plan_txt = " ".join(_sp.run(["pdftotext", os.path.join(tgt, PK.F["plan"]), "-"], capture_output=True, text=True).stdout.split())
+    ok("SF6 the plan files the bench loading", "31 lots a day" in plan_txt)
+    ok("SF7 the plan files CM3's return to R7 before VR90's first ILD0 lot", "fleet standard R7" in plan_txt and "23 November 2026" in plan_txt)
+    ok("SF8 the plan files the back-end yields", "99.2 per cent" in plan_txt and "98.1 per cent" in plan_txt)
+    for c, rid in (("loop", "R2"), ("bath", "R3"), ("edge", "R4"), ("etch", "R5")):
+        ok("R7 rivals: every rival's VR90 gain from the %s fix inside its band" % c,
+           all(inside(v["cost"][c], B[rid]["VR90"]) for v in R.values()))
+    ok("SF1 R7 rivals: the first-insertion reading of the shortfall inside its band",
+       all(inside(F["R1_first"][p], B["R1"][p]) for p in ("VX40", "VP12")), str(F["R1_first"]))
+    ok("SF2 R7 rivals: the die-killed reading of each VX40 cost inside its band",
+       inside(F["R2"]["excess_vx40"], B["R2"]["VX40"]) and inside(F["R3"]["raw_vx40"], B["R3"]["VX40"]) and
+       inside(F["R4"]["raw_vx40"], B["R4"]["VX40"]) and inside(F["R5"]["raw_vx40"], B["R5"]["VX40"]))
+    # golden figures inside their own bands, mid-band
+    g = fg
+    for rid, key in (("R2", "R2_loop"), ("R3", "R3_bath"), ("R4", "R4_edge"), ("R5", "R5_etch")):
+        for cell in ("VX40", "VR90"):
+            ok("band: %s %s golden inside its band" % (rid, cell), inside(g[key][cell], B[rid][cell]), "%s in %s" % (g[key][cell], B[rid][cell]))
+    ok("band: R6 golden inside", inside(g["R6_fixed"], B["R6"]))
+    ok("R6 rival ruled out: four VX40 die tiled from January to March sit above VR90's fixed band (VX40's own polish, "
+       "loading, polisher share and edge die)", fg["vr90_tile_fixed"] > B["R6"][1], "%s against %s" % (fg["vr90_tile_fixed"], B["R6"]))
+    ok("R6 composition: the stated parts multiply to the fixed yield", abs(fg["vr90_random_yield_pct"] * fg["vr90_fixed_parts"]["scratch"]
+       * fg["vr90_fixed_parts"]["gate_oxide"] * fg["vr90_fixed_parts"]["edge_die"] / 1e6 * 0.981 - fg["R6_fixed"]) < 0.25)
+    ok("band: R7 plan golden inside", inside(g["R7_plan"]["plan"], B["R7"]["plan"]))
+    ok("band: R7 starts golden inside", inside(g["R7_plan"]["starts"], B["R7"]["starts"]))
+    ok("band: R5 interval golden inside", inside(g["R5_etch"]["interval"], B["R5"]["interval"]))
+    # the ranking is determinate: the four VX40 bands do not overlap
+    order = sorted((B[r]["VX40"] for r in ("R2", "R3", "R4", "R5")), key=lambda b: b[0])
+    ok("SF10 band: the causes' VX40 bands do not overlap (the ranking is forced)", all(order[i][1] < order[i + 1][0] for i in range(3)), str(order))
+    # ---- R3: each hurried figure outside its band by a margin
+    sh = fg["shortcut"]
+    ok("R3 hurried: the far polishers' consumables reading leaves VR90's loop gain outside", sh["uniform_loop_vr90"] < B["R2"]["VR90"][0] - 1.0,
+       "%s against %s" % (sh["uniform_loop_vr90"], B["R2"]["VR90"]))
+    ok("R3 hurried: the summer's loading leaves VR90's bath gain outside", sh["q3_bath_vr90"] < B["R3"]["VR90"][0] - 0.4,
+       "%s against %s" % (sh["q3_bath_vr90"], B["R3"]["VR90"]))
+    ok("R3 hurried: RF time alone leaves VR90's etch gain outside", sh["kappa1_vr90"] < B["R5"]["VR90"][0] - 1.0)
+    ok("R3 hurried: RF time alone leaves the interval outside", sh["kappa1_interval"] > B["R5"]["interval"][1] + 150)
+    ok("R3 hurried: CM3's harmonisation as the edge fix leaves VR90's edge gain outside", B["R4"]["VR90"][0] > 0.3)
+    ok("R3 hurried: CM3 to R7 alone recovers far less than the thin excess", g["harmonise_alone_vx40"] < 0.4 * g["harmonise_claimed_vx40"])
+    ok("R3 hurried: a cluster factor of 2 leaves VR90's fixed yield outside", sh["alpha2_fixed"] < B["R6"][0] - 0.8)
+    ok("R3 hurried: Poisson leaves VR90's fixed yield outside", sh["poisson_fixed"] < B["R6"][0] - 2.0)
+    ok("R3 hurried: the careful pass leaves VR90's plan yield outside", sh["careful_plan"] > B["R7"]["plan"][1] + 3.0)
+    # ---- R2: mess neutrality (each item mishandled moves only what grades it)
+    pk = X["pk"]
+    import copy
+    shifted = {k: (v[0], v[1] + __import__("datetime").timedelta(minutes=4), v[2]) if v[0] == "CM1" else v for k, v in pk.cmp.items()}
+    pk2 = copy.copy(pk)
+    pk2.cmp = shifted
+    sc2 = A.scratch_cause(pk2)
+    ok("R2 mess: CM1's clock left uncorrected moves VR90's loop gain by under 0.2 points",
+       abs(A.vr90_build(pk2, sc2, X["bc"], X["ec"], X["eg"], None, blocks=X["vr"]["blocks"])["cost"]["loop"] - X["vr"]["cost"]["loop"]) < 0.2)
+    ok("R2 mess: first insertions move only the shortfall (the assembly result that grades them), inside its band",
+       all(inside(F["R1_first"][p], B["R1"][p]) for p in ("VX40", "VP12")), str({p: round(F["R1_first"][p], 2) for p in F["R1_first"]}))
+    ok("R2 mess: the bench log's restart repeats are dropped (no duplicate tool and seq)",
+       len({(e["tool"], e["seq"]) for b in pk.bench.values() for e in b}) == sum(len(b) for b in pk.bench.values()))
+    # ---- R5: no one thing; each factor runs across the data
+    br = fg["bin5_by_polisher"]
+    ok("R5 footprint: the loop's summer excess shows on every polisher, graded by distance",
+       all(br[t]["slow"] > br[t]["spring"] for t in br) and (br["CM2"]["slow"] - br["CM2"]["spring"]) < (br["CM4"]["slow"] - br["CM4"]["spring"])
+       < (br["CM1"]["slow"] - br["CM1"]["spring"]) < (br["CM3"]["slow"] - br["CM3"]["spring"]))
+    cls = F["R4"]["cls"]["VX40"]
+    ok("R5 footprint: the thick edge shows on DP2B wafers off CM3 and the thin edge on others' wafers on CM3, in both products",
+       cls["thick"]["b3"] > 20 and cls["thin"]["b4"] > 15 and F["R4"]["cls"]["VP12"]["thick"]["b3"] > 20)
+    ok("R5 footprint: the pair's wafers carry no edge excess", abs(cls["pair"]["b3"]) < 2 and abs(cls["pair"]["b4"]) < 2)
+    lb = X["bc"]["lot_bath"]
+    vx_lots = [l for l in lb if l.startswith("VXA")]
+    ok("R5 footprint: the bath runs above its threshold on many lots before July too",
+       sum(1 for l in vx_lots if lb[l][0] > X["bc"]["goi"]["c_th"] and lb[l][2].month < 7) >= 5)
+    ok("R5 one thing: the careful pass with the loop alone corrected still loses five of the seven results",
+       sum(1 for r in E["results"] if r["passes"]["careful"] != r["golden"]) >= 5)
+    # ---- R6: the hints rescue only what they list
+    ok("R6 hints: the largest single hint rescues one of seven", max(len(h["rescues"]) for h in E["hints"]) <= 2)
+    # ---- R4: no plant, and the realism sweep
+    lots = sorted({int(l[3:]) for l in lb if l.startswith("VXA")})
+    steps = np.diff(lots)
+    ok("realism: lot numbers are not an arithmetic sequence", len(set(steps.tolist())) > 2, str(sorted(set(steps.tolist()))[:6]))
+    goods = [r[0] for r in con.execute("SELECT good FROM sort_wafer WHERE product='VX40' LIMIT 3000")]
+    ok("realism: no repeated block of good-die counts", len(set(goods)) > 120)
+    ok("realism: no round headline figure", g["R6_fixed"] not in (60.0, 65.0, 70.0) and g["R7_plan"]["plan"] not in (40.0, 45.0, 50.0))
+    import subprocess
+    meta = subprocess.run(["pdfinfo", os.path.join(tgt, PK.F["plan"])], capture_output=True, text=True).stdout
+    ok("realism: the plan PDF is a Writer export", "Writer" in meta and "LibreOffice" in meta, meta.split("Producer:")[-1].split("\n")[0].strip())
+    # ---- distractors: deleting them changes nothing the golden reads
+    read = open(os.path.join(HERE, "analysis.py")).read()
+    ok("distractors: the golden reads none of them", not any(d in read for d in PK.DISTRACTORS))
+    # ---- the golden zip holds exactly the requested files
+    with zipfile.ZipFile(os.path.join(out, "task9_golden.zip")) as z:
+        ok("golden zip: exactly a spreadsheet and a note", sorted(z.namelist()) == sorted(["vr90_ramp_yield_note.docx", "vr90_ramp_yield_review.xlsx"]))
+    sub = open(os.path.join(out, "submission.md")).read()
+    ok("write-up: no em dash", "—" not in sub and "–" not in sub)
+    ok("write-up: four blocks and tags", all(h in sub for h in ("## Tags", "## Final Recommendation", "## Supplementary Questions",
+                                                               "## Critical Components", "## Step-by-Step")))
+    fails = [r for r in RES if not r[1]]
+    for label, good, detail in RES:
+        print("%s  %s  %s" % ("PASS" if good else "FAIL", label, detail))
+    print("%d assertions, %d failed" % (len(RES), len(fails)))
+    return 1 if fails else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else None))

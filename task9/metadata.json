@@ -1,27 +1,25 @@
 {
  "task": "task9",
- "title": "Tessaline Fab 2's edge ring: what causes it, what it cost from April to August 2026, and after how many wafers each polish unit should change the part responsible once Rev G takes it out of the full PM",
- "domain": "Machine Learning Research, General Statistics & Data Science (Interpretability: feature attribution, probing, mechanistic analysis)",
- "task_type": "Interpretability: a sort-yield loss attributed across dependent process features to the part whose wear carries it, its dose-response, and its split across the maintenance rules",
+ "title": "Varnholt Halbleiter Fab 2: the June to September 2026 sort-yield shortfall on VX40 and VP12 and VR90's Q1 2027 yield",
+ "domain": "General Statistics & Data Science, Interpretability",
  "objective": "Root-Cause Analysis",
- "as_of": "2026-08-31",
- "built": "2026-11-11",
- "setting_date": "2026-08-31",
+ "as_of": "2026-11-06",
+ "built": "2026-11-13",
  "deliverables": [
-  "tessaline_fab2_edge_ring_review.pptx"
+  "vr90_ramp_yield_review.xlsx",
+  "vr90_ramp_yield_note.docx"
  ],
  "distractor_files": [
-  "scanner_sc4_edge_focus.csv",
-  "slurry_lot_coa.csv",
-  "facility_particle_counts.csv"
+  "cleanroom_bay_environment.csv",
+  "probe_card_touchdowns.csv",
+  "scanner_overlay_lots.csv"
  ],
  "input_gates": {
-  "files": 27,
+  "files": 29,
   "formats": [
    "csv",
-   "md",
-   "png",
-   "py",
+   "jsonl",
+   "pdf",
    "sqlite",
    "txt",
    "xlsx",
@@ -30,215 +28,199 @@
   "categories": [
    "code",
    "database",
-   "image",
    "spreadsheet",
    "text"
   ],
-  "largest_file": "process_history.csv",
-  "largest_file_rows": 277063,
-  "long_file": "wafer_sort_zones.csv",
-  "long_file_rows": 37930,
-  "pm_rows": 395,
-  "fdc_rows": 37591,
-  "diemap_wafers": 5796
+  "largest_csv": "mes_lot_history.csv",
+  "largest_csv_rows": 23845,
+  "long_csv": "sds_ox1_trend_export.csv",
+  "long_csv_rows": 61740,
+  "sort_wafers": 13423,
+  "sqlite_tables": 6,
+  "pack_bytes": 46591466
  },
  "sources": [
   {
    "files": "every file",
-   "origin": "written for this task. Tessaline Semiconductor, Fab 2, its products, tools, people and paperwork are invented; the fab is simulated wafer by wafer (weekly lot starts at a shifting product mix, a forty-step flow with six chamber steps and one deposition chamber's affinity for two polish units, dispatch around each unit's downtime, clustered random defects with a weekly drift and a particle week, the outermost zone's fallout, conditioner-disk wear at each unit's, each supplier lot's and each disk's own rate with a pad term, thinned edge dielectric that passes sort and fails burn-in, the maintenance the spec, waiver EW-118 and the floor's unscheduled swaps produced, stores issuing the oldest disk lot first, removal-rate metrology, the ring classifier, the yield team's review pulls, assembly loss and final test at the assembly house), and every record is written from that process.",
-   "date": "2026-11-11",
+   "origin": "written for this task. Varnholt Halbleiter GmbH, its Fab 2 in Dresden, its products, tools, people and paperwork are invented; the fab is simulated lot by lot and wafer by wafer (lot starts, dispatch with bay rules and downtime, facilities, chemistry, film profiles, etch, clustered defects, sort, metrology and inspection sampling) and every record is written from that process.",
+   "date": "2026-11-13",
    "license": "CC BY 4.0 (original work)"
   }
  ],
  "files": [
   {
-   "path": "cmp_unit_pm_log.xlsx",
-   "format": "xlsx",
-   "bytes": 18275,
-   "covers": "the ILD-CMP units' PM log, one row per entry as the technicians made it",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "cmp_wafer_fdc.csv",
+   "path": "CM1_ild0_polish.csv",
    "format": "csv",
-   "bytes": 2505250,
-   "covers": "the polish record per wafer from the units' fault-detection system",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 306502,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "cost_inputs.yaml",
+   "path": "CM2_ild0_polish.csv",
+   "format": "csv",
+   "bytes": 210568,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "CM3_ild0_polish.csv",
+   "format": "csv",
+   "bytes": 349960,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "CM4_ild0_polish.csv",
+   "format": "csv",
+   "bytes": 255966,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "cleanroom_bay_environment.csv",
+   "format": "csv",
+   "bytes": 1167458,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "cost_inputs_2027.yaml",
    "format": "yaml",
-   "bytes": 1501,
-   "covers": "finance's cost inputs: parts, labour, downtime, single changes and the full PM all in, volume, die values",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 1313,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "dep_chamber_rf_hours.csv",
+   "path": "ct_etch_fdc_summary.csv",
    "format": "csv",
-   "bytes": 21713,
-   "covers": "the deposition chambers' RF hours since their last clean, by day",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 1329618,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "die_geometry.py",
-   "format": "py",
-   "bytes": 1046,
-   "covers": "the yield database's die position helpers (zones by radius)",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "path": "ecn_register_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 9818,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "die_maps.sqlite",
+   "path": "equipment_pm_log.xlsx",
+   "format": "xlsx",
+   "bytes": 31950,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "etch_chamber_monitors.csv",
+   "format": "csv",
+   "bytes": 102031,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "fab2_yield.sqlite",
    "format": "sqlite",
-   "bytes": 18477056,
-   "covers": "the yield database's die maps for the wafers pulled into the review set, with the die geometry",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 24510464,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "excursion_ticket_YE-2026-031.txt",
+   "path": "facilities_change_log.xlsx",
+   "format": "xlsx",
+   "bytes": 7912,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "facility_line_list.xlsx",
+   "format": "xlsx",
+   "bytes": 7212,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "ild0_dep_wafer_log.csv",
+   "format": "csv",
+   "bytes": 1083145,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "ild0_thickness_49pt.csv",
+   "format": "csv",
+   "bytes": 7026404,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "inline_defect_scans.csv",
+   "format": "csv",
+   "bytes": 119198,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "lab_bath_metals_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 13461,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "lot_genealogy.csv",
+   "format": "csv",
+   "bytes": 4934,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "mes_lot_history.csv",
+   "format": "csv",
+   "bytes": 2065839,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "pgc_bench_controller.jsonl",
+   "format": "jsonl",
+   "bytes": 3040517,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "probe_card_touchdowns.csv",
+   "format": "csv",
+   "bytes": 46655,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "product_data_sheet.xlsx",
+   "format": "xlsx",
+   "bytes": 6859,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "recipe_change_log.csv",
+   "format": "csv",
+   "bytes": 1715,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "scanner_overlay_lots.csv",
+   "format": "csv",
+   "bytes": 132416,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "sds_ox1_trend_export.csv",
+   "format": "csv",
+   "bytes": 3297802,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "shift_handover_ft2_2026.txt",
    "format": "txt",
-   "bytes": 679,
-   "covers": "the yield excursion ticket YE-2026-031",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 60793,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "facility_particle_counts.csv",
+   "path": "spc_ild0_thickness.csv",
    "format": "csv",
-   "bytes": 571205,
-   "covers": "hourly particle counts by bay",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 144051,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   },
   {
-   "path": "pen2_backend_lot_summary.csv",
+   "path": "vr90_ramp_plan_q1_2027.pdf",
+   "format": "pdf",
+   "bytes": 47810,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
+  },
+  {
+   "path": "wat_parametric.csv",
    "format": "csv",
-   "bytes": 95660,
-   "covers": "the back-end site's per-lot summary of units in and out at each step",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "pm_spec_history.md",
-   "format": "md",
-   "bytes": 1922,
-   "covers": "the ILD-CMP PM specification's revision history, waiver EW-118 and the Rev G draft",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "process_history.csv",
-   "format": "csv",
-   "bytes": 26187875,
-   "covers": "the MES: lot-level steps and the six chamber-per-wafer steps with their tools and times",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "scanner_sc4_edge_focus.csv",
-   "format": "csv",
-   "bytes": 35095,
-   "covers": "scanner SC-4's edge-field focus and levelling data for its lots",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "slurry_lot_coa.csv",
-   "format": "csv",
-   "bytes": 1619,
-   "covers": "slurry lot certificates of analysis",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "stores_receipts_cmp.csv",
-   "format": "csv",
-   "bytes": 4175,
-   "covers": "the CMP consumables' receiving log by part and lot",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
-  },
-  {
-   "path": "wafer_map_examples/T034005_13.png",
-   "format": "png",
-   "bytes": 16328,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T034215_11.png",
-   "format": "png",
-   "bytes": 15963,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T034299_23.png",
-   "format": "png",
-   "bytes": 17208,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T034362_13.png",
-   "format": "png",
-   "bytes": 17215,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T034453_23.png",
-   "format": "png",
-   "bytes": 17223,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T034558_18.png",
-   "format": "png",
-   "bytes": 15591,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T037078_03.png",
-   "format": "png",
-   "bytes": 14970,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T037323_05.png",
-   "format": "png",
-   "bytes": 16648,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T037463_17.png",
-   "format": "png",
-   "bytes": 16390,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T037666_09.png",
-   "format": "png",
-   "bytes": 15992,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T038737_24.png",
-   "format": "png",
-   "bytes": 15429,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_map_examples/T038926_06.png",
-   "format": "png",
-   "bytes": 15728,
-   "covers": "twelve wafer maps from the yield review deck",
-   "made": "written by task9/generator (pack.py) from the simulated fab"
-  },
-  {
-   "path": "wafer_sort_zones.csv",
-   "format": "csv",
-   "bytes": 5305109,
-   "covers": "the sort database's wafer records: zone fail and tested counts, bins, the classifier's label, retests",
-   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
+   "bytes": 1209095,
+   "made": "written by task9/generator from the simulated fab (deterministic)"
   }
  ]
 }

@@ -1,739 +1,675 @@
 {
- "forcing": {
-  "bands": {
-   "PU-1": [
-    930,
-    1090
-   ],
-   "PU-2": [
-    930,
-    1090
-   ],
-   "PU-3": [
-    770,
-    910
-   ],
-   "PU-4": [
-    770,
-    910
-   ]
-  },
-  "golden_answer": {
-   "high PU-3/PU-4": "inside",
-   "low PU-1/PU-2": "inside"
-  },
-  "golden_family": [
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "the golden (each downforce pair's fit on the current lot, final test's rise on the disk's wear)"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "each unit's own fit on the current lot"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "final test's rise on the disk's raw use"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "each pair's own final-test level"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "the pad's term left out"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "an unweighted pair fit"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "the pair fit with the ring's usage beside it"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "the pair fit below 3,000 wafers"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "name": "the pair fit with the rivals beside it"
-   }
-  ],
-  "kind": "set",
-  "perturbations": [
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "every climb 15 per cent steeper"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "every climb 15 per cent flatter"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "every onset 5 per cent earlier"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "every onset 5 per cent later"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "the pad's term doubled"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's level 15 per cent higher"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's level 15 per cent lower"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's rise starting 8 per cent sooner"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's rise starting 8 per cent later"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's rise 20 per cent shorter"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "final test's rise 20 per cent longer"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "the disk change 10 per cent dearer"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "the disk change 10 per cent cheaper"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "die values 10 per cent higher"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "inside",
-     "low PU-1/PU-2": "inside"
-    },
-    "input": "die values 10 per cent lower"
-   }
-  ],
-  "shortcuts": [
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "every disk lot pooled"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "final test in proportion to the ring's die"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "final test left out"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "every lot pooled and final test in proportion"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "the earlier lots' curve"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "one fit for the fleet, sort only"
-   },
-   {
-    "answer": {
-     "high PU-3/PU-4": "above",
-     "low PU-1/PU-2": "above"
-    },
-    "name": "a dose straight from zero"
-   }
-  ],
-  "what": "each downforce pair's count for the disk on its own count, read against the pair's band (the golden's count less and more 8 per cent): every sound method inside it, every shortcut outside"
- },
- "hints": [
-  {
-   "rescues": [
-    "R4",
-    "R6"
-   ],
-   "sentence": "The disks fitted since May come from a supplier lot that wears faster than the ones before it"
-  },
-  {
-   "rescues": [
-    "R3"
-   ],
-   "sentence": "Burn-in failures start well before the ring shows at sort, and level off"
-  },
-  {
-   "rescues": [
-    "R3"
-   ],
-   "sentence": "Final test's extra failures come from the outer band's good die on each lot's own wafers"
-  },
-  {
-   "rescues": [
-    "R5"
-   ],
-   "sentence": "A part off the full PM pays its own change each time, so the count has to price both stages of loss"
-  },
-  {
-   "rescues": [
-    "R6"
-   ],
-   "sentence": "Rev F as it stands runs the disks in stores, not the ones it ran"
-  }
- ],
  "results": [
   {
-   "bands": {
-    "P-A die": [
-     128000,
-     150000
-    ],
-    "P-B die": [
-     13000,
-     15000
-    ],
-    "P-C die": [
-     208000,
-     244000
-    ],
-    "points": [
-     0.84,
-     0.96
-    ]
-   },
-   "depends": [],
-   "figure": "R1_loss",
-   "golden": {
-    "P-A die": 139000,
-    "P-B die": 14000,
-    "P-C die": 226000,
-    "points": 0.9
-   },
-   "graded_as": "Component 1",
    "id": "R1",
-   "independent": "the sort record's zone counts and the band's fallout on young disks",
-   "name": "the ring's loss at sort on wafers sorted 1 April to 31 August: points of mean sort yield and good die by product",
-   "passes": {
-    "careful": {
-     "P-A die": 134000,
-     "P-B die": 14000,
-     "P-C die": 218000,
-     "points": 0.87
-    },
-    "quick": {
-     "P-A die": 108000,
-     "P-B die": 11000,
-     "P-C die": 172000,
-     "points": 0.7
-    },
-    "thorough": {
-     "P-A die": 139000,
-     "P-B die": 14000,
-     "P-C die": 226000,
-     "points": 0.9
-    }
-   }
-  },
-  {
-   "bands": {
-    "dep3": [
-     0.0,
-     0.03
-    ],
-    "disk": [
-     0.88,
-     1.0
-    ],
-    "pad": [
-     0.0,
-     0.1
-    ],
-    "rf": [
-     0.0,
-     0.03
-    ],
-    "ring": [
-     0.0,
-     0.03
-    ],
-    "sc4": [
-     0.0,
-     0.03
-    ]
-   },
-   "depends": [],
-   "figure": "R2_shares",
-   "golden": {
-    "dep3": 0.0,
-    "disk": 0.963,
-    "pad": 0.037,
-    "rf": 0.002,
-    "ring": 0.0,
-    "sc4": 0.004
-   },
-   "graded_as": "Component 2",
-   "id": "R2",
-   "independent": "",
-   "name": "each candidate cause's share of that loss",
-   "passes": {
-    "careful": {
-     "dep3": 0.0,
-     "disk": 0.984,
-     "pad": 0.016,
-     "rf": 0.01,
-     "ring": 0.0,
-     "sc4": 0.026
-    },
-    "quick": {
-     "dep3": 0.063,
-     "disk": null,
-     "pad": null,
-     "rf": null,
-     "ring": null,
-     "sc4": 0.126
-    },
-    "thorough": {
-     "dep3": 0.0,
-     "disk": 0.963,
-     "pad": 0.037,
-     "rf": 0.002,
-     "ring": 0.0,
-     "sc4": 0.004
-    }
-   }
-  },
-  {
-   "bands": {
-    "P-A": [
-     37700,
-     50900
-    ],
-    "P-B": [
-     3000,
-     4000
-    ],
-    "P-C": [
-     57000,
-     77200
-    ]
-   },
-   "depends": [],
-   "figure": "R3_ft_units",
-   "golden": {
-    "P-A": 44300,
-    "P-B": 3500,
-    "P-C": 67100
-   },
+   "name": "the June to September shortfall in good die per wafer, VX40 and VP12",
    "graded_as": "Ask 1",
-   "id": "R3",
-   "independent": "the final-test lot summary and each lot's wafers at sort",
-   "name": "the units final test lost to the ring on lots it finished 1 April to 31 August, by product",
-   "passes": {
-    "careful": {
-     "P-A": 11100,
-     "P-B": 1100,
-     "P-C": 17100
-    },
-    "quick": {
-     "P-A": 14800,
-     "P-B": -1700,
-     "P-C": 30900
-    },
-    "thorough": {
-     "P-A": 44300,
-     "P-B": 3500,
-     "P-C": 67100
-    }
-   },
-   "precedent": [
-    "L15"
-   ]
-  },
-  {
-   "bands": {
-    "PU-1 climb": [
-     11.1,
-     18.2
-    ],
-    "PU-1 onset": [
-     710,
-     920
-    ],
-    "PU-2 climb": [
-     11.1,
-     18.2
-    ],
-    "PU-2 onset": [
-     710,
-     920
-    ],
-    "PU-3 climb": [
-     20.0,
-     27.0
-    ],
-    "PU-3 onset": [
-     540,
-     700
-    ],
-    "PU-4 climb": [
-     20.0,
-     27.0
-    ],
-    "PU-4 onset": [
-     540,
-     700
-    ]
-   },
+   "figure": "R1_shortfall",
    "depends": [],
-   "figure": "R4_dose",
+   "independent": "the sort database's final insertions",
    "golden": {
-    "PU-1 climb": 15.8,
-    "PU-1 onset": 840,
-    "PU-2 climb": 15.8,
-    "PU-2 onset": 840,
-    "PU-3 climb": 23.5,
-    "PU-3 onset": 640,
-    "PU-4 climb": 23.5,
-    "PU-4 onset": 640
+    "VX40": 25.2,
+    "VP12": 34.8
    },
-   "graded_as": "Component 3",
-   "id": "R4",
-   "independent": "the stores receipts' serial ranges and the PM log's fitted serials",
-   "name": "each unit's onset and climb on the disks it will be fitted with from September",
-   "passes": {
-    "careful": {
-     "PU-1 climb": 18.9,
-     "PU-1 onset": 1540,
-     "PU-2 climb": 18.9,
-     "PU-2 onset": 1540,
-     "PU-3 climb": 18.2,
-     "PU-3 onset": 850,
-     "PU-4 climb": 18.2,
-     "PU-4 onset": 850
-    },
-    "quick": {
-     "PU-1 climb": 16.0,
-     "PU-1 onset": 1050,
-     "PU-2 climb": 16.0,
-     "PU-2 onset": 1050,
-     "PU-3 climb": 16.0,
-     "PU-3 onset": 1050,
-     "PU-4 climb": 16.0,
-     "PU-4 onset": 1050
-    },
-    "thorough": {
-     "PU-1 climb": 15.8,
-     "PU-1 onset": 840,
-     "PU-2 climb": 15.8,
-     "PU-2 onset": 840,
-     "PU-3 climb": 23.5,
-     "PU-3 onset": 640,
-     "PU-4 climb": 23.5,
-     "PU-4 onset": 640
-    }
-   },
-   "precedent": [
-    "L12"
-   ]
-  },
-  {
    "bands": {
-    "PU-1": [
-     930,
-     1090
+    "VX40": [
+     24.0,
+     26.8
     ],
-    "PU-2": [
-     930,
-     1090
-    ],
-    "PU-3": [
-     770,
-     910
-    ],
-    "PU-4": [
-     770,
-     910
+    "VP12": [
+     32.2,
+     36.0
     ]
    },
-   "depends": [
-    "R3",
-    "R4"
-   ],
-   "figure": "REC_counts",
-   "golden": {
-    "PU-1": 1010,
-    "PU-2": 1010,
-    "PU-3": 840,
-    "PU-4": 840
-   },
-   "graded_as": "Recommendation",
-   "id": "R5",
-   "independent": "",
-   "name": "each unit's count for the disk under Rev G, the ring costed at sort and at final test",
+   "partly_share": 0.5,
    "passes": {
-    "careful": {
-     "PU-1": 1730,
-     "PU-2": 1730,
-     "PU-3": 1170,
-     "PU-4": 1170
-    },
     "quick": {
-     "PU-1": 1400,
-     "PU-2": 1400,
-     "PU-3": 1400,
-     "PU-4": 1400
+     "VX40": 25.2,
+     "VP12": 34.8
+    },
+    "careful": {
+     "VX40": 25.2,
+     "VP12": 34.8
     },
     "thorough": {
-     "PU-1": 1010,
-     "PU-2": 1010,
-     "PU-3": 840,
-     "PU-4": 840
+     "VX40": 25.2,
+     "VP12": 34.8
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the scratch cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan",
+   "graded_as": "Component 1, Ask 2",
+   "figure": "R2_loop",
+   "depends": [],
+   "independent": "the loop's trend, line list and the polishers' exports",
+   "golden": {
+    "cause": "the slurry loop",
+    "VX40": 7.3,
+    "VR90": 8.3
+   },
+   "bands": {
+    "VX40": [
+     6.7,
+     9.0
+    ],
+    "VR90": [
+     7.5,
+     9.7
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "cause": "CM3",
+     "VX40": 7.3,
+     "VR90": 0.0
+    },
+    "careful": {
+     "cause": "the slurry loop",
+     "VX40": 7.3,
+     "VR90": 5.3
+    },
+    "thorough": {
+     "cause": "the slurry loop",
+     "VX40": 7.3,
+     "VR90": 8.3
     }
    },
    "precedent": [
-    "L11"
+    "L26",
+    "L38"
    ]
   },
   {
-   "band": [
-    467000,
-    571000
-   ],
-   "depends": [
-    "R4",
-    "R5"
-   ],
-   "figure": "R5_saving",
-   "golden": 519000,
-   "graded_as": "Ask 2",
-   "id": "R6",
-   "independent": "",
-   "name": "the yearly saving of those counts against Rev F as it stands",
-   "partly": [
-    415100.0,
-    622900.0
-   ],
+   "id": "R3",
+   "name": "the bath cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan",
+   "graded_as": "Ask 3",
+   "figure": "R3_bath",
+   "depends": [],
+   "independent": "the bench controller log and the lab's samples",
+   "golden": {
+    "cause": "the bench chemical life",
+    "VX40": 4.3,
+    "VR90": 3.1
+   },
+   "bands": {
+    "VX40": [
+     3.7,
+     5.6
+    ],
+    "VR90": [
+     2.3,
+     3.7
+    ]
+   },
+   "partly_share": 0.5,
    "passes": {
-    "careful": 274000,
-    "quick": 204000,
-    "thorough": 519000
+    "quick": {
+     "cause": "CM3",
+     "VX40": 0.0,
+     "VR90": 0.0
+    },
+    "careful": {
+     "cause": "the bench chemical life",
+     "VX40": 4.3,
+     "VR90": 1.8
+    },
+    "thorough": {
+     "cause": "the bench chemical life",
+     "VX40": 4.3,
+     "VR90": 3.1
+    }
    },
    "precedent": [
-    "N02"
+    "L36",
+    "N12"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the edge cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan",
+   "graded_as": "Component 2, Ask 4",
+   "figure": "R4_edge",
+   "depends": [],
+   "independent": "the deposition log, the polishers' exports and the 49-site maps",
+   "golden": {
+    "cause": "DP2B and CM3 together",
+    "VX40": 10.6,
+    "VR90": 0.76
+   },
+   "bands": {
+    "VX40": [
+     10.0,
+     13.0
+    ],
+    "VR90": [
+     0.49,
+     1.02
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "cause": "CM3",
+     "VX40": 10.6,
+     "VR90": 0.0
+    },
+    "careful": {
+     "cause": "CM3 R8",
+     "VX40": 10.6,
+     "VR90": 0.0
+    },
+    "thorough": {
+     "cause": "DP2B and CM3 together",
+     "VX40": 10.6,
+     "VR90": 0.76
+    }
+   },
+   "precedent": [
+    "L01",
+    "L06"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the etch cause: what it is, its cost per VX40 wafer, what fixing it adds to VR90 under the plan, and the clean interval",
+   "graded_as": "Component 3, Ask 5",
+   "figure": "R5_etch",
+   "depends": [],
+   "independent": "the contact-etch summary, the monitors and the PM log",
+   "golden": {
+    "cause": "the deep recipe's polymer",
+    "VX40": 2.1,
+    "VR90": 5.5,
+    "interval": 1420
+   },
+   "bands": {
+    "VX40": [
+     1.5,
+     3.0
+    ],
+    "VR90": [
+     4.9,
+     6.0
+    ],
+    "interval": [
+     1300,
+     1550
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "cause": "CM3",
+     "VX40": 0.0,
+     "VR90": 0.0,
+     "interval": 2400
+    },
+    "careful": {
+     "cause": "RF hours",
+     "VX40": 1.8,
+     "VR90": 3.4,
+     "interval": 1840
+    },
+    "thorough": {
+     "cause": "the deep recipe's polymer",
+     "VX40": 2.1,
+     "VR90": 5.5,
+     "interval": 1420
+    }
+   },
+   "precedent": [
+    "L36",
+    "N04",
+    "L37"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "VR90's Q1 2027 sort yield with every cause fixed",
+   "graded_as": "Component 4, Ask 6",
+   "figure": "R6_fixed",
+   "depends": [],
+   "independent": "the January to March die maps",
+   "golden": 65.3,
+   "band": [
+    64.3,
+    66.4
+   ],
+   "partly": [
+    63.699999999999996,
+    67.0
+   ],
+   "passes": {
+    "quick": 87.9,
+    "careful": 63.3,
+    "thorough": 65.3
+   },
+   "precedent": [
+    "L22"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "VR90's Q1 2027 sort yield under the ramp plan as filed, and the wafer starts with every cause fixed",
+   "graded_as": "Recommendation, Component 5, Ask 7",
+   "figure": "R7_plan",
+   "depends": [
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "plan": 45.4,
+    "starts": 3520
+   },
+   "bands": {
+    "plan": [
+     43.7,
+     46.4
+    ],
+    "starts": [
+     3470,
+     3580
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "plan": 84.5,
+     "starts": 2620
+    },
+    "careful": {
+     "plan": 52.1,
+     "starts": 3640
+    },
+    "thorough": {
+     "plan": 45.4,
+     "starts": 3520
+    }
+   },
+   "precedent": [
+    "L32",
+    "L11"
    ]
   }
  ],
  "routes": [
   {
-   "answer": {
-    "counts": {
-     "high": 840,
-     "low": 1010
-    },
-    "final test": 115000,
-    "loss": 0.9
-   },
+   "name": "the golden",
    "golden": true,
-   "name": "the golden"
+   "answer": [
+    45.4,
+    65.3,
+    [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 1400,
-     "low": 1400
-    },
-    "final test": 44000,
-    "loss": 0.7
-   },
-   "name": "the ticket's view: the classifier's wafers, the lots with no ring label as final test's base, one fleet fit"
+   "name": "the far polishers' excess booked to their own filters and pads",
+   "answer": [
+    48.7,
+    65.3,
+    [
+     "CM1 and CM3 filters and pads",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 1170,
-     "low": 1730
-    },
-    "final test": 29000,
-    "loss": 0.87
-   },
-   "name": "careful but hurried: every disk lot pooled, burn-in in proportion to the ring's die"
+   "name": "the bath carried at the summer's loading",
+   "answer": [
+    47.3,
+    65.9,
+    [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 940,
-     "low": 1210
-    },
-    "final test": 29000,
-    "loss": 0.9
-   },
-   "name": "the current lot found, burn-in in proportion to the ring's die"
+   "name": "CM3's harmonisation taken as the edge fix",
+   "answer": [
+    46.1,
+    65.3,
+    [
+     "loop",
+     "bath",
+     "etch",
+     "CM3 harmonised alone"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 990,
-     "low": 1220
-    },
-    "final test": 115000,
-    "loss": 0.87
-   },
-   "name": "final test's rise measured, every disk lot pooled"
+   "name": "VR90 read on a Poisson die-area formula",
+   "answer": [
+    42.7,
+    61.5,
+    [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 970,
-     "low": 1240
-    },
-    "final test": 115000,
-    "loss": 0.9
-   },
-   "name": "the current lot found, final test left out of the count"
+   "name": "VR90 read on a cluster factor of 2",
+   "answer": [
+    43.6,
+    62.8,
+    [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 890,
-     "low": 1260
-    },
-    "final test": 115000,
-    "loss": 0.9
-   },
-   "name": "the summer's wafers as the current state"
+   "name": "the etch cleans scaled by RF time alone",
+   "answer": [
+    47.8,
+    65.3,
+    [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 1020,
-     "low": 1110
-    },
-    "final test": 115000,
-    "loss": 0.9
-   },
-   "name": "the earlier lots' curve"
+   "name": "the careful but hurried pass",
+   "answer": [
+    52.1,
+    63.3,
+    [
+     "loop",
+     "CM1 and CM3 filters and pads",
+     "bath",
+     "CM3 harmonised alone",
+     "etch on RF hours"
+    ]
+   ]
   },
   {
-   "answer": {
-    "counts": {
-     "high": 990,
-     "low": 1140
-    },
-    "final test": 115000,
-    "loss": 0.9
-   },
-   "name": "a dose straight from zero"
-  },
-  {
-   "answer": {
-    "counts": {
-     "high": 1200,
-     "low": 1750
-    },
-    "final test": -5000,
-    "loss": 1.33
-   },
-   "name": "the first quarter's burn-in as final test's base, the fab's yield before and after April"
+   "name": "VX40's own yields carried to VR90",
+   "answer": [
+    84.5,
+    87.9,
+    []
+   ]
   }
- ]
+ ],
+ "forcing": {
+  "kind": "set",
+  "what": "the changes the ramp plan needs, each paying for itself in VR90's Q1 die value",
+  "golden_answer": [
+   "loop",
+   "bath",
+   "edge",
+   "etch"
+  ],
+  "golden_family": [
+   {
+    "name": "block yields read directly at VR90's area",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the cluster fit on VX40's blocks alone",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the cluster fit on VP12's blocks alone",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "VR90 split evenly between CM1 and CM3",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "particle kill per mm2 read from VP12",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the gate oxide fit at a straight hinge",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "bin 5 pooled over VX40 and VP12 per mm2 of die",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the far polishers' excess booked to their own filters and pads",
+    "answer": [
+     "CM1 and CM3 filters and pads",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the bath carried at the summer's loading",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "CM3's harmonisation taken as the edge fix",
+    "answer": [
+     "loop",
+     "bath",
+     "etch",
+     "CM3 harmonised alone"
+    ]
+   },
+   {
+    "name": "VR90 read on a Poisson die-area formula",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "VR90 read on a cluster factor of 2",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the etch cleans scaled by RF time alone",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "name": "the careful but hurried pass",
+    "answer": [
+     "loop",
+     "CM1 and CM3 filters and pads",
+     "bath",
+     "CM3 harmonised alone",
+     "etch on RF hours"
+    ]
+   },
+   {
+    "name": "VX40's own yields carried to VR90",
+    "answer": []
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "scratch rates 20 per cent lower",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "scratch rates 20 per cent higher",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "bath drag 20 per cent lower",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "bath drag 20 per cent higher",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "polymer factor 20 per cent lower",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "polymer factor 20 per cent higher",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "thick-edge kill 20 per cent lower",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   },
+   {
+    "input": "thick-edge kill 20 per cent higher",
+    "answer": [
+     "loop",
+     "bath",
+     "edge",
+     "etch"
+    ]
+   }
+  ]
+ },
+ "hints": [
+  {
+   "sentence": "Contact-etch polymer builds per RF second about 1.7 times faster on the deep recipe",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "The slurry loop's scratching grows with each polisher's distance along it",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "DP2B's thick edge and CM3's thin-edge tune cancel on the wafers that run both",
+   "rescues": [
+    "R4"
+   ]
+  },
+  {
+   "sentence": "The bath's metals build with every lot between spikes and changes, so the bench's loading sets them",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "Defects cluster, so a large die yields more than a die-area formula says",
+   "rescues": [
+    "R6"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 21.857,
+  "components": 55.429,
+  "asks": 15.714,
+  "instruction": 7
+ }
 }
