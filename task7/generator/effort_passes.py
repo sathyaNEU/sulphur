@@ -10,7 +10,7 @@ import params as P
 import verify as V
 
 GOLD = dict(A.GOLD)
-BASE = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", comp=None,
+BASE = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", lossv=True, comp=None,
             lam=1.0, lossk=1.0, room=0.0)
 # the judgments a careful run gets wrong in a hurry: the call turns on these
 STUMPS = {
@@ -55,11 +55,13 @@ def run(R, Jset, **kw):
     A.reset()
     parts = [A.parts2(R, f, Jset) for f in range(P.NF)]
     out = {"save": np.array([p["total"] for p in parts]), "cust": np.array([p["cust"] for p in parts]),
-           "loss": np.array([p["loss_rise"] for p in parts]), "cvrf": np.array([p["cvrf"] for p in parts])}
+           "loss": np.array([p["loss_rise"] for p in parts])}
     out["vc"] = out["save"] * P.PRICE * P.ANNUITY / np.array(R.cost)
     out["set"] = tuple(int(f) for f in np.where(out["vc"] >= 1)[0])
     out["trial"] = {f: A.trial_effect(R, f, Jset[1]) for f in R.trial}
     out["room"] = np.array([A.headroom(R, f, Jset[4]).mean() for f in range(P.NF)])
+    # each feeder's yearly response: its customer saving as a share of its energy, per unit of its average reduction
+    out["cvrf"] = out["cust"] / (energy_mwh(R) * out["room"] / P.VNOM)
     return out
 
 
@@ -78,12 +80,12 @@ def quick(R):
     eta = float(np.mean(list(tr.values())))
     out["trial"] = tr
     out["room"] = np.full(P.NF, P.TRIAL_DV)
-    out["cvrf"] = np.full(P.NF, eta)
     out["cust"] = np.array([eta * P.TRIAL_DV / P.VNOM * R.ami[f].sum() for f in range(P.NF)])
     out["save"] = out["cust"].copy()
     out["loss"] = np.zeros(P.NF)
     out["vc"] = out["save"] * P.PRICE * P.ANNUITY / np.array(R.cost)
     out["set"] = tuple(int(f) for f in np.where(out["vc"] >= 1)[0])
+    out["cvrf"] = out["cust"] / (out["raw_mwh"] * out["room"] / P.VNOM)
     return out
 
 
@@ -111,6 +113,7 @@ def run_all(target):
     drops = {j: run(R, J(j)) for j in STUMPS}
     alone = {j: run(R, J(*[k for k in STUMPS if k != j])) for j in STUMPS}
     assigned = run(R, J(1))
+    nominal = run(R, GOLD, lossv=False)
     E = energy_mwh(R)
     fam = [G] + list(riv.values())
     nf = range(P.NF)
@@ -149,7 +152,22 @@ def run_all(target):
     }
     for j, d in drops.items():
         fig["routes"]["%s dropped (%s)" % (STUMPS[j][0], STUMPS[j][1])] = [ids[f] for f in d["set"]]
+    fig["routes"]["the losses fitted with current at nominal kV"] = [ids[f] for f in nominal["set"]]
+    fig["on_day_loss_rise_pct"] = {}
+    for g in [g for g in R.trial if g in R.headmetered]:
+        S = R.ami[g] * 4
+        L = R.head[g] * 4 - S
+        on = np.repeat(R.dose_daily[g] > 1.0, P.Q)
+        off = np.zeros(P.NQ, bool)
+        for d in R.trial_days:
+            if R.assign[g][d] == 0:
+                off[d * P.Q:(d + 1) * P.Q] = True
+        k_on = (L[on] * S[on] ** 2).sum() / (S[on] ** 4).sum()
+        k_off = (L[off] * S[off] ** 2).sum() / (S[off] ** 4).sum()
+        fig["on_day_loss_rise_pct"][ids[g]] = round(float(100 * (k_on / k_off - 1)), 1)
     eff = effort(R, ids, G, C, drops, alone, riv, fig)
+    eff["routes"].append({"name": "the losses fitted with current at nominal kV", "answer": fig["routes"]["the losses fitted with current at nominal kV"]})
+    eff["forcing"]["shortcuts"].append({"name": "the losses fitted with current at nominal kV", "answer": fig["routes"]["the losses fitted with current at nominal kV"]})
     return fig, eff
 
 

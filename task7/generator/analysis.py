@@ -13,7 +13,7 @@ import params as P
 
 GOLD = {1: True, 2: True, 3: True, 4: True, 5: True}
 # the analyst's settings a rival may choose differently (the golden family varies them)
-OPT = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", comp=None, lam=1.0, lossk=1.0, room=0.0)
+OPT = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", lossv=True, comp=None, lam=1.0, lossk=1.0, room=0.0)
 
 
 def reset():
@@ -143,7 +143,7 @@ def loss_k(O):
     for f in O.headmetered:
         S = O.ami[f] * 4                        # MW
         L = O.head[f] * 4 - S
-        x = S ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * (P.VNOM / O.vmin_h_head[f]) ** 2
+        x = S ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * ((P.VNOM / O.vmin_h_head[f]) ** 2 if OPT["lossv"] else 1.0)
         xs.append(x)
         ys.append(L)
     x, y = np.concatenate(xs), np.concatenate(ys)
@@ -384,8 +384,10 @@ def parts2(O, f, J, cache={}):
         V0 = O.vmin_h_head[f]
         S1 = S - dcust
         V1 = V0 - np.repeat(dvh, 4)
-        l0 = kl * S ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * (P.VNOM / V0) ** 2
-        l1 = kl * S1 ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * (P.VNOM / V1) ** 2
+        vf0 = (P.VNOM / V0) ** 2 if OPT["lossv"] else 1.0                # current at the voltage the feeder runs, or at nominal kV
+        vf1 = (P.VNOM / V1) ** 2 if OPT["lossv"] else 1.0
+        l0 = kl * S ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * vf0
+        l1 = kl * S1 ** 2 * O.r[f] * O.L[f] / (P.KV ** 2) * vf1
         dl = l0 - l1
     else:
         dl = P.LOSS_RATE_REPORT * dcust

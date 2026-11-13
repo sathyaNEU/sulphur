@@ -120,6 +120,12 @@ def main():
           fam["the trial's scale the mean of the trial feeders' ratios, not the median"] == gold)
     check("SF14 the loss fit with a no-load term files the golden", fam["the loss fit with a no-load term"] == gold)
     check("SF15 the average reduction is over the year's hours (the prompt's 'over the year')", "over the year" in open(os.path.join(TASK, "prompt.txt")).read())
+    check("SF17 losses at the feeder's own voltage, not nominal kV: the head-metered trial feeders' losses per load squared rise on ON days",
+          all(6 < v < 11 for v in fig["on_day_loss_rise_pct"].values()) and len(fig["on_day_loss_rise_pct"]) >= 3, str(fig["on_day_loss_rise_pct"]))
+    check("SF18 the trial's ON hours restored, not dropped: the prompt's average over the year counts every hour",
+          "over the year" in open(os.path.join(TASK, "prompt.txt")).read())
+    check("SF19 each feeder's yearly response reconciles with the asked figures (saving over energy, per average reduction)",
+          all(abs(fig["cvrf"][i] - fig["cust_mwh"][i] / (fig["energy_mwh"][i] * fig["room_v"][i] / 120.0)) < 0.011 for i in ids))
     check("SF16 the loss change is a rise, positive when losses grow (the prompt's 'rise')", "rise in its own line losses" in open(os.path.join(TASK, "prompt.txt")).read())
     # mess and the read-back
     R = V.read_pack(TARGET)

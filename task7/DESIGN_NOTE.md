@@ -32,7 +32,7 @@ Swap: "fund voltage optimization where the load is not thermostatic and the loss
 Where the weight sits: R4 and R7, each feeder's own yearly response and its yearly saving at the substation, built from the trial (R2), each feeder's makeup through the year, its far end (R3) and its losses (R6); long because every feeder-quarter is rebuilt from records at four grains (quarter-hour meter sums, hourly far-end minima, the trial's daily records, the register and the survey), not clever
 Layer 1: the MDM export's re-sent October block and its estimated intervals (meters not reporting), the bus SCADA's lost scans, the regulator log's mixed-case modes, the weather station's missing reports, the bellwether meters three to a feeder (the lowest each hour counts); each made by the system that exports the file, none deciding a feeder on its own
 Not one thing: the strongest single piece is the makeup (J2) or the give-back (J3): told either alone, the careful route still files four feeders wrong; the losses alone leave five wrong; no single sentence rescues any of the nine results
-One-fact test: each of the three stumps' sentences rescues none of the nine results on its own (effort.json hints); the call needs all three
+One-fact test: each of the three stumps' sentences rescues none of the nine results on its own (effort.json hints); the strongest combined sentence, each feeder's own thermostatic share hour by hour (J2 and J3 together), rescues R4 and R5, 2 of 9, and leaves the call wrong on ASH-113 and CDB-116
 Not semantics: every field read right (the modes, the SCADA voltages, the bellwether minima, the survey codes, the load research, the register's ohms) still leaves the careful route funding 17 feeders, ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong, because each of the three is an estimate a reading cannot make
 Not rule application: VO-1 files what is compared and with which records (energy at the breaker over a year like 2026 against normal running, 115 V hour by hour, the 4.8 V cap, USD 48 and 9.4, feeder-head and far-end voltage); no filed procedure carries the response to a feeder or an hour or prices its losses
 Estimand: VO-1 2.1 to 2.4 and 3.1 to 3.2; the trial protocol's design; the capital plan's costs; the prompt's per-feeder quantities
@@ -51,7 +51,7 @@ Lesson: a voltage response measured on a few feeders in two seasons is a structu
 | R1 | each feeder's 2026 energy at the customer meters (MWh) | assembly and reconciliation | VO-1 3.1; the MDM export | within 0.5 percent | method shortcut: the export summed with its re-sent block | - | Ask 1 |
 | R2 | the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders | causal reasoning | VO-1 3.1 (feeder-head voltage); the trial protocol | 0.66 to 0.72 | dismissed own evidence: the local-mode ON days seen and the trial read on its assignment (0.53) | independent: the trial records | Ask 2 |
 | R3 | the average reduction in volts each feeder could be held at over the year | missingness and measurement | VO-1 2.3 and 3.1 | the golden family, 2 percent or 0.05 V | method shortcut: the trial's 4.8 V carried to every feeder | independent: the far-end meters | Ask 3 |
-| R4 | each feeder's yearly change in customer energy per 1 percent of voltage removed | modeling | the prompt (yearly, at the customer meters) | the golden family, 3 percent or 0.01 | method shortcut: the trial feeders' average (0.70) carried to every feeder flat through the year | R2 | Component 2 |
+| R4 | each feeder's yearly change in customer energy per 1 percent of voltage removed | modeling | the prompt (yearly, at the customer meters); SF19 | the golden family, 3 percent or 0.01 | method shortcut: the trial feeders' average (0.70) carried to every feeder flat through the year | R2 | Component 2 |
 | R5 | each feeder's yearly energy saving at the customer meters (MWh) | forecasting | VO-1 2.2 and 2.3 | the golden family, 3 percent or 8 MWh | method shortcut: the trial average at each feeder's volts, flat through the year | R3, R4 | Ask 4 |
 | R6 | the rise in each feeder's own line losses (MWh a year) | decomposition and attribution | VO-1 2.2 (energy at the breaker) | the golden family, 10 percent or 3 MWh | method shortcut: the annual report's 6.1 percent added in proportion (a fall) | R3, R5 | Component 3 |
 | R7 | each feeder's yearly energy saving at the substation (MWh) | forecasting | VO-1 2.2 to 2.4 | the golden family, 3 percent or 8 MWh | method shortcut: R5's flat carry with 6.1 percent added | R5, R6 | Component 1 |
@@ -87,6 +87,8 @@ Carry-forward: R1, R2 and R3 stand on their own records; R4 uses R2's trial scal
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
 Largest single hint: each untested feeder's response from its own makeup (or the give-back, or the losses); rescues 0 of 9 results
 Pair estimate: 47.0 (measured by effort.py on generator/effort.json; the careful pass is the reflex route)
+Without R9 (the program total, a sum of R7 over R8 with no work of its own) the careful pass is about 55; R9 stays because the memo's headline figure is what the board reads, and the platform is the measurement.
+Coupling, stated plainly: on an untested feeder the give-back (J3) cannot be carried without the feeder's own makeup (J2), so the one sentence "each feeder's own thermostatic share, hour by hour" fixes both; with the losses still hurried it leaves ASH-113 and CDB-116 wrong and rescues R4 and R5 (2 of 9). Two independent fix groups decide the call: the makeup through the year, and the losses.
 
 ## Stump factorial
 
@@ -150,6 +152,9 @@ Closed strategies: the call turns on latent_structure_estimation, cancellation_o
 | SF14 | the loss fit | through the origin / with a no-load term | through the origin | same call |
 | SF15 | the average reduction | over the year's hours / weighted by energy | over the year's hours | the prompt's "over the year" |
 | SF16 | the loss change | a fall / a rise | a rise, positive when losses grow | the prompt's "the rise in its own line losses" |
+| SF17 | the current in the loss fit | at nominal kV / at the voltage the feeder runs | at the feeder's own voltage (I = P / V) | the five head-metered trial feeders: losses per unit of load squared 7 to 9 percent higher on ON days, the (1/0.96) squared a 4 percent cut gives; the nominal-kV fit files a fourth wrong set |
+| SF18 | the trial's ON hours in the average reduction | dropped / restored to normal running | restored (bus voltage less the regulator's recorded reduction) | the prompt's "over the year" counts every hour; VO-1 2.2 (ON days are not normal running) |
+| SF19 | a feeder's yearly response | energy-weighted over the hours / its yearly saving over its energy per its average reduction | the latter, so it reconciles with the other asked figures | the asked columns: R5 over R1, per R3 over 120 |
 
 ## Closure table
 
