@@ -1,0 +1,1179 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the GPU-days the 2026 runs held, all of 2026",
+   "graded_as": "Ask 3",
+   "figure": "held_2026_total",
+   "depends": [],
+   "independent": "the registry's launch and finish times",
+   "golden": 1332946.0,
+   "band": [
+    1326281.27,
+    1339610.7299999997
+   ],
+   "partly": [
+    1306287.08,
+    1359604.92
+   ],
+   "passes": {
+    "quick": 1164051.0,
+    "careful": 1332946.0,
+    "thorough": 1332946.0
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the 2026 bridge from benchmark GPU-days to GPU-days held, by cause",
+   "graded_as": "Component 4",
+   "figure": "b26",
+   "depends": [
+    "R1"
+   ],
+   "independent": "2026's own records",
+   "golden": {
+    "benchmark GPU-days": 1250323.0,
+    "the runs' own mixes at the mean rank": -42558.0,
+    "waiting for the slowest rank": 60137.0,
+    "padding in packed sequences": 6.0,
+    "hall B held to its contracted load": 21024.0,
+    "hall A row 6 cooling fault": 5228.0,
+    "interruptions and restarts": 27131.0,
+    "provider works": 18900.0,
+    "other": -7244.0,
+    "GPU-days held": 1332946.0
+   },
+   "bands": {
+    "benchmark GPU-days": [
+     1237819.77,
+     1262826.23
+    ],
+    "the runs' own mixes at the mean rank": [
+     -47664.96,
+     -37451.04
+    ],
+    "waiting for the slowest rank": [
+     52920.56,
+     67353.44
+    ],
+    "padding in packed sequences": [
+     -1494.0,
+     1506.0
+    ],
+    "hall B held to its contracted load": [
+     18501.12,
+     23546.88
+    ],
+    "hall A row 6 cooling fault": [
+     3728.0,
+     6728.0
+    ],
+    "interruptions and restarts": [
+     23875.28,
+     30386.72
+    ],
+    "provider works": [
+     16632.0,
+     21168.0
+    ],
+    "other": [
+     -8744.0,
+     -5744.0
+    ],
+    "GPU-days held": [
+     1326281.27,
+     1339610.7299999997
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": null,
+    "careful": {
+     "benchmark GPU-days": 1250323.0,
+     "the runs' own mixes at the mean rank": 17585.0,
+     "waiting for the slowest rank": 0.0,
+     "padding in packed sequences": 0.0,
+     "hall B held to its contracted load": 0.0,
+     "hall A row 6 cooling fault": 5228.0,
+     "interruptions and restarts": 27131.0,
+     "provider works": 18900.0,
+     "other": 13780.0,
+     "GPU-days held": 1332946.0
+    },
+    "thorough": {
+     "benchmark GPU-days": 1250323.0,
+     "the runs' own mixes at the mean rank": -42558.0,
+     "waiting for the slowest rank": 60137.0,
+     "padding in packed sequences": 6.0,
+     "hall B held to its contracted load": 21024.0,
+     "hall A row 6 cooling fault": 5228.0,
+     "interruptions and restarts": 27131.0,
+     "provider works": 18900.0,
+     "other": -7244.0,
+     "GPU-days held": 1332946.0
+    }
+   },
+   "precedent": [
+    "L26",
+    "L32"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "each long-context 2027 run's slowest-rank overhead over its mean rank, per cent",
+   "graded_as": "Component 1",
+   "figure": "overhead_pct",
+   "depends": [],
+   "independent": "traces, manifests, the length sample",
+   "golden": {
+    "kide-13b-code-lc32": 31.3,
+    "kide-34b-lc64": 48.1,
+    "kide-8b-lc64": 57.8,
+    "kide-13b-lc32": 9.4,
+    "kide-34b-sci": 3.3
+   },
+   "bands": {
+    "kide-13b-code-lc32": [
+     28.3,
+     34.3
+    ],
+    "kide-34b-lc64": [
+     45.1,
+     51.1
+    ],
+    "kide-8b-lc64": [
+     54.8,
+     60.8
+    ],
+    "kide-13b-lc32": [
+     6.4,
+     12.4
+    ],
+    "kide-34b-sci": [
+     0.2999999999999998,
+     6.3
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "kide-13b-code-lc32": 0.0,
+     "kide-34b-lc64": 0.0,
+     "kide-8b-lc64": 0.0,
+     "kide-13b-lc32": 0.0,
+     "kide-34b-sci": 0.0
+    },
+    "thorough": {
+     "kide-13b-code-lc32": 31.3,
+     "kide-34b-lc64": 48.1,
+     "kide-8b-lc64": 57.8,
+     "kide-13b-lc32": 9.4,
+     "kide-34b-sci": 3.3
+    }
+   },
+   "precedent": [
+    "N04",
+    "L22",
+    "L26",
+    "L36"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "kide-34b-sci's packing fill",
+   "graded_as": "Component 2",
+   "figure": "fill_kide-34b-sci",
+   "depends": [],
+   "independent": "the length sample and the configs' packing rule",
+   "golden": 0.795,
+   "band": [
+    0.78,
+    0.81
+   ],
+   "partly": [
+    0.755,
+    0.8350000000000001
+   ],
+   "passes": {
+    "quick": 1.0,
+    "careful": 1.0,
+    "thorough": 0.795
+   },
+   "precedent": [
+    "N04",
+    "L36"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "each hall B run's mean step stretch in 2027 from the hall held to its contract, per cent",
+   "graded_as": "Component 3",
+   "figure": "stretch",
+   "depends": [],
+   "independent": "meter, node states, step logs, reservations",
+   "golden": {
+    "kide-120b-v1": 19.7,
+    "kide-13b-lc32": 9.6,
+    "kide-13b-v4": 19.6,
+    "kide-34b-16k": 23.4,
+    "kide-34b-v3": 23.3,
+    "kide-8b-lc64": 0.0,
+    "kide-8b-v4": 21.7
+   },
+   "bands": {
+    "kide-120b-v1": [
+     17.2,
+     22.2
+    ],
+    "kide-13b-lc32": [
+     7.1,
+     12.1
+    ],
+    "kide-13b-v4": [
+     17.1,
+     22.1
+    ],
+    "kide-34b-16k": [
+     20.9,
+     25.9
+    ],
+    "kide-34b-v3": [
+     20.8,
+     25.8
+    ],
+    "kide-8b-lc64": [
+     -2.5,
+     2.5
+    ],
+    "kide-8b-v4": [
+     19.2,
+     24.2
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "kide-120b-v1": 0.0,
+     "kide-13b-lc32": 0.0,
+     "kide-13b-v4": 0.0,
+     "kide-34b-16k": 0.0,
+     "kide-34b-v3": 0.0,
+     "kide-8b-lc64": 0.0,
+     "kide-8b-v4": 0.0
+    },
+    "thorough": {
+     "kide-120b-v1": 19.7,
+     "kide-13b-lc32": 9.6,
+     "kide-13b-v4": 19.6,
+     "kide-34b-16k": 23.4,
+     "kide-34b-v3": 23.3,
+     "kide-8b-lc64": 0.0,
+     "kide-8b-v4": 21.7
+    }
+   },
+   "precedent": [
+    "L38",
+    "L15",
+    "L01"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "days each 2027 run loses to interruptions and restarts",
+   "graded_as": "Ask 2",
+   "figure": "interrupt_days",
+   "depends": [],
+   "independent": "the interruption log",
+   "golden": {
+    "kide-120b-v1": 2.03,
+    "kide-13b-code-lc32": 0.03,
+    "kide-13b-lc32": 0.1,
+    "kide-13b-v4": 0.43,
+    "kide-34b-16k": 0.78,
+    "kide-34b-lc64": 0.06,
+    "kide-34b-sci": 0.18,
+    "kide-34b-v3": 0.79,
+    "kide-70b-v2": 0.5,
+    "kide-8b-lc64": 0.04,
+    "kide-8b-v4": 0.49
+   },
+   "bands": {
+    "kide-120b-v1": [
+     1.4725,
+     2.5874999999999995
+    ],
+    "kide-13b-code-lc32": [
+     -0.027500000000000004,
+     0.0875
+    ],
+    "kide-13b-lc32": [
+     0.02500000000000001,
+     0.175
+    ],
+    "kide-13b-v4": [
+     0.2725,
+     0.5875
+    ],
+    "kide-34b-16k": [
+     0.5349999999999999,
+     1.0250000000000001
+    ],
+    "kide-34b-lc64": [
+     -0.0050000000000000044,
+     0.125
+    ],
+    "kide-34b-sci": [
+     0.085,
+     0.27499999999999997
+    ],
+    "kide-34b-v3": [
+     0.5425,
+     1.0375
+    ],
+    "kide-70b-v2": [
+     0.325,
+     0.675
+    ],
+    "kide-8b-lc64": [
+     -0.020000000000000004,
+     0.1
+    ],
+    "kide-8b-v4": [
+     0.3175,
+     0.6625000000000001
+    ]
+   },
+   "passes": {
+    "quick": {
+     "kide-120b-v1": 0.0,
+     "kide-13b-code-lc32": 0.0,
+     "kide-13b-lc32": 0.0,
+     "kide-13b-v4": 0.0,
+     "kide-34b-16k": 0.0,
+     "kide-34b-lc64": 0.0,
+     "kide-34b-sci": 0.0,
+     "kide-34b-v3": 0.0,
+     "kide-70b-v2": 0.0,
+     "kide-8b-lc64": 0.0,
+     "kide-8b-v4": 0.0
+    },
+    "careful": {
+     "kide-120b-v1": 2.03,
+     "kide-13b-code-lc32": 0.03,
+     "kide-13b-lc32": 0.1,
+     "kide-13b-v4": 0.43,
+     "kide-34b-16k": 0.78,
+     "kide-34b-lc64": 0.06,
+     "kide-34b-sci": 0.18,
+     "kide-34b-v3": 0.79,
+     "kide-70b-v2": 0.5,
+     "kide-8b-lc64": 0.04,
+     "kide-8b-v4": 0.49
+    },
+    "thorough": {
+     "kide-120b-v1": 2.03,
+     "kide-13b-code-lc32": 0.03,
+     "kide-13b-lc32": 0.1,
+     "kide-13b-v4": 0.43,
+     "kide-34b-16k": 0.78,
+     "kide-34b-lc64": 0.06,
+     "kide-34b-sci": 0.18,
+     "kide-34b-v3": 0.79,
+     "kide-70b-v2": 0.5,
+     "kide-8b-lc64": 0.04,
+     "kide-8b-v4": 0.49
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "days each 2027 window that holds provider works loses to them",
+   "graded_as": "Ask 2",
+   "figure": "works_days",
+   "depends": [],
+   "independent": "work orders and the 2027 notice",
+   "golden": {
+    "kide-120b-v1": 0.44,
+    "kide-34b-lc64": 3.1,
+    "kide-34b-v3": 0.51,
+    "kide-70b-v2": 0.38,
+    "kide-8b-lc64": 4.45,
+    "kide-8b-v4": 0.51
+   },
+   "bands": {
+    "kide-120b-v1": [
+     0.09000000000000002,
+     0.79
+    ],
+    "kide-34b-lc64": [
+     2.75,
+     3.45
+    ],
+    "kide-34b-v3": [
+     0.16000000000000003,
+     0.86
+    ],
+    "kide-70b-v2": [
+     0.030000000000000027,
+     0.73
+    ],
+    "kide-8b-lc64": [
+     4.1000000000000005,
+     4.8
+    ],
+    "kide-8b-v4": [
+     0.16000000000000003,
+     0.86
+    ]
+   },
+   "passes": {
+    "quick": {
+     "kide-120b-v1": 0.0,
+     "kide-34b-lc64": 0.0,
+     "kide-34b-v3": 0.0,
+     "kide-70b-v2": 0.0,
+     "kide-8b-lc64": 0.0,
+     "kide-8b-v4": 0.0
+    },
+    "careful": {
+     "kide-120b-v1": 0.41,
+     "kide-34b-lc64": 1.6,
+     "kide-34b-v3": 0.47,
+     "kide-70b-v2": 0.35,
+     "kide-8b-lc64": 2.43,
+     "kide-8b-v4": 0.47
+    },
+    "thorough": {
+     "kide-120b-v1": 0.44,
+     "kide-34b-lc64": 3.1,
+     "kide-34b-v3": 0.51,
+     "kide-70b-v2": 0.38,
+     "kide-8b-lc64": 4.45,
+     "kide-8b-v4": 0.51
+    }
+   },
+   "precedent": [
+    "N22",
+    "N03",
+    "L46"
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "each 2027 run's expected days from its window's start",
+   "graded_as": "Ask 1",
+   "figure": "days",
+   "depends": [
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "kide-120b-v1": 86.2,
+    "kide-13b-code-lc32": 8.0,
+    "kide-13b-lc32": 10.1,
+    "kide-13b-v4": 33.6,
+    "kide-34b-16k": 62.1,
+    "kide-34b-lc64": 14.9,
+    "kide-34b-sci": 23.0,
+    "kide-34b-v3": 43.8,
+    "kide-70b-v2": 39.5,
+    "kide-8b-lc64": 15.1,
+    "kide-8b-v4": 63.0
+   },
+   "bands": {
+    "kide-120b-v1": [
+     83.614,
+     88.786
+    ],
+    "kide-13b-code-lc32": [
+     7.76,
+     8.24
+    ],
+    "kide-13b-lc32": [
+     9.796999999999999,
+     10.403
+    ],
+    "kide-13b-v4": [
+     32.592,
+     34.608000000000004
+    ],
+    "kide-34b-16k": [
+     60.237,
+     63.963
+    ],
+    "kide-34b-lc64": [
+     14.453,
+     15.347000000000001
+    ],
+    "kide-34b-sci": [
+     22.31,
+     23.69
+    ],
+    "kide-34b-v3": [
+     42.486,
+     45.114
+    ],
+    "kide-70b-v2": [
+     38.315,
+     40.685
+    ],
+    "kide-8b-lc64": [
+     14.646999999999998,
+     15.553
+    ],
+    "kide-8b-v4": [
+     61.11,
+     64.89
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "kide-120b-v1": 69.8,
+     "kide-13b-code-lc32": 6.4,
+     "kide-13b-lc32": 8.5,
+     "kide-13b-v4": 27.9,
+     "kide-34b-16k": 49.3,
+     "kide-34b-lc64": 7.8,
+     "kide-34b-sci": 17.1,
+     "kide-34b-v3": 34.9,
+     "kide-70b-v2": 38.5,
+     "kide-8b-lc64": 6.0,
+     "kide-8b-v4": 51.8
+    },
+    "careful": {
+     "kide-120b-v1": 70.0,
+     "kide-13b-code-lc32": 6.1,
+     "kide-13b-lc32": 8.5,
+     "kide-13b-v4": 27.1,
+     "kide-34b-16k": 48.4,
+     "kide-34b-lc64": 9.6,
+     "kide-34b-sci": 17.7,
+     "kide-34b-v3": 34.9,
+     "kide-70b-v2": 38.5,
+     "kide-8b-lc64": 7.1,
+     "kide-8b-v4": 50.9
+    },
+    "thorough": {
+     "kide-120b-v1": 86.2,
+     "kide-13b-code-lc32": 8.0,
+     "kide-13b-lc32": 10.1,
+     "kide-13b-v4": 33.6,
+     "kide-34b-16k": 62.1,
+     "kide-34b-lc64": 14.9,
+     "kide-34b-sci": 23.0,
+     "kide-34b-v3": 43.8,
+     "kide-70b-v2": 39.5,
+     "kide-8b-lc64": 15.1,
+     "kide-8b-v4": 63.0
+    }
+   },
+   "precedent": [
+    "N04",
+    "L38",
+    "L36"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "the runs that will not finish inside their windows",
+   "graded_as": "Recommendation",
+   "figure": "call_late_runs",
+   "depends": [
+    "R8"
+   ],
+   "independent": "",
+   "golden": [
+    "kide-120b-v1",
+    "kide-13b-code-lc32",
+    "kide-34b-16k",
+    "kide-34b-lc64",
+    "kide-34b-sci",
+    "kide-34b-v3",
+    "kide-8b-lc64"
+   ],
+   "passes": {
+    "quick": [],
+    "careful": [],
+    "thorough": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   "precedent": [
+    "N04",
+    "L38",
+    "L36"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ },
+ "hints": [
+  {
+   "sentence": "each step waits for the data-parallel rank whose sequences hold the long documents",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "the scientific run's best-fit packing leaves part of every sequence as padding",
+   "rescues": [
+    "R4"
+   ]
+  },
+  {
+   "sentence": "hall B's meter sits at its contract on the days the hall wanted more, and every job there ran slower",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "major works ran about twice their planned hours in 2025 and 2026",
+   "rescues": [
+    "R7"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "kide-120b-v1",
+    "kide-13b-code-lc32",
+    "kide-34b-16k",
+    "kide-34b-lc64",
+    "kide-34b-sci",
+    "kide-34b-v3",
+    "kide-8b-lc64"
+   ],
+   "golden": true
+  },
+  {
+   "name": "quick: benchmark days",
+   "answer": []
+  },
+  {
+   "name": "careful but hurried",
+   "answer": []
+  },
+  {
+   "name": "the full-context FLOPs formula",
+   "answer": [
+    "kide-13b-code-lc32",
+    "kide-13b-lc32",
+    "kide-34b-16k",
+    "kide-34b-lc64",
+    "kide-8b-lc64"
+   ]
+  },
+  {
+   "name": "the 2026 benchmark-to-held ratio",
+   "answer": []
+  },
+  {
+   "name": "drop S1 (the mean rank)",
+   "answer": [
+    "kide-120b-v1",
+    "kide-34b-16k",
+    "kide-34b-sci",
+    "kide-34b-v3"
+   ]
+  },
+  {
+   "name": "drop S18 (full sequences)",
+   "answer": [
+    "kide-120b-v1",
+    "kide-13b-code-lc32",
+    "kide-34b-16k",
+    "kide-34b-lc64",
+    "kide-34b-v3",
+    "kide-8b-lc64"
+   ]
+  },
+  {
+   "name": "drop S3 (no throttle)",
+   "answer": [
+    "kide-13b-code-lc32",
+    "kide-34b-lc64",
+    "kide-34b-sci",
+    "kide-8b-lc64"
+   ]
+  },
+  {
+   "name": "drop S4 (planned works hours)",
+   "answer": [
+    "kide-120b-v1",
+    "kide-13b-code-lc32",
+    "kide-34b-16k",
+    "kide-34b-lc64",
+    "kide-34b-sci",
+    "kide-34b-v3",
+    "kide-8b-lc64"
+   ]
+  },
+  {
+   "name": "fix S1 alone",
+   "answer": [
+    "kide-13b-code-lc32",
+    "kide-34b-lc64",
+    "kide-8b-lc64"
+   ]
+  },
+  {
+   "name": "fix S18 alone",
+   "answer": [
+    "kide-34b-sci"
+   ]
+  },
+  {
+   "name": "fix S3 alone",
+   "answer": [
+    "kide-120b-v1",
+    "kide-34b-16k",
+    "kide-34b-v3"
+   ]
+  },
+  {
+   "name": "fix S4 alone",
+   "answer": []
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "line": "each run's reserved window (expected finish against the window's end)",
+  "golden_answer": [
+   "kide-120b-v1",
+   "kide-13b-code-lc32",
+   "kide-34b-16k",
+   "kide-34b-lc64",
+   "kide-34b-sci",
+   "kide-34b-v3",
+   "kide-8b-lc64"
+  ],
+  "golden_family": [
+   {
+    "name": "the attention coefficient at the lowest run's fit",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "the attention coefficient at the highest run's fit",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "lengths from a fitted lognormal per source",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "another packing and dealing seed",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "the slowest rank by a normal approximation",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "the throttle as a straight line in the excess",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "works at the median overrun ratio",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "hardware stops pooled over both halls",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "quick: benchmark days",
+    "answer": []
+   },
+   {
+    "name": "careful but hurried",
+    "answer": []
+   },
+   {
+    "name": "the full-context FLOPs formula",
+    "answer": [
+     "kide-13b-code-lc32",
+     "kide-13b-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "name": "the 2026 benchmark-to-held ratio",
+    "answer": []
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "attention coefficient -20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "attention coefficient +20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "throttle response -20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "throttle response +20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "interruption rates -20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "interruption rates +20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "works overrun ratio -20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "works overrun ratio +20%",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "pool busy share -0.1",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   },
+   {
+    "input": "pool busy share +0.1",
+    "answer": [
+     "kide-120b-v1",
+     "kide-13b-code-lc32",
+     "kide-34b-16k",
+     "kide-34b-lc64",
+     "kide-34b-sci",
+     "kide-34b-v3",
+     "kide-8b-lc64"
+    ]
+   }
+  ]
+ },
+ "factorial": {
+  "golden_answer": [
+   "kide-120b-v1",
+   "kide-13b-code-lc32",
+   "kide-34b-16k",
+   "kide-34b-lc64",
+   "kide-34b-sci",
+   "kide-34b-v3",
+   "kide-8b-lc64"
+  ],
+  "reflex_route": {
+   "answer": []
+  },
+  "judgments": [
+   {
+    "id": "S1",
+    "name": "each step waits for the slowest data-parallel rank, its load quadratic in its documents' lengths",
+    "kind": "stump",
+    "precedent": [
+     "N04",
+     "L22",
+     "L26",
+     "L36"
+    ],
+    "hurried": "each rank at its mean cost",
+    "dropped": {
+     "answer": [
+      "kide-120b-v1",
+      "kide-34b-16k",
+      "kide-34b-sci",
+      "kide-34b-v3"
+     ],
+     "results_moved": [
+      "R3",
+      "R8",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "kide-13b-code-lc32",
+      "kide-34b-lc64",
+      "kide-8b-lc64"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "S18",
+    "name": "best-fit packing pads the scientific mix's sequences",
+    "kind": "stump",
+    "precedent": [
+     "N04",
+     "L36"
+    ],
+    "hurried": "every sequence full",
+    "dropped": {
+     "answer": [
+      "kide-120b-v1",
+      "kide-13b-code-lc32",
+      "kide-34b-16k",
+      "kide-34b-lc64",
+      "kide-34b-v3",
+      "kide-8b-lc64"
+     ],
+     "results_moved": [
+      "R4",
+      "R8",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "kide-34b-sci"
+     ],
+     "results_rescued": [
+      "R4"
+     ]
+    }
+   },
+   {
+    "id": "S3",
+    "name": "hall B held to its contracted load through February to April, every job's step stretched",
+    "kind": "stump",
+    "precedent": [
+     "L38",
+     "L15",
+     "L01"
+    ],
+    "hurried": "each run's throughput its own",
+    "dropped": {
+     "answer": [
+      "kide-13b-code-lc32",
+      "kide-34b-lc64",
+      "kide-34b-sci",
+      "kide-8b-lc64"
+     ],
+     "results_moved": [
+      "R5",
+      "R8",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "kide-120b-v1",
+      "kide-34b-16k",
+      "kide-34b-v3"
+     ],
+     "results_rescued": [
+      "R5"
+     ]
+    }
+   },
+   {
+    "id": "S4",
+    "name": "provider works at the 2025-26 overrun record",
+    "kind": "stump",
+    "precedent": [
+     "N22",
+     "N03",
+     "L46"
+    ],
+    "hurried": "the notice's planned hours",
+    "dropped": {
+     "answer": [
+      "kide-120b-v1",
+      "kide-13b-code-lc32",
+      "kide-34b-16k",
+      "kide-34b-lc64",
+      "kide-34b-sci",
+      "kide-34b-v3",
+      "kide-8b-lc64"
+     ],
+     "results_moved": [
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [],
+     "results_rescued": [
+      "R7"
+     ]
+    }
+   },
+   {
+    "id": "J5",
+    "name": "interruptions and restarts priced from the 2026 log",
+    "kind": "reflex",
+    "precedent": [
+     "R07",
+     "R30"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "each run's benchmark days and its own mix's mean attention",
+    "kind": "reflex",
+    "precedent": [
+     "R18",
+     "R40"
+    ]
+   }
+  ]
+ }
+}

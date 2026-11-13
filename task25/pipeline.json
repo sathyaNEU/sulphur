@@ -1,40 +1,40 @@
 {
  "task": "task25",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "benchmarking-and-ablations",
  "objective": "comparative-explanation",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "",
+ "call": "re-plan seven of eleven H1 2027 runs (kide-13b-code-lc32, kide-120b-v1, kide-34b-v3, kide-34b-16k, kide-34b-lc64, kide-34b-sci, kide-8b-lc64 finish past their windows); kide-70b-v2, kide-8b-v4, kide-13b-v4, kide-13b-lc32 fit",
  "chain": "R1 the 2026 run ledger reconciled to scheduler GPU-hours; R2 the 2026 bridge from benchmark days to actual days by cause; R3 the per-rank cost model and each 2027 long-context run's slowest-rank overhead; R4 each 2027 long-context run's packing fill; R5 hall B's throttle response and each hall B run's capped share in 2027; R6 interruptions, restarts and lost work per 2027 run; R7 days lost to works per run at the overrun record; R8 each 2027 run's expected days with an 80 per cent range against its window; R9 the late set with each late run's fix",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (2027 plan dates, a coincidental figure inside a node name, generic words in two PDFs; ruled harmless)",
+  "reader": "no leak: no file ranks the runs, nothing reads as the answer, quoted sentences are the filed WHAT and execute to the golden's endpoints; no single fact settles the task"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (weight against task24, Gate G against task7, house lesson non_additive_aggregation)",
+  "nearest": "mark111 at 0.05 (differentiated); skeleton severity none against every card, lineage and client task"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "determinism_check_report.md (blocks read before the data; the attention coefficient's exact filter left as a noted gap, recomputed by verify.py at 1.319 inside its band)"
  },
- "paper_pair": null,
+ "paper_pair": 44.4,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 44.4,
+  "thorough": 100.0,
+  "largest_hint": "each step waits for the data-parallel rank whose sequences hold the long documents (rescues 1 of 9)"
  },
  "runs": {
   "run1": null,
@@ -50,12 +50,16 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 2: write the design note's results chain, hidden factor record, stump factorial, effort test and fork tables to precut exit 0; the world's numbers prototyped in scratchpad/proto",
+ "resume": "author: rewrite prompt.txt in your own words, re-gate with voice-check.py task25 --rewrite and leak.py, upload prompt.txt and target.zip, generate the two runs, then /triage-runs task25",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "",
   "date": "",
   "note": ""
+ },
+ "zips": {
+  "target.zip": "061796689dc319c2",
+  "golden.zip": "c90c37463badd9f1"
  }
 }

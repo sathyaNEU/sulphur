@@ -11,8 +11,8 @@
   "shape": "03",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Re-plan seven of the eleven H1 2027 runs: kide-120b-v1 (86.2 days against 75), kide-13b-code-lc32 (8.0 days against 7), kide-34b-16k (62.1 days against 54), kide-34b-lc64 (14.9 days against 13), kide-34b-sci (23.0 days against 20), kide-34b-v3 (43.8 days against 38), kide-8b-lc64 (15.1 days against 13) finish past their windows; kide-13b-lc32, kide-13b-v4, kide-70b-v2, kide-8b-v4 fit.",
+  "answer_source": "submission.md Final Recommendation, from generator/figures.json",
   "gap": [
     "objective",
     "population",
@@ -52,7 +52,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "step_log_2026.csv",
-    "rows": 0,
+    "rows": 177705,
     "entity": "one 50-step logging interval of one training run",
     "grain": "run x 50 optimizer steps",
     "source": "synthetic"
@@ -101,14 +101,14 @@
     "synthesis"
   ],
   "results": "R1 the 2026 run ledger reconciled to scheduler GPU-hours; R2 the 2026 bridge from benchmark days to actual days by cause; R3 the per-rank cost model and each 2027 long-context run's slowest-rank overhead; R4 each 2027 long-context run's packing fill; R5 hall B's throttle response and each hall B run's capped share in 2027; R6 interruptions, restarts and lost work per 2027 run; R7 days lost to works per run at the overrun record; R8 each 2027 run's expected days with an 80 per cent range against its window; R9 the late set with each late run's fix",
-  "one_fact_test": "'the step waits for the rank whose sequences hold the long documents' rescues R3 and the two runs it flips in R8: 2 of 9",
+  "one_fact_test": "'each step waits for the data-parallel rank whose sequences hold the long documents' rescues R3 alone: 1 of 9 (effort.py)",
   "strategy_label": "UNTESTED (own: no client strategy carries a throughput benchmark bridged to production runs at conditions never run)",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark111": "mark111 ranks a closed quarter's causes whose leader stops operating in the forward season; here each cause grows at conditions the record never reached (more data-parallel ranks on heavier mixes, a packing rule that pads, a hall held past its cap), and each is rebuilt from a finer-grained record, not a seasonal provider switch"
   },
   "lineage": [],
-  "notes": "stump_strategy other: conditions the record never reached at three grains (the slowest of the data-parallel ranks, the fill of best-fit packing, a hall past its contracted power). Weight modeling repeats task24 inside the last five (WARN): each 2027 cause is a modelling build at conditions no 2026 run reached, which is where the work sits; the answer shape (a bridge) and the decision form differ from task24's.",
+  "notes": "stump_strategy other: conditions the record never reached at three grains (the slowest of the data-parallel ranks, the fill of best-fit packing, a hall past its contracted power). Weight modeling repeats task24 inside the last five (WARN): each 2027 cause is a modelling build at conditions no 2026 run reached, which is where the work sits; the answer shape (a bridge) and the decision form differ from task24's. Built 2026-11-13: eleven 2027 runs (seven late), effort quick 7.0, careful 44.4, thorough 100; eight rivals and ten perturbations hold the late set; the world's own replay files the same seven.",
   "skeleton": {
     "decision_form": "ranked_causes_bridge",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",

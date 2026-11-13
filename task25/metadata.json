@@ -1,0 +1,174 @@
+{
+ "task": "task25",
+ "organisation": "Saukko Labs Oy (fictional)",
+ "decision": "which H1 2027 pretraining runs will not reach their token budgets inside their reserved GPU windows, and how many days each will take against its benchmark",
+ "deliverables": [
+  "h1_2027_throughput_bridge.xlsx",
+  "h1_2027_run_windows_note.md"
+ ],
+ "pull_date": "2026-11-06",
+ "record_window": "2026-01-01 to 2026-10-31",
+ "generated": true,
+ "license": "synthetic data, CC0; no third-party data",
+ "distractor_files": [
+  "provider/energy_invoices_2026.xlsx",
+  "evals/checkpoint_evals_2026.csv"
+ ],
+ "files": {
+  "runs/run_registry_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "every pretraining, extension, scale-test and ablation run launched in 2026, as the run tracker exports it",
+   "license": "synthetic, CC0"
+  },
+  "runs/step_log_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the trainer's step log for every 2026 run, one row each time the trainer logs",
+   "license": "synthetic, CC0"
+  },
+  "runs/interruptions_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the alerting system's record of every stop and resume in 2026",
+   "license": "synthetic, CC0"
+  },
+  "runs/node_allocations_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the scheduler's node allocations for each run between stops",
+   "license": "synthetic, CC0"
+  },
+  "profiling/rank_step_samples_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the profiler's per-rank timings on its sampled steps",
+   "license": "synthetic, CC0"
+  },
+  "profiling/packing_manifests_2026.jsonl": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the data loader's manifests for a share of the profiler's sampled steps",
+   "license": "synthetic, CC0"
+  },
+  "cluster/node_states_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the scheduler's node states per hall, every five minutes",
+   "license": "synthetic, CC0"
+  },
+  "provider/hall_it_load_2026.csv": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's five-minute IT load per hall",
+   "license": "synthetic, CC0"
+  },
+  "provider/work_orders_2025_2026.csv": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's work orders, 2025 and 2026",
+   "license": "synthetic, CC0"
+  },
+  "provider/incident_log_2026.csv": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's facility incident log, 2026",
+   "license": "synthetic, CC0"
+  },
+  "provider/service_schedule_S3_kaivola.pdf": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's service schedule for the two halls",
+   "license": "synthetic, CC0"
+  },
+  "provider/planned_works_h1_2027.pdf": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's notice of planned works for January to June 2027",
+   "license": "synthetic, CC0"
+  },
+  "provider/energy_invoices_2026.xlsx": {
+   "source": "generated (simulated Pohjoisvirta Datacenters Oy systems)",
+   "covers": "the provider's monthly energy invoices for 2026",
+   "license": "synthetic, CC0"
+  },
+  "benchmark/tpbench_results.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the infrastructure team's throughput benchmark results for 2026 and 2027 configurations",
+   "license": "synthetic, CC0"
+  },
+  "benchmark/tpbench_harness.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the benchmark harness configuration",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/roadmap_h1_2027.xlsx": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the H1 2027 roadmap as filed for the committee",
+   "license": "synthetic, CC0"
+  },
+  "data/doc_length_sample.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the data team's sample of document lengths by source",
+   "license": "synthetic, CC0"
+  },
+  "data/data_mixes.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the data team's 2026 and 2027 data mixes",
+   "license": "synthetic, CC0"
+  },
+  "policy/compute_allocation_rules_CAR-2027-1.pdf": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the compute committee's allocation rules for the H1 2027 round",
+   "license": "synthetic, CC0"
+  },
+  "evals/checkpoint_evals_2026.csv": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "checkpoint evaluation scores for the 2026 runs",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-70b-v2.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-70b-v2",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-13b-code-lc32.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-13b-code-lc32",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-34b-lc64.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-34b-lc64",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-34b-sci.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-34b-sci",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-120b-v1.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-120b-v1",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-34b-v3.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-34b-v3",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-13b-lc32.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-13b-lc32",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-8b-lc64.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-8b-lc64",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-34b-16k.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-34b-16k",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-8b-v4.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-8b-v4",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-13b-v4.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-13b-v4",
+   "license": "synthetic, CC0"
+  }
+ }
+}
