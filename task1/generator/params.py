@@ -18,9 +18,8 @@ PRICE = {"FLEX": 9.99, "STD": 14.99, "ONB": 18.99, "GEZ": 22.99}          # by 2
 PRICE0 = {"FLEX": 9.49, "STD": 13.99, "ONB": 17.99, "GEZ": 21.99}         # 2023 and 2024
 RISES = {(2025, "BE"): ("STD", "ONB"), (2025, "NL"): ("FLEX", "GEZ"), (2026, "NL"): ("STD", "ONB"),
          (2026, "BE"): ("FLEX", "GEZ")}
-RIVAL = {"NL": {"FLEX": 9.79, "STD": 15.49, "ONB": 19.49, "GEZ": 23.49},   # the rival's comparable plans
-         "BE": {"FLEX": 9.39, "STD": 15.29, "ONB": 18.49, "GEZ": 22.49}}
-RIVAL_MOVE = (42, {("NL", "FLEX"): 10.29, ("BE", "FLEX"): 10.29, ("BE", "STD"): 15.59})    # the rival's July 2026 rise
+RIVAL = {"NL": {"FLEX": 9.79, "STD": 15.49, "ONB": 20.49, "GEZ": 24.49},   # the rival's comparable plans
+         "BE": {"FLEX": 9.39, "STD": 15.49, "ONB": 18.49, "GEZ": 22.49}}
 RIVAL_NAME = {"FLEX": "Luistr Basis 10 uur", "STD": "Luistr Plus 30 uur", "ONB": "Luistr Onbeperkt",
               "GEZ": "Luistr Familie"}
 RISE27 = ("FLEX", "STD", "ONB", "GEZ")    # the rises the price list announces for January 2027
@@ -43,7 +42,7 @@ HOURS = {"FLEX": 6.4, "STD": 12.6, "ONB": 23.0, "GEZ": 10.0}              # adul
 CHILD_HOURS = 7.5
 COMMUTER = {"FLEX": 0.12, "STD": 0.18, "ONB": 0.80, "GEZ": 0.10}
 CONVERT = {"FLEX": 0.56, "STD": 0.63, "ONB": 0.58, "GEZ": 0.55}
-CHURN = {"FLEX": 0.088, "STD": 0.052, "ONB": 0.039, "GEZ": 0.036}
+CHURN = {"FLEX": 0.060, "STD": 0.052, "ONB": 0.039, "GEZ": 0.036}
 SEASON = [1.03, 0.96, 0.97, 0.98, 0.99, 1.02, 1.21, 1.17, 0.94, 0.95, 0.97, 1.10]
 ROUTE = {"web": 0.68, "apple": 0.21, "google": 0.11}
 COUNTRY = {"NL": 0.71, "BE": 0.29}
@@ -72,7 +71,7 @@ def days_in(m):
 
 def rival_of(country, plan, m):
     """The rival's comparable plan's list price in month m (VAT included)."""
-    return RIVAL_MOVE[1].get((country, plan), RIVAL[country][plan]) if m >= RIVAL_MOVE[0] else RIVAL[country][plan]
+    return RIVAL[country][plan]
 
 
 def price_of(plan, country, m, rise27=RISE27):
@@ -85,3 +84,7 @@ def price_of(plan, country, m, rise27=RISE27):
             p = PRICE[plan]
     return p
 SEL = 0.6                            # how much more light listeners answer a rise
+STEP, STEP_DOWN, SEL_X = 0.12, 0.320, 1.4   # past the rival: the extra leaving and moving down; how much heavier the leavers
+ANNOUNCE = 0.055                     # the December bill after the price e-mail: light listeners leave before the new price
+ANN_SEL = 1.0                        # how much more light listeners leave at the e-mail
+SHARE_ADD = 0.08                     # an Onbeperkt account on one profile adds the second it pays for, months 1 to 3 after a rise

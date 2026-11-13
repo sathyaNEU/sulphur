@@ -12,7 +12,7 @@
  "shape": "02",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "let only Onbeperkt's January 2027 rise go ahead and hold Flex, Standaard and Gezin (Onbeperkt EUR 4.7 per October subscription in 2027; Flex -1.4, Standaard -13.2, Gezin -10.3), each 2027 rise the plan's own past rise in euros after the holistic audit of 2026-11-12",
+ "answer": "let only Gezin's January 2027 rise go ahead and hold Flex, Standaard and Onbeperkt (Gezin EUR 6.1 per October 2026 subscription in 2027; Flex -4.4, Standaard -14.8, Onbeperkt -4.6); three stumps by the factorial of 2026-11-13",
  "answer_source": "task1/generator/figures.json raise, change_2027",
  "gap": [
   "time",
@@ -80,8 +80,8 @@
  "opening_move": "question-first",
  "question_form": "which",
  "driver": "Each option's go or hold rests on the response of its existing members to a change, which past changes show as a step where the new level passes an outside reference, not a slope in the change or a property of the option, and on what each kind of answer is worth, which depends on who gives it and on a cost that falls on usage, so the option's own history, a pooled slope and an average-member valuation each land on a different wrong set.",
- "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; past rises lost and moved down subscriptions mainly where the new price passed the rival's comparable plan (read against the other region, with the rival's December scan), heavy listeners switching and light ones moving down, so Standaard (passing the rival in both regions in 2027, never before), Flex (past the rival's July 2026 Basis price in both regions) and Gezin (past it in the Netherlands) hold and Onbeperkt, whose light listeners move down and keep paying, goes ahead.",
- "stump": "A careful but hurried analyst carries each plan's own past response to 2027, counts downgrades as exits and values leavers at the plan's average, and lets Gezin, Onbeperkt and Standaard through; fixing only the crossing holds all four, Onbeperkt too.",
+ "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; past rises lost and moved down subscriptions mainly where the new price passed the rival's comparable plan, lost light listeners at the December bill after the price e-mail, and on Onbeperkt raised the stayers' listening as single-profile accounts added their second profile, so Standaard (past the rival in both regions), Flex (its light listeners at the e-mail) and Onbeperkt (the e-mail and the second profile) hold and Gezin goes ahead.",
+ "stump": "The platform run's own route (each plan's own past rise in its region, read at the first bill, downgraders kept and each account on its own listening) lets Onbeperkt and Standaard through; the crossing alone lets Flex, Gezin and Onbeperkt through, the December leavers alone none, the stayers' listening alone Standaard.",
  "answer_shape": "forecast-bands-drivers",
  "weight": "modeling",
  "chain_signature": [
@@ -89,10 +89,11 @@
   "causal-reasoning",
   "causal-reasoning",
   "forecasting",
+  "forecasting",
   "synthesis"
  ],
  "results": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
- "one_fact_test": "the crossing sentence rescues none of the graded results on the careful route (all four held, Onbeperkt too); a sentence naming the crossing and the downgrade valuation rescues the call",
+ "one_fact_test": "the crossing sentence rescues R3 and R4 (2 of 6) and not the call; the other two rescue none",
  "strategy_label": "UNTESTED",
  "mechanism_source": "design_note",
  "differentiation": {
@@ -267,13 +268,13 @@
   "lessons": [
    "response_at_crossing_point",
    "behavioural_response_measured",
-   "marginal_not_average",
-   "forward_window_structure_change"
+   "response_before_the_trigger",
+   "intensive_margin_response"
   ],
   "mechanisms": [
    "price_rise_response_step_at_rival_price",
-   "heavy_listeners_switch_light_listeners_downgrade",
-   "downgraders_keep_paying_under_cap",
+   "announcement_leavers_before_first_bill",
+   "stayers_add_profile_after_rise",
    "per_hour_remuneration_replaces_revenue_share",
    "rises_staged_by_region_and_year"
   ],

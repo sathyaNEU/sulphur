@@ -149,7 +149,7 @@ def write_pdfs(folder):
     _doc(os.path.join(folder, FILES["price"]), "Price list from 1 January 2027",
          [("Subscriptions", [rows, "Prices until 31 December 2026: Flex EUR 9.99, Standaard EUR 14.99, Onbeperkt "
            "EUR 18.99, Gezin EUR 22.99, in the Netherlands and in Flanders. Existing subscriptions move to the new "
-           "price at their first billing date in 2027; subscribers are told by e-mail from 2 November 2026. A rise "
+           "price at their first billing date in 2027; subscribers are told by e-mail on 1 December 2026. A rise "
            "may still be withdrawn for a plan until 30 November 2026.",
            "Listening hours that are not used do not carry over to the next month. In the app stores the price is "
            "the store's nearest price point."])],

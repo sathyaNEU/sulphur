@@ -8,47 +8,47 @@
    "depends": [],
    "independent": "the October base",
    "golden": {
-    "Flex": 494,
-    "Standaard": 1218,
-    "Onbeperkt": 1434,
-    "Gezin": 1021
+    "Flex": 689,
+    "Standaard": 1226,
+    "Onbeperkt": 1453,
+    "Gezin": 1014
    },
    "bands": {
     "Flex": [
-     493.5,
-     494.5
+     688.5,
+     689.5
     ],
     "Standaard": [
-     1217.5,
-     1218.5
+     1225.5,
+     1226.5
     ],
     "Onbeperkt": [
-     1433.5,
-     1434.5
+     1452.5,
+     1453.5
     ],
     "Gezin": [
-     1020.5,
-     1021.5
+     1013.5,
+     1014.5
     ]
    },
    "passes": {
     "quick": {
-     "Flex": 560,
-     "Standaard": 1295,
-     "Onbeperkt": 1516,
-     "Gezin": 1048
+     "Flex": 755,
+     "Standaard": 1303,
+     "Onbeperkt": 1535,
+     "Gezin": 1041
     },
     "careful": {
-     "Flex": 494,
-     "Standaard": 1218,
-     "Onbeperkt": 1434,
-     "Gezin": 1021
+     "Flex": 689,
+     "Standaard": 1226,
+     "Onbeperkt": 1453,
+     "Gezin": 1014
     },
     "thorough": {
-     "Flex": 494,
-     "Standaard": 1218,
-     "Onbeperkt": 1434,
-     "Gezin": 1021
+     "Flex": 689,
+     "Standaard": 1226,
+     "Onbeperkt": 1453,
+     "Gezin": 1014
     }
    }
   },
@@ -60,83 +60,83 @@
    "depends": [],
    "independent": "the 2025 and 2026 rises",
    "golden": {
-    "Flex Netherlands": 12.0,
-    "Flex Flanders": 12.0,
-    "Standaard Netherlands": 25.2,
-    "Standaard Flanders": 25.2,
-    "Onbeperkt Netherlands": 15.9,
-    "Onbeperkt Flanders": 4.0,
-    "Gezin Netherlands": 28.2,
+    "Flex Netherlands": 4.5,
+    "Flex Flanders": 4.5,
+    "Standaard Netherlands": 21.2,
+    "Standaard Flanders": 21.2,
+    "Onbeperkt Netherlands": 2.9,
+    "Onbeperkt Flanders": 2.9,
+    "Gezin Netherlands": 0.0,
     "Gezin Flanders": 0.0
    },
    "bands": {
     "Flex Netherlands": [
-     10.8,
-     12.6
+     -0.3,
+     4.78
     ],
     "Flex Flanders": [
-     10.8,
-     12.6
+     -0.3,
+     4.78
     ],
     "Standaard Netherlands": [
-     22.25,
-     28.49
+     17.81,
+     22.23
     ],
     "Standaard Flanders": [
-     22.25,
-     28.49
+     17.81,
+     22.23
     ],
     "Onbeperkt Netherlands": [
-     14.28,
-     16.7
+     1.32,
+     3.23
     ],
     "Onbeperkt Flanders": [
-     3.15,
-     4.29
+     1.32,
+     3.23
     ],
     "Gezin Netherlands": [
-     24.95,
-     29.64
+     -0.3,
+     3.55
     ],
     "Gezin Flanders": [
      -0.3,
-     0.3
+     3.55
     ]
    },
    "precedent": [
-    "L15",
-    "N02"
+    "N25",
+    "L15"
    ],
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "Flex Netherlands": 6.6,
-     "Flex Flanders": 6.6,
-     "Standaard Netherlands": 10.2,
-     "Standaard Flanders": 10.2,
-     "Onbeperkt Netherlands": 10.2,
-     "Onbeperkt Flanders": 10.2,
-     "Gezin Netherlands": 10.2,
-     "Gezin Flanders": 10.2
+     "Flex Netherlands": 6.0,
+     "Flex Flanders": 6.0,
+     "Standaard Netherlands": 9.2,
+     "Standaard Flanders": 9.2,
+     "Onbeperkt Netherlands": 9.2,
+     "Onbeperkt Flanders": 9.2,
+     "Gezin Netherlands": 9.2,
+     "Gezin Flanders": 9.2
     },
     "careful": {
-     "Flex Netherlands": 10.0,
-     "Flex Flanders": 10.0,
-     "Standaard Netherlands": 6.6,
-     "Standaard Flanders": 6.6,
-     "Onbeperkt Netherlands": 14.7,
-     "Onbeperkt Flanders": 14.7,
-     "Gezin Netherlands": 7.7,
-     "Gezin Flanders": 7.7
+     "Flex Netherlands": 10.9,
+     "Flex Flanders": 4.5,
+     "Standaard Netherlands": 1.7,
+     "Standaard Flanders": 5.3,
+     "Onbeperkt Netherlands": 2.9,
+     "Onbeperkt Flanders": 14.4,
+     "Gezin Netherlands": 0.0,
+     "Gezin Flanders": 28.9
     },
     "thorough": {
-     "Flex Netherlands": 12.0,
-     "Flex Flanders": 12.0,
-     "Standaard Netherlands": 25.2,
-     "Standaard Flanders": 25.2,
-     "Onbeperkt Netherlands": 15.9,
-     "Onbeperkt Flanders": 4.0,
-     "Gezin Netherlands": 28.2,
+     "Flex Netherlands": 4.5,
+     "Flex Flanders": 4.5,
+     "Standaard Netherlands": 21.2,
+     "Standaard Flanders": 21.2,
+     "Onbeperkt Netherlands": 2.9,
+     "Onbeperkt Flanders": 2.9,
+     "Gezin Netherlands": 0.0,
      "Gezin Flanders": 0.0
     }
    }
@@ -149,33 +149,33 @@
    "depends": [],
    "independent": "the 2025 and 2026 rises",
    "golden": {
-    "Standaard Netherlands": 16.5,
-    "Standaard Flanders": 16.5,
-    "Onbeperkt Netherlands": 24.7,
-    "Onbeperkt Flanders": 1.1,
-    "Gezin Netherlands": 3.4,
+    "Standaard Netherlands": 15.6,
+    "Standaard Flanders": 15.6,
+    "Onbeperkt Netherlands": 1.0,
+    "Onbeperkt Flanders": 1.0,
+    "Gezin Netherlands": 0.0,
     "Gezin Flanders": 0.0
    },
    "bands": {
     "Standaard Netherlands": [
-     14.57,
-     17.51
+     13.79,
+     18.18
     ],
     "Standaard Flanders": [
-     14.57,
-     17.51
+     13.79,
+     18.18
     ],
     "Onbeperkt Netherlands": [
-     22.2,
-     25.98
+     0.46,
+     3.01
     ],
     "Onbeperkt Flanders": [
-     0.51,
-     1.44
+     0.46,
+     3.01
     ],
     "Gezin Netherlands": [
-     2.95,
-     3.74
+     -0.3,
+     0.3
     ],
     "Gezin Flanders": [
      -0.3,
@@ -183,8 +183,8 @@
     ]
    },
    "precedent": [
-    "L15",
-    "L06"
+    "N25",
+    "L15"
    ],
    "partly_share": 0.75,
    "passes": {
@@ -197,19 +197,19 @@
      "Gezin Flanders": 0.0
     },
     "careful": {
-     "Standaard Netherlands": 0.0,
-     "Standaard Flanders": 0.0,
-     "Onbeperkt Netherlands": 0.0,
-     "Onbeperkt Flanders": 0.0,
+     "Standaard Netherlands": 2.6,
+     "Standaard Flanders": 2.3,
+     "Onbeperkt Netherlands": 1.0,
+     "Onbeperkt Flanders": 22.2,
      "Gezin Netherlands": 0.0,
-     "Gezin Flanders": 0.0
+     "Gezin Flanders": 4.5
     },
     "thorough": {
-     "Standaard Netherlands": 16.5,
-     "Standaard Flanders": 16.5,
-     "Onbeperkt Netherlands": 24.7,
-     "Onbeperkt Flanders": 1.1,
-     "Gezin Netherlands": 3.4,
+     "Standaard Netherlands": 15.6,
+     "Standaard Flanders": 15.6,
+     "Onbeperkt Netherlands": 1.0,
+     "Onbeperkt Flanders": 1.0,
+     "Gezin Netherlands": 0.0,
      "Gezin Flanders": 0.0
     }
    }
@@ -225,51 +225,112 @@
    ],
    "independent": "",
    "golden": {
-    "Flex": -1.4,
-    "Standaard": -13.2,
-    "Onbeperkt": 4.7,
-    "Gezin": -10.3
+    "Flex": -4.4,
+    "Standaard": -14.8,
+    "Onbeperkt": -4.6,
+    "Gezin": 6.1
    },
    "bands": {
     "Flex": [
-     -1.73,
-     -0.98
+     -4.75,
+     -2.62
     ],
     "Standaard": [
-     -15.08,
-     -11.55
+     -15.79,
+     -13.27
     ],
     "Onbeperkt": [
-     3.0,
-     5.11
+     -4.96,
+     -3.9
     ],
     "Gezin": [
-     -10.57,
-     -8.83
+     1.82,
+     6.36
     ]
    },
    "precedent": [
-    "L15",
-    "L17"
+    "N24",
+    "N23",
+    "L15"
    ],
    "passes": {
     "quick": {
-     "Flex": -0.3,
-     "Standaard": -1.6,
-     "Onbeperkt": -3.4,
-     "Gezin": -5.7
+     "Flex": -3.4,
+     "Standaard": -4.4,
+     "Onbeperkt": -7.7,
+     "Gezin": -6.9
     },
     "careful": {
-     "Flex": -0.9,
-     "Standaard": 1.2,
-     "Onbeperkt": 1.7,
-     "Gezin": 1.0
+     "Flex": -1.1,
+     "Standaard": 3.4,
+     "Onbeperkt": 2.6,
+     "Gezin": -0.6
     },
     "thorough": {
-     "Flex": -1.4,
-     "Standaard": -13.2,
-     "Onbeperkt": 4.7,
-     "Gezin": -10.3
+     "Flex": -4.4,
+     "Standaard": -14.8,
+     "Onbeperkt": -4.6,
+     "Gezin": 6.1
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "name": "each plan's October 2026 subscriptions still paying at the end of 2027 if its rise goes ahead",
+   "graded_as": "Ask 4",
+   "figure": "paying_end27",
+   "depends": [
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "Flex": 141,
+    "Standaard": 283,
+    "Onbeperkt": 677,
+    "Gezin": 664
+   },
+   "bands": {
+    "Flex": [
+     135,
+     153
+    ],
+    "Standaard": [
+     277,
+     297
+    ],
+    "Onbeperkt": [
+     663,
+     698
+    ],
+    "Gezin": [
+     628,
+     677
+    ]
+   },
+   "precedent": [
+    "N24",
+    "L04"
+   ],
+   "partly_share": 0.75,
+   "passes": {
+    "quick": {
+     "Flex": 138.0,
+     "Standaard": 331.0,
+     "Onbeperkt": 635.0,
+     "Gezin": 602.0
+    },
+    "careful": {
+     "Flex": 154.0,
+     "Standaard": 384.0,
+     "Onbeperkt": 698.0,
+     "Gezin": 628.0
+    },
+    "thorough": {
+     "Flex": 141,
+     "Standaard": 283,
+     "Onbeperkt": 677,
+     "Gezin": 664
     }
    }
   },
@@ -283,7 +344,7 @@
    ],
    "independent": "",
    "golden": [
-    "Onbeperkt"
+    "Gezin"
    ],
    "precedent": [
     "L15",
@@ -292,76 +353,206 @@
    "passes": {
     "quick": [],
     "careful": [
-     "Gezin",
      "Onbeperkt",
      "Standaard"
     ],
     "thorough": [
-     "Onbeperkt"
+     "Gezin"
     ]
    }
   }
  ],
  "hints": [
   {
-   "sentence": "a rise's cancellations and downgrades jump only where the new price passes the rival's comparable plan",
+   "sentence": "the response read by whether each past rise passed the rival's price",
+   "rescues": [
+    "R3",
+    "R4"
+   ]
+  },
+  {
+   "sentence": "the subscriptions that stay after a rise listen more (Onbeperkt accounts add their second profile), at EUR 0.40 a counted hour",
    "rescues": []
   },
   {
-   "sentence": "a subscription that moves down a plan is kept, not lost",
-   "rescues": []
-  },
-  {
-   "sentence": "the subscriptions that leave at a rise listen less than their plan's average",
+   "sentence": "the light listeners who leave at the December bill after the price e-mail, before the new price",
    "rescues": []
   }
  ],
+ "factorial": {
+  "golden_answer": [
+   "Gezin"
+  ],
+  "reflex_route": {
+   "answer": [
+    "Onbeperkt",
+    "Standaard"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "the response read by whether each past rise passed the rival's price",
+    "kind": "stump",
+    "precedent": [
+     "N25",
+     "L15"
+    ],
+    "dropped": {
+     "answer": [],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R7",
+      "R9",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Flex",
+      "Gezin",
+      "Onbeperkt"
+     ],
+     "results_rescued": [
+      "R3",
+      "R4"
+     ]
+    }
+   },
+   {
+    "id": "J2",
+    "name": "the subscriptions that stay after a rise listen more (Onbeperkt accounts add their second profile), at EUR 0.40 a counted hour",
+    "kind": "stump",
+    "precedent": [
+     "N23",
+     "L15"
+    ],
+    "dropped": {
+     "answer": [
+      "Gezin",
+      "Onbeperkt"
+     ],
+     "results_moved": [
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Standaard"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J3",
+    "name": "the light listeners who leave at the December bill after the price e-mail, before the new price",
+    "kind": "stump",
+    "precedent": [
+     "N24",
+     "L04"
+    ],
+    "dropped": {
+     "answer": [
+      "Flex",
+      "Gezin"
+     ],
+     "results_moved": [
+      "R7",
+      "R9",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J4",
+    "name": "downgraders kept paying on the lower plan, valued on their own months",
+    "kind": "reflex",
+    "precedent": [
+     "R43"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "each subscription valued on its own listening",
+    "kind": "reflex",
+    "precedent": [
+     "R44"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "EUR 0.40 per counted hour, filed in schedule B 2.1",
+    "kind": "reflex",
+    "precedent": []
+   },
+   {
+    "id": "J7",
+    "name": "a past response carried to a rise of another size (every 2027 rise is the plan's past rise in euros)",
+    "kind": "reflex",
+    "precedent": [
+     "R45"
+    ]
+   }
+  ]
+ },
  "forcing": {
   "kind": "set",
   "golden_answer": [
-   "Onbeperkt"
+   "Gezin"
   ],
   "golden_family": [
    {
     "name": "the golden",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "the same country a year earlier as the control where the record holds it",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "the first bill alone as the response window",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "downgraders valued on their own hours capped at the lower plan's, with the cap response",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "re-sent warehouse rows summed",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "each past response carried in proportion to the rise in per cent",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "name": "each past response carried on the log of the price ratio",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
+    ]
+   },
+   {
+    "name": "each plan's own level and one step where a rise passes the rival, fitted on the eight events",
+    "answer": [
+     "Gezin"
     ]
    }
   ],
@@ -369,65 +560,77 @@
    {
     "input": "extra cancellations +20%",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "input": "extra cancellations -20%",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "input": "extra downgrades +20%",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "input": "extra downgrades -20%",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
     ]
    },
    {
     "input": "the response where a rise passes the rival half as large again",
     "answer": [
-     "Onbeperkt"
+     "Gezin"
+    ]
+   },
+   {
+    "input": "the December leaving +20%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "the December leaving -20%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "the stayers' extra listening +20%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "the stayers' extra listening -20%",
+    "answer": [
+     "Gezin"
     ]
    }
   ],
   "shortcuts": [
    {
     "name": "one response for every rise, scaled by the rise",
-    "answer": [
-     "Gezin",
-     "Onbeperkt",
-     "Standaard"
-    ]
+    "answer": []
    },
    {
     "name": "each plan's own past response",
-    "answer": [
-     "Gezin",
-     "Onbeperkt",
-     "Standaard"
-    ]
+    "answer": []
    },
    {
-    "name": "each plan's own past rise in the same region",
+    "name": "the crossing read, the first bill alone",
     "answer": [
+     "Flex",
      "Gezin",
-     "Onbeperkt",
-     "Standaard"
+     "Onbeperkt"
     ]
    },
    {
     "name": "the response read off the new price's gap to the rival, in a straight line",
-    "answer": []
-   },
-   {
-    "name": "the 2026 remuneration basis carried (52 per cent of net revenue)",
     "answer": []
    }
   ]
@@ -436,44 +639,44 @@
   {
    "name": "the golden",
    "answer": [
-    "Onbeperkt"
+    "Gezin"
    ],
    "golden": true
   },
   {
-   "name": "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average",
+   "name": "the careful route: each plan's own past rise in its region, read at the first bill alone",
+   "answer": [
+    "Onbeperkt",
+    "Standaard"
+   ],
+   "golden": false
+  },
+  {
+   "name": "each plan's own past response, a downgrade counted as an exit, leavers at the plan's average",
    "answer": [
     "Gezin",
     "Onbeperkt",
     "Standaard"
+   ],
+   "golden": false
+  },
+  {
+   "name": "the crossing read, the first bill alone",
+   "answer": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt"
    ],
    "golden": false
   },
   {
    "name": "one response for every rise, scaled by the rise",
-   "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ],
+   "answer": [],
    "golden": false
   },
   {
    "name": "each plan's own past response",
-   "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ],
-   "golden": false
-  },
-  {
-   "name": "each plan's own past rise in the same region",
-   "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ],
+   "answer": [],
    "golden": false
   },
   {
@@ -484,13 +687,15 @@
   {
    "name": "a downgrade counted as an exit from the plan",
    "answer": [
-    "Onbeperkt"
+    "Gezin"
    ],
    "golden": false
   },
   {
    "name": "the 2026 remuneration basis carried (52 per cent of net revenue)",
-   "answer": [],
+   "answer": [
+    "Gezin"
+   ],
    "golden": false
   },
   {

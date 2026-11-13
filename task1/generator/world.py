@@ -338,15 +338,19 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                     hz *= 2.3
                 new_p = P.price_of(plan, a["country"], m, rise27)
                 old_p = a.get("last_price")
+                lt = min(max(math.exp(-P.ANN_SEL * a["eng"]), 0.2), 4.0)
+                if a["kind"] == "consumer" and m % 12 == 11 and P.price_of(plan, a["country"], m + 1, rise27) > new_p + 1e-9:
+                    hz += P.ANNOUNCE * lt          # told by e-mail on 1 December, some leave at the December bill
                 if a["kind"] == "consumer" and old_p and new_p > old_p + 1e-9:
                     # the first bill at a higher price: some leave, some move down a plan, the more so where the
                     # new price passes the rival's comparable plan
                     pct = (new_p - old_p) / old_p
                     cross = old_p <= P.rival_of(a["country"], plan, m) < new_p
+                    a["rise_m"], a["rise_cross"] = m, cross
                     light = min(max(math.exp(-P.SEL * a["eng"]), 0.3), 3.2)   # light listeners answer a rise first
-                    heavy = min(max(math.exp(P.SEL * a["eng"]), 0.3), 3.2)    # past the rival, heavy ones switch
-                    hz += (0.008 + 0.30 * pct) * light + (0.165 * heavy if cross else 0.0)
-                    pdown = (0.006 + 0.20 * pct + (0.320 if cross else 0.0)) * light
+                    heavy = min(max(math.exp(P.SEL_X * a["eng"]), 0.3), 3.2)  # past the rival, heavy ones switch
+                    hz += (0.008 + 0.30 * pct) * light + (P.STEP * heavy if cross else 0.0)
+                    pdown = (0.006 + 0.20 * pct + (P.STEP_DOWN if cross else 0.0)) * light
                     lower = {"STD": "FLEX", "ONB": "STD", "GEZ": "ONB"}.get(plan)
                     if lower and r.random() < pdown and len(a["profiles"]) <= P.MAX_PROFILES[lower]:
                         a["plan"] = plan = lower
@@ -371,7 +375,8 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
             # profiles added to family accounts, moved out at a month start, removed
             if a["kind"] == "consumer" and a["status"] == "paid":
                 cap = P.MAX_PROFILES[plan]
-                if len(a["profiles"]) < cap and r.random() < (0.012 if plan == "GEZ" else 0.006):
+                share = P.SHARE_ADD if (plan == "ONB" and 1 <= m - a.get("rise_m", -99) <= 3) else 0.0
+                if len(a["profiles"]) < cap and r.random() < (0.012 if plan == "GEZ" else 0.006) + share:
                     pr = Profile("P%07d" % (next_prof[0] + int(r.integers(1, 9))), a["aid"], plan == "ONB" or
                                  r.random() < 0.5, m, plan, np.random.default_rng(int(r.integers(1 << 62))), owner=False)
                     next_prof[0] = int(pr.pid[1:])

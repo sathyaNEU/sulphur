@@ -37,11 +37,12 @@ def workbook(path, f):
     wb = Workbook()
     ws = wb.active
     ws.title = "Rises"
-    rows = [[p, f["price26"][p], f["price27"][p], f["paying_oct"][p], f["change_2027"][p],
+    rows = [[p, f["price26"][p], f["price27"][p], f["paying_oct"][p], f["change_2027"][p], f["paying_end27"][p],
              "go ahead" if p in f["raise"] else "hold at 2026 price"] for p in PL]
     _sheet(ws, ["Plan", "2026 price (EUR)", "2027 price (EUR)", "Paying subscriptions at 31 Oct 2026",
-                "Change in their 2027 contribution if the rise goes ahead (EUR per subscription)", "Decision"],
-           rows, [12, 11, 11, 14, 24, 18], {2: "0.00", 3: "0.00", 5: "0.0"}, start=3)
+                "Change in their 2027 contribution if the rise goes ahead (EUR per subscription)",
+                "Of them, still paying at 31 Dec 2027 if the rise goes ahead", "Decision"],
+           rows, [12, 11, 11, 14, 24, 18, 18], {2: "0.00", 3: "0.00", 5: "0.0"}, start=3)
     ws["A1"] = "January 2027 price rises: go ahead on %s, hold %s" % (", ".join(f["raise"]), ", ".join(f["hold"]))
     ws["A1"].font = Font(bold=True, size=12)
     ws = wb.create_sheet("Response")
@@ -60,6 +61,11 @@ def workbook(path, f):
     _sheet(ws, ["January", "Region", "Plan", "Subscriptions facing the rise", "New price past the rival's",
                 "Extra cancellations per 100", "Extra downgrades per 100"], rows, [9, 13, 12, 14, 12, 14, 14],
            {6: "0.0", 7: "0.0"})
+    ws = wb.create_sheet("Before and after the bill")
+    rows = [[e["year"], e["country"], e["plan"], e["announce"], e["use"]] for e in f["later_events"]]
+    _sheet(ws, ["January", "Region", "Plan", "Extra leaving at the December bill after the e-mail, per 100",
+                "Change in stayers' counted hours, months 3 to 6, per cent"], rows, [9, 13, 12, 20, 20],
+           {4: "0.0", 5: "0.0"})
     ws = wb.create_sheet("Downgraders and leavers")
     rows = [[p, f["downgrader_value"].get(p), f["leaver_hours_ratio"][p]] for p in PL]
     _sheet(ws, ["Plan", "What a subscription moving down brings in 2027 (EUR)",
@@ -77,6 +83,8 @@ def workbook(path, f):
              "against the same plan in the other region over the same months (guideline 3.10).",
              "Whether a rise put a plan's price past the rival's comparable plan uses the rival scan of the December "
              "before (promotions left out); for 2027, the October 2026 scan (guideline 3.8).",
+             "Leaving at the December bill after the price e-mail and the stayers' change in counted hours are each read "
+             "against the same plan in the other region over the same months, and carried from the plan's own rises.",
              "Subscriptions that move down a plan stay in the October base and are valued on their own months on the "
              "lower plan after the 2025 and 2026 rises; those that leave on the listening of those who left at the "
              "plan's past rises of the same kind.",
@@ -129,14 +137,16 @@ def deck(path, f):
         "100 leave at the first bill and %.1f move down, and its October subscriptions bring EUR %.1f less each in "
         "2027." % (f["price27"]["Standaard"], f["extra_cancel"]["Standaard Netherlands"],
                    f["extra_down"]["Standaard Netherlands"], -c["Standaard"]),
-        "Gezin's rise passes the rival in the Netherlands, where three in four Gezin subscriptions are: EUR %.1f "
-        "each. Flex's passes it in both regions since the rival raised Basis 10 uur to EUR %.2f in July: EUR %.1f." % (
-            c["Gezin"], f["rival_nl"]["Flex"], c["Flex"]),
-        "Onbeperkt passes the rival only in the Netherlands, and there its light listeners move down to Standaard "
-        "and keep paying while the heavy listeners who leave cost more in hours than they pay: EUR %.1f a "
-        "subscription." % c["Onbeperkt"]], 17)
+        "Flex loses about %.0f in every 100 at the December bill once the e-mail goes out, light listeners worth "
+        "the whole of 2027: EUR %.1f each. Onbeperkt loses %.0f in every 100 there, and the accounts that stay add "
+        "their second profile and listen %.0f per cent more: EUR %.1f." % (
+            f["announce_pct"]["Flex"], c["Flex"], f["announce_pct"]["Onbeperkt"], f["use_pct"]["Onbeperkt"],
+            c["Onbeperkt"]),
+        "Gezin stays below the rival's family plan and gains EUR %.1f a subscription; %s of its %s October "
+        "subscriptions are still paying at the end of 2027." % (
+            c["Gezin"], format(f["paying_end27"]["Gezin"], ","), format(f["paying_oct"]["Gezin"], ","))], 17)
     s = prs.slides.add_slide(blank)
-    title(s, "Only Onbeperkt's rise adds to 2027",
+    title(s, "Only Gezin's rise adds to 2027",
           "Change in the October 2026 subscriptions' 2027 contribution if the rise goes ahead, EUR per subscription")
     cd = CategoryChartData()
     cd.categories = PL

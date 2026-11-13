@@ -6,37 +6,38 @@
  "objective": "forecasting",
  "stage": 4,
  "stage_name": "check",
- "updated": "2026-11-12",
+ "updated": "2026-11-13",
  "doctrine": "throughout",
  "architecture": 5,
  "loops": 0,
- "call": "let only Onbeperkt's January 2027 rise go ahead and hold Flex, Standaard and Gezin (Onbeperkt EUR 4.7, Flex -1.4, Standaard -13.2, Gezin -10.3 per October 2026 subscription in 2027)",
- "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
+ "call": "let only Gezin's January 2027 rise go ahead and hold Flex, Standaard and Onbeperkt (Gezin EUR 6.1 per October 2026 subscription in 2027; Flex -4.4, Standaard -14.8, Onbeperkt -4.6)",
+ "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100; R7 each plan's change in its October base's 2027 contribution; R9 of them still paying at 31 Dec 2027; R8 the rises that go ahead",
  "precut": {
   "exit": 0,
-  "date": "2026-11-12",
-  "checks": "gates.py 0 FAIL on the repaired cut"
+  "date": "2026-11-13",
+  "checks": "gates.py 0 FAIL"
  },
  "leak": {
   "leak_py": "REVIEW (clause numbers and ordinary vocabulary; device_id; shell quota), every line harmless",
-  "reader": "OWED (the price list and the rival scan changed)"
+  "reader": "OWED (the price list's e-mail date, the rival scan and every record changed)"
  },
  "duplicate_check": {
   "heart": "WARN (skeleton.lesson_taught marginal_not_average as a supporting step)",
   "nearest": "severity none against everything on file"
  },
  "judge": {
-  "verdict": "OWED (the repaired cut moved the call, every R7 figure and three pack files; the first cut's DETERMINISTIC no longer applies)",
+  "verdict": "OWED (re-designed world and call)",
   "disposition": "APPROVE (its one FIX_NOW, a wording note on the December scan, ruled mistaken: the step describes the 2025 and 2026 rises, whose December scans ship)",
   "gate_h": "not run by the judge under the 2026-11-13 scope (83dc482); the build's record: no one thing, 5 results over 4 areas, best single hint 0 of 5",
   "report": "task1/determinism_check_report.md (determinism only; the paying base and the crossing pattern recomputed; the four per-plan euro changes not recomputed by the thread)"
  },
- "paper_pair": 34.5,
+ "paper_pair": 25.3,
  "effort": {
   "quick": 7.0,
-  "careful": 34.5,
+  "careful": 25.3,
   "thorough": 100.0,
-  "largest_hint": "no single sentence rescues a graded result on the careful route; the crossing plus the downgrade valuation rescues the call"
+  "factorial": "level 5: J1 crossing, J2 stayers' listening, J3 December leavers each necessary, none sufficient; reflex route (the platform run's) files Onbeperkt and Standaard",
+  "largest_hint": "the crossing sentence rescues R3 and R4 (2 of 6), not the call"
  },
  "runs": {
   "run1": null,
@@ -57,6 +58,12 @@
    "by": "holistic audit (pasted by the author)",
    "why": "the 2027 Gezin rise (EUR 3.50, EUR 3.00 past Luistr Familie) and Flex rise (EUR 1.50) lay outside every past rise's size (EUR 0.50 to 1.00) and overshoot (EUR 0.20 to 0.50), so how the response grows with the rise was open and a dose-scaled reading withdrew Gezin; the platform run withdrew Flex and Gezin on log-dose scaling",
    "repair": "each 2027 rise set to the plan's own past rise in euros (Flex 10.49, Gezin 23.99); the rival's July 2026 list-price rise in the scan (Basis 10 uur 10.29 in both regions, Plus 30 uur 15.59 in Flanders) keeps every crossing EUR 0.20 to 0.50 past the rival; dose forms in the golden family and perturbations; a replayed truth (eight 2027 replays, rises against held prices) in checks.py; the profiles export dated to the cut (100 profiles pointed at accounts opened in 2027)"
+  },
+  {
+   "date": "2026-11-13",
+   "by": "the author's audit",
+   "why": "the repaired cut was one trick: against the platform run's own route the crossing alone rescued four of five results",
+   "repair": "three stumps under the stump factorial (dbb05a5): the crossing, the December leavers after the price e-mail, the Onbeperkt stayers' second profile; rival prices constant; R9 (still paying at the end of 2027) added; Gezin alone goes ahead"
   }
  ],
  "approved": null,
@@ -66,5 +73,5 @@
   "date": "",
   "note": ""
  },
- "resume": "stage 4 on the repaired cut: the isolated leak reader and the determinism judge together (/leak-check task1 and the judge), every finding fixed in the generator, then gates.py, audit_containers.py and RESHIPPED (task1); the author's prompt is unchanged and names no price"
+ "resume": "the author rewrites prompt.txt in their own voice (it now also asks how many of each plan's October subscriptions would still be paying at the end of 2027 if its rise goes ahead), voice-check --rewrite and leak.py; then stage 4 on the author's word: the isolated leak reader and the determinism judge together, fixes in the generator, gates.py, audit_containers.py, RESHIPPED (task1)"
 }

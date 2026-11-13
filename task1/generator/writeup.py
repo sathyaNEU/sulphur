@@ -3,7 +3,8 @@ import deliver as D
 
 PL = ["Flex", "Standaard", "Onbeperkt", "Gezin"]
 REG = ["Netherlands", "Flanders"]
-CAREFUL = "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average"
+CAREFUL = "the careful route: each plan's own past rise in its region, read at the first bill alone"
+CROSS1 = "the crossing read, the first bill alone"
 
 
 def write(path, f):
@@ -14,17 +15,17 @@ def write(path, f):
          "**Domain:** Product Analytics, Product Analytics (Cohort and LTV modeling: retention curves, customer "
          "lifetime value).", "**Analytical objective:** Forecasting & Predictive Modeling.", ""]
     hold = ", ".join(p for p in PL if p not in f["raise"])
+    x1 = f["routes"][CROSS1]
     L += ["## Final Recommendation", "",
-          "Let only Onbeperkt's January 2027 rise go ahead (EUR %.1f per October 2026 subscription in 2027) and hold "
-          "Flex, Standaard and Gezin at their 2026 prices: each of those rises takes the plan past the rival's "
-          "comparable plan where most of its subscriptions are (Standaard and Flex in both regions, the rival having "
-          "raised its Basis plan to EUR %.2f in July 2026; Gezin in the Netherlands), and changes the 2027 "
-          "contribution of its October subscriptions by EUR %.1f, EUR %.1f and EUR %.1f each. Not the careful "
-          "reading that lets Gezin, Onbeperkt and Standaard through on each plan's own past response (Standaard EUR "
-          "%.1f, Gezin EUR %.1f), nor one that sees where the rises pass the rival but counts a downgrade as a lost "
-          "subscription and so holds Onbeperkt too." % (
-              c["Onbeperkt"], f["rival_nl"]["Flex"], c["Flex"], c["Standaard"], c["Gezin"],
-              cr["change_2027"]["Standaard"], cr["change_2027"]["Gezin"]), ""]
+          "Let only Gezin's January 2027 rise go ahead (EUR %.1f per October 2026 subscription in 2027) and hold Flex, "
+          "Standaard and Onbeperkt at their 2026 prices: Standaard's rise passes the rival's comparable plan in both "
+          "regions (EUR %.1f); Flex's loses more to the light listeners who leave at the December bill after the price "
+          "e-mail than it brings (EUR %.1f); Onbeperkt's is lost to those leavers and to the second profile the accounts "
+          "that stay add, at EUR %.2f a counted hour (EUR %.1f). Not the careful reading that carries each plan's own "
+          "past rise in its region at the first bill and lets %s through, nor one that sees where the rises pass the "
+          "rival but stops at the first bill and lets %s through." % (
+              c["Gezin"], c["Standaard"], c["Flex"], f["rate"], c["Onbeperkt"],
+              " and ".join(cr["raise"]), ", ".join(x1["raise"][:-1]) + " and " + x1["raise"][-1]), ""]
     L += ["## Supplementary Questions", "", "### %s" % D.FILES["wb"], ""]
     L.append("1. Sheet Rises has one row per plan with its 2026 and 2027 price, the paying subscriptions at 31 October "
              "2026, the change in their 2027 contribution if the rise goes ahead, in euros per subscription, and the "
@@ -32,7 +33,7 @@ def write(path, f):
     L.append("2. Change in the 2027 contribution of the subscriptions paying at 31 October 2026 if the plan's rise "
              "goes ahead, in euros per subscription (band in brackets): " + "; ".join(
                  "%s %.1f (%.1f to %.1f)" % (p, c[p], b["R7"][p][0], b["R7"][p][1]) for p in PL) +
-             "; the rise goes ahead on %s and %s hold." % (up, hold.replace(", Gezin", " and Gezin")))
+             "; the rise goes ahead on %s; %s hold." % (up, hold.replace(", Onbeperkt", " and Onbeperkt")))
     L += ["", "### %s" % D.FILES["deck"], ""]
     L.append("3. A short deck that opens on the decision, then a column chart of each plan's change, the past rises' "
              "response table, and the base.")
@@ -46,19 +47,24 @@ def write(path, f):
              "; ".join("%s %s %.1f (%.1f to %.1f)" % (p, r, f["extra_down"]["%s %s" % (p, r)],
                                                       b["R4"]["%s %s" % (p, r)][0], b["R4"]["%s %s" % (p, r)][1])
                        for p in PL[1:] for r in REG) + ".")
+    L.append("7. Of each plan's October 2026 subscriptions, still paying at 31 December 2027 if its rise goes ahead "
+             "(band in brackets): " + "; ".join("%s %s (%s to %s)" % (p, format(f["paying_end27"][p], ","),
+                                                                   format(b["R9"][p][0], ","), format(b["R9"][p][1], ","))
+                                                for p in PL) + ".")
     L += ["", "## Critical Components", ""]
-    L.append("1. The change in the October subscriptions' 2027 contribution (forecasting): Onbeperkt **EUR %.1f**, Flex "
-             "**EUR %.1f**, Standaard **EUR %.1f**, Gezin **EUR %.1f** per subscription." % (
-                 c["Onbeperkt"], c["Flex"], c["Standaard"], c["Gezin"]))
-    L.append("2. The response at the first bill (causal reasoning): Standaard loses **%.1f** and moves down **%.1f** in "
-             "every 100 in both regions, Gezin loses **%.1f** in the Netherlands and **%.1f** in Flanders, Onbeperkt "
-             "**%.1f** and **%.1f** in the Netherlands against **%.1f** and **%.1f** in Flanders." % (
+    L.append("1. The change in the October subscriptions' 2027 contribution (forecasting): Gezin **EUR %.1f**, Flex "
+             "**EUR %.1f**, Standaard **EUR %.1f**, Onbeperkt **EUR %.1f** per subscription." % (
+                 c["Gezin"], c["Flex"], c["Standaard"], c["Onbeperkt"]))
+    L.append("2. The response around the bill (causal reasoning): at the first bill Standaard loses **%.1f** and moves "
+             "down **%.1f** in every 100 in both regions; at the December bill after the e-mail Flex loses **%.1f** and "
+             "Onbeperkt **%.1f** in every 100; Onbeperkt's stayers listen **%.1f** per cent more from the third month." % (
                  f["extra_cancel"]["Standaard Netherlands"], f["extra_down"]["Standaard Netherlands"],
-                 f["extra_cancel"]["Gezin Netherlands"], f["extra_cancel"]["Gezin Flanders"],
-                 f["extra_cancel"]["Onbeperkt Netherlands"], f["extra_down"]["Onbeperkt Netherlands"],
-                 f["extra_cancel"]["Onbeperkt Flanders"], f["extra_down"]["Onbeperkt Flanders"]))
+                 f["announce_pct"]["Flex"], f["announce_pct"]["Onbeperkt"], f["use_pct"]["Onbeperkt"]))
     L.append("3. The paying base at 31 October 2026 (assembly): **%s** subscriptions, Standaard **%s**." % (
         format(f["paying_oct_total"], ","), format(f["paying_oct"]["Standaard"], ",")))
+    L.append("4. Still paying at 31 December 2027 if the rise goes ahead (forecasting): Gezin **%s** of %s, Onbeperkt "
+             "**%s** of %s." % (format(f["paying_end27"]["Gezin"], ","), format(f["paying_oct"]["Gezin"], ","),
+                                format(f["paying_end27"]["Onbeperkt"], ","), format(f["paying_oct"]["Onbeperkt"], ",")))
     L += ["", "## Step-by-Step", ""]
     ev = f["events"]
     cross = [e for e in ev if e["crossed"]]
@@ -78,23 +84,27 @@ def write(path, f):
             ", ".join("%.1f" % e["extra_cancel"] for e in ev if not e["crossed"])),
         "Carry each 2027 rise at its own region's crossing, on the rival's prices as last scanned (October 2026, "
         "guideline 3.8): Standaard passes the rival in both regions (it never did before, so its own history says "
-        "little), Flex in both since the rival raised Basis 10 uur to EUR %.2f in July 2026, Onbeperkt and Gezin in "
-        "the Netherlands only. Every 2027 rise is the plan's own past rise in euros (Flex EUR %.2f, the others EUR "
-        "%.2f) and lands no further past the rival than a past crossing did, so each past response carries at the "
-        "size it was read; carried in proportion to the rise or on the log of the price ratio it moves no call." % (
-            f["rival_nl"]["Flex"], f["rise_eur"]["Flex"], f["rise_eur"]["Standaard"]),
+        "little); Flex, Onbeperkt and Gezin pass it nowhere. Every 2027 rise is the plan's own past rise in euros (Flex "
+        "EUR %.2f, the others EUR %.2f), so each past response carries at the size it was read." % (
+            f["rise_eur"]["Flex"], f["rise_eur"]["Standaard"]),
+        "Read what each past rise did outside its first bill, against the other region over the same months: at the "
+        "December bill after the price e-mail the light listeners left (%s per 100 on Flex, %s on Onbeperkt), and on "
+        "Onbeperkt the accounts that stayed listened %s per cent more from the third month, as single-profile accounts "
+        "added the second profile the plan pays for; 2027's rises are e-mailed on 1 December." % (
+            f["announce_pct"]["Flex"], f["announce_pct"]["Onbeperkt"], f["use_pct"]["Onbeperkt"]),
         "Value what is lost: those who leave at a crossing rise are the heavy listeners, whose counted hours at EUR "
-        "%.2f eat most of what they pay, and those who move down are light listeners still paying on the cheaper "
-        "plan, valued on the past downgraders' own months (Onbeperkt EUR %.1f each in 2027)." % (
-            f["rate"], f["downgrader_value"]["Onbeperkt"]),
+        "%.2f eat most of what they pay; those who leave at the e-mail are light listeners worth the whole of 2027; "
+        "those who move down keep paying on the cheaper plan, valued on the past downgraders' own months (Onbeperkt EUR "
+        "%.1f each in 2027)." % (f["rate"], f["downgrader_value"]["Onbeperkt"]),
         "Net it per October subscription against the rise's gain: Flex %.1f, Standaard %.1f, Onbeperkt %.1f, Gezin "
-        "%.1f euros; the rise goes ahead on %s only (guideline 3.10)." % (c["Flex"], c["Standaard"], c["Onbeperkt"],
-                                                                         c["Gezin"], up),
-        "The shortcuts land elsewhere: each plan's own past response, pooled or region by region, and one response "
-        "for every rise let Gezin, Onbeperkt and Standaard through (Standaard %.1f, Gezin %.1f on the careful route); "
-        "seeing the crossings but counting a downgrade as an exit and leavers at the plan's average holds all four "
-        "(Onbeperkt %.1f); the 2026 revenue share and a straight line in the gap to the rival hold all four too." % (
-            cr["change_2027"]["Standaard"], cr["change_2027"]["Gezin"], f["hint_cross_onb"]),
+        "%.1f euros; the rise goes ahead on %s only (guideline 3.10); %s of the %s October subscriptions are still paying "
+        "at the end of 2027." % (c["Flex"], c["Standaard"], c["Onbeperkt"], c["Gezin"], up,
+                                 format(f["paying_end27_total"], ","), format(f["paying_oct_total"], ",")),
+        "The shortcuts land elsewhere: each plan's own past rise in its region at the first bill (the careful route) "
+        "lets %s through; reading the crossing but stopping at the first bill lets %s through; leaving out the "
+        "December leavers lets Flex through and leaving out the stayers' listening lets Onbeperkt through; the 2026 "
+        "revenue share and one response for every rise land elsewhere again." % (
+            " and ".join(cr["raise"]), ", ".join(x1["raise"])),
     ]
     for i, st in enumerate(steps, 1):
         L.append("%d. %s" % (i, st))
@@ -102,6 +112,7 @@ def write(path, f):
           "barely elsewhere, in each plan that had both kinds, so neither one response for every rise nor each plan's "
           "own history carries to 2027, where the crossings fall differently; a downgrade keeps the subscription "
           "paying; the leavers and the downgraders listen differently from their plan's average; and schedule B "
-          "prices every counted hour. Every rival control, window, downgrader valuation and dose form lets the same "
-          "one rise through.", ""]
+          "prices every counted hour; and a rise is answered at the December bill after its e-mail and in the hours of "
+          "those who stay, not only at its first bill. Every rival control, window, downgrader valuation, dose form and "
+          "perturbation lets the same one rise through.", ""]
     open(path, "w").write("\n".join(L))

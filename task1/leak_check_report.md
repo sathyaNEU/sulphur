@@ -1,18 +1,21 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 18 files read, 49 golden figures and 11 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 48 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: million, trailing, golden, pooled, carries, family, months, creation, chosen, accounts, careful, priced, history, nearest, inside, uploaded, graded, hurried, commitment, growth, account, measured, onbeperkt, platform, counted
+Stump terms swept: million, golden, trailing, carries, family, pooled, december, accounts, months, onbeperkt, creation, chosen, platform, hurried, priced, inside, uploaded, nearest, commitment, growth, graded, history, account, missed, measured
 
-## 3 answer figures in the pack (REVIEW 2)
-- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 3.1 appears: ...ed under schedule C. B3. Statements and payment B3.1 Kraanvogel sends each publisher a statement of it...
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.1 appears: ...nce and the agencies' briefs. 3. Planning figures 3.1 A paying subscription is a consumer account whose...
+## 3 answer figures in the pack (REVIEW 4)
+- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 0.40 appears: ...For each month Kraanvogel pays each publisher EUR 0.40 for every counted hour of the publisher's titles...
+- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 3.2 appears: ...month and pays within 30 days of the statement. B3.2 A publisher whose code changes keeps its statemen...
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.2 appears: ...ng on the month's last day, on the plan charged. 3.2 A paying subscription-month is a consumer account...
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.5 appears: ...iles that belonged to the account in that month. 3.5 Net revenue is what Kraanvogel keeps of the charg...
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 5 of 25 stump-paragraph terms appear (months, accounts, growth, account, counted); read whether the document names the move
-- **REVIEW** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: 3 of 25 stump-paragraph terms appear (growth, account, onbeperkt); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 3)
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 4 of 25 stump-paragraph terms appear (accounts, months, growth, account); read whether the document names the move
+- **REVIEW** `price_list_2027.pdf`: 3 of 25 stump-paragraph terms appear (december, onbeperkt, nearest); read whether the document names the move
+- **REVIEW** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: 3 of 25 stump-paragraph terms appear (onbeperkt, growth, account); read whether the document names the move
 
 ## 8 column names (REVIEW 1)
 - **REVIEW** `licence_server_renewals_2024-01_2026-10.csv`: columns a generator names and an organisation does not: device_id

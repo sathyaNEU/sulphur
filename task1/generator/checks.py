@@ -51,7 +51,9 @@ def _truth_one(args):
     for (m, pid, aid, t, h) in W["counted"]:
         if 48 <= m <= 59 and aid in base:
             hrs[base[aid]] += h
-    return {p: (rev[p] - P.RATE27 * hrs[p]) / n[p] for p in P.PLANS}
+    end = collections.Counter(base[c["aid"]] for c in W["charges"] if c["m"] == 59 and c["aid"] in base
+                              and c["status"] in ("collected", "re-presented") and c["price"] > 0)
+    return {p: (rev[p] - P.RATE27 * hrs[p]) / n[p] for p in P.PLANS}, {p: end[p] for p in P.PLANS}
 
 
 def truth():
@@ -62,12 +64,14 @@ def truth():
     with mp.Pool(min(8, len(jobs))) as pool:
         res = pool.map(_truth_one, jobs)
     out = {}
+    end = {EP.NAMES[p]: sum(res[2 * i][1][p] for i in range(K27)) / K27 for p in P.PLANS}
+    res = [r[0] for r in res]
     for p in P.PLANS:
         d = [res[2 * i][p] - res[2 * i + 1][p] for i in range(K27)]
         mu = sum(d) / K27
         se = (sum((x - mu) ** 2 for x in d) / (K27 - 1) / K27) ** 0.5
         out[EP.NAMES[p]] = (mu, se)
-    return out
+    return out, end
 
 
 def main():
@@ -97,7 +101,10 @@ def main():
         "charged_on", "plan_code", "amount_eur", "rival_plan", "price_eur", "furthest_position_s"} <= heads)
     check("R1 no shipped column holds a result", not any(re.search(r"extra|crossed|contribution|elasticit", h) for h in heads))
     # the golden against the simulated 2027
-    tr = truth()
+    tr, end27 = truth()
+    for p, v in fig["paying_end27"].items():
+        check("R9 golden within 5 per cent of the replayed 2027: %s" % p, abs(v - end27[p]) <= 0.05 * end27[p],
+              "golden %d truth %.0f" % (v, end27[p]))
     for p in fig["change_2027"]:
         mu, se = tr[p]
         g = fig["change_2027"][p]
@@ -172,12 +179,22 @@ def main():
     ex = EP.results(pk, M.opts(down_as_exit=True))["R7"]["Onbeperkt"]
     check("SF6 a downgrade counted as an exit moves Onbeperkt's change outside its band",
           not (b["R7"]["Onbeperkt"][0] <= ex <= b["R7"]["Onbeperkt"][1]), "%.1f" % ex)
-    check("SF7 the 2026 basis files another set", EP.results(pk, M.opts(cost="share26"))["R8"] != fig["raise"])
+    s26 = EP.results(pk, M.opts(cost="share26"))["R7"]
+    check("SF7 the 2026 basis moves two or more plans' change outside its band (filed in schedule B, a reflex)",
+          sum(not (b["R7"][p][0] <= v <= b["R7"][p][1]) for p, v in s26.items()) >= 2,
+          str({p: round(float(v), 1) for p, v in s26.items()}))
     check("SF8 streamed seconds differ from counted hours", True)
     check("SF9 the 2027 prices are the price list's", all(P.PRICE27[p] > P.PRICE[p] for p in P.PLANS))
     check("SF10 re-sent rows: same call", D["R8"] == fig["raise"])
     check("SF11 regions from the accounts export", set(pk["acc"]["country"]) == {"NL", "BE"})
     check("SF12 downgraders modelled: same call", EP.results(pk, M.opts(dval="model"))["R8"] == fig["raise"])
+    check("SF14 one step fitted on the eight events: same call",
+          EP.results(pk, M.opts(resp="plan_step"))["R8"] == fig["raise"])
+    check("SF15 the e-mail's leavers moved 20 per cent: same call", all(
+        EP.results(pk, M.opts(scale_announce=k))["R8"] == fig["raise"] for k in (0.8, 1.2)))
+    check("SF16 the stayers' listening moved 20 per cent: same call", all(
+        EP.results(pk, M.opts(scale_use=k))["R8"] == fig["raise"] for k in (0.8, 1.2)))
+    check("SF17 one plan-wide continuation: same call", EP.results(pk, M.opts(r6_surv="plan"))["R8"] == fig["raise"])
     check("SF13 every dose form: same call", all(EP.results(pk, M.opts(dose=d))["R8"] == fig["raise"]
                                                  for d in ("pct", "log", "eur", "cross15")))
     # documents

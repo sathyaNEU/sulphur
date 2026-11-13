@@ -1,55 +1,61 @@
 {
+ "announce_pct": {
+  "Flex": 13.3,
+  "Gezin": 2.0,
+  "Onbeperkt": 7.2,
+  "Standaard": 7.8
+ },
  "bands": {
   "R2": {
    "Flex": [
-    4.99,
-    5.09
+    4.9,
+    5.0
    ],
    "Gezin": [
-    28.84,
-    29.42
+    29.11,
+    29.69
    ],
    "Onbeperkt": [
-    34.04,
-    34.72
+    35.05,
+    35.76
    ],
    "Standaard": [
-    9.82,
-    10.02
+    9.83,
+    10.03
    ]
   },
   "R3": {
    "Flex Flanders": [
-    10.8,
-    12.6
+    -0.3,
+    4.78
    ],
    "Flex Netherlands": [
-    10.8,
-    12.6
+    -0.3,
+    4.78
    ],
    "Gezin Flanders": [
     -0.3,
-    0.3
+    3.55
    ],
    "Gezin Netherlands": [
-    24.95,
-    29.64
+    -0.3,
+    3.55
    ],
    "Onbeperkt Flanders": [
-    3.15,
-    4.29
+    1.32,
+    3.23
    ],
    "Onbeperkt Netherlands": [
-    14.28,
-    16.7
+    1.32,
+    3.23
    ],
    "Standaard Flanders": [
-    22.25,
-    28.49
+    17.81,
+    22.23
    ],
    "Standaard Netherlands": [
-    22.25,
-    28.49
+    17.81,
+    22.23
    ]
   },
   "R4": {
@@ -58,111 +64,128 @@
     0.3
    ],
    "Gezin Netherlands": [
-    2.95,
-    3.74
+    -0.3,
+    0.3
    ],
    "Onbeperkt Flanders": [
-    0.51,
-    1.44
+    0.46,
+    3.01
    ],
    "Onbeperkt Netherlands": [
-    22.2,
-    25.98
+    0.46,
+    3.01
    ],
    "Standaard Flanders": [
-    14.57,
-    17.51
+    13.79,
+    18.18
    ],
    "Standaard Netherlands": [
-    14.57,
-    17.51
+    13.79,
+    18.18
    ]
   },
   "R5": {
    "Gezin": [
-    98.47,
-    114.41
+    74.45,
+    91.52
    ],
    "Onbeperkt": [
-    61.45,
-    70.37
+    58.64,
+    65.79
    ],
    "Standaard": [
-    32.25,
-    42.39
+    41.29,
+    46.46
    ]
   },
   "R6": {
    "Flex": [
-    1.03,
-    1.05
+    1.1,
+    1.12
    ],
    "Gezin": [
+    0.96,
+    0.98
+   ],
+   "Onbeperkt": [
     1.08,
     1.1
    ],
-   "Onbeperkt": [
-    1.09,
-    1.11
-   ],
    "Standaard": [
-    1.07,
-    1.09
+    1.05,
+    1.07
    ]
   },
   "R7": {
    "Flex": [
-    -1.73,
-    -0.98
+    -4.75,
+    -2.62
    ],
    "Gezin": [
-    -10.57,
-    -8.83
+    1.82,
+    6.36
    ],
    "Onbeperkt": [
-    3.0,
-    5.11
+    -4.96,
+    -3.9
    ],
    "Standaard": [
-    -15.08,
-    -11.55
+    -15.79,
+    -13.27
+   ]
+  },
+  "R9": {
+   "Flex": [
+    135,
+    153
+   ],
+   "Gezin": [
+    628,
+    677
+   ],
+   "Onbeperkt": [
+    663,
+    698
+   ],
+   "Standaard": [
+    277,
+    297
    ]
   }
  },
  "careful": {
   "change_2027": {
-   "Flex": -0.9,
-   "Gezin": 1.0,
-   "Onbeperkt": 1.7,
-   "Standaard": 1.2
+   "Flex": -1.1,
+   "Gezin": -0.6,
+   "Onbeperkt": 2.6,
+   "Standaard": 3.4
   },
   "extra_cancel": {
-   "Flex Flanders": 10.0,
-   "Flex Netherlands": 10.0,
-   "Gezin Flanders": 7.7,
-   "Gezin Netherlands": 7.7,
-   "Onbeperkt Flanders": 14.7,
-   "Onbeperkt Netherlands": 14.7,
-   "Standaard Flanders": 6.6,
-   "Standaard Netherlands": 6.6
+   "Flex Flanders": 4.5,
+   "Flex Netherlands": 10.9,
+   "Gezin Flanders": 28.9,
+   "Gezin Netherlands": 0.0,
+   "Onbeperkt Flanders": 14.4,
+   "Onbeperkt Netherlands": 2.9,
+   "Standaard Flanders": 5.3,
+   "Standaard Netherlands": 1.7
   },
   "leaver_hours_ratio": {
-   "Flex": 1.0,
-   "Gezin": 1.0,
-   "Onbeperkt": 1.0,
-   "Standaard": 1.0
+   "Flex": 1.11,
+   "Gezin": 0.97,
+   "Onbeperkt": 1.09,
+   "Standaard": 1.06
   }
  },
  "careful_raise": [
-  "Gezin",
   "Onbeperkt",
   "Standaard"
  ],
  "change_2027": {
-  "Flex": -1.4,
-  "Gezin": -10.3,
-  "Onbeperkt": 4.7,
-  "Standaard": -13.2
+  "Flex": -4.4,
+  "Gezin": 6.1,
+  "Onbeperkt": -4.6,
+  "Standaard": -14.8
  },
  "clauses": [
   2.1,
@@ -178,127 +201,193 @@
   3.1
  ],
  "counted_per_month": {
-  "Flex": 5.04,
-  "Gezin": 29.13,
-  "Onbeperkt": 34.38,
-  "Standaard": 9.92
+  "Flex": 4.95,
+  "Gezin": 29.4,
+  "Onbeperkt": 35.41,
+  "Standaard": 9.93
  },
  "downgrader_value": {
-  "Gezin": 99.5,
-  "Onbeperkt": 69.7,
-  "Standaard": 41.9
+  "Gezin": 75.2,
+  "Onbeperkt": 65.1,
+  "Standaard": 46.0
  },
  "events": [
   {
    "country": "Flanders",
    "crossed": false,
-   "extra_cancel": 8.6,
+   "extra_cancel": 5.3,
+   "extra_down": 2.3,
+   "plan": "Standaard",
+   "subscriptions": 312,
+   "year": 2025
+  },
+  {
+   "country": "Flanders",
+   "crossed": true,
+   "extra_cancel": 14.4,
+   "extra_down": 22.2,
+   "plan": "Onbeperkt",
+   "subscriptions": 348,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": true,
+   "extra_cancel": 10.9,
+   "extra_down": 0.0,
+   "plan": "Flex",
+   "subscriptions": 427,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": false,
+   "extra_cancel": -0.8,
+   "extra_down": -0.9,
+   "plan": "Gezin",
+   "subscriptions": 558,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": false,
+   "extra_cancel": 1.7,
    "extra_down": 2.6,
    "plan": "Standaard",
-   "subscriptions": 336,
-   "year": 2025
-  },
-  {
-   "country": "Flanders",
-   "crossed": true,
-   "extra_cancel": 15.9,
-   "extra_down": 24.7,
-   "plan": "Onbeperkt",
-   "subscriptions": 359,
-   "year": 2025
+   "subscriptions": 750,
+   "year": 2026
   },
   {
    "country": "Netherlands",
-   "crossed": true,
-   "extra_cancel": 12.0,
+   "crossed": false,
+   "extra_cancel": 2.9,
+   "extra_down": 1.0,
+   "plan": "Onbeperkt",
+   "subscriptions": 922,
+   "year": 2026
+  },
+  {
+   "country": "Flanders",
+   "crossed": false,
+   "extra_cancel": 4.5,
    "extra_down": 0.0,
    "plan": "Flex",
-   "subscriptions": 321,
-   "year": 2025
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": -1.6,
-   "extra_down": -0.7,
-   "plan": "Gezin",
-   "subscriptions": 587,
-   "year": 2025
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": 2.2,
-   "extra_down": 2.5,
-   "plan": "Standaard",
-   "subscriptions": 790,
-   "year": 2026
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": 4.0,
-   "extra_down": 1.1,
-   "plan": "Onbeperkt",
-   "subscriptions": 969,
-   "year": 2026
-  },
-  {
-   "country": "Flanders",
-   "crossed": false,
-   "extra_cancel": 4.1,
-   "extra_down": 0.0,
-   "plan": "Flex",
-   "subscriptions": 111,
+   "subscriptions": 155,
    "year": 2026
   },
   {
    "country": "Flanders",
    "crossed": true,
-   "extra_cancel": 28.2,
-   "extra_down": 3.4,
+   "extra_cancel": 28.9,
+   "extra_down": 4.5,
    "plan": "Gezin",
-   "subscriptions": 247,
+   "subscriptions": 240,
    "year": 2026
   }
  ],
  "extra_cancel": {
-  "Flex Flanders": 12.0,
-  "Flex Netherlands": 12.0,
+  "Flex Flanders": 4.5,
+  "Flex Netherlands": 4.5,
   "Gezin Flanders": 0.0,
-  "Gezin Netherlands": 28.2,
-  "Onbeperkt Flanders": 4.0,
-  "Onbeperkt Netherlands": 15.9,
-  "Standaard Flanders": 25.2,
-  "Standaard Netherlands": 25.2
+  "Gezin Netherlands": 0.0,
+  "Onbeperkt Flanders": 2.9,
+  "Onbeperkt Netherlands": 2.9,
+  "Standaard Flanders": 21.2,
+  "Standaard Netherlands": 21.2
  },
  "extra_down": {
   "Gezin Flanders": 0.0,
-  "Gezin Netherlands": 3.4,
-  "Onbeperkt Flanders": 1.1,
-  "Onbeperkt Netherlands": 24.7,
-  "Standaard Flanders": 16.5,
-  "Standaard Netherlands": 16.5
+  "Gezin Netherlands": 0.0,
+  "Onbeperkt Flanders": 1.0,
+  "Onbeperkt Netherlands": 1.0,
+  "Standaard Flanders": 15.6,
+  "Standaard Netherlands": 15.6
  },
- "hint_cross_onb": -4.2,
+ "hint_cross_onb": 5.6,
  "hold": [
   "Flex",
-  "Gezin",
+  "Onbeperkt",
   "Standaard"
  ],
+ "later_events": [
+  {
+   "announce": 8.3,
+   "country": "Flanders",
+   "plan": "Standaard",
+   "use": 2.7,
+   "year": 2025
+  },
+  {
+   "announce": 6.9,
+   "country": "Flanders",
+   "plan": "Onbeperkt",
+   "use": 8.5,
+   "year": 2025
+  },
+  {
+   "announce": 12.1,
+   "country": "Netherlands",
+   "plan": "Flex",
+   "use": 0.9,
+   "year": 2025
+  },
+  {
+   "announce": 3.2,
+   "country": "Netherlands",
+   "plan": "Gezin",
+   "use": 2.4,
+   "year": 2025
+  },
+  {
+   "announce": 7.4,
+   "country": "Netherlands",
+   "plan": "Standaard",
+   "use": -9.9,
+   "year": 2026
+  },
+  {
+   "announce": 7.4,
+   "country": "Netherlands",
+   "plan": "Onbeperkt",
+   "use": 7.4,
+   "year": 2026
+  },
+  {
+   "announce": 14.6,
+   "country": "Flanders",
+   "plan": "Flex",
+   "use": -3.5,
+   "year": 2026
+  },
+  {
+   "announce": 0.7,
+   "country": "Flanders",
+   "plan": "Gezin",
+   "use": -1.1,
+   "year": 2026
+  }
+ ],
  "leaver_hours_ratio": {
-  "Flex": 1.04,
-  "Gezin": 1.09,
-  "Onbeperkt": 1.1,
-  "Standaard": 1.08
+  "Flex": 1.11,
+  "Gezin": 0.97,
+  "Onbeperkt": 1.09,
+  "Standaard": 1.06
  },
+ "paying_end27": {
+  "Flex": 141,
+  "Gezin": 664,
+  "Onbeperkt": 677,
+  "Standaard": 283
+ },
+ "paying_end27_total": 1765,
  "paying_oct": {
-  "Flex": 494,
-  "Gezin": 1021,
-  "Onbeperkt": 1434,
-  "Standaard": 1218
+  "Flex": 689,
+  "Gezin": 1014,
+  "Onbeperkt": 1453,
+  "Standaard": 1226
  },
- "paying_oct_total": 4167,
+ "paying_oct_total": 4382,
+ "per": 100,
  "price26": {
   "Flex": 9.99,
   "Gezin": 22.99,
@@ -313,7 +402,7 @@
  },
  "quick_raise": [],
  "raise": [
-  "Onbeperkt"
+  "Gezin"
  ],
  "rate": 0.4,
  "rise_eur": {
@@ -323,68 +412,67 @@
   "Standaard": 1.0
  },
  "rival_be": {
-  "Flex": 10.29,
+  "Flex": 9.39,
   "Gezin": 22.49,
   "Onbeperkt": 18.49,
-  "Standaard": 15.59
+  "Standaard": 15.49
  },
  "rival_family": {
   "downgraders valued on their own hours capped at the lower plan's, with the cap response": [
-   "Onbeperkt"
+   "Gezin"
   ],
   "each past response carried in proportion to the rise in per cent": [
-   "Onbeperkt"
+   "Gezin"
   ],
   "each past response carried on the log of the price ratio": [
-   "Onbeperkt"
+   "Gezin"
+  ],
+  "each plan's own level and one step where a rise passes the rival, fitted on the eight events": [
+   "Gezin"
   ],
   "re-sent warehouse rows summed": [
-   "Onbeperkt"
+   "Gezin"
   ],
   "the first bill alone as the response window": [
-   "Onbeperkt"
+   "Gezin"
   ],
   "the same country a year earlier as the control where the record holds it": [
-   "Onbeperkt"
+   "Gezin"
   ]
  },
  "rival_nl": {
-  "Flex": 10.29,
-  "Gezin": 23.49,
-  "Onbeperkt": 19.49,
+  "Flex": 9.79,
+  "Gezin": 24.49,
+  "Onbeperkt": 20.49,
   "Standaard": 15.49
  },
  "routes": {
   "a downgrade counted as an exit from the plan": {
    "change_2027": {
-    "Flex": -1.4,
-    "Gezin": -11.2,
-    "Onbeperkt": 8.4,
-    "Standaard": -19.0
+    "Flex": -4.4,
+    "Gezin": 6.1,
+    "Onbeperkt": -5.0,
+    "Standaard": -20.5
    },
    "raise": [
-    "Onbeperkt"
+    "Gezin"
    ]
   },
   "each plan's own past response": {
    "change_2027": {
-    "Flex": -0.9,
-    "Gezin": 1.9,
-    "Onbeperkt": 5.2,
-    "Standaard": 2.3
+    "Flex": -6.1,
+    "Gezin": -4.2,
+    "Onbeperkt": -6.9,
+    "Standaard": -1.2
    },
-   "raise": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ]
+   "raise": []
   },
-  "each plan's own past rise in the same region": {
+  "each plan's own past response, a downgrade counted as an exit, leavers at the plan's average": {
    "change_2027": {
-    "Flex": -0.8,
-    "Gezin": 1.2,
-    "Onbeperkt": 3.8,
-    "Standaard": 2.3
+    "Flex": -1.3,
+    "Gezin": 0.0,
+    "Onbeperkt": 3.0,
+    "Standaard": 2.2
    },
    "raise": [
     "Gezin",
@@ -394,67 +482,83 @@
   },
   "one response for every rise, scaled by the rise": {
    "change_2027": {
-    "Flex": -0.1,
-    "Gezin": 1.0,
-    "Onbeperkt": 5.8,
-    "Standaard": 0.6
+    "Flex": -5.0,
+    "Gezin": -3.0,
+    "Onbeperkt": -6.5,
+    "Standaard": -3.3
+   },
+   "raise": []
+  },
+  "the 2026 remuneration basis carried (52 per cent of net revenue)": {
+   "change_2027": {
+    "Flex": -3.1,
+    "Gezin": 2.2,
+    "Onbeperkt": -3.7,
+    "Standaard": -11.3
    },
    "raise": [
-    "Gezin",
+    "Gezin"
+   ]
+  },
+  "the careful route: each plan's own past rise in its region, read at the first bill alone": {
+   "change_2027": {
+    "Flex": -1.1,
+    "Gezin": -0.6,
+    "Onbeperkt": 2.6,
+    "Standaard": 3.4
+   },
+   "raise": [
     "Onbeperkt",
     "Standaard"
    ]
   },
-  "the 2026 remuneration basis carried (52 per cent of net revenue)": {
+  "the crossing read, the first bill alone": {
    "change_2027": {
-    "Flex": -1.1,
-    "Gezin": -16.9,
-    "Onbeperkt": -7.8,
-    "Standaard": -10.2
-   },
-   "raise": []
-  },
-  "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average": {
-   "change_2027": {
-    "Flex": -0.9,
-    "Gezin": 1.0,
-    "Onbeperkt": 1.7,
-    "Standaard": 1.2
+    "Flex": 0.7,
+    "Gezin": 8.7,
+    "Onbeperkt": 5.6,
+    "Standaard": -11.1
    },
    "raise": [
+    "Flex",
     "Gezin",
-    "Onbeperkt",
-    "Standaard"
+    "Onbeperkt"
    ]
   },
   "the golden": {
    "change_2027": {
-    "Flex": -1.4,
-    "Gezin": -10.3,
-    "Onbeperkt": 4.7,
-    "Standaard": -13.2
+    "Flex": -4.4,
+    "Gezin": 6.1,
+    "Onbeperkt": -4.6,
+    "Standaard": -14.8
    },
    "raise": [
-    "Onbeperkt"
+    "Gezin"
    ]
   },
   "the quick route": {
    "change_2027": {
-    "Flex": -0.3,
-    "Gezin": -5.7,
-    "Onbeperkt": -3.4,
-    "Standaard": -1.6
+    "Flex": -3.4,
+    "Gezin": -6.9,
+    "Onbeperkt": -7.7,
+    "Standaard": -4.4
    },
    "raise": []
   },
   "the response read off the new price's gap to the rival, in a straight line": {
    "change_2027": {
-    "Flex": -0.7,
-    "Gezin": -21.6,
-    "Onbeperkt": -1.4,
-    "Standaard": -7.2
+    "Flex": -11.5,
+    "Gezin": -13.4,
+    "Onbeperkt": -10.8,
+    "Standaard": -10.8
    },
    "raise": []
   }
+ },
+ "use_pct": {
+  "Flex": -1.3,
+  "Gezin": 0.7,
+  "Onbeperkt": 8.0,
+  "Standaard": -3.6
  }
 }
