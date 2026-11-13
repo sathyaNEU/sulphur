@@ -290,8 +290,13 @@ ISO, FIPS, agency series codes), geography, naming, release calendars and revisi
 raw. **The realism sweep** is asserted in `checks.py` before any reader sees the pack: no identical counts
 across periods, sites or entities; no round headline totals, shares or rates; no constant stream or
 repeating block; no free text recurring beyond a real rate; every persona from `guard.py names`; containers
-written by the house writers and the gate green (`reduce-house-fixes` H1); timestamps coherent (§9). A tell the leak reader still finds is a
-generator fix before the judge.
+written by the house writers and the gate green (`reduce-house-fixes` H1); timestamps coherent (§9), every record's
+last date on or before its own export stamp and the as-of (`gates.py` passes `metadata.json`'s `as_of` to `leak.py`);
+**the units are the column's own**: `checks.py` reads each quantity back from the shipped file in the unit its header
+names and asserts its physical scale (energy per customer per year, a saving as a share of the energy it comes from, a
+rate per unit of exposure in the field's usual range). task7 architecture 12 shipped megawatt-hours in a column headed
+kWh, so every feeder's 2026 energy came out a thousand times small, and no gate saw it until a review. A tell the leak
+reader still finds is a generator fix before the judge.
 
 ### 7.1 The bar, executed
 

@@ -42,6 +42,13 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
                            as a supporting step and the route showing it alone leaves the call standing); and the
                            card's skeleton screen (fingerprint Part 1b, the closed rule included) clear
 
+  ## Pinning list          every constant the golden's estimator uses that the world also holds (a base temperature, a
+                           threshold, an exponent, a share, a draw per unit, a time constant), one row each: Constant |
+                           Golden value | Home (the shipped file a real organisation holds that carries it, or the
+                           estimator family and its measured spread); and `Variant battery:` (how many variants of
+                           every modelled transport were run and that they file one answer). Refused on an in-flight
+                           build when missing (determinism-check §1, task7 architecture 12's 58 F that no file held)
+
   ## Stump factorial       the one-trick guard (stumping Part 3.3), on paper before the generator: `Reflex route:` (every
                            move a run makes unprompted or the files spell out set right, every stump hurried, and the
                            answer it files), and a table, one row per judgment the call can turn on, with columns
@@ -93,7 +100,7 @@ FRONTIER_LABELS = ("Precedents", "Shallow path checks", "Assumption made false",
 # the call.
 CLOSED_LABEL = "Closed strategies"
 # From SCREEN_FROM (the author's direction, 2026-11-13): the design note carries `## Stump screen`, three or more
-# candidate traps put through the nine tests of references/stump-screen.md on paper before any code, three kept.
+# candidate traps put through the eleven tests of references/stump-screen.md on paper before any code, three kept.
 SCREEN_FROM = "2026-11-13T00:45:00Z"
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
@@ -696,6 +703,41 @@ def factorial_rows(task_dir, secs):
     return rows
 
 
+def pinning_rows(task_dir, secs):
+    """The golden may not know what the generator knows: every constant it shares with the world has a home in a shipped
+    file or a measured spread, and the transport was rebuilt across a variant battery that files one answer."""
+    try:
+        st = json.load(open(os.path.join(task_dir, "pipeline.json"))).get("status") or "DESIGN"
+    except Exception:
+        st = "DESIGN"
+    strict = st in IN_FLIGHT
+    rows = []
+
+    def row(check, ok, detail):
+        rows.append((check, "PASS" if ok else ("FAIL" if strict else "WARN"), detail))
+    pl = section(secs, "Pinning list")
+    row("section Pinning list", pl is not None, "present" if pl is not None else
+        "## Pinning list missing (determinism-check §1: each constant the golden shares with the world, filed or measured)")
+    if pl is None:
+        return rows
+    t = find_table(pl, "constant", "home") or []
+    data = [r for r in t[1:] if r and any(c.strip() for c in r)] if t else []
+    row("pinning list table", bool(data), "%d constants" % len(data) if data else "no table with Constant and Home columns")
+    if data:
+        ch = col(t[0], "home")
+        bad = [r[0][:40] for r in data if ch is None or len(r) <= ch or not (
+            re.search(r"\.(pdf|xlsx|csv|docx|txt|json)\b", r[ch], re.I) or re.search(r"\bspread\b", r[ch], re.I))]
+        row("pinning list: every constant filed in a shipped file or measured", not bad,
+            "each has a home" if not bad else "no file or measured spread: " + "; ".join(bad))
+    vb = labelled(pl, "Variant battery") or ""
+    m = re.search(r"(\d[\d,]*)\s+variants", vb)
+    n = int(m.group(1).replace(",", "")) if m else 0
+    one = bool(re.search(r"\b(one|1|a single) (answer|set|call)\b|\bsame (call|answer|set)\b|\bevery variant\b", vb, re.I))
+    row("pinning list: Variant battery run and files one answer", n >= 12 and one,
+        vb[:110] if vb else "no `Variant battery:` line (twelve or more variants of every modelled transport, one answer)")
+    return rows
+
+
 def col(header, *names):
     """Index of the first header cell containing any of `names` (case-insensitive), else None."""
     for i, h in enumerate(header):
@@ -1227,7 +1269,7 @@ def screen_rows(task_dir, secs):
     kept = [r for r in data if re.search(r"\bkept\b", " ".join(r), re.I) and not re.search(r"\bnot kept\b", " ".join(r), re.I)]
     ok = sc is not None and len(data) >= 3 and len(kept) >= 3
     detail = ("%d candidates, %d kept" % (len(data), len(kept))) if sc is not None else \
-        "## Stump screen missing (stumping references/stump-screen.md: three to five candidates through the nine tests)"
+        "## Stump screen missing (stumping references/stump-screen.md: three to five candidates through the eleven tests)"
     rows.append(("stump screen on paper", "PASS" if ok else ("FAIL" if sl else "WARN"),
                  detail + ("" if sl else ", registered before the stump screen")))
     return rows
@@ -1342,6 +1384,7 @@ def main(argv):
     rows.append(prompt_gate(task_dir))
     if not any(r[0] == "doctrine" for r in rows):
         rows.extend(factorial_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
+        rows.extend(pinning_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.append(effort_gate(task_dir))
     fails = [r for r in rows if r[1] == "FAIL"]
     for check, level, detail in rows:

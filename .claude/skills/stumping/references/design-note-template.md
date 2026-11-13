@@ -24,9 +24,10 @@ People: <from guard.py names>
 ## Stump screen
 
 Written at the draw, before the card is registered and before any code (`references/stump-screen.md`). Three to five
-candidate traps, each through the nine tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data,
+candidate traps, each through the eleven tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data,
 5 two records, 6 the waved-through assumption with its precedent, 7 a plausible shallower story, 8 across the data,
-9 worth the call); the three strongest independent ones kept.
+9 worth the call against the variant battery, 10 the run's alternative ruled out by named data, 11 the golden can
+measure it); the three strongest independent ones kept.
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
@@ -137,6 +138,18 @@ Closed strategies: <the lesson the call turns on, the client's closed card neare
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
 | SF1 | ... | ... | ... | <a filed sentence, `same call`, or named data> |
+
+## Pinning list
+
+Every constant the golden's estimator uses that the world also holds (determinism-check §1): the golden may not know
+what the generator knows.
+
+| Constant | Golden value | Home |
+|---|---|---|
+| <a base temperature, threshold, exponent, share, draw per unit, time constant> | <value> | <the shipped file and where in it, or the estimator family and its measured spread> |
+
+Variant battery: <how many variants of every modelled transport were run (each convention at the values the field
+uses, each alternative source, each component in and out, pooled against per group) and that they file one answer>
 
 ## Closure table
 

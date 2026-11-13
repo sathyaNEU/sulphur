@@ -315,9 +315,10 @@ and `precut.py` for every card registered from 2026-11-12:
   by part, a target no instrument covers. It is a way of placing new lessons, never a chain to copy.
 
 **The stump screen, at the draw** (`references/stump-screen.md`): three to five candidate traps written on paper and
-each put through nine tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at two
+each put through eleven tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at two
 grains, an assumption the run names and waves through with its precedent, a plausible shallower story, across the
-data, worth the call) before the card is registered and before any code; the three strongest independent ones are kept
+data, worth the call against the variant battery's spread, the run's alternative ruled out by named data, and the
+golden able to measure it) before the card is registered and before any code; the three strongest independent ones are kept
 and the table goes in the note's `## Stump screen` (`precut.py` from 2026-11-13). The platform's runs are the only
 measure of difficulty: no judge, reader or in-house pass solves the task, so the idea has to hold on paper first.
 

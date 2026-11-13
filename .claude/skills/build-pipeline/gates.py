@@ -41,11 +41,20 @@ def gates(d, full):
         rewrite = bool(json.load(open(os.path.join(d, "pipeline.json"))).get("prompt_rewritten"))
     except Exception:
         pass
+    # the dates sweep runs only with the fiction's as-of date: metadata.json's as_of (task7 architecture 12 shipped a
+    # year of exports past their own stamps because the sweep was skipped)
+    asof = []
+    try:
+        a = json.load(open(os.path.join(d, "metadata.json"))).get("as_of")
+        if a:
+            asof = ["--asof", str(a)[:10]]
+    except Exception:
+        pass
     g = [
         ("precut", [PY, os.path.join(SK, "stumping", "precut.py"), d, "--quiet"]),
         ("voice", [PY, os.path.join(SK, "guide-to-prompt", "references", "voice-check.py"), t]
          + (["--rewrite"] if rewrite else [])),
-        ("leak", [PY, os.path.join(SK, "leak-check", "leak.py"), t, "--quiet"]),
+        ("leak", [PY, os.path.join(SK, "leak-check", "leak.py"), t, "--quiet"] + asof),
         ("figures", [PY, os.path.join(SK, "determinism-check", "figures_check.py"), t]),
         ("containers", [PY, os.path.join(SK, "reduce-house-fixes", "scripts", "audit_containers.py"), t]),
         ("heart", [PY, os.path.join(SK, "fingerprint", "guard.py"), "heart", t]),

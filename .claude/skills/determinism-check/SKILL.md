@@ -158,6 +158,27 @@ is rule application and the stump is gone.
 **Never file a procedure, basis or formula whose literal application gives another answer**: an official
 decoy and a fork at once. **And a pin added to close one fork can open a larger one**, so read every
 new pin's literal execution against the graded quantity and not only against the fork it was written for.
+
+**The golden may not know what the generator knows.** Every constant the golden's estimator uses that the world also
+holds (a base temperature, a threshold, an exponent, a share, a draw per unit, a time constant, a profile) is either
+filed, at the value the golden uses, in a shipped file a real organisation would hold, or estimated from the pack by an
+estimator family whose spread is measured and carried into the band. The design note's `## Pinning list` names each
+one and its home (`precut.py` refuses an in-flight build without it), and `checks.py` asserts each filed value is in
+its file. task7 architecture 12 split each feeder's load into heating and cooling at the world's own 58 and 68 F and
+read a load research table labelled weather-normalised that the generator had computed on 2026 weather; no file held
+either, the golden sat at the edge of every variant the platform's auditor ran, and the call was 10 or 12 feeders by
+the balance point a run chose.
+
+**The variant battery, run before anything is priced.** Every result built by a modelled transport (a response
+carried by a makeup, a rate carried by a share, a profile carried by a regression) is rebuilt across every convention
+the golden uses, the ways the field does it: each base or threshold at the values the field uses (55, 60 and 65 F
+where the world uses 58), each alternative source for the same component (a weather regression against a survey times
+a published draw), each component in and out, and a pooled against a per-group scale. Twelve variants is the floor and
+the full cross is the norm. Every variant files the golden call or is ruled out by named data in the fork table; the
+bands are set from the battery, never from a narrower golden family; the design note's `Variant battery:` line records
+the count and the result. On task7 architecture 12 the house judge approved on the rivals its brief named while the
+auditor's 24 variants moved two feeders across the line; measured afterwards, 96 variants gave 11 distinct funded
+sets, residential feeders moving 11 to 23 percent.
 A build added a clause pinning the grain ("a partner's household-size band has one award level for those
 twelve months ... an award level is not taken claim month by claim month") to close a month-by-month
 reading, and the clause also said the scheme's awards are taken **at** those levels. Read literally that
@@ -493,6 +514,9 @@ The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
 - **One thread at medium effort** (the `determinism-judge` agent, about 25 tool calls), no sub-agents. It reads
   `prompt.txt`, a fresh unzip of `target.zip` and the four answer blocks, and never the design note, the generator,
   `figures.json`, `pipeline.json` or an earlier report: it checks the shipped text, not the author's intent.
+- **The brief names every convention in the Pinning list** (never the golden's values) and asks the judge to vary
+  each one the ways the field does; a judge brief that names only the build's own rivals approves what an auditor's
+  wider battery sends back (task7 architecture 12).
 - **The thread reads literally first** (§2) wherever it runs an alternative, and counts a fork closed only by
   inference or by the write-up as open. A fork it settles "by the plain reading" is a FIX_NOW.
 - **An APPROVE is scoped to the pack the judge saw.** A later change that moves a graded figure, the prompt or the
@@ -507,6 +531,7 @@ The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
 - [ ] Every result's estimand filed literally, unobserved members stated; method filed (then not a result's difficulty) or forced, candidates separated, asserted
 - [ ] Every result banded by the rivals run on the clean truth, the hurried figure outside the band by an asserted margin; effort.json tied to figures.json
 - [ ] No filed rule, basis or formula with another literal answer; `Literal reader` line written
+- [ ] `## Pinning list`: every constant the golden shares with the world filed or measured; `Variant battery:` twelve or more variants, one answer
 - [ ] Semantic fork table complete, every row ruled out or convergent, the stump none of them, every row in `checks.py`
 - [ ] 22-axis closure table (`precut.py` exit 0); pins at authority; counter-pin sweep clean
 - [ ] Figures mid-bin, flip stated; checks and verifier green; rebuild byte-identical; `figures_check.py` exit 0

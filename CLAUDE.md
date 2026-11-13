@@ -167,6 +167,11 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
   task457 was approved once its prompt opened on why the answer has to be an estimate. No chain of theirs is copied.
 - **A landed scaffold is never re-pointed** (task4 architectures 6 to 10, task10 architectures 4 to 7, all landed): a
   re-root changes the deciding lessons and the decision form, and the skeleton guard checks the slot's lineage.
+- **The field's whole textbook chain is one reflex when the pack ships its ingredients** (task22 arch 1, task7 arch 12):
+  a step priced as a stump on another build's loss is earned once the pack carries the inputs of the field's standard
+  method (a survey, a published draw per unit, a trial, a GIS), however many steps the method has; and a golden that
+  uses a constant only the generator knows (task7's 58 F) is a fork the platform's auditor finds
+  (`stumping/references/stump-screen.md` tests 2, 10 and 11, its measured-dead table, `determinism-check` §1).
 - **Forcing has two sides** (six returns on determinism or forcing): every defensible rival on the golden's side, the
   shortcuts across the line, and the call holding when each fitted input moves by its spread (`effort.json` forcing).
 
@@ -209,7 +214,7 @@ license the ones they name.
 0 INTAKE   the assigned domain (one of the 21 subdomains) and analysis type (one of the nine); status.py new for
            the number                                                         pipeline.json DRAWING, doctrine throughout
 1 DRAW     guard.py recent, coverage and mechanisms; the strategy atlas; the weight and answer shape not leaned on
-           recently; the stump screen on paper (three to five candidate traps through its nine tests, the three
+           recently; the stump screen on paper (three to five candidate traps through its eleven tests, the three
            strongest independent ones kept, stumping/references/stump-screen.md); the card (answer_shape, weight,
            chain_signature) through guard.py check, then register             COMMIT "DRAWN (taskNN)"
 2 DESIGN   the results chain, the hidden factor record, the effort test on paper, the data provenance, the
@@ -319,7 +324,9 @@ three at Tier 2, six at Tier 3).
 
 ## Current spec
 
-**Determinism is literal and per result.** The judge executes the shipped text word for word. Each result's
+**Determinism is literal and per result.** The judge executes the shipped text word for word. Every constant the
+golden shares with the world is filed or measured (the note's `## Pinning list`), and every modelled transport is
+rebuilt across a variant battery of twelve or more that files one answer, before anything is priced. Each result's
 estimand (population, including members not yet observed, outcome, window, unit, comparison) is filed so its literal
 execution is the golden; the method stays open. Every result is pinned by the data or a stated convention, with a
 band where reasonable methods differ: the rivals are run, not argued, and every defensible rival lands inside the
