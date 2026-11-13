@@ -1,200 +1,184 @@
-# task7: the EV Overnight rate's charging default for summer 2027, and the transformer replacements it leaves
+# task7: which of Platte Ridge PPD's 24 feeders receive voltage optimisation in the 2027 capital programme
 
 ## Draw
 
-Subdomain: Energy efficiency & demand response evaluation (tariff-demand-response-evaluation)
+Subdomain: Energy efficiency & demand response evaluation (energy-systems-utilities, efficiency-savings-verification)
 Analysis type: Experiment & Causal
-Answer shape: scenarios with the flip point (three charging defaults, each with the transformers it leaves over their limit, its fee
-  and its total, and the fee at which the call would change)
-Weight: a hard-to-measure quantity: each distribution transformer's highest 15-minute load of a summer like 2026 under charging
-  designs the record holds only in part (own schedules for half the chargers, random start for the other half, coordination for
-  none), on a meter that reads hourly; task22 sat in assembly and task20 in validation (task13's hard-to-measure is one of the last
-  five, a WARN answered here: its quantity is an outage's unrecorded duration, this one a coincident peak)
-Data-native sentence: the pilot randomised chargers, not transformers, so the randomised comparison measures what a design does to an
-  average charger's quarter-hour, while the limit is each transformer's single worst quarter-hour of the summer, which depends on how
-  often a handful of 7 to 11 kW blocks land together on the same nights, and the meters that see every home read only hourly
-People: Eileen Casey (manager of distribution planning), Chad Wyatt (pilot manager), Rebekah Fleming (rates analyst), Joshua Baker
-  (Quillpoint's account manager), Sandra Bernard (engineering, the planning standard)
+Answer shape: a flagged set with the evidence (the feeders funded, each feeder's yearly saving at the substation with its band, and the trial's measured response behind it)
+Weight: modeling: each feeder's yearly saving at the substation is built from three models fitted on the pack (its load's makeup against the weather and the survey, its far end hour by hour, its losses against current squared) and the trial's measured response; no record holds it (the trial ran on eight feeders in spring and autumn); the last two builds sat in assembly (task22) and investigation (task9), and hard-to-measure was redrawn because task20 holds it
+Data-native sentence: the randomised trial measured the energy response to a voltage cut on eight feeders on the days its regulators actually ran, the tap changers move every feeder's voltage a few thousand times a year but only for a half-hour read that thermostats undo, the customer meters miss the line losses and the far-end meters set how far each feeder can go, so each part of the yearly saving has to be assigned to the record that sees it
+Guard (registered card, 2026-11-13): gap redrawn from population to objective (population with G13 and a designated set repeats task8's lineage), forum board_of_directors (the District's board approves the capital programme; executive_team and line_manager_or_team repeat task9 and task13); WARN repeat.deliverables docx+xlsx (task9): a planner's workbook and memo is what this reader uses; WARN house_lesson position_on_network_effect (task9, task13): a supporting step here (the far end caps the volts), the call turns first on instrument_noncompliance; WARN house_shell set_over_threshold: the decision is a funded set against each feeder's own cost under VO-1 2.1, no other form is honest
+People: Joseph Harmon (manager of distribution engineering, owner of VO-1), Mary Wilson (system planning, whose workbook and memo the golden are), Bruce Hart (finance), Anthony Harris (GIS and register) (`guard.py names --geo US --seed 1113`). None appears in the prompt.
 
-## Deep reasoning
-
-Task type: energy efficiency & demand response evaluation (tariff-demand-response-evaluation): a randomised managed-charging pilot on a time-of-use EV rate, evaluated for the rate's default on the distribution transformers it loads
-Domain test: every result is a distribution-planning or demand-response quantity: the pilot's randomised change in a charger's load at the off-peak start, each distribution transformer's highest 15-minute load of a summer under a charging design (how often a few 7.2 to 11.5 kW blocks coincide on one transformer on top of its homes' evening and night load), the replacements DPS-7's 120 per cent limit calls for, and each option's cost for the year
-Swap: "which charging default for a cooperative's EV rate, judged on its distribution transformers' summer peaks" with servers and jobs for transformers and chargers: the tariff's 23:00 off-peak start, the 15-minute kVA limit at a 0.95 planning power factor, the summer air-conditioning base, the transformer sizes and the work plan's change-outs stop making sense
-Where the weight sits: R4 and R5, each of the 382 transformers' highest quarter-hour of July and August under two designs the record holds only in part: Stagger replayed night by night with 400 draws of every session's random start, Sequence (never piloted) replayed by its filed rule on each night's plug-ins, energy and unplug times; long because every transformer-night is rebuilt from records at two grains (hourly reads at the homes, minute-level sessions at the chargers), not clever
-Layer 1: hourly reads exported per substation in local time, hour-ending, with estimated hours filled by interpolation and a re-sent block in each file; meters exchanged mid-summer (the exchange day split across two meter numbers); the session log in UTC with a re-sent batch and empty plug-ins; chargers swapped under new serials; the roster's re-imported rows with the account number unpadded; one split's service transfers not yet posted to the GIS; three change-outs the register has not caught up with; monitor gaps and the transformer's own losses in the monitors; each made by the system that keeps the file, none deciding a result
-Not one thing: the call needs two independent judgments: Stagger's season coincidence replayed night by night (without it the pilot's average managed night files Stagger with 2 over) and Sequence replayed by its rule (without it Sequence is either the pilot's managed quarter, which files Stagger, or one charger at a time, which files Sequence with 3 replacements); the members' own schedules restored moves the own count (53 against 44 off the 2026 meters); the quarter-hour step is DPS-7's filed peaking factor and prices nothing; one sentence rescues one result
-One-fact test: the strongest sentence ("a few chargers on one transformer still land together on some night of the summer under a random start, so replay every night") rescues R4 alone; the call still needs Sequence's own replay and the budget its forced overlaps (effort.json: 1 of 9)
-Not semantics: every field read right (hour-ending reads, UTC sessions, swaps, exchanges, transfers, change-outs, the halves, the ready-by column) and the careful route still files Stagger with 2 over, because none of the judgments is a reading: one is a maximum over nights of a sum, one a schedule replayed under a rule, one a status quo rebuilt charger by charger
-Not rule application: EV-4 files what is compared (an option's expected fee plus replacements in a summer like the last one, the chargers the quote covers, own schedules as their owners set them) and the replay's frame (each session's plug-in, energy, charge time and unplug kept, the covered chargers' own charging out of the hourly reads and each option's in at the quarter-hour, ready-by at the unplug time rounded down), DPS-7 the limit, the hourly-to-15-minute peaking factors (Table 2), the kVA convention and the installed costs, the proposal the two products' rules (the queue's order and waiting included) and fees; nothing files that the pilot's average night misprices a transformer's worst night, how a random start's chance of coinciding is reached, what Sequence's rule does on each night's sessions, or how the managed quarter's own settings are known
-Estimand: Board Policy EV-4 sections 3 and 4.1 to 4.3; DPS-7 sections 2.1 to 2.3 with Table 2, 3 with Table 1, and 4; the proposal (fees per enrolled charger per year, the chargers enrolled on 1 November 2026, each product's rule); the pilot plan section 3 (R2's comparison and its per-charger, every-night footing); the prompt
-No decoy: no memo, draft or stakeholder figure; the proposal describes its products' rules and prices and ranks nothing; the state's EV registrations and the net-metering list rank nothing and decide nothing
-No replay: no result re-derives a published figure and no stated number is wrong
-Pinned: the rivals run on the cut pack (every charger on its declared setting, the own three-quarters at their recorded 2026 starts, the sessions the window cannot fit started early enough to finish, own sessions advanced to finish by their unplug times, two other random seeds) all call Sequence; with one marginal unit either side for arithmetic at the limit, own schedules span 52 to 55, Stagger 28.5 to 31.0, Sequence 12 to 14, its work plan USD 178,500 to 214,900, the flip fee USD 128 to 177; the three readings the 2026-11-13 holistic check found open are filed (the queue waits for a late charger, the proposal; ready-by at the unplug time rounded down, EV-4 4.1; the hourly reads brought to the quarter-hour by DPS-7 Table 2's peaking factor, monitored or not)
-Run forecast: a frontier run reads every file, cleans the reads and the sessions, measures the pilot's change at 23:00 from the randomised halves (-4.95 kW, R2 earned), and then carries the pilot's average managed night to each transformer (R4 lost: 2 over), takes Sequence as one charger at a time or as the pilot's managed quarter (R5 lost), reads own schedules off the 2026 meters (R3 lost: 44), and files Stagger (R6 to R8 lost); method shortcut at R4 and R5, dismissed own evidence at R3 (the one platform run on file, 2026-11-13, did better than this forecast: see the Effort test's run evidence)
-Strategy label: OWN (no client strategy carries a randomised per-charger effect to shared transformers' season peaks; the nearest, Engineering and Physical Sciences 9, sizing a battery when the month's peak is not known in advance, works a peak functional on one meter)
-Depth level: 4 on the client's scale (aim here): three connected judgments, each needing its own estimation, carry the results (Stagger's season coincidence at each transformer's chance over random draws, Sequence's rule replayed night by night on each transformer's sessions, own schedules restored from each managed charger's own pre-pilot history), the call needing the first two together; level 5's mark holds (the shortcuts land on different wrong answers: Stagger with 2 over, Stagger again with Sequence taken as the pilot's quarter, Sequence with 3 replacements, own schedules at 44), but with the quarter-hour step filed in DPS-7 Table 2 the chain has three real judgment steps, not the four level 5 asks
-Lesson: an effect randomised on the units is not the effect on the shared resource they load: the decision's quantity is the summer's maximum of a sum of a few blocks on each transformer, which the average night hides, and a design the pilot never ran is replayed on the record's own windows; no task on file teaches it (non_additive_aggregation untaught, skeleton.py lessons)
+Architecture 12, 2026-11-13, a new world on the author's word after architecture 11 (Hollins Creek's EV charging default) was landed by the platform run on every graded result (task7/runs/arch11/run1.md: the night-by-night Stagger replay a reflex under EV-4 4.3, the Sequence rule written in the proposal). Built to the stump factorial from the draw: five methods the data force, each prototyped on paper and then on the generator's own estimators before the pack was cut.
 
 ## Stump screen
 
-Run after the build (the card was registered before the screen existed), every candidate through the nine tests of
-stumping/references/stump-screen.md (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data, 5 two records at
-two grains, 6 an assumption waved through with its precedent, 7 a plausible shallower story, 8 across the data, 9 worth the
-call):
+Written at the draw on 2026-11-13, each candidate prototyped in a scratch simulation against the world's truth before any generator code (task7/runs/arch11/run1.md supplies the waved-through assumptions).
 
-| Candidate | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Kept |
-|---|---|---|---|---|---|---|---|---|---|---|
-| A: Stagger's season coincidence on each transformer (the average managed night against the summer's worst quarter-hour) | yes | yes | yes | yes | yes (hourly reads, minute sessions) | yes (N01) | yes (the pilot's own profile reproduces its means) | yes | yes (flips the call to Stagger alone) | kept: the deciding trap |
-| B: Sequence's forced overlaps (its rule replayed on each night's windows) | yes | yes | no: the proposal files the rule, its late-charger clause included | yes | yes | yes (N04) | yes (one charger at a time) | yes | yes (as the pilot's quarter it flips the call) | dropped as a trap, kept as a result: its trigger is filed, so a careful run that replays the rule earns it |
-| C: own schedules restored for the managed quarter | near a closed card (supporting only) | yes | no: the pilot plan files the managed quarter | yes | yes (halves against sessions) | yes (L04) | yes (the 2026 meters reconcile) | yes | no: alone it leaves the call standing | dropped as a trap, kept as a supporting result |
-| D: the quarter-hour lift over hourly reads | yes | yes | no: DPS-7 2.2 and Table 2 file the peaking factors | yes | yes (monitors) | no | no | yes | no: every lift stays inside the bands | dropped: texture |
+| Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
+|---|---|---|---|---|
+| the trial read on the volts its regulators took off, not on the day's assignment | the response taken at the scheduled 4 per cent (N24, L04) | the pilot regulator log against the bus SCADA, quarter-hour | none | kept (J1) |
+| an untested feeder's response from its own makeup, not the trial feeders' average | each feeder like the trial feeders (N25, L15) | each feeder's load against the weather, the appliance survey | none | kept (J2) |
+| the response carried hour by hour through the year, thermostatic load giving its energy back | a spring and autumn figure carried flat (N12, L15) | the year's load against the weather, the survey's resistive heat and water heaters | 1 (near the closed seasons card: answered in Closed strategies) | kept (J3) |
+| the volts each feeder can give from its far-end meters | the trial's 4.8 V scaled to every feeder (N01, L17) | the bellwether meters' hourly minimum voltages | none | kept (J4) |
+| the losses from current squared, not the annual report's rate added in proportion | an unmeasured component spread in proportion (N21, L22) | the substation revenue meters against the customer sums, the register's ohms | none | kept (J5) |
+| Stagger-style persistence or random-start correlation, a GIS mis-mapping of coordinated groups, offline fallback nights | tried in architecture 11's world | - | 3 (filed text contradicted, a literal replay catches it, too weak) | dropped (Tried and rejected) |
 
-Read straight, the screen keeps one trap (A), which the call needs; B and C are graded work a hurried route skips (the
-measured routes lose them) but a careful run can earn, because their triggers are written down. Depth rests on A plus the
-work around it, not on three independent traps.
+## Deep reasoning
+
+Task type: efficiency-savings-verification (Energy efficiency & demand response evaluation), which serves Experiment & Causal
+Domain test: every result is a conservation-voltage-reduction measurement and verification quantity: a randomised on/off trial's energy response per volt, each feeder's achievable voltage reduction against the service minimum, the change in its line losses, and its yearly energy saving at the substation against the equipment's cost; the distribution planner's own M&V work
+Swap: "fund voltage optimisation where the far end has room, the load is not thermostatic and the losses do not undo the saving" read with servers for feeders loses its meaning: there is no service voltage floor, no thermostat, no line loss growing with the square of current
+Where the weight sits: R5, each feeder's yearly saving at the substation, built from the trial (R2), each feeder's makeup through the year, its far end (R3) and its losses (R4); long because every feeder-quarter is rebuilt from records at four grains (quarter-hour meter sums, hourly far-end minima, the trial's daily records, the register), not clever
+Layer 1: the MDM export's re-sent October block and its estimated intervals (meters not reporting), the bus SCADA's lost scans, the regulator log's mixed-case modes, the weather station's missing reports, the bellwether meters three to a feeder (the lowest each hour counts); each made by the system that exports the file, none deciding a feeder on its own
+Not one thing: the strongest single piece is the dose (J1): told it alone, the careful route still files ASH-219, ASH-222, CDB-116, CDB-219 wrong; each of the other four alone leaves two to five feeders wrong; one sentence rescues one result of six at most
+One-fact test: "read the trial on the volts its regulators actually took off" rescues R2 only (1 of 6); "the volts come from the far-end meters" rescues R3 only; the other three rescue none (effort.json hints)
+Not semantics: every field read right (the modes, the SCADA voltages, the bellwether minima, the survey codes, the register's ohms) still leaves the careful route funding 14 feeders, ASH-222, CDB-219, HOL-219 wrong, because each of the five is an estimate a reading cannot make
+Not rule application: VO-1 files what is compared (energy at the breaker over a year like 2026 against normal running, 115 V hour by hour, the 4.8 V cap, USD 48 and 9.4); no filed procedure measures the response, carries it to a feeder or an hour, sets a feeder's volts or prices its losses
+Estimand: VO-1 2.1 to 2.4 and 3.1 to 3.2; the trial protocol's design; the capital plan's costs; the prompt's per-feeder quantities
+No decoy: the annual report's 6.1 per cent is a correct system statistic (energy delivered less retail sales over energy delivered) and answers a different quantity; no document argues a feeder
+No replay: no result re-derives a published figure
+Pinned: the heating and water-heating draws by the annual report's load research; every rival in the golden family (a resistive home at 2.5 or 3.2 times a heat pump home's heating draw, the trial's weather terms without squares, the trial's control from every untested feeder) files the same 13 feeders, nearest 6.1 per cent from the line; the trial scale moved by twice its sampling error (4.6 per cent), the loss coefficient by 20 per cent and the far-end readings by 0.2 V each hold the call; the world's own 2027 funds the same feeders, every feeder 6.2 per cent or more from the line, the golden's savings within 4.5 per cent of the world's on average
+Run forecast: R2 lost to dismissed own evidence (the local-mode ON days seen and the assignment read anyway), R3 and R4 to a method shortcut (the trial's volts and the report's loss rate carried), R5 and R6 to the stack of shortcuts (each feeder like the trial average, spring carried flat); R1 earned
+Strategy label: OWN (a randomised voltage trial carried through instruments with different blind spots to feeders and hours it never covered)
+Depth level: 5 by the stump factorial: five necessary methods (dose, makeup, seasons with the give-back, headroom, losses), none sufficient, the single drops on four distinct wrong sets; the reflex route funds 14 feeders
+Lesson: a voltage response measured on a few feeders on their best-behaved days is a structure, not a number: thermostats give it back, the far end caps it, the lines take part of it, and each feeder carries it in its own proportions; no build on file teaches the set
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | chargers enrolled on 1 November 2026 (1,313) | assembly-reconciliation | the proposal's basis; the roster (swaps, closures, re-imported rows) | exact | narrow look at broad data: the roster's Active rows counted with the re-imported duplicates (the quick pass); the careful pass is right | independent: the roster | Ask 7 |
-| R1b | transformers serving them (382, the CSV's rows) | assembly-reconciliation | DPS-7 4: the GIS as corrected by the work orders | exact | narrow look at broad data: the GIS alone, without the split's transfers; the careful pass is right | R1 | Ask 10 |
-| R2 | the pilot's change at 23:00 to 23:15 (-4.95 kW per enrolled charger) | causal-reasoning | the pilot plan 3 (per enrolled charger, every night, managed quarter against own schedules) | plus or minus 0.1 | method shortcut: the hourly reads at 23:00 to 24:00 in place of the quarter (the quick pass); the careful pass is right | independent: the sessions and the halves | Component 4, Ask 6 |
-| R3 | own schedules' transformers over their limit (53) | causal-reasoning | EV-4 4.1, 4.2 (as each owner set it); DPS-7 2.2, Table 2 | 52 to 55 | dismissed own evidence: the 2026 meters as the status quo (44) | R1b | Component 3, Ask 2 |
-| R4 | Stagger's transformers over their limit, at their chance (29.7) | modeling | EV-4 4.1, 4.3; the proposal's rule; DPS-7 2.2, Table 2 | 28.5 to 31.0 | method shortcut: the pilot's average night times the chargers (2) | R1b | Component 1, Ask 2 |
-| R5 | Sequence's transformers over their limit (13) | modeling | EV-4 4.1 (ready-by at the unplug time rounded down); the proposal's rule (ready-by order, the earlier plug-in first, each waiting for every charger before it, quarter-hour starts); DPS-7 2.2, Table 2 | 12 to 14 | method shortcut: one charger at a time (3) or the pilot's quarter (29.7) | R1b | Component 2, Ask 2 |
-| R6 | each option's fee, replacements and total (Sequence USD 249,200, Stagger USD 397,100, own USD 812,200) | synthesis | EV-4 3; DPS-7 3, Table 1; the proposal's fees | each count's band at its marginal units' DPS-7 costs | method shortcut, carried from the hurried counts | R3, R4, R5 | Asks 3 to 5 |
-| R7 | the default and the work plan's replacements (Sequence, 13, USD 196,700) | synthesis | EV-4 3 and 5 | the call exact; the count 12 to 14, USD 178,500 to 214,900 | method shortcut: Stagger | R4, R5 | Recommendation, Ask 1 |
-| R8 | the Sequence fee at which the call changes (USD 153 a charger) | uncertainty | EV-4 3 | USD 128 to 177 | method shortcut, carried from the hurried counts | R4, R5, R6 | Ask 8 |
+| R1 | each feeder's 2026 energy at the customer meters (MWh) | assembly and reconciliation | VO-1 3.1; the MDM export | within 2 MWh | method shortcut: the export summed with its re-sent block | - | Ask 1 |
+| R2 | the trial's change in energy per 1 per cent of voltage removed, averaged over the trial feeders | causal reasoning | VO-1 3.1 (feeder-head voltage); the trial protocol | the golden family, 0.64 to 0.69 | dismissed own evidence: the regulator log's local-mode ON days seen and the trial read on its assignment | independent: the trial records | Component 2 |
+| R3 | the average reduction in volts each feeder could be held at over the year | missingness and measurement | VO-1 2.3 | the golden family | method shortcut: the trial's 4.8 V carried to every feeder | independent: the far-end meters | Ask 3 |
+| R4 | the change in each feeder's own line losses (MWh a year) | decomposition and attribution | VO-1 2.2 (energy at the breaker) | the golden family, 10 per cent or 3 MWh | method shortcut: the annual report's 6.1 per cent added in proportion | R3 | Ask 4 |
+| R5 | each feeder's yearly energy saving at the substation (MWh) | forecasting | VO-1 2.2 to 2.4 | the golden family, 3 per cent or 8 MWh | method shortcut: the trial feeders' average carried flat at 4.8 V | R2, R3, R4 | Component 1 |
+| R6 | the feeders that receive VO in 2027 | synthesis | VO-1 2.1 | exact | method shortcut: the careful route funds 14 | R5 | Recommendation |
 
-Carry-forward: R1, R2 stand alone; R3, R4 and R5 each rest only on the assembly (R1b) and each other's judgments are independent, so a slip on one costs only its own count and the totals built on it; R6 to R8 fall with the counts they use.
+Carry-forward: R1, R2 and R3 stand on their own records; R4 uses R3's volts; R5 falls with R2, R3 and R4; R6 with R5; a run with one feeder's figures wrong still earns the others' cells.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| random starts that still coincide on some night | constructed, the process of random starts over 62 nights | no: every transformer with two or more chargers | modelling (a maximum over nights of a sum) | modelling | keep |
-| Sequence's forced overlaps on heavy nights | constructed, energy against the hours to departure | no: every transformer on its heavy nights | modelling (the rule replayed on each night's windows) | modelling | keep |
-| the managed quarter inside the 2026 meters | constructed, the pilot's design | no: a quarter of chargers on every substation | a targeted query (the halves against the sessions) | modelling (each charger's own setting) | keep (supporting; its omission alone leaves the call standing) |
-| peaks inside the hour the hourly reads cannot see | constructed, appliances and air-conditioning cycling | no: every transformer, every hour | filed: DPS-7 2.2 and Table 2's peaking factors (set from the monitors) | a filed factor per nameplate | keep (a filed convention: it prices no result) |
+| some ON days never ran (communications) and each ramped down over its first hour | constructed (every trial feeder, both windows, a share set by each regulator's link) | no: all eight trial feeders, 10 to 38 per cent of ON days | a targeted query (regulator mode and output against the bus) | modelling (the response on the achieved dose) | keep |
+| thermostatic load gives its energy back over a day | constructed (water heaters and resistive heat on every residential and rural feeder, all year) | no: every feeder with electric water heating or resistive heat | modelling (the load's makeup against the weather and the survey) | modelling | keep |
+| the far end caps the reduction, hour by hour | constructed (every feeder's voltage drop with its length, conductor and load) | no: every feeder; it binds on the long and heavy ones | a targeted query (the bellwether minima) | modelling (hour by hour against 115 V) | keep |
+| losses rise as constant-power loads draw more current at a lower voltage | constructed (current squared on every feeder) | no: every feeder, most on long rural lines | modelling (head meters against customer sums and the register) | modelling | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 chargers enrolled | Missed | Right | Right |
-| R1b transformers serving them | Right | Right | Right |
-| R2 the pilot's change at 23:00 | Missed | Right | Right |
-| R3 own schedules' transformers over | Missed | Missed | Right |
-| R4 Stagger's transformers over | Missed | Missed | Right |
-| R5 Sequence's transformers over | Missed | Missed | Right |
-| R6 each option's cost | Missed | Missed | Right |
-| R7 the default and its replacements | Missed | Missed | Right |
-| R8 the flip fee | Missed | Missed | Right |
-| Roughly | 1 of 9 | 3 of 9 | 9 of 9 |
+| R1 each feeder's 2026 energy at the customer meters (MWh) | Right | Right | Right |
+| R2 the trial's change in energy per 1 per cent of voltage removed, averaged over the trial feeders | Missed | Missed | Right |
+| R3 the average reduction in volts each feeder could be held at over the year | Missed | Missed | Right |
+| R4 the change in each feeder's own line losses (MWh a year) | Missed | Missed | Right |
+| R5 each feeder's yearly energy saving at the substation (MWh) | Missed | Missed | Right |
+| R6 the feeders that receive voltage optimisation in 2027 | Missed | Partly | Right |
+| Roughly | 1 of 6 | 1.5 of 6 | 6 of 6 |
 
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json (quick 20.8, careful but hurried 40.5, thorough 100)
-Largest single hint: "a few chargers on one transformer still land together on some night of the summer under a random start, so replay every night"; rescues 1 of 9 results (R4); each of the other two sentences rescues one (R5, R3)
-Pair estimate: 40.5
-Judge's note: the stage 4 judge put the careful pass at about 4 to 6 of 9 results where the measured routes give 3 of 9; the table is the generator's measurement of the coded routes, and the platform's runs are the measurement that counts
-Run evidence: the one platform run pasted with the holistic check of 2026-11-13 (runs/arch11/holistic_2026-11-13.md) earned R1, R1b and R2, restored own schedules from the managed chargers' own history (51, inside the band then in force), ran Stagger over 20,000 simulated summers (28.12, inside its band) and replayed Sequence with its late-charger overlaps; it lost R5 to R8 only where the three readings now filed were open (it took ready-by 15 minutes before the unplug time, rebuilt the quarter-hour its own way and used the monitors' reads at the monitored units). The careful column's R3 and R4 losses are not what that run did, so the platform's pair may sit well above 40.5; with the readings filed, the loss on R5 to R8 that run made is closed too
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json
+Largest single hint: the trial read on the volts its regulators actually took off, not on the day's assignment; rescues 1 of 6 results
+Pair estimate: 32.3 (measured by effort.py on generator/effort.json; the careful pass is the reflex route)
+
+## Stump factorial
+
+Reflex route: every move a run makes unprompted or the files spell out set right (the export cleaned, the trial regressed with weather and day-type terms against comparable feeders, energy at the breaker, 115 V and 4.8 V, USD 48 and 9.4), every stump hurried: the trial on its assignment, the trial feeders' average for the untested feeders, flat through the year, the trial's 4.8 V everywhere, the report's 6.1 per cent added; it funds 14 feeders (ASH-222, CDB-219, HOL-219 wrong).
+
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| J1 the trial read on the volts its regulators actually took off | stump | the day's assignment | N24, L04 | moves ASH-113, GBR-219, GBR-222, HOL-219 | leaves ASH-219, ASH-222, CDB-116, CDB-219 wrong; R2 rescued (1 of 6) | yes |
+| J2 each untested feeder's response from its own makeup | stump | the trial feeders' average | N25, L15 | moves CDB-219 | leaves ASH-222, HOL-219 wrong; none rescued | no |
+| J3 the response through the year, thermostatic load giving its energy back | stump | the spring and autumn figure flat | N12, L15 | moves ASH-222 | leaves ASH-222, CDB-219, HOL-219 wrong; none rescued | no |
+| J4 the volts from the far-end meters, hour by hour | stump | the trial's 4.8 V | N01, L17 | moves ASH-222 | leaves ASH-222, CDB-219, HOL-219 wrong; R3 rescued (1 of 6) | yes |
+| J5 the losses from current squared | stump | the report's 6.1 per cent in proportion | N21, L22 | moves ASH-222, CDB-219 | leaves ASH-222, CDB-219, ELC-116, GBR-219, HOL-219 wrong; none rescued | no |
+| J6 the export cleaned and the far-end lowest reading taken | reflex | - | R04, R05 | same call | - | - |
+| J7 energy at the breaker, 115 V, 4.8 V, USD 48 and 9.4 | reflex | - | VO-1 (filed) | same call | - | - |
+
+Level: 5 (five necessary stumps, none sufficient, the single drops on four distinct wrong answers)
 
 ## Data provenance
 
-Source: generated by task7/generator (world.py simulates the association's homes, EVs, chargers, pilot, network and systems; pack.py writes each file the way its system writes it); no public data
-Behaves like the real thing: homes' load at the quarter-hour from a household baseline, central air that follows a Front Range summer's heat with each house's thermal lag and compressor cycling, dryers, cooking, hot tubs and rooftop solar; EVs that drive, come home between 16:00 and 21:00, plug in on most evenings, leave around 07:00 and charge at 7.2, 9.6 or 11.5 kW; an off-peak price from 23:00 that most own schedules start at; a randomised pilot that managed one charger in four; a meter data system that keeps hourly reads and fills gaps; a platform that logs sessions in UTC; a GIS and a register that lag the work orders
-Genuine patterns: (1) the 23:00 step on own schedules against a spread under Stagger, (2) evening air-conditioning peaks that follow the heat with a lag and drop through the night, (3) weekday and weekend driving with Sunday-night top-ups and weekend trips, (4) adoption clustered by street (transformers with none to nine chargers), (5) peaks inside the hour that hourly reads average away
-Problems by process: estimated hours (the meter data system's interpolation), a re-sent block in each meter export and a re-sent session batch (export retries), meters exchanged mid-summer (failed registers and a recall), chargers swapped under warranty (new serials linked in the roster), re-imported roster rows (a migration that dropped leading zeros), a split's transfers not yet in the GIS and three change-outs not yet in the register (posting lag), monitor gaps (communications)
-License: none needed: generated for this task and released with it as CC BY 4.0 (metadata.json)
-Used as is: nothing public is used
-Breadth: 19 files in three formats; 382 transformers serving 1,313 enrolled chargers, about 3,500 meters' hourly reads, 257,000 sessions over three summers, 48 monitored transformers; which transformers, nights and chargers decide a count is the work
+Source: generated by the seeded generator in task7/generator from a simulated public power district: weather at the quarter-hour; each feeder's load built from its customers' appliance holdings (base load, electric water heating, resistive heat, heat pumps, air conditioning) driven by the weather and the calendar; each substation bus under its load tap changer, stepping 5/8 per cent when the transmission voltage drifts out of its band; the trial's pilot regulators with their communication failures and settling; every load answering the voltage at its own exponent, thermostatic load recovering with its thermostat; line losses with current squared; far-end voltages from each feeder's drop
+Behaves like the real thing: conservation voltage reduction factors of 0.5 to 0.9 per feeder, the give-back of resistive water heating and space heat, ANSI Range A binding at the far end of long rural lines, losses rising under CVR where constant-power load dominates, LTC operation a few times a day
+Genuine patterns: (1) winter and summer peaks with the weather, (2) commercial weekday shapes against residential evening peaks, (3) LTC taps clustering with the transmission voltage's daily swing, (4) far-end voltage falling with load and line length, (5) loss shares of 1 to 13 per cent, highest on the long rural lines
+Problems by process: the MDM's re-sent block and estimated intervals; the SCADA historian's lost scans; the weather station's missing reports; the regulator log's case drift; three bellwethers a feeder
+License: not applicable (generated data)
+Used as is: not applicable (generated data)
+Breadth: 16 files, 24 feeders on six substations, 841,632 meter intervals, 630,720 bellwether hours, 10,595 tap operations, 2,297 survey households, 84 MB
 
 ## Template check
 
-Chain signature: assembly-reconciliation, causal-reasoning, causal-reasoning, modeling, modeling, synthesis, synthesis, uncertainty
-Question form: what (the default, and what its replacements cost the work plan)
-Nearest build: task22 (Delmont Power and Light's feeder energy balance): another utility network, but its answer is a ranked set of feeders from a loss bridge, its lessons the square of current, a switching log and a residual; this one picks one of three charging designs from a randomised pilot on each transformer's coincident summer peak; skeleton severity none against every card and client task
-Guard warnings: repeat.decision (a pick among a few options, as task16's) is a cooperative's choice of three charging designs, not a record-linkage method; skeleton.house_lesson (queue_or_capacity_replay on mark117 and task4 v12) is a supporting move here (Sequence's rule replayed), the deciding lesson being non_additive_aggregation; precut's nearest chains (task21, scenarios with the flip point) has its weight in modeling quote feeds, this one in a hard-to-measure quantity On 2026-11-13 guard.py heart returns BLOCK on this card both as committed at READY and as repaired (ban.weight against task13 v4, ban.calibration against task8 v19, test.same_driver against task2 v4's lineage, all drawn before this architecture); the repair moved none of those axes and the skeleton screen stays clear, so it is recorded and handed to the author rather than cleared by a relabel.
-Abstraction sentence: none writable against a build on file: no card carries a randomised per-unit effect replayed onto shared capacities' season maxima with an unpiloted design replayed on the record's windows
+Chain signature: assembly-reconciliation, causal-reasoning, missingness-measurement, decomposition-attribution, forecasting, synthesis
+Question form: which (which feeders receive VO); answered by a funded set with each feeder's figures
+Nearest build: task13 (grid reliability, Kotuku) shares the energy domain and position on the network as a supporting lesson; its decision is an outage remedy, its records relays and outage logs; task22 shares the utility setting and nothing in the chain
+Abstraction sentence: none writable against a build on file.
 
 ## Frontier check
 
-Precedents: R3 L04 and L01 (dismissed own evidence: the 2026 meters read as the status quo though the halves file shows a managed quarter); R4 L15 and N01 (method shortcut: the pilot's per-charger change carried as an average night, an enlarged fleet assumed to scale in proportion); R5 L15 and N04 (method shortcut: Sequence assumed one charger at a time, or the pilot's quarter, instead of replayed); R6 to R8 L15 (they rest on the hurried counts)
-Shallow path checks: R4: the average managed night reproduces the managed quarter's mean load at every quarter-hour and the pilot's -4.95 kW change exactly; refuted by a check of another kind, the monitored transformers' 15-minute load (transformer_monitors_15min_2026-07_08.csv, another grain) on transformers with two or more managed chargers, which shows them landing together on some nights; R5: one charger at a time is what the product's name suggests and keeps every transformer under; refuted by the rule's own clause run on each night's sessions (energy and unplug times in the session log); R3: the 2026 meters reconcile to the monitors; refuted by the halves file and the sessions' control mode (a quarter of chargers under Stagger all summer)
-Assumption made false: "a managed design's effect on a transformer is the pilot's average change per charger times its chargers" (diversity smooths it): false here because a transformer serves two to nine chargers and its limit is the summer's single worst quarter-hour, so the average hides the nights they coincide; tested on the monitored transformers and by replaying the sessions
-Forcing: the line is the cheapest option; the golden family (declared settings, the own three-quarters at their recorded starts, the sessions the window cannot fit started early, own sessions advanced, two seeds) all call Sequence, the top of Sequence's band at USD 267,400 against the bottom of Stagger's at USD 383,900; the shortcuts call Stagger (the average night, Sequence taken as the pilot's quarter) or Sequence with 3 replacements; DPS-7's peaking factors moved 0.02 each way or dropped altogether, replacement costs down 20 per cent and Sequence's fee up 20 per cent all keep Sequence; the flip fee is USD 153 against the quoted 40
-Noun swap: nearest on file by skeleton.py check is depth:279e74f2 (a crew's days replayed through capacity): the replay move and the queue lesson carry across; the decision form, the deciding lesson, the mechanisms, the detection and the file roles do not; severity none
-Closed strategies: the call turns on non_additive_aggregation (a transformer's summer maximum of a sum of a few chargers' blocks), on no card of the client's page (none of the five families touches a maximum over a shared resource's season; skeleton.py closed lists no neighbour); the supporting step R3 (own schedules restored because the 2026 meters hold a managed quarter) sits near "Outcomes are hidden by the intervention itself" and "Controls were partly treated" (no selection on risk and no interference here, but the metered record carries the treatment): its route alone (no_own in effort.json) moves the own count to 44 and the call stays Sequence; the quarter-hour step is DPS-7's filed peaking factor
+Precedents: R2 (N24 the response read at the trigger only; L04 the caveat flagged and the recorded outcome kept), R3 (N01 proportional scaling; L17 the average unit), R4 (N21 an unmeasured component spread in proportion; L22 the published formula), R5 (N25 each unit off its own or the pooled event; N12 a season's rate carried; L15 an assumed response), R6 (N25, L15)
+Shallow path checks: R2: the assignment reading passes a randomisation balance check and reproduces the ON-minus-OFF difference; only the regulator log against the bus SCADA (another record, quarter-hourly) shows the ON days that never ran; R3: the trial's 4.8 V is what the trial achieved on its feeders; only the far-end meters (hourly, another record) show where 115 V binds; R4: the report's 6.1 per cent reproduces the system's losses exactly; only the head meters against the customer sums (quarter-hourly) show losses rising under a lower voltage; R5: the trial average reproduces the trial feeders' mean; only each feeder's load against the weather and the survey shows its own makeup
+Assumption made false: "the response is a first-bill pulse at the scheduled dose" (N24), false because some ON days never ran, tested by the regulator log; "the same response everywhere and all year" (N25, N12), false because thermostatic load gives its energy back and its share moves by feeder and season, tested by the load and the survey; "losses scale with load" (N21), false because constant-power loads draw more current at a lower voltage, tested by the head meters
+Forcing: the line is each feeder's present value over its installed cost at 1.0; the golden family's nearest is 6.1 per cent from it; the drops land 3 to 25 per cent across; the trial scale moved by 4.6 per cent (twice its bootstrap error of 2.3 per cent), the loss coefficient by 20 per cent and the far-end readings by 0.2 V each leave the call; the world's own 2027 funds the same feeders
+Noun swap: nearest by skeleton.py check is read at register; the decision form (a funded set over a value-to-cost line) and the five lessons differ from every card on file
+Closed strategies: the call turns on latent_structure_estimation and instrument_noncompliance, neither on the closed page; the seasons step sits next to the closed seasons card (seasonal_shift_calibration): its fix is not a factor calibrated on a target season's record but a makeup estimated from the year's load and the survey, with thermostatic load giving its energy back; no closed lesson decides a feeder
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | chargers counted | enrolled 1 November 2026; on the board's date; on 1 June 2026 | 1 November 2026 | the proposal ("quoted on the chargers enrolled on 1 November 2026"); EV-4 3 |
-| SF2 | a summer like the last one | July and August 2026 as metered; June to September; weather-normalised | July and August 2026 | EV-4 4.1; DPS-7 2.1 |
-| SF3 | over its limit | 15-minute kVA above 120 per cent; hourly; monitored kVA | 15-minute kW / 0.95 | DPS-7 2.1, 2.2 ("whether or not the transformer is monitored") |
-| SF4 | nameplate | register; register corrected by change-outs | corrected | DPS-7 2.3, 4 |
-| SF5 | transformers serving | GIS; GIS corrected by work orders | corrected | DPS-7 4 |
-| SF6 | own schedules for the managed quarter | own-schedule history then declared; declared only | history then declared | EV-4 4.2 (rival in band: declared only, 51) |
-| SF7 | a random option's count | expected (each at its chance); one draw; majority | expected | EV-4 4.3 (an option's cost is its expected cost) |
-| SF8 | ready-by in the replay | unplug time rounded down to the quarter-hour; the app's recorded ready-by; 15 or 30 minutes before the unplug time (Sequence 14 or 16) | unplug time rounded down, every session | EV-4 4.1 ("a session's ready-by time is its unplug time rounded down to the quarter-hour"), filed 2026-11-13 after the holistic check |
-| SF9 | Sequence's rule | the proposal's text | as filed | the proposal (its order, waiting and quarter-hour starts are SF17, SF19 and SF25) |
-| SF10 | replacement cost | DPS-7's installed cost by unit; times the chance for Stagger | as filed | DPS-7 3; EV-4 3, 4.3 |
-| SF11 | fee | per enrolled charger per year times the chargers covered | as filed | the proposal; EV-4 3 |
-| SF12 | the pilot's change | per enrolled charger, every night of July and August, 23:00 to 23:15, managed less own | as filed | the pilot plan 3; the prompt |
-| SF13 | chargers that left the rate | as metered; removed | as metered | EV-4 4.2 |
-| SF14 | hourly reads to the 15-minute interval | DPS-7 Table 2's peaking factor on each hour; a lift fitted from the monitors; the monitors' own reads at the 48 monitored units; flat within the hour | Table 2's factor for the nameplate, monitored or not | DPS-7 2.2 and Table 2 (revision 5, 14 September 2026), filed 2026-11-13 after the holistic check; checks.py asserts the monitors file reproduces the table to two places |
-| SF15 | sessions plugged in on 30 June | their July quarters counted; left out | counted | EV-4 4.1 (July as metered holds them); same call |
-| SF16 | 31 August's night after midnight | outside; inside | outside | DPS-7 2.1 (July and August) |
-| SF17 | a late charger and the queue behind it | the next charger waits for every charger before it, the late one included; it waits only for the one before it; the queue ignores the late charger (Sequence 7) | waits for every charger before it (the one-before reading gives the same 13) | the proposal ("each starting when every charger before it in that order has finished"), filed 2026-11-13 |
-| SF18 | two sessions sharing a ready-by time | the one plugged in first; any other order (later plug-in first: Sequence lower by up to 3) | the one plugged in first; same-minute pairs in either order give the same 13 | the proposal ("the one plugged in first where two share a ready-by time"); checks.py SF19 |
-| SF19 | where the base's charging comes out and the option's goes in | the covered chargers' own metered charging out of the hourly reads, then the factor, then each option's charging at the quarter-hour; the factor on the metered hours with the charging in them (own 72 to 75, Sequence up to 29) | as EV-4 4.1 files it | EV-4 4.1 ("taken out of the homes' hourly reads before the hours are brought to the 15-minute interval under DPS-7, and each option's charging is added in the 15-minute intervals in which it would be drawn") |
-| SF20 | a session's charge time | the time its charge took (energy at the charger's rated kW to the second); energy at the session's peak_kw (Sequence 15) | the time its charge took | EV-4 4.1 ("each session keeps ... the time its charge took"); checks.py SF20 asserts the two agree to two seconds |
-| SF21 | sessions the window cannot fit (energy beyond the hours from 23:00 to the unplug) | started at the later of plug-in and 23:00 and run on; started early enough to finish | started at the later of plug-in and 23:00 | same call: every count unchanged (rival late_sessions_early) |
-| SF22 | own sessions that would not finish by their unplug times | as the owner's setting starts them; advanced to finish | as the setting starts them | same call: the own count unchanged (rival own_advanced) |
-| SF23 | the own three-quarters' own schedules | each charger's setting replayed ("when I plug in" from the plug-in itself); the recorded 2026 starts kept | the setting replayed | same call: the own count unchanged (rival recorded_own) |
-| SF24 | a 50 kVA pole-mount unit's replacement | DPS-7 Table 1's row (75 kVA pole-mount, USD 13,900); the pad-mount row; unpriced | Table 1's row | DPS-7 Table 1; none of the eight is over under any option, so no figure rests on it |
-| SF25 | when a managed session may start | on the quarter-hour; at any minute (Sequence 12) | on the quarter-hour | the proposal ("Both products start a session only on the quarter-hour"), filed 2026-11-13 |
-| SF26 | the session log's clock | local daylight time, six hours behind UTC; standard time, seven behind (Sequence 77 in the judge's replay) | six hours behind | the data: the covered chargers' charging taken out of the hourly reads leaves almost no negative hours only at six hours (checks.py SF26); the answer blocks' Step 3 says so |
+| SF1 | a feeder's yearly saving | at the customer meters / at the substation breaker | at the breaker | VO-1 2.2 |
+| SF2 | the comparison | 2026 as operated / 2026 as the feeder normally runs | normal running, the trial's ON days restored | VO-1 2.2 |
+| SF3 | the voltage floor | 114 V / 115 V | 115 V, hour by hour | VO-1 2.3 |
+| SF4 | the cap | 4 per cent of the feeder's own voltage / 4.8 V on the 120 V base | 4.8 V on the 120 V base | VO-1 2.3 |
+| SF5 | the value | one year / the equipment's life | USD 48 a MWh times 9.4 | VO-1 2.4 |
+| SF6 | voltage removed in the trial | the scheduled 4 per cent / the feeder-head reduction recorded | the recorded reduction | VO-1 3.1 (feeder-head voltage is the bus or the pilot regulator's output) |
+| SF7 | far-end voltage | one bellwether / the lowest of the feeder's bellwethers | the lowest each hour | VO-1 3.1 |
+| SF8 | heating split | by households / by heating draw | by draw, the load research's 12,100 and 4,350 kWh | the annual report's load research; the ratio at 2.5 or 3.2 is same call |
+| SF9 | trial weather terms | linear / with squares | with squares | same call (the average 0.65 against 0.67, inside the band) |
+| SF10 | re-sent rows | summed / dropped | dropped | the repeated rows are exact copies of the same feeder and interval |
+| SF11 | a water heater's draw | an engineering figure / the load research | the load research's 3,200 kWh a year | the annual report's load research |
+| SF12 | the trial's control | same-class untested feeders / every untested feeder | same class | same call |
 
 ## Closure table
 
-| # | Axis | Reading | Move |
-|---|---|---|---|
-| 1 | Population | chargers enrolled on 1 November 2026; transformers serving them | filed: the proposal; DPS-7 4 |
-| 2 | Unit of account | transformers over their limit; USD for the year; kW per enrolled charger | filed: EV-4 3; the pilot plan 3 |
-| 3 | Attribution window | July and August 2026 as metered | filed: EV-4 4.1; DPS-7 2.1 |
-| 4 | As-of dating | the roster of 2 November, the quote of 1 November 2026 | the files' own dates |
-| 5 | Version basis | a swapped charger's sessions under both serials | the roster's replaces_serial |
-| 6 | Denominator | every enrolled charger, every night (R2) | filed: the pilot plan 3 |
-| 7 | Weighting | Stagger's transformers at their chance | filed: EV-4 4.3 |
-| 8 | Window length | the season's highest quarter-hour | filed: DPS-7 2.1 |
-| 9 | Boundary inclusivity | over when above 120 per cent | filed: DPS-7 2.1 ("exceeds") |
-| 10 | Rounding path | none in the prompt; figures at their natural precision | the answer blocks |
-| 11 | Tie-break | none needed (the totals differ by USD 150,000 and more) | - |
-| 12 | Maturity and censoring | 2027 not observed; judged on a summer like the last one | filed: EV-4 3, 4.1 |
-| 13 | Order of operations | assemble; base (hourly reads less the covered chargers' charging, times Table 2's factor); replay each option at the quarter-hour; test; cost | filed: EV-4 4.1 (the base before the factor, the options at the quarter-hour) |
-| 14 | Row order | the CSV by substation then location | - |
-| 15 | Duplicate resolution | re-sent meter rows, re-sent sessions, re-imported roster rows dropped | keys: meter and date; session id; service point, serial and date |
-| 16 | Identity normalisation | old meters to service points; swapped serials to one charger | the exchange log; the roster |
-| 17 | Netting against gross | net kWh at solar homes; enrolled charging removed from the base | EV-4 4.1 ("as metered") |
-| 18 | Dimensional units | kWh in an hour to kW; the hour to the 15-minute interval by Table 2's factor; kW to kVA at 0.95 | the export's header; DPS-7 2.2 and Table 2 |
-| 19 | Code and status semantics | control modes; Active, Closed, Replaced | the files' own codes |
-| 20 | Integerisation | counts whole except Stagger's chance-weighted count | filed: EV-4 4.3 |
-| 21 | Clause scope | EV-4 section 4 for all three options | filed |
-| 22 | Forward window contents | 2027 judged on 2026's sessions and loads | filed: EV-4 4.1 |
-| 23 | Queue order and waiting | ready-by, the earlier plug-in first; each charger waits for every one before it; quarter-hour starts | filed: the proposal |
+| Axis | Closure |
+|---|---|
+| 1 | population: the district's 24 feeders in the register |
+| 2 | unit of account: the feeder; MWh a year; volts on the 120 V base |
+| 3 | attribution window: a year like 2026 (VO-1 2.2) |
+| 4 | as-of: records to 13 November 2026 (exports 2 to 16 November) |
+| 5 | version basis: VO-1 revision 2; the 2027 capital plan |
+| 6 | denominator: per 1 per cent of feeder-head voltage removed |
+| 7 | weighting: none across feeders; each decided on its own |
+| 8 | window length: the trial's two windows; the year for the saving |
+| 9 | boundary inclusivity: equals or exceeds (VO-1 2.1) |
+| 10 | rounding path: none filed; precision in the answer blocks |
+| 11 | tie-break: none needed (nearest 6.1 per cent from the line) |
+| 12 | maturity: the trial closed on 13 November |
+| 13 | order of operations: response, makeup, volts, losses, value |
+| 14 | row order: the register's |
+| 15 | duplicate resolution: re-sent rows dropped |
+| 16 | identity normalisation: feeder ids as the register |
+| 17 | netting: losses netted at the breaker |
+| 18 | dimensional units: kWh by quarter, MWh a year, volts on 120 V |
+| 19 | code semantics: regulator modes VO and LOCAL (any case) |
+| 20 | integerisation: none |
+| 21 | clause scope: VO-1 applies to the 2027 programme |
+| 22 | forward window contents: a year like 2026, the 2027 capital plan |
 
 ## Literal reader
 
-EV-4 section 3 makes the default the cheapest option for the year; 4.1 to 4.3 make an option's cost its fee plus the replacements it leaves when every covered charger replays its July and August 2026 sessions as the option would (each keeping its plug-in, energy, charge time and unplug, finishing by its unplug time, its ready-by its unplug time rounded down to the quarter-hour; the covered chargers' own charging out of the homes' hourly reads before DPS-7 brings them to the quarter-hour, each option's charging in at the quarter-hour), the members' own schedules as each owner set them and every option at its expected cost (so Stagger's transformers at their chance); DPS-7 2.1 to 2.3 make a transformer over when its highest 15-minute load in July and August, each hour's demand times Table 2's peaking factor for the nameplate in service whether or not monitored, is above 120 per cent of that nameplate at kW / 0.95, and section 3 with Table 1 prices the replacement; the proposal fixes the fees, the chargers covered and each product's rule (Sequence in ready-by order, the earlier plug-in first, each waiting for every charger before it, a late charger alongside; both on the quarter-hour). Executed word for word on the cut pack these give Sequence with 13 replacements; the literal reader's remaining choices (which record shows an owner's setting, the sessions the window cannot fit, the draws) are run as rivals and all give Sequence with 13, own 53 or 54 and Stagger 29.7.
+VO-1 2.1 to 2.4 executed word for word on the read-back pack, with the trial read on its recorded feeder-head reduction (3.1), gives the 13 feeders and each feeder's figures in the answer blocks.
 
 ## Prompt contract
 
-May not drop or change: the question (the EV Overnight rate's charging default from summer 2027, and what the replacements it leaves cost the 2027 work plan); a short memo with the call and a CSV with a row for each transformer serving the rate's chargers; for each option the transformers it leaves over their limit, the platform's fee, the replacements' cost and the total; the kW per charger the pilot's managed charging took off an enrolled home's load from 23:00 to 23:15; the chargers enrolled; the fee per charger at which the call would change. Must never add: the policy's comparison or its summer, the limit, a method (an average night, a replay, a chance, a lift, a monitor, a setting), a warning, an attached file's name, a role, a rounding instruction or a count the data hold.
+A voice rewrite may not drop or change: the question (which feeders get VO in the 2027 capital programme); the workbook and the short memo; the decision and the yearly saving at the substation in MWh for each feeder; each feeder's 2026 energy at the customer meters, average achievable reduction in volts over the year and change in its own line losses in MWh a year; the trial's change in energy per 1 per cent of voltage removed, averaged over its feeders. It must never add: a method, the trial's failures, thermostats, a file name, a role, a count of feeders, rounding.
 
 ## Tried and rejected
+
 - The note's decisive rung, per feeder the smaller of expected buyers and hosting slots: a stated connection standard, a per-feeder hosting map and a neighbourhood-to-feeder join whose keys line up hand it to any solver who reads them, its driver sits nearest task106's, and as labelled it BLOCKs on ban.pattern C (task119), ban.calibration pilot_log (task122) and test.same_driver_older (a signature spent in nine builds); kept as rung 2.
 - Resistance-to-heat-pump netting (each resistance conversion frees feeder headroom for oil or propane conversions): the connection standard either states a per-heat-pump assessment, which contradicts the netting and is a counter-pin, or states a net-change rule, which hands it over; a corpus of past approvals would refute the stop rung, which L1 forbids.
 - Heat pumps per home (large ducted homes taking two outdoor units, so two feeder draws per slot): visible at heat-pump grain in any connection or rebate record, and found by any solver who counts rebates per buyer; moves only the saturated feeders, too little to change a leader.
@@ -556,3 +540,5 @@ May not drop or change: the question (the EV Overnight rate's charging default f
 - 2026-11-12, architecture 11 at calibration: the monitored transformers' option-by-option peak lift as the golden put Stagger 6
   above the world's quarter-hour truth; the per-hour excess lands closest to the truth and is the golden, the peak lift a rival.
 - 2026-11-13, architecture 11 after the holistic check: the Sequence count (11, USD 160,300) and the flip fee (USD 156) rested on three readings no file settled (whether the queue waits for a late charger: 7 if not; the ready-by for a session with none in the app: 14 or 16 at 15 or 30 minutes before the unplug; how hourly reads become quarter-hours: the golden's per-hour excess scaled by the square root of homes was filed nowhere). Closed by filing all three at their authority (the proposal's rule now says each charger waits for every one before it, the earlier plug-in first, both products on the quarter-hour; EV-4 4.1 the replay's frame and ready-by at the unplug time rounded down; DPS-7 revision 5's 2.2 and Table 2 peaking factors by nameplate, set from the 48 monitors and applied monitored or not, with Table 1's missing 50 kVA pole-mount row), not by keeping any open: the golden moved (own 53, Stagger 29.7, Sequence 13 and USD 196,700, flip USD 153) and the bands carry the rivals plus one marginal unit either side. The quarter-hour lift is no longer a judgment, so the depth line is level 4 on three judgments, not 5 on four. Re-judged once (Sequence replayed transformer by transformer to 13; Stagger sampled to 29.5 once the judge's own script stopped applying 0.95 twice and piling pre-July blocks onto 1 July): DETERMINISTIC, FIX_NOW, three answer-block sentences (the late charger counts ahead of every later one, energy over the recorded charge time, the clock six hours behind UTC), applied; the leak reader found no leak.
+- 2026-11-13, architecture 11 (Hollins Creek's EV Overnight default) retired: the platform run landed every graded result (task7/runs/arch11/run1.md); its retrofits were each tried and refused on paper: per-device Stagger persistence (contradicts the proposal's wording; filing it hands it over), offline fallback on shared nights (a literal replay catches it, or nothing pins it), Sequence on the uncorrected GIS (plus or minus 2 transformers), charging taper (moves every figure, never the default, one sentence rescues four results).
+- 2026-11-13, architecture 12 prototypes: per-feeder tap-event cells (too noisy alone: the commercial morning ramp and on-the-hour temperature steps contaminated them; the same-class peer control fixed the ramps, but heat pumps and resistive heat could not be told apart in the fit, so the compressor response was left to the trial's scale with every non-thermostatic load answering in proportion); an energy-weighted trial scale (one noisy trial feeder moved it 10 per cent; the median of the trial feeders' ratios holds it to 2.3 per cent).

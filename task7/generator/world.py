@@ -1,375 +1,221 @@
-"""task7 architecture 11: Hollins Creek Electric Association's EV Overnight rate and the 2025-26 managed-charging pilot.
-
-The world is simulated as the association's systems would see it: homes on distribution transformers, each home's load at the
-quarter-hour (a baseline that follows the household, central air that follows the heat with the house's lag, dryers, cooking,
-hot tubs, rooftop solar), EVs that drive, come home, plug in and leave in the morning, and the chargers enrolled on the rate
-charging either on their owners' own timers or, for the pilot's managed half, at a random start that still finishes by the
-member's departure. Nothing is placed where it decides: every mechanism runs across every transformer."""
-import datetime as dt
+"""Platte Ridge PPD's distribution system through 2026, simulated at the quarter-hour: weather, each feeder's load by
+component, the substation buses' voltage under their load tap changers, the trial's pilot regulators, the line losses,
+the far-end voltages, and the 2027 voltage optimization replayed on a year like 2026 (the clean truth)."""
+import math
 
 import numpy as np
-from scipy.signal import lfilter
 
-SEED = 110711
-AS_OF = dt.date(2026, 11, 6)
-RAND_DAY = dt.date(2025, 5, 12)            # the pilot's split of the chargers enrolled by then
-PAUSE_DAY = dt.date(2026, 6, 1)            # enrolment paused until the board sets the 2027 default
-JUL1 = dt.date(2026, 7, 1)
-NDAY = 62                                  # July and August 2026
-Q = 96
-OFF = 23 * 4                               # the off-peak window opens at 23:00
-WEND = 7 * 4                               # and closes at 07:00 next morning
-PF = 0.95
-LIMIT = 1.20                               # DPS-7: 120 per cent of nameplate kVA on the highest 15-minute load
-FEE = {"stagger": 18.0, "sequence": 40.0}  # Quillpoint's 2027 fee per enrolled charger per year (USD)
-COST = {25.0: 10800, 37.5: 11400, 50.0: 18200, 75.0: 21500, 100.0: 26900}   # replacement by the next size, installed
-NEXT = {25.0: 50.0, 37.5: 50.0, 50.0: 75.0, 75.0: 100.0, 100.0: 167.0}
-COST_POLE50 = 13900                        # DPS-7 Table 1: a 50 kVA pole-mount unit by a 75 kVA pole-mount, installed
-# DPS-7 Table 2 (revision 5): the 15-minute peaking factor by nameplate, set by engineering from the 48 monitored
-# transformers' July and August 2026 loads (a day's highest 15-minute load over its clock hour's load, averaged over
-# the days and the monitored units of each size, to two places); checks.py asserts the monitors file reproduces it
-PEAK = {25.0: 1.15, 37.5: 1.15, 50.0: 1.13, 75.0: 1.11, 100.0: 1.10}
-AREAS = {
-    # name: transformers, kVA choices with weights, homes per transformer, mount, EV-rate adoption, AC share, home size
-    "Prairie Hollow": dict(n=160, kva=([25.0, 37.5], [0.62, 0.38]), homes={25.0: (3, 5), 37.5: (4, 7)}, mount="pole", adopt=0.31, ac=0.78, size=0.85,
-                           prefix="PH", year=(1987, 2002)),
-    "Larkin Ridge": dict(n=145, kva=([50.0], [1.0]), homes={50.0: (7, 11)}, mount="pad", adopt=0.30, ac=0.88, size=1.0,
-                         prefix="LR", year=(2003, 2012)),
-    "Stonebrook": dict(n=125, kva=([75.0, 100.0], [0.6, 0.4]), homes={75.0: (9, 13), 100.0: (12, 16)}, mount="pad", adopt=0.33, ac=0.95, size=1.22,
-                       prefix="SB", year=(2015, 2024)),
-}
-POWER = np.array([7.2, 9.6, 11.5])
-OWN = ["t2300", "t2330", "t0000", "ready", "now"]
-OWN_P = [0.74, 0.07, 0.05, 0.09, 0.05]
-
-
-def summer_days(year):
-    d0 = dt.date(year, 6, 1)
-    return [d0 + dt.timedelta(days=k) for k in range(122)]
-
-
-def weather(rng):
-    """hourly dry-bulb temperature (F), June to September 2024 to 2026, at the association's station (local standard time)"""
-    out = {}
-    for year in (2024, 2025, 2026):
-        days = summer_days(year)
-        n = len(days)
-        doy = np.arange(n)
-        tmax = 84.5 + 6.5 * np.sin((doy - 5) / 122 * np.pi) + rng.normal(0, 4.0, n)
-        tmax = np.convolve(tmax, [0.25, 0.5, 0.25], mode="same")
-        tmax[0] = 82.0
-        for s in rng.choice(np.arange(20, n - 8), 3 if year != 2026 else 4, replace=False):
-            ln = int(rng.integers(3, 6))
-            tmax[s:s + ln] += rng.uniform(6, 10) * np.sin(np.linspace(0.6, 2.5, ln))
-        storms = rng.random(n) < 0.22
-        tmax[storms] -= rng.uniform(3, 9, storms.sum())
-        tmin = 0.55 * tmax + 10.5 + rng.normal(0, 2.2, n)
-        hrs = []
-        for k in range(n):
-            nxt = tmin[min(k + 1, n - 1)]
-            for h in range(24):
-                if h <= 5:
-                    v = tmin[k] + 1.8 * (5 - h) / 5
-                elif h <= 15:
-                    v = tmin[k] + (tmax[k] - tmin[k]) * (1 - np.cos((h - 5) / 10 * np.pi)) / 2
-                else:
-                    v = tmax[k] - (tmax[k] - nxt) * (1 - np.exp(-(h - 15) / 4.2)) / (1 - np.exp(-9 / 4.2))
-                hrs.append(v + rng.normal(0, 0.8))
-        out[year] = dict(days=days, tmax=tmax, tmin=tmin, hourly=np.array(hrs))
-    return out
+import params as P
 
 
 class World:
     pass
 
 
-def build():
-    rng = np.random.default_rng(SEED)
-    w = World()
-    w.wx = weather(rng)
-    # transformers and homes
-    tx, homes = [], []
-    for area, a in AREAS.items():
-        kvas, kp = a["kva"]
-        for i in range(a["n"]):
-            kv = float(rng.choice(kvas, p=kp))
-            t = dict(area=area, kva=kv, mount=a["mount"],
-                     year=int(rng.integers(a["year"][0], a["year"][1] + 1)), nh=int(rng.integers(a["homes"][kv][0], a["homes"][kv][1] + 1)),
-                     lean=float(rng.lognormal(0, 0.55)))
-            t["idx"] = len(tx)
-            tx.append(t)
-            for h in range(t["nh"]):
-                homes.append(dict(tx=t["idx"], area=area, size=a["size"] * float(rng.lognormal(0, 0.22)),
-                                  ac=bool(rng.random() < a["ac"]), accap=float(rng.uniform(2.8, 4.6)),
-                                  setp=float(rng.normal(75.5, 1.8)), lag=float(rng.uniform(3.0, 6.0)),
-                                  tub=bool(rng.random() < 0.035), pv=float(rng.choice([5.5, 7.6, 9.2]) if rng.random() < 0.12 else 0),
-                                  dryer=float(rng.uniform(0.10, 0.40)), cook=float(rng.uniform(0.3, 0.8)),
-                                  wkoff=float(rng.normal(0, 0.6))))
-    w.tx, w.homes = tx, homes
-    H = len(homes)
-    # EVs: enrolled chargers and unenrolled EVs, adoption clustered by transformer
-    chargers, unev = [], []
-    for hi, h in enumerate(homes):
-        t = tx[h["tx"]]
-        a = AREAS[h["area"]]
-        p = min(0.75, a["adopt"] * t["lean"])
-        if rng.random() < p:
-            n = 2 if rng.random() < 0.14 else 1
-            for k in range(n):
-                chargers.append(dict(home=hi, power=float(rng.choice(POWER, p=[0.30, 0.35, 0.35] if h["area"] == "Prairie Hollow" else ([0.50, 0.30, 0.20] if h["area"] == "Larkin Ridge" else [0.35, 0.35, 0.30]))),
-                                     own=str(rng.choice(OWN, p=OWN_P)), plug=float(rng.choice([0.96, 0.82, 0.60], p=[0.50, 0.35, 0.15])),
-                                     km=float(rng.lognormal(np.log(62), 0.45)), arr=float(rng.normal(18.6, 1.1)),
-                                     dep=float(np.clip(rng.normal(7.35, 0.55), 5.0, 9.0)), batt=float(rng.choice([60, 75, 82, 100]))))
-        elif rng.random() < min(0.30, 0.45 * a["adopt"] * t["lean"]):
-            unev.append(dict(home=hi, power=float(rng.choice([7.2, 9.6, 1.4], p=[0.7, 0.2, 0.1])),
-                             mode=str(rng.choice(["now", "t1900", "t2300"], p=[0.55, 0.30, 0.15])),
-                             plug=float(rng.choice([0.9, 0.6, 0.4])), km=float(rng.lognormal(np.log(48), 0.45)),
-                             arr=float(rng.normal(17.8, 1.1)), dep=float(np.clip(rng.normal(7.3, 0.8), 5.0, 9.5))))
-    # enrolment dates, the pilot's split, swaps and departures
-    rate0 = dt.date(2024, 3, 4)
-    for c in chargers:
-        u = rng.random()
-        if u < 0.42:
-            c["enrol"] = rate0 + dt.timedelta(days=int(rng.integers(0, 150)))
-        elif u < 0.72:
-            c["enrol"] = dt.date(2024, 8, 1) + dt.timedelta(days=int(rng.integers(0, 284)))
-        else:
-            c["enrol"] = RAND_DAY + dt.timedelta(days=int(rng.integers(1, (PAUSE_DAY - RAND_DAY).days)))
-        c["arm"] = "managed" if rng.random() < 0.25 else "own"
-        c["swap"] = None
-        if rng.random() < 0.035:
-            c["swap"] = dt.date(2025, 9, 1) + dt.timedelta(days=int(rng.integers(0, 400)))
-        c["left"] = None
-        if rng.random() < 0.035:
-            c["left"] = dt.date(2026, 9, 3) + dt.timedelta(days=int(rng.integers(0, 55)))
-        c["change"] = None
-        if c["enrol"] < RAND_DAY and rng.random() < 0.06:
-            c["change"] = str(rng.choice(OWN, p=OWN_P))     # an own setting changed after summer 2024
-        # what the member told the enrolment form about how they charge (most say what they do)
-        c["declared"] = c["own"] if rng.random() < 0.90 else str(rng.choice(OWN, p=OWN_P))
-    w.chargers, w.unev = chargers, unev
-    w.rng = rng
-    sessions(w, rng)
-    records(w, rng)
-    base(w, rng)
-    actual(w, rng)
-    return w
+def weather(rng):
+    """hourly dry-bulb (deg F) for the district's ASOS station"""
+    h = np.arange(P.ND * 24)
+    doy = h / 24.0
+    seasonal = 52 - 27 * np.cos(2 * np.pi * (doy - 18) / 365)
+    diurnal = (9 + 3 * np.cos(2 * np.pi * (doy - 172) / 365)) * np.sin(2 * np.pi * ((h % 24) - 9) / 24)
+    syn = np.zeros(len(h))
+    e = rng.normal(0, 1, len(h))
+    for i in range(1, len(h)):
+        syn[i] = 0.985 * syn[i - 1] + 1.1 * e[i]
+    return seasonal + diurnal + syn
 
 
-def _nights(year):
-    return summer_days(year)
-
-
-def sessions(w, rng):
-    """each EV's plug-ins, energy and unplug, night by night, June to September of 2024 to 2026"""
-    w.sess = {}
-    for ci, c in enumerate(w.chargers):
-        w.sess[ci] = _ev_nights(c, rng, enrolled=True)
-    w.usess = {}
-    for ui, u in enumerate(w.unev):
-        w.usess[ui] = _ev_nights(u, rng, enrolled=False)
-
-
-def _ev_nights(c, rng, enrolled):
+def feeders(rng):
     out = []
-    deficit = float(rng.uniform(5, 25))
-    for year in (2024, 2025, 2026):
-        for d in summer_days(year):
-            wd = d.weekday()
-            drive = c["km"] * 0.18 * float(rng.lognormal(0, 0.45)) * (0.75 if wd >= 5 else 1.0)
-            if wd >= 5 and rng.random() < 0.07:
-                drive += float(rng.uniform(25, 55))        # a weekend trip
-            deficit = min(deficit + drive, c.get("batt", 75) * 0.9)
-            p = c["plug"] * (0.85 if wd in (4, 5) else 1.0)
-            if deficit < 6 and rng.random() < 0.6:
-                continue
-            if rng.random() > p:
-                continue
-            arr = c["arr"] + (float(rng.normal(1.3, 1.6)) if wd >= 5 else float(rng.normal(0, 0.9)))
-            arr = float(np.clip(arr, 14.0, 23.6))
-            dep = c["dep"] + (float(rng.normal(1.8, 1.0)) if wd in (4, 5) else float(rng.normal(0, 0.35)))
-            dep = float(np.clip(dep, 4.75, 11.5))
-            e = deficit * float(rng.uniform(0.92, 1.0))
-            pq, dq = int(round(arr * 4)), int(round(dep * 4)) + Q
-            out.append((d, pq, dq, round(e, 2), pq * 15 + int(rng.integers(0, 15)), dq * 15 + int(rng.integers(0, 15))))
-            deficit -= e
+    subs = P.SUBSTATIONS
+    kinds = (["res"] * 11) + (["com"] * 6) + (["rural"] * 7)
+    rng.shuffle(kinds)
+    for f, k in enumerate(kinds):
+        d = dict(idx=f, kind=k, sub=subs[f % len(subs)])
+        # household appliance holdings (shares of customers), the survey samples them
+        d["sat_res_heat"] = rng.uniform(0.02, 0.55) if k != "com" else rng.uniform(0.0, 0.10)
+        d["sat_hp"] = rng.uniform(0.02, 0.30) if k != "rural" else rng.uniform(0.15, 0.55)
+        d["sat_ewh"] = rng.uniform(0.15, 0.85) if k != "com" else rng.uniform(0.02, 0.15)
+        d["sat_ac"] = rng.uniform(0.55, 0.95) if k != "rural" else rng.uniform(0.35, 0.70)
+        d["customers"] = int(rng.uniform(1400, 5200) if k == "res" else rng.uniform(280, 700) if k == "com" else rng.uniform(900, 2400))
+        d["L"] = rng.uniform(3, 9) if k != "rural" else rng.uniform(10, 25)
+        d["r"] = rng.uniform(0.15, 0.40) if k != "rural" else rng.uniform(0.30, 0.62)
+        d["midreg"] = bool(d["L"] > 9 and rng.random() < 0.65)
+        out.append(d)
     return out
 
 
-def own_start(setting, plug, dep, q):
-    """the quarter an own-schedule charger starts: its owner's timer, a ready-by time, or at once"""
-    if setting == "t2300":
-        return max(plug, OFF)
-    if setting == "t2330":
-        return max(plug, OFF + 2)
-    if setting == "t0000":
-        return max(plug, Q)
-    if setting == "ready":
-        return max(plug, dep - q - 2)
-    return plug
+KW = dict(base_res=0.95, base_com=11.0, base_rural=1.25, res_heat=4.2, hp=1.5, ewh=0.45, ac=1.6)
 
 
-def setting_on(c, d):
-    if c["change"] is not None and d >= dt.date(2025, 1, 1):
-        return c["change"]
-    return c["own"]
+def components(f, T, rng):
+    """MW by quarter-hour at the reference voltage, per load component, from the customers' holdings"""
+    q = np.arange(P.NQ)
+    hr = (q % P.Q) / 4.0
+    day = q // P.Q
+    dow = (day + 3) % 7                                    # 1 January 2026 is a Thursday
+    wk = dow >= 5
+    Tq = np.interp(np.arange(P.NQ) / 4.0, np.arange(len(T)) + 0.5, T)       # the hourly readings, smooth between
+    hdd = np.clip(58 - Tq, 0, None)
+    cdd = np.clip(Tq - 68, 0, None)
+    n = f["customers"]
+    if f["kind"] == "com":
+        shape = 0.45 + 0.75 * ((hr >= 7.5) & (hr <= 18.5)) * (~wk) + 0.15 * ((hr >= 9) & (hr <= 17)) * wk
+        kwb = KW["base_com"]
+    else:
+        shape = (0.70 + 0.42 * np.exp(-((hr - 19.2) / 2.8) ** 2) + 0.22 * np.exp(-((hr - 7.6) / 1.7) ** 2) * (~wk)
+                 + 0.12 * np.exp(-((hr - 11) / 3) ** 2) * wk)
+        kwb = KW["base_res"] if f["kind"] == "res" else KW["base_rural"]
+    ar = np.zeros(P.NQ)
+    e = rng.normal(0, 0.0016 / math.sqrt(max(n, 1) / 2000.0), P.NQ)       # a feeder of a few thousand customers is smooth
+    for i in range(1, P.NQ):
+        ar[i] = 0.9 * ar[i - 1] + e[i]
+    base = n * kwb / 1000.0 * shape * (1 + ar)
+    zip_ = (0.36, 0.44, 0.20)
+    C = dict(Z=zip_[0] * base, P=zip_[1] * base, I=zip_[2] * base)
+    ewh = n * f["sat_ewh"] * KW["ewh"] / 1000.0 * (0.55 + 0.7 * np.exp(-((hr - 7.0) / 1.6) ** 2) + 0.45 * np.exp(-((hr - 20.0) / 2.0) ** 2)) / 0.86
+    rheat = n * f["sat_res_heat"] * KW["res_heat"] / 1000.0 * hdd / 40.0
+    C["TH"] = ewh + rheat
+    C["HP"] = n * f["sat_hp"] * KW["hp"] / 1000.0 * hdd / 40.0
+    C["AC"] = n * f["sat_ac"] * KW["ac"] / 1000.0 * cdd / 18.0 * (0.6 + 0.4 * np.clip(np.sin(np.pi * (hr - 9) / 13), 0, None))
+    return {c: v * (1 + rng.normal(0, 0.0012, P.NQ)) for c, v in C.items()}
 
 
-def charge_profile(start, e, p, horizon=2 * Q + 16):
-    """kW by quarter from the evening's quarter 0: a block at the charger's power from `start` (in quarters, possibly
-    part-way into one) for e/p hours"""
-    L = np.zeros(horizon)
-    a = float(start)
-    b = a + e / p * 4.0
-    for k in range(int(np.floor(a)), min(horizon, int(np.ceil(b)))):
-        ov = min(b, k + 1) - max(a, k)
-        if ov > 0:
-            L[k] += p * ov
-    return L
-
-
-def base(w, rng):
-    """each home's own load (no enrolled charger) at the quarter-hour, July and August 2026, plus the unenrolled EVs"""
-    wx = w.wx[2026]
-    days = wx["days"]
-    i0 = days.index(JUL1)
-    # local daylight time = standard time + 1 hour: the station's hour h (LST) is local hour h+1
-    temp = wx["hourly"].reshape(-1, 24)
-    H = len(w.homes)
-    nq = (NDAY + 1) * Q
-    tq = np.repeat(np.concatenate([temp[i0 - 1:i0 + NDAY + 1].ravel()]), 4)[4 * 23:]     # shift one hour to daylight time
-    tq = tq[:nq]
-    hq = np.tile(np.arange(Q) / 4.0, NDAY + 1)
-    dows = np.repeat([(JUL1 + dt.timedelta(days=k)).weekday() for k in range(NDAY + 1)], Q)
-    wkend = (dows >= 5).astype(float)
-    B = np.zeros((H, nq), dtype=np.float32)
-    sun = np.clip(np.sin((hq - 5.8) / 14.6 * np.pi), 0, None)
-    for hi, h in enumerate(w.homes):
-        s = h["size"]
-        hh = (hq - h["wkoff"]) % 24
-        prof = (0.30 + 0.16 * np.exp(-((hh - 7.0) / 1.3) ** 2) * (1 - 0.6 * wkend) + 0.22 * np.exp(-((hh - 12.5) / 3.5) ** 2) * wkend
-                + 0.42 * np.exp(-((hh - 19.6) / 2.4) ** 2) - 0.10 * np.exp(-((hh - 3.5) / 2.2) ** 2))
-        load = s * prof * (1 + rng.normal(0, 0.10, nq))
-        if h["ac"]:
-            alpha = 1 / (4 * h["lag"])
-            ind, _ = lfilter([alpha], [1, -(1 - alpha)], tq, zi=[tq[0] * (1 - alpha)])
-            drive = ind + 6.0 * sun - h["setp"] - 0.5 * ((hh > 23) | (hh < 6))
-            duty = np.clip(drive / 21.0, 0, 1)
-            cyc = np.clip(duty + rng.normal(0, 0.16, nq) * np.sqrt(np.clip(duty * (1 - duty), 0, None)) * 1.4, 0, 1)
-            load = load + h["accap"] * cyc * s ** 0.5
-        # dryers and cooking
-        for day in range(NDAY + 1):
-            o = day * Q
-            if rng.random() < h["dryer"]:
-                st = int(np.clip(rng.normal(19.0 if dows[o] < 5 else 13.0, 2.6), 7, 22.5) * 4)
-                load[o + st:o + st + int(rng.integers(3, 5))] += 3.8
-            if rng.random() < h["cook"]:
-                st = int(np.clip(rng.normal(17.6, 0.8), 15.5, 20) * 4)
-                load[o + st:o + st + int(rng.integers(2, 4))] += float(rng.uniform(1.5, 2.6))
-            if h["tub"] and rng.random() < 0.8:
-                st = int(rng.uniform(21.5, 27.5) * 4)
-                ln = int(rng.integers(2, 6))
-                a0, a1 = o + st, min(o + st + ln, nq)
-                load[a0:a1] += 5.5
-        if h["pv"]:
-            cloud = np.repeat(rng.uniform(0.35, 1.0, NDAY + 1), Q)
-            load = load - h["pv"] * 0.78 * sun ** 1.3 * cloud
-        B[hi] = load
-    w.B = B                    # kW by home and quarter, from 00:00 on 1 July 2026 (and one extra day of night)
-    # unenrolled EVs add their charging to their homes
-    U = np.zeros_like(B)
-    for ui, u in enumerate(w.unev):
-        for (d, plug, dep, e, pm, dm) in w.usess[ui]:
-            if not (JUL1 <= d < JUL1 + dt.timedelta(days=NDAY)):
-                continue
-            o = (d - JUL1).days * Q
-            if u["mode"] == "t1900" and d.weekday() < 5:
-                st = max(plug, 19 * 4)
-            elif u["mode"] == "t2300":
-                st = max(plug, OFF)
+def bus_voltage(rng):
+    """each substation bus at the minute: the transmission voltage drifts and the LTC steps 5/8 percent once it has
+    been outside its 2 V band for two minutes; returns volts by minute and the tap log"""
+    M = P.ND * 24 * 60
+    out, log = {}, []
+    for s in P.SUBSTATIONS:
+        tm = np.zeros(M)
+        e = rng.normal(0, 0.045, M)
+        daily = 0.6 * np.sin(2 * np.pi * (np.arange(M) / 1440.0 - 0.3))
+        for i in range(1, M):
+            tm[i] = 0.9995 * tm[i - 1] + e[i]
+        raw = 123.0 + tm + daily
+        tap, out_m, v = 0, 0, np.zeros(M)
+        for i in range(M):
+            vb = raw[i] + tap * P.TAP
+            if abs(vb - 123.0) > 0.8:
+                out_m += 1
+                if out_m >= 2:
+                    step = -1 if vb > 123.0 else 1
+                    tap += step
+                    log.append((s, i, step, tap))
+                    vb += step * P.TAP
+                    out_m = 0
             else:
-                st = pm / 15.0
-            L = charge_profile(st, e, u["power"])
-            lo = o
-            hi = min(o + len(L), nq)
-            U[u["home"], lo:hi] += L[:hi - lo]
-    w.U = U
+                out_m = 0
+            v[i] = vb
+        out[s] = v
+    return out, log
 
 
-def actual(w, rng):
-    """what each enrolled charger actually did, session by session: its owner's setting before the split and in the own half,
-    Quillpoint Stagger's random start in the managed half (finishing by the member's ready-by time)"""
-    w.act = {}
-    for ci, c in enumerate(w.chargers):
-        out = []
-        for (d, plug, dep, e, pm, dm) in w.sess[ci]:
-            if d < c["enrol"] or (c["left"] is not None and d >= c["left"]):
-                out.append(None)
-                continue
-            q = int(np.ceil(e / c["power"] * 4))
-            plug = int(np.ceil(pm / 15.0))                     # no charger starts before it is plugged in
-            managed = c["arm"] == "managed" and d >= max(RAND_DAY, c["enrol"])
-            if managed:
-                ready = dep - int(rng.integers(0, 3))
-                lo = max(plug, OFF)
-                hi = max(lo, ready - q)
-                st = int(rng.integers(lo, hi + 1))
-                out.append(dict(start=st, ready=ready, mode="managed"))
-            else:
-                s = setting_on(c, d)
-                st = own_start(s, plug, dep, q)
-                out.append(dict(start=(pm / 15.0 if s == "now" else st), ready=None, mode=s))
-        w.act[ci] = out
-    # the enrolled chargers' actual charging in July and August 2026, by home and quarter
-    H = len(w.homes)
-    nq = (NDAY + 1) * Q
-    A = np.zeros((H, nq), dtype=np.float32)
-    for ci, c in enumerate(w.chargers):
-        for (d, plug, dep, e, pm, dm), a in zip(w.sess[ci], w.act[ci]):
-            if a is None or not (JUL1 <= d < JUL1 + dt.timedelta(days=NDAY)):
-                continue
-            o = (d - JUL1).days * Q
-            L = charge_profile(a["start"], e, c["power"])
-            hi = min(o + len(L), nq)
-            A[c["home"], o:hi] += L[:hi - o]
-    w.A = A
+def highpass(dv, tau_h):
+    a = 1 - math.exp(-0.25 / tau_h)
+    lp = np.zeros_like(dv)
+    for i in range(1, len(dv)):
+        lp[i] = lp[i - 1] + a * (dv[i] - lp[i - 1])
+    return dv - lp
 
 
-def records(w, rng):
-    """what the association's systems hold about the network: monitors, transformer work in 2025-26, meter exchanges"""
-    T = len(w.tx)
-    by_area = {}
-    for t in w.tx:
-        by_area.setdefault((t["area"], t["kva"]), []).append(t["idx"])
-    mon = []
-    for key in sorted(by_area):
-        ids = by_area[key]
-        k = max(4, int(round(48 * len(ids) / T)))
-        mon += list(rng.choice(ids, size=min(k, len(ids)), replace=False))
-    w.monitored = sorted(int(m) for m in mon)[:48] if len(mon) > 48 else sorted(int(m) for m in mon)
-    # units replaced in spring 2026 (sized up after 2025), and a few where a second transformer took some homes
-    small = [t["idx"] for t in w.tx if t["kva"] <= 37.5]
-    w.replaced = sorted(int(x) for x in rng.choice(small, size=9, replace=False))
-    for x in w.replaced:
-        t = w.tx[x]
-        t["old_kva"] = t["kva"]
-        t["kva"] = NEXT[t["kva"]]
-        t["replaced_on"] = dt.date(2026, 3, 9) + dt.timedelta(days=int(rng.integers(0, 70)))
-    multi = [t["idx"] for t in w.tx if t["nh"] >= 5 and t["idx"] not in w.replaced]
-    w.splits = []
-    for x in rng.choice(multi, size=4, replace=False):
-        hs = [hi for hi, h in enumerate(w.homes) if h["tx"] == int(x)]
-        moved = sorted(int(m) for m in rng.choice(hs, size=2, replace=False))
-        w.splits.append(dict(parent=int(x), moved=moved, on=dt.date(2026, 4, 6) + dt.timedelta(days=int(rng.integers(0, 50)))))
-    for sp in w.splits:
-        new = dict(area=w.tx[sp["parent"]]["area"], kva=w.tx[sp["parent"]]["kva"], mount=w.tx[sp["parent"]]["mount"], year=2026,
-                   nh=len(sp["moved"]), lean=1.0, idx=len(w.tx), new_on=sp["on"])
-        w.tx.append(new)
-        for hi in sp["moved"]:
-            w.homes[hi]["tx"] = new["idx"]
-        w.tx[sp["parent"]]["nh"] -= len(sp["moved"])
-        sp["child"] = new["idx"]
-    # meters exchanged during July and August 2026
-    w.exchanged = {}
-    for hi in rng.choice(len(w.homes), size=int(0.018 * len(w.homes)), replace=False):
-        w.exchanged[int(hi)] = JUL1 + dt.timedelta(days=int(rng.integers(3, NDAY - 3)))
+def respond(C, V):
+    """each component's power at the voltage path V (volts by quarter at the loads), from its reference at 122 V"""
+    dv = (V - 122.0) / P.VNOM
+    hp_dv = highpass(dv, P.TAU_TH)
+    out = {}
+    for c, v in C.items():
+        k = P.KE[c]
+        if c == "TH":
+            out[c] = v * (1 + P.KI[c] * hp_dv)
+        else:
+            out[c] = v * (1 + k * dv)
+    return out
+
+
+def drop_end(f, S, seg_frac=1.0):
+    seg = f["L"] * (0.45 if f["midreg"] else 1.0) * seg_frac
+    return 3.0 * S / 8.0 * seg / 8.0 * f["r"] / 0.25
+
+
+def losses(f, S, V):
+    Rf = f["r"] * f["L"] * 0.55
+    I = S / (math.sqrt(3) * P.KV * (V / P.VNOM))
+    return 3 * I ** 2 * Rf
+
+
+def build(seed=P.SEED):
+    rng = np.random.default_rng(seed)
+    w = World()
+    w.T = weather(rng)
+    w.F = feeders(rng)
+    w.C0 = [components(f, w.T, rng) for f in w.F]
+    for f, C in zip(w.F, w.C0):
+        f["peak"] = float(np.percentile(sum(C.values()), 99.9))
+        f["cost"] = (60 + 30 * f["peak"] + 11 * f["L"] + (45 if f["midreg"] else 0)) * rng.uniform(0.9, 1.1) * 1000 * P.COST_SCALE
+    w.vbus_min, w.taplog = bus_voltage(rng)
+    w.vbus = {s: v.reshape(-1, 15).mean(axis=1) for s, v in w.vbus_min.items()}       # quarter-hour mean
+    # the trial: eight feeders, pilot regulators, random on and off days in the trial months
+    w.trial = sorted(int(x) for x in rng.choice(P.NF, size=8, replace=False))
+    days = np.arange(P.ND)
+    import datetime as dt
+    dates = [P.T0.date() + dt.timedelta(days=int(d)) for d in days]
+    tm = np.array([(dt.date(2026, 3, 16) <= d <= dt.date(2026, 6, 12)) or (dt.date(2026, 9, 14) <= d <= dt.date(2026, 11, 13))
+                   for d in dates])
+    w.trial_days = days[tm]
+    w.assign, w.dose = {}, {}
+    for f in w.trial:
+        a = np.zeros(P.ND, dtype=int)
+        a[w.trial_days] = rng.random(len(w.trial_days)) < 0.5
+        comply = rng.uniform(0.62, 0.95)
+        settle = rng.uniform(15, 60)
+        ok = a.astype(bool) & (rng.random(P.ND) < comply)
+        dose = np.zeros(P.NQ)
+        for d in np.where(ok)[0]:
+            s0 = d * P.Q
+            st = settle * rng.uniform(0.6, 1.4) / 15.0
+            ramp = np.clip((np.arange(P.Q) - 0) / max(st, 0.5), 0, 1)
+            dose[s0:s0 + P.Q] = P.TRIAL_DV * ramp
+        w.assign[f], w.dose[f] = a, dose
+        w.F[f]["comply"], w.F[f]["settle"] = comply, settle
+    # actual 2026 operation and the 2027 replay
+    w.S, w.Vhead, w.loss, w.comp = [], [], [], []
+    w.truth = []
+    for f in w.F:
+        C0 = w.C0[f["idx"]]
+        Vh = w.vbus[f["sub"]] - (w.dose[f["idx"]] if f["idx"] in w.dose else 0.0)
+        Cr = respond(C0, Vh - 0.5 * drop_end(f, sum(C0.values())))
+        S = sum(Cr.values())
+        w.Vhead.append(Vh)
+        w.S.append(S)
+        w.loss.append(losses(f, S, Vh))
+        w.comp.append(Cr)
+        # 2027 like 2026, against normal running (no trial): the program takes off, hour by hour, what keeps the
+        # far end at 115 V, at most DVMAX
+        Vn = w.vbus[f["sub"]]
+        Cn = respond(C0, Vn - 0.5 * drop_end(f, sum(C0.values())))
+        Sn = sum(Cn.values())
+        ln = losses(f, Sn, Vn)
+        veol = Vn - drop_end(f, Sn)
+        room_q = np.clip(veol - (P.VMIN + P.MARGIN), 0, P.DVMAX)
+        room = np.repeat(room_q.reshape(-1, 4).min(axis=1), 4)                         # set hour by hour
+        Vvo = Vn - room
+        Cv = respond(C0, Vvo - 0.5 * drop_end(f, sum(C0.values())))
+        Sv = sum(Cv.values())
+        lv = losses(f, Sv, Vvo)
+        cust = float((Sn - Sv).sum() * 0.25)
+        dl = float((ln - lv).sum() * 0.25)
+        w.truth.append(dict(cust_mwh=cust, loss_mwh=dl, total_mwh=cust + dl, room=room,
+                            value=(cust + dl) * P.PRICE * P.ANNUITY, cost=f["cost"]))
+    return w
+
+
+if __name__ == "__main__":
+    import time
+    t = time.time()
+    w = build()
+    print("built in %.0fs, %d taps" % (time.time() - t, len(w.taplog)))
+    for f in w.F:
+        tr = w.truth[f["idx"]]
+        print(f["idx"], f["kind"], "trial" if f["idx"] in w.trial else "", "MWh %.0f (loss %+.0f) value/cost %.2f" % (
+            tr["total_mwh"], tr["loss_mwh"], tr["value"] / tr["cost"]))

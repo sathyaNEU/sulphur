@@ -1,13 +1,13 @@
 {
  "task": "task7",
- "status": "RETURNED",
+ "status": "BUILD",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-13",
- "stump": "",
- "architecture": 11,
+ "stump": "level 5 by the stump factorial: the trial on its achieved dose, each feeder's makeup, the give-back through the year, the far-end volts, the losses from current squared",
+ "architecture": 12,
  "loops": 1,
  "precut": {
   "exit": 0,
@@ -114,7 +114,7 @@
    "route": "REDESIGN under the stump factorial (stumping Part 3.3)"
   }
  ],
- "resume": "stage 2: re-design architecture 11's chain under the stump factorial; close the infeasible-session fork with a filed sentence",
+ "resume": "architecture 12 built (seed 3077); next: gates.py task7, then stage 4 (leak reader and judge) on the author's word",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -412,7 +412,7 @@
     "round": 1,
     "architecture": 5,
     "date": "2026-11-08",
-    "run1": "landed every graded cell: the plan figure (€2.04m unrounded, so €2.0m), the split (€1.27m and €0.77m, so €1.25m and €0.75m) and the five facilities",
+    "run1": "landed every graded cell: the plan figure (\u20ac2.04m unrounded, so \u20ac2.0m), the split (\u20ac1.27m and \u20ac0.77m, so \u20ac1.25m and \u20ac0.75m) and the five facilities",
     "run2": "not available (the author has one run)",
     "average": null,
     "verdict": "REDESIGN",

@@ -1,7 +1,7 @@
-"""task7 architecture 11: the golden deliverables, the board memo (Word) and the CSV of every transformer serving the
-rate's chargers, with every figure from checks on the cut pack."""
-import csv
+"""The golden deliverables the prompt asks for: a workbook (vo_program_2027.xlsx) and a short memo
+(vo_program_2027_memo.docx), both from figures.json."""
 import os
+import sys
 
 import matplotlib
 matplotlib.use("Agg")
@@ -9,65 +9,91 @@ import matplotlib.pyplot as plt  # noqa: E402
 from docx import Document  # noqa: E402
 from docx.enum.text import WD_ALIGN_PARAGRAPH  # noqa: E402
 from docx.shared import Mm, Pt, RGBColor  # noqa: E402
+from openpyxl import Workbook  # noqa: E402
+from openpyxl.styles import Alignment, Font, PatternFill  # noqa: E402
 
-import checks as CK  # noqa: E402
-import golden as G  # noqa: E402
+HERE = os.path.dirname(os.path.abspath(__file__))
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
+sys.path.insert(0, WRITERS)
 import postprocess  # noqa: E402
 
-INK = "#2F4B2F"
-ORG = "Hollins Creek Electric Association"
+ORG = "Platte Ridge Public Power District"
+INK = "1F3A5F"
+FILES = {"wb": "vo_program_2027.xlsx", "memo": "vo_program_2027_memo.docx"}
+CLS = {"res": "Residential", "com": "Commercial", "rural": "Rural"}
 
 
 def usd(x):
-    return "$" + format(int(round(x)), ",")
+    return "$" + format(int(round(x, -2)), ",")
 
 
-def write_csv(path, C):
-    S = C["S"]
-    P = C["P"]
-    rows = []
-    for t, r in S["out"].items():
-        rows.append([t, P.area.get(t, ""), "%g" % r["kva"], "%.1f" % r["limit"], r["homes"], r["chargers"],
-                     "%.1f" % r["own_peak"], "yes" if r["own_p"] > 0.5 else "no",
-                     "%.1f" % r["stagger_peak"], "%.2f" % r["stagger_p"],
-                     "%.1f" % r["sequence_peak"], "yes" if r["sequence_p"] > 0.5 else "no",
-                     r["cost"]])
-    rows.sort(key=lambda x: (x[1], x[0]))
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        wr = csv.writer(fh, lineterminator="\r\n")
-        wr.writerow(["transformer_location", "substation", "kva", "limit_kw_15min", "homes", "enrolled_chargers",
-                     "own_schedules_peak_kw", "own_schedules_over", "stagger_mean_peak_kw", "stagger_chance_over",
-                     "sequence_peak_kw", "sequence_over", "replacement_cost_usd"])
-        for r in rows:
-            wr.writerow(r)
+def workbook(path, F):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Decision"
+    hdr = ["Feeder", "Class", "Yearly saving at the substation (MWh)", "Present value of the saving (USD)",
+           "Installed cost (USD)", "Value over cost", "2027 program"]
+    ws.append(hdr)
+    for i in F["ids"]:
+        pv = F["save_mwh"][i] * F["price"] * F["annuity"]
+        ws.append([i, CLS[F["kind"][i]], F["save_mwh"][i], round(pv, -2), F["cost"][i], F["value_ratio"][i],
+                   "VO in 2027" if i in F["funded"] else "Not in 2027"])
+    ws2 = wb.create_sheet("Trial")
+    ws2.append(["Trial feeder", "Change in energy per 1% of feeder-head voltage removed (%)"])
+    for i in F["trial"]:
+        ws2.append([i, F["trial_effect"][i]])
+    ws2.append(["Average", F["trial_mean"]])
+    ws3 = wb.create_sheet("Voltage")
+    ws3.append(["Feeder", "Average reduction the equipment could hold over the year (V, 120 V base)"])
+    for i in F["ids"]:
+        ws3.append([i, F["room_v"][i]])
+    ws4 = wb.create_sheet("Losses")
+    ws4.append(["Feeder", "Change in the feeder's own line losses (MWh a year; negative: losses rise)"])
+    for i in F["ids"]:
+        ws4.append([i, F["loss_mwh"][i]])
+    ws5 = wb.create_sheet("Method")
+    for line in F["method"]:
+        ws5.append([line])
+    for s in (ws, ws2, ws3, ws4):
+        for c in s[1]:
+            c.font = Font(bold=True)
+            c.fill = PatternFill("solid", fgColor="DCE3EE")
+            c.alignment = Alignment(wrap_text=True, vertical="top")
+        s.freeze_panes = "B2"
+    for col, w in zip("ABCDEFG", (11, 13, 18, 18, 14, 11, 14)):
+        ws.column_dimensions[col].width = w
+    ws2.column_dimensions["A"].width = 13
+    ws2.column_dimensions["B"].width = 34
+    ws3.column_dimensions["B"].width = 36
+    ws4.column_dimensions["B"].width = 36
+    ws5.column_dimensions["A"].width = 118
+    for r in ws5.iter_rows():
+        r[0].alignment = Alignment(wrap_text=True, vertical="top")
+    wb.save(path)
+    postprocess.normalize_ooxml(path, "Mary Wilson", "Mary Wilson", "2026-11-17T15:10:00Z", "2026-11-20T21:34:16Z",
+                                excel=True, company=ORG)
 
 
 def chart(F, scratch):
-    sizes = list(F["sizes"].keys())
-    labels = ["Members' own\nschedules", "Quillpoint\nStagger", "Quillpoint\nSequence"]
-    cols = ["#9DB89D", "#5E8C61", "#2F4B2F", "#C9A227", "#8C6A1F"]
-    fig, ax = plt.subplots(figsize=(6.2, 2.7), dpi=150)
-    bottom = [0.0, 0.0, 0.0]
-    for i, s in enumerate(sizes):
-        vals = [F["by_size"][o].get(s, 0.0) for o in G.OPTIONS]
-        ax.bar(labels, vals, bottom=bottom, color=cols[i % len(cols)], label="%s kVA" % s, width=0.55)
-        bottom = [b + v for b, v in zip(bottom, vals)]
-    for x, b, o in zip(range(3), bottom, G.OPTIONS):
-        ax.text(x, b + 0.8, ("%.1f" % F[o]["over"]) if o == "stagger" else "%d" % F[o]["over"], ha="center", fontsize=8.5)
-    ax.set_ylabel("Transformers over their limit", fontsize=8)
-    ax.set_title("A summer like 2026 under each default (July and August)", fontsize=9, color=INK)
-    ax.tick_params(labelsize=8)
-    ax.legend(fontsize=7, frameon=False, ncol=5, loc="upper right")
+    ids = sorted(F["ids"], key=lambda i: -F["value_ratio"][i])
+    vals = [F["value_ratio"][i] for i in ids]
+    cols = ["#2F5D8C" if i in F["funded"] else "#B8C2CC" for i in ids]
+    fig, ax = plt.subplots(figsize=(6.4, 2.6), dpi=150)
+    ax.bar(range(len(ids)), vals, color=cols, width=0.7)
+    ax.axhline(1.0, color="#8C2F2F", lw=0.9)
+    ax.set_xticks(range(len(ids)))
+    ax.set_xticklabels(ids, rotation=90, fontsize=6.5)
+    ax.set_ylabel("Present value of the saving\nover installed cost", fontsize=7.5)
+    ax.tick_params(axis="y", labelsize=7)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.set_ylim(0, max(bottom) * 1.25)
     fig.tight_layout()
-    p = os.path.join(scratch, "options.png")
+    p = os.path.join(scratch, "vo_value.png")
     fig.savefig(p, metadata={"Software": None})
     plt.close(fig)
     return p
 
 
-def write_memo(path, F, png):
+def memo(path, F, png):
     doc = Document()
     sec = doc.sections[0]
     sec.page_width, sec.page_height = Mm(215.9), Mm(279.4)
@@ -85,75 +111,37 @@ def write_memo(path, F, png):
         if size:
             r.font.size = Pt(size)
         if color:
-            r.font.color.rgb = RGBColor.from_string(color.lstrip("#"))
+            r.font.color.rgb = RGBColor.from_string(color)
         p.paragraph_format.space_after = Pt(space)
         return p
-    o, s, q = F["own"], F["stagger"], F["sequence"]
-    para(ORG + ", Distribution Planning", size=8.5, color="#555555", space=1)
-    para("To: the board of directors    From: Eileen Casey, manager of distribution planning    Date: 12 November 2026",
-         size=8.5, color="#555555", space=1)
-    para("Make Quillpoint Sequence the EV Overnight default for 2027; the work plan replaces %d transformers" % q["over"],
-         bold=True, size=13.5, color=INK, space=6)
-    para("Set the EV Overnight rate's charging default for 2027 to Quillpoint Sequence and carry %d transformer replacements "
-         "(%s) in the 2027 work plan. Under Board Policy EV-4 it is the cheapest of the three options at %s for the year, "
-         "against %s for Quillpoint Stagger and %s for leaving members on their own schedules." %
-         (q["over"], usd(q["replace"]), usd(q["total"]), usd(s["total"]), usd(o["total"])), bold=True, space=5)
-    t = doc.add_table(rows=1, cols=5)
+    for line in F["memo_head"]:
+        para(line, size=8.5, color="555555", space=1)
+    para(F["memo_title"], bold=True, size=13.5, color=INK, space=6)
+    para(F["memo_call"], bold=True, space=5)
+    t = doc.add_table(rows=1, cols=4)
     t.style = "Table Grid"
-    hdr = ["Option", "Transformers over their limit", "Platform fee", "Replacements", "Total for 2027"]
-    for c, h in zip(t.rows[0].cells, hdr):
+    for c, h in zip(t.rows[0].cells, ["Feeder", "Yearly saving at the substation", "Installed cost", "Value over cost"]):
         c.text = h
         for r in c.paragraphs[0].runs:
             r.bold = True
             r.font.size = Pt(8.5)
-    for key, name in CK.NAMES.items():
-        v = F[key]
+    for i in sorted(F["funded"], key=lambda i: -F["value_ratio"][i]):
         cells = t.add_row().cells
-        cnt = ("%.1f" % v["over"]) if key == "stagger" else "%d" % v["over"]
-        for c, x in zip(cells, [name, cnt, usd(v["fee"]), usd(v["replace"]), usd(v["total"])]):
+        for c, x in zip(cells, [i, "%s MWh" % format(int(F["save_mwh"][i]), ","), usd(F["cost"][i]), "%.2f" % F["value_ratio"][i]]):
             c.text = x
             for r in c.paragraphs[0].runs:
                 r.font.size = Pt(8.5)
-    para("A summer like 2026: July and August 2026 as metered, the homes' hourly reads brought to the quarter-hour by "
-         "DPS-7's peaking factors, with the %s chargers enrolled on 1 November 2026 charging "
-         "their 2026 sessions as each option would. Stagger starts sessions at random, so its expected cost counts each "
-         "transformer at its chance of being over (EV-4 4.3). Fees at $%g and $%g per charger for the year; replacements at DPS-7's installed "
-         "costs." % (format(F["n_chargers"], ","), F["fee_rate"]["stagger"], F["fee_rate"]["sequence"]),
-         size=8, color="#555555", space=6)
-    doc.add_picture(png, width=Mm(160))
+    doc.add_picture(png, width=Mm(165))
     doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
-    para("What the pilot showed, and what it did not", bold=True, color=INK, space=2)
-    para("The pilot's managed quarter took %.2f kW per enrolled charger off the 23:00 to 23:15 interval in July and "
-         "August against the chargers on their owners' own schedules (%.2f kW against %.2f), because most own schedules "
-         "start the car at 23:00 when the overnight price begins. Read as an average night, that looks as if a random "
-         "start clears almost every transformer. It does not: a transformer's limit is its single highest quarter-hour "
-         "of the summer, and the two to five chargers on a small transformer still land together on some night when "
-         "each starts at random. Replayed night by night over the summer, Stagger still leaves %.1f transformers over." %
-         (abs(F["pilot_effect"]), F["pilot_managed"], F["pilot_own"], s["over"]))
-    para("Sequence was not in the pilot. Run on each night's actual plug-ins, energy and unplug times, it keeps the "
-         "chargers on a transformer apart most nights, but on nights when they need more charging than the hours to "
-         "their departures allow, its rule starts a late charger alongside the others and the queue waits for it: %d "
-         "transformers stay over." %
-         q["over"])
-    para("Members' own schedules are not what the meters saw in 2026, because a quarter of the chargers were under "
-         "Stagger. With every charger back on its owner's own setting (its own-schedule sessions, or what the member "
-         "told us at enrolment) %d transformers would be over." % o["over"])
-    para("Sequence stays the cheapest unless its fee rises above about $%d per charger for the year. The CSV gives "
-         "every transformer serving the rate's chargers, its limit, and its summer peak under each option." % F["flip_fee"],
-         space=2)
+    for head, body in F["memo_body"]:
+        para(head, bold=True, color=INK, space=2)
+        para(body)
     doc.save(path)
-    postprocess.normalize_docx(path, "Eileen Casey", "Eileen Casey", "2026-11-09T16:02:00Z", "2026-11-12T22:48:00Z", 7, 186,
-                               "task7-memo", title="EV Overnight charging default for 2027", company=ORG)
+    postprocess.normalize_docx(path, "Mary Wilson", "Joseph Harmon", "2026-11-18T14:22:00Z", "2026-11-20T22:05:00Z", 9, 214,
+                               "task7-vo-memo", title="Voltage optimization: the 2027 program", company=ORG)
 
 
-def write_all(C, golden_dir, gen_dir, scratch):
-    F = CK.figures(C)
-    write_csv(os.path.join(golden_dir, "ev_overnight_transformers_2027.csv"), C)
-    png = chart(F, scratch)
-    write_memo(os.path.join(golden_dir, "ev_overnight_default_2027_memo.docx"), F, png)
-    import json
-    with open(os.path.join(gen_dir, "figures.json"), "w", encoding="utf-8") as fh:
-        json.dump(F, fh, indent=1, ensure_ascii=False, default=float)
-    with open(os.path.join(gen_dir, "effort.json"), "w", encoding="utf-8") as fh:
-        json.dump(CK.effort(C, F), fh, indent=1, ensure_ascii=False, default=float)
-    return F
+def build(folder, F, scratch):
+    os.makedirs(folder, exist_ok=True)
+    workbook(os.path.join(folder, FILES["wb"]), F)
+    memo(os.path.join(folder, FILES["memo"]), F, chart(F, scratch))

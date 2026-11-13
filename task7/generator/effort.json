@@ -2,394 +2,1743 @@
  "results": [
   {
    "id": "R1",
-   "name": "chargers enrolled on 1 November 2026",
-   "graded_as": "Ask 5",
-   "figure": "n_chargers",
-   "depends": [],
-   "independent": "the roster",
-   "golden": 1313,
-   "band": [
-    1313,
-    1313
-   ],
-   "passes": {
-    "quick": 1326,
-    "careful": 1313,
-    "thorough": 1313
-   }
-  },
-  {
-   "id": "R1b",
-   "name": "transformers serving them (the CSV's rows)",
+   "name": "each feeder's 2026 energy at the customer meters (MWh)",
    "graded_as": "Ask 1",
-   "figure": "n_tx",
-   "depends": [
-    "R1"
-   ],
-   "independent": "",
-   "golden": 382,
-   "band": [
-    382,
-    382
-   ],
-   "passes": {
-    "quick": 382,
-    "careful": 382,
-    "thorough": 382
-   }
-  },
-  {
-   "id": "R2",
-   "name": "the pilot's change at 23:00 to 23:15, kW per enrolled charger",
-   "graded_as": "Component 4",
-   "figure": "pilot_effect",
+   "figure": "energy_mwh",
    "depends": [],
-   "independent": "the session log and the pilot halves",
-   "golden": -4.95,
-   "band": [
-    -5.05,
-    -4.8500000000000005
-   ],
-   "passes": {
-    "quick": null,
-    "careful": -4.95,
-    "thorough": -4.95
-   }
-  },
-  {
-   "id": "R3",
-   "name": "own schedules' transformers over their limit",
-   "graded_as": "Component 3",
-   "figure": "own_over",
-   "depends": [
-    "R1b"
-   ],
-   "independent": "",
-   "golden": 53,
-   "band": [
-    52,
-    55
-   ],
-   "precedent": [
-    "L04",
-    "L01"
-   ],
-   "passes": {
-    "quick": 44.0,
-    "careful": 44.0,
-    "thorough": 53
-   }
-  },
-  {
-   "id": "R4",
-   "name": "Stagger's transformers over their limit, each at its chance",
-   "graded_as": "Component 1",
-   "figure": "stagger_over",
-   "depends": [
-    "R1b"
-   ],
-   "independent": "",
-   "golden": 29.7,
-   "band": [
-    28.5,
-    31.0
-   ],
-   "precedent": [
-    "L15",
-    "N01"
-   ],
-   "passes": {
-    "quick": 2.0,
-    "careful": 2.0,
-    "thorough": 29.7
-   }
-  },
-  {
-   "id": "R5",
-   "name": "Sequence's transformers over their limit (the work plan's replacements)",
-   "graded_as": "Component 2",
-   "figure": "sequence_over",
-   "depends": [
-    "R1b"
-   ],
-   "independent": "",
-   "golden": 13,
-   "band": [
-    12,
-    14
-   ],
-   "precedent": [
-    "L15",
-    "N04"
-   ],
-   "passes": {
-    "quick": 2.0,
-    "careful": 3.0,
-    "thorough": 13
-   }
-  },
-  {
-   "id": "R6",
-   "name": "each option's fee, replacement cost and total",
-   "graded_as": "Ask 2-4",
-   "figure": "totals",
-   "depends": [
-    "R3",
-    "R4",
-    "R5"
-   ],
-   "independent": "",
+   "independent": "the customer-meter sums",
    "golden": {
-    "own": 812200,
-    "stagger": 397100,
-    "sequence": 249200
+    "ASH-113": 63.0,
+    "CDB-113": 24.0,
+    "ELC-113": 48.0,
+    "FRV-113": 28.0,
+    "GBR-113": 65.0,
+    "HOL-113": 18.0,
+    "ASH-116": 23.0,
+    "CDB-116": 34.0,
+    "ELC-116": 28.0,
+    "FRV-116": 34.0,
+    "GBR-116": 23.0,
+    "HOL-116": 33.0,
+    "ASH-219": 35.0,
+    "CDB-219": 45.0,
+    "ELC-219": 19.0,
+    "FRV-219": 46.0,
+    "GBR-219": 47.0,
+    "HOL-219": 21.0,
+    "ASH-222": 57.0,
+    "CDB-222": 23.0,
+    "ELC-222": 26.0,
+    "FRV-222": 25.0,
+    "GBR-222": 41.0,
+    "HOL-222": 22.0
    },
    "bands": {
-    "own": [
-     801400,
-     832900
+    "ASH-113": [
+     61.0,
+     65.0
     ],
-    "stagger": [
-     383900,
-     410000
+    "CDB-113": [
+     22.0,
+     26.0
     ],
-    "sequence": [
-     231000,
-     267400
+    "ELC-113": [
+     46.0,
+     50.0
+    ],
+    "FRV-113": [
+     26.0,
+     30.0
+    ],
+    "GBR-113": [
+     63.0,
+     67.0
+    ],
+    "HOL-113": [
+     16.0,
+     20.0
+    ],
+    "ASH-116": [
+     21.0,
+     25.0
+    ],
+    "CDB-116": [
+     32.0,
+     36.0
+    ],
+    "ELC-116": [
+     26.0,
+     30.0
+    ],
+    "FRV-116": [
+     32.0,
+     36.0
+    ],
+    "GBR-116": [
+     21.0,
+     25.0
+    ],
+    "HOL-116": [
+     31.0,
+     35.0
+    ],
+    "ASH-219": [
+     33.0,
+     37.0
+    ],
+    "CDB-219": [
+     43.0,
+     47.0
+    ],
+    "ELC-219": [
+     17.0,
+     21.0
+    ],
+    "FRV-219": [
+     44.0,
+     48.0
+    ],
+    "GBR-219": [
+     45.0,
+     49.0
+    ],
+    "HOL-219": [
+     19.0,
+     23.0
+    ],
+    "ASH-222": [
+     55.0,
+     59.0
+    ],
+    "CDB-222": [
+     21.0,
+     25.0
+    ],
+    "ELC-222": [
+     24.0,
+     28.0
+    ],
+    "FRV-222": [
+     23.0,
+     27.0
+    ],
+    "GBR-222": [
+     39.0,
+     43.0
+    ],
+    "HOL-222": [
+     20.0,
+     24.0
     ]
    },
-   "precedent": [
-    "L15"
-   ],
    "passes": {
     "quick": {
-     "own": null,
-     "stagger": null,
-     "sequence": null
+     "ASH-113": 63.0,
+     "CDB-113": 24.0,
+     "ELC-113": 48.0,
+     "FRV-113": 28.0,
+     "GBR-113": 65.0,
+     "HOL-113": 18.0,
+     "ASH-116": 23.0,
+     "CDB-116": 34.0,
+     "ELC-116": 28.0,
+     "FRV-116": 34.0,
+     "GBR-116": 23.0,
+     "HOL-116": 33.0,
+     "ASH-219": 35.0,
+     "CDB-219": 45.0,
+     "ELC-219": 19.0,
+     "FRV-219": 46.0,
+     "GBR-219": 47.0,
+     "HOL-219": 21.0,
+     "ASH-222": 57.0,
+     "CDB-222": 23.0,
+     "ELC-222": 26.0,
+     "FRV-222": 25.0,
+     "GBR-222": 41.0,
+     "HOL-222": 22.0
     },
     "careful": {
-     "own": 638600,
-     "stagger": 52600,
-     "sequence": 99700
+     "ASH-113": 63.0,
+     "CDB-113": 24.0,
+     "ELC-113": 48.0,
+     "FRV-113": 28.0,
+     "GBR-113": 65.0,
+     "HOL-113": 18.0,
+     "ASH-116": 23.0,
+     "CDB-116": 34.0,
+     "ELC-116": 28.0,
+     "FRV-116": 34.0,
+     "GBR-116": 23.0,
+     "HOL-116": 33.0,
+     "ASH-219": 35.0,
+     "CDB-219": 45.0,
+     "ELC-219": 19.0,
+     "FRV-219": 46.0,
+     "GBR-219": 47.0,
+     "HOL-219": 21.0,
+     "ASH-222": 57.0,
+     "CDB-222": 23.0,
+     "ELC-222": 26.0,
+     "FRV-222": 25.0,
+     "GBR-222": 41.0,
+     "HOL-222": 22.0
     },
     "thorough": {
-     "own": 812200,
-     "stagger": 397100,
-     "sequence": 249200
+     "ASH-113": 63.0,
+     "CDB-113": 24.0,
+     "ELC-113": 48.0,
+     "FRV-113": 28.0,
+     "GBR-113": 65.0,
+     "HOL-113": 18.0,
+     "ASH-116": 23.0,
+     "CDB-116": 34.0,
+     "ELC-116": 28.0,
+     "FRV-116": 34.0,
+     "GBR-116": 23.0,
+     "HOL-116": 33.0,
+     "ASH-219": 35.0,
+     "CDB-219": 45.0,
+     "ELC-219": 19.0,
+     "FRV-219": 46.0,
+     "GBR-219": 47.0,
+     "HOL-219": 21.0,
+     "ASH-222": 57.0,
+     "CDB-222": 23.0,
+     "ELC-222": 26.0,
+     "FRV-222": 25.0,
+     "GBR-222": 41.0,
+     "HOL-222": 22.0
     }
    }
   },
   {
-   "id": "R7",
-   "name": "the default and the work plan's replacements",
-   "graded_as": "Recommendation",
-   "figure": "call_budget",
+   "id": "R2",
+   "name": "the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders",
+   "graded_as": "Component 2",
+   "figure": "trial_mean",
+   "depends": [],
+   "independent": "the trial records",
+   "golden": 0.67,
+   "band": [
+    0.63,
+    0.69
+   ],
+   "precedent": [
+    "N24",
+    "L04"
+   ],
+   "passes": {
+    "quick": 0.34,
+    "careful": 0.54,
+    "thorough": 0.67
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the average reduction in volts each feeder could be held at over the year",
+   "graded_as": "Ask 3",
+   "figure": "room_v",
+   "depends": [],
+   "independent": "the far-end meters",
+   "golden": {
+    "ASH-113": 4.54,
+    "CDB-113": 4.8,
+    "ELC-113": 4.01,
+    "FRV-113": 4.8,
+    "GBR-113": 4.8,
+    "HOL-113": 4.8,
+    "ASH-116": 4.8,
+    "CDB-116": 2.39,
+    "ELC-116": 4.8,
+    "FRV-116": 3.51,
+    "GBR-116": 4.62,
+    "HOL-116": 4.8,
+    "ASH-219": 4.73,
+    "CDB-219": 4.64,
+    "ELC-219": 4.8,
+    "FRV-219": 4.8,
+    "GBR-219": 4.8,
+    "HOL-219": 4.8,
+    "ASH-222": 4.13,
+    "CDB-222": 4.8,
+    "ELC-222": 4.16,
+    "FRV-222": 4.8,
+    "GBR-222": 4.8,
+    "HOL-222": 4.8
+   },
+   "bands": {
+    "ASH-113": [
+     4.45,
+     4.63
+    ],
+    "CDB-113": [
+     4.7,
+     4.9
+    ],
+    "ELC-113": [
+     3.93,
+     4.09
+    ],
+    "FRV-113": [
+     4.7,
+     4.9
+    ],
+    "GBR-113": [
+     4.7,
+     4.9
+    ],
+    "HOL-113": [
+     4.7,
+     4.9
+    ],
+    "ASH-116": [
+     4.7,
+     4.9
+    ],
+    "CDB-116": [
+     2.34,
+     2.44
+    ],
+    "ELC-116": [
+     4.7,
+     4.9
+    ],
+    "FRV-116": [
+     3.44,
+     3.58
+    ],
+    "GBR-116": [
+     4.53,
+     4.71
+    ],
+    "HOL-116": [
+     4.7,
+     4.9
+    ],
+    "ASH-219": [
+     4.63,
+     4.82
+    ],
+    "CDB-219": [
+     4.55,
+     4.73
+    ],
+    "ELC-219": [
+     4.7,
+     4.9
+    ],
+    "FRV-219": [
+     4.7,
+     4.9
+    ],
+    "GBR-219": [
+     4.7,
+     4.89
+    ],
+    "HOL-219": [
+     4.7,
+     4.9
+    ],
+    "ASH-222": [
+     4.05,
+     4.21
+    ],
+    "CDB-222": [
+     4.7,
+     4.9
+    ],
+    "ELC-222": [
+     4.08,
+     4.25
+    ],
+    "FRV-222": [
+     4.7,
+     4.9
+    ],
+    "GBR-222": [
+     4.7,
+     4.9
+    ],
+    "HOL-222": [
+     4.7,
+     4.9
+    ]
+   },
+   "precedent": [
+    "N01",
+    "L17"
+   ],
+   "partly_share": 0.75,
+   "passes": {
+    "quick": {
+     "ASH-113": 4.8,
+     "CDB-113": 4.8,
+     "ELC-113": 4.8,
+     "FRV-113": 4.8,
+     "GBR-113": 4.8,
+     "HOL-113": 4.8,
+     "ASH-116": 4.8,
+     "CDB-116": 4.8,
+     "ELC-116": 4.8,
+     "FRV-116": 4.8,
+     "GBR-116": 4.8,
+     "HOL-116": 4.8,
+     "ASH-219": 4.8,
+     "CDB-219": 4.8,
+     "ELC-219": 4.8,
+     "FRV-219": 4.8,
+     "GBR-219": 4.8,
+     "HOL-219": 4.8,
+     "ASH-222": 4.8,
+     "CDB-222": 4.8,
+     "ELC-222": 4.8,
+     "FRV-222": 4.8,
+     "GBR-222": 4.8,
+     "HOL-222": 4.8
+    },
+    "careful": {
+     "ASH-113": 4.8,
+     "CDB-113": 4.8,
+     "ELC-113": 4.8,
+     "FRV-113": 4.8,
+     "GBR-113": 4.8,
+     "HOL-113": 4.8,
+     "ASH-116": 4.8,
+     "CDB-116": 4.8,
+     "ELC-116": 4.8,
+     "FRV-116": 4.8,
+     "GBR-116": 4.8,
+     "HOL-116": 4.8,
+     "ASH-219": 4.8,
+     "CDB-219": 4.8,
+     "ELC-219": 4.8,
+     "FRV-219": 4.8,
+     "GBR-219": 4.8,
+     "HOL-219": 4.8,
+     "ASH-222": 4.8,
+     "CDB-222": 4.8,
+     "ELC-222": 4.8,
+     "FRV-222": 4.8,
+     "GBR-222": 4.8,
+     "HOL-222": 4.8
+    },
+    "thorough": {
+     "ASH-113": 4.54,
+     "CDB-113": 4.8,
+     "ELC-113": 4.01,
+     "FRV-113": 4.8,
+     "GBR-113": 4.8,
+     "HOL-113": 4.8,
+     "ASH-116": 4.8,
+     "CDB-116": 2.39,
+     "ELC-116": 4.8,
+     "FRV-116": 3.51,
+     "GBR-116": 4.62,
+     "HOL-116": 4.8,
+     "ASH-219": 4.73,
+     "CDB-219": 4.64,
+     "ELC-219": 4.8,
+     "FRV-219": 4.8,
+     "GBR-219": 4.8,
+     "HOL-219": 4.8,
+     "ASH-222": 4.13,
+     "CDB-222": 4.8,
+     "ELC-222": 4.16,
+     "FRV-222": 4.8,
+     "GBR-222": 4.8,
+     "HOL-222": 4.8
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the change in each feeder's own line losses (MWh a year)",
+   "graded_as": "Ask 4",
+   "figure": "loss_mwh",
    "depends": [
-    "R4",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "ASH-113": -125.0,
+    "CDB-113": -47.0,
+    "ELC-113": -26.0,
+    "FRV-113": -6.0,
+    "GBR-113": -72.0,
+    "HOL-113": -7.0,
+    "ASH-116": -4.0,
+    "CDB-116": -31.0,
+    "ELC-116": -9.0,
+    "FRV-116": -115.0,
+    "GBR-116": -87.0,
+    "HOL-116": -5.0,
+    "ASH-219": -116.0,
+    "CDB-219": -94.0,
+    "ELC-219": -18.0,
+    "FRV-219": -22.0,
+    "GBR-219": -29.0,
+    "HOL-219": -4.0,
+    "ASH-222": -126.0,
+    "CDB-222": -9.0,
+    "ELC-222": -30.0,
+    "FRV-222": -6.0,
+    "GBR-222": -36.0,
+    "HOL-222": -5.0
+   },
+   "bands": {
+    "ASH-113": [
+     -137.5,
+     -109.95
+    ],
+    "CDB-113": [
+     -52.61,
+     -41.12
+    ],
+    "ELC-113": [
+     -29.18,
+     -19.58
+    ],
+    "FRV-113": [
+     -8.81,
+     -2.02
+    ],
+    "GBR-113": [
+     -79.15,
+     -63.31
+    ],
+    "HOL-113": [
+     -10.44,
+     -4.07
+    ],
+    "ASH-116": [
+     -6.95,
+     -0.44
+    ],
+    "CDB-116": [
+     -34.02,
+     -26.76
+    ],
+    "ELC-116": [
+     -12.44,
+     -5.17
+    ],
+    "FRV-116": [
+     -127.1,
+     -99.27
+    ],
+    "GBR-116": [
+     -96.53,
+     -75.98
+    ],
+    "HOL-116": [
+     -7.59,
+     -1.2
+    ],
+    "ASH-219": [
+     -129.65,
+     -101.34
+    ],
+    "CDB-219": [
+     -103.61,
+     -82.81
+    ],
+    "ELC-219": [
+     -21.43,
+     -14.66
+    ],
+    "FRV-219": [
+     -24.99,
+     -17.86
+    ],
+    "GBR-219": [
+     -32.23,
+     -24.65
+    ],
+    "HOL-219": [
+     -7.17,
+     -0.93
+    ],
+    "ASH-222": [
+     -138.27,
+     -110.91
+    ],
+    "CDB-222": [
+     -12.38,
+     -5.88
+    ],
+    "ELC-222": [
+     -32.84,
+     -24.98
+    ],
+    "FRV-222": [
+     -8.78,
+     -2.02
+    ],
+    "GBR-222": [
+     -39.85,
+     -31.5
+    ],
+    "HOL-222": [
+     -7.97,
+     -1.3
+    ]
+   },
+   "precedent": [
+    "N21",
+    "L22"
+   ],
+   "partly_share": 0.75,
+   "passes": {
+    "quick": {
+     "ASH-113": 0.0,
+     "CDB-113": 0.0,
+     "ELC-113": 0.0,
+     "FRV-113": 0.0,
+     "GBR-113": 0.0,
+     "HOL-113": 0.0,
+     "ASH-116": 0.0,
+     "CDB-116": 0.0,
+     "ELC-116": 0.0,
+     "FRV-116": 0.0,
+     "GBR-116": 0.0,
+     "HOL-116": 0.0,
+     "ASH-219": 0.0,
+     "CDB-219": 0.0,
+     "ELC-219": 0.0,
+     "FRV-219": 0.0,
+     "GBR-219": 0.0,
+     "HOL-219": 0.0,
+     "ASH-222": 0.0,
+     "CDB-222": 0.0,
+     "ELC-222": 0.0,
+     "FRV-222": 0.0,
+     "GBR-222": 0.0,
+     "HOL-222": 0.0
+    },
+    "careful": {
+     "ASH-113": 82.99,
+     "CDB-113": 39.14,
+     "ELC-113": 63.15,
+     "FRV-113": 36.9,
+     "GBR-113": 85.77,
+     "HOL-113": 23.43,
+     "ASH-116": 31.08,
+     "CDB-116": -14.8,
+     "ELC-116": 37.73,
+     "FRV-116": 45.44,
+     "GBR-116": -8.04,
+     "HOL-116": 45.1,
+     "ASH-219": 46.15,
+     "CDB-219": 59.87,
+     "ELC-219": 24.99,
+     "FRV-219": 153.14,
+     "GBR-219": 62.07,
+     "HOL-219": 28.22,
+     "ASH-222": 110.26,
+     "CDB-222": 38.08,
+     "ELC-222": 34.68,
+     "FRV-222": 33.73,
+     "GBR-222": 54.1,
+     "HOL-222": -42.44
+    },
+    "thorough": {
+     "ASH-113": -125.0,
+     "CDB-113": -47.0,
+     "ELC-113": -26.0,
+     "FRV-113": -6.0,
+     "GBR-113": -72.0,
+     "HOL-113": -7.0,
+     "ASH-116": -4.0,
+     "CDB-116": -31.0,
+     "ELC-116": -9.0,
+     "FRV-116": -115.0,
+     "GBR-116": -87.0,
+     "HOL-116": -5.0,
+     "ASH-219": -116.0,
+     "CDB-219": -94.0,
+     "ELC-219": -18.0,
+     "FRV-219": -22.0,
+     "GBR-219": -29.0,
+     "HOL-219": -4.0,
+     "ASH-222": -126.0,
+     "CDB-222": -9.0,
+     "ELC-222": -30.0,
+     "FRV-222": -6.0,
+     "GBR-222": -36.0,
+     "HOL-222": -5.0
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "each feeder's yearly energy saving at the substation (MWh)",
+   "graded_as": "Component 1",
+   "figure": "save_mwh",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "ASH-113": 1033.0,
+    "CDB-113": 540.0,
+    "ELC-113": 1142.0,
+    "FRV-113": 917.0,
+    "GBR-113": 1187.0,
+    "HOL-113": 455.0,
+    "ASH-116": 768.0,
+    "CDB-116": 292.0,
+    "ELC-116": 934.0,
+    "FRV-116": 462.0,
+    "GBR-116": 412.0,
+    "HOL-116": 1027.0,
+    "ASH-219": 668.0,
+    "CDB-219": 706.0,
+    "ELC-219": 420.0,
+    "FRV-219": 1156.0,
+    "GBR-219": 1224.0,
+    "HOL-219": 573.0,
+    "ASH-222": 790.0,
+    "CDB-222": 616.0,
+    "ELC-222": 592.0,
+    "FRV-222": 835.0,
+    "GBR-222": 818.0,
+    "HOL-222": 723.0
+   },
+   "bands": {
+    "ASH-113": [
+     1001.32,
+     1091.36
+    ],
+    "CDB-113": [
+     519.64,
+     570.29
+    ],
+    "ELC-113": [
+     1103.34,
+     1204.12
+    ],
+    "FRV-113": [
+     886.58,
+     964.9
+    ],
+    "GBR-113": [
+     1148.09,
+     1250.87
+    ],
+    "HOL-113": [
+     439.98,
+     478.46
+    ],
+    "ASH-116": [
+     742.6,
+     807.7
+    ],
+    "CDB-116": [
+     283.0,
+     308.79
+    ],
+    "ELC-116": [
+     902.81,
+     983.03
+    ],
+    "FRV-116": [
+     444.74,
+     492.41
+    ],
+    "GBR-116": [
+     395.48,
+     437.14
+    ],
+    "HOL-116": [
+     995.84,
+     1080.6
+    ],
+    "ASH-219": [
+     638.47,
+     708.52
+    ],
+    "CDB-219": [
+     679.82,
+     746.05
+    ],
+    "ELC-219": [
+     404.68,
+     443.0
+    ],
+    "FRV-219": [
+     1113.94,
+     1217.27
+    ],
+    "GBR-219": [
+     1185.98,
+     1289.29
+    ],
+    "HOL-219": [
+     554.22,
+     603.3
+    ],
+    "ASH-222": [
+     764.32,
+     835.52
+    ],
+    "CDB-222": [
+     597.04,
+     648.12
+    ],
+    "ELC-222": [
+     572.83,
+     624.38
+    ],
+    "FRV-222": [
+     807.99,
+     879.12
+    ],
+    "GBR-222": [
+     786.42,
+     862.0
+    ],
+    "HOL-222": [
+     698.6,
+     760.47
+    ]
+   },
+   "precedent": [
+    "N25",
+    "N12",
+    "L15"
+   ],
+   "partly_share": 0.75,
+   "passes": {
+    "quick": {
+     "ASH-113": 0.85,
+     "CDB-113": 0.33,
+     "ELC-113": 0.64,
+     "FRV-113": 0.38,
+     "GBR-113": 0.88,
+     "HOL-113": 0.24,
+     "ASH-116": 0.32,
+     "CDB-116": 0.46,
+     "ELC-116": 0.39,
+     "FRV-116": 0.46,
+     "GBR-116": 0.31,
+     "HOL-116": 0.45,
+     "ASH-219": 0.47,
+     "CDB-219": 0.61,
+     "ELC-219": 0.26,
+     "FRV-219": 0.63,
+     "GBR-219": 0.63,
+     "HOL-219": 0.29,
+     "ASH-222": 0.77,
+     "CDB-222": 0.31,
+     "ELC-222": 0.35,
+     "FRV-222": 0.34,
+     "GBR-222": 0.55,
+     "HOL-222": 0.3
+    },
+    "careful": {
+     "ASH-113": 1443.5,
+     "CDB-113": 541.33,
+     "ELC-113": 1098.4,
+     "FRV-113": 641.75,
+     "GBR-113": 1491.76,
+     "HOL-113": 407.53,
+     "ASH-116": 540.59,
+     "CDB-116": 624.02,
+     "ELC-116": 656.25,
+     "FRV-116": 790.4,
+     "GBR-116": 452.85,
+     "HOL-116": 912.22,
+     "ASH-219": 802.74,
+     "CDB-219": 1041.32,
+     "ELC-219": 434.6,
+     "FRV-219": 1179.21,
+     "GBR-219": 1079.57,
+     "HOL-219": 490.82,
+     "ASH-222": 1130.71,
+     "CDB-222": 582.05,
+     "ELC-222": 603.16,
+     "FRV-222": 586.75,
+     "GBR-222": 940.94,
+     "HOL-222": 567.86
+    },
+    "thorough": {
+     "ASH-113": 1033.0,
+     "CDB-113": 540.0,
+     "ELC-113": 1142.0,
+     "FRV-113": 917.0,
+     "GBR-113": 1187.0,
+     "HOL-113": 455.0,
+     "ASH-116": 768.0,
+     "CDB-116": 292.0,
+     "ELC-116": 934.0,
+     "FRV-116": 462.0,
+     "GBR-116": 412.0,
+     "HOL-116": 1027.0,
+     "ASH-219": 668.0,
+     "CDB-219": 706.0,
+     "ELC-219": 420.0,
+     "FRV-219": 1156.0,
+     "GBR-219": 1224.0,
+     "HOL-219": 573.0,
+     "ASH-222": 790.0,
+     "CDB-222": 616.0,
+     "ELC-222": 592.0,
+     "FRV-222": 835.0,
+     "GBR-222": 818.0,
+     "HOL-222": 723.0
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the feeders that receive voltage optimization in 2027",
+   "graded_as": "Recommendation",
+   "figure": "funded",
+   "depends": [
     "R5"
    ],
    "independent": "",
-   "golden": "Quillpoint Sequence, 13",
+   "golden": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ],
    "precedent": [
+    "N25",
     "L15"
    ],
    "passes": {
-    "quick": "Quillpoint Stagger, 2",
-    "careful": "Quillpoint Stagger, 2",
-    "thorough": "Quillpoint Sequence, 13"
+    "quick": [],
+    "careful": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "CDB-219",
+     "FRV-219",
+     "GBR-219",
+     "ASH-222",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ],
+    "thorough": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
    }
-  },
-  {
-   "id": "R8",
-   "name": "the Sequence fee at which the call would change",
-   "graded_as": "Ask 6",
-   "figure": "flip_fee",
-   "depends": [
-    "R4",
-    "R5",
-    "R6"
-   ],
-   "independent": "",
-   "golden": 153,
-   "band": [
-    128,
-    177
-   ],
-   "precedent": [
-    "L15"
-   ],
-   "passes": {
-    "quick": 18,
-    "careful": 4,
-    "thorough": 153
-   }
-  }
- ],
- "routes": [
-  {
-   "name": "the golden",
-   "answer": "Quillpoint Sequence, 13",
-   "golden": true
-  },
-  {
-   "name": "careful",
-   "answer": "Quillpoint Stagger, 2",
-   "golden": false
-  },
-  {
-   "name": "quick",
-   "answer": "Quillpoint Stagger, 2",
-   "golden": false
-  },
-  {
-   "name": "no_J1",
-   "answer": "Quillpoint Stagger, 2",
-   "golden": false
-  },
-  {
-   "name": "no_J3_perfect",
-   "answer": "Quillpoint Sequence, 3",
-   "golden": false
-  },
-  {
-   "name": "no_J3_as_stagger",
-   "answer": "Quillpoint Stagger, 29.7",
-   "golden": false
-  },
-  {
-   "name": "no_own",
-   "answer": "Quillpoint Sequence, 13",
-   "golden": false
   }
  ],
  "hints": [
   {
-   "sentence": "a few chargers on one transformer still land together on some night of the summer under a random start, so replay every night",
+   "sentence": "the trial read on the volts its regulators actually took off, not on the day's assignment",
    "rescues": [
-    "R4"
+    "R2"
    ]
   },
   {
-   "sentence": "Sequence was never piloted: run its rule on each night's sessions",
-   "rescues": [
-    "R5"
-   ]
+   "sentence": "each untested feeder's response built from its own makeup, not the trial feeders' average",
+   "rescues": []
   },
   {
-   "sentence": "a quarter of the chargers were managed in summer 2026, so the metered summer is not the members' own schedules",
+   "sentence": "the response carried through the year hour by hour, thermostatic load giving its energy back",
+   "rescues": []
+  },
+  {
+   "sentence": "the volts each feeder can give hour by hour from its far-end meters, not the trial's 4 percent",
    "rescues": [
     "R3"
    ]
+  },
+  {
+   "sentence": "the change in line losses from current squared, not the annual report's 6.1 percent added in proportion",
+   "rescues": []
   }
  ],
+ "factorial": {
+  "golden_answer": [
+   "ASH-113",
+   "ELC-113",
+   "FRV-113",
+   "GBR-113",
+   "ASH-116",
+   "ELC-116",
+   "HOL-116",
+   "FRV-219",
+   "GBR-219",
+   "HOL-219",
+   "FRV-222",
+   "GBR-222",
+   "HOL-222"
+  ],
+  "reflex_route": {
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "CDB-219",
+    "FRV-219",
+    "GBR-219",
+    "ASH-222",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "the trial read on the volts its regulators actually took off, not on the day's assignment",
+    "kind": "stump",
+    "precedent": [
+     "N24",
+     "L04"
+    ],
+    "dropped": {
+     "answer": [
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "FRV-219",
+      "FRV-222",
+      "HOL-222"
+     ],
+     "results_moved": [
+      "R2",
+      "R4",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "CDB-116",
+      "ELC-116",
+      "HOL-116",
+      "ASH-219",
+      "CDB-219",
+      "FRV-219",
+      "GBR-219",
+      "HOL-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "J2",
+    "name": "each untested feeder's response built from its own makeup, not the trial feeders' average",
+    "kind": "stump",
+    "precedent": [
+     "N25",
+     "L15"
+    ],
+    "dropped": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "CDB-219",
+      "FRV-219",
+      "GBR-219",
+      "HOL-219",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "FRV-219",
+      "GBR-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J3",
+    "name": "the response carried through the year hour by hour, thermostatic load giving its energy back",
+    "kind": "stump",
+    "precedent": [
+     "N12",
+     "L15"
+    ],
+    "dropped": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "FRV-219",
+      "GBR-219",
+      "HOL-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "CDB-219",
+      "FRV-219",
+      "GBR-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the volts each feeder can give hour by hour from its far-end meters, not the trial's 4 percent",
+    "kind": "stump",
+    "precedent": [
+     "N01",
+     "L17"
+    ],
+    "dropped": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "FRV-219",
+      "GBR-219",
+      "HOL-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "CDB-219",
+      "FRV-219",
+      "GBR-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "J5",
+    "name": "the change in line losses from current squared, not the annual report's 6.1 percent added in proportion",
+    "kind": "stump",
+    "precedent": [
+     "N21",
+     "L22"
+    ],
+    "dropped": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "ELC-116",
+      "HOL-116",
+      "FRV-219",
+      "GBR-219",
+      "HOL-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "ASH-113",
+      "ELC-113",
+      "FRV-113",
+      "GBR-113",
+      "ASH-116",
+      "HOL-116",
+      "CDB-219",
+      "FRV-219",
+      "ASH-222",
+      "FRV-222",
+      "GBR-222",
+      "HOL-222"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J6",
+    "name": "the customer-meter sums cleaned (re-sent rows, estimated intervals, the far-end meters' lowest reading)",
+    "kind": "reflex",
+    "precedent": []
+   },
+   {
+    "id": "J7",
+    "name": "daily energy regressed on the trial with weather and day-type terms against comparable untested feeders",
+    "kind": "reflex",
+    "precedent": []
+   },
+   {
+    "id": "J8",
+    "name": "energy at the substation, the 115 V floor and the 4.8 V cap, valued at USD 48 and 9.4 (filed in VO-1)",
+    "kind": "reflex",
+    "precedent": []
+   }
+  ]
+ },
  "forcing": {
   "kind": "set",
   "golden_answer": [
-   "Quillpoint Sequence"
+   "ASH-113",
+   "ELC-113",
+   "FRV-113",
+   "GBR-113",
+   "ASH-116",
+   "ELC-116",
+   "HOL-116",
+   "FRV-219",
+   "GBR-219",
+   "HOL-219",
+   "FRV-222",
+   "GBR-222",
+   "HOL-222"
   ],
   "golden_family": [
    {
     "name": "the golden",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "name": "declared_own",
+    "name": "a resistive home at 2.5 times a heat pump home's heating draw",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "name": "recorded_own",
+    "name": "a resistive home at 3.2 times a heat pump home's heating draw",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "name": "late_sessions_early",
+    "name": "the trial's weather terms without squares",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "name": "own_advanced",
+    "name": "the trial's control every untested feeder, not the same class",
     "answer": [
-     "Quillpoint Sequence"
-    ]
-   },
-   {
-    "name": "seed_11",
-    "answer": [
-     "Quillpoint Sequence"
-    ]
-   },
-   {
-    "name": "seed_23",
-    "answer": [
-     "Quillpoint Sequence"
-    ]
-   }
-  ],
-  "shortcuts": [
-   {
-    "name": "careful",
-    "answer": [
-     "Quillpoint Stagger"
-    ]
-   },
-   {
-    "name": "quick",
-    "answer": [
-     "Quillpoint Stagger"
-    ]
-   },
-   {
-    "name": "no_J1",
-    "answer": [
-     "Quillpoint Stagger"
-    ]
-   },
-   {
-    "name": "no_J3_as_stagger",
-    "answer": [
-     "Quillpoint Stagger"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    }
   ],
   "perturbations": [
    {
-    "input": "DPS-7's peaking factors 0.02 lower",
+    "input": "the trial-calibrated response 4.6 percent higher (twice its sampling error)",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "input": "DPS-7's peaking factors 0.02 higher",
+    "input": "the trial-calibrated response 4.6 percent lower (twice its sampling error)",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "input": "no peaking factor (each hour flat)",
+    "input": "the loss coefficient 20 percent higher",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "input": "replacement costs -20 per cent",
+    "input": "the loss coefficient 20 percent lower",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    },
    {
-    "input": "Sequence's fee +20 per cent",
+    "input": "the far-end readings 0.2 V higher",
     "answer": [
-     "Quillpoint Sequence"
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
+   },
+   {
+    "input": "the far-end readings 0.2 V lower",
+    "answer": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "J1 dropped",
+    "answer": [
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "FRV-222",
+     "HOL-222"
+    ]
+   },
+   {
+    "name": "J2 dropped",
+    "answer": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "CDB-219",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
+   },
+   {
+    "name": "J3 dropped",
+    "answer": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "ASH-222",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
+   },
+   {
+    "name": "J4 dropped",
+    "answer": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "ASH-222",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
+    ]
+   },
+   {
+    "name": "J5 dropped",
+    "answer": [
+     "ASH-113",
+     "ELC-113",
+     "FRV-113",
+     "GBR-113",
+     "ASH-116",
+     "ELC-116",
+     "HOL-116",
+     "FRV-219",
+     "GBR-219",
+     "HOL-219",
+     "ASH-222",
+     "FRV-222",
+     "GBR-222",
+     "HOL-222"
     ]
    }
   ]
  },
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the careful route (the reflex route)",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "CDB-219",
+    "FRV-219",
+    "GBR-219",
+    "ASH-222",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "J1 dropped",
+   "answer": [
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "FRV-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "J2 dropped",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "CDB-219",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "J3 dropped",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "ASH-222",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "J4 dropped",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "ASH-222",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "J5 dropped",
+   "answer": [
+    "ASH-113",
+    "ELC-113",
+    "FRV-113",
+    "GBR-113",
+    "ASH-116",
+    "ELC-116",
+    "HOL-116",
+    "FRV-219",
+    "GBR-219",
+    "HOL-219",
+    "ASH-222",
+    "FRV-222",
+    "GBR-222",
+    "HOL-222"
+   ]
+  },
+  {
+   "name": "the quick route",
+   "answer": []
+  }
+ ],
  "weights": {
   "recommendation": 14,
   "components": 24,

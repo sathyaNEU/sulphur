@@ -1,130 +1,139 @@
-"""task7 architecture 11: submission.md, the four answer blocks, every figure from figures.json at the precision the
-golden deliverables print it (counts whole, Stagger's chance-weighted count to a tenth, kW to the hundredth, money to the
-hundred dollars, the flip fee to the dollar), every band from the rivals run on the cut pack."""
+"""The memo's text, the workbook's method notes and submission.md, every figure from figures.json."""
 
 
-def usd(v):
-    return "$" + format(int(round(v)), ",")
+def mwh(x):
+    return format(int(round(x)), ",")
 
 
-def cnt(F, o):
-    v = F[o]["over"]
-    return ("%.1f" % v) if o == "stagger" else "%d" % v
+def usd(x):
+    return "$" + format(int(round(x, -2)), ",")
 
 
-def band(F, o):
-    b = F["bands"][o]
-    return ("%.1f and %.1f" % (b[0], b[1])) if o == "stagger" else "%d and %d" % (b[0], b[1])
+def texts(F):
+    fund = sorted(F["funded"])
+    care = sorted(F["routes"]["the careful route (the reflex route)"])
+    F["memo_head"] = [F["org"] + ", System Planning",
+                      "To: Joseph Harmon, manager of distribution engineering    From: Mary Wilson, system planning    Date: 20 November 2026"]
+    F["memo_title"] = "Voltage optimization in 2027: %d feeders, %s" % (len(fund), usd(F["total_cost"]))
+    F["memo_call"] = ("Put voltage optimization on %s in the 2027 capital program. Under VO-1 each of them saves more "
+                      "energy at its substation breaker over a year like 2026 than its equipment costs: together %s MWh a "
+                      "year for %s installed. The other %d feeders do not clear their cost." %
+                      (", ".join(fund), mwh(F["total_save_mwh"]), usd(F["total_cost"]), len(F["ids"]) - len(fund)))
+    F["memo_body"] = [
+        ("What the trial measured", "On the eight trial feeders the energy drawn fell by %.2f percent on average (%s, feeder by "
+         "feeder) for each 1 percent the regulators actually took off the feeder-head voltage. The ON days did not all run: on some the pilot regulators "
+         "stayed in local mode, and each ON day ramped down over its first hour, so a reading on the day's assignment alone "
+         "understates the response." % (F["trial_mean"], ", ".join("%.2f" % F["trial_effect"][i] for i in F["trial"]))),
+        ("Carrying it to every feeder and every hour", "The trial ran in spring and autumn on eight feeders. Water heaters and "
+         "resistive heat draw less at a lower voltage only until their thermostats keep them on longer, so over a day they "
+         "give their energy back; every other load answers in proportion to its share. Each feeder's share of thermostatic "
+         "load hour by hour comes from its own load against the weather and the 2025 appliance survey; scaled to what the "
+         "trial measured, that gives each feeder's response through the whole year, lower in winter where resistive heat is "
+         "common."),
+        ("How far each feeder can go", "VO-1 keeps every customer at or above 115 V in every hour. The far-end meters set what "
+         "each feeder can give hour by hour: the trial's 4.8 V on the short, lightly loaded feeders, much less at the far end "
+         "of the long rural lines and on the heaviest summer and winter hours."),
+        ("Losses", "Lowering the voltage raises the current the constant-power loads draw, so on most feeders the lines' own "
+         "losses rise and give back part of the customers' saving; current squared, fitted on the feeders with substation "
+         "revenue meters, puts the change between %s and %s MWh a year. The annual report's 6.1 percent loss rate, added "
+         "in proportion, gets the sign wrong." % (mwh(min(F["loss_mwh"].values())), mwh(max(F["loss_mwh"].values())))),
+        ("What a quicker reading would fund", "Reading the trial on its assignment, carrying the trial feeders' average to the "
+         "rest at the trial's 4.8 V all year and adding 6.1 percent for losses funds %s instead." % ", ".join(care)),
+    ]
+    F["method"] = [
+        "Customer energy: the meter data management system's feeder interval sums, the October re-sent rows dropped.",
+        "Trial: each trial feeder's daily customer energy over its same-class untested feeders' on the same day, on the trial "
+        "days, regressed on the day's achieved feeder-head reduction (bus SCADA less the pilot regulator's output) with "
+        "heating, cooling and day-type terms.",
+        "Makeup: each feeder's quarter-hour load regressed on its quarter-of-day by day-type profile with heating and cooling "
+        "degrees; heating split between resistive heat and heat pumps by the survey's holdings at the 2024 load research's "
+        "12,100 and 4,350 kWh a year; water heating at the load research's 3,200 kWh a year a heater of the survey's holding.",
+        "Response: thermostatic load gives its energy back; every other load answers in proportion to its share, scaled to "
+        "the trial's measured response (the median over the trial feeders of trial response over non-thermostatic share).",
+        "Volts: hour by hour, the far-end meters' lowest reading less 115 V, at most 4.8 V; the trial's ON days restored "
+        "to normal running.",
+        "Losses: head-meter energy less customer energy against current squared times the register's ohms, fitted on the "
+        "head-metered feeders; applied at each feeder's load and voltage with and without VO.",
+        "Value: yearly MWh at the substation times USD 48 times 9.4 (VO-1 2.4), against the 2027 capital plan's estimate.",
+    ]
+    return F
 
 
-def reps(x):
-    return "%g replacement%s" % (x, "" if x == 1 else "s")
-
-
-def write(F, path):
-    o, s, q = F["own"], F["stagger"], F["sequence"]
-    rc, rq = F["routes"]["careful"], F["routes"]["no_J3_perfect"]
-    bt = F["band_totals"]
-    L = ["## Tags", "",
-         "**Domain:** Energy Systems & Utilities, energy efficiency and demand response evaluation (tariff and "
-         "demand-response evaluation).",
-         "**Analytical objective:** Experiment & Causal Analysis.", "",
-         "## Final Recommendation", ""]
-    L.append("**Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry %d transformer "
-             "replacements (%s) in the 2027 work plan**: at %s for the year it costs less than Quillpoint Stagger (%s) or "
-             "the members' own schedules (%s). This rejects Stagger, which the pilot's average managed night shows "
-             "clearing all but %g transformers (%s for the year), because a random start still lets the few chargers on a small "
-             "transformer land together on some night of the summer: replayed night by night, Stagger leaves %s over."
-             % (q["over"], usd(q["replace"]), usd(q["total"]), usd(s["total"]), usd(o["total"]),
-                rc["stagger"], usd(rc["total"]), cnt(F, "stagger")))
-    L += ["", "## Supplementary Questions", "", "### ev_overnight_default_2027_memo.docx", ""]
-    L.append("1. The call, in the memo's title and first paragraph: Quillpoint Sequence as the 2027 default, with %d "
-             "transformer replacements in the 2027 work plan (between %d and %d) costing %s (between %s and %s)." %
-             (q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1], usd(q["replace"]),
-              usd(F["band_replace"]["sequence"][0]), usd(F["band_replace"]["sequence"][1])))
-    L.append("2. Transformers serving the rate's chargers that each option leaves over their limit in a summer like 2026: "
-             "members' own schedules %d (between %s), Quillpoint Stagger %s with each transformer at its chance of being "
-             "over (between %s), Quillpoint Sequence %d (between %s)." %
-             (o["over"], band(F, "own"), cnt(F, "stagger"), band(F, "stagger"), q["over"], band(F, "sequence")))
-    L.append("3. The platform's fee for the %s enrolled chargers for 2027: own schedules $0, Stagger %s ($%g a charger), "
-             "Sequence %s ($%g a charger)." % (format(F["n_chargers"], ","), usd(s["fee"]), F["fee_rate"]["stagger"],
-                                                  usd(q["fee"]), F["fee_rate"]["sequence"]))
-    br = F["band_replace"]
-    L.append("4. What the replacements would cost at DPS-7's installed costs: own schedules %s (between %s and %s), Stagger "
-             "%s (between %s and %s), Sequence %s (between %s and %s)." %
-             (usd(o["replace"]), usd(br["own"][0]), usd(br["own"][1]), usd(s["replace"]), usd(br["stagger"][0]),
-              usd(br["stagger"][1]), usd(q["replace"]), usd(br["sequence"][0]), usd(br["sequence"][1])))
-    L.append("5. The total for 2027: own schedules %s (between %s and %s), Stagger %s (between %s and %s), Sequence %s "
-             "(between %s and %s)." % (usd(o["total"]), usd(bt["own"][0]), usd(bt["own"][1]), usd(s["total"]),
-                                         usd(bt["stagger"][0]), usd(bt["stagger"][1]), usd(q["total"]),
-                                         usd(bt["sequence"][0]), usd(bt["sequence"][1])))
-    L.append("6. The pilot's managed charging took %.2f kW per enrolled charger off the 23:00 to 23:15 interval in July "
-             "and August 2026 (within 0.1 kW): %.2f kW in the managed quarter against %.2f kW on the owners' own "
-             "schedules." % (abs(F["pilot_effect"]), F["pilot_managed"], F["pilot_own"]))
-    L.append("7. Chargers enrolled on the rate on 1 November 2026: %s." % format(F["n_chargers"], ","))
-    L.append("8. The call changes if Sequence's fee rises above about $%d per charger for the year (between $%d and $%d), "
-             "where Stagger would cost the same." % (F["flip_fee"], F["band_flip"][0], F["band_flip"][1]))
-    L.append("9. A chart of the transformers over their limit under each option, stacked by transformer size.")
-    L += ["", "### ev_overnight_transformers_2027.csv", ""]
-    L.append("10. %d rows, one for each transformer serving an enrolled charger, with its location, substation, kVA, "
-             "15-minute limit in kW, homes, enrolled chargers, and its summer peak in kW under each option: own schedules "
-             "(%d marked over), Stagger (its mean peak and its chance of being over, the chances summing to %s) and "
-             "Sequence (%d marked over), with the replacement cost." % (F["n_tx"], o["over"], cnt(F, "stagger"), q["over"]))
+def write(path, F, bands):
+    ids = F["ids"]
+    fund = sorted(F["funded"])
+    care = sorted(F["routes"]["the careful route (the reflex route)"])
+    b = bands
+    L = ["# task7: Platte Ridge PPD, voltage optimization in the 2027 capital program", "", "## Tags", "",
+         "**Domain:** Energy Systems & Utilities (Energy efficiency & demand response evaluation).",
+         "**Analytical objective:** Experiment & Causal Analysis.", "", "## Final Recommendation", "",
+         "Put voltage optimization on %s in the 2027 capital program (%s installed, %s MWh a year saved at the substation): "
+         "each saves more energy at its breaker over a year like 2026 than its equipment costs under VO-1. Not the careful "
+         "reading that takes the trial on its assignment, carries the trial feeders' average to the rest at the trial's 4.8 V "
+         "all year and adds the annual report's 6.1 percent for losses, which funds %s." %
+         (", ".join(fund), usd(F["total_cost"]), mwh(F["total_save_mwh"]), ", ".join(care)), "",
+         "## Supplementary Questions", "", "### vo_program_2027.xlsx", ""]
+    q = 1
+    L.append("%d. Sheet Decision: one row per feeder with its yearly saving at the substation, the saving's present value, "
+             "its installed cost, the ratio and the decision; sheets Trial, Voltage and Losses carry the figures below." % q)
+    q += 1
+    L.append("%d. The feeders that receive VO in 2027 (exact): %s." % (q, ", ".join(fund)))
+    q += 1
+    L.append("%d. Each feeder's expected yearly energy saving at the substation, MWh (band in brackets): " % q +
+             "; ".join("%s %s (%s to %s)" % (i, mwh(F["save_mwh"][i]), mwh(b["save"][i][0]), mwh(b["save"][i][1])) for i in ids) + ".")
+    q += 1
+    L.append("%d. Each feeder's 2026 energy at the customer meters, MWh (within 2 MWh): " % q +
+             "; ".join("%s %s" % (i, mwh(F["energy_mwh"][i])) for i in ids) + ".")
+    q += 1
+    L.append("%d. The average reduction in volts the equipment could hold each feeder at over the year, 120 V base (band in "
+             "brackets): " % q + "; ".join("%s %.2f (%.2f to %.2f)" % (i, F["room_v"][i], b["room"][i][0], b["room"][i][1]) for i in ids) + ".")
+    q += 1
+    L.append("%d. The change in each feeder's own line losses, MWh a year, negative where losses rise (band in brackets): " % q +
+             "; ".join("%s %s (%s to %s)" % (i, mwh(F["loss_mwh"][i]), mwh(b["loss"][i][0]), mwh(b["loss"][i][1])) for i in ids) + ".")
+    q += 1
+    L.append("%d. The trial's change in energy per 1 percent of voltage removed, averaged over the eight trial feeders, percent: "
+             "%.2f (%.2f to %.2f); sheet Trial also shows each trial feeder's own figure." %
+             (q, F["trial_mean"], b["trial_mean"][0], b["trial_mean"][1]))
+    q += 1
+    L += ["", "### vo_program_2027_memo.docx", ""]
+    L.append("%d. A short memo that opens on the decision, lists the funded feeders with their saving and cost, shows each "
+             "feeder's value over cost, and says what the trial measured and how it was carried to every feeder and hour." % q)
     L += ["", "## Critical Components", ""]
-    L.append("1. Quillpoint Stagger leaves **%s** transformers over their limit (between %s), not the **%g** the pilot's "
-             "average managed night suggests." % (cnt(F, "stagger"), band(F, "stagger"), rc["stagger"]))
-    L.append("2. Quillpoint Sequence leaves **%d** transformers over (between %s): its rule has to start a late charger "
-             "alongside others on heavy nights, and every later charger in the queue then waits for it too, where one "
-             "charger at a time would leave **%g**." % (q["over"], band(F, "sequence"), rq["sequence"]))
-    L.append("3. The members' own schedules leave **%d** transformers over (between %s), not the **%g** the 2026 meters "
-             "show with a quarter of the chargers under Stagger." % (o["over"], band(F, "own"), rc["own"]))
-    L.append("4. The pilot's managed charging took **%.2f kW** per enrolled charger off 23:00 to 23:15." % abs(F["pilot_effect"]))
+    top = sorted(ids, key=lambda i: abs(F["value_ratio"][i] - 1))[:3]
+    L.append("1. The yearly saving at the substation on the feeders nearest the line (forecasting): %s." %
+             "; ".join("%s **%s MWh** against a break-even of %s MWh" % (i, mwh(F["save_mwh"][i]), mwh(F["break_even_mwh"][i])) for i in top))
+    L.append("2. The trial's response per 1 percent of voltage actually removed, averaged over the trial feeders (causal "
+             "reasoning): **%.2f percent** (%.2f to %.2f), not the %.2f the day's assignment gives." %
+             (F["trial_mean"], b["trial_mean"][0], b["trial_mean"][1], F["trial_mean_assigned"]))
+    lo = sorted(ids, key=lambda i: F["room_v"][i])[:3]
+    L.append("3. The volts the far end allows (measurement): %s, against the trial's 4.8 V." % "; ".join("%s **%.2f V**" % (i, F["room_v"][i]) for i in lo))
+    hi = sorted(ids, key=lambda i: F["loss_mwh"][i])[:3]
+    L.append("4. The losses that rise under VO (decomposition): %s MWh a year." % "; ".join("%s **%s**" % (i, mwh(F["loss_mwh"][i])) for i in hi))
     L += ["", "## Step-by-Step", ""]
-    L.append("1. From `ev_overnight_roster_2026-11-02.csv`, with the re-imported rows dropped, each swapped charger "
-             "followed to its replacement and the closed ones left out: %s chargers enrolled on 1 November 2026." %
-             format(F["n_chargers"], ","))
-    L.append("2. Through `gis_service_points_2026-10-30.csv`, the transfers in `distribution_work_orders_2025_2026.xlsx` "
-             "and `ami_meter_exchanges_2026.csv`, they sit on %d transformers; each one's nameplate is the register's as "
-             "corrected by the change-outs (DPS-7 section 4)." % F["n_tx"])
-    pt = F["peak_table"]
-    L.append("3. Each transformer's base is its homes' hourly reads (the three `mdm_hourly_` files, re-sent rows dropped) "
-             "less the enrolled chargers' own charging from `quillpoint_sessions_2024-06_2026-09.csv`, put from UTC onto "
-             "local daylight time (six hours behind UTC, where the sessions line up with the charging in the hourly reads), "
-             "each hour then brought to the quarter-hour by DPS-7 Table 2's peaking factor for the transformer's "
-             "nameplate (from %s on the smallest units down to %s on the largest), monitored or not (DPS-7's Table 2, "
-             "EV-4 4.1)." %
-             ("%.2f" % pt["25"], "%.2f" % pt["100"]))
-    L.append("4. The pilot's randomised comparison (`pilot_assignment_2025.csv`): the managed quarter charged %.2f kW per "
-             "enrolled charger at 23:00 to 23:15 against %.2f on own schedules. Carried to the transformers as the managed "
-             "quarter's average night times their chargers, it puts Stagger at %g transformers over, the shallow read." %
-             (F["pilot_managed"], F["pilot_own"], rc["stagger"]))
-    L.append("5. The limit is each transformer's single highest quarter-hour of the summer (DPS-7 2.1), so Stagger is "
-             "replayed night by night on every charger's 2026 sessions with its random start drawn %s times: the few "
-             "chargers on a small transformer still coincide on some nights, and Stagger leaves %s over at their chance "
-             "(EV-4 4.3)." % (format(400, ","), cnt(F, "stagger")))
-    L.append("6. Sequence, never piloted, is run by its rule in `quillpoint_proposal_2027.xlsx` on each night's plug-ins, "
-             "energy, charge times and unplug times (each session drawing its energy over its recorded charge time, "
-             "ready-by at the unplug time rounded down to the quarter-hour, the earlier plug-in first, each charger waiting "
-             "for every one before it, a charger started late at its latest start included): on heavy nights a late "
-             "charger starts alongside, and %d transformers stay over, where one charger at a time would leave %g." %
-             (q["over"], rq["sequence"]))
-    L.append("7. Own schedules are rebuilt for every charger (its own-schedule sessions, the managed quarter's from summer "
-             "2024, or the usual charging the member gave at enrolment): %d over, where the 2026 loads as metered give %g."
-             % (o["over"], rc["own"]))
-    L.append("8. Each option's charging goes in at the quarter-hour it would be drawn, on top of that base, and each "
-             "transformer's highest quarter-hour of July and August is set against its limit (DPS-7 2.1); the %d "
-             "monitored transformers are read like every other, from their homes' hourly reads." % F["monitors"])
-    L.append("9. At DPS-7's installed costs and Quillpoint's fees, Sequence costs %s, Stagger %s and own schedules %s; "
-             "Sequence stays cheapest until its fee passes about $%d a charger." %
-             (usd(q["total"]), usd(s["total"]), usd(o["total"]), F["flip_fee"]))
-    L += [""]
-    L.append("No other conclusion survives. The pilot's average night prices a coincidence it cannot see, so it files "
-             "Stagger with %g to replace; taking Sequence as the pilot's managed quarter files Stagger again, and "
-             "taking it as one charger at a time files Sequence with %s, where its own rule leaves %d. The 2026 "
-             "meters are not the members' own schedules. With the replay's frame filed (the queue waiting for a late "
-             "charger, ready-by at the unplug time, DPS-7's peaking factors), the readings the files still leave open "
-             "(each charger on its declared setting, the own three-quarters at their recorded starts, the sessions the "
-             "window cannot fit started early, other draws) land Sequence between %d and %d and the call nowhere else."
-             % (rc["stagger"], reps(rq["sequence"]), q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1]))
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write("\n".join(L) + "\n")
+    steps = [
+        "Assemble the customer energy from mdm_feeder_interval_kwh_2026.csv (the October re-sent rows dropped) and the register's "
+        "feeders, substations and classes.",
+        "Read the trial: the regulator log against the bus SCADA gives the voltage each pilot regulator actually took off each "
+        "day; some ON days stayed in local mode and each ramped down over its first hour. Regress each trial feeder's daily "
+        "energy, over its same-class untested feeders', on that achieved reduction with weather and day-type terms: %.2f percent "
+        "per 1 percent on average (%s)." % (F["trial_mean"], ", ".join("%.2f" % F["trial_effect"][i] for i in F["trial"])),
+        "Build each feeder's makeup: its load against its quarter-of-day profile and heating and cooling degrees, the heating "
+        "split by the survey between resistive heat and heat pumps at the load research's draws, water heating at the "
+        "survey's holding and the load research's 3,200 kWh a heater. Thermostatic load "
+        "gives its energy back over the day, so the response is the non-thermostatic share times the trial's measured "
+        "response per unit of that share, hour by hour through the year.",
+        "Set the volts each feeder can give from its far-end meters, hour by hour, to keep 115 V, at most 4.8 V (VO-1 2.3), "
+        "the trial's ON days restored: averages from %.2f to %.2f V." % (min(F["room_v"].values()), max(F["room_v"].values())),
+        "Fit the losses on the head-metered feeders against current squared and apply them with and without VO: most feeders' "
+        "losses rise, by up to %s MWh a year." % mwh(F["largest_loss_rise_mwh"]),
+        "Value each feeder's yearly saving at the substation at USD 48 and 9.4 against its capital-plan cost: %s clear it." % ", ".join(fund),
+        "The shortcuts land elsewhere: %s." % "; ".join("%s funds %s" % (k, ", ".join(sorted(v))) for k, v in F["routes"].items()),
+    ]
+    for i, s in enumerate(steps, 1):
+        L.append("%d. %s" % (i, s))
+    L += ["", "No other conclusion survives the records: the trial's response is its achieved voltage's, not its assignment's; "
+          "an untested feeder answers as its own makeup does, not as the trial feeders' average; thermostatic load gives its "
+          "energy back, so winter is worth less where resistive heat is common; the far end, not the trial, sets each feeder's "
+          "volts; and the lines' losses rise with the current the constant-power loads draw. Every heating ratio, weather form "
+          "and trial control in the golden family, and every input moved by its spread, funds the same feeders.", ""]
+    open(path, "w").write("\n".join(L))

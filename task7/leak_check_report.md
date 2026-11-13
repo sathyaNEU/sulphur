@@ -1,17 +1,16 @@
 # leak check, task7
 
-**Verdict: REVIEW.** 19 files read, 30 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 16 files read, 121 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, sequence, buildings, golden, record, stagger, controls, insulation, season, million, average, quarter, careful, carried, closed, missed, feeder, quarter-hour, sessions, schedules, author, patients, heating, building, meters
+Stump terms swept: architecture, golden, buildings, record, controls, insulation, carried, million, heating, author, default, season, landed, seasons, patients, building, report, family, graded, reflex, careful, sentence, december, spread, lived-in
 
-## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `board_policy_EV-4_charging_default.pdf`: carries 7 of 11 distinctive words of the committed call: "Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry 13 transformer replacements ($196,7"
-
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `board_policy_EV-4_charging_default.pdf`: 5 of 25 stump-paragraph terms appear (quarter, carried, quarter-hour, sessions, schedules); read whether the document names the move
-- **REVIEW** `ev_overnight_pilot_plan_2025.pdf`: 4 of 25 stump-paragraph terms appear (stagger, average, quarter, schedules); read whether the document names the move
+## 3 answer figures in the pack (REVIEW 4)
+- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: golden figure 115 appears: ...the feeder at or above 114 V plus a 1 V margin (115 V on the 120 V base) in that hour, and never by m...
+- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: golden figure 4.8 appears: ...) in that hour, and never by more than 4 percent (4.8 V on the 120 V base). 2.4 Energy saved is valued...
+- **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 6.1 appears: ...Wh Retail sales 1,132,800 MWh Distribution losses 6.1 percent of energy delivered Distribution feeders...
+- **REVIEW** `vo_trial_protocol_2026.pdf`: golden figure 4.8 appears: ...lator's schedule lowers its output by 4 percent (4.8 V) from midnight, returning to normal at the foll...
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -20,12 +19,14 @@ Stump terms swept: architecture, sequence, buildings, golden, record, stagger, c
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 19 usable files (10 or more required)
+- **INFO** `-`: 16 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
 ## 2 author vocabulary (clean)
+
+## 4 design-note vocabulary (clean)
 
 ## 5 announcements (clean)
 

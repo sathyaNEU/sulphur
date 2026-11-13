@@ -1,156 +1,179 @@
-"""task7 architecture 11: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer (officepdf.py).
-They file the WHAT (what the board chooses the default on, what a summer like the last one is, which chargers and which
-transformers count, the limit and the replacement costs, how the pilot's managed quarter was drawn and how its results are
-reported, the rate's hours, and DPS-7's planning conventions for bringing hourly reads to the quarter-hour) and say nothing
-of how an option's charging would land on a transformer's nights."""
+"""The district's own documents and workbooks: the voltage optimization program standard, the 2026 trial's protocol,
+an extract of the 2025 annual report, the feeder register and the 2027 capital plan's estimates. PDFs are Word documents
+exported by LibreOffice Writer through the house writer; workbooks pass through the house workbook writer."""
 import datetime as dt
 import os
+import sys
 
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.platypus import Paragraph, Table
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill
+from reportlab.lib import colors
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
-import officepdf
-import world as W
+HERE = os.path.dirname(os.path.abspath(__file__))
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
+sys.path.insert(0, WRITERS)
+import officepdf as OP  # noqa: E402
+import params as P  # noqa: E402
 
-MT = dt.timezone(dt.timedelta(hours=-6))
-MST = dt.timezone(dt.timedelta(hours=-7))
-H1 = ParagraphStyle("h1", fontName="Helvetica-Bold", fontSize=14, spaceAfter=6, textColor="#2F4B2F")
-H2 = ParagraphStyle("h2", fontName="Helvetica-Bold", fontSize=10.5, spaceBefore=8, spaceAfter=3, textColor="#2F4B2F")
-BODY = ParagraphStyle("b", fontName="Helvetica", fontSize=9.2, spaceAfter=4)
-SMALL = ParagraphStyle("s", fontName="Helvetica", fontSize=8, spaceAfter=2, textColor="#444444")
-ORG = "Hollins Creek Electric Association"
-
-
-def P(t, st=BODY):
-    return Paragraph(t, st)
-
-
-def T(rows, widths):
-    return Table(rows, colWidths=widths)
-
-
-def policy(target):
-    s = [P(ORG, SMALL), P("Board Policy EV-4: The EV Overnight rate's charging default", H1),
-         P("Adopted by the board of directors on 20 February 2025; section 4 revised 17 September 2026.", SMALL),
-         P("1 Purpose", H2),
-         P("Members on the EV Overnight rate charge their cars at home on networked chargers enrolled with the association's "
-           "charging platform. The charging default is how those chargers charge unless the member is told otherwise. This "
-           "policy sets how the board chooses it."),
-         P("2 The options", H2),
-         P("The default is one of three options: the members' own schedules, under which each charger charges as its owner "
-           "has set it; or one of the two products the platform offers, as its current proposal describes them."),
-         P("3 Choosing the default", H2),
-         P("Each November the board sets the default for the following calendar year. It chooses the option with the lowest "
-           "cost to the association for that year. An option's cost is the platform's quoted fee for the chargers the quote "
-           "covers, plus the replacement cost, under Distribution Planning Standard DPS-7, of each distribution transformer "
-           "serving one of those chargers that the option would leave over its limit in a summer like the last one."),
-         P("4 A summer like the last one", H2),
-         P("4.1 A summer like the last one is July and August of the last summer as metered at the homes each transformer "
-           "serves, with every charger the quote covers charging its sessions of that July and August as the option would "
-           "charge them: each session keeps its plug-in time, the energy it drew, the time its charge took and its unplug "
-           "time, and finishes by the time it was unplugged. The covered chargers' own metered charging is taken out of "
-           "the homes' hourly reads before the hours are brought to the 15-minute interval under DPS-7, and each option's "
-           "charging is added in the 15-minute intervals in which it would be drawn. Where an option works to a ready-by "
-           "time, a session's ready-by time is its unplug time rounded down to the quarter-hour."),
-         P("4.2 Under the members' own schedules a charger charges as its owner set it. A charger that has left the rate is "
-           "taken as it was metered."),
-         P("4.3 An option's cost is its expected cost."),
-         P("5 The work plan", H2),
-         P("The transformers the chosen default would leave over their limit are replaced before the next summer and are "
-           "carried in that year's construction work plan.")]
-    officepdf.build(os.path.join(target, "board_policy_EV-4_charging_default.pdf"), s,
-                    "Board Policy EV-4: The EV Overnight rate's charging default", "Board of Directors", "Board Policy EV-4",
-                    ORG + " | Board Policy EV-4",
-                    dt.datetime(2026, 9, 17, 9, 40, tzinfo=MT), dt.datetime(2026, 9, 18, 8, 55, tzinfo=MT),
-                    producer="LibreOffice 25.2", font="Liberation Sans", body_pt=9.2, margin_mm=22, top_mm=20, bottom_mm=18)
+ORG = "Platte Ridge Public Power District"
+CST = dt.timezone(dt.timedelta(hours=-6))
+CDT = dt.timezone(dt.timedelta(hours=-5))
+FILES = {
+    "std": "VO-1_voltage_optimization_program_standard.pdf",
+    "proto": "vo_trial_protocol_2026.pdf",
+    "ar": "annual_report_2025_system_statistics.pdf",
+}
 
 
-def standard(target):
-    rows = [["Unit in service", "Replaced by", "Installed cost"]]
-    for kva in (25.0, 37.5, 50.0, 75.0, 100.0):
-        mount = "pole-mount" if kva <= 37.5 else "pad-mount"
-        rows.append(["%g kVA %s" % (kva, mount), "%g kVA %s" % (W.NEXT[kva], "pole-mount" if W.NEXT[kva] <= 50 and kva <= 37.5 else "pad-mount"),
-                     "$%s" % format(W.COST[kva], ",")])
-        if kva == 37.5:
-            rows.append(["50 kVA pole-mount", "75 kVA pole-mount", "$%s" % format(W.COST_POLE50, ",")])
-    peak = [["Nameplate", "Peaking factor"]] + [["%g kVA" % k, "%.2f" % W.PEAK[k]] for k in sorted(W.PEAK)]
-    s = [P(ORG + ", Engineering", SMALL), P("Distribution Planning Standard DPS-7: Distribution transformer loading", H1),
-         P("Revision 5, 14 September 2026. Owner: Sandra Bernard, engineering supervisor.", SMALL),
-         P("1 Scope", H2),
-         P("This standard sets when a single-phase distribution transformer serving residential load is over its limit and "
-           "what replacing it costs, for the construction work plan and for any board policy that relies on it."),
-         P("2 The limit", H2),
-         P("2.1 A transformer is over its limit in a summer when its highest 15-minute load in July and August exceeds 120 "
-           "per cent of its nameplate kVA."),
-         P("2.2 A transformer's load in a 15-minute interval is the demand of the homes it serves in that interval. For "
-           "planning it is taken from the homes' hourly meter reads, whether or not the transformer is monitored: the "
-           "demand in each 15-minute interval of an hour is the hour's demand times the peaking factor for the "
-           "transformer's nameplate in Table 2, and load in kVA is that demand in kW divided by 0.95."),
-         P("2.3 The nameplate is that of the unit in service at the date of the study."),
-         P("3 Replacement", H2),
-         P("A transformer over its limit is replaced by the next standard size before the following summer, at the installed "
-           "cost in Table 1 (crew, unit, connections and disposal)."),
-         P("Table 1. Replacement by the next standard size.", SMALL),
-         T(rows, [140, 140, 90]),
-         P("4 Records", H2),
-         P("Connectivity is taken from the GIS as corrected by completed work orders; a unit's nameplate from the transformer "
-           "register as corrected by completed change-outs."),
-         P("Annex", H2),
-         P("Table 2. Peaking factors, set from the 48 monitored transformers' loads in July and August 2026.", SMALL),
-         T(peak, [140, 90])]
-    officepdf.build(os.path.join(target, "dps-7_distribution_transformer_loading.pdf"), s,
-                    "DPS-7 Distribution transformer loading", "Sandra Bernard", "Distribution Planning Standard DPS-7",
-                    ORG + " | Engineering",
-                    dt.datetime(2026, 9, 14, 10, 22, tzinfo=MT), dt.datetime(2026, 9, 15, 8, 47, tzinfo=MT),
-                    producer="LibreOffice 25.8", font="Carlito", body_pt=9.5, margin_mm=20, top_mm=18, bottom_mm=18)
+def _styles():
+    ss = getSampleStyleSheet()
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.4, leading=13.0, spaceAfter=5)
+    h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13, leading=16.5, spaceAfter=3)
+    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10, leading=13.4, spaceBefore=7,
+                        spaceAfter=3, keepWithNext=1)
+    small = ParagraphStyle("small", parent=body, fontSize=7.9, leading=10.4, textColor=colors.HexColor("#444444"))
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
+    return body, h1, h2, small, cell
 
 
-def pilot_plan(target):
-    s = [P(ORG + ", Member Programs", SMALL), P("EV Overnight managed charging pilot, 2025 and 2026", H1),
-         P("Issued 28 April 2025 by Chad Wyatt, pilot manager.", SMALL),
-         P("1 Design", H2),
-         P("On 12 May 2025 the platform draws one in four of the chargers then enrolled on the EV Overnight rate, at random, "
-           "for its Stagger product. A charger enrolled after that day is drawn the same way when it enrols. The other three "
-           "in four keep charging on their owners' own schedules. A member in the managed quarter sets a ready-by time in "
-           "the app and cannot pause a managed session."),
-         P("2 Data", H2),
-         P("The platform reads every enrolled charger, managed or not, and keeps each session's plug-in, start, end and "
-           "unplug times and its energy. The meter data system keeps every member's hourly reads. In 2024 the association "
-           "fitted 15-minute load monitors to 48 distribution transformers chosen at random within each size class."),
-         P("3 Results", H2),
-         P("The pilot's results are reported per enrolled charger, averaged over every night of July and August whether the "
-           "car was plugged in or not, the managed quarter against the chargers on their owners' own schedules."),
-         P("4 Enrolment", H2),
-         P("Enrolment on the EV Overnight rate pauses on 1 June 2026 and reopens once the board has set the default for "
-           "2027 under Board Policy EV-4.")]
-    officepdf.build(os.path.join(target, "ev_overnight_pilot_plan_2025.pdf"), s,
-                    "EV Overnight managed charging pilot", "Chad Wyatt", "Pilot plan", ORG + " | Member Programs",
-                    dt.datetime(2025, 4, 28, 11, 20, tzinfo=MT), dt.datetime(2025, 4, 28, 15, 2, tzinfo=MT),
-                    producer="LibreOffice 24.8", font="DejaVu Sans", body_pt=9.0, margin_mm=24, top_mm=20, bottom_mm=20)
+def _grid(rows, widths, cell):
+    t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=widths, repeatRows=1)
+    t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")), ("VALIGN", (0, 0), (-1, -1), "TOP")]))
+    return t
 
 
-def rate_schedule(target):
-    rows = [["Period", "Hours", "Energy charge"],
-            ["Off-peak", "23:00 to 07:00, every day", "$0.068 per kWh"],
-            ["On-peak", "15:00 to 19:00, weekdays June to September", "$0.284 per kWh"],
-            ["Standard", "all other hours", "$0.121 per kWh"],
-            ["Monthly service charge", "", "$19.50"]]
-    s = [P(ORG, SMALL), P("Rate Schedule EV-1: EV Overnight", H1), P("Effective 1 January 2026", SMALL),
-         P("Availability", H2),
-         P("To residential members who charge an electric vehicle at home on a networked Level 2 charger enrolled with the "
-           "association's charging platform. At enrolment the member says how the car usually charges."),
-         T(rows, [110, 200, 90]),
-         P("Charges are billed on the member's hourly meter reads. The charging default under Board Policy EV-4 applies to "
-           "every enrolled charger.", SMALL),
-         P("Prepared by Rebekah Fleming, rates analyst.", SMALL)]
-    officepdf.build(os.path.join(target, "rate_schedule_EV-1_2026.pdf"), s, "Rate Schedule EV-1: EV Overnight",
-                    "Rebekah Fleming", "Rate Schedule EV-1", ORG + " | Rates",
-                    dt.datetime(2025, 12, 4, 16, 30, tzinfo=MST), dt.datetime(2025, 12, 9, 9, 12, tzinfo=MST),
-                    producer="LibreOffice 24.8", font="Liberation Sans", body_pt=9.4, margin_mm=20, top_mm=18, bottom_mm=18)
+def _doc(path, title, header_rows, sections, author, subject, footer, created, modified, widths=None, producer=None):
+    body, h1, h2, small, cell = _styles()
+    story = [Paragraph(title, h1), _grid(header_rows, [44 * 2.83, 118 * 2.83], cell), Spacer(1, 6)]
+    for head, paras in sections:
+        story.append(Paragraph(head, h2))
+        for p in paras:
+            if isinstance(p, list):
+                n = len(p[0])
+                w = widths or {2: [70, 92], 3: [54, 54, 54], 4: [40, 40, 40, 42]}[n]
+                story.append(_grid(p, [x * 2.83 for x in w], cell))
+            else:
+                story.append(Paragraph(p, body))
+    OP.build(path, story, title=title, author=author, subject=subject, footer=footer, created=created, modified=modified,
+             font="Liberation Sans", producer=producer)
 
 
-def write_all(target, w):
-    policy(target)
-    standard(target)
-    pilot_plan(target)
-    rate_schedule(target)
+STANDARD = [
+    ("1. Purpose", [
+        "This standard sets which distribution feeders receive voltage optimization (VO) equipment in the District's "
+        "capital program, and how the decision is made. It binds Distribution Engineering, System Planning and "
+        "Finance."]),
+    ("2. The decision", [
+        "2.1 A feeder receives VO in the 2027 program when the present value of its yearly energy saving equals or "
+        "exceeds its installed cost in the 2027 capital plan.",
+        "2.2 A feeder's yearly energy saving is the reduction in the energy delivered into the feeder at its substation "
+        "breaker over a year like 2026: the feeder's 2026 load, hour by hour, as it would have been drawn under VO, "
+        "against 2026 as the feeder normally runs. The 2026 trial's ON days are not part of normal running.",
+        "2.3 Under VO the feeder-head voltage is lowered hour by hour as far as keeps every customer on the feeder at or "
+        "above 114 V plus a 1 V margin (115 V on the 120 V base) in that hour, and never by more than 4 percent "
+        "(4.8 V on the 120 V base).",
+        "2.4 Energy saved is valued at USD 48 per MWh, the District's avoided wholesale energy cost for 2027, and a "
+        "year's saving is carried over the equipment's 15-year life at a present-value factor of 9.4 (6.5 percent)."]),
+    ("3. Records", [
+        "3.1 Customer energy is the meter data management system's feeder interval sums. Voltages at the far end of each "
+        "feeder are its AMI bellwether meters' hourly minimum readings. Feeder-head voltage is the substation bus as "
+        "SCADA records it, or a pilot regulator's output where one is installed.",
+        "3.2 Installed costs are the 2027 capital plan's estimates, which include any mid-line regulator retrofit the "
+        "feeder needs."]),
+]
+
+PROTOCOL = [
+    ("1. Design", [
+        "Eight feeders, drawn at random from the District's 24 in January 2026, were fitted with pilot regulators at the "
+        "feeder head. In two windows, 16 March to 12 June and 14 September to 13 November 2026, each trial day was "
+        "assigned ON or OFF for each trial feeder independently, with even odds, by the System Planning random draw. On an ON day the regulator's schedule lowers its output by 4 percent "
+        "(4.8 V) from midnight, returning to normal at the following midnight. On an OFF day the regulator follows the "
+        "bus.",
+        "The regulators report their mode and output voltage each quarter-hour to the SCADA historian."]),
+    ("2. Measurements", [
+        "Customer energy on each feeder is taken from the meter data management system's feeder interval sums. Weather "
+        "is the Grand Island (KGRI) ASOS station's hourly record."]),
+    ("3. Responsibilities", [
+        "System Planning holds the assignment draw and the analysis. Distribution Operations maintains the pilot "
+        "regulators and their communications."]),
+]
+
+AR = [
+    ("System statistics, 2025", [
+        [["Measure", "2025"], ["Retail customers", "52,140"], ["Energy delivered to the distribution system", "1,206,400 MWh"],
+         ["Retail sales", "1,132,800 MWh"], ["Distribution losses", "6.1 percent of energy delivered"],
+         ["Distribution feeders", "24, on six substations"], ["Miles of distribution line", "1,872"],
+         ["System peak", "268.4 MW (21 July 2025, 17:00)"], ["SAIDI, excluding major event days", "88.6 minutes"]]]),
+    ("Residential load research, 2024", [
+        [["End use (homes that have it)", "Average annual use"], ["Electric water heater", "3,200 kWh"],
+         ["Electric resistance space heating", "12,100 kWh"], ["Heat pump space heating", "4,350 kWh"],
+         ["Central air conditioning", "2,300 kWh"], ["Homes metered by end use", "212"]]]),
+    ("Notes", [
+        "Distribution losses are energy delivered to the distribution system less retail sales and the District's own "
+        "use, as a share of energy delivered. Retail sales are billed sales adjusted to the calendar year. Load research "
+        "averages are for the homes in the 2024 end-use metering sample that have each end use, weather-normalized to the "
+        "District's 30-year normal."]),
+]
+
+
+def write_pdfs(target):
+    _doc(os.path.join(target, FILES["std"]), "VO-1 Voltage optimization program standard",
+         [["Standard", "VO-1, revision 2"], ["Approved", "8 October 2026, Board of Directors"], ["Owner", "Distribution Engineering"]],
+         STANDARD, "Joseph Harmon", "VO-1", "Platte Ridge PPD  VO-1 rev 2", dt.datetime(2026, 9, 21, 10, 4, tzinfo=CDT),
+         dt.datetime(2026, 10, 8, 15, 26, tzinfo=CDT))
+    _doc(os.path.join(target, FILES["proto"]), "Voltage optimization trial, 2026: protocol",
+         [["Document", "SP-2026-03"], ["Issued", "6 January 2026"], ["Owner", "System Planning"]], PROTOCOL, "Mary Wilson",
+         "VO trial protocol", "Platte Ridge PPD  SP-2026-03", dt.datetime(2026, 1, 5, 14, 12, tzinfo=CST),
+         dt.datetime(2026, 1, 6, 9, 40, tzinfo=CST), producer="LibreOffice 25.8")
+    _doc(os.path.join(target, FILES["ar"]), "Annual Report 2025: system statistics",
+         [["Extract", "pages 14 and 15"], ["Published", "April 2026"], ["Prepared by", "Finance"]], AR, "Bruce Hart",
+         "Annual report 2025", "Platte Ridge PPD  Annual Report 2025", dt.datetime(2026, 3, 30, 11, 2, tzinfo=CDT),
+         dt.datetime(2026, 4, 9, 16, 45, tzinfo=CDT), widths=[90, 72], producer="LibreOffice 26.2")
+
+
+CONDUCTOR = {(0.15, 0.22): "477 AAC", (0.22, 0.30): "336.4 ACSR", (0.30, 0.42): "4/0 ACSR", (0.42, 0.52): "2/0 ACSR", (0.52, 1.0): "1/0 ACSR"}
+
+
+def conductor(r):
+    for (a, b), n in CONDUCTOR.items():
+        if a <= r < b:
+            return n
+    return "1/0 ACSR"
+
+
+def write_register(path, w, O, ids):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Feeders"
+    hdr = ["Feeder", "Substation", "Class", "Customers", "Main line length (km)", "Main conductor", "Positive-sequence ohms per km",
+           "Mid-line regulator", "Substation revenue meter", "Nominal kV"]
+    ws.append(hdr)
+    for c in ws[1]:
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="D9E1F2")
+    cls = {"res": "Residential", "com": "Commercial", "rural": "Rural"}
+    for i, f in enumerate(w.F):
+        ws.append([ids[i], f["sub"], cls[f["kind"]], f["customers"], round(f["L"], 1), conductor(f["r"]), round(f["r"], 3),
+                   "Yes" if f["midreg"] else "No", "Yes" if i in O.headmetered else "No", 12.47])
+    for col, wd in zip("ABCDEFGHIJ", (11, 13, 12, 11, 14, 15, 16, 12, 14, 10)):
+        ws.column_dimensions[col].width = wd
+    ws.freeze_panes = "B2"
+    wb.save(path)
+
+
+def write_plan(path, w, ids):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "2027 estimates"
+    ws.append(["Feeder", "Scope", "Estimated installed cost (USD)", "Estimate class"])
+    for c in ws[1]:
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="E2EFDA")
+    for i, f in enumerate(w.F):
+        scope = "Head regulator, VO controller, AMI integration" + ("; mid-line regulator retrofit" if f["midreg"] else "")
+        ws.append([ids[i], scope, int(round(f["cost"], -2)), "Class 4"])
+    for col, wd in zip("ABCD", (11, 52, 18, 12)):
+        ws.column_dimensions[col].width = wd
+    wb.save(path)
