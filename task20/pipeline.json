@@ -1,40 +1,41 @@
 {
  "task": "task20",
- "status": "RETURNED",
+ "status": "BUILD",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 6,
- "stage_name": "runs",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "Approve a 2027 private-fund budget of no more than USD 250 million (268.6 before the policy's USD 25 million steps; band 175 to 350), not Corrigan Hart's USD 500 million, which fails by USD 123.3 million",
- "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 calls of the funds that have held a first close by half-year 2027-28 (the credit-line stock, the defensive follow-ons); R3 calls of the funds yet to close by half-year (slipped first closes); R4 distributions by half-year at the policy's 2008-10 rates; R5 net cash needs at USD 500 million; R6 headroom above the minimum reserve at USD 500 million; R7 the largest 2027 budget that passes",
- "architecture": 4,
+ "call": "Adopt Corrigan Hart's program D, the venture re-up only (Corvane Ventures VI, USD 45 million): before any 2027 commitment the policy's stress leaves USD 75.6 million above the USD 1,200 million minimum (band 27.6 to 101.0), enough for D's USD 18.4 million of calls but not C's 123.8, B's 169.3 or A's 247.6",
+ "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 stressed calls on the commitments made by the end of 2026, each half of 2027 (the six managers' line stock rebuilt after their company-level files stop); R3 the same, each half of 2028 (the support response past the record's plateau, read off the benchmark's funds past their investment period); R4 distributions by half-year at the policy's 2008-10 rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
+ "architecture": 5,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "REVIEW (the plan's notes, the survey's provenance, the policy's vocabulary), every line ruled harmless",
-  "reader": "pass 1: two fixes (the stress named on the half-year asks; the plan's two 2027 splits made one); pass 2 on the final cut: no fix"
+  "leak_py": "pending stage 4 on architecture 5",
+  "reader": "pending"
  },
  "duplicate_check": {
-  "heart": "WARN (task type, forcing event, gate_g repeat; skeleton house shell)",
-  "nearest": "skeleton severity none against every card, the client corpus and the lineage"
+  "heart": "WARN (task type, deliverables, question form)",
+  "nearest": "skeleton severity none against every card, the client corpus and the lineage; card labels redrawn at registration (weight, Gate G, gap)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "report": "determinism_check_report.md (pass 1) and determinism_check_report_pass2.md (pass 2, the final cut); no fixes; the follow-on coefficient's denominator rival added to the golden family"
+  "verdict": "pending",
+  "disposition": "pending",
+  "report": "determinism_check_report.md (architecture 5, pending)"
  },
  "paper_pair": 43.7,
  "effort": {
-  "quick": 20.2,
+  "quick": 16.2,
   "careful": 43.7,
   "thorough": 100.0,
-  "largest_hint": "first closes slip with the exit index in the quarter before; rescues 1 of 7"
+  "level": 4,
+  "largest_hint": "six managers' company-level files stop after 2024 (or the support sentence); each rescues 1 of 6"
  },
  "runs": {
   "run1": null,
@@ -103,7 +104,7 @@
    "route": "re-root to architecture 5 (a landed scaffold is never re-pointed)"
   }
  ],
- "resume": "stage 1 for architecture 5: the draw (guard recent, coverage, mechanisms, slots; the stump screen on paper against R63 to R66 and N34, N35, L46), a new decision form and new deciding lessons; architecture 4's identity moves to the card's lineage",
+ "resume": "stage 4 for architecture 5: spawn the leak reader and the determinism judge together (general-purpose, contract inline), fix every finding in the generator in one pass, re-run gates.py and audit_containers, then READY",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -111,5 +112,11 @@
   "date": "2026-11-13",
   "note": "not deterministic: annex (a) of the liquidity standard reads two ways (each mapped day's one-day 2022 move, EUR 208m and a EUR 250m facility, against the level copy, 328.8m and EUR 350m); depth level 4 on the reviewer's reading; runs/arch3_review.md"
  },
- "source_concept": "re-root at the author's word (2026-11-13) after architecture 3's review return and run evidence: private-markets commitment capacity under an endowment's liquidity policy"
+ "source_concept": "re-root at the author's word (2026-11-13) after architecture 3's review return and run evidence: private-markets commitment capacity under an endowment's liquidity policy",
+ "history": [
+  {
+   "date": "2026-11-13",
+   "event": "architecture 5 drawn and built: card registered (v5), generator rebuilt, every free gate passing; stage 4 next"
+  }
+ ]
 }
