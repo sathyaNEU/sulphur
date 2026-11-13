@@ -22,7 +22,7 @@
    "kind": "loss",
    "class": "dismissed own evidence",
    "move": "set aside a second log at another grain as possible leakage and uneven coverage",
-   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
    "quote": "Login and reading files were inspected but excluded from forecasting because coverage differs across cohorts and post-start engagement could leak information about subsequent outcomes."
   },
   {
@@ -446,7 +446,7 @@
    "kind": "reflex",
    "class": "assembly",
    "move": "record linkage by fingerprint and normalised address",
-   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
    "quote": "R2 by household (fingerprint and normalised address)"
   },
   {
@@ -470,7 +470,7 @@
    "kind": "reflex",
    "class": "uncertainty",
    "move": "a plus or minus 20 per cent stress test on a key fitted rate",
-   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
    "quote": "exit probabilities 20 per cent higher fund 7 lines, 20 per cent lower 15"
   },
   {

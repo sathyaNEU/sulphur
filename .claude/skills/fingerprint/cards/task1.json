@@ -13,7 +13,7 @@
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
  "answer": "lead the spring 2027 campaign with Gezin (EUR 22.0 per trial start over 24 months after EUR 0.40 per counted hour and the agency's fee, EUR 8.7 ahead of Flex); not Onbeperkt, which the careful route leads with",
- "answer_source": "task1/generator/figures.json lead_plan, contribution, routes",
+ "answer_source": "task1/generator/figures.json at commit 87422aa (folder removed on retirement)",
  "gap": [
   "objective",
   "population"
@@ -189,7 +189,7 @@
   }
  ],
  "architecture_spent": true,
- "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks).",
+ "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks). Skeleton relabelled after the send-back: the call turned on a coverage gap (the licence renewals held exactly the positions the live roll-up lacked, so a union was the remedy) and a stale roster (the charges' profile lists dated membership), not on inverting a recording algorithm; record_algorithm_inversion stays untried. RETIRED 2026-11-12 on the author's word: the folder removed from the repo (every file in git at 87422aa); the card stays as spent so the guard keeps the four dead architectures in its duplicate check.",
  "registered": "2026-11-12T23:07:18Z",
  "shell": {
   "question form": "which",
@@ -200,9 +200,9 @@
   "decision_form": "pick_one_of_few_options",
   "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
   "lessons": [
-   "record_algorithm_inversion",
-   "exposure_seen_only_in_linked_record",
+   "unmetered_component",
    "time_varying_membership",
+   "exposure_seen_only_in_linked_record",
    "forward_window_structure_change"
   ],
   "mechanisms": [
@@ -220,7 +220,6 @@
    "flow_step_at_dated_operation"
   ],
   "moves": [
-   "invert_recording_algorithm",
    "link_records_by_parsed_key",
    "rebuild_membership_from_operations_log",
    "per_cohort_curves"
