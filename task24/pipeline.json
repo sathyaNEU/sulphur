@@ -1,41 +1,41 @@
 {
  "task": "task24",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "general-statistics-data-science",
  "subdomain": "regression-classification-model-diagnostics",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "accept Shelfgrid Retail's shelf stills, Ardley Autonomy's highway video and Kestrin Warehousing's warehouse labels; decline Corvane Mobility's crowded street stills and Brindle Pallet Systems' pallet polygons unless their clients come up to USD 7.01 and USD 1.95 per image",
- "chain": "R1 2026 delivery cost as payroll settled it; R2 QA reviews per image (any-issue return and correction chain); R3 annotator paid minutes per image, per frame for the video (track turnover); R4 floor top-up per image; R5 the costing checked on 2026's closed projects; R6 each request's expected cost; R7 the accept set; R8 each cost's 80 per cent range; R9 the lowest acceptable price for each declined request",
- "architecture": 1,
+ "call": "",
+ "chain": "R1 usable 2026 comparisons by source and ticket type; R2 each source's error against the senior technicians' standard by type and the crowd's verbosity tilt; R3 the current reply model's accuracy against the standard on the 2027 mix; R4 a crowd comparison's worth against a specialist one by type; R5 the accuracy the learned tilt costs; R6 the forecast grid (ticket type by specialist volume) with the signed crowd contract; R7 the specialist comparisons the bar needs and their cost; R8 the forecast's 80 per cent band at that volume",
+ "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-13",
-  "note": "102 checks, 0 FAIL, 3 WARN (nearest chains, forks owed to checks.py, effort on paper until stage 3)"
+  "exit": null,
+  "date": "",
+  "note": ""
  },
  "leak": {
-  "leak_py": "REVIEW (5 lines, each ruled harmless in the design note's Leak review)",
-  "reader": "two reads (first cut and final cut): no leak; the filed sentences are the WHAT, the estimates open work; the payroll period totals sheet harmless"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (no BLOCK)",
-  "nearest": "task1 v5 (chain and shape), task13 v1 (driver 0.06)"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW, applied: bands widened (costs and lowest prices 6, minutes 12, reviews 8 per cent), Ardley's reviews per frame, Step 3's logistic rejection named; the staffing basis filed as images allotted by contracted hours (the hours reading moved Vantorra 8.5 per cent); the re-judge's Vantorra minutes traced to reading the occluded counts as a subset, which payroll and the passes rule out (SF14, Step 2); no figure moved",
-  "report": "task24/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 43.5,
+ "paper_pair": null,
  "effort": {
-  "quick": 13.0,
-  "careful": 43.5,
-  "thorough": 100.0,
-  "largest_hint": "A corrected image goes back to QA with every object re-checked, so the denser the image the likelier it comes back again (rescues R2, 1 of 9)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -48,10 +48,20 @@
   },
   "triage": "",
   "recorded": "",
-  "history": []
+  "history": [
+   {
+    "round": "arch1",
+    "date": "2026-11-13",
+    "run1": "not reported (the author: not stumped)",
+    "run2": "not reported",
+    "average": null,
+    "verdict": "REDESIGN",
+    "note": "no responses pasted; re-rooted to architecture 2"
+   }
+  ]
  },
  "returned": [],
- "resume": "READY: the author rewrites prompt.txt in their own words (re-gated with voice-check.py task24 --rewrite and leak.py), uploads it with target.zip, generates the two runs and runs /triage-runs task24",
+ "resume": "stage 2: write the arch 2 design note's results chain, hidden factor record, effort test, stump factorial, data provenance, template check, frontier check, fork and closure tables, literal reader and prompt contract from the prototype (scratchpad rm_proto3.py and rm_dial.py); then precut.py; then the generator",
  "approved": null,
  "submitted": null,
  "portal": {
