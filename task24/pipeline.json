@@ -1,41 +1,42 @@
 {
  "task": "task24",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "regression-classification-model-diagnostics",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 usable 2026 comparisons by source and ticket type; R2 each source's error against the senior technicians' standard by type and the crowd's verbosity tilt; R3 the current reply model's accuracy against the standard on the 2027 mix; R4 a crowd comparison's worth against a specialist one by type; R5 the accuracy the learned tilt costs; R6 the forecast grid (ticket type by specialist volume) with the signed crowd contract; R7 the specialist comparisons the bar needs and their cost; R8 the forecast's 80 per cent band at that volume",
+ "call": "Buy 38,000 Ardentdesk device troubleshooting comparisons (USD 136,800) and none of the Tallyfield option: expected 81.0 per cent against the senior technicians on the planned 2027 mix (80 per cent range 79.4 to 82.5) at the 81.0 per cent bar",
+ "chain": "R1 each vendor's error against the standard by type (measurement); R2 the current model's accuracy against the standard (validation); R3 the signed order alone, R4 five Ardentdesk volumes, R5 the whole Tallyfield option (forecasting); R6 the cheapest purchase, R7 its Ardentdesk volume and cost (synthesis); R8 the 80 per cent range (uncertainty)",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": "",
-  "note": ""
+  "exit": 0,
+  "date": "2026-11-13",
+  "note": "106 checks, 0 FAIL, 1 WARN (nearest chains task1, task14)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "mechanical": "REVIEW (ruled harmless)",
+  "reader": "no leak; no method sentence, no single settling fact"
  },
  "duplicate_check": {
   "heart": "",
   "nearest": ""
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "note": "optional: the option's first tranche near parity with Ardentdesk at the margin; acted on (the call graded as Ardentdesk carrying the purchase with no more than 30,000 of the option)"
  },
  "paper_pair": null,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 25.3,
+  "thorough": 100.0,
+  "level": 5,
+  "hint_rescues": "0 of 8"
  },
  "runs": {
   "run1": null,
@@ -61,12 +62,20 @@
   ]
  },
  "returned": [],
- "resume": "stage 2: write the arch 2 design note's results chain, hidden factor record, effort test, stump factorial, data provenance, template check, frontier check, fork and closure tables, literal reader and prompt contract from the prototype (scratchpad rm_proto3.py and rm_dial.py); then precut.py; then the generator",
+ "resume": "READY: the author rewrites prompt.txt in their own words (re-gate with voice-check.py task24 --rewrite and leak.py), uploads it with target.zip, generates the two runs, then /triage-runs task24",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "",
   "date": "",
   "note": ""
- }
+ },
+ "gates": {
+  "date": "2026-11-13",
+  "result": "11 gates, 0 FAIL, 4 WARN (precut nearest chains; voice shell quota; leak REVIEW lines ruled harmless; heart strategy risk, house lesson, house shell)",
+  "checks": "53 of 53",
+  "verify": "53 of 53",
+  "rebuild": "two builds byte-identical"
+ },
+ "target_zip_md5": "796d525fb6644b946a94ccae30e4a136"
 }

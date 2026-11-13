@@ -1,0 +1,275 @@
+{
+ "R1_vendor_error": {
+  "ardentdesk.account_billing": 10.8,
+  "ardentdesk.device_troubleshooting": 13.2,
+  "ardentdesk.order_delivery": 10.2,
+  "ardentdesk.product_howto": 10.7,
+  "ardentdesk.returns_refunds": 15.2,
+  "tallyfield.account_billing": 29.8,
+  "tallyfield.device_troubleshooting": 41.3,
+  "tallyfield.order_delivery": 21.5,
+  "tallyfield.product_howto": 23.8,
+  "tallyfield.returns_refunds": 29.3
+ },
+ "R2_current": {
+  "account_billing": 82.3,
+  "device_troubleshooting": 64.9,
+  "mix": 75.2,
+  "order_delivery": 87.6,
+  "product_howto": 85.3,
+  "returns_refunds": 79.4
+ },
+ "R2_dashboard_RM22": 65.7,
+ "R3_order": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 67.4,
+  "mix": 77.3,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_120000": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 81.8,
+  "mix": 84.1,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_20000": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 72.4,
+  "mix": 79.7,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_40000": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 75.5,
+  "mix": 81.2,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_60000": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 77.8,
+  "mix": 82.2,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_80000": {
+  "account_billing": 85.0,
+  "device_troubleshooting": 79.4,
+  "mix": 83.0,
+  "order_delivery": 88.6,
+  "product_howto": 87.4,
+  "returns_refunds": 81.7
+ },
+ "R4_grid": {
+  "120000.account_billing": 85.0,
+  "120000.device_troubleshooting": 81.8,
+  "120000.mix": 84.1,
+  "120000.order_delivery": 88.6,
+  "120000.product_howto": 87.4,
+  "120000.returns_refunds": 81.7,
+  "20000.account_billing": 85.0,
+  "20000.device_troubleshooting": 72.4,
+  "20000.mix": 79.7,
+  "20000.order_delivery": 88.6,
+  "20000.product_howto": 87.4,
+  "20000.returns_refunds": 81.7,
+  "40000.account_billing": 85.0,
+  "40000.device_troubleshooting": 75.5,
+  "40000.mix": 81.2,
+  "40000.order_delivery": 88.6,
+  "40000.product_howto": 87.4,
+  "40000.returns_refunds": 81.7,
+  "60000.account_billing": 85.0,
+  "60000.device_troubleshooting": 77.8,
+  "60000.mix": 82.2,
+  "60000.order_delivery": 88.6,
+  "60000.product_howto": 87.4,
+  "60000.returns_refunds": 81.7,
+  "80000.account_billing": 85.0,
+  "80000.device_troubleshooting": 79.4,
+  "80000.mix": 83.0,
+  "80000.order_delivery": 88.6,
+  "80000.product_howto": 87.4,
+  "80000.returns_refunds": 81.7
+ },
+ "R5_option": {
+  "account_billing": 86.5,
+  "device_troubleshooting": 69.4,
+  "mix": 78.9,
+  "order_delivery": 89.2,
+  "product_howto": 88.4,
+  "returns_refunds": 82.9
+ },
+ "R6_call": [
+  "Ardentdesk, at most a tranche of the option"
+ ],
+ "R7_at_purchase_mix": 81.0,
+ "R7_cost_usd": 136800,
+ "R7_purchase": {
+  "desk": 38000,
+  "option": 0
+ },
+ "R7_volume": 38000,
+ "R8_range": {
+  "hi": 82.5,
+  "lo": 79.4
+ },
+ "acc_ratio_troubleshooting": 0.675,
+ "alpha_df": 4,
+ "alpha_lr": 4.4,
+ "bands": {
+  "desk": [
+   18000,
+   61000
+  ],
+  "mix": 1.0,
+  "range": 0.6,
+  "type": 2.0,
+  "vendor": 2.5
+ },
+ "bar_pct": 81.0,
+ "context": {
+  "audit_pairs": 2000,
+  "capacity": 120000,
+  "ceiling_pct": 100,
+  "min_order": 10000,
+  "option": 300000,
+  "option_cost_usd": 126000,
+  "option_step": 10000,
+  "option_tranche_cost_usd": 4200,
+  "option_tranche_max": 30000,
+  "order": 300000,
+  "plan_year": 2027,
+  "price_usd": 3.6,
+  "quick_vendor_error": 6.0,
+  "record_year": 2026,
+  "review_rounds": 7,
+  "step": 1000,
+  "volumes": [
+   0,
+   20000,
+   40000,
+   60000,
+   80000,
+   120000
+  ]
+ },
+ "crowd_error_troubleshooting": 0.381,
+ "derived": {
+  "crowd_error_troubleshooting_pct": 38,
+  "desk_error_troubleshooting_pct": 8,
+  "option_gain_pts": 1.6,
+  "purchase_gain_pts": 3.7
+ },
+ "desk_error_troubleshooting": 0.083,
+ "family_desk": [
+  36000,
+  37000,
+  38000,
+  38000,
+  39000,
+  39000,
+  40000,
+  41000
+ ],
+ "info_ratio_troubleshooting": 0.059,
+ "is_error_lr": 106.2,
+ "kappa": 0.478,
+ "order_troubleshooting": 139500,
+ "shortcut_cells": {
+  "J1_current_mix": 69.1,
+  "J4_troubleshooting_120000": 78.1,
+  "is_audit_current_mix": 71.2
+ },
+ "shortcut_purchases": {
+  "J1": {
+   "cost_usd": null,
+   "desk": null,
+   "option": null
+  },
+  "J2": {
+   "cost_usd": 37800,
+   "desk": 0,
+   "option": 90000
+  },
+  "J2raw": {
+   "cost_usd": 29400,
+   "desk": 0,
+   "option": 70000
+  },
+  "J3": {
+   "cost_usd": 355200,
+   "desk": 87000,
+   "option": 100000
+  },
+  "J4": {
+   "cost_usd": 187200,
+   "desk": 52000,
+   "option": 0
+  },
+  "reflex": {
+   "cost_usd": null,
+   "desk": null,
+   "option": null
+  }
+ },
+ "tranches": {
+  "0": {
+   "cost_usd": 136800,
+   "desk": 38000,
+   "extra_usd": 0
+  },
+  "10000": {
+   "cost_usd": 137400,
+   "desk": 37000,
+   "extra_usd": 600
+  },
+  "20000": {
+   "cost_usd": 141600,
+   "desk": 37000,
+   "extra_usd": 4800
+  },
+  "30000": {
+   "cost_usd": 142200,
+   "desk": 36000,
+   "extra_usd": 5400
+  },
+  "40000": {
+   "cost_usd": 146400,
+   "desk": 36000,
+   "extra_usd": 9600
+  },
+  "50000": {
+   "cost_usd": 147000,
+   "desk": 35000,
+   "extra_usd": 10200
+  },
+  "60000": {
+   "cost_usd": 151200,
+   "desk": 35000,
+   "extra_usd": 14400
+  },
+  "70000": {
+   "cost_usd": 151800,
+   "desk": 34000,
+   "extra_usd": 15000
+  },
+  "80000": {
+   "cost_usd": 156000,
+   "desk": 34000,
+   "extra_usd": 19200
+  }
+ },
+ "vol_range": {
+  "hi": 69000,
+  "lo": 16000
+ }
+}

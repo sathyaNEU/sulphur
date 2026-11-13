@@ -1,0 +1,1061 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "each vendor's error against the standard by ticket type",
+   "graded_as": "Ask 1",
+   "figure": "R1_vendor_error",
+   "depends": [],
+   "independent": "the 2026 label audit",
+   "golden": {
+    "tallyfield.order_delivery": 21.5,
+    "tallyfield.returns_refunds": 29.3,
+    "tallyfield.account_billing": 29.8,
+    "tallyfield.product_howto": 23.8,
+    "tallyfield.device_troubleshooting": 41.3,
+    "ardentdesk.order_delivery": 10.2,
+    "ardentdesk.returns_refunds": 15.2,
+    "ardentdesk.account_billing": 10.8,
+    "ardentdesk.product_howto": 10.7,
+    "ardentdesk.device_troubleshooting": 13.2
+   },
+   "bands": {
+    "tallyfield.order_delivery": [
+     19.0,
+     24.0
+    ],
+    "tallyfield.returns_refunds": [
+     26.8,
+     31.8
+    ],
+    "tallyfield.account_billing": [
+     27.3,
+     32.3
+    ],
+    "tallyfield.product_howto": [
+     21.3,
+     26.3
+    ],
+    "tallyfield.device_troubleshooting": [
+     38.8,
+     43.8
+    ],
+    "ardentdesk.order_delivery": [
+     7.7,
+     12.7
+    ],
+    "ardentdesk.returns_refunds": [
+     12.7,
+     17.7
+    ],
+    "ardentdesk.account_billing": [
+     8.3,
+     13.3
+    ],
+    "ardentdesk.product_howto": [
+     8.2,
+     13.2
+    ],
+    "ardentdesk.device_troubleshooting": [
+     10.7,
+     15.7
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "tallyfield.order_delivery": 6.0,
+     "tallyfield.returns_refunds": 6.0,
+     "tallyfield.account_billing": 6.0,
+     "tallyfield.product_howto": 6.0,
+     "tallyfield.device_troubleshooting": 6.0,
+     "ardentdesk.order_delivery": null,
+     "ardentdesk.returns_refunds": null,
+     "ardentdesk.account_billing": null,
+     "ardentdesk.product_howto": null,
+     "ardentdesk.device_troubleshooting": null
+    },
+    "careful": {
+     "tallyfield.order_delivery": 21.5,
+     "tallyfield.returns_refunds": 29.3,
+     "tallyfield.account_billing": 29.8,
+     "tallyfield.product_howto": 23.8,
+     "tallyfield.device_troubleshooting": 41.3,
+     "ardentdesk.order_delivery": 10.2,
+     "ardentdesk.returns_refunds": 15.2,
+     "ardentdesk.account_billing": 10.8,
+     "ardentdesk.product_howto": 10.7,
+     "ardentdesk.device_troubleshooting": 13.2
+    },
+    "thorough": {
+     "tallyfield.order_delivery": 21.5,
+     "tallyfield.returns_refunds": 29.3,
+     "tallyfield.account_billing": 29.8,
+     "tallyfield.product_howto": 23.8,
+     "tallyfield.device_troubleshooting": 41.3,
+     "ardentdesk.order_delivery": 10.2,
+     "ardentdesk.returns_refunds": 15.2,
+     "ardentdesk.account_billing": 10.8,
+     "ardentdesk.product_howto": 10.7,
+     "ardentdesk.device_troubleshooting": 13.2
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the current model's accuracy against the standard by ticket type and on the 2027 mix",
+   "graded_as": "Ask 2, Component 1",
+   "figure": "R2_current",
+   "depends": [],
+   "independent": "the audit, the shadow reviews and IS-25",
+   "precedent": [
+    "L37",
+    "L28"
+   ],
+   "golden": {
+    "order_delivery": 87.6,
+    "returns_refunds": 79.4,
+    "account_billing": 82.3,
+    "product_howto": 85.3,
+    "device_troubleshooting": 64.9,
+    "mix": 75.2
+   },
+   "bands": {
+    "order_delivery": [
+     85.6,
+     89.6
+    ],
+    "returns_refunds": [
+     77.4,
+     81.4
+    ],
+    "account_billing": [
+     80.3,
+     84.3
+    ],
+    "product_howto": [
+     83.3,
+     87.3
+    ],
+    "device_troubleshooting": [
+     62.9,
+     66.9
+    ],
+    "mix": [
+     74.2,
+     76.2
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "order_delivery": 73.9,
+     "returns_refunds": 61.2,
+     "account_billing": 60.8,
+     "product_howto": 71.5,
+     "device_troubleshooting": 50.6,
+     "mix": 59.8
+    },
+    "careful": {
+     "order_delivery": 85.8,
+     "returns_refunds": 72.4,
+     "account_billing": 74.8,
+     "product_howto": 82.4,
+     "device_troubleshooting": 55.8,
+     "mix": 68.6
+    },
+    "thorough": {
+     "order_delivery": 87.6,
+     "returns_refunds": 79.4,
+     "account_billing": 82.3,
+     "product_howto": 85.3,
+     "device_troubleshooting": 64.9,
+     "mix": 75.2
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "accuracy with the signed order alone",
+   "graded_as": "Ask 3, Component 2",
+   "figure": "R3_order",
+   "depends": [],
+   "independent": "the audit, the shadow reviews and IS-25",
+   "precedent": [
+    "L17",
+    "L15",
+    "N01"
+   ],
+   "golden": {
+    "order_delivery": 88.6,
+    "returns_refunds": 81.7,
+    "account_billing": 85.0,
+    "product_howto": 87.4,
+    "device_troubleshooting": 67.4,
+    "mix": 77.3
+   },
+   "bands": {
+    "order_delivery": [
+     86.6,
+     90.6
+    ],
+    "returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "account_billing": [
+     83.0,
+     87.0
+    ],
+    "product_howto": [
+     85.4,
+     89.4
+    ],
+    "device_troubleshooting": [
+     65.4,
+     69.4
+    ],
+    "mix": [
+     76.3,
+     78.3
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "order_delivery": 75.8,
+     "returns_refunds": 62.4,
+     "account_billing": 62.1,
+     "product_howto": 74.2,
+     "device_troubleshooting": 51.1,
+     "mix": 61.1
+    },
+    "careful": {
+     "order_delivery": 87.6,
+     "returns_refunds": 73.6,
+     "account_billing": 76.1,
+     "product_howto": 85.2,
+     "device_troubleshooting": 56.4,
+     "mix": 69.9
+    },
+    "thorough": {
+     "order_delivery": 88.6,
+     "returns_refunds": 81.7,
+     "account_billing": 85.0,
+     "product_howto": 87.4,
+     "device_troubleshooting": 67.4,
+     "mix": 77.3
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "accuracy with 20,000 to 120,000 Ardentdesk comparisons added",
+   "graded_as": "Ask 4 to 8",
+   "figure": "R4_grid",
+   "depends": [],
+   "independent": "the audit, the shadow reviews and IS-25",
+   "precedent": [
+    "L17",
+    "L40",
+    "N34"
+   ],
+   "golden": {
+    "20000.order_delivery": 88.6,
+    "20000.returns_refunds": 81.7,
+    "20000.account_billing": 85.0,
+    "20000.product_howto": 87.4,
+    "20000.device_troubleshooting": 72.4,
+    "20000.mix": 79.7,
+    "40000.order_delivery": 88.6,
+    "40000.returns_refunds": 81.7,
+    "40000.account_billing": 85.0,
+    "40000.product_howto": 87.4,
+    "40000.device_troubleshooting": 75.5,
+    "40000.mix": 81.2,
+    "60000.order_delivery": 88.6,
+    "60000.returns_refunds": 81.7,
+    "60000.account_billing": 85.0,
+    "60000.product_howto": 87.4,
+    "60000.device_troubleshooting": 77.8,
+    "60000.mix": 82.2,
+    "80000.order_delivery": 88.6,
+    "80000.returns_refunds": 81.7,
+    "80000.account_billing": 85.0,
+    "80000.product_howto": 87.4,
+    "80000.device_troubleshooting": 79.4,
+    "80000.mix": 83.0,
+    "120000.order_delivery": 88.6,
+    "120000.returns_refunds": 81.7,
+    "120000.account_billing": 85.0,
+    "120000.product_howto": 87.4,
+    "120000.device_troubleshooting": 81.8,
+    "120000.mix": 84.1
+   },
+   "bands": {
+    "20000.order_delivery": [
+     86.6,
+     90.6
+    ],
+    "20000.returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "20000.account_billing": [
+     83.0,
+     87.0
+    ],
+    "20000.product_howto": [
+     85.4,
+     89.4
+    ],
+    "20000.device_troubleshooting": [
+     70.4,
+     74.4
+    ],
+    "20000.mix": [
+     78.7,
+     80.7
+    ],
+    "40000.order_delivery": [
+     86.6,
+     90.6
+    ],
+    "40000.returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "40000.account_billing": [
+     83.0,
+     87.0
+    ],
+    "40000.product_howto": [
+     85.4,
+     89.4
+    ],
+    "40000.device_troubleshooting": [
+     73.5,
+     77.5
+    ],
+    "40000.mix": [
+     80.2,
+     82.2
+    ],
+    "60000.order_delivery": [
+     86.6,
+     90.6
+    ],
+    "60000.returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "60000.account_billing": [
+     83.0,
+     87.0
+    ],
+    "60000.product_howto": [
+     85.4,
+     89.4
+    ],
+    "60000.device_troubleshooting": [
+     75.8,
+     79.8
+    ],
+    "60000.mix": [
+     81.2,
+     83.2
+    ],
+    "80000.order_delivery": [
+     86.6,
+     90.6
+    ],
+    "80000.returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "80000.account_billing": [
+     83.0,
+     87.0
+    ],
+    "80000.product_howto": [
+     85.4,
+     89.4
+    ],
+    "80000.device_troubleshooting": [
+     77.4,
+     81.4
+    ],
+    "80000.mix": [
+     82.0,
+     84.0
+    ],
+    "120000.order_delivery": [
+     86.6,
+     90.6
+    ],
+    "120000.returns_refunds": [
+     79.7,
+     83.7
+    ],
+    "120000.account_billing": [
+     83.0,
+     87.0
+    ],
+    "120000.product_howto": [
+     85.4,
+     89.4
+    ],
+    "120000.device_troubleshooting": [
+     79.8,
+     83.8
+    ],
+    "120000.mix": [
+     83.1,
+     85.1
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "20000.order_delivery": 75.8,
+     "20000.returns_refunds": 62.4,
+     "20000.account_billing": 62.1,
+     "20000.product_howto": 74.2,
+     "20000.device_troubleshooting": 51.2,
+     "20000.mix": 61.1,
+     "40000.order_delivery": 75.8,
+     "40000.returns_refunds": 62.4,
+     "40000.account_billing": 62.1,
+     "40000.product_howto": 74.2,
+     "40000.device_troubleshooting": 51.2,
+     "40000.mix": 61.2,
+     "60000.order_delivery": 75.8,
+     "60000.returns_refunds": 62.4,
+     "60000.account_billing": 62.1,
+     "60000.product_howto": 74.2,
+     "60000.device_troubleshooting": 51.3,
+     "60000.mix": 61.2,
+     "80000.order_delivery": 75.8,
+     "80000.returns_refunds": 62.4,
+     "80000.account_billing": 62.1,
+     "80000.product_howto": 74.2,
+     "80000.device_troubleshooting": 51.3,
+     "80000.mix": 61.2,
+     "120000.order_delivery": 75.8,
+     "120000.returns_refunds": 62.4,
+     "120000.account_billing": 62.1,
+     "120000.product_howto": 74.2,
+     "120000.device_troubleshooting": 51.4,
+     "120000.mix": 61.2
+    },
+    "careful": {
+     "20000.order_delivery": 87.6,
+     "20000.returns_refunds": 73.6,
+     "20000.account_billing": 76.1,
+     "20000.product_howto": 85.2,
+     "20000.device_troubleshooting": 56.4,
+     "20000.mix": 69.9,
+     "40000.order_delivery": 87.6,
+     "40000.returns_refunds": 73.6,
+     "40000.account_billing": 76.1,
+     "40000.product_howto": 85.2,
+     "40000.device_troubleshooting": 56.5,
+     "40000.mix": 69.9,
+     "60000.order_delivery": 87.6,
+     "60000.returns_refunds": 73.6,
+     "60000.account_billing": 76.1,
+     "60000.product_howto": 85.2,
+     "60000.device_troubleshooting": 56.5,
+     "60000.mix": 70.0,
+     "80000.order_delivery": 87.6,
+     "80000.returns_refunds": 73.6,
+     "80000.account_billing": 76.1,
+     "80000.product_howto": 85.2,
+     "80000.device_troubleshooting": 56.6,
+     "80000.mix": 70.0,
+     "120000.order_delivery": 87.6,
+     "120000.returns_refunds": 73.6,
+     "120000.account_billing": 76.1,
+     "120000.product_howto": 85.2,
+     "120000.device_troubleshooting": 56.7,
+     "120000.mix": 70.0
+    },
+    "thorough": {
+     "20000.order_delivery": 88.6,
+     "20000.returns_refunds": 81.7,
+     "20000.account_billing": 85.0,
+     "20000.product_howto": 87.4,
+     "20000.device_troubleshooting": 72.4,
+     "20000.mix": 79.7,
+     "40000.order_delivery": 88.6,
+     "40000.returns_refunds": 81.7,
+     "40000.account_billing": 85.0,
+     "40000.product_howto": 87.4,
+     "40000.device_troubleshooting": 75.5,
+     "40000.mix": 81.2,
+     "60000.order_delivery": 88.6,
+     "60000.returns_refunds": 81.7,
+     "60000.account_billing": 85.0,
+     "60000.product_howto": 87.4,
+     "60000.device_troubleshooting": 77.8,
+     "60000.mix": 82.2,
+     "80000.order_delivery": 88.6,
+     "80000.returns_refunds": 81.7,
+     "80000.account_billing": 85.0,
+     "80000.product_howto": 87.4,
+     "80000.device_troubleshooting": 79.4,
+     "80000.mix": 83.0,
+     "120000.order_delivery": 88.6,
+     "120000.returns_refunds": 81.7,
+     "120000.account_billing": 85.0,
+     "120000.product_howto": 87.4,
+     "120000.device_troubleshooting": 81.8,
+     "120000.mix": 84.1
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "accuracy with the whole Tallyfield option taken up",
+   "graded_as": "Ask 9, Component 2",
+   "figure": "R5_option",
+   "depends": [],
+   "independent": "the audit, the shadow reviews and IS-25",
+   "precedent": [
+    "L17",
+    "L15",
+    "N01"
+   ],
+   "golden": {
+    "order_delivery": 89.2,
+    "returns_refunds": 82.9,
+    "account_billing": 86.5,
+    "product_howto": 88.4,
+    "device_troubleshooting": 69.4,
+    "mix": 78.9
+   },
+   "bands": {
+    "order_delivery": [
+     87.2,
+     91.2
+    ],
+    "returns_refunds": [
+     80.9,
+     84.9
+    ],
+    "account_billing": [
+     84.5,
+     88.5
+    ],
+    "product_howto": [
+     86.4,
+     90.4
+    ],
+    "device_troubleshooting": [
+     67.4,
+     71.4
+    ],
+    "mix": [
+     77.9,
+     79.9
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "order_delivery": 77.0,
+     "returns_refunds": 63.2,
+     "account_billing": 63.0,
+     "product_howto": 75.9,
+     "device_troubleshooting": 51.4,
+     "mix": 61.9
+    },
+    "careful": {
+     "order_delivery": 88.9,
+     "returns_refunds": 74.4,
+     "account_billing": 77.0,
+     "product_howto": 86.9,
+     "device_troubleshooting": 56.6,
+     "mix": 70.6
+    },
+    "thorough": {
+     "order_delivery": 89.2,
+     "returns_refunds": 82.9,
+     "account_billing": 86.5,
+     "product_howto": 88.4,
+     "device_troubleshooting": 69.4,
+     "mix": 78.9
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the cheapest purchase that reaches the bar",
+   "graded_as": "Recommendation, Component 3",
+   "figure": "R6_call",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "precedent": [
+    "L17",
+    "L15",
+    "L37"
+   ],
+   "golden": [
+    "Ardentdesk, at most a tranche of the option"
+   ],
+   "passes": {
+    "quick": [
+     "out of reach"
+    ],
+    "careful": [
+     "out of reach"
+    ],
+    "thorough": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the Ardentdesk volume to buy and its cost",
+   "graded_as": "Recommendation, Ask 10",
+   "figure": "R7_volume",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "precedent": [
+    "L17",
+    "L40"
+   ],
+   "golden": 38000,
+   "band": [
+    18000,
+    61000
+   ],
+   "passes": {
+    "quick": null,
+    "careful": null,
+    "thorough": 38000
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the 80 per cent range at the purchase",
+   "graded_as": "Ask 11",
+   "figure": "R8_range",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "precedent": [
+    "L28",
+    "L37"
+   ],
+   "golden": {
+    "lo": 79.4,
+    "hi": 82.5
+   },
+   "bands": {
+    "lo": [
+     78.80000000000001,
+     80.0
+    ],
+    "hi": [
+     81.9,
+     83.1
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "lo": null,
+     "hi": null
+    },
+    "careful": {
+     "lo": null,
+     "hi": null
+    },
+    "thorough": {
+     "lo": 79.4,
+     "hi": 82.5
+    }
+   }
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "golden": true,
+   "answer": [
+    "Ardentdesk, at most a tranche of the option"
+   ]
+  },
+  {
+   "name": "the careful but hurried pass: IS-25 plus a constant per type, labels weighted by accuracy, no pull, accuracy rising with log labels",
+   "answer": [
+    "out of reach"
+   ]
+  },
+  {
+   "name": "the internal set read through the reviews by a constant per ticket type",
+   "answer": [
+    "out of reach"
+   ]
+  },
+  {
+   "name": "labels weighted by their accuracy, not their information",
+   "answer": [
+    "option only"
+   ]
+  },
+  {
+   "name": "labels counted",
+   "answer": [
+    "option only"
+   ]
+  },
+  {
+   "name": "no pull to the longer reply in the bridge or the curve",
+   "answer": [
+    "option and Ardentdesk"
+   ]
+  },
+  {
+   "name": "accuracy rising with log label information, no bound",
+   "answer": [
+    "Ardentdesk, at most a tranche of the option"
+   ]
+  },
+  {
+   "name": "the dashboard figures, labels counted, a straight line in log labels",
+   "answer": [
+    "out of reach"
+   ]
+  },
+  {
+   "name": "IS-25 corrected for the crowd's error with no shared pull",
+   "answer": [
+    "out of reach"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "what": "the cheapest purchase that reaches the bar: Ardentdesk carries it, with no more than three tranches (30,000) of the option beside it (the Ardentdesk volume graded between 18,000 and 61,000)",
+  "golden_answer": [
+   "Ardentdesk, at most a tranche of the option"
+  ],
+  "golden_family": [
+   {
+    "name": "the learning curve as a logistic in log label information",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "each run's pull a share of the square root of its labels' crowd share",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "each source's error as its plain disagreement with unanimous technicians",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "the contrast in three bins, not nine",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "the order's comparisons used in full, no-preference judgments included",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "the technicians' error and split share from the audit alone",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "the crowd's pull read from the audit, not the deliveries",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "name": "the learning curve fitted on the seven reviewed runs alone",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the careful but hurried pass: IS-25 plus a constant per type, labels weighted by accuracy, no pull, accuracy rising with log labels",
+    "answer": [
+     "out of reach"
+    ]
+   },
+   {
+    "name": "the internal set read through the reviews by a constant per ticket type",
+    "answer": [
+     "out of reach"
+    ]
+   },
+   {
+    "name": "labels weighted by their accuracy, not their information",
+    "answer": [
+     "option only"
+    ]
+   },
+   {
+    "name": "labels counted",
+    "answer": [
+     "option only"
+    ]
+   },
+   {
+    "name": "no pull to the longer reply in the bridge or the curve",
+    "answer": [
+     "option and Ardentdesk"
+    ]
+   },
+   {
+    "name": "the dashboard figures, labels counted, a straight line in log labels",
+    "answer": [
+     "out of reach"
+    ]
+   },
+   {
+    "name": "IS-25 corrected for the crowd's error with no shared pull",
+    "answer": [
+     "out of reach"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "K_troubleshooting plus its spread (4.52e+03 on 1.39e+04)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "K_troubleshooting minus its spread (4.52e+03 on 1.39e+04)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "alpha plus its spread (0.0532 on 0.665)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "alpha minus its spread (0.0532 on 0.665)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "kappa plus its spread (0.0376 on 0.478)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "kappa minus its spread (0.0376 on 0.478)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "crowd_info plus its spread (0.0107 on 0.0367)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "crowd_info minus its spread (0.0107 on 0.0367)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "desk_info plus its spread (0.0289 on 0.624)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "desk_info minus its spread (0.0289 on 0.624)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "split_share plus its spread (0.0166 on 0.103)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   },
+   {
+    "input": "split_share minus its spread (0.0166 on 0.103)",
+    "answer": [
+     "Ardentdesk, at most a tranche of the option"
+    ]
+   }
+  ],
+  "lines": {
+   "bar": 81.0
+  }
+ },
+ "factorial": {
+  "golden_answer": [
+   "Ardentdesk, at most a tranche of the option"
+  ],
+  "reflex_route": {
+   "answer": [
+    "out of reach"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "the bridge: IS-25's agreement read through the crowd's error and the pull a run shares with it, fitted on the reviewed runs",
+    "kind": "stump",
+    "precedent": [
+     "L37",
+     "L28"
+    ],
+    "dropped": {
+     "answer": [
+      "out of reach"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "option and Ardentdesk"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J2",
+    "name": "a label's worth as its information, the square of its signal, not its count or its accuracy",
+    "kind": "stump",
+    "precedent": [
+     "L17",
+     "N01"
+    ],
+    "dropped": {
+     "answer": [
+      "option only"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "out of reach"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J3",
+    "name": "the crowd's pull to longer replies, inherited by the model in proportion to its crowd share",
+    "kind": "stump",
+    "precedent": [
+     "L15",
+     "N04"
+    ],
+    "dropped": {
+     "answer": [
+      "option and Ardentdesk"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "out of reach"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the bound the technicians' split pairs set, each type's curve saturating (priced on the troubleshooting cells, the call unmoved)",
+    "kind": "supporting",
+    "precedent": [
+     "N34",
+     "L40"
+    ],
+    "dropped": {
+     "answer": [
+      "Ardentdesk, at most a tranche of the option"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5"
+     ]
+    }
+   },
+   {
+    "id": "J5",
+    "name": "each source's agreement with the technicians read from the audit; duplicates, display order, re-runs and vote codes reconciled",
+    "kind": "reflex",
+    "precedent": [
+     "R01",
+     "R14"
+    ]
+   }
+  ]
+ },
+ "hints": [
+  {
+   "sentence": "IS-25's labels are single 2025 Tallyfield judgments, so a run's agreement with them is set by its accuracy, the crowd's error and the pull to longer replies the two share",
+   "rescues": []
+  },
+  {
+   "sentence": "a Tallyfield label on a device troubleshooting pair carries a small fraction of an Ardentdesk label's information",
+   "rescues": []
+  }
+ ]
+}
