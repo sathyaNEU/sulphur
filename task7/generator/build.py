@@ -19,10 +19,11 @@ import world as W  # noqa: E402
 
 import datetime as dt  # noqa: E402
 CST = dt.timezone(dt.timedelta(hours=-6))
-_E = {"ami": (11, 2, 7, 14, 9), "head": (11, 2, 7, 31, 40), "bus": (11, 3, 10, 2, 18), "ltc": (11, 3, 10, 5, 3),
-      "bell": (11, 2, 8, 46, 51), "reg": (11, 16, 9, 12, 26), "sched": (11, 16, 9, 20, 7), "wx": (11, 4, 13, 37, 45),
-      "out": (11, 5, 11, 8, 30), "der": (10, 30, 16, 22, 12)}
-EXPORTED = {pack.FILES[k]: dt.datetime(2026, m, d, hh, mm, ss, tzinfo=CST) for k, (m, d, hh, mm, ss) in _E.items()}
+# the year's exports were pulled once 2026 closed; the trial's own records when it ended; the queue at its October cut
+_E = {"ami": (2027, 1, 5, 7, 14, 9), "head": (2027, 1, 5, 7, 31, 40), "bus": (2027, 1, 6, 10, 2, 18), "ltc": (2027, 1, 6, 10, 5, 3),
+      "bell": (2027, 1, 5, 8, 46, 51), "reg": (2026, 11, 16, 9, 12, 26), "sched": (2026, 11, 16, 9, 20, 7),
+      "wx": (2027, 1, 4, 13, 37, 45), "out": (2027, 1, 7, 11, 8, 30), "der": (2026, 10, 30, 16, 22, 12)}
+EXPORTED = {pack.FILES[k]: dt.datetime(y, m, d, hh, mm, ss, tzinfo=CST) for k, (y, m, d, hh, mm, ss) in _E.items()}
 EXPORTED[pack.FILES["survey"]] = dt.datetime(2025, 12, 11, 15, 50, 2, tzinfo=CST)
 
 

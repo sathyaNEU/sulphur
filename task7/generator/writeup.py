@@ -13,7 +13,7 @@ def texts(F):
     fund = sorted(F["funded"])
     care = sorted(F["routes"]["the careful route (the reflex route)"])
     F["memo_head"] = [F["org"] + ", System Planning",
-                      "To: Joseph Harmon, manager of distribution engineering    From: Mary Wilson, system planning    Date: 20 November 2026"]
+                      "To: Joseph Harmon, manager of distribution engineering    From: Mary Wilson, system planning    Date: 14 January 2027"]
     F["memo_title"] = "Voltage optimization in 2027: %d feeders, %s" % (len(fund), usd(F["total_cost"]))
     F["memo_call"] = ("Put voltage optimization on %s in the 2027 capital program. Under VO-1 each of them saves more "
                       "energy at its substation breaker over a year like 2026 than its equipment costs: together %s MWh a "

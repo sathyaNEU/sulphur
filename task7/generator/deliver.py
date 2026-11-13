@@ -68,7 +68,7 @@ def workbook(path, F):
     for r in ws4.iter_rows():
         r[0].alignment = Alignment(wrap_text=True, vertical="top")
     wb.save(path)
-    postprocess.normalize_ooxml(path, "Mary Wilson", "Mary Wilson", "2026-11-17T15:10:00Z", "2026-11-20T21:34:16Z",
+    postprocess.normalize_ooxml(path, "Mary Wilson", "Mary Wilson", "2027-01-11T15:10:00Z", "2027-01-14T21:34:16Z",
                                 excel=True, company=ORG)
 
 
@@ -135,7 +135,7 @@ def memo(path, F, png):
         para(head, bold=True, color=INK, space=2)
         para(body)
     doc.save(path)
-    postprocess.normalize_docx(path, "Mary Wilson", "Joseph Harmon", "2026-11-18T14:22:00Z", "2026-11-20T22:05:00Z", 9, 214,
+    postprocess.normalize_docx(path, "Mary Wilson", "Joseph Harmon", "2027-01-12T14:22:00Z", "2027-01-14T22:05:00Z", 9, 214,
                                "task7-vo-memo", title="Voltage optimization: the 2027 program", company=ORG)
 
 

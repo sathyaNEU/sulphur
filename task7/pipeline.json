@@ -1,10 +1,10 @@
 {
  "task": "task7",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 3,
- "stage_name": "build",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "stump": "level 5 by the stump factorial: each feeder's makeup, the thermostatic give-back through the year, the losses from current squared (the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes)",
  "architecture": 12,
@@ -15,8 +15,8 @@
   "note": "WARN R2 upstream of R4 to R9 (earned, answered in the note); WARN nearest chains"
  },
  "leak": {
-  "leak_py": "REVIEW (the call's words in EV-4; stump terms in EV-4 and the pilot plan), each ruled harmless",
-  "reader": "no leak: nothing ranks the options, no answer figure or name, no one thing settles the task; it reads EV-4 4.1 and DPS-7 2.2 as the replay's frame with the option simulations left to the analyst"
+  "leak_py": "REVIEW (the report's filed 6.1 percent and load research; digit coincidences inside two meter CSVs), each ruled harmless by the reader; dates sweep clean at as-of 2027-01-14",
+  "reader": "NO LEAK: nothing ranks the feeders, no helper file, the hard parts (each feeder's response, the losses) written nowhere; VO-1 fixes what is compared and from which record; its literal reading of 2.2 (ON days dropped) closed as SF20, same call"
  },
  "duplicate_check": {
   "heart": "WARN only on 2026-11-13 after re-registering with weight, calibration, context artifact and forcing event redrawn against task23 and task24",
@@ -106,7 +106,7 @@
    "route": "REDESIGN under the stump factorial (stumping Part 3.3)"
   }
  ],
- "resume": "stage 3 done on seed 4009 (checks 58 of 58, gates.py 8 of 8 with 3 WARN answered in the note, containers clean, careful 47.0 (about 55 without R9), quick 25.0); next: stage 4 (leak reader and determinism judge together) on the author's word, the reader briefed on whether asking each feeder's own yearly response beside the load research hands over J2; then READY and the author's prompt rewrite",
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite and leak.py on the rewrite), uploads it with target.zip, then /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -468,5 +468,10 @@
   "effort_check": "careful 40.5 cited, 5 distinct wrong answers, 6 rivals and 4 perturbations on Sequence",
   "containers": "PASS"
  },
- "stump_screen": "run after the build: keeps A (Stagger's season coincidence, the deciding trap); B (Sequence's filed rule) and C (own schedules restored, near a closed card) are graded work a careful run can earn; D (the quarter-hour lift) is texture"
+ "stump_screen": "run after the build: keeps A (Stagger's season coincidence, the deciding trap); B (Sequence's filed rule) and C (own schedules restored, near a closed card) are graded work a careful run can earn; D (the quarter-hour lift) is texture",
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE (one optional FIX_NOW declined: a filed loss-current sentence would hand over J5; SF17 rules the fork out by named data)",
+  "date": "2026-11-13"
+ }
 }

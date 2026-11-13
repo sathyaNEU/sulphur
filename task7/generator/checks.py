@@ -129,6 +129,17 @@ def main():
     check("SF16 the loss change is a rise, positive when losses grow (the prompt's 'rise')", "rise in its own line losses" in open(os.path.join(TASK, "prompt.txt")).read())
     # mess and the read-back
     R = V.read_pack(TARGET)
+    mv = []
+    for g in R.trial:
+        on = np.repeat(R.assign[g] == 1, P.Q)
+        d = R.ami[g].reshape(P.ND, P.Q)
+        ok = R.assign[g] == 0
+        k = np.arange(P.ND)
+        fill = np.array([np.interp(k, k[ok], d[ok, q]) for q in range(P.Q)]).T.ravel()
+        alt = R.ami[g].copy()
+        alt[on] = fill[on]
+        mv.append(abs(alt.sum() / R.ami[g].sum() - 1))
+    check("SF20 the trial feeders' ON-day load replaced by normal running moves the load base by under 3 percent", max(mv) < 0.03, "%.3f" % max(mv))
     raw = sum(1 for _ in open(os.path.join(TARGET, PK.FILES["ami"]))) - 1
     check("mess: the customer-meter export carries re-sent rows", raw > P.NF * P.NQ, str(raw - P.NF * P.NQ))
     check("mess: estimated intervals flagged", sum(1 for r in open(os.path.join(TARGET, PK.FILES["ami"])) if r.rstrip().endswith(",E")) > 100)

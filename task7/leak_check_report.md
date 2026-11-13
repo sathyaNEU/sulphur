@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, golden, buildings, record, controls, insulation, carried, million, careful, heating, reflex, author, default, family, season, landed, sentence, report, seasons, patients, building, graded, prompt, method, platform
+Stump terms swept: architecture, golden, buildings, record, controls, insulation, carried, million, careful, sentence, heating, reflex, author, default, family, season, landed, report, seasons, patients, building, graded, reading, prompt, method
 
 ## 3 answer figures in the pack (REVIEW 5)
 - **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 450 appears: ...pace heating 4,200 kWh Central air conditioning 2,450 kWh Homes metered by end use 212 Notes Distributi...
@@ -12,6 +12,9 @@ Stump terms swept: architecture, golden, buildings, record, controls, insulation
 - **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 854 appears: ...the distribution system 913,700 MWh Retail sales 854,300 MWh Distribution losses 6.1 percent of energy...
 - **REVIEW** `mdm_feeder_interval_kwh_2026.csv`: golden figure 45,883 appears: ...26-01-01 20:45,728.6,1762,A FRV-113,2026-01-01 20:45,883.9,671,A FRV-116,2026-01-01 20:45,1411.3,1871,A FR...
 - **REVIEW** `substation_revenue_meters_15min_2026.csv`: golden figure 45,883 appears: ...-113,2026-03-12 15:30,872.9 ELC-113,2026-03-12 15:45,883.2 ELC-113,2026-03-12 16:00,891.7 ELC-113,2026-03-...
+
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: 3 of 25 stump-paragraph terms appear (record, carried, reading); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -27,8 +30,6 @@ Stump terms swept: architecture, golden, buildings, record, controls, insulation
 
 ## 2 author vocabulary (clean)
 
-## 4 design-note vocabulary (clean)
-
 ## 5 announcements (clean)
 
 ## 6 ranking artifacts (clean)
@@ -38,3 +39,18 @@ Stump terms swept: architecture, golden, buildings, record, controls, insulation
 ## 8 column names (clean)
 
 ## 11 prompt gate (clean)
+
+
+## Solver's-eye read
+
+Reader (isolated, prompt and target only), 2026-11-13. Verdict: NO LEAK.
+
+1. Method sentences: VO-1 2.1 to 2.4 and 3.1 (what is compared, the floor and cap, the value, which record is which quantity) and the protocol's ON/OFF mechanics; they fix the estimand and sources, not the estimation.
+2. Ranking file: none.
+3. Helper-only file: none.
+4. Answer-like figure or name: none.
+5. Literal readings: VO-1 2.2 (yearly saving at the breaker against normal running, ON days not normal running), 2.3 (hourly headroom to 115 V capped at 4.8 V), 2.4 (USD 48, 9.4), 3.1 (record per quantity).
+6. One thing: none. Each feeder's response, its carry to untested feeders and the losses' rise are analysis written nowhere; the energy sums and the headroom are close to reading and formula; the asks do not hand over a method.
+
+Sweep items: the annual report (harmless: system 2025 totals, a different grain and year), the customer-meter CSV and the revenue-meter CSV (harmless: digit coincidences among hundreds of thousands of readings).
+Realism: no tells found.
