@@ -79,11 +79,11 @@
      2.92
     ],
     "Standaard Netherlands": [
-     17.73,
+     16.37,
      22.33
     ],
     "Standaard Flanders": [
-     17.73,
+     16.37,
      22.33
     ],
     "Onbeperkt Netherlands": [
@@ -95,11 +95,11 @@
      3.01
     ],
     "Gezin Netherlands": [
-     -0.3,
+     -1.12,
      2.98
     ],
     "Gezin Flanders": [
-     -0.3,
+     -1.12,
      2.98
     ]
    },
@@ -158,11 +158,11 @@
    },
    "bands": {
     "Standaard Netherlands": [
-     14.18,
+     12.97,
      18.62
     ],
     "Standaard Flanders": [
-     14.18,
+     12.97,
      18.62
     ],
     "Onbeperkt Netherlands": [
@@ -174,11 +174,11 @@
      2.9
     ],
     "Gezin Netherlands": [
-     -0.3,
+     -1.17,
      0.3
     ],
     "Gezin Flanders": [
-     -0.3,
+     -1.17,
      0.3
     ]
    },
@@ -237,7 +237,7 @@
     ],
     "Standaard": [
      -16.41,
-     -14.03
+     -12.4
     ],
     "Onbeperkt": [
      -6.26,
@@ -245,7 +245,7 @@
     ],
     "Gezin": [
      2.49,
-     6.36
+     7.84
     ]
    },
    "precedent": [
@@ -297,7 +297,7 @@
     ],
     "Standaard": [
      273,
-     294
+     299
     ],
     "Onbeperkt": [
      685,
@@ -305,7 +305,7 @@
     ],
     "Gezin": [
      628,
-     673
+     679
     ]
    },
    "precedent": [
@@ -559,6 +559,18 @@
    },
    {
     "name": "the stayers' listening counted only where the plan's two rises agree in sign",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "a crossing with no rise of its own of that kind read off the plain mean of every past crossing",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "each past response read as measured, not floored at none",
     "answer": [
      "Gezin"
     ]

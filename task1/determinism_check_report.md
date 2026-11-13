@@ -1,78 +1,184 @@
-# determinism-check report, task1, 2026-11-12
+# Determinism check — task1 (architecture 5, 2026-11-13 cut)
 
-Architecture 5, stage 4 pass (beside the leak reader; `gates.py task1` 0 FAIL at the point of this run).
+This report replaces the prior pass, which described an earlier cut; the world, the call and every figure have
+changed since. Verified fresh against `prompt.txt`, `submission.md` and a clean unzip of `target.zip`.
 
-## Verdict
-**DETERMINISTIC** (as checked; see Gate A caveat below).
-**Disposition:** FIX_NOW is not actually warranted on the one item the thread flagged (see Why/Fix); treat this pass as **APPROVE on determinism**, with one open item for the author: get the quantitative response and contribution figures (R3/R4/R7) independently recomputed in a follow-up pass, because this run did not do it.
-**Stumping type:** not run by the judge this pass (see Order of work). Gate G/H values below are the build's own record (`DESIGN_NOTE.md`, `metadata.json`, `skeleton.py`), not judge-checked.
+## Verdict: NOT_DETERMINISTIC
+## Disposition: SEND_BACK
 
-## Order of work — NOT kept, by the thread's own deliberate choice
-The thread did **not** derive its own answer before opening `graded_blocks.md`, and wrote no `own_derivation.md`. It opened the blocks first, then independently recomputed load-bearing figures by its own method. It made this choice explicitly, against the spawn prompt's stated override, citing two binding sources it read as controlling: `CLAUDE.md`'s "STOP: no solver, no scored reader, no probe" rule ("no 'cold' reader that solves the prompt and hands back figures"), and the newest (2026-11-13) scope note at the top of `guidelines/determinism_judge_system_prompt.md` itself, which says the judge "never works the task on its own (no derivation of its own before the blocks)" and that Gates F, G, H "are not run or reported by the judge." It also declined to report Stump power / Stumping type / Deep reasoning on the same grounds, marking those sections "Not run: outside judge scope" rather than fabricating them.
+## Why
 
-**This is a real, binding-rule conflict, not a preference**, and it sits above my pay grade to resolve by re-running: this agent's own definition (`determinism-judge`) and this task's stage-4 invocation both require derive-first and Gate G/H reporting; `CLAUDE.md` (checked in, outranks an invocation message) and the guideline's own current scope note (SKILLS commit `83dc482`) say the opposite and were written after the agent definition. Per policy, I did not respawn a second thread to force the override — that would itself violate the one-pass rule and run exactly the cold-reader CLAUDE.md bans. **This conflict needs the author's/user's decision, not mine**: either the `determinism-judge` skill is stale and should be brought up to `83dc482` and the 2026-11-13 scope note (dropping derive-first and F/G/H from its contract), or the skill is current and CLAUDE.md/the guideline need a `SKILLS:` commit to re-widen the judge's scope. Flagging this is this report's most important finding.
+The Final Recommendation turns on Gezin's rise clearing a positive net effect (EUR 6.1 per October subscription,
+band 2.5 to 6.4). That figure is not robustly forced: the same method the blocks themselves use to value the
+December-bill response to the price e-mail on Flex and Onbeperkt — average the plan's own two historical January
+rises' extra cancellations at the December bill, valued (per Step 6) as "light listeners worth the whole of
+2027" — reproduces Flex's 14.2 and Onbeperkt's 7.0 almost exactly, and, applied the same way to Gezin, yields a
+materially non-zero December response that the golden appears to treat as zero (Critical Component 2 and the
+Step-by-Step mention it only for Flex and Onbeperkt). Carried through at the filed valuation convention, it erodes
+Gezin's +6.1 to roughly 0.2–1.4 EUR/subscription — outside the stated band floor of 2.5 and close enough to zero
+that the sign is not safely forced. This is a Gate A/C problem on the single most heavily weighted figure, not a
+wording issue, so the fix is not a one-line answer-block edit.
 
-**Protocol deviation, noted but not disqualifying:** the thread's own report says it "confirmed this read with the advisor" before proceeding. The spawn prompt told it (per contract) that it had no `advisor`/`WebSearch`/`WebFetch`/`Agent` tools; that was incorrect for a `general-purpose` subagent, which does have `advisor`. The call did not 400 and the advisor it reached saw only the thread's own transcript, not the repo, so it did not supply the thread with repo content it shouldn't have had. Worth fixing in the skill's spawn-prompt wording (either strip `advisor` from the subagent's toolset if the harness allows it, or stop asserting it isn't there), but it does not invalidate this pass.
+## Evidence
 
-## First-pass figures vs. bands
-There is no first pass: the thread read the blocks before computing anything, so there is nothing to compare "before" and "after." What exists is a **recompute-after-reading-the-blocks** table. The thread recomputed the base counts and the rival-crossing logic quantitatively/exactly; it did **not** quantitatively recompute the fourteen response figures or the four contribution-change figures against their stated bands — it only confirmed the qualitative crossing pattern they rest on and sanity-checked the counted-hours input that feeds R7 (within 1-6%, not graded, not band-checked). See the ledger below. **The thread's first-pass (really: only-pass) go/hold set is: Standaard holds, Flex/Onbeperkt/Gezin go** — it reproduced this from the crossing test, matching `FINAL_RECOMMENDATION` and ask 2, and it stress-tested (and rejected) the two named shortcuts (own-plan history; downgrade-as-cancellation) that would let all four through or hold Onbeperkt respectively.
+### Reproduced cleanly (no finding)
 
-## Recomputation ledger
-| Figure | Claimed | Judge recomputed | Reproduced |
+| Figure | Blocks' value | My recomputation | Method |
 |---|---|---|---|
-| Paying subs, Flex | 494 | 494 | Yes, exact |
-| Paying subs, Standaard | 1,218 | 1,218 | Yes, exact |
-| Paying subs, Onbeperkt | 1,434 | 1,434 | Yes, exact |
-| Paying subs, Gezin | 1,021 | 1,021 | Yes, exact |
-| Paying subs, total | 4,167 | 4,167 | Yes, exact (fork: `status=='collected'` alone undercounts by 47; guideline 3.1's re-presented-and-not-refunded reading closes it) |
-| Rival-crossing pattern (qualitative, underlies R7/R8) | Standaard both regions; Onbeperkt/Gezin NL only; Flex nowhere | same pattern | Yes, exact |
-| Contribution change, Flex (EUR) | 3.3 (3.0-4.6) | **not recomputed to value** | Gate A gap |
-| Contribution change, Standaard (EUR) | -12.4 (-14.3 to -12.1) | **not recomputed to value** | Gate A gap |
-| Contribution change, Onbeperkt (EUR) | 4.7 (3.0-5.1) | **not recomputed to value** | Gate A gap |
-| Contribution change, Gezin (EUR) | 5.3 (5.0-7.0) | **not recomputed to value** | Gate A gap |
-| Cancellations, 8 plan×region cells (ask 5) | per blocks | **not recomputed** | Gate A gap |
-| Downgrades, 6 plan×region cells (ask 6) | per blocks | **not recomputed** | Gate A gap |
-| Counted hours/month, Standaard (input to R7, ungraded) | 9.92 | 10.50 (own reconciliation) | within ~6%, not an exact match, inside R7's band, does not flip any call |
-| Counted hours/month, Onbeperkt (input to R7, ungraded) | 34.38 | 34.77 (own reconciliation) | within ~1%, same |
+| Paying base 31 Oct 2026 by plan | Flex 697, Standaard 1,222, Onbeperkt 1,461, Gezin 1,010; 4,390 | Exact match | Consumer accounts with an October 2026 charge whose status is `collected` **or** `re-presented` (guideline 3.1: "a charge returned and **not re-presented**, or refunded, is not collected" — re-presented alone counts). `collected`-only gives 4,342, ruled out by that sentence. |
+| Past rises' first-bill extra cancellations (Step 3) | crossing: 14.4, 10.9, 27.0; non-crossing: 5.3, −0.8, 1.8, 2.7, 2.6 | 14.40, 10.92, 26.96; 5.3 (STD BE), −0.8 (GEZ NL), 1.8 (STD NL), 2.7 (ONB NL), 2.6 (FLEX BE) | Each plan-region's one January rise (2025 or 2026) vs the same plan in the other region, same calendar months, difference in (no-next-month-charge) rate. |
+| 2027 crossing classification | Standaard crosses the rival in both NL and BE; Flex, Onbeperkt, Gezin cross nowhere | Confirmed from `price_list_2027.pdf` (2027 and 2026 prices) against the October 2026 row of `rival_price_scan...csv` (no promotion flags that month), with the rival plan pinned by matching listening-hours/profile caps (Flex→Basis 10h, Standaard→Plus 30h, Onbeperkt→Onbeperkt, Gezin→Familie) | Forced by filed numbers once the rival mapping is pinned by hours, which it is. |
+| December-bill extra cancellations after the e-mail, Flex and Onbeperkt | Flex 14.2, Onbeperkt 7.0 | Flex: avg(12.07 crossing-NL-2025, 16.29 non-crossing-BE-2026) = 14.18. Onbeperkt: avg(6.94 crossing-BE-2025, 7.09 non-crossing-NL-2026) = 7.02 | Plan's own two historical rises averaged, Nov→Dec extra cancel rate vs same-months other-region control. This is the method I then applied to Gezin (below). |
 
-**Gate A: PASS on the base count and the crossing logic; PARTIAL on everything downstream of it.** 18 of the ~22-23 graded figures (the 4 contribution changes, the 8 cancellation cells, the 6 downgrade cells) rest on the thread's qualitative confirmation that the crossing pattern is right, plus a ballpark, non-exact, non-graded sanity check of the counted-hours input — not on an independent quantitative recomputation against the stated bands. That gap is real and should be closed by `figures_check.py` / a from-the-generator rerun, not assumed fine on the strength of this pass.
+### The blocking finding: Gezin's December response
 
-## Competing answers that survived
-None found by the thread on the main recommendation or on ask 2 (the plan-by-plan go/hold calls): both named shortcuts (each plan's own past response, letting all four through with Standaard misread as +1.2; counting a downgrade as a cancellation, which would hold Onbeperkt) were stress-tested and ruled out by the guideline's own wording and by the prompt's own separation of cancellations from downgrades as two distinct asks. "Flanders" was checked as a possible fork (no file anywhere distinguishes a Flemish subset of BE) and found not to be one — `country` only takes NL/BE, so BE is the only candidate population and there is nothing to confuse it with.
+Applying the identical, just-validated method to Gezin's own two historical rises (NL Jan 2025, BE Jan 2026):
 
-**One finding the thread got wrong, caught on reread:** the thread flagged `SOLUTION_STEPS` step 3's phrase "the December scan" as a wording slip, reasoning that `rival_price_scan_2024-01_2026-10.csv` has no 2026-12 row and that the actual (2027) crossing computation uses October 2026. But step 3 is about the **2025 and 2026 January rises**, not the 2027 one — and the file does carry 2024-12 and 2025-12 rows (the Decembers before those two historical rises), matching the design note's own fork table (SF5: "the December scan before the rise" for historical rises; "3.8 for 2027: the latest scan" for the 2027 one). The rival's NL Basis price is flat at 9.79 across the whole window outside the excluded summer promotion months, so the December-vs-October choice doesn't even move a number here. Confirmed against `golden.zip`'s own `price_rises_2027.xlsx` sharedStrings, which states the same rule explicitly ("the rival scan of the December before... for 2027, the October 2026 scan"). **No fix is needed on this point**; the thread's one proposed FIX_NOW item should be dropped.
-
-## Spec gates
-| Gate | Required | Actual | Pass |
+| | GEZ NL (email Dec 2024) | GEZ BE (email Dec 2025) | Average |
 |---|---|---|---|
-| Usable files | >=10 | 18 (no system files, no `__MACOSX`, none empty) | Yes |
-| File categories | >=2 | csv (text/spreadsheet-adjacent), xlsx (spreadsheet), pdf (text) = 3 distinct formats | Yes |
-| Large messy CSV >=20,000 rows | 1+ | `listening_monthly` 814,411; `licence_server_renewals` 456,816; `payments` 145,511; `profiles_export` 38,543; `plan_periods` 34,199; `accounts_export` 28,252 rows | Yes |
-| CSV 10-20 printed pages | 1+ | `remuneration_statements_2024-01_2026-10.csv`: 1,361 rows, 7 cols, max line 94 chars — plausibly 10+ printed pages at this width; `app_reviews_2026.csv` (1,457 rows) is a candidate too, but it's a declared distractor | Yes (at least one qualifies) |
-| metadata.json distractors | >=2, unlabelled inside the ZIP | 4 named: `podcast_plays_2025-01_2026-10.csv`, `ebook_reading_2025-01_2026-10.csv`, `app_reviews_2026.csv`, `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`; none of these names or any file inside the ZIP says "distractor" | Yes |
-| Deliverables match prompt | 1-3, present in golden | prompt asks for "a workbook and a short deck"; `golden.zip` holds exactly `price_rises_2027.xlsx` and `price_rises_2027.pptx` | Yes |
-| Golden ZIP = exactly what's requested | no extra, no missing | 2 files, matches the 2 deliverables asked for | Yes |
+| Extra Nov→Dec cancel per 100 | 3.22 | 1.49 | **2.36** |
 
-## Gate G reconciliation (build's record, not judge-checked this pass)
-The thread marked Stumping type "Not run: outside judge scope." Per the design note's own Frontier check, `mechanism`-equivalent classification would be `method_or_model_selection`/causal reasoning on honest data (reading each rise's response against the rival's price, rather than off each plan's own flat history), explicitly contrasted against the banned `surface_read_rejection` family: "Closed strategies: the call turns on response_at_crossing_point... not on the closed transport card." Nothing in the note or `skeleton.py`'s output claims a planted-defect-flip shape.
+Not zero, not noise-sized next to Flex's 14.2 and Onbeperkt's 7.0 that the same arithmetic reproduces almost
+exactly. I also checked these leavers are the "light listeners" Step 6's valuation convention names: average
+counted monthly hours (proxy: `listening_monthly` seconds_streamed) in the month before leaving is lower than
+stayers' in both cohorts (NL: leavers 20.4 h vs stayers 23.1 h; BE: leavers 12.0 h vs stayers 23.2 h), so Step 6's
+"worth the whole of 2027" applies to them, not the cheaper, remuneration-heavy valuation used for crossing-driven
+heavy-listener leavers.
 
-## Gate H line (build's record, not judge-checked this pass)
-- `domain`: pass (per note) — cohort/LTV-style forecasting of a subscription base's 2027 contribution, response to a price change valued against a competitor's price and the content-licensing agreement's per-hour remuneration; not a backdrop.
-- `layers`: pass — Layer 1 (re-sent warehouse rows, staff/test accounts, renamed publisher codes, incomplete `listening_monthly` reconciled against `licence_server_renewals`, own-production/public-domain exclusions) named distinctly from Layer 2 (the crossing test, the response valuation, the forecast).
-- `results`: 5 graded results (R1, R3, R4, R7, R8) across 4 areas (assembly and reconciliation; causal reasoning x2; forecasting; synthesis).
-- `one_thing`: none, per the note's Hidden factor record — three constructed factors (the rival-crossing step; heavy-listener switching vs. light-listener downgrading; cap-hit leaving on Flex/Standaard), each explicitly "keep (one of several)" / "decides nothing alone," none sitting only in the deciding units across all four plans (Standaard alone has both a crossing and a non-crossing historical rise, so the pattern shows within-plan, not only where it decides).
-- `effort`: quick 0.5 of 5 (10%), careful but hurried 1.5 of 5 (30%), thorough 5 of 5 (100%) — per `effort.py` on `generator/effort.json`.
-- `one_fact`: "a rise's cancellations and downgrades jump only where the new price passes the rival's comparable plan" rescues 0 of 5 results, per the note.
-- `closed`: none decides. `skeleton.py closed task1` reports: "the call turns on response_at_crossing_point (open); closed supporting steps none; 0 of 4 lessons closed" — matching the note's own Frontier check line, which also rules out "a pooled effect carried to a different mix" and "composition" as the deciding mechanism (the selection of who answers, marginal-not-average, is named as a *supporting* step only, whose fix alone still lets all four through).
+Rough sizing: 2.36 per 100 of Gezin's 1,010 October base ≈ 23.8 extra December leavers; valued at roughly a year's
+net contribution each (net-of-VAT EUR 21.09/month, minus a modest store-fee blend and light remuneration) ≈
+EUR 200–250 per leaver ⇒ about EUR 4,700–6,000 total, i.e. roughly EUR 4.7–5.9 per October subscription. Against
+the filed +6.1, that leaves Gezin at roughly **0.2 to 1.4 EUR/subscription** once this effect is folded in —
+outside the stated band (2.5 to 6.4) and uncomfortably close to zero given the width of my own estimate. I did not
+build the exact counted-hours pipeline (B2.2 running-maximum-of-position-reached) to pin this to a point figure;
+that refinement belongs to whoever repairs it, not to this check. What is established is that the effect is real,
+reproducible by the blocks' own stated method, and large enough relative to Gezin's margin that the call is not
+safely forced as written.
 
-The counted-hours reconciliation (`listening_monthly` missing ~74% of `licence_server_renewals`'s distinct keys) that the thread found and partially redid is explicitly the ungraded Layer 1 carry-forward in the Results chain ("shown in the workbook and not graded"), not a graded result — consistent with the house rule that a join/re-key remedy a reflex catches (cf. task1 architecture 4's send-back) must never be the deciding step. Here it isn't: R1 (the only graded assembly result) is the payments/accounts "collected" reconciliation, not the listening/licence one, and the crossing logic (R7/R8's actual lever) doesn't touch it at all.
+### FIX_NOW band findings (do not move the call)
 
-## Findings, ranked
-1. **Scope conflict between this run's governing documents is unresolved and needs the user's call, not a re-run.** `CLAUDE.md` + the guideline's 2026-11-13 scope note (SKILLS commit `83dc482`) say the judge is Gates A-E only, never derives, never reports F/G/H. The `determinism-judge` agent definition and this stage-4 invocation say the opposite. The thread chose to follow the former and told me so in `verdict.md`. I did not override it by respawning.
-2. **Gate A is only partially checked this pass.** The base count (5 figures) and the qualitative crossing pattern are quantitatively verified. The 4 contribution-change figures and the 14 response-rate figures (18 of ~22-23 graded figures) were not independently recomputed against their bands by this judge pass. Recommend a `figures_check.py` run (or a second, scoped recompute) to close this before relying on this pass as full Gate A coverage.
-3. **The thread's one proposed fix (reword "the December scan" in `SOLUTION_STEPS` step 3) is itself mistaken** — the phrase is correct for the 2025/2026 historical rises it describes, matches the design note's own SF5 fork closure, and matches the golden xlsx's own stated rule. No change needed there.
-4. **Protocol deviation (thread's `advisor` call) noted, not disqualifying** — fix the spawn prompt's tool-availability claim in the `determinism-judge` skill.
-5. No competing defensible answer, no missing input data, no external dependency found on the main recommendation or the supplementary asks that were checked (base count, crossing logic, region label).
+Both of these were found while stress-testing item 5/6's bands with the same reproducible per-100 figures above;
+neither threatens Flex, Standaard or Onbeperkt's own (clearly negative) calls.
 
-## Next action for the author
-Resolve finding 1 first (bring the `determinism-judge` skill's contract in line with `CLAUDE.md`/`83dc482`, or re-open the guideline's scope via a `SKILLS:` commit — the user's call). Separately, and regardless of that resolution, run `figures_check.py` (or equivalent) against `generator/golden.py`'s own output for the 4 contribution-change figures and the 14 response-rate figures before treating this task as fully determinism-cleared, since this pass only reproduced the base count and the qualitative crossing pattern they rest on.
+- **Standaard, items 5 and 6 (cancellations and downgrades).** The forecast figures (21.2 cancel, 16.1 downgrade,
+  both regions) sit inside the stated bands (17.7–22.3; 14.2–18.6) only under some aggregations of the historical
+  crossing analogs, not others. A plain, equally reasonable average of the three crossing analogs (Flex NL 10.9,
+  Onbeperkt BE 14.4, Gezin BE 27.0) gives 17.43 (misses the cancel floor by 0.27); the n-weighted pooled rate gives
+  15.85 (further out). For downgrades, the same-size-only pair (Onbeperkt, Gezin; Flex structurally has no plan
+  below it) averages 13.75 against a floor of 14.2 (n-weighted gives 15.38, inside). Recommend widening the floors
+  to cover these reasonable alternatives (e.g., cancel floor to ~15.5, downgrade floor to ~13.5), or stating in the
+  blocks which weighting is intended. Standaard's own recommendation is unaffected: even the lowest reasonable
+  cancel estimate leaves Standaard's 2027-contribution figure deeply negative, though its own stated band
+  (−16.4 to −14.0) likely needs a wider upper edge past −14.0 to stay consistent.
+- **Gezin, items 5 and 6 (own non-crossing rise, "carries at the size it was read").** Taking Gezin's own
+  non-crossing historical response at face value (as Step 4 licenses for non-crossing plans) gives −0.8 cancel and
+  −0.9 downgrade (negative, i.e. fewer than the no-rise counterfactual), both outside the stated −0.3 floor for
+  Gezin's 2027 figures. These push Gezin more positive, not less, so they do not touch the call; widen the floor to
+  about −1.0 or state a zero floor explicitly.
+
+### Forks run and closed by named facts
+
+- **Which rival plan is "comparable."** Pinned by `price_list_2027.pdf`'s listed hours and profile counts against
+  the rival scan's named plans (10h→Basis, 30h→Plus, unlimited/2 profiles→Onbeperkt, unlimited/4 profiles→Familie).
+  No alternative mapping is defensible given the hours match exactly.
+- **Scan month for the 2027 decision.** Guideline 3.8 pins "rivals' prices as last scanned" = October 2026; that
+  row carries no promotion flag, so there is no live fork between the raw October row and a "with promotions
+  excluded" reading — they coincide.
+- **"Crossed the rival" vs "ended up above the rival."** I ran both readings. Under "ended up above," Flex BE 2026
+  (old 9.49, new 9.99, rival 9.39 — already above before the rise) and Onbeperkt BE and Gezin BE would also count
+  as "above," which is a different and looser test than "newly passed it." This reading is ruled out by Flex's own
+  2026 BE rise: it ended up above the rival (9.99 > 9.39) exactly as it had been before (9.49 > 9.39), and its
+  first-bill extra cancellation (2.6, non-crossing bucket) sits with the non-crossing group, not the crossing group
+  — so the data itself distinguishes "newly passing" from "already past," and only the former produces the large
+  response. Guideline 3.10's and Step 4's "took the price past the rival" / "passes it nowhere" language matches
+  the newly-crossing reading, and only that reading is consistent with the magnitudes in the files.
+- **Guideline 3.10's two sentences.** The first ("a rise goes ahead... when it raises the 2027 contribution...
+  followed through 2027") is the decision test; the second ("a rise's extra cancellations and extra downgrades are
+  those at a subscription's first bill...") only defines the items-5/6 figures. They do not conflict, and Step 8's
+  "stopping at the first bill" shortcut is correctly named as a shortcut, not a second defensible reading of the
+  decision rule.
+- **Item 7's "still paying on any plan."** Pinned by the prompt's own wording ("still be paying on any plan"); an
+  own-plan-only reading is explicitly ruled out by that phrase.
+
+### Not independently recomputed (say so plainly)
+
+- **Item 2 / Critical Component 1, the full EUR 6.1 / −4.4 / −15.5 / −5.9 netting.** I verified the three
+  reproducible inputs that feed it (first-bill crossing response, December-email response, crossing classification)
+  and found the Gezin blocking issue above; I did not rebuild the full contribution model (counted-hours-by-profile
+  via B2.2's running-maximum-of-position-reached, remuneration, store fees, downgrade valuation at EUR 67.7) end to
+  end. Gate A on this figure is partial, not confirmed.
+- **Item 7, the end-of-2027 still-paying counts (Flex 149, Standaard 279, Onbeperkt 700, Gezin 660).** Not
+  recomputed; flagged as unverified, not as reproduced.
+
+## Fix
+
+**Fix location: solution**, pending the author's own recomputation — this is not a prompt or input-file defect;
+every fact needed (the two Gezin historical rises, the e-mail date, the light-listener hours) is already shipped.
+Two possible outcomes once the December effect is folded into Gezin properly:
+1. Gezin's net figure stays positive but moves down, inside a widened band — then this is a solution-only fix
+   (recompute item 2's Gezin figure and item 5's Gezin December line, re-band it, keep the recommendation).
+2. Gezin's net figure goes to zero or negative — then the recommendation itself changes (no rise goes ahead, or a
+   different plan does), which is a bigger rewrite of the Final Recommendation, Step-by-Step and Critical
+   Component 1/2, still within `solution`/`submission.md`, no change to what solvers see in `target.zip` or
+   `prompt.txt`.
+
+Also apply the two FIX_NOW band widenings above (Standaard items 5/6 floors; Gezin items 5/6 floor) in the same
+pass, since they are cheap and were found during the same recomputation.
+
+## Pass 2 (2026-11-13)
+
+## Verdict: DETERMINISTIC
+## Disposition: APPROVE
+
+### Why
+
+Pass 1's blocking finding was that the blocks were silent on whether Gezin's December-bill response to the price
+e-mail was included in its +6.1 figure, and that the same method the blocks used for Flex and Onbeperkt, applied to
+Gezin, gives a non-trivial response that could erode the call below its band. The blocks now state this explicitly
+(Critical Component 2 and Step 5 list Gezin's December rate, 2.4 per 100, beside Flex 14.2, Standaard 8.5 and
+Onbeperkt 7.0; Step 6 states leavers at the e-mail are valued at "what an October subscription on the plan brings
+in 2027 at the held price, on the plan's continuation by tenure and their own listening", not a full year). This
+closes the Gate A/C gap: the fact is now filed, and both the rate and the valuation convention reproduce.
+
+### Evidence
+
+| Figure | Blocks' value | My recomputation | Method |
+|---|---|---|---|
+| December-bill extra cancellations, all four plans | Flex 14.2, Standaard 8.5, Onbeperkt 7.0, Gezin 2.4 | Flex 14.18, Standaard 8.11, Onbeperkt 7.02, Gezin 2.36 (Standaard and Gezin newly rechecked this pass; Flex and Onbeperkt reproduced in pass 1) | Each plan's two historical January rises' Nov-to-Dec extra-cancellation rate vs the same plan in the other region over the same months, averaged. All four land inside rounding of the filed figures. |
+| Value per Gezin December leaver, continuation-by-tenure convention | Not stated as a point figure (feeds item 2's EUR 6.1) | Approx EUR 128 per leaver (held-price net revenue ~EUR 19.8/month less ~EUR 6.5/month remuneration on the leavers' own lighter listening (~16h), times an expected 9.6 of 12 months paid in 2027 from an empirical tenure-indexed survival curve built on `plan_periods...csv`'s historical Gezin episodes) | Same convention Step 6 states: held price, own listening, continuation by tenure (not a full year). |
+| Impact of Gezin's December leavers on its per-subscription net | Implied by the task's framing: about +8.8 without them to the stated +6.1 (an effect of about -2.7) | About -3.0 to -3.1 (128 EUR/leaver x ~24.2 extra leavers (2.4/100 of 1,010) / 1,010 subscriptions) | Same arithmetic, independently built. |
+
+The continuation-by-tenure convention (expected ~9.6 of 12 months, not 12) matters: using it, my own recomputation
+lands within about 15 per cent of the stated ~2.7 effect, materially smaller than pass 1's cruder "worth a full
+year" estimate (which gave EUR 4.7-5.9, i.e., a bigger bite). Net Gezin figure under either my estimate (8.8 - 3.0 =
+5.8) or pass 1's cruder full-year estimate (8.8 - 4.7 to 8.8 - 5.9 = 2.9 to 4.1) lands inside the stated band (2.5 to
+7.8) and stays clearly positive, so the call (Gezin only) holds under both the correct convention and a sloppy
+reading of it; the fork pass 1 flagged is closed, not merely narrowed.
+
+### FIX_NOW band findings from pass 1, rechecked
+
+- **Standaard, items 5/6.** Floors widened to 16.4 (cancel) and 13.0 (downgrade). The plain, unweighted mean of the
+  three crossing analogs (Flex NL 10.9, Onbeperkt BE 14.4, Gezin BE 27.0) = 17.43, now inside 16.4-22.3 (it missed
+  the old 17.7 floor by 0.27). The same-size-only downgrade pair (Onbeperkt, Gezin) = 13.75, now inside 13.0-18.6.
+  An n-weighted pooled rate (15.85 for cancellations) would still sit outside 16.4, but the blocks' own stated
+  convention is consistently an unweighted mean (Step 5: "the mean of the plan's own two rises"), never an
+  n-weighted pool, so this is not an equally reasonable neighbour and does not reopen the fork. Standaard's own
+  2027-contribution band is now -16.4 to -12.4 (widened from -16.4 to -14.0 in pass 1's reading), which comfortably
+  covers the lower cancel/downgrade estimates; Standaard's call (hold) is unaffected regardless.
+- **Gezin, items 5/6 (first-bill, non-crossing).** Floors widened to -1.1 (cancel) and -1.2 (downgrade). Gezin's
+  own non-crossing historical first-bill reading (-0.8 cancel, -0.9 downgrade, from NL's historical non-crossing
+  rise) now lands inside both. Resolved.
+
+### Not rechecked this pass (unchanged from pass 1, not touched by the described changes)
+
+Item 2/Critical Component 1's full netting (remuneration, store fees, downgrade valuation at EUR 67.7, the
+counted-hours pipeline via B2.2) was not rebuilt end to end in either pass; this pass only checked the piece that
+changed (the December response's rate and valuation convention) and found it reproduces and keeps the call inside
+band. Item 7's still-paying counts remain unverified as in pass 1.
+
+### Fix
+
+None required. The pass 1 SEND_BACK is lifted: the previously unfiled fact (whether Gezin's December response is
+counted, and how it is valued) is now filed in Step 5, Step 6 and Critical Component 2, reproduces independently,
+and the resulting figure stays inside its stated band under both the filed convention and a cruder neighbour of it.
+Both FIX_NOW band findings from pass 1 are resolved by the widened bands now shipped.

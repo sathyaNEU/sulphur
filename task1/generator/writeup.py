@@ -56,10 +56,12 @@ def write(path, f):
              "**EUR %.1f**, Standaard **EUR %.1f**, Onbeperkt **EUR %.1f** per subscription." % (
                  c["Gezin"], c["Flex"], c["Standaard"], c["Onbeperkt"]))
     L.append("2. The response around the bill (causal reasoning): at the first bill Standaard loses **%.1f** and moves "
-             "down **%.1f** in every 100 in both regions; at the December bill after the e-mail Flex loses **%.1f** and "
-             "Onbeperkt **%.1f** in every 100; Onbeperkt's stayers listen **%.1f** per cent more from the third month." % (
+             "down **%.1f** in every 100 in both regions; at the December bill after the e-mail Flex loses **%.1f**, "
+             "Standaard **%.1f**, Onbeperkt **%.1f** and Gezin **%.1f** in every 100; Onbeperkt's stayers listen **%.1f** "
+             "per cent more from the third month." % (
                  f["extra_cancel"]["Standaard Netherlands"], f["extra_down"]["Standaard Netherlands"],
-                 f["announce_pct"]["Flex"], f["announce_pct"]["Onbeperkt"], f["use_pct"]["Onbeperkt"]))
+                 f["announce_pct"]["Flex"], f["announce_pct"]["Standaard"], f["announce_pct"]["Onbeperkt"],
+                 f["announce_pct"]["Gezin"], f["use_pct"]["Onbeperkt"]))
     L.append("3. The paying base at 31 October 2026 (assembly): **%s** subscriptions, Standaard **%s**." % (
         format(f["paying_oct_total"], ","), format(f["paying_oct"]["Standaard"], ",")))
     L.append("4. Still paying at 31 December 2027 if the rise goes ahead (forecasting): Gezin **%s** of %s, Onbeperkt "
@@ -87,13 +89,19 @@ def write(path, f):
         "little); Flex, Onbeperkt and Gezin pass it nowhere. Every 2027 rise is the plan's own past rise in euros (Flex "
         "EUR %.2f, the others EUR %.2f), so each past response carries at the size it was read." % (
             f["rise_eur"]["Flex"], f["rise_eur"]["Standaard"]),
-        "Read what each past rise did outside its first bill, against the other region over the same months: at the "
-        "December bill after the price e-mail the light listeners left (%s per 100 on Flex, %s on Onbeperkt), and on "
-        "Onbeperkt the accounts that stayed listened %s per cent more from the third month, as single-profile accounts "
-        "added the second profile the plan pays for; 2027's rises are e-mailed on 1 December." % (
-            f["announce_pct"]["Flex"], f["announce_pct"]["Onbeperkt"], f["use_pct"]["Onbeperkt"]),
+        "Read what each past rise did outside its first bill, against the same plan in the other region over the same "
+        "months, the mean of each plan's two rises: at the December bill after the price e-mail, of those paying in "
+        "November, light listeners left (Flex %s, Standaard %s, Onbeperkt %s, Gezin %s per 100); from the third to the "
+        "sixth month the accounts that stayed changed their counted hours by Flex %s, Standaard %s, Onbeperkt %s and Gezin "
+        "%s per cent, Onbeperkt's single users having started to share the profile the plan pays for; every rate is "
+        "carried to every 2027 rise in both regions (they are e-mailed on 1 December)." % (
+            f["announce_pct"]["Flex"], f["announce_pct"]["Standaard"], f["announce_pct"]["Onbeperkt"],
+            f["announce_pct"]["Gezin"], f["use_pct"]["Flex"], f["use_pct"]["Standaard"], f["use_pct"]["Onbeperkt"],
+            f["use_pct"]["Gezin"]),
         "Value what is lost: those who leave at a crossing rise are the heavy listeners, whose counted hours at EUR "
-        "%.2f eat most of what they pay; those who leave at the e-mail are light listeners worth the whole of 2027; "
+        "%.2f eat most of what they pay; those who leave at the e-mail are light listeners, each worth what an October "
+        "subscription on the plan brings in 2027 at the held price, on the plan's continuation by tenure and their own "
+        "listening; the stayers' extra hours cost EUR 0.40 each from April 2027; "
         "those who move down keep paying on the cheaper plan, valued on the past downgraders' own months (Onbeperkt EUR "
         "%.1f each in 2027)." % (f["rate"], f["downgrader_value"]["Onbeperkt"]),
         "Net it per October subscription against the rise's gain: Flex %.1f, Standaard %.1f, Onbeperkt %.1f, Gezin "

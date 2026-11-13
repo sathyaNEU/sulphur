@@ -40,6 +40,8 @@ RIVALS = {
     "each past response carried on the log of the price ratio": M.opts(dose="log"),
     "each plan's own level and one step where a rise passes the rival, fitted on the eight events": M.opts(resp="plan_step"),
     "the stayers' listening counted only where the plan's two rises agree in sign": M.opts(use_sign=True),
+    "a crossing with no rise of its own of that kind read off the plain mean of every past crossing": M.opts(resp="cross_mean"),
+    "each past response read as measured, not floored at none": M.opts(noclip=True),
 }
 ROUTES = {
     "the golden": GOLD,

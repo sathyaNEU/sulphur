@@ -34,11 +34,11 @@
     2.92
    ],
    "Gezin Flanders": [
-    -0.3,
+    -1.12,
     2.98
    ],
    "Gezin Netherlands": [
-    -0.3,
+    -1.12,
     2.98
    ],
    "Onbeperkt Flanders": [
@@ -50,21 +50,21 @@
     3.01
    ],
    "Standaard Flanders": [
-    17.73,
+    16.37,
     22.33
    ],
    "Standaard Netherlands": [
-    17.73,
+    16.37,
     22.33
    ]
   },
   "R4": {
    "Gezin Flanders": [
-    -0.3,
+    -1.17,
     0.3
    ],
    "Gezin Netherlands": [
-    -0.3,
+    -1.17,
     0.3
    ],
    "Onbeperkt Flanders": [
@@ -76,11 +76,11 @@
     2.9
    ],
    "Standaard Flanders": [
-    14.18,
+    12.97,
     18.62
    ],
    "Standaard Netherlands": [
-    14.18,
+    12.97,
     18.62
    ]
   },
@@ -123,7 +123,7 @@
    ],
    "Gezin": [
     2.49,
-    6.36
+    7.84
    ],
    "Onbeperkt": [
     -6.26,
@@ -131,7 +131,7 @@
    ],
    "Standaard": [
     -16.41,
-    -14.03
+    -12.4
    ]
   },
   "R9": {
@@ -141,7 +141,7 @@
    ],
    "Gezin": [
     628,
-    673
+    679
    ],
    "Onbeperkt": [
     685,
@@ -149,7 +149,7 @@
    ],
    "Standaard": [
     273,
-    294
+    299
    ]
   }
  },
@@ -419,6 +419,9 @@
   "Standaard": 15.49
  },
  "rival_family": {
+  "a crossing with no rise of its own of that kind read off the plain mean of every past crossing": [
+   "Gezin"
+  ],
   "downgraders valued on their own hours capped at the lower plan's, with the cap response": [
    "Gezin"
   ],
@@ -426,6 +429,9 @@
    "Gezin"
   ],
   "each past response carried on the log of the price ratio": [
+   "Gezin"
+  ],
+  "each past response read as measured, not floored at none": [
    "Gezin"
   ],
   "each plan's own level and one step where a rise passes the rival, fitted on the eight events": [

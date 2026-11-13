@@ -469,10 +469,17 @@ def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
                 b = np.linalg.lstsq(X * np.sqrt(w)[:, None], yv * np.sqrt(w), rcond=None)[0]
             out.append(max(float(x0 @ b), 0.0))
         return out[0], (0.0 if pl == "FLEX" else out[1])
-    if o.get("resp", "plan_cross") == "plan_cross":
+    lo = -1.0 if o.get("noclip") else 0.0     # a response read as measured, or floored at none
+    if o.get("resp", "plan_cross") in ("plan_cross", "cross_mean"):
         own = [r for r in rows if r["plan"] == pl and r["cross"] == cross]
         if own:
             sel = own
+        elif o.get("resp") == "cross_mean":
+            # no rise of its own of this kind: the plain mean of every past rise of that kind
+            kind = [r for r in rows if r["cross"] == cross]
+            xc = float(np.mean([r["x_cancel"] for r in kind]))
+            xd = float(np.mean([r["x_down"] for r in kind if r["plan"] in LOWER]))
+            return max(xc, lo), (0.0 if pl == "FLEX" else max(xd, lo))
         else:
             base = [r for r in rows if r["plan"] == pl and not r["cross"]]
             inc = []
@@ -483,7 +490,7 @@ def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
                     inc.append((a[0]["x_cancel"] - b[0]["x_cancel"], a[0]["x_down"] - b[0]["x_down"], q))
             xc = base[0]["x_cancel"] + np.mean([i[0] for i in inc])
             xd = base[0]["x_down"] + np.mean([i[1] for i in inc if i[2] in LOWER])
-            return max(xc, 0.0), (0.0 if pl == "FLEX" else max(xd, 0.0))
+            return max(xc, lo), (0.0 if pl == "FLEX" else max(xd, lo))
     elif o.get("resp") == "pooled":
         sel = rows
     elif o.get("resp") == "plan":
@@ -496,7 +503,7 @@ def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
     wd = sum(r["n"] * r["x_down"] for r in sel) / sum(r["n"] for r in sel)
     if o.get("resp") != "plan" and pl == "FLEX":
         wd = 0.0
-    return max(wc, 0.0), max(wd, 0.0)
+    return max(wc, lo), max(wd, lo)
 
 
 def downgrader_realised(pk, o, pl):

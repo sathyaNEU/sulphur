@@ -1,11 +1,11 @@
 {
  "task": "task1",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
  "architecture": 5,
@@ -18,18 +18,17 @@
   "checks": "gates.py 0 FAIL"
  },
  "leak": {
-  "leak_py": "REVIEW (clause numbers and ordinary vocabulary; device_id; shell quota), every line harmless",
-  "reader": "OWED (the price list's e-mail date, the rival scan and every record changed)"
+  "leak_py": "REVIEW (clause numbers, ordinary vocabulary, device_id, shell quota), every line harmless",
+  "reader": "NO LEAK (leak_check_report.md, Solver's-eye read, 2026-11-13)"
  },
  "duplicate_check": {
   "heart": "WARN (skeleton.lesson_taught marginal_not_average as a supporting step)",
   "nearest": "severity none against everything on file"
  },
  "judge": {
-  "verdict": "OWED (re-designed world and call)",
-  "disposition": "APPROVE (its one FIX_NOW, a wording note on the December scan, ruled mistaken: the step describes the 2025 and 2026 rises, whose December scans ship)",
-  "gate_h": "not run by the judge under the 2026-11-13 scope (83dc482); the build's record: no one thing, 5 results over 4 areas, best single hint 0 of 5",
-  "report": "task1/determinism_check_report.md (determinism only; the paying base and the crossing pattern recomputed; the four per-plan euro changes not recomputed by the thread)"
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE (pass 2; pass 1 SEND_BACK on the blocks' silence about Gezin's December leaving, fixed in the blocks, and two band floors, widened by two golden-family readings)",
+  "report": "task1/determinism_check_report.md (pass 1 and pass 2)"
  },
  "paper_pair": 25.3,
  "effort": {
@@ -73,5 +72,5 @@
   "date": "",
   "note": ""
  },
- "resume": "the author rewrites prompt.txt in their own voice (it now also asks how many of each plan's October subscriptions would still be paying at the end of 2027 if its rise goes ahead), voice-check --rewrite and leak.py; then stage 4 on the author's word: the isolated leak reader and the determinism judge together, fixes in the generator, gates.py, audit_containers.py, RESHIPPED (task1)"
+ "resume": "READY: the author rewrites prompt.txt in their own voice, keeping 'on any plan' in the end-of-2027 ask (voice-check.py task1 --rewrite, then leak.py), and uploads it with target.zip; the golden ZIP and the answer blocks are in task1/"
 }
