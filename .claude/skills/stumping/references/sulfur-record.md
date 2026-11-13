@@ -108,7 +108,12 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   which the generator fired at true time (a real controller runs them on its own clock, so their stamps carry no
   offset), restored the overwritten and unread months by exposure, and took the seasons a later inspection found
   sound as the baseline unprompted. Three data repairs with the field's standard remedies were three reflexes, and an
-  event a device schedules is placed on that device's clock. Repriced at about 73, back to stage 2.
+  event a device schedules is placed on that device's clock. Repriced at about 73, back to stage 2. On task22 arch 1
+  (2026-11-12, a feeder energy balance, nine results priced at 20.8 on paper) both platform runs made every move the
+  careful column priced as lost: the switching log replayed on the network with pole-tag matching, the breaker gaps
+  rebuilt from the delivery point, I2R computed hour by hour on the GIS at current loads, the new loads measured on
+  interval analogs and the lights recomputed from the inventory (R38 to R42); what they named and waved through
+  (calendarization even by day, unmetered load placed pro rata, scheduled starts) was true in that world (N20 to N22).
   On task13 arch 3 (2026-11-11: the same world with each zone's own sound level learned from inspection-confirmed
   seasons, seven results, pair 47.2 on paper) the pass missed the level, the restoration and the set, but landed
   the two results priced on a reading: the refit's value, because the terms filed "the faults its zones ran in the

@@ -2,198 +2,232 @@
  "results": [
   {
    "id": "R1",
-   "name": "each feeder's energy in, the breaker metering's missing hours rebuilt",
-   "graded_as": "Component 3",
-   "figure": "R1_energy_in",
+   "name": "each district's gas in at its regulator stations, faulty days rebuilt from the gate",
+   "graded_as": "Ask 1",
+   "figure": "R1_gas_in",
    "depends": [],
-   "independent": "the delivery point meters and the breakers' telemetry",
+   "independent": "the regulator station correctors and the city gate",
    "golden": {
-    "CHL-3, twelve months to September 2026": 12232.6,
-    "CHL-3, January 2026": 1340.5,
-    "fourteen feeders, twelve months to September 2026": 248001.4
+    "Riverside, January 2026": 22715.3,
+    "Lakeview, December 2025": 13568.6,
+    "fourteen districts, twelve months to September 2026": 1844373.0
    },
    "bands": {
-    "CHL-3, twelve months to September 2026": [
-     12159.2,
-     12306.0
+    "Riverside, January 2026": [
+     22374.57,
+     23056.03
     ],
-    "CHL-3, January 2026": [
-     1300.3,
-     1380.7
+    "Lakeview, December 2025": [
+     13365.07,
+     13772.13
     ],
-    "fourteen feeders, twelve months to September 2026": [
-     247703.8,
-     248299.0
+    "fourteen districts, twelve months to September 2026": [
+     1838839.88,
+     1849906.12
     ]
    },
+   "partly_share": 0.5,
    "passes": {
     "quick": {
-     "CHL-3, twelve months to September 2026": 11404.2,
-     "CHL-3, January 2026": 752.9,
-     "fourteen feeders, twelve months to September 2026": 244586.4
+     "Riverside, January 2026": 12943.3,
+     "Lakeview, December 2025": 11976.8,
+     "fourteen districts, twelve months to September 2026": 1824662.0
     },
     "careful": {
-     "CHL-3, twelve months to September 2026": 11866.2,
-     "CHL-3, January 2026": 1033.6,
-     "fourteen feeders, twelve months to September 2026": 247587.0
+     "Riverside, January 2026": 22715.3,
+     "Lakeview, December 2025": 13568.6,
+     "fourteen districts, twelve months to September 2026": 1844373.0
     },
     "thorough": {
-     "CHL-3, twelve months to September 2026": 12232.6,
-     "CHL-3, January 2026": 1340.5,
-     "fourteen feeders, twelve months to September 2026": 248001.4
-    }
-   },
-   "precedent": [
-    "N10"
-   ]
-  },
-  {
-   "id": "R2",
-   "name": "who each feeder served, month by month, and what their meters recorded",
-   "graded_as": "Component 2",
-   "figure": "R2_membership",
-   "depends": [],
-   "independent": "the GIS, the switching log and the meter reads",
-   "golden": {
-    "NTH-4 customers, 31 March 2026": 374,
-    "NTH-4 customers, 31 May 2026": 441,
-    "NTH-4 metered use, twelve months": 9377.7,
-    "NTH-3 metered use, twelve months": 6707.5
-   },
-   "bands": {
-    "NTH-4 customers, 31 March 2026": [
-     371,
-     377
-    ],
-    "NTH-4 customers, 31 May 2026": [
-     438,
-     444
-    ],
-    "NTH-4 metered use, twelve months": [
-     9237.0,
-     9518.4
-    ],
-    "NTH-3 metered use, twelve months": [
-     6606.9,
-     6808.1
-    ]
-   },
-   "passes": {
-    "quick": {
-     "NTH-4 customers, 31 March 2026": 440,
-     "NTH-4 customers, 31 May 2026": 441,
-     "NTH-4 metered use, twelve months": 9871.9,
-     "NTH-3 metered use, twelve months": null
-    },
-    "careful": {
-     "NTH-4 customers, 31 March 2026": 440,
-     "NTH-4 customers, 31 May 2026": 441,
-     "NTH-4 metered use, twelve months": 9871.9,
-     "NTH-3 metered use, twelve months": 6213.3
-    },
-    "thorough": {
-     "NTH-4 customers, 31 March 2026": 374,
-     "NTH-4 customers, 31 May 2026": 441,
-     "NTH-4 metered use, twelve months": 9377.7,
-     "NTH-3 metered use, twelve months": 6707.5
-    }
-   },
-   "precedent": [
-    "N09",
-    "N14"
-   ]
-  },
-  {
-   "id": "R3",
-   "name": "the unmetered lights' real use against their deemed kWh",
-   "graded_as": "Ask 3",
-   "figure": "R3_lights",
-   "depends": [],
-   "independent": "the lighting inventory, the lamp watts and burning hours, the lighting bills",
-   "golden": {
-    "real use": 874.1,
-    "deemed kWh billed": 1145.7
-   },
-   "bands": {
-    "real use": [
-     839.1,
-     909.1
-    ],
-    "deemed kWh billed": [
-     1142.3,
-     1149.1
-    ]
-   },
-   "passes": {
-    "quick": {
-     "real use": 1145.7,
-     "deemed kWh billed": 1145.7
-    },
-    "careful": {
-     "real use": 874.4,
-     "deemed kWh billed": 1145.7
-    },
-    "thorough": {
-     "real use": 874.1,
-     "deemed kWh billed": 1145.7
+     "Riverside, January 2026": 22715.3,
+     "Lakeview, December 2025": 13568.6,
+     "fourteen districts, twelve months to September 2026": 1844373.0
     }
    }
   },
   {
-   "id": "R4",
-   "name": "each feeder's technical losses at its loads' positions",
-   "graded_as": "Component 1",
-   "figure": "R4_technical",
-   "depends": [
-    "R1"
-   ],
-   "independent": "",
+   "id": "R2",
+   "name": "the volume billed for each district's meters, carried to calendar months",
+   "graded_as": "Component 4",
+   "figure": "R2_billed_months",
+   "depends": [],
+   "independent": "the cycle reads and the regulator stations' daily volumes",
    "golden": {
-    "APT-3": 1786.6,
-    "APT-4": 1189.0,
-    "fourteen feeders": 13002.6
+    "College Hill, January 2026": 16638.8,
+    "North End, March 2026": 14000.3,
+    "Old Town, October 2025": 8105.3,
+    "Halvorsen, October 2025": 3293.3
    },
    "bands": {
-    "APT-3": [
-     1661.5,
-     1911.7
+    "College Hill, January 2026": [
+     16306.02,
+     16971.58
     ],
-    "APT-4": [
-     1105.8,
-     1272.2
+    "North End, March 2026": [
+     13720.29,
+     14280.31
     ],
-    "fourteen feeders": [
-     12482.5,
-     13522.7
+    "Old Town, October 2025": [
+     7943.19,
+     8267.41
+    ],
+    "Halvorsen, October 2025": [
+     3227.43,
+     3359.17
     ]
    },
+   "partly_share": 0.5,
    "passes": {
     "quick": {
-     "APT-3": 0.0,
-     "APT-4": 0.0,
-     "fourteen feeders": 0.0
+     "College Hill, January 2026": 16169.3,
+     "North End, March 2026": 12828.5,
+     "Old Town, October 2025": 3991.3,
+     "Halvorsen, October 2025": 2049.4
     },
     "careful": {
-     "APT-3": 832.9,
-     "APT-4": 731.5,
-     "fourteen feeders": 10787.0
+     "College Hill, January 2026": 15647.2,
+     "North End, March 2026": 12788.1,
+     "Old Town, October 2025": 7997.9,
+     "Halvorsen, October 2025": 3280.7
     },
     "thorough": {
-     "APT-3": 1786.6,
-     "APT-4": 1189.0,
-     "fourteen feeders": 13002.6
+     "College Hill, January 2026": 16638.8,
+     "North End, March 2026": 14000.3,
+     "Old Town, October 2025": 8105.3,
+     "Halvorsen, October 2025": 3293.3
+    }
+   },
+   "precedent": [
+    "N20"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the under-registration of the meters that do not compensate for gas temperature",
+   "graded_as": "Component 1",
+   "figure": "R3_under",
+   "depends": [],
+   "independent": "the loggers, the soil station and the commercial correctors",
+   "golden": {
+    "Riverside, Mcf": 3645.0,
+    "Lakeview, Mcf": 2406.0,
+    "College Hill, per cent": 3.05,
+    "Airport, per cent": 2.99,
+    "Halvorsen, per cent": 4.61
+   },
+   "bands": {
+    "Riverside, Mcf": [
+     3426.3,
+     3863.7
+    ],
+    "Lakeview, Mcf": [
+     2261.64,
+     2550.36
+    ],
+    "College Hill, per cent": [
+     2.85,
+     3.25
+    ],
+    "Airport, per cent": [
+     2.79,
+     3.19
+    ],
+    "Halvorsen, per cent": [
+     4.41,
+     4.81
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "Riverside, Mcf": 0.0,
+     "Lakeview, Mcf": 0.0,
+     "College Hill, per cent": 0.0,
+     "Airport, per cent": 0.0,
+     "Halvorsen, per cent": 0.0
+    },
+    "careful": {
+     "Riverside, Mcf": 4452.0,
+     "Lakeview, Mcf": 2919.0,
+     "College Hill, per cent": 3.65,
+     "Airport, per cent": 3.62,
+     "Halvorsen, per cent": 5.67
+    },
+    "thorough": {
+     "Riverside, Mcf": 3645.0,
+     "Lakeview, Mcf": 2406.0,
+     "College Hill, per cent": 3.05,
+     "Airport, per cent": 2.99,
+     "Halvorsen, per cent": 4.61
     }
    },
    "precedent": [
     "L22",
-    "L36"
+    "L37",
+    "N04"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the accounts that took gas without authorization, and their volume",
+   "graded_as": "Component 3",
+   "figure": "R4_diversion",
+   "depends": [],
+   "independent": "each account's reads against its own weather response a year earlier",
+   "golden": {
+    "accounts": 15,
+    "Elm Grove, Mcf": 568.0,
+    "East Industrial, Mcf": 1310.0,
+    "Sundquist, Mcf": 267.0
+   },
+   "bands": {
+    "accounts": [
+     14,
+     16
+    ],
+    "Elm Grove, Mcf": [
+     426.0,
+     710.0
+    ],
+    "East Industrial, Mcf": [
+     982.5,
+     1637.5
+    ],
+    "Sundquist, Mcf": [
+     200.25,
+     333.75
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "accounts": 0,
+     "Elm Grove, Mcf": 0.0,
+     "East Industrial, Mcf": 0.0,
+     "Sundquist, Mcf": 0.0
+    },
+    "careful": {
+     "accounts": 61,
+     "Elm Grove, Mcf": 688.0,
+     "East Industrial, Mcf": 1321.0,
+     "Sundquist, Mcf": 269.0
+    },
+    "thorough": {
+     "accounts": 15,
+     "Elm Grove, Mcf": 568.0,
+     "East Industrial, Mcf": 1310.0,
+     "Sundquist, Mcf": 267.0
+    }
+   },
+   "precedent": [
+    "L26"
    ]
   },
   {
    "id": "R5",
-   "name": "each feeder's non-technical loss, twelve months to September 2026",
-   "graded_as": "Ask 1",
-   "figure": "R5_ntl",
+   "name": "each district's leak loss in the twelve months to September 2026, per cent of its gas in",
+   "graded_as": "Component 2",
+   "figure": "R5_leak_pct",
    "depends": [
     "R1",
     "R2",
@@ -202,659 +236,1048 @@
    ],
    "independent": "",
    "golden": {
-    "CHL-2": 1310.4,
-    "APT-4": 1121.9,
-    "NTH-4": 700.3,
-    "CHL-3": 698.9,
-    "NTH-3": 502.7,
-    "APT-3": 456.6
+    "Riverside": 1.25,
+    "Lakeview": 1.21,
+    "Sundquist": 1.35,
+    "Halvorsen": 0.83,
+    "Elm Grove": 0.69,
+    "East Industrial": 0.59,
+    "College Hill": 0.78
    },
    "bands": {
-    "CHL-2": [
-     1192.5,
-     1428.3
+    "Riverside": [
+     1.15,
+     1.35
     ],
-    "APT-4": [
-     1020.9,
-     1222.9
+    "Lakeview": [
+     1.11,
+     1.31
     ],
-    "NTH-4": [
-     625.3,
-     775.3
+    "Sundquist": [
+     1.25,
+     1.45
     ],
-    "CHL-3": [
-     623.9,
-     773.9
+    "Halvorsen": [
+     0.73,
+     0.93
     ],
-    "NTH-3": [
-     427.7,
-     577.7
+    "Elm Grove": [
+     0.59,
+     0.79
     ],
-    "APT-3": [
-     381.6,
-     531.6
+    "East Industrial": [
+     0.49,
+     0.69
+    ],
+    "College Hill": [
+     0.68,
+     0.88
     ]
    },
+   "partly_share": 0.5,
    "passes": {
     "quick": {
-     "CHL-2": 1921.2,
-     "APT-4": 2158.7,
-     "NTH-4": 844.0,
-     "CHL-3": 853.6,
-     "NTH-3": 1323.0,
-     "APT-3": 2116.9
+     "Riverside": -3.96,
+     "Lakeview": 1.73,
+     "Sundquist": 5.22,
+     "Halvorsen": 4.12,
+     "Elm Grove": 3.53,
+     "East Industrial": 0.72,
+     "College Hill": 0.72
     },
     "careful": {
-     "CHL-2": 1335.3,
-     "APT-4": 1573.9,
-     "NTH-4": 316.1,
-     "CHL-3": 687.7,
-     "NTH-3": 977.3,
-     "APT-3": 1402.8
+     "Riverside": 0.59,
+     "Lakeview": -0.03,
+     "Sundquist": 0.83,
+     "Halvorsen": 0.2,
+     "Elm Grove": -0.1,
+     "East Industrial": 0.52,
+     "College Hill": 0.7
     },
     "thorough": {
-     "CHL-2": 1310.4,
-     "APT-4": 1121.9,
-     "NTH-4": 700.3,
-     "CHL-3": 698.9,
-     "NTH-3": 502.7,
-     "APT-3": 456.6
+     "Riverside": 1.25,
+     "Lakeview": 1.21,
+     "Sundquist": 1.35,
+     "Halvorsen": 0.83,
+     "Elm Grove": 0.69,
+     "East Industrial": 0.59,
+     "College Hill": 0.78
     }
    },
    "precedent": [
-    "L11",
-    "L32"
+    "L22",
+    "L26",
+    "N20"
    ]
   },
   {
    "id": "R6",
-   "name": "the rise in line loss bridged to its causes",
-   "graded_as": "Component 4",
-   "figure": "R6_bridge",
-   "depends": [
-    "R1",
-    "R4"
-   ],
-   "independent": "",
-   "golden": {
-    "line loss, twelve months to September 2024": 7.74,
-    "line loss, twelve months to September 2026": 8.24,
-    "technical losses, points": 0.44,
-    "non-technical losses, points": 0.3,
-    "everything else, points": -0.24
-   },
-   "bands": {
-    "line loss, twelve months to September 2024": [
-     7.69,
-     7.79
-    ],
-    "line loss, twelve months to September 2026": [
-     8.19,
-     8.29
-    ],
-    "technical losses, points": [
-     0.34,
-     0.54
-    ],
-    "non-technical losses, points": [
-     0.2,
-     0.4
-    ],
-    "everything else, points": [
-     -0.34,
-     -0.14
-    ]
-   },
-   "passes": {
-    "quick": {
-     "line loss, twelve months to September 2024": null,
-     "line loss, twelve months to September 2026": null,
-     "technical losses, points": 0.0,
-     "non-technical losses, points": 0.5,
-     "everything else, points": 0.0
-    },
-    "careful": {
-     "line loss, twelve months to September 2024": 7.74,
-     "line loss, twelve months to September 2026": 8.24,
-     "technical losses, points": 0.02,
-     "non-technical losses, points": 0.56,
-     "everything else, points": -0.08
-    },
-    "thorough": {
-     "line loss, twelve months to September 2024": 7.74,
-     "line loss, twelve months to September 2026": 8.24,
-     "technical losses, points": 0.44,
-     "non-technical losses, points": 0.3,
-     "everything else, points": -0.24
-    }
-   },
-   "precedent": [
-    "L26",
-    "L27"
-   ]
-  },
-  {
-   "id": "R7",
-   "name": "the peak hourly demand each approved 2027 connection adds",
-   "graded_as": "Ask 4",
-   "figure": "R7_new_peaks",
-   "depends": [],
-   "independent": "the large power interval meters and the applications",
-   "golden": {
-    "LL-2026-433": 521.6,
-    "LL-2026-722": 931.4,
-    "LL-2026-964": 541.2
-   },
-   "bands": {
-    "LL-2026-433": [
-     495.5,
-     547.7
-    ],
-    "LL-2026-722": [
-     884.8,
-     978.0
-    ],
-    "LL-2026-964": [
-     514.1,
-     568.3
-    ]
-   },
-   "passes": {
-    "quick": {
-     "LL-2026-433": 700.0,
-     "LL-2026-722": 1250.0,
-     "LL-2026-964": 820.0
-    },
-    "careful": {
-     "LL-2026-433": 700.0,
-     "LL-2026-722": 1250.0,
-     "LL-2026-964": 820.0
-    },
-    "thorough": {
-     "LL-2026-433": 521.6,
-     "LL-2026-722": 931.4,
-     "LL-2026-964": 541.2
-    }
-   },
-   "precedent": [
-    "L15"
-   ]
-  },
-  {
-   "id": "R8",
-   "name": "each feeder's technical losses in 2027",
-   "graded_as": "Ask 5",
-   "figure": "R8_tech2027",
-   "depends": [
-    "R4",
-    "R7"
-   ],
-   "independent": "",
-   "golden": {
-    "APT-4": 1720.9,
-    "APT-3": 1694.1,
-    "fourteen feeders": 13455.3
-   },
-   "bands": {
-    "APT-4": [
-     1600.4,
-     1841.4
-    ],
-    "APT-3": [
-     1575.5,
-     1812.7
-    ],
-    "fourteen feeders": [
-     13051.6,
-     13859.0
-    ]
-   },
-   "passes": {
-    "quick": {
-     "APT-4": 0.0,
-     "APT-3": 0.0,
-     "fourteen feeders": 0.0
-    },
-    "careful": {
-     "APT-4": 889.5,
-     "APT-3": 960.3,
-     "fourteen feeders": 11105.3
-    },
-    "thorough": {
-     "APT-4": 1720.9,
-     "APT-3": 1694.1,
-     "fourteen feeders": 13455.3
-    }
-   },
-   "precedent": [
-    "N13",
-    "N01"
-   ]
-  },
-  {
-   "id": "R9",
-   "name": "the four feeders the 2027 sweep covers",
+   "name": "the districts that enter the 2027-2029 main replacement program",
    "graded_as": "Recommendation",
-   "figure": "R9_sweep",
+   "figure": "R6_designated",
    "depends": [
     "R5"
    ],
    "independent": "",
    "golden": [
-    "CHL-2",
-    "APT-4",
-    "NTH-4",
-    "CHL-3"
+    "Downtown",
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
    ],
    "passes": {
     "quick": [
-     "APT-4",
-     "APT-3",
-     "CHL-2",
-     "NTH-3"
+     "Airport",
+     "Downtown",
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Old Town",
+     "Prairie Rose",
+     "Sundquist"
     ],
     "careful": [
-     "APT-4",
-     "APT-3",
-     "CHL-2",
-     "NTH-3"
+     "Downtown",
+     "Old Town"
     ],
     "thorough": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    "precedent": [
-    "L11"
+    "L22",
+    "L26",
+    "N20"
    ]
-  }
- ],
- "weights": {
-  "recommendation": 14,
-  "components": 24,
-  "asks": 55,
-  "instruction": 7
- },
- "routes": [
+  },
   {
-   "name": "the golden: breaker gaps from the delivery point balance, the switching log replayed, technical losses at each node's monthly metered load",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "NTH-4",
-    "CHL-3"
+   "id": "R7",
+   "name": "the districts where the 2027 meter changeout goes",
+   "graded_as": "Ask 2",
+   "figure": "R7_changeout",
+   "depends": [
+    "R3"
    ],
-   "golden": true
-  },
-  {
-   "name": "technical losses at the 2019 study's percentage of each feeder's energy",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "APT-3",
-    "NTH-4"
+   "independent": "",
+   "golden": [
+    "Elm Grove",
+    "Halvorsen",
+    "Lakeview",
+    "North End",
+    "Prairie Rose",
+    "Riverside",
+    "Sundquist"
+   ],
+   "passes": {
+    "quick": [],
+    "careful": [
+     "Airport",
+     "College Hill",
+     "Elm Grove",
+     "East Industrial",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "thorough": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   "precedent": [
+    "L22",
+    "L37",
+    "N04"
    ]
   },
   {
-   "name": "technical losses on the 2019 study's equivalent resistance with 2026's current",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "APT-3",
-    "NTH-4"
-   ]
-  },
-  {
-   "name": "technical losses with load placed by transformer rating (the study's load-flow convention)",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "APT-3",
-    "NTH-4"
-   ]
-  },
-  {
-   "name": "today's GIS feeder for every month",
-   "answer": [
-    "APT-4",
-    "CHL-2",
-    "CHL-3",
-    "NTH-3"
-   ]
-  },
-  {
-   "name": "breaker gaps carried at the feeder's own average for the hour",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "NTH-4",
-    "NTH-3"
-   ]
-  },
-  {
-   "name": "breaker gaps interpolated across",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "NTH-4",
-    "NTH-3"
-   ]
-  },
-  {
-   "name": "the careful but hurried pass: today's GIS, gaps at the feeder's average, the 2019 percentages",
-   "answer": [
-    "APT-4",
-    "APT-3",
-    "CHL-2",
-    "NTH-3"
-   ]
-  },
-  {
-   "name": "today's GIS with the study's resistance and interpolated gaps",
-   "answer": [
-    "APT-4",
-    "CHL-2",
-    "NTH-3",
-    "APT-3"
-   ]
-  },
-  {
-   "name": "only the switching log replayed",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "APT-3",
-    "NTH-4"
-   ]
-  },
-  {
-   "name": "only the breaker gaps from the balance",
-   "answer": [
-    "APT-4",
-    "APT-3",
-    "CHL-2",
-    "CHL-3"
-   ]
-  },
-  {
-   "name": "only technical losses at the loads' positions",
-   "answer": [
-    "APT-4",
-    "CHL-2",
-    "NTH-3",
-    "CHL-3"
-   ]
-  },
-  {
-   "name": "the log and the gaps, the 2019 percentages kept",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "APT-3",
-    "NTH-4"
-   ]
-  },
-  {
-   "name": "the log and the positions, gaps at the average",
-   "answer": [
-    "CHL-2",
-    "APT-4",
-    "NTH-4",
-    "NTH-3"
-   ]
-  },
-  {
-   "name": "the gaps and the positions, today's GIS",
-   "answer": [
-    "APT-4",
-    "CHL-2",
-    "CHL-3",
-    "NTH-3"
+   "id": "R8",
+   "name": "the scheduled 2027 changeouts done before the 2027-28 heating season",
+   "graded_as": "Ask 3",
+   "figure": "R8_done_before_season",
+   "depends": [],
+   "independent": "the 2024-25 work orders and the 2027 plan",
+   "golden": 668,
+   "band": [
+    641.28,
+    694.72
+   ],
+   "partly": [
+    614.56,
+    721.44
+   ],
+   "passes": {
+    "quick": 976,
+    "careful": 976,
+    "thorough": 668
+   },
+   "precedent": [
+    "N22",
+    "N03"
    ]
   }
  ],
  "hints": [
   {
-   "sentence": "Each substation's delivery point meter covers every hour the feeder breakers' telemetry missed.",
+   "sentence": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm; the commercial correctors log what the gas actually was.",
    "rescues": [
-    "R1"
+    "R3",
+    "R7"
    ]
   },
   {
-   "sentence": "The GIS shows today's network; the switching log moved customers between feeders.",
+   "sentence": "Spread each read period's gas over its days the way the district's own regulator station took it.",
    "rescues": [
     "R2"
    ]
   },
   {
-   "sentence": "Technical losses follow the square of each segment's current where the loads sit now, not the 2019 study's percentages.",
+   "sentence": "A snowbird's winter use keeps some heating and comes back in summer; a bypass or a furnace tap does not.",
    "rescues": [
     "R4"
    ]
   },
   {
-   "sentence": "New connections draw what comparable connected members draw, not the load they applied for.",
+   "sentence": "Past changeouts finished at the pace access allowed, slowest where the meter is inside.",
    "rescues": [
-    "R7"
+    "R8"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Downtown",
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the logger study's straight line on the airport's air",
+   "answer": [
+    "Downtown",
+    "Old Town"
+   ]
+  },
+  {
+   "name": "the 2019 consultant's monthly mean air temperature",
+   "answer": []
+  },
+  {
+   "name": "each read spread evenly over its days",
+   "answer": [
+    "Downtown",
+    "Halvorsen",
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ]
+  },
+  {
+   "name": "bills taken in the month they were read",
+   "answer": [
+    "Downtown",
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ]
+  },
+  {
+   "name": "no diversion subtracted",
+   "answer": [
+    "Downtown",
+    "Elm Grove",
+    "East Industrial",
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ]
+  },
+  {
+   "name": "every collapse in use booked as diversion",
+   "answer": [
+    "Downtown",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ]
+  },
+  {
+   "name": "the careful but hurried route",
+   "answer": [
+    "Downtown",
+    "Old Town"
    ]
   }
  ],
  "forcing": {
   "kind": "set",
+  "line": "leak loss over 1.0 per cent of the gas delivered into the district",
   "golden_family": [
    {
-    "name": "the golden",
+    "name": "the golden: each read spread on its district's daily sendout, gas temperature tied to the soil",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "name": "load placed by each node's twelve-month metered energy",
+    "name": "reads spread on a base-and-degree-day fit of each district's sendout",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "CHL-3",
-     "NTH-4"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "name": "each read period spread evenly over its days",
+    "name": "gas temperature tied to the commercial correctors' gas temperature",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "CHL-3",
-     "NTH-4"
-    ]
-   }
-  ],
-  "shortcuts": [
-   {
-    "name": "technical losses at the 2019 study's percentage of each feeder's energy",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "APT-3",
-     "NTH-4"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "name": "technical losses on the 2019 study's equivalent resistance with 2026's current",
+    "name": "both rivals together",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "APT-3",
-     "NTH-4"
-    ]
-   },
-   {
-    "name": "technical losses with load placed by transformer rating (the study's load-flow convention)",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "APT-3",
-     "NTH-4"
-    ]
-   },
-   {
-    "name": "today's GIS feeder for every month",
-    "answer": [
-     "APT-4",
-     "CHL-2",
-     "CHL-3",
-     "NTH-3"
-    ]
-   },
-   {
-    "name": "breaker gaps carried at the feeder's own average for the hour",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "NTH-3"
-    ]
-   },
-   {
-    "name": "breaker gaps interpolated across",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "NTH-3"
-    ]
-   },
-   {
-    "name": "the careful but hurried pass: today's GIS, gaps at the feeder's average, the 2019 percentages",
-    "answer": [
-     "APT-4",
-     "APT-3",
-     "CHL-2",
-     "NTH-3"
-    ]
-   },
-   {
-    "name": "today's GIS with the study's resistance and interpolated gaps",
-    "answer": [
-     "APT-4",
-     "CHL-2",
-     "NTH-3",
-     "APT-3"
-    ]
-   },
-   {
-    "name": "only the switching log replayed",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "APT-3",
-     "NTH-4"
-    ]
-   },
-   {
-    "name": "only the breaker gaps from the balance",
-    "answer": [
-     "APT-4",
-     "APT-3",
-     "CHL-2",
-     "CHL-3"
-    ]
-   },
-   {
-    "name": "only technical losses at the loads' positions",
-    "answer": [
-     "APT-4",
-     "CHL-2",
-     "NTH-3",
-     "CHL-3"
-    ]
-   },
-   {
-    "name": "the log and the gaps, the 2019 percentages kept",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "APT-3",
-     "NTH-4"
-    ]
-   },
-   {
-    "name": "the log and the positions, gaps at the average",
-    "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "NTH-3"
-    ]
-   },
-   {
-    "name": "the gaps and the positions, today's GIS",
-    "answer": [
-     "APT-4",
-     "CHL-2",
-     "CHL-3",
-     "NTH-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    }
   ],
   "perturbations": [
    {
-    "input": "conductor R at 25 C",
+    "input": "gas temperature's air coefficient -20%",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "input": "conductor R plus 5 per cent",
+    "input": "gas temperature's air coefficient +20%",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "CHL-3",
-     "NTH-4"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "input": "transformer losses plus 10 per cent",
+    "input": "indoor gas temperature -2 F",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "input": "transformer losses less 10 per cent",
+    "input": "indoor gas temperature +2 F",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "input": "burning hours less 5 per cent",
+    "input": "damage reports -20%",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    },
    {
-    "input": "substation transformer losses plus 20 per cent",
+    "input": "damage reports +20%",
     "answer": [
-     "CHL-2",
-     "APT-4",
-     "NTH-4",
-     "CHL-3"
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "own use -20%",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "own use +20%",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "diversion volumes -20%",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "diversion volumes +20%",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
     ]
    }
   ]
+ },
+ "changeout_forcing": {
+  "golden_family": [
+   {
+    "name": "the golden: each read spread on its district's daily sendout, gas temperature tied to the soil",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "reads spread on a base-and-degree-day fit of each district's sendout",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "gas temperature tied to the commercial correctors' gas temperature",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "both rivals together",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "gas temperature's air coefficient -20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "gas temperature's air coefficient +20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "indoor gas temperature -2 F",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "indoor gas temperature +2 F",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "damage reports -20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "damage reports +20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "own use -20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "own use +20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "diversion volumes -20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "input": "diversion volumes +20%",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the logger study's straight line on the airport's air",
+    "answer": [
+     "Airport",
+     "College Hill",
+     "Elm Grove",
+     "East Industrial",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the 2019 consultant's monthly mean air temperature",
+    "answer": [
+     "Airport",
+     "College Hill",
+     "Downtown",
+     "Elm Grove",
+     "East Industrial",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Old Town",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "each read spread evenly over its days",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "bills taken in the month they were read",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "no diversion subtracted",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "every collapse in use booked as diversion",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the careful but hurried route",
+    "answer": [
+     "Airport",
+     "College Hill",
+     "Elm Grove",
+     "East Industrial",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   }
+  ]
+ },
+ "margins": {
+  "Old Town": {
+   "leak_pct": 1.606,
+   "ur_pct": 2.019,
+   "ntc_meters": 501,
+   "family_leak": [
+    1.606,
+    1.619,
+    1.611,
+    1.623
+   ],
+   "perturbed_leak": [
+    1.62,
+    1.592,
+    1.484,
+    1.727,
+    1.612,
+    1.6,
+    1.636,
+    1.575,
+    1.619,
+    1.593
+   ]
+  },
+  "Riverside": {
+   "leak_pct": 1.25,
+   "ur_pct": 4.683,
+   "ntc_meters": 749,
+   "family_leak": [
+    1.25,
+    1.278,
+    1.268,
+    1.296
+   ],
+   "perturbed_leak": [
+    1.308,
+    1.191,
+    1.25,
+    1.25,
+    1.272,
+    1.227,
+    1.268,
+    1.231,
+    1.264,
+    1.235
+   ]
+  },
+  "College Hill": {
+   "leak_pct": 0.777,
+   "ur_pct": 3.05,
+   "ntc_meters": 505,
+   "family_leak": [
+    0.777,
+    0.785,
+    0.78,
+    0.788
+   ],
+   "perturbed_leak": [
+    0.787,
+    0.767,
+    0.746,
+    0.807,
+    0.786,
+    0.768,
+    0.785,
+    0.769,
+    0.777,
+    0.777
+   ]
+  },
+  "North End": {
+   "leak_pct": 0.59,
+   "ur_pct": 4.709,
+   "ntc_meters": 792,
+   "family_leak": [
+    0.59,
+    0.622,
+    0.61,
+    0.642
+   ],
+   "perturbed_leak": [
+    0.657,
+    0.523,
+    0.59,
+    0.59,
+    0.592,
+    0.589,
+    0.61,
+    0.57,
+    0.59,
+    0.59
+   ]
+  },
+  "Westgate": {
+   "leak_pct": 0.396,
+   "ur_pct": 4.261,
+   "ntc_meters": 69,
+   "family_leak": [
+    0.396,
+    0.405,
+    0.398,
+    0.407
+   ],
+   "perturbed_leak": [
+    0.402,
+    0.391,
+    0.393,
+    0.399,
+    0.44,
+    0.352,
+    0.416,
+    0.376,
+    0.396,
+    0.396
+   ]
+  },
+  "Lakeview": {
+   "leak_pct": 1.211,
+   "ur_pct": 4.71,
+   "ntc_meters": 542,
+   "family_leak": [
+    1.211,
+    1.223,
+    1.23,
+    1.242
+   ],
+   "perturbed_leak": [
+    1.273,
+    1.148,
+    1.211,
+    1.211,
+    1.22,
+    1.202,
+    1.241,
+    1.181,
+    1.211,
+    1.211
+   ]
+  },
+  "Prairie Rose": {
+   "leak_pct": 0.253,
+   "ur_pct": 4.671,
+   "ntc_meters": 285,
+   "family_leak": [
+    0.253,
+    0.283,
+    0.26,
+    0.29
+   ],
+   "perturbed_leak": [
+    0.276,
+    0.231,
+    0.253,
+    0.253,
+    0.306,
+    0.2,
+    0.272,
+    0.234,
+    0.253,
+    0.253
+   ]
+  },
+  "Heritage Park": {
+   "leak_pct": 0.182,
+   "ur_pct": 4.743,
+   "ntc_meters": 29,
+   "family_leak": [
+    0.182,
+    0.188,
+    0.183,
+    0.189
+   ],
+   "perturbed_leak": [
+    0.186,
+    0.179,
+    0.182,
+    0.182,
+    0.2,
+    0.165,
+    0.207,
+    0.158,
+    0.182,
+    0.182
+   ]
+  },
+  "East Industrial": {
+   "leak_pct": 0.585,
+   "ur_pct": 2.907,
+   "ntc_meters": 142,
+   "family_leak": [
+    0.585,
+    0.586,
+    0.589,
+    0.589
+   ],
+   "perturbed_leak": [
+    0.594,
+    0.577,
+    0.559,
+    0.612,
+    0.59,
+    0.58,
+    0.598,
+    0.573,
+    0.722,
+    0.448
+   ]
+  },
+  "Downtown": {
+   "leak_pct": 1.353,
+   "ur_pct": 1.404,
+   "ntc_meters": 475,
+   "family_leak": [
+    1.353,
+    1.359,
+    1.356,
+    1.362
+   ],
+   "perturbed_leak": [
+    1.36,
+    1.347,
+    1.215,
+    1.491,
+    1.355,
+    1.352,
+    1.377,
+    1.33,
+    1.445,
+    1.262
+   ]
+  },
+  "Airport": {
+   "leak_pct": 0.646,
+   "ur_pct": 2.986,
+   "ntc_meters": 204,
+   "family_leak": [
+    0.646,
+    0.645,
+    0.653,
+    0.651
+   ],
+   "perturbed_leak": [
+    0.665,
+    0.628,
+    0.591,
+    0.701,
+    0.675,
+    0.617,
+    0.667,
+    0.625,
+    0.646,
+    0.646
+   ]
+  },
+  "Elm Grove": {
+   "leak_pct": 0.691,
+   "ur_pct": 4.662,
+   "ntc_meters": 544,
+   "family_leak": [
+    0.691,
+    0.724,
+    0.71,
+    0.743
+   ],
+   "perturbed_leak": [
+    0.751,
+    0.631,
+    0.691,
+    0.691,
+    0.706,
+    0.676,
+    0.716,
+    0.666,
+    0.811,
+    0.571
+   ]
+  },
+  "Halvorsen": {
+   "leak_pct": 0.826,
+   "ur_pct": 4.611,
+   "ntc_meters": 407,
+   "family_leak": [
+    0.826,
+    0.827,
+    0.849,
+    0.85
+   ],
+   "perturbed_leak": [
+    0.897,
+    0.755,
+    0.826,
+    0.826,
+    0.858,
+    0.794,
+    0.864,
+    0.788,
+    0.826,
+    0.826
+   ]
+  },
+  "Sundquist": {
+   "leak_pct": 1.347,
+   "ur_pct": 4.619,
+   "ntc_meters": 432,
+   "family_leak": [
+    1.347,
+    1.375,
+    1.37,
+    1.398
+   ],
+   "perturbed_leak": [
+    1.42,
+    1.273,
+    1.347,
+    1.347,
+    1.377,
+    1.316,
+    1.384,
+    1.309,
+    1.431,
+    1.262
+   ]
+  }
+ },
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
  }
 }

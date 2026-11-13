@@ -1,40 +1,41 @@
 {
  "task": "task22",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "",
+ "call": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist; 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 668 of 976 scheduled changeouts done before the 2027-28 season",
  "chain": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services; R4 the accounts that took gas without authorization, told from new snowbirds; R5 each district's leak loss in the twelve months to September 2026; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the scheduled 2027 changeouts done before the 2027-28 heating season",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (2026-11-12: 6 REVIEW lines, each ruled harmless in leak_check_report.md; no LEAK)",
+  "reader": "three isolated reads on architecture 2: the first (fresh cut) and the second (after the stage 4 fixes) found no ranking file, no helping file and no answer figure; their points were fixed in one pass each (the meter-access clause removed; the accounts, the billed month and the leak loss share pinned in the prompt); the third, on the re-pinned prompt only, found no method, file, count or rounding named and every ask determinate (leak_check_report.md)"
  },
  "duplicate_check": {
-  "heart": "WARN at register (strategy risk, chain near task8 v19, question form, two house WARNs), 2026-11-13",
+  "heart": "WARN (strategy risk, chain near task8 v19, question form, house lessons and shell), 2026-11-12",
   "nearest": "task4 v13 (skeleton severity none)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "passes": "four: the first read a stale target.zip (re-cut); DETERMINISTIC and APPROVE on the fresh cut, on the prompt's first two pins and on the re-pinned share window",
+  "report": "task22/determinism_check_report.md"
  },
- "paper_pair": null,
+ "paper_pair": 40.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 40.5,
+  "thorough": 100.0,
+  "largest_hint": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm; the commercial correctors log what the gas actually was (rescues R3 and R7, 2 of 8)"
  },
  "runs": {
   "run1": null,
@@ -99,7 +100,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: prototype the district parameters in a scratch script (every district 12 per cent or more from both lines under the golden, each shortcut flipping its own districts), then the results chain, effort test, frontier check, fork and closure tables and prompt; precut.py exit 0",
+ "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py --rewrite, leak.py), uploads it with target.zip, then /triage-runs task22 with both runs and the rubric",
  "approved": null,
  "submitted": null,
  "portal": {

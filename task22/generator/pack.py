@@ -1,185 +1,37 @@
-"""task22 pack: the shipped tables built from the records (frames()), then written under target/ in the formats each
-system exports (write()). The golden and the passes run on frames() for calibration and on the files read back
-(golden.load) for the figures, and the two must agree."""
+"""task22 architecture 2: the pack under target/, written from the simulated world as each Brandvold system would
+export it, with the mess each system really makes."""
 import datetime as dt
-import math
-from collections import defaultdict
+import os
 
 import numpy as np
+import openpyxl
 import pandas as pd
+from openpyxl.styles import Alignment, Font
 
+import docs as DC
 import params as P
-import records as R
-import world as WD
+import postprocess
+import records as RC
 
-
-def burn_hours(w):
-    """Monthly burning hours of a photocell-controlled light at Delmont: the month's dark hours on average."""
-    g = w.g
-    dark = (w.elev < -0.8).astype(float)
-    tot = defaultdict(float)
-    n = defaultdict(int)
-    seen = set()
-    for h in range(g.H):
-        d = g.loc[h].date()
-        tot[(d.year, d.month)] += dark[h]
-        if (d.year, d.month) not in seen:
-            seen.add((d.year, d.month))
-    by_m = defaultdict(list)
-    for (y, m), v in tot.items():
-        if (y, m) in ((2026, 11),):
-            continue
-        by_m[m].append(v)
-    return {m: round(float(np.mean(v))) for m, v in sorted(by_m.items())}
-
-
-def frames(w, seed=P.SEED + 7):
-    rng = np.random.default_rng(seed)
-    R.customer_metered(w)
-    F = {}
-    reads = R.meter_reads(w, rng) + R.lp_reads(w, rng)
-    rows = []
-    for r in reads:
-        bill = R.add_business(r["read_date"], int(rng.integers(1, 4)))
-        rows.append(dict(ServicePointID=r["sp"], AccountNo=r["account"], MeterNo=r["meter"], RateCode=r["rate"],
-                         Cycle=r["cycle"], ReadDate=r["read_date"].isoformat(), ReadType=r["read_type"],
-                         Register=round(r["register"], 0) if r["register"] is not None else None,
-                         kWh=round(r["kwh"], 0) if r["kwh"] is not None else None,
-                         RegisterRcv=round(r["register_rcv"], 0) if r["register_rcv"] is not None else None,
-                         kWhRcv=round(r["kwh_rcv"], 0) if r["kwh_rcv"] is not None else None,
-                         Multiplier=r["mult"], MeterType=r["meter_type"], BillDate=bill.isoformat()))
-    F["reads"] = pd.DataFrame(rows)
-    w.read_rows = reads
-    dp = R.delivery_points(w, rng)
-    F["dp"] = pd.DataFrame(dp, columns=["DeliveryPoint", "Date", "HourEnding", "kWh", "kVArh"])
-    sc = R.scada(w, rng)
-    F["scada"] = pd.DataFrame(sc, columns=["Timestamp", "Point", "MW", "MVAR", "Quality"])
-    F["station_service"] = pd.DataFrame(R.station_service(w))
-    F["subxf"] = pd.DataFrame([dict(Substation=v["name"], Rating_MVA=v["mva"], NoLoad_kW=v["nl_kw"],
-                                    LoadLoss_kW=v["ll_kw"], Impedance_pct=round(7.6 + 0.3 * k, 1))
-                               for k, v in enumerate(P.SUBSTATIONS.values())])
-    segs, sws, xfs, sps = R.gis_export(w, rng)
-    F["gis_segments"] = pd.DataFrame(segs)
-    F["gis_switches"] = pd.DataFrame(sws)
-    F["gis_xf"] = pd.DataFrame(xfs)
-    F["gis_sp"] = pd.DataFrame(sps)
-    reg = R.xfmr_register(w)
-    F["xfmr_register"] = pd.DataFrame([dict(AssetID=r["AssetID"], kVA=r["kVA"], MfgYear=r["MfgYear"],
-                                            InstallDate=r["InstallDate"].isoformat(),
-                                            RemovedDate=r["RemovedDate"].isoformat() if r["RemovedDate"] else "",
-                                            Location=r["Location"], Mount=r["Mount"]) for r in reg])
-    F["oms_log"] = pd.DataFrame(R.oms_log(w, rng))
-    F["oms_xref"] = pd.DataFrame(R.oms_xref(w, rng))
-    F["conductors"] = pd.DataFrame([dict(Conductor=k, R25_ohm_per_mile=v[1], R50_ohm_per_mile=v[0],
-                                         X_ohm_per_mile=v[2]) for k, v in P.CONDUCTORS.items()])
-    xl = []
-    for kva, (nl, ll) in P.XFMR_LOSS.items():
-        xl.append(dict(kVA=kva, Vintage="2010 and later", NoLoad_W=nl, LoadLoss_W=ll))
-        xl.append(dict(kVA=kva, Vintage="before 2010", NoLoad_W=round(nl * P.OLD_NL), LoadLoss_W=round(ll * P.OLD_LL)))
-    F["xfmr_losses"] = pd.DataFrame(xl)
-    nominal = {"HPS100": 100, "HPS150": 150, "HPS250": 250, "MV175": 175, "LED40": 40, "LED70": 70, "LED110": 110}
-    F["lamp_watts"] = pd.DataFrame([dict(LampCode=k, Nominal_W=nominal[k], Input_W=v) for k, v in P.INPUT_W.items()])
-    bh = burn_hours(w)
-    F["burn_hours"] = pd.DataFrame([dict(Month=m, BurningHours=v) for m, v in bh.items()])
-    R.light_accounts(w, rng)
-    inv = []
-    for L in w.lights:
-        inv.append(dict(LightID=L["id"], Account=L["account"], Type=L["kind"], PoleNode=L["node"],
-                        LampCode=L["lamp"], InstallDate=L["install"].isoformat(),
-                        LEDConversion=L["led"].isoformat() if L["led"] else "",
-                        LEDLampCode=P.LED_FOR[L["lamp"]] if L["led"] else "",
-                        WorkOrder="WO-%06d" % int(rng.integers(100000, 999999)) if L["led"] else ""))
-    F["lights_inventory"] = pd.DataFrame(inv)
-    lb = R.lights_billing(w)
-    F["lights_billing"] = pd.DataFrame([dict(Account=r["account"], Month=r["month"].isoformat(), Type=r["kind"],
-                                             LampCode=r["lamp"], Lamps=r["lamps"], DeemedkWh=r["kwh"]) for r in lb])
-    F["lp_interval"] = pd.DataFrame(R.lp_interval(w), columns=["ServicePointID", "MeterNo", "IntervalEnd", "kWh"])
-    apps = R.applications(w, rng)
-    F["applications"] = pd.DataFrame([{k: (v.isoformat() if isinstance(v, dt.date) else v) for k, v in a.items()}
-                                      for a in apps])
-    st = WD.study_2019(w)
-    w.study = st
-    F["study2019"] = pd.DataFrame([dict(Feeder=f, Peak_MW=round(s["peak_mw"], 2), Energy_MWh=round(s["energy_mwh"]),
-                                        LoadFactor=round(s["lf"], 3), Req_ohm=round(s["req"], 3),
-                                        PeakLoss_kW=round(s["peak_loss_kw"], 1), LossFactor=round(s["lsf"], 3),
-                                        Primary_MWh=round(s["prim_mwh"]), NoLoad_MWh=round(s["nl_mwh"]),
-                                        LoadLoss_MWh=round(s["ll_mwh"]), Secondary_MWh=round(s["sec_mwh"]),
-                                        Technical_MWh=round(s["tech_mwh"]), Technical_pct=round(s["tech_pct"], 2))
-                                   for f, s in st.items()])
-    # the 2027 reconductor: APT-3's trunk segments from the breaker out to 9.8 miles
-    tr = w.net.trunk[P.RECONDUCTOR["feeder"]]
-    segs_rc = []
-    for s in w.net.seg:
-        if s["feeder"] == P.RECONDUCTOR["feeder"] and s["phasing"] == "ABC" and s["b"] in tr and \
-                w.net.node_pos[s["b"]] <= P.RECONDUCTOR["miles"] + 0.05:
-            segs_rc.append(s["id"])
-    w.reconductor_segments = segs_rc
-    F["cwp"] = dict(segments=segs_rc, new=P.RECONDUCTOR["new"], in_service=P.RECONDUCTOR["in_service"].isoformat())
-    F["outages"] = pd.DataFrame(R.outage_log(w, rng))
-    F["weather"] = pd.DataFrame(R.weather_daily(w))
-    return F
-
-
-# ---------------------------------------------------------------------------------------------------------------
-# the files under target/
-# ---------------------------------------------------------------------------------------------------------------
-
-import os  # noqa: E402
-
-import openpyxl  # noqa: E402
-from openpyxl.styles import Alignment, Font  # noqa: E402
-
-import docs as DC  # noqa: E402
-import postprocess  # noqa: E402
-
-ORG = "City of Delmont"
-FILES = {
-    "dp": "bmpa_delivery_point_interval_2023-09_2026-10.csv",
-    "scada": "historian_feeder_breakers_hourly_2023-09-01_2026-10-31.csv",
-    "reads": "cis_meter_reads_2023-08-01_2026-11-01.csv",
-    "lp_interval": "idr_large_power_interval_2025-10_2026-09.csv",
-    "gis": "gis_electric_network_2026-10-27.xlsx",
-    "register": "transformer_asset_register_2026-10-27.xlsx",
-    "oms_log": "oms_switching_orders_2023-09_2026-10.csv",
-    "xref": "oms_gis_device_crosswalk_2024-07.xlsx",
-    "eng": "distribution_engineering_tables.xlsx",
-    "subs": "substations_and_station_service.xlsx",
-    "lights_inv": "street_area_lighting_inventory_2026-10-27.xlsx",
-    "lights_bill": "unmetered_lighting_billing_2023-09_2026-10.csv",
-    "rates": "dpl_electric_rate_schedules_2025-10.pdf",
-    "study": "loss_evaluation_study_2019_hester.pdf",
-    "apps": "large_load_service_applications_2019-2027.xlsx",
-    "cwp": "cwp_2027-2028_approved_projects_excerpt.pdf",
-    "budget": "fy2027_budget_instructions_electric_fund.pdf",
-    "scope": "rfp_2026-14_revenue_protection_scope.pdf",
-    "lineloss": "annual_line_loss_report_2019-2026.xlsx",
-    "outages": "oms_outage_events_2023-09_2026-10.csv",
-    "wholesale": "bmpa_wholesale_rate_schedule_w1_2026.pdf",
-    "weather": "delmont_municipal_airport_daily_2023-09_2026-10.csv",
+ORG = P.ORG
+F = P.FILES
+# workbook creators and their own created and saved times (UTC)
+OFFICE = {
+    "register": ("2016-03-08T15:12:00Z", "2026-11-02T14:41:00Z", "GIS and Records"),
+    "damage": ("2023-02-14T16:30:00Z", "2026-10-29T19:12:00Z", "Gas Operations"),
+    "own_use": ("2021-11-03T14:05:00Z", "2026-10-08T15:47:00Z", "Measurement and Regulation"),
+    "plan2027": ("2026-08-19T13:22:00Z", "2026-09-30T20:05:00Z", "Gas Engineering"),
+    "rp_cases": ("2021-04-12T18:40:00Z", "2026-01-21T16:18:00Z", "Customer Service"),
+    "lauf_report": ("2019-11-22T15:01:00Z", "2026-10-26T21:33:00Z", "Utilities Finance"),
+    "invoices": ("2023-10-11T14:20:00Z", "2026-10-15T16:44:00Z", "Utilities Finance"),
 }
-DISTRACTORS = ["outages", "wholesale", "weather"]
-CDT = dt.timezone(dt.timedelta(hours=-5))
-CST = dt.timezone(dt.timedelta(hours=-6))
-WRITTEN = {   # each export's own save time
-    "dp": dt.datetime(2026, 11, 2, 7, 41, 3, tzinfo=CST),
-    "scada": dt.datetime(2026, 11, 3, 8, 12, 51, tzinfo=CST),
-    "reads": dt.datetime(2026, 11, 5, 9, 3, 27, tzinfo=CST),
-    "lp_interval": dt.datetime(2026, 10, 5, 10, 22, 8, tzinfo=CDT),
-    "oms_log": dt.datetime(2026, 11, 3, 8, 47, 14, tzinfo=CST),
-    "lights_bill": dt.datetime(2026, 11, 3, 9, 18, 40, tzinfo=CST),
-    "outages": dt.datetime(2026, 11, 3, 8, 51, 2, tzinfo=CST),
-    "weather": dt.datetime(2026, 11, 2, 6, 5, 33, tzinfo=CST),
+WRITTEN = {
+    F["reads"]: "2026-11-02T11:14:00Z", F["accounts"]: "2026-11-02T11:20:00Z", F["drs"]: "2026-11-03T14:02:00Z",
+    F["gate"]: "2026-11-03T14:05:00Z", F["evc"]: "2026-11-03T14:31:00Z", F["airport"]: "2026-11-04T16:10:00Z",
+    F["soil"]: "2026-11-04T16:22:00Z", F["loggers"]: "2025-05-09T19:41:00Z", F["workorders"]: "2026-11-05T13:08:00Z",
+    F["rebates"]: "2026-11-05T13:40:00Z", F["cng"]: "2026-11-04T20:52:00Z",
 }
-OFFICE = {   # workbooks: created, modified (UTC), last saved by
-    "gis": ("2024-02-05T15:20:00Z", "2026-10-27T16:41:00Z", "GIS Services"),
-    "register": ("2019-03-11T14:02:00Z", "2026-10-27T17:05:00Z", "Asset Management"),
-    "xref": ("2024-07-12T19:44:00Z", "2024-07-12T21:16:00Z", "Systems Integration"),
-    "eng": ("2017-05-22T13:30:00Z", "2025-03-04T15:52:00Z", "Electric Engineering"),
-    "subs": ("2018-01-15T16:12:00Z", "2026-11-02T15:27:00Z", "Substations"),
-    "lights_inv": ("2020-08-03T14:45:00Z", "2026-10-27T18:20:00Z", "Electric Distribution"),
-    "apps": ("2019-06-04T15:01:00Z", "2026-10-20T20:33:00Z", "Customer Engineering"),
-    "lineloss": ("2020-01-27T16:10:00Z", "2026-10-14T19:48:00Z", "Utilities Finance"),
-}
+WRITTEN = {k: dt.datetime.strptime(v, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc) for k, v in WRITTEN.items()}
 
 
 def _csv(path, df):
@@ -211,107 +63,328 @@ def _df_sheet(ws, df, widths=None, title=None, note=None):
     _sheet(ws, list(df.columns), df.astype(object).where(df.notna(), None).values.tolist(), widths, title, note)
 
 
-def line_loss_report(w, F):
-    """The utility's own annual line loss: purchases less billed sales, over purchases (the Form EIA-861 basis)."""
-    import analysis as A
+# --------------------------------------------------------------------------------------------------- the frames
+def register_frames(w, rng):
+    pr = w.pr
     rows = []
-    hist = {2019: (231840, 218150), 2020: (229410, 215760), 2021: (233980, 219770), 2022: (238120, 223280),
-            2023: (241960, 226430)}
-    for y, (p_, b_) in hist.items():
-        rows.append([str(y), p_, b_, round(100 * (p_ - b_) / p_, 2)])
-    for y in (2024, 2025):
-        win = (dt.date(y, 1, 1), dt.date(y + 1, 1, 1))
-        p_ = A.purchases(F, win) / 1000.0
-        c_, l_ = A.billed_in(F, win)
-        b_ = (c_ + l_) / 1000.0
-        rows.append([str(y), round(p_), round(b_), round(100 * (p_ - b_) / p_, 2)])
-    for lab, win in (("12 months to September 2024", A.WIN24), ("12 months to September 2026", A.WIN26)):
-        p_ = A.purchases(F, win) / 1000.0
-        c_, l_ = A.billed_in(F, win)
-        b_ = (c_ + l_) / 1000.0
-        rows.append([lab, round(p_), round(b_), round(100 * (p_ - b_) / p_, 2)])
+    for _, p in pr.iterrows():
+        tc = "Y" if p["tc"] else "N"
+        if rng.random() < 0.006:
+            tc = None
+        loc = "Outside" if p["outdoor"] else "Inside"
+        ex = p["exch_date"] if isinstance(p["exch_date"], dt.date) else None
+        rows.append(dict(PremiseID=int(p["premise"]), PressureDistrict=P.DNAME[p["district"]],
+                         ServiceClass="Residential" if p["cls"] == "RES" else "Commercial", Cycle=int(p["cycle"]),
+                         MeterID=p["meter"], MeterModel=p["model"], TempComp=tc, MeterLocation=loc,
+                         MeterSetDate=p["installed"], Multiplier=int(p["multiplier"]),
+                         PreviousMeterID=p["old_meter"] if ex else None, PreviousModel=p["old_model"] if ex else None,
+                         PreviousSetDate=p["old_installed"] if ex else None, ExchangeDate=ex))
+    prem = pd.DataFrame(rows)
+    models = pd.DataFrame([
+        dict(Model="S175", Type="Diaphragm, 175 cfh", TempComp="N", InService="1979 to 1996"),
+        dict(Model="D250", Type="Diaphragm, 250 cfh", TempComp="N", InService="1988 to 2008"),
+        dict(Model="D275", Type="Diaphragm, 275 cfh", TempComp="N", InService="1996 to 2008"),
+        dict(Model="D250TC", Type="Diaphragm, 250 cfh, temperature compensated", TempComp="Y", InService="2009 on"),
+        dict(Model="D275TC", Type="Diaphragm, 275 cfh, temperature compensated", TempComp="Y", InService="2009 on"),
+        dict(Model="D425", Type="Diaphragm, 425 cfh", TempComp="N", InService="1985 to 2008"),
+        dict(Model="D630", Type="Diaphragm, 630 cfh", TempComp="N", InService="1985 to 2008"),
+        dict(Model="D425TC", Type="Diaphragm, 425 cfh, temperature compensated", TempComp="Y", InService="2009 on"),
+        dict(Model="D630TC", Type="Diaphragm, 630 cfh, temperature compensated", TempComp="Y", InService="2009 on")])
+    st = []
+    for d in P.DISTRICTS:
+        for s in d["drs"]:
+            st.append(dict(Station=s, PressureDistrict=d["name"], OutletPressurePsig=35 if s[:2] in (
+                "OT", "DT", "RS", "NE", "EG", "SQ", "HV", "LV") else 25, Corrector="EVC-II", MeteringSince="2021"))
+    stations = pd.DataFrame(st)
+    ev = w.evc
+    corr = pd.DataFrame(dict(Account=ev["account"], PressureDistrict=ev["district"].map(P.DNAME),
+                             DeliveryPressurePsig=ev["press"], MeterLocation=np.where(ev["outdoor"], "Outside", "Inside"),
+                             Corrector="EVC-I"))
+    return prem, models, stations, corr
+
+
+def airport(w, rng):
+    tavg = w.air + rng.normal(0, 0.7, w.D)
+    df = pd.DataFrame(dict(NAME="BRANDVOLD REGIONAL AIRPORT, MN US", DATE=w.dates,
+                           PRCP=np.round(w.precip, 2), SNOW=np.round(w.snowfall, 1), SNWD=w.snow_depth.astype(int),
+                           TAVG=np.round(tavg).astype(int), TMAX=np.round(w.tmax).astype(int),
+                           TMIN=np.round(w.tmin).astype(int)))
+    df = df.astype(object)
+    miss = rng.random(w.D) < 0.006
+    df.loc[miss, "TAVG"] = None
+    df.loc[rng.random(w.D) < 0.01, "SNWD"] = None
+    return df
+
+
+def soil(w, rng):
+    out = []
+    for i in range(w.D):
+        r = dict(Date=w.dates[i], AirMaxF=round(float(w.tmax[i] + rng.normal(0, 1.0)), 1),
+                 AirMinF=round(float(w.tmin[i] + rng.normal(0, 1.0)), 1), PrecipIn=round(float(w.precip[i]), 2),
+                 SnowDepthIn=int(max(0, round(w.snow_depth[i] + rng.normal(0, 0.8)))))
+        for lab, arr in (("Soil2in", w.s2), ("Soil4in", w.s4), ("Soil8in", w.s8), ("Soil20in", w.s20),
+                         ("Soil40in", w.s40)):
+            v = float(arr[i] + rng.normal(0, 0.25))
+            r[lab + "F"] = "M" if rng.random() < 0.01 else round(v, 1)
+        out.append(r)
+    return pd.DataFrame(out)
+
+
+def damage(w, rng):
+    rows = []
+    no = 23001
+    for e in sorted(w.damage, key=lambda e: e["day"]):
+        d = w.dates[e["day"]]
+        rows.append(dict(ReportNo="DMG-%d" % no, Date=d, PressureDistrict=P.DNAME[e["district"]],
+                         Facility=str(rng.choice(["Service line", "Service line", "Main"])),
+                         Material=str(rng.choice(["PE", "PE", "Coated steel", "Bare steel"])),
+                         Excavator=str(rng.choice(["Contractor", "Contractor", "Homeowner", "Municipal"])),
+                         LocateTicket=bool(rng.random() < 0.7),
+                         MinutesToControl=int(rng.integers(25, 160)),
+                         EstimatedGasLostMcf=int(e["reported"])))
+        no += 1
+    return pd.DataFrame(rows)
+
+
+def own_use(w):
+    rows = []
+    months = pd.period_range(P.MON0, P.SIM1, freq="M")
+    for d in P.DISTRICTS:
+        for s in d["drs"]:
+            for m in months:
+                msk = (w.days.year == m.year) & (w.days.month == m.month)
+                hdd = float(w.hdd60[msk].sum())
+                est = (0.15 * msk.sum() + 0.012 * hdd) if m.month in (10, 11, 12, 1, 2, 3, 4) else 0.0
+                rows.append(dict(Month=str(m), Facility="Regulator station heater %s" % s,
+                                 PressureDistrict=d["name"], EstimatedMcf=round(est, 1)))
+    for m in months:
+        msk = (w.days.year == m.year) & (w.days.month == m.month)
+        rows.append(dict(Month=str(m), Facility="City gate line heater", PressureDistrict=None,
+                         EstimatedMcf=round(float(w.gate_heater[msk].sum()), 0)))
+    return pd.DataFrame(rows)
+
+
+def rp_cases(w, rng):
+    pr = w.pr
+    rows = []
+    for k, c in enumerate(sorted(w.bypass_hist, key=lambda c: c["found"])):
+        i = c["i"]
+        d1 = (c["found"] - P.SIM0).days
+        months = c["months"]
+        if d1 > 0:
+            d0 = max(0, d1 - months * 30)
+            unreg = float((w.U[i, d0:d1].sum() - w.R[i, d0:d1].sum() * P.PF / 10.0) * 10)
+        else:
+            unreg = float(rng.uniform(300, 900))
+        rows.append(dict(CaseNo="RP-%04d" % (311 + k), PremiseID=int(pr.at[i, "premise"]),
+                         PressureDistrict=P.DNAME[pr.at[i, "district"]], FoundDate=c["found"],
+                         Finding="Bypass pipe around meter" if c["kind"] == "full" else
+                         "Furnace supply tapped ahead of meter",
+                         EstimatedMonths=months, BackBilledCcf=int(round(max(unreg, 0) / 10) * 10),
+                         Notes="Meter reset and sealed" if c["kind"] == "full" else
+                         "Water heater and range stayed on the meter; tap removed"))
+    return pd.DataFrame(rows)
+
+
+def lauf_report(w, reads, F0):
+    rows = [["FY2019", 1755230, 1704980, 13820, 36430, 2.08], ["FY2020", 1728410, 1681020, 13510, 33880, 1.96],
+            ["FY2021", 1790650, 1741770, 14100, 34780, 1.94], ["FY2022", 1831940, 1774630, 14390, 42920, 2.34],
+            ["FY2023", 1712280, 1660240, 13660, 38380, 2.24]]
+    gate = w.gate
+    own = F0["own_use"]
+    for fy, (a, b) in P.FY.items():
+        g = float(gate[(gate["GasDay"] >= a) & (gate["GasDay"] <= b)]["CorrectedMcf"].sum())
+        r = reads[(reads["ReadDate"] >= a) & (reads["ReadDate"] <= b)]
+        sales = float(r["ConsumptionCcf"].sum()) * P.PF / 10.0
+        ev = w.evc_rec
+        sales += float(ev[(ev["GasDay"] >= a) & (ev["GasDay"] <= b)]["CorrectedMcf"].sum())
+        ow = own[(own["Month"] >= "%d-%02d" % (a.year, a.month)) & (own["Month"] <= "%d-%02d" % (b.year, b.month))]
+        cu = float(ow["EstimatedMcf"].sum())
+        lauf = g - sales - cu
+        rows.append([fy, round(g), round(sales), round(cu), round(lauf), round(100 * lauf / g, 2)])
     return rows
 
 
-def write(w, F, target):
+def distractors(w, rng):
+    pr = w.pr
+    reb = []
+    for (i, d, f) in w.rebates:
+        reb.append(dict(RebateNo="R%05d" % (4100 + len(reb)), PremiseID=int(pr.at[i, "premise"]),
+                        InstallDate=d, Equipment=str(rng.choice(["Furnace 96% AFUE", "Furnace 97% AFUE",
+                                                                  "Boiler 95% AFUE"])),
+                        RebateUSD=int(rng.choice([300, 400, 400, 500]))))
+    for _ in range(140):
+        i = int(rng.integers(0, len(pr)))
+        reb.append(dict(RebateNo="R%05d" % (4100 + len(reb)), PremiseID=int(pr.at[i, "premise"]),
+                        InstallDate=w.dates[int(rng.integers(100, w.D - 10))],
+                        Equipment=str(rng.choice(["Water heater 0.67 UEF", "Smart thermostat", "Water heater 0.70 UEF"])),
+                        RebateUSD=int(rng.choice([50, 75, 100]))))
+    reb = pd.DataFrame(reb).sort_values("InstallDate").reset_index(drop=True)
+    cng = []
+    for i in range(w.D):
+        if w.dates[i] < dt.date(2024, 1, 2) or w.days[i].dayofweek >= 6:
+            continue
+        for _ in range(int(rng.integers(3, 11))):
+            cng.append(dict(Date=w.dates[i], Fleet=str(rng.choice(["City refuse", "Transit", "School district",
+                                                                     "Parks"])),
+                            GGE=round(float(rng.uniform(8, 36)), 2), Dispenser=int(rng.integers(1, 3))))
+    cng = pd.DataFrame(cng)
+    inv = []
+    g = w.gate
+    for m in pd.period_range("2023-09", "2026-09", freq="M"):
+        msk = pd.to_datetime(g["GasDay"]).dt.to_period("M") == m
+        dth = float(g.loc[msk, "Dth"].sum())
+        inv.append(dict(Month=str(m), DeliveredDth=round(dth), CommodityUSD=round(dth * float(rng.uniform(2.4, 4.6)), 2),
+                        ReservationUSD=184250.00, FuelRetainedDth=round(dth * 0.0081)))
+    return reb, cng, pd.DataFrame(inv)
+
+
+def study_stats(w, airport_df):
+    lg = w.loggers.copy()
+    pr = w.pr.set_index("premise")
+    lg["loc"] = lg["PremiseID"].map(lambda p: "Outside" if pr.at[p, "outdoor"] else "Inside")
+    ap = airport_df.set_index("DATE")["TAVG"]
+    lg["air"] = lg["Date"].map(ap)
+    out = lg[(lg["loc"] == "Outside") & lg["air"].notna()]
+    x = out["air"].astype(float).values
+    y = out["GasTempF"].values
+    b, a = np.polyfit(x, y, 1)
+    r2 = 1 - ((y - (a + b * x)) ** 2).sum() / ((y - y.mean()) ** 2).sum()
+    months = []
+    for m in pd.period_range("2024-11", "2025-04", freq="M"):
+        mm = pd.to_datetime(lg["Date"]).dt.to_period("M") == m
+        am = (pd.to_datetime(airport_df["DATE"]).dt.to_period("M") == m)
+        months.append([m.strftime("%B %Y"), "%.1f" % airport_df.loc[am, "TAVG"].dropna().astype(float).mean(),
+                       "%.1f" % lg.loc[mm & (lg["loc"] == "Outside"), "GasTempF"].mean(),
+                       "%.1f" % lg.loc[mm & (lg["loc"] == "Inside"), "GasTempF"].mean(), str(int(mm.sum()))])
+    n_out = lg.loc[lg["loc"] == "Outside", "LoggerID"].nunique()
+    n_in = lg.loc[lg["loc"] == "Inside", "LoggerID"].nunique()
+    return dict(a=a, b=b, r2=r2, n_days=len(out), months=months, n=n_out + n_in, n_out=n_out, n_in=n_in,
+                dropout="%s" % lg["LoggerID"].iloc[0].split("-")[1])
+
+
+def lauf2019():
+    rng = np.random.default_rng([P.SEED, 30])
+    months = []
+    tot_eff = 0.0
+    tot_vol = 0.0
+    norm = [45.1, 27.6, 12.9, 7.4, 11.8, 25.3, 42.6, 56.2, 66.0, 70.8, 68.9, 58.9]
+    names = ["October 2018", "November 2018", "December 2018", "January 2019", "February 2019", "March 2019",
+             "April 2019", "May 2019", "June 2019", "July 2019", "August 2019", "September 2019"]
+    vols = [52100, 103400, 151800, 176900, 158300, 129600, 73400, 39800, 24100, 20400, 20900, 27300]
+    for nm, t, v in zip(names, norm, vols):
+        t = t + float(rng.normal(0, 1.2))
+        eff = v * (P.R_BASE / (t + 459.67) - 1)
+        months.append([nm, "%.1f" % t, "{:,.0f}".format(v), "{:,.0f}".format(eff)])
+        tot_eff += eff
+        tot_vol += v
+    rec = 1755230
+    lauf = 36430
+    comps = [["Temperature effect, meters without compensation", "{:,.0f}".format(tot_eff), "%.2f" % (100 * tot_eff / rec)],
+             ["Billing lag (bills issued against gas delivered)", "2,940", "%.2f" % (100 * 2940 / rec)],
+             ["Leakage (survey leak counts at industry factors)", "4,880", "%.2f" % (100 * 4880 / rec)],
+             ["Third-party damage", "610", "0.03"],
+             ["Unexplained", "{:,.0f}".format(lauf - tot_eff - 2940 - 4880 - 610),
+              "%.2f" % (100 * (lauf - tot_eff - 2940 - 4880 - 610) / rec)],
+             ["Lost and unaccounted-for gas", "{:,.0f}".format(lauf), "%.2f" % (100 * lauf / rec)]]
+    return dict(months=months, components=comps, lauf=lauf, lauf_pct=100 * lauf / rec)
+
+
+def frames(w):
+    rng = np.random.default_rng([P.SEED, 40])
+    F0 = {}
+    reads = RC.reads(w)
+    F0["reads_clean"] = reads
+    prem, models, stations, corr = register_frames(w, rng)
+    F0.update(register=prem, models=models, stations=stations, correctors=corr)
+    acc = w.accounts.copy()
+    acc["AccountClass"] = acc["cls"].map({"RES": "Residential", "COM": "Commercial"})
+    F0["accounts"] = acc[["AccountID", "PremiseID", "AccountClass", "StartDate", "EndDate"]]
+    F0["drs"] = w.drs
+    F0["gate"] = w.gate
+    F0["evc"] = w.evc_rec
+    F0["airport"] = airport(w, rng)
+    F0["soil"] = soil(w, rng)
+    F0["loggers"] = w.loggers
+    F0["damage"] = damage(w, rng)
+    F0["own_use"] = own_use(w)
+    wo = w.workorders.copy()
+    F0["workorders"] = wo
+    F0["plan2027"] = w.plan2027
+    F0["rp_cases"] = rp_cases(w, rng)
+    F0["rebates"], F0["cng"], F0["invoices"] = distractors(w, rng)
+    F0["lauf_report"] = lauf_report(w, reads, F0)
+    F0["study"] = study_stats(w, F0["airport"])
+    F0["lauf2019"] = lauf2019()
+    return F0
+
+
+def write(w, F0, target):
     os.makedirs(target, exist_ok=True)
-    out = {k: os.path.join(target, v) for k, v in FILES.items()}
+    out = {k: os.path.join(target, v) for k, v in F.items()}
     counts = {}
-    rng = np.random.default_rng(P.SEED + 41)
-    # the CIS extract was pulled in two runs that overlap by a day; the overlap's rows appear twice
-    reads = F["reads"].copy()
-    dup = reads[(reads["ReadDate"] >= "2025-06-30") & (reads["ReadDate"] <= "2025-07-01")]
-    reads = pd.concat([reads, dup]).sort_values(["ReadDate", "ServicePointID", "ReadType"], kind="mergesort")
+    reads = F0["reads_clean"].copy()
+    # the June 2025 extract was re-run and both runs' rows were kept
+    dup = reads[(reads["ReadDate"] >= dt.date(2025, 6, 1)) & (reads["ReadDate"] <= dt.date(2025, 6, 30))]
+    reads = pd.concat([reads, dup]).sort_values(["ReadDate", "Cycle", "PremiseID"], kind="mergesort")
     counts["reads"] = _csv(out["reads"], reads)
-    counts["dp"] = _csv(out["dp"], F["dp"])
-    counts["scada"] = _csv(out["scada"], F["scada"])
-    counts["lp_interval"] = _csv(out["lp_interval"], F["lp_interval"])
-    counts["oms_log"] = _csv(out["oms_log"], F["oms_log"])
-    counts["lights_bill"] = _csv(out["lights_bill"], F["lights_billing"])
-    counts["outages"] = _csv(out["outages"], F["outages"])
-    wx = F["weather"].copy()
-    wx.insert(0, "NAME", "DELMONT MUNICIPAL AIRPORT, OK US")
-    wx.insert(0, "STATION", "USC00342207")
-    counts["weather"] = _csv(out["weather"], wx)
-    # the GIS export
+    counts["accounts"] = _csv(out["accounts"], F0["accounts"].sort_values(["PremiseID", "StartDate"], key=lambda s: s.map(
+        lambda v: v if isinstance(v, dt.date) else dt.date(1900, 1, 1)) if s.name == "StartDate" else s))
+    counts["drs"] = _csv(out["drs"], F0["drs"])
+    counts["gate"] = _csv(out["gate"], F0["gate"])
+    counts["evc"] = _csv(out["evc"], F0["evc"])
+    counts["airport"] = _csv(out["airport"], F0["airport"])
+    counts["soil"] = _csv(out["soil"], F0["soil"])
+    counts["loggers"] = _csv(out["loggers"], F0["loggers"])
+    wo = F0["workorders"].copy()
+    counts["workorders"] = _csv(out["workorders"], wo)
+    counts["rebates"] = _csv(out["rebates"], F0["rebates"])
+    counts["cng"] = _csv(out["cng"], F0["cng"])
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Primary segments"
-    _df_sheet(ws, F["gis_segments"], [12, 8, 12, 12, 10, 12, 9, 11])
-    _df_sheet(wb.create_sheet("Switches"), F["gis_switches"], [10, 14, 12, 12, 12, 10, 8])
-    _df_sheet(wb.create_sheet("Transformers"), F["gis_xf"], [10, 12, 8, 8, 9, 12, 8])
-    _df_sheet(wb.create_sheet("Service points"), F["gis_sp"], [14, 10, 8, 10, 10])
-    wb.save(out["gis"])
-    counts["gis"] = len(F["gis_segments"])
-    wb = openpyxl.Workbook()
-    _df_sheet(wb.active, F["xfmr_register"], [10, 8, 9, 12, 12, 12, 8])
-    wb.active.title = "Distribution transformers"
+    ws.title = "Premises"
+    _df_sheet(ws, F0["register"], [11, 16, 12, 7, 11, 10, 9, 11, 12, 10, 14, 13, 14, 13])
+    _df_sheet(wb.create_sheet("Meter models"), F0["models"], [10, 40, 10, 14])
+    _df_sheet(wb.create_sheet("Regulator stations"), F0["stations"], [10, 16, 18, 10, 13])
+    _df_sheet(wb.create_sheet("Corrector accounts"), F0["correctors"], [10, 16, 18, 14, 10])
     wb.save(out["register"])
+    counts["register"] = len(F0["register"])
     wb = openpyxl.Workbook()
-    _df_sheet(wb.active, F["oms_xref"], [14, 14, 12])
-    wb.active.title = "Device map"
-    wb.save(out["xref"])
+    _df_sheet(wb.active, F0["damage"], [12, 11, 16, 13, 13, 12, 12, 16, 18])
+    wb.active.title = "Damage reports"
+    wb.save(out["damage"])
     wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Conductors"
-    _df_sheet(ws, F["conductors"], [14, 16, 16, 16], title="Overhead and underground primary conductors")
-    _df_sheet(wb.create_sheet("Transformer losses"), F["xfmr_losses"], [8, 16, 12, 14],
-              title="Distribution transformer losses, manufacturers' test data")
-    _df_sheet(wb.create_sheet("Lamp input watts"), F["lamp_watts"], [12, 12, 12],
-              title="Lighting: lamp and ballast input watts")
-    _df_sheet(wb.create_sheet("Burning hours"), F["burn_hours"], [8, 16],
-              title="Photocell-controlled lighting, burning hours by month, Delmont")
-    wb.save(out["eng"])
+    _df_sheet(wb.active, F0["own_use"], [10, 34, 16, 14], title="Utility own use, estimated",
+              note="Station heaters: rated input times heating hours from the month's degree days. Gate line heater: "
+                   "estimated from throughput.")
+    wb.active.title = "Own use"
+    wb.save(out["own_use"])
     wb = openpyxl.Workbook()
-    _df_sheet(wb.active, F["subxf"], [18, 12, 12, 14, 14], title="Substation power transformers, 69/12.47 kV")
-    wb.active.title = "Power transformers"
-    _df_sheet(wb.create_sheet("Station service"), F["station_service"], [18, 10, 10],
-              title="Station service meters, monthly kWh")
-    wb.save(out["subs"])
+    _df_sheet(wb.active, F0["plan2027"], [9, 11, 14, 11, 10, 13, 12], title="2027 meter changeout plan",
+              note="Set from the 2026 capital budget. Crews work routes in the order shown. The heating season begins "
+                   "November 1.")
+    wb.active.title = "Plan"
+    wb.save(out["plan2027"])
     wb = openpyxl.Workbook()
-    _df_sheet(wb.active, F["lights_inventory"], [9, 11, 8, 11, 9, 12, 13, 12, 11])
-    wb.active.title = "Lights"
-    wb.save(out["lights_inv"])
+    _df_sheet(wb.active, F0["rp_cases"], [10, 11, 16, 12, 34, 15, 14, 44])
+    wb.active.title = "Cases"
+    wb.save(out["rp_cases"])
     wb = openpyxl.Workbook()
-    _df_sheet(wb.active, F["applications"], [12, 34, 20, 8, 22, 9, 10, 9, 10, 12, 12, 10, 12, 14])
-    wb.active.title = "Applications"
-    wb.save(out["apps"])
+    _sheet(wb.active, ["Fiscal year", "City gate receipts Mcf", "Sales Mcf", "Company use Mcf", "LAUF Mcf", "LAUF %"],
+           F0["lauf_report"], [12, 20, 14, 16, 12, 9], title="Lost and unaccounted-for gas, fiscal years ending September 30",
+           note="Sales: volume billed on bills issued in the fiscal year (registered ccf times the pressure factor) and "
+                "corrector customers' corrected volume. Company use: station heaters and the gate line heater.")
+    wb.active.title = "LAUF"
+    wb.save(out["lauf_report"])
     wb = openpyxl.Workbook()
-    rows = line_loss_report(w, F)
-    _sheet(wb.active, ["Period", "Purchased MWh", "Billed MWh", "Line loss %"], rows, [26, 16, 14, 12],
-           title="Delmont Power and Light: line loss",
-           note="Purchased: Bluestem Municipal Power Agency delivery point invoices. Billed: kWh on bills issued in "
-                "the period, all rate schedules including lighting.")
-    wb.active.title = "Line loss"
-    wb.save(out["lineloss"])
+    _df_sheet(wb.active, F0["invoices"], [10, 14, 16, 16, 16])
+    wb.active.title = "Invoices"
+    wb.save(out["invoices"])
     for k, (c0, c1, who) in OFFICE.items():
         postprocess.normalize_ooxml(out[k], who, who, c0, c1, excel=True, company=ORG)
-    DC.study(out["study"], w.study)
-    DC.cwp(out["cwp"], w.reconductor_segments)
-    DC.rates(out["rates"])
-    DC.budget(out["budget"])
-    DC.scope(out["scope"])
-    DC.wholesale(out["wholesale"])
-    postprocess.own_mtimes(target, {FILES[k]: v for k, v in WRITTEN.items()})
-    w.line_loss_rows = rows
+    DC.rules(out["rules"])
+    DC.lauf_study(out["lauf_study"], F0["lauf2019"])
+    DC.study_memo(out["study_memo"], F0["study"])
+    DC.rate_schedules(out["tariff"])
+    postprocess.own_mtimes(target, WRITTEN)
     return counts

@@ -1,73 +1,161 @@
-# determinism-check report, task22, 2026-11-12
+# Determinism check, task22 (architecture 2, Brandvold district gas balance)
 
-## Verdict
-DETERMINISTIC (judge thread's call; see Findings #1 for why this verdict rests on an incomplete Gate A check)
-**Disposition:** APPROVE, as returned by the judge thread, with a caveat the judge itself raised under Fix: the
-final per-feeder MWh figures (R4 technical losses, R5 non-technical loss, R9 the sweep four) were not independently
-rebuilt end to end. Given that caveat covers exactly the numbers the main recommendation and three of four
-Supplementary asks turn on, this should be read as APPROVE-pending-verification, not a clean sign-off.
-**Stumping type:** mechanism: method_or_model_selection (supporting: assembly_and_reconciliation, missingness_and_measurement), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+## Pass on the re-pinned share window (2026-11-12)
 
-## Why
-The judge found every decisive definition and window pinned literally in a shipped file (`rfp_2026-14_revenue_protection_scope.pdf` A.2-A.3 for the NTL formula, population and window; `fy2027_budget_instructions_electric_fund.pdf` for the 2027 basis), and verified seven supporting mechanisms exactly against the data: the 7.75%/8.22% line-loss figures, the 2019 study's 4.83% APT-3 figure, the 0.745/0.660 large-load diversity ratios (recomputed directly), the APT-2 stuck-transducer run, the CHL-3 storm telemetry gap and its emergency-tie switching, and the shape (not the exact customer counts) of the April 21 2026 NTH-4/NTH-3 transfer. It did not independently recompute the technical-loss physics model or the final NTL MWh ranking (CHL-2 1,312 / APT-4 1,127 / CHL-3 715 / NTH-4 699 / NTH-3 502 / APT-3 458) against the 388,753-row historian, 364,954-row CIS extract and 219,001-row IDR file, calling this an "open verification item" rather than a defect, since nothing it did check contradicted the solution. The main recommendation (which four feeders) and Supplementary asks 1, 3 and 6 all turn on exactly that un-rebuilt figure set.
+**Verdict: DETERMINISTIC**
 
-## Recomputation ledger
-| Figure | Claimed | Judge recomputed | Reproduced |
+**Disposition: APPROVE**
+
+Scope: the prompt's one sentence, "for the program's twelve months, each district's leak loss as a share of its
+gas in and the accounts that took gas without authorization," checked against the figures the blocks grade.
+Nothing else was re-examined; `target.zip` (sha256 prefix a2e82e0db1b5b92f) and `golden.zip` (sha256 prefix
+99197143b4131671) are byte-identical to the cut carried into the prior pass.
+
+"The program's twelve months" has one referent in the pack: `lauf_reduction_program_rules_2026.pdf` defines Rule 1
+(main replacement) and Rule 2 (meter changeout) both on "the twelve months ending September 30, 2026," and that
+phrase (or any other twelve-month window tied to the program) appears nowhere else in `target/`. "For the program's
+twelve months" grammatically governs both conjuncts that follow it, "each district's leak loss as a share of its
+gas in" and "the accounts that took gas without authorization," so both resolve to October 2025 through September
+2026. That is exactly the window the blocks grade: Supplementary Question 2 ("Twelve months to September 2026
+sheet... leak loss as a share of gas in: Riverside 1.25; Lakeview 1.21...") and Supplementary Question 3
+("Without authorization sheet: 15 accounts took gas without authorization in the twelve months... 568 Mcf of it in
+Elm Grove..."), both repeated in Critical Components 2 and 3. No alternative twelve-month window is filed anywhere
+a careful analyst could reach for instead, so this is not a fork: it is a filed fact closing the leak reader's
+earlier finding.
+
+No other ask's reading moved with this sentence. Ask 1 (the Oct 2023 to Sept 2026 monthly balance), ask 4 (the Rule
+1 and Rule 2 district lists) and ask 5 (changeouts done before the 2027-28 heating season) are untouched by the
+restructuring and still resolve, word for word, to the figures in the blocks.
+
+**Fix:** none. The restructured sentence already resolves to the single window the blocks grade; no further change
+to the prompt, the pack or the blocks is needed.
+
+## Pass on the prompt's first two pins (2026-11-12): DETERMINISTIC, APPROVE
+
+### What changed and what was checked
+
+Fresh unzip of `target.zip` into a scratch copy: 22 files, same names/sizes as `target/` and as pass 1's list.
+Read `prompt.txt` and all four blocks of `submission.md`. The prompt now carries, verbatim, the two phrases the
+author re-pinned: "the billed volume of the gas its meters took that month" (ask 1) and "the accounts that took
+gas without authorization in the program's twelve months" (ask 3), both match the corresponding ask sentences in
+`submission.md` word for word, so there is no wording gap between what the prompt asks and what the blocks grade.
+`gas_rate_schedules_2026.pdf` now holds four sections (rate schedules, billing volume, estimated bills, gas day);
+the removed section was unrelated admin text (checked by grepping the generator for any use of the file beyond
+`params.py`'s path reference and `docs.py`/`pack.py`'s writer, no figure or decisive fact traces to it). Section 2
+("Billing volume"), which carries the 0.9663 pressure factor used below, is still present and unchanged.
+
+### Evidence, figures recomputed independently from the blocks' own stated method
+
+| Figure (block) | Claimed | Recomputed | Within band? |
 |---|---|---|---|
-| Line loss 7.75% (12mo-Sep2024) / 8.22% (12mo-Sep2026) | ask 4 | Yes, verbatim from `annual_line_loss_report_2019-2026.xlsx` | Yes |
-| 2019 study APT-3 technical-loss % = 4.83% | Step 5 | Yes, Table 2 of `loss_evaluation_study_2019_hester.pdf` | Yes |
-| Grow diversity ratio 0.745 | Step 8 | Yes, recomputed from `idr_large_power_interval` (547.77/735 kW) | Yes, exact |
-| Cold-store diversity ratio 0.660 | Step 8 | Yes, recomputed from `idr_large_power_interval` (891.00/1,350 kW) | Yes, exact |
-| CHL-3 storm telemetry gap window | Step 2 | Yes, `COMM FAIL` block Jan 23 22:00-Feb 3 06:00 in the historian | Yes, to the hour |
-| APT-2 stuck transducer, August 2025 | Step 1 | Yes, 52 identical consecutive hours from Aug 18 2025 in the historian | Yes |
-| April 21 2026 NTH-4/NTH-3 lateral transfer (the mechanism) | Step 3 | Yes, switching orders crosswalked to GIS devices | Yes, shape only |
-| NTH-4 373/441 customers (the exact counts) | ask 2 | No, not walked through the 9,023-row service-point tree | Not checked |
-| APT-3 technical losses 1,777.8 MWh / fourteen feeders 13,037.7 MWh | Critical Component 1 | No, not rebuilt end to end | Not checked |
-| NTL ranking, all six named feeders (CHL-2 1,312 ... APT-3 458) | Final Recommendation, ask 3, Critical Component 1 | No, not rebuilt end to end | Not checked |
-| 2027 connection peak demand (931.4 / 541.2 / 521.6 kW) | ask 5 | Partially (the diversity ratios feeding it, yes; the final kW figures themselves, not reconfirmed) | Partial |
-| 2027 technical losses (APT-4 1,731.4 / APT-3 1,686.7 / fourteen 13,492.4 MWh) | ask 6 | No | Not checked |
+| Ask 1 reading: "billed volume... that month" | College Hill Jan 2026: 16,638.8 Mcf (±2%) | Built actual-to-actual AMR periods per meter in College Hill (mapped `PremiseID → PressureDistrict` from `premise_meter_register`), spread each period's `ConsumptionCcf` over its calendar days in proportion to the CH-1 station's daily `CorrectedMcf` (the method Step 2 names), summed the January 2026 portion, converted ccf→Mcf with the rate-schedule's own 0.9663 pressure factor: **16,639.2 Mcf** | Yes (0.003%) |
+| Same ask, alternative reading ("reads dated in January", i.e. bill-cycle totals as issued) | n/a (not a graded figure) | Naive sum of `ConsumptionCcf` for reads whose `ReadDate` falls in January 2026: 16,208.8 Mcf | Differs from the claimed figure by 2.6%, this is the rejected alternative the block itself names (it reports the even-days-spread rival at 15,647.2); the prompt's now-literal phrase "the gas its meters took **that month**" (not "the gas billed in that month's cycle") plus Step 2's explicit statement of the rule forces the sendout-weighted, calendar-month reading, which reproduces to three decimal places |
+| Ask 3 reading: "accounts that took gas without authorization... in the program's twelve months" | 15 accounts (±1), Elm Grove 568 Mcf, East Industrial 1,310, Sundquist 267 | A deliberately coarser pass (monthly-binned AMR by read-date, not full day-weighted reconstruction, collapse = current-year month < 2 ccf vs prior-year same month > 5 ccf, run ≥ 3) found 6 of the pattern directly: Old Town, Sundquist ×2, Elm Grove ×3, same districts the block names as diversion-heavy (Elm Grove, Sundquist), and no false hits in a district the block excludes | Directionally consistent; not an exact re-derivation (coarser binning under-counts short/edge collapses and a full day-weighted replication was out of budget), but no contradictory pattern found and the districts line up |
+| Gate B check: rate-schedule section loss |, | Confirmed `gas_rate_schedules_2026.pdf`'s pressure factor (0.9663, used above) and gas-day definition are intact; grepped `generator/` for any other use of the file, none beyond the writer/path reference | No decisive fact lost |
 
-## Competing answers that survived
-None found by the judge beyond the three shortcut routes the solution itself stress-tests (today's-GIS feeder label, the storm gap averaged, the 2019 study's stale percentages), each of which the solution shows produces a different wrong four. No additional fork was raised. The fourth/fifth-place margin (NTH-4 699.4 MWh, band 624.4-774.4, vs NTH-3 501.8, band 426.8-576.8) does not overlap on the judge's reading, a thin-but-clean gap rather than a contested one — but this reading rests on the unverified final MWh figures above, not on an independent rebuild of the gap.
+### Gate C, the two re-pinned forks
 
-## Spec gates
-| Gate | Required | Actual | Pass |
+- **"Billed volume... that month"**: before the re-pin, a careful analyst could read this as either (a) the volume
+  assigned to a bill whose cycle read falls near that month ("reads-dated" reading, ≈16,208.8, only 2.6% off) or
+  (b) the calendar-month allocation of actual-to-actual consumption, weighted by the district's own daily sendout
+  (16,639.2, matching the golden to three decimals). Both readings are now closed the same way: the prompt's literal
+  wording ("the gas its meters took **that month**") plus Step 2's spread rule forces (b); the even-spread rival
+  the block names explicitly (15,647.2) is a third, clearly-labeled alternative that the blocks already reject by
+  naming the mechanism (College Hill's student-rental seasonality). No reading of the prompt's own phrase survives
+  that the blocks do not already name and close.
+- **"Accounts that took gas without authorization... in the program's twelve months"**: the window ("the program's
+  twelve months", i.e. October 2025–September 2026) is now explicit in the prompt itself, closing the fork pass 1
+  flagged only implicitly (whether to count any-time bypass history or only activity inside the graded window). The
+  three-way classification itself (bypass vs. furnace-tap vs. snowbird) is anchored in the worked examples of
+  `revenue_protection_cases_2021-2025.xlsx` and applied forward by the rule Step 4 states (base load drop vs. a lost
+  heating response vs. a kept reduced heating response with a returned summer); a spot check found the pattern
+  landing in the named districts and no contradiction.
+
+### Gate B, decisive facts filed
+
+Unchanged from pass 1 except the one file edit audited above: no computation in the blocks traces to the removed
+meter-access section. Rule 1/2/3 thresholds, the soil-temperature correction basis, the AMR grain, and the
+regulator-station alarm flags are all still in the shipped files exactly as pass 1 found them (byte-identical pack
+per the brief).
+
+### Fix
+
+None. Both re-pinned readings reproduce the stated figures under the blocks' own method (one to three decimal
+places on the figure checked in full; the second directionally consistent on a coarser check), and the dropped PDF
+section carried nothing load-bearing. APPROVE as-is.
+
+## Author's follow-up on the accounts result (after the pass on the first two pins)
+
+That pass re-derived the accounts that took gas without authorization only on a coarser monthly binning (6
+found, in the named districts). The rival detections were then run in `generator/checks.py` on the shipped cut: the
+count holds 14 to 16 (the band) at collapse cuts 0.30 to 0.50, heat-kept cuts 0.10 to 0.25, base-kept cuts 0.4 to 0.6,
+summer cuts 0.3 to 0.5, runs of 3 or 4 months and vacancy rules of 1 to 3 months (SF17 and SF18 in the design note's
+fork table). The two looser rivals outside it are ruled out by named data: a heat-kept cut of 0.35 adds only accounts
+back at their weather response in May 2026 (absences), while every tap the golden books is still under 0.65 in May's
+heating; a half cut that admits summer-only runs adds only College Hill rentals whose own summer of 2025 dipped as far.
+The golden's collapse rule now requires a run reaching the heating season; no figure, pack file or golden file moved
+(both zips byte-identical to the judged cut).
+
+## Earlier pass (2026-11-12, on the fresh cut before the prompt's two pins): DETERMINISTIC, APPROVE
+
+### What was checked
+
+Fresh unzip of `target.zip` (22 gas files, matches `target/` byte-for-byte by name) and `golden.zip`. Read `prompt.txt`,
+all four answer blocks of `submission.md`, and `lauf_reduction_program_rules_2026.pdf` (Rules 1–3) and
+`gas_temperature_study_memo_2025-06.pdf` (the rejected air-line fit) as the filed conventions the blocks invoke. No
+generator, DESIGN_NOTE, figures.json or golden file content was used to derive any figure (one header line of
+figures.json was glimpsed while listing a directory; it only echoed numbers already in `submission.md` and was not
+used as a source).
+
+### Evidence, figures recomputed independently from the blocks' own stated method
+
+| Figure (block) | Claimed | Recomputed | Within band? |
 |---|---|---|---|
-| File count / categories | 10+ usable files, 2+ categories | 22 files: 8 xlsx, 8 csv, 6 pdf (3 categories: spreadsheet, tabular text, document) | Pass |
-| Large messy CSVs | 1 CSV 20,000+ rows, 1 CSV 10-20 printed pages | `cis_meter_reads` 364,954 rows, `historian_feeder_breakers` 388,753 rows, `bmpa_delivery_point_interval` 111,073 rows, `idr_large_power_interval` 219,001 rows (all 20k+); `oms_outage_events` 890 rows / 7 cols ≈ 18 printed pages | Pass |
-| Distractors declared outside ZIP, unlabeled inside | 2+ named in metadata.json, none labeled in ZIP | 3 named: `oms_outage_events`, `bmpa_wholesale_rate_schedule_w1_2026.pdf`, `delmont_municipal_airport_daily` — none labeled in the ZIP per judge's hygiene pass | Pass |
-| Distractors unused but relevant | each looks relevant, carries no result | outage events (grid reliability-adjacent), wholesale rate schedule (billing-adjacent), airport weather (load-driver-adjacent) — none appears in the Results chain's "Pinned by" column | Pass |
-| Deliverables | 1-3, all present in golden, no format family required | 2 requested (spreadsheet, PDF memo), both present in `golden/` as `dpl_feeder_energy_balance_2023-10_2026-09.xlsx` and `revenue_protection_2027_memo.pdf` | Pass |
-| Asks multi-dimensional, unit stated, no rounding instruction in prompt | per spec | `prompt.txt` has no rounding instruction; submission.md's Supplementary Questions state MWh/kW/per cent/points units and bands throughout | Pass |
-| Answer shape | one of fourteen | a reconciled table / bridge (the energy balance reconciling two totals, with the line-loss bridge on top); 9 checkable results (R1-R9) in the design note | Pass |
-| Golden ZIP contents | exactly the requested files/formats | 2 files, matching the prompt's spreadsheet + one-page PDF memo | Pass |
-| Not LLM-looking, real work product | per spec | judge's hygiene pass: PASS, no LLM-authorship tell found, no benchmark/authoring disclosure | Pass |
+| Soil-based gas-temp model vs. air-line (Critical Component 1 / Step 3) | soil model is the correct basis, air line overstates under-registration | Fit both models against `gas_temperature_study_loggers` + `prairie_soil_network`: soil model (soil20 + 0.181·(air−soil) + 1.7°F wall term below 45°F) gives R²=0.977 over 9,111 outdoor logger-days vs. the memo's own air-line R²=0.767 (matches the memo's stated 0.77). Confirms the chosen basis is empirically forced by the filed loggers, not an arbitrary pick. | Yes, qualitative claim and the memo's own R² reproduced |
+| Riverside gas in, Jan 2026 | 22,715.3 Mcf (±1.5%) | Rebuilt the Jan 12–25 COMM FAIL gap from city-gate minus the other 15 stations (after separately interpolating two *other* stations' own short gaps found on Jan 17 and Jan 25, using the local gate-vs-stations residual of the surrounding good days, ≈17.3 Mcf): **22,679.9 Mcf** | Yes (0.16%) |
+| Lakeview gas in, Dec 2025 | 13,568.6 Mcf (±1.5%) | Refit the LV-1 pressure-correction ratio vs. pressure from clean days, reapplied at the true 35 psig for the 18 PXDCR-FAIL days (station had logged a stuck 25 psig): **13,436.6 Mcf** | Yes (0.97%) |
+| 12-month 14-district total gas in | 1,844,373 Mcf (±0.3%) | A naive same-grain sum (no correction) gives 1,762,274 (4.5% low); the `Alarm` column shows 62 flagged days across 12 stations in the window (35 COMM FAIL, 18 PXDCR FAIL FIXED P, 9 TXMTR STUCK), each needing the same class of fix exercised above. Not fully re-summed station by station (budget), but the two spot fixes above each closed to <1% once the correction was applied, and the Alarm column gives every station-day that needs one, the fact is filed, the method is specified by Step 1's examples. | Consistent, not exhaustively re-summed |
+| Rule 2 minimum-100-meters exemption | Westgate and Heritage Park excluded | Counted `TempComp='N'` premises per district in `premise_meter_register.xlsx`: Westgate 69, Heritage Park 29 (all other districts 142–789) | Exact match |
+| 2027 changeout plan, Old Town + Downtown | 976 scheduled, 668 done before Nov 1 2027 (±4%) | Plan sheet: 976 rows (501 Old Town + 475 Downtown; 233 Outside, 743 Inside). Applied each historical work order's empirical location-specific lag (or non-completion) from `meter_changeout_work_orders_2024-2025.csv` (Outside: 97% complete, median 4-day lag; Inside: 73% complete, median 25-day lag) against each 2027 planned date and the Nov 1 2027 cutoff: **672.0** | Yes (0.6%) |
 
-## Gate G reconciliation
-Judge: mechanism `method_or_model_selection` (primary), `assembly_and_reconciliation` and `missingness_and_measurement` as supporting layers; `stumping_family: analytical_non_defect`; `surface_read_dependency: no`; `sole_data_defect: no`.
+### Gate C, forks run
 
-Design note: the Results chain's hurried-analyst failures are dismissed own evidence (R1, R2, R8), method shortcut (R4, R7), stopped at the first story (R6), unfinished chain (R5, R9) — no rule_application, no data_semantics, no planted defect anywhere in the chain, and the note's own Gate-G-adjacent language ("no decoy... no replay... not rule application... not semantics") matches the judge's `surface_read_dependency: no` finding. No reconciliation gap on Gate G; the judge's classification lines up with the design note's own account of where the difficulty sits.
+- **Air-line vs. soil model**: ruled out by the loggers' own residuals (R² 0.977 vs 0.767), not by assertion, the
+  filed data itself rejects the air-line reading in the snow winter the blocks describe. No surviving rival.
+- **Reads spread evenly vs. proportional to sendout**: the blocks state the alternative explicitly and name which
+  districts it adds (Halvorsen); this is reported as a named, closed fork, consistent with the files (student-rental
+  seasonality is the kind of effect a proportional spread, not an even one, would pick up).
+- **Diversion rule (62 collapses vs. 15 "took gas")**: the three-way split (bypass/furnace-tap vs. snowbird) is
+  defined by example in `revenue_protection_cases_2021-2025.xlsx` (bypass = base load also drops; furnace tap =
+  winter heating response lost, base stays) applied forward to new 2025–26 collapses. Not independently re-run
+  against the 21M-row AMR file end to end (budget), but the classification rule is concrete and the historical
+  cases give it a filed anchor, not an invented one.
+- **Rule 1/2 thresholds (1.0%, 3.5%, 100-meter floor)**: confirmed verbatim in `lauf_reduction_program_rules_2026.pdf`,
+  literal application, no residual choice.
+- Robustness band claimed in Step-by-Step's closing paragraph (20% either way on the air coefficient, 2°F indoor,
+  20% on damage/own-use/diversion) was not independently perturbed, but it only reinforces a conclusion already
+  forced twice over (threshold-crossing checked exactly for Westgate/Heritage Park, and the soil-vs-air choice
+  checked by fit quality).
 
-## Gate H reconciliation
-Judge's Deep reasoning line: `domain: pass`, `layers: pass`, `results: 6 graded across 4+ areas`, `one_thing: none`, `effort: quick ~1-2 of 6, careful ~3-4 of 6, thorough 6 of 6`, `one_fact: "today's GIS reflects current topology; replay the switching log" rescues ~1 of 4 feeder-ranking swaps (roughly a quarter to a third of results)`.
+### Gate B, decisive facts filed
 
-Design note's own Effort test (computed by `effort.py` on `generator/effort.json`, the generator's own golden and hurried routes on the cut pack, not a solver): 9 results (R1-R9), quick ~0.5/9, careful ~1/9, thorough 9/9; largest single hint rescues 1/9; pair estimate 20.8.
+Rule 1, Rule 2 and Rule 3 text is in `lauf_reduction_program_rules_2026.pdf`. The soil-temperature correction
+formula is not asserted anywhere but is recoverable, and recovered here, purely from `gas_temperature_study_loggers`
++ `prairie_soil_network_brandvold_station_daily` + `premise_meter_register` (which outdoor/indoor flag). The
+regulator-station data-quality events are flagged in the `Alarm` column of
+`regulator_station_correctors_daily_2023-09_2026-10.csv` itself. The diversion precedent pattern is in
+`revenue_protection_cases_2021-2025.xlsx`. Nothing load-bearing requires outside knowledge.
 
-Two findings worth the author's attention:
+### Files/Hygiene
 
-1. **Result count mismatch and a careful-pass gap that reads much higher than the note's table.** The judge counted 6 graded results where the design note's chain has 9 (R1-R9); more importantly the judge's own careful-but-hurried estimate (3-4 of 6, roughly 50-67 per cent) sits far above the note's careful-pass figure (1/9, about 11 per cent) and close to its thorough column (6 of 6 = 9 of 9 by the note's count). Per the Gate H reconciliation rule, this is exactly the pattern that predicts a send-back: "the thread's effort grades leave the quick pass at more than a third of the results, or the careful pass level with the thorough one." However, the judge's own effort grading here is not itself a rebuild of the hurried routes against the data (it inferred "right/missed" from which mechanisms it had traced, not from actually running the shortcut computations and checking they land on a different four), so this reading is lower-confidence than the note's `effort.py`-computed figures, which are arithmetic on the generator's own implementations, not an estimate. Flagging the discrepancy rather than treating the judge's effort line as authoritative over the note's.
-2. **One-fact count is consistent.** Both the judge ("rescues about a quarter to a third of results") and the note ("rescues 1 of 9") agree the single best hint clears only one of the three deciding corrections (the switching-log replay), leaving the storm-gap rebuild and the technical-loss repositioning untouched. No H5 concern.
+`target.zip` and `target/` both hold the same 22 files (verified by name diff); this is the current gas pack, not
+the stale electric pack a previous pass flagged. 22 files, formats: CSV, XLSX, PDF. No further hygiene issue found
+in the files opened.
 
-No `one_thing` finding: the judge's own derivation (`own_derivation.md`) independently traced three separately-grounded mechanisms (GIS-vintage technical-loss recompute, switching-log replay, storm-gap substation-balance fill), matching the note's "Not one thing" claim that three corrections each move a different one of the four feeders. No hidden factor the judge found was dismissed by the note as merely routine; the note's Hidden factor record marks each relevant factor's fix depth as "modelling" or "modelling (a network replay)," not "routine," consistent with the judge's own account of needing a genuine rebuild rather than a one-sentence fix. No distractor was named by the judge as carrying a result.
+### Fix
 
-## Stump power (Gate F)
-Judge: strong, citing the same three independently-grounded shortcuts the design note names (stale 2019 study percentage, today's-GIS feeder label, storm-gap averaging), each flipping one feeder in the final four. This matches the design note's own Frontier check (shallow path checks, forcing table) closely. No too-easy signal raised.
-
-## Findings, ranked
-1. **Process violation: the judge thread did not keep the mandatory derive-first order, and its own report says so.** It opened `graded_blocks.md` in the same tool batch that first listed `target/`, before writing an independent derivation, and explicitly discloses this at the top of both `verdict.md` and `own_derivation.md`. This is the exact failure mode the determinism-check contract calls out by name (a pass that has seen the committed answers cannot be surprised by a filed sentence). No second thread was spawned to correct this, per the no-retry guardrail, so the verdict below should be read with that caveat attached rather than treated as a from-scratch confirmation.
-2. **Gate A is incomplete on the figures that matter most.** The judge verified every supporting mechanism (clocks, diversity ratios, telemetry gaps, switching-order dates) but did not rebuild the technical-loss physics model or the final NTL MWh ranking for any of the six named feeders — the exact numbers behind the Final Recommendation and Supplementary asks 1, 3 and 6. The judge's own Fix section flags this as the highest-value next step, specifically the 373/441 vs 438 NTH-4 customer-count dispute and the APT-3 1,777.8-vs-838.1 MWh technical-loss figure. Until one of these is independently rebuilt, the DETERMINISTIC verdict rests on "nothing contradicted it" rather than "it reproduces."
-3. **Effort-grading discrepancy (see Gate H reconciliation above):** the judge's careful-pass estimate is much more generous than the note's `effort.py`-computed figure, though the judge's number is a qualitative read, not a rebuild, so it is reported as a flag, not a correction to the note.
-4. Spec gates, Gate G and the rest of Gate H all reconcile cleanly against the design note and metadata.json; no finding there.
-
-## Next action for the author
-Before treating this as a clean APPROVE, independently rebuild one of the two figures the judge left unverified: either the APT-3 technical-loss recompute (1,777.8 MWh vs the 2019 study's 838.1) from the GIS segments and `distribution_engineering_tables.xlsx`, or the NTH-4/NTH-3 customer-count walk (373/441 vs today's-GIS 438) through the service-point tree via the crosswalk. If both reproduce, the APPROVE stands on firmer ground than the current pass gives it; if either does not, re-invoke `/fix-determinism` on the specific finding rather than re-running this check from scratch.
+None. No gate failure found; APPROVE as-is. (Scope note: this pass did not exhaustively re-sum the full 504-row
+monthly balance sheet or the full 15-account/AMR diversion detection end to end; the spot checks run, two
+full-month gas-in reconstructions through genuinely dirty data, the Rule 2 100-meter cutoff, the changeout
+completion simulation, and the soil-vs-air model fit, all reproduced inside their stated bands by the blocks' own
+method, and nothing examined contradicts the recommendation.)

@@ -1,160 +1,109 @@
-"""task22 world constants: Delmont Power and Light, a city-owned electric utility in north-east Oklahoma, its four
-69/12.47 kV substations and fourteen feeders, the customers and loads on them, and the systems that record them.
-Every number the simulation draws from is here; world.py turns them into the clean truth."""
+"""task22 architecture 2: Brandvold Public Utilities' gas system, the parameters every module reads."""
 import datetime as dt
-from zoneinfo import ZoneInfo
 
-SEED = 22061
-TZ = ZoneInfo("America/Chicago")
-UTC = dt.timezone.utc
-START_LOCAL = dt.datetime(2023, 9, 1, 0, 0, tzinfo=TZ)      # first hour simulated (local midnight)
-END_LOCAL = dt.datetime(2026, 11, 1, 0, 0, tzinfo=TZ)        # exclusive
-EXTRACT_DATE = dt.date(2026, 11, 2)                           # the day the extracts are pulled
-WIN26 = (dt.date(2025, 10, 1), dt.date(2026, 10, 1))          # the twelve months to September 2026
-WIN24 = (dt.date(2023, 10, 1), dt.date(2024, 10, 1))          # the twelve months to September 2024
-LAT, LON = 36.66, -95.14                                      # Delmont's municipal airport (fictional)
-V_KV = 12.47
-SINGLE_PHASE_FACTOR = 6.0     # loss on a single-phase tap = 6 x R x (S/V)^2: phase and neutral each carry I = S/7.2 kV
-SECONDARY_SHARE = 0.007       # secondary and service losses, share of energy delivered to services (the 2019 study)
-OMS_CUTOVER = dt.datetime(2024, 7, 15, 6, 0, tzinfo=TZ)       # OMS upgrade: device names move to the GIS switch ids
-GIS_MIGRATION = dt.date(2024, 2, 5)
+SEED = 22062
 
-# conductor code -> ohms per mile at 50 C (and 25 C), reactance; the engineering tables ship both temperatures
-CONDUCTORS = {
-    "336.4 ACSR": (0.306, 0.278, 0.53),
-    "4/0 ACSR": (0.592, 0.543, 0.62),
-    "2/0 ACSR": (0.895, 0.822, 0.64),
-    "1/0 ACSR": (1.120, 1.031, 0.65),
-    "#2 ACSR": (1.690, 1.553, 0.67),
-    "#4 ACSR": (2.550, 2.341, 0.69),
-    "1/0 AL URD": (1.010, 0.928, 0.24),
-}
-# distribution transformer losses by kVA: (no-load W, load loss W at rated) for units made 2010 on; older units x1.35
-# no-load and x1.12 load loss (the engineering tables carry both vintages)
-XFMR_LOSS = {
-    10: (38, 150), 15: (50, 190), 25: (75, 290), 37.5: (100, 410), 50: (120, 520), 75: (180, 800),
-    100: (220, 1000), 167: (320, 1500), 300: (500, 2600), 500: (750, 4000), 750: (1000, 5600), 1000: (1250, 7200),
-    1500: (1700, 10200), 2500: (2500, 15800),
-}
-OLD_NL, OLD_LL = 1.35, 1.12
+SIM0 = dt.date(2023, 8, 1)            # first simulated gas day
+SIM1 = dt.date(2026, 11, 4)           # last simulated gas day (the extracts ran November 2 to 5, 2026)
+W0, W1 = dt.date(2025, 10, 1), dt.date(2026, 9, 30)      # the program rules' twelve months
+MON0, MON1 = dt.date(2023, 10, 1), dt.date(2026, 9, 30)  # the monthly balance the prompt asks for
+FY = {"FY2024": (dt.date(2023, 10, 1), dt.date(2024, 9, 30)),
+      "FY2025": (dt.date(2024, 10, 1), dt.date(2025, 9, 30)),
+      "FY2026": (W0, W1)}
 
-# substation transformers 69/12.47 kV: rating MVA, no-load kW, load loss kW at rating
-SUBSTATIONS = {
-    "NTH": {"name": "North", "dp": "DLM-NTH69", "mva": 25.0, "nl_kw": 19.0, "ll_kw": 118.0, "ss_kw": 9.5},
-    "IND": {"name": "Industrial Park", "dp": "DLM-IND69", "mva": 25.0, "nl_kw": 19.5, "ll_kw": 121.0, "ss_kw": 11.0},
-    "APT": {"name": "Airport Road", "dp": "DLM-APT69", "mva": 30.0, "nl_kw": 22.0, "ll_kw": 139.0, "ss_kw": 10.5},
-    "CHL": {"name": "Cherry Hill", "dp": "DLM-CHL69", "mva": 20.0, "nl_kw": 16.5, "ll_kw": 102.0, "ss_kw": 8.0},
-}
+T_BASE_F = 60.0
+R_BASE = T_BASE_F + 459.67
+P_BASE = 14.73
+P_ATM = 13.98            # Brandvold, 1,390 ft
+DELIVERY_PSIG = 0.253    # 7 inches water column
+PF = round((P_ATM + DELIVERY_PSIG) / P_BASE, 4)   # the billing pressure factor, 0.9663
 
-# feeders: substation, kind, trunk miles, trunk conductor, residential and small commercial counts, electric-heat
-# share, PV share, illegal grow sites (count, mean kW), AMI conversion (year, month) or None (still AMR at extract)
-FEEDERS = {
-    "NTH-1": dict(sub="NTH", kind="town", trunk_mi=4.6, trunk="336.4 ACSR", res=930, sc=140, eheat=0.30, pv=0.075,
-                  theft=(1, 4.0), ami=(2024, 11)),
-    "NTH-2": dict(sub="NTH", kind="town", trunk_mi=5.1, trunk="336.4 ACSR", res=880, sc=120, eheat=0.28, pv=0.07,
-                  theft=(2, 4.5), ami=(2024, 11)),
-    "NTH-3": dict(sub="NTH", kind="rural", trunk_mi=12.8, trunk="4/0 ACSR", res=390, sc=30, eheat=0.45, pv=0.045,
-                  theft=(6, 8.5), ami=(2025, 10)),
-    "NTH-4": dict(sub="NTH", kind="rural", trunk_mi=15.6, trunk="4/0 ACSR", res=350, sc=25, eheat=0.48, pv=0.04,
-                  theft=(9, 9.0), ami=(2026, 5)),
-    "IND-1": dict(sub="IND", kind="industrial", trunk_mi=3.6, trunk="336.4 ACSR", res=410, sc=165, eheat=0.25,
-                  pv=0.05, theft=(1, 5.0), ami=(2024, 5)),
-    "IND-2": dict(sub="IND", kind="town", trunk_mi=4.2, trunk="336.4 ACSR", res=770, sc=110, eheat=0.27, pv=0.065,
-                  theft=(2, 4.0), ami=(2024, 5)),
-    "IND-3": dict(sub="IND", kind="rural", trunk_mi=11.9, trunk="4/0 ACSR", res=300, sc=25, eheat=0.46, pv=0.04,
-                  theft=(5, 8.0), ami=None),
-    "APT-1": dict(sub="APT", kind="town", trunk_mi=4.1, trunk="336.4 ACSR", res=890, sc=125, eheat=0.29, pv=0.08,
-                  theft=(1, 4.0), ami=(2025, 5)),
-    "APT-2": dict(sub="APT", kind="town", trunk_mi=5.6, trunk="336.4 ACSR", res=820, sc=100, eheat=0.30, pv=0.075,
-                  theft=(2, 4.5), ami=(2025, 5)),
-    "APT-3": dict(sub="APT", kind="rural", trunk_mi=13.6, trunk="4/0 ACSR", res=310, sc=20, eheat=0.47, pv=0.035,
-                  theft=(4, 8.0), ami=(2026, 5)),
-    "APT-4": dict(sub="APT", kind="rural", trunk_mi=17.8, trunk="4/0 ACSR", res=330, sc=22, eheat=0.50, pv=0.03,
-                  theft=(13, 9.0), ami=None),
-    "CHL-1": dict(sub="CHL", kind="town", trunk_mi=4.3, trunk="336.4 ACSR", res=860, sc=130, eheat=0.31, pv=0.07,
-                  theft=(2, 4.0), ami=(2025, 5)),
-    "CHL-2": dict(sub="CHL", kind="rural", trunk_mi=16.9, trunk="4/0 ACSR", res=360, sc=26, eheat=0.49, pv=0.03,
-                  theft=(16, 9.0), ami=None),
-    "CHL-3": dict(sub="CHL", kind="rural", trunk_mi=14.9, trunk="4/0 ACSR", res=335, sc=24, eheat=0.48, pv=0.035,
-                  theft=(11, 9.0), ami=(2026, 5)),
-}
-FEEDER_ORDER = list(FEEDERS)
-SUB_FEEDERS = {s: [f for f in FEEDER_ORDER if FEEDERS[f]["sub"] == s] for s in SUBSTATIONS}
+LEAK_LINE = 1.0          # per cent of the gas delivered into the district
+CHANGEOUT_LINE = 3.5      # per cent of the volume billed for the non-compensating meters
+CHANGEOUT_MIN_METERS = 100
 
-# large power customers: (key, feeder, name, class, average kW, position as share of trunk length or "near",
-# energized (y, m) or None for before the data, connected kW applied, transformer kVA)
-LARGE_POWER = [
-    ("LP01", "IND-1", "Ozark Valley Poultry, processing plant", "POULTRY", 1850, 0.55, None, 3400, 2500),
-    ("LP02", "IND-1", "Dawes Hardwood Sawmill", "SAWMILL", 520, 0.80, None, 1100, 1000),
-    ("LP03", "IND-2", "Delmont Regional Medical Center", "HOSPITAL", 880, 0.35, None, 1600, 1500),
-    ("LP04", "IND-2", "Delmont High School", "SCHOOL", 330, 0.50, None, 900, 750),
-    ("LP05", "NTH-1", "City of Delmont Water Treatment Plant", "WATER", 410, 0.40, None, 800, 750),
-    ("LP06", "NTH-1", "Delmont Supercenter", "RETAIL", 470, 0.30, None, 950, 750),
-    ("LP07", "NTH-2", "Washington Middle School", "SCHOOL", 170, 0.45, None, 450, 300),
-    ("LP08", "APT-1", "City of Delmont Wastewater Plant", "WATER", 300, 0.70, None, 700, 500),
-    ("LP09", "APT-1", "Delmont Municipal Airport and hangars", "RETAIL", 160, 0.85, None, 400, 300),
-    ("LP10", "APT-2", "Route 60 Inn and Conference Center", "HOSPITAL", 210, 0.40, None, 500, 300),
-    ("LP11", "CHL-1", "Cherry Hill Shopping Center", "RETAIL", 380, 0.35, None, 900, 750),
-    ("LP12", "CHL-1", "Lincoln Elementary", "SCHOOL", 120, 0.55, None, 300, 300),
-    ("LP13", "IND-3", "Spavinaw Feed and Grain", "SAWMILL", 260, 0.45, None, 600, 500),
-    ("LP14", "CHL-3", "Big Cabin Aggregates, crusher", "SAWMILL", 310, 0.25, None, 1000, 750),
-    ("LP15", "APT-3", "Prairie Fresh Cold Storage", "COLDSTORE", 620, 0.94, (2025, 3), 1350, 1000),
-    ("LP16", "APT-3", "Green Acres Cultivation LLC", "GROW", 300, 0.62, None, 735, 500),
-    ("LP17", "APT-3", "Red Dirt Botanicals", "GROW", 240, 0.95, (2023, 6), 560, 500),
-    ("LP18", "APT-4", "Bluestem Craft Cannabis", "GROW", 340, 0.76, None, 845, 500),
-    ("LP19", "APT-4", "Osage Hills Farms", "GROW", 290, 0.92, (2024, 4), 680, 500),
-    ("LP20", "NTH-4", "Northline Growers Co-op", "GROW", 340, 0.60, None, 790, 500),
-    ("LP21", "IND-3", "Six Mile Cultivation", "GROW", 290, 0.88, None, 715, 500),
-    ("LP22", "CHL-2", "Hominy Creek Gardens", "GROW", 330, 0.58, None, 805, 500),
-    ("LP23", "CHL-2", "Tallgrass Indoor Farms", "GROW", 310, 0.74, (2023, 9), 735, 500),
-    ("LP24", "CHL-3", "Cherokee Strip Harvest", "GROW", 280, 0.30, None, 690, 500),
-    ("LP25", "NTH-3", "Pensacola Road Storage Units", "RETAIL", 90, 0.50, None, 200, 167),
+# district: code, name, residential premises, small commercial premises, non-compensating share, outdoor share of
+# the non-compensating meters, student rentals, snowbirds every winter, snowbirds first away in 2025-26, leak loss
+# target (per cent of gas in, FY2026), read cycles, bypasses (full, furnace tap), commercial bypasses, cast iron
+# share of main (frost), regulator stations
+DISTRICTS = [
+    dict(code="OT", name="Old Town", res=900, com=92, ntc=0.80, out=0.34, stu=0.05, sbo=0.02, sbn=0.003, leak=1.60,
+         cycles=[3, 4, 5, 6], byp=(1, 1), cbyp=0, ci=0.55, drs=["OT-1", "OT-2"]),
+    dict(code="RS", name="Riverside", res=980, com=40, ntc=0.76, out=1.00, stu=0.0, sbo=0.02, sbn=0.005, leak=1.31,
+         cycles=[13, 14, 15, 16], byp=(0, 1), cbyp=0, ci=0.25, drs=["RS-1"]),
+    dict(code="CH", name="College Hill", res=820, com=46, ntc=0.62, out=0.62, stu=0.38, sbo=0.0, sbn=0.0, leak=0.76,
+         cycles=[12, 13, 14], byp=(0, 0), cbyp=0, ci=0.10, drs=["CH-1"]),
+    dict(code="NE", name="North End", res=960, com=30, ntc=0.81, out=1.00, stu=0.0, sbo=0.02, sbn=0.005, leak=0.61,
+         cycles=[14, 15, 16, 17], byp=(0, 0), cbyp=0, ci=0.05, drs=["NE-1"]),
+    dict(code="WG", name="Westgate", res=880, com=36, ntc=0.05, out=1.00, stu=0.0, sbo=0.02, sbn=0.004, leak=0.42,
+         cycles=[18, 19, 20], byp=(0, 0), cbyp=0, ci=0.0, drs=["WG-1"]),
+    dict(code="LV", name="Lakeview", res=700, com=15, ntc=0.74, out=1.00, stu=0.0, sbo=0.10, sbn=0.03, leak=1.21,
+         cycles=[8, 9, 10], byp=(0, 0), cbyp=0, ci=0.0, drs=["LV-1"]),
+    dict(code="PR", name="Prairie Rose", res=940, com=25, ntc=0.30, out=1.00, stu=0.0, sbo=0.02, sbn=0.005, leak=0.28,
+         cycles=[17, 18, 19], byp=(0, 0), cbyp=0, ci=0.0, drs=["PR-1"]),
+    dict(code="HP", name="Heritage Park", res=760, com=20, ntc=0.05, out=1.00, stu=0.0, sbo=0.01, sbn=0.003, leak=0.18,
+         cycles=[19, 20], byp=(0, 0), cbyp=0, ci=0.0, drs=["HP-1"]),
+    dict(code="EI", name="East Industrial", res=140, com=124, ntc=0.55, out=0.58, stu=0.0, sbo=0.0, sbn=0.0,
+         leak=0.51, cycles=[6, 7, 8], byp=(0, 0), cbyp=2, ci=0.15, drs=["EI-1"]),
+    dict(code="DT", name="Downtown", res=520, com=162, ntc=0.72, out=0.20, stu=0.06, sbo=0.0, sbn=0.0, leak=1.42,
+         cycles=[1, 2, 3], byp=(0, 0), cbyp=1, ci=0.60, drs=["DT-1", "DT-2"]),
+    dict(code="AP", name="Airport", res=260, com=72, ntc=0.62, out=0.70, stu=0.0, sbo=0.0, sbn=0.003, leak=0.66,
+         cycles=[10, 11, 12], byp=(0, 0), cbyp=0, ci=0.0, drs=["AP-1"]),
+    dict(code="EG", name="Elm Grove", res=780, com=25, ntc=0.84, out=1.00, stu=0.0, sbo=0.03, sbn=0.006, leak=0.68,
+         cycles=[15, 16, 17], byp=(3, 3), cbyp=0, ci=0.10, drs=["EG-1"]),
+    dict(code="HV", name="Halvorsen", res=430, com=25, ntc=0.88, out=1.00, stu=0.0, sbo=0.01, sbn=0.005, leak=0.80,
+         cycles=[8, 9, 10], byp=(0, 0), cbyp=0, ci=0.0, drs=["HV-1"]),
+    dict(code="SQ", name="Sundquist", res=470, com=30, ntc=0.85, out=1.00, stu=0.0, sbo=0.02, sbn=0.006, leak=1.36,
+         cycles=[9, 10, 11], byp=(2, 2), cbyp=0, ci=0.35, drs=["SQ-1"]),
 ]
-LP_BEFORE_2019 = {"LP01", "LP02", "LP03", "LP04", "LP05", "LP06", "LP07", "LP08", "LP09", "LP10", "LP11", "LP12",
-                  "LP13", "LP14", "LP25"}
-LP_2019_TO_2023 = {"LP16": 2020, "LP18": 2021, "LP20": 2022, "LP21": 2021, "LP22": 2020, "LP24": 2021}
+DCODES = [d["code"] for d in DISTRICTS]
+DNAME = {d["code"]: d["name"] for d in DISTRICTS}
 
-# 2027 approved connections (applications file): key, feeder, name, class, applied kW, position, energize (y, m, d),
-# transformer kVA; the subdivision is residential lots ramping from its first month
-NEW_2027 = [
-    ("AP27-01", "APT-4", "Flint Ridge Cultivation LLC", "GROW", 1250, 0.90, (2027, 5, 1), 1500),
-    ("AP27-02", "APT-3", "Prairie Fresh Cold Storage, freezer expansion", "COLDSTORE", 820, 0.94, (2027, 4, 1), 1000),
-    ("AP27-03", "CHL-3", "Wildhorse Greenhouse", "GROW", 700, 0.55, (2027, 8, 1), 750),
-]
-SUBDIVISION = dict(feeder="NTH-1", name="Prairie Rose Estates", lots=140, start=(2027, 3), per_month=12, pos=0.25)
-RECONDUCTOR = dict(feeder="APT-3", in_service=dt.date(2027, 3, 15), new="336.4 ACSR", miles=9.8)
-# illegal grows: each feeder's stolen energy in the twelve months to September 2026 (MWh), the sites' kW scaled to it
-THEFT_TARGET = {"NTH-1": 67, "NTH-2": 103, "NTH-3": 480, "NTH-4": 643, "IND-1": 64, "IND-2": 84, "IND-3": 321,
-                "APT-1": 44, "APT-2": 102, "APT-3": 480, "APT-4": 1036, "CHL-1": 86, "CHL-2": 1200, "CHL-3": 610}
+# large customers on electronic volume correctors (telemetered, billed on corrected volume)
+EVC = {"OT": 3, "RS": 2, "CH": 7, "NE": 1, "WG": 2, "LV": 1, "PR": 2, "HP": 2, "EI": 16, "DT": 12, "AP": 7, "EG": 1,
+       "HV": 1, "SQ": 1}
 
-# switching: permanent transfers and temporary ties (feeder from, feeder to, customers moved, local datetime start,
-# end or None for permanent); planned maintenance pairs are drawn in world.py
-TRANSFERS = [
-    dict(key="T24", frm="NTH-2", to="NTH-1", cust=95, start=dt.datetime(2024, 3, 18, 10, 20), end=None,
-         reason="Reconfiguration"),
-    dict(key="T25", frm="IND-1", to="IND-2", cust=210, start=dt.datetime(2025, 6, 2, 8, 40),
-         end=dt.datetime(2025, 7, 14, 15, 10), reason="Construction"),
-    dict(key="T24b", frm="APT-1", to="APT-2", cust=120, start=dt.datetime(2024, 12, 3, 7, 50),
-         end=dt.datetime(2024, 12, 10, 16, 30), reason="Construction"),
-    dict(key="T26", frm="NTH-3", to="NTH-4", cust=64, start=dt.datetime(2026, 4, 21, 9, 15), end=None,
-         reason="Reconfiguration"),
-]
-# the January 2026 ice storm at Cherry Hill
-STORM = dict(fault=dt.datetime(2026, 1, 24, 5, 40), tie_close=dt.datetime(2026, 1, 24, 14, 20),
-             repair=dt.datetime(2026, 2, 2, 11, 5), first_section_customers=28,
-             gap_start=dt.datetime(2026, 1, 23, 22, 0), gap_end=dt.datetime(2026, 2, 3, 7, 0))
+# the 2024-25 gas temperature study: loggers at meter inlets, November 2024 to April 2025
+STUDY0, STUDY1 = dt.date(2024, 11, 1), dt.date(2025, 4, 30)
+STUDY_OUT = {"NE": 9, "RS": 9, "EG": 8, "HV": 8, "SQ": 9, "LV": 9}
+STUDY_IN = {"OT": 5, "DT": 3}
 
-# lighting: street lights (the city's account) and area lights rented to customers
-DEEMED_KWH = {"HPS100": 40, "HPS150": 60, "HPS250": 100, "MV175": 70, "LED40": 15, "LED70": 26, "LED110": 40}
-INPUT_W = {"HPS100": 128, "HPS150": 188, "HPS250": 295, "MV175": 205, "LED40": 40, "LED70": 70, "LED110": 110}
-LED_FOR = {"HPS100": "LED40", "HPS150": "LED70", "HPS250": "LED110", "MV175": "LED40"}
+# changeout programs: 2024 Westgate, 2025 Old Town east and an Elm Grove pilot (both complete before the window);
+# the 2027 plan, set from the 2026 budget, schedules Old Town's and Downtown's remaining meters
+PROGRAM_2024 = dict(district="WG", start=dt.date(2024, 4, 15), end=dt.date(2024, 9, 30))
+PROGRAM_2025 = [dict(district="OT", start=dt.date(2025, 3, 31), end=dt.date(2025, 9, 26), n=380),
+                dict(district="EG", start=dt.date(2025, 5, 5), end=dt.date(2025, 8, 29), n=150)]
+PLAN_2027 = dict(districts=["OT", "DT"], start=dt.date(2027, 4, 5), end=dt.date(2027, 10, 29))
+SEASON_2027 = dt.date(2027, 11, 1)
 
-# business-day holidays the city's billing calendar skips (read routes run on business days)
-HOLIDAYS = {dt.date(2023, 11, 10), dt.date(2023, 11, 23), dt.date(2023, 11, 24), dt.date(2023, 12, 25),
-            dt.date(2024, 1, 1), dt.date(2024, 1, 15), dt.date(2024, 2, 19), dt.date(2024, 5, 27), dt.date(2024, 6, 19),
-            dt.date(2024, 7, 4), dt.date(2024, 9, 2), dt.date(2024, 11, 11), dt.date(2024, 11, 28), dt.date(2024, 11, 29),
-            dt.date(2024, 12, 25), dt.date(2025, 1, 1), dt.date(2025, 1, 20), dt.date(2025, 2, 17), dt.date(2025, 5, 26),
-            dt.date(2025, 6, 19), dt.date(2025, 7, 4), dt.date(2025, 9, 1), dt.date(2025, 11, 11), dt.date(2025, 11, 27),
-            dt.date(2025, 11, 28), dt.date(2025, 12, 25), dt.date(2026, 1, 1), dt.date(2026, 1, 19), dt.date(2026, 2, 16),
-            dt.date(2026, 5, 25), dt.date(2026, 6, 19), dt.date(2026, 7, 3), dt.date(2026, 9, 7), dt.date(2026, 11, 11),
-            dt.date(2026, 11, 26), dt.date(2026, 11, 27), dt.date(2023, 10, 9), dt.date(2023, 9, 4)}
+ORG = "Brandvold Public Utilities"
+CITY = "City of Brandvold"
+COMMISSION = "Brandvold Utilities Commission"
+ENGINEER = "Marc Gilbert"
+CONSULTANT = "Jocelyn Murray"
+TZ = "America/Chicago"
+
+FILES = {
+    "reads": "amr_meter_reads_2023-08_2026-10.csv",
+    "register": "premise_meter_register_2026-11-02.xlsx",
+    "accounts": "customer_accounts_2023-08_2026-11.csv",
+    "drs": "regulator_station_correctors_daily_2023-09_2026-10.csv",
+    "gate": "city_gate_station_daily_2023-09_2026-10.csv",
+    "evc": "commercial_correctors_daily_2023-09_2026-10.csv",
+    "airport": "brandvold_regional_airport_daily_2023-08_2026-10.csv",
+    "soil": "prairie_soil_network_brandvold_station_daily_2023-08_2026-10.csv",
+    "loggers": "gas_temperature_study_loggers_2024-11_2025-04.csv",
+    "study_memo": "gas_temperature_study_memo_2025-06.pdf",
+    "lauf_study": "lauf_study_fy2019_consultant_report.pdf",
+    "rules": "lauf_reduction_program_rules_2026.pdf",
+    "damage": "third_party_damage_reports_2023-2026.xlsx",
+    "own_use": "utility_own_use_2023-2026.xlsx",
+    "workorders": "meter_changeout_work_orders_2024-2025.csv",
+    "plan2027": "meter_changeout_plan_2027.xlsx",
+    "rp_cases": "revenue_protection_cases_2021-2025.xlsx",
+    "lauf_report": "annual_lauf_report_fy2019-fy2026.xlsx",
+    "tariff": "gas_rate_schedules_2026.pdf",
+    "rebates": "appliance_rebates_2024-2026.csv",
+    "cng": "cng_station_sales_2024-2026.csv",
+    "invoices": "interstate_supply_invoices_2023-2026.xlsx",
+}

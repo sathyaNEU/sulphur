@@ -1,25 +1,28 @@
-"""task22 golden deliverables: the engineering division's workbook (each feeder's monthly energy balance, the twelve
-months, the line loss bridge, the 2027 connections and 2027 technical losses) and its one-page memo to the utility
-director, both from the same results that write figures.json."""
+"""task22 architecture 2, the golden deliverables: the engineering manager's workbook (each district's monthly gas
+balance, the twelve months to September 2026, the accounts that took gas without authorization, the gas temperature
+the meters saw, the 2027 changeouts' pace) and the short deck for the Utilities Commission, both from the results
+that write figures.json."""
 import datetime as dt
-import io
 import os
 
-import matplotlib
+import numpy as np
+import openpyxl
+from openpyxl.styles import Alignment, Font
+from pptx import Presentation
+from pptx.chart.data import CategoryChartData
+from pptx.dml.color import RGBColor
+from pptx.enum.chart import XL_CHART_TYPE
+from pptx.util import Emu, Pt
 
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-import openpyxl  # noqa: E402
-from openpyxl.styles import Alignment, Font  # noqa: E402
+import analysis as A
+import params as P
+import postprocess
 
-import analysis as A  # noqa: E402
-import postprocess  # noqa: E402
-
-WORKBOOK = "dpl_feeder_energy_balance_2023-10_2026-09.xlsx"
-MEMO = "revenue_protection_2027_memo.pdf"
-ORG = "City of Delmont"
-AUTHOR = "Dustin Jones"
-BLUE, GRAY, INK, INK2 = "#2a78d6", "#b5b4ae", "#0b0b0b", "#52514e"
+WORKBOOK = "bpu_district_gas_balance_2023-10_2026-09.xlsx"
+DECK = "lauf_program_2027_commission.pptx"
+INK, MUTED, BLUE, GRAY = "1F1F1F", "6B6B6B", "2A78D6", "B5B4AE"
+MCF = "#,##0"
+PCT = "0.00"
 
 
 def _hdr(ws, row, cols, widths=None):
@@ -31,285 +34,198 @@ def _hdr(ws, row, cols, widths=None):
         ws.column_dimensions[openpyxl.utils.get_column_letter(j)].width = wd
 
 
-def r1(x):
-    return round(float(x), 1)
-
-
-MWH, CNT, PCT, PTS = "#,##0.0", "#,##0", "0.00", "+0.00;-0.00;0.00"
-
-
-def _fmt(ws, cols, r0, r1_, fmt):
-    for col in cols:
-        for r in range(r0, r1_ + 1):
-            ws["%s%d" % (col, r)].number_format = fmt
-
-
-def write(F, G, mon, gold_dir):
-    os.makedirs(gold_dir, exist_ok=True)
-    b = G["_balance"]
+def workbook(path, R, figs, F):
+    mon = R["monthly"]
+    agg = R["agg"]
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Monthly balance"
-    ws["A1"] = "Feeder energy balance by month, MWh (October 2023 to September 2026)"
+    ws["A1"] = "District gas balance by month, Mcf at 14.73 psia and 60 F (October 2023 to September 2026)"
     ws["A1"].font = Font(bold=True, size=12)
-    cols = ["Month", "Feeder", "Customers at month end", "Energy in at breaker", "Received from customers' generation",
-            "Delivered through customers' meters", "Large power meters", "City street and area lights",
-            "Technical losses", "Non-technical loss"]
-    _hdr(ws, 3, cols, [9, 8, 11, 12, 14, 14, 12, 12, 11, 12])
+    cols = ["Month", "District", "Gas in at regulator stations", "Billed volume, cycle-read meters",
+            "Under-registration, meters without temperature compensation", "Corrector customers", "Own use",
+            "Third-party damage", "Taken without authorization", "Leak loss"]
+    _hdr(ws, 3, cols, [9, 15, 13, 14, 18, 12, 9, 10, 13, 10])
     r = 4
-    for m in mon:
-        ws.append if False else None
-        vals = [m["month"], m["feeder"], m["customers"], r1(m["e_in"]), r1(m["rcv"]), r1(m["dlv"]), r1(m["lp"]),
-                r1(m["lights"]), r1(m["tech"]), r1(m["ntl"])]
-        for j, v in enumerate(vals, 1):
-            ws.cell(row=r, column=j, value=v)
+    order = sorted(mon.itertuples(), key=lambda x: (x.month, P.DCODES.index(x.district)))
+    for m in order:
+        ws.append([m.month, P.DNAME[m.district], round(m.inflow, 1), round(m.billed, 1), round(m.under, 1),
+                   round(m.evc, 1), round(m.own, 1), round(m.dmg, 1), round(m.div, 1), round(m.leak, 1)])
         r += 1
-    _fmt(ws, "C", 4, r - 1, CNT)
-    _fmt(ws, "DEFGHIJ", 4, r - 1, MWH)
+    for col in "CDEFGHIJ":
+        for k in range(4, r):
+            ws["%s%d" % (col, k)].number_format = "#,##0.0"
     ws.freeze_panes = "C4"
-    ws.auto_filter.ref = "A3:J%d" % (r - 1)
-    ws.print_title_rows = "3:3"
-    # twelve months
-    ws = wb.create_sheet("Twelve months")
-    ws["A1"] = "Twelve months to September 2026, MWh"
+    ws = wb.create_sheet("Twelve months to Sep 2026")
+    ws["A1"] = "Twelve months ending September 30, 2026, Mcf"
     ws["A1"].font = Font(bold=True, size=12)
-    cols = ["Feeder", "Energy in at breaker", "Received from customers' generation", "Delivered through customers' meters",
-            "Large power meters", "City lights", "Primary conductors", "Transformer core", "Transformer load",
-            "Secondary and service", "Technical losses", "Non-technical loss", "Rank"]
-    _hdr(ws, 3, cols, [8, 12, 14, 14, 12, 10, 11, 11, 11, 11, 11, 12, 6])
-    order = sorted(A.FEEDERS, key=lambda f: -b[f]["ntl"])
-    rank = {f: i + 1 for i, f in enumerate(order)}
-    r = 4
-    for f in A.FEEDERS:
-        x = b[f]
-        vals = [f, r1(x["e_in"] / 1000), r1(x["rcv"] / 1000), r1(x["dlv"] / 1000), r1(x["lp"] / 1000),
-                r1(x["lights"] / 1000), r1(x["prim"] / 1000), r1(x["nl"] / 1000), r1(x["cu"] / 1000),
-                r1(x["sec"] / 1000), r1(x["tech"] / 1000), r1(x["ntl"] / 1000), rank[f]]
-        for j, v in enumerate(vals, 1):
-            ws.cell(row=r, column=j, value=v)
-        r += 1
-    tot = {k: sum(b[f][k] for f in A.FEEDERS) / 1000 for k in ("e_in", "rcv", "dlv", "lp", "lights", "prim", "nl",
-                                                                 "cu", "sec", "tech", "ntl")}
-    vals = ["Total", r1(tot["e_in"]), r1(tot["rcv"]), r1(tot["dlv"]), r1(tot["lp"]), r1(tot["lights"]),
-            r1(tot["prim"]), r1(tot["nl"]), r1(tot["cu"]), r1(tot["sec"]), r1(tot["tech"]), r1(tot["ntl"]), ""]
-    for j, v in enumerate(vals, 1):
-        ws.cell(row=r, column=j, value=v).font = Font(bold=True)
-    _fmt(ws, "BCDEFGHIJKL", 4, r, MWH)
-    ws.freeze_panes = "B4"
-    r += 2
-    ws.cell(row=r, column=1, value="Substations: purchases at the delivery points less the feeders' energy in "
-                                   "(substation transformer losses and station service), MWh").font = Font(italic=True)
-    r += 1
-    ws.cell(row=r, column=1, value="Purchases")
-    ws.cell(row=r, column=2, value=r1(G["purchases_26"]))
-    ws.cell(row=r + 1, column=1, value="Substations")
-    ws.cell(row=r + 1, column=2, value=r1(G["substation_26"]))
-    ws.cell(row=r + 2, column=1, value="Lights billed at deemed kWh")
-    ws.cell(row=r + 2, column=2, value=r1(G["lights_deemed_26"]))
-    _fmt(ws, "B", r, r + 2, MWH)
-    # bridge
-    ws = wb.create_sheet("Line loss bridge")
-    ws["A1"] = "Line loss, purchases less billed sales over purchases, per cent"
+    cols = ["District", "Gas in", "Billed volume", "Under-registration", "Corrector customers", "Own use", "Damage",
+            "Taken without authorization", "Leak loss", "Leak loss, % of gas in", "Meters without compensation",
+            "Under-registration, % of their billed volume", "Main replacement 2027-2029", "2027 changeout"]
+    _hdr(ws, 3, cols, [15, 11, 12, 14, 12, 9, 9, 13, 10, 11, 12, 15, 13, 11])
+    k = 4
+    for c in P.DCODES:
+        a = agg.loc[c]
+        ur = float(a["ur_pct"]) if np.isfinite(a["ur_pct"]) else None
+        elig = int(a["ntc_meters"]) >= P.CHANGEOUT_MIN_METERS
+        ws.append([P.DNAME[c], round(a["inflow"], 0), round(a["billed"], 0), round(a["under"], 0),
+                   round(a["evc"], 0), round(a["own"], 0), round(a["dmg"], 0), round(a["div"], 0),
+                   round(a["leak"], 0), round(float(a["leak_pct"]), 2), int(a["ntc_meters"]),
+                   round(ur, 2) if ur is not None else None,
+                   "Yes" if c in R["designated"] else "No",
+                   "Yes" if c in R["changeout"] else ("No" if elig else "No (fewer than 100 meters)")])
+        k += 1
+    ws.append(["All districts", round(agg["inflow"].sum(), 0), round(agg["billed"].sum(), 0),
+               round(agg["under"].sum(), 0), round(agg["evc"].sum(), 0), round(agg["own"].sum(), 0),
+               round(agg["dmg"].sum(), 0), round(agg["div"].sum(), 0), round(agg["leak"].sum(), 0),
+               round(100 * agg["leak"].sum() / agg["inflow"].sum(), 2)])
+    for col in "BCDEFGHI":
+        for j in range(4, k + 1):
+            ws["%s%d" % (col, j)].number_format = MCF
+    for col in "JL":
+        for j in range(4, k + 1):
+            ws["%s%d" % (col, j)].number_format = PCT
+    ws.cell(row=k + 2, column=1, value="Main replacement: leak loss over 1.0% of gas in (Rule 1). Changeout: "
+            "under-registration over 3.5% of the billed volume, at least 100 meters (Rule 2).").font = Font(italic=True,
+                                                                                                         size=8)
+    ws = wb.create_sheet("Without authorization")
+    ws["A1"] = "Accounts that took gas without authorization, October 2025 to September 2026"
     ws["A1"].font = Font(bold=True, size=12)
-    _hdr(ws, 3, ["", "Twelve months to September 2024", "Twelve months to September 2026", "Change, points"],
-         [40, 16, 16, 14])
-    br = G["bridge"]
-    names = [("substation", "Substation transformers and station service"), ("technical", "Technical losses"),
-             ("nontechnical", "Non-technical losses"), ("lights", "Lights: real use less deemed kWh billed"),
-             ("billing", "Metered use not billed in the period")]
-    r = 4
-    ws.cell(row=r, column=1, value="Line loss").font = Font(bold=True)
-    ws.cell(row=r, column=2, value=round(G["loss_pct_24"], 2))
-    ws.cell(row=r, column=3, value=round(G["loss_pct_26"], 2))
-    ws.cell(row=r, column=4, value=round(G["loss_change"], 2))
-    for k, lab in names:
-        r += 1
-        ws.cell(row=r, column=1, value=lab)
-        ws.cell(row=r, column=2, value=round(br["2024"]["parts"][k], 2))
-        ws.cell(row=r, column=3, value=round(br["2026"]["parts"][k], 2))
-        ws.cell(row=r, column=4, value=round(br["change"][k], 2))
-    r += 2
-    ws.cell(row=r, column=1, value="Change from technical losses, points")
-    ws.cell(row=r, column=4, value=round(G["d_technical"], 2))
-    ws.cell(row=r + 1, column=1, value="Change from non-technical losses, points")
-    ws.cell(row=r + 1, column=4, value=round(G["d_nontechnical"], 2))
-    ws.cell(row=r + 2, column=1, value="Change from everything else, points")
-    ws.cell(row=r + 2, column=4, value=round(G["d_other"], 2))
-    _fmt(ws, "BC", 4, r - 2, PCT)
-    _fmt(ws, "D", 4, r + 2, PTS)
-    # 2027
-    ws = wb.create_sheet("2027")
-    ws["A1"] = "2027: approved large connections and each feeder's technical losses"
+    _hdr(ws, 3, ["Premise", "District", "Finding", "Use first fell", "Gas not registered, Mcf"], [11, 15, 14, 13, 14])
+    dv = R["diversion"].sort_values(["district", "PremiseID"]) if len(R["diversion"]) else []
+    for d in (dv.itertuples() if len(dv) else []):
+        ws.append([int(d.PremiseID), P.DNAME[d.district], d.kind, d.first_month, round(d.mcf_window, 0)])
+    ws = wb.create_sheet("Gas temperature")
+    ws["A1"] = "Gas temperature at meters without compensation, monthly mean, F"
     ws["A1"].font = Font(bold=True, size=12)
-    _hdr(ws, 3, ["Application", "Applicant", "Feeder", "Applied kW", "Service date", "Peak hourly demand added, kW"],
-         [12, 40, 8, 10, 12, 16])
-    r = 4
-    for rr in F["applications"].itertuples(index=False):
-        if rr.Status != "Approved":
-            continue
-        for j, v in enumerate([rr.AppNo, rr.Applicant, rr.Feeder, float(rr.Connected_kW), rr.ServiceDate,
-                               r1(G["new_peaks"][rr.AppNo])], 1):
-            ws.cell(row=r, column=j, value=v)
-        r += 1
-    _fmt(ws, "D", 4, r - 1, CNT)
-    _fmt(ws, "F", 4, r - 1, MWH)
-    r += 1
-    r27 = r + 1
-    _hdr(ws, r, ["Feeder", "Energy in, MWh", "Primary conductors", "Transformer core", "Transformer load",
-                 "Secondary and service", "Technical losses, MWh"])
-    t27 = G["_tech27"]
-    for f in A.FEEDERS:
-        r += 1
-        x = t27[f]
-        for j, v in enumerate([f, r1(x["e_in"] / 1000), r1(x["prim"] / 1000), r1(x["nl"] / 1000), r1(x["cu"] / 1000),
-                               r1(x["sec"] / 1000), r1(x["tech"] / 1000)], 1):
-            ws.cell(row=r, column=j, value=v)
-    r += 1
-    ws.cell(row=r, column=1, value="Total").font = Font(bold=True)
-    ws.cell(row=r, column=7, value=r1(G["tech27_system"])).font = Font(bold=True)
-    _fmt(ws, "BCDEFG", r27, r, MWH)
-    # sweep
-    ws = wb.create_sheet("2027 sweep")
-    ws["A1"] = "Revenue protection sweep, 2027: feeders by non-technical loss, twelve months to September 2026"
+    tp = R["tpar"]
+    ws["A2"] = ("Outdoor sets: soil at 20 in + %.3f x (air - soil) + %.2f F when the air is below 45 F + %.2f F, "
+                "fitted on the 2024-25 loggers. Indoor: from the indoor loggers on the soil at 40 in."
+                % (tp.get("k", 0), tp.get("wall", 0), tp.get("c0", 0)))
+    _hdr(ws, 4, ["Month", "Airport air", "Outdoor meters", "Indoor meters"], [10, 11, 13, 13])
+    Wx = A.weather(F)
+    T_out, T_in, _ = A.gas_temp(F, Wx, "soil")
+    for m in A.MONTHS:
+        msk = (A.DAYS.year == m.year) & (A.DAYS.month == m.month)
+        ws.append([str(m), round(float(Wx["air"][msk].mean()), 1), round(float(T_out[msk].mean()), 1),
+                   round(float(T_in[msk].mean()), 1)])
+    ws = wb.create_sheet("2027 changeouts")
+    ws["A1"] = "Changeouts the 2027 plan schedules, done before November 1, 2027 at the 2024-25 pace"
     ws["A1"].font = Font(bold=True, size=12)
-    _hdr(ws, 3, ["Rank", "Feeder", "Non-technical loss, MWh", "Swept in 2027"], [6, 8, 16, 12])
-    for i, f in enumerate(order):
-        for j, v in enumerate([i + 1, f, r1(b[f]["ntl"] / 1000), "Yes" if i < 4 else ""], 1):
-            ws.cell(row=4 + i, column=j, value=v)
-    _fmt(ws, "C", 4, 3 + len(order), MWH)
-    notes(wb.create_sheet("Notes"))
-    path = os.path.join(gold_dir, WORKBOOK)
+    pl = R["plan"]
+    _hdr(ws, 3, ["Meter location", "Meters scheduled", "Expected done before the season"], [15, 15, 18])
+    plan = F["plan2027"]
+    for loc in ("Outside", "Inside"):
+        ws.append([loc, int((plan["MeterLocation"] == loc).sum()), round(pl["by_loc"].get(loc, 0.0), 0)])
+    ws.append(["All", pl["n"], round(pl["done"], 0)])
     wb.save(path)
-    postprocess.normalize_ooxml(path, AUTHOR, AUTHOR, "2026-11-09T15:12:00Z", "2026-11-10T22:41:00Z", excel=True,
-                                company=ORG)
-    memo(G, order, os.path.join(gold_dir, MEMO))
-    return path
 
 
-NOTES = [
-    ("Non-technical loss", "As RFP 2026-14 scope A.3 defines it: energy that entered the feeder at its substation "
-                           "breaker and from customers' own generation, less what customers' meters recorded, the "
-                           "City's unmetered street and area lights, and the feeder's own technical losses."),
-    ("Energy in at breaker", "The feeder breakers' hourly metering from the substation historian. Hours the "
-                             "telemetry missed, and APT-2's stuck readings of August 18 to 20, 2025, are rebuilt "
-                             "from the substation's delivery point purchases less its transformer losses, station "
-                             "service and the other feeders' breaker energy."),
-    ("Customers at month end", "Service points connected on the last day of the month on nodes the feeder served at "
-                               "midnight, with every OMS switching order replayed on the GIS network."),
-    ("Customers' meters", "Each read's kWh spread over the days it covers by the substation's daily energy; an "
-                          "estimated read is carried into the actual read that trues it up."),
-    ("City lights", "Lamps in the lighting inventory at their input watts (engineering tables) and each month's "
-                    "burning hours, by conversion date."),
-    ("Technical losses", "Primary conductors at 50 C, single-phase taps at six times the three-phase expression, as "
-                         "in the 2019 loss evaluation, with each month's metered load at the nodes of the network "
-                         "that served it; transformer core and load losses from the asset register by kVA and "
-                         "vintage; secondary and service conductors at 0.7 per cent of energy delivered to services."),
-    ("Line loss", "Purchases at the delivery points less sales on bills issued in the period (customer bills net of "
-                  "energy received from customers, large power bills and the lights' deemed kWh), over purchases; "
-                  "the basis of the annual line loss report."),
-    ("2027", "The twelve months to September 2026 stand for 2027's months on today's network, with the approved "
-             "connections from their service dates at the peak share of applied load that comparable connected "
-             "customers draw, and the APT-3 reconductor from March 15, 2027 (FY2027 budget instructions 1 and 2)."),
-    ("Sources", "Delivery point interval data and feeder historian to October 31, 2026; CIS meter reads pulled "
-                "November 5, 2026; GIS, transformer register and lighting inventory exported October 27, 2026."),
-    ("Rounding", "MWh to one decimal and line loss to two; totals and changes from unrounded values."),
-]
+def deck(path, R, figs):
+    prs = Presentation()
+    prs.slide_width, prs.slide_height = Emu(12192000), Emu(6858000)
+    blank = prs.slide_layouts[6]
+
+    def text(slide, x, y, w, h, lines, size=16):
+        tf = slide.shapes.add_textbox(Emu(x), Emu(y), Emu(w), Emu(h)).text_frame
+        tf.word_wrap = True
+        for k, line in enumerate(lines):
+            p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
+            p.text = line
+            p.runs[0].font.size = Pt(size)
+            p.runs[0].font.color.rgb = RGBColor.from_string(INK)
+            p.space_after = Pt(9)
+        return tf
+
+    def title(slide, t, sub=None):
+        tf = text(slide, 457200, 300000, 11277600, 700000, [t], 24)
+        tf.paragraphs[0].runs[0].font.bold = True
+        if sub:
+            q = tf.add_paragraph()
+            q.text = sub
+            q.runs[0].font.size = Pt(13)
+            q.runs[0].font.color.rgb = RGBColor.from_string(MUTED)
+        q = slide.shapes.add_textbox(Emu(457200), Emu(6400000), Emu(10800000), Emu(300000)).text_frame.paragraphs[0]
+        q.text = "Regulator station correctors, AMR reads and accounts to October 2026; Resolution 2026-11"
+        q.runs[0].font.size = Pt(9)
+        q.runs[0].font.color.rgb = RGBColor.from_string(MUTED)
+
+    agg = R["agg"]
+    des = [P.DNAME[c] for c in R["designated"]]
+    cho = [P.DNAME[c] for c in R["changeout"]]
+    s = prs.slides.add_slide(blank)
+    title(s, "2027 LAUF program: mains in %s; meters in %d districts" % (", ".join(des), len(cho)),
+          "Utilities Commission, December 2026")
+    text(s, 457200, 1500000, 11277600, 4600000, [
+        "Main replacement 2027-2029 (Rule 1): %s. Each lost more than 1.0%% of its gas to leaks in the twelve months "
+        "to September 2026." % ", ".join(des),
+        "Meter changeout 2027 (Rule 2): %s." % ", ".join(cho),
+        "Of the %d changeouts already scheduled in Old Town and Downtown, about %d will be done before the 2027-28 "
+        "heating season; meters inside take an appointment." % (R["plan"]["n"], int(round(R["plan"]["done"])))], 17)
+    s = prs.slides.add_slide(blank)
+    title(s, "Leak loss by district, twelve months to September 2026",
+          "Per cent of gas in at the regulator stations; the program line is 1.0%")
+    cd = CategoryChartData()
+    order = sorted(P.DCODES, key=lambda c: -float(agg.loc[c, "leak_pct"]))
+    cd.categories = [P.DNAME[c] for c in order]
+    cd.add_series("Leak loss %", [round(float(agg.loc[c, "leak_pct"]), 2) for c in order])
+    ch = s.shapes.add_chart(XL_CHART_TYPE.BAR_CLUSTERED, Emu(457200), Emu(1300000), Emu(11277600), Emu(4900000),
+                            cd).chart
+    ch.has_legend = False
+    ch.font.size = Pt(11)
+    pl = ch.plots[0]
+    pl.has_data_labels = True
+    pl.data_labels.number_format = "0.00"
+    pl.data_labels.number_format_is_linked = False
+    ch.category_axis.reverse_order = True
+    for i, c in enumerate(order):
+        pt = pl.series[0].points[i]
+        pt.format.fill.solid()
+        pt.format.fill.fore_color.rgb = RGBColor.from_string(BLUE if c in R["designated"] else GRAY)
+    s = prs.slides.add_slide(blank)
+    title(s, "Most of the reported LAUF is gas the meters did not register",
+          "Twelve months to September 2026, Mcf")
+    tot = agg.sum()
+    text(s, 457200, 1450000, 11277600, 4700000, [
+        "Gas in at the regulator stations: {:,.0f} Mcf; leak loss {:,.0f} Mcf ({:.2f}%).".format(
+            tot["inflow"], tot["leak"], 100 * tot["leak"] / tot["inflow"]),
+        "Meters without temperature compensation registered the gas at the temperature it reached them, near the "
+        "soil's under the 2025-26 snow, not the airport's air: {:,.0f} Mcf more than they billed.".format(tot["under"]),
+        "Gas taken without authorization: {:,.0f} Mcf at {} accounts (bypasses and furnace taps).".format(
+            tot["div"], figs["R4_diversion"]["accounts"]),
+        "Own use {:,.0f} Mcf; third-party damage {:,.0f} Mcf as reported.".format(tot["own"], tot["dmg"])], 16)
+    s = prs.slides.add_slide(blank)
+    title(s, "Where the meters under-register", "Under-registration, per cent of the volume billed for meters "
+                                                "without compensation; Rule 2's line is 3.5%")
+    cd = CategoryChartData()
+    elig = [c for c in P.DCODES if int(agg.loc[c, "ntc_meters"]) >= P.CHANGEOUT_MIN_METERS]
+    order = sorted(elig, key=lambda c: -float(agg.loc[c, "ur_pct"]))
+    cd.categories = [P.DNAME[c] for c in order]
+    cd.add_series("Under-registration %", [round(float(agg.loc[c, "ur_pct"]), 2) for c in order])
+    ch = s.shapes.add_chart(XL_CHART_TYPE.BAR_CLUSTERED, Emu(457200), Emu(1300000), Emu(11277600), Emu(4900000),
+                            cd).chart
+    ch.has_legend = False
+    ch.font.size = Pt(11)
+    pl = ch.plots[0]
+    pl.has_data_labels = True
+    pl.data_labels.number_format = "0.00"
+    pl.data_labels.number_format_is_linked = False
+    ch.category_axis.reverse_order = True
+    for i, c in enumerate(order):
+        pt = pl.series[0].points[i]
+        pt.format.fill.solid()
+        pt.format.fill.fore_color.rgb = RGBColor.from_string(BLUE if c in R["changeout"] else GRAY)
+    prs.save(path)
 
 
-def notes(ws):
-    ws["A1"] = "Notes"
-    ws["A1"].font = Font(bold=True, size=12)
-    ws.column_dimensions["A"].width = 22
-    ws.column_dimensions["B"].width = 100
-    for i, (k, v) in enumerate(NOTES):
-        ws.cell(row=3 + i, column=1, value=k).font = Font(bold=True)
-        c = ws.cell(row=3 + i, column=2, value=v)
-        c.alignment = Alignment(wrap_text=True, vertical="top")
-        ws.cell(row=3 + i, column=1).alignment = Alignment(vertical="top")
-
-
-def chart(G, order):
-    b = G["_balance"]
-    vals = [b[f]["ntl"] / 1000 for f in order][::-1]
-    labs = order[::-1]
-    fig, ax = plt.subplots(figsize=(6.2, 3.6), dpi=200)
-    colors = [BLUE if f in G["sweep"] else GRAY for f in labs]
-    ax.barh(labs, vals, color=colors, height=0.62, edgecolor="white", linewidth=1.5)
-    for y, v in enumerate(vals):
-        ax.text(v + 12, y, "{:,.0f}".format(v), va="center", fontsize=7.5, color=INK2)
-    ax.set_xlabel("Non-technical loss, MWh, twelve months to September 2026", fontsize=8, color=INK2)
-    ax.tick_params(axis="both", labelsize=7.5, colors=INK2)
-    for s in ("top", "right"):
-        ax.spines[s].set_visible(False)
-    ax.spines["left"].set_color("#d6d5d0")
-    ax.spines["bottom"].set_color("#d6d5d0")
-    ax.xaxis.grid(True, color="#ecebe7", linewidth=0.6)
-    ax.set_axisbelow(True)
-    ax.set_xlim(0, max(vals) * 1.15)
-    fig.tight_layout()
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png", metadata={"Software": None})
-    plt.close(fig)
-    buf.seek(0)
-    return buf
-
-
-def memo(G, order, path):
-    """The one-page memo to the utility director, written in Word and exported to PDF (officepdf)."""
-    import datetime as dt
-    import tempfile
-
-    from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-    from reportlab.platypus import Image, Paragraph, Spacer
-
-    import officepdf
-    SS = getSampleStyleSheet()
-    BODY = ParagraphStyle("b", parent=SS["BodyText"], fontName="Helvetica", fontSize=10, leading=13, spaceAfter=6)
-    HEAD = ParagraphStyle("h", parent=BODY, spaceAfter=0)
-    b = G["_balance"]
-    s = G["sweep"]
-    ntl = {f: b[f]["ntl"] / 1000 for f in A.FEEDERS}
-    story = [
-        Paragraph("<b>Delmont Power and Light, Engineering</b>", HEAD),
-        Paragraph("To: Utility Director", HEAD),
-        Paragraph("From: Dustin Jones, Engineering Manager", HEAD),
-        Paragraph("Date: November 10, 2026", HEAD),
-        Paragraph("<b>Subject: 2027 revenue protection sweep and 2027 technical losses</b>", BODY),
-        Paragraph("Sweep %s, %s, %s and %s in 2027. They carried %s, %s, %s and %s MWh of non-technical loss in the "
-                  "twelve months to September 2026; the next feeder, %s, carried %s." % (
-                      s[0], s[1], s[2], s[3], "{:,.0f}".format(ntl[s[0]]), "{:,.0f}".format(ntl[s[1]]),
-                      "{:,.0f}".format(ntl[s[2]]), "{:,.0f}".format(ntl[s[3]]), order[4],
-                      "{:,.0f}".format(ntl[order[4]])), BODY),
-        Paragraph("APT-3 and NTH-3 look like candidates on a raw residual and are not. APT-3's excess is its own "
-                  "network losses: with the cold store and the grow at the end of the feeder its lines and "
-                  "transformers lost %s MWh, where the 2019 study's %.2f per cent of its energy gives %s. NTH-3 looks "
-                  "high only if every customer is kept on today's feeder; the switching log moved one of its laterals "
-                  "to NTH-4 on April 21." % ("{:,.0f}".format(G["tech_apt3_26"]), G["study_apt3_pct"],
-                                             "{:,.0f}".format(G["careful_tech_apt3_26"])), BODY),
-        Paragraph("CHL-3 belongs on the list even though its breaker metering was down through the January ice "
-                  "storm, when it was also carrying CHL-2's customers. Its energy in for the year is %s MWh, rebuilt "
-                  "for those hours from the Cherry Hill delivery point." % "{:,.0f}".format(G["e_in_chl3_26"]), BODY),
-        Paragraph("Line loss rose from %.2f to %.2f per cent between the twelve months to September 2024 and to "
-                  "September 2026. Technical losses account for %.2f points of the rise and non-technical losses for "
-                  "%.2f; the lights, billing timing and the substations take %.2f points off." % (
-                      G["loss_pct_24"], G["loss_pct_26"], G["d_technical"], G["d_nontechnical"], -G["d_other"]), BODY),
-        Paragraph("For the 2027 budget, technical losses come to %s MWh on the fourteen feeders, including %s MWh on "
-                  "APT-4 once the Flint Ridge grow connects in May. The three approved connections will add %s, %s "
-                  "and %s kW at their peaks, well under what they applied for." % (
-                      "{:,.0f}".format(G["tech27_system"]), "{:,.0f}".format(G["tech27_apt4"]),
-                      *["{:,.0f}".format(G["new_peaks"][k]) for k in sorted(G["new_peaks"])]), BODY),
-    ]
-    tmp = tempfile.mkdtemp(prefix="t22memo-")
-    png = os.path.join(tmp, "ntl_by_feeder.png")
-    open(png, "wb").write(chart(G, order).read())
-    story.append(Image(png, width=150 * 72 / 25.4, height=150 * 72 / 25.4 * 3.6 / 6.2))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("Non-technical loss by feeder as RFP 2026-14 scope A.3 defines it, the four to sweep in "
-                           "blue. Monthly detail in the feeder energy balance workbook.", BODY))
-    CST = dt.timezone(dt.timedelta(hours=-6))
-    officepdf.build(path, story, "2027 revenue protection sweep", "Delmont Power and Light",
-                    "Revenue protection sweep and technical losses, 2027", "Delmont Power and Light  |  Engineering",
-                    dt.datetime(2026, 11, 10, 8, 5, tzinfo=CST), dt.datetime(2026, 11, 10, 16, 58, tzinfo=CST),
-                    letter=True)
-    import shutil
-    shutil.rmtree(tmp, ignore_errors=True)
+def write(F, R, figs, gold_dir):
+    os.makedirs(gold_dir, exist_ok=True)
+    wbp = os.path.join(gold_dir, WORKBOOK)
+    dkp = os.path.join(gold_dir, DECK)
+    workbook(wbp, R, figs, F)
+    deck(dkp, R, figs)
+    postprocess.normalize_ooxml(wbp, P.ENGINEER, P.ENGINEER, "2026-11-09T14:12:00Z", "2026-11-12T21:47:33Z",
+                                excel=True, company=P.ORG)
+    postprocess.normalize_pptx(dkp, P.ENGINEER, P.ENGINEER, "2026-11-11T15:30:00Z", "2026-11-12T22:05:41Z",
+                               title="2027 LAUF program", company=P.ORG)
+    postprocess.own_mtimes(gold_dir, {})

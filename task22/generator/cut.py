@@ -1,5 +1,5 @@
 """task22 stage 5: the golden files' modification times set to their own last saves, then target.zip and golden.zip
-cut from target/ and golden/ (entries in name order, each at its file's own save time in Delmont's clock), so two
+cut from target/ and golden/ (entries in name order, each at its file's own save time in Brandvold's clock), so two
 cuts of the same build are byte-identical.
 
     python3 task22/generator/cut.py

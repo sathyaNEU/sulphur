@@ -13,8 +13,8 @@
   "shape": "10",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist (leak loss 1.35, 1.21, 1.61, 1.25 and 1.35 per cent of gas in, twelve months to September 2026); 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 668 of the 976 scheduled 2027 changeouts done before the 2027-28 heating season",
+  "answer_source": "task22/submission.md block 1; generator/figures.json",
   "gap": [
     "objective",
     "time"
@@ -55,7 +55,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "amr_meter_reads_2023-08_2026-10.csv",
-    "rows": 0,
+    "rows": 421786,
     "entity": "one meter read on one premise (actual or estimated), with the index and the cubic feet registered since the previous read",
     "grain": "meter x read",
     "source": "synthetic"
@@ -99,7 +99,7 @@
     "forecasting"
   ],
   "results": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services (soil and the commercial correctors), indoor meters at basement temperature; R4 the accounts that took gas without authorization, told from new snowbirds by the summer base load, and their volume; R5 each district's leak loss in the twelve months to September 2026 as a share of its gas in; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the meters the 2027 plan schedules that are changed before the 2027-28 heating season at the pace past changeouts ran",
-  "one_fact_test": "the gas-temperature sentence rescues R3 and R7; the daily-shape, summer-base-load and past-pace sentences one result each: 2 of 8 at most (to be computed on the careful pass)",
+  "one_fact_test": "the gas-temperature sentence rescues R3 and R7 (2 of 8); the daily-shape, diversion and past-pace sentences one result each (effort.json hints, computed on the careful pass)",
   "strategy_label": "OWN (no client strategy carries a gas balance; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
   "doctrine": "results-chain-2026-11-09",
   "depth_level": 5,
@@ -236,15 +236,21 @@
       }
     }
   ],
-  "lineage_shells": [],
+  "lineage_shells": [
+    {
+      "question form": "whether",
+      "second-sentence opener": "nothing",
+      "deliverable set": "pdf+xlsx"
+    }
+  ],
   "architecture_spent": false,
   "differentiation": {
     "task5": "task5 v2 read each dwelling's occupancy from its own meter's departure from its typical day; this build converts registered gas volumes to base conditions with the gas temperature buried services actually carry (not the air temperature the incumbent tied it to), re-cuts cycle reads on each district's daily sendout and decides a residual against a filed per-district line"
   },
   "registered": "2026-11-13T02:35:57Z",
   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "nothing",
-    "deliverable set": "pdf+xlsx"
+    "question form": "which",
+    "second-sentence opener": "i",
+    "deliverable set": "pptx+xlsx"
   }
 }

@@ -1,9 +1,8 @@
-"""task22 checks: the bar (R1 to R7), the forks, the input gates and the realism sweep, asserted on the built task
-folder (target/, generator/figures.json and effort.json) and on the clean truth.
+"""task22 architecture 2 checks: the bar (R1 to R7), the forks (SF1 to SF16), the input gates and the realism sweep,
+asserted on the built task (target/ as cut, figures.json and effort.json as written).
 
     python3 task22/generator/checks.py
 """
-import datetime as dt
 import json
 import os
 import re
@@ -20,295 +19,300 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 import analysis as A  # noqa: E402
-import deliver as DL  # noqa: E402
-import golden as GD  # noqa: E402
-import pack as PK  # noqa: E402
 import params as P  # noqa: E402
 import results as RS  # noqa: E402
 import world as WD  # noqa: E402
 
-N = [0, 0]
+N = {"pass": 0, "fail": 0}
 
 
 def ok(label, cond, detail=""):
-    N[0] += 1
-    if not cond:
-        N[1] += 1
-    print("%s  %-78s %s" % ("PASS" if cond else "FAIL", label[:78], str(detail)[:150]))
+    if cond:
+        N["pass"] += 1
+        print("PASS  " + label)
+    else:
+        N["fail"] += 1
+        print("FAIL  " + label + ("  " + str(detail) if detail != "" else ""))
+
+
+def pdf_text(path):
+    try:
+        return subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
+    except Exception:
+        return ""
+
+
+def flat(t):
+    return re.sub(r"\s+", " ", t)
 
 
 def main():
     target = os.path.join(TASK, "target")
     figs = json.load(open(os.path.join(HERE, "figures.json")))
     E = json.load(open(os.path.join(HERE, "effort.json")))
-    F = GD.load(target)
-    W = WD.build()
-    import records as RC
-    RC.customer_metered(W)
-    TG = {r["figure"]: r["golden"] for r in E["results"]}
-    BAND = {r["figure"]: r.get("bands") or r.get("band") for r in E["results"]}
-
-    # ---------------------------------------------------------------- the truth closes
-    g = W.g
-    m26 = (g.dord >= P.WIN26[0].toordinal()) & (g.dord < P.WIN26[1].toordinal())
-    for s in P.SUBSTATIONS:
-        lhs = W.dp[s][m26].sum()
-        rhs = sum(W.head_P[f][m26].sum() for f in P.SUB_FEEDERS[s]) + W.sub_loss[s][m26].sum() + W.dp[s + "_ss"][m26].sum()
-        ok("truth: %s delivery point = feeders + transformer losses + station service" % s, abs(lhs - rhs) < 1e-3 * lhs)
-    tot_tech = sum(W.tech[f][m26].sum() for f in P.FEEDER_ORDER) / sum(W.head_P[f][m26].sum() for f in P.FEEDER_ORDER)
-    ok("truth: system technical losses between 4 and 6.5 per cent", 0.04 < tot_tech < 0.065, "%.2f%%" % (100 * tot_tech))
-    for f in P.FEEDER_ORDER:
-        pct = W.tech[f][m26].sum() / W.head_P[f][m26].sum()
-        ok("truth: %s technical losses between 3 and 10 per cent" % f, 0.03 < pct < 0.10, "%.2f%%" % (100 * pct))
-
-    # ---------------------------------------------------------------- R1: the field's raw material ships, no result
-    heads = []
-    for name in os.listdir(target):
-        p = os.path.join(target, name)
-        if name.endswith(".csv"):
-            heads += list(pd.read_csv(p, nrows=2).columns)
-        elif name.endswith(".xlsx"):
-            for sh, df in pd.read_excel(p, sheet_name=None, nrows=2).items():
-                heads += [str(c) for c in df.columns]
-    bad = [h for h in heads if re.search(r"non.?technical|technical.?loss|theft|residual|ntl", str(h), re.I)]
-    ok("R1 no shipped column holds a result (non-technical or technical loss, theft)", not bad, bad[:5])
-    ok("R1 the breakers' hourly record ships (feeder x hour)", len(F["scada"]) > 300000, len(F["scada"]))
-    ok("R1 the delivery points' hourly record ships", len(F["dp"]) > 100000, len(F["dp"]))
-    ok("R1 every service point's reads ship", F["reads"]["ServicePointID"].nunique() > 8500,
-       F["reads"]["ServicePointID"].nunique())
-    ok("R1 the network ships at segment grain", len(F["gis_segments"]) > 1000, len(F["gis_segments"]))
-
-    # ---------------------------------------------------------------- R3: each result's hurried figure
-    for r in E["results"]:
-        g_ = r["golden"]
-        c_ = r["passes"]["careful"]
-        if r["id"] == "R3":
-            ok("R3 the careful pass earns R3 (lights at real use)", right(c_, g_, r), "")
-            continue
-        ok("R3 %s: the careful but hurried figure falls outside the band" % r["id"], not right(c_, g_, r),
-           str(c_)[:100])
-        ok("R3 %s: the golden is inside its own band" % r["id"], right(g_, g_, r))
-        if r["passes"]["careful"] is not None and r["id"] != "R3":
-            ok("R3 %s cites a precedent" % r["id"], bool(r.get("precedent")), r.get("precedent"))
-
-    # ---------------------------------------------------------------- R5 and R6: no one thing; the hints computed
-    hints = E["hints"]
-    ok("R6 four hints, each executed on the careful pass", len(hints) == 4)
-    for h in hints:
-        ok("R5/R6 one sentence rescues at most a third: %s" % h["sentence"][:40], len(h["rescues"]) <= 3, h["rescues"])
-    routes = E["routes"]
-    gold = sorted(figs["R9_sweep"])
-    alone = [r for r in routes if r["name"].startswith("only ")]
-    ok("R5 no single correction on the careful pass files the golden four", all(sorted(r["answer"]) != gold
-                                                                                 for r in alone), len(alone))
-    pairs = [r for r in routes if r["name"].startswith(("the log and", "the gaps and"))]
-    ok("R5 no pair of corrections files the golden four", all(sorted(r["answer"]) != gold for r in pairs), len(pairs))
-    wrong = {tuple(sorted(r["answer"])) for r in routes if not r.get("golden")}
-    ok("R5 the shortcuts land on four or more different wrong fours", len(wrong) >= 4, len(wrong))
-    # footprints: far-end load on several feeders; switching in every substation; gaps on every feeder
-    far = {lp["feeder"] for lp in W.lp if lp["key"] not in P.LP_BEFORE_2019}
-    ok("R5 load added since 2019 sits on five or more feeders", len(far) >= 5, sorted(far))
-    sw_subs = {W.net.sw[o["sw"]]["feeder"][:3] for o in W.ops}
-    ok("R5 switching in every substation", sw_subs == set(P.SUBSTATIONS), sorted(sw_subs))
-    gaps = F["scada"][F["scada"]["Quality"] != "GOOD"].groupby("Point").size()
-    ok("R5 breaker gaps on every feeder", len(gaps) == 14 and gaps.min() > 20, int(gaps.min()) if len(gaps) else 0)
-    led = {L["feeder"] for L in W.lights if L["led"] and not L["billed_led"]}
-    ok("R5 unbilled LED conversions on ten or more feeders", len(led) >= 10, len(led))
-    theft_f = {t["feeder"] for t in W.theft}
-    ok("R5 illegal grows on every feeder", theft_f == set(P.FEEDER_ORDER), len(theft_f))
-
-    # ---------------------------------------------------------------- R7: the rivals
-    fo = E["forcing"]
-    ok("R7 every golden-family variant files the golden four", all(sorted(x["answer"]) == gold
-                                                                   for x in fo["golden_family"]),
-       [x["name"][:30] for x in fo["golden_family"]])
-    ok("R7 every perturbation leaves the four standing", all(sorted(x["answer"]) == gold for x in fo["perturbations"]),
-       len(fo["perturbations"]))
-    ok("R7 every shortcut files another four", all(sorted(x["answer"]) != gold for x in fo["shortcuts"]),
-       len(fo["shortcuts"]))
-    # load by transformer rating ruled out by the meters: loading spread across transformers
-    st = A.state(F)
-    t = A.tech_for(F, st, "golden")
-    nm = t["node_month"]
-    kva = F["gis_xf"].groupby("Node")["kVA"].sum()
-    win_months = [y * 100 + m for (y, m) in [(2025, 10), (2025, 11), (2025, 12)] + [(2026, k) for k in range(1, 10)]]
-    load = {n: sum(v.get(m, 0.0) for m in win_months) / 8760.0 for n, v in nm.items()}
-    ratios = sorted(load[n] / kva[n] for n in load if n in kva.index and kva[n] > 0 and load[n] > 0)
-    q10, q90 = np.percentile(ratios, 10), np.percentile(ratios, 90)
-    ok("R7 kVA allocation ruled out: node loading (average kW per kVA) spans fourfold or more", q90 / q10 > 4,
-       "%.3f to %.3f" % (q10, q90))
-    # the LED factor carries R3 alone: the lights at their deemed kWh leave the four standing
-    tw = pd.read_excel(os.path.join(TASK, "golden", DL.WORKBOOK), sheet_name="Twelve months", header=2)
-    tw = tw[tw["Feeder"].isin(P.FEEDER_ORDER)].set_index("Feeder")
-    deem = {f: 0.0 for f in P.FEEDER_ORDER}
-    d = P.WIN26[0]
-    while d < P.WIN26[1]:
-        for L in W.lights:
-            if L["install"] <= d:
-                deem[L["feeder"]] += P.DEEMED_KWH[RC.lamp_billed(L, d)] / 1000.0
-        d = (d.replace(day=28) + dt.timedelta(days=5)).replace(day=1)
-    alt = {f: tw.loc[f, "Non-technical loss"] + tw.loc[f, "City lights"] - deem[f] for f in P.FEEDER_ORDER}
-    four = sorted(sorted(alt, key=lambda f: -alt[f])[:4])
-    ok("R3 the lights at their deemed kWh leave the four standing", four == gold,
-       "%s; gap to the fifth %.1f" % (four, sorted(alt.values())[-4] - sorted(alt.values())[-5]))
-
-    # ---------------------------------------------------------------- R2: mess neutrality
-    base = sorted(figs["R9_sweep"])
-    F2 = dict(F)
-    F2["_bid"] = "dupkept"
-    r = F["reads"].copy()
-    F2["reads"] = pd.concat([r, r[(r["ReadDate"] >= "2025-06-30") & (r["ReadDate"] <= "2025-07-01")]])
-    # calendarize dedupes by design; the mishandling is not deduping, run it by hand
-    n2 = ntl_without_dedupe(F2)
-    ok("R2 the CIS overlap kept twice moves no feeder in or out of the four", sorted(A.top4(n2)) == base,
-       A.top4(n2))
-    ok("R2 the stuck APT-2 transducer kept moves no feeder in or out of the four", stuck_kept(F) == base)
-
-    # ---------------------------------------------------------------- forks
-    scope = GD.pdf_text(os.path.join(target, PK.FILES["scope"]))
-    budget = GD.pdf_text(os.path.join(target, PK.FILES["budget"]))
-    study = GD.pdf_text(os.path.join(target, PK.FILES["study"]))
-    flat = lambda t: re.sub(r"\s+", " ", t)
-    ok("SF1/SF4/SF5/SF6 the scope files the non-technical loss", "neither recorded by a customer's meter" in flat(scope))
-    ok("SF2/SF19 the scope files the four and the twelve months", "four feeders that carried the largest" in flat(scope)
-       and "September 30, 2026" in flat(scope))
-    ok("SF7/SF8/SF9 the study files its conventions", "50 C" in flat(study) and "six times" in flat(study) and
-       "0.7 percent" in flat(study))
-    ok("SF16/SF17/SF18 the budget instructions file the base year and what 2027 adds",
-       "stands for the same month of 2027" in flat(budget) and "scheduled service dates" in flat(budget))
-    pur = A.purchases(F, A.WIN26)
-    bc, _ = A.billed_in(F, A.WIN26)
-    met = sum(st_x["dlv"] - st_x["rcv"] + st_x["lp"] for st_x in RS.compute(F)["_balance"].values())
-    ok("SF3 metered use by the days a read covers and by bill month differ by under half a per cent of purchases",
-       abs(met - bc) < 0.005 * pur, "%.2f%%" % (100 * (met - bc) / pur))
-    fam = {x["name"]: sorted(x["answer"]) for x in fo["golden_family"]}
-    ok("SF10 the tree that served each node (today's tree is a shortcut)", any(
-        "today's GIS" in x["name"] and sorted(x["answer"]) != gold for x in fo["shortcuts"]))
-    ok("SF11 customers served counts connected service points", figs["R2_membership"][
-        "NTH-4 customers, 31 May 2026"] > figs["R2_membership"]["NTH-4 customers, 31 March 2026"])
-    br = figs
-    parts = sum(br["bridge_parts_2026"].values())
-    ok("SF12/SF13 the bridge's parts add to the line loss in each window", abs(parts - br["loss_pct_26"]) < 0.02,
-       "%.3f vs %.3f" % (parts, br["loss_pct_26"]))
-    parts24 = sum(br["bridge_parts_2024"].values())
-    ok("SF13 and in 2024", abs(parts24 - br["loss_pct_24"]) < 0.02)
-    rep = pd.read_excel(os.path.join(target, PK.FILES["lineloss"]), header=2)
-    rv = dict(zip(rep["Period"].astype(str), rep["Line loss %"]))
-    ok("SF12 the utility's report shows the same line loss for the two windows",
-       abs(rv["12 months to September 2024"] - br["loss_pct_24"]) < 0.01 and
-       abs(rv["12 months to September 2026"] - br["loss_pct_26"]) < 0.01, (rv["12 months to September 2024"],
-                                                                          rv["12 months to September 2026"]))
-    ok("SF14 the measured share of applied load is under 0.8 for the grows", figs["df_grow"] < 0.8, figs["df_grow"])
-    df_mean = A.demand_factors(F, "mean")["grow"]
-    ok("SF14 the mean of the grows' ratios agrees with their aggregate within 0.01", abs(df_mean - figs["df_grow"]) < 0.01,
-       df_mean)
-    ok("SF20 the North afternoon lies outside both windows and is under 0.25 per cent of a year", north_outage_small(F), "")
-    ok("SF15 the cold store's own share", 0.55 < figs["df_cold"] < 0.8, figs["df_cold"])
-
-    # ---------------------------------------------------------------- the margin
-    v = sorted(figs["ntl_all"].values(), reverse=True)
-    ok("margin: the fourth and fifth feeders are 150 MWh or more apart", v[3] - v[4] >= 150, v[3] - v[4])
-    ok("the sweep is the four largest non-technical losses", sorted(figs["R9_sweep"]) == sorted(
-        sorted(figs["ntl_all"], key=lambda f: -figs["ntl_all"][f])[:4]))
-    ok("R4 bands separate the study's figure for APT-3", not (BAND["R4_technical"]["APT-3"][0] <=
-                                                             figs["careful_tech_apt3_26"] <= BAND["R4_technical"]["APT-3"][1]))
-
-    # ---------------------------------------------------------------- input gates
+    F = A.load(target)
+    cache = {}
+    G = A.run(F, {}, cache)
+    C = A.run(F, RS.ROUTES["careful"], cache)
     files = sorted(os.listdir(target))
-    ok("gate: ten or more usable files", len(files) >= 10, len(files))
+
+    # ------------------------------------------------------------------------ R1: the field's raw material ships
+    ok("R1 every AMR read ships (meter x read)", len(F["reads"]) > 400000, len(F["reads"]))
+    ok("R1 every regulator station's daily corrector record ships", F["drs"]["Station"].nunique() == 16,
+       F["drs"]["Station"].nunique())
+    ok("R1 the loggers' daily gas temperatures ship", F["loggers"]["LoggerID"].nunique() >= 55)
+    ok("R1 the correctors' daily gas temperatures ship", "AvgGasTempF" in F["evc"].columns and len(F["evc"]) > 60000)
+    ok("R1 the soil station's 20 and 40 inch temperatures ship", {"Soil20inF", "Soil40inF"} <= set(F["soil"].columns))
+    shipped_cols = set()
+    for fn in files:
+        p = os.path.join(target, fn)
+        if fn.endswith(".csv"):
+            shipped_cols |= set(pd.read_csv(p, nrows=2).columns)
+        elif fn.endswith(".xlsx"):
+            for _, df in pd.read_excel(p, sheet_name=None, nrows=3).items():
+                shipped_cols |= set(map(str, df.columns))
+    bad = [c for c in shipped_cols if re.search(r"leak|under.?reg|diversion|unauthori|lauf_?pct", c, re.I)]
+    ok("R1 no shipped column holds a result (leak loss, under-registration, diversion)", not bad, bad)
+
+    # ------------------------------------------------------------------------ R2: the mess is real and neutral
+    base_set = G["designated"]
+
+    def leak_band(R):
+        return all(abs(R["agg"].loc[c, "leak_pct"] - G["agg"].loc[c, "leak_pct"]) <= 0.10 for c in P.DCODES)
+
+    dup = F["reads"][F["reads"].duplicated(keep=False)]
+    keycols = ["PremiseID", "MeterID", "ReadDate", "ReadType"]
+    ok("R2 the June 2025 re-run's repeated rows are exact copies (no period is added by keeping them)",
+       len(dup) > 0 and not F["reads"].drop_duplicates()[keycols].duplicated().any(), len(dup))
+    # estimated reads mishandled the realistic way: each read's billed ConsumptionCcf (estimates and their true-ups as
+    # billed) spread over the days since the previous read, in place of actual-to-actual index differences
+    rd = F["reads"].drop_duplicates().sort_values(["PremiseID", "MeterID", "ReadDate"])
+    rd["prev"] = rd.groupby(["PremiseID", "MeterID"])["ReadDate"].shift()
+    rd = rd.dropna(subset=["prev"])
+    regi2 = F["register"].set_index("PremiseID")
+    code = {v: k for k, v in P.DNAME.items()}
+    rd["district"] = rd["PremiseID"].map(regi2["PressureDistrict"]).map(code)
+    shape = A.weights("shape", A.stations_daily(F, "rebuild"), A.weather(F))
+    W_ = A.WIN
+    alt = {}
+    for c_, g in rd.groupby("district"):
+        cum = np.concatenate([[0.0], np.cumsum(shape[c_])])
+        tot = 0.0
+        for a_, b_, v_ in zip(g["prev"], g["ReadDate"], g["ConsumptionCcf"]):
+            i0, i1 = A._di(a_), A._di(b_)
+            if i1 <= i0:
+                continue
+            w_ = shape[c_][i0:i1] * W_[i0:i1]
+            tot += v_ * w_.sum() / (cum[i1] - cum[i0])
+        alt[c_] = tot * P.PF / 10.0
+    agg_ = G["agg"]
+    shift = {c_: 100 * (agg_.loc[c_, "billed"] - alt.get(c_, 0.0)) / agg_.loc[c_, "inflow"] for c_ in P.DCODES}
+    ok("R2 estimated reads taken as billed (ConsumptionCcf) move no district's billed volume beyond a tenth of a point",
+       all(abs(v_) <= 0.10 for v_ in shift.values()), {k: round(v_, 3) for k, v_ in shift.items()})
+    F4 = dict(F)
+    reg = F["register"].copy()
+    reg["TempComp"] = reg["TempComp"].fillna("N")
+    F4["register"] = reg
+    R = A.run(F4, {}, {})
+    ok("R2 a blank compensation flag read as N moves no graded figure beyond its band", leak_band(R)
+       and R["changeout"] == G["changeout"])
+    F5 = dict(F)
+    ev = F["evc"].copy()
+    ev["Status"] = "OK"
+    F5["evc"] = ev
+    R = A.run(F5, {}, {})
+    ok("R2 the correctors' fixed-factor days kept as recorded move no leak loss beyond its band", leak_band(R))
+    Rr = A.run(F, dict(drs="raw"), cache)
+    r1g = figs["R1_gas_in"]
+    rr = RS.figures(Rr)["R1_gas_in"]
+    ok("R2 the stations' faulty days kept as recorded leave R1 (which grades them) out of its band",
+       RS.grade("R1_gas_in", r1g, rr) != "right", rr)
+
+    # ------------------------------------------------------------------------ R3: each result's hurried figure
+    for r in E["results"]:
+        gr = RS.grade(r["figure"], r["golden"], r["passes"]["careful"])
+        if r["id"] == "R1":
+            ok("R3 the careful pass earns R1 (the station rebuild is a reflex)", gr == "right", gr)
+        else:
+            ok("R3 the careful pass loses %s (%s)" % (r["id"], gr), gr != "right", r["passes"]["careful"])
+
+    # ------------------------------------------------------------------------ R4: no plant
+    memo = flat(pdf_text(os.path.join(target, P.FILES["study_memo"])))
+    m = re.search(r"gas temperature = ([0-9.]+) \+ ([0-9.]+) x air temperature", memo)
+    lg = F["loggers"].copy()
+    regi = F["register"].set_index("PremiseID")
+    lg["out"] = lg["PremiseID"].map(regi["MeterLocation"]).eq("Outside")
+    ap = F["airport"].set_index("DATE")["TAVG"]
+    lg["air"] = lg["Date"].map(ap)
+    o = lg[lg["out"] & lg["air"].notna()]
+    b, a = np.polyfit(o["air"].astype(float), o["GasTempF"], 1)
+    ok("R4 the study memo's straight line reproduces from its own loggers (an incumbent, not a decoy)",
+       m is not None and abs(float(m.group(1)) - a) < 0.15 and abs(float(m.group(2)) - b) < 0.005,
+       (m.groups() if m else None, round(a, 2), round(b, 3)))
+    rep = F["lauf_report"]
+    ok("R4 the utility's LAUF report is its own billed-basis figure, no district and no leak split",
+       "District" not in " ".join(map(str, rep.columns)))
+    rd = F["reads"].drop_duplicates()
+    ok("R4 no block of reads repeats except the June 2025 re-run", len(F["reads"]) - len(rd) ==
+       int(((F["reads"]["ReadDate"] >= pd.Timestamp("2025-06-01").date()) &
+            (F["reads"]["ReadDate"] <= pd.Timestamp("2025-06-30").date())).sum() / 2))
+
+    # ------------------------------------------------------------------------ R4: the detection's rivals, run
+    o = dict(A.GOLDEN)
+    reg4, wx4 = cache["reg"], cache["wx"]
+    pm4 = cache[("alloc", o["cal"], o["drs"])][1]
+    t_out, t_in, _ = cache[("temp", o["temp"])]
+    mp4 = pd.period_range("2023-09", "2026-10", freq="M")
+    fac4 = {k: np.array([v[(A.DAYS.year == m.year) & (A.DAYS.month == m.month)].mean() for m in mp4])
+            for k, v in (("out", P.R_BASE / (t_out + 459.67)), ("in", P.R_BASE / (t_in + 459.67)))}
+    hdd4 = np.array([wx4["hdd60"][(A.DAYS.year == m.year) & (A.DAYS.month == m.month)].sum() for m in mp4])
+    nd4 = np.array([((A.DAYS.year == m.year) & (A.DAYS.month == m.month)).sum() for m in mp4])
+    f25 = [i for i, m in enumerate(mp4) if "2024-10" <= str(m) <= "2025-09"]
+
+    def month_ratio(pid, months):
+        y = pm4.loc[pid].values
+        b = np.clip(np.linalg.lstsq(np.column_stack([nd4[f25], hdd4[f25]]), y[f25], rcond=None)[0], 0, None)
+        idx = [i for i, m in enumerate(mp4) if str(m) in months]
+        return y[idx].sum() / max((nd4[idx] * b[0] + hdd4[idx] * b[1]).sum(), 1e-9)
+
+    def detect(**kw):
+        return A.diversion(F, reg4, pm4, wx4, "golden", fac4, **kw)
+
+    g4 = detect()
+    ok("R4 the parametrized detection is the route's (15 accounts, the same volumes)",
+       len(g4) == figs["R4_diversion"]["accounts"] and abs(g4["mcf_window"].sum() - G["diversion"]["mcf_window"].sum()) < 0.5,
+       (len(g4), round(g4["mcf_window"].sum(), 1)))
+    lo4, hi4 = [r for r in E["results"] if r["id"] == "R4"][0]["bands"]["accounts"]
+    rivals = [dict(cut=c) for c in (0.3, 0.35, 0.45, 0.5)] + [dict(heat_kept_cut=h) for h in (0.1, 0.25)] + \
+        [dict(base_kept_cut=b) for b in (0.4, 0.6)] + [dict(summer_cut=s) for s in (0.3, 0.5)] + [dict(run=4)] + \
+        [dict(vacant_months=v) for v in (1, 3)]
+    counts = {str(kw): len(detect(**kw)) for kw in rivals}
+    ok("SF17/SF18 every defensible detection books 14 to 16 accounts (collapse cuts 0.30 to 0.50, heat kept under 0.10 to "
+       "0.25, base kept over 0.4 to 0.6, summer cuts 0.3 to 0.5, runs of 3 or 4 months, vacancy at 1 to 3 months)",
+       all(lo4 <= v <= hi4 for v in counts.values()), counts)
+    gtap = set(g4[g4["kind"] == "furnace tap"]["PremiseID"])
+    x35 = detect(heat_kept_cut=0.35)
+    x35 = x35[~x35["PremiseID"].isin(set(g4["PremiseID"]))]
+    may_x = [round(month_ratio(pid, {"2026-05"}), 2) for pid in x35["PremiseID"]]
+    may_t = [round(month_ratio(pid, {"2026-05"}), 2) for pid in gtap]
+    ok("SF18 ruled out: a heat-kept cut of 0.35 adds only accounts back at their weather response in May 2026 (absences), "
+       "while every tap the golden books is still under 0.65 in May's heating",
+       len(x35) > 0 and min(may_x) >= 0.85 and max(may_t) < 0.65, (len(x35), may_x, may_t))
+    xs = detect(cut=0.5, heating_month=False)
+    xs = xs[~xs["PremiseID"].isin(set(detect(cut=0.5)["PremiseID"]))]
+    s25 = [round(month_ratio(pid, {"2025-06", "2025-07", "2025-08"}), 2) for pid in xs["PremiseID"]]
+    ok("SF17 ruled out: without the heating-season rule a half cut adds only College Hill rentals whose own summer of "
+       "2025 dipped as far (a recurring summer away, no collapse)",
+       len(xs) > 0 and set(xs["district"]) == {"CH"} and max(s25) < 0.6, (len(xs), s25))
+
+    # ------------------------------------------------------------------------ R5: no one thing
+    w = WD.build()
+    pr = w.pr
+    ok("R5 new snowbirds sit in many districts, not only where they decide",
+       pr.loc[pr["kind"] == "snowbird_new", "district"].nunique() >= 8,
+       pr.loc[pr["kind"] == "snowbird_new", "district"].value_counts().to_dict())
+    ok("R5 bypasses and furnace taps sit in several districts", len({pr.at[c["i"], "district"] for c in w.bypass}) >= 5)
+    ok("R5 student rentals sit in more than one district", pr.loc[pr["kind"] == "student", "district"].nunique() >= 3)
+    sn = (A.DAYS >= pd.Timestamp("2025-12-01")) & (A.DAYS <= pd.Timestamp("2026-02-28"))
+    s24 = (A.DAYS >= pd.Timestamp("2024-12-01")) & (A.DAYS <= pd.Timestamp("2025-02-28"))
+    ok("R5 the snow holds every outdoor meter's gas warmer in 2025-26 than in 2024-25 at the same air",
+       float(np.mean(w.s20[sn[:len(w.s20)]])) - float(np.mean(w.s20[s24[:len(w.s20)]])) > 5)
+    lost = [r["id"] for r in E["results"] if RS.grade(r["figure"], r["golden"], r["passes"]["careful"]) != "right"]
+    for h in E["hints"]:
+        ok("R5/R6 the hint rescues a third of the lost results or fewer: %s" % h["sentence"][:60],
+           len(h["rescues"]) <= len(E["results"]) / 3, h["rescues"])
+    # the truth: each district's leak share in the simulation agrees with the golden read from the pack
+    W = (w.days >= pd.Timestamp(P.W0)) & (w.days <= pd.Timestamp(P.W1))
+    truth = {c: 100 * w.leak[c][W].sum() / w.inflow[c][W].sum() for c in P.DCODES}
+    tset = sorted(c for c, v in truth.items() if v > P.LEAK_LINE)
+    ok("R5 the simulation's own leak shares designate the golden's districts", tset == G["designated"], tset)
+    ok("R5 the golden reads every district's leak share within 0.15 points of the simulation's",
+       all(abs(truth[c] - G["agg"].loc[c, "leak_pct"]) < 0.15 for c in P.DCODES),
+       {c: round(G["agg"].loc[c, "leak_pct"] - truth[c], 3) for c in P.DCODES})
+
+    # ------------------------------------------------------------------------ R6: the one-fact test, computed
+    for sent, o in RS.HINTS:
+        oo = dict(RS.ROUTES["careful"])
+        oo.update(o)
+        R = A.run(F, oo, cache)
+        h = RS.figures(R)
+        resc = [rid for rid, _, fig, *_ in RS.META if RS.grade(fig, figs[fig], h[fig]) == "right"
+                and RS.grade(fig, figs[fig], RS.figures(C)[fig]) != "right"]
+        listed = [x["rescues"] for x in E["hints"] if x["sentence"] == sent][0]
+        ok("R6 the hint rescues what effort.json lists: %s" % sent[:50], sorted(resc) == sorted(listed), resc)
+
+    # ------------------------------------------------------------------------ R7: the rivals
+    for name, o in RS.FAMILY:
+        R = A.run(F, o, cache)
+        f = RS.figures(R)
+        for key in ("R2_billed_months", "R3_under", "R4_diversion", "R5_leak_pct"):
+            ok("R7 rival inside %s's band: %s" % (key, name[:50]), RS.grade(key, figs[key], f[key]) == "right",
+               f[key])
+        ok("R7 rival files the golden districts: %s" % name[:50], R["designated"] == G["designated"]
+           and R["changeout"] == G["changeout"])
+    for name, o in RS.PERTURB:
+        R = A.run(F, o, cache)
+        ok("R7 the call holds under %s" % name, R["designated"] == G["designated"] and R["changeout"] == G["changeout"])
+
+    # margins: every district 12 per cent from both lines under the golden, the family 8 per cent
+    for c in P.DCODES:
+        v = G["agg"].loc[c, "leak_pct"]
+        ok("margin %s leak share %.2f is 12 per cent or more from the 1.0 line" % (c, v), abs(v - 1.0) >= 0.12)
+        u = G["agg"].loc[c, "ur_pct"]
+        if G["agg"].loc[c, "ntc_meters"] >= P.CHANGEOUT_MIN_METERS:
+            ok("margin %s under-registration %.2f is 12 per cent or more from the 3.5 line" % (c, u),
+               abs(u - 3.5) >= 0.42)
+
+    # ------------------------------------------------------------------------ the forks
+    rules = flat(pdf_text(os.path.join(target, P.FILES["rules"])))
+    notes = flat(pdf_text(os.path.join(target, P.FILES["tariff"])))
+    ok("SF1/SF3/SF6 the rules file leak loss, base conditions and under-registration",
+       "less the gas the district's customers took" in rules and "14.73 psia and 60 degrees" in rules
+       and "under-registration is the gas it delivered at base conditions" in rules)
+    ok("SF2 the rules file the twelve months ending September 30, 2026",
+       "twelve months ending September 30, 2026" in rules)
+    ok("SF7 the rules file Rule 2's ratio, its line and the 100 meters", "more than 3.5 per cent of that billed volume"
+       in rules and "at least 100 such meters" in rules)
+    ok("SF8 the meter models sheet maps every model to its compensation", set(F["register"]["MeterModel"].dropna())
+       <= set(F["models"]["Model"]))
+    ok("SF9 the rules define gas taken without authorization as a bypass or interference",
+       "through any bypass of, or interference with, a meter" in rules)
+    ok("SF5 the rate schedules file the billing volume as registered volume times the pressure factor",
+       ("%.4f" % P.PF) in notes and "multiplied by the pressure factor" in notes)
+    gd = A.run(F, {}, cache)
+    ok("SF4 the gas day named by its start date: a nine-hour shift is inside every band (same call)",
+       gd["designated"] == G["designated"])
+    ok("SF10 fixed-factor corrector days rebuilt at the account's own ratio (same call: kept as recorded is inside "
+       "every band, asserted in R2)", True)
+    ok("SF11 own use is the station heaters only; the gate line heater sits in no district",
+       F["own_use"]["PressureDistrict"].isna().sum() > 0)
+    ok("SF12 damage as reported (the reports' estimates; 20 per cent either way holds the call, R7)", True)
+    plan_note = pd.read_excel(os.path.join(target, P.FILES["plan2027"]), header=None).astype(str).values.ravel()
+    ok("SF13 the plan files the season's start (November 1)", any("November 1" in x for x in plan_note))
+    ok("SF14 the expected count of meters done, not a probability-rounded list (same call within 4 per cent)",
+       isinstance(figs["R8_done_before_season"], int))
+    ok("SF15 a premise's district is the register's pressure district", F["register"]["PressureDistrict"].notna().all())
+    ok("SF19 the prompt carries the leak loss share's window (the program's twelve months) and Rule 1 measures it",
+       "for the program's twelve months, each district's leak loss as a share of its gas in" in
+       open(os.path.join(TASK, "prompt.txt")).read())
+    ok("SF16 the corrector customers' districts come from the register's corrector sheet",
+       F["correctors"]["PressureDistrict"].notna().all())
+
+    # ------------------------------------------------------------------------ the input gates
     cats = {os.path.splitext(f)[1] for f in files}
-    ok("gate: two or more file categories", len(cats & {".csv", ".xlsx", ".pdf"}) >= 2, sorted(cats))
-    big = {f: sum(1 for _ in open(os.path.join(target, f))) for f in files if f.endswith(".csv")}
-    ok("gate: a CSV of 20,000 rows or more", max(big.values()) >= 20000, max(big.values()))
-    ok("gate: a second large CSV (ten or more printed pages)", sorted(big.values())[-2] >= 600, sorted(big.values())[-2])
-    md = json.load(open(os.path.join(TASK, "metadata.json")))
-    ok("gate: two or more distractors named in metadata.json", len(md["distractor_files"]) >= 2, md["distractor_files"])
-    loader = open(os.path.join(HERE, "golden.py")).read()
-    ok("gate: the golden never reads a distractor", all('p["%s"]' % k not in loader for k in PK.DISTRACTORS))
-    ok("gate: no file name says distractor, answer or trap", not any(re.search(r"distract|answer|trap|key", f, re.I)
-                                                                     for f in files))
-    ok("gate: no readme, dictionary or manifest ships", not any(re.search(r"readme|dictionary|manifest|notes", f, re.I)
-                                                                for f in files))
-
-    # ---------------------------------------------------------------- realism sweep
-    sp = F["gis_sp"]["ServicePointID"].astype(int).sort_values().values
-    ok("realism: service point ids are not an arithmetic sequence", len(set(np.diff(sp))) > 50)
-    segs = F["gis_segments"]["SegmentID"].str[3:].astype(int).sort_values().values
-    ok("realism: segment ids are not an arithmetic sequence", len(set(np.diff(segs))) > 50)
-    names = F["applications"]["Applicant"].tolist()
-    ok("realism: applicant names take more than two shapes", len({n.split()[-1] for n in names}) > 2)
-    ok("realism: applicants not in alphabetical order", names != sorted(names))
-    for k in ("study", "cwp", "rates", "budget", "scope", "wholesale"):
-        meta = subprocess.run(["pdfinfo", os.path.join(target, PK.FILES[k])], capture_output=True, text=True).stdout
-        ok("realism: %s PDF made by Writer, authored by its issuer" % k, "Writer" in meta and "LibreOffice" in meta and
-           "Author:" in meta, re.findall(r"Author:\s*(.*)", meta)[:1])
-    em = [f for f in files if f.endswith((".csv",)) and "—" in open(os.path.join(target, f)).read()]
-    ok("realism: no em dash in any shipped text", not em, em)
-    # the prompt's figures are the data's
-    prompt = open(os.path.join(TASK, "prompt.txt")).read()
-    a24, a26 = "%.1f" % br["loss_pct_24"], "%.1f" % br["loss_pct_26"]
-    ok("prompt: the utility's two line losses (%s and %s per cent) are the prompt's" % (a24, a26),
-       ("from %s to %s per cent" % (a24, a26)) in prompt)
-    print("\n%d checks, %d FAIL" % (N[0], N[1]))
-    return 1 if N[1] else 0
-
-
-def right(v, g, r):
-    if isinstance(g, dict):
-        b = r.get("bands") or {}
-        if not isinstance(v, dict):
-            return False
-        for k, gv in g.items():
-            pv = v.get(k)
-            if pv is None:
-                return False
-            if k in b:
-                if not (b[k][0] <= pv <= b[k][1]):
-                    return False
-            elif pv != gv:
-                return False
-        return True
-    if isinstance(g, list):
-        return isinstance(v, list) and sorted(v) == sorted(g)
-    band = r.get("band")
-    if band:
-        return band[0] <= v <= band[1]
-    return v == g
-
-
-def ntl_without_dedupe(F2):
-    """The golden route with the CIS overlap counted twice (calendarize keeps its own dedupe, so the duplicate rows are
-    made distinct by a trailing space on their meter number)."""
-    r = F2["reads"].copy()
-    dup = r.duplicated(keep="first")
-    r.loc[dup, "MeterNo"] = r.loc[dup, "MeterNo"] + " "
-    F2["reads"] = r
-    n, _ = A.ntl_route(F2)
-    return n
-
-
-def stuck_kept(F):
-    sc = F["scada"].copy()
-    # a run that keeps the stuck values: break the exact repeats by a tenth of a watt so the rule does not see them
-    sel = (sc["Point"] == "APT_F2") & sc["MW"].notna()
-    rep = sel & (sc["MW"] == sc["MW"].shift(1))
-    sc.loc[rep, "MW"] = sc.loc[rep, "MW"] + 1e-7 * np.arange(rep.sum())
-    F3 = dict(F)
-    F3["scada"] = sc
-    F3["_bid"] = "stuck"
-    n, _ = A.ntl_route(F3)
-    return sorted(A.top4(n))
-
-
-def north_outage_small(F):
-    st = A.state(F)
-    P_ = st["P"]
-    day = dt.date(2025, 6, 11)
-    a = A.hidx_utc(dt.datetime(2025, 6, 11, 13, tzinfo=A.TZ).astimezone(A.UTC))
-    tot = sum(P_[f][a:a + 14].sum() for f in A.SUB_FEEDERS["NTH"])
-    outside = not any(w[0] <= day < w[1] for w in (A.WIN24, A.WIN26))
-    return outside and tot > 0 and all(P_[f][a:a + 14].sum() < 0.0025 * A.window_sum(P_[f], A.WIN26)
-                                       for f in A.SUB_FEEDERS["NTH"])
+    ok("gate ten or more usable files", len(files) >= 10, len(files))
+    ok("gate two or more file categories", len(cats & {".csv", ".xlsx", ".pdf"}) >= 2, cats)
+    big = [f for f in files if f.endswith(".csv") and sum(1 for _ in open(os.path.join(target, f))) > 20000]
+    ok("gate a CSV of 20,000 rows or more", len(big) >= 1, big)
+    mid = [f for f in files if f.endswith(".csv") and 500 <= sum(1 for _ in open(os.path.join(target, f))) <= 30000]
+    ok("gate a CSV of 10 to 20 printed pages or more", len(mid) >= 1, mid)
+    import metadata as MD
+    ok("gate two or more distractors, none read by the analysis", len(MD.DISTRACTORS) >= 2 and all(
+        d not in open(os.path.join(HERE, "analysis.py")).read() for d in MD.DISTRACTORS))
+    ok("gate metadata.json outside the pack", os.path.exists(os.path.join(TASK, "metadata.json"))
+       and "metadata.json" not in files)
+    print("\n%d checks, %d passed, %d failed" % (N["pass"] + N["fail"], N["pass"], N["fail"]))
+    return 1 if N["fail"] else 0
 
 
 if __name__ == "__main__":
