@@ -1,42 +1,40 @@
 {
  "task": "task1",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "architecture": 5,
- "loops": 1,
- "call": "let Standaard's and Gezin's January 2027 rises go ahead and hold Flex and Onbeperkt (Standaard EUR 2.3 and Gezin 5.4 per October 2026 subscription in 2027; Flex -3.3, Onbeperkt -4.8)",
- "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100; R5 of those that stop by Dec 2027, per 100 paying again then; R6 the stayers' extra counted hours over 2027; R7 each plan's change in its October base's 2027 contribution; R9 paying on any plan at 31 Dec 2027 with the rise; R2 the 2027 remuneration per October subscription with the rise; R8 the rises that go ahead",
+ "architecture": 6,
+ "loops": 0,
+ "call": "",
+ "chain": "R1 2026 installs and cost per install by channel from the instrument that sees each; R2 the store charges and net revenue the app never recorded, by channel; R3 the iOS ad channels' 12-month net revenue per install over all their installs; R4 Google Android's installs and 12-month net revenue per install at the plan's weekly spend; R5 each channel's 12-month net revenue per euro at the plan's spend; R6 each channel's band",
  "precut": {
-  "exit": 0,
-  "date": "2026-11-13",
-  "checks": "gates.py 0 FAIL, 4 WARN; checks 150 of 150 (every graded figure against eight replays of the world's 2027); verify 26 of 26; byte-identical rebuild"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (clause numbers and the EUR 0.40 rate in the documents, ordinary vocabulary, device_id, shell quota), every line harmless",
-  "reader": "NO LEAK (leak_check_report.md, Solver's-eye read, 2026-11-13; read before the rival scan's July 2026 alignment, a data-only change)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (template.chain_near task24, answered in the note's Template check; overuse weight; skeleton.lesson_taught marginal_not_average as a supporting step; house_shell set_over_threshold; the context artifact retyped filed_standard after task8 v19 entered the recency window upstream)",
-  "nearest": "severity none against everything on file (task7 v10, mark115)"
+  "heart": "",
+  "nearest": "guard check WARN only at the draw (forum overuse, young cohorts supporting, record_algorithm_inversion on task16 v3 and task22 v2); skeleton clear of every card and the slot's lineage"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE (pass 4; pass 3 SEND_BACK on what passing the rival means, two readings disagreeing on Onbeperkt's and Gezin's Flanders cells, closed in the pack by the rival's prices: no plan above the rival before any rise; pass 4 rebuilt the rival comparison region by region for all sixteen cells and the October base, and did not rebuild the returns or the stayers' listening components, which rest on checks.py against the replayed world)",
-  "report": "task1/determinism_check_report_pass3.md, task1/determinism_check_report_pass4.md"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 40.0,
+ "paper_pair": null,
  "effort": {
-  "quick": 7.0,
-  "careful": 40.0,
-  "thorough": 100.0,
-  "factorial": "level 4: J1 the stops that pay again, J2 the stayers' listening, each necessary, neither sufficient; the reflex route (the reshipped cut's run's own) files Onbeperkt and Gezin",
-  "largest_hint": "the returns sentence rescues R5 and R9 (2 of 9), not the call"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -89,9 +87,9 @@
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "sent back for fixes",
+  "status": "RETURNED",
   "date": "2026-11-13",
-  "note": "review sheet: reward 83.0, stumped failed, determinism and solution passed (main and supp); task e10c0e38-bbd8-4a03-92f1-6afb6ad24915"
+  "note": "architecture 5 sent back at review (reward 83); architecture 6 drawn the same day in a new world"
  },
- "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word"
+ "resume": "architecture 6 drawn 2026-11-13 (card v6 registered 23:07Z): stage 2 design next. Write the arch 6 note sections (Deep reasoning, Results chain, Open members, Stump factorial, Hidden factor record, Effort test, Data provenance, Template check, Frontier check, fork and closure tables, Literal reader, Prompt contract) for the Zancada world in the note's Draw and Stump screen; prototype numbers (scratch, not kept): bands cut < 0.90 <= hold < 1.20 <= scale; targets Meta iOS 1.05 hold, TikTok iOS 0.80 cut, Apple Search Ads 1.45 scale, Meta Android 1.08 hold, Google Android 0.97 hold at a plan spend 1.69x its 2026 level, TikTok Android 0.74 cut, AppLovin about 0.96 hold (widen its margin: one seed of three put its proportional route at 0.907); silent continuation about 0.90 a month against active retention, consent slope 0.6 on engagement, 32 fine conversion values. Then precut.py exit 0 and stage 3 (the arch 5 generator in task1/generator is replaced)."
 }
