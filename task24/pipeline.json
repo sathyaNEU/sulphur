@@ -1,40 +1,41 @@
 {
  "task": "task24",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "general-statistics-data-science",
  "subdomain": "regression-classification-model-diagnostics",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 2026 labour cost closed on the payroll ledger; R2 review passes per image for each still request; R3 floor top-up per image for each request; R4 annotator minutes per frame for the video request; R5 the cost model back-tested on 2026's densest, slowest and calmest projects; R6 each request's expected cost per image with an 80 per cent range; R7 the accept set and the price each declined request needs",
+ "call": "accept Shelfgrid Retail's shelf stills, Ardley Autonomy's highway video and Kestrin Warehousing's warehouse labels; decline Corvane Mobility's crowded street stills and Brindle Pallet Systems' pallet polygons unless their clients come up to USD 7.01 and USD 1.95 per image",
+ "chain": "R1 2026 delivery cost as payroll settled it; R2 QA reviews per image (any-issue return and correction chain); R3 annotator paid minutes per image, per frame for the video (track turnover); R4 floor top-up per image; R5 the costing checked on 2026's closed projects; R6 each request's expected cost; R7 the accept set; R8 each cost's 80 per cent range; R9 the lowest acceptable price for each declined request",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13",
+  "note": "102 checks, 0 FAIL, 3 WARN (nearest chains, forks owed to checks.py, effort on paper until stage 3)"
  },
  "leak": {
-  "leak_py": "",
+  "leak_py": "REVIEW (5 lines, each ruled harmless in the design note's Leak review)",
   "reader": ""
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (no BLOCK)",
+  "nearest": "task1 v5 (chain and shape), task13 v1 (driver 0.06)"
  },
  "judge": {
   "verdict": "",
   "disposition": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": 43.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 13.0,
+  "careful": 43.5,
+  "thorough": 100.0,
+  "largest_hint": "A corrected image goes back to QA with every object re-checked, so the denser the image the likelier it comes back again (rescues R2, 1 of 9)"
  },
  "runs": {
   "run1": null,
@@ -50,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 2: build the world prototype (scratch) to the factorial and forcing margins, then the design note to precut exit 0",
+ "resume": "stage 4: the leak reader is in (no leak; recorded in leak_check_report.md and the note's Leak review); the determinism judge was launched on this cut (report to determinism_check_report.md). Resume by reading that report, fixing every finding in one generator pass (python3 task24/generator/build.py), re-running gates.py task24 --full, then stage 5 READY with target.zip, task24_golden.zip and golden/ force-added",
  "approved": null,
  "submitted": null,
  "portal": {

@@ -1,147 +1,154 @@
 {
-  "task": "task24",
-  "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-13",
-  "slot_note": "",
-  "domain": "general-statistics-data-science",
-  "subdomain": "regression-classification-model-diagnostics",
-  "client_domain": "general-statistics-data-science",
-  "niche": "annotation cost modelling for a data-labeling vendor's batch acceptance: per-object QA misses aggregated into review passes, piece pay against a weekly hourly floor, video frame time on track turnover",
-  "objective": "forecasting",
-  "shape": "01",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
-    "population",
-    "objective"
+ "task": "task24",
+ "project": "sulfur",
+ "architecture": "v1",
+ "drawn": "2026-11-13",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "regression-classification-model-diagnostics",
+ "client_domain": "general-statistics-data-science",
+ "niche": "annotation cost modelling for a data-labeling vendor's batch acceptance: per-object QA misses aggregated into review passes, piece pay against a weekly hourly floor, video frame time on track turnover",
+ "objective": "forecasting",
+ "shape": "01",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "Accept Shelfgrid Retail's shelf stills, Ardley Autonomy's highway video and Kestrin Warehousing's warehouse labels at the offered prices; decline Corvane Mobility's crowded street stills and Brindle Pallet Systems' pallet polygons unless their clients come up to at least USD 7.01 and USD 1.95 per image.",
+ "answer_source": "submission.md Final Recommendation; generator/figures.json call",
+ "gap": [
+  "population",
+  "objective"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G14",
+  "G2",
+  "G1",
+  "G16"
+ ],
+ "gate_g": "method_or_model_selection",
+ "calibration_form": "existing_book_actuals",
+ "stump_strategy": "grain_or_unit",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "other",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass models the first-pass return on the counts and settles the floor right, but carries 2026's re-return share along the chain and a per-object-on-screen video rate to requests denser or calmer than any 2026 project, so it accepts the crowded street request and declines the highway video.",
+ "domain_test": "The call turns on statistical modelling judgments (an any-issue probability aggregated over each image's objects and compounded through a correction chain whose second-stage intensity is fitted as a structural multiplier and extrapolated past the record's support, and the regressor for frame time chosen where the candidate drivers part), each validated on 2026's closed projects; swap the nouns and the aggregation, the chain and the driver choice no longer exist.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:joint-condition-hinge-turnover",
+ "layer1": [
+  "duplicate and auto-closed timesheet punches with supervisor edits",
+  "two delivery centres on different local times",
+  "re-queued tasks issued new ids with a parent link",
+  "QA reviews re-keyed when an image is re-batched",
+  "client sample labels in two COCO dialects",
+  "payroll adjustment lines and a voided week"
+ ],
+ "stakeholder_role": "the vendor's finance lead (not named in the prompt)",
+ "role_family": "finance_controller",
+ "scoring_unit": "per accepted item",
+ "spine": {
+  "file": "pellucid_task_passes_2026-04-06_2026-11-01.csv",
+  "rows": 390230,
+  "entity": "one annotation or correction pass on one image or one 25-frame video task",
+  "grain": "task pass",
+  "source": "synthetic"
+ },
+ "forum": "operations_desk",
+ "forcing_event": "purchase_order_or_contract",
+ "org_family": "professional_services",
+ "world": {
+  "geography": "Kenya and the Philippines (delivery centres in Kisumu and Iloilo, head office in Nairobi)",
+  "currency": "USD",
+  "org_type": "data-labeling vendor with a managed annotation workforce",
+  "invented_names": [
+   "Pellucid Annotation",
+   "Corvane Mobility",
+   "Shelfgrid Retail",
+   "Ardley Autonomy",
+   "Brindle Pallet Systems",
+   "Kestrin Warehousing"
   ],
-  "pattern": [
-    "none"
+  "people": [
+   "Loice Mumo",
+   "Collins Mutuku",
+   "Mourine Kipngetich",
+   "Chege Ouma",
+   "Jeffrey Reyes",
+   "Maria Osborn",
+   "Eleanor Wilson",
+   "Malte Mosemann",
+   "Wayne Carter",
+   "Jorge Berry"
+  ]
+ },
+ "deliverables": [
+  "batch_cost_forecast.xlsx",
+  "batch_decision_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "which",
+ "driver": "The decisive quantity is a cost defined on a joint condition across an item's parts and compounded through a rework chain that re-applies it to every part, and, for sequential items, driven by what enters and leaves rather than by what is present; a second-stage rate held at the record's average and a stock rate fitted where turnover ran high misprice new items that leave the record's support, in opposite directions.",
+ "driver_concrete": "Each request's cost per image is built from per-object issue intensities aggregated by the any-issue QA rule into a correction chain whose re-review intensity rises with the image's own, and for the dashcam video from tracks entering and leaving rather than objects on screen; a logistic return model with 2026's re-return share and a per-object-on-screen video rate accept the crowded street request and decline the video.",
+ "stump": "A competent solver fits per-object time with each annotator's pace, models the first-pass return on the image's object counts and settles the floor per annotator-week, but carries 2026's re-return share of corrected tasks along the correction chain and prices video on frames and objects on screen, so it accepts the crowded street request (A) and declines the highway video (C), where the golden declines A and accepts C.",
+ "answer_shape": "forecast-bands-drivers",
+ "weight": "modeling",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "modeling",
+  "modeling",
+  "modeling",
+  "validation",
+  "forecasting",
+  "synthesis",
+  "uncertainty",
+  "synthesis"
+ ],
+ "results": "R1 the April to October 2026 delivery cost rebuilt from payroll and the punch clock; R2 QA reviews per delivered image for each request (the any-issue return and its correction chain); R3 annotator paid minutes per image, per frame for the video (track turnover); R4 the floor top-up per image; R5 the costing checked on 2026's closed projects; R6 each request's expected cost per image; R7 the accept set; R8 each cost's 80 per cent range; R9 the lowest acceptable price for each declined request.",
+ "one_fact_test": "'QA sends an image back when any one object is missed, so crowded images come back far more often' rescues R2 and the crowded and shelf parts of R6, about 2 of 7.",
+ "strategy_label": "UNTESTED",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "task2": "task2 v6 carries a tail share to a compelled population through three partial views of who joins (transport, self-selection, composition); task24 prices work whose cost is a joint failure condition over each item's parts, a hinge over the spread of worker speeds and a turnover-driven frame time, with no population carried through selection and no view of who joins"
+ },
+ "lineage": [],
+ "notes": "Drawn 2026-11-13 at the author's request for a General Statistics task where the solver builds a cost model and the hurried model files the wrong set; built from the general lessons of the client's approved work (the constancy reflex: a rate, a share or a per-unit form carried past the record's support), not from any task. role_family finance_controller: the vendor's finance lead owns the pricing policy line. context_artifact other: the stakeholder's files are client requests for quotation (RFQs) with sample labels. Lesson key turnover_not_stock_driver added to skeleton_vocab.json for the video judgment (no existing key was honest). Decisive generator G14 (does the pooled rate apply to this pool?): each judgment is 2026's pooled share or per-object rate carried to a batch outside 2026's range; G2 (grain) names the fix. Forum operations_desk: requests are accepted or declined at the vendor's deal desk. Stage 3 (2026-11-13): the floor (nonlinear_functional_of_path) was measured a reflex (runs simulate a rule's expected cost, R53) and left the deciding lessons; the QA stump moved from the first-pass aggregation, which a logistic on the counts recovers, to the correction chain.",
+ "skeleton": {
+  "decision_form": "set_over_threshold",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "non_additive_aggregation",
+   "turnover_not_stock_driver"
   ],
-  "generators": [
-    "G14",
-    "G2",
-    "G1",
-    "G16"
+  "mechanisms": [
+   "any_object_missed_rejects_image",
+   "correction_rechecks_every_object",
+   "piece_rate_against_weekly_hourly_floor",
+   "track_births_and_deaths_drive_frame_time"
   ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "existing_book_actuals",
-  "stump_strategy": "grain_or_unit",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "other",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass carries 2026's rejection and top-up shares and a per-object video rate to batches far denser, slower or calmer than any 2026 project, so it files the crowded street, shelf and polygon batches as profitable and the highway video as a loss.",
-  "domain_test": "The call turns on statistical modelling judgments (a joint any-miss probability aggregated over each image's objects, the expectation of a hinge over the distribution of annotator speeds, and the right regressor for frame time), each validated on the 2026 projects that look most like the new batches; swap the nouns and the aggregation, the hinge and the driver choice no longer exist.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:joint-condition-hinge-turnover",
-  "layer1": [
-    "duplicate and auto-closed timesheet punches with supervisor edits",
-    "two delivery centres on different local times",
-    "re-queued tasks issued new ids with a parent link",
-    "QA reviews re-keyed when an image is re-batched",
-    "client sample labels in two COCO dialects",
-    "payroll adjustment lines and a voided week"
+  "detection": [
+   "naive_ignores_what_it_should_depend_on",
+   "second_source_at_other_grain",
+   "residual_by_subgroup"
   ],
-  "stakeholder_role": "the vendor's finance lead (not named in the prompt)",
-  "role_family": "finance_controller",
-  "scoring_unit": "per accepted item",
-  "spine": {
-    "file": "task_log.csv",
-    "rows": 0,
-    "entity": "one annotation or correction pass on one image or one chunk of video frames",
-    "grain": "task pass",
-    "source": "synthetic"
-  },
-  "forum": "operations_desk",
-  "forcing_event": "purchase_order_or_contract",
-  "org_family": "professional_services",
-  "world": {
-    "geography": "Kenya and the Philippines (delivery centres in Kisumu and Iloilo, head office in Nairobi)",
-    "currency": "USD",
-    "org_type": "data-labeling vendor with a managed annotation workforce",
-    "invented_names": [
-      "Pellucid Annotation",
-      "Corvane Mobility",
-      "Shelfgrid Retail",
-      "Ardley Autonomy",
-      "Brindle Pallet Systems",
-      "Kestrin Warehousing"
-    ],
-    "people": [
-      "Loice Mumo",
-      "Collins Mutuku",
-      "Jeffrey Reyes"
-    ]
-  },
-  "deliverables": [
-    "batch_cost_forecast.xlsx",
-    "batch_decision_note.docx"
+  "moves": [
+   "compute_on_joint_path",
+   "simulate_with_fitted_inputs",
+   "rate_on_driver_exposure",
+   "variant_sweep_holds_call"
   ],
-  "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "The decisive quantity is a cost defined on joint conditions across parts and across people (any part failing returns the whole item for another full pass, and each person-week is topped up to a floor) and, for sequential items, driven by what enters and leaves rather than by what is present; item-level averages fitted on the record's typical items and carried to new items far denser, slower or with different turnover misprice them in opposite directions.",
-  "driver_concrete": "Each batch's cost per image is built from per-object miss chances aggregated by the any-miss QA rule into review and correction passes that each re-check every object, from each annotator-week's piece earnings set against the guaranteed hourly floor, and for the dashcam video from tracks entering and leaving rather than objects on screen; image-level cost carried at 2026's rework and top-up shares and a per-object video rate accepts the crowded street, shelf and polygon batches and declines the video.",
-  "stump": "A competent solver fits an image-level time model on the 2026 task log, adds QA rework and floor top-ups at their 2026 shares by scene type and prices video frames by objects on screen, so it accepts the crowded street (A), shelf (B) and polygon (D) batches and declines the highway video (C), where only the video and the warehouse labels (E) clear the policy line.",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "modeling",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "modeling",
-    "modeling",
-    "modeling",
-    "validation",
-    "forecasting",
-    "synthesis"
-  ],
-  "results": "R1 the 2026 labour cost rebuilt from task passes, QA reviews and timesheets and closed on the payroll ledger; R2 expected first-pass rejection and review passes per image for each still batch; R3 expected floor top-up per image for each batch; R4 annotator minutes per frame for the video batch; R5 the cost model back-tested on 2026's densest still, slowest polygon and calmest video projects; R6 each batch's expected cost per image with an 80 per cent range; R7 the accept set and the price each declined batch would need.",
-  "one_fact_test": "'QA sends an image back when any one object is missed, so crowded images come back far more often' rescues R2 and the crowded and shelf parts of R6, about 2 of 7.",
-  "strategy_label": "UNTESTED",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "task2": "task2 v6 carries a tail share to a compelled population through three partial views of who joins (transport, self-selection, composition); task24 prices work whose cost is a joint failure condition over each item's parts, a hinge over the spread of worker speeds and a turnover-driven frame time, with no population carried through selection and no view of who joins"
-  },
-  "lineage": [],
-  "notes": "Drawn 2026-11-13 at the author's request for a General Statistics task where the solver builds a cost model and the hurried model files the wrong set; built from the general lessons of the client's approved work (the constancy reflex: a rate, a share or a per-unit form carried past the record's support), not from any task. role_family finance_controller: the vendor's finance lead owns the pricing policy line. context_artifact other: the stakeholder's files are client requests for quotation (RFQs) with sample labels. Lesson key turnover_not_stock_driver added to skeleton_vocab.json for the video judgment (no existing key was honest). Decisive generator G14 (does the pooled rate apply to this pool?): each judgment is 2026's pooled share or per-object rate carried to a batch outside 2026's range; G2 (grain) names the fix. Forum operations_desk: requests are accepted or declined at the vendor's deal desk.",
-  "skeleton": {
-    "decision_form": "set_over_threshold",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-    "lessons": [
-      "non_additive_aggregation",
-      "nonlinear_functional_of_path",
-      "turnover_not_stock_driver"
-    ],
-    "mechanisms": [
-      "any_object_missed_rejects_image",
-      "correction_rechecks_every_object",
-      "piece_rate_against_weekly_hourly_floor",
-      "track_births_and_deaths_drive_frame_time"
-    ],
-    "detection": [
-      "naive_ignores_what_it_should_depend_on",
-      "second_source_at_other_grain",
-      "residual_by_subgroup"
-    ],
-    "moves": [
-      "compute_on_joint_path",
-      "simulate_with_fitted_inputs",
-      "rate_on_driver_exposure",
-      "variant_sweep_holds_call"
-    ],
-    "file_roles": [
-      "primary_record",
-      "second_grain_source",
-      "governing_standard",
-      "shortlist_or_candidates",
-      "quotes_or_costs",
-      "field_legend_or_dictionary",
-      "reference_register",
-      "unused_distractor"
-    ]
-  },
-  "registered": "2026-11-13T08:47:03Z"
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "governing_standard",
+   "shortlist_or_candidates",
+   "quotes_or_costs",
+   "reference_register",
+   "unused_distractor"
+  ]
+ },
+ "registered": "2026-11-13T08:47:03Z"
 }

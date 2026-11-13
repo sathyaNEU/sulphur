@@ -1,0 +1,909 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "April to October 2026 delivery cost as payroll settled it",
+   "graded_as": "Ask 4",
+   "figure": "R1",
+   "depends": [],
+   "independent": "the pay register and the punch clock",
+   "golden": {
+    "total": 192217.0
+   },
+   "bands": {
+    "total": [
+     191256.0,
+     193178.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "total": 131183.0
+    },
+    "careful": {
+     "total": 192217.0
+    },
+    "thorough": {
+     "total": 192217.0
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "QA reviews per delivered image",
+   "graded_as": "Ask 2, Component 2",
+   "figure": "R2_reviews",
+   "depends": [],
+   "independent": "the request samples and the 2026 reviews",
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": {
+    "A": 2.86,
+    "B": 2.29,
+    "C": 1.2,
+    "D": 1.08,
+    "E": 1.07
+   },
+   "bands": {
+    "A": [
+     2.719,
+     3.006
+    ],
+    "B": [
+     2.175,
+     2.404
+    ],
+    "C": [
+     1.142,
+     1.262
+    ],
+    "D": [
+     1.022,
+     1.129
+    ],
+    "E": [
+     1.018,
+     1.125
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "A": 1.0,
+     "B": 1.0,
+     "C": 1.0,
+     "D": 1.0,
+     "E": 1.0
+    },
+    "careful": {
+     "A": 2.226,
+     "B": 2.104,
+     "C": 1.202,
+     "D": 1.076,
+     "E": 1.116
+    },
+    "thorough": {
+     "A": 2.86,
+     "B": 2.29,
+     "C": 1.2,
+     "D": 1.08,
+     "E": 1.07
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "annotator paid minutes per delivered image (per frame for the video)",
+   "graded_as": "Ask 2, Component 3",
+   "figure": "R3_minutes",
+   "depends": [],
+   "independent": "the request samples",
+   "precedent": [
+    "L36",
+    "L42"
+   ],
+   "golden": {
+    "A": 54.4,
+    "B": 38.8,
+    "C": 0.341,
+    "D": 22.0,
+    "E": 2.4
+   },
+   "bands": {
+    "A": [
+     51.6619,
+     57.1
+    ],
+    "B": [
+     36.8222,
+     40.6982
+    ],
+    "C": [
+     0.3236,
+     0.3577
+    ],
+    "D": [
+     20.943,
+     23.1475
+    ],
+    "E": [
+     2.326,
+     2.5708
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "A": 28.0372,
+     "B": 21.8328,
+     "C": 0.4747,
+     "D": 19.7253,
+     "E": 1.8508
+    },
+    "careful": {
+     "A": 47.1069,
+     "B": 36.838,
+     "C": 0.6083,
+     "D": 22.0453,
+     "E": 2.5144
+    },
+    "thorough": {
+     "A": 54.4,
+     "B": 38.8,
+     "C": 0.341,
+     "D": 22.0,
+     "E": 2.4
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "floor top-up per delivered image",
+   "graded_as": "Ask 2",
+   "figure": "R4_topup",
+   "depends": [
+    "R3"
+   ],
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": {
+    "A": 0.763,
+    "B": 0.39,
+    "C": 0.0005,
+    "D": 0.421,
+    "E": 0.006
+   },
+   "bands": {
+    "A": [
+     0.6058,
+     0.9212
+    ],
+    "B": [
+     0.3067,
+     0.4725
+    ],
+    "C": [
+     0.0,
+     0.0011
+    ],
+    "D": [
+     0.3317,
+     0.51
+    ],
+    "E": [
+     0.0,
+     0.0123
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "A": 0.0,
+     "B": 0.0,
+     "C": 0.0,
+     "D": 0.0,
+     "E": 0.0
+    },
+    "careful": {
+     "A": 0.5161,
+     "B": 0.3309,
+     "C": 0.0081,
+     "D": 0.4209,
+     "E": 0.0067
+    },
+    "thorough": {
+     "A": 0.763,
+     "B": 0.39,
+     "C": 0.0005,
+     "D": 0.421,
+     "E": 0.006
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "each closed 2026 project's costing beside its actual cost per delivered image",
+   "graded_as": "Ask 3, Component 4",
+   "figure": "R5_costing",
+   "depends": [
+    "R1"
+   ],
+   "precedent": [
+    "L28",
+    "L37"
+   ],
+   "golden": {
+    "P26-0446": 1.48,
+    "P26-0441": 1.55,
+    "P26-0434": 0.0186
+   },
+   "bands": {
+    "P26-0446": [
+     1.4026,
+     1.5502
+    ],
+    "P26-0441": [
+     1.4697,
+     1.6244
+    ],
+    "P26-0434": [
+     0.0176,
+     0.0195
+    ]
+   },
+   "passes": {
+    "quick": {
+     "P26-0446": 1.51,
+     "P26-0441": 1.57,
+     "P26-0434": 0.019
+    },
+    "careful": {
+     "P26-0446": 1.41,
+     "P26-0441": 1.52,
+     "P26-0434": 0.0416
+    },
+    "thorough": {
+     "P26-0446": 1.48,
+     "P26-0441": 1.55,
+     "P26-0434": 0.0186
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "each request's expected cost per delivered image (per frame for the video)",
+   "graded_as": "Ask 1, Component 1",
+   "figure": "R6_cost",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": {
+    "A": 5.94,
+    "B": 4.24,
+    "C": 0.0285,
+    "D": 1.65,
+    "E": 0.31
+   },
+   "bands": {
+    "A": [
+     5.6855,
+     6.1736
+    ],
+    "B": [
+     4.0511,
+     4.432
+    ],
+    "C": [
+     0.0274,
+     0.0299
+    ],
+    "D": [
+     1.5541,
+     1.7528
+    ],
+    "E": [
+     0.3059,
+     0.3235
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "A": 3.803,
+     "B": 3.2643,
+     "C": 0.0307,
+     "D": 0.4864,
+     "E": 0.3588
+    },
+    "careful": {
+     "A": 4.9508,
+     "B": 3.9886,
+     "C": 0.043,
+     "D": 1.652,
+     "E": 0.3199
+    },
+    "thorough": {
+     "A": 5.94,
+     "B": 4.24,
+     "C": 0.0285,
+     "D": 1.65,
+     "E": 0.31
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the requests to accept (offered price at least 1.18 times the expected cost)",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R6"
+   ],
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": "B C E",
+   "passes": {
+    "quick": "A B C D",
+    "careful": "A B E",
+    "thorough": "B C E"
+   }
+  },
+  {
+   "id": "R8",
+   "name": "each request's 80 per cent range on its expected cost",
+   "graded_as": "Ask 1",
+   "figure": "R8_range",
+   "depends": [
+    "R6"
+   ],
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": {
+    "A_lo": 5.78,
+    "A_hi": 6.11,
+    "B_lo": 4.13,
+    "B_hi": 4.34,
+    "C_lo": 0.0275,
+    "C_hi": 0.0295,
+    "D_lo": 1.61,
+    "D_hi": 1.69,
+    "E_lo": 0.3,
+    "E_hi": 0.32
+   },
+   "bands": {
+    "A_lo": [
+     5.4332,
+     6.1268
+    ],
+    "A_hi": [
+     5.7434,
+     6.4766
+    ],
+    "B_lo": [
+     3.8822,
+     4.3778
+    ],
+    "B_hi": [
+     4.0796,
+     4.6004
+    ],
+    "C_lo": [
+     0.0258,
+     0.0292
+    ],
+    "C_hi": [
+     0.0277,
+     0.0313
+    ],
+    "D_lo": [
+     1.5134,
+     1.7066
+    ],
+    "D_hi": [
+     1.5886,
+     1.7914
+    ],
+    "E_lo": [
+     0.282,
+     0.318
+    ],
+    "E_hi": [
+     0.3008,
+     0.3392
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {},
+    "careful": {
+     "A_lo": 4.8436,
+     "A_hi": 5.0695,
+     "B_lo": 3.8992,
+     "B_hi": 4.0755,
+     "C_lo": 0.0414,
+     "C_hi": 0.0446,
+     "D_lo": 1.6059,
+     "D_hi": 1.6875,
+     "E_lo": 0.3098,
+     "E_hi": 0.3301
+    },
+    "thorough": {
+     "A_lo": 5.78,
+     "A_hi": 6.11,
+     "B_lo": 4.13,
+     "B_hi": 4.34,
+     "C_lo": 0.0275,
+     "C_hi": 0.0295,
+     "D_lo": 1.61,
+     "D_hi": 1.69,
+     "E_lo": 0.3,
+     "E_hi": 0.32
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the lowest acceptable price for each request to decline",
+   "graded_as": "Ask 5",
+   "figure": "R9_lowest_price",
+   "depends": [
+    "R6"
+   ],
+   "precedent": [
+    "L40",
+    "L36"
+   ],
+   "golden": {
+    "A": 7.01,
+    "D": 1.95
+   },
+   "bands": {
+    "A": [
+     6.7997,
+     7.2203
+    ],
+    "D": [
+     1.8915,
+     2.0085
+    ]
+   },
+   "passes": {
+    "quick": {
+     "E": 0.4234
+    },
+    "careful": {
+     "C": 0.0507,
+     "D": 1.9493
+    },
+    "thorough": {
+     "A": 7.01,
+     "D": 1.95
+    }
+   }
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "golden": true,
+   "answer": [
+    "B",
+    "C",
+    "E"
+   ]
+  },
+  {
+   "name": "the careful but hurried pass: a logistic return model with 2026's re-return share along the chain and video on frames and objects on screen",
+   "answer": [
+    "A",
+    "B",
+    "E"
+   ]
+  },
+  {
+   "name": "the QA chain carried at 2026's re-return share (only the video on track turnover)",
+   "answer": [
+    "A",
+    "B",
+    "C",
+    "E"
+   ]
+  },
+  {
+   "name": "video time on frames and objects on screen (only the QA chain built)",
+   "answer": [
+    "B",
+    "E"
+   ]
+  },
+  {
+   "name": "the careful pass with QA at 2026's return share by scene type and one correction",
+   "answer": [
+    "A",
+    "B",
+    "E"
+   ]
+  },
+  {
+   "name": "the careful pass with QA stopped at one correction",
+   "answer": [
+    "A",
+    "B",
+    "E"
+   ]
+  },
+  {
+   "name": "the careful pass with the floor on the request's average paid time",
+   "answer": [
+    "A",
+    "B",
+    "E"
+   ]
+  },
+  {
+   "name": "the careful pass with floor top-ups at 2026's share of piece pay",
+   "answer": [
+    "A",
+    "B",
+    "D",
+    "E"
+   ]
+  },
+  {
+   "name": "2026's delivery cost per object carried to each request",
+   "answer": [
+    "A",
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "name": "QA re-returns extrapolated by a logistic on the counts",
+   "answer": [
+    "C",
+    "E"
+   ]
+  },
+  {
+   "name": "QA returns and re-returns read from 2026's density bins",
+   "answer": [
+    "A",
+    "B",
+    "C",
+    "E"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "what": "the requests whose offered price clears 1.18 times the expected cost of delivery",
+  "golden_answer": [
+   "B",
+   "C",
+   "E"
+  ],
+  "golden_family": [
+   {
+    "name": "issue intensities with every annotator's care set to one",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "each annotator's care estimated with a lighter prior",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "the floor settled without week-to-week variation",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "paid weeks at contracted hours rather than the clock's",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "video time on tracks starting and objects on screen, without track ends",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "reviewer paid time per review second pooled across centres",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the careful but hurried pass: a logistic return model with 2026's re-return share along the chain and video on frames and objects on screen",
+    "answer": [
+     "A",
+     "B",
+     "E"
+    ]
+   },
+   {
+    "name": "the QA chain carried at 2026's re-return share (only the video on track turnover)",
+    "answer": [
+     "A",
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "video time on frames and objects on screen (only the QA chain built)",
+    "answer": [
+     "B",
+     "E"
+    ]
+   },
+   {
+    "name": "the careful pass with QA at 2026's return share by scene type and one correction",
+    "answer": [
+     "A",
+     "B",
+     "E"
+    ]
+   },
+   {
+    "name": "the careful pass with QA stopped at one correction",
+    "answer": [
+     "A",
+     "B",
+     "E"
+    ]
+   },
+   {
+    "name": "the careful pass with the floor on the request's average paid time",
+    "answer": [
+     "A",
+     "B",
+     "E"
+    ]
+   },
+   {
+    "name": "the careful pass with floor top-ups at 2026's share of piece pay",
+    "answer": [
+     "A",
+     "B",
+     "D",
+     "E"
+    ]
+   },
+   {
+    "name": "2026's delivery cost per object carried to each request",
+    "answer": [
+     "A",
+     "B",
+     "C",
+     "D"
+    ]
+   },
+   {
+    "name": "QA re-returns extrapolated by a logistic on the counts",
+    "answer": [
+     "C",
+     "E"
+    ]
+   },
+   {
+    "name": "QA returns and re-returns read from 2026's density bins",
+    "answer": [
+     "A",
+     "B",
+     "C",
+     "E"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "per-object time 5 per cent higher",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "input": "per-object time 5 per cent lower",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "input": "issue intensities 10 per cent higher",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "input": "issue intensities 10 per cent lower",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "input": "every annotator's pace 4 per cent faster",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   },
+   {
+    "input": "every annotator's pace 4 per cent slower",
+    "answer": [
+     "B",
+     "C",
+     "E"
+    ]
+   }
+  ],
+  "lines": {
+   "A": 5.47,
+   "B": 4.62,
+   "C": 0.0331,
+   "D": 1.51,
+   "E": 0.36
+  }
+ },
+ "factorial": {
+  "golden_answer": "B C E",
+  "reflex_route": {
+   "answer": "A B E"
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "the QA chain: per-object issue intensities aggregated over each image, and each correction's re-review at an intensity that rises with the image's own",
+    "kind": "stump",
+    "precedent": [
+     "L40",
+     "L36"
+    ],
+    "dropped": {
+     "answer": [
+      "A",
+      "B",
+      "C",
+      "E"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "B",
+      "E"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "J2",
+    "name": "the floor settled per annotator per pay week as an expected cost over paces and weeks",
+    "kind": "reflex",
+    "precedent": [
+     "R53",
+     "R47"
+    ]
+   },
+   {
+    "id": "J3",
+    "name": "video time on tracks starting and ending, not objects on screen",
+    "kind": "stump",
+    "precedent": [
+     "L36",
+     "L42"
+    ],
+    "dropped": {
+     "answer": [
+      "B",
+      "E"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "A",
+      "B",
+      "C",
+      "E"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J4",
+    "name": "per-object time with each annotator's pace",
+    "kind": "reflex",
+    "precedent": [
+     "R14",
+     "R26"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "paid time per tool second from the punch clock by centre, the 2026 cost rebuilt on payroll",
+    "kind": "reflex",
+    "precedent": [
+     "R01",
+     "R57"
+    ]
+   }
+  ]
+ },
+ "hints": [
+  {
+   "sentence": "A corrected image goes back to QA with every object re-checked, so the denser the image the likelier it comes back again",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "The floor is settled per annotator per pay week",
+   "rescues": []
+  },
+  {
+   "sentence": "Video time follows the tracks that start and end, not the objects on screen",
+   "rescues": []
+  }
+ ]
+}
