@@ -1,0 +1,61 @@
+{
+ "task": "task24",
+ "status": "DESIGN",
+ "domain": "general-statistics-data-science",
+ "subdomain": "regression-classification-model-diagnostics",
+ "objective": "forecasting",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-13",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 2026 labour cost closed on the payroll ledger; R2 review passes per image for each still request; R3 floor top-up per image for each request; R4 annotator minutes per frame for the video request; R5 the cost model back-tested on 2026's densest, slowest and calmest projects; R6 each request's expected cost per image with an 80 per cent range; R7 the accept set and the price each declined request needs",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": ""
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "stage 2: build the world prototype (scratch) to the factorial and forcing margins, then the design note to precut exit 0",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
+}
