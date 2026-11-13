@@ -1,105 +1,114 @@
 {
   "task": "task13",
   "project": "sulfur",
-  "architecture": "v4",
-  "drawn": "2026-11-11",
-  "slot_note": "author-requested level-up to depth level 5 after a platform run landed architecture 3 (2026-11-11): a new world, new deciding lessons and a new decision form, many independent judgments, each priced result built on an assumption the run wrote down and waved through, made false by the world's process and testable from a second record at another grain",
+  "architecture": "v5",
+  "drawn": "2026-11-13",
+  "slot_note": "the author reassigned the slot to Energy Systems & Utilities x Data Extraction & Conformation on 2026-11-12, after architecture 4's platform run landed R1 to R3 and the holistic audit returned it on determinism: a new world, dataset, decision form and shell, six independent stumps on the stump factorial (level 5)",
   "domain": "energy-systems-utilities",
   "subdomain": "grid-reliability-outage-analysis",
   "client_domain": "energy-systems-utilities",
-  "niche": "a Minnesota investor-owned utility's review of its 22 automated feeder loops (fault location, isolation and service restoration) for the commission's 2026 grid modernization report: the sustained customer interruptions the automation really avoided net of the ones its own switching caused, which loops, devices and transfer directions are not performing and why, what to change before the 2026-27 winter and the 2027 summer, and what it will avoid in 2027",
-  "objective": "anomaly-detection",
-  "shape": "other",
+  "niche": "a Texas coastal electric cooperative's 69 kV fault record conformed from two relay vendors' event exports, a legacy target log, the SCADA sequence of events, the control room log, the outage system database and a solar farm's own protection export into one row per fault (located, timed, caused, its member impact), and the work list it sends line crews to this winter and before summer 2027",
+  "objective": "etl",
+  "shape": "15",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "re-battery 16 recloser controls before December (14 to 17 with the three at the 21.2 V line, led by RCL-21316, RCL-20466 and RCL-20542); move the receiving reclosers on the 16 transfer directions the ADMS does not switch to settings that carry a transfer before June, without waiting for the four reinforcements; 25,741 customer interruptions avoided in 2027 as the loops stand (80 per cent range 18,889 to 32,894); 21,780 avoided January to October 2026 on the commission's definition",
-  "answer_source": "task13/generator/figures.json: net_2026, bridge_2026, r1_by_year, rebattery_set, summer_2027_receiving, forecast_2027",
+  "answer": "to be filled when the pack is cut",
+  "answer_source": "task13/generator/figures.json",
   "gap": [
-    "objective",
     "population",
     "time"
   ],
   "pattern": [
-    "none"
+    "D"
   ],
   "generators": [
-    "G9",
-    "G12",
-    "G13"
+    "G3",
+    "G2",
+    "G12"
   ],
-  "gate_g": "binding_constraint",
-  "calibration_form": "parallel_run_overlap",
-  "stump_strategy": "binding_constraint",
+  "gate_g": "etl_conformance",
+  "calibration_form": "physical_verification",
+  "stump_strategy": "classification_error",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "operations_log",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A careful run that reconciles the automation log with the outage record but fills the storm days' lost sequences at the observed success rate, nets only the closes onto faults the log shows, reads every no-response timeout as a radio fault, re-batteries by age and past cold failures and takes the 2027 reinforcements on their planned dates overstates the 2026 net interruptions avoided, restricts none of the summer transfers that trip the receiving feeder, re-batteries the wrong controls and overstates 2027, each by a different route.",
-  "domain_test": "The field's own distribution automation performance analysis decides it: a transfer's capacity through every protective device on the receiving path at the hour the fault strikes, protection pickups against coincident section loads, sustained against momentary interruptions under the five-minute rule, and a control battery's cranking voltage at the design cold; with a hospital's or a warehouse's nouns there is no tie switch, pickup, settings group or cold crank to carry the answer.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:an-automatic-action-netted-against-the-harm-it-causes-at-the-unit-that-absorbs-it",
+  "analyst_test": "The careful but hurried pass conforms every export, sets every relay clock on SCADA, matches lightning to strokes and rebuilds the 2026 member impact from the sequence of events, then locates each fault by the relays' own distances (both ends averaged) on the 2025 protection study, sets the solar farm's export aside, reads fog off the coastal airport with the roost survey set aside, counts every non-lightning summer afternoon fault as vegetation and washes every section that ever flashed over: it clears spans 1 to 6 km from the grow-in contacts, loses Inland's span, sends the tap line's crew to a structure near Ponder Creek, books roost streamers as contamination and failing strings as fog, and washes sections cleaned in October, each by a different route.",
+  "domain_test": "Every result is a quantity a cooperative's reliability and protection engineers compute from the 69 kV fault record: a fault's location from the zero-sequence current division between its line's terminals against the protection study's line-out source impedances on that date, the ground infeed of a grounded-wye generator step-up at a tap, a flashover's cause from fog at the line, roost structures and light rain, a grow-in contact from the conductor's heat balance, and an insulator deposit's build-up against its flashover level; with a hospital's or a warehouse's nouns there is no terminal, zero-sequence source, infeed, streamer, sag or salt deposit to carry any of it.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:fault-records-located-by-the-residual-split-and-caused-by-conditions-at-the-line",
   "layer1": [
-    "ADMS log in UTC against the outage record in US Central time with daylight saving",
-    "messages logged twice by the redundant ADMS servers",
-    "the ADMS upgrade of March 2025 changed message text and device tags",
-    "ADMS device tags against register asset numbers through a crosswalk",
-    "outage restoration steps keyed by hand when the ADMS interface was down",
-    "battery self-tests missing in weeks a radio link was down",
-    "airport weather station gaps",
-    "test operations and maintenance switching in the log",
-    "the SCADA export's tag columns renamed after the upgrade"
+    "two relay vendors' exports: one UTC with distances in miles, one in local time with daylight saving, distances in km and currents in kA",
+    "relay clocks that lost GPS sync for weeks at two stations, set only by the SCADA sequence of events",
+    "events not retrieved from relay memory in lightning storms (one terminal's record missing)",
+    "electromechanical stations with technicians' target notes and no currents or distances",
+    "the control room log typed by hand, duplicated across a shift change, causes coded from the weather",
+    "the outage system's restoration times closed by dispatchers after the fact",
+    "the solar farm's export on local standard time all year, with its own breaker names and inverter events",
+    "substation weather stations installed from March 2023 with gaps, the airport's visibility in statute miles",
+    "patrol findings as free text with structure numbers written several ways",
+    "structure numbering restarted on two lines rebuilt in 2023"
   ],
-  "stakeholder_role": "the utility's manager of grid modernization performance, who files the 2026 report with the commission and sets the 2027 automation work",
-  "role_family": "compliance_or_audit",
+  "stakeholder_role": "the cooperative's manager of engineering, who sets the 69 kV line crews' work for the winter and the 2027 summer",
+  "role_family": "other",
   "scoring_unit": "per episode",
   "spine": {
-    "file": "adms_flisr_event_log_2022-2026.csv",
-    "rows": 31653,
-    "entity": "one message the ADMS logged for a FLISR sequence or a scheme state change",
-    "grain": "sequence x step",
-    "source": "synthetic (a fictional Minnesota investor-owned utility's ADMS archive export, outage record, SCADA historian and maintenance records, January 2022 to October 2026; seeded world in task13/generator)"
+    "file": "relay_events_eventrecall_export_2022-2026.csv",
+    "rows": null,
+    "entity": "one event summary a relay at one 69 kV terminal recorded (a trip, a reclose shot or a triggered record)",
+    "grain": "terminal x event",
+    "source": "synthetic (a fictional Texas coastal electric cooperative's relay exports, SCADA, control room log, outage database and field records, January 2022 to October 2026; seeded world in task13/generator)"
   },
-  "forum": "regulator_or_inspector",
-  "forcing_event": "statutory_or_regulatory_filing",
-  "org_family": "utility_or_infrastructure",
+  "forum": "line_manager_or_team",
+  "forcing_event": "season_or_peak",
+  "org_family": "cooperative_or_member_body",
   "world": {
-    "geography": "United States (southern Minnesota: a fictional investor-owned utility's distribution service area around a regional city and its farm towns)",
+    "geography": "United States (the Texas coastal bend: a fictional electric cooperative's service area around a bay)",
     "currency": "USD",
-    "org_type": "an investor-owned electric distribution utility running 13.8 kV feeders, 22 of them paired into automated loops",
+    "org_type": "an electric distribution cooperative that owns its 69 kV sub-transmission lines",
     "invented_names": [
-      "Blue Earth Valley Power"
+      "Laguna Prieta Electric Cooperative",
+      "Port Alcorn",
+      "Coyote Draw Solar",
+      "EventRecall",
+      "GridVue"
     ],
     "people": [
-      "Shawn Hudson",
-      "Ruben Nicholson",
-      "Nathan Reeves",
-      "Elaine Stewart",
-      "Jacob Barton",
-      "Debra Reed"
+      "Brittany Melton",
+      "Thomas Evans",
+      "Derek Hart",
+      "Joanna Choi",
+      "Allison Ward",
+      "Andrew Russell",
+      "Julie Peterson"
     ]
   },
   "deliverables": [
-    "flisr_review_2026.xlsx",
-    "flisr_2026_memo.pdf"
+    "lpec_69kv_faults_2022-2026.csv",
+    "lpec_69kv_fault_review_2026.xlsx",
+    "69kv_work_list_winter_2026-27.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "how-many",
-  "driver": "The decisive quantity is what an automatic action changed across the whole system, which its own log overstates three ways: the log loses the busiest periods' records exactly when the action fails most, the action's gain at one unit is partly undone hours later at the neighbouring unit that absorbs it, a harm no record links back to the action, and the devices that carry it out fail under a condition their periodic tests never meet; the forward value then rests on works the plan dates earlier than the organisation's own record of past works supports.",
-  "driver_concrete": "FLISR's 2026 sustained interruptions avoided are the customers it restored within five minutes, with the sequences the ADMS archive dropped on storm days read back from the outage record's restoration steps and the devices' own operation records, less the customers its own switching put out: closes onto mislocated faults, and the receiving feeder's midline recloser tripping on the combined load hours after a summer transfer, coded no cause found; the controls whose batteries cannot crank at the design cold are read from weekly self-test sag against temperature, since spring and autumn functional tests pass them; and summer auto-transfer stays off on the directions whose reinforcement the capital works history says will not be in service by the 2027 summer.",
-  "stump": "A careful run that reconciles every log prices each restoration at its own loop and files 25508 for 2026 against 21780, judges each battery at last winter's coldest test and names 2 controls against 16, carries the 2025-26 summers forward with the reinforcements on their planned dates (582 or 236 receiving customers against 381) and forecasts 29666 for 2027 against 25741, each by its own route",
+  "question_form": "what",
+  "driver": "The decisive quantities are where each event happened and what caused it, which no record states: each endpoint instrument computes a position as if the event had no impedance and nothing fed it from the side, so the position comes from how the event's residual flow split between the two endpoints against the network behind each on that date, corrected for a side source that feeds every event beyond it at all hours; the cause comes from conditions measured at the asset by the owner's own sensors and a third party's survey rather than the nearest public station, and from the asset's thermal state rather than the season; and the forward work from a deposit carried from its last reset at each unit's own rate against the level at which it failed before.",
+  "driver_concrete": "Each 69 kV fault's location is the split of its residual current between the two terminals solved against the protection study's line-out zero-sequence sources for its date (the 2022 study before Inland's autotransformer replacement in March 2024), with the solar farm's ground infeed taken out of Shell Ridge's distance on the tap line; night faults on the coast are split into fog flashovers, bird streamers and failing strings on the bay stations' dewpoint spread, the roost survey and light rain; summer grow-ins are told by the conductor's temperature on still afternoons; and the sections washed before the fog season are those whose salt deposit, carried from the last wash or soaking rain at the section's own rate, passes the level at which they flashed over.",
+  "stump": "The careful but hurried pass locates faults by the relays' own distances on today's study, ignores the solar farm's export, reads fog off the airport with the roost survey set aside, counts every non-lightning summer afternoon fault as vegetation and washes every section that ever flashed over, so it clears the wrong spans, drops Inland's span, sends the tap line's crew near Ponder Creek, washes roost structures instead of guarding them, misses the failing strings and washes sections cleaned in October.",
   "answer_shape": "flagged-set",
-  "weight": "hard-to-measure",
+  "weight": "assembly",
   "chain_signature": [
     "assembly-reconciliation",
-    "decomposition-attribution",
     "missingness-measurement",
-    "causal-reasoning",
-    "forecasting"
+    "investigation-loops",
+    "missingness-measurement",
+    "decomposition-attribution",
+    "exploration-triage",
+    "forecasting",
+    "synthesis"
   ],
-  "results": "R1 customers restored within five minutes each year 2022 to 2026, the storm overflows' operations read from the device record; R2 2026's walk from the dashboard to the customer interruptions avoided, net of the receiving reclosers' trips; R3 the controls whose batteries fail at -27 C by the end of February 2027; R4 the receiving feeders' customers June to September 2027 transfers would interrupt with the settings as they stand (the design basis's summer); R5 2027 customer interruptions avoided as the loops stand, with its 80 per cent range",
-  "one_fact_test": "\"a transfer onto a receiving feeder whose reclosers the ADMS does not switch can trip them later, with no fault found\" rescues R2 only (1 of 5; executed end to end the careful forecast moves to 27,523, outside R5's band, and R4 stays at 582); the battery sentence rescues R3 alone; the slip and archive sentences rescue nothing the careful pass lacks",
-  "strategy_label": "UNTESTED",
+  "results": "R1 the conformed fault count by year; R2 the grow-in spans to clear; R3 the night repeat locations by cause (roost structures, failing strings); R4 the tap line's repeat location; R5 the 2026 member interruptions and member-minutes by line; R6 the 2026 faults by cause; R7 the coastal sections washed before the fog season; the work list and its dates on top",
+  "one_fact_test": "the residual-split sentence rescues no result alone (R2 also needs S2 and S5); the survey-and-bay-fog sentence rescues R3 (1 of 7)",
+  "strategy_label": "OWN (no client strategy carries a fault record; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
   "mechanism_source": "design_note",
   "differentiation": {},
   "lineage": [
@@ -242,63 +251,164 @@
       ],
       "architecture": "v3 (Kalumpang Valley Electric Cooperative, the lightning referral rule over 143 protection zones, each zone judged at its own sound level learned from inspection-confirmed seasons)",
       "fate": "spent 2026-11-11 after upload: a platform run landed every result (the same 11 zones, the season totals, the failed-protection count, the alert load, the inspection check and the avoided faults inside their bands; task13/runs/run1.md): a level per zone as a random effect with its uncertainty in the predictive tail, the all-sound simulation, the clocks rebuilt from upstream and downstream pairs and the latest window for the refit were all reflexes (precedents R26 to R32); the lightning world has now spent two architectures, so architecture 4 moves to another world, dataset and shell"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "grid-reliability-outage-analysis",
+      "objective": "anomaly-detection",
+      "shape": "other",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G9",
+        "G12",
+        "G13"
+      ],
+      "gate_g": "binding_constraint",
+      "stump_strategy": "binding_constraint",
+      "role_family": "compliance_or_audit",
+      "forum": "regulator_or_inspector",
+      "forcing_event": "statutory_or_regulatory_filing",
+      "org_family": "utility_or_infrastructure",
+      "driver": "The decisive quantity is what an automatic action changed across the whole system, which its own log overstates three ways: the log loses the busiest periods' records exactly when the action fails most, the action's gain at one unit is partly undone hours later at the neighbouring unit that absorbs it, a harm no record links back to the action, and the devices that carry it out fail under a condition their periodic tests never meet; the forward value then rests on works the plan dates earlier than the organisation's own record of past works supports.",
+      "driver_concrete": "FLISR's 2026 sustained interruptions avoided are the customers it restored within five minutes, with the sequences the ADMS archive dropped on storm days read back from the outage record's restoration steps and the devices' own operation records, less the customers its own switching put out: closes onto mislocated faults, and the receiving feeder's midline recloser tripping on the combined load hours after a summer transfer, coded no cause found; the controls whose batteries cannot crank at the design cold are read from weekly self-test sag against temperature, since spring and autumn functional tests pass them; and summer auto-transfer stays off on the directions whose reinforcement the capital works history says will not be in service by the 2027 summer.",
+      "stump": "A careful run that reconciles every log prices each restoration at its own loop and files 25508 for 2026 against 21780, judges each battery at last winter's coldest test and names 2 controls against 16, carries the 2025-26 summers forward with the reinforcements on their planned dates (582 or 236 receiving customers against 381) and forecasts 29666 for 2027 against 25741, each by its own route",
+      "answer_shape": "flagged-set",
+      "weight": "hard-to-measure",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "decomposition-attribution",
+        "missingness-measurement",
+        "causal-reasoning",
+        "forecasting"
+      ],
+      "skeleton": {
+        "decision_form": "per_unit_diagnosis",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "downstream_offset",
+          "validation_cannot_see_condition",
+          "linkage_missing_not_at_random",
+          "scheduled_completion_slippage"
+        ],
+        "mechanisms": [
+          "flisr_transfer_overloads_receiving_midline_recloser_in_summer",
+          "control_battery_cold_crank_failure_unseen_by_mild_weather_functional_test",
+          "adms_event_archive_overflow_on_storm_days",
+          "reinforcement_in_service_dates_slip",
+          "fpi_missed_indication_close_onto_fault",
+          "radio_base_station_outage_comms_cluster",
+          "operators_switch_settings_group_on_manual_transfer"
+        ],
+        "detection": [
+          "natural_experiment_in_record",
+          "second_source_at_other_grain",
+          "control_total_gap",
+          "layout_or_physics",
+          "naive_depends_on_what_it_should_not"
+        ],
+        "moves": [
+          "net_displacement",
+          "replay_event_by_event",
+          "extrapolate_form_chosen_at_edge",
+          "link_records_by_parsed_key",
+          "empirical_completion_from_past_works"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "governing_standard",
+          "schedule_or_plan",
+          "exogenous_long_record",
+          "incumbent_figure_or_method",
+          "unused_distractor"
+        ]
+      },
+      "niche": "a Minnesota investor-owned utility's review of its 22 automated feeder loops (fault location, isolation and service restoration) for the commission's 2026 grid modernization report: the sustained customer interruptions the automation really avoided net of the ones its own switching caused, which loops, devices and transfer directions are not performing and why, what to change before the 2026-27 winter and the 2027 summer, and what it will avoid in 2027",
+      "drawn": "2026-11-11",
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "for",
+        "deliverable set": "csv"
+      },
+      "architecture": "v4 (Blue Earth Valley Power, the 22 automated FLISR loops: 2026 avoided interruptions netted on the commission definition, controls to re-battery at -27 C, receiving settings before summer, 2027 as the loops stand)",
+      "fate": "spent 2026-11-12 after upload: the platform run landed R1, R2 and R3 (task13/runs/arch4_run1.md) and the holistic audit returned the build on determinism (the battery fitting window and the 2027 forecast's four conventions); the author reassigned the slot to Energy Systems & Utilities x Data Extraction & Conformation"
     }
   ],
-  "notes": "Architecture 4 drawn 2026-11-11 in a new world after the platform run on architecture 3 (task13/runs/run1.md) landed every result; the lightning world spent architectures 2 and 3. Axes chosen against the window of task7 v9, task9 v2 and task4 v12: forum regulator_or_inspector, org_family utility_or_infrastructure, forcing_event statutory_or_regulatory_filing, role compliance_or_audit, calibration parallel_run_overlap (the ADMS log and the outage record observe the same operations), strategy and Gate G binding_constraint (the receiving midline recloser's pickup binds the transfer and removes the naive keep-everything-on pick). Stage 4 (2026-11-11): the judge sent the dashboard-walk headline back on Gate G; re-framed in the same world to a flagged set (controls and directions) with the 2026 and 2027 figures; shape other, answer shape flagged-set. Stage 4 round 2 (2026-11-11): the judge's FIX_NOW closed in the generator: R3's model structure ruled on the load tests themselves (control levels F 218.3, control ageing F 101.2, cold slopes F 1.2; fleet, per-type and linear fits miss last winter's cold tests by 0.31 to 0.64 V at 30 A against 0.12 V; the mixed model names the same 16), R4's summer filed by the design basis's seasons, R4 graded in the memo's ask and R5 as the second component. READY 2026-11-11: judge p3 DETERMINISTIC, APPROVE; three leak readers clean; effort pair 34.5. After READY 5f9b2ca the p3 judge's straight outage-record route exposed a golden bug: the breaker's re-close onto section 1 counted only when the tie closed, and the forecast credited only the transfers; corrected (R1 2026 25,508, R2 21,780, R5 25,741) and RESHIPPED.",
+  "notes": "Architecture 5, re-rooted 2026-11-13. The analysis type is the author's assignment of 2026-11-12 (Energy Systems & Utilities x Data Extraction & Conformation); grid-reliability-outage-analysis serves ETL from SKILLS 9e6c911. role_family other: the stakeholder is the cooperative's manager of engineering setting the line crews' work (field_unit_lead, operations_director and capacity_planner sit on the last three live cards). The energy x etl pairing repeats task22 inside the axis window by the author's direction; registered with --force on that ban only.",
   "skeleton": {
-    "decision_form": "per_unit_diagnosis",
+    "decision_form": "reconciled_record_or_table",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "downstream_offset",
-      "validation_cannot_see_condition",
-      "linkage_missing_not_at_random",
-      "scheduled_completion_slippage"
+      "position_on_network_effect",
+      "exposure_seen_only_in_linked_record",
+      "nonlinear_functional_of_path",
+      "renewal_resets_hazard"
     ],
     "mechanisms": [
-      "flisr_transfer_overloads_receiving_midline_recloser_in_summer",
-      "control_battery_cold_crank_failure_unseen_by_mild_weather_functional_test",
-      "adms_event_archive_overflow_on_storm_days",
-      "reinforcement_in_service_dates_slip",
-      "fpi_missed_indication_close_onto_fault",
-      "radio_base_station_outage_comms_cluster",
-      "operators_switch_settings_group_on_manual_transfer"
+      "fault_resistance_and_load_flow_bias_single_ended_relay_distance",
+      "residual_current_split_between_line_ends_locates_fault",
+      "bulk_autotransformer_replacement_changes_zero_sequence_source",
+      "grounded_wye_solar_tap_feeds_ground_fault_current_day_and_night",
+      "bay_fog_unseen_by_coastal_airport_visibility",
+      "bird_streamers_at_roost_structures_in_roost_season",
+      "failing_porcelain_flashes_in_light_rain_at_any_hour",
+      "grow_in_contact_needs_hot_sagged_conductor_on_still_afternoon",
+      "salt_deposit_builds_from_last_wash_or_soaking_rain"
     ],
     "detection": [
-      "natural_experiment_in_record",
       "second_source_at_other_grain",
-      "control_total_gap",
       "layout_or_physics",
-      "naive_depends_on_what_it_should_not"
+      "measurement_at_another_network_point",
+      "record_time_against_event_time"
     ],
     "moves": [
-      "net_displacement",
-      "replay_event_by_event",
-      "extrapolate_form_chosen_at_edge",
+      "allocate_by_network_position",
+      "compute_on_joint_path",
       "link_records_by_parsed_key",
-      "empirical_completion_from_past_works"
+      "rate_on_driver_exposure",
+      "replay_event_by_event"
     ],
     "file_roles": [
       "primary_record",
       "second_grain_source",
       "reference_register",
       "governing_standard",
-      "schedule_or_plan",
       "exogenous_long_record",
-      "incumbent_figure_or_method",
+      "event_timeline",
+      "field_legend_or_dictionary",
       "unused_distractor"
     ]
-  },
-  "registered": "2026-11-11T23:18:17Z",
-  "shell": {
-    "question form": "whether",
-    "second-sentence opener": "for",
-    "deliverable set": "csv"
   },
   "lineage_shells": [
     {
       "question form": "what",
       "second-sentence opener": "for",
       "deliverable set": "csv+docx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "for",
+      "deliverable set": "csv"
     }
-  ]
+  ],
+  "client_subdomain": "Energy Systems & Utilities (grid reliability and outage analysis: the 69 kV fault record)",
+  "doctrine": "results-chain-2026-11-09",
+  "depth_level": 5,
+  "architecture_spent": false,
+  "registered": "2026-11-13T05:21:40Z",
+  "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "no",
+    "deliverable set": "pdf+xlsx"
+  }
 }

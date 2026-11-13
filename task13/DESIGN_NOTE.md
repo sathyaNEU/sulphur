@@ -1,196 +1,94 @@
-# task13: what Blue Earth Valley Power's automated loops really avoided in 2026, what to change before the winter and the 2027 summer, and what they will avoid in 2027
+# task13: what Laguna Prieta Electric Cooperative's line crews fix on the 69 kV system this winter and before summer 2027, from one conformed table of every fault since January 2022
 
 ## Draw
 
-Subdomain: Energy Systems & Utilities, task type grid reliability and outage analysis (`grid-reliability-outage-analysis`, the only energy task type serving the assigned analysis type)
-Analysis type: Anomaly Detection & Diagnostics
-Answer shape: a flagged set with the evidence (the recloser controls to re-battery before the winter and the transfer
-  directions whose receiving settings must change before the summer, each with its evidence), beside 2026's customer
-  interruptions avoided on the commission's definition and 2027's as the loops stand
-Weight: a hard-to-measure quantity: what an automatic restoration scheme changed across the whole network is in no
-  record; the ADMS archive holds what the scheme logged, minus what it lost on storm days, and none of what its
-  transfers did to the receiving feeders hours later; the last two live builds sit on investigation (task7 v9) and
-  metric or rule design (task9 v2), and architecture 3 sat on metric or rule design
-Data-native sentence: a FLISR restoration is worth the customers it moves from a sustained interruption to a momentary
-  one, less the customers its own switching then puts out, and whether a transfer holds depends on the coincident
-  load through every protective device on the receiving path at the hours after the fault, while the archive that
-  records the scheme loses its busiest days and the controls that carry it out are tested only in mild weather.
-People: Shawn Hudson (manager of grid modernization performance, files the 2026 report with the commission), Nathan
-  Reeves (distribution automation engineer, the golden's author), Elaine Stewart (system protection engineer), Jacob
-  Barton (distribution operations superintendent), Debra Reed (regulatory affairs director, signs the filing),
-  Ruben Nicholson (capital projects manager); drawn with `guard.py names --geo "United States"` at seeds 1341 and 1347;
-  none is named in the prompt
+Subdomain: Energy Systems & Utilities, grid reliability and outage analysis (`grid-reliability-outage-analysis`; the
+  69 kV fault record a cooperative's reliability engineer conforms from relays, SCADA, the control room and the field)
+Analysis type: Data Extraction & Conformation (ETL / Pipeline Build): the author's assignment of 2026-11-12. Two
+  relay vendors' event exports, a legacy target log, the SCADA sequence of events, the control room's outage log, the
+  outage system's database, a solar farm's own protection export, five weather records, the lightning record and the
+  field records (patrols, the environmental team's roost survey, test insulators, washing, vegetation and maintenance
+  work) conformed to one row per fault, with the counts, locations, causes and member impact computed from it
+Answer shape: a flagged set with the evidence (the repeat locations and sections the work list flags, each with its
+  cause, its located faults and the fix), on top of the conformed fault table
+Weight: assembly (building one fault record a crew can be sent from: each fault located, timed and caused from
+  instruments that each see part of it); the last two live cards sit on measurement (task22) and attribution (task4)
+Data-native sentence: a 69 kV fault is recorded by the relays at both ends of its line, each computing its own
+  distance on its own clock as if the fault had no resistance and nothing fed it from the side, by a SCADA clock that
+  knows only breakers, by a control room that codes a cause from what the weather looked like, and by nothing at all
+  where no crew went, so where a fault was and what caused it exist only in the relation between the two ends'
+  residual currents and the network behind each end on that date, the weather at the line rather than the airport,
+  the conductor's temperature that afternoon and the field teams' own records
+People: Brittany Melton (reliability engineer, the golden's author), Thomas Evans (manager of engineering), Derek
+  Hart (system operations supervisor), Joanna Choi (environmental compliance specialist), Allison Ward (vegetation
+  management coordinator), Andrew Russell (transmission planning engineer), Julie Peterson (line superintendent), from
+  `guard.py names --geo "United States" --seed 1305` and `--seed 1306`; none is named in the prompt. Card WARNs answered: people.first Thomas against mark126 (an older Mark build, a different world); overuse.objective (ETL on 4 of the last 12) is the author's assignment. ban.pairing (energy x etl against task22) registered with --force at the author's direction of 2026-11-12
 
-**The decision.** Blue Earth Valley Power, an investor-owned distribution utility in southern Minnesota, runs 13.8 kV
-feeders from nine substations; 44 of them are paired into 22 loops automated for fault location, isolation and
-service restoration (a substation breaker, two midline reclosers and a normally open tie switch per loop, run by the
-ADMS). The commission's grid modernization order has the utility report each year the sustained customer
-interruptions the automation avoided. The vendor's dashboard reports a gross figure from the ADMS archive. Before the
-March 2027 filing the utility must say what the loops really avoided in 2026, which loops, controls and transfer
-directions are not performing and why, what it will change before the 2026-27 winter and the 2027 summer, and what the
-loops will avoid in 2027.
+## Stump screen
 
-**Card.** `.claude/skills/fingerprint/cards/task13.json`, architecture v4, registered 2026-11-11 (23:18Z), guard verdict
-WARN. Answered: `repeat.decision` against task7 v9 (there one fund-or-not call per measure; here which controls to
-re-battery and which transfer directions to run without summer auto-transfer, a designation unit by unit beside the
-net figures); `repeat.deliverables` against task7 v9 (the commission's filing takes a PDF memo, and the workbook is the
-engineer's); `skeleton.lesson_once` (downstream_offset is taught once, by the client's turbine-wake task 8ec45b05, as a
-go or hold on one unit's repair; here it is netted across 44 transfer directions inside a chain of four lessons whose
-other three no accepted task teaches); `skeleton.house_lesson` on validation_cannot_see_condition (mark258, task20 v2,
-task7 v9) and linkage_missing_not_at_random (task16 v2, task19 v1): both are supporting judgments here, each priced on
-its own result (the cold-crank controls; the storm days the archive lost), never the lesson the call turns on.
+Written at the draw on 2026-11-13, before the card and before any code. Tests: 1 off the closed page, 2 not a reflex,
+3 nothing filed, 4 clean data, 5 two records, 6 the waved-through assumption, 7 a plausible shallower story, 8 across
+the data, 9 worth the call.
 
-## Deep reasoning
-
-Task type: grid reliability and outage analysis (`grid-reliability-outage-analysis`), the energy task type serving Anomaly Detection & Diagnostics.
-Domain test: the results are the quantities a distribution automation engineer owes the commission: sustained customer interruptions avoided under the five-minute rule, the receiving path's coincident load against each recloser's pickup at the hours faults strike, a control battery's cranking voltage at the design minimum, and a forecast at the record's lockout rate with the planned works at their likely dates.
-Swap: with a hospital's or a warehouse's nouns there is no tie switch carrying one feeder's load through another's reclosers, no settings group, no five-minute momentary line, no cold crank at 30 A; the net, the summer figure and the battery set stop making sense.
-Where the weight sits: the 2026 figure the order defines is in no record: the archive holds what the scheme logged minus its storm overflows, the outage record holds the receiving feeders' trips as no cause found, and only the device record joins them; the work is long because every operation has to be rebuilt and its consequence on the next feeder found.
-Layer 1: the archive in UTC under two message formats and device tags either side of the March 2025 upgrade, with the standby server's echoes; the outage record in Central prevailing time with the feeder written two ways; the SCADA historian in Central Standard Time, wide, with gaps where a radio path was down; the airport weather in Fahrenheit and knots with M for missing; each is what that system writes, and none moves a graded figure once read correctly.
-Not one thing: a run told that transfers trip unswitched receiving reclosers still has to find them in the device record, net them by the order's definition (the restored customers undone and the receiving customers added), carry them to the 2027 summer at the reinforcements' likely dates, fit every battery to the cold and age it to February, and rebuild the storm overflows' operations; that one sentence rescues none of the five results by itself.
-One-fact test: every hint executed on the careful pass end to end (effort.json hints): the transfer-trip sentence rescues R2 only (R5 moves to 27,523, outside 24,784 to 26,551; R4 needs the replay and the slip); the battery sentence rescues R3; the reinforcement-slip sentence and the duration-and-overflow sentence rescue nothing the careful pass lacks.
-Not semantics: every column and clause read correctly still leaves the receiving trips unlinked to the transfers, the batteries judged at a temperature they will not meet, and the reinforcements in service months early.
-Not rule application: no filed procedure finds the receiving trips, fits a battery's cold resistance, replays a transfer on the summer loads or dates a planned project; the order files only what is counted.
-Estimand: order paragraphs 2 to 5 file CIA (sustained interruptions they would have had without automatic restoration, less those they had), the five minutes from the first loss of supply, the usual switching as the counterfactual, all days, and the forecast at the average annual lockout rate since 1 January 2022 with the schemes as they stand; the design basis files -27 C, the 5 A test, the 30 A operation at 21.2 V and the seasons (summer 1 June to 30 September, winter 1 December to the end of February); the prompt files 2022 to October 2026, the end of February 2027 and the 80 per cent range.
-No decoy: the vendor dashboard is the incumbent figure, the right count of a shallower quantity (completed sequences in the archive); the walk prices it on the order's footing; no document argues a wrong answer.
-No replay: no published figure is re-derived; the dashboard is superseded, not reproduced as the answer.
-Pinned: each result's rivals run on the cut pack: R3 under a per-battery cold coefficient, the end of January, -26 C, -28 C and a mixed model (each control's level and ageing drawn around the fleet's) moves at most two controls at the 21.2 V line (stated as the margin), and the tests themselves rule out one fleet fit, one per control type, a linear resistance and each control's level with the fleet's ageing (control levels F 218.3 on 87 and 9,395, control ageing F 101.2 on 87 and 9,308, both p below 1e-15, cold slopes F 1.2, p 0.11; fitted to October 2025 those miss last winter's 170 tests below -15 C by 0.31 to 0.64 V at 30 A against 0.12 V for each battery's own fit, naming 0 to 11 controls); R4 under a 1.05 peak factor, every summer hour alike, a reconductoring-only slip and the unlocated breaker lockouts taken as section 1 faults lands 321 to 432, inside 311 to 445, on the design basis's summer (June to August gives 357 and May to September 423, both inside; July to August 236 and 21 June to 22 September, about 294, fall outside, hence the filed seasons); R5 under the same four and the radio outage kept lands 25,290 to 26,029, inside 24,784 to 26,551, and crediting only the transfers (24,394, without the breaker's re-close onto section 1 that the record shows in 11 of 15 breaker lockouts for a section 2 fault) falls outside; R2 and R1 count from the records.
-Run forecast: R2 method shortcut (the restored loop priced alone); R3 dismissed own evidence (the battery judged where it was tested); R4 dismissed own evidence (the plan's dates, the past summers carried); R5 method shortcut; R1 is earned by careful runs.
-Strategy label: UNTESTED (no client strategy covers a FLISR fleet diagnosis)
-Depth level: 5 on the client's marks, with three independent priced judgments, each on its own result and carried into R5: the receiving trips netted by the order (R2), each battery's own ageing carried to the cold and to February (R3), and the reinforcements at the completion the record supports (R4). The shortcuts land on different wrong answers, R3's alone on 0, 2, 4, 5, 8, 11 and 27 controls against 16. R1's reconstruction is a fourth judgment careful runs make by reflex (the outage record's automatic steps reproduce it), so it prices nothing.
-Lesson: an automatic action's value is what it changed across the system, net of what it did to the units that absorbed it, read from the record that saw every operation rather than the one that logged the action; no build on file teaches the netting inside a fleet diagnosis.
-
-## Results chain
-
-| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
-|---|---|---|---|---|---|---|---|
-| R1 | customers restored within five minutes of the first loss of supply, each year: 2022 32,875; 2023 25,796; 2024 28,781; 2025 22,561; 2026 25,508 | assembly-reconciliation | order paras 2 and 3; the device record's closes timed from the first trip | 2 per cent each year | dismissed own evidence: the lockouts the archive does not hold filled at its own success rate (2026 27,654), or the dashboard's counts | - | Ask 1 |
-| R2 | 2026's customer interruptions avoided on the order's definition: 21,780 (25,508 restored within five minutes, less 2,407 undone and 1,321 receiving customers) | decomposition-attribution | order para 2; the receiving trips between the ADMS tie close and the operators' opening | 2.5 per cent | method shortcut: the restored loop priced alone, no receiving trip netted (25,508) | - | Component 1 |
-| R3 | the 16 controls whose batteries will not operate at -27 C by 28 February 2027 (14 at every rival, RCL-20188, RCL-21643 and RCL-21281 at the line) | missingness-measurement | design basis (5 A, 30 A, 21.2 V, -27 C); prompt's end of February; each battery's own ageing, which the load tests select over a fleet or per-type fit | the 14 with or without the three at the line | dismissed own evidence: each battery judged at last winter's coldest test as it stood (2 controls) | - | Recommendation |
-| R4 | the receiving feeders' own customers June to September 2027 transfers would interrupt if the settings stand: 381 | causal-reasoning | the design basis's summer; the unswitched directions read from the archive and the register; the capital works record; the approved load | 311 to 445 | dismissed own evidence: the 2025-26 summers' average carried forward (582), or the plan's in-service dates (236) | - | Ask 3 (the memo's why) |
-| R5 | 2027 customer interruptions avoided as the schemes stand: 25,741, 80 per cent range 18,889 to 32,894 | forecasting | order para 5 | 24,784 to 26,551 (the rivals' span, 2 per cent beyond) | method shortcut: the restored loop priced alone with the plan's dates and the archive's rate (29,666) | R4 | Component 2 (and the recommendation) |
-
-Carry-forward: R1, R2, R3 and R4 stand on inputs of their own (the device record; the dashboard and the 2026 records; the load tests and temperatures; the hourly amps, register and capital works); R5 carries R4's replay and R3's batteries, so a run that misses the netting loses R2 and R5 and keeps R1, R3 and R4's other parts.
-
-## Hidden factor record
-
-| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
-|---|---|---|---|---|---|
-| Receiving reclosers on CTL-4C controls are never switched to their transfer group, and their old pickups trip on the combined load after a transfer | constructed by the simulated settings (set at commissioning, never revisited), loads and protection | no: 16 unswitched directions trip at different rates, most summer peaks, two year-round, and several never in the record | investigation: linking outage-record trips with no cause found to transfers through the device record | modeling: netted by the order, then replayed on the summer loads | keep |
-| The archive's event queue overflows in storms and the front end slows with it | constructed by the simulated alarm load | no: overflows in every year, most lockouts in them restored late or not at all | reconciliation of the device record against the archive | reconstruction from the device record | keep |
-| Control batteries age at their own rates and fail to crank in the cold, unseen by line-powered functional tests | constructed by the simulated batteries, tests and replacements | no: across the fleet, renewed after failures and alarms | modeling: resistance against temperature and age per battery | modeling: carried to -27 C and to February | keep |
-| Planned works finish late | constructed by the simulated capital programme | no: every category of project slips | the capital works record | modeling: the completion distribution carried to the summer | keep |
-
-## Effort test
-
-| Result | Quick pass | Careful but hurried | Thorough |
-|---|---|---|---|
-| R1 customers restored within five minutes, each year 2022 to 2026 | Missed | Right | Right |
-| R2 2026's customer interruptions avoided, walked from the dashboard | Missed | Missed | Right |
-| R3 the controls to re-battery before the winter | Missed | Missed | Right |
-| R4 the receiving feeders' customers June to September 2027 transfers would interrupt | Missed | Missed | Right |
-| R5 2027 customer interruptions avoided as the schemes stand | Missed | Missed | Right |
-| Roughly | 0 of 5 | 1 of 5 | 5 of 5 |
-
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: "a transfer onto a receiving feeder whose reclosers the ADMS does not switch can trip them later, with no fault found"; rescues 1 of 5 results (R2; executed end to end, the careful forecast moves to 27,523, still outside R5's band)
-Pair estimate: 34.5
-
-The quick pass reads the dashboard. The careful pass is calibrated to the run on architecture 3: it reconciles every log (so it earns R1), and stops where the six places say runs stop: it prices each restoration at its own loop, judges a battery where it was tested, and takes the plan's dates and the past summers as the coming one.
-
-## Data provenance
-
-Source: generated by task13/generator from a simulated utility (network, loads, weather, faults, protection, the ADMS scheme, radio links, control batteries, maintenance, capital works); no LLM-written data.
-Behaves like the real thing: loads follow households' and businesses' daily shapes and a lagged cooling response; faults follow thunderstorm cells, wind, ice and deep cold; reclosers lock out after reclosing; the scheme reads fault indicators, isolates, checks the receiving breaker and closes the tie; commands fail on weak radio paths and in storms; batteries' resistance rises with age and cold as VRLA cells do; projects slip as distribution capital work does.
-Genuine patterns: (1) summer afternoon storm peaks in faults and the evening cooling peak in load (2) feeders' own fault exposure and section growth, new subdivisions with evening charging (3) battery fade by unit and the winter's arctic outbreaks (4) chronic weak radio paths and a base site's months-long outage.
-Problems by process: the archive's overflow in storms; the standby server's echoes; the March 2025 upgrade's message text and tags; the October 2024 relocations; manual keying and two feeder spellings in the outage record; historian gaps when a radio path is down; airport gaps.
-Breadth: 16 files; 22 loops, 44 feeders, 110 automated devices, 88 control batteries, five years of operations; deciding which loops, directions and controls matter is the work.
-
-## Template check
-
-Chain signature: assembly-reconciliation, decomposition-attribution, missingness-measurement, causal-reasoning, forecasting
-Question form: how many (how many sustained customer interruptions the loops avoided, then what to change)
-Nearest build: task4 v12 (a per-unit diagnosis at triage weight, a flagged set of spares lines) shares the decision form only; its exposures, queue and conversions are not here, and this chain's netting, cold crank and storm-lost record are not there. Abstraction: no sentence fits both.
-
-## Frontier check
-
-Precedents: R2 L16 (priced the unit alone where the system nets it against the units it affects), L06 (did one correction and declined the second); R3 N12 (a rate learned in one condition carried to another), N13 (the latest observed state taken as the state at the decision date); R4 N02 (history assumed informative of the forward window), N03 (scheduled works assumed to happen as planned); R5 L16, N03. R1 is Right: the runs reconcile every log by reflex.
-Shallow path checks: R2's shallow path reproduces the dashboard after the five-minute rule and passes a reconciliation of the archive with the outage record; only the device record's receiving trips between a tie close and its opening, a second record at the device grain, refute it. R3's shallow path passes every functional test and last winter's cold tests; only each battery's resistance fitted on temperature and age and carried to February refutes it, and a fleet or per-type fit that passes its own residual check names 0 to 8 controls until its misses on last winter's cold tests are scored. R4's shallow path matches the 2025-26 summers' observed trips; only the replay at the hours faults strike with the reinforcements at their record-based dates refutes it. R5's shallow path back-tests on the record's success rate; only the netting refutes it.
-Assumption made false: a run lists "the archive's sequences represent the operations", "a passed functional test means a sound battery" and "the approved works finish on their planned dates" and moves on. The archive loses its storm overflows, the line-powered test cannot see a cold crank, and comparable projects finished a median 3.9 months late; the device record, the load tests with the airport temperatures and the capital works record test each.
-Forcing: R2's golden family (lost sequences counted from the configuration or the outage steps, receiving trips from the outage record or the device record) all give 21,780, against the dashboard's 27,370 across the line; section customers moved 10 per cent either way hold the call. R4's family spans 321 to 432 against the shortcuts' 236 and 582.
-Noun swap: the nearest on file is task4 v12 (skeleton severity none); swapped in, its decision form (a per-unit diagnosis) carries, its lessons (exposure decoupled, staggered conversion, a shared queue) do not, nor do this build's netting, cold crank or storm-lost record; the guard's WARNs (downstream_offset taught once by the client's turbine wake; house lessons validation_cannot_see_condition and linkage_missing_not_at_random) are answered in the Draw.
-
-## Semantic fork table
-
-| ID | Term or convention | Readings | Golden | Ruled out by |
+| Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
-| SF1 | avoided | gross restored, or net of what the switching caused | net | order para 2 (would have had less had) |
-| SF2 | five minutes | from the lockout, or from the first loss of supply | first loss | order para 3 |
-| SF3 | 2026 | calendar year, or to the extract | January to October | the prompt (to October 2026) |
-| SF4 | without automatic restoration | no restoration, or the usual switching | usual switching | order para 4 |
-| SF5 | the batteries that would fail | at a test's temperature, or at the design minimum by end of February | design minimum, 28 February 2027 | the prompt and the design basis |
-| SF6 | as they stand | including or excluding approved works | approved works at their likely dates, no unplanned change | order para 5; same call for R4's set |
-| SF7 | average year | 2022-2025 complete years, or the rate since 1 January 2022 | the rate since 1 January 2022 | order para 5 |
-| SF8 | major event days | excluded or included | included | order para 2 |
-| SF9 | the restored customers a later trip put out again | counted as avoided (only the receiving customers netted, 24,187), or not | not | order para 2 (they had a sustained interruption either way) |
-| SF10 | summer 2027 (R4's window) | June to August (357), June to September (381), May to September (423), 21 June to 22 September (about 294), July to August (236) | June to September | the design basis's seasons (summer 1 June to 30 September); the first three land inside 311 to 445 in any case |
+| Fault resistance and load flow move each relay's own distance toward the sending end (tree contacts by 1 to 6 km, arcs by under a span); the residual current's split between the two ends follows only the zero-sequence network | the relay's distance taken as the location, both ends averaged (L22: the formula's no-resistance assumption, contradicted by the tree contacts' low currents) | the other terminal's export at another format and clock, and the protection study's line-out zero-sequence source impedances | none | kept (S1) |
+| Inland's 138/69 kV autotransformer replaced in March 2024 (a stronger ground source behind Inland), so the split of a 2022 or 2023 fault on an Inland line reads against the 2022 study | today's network for the whole history (N09) | the 2022 protection study beside the 2025 one, and Inland's relay settings changed in 2024 | none | kept (S2) |
+| The solar farm tapped on Shell Ridge-Ponder Creek steps the 69 kV through a grounded-wye transformer, so it feeds ground current into every fault beyond the tap, by night as well as by day; Ponder Creek's electromechanical relays keep no record | the farm's export set aside as a generator's log with its own clock and names (L38, N27), or no infeed at night | the solar farm's own protection export (local standard time, kA) and the substation register's transformer windings | none | kept (S3) |
+| Night faults on the coast come from three causes: fog flashovers on salted porcelain, bird streamers at roost structures, failing insulators in light rain; the coastal airport's visibility misses the bay's fog and finds fog the bay never had | the airport stands for the conditions at the line (N26) and the environmental survey is unrelated (L38); every humid-night coastal fault booked as contamination (L26) | the cooperative's own substation weather stations by the bay (dewpoint spread, from March 2023), the environmental team's roost survey, the washing log | none | kept (S4) |
+| A grow-in contact needs the conductor hot (sagged) on a still afternoon; fall-ins and storm debris come on gusty afternoons; both are summer afternoon faults with no stroke | every non-lightning summer afternoon fault, or the control room's TREE code, taken as vegetation (L26, L04) | the hourly line loading beside the bay and inland weather (conductor temperature), the lightning record on the true time | none | kept (S5) |
+| A coastal section's salt deposit builds from its last wash or soaking rain at its own rate and flashes over only past a level, so the sections due before the fog season are not the ones that flashed over before | the past flashovers taken as the present state, or October's test readings as December's (N02, N13) | the test insulators' monthly deposits, the washing log and daily rain, against the deposit at each past flashover | none | kept (S6) |
+| Lightning backflashovers recurring at towers with high footing resistance | a tower's count read at face value | footing resistance survey | 2 (stroke matching is R32), lineage (architecture 3's lightning protection referral) | dropped |
+| Member-minutes from the outage system's dispatcher-closed times instead of the SCADA restorations | the outage system's durations | the sequence of events | 2 (R46: the architecture 4 run rebuilt every time from the device record) | dropped (kept as a Right-scored result, R5) |
+| A field switching move the GIS never recorded, found from paired load steps | today's topology | hourly loading | 8 (one transfer, only in the deciding units), 4 (a re-key once found) | dropped |
+| Conductor sag at the 2027 planning case's loads against the vegetation survey | the 2026 peak carried to 2027 | the planning case | 3 (the planning case files the loads, and the sag formula is executed), and a forward total | dropped |
 
-## Closure table
+Kept: six, each independent (no one sentence of help rescues two of them): S1 and S2 move the located spans of the
+grow-in contacts, S3 the tap line's repeat location, S4 the night repeat locations and their fixes, S5 which summer
+faults are grow-ins, S6 the sections washed before the fog season.
 
-| Axis | Closure |
-|---|---|
-| 1 | population: lockouts on in-service loops, every one the device record holds (order para 2) |
-| 2 | unit: customers, sustained interruptions (order paras 2 and 3) |
-| 3 | attribution window: Central calendar year by the lockout's time; nothing within an hour of a year's edge decides |
-| 4 | as-of: the extract of 31 October 2026; batteries at 28 February 2027 (prompt) |
-| 5 | version: the ADMS messages of both releases read alike; same call |
-| 6 | denominator: none graded |
-| 7 | weighting: the forecast weights by the record's lockout rates (order para 5) |
-| 8 | window length: since 1 January 2022 (order para 5) |
-| 9 | boundary: five minutes strict at 300 s; no restoration within 10 s of the line |
-| 10 | rounding: whole customers, summed once |
-| 11 | tie-break: none |
-| 12 | maturity: 2026 to October, stated |
-| 13 | order of operations: the walk's items are additive |
-| 14 | row order: C1, every table keyed by device and time |
-| 15 | duplicates: the standby server's echoes within a second, C1 |
-| 16 | identity: the register's tag crosswalk and the device asset numbers |
-| 17 | netting: order para 2 nets |
-| 18 | units: amps at 13.8 kV; MW to amps at 0.96 power factor |
-| 19 | codes: no cause found read with the device record, never alone |
-| 20 | integers: customers whole |
-| 21 | clause scope: order paras apply per calendar year |
-| 22 | forward window: the capital works and large load workbooks |
-| 23 | model structure (R3): each battery's own ageing with the fleet's cold coefficient, which the load tests select (control levels F 218.3, control ageing F 101.2, cold slopes F 1.2, p 0.11); the mixed model names the same 16; each core control fails in at least 0.9998 of its own fit's draws, RCL-20188 0.93, RCL-21643 0.83, RCL-21281 0.40, and no control outside them more than 0.035 |
-| 24 | the oldest battery (RCL-21299, installed 22 February 2021, 6.02 years at the end of February): one asset key in the device events either side of the March 2025 upgrade (166 and 83 tests, no gap over 14 days), no replacement in the book, ageing 0.110 a year (two of 85 batteries slower); it holds 21.73 V, 0.53 V clear, so any fleet slope ranks it first and its own tests clear it |
-| 25 | comparable projects (R4's slip): reconductoring and control replacements, a median 3.9 months late, or reconductoring alone, 4.5; R4 lands 381 or 400, both inside, and no reinforcement reaches a 0.25 chance of being in service by 1 June either way (0.23 and 0.12 at most) |
-| 27 | the breaker's re-close (R1, R2, R5): a breaker that re-closed onto section 1 within five minutes counts whatever became of the transfer, since order para 2 counts those customers' momentary interruption against the sustained one the usual switching would have left (GTH531 on 14 February 2026, 452 customers, its tie close timed out); the walk carries it as the failed sequences' item, and the forecast carries breaker lockouts for a section 2 fault at 3.10 a year, re-closed in 11 of 15 |
-| 28 | breaker lockouts the scheme never located (R4, R5): typed by the section the outage record's repair restored (26 section 1, 3 section 2, 1 section 3); the archive's location alone, section 1 by default, gives R5 26,029 and R4 388, both in band |
-| 26 | distractors: the AMI notifications are daily counts per feeder for 2025 and 2026 only, so they cannot time a restoration to five minutes or reach 2022 to 2024 and are no second route to R1 or R2; the vegetation cycle status dates trimming, not operations |
+## Stump factorial
 
-## Literal reader
+Reflex route: every move a run makes unprompted set right (one fault per trip sequence across both terminals' exports,
+the SCADA sequence of events and the control room log, vendor B's local time and the drifting clocks set on SCADA,
+R01, R28, R29, R46; lightning faults matched to strokes on the true time, R32; member impact from the sequence of events
+and the outage steps, R46; the patrols read, and the work already done applied, R02), every stump hurried. It files the
+fault count and the 2026 member figures right and misses the call: the relays' own distances (both ends averaged)
+place the grow-in contacts 1 to 6 km from their spans, the 2025 study places Inland's 2022 and 2023 faults, Shell
+Ridge's distance places the tap line's failing string near Ponder Creek, the airport's visibility and no roost survey
+book the roost structures' streamers as contamination, every summer afternoon fault with no stroke counts as
+vegetation, and every section that ever flashed over is washed. This route is the careful but hurried pass.
 
-Order para 2 executed word for word gives 21,780 for 2026 (every operation's customers restored within five minutes, the breaker's re-close onto its first section included whatever became of the transfer, less the restored customers re-interrupted and the receiving customers interrupted by the switching); para 3 gives the five-minute line from the first trip; para 5 gives 25,741. The design basis's -27 C, 5 A, 30 A and 21.2 V give the 16. Every literal reading of the prompt's asks lands on the golden.
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| S1 each fault located by the split of its residual current between the two ends against the line-out zero-sequence sources | stump | the relays' own distances, both ends averaged | L22 | the grow-in spans land 1 to 6 km off: a different clearing list | the clearing list still carries the fall-in clusters (S5) and misses Inland's span (S2): no result rescued | no (a two-port zero-sequence solution per fault) |
+| S2 Inland's faults before March 2024 read against the 2022 study | stump | the 2025 study for every fault | N09 | Inland-Mesquite Flat's grow-in span loses its 2022 and 2023 contacts: off the list | nothing else fixed: no result rescued | yes (the date-matched study), but invisible in any one table and only beside S1 |
+| S3 the solar farm's ground infeed corrected out of Shell Ridge's distance with the farm's own residual current | stump | Shell Ridge's distance as recorded (the farm's export set aside) | L38, N27 | the tap line's repeat location moves about 3 km toward Ponder Creek | R4 only (1 of 7) | no (the infeed ratio per fault from two exports on two clocks) |
+| S4 night coastal faults split three ways on the bay stations' fog, the roost survey and the light-rain signature | stump | the airport's visibility as the fog, the survey set aside | N26, L38, L26 | roost structures booked as contamination, failing insulators as fog: other perch-guard, washing and insulator lists | R3 only (1 of 7); R6 still wrong on vegetation (S5), R7 on the deposit (S6) | no |
+| S5 grow-in contacts told by the conductor's temperature on still afternoons | stump | every summer afternoon fault with no stroke | L26, L04 | fall-in clusters on the clearing list, the 2026 counts move | with S1 hurried the spans stay mislocated: no result rescued | no (a conductor heat balance per fault hour) |
+| S6 each coastal section's deposit carried from its last cleaning at its own rate against the flashover level | stump | every section with past flashovers, or October's readings as December's | N02, N13 | a different wash list before the fog season | with S4 hurried the flashover level is learned from mixed faults: R7 still wrong | no |
+| X1 one fault per trip sequence, clocks set on SCADA | reflex | - | R01, R28, R29, R46 | the fault count moves by 6 to 9 per cent | - | - |
+| X2 lightning matched to strokes on the true time | reflex | - | R32 | lightning counted under other causes | - | - |
+| X3 member impact from the sequence of events and the outage steps | reflex | - | R46 | the 2026 member-minutes from the dispatchers' closing times | - | - |
+| X4 the work already done applied (guards fitted, spans trimmed after a contact, strings replaced) | reflex | - | R02 | fixed places stay on the list | - | - |
 
-## Prompt contract
+Level: 5 (six stumps, each necessary; none reaches the call alone; the single drops land on six different wrong work
+lists)
 
-The rewrite keeps: the question (what to change before this winter and next summer, and 2027 as the loops stand), 2026 on the commission's definition as one figure, the years 2022 to October 2026, the controls whose batteries fail at the design minimum by the end of February 2027, the 2027 figure as the loops stand with an 80 per cent range, a spreadsheet and a short PDF memo. It never adds a rounding, a method, a warning, a file name, a role or a count the data hold, and never mentions the receiving feeders, the archive's losses, the reinforcements, the vendor dashboard or its figure.
+## Results chain (sketch at the draw; the full table at stage 2)
 
-## Leak rulings
+- R1 the conformed fault count, January 2022 to October 2026, by year (assembly and reconciliation; X1, Right).
+- R2 the grow-in spans to clear by 1 May 2027 (missingness and measurement; S1, S2, S5).
+- R3 the night repeat locations: roost structures for perch guards and failing strings for replacement (investigation
+  loops; S4).
+- R4 the tap line's repeat location (missingness and measurement; S3).
+- R5 the 2026 member interruptions and member-minutes by line (decomposition and attribution; X3, Right).
+- R6 the 2026 faults by cause (exploration and triage at breadth; S4, S5, X2).
+- R7 the coastal sections washed before the fog season (forecasting; S6, with S4's fog flashovers).
+- Recommendation: the work list and its dates (synthesis).
 
-- Sweep 3 (answer figures in data): the flagged numbers are recloser asset numbers (RCL-20188, RCL-21281, RCL-21643) that every record carrying those devices names; identifiers, not figures; harmless.
-- Sweep 4 (design-note vocabulary): the design basis carries record, result, battery, feeders, control and, since judge p2, season; the order record, faults, control and outage; neither names a step (the order defines what is counted, the design basis the equipment's ratings and its seasons); harmless.
-- Sweep 8 (column names): "Device" is the SCADA sequence-of-events export's and the register's own column; harmless.
-- Sweep 9 (dates after the as-of): the capital works' planned 2027 in-service dates and the large loads' requested 2027 dates are forward plans, dated in the future by their nature; harmless.
-- Sweep 11 (prompt gate, no roll call): the one attributed figure is the commission's (the 2026 figure it wants), the regulator whose definition the filing owes; no opinion is stated; harmless.
-- Third reader's realism tells: the order printed paragraphs 7 and 8 after 9 to 12 (renumbered into sequence, 7 to 10 then 11 and 12; nothing cites them by number), both PDFs on A4 (US Letter now, the golden memo too), "programme" in the capital works register ("program"), documents created on round times (every stamp carries its seconds); Celsius before Fahrenheit in the design basis kept (equipment ratings are stated in Celsius, the airport's record in Fahrenheit, and the line gives both). checks.py asserts the sequence, the Letter page and US spelling across the pack.
-- The design basis's Seasons line (added for judge p2's Gate E finding): it defines summer and winter by date and names no transfer, recloser, load or setting (asserted in checks.py); a design basis that states its ambient range states its seasons, and the prompt already names next summer; harmless, and read by the stage 4 reader again.
-
-## Pre-ship check
-
-- precut.py exit 0 (WARN nearest chains: task1 and task6 share the chain or the shape and the weight, none this chain's netting, cold crank or storm-lost record); effort.py exit 0 (quick 7.0, careful 34.5, thorough 100.0; the largest hint rescues 1 of 5; four shortcuts on four wrong answers); voice-check PASS; figures_check 72 of 72; audit_containers exit 0; guard heart WARN (answered in the Draw), surface clean; checks.py 81 of 81, R1 anchored on the world's own outage steps; verify.py 10 of 10 from target.zip on its own code path, its breaker pass included; two builds byte-identical (target 549db717, golden 5bd257c0; target.zip 2b4cbfaa, golden.zip 5b08e090); gates.py 0 FAIL, 3 WARN.
-- Stage 4: judge p1 SEND_BACK (Gate G, closed by the re-frame); p2 DETERMINISTIC FIX_NOW (Gate C on R3's model structure, Gate E on the summer window; both closed in the generator); p3 DETERMINISTIC, APPROVE. Three leak readers: no method leak, nothing ranks or exists for the analyst, no one thing; the realism tells each found were fixed in the generator.
-- After p3: its thread's straight outage-record route (25,508 for 2026) exposed the breaker re-close the golden dropped when a tie close failed, and the forecast's missing section 1 term; both corrected (closure rows 27 and 28), so R1 2026, R2, R4 and R5 moved after the judge's APPROVE and no judge pass has recomputed the new figures. The world-truth anchor, verify.py and the outage-record route now agree on R1 in all five years.
+One-fact test: the strongest single sentence ("the relays' distances move with fault resistance; the residual current's
+split does not") rescues no result alone (R2 also needs S2 and S5); the survey-and-bay-fog sentence rescues R3 (1 of 7).
 
 ## Tried and rejected
 
@@ -308,3 +206,11 @@ The rewrite keeps: the question (what to change before this winter and next summ
 - A summer-transfers sheet described in Supplementary 4: the prompt never asks for it; the sheet stays in the golden workbook as working, undescribed.
 - The golden's R1 counted the breaker's re-close onto section 1 only when the ADMS also closed the tie, and the world-truth check in checks.py shared that condition, so both missed GTH531 on 14 February 2026 (452 customers, re-closed at 110 s, the tie close timed out) after READY 5f9b2ca; the p3 judge's straight outage-record route found it at 25,508. Fixed in operations(), the walk (the failed sequences' item), verify.py's own breaker pass, and a truth anchor rebuilt from the world's outage steps.
 - The 2027 forecast credited only the transfers (24,679 at READY, 24,394 on the corrected record): the record shows the breaker re-closing onto section 1 in 11 of 15 breaker lockouts for a section 2 fault, about 1,400 customers a year; and breaker lockouts the scheme never located defaulted to section 1, where the repair step types three of them as section 2. Both now in forecast(); the transfers-only figure is a ruled-out route.
+- Architecture 4 as a whole (Blue Earth Valley Power's 22 automated loops, READY at 5f9b2ca and RESHIPPED at 7a6d186,
+  uploaded): the platform run landed R1, R2 and R3 (the five yearly restorations exactly, 21,780 by the same walk, the
+  golden's 16 controls plus RCL-20378) and the holistic audit of 2026-11-12 returned it on determinism (the battery list
+  turned on the fitting window, the 2027 figure on four unpinned treatments, task13/runs/arch4_run1.md). Every priced
+  move was made unprompted (the lockouts rebuilt from SCADA, the receiving trips netted, each battery's ageing fitted),
+  and a forecast total carrying four conventions could not be both forced and hard; the world was spent, and the author
+  reassigned the slot to Energy Systems & Utilities x Data Extraction & Conformation on 2026-11-12, so architecture 5
+  moved to a new world, dataset, decision form and shell.
