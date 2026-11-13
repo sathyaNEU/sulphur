@@ -1,15 +1,16 @@
 # leak check, task7
 
-**Verdict: REVIEW.** 19 files read, 25 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 19 files read, 30 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, buildings, sequence, golden, record, controls, insulation, stagger, season, million, average, quarter, carried, careful, missed, feeder, author, patients, heating, building, meters, schedules, nights, method, closed
+Stump terms swept: architecture, sequence, buildings, golden, record, stagger, controls, insulation, season, million, average, quarter, careful, carried, closed, missed, feeder, quarter-hour, sessions, schedules, author, patients, heating, building, meters
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `board_policy_EV-4_charging_default.pdf`: carries 7 of 11 distinctive words of the committed call: "Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry 11 transformer replacements ($160,3"
+- **REVIEW** `board_policy_EV-4_charging_default.pdf`: carries 7 of 11 distinctive words of the committed call: "Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry 13 transformer replacements ($196,7"
 
-## 4 design-note vocabulary (REVIEW 1)
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `board_policy_EV-4_charging_default.pdf`: 5 of 25 stump-paragraph terms appear (quarter, carried, quarter-hour, sessions, schedules); read whether the document names the move
 - **REVIEW** `ev_overnight_pilot_plan_2025.pdf`: 4 of 25 stump-paragraph terms appear (stagger, average, quarter, schedules); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
@@ -78,3 +79,36 @@ filed and the method left to the analysis. Its notes: no negative or out-of-rang
 the enrolment pause are replacements for enrolled members; the one transformer location in the register and work orders
 but in no GIS row is the split whose transfers the GIS has not posted; the state's EV registrations, the weather and the
 net-metering list look relevant and are not needed. Nothing to fix.
+
+## Solver's-eye read
+
+One isolated reader (2026-11-13, after the determinism repair that filed the queue's waiting, the ready-by and the
+hourly-to-15-minute method), on fresh copies of `prompt.txt` and `target/` only.
+
+1. How the analysis is done: it quotes EV-4 4.1 (the replay's frame: each session keeps its plug-in, energy, charge time
+   and unplug; the covered chargers' own charging out of the hourly reads before DPS-7 brings them to the quarter-hour,
+   each option's in at the quarter-hour; ready-by at the unplug time rounded down), EV-4 3, 4.2 and 4.3, DPS-7 2.1 to
+   2.3 and 4, the pilot plan 1 and 3, and the proposal's product rules and fee basis. Ruling: each is the estimand or a
+   convention filed at its authority (the three new ones at the client's direction); none names the moves the results
+   price (each transformer's chance of coinciding over random starts, Sequence's rule run on each night's sessions, the
+   managed quarter's own settings restored from each charger's own history).
+2. A file that ranks the options: none.
+3. A file that exists only to help: none.
+4. A figure or name that reads as the answer: none (it notes the proposal's "The same as the pilot's managed half", a
+   product description, not an answer).
+5. Filed sentences that fix a graded figure: the same list read literally (the window, the chargers covered, each
+   session's timing, the ready-by, the order of the base's steps, chargers that left as metered, the limit, the factor
+   and the 0.95, the nameplate and connectivity, Table 1's costs, the pilot's per-charger every-night footing, the fee
+   basis). Ruling: each literal reading is the golden's (checks.py SF1 to SF25); none is a hurried figure.
+6. One thing: none. It reads the overload counts as the replay's frame plus "the simulation of each option, including
+   Sequence's per-transformer ordering" as the analysis, the pilot change as a causal comparison on the filed design,
+   the enrolled count as reading the roster, the flip fee and the call as analysis. Ruling: consistent with the design;
+   under the frame the careful but hurried routes still land Stagger with 2 over, Sequence with 3 and own schedules at 44.
+
+REVIEW rulings:
+- `board_policy_EV-4_charging_default.pdf`, the call's words (answer-figure sweep): harmless (reader): the governing
+  policy names the options and the cost test, ranks nothing and gives no figure.
+- `board_policy_EV-4_charging_default.pdf`, stump terms (quarter, carried, quarter-hour, sessions, schedules): harmless
+  (main thread): EV-4 4.1 files the replay's frame and none of the three moves.
+- `ev_overnight_pilot_plan_2025.pdf`, stump terms (stagger, average, quarter, schedules): harmless (main thread): unchanged
+  since the last ship; it files the pilot's design and its per-charger footing.

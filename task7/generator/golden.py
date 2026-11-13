@@ -1,12 +1,14 @@
 """task7 architecture 11: the estimators, from the pack alone (verify.Pack).
 
 A summer like 2026 is July and August 2026 as metered, with each charger enrolled on 1 November 2026 charged as an option
-would charge its 2026 sessions (Board Policy EV-4). The golden replays every transformer night by night at the quarter-hour:
-its homes' hourly reads less the enrolled chargers' own charging, lifted to the quarter-hour by the monitored transformers'
-highest quarter-hour above each hour, plus the enrolled chargers' sessions as each option would run them: the members' own
-schedules (each charger's own-schedule history, the managed quarter's read from summer 2024, else what the member said at
-enrolment), Quillpoint Stagger's random start (each transformer at its chance of being over, over many draws) and Quillpoint
-Sequence (one charger at a time in ready-by order, a late charger alongside). The hurried routes are coded beside it."""
+would charge its 2026 sessions (Board Policy EV-4 4.1). The golden replays every transformer night by night at the
+quarter-hour: its homes' hourly reads less the covered chargers' own metered charging, brought to the quarter-hour by DPS-7
+2.2's peaking factor for its nameplate (Table 2), plus the covered chargers' sessions as each option would run them, each
+keeping its plug-in, energy, charge time and unplug, its ready-by its unplug time rounded down to the quarter-hour: the
+members' own schedules (each charger's own-schedule history, the managed quarter's read from summer 2024, else what the
+member said at enrolment), Quillpoint Stagger's random start (each transformer at its chance of being over, over many draws)
+and Quillpoint Sequence (one charger at a time in ready-by order, the earlier plug-in first, each waiting for every charger
+before it, a late charger alongside). The hurried routes are coded beside it."""
 import datetime as dt
 from collections import Counter, defaultdict
 
@@ -21,7 +23,9 @@ WIN = ND * Q
 OFF = 23 * 4
 LIMIT, PF = 1.20, 0.95
 FEE = {"own": 0.0, "stagger": 18.0, "sequence": 40.0}
-COST = {25.0: 10800, 37.5: 11400, 50.0: 18200, 75.0: 21500, 100.0: 26900}
+COST = {25.0: 10800, 37.5: 11400, 50.0: 18200, 75.0: 21500, 100.0: 26900}       # DPS-7 Table 1
+COST_POLE50 = 13900                                                              # DPS-7 Table 1, a 50 kVA pole-mount unit
+PEAK = {25.0: 1.15, 37.5: 1.15, 50.0: 1.13, 75.0: 1.11, 100.0: 1.10}            # DPS-7 Table 2
 OPTIONS = ("own", "stagger", "sequence")
 EVE0 = dt.date(2026, 6, 30)        # the first evening whose charging reaches into July
 K_RANDOM = 400
@@ -34,17 +38,23 @@ def qofday(t):
 
 
 def evening_q(night, t):
-    """quarter index of time t counted from 00:00 on the evening's own date"""
+    """quarter index of time t counted from 00:00 on the evening's own date (rounded down to the quarter-hour)"""
     return (t.date() - night).days * Q + qofday(t)
 
 
+def evening_qf(night, t):
+    """time t in quarters from 00:00 on the evening's own date, part-way into a quarter where it falls there"""
+    return (t.date() - night).days * Q + t.hour * 4 + (t.minute + t.second / 60.0) / 15.0
+
+
 def place(series, a, e, p):
-    qn = e / p * 4.0
-    k = a
-    while qn > 1e-9 and k < len(series):
-        if k >= 0:
-            series[k] += p * min(1.0, qn)
-        qn -= 1.0
+    """e kWh drawn at p kW from quarter a (a whole quarter, or part-way into one)"""
+    b = a + e / p * 4.0
+    k = int(np.floor(a))
+    while k < b and k < len(series):
+        ov = min(b, k + 1) - max(a, k)
+        if k >= 0 and ov > 1e-12:
+            series[k] += p * ov
         k += 1
 
 
@@ -117,7 +127,6 @@ class Book:
         self.ev15 = {k: actual_quarters(P, k) for k in P.ch}
         self.sess = {k: self._sessions(k) for k in P.enrolled}
         self.bh = {t: self._base_hourly(t) for t in self.tx_ch}
-        self.bh_mon = {t: self._base_hourly(t) for t in P.mon}
         self.obs = {t: self._observed(t) for t in self.tx_ch}
 
     def _sessions(self, k):
@@ -152,68 +161,17 @@ class Book:
     def homes(self, t):
         return len(self.P.tx_sps[t])
 
-
-def hourly_excess(B):
-    """the monitored transformers' highest quarter-hour above its hour, by hour of day, per square root of homes"""
-    P = B.P
-    rec = defaultdict(list)
-    for t, mon in P.mon.items():
-        bh = B.bh_mon[t]
-        ev = np.zeros(WIN)
-        for k in B.tx_ch.get(t, []):
-            ev += B.ev15[k]
-        tot_m = np.nanmean(mon.reshape(-1, 4), axis=1)
-        tot_h = bh + ev.reshape(-1, 4).mean(1)
-        ok = ~np.isnan(tot_m)
-        ratio = float(np.sum(tot_m[ok]) / np.sum(tot_h[ok]))           # the monitor reads its own losses too
-        base = mon / ratio - ev
-        m = base.reshape(-1, 4)
-        good = ~np.isnan(m).any(axis=1)
-        excess = (np.nanmax(m, axis=1) - np.nanmean(m, axis=1))[good]
-        hours = (np.arange(ND * 24) % 24)[good]
-        n = max(B.homes(t), 1)
-        for h in range(24):
-            rec[h].append(np.mean(excess[hours == h]) / np.sqrt(n))
-    return np.array([np.mean(rec[h]) for h in range(24)])
+    def cost(self, t):
+        """DPS-7 Table 1: the installed cost of replacing the unit in service by the next standard size"""
+        if self.P.kva[t] == 50.0 and self.P.mount.get(t, "").lower().startswith("pole"):
+            return COST_POLE50
+        return COST[self.P.kva[t]]
 
 
-def peak_lift(B, K=60):
-    """rival: each option's summer peak on a monitored transformer's quarter-hour base less the same on its hourly base,
-    fitted to the square root of its homes"""
-    P = B.P
-    rec = {o: [] for o in OPTIONS}
-    for t, mon in P.mon.items():
-        bh = B.bh_mon[t]
-        ev = np.zeros(WIN)
-        for k in B.tx_ch.get(t, []):
-            ev += B.ev15[k]
-        tot_m = np.nanmean(mon.reshape(-1, 4), axis=1)
-        tot_h = bh + ev.reshape(-1, 4).mean(1)
-        ok = ~np.isnan(tot_m)
-        ratio = float(np.sum(tot_m[ok]) / np.sum(tot_h[ok]))
-        hb = np.repeat(bh, 4)
-        b15 = np.where(np.isnan(mon), hb * 1.0, mon / ratio - ev)
-        f15 = np.concatenate([b15, np.repeat(b15[-32:].mean(), Q)])
-        fh = np.concatenate([hb, np.repeat(hb[-32:].mean(), Q)])
-        sess = [s for k in B.tx_ch.get(t, []) for s in B.sess[k]]
-        sets = [own_setting(P, k) for k in B.tx_ch.get(t, []) for _ in B.sess[k]]
-        n = B.homes(t)
-        rec["own"].append((n, season_max(f15, own_blocks(sess, sets)) - season_max(fh, own_blocks(sess, sets))))
-        rec["sequence"].append((n, season_max(f15, sequence_blocks(sess)) - season_max(fh, sequence_blocks(sess))))
-        _, a = random_peaks(f15, sess, np.random.default_rng(1), K)
-        _, b = random_peaks(fh, sess, np.random.default_rng(1), K)
-        rec["stagger"].append((n, float(np.mean(a - b))))
-    fit = {}
-    for o, v in rec.items():
-        x = np.sqrt(np.array([a for a, _ in v], dtype=float))
-        y = np.array([b for _, b in v])
-        fit[o] = float((x * y).sum() / (x * x).sum())
-    return fit
-
-
-def base15(bh, n_homes, lift):
-    up = np.tile(lift, ND) * np.sqrt(max(n_homes, 1))
-    s = np.repeat(bh + up, 4)
+def base15(bh, kva, factor=None):
+    """DPS-7 2.2: each 15-minute interval of an hour is the hour's demand times the peaking factor for the nameplate"""
+    f = (factor or PEAK)[kva]
+    s = np.repeat(bh * f, 4)
     return np.concatenate([s, np.repeat(s[-32:].mean(), Q)])        # the night after 31 August is outside the window
 
 
@@ -225,38 +183,67 @@ def season_max(base, blocks):
     return s[:WIN].max()
 
 
-def own_blocks(sess, settings):
-    return [(o + own_start(st, plug, dep, e, p), e, p) for (o, plug, dep, e, p, _), st in zip(sess, settings)]
+def own_blocks(sess, settings, halves=None, mode="history", advance=False):
+    """each session as its owner set it: a timer or the car's departure schedule from the quarter-hour after plug-in, "when I
+    plug in" from the plug-in itself; mode "recorded" keeps the own three-quarters' 2026 sessions at their recorded starts,
+    and advance moves a session that would not finish by its unplug time to the latest start that does"""
+    out = []
+    for i, ((o, plug, dep, e, p, s), st) in enumerate(zip(sess, settings)):
+        if mode == "recorded" and halves is not None and halves[i] == "own":
+            a = evening_qf(s["night"], s["start"])
+        elif st == "now":
+            a = evening_qf(s["night"], s["plug"])
+        else:
+            a = own_start(st, plug, dep, e, p)
+        if advance and a + e / p * 4.0 > dep:
+            a = max(evening_qf(s["night"], s["plug"]), dep - e / p * 4.0)
+        out.append((o + a, e, p))
+    return out
 
 
-def sequence_blocks(sess, perfect=False):
+def latest_start(plug, dep, q, early=False):
+    """the latest quarter-hour from which a session still finishes by its ready-by time, never before the later of plug-in
+    and 23:00 (early: never before plug-in, for the sessions the window cannot fit)"""
+    return max(plug if early else max(plug, OFF), dep - q)
+
+
+def sequence_blocks(sess, perfect=False, block=True, early=False, tie_rev=False):
+    """Quillpoint Sequence on each night's sessions: in ready-by order, the one plugged in first where two share one, each
+    from the later of plug-in and 23:00 once every charger before it in that order has finished; a charger that could not
+    otherwise finish by its ready-by time starts at its latest start, alongside (block=False: the queue does not wait for it)"""
     bynight = defaultdict(list)
     for i, s in enumerate(sess):
         bynight[s[0]].append(i)
     out = []
     for o, idx in bynight.items():
         free = OFF
-        for i in sorted(idx, key=lambda i: (sess[i][2], sess[i][1])):
+        for i in sorted(idx[::-1] if tie_rev else idx, key=lambda i: (sess[i][2], sess[i][5]["plug"])):
             _, plug, dep, e, p, _ = sess[i]
             q = int(np.ceil(e / p * 4))
             lo = max(plug, OFF)
             st = max(free, lo)
-            if not perfect and st + q > dep:
-                st = max(lo, dep - q)
+            late = not perfect and st + q > dep
+            if late:
+                st = latest_start(plug, dep, q, early)
             out.append((o + st, e, p))
-            free = max(free, st + q)
+            if block or not late:
+                free = max(free, st + q)
     return out
 
 
-def random_peaks(base, sess, rng, K=K_RANDOM):
-    """the summer peak under Stagger over K draws of every session's random start"""
+def random_peaks(base, sess, rng, K=K_RANDOM, early=False):
+    """the summer peak under Stagger over K draws of every session's random start, drawn evenly over the quarter-hours from
+    the later of plug-in and 23:00 to the latest start that still finishes by the ready-by time"""
     if not sess:
         return None, np.full(K, base[:WIN].max())
     S = len(sess)
-    lo = np.array([max(s[1], OFF) for s in sess])
     qn = np.array([s[3] / s[4] * 4 for s in sess])
     qi = np.ceil(qn).astype(int)
-    hi = np.maximum(lo, np.array([s[2] for s in sess]) - qi)
+    dep = np.array([s[2] for s in sess])
+    lo = np.array([max(s[1], OFF) for s in sess])
+    if early:                                   # a session the window cannot fit starts early enough to finish by its ready-by
+        lo = np.where(lo + qi > dep, np.maximum(np.array([s[1] for s in sess]), dep - qi), lo)
+    hi = np.maximum(lo, dep - qi)
     st = lo[None, :] + np.floor(rng.random((K, S)) * (hi - lo + 1)[None, :]).astype(int)
     o = np.array([s[0] for s in sess]) + 2 * Q
     p = np.array([s[4] for s in sess])
@@ -289,36 +276,32 @@ def managed_profile(B):
 
 
 # ---- the replay -----------------------------------------------------------------------------------------------------------------
-def replay(B, seed=7, lift="excess", own="history", stagger="draws", sequence="filed", K=K_RANDOM, tables=None):
+def replay(B, seed=7, own="history", stagger="draws", sequence="filed", K=K_RANDOM, early=False, advance=False, block=True,
+           factor=None, tie_rev=False, shift=0):
     """every transformer serving an enrolled charger, each option's summer peak and its chance of being over its limit"""
     P = B.P
     rng = np.random.default_rng(seed)
-    tables = tables or {}
-    exc = tables.get("excess") if lift in ("excess",) else None
-    if lift == "excess" and exc is None:
-        exc = hourly_excess(B)
-    pl = tables.get("peak") if lift == "peak" else None
-    if lift == "peak" and pl is None:
-        pl = peak_lift(B)
     mprof = managed_profile(B) if stagger == "profile" else None
+    f = factor or PEAK
     out = {}
     for t in sorted(B.tx_ch):
         kva = P.kva[t]
         limit = LIMIT * kva * PF
         n_h = B.homes(t)
-        b = base15(B.bh[t], n_h, exc if lift == "excess" else np.zeros(24))
-        up = {o: (pl[o] * np.sqrt(n_h) if lift == "peak" else 0.0) for o in OPTIONS}
+        b = base15(B.bh[t], kva, f)
         sess = [s for k in B.tx_ch[t] for s in B.sess[k]]
-        sets = [own_setting(P, k, own if own != "observed" else "history") for k in B.tx_ch[t] for _ in B.sess[k]]
-        r = dict(kva=kva, limit=limit, chargers=len(B.tx_ch[t]), homes=n_h, cost=COST.get(kva, 0), area=P.area.get(t, ""))
+        if shift:                                 # a closed reading: ready-by some quarter-hours before the unplug time
+            sess = [(o, pl, dp - shift, e, p, x) for (o, pl, dp, e, p, x) in sess]
+        halves = [P.half.get(k) for k in B.tx_ch[t] for _ in B.sess[k]]
+        sets = [own_setting(P, k, "declared" if own == "declared" else "history") for k in B.tx_ch[t] for _ in B.sess[k]]
+        r = dict(kva=kva, limit=limit, chargers=len(B.tx_ch[t]), homes=n_h, cost=B.cost(t), area=P.area.get(t, ""))
         if own == "observed":                     # the 2026 loads as metered, a quarter of the chargers managed
-            pk = B.obs[t].max()
+            pk = (B.obs[t] * f[kva]).max()
         else:
-            pk = season_max(b, own_blocks(sess, sets)) + up["own"]
+            pk = season_max(b, own_blocks(sess, sets, halves, own, advance))
         r["own_peak"], r["own_p"] = float(pk), float(pk > limit)
         if stagger == "draws":
-            _, pks = random_peaks(b, sess, rng, K)
-            pks = pks + up["stagger"]
+            _, pks = random_peaks(b, sess, rng, K, early)
             r["stagger_peak"], r["stagger_p"] = float(np.mean(pks)), float((pks > limit).mean())
         else:                                    # the managed quarter's average night times the transformer's chargers
             s = b.copy()
@@ -327,12 +310,12 @@ def replay(B, seed=7, lift="excess", own="history", stagger="draws", sequence="f
                 seg = mprof * len(B.tx_ch[t])
                 a0, a1 = max(0, lo), min(L, lo + len(seg))
                 s[a0:a1] += seg[a0 - lo:a1 - lo]
-            pk = s[:WIN].max() + up["stagger"]
+            pk = s[:WIN].max()
             r["stagger_peak"], r["stagger_p"] = float(pk), float(pk > limit)
         if sequence == "as_stagger":
             r["sequence_peak"], r["sequence_p"] = r["stagger_peak"], r["stagger_p"]
         else:
-            pk = season_max(b, sequence_blocks(sess, perfect=(sequence == "perfect"))) + up["sequence"]
+            pk = season_max(b, sequence_blocks(sess, perfect=(sequence == "perfect"), block=block, early=early, tie_rev=tie_rev))
             r["sequence_peak"], r["sequence_p"] = float(pk), float(pk > limit)
         out[t] = r
     return out
@@ -371,19 +354,20 @@ def flip_fee(res, n_chargers):
 
 ROUTES = {
     # the careful but hurried pass: the pilot's per-charger effect as an average night, coordination as one charger at a
-    # time, own schedules as metered in 2026, peaks off the hourly reads
-    "careful": dict(lift="none", own="observed", stagger="profile", sequence="perfect"),
-    "quick": dict(lift="none", own="observed", stagger="profile", sequence="as_stagger"),
+    # time, own schedules as metered in 2026 (DPS-7's peaking factors applied throughout: a written step is executed)
+    "careful": dict(own="observed", stagger="profile", sequence="perfect"),
+    "quick": dict(own="observed", stagger="profile", sequence="as_stagger"),
     "no_J1": dict(stagger="profile"),
     "no_J3_perfect": dict(sequence="perfect"),
     "no_J3_as_stagger": dict(sequence="as_stagger"),
     "no_own": dict(own="observed"),
-    "no_lift": dict(lift="none"),
 }
 RIVALS = {
-    "peak_lift": dict(lift="peak"),
-    "no_lift": dict(lift="none"),
+    # what EV-4, DPS-7 and the proposal leave to the analyst, each run on the cut pack
     "declared_own": dict(own="declared"),
+    "recorded_own": dict(own="recorded"),
+    "late_sessions_early": dict(early=True),
+    "own_advanced": dict(advance=True),
     "seed_11": dict(seed=11),
     "seed_23": dict(seed=23),
 }
@@ -391,8 +375,7 @@ RIVALS = {
 
 def solve(P):
     B = Book(P)
-    tables = {"excess": hourly_excess(B)}
-    g = replay(B, tables=tables)
+    g = replay(B)
     n = len(P.enrolled)
     res = totals(g, n)
-    return dict(B=B, tables=tables, out=g, res=res, n=n, pilot=pilot_effect(B), flip=flip_fee(res, n))
+    return dict(B=B, out=g, res=res, n=n, pilot=pilot_effect(B), flip=flip_fee(res, n))

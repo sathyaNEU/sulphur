@@ -50,6 +50,7 @@ class Pack:
         reg = rows(self.p("transformer_register_2026.csv"))
         self.kva = {r["transformer_location"]: float(r["kva"]) for r in reg}
         self.area = {r["transformer_location"]: r["substation"] for r in reg}
+        self.mount = {r["transformer_location"]: r["mount"] for r in reg}
         wb = load_workbook(self.p("distribution_work_orders_2025_2026.xlsx"), read_only=True)
         ws = wb.worksheets[0]
         it = ws.iter_rows(values_only=True)

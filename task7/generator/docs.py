@@ -1,7 +1,8 @@
 """task7 architecture 11: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer (officepdf.py).
 They file the WHAT (what the board chooses the default on, what a summer like the last one is, which chargers and which
 transformers count, the limit and the replacement costs, how the pilot's managed quarter was drawn and how its results are
-reported, the rate's hours) and say nothing of how a transformer's summer peak is estimated under an option."""
+reported, the rate's hours, and DPS-7's planning conventions for bringing hourly reads to the quarter-hour) and say nothing
+of how an option's charging would land on a transformer's nights."""
 import datetime as dt
 import os
 
@@ -45,8 +46,12 @@ def policy(target):
            "serving one of those chargers that the option would leave over its limit in a summer like the last one."),
          P("4 A summer like the last one", H2),
          P("4.1 A summer like the last one is July and August of the last summer as metered at the homes each transformer "
-           "serves, with every charger the quote covers charging its sessions of that July and August (plugged in, energy "
-           "drawn, unplugged) as the option would charge them, each session finishing by the time it was unplugged."),
+           "serves, with every charger the quote covers charging its sessions of that July and August as the option would "
+           "charge them: each session keeps its plug-in time, the energy it drew, the time its charge took and its unplug "
+           "time, and finishes by the time it was unplugged. The covered chargers' own metered charging is taken out of "
+           "the homes' hourly reads before the hours are brought to the 15-minute interval under DPS-7, and each option's "
+           "charging is added in the 15-minute intervals in which it would be drawn. Where an option works to a ready-by "
+           "time, a session's ready-by time is its unplug time rounded down to the quarter-hour."),
          P("4.2 Under the members' own schedules a charger charges as its owner set it. A charger that has left the rate is "
            "taken as it was metered."),
          P("4.3 An option's cost is its expected cost."),
@@ -66,8 +71,11 @@ def standard(target):
         mount = "pole-mount" if kva <= 37.5 else "pad-mount"
         rows.append(["%g kVA %s" % (kva, mount), "%g kVA %s" % (W.NEXT[kva], "pole-mount" if W.NEXT[kva] <= 50 and kva <= 37.5 else "pad-mount"),
                      "$%s" % format(W.COST[kva], ",")])
+        if kva == 37.5:
+            rows.append(["50 kVA pole-mount", "75 kVA pole-mount", "$%s" % format(W.COST_POLE50, ",")])
+    peak = [["Nameplate", "Peaking factor"]] + [["%g kVA" % k, "%.2f" % W.PEAK[k]] for k in sorted(W.PEAK)]
     s = [P(ORG + ", Engineering", SMALL), P("Distribution Planning Standard DPS-7: Distribution transformer loading", H1),
-         P("Revision 4, 3 November 2025. Owner: Sandra Bernard, engineering supervisor.", SMALL),
+         P("Revision 5, 14 September 2026. Owner: Sandra Bernard, engineering supervisor.", SMALL),
          P("1 Scope", H2),
          P("This standard sets when a single-phase distribution transformer serving residential load is over its limit and "
            "what replacing it costs, for the construction work plan and for any board policy that relies on it."),
@@ -75,20 +83,26 @@ def standard(target):
          P("2.1 A transformer is over its limit in a summer when its highest 15-minute load in July and August exceeds 120 "
            "per cent of its nameplate kVA."),
          P("2.2 A transformer's load in a 15-minute interval is the demand of the homes it serves in that interval. For "
-           "planning, load in kVA is that demand in kW divided by 0.95, whether or not the transformer is monitored."),
+           "planning it is taken from the homes' hourly meter reads, whether or not the transformer is monitored: the "
+           "demand in each 15-minute interval of an hour is the hour's demand times the peaking factor for the "
+           "transformer's nameplate in Table 2, and load in kVA is that demand in kW divided by 0.95."),
          P("2.3 The nameplate is that of the unit in service at the date of the study."),
          P("3 Replacement", H2),
          P("A transformer over its limit is replaced by the next standard size before the following summer, at the installed "
-           "cost below (crew, unit, connections and disposal)."),
+           "cost in Table 1 (crew, unit, connections and disposal)."),
+         P("Table 1. Replacement by the next standard size.", SMALL),
          T(rows, [140, 140, 90]),
          P("4 Records", H2),
          P("Connectivity is taken from the GIS as corrected by completed work orders; a unit's nameplate from the transformer "
-           "register as corrected by completed change-outs.")]
+           "register as corrected by completed change-outs."),
+         P("Annex", H2),
+         P("Table 2. Peaking factors, set from the 48 monitored transformers' loads in July and August 2026.", SMALL),
+         T(peak, [140, 90])]
     officepdf.build(os.path.join(target, "dps-7_distribution_transformer_loading.pdf"), s,
                     "DPS-7 Distribution transformer loading", "Sandra Bernard", "Distribution Planning Standard DPS-7",
                     ORG + " | Engineering",
-                    dt.datetime(2025, 11, 3, 14, 5, tzinfo=MST), dt.datetime(2025, 11, 4, 10, 18, tzinfo=MST),
-                    producer="LibreOffice 24.8", font="Carlito", body_pt=9.5, margin_mm=20, top_mm=18, bottom_mm=18)
+                    dt.datetime(2026, 9, 14, 10, 22, tzinfo=MT), dt.datetime(2026, 9, 15, 8, 47, tzinfo=MT),
+                    producer="LibreOffice 25.8", font="Carlito", body_pt=9.5, margin_mm=20, top_mm=18, bottom_mm=18)
 
 
 def pilot_plan(target):

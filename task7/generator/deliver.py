@@ -114,7 +114,8 @@ def write_memo(path, F, png):
             c.text = x
             for r in c.paragraphs[0].runs:
                 r.font.size = Pt(8.5)
-    para("A summer like 2026: July and August 2026 as metered, with the %s chargers enrolled on 1 November 2026 charging "
+    para("A summer like 2026: July and August 2026 as metered, the homes' hourly reads brought to the quarter-hour by "
+         "DPS-7's peaking factors, with the %s chargers enrolled on 1 November 2026 charging "
          "their 2026 sessions as each option would. Stagger starts sessions at random, so its expected cost counts each "
          "transformer at its chance of being over (EV-4 4.3). Fees at $%g and $%g per charger for the year; replacements at DPS-7's installed "
          "costs." % (format(F["n_chargers"], ","), F["fee_rate"]["stagger"], F["fee_rate"]["sequence"]),
@@ -131,7 +132,8 @@ def write_memo(path, F, png):
          (abs(F["pilot_effect"]), F["pilot_managed"], F["pilot_own"], s["over"]))
     para("Sequence was not in the pilot. Run on each night's actual plug-ins, energy and unplug times, it keeps the "
          "chargers on a transformer apart most nights, but on nights when they need more charging than the hours to "
-         "their departures allow, its rule starts a late charger alongside the others: %d transformers stay over." %
+         "their departures allow, its rule starts a late charger alongside the others and the queue waits for it: %d "
+         "transformers stay over." %
          q["over"])
     para("Members' own schedules are not what the meters saw in 2026, because a quarter of the chargers were under "
          "Stagger. With every charger back on its owner's own setting (its own-schedule sessions, or what the member "

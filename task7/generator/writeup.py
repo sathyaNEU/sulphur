@@ -33,14 +33,15 @@ def write(F, path):
     L.append("**Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry %d transformer "
              "replacements (%s) in the 2027 work plan**: at %s for the year it costs less than Quillpoint Stagger (%s) or "
              "the members' own schedules (%s). This rejects Stagger, which the pilot's average managed night shows "
-             "clearing every transformer (%g over, %s), because a random start still lets the few chargers on a small "
+             "clearing all but %g transformers (%s for the year), because a random start still lets the few chargers on a small "
              "transformer land together on some night of the summer: replayed night by night, Stagger leaves %s over."
              % (q["over"], usd(q["replace"]), usd(q["total"]), usd(s["total"]), usd(o["total"]),
                 rc["stagger"], usd(rc["total"]), cnt(F, "stagger")))
     L += ["", "## Supplementary Questions", "", "### ev_overnight_default_2027_memo.docx", ""]
     L.append("1. The call, in the memo's title and first paragraph: Quillpoint Sequence as the 2027 default, with %d "
-             "transformer replacements in the 2027 work plan (between %d and %d) costing %s." %
-             (q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1], usd(q["replace"])))
+             "transformer replacements in the 2027 work plan (between %d and %d) costing %s (between %s and %s)." %
+             (q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1], usd(q["replace"]),
+              usd(F["band_replace"]["sequence"][0]), usd(F["band_replace"]["sequence"][1])))
     L.append("2. Transformers serving the rate's chargers that each option leaves over their limit in a summer like 2026: "
              "members' own schedules %d (between %s), Quillpoint Stagger %s with each transformer at its chance of being "
              "over (between %s), Quillpoint Sequence %d (between %s)." %
@@ -48,8 +49,11 @@ def write(F, path):
     L.append("3. The platform's fee for the %s enrolled chargers for 2027: own schedules $0, Stagger %s ($%g a charger), "
              "Sequence %s ($%g a charger)." % (format(F["n_chargers"], ","), usd(s["fee"]), F["fee_rate"]["stagger"],
                                                   usd(q["fee"]), F["fee_rate"]["sequence"]))
-    L.append("4. What the replacements would cost at DPS-7's installed costs: own schedules %s, Stagger %s, Sequence %s "
-             "(each within the spread of its count)." % (usd(o["replace"]), usd(s["replace"]), usd(q["replace"])))
+    br = F["band_replace"]
+    L.append("4. What the replacements would cost at DPS-7's installed costs: own schedules %s (between %s and %s), Stagger "
+             "%s (between %s and %s), Sequence %s (between %s and %s)." %
+             (usd(o["replace"]), usd(br["own"][0]), usd(br["own"][1]), usd(s["replace"]), usd(br["stagger"][0]),
+              usd(br["stagger"][1]), usd(q["replace"]), usd(br["sequence"][0]), usd(br["sequence"][1])))
     L.append("5. The total for 2027: own schedules %s (between %s and %s), Stagger %s (between %s and %s), Sequence %s "
              "(between %s and %s)." % (usd(o["total"]), usd(bt["own"][0]), usd(bt["own"][1]), usd(s["total"]),
                                          usd(bt["stagger"][0]), usd(bt["stagger"][1]), usd(q["total"]),
@@ -70,8 +74,8 @@ def write(F, path):
     L.append("1. Quillpoint Stagger leaves **%s** transformers over their limit (between %s), not the **%g** the pilot's "
              "average managed night suggests." % (cnt(F, "stagger"), band(F, "stagger"), rc["stagger"]))
     L.append("2. Quillpoint Sequence leaves **%d** transformers over (between %s): its rule has to start a late charger "
-             "alongside others on heavy nights, where one charger at a time would leave **%g**." %
-             (q["over"], band(F, "sequence"), rq["sequence"]))
+             "alongside others on heavy nights, and every later charger in the queue then waits for it too, where one "
+             "charger at a time would leave **%g**." % (q["over"], band(F, "sequence"), rq["sequence"]))
     L.append("3. The members' own schedules leave **%d** transformers over (between %s), not the **%g** the 2026 meters "
              "show with a quarter of the chargers under Stagger." % (o["over"], band(F, "own"), rc["own"]))
     L.append("4. The pilot's managed charging took **%.2f kW** per enrolled charger off 23:00 to 23:15." % abs(F["pilot_effect"]))
@@ -82,9 +86,14 @@ def write(F, path):
     L.append("2. Through `gis_service_points_2026-10-30.csv`, the transfers in `distribution_work_orders_2025_2026.xlsx` "
              "and `ami_meter_exchanges_2026.csv`, they sit on %d transformers; each one's nameplate is the register's as "
              "corrected by the change-outs (DPS-7 section 4)." % F["n_tx"])
+    pt = F["peak_table"]
     L.append("3. Each transformer's base is its homes' hourly reads (the three `mdm_hourly_` files, re-sent rows dropped) "
-             "less the enrolled chargers' charging from `quillpoint_sessions_2024-06_2026-09.csv`, put from UTC onto "
-             "local time.")
+             "less the enrolled chargers' own charging from `quillpoint_sessions_2024-06_2026-09.csv`, put from UTC onto "
+             "local daylight time (six hours behind UTC, where the sessions line up with the charging in the hourly reads), "
+             "each hour then brought to the quarter-hour by DPS-7 Table 2's peaking factor for the transformer's "
+             "nameplate (from %s on the smallest units down to %s on the largest), monitored or not (DPS-7's Table 2, "
+             "EV-4 4.1)." %
+             ("%.2f" % pt["25"], "%.2f" % pt["100"]))
     L.append("4. The pilot's randomised comparison (`pilot_assignment_2025.csv`): the managed quarter charged %.2f kW per "
              "enrolled charger at 23:00 to 23:15 against %.2f on own schedules. Carried to the transformers as the managed "
              "quarter's average night times their chargers, it puts Stagger at %g transformers over, the shallow read." %
@@ -94,22 +103,28 @@ def write(F, path):
              "chargers on a small transformer still coincide on some nights, and Stagger leaves %s over at their chance "
              "(EV-4 4.3)." % (format(400, ","), cnt(F, "stagger")))
     L.append("6. Sequence, never piloted, is run by its rule in `quillpoint_proposal_2027.xlsx` on each night's plug-ins, "
-             "energy and unplug times: on heavy nights a late charger starts alongside, and %d transformers stay over, "
-             "where one charger at a time would leave %g." % (q["over"], rq["sequence"]))
+             "energy, charge times and unplug times (each session drawing its energy over its recorded charge time, "
+             "ready-by at the unplug time rounded down to the quarter-hour, the earlier plug-in first, each charger waiting "
+             "for every one before it, a charger started late at its latest start included): on heavy nights a late "
+             "charger starts alongside, and %d transformers stay over, where one charger at a time would leave %g." %
+             (q["over"], rq["sequence"]))
     L.append("7. Own schedules are rebuilt for every charger (its own-schedule sessions, the managed quarter's from summer "
              "2024, or the usual charging the member gave at enrolment): %d over, where the 2026 loads as metered give %g."
              % (o["over"], rc["own"]))
-    L.append("8. Every option's base is lifted from the hourly reads to the quarter-hour by the highest quarter-hour above "
-             "each hour on the %d monitored transformers (`transformer_monitors_15min_2026-07_08.csv`), scaled by the "
-             "square root of a transformer's homes." % F["monitors"])
+    L.append("8. Each option's charging goes in at the quarter-hour it would be drawn, on top of that base, and each "
+             "transformer's highest quarter-hour of July and August is set against its limit (DPS-7 2.1); the %d "
+             "monitored transformers are read like every other, from their homes' hourly reads." % F["monitors"])
     L.append("9. At DPS-7's installed costs and Quillpoint's fees, Sequence costs %s, Stagger %s and own schedules %s; "
              "Sequence stays cheapest until its fee passes about $%d a charger." %
              (usd(q["total"]), usd(s["total"]), usd(o["total"]), F["flip_fee"]))
     L += [""]
     L.append("No other conclusion survives. The pilot's average night prices a coincidence it cannot see, so it files "
-             "Stagger with nothing to replace; taking Sequence as the pilot's managed quarter files Stagger again, and "
+             "Stagger with %g to replace; taking Sequence as the pilot's managed quarter files Stagger again, and "
              "taking it as one charger at a time files Sequence with %s, where its own rule leaves %d. The 2026 "
-             "meters are not the members' own schedules, and every replay that lifts the hourly reads to the quarter-hour "
-             "another way (the monitored transformers' peaks, or none at all) still calls Sequence." % (reps(rq["sequence"]), q["over"]))
+             "meters are not the members' own schedules. With the replay's frame filed (the queue waiting for a late "
+             "charger, ready-by at the unplug time, DPS-7's peaking factors), the readings the files still leave open "
+             "(each charger on its declared setting, the own three-quarters at their recorded starts, the sessions the "
+             "window cannot fit started early, other draws) land Sequence between %d and %d and the call nowhere else."
+             % (rc["stagger"], reps(rq["sequence"]), q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1]))
     with open(path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(L) + "\n")

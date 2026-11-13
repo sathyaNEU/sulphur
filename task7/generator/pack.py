@@ -339,12 +339,14 @@ def quote_file(w, target):
                "break. The same as the pilot's managed half.", W.FEE["stagger"], "The enrolled chargers"])
     ws.append(["Quillpoint Sequence",
                "On each transformer, charges the enrolled chargers one at a time from the later of plug-in and 23:00, in the "
-               "order of their ready-by times, each starting when the one before it finishes; a charger that could not "
-               "otherwise finish by its ready-by time starts at its latest start, alongside whichever are charging.",
+               "order of their ready-by times (the one plugged in first where two share a ready-by time), each starting when "
+               "every charger before it in that order has finished; a charger that could not otherwise finish by its ready-by "
+               "time starts at its latest start, alongside whichever are charging.",
                W.FEE["sequence"], "The enrolled chargers and the transformer each one is on"])
     ws.append([])
     ws.append(["Fees are quoted on the chargers enrolled on the EV Overnight rate on 1 November 2026, for calendar 2027."])
     ws.append(["Members cannot pause a managed session; the ready-by time is set in the Quillpoint app."])
+    ws.append(["Both products start a session only on the quarter-hour."])
     for c in ws[1]:
         c.font = Font(bold=True)
     for col, wd in zip("ABCD", (20, 90, 18, 34)):

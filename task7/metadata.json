@@ -44,7 +44,7 @@
   {
    "path": "board_policy_EV-4_charging_default.pdf",
    "format": "pdf",
-   "bytes": 55200,
+   "bytes": 30969,
    "covers": "the board's policy for choosing the EV Overnight charging default",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -58,14 +58,14 @@
   {
    "path": "dps-7_distribution_transformer_loading.pdf",
    "format": "pdf",
-   "bytes": 62459,
+   "bytes": 39739,
    "covers": "the planning standard for transformer limits and replacement costs",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "ev_overnight_pilot_plan_2025.pdf",
    "format": "pdf",
-   "bytes": 47354,
+   "bytes": 30832,
    "covers": "the managed-charging pilot's plan",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -121,7 +121,7 @@
   {
    "path": "quillpoint_proposal_2027.xlsx",
    "format": "xlsx",
-   "bytes": 6652,
+   "bytes": 6717,
    "covers": "the charging platform's 2027 products and fees",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -135,7 +135,7 @@
   {
    "path": "rate_schedule_EV-1_2026.pdf",
    "format": "pdf",
-   "bytes": 60884,
+   "bytes": 32434,
    "covers": "the EV Overnight rate",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },

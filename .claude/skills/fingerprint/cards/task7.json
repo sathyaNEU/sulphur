@@ -11,7 +11,7 @@
  "shape": "13",
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
- "answer": "Make Quillpoint Sequence the EV Overnight default for 2027 and carry 11 transformer replacements ($160,300) in the 2027 work plan: $212,800 for the year against Quillpoint Stagger's $365,200 (27.5 transformers over at their chance) and own schedules' $794,600 (52 over)",
+ "answer": "Make Quillpoint Sequence the EV Overnight default for 2027 and carry 13 transformer replacements (USD 196,700) in the 2027 work plan: USD 249,200 for the year against Quillpoint Stagger's USD 397,100 (29.7 transformers over at their chance) and own schedules' USD 812,200 (53 over)",
  "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
  "gap": [
   "objective",
@@ -84,13 +84,13 @@
  ],
  "opening_move": "question-first",
  "question_form": "what",
- "driver": "The decisive quantity is each design's effect on the highest load a shared capacity sees over a season: a randomised per-unit effect, measured as an average profile, has to be replayed unit by unit and night by night on each shared resource, because the season's maximum of a few units' blocks depends on how often they coincide, which the average hides; the untested design is replayed on the recorded windows, where some nights force overlaps, and the record's coarser grain is lifted to the limit's own.",
+ "driver": "The decisive quantity is each design's effect on the highest load a shared capacity sees over a season: a randomised per-unit effect, measured as an average profile, has to be replayed unit by unit and night by night on each shared resource, because the season's maximum of a few units' blocks depends on how often they coincide, which the average hides; the untested design is replayed on the recorded windows, where some nights force overlaps, and the record's coarser grain is brought to the limit's own by the planning standard's filed factor.",
  "driver_concrete": "Hollins Creek's board sets the EV Overnight rate's 2027 default at the lowest cost of Quillpoint's fee plus the transformers each design would leave over 120 per cent of nameplate on their highest 15-minute load in a summer like 2026: the pilot's randomised halves show random start taking about 2.6 kW per charger off 23:00 to 23:15, but replayed night by night random start still leaves most of the own-schedule transformers over, coordination leaves the few its forced overlaps put over, and the members' own schedules are rebuilt from the managed half's own timers.",
- "stump": "The pilot's average managed night times each transformer's chargers, coordination as one charger at a time, own schedules from the 2026 loads as metered and peaks off the hourly reads file Stagger with 0 replacements; replayed night by night Stagger leaves 27.5 transformers over, Sequence's own rule leaves 11 (one at a time would say 1), and own schedules restored leave 52 where the 2026 meters show 28.",
+ "stump": "The pilot's average managed night times each transformer's chargers, coordination as one charger at a time and own schedules from the 2026 loads as metered file Stagger with 2 transformers over; replayed night by night Stagger leaves 29.7 transformers over, Sequence's own rule leaves 13 (one at a time would say 3), and own schedules restored leave 53 where the 2026 meters show 44.",
  "differentiation": {
   "task7 v10": "v10 renewed thermostat providers on a test-event impact carried to the 4CP days, next summer's fleet and the fleet's homes (closed lessons); v11 picks an EV charging default on each transformer's coincident summer peak replayed night by night under three designs",
   "task22": "task22 is a municipal utility's feeder energy balance (technical losses by the square of current, a switching log, the residual by feeder); v11 is a cooperative's EV charging default judged on each distribution transformer's coincident 15-minute summer peak from a randomised pilot",
-  "task2": "task2 v4's decisive quantity is a share of material above a line at a block's support, read from clustered point samples through their covariance with distance (change of support); v11's is each transformer's season maximum of coincident charger blocks under each design, computed on the joint path night by night, with the 15-minute lift over hourly reads a supporting step"
+  "task2": "task2 v4's decisive quantity is a share of material above a line at a block's support, read from clustered point samples through their covariance with distance (change of support); v11's is each transformer's season maximum of coincident charger blocks under each design, computed on the joint path night by night, the 15-minute step filed as the planning standard's peaking factor"
  },
  "lineage": [
   {
@@ -544,7 +544,7 @@
    "deliverable set": "docx+xlsx"
   }
  ],
- "notes": "architecture 11 (2026-11-12): re-rooted to another world and dataset after architecture 10's deciding carries were found on the client's overused-strategies page before upload; the deciding lesson (coincidence on a shared transformer, a season's maximum of a joint path) is off the page and untaught on file",
+ "notes": "architecture 11 (2026-11-12): re-rooted to another world and dataset after architecture 10's deciding carries were found on the client's overused-strategies page before upload; the deciding lesson (coincidence on a shared transformer, a season's maximum of a joint path) is off the page and untaught on file; 2026-11-13 holistic check: the queue's waiting for a late charger, the ready-by for a session with none in the app and the hourly-to-15-minute method were filed (the proposal, EV-4 4.1, DPS-7 2.2 and Table 2), the golden recomputed (Sequence 13, USD 196,700; flip USD 153); support_effect leaves the lessons, the quarter-hour step now a filed convention",
  "answer_shape": "scenarios-flip",
  "weight": "hard-to-measure",
  "chain_signature": [
@@ -565,8 +565,7 @@
   "lessons": [
    "non_additive_aggregation",
    "queue_or_capacity_replay",
-   "device_setting_replay",
-   "support_effect"
+   "device_setting_replay"
   ],
   "mechanisms": [
    "off_peak_timers_synchronise_chargers_at_23_00",

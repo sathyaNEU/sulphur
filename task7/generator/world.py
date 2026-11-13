@@ -24,6 +24,11 @@ LIMIT = 1.20                               # DPS-7: 120 per cent of nameplate kV
 FEE = {"stagger": 18.0, "sequence": 40.0}  # Quillpoint's 2027 fee per enrolled charger per year (USD)
 COST = {25.0: 10800, 37.5: 11400, 50.0: 18200, 75.0: 21500, 100.0: 26900}   # replacement by the next size, installed
 NEXT = {25.0: 50.0, 37.5: 50.0, 50.0: 75.0, 75.0: 100.0, 100.0: 167.0}
+COST_POLE50 = 13900                        # DPS-7 Table 1: a 50 kVA pole-mount unit by a 75 kVA pole-mount, installed
+# DPS-7 Table 2 (revision 5): the 15-minute peaking factor by nameplate, set by engineering from the 48 monitored
+# transformers' July and August 2026 loads (a day's highest 15-minute load over its clock hour's load, averaged over
+# the days and the monitored units of each size, to two places); checks.py asserts the monitors file reproduces it
+PEAK = {25.0: 1.15, 37.5: 1.15, 50.0: 1.13, 75.0: 1.11, 100.0: 1.10}
 AREAS = {
     # name: transformers, kVA choices with weights, homes per transformer, mount, EV-rate adoption, AC share, home size
     "Prairie Hollow": dict(n=160, kva=([25.0, 37.5], [0.62, 0.38]), homes={25.0: (3, 5), 37.5: (4, 7)}, mount="pole", adopt=0.31, ac=0.78, size=0.85,

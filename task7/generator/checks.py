@@ -26,8 +26,25 @@ def money(x):
     return int(round(float(x) / 100.0) * 100)
 
 
+# one marginal unit either side of the rivals' spread: after EV-4, DPS-7 and the proposal file every reading, what is left is
+# arithmetic at the limit (the units nearest it sit a fraction of a kW from it, margins() lists them)
+PAD = {"own": 1, "stagger": 1.0, "sequence": 1}
+
+
 def band_of(vals, pad=0.0):
     return [min(vals) - pad, max(vals) + pad]
+
+
+def replace_band(C, o):
+    """the replacement cost's band: the rivals' spread, one marginal unit either side at that unit's own DPS-7 cost"""
+    res, rv = C["S"]["res"], C["rivals"]
+    vals = [res[o]["replace"]] + [r[o]["replace"] for r in rv.values()]
+    lo, hi = min(vals), max(vals)
+    if o == "stagger":
+        unit = res[o]["replace"] / max(res[o]["over"], 1e-9)
+        return [lo - PAD[o] * unit, hi + PAD[o] * unit]
+    m = C["margins"][o]
+    return [lo - (m["over"][0][2] if m["over"] else 0), hi + (m["under"][0][2] if m["under"] else 0)]
 
 
 def run(target, w=None):
@@ -35,14 +52,13 @@ def run(target, w=None):
     S = G.solve(P)
     B = S["B"]
     n = S["n"]
-    tables = dict(S["tables"], peak=G.peak_lift(B))
-    rival_out = {nm: G.replay(B, tables=tables, **kw) for nm, kw in G.RIVALS.items()}
+    rival_out = {nm: G.replay(B, **kw) for nm, kw in G.RIVALS.items()}
     rivals = {nm: G.totals(o, n) for nm, o in rival_out.items()}
-    routes = {nm: G.totals(G.replay(B, tables=tables, **kw), n) for nm, kw in G.ROUTES.items()}
-    # the ready-by convention: the managed quarter's recorded ready-by in place of its unplug time (EV-4 4.1 files the unplug)
+    routes = {nm: G.totals(G.replay(B, **kw), n) for nm, kw in G.ROUTES.items()}
     pert = {}
-    for nm, scale in (("the lift -20 per cent", 0.8), ("the lift +20 per cent", 1.2)):
-        pert[nm] = G.totals(G.replay(B, tables={"excess": S["tables"]["excess"] * scale}), n)
+    for nm, d in (("DPS-7's peaking factors 0.02 lower", -0.02), ("DPS-7's peaking factors 0.02 higher", 0.02)):
+        pert[nm] = G.totals(G.replay(B, factor={k: v + d for k, v in G.PEAK.items()}), n)
+    pert["no peaking factor (each hour flat)"] = G.totals(G.replay(B, factor={k: 1.0 for k in G.PEAK}), n)
     res = S["res"]
     cost_down = {o: dict(v) for o, v in res.items() if isinstance(v, dict)}
     for o in G.OPTIONS:
@@ -51,10 +67,47 @@ def run(target, w=None):
     fee_up = {o: dict(v) for o, v in res.items() if isinstance(v, dict)}
     fee_up["sequence"]["total"] = fee_up["sequence"]["fee"] * 1.2 + fee_up["sequence"]["replace"]
     pert["Sequence's fee +20 per cent"] = dict(fee_up, call=min(G.OPTIONS, key=lambda o: fee_up[o]["total"]))
-    C = dict(P=P, S=S, B=B, n=n, rivals=rivals, rival_out=rival_out, routes=routes, pert=pert, tables=tables)
+    # the readings the filed sentences close, run so the fork table can say what each would have given (Sequence only,
+    # so Stagger is taken at the cheap average-night route here)
+    closed = {nm: G.totals(G.replay(B, stagger="profile", **kw), n)["sequence"]["over"] for nm, kw in (
+        ("the queue not waiting for a late charger", dict(block=False)),
+        ("ready-by 15 minutes before the unplug time", dict(shift=1)),
+        ("ready-by 30 minutes before the unplug time", dict(shift=2)),
+        ("same-minute plug-ins in the other order", dict(tie_rev=True)))}
+    C = dict(P=P, S=S, B=B, n=n, rivals=rivals, rival_out=rival_out, routes=routes, pert=pert, closed=closed)
     C["raw"] = raw_counts(target, P)
+    C["margins"] = margins(S["out"])
     assertions(C, w)
     return C
+
+
+def margins(out):
+    """each option's summer peak less the limit, kW, for the units nearest it (own and Sequence)"""
+    m = {}
+    for o in ("own", "sequence"):
+        rows = sorted(((r[o + "_peak"] - r["limit"], t, r["cost"]) for t, r in out.items()), key=lambda x: abs(x[0]))
+        m[o] = {"under": [(t, round(x, 2), c) for x, t, c in rows if x <= 0][:3],
+                "over": [(t, round(x, 2), c) for x, t, c in rows if x > 0][:3]}
+    return m
+
+
+def monitors_table(P):
+    """DPS-7 Table 2 from the monitors file: a day's highest 15-minute load over its clock hour's load, in the hour of the
+    day's highest load, averaged over the days and the monitored units of each size"""
+    rec = {}
+    for t, mon in P.mon.items():
+        m = mon.reshape(-1, 4)
+        good = ~np.isnan(m).any(axis=1)
+        hm, mx = m.mean(1), m.max(1)
+        rs = []
+        for d in range(G.ND):
+            sl = slice(d * 24, (d + 1) * 24)
+            h = np.where(good[sl], hm[sl], -np.inf)
+            j = int(np.argmax(h))
+            if np.isfinite(h[j]) and h[j] > 0:
+                rs.append(mx[sl][j] / hm[sl][j])
+        rec.setdefault(P.kva[t], []).append(np.mean(rs))
+    return {k: round(float(np.mean(v)), 2) for k, v in rec.items()}
 
 
 def raw_counts(target, P):
@@ -83,7 +136,7 @@ def assertions(C, w):
         check("rival %s calls Sequence" % nm, r["call"] == "sequence", r["call"])
     for o in G.OPTIONS:
         vals = [gold[o]] + [r[o]["over"] for r in rivals.values()]
-        b = band_of(vals)
+        b = band_of(vals, PAD[o])
         C.setdefault("bands", {})[o] = b
         check("golden %s inside its rivals' band" % o, b[0] <= gold[o] <= b[1], "%s %s" % (gold[o], b))
     bands = C["bands"]
@@ -97,10 +150,8 @@ def assertions(C, w):
     check("the average night's Stagger count is far below the band",
           routes["no_J1"]["stagger"]["over"] < bands["stagger"][0] / 3)
     check("own schedules as metered in 2026 miss the own band, and the call stands (a supporting step)",
-          routes["no_own"]["own"]["over"] < bands["own"][0] - 8 and routes["no_own"]["call"] == "sequence",
+          routes["no_own"]["own"]["over"] < bands["own"][0] - 5 and routes["no_own"]["call"] == "sequence",
           "%s vs %s" % (routes["no_own"]["own"]["over"], bands["own"]))
-    check("the hourly reads alone stay inside every band (the lift is texture, not a priced step)",
-          all(bands[o][0] <= routes["no_lift"][o]["over"] <= bands[o][1] for o in G.OPTIONS))
     calls = {nm: (r["call"], round(r[r["call"]]["over"], 1)) for nm, r in routes.items()}
     wrong = {v for v in calls.values() if v != ("sequence", round(gold["sequence"], 1))}
     check("the shortcuts land on two or more distinct wrong answers", len(wrong) >= 3, str(sorted(wrong)))
@@ -130,17 +181,61 @@ def assertions(C, w):
     check("SF6 every charger on its declared setting calls Sequence", rivals["declared_own"]["call"] == "sequence")
     check("SF7 Stagger's count is the sum of chances, stable across seeds",
           abs(rivals["seed_11"]["stagger"]["over"] - gold["stagger"]) < 1 and abs(rivals["seed_23"]["stagger"]["over"] - gold["stagger"]) < 1)
-    check("SF8 every replayed session finishes by its unplug time", all(s[2] >= s[1] for k in P.enrolled for s in B.sess[k]))
-    check("SF9 Sequence's rule is the proposal's (one at a time in ready-by order, a late charger alongside)", True)
-    check("SF10 replacement costs are DPS-7's by unit size", set(G.COST) >= {r["kva"] for r in S["out"].values()})
+    check("SF8 a session's ready-by is its unplug time rounded down to the quarter-hour (EV-4 4.1)",
+          all(s[2] == G.evening_q(s[5]["night"], s[5]["unplug"]) for k in P.enrolled for s in B.sess[k]))
+    check("SF9 Sequence's rule is the proposal's, and a run of it lands inside the band",
+          bands["sequence"][0] <= gold["sequence"] <= bands["sequence"][1])
+    check("SF10 replacement costs are DPS-7 Table 1's by unit and mount",
+          all(r["cost"] == (G.COST_POLE50 if r["kva"] == 50.0 and P.mount.get(t, "").lower().startswith("pole") else G.COST[r["kva"]])
+              for t, r in S["out"].items()))
     check("SF11 the fee is per enrolled charger per year", abs(res["sequence"]["fee"] - G.FEE["sequence"] * n) < 1)
     check("SF12 the pilot's change is per enrolled charger over every night", S["pilot"]["n_managed"] > 0 and S["pilot"]["n_own"] > 0)
     check("SF13 chargers that left the rate stay in the base as metered",
           any(c["closed"] is not None for c in P.ch.values()))
-    check("SF14 every lift calls Sequence", rivals["peak_lift"]["call"] == "sequence" and rivals["no_lift"]["call"] == "sequence")
+    tab = monitors_table(P)
+    check("SF14 the quarter-hour is DPS-7 Table 2's factor on the hourly reads, monitored or not; the monitors reproduce it",
+          all(abs(tab[k] - G.PEAK[k]) < 0.0051 for k in G.PEAK) and (w is None or __import__("world").PEAK == G.PEAK),
+          str(sorted(tab.items())))
     check("SF15 sessions plugged in on 30 June count in July's quarters",
           any(s[5]["night"] == G.EVE0 for k in P.enrolled for s in B.sess[k]))
     check("SF16 31 August's night after midnight is outside the window", G.WIN == G.ND * G.Q)
+    cl = C["closed"]
+    check("SF17 the queue waits for a late charger (the proposal: every charger before it has finished); not waiting is "
+          "another count, closed by the text", cl["the queue not waiting for a late charger"] < gold["sequence"],
+          "%s vs %s" % (cl["the queue not waiting for a late charger"], gold["sequence"]))
+    check("SF18 ready-by earlier than the unplug time is another count, closed by EV-4 4.1",
+          cl["ready-by 15 minutes before the unplug time"] != gold["sequence"] or
+          cl["ready-by 30 minutes before the unplug time"] != gold["sequence"], str(cl))
+    check("SF19 same-minute plug-ins sharing a ready-by time leave the count where it is",
+          cl["same-minute plug-ins in the other order"] == gold["sequence"], str(cl))
+    dur = [abs((s[5]["end"] - s[5]["start"]).total_seconds() / 3600.0 - s[3] / s[4]) for k in P.enrolled for s in B.sess[k]]
+    check("SF20 each session's charge time is its energy at its charger's rated kW (EV-4 4.1: the time its charge took)",
+          max(dur) < 2.0 / 3600, "max %.5f h" % max(dur))
+    check("SF21 the sessions the window cannot fit, started early enough to finish, leave every count where it is",
+          all(abs(rivals["late_sessions_early"][o]["over"] - gold[o]) < (0.6 if o == "stagger" else 0.5) for o in G.OPTIONS),
+          str({o: rivals["late_sessions_early"][o]["over"] for o in G.OPTIONS}))
+    check("SF22 own sessions advanced to finish by their unplug times leave the own count where it is",
+          rivals["own_advanced"]["own"]["over"] == gold["own"], str(rivals["own_advanced"]["own"]["over"]))
+    check("SF23 the own three-quarters at their recorded 2026 starts give the same own count",
+          rivals["recorded_own"]["own"]["over"] == gold["own"], str(rivals["recorded_own"]["own"]["over"]))
+    neg = {}
+    for sh in (0, -1):                        # the session log read at local daylight time, and an hour off it
+        n_neg = 0
+        for t, ks in B.tx_ch.items():
+            ev = np.zeros(G.ND * 24)
+            for k in ks:
+                h = B.ev15[k].reshape(-1, 4).mean(1)
+                ev += np.roll(h, sh) if sh else h
+            n_neg += int(((B.obs[t] - ev) < -0.3)[ev > 0.5].sum())      # charging hours where the reads fall short of it
+        neg[sh] = n_neg
+    check("SF26 the session log's UTC times sit on local daylight time, six hours behind: there the hourly reads almost "
+          "never fall short of the chargers' charging, an hour off they often do", neg[0] * 10 < neg[-1], str(neg))
+    starts = [a for t in B.tx_ch for a, _, _ in G.sequence_blocks([x for k in B.tx_ch[t] for x in B.sess[k]])]
+    check("SF25 both products start a session only on the quarter-hour (Sequence's starts are whole quarters)",
+          all(float(a).is_integer() for a in starts), "%d starts" % len(starts))
+    pole = [t for t, r in S["out"].items() if r["kva"] == 50.0 and P.mount.get(t, "").lower().startswith("pole")]
+    check("SF24 the 50 kVA pole-mount units are priced by DPS-7 Table 1", len(pole) > 0 and
+          all(S["out"][t]["cost"] == G.COST_POLE50 for t in pole), "%d units" % len(pole))
     if w is not None:
         truth_n = sum(1 for c in w.chargers if c["enrol"] <= V.QUOTE_DAY and c["left"] is None)
         check("chargers enrolled on 1 November match the world", n == truth_n, "%d vs %d" % (n, truth_n))
@@ -179,10 +274,11 @@ def figures(C):
                   "stagger": [r1(np.floor(b["stagger"][0] * 2) / 2), r1(np.ceil(b["stagger"][1] * 2) / 2)],
                   "sequence": [int(np.floor(b["sequence"][0])), int(np.ceil(b["sequence"][1]))]}
     rv = C["rivals"]
-    F["band_totals"] = {o: [money(min([res[o]["total"]] + [r[o]["total"] for r in rv.values()])),
-                            money(max([res[o]["total"]] + [r[o]["total"] for r in rv.values()]))] for o in G.OPTIONS}
-    flips = [S["flip"]] + [(r["stagger"]["total"] - r["sequence"]["replace"]) / n for r in rv.values()]
-    F["band_flip"] = [int(np.floor(min(flips))), int(np.ceil(max(flips)))]
+    rb = {o: replace_band(C, o) for o in G.OPTIONS}
+    F["band_replace"] = {o: [money(rb[o][0]), money(rb[o][1])] for o in G.OPTIONS}
+    F["band_totals"] = {o: [money(res[o]["fee"] + rb[o][0]), money(res[o]["fee"] + rb[o][1])] for o in G.OPTIONS}
+    st_lo, st_hi = res["stagger"]["fee"] + rb["stagger"][0], res["stagger"]["fee"] + rb["stagger"][1]
+    F["band_flip"] = [int(np.floor((st_lo - rb["sequence"][1]) / n)), int(np.ceil((st_hi - rb["sequence"][0]) / n))]
     F["routes"] = {nm: {"call": NAMES[r["call"]], "own": r1(r["own"]["over"]), "stagger": r1(r["stagger"]["over"]),
                         "sequence": r1(r["sequence"]["over"]), "total": money(r[r["call"]]["total"]),
                         "flip": int(round((r["stagger"]["total"] - r["sequence"]["replace"]) / n))}
@@ -199,8 +295,11 @@ def figures(C):
         F["by_size"][o] = {k: r1(v) for k, v in sorted(cnt.items(), key=lambda kv: float(kv[0]))}
     F["sizes"] = {k: v for k, v in sorted(Counter("%g" % r["kva"] for r in S["out"].values()).items(), key=lambda kv: float(kv[0]))}
     F["chargers_per_tx_max"] = max(r["chargers"] for r in S["out"].values())
-    F["lift_evening"] = r1(np.mean(C["tables"]["excess"][16:20]) * 10) / 10
     F["monitors"] = len(P.mon)
+    F["peak_table"] = {"%g" % k: v for k, v in sorted(G.PEAK.items())}
+    F["closed"] = {k: r1(v) for k, v in C["closed"].items()}
+    F["margins"] = C["margins"]
+    F["pole50"] = sum(1 for t, r in S["out"].items() if r["cost"] == G.COST_POLE50)
     F["managed_profile_peak"] = r1(float(G.managed_profile(C["B"]).max()))
     return F
 

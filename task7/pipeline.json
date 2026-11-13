@@ -5,31 +5,29 @@
  "objective": "experiment-causal",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-12",
+ "updated": "2026-11-13",
  "stump": "",
  "architecture": 11,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-12",
   "note": "1 WARN: nearest chains task21 (answered in the note)"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-12, --asof 2026-11-06): the policy shares the call's ordinary words; the pilot plan names its own design",
-  "reader": "2026-11-12 reader 1: questions 2 to 4 none, question 6 no one thing; EV-4 4.3 ('a transformer counts at its chance') pointed at simulating random starts: reworded to the estimand ('An option's cost is its expected cost.'); a negative kVA at solar-export hours fixed. Reader 2 on the fixed cut: nothing to fix; it reads 4.3 as an expectation whose method stays open"
+  "leak_py": "REVIEW (the call's words in EV-4; stump terms in EV-4 and the pilot plan), each ruled harmless",
+  "reader": "no leak: nothing ranks the options, no answer figure or name, no one thing settles the task; it reads EV-4 4.1 and DPS-7 2.2 as the replay's frame with the option simulations left to the analyst"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "BLOCK on 2026-11-13, identical on the card as committed at READY (71b70e6) and on the repaired card: ban.weight (hard-to-measure, as task13 v4), ban.calibration (pilot_log, as task8 v19) and test.same_driver (objective, G2, method_or_model_selection, as task2 v4's lineage); the colliding cards were drawn 2026-11-10 and 11-11, before this architecture (11-12), and this repair moved none of those axes; the skeleton screen (the client's duplicate test) is clear; handed to the author",
   "surface": ""
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "order_kept": true,
-  "gate_h": "pass: 8 to 9 results graded across five or more areas; one_thing none; the best single hint rescues about 2 of 9; closed: none decides",
-  "first_pass": "blind: derived 1,313 chargers, 382 transformers, the fees, the totals and the USD 156 flip fee exactly before opening the blocks",
-  "scope": "did not re-run the 382-transformer night-by-night replays (Stagger draws, Sequence's rule): the counts 52, 27.5 and 11 were checked for rule-correctness and consistency, not reproduced figure for figure",
-  "careful_estimate": "the judge put the careful pass at about 4 to 6 of 9 against the measured 3 of 9 (effort.json routes)",
+  "disposition": "FIX_NOW, applied (answer blocks only)",
+  "date": "2026-11-13",
+  "scope": "Sequence replayed transformer by transformer and night by night to 13 (band 12 to 14), every open reading of the queue, ready-by, charge time and clock run; Stagger sampled at 100 draws to 29.5 (band 28.5 to 31.0) after the judge corrected its own script (0.95 applied twice, pre-July blocks piled on 1 July); costs, totals and the flip fee not recomputed by the judge",
+  "fixes": "Step-by-Step 3 states the clock; Step-by-Step 6 the charge time, the ready-by and that a late charger counts ahead of every later one; Critical Component 2 the same",
   "report": "task7/determinism_check_report.md"
  },
  "returned": [
@@ -98,9 +96,19 @@
    "repair": "design",
    "commit": "",
    "note": "the platform run landed architecture 9; re-rooted to another world"
+  },
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "portal": "holistic check failed: the Sequence count (11, USD 160,300) and the fee crossover rested on three readings no file settled (whether the queue waits for a late charger; the ready-by for a session with none in the app; how hourly reads become quarter-hours)",
+   "repair": "determinism",
+   "moves": "filed at authority: the proposal's Sequence rule (each charger waits for every one before it, the earlier plug-in first) and a note that both products start on the quarter-hour; EV-4 4.1 (each session keeps its plug-in, energy, charge time and unplug; the covered chargers' own charging out of the hourly reads before DPS-7 brings them to the quarter-hour, each option's charging in at the quarter-hour; ready-by at the unplug time rounded down); DPS-7 revision 5 (2.2 and Table 2 peaking factors by nameplate from the 48 monitors, monitored or not; Table 1's 50 kVA pole-mount row); golden recomputed and bands widened to the rivals plus one marginal unit either side",
+   "figures": "Sequence 13 (12 to 14), USD 196,700 (178,500 to 214,900); Stagger 29.7 (28.5 to 31.0); own 53 (52 to 55); totals USD 249,200, 397,100, 812,200; flip fee USD 153 (128 to 177)",
+   "freeze": "determinism mode: the moved figures allowed by key (the reviewer directed the recompute); rubric mode and both outputs recorded in the report",
+   "commit": "RESHIPPED (task7): determinism, the queue, the ready-by and the quarter-hour filed"
   }
  ],
- "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip and pastes the four blocks; then the two platform runs and /triage-runs task7",
+ "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with the new target.zip and pastes the four blocks; then the two platform runs and /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -418,7 +426,7 @@
  },
  "paper_pair": 40.5,
  "subdomain": "tariff-demand-response-evaluation",
- "call": "make Quillpoint Sequence the EV Overnight default for 2027 and carry 11 transformer replacements (USD 160,300) in the 2027 work plan: USD 212,800 for the year against Stagger's USD 365,200 and own schedules' USD 794,600",
+ "call": "make Quillpoint Sequence the EV Overnight default for 2027 and carry 13 transformer replacements (USD 196,700) in the 2027 work plan: USD 249,200 for the year against Stagger's USD 397,100 and own schedules' USD 812,200",
  "doctrine": "throughout",
  "chain": "R1 chargers enrolled (Ask 7) and R1b transformers serving them (Ask 10); R2 the pilot's change at 23:00 to 23:15 (Component 4, Ask 6); R3 own schedules' transformers over (Component 3); R4 Stagger's, at their chance (Component 1); R5 Sequence's (Component 2); R6 each option's fee, replacements and total (Asks 3 to 5); R7 the default and the work plan's replacements (Recommendation, Ask 1); R8 the flip fee (Ask 8)",
  "effort": {

@@ -65,19 +65,19 @@
     "R1b"
    ],
    "independent": "",
-   "golden": 52,
+   "golden": 53,
    "band": [
-    49,
-    59
+    52,
+    55
    ],
    "precedent": [
     "L04",
     "L01"
    ],
    "passes": {
-    "quick": 28.0,
-    "careful": 28.0,
-    "thorough": 52
+    "quick": 44.0,
+    "careful": 44.0,
+    "thorough": 53
    }
   },
   {
@@ -89,19 +89,19 @@
     "R1b"
    ],
    "independent": "",
-   "golden": 27.5,
+   "golden": 29.7,
    "band": [
-    25.5,
-    33.5
+    28.5,
+    31.0
    ],
    "precedent": [
     "L15",
     "N01"
    ],
    "passes": {
-    "quick": 0.0,
-    "careful": 0.0,
-    "thorough": 27.5
+    "quick": 2.0,
+    "careful": 2.0,
+    "thorough": 29.7
    }
   },
   {
@@ -113,19 +113,19 @@
     "R1b"
    ],
    "independent": "",
-   "golden": 11,
+   "golden": 13,
    "band": [
-    10,
-    12
+    12,
+    14
    ],
    "precedent": [
     "L15",
     "N04"
    ],
    "passes": {
-    "quick": 0.0,
-    "careful": 0.0,
-    "thorough": 11
+    "quick": 2.0,
+    "careful": 3.0,
+    "thorough": 13
    }
   },
   {
@@ -140,22 +140,22 @@
    ],
    "independent": "",
    "golden": {
-    "own": 794600,
-    "stagger": 365200,
-    "sequence": 212800
+    "own": 812200,
+    "stagger": 397100,
+    "sequence": 249200
    },
    "bands": {
     "own": [
-     750900,
-     906400
+     801400,
+     832900
     ],
     "stagger": [
-     341100,
-     445400
+     383900,
+     410000
     ],
     "sequence": [
-     202000,
-     231000
+     231000,
+     267400
     ]
    },
    "precedent": [
@@ -168,14 +168,14 @@
      "sequence": null
     },
     "careful": {
-     "own": 391400,
-     "stagger": 23600,
-     "sequence": 52500
+     "own": 638600,
+     "stagger": 52600,
+     "sequence": 99700
     },
     "thorough": {
-     "own": 794600,
-     "stagger": 365200,
-     "sequence": 212800
+     "own": 812200,
+     "stagger": 397100,
+     "sequence": 249200
     }
    }
   },
@@ -189,14 +189,14 @@
     "R5"
    ],
    "independent": "",
-   "golden": "Quillpoint Sequence, 11",
+   "golden": "Quillpoint Sequence, 13",
    "precedent": [
     "L15"
    ],
    "passes": {
-    "quick": "Quillpoint Stagger, 0",
-    "careful": "Quillpoint Stagger, 0",
-    "thorough": "Quillpoint Sequence, 11"
+    "quick": "Quillpoint Stagger, 2",
+    "careful": "Quillpoint Stagger, 2",
+    "thorough": "Quillpoint Sequence, 13"
    }
   },
   {
@@ -210,60 +210,55 @@
     "R6"
    ],
    "independent": "",
-   "golden": 156,
+   "golden": 153,
    "band": [
-    145,
-    204
+    128,
+    177
    ],
    "precedent": [
     "L15"
    ],
    "passes": {
     "quick": 18,
-    "careful": 18,
-    "thorough": 156
+    "careful": 4,
+    "thorough": 153
    }
   }
  ],
  "routes": [
   {
    "name": "the golden",
-   "answer": "Quillpoint Sequence, 11",
+   "answer": "Quillpoint Sequence, 13",
    "golden": true
   },
   {
    "name": "careful",
-   "answer": "Quillpoint Stagger, 0",
+   "answer": "Quillpoint Stagger, 2",
    "golden": false
   },
   {
    "name": "quick",
-   "answer": "Quillpoint Stagger, 0",
+   "answer": "Quillpoint Stagger, 2",
    "golden": false
   },
   {
    "name": "no_J1",
-   "answer": "Quillpoint Stagger, 1",
+   "answer": "Quillpoint Stagger, 2",
    "golden": false
   },
   {
    "name": "no_J3_perfect",
-   "answer": "Quillpoint Sequence, 1",
+   "answer": "Quillpoint Sequence, 3",
    "golden": false
   },
   {
    "name": "no_J3_as_stagger",
-   "answer": "Quillpoint Stagger, 27.5",
+   "answer": "Quillpoint Stagger, 29.7",
    "golden": false
   },
   {
    "name": "no_own",
-   "answer": "Quillpoint Sequence, 11",
-   "golden": false
-  },
-  {
-   "name": "no_lift",
-   "answer": "Quillpoint Sequence, 10",
+   "answer": "Quillpoint Sequence, 13",
    "golden": false
   }
  ],
@@ -300,19 +295,25 @@
     ]
    },
    {
-    "name": "peak_lift",
-    "answer": [
-     "Quillpoint Sequence"
-    ]
-   },
-   {
-    "name": "no_lift",
-    "answer": [
-     "Quillpoint Sequence"
-    ]
-   },
-   {
     "name": "declared_own",
+    "answer": [
+     "Quillpoint Sequence"
+    ]
+   },
+   {
+    "name": "recorded_own",
+    "answer": [
+     "Quillpoint Sequence"
+    ]
+   },
+   {
+    "name": "late_sessions_early",
+    "answer": [
+     "Quillpoint Sequence"
+    ]
+   },
+   {
+    "name": "own_advanced",
     "answer": [
      "Quillpoint Sequence"
     ]
@@ -358,13 +359,19 @@
   ],
   "perturbations": [
    {
-    "input": "the lift -20 per cent",
+    "input": "DPS-7's peaking factors 0.02 lower",
     "answer": [
      "Quillpoint Sequence"
     ]
    },
    {
-    "input": "the lift +20 per cent",
+    "input": "DPS-7's peaking factors 0.02 higher",
+    "answer": [
+     "Quillpoint Sequence"
+    ]
+   },
+   {
+    "input": "no peaking factor (each hour flat)",
     "answer": [
      "Quillpoint Sequence"
     ]
