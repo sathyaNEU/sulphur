@@ -1,6 +1,6 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
@@ -76,14 +76,22 @@
    "by": "holistic audit (pasted by the author)",
    "why": "Standaard's first-bill response unpinned (its 2027 rise passed the rival, none of its past rises had; the golden's carry of the other plans' crossing increments was also wrong against the replayed world, 21.2 and 16.1 per 100 against 4.5 to 7.4 and 41.5 to 43.9), a Gezin cell floored against a negative comparable rise, and the only call a careful analysis missed (Onbeperkt) turning on one constructed second-profile shift",
    "repair": "same world at the audit's request: no 2027 configuration the record never ran (the rival's Plus 30 uur at EUR 16.99, its Basis 10 uur at EUR 10.29 from July 2026 so Flex's 2027 rise passes it as its 2025 Dutch rise did), every past e-mail dated in the price list, the second-profile shift removed; two processes the runs named and waved through run on every plan (a stopped subscription takes its plan up again, light listeners soonest; the account holder listens more for months after the bill at a higher price, the heavier the more); Standaard's rises EUR 1.50; the first bill pooled by listening band in proportion to the rise with the profile limit; every graded figure checked against the replayed world; prompt: 'would be paying, on any plan' and the 2027 remuneration ask; Standaard and Gezin go ahead"
+  },
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "by": "the reviewer's sheet (pasted by the author; runs/review_2026-11-13.md)",
+   "why": "not difficult enough: Flex forced by its crossing in both regions, Gezin's margin (+5.4) too wide, Standaard positive under any transfer; only Onbeperkt open, and only through the stayers' listening",
+   "repair": "design",
+   "commit": ""
   }
  ],
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "sent back for fixes",
+  "date": "2026-11-13",
+  "note": "review sheet: reward 83.0, stumped failed, determinism and solution passed (main and supp); task e10c0e38-bbd8-4a03-92f1-6afb6ad24915"
  },
- "resume": "READY: the author rewrites prompt.txt in their own voice (two clauses changed in the repair: 'would be paying, on any plan, at the end of 2027' in place of 'still be paying', which reads as paying without a break, and the 2027 publisher remuneration ask added), runs voice-check.py task1 --rewrite and leak.py, and uploads it with target.zip; then /triage-runs task1"
+ "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word"
 }
