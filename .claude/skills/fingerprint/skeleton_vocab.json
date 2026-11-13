@@ -142,7 +142,8 @@
     "time_varying_membership": "units' membership in a parent (a feeder, territory, portfolio or hierarchy) changed over the history, so each period's members are rebuilt from the dated operations record, not from today's register, and checked against the flows the changes moved",
     "nonlinear_functional_of_path": "the outcome is a convex or threshold function of a load or exposure path (losses with the square of current, ageing exponential in temperature, a charge on the maximum), so it is computed on the path, never on its mean or as a percentage carried from another level",
     "position_on_network_effect": "the same load or fault has a different effect by where it sits on a radial or graph structure (voltage drop and losses grow with distance, delay with hops), so an equivalent factor calibrated on an old spatial mix misstates a new one",
-    "record_algorithm_inversion": "the stored record is the output of a recording algorithm (exception reporting, estimation and editing, a rolling register, a billing cycle), so the algorithm is inverted before anything is measured; never decided by reading one field"
+    "record_algorithm_inversion": "the stored record is the output of a recording algorithm (exception reporting, estimation and editing, a rolling register, a billing cycle), so the algorithm is inverted before anything is measured; never decided by reading one field",
+    "coincidental_agreement_joint_frequencies": "distinct units agree on every identifying field by chance far more often than the product of the fields' own frequencies implies, because the fields are dependent and concentrated where the rule runs (first names by birth cohort and community, surnames by community, dates heaped on conventions), so a match rule's false-merge rate is read from the joint distribution of the population it runs on, never from independent per-field rates"
   },
   "detections": {
     "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -164,7 +165,8 @@
     "document_defines_estimand": "the governing document defines the quantity in a way the incumbent figure does not meet",
     "conservation_residual_sign": "a balance's residual takes a sign or size the physics or the books do not allow, somewhere in the history",
     "flow_step_at_dated_operation": "a parent's flow steps at the time of a dated operation that moved members between parents, mirrored at the receiving parent",
-    "measurement_at_another_network_point": "a measurement taken at another point of the network (an end-of-line voltage, a downstream meter) that the hurried model must also reproduce"
+    "measurement_at_another_network_point": "a measurement taken at another point of the network (an end-of-line voltage, a downstream meter) that the hurried model must also reproduce",
+    "conflict_marker_in_linked_pairs": "an attribute the match never used (a blood group, a birth, a sex-specific event) conflicts inside linked pairs at the rate random distinct pairs would conflict, which counts the distinct pairs the rule joined"
   },
   "moves": {
     "fixed_plus_covariate_fit": "a fixed component plus a covariate term fitted across all tests, then re-ranked",
@@ -229,7 +231,8 @@
     "weighted_balance_reconciliation": "every term of the balance rebuilt on one basis and window, the residual reconciled with each instrument weighted by its own accuracy, and its sign and size checked against physics",
     "compute_on_joint_path": "the non-additive or nonlinear quantity computed interval by interval on the joint path, never from the parts' own summaries",
     "allocate_by_network_position": "each load placed at its position on the network and its effect computed segment by segment (a backward sweep), validated on a measurement taken at another point of the network",
-    "invert_recording_algorithm": "the recording rule (deadband, estimation, cycle, rolling window) applied in reverse to recover the quantity at the decision's grain"
+    "invert_recording_algorithm": "the recording rule (deadband, estimation, cycle, rolling window) applied in reverse to recover the quantity at the decision's grain",
+    "chance_agreement_on_joint_distribution": "the expected chance agreements of a match rule estimated from the population's joint distribution of the fields it compares (or a permutation within the strata that carry the dependence), checked against an attribute the rule never used"
   },
   "file_roles": {
     "governing_standard": "a standard, policy, rule or terms that file the WHAT",
