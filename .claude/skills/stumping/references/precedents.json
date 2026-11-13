@@ -952,6 +952,54 @@
    "move": "the practice the history shows preferred over a correction the written policy requires once the forecast crosses its limit",
    "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
    "quote": "The simulation follows observed trading practice, not an invented compliance correction."
+  },
+  {
+   "id": "R53",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "an option's expected seasonal peak simulated night by night over random draws, because the governing rule asks for an expected cost, not the peak of an average night",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Stagger used 20,000 complete-summer simulations, seed 20271101, because EV-4 requires expected seasonal replacement cost rather than the peak of an average profile."
+  },
+  {
+   "id": "R54",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a counterfactual schedule rebuilt for each unit from its own pre-treatment history and validated on held-out sessions",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Historical schedule reconstruction predicted 46,798 of 46,801 held-out control starts within 15 minutes"
+  },
+  {
+   "id": "R55",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a randomised pilot's effect with its interval clustered by the household",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Kept assignment across replacement serials and clustered uncertainty by home."
+  },
+  {
+   "id": "R56",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a filed remedy checked against its own limit and flagged where it still fails",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "PH-7118's prescribed next-size replacement still models at 67.862 kVA, above its 60.000 kVA limit."
+  },
+  {
+   "id": "N30",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "a session's power taken as constant at its energy over its duration",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Session power is modeled as constant at energy divided by duration"
+  },
+  {
+   "id": "N31",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "sessions a filed rule cannot schedule kept as they were recorded, the rule's gap noted and left",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "279 covered sessions cannot satisfy every stated product timing rule; 16 remain infeasible even with actual unplug deadlines. Both products retain those sessions as actually charged."
   }
  ]
 }

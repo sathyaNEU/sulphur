@@ -1,6 +1,6 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
  "stage": 5,
@@ -106,9 +106,15 @@
    "figures": "Sequence 13 (12 to 14), USD 196,700 (178,500 to 214,900); Stagger 29.7 (28.5 to 31.0); own 53 (52 to 55); totals USD 249,200, 397,100, 812,200; flip fee USD 153 (128 to 177)",
    "freeze": "determinism mode: the moved figures allowed by key (the reviewer directed the recompute); rubric mode and both outputs recorded in the report",
    "commit": "RESHIPPED (task7): determinism, the queue, the ready-by and the quarter-hour filed"
+  },
+  {
+   "date": "2026-11-13",
+   "by": "holistic audit and the platform run (task7/runs/arch11/run1.md)",
+   "why": "the run earned every graded result inside its band and the call (Sequence, 12 replacements, USD 178,500): the night-by-night Stagger replay is a reflex under EV-4 4.3, the Sequence rule is written in the proposal, the own-schedule rebuild a reflex; the 279 sessions no product rule can schedule are an open fork (12 against 13); under the stump factorial the build has no stump",
+   "route": "REDESIGN under the stump factorial (stumping Part 3.3)"
   }
  ],
- "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with the new target.zip and pastes the four blocks; then the two platform runs and /triage-runs task7",
+ "resume": "stage 2: re-design architecture 11's chain under the stump factorial; close the infeasible-session fork with a filed sentence",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -421,6 +427,14 @@
     "average": null,
     "verdict": "REDESIGN",
     "note": "landed the call (insulation alone); both deciding judgments reflexes; lost insulation's transport only"
+   },
+   {
+    "round": "arch11 run 1",
+    "date": "2026-11-13",
+    "run1": "landed every graded cell",
+    "run2": null,
+    "average": null,
+    "verdict": "REDESIGN"
    }
   ]
  },
