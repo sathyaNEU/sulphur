@@ -37,7 +37,8 @@ nothing in-house solves the task, so the idea has to be right before it is built
 6. **An assumption the run names and waves through.** Name it and cite its precedent (N02 history taken as
    informative of the forward window; N13 the latest rate taken as the end state; N01 an enlarged load assumed to
    scale in proportion; L07 a measurement change flagged and never tested; L37 a check that cannot see the
-   condition). The world's process makes it false for the target and weaker in the history, so the run's own
+   condition; L40 to L42 a fitted form or effect held constant past the data's support; L43 and L44 a deferral
+   where the bridge has to be built). The world's process makes it false for the target and weaker in the history, so the run's own
    back-test still passes.
 7. **A plausible shallower story.** The data offers a wrong explanation that passes its own checks (L26), so a run
    that notices the pattern still files the wrong number.
@@ -72,3 +73,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
   register, a billing cycle) that has to be inverted before anything is measured?
 - **Instruments with different blind spots**: which part of the estimand does each source see, and which part does
   none of them see?
+- **The constant the run will hold**: which quantity will a careful run hold fixed where the target sits (an effect
+  over time, an uplift across levels, a response past the obvious channel's plateau, an event's trace in final
+  values), does the world's process move it there, and which slice of the data tests it with the first channel held
+  fixed?

@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, thirty-seven reflexes and fifty-seven losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 34 closed strategies (2026-11-12, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (the assumption a run names and waves through made false, a measured response and the marginal unit, a shallow path that passes its own checks, and the open dimensions: conservation, changing structure, non-additive and nonlinear quantities, position on a network, hidden state, the recording algorithm), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, sixty reflexes and seventy-six losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 34 closed strategies (2026-11-12, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (the assumption a run names and waves through made false, a measured response and the marginal unit, a shallow path that passes its own checks, and the open dimensions: conservation, changing structure, non-additive and nonlinear quantities, position on a network, hidden state, the recording algorithm), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -40,7 +40,7 @@ does in a hurry, by the client's table and our runs: stops at the first account 
 rival explanation, looks at a handful of series where the question needs all of them, estimates a quantity and never
 carries it into the decision, reports pieces that do not add back to the total, and checks robustness only by
 varying nearby choices. **Every result that prices the task lives in that second list**, and only where a run has
-been seen to lose there: `references/precedents.json` holds thirty-seven reflexes the runs made unprompted and fifty-seven
+been seen to lose there: `references/precedents.json` holds sixty reflexes the runs made unprompted and seventy-six
 places they lost or waved an assumption through, each with its run or client page.
 
 **Thirty Sulfur rounds, measured.** No Sulfur round has yet come back under 60 with analytical losses spread across
@@ -221,6 +221,34 @@ supersedes it for reasons the data prove. That is not a decoy: a decoy's number 
 the wrong answer, while an incumbent figure is the right computation of a shallower quantity. It may sit in the prompt
 as the stakeholder's position, with an ask that prices it on the same footing as the golden ("Corinne's mid-October
 plan needs the same figure"); Gate G still refuses a shipped artifact that ranks the candidates.
+
+**The constancy reflex and the retreat** (the client's review pages of approved work outside our dataset, read
+2026-11-13; L39 to L44, N32, R57 to R60). Where approved work beat the runs, the run built the model well (the at-date
+population to its control total, the interactions, a law with its curved link, the event study, the benefit through
+a tie: R57 to R60) and lost where the target leaves the data's support, by holding constant something the world's
+process moves: an effect along a state every target unit advances through during the window (L39), an additive
+uplift carried to a unit near the outcome's bound (L40), an event's transient read as absent because every past unit
+was measured after it faded (L41), a response capped where the obvious channel stops while a second channel keeps it
+moving (L42). Or it retreated: where the answer needs a bridge built from a second record (an attribute the target
+period no longer records, calibrated on the periods that do; the level from the complete source and the mix from the
+detailed one), it deferred or called the figure not calculable (L43, L44), or computed the bound and set it aside as
+an assumption (N32). What the approved designs did with it:
+- the constant is false through the world's own process wherever it applies, and the pack carries a test of another
+  kind that rejects it: within-unit change against the pooled profile, untreated units already near the bound, a slice
+  where the first channel cannot change, the fine log or a same-step replay of the recent event, the complete summary
+  beside the partial detail;
+- the right form is a modelling build (a path summed unit by unit, an item-level model with the bound, a fitted fade,
+  a curve run as far as the slices say, a calibrated classifier), so one sentence naming the problem leaves the build
+  to do;
+- two such judgments, each necessary, each about the size of the margin, and each moving a different part of the call
+  (one decides something against nothing, the other how much or which);
+- the prompt asks for a committed figure, so deferring is a wrong answer, never a defensible one;
+- the call holds across every defensible variant while the figures carry wide bands, the golden's own ranges hold
+  every well-fitting rival, and every figure in the memo comes out of a shipped script or workbook.
+Against the closed page: L39 is the settled-level and transport cards (a supporting step only); L40
+(`bounded_outcome_headroom`, near transport) and L41 (`validation_cannot_see_condition`, near the settled level) are
+one judgment among several; L42 (`second_channel_past_plateau`), L43 (`calibrated_proxy_for_lost_attribute`) and L44
+(`level_and_mix_from_two_sources`) are open, the last two next to the instrument-change card.
 
 **Measured dead in Sulfur** (each landed by both runs, or returned at review, at least twice; `sulfur-record.md`):
 - one more correction re-pointed inside a scaffold the runs already landed (task4 architectures 6 to 10, task10

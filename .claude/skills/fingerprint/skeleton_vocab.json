@@ -146,7 +146,11 @@
   "coincidental_agreement_joint_frequencies": "distinct units agree on every identifying field by chance far more often than the product of the fields' own frequencies implies, because the fields are dependent and concentrated where the rule runs (first names by birth cohort and community, surnames by community, dates heaped on conventions), so a match rule's false-merge rate is read from the joint distribution of the population it runs on, never from independent per-field rates",
   "lot_size_cycle_stock": "a stock is held because supply arrives in lots the process sizes (a brew, a production run, a trunk load), so it scales with the lot and the number of items rather than with throughput",
   "response_before_the_trigger": "an announced change is answered between its announcement and the date it bites (cancellations at the bill after the notice), so a response read only at the effective date misses it and the window is read from the announcement",
-  "intensive_margin_response": "a price change moves how much the staying units use, not only whether they stay, so under a cost priced per unit of use the stayers' consumption response is measured, not assumed unchanged"
+  "intensive_margin_response": "a price change moves how much the staying units use, not only whether they stay, so under a cost priced per unit of use the stayers' consumption response is measured, not assumed unchanged",
+  "second_channel_past_plateau": "a response the obvious channel caps past a threshold keeps moving through a second channel (behaviour, exposure, a process the first one starts), so its form is tested in slices where the first channel is held fixed and the curve runs as far as those slices say",
+  "bounded_outcome_headroom": "an uplift measured in points where the outcome had room to rise shrinks as the unit nears the outcome's bound, so it is modelled at the item or unit level with the bound and read at the target's own level",
+  "calibrated_proxy_for_lost_attribute": "an attribute the target period no longer records is rebuilt from a field every period carries, with a rule calibrated and validated on the periods that record both and its error carried into the estimate",
+  "level_and_mix_from_two_sources": "a complete source holds the level and a detailed but partial source the mix, with the partial source's coverage moving between periods, so each part of the estimand is taken from the source that sees it and a coverage change is never read as a change in the quantity"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -528,6 +532,18 @@
   },
   "fixed_nuisance_component": {
    "card": "A co-occurring change is tangled with the treatment",
+   "family": "how it was measured or recorded"
+  },
+  "bounded_outcome_headroom": {
+   "card": "The pooled effect does not transfer to a target with a different mix",
+   "family": "carrying an effect to a new place"
+  },
+  "calibrated_proxy_for_lost_attribute": {
+   "card": "The instrument changed (drift or step change)",
+   "family": "how it was measured or recorded"
+  },
+  "level_and_mix_from_two_sources": {
+   "card": "The instrument changed (drift or step change)",
    "family": "how it was measured or recorded"
   }
  }

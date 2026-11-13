@@ -46,7 +46,8 @@ L08 (inclusion probability another unit set, near the occurrences card), L09 to 
 vintages pooled), L14 (selected survivors), L16 and L18 (the unit priced alone; not-yet-treated taken as untreated),
 L19 and L35 (default or independence errors where units share the cluster or the shock), L20 (attenuation), L21
 (censored as answered), L23 (who is observed changed, near), L33 (variance beyond sampling error), N08 and N19
-(transport assumed), N12 (a season's rate carried, near).
+(transport assumed), N12 (a season's rate carried, near), L39 (an effect held flat along a state every target unit
+moves through: the settled-level and transport cards).
 
 **Open**, with the runs' losses behind them:
 - **The assumption named and waved through**, where the assumption is not a card's: N09 the current topology or
@@ -66,6 +67,15 @@ L19 and L35 (default or independence errors where units share the cluster or the
   agreement between two estimates that share one error; common_error_benchmark).
 - **Dismissed own evidence** (L01 to L07, L38): a class, not a lesson; it prices whatever lesson the evidence carries.
   The evidence a run measures and sets aside is almost always a second record at another grain.
+- **The constancy reflex** (L40 to L42, from the client's review pages of approved work, 2026-11-13): the run builds
+  the model well and holds one thing constant where the target leaves the data's support: an uplift carried to a unit
+  near the outcome's bound (L40, near transport), an event's trace read off final values that every past unit
+  reached after it faded (L41, near the settled level), a response capped where the obvious channel stops (L42, open).
+  The approved designs put a test of another kind in the pack and made the right form a modelling build (`../SKILL.md`
+  Part 1b).
+- **The retreat** (L43, L44, N32): where the answer needs a bridge built from a second record, the run defers, calls
+  the figure not calculable, or computes the bound and sets it aside. Open, and priced only when the prompt asks for a
+  committed figure and the files support the bridge.
 
 ## 3. What the four approved builds teach, and what no build may copy from them
 
@@ -117,8 +127,9 @@ with the runs' loss class it invites. Draw the deciding lesson from here, never 
 | Where along a network | The same load or fault has a different effect by its position on a radial or graph structure (voltage drop and losses grow with distance, delay with hops) | feeders and pipelines, supply chains, communication networks | one equivalent factor per network calibrated on an old spatial mix (N04, method shortcut) | position_on_network_effect |
 | Hidden state and dynamics | A state no record holds (a stock, a temperature, a queue, a charge level) rebuilt from the flows and the physics that move it, with its lags | storage, thermal plant, inventories, backlogs | instantaneous mapping from input to output, or the latest level carried (N13) | stock_flow_accounting, latent_structure_estimation |
 | The recording algorithm | The record is an algorithm's output (exception reporting, estimation and editing, rolling registers, billing cycles), so the work inverts the algorithm before measuring; never decided by reading one flag | meter data management, plant historians, billing systems, survey processing | the stored values taken as observations at the stored times (method shortcut); guard against data semantics: the inversion must take estimation, not one field read correctly | record_algorithm_inversion |
-| Triangulating instruments | Several sources with different blind spots measure one quantity; each part of the estimand is assigned to the source that sees it and the overlap calibrates the rest | the approved builds' anatomy (Part 3); any register beside a panel, a meter beside a model | the closest-looking or most complete source; a hold-out from the same source (narrow look, self-confirming check) | any, as the anatomy around new lessons |
+| Triangulating instruments | Several sources with different blind spots measure one quantity; each part of the estimand is assigned to the source that sees it and the overlap calibrates the rest | the approved builds' anatomy (Part 3); any register beside a panel, a meter beside a model | the closest-looking or most complete source; a hold-out from the same source (narrow look, self-confirming check); a deferral where the bridge has to be built (L43, L44) | any, as the anatomy around new lessons; level_and_mix_from_two_sources, calibrated_proxy_for_lost_attribute (both near the instrument-change card) |
 | Lumpy and joint decisions | Capacity comes in units, constraints bind jointly, costs are asymmetric, so the decision's marginal unit and its option value drive the call | crews, transformers, contracts, sweeps under a cap | the average unit, the unconstrained optimum rounded (method shortcut) | marginal_not_average (taught twice: supporting), queue_or_capacity_replay |
+| Where the target leaves the support | The model's form is tested in the region the target occupies, by a check of another kind (a slice where the obvious channel is fixed, untreated units already near the bound, the fine log of a recent event, within-unit change against the pooled profile) | any model carried past its data: a bounded score, a dose past its plateau, a unit measured soon after an event | the fitted form or effect held constant past the support and certified by a hold-out from inside it (L40 to L42, method shortcut) | second_channel_past_plateau, bounded_outcome_headroom (near transport), validation_cannot_see_condition, extrapolation_beyond_observed_range |
 | Support and units of account | A peak, a variance or a rate depends on the interval or unit it is integrated over, so the record's grain is carried to the decision's | 15-minute against hourly demand, block against point, per dwelling against per person | the record's grain taken as the decision's (method shortcut) | support_effect |
 
 A dimension does not price a result on its own: the runs model what one plot shows, run the field's textbook method
