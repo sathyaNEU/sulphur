@@ -76,6 +76,20 @@ License: not applicable (generated data, no public source)
 Used as is: not applicable (generated data)
 Breadth: 18 files (14 used, 4 distractors), 822,089 live listening rows, 459,775 licence renewals, 145,619 payments, 272 rival scan rows, four plans in two regions over 34 months, eight past rise events.
 
+## Stump screen
+
+Written after the build (the screen rule arrived on 2026-11-13, after this card was drawn); the candidates are the
+ones this architecture's prototyping put through the nine tests, answered as the measurements stand.
+
+| Candidate trap | 1 closed | 2 reflex | 3 filed | 4 clean data | 5 two records | 6 assumption | 7 shallower story | 8 across data | 9 worth the call | Kept |
+|---|---|---|---|---|---|---|---|---|---|---|
+| the response steps where the new price passes the rival's comparable plan | yes (response_at_crossing_point; nearest closed card transport, whose fix reweights a pooled effect, not a reference read per cell) | yes (each plan's own response and one pooled slope both land wrong) | yes (no document names the rival or a step) | yes | yes (charges by account and month against the rival's monthly scan by region) | yes (N02: a plan's response taken as the plan's own) | yes (L26: plans differ in price sensitivity) | yes (eight rises, four plans, two regions) | yes (the careful route lets all four through) | kept |
+| a subscription that moves down a plan is kept, not lost | yes | yes | yes (3.10 files the population followed through 2027, not how a downgrade is valued) | yes | yes (plan changes at the first bill against the past downgraders' months) | yes (L06) | yes (plan-level churn) | yes | partly: alone it moves Onbeperkt's figure outside its band but not the call; with the next row it decides Gezin | kept (test 9 partial) |
+| those who leave at a rise are the heavy listeners, those who move down the light ones | yes (marginal_not_average, taught, as a supporting step) | yes | yes | yes | yes (responders' listening before the rise against the charges) | yes (L17: the leavers are like the plan) | yes (the plan's average margin) | yes | partly: as the row above, decisive only with it | kept (test 9 partial) |
+| the 2027 per-hour rate in place of the 2026 revenue share | yes | no: schedule B files the rate and a careful run executes it | no | yes | no | no | no | yes | yes (the 2026 basis files Flex alone) | dropped (filed) |
+| counted hours rebuilt from the licence renewals and the dated profiles | yes | no: the architecture 4 judge made both by reflex | yes | no: a union and a re-key | yes | no | no | yes | no | dropped (Layer 1) |
+| the extra leaving after a month that runs out of hours | yes | yes | yes | no: the cap binds on time listened, which no file holds, so the response cannot be measured | yes | yes | yes | yes | no | dropped (unmeasurable) |
+
 ## Template check
 
 Chain signature: assembly-reconciliation, causal-reasoning, causal-reasoning, forecasting, synthesis

@@ -1,11 +1,11 @@
 {
  "task": "task1",
- "status": "BUILD",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 5,
@@ -18,18 +18,18 @@
   "checks": "96 checks, 0 FAIL"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (clause numbers and ordinary vocabulary; device_id; shell quota), every line harmless",
+  "reader": "clean (leak_check_report.md, Solver's-eye read)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (skeleton.lesson_taught marginal_not_average as a supporting step)",
+  "nearest": "severity none against everything on file"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE (its one FIX_NOW, a wording note on the December scan, ruled mistaken: the step describes the 2025 and 2026 rises, whose December scans ship)",
+  "gate_h": "not run by the judge under the 2026-11-13 scope (83dc482); the build's record: no one thing, 5 results over 4 areas, best single hint 0 of 5",
+  "report": "task1/determinism_check_report.md (determinism only; the paying base and the crossing pattern recomputed; the four per-plan euro changes not recomputed by the thread)"
  },
  "paper_pair": 41.5,
  "effort": {
@@ -59,5 +59,5 @@
   "date": "",
   "note": ""
  },
- "resume": "stage 4: leak reader and determinism judge spawned on the architecture 5 cut (gates.py 0 FAIL, checks 58 of 58, verify 29 of 29, byte-identical b40525c27049bd18 class)"
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py task1 --rewrite, then leak.py) and uploads it with target.zip; the golden ZIP and the four answer blocks are in task1/"
 }
