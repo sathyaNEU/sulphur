@@ -126,6 +126,20 @@ and back-test by reflex (`precedents.json` reflexes R01 to R37). A dimension pri
 process makes the hurried route pass its own checks (the reconciliation closes, the back-test on the record holds)
 and only a check of another kind refutes it, with a precedent id for the kind of loss.
 
+**Dead as a deciding lesson: a record to be found, merged or re-keyed.** task1 architecture 4 (an audiobook app's
+lead plan, sent back at stage 4 on 2026-11-12 and retired) put its call on two record-handling corrections: a second
+log that held exactly the rows the primary log lacked (a coverage gap, remedied by a union) and a current roster
+standing in for a dated one (remedied by walking the charges' member lists). The judge's own first pass, written
+before it saw the answers, made both by reflex and landed the graded figures, and Gate G read the pair as a
+planted_defect_flip. Whatever key it is labelled with (unmetered_component, exposure_seen_only_in_linked_record,
+time_varying_membership, linkage), a deciding lesson whose remedy is a join, a union or a re-key fails the
+clean-data test: with every file complete and correctly keyed the call is arithmetic. Such corrections are Layer 1
+or an assembly result, never a priced result. Before a card is drafted, run three screens on paper: the clean-data
+test (every file complete and keyed, the call still needs a modelling judgment the reflexive method gets wrong); the
+reflex screen (each careful-run reflex in precedents.json R01 to R37 executed perfectly lands outside the band);
+the compound hint (the best two-move sentence rescues a third of the results or fewer, so three or more independent
+judgments graded in different results).
+
 ## 5. How the next draw uses this
 
 1. Run `skeleton.py closed` and `skeleton.py lessons --min 1` before the chain is written.
