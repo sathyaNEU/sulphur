@@ -1,0 +1,62 @@
+{
+ "task": "task1",
+ "status": "PAUSED",
+ "domain": "product-analytics",
+ "subdomain": "retention-cohort-lifetime-value-modeling",
+ "objective": "forecasting",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-12",
+ "doctrine": "throughout",
+ "architecture": 5,
+ "loops": 0,
+ "call": "provisional: raise Flex, Onbeperkt and Gezin in January 2027 and hold Standaard",
+ "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan; R3 extra cancellations per subscription at the first 2027 bill by plan and country; R4 extra downgrades per subscription by plan and country; R5 each plan's change in its October base's 2027 contribution if its rise goes ahead; R6 the rises to go ahead",
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": ""
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
+ "resume": "PAUSED 2026-11-12 at stage 2 of architecture 5 (re-drawn on the author's word in the restored Kraanvogel world, generator from 87422aa): the decision is which January 2027 price rises go ahead plan by plan, on each plan's October 2026 base's 2027 contribution at EUR 0.40 per counted hour; world.py now carries a price history (each plan rose in one country in 2025 and the other in 2026), a rival price scan by country (pack.write_rival), and a rise response at the first higher bill (extra cancellations and downgrades, a step where the new price passes the rival's) with cap-hit churn on Flex and Standaard; methods.r5_rises estimates the response by event against the other country and values past downgraders' realised months. Measured: truth and golden both raise Flex, Onbeperkt and Gezin and hold Standaard; shortcuts land on four distinct wrong sets (pooled response all four; per-plan response Standaard, Onbeperkt, Gezin; the 2026 share Flex alone; the live log alone Flex and Gezin); the downgrade-free route lands on the golden set (not priced). Next: widen the per-plan margins (EUR 1.6 to 3 per subscription now) by larger rise gains or larger events, register the v5 card, write the note, prompt, figures, effort, golden and submission, gates, stage 4."
+}

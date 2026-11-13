@@ -1,0 +1,231 @@
+{
+ "bands": {
+  "contribution": {
+   "Flex": [
+    13.16,
+    13.52
+   ],
+   "Gezin": [
+    21.16,
+    22.22
+   ],
+   "Onbeperkt": [
+    -3.65,
+    -2.5
+   ],
+   "Standaard": [
+    12.31,
+    13.41
+   ]
+  },
+  "counted_per_month": {
+   "Flex": [
+    5.29,
+    5.39
+   ],
+   "Gezin": [
+    27.67,
+    28.41
+   ],
+   "Onbeperkt": [
+    31.06,
+    31.72
+   ],
+   "Standaard": [
+    10.39,
+    10.6
+   ]
+  }
+ },
+ "careful_lead": "Onbeperkt",
+ "clauses": [
+  2.1,
+  2.2,
+  2.3,
+  2.4,
+  3.1,
+  3.2,
+  3.3,
+  3.4,
+  3.5,
+  3.6,
+  3.7,
+  3.8
+ ],
+ "contribution": {
+  "Flex": 13.3,
+  "Gezin": 22.0,
+  "Onbeperkt": -3.6,
+  "Standaard": 12.4
+ },
+ "contribution_detail": {
+  "Flex": {
+   "counted hours": 23.7,
+   "fee (EUR)": 13.9,
+   "remuneration (EUR)": 9.48
+  },
+  "Gezin": {
+   "counted hours": 247.1,
+   "fee (EUR)": 54.8,
+   "remuneration (EUR)": 98.86
+  },
+  "Onbeperkt": {
+   "counted hours": 280.9,
+   "fee (EUR)": 14.2,
+   "remuneration (EUR)": 112.35
+  },
+  "Standaard": {
+   "counted hours": 81.8,
+   "fee (EUR)": 44.2,
+   "remuneration (EUR)": 32.7
+  }
+ },
+ "counted_per_month": {
+  "Flex": 5.34,
+  "Gezin": 27.95,
+  "Onbeperkt": 31.37,
+  "Standaard": 10.49
+ },
+ "fee": {
+  "Flex": 13.9,
+  "Gezin": 54.8,
+  "Onbeperkt": 14.2,
+  "Standaard": 44.2
+ },
+ "horizon_months": 24,
+ "lead_margin_eur": 8.7,
+ "lead_plan": "Gezin",
+ "lead_plan_code": "GEZ",
+ "paying_oct": {
+  "Flex": 376,
+  "Gezin": 731,
+  "Onbeperkt": 1004,
+  "Standaard": 858
+ },
+ "paying_oct_total": 2969,
+ "rate": 0.4,
+ "remuneration_2027_band": [
+  191900,
+  207300
+ ],
+ "remuneration_2027_base": 202600,
+ "routes": {
+  "streamed seconds read as hours, today's profile export": {
+   "contribution": {
+    "Flex": 16.6,
+    "Gezin": 29.0,
+    "Onbeperkt": 70.2,
+    "Standaard": 28.5
+   },
+   "counted_per_month": {
+    "Flex": 3.3,
+    "Gezin": 23.17,
+    "Onbeperkt": 11.96,
+    "Standaard": 5.33
+   },
+   "lead": "Onbeperkt",
+   "remuneration_2027": 115300
+  },
+  "the 2026 remuneration basis carried (52 per cent of net revenue)": {
+   "contribution": {
+    "Flex": 5.4,
+    "Gezin": 36.7,
+    "Onbeperkt": 48.1,
+    "Standaard": 1.6
+   },
+   "counted_per_month": {
+    "Flex": 5.34,
+    "Gezin": 27.95,
+    "Onbeperkt": 31.37,
+    "Standaard": 10.49
+   },
+   "lead": "Onbeperkt",
+   "remuneration_2027": 209000
+  },
+  "the careful route: the live roll-up's positions, today's profile export": {
+   "contribution": {
+    "Flex": 15.1,
+    "Gezin": 23.8,
+    "Onbeperkt": 45.5,
+    "Standaard": 23.0
+   },
+   "counted_per_month": {
+    "Flex": 4.29,
+    "Gezin": 26.29,
+    "Onbeperkt": 18.8,
+    "Standaard": 7.1
+   },
+   "lead": "Onbeperkt",
+   "remuneration_2027": 149900
+  },
+  "the golden": {
+   "contribution": {
+    "Flex": 13.3,
+    "Gezin": 22.0,
+    "Onbeperkt": -3.6,
+    "Standaard": 12.4
+   },
+   "counted_per_month": {
+    "Flex": 5.34,
+    "Gezin": 27.95,
+    "Onbeperkt": 31.37,
+    "Standaard": 10.49
+   },
+   "lead": "Gezin",
+   "remuneration_2027": 202600
+  },
+  "the licence renewals merged, today's profile export": {
+   "contribution": {
+    "Flex": 14.2,
+    "Gezin": 10.4,
+    "Onbeperkt": 3.3,
+    "Standaard": 19.8
+   },
+   "counted_per_month": {
+    "Flex": 4.64,
+    "Gezin": 31.52,
+    "Onbeperkt": 28.58,
+    "Standaard": 8.1
+   },
+   "lead": "Standaard",
+   "remuneration_2027": 197700
+  },
+  "the live roll-up's positions, the profiles each charge lists": {
+   "contribution": {
+    "Flex": 14.2,
+    "Gezin": 32.6,
+    "Onbeperkt": 42.7,
+    "Standaard": 16.1
+   },
+   "counted_per_month": {
+    "Flex": 4.94,
+    "Gezin": 23.56,
+    "Onbeperkt": 20.51,
+    "Standaard": 9.27
+   },
+   "lead": "Onbeperkt",
+   "remuneration_2027": 153000
+  }
+ },
+ "runner_up": "Flex",
+ "spring24": {
+  "Flex net revenue": 36.67,
+  "Flex paying months": 3.78,
+  "Flex share paying": 54.3,
+  "Gezin net revenue": 175.66,
+  "Gezin paying months": 8.46,
+  "Gezin share paying": 56.6,
+  "Onbeperkt net revenue": 122.95,
+  "Onbeperkt paying months": 7.14,
+  "Onbeperkt share paying": 60.7,
+  "Standaard net revenue": 89.33,
+  "Standaard paying months": 6.51,
+  "Standaard share paying": 65.1
+ },
+ "spring24_trial_starts": {
+  "Flex": 337,
+  "Gezin": 309,
+  "Onbeperkt": 440,
+  "Standaard": 436
+ }
+}
