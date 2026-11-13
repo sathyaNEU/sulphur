@@ -71,6 +71,54 @@ PERTURB = [("the campaigns' pressure factor +0.03", dict(corr_shift=0.03)),
            ("package C's pump gain -20 per cent", dict(gain_scale=0.8)),
            ("cell 5's spring calibration +7 per cent", dict(s5_scale=1.07)),
            ("cell 5's spring calibration -7 per cent", dict(s5_scale=0.93))]
+# the holistic audit's test: every combination of the choices a careful run makes inside the answer blocks' bands (the
+# pressure response that sets R2's edge, cell 5's spring calibration across R4's band, package C's pump gain across its
+# rivals, cell 4's 2027 collection carried by zone or flat), each filing the call
+# every pressure specification whose 2025 figure stays inside R2's band (an 8- to 32-hour lag; 36 hours and longer
+# put R4 or R2 outside theirs), the half-life reading and the two pressure-change specifications that set R2's edge
+SWEEP_BARO = [("the fitted lag", "ema"), ("an 8-hour lag", "ema_tau8"), ("a 12-hour lag", "ema_tau12"),
+              ("a 20-hour lag", "ema_tau20"), ("a 24-hour lag", "ema_tau24"), ("a 32-hour lag", "ema_tau32"),
+              ("a 16-hour half-life on all three chambers", "ema_hl16_all"),
+              ("the pressure's 12-hour change", "dp12"), ("the pressure's 24-hour change", "dp24")]
+IN_BAND_KEYS = ("R2_actual_2025_t", "R4_cell5_generation_2027_t", "R5_cell5_oxidized_share_2027_pct")
+SWEEP_S5 = [(-7, 0.93), (0, 1.0), (7, 1.07)]
+SWEEP_GAIN = [(-7, 0.93), (0, 1.0), (7, 1.07)]
+SWEEP_CE4 = [("cell 4 by zone", "zones"), ("cell 4 held flat", "flat")]
+
+
+def sweep_routes():
+    out = []
+    for bn, b in SWEEP_BARO:
+        for s5p, s5 in SWEEP_S5:
+            for gp, gs in SWEEP_GAIN:
+                for cn, c4 in SWEEP_CE4:
+                    s5t = "as fitted" if s5p == 0 else "%+d per cent" % s5p
+                    gt = "as fitted" if gp == 0 else "%+d per cent" % gp
+                    name = "%s, cell 5's spring calibration %s, package C's gain %s, %s" % (bn, s5t, gt, cn)
+                    out.append((name, dict(baro=b, s5_scale=s5, gain_scale=gs, ce4=c4)))
+    return out
+
+
+def in_band(R, G):
+    """Whether a route keeps the 2025 emission, cell 5's 2027 generation and its cover's share inside their bands."""
+    f = figures(R)
+    return all(grade(k, G[k], f[k]) == "right" for k in IN_BAND_KEYS)
+
+
+def r4_flip(F, cache, base):
+    """Cell 5's 2027 generation at which package C reaches the limit, the route's other choices held: bisected on
+    cell 5's spring calibration."""
+    lo, hi = 0.2, 1.0
+    for _ in range(40):
+        mid = 0.5 * (lo + hi)
+        R = A.run(F, dict(base, s5_scale=mid), cache)
+        if R["R7"]["C"] > P.LIMIT_T:
+            hi = mid
+        else:
+            lo = mid
+    return float(A.run(F, dict(base, s5_scale=hi), cache)["R4"])
+
+
 HINTS = [("Cell 4's collected gas is flat because the leachate that sped its decay also flooded its lower wells; the "
           "wells it did not flood show the faster decay.", dict(kwet=True, r3="zones")),
          ("Waste holds gas while the barometer rises and lets it out as it falls, and the campaigns only fly on "
@@ -101,14 +149,14 @@ def figures(R):
 
 def band_scalar(key, v):
     return {"R1_cell5_msw_tons": (v * 0.99, v * 1.01), "R2_actual_2025_t": (v * 0.90, v * 1.10),
-            "R3_cell4_generation_change_pct": (v - 8.0, v + 8.0), "R4_cell5_generation_2027_t": (v * 0.88, v * 1.12),
-            "R5_cell5_oxidized_share_2027_pct": (v - 4.0, v + 4.0)}[key]
+            "R3_cell4_generation_change_pct": (v - 8.0, v + 8.0), "R4_cell5_generation_2027_t": (v * 0.93, v * 1.07),
+            "R5_cell5_oxidized_share_2027_pct": (v - 3.0, v + 3.0)}[key]
 
 
 def partly_scalar(key, v):
     return {"R1_cell5_msw_tons": (v * 0.97, v * 1.03), "R2_actual_2025_t": (v * 0.80, v * 1.20),
-            "R3_cell4_generation_change_pct": (v - 16.0, v + 16.0), "R4_cell5_generation_2027_t": (v * 0.75, v * 1.25),
-            "R5_cell5_oxidized_share_2027_pct": (v - 8.0, v + 8.0)}[key]
+            "R3_cell4_generation_change_pct": (v - 16.0, v + 16.0), "R4_cell5_generation_2027_t": (v * 0.85, v * 1.15),
+            "R5_cell5_oxidized_share_2027_pct": (v - 6.0, v + 6.0)}[key]
 
 
 GAP_HALF_T = 490.0   # the survey's gap is the actual emission less a filed figure: R2's band (10 per cent) carried
@@ -187,6 +235,8 @@ def run_all(F):
     fam = [(n, A.run(F, o, cache)) for n, o in FAMILY]
     sc = [(n, A.run(F, o, cache)) for n, o in SHORTCUTS]
     pt = [(n, A.run(F, o, cache)) for n, o in PERTURB]
+    sw = [(n, A.run(F, o, cache)) for n, o in sweep_routes()]
+    pt = pt + [(n, R) for n, R in sw if n in corner_names(sw, figures(out["golden"]))]
     drops = [(j, A.run(F, d, cache)) for j, _, d, _, _, _ in STUMPS]
     alones = []
     for j, _, _, fx, _, _ in STUMPS:
@@ -198,11 +248,20 @@ def run_all(F):
         oo = dict(REFLEX)
         oo.update(o)
         hints.append((sent, A.run(F, oo, cache)))
+    cache["_sweep"] = sw
     return out, fam, sc, pt, drops, alones, hints, cache
+
+
+def corner_names(sw, G):
+    """The sweep's two corners recorded as perturbations: package C at its lowest among the combinations that keep R2,
+    R4 and R5 inside their bands, package D at its highest of all."""
+    return {min([x for x in sw if in_band(x[1], G)], key=lambda x: x[1]["R7"]["C"])[0],
+            max(sw, key=lambda x: x[1]["R7"]["D"])[0]}
 
 
 def write(F, gen_out):
     out, fam, sc, pt, drops, alones, hints, cache = run_all(F)
+    sw = cache["_sweep"]
     Rg = out["golden"]
     G = figures(Rg)
     Cf = figures(out["careful"])
@@ -234,7 +293,23 @@ def write(F, gen_out):
                    golden_answer=ans(Rg["R8"]),
                    golden_family=[dict(name=n, answer=ans(R["R8"])) for n, R in fam],
                    perturbations=[dict(input=n, answer=ans(R["R8"])) for n, R in pt],
-                   shortcuts=[dict(name=n, answer=ans(R["R8"])) for n, R in sc])
+                   shortcuts=[dict(name=n, answer=ans(R["R8"])) for n, R in sc],
+                   sweep=dict(grid="every combination of the pressure response (the fitted 16-hour lag, an 8-, 12-, "
+                                   "20-, 24- or 32-hour lag, a 16-hour half-life on all three chambers, the 12- or "
+                                   "24-hour change), cell 5's spring calibration (-7, 0 or +7 per cent, R4's band), "
+                                   "package C's pump gain (-7, 0 or +7 per cent) and cell 4's 2027 collection (by zone "
+                                   "or held flat)",
+                              runs=len(sw),
+                              in_band_runs=sum(in_band(R, G) for _, R in sw),
+                              C_min_in_band_t=round(min(R["R7"]["C"] for _, R in sw if in_band(R, G))),
+                              C_min_in_band_name=min([x for x in sw if in_band(x[1], G)],
+                                                     key=lambda x: x[1]["R7"]["C"])[0],
+                              answers={a: sum(ans(R["R8"]) == a for _, R in sw) for a in sorted(
+                                  set(ans(R["R8"]) for _, R in sw))},
+                              C_min_t=round(min(R["R7"]["C"] for _, R in sw)),
+                              C_min_name=min(sw, key=lambda x: x[1]["R7"]["C"])[0],
+                              D_max_t=round(max(R["R7"]["D"] for _, R in sw)),
+                              D_max_name=max(sw, key=lambda x: x[1]["R7"]["D"])[0]))
     jud = []
     for (j, name, d, fx, prec, hurried), (_, Rd), (_, Ra) in zip(STUMPS, drops, alones):
         fd = figures(Rd)
@@ -254,7 +329,8 @@ def write(F, gen_out):
                "golden": {p: round(Rg["R7"][p]) for p in PK},
                "family": {n: {p: round(R["R7"][p]) for p in PK} for n, R in fam},
                "perturbations": {n: {p: round(R["R7"][p]) for p in PK} for n, R in pt},
-               "shortcuts": {n: {p: round(R["R7"][p]) for p in PK} for n, R in sc}}
+               "shortcuts": {n: {p: round(R["R7"][p]) for p in PK} for n, R in sc},
+               "sweep": {n: {p: round(R["R7"][p]) for p in PK} for n, R in sw}}
     E = dict(results=res, hints=hint_rows, routes=routes, forcing=forcing, factorial=factorial, margins=margins,
              weights={"recommendation": 14, "components": 24, "asks": 55, "instruction": 7})
     figs = dict(G)
@@ -339,12 +415,16 @@ def extra(F, Rg, Rc, fam, sc, pt, jud, cache):
                               "the hours the campaigns did not sample": round(R["R6"]["survey_gap"])}}
                    for n, R in fam}
     lim = P.LIMIT_T
-    famC = [(R["R7"]["C"], n) for n, R in fam] + [(R["R7"]["C"], n) for n, R in pt]
-    famD = [(R["R7"]["D"], n) for n, R in fam] + [(R["R7"]["D"], n) for n, R in pt]
+    sw = cache["_sweep"]
+    G1 = figures(Rg)
+    famC = [(R["R7"]["C"], n) for n, R in fam] + [(R["R7"]["C"], n) for n, R in pt] + [
+        (R["R7"]["C"], n) for n, R in sw if in_band(R, G1)]
+    famD = [(R["R7"]["D"], n) for n, R in fam] + [(R["R7"]["D"], n) for n, R in pt] + [(R["R7"]["D"], n) for n, R in sw]
     cmin, dmax = min(famC), max(famD)
     x["nearest"] = {"C_min_t": round(cmin[0]), "C_min_pct": round(100 * (cmin[0] / lim - 1), 1), "C_name": cmin[1],
                     "C_over_t": round(cmin[0]) - round(lim),
-                    "D_max_t": round(dmax[0]), "D_max_pct": round(100 * (1 - dmax[0] / lim), 1), "D_name": dmax[1]}
+                    "D_max_t": round(dmax[0]), "D_max_pct": round(100 * (1 - dmax[0] / lim), 1), "D_name": dmax[1],
+                    "D_under_t": round(lim) - round(dmax[0])}
     x["perturbations"] = {n: {"answer": ans(R["R8"]), "C": round(R["R7"]["C"]), "D": round(R["R7"]["D"])}
                           for n, R in pt}
     closed = next(R for n, R in fam if n.startswith("the level set by the closed cells"))
@@ -354,8 +434,33 @@ def extra(F, Rg, Rc, fam, sc, pt, jud, cache):
     x["plots"] = int(F["oxplots"]["plot_id"].nunique())
     x["ce4_zones"] = {k: round(v, 2) for k, v in Rg["ce4_zones"].items()}
     x["cell5_acres"] = float(F["cells"].set_index("cell").loc[5, "footprint_acres"])
+    x["cell5_lifts"] = {"log_oct_2026": str(F["dailylog"]["working_lift"].iloc[-1]),
+                        "plan_dec_2027": str(F["fillplan"]["lift"].iloc[-1])}
+    x["pump"] = {"wells": int(Rg["pump_wells"]), "s_after": round(Rg["z"]["s_after"], 2)}
+    tk = A.tickets_monthly(F, "clean")
+    tk = tk[(tk["area"] == "C5") & (tk["mat"] == "MSW") & (tk["ticket_date"] <= P.DATA_END.date())]
+    x["contract"] = {"hauler": P.CONTRACT["hauler"], "start": P.CONTRACT["start"].strftime("%B %Y"),
+                     "tons_to_oct_2026": round(float(tk.loc[tk["hauler"] == P.CONTRACT["hauler"], "net_tons"].sum()))}
     x["cell5_acres_2025_report"] = round(P.RULE_AREAS_2025["none"] / 4046.86, 1)
-    x["bands"] = {"R1_pct": 1, "R2_pct": 10, "R3_points": 8, "R4_pct": 12, "R5_points": 4, "R6_collection_pct": 15,
+    x["sweep_runs"] = len(sw)
+    G0 = figures(Rg)
+    swb = [(n, R) for n, R in sw if in_band(R, G0)]
+    cib = min(swb, key=lambda x: x[1]["R7"]["C"])
+    x["sweep_in_band"] = {"runs": len(swb), "C_min_t": round(cib[1]["R7"]["C"]), "C_name": cib[0],
+                          "C_over_t": round(cib[1]["R7"]["C"]) - round(lim),
+                          "C_min_pct": round(100 * (cib[1]["R7"]["C"] / lim - 1), 1)}
+    call_ = min(sw, key=lambda x: x[1]["R7"]["C"])
+    x["sweep_all"] = {"C_min_t": round(call_[1]["R7"]["C"]), "C_name": call_[0],
+                      "C_over_t": round(call_[1]["R7"]["C"]) - round(lim),
+                      "C_min_pct": round(100 * (call_[1]["R7"]["C"] / lim - 1), 1),
+                      "R4_pct": round(100 * (call_[1]["R4"] / Rg["R4"] - 1), 1),
+                      "R4_off_pct": round(abs(100 * (call_[1]["R4"] / Rg["R4"] - 1)), 1)}
+    x["sweep_C_min_t"] = round(min(R["R7"]["C"] for _, R in sw))
+    x["sweep_D_max_t"] = round(max(R["R7"]["D"] for _, R in sw))
+    x["r4_flip"] = {"golden_t": round(r4_flip(F, cache, {})),
+                    "run_route_t": round(r4_flip(F, cache, dict(baro="ema_tau24", gain_scale=1.07))),
+                    "band_low_t": round(Rg["R4"] * 0.93)}
+    x["bands"] = {"R1_pct": 1, "R2_pct": 10, "R3_points": 8, "R4_pct": 7, "R5_points": 3, "R6_collection_pct": 15,
                   "R6_oxidation_t": 250, "R6_survey_gap_t": round(GAP_HALF_T), "R7_pct": 7}
     x["ce4_cap_pct"] = round(100 * P.CE4_CAP)
     x["ce_closed_pct"] = round(100 * P.CE_CLOSED_DESIGN)

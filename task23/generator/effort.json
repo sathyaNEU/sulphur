@@ -7,19 +7,19 @@
    "figure": "R1_cell5_msw_tons",
    "depends": [],
    "independent": "the scale tickets and the daily log",
-   "golden": 574197,
+   "golden": 701823,
    "band": [
-    568455.03,
-    579938.97
+    694804.77,
+    708841.23
    ],
    "partly": [
-    556971.09,
-    591422.91
+    680768.31,
+    722877.69
    ],
    "passes": {
-    "quick": 648207,
-    "careful": 574197,
-    "thorough": 574197
+    "quick": 776455,
+    "careful": 701823,
+    "thorough": 701823
    }
   },
   {
@@ -84,19 +84,19 @@
     "R3"
    ],
    "independent": "",
-   "golden": 3752,
+   "golden": 4732,
    "band": [
-    3301.76,
-    4202.24
+    4400.76,
+    5063.24
    ],
    "partly": [
-    2814.0,
-    4690.0
+    4022.2,
+    5441.8
    ],
    "passes": {
-    "quick": 2074,
-    "careful": 959,
-    "thorough": 3752
+    "quick": 2624,
+    "careful": 1205,
+    "thorough": 4732
    },
    "precedent": [
     "L11",
@@ -113,19 +113,19 @@
     "R4"
    ],
    "independent": "",
-   "golden": 17.1,
+   "golden": 14.1,
    "band": [
-    13.1,
-    21.1
+    11.1,
+    17.1
    ],
    "partly": [
-    9.1,
-    25.1
+    8.1,
+    20.1
    ],
    "passes": {
     "quick": 10.0,
     "careful": 39.3,
-    "thorough": 17.1
+    "thorough": 14.1
    },
    "precedent": [
     "N04",
@@ -142,18 +142,18 @@
    ],
    "independent": "",
    "golden": {
-    "collection efficiency": 3280,
-    "oxidation": -467,
+    "collection efficiency": 3191,
+    "oxidation": -412,
     "the hours the campaigns did not sample": 1387
    },
    "bands": {
     "collection efficiency": [
-     2788.0,
-     3772.0
+     2712.3,
+     3669.6
     ],
     "oxidation": [
-     -717.0,
-     -217.0
+     -662.0,
+     -162.0
     ],
     "the hours the campaigns did not sample": [
      897.0,
@@ -168,13 +168,13 @@
      "the hours the campaigns did not sample": 0
     },
     "careful": {
-     "collection efficiency": 2274,
-     "oxidation": -646,
+     "collection efficiency": 2186,
+     "oxidation": -587,
      "the hours the campaigns did not sample": 0
     },
     "thorough": {
-     "collection efficiency": 3280,
-     "oxidation": -467,
+     "collection efficiency": 3191,
+     "oxidation": -412,
      "the hours the campaigns did not sample": 1387
     }
    },
@@ -195,32 +195,32 @@
    ],
    "independent": "",
    "golden": {
-    "package A": 6942,
-    "package B": 6385,
-    "package C": 5549,
-    "package D": 4495,
-    "package E": 4095
+    "package A": 7868,
+    "package B": 7371,
+    "package C": 6489,
+    "package D": 4507,
+    "package E": 4124
    },
    "bands": {
     "package A": [
-     6456.1,
-     7427.9
+     7317.2,
+     8418.8
     ],
     "package B": [
-     5938.1,
-     6832.0
+     6855.0,
+     7887.0
     ],
     "package C": [
-     5160.6,
-     5937.4
+     6034.8,
+     6943.2
     ],
     "package D": [
-     4180.4,
-     4809.7
+     4191.5,
+     4822.5
     ],
     "package E": [
-     3808.4,
-     4381.7
+     3835.3,
+     4412.7
     ]
    },
    "partly_share": 0.5,
@@ -233,18 +233,18 @@
      "package E": 2149
     },
     "careful": {
-     "package A": 4015,
-     "package B": 3925,
-     "package C": 3169,
-     "package D": 2987,
-     "package E": 2704
+     "package A": 4138,
+     "package B": 4059,
+     "package C": 3261,
+     "package D": 2929,
+     "package E": 2661
     },
     "thorough": {
-     "package A": 6942,
-     "package B": 6385,
-     "package C": 5549,
-     "package D": 4495,
-     "package E": 4095
+     "package A": 7868,
+     "package B": 7371,
+     "package C": 6489,
+     "package D": 4507,
+     "package E": 4124
     }
    },
    "precedent": [
@@ -342,7 +342,7 @@
   },
   {
    "name": "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation",
-   "answer": "no package"
+   "answer": "package E"
   },
   {
    "name": "the closed cells' level with both decay rates and the study's oxidation",
@@ -355,7 +355,7 @@
  ],
  "forcing": {
   "kind": "set",
-  "line": "the Council's 2027 limit of 5,100 metric tons",
+  "line": "the Council's 2027 limit of 5,500 metric tons",
   "golden_answer": "package D",
   "golden_family": [
    {
@@ -463,6 +463,14 @@
    {
     "input": "cell 5's spring calibration -7 per cent",
     "answer": "package D"
+   },
+   {
+    "input": "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat",
+    "answer": "package D"
+   },
+   {
+    "input": "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone",
+    "answer": "package D"
    }
   ],
   "shortcuts": [
@@ -508,24 +516,38 @@
    },
    {
     "name": "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation",
-    "answer": "no package"
+    "answer": "package E"
    },
    {
     "name": "the closed cells' level with both decay rates and the study's oxidation",
     "answer": "package C"
    }
-  ]
+  ],
+  "sweep": {
+   "grid": "every combination of the pressure response (the fitted 16-hour lag, an 8-, 12-, 20-, 24- or 32-hour lag, a 16-hour half-life on all three chambers, the 12- or 24-hour change), cell 5's spring calibration (-7, 0 or +7 per cent, R4's band), package C's pump gain (-7, 0 or +7 per cent) and cell 4's 2027 collection (by zone or held flat)",
+   "runs": 162,
+   "in_band_runs": 114,
+   "C_min_in_band_t": 5806,
+   "C_min_in_band_name": "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone",
+   "answers": {
+    "package D": 162
+   },
+   "C_min_t": 5538,
+   "C_min_name": "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone",
+   "D_max_t": 4801,
+   "D_max_name": "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat"
+  }
  },
  "factorial": {
   "golden_answer": "package D",
   "reflex_route": {
    "answer": "package A",
    "packages_t": {
-    "A": 4015,
-    "B": 3925,
-    "C": 3169,
-    "D": 2987,
-    "E": 2704
+    "A": 4138,
+    "B": 4059,
+    "C": 3261,
+    "D": 2929,
+    "E": 2661
    }
   },
   "judgments": [
@@ -549,11 +571,11 @@
       "R8"
      ],
      "packages_t": {
-      "A": 5221,
-      "B": 5011,
-      "C": 4114,
-      "D": 3749,
-      "E": 3292
+      "A": 5557,
+      "B": 5364,
+      "C": 4417,
+      "D": 3709,
+      "E": 3270
      }
     },
     "alone": {
@@ -562,11 +584,11 @@
       "R3"
      ],
      "packages_t": {
-      "A": 4574,
-      "B": 4360,
-      "C": 3653,
-      "D": 3220,
-      "E": 2976
+      "A": 4911,
+      "B": 4723,
+      "C": 3976,
+      "D": 3184,
+      "E": 2954
      }
     }
    },
@@ -589,11 +611,11 @@
       "R8"
      ],
      "packages_t": {
-      "A": 5663,
-      "B": 5190,
-      "C": 4370,
-      "D": 3485,
-      "E": 3243
+      "A": 6451,
+      "B": 6026,
+      "C": 5161,
+      "D": 3488,
+      "E": 3263
      }
     },
     "alone": {
@@ -602,11 +624,11 @@
       "R2"
      ],
      "packages_t": {
-      "A": 4986,
-      "B": 4872,
-      "C": 4117,
-      "D": 3887,
-      "E": 3433
+      "A": 5148,
+      "B": 5048,
+      "C": 4250,
+      "D": 3832,
+      "E": 3393
      }
     }
    },
@@ -629,22 +651,22 @@
       "R8"
      ],
      "packages_t": {
-      "A": 5713,
-      "B": 5443,
-      "C": 4735,
-      "D": 4191,
-      "E": 3787
+      "A": 6145,
+      "B": 5907,
+      "C": 5160,
+      "D": 4163,
+      "E": 3773
      }
     },
     "alone": {
      "answer": "package A",
      "results_rescued": [],
      "packages_t": {
-      "A": 4211,
-      "B": 4036,
-      "C": 3153,
-      "D": 2855,
-      "E": 2569
+      "A": 4489,
+      "B": 4327,
+      "C": 3395,
+      "D": 2812,
+      "E": 2544
      }
     }
    },
@@ -683,284 +705,1434 @@
   ]
  },
  "margins": {
-  "limit_t": 5100.0,
+  "limit_t": 5500.0,
   "golden": {
-   "A": 6942,
-   "B": 6385,
-   "C": 5549,
-   "D": 4495,
-   "E": 4095
+   "A": 7868,
+   "B": 7371,
+   "C": 6489,
+   "D": 4507,
+   "E": 4124
   },
   "family": {
    "the golden: an exponential pressure lag fitted on both soil-cover chambers, the state's campaigns, cell 5 calibrated on its spring 2026 campaigns, a saturating oxidation": {
-    "A": 6942,
-    "B": 6385,
-    "C": 5549,
-    "D": 4495,
-    "E": 4095
+    "A": 7868,
+    "B": 7371,
+    "C": 6489,
+    "D": 4507,
+    "E": 4124
    },
    "the pressure lag fixed at 12 hours": {
-    "A": 7052,
-    "B": 6488,
-    "C": 5651,
-    "D": 4583,
-    "E": 4170
+    "A": 7990,
+    "B": 7486,
+    "C": 6603,
+    "D": 4596,
+    "E": 4199
    },
    "the pressure lag fixed at 20 hours": {
-    "A": 6778,
-    "B": 6232,
-    "C": 5398,
-    "D": 4365,
-    "E": 3986
+    "A": 7688,
+    "B": 7199,
+    "C": 6319,
+    "D": 4375,
+    "E": 4013
    },
    "cell 4's chamber alone": {
-    "A": 6938,
-    "B": 6382,
-    "C": 5546,
-    "D": 4492,
-    "E": 4093
+    "A": 7864,
+    "B": 7367,
+    "C": 6485,
+    "D": 4504,
+    "E": 4122
    },
    "the campaigns and the drone flights weighted by their uncertainty": {
-    "A": 6942,
-    "B": 6385,
-    "C": 5549,
-    "D": 4495,
-    "E": 4095
+    "A": 7868,
+    "B": 7371,
+    "C": 6489,
+    "D": 4507,
+    "E": 4124
    },
    "oxidation as a logistic in the log of the flux": {
-    "A": 6929,
-    "B": 6376,
-    "C": 5526,
-    "D": 4477,
-    "E": 4077
+    "A": 7851,
+    "B": 7356,
+    "C": 6459,
+    "D": 4487,
+    "E": 4105
    },
    "cell 5 on cell 4's methane potential": {
-    "A": 6893,
-    "B": 6344,
-    "C": 5508,
-    "D": 4470,
-    "E": 4071
+    "A": 7806,
+    "B": 7316,
+    "C": 6433,
+    "D": 4481,
+    "E": 4099
    },
    "the faster decay ramped in over three months": {
-    "A": 6934,
-    "B": 6380,
-    "C": 5543,
-    "D": 4493,
-    "E": 4093
+    "A": 7855,
+    "B": 7359,
+    "C": 6476,
+    "D": 4503,
+    "E": 4120
    },
    "the faster decay ramped in over six months": {
-    "A": 6926,
-    "B": 6374,
-    "C": 5536,
-    "D": 4491,
-    "E": 4090
+    "A": 7838,
+    "B": 7346,
+    "C": 6462,
+    "D": 4500,
+    "E": 4116
    },
    "package C's gain as the pilot's mean flow ratio": {
-    "A": 6942,
-    "B": 6385,
-    "C": 5490,
-    "D": 4436,
-    "E": 4058
+    "A": 7868,
+    "B": 7371,
+    "C": 6443,
+    "D": 4461,
+    "E": 4096
    },
    "the level set by the closed cells' collected gas at the closure plan's design collection": {
-    "A": 7008,
-    "B": 6454,
-    "C": 5617,
-    "D": 4567,
-    "E": 4151
+    "A": 7657,
+    "B": 7172,
+    "C": 6291,
+    "D": 4365,
+    "E": 4002
    },
    "all three chambers pooled in the pressure fit": {
-    "A": 6874,
-    "B": 6322,
-    "C": 5486,
-    "D": 4441,
-    "E": 4050
+    "A": 7794,
+    "B": 7300,
+    "C": 6418,
+    "D": 4452,
+    "E": 4078
    },
    "oxidation as a capacity with its own half-saturation flux": {
-    "A": 6875,
-    "B": 6324,
-    "C": 5484,
-    "D": 4445,
-    "E": 4044
+    "A": 7790,
+    "B": 7297,
+    "C": 6410,
+    "D": 4455,
+    "E": 4071
    },
    "cell 4's collection efficiency held at its August to October 2026 level": {
-    "A": 6971,
-    "B": 6415,
-    "C": 5557,
-    "D": 4503,
-    "E": 4102
+    "A": 7898,
+    "B": 7401,
+    "C": 6495,
+    "D": 4513,
+    "E": 4131
    }
   },
   "perturbations": {
    "the campaigns' pressure factor +0.03": {
-    "A": 6717,
-    "B": 6175,
-    "C": 5341,
-    "D": 4316,
-    "E": 3944
+    "A": 7620,
+    "B": 7135,
+    "C": 6255,
+    "D": 4326,
+    "E": 3972
    },
    "the campaigns' pressure factor -0.03": {
-    "A": 7183,
-    "B": 6612,
-    "C": 5773,
-    "D": 4688,
-    "E": 4258
+    "A": 8136,
+    "B": 7625,
+    "C": 6740,
+    "D": 4702,
+    "E": 4289
    },
    "the recirculated decay rate +8 per cent": {
-    "A": 7154,
-    "B": 6556,
-    "C": 5727,
-    "D": 4588,
-    "E": 4197
+    "A": 8156,
+    "B": 7621,
+    "C": 6747,
+    "D": 4607,
+    "E": 4233
    },
    "the recirculated decay rate -8 per cent": {
-    "A": 6725,
-    "B": 6212,
-    "C": 5368,
-    "D": 4401,
-    "E": 3992
+    "A": 7577,
+    "B": 7117,
+    "C": 6226,
+    "D": 4406,
+    "E": 4015
    },
    "the dry decay rate +10 per cent": {
-    "A": 6975,
-    "B": 6399,
-    "C": 5578,
-    "D": 4485,
-    "E": 4101
+    "A": 7943,
+    "B": 7428,
+    "C": 6561,
+    "D": 4504,
+    "E": 4137
    },
    "the dry decay rate -10 per cent": {
-    "A": 6918,
-    "B": 6379,
-    "C": 5529,
-    "D": 4509,
-    "E": 4094
+    "A": 7809,
+    "B": 7327,
+    "C": 6431,
+    "D": 4515,
+    "E": 4118
    },
    "the covers' oxidation capacity +15 per cent": {
-    "A": 7030,
-    "B": 6450,
-    "C": 5620,
-    "D": 4529,
-    "E": 4121
+    "A": 8004,
+    "B": 7484,
+    "C": 6609,
+    "D": 4549,
+    "E": 4159
    },
    "the covers' oxidation capacity -15 per cent": {
-    "A": 6845,
-    "B": 6315,
-    "C": 5472,
-    "D": 4460,
-    "E": 4068
+    "A": 7720,
+    "B": 7248,
+    "C": 6358,
+    "D": 4462,
+    "E": 4088
    },
    "package C's pump gain +20 per cent": {
-    "A": 6942,
-    "B": 6385,
-    "C": 5385,
-    "D": 4331,
-    "E": 3992
+    "A": 7868,
+    "B": 7371,
+    "C": 6316,
+    "D": 4334,
+    "E": 4016
    },
    "package C's pump gain -20 per cent": {
-    "A": 6942,
-    "B": 6385,
-    "C": 5715,
-    "D": 4661,
-    "E": 4199
+    "A": 7868,
+    "B": 7371,
+    "C": 6663,
+    "D": 4681,
+    "E": 4234
    },
    "cell 5's spring calibration +7 per cent": {
-    "A": 7197,
-    "B": 6599,
-    "C": 5762,
-    "D": 4624,
-    "E": 4224
+    "A": 8193,
+    "B": 7659,
+    "C": 6777,
+    "D": 4641,
+    "E": 4258
    },
    "cell 5's spring calibration -7 per cent": {
-    "A": 6688,
-    "B": 6173,
-    "C": 5337,
-    "D": 4367,
-    "E": 3967
+    "A": 7545,
+    "B": 7083,
+    "C": 6201,
+    "D": 4374,
+    "E": 3991
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8348,
+    "B": 7808,
+    "C": 6964,
+    "D": 4801,
+    "E": 4381
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7205,
+    "B": 6741,
+    "C": 5806,
+    "D": 3966,
+    "E": 3681
    }
   },
   "shortcuts": {
    "the careful but hurried route": {
-    "A": 4015,
-    "B": 3925,
-    "C": 3169,
-    "D": 2987,
-    "E": 2704
+    "A": 4138,
+    "B": 4059,
+    "C": 3261,
+    "D": 2929,
+    "E": 2661
    },
    "no pressure correction": {
-    "A": 5663,
-    "B": 5190,
-    "C": 4370,
-    "D": 3485,
-    "E": 3243
+    "A": 6451,
+    "B": 6026,
+    "C": 5161,
+    "D": 3488,
+    "E": 3263
    },
    "one decay for every cell": {
-    "A": 5221,
-    "B": 5011,
-    "C": 4114,
-    "D": 3749,
-    "E": 3292
+    "A": 5557,
+    "B": 5364,
+    "C": 4417,
+    "D": 3709,
+    "E": 3270
    },
    "the study's cover-type oxidation": {
-    "A": 5713,
-    "B": 5443,
-    "C": 4735,
-    "D": 4191,
-    "E": 3787
+    "A": 6145,
+    "B": 5907,
+    "C": 5160,
+    "D": 4163,
+    "E": 3773
    },
    "the reporting rule's 10 per cent oxidation": {
-    "A": 5958,
-    "B": 5686,
-    "C": 4905,
+    "A": 6335,
+    "B": 6097,
+    "C": 5272,
+    "D": 4269,
+    "E": 3919
+   },
+   "no pressure correction and one decay": {
+    "A": 4489,
+    "B": 4327,
+    "C": 3395,
+    "D": 2812,
+    "E": 2544
+   },
+   "no pressure correction and the study's oxidation": {
+    "A": 4911,
+    "B": 4723,
+    "C": 3976,
+    "D": 3184,
+    "E": 2954
+   },
+   "one decay and the study's oxidation": {
+    "A": 5148,
+    "B": 5048,
+    "C": 4250,
+    "D": 3832,
+    "E": 3393
+   },
+   "the rule's default decay and potential, uncalibrated, with the study's oxidation": {
+    "A": 4820,
+    "B": 4644,
+    "C": 3852,
+    "D": 3115,
+    "E": 2890
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation": {
+    "A": 10343,
+    "B": 9750,
+    "C": 8851,
+    "D": 6461,
+    "E": 5745
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation": {
+    "A": 8417,
+    "B": 8052,
+    "C": 7304,
+    "D": 5769,
+    "E": 5159
+   },
+   "the closed cells' level with both decay rates and the study's oxidation": {
+    "A": 6393,
+    "B": 6092,
+    "C": 5345,
+    "D": 4082,
+    "E": 3763
+   }
+  },
+  "sweep": {
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7545,
+    "B": 7083,
+    "C": 6262,
+    "D": 4435,
+    "E": 4030
+   },
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7574,
+    "B": 7113,
+    "C": 6270,
+    "D": 4443,
+    "E": 4037
+   },
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7545,
+    "B": 7083,
+    "C": 6201,
+    "D": 4374,
+    "E": 3991
+   },
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7574,
+    "B": 7113,
+    "C": 6208,
+    "D": 4380,
+    "E": 3998
+   },
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7545,
+    "B": 7083,
+    "C": 6140,
+    "D": 4313,
+    "E": 3953
+   },
+   "the fitted lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7574,
+    "B": 7113,
+    "C": 6145,
+    "D": 4318,
+    "E": 3959
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7868,
+    "B": 7371,
+    "C": 6550,
+    "D": 4568,
+    "E": 4163
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7898,
+    "B": 7401,
+    "C": 6558,
+    "D": 4576,
+    "E": 4170
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7868,
+    "B": 7371,
+    "C": 6489,
+    "D": 4507,
+    "E": 4124
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7898,
+    "B": 7401,
+    "C": 6495,
+    "D": 4513,
+    "E": 4131
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7868,
+    "B": 7371,
+    "C": 6428,
+    "D": 4446,
+    "E": 4086
+   },
+   "the fitted lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7898,
+    "B": 7401,
+    "C": 6433,
+    "D": 4451,
+    "E": 4092
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 8193,
+    "B": 7659,
+    "C": 6838,
+    "D": 4702,
+    "E": 4297
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8223,
+    "B": 7689,
+    "C": 6846,
+    "D": 4710,
+    "E": 4304
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 8193,
+    "B": 7659,
+    "C": 6777,
+    "D": 4641,
+    "E": 4258
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 8223,
+    "B": 7689,
+    "C": 6784,
+    "D": 4648,
+    "E": 4265
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 8193,
+    "B": 7659,
+    "C": 6716,
+    "D": 4580,
+    "E": 4220
+   },
+   "the fitted lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8223,
+    "B": 7689,
+    "C": 6721,
+    "D": 4585,
+    "E": 4226
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7597,
+    "B": 7133,
+    "C": 6311,
+    "D": 4475,
+    "E": 4063
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7626,
+    "B": 7163,
+    "C": 6320,
+    "D": 4483,
+    "E": 4070
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7597,
+    "B": 7133,
+    "C": 6250,
+    "D": 4414,
+    "E": 4025
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7626,
+    "B": 7163,
+    "C": 6257,
+    "D": 4421,
+    "E": 4031
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7597,
+    "B": 7133,
+    "C": 6190,
+    "D": 4353,
+    "E": 3986
+   },
+   "an 8-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7626,
+    "B": 7163,
+    "C": 6195,
     "D": 4358,
     "E": 3992
    },
-   "no pressure correction and one decay": {
-    "A": 4211,
-    "B": 4036,
-    "C": 3153,
-    "D": 2855,
-    "E": 2569
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7922,
+    "B": 7422,
+    "C": 6600,
+    "D": 4609,
+    "E": 4197
    },
-   "no pressure correction and the study's oxidation": {
-    "A": 4574,
-    "B": 4360,
-    "C": 3653,
-    "D": 3220,
-    "E": 2976
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7952,
+    "B": 7452,
+    "C": 6608,
+    "D": 4617,
+    "E": 4204
    },
-   "one decay and the study's oxidation": {
-    "A": 4986,
-    "B": 4872,
-    "C": 4117,
-    "D": 3887,
-    "E": 3433
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7922,
+    "B": 7422,
+    "C": 6539,
+    "D": 4548,
+    "E": 4158
    },
-   "the rule's default decay and potential, uncalibrated, with the study's oxidation": {
-    "A": 4514,
-    "B": 4314,
-    "C": 3563,
-    "D": 3159,
-    "E": 2918
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7952,
+    "B": 7452,
+    "C": 6546,
+    "D": 4554,
+    "E": 4165
    },
-   "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation": {
-    "A": 9232,
-    "B": 8566,
-    "C": 7714,
-    "D": 6437,
-    "E": 5703
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7922,
+    "B": 7422,
+    "C": 6478,
+    "D": 4487,
+    "E": 4120
    },
-   "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation": {
-    "A": 7738,
-    "B": 7322,
-    "C": 6615,
-    "D": 5776,
-    "E": 5152
+   "an 8-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7952,
+    "B": 7452,
+    "C": 6483,
+    "D": 4492,
+    "E": 4126
    },
-   "the closed cells' level with both decay rates and the study's oxidation": {
-    "A": 6034,
-    "B": 5685,
-    "C": 4977,
-    "D": 4272,
-    "E": 3909
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 8248,
+    "B": 7712,
+    "C": 6890,
+    "D": 4743,
+    "E": 4331
+   },
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8278,
+    "B": 7742,
+    "C": 6898,
+    "D": 4752,
+    "E": 4339
+   },
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 8248,
+    "B": 7712,
+    "C": 6829,
+    "D": 4682,
+    "E": 4293
+   },
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 8278,
+    "B": 7742,
+    "C": 6835,
+    "D": 4689,
+    "E": 4300
+   },
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 8248,
+    "B": 7712,
+    "C": 6768,
+    "D": 4622,
+    "E": 4255
+   },
+   "an 8-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8278,
+    "B": 7742,
+    "C": 6773,
+    "D": 4627,
+    "E": 4260
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7662,
+    "B": 7196,
+    "C": 6373,
+    "D": 4522,
+    "E": 4103
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7692,
+    "B": 7225,
+    "C": 6381,
+    "D": 4531,
+    "E": 4110
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7662,
+    "B": 7196,
+    "C": 6312,
+    "D": 4461,
+    "E": 4065
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7692,
+    "B": 7225,
+    "C": 6319,
+    "D": 4468,
+    "E": 4071
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7662,
+    "B": 7196,
+    "C": 6251,
+    "D": 4401,
+    "E": 4026
+   },
+   "a 12-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7692,
+    "B": 7225,
+    "C": 6256,
+    "D": 4405,
+    "E": 4032
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7990,
+    "B": 7486,
+    "C": 6664,
+    "D": 4657,
+    "E": 4238
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8020,
+    "B": 7516,
+    "C": 6672,
+    "D": 4665,
+    "E": 4245
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7990,
+    "B": 7486,
+    "C": 6603,
+    "D": 4596,
+    "E": 4199
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 8020,
+    "B": 7516,
+    "C": 6610,
+    "D": 4603,
+    "E": 4206
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7990,
+    "B": 7486,
+    "C": 6542,
+    "D": 4535,
+    "E": 4161
+   },
+   "a 12-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8020,
+    "B": 7516,
+    "C": 6547,
+    "D": 4540,
+    "E": 4167
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 8318,
+    "B": 7778,
+    "C": 6956,
+    "D": 4793,
+    "E": 4374
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8348,
+    "B": 7808,
+    "C": 6964,
+    "D": 4801,
+    "E": 4381
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 8318,
+    "B": 7778,
+    "C": 6895,
+    "D": 4732,
+    "E": 4335
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 8348,
+    "B": 7808,
+    "C": 6901,
+    "D": 4738,
+    "E": 4342
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 8318,
+    "B": 7778,
+    "C": 6834,
+    "D": 4671,
+    "E": 4297
+   },
+   "a 12-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8348,
+    "B": 7808,
+    "C": 6839,
+    "D": 4676,
+    "E": 4302
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7370,
+    "B": 6917,
+    "C": 6097,
+    "D": 4306,
+    "E": 3921
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7400,
+    "B": 6947,
+    "C": 6106,
+    "D": 4314,
+    "E": 3928
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7370,
+    "B": 6917,
+    "C": 6037,
+    "D": 4245,
+    "E": 3883
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7400,
+    "B": 6947,
+    "C": 6043,
+    "D": 4251,
+    "E": 3889
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7370,
+    "B": 6917,
+    "C": 5976,
+    "D": 4184,
+    "E": 3845
+   },
+   "a 20-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7400,
+    "B": 6947,
+    "C": 5981,
+    "D": 4189,
+    "E": 3851
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7688,
+    "B": 7199,
+    "C": 6380,
+    "D": 4436,
+    "E": 4052
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7718,
+    "B": 7229,
+    "C": 6388,
+    "D": 4444,
+    "E": 4059
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7688,
+    "B": 7199,
+    "C": 6319,
+    "D": 4375,
+    "E": 4013
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7718,
+    "B": 7229,
+    "C": 6325,
+    "D": 4382,
+    "E": 4020
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7688,
+    "B": 7199,
+    "C": 6258,
+    "D": 4315,
+    "E": 3975
+   },
+   "a 20-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7718,
+    "B": 7229,
+    "C": 6263,
+    "D": 4320,
+    "E": 3981
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 8007,
+    "B": 7483,
+    "C": 6663,
+    "D": 4568,
+    "E": 4183
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8037,
+    "B": 7512,
+    "C": 6671,
+    "D": 4576,
+    "E": 4190
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 8007,
+    "B": 7483,
+    "C": 6602,
+    "D": 4507,
+    "E": 4145
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 8037,
+    "B": 7512,
+    "C": 6609,
+    "D": 4513,
+    "E": 4151
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 8007,
+    "B": 7483,
+    "C": 6542,
+    "D": 4446,
+    "E": 4107
+   },
+   "a 20-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8037,
+    "B": 7512,
+    "C": 6546,
+    "D": 4451,
+    "E": 4112
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7194,
+    "B": 6750,
+    "C": 5932,
+    "D": 4176,
+    "E": 3812
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7224,
+    "B": 6779,
+    "C": 5940,
+    "D": 4184,
+    "E": 3819
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7194,
+    "B": 6750,
+    "C": 5871,
+    "D": 4115,
+    "E": 3774
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7224,
+    "B": 6779,
+    "C": 5878,
+    "D": 4122,
+    "E": 3781
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7194,
+    "B": 6750,
+    "C": 5811,
+    "D": 4055,
+    "E": 3736
+   },
+   "a 24-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7224,
+    "B": 6779,
+    "C": 5816,
+    "D": 4060,
+    "E": 3742
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7506,
+    "B": 7027,
+    "C": 6209,
+    "D": 4304,
+    "E": 3940
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7536,
+    "B": 7056,
+    "C": 6217,
+    "D": 4312,
+    "E": 3947
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7506,
+    "B": 7027,
+    "C": 6148,
+    "D": 4243,
+    "E": 3902
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7536,
+    "B": 7056,
+    "C": 6155,
+    "D": 4250,
+    "E": 3908
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7506,
+    "B": 7027,
+    "C": 6088,
+    "D": 4183,
+    "E": 3864
+   },
+   "a 24-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7536,
+    "B": 7056,
+    "C": 6093,
+    "D": 4188,
+    "E": 3870
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7819,
+    "B": 7305,
+    "C": 6486,
+    "D": 4433,
+    "E": 4069
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7849,
+    "B": 7334,
+    "C": 6494,
+    "D": 4441,
+    "E": 4076
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7819,
+    "B": 7305,
+    "C": 6426,
+    "D": 4372,
+    "E": 4031
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7849,
+    "B": 7334,
+    "C": 6432,
+    "D": 4379,
+    "E": 4037
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7819,
+    "B": 7305,
+    "C": 6366,
+    "D": 4312,
+    "E": 3993
+   },
+   "a 24-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7849,
+    "B": 7334,
+    "C": 6370,
+    "D": 4317,
+    "E": 3999
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 6903,
+    "B": 6473,
+    "C": 5658,
+    "D": 3963,
+    "E": 3633
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 6933,
+    "B": 6503,
+    "C": 5666,
+    "D": 3971,
+    "E": 3640
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 6903,
+    "B": 6473,
+    "C": 5598,
+    "D": 3903,
+    "E": 3595
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 6933,
+    "B": 6503,
+    "C": 5604,
+    "D": 3909,
+    "E": 3601
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 6903,
+    "B": 6473,
+    "C": 5538,
+    "D": 3843,
+    "E": 3557
+   },
+   "a 32-hour lag, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 6933,
+    "B": 6503,
+    "C": 5543,
+    "D": 3848,
+    "E": 3563
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7205,
+    "B": 6741,
+    "C": 5926,
+    "D": 4086,
+    "E": 3756
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7235,
+    "B": 6771,
+    "C": 5934,
+    "D": 4094,
+    "E": 3764
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7205,
+    "B": 6741,
+    "C": 5866,
+    "D": 4026,
+    "E": 3719
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7235,
+    "B": 6771,
+    "C": 5872,
+    "D": 4033,
+    "E": 3725
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7205,
+    "B": 6741,
+    "C": 5806,
+    "D": 3966,
+    "E": 3681
+   },
+   "a 32-hour lag, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7235,
+    "B": 6771,
+    "C": 5811,
+    "D": 3971,
+    "E": 3687
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7508,
+    "B": 7010,
+    "C": 6195,
+    "D": 4211,
+    "E": 3881
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7538,
+    "B": 7040,
+    "C": 6203,
+    "D": 4219,
+    "E": 3888
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7508,
+    "B": 7010,
+    "C": 6135,
+    "D": 4151,
+    "E": 3843
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7538,
+    "B": 7040,
+    "C": 6141,
+    "D": 4157,
+    "E": 3850
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7508,
+    "B": 7010,
+    "C": 6075,
+    "D": 4091,
+    "E": 3805
+   },
+   "a 32-hour lag, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7538,
+    "B": 7040,
+    "C": 6080,
+    "D": 4096,
+    "E": 3811
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7153,
+    "B": 6711,
+    "C": 5893,
+    "D": 4146,
+    "E": 3787
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7183,
+    "B": 6741,
+    "C": 5901,
+    "D": 4154,
+    "E": 3794
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7153,
+    "B": 6711,
+    "C": 5833,
+    "D": 4086,
+    "E": 3749
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7183,
+    "B": 6741,
+    "C": 5839,
+    "D": 4092,
+    "E": 3755
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7153,
+    "B": 6711,
+    "C": 5772,
+    "D": 4025,
+    "E": 3711
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7183,
+    "B": 6741,
+    "C": 5777,
+    "D": 4030,
+    "E": 3717
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7464,
+    "B": 6987,
+    "C": 6169,
+    "D": 4273,
+    "E": 3914
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7494,
+    "B": 7016,
+    "C": 6177,
+    "D": 4282,
+    "E": 3921
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7464,
+    "B": 6987,
+    "C": 6108,
+    "D": 4213,
+    "E": 3876
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7494,
+    "B": 7016,
+    "C": 6115,
+    "D": 4219,
+    "E": 3883
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7464,
+    "B": 6987,
+    "C": 6048,
+    "D": 4153,
+    "E": 3838
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7494,
+    "B": 7016,
+    "C": 6053,
+    "D": 4158,
+    "E": 3844
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7775,
+    "B": 7263,
+    "C": 6445,
+    "D": 4402,
+    "E": 4042
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7805,
+    "B": 7293,
+    "C": 6454,
+    "D": 4410,
+    "E": 4050
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7775,
+    "B": 7263,
+    "C": 6385,
+    "D": 4341,
+    "E": 4004
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7805,
+    "B": 7293,
+    "C": 6391,
+    "D": 4348,
+    "E": 4011
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7775,
+    "B": 7263,
+    "C": 6325,
+    "D": 4281,
+    "E": 3967
+   },
+   "a 16-hour half-life on all three chambers, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7805,
+    "B": 7293,
+    "C": 6330,
+    "D": 4286,
+    "E": 3972
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7356,
+    "B": 6904,
+    "C": 6085,
+    "D": 4299,
+    "E": 3915
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7385,
+    "B": 6934,
+    "C": 6093,
+    "D": 4307,
+    "E": 3922
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7356,
+    "B": 6904,
+    "C": 6024,
+    "D": 4238,
+    "E": 3877
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7385,
+    "B": 6934,
+    "C": 6030,
+    "D": 4245,
+    "E": 3883
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7356,
+    "B": 6904,
+    "C": 5963,
+    "D": 4178,
+    "E": 3839
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7385,
+    "B": 6934,
+    "C": 5968,
+    "D": 4183,
+    "E": 3844
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7673,
+    "B": 7186,
+    "C": 6366,
+    "D": 4429,
+    "E": 4045
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7702,
+    "B": 7215,
+    "C": 6374,
+    "D": 4437,
+    "E": 4052
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7673,
+    "B": 7186,
+    "C": 6305,
+    "D": 4369,
+    "E": 4007
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7702,
+    "B": 7215,
+    "C": 6312,
+    "D": 4375,
+    "E": 4013
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7673,
+    "B": 7186,
+    "C": 6245,
+    "D": 4308,
+    "E": 3969
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7702,
+    "B": 7215,
+    "C": 6250,
+    "D": 4313,
+    "E": 3974
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7991,
+    "B": 7468,
+    "C": 6648,
+    "D": 4560,
+    "E": 4176
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 8020,
+    "B": 7498,
+    "C": 6656,
+    "D": 4568,
+    "E": 4183
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7991,
+    "B": 7468,
+    "C": 6587,
+    "D": 4500,
+    "E": 4138
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 8020,
+    "B": 7498,
+    "C": 6594,
+    "D": 4506,
+    "E": 4144
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7991,
+    "B": 7468,
+    "C": 6527,
+    "D": 4439,
+    "E": 4100
+   },
+   "the pressure's 12-hour change, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 8020,
+    "B": 7498,
+    "C": 6532,
+    "D": 4444,
+    "E": 4105
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7133,
+    "B": 6691,
+    "C": 5873,
+    "D": 4128,
+    "E": 3772
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7162,
+    "B": 6720,
+    "C": 5881,
+    "D": 4136,
+    "E": 3780
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7133,
+    "B": 6691,
+    "C": 5813,
+    "D": 4068,
+    "E": 3734
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7162,
+    "B": 6720,
+    "C": 5819,
+    "D": 4074,
+    "E": 3741
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7133,
+    "B": 6691,
+    "C": 5753,
+    "D": 4007,
+    "E": 3697
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration -7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7162,
+    "B": 6720,
+    "C": 5758,
+    "D": 4012,
+    "E": 3702
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7443,
+    "B": 6966,
+    "C": 6149,
+    "D": 4255,
+    "E": 3900
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7473,
+    "B": 6996,
+    "C": 6157,
+    "D": 4263,
+    "E": 3907
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 by zone": {
+    "A": 7443,
+    "B": 6966,
+    "C": 6088,
+    "D": 4195,
+    "E": 3862
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain as fitted, cell 4 held flat": {
+    "A": 7473,
+    "B": 6996,
+    "C": 6095,
+    "D": 4201,
+    "E": 3868
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7443,
+    "B": 6966,
+    "C": 6028,
+    "D": 4135,
+    "E": 3824
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration as fitted, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7473,
+    "B": 6996,
+    "C": 6033,
+    "D": 4140,
+    "E": 3829
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 by zone": {
+    "A": 7754,
+    "B": 7243,
+    "C": 6425,
+    "D": 4383,
+    "E": 4028
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain -7 per cent, cell 4 held flat": {
+    "A": 7784,
+    "B": 7272,
+    "C": 6433,
+    "D": 4392,
+    "E": 4035
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 by zone": {
+    "A": 7754,
+    "B": 7243,
+    "C": 6365,
+    "D": 4323,
+    "E": 3990
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain as fitted, cell 4 held flat": {
+    "A": 7784,
+    "B": 7272,
+    "C": 6371,
+    "D": 4330,
+    "E": 3996
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 by zone": {
+    "A": 7754,
+    "B": 7243,
+    "C": 6304,
+    "D": 4263,
+    "E": 3952
+   },
+   "the pressure's 24-hour change, cell 5's spring calibration +7 per cent, package C's gain +7 per cent, cell 4 held flat": {
+    "A": 7784,
+    "B": 7272,
+    "C": 6309,
+    "D": 4268,
+    "E": 3958
    }
   }
  },

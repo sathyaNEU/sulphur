@@ -27,7 +27,8 @@ MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", 
 WORKS = {"A": "No new works (cell 5 collection at final grade in 2029)",
          "B": "Horizontal collectors in cell 5 from May 1",
          "C": "B, and pumps in cell 4's flooded wells from May 1",
-         "D": "C, and 18 vertical wells with pumps in cell 5 from June 1",
+         "D": "C, and 18 vertical wells with pumps in cell 5 from %s %d" % (P.WORKS["wells5"].strftime("%B"),
+                                                                          P.WORKS["wells5"].day),
          "E": "D, and a geomembrane cap on cell 4 from October 1"}
 
 
@@ -168,6 +169,10 @@ def workbook(path, R, figs, F, cache):
     ws["E4"] = figs["R1_cell5_msw_tons"]
     ws["E4"].number_format = T0
     ws["A4"].font = Font(bold=True)
+    ws["A5"] = "of which %s's trailers, %s to October 2026" % (figs["_extra"]["contract"]["hauler"],
+                                                            figs["_extra"]["contract"]["start"])
+    ws["E5"] = figs["_extra"]["contract"]["tons_to_oct_2026"]
+    ws["E5"].number_format = T0
     _hdr(ws, 6, ["Month, 2027", "Methane generated, t", "Soil temperature, normal, C",
                  "Flux reaching the cover, g/m2/d", "Share oxidized, per cent", "Methane oxidized, t"],
          [14, 14, 14, 16, 14, 14])
@@ -348,9 +353,11 @@ def deck(path, R, figs):
         "that reach that waste; the wells it never reached rose %.1f per cent and the pumped wells, at full yield, "
         "%.1f per cent." % (figs["R3_cell4_generation_change_pct"], 100 * (z["r_collected"] - 1),
                              100 * (z["r_dry"] - 1), 100 * (z["r_wet"] - 1)),
-        "Cell 5: %s short tons of municipal waste through October 2026. Leachate across the whole cell since July "
-        "2026 puts all of it on the faster decay: about %s t generated in 2027." % (
-            f(figs["R1_cell5_msw_tons"]), f(figs["R4_cell5_generation_2027_t"])),
+        "Cell 5: %s short tons of municipal waste through October 2026, %s of them from %s's trailers since %s. "
+        "Leachate across the whole cell since July 2026 puts all of it on the faster decay: about %s t generated in "
+        "2027." % (f(figs["R1_cell5_msw_tons"]), f(figs["_extra"]["contract"]["tons_to_oct_2026"]),
+                   figs["_extra"]["contract"]["hauler"], figs["_extra"]["contract"]["start"],
+                   f(figs["R4_cell5_generation_2027_t"])),
         "Cell 5's daily cover oxidizes a nearly fixed amount per square meter, so at the flux it will carry in 2027 it takes about "
         "%.1f per cent, not the share the 2019 study measured at lower fluxes." % figs["R5_cell5_oxidized_share_2027_pct"]],
         16)

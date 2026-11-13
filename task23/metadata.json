@@ -6,7 +6,7 @@
  "license": "synthetic, no third-party data",
  "pull_dates": "extracts pulled November 2 to 4, 2026; workbooks and documents as filed",
  "counts": {
-  "scale_tickets_2021-01_2026-10.csv": 212294,
+  "scale_tickets_2021-01_2026-10.csv": 218343,
   "operations_daily_log_2024-2026.csv": 872,
   "lfg_plant_hourly_2023-2026.csv": 33600,
   "wellfield_monitoring_2019-2026.csv": 10223,
@@ -28,14 +28,14 @@
  "files": [
   {
    "file": "auto_chamber_flux_hourly.csv",
-   "bytes": 1575036,
+   "bytes": 1575033,
    "pulled": "2026-11-02",
    "distractor": false,
    "rows": 34143
   },
   {
    "file": "brightwater_cover_oxidation_2019.pdf",
-   "bytes": 64851,
+   "bytes": 95999,
    "pulled": "as filed",
    "distractor": false,
    "rows": null
@@ -56,7 +56,7 @@
   },
   {
    "file": "council_agenda_lfg_capital_2027.pdf",
-   "bytes": 45722,
+   "bytes": 89595,
    "pulled": "as filed",
    "distractor": false,
    "rows": null
@@ -77,7 +77,7 @@
   },
   {
    "file": "fill_plan_2027.xlsx",
-   "bytes": 6849,
+   "bytes": 6867,
    "pulled": "as filed",
    "distractor": false,
    "rows": 14
@@ -91,7 +91,7 @@
   },
   {
    "file": "ghg_annual_report_RY2025.pdf",
-   "bytes": 66457,
+   "bytes": 99377,
    "pulled": "as filed",
    "distractor": false,
    "rows": null
@@ -133,17 +133,17 @@
   },
   {
    "file": "operations_daily_log_2024-2026.csv",
-   "bytes": 33515,
+   "bytes": 33587,
    "pulled": "2026-11-03",
    "distractor": false,
    "rows": 872
   },
   {
    "file": "scale_tickets_2021-01_2026-10.csv",
-   "bytes": 17424983,
+   "bytes": 17940079,
    "pulled": "2026-11-03",
    "distractor": false,
-   "rows": 212294
+   "rows": 218343
   },
   {
    "file": "surface_emission_monitoring_quarterly.csv",
@@ -161,7 +161,7 @@
   },
   {
    "file": "tessaline_whole_site_methane_2025_2026.pdf",
-   "bytes": 76986,
+   "bytes": 109521,
    "pulled": "as filed",
    "distractor": false,
    "rows": null
@@ -188,7 +188,7 @@
   "odor_complaints_2024-2026.csv"
  ],
  "stated_inputs": [
-  "5,100",
+  "5,500",
   "0.00",
   "0.64",
   "1.21",

@@ -61,7 +61,7 @@ def fill_plan(W):
     for i in range(WD.month_index(2026, 11), WD.month_index(2028, 1)):
         y, m = WD.month_of_index(i)
         v = {mat: float(W.tonnes[5][mat][i]) * TONS for mat in P.SHARE}
-        lift = "5-L%d" % (1 + int((dt.date(y, m, 15) - dt.date(2025, 2, 3)).days / 210))
+        lift = "5-L%d" % RC.lift_of(dt.date(y, m, 15))
         rows.append(["%04d-%02d" % (y, m), int(round(v["MSW"], -1)), int(round(v["CD"], -1)), int(round(v["BIO"], -1)),
                      int(round(v["SOIL"], -1)), int(round(v["SPEC"], -1)), lift])
     return pd.DataFrame(rows, columns=["month", "msw_tons", "cd_tons", "biosolids_tons", "soil_tons", "special_tons",

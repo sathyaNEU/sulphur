@@ -38,7 +38,11 @@ HAULERS = {"MSW": [("Ridgeline Hauling", 0.31), ("North Fork Sanitation", 0.22),
            "BIO": [("Kelloway Water Reclamation", 1.0)],
            "SOIL": [("Tamarack Excavating", 0.55), ("Kelloway County Roads", 0.45)],
            "SPEC": [("Westbay Abatement", 0.6), ("PUBLIC", 0.4)]}
-LOAD_T = {("MSW", "Kelloway County Transfer"): (21.5, 2.2), ("MSW", "PUBLIC"): (0.45, 0.3), ("MSW", None): (9.6, 2.1),
+# the transfer contract's trailers from its start, weighted by load count so they carry the contract's share of the tons
+_C_TONS = (P.CONTRACT["factor"] - 1.0) / P.CONTRACT["factor"]
+_BASE_TONS = sum(p * (21.5 if h.endswith("Transfer") else (0.45 if h == "PUBLIC" else 9.6)) for h, p in HAULERS["MSW"])
+HAULERS_CONTRACT = HAULERS["MSW"] + [(P.CONTRACT["hauler"], round(_C_TONS / (1 - _C_TONS) * _BASE_TONS / 21.8, 4))]
+LOAD_T = {("MSW", "Kelloway County Transfer"): (21.5, 2.2), ("MSW", P.CONTRACT["hauler"]): (21.8, 1.9), ("MSW", "PUBLIC"): (0.45, 0.3), ("MSW", None): (9.6, 2.1),
           ("CD", None): (5.2, 2.0), ("CD", "PUBLIC"): (0.7, 0.5), ("BIO", None): (17.5, 2.5), ("SOIL", None): (16.0, 2.8),
           ("SPEC", None): (2.4, 1.1), ("SPEC", "PUBLIC"): (0.3, 0.2)}
 TONS_PER_TONNE = 1.0 / 0.90718474
@@ -72,7 +76,7 @@ def tickets(W):
                     continue
                 t_day = t_month * wts[d] / wsum * math.exp(r.normal(0, 0.12))
                 tons_day = t_day * TONS_PER_TONNE
-                hl = HAULERS[mat]
+                hl = HAULERS_CONTRACT if (mat == "MSW" and d >= P.CONTRACT["start"]) else HAULERS[mat]
                 names = [h for h, _ in hl]
                 pr = np.array([p for _, p in hl])
                 while tons_day > 0.05:
@@ -129,6 +133,20 @@ def tickets(W):
 
 
 # ------------------------------------------------------------------ the operations daily log
+def lift_of(d):
+    """Cell 5's working lift on day d: a lift every 210 days at the site's own receipts, sooner once the transfer
+    contract's trailers add to them."""
+    d0, c0 = dt.date(2025, 2, 3), P.CONTRACT["start"]
+    days = (min(d, c0) - d0).days + max(0, (d - c0).days) * P.CONTRACT["factor"]
+    return 1 + int(days / 210)
+
+
+def first_day(d):
+    while d.weekday() == 6 or d in _holidays(d.year):
+        d += dt.timedelta(1)
+    return d
+
+
 def daily_log(W):
     r = W.streams["log"]
     rows = []
@@ -140,7 +158,7 @@ def daily_log(W):
             continue
         cell = 4 if d < dt.date(2025, 2, 3) else 5
         if cell == 5:
-            lift5 = 1 + int((d - dt.date(2025, 2, 3)).days / 210)
+            lift5 = lift_of(d)
         lift = "4-L9" if cell == 4 else "5-L%d" % lift5
         i0 = W.hour_index(dt.datetime(d.year, d.month, d.day, 6))
         rain = float(W.rain[i0:i0 + 12].sum())
@@ -154,6 +172,8 @@ def daily_log(W):
         if r.random() < 0.025:
             notes.append(str(r.choice(["compactor down 3 h, hydraulic hose", "scale B offline AM", "fire watch on face",
                                        "survey crew on 5-L%d" % lift5, "leachate seep repaired, east toe"])))
+        if d == first_day(P.CONTRACT["start"]):
+            notes.append("first %s trailers on the face, new transfer contract" % P.CONTRACT["hauler"])
         cover = "soil" if (d.weekday() == 5 or r.random() < 0.25) else "tarp"
         rows.append([d, "C%d" % cell, lift, cover, round(float(np.clip(r.normal(0.42, 0.18), 0, 1.4)), 2)
                      if r.random() < 0.08 else 0.0, round(rain, 1), "; ".join(notes)])

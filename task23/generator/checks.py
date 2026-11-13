@@ -145,6 +145,13 @@ def main():
         else:
             ok("R3 the careful pass loses %s (%s)" % (r["id"], gr), gr != "right", r["passes"]["careful"])
     ok("R3 the careful pass picks package A (the reflex route)", C["R8"] == "A", C["R8"])
+    b5 = RS.band_scalar("R5_cell5_oxidized_share_2027_pct", figs["R5_cell5_oxidized_share_2027_pct"])
+    b4 = RS.band_scalar("R4_cell5_generation_2027_t", figs["R4_cell5_generation_2027_t"])
+    ok("R3 the reporting rule's 10 per cent sits a point or more outside R5's band (%.1f to %.1f)" % b5,
+       b5[0] - 10.0 >= 1.0)
+    ok("R3 the hurried cell 5 generations (the rule's default decay %s t, the dry decay %s t) sit far outside R4's band"
+       % (figs["_quick"]["R4_cell5_generation_2027_t"], figs["_extra"]["careful"]["R4"]),
+       max(figs["_quick"]["R4_cell5_generation_2027_t"], figs["_extra"]["careful"]["R4"]) < 0.8 * b4[0])
 
     # ------------------------------------------------------------------------ R4: no plant
     rep = flat(pdf_text(os.path.join(target, P.FILES["ghg2025"]), layout=True))
@@ -164,6 +171,10 @@ def main():
     st = flat(pdf_text(os.path.join(target, P.FILES["oxstudy"])))
     s = F["oxplots"].dropna(subset=["fraction_oxidized"])
     means = s.groupby("cover")["fraction_oxidized"].mean()
+    nfail = int(F["oxplots"]["fraction_oxidized"].isna().sum())
+    word = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"][nfail]
+    ok("R4 the oxidation study's count of failed isotope runs is its plot file's (%d)" % nfail,
+       has(st, "%s runs whose isotope analysis failed are excluded" % word))
     ok("R4 the oxidation study's means reproduce from its plot file", all(
         ("%.2f" % means[c]) in st for c in ("final", "intermediate", "active")), means.round(2).to_dict())
     dr = F["drone"][pd.to_datetime(F["drone"]["date"]).dt.year == 2025]
@@ -277,13 +288,36 @@ def main():
     for name, o in RS.SHORTCUTS:
         R = A.run(F, o, cache)
         ok("R7 the shortcut misses the call: %s (%s)" % (name, R["R8"]), R["R8"] != G["R8"])
-    ok("margin package C is 4 per cent or more over the limit (%s t)" % figs["R7_emissions_2027_t"]["package C"],
-       figs["R7_emissions_2027_t"]["package C"] >= 1.04 * lim)
-    ok("margin package D is 8 per cent or more under the limit (%s t)" % figs["R7_emissions_2027_t"]["package D"],
-       figs["R7_emissions_2027_t"]["package D"] <= 0.92 * lim)
-    ok("margin every rival and perturbation keeps C 3 per cent over and D 5 per cent under the limit",
-       figs["_extra"]["nearest"]["C_min_t"] >= 1.03 * lim and figs["_extra"]["nearest"]["D_max_t"] <= 0.95 * lim,
+    ok("margin package C is 12 per cent or more over the limit (%s t)" % figs["R7_emissions_2027_t"]["package C"],
+       figs["R7_emissions_2027_t"]["package C"] >= 1.12 * lim)
+    ok("margin package D is 12 per cent or more under the limit (%s t)" % figs["R7_emissions_2027_t"]["package D"],
+       figs["R7_emissions_2027_t"]["package D"] <= 0.88 * lim)
+    ok("margin every rival, perturbation and sweep combination keeps C 3 per cent over and D 8 per cent under the limit",
+       figs["_extra"]["nearest"]["C_min_t"] >= 1.03 * lim and figs["_extra"]["nearest"]["D_max_t"] <= 0.92 * lim,
        figs["_extra"]["nearest"])
+    # the holistic audit's test, re-run here: every combination of the choices inside the answer blocks' bands
+    swr = [(n, A.run(F, o, cache)) for n, o in RS.sweep_routes()]
+    off = [n for n, R in swr if R["R8"] != G["R8"]]
+    cmin = min(swr, key=lambda x: x[1]["R7"]["C"])
+    dmax = max(swr, key=lambda x: x[1]["R7"]["D"])
+    ok("sweep all %d combinations of the pressure response, cell 5's calibration across R4's band, package C's gain "
+       "and cell 4's carry file package %s" % (len(swr), G["R8"]), not off and len(swr) == E["forcing"]["sweep"]["runs"],
+       off[:3])
+    swb = [(n, R) for n, R in swr if RS.in_band(R, Gf)]
+    cib = min(swb, key=lambda x: x[1]["R7"]["C"])
+    ok("sweep package C stays 3 per cent over the limit at its lowest among the %d combinations that keep R2, R4 and "
+       "R5 inside their bands (%.0f t: %s)" % (len(swb), cib[1]["R7"]["C"], cib[0]), cib[1]["R7"]["C"] >= 1.03 * lim)
+    ok("sweep package C stays over the limit at its lowest of all %d (%.0f t: %s, R4 %+.1f per cent)"
+       % (len(swr), cmin[1]["R7"]["C"], cmin[0], 100 * (cmin[1]["R4"] / G["R4"] - 1)), cmin[1]["R7"]["C"] > lim)
+    ok("sweep no pressure specification beyond the swept ones keeps R2 and R4 inside their bands (36 and 40 hours)",
+       all(not RS.in_band(A.run(F, dict(baro=b), cache), Gf) for b in ("ema_tau36", "ema_tau40")))
+    ok("sweep package D stays 8 per cent under the limit at its highest (%.0f t: %s)" % (dmax[1]["R7"]["D"], dmax[0]),
+       dmax[1]["R7"]["D"] <= 0.92 * lim)
+    fl = figs["_extra"]["r4_flip"]
+    ok("flip cell 5's 2027 generation at which package C would pass sits below R4's band, on the golden route (%s t) "
+       "and on a 24-hour lag with package C's gain +7 per cent (%s t), against the band's floor %s t"
+       % (fl["golden_t"], fl["run_route_t"], fl["band_low_t"]),
+       fl["golden_t"] < 0.85 * fl["band_low_t"] and fl["run_route_t"] < 0.95 * fl["band_low_t"], fl)
 
     # ------------------------------------------------------------------------ the forks
     plan = pdf_text(os.path.join(target, P.FILES["plan"]))
@@ -301,8 +335,9 @@ def main():
        % (G["R8"], round(R25["R7"]["C"]), round(R25["R7"]["D"])), R25["R8"] == G["R8"] and
        abs(R25["R5"] - G["R5"]) < 2.0)
     ok("SF5 the packages are cumulative in the options paper", has(plan, "each includes the works of the one before"))
+    wd = P.WORKS["wells5"]
     ok("SF6 the options paper files each works' in-service date", all(has(plan, x) for x in (
-        "May 1, 2027", "June 1, 2027 (wells)", "October 1, 2027 (cap)")))
+        "May 1, 2027", "%s %d, %d (wells)" % (wd.strftime("%B"), wd.day, wd.year), "October 1, 2027 (cap)")))
     ok("SF7 design capture is filed as the share of cell 5's methane", has(plan, "the share of the methane generated in cell 5"))
     ok("SF8 the report is filed as submitted in March 2026", "Submitted March 27, 2026" in rep)
     ok("SF9 the survey annualizes the 2025 campaigns only", "The 2025 campaigns averaged" in sv)
@@ -325,6 +360,51 @@ def main():
     ok("SF17 same band: R5 under 2025's soil temperatures stays inside its band (%.1f)" % R17["R5"],
        RS.grade("R5_cell5_oxidized_share_2027_pct", figs["R5_cell5_oxidized_share_2027_pct"], round(R17["R5"], 1))
        == "right")
+
+    ok("SF20 the options paper files the pumps' level as the pilot pumps' own", has(plan, "hold the liquid where the "
+       "June 2025 pilot pumps hold it"))
+    ok("SF23 the options paper files the gas model's delay (a month's waste producing methane six months after it is "
+       "placed), the golden's", has(plan, "begins producing methane six months after it is placed")
+       and A.fod.__defaults__[0] == P.RULE["lag_months"] == 6)
+    d0 = A.fod.__defaults__
+    lagc = {}
+    for lag in (0, 3, 9):
+        A.fod.__defaults__ = (lag,) + tuple(d0[1:])
+        lagc[lag] = A.run(F, {}, {})
+    A.fod.__defaults__ = d0
+    ok("SF23 same call under the delays the filed sentence rules out: none, three and nine months still file package %s "
+       "(C %s t), with cell 5's generation %s per cent off" % (G["R8"], ", ".join("%.0f" % lagc[k]["R7"]["C"] for k in (0, 3, 9)),
+                                                               ", ".join("%+.0f" % (100 * (lagc[k]["R4"] / G["R4"] - 1)) for k in (0, 3, 9))),
+       all(r["R8"] == G["R8"] for r in lagc.values()))
+    Rf = A.run(F, dict(pumps="full"), cache)
+    ok("SF20 the pilot wells leave %.2f of the screen under liquid since their pumps (read off the pack, not cleared); "
+       "a cleared screen instead still files package %s (C %.0f t)" % (G["z"]["s_after"], Rf["R8"], Rf["R7"]["C"]),
+       0.01 < G["z"]["s_after"] < 0.1 and Rf["R8"] == G["R8"])
+    Ro = A.run(F, dict(pumps="october"), cache)
+    ok("SF21 the pumps' scope is every well flooded at its last 2026 gauging (%d wells); only the wells gauged in "
+       "October 2026 (%d) still files package %s" % (G["pump_wells"], Ro["pump_wells"], Ro["R8"]),
+       has(plan, "when the well was last gauged in 2026") and G["pump_wells"] >= Ro["pump_wells"]
+       and Ro["R8"] == G["R8"])
+    hk = t[t["hauler"] == P.CONTRACT["hauler"]]
+    ok("SF22 the transfer contract's trailers are on the tickets from %s only, and the daily log notes their first day"
+       % P.CONTRACT["start"], len(hk) > 1000 and hk["ticket_date"].min() >= P.CONTRACT["start"]
+       and F["dailylog"]["supervisor_notes"].fillna("").str.contains(P.CONTRACT["hauler"]).sum() == 1, len(hk))
+    fp = F["fillplan"]
+    t25 = t[(t["status"].fillna("") != "VOID") & (t["ticket_date"] >= dt.date(2025, 3, 1))
+            & (t["ticket_date"] < dt.date(2026, 3, 1)) & (t["material_code"] == "MSW")]
+    ok("SF22 the fill plan carries the contract's receipts into 2027 (its 2027 monthly municipal waste above the "
+       "twelve months before the contract)", fp[fp["month"].astype(str).str.startswith("2027")]["msw_tons"].mean()
+       > 1.3 * t25["net_tons"].sum() / 12)
+    F7 = dict(F)
+    fp7 = F["fillplan"].copy()
+    fp7["msw_tons"] = fp7["msw_tons"] / P.CONTRACT["factor"]
+    F7["fillplan"] = fp7
+    R7x = A.run(F7, {}, {})
+    ok("SF22 same call: the fill plan's receipts carried at the rate before the contract still file package %s (C %.0f t)"
+       % (R7x["R8"], R7x["R7"]["C"]), R7x["R8"] == G["R8"] and has(plan, "Waste receipts for cell 5 through 2027 are in "
+                                                                   "the Division's 2027 fill plan"))
+    docs_txt = " ".join(flat(pdf_text(os.path.join(target, P.FILES[k]))) for k in ("plan", "ghg2025", "survey", "oxstudy"))
+    ok("SF22 no document names the contract (the records carry it)", P.CONTRACT["hauler"] not in docs_txt)
 
     # ------------------------------------------------------------------------ the input gates and the house rules
     cats = {os.path.splitext(f)[1] for f in files}

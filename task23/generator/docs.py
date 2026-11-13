@@ -33,9 +33,10 @@ CELL5_RECIRC = ("Cell 5 was built with leachate injection lines in every lift an
 CAPTURE_NOTE = ("Design capture is the share of the methane generated in cell 5 that the new collectors take from "
                 "their in-service date: %d per cent with the horizontal collectors alone, %d per cent once the "
                 "vertical wells are in.")
-PUMPS_NOTE = ("Package C's pumps go into every cell 4 well whose liquid stood above the bottom of its screen at the "
-              "October 2026 liquid level survey and hold the liquid below the screen, as the June 2025 pilot pumps do.")
+PUMPS_NOTE = ("Package C's pumps go into every cell 4 well whose liquid stood above the bottom of its screen when the "
+              "well was last gauged in 2026, and hold the liquid where the June 2025 pilot pumps hold it.")
 CAP_NOTE = "Package E's cap brings cell 4's collection to %d per cent of its methane from the month it is complete."
+GEN_NOTE = "In the Division's gas model a month's waste begins producing methane %s months after it is placed."
 CLOSED_NOTE = ("The closed cells (1 to 3) are carried at the 2015 closure plan's design collection of %d per cent of "
                "their methane.")
 RULE_EQ = ("Methane emissions are the collected methane divided by the area-weighted collection efficiency, less "
@@ -55,6 +56,15 @@ def fmt(x, d=0):
     return ("{:,.%df}" % d).format(x)
 
 
+def _words(n):
+    w = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"]
+    return w[n] if n < len(w) else str(n)
+
+
+def _day(d):
+    return "%s %d, %d" % (d.strftime("%B"), d.day, d.year)
+
+
 # ------------------------------------------------------------------ the options paper for Council
 def plan(path):
     pk = P.PACKAGES
@@ -65,7 +75,8 @@ def plan(path):
              "%.2f" % pk["B"]["cost"]],
             ["C", "Package B, and pneumatic pumps in cell 4's wells with liquid above the screen",
              "May 1, 2027 (pumps)", "%.2f" % pk["C"]["cost"]],
-            ["D", "Package C, and 18 vertical wells with pumps across cell 5's completed area", "June 1, 2027 (wells)",
+            ["D", "Package C, and 18 vertical wells with pumps across cell 5's completed area",
+             "%s (wells)" % _day(P.WORKS["wells5"]),
              "%.2f" % pk["D"]["cost"]],
             ["E", "Package D, and a geomembrane cap on cell 4's north and east slopes", "October 1, 2027 (cap)",
              "%.2f" % pk["E"]["cost"]]]
@@ -92,7 +103,8 @@ def plan(path):
         Spacer(1, 6),
         P_("4. Design basis", H2),
         P_(CAPTURE_NOTE % (round(P.CE5_HC * 100), round(P.CE5_WELLS * 100)) + " The vertical wells in package D "
-           "carry pumps from installation because cell 5 takes recirculated leachate."),
+           "carry pumps from installation because cell 5 takes recirculated leachate. "
+           + GEN_NOTE % {6: "six"}[P.RULE["lag_months"]]),
         P_(PUMPS_NOTE),
         P_(CAP_NOTE % round(P.CE4_CAP * 100)),
         P_(CLOSED_NOTE % round(P.CE_CLOSED_DESIGN * 100)),
@@ -266,8 +278,8 @@ def ox_study(path, plots):
            "November 2019. At each visit a static chamber measured the methane flux at the surface, a soil gas "
            "probe below the cover sampled the methane before oxidation, and the stable carbon isotope ratio of "
            "each was measured. The fraction oxidized is the difference between the emitted and the below-cover "
-           "ratio divided by 25 per mil, the fractionation of methane oxidation in landfill cover soils. Seven runs "
-           "whose isotope analysis failed are excluded."),
+           "ratio divided by 25 per mil, the fractionation of methane oxidation in landfill cover soils. %s runs "
+           "whose isotope analysis failed are excluded." % _words(int(plots["fraction_oxidized"].isna().sum()))),
         P_("3. Results", H2),
         T(rows, [44, 14, 22, 32, 30, 30]),
         Spacer(1, 6),

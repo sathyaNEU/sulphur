@@ -12,7 +12,9 @@ choice a switch, so the golden, each hurried route, the rivals and the perturbat
       ox       SAT (a saturating capacity with a shared temperature factor) | exp | loglin | mean (the study's
                cover-type means) | default (the reporting rule's 10 per cent)
       c5       ANCHOR (cell 5 calibrated on its spring 2026 campaigns) | waste (cell 5 on cell 4's methane potential)
-      pumps    YIELD (a yield model fitted on the pilot) | ratio (the pilot's mean flow ratio)
+      pumps    YIELD (a yield model fitted on the pilot, the pumped level read off the pilot wells, every well flooded
+               at its last 2026 gauging) | ratio (the pilot's mean flow ratio) | full (the screen cleared of liquid) |
+               october (only the wells gauged in October 2026)
       ramp     the months over which the reached waste's decay moves to the faster rate (0)
       ce4      ZONES (cell 4's 2027 collection by zone, each zone's August to October 2026 efficiency carried with its
                own generation) | flat (cell 4's efficiency held at its August to October 2026 level)
@@ -668,7 +670,8 @@ def run(F, sw=None, cache=None):
                   for cc in (1, 2, 3)}
 
     # package C's pumps: the pilot's yield model on the wells still flooded
-    gain = pump_gain(F, Z, sw["pumps"]) * sw["gain_scale"]           # t per month at the October 2026 rate
+    gain, R["pump_wells"] = pump_gain(F, Z, sw["pumps"], count=True)
+    gain *= sw["gain_scale"]                                          # t per month at the October 2026 rate
     R["pump_gain_t_month"] = gain
 
     def cell5_ce(pkgc, m):
@@ -781,7 +784,7 @@ def pilot_yield(Z):
     return (float(np.mean(Ls)) if Ls else 0.85), (float(np.mean(sq_all)) if sq_all else 0.0)
 
 
-def pump_gain(F, Z, how="yield"):
+def pump_gain(F, Z, how="yield", count=False):
     """Methane (t per month, at the October 2026 rate) that pumps in cell 4's flooded wells add, read off the
     June 2025 pilot."""
     w = Z["w"]
@@ -804,21 +807,29 @@ def pump_gain(F, Z, how="yield"):
         Ls.append(min(0.98, max(0.3, L)))
     L = float(np.mean(Ls)) if Ls else 0.85
     rho = float(np.mean(ratios)) if ratios else 1.0
-    s_after = 0.04
+    # the options paper: the pumps hold the liquid where the pilot pumps hold it, so the screen they leave under liquid
+    # is the pilot wells' own since their pumps; they go into every well whose liquid stood above its screen bottom
+    # when the well was last gauged in 2026
+    s_after = pilot_yield(Z)[1] if how != "full" else 0.0
     flooded = [x for x in Z["wet"] if x not in Z["pumped"]]
     last = w[(w["m"] >= mi(2026, 7)) & (w["m"] < mi(2026, 11))]
     flows = last.groupby("well_id")["ch4_scfm"].mean()
-    subs = w[w["m"] == mi(2026, 10)].set_index("well_id")["sub"]
-    g = 0.0
+    g26 = w[(w["m"] >= mi(2026, 1)) & (w["m"] < mi(2026, 11))].dropna(subset=["sub"]).sort_values("visit_date")
+    subs = g26.groupby("well_id")["sub"].last()
+    if how == "october":
+        subs = w[w["m"] == mi(2026, 10)].set_index("well_id")["sub"]
+    g, nw = 0.0, 0
     for wid in flooded:
         if wid not in flows.index:
             continue
         s = float(subs.get(wid, np.nan)) if wid in subs.index else np.nan
         if np.isnan(s) or s < 0.02:
             continue
-        if how == "yield":
+        nw += 1
+        if how in ("yield", "full", "october"):
             g += flows[wid] * ((1 - L * s_after) / (1 - L * s) - 1)
         else:
             g += flows[wid] * (rho - 1)
     # scfm of methane to t per month, scaled from the wells' instantaneous readings to the gas system's total
-    return g * 60 * 24 * 30.44 * P.KG_PER_SCF / 1000.0
+    t = g * 60 * 24 * 30.44 * P.KG_PER_SCF / 1000.0
+    return (t, nw) if count else t

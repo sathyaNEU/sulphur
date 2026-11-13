@@ -23,8 +23,8 @@ People: drawn with `guard.py names --geo us --seed 2323`: Nathan Wheeler (the di
 Decision: in January 2027 the Kelloway County Solid Waste Division brings to the County Council the least-cost package
   from its 2027 gas collection options (A, the plan of record with cell 5's collection at final grade in 2029; B,
   horizontal collectors in cell 5's completed lifts from May 1; C, B with pumps in cell 4's flooded wells from May 1;
-  D, C with 18 vertical wells and pumps across cell 5's completed area from June 1; E, D with a geomembrane cap on cell
-  4's slopes from October 1) expected to keep Fernhallow's 2027 methane emissions at or under the 5,100 t limit in
+  D, C with 18 vertical wells and pumps across cell 5's completed area from May 1; E, D with a geomembrane cap on cell
+  4's slopes from October 1) expected to keep Fernhallow's 2027 methane emissions at or under the 5,500 t limit in
   Council Resolution 2025-41, in a year of normal weather; forward-facing (the year is 2027's), with the 2025
   reconciliation as the evidence the Council asked for once the state's survey and the division's report disagreed.
 
@@ -46,7 +46,7 @@ assumption with its precedent, 7 a plausible shallower story, 8 across the data,
 independent ones kept. Magnitudes as measured on the cut pack: the 2025 campaigns' hours ran at 0.711 of the year's
 mean emission (2026's at 0.792, the drone flights' at 0.736); cell 4's generation rose 85.1 per cent from 2022 while
 its collected gas rose 28.7 per cent; cell 5's daily cover oxidized 39.3 per cent of the flux through the study's
-plots on average and will oxidize 17.1 per cent of cell 5's methane in 2027.
+plots on average and will oxidize 14.1 per cent of cell 5's methane in 2027.
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
@@ -78,7 +78,9 @@ Where the weight sits: R7, the 2027 emission under each package: it needs the 20
   dates; long because each input comes from a different instrument at a different grain, not because one step is clever
 Layer 1: 1,136 voided tickets beside their reissues under the same ticket number (tare keying errors, some with
   negative nets), tickets with no disposal area (weekend and public loads before the September 2022 software change,
-  and two scale-software outages in August 2025 and March 2026) and the material codes renamed on July 1, 2021; the
+  and two scale-software outages in August 2025 and March 2026) and the material codes renamed on July 1, 2021; a
+  transfer contract's trailers (Silverbrook Transfer) on the tickets from April 1, 2026, about 60 per cent more
+  municipal waste into cell 5, noted in the daily log on their first day and carried into the fill plan; the
   historical tonnage by cell with 1991 and 1992 estimated; the gas plant's hourly export on the local wall clock (the
   fall-back hour repeated, the spring hour missing), analyzer calibration hours reading zero and engine outages; well
   readings with liquid levels quarterly (a depth or DRY) and oxygen intrusion readings; a well register with a blank
@@ -88,7 +90,7 @@ Layer 1: 1,136 voided tickets beside their reissues under the same ticket number
   standard cubic feet a minute); none moves a graded figure outside its band once handled the way every careful run
   handles it (checks.py R2)
 Not one thing: each stump fixed alone on the careful route leaves package A (the recirculated decay alone files A at
-  4,574 t, the pressure response alone A at 4,986, the saturating oxidation alone A at 4,211); each dropped alone from
+  4,911 t, the pressure response alone A at 5,148, the saturating oxidation alone A at 4,489); each dropped alone from
   the golden moves the call (to B, C and C); a run that nails any one still misses at least five of the eight results
 One-fact test: the most useful single sentences rescue one result each or none: the recirculation sentence ("cell 4's
   collected gas is flat because the leachate that sped its decay also flooded its lower wells; the wells it did not
@@ -122,8 +124,10 @@ Pinned: R2's rivals (the exponential pressure lag fixed at 12 or 20 hours, cell 
   for the fitted lag) and still land inside it; R3's zones read from the register's pumps or the work orders give the
   same wells; R4 and R7's rivals (cell 5 on cell 4's methane potential, the level from the closed cells' collected gas
   at their design collection, the faster decay ramped over three or six months, package C's gain as the pilot's mean
-  flow ratio, cell 4's efficiency held at its autumn 2026 level) land inside their bands; R5's rivals (a logistic in
-  the log of the flux, a capacity with its own half-saturation flux) land at 17.0 and 18.9 per cent against 17.1
+  flow ratio, cell 4's efficiency held at its autumn 2026 level) land inside their bands, R4's spanning -2.5 to +1.1
+  per cent of the golden (the lags and the pressure-change specifications -3.5 to -4.0, a 32-hour lag -6.4) inside a
+  7 per cent band; R5's rivals (a logistic in the log of the flux, a capacity with its own half-saturation flux) land
+  at 14.0 and 15.7 per cent against 14.1, inside 3 points
 Run forecast: R2 lost by a self-confirming check (the campaigns and the drone flights agree, so the level is taken),
   R3 by dismissed own evidence (the per-well readings show the rise, the cell total is filed), R4 by an unfinished chain
   (cell 5 carried at the dry decay), R5 by a method shortcut (the study's cover-type mean), R6 by the bars sized on the
@@ -144,14 +148,14 @@ Lesson: a record can barely move because one cause moved two of its terms the op
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | the municipal waste placed in cell 5 from its opening through October 2026, in short tons (574,197) | assembly-reconciliation | the scale tickets (voids and reissues, the daily log's active cell for tickets without a disposal area), the material codes | within 1 per cent | narrow look (the quick read): every ticket summed as filed, voids, reissues and cover soil included (648,207); the careful but hurried pass earns it | - | Ask 3 |
+| R1 | the municipal waste placed in cell 5 from its opening through October 2026, in short tons (701,823) | assembly-reconciliation | the scale tickets (voids and reissues, the daily log's active cell for tickets without a disposal area), the material codes | within 1 per cent | narrow look (the quick read): every ticket summed as filed, voids, reissues and cover soil included (776,455); the careful but hurried pass earns it | - | Ask 3 |
 | R2 | the site's actual methane emission in calendar 2025, in metric tons (4,924) | missingness-measurement | the 2025 campaigns and drone flights, the automated chambers' hourly fluxes, the site barometer; the resolution's definition | within 10 per cent of the golden | self-confirming check: the campaigns' mean rate times the year's hours (3,537), confirmed by the drone flights (3,832) | - | Component 1 |
 | R3 | the per cent change in cell 4's methane generation from calendar 2022 to the 12 months to October 2026 (+85.1) | investigation-loops | the monthly wellfield readings with liquid levels, the well register's pumps and the work orders, the recirculation log | within 8 points of the golden | dismissed own evidence: cell 4's summed collected gas (+28.7 per cent), the flooded wells' fall read as cell 4's own | - | Component 2 |
-| R4 | the methane cell 5 will generate in 2027, in metric tons (3,752) | forecasting | the scale tickets and the 2027 fill plan, the cell-resolved 2026 campaigns, the options paper's recirculation sentence, R3's decay | within 12 per cent of the golden | unfinished chain: cell 5's spring 2026 level from the uncorrected campaigns carried on the dry decay with the study's share (959) | R1, R3 | Ask 5 |
-| R5 | the share of the methane reaching cell 5's cover in 2027 that the cover oxidizes if nothing changes, per cent (17.1) | modeling | the 2019 study's paired plot fluxes and isotope oxidation shares, R4's flux, the station's soil temperature normals | within 4 points of the golden | method shortcut: the study's daily-cover mean (39.3 per cent) | R4 | Ask 6 |
-| R6 | the bridge from the 2025 report's figure (collection efficiency +3,280, then oxidation -467, then everything else -38) and from the 2025 survey's figure (the hours the campaigns did not sample, +1,387) to the actual 2025 emission, in metric tons | decomposition-attribution | the reporting rule's equation as the report files it, the survey's annualisation, R2; the prompt's order | collection within 15 per cent, oxidation within 250 t, the survey's gap within 490 t | method shortcut: the bars sized to the survey's level, so the survey has no gap and the report's collection bar is about a third short (2,274) | R2 | Ask 2 |
-| R7 | the 2027 emission under each package A to E in a year of normal weather, in metric tons (6,942; 6,385; 5,549; 4,495; 4,095) | forecasting | the options paper's works, dates and design capture; R2's correction on the 2026 campaigns, R3's decay, R4, R5; the pilot wells | each within 7 per cent of the golden | unfinished chain: cell 5 on the dry decay, the campaigns' level and the study's oxidation, every package 40 per cent or more low (A 4,015) | R2, R4, R5 | Component 3 |
-| R8 | the cheapest package that keeps 2027 at or under the Council's limit (package D) | synthesis | the resolution's limit (5,100 t) and least-cost rule; R7 | exact | method shortcut: package A on the three hurried judgments together (each alone gives B or C) | R7 | Recommendation |
+| R4 | the methane cell 5 will generate in 2027, in metric tons (4,732) | forecasting | the scale tickets and the 2027 fill plan, the cell-resolved 2026 campaigns, the options paper's recirculation sentence, R3's decay | within 7 per cent of the golden (its rivals span -2.5 to +1.1 per cent, the lag and pressure-change specifications to -4.0) | unfinished chain: cell 5's spring 2026 level from the uncorrected campaigns carried on the dry decay with the study's share (1,205) | R1, R3 | Ask 5 |
+| R5 | the share of the methane reaching cell 5's cover in 2027 that the cover oxidizes if nothing changes, per cent (14.1) | modeling | the 2019 study's paired plot fluxes and isotope oxidation shares, R4's flux, the station's soil temperature normals | within 3 points of the golden (the rule's 10 per cent sits 1.1 points outside) | method shortcut: the study's daily-cover mean (39.3 per cent) | R4 | Ask 6 |
+| R6 | the bridge from the 2025 report's figure (collection efficiency +3,191, then oxidation -412, then everything else -4) and from the 2025 survey's figure (the hours the campaigns did not sample, +1,387) to the actual 2025 emission, in metric tons | decomposition-attribution | the reporting rule's equation as the report files it, the survey's annualisation, R2; the prompt's order | collection within 15 per cent, oxidation within 250 t, the survey's gap within 490 t | method shortcut: the bars sized to the survey's level, so the survey has no gap and the report's collection bar is about a third short | R2 | Ask 2 |
+| R7 | the 2027 emission under each package A to E in a year of normal weather, in metric tons (7,868; 7,371; 6,489; 4,507; 4,124) | forecasting | the options paper's works, dates, design capture and the pumps' basis; R2's correction on the 2026 campaigns, R3's decay, R4, R5; the pilot wells | each within 7 per cent of the golden | unfinished chain: cell 5 on the dry decay, the campaigns' level and the study's oxidation, every package 40 per cent or more low (A 4,138) | R2, R4, R5 | Component 3 |
+| R8 | the cheapest package that keeps 2027 at or under the Council's limit (package D) | synthesis | the resolution's limit (5,500 t) and least-cost rule; R7 | exact | method shortcut: package A on the three hurried judgments together (each alone gives B or C) | R7 | Recommendation |
 
 Carry-forward: R1, R2 and R3 stand on inputs of their own (the tickets; the campaigns, flights, chambers and barometer;
 the wellfield readings); R4 falls with R3 (and with R1's tonnage), R5 with R4's flux, R6 with R2, R7 with R2, R4 and
@@ -168,6 +172,7 @@ offsetting record keeps R1, R2 and R6; one that misses the saturation keeps R1, 
 | the site's methane potential below the reporting default | constructed (the simulated waste stream) | no: every cell's waste since 1986 | calibration: the corrected campaigns or the closed cells' collected gas against the decay model | modelling | keep, a supporting step (an uncalibrated default files no package) |
 | the 2027 gas shifting to the uncollected cell 5 | constructed (the filling sequence) | no: the shift runs through every year as each cell fills | a targeted query: tonnage by cell and the well register | routine | keep, a reflex step (the packages are defined cell by cell) |
 | construction debris, biosolids and cover soil at the scale house | constructed (the simulated waste stream) | no: every day's tickets | a targeted query: the material codes | routine | keep, R1 only |
+| a transfer contract's trailers from April 2026, about 60 per cent more municipal waste into cell 5 | constructed (the simulated waste stream) | no: every day's tickets from April 2026, the daily log and the fill plan, and it moves every package | none needed: the tickets and the fill plan carry it into R1 and R4 by reflex | routine | keep, texture: R1's tonnage and the forecast's input, after every 2026 campaign so the spring calibration is untouched |
 
 ## Effort test
 
@@ -200,13 +205,13 @@ Reflex route: every file conformed and every document read, the tickets' voids a
   the report's figure reproduced from its own equation, the pilot pumps' gain read from the pumped wells, the forecast
   built cell by cell as the packages are defined, a decay model calibrated on the measurements; with the campaigns'
   level taken as measured (confirmed by the drone flights), cell 4's collected gas read as its generation, and the
-  study's cover-type oxidation; it files package A (A at 4,015 t, every package under the limit)
+  study's cover-type oxidation; it files package A (A at 4,138 t, every package under the limit)
 
 | Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
 |---|---|---|---|---|---|---|
-| J1 the recirculated decay read on the wells the leachate did not flood, carried to cell 5 from July 2026 | stump | cell 4's collected gas read as no change in its decay; cell 5 on the dry decay | L02, L26, N04 | package B (B at 5,011 t, C at 4,114) | package A (A at 4,574 t; rescues R3, 1 of 8) | no: the faster decay has to be fitted on the unflooded and pumped wells and carried to a cell with no wells |
-| J2 the campaigns and drone flights carried to every hour through the pressure response the chambers record | stump | the campaigns' mean rate times the year's hours, confirmed by the drone flights | N12, L28 | package C (B at 5,190 t, C at 4,370) | package A (A at 4,986 t; rescues R2, 1 of 8) | no: the response and its lag have to be fitted on the chamber record and each campaign's hours placed on it |
-| J3 the cover's oxidation evaluated at each cell's own flux | stump | the 2019 study's mean share for each cover | N04, L22 | package C (B at 5,443 t, C at 4,735) | package A (A at 4,211 t; rescues none) | no: the share has to be fitted against flux across plots and evaluated at a flux most daily-cover plots never reached |
+| J1 the recirculated decay read on the wells the leachate did not flood, carried to cell 5 from July 2026 | stump | cell 4's collected gas read as no change in its decay; cell 5 on the dry decay | L02, L26, N04 | package B (B at 5,364 t, C at 4,417) | package A (A at 4,911 t; rescues R3, 1 of 8) | no: the faster decay has to be fitted on the unflooded and pumped wells and carried to a cell with no wells |
+| J2 the campaigns and drone flights carried to every hour through the pressure response the chambers record | stump | the campaigns' mean rate times the year's hours, confirmed by the drone flights | N12, L28 | package C (B at 6,026 t, C at 5,161) | package A (A at 5,148 t; rescues R2, 1 of 8) | no: the response and its lag have to be fitted on the chamber record and each campaign's hours placed on it |
+| J3 the cover's oxidation evaluated at each cell's own flux | stump | the 2019 study's mean share for each cover | N04, L22 | package C (B at 5,907 t, C at 5,160) | package A (A at 4,489 t; rescues none) | no: the share has to be fitted against flux across plots and evaluated at a flux most daily-cover plots never reached |
 | J4 the forecast built cell by cell, each package acting on its own cell | reflex | a site-wide collection efficiency carried | R25 | same call | - | - |
 | J5 the report's figure reproduced from its own equation | reflex | none | R18 | same call | - | - |
 | J6 the pilot pumps' gain read from the pumped wells' flows | reflex | none | R14 | same call | - | - |
@@ -235,13 +240,14 @@ Genuine patterns: (1) the scale house's weekday, holiday and seasonal tonnage wi
   pressure cycles and the semidiurnal pressure tide; (3) the gas plant's engine availability and the slow decline of
   the closed cells; (4) the oxidation's soil temperature seasonality, with warm and cold spells and years; (5)
   well-to-well heterogeneity in yield, oxygen intrusion and liquids; (6) the chambers' diurnal temperature cycle and
-  rain response
+  rain response; (7) a transfer contract's trailers from April 2026, a new hauler at the scale house with its own load
+  sizes, cell 5's lifts coming faster and the fill plan's receipts at the new level
 Problems by process: voided and reissued tickets with tare errors and missing disposal areas (the scale-house
   operator and two software outages), the material code rename of 2021 (the software change), the plant's local wall
   clock and its analyzer calibration hours (the SCADA historian), quarterly liquid levels and oxygen intrusion readings
   (the wellfield technician), a re-sited barometer and a clogged rain gauge (the station), chamber QC hours and a
   chamber added in 2026, two estimated years in the historical tonnage
-Breadth: 22 files; 212,294 scale tickets, 94,537 hours of weather, 33,600 hours of plant record, 10,223 readings on
+Breadth: 22 files; 218,343 scale tickets, 94,537 hours of weather, 33,600 hours of plant record, 10,223 readings on
   114 wells, three chambers (34,143 hours), eight campaigns, ten drone flights and 44 oxidation plots; deciding which
   instruments see which part of the emission is the work
 
@@ -280,18 +286,31 @@ Assumption made false: that the campaigns' days stand for the year (false becaus
   cell 4's gas unchanged (false because the same leachate flooded the lower wells; the per-well liquid levels and the
   pumped wells test it); that the cover oxidizes cell 5's 2027 gas at the study's daily-cover share (false because
   oxidation saturates; the plot data test it)
-Forcing: the line is the Council's 5,100 t limit; on the cut pack the golden files D (C 5,549 t, 8.8 per cent over; D
-  4,495 t, 11.9 per cent under) and all thirteen golden-family variants file D (the pressure lag fixed at 12 or 20
-  hours, cell 4's chamber alone, all three chambers pooled, the campaigns weighted with the drone flights, oxidation as
-  a logistic in the log of the flux or with its own half-saturation flux, cell 5 on cell 4's methane potential, the
-  faster decay ramped over three or six months, package C's gain as the pilot's mean flow ratio, the level from the
-  closed cells' collected gas, cell 4's efficiency held flat); each fitted input moved by its defensible
-  spread (the campaigns' pressure factor by 0.03, the recirculated decay by 8 per cent, the dry decay by 10 per cent,
-  the covers' oxidation capacity by 15 per cent, package C's pump gain by 20 per cent, cell 5's spring calibration by
-  7 per cent) keeps D, the nearest being cell 5's calibration 7 per cent lower (C 5,337 t, 4.6 per cent over) and the
-  pressure factor 0.03 lower (D 4,688 t, 8.1 per cent under); the twelve shortcuts file A, B, C or no package (the
-  rule's default potential uncalibrated puts every package over the limit; the closed cells' level with the study's
-  shares puts C at 4,977 t, 2.4 per cent under), none D (effort.json forcing)
+Forcing: the line is the Council's 5,500 t limit; on the cut pack the golden files D (C 6,489 t, 18.0 per cent over;
+  D 4,507 t, 18.1 per cent under; the simulation's own 2027 at C 6,191 and D 4,309) and all thirteen golden-family
+  variants file D (the pressure lag fixed at 12 or 20 hours, cell 4's chamber alone, all three chambers pooled, the
+  campaigns weighted with the drone flights, oxidation as a logistic in the log of the flux or with its own
+  half-saturation flux, cell 5 on cell 4's methane potential, the faster decay ramped over three or six months,
+  package C's gain as the pilot's mean flow ratio, the level from the closed cells' collected gas, cell 4's efficiency
+  held flat); each fitted input moved by its defensible spread (the campaigns' pressure factor by 0.03, the
+  recirculated decay by 8 per cent, the dry decay by 10 per cent, the covers' oxidation capacity by 15 per cent,
+  package C's pump gain by 20 per cent, cell 5's spring calibration by 7 per cent) keeps D; and the holistic audit's
+  test, every combination of the choices the answer blocks' bands leave open (every pressure specification whose 2025
+  figure stays inside R2's band: the fitted lag, an 8-, 12-, 20-, 24- or 32-hour lag, a 16-hour half-life on all three
+  chambers, the 12- or 24-hour change, the last two setting R2's edge, while 36 and 40 hours put R4 or R2 outside its
+  band; cell 5's spring calibration -7, 0 or +7 per cent, R4's band; package C's gain -7, 0 or +7 per cent, its
+  rivals' spread; cell 4's 2027 collection by zone or flat), files D in all 162 combinations. Among the 114 that keep
+  R2, R4 and R5 inside their bands (the audit's own test: every intermediate inside its tolerance) C is nearest at
+  5,806 t (5.6 per cent over: a 32-hour lag, the gain +7); the nearest of all, the same lag with the calibration -7 as
+  well (R4 13.0 per cent low, outside its band), leaves C at 5,538 t, 0.7 per cent over (the stage 4 judge's pass 3
+  put the 32-hour lag to the sweep); D is nearest at 4,801 t (12.7 per cent under: a 12-hour lag, the calibration
+  +7, the gain -7); the audit's own route (a 24-hour lag, a pump gain 16 per cent higher) leaves C at 6,010 t; R4's
+  flip point, the cell 5 generation at which C would pass, is 3,587 t on the golden route and 3,887 t on the audit's
+  route, against the band's floor of 4,401 t.
+  On the other side the twelve shortcuts file A, B, C, E or no package, none D; the nearest are the pressure and
+  oxidation stumps dropped alone (C 5,161 and 5,160 t, 6.2 per cent under) and the closed cells' level with the
+  study's shares (C 5,345 t, 2.8 per cent under); the rule's default potential uncalibrated puts packages A to D
+  over the limit (E or no package) (effort.json forcing, sweep)
 Noun swap: the nearest task on file by skeleton.py check is task1 v5 (severity none); its nouns swapped in (audiobook
   plans become gas packages, a price rise's response becomes the methane forecast) carry across only the common decision
   form (one of a few options) and two common detections (a natural experiment in the record, a second source at
@@ -328,7 +347,40 @@ Closed strategies: the call turns on cancellation_of_offsetting_effects (one tre
 | SF16 | methane in metric tons | metric tons of methane; short tons; CO2 equivalent | metric tons of methane | the prompt, the resolution and the report |
 | SF17 | the weather of R5's year | normal weather as for the call; 2025's | normals | same band: 2025's soil temperatures give 17.5 per cent against 17.1 |
 | SF18 | the waste in short tons | the tickets' net tons (short tons); metric tonnes | short tons | the prompt's "short tons" and the tickets' net_tons column |
-| SF19 | cell 5's cover area in 2027 | its 24.2-acre footprint (the Cells sheet); the 2025 report's 14.6 acres filled | the footprint | the options paper ("across its whole footprint since July 13, 2026") and the lifts in the daily log and the fill plan; the 14.6 acres would give 12.8 per cent and the same call |
+| SF19 | cell 5's cover area in 2027 | its 24.2-acre footprint (the Cells sheet); the 2025 report's 14.6 acres filled | the footprint | the options paper ("across its whole footprint since July 13, 2026") and the lifts in the daily log and the fill plan; the 14.6 acres would give 10.5 per cent and the same call |
+| SF20 | the liquid level package C's pumps hold | where the pilot pumps hold it: 0.04 of the screen under liquid, read off the pilot wells' gaugings since June 2025; the screen cleared | the pilot's level | the options paper ("hold the liquid where the June 2025 pilot pumps hold it"); same call: a cleared screen gives C 6,443 t (the holistic audit's pumped-well recovery, closed at authority as a WHAT and asserted in checks.py) |
+| SF21 | the wells package C's pumps go into | every cell 4 well whose liquid stood above its screen bottom when last gauged in 2026 (18: EW-446 was last gauged in July); only the wells gauged in October 2026 (17) | last gauged in 2026 | the options paper ("when the well was last gauged in 2026"); same call: the 17 give C 6,535 t |
+| SF23 | when a month's waste begins producing methane | six months after placement (the field's first-order decay convention); none, three, nine or twelve months | six months | the options paper ("In the Division's gas model a month's waste begins producing methane six months after it is placed"); the delays it rules out move cell 5's 2027 generation (none -16, three -7.5, nine +17 per cent) and keep package D (C 5,765, 6,152 and 7,207 t); twelve months, which neither the IPCC model's default delay nor the year-after-placement step of the federal rule gives, would file E |
+| SF22 | cell 5's receipts after the extracts' cut-off | the Division's 2027 fill plan (the transfer contract's receipts carried); the tickets' run rate before the contract | the fill plan | the options paper ("Waste receipts for cell 5 through 2027 are in the Division's 2027 fill plan"); same call: the fill plan's receipts at the rate before the contract give C 6,265 t (receipts placed after the extracts generate little in 2027, six months late) |
+
+## Pinning list
+
+Every constant the golden's estimator shares with the simulated world (determinism-check §1), with its home in the pack
+or the estimator family and its measured spread.
+
+| Constant | Golden value | Home |
+|---|---|---|
+| the pressure response's time constant | 16 hours | auto_chamber_flux_hourly.csv against fernhallow_met_station_hourly.csv, chosen by least squares among 4 to 48 hours; measured spread 8 to 32 hours (and the half-life and pressure-change specifications) in the 162-combination sweep, all package D |
+| the response per hPa of the lagged gap | 0.100 | the same fit on auto_chamber_flux_hourly.csv; measured spread: cell 4's chamber alone or all three pooled within a few per cent, and the lags' own coefficients across the sweep (package D) |
+| the unreached waste's decay rate | 0.0495 a year | wellfield_monitoring_2019-2026.csv, the closed cells' collected gas 2019 to 2026; measured spread 10 per cent either way (package D) |
+| the reached waste's decay rate | 0.1249 a year | wellfield_monitoring_2019-2026.csv with gccs_well_register.xlsx and cmms_work_orders_2022-2026.csv, the pumped wells' full-yield rise; measured spread 8 per cent either way (package D) |
+| the reached share of cell 4 | 0.448 | wellfield_monitoring_2019-2026.csv liquid levels since 2023, by well, with gccs_well_register.xlsx |
+| when a month's waste begins producing methane | six months | council_agenda_lfg_capital_2027.pdf (the Division's gas model); SF23 |
+| when the faster decay begins | the month after the first injection | leachate_recirculation_log.csv; measured spread: ramped over three or six months (package D) |
+| the yield a well loses per unit of submerged screen | 0.82 | wellfield_monitoring_2019-2026.csv, the pilot wells before and after their pumps; measured spread: the pilot's mean flow ratio (package D) |
+| the screen the pumps leave under liquid | 0.04 | wellfield_monitoring_2019-2026.csv, the pilot wells' gaugings since June 2025, with council_agenda_lfg_capital_2027.pdf (the pilot pumps' level); SF20 |
+| each cover's oxidation capacity and its temperature factor | V15 22.1, 15.5 and 27.0 g per square meter a day, Q10 1.89 | brightwater_plot_measurements_2019.csv, fitted; measured spread: a logistic in the log of the flux and a half-saturation form (package D) |
+| the cells' areas | the footprints | tonnage_by_cell_1986-2020.xlsx, the Cells sheet; SF19 |
+| design capture, the cap, the closed cells' collection, the in-service dates | 15 and 78 per cent, 86, 92, May 1 and October 1 | council_agenda_lfg_capital_2027.pdf |
+| destruction at the flare and engines | 0.99 | ghg_annual_report_RY2025.pdf, the rule's destruction efficiency |
+| methane in a standard cubic foot | 0.0192 kg | ghg_annual_report_RY2025.pdf |
+| normal weather | each month's 2016 to 2025 mean soil temperature | fernhallow_met_station_hourly.csv; SF2 |
+| cell 5's receipts after October 2026 | the fill plan | fill_plan_2027.xlsx; SF22 |
+| the materials' relative methane potential | the reporting rule's 100, 15 and 60 for municipal waste, C&D and biosolids, scaled by the calibration | measured spread: C&D and biosolids at none or doubled move cell 5's generation 0.6 per cent (package D) |
+| methane's density | 0.668 kg per cubic meter (20 C, 1 atm) | a physical constant; the level is calibrated on the campaigns, so it cancels from R4 and R7 (measured spread none) |
+
+Variant battery: 13 golden-family rivals, 14 perturbations (each fitted input moved by its spread, and the sweep's two
+nearest corners) and all 162 combinations of the sweep, 189 variants in all, file one answer, package D.
 
 ## Closure table
 
@@ -344,7 +396,7 @@ Closed strategies: the call turns on cancellation_of_offsetting_effects (one tre
 | 8 | Window length: one calendar year for the emissions; the station's 2016 to 2025 record for the normals |
 | 9 | Boundary inclusivity: a package's work counts from its in-service date's month |
 | 10 | Rounding path: hourly and monthly values summed at full precision; tons shown whole |
-| 11 | Tie-break: none needed; C sits 8.8 per cent over the limit and D 11.9 per cent under |
+| 11 | Tie-break: none needed; C sits 18.0 per cent over the limit and D 18.1 per cent under, and every one of the 162 sweep combinations files D (C 5.6 per cent over at its nearest with every graded figure inside its band, 0.7 per cent over at its nearest of all, D 12.7 per cent under) |
 | 12 | Maturity and censoring: the 2027 forecast is a model; no record is censored |
 | 13 | Order of operations: assemble waste, correct the campaigns, read the decay, calibrate cell 5, evaluate oxidation, forecast by package |
 | 14 | Row order: no step depends on file order |
@@ -355,7 +407,7 @@ Closed strategies: the call turns on cancellation_of_offsetting_effects (one tre
 | 19 | Code and status semantics: ticket material codes by the scale software's code list; well type and pumps by the register |
 | 20 | Integerisation: none; tons are continuous |
 | 21 | Clause scope: the limit applies to calendar 2027 only |
-| 22 | Forward window contents: the 2027 fill plan, the options paper's works and dates, cell 5's recirculation since July 13, 2026 |
+| 22 | Forward window contents: the 2027 fill plan (with the transfer contract's receipts), the options paper's works, dates, design capture and pumps' basis, cell 5's recirculation since July 13, 2026 |
 
 ## Literal reader
 
@@ -384,19 +436,23 @@ attached file's name, a role, or a count the data hold.
 - Bar re-read on the built pack: eight results across seven areas (assembly and reconciliation, missingness and
   measurement, investigation loops, forecasting, modeling, decomposition and attribution, synthesis), each pinned by a
   filed sentence (Resolution 2025-41's definition, limit and least-cost rule; the options paper's works, dates, design
-  capture and cell 5's recirculation date; the report's equation) or the prompt (the units, the windows, the bridge's
-  order) and the data, with the bands the answer blocks state; precut 0 FAIL; checks.py 113 of 113; verify.py 27 of 27
-  on its own path; two rebuilds byte-identical; figures_check 123 of 123.
+  capture, the pumps' basis and cell 5's recirculation date; the report's equation) or the prompt (the units, the
+  windows, the bridge's order) and the data, with the bands the answer blocks state; on the repaired cut precut 0
+  FAIL; checks.py 129 of 129; verify.py 27 of 27 on its own path; two rebuilds byte-identical; figures_check 137 of
+  137.
 - Hidden factor record against the cut data: every chamber breathes with the barometer (cell 3's geomembrane cap
   too); the fair-weather rule lowers the 2026 campaigns (0.792) and the drone flights (0.736) as well as the 2025
   campaigns (0.711); 26 of cell 4's 58 wells flooded, 8 pumped; recirculation in both open cells; the share oxidized
   falls with the flux on all three covers of the study (checks.py R5).
 - Effort test against effort.py: quick 13.9, careful 20.8 (1 of 8), thorough 100; the largest hint rescues 1 of 8;
-  twelve shortcuts land on four distinct wrong answers (A, B, C and no package); level 5 from the factorial.
-- Forcing: the golden C 5,549 t and D 4,495 t against 5,100; thirteen golden-family variants and twelve perturbations
-  file D, the nearest C 5,337 t (cell 5's calibration 7 per cent lower) and D 4,688 t (the pressure factor 0.03 lower);
-  the pressure's 12- and 24-hour changes ruled out by the chambers' fit and still on D; against the simulation the
-  golden's 2025 figure is 4,924 t to its 4,903 and its 2027 package C 5,549 t to its 5,233 (both over the limit).
+  the twelve shortcuts and the quick pass land on five distinct wrong answers (A, B, C, E and no package); level 5 from
+  the factorial (each stump dropped alone lands B, C or C, 6.2 to 19.7 per cent from the line on package C).
+- Forcing: the golden C 6,489 t and D 4,507 t against 5,500; thirteen golden-family variants, twelve perturbations and
+  all 162 combinations of the bands' choices file D, the nearest C 5,806 t with every graded figure inside its band
+  (5.6 per cent over), 5,538 t of all (0.7 per cent over, R4 outside its band) and D 4,801 t (12.7 per cent under); the pressure's 12- and 24-hour changes ruled out by the chambers' fit and still on D; R4's flip point
+  3,587 t (3,887 t on the holistic audit's route) against the band's floor 4,401 t; against the simulation the golden's
+  2025 figure is 4,924 t to its 4,903, its cell 5 generation 4,732 t to its 4,521 and its 2027 package C 6,489 t to
+  its 6,191 (both over the limit) and D 4,507 t to its 4,309.
 - Leak sweep REVIEW lines, ruled: the options paper carries the call's words because it defines the packages and the
   limit, and ranks none ("The Division will bring one of them to the Council"); the stump-vocabulary lines on the four
   PDFs are the field's own words (campaigns, oxidation, emission, collected, record), and no sentence relates pressure
@@ -420,6 +476,25 @@ attached file's name, a role, or a count the data hold.
   (the Council's medium); the leak sweep's REVIEW lines (ruled above); heart's house lesson: task7 v12, drawn after
   this build (its DRAWN commit follows task23's), took cancellation_of_offsetting_effects as well, so the count rose
   after the draw; this build keeps its precedence by draw order.
+- Repair of 2026-11-13 (the holistic audit, runs/holistic_audit_2026-11-13.md), stage 4 on the repaired cut: the
+  isolated leak reader found no instruction, no ranking or helper file, no answer figure and nothing that settles more
+  than one ask; every sentence it quoted for question 5 (the design capture, package C's scope at each well's last 2026
+  gauging, the closed cells at 92 per cent, the report's equation) executes to the golden's convention; its realism
+  note (the 2019 study's text said seven failed isotope runs where its table and plot file show ten) fixed, the count
+  now read off the plot file (checks.py R4). The determinism judge's pass 3 (determinism_check_report_pass3.md):
+  DETERMINISTIC, APPROVE; the pumps' yield-loss slope reproduces at 0.82 by the audit's own method, the 18 wells with
+  the register's two blank cells read by their ids, cell 4's carry moves 1 to 3 per cent; its one note, that a 32-hour
+  lag fits the chambers better than the 24-hour change already swept, was taken: the sweep carries an 8- and a 32-hour
+  lag (162 combinations, all D) and the answer blocks name both nearest figures. No re-judge: the later edits move no
+  graded figure (the study's failed-run count is a word in a method paragraph; the blocks' added clause and sweep
+  names state the pack's own facts). The gas model's six-month delay, filed after pass 3, went back to the same judge
+  (pass 3b, appended to the report): DETERMINISTIC; no other delay survives the filed sentence for cell 5's generation
+  or the call, the sweep's two nearest sentences say only what the files support (APPROVE), and its FIX_NOW, Step 5
+  naming the delay, made in the blocks; the same reader read the sentence as a convention that settles no ask.
+- Duplicate check on the repaired cut: guard.py surface PASS; guard.py heart BLOCKs on ban.pattern, ban.shape,
+  ban.forcing_event and ban.org_family against task22 v2 and task9 v3, raised when task20's re-root re-stamped its card
+  after this build's draw (at the READY commit 3bf7d67 the same card gave WARN); overridden by the author on 2026-11-13,
+  every label kept as the build is (recorded in the card's notes and pipeline.json).
 - Containers: audit_containers exit 0 on the pack, the golden and both zips.
 
 ## Tried and rejected
@@ -480,3 +555,36 @@ attached file's name, a role, or a count the data hold.
   simulation (the reached waste's share of its gas falls in 2027); the golden forecasts it by zone, the flat efficiency
   kept as a rival (same call); the faster decay now starts the month after the log's first injection, as the
   Step-by-Step states; the cover areas are read from the Cells sheet.
+- 2026-11-13, the platform's holistic audit of READY 3bf7d67 (determinism not_pinned, depth 4): package C was 8.8 per
+  cent over the 5,100 t limit, and a careful run with every intermediate inside its band (a 24-hour pressure lag, a
+  pump gain about 16 per cent larger, cell 5's generation 3.6 per cent low) put C at 5,076 t; R4's 12 per cent band
+  straddled the 3,644 t at which C passed; the options paper's "hold the liquid below the screen" read as a cleared
+  screen while the golden held the pilot's 0.04, hard-coded rather than read off the pack; the pump scope missed
+  EW-446, not gauged in October. Repaired by widening the margin from the world and the filed design basis, never a
+  method: a transfer contract's trailers on the tickets from April 2026 (about 60 per cent more municipal waste into
+  cell 5, after every 2026 campaign, so no 2025 figure, R2, R3 or the prompt moves), the horizontal collectors'
+  design capture 15 per cent (from 22), D's wells at 78 per cent (from 72) from May 1 (from June 1), the limit 5,500
+  t, the 2015 closure plan's design collection 92 per cent (from 90); the pumps' basis filed as a WHAT (the liquid
+  where the pilot pumps hold it, every well flooded at its last 2026 gauging) and read off the pilot wells; R4's band
+  narrowed to its rivals' spread (7 per cent) and R5's to 3 points (the rule's 10 per cent sat 0.1 points from the old
+  floor); the audit's sweep (162 combinations, the 8- and 32-hour lags added on the stage 4 judge's pass 3) asserted
+  in checks.py and recorded in effort.json. Graded figures moved
+  on purpose (R1, R4, R5, R6's first two bars, R7, the limit), recorded with freeze.py --allow.
+- 2026-11-13, repair, rejected: the decision levers alone (capture, dates, limit) left a window of about 3 per cent
+  either side between the sweep's lowest C and the oxidation stump dropped alone, which a 24-hour lag crosses; a faster
+  recirculated decay (0.16 a year) widened it but moved every 2025 figure, R3 and the prompt's 2,149 and 3,537; raising
+  the 2027 fill plan alone moves 2027 little (six months late); the closure plan at 94 per cent put the closed-cell
+  rival's D 7.7 per cent under the golden, outside R7's band, and at 90 per cent the closed cells' level with the
+  study's shares landed D; clearing the pilot pumps' liquid in the world (the note's old wording made true) moved the
+  2025 collected gas and with it the report's figure, so the note was reworded to the pilot's own level instead; the
+  audit's second option, a filed forecast basis (a time constant, a carry of cell 4's fractions), would file the
+  pressure stump's method, and cell 4's carry is inert anyway (by zone, flat, twelve-month or October: within 1 per
+  cent on C).
+- 2026-11-13, repair, stage 4: the judge's pass 3 noted that a 32-hour lag fits the chambers better than the 24-hour
+  change already in the sweep; the sweep now carries every lag whose 2025 figure stays inside R2's band (8 to 32 hours;
+  36 and 40 hours put R4 or R2 outside its band), 162 combinations, all D, the blocks naming the nearest inside the bands
+  (C 306 t over) and the nearest of all (38 t over, R4 13 per cent low). Building the Pinning list then found the one
+  constant the golden shared with the world that no file held: the six-month delay before a month's waste produces
+  methane, to which young cell 5's 2027 generation is steep (none -16, three months -7.5, nine +17 per cent; twelve
+  months would file E); filed in the options paper's design basis as the Division's gas model's convention (the IPCC
+  model's default delay, and the average of the federal rule's year-after-placement step), SF23, checked in checks.py.

@@ -156,6 +156,7 @@ class World:
     # ---------------------------------------------------------------- waste
     def waste(self):
         r = self.streams["waste"]
+        rc = np.random.default_rng(P.SEED + 60607)
         yrs = np.arange(P.Y0, P.YEND)
         base = np.interp(yrs, [1986, 1995, 2000, 2007, 2009, 2012, 2019, 2020, 2021, 2026, 2027],
                          [158e3, 196e3, 214e3, 262e3, 238e3, 246e3, 291e3, 282e3, 300e3, 331e3, 336e3])
@@ -179,6 +180,11 @@ class World:
                 for mat, s in P.SHARE.items():
                     sj = s * math.exp(r.normal(0, 0.06))
                     self.tonnes[c][mat][i] += tot * share * sj
+            # the transfer contract's trailers, municipal waste only, into the cell then filling (its own stream, so
+            # nothing before the contract moves)
+            if i >= month_index(P.CONTRACT["start"].year, P.CONTRACT["start"].month):
+                extra = tot * (P.CONTRACT["factor"] - 1.0) * P.SHARE["MSW"] * math.exp(rc.normal(0, 0.04))
+                self.tonnes[max(active)]["MSW"][i] += extra
         self.open_m, self.close_m = open_m, close_m
 
     def potential_placed(self, c, L0=None):

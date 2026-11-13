@@ -49,16 +49,19 @@ KD = 0.048          # first-order decay, per year, as placed
 KW = 0.120          # decay of the waste recirculated leachate reaches
 REACH = {4: 0.45, 5: 1.00}
 RAMP_MONTHS = 3     # the reached waste's decay moves to KW over this many months
+# a transfer contract: from April 2026 Silverbrook Transfer's trailers bring municipal waste on top of the site's own
+# receipts, raising cell 5's municipal waste by this factor (the tickets carry the hauler, the fill plan the receipts)
+CONTRACT = dict(start=dt.date(2026, 4, 1), factor=1.6, hauler="Silverbrook Transfer")
 LAG_MONTHS = 6      # methanogenesis begins six months after placement
 RHO_CH4 = 0.0006680  # t per m3 of methane at 20 C and 1 atm (the reporting rule's density)
 KG_PER_SCF = 0.019200  # kg of methane per standard cubic foot (60 F, 14.696 psia)
 
 # ---- collection ----
 CE_FINAL = 0.90
-CE_CLOSED_DESIGN = 0.90   # the 2015 closure plan's design collection for the capped cells
+CE_CLOSED_DESIGN = 0.92   # the 2015 closure plan's design collection for the capped cells (they collect CE_FINAL)
 CE4_BASE = 0.700
-CE5_HC = 0.22
-CE5_WELLS = 0.72
+CE5_HC = 0.15
+CE5_WELLS = 0.78
 CE4_CAP = 0.86
 FLOOD_LOSS_MAX = 0.85   # a flooded well's yield loss when its screen is fully submerged
 WELLFIELD_SD = 0.0      # the wellfield's month-to-month state beyond the blowers' outages (held steady)
@@ -82,9 +85,9 @@ PACKAGES = {
     "D": dict(works=["hc5", "pumps4", "wells5"], cost=2.38),
     "E": dict(works=["hc5", "pumps4", "wells5", "cap4"], cost=5.95),
 }
-WORKS = {"hc5": dt.date(2027, 5, 1), "pumps4": dt.date(2027, 5, 1), "wells5": dt.date(2027, 6, 1),
+WORKS = {"hc5": dt.date(2027, 5, 1), "pumps4": dt.date(2027, 5, 1), "wells5": dt.date(2027, 5, 1),
          "cap4": dt.date(2027, 10, 1)}
-LIMIT_T = 5100.0   # the Council's limit, metric tons of methane leaving the site in calendar 2027
+LIMIT_T = 5500.0   # the Council's limit, metric tons of methane leaving the site in calendar 2027
 REPORTED_2025 = None   # set by docs.py from the report it writes
 
 # ---- files under target/ ----

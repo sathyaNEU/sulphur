@@ -71,11 +71,11 @@ def write(figs, E, path):
       "wells at full yield (+%s per cent), the flooded wells and the collected gas (+%s per cent) side by side."
       % (_f(figs["R3_cell4_generation_change_pct"], 1), _f(c4["dry_change_pct"], 1),
          _f(c4["pumped_full_yield_change_pct"], 1), _f(c4["collected_change_pct"], 1)))
-    A("5. Cell 5 will generate **%s metric tons** of methane in 2027 (within 12 per cent), month by month on the cell 5 "
-      "sheet." % _f(figs["R4_cell5_generation_2027_t"]))
+    A("5. Cell 5 will generate **%s metric tons** of methane in 2027 (within %d per cent), month by month on the cell 5 "
+      "sheet." % (_f(figs["R4_cell5_generation_2027_t"]), x["bands"]["R4_pct"]))
     A("6. Under the plan of record cell 5's cover will oxidize **%s per cent** of the methane reaching it in 2027 "
-      "(within 4 points), with each month's flux, normal soil temperature and share on the cell 5 sheet."
-      % _f(figs["R5_cell5_oxidized_share_2027_pct"], 1))
+      "(within %d points), with each month's flux, normal soil temperature and share on the cell 5 sheet."
+      % (_f(figs["R5_cell5_oxidized_share_2027_pct"], 1), x["bands"]["R5_points"]))
     A("7. 2027 emissions in a normal-weather year, metric tons (each within 7 per cent), on the package call sheet "
       "with each package's works, cost and margin to the limit: %s. The 2027 by cell sheet splits each package's "
       "total into the closed cells, cell 4, cell 5 and the flare and engines." % _pk(e))
@@ -137,15 +137,20 @@ def write(figs, E, path):
          _f(c4["pumped_submergence"], 2), _f(c4["pumped_full_yield_change_pct"], 1), _f(c4["yield_loss"], 2),
          _f(c4["share_reached_pct"], 1), _f(figs["R3_cell4_generation_change_pct"], 1),
          _f(c4["collected_change_pct"], 1)))
-    A("5. Took the decay rate of unreached waste from the closed cells' collected gas (%s a year) and fitted the "
-      "reached waste's rate so cell 4's reached zone reproduces the pumped wells' full-yield rise (%s a year). Cell 5 "
-      "has taken leachate across its whole footprint since July 13, 2026 (the options paper), so its waste moves to "
+    A("5. Modelled every cell's methane as the first-order decay of each month's waste from six months after it is "
+      "placed (the options paper's gas model). Took the decay rate of unreached waste from the closed cells' collected "
+      "gas (%s a year) and fitted the "
+      "reached waste's rate so cell 4's reached zone reproduces the pumped wells' full-yield rise (%s a year). Cell 5's "
+      "waste is the tickets' through October 2026 (%s short tons from %s's trailers since %s among them) and the 2027 "
+      "fill plan's after it. Cell 5 has taken leachate across its whole footprint since July 13, 2026 (the options "
+      "paper), so its waste moves to "
       "the faster rate from August; its level is set by the spring 2026 two-tracer campaigns on cell 5, all before "
       "the recirculation, on the unreached rate, and puts the municipal waste's methane potential at about %s "
       "cubic meters a short ton (cell 4's campaigns %s, the closed cells' collected gas at their design collection %s). "
       "Cell 5 generates **%s tons** in 2027; carried on the unreached rate from the uncorrected campaigns, as the "
       "shortcut does, it is %s."
-      % (_f(x["decay"]["kd"], 4), _f(x["decay"]["kw"], 4), x["implied_l0_m3_per_ton"]["campaigns cell 5"],
+      % (_f(x["decay"]["kd"], 4), _f(x["decay"]["kw"], 4), _f(x["contract"]["tons_to_oct_2026"]),
+         x["contract"]["hauler"], x["contract"]["start"], x["implied_l0_m3_per_ton"]["campaigns cell 5"],
          x["implied_l0_m3_per_ton"]["campaigns cell 4"], x["implied_l0_m3_per_ton"]["closed cells"],
          _f(figs["R4_cell5_generation_2027_t"]), _f(car["R4"])))
     A("6. Fitted the 2019 study's %d plots by least squares as a capacity that saturates with the flux: the share "
@@ -153,11 +158,12 @@ def write(figs, E, path):
       "share) and V = V15 x Q10^((T - 15)/10) at the plot's soil temperature, V15 for each cover and one Q10 (%s) for "
       "all: daily cover takes about %s g per square meter a day at 15 C. Cell 5's flux is its uncollected methane over "
       "its %s-acre footprint (the Cells sheet): by 2027 its lifts and leachate lines cover the whole footprint (the "
-      "options paper; the daily log's fourth lift and the fill plan's fifth), while the 2025 report's %s acres is the "
-      "area filled in 2025. At the flux cell 5 will carry in 2027 and normal "
+      "options paper; the daily log's working lift %s in October 2026 and the fill plan's %s by December 2027), while "
+      "the 2025 report's %s acres is the area filled in 2025. At the flux cell 5 will carry in 2027 and normal "
       "soil temperatures it oxidizes **%s per cent**; the study's daily-cover mean (%s per cent) was measured at a small "
       "fraction of that flux."
       % (x["plots"], _f(x["sat_q10"], 2), _f(x["sat_v15_g_m2_d"]["active"], 1), _f(x["cell5_acres"], 1),
+         x["cell5_lifts"]["log_oct_2026"], x["cell5_lifts"]["plan_dec_2027"],
          _f(x["cell5_acres_2025_report"], 1), _f(figs["R5_cell5_oxidized_share_2027_pct"], 1),
          _f(x["study_mean_pct"]["active"], 1)))
     A("7. Bridged 2025 in the order of the report's equation: actual generation in place of the rule's collection "
@@ -168,27 +174,36 @@ def write(figs, E, path):
     A("8. Forecast 2027 cell by cell in normal weather: closed cells on their own collected gas at the closure plan's "
       "%s per cent design collection, cell 4 by zone (the unflooded wells at %s of the unreached waste's methane, "
       "the wells in the reached waste at %s, each over August to October 2026 and carried with its own zone's "
-      "generation) with package C's pumps restoring its flooded wells by the pilot's yield model and package E's cap "
-      "at %s per cent, cell 5 at the "
+      "generation) with package C's pumps restoring the %d wells flooded at their last 2026 gauging, by the pilot's "
+      "yield model, to the %s of the screen the pilot pumps leave under liquid, package E's cap at %s per cent, cell 5 "
+      "at the "
       "options paper's design capture from each works' date, each cover's saturating oxidation and the unburned "
       "share at the flare and engines: %s. The campaigns' rates as measured, one decay rate and the study's shares "
       "give %s and pick package A."
-      % (x["ce_closed_pct"], _f(x["ce4_zones"]["dry"], 2), _f(x["ce4_zones"]["wet"], 2), x["ce4_cap_pct"], _pk(e),
-         _pk(car["R7"])))
+      % (x["ce_closed_pct"], _f(x["ce4_zones"]["dry"], 2), _f(x["ce4_zones"]["wet"], 2), x["pump"]["wells"],
+         _f(x["pump"]["s_after"], 2), x["ce4_cap_pct"], _pk(e), _pk(car["R7"])))
     A("")
     A("No other package survives. %s comes out under a pressure lag fixed at 12 or 20 hours, cell 4's chamber alone "
       "or all three chambers pooled, the campaigns weighted with the drone flights, oxidation as a logistic in the log "
       "of the flux or as a capacity with its own half-saturation flux, cell 5 on cell 4's methane potential, the level "
       "set by the closed cells' collected gas, the faster decay ramped in over three or six months, cell 4's "
-      "efficiency held at its autumn 2026 level and package C's gain read as the pilot's mean flow ratio, and under "
-      "each fitted input moved by its spread; the nearest, %s, still leaves "
-      "package C %s tons over. Each shortcut lands elsewhere: no pressure "
+      "efficiency held at its autumn 2026 level and package C's gain read as the pilot's mean flow ratio, under "
+      "each fitted input moved by its spread, and under all %d combinations of the choices the bands leave open (the "
+      "pressure response as an 8- to 32-hour lag, a 16-hour half-life on all three chambers or the 12- or 24-hour "
+      "change, cell 5's spring calibration 7 per cent either way, package C's gain 7 per cent either way, cell 4's "
+      "2027 collection by zone or held flat); among those that keep the 2025 emission, cell 5's generation and its "
+      "cover's share inside their bands the nearest, %s, leaves package C %s tons over the limit, the nearest of all, "
+      "%s (cell 5's generation then %s per cent off, outside its band), still %s tons over, and package D's highest, "
+      "%s, leaves it %s tons under. Each shortcut lands elsewhere: no pressure "
       "correction on %s, one decay rate on %s, the study's oxidation shares on %s, the rule's 10 per cent on %s, any "
       "two of them together on package A, a methane potential taken from a reporting default instead of the "
-      "measurements on %s at all, and the closed cells' level with both decay rates but the study's shares on %s."
-      % ("Package " + call.split()[-1], near["C_name"], _f(near["C_over_t"]), dr["J2"]["answer"],
+      "measurements on %s, and the closed cells' level with both decay rates but the study's shares on %s."
+      % ("Package " + call.split()[-1], x["sweep_runs"], x["sweep_in_band"]["C_name"],
+         _f(x["sweep_in_band"]["C_over_t"]), x["sweep_all"]["C_name"], _f(x["sweep_all"]["R4_off_pct"], 1),
+         _f(x["sweep_all"]["C_over_t"]), near["D_name"], _f(near["D_under_t"]), dr["J2"]["answer"],
          dr["J1"]["answer"], dr["J3"]["answer"],
          sc["the reporting rule's 10 per cent oxidation"]["answer"],
-         sc["the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation"]["answer"],
+         {"no package": "no package at all"}.get(*[sc["the rule's default potential, uncalibrated, with both decay "
+                                                       "rates and a saturating oxidation"]["answer"]] * 2),
          sc["the closed cells' level with both decay rates and the study's oxidation"]["answer"]))
     open(path, "w").write("\n".join(L) + "\n")
