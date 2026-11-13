@@ -1250,7 +1250,8 @@
     "grid-reliability-outage-analysis": [
      "root-cause",
      "anomaly-detection",
-     "comparative-explanation"
+     "comparative-explanation",
+     "etl"
     ],
     "tariff-demand-response-evaluation": [
      "experiment-causal",

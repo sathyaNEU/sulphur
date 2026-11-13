@@ -209,7 +209,7 @@ themselves; `economics` to `economics-econometrics`; `policy-education` to `poli
 
 - `load-forecasting`: F
 - `generation-capacity-planning`: OS
-- `grid-reliability-outage-analysis`: RC, AD
+- `grid-reliability-outage-analysis`: RC, AD, ETL (fault and interruption records from relays, SCADA, the outage system and field records conformed to one schema; the platform assigns analysis types apart from task types)
 - `tariff-demand-response-evaluation`: EC
 - `asset-condition-maintenance`: F, OS
 - `efficiency-savings-verification`: EC
