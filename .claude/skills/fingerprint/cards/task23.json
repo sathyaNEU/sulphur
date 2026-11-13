@@ -1,0 +1,152 @@
+{
+  "task": "task23",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-13",
+  "slot_note": "task23/DESIGN_NOTE.md",
+  "domain": "physical-environmental-sciences",
+  "subdomain": "emissions-inventory",
+  "client_domain": "physical-environmental-sciences",
+  "client_subdomain": "Physical & Environmental Sciences (emissions inventory; closest client task types: physical-model calibration and data assimilation, sensor calibration and measurement uncertainty, spatiotemporal exposure and source apportionment)",
+  "niche": "a county solid waste division's landfill methane: what the regional landfill actually emitted in 2026 behind a GHG report and a state tracer survey that disagree, and the cheapest 2027 gas collection package that keeps the site under the county's 2027 methane target, when the newest cell takes recirculated leachate and has no gas wells",
+  "objective": "comparative-explanation",
+  "shape": "03",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "time",
+    "objective"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G3",
+    "G2",
+    "G16"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "pilot_log",
+  "stump_strategy": "other",
+  "decisive_rule_filed": true,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "filed_standard",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass reproduces the GHG report's figure from its own method, builds waste in place by cell and material from the scale tickets, weights collection by where the gas is made and converts every flow correctly, but takes the state's tracer campaigns (which the division's drone flights confirm) as the 2026 emission although both only fly in dry steady weather after fronts, when rising pressure holds gas in the waste, reads cell 4's flat collected gas as recirculation having changed nothing although the same leachate sped the decay and flooded the lower wells, and applies the 2019 study's daily-cover oxidation to cell 5 although oxidation saturates far below cell 5's flux, so it files a cheaper package than the one that meets the target.",
+  "domain_test": "Every result is a quantity a landfill gas engineer or an emissions inventory analyst estimates: waste in place by cell and its methane potential, first-order decay with the rate each cell's moisture sets, collection efficiency by well and cover, methane oxidation in cover soil as a function of the flux through it, and an annual emission from short whole-site tracer measurements carried through the gas held and released as barometric pressure moves; swap the landfill for a warehouse or a hospital and stored gas, decay rates, flooded well screens and soil oxidation stop meaning anything.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:a-landfill-methane-balance-read-through-instruments-whose-blind-spots-are-weather-liquids-and-flux",
+  "layer1": [
+    "scale-house tickets with voided and reissued tickets, tare errors, missing cell codes on some days and material codes that changed in 2021",
+    "historical tonnage by cell from annual reports with two years estimated and a cell boundary moved in the 1990s",
+    "gas system SCADA hourly flows at actual temperature with analyzer calibration days, engine trips and a flow meter replaced in 2025",
+    "wellfield monitoring monthly readings with re-drilled wells renamed, missed readings, oxygen intrusion events and liquid levels taken quarterly",
+    "a well register whose cell field is blank for some replacement wells and whose coordinates are in the county's state plane feet",
+    "the on-site weather station hourly with missing hours, a barometer re-sited in 2023 and rain gauge clogs",
+    "automated chamber fluxes hourly with maintenance gaps, a lid fault and a battery-failure week",
+    "the state contractor's campaign report and the division's drone flight summaries in their own units and conventions",
+    "the 2019 consultant's plot data with plots re-measured in later seasons and a few failed isotope runs"
+  ],
+  "stakeholder_role": "the county solid waste division's landfill gas and compliance engineer, preparing the 2027 gas collection package for the County Council's January budget amendment",
+  "role_family": "compliance_or_audit",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "scale_tickets_2021-01_2026-10.csv",
+    "rows": 0,
+    "entity": "one weighed load at the scale house (gross, tare, net, material, cell or area code)",
+    "grain": "load x day",
+    "source": "synthetic"
+  },
+  "forum": "council_or_assembly",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "local_government",
+  "world": {
+    "geography": "western Washington, United States (a fictional county)",
+    "currency": "USD",
+    "org_type": "county solid waste division operating one regional landfill with five cells, a gas collection system, an enclosed flare and two engines",
+    "invented_names": [
+      "Kelloway County",
+      "Kelloway County Solid Waste Division",
+      "Fernhallow Regional Landfill",
+      "Tessaline Environmental"
+    ],
+    "people": [
+      "Nathan Wheeler",
+      "Diane Martinez"
+    ]
+  },
+  "deliverables": [
+    "fernhallow_methane_2026_2027.xlsx",
+    "council_briefing_2027_gas_package.pptx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is a facility's annual release that no instrument holds: the short whole-site measurements all fell in one phase of a driver the release follows hour by hour, so two programs agreeing certifies a low level; the record that should show a treatment's effect on the source stays flat because the same treatment cut what that record captures; and the removal applied to the newest area saturates far below the rate measured on older areas, so each instrument read alone files a lower figure and a cheaper package than the one that meets the line.",
+  "driver_concrete": "Fernhallow's 2026 methane emission is the state's tracer campaigns and the division's drone flights carried to every hour through the gas the waste holds when pressure rises and releases when it falls, which the automated chambers record hour by hour; leachate recirculated into cell 4 since 2023 sped its decay while flooding the lower wells, so cell 4's collected gas stayed flat and only the dry and pumped wells show the faster decay that cell 5 takes on from its own recirculation in August 2026; and cell 5's thin cover oxidizes a far smaller share of its much larger flux than the 2019 study's plots did, so only package D keeps 2027 under the county's target.",
+  "stump": "The careful but hurried pass takes the tracer campaigns (confirmed by the drone flights) as the 2026 emission, reads cell 4's flat collected gas as recirculation having changed nothing and carries cell 5 at the dry decay rate with no value for pumping cell 4's flooded wells, and applies the 2019 study's daily-cover oxidation to cell 5, so it funds package B or C, which leave 2027 over the county's target.",
+  "answer_shape": "bridge",
+  "weight": "synthesis",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "investigation-loops",
+    "modeling",
+    "decomposition-attribution",
+    "forecasting",
+    "uncertainty",
+    "synthesis"
+  ],
+  "results": "R1 waste in place by cell at the end of October 2026 in methane-potential terms, from the scale tickets and the historical tonnage; R2 the site's actual 2026 methane emission from the state's campaigns and the drone flights carried to every hour through the pressure response the chambers record; R3 cell 4's methane generation and collection efficiency since recirculation, from the dry and pumped wells against the flooded ones; R4 the share of cell 5's 2027 uncollected methane its cover oxidizes at cell 5's own flux; R5 the bridge from the 2026 GHG report figure to the actual 2026 emission, by collection, oxidation and generation; R6 the 2027 emission under each package A to E; R7 the 90 per cent range on the chosen package's 2027 emission; R8 the cheapest package that keeps 2027 under the county's target",
+  "one_fact_test": "to be computed on the careful pass (effort.json hints): the pressure sentence is expected to rescue R2 alone, the recirculation sentence R3, the oxidation sentence R4; none rescues R6 or R8",
+  "strategy_label": "OWN (no client strategy carries a landfill methane balance; the client's emissions-table ETL strategy is the nearest by task type and shares no step)",
+  "mechanism_source": "design_note",
+  "doctrine": "results-chain-2026-11-09",
+  "depth_level": 5,
+  "differentiation": {},
+  "lineage": [],
+  "notes": "stump_strategy other: three independent physical estimation judgments, each from its own instrument at its own grain (the barometric response of stored gas from the hourly chambers, the offsetting effects of recirculation from the dry and pumped wells against the flooded ones, the saturation of cover oxidation from the 2019 plots), none of the enumerated strategies. Weight synthesis: several partial instruments (the GHG report's method, the state's tracer campaigns, the drone flights, the chambers, the wells, the SCADA, the oxidation study) each see part of the emission and are reconciled into one 2026 figure and one 2027 forecast; the last two cards sit on assembly and a hard-to-measure quantity.",
+  "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "each_correction_alone_flips",
+    "lessons": [
+      "cancellation_of_offsetting_effects",
+      "common_error_benchmark",
+      "scaling_diminishing_returns"
+    ],
+    "mechanisms": [
+      "recirculation_speeds_decay_and_floods_well_screens",
+      "barometric_pumping_of_stored_landfill_gas",
+      "fair_weather_measurement_windows",
+      "cover_soil_oxidation_saturates_with_flux",
+      "young_waste_in_uncollected_cell_dominates_generation"
+    ],
+    "detection": [
+      "unchanged_signal_diverges",
+      "second_source_at_other_grain",
+      "naive_ignores_what_it_should_depend_on",
+      "natural_experiment_in_record"
+    ],
+    "moves": [
+      "refit_comparison_on_unaffected",
+      "impute_by_model_at_own_drivers",
+      "extrapolate_form_chosen_at_edge",
+      "per_cohort_curves",
+      "bridge_by_contribution"
+    ],
+    "file_roles": [
+      "primary_record",
+      "second_grain_source",
+      "exogenous_long_record",
+      "incumbent_figure_or_method",
+      "shortlist_or_candidates",
+      "governing_standard",
+      "reference_register",
+      "schedule_or_plan",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-13T07:43:21Z"
+}

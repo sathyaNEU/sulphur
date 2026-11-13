@@ -1,0 +1,61 @@
+{
+ "task": "task23",
+ "status": "DESIGN",
+ "domain": "physical-environmental-sciences",
+ "subdomain": "emissions-inventory",
+ "objective": "comparative-explanation",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-13",
+ "doctrine": "throughout",
+ "call": "to be filled when the pack is cut: the cheapest 2027 gas collection package that keeps Fernhallow Regional Landfill under Kelloway County's 2027 methane target, with the actual 2026 emission behind the GHG report and the state survey",
+ "chain": "R1 waste in place by cell in methane-potential terms; R2 the actual 2026 emission from the campaigns and drone flights carried to every hour through the chambers' pressure response; R3 cell 4's generation and collection efficiency since recirculation from the dry and pumped wells against the flooded ones; R4 cell 5's oxidized share at its own flux; R5 the bridge from the 2026 GHG report to the actual 2026 emission; R6 the 2027 emission under each package A to E; R7 the 90 per cent range on the chosen package; R8 the cheapest package under the target",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": "skeleton severity none against everything on file (nearest task1 v5); nearest driver task6 v1 at 0.05; guard check PASS on the registered card"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
+}
