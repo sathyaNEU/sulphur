@@ -1,12 +1,12 @@
 {
  "task": "task22",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-12",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-13",
  "doctrine": "throughout",
  "call": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist; 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 668 of 976 scheduled changeouts done before the 2027-28 season",
  "chain": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services; R4 the accounts that took gas without authorization, told from new snowbirds; R5 each district's leak loss in the twelve months to September 2026; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the scheduled 2027 changeouts done before the 2027-28 heating season",
@@ -38,16 +38,16 @@
   "largest_hint": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm; the commercial correctors log what the gas actually was (rescues R3 and R7, 2 of 8)"
  },
  "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
+  "run1": 49.0,
+  "run2": 46.0,
+  "average": 47.5,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+   "run1": "R4 dismissed own evidence: 74 premises deducted as gas taken without authorization though it split 9 whole-load from 65 heating-season falls (L47); Lakeview 0.434 and out of Rule 1",
+   "run2": "R4 dismissed own evidence: 72 premises deducted though it named 16 whole-load or heating-only signatures (L47); Lakeview 0.264 and out of Rule 1; 603 changeouts against 668"
   },
-  "triage": "",
-  "recorded": "",
+  "triage": "none (returned at review before triage): both runs made every other priced judgment unprompted (R71 to R74), the Rule 2 set exact; one judgment carried the call",
+  "recorded": "2026-11-13",
   "history": [
    {
     "architecture": 1,
@@ -98,14 +98,21 @@
    "source": "triage",
    "repair": "design",
    "commit": ""
+  },
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "repair": "design",
+   "commit": "",
+   "note": "reward 71.0, stumped type match failed: the call rested on the unauthorized-use screen alone; golden fixes: premise 3135379 a furnace tap, the step 4 count, premises against accounts"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py --rewrite, leak.py), uploads it with target.zip, then /triage-runs task22 with both runs and the rubric",
+ "resume": "RETURNED: redesign at stage 2 in the same world: keep the diversion-against-absence judgment the runs lost, demote the judgments they made unprompted (R71 to R74), add two or more stumps that each move the call (the stump factorial), fix the golden's furnace tap, count and unit",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "sent back for fixes",
+  "date": "2026-11-13",
+  "note": "version 13, reward 71.0, stumped failed, stumped type match failed, determinism and solution passed (runs/arch2_review_2026-11-13.md)"
  }
 }

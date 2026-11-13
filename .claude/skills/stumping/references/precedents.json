@@ -1208,6 +1208,78 @@
    "move": "line losses fitted as current squared on the head-metered feeders and applied at the lowered voltage, so constant-power load raises losses under a voltage cut",
    "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
    "quote": "FRV-116 166 vs 168 MWh"
+  },
+  {
+   "id": "R71",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "the gas temperature at meters that do not compensate fitted on the logger study against the soil and the air, indoor and outdoor apart, chosen by a month-blocked hold-out with the airport-only line rejected on its error, and applied day by day",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Outdoor held-out-month RMSE was 1.058 F, compared with 3.745 F for airport-only regression. Applied the temperature factor daily, retaining negative warm-season corrections."
+  },
+  {
+   "id": "R72",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "cycle reads carried to calendar months on a per-premise base-load plus degree-day shape chosen by a hold-out, each interval's measured total conserved",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Fitted nonnegative base-load plus heating-degree-day shapes and allocated each actual interval across its service days while conserving the measured total. ... A 600-premise holdout supported the HDD60 model"
+  },
+  {
+   "id": "R73",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "scheduled works forecast job by job from the past work orders' delay distributions by access type, the unresolved jobs kept in the denominators and the count simulated by bootstrap",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Each scheduled job's probability incorporates its access type, planned date, completion likelihood, and historical delay distribution. ... The uncertainty calculation used 20,000 stratified bootstrap simulations."
+  },
+  {
+   "id": "R74",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a station corrector's failed pressure transducer and stuck temperature transmitter repaired from the valid raw flow, the communication gaps rebuilt by peer reconstruction validated on withheld outage blocks",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "Repair Lakeview's pressure failure and Westgate's stuck temperature channel, adding 1,623.7 Mcf and 241.0 Mcf, respectively. ... Peer-based reconstruction outperformed interpolation on withheld outage blocks"
+  },
+  {
+   "id": "N36",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "fuel switching, absence and changed occupants named as explanations of the winter falls in use and left untested, every fall kept as gas taken without authorization",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Unauthorized use is estimated, not proven. The central balance adopts the screened demand deficits as conditional unauthorized-use estimates. Vacancy, fuel switching, meter faults, and changed occupants remain possible explanations."
+  },
+  {
+   "id": "N37",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a gas temperature model fitted on one winter's loggers carried to the other seasons, the transfer named and left untested although the commercial correctors log the gas temperature every day",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Temperature transport outside winter is unvalidated. There are no May-October gas-temperature observations."
+  },
+  {
+   "id": "N38",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "scheduled works forecast job by job with the crews' shared capacity and the added scope left out",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "The forecast assumes the published dates are feasible and Old Town performance transfers to Downtown and commercial premises. It does not model shared crew disruptions or promise completion of the newly added scope."
+  },
+  {
+   "id": "L47",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the screen split whole-load falls from heating-only ones and listed the strongest signatures, then deducted every fall as gas taken without authorization, new absentees with it, so a district whose loss is leaks fell under the line",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "The strongest 16 whole-load or heating-only signatures are inspection priorities, not findings of culpability. (and) The evidence identifies 72 unconfirmed premises across 76 account tenures, carrying a 5,995.017 Mcf provisional FY2026 allowance."
+  },
+  {
+   "id": "L48",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "negative monthly balance residuals kept as noise rather than read as a deduction that took more than the district lost",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "Retained 67 negative monthly residuals, including the minimum -329.309 Mcf, rather than clipping them and inflating annual leakage."
   }
  ]
 }
