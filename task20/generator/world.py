@@ -16,12 +16,34 @@ W = list(range(H_END + 1, H_END + 9))          # the policy's 24 months, 2027Q1 
 
 P = dict(
     exit_lag=2, a_dn=0.85, a_up=0.20, gamma=1.3, gamma2=0.0, e_ref=100.0,
-    deal_gamma=0.20, line_margin=1.75, support=0.070, support_e=1.00, support_cap=0.30, rescue=0.30, rescue_th=0.45,
+    deal_gamma=0.10, line_margin=1.75, support=0.070, support_e=1.00, support_cap=0.30, rescue=0.10, rescue_th=0.45,
     slip_k=6.0, slip_ref=100.0, slip_base=0.08,
     ext_on=True, ext_e=95.0, ext_share=0.92, ext_win=2, ext_q=8,
     stress_rate_up=2.5, stress_eq=[0.85, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00],
-    plan_total=500.0,
+    plan_total=540.0, plan_pc=175.0,
+    # property and infrastructure loans: the lender lends up to the lower of ltv_max and what the rate lets the asset's
+    # income carry (kappa over the all-in rate), on the asset's value; values move with the cap rate the short rate sets
+    refi_spread=2.0, refi_kappa=3.6, refi_ltv_max=0.80, ltv_pre=0.62, ltv_post=0.70, ltv_crunch=0.50, cap0=4.2, cap1=0.05, beta_p=0.70,
+    re_scale=2.0, in_scale=1.8, succ_share=0.80, recyc_scale=0.6,
 )
+REAL = ("RE", "IN")
+
+def ltv_cap(q):
+    """the most lenders would lend against an asset's value in quarter q: tighter before 2020 and after mid-2022, looser
+    in the near-zero-rate years between."""
+    if qi(2008, 3) <= q <= qi(2011, 4): return P["ltv_crunch"]
+    if q < qi(2020, 1): return P["ltv_pre"]
+    if q <= qi(2022, 2): return P["refi_ltv_max"]
+    return P["ltv_post"]
+
+def lender_limit(r, q=None):
+    """the loan-to-value a lender offers on a property or infrastructure asset in quarter q at short rate r (per cent):
+    the lower of its cap and what the asset's income can carry at the all-in rate."""
+    cap = P["refi_ltv_max"] if q is None else ltv_cap(q)
+    return min(cap, P["refi_kappa"] / (r + P["refi_spread"]))
+
+def cap_rate(r):
+    return P["cap0"] + P["cap1"] * r
 
 def _interp(knots, n=NQ):
     xs = [qi(*k[0]) for k in knots]
@@ -59,8 +81,8 @@ ST = {  # ip/life in quarters; n deals; hazard start/plateau; income per quarter
     "BO": dict(ip=20, life=44, fee=0.020, mult=1.85, sd=0.45, n=(9, 14), h0=8, h1=18, hmax=0.085, inc=0.0, fo=0.12, pace=(0.060, 0.068), deploy=0.82),
     "GE": dict(ip=20, life=44, fee=0.020, mult=1.95, sd=0.55, n=(11, 16), h0=8, h1=18, hmax=0.080, inc=0.0, fo=0.15, pace=(0.058, 0.066), deploy=0.82),
     "VC": dict(ip=20, life=48, fee=0.025, mult=2.10, sd=0.95, n=(20, 30), h0=12, h1=24, hmax=0.060, inc=0.0, fo=0.30, pace=(0.055, 0.065), deploy=0.80),
-    "RE": dict(ip=16, life=32, fee=0.0125, mult=1.35, sd=0.25, n=(7, 11), h0=6, h1=14, hmax=0.070, inc=0.0105, fo=0.05, pace=(0.080, 0.092), deploy=0.90),
-    "IN": dict(ip=20, life=48, fee=0.015, mult=1.55, sd=0.25, n=(6, 9), h0=16, h1=28, hmax=0.035, inc=0.0135, fo=0.08, pace=(0.056, 0.064), deploy=0.90),
+    "RE": dict(ip=16, life=32, fee=0.0125, mult=1.35, sd=0.25, n=(7, 11), h0=6, h1=14, hmax=0.070, inc=0.0105, fo=0.05, pace=(0.080, 0.092), deploy=0.75),
+    "IN": dict(ip=20, life=48, fee=0.015, mult=1.55, sd=0.25, n=(6, 9), h0=16, h1=28, hmax=0.035, inc=0.0135, fo=0.08, pace=(0.056, 0.064), deploy=0.75),
     "PC": dict(ip=12, life=28, fee=0.010, mult=1.05, sd=0.08, n=(30, 45), h0=5, h1=6, hmax=0.075, inc=None, fo=0.0, pace=(0.13, 0.15), deploy=0.92),
 }
 EXIT_DRIVEN = ("BO", "GE", "VC", "RE", "IN")
@@ -107,10 +129,17 @@ def managers(seed=23):
         for j in range(n):
             cdp = {"VC": [0.55, 0.30, 0.15, 0.0, 0.0], "PC": [0.05, 0.15, 0.30, 0.30, 0.20]}.get(st, [0.10, 0.15, 0.25, 0.30, 0.20])
             out.append(dict(id="%s%d" % (st, j + 1), st=st, cd_base=int(rng.choice([0, 1, 2, 3, 4], p=cdp)),
-                            tol=float(rng.uniform(4.6, 5.6)), recyc=float(rng.choice([0.15, 0.3, 0.45], p=[0.35, 0.35, 0.30])),
+                            tol=float(rng.uniform(4.6, 5.6)), recyc=float(rng.choice([0.15, 0.3, 0.45], p=[0.35, 0.35, 0.30])) * P["recyc_scale"],
                             pace=float(rng.uniform(*ST[st]["pace"])), slip_k=float(rng.uniform(1.6, 3.4)),
                             first=int(rng.integers(2013, 2019)), gap=int(rng.integers(3, 5)), fy_june=False))
     out[3]["fy_june"] = True; out[17]["fy_june"] = True
+    r2 = np.random.default_rng(seed + 400)
+    for g in out:
+        if g["st"] in REAL: r2.choice([20, 24])
+        g["term"] = {"RE2": 24}.get(g["id"], 28) if g["st"] in REAL else 0        # quarters to a loan's maturity
+        # the period ends at the next fund's first close (credit funds' agreements let a successor lend alongside, and a
+        # few managers negotiated the clause out)
+        g["succ_clause"] = bool(r2.random() < P["succ_share"]) and g["st"] != "PC" and g["id"] not in ("BO5", "GE3")
     return out
 
 def slip_quarters(E, exp_q, rng):
@@ -128,7 +157,8 @@ def commitments(gps, E, seed=37):
     for gp in gps:
         y = gp["first"]; k = 0
         while y <= 2027:
-            C = round(base[gp["st"]] * 1.07 ** (y - 2013) * float(rng.uniform(0.8, 1.25)))
+            C = round(base[gp["st"]] * 1.07 ** (y - 2013) * float(rng.uniform(0.8, 1.25))
+                      * {"RE": P["re_scale"], "IN": P["in_scale"]}.get(gp["st"], 1.0))
             share = float(rng.uniform(0.025, 0.06))
             commit_q = qi(y, int(rng.integers(1, 5)))
             exp_fc = commit_q + int(rng.integers(1, 4))
@@ -155,23 +185,41 @@ def slip_of(f, E):
     return slip_quarters(E, f["exp_fc"], _R(f["slip_u"]))
 
 # ------------------------------------------------------------------------------------------------ one fund
-def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=None, deal_log=None):
+def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=None, deal_log=None, succ_fc=None,
+             succ_rule=True, refi=True, refi_log=None):
     """simulates a fund at fund level from its first close `fc`; returns quarterly arrays at the endowment's share
-    (or per unit of commitment when scale is given). rec: dict to receive fund-level series for the audited accounts."""
+    (or per unit of commitment when scale is given). rec: dict to receive fund-level series for the audited accounts.
+    succ_fc: the quarter the manager's next fund holds its first close, which ends this fund's investment period where
+    the agreement says so (succ_rule False: only up to the end of 2026). refi False: real-asset loans that mature after
+    2026 are not refinanced (the asset is held on its old loan)."""
     gp = f["gp"]; st = gp["st"]; s = ST[st]
     rng = np.random.default_rng(f["seed"])
+    rng2 = np.random.default_rng(f["seed"] + 7)          # the real assets' loan terms, drawn apart from the deals
     size = float(f["size"]); share = f["C"] / size if scale is None else scale
     n_deals = int(rng.integers(s["n"][0], s["n"][1] + 1))
     target = s["deploy"] * size
     deal_size = target / (n_deals * (1 + s["fo"] * 0.6))
-    o = {k: np.zeros(NQ) for k in ("call_inv", "call_fee", "call_exp", "dist", "proc", "inc", "inv", "nav", "line", "recyc", "cost")}
+    o = {k: np.zeros(NQ) for k in ("call_inv", "call_fee", "call_exp", "dist", "proc", "inc", "inv", "nav", "line", "recyc", "cost", "refi", "debt")}
     called_cum = 0.0               # fund-level contributions to date (calls never exceed the commitments)
     deals = []                     # [cost, inv_q, mult, alive, fo_done, id]
+    debt = {}                      # real assets: deal id -> dict(D, P0, mP, qm)
     queue = []                     # line draws: [q, amount]
-    inv_cum = 0.0; recyc_cum = 0.0; dealno = 0
+    inv_cum = 0.0; recyc_cum = 0.0; dealno = 0; carry = 0.0
     ip = s["ip"]; o["ip_end"] = fc + ip
+    term = gp.get("term") or 20
+    def gross(d, q):
+        """a real asset's value: its acquisition value grown with its plan, moved by equities and by the cap rate."""
+        x = debt[d[5]]
+        return (x["P0"] * (1 + (x["mP"] - 1) * min((q - d[1]) / 16.0, 1.0)) * (S[max(q - 1, 0)] / S[d[1]]) ** P["beta_p"]
+                * cap_rate(R[d[1]]) / cap_rate(R[max(q - 1, 0)]))
+    def equity(d, q):
+        if st in REAL and d[5] in debt:
+            return max(gross(d, q) - debt[d[5]]["D"], 0.0)
+        return d[0] * (1 + (d[2] - 1) * min((q - d[1]) / 16.0, 1.0)) * ((S[max(q - 1, 0)] / S[d[1]]) ** 0.40 if st != "PC" else 1.0)
     for q in range(fc, min(upto, fc + s["life"]) + 1):
         age = q - fc
+        if gp.get("succ_clause") and succ_fc is not None and q == succ_fc and age < ip and (succ_rule or q <= H_END):
+            ip = age; o["ip_end"] = q                      # the next fund's first close ends the investment period
         if age == ip and ip == s["ip"] and P["ext_on"]:
             weak = float(np.mean([E[max(q - k, 0)] for k in range(1, P["ext_win"] + 1)])) < P["ext_e"]
             behind = inv_cum < P["ext_share"] * target
@@ -190,27 +238,64 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
                 h = hazard_age(st, a) * p[q]
             if age >= s["life"] - 1: h = 1.0
             if rng.random() < h:
-                m = d[2] * ((S[q] / S[d[1]]) ** 0.30 if st != "PC" else 1.0)
-                proc += d[0] * m; d[3] = False
-                if deal_log is not None: deal_log.append(("exit", f["id"], d[5], q, d[0], d[0] * m))
-        # deployment: new deals and follow-ons
+                if st in REAL and d[5] in debt:
+                    val = max(gross(d, q) - debt[d[5]]["D"], 0.0)
+                else:
+                    val = d[0] * d[2] * ((S[q] / S[d[1]]) ** 0.30 if st != "PC" else 1.0)
+                proc += val; d[3] = False
+                if deal_log is not None: deal_log.append(("exit", f["id"], d[5], q, d[0], val))
+        # deployment: new deals on the room left, the budget carried while no deal of the fund's size is found
         inv = 0.0
         if age < ip:
             room = max(target - inv_cum + recyc_cum, 0.0)
             # the deal market: the managers find fewer deals when exits are weak (credit funds lend on regardless)
             md = min(max((E[q] / P["e_ref"]) ** P["deal_gamma"], 0.4), 1.4) if st != "PC" else 1.0
-            budget = gp["pace"] * room * md
-            while budget > 0.35 * deal_size and dealno < n_deals * 1.5:
+            if q > H_END and P.get("policy_pace"): md = 1.0       # the liquidity policy's test: no allowance for a slower deal market
+            budget = min(carry + gp["pace"] * room * md, room)
+            while budget > 0.35 * deal_size and room > 0.15 * deal_size and dealno < n_deals * 2.5:
                 c = deal_size * math.exp(rng.normal(0, 0.35))
-                c = min(c, budget * 1.6)
+                c = min(c, budget * 1.6, room)
                 mult = s["mult"] * math.exp(rng.normal(0, s["sd"]) - s["sd"] ** 2 / 2)
-                deals.append([c, q, mult, True, False, dealno]); inv += c; budget -= c
+                deals.append([c, q, mult, True, False, dealno]); inv += c; budget -= c; room -= c
+                if st in REAL:
+                    lev = lender_limit(R[q], q) * float(rng2.uniform(0.94, 1.0))
+                    P0 = c / (1 - lev)
+                    debt[dealno] = dict(D=P0 - c, P0=P0, mP=lev + (1 - lev) * mult, qm=q + term)
+                    if deal_log is not None: deal_log.append(("loan", f["id"], dealno, q, P0 - c, q + term))
                 if deal_log is not None: deal_log.append(("new", f["id"], dealno, q, c, mult))
                 dealno += 1
+            carry = max(budget, 0.0)
+        else:
+            carry = 0.0
         for d in deals:
             if d[3] and not d[4] and q - d[1] >= 5 and s["fo"] > 0 and age < ip + 8:
                 fo = s["fo"] * d[0] / (1 + s["fo"]) ; d[0] += fo; d[4] = True; inv += fo
+                if st in REAL and d[5] in debt: debt[d[5]]["P0"] += fo              # equity-funded capex adds to the asset
                 if deal_log is not None: deal_log.append(("follow_on", f["id"], d[5], q, fo, 0.0))
+        # real assets: a maturing loan is refinanced at the lender's limit on the asset's value; any excess is paid out,
+        # any shortfall is called from the investors while the commitment allows (otherwise the lender extends a year)
+        if st in REAL and (refi or q <= H_END):
+            hr = max(size - called_cum - sum(a for _, a in queue) - inv, 0.0)
+            for d in deals:
+                if not d[3] or d[5] not in debt: continue
+                x = debt[d[5]]
+                if q != x["qm"]: continue
+                Pg = gross(d, q)
+                cap = lender_limit(R[q], q) * Pg * float(rng2.uniform(0.97, 1.0))
+                gap = max(x["D"] - cap, 0.0)
+                if refi_log is not None: refi_log.append((q, x["D"] * share, Pg * share, cap * share, gap * share))
+                if gap <= 0:
+                    excess = cap - x["D"]; proc += excess; x["D"] = cap
+                    if deal_log is not None: deal_log.append(("refi_out", f["id"], d[5], q, excess, 0.0))
+                    x["qm"] = q + term
+                else:
+                    paid = min(gap, hr); hr -= paid
+                    if paid > 0:
+                        d[0] += paid; inv += paid; o["refi"][q] += paid
+                        if deal_log is not None: deal_log.append(("follow_on", f["id"], d[5], q, paid, 0.0))
+                    x["D"] -= paid
+                    x["qm"] = q + (term if paid >= gap - 1e-9 else 4)
+                if deal_log is not None: deal_log.append(("loan", f["id"], d[5], q, x["D"], x["qm"]))
         sf = max(0.0, P["support_e"] - E[max(q - 2, 0)] / P["e_ref"]) / P["support_e"]
         # two channels: the managers' follow-on reserves (capped once a fund's reserve plan is spent) and, past a
         # shortfall where lenders call covenants, rescue financings that keep rising with the shortfall
@@ -236,14 +321,12 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
             else: keep.append([q0, a])
         queue = keep
         line = sum(a for _, a in queue)
-        fv = sum(d[0] * (1 + (d[2] - 1) * min((q - d[1]) / 16.0, 1.0)) * ((S[max(q - 1, 0)] / S[d[1]]) ** 0.40 if st != "PC" else 1.0)
-                 for d in deals if d[3])
+        fv = sum(equity(d, q) for d in deals if d[3])
         cost = sum(d[0] for d in deals if d[3])
         if deal_log is not None and q <= H_END:
             for d in deals:
                 if d[3]:
-                    v = d[0] * (1 + (d[2] - 1) * min((q - d[1]) / 16.0, 1.0)) * ((S[max(q - 1, 0)] / S[d[1]]) ** 0.40 if st != "PC" else 1.0)
-                    deal_log.append(("val", f["id"], d[5], q, d[0], v))
+                    deal_log.append(("val", f["id"], d[5], q, d[0], equity(d, q)))
         exp = 0.0005 * size if age > 0 else 0.0
         avail = max(size - called_cum, 0.0)
         fee_c = min(fee, avail); avail -= fee_c
@@ -255,8 +338,11 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
         for k, v in (("call_inv", inv_c), ("call_fee", fee_c), ("call_exp", exp_c), ("dist", D), ("proc", proc), ("inc", inc), ("inv", inv),
                      ("nav", fv - line), ("line", line), ("recyc", rc), ("cost", cost)):
             o[k][q] = v * share
+        o["refi"][q] *= share
+        o["debt"][q] = sum(debt[d[5]]["D"] for d in deals if d[3] and d[5] in debt) * share
         if rec is not None:
             rec.setdefault("fv", {})[q] = fv; rec.setdefault("line", {})[q] = line; rec.setdefault("cost", {})[q] = cost
+            rec.setdefault("debt", {})[q] = o["debt"][q] / share if share else 0.0
     return o
 
 def benchmark_funds(gps, n=2200, seed=71):
@@ -270,7 +356,7 @@ def benchmark_funds(gps, n=2200, seed=71):
         cdp = {"VC": [0.55, 0.30, 0.15, 0.0, 0.0], "PC": [0.05, 0.15, 0.30, 0.30, 0.20]}.get(st, [0.10, 0.15, 0.25, 0.30, 0.20])
         gp = dict(id="B%04d" % i, st=st, cd_base=int(rng.choice([0, 1, 2, 3, 4], p=cdp)), tol=float(rng.uniform(4.6, 5.6)),
                   recyc=float(rng.choice([0.15, 0.3, 0.45], p=[0.35, 0.35, 0.30])), pace=float(rng.uniform(*ST[st]["pace"])),
-                  slip_k=2.5, fy_june=False)
+                  slip_k=2.5, fy_june=False, term=20 + 4 * (i % 2) if st in REAL else 0, succ_clause=False)
         fc = qi(vint, int(rng.integers(1, 5)))
         out.append(dict(id=gp["id"], gp=gp, vint=vint, C=100.0, share=1.0, size=100.0, fc=fc, exp_fc=fc, seed=int(rng.integers(1, 2**31))))
     return out

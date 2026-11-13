@@ -90,13 +90,14 @@ def build_into(root):
                       revision=7, total_time=86, seed="task20-memo-2027", company="Wexmoor University")
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F, R))
     pulled = {n: dt.date(*SAVED[n][:3]).isoformat() for n in SAVED}
-    meta = {"task": "task20", "architecture": 5, "as_of": AS_OF, "position_date": "2026-12-31",
+    meta = {"task": "task20", "architecture": 6, "as_of": AS_OF, "position_date": "2026-12-31",
             "decision": "which of Corrigan Hart's 2027 commitment programs Wexmoor University's endowment can adopt under its liquidity policy",
             "deliverables": [GD.XLSX, GD.MEMO],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
             "stated_inputs": ["2027", "2028", "2026", format(int(DC.CUSHION), ","), str(int(DC.CUSHION))],
             "field_terms": ["capital call", "distribution", "unfunded commitment", "first close", "subscription line", "recycling",
-                            "pacing", "liquidity", "stress", "follow-on", "rescue financing", "investment period"],
+                            "pacing", "liquidity", "stress", "follow-on", "rescue financing", "investment period", "successor fund",
+                            "refinancing", "loan maturity", "loan-to-value"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
                           "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund "

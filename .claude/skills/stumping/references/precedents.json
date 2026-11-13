@@ -1280,6 +1280,14 @@
    "move": "negative monthly balance residuals kept as noise rather than read as a deduction that took more than the district lost",
    "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
    "quote": "Retained 67 negative monthly residuals, including the minimum -329.309 Mcf, rather than clipping them and inflating annual leakage."
+  },
+  {
+   "id": "R75",
+   "kind": "reflex",
+   "class": "missingness-measurement",
+   "move": "the line balances of managers whose company-level reports stop rolled forward to the test date from the complete capital accounts and audits, not carried at the last audited balance",
+   "source": "task20/runs/arch5_holistic_audit.md (the platform's holistic audit of architecture 5, pasted by the author 2026-11-13; the run's text was not pasted, so the move is read off the audit's loss map)",
+   "quote": "Run losses: calls in H2 2027, H1 2028 and H2 2028, the headroom, and the recommendation. All trace to S5/S6"
   }
  ]
 }

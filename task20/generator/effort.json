@@ -8,64 +8,64 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "Buyout": 2025.3,
-    "Growth equity": 466.0,
-    "Venture capital": 202.0,
-    "Real estate": 287.1,
-    "Infrastructure": 834.7,
-    "Private credit": 488.6
+    "Buyout": 1601.8,
+    "Growth equity": 421.4,
+    "Venture capital": 223.7,
+    "Real estate": 581.2,
+    "Infrastructure": 1172.7,
+    "Private credit": 474.0
    },
    "bands": {
     "Buyout": [
-     2024.8,
-     2025.8
+     1601.3,
+     1602.3
     ],
     "Growth equity": [
-     465.5,
-     466.5
+     420.9,
+     421.9
     ],
     "Venture capital": [
-     201.5,
-     202.5
+     223.2,
+     224.2
     ],
     "Real estate": [
-     286.6,
-     287.6
+     580.7,
+     581.7
     ],
     "Infrastructure": [
-     834.2,
-     835.2
+     1172.2,
+     1173.2
     ],
     "Private credit": [
-     488.1,
-     489.1
+     473.5,
+     474.5
     ]
    },
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "Buyout": 2042.7,
-     "Growth equity": 466.0,
-     "Venture capital": 202.0,
-     "Real estate": 287.1,
-     "Infrastructure": 834.7,
-     "Private credit": 488.6
+     "Buyout": 1619.2,
+     "Growth equity": 421.4,
+     "Venture capital": 223.7,
+     "Real estate": 581.2,
+     "Infrastructure": 1172.7,
+     "Private credit": 474.0
     },
     "careful": {
-     "Buyout": 2025.3,
-     "Growth equity": 466.0,
-     "Venture capital": 202.0,
-     "Real estate": 287.1,
-     "Infrastructure": 834.7,
-     "Private credit": 488.6
+     "Buyout": 1601.8,
+     "Growth equity": 421.4,
+     "Venture capital": 223.7,
+     "Real estate": 581.2,
+     "Infrastructure": 1172.7,
+     "Private credit": 474.0
     },
     "thorough": {
-     "Buyout": 2025.3,
-     "Growth equity": 466.0,
-     "Venture capital": 202.0,
-     "Real estate": 287.1,
-     "Infrastructure": 834.7,
-     "Private credit": 488.6
+     "Buyout": 1601.8,
+     "Growth equity": 421.4,
+     "Venture capital": 223.7,
+     "Real estate": 581.2,
+     "Infrastructure": 1172.7,
+     "Private credit": 474.0
     }
    }
   },
@@ -77,37 +77,37 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 532.7,
-    "H2 2027": 189.9
+    "H1 2027": 700.5,
+    "H2 2027": 366.7
    },
    "bands": {
     "H1 2027": [
-     524.5,
-     553.7
+     685.4,
+     726.8
     ],
     "H2 2027": [
-     181.8,
-     213.4
+     356.9,
+     374.8
     ]
    },
    "partly_share": 0.75,
    "precedent": [
-    "N13",
-    "L44",
-    "L43"
+    "N28",
+    "N03",
+    "N13"
    ],
    "passes": {
     "quick": {
-     "H1 2027": 335.9,
-     "H2 2027": 318.7
+     "H1 2027": 470.6,
+     "H2 2027": 465.2
     },
     "careful": {
-     "H1 2027": 415.9,
-     "H2 2027": 203.7
+     "H1 2027": 706.8,
+     "H2 2027": 345.0
     },
     "thorough": {
-     "H1 2027": 532.7,
-     "H2 2027": 189.9
+     "H1 2027": 700.5,
+     "H2 2027": 366.7
     }
    }
   },
@@ -119,36 +119,37 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2028": 342.5,
-    "H2 2028": 280.8
+    "H1 2028": 450.1,
+    "H2 2028": 438.2
    },
    "bands": {
     "H1 2028": [
-     321.5,
-     368.3
+     436.5,
+     472.0
     ],
     "H2 2028": [
-     260.6,
-     297.9
+     425.5,
+     453.8
     ]
    },
    "partly_share": 0.75,
    "precedent": [
-    "L42",
-    "N34"
+    "N28",
+    "N03",
+    "N13"
    ],
    "passes": {
     "quick": {
-     "H1 2028": 252.5,
-     "H2 2028": 217.0
+     "H1 2028": 379.8,
+     "H2 2028": 330.8
     },
     "careful": {
-     "H1 2028": 235.0,
-     "H2 2028": 229.9
+     "H1 2028": 440.7,
+     "H2 2028": 371.5
     },
     "thorough": {
-     "H1 2028": 342.5,
-     "H2 2028": 280.8
+     "H1 2028": 450.1,
+     "H2 2028": 438.2
     }
    }
   },
@@ -160,48 +161,48 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 364.1,
-    "H2 2027": 285.8,
-    "H1 2028": 157.2,
-    "H2 2028": 202.6
+    "H1 2027": 685.6,
+    "H2 2027": 466.2,
+    "H1 2028": 273.9,
+    "H2 2028": 291.3
    },
    "bands": {
     "H1 2027": [
-     363.6,
-     364.6
+     685.1,
+     686.1
     ],
     "H2 2027": [
-     285.3,
-     286.3
+     465.7,
+     466.7
     ],
     "H1 2028": [
-     156.7,
-     157.7
+     273.4,
+     274.4
     ],
     "H2 2028": [
-     202.1,
-     203.1
+     290.8,
+     291.8
     ]
    },
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "H1 2027": 362.3,
-     "H2 2027": 284.6,
-     "H1 2028": 156.6,
-     "H2 2028": 201.8
+     "H1 2027": 683.9,
+     "H2 2027": 465.0,
+     "H1 2028": 273.2,
+     "H2 2028": 290.8
     },
     "careful": {
-     "H1 2027": 364.1,
-     "H2 2027": 285.8,
-     "H1 2028": 157.2,
-     "H2 2028": 202.6
+     "H1 2027": 685.6,
+     "H2 2027": 466.2,
+     "H1 2028": 273.9,
+     "H2 2028": 291.3
     },
     "thorough": {
-     "H1 2027": 364.1,
-     "H2 2027": 285.8,
-     "H1 2028": 157.2,
-     "H2 2028": 202.6
+     "H1 2027": 685.6,
+     "H2 2027": 466.2,
+     "H1 2028": 273.9,
+     "H2 2028": 291.3
     }
    }
   },
@@ -216,20 +217,20 @@
     "R4"
    ],
    "independent": "",
-   "golden": 78.3,
+   "golden": 214.3,
    "band": [
-    30.3,
-    115.4
+    180.9,
+    238.4
    ],
    "precedent": [
-    "L42",
-    "N13",
-    "N34"
+    "N28",
+    "N03",
+    "N13"
    ],
    "passes": {
-    "quick": 300.1,
-    "careful": 339.7,
-    "thorough": 78.3
+    "quick": 523.3,
+    "careful": 305.7,
+    "thorough": 214.3
    }
   },
   {
@@ -243,50 +244,70 @@
     "R4"
    ],
    "independent": "",
-   "golden": "D",
+   "golden": "B",
    "precedent": [
-    "L42",
-    "N13",
-    "N34"
+    "N28",
+    "N03",
+    "N13"
    ],
    "passes": {
     "quick": "A",
     "careful": "A",
-    "thorough": "D"
+    "thorough": "B"
    }
   }
  ],
  "hints": [
   {
-   "sentence": "past a shortfall the endowment's own record never reached, rescue financings keep the managers' calls on held companies rising; the benchmark's funds past their investment period show it in 2009",
-   "rescues": [
-    "R3"
-   ]
+   "sentence": "a fund's investment period ends when its manager's next fund holds its first close, and 5 of the endowment's funds have a successor closing in 2027 or 2028",
+   "rescues": []
   },
   {
-   "sentence": "six managers' company-level files stop after 2024, and their funds' lines were rebuilt through 2026 as rates fell",
+   "sentence": "16 of the real-asset funds' property and infrastructure loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values",
    "rescues": [
-    "R2"
+    "R3"
    ]
   }
  ],
  "factorial": {
-  "golden_answer": "D",
+  "golden_answer": "B",
   "reflex_route": {
    "answer": "A"
   },
   "judgments": [
    {
-    "id": "J1",
-    "name": "the support curve past the plateau the record shows: rescue financings beyond a shortfall it never reached, read off the benchmark's funds past their investment period",
+    "id": "S1",
+    "name": "the investment periods the successor funds' first closes end: the clause read off each manager's past successions, the close dated on the slip the exit market gives",
     "kind": "stump",
     "precedent": [
-     "L42",
-     "N34"
+     "N28",
+     "N03"
+    ],
+    "dropped": {
+     "answer": "C",
+     "results_moved": [
+      "R2",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": "A",
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "S2",
+    "name": "the property and infrastructure loans that fall due in the stress, refinanced at the lenders' limit fitted on the past refinancings, on the values the stress path gives, the gaps called",
+    "kind": "stump",
+    "precedent": [
+     "N28",
+     "N13"
     ],
     "dropped": {
      "answer": "A",
      "results_moved": [
+      "R2",
       "R3",
       "R5",
       "R6"
@@ -300,27 +321,22 @@
     }
    },
    {
-    "id": "J2",
-    "name": "the six managers whose company-level files stop after 2024: their line stock bridged from the file's end on the fitted pace, re-anchored at the audits",
-    "kind": "stump",
+    "id": "J1",
+    "name": "the calls on companies already held past the endowment's own record read off the benchmark's funds past their investment period (policy section 8)",
+    "kind": "reflex",
     "precedent": [
-     "N13",
-     "L44"
-    ],
-    "dropped": {
-     "answer": "C",
-     "results_moved": [
-      "R2",
-      "R5",
-      "R6"
-     ]
-    },
-    "alone": {
-     "answer": "A",
-     "results_rescued": [
-      "R2"
-     ]
-    }
+     "R51",
+     "R64"
+    ]
+   },
+   {
+    "id": "J2",
+    "name": "the six managers' line balances estimated to 31 December from the capital accounts and the audits (policy section 8)",
+    "kind": "reflex",
+    "precedent": [
+     "R75",
+     "R63"
+    ]
    },
    {
     "id": "J3",
@@ -348,11 +364,11 @@
    },
    {
     "id": "J6",
-    "name": "investment periods extended where the register's rule says, new deals at the managers' pace with the deal market",
+    "name": "investment periods extended where the register's record shows, new investment at the managers' pace (policy section 8)",
     "kind": "reflex",
     "precedent": [
      "R14",
-     "R20"
+     "R51"
     ]
    },
    {
@@ -379,72 +395,108 @@
  },
  "forcing": {
   "kind": "set",
-  "golden_answer": "D",
+  "golden_answer": "B",
   "golden_family": [
    {
     "name": "the golden",
-    "answer": "D"
+    "answer": "B"
    },
    {
-    "name": "the second channel from a shortfall of 0.43",
-    "answer": "D"
+    "name": "the second channel from a shortfall of 0.38",
+    "answer": "B"
    },
    {
-    "name": "the second channel from a shortfall of 0.49",
-    "answer": "D"
+    "name": "the second channel from a shortfall of 0.44",
+    "answer": "B"
    },
    {
     "name": "the benchmark slice of funds six to ten years old",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "the benchmark slice of funds seven to eleven years old",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "the benchmark slice of funds with 5 percent or more left to call",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "the benchmark slice of funds with 20 percent or more left to call",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "the first channel capped at a shortfall of 0.25",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "the first channel capped at a shortfall of 0.35",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "recycling at the median of every manager",
-    "answer": "D"
-   },
-   {
-    "name": "new deals at their normal pace, no deal-market term",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "fees 5 percent below the investing-period median",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "slips fitted on a 1-quarter window against 95",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "name": "slips fitted on a 1-quarter window against 105",
-    "answer": "D"
+    "answer": "B"
    },
    {
-    "name": "the six managers' stock rolled from the file's end, not re-anchored at the 2025 and 2026 audits",
-    "answer": "D"
+    "name": "the six managers' facility balances rolled from the file's end, not re-anchored at the later audits",
+    "answer": "B"
+   },
+   {
+    "name": "the lenders' limit fitted on every refinancing since 2020",
+    "answer": "B"
+   },
+   {
+    "name": "the lenders' limit fitted at the grid's next-best cap and spread",
+    "answer": "B"
+   },
+   {
+    "name": "the assets' rate sensitivity at 0.000",
+    "answer": "B"
+   },
+   {
+    "name": "the assets' rate sensitivity at 0.020",
+    "answer": "B"
+   },
+   {
+    "name": "the assets' equity sensitivity at 0.65",
+    "answer": "B"
+   },
+   {
+    "name": "the assets' equity sensitivity at 0.75",
+    "answer": "B"
    }
   ],
   "shortcuts": [
    {
-    "name": "the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried",
+    "name": "the careful route: every investment period to its registered end, the real-asset loans rolled over as they stand",
+    "answer": "A"
+   },
+   {
+    "name": "the real-asset loans rolled over as they stand, the successor's first close ending its predecessor's period",
+    "answer": "A"
+   },
+   {
+    "name": "every investment period to its registered end, the loans refinanced at the stressed terms",
+    "answer": "C"
+   },
+   {
+    "name": "the loans refinanced at the lenders' terms and the values of 31 December 2026",
+    "answer": "A"
+   },
+   {
+    "name": "the loans refinanced at 31 December's terms, every period to its registered end",
     "answer": "A"
    },
    {
@@ -452,77 +504,93 @@
     "answer": "A"
    },
    {
-    "name": "one straight support line through the record, the last audited borrowings carried",
-    "answer": "A"
-   },
-   {
-    "name": "the rescue channel found, the six managers' stock read off the file as it stands",
-    "answer": "B"
-   },
-   {
-    "name": "the plateau held, the six managers bridged",
-    "answer": "A"
-   },
-   {
     "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-    "answer": "none"
+    "answer": "D"
    },
    {
     "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
-    "answer": "C"
+    "answer": "A"
    }
   ],
   "perturbations": [
    {
-    "input": "deployment and the deal market at the bootstrap's 5th percentile",
-    "answer": "D"
+    "input": "deployment at the bootstrap's 5th percentile",
+    "answer": "B"
    },
    {
-    "input": "deployment and the deal market at the bootstrap's 95th percentile",
-    "answer": "D"
+    "input": "deployment at the bootstrap's 95th percentile",
+    "answer": "B"
    },
    {
     "input": "the support's two channels at the bootstrap's 5th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "the support's two channels at the bootstrap's 95th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "first-close slips at the bootstrap's 5th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "first-close slips at the bootstrap's 95th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "recycling at the bootstrap's 5th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "recycling at the bootstrap's 95th percentile",
-    "answer": "D"
+    "answer": "B"
+   },
+   {
+    "input": "the lenders' limit and the assets' values at the bootstrap's 5th percentile",
+    "answer": "B"
+   },
+   {
+    "input": "the lenders' limit and the assets' values at the bootstrap's 95th percentile",
+    "answer": "B"
    },
    {
     "input": "every fitted input together at the bootstrap's 5th percentile",
-    "answer": "D"
+    "answer": "B"
    },
    {
     "input": "every fitted input together at the bootstrap's 95th percentile",
-    "answer": "D"
+    "answer": "B"
    }
   ]
  },
  "routes": [
   {
    "name": "the golden",
-   "answer": "D",
+   "answer": "B",
    "golden": true
   },
   {
-   "name": "the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried",
+   "name": "the careful route: every investment period to its registered end, the real-asset loans rolled over as they stand",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the real-asset loans rolled over as they stand, the successor's first close ending its predecessor's period",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "every investment period to its registered end, the loans refinanced at the stressed terms",
+   "answer": "C",
+   "golden": false
+  },
+  {
+   "name": "the loans refinanced at the lenders' terms and the values of 31 December 2026",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the loans refinanced at 31 December's terms, every period to its registered end",
    "answer": "A",
    "golden": false
   },
@@ -532,28 +600,13 @@
    "golden": false
   },
   {
-   "name": "one straight support line through the record, the last audited borrowings carried",
-   "answer": "A",
-   "golden": false
-  },
-  {
-   "name": "the rescue channel found, the six managers' stock read off the file as it stands",
-   "answer": "B",
-   "golden": false
-  },
-  {
-   "name": "the plateau held, the six managers bridged",
-   "answer": "A",
-   "golden": false
-  },
-  {
    "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-   "answer": "none",
+   "answer": "D",
    "golden": false
   },
   {
    "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
-   "answer": "C",
+   "answer": "A",
    "golden": false
   }
  ],

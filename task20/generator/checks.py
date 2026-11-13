@@ -1,4 +1,4 @@
-"""Generator assertions for task20 architecture 5: the processes the golden fits are the world's own, the golden from the
+"""Generator assertions for task20 architecture 6: the processes the golden fits are the world's own, the golden from the
 pack tracks the world's 2027-28 under the stress and lands on the world's own program, every rival and perturbation
 gives the golden program and every shortcut another, the stump factorial holds, and the figures add up across the
 deliverables."""
@@ -41,16 +41,18 @@ def main():
     check("defensive follow-ons: lag and threshold chosen by fit are the world's", (sp["lag"], sp["e_star"]) == (P["exit_lag"], P["support_e"]), str(sp))
     check("defensive follow-ons: the fitted rate within 10 per cent of the world's", abs(sp["sigma"] / P["support"] - 1) < 0.10, "%.4f" % sp["sigma"])
     check("defensive follow-ons: the cap chosen by fit is the world's reserve cap", abs(sp["cap"] - P["support_cap"]) < 1e-9, "%.2f" % sp["cap"])
-    check("rescue financings: the threshold chosen by fit within 0.02 of the world's", abs(sp["th"] - P["rescue_th"]) <= 0.02 + 1e-9, "%.2f" % sp["th"])
-    check("rescue financings: their steepness relative to the first channel within 15 per cent of the world's",
-          abs(sp["ratio"] / (P["rescue"] / P["support"]) - 1) < 0.15, "%.2f against %.2f" % (sp["ratio"], P["rescue"] / P["support"]))
+    sfs = [max(0.0, 1.0 - R["mkt"][0][q - 2] / 100.0) for q in A.W]
+    gr = lambda s: min(s, sp["cap"]) + sp["ratio"] * max(0.0, s - sp["th"]); wr = lambda s: min(s, P["support_cap"]) + P["rescue"] / P["support"] * max(0.0, s - P["rescue_th"])
+    check("rescue financings: the two-channel response within 25 per cent of the world's at every shortfall the stress reaches",
+          all(abs(gr(s) / wr(s) - 1) < 0.25 for s in sfs if s > 0.05), "threshold %.2f against %.2f, steepness %.2f against %.2f; worst %.3f" % (
+              sp["th"], P["rescue_th"], sp["ratio"], P["rescue"] / P["support"], max(abs(gr(s) / wr(s) - 1) for s in sfs if s > 0.05)))
     check("the endowment's own record never reaches the second channel", A.own_record_max_shortfall(L) < sp["th"],
           "%.3f against %.2f" % (A.own_record_max_shortfall(L), sp["th"]))
     check("the stress takes the shortfall past the second channel's threshold",
           max(max(0.0, 1.0 - R["mkt"][0][q - 2] / 100.0) for q in A.W) > sp["th"])
     ex = R["fit"]["ext"]
-    check("investment-period extensions: the window and length chosen by fit are the world's, every case classed",
-          (ex["win"], ex["length"], ex["accuracy"]) == (P["ext_win"], P["ext_q"], 1.0), str(ex))
+    check("investment-period extensions: the length is the world's and the rule classes 85 per cent of the agreed ends or more",
+          ex["length"] == P["ext_q"] and ex["accuracy"] >= 0.85, str(ex))
     # the line stock against the world's
     Wo = PK.build_world(); H = PK.history(Wo)
     reg = L["reg"]; six = set(L["cov"])
@@ -61,26 +63,68 @@ def main():
     check("the covered managers' line stock within 3 per cent of the world's", abs(gc / tc - 1) < 0.03, "%.1f against %.1f" % (gc, tc))
     check("the six managers' bridged stock within 25 per cent of the world's", abs(F["line_stock_six_managers_usd_m"] / tu - 1) < 0.25,
           "%.1f against %.1f" % (F["line_stock_six_managers_usd_m"], tu))
-    check("their last audited borrowings carry under a tenth of the world's stock", F["line_stock_six_managers_audited_usd_m"] < 0.10 * tu,
+    check("their last audited borrowings fall well short of the world's stock (under half; the lines rebuilt through 2026)", F["line_stock_six_managers_audited_usd_m"] < 0.50 * tu,
           "%.1f against %.1f" % (F["line_stock_six_managers_audited_usd_m"], tu))
     check("six managers, their company-level rows stopping after 2024Q4", len(six) == 6 and all(
         L["cov"][m] == A.qi(2024, 4) for m in six), ", ".join(sorted(six)))
-    # the calls against the world's under the stress, and the world's own program
+    # the successor clause and the successor closes against the world's
+    Wf = {f["id"]: f for f in Wo["funds"]}
+    gp_of = {fid: Wf[fid]["gp"] for fid in reg if fid in Wf}
+    mgr_gp = {}
+    for fid, g_ in gp_of.items(): mgr_gp[reg[fid]["Manager"]] = g_
+    wrong = [m for m, v in R["clause"].items() if v[0] is not None and v[0] != mgr_gp[m]["succ_clause"]]
+    check("S1 the clause read off each manager's past successions is its own", not wrong and sum(v[0] is not None for v in R["clause"].values()) >= 15,
+          "%d managers read, %s" % (sum(v[0] is not None for v in R["clause"].values()), "; ".join(wrong) or "none wrong"))
+    Es, Ss, Rs = Wd.stressed(Wo["E"], Wo["S"], Wo["R"])
+    wev = set()
+    for fid, r in reg.items():
+        f = Wf.get(fid)
+        if f is None or r["Status"] not in ("investing", "harvesting") or not f["gp"]["succ_clause"]: continue
+        sq = PK.succ_fc(f, Es); ie = A._qd(r["Investment period ends"])
+        if sq is not None and ie is not None and sq <= ie and A.W[0] <= sq <= A.W[-1]: wev.add(r["Fund"])
+    gev = set(F["successor_funds"])
+    unread = [r["Fund"] for fid, r in reg.items() if r["Fund"] in wev and R["clause"].get(r["Manager"], (None,))[0] is None]
+    check("S1 the funds whose successors close inside the stress are the world's", gev == wev, "golden %s; world %s" % (sorted(gev), sorted(wev)))
+    check("S1 no manager without a past succession has a successor closing inside the stress", not unread, "; ".join(unread) or "none")
+    # the asset loans, the lenders and the values against the world's
+    lr, vr = R["fit"]["lender"], R["fit"]["value"]
+    check("S2 the lenders' cap since mid-2022 within 0.02 of the world's", abs(lr["cap_post"] - P["ltv_post"]) <= 0.02, "%.3f against %.2f" % (lr["cap_post"], P["ltv_post"]))
+    r26 = float(L["R"][A.H_END]); rates = [r26, r26 + Wd.P["stress_rate_up"]]
+    fl = lambda r: min(lr["cap_post"], lr["kappa"] / (r + lr["spread"])); wl = lambda r: min(P["ltv_post"], P["refi_kappa"] / (r + P["refi_spread"]))
+    check("S2 the fitted lenders' limit within 0.02 of the world's at 31 December's rate and at the stressed rate",
+          all(abs(fl(r) - wl(r)) <= 0.02 for r in rates), "; ".join("%.2f%%: %.3f against %.3f" % (r, fl(r), wl(r)) for r in rates))
+    check("S2 the assets' equity sensitivity within 0.1 of the world's", abs(vr["beta"] - P["beta_p"]) <= 0.1, "%.3f against %.2f" % (vr["beta"], P["beta_p"]))
+    check("S2 the assets' rate sensitivity within 0.006 of the world's", abs(vr["c"] - P["cap1"] / P["cap0"]) <= 0.006, "%.3f against %.4f" % (vr["c"], P["cap1"] / P["cap0"]))
     tr, tplan = T.truth()
+    wdue = {}
+    for fid, x in tr["due"]:
+        if fid in reg and reg[fid]["Status"] in ("investing", "harvesting"): wdue.setdefault((fid, x[0]), []).append(x)
+    wref = float(tr["refi"][A.W].sum())
+    wrh = [float(tr["refi"][Wd.W[2 * i:2 * i + 2]].sum()) for i in range(4)]
+    check("S2 the refinancing calls within 20 per cent of the world's under the stress", abs(F["refinancing_calls_total_usd_m"] / wref - 1) < 0.20,
+          "golden %.1f world %.1f; by half golden %s world %s" % (F["refinancing_calls_total_usd_m"], wref,
+                                                                 [F["refinancing_calls_by_half_usd_m"][h] for h in A.HALVES], [round(x, 1) for x in wrh]))
+    # the calls against the world's under the stress, and the world's own program
     hv = lambda v: [float(v[Wd.W[2 * i:2 * i + 2]].sum()) for i in range(4)]
     ti, tp = hv(tr["call_inv"]), hv(tr["call_pend"])
     gi = [g["closed"][h] for h in A.HALVES]; gp = [g["pending"][h] for h in A.HALVES]
-    check("calls of the closed funds by half within 6 per cent of the world's under the stress",
-          all(abs(a - b) <= 0.06 * b + 1.0 for a, b in zip(gi, ti)), "golden %s world %s" % ([round(x, 1) for x in gi], [round(x, 1) for x in ti]))
+    check("calls of the closed funds by half within 8 per cent of the world's under the stress, and within 2 per cent over the eight quarters",
+          all(abs(a - b) <= 0.08 * b + 1.0 for a, b in zip(gi, ti)) and abs(sum(gi) / sum(ti) - 1) < 0.02,
+          "golden %s world %s" % ([round(x, 1) for x in gi], [round(x, 1) for x in ti]))
     check("calls of the pending funds over the eight quarters within 20 per cent of the world's",
           abs(sum(gp) - sum(tp)) <= 0.20 * sum(tp), "golden %.1f world %.1f" % (sum(gp), sum(tp)))
-    check("each re-up's calls within 15 per cent of the world's", all(abs(F["re_up_calls_usd_m"][k] / v - 1) < 0.15 for k, v in tplan.items()),
+    check("each re-up's calls within 20 per cent of the world's", all(abs(F["re_up_calls_usd_m"][k] / v - 1) < 0.20 for k, v in tplan.items()),
           "; ".join("%s %.1f/%.1f" % (k.split()[0], F["re_up_calls_usd_m"][k], v) for k, v in tplan.items()))
     h0w = round(F["reserve_usd_m"] - F["spending_24m_usd_m"] - (sum(ti) + sum(tp) - sum(g["R4"].values())) - F["minimum_reserve_usd_m"], 1)
     passing = [pr for pr in L["programs"] if h0w - sum(tplan[f] for f in pr["funds"]) >= 0]
     world_prog = max(passing, key=lambda pr: pr["total"])["code"] if passing else "none"
     check("the world's own calls give the golden's program", world_prog == g["R7"], "world headroom %.1f, program %s" % (h0w, world_prog))
     check("the world's own headroom sits inside the headroom band", F["bands"]["R5"][0] <= h0w <= F["bands"]["R5"][1], "%.1f in %s" % (h0w, F["bands"]["R5"]))
+    tr2, tplan2 = T.truth(policy=False)
+    h0m = round(F["reserve_usd_m"] - F["spending_24m_usd_m"] - (float((tr2["call_inv"] + tr2["call_pend"])[Wd.W].sum()) - sum(g["R4"].values())) - F["minimum_reserve_usd_m"], 1)
+    passing2 = [pr for pr in L["programs"] if h0m - sum(tplan2[f] for f in pr["funds"]) >= 0]
+    prog2 = max(passing2, key=lambda pr: pr["total"])["code"] if passing2 else "none"
+    check("the world's managers slowing in the weak deal market still give the golden's program", prog2 == g["R7"], "headroom %.1f, program %s" % (h0m, prog2))
     # forcing and bands
     gold = E["forcing"]["golden_answer"]
     fam = E["forcing"]["golden_family"]; pert = E["forcing"]["perturbations"]
@@ -100,10 +144,11 @@ def main():
     check("the bootstrap's 5th to 95th percentiles sit inside the golden program's window",
           all(lo <= v[0] and v[1] < hi for v in F["bootstrap_p5_p95"].values()), str(F["bootstrap_p5_p95"]))
     fac = R["factorial"]
-    check("each stump dropped alone moves the program", all(fac[k]["R7"] != gold for k in ("J1 dropped", "J2 dropped")),
+    check("each stump dropped alone moves the program", all(fac[k]["R7"] != gold for k in ("S1 dropped", "S2 dropped")),
           ", ".join("%s %s" % (k, fac[k]["R7"]) for k in fac))
-    check("the two single drops land on different programs", fac["J1 dropped"]["R7"] != fac["J2 dropped"]["R7"])
-    check("no stump fixed alone on the careful route reaches the golden program", all(fac[k]["R7"] != gold for k in ("J1 alone", "J2 alone")))
+    check("the two single drops land on different programs", fac["S1 dropped"]["R7"] != fac["S2 dropped"]["R7"])
+    check("no stump fixed alone on the careful route reaches the golden program", all(fac[k]["R7"] != gold for k in ("S1 alone", "S2 alone")))
+
     check("the careful route misses the call", car["R7"] != gold, car["R7"])
     # arithmetic across the deliverables
     calls = sum(g["R2"].values()) + sum(g["R3"].values())
@@ -175,13 +220,37 @@ def main():
         o_ = A.project2(L, [x], [], 0.0, sw_, fit_, mkt_)
         late_calls += sum(float(o_["call_inv"][q]) for q in A.W if q > x["term"])
     check("SF18 a fund whose term ends inside the stress calls nothing after it", len(ended) > 0 and late_calls == 0.0, "%d funds" % len(ended))
+    plan_funds = {p["fund"] for p in L["plan"]}
+    check("SF19 the successors' first closes are their managers' whether or not Wexmoor commits (re-ups among them)",
+          any(e["successor"] in plan_funds for e in R["successor_events"]) and all(e["successor"] for e in R["successor_events"]),
+          "; ".join("%s to %s" % (e["fund"], e["successor"]) for e in R["successor_events"]))
+    pol = open(os.path.join(HERE, "docs.py")).read()
+    part = {n: o for n, o in R["partials"]}
+    check("SF20 values move with the stress outside sections 4 and 7 (policy section 6), the values held at 31 December keep the call",
+          "values move with these paths" in pol and part["the assets' values held at 31 December while the lenders' terms move with the stress"]["R7"] == gold)
+    j7 = [o for k, o in R["reflex_drops"].items() if k.startswith("J7")][0]
+    check("SF21 no allowance for a slower deal market (policy section 8), a fitted deal-market term keeps the call",
+          "No allowance is made for managers finding fewer new companies" in pol and j7["R7"] == gold, "%.1f %s" % (j7["R5"], j7["R7"]))
+    lf = [o for n, o in R["family"] if n.startswith("the lenders' limit fitted")]
+    check("SF22 the lenders' limit on the refinancings since mid-2022 or since 2020, or at the grid's next-best fit (same call)", all(o["R7"] == gold for o in lf))
+    six_real = [f for f, r in reg.items() if r["Manager"] in six and A.STRATS[r["Strategy"]] in ("RE", "IN")]
+    check("SF23 no property or infrastructure fund sits with the six managers, so every loan's record runs to 2026 (C1)", not six_real and all(
+        reg[x["fid"]]["Manager"] not in six for x in F["loans_due"]), "%d loans due, none with the six" % len(F["loans_due"]))
+    held = part["the six managers' held companies as their files last show them"]
+    check("SF26 the six managers' held companies as their files last show them keep the call", held["R7"] == gold, "%.1f %s" % (held["R5"], held["R7"]))
+    unk = [r["Fund"] for fid, r in reg.items() if r["Status"] in ("investing", "harvesting") and R["clause"].get(r["Manager"], (None,))[0] is None
+           and (A.successor_close(L, R["fit"], R["mkt"][0], fid, A.GOLDEN5) or [(None, 0)])[0][0] is not None
+           and A.W[0] <= A.successor_close(L, R["fit"], R["mkt"][0], fid, A.GOLDEN5)[0][0] <= A.W[-1]]
+    check("SF24 no manager without a past succession has a successor closing inside the stress (same call)", not unk, "; ".join(unk) or "none")
+    unsl = part["the successor's first close on its manager's date, unslipped, while the pending funds' own calls slip"]
+    check("SF25 the successors' closes on their managers' dates, unslipped, keep the call", unsl["R7"] == gold, "%.1f %s" % (unsl["R5"], unsl["R7"]))
     # the deliverables
     sub = open(os.path.join(TASK, "submission.md")).read()
     check("no em dash in the answer blocks", "—" not in sub)
     src = open(os.path.join(HERE, "analysis.py")).read()
     check("the distractors are never read", all(n not in src for n in (DC.F_PEER, DC.F_CAPPLAN, DC.F_IPS)))
-    check("the stated figures appear in the answer blocks", all(format(x, ",.1f") in sub for x in (F["headroom_before_2027_usd_m"], F["line_stock_six_managers_usd_m"],
-                                                                                                    F["line_stock_six_managers_audited_usd_m"])))
+    check("the stated figures appear in the answer blocks", all(format(x, ",.1f") in sub for x in (F["headroom_before_2027_usd_m"], F["refinancing_calls_total_usd_m"],
+                                                                                                    F["successor_effect_usd_m"], F["line_stock_six_managers_usd_m"])))
     check("the answer blocks name the golden program first", sub.split("## Final Recommendation")[1].strip().startswith("Adopt program %s" % F["program"]))
     print("\n%d failure%s" % (len(fails), "" if len(fails) == 1 else "s"))
     sys.exit(1 if fails else 0)

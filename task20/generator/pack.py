@@ -28,8 +28,9 @@ MGR_NAMES = {
     "IN1": "Garsington Infrastructure", "IN2": "Shabbington Infrastructure", "IN3": "Waterperry Infrastructure",
     "PC1": "Harpsden Credit", "PC2": "Lewknor Credit Partners", "PC3": "Bix Direct Lending", "PC4": "Swyncombe Credit",
 }
-# the managers whose company-level reporting stopped after 2024 (the look-through feed covers the others)
-SUMMARY_ONLY = sorted(str(x) for x in np.random.default_rng(10).choice([g for g in ["BO1", "BO2", "BO3", "BO4", "BO5", "BO6", "BO7", "BO8", "GE1", "GE2", "GE3", "VC1", "VC2", "VC3", "VC4", "RE1", "RE2", "RE3", "IN1", "IN2", "IN3", "PC1", "PC2", "PC3", "PC4"]], 6, replace=False))
+# the managers whose company-level reporting stopped after 2024 (the look-through feed covers the others; the property and
+# infrastructure managers report asset by asset, loans included, through it to the end)
+SUMMARY_ONLY = sorted(str(x) for x in np.random.default_rng(10).choice([g for g in ["BO1", "BO2", "BO3", "BO4", "BO5", "BO6", "BO7", "BO8", "GE1", "GE2", "GE3", "VC1", "VC2", "VC3", "VC4", "PC1", "PC2", "PC3", "PC4"]], 6, replace=False))
 ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
 STRAT_NAME = {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate", "IN": "Infrastructure", "PC": "Private credit"}
 
@@ -93,16 +94,32 @@ def build_world():
         f["id"] = "WX-%s-%03d" % (f["gp"]["st"], 100 + fs.index(f))
         nm = MGR_NAMES[f["gp"]["id"]]
         f["name"] = "%s %s" % (nm, ROMAN[f["no"] - 1])
-    # the consultant's 2027 plan totals USD 500 million: scale the 2027 re-ups
+    # the consultant's 2027 plan: the credit re-up at its own size, the equity and real-asset re-ups scaled to the rest
     plan = [f for f in fs if f["vint"] == 2027]
-    tot = sum(f["C"] for f in plan)
+    eq = [f for f in plan if f["gp"]["st"] != "PC"]
+    rest = Wd.P["plan_total"] - Wd.P["plan_pc"]
+    tot = sum(f["C"] for f in eq)
     for f in plan:
-        f["C"] = round(Wd.P["plan_total"] * f["C"] / tot / 5.0) * 5.0
-    d = sum(f["C"] for f in plan) - Wd.P["plan_total"]
-    plan[0]["C"] -= d
+        f["C"] = Wd.P["plan_pc"] if f["gp"]["st"] == "PC" else round(rest * f["C"] / tot / 5.0) * 5.0
+    d = sum(f["C"] for f in eq) - rest
+    eq[0]["C"] -= d
     for f in plan:
         f["size"] = round(f["C"] / f["share"])
+    # each fund's successor: the same manager's next fund
+    by_gp = {}
+    for f in fs: by_gp.setdefault(f["gp"]["id"], []).append(f)
+    for L_ in by_gp.values():
+        L_.sort(key=lambda x: x["vint"])
+        for a, b in zip(L_[:-1], L_[1:]): a["succ"] = b
     return dict(E=E, S=S, R=R, gps=gps, funds=fs)
+
+def succ_fc(f, E=None):
+    """the quarter f's successor holds its first close: as it happened by the end of 2026, otherwise its manager's date
+    slipped on the market E (the stress for the forecast)."""
+    s = f.get("succ")
+    if s is None: return None
+    if (s["fc"] <= H_END and s["vint"] <= 2026) or E is None: return s["fc"]
+    return s["exp_fc"] + Wd.slip_of(s, E)
 
 def history(Wo):
     E, S, R = Wo["E"], Wo["S"], Wo["R"]
@@ -112,7 +129,7 @@ def history(Wo):
         if f["vint"] > 2026 or f["fc"] > H_END:
             continue
         log = []; rec = {}
-        o = Wd.run_fund(f, E, S, R, p, f["fc"], upto=H_END, rec=rec, deal_log=log)
+        o = Wd.run_fund(f, E, S, R, p, f["fc"], upto=H_END, rec=rec, deal_log=log, succ_fc=succ_fc(f))
         # fund-level contributions for the audited accounts
         out[f["id"]] = dict(o=o, log=log, rec=rec)
     return out
@@ -180,7 +197,7 @@ def write_all(Wo, H, tgt):
     cash_rows.sort()
     rows[F_CASH] = w_csv(os.path.join(tgt, F_CASH), ["value_date", "fund_id", "movement", "amount_usd"], cash_rows)
     # ---------------------------------------------------------------- managers' portfolio activity (fund level, USD m)
-    act = []
+    act = []; seen_loan = set()
     for fid in sorted(H):
         f = byid[fid]
         nm = MGR_NAMES[f["gp"]["id"]]
@@ -194,12 +211,19 @@ def write_all(Wo, H, tgt):
             elif kind == "follow_on":
                 act.append([fid, nm, co, qmid(q, 0.55).isoformat(), "follow-on investment", "%.3f" % a, ""])
             elif kind == "exit":
-                act.append([fid, nm, co, qmid(q, 0.65).isoformat(), "realization", "%.3f" % b, "%.3f" % a])
+                act.append([fid, nm, co, qmid(q, 0.65).isoformat(), "realization", "%.3f" % b, "%.3f" % a, ""])
             elif kind == "val":
-                act.append([fid, nm, co, qend(q).isoformat(), "valuation", "%.3f" % b, "%.3f" % a])
+                act.append([fid, nm, co, qend(q).isoformat(), "valuation", "%.3f" % b, "%.3f" % a, ""])
+            elif kind == "loan":
+                first_loan = (fid, dno) not in seen_loan; seen_loan.add((fid, dno))
+                act.append([fid, nm, co, qmid(q, 0.45 if first_loan else 0.5).isoformat(), "asset loan drawn" if first_loan else "asset loan refinanced",
+                            "%.3f" % a, "", qend(b).isoformat()])
+            elif kind == "refi_out":
+                act.append([fid, nm, co, qmid(q, 0.5).isoformat(), "refinancing proceeds", "%.3f" % a, "", ""])
+    act = [r_ if len(r_) == 8 else r_ + [""] for r_ in act]
     act.sort(key=lambda r: (r[0], r[3], r[2], r[4]))
     rows[F_ACT] = w_csv(os.path.join(tgt, F_ACT), ["fund_id", "manager", "portfolio_company", "date", "record_type",
-        "amount_usd_m", "cost_basis_usd_m"], act)
+        "amount_usd_m", "cost_basis_usd_m", "loan_maturity"], act)
     # ---------------------------------------------------------------- audited financials (fund level, USD thousands)
     wb = Workbook(); ws = wb.active; ws.title = "Audited accounts"
     ws.append(["Fund ID", "Fund", "Fiscal year end", "Total commitments (USD thousands)", "Investments at cost (USD thousands)",

@@ -1,9 +1,9 @@
 {
  "task": "task20",
  "project": "sulfur",
- "architecture": "v5",
+ "architecture": "v6",
  "drawn": "2026-11-13",
- "slot_note": "architecture 4, re-rooted to another world, dataset and shell on 2026-11-13 at the author's word after the review return of architecture 3 (annex (a) read two ways) and the platform run that made every one of its deep steps: a US university endowment sets its 2027 private-fund commitment budget under a 24-month liquidity test in a stressed market",
+ "slot_note": "architecture 6, rebuilt in the same world on 2026-11-13 after the holistic audit of architecture 5: the audit's pins (the support basis past the record and the six managers' line balances, policy section 8) make architecture 5's stumps reflexes, and the call is rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "niche": "an endowment choosing among its consultant's 2027 private-fund programs under its liquidity policy, from the calls its existing funds will make in a stress deeper than its own record and with part of its managers' company-level files stopped",
@@ -11,7 +11,7 @@
  "shape": "04",
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
- "answer": "Program D (the venture re-up only, USD 45 million); A, B and C fail",
+ "answer": "Program B (Oakhanger Capital V, Wendlebury Growth VI, Corvane Ventures VI and Ewelme Real Estate VI, USD 365 million); A fails",
  "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
  "gap": [
   "time",
@@ -27,16 +27,16 @@
  ],
  "gate_g": "binding_constraint",
  "calibration_form": "settled_transaction_ledger",
- "stump_strategy": "forecast_method_backtest",
+ "stump_strategy": "other",
  "decisive_rule_filed": false,
  "official_decoy": false,
  "validated_decoy": false,
  "context_artifact": "planning_thread",
  "stump_class": "analytical",
- "analyst_test": "The careful but hurried pass rebuilds the line stock, the defensive follow-ons with their plateau and the slipped closes (the reflexes of architecture 4's round), holds the support curve flat past the shortfall the endowment's record reaches and carries the six managers' last audited borrowings, and adopts program A (the full USD 500 million).",
+ "analyst_test": "The careful but hurried pass makes every reflex (the line stock called at the clean-down, the six managers' balances and the support basis as policy section 8 files them, the defensive follow-ons, the slipped closes, the extensions), holds every investment period to the end the register records and carries the real-asset loans as they stand, and adopts program A.",
  "domain_test": "Private-markets liquidity planning (unfunded commitments, the managers' deployment and short-term financing, exits and distributions in a stressed exit market, fundraising timelines) decides how much a long-horizon investor can commit; swap the nouns for a retailer's inventory or a bank's deposits and the subscription lines, recycling, exit-driven distributions and first closes stop making sense.",
  "layer2_family": "estimand_identification",
- "layer2_pattern": "own: a program choice under a liquidity test whose stressed calls run past the record's range, where a second record's deep episode shows the response rising again, and part of the line stock sits with managers whose detailed files stopped",
+ "layer2_pattern": "own: a program choice under a liquidity test whose stressed calls are cut where the managers' next funds close and raised where the real assets' loans fall due at stressed terms, the two found in the register's past successions and the activity file's loan records and pulling in opposite directions",
  "layer1": [
   "capital account statements restated for a quarter, with the superseded line kept",
   "a manager renamed between vintages (Tilsworth Growth Partners to Tilsworth Partners)",
@@ -80,55 +80,56 @@
  ],
  "opening_move": "question-first",
  "question_form": "which",
- "driver": "The decisive quantity is a forward stream of obligations whose response to a stress deeper than the record is capped where the record stops while a second channel keeps it rising, seen only in another record's earlier deep episode at a slice where the first channel cannot move; and part of the stream must be rebuilt from complete summary records because the detailed records covering it stopped, the last summary balance being stale because the process rebuilt it after it.",
- "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the managers' calls on companies they already hold past a 45 per cent exit shortfall the endowment's own funds never reached (defensive follow-ons capped at 30 per cent, then rescue financings 4.5 times as steep, read off the benchmark's funds past their investment period in 2009) and on the line stock of six managers whose company-level files stop after 2024 (USD 139 million rolled from the file's end and re-anchored at the audits, against near nothing in their last audited balances, the lines rebuilt through 2026).",
- "stump": "A careful pass that makes architecture 4's moves, holds the support curve flat past the plateau and carries the six managers' last audited borrowings adopts program A; the golden is D; fixing the support curve alone gives C and the six managers' bridge alone A, and dropping either alone from the golden gives A or C.",
+ "driver": "The decisive quantity is a forward stream of obligations shaped by two events in other units' processes inside the window: a unit's window ends when a related unit's own event comes first (read off the past cases where it did, dated on that event's forecast), and contracts carried on old terms reset to the stressed terms at maturity, the holder funding the gap; the two pull the stream in opposite directions, so either alone lands on a wrong answer.",
+ "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the investment periods its managers' next funds end (14 managers' agreements stop new investment at the successor's first close; five funds' successors close in 2027-28, USD 46.8 million less called) and on 16 property and infrastructure loans that fall due in the stress (USD 661.9 million at Wexmoor's share), refinanced at the lenders' limit fitted on the refinancings since mid-2022 on values that fall with the stress, leaving USD 138.4 million to call.",
+ "stump": "A careful pass that makes every reflex, holds every investment period to its registered end and carries the real-asset loans as they stand adopts program A; the golden is B; fixing the successor closes alone gives A and the loans alone C, and dropping either alone from the golden gives C or A.",
  "answer_shape": "scenarios-flip",
- "weight": "measurement",
+ "weight": "investigation",
  "chain_signature": [
   "assembly-reconciliation",
-  "missingness-measurement",
+  "investigation-loops",
   "modeling",
   "forecasting",
   "synthesis",
   "synthesis"
  ],
- "results": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the stressed calls of the commitments made by the end of 2026 in each half of 2027 (the six managers' line stock bridged from the complete records); R3 the same in each half of 2028 (the support curve past the record's plateau, read off the benchmark's funds past their investment period); R4 distributions by half at the policy's rates; R5 the headroom above the minimum before any 2027 commitment; R7 the program the policy lets the Committee adopt",
- "one_fact_test": "either judgment's sentence rescues one result of six (R3 for the support curve, R2 for the six managers) and leaves the program wrong",
- "strategy_label": "UNTESTED (second_channel_past_plateau with level_and_mix_from_two_sources)",
+ "results": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the stressed calls of the commitments made by the end of 2026 in each half of 2027; R3 the same in each half of 2028 (both carrying the successor funds' first closes and the real-asset loans that fall due); R4 distributions by half at the policy's rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
+ "one_fact_test": "the most useful single sentences: 'a fund's investment period ends when its manager's next fund holds its first close, and five of the endowment's funds have a successor closing in 2027 or 2028' and '16 of the real-asset funds' loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values'; each rescues 1 of 6 results and leaves the program wrong (effort.json hints)",
+ "strategy_label": "UNTESTED (term_ended_by_another_units_event with terms_reset_at_maturity)",
  "mechanism_source": "design_note",
  "differentiation": {
   "mark115": "mark115 prices a planned move's second response where its new level crosses a rival's own level; v4 rebuilds the capital already invested on short credit from two records at two grains and carries it, with a stressed exit response and slipped closes, into a 24-month liquidity test",
   "task20 v3": "v3 replayed a stress year through five process rules each recovered from its own record (a desk, a clearing house, plants, an affiliate, payment habits); v4 estimates quantities no record holds (deferred calls, a stressed asymmetric exit response, slipped closes) for a private-fund program, with no rule to recover",
   "task9": "task9 v10's population-and-two-grains puzzle is a yield bridge on a fab's records; v4 is a forecast of an endowment's private-fund cash flows under a liquidity test",
   "mark111": "mark111 picks which cause of missed appointments still operates once a second provider layer returns for the season; v4 sizes a private-fund commitment budget from capital the managers have already invested on their own credit lines, rebuilt from their activity and audited borrowings and told apart from recycled proceeds",
-  "task10": "task10 v1 reads a paid tier's capacity only in the periods a volunteer tier fell short; v4 reads an investor's coming calls from capital its managers financed on credit, with an asymmetric exit response and slipped closes beside it, for a private-fund commitment budget"
+  "task10": "task10 v1 reads a paid tier's capacity only in the periods a volunteer tier fell short; v4 reads an investor's coming calls from capital its managers financed on credit, with an asymmetric exit response and slipped closes beside it, for a private-fund commitment budget",
+  "task20 v5": "v5 turned on a response past the record's plateau read off another record's deep episode and a level rebuilt where a detailed file stopped; v6 files both and turns on windows another unit's event ends and loans that reset to stressed terms at maturity, two judgments that pull the headroom in opposite directions"
  },
- "notes": "Re-rooted 2026-11-13 from architecture 4, which landed on its first platform round (its three stumps are reflexes R63 to R65). Architecture 5 keeps the endowment's world and pack, changes the decision (a pick among the consultant's programs) and the deciding lessons (the response past the record's plateau, the two-source bridge for the managers whose files stopped).",
+ "notes": "Re-rooted 2026-11-13 from architecture 4, which landed on its first platform round (its three stumps are reflexes R63 to R65). Architecture 5 kept the endowment's world and pack and changed the decision to a pick among the consultant's programs; the platform's holistic audit returned it the same day (its two judgments unforced), and architecture 6 keeps the decision, files architecture 5's two judgments in policy section 8 as the audit asked, and rebuilds the call on the successor funds' first closes and the real-asset loans that fall due in the stress (the world extended with both processes). Stump strategy other (architecture 6): windows ended by another unit's event (the successor funds' first closes, read off the register's past successions) and contract terms reset at maturity (the real-asset loans refinanced at the lenders' stressed limit), two judgments the records force; neither is a forecast-method choice, so architecture 4's and 5's forecast_method_backtest no longer describes the build.",
  "skeleton": {
   "decision_form": "pick_one_of_few_options",
   "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
   "lessons": [
-   "second_channel_past_plateau",
-   "level_and_mix_from_two_sources"
+   "term_ended_by_another_units_event",
+   "terms_reset_at_maturity"
   ],
   "mechanisms": [
-   "follow_on_reserves_cap_defensive_support_at_a_30_per_cent_shortfall",
-   "rescue_financings_past_a_46_per_cent_shortfall_the_own_record_never_reached",
-   "six_managers_company_level_files_stop_after_2024",
-   "lines_cleaned_down_at_end_2025_and_rebuilt_through_2026",
+   "periods_end_at_the_successor_funds_first_close",
+   "successor_first_closes_slip_with_the_exit_market",
+   "real_asset_loans_refinance_at_a_rate_dependent_limit",
+   "refinancing_shortfalls_called_from_investors_within_the_commitment",
+   "real_asset_values_move_with_equities_a_quarter_late_and_with_the_short_rate",
    "subscription_lines_called_at_the_stress_clean_down",
-   "investment_periods_extended_in_weak_markets_when_behind",
-   "first_closes_slip_with_the_exit_market"
+   "rescue_financings_past_the_own_records_shortfall_read_off_the_benchmark"
   ],
   "detection": [
-   "naive_ignores_what_it_should_depend_on",
    "natural_experiment_in_record",
+   "naive_ignores_what_it_should_depend_on",
    "second_source_at_other_grain"
   ],
   "moves": [
    "measure_response_shape_from_events",
-   "impute_by_model_at_own_drivers",
+   "replay_event_by_event",
    "variant_sweep_holds_call"
   ],
   "file_roles": [
@@ -167,6 +168,52 @@
  },
  "registered": "2026-11-13T11:46:34Z",
  "lineage": [
+  {
+   "architecture": "v5",
+   "driver": "The decisive quantity is a forward stream of obligations whose response to a stress deeper than the record is capped where the record stops while a second channel keeps it rising, seen only in another record's earlier deep episode at a slice where the first channel cannot move; and part of the stream must be rebuilt from complete summary records because the detailed records covering it stopped, the last summary balance being stale because the process rebuilt it after it.",
+   "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the managers' calls on companies they already hold past a 45 per cent exit shortfall the endowment's own funds never reached (defensive follow-ons capped at 30 per cent, then rescue financings 4.5 times as steep, read off the benchmark's funds past their investment period in 2009) and on the line stock of six managers whose company-level files stop after 2024 (USD 139 million rolled from the file's end and re-anchored at the audits, against near nothing in their last audited balances, the lines rebuilt through 2026).",
+   "stump": "A careful pass that makes architecture 4's moves, holds the support curve flat past the plateau and carries the six managers' last audited borrowings adopts program A; the golden is D; fixing the support curve alone gives C and the six managers' bridge alone A, and dropping either alone from the golden gives A or C.",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "second_channel_past_plateau",
+     "level_and_mix_from_two_sources"
+    ],
+    "mechanisms": [
+     "follow_on_reserves_cap_defensive_support_at_a_30_per_cent_shortfall",
+     "rescue_financings_past_a_46_per_cent_shortfall_the_own_record_never_reached",
+     "six_managers_company_level_files_stop_after_2024",
+     "lines_cleaned_down_at_end_2025_and_rebuilt_through_2026",
+     "subscription_lines_called_at_the_stress_clean_down",
+     "investment_periods_extended_in_weak_markets_when_behind",
+     "first_closes_slip_with_the_exit_market"
+    ],
+    "detection": [
+     "naive_ignores_what_it_should_depend_on",
+     "natural_experiment_in_record",
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "measure_response_shape_from_events",
+     "impute_by_model_at_own_drivers",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "governing_standard",
+     "schedule_or_plan",
+     "shortlist_or_candidates",
+     "exogenous_long_record",
+     "reference_register",
+     "unused_distractor"
+    ]
+   },
+   "answer": "Program D (the venture re-up only, USD 45 million); A, B and C fail",
+   "weight": "measurement",
+   "spent": "returned 2026-11-13 by the platform's holistic audit (runs/arch5_holistic_audit.md): its two stumps (the support curve past the record's plateau and the six managers' line stock) each rested on a judgment no file forced; pinned at authority as the audit asked (policy section 8), both became filed reflexes, so architecture 6 rebuilds the call on two judgments the records force"
+  },
   {
    "driver": "The decisive quantity is a forward stream of obligations no primary record holds, built from three behaviours the intermediaries' own records show at other grains: outflows already funded on short credit and passed on later, rebuilt as a residual of two ledgers and told apart from a permanent residual with the same signature at the dates a third record pins it, which fall due at once when the credit's cost rises; a defensive outflow into aged holdings that rises as the market for selling them falls, measured apart from the ordinary flow it masks; and new obligations that begin later than their sponsors say when that market is weak.",
    "driver_concrete": "Wexmoor's 2027 commitment capacity turns on the USD 238 million its managers had invested on subscription lines and not yet called (rebuilt fund by fund from their activity less the investment calls, the recycled proceeds read off the audited borrowings and carried at each manager's rate), called at the clean-down once the stress's rates pass every manager's limit as in 2022-23; on defensive follow-ons into companies held two years or more, which rise two quarters after the exit index falls below 100 while new deals slow; and on first closes that slip with the exit index in the quarter before, so the four pending funds close in 2028.",

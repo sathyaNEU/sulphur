@@ -8,26 +8,26 @@
  "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "Adopt Corrigan Hart's program D, the venture re-up only (Corvane Ventures VI, USD 45 million): before any 2027 commitment the policy's stress leaves USD 78.3 million above the USD 1,150 million minimum (band 30.3 to 115.4), enough for D's USD 18.4 million of calls but not C's 123.8, B's 169.3 or A's 247.6",
- "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 stressed calls on the commitments made by the end of 2026, each half of 2027 (the six managers' line stock rebuilt after their company-level files stop); R3 the same, each half of 2028 (the support response past the record's plateau, read off the benchmark's funds past their investment period); R4 distributions by half-year at the policy's 2008-10 rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
- "architecture": 5,
+ "call": "Adopt program B (Oakhanger Capital V, Wendlebury Growth VI, Corvane Ventures VI and Ewelme Real Estate VI, USD 365 million) and defer Harpsden Credit V to 2028: before any 2027 commitment the policy's stress leaves USD 214.3 million above the USD 1,535 million minimum (band 180.9 to 238.4), enough for B's USD 180.1 million of calls but not A's 288.9",
+ "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 stressed calls on the commitments made by the end of 2026, each half of 2027 (the investment periods the successor funds' first closes end, the first property and infrastructure loans falling due); R3 the same, each half of 2028 (the loans refinanced at the lenders' stressed limit on the stressed values, the 2028 successor closes); R4 distributions by half-year at the policy's 2008-10 rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
+ "architecture": 6,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "REVIEW only (the plan's Notes, the survey's About, the plan's candidate list, the register's forward dates, the prompt's shell quota), every line ruled harmless",
-  "reader": "pass 1: no unlock, no ranking; three fixes (calls stop at a fund's term end, SF18; the headroom pinned in the prompt; companies named in the activity file); pass 2 on the final cut: no unlock, the headroom pinned as one figure (\"taken together\")"
+  "leak_py": "REVIEW only (the plan's Notes, the survey's About, the two policies' vocabulary, the plan's program list, the prompt's shell quota), every line ruled harmless",
+  "reader": "architecture 6, pass 1: no leak, no ranking, no helper file; its FY2028 spending remark answered by policy section 3 (no fix)"
  },
  "duplicate_check": {
-  "heart": "WARN (task type, deliverables docx+xlsx, question form which)",
-  "nearest": "skeleton severity none against every card, the client corpus and the lineage"
+  "heart": "WARN (task type, weight investigation against task9, deliverables docx+xlsx, question form which)",
+  "nearest": "skeleton severity none against every card, the client corpus and the lineage (architecture 5's lessons are this build's filed reflexes)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
+  "verdict": "DETERMINISTIC (pass 4)",
   "disposition": "APPROVE",
-  "report": "determinism_check_report.md (pass 1, the cut before the term-end release) and determinism_check_report_pass2.md (pass 2, the final cut); no fixes"
+  "report": "determinism_check_report_pass3.md (FIX_NOW: the six managers' stale loan records, closed by convergence, SF23) and determinism_check_report_pass4.md (APPROVE, no fixes)"
  },
  "paper_pair": 43.7,
  "effort": {
@@ -35,7 +35,7 @@
   "careful": 43.7,
   "thorough": 100.0,
   "level": 4,
-  "largest_hint": "six managers' company-level files stop after 2024 (or the support sentence); each rescues 1 of 6"
+  "largest_hint": "16 of the real-asset funds' loans fall due in 2027 and 2028 and lenders will refinance them on the stressed rate and values; rescues 1 of 6 (the successor sentence rescues none)"
  },
  "runs": {
   "run1": null,
@@ -43,11 +43,11 @@
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "none that moves a result (R2's last half-year cell 156.88 against 160)",
-   "run2": "the pending funds' first closes on their managers' dates (dismissed own evidence, J3)"
+   "run1": "",
+   "run2": ""
   },
-  "triage": "runs/triage.md: LANDED by run 1 (all three stumps made unprompted); estimated 96.0 and 51.7 on effort.json's weights, scores not reported",
-  "recorded": "2026-11-13",
+  "triage": "",
+  "recorded": "",
   "history": [
    {
     "architecture": 3,
@@ -62,6 +62,13 @@
     "run1": "not reported (runs/arch4_run1.md: on the golden, every deep step made unprompted)",
     "run2": "not reported (runs/arch4_run2.md: off the call, J3 lost)",
     "triage": "landed; redesign"
+   },
+   {
+    "architecture": 5,
+    "date": "2026-11-13",
+    "run1": "not reported (the holistic audit's run: headroom 194.2 and program B, the support held at its plateau)",
+    "run2": "not reported",
+    "triage": "none (returned by the holistic audit)"
    }
   ]
  },
@@ -102,15 +109,24 @@
    "by": "platform round 1",
    "why": "run 1 made the line stock, the defensive follow-ons and the slipped closes unprompted and filed USD 250 million; the three stumps are reflexes R63 to R65",
    "route": "re-root to architecture 5 (a landed scaffold is never re-pointed)"
+  },
+  {
+   "date": "2026-11-13",
+   "architecture": 5,
+   "source": "review (the platform's holistic audit)",
+   "repair": "design",
+   "why": "the two judgments the program turned on (the six managers' line stock, the 2009 support slope) were forced by no file, and the Final Recommendation as pasted was architecture 4's stale text; pinning both as asked makes them filed reflexes",
+   "route": "architecture 6 in the same world on the user's instruction to fix the task: the pins filed in policy section 8, the call rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress",
+   "commit": "RESHIPPED (task20)"
   }
  ],
- "resume": "the author rewrites prompt.txt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip, then /triage-runs task20 with both runs pasted",
+ "resume": "the author uploads target.zip with prompt.txt (the prompt is unchanged from architecture 5, so the author's own voice rewrite stands; run voice-check.py --rewrite and leak.py if it is rewritten again), pastes architecture 6's blocks from submission.md (the Final Recommendation now opens on program B), then /triage-runs task20 with both runs pasted",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "RETURNED",
   "date": "2026-11-13",
-  "note": "not deterministic: annex (a) of the liquidity standard reads two ways (each mapped day's one-day 2022 move, EUR 208m and a EUR 250m facility, against the level copy, 328.8m and EUR 350m); depth level 4 on the reviewer's reading; runs/arch3_review.md"
+  "note": "holistic audit of architecture 5: correct figures, not deterministic (two unforced judgments), stale Final Recommendation; depth level 4; runs/arch5_holistic_audit.md"
  },
  "source_concept": "re-root at the author's word (2026-11-13) after architecture 3's review return and run evidence: private-markets commitment capacity under an endowment's liquidity policy",
  "history": [

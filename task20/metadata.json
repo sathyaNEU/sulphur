@@ -1,6 +1,6 @@
 {
  "task": "task20",
- "architecture": 5,
+ "architecture": 6,
  "as_of": "2027-03-12",
  "position_date": "2026-12-31",
  "decision": "which of Corrigan Hart's 2027 commitment programs Wexmoor University's endowment can adopt under its liquidity policy",
@@ -22,8 +22,8 @@
   "2027",
   "2028",
   "2026",
-  "1,150",
-  "1150"
+  "1,535",
+  "1535"
  ],
  "field_terms": [
   "capital call",
@@ -37,15 +37,19 @@
   "stress",
   "follow-on",
   "rescue financing",
-  "investment period"
+  "investment period",
+  "successor fund",
+  "refinancing",
+  "loan maturity",
+  "loan-to-value"
  ],
  "rows": {
   "capital_account_statements_2013Q1_2026Q4.csv": 2303,
-  "custodian_cash_activity_2026Q4.csv": 109,
-  "manager_portfolio_activity_2013_2026.csv": 21107,
+  "custodian_cash_activity_2026Q4.csv": 104,
+  "manager_portfolio_activity_2013_2026.csv": 23357,
   "fund_audited_financials_FY2013_FY2026.xlsx": 531,
   "private_commitment_register_2026-12-31.xlsx": 98,
-  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": 69694,
+  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": 69551,
   "market_series_quarterly_2000Q1_2026Q4.csv": 108,
   "liquid_holdings_2026-12-31.xlsx": 18,
   "spending_distributions_FY2014_FY2027.csv": 14,

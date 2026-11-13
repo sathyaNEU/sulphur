@@ -24,7 +24,7 @@ F_SPEND = "spending_distributions_FY2014_FY2027.csv"
 F_PLAN = "corrigan_hart_pacing_plan_2027.xlsx"
 F_PEER = "peer_endowment_survey_2025.xlsx"
 
-CUSHION = 1150.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
+CUSHION = 1535.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
 # Corrigan Hart's alternatives for 2027: the full program and three with re-ups deferred to 2028
 PROGRAMS = [
     ("A", "The full 2027 program", ("BO", "GE", "VC", "RE", "PC")),
@@ -35,24 +35,24 @@ PROGRAMS = [
 
 # the holdings at 31 December 2026 (USD m) and the class the Office of Investments assigns each
 HOLDINGS = [
-    ("Operating cash and money market funds", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 186.4, "Daily"),
-    ("US Treasury bills, 3 to 12 months", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 142.0, "Daily"),
-    ("US Treasury notes, 2 to 5 years", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 171.3, "Daily"),
-    ("Core fixed income account", "Harrowden Asset Management", "Investment-grade bonds", 228.6, "Daily"),
-    ("Intermediate credit account", "Lowfield Bond Partners", "Investment-grade bonds", 154.9, "Daily"),
-    ("US large cap index fund", "Brayfield Index Trust", "Public equities", 603.3, "Daily"),
-    ("US small and mid cap account", "Pembury Capital", "Public equities", 174.2, "Daily"),
-    ("International developed equity", "Strand Hill Global", "Public equities", 390.5, "Monthly"),
-    ("Emerging markets equity fund", "Kesgrave Partners", "Public equities", 212.7, "Monthly"),
-    ("Hollins Bay Multi-Strategy Fund", "Hollins Bay Capital", "Hedge funds: redeemable within 24 months", 96.4, "Quarterly, 65 days' notice"),
-    ("Carrow Point Credit Opportunities", "Carrow Point", "Hedge funds: redeemable within 24 months", 118.2, "Quarterly, 90 days' notice"),
-    ("Westerby Global Macro", "Westerby Partners", "Hedge funds: redeemable within 24 months", 84.7, "Monthly, 30 days' notice"),
-    ("Aldwick Equity Long/Short", "Aldwick Asset Management", "Hedge funds: redeemable within 24 months", 63.0, "Quarterly, 45 days' notice"),
-    ("Fenmore Event Driven Fund", "Fenmore Capital", "Hedge funds: not redeemable within 24 months", 141.5, "Locked to 30 June 2029"),
-    ("Saltire Structured Credit", "Saltire Investors", "Hedge funds: not redeemable within 24 months", 176.0, "Annual, 25% investor gate, side pocket"),
-    ("Corringham Activist Partners", "Corringham", "Hedge funds: not redeemable within 24 months", 95.3, "Three-year rolling lock to 2029"),
-    ("Timberland separate account", "Allerton Forest Resources", "Other holdings", 118.0, "None"),
-    ("University housing note (program-related)", "Wexmoor University", "Other holdings", 34.0, "None"),
+    ("Operating cash and money market funds", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 242.3, "Daily"),
+    ("US Treasury bills, 3 to 12 months", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 184.6, "Daily"),
+    ("US Treasury notes, 2 to 5 years", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 222.7, "Daily"),
+    ("Core fixed income account", "Harrowden Asset Management", "Investment-grade bonds", 297.2, "Daily"),
+    ("Intermediate credit account", "Lowfield Bond Partners", "Investment-grade bonds", 201.4, "Daily"),
+    ("US large cap index fund", "Brayfield Index Trust", "Public equities", 784.3, "Daily"),
+    ("US small and mid cap account", "Pembury Capital", "Public equities", 226.5, "Daily"),
+    ("International developed equity", "Strand Hill Global", "Public equities", 507.7, "Monthly"),
+    ("Emerging markets equity fund", "Kesgrave Partners", "Public equities", 276.5, "Monthly"),
+    ("Hollins Bay Multi-Strategy Fund", "Hollins Bay Capital", "Hedge funds: redeemable within 24 months", 125.3, "Quarterly, 65 days' notice"),
+    ("Carrow Point Credit Opportunities", "Carrow Point", "Hedge funds: redeemable within 24 months", 153.7, "Quarterly, 90 days' notice"),
+    ("Westerby Global Macro", "Westerby Partners", "Hedge funds: redeemable within 24 months", 110.1, "Monthly, 30 days' notice"),
+    ("Aldwick Equity Long/Short", "Aldwick Asset Management", "Hedge funds: redeemable within 24 months", 81.9, "Quarterly, 45 days' notice"),
+    ("Fenmore Event Driven Fund", "Fenmore Capital", "Hedge funds: not redeemable within 24 months", 184.0, "Locked to 30 June 2029"),
+    ("Saltire Structured Credit", "Saltire Investors", "Hedge funds: not redeemable within 24 months", 228.8, "Annual, 25% investor gate, side pocket"),
+    ("Corringham Activist Partners", "Corringham", "Hedge funds: not redeemable within 24 months", 123.9, "Three-year rolling lock to 2029"),
+    ("Timberland separate account", "Allerton Forest Resources", "Other holdings", 153.4, "None"),
+    ("University housing note (program-related)", "Wexmoor University", "Other holdings", 44.2, "None"),
 ]
 FACTORS = {"Cash, money market funds and US Treasuries": 1.00, "Investment-grade bonds": 0.90, "Public equities": 0.70,
            "Hedge funds: redeemable within 24 months": 0.90, "Hedge funds: not redeemable within 24 months": 0.0,
@@ -107,7 +107,9 @@ def policy(path):
                    "level in the second quarter of 2008, starting from its level in the last quarter before the test. "
                    "Public equities stand at 85 percent of their 31 December level in the first quarter and 70 percent "
                    "in the second, then recover five points a quarter to 100 percent. Short-term interest rates stand 2.5 "
-                   "percentage points above their 31 December level throughout.", body),
+                   "percentage points above their 31 December level throughout. Apart from the holdings in section 4 and the "
+                   "fund values in section 7, which are taken as they stood at 31 December, values move with these paths "
+                   "through the stress.", body),
          Paragraph("7. Distributions in the stress", h2),
          Paragraph("In each quarter of the stress, each fund distributes its value at 31 December times the distribution "
                    "rate of its strategy in the matching quarter from the third quarter of 2008 in the industry cash-flow "
@@ -118,7 +120,14 @@ def policy(path):
                    "custodian recorded them.", body),
          Paragraph("8. Capital calls in the stress", h2),
          Paragraph("Capital calls are those the endowment's managers can be expected to make in the stress, judged on the "
-                   "evidence the Office of Investments holds.", body),
+                   "evidence the Office of Investments holds. Where the stress takes the exit market further below its "
+                   "normal level than the endowment's own funds have experienced, the calls managers make on the companies "
+                   "their funds already hold are judged on the industry benchmark's funds that were past their investment "
+                   "periods from 2008 to 2010. No allowance is made for managers finding fewer new companies to invest in "
+                   "while the exit market is weak. Capital a manager has invested through a fund's credit facility and not yet "
+                   "called counts at its balance at 31 December; where the manager's reports to the Office stop before that "
+                   "date, the balance is estimated to 31 December from the fund's capital account statements and audited "
+                   "accounts.", body),
          Paragraph("9. The year's new commitments", h2),
          Paragraph("The pacing plan's commitments are tested each at its proposed size. Where the plan sets out alternative "
                    "programs, the Investment Committee adopts the program with the largest total of new commitments that "
@@ -135,9 +144,9 @@ def policy(path):
 
 def ips(path):
     body, h1, h2, small, cell = _st()
-    rows = [["Asset class", "Target", "Range"], ["Public equities", "23%", "15% to 30%"], ["Hedge funds", "13%", "8% to 18%"],
-            ["Private equity and venture capital", "32%", "25% to 40%"], ["Real assets (real estate, infrastructure, timber)", "14%", "8% to 18%"],
-            ["Private credit", "6%", "2% to 10%"], ["Fixed income and cash", "12%", "8% to 20%"]]
+    rows = [["Asset class", "Target", "Range"], ["Public equities", "20%", "14% to 28%"], ["Hedge funds", "11%", "6% to 16%"],
+            ["Private equity and venture capital", "30%", "24% to 38%"], ["Real assets (real estate, infrastructure, timber)", "23%", "16% to 28%"],
+            ["Private credit", "6%", "2% to 10%"], ["Fixed income and cash", "10%", "6% to 18%"]]
     t = Table([[Paragraph(c, cell) for c in r] for r in rows], colWidths=[260, 70, 90])
     s = [Paragraph("Wexmoor University Endowment", small),
          Paragraph("Investment policy statement", h1),
@@ -215,7 +224,7 @@ def holdings(path):
 def spending_series():
     """the trustees' distributions by fiscal year under the spending rule, from the endowment's value at each preceding
     31 December (USD m)."""
-    vals = {2012: 3050.0}
+    vals = {2012: 4210.0}
     ret = {2013: 0.112, 2014: 0.071, 2015: 0.018, 2016: 0.064, 2017: 0.121, 2018: 0.026, 2019: 0.118, 2020: 0.094,
            2021: 0.236, 2022: -0.071, 2023: 0.083, 2024: 0.097, 2025: 0.088}
     inflow = {y: 0.030 for y in ret}
@@ -245,7 +254,7 @@ def spending(path):
 
 def pacing_plan(path, plan_funds, names):
     wb = Workbook(); ws = wb.active; ws.title = "2027 proposed commitments"
-    ws.append(["Fund", "Manager", "Strategy", "Proposed commitment (USD m)", "Commitment expected", "First close expected", "Relationship"])
+    ws.append(["Fund", "Manager", "Strategy", "Proposed commitment (USD m)", "Commitment expected", "Fund's first close (manager's schedule)", "Relationship"])
     for c in ws[1]: c.font = Font(bold=True)
     for f in plan_funds:
         ws.append([f["name"], names[f["gp"]["id"]], {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate",
@@ -273,7 +282,7 @@ def pacing_plan(path, plan_funds, names):
     ws3 = wb.create_sheet("Notes")
     for line in ["Draft for discussion with the Office of Investments, 7 December 2026, for the Investment Committee's March 2027 meeting.",
                  "The 2027 program continues existing relationships; no new managers are proposed for 2027, and infrastructure resumes in 2028.",
-                 "Commitments are sized to keep the private allocation near its 52 percent policy target by 2031.",
+                 "Commitments are sized to keep the private allocation near its 59 percent policy target by 2031.",
                  "Corrigan Hart LLC, Private Markets Advisory."]:
         ws3.append([line])
     wb.save(path)

@@ -102,6 +102,38 @@ ok("the stress takes the exit shortfall past the second channel's threshold", de
 wb = load_workbook(T("corrigan_hart_pacing_plan_2027.xlsx"), data_only=True)
 prog = {r[0]: r for r in wb["Programs"].iter_rows(min_row=2, values_only=True) if r[0]}
 ok("the plan's program totals", all(abs(prog[c][3] - v["total_usd_m"]) < 1e-9 for c, v in F["programs"].items()))
+# the property and infrastructure loans alive at 31 December 2026 that fall due in the eight quarters
+loan = {}; gone = set()
+for r in rows("manager_portfolio_activity_2013_2026.csv"):
+    key = (r["fund_id"], r["portfolio_company"])
+    if r["record_type"] in ("asset loan drawn", "asset loan refinanced"):
+        d = dt.date.fromisoformat(r["date"])
+        if key not in loan or d >= loan[key][0]: loan[key] = (d, float(r["amount_usd_m"]), dt.date.fromisoformat(r["loan_maturity"]))
+    elif r["record_type"] == "realization":
+        gone.add(key)
+due = [k for k, x in loan.items() if k not in gone and reg.get(k[0], {}).get("Status") in ("investing", "harvesting")
+       and dt.date(2027, 1, 1) <= x[2] <= dt.date(2028, 12, 31)]
+ok("the loans falling due in 2027 and 2028", len(due) == F["loans_due_count"], "%d against %d" % (len(due), F["loans_due_count"]))
+bal = sum(loan[k][1] * float(reg[k[0]]["Commitment (USD m)"]) / float(reg[k[0]]["Fund size (USD m)"]) for k in due)
+ok("their balance at Wexmoor's share (commitment over fund size)", abs(bal - F["loans_due_balance_usd_m"]) < 0.11, "%.2f against %.1f" % (bal, F["loans_due_balance_usd_m"]))
+# the managers' past successions: did the earlier fund's period end at the successor's first close?
+by_m = defaultdict(list)
+for r in reg.values(): by_m[r["Manager"]].append(r)
+votes = {}
+for m_, rs in by_m.items():
+    rs = sorted(rs, key=lambda r: (r["Vintage"], r["Fund ID"]))
+    for a, b in zip(rs[:-1], rs[1:]):
+        if not (a["First close"] and b["First close"] and a["Investment period ends"]): continue
+        fa = a["First close"].date() if hasattr(a["First close"], "date") else a["First close"]
+        fb = b["First close"].date() if hasattr(b["First close"], "date") else b["First close"]
+        ie = a["Investment period ends"].date() if hasattr(a["Investment period ends"], "date") else a["Investment period ends"]
+        agreed = dt.date(fa.year + int(a["Investment period (years, per agreement)"]), fa.month, 1)
+        qn = lambda d: d.year * 4 + (d.month - 1) // 3
+        if qn(fb) < max(qn(agreed), qn(ie) + 1):
+            votes.setdefault(m_, []).append(qn(ie) + 1 == qn(fb))
+cl = sorted(m_ for m_, v in votes.items() if all(v)); nc = sorted(m_ for m_, v in votes.items() if not any(v))
+ok("the managers whose past periods ended at the successor's first close", cl == F["clause_managers"], "%d managers" % len(cl))
+ok("the managers whose past periods ran on", nc == F["no_clause_managers"], "; ".join(nc))
 # the golden workbook against figures.json
 wb = load_workbook(os.path.join(TASK, "golden", "wexmoor_2027_program_test.xlsx"), data_only=True)
 summ = {r[0]: r[1:] for r in wb["Summary"].iter_rows(values_only=True) if r[0]}
@@ -114,6 +146,11 @@ H = ["H1 2027", "H2 2027", "H1 2028", "H2 2028"]
 allc = {**F["calls_2027_by_half_usd_m"], **F["calls_2028_by_half_usd_m"]}
 ok("workbook: calls by half", list(hy["Calls on the commitments made by the end of 2026"]) == [allc[h] for h in H])
 ok("workbook: distributions by half", list(hy["Distributions, the policy's 2008-10 rates"]) == [F["distributions_by_half_usd_m"][h] for h in H])
+ok("workbook: the refinancing calls by half", list(hy["   of which property and infrastructure loans refinanced short of their balance"]) == [F["refinancing_calls_by_half_usd_m"][h] for h in H])
+scs = [r[0] for r in wb["Successor closes"].iter_rows(min_row=2, values_only=True) if r[0] and r[5]]
+ok("workbook: the successor closes", scs == F["successor_funds"], "; ".join(scs))
+al = {r[0]: r for r in wb["Asset loans"].iter_rows(min_row=2, values_only=True) if r[0]}
+ok("workbook: the loans' shortfall", abs(al["Total"][7] - F["loans_due_gap_usd_m"]) < 1e-9 and len([k for k in al if k != "Total" and al[k][2]]) >= 1)
 un = {r[0]: r[1] for r in wb["Unfunded"].iter_rows(min_row=2, values_only=True) if r[0]}
 ok("workbook: unfunded by strategy", all(un[s_] == v for s_, v in F["unfunded_by_strategy_usd_m"].items()))
 from docx import Document
