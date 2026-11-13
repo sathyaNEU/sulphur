@@ -1,0 +1,437 @@
+fault_id,date,time,line,terminal_a,terminal_b,km_from_terminal_a,structure,span,fault_type,cause,cleared_on_reclose,members_interrupted,member_minutes,members_momentary,repeat_location
+F0001,2022-01-09,00:17:59,Line 2,Port Alcorn,Shell Ridge,13.57,71,71-72,BG,vegetation from outside the right of way,yes,0,0,7532,
+F0002,2022-01-09,15:56:16,Line 7,Tule Marsh,Caney Bend,13.40,70,70-71,AG,vegetation from outside the right of way,no,1523,73967,0,
+F0003,2022-01-19,04:08:30,Line 12,Caney Bend,Mesquite Flat,18.81,95,,CG,bird or other animal,yes,0,0,5377,RL-15
+F0004,2022-01-21,03:01:51,Line 2,Port Alcorn,Shell Ridge,5.07,28,,BG,salt contamination,no,7532,146187,0,
+F0005,2022-01-21,05:46:48,Line 2,Port Alcorn,Shell Ridge,8.67,46,,CG,salt contamination,yes,0,0,7532,
+F0006,2022-01-23,22:39:39,Line 2,Port Alcorn,Shell Ridge,13.88,73,,BG,salt contamination,yes,0,0,7532,
+F0007,2022-01-28,01:50:02,Line 7,Tule Marsh,Caney Bend,9.59,52,,CG,bird or other animal,yes,0,0,1523,RL-10
+F0008,2022-01-28,04:07:57,Line 14,Live Oak Crossing,Caney Bend,22.71,117,,AG,bird or other animal,yes,0,0,3733,RL-20
+F0009,2022-01-31,09:09:42,Line 16,Port Alcorn,Tule Marsh,1.81,10,,AG,other or unknown,yes,0,0,0,
+F0010,2022-02-04,10:09:09,Line 11,Inland,Granger Gap,23.75,119,119-120,BG,vegetation from outside the right of way,no,4156,125216,0,RL-14
+F0011,2022-02-12,04:36:46,Line 7,Tule Marsh,Caney Bend,6.80,38,,CG,bird or other animal,yes,0,0,1525,RL-09
+F0012,2022-02-15,08:39:05,Line 11,Inland,Granger Gap,23.67,119,118-119,BG,vegetation from outside the right of way,yes,0,0,4156,RL-14
+F0013,2022-02-19,04:11:42,Line 7,Tule Marsh,Caney Bend,9.75,52,,CG,bird or other animal,yes,0,0,1525,RL-10
+F0014,2022-02-22,06:01:55,Line 7,Tule Marsh,Caney Bend,9.71,52,,AG,bird or other animal,yes,0,0,1525,RL-10
+F0015,2022-02-27,01:38:47,Line 7,Tule Marsh,Caney Bend,6.83,38,,CG,bird or other animal,yes,0,0,1525,RL-09
+F0016,2022-02-27,03:34:31,Line 14,Live Oak Crossing,Caney Bend,22.67,117,,CG,bird or other animal,yes,0,0,3738,RL-20
+F0017,2022-02-27,12:29:39,Line 13,Granger Gap,Live Oak Crossing,13.94,74,,BG,other or unknown,yes,0,0,1599,
+F0018,2022-03-05,04:50:33,Line 7,Tule Marsh,Caney Bend,6.92,38,,AG,bird or other animal,yes,0,0,1527,RL-09
+F0019,2022-03-09,01:06:05,Line 7,Tule Marsh,Caney Bend,9.83,53,,AG,bird or other animal,yes,0,0,1527,RL-10
+F0020,2022-03-10,02:11:46,Line 7,Tule Marsh,Caney Bend,6.80,38,,AG,bird or other animal,yes,0,0,1527,RL-09
+F0021,2022-03-15,22:40:12,Line 2,Port Alcorn,Shell Ridge,18.45,96,,AG,salt contamination,yes,0,0,7551,
+F0022,2022-03-16,00:59:44,Line 2,Port Alcorn,Shell Ridge,15.43,81,,AG,salt contamination,yes,0,0,7551,
+F0023,2022-03-16,02:19:55,Line 2,Port Alcorn,Shell Ridge,7.24,39,,AG,salt contamination,yes,0,0,7551,
+F0024,2022-03-16,04:03:57,Line 2,Port Alcorn,Shell Ridge,1.56,9,,AG,salt contamination,yes,0,0,7551,
+F0025,2022-03-16,06:02:27,Line 2,Port Alcorn,Shell Ridge,7.51,40,,CG,salt contamination,yes,0,0,7551,
+F0026,2022-03-16,17:07:49,Line 6,Bayside,Tule Marsh,17.80,94,,AG,other or unknown,yes,0,0,3622,
+F0027,2022-03-18,07:11:07,Line 1,Bayside,Port Alcorn,9.81,49,,AG,insulator failure,yes,0,0,7262,RL-01
+F0028,2022-03-18,11:00:03,Line 13,Granger Gap,Live Oak Crossing,13.43,71,,BG,insulator failure,yes,0,0,1601,RL-17
+F0029,2022-03-22,09:23:23,Line 1,Bayside,Port Alcorn,9.74,48,,BG,insulator failure,yes,0,0,7262,RL-01
+F0030,2022-03-24,22:43:33,Line 2,Port Alcorn,Shell Ridge,8.99,47,,AG,other or unknown,yes,0,0,7551,
+F0031,2022-03-25,04:05:14,Line 12,Caney Bend,Mesquite Flat,20.49,104,,AG,bird or other animal,yes,0,0,5391,RL-16
+F0032,2022-03-28,02:26:45,Line 12,Caney Bend,Mesquite Flat,19.03,96,,CG,bird or other animal,yes,0,0,5391,RL-15
+F0033,2022-04-13,05:25:24,Line 13,Granger Gap,Live Oak Crossing,9.18,49,,CG,other or unknown,yes,0,0,1603,
+F0034,2022-04-14,16:02:38,Line 10,Inland,Mesquite Flat,2.14,11,,BC,lightning,yes,0,0,6963,
+F0035,2022-04-20,12:32:21,Line 15,Mesquite Flat,Live Oak Crossing,21.87,110,,BG,equipment or hardware,no,5473,49655,0,
+F0036,2022-04-23,15:45:50,Line 8,Caney Bend,Ponder Creek,13.00,67,,AG,lightning,yes,0,0,4829,
+F0037,2022-05-05,04:08:20,Line 1,Bayside,Port Alcorn,9.72,48,,AG,insulator failure,yes,0,0,7281,RL-01
+F0038,2022-05-10,16:27:08,Line 2,Port Alcorn,Shell Ridge,14.59,77,,CG,lightning,yes,0,0,7571,
+F0039,2022-05-11,08:53:34,Line 1,Bayside,Port Alcorn,9.92,49,,AG,insulator failure,no,3380,69724,3901,RL-01
+F0040,2022-05-11,11:54:17,Line 13,Granger Gap,Live Oak Crossing,13.60,72,,AG,insulator failure,yes,0,0,1606,RL-17
+F0041,2022-06-06,15:47:43,Line 4,Bayside,Redfish Pass,11.52,59,,BG,lightning,yes,0,0,2561,
+F0042,2022-06-06,18:47:31,Line 4,Bayside,Redfish Pass,6.98,36,,BG,lightning,yes,0,0,2561,
+F0043,2022-06-09,19:15:06,Line 14,Live Oak Crossing,Caney Bend,12.90,66,,BG,lightning,yes,0,0,3757,
+F0044,2022-06-13,11:37:17,Line 11,Inland,Granger Gap,26.47,133,,BG,lightning,yes,0,0,4178,
+F0045,2022-06-13,13:42:06,Line 15,Mesquite Flat,Live Oak Crossing,4.67,24,,AG,lightning,yes,0,0,5486,
+F0046,2022-06-13,16:44:03,Line 9,Shell Ridge,Ponder Creek,3.70,20,20-21,BG,vegetation from outside the right of way,no,1103,13261,3150,
+F0047,2022-06-22,17:19:00,Line 11,Inland,Granger Gap,20.33,103,,BC,lightning,yes,0,0,4178,
+F0048,2022-06-23,13:40:00,Line 10,Inland,Mesquite Flat,9.12,48,47-48,CG,vegetation grown into the line,yes,0,0,6981,RL-12
+F0049,2022-06-25,13:30:18,Line 14,Live Oak Crossing,Caney Bend,25.52,131,131-132,BG,vegetation grown into the line,yes,0,0,3757,RL-21
+F0050,2022-06-25,14:24:20,Line 14,Live Oak Crossing,Caney Bend,-17.77,1,1-1,CG,vegetation grown into the line,yes,0,0,3757,
+F0051,2022-06-25,14:42:11,Line 10,Inland,Mesquite Flat,16.90,88,87-88,CG,vegetation grown into the line,yes,0,0,6981,RL-13
+F0052,2022-06-25,16:57:17,Line 15,Mesquite Flat,Live Oak Crossing,6.47,33,33-34,AG,vegetation grown into the line,yes,0,0,5486,
+F0053,2022-06-26,17:00:26,Line 13,Granger Gap,Live Oak Crossing,19.77,103,103-104,CG,vegetation from outside the right of way,yes,0,0,1608,RL-18
+F0054,2022-07-01,14:30:35,Line 13,Granger Gap,Live Oak Crossing,20.30,106,105-106,AG,vegetation from outside the right of way,no,1610,133525,0,RL-18
+F0055,2022-07-01,15:04:47,Line 1,Bayside,Port Alcorn,12.53,63,62-63,BG,vegetation from outside the right of way,no,3387,36414,3912,
+F0056,2022-07-01,17:31:42,Line 16,Port Alcorn,Tule Marsh,0.28,3,,AC,lightning,yes,0,0,0,
+F0057,2022-07-07,13:24:55,Line 13,Granger Gap,Live Oak Crossing,20.19,105,105-106,CG,vegetation from outside the right of way,no,1610,143549,0,RL-18
+F0058,2022-07-10,03:25:55,Line 9,Shell Ridge,Ponder Creek,0.70,5,,CG,other or unknown,no,1104,20294,3154,
+F0059,2022-07-12,14:57:31,Line 15,Mesquite Flat,Live Oak Crossing,13.31,68,,AG,lightning,yes,0,0,5494,
+F0060,2022-07-14,15:59:53,Line 13,Granger Gap,Live Oak Crossing,20.00,104,104-105,AG,vegetation from outside the right of way,yes,0,0,1610,RL-18
+F0061,2022-07-20,17:27:41,Line 13,Granger Gap,Live Oak Crossing,20.20,105,105-106,AG,vegetation from outside the right of way,yes,0,0,1610,RL-18
+F0062,2022-07-20,18:17:42,Line 3,Shell Ridge,Sedge Point,3.53,18,,CG,lightning,yes,0,0,3996,
+F0063,2022-07-23,14:35:30,Line 11,Inland,Granger Gap,23.53,118,118-119,BG,vegetation from outside the right of way,yes,0,0,4184,RL-14
+F0064,2022-07-28,16:54:52,Line 9,Shell Ridge,Ponder Creek,2.30,13,,BG,lightning,yes,0,0,4258,
+F0065,2022-07-31,05:00:27,Line 10,Inland,Mesquite Flat,3.13,16,,AG,equipment or hardware,no,6992,121535,0,
+F0066,2022-08-02,16:46:45,Line 16,Port Alcorn,Tule Marsh,5.74,30,29-30,AG,vegetation from outside the right of way,yes,0,0,0,
+F0067,2022-08-06,19:37:33,Line 13,Granger Gap,Live Oak Crossing,24.79,128,,AG,lightning,yes,0,0,1612,
+F0068,2022-08-10,08:24:13,Line 13,Granger Gap,Live Oak Crossing,13.53,72,,CG,insulator failure,no,1612,150055,0,RL-17
+F0069,2022-08-10,18:29:19,Line 10,Inland,Mesquite Flat,14.85,77,76-77,CG,vegetation from outside the right of way,yes,0,0,7001,
+F0070,2022-08-12,14:29:01,Line 14,Live Oak Crossing,Caney Bend,7.67,38,,CG,lightning,yes,0,0,3767,
+F0071,2022-08-12,15:05:46,Line 11,Inland,Granger Gap,22.75,115,,BG,lightning,yes,0,0,4189,
+F0072,2022-08-16,00:22:23,Line 9,Shell Ridge,Ponder Creek,4.90,26,,CG,other or unknown,yes,0,0,4264,
+F0073,2022-08-18,16:54:00,Line 12,Caney Bend,Mesquite Flat,16.52,85,,CG,lightning,yes,0,0,5427,
+F0074,2022-08-22,08:00:09,Line 5,Redfish Pass,Live Oak Crossing,14.23,73,,AG,other or unknown,yes,0,0,5276,
+F0075,2022-08-23,12:16:57,Line 16,Port Alcorn,Tule Marsh,8.59,44,43-44,CG,vegetation from outside the right of way,yes,0,0,0,
+F0076,2022-08-23,16:14:24,Line 8,Caney Bend,Ponder Creek,17.70,90,,BC,lightning,yes,0,0,4855,
+F0077,2022-10-09,19:43:19,Line 8,Caney Bend,Ponder Creek,18.50,94,,BG,lightning,no,4867,203514,0,
+F0078,2022-10-12,09:59:28,Line 12,Caney Bend,Mesquite Flat,9.56,49,,CG,other or unknown,yes,0,0,5440,
+F0079,2022-10-12,17:30:36,Line 16,Port Alcorn,Tule Marsh,3.20,18,,CG,lightning,yes,0,0,0,
+F0080,2022-10-12,18:03:53,Line 7,Tule Marsh,Caney Bend,14.00,74,,BG,lightning,yes,0,0,1541,
+F0081,2022-10-17,21:28:30,Line 5,Redfish Pass,Live Oak Crossing,11.41,59,,BC,lightning,yes,0,0,5289,
+F0082,2022-11-05,03:00:22,Line 12,Caney Bend,Mesquite Flat,20.56,104,,AG,bird or other animal,yes,0,0,5447,RL-16
+F0083,2022-11-12,05:33:18,Line 7,Tule Marsh,Caney Bend,9.48,51,,CG,bird or other animal,yes,0,0,1543,RL-10
+F0084,2022-11-14,03:07:24,Line 12,Caney Bend,Mesquite Flat,19.03,96,,AG,bird or other animal,yes,0,0,5447,RL-15
+F0085,2022-11-15,22:00:20,Line 16,Port Alcorn,Tule Marsh,3.34,18,,AG,vehicle or other third party,yes,0,0,0,
+F0086,2022-11-21,01:24:24,Line 14,Live Oak Crossing,Caney Bend,22.83,118,,CG,bird or other animal,yes,0,0,3782,RL-20
+F0087,2022-11-24,04:23:14,Line 7,Tule Marsh,Caney Bend,5.52,31,,AG,bird or other animal,yes,0,0,1543,RL-08
+F0088,2022-11-27,01:40:08,Line 16,Port Alcorn,Tule Marsh,4.49,24,,AG,bird or other animal,yes,0,0,0,RL-23
+F0089,2022-11-27,18:50:27,Line 14,Live Oak Crossing,Caney Bend,15.46,79,,BG,other or unknown,yes,0,0,3782,
+F0090,2022-12-10,09:19:36,Line 11,Inland,Granger Gap,23.57,118,118-119,AG,vegetation from outside the right of way,no,4210,136561,0,RL-14
+F0091,2022-12-14,03:24:38,Line 12,Caney Bend,Mesquite Flat,18.93,96,,AG,bird or other animal,yes,0,0,5454,RL-15
+F0092,2022-12-15,14:48:30,Line 8,Caney Bend,Ponder Creek,13.10,68,67-68,BG,vegetation from outside the right of way,no,4881,239759,0,
+F0093,2022-12-15,19:46:08,Line 5,Redfish Pass,Live Oak Crossing,19.63,100,99-100,BG,vegetation grown into the line,yes,0,0,5302,RL-05
+F0094,2022-12-20,04:42:04,Line 12,Caney Bend,Mesquite Flat,20.63,104,,AG,bird or other animal,yes,0,0,5454,RL-16
+F0095,2022-12-25,03:57:22,Line 14,Live Oak Crossing,Caney Bend,22.71,117,,CG,bird or other animal,yes,0,0,3787,RL-20
+F0096,2022-12-31,03:27:36,Line 16,Port Alcorn,Tule Marsh,4.44,23,,AG,bird or other animal,yes,0,0,0,RL-23
+F0097,2023-01-03,02:41:10,Line 7,Tule Marsh,Caney Bend,6.85,38,,CG,bird or other animal,yes,0,0,1547,RL-09
+F0098,2023-01-05,04:36:51,Line 7,Tule Marsh,Caney Bend,6.88,38,,AG,bird or other animal,yes,0,0,1547,RL-09
+F0099,2023-01-10,01:02:29,Line 2,Port Alcorn,Shell Ridge,10.50,56,,BG,salt contamination,yes,0,0,7650,
+F0100,2023-01-17,18:48:46,Line 9,Shell Ridge,Ponder Creek,23.30,119,119-120,BG,vegetation from outside the right of way,no,1113,19461,3179,
+F0101,2023-01-21,03:46:15,Line 7,Tule Marsh,Caney Bend,5.51,31,,CG,bird or other animal,yes,0,0,1547,RL-08
+F0102,2023-01-29,06:16:14,Line 7,Tule Marsh,Caney Bend,9.54,51,,CG,bird or other animal,yes,0,0,1547,RL-10
+F0103,2023-01-31,01:52:51,Line 7,Tule Marsh,Caney Bend,6.97,39,,AG,bird or other animal,yes,0,0,1547,RL-09
+F0104,2023-02-03,01:43:25,Line 2,Port Alcorn,Shell Ridge,13.75,72,,BG,other or unknown,yes,0,0,7660,
+F0105,2023-02-03,05:02:39,Line 2,Port Alcorn,Shell Ridge,10.64,57,,BG,other or unknown,yes,0,0,7660,
+F0106,2023-02-13,03:39:44,Line 7,Tule Marsh,Caney Bend,9.56,51,,AG,bird or other animal,yes,0,0,1549,RL-10
+F0107,2023-02-17,02:15:44,Line 12,Caney Bend,Mesquite Flat,18.86,96,,CG,bird or other animal,yes,0,0,5469,RL-15
+F0108,2023-02-23,05:02:42,Line 2,Port Alcorn,Shell Ridge,9.17,48,,CG,salt contamination,yes,0,0,7660,
+F0109,2023-02-24,05:31:15,Line 16,Port Alcorn,Tule Marsh,4.31,23,,AG,bird or other animal,yes,0,0,0,RL-23
+F0110,2023-02-25,08:27:41,Line 5,Redfish Pass,Live Oak Crossing,7.46,39,38-39,BG,vegetation from outside the right of way,yes,0,0,5317,
+F0111,2023-03-07,00:39:06,Line 12,Caney Bend,Mesquite Flat,15.14,77,,CG,other or unknown,yes,0,0,5477,
+F0112,2023-03-18,04:41:54,Line 7,Tule Marsh,Caney Bend,6.93,38,,CG,bird or other animal,yes,0,0,1551,RL-09
+F0113,2023-03-23,17:37:04,Line 5,Redfish Pass,Live Oak Crossing,14.57,75,74-75,BG,vegetation from outside the right of way,no,5323,69682,0,
+F0114,2023-03-24,11:28:08,Line 9,Shell Ridge,Ponder Creek,1.80,11,10-11,AG,vegetation from outside the right of way,yes,0,0,4304,
+F0115,2023-03-24,18:16:22,Line 2,Port Alcorn,Shell Ridge,7.98,43,42-43,CG,vegetation from outside the right of way,no,7670,48943,0,
+F0116,2023-04-22,07:43:10,Line 7,Tule Marsh,Caney Bend,14.09,74,,AG,other or unknown,yes,0,0,1553,
+F0117,2023-06-01,14:38:12,Line 9,Shell Ridge,Ponder Creek,7.80,41,,AG,lightning,yes,0,0,4318,
+F0118,2023-06-07,14:47:33,Line 4,Bayside,Redfish Pass,7.88,41,,BG,other or unknown,yes,0,0,2601,
+F0119,2023-06-11,17:55:06,Line 5,Redfish Pass,Live Oak Crossing,0.05,1,,BG,lightning,yes,0,0,5344,
+F0120,2023-06-11,18:13:03,Line 4,Bayside,Redfish Pass,10.18,53,,BG,lightning,yes,0,0,2601,
+F0121,2023-06-23,18:40:53,Line 1,Bayside,Port Alcorn,8.54,43,,CG,lightning,yes,0,0,7406,
+F0122,2023-06-24,16:31:59,Line 4,Bayside,Redfish Pass,8.24,43,,BG,lightning,yes,0,0,2601,
+F0123,2023-07-01,03:18:45,Line 15,Mesquite Flat,Live Oak Crossing,13.64,69,,CG,other or unknown,yes,0,0,5580,
+F0124,2023-07-03,16:23:40,Line 12,Caney Bend,Mesquite Flat,9.95,51,,AG,lightning,yes,0,0,5504,
+F0125,2023-07-04,15:00:53,Line 9,Shell Ridge,Ponder Creek,19.20,98,,CG,lightning,yes,0,0,4326,
+F0126,2023-07-06,16:52:31,Line 4,Bayside,Redfish Pass,5.28,28,,AC,lightning,yes,0,0,2605,
+F0127,2023-07-07,16:45:11,Line 8,Caney Bend,Ponder Creek,12.50,65,,BG,lightning,yes,0,0,4924,
+F0128,2023-07-07,17:59:34,Line 3,Shell Ridge,Sedge Point,17.46,88,,BG,lightning,yes,0,0,4059,
+F0129,2023-07-07,19:13:14,Line 7,Tule Marsh,Caney Bend,4.73,26,,BG,lightning,yes,0,0,1559,
+F0130,2023-07-13,18:22:02,Line 13,Granger Gap,Live Oak Crossing,20.22,105,105-106,CG,vegetation from outside the right of way,yes,0,0,1635,RL-18
+F0131,2023-07-17,17:41:43,Line 14,Live Oak Crossing,Caney Bend,20.40,105,,AG,lightning,yes,0,0,3821,
+F0132,2023-07-17,19:18:42,Line 12,Caney Bend,Mesquite Flat,15.37,78,78-79,AG,vegetation from outside the right of way,no,2348,46911,3156,
+F0133,2023-07-17,20:46:31,Line 5,Redfish Pass,Live Oak Crossing,9.19,48,,CG,lightning,yes,0,0,5351,
+F0134,2023-07-21,12:33:17,Line 12,Caney Bend,Mesquite Flat,24.76,125,,CG,lightning,yes,0,0,5504,
+F0135,2023-07-25,15:17:29,Line 13,Granger Gap,Live Oak Crossing,19.88,104,103-104,BG,vegetation from outside the right of way,yes,0,0,1635,RL-18
+F0136,2023-07-25,15:42:42,Line 14,Live Oak Crossing,Caney Bend,27.24,140,139-140,AG,vegetation grown into the line,yes,0,0,3821,
+F0137,2023-07-29,14:58:31,Line 10,Inland,Mesquite Flat,8.98,47,46-47,CG,vegetation grown into the line,yes,0,0,7101,RL-12
+F0138,2023-07-30,21:40:26,Line 16,Port Alcorn,Tule Marsh,6.27,32,,CG,other or unknown,yes,0,0,0,
+F0139,2023-07-31,13:43:56,Line 14,Live Oak Crossing,Caney Bend,25.77,133,132-133,BG,vegetation grown into the line,yes,0,0,3821,RL-21
+F0140,2023-07-31,14:26:03,Line 1,Bayside,Port Alcorn,14.68,74,,AC,lightning,yes,0,0,7415,
+F0141,2023-07-31,14:54:46,Line 2,Port Alcorn,Shell Ridge,4.81,26,,BG,lightning,yes,0,0,7709,
+F0142,2023-07-31,15:08:03,Line 5,Redfish Pass,Live Oak Crossing,20.00,102,101-102,CG,vegetation grown into the line,yes,0,0,5351,RL-05
+F0143,2023-07-31,15:22:06,Line 15,Mesquite Flat,Live Oak Crossing,6.38,33,33-34,AG,vegetation grown into the line,yes,0,0,5580,
+F0144,2023-07-31,16:15:14,Line 14,Live Oak Crossing,Caney Bend,,,,CG,vegetation grown into the line,yes,0,0,3821,
+F0145,2023-07-31,16:56:05,Line 6,Bayside,Tule Marsh,10.94,58,57-58,CG,vegetation grown into the line,yes,0,0,3698,RL-06
+F0146,2023-07-31,17:21:53,Line 12,Caney Bend,Mesquite Flat,8.63,44,44-45,BG,vegetation grown into the line,no,2348,54013,3156,
+F0147,2023-08-05,18:56:58,Line 2,Port Alcorn,Shell Ridge,10.34,55,,AC,lightning,yes,0,0,7721,
+F0148,2023-08-06,02:26:48,Line 16,Port Alcorn,Tule Marsh,8.10,42,,BG,other or unknown,yes,0,0,0,
+F0149,2023-08-06,16:39:24,Line 13,Granger Gap,Live Oak Crossing,9.36,50,,CG,lightning,yes,0,0,1637,
+F0150,2023-08-10,23:58:22,Line 8,Caney Bend,Ponder Creek,9.70,50,,CG,vehicle or other third party,no,4931,241690,0,
+F0151,2023-08-13,14:19:03,Line 9,Shell Ridge,Ponder Creek,33.80,165,,AC,lightning,yes,0,0,4331,
+F0152,2023-08-13,17:24:38,Line 2,Port Alcorn,Shell Ridge,6.85,37,,AG,lightning,yes,0,0,7721,
+F0153,2023-08-14,10:15:30,Line 6,Bayside,Tule Marsh,18.02,95,,BG,lightning,yes,0,0,3704,
+F0154,2023-08-14,16:14:04,Line 6,Bayside,Tule Marsh,15.84,83,,BG,lightning,yes,0,0,3704,
+F0155,2023-08-14,18:23:40,Line 15,Mesquite Flat,Live Oak Crossing,23.32,118,117-118,AG,vegetation from outside the right of way,no,5588,51680,0,
+F0156,2023-08-15,13:06:28,Line 9,Shell Ridge,Ponder Creek,27.79,142,,AG,lightning,yes,0,0,4331,
+F0157,2023-08-15,16:47:24,Line 13,Granger Gap,Live Oak Crossing,20.51,107,106-107,CG,vegetation from outside the right of way,yes,0,0,1637,RL-18
+F0158,2023-08-16,21:47:43,Line 11,Inland,Granger Gap,15.57,79,,CG,lightning,yes,0,0,4254,
+F0159,2023-08-19,13:12:54,Line 2,Port Alcorn,Shell Ridge,0.77,5,,CG,other or unknown,yes,0,0,7721,
+F0160,2023-08-27,05:30:27,Line 8,Caney Bend,Ponder Creek,18.20,93,,BG,other or unknown,no,4931,204010,0,
+F0161,2023-09-13,16:43:22,Line 14,Live Oak Crossing,Caney Bend,2.86,14,,BC,lightning,yes,0,0,3831,
+F0162,2023-09-13,18:26:22,Line 14,Live Oak Crossing,Caney Bend,10.33,52,,CG,lightning,yes,0,0,3831,
+F0163,2023-09-13,19:18:31,Line 13,Granger Gap,Live Oak Crossing,19.98,104,104-105,BG,vegetation from outside the right of way,no,1639,175238,0,RL-18
+F0164,2023-09-14,19:44:14,Line 15,Mesquite Flat,Live Oak Crossing,14.74,75,74-75,CG,vegetation from outside the right of way,no,5595,40788,0,
+F0165,2023-09-16,11:18:13,Line 4,Bayside,Redfish Pass,3.25,17,,BG,other or unknown,yes,0,0,2610,
+F0166,2023-09-17,13:49:36,Line 1,Bayside,Port Alcorn,12.09,60,,AB,lightning,yes,0,0,7434,
+F0167,2023-09-19,14:28:29,Line 13,Granger Gap,Live Oak Crossing,20.15,105,104-105,BG,vegetation from outside the right of way,yes,0,0,1639,RL-18
+F0168,2023-09-19,19:00:49,Line 9,Shell Ridge,Ponder Creek,19.00,97,,BG,lightning,yes,0,0,4337,
+F0169,2023-09-19,19:27:19,Line 7,Tule Marsh,Caney Bend,8.88,48,,AG,lightning,yes,0,0,1563,
+F0170,2023-09-19,21:49:52,Line 1,Bayside,Port Alcorn,16.87,85,,AG,equipment or hardware,no,3450,78103,3984,
+F0171,2023-10-02,01:07:37,Line 15,Mesquite Flat,Live Oak Crossing,23.85,120,,BG,other or unknown,yes,0,0,5601,
+F0172,2023-10-08,02:48:53,Line 15,Mesquite Flat,Live Oak Crossing,9.22,47,,CG,other or unknown,yes,0,0,5601,
+F0173,2023-10-29,03:52:28,Line 3,Shell Ridge,Sedge Point,2.88,15,,AG,vehicle or other third party,no,4073,242365,0,
+F0174,2023-11-02,10:13:32,Line 12,Caney Bend,Mesquite Flat,11.19,57,,BG,other or unknown,yes,0,0,5533,
+F0175,2023-11-04,23:55:54,Line 4,Bayside,Redfish Pass,9.38,49,,AG,other or unknown,yes,0,0,2617,
+F0176,2023-11-16,13:11:21,Line 10,Inland,Mesquite Flat,10.75,56,,BG,other or unknown,yes,0,0,7137,
+F0177,2023-11-20,04:34:54,Line 12,Caney Bend,Mesquite Flat,18.73,95,,AG,bird or other animal,yes,0,0,5533,RL-15
+F0178,2023-11-21,03:10:53,Line 7,Tule Marsh,Caney Bend,9.62,52,,AG,bird or other animal,yes,0,0,1567,RL-10
+F0179,2023-11-21,04:55:29,Line 9,Shell Ridge,Ponder Creek,10.40,54,,BG,equipment or hardware,no,1128,12540,3220,
+F0180,2023-11-21,06:12:03,Line 12,Caney Bend,Mesquite Flat,18.93,96,,CG,bird or other animal,yes,0,0,5533,RL-15
+F0181,2023-11-26,06:29:48,Line 7,Tule Marsh,Caney Bend,9.68,52,,AG,bird or other animal,yes,0,0,1567,RL-10
+F0182,2023-11-27,04:07:29,Line 12,Caney Bend,Mesquite Flat,20.78,105,,AG,bird or other animal,yes,0,0,5533,RL-16
+F0183,2023-12-08,09:44:32,Line 10,Inland,Mesquite Flat,15.59,81,,AG,other or unknown,yes,0,0,7146,
+F0184,2023-12-12,02:52:33,Line 2,Port Alcorn,Shell Ridge,5.72,31,,CG,salt contamination,yes,0,0,7759,
+F0185,2023-12-13,05:40:30,Line 12,Caney Bend,Mesquite Flat,20.61,104,,CG,bird or other animal,yes,0,0,5540,RL-16
+F0186,2023-12-13,08:08:04,Line 3,Shell Ridge,Sedge Point,20.93,106,,AG,salt contamination,yes,0,0,4085,
+F0187,2023-12-17,11:11:21,Line 11,Inland,Granger Gap,2.97,16,16-17,BG,vegetation from outside the right of way,yes,0,0,4277,
+F0188,2023-12-17,19:18:45,Line 13,Granger Gap,Live Oak Crossing,12.40,67,66-67,CG,vegetation from outside the right of way,no,1646,105418,0,
+F0189,2023-12-28,16:27:35,Line 14,Live Oak Crossing,Caney Bend,21.63,112,,BG,vehicle or other third party,yes,0,0,3846,
+F0190,2024-01-01,03:45:15,Line 14,Live Oak Crossing,Caney Bend,22.90,118,,AG,bird or other animal,yes,0,0,3851,RL-20
+F0191,2024-01-02,02:58:47,Line 6,Bayside,Tule Marsh,15.07,79,,AG,bird or other animal,yes,0,0,3727,RL-07
+F0192,2024-01-05,06:28:49,Line 3,Shell Ridge,Sedge Point,21.16,107,,AG,other or unknown,yes,0,0,4091,
+F0193,2024-01-10,03:45:34,Line 14,Live Oak Crossing,Caney Bend,22.72,117,,CG,bird or other animal,yes,0,0,3851,RL-20
+F0194,2024-01-15,22:32:17,Line 2,Port Alcorn,Shell Ridge,11.39,60,,BG,salt contamination,yes,0,0,7770,
+F0195,2024-01-18,22:56:07,Line 3,Shell Ridge,Sedge Point,21.40,108,108-109,BG,vegetation from outside the right of way,yes,0,0,4091,
+F0196,2024-01-19,08:58:23,Line 6,Bayside,Tule Marsh,12.28,65,65-66,AG,vegetation from outside the right of way,yes,0,0,3727,
+F0197,2024-01-19,14:49:58,Line 14,Live Oak Crossing,Caney Bend,20.28,105,104-105,BG,vegetation from outside the right of way,yes,0,0,3851,
+F0198,2024-01-19,19:49:16,Line 11,Inland,Granger Gap,23.62,119,118-119,BG,vegetation from outside the right of way,yes,0,0,4283,RL-14
+F0199,2024-01-23,06:15:09,Line 7,Tule Marsh,Caney Bend,5.66,31,,CG,bird or other animal,yes,0,0,1571,RL-08
+F0200,2024-01-23,23:26:37,Line 2,Port Alcorn,Shell Ridge,20.97,109,,BG,salt contamination,yes,0,0,7770,
+F0201,2024-01-24,01:25:32,Line 3,Shell Ridge,Sedge Point,21.22,108,,CG,salt contamination,yes,0,0,4091,
+F0202,2024-02-12,02:27:17,Line 7,Tule Marsh,Caney Bend,9.67,52,,CG,bird or other animal,yes,0,0,1573,RL-10
+F0203,2024-02-12,06:18:41,Line 12,Caney Bend,Mesquite Flat,20.55,104,,AG,bird or other animal,yes,0,0,5555,RL-16
+F0204,2024-02-17,17:07:12,Line 8,Caney Bend,Ponder Creek,20.20,103,103-104,CG,vegetation from outside the right of way,yes,0,0,4969,
+F0205,2024-02-17,19:02:25,Line 4,Bayside,Redfish Pass,1.79,10,10-11,AG,vegetation from outside the right of way,yes,0,0,2628,
+F0206,2024-02-18,10:13:09,Line 13,Granger Gap,Live Oak Crossing,20.06,105,104-105,BG,vegetation from outside the right of way,yes,0,0,1650,RL-18
+F0207,2024-02-21,01:55:19,Line 7,Tule Marsh,Caney Bend,5.58,31,,AG,bird or other animal,yes,0,0,1573,RL-08
+F0208,2024-02-26,14:17:59,Line 3,Shell Ridge,Sedge Point,8.12,41,,CG,insulator failure,yes,0,0,4096,RL-03
+F0209,2024-03-06,01:12:55,Line 7,Tule Marsh,Caney Bend,9.56,51,,CG,bird or other animal,yes,0,0,1575,RL-10
+F0210,2024-03-17,13:07:27,Line 12,Caney Bend,Mesquite Flat,0.92,5,,BG,equipment or hardware,no,2373,48005,3190,
+F0211,2024-03-19,06:10:57,Line 7,Tule Marsh,Caney Bend,5.60,31,,AG,bird or other animal,yes,0,0,1575,RL-08
+F0212,2024-03-19,08:15:19,Line 9,Shell Ridge,Ponder Creek,26.68,137,,BG,insulator failure,yes,0,0,4370,RL-11
+F0213,2024-03-19,19:24:02,Line 3,Shell Ridge,Sedge Point,7.85,39,,CG,other or unknown,yes,0,0,4102,
+F0214,2024-03-20,04:37:55,Line 6,Bayside,Tule Marsh,15.14,79,,CG,bird or other animal,yes,0,0,3736,RL-07
+F0215,2024-03-21,08:42:14,Line 5,Redfish Pass,Live Oak Crossing,4.48,24,,BG,other or unknown,yes,0,0,5409,
+F0216,2024-03-25,06:26:56,Line 7,Tule Marsh,Caney Bend,9.64,52,,AG,bird or other animal,yes,0,0,1575,RL-10
+F0217,2024-03-29,00:43:53,Line 2,Port Alcorn,Shell Ridge,15.71,82,,BG,salt contamination,yes,0,0,7790,
+F0218,2024-03-29,06:35:50,Line 2,Port Alcorn,Shell Ridge,13.54,71,,AG,salt contamination,yes,0,0,7790,
+F0219,2024-03-30,06:12:30,Line 7,Tule Marsh,Caney Bend,5.55,31,,AG,bird or other animal,yes,0,0,1575,RL-08
+F0220,2024-04-05,13:12:19,Line 6,Bayside,Tule Marsh,3.16,17,,CG,lightning,yes,0,0,3741,
+F0221,2024-04-05,13:34:16,Line 6,Bayside,Tule Marsh,12.16,64,,BC,lightning,yes,0,0,3741,
+F0222,2024-04-13,21:35:16,Line 12,Caney Bend,Mesquite Flat,22.02,112,,AG,lightning,yes,0,0,5570,
+F0223,2024-04-19,21:50:16,Line 1,Bayside,Port Alcorn,19.57,100,,CG,lightning,no,3483,73092,4020,
+F0224,2024-04-25,21:18:01,Line 15,Mesquite Flat,Live Oak Crossing,4.91,25,,AG,equipment or hardware,no,5646,67171,0,
+F0225,2024-05-05,14:34:53,Line 12,Caney Bend,Mesquite Flat,8.90,46,,AG,lightning,yes,0,0,5576,
+F0226,2024-05-05,15:39:17,Line 14,Live Oak Crossing,Caney Bend,3.87,19,19-20,BG,vegetation from outside the right of way,yes,0,0,3871,
+F0227,2024-05-18,19:23:24,Line 10,Inland,Mesquite Flat,12.54,65,,AG,lightning,yes,0,0,7195,
+F0228,2024-05-25,15:05:51,Line 13,Granger Gap,Live Oak Crossing,20.28,106,105-106,AG,vegetation from outside the right of way,yes,0,0,1656,RL-18
+F0229,2024-05-25,15:50:16,Line 13,Granger Gap,Live Oak Crossing,9.20,49,,BG,lightning,yes,0,0,1656,
+F0230,2024-06-05,16:42:51,Line 2,Port Alcorn,Shell Ridge,1.26,8,,CG,lightning,yes,0,0,7820,
+F0231,2024-06-13,10:40:13,Line 2,Port Alcorn,Shell Ridge,21.04,110,,CG,equipment or hardware,no,7820,61943,0,
+F0232,2024-06-15,16:26:57,Line 10,Inland,Mesquite Flat,10.03,53,52-53,AG,vegetation from outside the right of way,yes,0,0,7203,
+F0233,2024-06-15,18:14:16,Line 13,Granger Gap,Live Oak Crossing,20.15,105,104-105,CG,vegetation from outside the right of way,yes,0,0,1659,RL-18
+F0234,2024-06-19,00:17:45,Line 2,Port Alcorn,Shell Ridge,3.92,22,,BG,other or unknown,yes,0,0,7820,
+F0235,2024-06-21,03:28:48,Line 2,Port Alcorn,Shell Ridge,21.52,112,,BG,other or unknown,yes,0,0,7820,
+F0236,2024-06-29,14:39:54,Line 14,Live Oak Crossing,Caney Bend,14.57,74,,BG,lightning,yes,0,0,3877,
+F0237,2024-06-29,15:05:10,Line 13,Granger Gap,Live Oak Crossing,15.45,82,,BG,lightning,no,1659,68955,0,
+F0238,2024-06-29,15:46:43,Line 13,Granger Gap,Live Oak Crossing,20.22,105,105-106,CG,vegetation from outside the right of way,yes,0,0,1659,RL-18
+F0239,2024-07-03,17:48:20,Line 10,Inland,Mesquite Flat,22.95,118,,AB,lightning,yes,0,0,7213,
+F0240,2024-07-13,21:54:47,Line 9,Shell Ridge,Ponder Creek,17.50,89,,CG,other or unknown,yes,0,0,4393,
+F0241,2024-07-18,15:50:23,Line 14,Live Oak Crossing,Caney Bend,5.66,28,,AB,lightning,yes,0,0,3880,
+F0242,2024-07-23,14:00:11,Line 13,Granger Gap,Live Oak Crossing,19.99,104,104-105,CG,vegetation from outside the right of way,yes,0,0,1661,RL-18
+F0243,2024-07-23,14:15:04,Line 15,Mesquite Flat,Live Oak Crossing,8.56,44,,AG,lightning,yes,0,0,5667,
+F0244,2024-07-24,17:06:58,Line 6,Bayside,Tule Marsh,4.21,23,,BC,lightning,yes,0,0,3756,
+F0245,2024-07-28,17:40:51,Line 11,Inland,Granger Gap,23.85,120,119-120,CG,vegetation from outside the right of way,yes,0,0,4316,RL-14
+F0246,2024-08-01,14:20:32,Line 9,Shell Ridge,Ponder Creek,23.46,120,,CG,lightning,yes,0,0,4399,
+F0247,2024-08-15,16:11:27,Line 8,Caney Bend,Ponder Creek,8.70,44,,AB,lightning,yes,0,0,5009,
+F0248,2024-08-15,16:15:25,Line 13,Granger Gap,Live Oak Crossing,20.23,105,105-106,AG,vegetation from outside the right of way,yes,0,0,1663,RL-18
+F0249,2024-08-15,16:35:54,Line 5,Redfish Pass,Live Oak Crossing,15.53,79,,AG,lightning,yes,0,0,5442,
+F0250,2024-08-16,13:03:56,Line 16,Port Alcorn,Tule Marsh,8.48,43,,AB,lightning,yes,0,0,0,
+F0251,2024-08-26,13:12:27,Line 5,Redfish Pass,Live Oak Crossing,21.72,110,,CG,lightning,yes,0,0,5442,
+F0252,2024-08-26,13:55:07,Line 13,Granger Gap,Live Oak Crossing,20.07,105,104-105,BG,vegetation from outside the right of way,yes,0,0,1663,RL-18
+F0253,2024-09-03,04:29:45,Line 11,Inland,Granger Gap,17.38,88,,AG,equipment or hardware,no,4329,296645,0,
+F0254,2024-09-07,14:07:48,Line 13,Granger Gap,Live Oak Crossing,20.36,106,106-107,CG,vegetation from outside the right of way,yes,0,0,1665,RL-18
+F0255,2024-09-19,12:35:27,Line 5,Redfish Pass,Live Oak Crossing,1.35,8,,BG,lightning,yes,0,0,5450,
+F0256,2024-09-23,06:50:41,Line 2,Port Alcorn,Shell Ridge,12.19,64,,BG,insulator failure,yes,0,0,7850,RL-02
+F0257,2024-09-23,06:52:25,Line 3,Shell Ridge,Sedge Point,8.45,43,,AG,insulator failure,yes,0,0,4133,RL-03
+F0258,2024-09-24,02:54:35,Line 11,Inland,Granger Gap,25.20,127,,AG,other or unknown,yes,0,0,4329,
+F0259,2024-10-06,16:26:28,Line 2,Port Alcorn,Shell Ridge,18.54,96,,BG,lightning,yes,0,0,7860,
+F0260,2024-11-10,17:22:04,Line 3,Shell Ridge,Sedge Point,14.90,76,,CG,lightning,yes,0,0,4145,
+F0261,2024-11-10,17:53:25,Line 13,Granger Gap,Live Oak Crossing,23.24,121,,CG,lightning,yes,0,0,1669,
+F0262,2024-11-10,18:22:57,Line 8,Caney Bend,Ponder Creek,4.80,25,,AG,lightning,yes,0,0,5027,
+F0263,2024-11-11,02:53:55,Line 6,Bayside,Tule Marsh,15.11,79,,CG,bird or other animal,yes,0,0,3774,RL-07
+F0264,2024-11-15,07:33:50,Line 5,Redfish Pass,Live Oak Crossing,17.26,88,,AG,insulator failure,yes,0,0,5464,RL-04
+F0265,2024-11-23,19:13:14,Line 12,Caney Bend,Mesquite Flat,2.58,14,,AG,other or unknown,yes,0,0,5618,
+F0266,2024-11-29,04:45:49,Line 7,Tule Marsh,Caney Bend,5.55,31,,CG,bird or other animal,yes,0,0,1592,RL-08
+F0267,2024-11-30,08:10:38,Line 3,Shell Ridge,Sedge Point,8.29,42,,AG,insulator failure,no,4145,144279,0,RL-03
+F0268,2024-11-30,15:27:33,Line 2,Port Alcorn,Shell Ridge,12.02,63,,AG,insulator failure,yes,0,0,7872,RL-02
+F0269,2024-12-02,08:33:17,Line 5,Redfish Pass,Live Oak Crossing,21.42,108,108-109,BG,vegetation from outside the right of way,yes,0,0,5470,
+F0270,2024-12-02,13:57:22,Line 16,Port Alcorn,Tule Marsh,1.39,8,8-9,CG,vegetation from outside the right of way,yes,0,0,0,
+F0271,2024-12-19,04:46:56,Line 7,Tule Marsh,Caney Bend,5.56,31,,AG,bird or other animal,yes,0,0,1594,RL-08
+F0272,2024-12-20,01:48:06,Line 2,Port Alcorn,Shell Ridge,5.80,31,,CG,salt contamination,yes,0,0,7882,
+F0273,2025-01-05,01:15:27,Line 7,Tule Marsh,Caney Bend,9.56,51,,AG,bird or other animal,yes,0,0,1596,RL-10
+F0274,2025-01-05,04:48:38,Line 14,Live Oak Crossing,Caney Bend,22.87,118,,CG,bird or other animal,yes,0,0,3911,RL-20
+F0275,2025-01-06,03:53:07,Line 7,Tule Marsh,Caney Bend,9.64,52,,AG,bird or other animal,yes,0,0,1596,RL-10
+F0276,2025-01-11,11:09:52,Line 13,Granger Gap,Live Oak Crossing,20.12,105,104-105,BG,vegetation from outside the right of way,yes,0,0,1674,RL-18
+F0277,2025-01-11,11:46:56,Line 13,Granger Gap,Live Oak Crossing,2.33,13,12-13,CG,vegetation from outside the right of way,yes,0,0,1674,
+F0278,2025-01-19,18:17:44,Line 11,Inland,Granger Gap,23.64,119,118-119,BG,vegetation from outside the right of way,yes,0,0,4350,RL-14
+F0279,2025-01-20,09:52:31,Line 1,Bayside,Port Alcorn,1.67,9,9-10,AG,vegetation from outside the right of way,yes,0,0,7590,
+F0280,2025-01-29,04:05:56,Line 16,Port Alcorn,Tule Marsh,4.38,23,,CG,bird or other animal,yes,0,0,0,RL-23
+F0281,2025-02-17,04:46:18,Line 2,Port Alcorn,Shell Ridge,14.34,76,,BG,salt contamination,yes,0,0,7902,
+F0282,2025-02-22,20:15:47,Line 11,Inland,Granger Gap,7.70,41,,CG,vehicle or other third party,no,4356,217303,0,
+F0283,2025-03-03,03:13:50,Line 7,Tule Marsh,Caney Bend,5.50,30,,AG,bird or other animal,yes,0,0,1600,RL-08
+F0284,2025-03-13,19:24:04,Line 15,Mesquite Flat,Live Oak Crossing,11.03,56,,BG,insulator failure,yes,0,0,5726,RL-22
+F0285,2025-03-15,12:52:22,Line 3,Shell Ridge,Sedge Point,17.39,88,87-88,BG,vegetation from outside the right of way,yes,0,0,4165,
+F0286,2025-03-20,22:10:48,Line 2,Port Alcorn,Shell Ridge,10.20,54,,BG,salt contamination,yes,0,0,7910,
+F0287,2025-03-21,00:58:20,Line 2,Port Alcorn,Shell Ridge,7.23,39,,AG,salt contamination,yes,0,0,7910,
+F0288,2025-03-21,02:21:28,Line 2,Port Alcorn,Shell Ridge,7.82,42,,CG,other or unknown,yes,0,0,7910,
+F0289,2025-03-21,04:18:36,Line 2,Port Alcorn,Shell Ridge,8.14,44,,AG,salt contamination,yes,0,0,7910,
+F0290,2025-03-23,09:17:05,Line 11,Inland,Granger Gap,23.94,120,120-121,BG,vegetation from outside the right of way,yes,0,0,4361,RL-14
+F0291,2025-04-05,19:48:54,Line 12,Caney Bend,Mesquite Flat,4.31,23,,BG,other or unknown,no,2413,41664,3244,
+F0292,2025-04-06,15:28:45,Line 9,Shell Ridge,Ponder Creek,26.46,136,,AG,insulator failure,yes,0,0,4445,RL-11
+F0293,2025-04-11,10:20:29,Line 9,Shell Ridge,Ponder Creek,26.63,137,,BG,insulator failure,yes,0,0,4445,RL-11
+F0294,2025-04-13,08:21:49,Line 2,Port Alcorn,Shell Ridge,11.98,63,,AG,insulator failure,yes,0,0,7923,RL-02
+F0295,2025-04-13,13:30:30,Line 5,Redfish Pass,Live Oak Crossing,17.52,89,,CG,insulator failure,yes,0,0,5500,RL-04
+F0296,2025-04-26,02:23:40,Line 4,Bayside,Redfish Pass,6.67,35,,BG,other or unknown,yes,0,0,2677,
+F0297,2025-04-27,16:55:33,Line 3,Shell Ridge,Sedge Point,10.77,54,,BG,lightning,yes,0,0,4172,
+F0298,2025-05-05,18:36:24,Line 10,Inland,Mesquite Flat,15.76,82,,CG,lightning,yes,0,0,7307,
+F0299,2025-05-26,10:11:12,Line 5,Redfish Pass,Live Oak Crossing,17.16,87,,CG,insulator failure,yes,0,0,5507,RL-04
+F0300,2025-06-02,04:19:13,Line 6,Bayside,Tule Marsh,8.67,46,,BG,vehicle or other third party,yes,0,0,3810,
+F0301,2025-06-06,16:35:08,Line 15,Mesquite Flat,Live Oak Crossing,1.91,10,,CG,lightning,yes,0,0,5749,
+F0302,2025-06-08,13:26:50,Line 6,Bayside,Tule Marsh,10.76,57,56-57,AG,vegetation grown into the line,yes,0,0,3810,RL-06
+F0303,2025-06-09,13:31:27,Line 13,Granger Gap,Live Oak Crossing,0.11,1,,AG,lightning,yes,0,0,1685,
+F0304,2025-06-16,15:27:43,Line 3,Shell Ridge,Sedge Point,21.13,107,,AC,lightning,yes,0,0,4183,
+F0305,2025-06-19,16:13:40,Line 8,Caney Bend,Ponder Creek,8.70,44,,BG,lightning,yes,0,0,5073,
+F0306,2025-06-21,06:05:46,Line 11,Inland,Granger Gap,25.91,130,,CG,equipment or hardware,no,4378,268554,0,
+F0307,2025-06-25,12:14:18,Line 10,Inland,Mesquite Flat,17.02,88,88-89,AG,vegetation grown into the line,yes,0,0,7316,RL-13
+F0308,2025-06-25,12:34:36,Line 5,Redfish Pass,Live Oak Crossing,,,,CG,vegetation grown into the line,yes,0,0,5514,
+F0309,2025-06-25,13:14:54,Line 14,Live Oak Crossing,Caney Bend,25.53,131,131-132,AG,vegetation grown into the line,yes,0,0,3938,RL-21
+F0310,2025-06-25,13:33:14,Line 10,Inland,Mesquite Flat,9.25,49,48-49,AG,vegetation grown into the line,yes,0,0,7316,RL-12
+F0311,2025-07-05,16:38:40,Line 11,Inland,Granger Gap,-1.45,1,,BC,lightning,yes,0,0,4385,
+F0312,2025-07-05,17:42:53,Line 9,Shell Ridge,Ponder Creek,11.50,60,,AG,lightning,yes,0,0,4462,
+F0313,2025-07-17,01:58:50,Line 16,Port Alcorn,Tule Marsh,8.27,42,,CG,other or unknown,yes,0,0,0,
+F0314,2025-07-17,15:28:42,Line 14,Live Oak Crossing,Caney Bend,30.75,158,,CG,lightning,yes,0,0,3941,
+F0315,2025-07-27,16:01:04,Line 15,Mesquite Flat,Live Oak Crossing,24.33,123,,AG,lightning,yes,0,0,5755,
+F0316,2025-07-28,13:55:55,Line 14,Live Oak Crossing,Caney Bend,25.68,132,132-133,CG,vegetation grown into the line,yes,0,0,3941,RL-21
+F0317,2025-07-28,13:59:23,Line 6,Bayside,Tule Marsh,10.83,57,57-58,CG,vegetation grown into the line,yes,0,0,3815,RL-06
+F0318,2025-07-28,14:14:38,Line 5,Redfish Pass,Live Oak Crossing,20.04,102,101-102,CG,vegetation grown into the line,yes,0,0,5521,RL-05
+F0319,2025-07-30,14:07:59,Line 13,Granger Gap,Live Oak Crossing,20.15,105,104-105,AG,vegetation from outside the right of way,yes,0,0,1687,RL-18
+F0320,2025-08-05,08:13:19,Line 8,Caney Bend,Ponder Creek,5.90,31,,AG,other or unknown,yes,0,0,5086,
+F0321,2025-08-05,14:15:00,Line 11,Inland,Granger Gap,23.84,120,119-120,BG,vegetation from outside the right of way,no,4388,199778,0,RL-14
+F0322,2025-08-09,16:49:43,Line 8,Caney Bend,Ponder Creek,12.10,62,,AB,lightning,yes,0,0,5086,
+F0323,2025-08-13,15:08:57,Line 8,Caney Bend,Ponder Creek,3.40,18,,AG,lightning,yes,0,0,5086,
+F0324,2025-08-16,09:59:19,Line 5,Redfish Pass,Live Oak Crossing,17.48,89,,BG,insulator failure,yes,0,0,5526,RL-04
+F0325,2025-08-22,11:51:33,Line 15,Mesquite Flat,Live Oak Crossing,11.25,57,,AG,insulator failure,yes,0,0,5765,RL-22
+F0326,2025-08-30,17:00:12,Line 3,Shell Ridge,Sedge Point,18.82,95,,CG,lightning,yes,0,0,4192,
+F0327,2025-08-31,11:56:00,Line 13,Granger Gap,Live Oak Crossing,20.04,104,104-105,BG,vegetation from outside the right of way,yes,0,0,1689,RL-18
+F0328,2025-09-09,12:37:09,Line 6,Bayside,Tule Marsh,4.50,24,24-25,BG,vegetation from outside the right of way,yes,0,0,3825,
+F0329,2025-09-09,18:04:43,Line 11,Inland,Granger Gap,9.73,50,,CG,lightning,yes,0,0,4394,
+F0330,2025-09-12,21:58:14,Line 10,Inland,Mesquite Flat,3.01,15,,BG,other or unknown,yes,0,0,7346,
+F0331,2025-09-17,13:15:59,Line 11,Inland,Granger Gap,18.60,94,,AG,lightning,yes,0,0,4394,
+F0332,2025-09-17,19:48:07,Line 12,Caney Bend,Mesquite Flat,18.40,93,,CG,lightning,yes,0,0,5693,
+F0333,2025-09-22,21:30:02,Line 2,Port Alcorn,Shell Ridge,9.35,49,,AG,lightning,no,7974,85140,0,
+F0334,2025-09-25,07:51:21,Line 9,Shell Ridge,Ponder Creek,26.51,136,,CG,insulator failure,yes,0,0,4475,RL-11
+F0335,2025-10-11,07:01:20,Line 11,Inland,Granger Gap,6.16,33,,AG,other or unknown,yes,0,0,4401,
+F0336,2025-10-21,02:07:00,Line 1,Bayside,Port Alcorn,2.81,15,,BG,other or unknown,yes,0,0,7680,
+F0337,2025-11-05,01:02:15,Line 7,Tule Marsh,Caney Bend,9.74,52,,AG,bird or other animal,yes,0,0,1617,RL-10
+F0338,2025-11-14,02:52:58,Line 14,Live Oak Crossing,Caney Bend,22.91,118,,CG,bird or other animal,yes,0,0,3963,RL-20
+F0339,2025-11-20,08:16:25,Line 2,Port Alcorn,Shell Ridge,11.99,63,,BG,insulator failure,yes,0,0,7995,RL-02
+F0340,2025-11-20,13:46:03,Line 5,Redfish Pass,Live Oak Crossing,17.05,87,,BG,insulator failure,yes,0,0,5549,RL-04
+F0341,2025-12-02,01:55:54,Line 2,Port Alcorn,Shell Ridge,20.18,105,,AG,salt contamination,yes,0,0,8005,
+F0342,2025-12-02,05:23:15,Line 2,Port Alcorn,Shell Ridge,17.76,92,,BG,salt contamination,yes,0,0,8005,
+F0343,2025-12-02,07:20:31,Line 2,Port Alcorn,Shell Ridge,12.10,64,,CG,salt contamination,yes,0,0,8005,
+F0344,2025-12-02,09:23:46,Line 2,Port Alcorn,Shell Ridge,11.41,60,,CG,salt contamination,yes,0,0,8005,
+F0345,2025-12-05,02:01:34,Line 2,Port Alcorn,Shell Ridge,7.60,41,,CG,salt contamination,yes,0,0,8005,
+F0346,2025-12-05,09:41:05,Line 2,Port Alcorn,Shell Ridge,10.36,55,,BG,salt contamination,yes,0,0,8005,
+F0347,2025-12-09,02:28:00,Line 14,Live Oak Crossing,Caney Bend,22.69,117,,AG,bird or other animal,yes,0,0,3968,RL-20
+F0348,2025-12-09,03:01:14,Line 16,Port Alcorn,Tule Marsh,4.29,23,,AG,bird or other animal,yes,0,0,0,RL-23
+F0349,2025-12-11,01:21:00,Line 2,Port Alcorn,Shell Ridge,17.17,89,,BG,salt contamination,yes,0,0,8005,
+F0350,2025-12-11,04:23:03,Line 2,Port Alcorn,Shell Ridge,20.20,105,,AG,salt contamination,yes,0,0,8005,
+F0351,2025-12-11,06:24:35,Line 2,Port Alcorn,Shell Ridge,9.38,49,,AG,salt contamination,yes,0,0,8005,
+F0352,2025-12-11,08:25:09,Line 2,Port Alcorn,Shell Ridge,14.38,76,,CG,salt contamination,yes,0,0,8005,
+F0353,2025-12-13,09:25:12,Line 13,Granger Gap,Live Oak Crossing,20.35,106,106-107,BG,vegetation from outside the right of way,yes,0,0,1698,RL-18
+F0354,2025-12-13,09:32:23,Line 11,Inland,Granger Gap,23.88,120,119-120,CG,vegetation from outside the right of way,yes,0,0,4413,RL-14
+F0355,2025-12-13,12:31:16,Line 2,Port Alcorn,Shell Ridge,3.87,22,21-22,BG,vegetation from outside the right of way,yes,0,0,8005,
+F0356,2025-12-28,00:36:07,Line 3,Shell Ridge,Sedge Point,3.81,20,,CG,equipment or hardware,no,4215,213616,0,
+F0357,2026-01-02,03:21:58,Line 16,Port Alcorn,Tule Marsh,4.40,23,,CG,bird or other animal,yes,0,0,0,RL-23
+F0358,2026-01-02,05:05:48,Line 11,Inland,Granger Gap,9.28,48,,BG,other or unknown,yes,0,0,4418,
+F0359,2026-01-04,10:28:19,Line 13,Granger Gap,Live Oak Crossing,20.16,105,104-105,CG,vegetation from outside the right of way,yes,0,0,1700,RL-18
+F0360,2026-01-08,02:42:54,Line 6,Bayside,Tule Marsh,15.05,79,,AG,bird or other animal,yes,0,0,3845,RL-07
+F0361,2026-01-11,03:43:50,Line 6,Bayside,Tule Marsh,5.14,28,,CG,vehicle or other third party,yes,0,0,3845,
+F0362,2026-01-16,23:42:20,Line 2,Port Alcorn,Shell Ridge,11.72,62,,CG,salt contamination,yes,0,0,8016,
+F0363,2026-01-17,01:45:06,Line 16,Port Alcorn,Tule Marsh,4.29,23,,AG,bird or other animal,yes,0,0,0,RL-23
+F0364,2026-01-18,05:51:36,Line 2,Port Alcorn,Shell Ridge,7.16,38,,AG,salt contamination,yes,0,0,8016,
+F0365,2026-01-18,07:12:00,Line 2,Port Alcorn,Shell Ridge,9.15,48,,CG,salt contamination,yes,0,0,8016,
+F0366,2026-01-18,09:18:45,Line 2,Port Alcorn,Shell Ridge,11.59,61,,CG,salt contamination,yes,0,0,8016,
+F0367,2026-01-21,00:20:39,Line 2,Port Alcorn,Shell Ridge,12.40,65,,AG,salt contamination,yes,0,0,8016,
+F0368,2026-01-21,04:40:45,Line 2,Port Alcorn,Shell Ridge,9.85,52,,CG,salt contamination,yes,0,0,8016,
+F0369,2026-01-22,00:54:25,Line 2,Port Alcorn,Shell Ridge,8.81,47,,CG,salt contamination,yes,0,0,8016,
+F0370,2026-01-22,05:09:49,Line 2,Port Alcorn,Shell Ridge,12.13,64,,AG,salt contamination,yes,0,0,8016,
+F0371,2026-01-22,07:18:31,Line 2,Port Alcorn,Shell Ridge,14.51,76,,CG,salt contamination,yes,0,0,8016,
+F0372,2026-01-22,09:12:42,Line 2,Port Alcorn,Shell Ridge,13.57,71,,CG,salt contamination,yes,0,0,8016,
+F0373,2026-01-22,22:43:40,Line 2,Port Alcorn,Shell Ridge,10.96,58,,CG,salt contamination,yes,0,0,8016,
+F0374,2026-01-30,01:02:07,Line 2,Port Alcorn,Shell Ridge,14.24,75,,CG,salt contamination,yes,0,0,8016,
+F0375,2026-01-30,03:55:23,Line 2,Port Alcorn,Shell Ridge,9.43,50,,CG,salt contamination,yes,0,0,8016,
+F0376,2026-02-02,05:11:14,Line 12,Caney Bend,Mesquite Flat,20.52,104,,CG,bird or other animal,yes,0,0,5730,RL-16
+F0377,2026-02-11,14:15:55,Line 8,Caney Bend,Ponder Creek,7.00,36,36-37,AG,vegetation from outside the right of way,no,5126,148524,0,
+F0378,2026-02-11,19:10:16,Line 9,Shell Ridge,Ponder Creek,14.40,74,74-75,AG,vegetation from outside the right of way,no,1168,27196,3335,
+F0379,2026-02-14,12:40:41,Line 2,Port Alcorn,Shell Ridge,11.95,63,,AG,insulator failure,yes,0,0,8025,RL-02
+F0380,2026-02-14,15:28:42,Line 15,Mesquite Flat,Live Oak Crossing,11.41,58,,CG,insulator failure,yes,0,0,5809,RL-22
+F0381,2026-02-17,02:21:54,Line 5,Redfish Pass,Live Oak Crossing,6.32,33,,AG,equipment or hardware,no,5570,60277,0,
+F0382,2026-02-27,03:17:31,Line 16,Port Alcorn,Tule Marsh,4.42,23,,AG,bird or other animal,yes,0,0,0,RL-23
+F0383,2026-02-28,18:46:42,Line 2,Port Alcorn,Shell Ridge,11.73,62,,AG,insulator failure,yes,0,0,8025,RL-02
+F0384,2026-03-03,09:46:27,Line 9,Shell Ridge,Ponder Creek,26.74,137,,AG,insulator failure,yes,0,0,4508,RL-11
+F0385,2026-03-04,07:08:47,Line 2,Port Alcorn,Shell Ridge,11.98,63,,BG,insulator failure,yes,0,0,8040,RL-02
+F0386,2026-03-04,18:07:40,Line 15,Mesquite Flat,Live Oak Crossing,11.15,57,,BG,insulator failure,yes,0,0,5818,RL-22
+F0387,2026-03-07,03:08:27,Line 7,Tule Marsh,Caney Bend,5.57,31,,AG,bird or other animal,yes,0,0,1625,RL-08
+F0388,2026-03-10,16:10:20,Line 7,Tule Marsh,Caney Bend,2.18,13,,AG,lightning,yes,0,0,1625,
+F0389,2026-03-10,16:33:34,Line 6,Bayside,Tule Marsh,6.66,36,,CG,lightning,yes,0,0,3854,
+F0390,2026-03-17,15:19:53,Line 13,Granger Gap,Live Oak Crossing,7.79,42,41-42,CG,vegetation from outside the right of way,no,1704,121250,0,
+F0391,2026-03-17,19:29:46,Line 8,Caney Bend,Ponder Creek,7.40,38,38-39,AG,vegetation from outside the right of way,no,5133,206282,0,
+F0392,2026-04-06,10:44:43,Line 14,Live Oak Crossing,Caney Bend,9.87,50,,AG,vehicle or other third party,yes,0,0,3988,
+F0393,2026-04-15,08:54:45,Line 7,Tule Marsh,Caney Bend,11.79,63,,BG,other or unknown,yes,0,0,1627,
+F0394,2026-04-15,22:24:41,Line 2,Port Alcorn,Shell Ridge,2.34,14,,BG,salt contamination,yes,0,0,8048,
+F0395,2026-04-16,00:46:25,Line 2,Port Alcorn,Shell Ridge,9.69,51,,BG,salt contamination,yes,0,0,8048,
+F0396,2026-04-16,03:01:48,Line 2,Port Alcorn,Shell Ridge,13.85,73,,AG,salt contamination,no,8048,105883,0,
+F0397,2026-05-06,13:12:40,Line 15,Mesquite Flat,Live Oak Crossing,11.14,57,,BG,insulator failure,yes,0,0,5832,RL-22
+F0398,2026-05-06,14:42:53,Line 9,Shell Ridge,Ponder Creek,26.60,137,,CG,insulator failure,yes,0,0,4521,RL-11
+F0399,2026-05-06,14:46:25,Line 5,Redfish Pass,Live Oak Crossing,17.23,88,,AG,insulator failure,yes,0,0,5595,RL-04
+F0400,2026-05-16,14:22:55,Line 7,Tule Marsh,Caney Bend,0.42,3,,CG,lightning,yes,0,0,1629,
+F0401,2026-05-16,14:59:41,Line 4,Bayside,Redfish Pass,0.74,5,,BG,lightning,yes,0,0,2723,
+F0402,2026-05-17,05:38:33,Line 9,Shell Ridge,Ponder Creek,26.53,136,,CG,insulator failure,yes,0,0,4521,RL-11
+F0403,2026-05-17,06:38:36,Line 2,Port Alcorn,Shell Ridge,11.97,63,,AG,insulator failure,yes,0,0,8057,RL-02
+F0404,2026-05-20,00:32:26,Line 6,Bayside,Tule Marsh,19.32,102,,AG,vehicle or other third party,yes,0,0,3865,
+F0405,2026-05-27,18:48:22,Line 1,Bayside,Port Alcorn,16.82,85,,BG,lightning,yes,0,0,7750,
+F0406,2026-06-05,14:45:01,Line 6,Bayside,Tule Marsh,10.92,57,57-58,AG,vegetation grown into the line,yes,0,0,3871,RL-06
+F0407,2026-06-11,14:12:24,Line 14,Live Oak Crossing,Caney Bend,12.43,63,63-64,AG,vegetation grown into the line,yes,0,0,3998,RL-19
+F0408,2026-06-11,14:14:25,Line 5,Redfish Pass,Live Oak Crossing,19.84,101,100-101,CG,vegetation grown into the line,no,5601,111947,0,RL-05
+F0409,2026-06-13,02:23:04,Line 2,Port Alcorn,Shell Ridge,21.00,110,,CG,vehicle or other third party,no,8067,74112,0,
+F0410,2026-07-05,14:17:33,Line 9,Shell Ridge,Ponder Creek,11.50,60,,AG,lightning,yes,0,0,4533,
+F0411,2026-07-07,13:03:17,Line 6,Bayside,Tule Marsh,10.89,57,57-58,AG,vegetation grown into the line,yes,0,0,3875,RL-06
+F0412,2026-07-08,13:55:50,Line 14,Live Oak Crossing,Caney Bend,27.46,141,,BG,lightning,yes,0,0,4005,
+F0413,2026-07-12,13:29:18,Line 11,Inland,Granger Gap,12.70,65,64-65,BG,vegetation grown into the line,yes,0,0,4453,
+F0414,2026-07-12,15:01:26,Line 14,Live Oak Crossing,Caney Bend,12.66,64,64-65,CG,vegetation grown into the line,yes,0,0,4005,RL-19
+F0415,2026-07-13,15:20:09,Line 14,Live Oak Crossing,Caney Bend,25.50,131,131-132,BG,vegetation grown into the line,yes,0,0,4005,RL-21
+F0416,2026-07-13,16:24:12,Line 10,Inland,Mesquite Flat,17.05,88,88-89,AG,vegetation grown into the line,yes,0,0,7443,RL-13
+F0417,2026-07-14,13:09:47,Line 10,Inland,Mesquite Flat,9.08,47,47-48,CG,vegetation grown into the line,yes,0,0,7443,RL-12
+F0418,2026-07-19,09:00:09,Line 2,Port Alcorn,Shell Ridge,8.66,46,,CG,other or unknown,yes,0,0,8079,
+F0419,2026-07-21,17:12:04,Line 13,Granger Gap,Live Oak Crossing,20.02,104,104-105,AG,vegetation from outside the right of way,no,1713,172874,0,RL-18
+F0420,2026-07-21,18:02:46,Line 15,Mesquite Flat,Live Oak Crossing,18.44,94,,AG,lightning,yes,0,0,5846,
+F0421,2026-07-30,17:44:33,Line 10,Inland,Mesquite Flat,4.75,24,23-24,BG,vegetation from outside the right of way,no,7443,95381,0,
+F0422,2026-08-01,04:37:48,Line 3,Shell Ridge,Sedge Point,19.63,99,,CG,other or unknown,yes,0,0,4259,
+F0423,2026-08-03,02:42:19,Line 4,Bayside,Redfish Pass,9.08,47,,AG,equipment or hardware,yes,0,0,2733,
+F0424,2026-08-05,14:24:36,Line 14,Live Oak Crossing,Caney Bend,12.46,63,63-64,AG,vegetation grown into the line,yes,0,0,4010,RL-19
+F0425,2026-08-06,15:08:29,Line 6,Bayside,Tule Marsh,11.03,58,58-59,CG,vegetation grown into the line,yes,0,0,3881,RL-06
+F0426,2026-08-15,15:11:06,Line 13,Granger Gap,Live Oak Crossing,19.98,104,104-105,AG,vegetation from outside the right of way,yes,0,0,1716,RL-18
+F0427,2026-08-19,09:24:24,Line 9,Shell Ridge,Ponder Creek,26.94,138,,AG,insulator failure,yes,0,0,4538,RL-11
+F0428,2026-08-19,12:25:33,Line 2,Port Alcorn,Shell Ridge,12.03,63,,CG,insulator failure,yes,0,0,8089,RL-02
+F0429,2026-08-19,15:27:53,Line 11,Inland,Granger Gap,12.86,65,65-66,CG,vegetation grown into the line,yes,0,0,4457,
+F0430,2026-08-21,13:11:31,Line 10,Inland,Mesquite Flat,17.04,88,88-89,AG,vegetation grown into the line,yes,0,0,7451,RL-13
+F0431,2026-08-30,11:48:49,Line 10,Inland,Mesquite Flat,14.06,73,,BG,vehicle or other third party,no,7451,103886,0,
+F0432,2026-09-06,13:46:50,Line 6,Bayside,Tule Marsh,10.93,58,57-58,CG,vegetation grown into the line,yes,0,0,3886,RL-06
+F0433,2026-09-16,14:31:57,Line 15,Mesquite Flat,Live Oak Crossing,21.72,110,,BG,lightning,yes,0,0,5863,
+F0434,2026-10-15,12:54:38,Line 2,Port Alcorn,Shell Ridge,12.19,64,,AG,insulator failure,yes,0,0,8111,RL-02
+F0435,2026-10-15,14:21:07,Line 9,Shell Ridge,Ponder Creek,26.77,137,,BG,insulator failure,yes,0,0,4550,RL-11
+F0436,2026-10-15,14:37:54,Line 15,Mesquite Flat,Live Oak Crossing,11.22,57,,AG,insulator failure,yes,0,0,5869,RL-22

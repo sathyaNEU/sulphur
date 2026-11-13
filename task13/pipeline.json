@@ -1,43 +1,43 @@
 {
  "task": "task13",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: the 69 kV work list for the 2026-27 winter and before summer 2027 (perch guards at the roost structures, failing strings replaced, the coastal sections washed before the fog season, the grow-in spans cleared, the tap line's repeat location) from one conformed table of every fault since January 2022",
- "chain": "R1 the conformed fault count by year; R2 the grow-in spans to clear; R3 the night repeat locations by cause (roost structures, failing strings); R4 the tap line's repeat location; R5 the 2026 member interruptions and member-minutes by line; R6 the 2026 faults by cause; R7 the coastal sections washed before the fog season",
+ "call": "this winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 9 structure 137 among them, 3.2 km past the solar tap), wash 9 coastal sections before 1 December and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans",
+ "chain": "R1 the 69 kV faults by year (436); R6 the 2026 faults by cause; R5 the 2026 member interruptions and member-minutes by line; R2 the vegetation repeat locations (4 spans, 2 stands); R3 the night repeat locations (6 perch guards, 3 strings); R4 the tap line's string (Line 9 structure 137); R7 the 9 washing sections due; R8 every open repeat location with its cause; R9 the memo's work list; R10 the work list",
  "stump": "six stumps on the factorial (level 5): S1 the residual current's split between the line ends against the line-out zero-sequence sources, S2 Inland's 2024 source change, S3 the solar farm's ground infeed at the tap, S4 night coastal faults split on the bay stations' fog, the roost survey and light rain, S5 grow-ins told by the conductor's temperature, S6 each section's salt deposit carried from its last cleaning",
  "architecture": 5,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (2026-11-13, as of 2026-11-12; four REVIEW lines ruled harmless in the note)",
+  "reader": "clean (2026-11-13): nothing quoted for question 1 beyond RP-04's definitions, no ranking or answer-bearing file, the repeat-location sentence executes to the golden, no single rescuing fact"
  },
  "duplicate_check": {
-  "heart": "BLOCK ban.pairing only (energy x etl against task22, the author's assignment; registered --force)",
-  "nearest": "skeleton severity none against everything on file"
+  "heart": "BLOCK ban.pairing only (energy x etl against task22, the author's assignment; registered --force, reason in the card notes); surface WARN people.first Thomas",
+  "nearest": "skeleton severity none against everything on file (nearest task9 v3)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "determinism_check_report.md (2026-11-13; one non-blocking note: the flashover level carried no band, closed by stating 0.029 to 0.039 mg/cm2 across the eight rival fits, each filing the same nine sections, and how the level is read)"
  },
- "paper_pair": null,
+ "paper_pair": 34.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 12.5,
+  "careful": 34.5,
+  "thorough": 100.0,
+  "largest_hint": "the solar farm's ground infeed taken out of Shell Ridge's distance; rescues 1 of 10"
  },
- "cited_pair": null,
+ "cited_pair": 34.5,
  "runs": {
   "run1": null,
   "run2": null,
@@ -213,7 +213,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: the full results chain, hidden factor record, fork and closure tables, forcing and the prompt; then the generator (network, weather, loading, faults by cause with the relay physics, the records), golden, effort passes with the factorial, checks",
+ "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py task13 --rewrite and leak.py must pass), uploads it with target.zip, pastes the four answer blocks from submission.md and the golden ZIP; then /triage-runs task13",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -222,5 +222,19 @@
   "note": ""
  },
  "notes": "architecture 5 drawn 2026-11-13 at the author's assignment (Energy Systems & Utilities x Data Extraction & Conformation); work in worktree .claude/worktrees/task13-arch4 (detached at origin/main)",
- "prompt_rewritten": false
+ "prompt_rewritten": false,
+ "gates": {
+  "date": "2026-11-13",
+  "precut": "exit 0 (WARN nearest chains task6, answered)",
+  "effort": "PASS (quick 12.5, careful 34.5, thorough 100)",
+  "voice": "PASS",
+  "leak": "REVIEW",
+  "figures": "PASS",
+  "containers": "PASS",
+  "heart": "BLOCK ban.pairing only (author override)",
+  "surface": "WARN people.first",
+  "checks": "37 of 37",
+  "verify": "12 of 12",
+  "rebuild": "byte-identical"
+ }
 }

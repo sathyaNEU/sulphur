@@ -12,8 +12,8 @@
   "shape": "15",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "to be filled when the pack is cut",
-  "answer_source": "task13/generator/figures.json",
+  "answer": "This winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 9 structure 137, 3.2 km past the solar tap, among them), wash 9 coastal sections before 1 December and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans (25 items)",
+  "answer_source": "submission.md Final Recommendation, from generator/figures.json",
   "gap": [
     "population",
     "time"
@@ -93,7 +93,7 @@
   "question_form": "what",
   "driver": "The decisive quantities are where each event happened and what caused it, which no record states: each endpoint instrument computes a position as if the event had no impedance and nothing fed it from the side, so the position comes from how the event's residual flow split between the two endpoints against the network behind each on that date, corrected for a side source that feeds every event beyond it at all hours; the cause comes from conditions measured at the asset by the owner's own sensors and a third party's survey rather than the nearest public station, and from the asset's thermal state rather than the season; and the forward work from a deposit carried from its last reset at each unit's own rate against the level at which it failed before.",
   "driver_concrete": "Each 69 kV fault's location is the split of its residual current between the two terminals solved against the protection study's line-out zero-sequence sources for its date (the 2022 study before Inland's autotransformer replacement in March 2024), with the solar farm's ground infeed taken out of Shell Ridge's distance on the tap line; night faults on the coast are split into fog flashovers, bird streamers and failing strings on the bay stations' dewpoint spread, the roost survey and light rain; summer grow-ins are told by the conductor's temperature on still afternoons; and the sections washed before the fog season are those whose salt deposit, carried from the last wash or soaking rain at the section's own rate, passes the level at which they flashed over.",
-  "stump": "The careful but hurried pass locates faults by the relays' own distances on today's study, ignores the solar farm's export, reads fog off the airport with the roost survey set aside, counts every non-lightning summer afternoon fault as vegetation and washes every section that ever flashed over, so it clears the wrong spans, drops Inland's span, sends the tap line's crew near Ponder Creek, washes roost structures instead of guarding them, misses the failing strings and washes sections cleaned in October.",
+  "stump": "The careful but hurried pass locates faults by the relays' own distances on today's study, sets the solar farm's export aside, reads fog off the airport with the roost survey set aside, counts every summer afternoon fault with no stroke as a tree and washes every section that ever flashed over, so it clears the wrong spans, drops Inland's span, puts the tap line's string near Ponder Creek, replaces strings at the roost structures instead of fitting guards, and washes sections cleaned in October while missing four that are due.",
   "answer_shape": "flagged-set",
   "weight": "assembly",
   "chain_signature": [
