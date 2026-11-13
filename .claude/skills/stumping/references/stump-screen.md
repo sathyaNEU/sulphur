@@ -81,6 +81,9 @@ screen, whatever its domain or nouns.
 | an imbalance or settlement cost's error-price covariance | task7 re-root screen after arch 12 | 2 (runs compute the settlement hour by hour) |
 | a component response read off natural step events (tap changes) at long windows | task7 arch 12 prototype | 11 (unmeasurable at the needed precision) |
 | a record to be found, merged or re-keyed (a union of logs, a dated roster) | task1 arch 4 (open-ground §4) | 4 |
+| dated works, commissioning or closes carried at the organisation's own record of past slips | task20 arch 4 (R65, one run of two), task10 arch 7 (commissioning by class with censoring, R07); lost once (L46) | 2 (a reflex with occasional misses, never a stump on its own) |
+| a contracted intervention's delivered amount measured from the record's own events, the counterfactual rebuilt outside the window | task10 arch 7's runs (the come-back replayed at the events' megawatts, the cold end read from the hours before the window) | 2 |
+| net against gross load rebuilt from a shipped distributed-generation register and a metered production sample (the peak hour moving later) | the task26 screen against test 2's ingredients rule | 2 |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 
