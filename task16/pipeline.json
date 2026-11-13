@@ -1,45 +1,41 @@
 {
  "task": "task16",
- "status": "PAUSED",
+ "status": "DRAWING",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
- "updated": "2026-11-11",
+ "stage": 1,
+ "stage_name": "draw",
+ "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "offer the assistant first through the 2026 peak season for Delivery day and time, Redirect and address, Pickup point and collection, Returns and labels, Charges and refunds and an adviser first for Track and trace, Missed delivery and redelivery, Customs and import charges, Damaged parcel, Missing parcel (expected 70.7, 70.4, 68.6, 70.6, 54.9 per cent, all under 75); the assistant resolves 75.5 per cent across all ten families (90 per cent range 74.3 to 76.7); not Track and trace kept on October's 76.5 per cent, which comes to 70.7 on the season's conversations",
- "chain": "R1 the linked record (30,745 conversations, 83.9 per cent on the record alone); R2 telephone follow-ups with no tracking number (40.7 per cent); R3 written follow-ups still open (235); R4 the rate achieved under version 3 (80.4); R5 the delay alerts' effect (41 per cent fewer conversations per late parcel); R6 the season's conversations (56.4 per cent from late and exception parcels, about 10700 a week); R7 each family's expected rate; R8 its 90 per cent range (plus or minus 1.2 for all families); R9 the five families kept and the five handed back",
- "architecture": 2,
+ "call": "to be filled when the pack is cut: whether the One Chart conversion links patient records automatically in April 2027 and under which of four candidate rules, read from each rule's estimated false merges per 2,000 automatic links against the patient identity policy's cap of one",
+ "chain": "R1 distinct patients in the converted index and patients in both legacy indexes; R2 the exact name, birth date and sex rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN and birth date rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
+ "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-11"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (no LEAK), 2026-11-11, --asof 2026-11-09",
-  "reader": "two reads 2026-11-11 (cuts adc5ecaf and 3b7dfb87): no method sentence, no ranking file, no helping file, no answer figure, question 6 no one thing; realism findings fixed in the generator with no graded figure moved (cut 197dacab)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-11 (repeat.gate_g against task9, overuse.gate_g: answered in the note); nearest stump 0.05 (task15, task17)",
-  "surface": "exit 0"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE on the gates; back to stage 2 on the first-pass reading",
-  "gate_g": "mechanism forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, one_thing none, effort quick 2, careful 6, thorough 11 of 11",
-  "report": "task16/determinism_check_report.md",
-  "first_pass": "the thread's own derivation (medium effort, about four minutes, before the blocks were opened) landed all ten family rates, the all-families rate, the set, the linked record, the rate achieved and the season's conversations inside the bands; it ran no resampling and did not reproduce the unkeyed share or the open-case count as figures",
-  "judged_cut": "target.zip 3b7dfb87 (figures and answer blocks byte-identical to the cut on disk, 197dacab)"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": 46.7,
+ "paper_pair": null,
  "effort": {
-  "quick": 32.3,
-  "careful": 46.7,
-  "thorough": 100.0,
-  "largest_hint": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots; rescues 1 of 9 (R5)",
-  "first_pass_repriced": "about 70 with the careful column priced on the judge thread's own first pass (R1, R4, R6, R7, R9 Right, R5 Partly, R2, R3, R8 Missed): over 50, back to stage 2"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -91,11 +87,46 @@
      "gate_h": "domain pass, layers pass, results 6 graded across 5 areas, one_thing none, effort quick 1, careful 3, thorough 5 of 6, one_fact 'score only the expert-labelled dev items' rescues 2 of 6",
      "shipped": "the pass-3 form, approved as judged: nothing graded moved after the verdict; target.zip abdda1af"
     }
+   },
+   {
+    "architecture": 2,
+    "date": "2026-11-11",
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "note": "never uploaded: built, gates.py 0 FAIL, two leak reads clean, judge DETERMINISTIC APPROVE, then sent back at stage 4 by the judge thread's own first pass (all eleven rates and the set inside the bands in about four minutes; careful column repriced near 70); re-rooted 2026-11-12 to architecture 3 in another world",
+    "call": "offer the assistant first through the 2026 peak season for Delivery day and time, Redirect and address, Pickup point and collection, Returns and labels, Charges and refunds and an adviser first for Track and trace, Missed delivery and redelivery, Customs and import charges, Damaged parcel, Missing parcel (expected 70.7, 70.4, 68.6, 70.6, 54.9 per cent, all under 75); the assistant resolves 75.5 per cent across all ten families (90 per cent range 74.3 to 76.7); not Track and trace kept on October's 76.5 per cent, which comes to 70.7 on the season's conversations",
+    "chain": "R1 the linked record (30,745 conversations, 83.9 per cent on the record alone); R2 telephone follow-ups with no tracking number (40.7 per cent); R3 written follow-ups still open (235); R4 the rate achieved under version 3 (80.4); R5 the delay alerts' effect (41 per cent fewer conversations per late parcel); R6 the season's conversations (56.4 per cent from late and exception parcels, about 10700 a week); R7 each family's expected rate; R8 its 90 per cent range (plus or minus 1.2 for all families); R9 the five families kept and the five handed back",
+    "paper_pair": 46.7,
+    "effort": {
+     "quick": 32.3,
+     "careful": 46.7,
+     "thorough": 100.0,
+     "largest_hint": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots; rescues 1 of 9 (R5)",
+     "first_pass_repriced": "about 70 with the careful column priced on the judge thread's own first pass (R1, R4, R6, R7, R9 Right, R5 Partly, R2, R3, R8 Missed): over 50, back to stage 2"
+    },
+    "judge": {
+     "verdict": "DETERMINISTIC",
+     "disposition": "APPROVE on the gates; back to stage 2 on the first-pass reading",
+     "gate_g": "mechanism forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain pass, layers pass, one_thing none, effort quick 2, careful 6, thorough 11 of 11",
+     "report": "task16/determinism_check_report.md",
+     "first_pass": "the thread's own derivation (medium effort, about four minutes, before the blocks were opened) landed all ten family rates, the all-families rate, the set, the linked record, the rate achieved and the season's conversations inside the bands; it ran no resampling and did not reproduce the unkeyed share or the open-case count as figures",
+     "judged_cut": "target.zip 3b7dfb87 (figures and answer blocks byte-identical to the cut on disk, 197dacab)"
+    },
+    "leak": {
+     "leak_py": "REVIEW (no LEAK), 2026-11-11, --asof 2026-11-09",
+     "reader": "two reads 2026-11-11 (cuts adc5ecaf and 3b7dfb87): no method sentence, no ranking file, no helping file, no answer figure, question 6 no one thing; realism findings fixed in the generator with no graded figure moved (cut 197dacab)"
+    },
+    "precut": {
+     "exit": 0,
+     "date": "2026-11-11"
+    }
    }
   ]
  },
  "returned": [],
- "resume": "PAUSED at stage 2 (design), architecture 2: built, gates.py 0 FAIL, two leak reads clean, judge DETERMINISTIC APPROVE, but the judge thread's own first pass landed every family rate and the set inside the bands in about four minutes, which reprices the careful column at about 70 and sends the build back to design (determinism_check_report.md). The chain's five estimates were each a join and a ratio over labelled ingredients (KS-07 5.1 and 5.2, the outcome class column, the plan's service-level and alert sheets). Next: the author's call between (a) uploading this cut as it stands to measure it on the platform (python3 task16/generator/make.py rebuilds target.zip 197dacab and the golden zip byte for byte; the prompt and blocks are current), and (b) a redesign whose results rest on what no file labels and no hold-out confirms. Nothing here is READY.",
+ "resume": "stage 2: the results chain, bands and forks for architecture 3, run on the generator's clean truth, then precut.py task16",
  "approved": null,
  "submitted": null,
  "portal": {
