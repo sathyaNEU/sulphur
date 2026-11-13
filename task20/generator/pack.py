@@ -1,347 +1,228 @@
-"""Writes the record files of target/ from the world (sim.py). Each file is the output of the process that keeps it:
-the exchange's settlement file, the risk system's curve store, the clearing house's notices and statements, the trade
-capture system, the hydrology database, the plant SCADA monthly export, the billing system and the day-ahead
-market's settlements. Mess comes from those processes, never from a decision."""
+"""The data files of target/ for task20 architecture 4, written from the world's history to 31 December 2026."""
 import csv
 import datetime as dt
 import math
+import zlib
 import os
 import numpy as np
-import common as C
-import sim as S
-from common import mi, mi_date, month_hours, cprice
+from openpyxl import Workbook
+from openpyxl.styles import Font
+import world as Wd
+import docs as DC
+from world import qi, qy, qq, H_END, NQ
 
-F_SETTLE = "nex_daily_settlement_2018_2026.csv"
-F_CURVE = "hk_risk_curve_daily_2018_2026.csv"
-F_PARAMS = "nex_margin_parameters_2018_2026.csv"
-F_STMT = "nex_clearing_statements_2018_2026.csv"
-F_POS = "nex_positions_month_end_2017_2026.csv"
-F_TRADES = "hk_trade_capture_2018_2026.csv"
-F_HYDRO = "hk_hydrology_weekly_2017_2026.csv"
-F_PLANT = "hk_plant_output_monthly_2017_2026.csv"
-F_LEDGER = "hk_sales_ledger_2018_2026.csv"
-F_DA = "nex_dayahead_settlements_2018_2026.csv"
-F_FX = "eurnok_daily_2018_2026.csv"
-F_HDD = "hk_heating_degree_days_weekly.csv"
+F_STMT = "capital_account_statements_2013Q1_2026Q4.csv"
+F_CASH = "custodian_cash_activity_2026Q4.csv"
+F_ACT = "manager_portfolio_activity_2013_2026.csv"
+F_AUD = "fund_audited_financials_FY2013_FY2026.xlsx"
+F_REG = "private_commitment_register_2026-12-31.xlsx"
+F_BENCH = "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv"
+F_MKT = "market_series_quarterly_2000Q1_2026Q4.csv"
 
-CUST_NAME = {"SMELTER": "Fjordal Aluminium AS", "PULP": "Nesbyen Treforedling AS", "AFFILIATE": "Hallingvass Straum AS",
-             "GRID": "Bygdenett AS"}
-PLANTS = [("Kvitebrekka", "run-of-river", 0.55), ("Tinnhylla", "run-of-river", 0.45),
-          ("Hallingvass I", "reservoir", 0.40), ("Hallingvass II", "reservoir", 0.35), ("Djupetjern", "reservoir", 0.25)]
-START = dt.date(2018, 1, 1)
-NEW_CODES = dt.date(2020, 4, 1)
-MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+MGR_NAMES = {
+    "BO1": "Ardley Square Partners", "BO2": "Thornwick Capital", "BO3": "Kelstone Equity", "BO4": "Marrable Partners",
+    "BO5": "Oakhanger Capital", "BO6": "Pellworth Partners", "BO7": "Rudgely Equity", "BO8": "Sallowfield Capital",
+    "GE1": "Brackley Growth", "GE2": "Tilsworth Growth Partners", "GE3": "Wendlebury Growth",
+    "VC1": "Corvane Ventures", "VC2": "Lindhurst Ventures", "VC3": "Quarrendon Ventures", "VC4": "Yelden Venture Partners",
+    "RE1": "Hambleden Real Estate", "RE2": "Nettlebed Property Partners", "RE3": "Ewelme Real Estate",
+    "IN1": "Garsington Infrastructure", "IN2": "Shabbington Infrastructure", "IN3": "Waterperry Infrastructure",
+    "PC1": "Harpsden Credit", "PC2": "Lewknor Credit Partners", "PC3": "Bix Direct Lending", "PC4": "Swyncombe Credit",
+}
+ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
+STRAT_NAME = {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate", "IN": "Infrastructure", "PC": "Private credit"}
 
+def qend(i):
+    y, q = qy(i), qq(i)
+    return dt.date(y, 3 * q, {3: 31, 6: 30, 9: 30, 12: 31}[3 * q])
 
-def w(path, header, rows):
-    with open(path, "w", newline="") as f:
-        cw = csv.writer(f, lineterminator="\r\n")
-        cw.writerow(header)
-        cw.writerows(rows)
-    return len(rows)
+def qmid(i, frac=0.5):
+    a = qend(i - 1) + dt.timedelta(days=1); b = qend(i)
+    return a + dt.timedelta(days=int((b - a).days * frac))
 
+def build_world():
+    E, S, R = Wd.market()
+    gps = Wd.managers()
+    fs = Wd.commitments(gps, E)
+    first_no = {}
+    for f in fs:
+        g = f["gp"]["id"]
+        first_no.setdefault(g, int(np.random.default_rng(zlib.crc32(g.encode())).integers(2, 5)))
+        f["no"] = first_no[g] + f["k"]
+        f["id"] = "WX-%s-%03d" % (f["gp"]["st"], 100 + fs.index(f))
+        nm = MGR_NAMES[f["gp"]["id"]]
+        f["name"] = "%s %s" % (nm, ROMAN[f["no"] - 1])
+    # the consultant's 2027 plan totals USD 500 million: scale the 2027 re-ups
+    plan = [f for f in fs if f["vint"] == 2027]
+    tot = sum(f["C"] for f in plan)
+    for f in plan:
+        f["C"] = round(Wd.P["plan_total"] * f["C"] / tot / 5.0) * 5.0
+    d = sum(f["C"] for f in plan) - Wd.P["plan_total"]
+    plan[0]["C"] -= d
+    for f in plan:
+        f["size"] = round(f["C"] / f["share"])
+    return dict(E=E, S=S, R=R, gps=gps, funds=fs)
 
-def contract_code(t, k, d):
-    s = mi_date(k)
-    q = (s.month - 1) // 3 + 1
-    if d < NEW_CODES:
-        yy = "%02d" % (s.year % 100)
-        return {"M": "ENOM%s-%s" % (MON[s.month - 1], yy), "Q": "ENOQ%d-%s" % (q, yy), "Y": "ENOYR-%s" % yy}[t]
-    return {"M": "NSBM %d-%02d" % (s.year, s.month), "Q": "NSBQ %d-Q%d" % (s.year, q), "Y": "NSBY %d" % s.year}[t]
-
-
-def listed(d):
-    k0 = mi(d.year, d.month)
-    out = [("M", [k0 + j]) for j in range(1, 7)]
-    fq0 = mi(d.year, 3 * ((d.month - 1) // 3) + 1) + 3
-    out += [("Q", [fq0 + 3 * (j - 1) + x for x in range(3)]) for j in range(1, 7)]
-    out += [("Y", C.year_months(d.year + j)) for j in range(1, 5)]
+def history(Wo):
+    E, S, R = Wo["E"], Wo["S"], Wo["R"]
+    p = Wd.propensity(E)
+    out = {}
+    for f in Wo["funds"]:
+        if f["vint"] > 2026 or f["fc"] > H_END:
+            continue
+        log = []; rec = {}
+        o = Wd.run_fund(f, E, S, R, p, f["fc"], upto=H_END, rec=rec, deal_log=log)
+        # fund-level contributions for the audited accounts
+        out[f["id"]] = dict(o=o, log=log, rec=rec)
     return out
 
+def w_csv(path, header, rows):
+    with open(path, "w", newline="") as fh:
+        w = csv.writer(fh, lineterminator="\n")
+        w.writerow(header)
+        for r in rows:
+            w.writerow(r)
+    return len(rows)
 
-PRODUCT = {"M": "Base Month", "Q": "Base Quarter", "Y": "Base Year"}
+def money(x): return "%.2f" % x
 
-
-def settlement(W, tgt):
-    rows = []
-    dup = []
-    for i, d in enumerate(W.days):
-        if d < START or d == dt.date(2019, 11, 21):
-            continue
-        for t, ks in listed(d):
-            e = mi_date(ks[-1] + 1) - dt.timedelta(days=1)
-            r = [d.isoformat(), contract_code(t, ks[0], d), PRODUCT[t], mi_date(ks[0]).isoformat(), e.isoformat(),
-                 "%.3f" % cprice(W.curves[i], ks)]
-            rows.append(r)
-            if dt.date(2023, 5, 8) <= d <= dt.date(2023, 5, 12):
-                dup.append(list(r))
-    # the exchange's re-sent file for the week of 8 May 2023 was appended twice
-    at = next(j for j, r in enumerate(rows) if r[0] == "2023-05-15")
-    rows = rows[:at] + dup + rows[at:]
-    return w(os.path.join(tgt, F_SETTLE), ["trade_date", "contract", "product", "delivery_start", "delivery_end",
-                                           "settlement_eur_mwh"], rows)
-
-
-def curve(W, tgt):
-    rows = []
-    for i, d in enumerate(W.days):
-        if d < START:
-            continue
-        k0 = mi(d.year, d.month)
-        for k in range(k0 + 1, k0 + 49):
-            s = mi_date(k)
-            rows.append([d.isoformat(), "%d-%02d" % (s.year, s.month), "%.3f" % W.curves[i][k], "HK_SYS"])
-            # the June 2021 parallel run of the new curve builder, a second curve id carried for a month
-            if dt.date(2021, 6, 1) <= d <= dt.date(2021, 6, 30) and k <= k0 + 36:
-                rows.append([d.isoformat(), "%d-%02d" % (s.year, s.month), "%.3f" % (W.curves[i][k] * (1 + 0.0004 * ((k * 7 + i) % 5 - 2))), "HK_SYS_V2"])
-    return w(os.path.join(tgt, F_CURVE), ["as_of", "delivery_month", "forward_eur_mwh", "curve_id"], rows)
-
-
-def params(W, tgt):
-    rows, n = [], 4100
-    first = {}
-    for d, t, r in W.notices:
-        if d < START:
-            first[t] = (d, r)
-    cls = {"M": "Base Month", "Q": "Base Quarter", "Y": "Base Year"}
-    for t in "MQY":
-        d, r = first[t]
-        n += 1
-        rows.append(["NEX-CM-%d" % n, "2017-12-29", "2018-01-02", cls[t], "%.2f" % W.rates[t][W.didx[dt.date(2018, 1, 2)]]])
-    for d, t, r in sorted((x for x in W.notices if x[0] >= START), key=lambda x: (x[0], "MQY".index(x[1]))):
-        n += 1
-        rows.append(["NEX-CM-%d" % n, C.prev_bday(d).isoformat(), d.isoformat(), cls[t], "%.2f" % r])
-    return w(os.path.join(tgt, F_PARAMS), ["notice_no", "published", "effective_date", "product_class",
-                                           "margin_eur_per_mwh"], rows)
-
-
-def statements(W, tgt):
-    r = W.res
-    rows = []
-    im_prev = None
-    for i, d in enumerate(W.days):
-        im = r["im"][i]
-        if d < START:
-            im_prev = im
-            continue
-        vm, dl = r["vm"][i], r["dlv"][i]
-        dim = im - im_prev
-        im_prev = im
-        row = [d.isoformat(), "HKK-HEDGE", "EUR", "%.2f" % vm, "%.2f" % dl, "%.2f" % im, "%.2f" % dim,
-               "%.2f" % (vm + dl + dim), ""]
-        if d == dt.date(2022, 3, 8):
-            bad = list(row)
-            bad[3] = "%.2f" % (vm * 1.07)
-            bad[7] = "%.2f" % (vm * 1.07 + dl + dim)
-            bad[8] = "superseded"
-            rows.append(bad)
-            row[8] = "restated"
-        rows.append(row)
-    return w(os.path.join(tgt, F_STMT), ["statement_date", "account", "currency", "variation_margin",
-                                         "delivery_settlement", "initial_margin_requirement", "initial_margin_change",
-                                         "net_cash_to_nex", "status"], rows)
-
-
-def positions(W, tgt):
-    rows = []
-    months = sorted({mi(d.year, d.month) for d in W.days})
-    for k in months:
-        ds = [d for d in W.days if mi(d.year, d.month) == k]
-        d = ds[-1]
-        if d < dt.date(2017, 12, 1):
-            continue
-        mw = W.res["mw_by_day"][W.didx[d]]
-        seen = set()
-        for kk in sorted(mw):
-            cl = C.margin_class(kk, d)
-            s = mi_date(kk)
-            if cl == "Y":
-                key, ks = ("Y", s.year), C.year_months(s.year)
-            elif cl == "Q":
-                q0 = mi(s.year, 3 * ((s.month - 1) // 3) + 1)
-                key, ks = ("Q", q0), [q0, q0 + 1, q0 + 2]
-            else:
-                key, ks = ("M", kk), [kk]
-            if key in seen:
-                continue
-            seen.add(key)
-            if mi_date(ks[-1] + 1) <= d:
-                continue
-            e = mi_date(ks[-1] + 1) - dt.timedelta(days=1)
-            rows.append([d.isoformat(), "HKK-HEDGE", contract_code(cl, ks[0], d), PRODUCT[cl],
-                         mi_date(ks[0]).isoformat(), e.isoformat(), "%.1f" % mw[kk]])
-    return w(os.path.join(tgt, F_POS), ["month_end", "account", "contract", "product", "delivery_start",
-                                        "delivery_end", "position_mw"], rows)
-
-
-def trades(W, tgt):
+def write_all(Wo, H, tgt):
+    E, S, R = Wo["E"], Wo["S"], Wo["R"]
+    fs = Wo["funds"]
+    byid = {f["id"]: f for f in fs}
     rng = np.random.default_rng(404)
-    rows = []
-    n = 70000
-    traders = ["MHA", "MHA", "SSA", "MHA", "TBR"]
-    for d, add in W.res["trades"]:
-        if d < START:
-            continue
-        years = sorted({mi_date(k).year for k in add})
-        for y in years:
-            ks = C.year_months(y)
-            mw = -add[ks[0]]
-            px = cprice(W.curves[W.didx[d]], ks)
-            n += 1
-            # clips of up to 10 MW, as the desk executes on screen
-            left = int(round(mw))
-            while left > 0:
-                clip = int(min(left, rng.integers(3, 11)))
-                left -= clip
-                n += 1
-                unit, qty = ("MW", "%d" % clip)
-                if d < dt.date(2021, 2, 1) and rng.random() < 0.35:
-                    unit, qty = ("MWh", "%d" % (clip * C.hours_year(y)))
-                t = dt.time(9 + int(rng.integers(0, 7)), int(rng.integers(0, 60)))
-                pr = px * (1 + rng.normal(0, 0.0015))
-                rows.append(["HK%06d" % n, d.isoformat(), t.strftime("%H:%M"), "HKK-HEDGE", contract_code("Y", ks[0], d),
-                             "SELL", qty, unit, "%.2f" % pr, "NEW", traders[int(rng.integers(0, len(traders)))], "NEX"])
-    # amendments and cancellations, as the capture system logs them
-    out = []
-    for j, r in enumerate(rows):
-        out.append(r)
-        if j % 53 == 7:
-            a = list(r)
-            a[9] = "AMEND"
-            a[8] = "%.2f" % (float(r[8]) + 0.05)
-            out.append(a)
-        if j % 97 == 31:
-            c = list(r)
-            c[9] = "CANCEL"
-            out.append(c)
-            nb = list(r)
-            nb[0] = r[0] + "R"
-            out.append(nb)
-    return w(os.path.join(tgt, F_TRADES), ["trade_id", "trade_date", "trade_time", "account", "contract", "side",
-                                           "quantity", "unit", "price_eur_mwh", "status", "trader", "venue"], out)
-
-
-def hydrology(W, tgt):
-    rows = []
-    g = W.guide()
-    for i, wk in enumerate(W.weeks):
-        iso = wk.isocalendar()
-        n = min(iso[1], 52)
-        infl = "%.1f" % W.inflow[i]
-        status = "final"
-        if dt.date(2019, 2, 4) <= wk <= dt.date(2019, 2, 18):
-            infl = ""
-            status = "gauge outage"
-        if wk >= dt.date(2026, 11, 16):
-            status = "provisional"
-        rows.append(["%d-W%02d" % (iso[0], iso[1]), wk.isoformat(), infl, "%.1f" % W.level[i],
-                     "%.1f" % (100 * W.level[i] / S.P["res_cap"]), "%.1f" % W.normal_week(n),
-                     "%.1f" % (100 * g[n] / S.P["res_cap"]), status])
-    return w(os.path.join(tgt, F_HYDRO), ["iso_week", "week_start", "inflow_gwh", "storage_gwh", "storage_pct",
-                                          "normal_inflow_gwh", "normal_storage_pct", "status"], rows)
-
-
-def plant_output(W, tgt):
-    rng = np.random.default_rng(77)
-    ror, rel = {}, {}
-    for i, wk in enumerate(W.weeks):
-        for dd in range(7):
-            c = wk + dt.timedelta(days=dd)
-            k = mi(c.year, c.month)
-            ror[k] = ror.get(k, 0.0) + W.ror_w[i] / 7.0 * 1000.0
-            rel[k] = rel.get(k, 0.0) + W.rel_w[i] / 7.0 * 1000.0
-    rows = []
-    for k in sorted(ror):
-        s = mi_date(k)
-        if s.year > 2026:
-            continue
-        for name, typ, sh in PLANTS:
-            base = ror[k] if typ == "run-of-river" else rel[k]
-            val = base * sh
-            nm = name
-            if name == "Djupetjern" and s >= dt.date(2021, 1, 1):
-                nm = "Djupetjern kraftverk"
-            rows.append(["%d-%02d" % (s.year, s.month), nm, typ, "%.0f" % val])
-    return w(os.path.join(tgt, F_PLANT), ["month", "plant", "plant_type", "output_mwh"], rows)
-
-
-def ledger(W, tgt):
-    rows = []
-    n = 220000
-    for x in W.invoices:
-        cu, k, inv = x["cu"], x["k"], x["doc"]
-        if inv > dt.date(2026, 12, 31):
-            continue  # the extract was taken on 31 December 2026
-        s = mi_date(k)
-        n += 1
-        acct = {"SMELTER": "10411", "PULP": "10388", "AFFILIATE": "10102" if s < dt.date(2023, 4, 1) else "10977",
-                "GRID": "10560"}[cu]
-        paid = x["pay"].isoformat() if x["pay"] <= dt.date(2026, 12, 31) else ""
-        amt = x["amt"]
-        row = ["F%d" % n, "INV", CUST_NAME[cu], acct, "%d-%02d" % (s.year, s.month), "%.0f" % x["mwh"], "%.2f" % x["px"],
-               "%.2f" % amt, inv.isoformat(), (inv + dt.timedelta(days=30)).isoformat(), paid, "%.2f" % amt if paid else ""]
-        # the pulp mill pays some invoices in two parts
-        if cu == "PULP" and k % 17 == 5 and paid:
-            part = round(amt * 0.6, 2)
-            row[11] = "%.2f" % part
-            rows.append(row)
-            later = S.pay_date(x["pay"], 9)
-            rows.append(["F%d" % n, "PAY", CUST_NAME[cu], acct, row[4], "", "", "", "", "", later.isoformat(),
-                         "%.2f" % (amt - part)])
-            continue
-        rows.append(row)
-        if cu == "GRID" and k % 23 == 11:
-            n += 1
-            cr = round(x["mwh"] * 0.012)
-            rows.append(["F%d" % n, "CRN", CUST_NAME[cu], acct, row[4], "%.0f" % -cr, "%.2f" % x["px"],
-                         "%.2f" % (-cr * x["px"]), (inv + dt.timedelta(days=12)).isoformat(), "", "", ""])
-    return w(os.path.join(tgt, F_LEDGER), ["doc_no", "doc_type", "customer", "customer_account", "period", "mwh",
-                                           "price_eur_mwh", "amount_eur", "doc_date", "due_date", "paid_date",
-                                           "paid_eur"], rows)
-
-
-def dayahead(W, tgt):
-    rows = []
-    for c in W.cdays:
-        if c < START:
-            continue
-        k = mi(c.year, c.month)
-        com = sum(S.committed(k).values()) / C.month_days(k)
-        out = W.out_day[c]
-        net = out - com
-        sold, bought = (net, 0.0) if net > 0 else (0.0, -net)
-        sp = W.spot[c]
-        settle = C.next_bday(c)
-        rows.append([c.isoformat(), "%.1f" % sold, "%.1f" % bought, "%.2f" % sp, "%.2f" % (net * sp), settle.isoformat()])
-    return w(os.path.join(tgt, F_DA), ["delivery_date", "sold_mwh", "bought_mwh", "system_price_eur_mwh",
-                                       "net_amount_eur", "settlement_date"], rows)
-
-
-def fx(W, tgt):
-    rng = np.random.default_rng(12)
-    x, rows = math.log(9.6), []
-    for d in W.days:
-        x += rng.normal(0, 0.004) + 0.00004
-        if d >= START:
-            rows.append([d.isoformat(), "%.4f" % math.exp(x)])
-    return w(os.path.join(tgt, F_FX), ["date", "eur_nok"], rows)
-
-
-def hdd(W, tgt):
-    rng = np.random.default_rng(13)
-    rows = []
-    for wk in W.weeks:
-        n = wk.isocalendar()[1]
-        base = max(0.0, 15.5 + 9.5 * math.cos(2 * math.pi * (n - 3) / 52.0))
-        rows.append([wk.isoformat(), "%.1f" % max(0.0, 7 * base + rng.normal(0, 9))])
-    return w(os.path.join(tgt, F_HDD), ["week_start", "heating_degree_days"], rows)
-
-
-def write_all(W, tgt):
-    os.makedirs(tgt, exist_ok=True)
-    n = {}
-    for name, fn in ((F_SETTLE, settlement), (F_CURVE, curve), (F_PARAMS, params), (F_STMT, statements),
-                     (F_POS, positions), (F_TRADES, trades), (F_HYDRO, hydrology), (F_PLANT, plant_output),
-                     (F_LEDGER, ledger), (F_DA, dayahead), (F_FX, fx), (F_HDD, hdd)):
-        n[name] = fn(W, tgt)
-    return n
+    rows = {}
+    # ---------------------------------------------------------------- capital account statements (USD, endowment share)
+    late = sorted([fid for fid in H if byid[fid]["gp"]["st"] in ("BO", "VC", "RE")])[2::9][:3]   # Q4 statements not yet in
+    restated = sorted(H)[5::31][:2]
+    st_rows, cash_rows = [], []
+    for fid in sorted(H):
+        f = byid[fid]; o = H[fid]["o"]; C = f["C"]
+        cum = 0.0
+        name = f["name"]
+        last = min(H_END, f["fc"] + Wd.ST[f["gp"]["st"]]["life"])
+        for q in range(f["fc"], last + 1):
+            ci, cf, other = o["call_inv"][q], o["call_fee"][q], o["call_exp"][q]
+            dist = o["dist"][q]; inc = min(o["inc"][q], dist)
+            # return of capital is the realised cost net of recycling; the rest of the proceeds is gain
+            realised = [e for e in H[fid]["log"] if e[0] == "exit" and e[3] == q]
+            cost_out = sum(e[4] for e in realised) * f["C"] / f["size"]
+            proc_net = max(dist - inc, 0.0)
+            roc = min(cost_out, proc_net); gain = proc_net - roc
+            cum += (ci + cf + other) * 1e6
+            final = q == f["fc"] + Wd.ST[f["gp"]["st"]]["life"]
+            unf = 0.0 if final else C * 1e6 - cum
+            nav = o["nav"][q] * 1e6
+            disp = name
+            if f["gp"]["id"] == "GE2" and q >= qi(2021, 3):
+                disp = name.replace("Tilsworth Growth Partners", "Tilsworth Partners")
+            row = [fid, disp, MGR_NAMES[f["gp"]["id"]] if not (f["gp"]["id"] == "GE2" and q >= qi(2021, 3)) else "Tilsworth Partners",
+                   qend(q).isoformat(), (qend(q) + dt.timedelta(days=int(rng.integers(38, 71)))).isoformat(),
+                   money((ci) * 1e6), money(cf * 1e6), money(other * 1e6), money(roc * 1e6), money(gain * 1e6), money(inc * 1e6),
+                   money(nav), money(unf), "N", "final statement; commitment not called released" if final else ""]
+            if q == H_END and fid in late:
+                cash_rows += [[qmid(q, 0.3).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)]] if (ci + cf + other) > 0 else []
+                cash_rows += [[qmid(q, 0.8).isoformat(), fid, "distribution", money(dist * 1e6)]] if dist > 0 else []
+                continue
+            if fid in restated and q == qi(2024, 2):
+                old = list(row); old[11] = money(nav * 1.012); old[6] = money(cf * 1e6 * 1.08); old[13] = "N"; old[14] = "superseded"
+                st_rows.append(old)
+                row[13] = "Y"; row[4] = (qend(q) + dt.timedelta(days=118)).isoformat()
+            st_rows.append(row)
+            if q == H_END:
+                if ci + cf + other > 0: cash_rows.append([qmid(q, 0.3).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)])
+                if dist > 0: cash_rows.append([qmid(q, 0.8).isoformat(), fid, "distribution", money(dist * 1e6)])
+    rows[F_STMT] = w_csv(os.path.join(tgt, F_STMT), ["fund_id", "fund_name", "manager", "period_end", "statement_date",
+        "contributions_investments_usd", "contributions_management_fees_usd", "contributions_fund_expenses_usd",
+        "distributions_return_of_capital_usd", "distributions_realized_gain_usd", "distributions_income_usd",
+        "ending_nav_usd", "unfunded_commitment_usd", "restated", "note"], st_rows)
+    cash_rows.sort()
+    rows[F_CASH] = w_csv(os.path.join(tgt, F_CASH), ["value_date", "fund_id", "movement", "amount_usd"], cash_rows)
+    # ---------------------------------------------------------------- managers' portfolio activity (fund level, USD m)
+    act = []
+    for fid in sorted(H):
+        f = byid[fid]
+        nm = MGR_NAMES[f["gp"]["id"]]
+        for e in H[fid]["log"]:
+            kind, _, dno, q, a, b = e
+            co = "%s portfolio %02d" % (f["name"].split()[0], dno + 1)
+            if kind == "new":
+                act.append([fid, nm, co, qmid(q, 0.45).isoformat(), "initial investment", "%.3f" % a, ""])
+            elif kind == "follow_on":
+                act.append([fid, nm, co, qmid(q, 0.55).isoformat(), "follow-on investment", "%.3f" % a, ""])
+            elif kind == "exit":
+                act.append([fid, nm, co, qmid(q, 0.65).isoformat(), "realization", "%.3f" % b, "%.3f" % a])
+            elif kind == "val":
+                act.append([fid, nm, co, qend(q).isoformat(), "valuation", "%.3f" % b, "%.3f" % a])
+    act.sort(key=lambda r: (r[0], r[3], r[2], r[4]))
+    rows[F_ACT] = w_csv(os.path.join(tgt, F_ACT), ["fund_id", "manager", "portfolio_company", "date", "record_type",
+        "amount_usd_m", "cost_basis_usd_m"], act)
+    # ---------------------------------------------------------------- audited financials (fund level, USD thousands)
+    wb = Workbook(); ws = wb.active; ws.title = "Audited accounts"
+    ws.append(["Fund ID", "Fund", "Fiscal year end", "Total commitments (USD thousands)", "Investments at cost (USD thousands)",
+               "Investments at fair value (USD thousands)", "Cash (USD thousands)", "Credit facility borrowings (USD thousands)",
+               "Accrued liabilities (USD thousands)", "Partners' capital (USD thousands)", "Unfunded commitments (USD thousands)"])
+    for c in ws[1]: c.font = Font(bold=True)
+    aud_n = 0
+    for fid in sorted(H):
+        f = byid[fid]; rec = H[fid]["rec"]; o = H[fid]["o"]; sh = f["C"] / f["size"]
+        june = f["gp"]["fy_june"]
+        for y in range(qy(f["fc"]), 2027):
+            qe = qi(y, 2) if june else qi(y, 4)
+            if qe < f["fc"] or qe > H_END or qe > f["fc"] + Wd.ST[f["gp"]["st"]]["life"]: continue
+            if not june and y == 2026: continue            # the 2026 accounts arrive in the spring
+            fv = rec["fv"].get(qe, 0.0); line = rec["line"].get(qe, 0.0); cost = rec["cost"].get(qe, 0.0)
+            contrib_f = (o["call_inv"][:qe + 1].sum() + o["call_fee"][:qe + 1].sum() + o["call_exp"][:qe + 1].sum()) / sh
+            cash = 0.004 * f["size"]
+            accr = o["call_fee"][qe] / sh * 0.33
+            pc = fv + cash - line - accr
+            ws.append([fid, f["name"], qend(qe), round(f["size"] * 1000), round(cost * 1000), round(fv * 1000), round(cash * 1000),
+                       round(line * 1000), round(accr * 1000), round(pc * 1000), round((f["size"] - contrib_f) * 1000)])
+            aud_n += 1
+    for row in ws.iter_rows(min_row=2, min_col=3, max_col=3):
+        for c in row: c.number_format = "yyyy-mm-dd"
+    wb.save(os.path.join(tgt, F_AUD)); rows[F_AUD] = aud_n
+    # ---------------------------------------------------------------- the commitment register
+    wb = Workbook(); ws = wb.active; ws.title = "Register"
+    ws.append(["Fund ID", "Fund", "Manager", "Strategy", "Vintage", "Commitment (USD m)", "Fund size (USD m)", "Commitment date",
+               "First close expected at commitment", "First close", "Investment period ends", "Term ends", "Status"])
+    for c in ws[1]: c.font = Font(bold=True)
+    reg_n = 0
+    for f in sorted(fs, key=lambda x: x["id"]):
+        if f["vint"] > 2026: continue
+        st = Wd.ST[f["gp"]["st"]]
+        closed = f["fc"] <= H_END
+        status = "pending first close" if not closed else ("investing" if H_END < f["fc"] + st["ip"] else
+                                                           ("harvesting" if H_END < f["fc"] + st["life"] else "liquidated"))
+        ws.append([f["id"], f["name"], MGR_NAMES[f["gp"]["id"]], STRAT_NAME[f["gp"]["st"]], f["vint"], f["C"],
+                   f["size"] if closed else None, qmid(f["commit_q"], 0.5), qend(f["exp_fc"]), qend(f["fc"]) if closed else None,
+                   qend(f["fc"] + st["ip"] - 1) if closed else None, qend(f["fc"] + st["life"]) if closed else None, status])
+        reg_n += 1
+    for row in ws.iter_rows(min_row=2, min_col=8, max_col=12):
+        for c in row: c.number_format = "yyyy-mm-dd"
+    wb.save(os.path.join(tgt, F_REG)); rows[F_REG] = reg_n
+    # ---------------------------------------------------------------- the industry benchmark (per cent of commitment)
+    bench = Wd.benchmark_funds(Wo["gps"])
+    p = Wd.propensity(E)
+    br = []
+    last = qi(2026, 2)
+    for b in bench:
+        o = Wd.run_fund(b, E, S, R, p, b["fc"], upto=last)
+        for q in range(b["fc"], min(last, b["fc"] + Wd.ST[b["gp"]["st"]]["life"]) + 1):
+            c = o["call_inv"][q] + o["call_fee"][q] + o["call_exp"][q]; d = o["dist"][q]; n = o["nav"][q]
+            if c == 0 and d == 0 and n == 0: continue
+            br.append([b["id"], STRAT_NAME[b["gp"]["st"]], b["vint"], qend(q).isoformat(), "%.4f" % c, "%.4f" % d, "%.4f" % n])
+    rows[F_BENCH] = w_csv(os.path.join(tgt, F_BENCH), ["benchmark_fund", "strategy", "vintage", "period_end",
+        "contributions_pct_of_commitment", "distributions_pct_of_commitment", "nav_pct_of_commitment"], br)
+    # ---------------------------------------------------------------- market series
+    mk = []
+    for q in range(0, H_END + 1):
+        mk.append([qend(q).isoformat(), "%.2f" % E[q], "%.2f" % S[q], "%.3f" % R[q], "%.3f" % (R[q] * 0.55 + 2.1 + 0.3 * math.sin(q / 5.0))])
+    rows[F_MKT] = w_csv(os.path.join(tgt, F_MKT), ["quarter_end", "exit_activity_index_2015_100", "public_equity_total_return_index",
+        "short_rate_pct", "treasury_10y_yield_pct"], mk)
+    # ---------------------------------------------------------------- the holdings, spending, plan and survey
+    DC.holdings(os.path.join(tgt, DC.F_LIQ)); rows[DC.F_LIQ] = len(DC.HOLDINGS)
+    rows[DC.F_SPEND] = DC.spending(os.path.join(tgt, DC.F_SPEND))
+    plan = [f for f in fs if f["vint"] == 2027]
+    DC.pacing_plan(os.path.join(tgt, DC.F_PLAN), plan, MGR_NAMES); rows[DC.F_PLAN] = len(plan)
+    DC.peers(os.path.join(tgt, DC.F_PEER), np.random.default_rng(909)); rows[DC.F_PEER] = 24
+    return rows

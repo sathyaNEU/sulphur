@@ -1,28 +1,55 @@
-"""The documents of target/: the hedging policy (Word), the liquidity standard, NEX Clearing's public margin summary and
-the regulation licence extract (PDFs written through the house office writer), and the budget workbook. Documents
-describe the business and the rules it set itself; none describes how the desk, the plants, the customers or the
-clearing house actually behave."""
+"""The documents and workbooks of target/ written by hand for the world: the endowment's liquidity policy, its
+investment policy statement and the university's capital plan (PDFs through the house office writer), the liquid
+holdings report, the spending history, Corrigan Hart's draft pacing plan and a peer survey. Documents describe the
+rules the trustees set and the positions held; none describes how the managers behave."""
+import csv
 import datetime as dt
 import os
 from zoneinfo import ZoneInfo
 
-from docx import Document
-from docx.shared import Pt, Mm
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph, Spacer, Table
 
 import officepdf as O
-import sim as S
+import world as Wd
 
-OSL = ZoneInfo("Europe/Oslo")
-F_POLICY = "hk_hedging_policy_2025.docx"
-F_STANDARD = "hk_liquidity_standard_2026.pdf"
-F_NEXDOC = "nex_clearing_margin_summary.pdf"
-F_LICENCE = "hallingvass_regulation_licence_extract.pdf"
-F_BUDGET = "hk_budget_vintages_2016_2026.xlsx"
-F_CONTRACTS = "hk_supply_contracts_register.xlsx"
+NY = ZoneInfo("America/New_York")
+F_POLICY = "wexmoor_endowment_liquidity_policy_2025.pdf"
+F_IPS = "wexmoor_investment_policy_statement_2024.pdf"
+F_CAPPLAN = "wexmoor_university_capital_plan_FY2027_FY2031.pdf"
+F_LIQ = "liquid_holdings_2026-12-31.xlsx"
+F_SPEND = "spending_distributions_FY2014_FY2027.csv"
+F_PLAN = "corrigan_hart_pacing_plan_2027.xlsx"
+F_PEER = "peer_endowment_survey_2025.xlsx"
+
+CUSHION = 1200.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
+
+# the holdings at 31 December 2026 (USD m) and the class the Office of Investments assigns each
+HOLDINGS = [
+    ("Operating cash and money market funds", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 186.4, "Daily"),
+    ("US Treasury bills, 3 to 12 months", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 142.0, "Daily"),
+    ("US Treasury notes, 2 to 5 years", "Northern Ohio Trust (custody)", "Cash, money market funds and US Treasuries", 171.3, "Daily"),
+    ("Core fixed income account", "Harrowden Asset Management", "Investment-grade bonds", 228.6, "Daily"),
+    ("Intermediate credit account", "Lowfield Bond Partners", "Investment-grade bonds", 154.9, "Daily"),
+    ("US large cap index fund", "Brayfield Index Trust", "Public equities", 603.3, "Daily"),
+    ("US small and mid cap account", "Pembury Capital", "Public equities", 174.2, "Daily"),
+    ("International developed equity", "Strand Hill Global", "Public equities", 390.5, "Monthly"),
+    ("Emerging markets equity fund", "Kesgrave Partners", "Public equities", 212.7, "Monthly"),
+    ("Hollins Bay Multi-Strategy Fund", "Hollins Bay Capital", "Hedge funds: redeemable within 24 months", 96.4, "Quarterly, 65 days' notice"),
+    ("Carrow Point Credit Opportunities", "Carrow Point", "Hedge funds: redeemable within 24 months", 118.2, "Quarterly, 90 days' notice"),
+    ("Westerby Global Macro", "Westerby Partners", "Hedge funds: redeemable within 24 months", 84.7, "Monthly, 30 days' notice"),
+    ("Aldwick Equity Long/Short", "Aldwick Asset Management", "Hedge funds: redeemable within 24 months", 63.0, "Quarterly, 45 days' notice"),
+    ("Fenmore Event Driven Fund", "Fenmore Capital", "Hedge funds: not redeemable within 24 months", 141.5, "Locked to 30 June 2029"),
+    ("Saltire Structured Credit", "Saltire Investors", "Hedge funds: not redeemable within 24 months", 176.0, "Annual, 25% investor gate, side pocket"),
+    ("Corringham Activist Partners", "Corringham", "Hedge funds: not redeemable within 24 months", 95.3, "Three-year rolling lock to 2029"),
+    ("Timberland separate account", "Allerton Forest Resources", "Other holdings", 118.0, "None"),
+    ("University housing note (program-related)", "Wexmoor University", "Other holdings", 34.0, "None"),
+]
+FACTORS = {"Cash, money market funds and US Treasuries": 1.00, "Investment-grade bonds": 0.90, "Public equities": 0.70,
+           "Hedge funds: redeemable within 24 months": 0.90, "Hedge funds: not redeemable within 24 months": 0.0,
+           "Other holdings": 0.0}
 
 
 def _st():
@@ -35,212 +62,219 @@ def _st():
 
 
 def policy(path):
-    doc = Document()
-    sec = doc.sections[0]
-    sec.page_width, sec.page_height = Mm(210), Mm(297)
-    sec.left_margin = sec.right_margin = Mm(22)
-    st = doc.styles["Normal"]
-    st.font.name = "Calibri"
-    st.font.size = Pt(10.5)
-
-    def h(t, lvl=1):
-        doc.add_heading(t, level=lvl)
-
-    def p(t):
-        doc.add_paragraph(t)
-    doc.add_heading("Hallingvass Kraft AS: Hedging policy for power sales", 0)
-    p("Approved by the board on 11 December 2024, in force from 1 January 2025. Owner: Head of Trading. Replaces the "
-      "policy of 2021.")
-    h("1. Purpose")
-    p("The policy sets how much of each year's expected generation the company sells forward at a fixed price, so that "
-      "revenue in the coming years is less exposed to the system price, and who may do so on the company's behalf.")
-    h("2. Hedge ratio")
-    p("The hedge ratio of a delivery year is the share of that year's budgeted generation that has been sold forward "
-      "at a fixed price. Budgeted generation is the figure in the budget approved in October before the delivery year "
-      "or, for later years, the latest long-range budget.")
-    h("3. Limits")
-    p("The hedge ratio of each delivery year must stay between the minimum and the maximum below, read at the time "
-      "left until the delivery year starts. Between the points in the table the limits move in a straight line.")
-    t = doc.add_table(rows=1, cols=3)
-    t.style = "Table Grid"
-    hdr = t.rows[0].cells
-    hdr[0].text, hdr[1].text, hdr[2].text = "Time to the start of the delivery year", "Minimum", "Maximum"
-    for tau, lo, hi in S.P["ladder"]:
-        r = t.add_row().cells
-        r[0].text = "%d months" % int(round(12 * tau)) if tau > 0 else "Delivery year started"
-        r[1].text = "%d per cent" % round(100 * lo)
-        r[2].text = "%d per cent" % round(100 * hi)
-    p("")
-    p("Within the limits the Head of Trading decides the pace and timing of sales. The desk reports the hedge ratio of "
-      "each delivery year to the CFO every Monday.")
-    h("4. Instruments and counterparties")
-    p("Exchange-traded base-load futures on the Nordvik Energy Exchange, cleared at NEX Clearing, are the standard "
-      "instrument. Bilateral sales at a fixed price require the CFO's approval. Options and profile products are not "
-      "permitted.")
-    h("5. Authority")
-    p("The Head of Trading and the traders named in the trading mandate may enter trades within the limits. A breach "
-      "of a limit is reported to the CFO the same day and corrected within ten business days.")
-    h("6. Review")
-    p("The policy is reviewed every second year or after any year in which variation margin paid exceeded EUR 100 "
-      "million.")
-    doc.save(path)
-
-
-def standard(path):
     body, h1, h2, small, cell = _st()
-    s = [Paragraph("Hallingvass Kraft AS", small),
-         Paragraph("Liquidity standard: committed margin facility", h1),
-         Paragraph("Approved by the board on 9 December 2025. Owner: Treasurer. This standard sets how large the "
-                   "committed facility that funds the hedge program's cash needs at NEX Clearing and in the day-ahead "
-                   "market must be for each calendar year.", body),
-         Paragraph("1. Requirement", h2),
-         Paragraph("The facility committed for a calendar year must be at least the stress requirement for that year, "
-                   "rounded up to the next EUR 50 million.", body),
-         Paragraph("2. Stress requirement", h2),
-         Paragraph("The stress requirement is the largest cumulative net cash outflow of the hedge program during the "
-                   "year, counted from the year's first business day, in a year whose market prices and inflows repeat "
-                   "those of 2022. Treasury builds that year from the company's own records as set out in the annex.",
-                   body),
-         Paragraph("3. Net cash outflow", h2),
-         Paragraph("Net cash outflow is variation margin, delivery settlement and changes in initial margin paid to "
-                   "NEX Clearing, plus day-ahead purchases less day-ahead sales, less payments received from supply "
-                   "customers, each counted on the day the cash moves. Interest, fees, taxes and operating costs are "
-                   "left out.", body),
-         Paragraph("4. Review", h2),
-         Paragraph("Treasury computes the requirement each December for the coming year and again whenever the hedge "
-                   "book, the supply contracts or NEX Clearing's margin practice change materially. The facility "
-                   "committed for 2026 is EUR 150 million.", body),
-         Spacer(1, 6),
-         Paragraph("Annex. Building the stress year", h2),
-         Paragraph("(a) Every delivery month's forward price on the risk system's daily curve moves on each business "
-                   "day by the percentage the forward for the same calendar month moved on the corresponding day of "
-                   "2022 (the same date in 2022, or the latest 2022 business day before it), starting from the curve "
-                   "of the last business day of the previous year.", body),
-         Paragraph("(b) The system price of each calendar day is the stress curve's forward for the next delivery "
-                   "month on that day (the latest business day's curve) times the ratio of the 2022 system price of "
-                   "the corresponding date to the 2022 curve's forward for the next delivery month on that date.", body),
-         Paragraph("(c) Each week's inflow is the normal inflow for that week times the ratio of the 2022 inflow of "
-                   "the same ISO week to its normal.", body),
-         Paragraph("(d) Everything else runs as it runs in practice: the trading desk's hedging, the plants' operation "
-                   "within the regulation licence, the supply contracts and NEX Clearing's margining.", body),
+    s = [Paragraph("Wexmoor University Endowment  |  Office of Investments", small),
+         Paragraph("Liquidity policy for private-fund commitments", h1),
+         Paragraph("Adopted by the Investment Committee of the Board of Trustees on 14 March 2024 and amended on 11 "
+                   "September 2025. Owner: Chief Investment Officer.", body),
+         Paragraph("1. Purpose", h2),
+         Paragraph("The endowment commits to private funds years before the money is called, and the funds return it years "
+                   "later. This policy makes sure that a year's new commitments leave the endowment able to pay the "
+                   "university's spending distribution and every capital call through a severe market without selling "
+                   "fund interests or cutting the distribution.", body),
+         Paragraph("2. When the test is run", h2),
+         Paragraph("Before the Investment Committee approves a year's private-fund commitment budget, the Office of "
+                   "Investments tests the budget on the endowment's position at the preceding 31 December. The test covers "
+                   "the eight quarters from 1 January of the budget year.", body),
+         Paragraph("3. Net cash needs", h2),
+         Paragraph("Net cash needs over the eight quarters are the spending distribution, plus the capital calls on every "
+                   "private commitment (those made by 31 December and the budget's new commitments), less the distributions "
+                   "from the private funds. The spending distribution of each quarter is one quarter of the distribution "
+                   "the trustees approved for the fiscal year in which the test is run. Commitments to funds that have not "
+                   "held a first close count in full. A commitment's part not called when its fund's term ends is released "
+                   "and does not count.", body),
+         Paragraph("4. Liquid reserve", h2),
+         Paragraph("The liquid reserve is the endowment's holdings at 31 December, each counted at the share of its value its "
+                   "liquidity class allows: cash, money market funds and US Treasuries 100 per cent; investment-grade bonds "
+                   "90 per cent; public equities 70 per cent; hedge funds the endowment can redeem with the proceeds received "
+                   "within the eight quarters 90 per cent; all other holdings nothing. The factors stand for the stress in section "
+                   "6, so the holdings are counted at their 31 December values and not revalued along its path. The Office of "
+                   "Investments assigns each holding its class in the year-end holdings report.", body),
+         Paragraph("5. The test", h2),
+         Paragraph("A budget passes when the liquid reserve less the net cash needs of the eight quarters is at least the "
+                   "minimum reserve the Investment Committee sets each year. For the 2027 budget the minimum reserve is "
+                   "USD %s million. Budgets are set in multiples of USD 25 million." % format(int(CUSHION), ","), body),
+         Paragraph("6. The stress", h2),
+         Paragraph("Net cash needs are measured in a stress this policy sets. The exit market, read on the exit activity "
+                   "index, follows its path from the third quarter of 2008 to the second quarter of 2010 relative to its "
+                   "level in the second quarter of 2008, starting from its level in the last quarter before the test. "
+                   "Public equities stand at 85 per cent of their 31 December level in the first quarter and 70 per cent "
+                   "in the second, then recover five points a quarter to 100 per cent. Short-term interest rates stand 2.5 "
+                   "percentage points above their 31 December level throughout.", body),
+         Paragraph("7. Distributions in the stress", h2),
+         Paragraph("In each quarter of the stress, each fund distributes its value at 31 December times the distribution "
+                   "rate of its strategy in the matching quarter from the third quarter of 2008 in the industry cash-flow "
+                   "benchmark: the benchmark funds' distributions in that quarter over their value at the end of the "
+                   "previous quarter, each summed over the strategy's funds. A fund's value at 31 December is its capital "
+                   "account value at that date; where the manager's statement for the fourth quarter has not arrived, it is "
+                   "the value at 30 September plus the fourth quarter's capital calls less its distributions as the "
+                   "custodian recorded them.", body),
+         Paragraph("8. Capital calls in the stress", h2),
+         Paragraph("Capital calls are those the endowment's own managers can be expected to make in the stress, judged from "
+                   "their record in the endowment's funds.", body),
+         Paragraph("9. The budget's new commitments", h2),
+         Paragraph("A budget's new commitments are spread across the funds of the year's pacing plan in the plan's "
+                   "proportions.", body),
+         Paragraph("10. Reporting", h2),
+         Paragraph("The Office of Investments reports the result to the Investment Committee with the budget, and the "
+                   "Committee may approve any budget up to the largest that passes.", body),
          Spacer(1, 8),
-         Paragraph("Hallingvass Kraft AS, Treasury. Internal.", small)]
-    O.build(path, s, "Liquidity standard: committed margin facility", "Jorunn Solberg", "Liquidity standard",
-            "Hallingvass Kraft AS  |  Treasury  |  Internal", dt.datetime(2025, 12, 9, 14, 12, 40, tzinfo=OSL),
-            dt.datetime(2025, 12, 9, 14, 31, 5, tzinfo=OSL))
+         Paragraph("Wexmoor University Endowment. Office of Investments. Internal.", small)]
+    O.build(path, s, "Liquidity policy for private-fund commitments", "Daniel Marshall", "Liquidity policy",
+            "Wexmoor University Endowment  |  Office of Investments  |  Internal",
+            dt.datetime(2025, 9, 11, 16, 2, 31, tzinfo=NY), dt.datetime(2025, 9, 11, 16, 20, 4, tzinfo=NY), producer="LibreOffice 25.8")
 
 
-def nexdoc(path):
+def ips(path):
     body, h1, h2, small, cell = _st()
-    s = [Paragraph("NEX Clearing", small),
-         Paragraph("Margining of Nordic base-load futures: summary for clearing members", h1),
-         Paragraph("This summary describes how NEX Clearing margins the base-load futures listed on the Nordvik Energy "
-                   "Exchange. The clearing rules and the clearing notices prevail over it.", body),
-         Paragraph("Products and cascading", h2),
-         Paragraph("Base Year futures cascade at expiry into the four Base Quarter futures of the year, and Base "
-                   "Quarter futures cascade into the three Base Month futures of the quarter. A month future's "
-                   "delivery period is settled day by day against the system price.", body),
-         Paragraph("Variation margin and delivery settlement", h2),
-         Paragraph("Open positions are marked to the daily settlement price, and the change is paid or received on "
-                   "the same business day. Each delivery day of a position in delivery is settled against that day's "
-                   "system price on the next business day, at the position's last settlement price before delivery.",
-                   body),
-         Paragraph("Initial margin", h2),
-         Paragraph("Initial margin is the energy of each open position not yet settled times the margin rate of the "
-                   "product class in which the position is held after cascading (Base Month, Base Quarter or Base "
-                   "Year). Positions in delivery are margined in the Base Month class on their remaining days. Margin "
-                   "rates are set by NEX Clearing's risk function from the observed behaviour of settlement prices and "
-                   "are published in clearing notices with the date from which they apply.", body),
-         Paragraph("Collateral", h2),
-         Paragraph("Margin is called in euro cash. Members may not post securities or bank guarantees against the "
-                   "Nordic power margin pool.", body),
+    rows = [["Asset class", "Target", "Range"], ["Public equities", "23%", "15% to 30%"], ["Hedge funds", "13%", "8% to 18%"],
+            ["Private equity and venture capital", "32%", "25% to 40%"], ["Real assets (real estate, infrastructure, timber)", "14%", "8% to 18%"],
+            ["Private credit", "6%", "2% to 10%"], ["Fixed income and cash", "12%", "8% to 20%"]]
+    t = Table([[Paragraph(c, cell) for c in r] for r in rows], colWidths=[260, 70, 90])
+    s = [Paragraph("Wexmoor University Endowment", small),
+         Paragraph("Investment policy statement", h1),
+         Paragraph("Approved by the Board of Trustees on 6 June 2024 on the recommendation of the Investment Committee.", body),
+         Paragraph("1. The endowment's purpose", h2),
+         Paragraph("The endowment supports the university's teaching, research and financial aid in perpetuity. Its "
+                   "investment objective is a real total return of at least the spending rate plus the growth of the "
+                   "university's costs, measured over rolling ten-year periods.", body),
+         Paragraph("2. Spending", h2),
+         Paragraph("The distribution for each fiscal year (1 July to 30 June) is approved by the trustees in June. It is "
+                   "70 per cent of the previous year's distribution raised by the Higher Education Price Index, plus 30 "
+                   "per cent of 4.5 per cent of the endowment's value at the preceding 31 December. The trustees may "
+                   "depart from the rule in an extraordinary year.", body),
+         Paragraph("3. Asset allocation", h2), t, Spacer(1, 6),
+         Paragraph("4. Rebalancing", h2),
+         Paragraph("The Chief Investment Officer rebalances the liquid portfolio when an asset class leaves its range. "
+                   "Private allocations move with commitments and are not rebalanced by sale.", body),
+         Paragraph("5. Delegation", h2),
+         Paragraph("The Investment Committee approves the annual private-fund commitment budget and the liquidity policy. "
+                   "The Chief Investment Officer selects managers within the budget, with the advice of the endowment's "
+                   "consultant.", body),
          Spacer(1, 8),
-         Paragraph("NEX Clearing, Risk. Public.", small)]
-    O.build(path, s, "Margining of Nordic base-load futures", "NEX Clearing Risk", "Margin summary",
-            "NEX Clearing  |  Public", dt.datetime(2023, 3, 1, 9, 15, 0, tzinfo=OSL),
-            dt.datetime(2023, 3, 1, 9, 22, 41, tzinfo=OSL), producer="LibreOffice 7.5")
+         Paragraph("Wexmoor University. Board of Trustees.", small)]
+    O.build(path, s, "Investment policy statement", "Jonathan Potter", "Investment policy statement",
+            "Wexmoor University Endowment  |  Investment policy statement",
+            dt.datetime(2024, 6, 6, 10, 44, 12, tzinfo=NY), dt.datetime(2024, 6, 6, 11, 5, 48, tzinfo=NY), producer="LibreOffice 24.2")
 
 
-def licence(path):
+def capplan(path):
     body, h1, h2, small, cell = _st()
-    s = [Paragraph("Extract from the regulation licence for the Hallingvass reservoirs", h1),
-         Paragraph("Granted by royal decree of 14 June 1974, amended 2 March 2018. Extract made by Hallingvass Kraft AS "
-                   "for internal use; the licence in full prevails.", small),
-         Paragraph("Section 3. Regulation limits", h2),
-         Paragraph("The reservoirs may be regulated between the lowest and highest regulated water levels stated in "
-                   "the annex. Together they hold 2,600 GWh of stored energy at the highest regulated level.", body),
-         Paragraph("Section 4. Minimum storage", h2),
-         Paragraph("Stored energy in the regulated reservoirs shall not be drawn below %d GWh at any time of the " % S.P["res_floor"] +
-                   "year, so that the minimum flows in Section 5 can be released through a dry winter.", body),
-         Paragraph("Section 5. Minimum flows", h2),
-         Paragraph("Below the main dam at least 1.2 cubic metres a second shall be released from 1 May to 30 September "
-                   "and 0.6 cubic metres a second for the rest of the year.", body),
-         Paragraph("Section 9. Reporting", h2),
-         Paragraph("The licensee reports weekly storage and inflow to the regulator and publishes them with the "
-                   "normal (median) values for each week.", body)]
-    O.build(path, s, "Regulation licence extract", "Hallingvass Kraft AS", "Licence extract",
-            "Hallingvass Kraft AS  |  Production", dt.datetime(2018, 3, 20, 10, 5, 0, tzinfo=OSL),
-            dt.datetime(2018, 3, 20, 10, 9, 33, tzinfo=OSL), producer="LibreOffice 6.0")
+    rows = [["Project", "Cost (USD m)", "Funding", "Years"],
+            ["Hartley Science Building renewal", "182", "Bonds 120, gifts 62", "FY2027 to FY2030"],
+            ["North Campus residence halls", "146", "Bonds 146 (housing revenue)", "FY2027 to FY2029"],
+            ["Library and learning commons", "64", "Gifts 40, operating 24", "FY2028 to FY2030"],
+            ["Central plant and steam line replacement", "58", "Operating 30, bonds 28", "FY2027 to FY2031"],
+            ["Athletics fields and track", "21", "Gifts 21", "FY2029 to FY2030"]]
+    t = Table([[Paragraph(c, cell) for c in r] for r in rows], colWidths=[180, 60, 130, 90])
+    s = [Paragraph("Wexmoor University  |  Finance and Administration", small),
+         Paragraph("Capital plan FY2027 to FY2031", h1),
+         Paragraph("Presented to the Finance Committee of the Board of Trustees on 18 September 2026.", body),
+         Paragraph("Summary", h2),
+         Paragraph("The plan carries USD 471 million of projects over five years. USD 294 million is to be borrowed in two "
+                   "tax-exempt series in fiscal 2027 and fiscal 2029, USD 123 million is to come from gifts already "
+                   "pledged or in solicitation, and USD 54 million from operating budgets. No project draws on the "
+                   "endowment beyond the annual distribution the trustees approve.", body),
+         Paragraph("Projects", h2), t, Spacer(1, 6),
+         Paragraph("Debt", h2),
+         Paragraph("After the two series the university's debt rises from USD 612 million to USD 871 million. Debt service "
+                   "stays below 5.5 per cent of operating expenses in every year of the plan, inside the 7 per cent limit "
+                   "of the debt policy. The university keeps USD 150 million of operating liquidity, separate from the "
+                   "endowment, against its bonds' covenants.", body),
+         Paragraph("Gifts", h2),
+         Paragraph("Of the USD 123 million of gifts, USD 71 million is pledged and USD 52 million is in solicitation. If "
+                   "solicitation falls short the library is deferred.", body),
+         Spacer(1, 8),
+         Paragraph("Wexmoor University. Office of the Vice President for Finance.", small)]
+    O.build(path, s, "Capital plan FY2027 to FY2031", "Wexmoor University Finance", "Capital plan",
+            "Wexmoor University  |  Capital plan FY2027 to FY2031",
+            dt.datetime(2026, 9, 18, 9, 12, 5, tzinfo=NY), dt.datetime(2026, 9, 18, 9, 40, 31, tzinfo=NY), producer="LibreOffice 26.2")
 
 
-def budget(path, W):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Budget vintages"
-    ws.append(["Budget approved", "Delivery year", "Budget price (EUR/MWh)", "Budgeted generation (GWh)"])
-    for c in ws[1]:
-        c.font = Font(bold=True)
-    for set_on, y, px, gen in sorted(W.bud, key=lambda x: (x[0], x[1])):
-        if set_on.year < 2016:
-            continue
-        ws.append([set_on if set_on.year >= 2017 else dt.date(2016, 10, 3), y, round(px, 2), round(gen / 1e3)])
-    for row in ws.iter_rows(min_row=2, max_col=1):
-        for c in row:
-            c.number_format = "yyyy-mm-dd"
-    ws.column_dimensions["A"].width = 16
-    ws.column_dimensions["B"].width = 13
-    ws.column_dimensions["C"].width = 22
-    ws.column_dimensions["D"].width = 26
+def holdings(path):
+    wb = Workbook(); ws = wb.active; ws.title = "Holdings 31 Dec 2026"
+    ws.append(["Holding", "Manager or custodian", "Policy liquidity class", "Market value 31 Dec 2026 (USD m)", "Liquidity terms"])
+    for c in ws[1]: c.font = Font(bold=True)
+    for h in HOLDINGS:
+        ws.append(list(h[:3]) + [h[3], h[4]])
+    ws.append([])
+    ws.append(["Private funds at capital account value are reported separately (capital account statements)."])
+    for col, w in zip("ABCDE", (44, 30, 44, 16, 34)):
+        ws.column_dimensions[col].width = w
     wb.save(path)
 
 
-def contracts(path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Supply contracts"
-    ws.append(["Customer", "Contract", "Start", "End", "Volume", "Price basis", "Invoicing", "Payment terms"])
-    for c in ws[1]:
-        c.font = Font(bold=True)
-    ws.append(["Fjordal Aluminium AS", "FA-2019-01", dt.date(2020, 1, 1), dt.date(2029, 12, 31), "%d MW base load" % S.P["smelter_mw"],
-               "EUR %.2f/MWh for the whole term" % S.P["smelter_px"][2025], "Monthly in arrears", "30 days from invoice"])
-    ws.append(["Nesbyen Treforedling AS", "NT-2016-03", dt.date(2016, 7, 1), "Evergreen, 12 months' notice",
-               "%d MW base load" % S.P["pulp_mw"], "Monthly average system price", "Monthly in arrears", "30 days from invoice"])
-    ws.append(["Hallingvass Straum AS", "Group supply", dt.date(2012, 1, 1), "Evergreen",
-               "{:,.0f} GWh a year on the retail load profile".format(S.P["affiliate_gwh"]), "Group transfer price", "Monthly in arrears",
-               "30 days from invoice"])
-    ws.append(["Bygdenett AS", "BN-2018-07", dt.date(2018, 1, 1), dt.date(2028, 12, 31),
-               "Grid losses, {:,.0f} GWh a year on the losses profile".format(S.P["grid_gwh"]), "Monthly average system price",
-               "Monthly in arrears", "30 days from invoice"])
-    for row in ws.iter_rows(min_row=2):
-        for c in row[2:4]:
-            if isinstance(c.value, dt.date):
-                c.number_format = "yyyy-mm-dd"
-    for col, wd in zip("ABCDEFGH", (26, 14, 12, 26, 40, 32, 20, 22)):
-        ws.column_dimensions[col].width = wd
-    prof = wb.create_sheet("Profiles")
-    prof.append(["Month", "Retail load (share of year)", "Grid losses (share of year)"])
-    for c in prof[1]:
-        c.font = Font(bold=True)
-    for m in range(12):
-        prof.append([m + 1, round(float(S.RETAIL_SHAPE[m] / S.RETAIL_SHAPE.sum()), 5),
-                     round(float(S.LOSS_SHAPE[m] / S.LOSS_SHAPE.sum()), 5)])
+def spending_series():
+    """the trustees' distributions by fiscal year under the spending rule, from the endowment's value at each preceding
+    31 December (USD m)."""
+    vals = {2012: 3050.0}
+    ret = {2013: 0.112, 2014: 0.071, 2015: 0.018, 2016: 0.064, 2017: 0.121, 2018: 0.026, 2019: 0.118, 2020: 0.094,
+           2021: 0.236, 2022: -0.071, 2023: 0.083, 2024: 0.097, 2025: 0.088}
+    inflow = {y: 0.030 for y in ret}
+    for y in sorted(ret):
+        vals[y] = round(vals[y - 1] * (1 + ret[y] + inflow[y]) - 0.045 * vals[y - 1], 1)
+    out = []
+    dist = round(0.045 * vals[2012], 1)
+    hepi = 0.031
+    for fy in range(2014, 2028):
+        v = vals[fy - 2]
+        dist = dist if fy == 2014 else round(0.7 * dist * (1 + hepi) + 0.3 * 0.045 * v, 1)
+        out.append((fy, v, dist))
+    return out
+
+
+def spending(path):
+    rows = spending_series()
+    with open(path, "w", newline="") as fh:
+        w = csv.writer(fh, lineterminator="\n")
+        w.writerow(["fiscal_year", "endowment_value_prior_dec31_usd_m", "approved_distribution_usd_m", "paid_q1_usd_m",
+                    "paid_q2_usd_m", "paid_q3_usd_m", "paid_q4_usd_m"])
+        for fy, v, dist in rows:
+            q = "%.2f" % (dist / 4.0)
+            w.writerow([fy, "%.1f" % v, "%.1f" % dist] + ([q] * 4 if fy < 2027 else [q, q, "", ""]))
+    return len(rows)
+
+
+def pacing_plan(path, plan_funds, names):
+    wb = Workbook(); ws = wb.active; ws.title = "2027 proposed commitments"
+    ws.append(["Fund", "Manager", "Strategy", "Proposed commitment (USD m)", "Commitment expected", "First close expected", "Relationship"])
+    for c in ws[1]: c.font = Font(bold=True)
+    for f in plan_funds:
+        ws.append([f["name"], names[f["gp"]["id"]], {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate",
+                   "IN": "Infrastructure", "PC": "Private credit"}[f["gp"]["st"]], f["C"], "Q%d 2027" % Wd.qq(f["commit_q"]),
+                   "Q%d %d" % (Wd.qq(f["exp_fc"]), Wd.qy(f["exp_fc"])), "Re-up"])
+    ws.append(["Total", "", "", sum(f["C"] for f in plan_funds), "", "", ""])
+    ws2 = wb.create_sheet("Long-range pacing")
+    ws2.append(["Year", "Buyout", "Growth equity", "Venture capital", "Real estate", "Infrastructure", "Private credit", "Total (USD m)"])
+    for c in ws2[1]: c.font = Font(bold=True)
+    order = ["BO", "GE", "VC", "RE", "IN", "PC"]
+    first = [sum(f["C"] for f in plan_funds if f["gp"]["st"] == s) for s in order]     # 2027 is the year's proposed funds
+    ws2.append([2027] + first + [sum(first)])
+    base = [175, 95, 50, 65, 50, 65]
+    for k, y in enumerate(range(2028, 2032), start=1):
+        g = 1.0 + 0.04 * k
+        v = [round(b * g / 5.0) * 5 for b in base]
+        ws2.append([y] + v + [sum(v)])
+    ws3 = wb.create_sheet("Notes")
+    for line in ["Draft for discussion with the Office of Investments, 7 December 2026, for the Investment Committee's March 2027 meeting.",
+                 "The 2027 programme continues existing relationships; no new managers are proposed for 2027, and infrastructure resumes in 2028.",
+                 "Commitments are sized to keep the private allocation near its 52 per cent policy target by 2031.",
+                 "Corrigan Hart LLC, Private Markets Advisory."]:
+        ws3.append([line])
     wb.save(path)
 
 
-def write_all(tgt, W):
-    contracts(os.path.join(tgt, F_CONTRACTS))
-    policy(os.path.join(tgt, F_POLICY))
-    standard(os.path.join(tgt, F_STANDARD))
-    nexdoc(os.path.join(tgt, F_NEXDOC))
-    licence(os.path.join(tgt, F_LICENCE))
-    budget(os.path.join(tgt, F_BUDGET), W)
+def peers(path, rng):
+    wb = Workbook(); ws = wb.active; ws.title = "Survey 2025"
+    ws.append(["Endowment", "Value 30 Jun 2025 (USD bn)", "Private allocation", "Unfunded commitments / value", "Liquid within 1 year",
+               "Payout rate FY2025", "10-year return"])
+    for c in ws[1]: c.font = Font(bold=True)
+    for i in range(24):
+        v = round(float(rng.uniform(2.5, 14.0)), 1)
+        pa = float(rng.uniform(0.30, 0.62)); unf = pa * float(rng.uniform(0.28, 0.55)); liq = max(0.08, 1 - pa - float(rng.uniform(0.10, 0.25)))
+        ws.append(["Peer %02d" % (i + 1), v, "%.0f%%" % (100 * pa), "%.0f%%" % (100 * unf), "%.0f%%" % (100 * liq),
+                   "%.1f%%" % float(rng.uniform(4.0, 5.4)), "%.1f%%" % float(rng.uniform(6.2, 10.8))])
+    ws2 = wb.create_sheet("About")
+    ws2.append(["Survey of private university endowments of USD 2.5 billion to USD 14 billion, fiscal year 2025, anonymised."])
+    ws2.append(["Compiled by Corrigan Hart LLC from responses received by 30 September 2025."])
+    wb.save(path)

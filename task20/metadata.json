@@ -1,168 +1,137 @@
 {
  "task": "task20",
- "architecture": 3,
- "as_of": "2026-12-31",
- "decision": "the committed margin facility Hallingvass Kraft needs for 2027 under its liquidity standard",
+ "architecture": 4,
+ "as_of": "2027-03-12",
+ "position_date": "2026-12-31",
+ "decision": "the largest 2027 private-fund commitment budget Wexmoor University's endowment can approve under its liquidity policy",
  "deliverables": [
-  "hallingvass_margin_facility_2027.xlsx",
-  "margin_facility_2027_note.docx"
+  "wexmoor_2027_commitment_capacity.xlsx",
+  "commitment_budget_2027_memo.pdf"
  ],
  "distractors": [
-  "eurnok_daily_2018_2026.csv",
-  "hk_heating_degree_days_weekly.csv"
+  "peer_endowment_survey_2025.xlsx",
+  "wexmoor_investment_policy_statement_2024.pdf",
+  "wexmoor_university_capital_plan_FY2027_FY2031.pdf"
  ],
  "distractor_notes": {
-  "eurnok_daily_2018_2026.csv": "daily EUR/NOK fixings: every price, margin and invoice in the pack is in euro, so it bears on no result",
-  "hk_heating_degree_days_weekly.csv": "weekly heating degree days for the company's area: they look like a driver of the retail affiliate's load, but supply volumes are contracted on fixed profiles and output follows inflow and storage"
+  "peer_endowment_survey_2025.xlsx": "a peer survey of endowments' allocations, unfunded ratios and liquidity: it looks like a yardstick for the budget, but the policy tests Wexmoor's own reserve and cash flows, so no figure in it enters a result",
+  "wexmoor_university_capital_plan_FY2027_FY2031.pdf": "the university's capital plan and borrowing: it looks like a claim on liquidity, but it draws nothing from the endowment beyond the approved distribution, which the spending file already carries",
+  "wexmoor_investment_policy_statement_2024.pdf": "the investment policy statement's allocation targets and spending rule: the liquidity policy fixes the spending as FY2027's approved distribution, so neither enters a result"
  },
  "stated_inputs": [
-  "2022",
+  "500",
   "2027",
-  "2026",
-  "2021",
-  "50",
-  "150",
-  "700",
-  "38.00",
-  "100",
-  "70",
-  "1,800",
-  "300"
+  "2028",
+  "2026"
  ],
  "field_terms": [
-  "margin",
-  "variation margin",
-  "initial margin",
-  "facility",
-  "hedge ratio",
-  "cascade",
-  "day-ahead",
-  "inflow",
-  "storage",
-  "settlement"
+  "capital call",
+  "distribution",
+  "unfunded commitment",
+  "first close",
+  "subscription line",
+  "recycling",
+  "pacing",
+  "liquidity",
+  "stress"
  ],
  "rows": {
-  "nex_daily_settlement_2018_2026.csv": 36176,
-  "hk_risk_curve_daily_2018_2026.csv": 109128,
-  "nex_margin_parameters_2018_2026.csv": 246,
-  "nex_clearing_statements_2018_2026.csv": 2258,
-  "nex_positions_month_end_2017_2026.csv": 596,
-  "hk_trade_capture_2018_2026.csv": 441,
-  "hk_hydrology_weekly_2017_2026.csv": 522,
-  "hk_plant_output_monthly_2017_2026.csv": 600,
-  "hk_sales_ledger_2018_2026.csv": 438,
-  "nex_dayahead_settlements_2018_2026.csv": 3287,
-  "eurnok_daily_2018_2026.csv": 2257,
-  "hk_heating_degree_days_weekly.csv": 522
+  "capital_account_statements_2013Q1_2026Q4.csv": 2303,
+  "custodian_cash_activity_2026Q4.csv": 107,
+  "manager_portfolio_activity_2013_2026.csv": 21568,
+  "fund_audited_financials_FY2013_FY2026.xlsx": 531,
+  "private_commitment_register_2026-12-31.xlsx": 98,
+  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": 69675,
+  "market_series_quarterly_2000Q1_2026Q4.csv": 108,
+  "liquid_holdings_2026-12-31.xlsx": 18,
+  "spending_distributions_FY2014_FY2027.csv": 14,
+  "corrigan_hart_pacing_plan_2027.xlsx": 5,
+  "peer_endowment_survey_2025.xlsx": 24
  },
  "files": {
-  "eurnok_daily_2018_2026.csv": {
-   "source": "Simulated EUR/NOK daily fixings",
+  "capital_account_statements_2013Q1_2026Q4.csv": {
+   "source": "Simulated quarterly capital account statements of the endowment's private-fund interests",
+   "role": "evidence",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "corrigan_hart_pacing_plan_2027.xlsx": {
+   "source": "Simulated consultant's draft pacing plan for 2027",
+   "role": "evidence",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "custodian_cash_activity_2026Q4.csv": {
+   "source": "Simulated custodian cash activity for the fourth quarter of 2026",
+   "role": "evidence",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "fund_audited_financials_FY2013_FY2026.xlsx": {
+   "source": "Simulated funds' audited financial statements, compiled by the Office of Investments",
+   "role": "evidence",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": {
+   "source": "Simulated industry private-fund cash-flow benchmark (anonymised funds)",
+   "role": "evidence",
+   "pull_date": "2026-12-04",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "liquid_holdings_2026-12-31.xlsx": {
+   "source": "Simulated year-end liquid holdings report",
+   "role": "evidence",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "manager_portfolio_activity_2013_2026.csv": {
+   "source": "Simulated managers' portfolio activity reports (fund level)",
+   "role": "evidence",
+   "pull_date": "2027-03-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "market_series_quarterly_2000Q1_2026Q4.csv": {
+   "source": "Simulated quarterly market series (exit activity index, public equity index, short rate)",
+   "role": "evidence",
+   "pull_date": "2027-01-04",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "peer_endowment_survey_2025.xlsx": {
+   "source": "Simulated consultant's peer endowment survey",
    "role": "distractor",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
   },
-  "hallingvass_regulation_licence_extract.pdf": {
-   "source": "Extract from the reservoirs' regulation licence (written for this task)",
-   "role": "standard",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_budget_vintages_2016_2026.xlsx": {
-   "source": "The company's budget vintages (simulated)",
+  "private_commitment_register_2026-12-31.xlsx": {
+   "source": "Simulated private commitment register of the Office of Investments",
    "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
   },
-  "hk_heating_degree_days_weekly.csv": {
-   "source": "Simulated weekly heating degree days",
+  "spending_distributions_FY2014_FY2027.csv": {
+   "source": "Simulated spending distributions by fiscal year",
+   "role": "evidence",
+   "pull_date": "2026-07-02",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "wexmoor_endowment_liquidity_policy_2025.pdf": {
+   "source": "The endowment's liquidity policy (written for this task)",
+   "role": "standard",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
+  },
+  "wexmoor_investment_policy_statement_2024.pdf": {
+   "source": "The endowment's investment policy statement (written for this task)",
    "role": "distractor",
-   "pull_date": "2026-12-30",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
   },
-  "hk_hedging_policy_2025.docx": {
-   "source": "The company's hedging policy (written for this task)",
-   "role": "standard",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_hydrology_weekly_2017_2026.csv": {
-   "source": "Simulated weekly inflow and storage as reported to the regulator, with weekly normals",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_liquidity_standard_2026.pdf": {
-   "source": "The company's liquidity standard for the margin facility (written for this task)",
-   "role": "standard",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_plant_output_monthly_2017_2026.csv": {
-   "source": "Simulated monthly output by plant",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_risk_curve_daily_2018_2026.csv": {
-   "source": "Simulated risk system daily monthly forward curve",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_sales_ledger_2018_2026.csv": {
-   "source": "Simulated billing system extract of supply invoices and payments",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_supply_contracts_register.xlsx": {
-   "source": "The company's supply contract register (written for this task)",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "hk_trade_capture_2018_2026.csv": {
-   "source": "Simulated trade capture export of the hedge desk",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_clearing_margin_summary.pdf": {
-   "source": "NEX Clearing's public margining summary (written for this task)",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_clearing_statements_2018_2026.csv": {
-   "source": "Simulated NEX Clearing daily clearing statements for the hedge account",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_daily_settlement_2018_2026.csv": {
-   "source": "Simulated Nordvik Energy Exchange daily settlement prices for base-load futures",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_dayahead_settlements_2018_2026.csv": {
-   "source": "Simulated day-ahead market settlements of the company's net position",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_margin_parameters_2018_2026.csv": {
-   "source": "Simulated NEX Clearing margin rate notices",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
-  },
-  "nex_positions_month_end_2017_2026.csv": {
-   "source": "Simulated NEX Clearing month-end position statements",
-   "role": "evidence",
-   "pull_date": "2026-12-31",
-   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  "wexmoor_university_capital_plan_FY2027_FY2031.pdf": {
+   "source": "The university's capital plan (written for this task)",
+   "role": "distractor",
+   "pull_date": "2027-03-12",
+   "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"
   }
  }
 }

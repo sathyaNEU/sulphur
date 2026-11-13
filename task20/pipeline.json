@@ -1,40 +1,40 @@
 {
  "task": "task20",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 unfunded and pending commitments at 31 December 2026 by strategy; R2 the capital the managers have invested and not yet called at 31 December 2026; R3 the distributions' lagged, asymmetric response to the exit market; R4 the pending funds' first closes and first calls; R5 calls and distributions on the 2026 commitments over 2027-2028 by half-year; R6 the policy's 24-month net cash need and headroom at the consultant's USD 500 million; R7 the largest 2027 budget that passes",
+ "call": "Approve a 2027 private-fund budget of no more than USD 250 million (268.6 before the policy's USD 25 million steps; band 175 to 350), not Corrigan Hart's USD 500 million, which fails by USD 123.3 million",
+ "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 calls of the funds that have held a first close by half-year 2027-28 (the credit-line stock, the defensive follow-ons); R3 calls of the funds yet to close by half-year (slipped first closes); R4 distributions by half-year at the policy's 2008-10 rates; R5 net cash needs at USD 500 million; R6 headroom above the minimum reserve at USD 500 million; R7 the largest 2027 budget that passes",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (the plan's notes, the survey's provenance, the policy's vocabulary), every line ruled harmless",
+  "reader": "pass 1: two fixes (the stress named on the half-year asks; the plan's two 2027 splits made one); pass 2 on the final cut: no fix"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (task type, forcing event, gate_g repeat; skeleton house shell)",
+  "nearest": "skeleton severity none against every card, the client corpus and the lineage"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "determinism_check_report.md (pass 1) and determinism_check_report_pass2.md (pass 2, the final cut); no fixes; the follow-on coefficient's denominator rival added to the golden family"
  },
- "paper_pair": null,
+ "paper_pair": 43.7,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 20.2,
+  "careful": 43.7,
+  "thorough": 100.0,
+  "largest_hint": "first closes slip with the exit index in the quarter before; rescues 1 of 7"
  },
  "runs": {
   "run1": null,
@@ -89,7 +89,7 @@
    "commit": "re-root to architecture 4: the review returned annex (a) open, and the pasted run made every deep step of architecture 3, so pinning alone would land it"
   }
  ],
- "resume": "",
+ "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py --rewrite and leak.py on the rewrite), uploads it with target.zip; then /triage-runs task20 with both run scores",
  "approved": null,
  "submitted": null,
  "portal": {

@@ -1,10 +1,11 @@
-"""Independent verifier: recomputes figures from target/ and the golden workbook with plain parsing, no analysis.py."""
+"""Independent verifier: recomputes the assembly figures, the reserve, the spending and the policy's distributions from
+target/ with plain parsing (no analysis.py), and reads the golden workbook back against figures.json."""
 import csv
 import datetime as dt
 import json
 import os
-import re
 import sys
+from collections import defaultdict
 from openpyxl import load_workbook
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -15,7 +16,7 @@ fails = []
 
 
 def ok(name, cond, detail=""):
-    print("%-4s %-62s %s" % ("PASS" if cond else "FAIL", name, detail))
+    print("%-4s %-66s %s" % ("PASS" if cond else "FAIL", name, detail))
     if not cond:
         fails.append(name)
 
@@ -24,73 +25,69 @@ def rows(f):
     return list(csv.DictReader(open(T(f), newline="")))
 
 
-# 2022 records: NEX net cash, day-ahead net, customer payments, by cash date
-flow = {}
-for r in rows("nex_clearing_statements_2018_2026.csv"):
-    if r["status"] != "superseded" and r["statement_date"].startswith("2022"):
-        flow[r["statement_date"]] = flow.get(r["statement_date"], 0.0) + float(r["net_cash_to_nex"])
-days = sorted(flow)
-for r in rows("nex_dayahead_settlements_2018_2026.csv"):
-    if r["settlement_date"] in flow:
-        flow[r["settlement_date"]] -= float(r["net_amount_eur"])
-for r in rows("hk_sales_ledger_2018_2026.csv"):
-    if r["paid_date"] in flow and r["paid_eur"]:
-        flow[r["paid_date"]] -= float(r["paid_eur"])
-cum, best = 0.0, (-1e18, None)
-for d in days:
-    cum += flow[d]
-    if cum > best[0]:
-        best = (cum, d)
-ok("2022 records' peak", abs(best[0] / 1e6 - F["c22_actual_m"]) < 0.06, "%.2f on %s" % (best[0] / 1e6, best[1]))
+def sheet(f, name=None):
+    wb = load_workbook(T(f), data_only=True)
+    ws = wb[name] if name else wb.worksheets[0]
+    it = ws.iter_rows(values_only=True); hdr = next(it)
+    return [dict(zip(hdr, r)) for r in it if any(v is not None for v in r)]
 
-# the opening book from the month-end statement
-twh = {}
-for r in rows("nex_positions_month_end_2017_2026.csv"):
-    if r["month_end"] != "2026-12-30":
+
+qkey = lambda d: (d.year, (d.month - 1) // 3)
+reg = {r["Fund ID"]: r for r in sheet("private_commitment_register_2026-12-31.xlsx")}
+paid = defaultdict(float); nav = {}; navq = {}
+for r in rows("capital_account_statements_2013Q1_2026Q4.csv"):
+    if r["note"] == "superseded":
         continue
-    s, e = dt.date.fromisoformat(r["delivery_start"]), dt.date.fromisoformat(r["delivery_end"])
-    if s.year < 2027:
+    paid[r["fund_id"]] += sum(float(r[k]) for k in ("contributions_investments_usd", "contributions_management_fees_usd", "contributions_fund_expenses_usd")) / 1e6
+    d = dt.date.fromisoformat(r["period_end"])
+    if r["fund_id"] not in navq or d > navq[r["fund_id"]]:
+        navq[r["fund_id"]] = d; nav[r["fund_id"]] = float(r["ending_nav_usd"]) / 1e6
+for r in rows("custodian_cash_activity_2026Q4.csv"):
+    if navq.get(r["fund_id"]) == dt.date(2026, 12, 31):
         continue
-    twh[s.year] = twh.get(s.year, 0.0) - float(r["position_mw"]) * ((e - s).days + 1) * 24 / 1e6
-ok("open book 2027", abs(twh.get(2027, 0) - F["book_open_2027_twh"]) < 0.001, "%.3f" % twh.get(2027, 0))
-ok("open book 2028", abs(twh.get(2028, 0) - F["book_open_2028_twh"]) < 0.001, "%.3f" % twh.get(2028, 0))
-
-# hedge ratios on the policy's basis
-wb = load_workbook(T("hk_budget_vintages_2016_2026.xlsx"), data_only=True)
-gen = {}
-for r in list(wb.active.iter_rows(values_only=True))[1:]:
-    s = r[0].date() if isinstance(r[0], dt.datetime) else r[0]
-    if s <= dt.date(2026, 12, 30):
-        if r[1] not in gen or s >= gen[r[1]][0]:
-            gen[r[1]] = (s, float(r[3]) * 1e3)
-for y in (2027, 2028, 2029):
-    hrs = ((dt.date(y + 1, 1, 1) - dt.date(y, 1, 1)).days) * 24
-    pol = (twh.get(y, 0.0) * 1e6 + 100 * hrs) / gen[y][1] * 100
-    ok("hedge ratio %d" % y, abs(pol - F["ratio_%d_pct" % y]) < 0.06, "%.2f" % pol)
-
-# the golden workbook's daily path: its cumulative maximum is the requirement and its date
-wb = load_workbook(os.path.join(TASK, "golden", "hallingvass_margin_facility_2027.xlsx"), data_only=True)
-p = list(wb["Daily path"].iter_rows(values_only=True))[1:]
-cum, best = 0.0, (-1e18, None)
-for r in p:
-    cum += r[7]
-    if cum > best[0]:
-        best = (cum, r[0])
-d = best[1].date() if isinstance(best[1], dt.datetime) else best[1]
-ok("workbook's cumulative peak", abs(best[0] - F["peak_m"]) < 0.06, "%.2f on %s" % (best[0], d))
-ok("workbook's peak date", "%d %s %d" % (d.day, d.strftime("%B"), d.year) == F["peak_date"])
-ok("facility is the peak rounded up to EUR 50 million", F["facility_m"] == 50 * -(-F["peak_m"] // 50))
-
-# every number in the answer blocks traces to figures.json
-sub = open(os.path.join(TASK, "submission.md")).read()
-vals = set()
-for v in F.values():
-    if isinstance(v, (int, float)):
-        vals |= {"%g" % v, "%.1f" % v, "%.2f" % v, "%.3f" % v, "{:,}".format(v) if isinstance(v, int) else "%.1f" % v}
+    a = float(r["amount_usd"]) / 1e6
+    if r["movement"] == "capital call":
+        paid[r["fund_id"]] += a; nav[r["fund_id"]] = nav.get(r["fund_id"], 0.0) + a
     else:
-        vals.add(str(v))
-nums = [n.rstrip(".,") for n in re.findall(r"(?<![\w.])\d[\d,]*\.?\d*(?![\w])", sub)]
-stray = sorted({n for n in nums if n not in vals and not re.fullmatch(r"(19|20)\d\d|[0-9]|1[0-9]|2[0-9]|3[01]", n.rstrip("."))})
-ok("numbers in the answer blocks trace to figures.json", not stray, ", ".join(stray))
-print("%d FAIL" % len(fails))
+        nav[r["fund_id"]] = nav.get(r["fund_id"], 0.0) - a
+unf = defaultdict(float)
+for fid, r in reg.items():
+    if r["Status"] == "liquidated":
+        continue
+    unf[r["Strategy"]] += float(r["Commitment (USD m)"]) - (paid[fid] if r["Status"] != "pending first close" else 0.0)
+for s, v in F["unfunded_by_strategy_usd_m"].items():
+    ok("unfunded %s" % s, abs(unf[s] - v) < 0.06, "%.2f against %.1f" % (unf[s], v))
+fac = {"Cash, money market funds and US Treasuries": 1.0, "Investment-grade bonds": 0.9, "Public equities": 0.7,
+       "Hedge funds: redeemable within 24 months": 0.9}
+res = sum(float(h["Market value 31 Dec 2026 (USD m)"]) * fac.get(h["Policy liquidity class"], 0.0) for h in sheet("liquid_holdings_2026-12-31.xlsx") if h["Policy liquidity class"])
+ok("the liquid reserve at the policy's factors", abs(res - F["reserve_usd_m"]) < 0.01, "%.2f" % res)
+sp = {int(r["fiscal_year"]): float(r["approved_distribution_usd_m"]) for r in rows("spending_distributions_FY2014_FY2027.csv")}
+ok("eight quarters of FY2027's distribution", abs(2 * sp[2027] - F["spending_24m_usd_m"]) < 0.01)
+# the policy's distribution rates, from the benchmark
+num = defaultdict(float); den = defaultdict(float); prev = {}
+for r in sorted(rows("industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv"), key=lambda r: (r["benchmark_fund"], r["period_end"])):
+    d = dt.date.fromisoformat(r["period_end"]); q = d.year * 4 + (d.month - 1) // 3
+    p = prev.get(r["benchmark_fund"])
+    if p and p[0] == q - 1 and 2008 * 4 + 2 <= q <= 2010 * 4 + 1:
+        num[(r["strategy"], q - (2008 * 4 + 2))] += float(r["distributions_pct_of_commitment"]); den[(r["strategy"], q - (2008 * 4 + 2))] += p[1]
+    prev[r["benchmark_fund"]] = (q, float(r["nav_pct_of_commitment"]))
+dist = [0.0] * 8
+for fid, r in reg.items():
+    if r["Status"] in ("liquidated", "pending first close"):
+        continue
+    for k in range(8):
+        dist[k] += max(nav.get(fid, 0.0), 0.0) * num[(r["Strategy"], k)] / den[(r["Strategy"], k)]
+for i, h in enumerate(["H1 2027", "H2 2027", "H1 2028", "H2 2028"]):
+    v = dist[2 * i] + dist[2 * i + 1]
+    ok("distributions %s" % h, abs(v - F["distributions_by_half_usd_m"][h]) < 0.06, "%.2f against %.1f" % (v, F["distributions_by_half_usd_m"][h]))
+# the golden workbook against figures.json
+wb = load_workbook(os.path.join(TASK, "golden", "wexmoor_2027_commitment_capacity.xlsx"), data_only=True)
+summ = {r[0]: r[1:] for r in wb["Summary"].iter_rows(values_only=True) if r[0]}
+ok("workbook: the largest budget that passes", summ["Largest budget that passes (USD m, policy steps of 25)"][0] == F["capacity_usd_m"])
+ok("workbook: net cash needs at USD 500m", summ["Net cash needs"][0] == F["net_cash_needs_500_usd_m"])
+ok("workbook: headroom at USD 500m", summ["Headroom above the minimum"][0] == F["headroom_500_usd_m"])
+hy = {r[0]: r[1:5] for r in wb["By half-year"].iter_rows(values_only=True) if r[0]}
+ok("workbook: calls of the closed funds by half", list(hy["Calls, funds that have held a first close"]) == [F["calls_closed_funds_by_half_usd_m"][h] for h in ["H1 2027", "H2 2027", "H1 2028", "H2 2028"]])
+ok("workbook: calls of the pending funds by half", list(hy["Calls, funds yet to hold a first close"]) == [F["calls_pending_funds_by_half_usd_m"][h] for h in ["H1 2027", "H2 2027", "H1 2028", "H2 2028"]])
+print("\n%d failure%s" % (len(fails), "" if len(fails) == 1 else "s"))
 sys.exit(1 if fails else 0)

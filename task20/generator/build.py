@@ -22,43 +22,46 @@ import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
 import pack as PK  # noqa: E402
 import postprocess as PP  # noqa: E402
-import sim as S  # noqa: E402
 import writeup as WU  # noqa: E402
 
-ZONE = "Europe/Oslo"
-OSL = ZoneInfo(ZONE)
-AS_OF = "2026-12-31"
-# exports with no stamp of their own: the time each was pulled (Oslo)
+ZONE = "America/New_York"
+NY = ZoneInfo(ZONE)
+AS_OF = "2027-03-12"          # the March pull; the position is at 31 December 2026
+# exports with no stamp of their own: the time each was pulled (New York)
 SAVED = {
-    PK.F_SETTLE: (2026, 12, 31, 8, 12, 40), PK.F_CURVE: (2026, 12, 31, 7, 55, 3), PK.F_PARAMS: (2026, 12, 31, 8, 14, 22),
-    PK.F_STMT: (2026, 12, 31, 8, 16, 9), PK.F_POS: (2026, 12, 31, 8, 17, 51), PK.F_TRADES: (2026, 12, 31, 9, 2, 14),
-    PK.F_HYDRO: (2026, 12, 31, 10, 31, 0), PK.F_PLANT: (2026, 12, 31, 10, 44, 37), PK.F_LEDGER: (2026, 12, 31, 13, 5, 12),
-    PK.F_DA: (2026, 12, 31, 8, 21, 46), PK.F_FX: (2026, 12, 31, 8, 3, 55), PK.F_HDD: (2026, 12, 30, 15, 40, 18),
+    PK.F_STMT: (2027, 3, 12, 8, 14, 5), PK.F_CASH: (2027, 3, 12, 8, 20, 41), PK.F_ACT: (2027, 3, 11, 16, 2, 33),
+    PK.F_BENCH: (2026, 12, 4, 10, 31, 0), PK.F_MKT: (2027, 1, 4, 9, 12, 18), DC.F_SPEND: (2026, 7, 2, 14, 5, 50),
+}
+WORKBOOKS = {  # creator, last saved by, created, modified (UTC), company
+    PK.F_REG: ("Donna Turner", "Donna Turner", "2016-03-02T14:20:00Z", "2027-03-10T19:44:12Z", "Wexmoor University"),
+    PK.F_AUD: ("Donna Turner", "Donna Turner", "2017-05-11T13:05:00Z", "2026-11-20T21:12:40Z", "Wexmoor University"),
+    DC.F_LIQ: ("Donna Turner", "Donna Turner", "2027-01-12T15:30:00Z", "2027-01-14T18:02:27Z", "Wexmoor University"),
+    DC.F_PLAN: ("Corrigan Hart", "Corrigan Hart", "2026-11-30T16:10:00Z", "2026-12-07T22:48:05Z", "Corrigan Hart LLC"),
+    DC.F_PEER: ("Corrigan Hart", "Corrigan Hart", "2025-10-02T13:41:00Z", "2025-10-06T20:15:33Z", "Corrigan Hart LLC"),
 }
 DISTRACTORS = {
-    PK.F_FX: "daily EUR/NOK fixings: every price, margin and invoice in the pack is in euro, so it bears on no result",
-    PK.F_HDD: "weekly heating degree days for the company's area: they look like a driver of the retail affiliate's "
-              "load, but supply volumes are contracted on fixed profiles and output follows inflow and storage",
+    DC.F_PEER: "a peer survey of endowments' allocations, unfunded ratios and liquidity: it looks like a yardstick for the "
+               "budget, but the policy tests Wexmoor's own reserve and cash flows, so no figure in it enters a result",
+    DC.F_CAPPLAN: "the university's capital plan and borrowing: it looks like a claim on liquidity, but it draws nothing from "
+                  "the endowment beyond the approved distribution, which the spending file already carries",
+    DC.F_IPS: "the investment policy statement's allocation targets and spending rule: the liquidity policy fixes the "
+              "spending as FY2027's approved distribution, so neither enters a result",
 }
 SOURCES = {
-    PK.F_SETTLE: ("Simulated Nordvik Energy Exchange daily settlement prices for base-load futures", "evidence"),
-    PK.F_CURVE: ("Simulated risk system daily monthly forward curve", "evidence"),
-    PK.F_PARAMS: ("Simulated NEX Clearing margin rate notices", "evidence"),
-    PK.F_STMT: ("Simulated NEX Clearing daily clearing statements for the hedge account", "evidence"),
-    PK.F_POS: ("Simulated NEX Clearing month-end position statements", "evidence"),
-    PK.F_TRADES: ("Simulated trade capture export of the hedge desk", "evidence"),
-    PK.F_HYDRO: ("Simulated weekly inflow and storage as reported to the regulator, with weekly normals", "evidence"),
-    PK.F_PLANT: ("Simulated monthly output by plant", "evidence"),
-    PK.F_LEDGER: ("Simulated billing system extract of supply invoices and payments", "evidence"),
-    PK.F_DA: ("Simulated day-ahead market settlements of the company's net position", "evidence"),
-    PK.F_FX: ("Simulated EUR/NOK daily fixings", "distractor"),
-    PK.F_HDD: ("Simulated weekly heating degree days", "distractor"),
-    DC.F_POLICY: ("The company's hedging policy (written for this task)", "standard"),
-    DC.F_STANDARD: ("The company's liquidity standard for the margin facility (written for this task)", "standard"),
-    DC.F_NEXDOC: ("NEX Clearing's public margining summary (written for this task)", "evidence"),
-    DC.F_LICENCE: ("Extract from the reservoirs' regulation licence (written for this task)", "standard"),
-    DC.F_BUDGET: ("The company's budget vintages (simulated)", "evidence"),
-    DC.F_CONTRACTS: ("The company's supply contract register (written for this task)", "evidence"),
+    PK.F_STMT: ("Simulated quarterly capital account statements of the endowment's private-fund interests", "evidence"),
+    PK.F_CASH: ("Simulated custodian cash activity for the fourth quarter of 2026", "evidence"),
+    PK.F_ACT: ("Simulated managers' portfolio activity reports (fund level)", "evidence"),
+    PK.F_AUD: ("Simulated funds' audited financial statements, compiled by the Office of Investments", "evidence"),
+    PK.F_REG: ("Simulated private commitment register of the Office of Investments", "evidence"),
+    PK.F_BENCH: ("Simulated industry private-fund cash-flow benchmark (anonymised funds)", "evidence"),
+    PK.F_MKT: ("Simulated quarterly market series (exit activity index, public equity index, short rate)", "evidence"),
+    DC.F_LIQ: ("Simulated year-end liquid holdings report", "evidence"),
+    DC.F_SPEND: ("Simulated spending distributions by fiscal year", "evidence"),
+    DC.F_PLAN: ("Simulated consultant's draft pacing plan for 2027", "evidence"),
+    DC.F_PEER: ("Simulated consultant's peer endowment survey", "distractor"),
+    DC.F_POLICY: ("The endowment's liquidity policy (written for this task)", "standard"),
+    DC.F_IPS: ("The endowment's investment policy statement (written for this task)", "distractor"),
+    DC.F_CAPPLAN: ("The university's capital plan (written for this task)", "distractor"),
 }
 
 
@@ -71,38 +74,31 @@ def build_into(root):
     gld = os.path.join(root, "golden")
     for d in (tgt, gld):
         os.makedirs(d, exist_ok=True)
-    W = S.World()
-    rows = PK.write_all(W, tgt)
-    DC.write_all(tgt, W)
-    PP.normalize_docx(os.path.join(tgt, DC.F_POLICY), "Markus Hanssen", "Helge Saether", "2024-11-27T13:02:00Z",
-                      "2024-12-11T15:48:00Z", 9, 214, "task20-policy", title="Hedging policy for power sales",
-                      company="Hallingvass Kraft AS")
-    PP.normalize_ooxml(os.path.join(tgt, DC.F_BUDGET), "Sindre Sandvik", "Sindre Sandvik", "2017-10-05T09:12:00Z",
-                       "2026-10-08T14:20:31Z", excel=True, company="Hallingvass Kraft AS")
-    PP.normalize_ooxml(os.path.join(tgt, DC.F_CONTRACTS), "Jorunn Solberg", "Jorunn Solberg", "2019-11-14T10:40:00Z",
-                       "2026-06-02T11:05:44Z", excel=True, company="Hallingvass Kraft AS")
+    Wo = PK.build_world()
+    H = PK.history(Wo)
+    rows = PK.write_all(Wo, H, tgt)
+    DC.policy(os.path.join(tgt, DC.F_POLICY)); DC.ips(os.path.join(tgt, DC.F_IPS)); DC.capplan(os.path.join(tgt, DC.F_CAPPLAN))
+    for name, (cr, lb, c0, c1, co) in WORKBOOKS.items():
+        PP.normalize_ooxml(os.path.join(tgt, name), cr, lb, c0, c1, excel=True, company=co)
     R = A.full(tgt)
     F, E = FG.write(R, root)
     GD.workbook(F, R, os.path.join(gld, GD.XLSX))
-    PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Sindre Sandvik", "Jorunn Solberg", "2027-01-04T08:20:00Z",
-                       "2027-01-06T16:42:09Z", excel=True, company="Hallingvass Kraft AS")
-    GD.note(F, R, os.path.join(gld, GD.NOTE))
-    PP.normalize_docx(os.path.join(gld, GD.NOTE), "Jorunn Solberg", "Jorunn Solberg", "2027-01-06T13:10:00Z",
-                      "2027-01-06T17:02:00Z", 4, 63, "task20-note", title="Margin facility for 2027",
-                      company="Hallingvass Kraft AS")
-    open(os.path.join(root, "submission.md"), "w").write(WU.text(F))
+    PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Caitlin Hill", "Caitlin Hill", "2027-03-13T15:02:00Z", "2027-03-16T19:41:26Z",
+                       excel=True, company="Wexmoor University")
+    GD.memo(F, R, os.path.join(gld, GD.MEMO))
+    open(os.path.join(root, "submission.md"), "w").write(WU.text(F, R))
     pulled = {n: dt.date(*SAVED[n][:3]).isoformat() for n in SAVED}
-    meta = {"task": "task20", "architecture": 3, "as_of": AS_OF,
-            "decision": "the committed margin facility Hallingvass Kraft needs for 2027 under its liquidity standard",
-            "deliverables": [GD.XLSX, GD.NOTE],
+    meta = {"task": "task20", "architecture": 4, "as_of": AS_OF, "position_date": "2026-12-31",
+            "decision": "the largest 2027 private-fund commitment budget Wexmoor University's endowment can approve under its liquidity policy",
+            "deliverables": [GD.XLSX, GD.MEMO],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
-            "stated_inputs": ["2022", "2027", "2026", "2021", "50", "150", "700", "38.00", "100", "70", "1,800", "300"],
-            "field_terms": ["margin", "variation margin", "initial margin", "facility", "hedge ratio", "cascade",
-                            "day-ahead", "inflow", "storage", "settlement"],
+            "stated_inputs": ["500", "2027", "2028", "2026"],
+            "field_terms": ["capital call", "distribution", "unfunded commitment", "first close", "subscription line", "recycling",
+                            "pacing", "liquidity", "stress"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
-                          "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style "
-                                     "power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"}
+                          "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund "
+                                     "programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"}
                       for n, (s, r) in sorted(SOURCES.items())}}
     json.dump(meta, open(os.path.join(root, "metadata.json"), "w"), indent=1)
     return F
@@ -128,7 +124,7 @@ def install(root):
         shutil.copy(os.path.join(root, f), os.path.join(HERE, f))
     for f in ("submission.md", "metadata.json"):
         shutil.copy(os.path.join(root, f), os.path.join(TASK, f))
-    fallback = {n: dt.datetime(*v, tzinfo=OSL) for n, v in SAVED.items()}
+    fallback = {n: dt.datetime(*v, tzinfo=NY) for n, v in SAVED.items()}
     PP.own_mtimes(os.path.join(TASK, "target"), fallback)
     PP.own_mtimes(os.path.join(TASK, "golden"), {})
     PP.zip_folder(os.path.join(TASK, "target"), os.path.join(TASK, "target.zip"), zone=ZONE)
@@ -136,12 +132,17 @@ def install(root):
 
 
 def main():
+    if "--into" in sys.argv:                     # the second build, in a process of its own
+        build_into(sys.argv[sys.argv.index("--into") + 1])
+        return
     once = "--once" in sys.argv
     a = tempfile.mkdtemp(prefix="task20a-")
     build_into(a)
     if not once:
         b = tempfile.mkdtemp(prefix="task20b-")
-        build_into(b)
+        import subprocess
+        subprocess.run([sys.executable, os.path.abspath(__file__), "--into", b], check=True,
+                       env=dict(os.environ, PYTHONHASHSEED="20271"))
         ha, hb = hashes(a), hashes(b)
         diff = [k for k in ha if ha[k] != hb.get(k)]
         if diff:
