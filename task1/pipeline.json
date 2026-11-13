@@ -1,41 +1,42 @@
 {
  "task": "task1",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 1,
+ "stage_name": "draw",
  "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "provisional: lead the spring 2027 campaign with Standaard, not Onbeperkt",
- "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan, Nov 2025-Oct 2026; R3 share of each plan's counted hours reported only at licence renewal; R4 each plan's spring 2024 campaign sign-ups over 24 months (conversion, paying months, net revenue at 2027 prices); R5 each plan's 24-month contribution per spring 2027 sign-up; R6 the 2027 remuneration owed on the Oct 2026 base; R7 the lead plan",
+ "call": "lead the spring 2027 campaign with Gezin, EUR 22.0 per trial start over 24 months (EUR 8.7 ahead of Flex); not Onbeperkt, which the live roll-up on today's profiles leads with",
+ "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan, Nov 2025-Oct 2026; R4 the spring 2024 trial starts over 24 months by plan (share paying, paying months, net revenue at 2027 prices); R5 each plan's 24-month contribution per spring 2027 trial start; R6 the 2027 remuneration on the Oct 2026 base; R7 the lead plan",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12",
+  "checks": "96 checks, 0 FAIL, 1 WARN"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (every line ruled harmless, leak_check_report.md)",
+  "reader": "clean: no leak, no ranking file, realism clean; a cold read saw both second records"
  },
  "duplicate_check": {
   "heart": "",
   "nearest": ""
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "SEND_BACK",
+  "gate_h": "H3 fail, H4 borderline, H5 fail (the compound hint naming both corrections rescues the call and two components)",
+  "report": "task1/determinism_check_report.md (order kept; its first pass landed R1 exactly and R2 inside the band on all four plans before it opened the blocks)"
  },
- "paper_pair": null,
+ "paper_pair": 43.7,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 16.2,
+  "careful": 43.7,
+  "thorough": 100.0,
+  "largest_hint": "the licence server's renewals carry the positions of titles played from downloads; rescues 1 of 6 (R6)"
  },
  "runs": {
   "run1": null,
@@ -93,7 +94,7 @@
    "note": "the platform's review of the 2026-11-11 reshipped cut returned it on determinism (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection are open modelling choices no file pins, and a return rate not tied to early reading funds 9 to 13 lines; the base window reads as October 2025 to September 2026 off the plan's 28 October date; KPI 2.6 counts every later subscription, the golden only the first. Architecture 3 spent (two returns on forcing; its deciding lessons vintage_or_cohort_drift and completion_of_young_cohorts are on the client's closed page of 2026-11-12); re-rooted to architecture 4 in a new world"
   }
  ],
- "resume": "DESIGN: architecture 4 drawn (Kraanvogel Luisterboeken, the spring 2027 campaign's lead plan); next the full design note to precut.py exit 0, then the generator",
+ "resume": "PAUSED at stage 4 2026-11-12: architecture 4 (Kraanvogel's lead plan) sent back by the judge: the call turns on two record-handling corrections (the licence renewals' positions merged into the live roll-up; profiles dated by the charges' profile lists), Gate G planted_defect_flip, and the judge's own first pass made both by reflex, so the careful column's R2, R5 and R7 are earned; architecture spent; re-root to architecture 5 at stage 1 in a new world, the deciding lesson an estimation or modeling judgment a careful run's reflexive method gets wrong, not a record correction",
  "approved": null,
  "submitted": null,
  "portal": {

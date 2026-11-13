@@ -1,23 +1,21 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 18 files read, 134 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 17 files read, 50 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: million, reading, golden, trailing, pooled, carries, accounts, nearest, creation, chosen, uploaded, social, priced, family, commitment, graded, carried, careful, hurried, inside, history, standard, missed, account, growth
+Stump terms swept: million, trailing, golden, accounts, carries, family, nearest, pooled, creation, account, chosen, profile, priced, hurried, uploaded, onbeperkt, commitment, growth, renewals, inside, careful, graded, reading, process, defensible
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 3.5 appears: ...xpected 36-month value of its starts is at least 3.5 times its planned cost per start, the plan's spen...
+- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 0.40 appears: ...For each month Kraanvogel pays each publisher EUR 0.40 for every counted hour of the publisher's titles...
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `digital_subscription_kpi_standard.pdf`: 4 of 25 stump-paragraph terms appear (carries, accounts, standard, account); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 3)
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 4 of 25 stump-paragraph terms appear (accounts, account, profile, growth); read whether the document names the move
+- **REVIEW** `price_list_2027.pdf`: 3 of 25 stump-paragraph terms appear (nearest, profile, onbeperkt); read whether the document names the move
+- **REVIEW** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: 3 of 25 stump-paragraph terms appear (account, onbeperkt, growth); read whether the document names the move
 
-## 6 ranking artifacts (REVIEW 3, INFO 2)
-- **REVIEW** `marketing_spend_2023-01_2026-10.csv`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `media_plan_2027.xlsx`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `print_circulation_2023-2026.csv`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **INFO** `digital_subscription_kpi_standard.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
-- **INFO** `price_list_digital_2027.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
+## 8 column names (REVIEW 1)
+- **REVIEW** `licence_server_renewals_2024-01_2026-10.csv`: columns a generator names and an organisation does not: device_id
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -26,10 +24,10 @@ Stump terms swept: million, reading, golden, trailing, pooled, carries, accounts
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 33% of 15 prompts (cap 30%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 24% of 21 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 18 usable files (10 or more required)
+- **INFO** `-`: 17 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
@@ -38,22 +36,19 @@ Stump terms swept: million, reading, golden, trailing, pooled, carries, accounts
 
 ## 5 announcements (clean)
 
+## 6 ranking artifacts (clean)
+
 ## 7 hidden content (clean)
-
-## 8 column names (clean)
-
 
 ## Solver's-eye read
 
-Reader: one isolated Sonnet thread at medium effort, 2026-11-10, on fresh copies of prompt.txt and target/ (the repaired cut) only.
+Isolated reader (Sonnet, medium), 2026-11-12, on fresh copies of prompt.txt and target/ only.
 
-1. No process instruction. Quoted the policy's definitions and conventions (4.1 the six movement categories in their order; 2.1 and 2.4 what ARR is; 2.3 the plan rate; 5.2 the population a plan forecast's range runs over; 5.3 what a commitment is), "definitions of terms/population rather than a forecasting method or model".
-2. No file ranks candidates or states the answer; the KPI export stops at September 2026 actuals.
-3. No helper file: the policy, the price book and the KPI refresh each have a life outside the task.
-4. None.
-5. Literal sentences quoted (policy 2.4 the paid invoice's seats billed times the price times twelve, failed payments not paid; 2.3 the flat plan rate): each executes to the golden's convention (SF2, SF6, SF7).
-6. No one thing: "at least four separately-sourced mechanisms" (the Business renewal, price and seat dynamics; the Team plan under the 2026 minimum; pipeline conversion against the CRM's flat stage constants; the policy's categories and the commitment rule), with the policy settling only what to report and how to select the step once a distribution exists. Per sub-ask: the commitment, the path, the bridge's magnitudes, the Team cohort's December ARR and the open deals' ARR turn on analysis; the opening book (R1) on reading the definitions and executing them across thousands of rows (the assembly result, graded as such); the bridge's categories and the step rule are stated procedures applied after the analysis.
-Realism: none of the twelve files looks generated (prices drift around list, id steps irregular, each container its own author and stamps); one soft note, the policy's document history lines up neatly with the pieces the prompt needs though it reads as a plausible multi-year evolution. Answered in the generator: version 5 also sets the month-end reconciliation's deadline in 6.1, so the revision is not single-purpose.
-Least relevant: nps_responses_2026-q3.csv and support_tickets_2026.csv (the two distractors).
-
-Rulings on the REVIEW lines: sweep 4 (eight common policy words) harmless, the policy defines terms and names no method or step; sweep 9 (service ends and period ends after 3 November 2026) harmless, "forward-running terms, not events after the extract": no service start after 1 November 2026, the latest invoice date 2 November 2026, the period ends the billed month attached to it.
+- Q1 (a step spelled out): the growth planning guideline's 3.4 to 3.8 and schedule B's B2.2 to B2.4. Ruled harmless: they file the WHAT (the spring 2024 trial starts and their 24 months, net revenue, the contribution, the counting rule) as determinism requires; the reader itself classes the two-source reconstruction of counted hours and the dated membership as "real analysis, not written anywhere".
+- Q2 (a file ranking the plans): none.
+- Q3 (a file that exists only to help): the KPI monthly report. Ruled harmless: finance's real monthly report under the 2026 basis, to which R1's paying base reconciles; it ranks nothing and holds no 2027 count.
+- Q4 (a figure reading as the answer): none; the quote's fees and the price list are inputs.
+- Q5 (a sentence fixing a graded figure): B3.2 (publisher codes from the change) and guideline 3.1 and 3.2 (paying at a month end against paying subscription-months); each executes to the golden's reading.
+- Q6 (one thing): none; the reader names the counted-hours reconstruction across the two position sources and the membership dated by the charges' profile lists as the analysis, and the remaining sub-steps (codes, exclusions, fees) as spelled-out rule application on the path. Recorded as a Gate F caution: a cold read saw both second records exist.
+- Realism: nothing reads as generated.
+- Flagged files: schedule B, the guideline, the price list, the quote, the licence renewals and the prompt, no leak in any.

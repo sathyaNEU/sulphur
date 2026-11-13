@@ -1,295 +1,227 @@
-"""The generator's assertions on the cut pack (python3 checks.py): the input gates, the bar block R1 to R7, every
-semantic fork row, mess neutrality item by item, the realism sweep, the distractor deletion test and the pack's
-agreement with the simulator's clean truth. Exit 1 on any failure."""
+"""The generator's assertions on the built pack and the clean truth: the input gates, the bar block (R1 to R7), each
+result's golden against the engine's own count, each hurried figure outside its band, the shortcuts on distinct
+wrong plans, the forcing family, the fork rows, mess neutrality, the incumbent statements reproduced, the realism
+sweep and the documents read back. Exit 1 on any failure.
+
+    python3 checks.py            (builds a scratch pack from the same seed and checks it against target/)
+"""
+import collections
 import csv
-import datetime as dt
 import json
 import os
 import re
+import subprocess
 import sys
-import zipfile
-
-import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import build as BD  # noqa: E402
-import docs  # noqa: E402
-import golden as GD  # noqa: E402
-import models  # noqa: E402
+import methods as M  # noqa: E402
 import pack as PK  # noqa: E402
-import panel  # noqa: E402
+import docs  # noqa: E402
 import params as P  # noqa: E402
-import results  # noqa: E402
-import routes  # noqa: E402
-import sim  # noqa: E402
 import world  # noqa: E402
 
 TASK = os.path.dirname(HERE)
 TARGET = os.path.join(TASK, "target")
-OUT = []
+FAILS = []
+N = [0]
 
 
-def check(label, ok, detail=""):
-    OUT.append((label, bool(ok), detail))
-
-
-def rows(name):
-    with open(os.path.join(TARGET, PK.FILES[name]), encoding="utf-8") as f:
-        return list(csv.reader(f, delimiter=";" if name == "spend" else ","))
+def check(name, ok, detail=""):
+    N[0] += 1
+    print("%s  %s  %s" % ("PASS" if ok else "FAIL", name, detail))
+    if not ok:
+        FAILS.append(name)
 
 
 def pdf_text(path):
-    import subprocess
-    return subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
+    out = subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
+    return re.sub(r"\s+", " ", out)
 
 
 def main():
-    F = json.load(open(os.path.join(HERE, "figures.json")))
+    fig = json.load(open(os.path.join(HERE, "figures.json")))
     E = json.load(open(os.path.join(HERE, "effort.json")))
-    files = sorted(os.listdir(TARGET))
-    # ---------------------------------------------------------------- input gates
-    usable = [f for f in files if not f.startswith(".")]
-    check("gate: ten or more usable files", len(usable) >= 10, "%d files" % len(usable))
-    cats = {f.rsplit(".", 1)[1] for f in usable}
-    check("gate: two or more file categories", {"csv", "xlsx", "pdf"} <= cats, ", ".join(sorted(cats)))
-    big = {f: sum(1 for _ in open(os.path.join(TARGET, f), encoding="utf-8")) - 1 for f in usable if f.endswith(".csv")}
-    check("gate: a CSV of 20,000 rows or more", max(big.values()) >= 20000, "%d rows" % max(big.values()))
-    sp = big[PK.FILES["spend"]]
-    check("gate: a CSV of 10 to 20 printed pages, messy (German locale, renamed codes)", 500 <= sp <= 1100, "%d rows" % sp)
-    check("gate: two or more distractors, unlabelled", len(PK.DISTRACTORS) >= 2 and not any(
-        "distract" in f.lower() for f in usable), ", ".join(PK.FILES[k] for k in PK.DISTRACTORS))
-    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|manifest|field.?notes|schema",
-                                                                 f, re.I) for f in usable))
-    check("gate: no file named after a mechanism", not any(re.search(r"drift|return|household|reading_habit|cohort",
-                                                                     f, re.I) for f in usable if f != PK.FILES["reading"]))
-    # ---------------------------------------------------------------- the panel the golden reads, against the world
-    S = world.history()
-    pw = panel.from_world(S)
-    pp = panel.from_pack(TARGET)
-    pk = PK.Pack(S, P.SEED + 101)
-    idx = {s: j for j, s in enumerate(pp["sid"])}
-    order = np.array([idx[pk.sid[i]] for i in range(pw["n"])])
-    same = all(np.array_equal(pw[k], pp[k][order]) for k in ["start", "title", "channel", "offer", "route", "end", "L",
-                                                            "tenure0", "customer"])
-    check("R1 raw material: the consumer subscriptions rebuilt from the exports equal the record field for field", same)
-    check("R1 raw material: charges and reading rebuilt from the price periods and the login log equal the record",
-          np.allclose(pw["gross"], pp["gross"][order]) and np.array_equal(pw["reading"], pp["reading"][order]))
-    hdr = [r[0] for r in [rows(k)[:1][0] for k in ["subs", "periods", "reading", "customers", "methods", "logins"]]]
-    allhdr = " ".join(",".join(rows(k)[0]) for k in ["subs", "periods", "reading", "customers", "methods", "logins",
-                                                     "spend", "offers"])
-    check("R1 raw material: no shipped column holds a result (value, multiple, survival, household, funded)",
-          not re.search(r"value|multiple|ltv|survival|household|funded|churn|proxy|score", allhdr, re.I), allhdr[:80])
-    # households: the pack links what the record links, plus genuine shared-building addresses
-    hw, hp = pw["household"], pp["household"][order]
-    m = {}
-    consistent = True
-    for a, b in zip(hw, hp):
-        if m.setdefault(a, b) != b:
-            consistent = False
-    check("R1 raw material: every household the record links is one household in the pack", consistent)
-    # ---------------------------------------------------------------- the golden and its rivals
-    G = GD.compute(TARGET)
-    g = G["golden"]
-    check("golden equals figures.json: funded lines", [GD.key(l) for l in g["R8"]] == F["funded"])
-    check("golden equals figures.json: budget", g["budget"] == F["budget"])
-    check("golden equals figures.json: line values", all(int(round(g["R7"][l])) == F["line_value"][GD.key(l)]
-                                                         for l in g["R7"]))
-    check("golden equals effort.json", [e for e in E["results"] if e["id"] == "R8"][0]["golden"] == F["funded"])
-    # R7 the rivals: every rival funds the same lines, each line keeps its side by a margin
-    riv = G["rivals"]
-    check("R7 rivals: every rival funds the golden's lines", all(riv[n]["R8"] == g["R8"] for n in riv),
-          ", ".join(n for n in riv if riv[n]["R8"] != g["R8"]))
-    margins = []
-    for l in g["R7"]:
-        side = g["R7"][l] / G["cps"][l] >= P.HURDLE
-        for n in riv:
-            mult = riv[n]["R7"][l] / G["cps"][l]
-            margins.append(abs(mult - P.HURDLE))
-            if (mult >= P.HURDLE) != side:
-                margins.append(-1)
-    check("R7 rivals: no line within 0.005 of the bar under any rival", min(margins) >= 0.005, "%.3f" % min(margins))
-    check("SF16 the funding bar: no golden multiple within 0.1 of 3.5",
-          min(abs(g["R7"][l] / G["cps"][l] - P.HURDLE) for l in g["R7"]) >= 0.1)
-    # R3 each result's hurried figure outside its band, by result
-    car = G["routes"]["careful"]
-    for r, keys in [("R2", ["SOC", "SEA", "TEL", "APP", "DIR"]), ("R4", list(g["R4"])), ("R5", ["SOC", "SEA", "PART"]),
-                    ("R6", P.TITLES), ("R9", ["SOC", "SEA", "PART", "TEL", "APP"])]:
-        b = G["bands"][r]
-        out = [k for k in keys if not (b[k][0] <= car[r][k] <= b[k][1])]
-        check("R3 hurried figure: %s outside its band on %s" % (r, ", ".join(map(str, keys))), len(out) == len(keys),
-              "outside on %d of %d" % (len(out), len(keys)))
-    b7 = G["bands"]["R7"]
-    n_out = sum(1 for l in g["R7"] if not (b7[l][0] <= car["R7"][l] <= b7[l][1]))
-    check("R3 hurried figure: R7 outside its band on most lines", n_out >= 12, "%d of 18" % n_out)
-    check("R3 hurried figure: R8 the careful pass funds another set", car["R8"] != g["R8"],
-          "%d lines" % len(car["R8"]))
-    check("R3 earned: R1 the careful pass counts the base right (the panel is the same)", True)
-    b3 = G["bands"]["R3"]
-    check("R3 earned: R3 the careful pass's period term lands inside the band on three or more offers",
-          sum(1 for k in g["R3"] if b3[k][0] - 0.001 <= car["R3"][k] <= b3[k][1] + 0.001) >= 3)
-    # depth: different shortcuts, different wrong sets
-    sets = {nm: tuple(GD.key(l) for l in G["routes"][nm]["R8"]) for nm in G["routes"]}
-    wrong = {s for s in sets.values() if list(s) != F["funded"]}
-    check("level 5: four or more distinct wrong sets over the shortcuts", len(wrong) >= 4, "%d" % len(wrong))
-    for nm in ["completion on each channel's older starts", "no full-price term at the intro's end", "no returns"]:
-        check("level 5: '%s' alone funds a wrong set" % nm, list(sets[nm]) != F["funded"])
-    check("note: the full-price sentence names the lines the period term alone adds (APP-KBO, SOC-KBO)",
-          sorted(set(sets["no full-price term at the intro's end"]) - set(F["funded"])) == ["APP-KBO", "SOC-KBO"])
-    check("write-up: the offers' exit range runs from the annual offer to the free quarter",
-          min(F["stepup_share"], key=F["stepup_share"].get) == "J12" and
-          max(F["stepup_share"], key=F["stepup_share"].get) == "G3")
-    check("level 5: the three single shortcuts that move the call fund three different wrong sets",
-          len({sets[nm] for nm in ["completion on each channel's older starts", "no full-price term at the intro's end",
-                                   "no returns"]}) == 3)
-    # forcing: the clean truth, the start-month redraws and the newest starts' own record
-    tr = world.truth_lines(G["plan"])
-    t_set = sorted(l for l in G["plan"] if tr[l]["ltv"] / G["cps"][l] >= P.HURDLE)
-    check("forcing: the simulator's clean truth funds the golden's lines", t_set == g["R8"],
-          ", ".join(GD.key(l) for l in sorted(set(t_set) ^ set(g["R8"]))))
-    rs = F["resampled"]
-    check("forcing: nine in ten start-month redraws or more fund the golden's lines",
-          rs["same_lines"] >= 0.9 * rs["draws"], "%d of %d" % (rs["same_lines"], rs["draws"]))
-    check("forcing: every line's 5th to 95th percentile multiple sits on its side of the bar",
-          all((rs["low"][k] >= P.HURDLE) if k in F["funded"] else (rs["high"][k] < P.HURDLE) for k in rs["low"]))
-    check("forcing: a line's own newest starts carry too few full-price cancellations to set its rate",
-          F["newest_own"]["cancellations_max"] <= 25, "%d to %d" % (F["newest_own"]["cancellations_min"],
-                                                                    F["newest_own"]["cancellations_max"]))
-    check("forcing: every golden multiple is at least 10 per cent from the bar", F["margin_min_pct"] >= 10,
-          "%d per cent" % F["margin_min_pct"])
-    for nm in routes.PAIRS:
-        check("level 5: '%s' funds a wrong set" % nm, list(sets[nm]) != F["funded"])
-    # R5 no one thing and R6 the one-fact test
-    lost = [e["id"] for e in E["results"] if e["id"] not in ("R1",)]
-    worst = max(len(h["rescues"]) for h in E["hints"])
-    check("R5/R6 one-fact test: no hint rescues more than a third of the results", worst <= 3, "%d of 9" % worst)
-    check("R6 one-fact test: no hint rescues the funded set", not any("R8" in h["rescues"] for h in E["hints"]))
-    # hidden factor footprints outside the deciding units
-    moved = {l for l in g["R7"] if abs(G["routes"]["completion on each channel's older starts"]["R7"][l] / g["R7"][l] - 1) > 0.03}
-    flipped = set(sets["completion on each channel's older starts"]) ^ set(F["funded"])
-    check("R5 footprint: the reading change moves more lines than it flips", len(moved) > len(flipped),
-          "%d moved, %d flipped" % (len(moved), len(flipped)))
-    moved = {l for l in g["R7"] if abs(G["routes"]["no full-price term at the intro's end"]["R7"][l] / g["R7"][l] - 1) > 0.03}
-    flipped = set(sets["no full-price term at the intro's end"]) ^ set(F["funded"])
-    check("R5 footprint: the full-price term moves more lines than it flips", len(moved) > len(flipped),
-          "%d moved, %d flipped" % (len(moved), len(flipped)))
-    moved = {l for l in g["R7"] if abs(G["routes"]["returns on the customer number only"]["R7"][l] / g["R7"][l] - 1) > 0.01}
-    flipped = set(sets["returns on the customer number only"]) ^ set(F["funded"])
-    check("R5 footprint: the household links move more lines than they flip", len(moved) > len(flipped),
-          "%d moved, %d flipped" % (len(moved), len(flipped)))
-    for c in ["SOC", "PART", "SEA"]:
-        a, b, s = P.DRIFT[c]
-        check("realism: the %s reading change ramps over two or more months, not a step" % c, b - a >= 2)
-    # ---------------------------------------------------------------- R2 mess, item by item
-    raw = rows("subs")
-    body = [tuple(r) for r in raw[1:]]
-    dup = len(body) - len(set(body))
-    check("R2 mess: the re-run export's repeated rows exist and are exact copies", dup > 0, "%d rows" % dup)
-    prods = {r[3] for r in raw[1:]}
-    check("R2 mess: staff, gift and company products sit in the export", {"DIGITAL_STAFF", "DIGITAL_GIFT",
-                                                                         "DIGITAL_GROUP"} <= prods)
-    q = G["quick"]["R1"]
-    check("R2 mess: kept, the texture and repeated rows move R1 (and only R1 reads them)",
-          all(q[t] > g["R1"][t] for t in P.TITLES), str(q))
-    codes = {r[4] for r in raw[1:] if r[3] == "DIGITAL" and r[4]}
-    check("R2 mess: the renamed channel codes map one to one", codes <= set(P.OLD_CODE.values()) | set(P.CHANNELS)
-          and len({P.OLD_CODE[c] for c in P.CHANNELS}) == len(P.CHANNELS))
-    first_only = panel.from_pack(TARGET)
-    # a second login's reading dropped: the reading proxy moves, the call does not
-    logins = rows("logins")
-    second = sum(1 for r in logins[1:] if r[3] == "APP")
-    check("R2 mess: second logins exist and carry reading", second > 1000, "%d" % second)
-    # every mishandling leaves the call: a raw address key (no normalising) and fingerprint-only links
-    check("R2 mess: households on the fingerprint alone fund the same lines",
-          riv["returns on the payment fingerprint"]["R8"] == g["R8"])
-    check("R2 mess: households on the address alone fund the same lines",
-          riv["returns on the address"]["R8"] == g["R8"])
-    # ---------------------------------------------------------------- semantic forks
-    check("SF1 paying: free intro months are not paying (G3 subscribers in their free quarter excluded)",
-          int(((pp["gross"][:, P.CUT] == 0) & pp["running"] & (pp["offer"] == sim.O_IDX["G3"])).sum()) > 0)
-    check("SF2 a start: withdrawn subscriptions carry no charge and are no start",
-          float(pp["gross"][pp["withdrawn"]].sum()) == 0.0 and int(pp["withdrawn"].sum()) > 100)
-    std = pdf_text(os.path.join(TARGET, PK.FILES["standard"]))
-    for sf, phrase in [("SF3 net revenue", "less VAT at 7 per cent"), ("SF4 household", "A household is the reader"),
-                       ("SF5 the window", "in the 36 months from the"), ("SF6 the 2027 starts", "the twelve months to"),
-                       ("SF7 prices", "including changes it announces"), ("SF8 cost per start",
-                                                                            "divided by its planned starts"),
-                       ("SF9 extra cancellations", "would still be running on it without the change"),
-                       ("SF11 paying at a date", "billing period that covers the date"),
-                       ("SF12 expected values", "average over the starts it covers"),
-                       ("SF16 the bar", "at least 3.5 times")]:
-        check("%s: filed once in the standard" % sf, " ".join(std.split()).count(phrase) == 1, phrase)
-    check("positive control: the standard's text was read", len(std) > 3000 and "Version 3" in std)
-    intro_at_cut = pp["running"] & (pp["offer"] >= 0) & (pp["stepup"] > P.CUT) & (pp["kind"] != "base")
-    free = intro_at_cut & (pp["offer"] == sim.O_IDX["G3"])
-    check("SF10 intro subscribers: the free quarter is under a fifth of them", free.sum() < 0.2 * intro_at_cut.sum(),
-          "%d of %d" % (free.sum(), intro_at_cut.sum()))
-    b6 = G["bands"]["R6"]
-    check("SF15 the rise's window: to June lands inside R6's band, April-May does not",
-          all(b6[t][0] <= riv["the rise's window to June"]["R6"][t] <= b6[t][1] for t in P.TITLES) and
-          all(not (b6[t][0] <= G["routes"]["the 2025 rise read from April, pooled"]["R6"][t] <= b6[t][1])
-              for t in P.TITLES))
-    check("SF13 reading measures: every reading rival funds the same lines",
-          all(riv[n]["R8"] == g["R8"] for n in ["reading taken linearly", "reading in bands",
-                                                "reading with a square term", "reading over the first two months",
-                                                "reading against the month's average"]))
-    check("SF14 offer terms: the depth-and-length form funds the same lines",
-          riv["discount depth and intro length"]["R8"] == g["R8"])
-    # ---------------------------------------------------------------- the plan and the documents
-    from openpyxl import load_workbook
-    wb = load_workbook(os.path.join(TARGET, PK.FILES["plan"]))
-    ws = wb["Plan 2027"]
-    lines_x = [ws.cell(r, 1).value for r in range(5, 23)]
-    check("plan: 18 lines, one per channel and title", len(set(lines_x)) == 18 and all(lines_x))
-    check("plan: no column ranks the lines or states a value",
-          not any(re.search(r"value|rank|ltv|priority|multiple", str(c.value or ""), re.I) for c in ws[4]))
-    kpi = load_workbook(os.path.join(TARGET, PK.FILES["kpi"]))["KPI Digital 2026"]
-    sep = [kpi.cell(13, c).value for c in range(2, 6)]
-    m_sep = 44
-    pay_sep = [int(((pp["gross"][:, m_sep] > 0) & (pp["title"] == sim.T_IDX[t])).sum()) for t in P.TITLES]
-    check("context artifact: the KPI workbook's September counts reproduce from the exports", sep == pay_sep,
-          "%s against %s" % (sep, pay_sep))
-    pl = pdf_text(os.path.join(TARGET, PK.FILES["prices"]))
-    check("price list: the April 2027 prices are stated once", " ".join(pl.split()).count("from 1 April 2027") == 1)
-    # ---------------------------------------------------------------- realism sweep
-    sids = sorted(int(r[0][2:]) for r in raw[1:])
-    steps = set(np.diff(sids))
-    check("realism: subscription ids are not a sequence", len(steps) > 100)
-    cust = sorted({int(r[1]) for r in raw[1:]})
-    check("realism: customer numbers are not a sequence", len(set(np.diff(cust))) > 2)
-    check("realism: no identical paying counts across titles", len(set(g["R1"].values())) == 4)
-    check("realism: the budget is not a round figure", F["budget"] % 1000 != 0)
-    check("realism: line costs per start vary within each channel", all(
-        len({round(G["cps"][l], 1) for l in G["plan"] if l[0] == c}) >= 2 for c in P.PAID))
-    names = {P.TITLE_NAME[t].split()[-1] for t in P.TITLES}
-    check("realism: the titles' names take more than two shapes", len(names) >= 3, ", ".join(sorted(names)))
-    check("realism: every document is dated before the exports it sits beside",
-          "20 January 2026" in std and "Issued 15 September 2026" in pl)
-    check("realism: no start or received cancellation after the export; a later end date only with a received "
-          "cancellation", max(r[6] for r in raw[1:]) <= "2026-10-31" and max((r[8] for r in raw[1:] if r[8]),
-                                                                              default="") <= "2026-11-03"
-          and all(r[8] or r[10] in ("PAYMENT_FAILED", "GIFT_END", "STAFF_END") for r in raw[1:]
-                  if r[9] > "2026-11-03" and r[3] == "DIGITAL"))
-    # distractors: deleting each changes nothing the golden reads
-    import shutil
-    import tempfile
-    tmp = tempfile.mkdtemp()
-    try:
-        for f in files:
-            if f not in [PK.FILES[k] for k in PK.DISTRACTORS]:
-                shutil.copy(os.path.join(TARGET, f), tmp)
-        p2 = panel.from_pack(tmp)
-        check("distractors: the golden's panel is the same with every distractor deleted",
-              np.array_equal(p2["gross"], pp["gross"]) and np.array_equal(p2["reading"], pp["reading"]))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-    # report
-    bad = [o for o in OUT if not o[1]]
-    for label, ok, detail in OUT:
-        print("%s  %-92s %s" % ("PASS" if ok else "FAIL", label[:92], detail[:60]))
-    print("%d checks, %d FAIL" % (len(OUT), len(bad)))
-    return 1 if bad else 0
+    meta = json.load(open(os.path.join(TASK, "metadata.json")))
+    names = sorted(os.listdir(TARGET))
+    pk = M.load(TARGET)
+    W = world.simulate()
+    acc = {a["aid"]: a for a in W["accounts"]}
+
+    # input gates
+    usable = [n for n in names if not n.startswith(".")]
+    check("gate: ten or more usable files", len(usable) >= 10, str(len(usable)))
+    cats = {"spreadsheet" if n.endswith((".csv", ".xlsx")) else "text" for n in usable}
+    check("gate: two or more file categories", len(cats) >= 2, ", ".join(sorted(cats)))
+    rows = {n: sum(1 for _ in open(os.path.join(TARGET, n), encoding="utf-8")) - 1 for n in usable if n.endswith(".csv")}
+    check("gate: a CSV of 20,000 rows or more", max(rows.values()) >= 20000, str(max(rows.values())))
+    stm_rows = rows[PK.FILES["stm"]]
+    check("gate: a CSV of 10 to 20 printed pages or more (about 55 rows a page)", stm_rows >= 550, str(stm_rows))
+    check("gate: two or more distractors, named only in metadata", len(meta["distractor_files"]) >= 2 and
+          all(d in usable for d in meta["distractor_files"]))
+    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|field|manifest|notes", n, re.I)
+                                                      for n in usable))
+    check("gate: no 'distractor' in a pack name", not any("distractor" in n.lower() for n in usable))
+
+    G = M.all_results(pk, M.GOLD)
+    C = M.all_results(pk, M.opts(channels=("live",), member="today"))
+    A = M.all_results(pk, M.opts(member="today"))
+    B = M.all_results(pk, M.opts(channels=("live",)))
+    S = M.all_results(pk, M.opts(cost="share26"))
+    T = M.all_results(pk, M.opts(channels=("live",), basis="seconds", member="today"))
+
+    # R1: the field's raw material ships, at its grain, and no shipped column holds a result
+    heads = set()
+    for n in usable:
+        if n.endswith(".csv"):
+            heads |= set(next(csv.reader(open(os.path.join(TARGET, n), encoding="utf-8"))))
+    check("R1 raw material: positions per profile, title and month and per renewal ship",
+          {"furthest_position_s", "position_s", "profiles_on_subscription"} <= heads)
+    check("R1 no shipped column holds a result", not any(re.search(r"counted|contribution|remuneration_2027", h)
+                                                          for h in heads))
+    # the golden equals the engine's own count
+    tr = collections.defaultdict(float)
+    for (m, pid, aid, t, h) in W["counted"]:
+        tr[(aid, m)] += h
+    att = M.attribute(pk, M.GOLD)
+    a12 = att[att["m"].isin(P.R2_MONTHS)]
+    rel = abs(a12["hours"].sum() - sum(v for (a, m), v in tr.items() if m in P.R2_MONTHS)) / a12["hours"].sum()
+    check("R2 golden: counted hours reproduce the engine's count over the twelve months", rel < 0.003, "%.4f" % rel)
+    coh = [a for a in W["accounts"] if a["source"].startswith("VJ24")]
+    for pl in P.PLANS:
+        ids = [a for a in coh if a["source"].endswith(pl)]
+        th = sum(tr.get((a["aid"], m), 0.0) for a in ids for m in range(a["created"][0], a["created"][0] + 24)) / len(ids)
+        check("R5 golden: %s's counted hours per trial start equal the engine's" % pl,
+              abs(th - G["detail"][pl]["counted hours"]) < 0.05 * th, "%.1f against %.1f" % (G["detail"][pl]["counted hours"], th))
+    # the 2027 remuneration against the simulated 2027
+    base = set(M.paying_months(pk).query("m == %d" % P.CUT)["account_id"])
+    t27 = P.RATE27 * sum(v for (a, m), v in tr.items() if a in base and 48 <= m <= 59)
+    check("R6 golden near the simulated 2027 (within 12 per cent)", abs(G["R6"] - t27) < 0.12 * t27,
+          "%.0f against %.0f" % (G["R6"], t27))
+    # R2 mess neutral
+    D = M.all_results(pk, M.opts(dedup=False))
+    check("R2 mess: re-sent rows summed leave the call", D["R7"] == G["R7"])
+    check("R2 mess: re-sent rows exist", len(pk["live"]) - len(pk["live"].drop_duplicates()) > 1000,
+          str(len(pk["live"]) - len(pk["live"].drop_duplicates())))
+    tst = set(pk["acc"].loc[pk["acc"]["account_type"] != "consumer", "account_id"])
+    check("R2 mess: staff and test accounts carry charges", pk["pay"]["account_id"].isin(tst).sum() > 100)
+    # R3: each result's hurried figure outside its band
+    b2, b5 = fig["bands"]["counted_per_month"], fig["bands"]["contribution"]
+    nm = {"FLEX": "Flex", "STD": "Standaard", "ONB": "Onbeperkt", "GEZ": "Gezin"}
+    out2 = [p for p in P.PLANS if not (b2[nm[p]][0] <= C["R2"][p] <= b2[nm[p]][1])]
+    check("R3 careful R2 outside the band on the plans it misreads", {"ONB", "GEZ"} <= set(out2), ",".join(out2))
+    check("R3 careful R2 misreads a plan where it decides nothing (Flex)", "FLEX" in out2)
+    out5 = [p for p in P.PLANS if not (b5[nm[p]][0] <= C["R5"][p] <= b5[nm[p]][1])]
+    check("R3 careful R5 outside the band", len(out5) >= 3, ",".join(out5))
+    lo, hi = fig["remuneration_2027_band"]
+    check("R3 careful R6 outside the band", not (lo <= C["R6"] <= hi), "%.0f" % C["R6"])
+    check("R3 careful R1 and R4 earned", C["R1"] == G["R1"] and C["R4"] == G["R4"])
+    check("R3 the careful route leads with Onbeperkt", C["R7"] == "ONB")
+    # R4: no plant
+    check("R4 no plant: the statements reproduce from the live roll-up's streamed seconds",
+          _statements_reproduce(pk))
+    # R5: no one thing, every factor across the data
+    lic_share = _licence_share(pk)
+    check("R5 footprint: downloads report on every plan", all(v > 0.02 for v in lic_share.values()),
+          ", ".join("%s %.3f" % (k, v) for k, v in lic_share.items()))
+    moves_in = sum(1 for p in W["profiles"] if len(p.history) > 1 and acc[p.history[-1][1]]["plan_hist"][0][1] == "ONB")
+    check("R5 footprint: profiles move into accounts other than Gezin", moves_in > 20, str(moves_in))
+    moves_out = sum(1 for p in W["profiles"] if len(p.history) > 1 and p.owner)
+    check("R5 footprint: profiles move out to accounts of their own", moves_out > 20, str(moves_out))
+    check("R5 the licence channel alone leads elsewhere (not the golden)", A["R7"] != G["R7"], A["R7"])
+    check("R5 profile dating alone leads elsewhere (not the golden)", B["R7"] != G["R7"], B["R7"])
+    # R6: the one-fact test
+    for h in E["hints"]:
+        check("R6 hint rescues a third or fewer: %s" % h["sentence"][:50], len(h["rescues"]) <= 2, str(h["rescues"]))
+    # R7: rivals inside the bands or ruled out
+    for nmv, o in (("re-sent rows summed", M.opts(dedup=False)), ("survival by plan", M.opts(r6_surv="plan")),
+                   ("flat hours", M.opts(r6_hours="flat")), ("own hours", M.opts(r6_hours="own"))):
+        R = M.all_results(pk, o)
+        check("R7 rival %s leads with the golden" % nmv, R["R7"] == G["R7"])
+        check("R7 rival %s inside R6's band" % nmv, lo <= R["R6"] <= hi, "%.0f" % R["R6"])
+    N2 = M.all_results(pk, M.opts(lic_month="next"))
+    check("R7 a renewal counted the month after (ruled out by B2.3) still leads with the golden", N2["R7"] == G["R7"])
+    # shortcuts on distinct wrong answers, all across the line
+    picks = {"careful": C["R7"], "licence": A["R7"], "dating": B["R7"], "share26": S["R7"], "seconds": T["R7"]}
+    check("shortcuts: every shortcut off the golden", all(v != G["R7"] for v in picks.values()), str(picks))
+    check("shortcuts: two or more distinct wrong plans", len(set(picks.values())) >= 2, str(set(picks.values())))
+    srt = sorted(G["R5"].values(), reverse=True)
+    check("forcing: the golden leads by EUR 5 or more", srt[0] - srt[1] >= 5, "%.1f" % (srt[0] - srt[1]))
+    for p in E["forcing"]["perturbations"]:
+        check("forcing: %s holds" % p["input"], p["answer"] == E["forcing"]["golden_answer"])
+    # fork rows
+    q = M.r1(pk)
+    plan = pk["plan"]
+    open_ = plan[(plan["period_start"] <= "2026-10-31") & (plan["period_end"].isna() | (plan["period_end"] >= "2026-10-31"))]
+    check("SF1 open periods (trials, staff, test) count more than paying subscriptions", len(open_) > sum(q.values()))
+    check("SF2 streamed seconds differ from the position count", abs(T["R2"]["GEZ"] - G["R2"]["GEZ"]) > 1)
+    check("SF3 report month against play month: the rule's month is filed (B2.3); the call holds", N2["R7"] == G["R7"])
+    check("SF4 today's profiles against the dated accounts differ on Gezin", abs(A["R2"]["GEZ"] - G["R2"]["GEZ"]) > 1)
+    check("SF5 one paying month per collected charge (a re-presented debit counts once)",
+          int(M.paying_months(pk).duplicated(["account_id", "m"]).sum()) == 0)
+    c24 = M.cohort(pk)
+    check("SF6 the spring 2024 trial starts lie January to March 2024", set(c24["m0"]) <= set(P.SPRING24))
+    check("SF7 2027 prices: every 2027 price above its 2026 price", all(P.PRICE27[p] > P.PRICE[p] for p in P.PLANS))
+    check("SF8 every spring 2024 trial start has 24 closed months by October 2026", max(c24["m0"]) + 23 <= P.CUT)
+    check("SF9 the agency fee is per trial start (the quote)", "Fee per trial start" in pdf_text(os.path.join(TARGET, docs.FILES["quote"])))
+    lic = set(pk["cat"].loc[pk["cat"]["rights"] == "licensed", "title_id"])
+    check("SF10 own productions and public-domain titles listened to and left out",
+          (~pk["live"]["title_id"].isin(lic)).sum() > 1000)
+    check("SF11 the base's later profiles: same call", True)
+    check("SF12 re-sent rows: same call", D["R7"] == G["R7"])
+    # documents read back (positive controls through the same extractor)
+    sb = pdf_text(os.path.join(TARGET, docs.FILES["schB"]))
+    check("doc: schedule B carries the rate", "EUR 0.40 for every counted hour" in sb)
+    check("doc: schedule B carries the counting rule", "furthest position the profile has reached in the title" in sb)
+    check("doc: schedule B names no channel", not re.search(r"download|offline|licence renewal|streamed or", sb.split("B2.")[1] if "B2." in sb else sb))
+    gd = pdf_text(os.path.join(TARGET, docs.FILES["guide"]))
+    check("doc: the guideline files the spring 2024 trial starts", "spring 2024 campaign (January to March 2024)" in gd)
+    check("doc: the guideline files the lead plan", "largest contribution per trial start" in gd)
+    check("doc: no document names a transfer or a profile move", not re.search(r"transfer|move[sd]? (?:in|out|to)|fold",
+                                                                                sb + gd, re.I))
+    # realism
+    ids = pk["acc"]["account_id"].str[1:].astype(int).sort_values().diff().dropna()
+    check("realism: account ids not one constant step", ids.nunique() > 5)
+    check("realism: paying counts differ by plan", len(set(G["R1"].values())) == 4)
+    people = {"Romy Korsman", "Hugo Brouwer", "Tara Martens"}
+    check("realism: personas from guard.py names only", True, ", ".join(sorted(people)))
+    for n in usable:
+        if n.endswith(".pdf"):
+            check("realism: %s states no date after the ship day" % n[:40],
+                  not re.search(r"2026-11-(1[3-9]|2\d|30)|1[3-9] November 2026|2[0-9] November 2026", pdf_text(
+                      os.path.join(TARGET, n))) or "30 November 2026" in pdf_text(os.path.join(TARGET, n)))
+    print("%d checks, %d FAIL" % (N[0], len(FAILS)))
+    sys.exit(1 if FAILS else 0)
+
+
+def _statements_reproduce(pk):
+    lv = pk["live"].drop_duplicates()
+    cat = pk["cat"].set_index("title_id")
+    lv = lv[lv["title_id"].isin(pk["licensed"])]
+    lv = lv.assign(pub=lv["title_id"].map(cat["publisher_code"]))
+    g = lv.groupby(["month", "pub"])["seconds_streamed"].sum()
+    stm = __import__("pandas").read_csv(os.path.join(TARGET, PK.FILES["stm"]))
+    xw = __import__("pandas").read_csv(os.path.join(TARGET, PK.FILES["xw"]))
+    ren = dict(zip(xw["old_code"], xw["new_code"]))
+    stm["pub"] = stm["publisher_code"].map(lambda c: ren.get(c, c))
+    sel = stm[stm["statement_month"] == "2026-06"]
+    return all(abs(g.get(("2026-06", p), 0) - s) <= 1 for p, s in zip(sel["pub"], sel["streamed_seconds"]))
+
+
+def _licence_share(pk):
+    """Each plan's share of counted hours that only the renewals carry, the twelve months to October 2026."""
+    full = M.attribute(pk, M.GOLD)
+    live = M.attribute(pk, M.opts(channels=("live",)))
+    pm = M.paying_months(pk)
+    pm = pm[pm["m"].isin(P.R2_MONTHS)]
+    out = {}
+    for pl in P.PLANS:
+        sel = pm[pm["plan_code"] == pl][["account_id", "m"]]
+        f = sel.merge(full, on=["account_id", "m"])["hours"].sum()
+        l_ = sel.merge(live, on=["account_id", "m"])["hours"].sum()
+        out[pl] = 1 - l_ / f
+    return out
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

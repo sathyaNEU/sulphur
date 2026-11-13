@@ -1,12 +1,16 @@
-"""Build the pack under target/: the record (world.py), the exports (pack.py), the neighbouring files
-(distractors.py), the four documents (docs.py), every office container through the house writers with its owner's
-stamps, and each file's time its own last save or its system's export time.
+"""Build the pack under target/: the simulated business (world.py), the system exports (pack.py), the documents and
+finance's workbook (docs.py), every office container through the house writers with its owner's stamps, and each
+file's time its own last save or its system's export time.
 
     python3 build.py [--out <folder>]
 """
+import collections
 import datetime as dt
 import os
+import shutil
 import sys
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
@@ -18,63 +22,64 @@ sys.path.insert(0, HERE)
 import docs  # noqa: E402
 import pack  # noqa: E402
 import params as P  # noqa: E402
-import sim  # noqa: E402
 import world  # noqa: E402
 
-FILES = pack.FILES
-DISTRACTORS = pack.DISTRACTORS
+GMT = dt.timezone.utc
 CET = dt.timezone(dt.timedelta(hours=1))
-EXPORTED = {"subs": dt.datetime(2026, 11, 3, 2, 12, 41, tzinfo=CET),
-            "periods": dt.datetime(2026, 11, 3, 2, 19, 7, tzinfo=CET),
-            "exceptions": dt.datetime(2026, 11, 3, 2, 21, 55, tzinfo=CET),
-            "customers": dt.datetime(2026, 11, 3, 2, 24, 30, tzinfo=CET),
-            "methods": dt.datetime(2026, 11, 3, 2, 26, 3, tzinfo=CET),
-            "reading": dt.datetime(2026, 11, 2, 5, 40, 18, tzinfo=CET),
-            "logins": dt.datetime(2026, 11, 2, 5, 41, 52, tzinfo=CET),
-            "spend": dt.datetime(2026, 11, 4, 9, 7, 26, tzinfo=CET),
-            "codes": dt.datetime(2026, 11, 4, 9, 9, 3, tzinfo=CET),
-            "offers": dt.datetime(2026, 10, 12, 14, 33, 9, tzinfo=dt.timezone(dt.timedelta(hours=2))),
-            "print": dt.datetime(2026, 10, 21, 10, 15, 44, tzinfo=dt.timezone(dt.timedelta(hours=2))),
-            "newsletter": dt.datetime(2026, 11, 2, 7, 58, 31, tzinfo=CET),
-            "survey": dt.datetime(2026, 7, 14, 16, 3, 12, tzinfo=dt.timezone(dt.timedelta(hours=2))),
-            "ads": dt.datetime(2026, 11, 3, 8, 46, 20, tzinfo=CET)}
-OFFICE = {"plan": ("2026-09-02T08:11:00Z", "2026-10-28T15:47:00Z", "Jost Reising"),
-          "kpi": ("2026-01-12T07:55:00Z", "2026-10-08T06:31:00Z", "Rosa-Maria Herrmann")}
+EXPORTED = {pack.FILES["acc"]: dt.datetime(2026, 11, 3, 2, 14, 7, tzinfo=GMT),
+            pack.FILES["plan"]: dt.datetime(2026, 11, 3, 2, 19, 52, tzinfo=GMT),
+            pack.FILES["pay"]: dt.datetime(2026, 11, 3, 2, 41, 19, tzinfo=GMT),
+            pack.FILES["prof"]: dt.datetime(2026, 11, 3, 3, 6, 44, tzinfo=GMT),
+            pack.FILES["live"]: dt.datetime(2026, 11, 4, 5, 2, 11, tzinfo=GMT),
+            pack.FILES["lic"]: dt.datetime(2026, 11, 4, 6, 47, 36, tzinfo=GMT),
+            pack.FILES["cat"]: dt.datetime(2026, 11, 2, 22, 30, 58, tzinfo=GMT),
+            pack.FILES["xw"]: dt.datetime(2025, 3, 3, 9, 12, 40, tzinfo=CET),
+            pack.FILES["stm"]: dt.datetime(2026, 11, 3, 7, 55, 3, tzinfo=GMT),
+            pack.FILES["pod"]: dt.datetime(2026, 11, 4, 5, 31, 27, tzinfo=GMT),
+            pack.FILES["ebk"]: dt.datetime(2026, 11, 4, 5, 38, 2, tzinfo=GMT),
+            pack.FILES["rev"]: dt.datetime(2026, 11, 2, 8, 0, 19, tzinfo=GMT)}
 
 
-def kpi_rows(S):
-    import models
-    net = sim.store_net(S["gross"], S["route"], lead=S["tenure0"])
+def kpi_rows(W):
+    acc = {a["aid"]: a for a in W["accounts"]}
+    paying = collections.defaultdict(collections.Counter)
+    seen = set()
+    for c in W["charges"]:
+        if c["status"] in ("collected", "re-presented") and c["price"] > 0 and acc[c["aid"]]["kind"] == "consumer":
+            if (c["aid"], c["m"]) in seen:
+                continue
+            seen.add((c["aid"], c["m"]))
+            paying[c["m"]][c["plan"]] += 1
+    rev = collections.Counter()
+    for c in W["charges"]:
+        rev[c["m"]] += pack.net_revenue(c)
+    trials = collections.Counter(a["created"][0] for a in W["accounts"] if a["trial_days"] and a["kind"] == "consumer")
     rows = []
     for m in range(36, 45):
-        y, mo = sim.ym(m)
-        pay = S["gross"][:, m] > 0
-        cnt = [int((pay & (S["title"] == sim.T_IDX[t])).sum()) for t in P.TITLES]
-        rev = [round(float(net[S["title"] == sim.T_IDX[t], m].sum()), 2) for t in P.TITLES]
-        rows.append(["%04d-%02d" % (y, mo)] + cnt + rev)
+        pc = paying[m]
+        rows.append([P.month_label(m)] + [pc[p] for p in P.PLANS] + [sum(pc.values()), trials[m],
+                                                                    round(rev[m], 2), round(P.SHARE26 * rev[m], 2)])
     return rows
 
 
-def run(target):
-    os.makedirs(target, exist_ok=True)
-    for f in os.listdir(target):
-        os.remove(os.path.join(target, f))
-    F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    S = world.history()
-    pk, n = pack.write_all(S, target)
-    plan = world.plan_2027()
-    docs.standard(F["standard"])
-    docs.price_list(F["prices"])
-    docs.media_plan(F["plan"], plan)
-    docs.kpi(F["kpi"], kpi_rows(S))
-    for k, (created, modified, who) in OFFICE.items():
-        postprocess.normalize_ooxml(F[k], who, who, created, modified, excel=True, company=docs.ORG)
-    postprocess.own_mtimes(target, {FILES[k]: v for k, v in EXPORTED.items()})
-    return S, pk, n, plan
+def build(target):
+    if os.path.isdir(target):
+        shutil.rmtree(target)
+    os.makedirs(target)
+    W = world.simulate()
+    rng = np.random.default_rng(P.SEED + 5)
+    counts = pack.write(W, target, rng)
+    counts["stm"] = pack.write_statements(W, target)
+    counts["pod"], counts["ebk"], counts["rev"] = pack.write_distractors(W, target, rng)
+    docs.write_pdfs(target)
+    docs.write_kpi(os.path.join(target, docs.FILES["kpi"]), kpi_rows(W))
+    postprocess.normalize_ooxml(os.path.join(target, docs.FILES["kpi"]), "Hugo Brouwer", "Hugo Brouwer",
+                                "2026-01-08T08:41:00Z", "2026-10-07T14:16:33Z", excel=True, company=docs.ORG)
+    postprocess.own_mtimes(target, EXPORTED)
+    return {"W": W, "counts": counts}
 
 
 if __name__ == "__main__":
-    out = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else os.path.join(os.path.dirname(HERE),
-                                                                                          "target")
-    S, pk, n, plan = run(out)
-    print({k: v for k, v in n.items()})
+    out = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else os.path.join(os.path.dirname(HERE), "target")
+    r = build(out)
+    print(r["counts"])

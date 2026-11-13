@@ -1,189 +1,131 @@
-"""The independent verifier (python3 verify.py <target>): reads only the bundle, on its own parsing path (pandas),
-and recomputes the graded figures: R1 and R2 from its own tables and its own household linkage, R3 and R4 from its
-own logistic fit, the plan's costs and the budget from the workbook as read back, and R5, R6, R7 and R9 from the
-golden's models run on the verifier's own panel. Every document a figure or a filed sentence leans on is read back
-through the verifier's own extractor, with a positive control. Exit 1 on any mismatch."""
-import json
+"""The independent verifier: reads only the shipped bundle (target/ and the answer blocks in submission.md) on its
+own code path (the csv module, no generator module, no pandas) and recomputes the paying base, the counted hours
+per paying subscription-month, each plan's contribution per spring 2024 trial start and the lead plan, then checks
+them against the answer blocks. Exit 1 on any failure."""
+import csv
 import os
+import re
 import subprocess
 import sys
+from collections import defaultdict
 
-import numpy as np
-import pandas as pd
-
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-
-OK = []
+TASK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+T = os.path.join(TASK, "target")
+PLANS = {"FLEX": "Flex", "STD": "Standaard", "ONB": "Onbeperkt", "GEZ": "Gezin"}
+FAIL = []
 
 
-def chk(label, ok, detail=""):
-    OK.append((label, bool(ok), detail))
+def rd(name):
+    with open(os.path.join(T, name), encoding="utf-8") as f:
+        yield from csv.DictReader(f)
 
 
-def months(a, b):
-    return (b.dt.year - a.dt.year) * 12 + (b.dt.month - a.dt.month)
+def mi(s):
+    return (int(s[:4]) - 2023) * 12 + int(s[5:7]) - 1
 
 
-def load(T):
-    subs = pd.read_csv(os.path.join(T, "subscriptions_2023-01_2026-10.csv"), dtype=str, keep_default_na=False)
-    cust = pd.read_csv(os.path.join(T, "customers.csv"), dtype=str, keep_default_na=False)
-    subs = subs.drop_duplicates()
-    consumer = set(cust.loc[cust.account_type == "CONSUMER", "customer_no"])
-    subs = subs[(subs["product"] == "DIGITAL") & subs.customer_no.isin(consumer)].copy()
-    per = pd.read_csv(os.path.join(T, "price_periods_2023-01_2026-10.csv"), dtype=str, keep_default_na=False)
-    return subs, cust, per
+def ok(name, cond, detail=""):
+    print("%s  %s  %s" % ("PASS" if cond else "FAIL", name, detail))
+    if not cond:
+        FAIL.append(name)
 
 
-def oct_paying(subs, per):
-    per = per[per.subscription_id.isin(set(subs.subscription_id))].copy()
-    per["p"] = per.monthly_price_eur.astype(float)
-    per["a"] = pd.to_datetime(per.valid_from)
-    per["b"] = pd.to_datetime(per.valid_to.replace("", "2099-12-31"))
-    # the billing period covering 31 October 2026: the last billing on or before that day inside a period
-    day = pd.to_datetime(subs.set_index("subscription_id").start_date).dt.day
-    per["day"] = per.subscription_id.map(day)
-    oct_bill = pd.to_datetime(dict(year=2026, month=10, day=per["day"].clip(upper=28)))
-    hit = (per.a <= oct_bill) & (per.b >= oct_bill) & (per.p > 0)
-    ids = set(per.loc[hit, "subscription_id"])
-    withdrawn = set(subs.loc[subs.end_reason == "WITHDRAWN", "subscription_id"])
-    ids -= withdrawn
-    return subs[subs.subscription_id.isin(ids)].groupby("title").size().to_dict()
+def pdf(name):
+    return re.sub(r"\s+", " ", subprocess.run(["pdftotext", "-layout", os.path.join(T, name), "-"],
+                                              capture_output=True, text=True).stdout)
 
 
-def logit_irls(X, y, it=60):
-    b = np.zeros(X.shape[1])
-    for _ in range(it):
-        eta = X @ b
-        p = 1 / (1 + np.exp(-eta))
-        W = p * (1 - p)
-        H = X.T @ (X * W[:, None]) + 1e-10 * np.eye(X.shape[1])
-        g = X.T @ (y - p)
-        step = np.linalg.solve(H, g)
-        b = b + step
-        if np.max(np.abs(step)) < 1e-10:
-            break
-    return b
-
-
-def main(T):
-    import golden as GD
-    import models
-    import panel
-    import params as P
-    import results
-    import sim
-    import world
-    F = json.load(open(os.path.join(HERE, "figures.json")))
-    subs, cust, per = load(T)
-    # R1
-    r1 = oct_paying(subs, per)
-    chk("R1 paying at 31 October 2026, by title", all(int(r1.get(t, 0)) == F["paying_oct"][t] for t in P.TITLES),
-        str(r1))
-    # the verifier's own panel against the golden's parser
-    pp = panel.from_pack(T)
-    chk("own parse: the consumer subscriptions are the golden's", len(subs) == pp["n"], "%d" % len(subs))
-    # R2 with the verifier's own household links (pandas: customer, fingerprint, normalised address)
-    meth = pd.read_csv(os.path.join(T, "payment_methods.csv"), dtype=str, keep_default_na=False)
-    import re
-
-    def akey(r):
-        s = r.street.strip().lower().replace(" ", "")
-        s = re.sub(r"(strasse|str\.)$", "straße", s)
-        return s + "|" + r.house_no.strip().lower() + "|" + r.postcode.strip()
-    cust["akey"] = cust.apply(akey, axis=1)
-    parent = {}
-
-    def find(a):
-        while parent.setdefault(a, a) != a:
-            parent[a] = parent[parent[a]]
-            a = parent[a]
-        return a
-
-    def union(a, b):
-        ra, rb = find(a), find(b)
-        if ra != rb:
-            parent[max(ra, rb)] = min(ra, rb)
-    live = set(subs.customer_no)
-    for col, df in [("fingerprint", meth[meth.customer_no.isin(live)]),
-                    ("akey", cust[cust.customer_no.isin(live)])]:
-        first = {}
-        for c, k in zip(df.customer_no, df[col]):
-            if k in first:
-                union(int(first[k]), int(c))
-            else:
-                first[k] = c
-    hh = subs.customer_no.astype(int).map(lambda c: find(c))
-    subs = subs.assign(hh=hh.values)
-    net = results.net_matrix(pp)
-    sid_row = {s: i for i, s in enumerate(pp["sid"])}
-    subs["row"] = subs.subscription_id.map(sid_row)
-    subs["sd"] = pd.to_datetime(subs.start_date)
-    subs["m0"] = (subs.sd.dt.year - 2023) * 12 + subs.sd.dt.month - 1
-    old_new = {v: k for k, v in P.OLD_CODE.items()}
-    subs["ch"] = subs.channel.map(lambda c: old_new.get(c, c) if c else "DIR")
-    q3 = subs[(subs.sd >= "2023-07-01") & (subs.sd <= "2023-09-30") & (subs.end_reason != "WITHDRAWN")]
-    by_hh = {k: v for k, v in subs.groupby("hh")}
-    r2 = {}
-    for c, grp in q3.groupby("ch"):
-        vals = []
-        for _, r in grp.iterrows():
-            a = int(r.m0)
-            v = net[int(r.row), a: a + 36].sum()
-            for _, o in by_hh[r.hh].iterrows():
-                if o.subscription_id != r.subscription_id and o.m0 > r.m0 and o.m0 <= a + 35:
-                    v += net[int(o.row), int(o.m0): a + 36].sum()
-            vals.append(v)
-        r2[c] = int(round(np.mean(vals)))
-    chk("R2 36-month value of the July to September 2023 starts, own household links",
-        all(abs(r2[c] - F["value_2023q3"][c]) <= 1 for c in P.CHANNELS), str(r2))
-    # R3 and R4: the verifier's own logistic fit
-    idx, y = models.su_rows(pp)
-    X = models.su_design(pp["channel"][idx], pp["title"][idx], pp["offer"][idx], pp["L"][idx], pp["ip"][idx],
-                         pp["stepup"][idx], models.GOLD)
-    b = logit_irls(X, y)
-    M = {"b": b, "o": models.GOLD}
-    plan = world.plan_2027()
-    r3, r4 = results.r3_r4({"su": M}, plan)
-    chk("R3 share leaving at the end of the intro, own fit",
-        all(abs(100 * r3[o] - F["stepup_share"][o]) <= 0.15 for o in r3), str({o: round(100 * v, 1) for o, v in r3.items()}))
-    chk("R4 points the April 2027 prices add, own fit",
-        all(abs(100 * r4[o] - F["stepup_added"][o]) <= 0.15 for o in r4), str({o: round(100 * v, 1) for o, v in r4.items()}))
-    # the plan as read back from the workbook
-    from openpyxl import load_workbook
-    ws = load_workbook(os.path.join(T, "media_plan_2027.xlsx"))["Plan 2027"]
-    spend = {ws.cell(r, 1).value: ws.cell(r, 19).value for r in range(5, 23)}
-    starts = {ws.cell(r, 1).value: sum(ws.cell(r, c).value for c in range(6, 18)) for r in range(5, 23)}
-    chk("plan read back: 18 lines with spend and starts", len(spend) == 18 and all(spend.values()))
-    budget = sum(spend[k] for k in F["funded"])
-    chk("R8 budget from the workbook's spend on the funded lines", budget == F["budget"], "%d" % budget)
-    # R5, R6, R7, R9 on the verifier's panel
-    Mg = results.fit(pp, models.GOLD)
-    R, _ = results.all_results(pp, plan, models.GOLD, M=Mg)
-    mult = {GD.key(l): R["R7"][l] / (spend[GD.key(l)] / starts[GD.key(l)]) for l in R["R7"]}
-    fund = sorted(k for k, v in mult.items() if v >= P.HURDLE)
-    chk("R8 the funded lines from the values and the workbook's costs", fund == sorted(F["funded"]), ", ".join(fund))
-    chk("R7 every line's value", all(abs(int(round(R["R7"][l])) - F["line_value"][GD.key(l)]) <= 1 for l in R["R7"]))
-    chk("R5 three-year survival by channel", all(abs(100 * R["R5"][c] - F["survival_36"][c]) <= 0.15 for c in P.CHANNELS))
-    chk("R6 extra cancellations by title", all(abs(R["R6"][t] - F["rise_extra"][t]) <= 1 for t in P.TITLES))
-    chk("R9 the plan's 2027 starts paying at December 2027", all(abs(R["R9"][c] - F["plan_paying"][c]) <= 1
-                                                                 for c in P.PAID))
-    # the documents, read back through the verifier's own extractor, each with a positive control
-    for f, control, needle in [("digital_subscription_kpi_standard.pdf", "Version 3", "at least 3.5 times"),
-                               ("price_list_digital_2027.pdf", "from 1 April 2027", "first billing on or after")]:
-        t = subprocess.run(["pdftotext", os.path.join(T, f), "-"], capture_output=True, text=True).stdout
-        t = " ".join(t.split())
-        chk("document read back: %s (control '%s')" % (f, control), control in t and needle in t, "%d chars" % len(t))
-    prices = subprocess.run(["pdftotext", "-layout", os.path.join(T, "price_list_digital_2027.pdf"), "-"],
-                            capture_output=True, text=True).stdout
-    chk("price list: the April 2027 list prices are the ones the golden uses",
-        all(("%.2f" % P.PRICE[t][2]).replace(".", ",") in prices for t in P.TITLES))
-    bad = [o for o in OK if not o[1]]
-    for label, ok, detail in OK:
-        print("%s  %-80s %s" % ("PASS" if ok else "FAIL", label[:80], detail[:70]))
-    print("verify: %d checks, %d failed" % (len(OK), len(bad)))
-    return 1 if bad else 0
+def main():
+    sub = open(os.path.join(TASK, "submission.md")).read()
+    sb = pdf("SUL_licence_agreement_2027-2029_schedule_B.pdf")
+    rate = float(re.search(r"EUR (\d+\.\d+) for every counted hour", sb).group(1))
+    ok("schedule B read: the rate", rate > 0, str(rate))
+    quote = pdf("spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf")
+    fee = {k: float(re.search(r"Kraanvogel %s EUR (\d+\.\d+)" % v, quote).group(1)) for k, v in PLANS.items()}
+    ok("quote read: four fees", len(fee) == 4, str(fee))
+    price = pdf("price_list_2027.pdf")
+    p27 = {k: float(re.search(r"Kraanvogel %s .*?EUR (\d+\.\d+)" % v, price).group(1)) for k, v in PLANS.items()}
+    ok("price list read", len(p27) == 4, str(p27))
+    consumer = {r["account_id"] for r in rd("accounts_export_2026-11-03.csv") if r["account_type"] == "consumer"}
+    spring = {r["account_id"]: (mi(r["created_on"]), r["signup_source"][5:]) for r in rd("accounts_export_2026-11-03.csv")
+              if r["signup_source"].startswith("VJ24-") and r["account_type"] == "consumer" and r["created_on"] < "2024-04"}
+    paying = {}
+    members = {}
+    for r in rd("payments_2024-01_2026-10.csv"):
+        m = mi(r["charged_on"])
+        if r["profiles_on_subscription"]:
+            for p in r["profiles_on_subscription"].split(";"):
+                members[(p, m)] = r["account_id"]
+        if r["account_id"] in consumer and r["status"] in ("collected", "re-presented") and float(r["amount_eur"]) > 0:
+            paying[(r["account_id"], m)] = (r["plan_code"], r["route"], float(r["vat_rate"]))
+    oct_ = defaultdict(int)
+    for (a, m), v in paying.items():
+        if m == 45:
+            oct_[v[0]] += 1
+    for k, v in PLANS.items():
+        ok("R1 %s paying at 31 October 2026" % v, ("%s %s" % (v, format(oct_[k], ","))) in sub, str(oct_[k]))
+    licensed = {r["title_id"] for r in rd("catalogue_2026-10.csv") if r["rights"] == "licensed"}
+    best = defaultdict(float)
+    seen = set()
+    for r in rd("listening_monthly_2024-01_2026-10.csv"):
+        key = tuple(r.values())
+        if key in seen or r["title_id"] not in licensed:
+            continue
+        seen.add(key)
+        k = (r["profile_id"], r["title_id"], mi(r["month"]))
+        best[k] = max(best[k], float(r["furthest_position_s"]))
+    for r in rd("licence_server_renewals_2024-01_2026-10.csv"):
+        if r["title_id"] not in licensed:
+            continue
+        k = (r["profile_id"], r["title_id"], mi(r["renewed_at_utc"]))
+        best[k] = max(best[k], float(r["position_s"]))
+    run = {}
+    hours = defaultdict(float)
+    for (p, t, m) in sorted(best, key=lambda x: (x[0], x[1], x[2])):
+        prev = run.get((p, t), 0.0)
+        if best[(p, t, m)] > prev:
+            hours[(p, m)] += (best[(p, t, m)] - prev) / 3600.0
+            run[(p, t)] = best[(p, t, m)]
+    today = {r["profile_id"]: r["account_id"] for r in rd("profiles_export_2026-11-03.csv")}
+    by_p = defaultdict(list)
+    for (p, m), a in members.items():
+        by_p[p].append((m, a))
+    acc_h = defaultdict(float)
+    for (p, m), h in hours.items():
+        a = members.get((p, m))
+        if a is None:
+            lst = sorted(by_p.get(p, []))
+            later = [x for x in lst if x[0] > m]
+            earlier = [x for x in lst if x[0] < m]
+            a = later[0][1] if later else (earlier[-1][1] if earlier else today.get(p))
+        acc_h[(a, m)] += h
+    num, den = defaultdict(float), defaultdict(int)
+    for (a, m), v in paying.items():
+        if 34 <= m <= 45:
+            num[v[0]] += acc_h.get((a, m), 0.0)
+            den[v[0]] += 1
+    for k, v in PLANS.items():
+        val = num[k] / den[k]
+        ok("R2 %s counted hours per paying month" % v, ("%s %.2f" % (v, val)) in sub, "%.2f" % val)
+    contrib = {}
+    for k, v in PLANS.items():
+        ids = [a for a, (m0, pl) in spring.items() if pl == k]
+        rev = hrs = 0.0
+        for a in ids:
+            m0 = spring[a][0]
+            ms = sorted(m for (aa, m) in paying if aa == a)
+            for i, m in enumerate(ms, 1):
+                if m0 <= m < m0 + 24:
+                    pl, route, vat = paying[(a, m)]
+                    f = (0.30 if i <= 12 else 0.15) if route == "apple" else (0.15 if route == "google" else 0.0)
+                    rev += p27[pl] / (1 + vat) * (1 - f)
+            hrs += sum(acc_h.get((a, m), 0.0) for m in range(m0, m0 + 24))
+        contrib[k] = (rev - rate * hrs) / len(ids) - fee[k]
+        ok("R5 %s contribution per trial start" % v, ("%s %.1f" % (v, contrib[k])) in sub, "%.1f" % contrib[k])
+    lead = PLANS[max(contrib, key=contrib.get)]
+    ok("R7 the lead plan", ("Lead the spring 2027 campaign with %s" % lead) in sub, lead)
+    sys.exit(1 if FAIL else 0)
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")))
+    main()

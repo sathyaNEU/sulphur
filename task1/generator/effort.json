@@ -1,871 +1,571 @@
 {
- "hints": [
-  {
-   "rescues": [
-    "R3",
-    "R4"
-   ],
-   "sentence": "the April 2025 rise also raised the share leaving at the end of the introductory price"
-  },
-  {
-   "rescues": [
-    "R5"
-   ],
-   "sentence": "the newest social and partner starts read far less in their first months than earlier ones"
-  },
-  {
-   "rescues": [
-    "R2"
-   ],
-   "sentence": "households that leave often come back under a new customer number, with the same payment method or address"
-  },
-  {
-   "rescues": [],
-   "sentence": "the April 2025 rise's cancellations began with the notice letters and were heaviest in the first paid year"
-  }
- ],
  "results": [
   {
-   "bands": {
-    "BHR": [
-     5075.5,
-     5076.5
-    ],
-    "ELN": [
-     1480.5,
-     1481.5
-    ],
-    "GAZ": [
-     3064.5,
-     3065.5
-    ],
-    "KBO": [
-     2607.5,
-     2608.5
-    ]
-   },
-   "depends": [],
-   "figure": "paying_oct",
-   "golden": {
-    "BHR": 5076,
-    "ELN": 1481,
-    "GAZ": 3065,
-    "KBO": 2608
-   },
-   "graded_as": "Ask 1",
    "id": "R1",
-   "independent": "",
-   "name": "paying digital subscribers at 31 Oct 2026 by title",
-   "partly_share": 0.5,
+   "name": "paying subscriptions by plan at 31 October 2026",
+   "graded_as": "Ask 2",
+   "figure": "paying_oct",
+   "depends": [],
+   "independent": "the October base",
+   "golden": {
+    "Flex": 376,
+    "Standaard": 858,
+    "Onbeperkt": 1004,
+    "Gezin": 731
+   },
+   "bands": {
+    "Flex": [
+     375.5,
+     376.5
+    ],
+    "Standaard": [
+     857.5,
+     858.5
+    ],
+    "Onbeperkt": [
+     1003.5,
+     1004.5
+    ],
+    "Gezin": [
+     730.5,
+     731.5
+    ]
+   },
    "passes": {
-    "careful": {
-     "BHR": 5076,
-     "ELN": 1481,
-     "GAZ": 3065,
-     "KBO": 2608
-    },
     "quick": {
-     "BHR": 5241,
-     "ELN": 1523,
-     "GAZ": 3148,
-     "KBO": 2680
+     "Flex": 418,
+     "Standaard": 907,
+     "Onbeperkt": 1093,
+     "Gezin": 744
+    },
+    "careful": {
+     "Flex": 376,
+     "Standaard": 858,
+     "Onbeperkt": 1004,
+     "Gezin": 731
     },
     "thorough": {
-     "BHR": 5076,
-     "ELN": 1481,
-     "GAZ": 3065,
-     "KBO": 2608
+     "Flex": 376,
+     "Standaard": 858,
+     "Onbeperkt": 1004,
+     "Gezin": 731
     }
    }
   },
   {
-   "bands": {
-    "APP": [
-     178.49,
-     180.36
-    ],
-    "DIR": [
-     254.27,
-     256.26
-    ],
-    "PART": [
-     221.78,
-     225.53
-    ],
-    "SEA": [
-     221.83,
-     225.8
-    ],
-    "SOC": [
-     150.1,
-     151.89
-    ],
-    "TEL": [
-     128.37,
-     131.32
-    ]
-   },
-   "depends": [],
-   "figure": "value_2023q3",
-   "golden": {
-    "APP": 180,
-    "DIR": 256,
-    "PART": 225,
-    "SEA": 225,
-    "SOC": 151,
-    "TEL": 131
-   },
-   "graded_as": "Component 4",
    "id": "R2",
-   "independent": "",
-   "name": "Jul-Sep 2023 starts: 36-month net revenue per start by channel",
-   "partly_share": 0.5,
-   "passes": {
-    "careful": {
-     "APP": 169,
-     "DIR": 242,
-     "PART": 218,
-     "SEA": 209,
-     "SOC": 128,
-     "TEL": 118
-    },
-    "quick": {
-     "APP": 160,
-     "DIR": 223,
-     "PART": 205,
-     "SEA": 190,
-     "SOC": 99,
-     "TEL": 90
-    },
-    "thorough": {
-     "APP": 180,
-     "DIR": 256,
-     "PART": 225,
-     "SEA": 225,
-     "SOC": 151,
-     "TEL": 131
-    }
-   }
-  },
-  {
-   "bands": {
-    "G3": [
-     74.21,
-     75.26
-    ],
-    "H6": [
-     28.01,
-     32.34
-    ],
-    "J12": [
-     23.49,
-     30.81
-    ],
-    "M3E1": [
-     60.2,
-     61.72
-    ],
-    "PM1": [
-     68.76,
-     70.01
-    ]
-   },
-   "depends": [],
-   "figure": "stepup_share",
-   "golden": {
-    "G3": 74.6,
-    "H6": 31.5,
-    "J12": 29.6,
-    "M3E1": 60.6,
-    "PM1": 69.1
-   },
-   "graded_as": "Ask 3",
-   "id": "R3",
-   "independent": "",
-   "name": "share leaving at the end of the intro, 2027 offers, 2026 prices",
-   "partly_share": 0.5,
-   "passes": {
-    "careful": {
-     "G3": 74.2,
-     "H6": 31.5,
-     "J12": 29.8,
-     "M3E1": 60.6,
-     "PM1": 68.9
-    },
-    "quick": {
-     "G3": 70.1,
-     "H6": 26.1,
-     "J12": 19.0,
-     "M3E1": 51.7,
-     "PM1": 58.1
-    },
-    "thorough": {
-     "G3": 74.6,
-     "H6": 31.5,
-     "J12": 29.6,
-     "M3E1": 60.6,
-     "PM1": 69.1
-    }
-   }
-  },
-  {
-   "bands": {
-    "G3": [
-     5.42,
-     7.05
-    ],
-    "H6": [
-     6.6,
-     10.74
-    ],
-    "J12": [
-     6.25,
-     10.15
-    ],
-    "M3E1": [
-     6.69,
-     8.68
-    ],
-    "PM1": [
-     5.95,
-     7.73
-    ]
-   },
-   "depends": [],
-   "figure": "stepup_added",
-   "golden": {
-    "G3": 7.0,
-    "H6": 8.5,
-    "J12": 8.0,
-    "M3E1": 8.6,
-    "PM1": 7.7
-   },
-   "graded_as": "Component 3",
-   "id": "R4",
-   "independent": "",
-   "name": "points the April 2027 prices add at the end of the intro",
-   "partly_share": 0.5,
-   "passes": {
-    "careful": {
-     "G3": 0.0,
-     "H6": 0.0,
-     "J12": 0.0,
-     "M3E1": 0.0,
-     "PM1": 0.0
-    },
-    "quick": {
-     "G3": 0.0,
-     "H6": 0.0,
-     "J12": 0.0,
-     "M3E1": 0.0,
-     "PM1": 0.0
-    },
-    "thorough": {
-     "G3": 7.0,
-     "H6": 8.5,
-     "J12": 8.0,
-     "M3E1": 8.6,
-     "PM1": 7.7
-    }
-   }
-  },
-  {
-   "bands": {
-    "APP": [
-     11.03,
-     12.22
-    ],
-    "DIR": [
-     27.75,
-     29.28
-    ],
-    "PART": [
-     11.35,
-     12.91
-    ],
-    "SEA": [
-     25.85,
-     27.38
-    ],
-    "SOC": [
-     8.76,
-     9.82
-    ],
-    "TEL": [
-     7.08,
-     8.17
-    ]
-   },
-   "depends": [],
-   "figure": "survival_36",
-   "golden": {
-    "APP": 11.6,
-    "DIR": 28.6,
-    "PART": 11.8,
-    "SEA": 26.4,
-    "SOC": 9.2,
-    "TEL": 7.5
-   },
+   "name": "counted hours per paying subscription-month by plan, Nov 2025 to Oct 2026",
    "graded_as": "Component 2",
-   "id": "R5",
-   "independent": "",
-   "name": "Nov 2025-Apr 2026 starts still paying three years in, by channel",
-   "partly_share": 0.5,
-   "passes": {
-    "careful": {
-     "APP": 11.3,
-     "DIR": 28.1,
-     "PART": 14.0,
-     "SEA": 24.5,
-     "SOC": 11.3,
-     "TEL": 7.9
-    },
-    "quick": {
-     "APP": 26.5,
-     "DIR": 29.5,
-     "PART": 18.0,
-     "SEA": 25.7,
-     "SOC": 11.9,
-     "TEL": 9.8
-    },
-    "thorough": {
-     "APP": 11.6,
-     "DIR": 28.6,
-     "PART": 11.8,
-     "SEA": 26.4,
-     "SOC": 9.2,
-     "TEL": 7.5
-    }
-   }
-  },
-  {
-   "bands": {
-    "BHR": [
-     160.26,
-     170.55
-    ],
-    "ELN": [
-     46.32,
-     49.87
-    ],
-    "GAZ": [
-     95.59,
-     102.22
-    ],
-    "KBO": [
-     81.46,
-     87.15
-    ]
-   },
+   "figure": "counted_per_month",
    "depends": [],
-   "figure": "rise_extra",
+   "independent": "the twelve months' listening",
    "golden": {
-    "BHR": 164,
-    "ELN": 48,
-    "GAZ": 98,
-    "KBO": 84
+    "Flex": 5.34,
+    "Standaard": 10.49,
+    "Onbeperkt": 31.37,
+    "Gezin": 27.95
    },
-   "graded_as": "Ask 4",
-   "id": "R6",
-   "independent": "",
-   "name": "extra cancellations from the April 2027 rise by Dec 2027, by title",
-   "partly_share": 0.5,
+   "bands": {
+    "Flex": [
+     5.29,
+     5.39
+    ],
+    "Standaard": [
+     10.39,
+     10.6
+    ],
+    "Onbeperkt": [
+     31.06,
+     31.72
+    ],
+    "Gezin": [
+     27.67,
+     28.41
+    ]
+   },
+   "precedent": [
+    "L03",
+    "L28",
+    "N09"
+   ],
    "passes": {
-    "careful": {
-     "BHR": 86,
-     "ELN": 26,
-     "GAZ": 52,
-     "KBO": 45
-    },
     "quick": {
-     "BHR": 0,
-     "ELN": 0,
-     "GAZ": 0,
-     "KBO": 0
+     "Flex": 3.33,
+     "Standaard": 5.39,
+     "Onbeperkt": 12.1,
+     "Gezin": 23.41
+    },
+    "careful": {
+     "Flex": 4.29,
+     "Standaard": 7.1,
+     "Onbeperkt": 18.8,
+     "Gezin": 26.29
     },
     "thorough": {
-     "BHR": 164,
-     "ELN": 48,
-     "GAZ": 98,
-     "KBO": 84
+     "Flex": 5.34,
+     "Standaard": 10.49,
+     "Onbeperkt": 31.37,
+     "Gezin": 27.95
     }
    }
   },
   {
+   "id": "R4",
+   "name": "spring 2024 trial starts over 24 months by plan",
+   "graded_as": "Ask 3",
+   "figure": "spring24",
+   "depends": [],
+   "independent": "the spring 2024 trial starts' billing",
+   "golden": {
+    "Flex share paying": 54.3,
+    "Flex paying months": 3.78,
+    "Flex net revenue": 36.67,
+    "Standaard share paying": 65.1,
+    "Standaard paying months": 6.51,
+    "Standaard net revenue": 89.33,
+    "Onbeperkt share paying": 60.7,
+    "Onbeperkt paying months": 7.14,
+    "Onbeperkt net revenue": 122.95,
+    "Gezin share paying": 56.6,
+    "Gezin paying months": 8.46,
+    "Gezin net revenue": 175.66
+   },
    "bands": {
-    "APP-BHR": [
-     275.01,
-     283.43
+    "Flex share paying": [
+     54.252670623145406,
+     54.3526706231454
     ],
-    "APP-GAZ": [
-     99.54,
-     106.04
+    "Flex paying months": [
+     3.7724480712166173,
+     3.782448071216617
     ],
-    "APP-KBO": [
-     116.2,
-     123.26
+    "Flex net revenue": [
+     36.16926936809171,
+     37.16926936809171
     ],
-    "PART-BHR": [
-     199.36,
-     209.1
+    "Standaard share paying": [
+     65.08761467889909,
+     65.18761467889908
     ],
-    "PART-GAZ": [
-     247.31,
-     257.48
+    "Standaard paying months": [
+     6.5018807339449545,
+     6.511880733944954
     ],
-    "PART-KBO": [
-     189.28,
-     198.58
+    "Standaard net revenue": [
+     88.83490328818964,
+     89.83490328818964
     ],
-    "SEA-BHR": [
-     349.96,
-     359.23
+    "Onbeperkt share paying": [
+     60.63181818181818,
+     60.73181818181818
     ],
-    "SEA-ELN": [
-     161.22,
-     168.85
+    "Onbeperkt paying months": [
+     7.131363636363637,
+     7.141363636363637
     ],
-    "SEA-GAZ": [
-     184.07,
-     192.34
+    "Onbeperkt net revenue": [
+     122.44608476796701,
+     123.44608476796701
     ],
-    "SEA-KBO": [
-     314.89,
-     324.19
+    "Gezin share paying": [
+     56.58430420711975,
+     56.684304207119744
     ],
-    "SOC-BHR": [
-     107.51,
-     114.74
+    "Gezin paying months": [
+     8.45131067961165,
+     8.461310679611652
     ],
-    "SOC-ELN": [
-     171.15,
-     181.19
-    ],
-    "SOC-GAZ": [
-     196.52,
-     209.46
-    ],
-    "SOC-KBO": [
-     94.29,
-     101.92
-    ],
-    "TEL-BHR": [
-     283.51,
-     296.01
-    ],
-    "TEL-ELN": [
-     83.12,
-     89.61
-    ],
-    "TEL-GAZ": [
-     84.6,
-     91.06
-    ],
-    "TEL-KBO": [
-     252.65,
-     262.98
+    "Gezin net revenue": [
+     175.15904377250928,
+     176.15904377250928
     ]
    },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "Flex share paying": 54.3,
+     "Flex paying months": 3.78,
+     "Flex net revenue": 38.97,
+     "Standaard share paying": 65.1,
+     "Standaard paying months": 6.51,
+     "Standaard net revenue": 97.65,
+     "Onbeperkt share paying": 60.7,
+     "Onbeperkt paying months": 7.14,
+     "Onbeperkt net revenue": 135.86,
+     "Gezin share paying": 56.6,
+     "Gezin paying months": 8.46,
+     "Gezin net revenue": 192.35
+    },
+    "careful": {
+     "Flex share paying": 54.3,
+     "Flex paying months": 3.78,
+     "Flex net revenue": 36.67,
+     "Standaard share paying": 65.1,
+     "Standaard paying months": 6.51,
+     "Standaard net revenue": 89.33,
+     "Onbeperkt share paying": 60.7,
+     "Onbeperkt paying months": 7.14,
+     "Onbeperkt net revenue": 122.95,
+     "Gezin share paying": 56.6,
+     "Gezin paying months": 8.46,
+     "Gezin net revenue": 175.66
+    },
+    "thorough": {
+     "Flex share paying": 54.3,
+     "Flex paying months": 3.78,
+     "Flex net revenue": 36.67,
+     "Standaard share paying": 65.1,
+     "Standaard paying months": 6.51,
+     "Standaard net revenue": 89.33,
+     "Onbeperkt share paying": 60.7,
+     "Onbeperkt paying months": 7.14,
+     "Onbeperkt net revenue": 122.95,
+     "Gezin share paying": 56.6,
+     "Gezin paying months": 8.46,
+     "Gezin net revenue": 175.66
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "24-month contribution per spring 2027 trial start by plan",
+   "graded_as": "Component 1",
+   "figure": "contribution",
    "depends": [
-    "R3",
-    "R4",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "Flex": 13.3,
+    "Standaard": 12.4,
+    "Onbeperkt": -3.6,
+    "Gezin": 22.0
+   },
+   "bands": {
+    "Flex": [
+     13.16,
+     13.52
+    ],
+    "Standaard": [
+     12.31,
+     13.41
+    ],
+    "Onbeperkt": [
+     -3.65,
+     -2.5
+    ],
+    "Gezin": [
+     21.16,
+     22.22
+    ]
+   },
+   "precedent": [
+    "L03",
+    "N09",
+    "L28"
+   ],
+   "passes": {
+    "quick": {
+     "Flex": 5.4,
+     "Standaard": 1.6,
+     "Onbeperkt": 48.1,
+     "Gezin": 36.7
+    },
+    "careful": {
+     "Flex": 15.1,
+     "Standaard": 23.0,
+     "Onbeperkt": 45.5,
+     "Gezin": 23.8
+    },
+    "thorough": {
+     "Flex": 13.3,
+     "Standaard": 12.4,
+     "Onbeperkt": -3.6,
+     "Gezin": 22.0
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the 2027 remuneration on the October 2026 base",
+   "graded_as": "Ask 4",
+   "figure": "remuneration_2027_base",
+   "depends": [],
+   "independent": "the base's own records",
+   "golden": 202600,
+   "band": [
+    191900,
+    207300
+   ],
+   "partly": [
+    182305.0,
+    217665.0
+   ],
+   "precedent": [
+    "L03",
+    "N13"
+   ],
+   "passes": {
+    "quick": 287500.0,
+    "careful": 149900.0,
+    "thorough": 202600
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the plan the spring 2027 campaign leads with",
+   "graded_as": "Recommendation",
+   "figure": "lead_plan",
+   "depends": [
     "R5"
    ],
-   "figure": "line_value",
-   "golden": {
-    "APP-BHR": 277,
-    "APP-GAZ": 102,
-    "APP-KBO": 118,
-    "PART-BHR": 201,
-    "PART-GAZ": 251,
-    "PART-KBO": 191,
-    "SEA-BHR": 352,
-    "SEA-ELN": 163,
-    "SEA-GAZ": 187,
-    "SEA-KBO": 317,
-    "SOC-BHR": 109,
-    "SOC-ELN": 172,
-    "SOC-GAZ": 200,
-    "SOC-KBO": 96,
-    "TEL-BHR": 285,
-    "TEL-ELN": 85,
-    "TEL-GAZ": 87,
-    "TEL-KBO": 254
-   },
-   "graded_as": "Component 1",
-   "id": "R7",
    "independent": "",
-   "name": "expected 36-month net revenue per start, every 2027 line",
-   "partly_share": 0.5,
+   "golden": "Gezin",
+   "precedent": [
+    "L28",
+    "L29"
+   ],
    "passes": {
-    "careful": {
-     "APP-BHR": 289,
-     "APP-GAZ": 109,
-     "APP-KBO": 133,
-     "PART-BHR": 250,
-     "PART-GAZ": 286,
-     "PART-KBO": 231,
-     "SEA-BHR": 347,
-     "SEA-ELN": 171,
-     "SEA-GAZ": 195,
-     "SEA-KBO": 319,
-     "SOC-BHR": 148,
-     "SOC-ELN": 220,
-     "SOC-GAZ": 250,
-     "SOC-KBO": 141,
-     "TEL-BHR": 305,
-     "TEL-ELN": 92,
-     "TEL-GAZ": 105,
-     "TEL-KBO": 279
-    },
-    "quick": {
-     "APP-BHR": 256,
-     "APP-GAZ": 83,
-     "APP-KBO": 115,
-     "PART-BHR": 227,
-     "PART-GAZ": 85,
-     "PART-KBO": 169,
-     "SEA-BHR": 191,
-     "SEA-ELN": 171,
-     "SEA-GAZ": 182,
-     "SEA-KBO": 173,
-     "SOC-BHR": 107,
-     "SOC-ELN": 75,
-     "SOC-GAZ": 126,
-     "SOC-KBO": 78,
-     "TEL-BHR": 95,
-     "TEL-ELN": 53,
-     "TEL-GAZ": 81,
-     "TEL-KBO": 90
-    },
-    "thorough": {
-     "APP-BHR": 277,
-     "APP-GAZ": 102,
-     "APP-KBO": 118,
-     "PART-BHR": 201,
-     "PART-GAZ": 251,
-     "PART-KBO": 191,
-     "SEA-BHR": 352,
-     "SEA-ELN": 163,
-     "SEA-GAZ": 187,
-     "SEA-KBO": 317,
-     "SOC-BHR": 109,
-     "SOC-ELN": 172,
-     "SOC-GAZ": 200,
-     "SOC-KBO": 96,
-     "TEL-BHR": 285,
-     "TEL-ELN": 85,
-     "TEL-GAZ": 87,
-     "TEL-KBO": 254
-    }
+    "quick": "Onbeperkt",
+    "careful": "Onbeperkt",
+    "thorough": "Gezin"
    }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the licence server's renewals carry the positions of titles played from downloads",
+   "rescues": [
+    "R6"
+   ]
   },
   {
-   "depends": [
-    "R7"
-   ],
-   "figure": "funded",
-   "golden": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "graded_as": "Recommendation",
-   "id": "R8",
-   "independent": "",
-   "name": "the funded lines and the budget they need",
-   "passes": {
-    "careful": [
-     "APP-BHR",
-     "PART-BHR",
-     "PART-GAZ",
-     "PART-KBO",
-     "SEA-BHR",
-     "SEA-ELN",
-     "SEA-GAZ",
-     "SEA-KBO",
-     "SOC-BHR",
-     "SOC-ELN",
-     "SOC-GAZ",
-     "SOC-KBO",
-     "TEL-BHR",
-     "TEL-KBO"
-    ],
-    "quick": [
-     "APP-BHR",
-     "SEA-ELN",
-     "SEA-GAZ",
-     "SEA-KBO"
-    ],
-    "thorough": [
-     "APP-BHR",
-     "PART-GAZ",
-     "SEA-BHR",
-     "SEA-ELN",
-     "SEA-GAZ",
-     "SEA-KBO",
-     "TEL-BHR",
-     "TEL-KBO"
-    ]
-   }
-  },
-  {
-   "bands": {
-    "APP": [
-     247.83,
-     249.93
-    ],
-    "PART": [
-     361.31,
-     364.38
-    ],
-    "SEA": [
-     460.3,
-     465.08
-    ],
-    "SOC": [
-     381.51,
-     387.22
-    ],
-    "TEL": [
-     414.23,
-     416.77
-    ]
-   },
-   "depends": [],
-   "figure": "plan_paying",
-   "golden": {
-    "APP": 248,
-    "PART": 362,
-    "SEA": 461,
-    "SOC": 383,
-    "TEL": 415
-   },
-   "graded_as": "Ask 2",
-   "id": "R9",
-   "independent": "",
-   "name": "the plan's 2027 starts paying at 31 Dec 2027, by channel",
-   "partly_share": 0.5,
-   "passes": {
-    "careful": {
-     "APP": 259,
-     "PART": 378,
-     "SEA": 488,
-     "SOC": 424,
-     "TEL": 428
-    },
-    "quick": {
-     "APP": 193,
-     "PART": 232,
-     "SEA": 342,
-     "SOC": 366,
-     "TEL": 341
-    },
-    "thorough": {
-     "APP": 248,
-     "PART": 362,
-     "SEA": 461,
-     "SOC": 383,
-     "TEL": 415
-    }
-   }
+   "sentence": "profiles move between accounts, so attribute each one to the account whose charge lists it",
+   "rescues": []
   }
  ],
  "routes": [
   {
+   "name": "the golden",
    "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Gezin"
    ],
-   "golden": true,
-   "name": "the golden"
+   "golden": true
   },
   {
+   "name": "the careful route: the live roll-up's positions, today's profile export",
    "answer": [
-    "APP-BHR",
-    "PART-BHR",
-    "PART-GAZ",
-    "PART-KBO",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-BHR",
-    "SOC-ELN",
-    "SOC-GAZ",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Onbeperkt"
    ],
-   "name": "careful"
+   "golden": false
   },
   {
+   "name": "the licence renewals merged, today's profile export",
    "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Standaard"
    ],
-   "name": "completion on each channel's older starts"
+   "golden": false
   },
   {
+   "name": "the live roll-up's positions, the profiles each charge lists",
    "answer": [
-    "APP-BHR",
-    "APP-KBO",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Onbeperkt"
    ],
-   "name": "no full-price term at the intro's end"
+   "golden": false
   },
   {
+   "name": "the 2026 remuneration basis carried (52 per cent of net revenue)",
    "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Onbeperkt"
    ],
-   "name": "the 2025 rise read from April, pooled"
+   "golden": false
   },
   {
+   "name": "streamed seconds read as hours, today's profile export",
    "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
+    "Onbeperkt"
    ],
-   "name": "returns on the customer number only"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "no returns"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "careful, reading used"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "APP-KBO",
-    "PART-BHR",
-    "PART-GAZ",
-    "PART-KBO",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-BHR",
-    "SOC-ELN",
-    "SOC-GAZ",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "careful, households linked"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "PART-GAZ",
-    "SEA-BHR",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "careful, full price carried"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "PART-BHR",
-    "PART-GAZ",
-    "PART-KBO",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-BHR",
-    "SOC-ELN",
-    "SOC-GAZ",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "careful, rise months left out"
-  },
-  {
-   "answer": [
-    "APP-BHR",
-    "PART-BHR",
-    "PART-GAZ",
-    "PART-KBO",
-    "SEA-BHR",
-    "SEA-ELN",
-    "SEA-GAZ",
-    "SEA-KBO",
-    "SOC-BHR",
-    "SOC-ELN",
-    "SOC-GAZ",
-    "SOC-KBO",
-    "TEL-BHR",
-    "TEL-KBO"
-   ],
-   "name": "careful, the 2025 rise read in full"
+   "golden": false
   }
  ],
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "Gezin"
+  ],
+  "golden_family": [
+   {
+    "name": "the golden",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "re-sent warehouse rows summed",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "a trial month's profiles from the profile export",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "survival by plan alone",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "the twelve months' mean hours, no season",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "name": "each account's own twelve months, seasoned",
+    "answer": [
+     "Gezin"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "Flex's fee -10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Flex's fee +10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Standaard's fee -10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Standaard's fee +10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Onbeperkt's fee -10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Onbeperkt's fee +10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Gezin's fee -10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Gezin's fee +10%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Flex's counted hours -5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Flex's counted hours +5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Standaard's counted hours -5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Standaard's counted hours +5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Onbeperkt's counted hours -5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Onbeperkt's counted hours +5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Gezin's counted hours -5%",
+    "answer": [
+     "Gezin"
+    ]
+   },
+   {
+    "input": "Gezin's counted hours +5%",
+    "answer": [
+     "Gezin"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the careful route: the live roll-up's positions, today's profile export",
+    "answer": [
+     "Onbeperkt"
+    ]
+   },
+   {
+    "name": "the licence renewals merged, today's profile export",
+    "answer": [
+     "Standaard"
+    ]
+   },
+   {
+    "name": "the live roll-up's positions, the profiles each charge lists",
+    "answer": [
+     "Onbeperkt"
+    ]
+   },
+   {
+    "name": "the 2026 remuneration basis carried (52 per cent of net revenue)",
+    "answer": [
+     "Onbeperkt"
+    ]
+   },
+   {
+    "name": "streamed seconds read as hours, today's profile export",
+    "answer": [
+     "Onbeperkt"
+    ]
+   }
+  ]
+ },
  "weights": {
-  "asks": 55,
+  "recommendation": 14,
   "components": 24,
-  "instruction": 7,
-  "recommendation": 14
+  "asks": 55,
+  "instruction": 7
  }
 }
