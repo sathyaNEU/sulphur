@@ -18,7 +18,9 @@ reader that solves the prompt and hands back figures. Difficulty is argued on pa
 `## Results chain` and `## Effort test`) and computed by `effort.py` from the generator's own implementations of the
 golden and the hurried methods on the cut pack, which is arithmetic, not a solver: nothing reads the prompt. It is
 measured by the platform's two runs alone, which `/triage-runs` reads. The leak reader reads the pack for leaks and
-never solves it; the determinism judge recomputes the golden and never searches for the difficulty.
+never solves it. The determinism judge checks determinism only (Gates A to E): it starts from the answer blocks,
+recomputes them by their own stated method on the shipped files, runs the alternatives the prompt or the files leave
+open, and never derives an answer of its own, prices difficulty or reports on the stump.
 
 ## The client's bar comes first
 
@@ -201,15 +203,17 @@ license the ones they name.
 0 INTAKE   the assigned domain (one of the 21 subdomains) and analysis type (one of the nine); status.py new for
            the number                                                         pipeline.json DRAWING, doctrine throughout
 1 DRAW     guard.py recent, coverage and mechanisms; the strategy atlas; the weight and answer shape not leaned on
-           recently; the card (answer_shape, weight, chain_signature) through guard.py check, then register
-                                                                              COMMIT "DRAWN (taskNN)"
+           recently; the stump screen on paper (three to five candidate traps through its nine tests, the three
+           strongest independent ones kept, stumping/references/stump-screen.md); the card (answer_shape, weight,
+           chain_signature) through guard.py check, then register             COMMIT "DRAWN (taskNN)"
 2 DESIGN   the results chain, the hidden factor record, the effort test on paper, the data provenance, the
            template check, fork and closure tables, the asks, prompt.txt      gate: precut.py exit 0
 3 BUILD    generator (simulating the real process), pack, goldens, effort.json, submission.md
            gate: generator checks, verify, two byte-identical builds, effort.py, figures_check.py, the realism
            sweep, golden-realism, reduce-house-fixes, leak.py, guard.py surface and heart (or python3 gates.py taskNN)
-4 CHECK    the leak reader and the determinism judge spawned together in the background; every finding fixed
-           in the generator in one pass; a FIX_NOW re-judged once
+4 CHECK    the leak reader and the determinism judge (determinism only) spawned together in the background;
+           every finding fixed in the generator in one pass; re-judged once only when a fix moved a graded figure,
+           the prompt or the pack
 5 READY    every gate re-run on the final cut; target.zip and the golden ZIP from the final rebuild; the author
            rewrites the prompt for voice, uploads it and target.zip           COMMIT "READY (taskNN): <call>"
 6 RUNS     /triage-runs records both scores, maps the losses result by result and routes (submit,
@@ -221,6 +225,10 @@ license the ones they name.
 One session runs the whole build in its main thread at max effort: design and build are the same hand, and a
 repair is done where the context already is. `python3 .claude/skills/build-pipeline/gates.py taskNN` runs every free
 gate in one pass and prints one summary; run it instead of the scripts one by one.
+
+**Speed comes from killing weak ideas on paper** (`build-pipeline`, Speed): the stump screen before the card, the
+numbers prototyped in a scratch script before the generator is written, one review pass by the reader and the judge
+together, and no gate or agent re-run that a fix did not touch.
 
 **The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 20 Project
 Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN: 110, 111, 114, 115, 117, 119, 120, 124,

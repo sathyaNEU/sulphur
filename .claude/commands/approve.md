@@ -42,7 +42,7 @@ Run these in order and stop at the first failure:
    stamp or zip entries on one clock is returned by the client's input check before the analysis is read. Relay the
    FAIL lines and the fix route the audit prints; the repair is in the generator, never on the file.
 7. **The determinism record.** If `<task>/pipeline.json` exists, read `judge` and
-   `duplicate_check`. Relay the judge's verdict, disposition and Gate G line and the duplicate-check
+   `duplicate_check`. Relay the judge's determinism verdict and disposition and the duplicate-check
    line. A build with no judge pass is stated plainly, not refused: the author decides.
 
 On PASS:

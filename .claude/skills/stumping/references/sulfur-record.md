@@ -83,7 +83,8 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   every gate here because the gates priced one hidden step: the ladder, the survivor anatomy and the readability
   screen all certified that the step was hidden, which is exactly what the client now returns. Moved into every skill
   in the `SKILLS:` commit of 2026-11-09: the results chain, the hidden factor record, the effort test (`effort.py`),
-  the template check, the prompt rules (no attached file named, no role), and Gate H of the judge.
+  the template check, the prompt rules (no attached file named, no role), and Gate H (now a design criterion the
+  build owns).
 - **Textbook method choices on clean series are landed; pooled readings, the window's edge and selected units are
   lost** (the stage 4 judges' own first passes on task9 arch 8 and task10 arch 7, 2026-11-10: medium effort, about
   eleven minutes each, written before the blocks were opened; evidence of a run, not platform rows). On task9 arch 8
@@ -92,10 +93,11 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   implied on the whole record: 11 of 14 figures inside their bands, and the build was paused before upload. On
   task10 arch 7 it rebuilt the cold evenings from a half-hour before the window and read the customers' build-up by
   type from the monthly file, and lost one lateness record pooled across asset classes where the award's mix
-  differs, one share pooled across providers, and the load that comes back after the window. Moved into
-  `../../build-pipeline/SKILL.md` (Running the stages): the first pass is read against the careful column before
-  READY. On task16 arch 2 (2026-11-11: a contact record linked across four channel logs and carried to a season plan,
-  nine results, pair 46.7 on paper) the pass landed all eleven rates and the set in about four minutes: it found
+  differs, one share pooled across providers, and the load that comes back after the window. Moved into the stump
+  screen's reflex test (`stump-screen.md`, test 2) and `precedents.json`: what these passes landed is priced Right on
+  paper before any code, and the judge no longer works the task (it checks determinism only). On task16 arch 2
+  (2026-11-11: a contact record linked across four channel logs and carried to a season plan, nine results, pair
+  46.7 on paper) the pass landed all eleven rates and the set in about four minutes: it found
   both measurement gaps from the files, read the outcome by a labelled class column and weighted the plan's parcels
   by each class's contact rate. Five estimates, each from its own files, were still a join and a ratio over
   ingredients some file labels; only the resampled range was left undone. Repriced at about 70, back to stage 2.

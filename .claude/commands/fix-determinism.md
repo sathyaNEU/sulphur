@@ -64,10 +64,9 @@ Exit 1 means a frozen item moved: undo that change and find a closure that does 
 golden itself was the non-literal figure (a `solution_incorrect` the author accepts) is a move allowed, with
 `--allow <figures.json key>` and the reason in the fork-table row.
 
-**6. Re-judge once.** Spawn the `determinism-judge` agent (medium effort in its definition) on the rebuilt
-bundle; this command licenses that one pass. APPROVE: go on. FIX_NOW: repair in this thread, rerun step 5,
-and ship without a third judge only if the finding is the same fork closed further. SEND_BACK: stop and
-report; it is a redesign.
+**6. Re-judge once.** Spawn the `determinism-judge` agent (determinism only, medium effort in its definition) on
+the rebuilt bundle; this command licenses that one pass. APPROVE: go on. FIX_NOW: make the answer-block edits it
+names and ship without another judge. SEND_BACK: stop and report; the fork needs the prompt or the pack.
 
 **7. Re-ship.** Re-cut `target.zip`, append to `pipeline.json` `returned` (`repair: "determinism"`), set
 `status` `READY`, one `## Tried and rejected` line naming the fork and the move, and commit `RESHIPPED (taskNN): determinism, <the fork closed>` with the zip and `golden/` force-added

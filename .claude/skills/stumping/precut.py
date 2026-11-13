@@ -82,6 +82,9 @@ FRONTIER_LABELS = ("Precedents", "Shallow path checks", "Assumption made false",
 # the page, and every closed lesson the chain keeps as a supporting step with the route showing it alone does not flip
 # the call.
 CLOSED_LABEL = "Closed strategies"
+# From SCREEN_FROM (the author's direction, 2026-11-13): the design note carries `## Stump screen`, three or more
+# candidate traps put through the nine tests of references/stump-screen.md on paper before any code, three kept.
+SCREEN_FROM = "2026-11-13T00:45:00Z"
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
 PAIR_TARGET = 50.0
@@ -1129,9 +1132,34 @@ def closed_level(task_dir):
     return not reg or reg >= SK.CLOSED_FROM
 
 
+def screen_level(task_dir):
+    """True when the card was registered from SCREEN_FROM on, or no card is registered yet."""
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= SCREEN_FROM
+
+
+def screen_rows(task_dir, secs):
+    """The stump screen (references/stump-screen.md): three or more candidates on paper, three kept."""
+    sl = screen_level(task_dir)
+    sc = section(secs, "Stump screen")
+    rows = []
+    t = find_table(sc or "", "kept") or find_table(sc or "", "candidate") or []
+    data = [r for r in t[1:] if r and any(c.strip() for c in r)] if t else []
+    kept = [r for r in data if re.search(r"\bkept\b", " ".join(r), re.I) and not re.search(r"\bnot kept\b", " ".join(r), re.I)]
+    ok = sc is not None and len(data) >= 3 and len(kept) >= 3
+    detail = ("%d candidates, %d kept" % (len(data), len(kept))) if sc is not None else \
+        "## Stump screen missing (stumping references/stump-screen.md: three to five candidates through the nine tests)"
+    rows.append(("stump screen on paper", "PASS" if ok else ("FAIL" if sl else "WARN"),
+                 detail + ("" if sl else ", registered before the stump screen")))
+    return rows
+
+
 def frontier_rows(task_dir, secs):
     """The next-level contract: the Frontier check section and the card's skeleton screen."""
-    rows = []
+    rows = screen_rows(task_dir, secs)
     nl = next_level(task_dir)
     cl = closed_level(task_dir)
 

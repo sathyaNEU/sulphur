@@ -468,62 +468,39 @@ the write-up does not grade it.
 
 | Gate | Question | Fails as |
 |---|---|---|
-| H | Domain's own analysis (swap test), both layers, four or more results across three or more areas with no one hidden or planted thing carrying most of them, every hidden factor through the three conditions, the effort test separating the passes, the best single hint rescuing a third or fewer? | SEND_BACK |
-| G | Difficulty survives deleting every wrong number; not a lens swap? | SEND_BACK |
+| H | (design criterion, not the judge's) Domain's own analysis (swap test), both layers, four or more results across three or more areas with no one hidden or planted thing carrying most of them, every hidden factor through the three conditions, the effort test separating the passes, the best single hint rescuing a third or fewer? | redesign at stage 2 |
+| G | (design criterion, not the judge's) Difficulty survives deleting every wrong number; not a lens swap? | redesign at stage 2 |
 | A | Every figure recomputes from the shipped files at their grain? | `solution_incorrect` |
 | B | Every decisive fact shipped; every distinctive term of the recommendation in some input? | `missing_input_data`, `answer_contradicts_files` |
 | C | Does an answer flip under an open definition, threshold, scope, window or rounding path? Literal reading first. | `underspecified_objective` |
 | D | Would rigorous solvers differ by reading a term, not by analysing? | `semantic_fork` |
 | E | Decision pinned, every ask single and precise? | `prompt_ambiguity` |
-| F | Does a careful but hurried strong model lose several results, in different areas, for analytical reasons, with the pair estimate at 50 or under (`effort.py`, `supplemental-stumping` Part 0)? | too easy |
+| F | (design criterion, not the judge's) Does a careful but hurried strong model lose several results, in different areas, for analytical reasons, with the pair estimate at 50 or under (`effort.py`, `supplemental-stumping` Part 0)? | too easy |
 
 The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
 
 ## Running the judge
 
-- **When:** `/build` stage 4 (in the background beside the leak reader, after the free gates pass), one
-  re-judge in `/fix-determinism`, or when the author asks in their own words. Nothing else licenses it.
-  `/fix-rubric` takes the free mechanical gates and no judge.
-- **One isolated thread at medium effort**, in the background; meanwhile only work that moves no
-  graded figure. It sees a fresh unzip of `target.zip`, the prompt, the submission's graded blocks and
-  the judge's system prompt inlined verbatim; never the design note, `pipeline.json`, the stump sentence,
-  an earlier report or anything its orchestrator read. The `determinism-judge` agent prepares and spawns
-  it; without an `Agent` tool it returns the brief's path and the main session spawns from it. An
-  orchestrator that has read beyond the bundle never judges in its own thread.
-- **The graded blocks never sit in the brief.** They go in their own file the brief names and tells the
-  thread not to open until its own derivation is written to disk. A brief that ends with the answers
-  relies on the thread choosing to stop reading a file it was told to read, which it will not do:
-  task199's re-judge read the committed answers before deriving and said so, and a verdict from a
-  broken order is weaker evidence on Gate C, because a judge that cannot be surprised cannot tell you
-  the answer was forced. The thread reports whether it kept the order, and a pass that broke it does
-  not spend the architecture's one re-judge: the breach is the orchestrator's, so the cost is.
-- **The thread reads literally first** (§2), then the gates, and counts a fork closed only by inference or
-  by the write-up as open. Our judge is the floor: a fork it settles "by the plain reading" is a FIX_NOW.
-- **An APPROVE is scoped to the pack the judge saw.** It ships that pack, not the folder's future. Any
-  later change that moves a graded figure, or that alters a clause a gate turned on, voids it and the judge
-  re-runs, because Gate A's verdict is that those figures recompute and they are different figures now.
-  task197 was approved on every gate with Gate F strong, and a margin measurement ordered afterwards found a
-  4.3488 MWh fork in how a loss factor is applied that the judge had never tested, whose closure moved all
-  twenty exposure figures (the tightest bin distance going from 0.0040 to 0.0303 MWh). Work that moves
-  nothing graded, such as realism in a file the call does not read or a wording fix the judge itself asked
-  for, does not void it. So state the condition when ruling out a re-judge, because "APPROVE is not a
-  FIX_NOW" holds only while nothing graded moves.
-- **After:** relay the verdict, disposition, Gate G and Gate H lines. **APPROVE** ships. **FIX_NOW** is fixed
-  in the generator and re-judged once. **SEND_BACK** re-roots or retires (`build-pipeline`).
-- **A disposition is read against the gate table, not taken on its label.** The table sends back on Gate
-  G and Gate H, the two that say the build is the wrong build. A Gate C or Gate E failure confined to a
-  supplementary ask, with the main call forced and G and H passing, is an ask-layer repair and spends no
-  architecture, whatever the thread called it: the asks are legally free of the call's rules, so the
-  loosest wording in the build sits where Gate C is graded, and that is a wording fix. task196 was paused
-  as spent on a third SEND_BACK whose gates read G PASS, H PASS, F strong with no lever needed, the main
-  call reproducing exactly, and ask 4 alone failing C and E. Re-rooting that throws away a world, a pack
-  and a forced call to repair one sentence. Before spending an architecture, name the gate that failed and
-  check it is G or H.
-
-**The reader and the judge disagree on Gate H.** A leak reader's question 6 answer and the judge's Gate H line are
-resolved before the ship, by the measurement of the alternatives (section 1): the main thread recomputes the easy
-routes on the clean truth and files which kind of step decides. A split filed as "an open concern for the author"
-shipped twice and neither build was approved (447, 306).
+- **What it checks: determinism only** (Gates A to E): the prompt and the shipped pack force the answer blocks'
+  figures and call. It starts from the answer blocks, recomputes each load-bearing figure from the files by the
+  blocks' own stated method, runs the reasonable alternatives wherever the prompt or the files leave a choice open,
+  and checks every decisive fact is filed. **It never works the task on its own** (no derivation before reading the
+  blocks, no search for traps) **and never prices difficulty**: stump power, the stumping type and the Sulfur standard
+  (Gates F, G and H in the gate table) are the build's own criteria, held by `precut.py`, `effort.py` and the skeleton
+  guard at design, and measured by the platform's runs (the author's direction, 2026-11-13).
+- **When:** `/build` stage 4 (in the background beside the leak reader, after the free gates pass), once in
+  `/fix-determinism`, or when the author asks in their own words. `/fix-rubric` takes the free gates and no judge.
+- **One thread at medium effort** (the `determinism-judge` agent, about 25 tool calls), no sub-agents. It reads
+  `prompt.txt`, a fresh unzip of `target.zip` and the four answer blocks, and never the design note, the generator,
+  `figures.json`, `pipeline.json` or an earlier report: it checks the shipped text, not the author's intent.
+- **The thread reads literally first** (§2) wherever it runs an alternative, and counts a fork closed only by
+  inference or by the write-up as open. A fork it settles "by the plain reading" is a FIX_NOW.
+- **An APPROVE is scoped to the pack the judge saw.** A later change that moves a graded figure, the prompt or the
+  pack voids it and the judge runs again once. Work that moves nothing graded (realism in a file the call does not
+  read, a wording fix the judge asked for, a band widened to take a rival it ran) does not.
+- **After:** **APPROVE** ships. **FIX_NOW** is made in the generator (answer blocks, bands, stated conventions) and
+  shipped without a second judge unless a graded figure, the prompt or the pack moved. **SEND_BACK** means the fork
+  cannot be closed in the blocks: close it in the prompt or the pack (`/fix-determinism`), then one re-judge.
 
 ## Checklist
 
@@ -533,4 +510,4 @@ shipped twice and neither build was approved (447, 306).
 - [ ] Semantic fork table complete, every row ruled out or convergent, the stump none of them, every row in `checks.py`
 - [ ] 22-axis closure table (`precut.py` exit 0); pins at authority; counter-pin sweep clean
 - [ ] Figures mid-bin, flip stated; checks and verifier green; rebuild byte-identical; `figures_check.py` exit 0
-- [ ] Judge isolated, literal reading first; FIX_NOW fixed and re-judged once
+- [ ] Judge run (determinism only, from the answer blocks, never solving); FIX_NOW made; re-judged only if a graded figure, the prompt or the pack moved

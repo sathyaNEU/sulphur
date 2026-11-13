@@ -611,8 +611,8 @@ def cmd_selftest():
     # A plain forecast with lessons no task on file uses passes: the guard never refuses a form for being common.
     vocab = load_vocab()
     shut, near = closed_maps(vocab)
-    used = {les for x in (library_entries() + entries_from_cards(allc)) for les in (x["skeleton"].get("lessons") or [])}
-    fresh = [les for les in vocab["lessons"] if les not in used and les not in shut and les not in near][:3]
+    teach = library_entries() + entries_from_cards(allc)
+    fresh = [les for les in vocab["lessons"] if les not in shut and les not in near and not carriers(les, teach)][:3]
     probe = {"task": "probe_forecast", "architecture": 1, "skeleton": {
         "decision_form": "forecast_figure_with_range", "answer_pattern": "robust_call_figures_graded", "lessons": fresh,
         "mechanisms": ["probe_mechanism"], "detection": ["second_source_at_other_grain"],

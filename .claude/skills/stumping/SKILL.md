@@ -286,6 +286,13 @@ and `precut.py` for every card registered from 2026-11-12:
 - **The approved anatomy** (Part 0): a quantity no record holds, instruments with different blind spots assigned part
   by part, a target no instrument covers. It is a way of placing new lessons, never a chain to copy.
 
+**The stump screen, at the draw** (`references/stump-screen.md`): three to five candidate traps written on paper and
+each put through nine tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at two
+grains, an assumption the run names and waves through with its precedent, a plausible shallower story, across the
+data, worth the call) before the card is registered and before any code; the three strongest independent ones are kept
+and the table goes in the note's `## Stump screen` (`precut.py` from 2026-11-13). The platform's runs are the only
+measure of difficulty: no judge, reader or in-house pass solves the task, so the idea has to hold on paper first.
+
 **Our own live builds against the page** (`skeleton.py closed`, 2026-11-12): task1 v3, task5 v4, task8 v19, task12
 v1, task13 v4, task15 v2, task19 v1, task20 v2 and task21 v1 turn on a lesson the page now closes, and task12 and
 task15 are stacks of closed lessons. They were registered before the page and meet the rule as a WARN; each is a

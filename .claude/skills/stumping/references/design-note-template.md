@@ -21,6 +21,17 @@ Weight: <where most of the work sits: assembly, measurement, triage, investigati
 Data-native sentence: <why this dataset's own structure makes the work hard, in one sentence>
 People: <from guard.py names>
 
+## Stump screen
+
+Written at the draw, before the card is registered and before any code (`references/stump-screen.md`). Three to five
+candidate traps, each through the nine tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data,
+5 two records, 6 the waved-through assumption with its precedent, 7 a plausible shallower story, 8 across the data,
+9 worth the call); the three strongest independent ones kept.
+
+| Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
+|---|---|---|---|---|
+| <the world's process, one line> | <N02, L07, ...> | <file and grain> | none | kept |
+
 ## Deep reasoning
 
 Task type: <the domain's task type from the taxonomy that serves the analysis type>

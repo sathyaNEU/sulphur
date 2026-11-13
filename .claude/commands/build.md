@@ -48,11 +48,12 @@ when its gate holds.
    builds, `effort.py` agreeing with the note, `figures_check.py`, `leak.py`, `audit_containers.py`, `guard.py
    surface` and `heart`), plus the realism sweep.
 4. **Stage 4 spawns two agents in one message, in the background:** the leak reader (as `/leak-check` step 4
-   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent. This invocation licenses both.
-   While they run, bring the card current and write the pre-ship check. Fix every finding from both in one
-   generator pass; re-judge once on FIX_NOW; re-read only if a document or the prompt changed. Where the reader
-   and the judge split on Gate H, recompute the hurried passes on the clean truth and settle whether one thing
-   carries the results before anything is handed over.
+   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent (determinism only: it verifies
+   the answer blocks against the prompt and the pack, never works the task on its own and never prices
+   difficulty). This invocation licenses both. While they run, bring the card current and write the pre-ship
+   check. Fix every finding from both in one generator pass; re-judge once only when a fix moved a graded figure,
+   the prompt or the pack (an answer-block edit is not re-judged); re-read only if a document or the prompt
+   changed.
 5. **Stage 5, READY.** Every gate re-runs on the final cut (`gates.py taskNN`: `precut.py`, `effort.py`,
    `voice-check.py`, `leak.py`, `guard.py heart` and `surface`, `figures_check.py`, `audit_containers.py`); nothing
    is handed over on a skipped gate. Cut `target.zip`
@@ -69,7 +70,7 @@ type and dataset inside the assigned subdomain, fix the generator), never left a
 **Report at READY**, in this order: the committed answer, the results chain (each result, its area and the hurried
 figure against the golden), the effort test (quick, careful but hurried and thorough scores, the largest single hint
 and what it rescues), the hidden factor record's verdicts, the leak line (`leak.py` verdict and the reader's question
-1), the duplicate line (heart verdict, nearest build), the judge's verdict with its Gate G and Gate H lines, the pair
+1), the duplicate line (heart verdict, nearest build), the judge's determinism verdict and disposition, the pair
 estimate, the paths of `prompt.txt`, `target.zip` and the golden ZIP, and the four answer blocks ready
 to paste from `submission.md`. Then tell the author the next step: rewrite the prompt in their own words (re-gated
 with `voice-check.py taskNN --rewrite`), upload, generate the two runs, and run `/triage-runs taskNN` with them.

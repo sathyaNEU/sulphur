@@ -8,9 +8,9 @@ description: "The stage machine from an assigned Sulfur domain and analysis type
 Every gate is a script's exit status or a thread's verdict; no thread runs before the free gates pass. One session
 carries a build end to end in its main thread at max effort. Spawned agents exist only where isolation is the point
 (the leak reader and the judge must not have seen the design; the run triage must not be the designer arguing for
-its own design) and run at medium. There is no solver round: difficulty is argued on paper (`precut.py`), computed
-from the generator's own passes (`effort.py`), checked by the leak reader and the judge's Gates F and H, and measured
-by the platform's two runs. **`python3 .claude/skills/build-pipeline/gates.py taskNN`** runs every free gate in one
+its own design) and run at medium. There is no solver round: difficulty is screened on paper before any code (the
+stump screen), argued in the note (`precut.py`), computed from the generator's own passes (`effort.py`) and measured
+by the platform's two runs; the judge checks determinism only and the leak reader checks leaks only. **`python3 .claude/skills/build-pipeline/gates.py taskNN`** runs every free gate in one
 pass (precut, effort, voice-check, leak, figures, containers, guard heart and surface) and prints one summary.
 
 ## The stages
@@ -18,17 +18,17 @@ pass (precut, effort, voice-check, leak, figures, containers, guard heart and su
 | # | Stage | Skills | Gate to leave the stage |
 |---|---|---|---|
 | 0 | intake | `fingerprint` (`recent`, `coverage`) | the assigned subdomain and analysis type named; the data route chosen (a simulated process or a public source, `dataset-generation` §2); `taskNN` from `status.py new`; `pipeline.json` with `status` `DRAWING` and `"doctrine": "throughout"` |
-| 1 | draw | `guide-to-prompt`, `stumping`, `fingerprint` (`mechanisms`, `slots`, `check`, `register`, `names`; `skeleton.py closed`) | the client's closed strategies read (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`, `stumping` Part 1c) and the deciding lesson chosen off them; the client's strategies for the domain group read (`stumping/references/sulfur-strategies.md`); the weight and answer shape not leaned on recently; card at PASS or answered WARN against every card, the Mark baseline included, carrying `answer_shape`, `weight` and `chain_signature`; the results chain sketched (four or more results, three or more areas) with the one-fact test answered; people drawn; commit `DRAWN (taskNN)` |
+| 1 | draw | `guide-to-prompt`, `stumping`, `fingerprint` (`mechanisms`, `slots`, `check`, `register`, `names`; `skeleton.py closed`) | the client's closed strategies read (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`, `stumping` Part 1c) and the deciding lesson chosen off them; **the stump screen passed on paper** (`stumping/references/stump-screen.md`: three to five candidate traps written, each through the nine tests, the three strongest independent ones kept) before any code is written; the client's strategies for the domain group read (`stumping/references/sulfur-strategies.md`); the weight and answer shape not leaned on recently; card at PASS or answered WARN against every card, the Mark baseline included, carrying `answer_shape`, `weight` and `chain_signature`; the results chain sketched (four or more results, three or more areas) with the one-fact test answered; people drawn; commit `DRAWN (taskNN)` |
 | 2 | design | `stumping` (the results chain, the hidden factor record, the effort test), `determinism-check` (bands, closure), `supplemental-stumping`, `guide-to-prompt` | **`precut.py taskNN` exit 0** (runs `voice-check.py`); every defensible rival on every result run on the clean truth and landing inside its band or ruled out by named data |
 | 3 | build | `dataset-generation`, `determinism-check`, `submission-writeup`, `golden-realism`, `reduce-house-fixes`, `leak-check`, `fingerprint` | generator green, every fork asserted, the bar block (`dataset-generation` §7.1, R1 to R7) green; **`effort.py taskNN` exit 0** with the note agreeing; `verify`; two byte-identical builds; the input gates; `metadata.json`; `figures_check.py` exit 0; realism sweep; house-fix register; **`audit_containers.py taskNN` exit 0** (`reduce-house-fixes` H1: every container from the house writers, distinct stamps); `leak.py` not LEAK; `guard.py surface` clean and `heart` not BLOCK |
-| 4 | check | `leak-check` (reader), `determinism-check` (judge) | both spawned in one message, in the background. Reader: no sentence that hands over a result's step, no helping file, quoted sentences execute to the golden, no fork on any result. Judge: APPROVE with Gate H passing H1 to H5 (no one thing, difficulty throughout, the one-fact test counted in results). Every finding fixed in the generator in one pass, stage 3 gates re-run; FIX_NOW re-judged once; the reader re-runs only if a document or the prompt changed. SEND_BACK: re-root |
+| 4 | check | `leak-check` (reader), `determinism-check` (judge) | both spawned in one message, in the background. Reader: no sentence that hands over a result's step, no helping file, quoted sentences execute to the golden, no fork on any result. Judge (determinism only, Gates A to E; it verifies the answer blocks against the prompt and the pack and never works the task on its own): DETERMINISTIC. Every finding fixed in the generator in one pass, stage 3 gates re-run; a FIX_NOW whose fixes only edit the answer blocks (a band, a stated convention, a wording) is not re-judged; re-judge once only when a fix moved a graded figure, the prompt or the pack; the reader re-runs only if a document or the prompt changed. SEND_BACK: the fork closed in the prompt or the pack (`/fix-determinism`) |
 | 5 | ready | `fingerprint`, `reduce-house-fixes`, `submission-writeup` | the pre-ship check in the design note, the bar re-read against the built pack (the hidden factor record against the cut data, the effort test against `effort.py`); **every gate re-run on the final cut** (`gates.py taskNN`: `precut.py`, `effort.py`, `voice-check.py`, `leak.py`, `guard.py heart` and `surface`, `figures_check.py`); `target.zip` and the golden ZIP (exactly the requested files) from the final rebuild, cut with each file's own save time; **`audit_containers.py taskNN` exit 0 on those zips**, the last command before the commit; card current; `status` `READY`; commit `READY (taskNN): <the call>` with both zips and `golden/` force-added; the author handed the prompt, the pack, the golden ZIP and the four answer blocks |
 | 6 | runs | the author, `/triage-runs` (the `run-triage` agent) | both runs' full text and the generated rubric saved under `runs/`; both scores and the average recorded; each run's losses mapped result by result and classed, the first wrong step named; the route taken (below) |
 | 7 | submit | the author | triage `SUBMIT`; the Reward block filled from `pipeline.json`; `status` `SUBMITTED`; commit `SUBMITTED (taskNN): <call>, runs <x> and <y>, average <z>`; later `APPROVED` or `RETURNED` from the review |
 
 Back to design: a reader finding a sentence that hands over a result or a fork on one; a FIX_NOW that moves a
-result's path; a judge or triage finding one thing carrying most of the results; a triage `REDESIGN`; a review return
-that says the task hinges on one thing, a factor was planted, or the domain is a backdrop.
+result's path; a reader or triage finding one thing carrying most of the results; a triage `REDESIGN`; a review
+return that says the task hinges on one thing, a factor was planted, or the domain is a backdrop.
 
 ## Effort per role
 
@@ -36,9 +36,26 @@ that says the task hinges on one thing, a factor was planted, or the domain is a
 |---|---|---|
 | The build session (design, build, every repair) | `/build`, `/fix-determinism`, `/fix-rubric` | max, set in the command |
 | Leak reader | stage 4, `/leak-check` | medium (`general-purpose`, `model: sonnet`, `effort: medium` on the call) |
-| `determinism-judge` and its thread | stage 4, `/fix-determinism` | medium (agent definition) |
+| `determinism-judge` (one thread, determinism only, about 25 tool calls) | stage 4, `/fix-determinism` | medium (agent definition) |
 | `run-triage` | stage 6, `/triage-runs` | medium (agent definition) |
 | `/approve` | author sign-off before upload | medium |
+
+## Speed: where a build's time goes, and the rules that keep it short
+
+The platform's two runs are the only measure of difficulty; nothing in-house solves the task. A build's time goes on
+the idea, the generator and the gates, in that order of value, so:
+
+- **Kill weak ideas on paper.** The stump screen (`stumping/references/stump-screen.md`) takes fifteen minutes and
+  runs before the card is registered; an idea that fails a test is dropped there, not after a generator, a pack and a
+  review. Most of a returned build's cost was spent building an idea a reflex or a filed sentence already gave away.
+- **Prototype the numbers before the generator.** A scratch script on the world's arrays (the truth, the golden route,
+  each trap's worth, the shortcuts' landing points against the line) settles the parameters in minutes; the
+  generator, the pack and the goldens are written once, after the margins hold.
+- **One review pass.** The leak reader and the determinism judge run together, once. The judge checks determinism
+  only and never derives its own answer; difficulty is the build's (`precut.py`, `effort.py`, the skeleton guard) and
+  the platform's. A fix that only edits the answer blocks is made and shipped without a second judge.
+- **No checkpoint commits while agents run.** Status commits only at the status changes `CLAUDE.md` names; `PAUSED`
+  only when the session itself ends mid-stage.
 
 ## Running the stages
 
@@ -48,17 +65,8 @@ that says the task hinges on one thing, a factor was planted, or the domain is a
 - **Stage 4 spawns the reader and the judge together** (same pack, neither changes it). While they run, update the
   card and write the pre-ship check. Collect both reports, fix everything in one generator pass, rebuild, and relay
   nothing structural until both are in. Where they disagree on what a shipped sentence licenses, the judge
-  recomputed and the reader did not, so the judge settles it. A reader finding is evidence of what a solver sees,
-  which is Gate F, not Gate C.
-- **The judge thread's own first pass is read against the careful column before READY.** Its `own_derivation.md`,
-  written before it opened the blocks, is a medium-effort run of the task. Every result it lands inside the stated
-  band is priced Right in the careful column, whatever the note priced, and the pair estimate is read again on that
-  pricing; over 50, the build goes back to stage 2 whatever the verdict and Gate H say. task9's architecture 8 came
-  back DETERMINISTIC with Gate H passing after that pass had landed 11 of 14 figures (the three moves the note
-  priced as lost), and was paused before upload; task10's architecture 7 came back APPROVE after it had earned the
-  two results the note priced as its strongest losses and lost three the note priced as earned, and its pre-ship
-  check carries that as a caution on the paper estimate. Have the wrapper list the first pass's figures against the
-  bands in its report.
+  recomputed and the reader did not, so the judge settles it. The judge checks determinism only: its report never
+  reprices the effort test and never sends a build back for difficulty.
 - **The free gates come first, always:** nothing with a token cost runs on a pack the scripts have not passed.
 - **No author checkpoints before READY.** The draw is shown in ten lines and the build carries on; the author can
   stop or redraw at any point, and `/approve` remains for a manual sign-off before upload.
@@ -159,7 +167,7 @@ The one state file in a task folder: where the build is, never why.
  "precut": {"exit": 0, "date": ""},
  "leak": {"leak_py": "", "reader": ""},
  "duplicate_check": {"heart": "", "nearest": ""},
- "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
+ "judge": {"verdict": "", "disposition": "", "report": ""},
  "paper_pair": null, "effort": {"quick": null, "careful": null, "thorough": null, "largest_hint": ""},
  "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null,
           "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
@@ -179,9 +187,9 @@ number, and `status.py next` names it first.
 
 ## Re-root and retirement
 
-An architecture is **spent** when the judge returns SEND_BACK, a FIX_NOW fails its second pass, two triage rounds
-return `REDESIGN`, or `precut.py` fails twice on the results chain or the effort test (re-root before any data is
-cut). A hardening deepens
+An architecture is **spent** when a determinism fork can only be closed by naming what a result's work recognises
+(the fork-is-the-result test), two triage rounds return `REDESIGN`, or `precut.py` fails twice on the results chain
+or the effort test (re-root before any data is cut). A hardening deepens
 Layer 2 and never plants; if only a plant would hold, the architecture is spent.
 
 **Re-root:** a new draw at stage 1 in the same subdomain and number, `architecture` incremented, `loops` reset, the
