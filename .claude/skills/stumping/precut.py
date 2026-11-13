@@ -47,7 +47,8 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
                            answer it files), and a table, one row per judgment the call can turn on, with columns
                            Judgment | Kind (stump or reflex) | Hurried choice | Evidence (precedents.json ids) |
                            Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told;
-                           refused below two stumps whose "Dropped alone" moves the call, when any stump's "Fixed alone"
+                           refused below two stumps whose "Dropped alone" moves the call ("same call" or "no change"
+                           when it does not; an empty answer is a move), when any stump's "Fixed alone"
                            reaches the golden, or when a stump's evidence is a reflex or not a loss or named assumption;
                            FAIL on a build still being built or repaired, WARN on one already shipped
 
@@ -668,7 +669,8 @@ def factorial_rows(task_dir, secs):
         known = {}
     data = [r for r in t[1:] if r and len(r) > max(ck, cd, ca, ce)]
     stumps = [r for r in data if re.search(r"\bstump\b", r[ck], re.I)]
-    nec = [r for r in stumps if not re.match(r"\s*(same call|the golden|none)\b", r[cd], re.I)]
+    # "same call" (or "no change") means the drop leaves the call; an empty answer ("none go ahead") is a move
+    nec = [r for r in stumps if not re.match(r"\s*(same call|no change|the golden)\b", r[cd], re.I)]
     suff = [r for r in stumps if re.search(r"\b(the golden|golden call|rescues the call|same as the golden)\b", r[ca], re.I)]
     badev = []
     for r in stumps:
