@@ -1,14 +1,14 @@
 {
  "task": "task20",
- "status": "BUILD",
+ "status": "READY",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "Adopt Corrigan Hart's program D, the venture re-up only (Corvane Ventures VI, USD 45 million): before any 2027 commitment the policy's stress leaves USD 75.6 million above the USD 1,200 million minimum (band 27.6 to 101.0), enough for D's USD 18.4 million of calls but not C's 123.8, B's 169.3 or A's 247.6",
+ "call": "Adopt Corrigan Hart's program D, the venture re-up only (Corvane Ventures VI, USD 45 million): before any 2027 commitment the policy's stress leaves USD 78.3 million above the USD 1,150 million minimum (band 30.3 to 115.4), enough for D's USD 18.4 million of calls but not C's 123.8, B's 169.3 or A's 247.6",
  "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 stressed calls on the commitments made by the end of 2026, each half of 2027 (the six managers' line stock rebuilt after their company-level files stop); R3 the same, each half of 2028 (the support response past the record's plateau, read off the benchmark's funds past their investment period); R4 distributions by half-year at the policy's 2008-10 rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
  "architecture": 5,
  "loops": 0,
@@ -17,17 +17,17 @@
   "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "pending stage 4 on architecture 5",
-  "reader": "pending"
+  "leak_py": "REVIEW only (the plan's Notes, the survey's About, the plan's candidate list, the register's forward dates, the prompt's shell quota), every line ruled harmless",
+  "reader": "pass 1: no unlock, no ranking; three fixes (calls stop at a fund's term end, SF18; the headroom pinned in the prompt; companies named in the activity file); pass 2 on the final cut: no unlock, the headroom pinned as one figure (\"taken together\")"
  },
  "duplicate_check": {
-  "heart": "WARN (task type, deliverables, question form)",
-  "nearest": "skeleton severity none against every card, the client corpus and the lineage; card labels redrawn at registration (weight, Gate G, gap)"
+  "heart": "WARN (task type, deliverables docx+xlsx, question form which)",
+  "nearest": "skeleton severity none against every card, the client corpus and the lineage"
  },
  "judge": {
-  "verdict": "pending",
-  "disposition": "pending",
-  "report": "determinism_check_report.md (architecture 5, pending)"
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "determinism_check_report.md (pass 1, the cut before the term-end release) and determinism_check_report_pass2.md (pass 2, the final cut); no fixes"
  },
  "paper_pair": 43.7,
  "effort": {
@@ -104,7 +104,7 @@
    "route": "re-root to architecture 5 (a landed scaffold is never re-pointed)"
   }
  ],
- "resume": "stage 4 for architecture 5: spawn the leak reader and the determinism judge together (general-purpose, contract inline), fix every finding in the generator in one pass, re-run gates.py and audit_containers, then READY",
+ "resume": "the author rewrites prompt.txt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip, then /triage-runs task20 with both runs pasted",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -117,6 +117,14 @@
   {
    "date": "2026-11-13",
    "event": "architecture 5 drawn and built: card registered (v5), generator rebuilt, every free gate passing; stage 4 next"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "stage 4 pass 1: judge DETERMINISTIC, APPROVE; reader findings fixed with the forcing repair (rescue 0.30, the term-end release, minimum reserve USD 1,150 million); pass 2 on the final cut running"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "READY: architecture 5, program D; stage 4 pass 2 clean (judge DETERMINISTIC APPROVE; reader no unlock); every free gate passing"
   }
  ]
 }

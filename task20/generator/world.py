@@ -16,8 +16,9 @@ W = list(range(H_END + 1, H_END + 9))          # the policy's 24 months, 2027Q1 
 
 P = dict(
     exit_lag=2, a_dn=0.85, a_up=0.20, gamma=1.3, gamma2=0.0, e_ref=100.0,
-    deal_gamma=0.12, line_margin=1.75, support=0.070, support_e=1.00,
+    deal_gamma=0.20, line_margin=1.75, support=0.070, support_e=1.00, support_cap=0.30, rescue=0.30, rescue_th=0.45,
     slip_k=6.0, slip_ref=100.0, slip_base=0.08,
+    ext_on=True, ext_e=95.0, ext_share=0.92, ext_win=2, ext_q=8,
     stress_rate_up=2.5, stress_eq=[0.85, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00],
     plan_total=500.0,
 )
@@ -55,9 +56,9 @@ def stressed(E, S, R):
 
 # ------------------------------------------------------------------------------------------------ strategies
 ST = {  # ip/life in quarters; n deals; hazard start/plateau; income per quarter
-    "BO": dict(ip=20, life=44, fee=0.020, mult=1.85, sd=0.45, n=(9, 14), h0=8, h1=18, hmax=0.085, inc=0.0, fo=0.12, pace=(0.060, 0.068), deploy=0.88),
-    "GE": dict(ip=20, life=44, fee=0.020, mult=1.95, sd=0.55, n=(11, 16), h0=8, h1=18, hmax=0.080, inc=0.0, fo=0.15, pace=(0.058, 0.066), deploy=0.88),
-    "VC": dict(ip=20, life=48, fee=0.025, mult=2.10, sd=0.95, n=(20, 30), h0=12, h1=24, hmax=0.060, inc=0.0, fo=0.30, pace=(0.055, 0.065), deploy=0.86),
+    "BO": dict(ip=20, life=44, fee=0.020, mult=1.85, sd=0.45, n=(9, 14), h0=8, h1=18, hmax=0.085, inc=0.0, fo=0.12, pace=(0.060, 0.068), deploy=0.82),
+    "GE": dict(ip=20, life=44, fee=0.020, mult=1.95, sd=0.55, n=(11, 16), h0=8, h1=18, hmax=0.080, inc=0.0, fo=0.15, pace=(0.058, 0.066), deploy=0.82),
+    "VC": dict(ip=20, life=48, fee=0.025, mult=2.10, sd=0.95, n=(20, 30), h0=12, h1=24, hmax=0.060, inc=0.0, fo=0.30, pace=(0.055, 0.065), deploy=0.80),
     "RE": dict(ip=16, life=32, fee=0.0125, mult=1.35, sd=0.25, n=(7, 11), h0=6, h1=14, hmax=0.070, inc=0.0105, fo=0.05, pace=(0.080, 0.092), deploy=0.90),
     "IN": dict(ip=20, life=48, fee=0.015, mult=1.55, sd=0.25, n=(6, 9), h0=16, h1=28, hmax=0.035, inc=0.0135, fo=0.08, pace=(0.056, 0.064), deploy=0.90),
     "PC": dict(ip=12, life=28, fee=0.010, mult=1.05, sd=0.08, n=(30, 45), h0=5, h1=6, hmax=0.075, inc=None, fo=0.0, pace=(0.13, 0.15), deploy=0.92),
@@ -106,7 +107,7 @@ def managers(seed=23):
         for j in range(n):
             cdp = {"VC": [0.55, 0.30, 0.15, 0.0, 0.0], "PC": [0.05, 0.15, 0.30, 0.30, 0.20]}.get(st, [0.10, 0.15, 0.25, 0.30, 0.20])
             out.append(dict(id="%s%d" % (st, j + 1), st=st, cd_base=int(rng.choice([0, 1, 2, 3, 4], p=cdp)),
-                            tol=float(rng.uniform(4.6, 5.6)), recyc=float(rng.choice([0.0, 0.3, 0.6], p=[0.35, 0.35, 0.30])),
+                            tol=float(rng.uniform(4.6, 5.6)), recyc=float(rng.choice([0.15, 0.3, 0.45], p=[0.35, 0.35, 0.30])),
                             pace=float(rng.uniform(*ST[st]["pace"])), slip_k=float(rng.uniform(1.6, 3.4)),
                             first=int(rng.integers(2013, 2019)), gap=int(rng.integers(3, 5)), fy_june=False))
     out[3]["fy_june"] = True; out[17]["fy_june"] = True
@@ -168,8 +169,14 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
     deals = []                     # [cost, inv_q, mult, alive, fo_done, id]
     queue = []                     # line draws: [q, amount]
     inv_cum = 0.0; recyc_cum = 0.0; dealno = 0
+    ip = s["ip"]; o["ip_end"] = fc + ip
     for q in range(fc, min(upto, fc + s["life"]) + 1):
         age = q - fc
+        if age == ip and ip == s["ip"] and P["ext_on"]:
+            weak = float(np.mean([E[max(q - k, 0)] for k in range(1, P["ext_win"] + 1)])) < P["ext_e"]
+            behind = inv_cum < P["ext_share"] * target
+            if weak and behind:
+                ip = s["ip"] + P["ext_q"]; o["ip_end"] = fc + ip      # the advisory committee extends the period
         # exits and income on the deals held at the start of the quarter
         proc = 0.0; inc = 0.0
         for d in deals:
@@ -188,8 +195,9 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
                 if deal_log is not None: deal_log.append(("exit", f["id"], d[5], q, d[0], d[0] * m))
         # deployment: new deals and follow-ons
         inv = 0.0
-        if age < s["ip"]:
+        if age < ip:
             room = max(target - inv_cum + recyc_cum, 0.0)
+            # the deal market: the managers find fewer deals when exits are weak (credit funds lend on regardless)
             md = min(max((E[q] / P["e_ref"]) ** P["deal_gamma"], 0.4), 1.4) if st != "PC" else 1.0
             budget = gp["pace"] * room * md
             while budget > 0.35 * deal_size and dealno < n_deals * 1.5:
@@ -200,10 +208,13 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
                 if deal_log is not None: deal_log.append(("new", f["id"], dealno, q, c, mult))
                 dealno += 1
         for d in deals:
-            if d[3] and not d[4] and q - d[1] >= 5 and s["fo"] > 0 and age < s["ip"] + 8:
+            if d[3] and not d[4] and q - d[1] >= 5 and s["fo"] > 0 and age < ip + 8:
                 fo = s["fo"] * d[0] / (1 + s["fo"]) ; d[0] += fo; d[4] = True; inv += fo
                 if deal_log is not None: deal_log.append(("follow_on", f["id"], d[5], q, fo, 0.0))
-        dep_e = max(0.0, P["support_e"] - E[max(q - 2, 0)] / P["e_ref"]) / P["support_e"]
+        sf = max(0.0, P["support_e"] - E[max(q - 2, 0)] / P["e_ref"]) / P["support_e"]
+        # two channels: the managers' follow-on reserves (capped once a fund's reserve plan is spent) and, past a
+        # shortfall where lenders call covenants, rescue financings that keep rising with the shortfall
+        dep_e = min(sf, P["support_cap"]) + P["rescue"] / P["support"] * max(0.0, sf - P["rescue_th"])
         if st in ("BO", "GE", "VC") and dep_e > 0:
             headroom = max(size - called_cum - sum(a for _, a in queue), 0.0)
             for d in deals:
@@ -213,11 +224,11 @@ def run_fund(f, E, S, R, p, fc, upto=NQ - 1, scale=None, rec=None, cd_override=N
                         d[0] += sup; inv += sup; headroom -= sup
                         if deal_log is not None: deal_log.append(("follow_on", f["id"], d[5], q, sup, 0.0))
         rc = 0.0
-        if age < s["ip"] and gp["recyc"] > 0 and proc > 0:
+        if age < ip and gp["recyc"] > 0 and proc > 0:
             rc = min(gp["recyc"] * proc, max(0.15 * size - recyc_cum, 0.0), inv)
         recyc_cum += rc; inv_cum += inv
         need = inv - rc
-        fee = s["fee"] / 4.0 * (size if age < s["ip"] else sum(d[0] for d in deals if d[3]))
+        fee = s["fee"] / 4.0 * (size if age < ip else sum(d[0] for d in deals if d[3]))
         cd = (cd_override if cd_override is not None else line_quarters(gp, R[q])) if f["vint"] >= 2012 else 0
         queue.append([q, need]); called = 0.0; keep = []
         for (q0, a) in queue:
@@ -258,7 +269,7 @@ def benchmark_funds(gps, n=2200, seed=71):
         vint = int(rng.choice(vv, p=pv))
         cdp = {"VC": [0.55, 0.30, 0.15, 0.0, 0.0], "PC": [0.05, 0.15, 0.30, 0.30, 0.20]}.get(st, [0.10, 0.15, 0.25, 0.30, 0.20])
         gp = dict(id="B%04d" % i, st=st, cd_base=int(rng.choice([0, 1, 2, 3, 4], p=cdp)), tol=float(rng.uniform(4.6, 5.6)),
-                  recyc=float(rng.choice([0.0, 0.3, 0.6], p=[0.35, 0.35, 0.30])), pace=float(rng.uniform(*ST[st]["pace"])),
+                  recyc=float(rng.choice([0.15, 0.3, 0.45], p=[0.35, 0.35, 0.30])), pace=float(rng.uniform(*ST[st]["pace"])),
                   slip_k=2.5, fy_june=False)
         fc = qi(vint, int(rng.integers(1, 5)))
         out.append(dict(id=gp["id"], gp=gp, vint=vint, C=100.0, share=1.0, size=100.0, fc=fc, exp_fc=fc, seed=int(rng.integers(1, 2**31))))

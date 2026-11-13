@@ -8,425 +8,347 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "Buyout": 1918.2,
-    "Growth equity": 433.4,
-    "Venture capital": 186.0,
-    "Real estate": 288.1,
-    "Infrastructure": 840.8,
-    "Private credit": 524.6
+    "Buyout": 2025.3,
+    "Growth equity": 466.0,
+    "Venture capital": 202.0,
+    "Real estate": 287.1,
+    "Infrastructure": 834.7,
+    "Private credit": 488.6
    },
    "bands": {
     "Buyout": [
-     1917.7,
-     1918.7
+     2024.8,
+     2025.8
     ],
     "Growth equity": [
-     432.9,
-     433.9
+     465.5,
+     466.5
     ],
     "Venture capital": [
-     185.5,
-     186.5
+     201.5,
+     202.5
     ],
     "Real estate": [
-     287.6,
-     288.6
+     286.6,
+     287.6
     ],
     "Infrastructure": [
-     840.3,
-     841.3
+     834.2,
+     835.2
     ],
     "Private credit": [
-     524.1,
-     525.1
+     488.1,
+     489.1
     ]
    },
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "Buyout": 1936.7,
-     "Growth equity": 433.4,
-     "Venture capital": 186.0,
-     "Real estate": 288.1,
-     "Infrastructure": 840.8,
-     "Private credit": 524.6
+     "Buyout": 2042.7,
+     "Growth equity": 466.0,
+     "Venture capital": 202.0,
+     "Real estate": 287.1,
+     "Infrastructure": 834.7,
+     "Private credit": 488.6
     },
     "careful": {
-     "Buyout": 1918.2,
-     "Growth equity": 433.4,
-     "Venture capital": 186.0,
-     "Real estate": 288.1,
-     "Infrastructure": 840.8,
-     "Private credit": 524.6
+     "Buyout": 2025.3,
+     "Growth equity": 466.0,
+     "Venture capital": 202.0,
+     "Real estate": 287.1,
+     "Infrastructure": 834.7,
+     "Private credit": 488.6
     },
     "thorough": {
-     "Buyout": 1918.2,
-     "Growth equity": 433.4,
-     "Venture capital": 186.0,
-     "Real estate": 288.1,
-     "Infrastructure": 840.8,
-     "Private credit": 524.6
+     "Buyout": 2025.3,
+     "Growth equity": 466.0,
+     "Venture capital": 202.0,
+     "Real estate": 287.1,
+     "Infrastructure": 834.7,
+     "Private credit": 488.6
     }
    }
   },
   {
    "id": "R2",
-   "name": "capital calls on the funds that have held a first close, in each half of 2027 and 2028",
+   "name": "capital calls in the policy's stress on the commitments made by the end of 2026, each half of 2027",
    "graded_as": "Component 2",
-   "figure": "calls_closed_funds_by_half_usd_m",
+   "figure": "calls_2027_by_half_usd_m",
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 517.0,
-    "H2 2027": 211.7,
-    "H1 2028": 222.0,
-    "H2 2028": 172.6
+    "H1 2027": 532.7,
+    "H2 2027": 189.9
    },
    "bands": {
     "H1 2027": [
-     505.0,
-     532.0
+     524.5,
+     553.7
     ],
     "H2 2027": [
-     198.0,
-     226.0
-    ],
-    "H1 2028": [
-     205.0,
-     245.0
-    ],
-    "H2 2028": [
-     160.0,
-     188.0
+     181.8,
+     213.4
     ]
    },
    "partly_share": 0.75,
    "precedent": [
-    "L32",
-    "L10",
-    "L15"
+    "N13",
+    "L44",
+    "L43"
    ],
    "passes": {
     "quick": {
-     "H1 2027": 345.1,
-     "H2 2027": 265.7,
-     "H1 2028": 197.3,
-     "H2 2028": 132.0
+     "H1 2027": 335.9,
+     "H2 2027": 318.7
     },
     "careful": {
-     "H1 2027": 286.5,
-     "H2 2027": 190.4,
-     "H1 2028": 132.4,
-     "H2 2028": 94.4
+     "H1 2027": 415.9,
+     "H2 2027": 203.7
     },
     "thorough": {
-     "H1 2027": 517.0,
-     "H2 2027": 211.7,
-     "H1 2028": 222.0,
-     "H2 2028": 172.6
+     "H1 2027": 532.7,
+     "H2 2027": 189.9
     }
    }
   },
   {
    "id": "R3",
-   "name": "capital calls on the funds yet to hold a first close, in each half of 2027 and 2028",
+   "name": "capital calls in the policy's stress on the commitments made by the end of 2026, each half of 2028",
    "graded_as": "Component 3",
-   "figure": "calls_pending_funds_by_half_usd_m",
+   "figure": "calls_2028_by_half_usd_m",
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 0.0,
-    "H2 2027": 0.0,
-    "H1 2028": 63.7,
-    "H2 2028": 85.2
+    "H1 2028": 342.5,
+    "H2 2028": 280.8
    },
    "bands": {
-    "H1 2027": [
-     0.0,
-     1.0
-    ],
-    "H2 2027": [
-     0.0,
-     6.0
-    ],
     "H1 2028": [
-     56.0,
-     72.0
+     321.5,
+     368.3
     ],
     "H2 2028": [
-     78.0,
-     92.0
+     260.6,
+     297.9
     ]
    },
    "partly_share": 0.75,
    "precedent": [
-    "N22",
-    "N03",
-    "N28"
+    "L42",
+    "N34"
    ],
    "passes": {
     "quick": {
-     "H1 2027": 0.0,
-     "H2 2027": 60.8,
-     "H1 2028": 60.0,
-     "H2 2028": 88.1
+     "H1 2028": 252.5,
+     "H2 2028": 217.0
     },
     "careful": {
-     "H1 2027": 0.0,
-     "H2 2027": 89.7,
-     "H1 2028": 86.3,
-     "H2 2028": 80.1
+     "H1 2028": 235.0,
+     "H2 2028": 229.9
     },
     "thorough": {
-     "H1 2027": 0.0,
-     "H2 2027": 0.0,
-     "H1 2028": 63.7,
-     "H2 2028": 85.2
+     "H1 2028": 342.5,
+     "H2 2028": 280.8
     }
    }
   },
   {
    "id": "R4",
-   "name": "distributions in each half of 2027 and 2028 under the policy's stress",
+   "name": "distributions in the policy's stress, each half of 2027 and 2028",
    "graded_as": "Ask 2",
    "figure": "distributions_by_half_usd_m",
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 402.8,
-    "H2 2027": 280.2,
-    "H1 2028": 169.5,
-    "H2 2028": 198.4
+    "H1 2027": 364.1,
+    "H2 2027": 285.8,
+    "H1 2028": 157.2,
+    "H2 2028": 202.6
    },
    "bands": {
     "H1 2027": [
-     402.3,
-     403.3
+     363.6,
+     364.6
     ],
     "H2 2027": [
-     279.7,
-     280.7
+     285.3,
+     286.3
     ],
     "H1 2028": [
-     169.0,
-     170.0
+     156.7,
+     157.7
     ],
     "H2 2028": [
-     197.9,
-     198.9
+     202.1,
+     203.1
     ]
    },
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "H1 2027": 400.8,
-     "H2 2027": 278.9,
-     "H1 2028": 168.9,
-     "H2 2028": 197.6
+     "H1 2027": 362.3,
+     "H2 2027": 284.6,
+     "H1 2028": 156.6,
+     "H2 2028": 201.8
     },
     "careful": {
-     "H1 2027": 402.8,
-     "H2 2027": 280.2,
-     "H1 2028": 169.5,
-     "H2 2028": 198.4
+     "H1 2027": 364.1,
+     "H2 2027": 285.8,
+     "H1 2028": 157.2,
+     "H2 2028": 202.6
     },
     "thorough": {
-     "H1 2027": 402.8,
-     "H2 2027": 280.2,
-     "H1 2028": 169.5,
-     "H2 2028": 198.4
+     "H1 2027": 364.1,
+     "H2 2027": 285.8,
+     "H1 2028": 157.2,
+     "H2 2028": 202.6
     }
    }
   },
   {
    "id": "R5",
-   "name": "the policy's net cash needs over 2027 and 2028 at a USD 500 million budget",
+   "name": "the headroom above the minimum reserve before any 2027 commitment",
    "graded_as": "Ask 3",
-   "figure": "net_cash_needs_500_usd_m",
+   "figure": "headroom_before_2027_usd_m",
    "depends": [
     "R2",
     "R3",
     "R4"
    ],
    "independent": "",
-   "golden": 1060.7,
+   "golden": 78.3,
    "band": [
-    1022.0,
-    1100.0
+    30.3,
+    115.4
    ],
    "precedent": [
-    "L32",
-    "L10",
-    "N22"
+    "L42",
+    "N13",
+    "N34"
    ],
    "passes": {
-    "quick": 911.9,
-    "careful": 748.9,
-    "thorough": 1060.7
+    "quick": 300.1,
+    "careful": 339.7,
+    "thorough": 78.3
    }
   },
   {
    "id": "R6",
-   "name": "the headroom above the minimum reserve at a USD 500 million budget",
-   "graded_as": "Component 1",
-   "figure": "headroom_500_usd_m",
-   "depends": [
-    "R5"
-   ],
-   "independent": "",
-   "golden": -123.3,
-   "band": [
-    -163.0,
-    -85.0
-   ],
-   "precedent": [
-    "L32",
-    "L10",
-    "N22"
-   ],
-   "passes": {
-    "quick": 25.5,
-    "careful": 188.5,
-    "thorough": -123.3
-   }
-  },
-  {
-   "id": "R7",
-   "name": "the largest 2027 total that passes",
+   "name": "the program the policy lets the Investment Committee adopt",
    "graded_as": "Recommendation",
-   "figure": "capacity_usd_m",
+   "figure": "program",
    "depends": [
     "R2",
     "R3",
     "R4"
    ],
    "independent": "",
-   "golden": 250,
-   "band": [
-    175,
-    350
-   ],
+   "golden": "D",
    "precedent": [
-    "L32",
-    "L10",
-    "N22"
+    "L42",
+    "N13",
+    "N34"
    ],
    "passes": {
-    "quick": 550,
-    "careful": 850,
-    "thorough": 250
+    "quick": "A",
+    "careful": "A",
+    "thorough": "D"
    }
   }
  ],
  "hints": [
   {
-   "sentence": "the managers had about USD 238 million invested on their funds' credit lines at 31 December and not yet called, and the stress's rates make every manager call it in the first quarter",
-   "rescues": []
-  },
-  {
-   "sentence": "in a weak exit market the managers put more into the companies they have held two years or more, from two quarters after the exit index falls below normal",
-   "rescues": []
-  },
-  {
-   "sentence": "first closes slip when the exit index sits below normal in the quarter before, by about six quarters for every 100 per cent it falls short",
+   "sentence": "past a shortfall the endowment's own record never reached, rescue financings keep the managers' calls on held companies rising; the benchmark's funds past their investment period show it in 2009",
    "rescues": [
     "R3"
+   ]
+  },
+  {
+   "sentence": "six managers' company-level files stop after 2024, and their funds' lines were rebuilt through 2026 as rates fell",
+   "rescues": [
+    "R2"
    ]
   }
  ],
  "factorial": {
-  "golden_answer": 250,
+  "golden_answer": "D",
   "reflex_route": {
-   "answer": 850
+   "answer": "A"
   },
   "judgments": [
    {
     "id": "J1",
-    "name": "the capital invested on subscription lines and not yet called, rebuilt and told apart from recycled proceeds, called at the clean-down",
+    "name": "the support curve past the plateau the record shows: rescue financings beyond a shortfall it never reached, read off the benchmark's funds past their investment period",
     "kind": "stump",
     "precedent": [
-     "L32",
-     "N02"
+     "L42",
+     "N34"
     ],
     "dropped": {
-     "answer": 700,
-     "results_moved": [
-      "R2",
-      "R5",
-      "R6",
-      "R7"
-     ]
-    },
-    "alone": {
-     "answer": 400,
-     "results_rescued": []
-    }
-   },
-   {
-    "id": "J2",
-    "name": "defensive follow-ons into companies held two years or more, measured apart from new deals, on the stress path",
-    "kind": "stump",
-    "precedent": [
-     "L10",
-     "L15"
-    ],
-    "dropped": {
-     "answer": 600,
-     "results_moved": [
-      "R2",
-      "R5",
-      "R6",
-      "R7"
-     ]
-    },
-    "alone": {
-     "answer": 500,
-     "results_rescued": []
-    }
-   },
-   {
-    "id": "J3",
-    "name": "first closes that slip with the exit market, measured on the register's own closes and carried on the stress path",
-    "kind": "stump",
-    "precedent": [
-     "N22",
-     "N03"
-    ],
-    "dropped": {
-     "answer": 50,
+     "answer": "A",
      "results_moved": [
       "R3",
       "R5",
-      "R6",
-      "R7"
+      "R6"
      ]
     },
     "alone": {
-     "answer": 1050,
+     "answer": "C",
      "results_rescued": [
       "R3"
      ]
     }
    },
    {
-    "id": "J4",
-    "name": "statements cleaned: the superseded row, the custodian's fourth-quarter cash for late statements, commitments released at term end",
+    "id": "J2",
+    "name": "the six managers whose company-level files stop after 2024: their line stock bridged from the file's end on the fitted pace, re-anchored at the audits",
+    "kind": "stump",
+    "precedent": [
+     "N13",
+     "L44"
+    ],
+    "dropped": {
+     "answer": "C",
+     "results_moved": [
+      "R2",
+      "R5",
+      "R6"
+     ]
+    },
+    "alone": {
+     "answer": "A",
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "J3",
+    "name": "the covered managers' capital invested on lines and not yet called, called at the clean-down",
     "kind": "reflex",
     "precedent": [
-     "R01"
+     "R63"
+    ]
+   },
+   {
+    "id": "J4",
+    "name": "defensive follow-ons on the held companies' cost, two quarters after the exit index, the plateau fitted",
+    "kind": "reflex",
+    "precedent": [
+     "R64"
     ]
    },
    {
     "id": "J5",
-    "name": "distributions at the policy's 2008-10 benchmark rates on each fund's 31 December value",
+    "name": "pending funds' first closes slipped on the exit market",
     "kind": "reflex",
     "precedent": [
-     "R18"
+     "R65"
     ]
    },
    {
     "id": "J6",
-    "name": "new deals from the managers' own pace on the room left, by strategy and year, with the deal market's elasticity",
+    "name": "investment periods extended where the register's rule says, new deals at the managers' pace with the deal market",
     "kind": "reflex",
     "precedent": [
      "R14",
@@ -435,19 +357,21 @@
    },
    {
     "id": "J7",
-    "name": "fees on commitments while investing and on the cost held afterwards; recycling read per manager",
+    "name": "statements cleaned; distributions, reserve and spending as the policy sets them",
     "kind": "reflex",
     "precedent": [
-     "R14"
+     "R01",
+     "R18"
     ]
    },
    {
     "id": "J8",
-    "name": "the response's window and level chosen by fit, a bootstrap over funds for the spread",
+    "name": "fees, recycling, the fits chosen by fit and back-tested, a bootstrap over funds",
     "kind": "reflex",
     "precedent": [
+     "R14",
      "R36",
-     "R33",
+     "R66",
      "R04"
     ]
    }
@@ -455,143 +379,181 @@
  },
  "forcing": {
   "kind": "set",
-  "golden_answer": "USD 175m to 350m",
+  "golden_answer": "D",
   "golden_family": [
    {
     "name": "the golden",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
-    "name": "slips fitted on a 1-quarter window against 95 (the next-best fit)",
-    "answer": "USD 175m to 350m"
+    "name": "the second channel from a shortfall of 0.43",
+    "answer": "D"
    },
    {
-    "name": "slips fitted on a 1-quarter window against 105 (the next-best fit)",
-    "answer": "USD 175m to 350m"
+    "name": "the second channel from a shortfall of 0.49",
+    "answer": "D"
    },
    {
-    "name": "defensive follow-ons from 90 on the index, 2 quarters late",
-    "answer": "USD 175m to 350m"
+    "name": "the benchmark slice of funds six to ten years old",
+    "answer": "D"
    },
    {
-    "name": "defensive follow-ons from 110 on the index, 2 quarters late",
-    "answer": "USD 175m to 350m"
+    "name": "the benchmark slice of funds seven to eleven years old",
+    "answer": "D"
    },
    {
-    "name": "defensive follow-ons measured and carried on the held companies' latest value, not their cost",
-    "answer": "USD 175m to 350m"
+    "name": "the benchmark slice of funds with 5 percent or more left to call",
+    "answer": "D"
+   },
+   {
+    "name": "the benchmark slice of funds with 20 percent or more left to call",
+    "answer": "D"
+   },
+   {
+    "name": "the first channel capped at a shortfall of 0.25",
+    "answer": "D"
+   },
+   {
+    "name": "the first channel capped at a shortfall of 0.35",
+    "answer": "D"
    },
    {
     "name": "recycling at the median of every manager",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "name": "new deals at their normal pace, no deal-market term",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
-    "name": "fees 5 per cent below the investing-period median",
-    "answer": "USD 175m to 350m"
+    "name": "fees 5 percent below the investing-period median",
+    "answer": "D"
    },
    {
-    "name": "the line stock with no recycling since the last audited year-end",
-    "answer": "USD 175m to 350m"
+    "name": "slips fitted on a 1-quarter window against 95",
+    "answer": "D"
+   },
+   {
+    "name": "slips fitted on a 1-quarter window against 105",
+    "answer": "D"
+   },
+   {
+    "name": "the six managers' stock rolled from the file's end, not re-anchored at the 2025 and 2026 audits",
+    "answer": "D"
    }
   ],
   "shortcuts": [
    {
-    "name": "the careful route: the gap between investments and calls read as recycled proceeds, one investment pace for every follow-on, pending and new funds closing on their managers' dates",
-    "answer": "USD 850m"
+    "name": "the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried",
+    "answer": "A"
    },
    {
     "name": "the textbook pacing model on the capital accounts",
-    "answer": "USD 550m"
+    "answer": "A"
    },
    {
-    "name": "the pacing model recalibrated on 2022 and 2023",
-    "answer": "USD 150m"
+    "name": "one straight support line through the record, the last audited borrowings carried",
+    "answer": "A"
+   },
+   {
+    "name": "the rescue channel found, the six managers' stock read off the file as it stands",
+    "answer": "B"
+   },
+   {
+    "name": "the plateau held, the six managers bridged",
+    "answer": "A"
    },
    {
     "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-    "answer": "USD 50m"
+    "answer": "none"
    },
    {
-    "name": "the latest audited borrowings carried as the line stock at 31 December 2026",
-    "answer": "USD 625m"
+    "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+    "answer": "C"
    }
   ],
   "perturbations": [
    {
-    "input": "deployment and the deal-market term at the bootstrap's 5th percentile",
-    "answer": "USD 175m to 350m"
+    "input": "deployment and the deal market at the bootstrap's 5th percentile",
+    "answer": "D"
    },
    {
-    "input": "deployment and the deal-market term at the bootstrap's 95th percentile",
-    "answer": "USD 175m to 350m"
+    "input": "deployment and the deal market at the bootstrap's 95th percentile",
+    "answer": "D"
    },
    {
-    "input": "defensive follow-ons at the bootstrap's 5th percentile",
-    "answer": "USD 175m to 350m"
+    "input": "the support's two channels at the bootstrap's 5th percentile",
+    "answer": "D"
    },
    {
-    "input": "defensive follow-ons at the bootstrap's 95th percentile",
-    "answer": "USD 175m to 350m"
+    "input": "the support's two channels at the bootstrap's 95th percentile",
+    "answer": "D"
    },
    {
     "input": "first-close slips at the bootstrap's 5th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "input": "first-close slips at the bootstrap's 95th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "input": "recycling at the bootstrap's 5th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "input": "recycling at the bootstrap's 95th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "input": "every fitted input together at the bootstrap's 5th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    },
    {
     "input": "every fitted input together at the bootstrap's 95th percentile",
-    "answer": "USD 175m to 350m"
+    "answer": "D"
    }
   ]
  },
  "routes": [
   {
    "name": "the golden",
-   "answer": 250,
+   "answer": "D",
    "golden": true
   },
   {
-   "name": "the careful route: the gap between investments and calls read as recycled proceeds, one investment pace for every follow-on, pending and new funds closing on their managers' dates",
-   "answer": 850,
+   "name": "the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried",
+   "answer": "A",
    "golden": false
   },
   {
    "name": "the textbook pacing model on the capital accounts",
-   "answer": 550,
+   "answer": "A",
    "golden": false
   },
   {
-   "name": "the pacing model recalibrated on 2022 and 2023",
-   "answer": 150,
+   "name": "one straight support line through the record, the last audited borrowings carried",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the rescue channel found, the six managers' stock read off the file as it stands",
+   "answer": "B",
+   "golden": false
+  },
+  {
+   "name": "the plateau held, the six managers bridged",
+   "answer": "A",
    "golden": false
   },
   {
    "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-   "answer": 50,
+   "answer": "none",
    "golden": false
   },
   {
-   "name": "the latest audited borrowings carried as the line stock at 31 December 2026",
-   "answer": 625,
+   "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+   "answer": "C",
    "golden": false
   }
  ],

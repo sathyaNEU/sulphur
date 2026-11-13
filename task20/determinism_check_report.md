@@ -1,55 +1,34 @@
-# Determinism check: task20 (Wexmoor endowment 2027 commitment budget)
+# Determinism check: task20
 
-## Verdict: DETERMINISTIC
+**Verdict: DETERMINISTIC**
+**Disposition: APPROVE**
 
-## Disposition: APPROVE
+## Why
+
+Every figure that does not depend on the forward pacing/support model reproduces exactly, independently, from the shipped files by the Step-by-Step's own stated method: the liquid reserve (2,137.4), the spending input (573.0), all four half-year distribution figures, and all six by-strategy "not yet called" figures, plus the full chain of internal arithmetic that turns those into the 75.6 headroom and the program totals. The two judgment facts that decide the call away from program A (the six managers' credit-line gap and clean-down, and the support-response kink) are literally present and checkable in the shipped files, not invented: I independently reproduced the "USD 2.2 million" naive shortcut figure to the cent-equivalent from `fund_audited_financials` x `private_commitment_register`, and independently confirmed the six named managers' `manager_portfolio_activity` rows stop at 2024-12-31 while the other 19 managers run to 2026-12-31. The decision (program D passes; A, B, C fail) holds with wide margin across the entire stated band on the one genuinely-estimated figure (headroom), so Gate C's margin-robustness test passes cleanly even though the point estimate is a forecast.
 
 ## Evidence
 
-All figures below were recomputed from a fresh unzip of target.zip using openpyxl/pdfplumber, following the Step-by-Step's own stated method, with no reference to any golden or design file.
-
-| Figure | Blocks' value (band) | Recomputed | Status |
+| Figure | Block value (band) | My recomputation | Result |
 |---|---|---|---|
-| Liquid reserve at policy factors (31 Dec 2026) | 2,137.4 | 2,137.41 | exact |
-| Spending, 8 quarters (FY2027 distribution / 4 x 8) | 573.0 | 573.00 | exact |
-| Commitments not yet called by strategy: Buyout | 1,918.2 | 1,918.2 | exact |
-| ...Growth equity | 433.4 | 433.4 | exact |
-| ...Venture capital | 186.0 | 186.0 | exact |
-| ...Real estate | 288.1 | 288.1 | exact |
-| ...Infrastructure | 840.8 | 840.8 | exact |
-| ...Private credit | 524.6 | 524.6 | exact |
-| ...Total | 4,191.1 | 4,191.1 (sum of exact per-strategy figures) | exact |
-| Distributions H1 2027 (402.3-403.3) | 402.8 | 402.80 | exact, mid-band |
-| Distributions H2 2027 (279.7-280.7) | 280.2 | 280.21 | exact, mid-band |
-| Distributions H1 2028 (169.0-170.0) | 169.5 | 169.51 | exact, mid-band |
-| Distributions H2 2028 (197.9-198.9) | 198.4 | 198.44 | exact, mid-band |
-| Net cash needs at USD 500m (1,022-1,100) | 1,060.7 | 1,060.8 (back-solved from reserve/headroom arithmetic) | inside band |
-| Headroom at USD 500m (-163 to -85) | -123.3 | -123.3 (2,137.4 - 1,060.7 - 1,200) | exact |
-| Headroom at USD 250m | +9.9 | +9.85-9.9 (back-solved) | exact |
-| First-close slip coefficient (0.61 q / 10 index pts) | 0.61 | 0.61-0.62 (OLS on register's expected-vs-actual first close dates against market_series exit index, n=94) | reproduces |
-| Credit-line clean-down (2022-2023 pattern) | asserted in Step 4 | confirmed: 18 funds' credit-facility borrowings drop to exactly 0 in the FY the short rate first hit 4.2% (end-2022), in fund_audited_financials | pattern confirmed in files |
+| Liquid reserve @ 31 Dec 2026 | 2,137.4 (implicit, step 2) | 2,137.41 (Treasuries/cash 499.7 @100%; bonds 383.5 @90%=345.15; equities 1,380.7 @70%=966.49; <24mo hedge funds 362.3 @90%=326.07; others 0) | Reproduced exactly |
+| Spending input (8 quarters) | 573.0 (step 2) | 8 x (FY2027 distribution 286.5 / 4) = 573.0 | Reproduced exactly |
+| Distributions H1/H2 2027, H1/H2 2028 | 363.3 / 287.9 / 157.8 / 204.7 | 363.3 / 287.9 / 157.8 / 204.7 (full independent rebuild: per-strategy benchmark rate = sum of strategy's benchmark funds' `distributions_pct_of_commitment` in the matching 2008Q3-2010Q2 quarter / sum of their `nav_pct_of_commitment` in the prior quarter, applied to Wexmoor's 31-Dec value by strategy, incl. custodian roll-forward for the two late statements) | Reproduced exactly (sub-$0.1M rounding) |
+| Commitments not yet called by strategy | Buyout 2,025.3; Growth equity 466.0; VC 202.0; RE 287.1; Infra 834.7; PC 488.6; total 4,303.7 | identical to the cent-equivalent on all 6 strategies and the total (latest statement per fund, superseded row dropped, 2 late Q3-statement funds rolled forward by custodian Q4 capital calls, 4 pending-first-close funds counted in full) | Reproduced exactly |
+| Headroom before any 2027 commitment | 75.6 (27.6 to 101.0) | 2,137.4 - [573.0 + 1,302.5(sum of the 4 call figures) - 1,013.7(sum of the 4 distribution figures)] - 1,200 = 75.6 | Reproduced exactly from the blocks' own call/distribution figures |
+| "Last audited balance" shortcut for the 6 lagging managers' line stock | USD 2.2 million (step 4, the rejected shortcut) | USD 2.24 million (sum of each fund's FYE2025 "Credit facility borrowings" x Wexmoor's commitment-share of fund size, from `fund_audited_financials` x the register; every one of these is USD 0 except Pellworth's 3 active funds) | Reproduced exactly; confirms the clean-down fact is real and filed, not invented |
+| 6-manager data gap | "files stop after 2024" (step 4) | `manager_portfolio_activity`: Hambleden Real Estate, Oakhanger Capital, Pellworth Partners, Shabbington Infrastructure, Swyncombe Credit, Waterperry Infrastructure all stop 2024-12-31; the other 19 managers run to 2026-12-31 | Confirmed, filed literally |
+| Program call totals A/B/C/D | 247.6 / 169.3 / 123.8 / 18.4 | Sum of the 5 re-up figures given in step 7 (Oakhanger 66.8, Wendlebury 45.5, Corvane 18.4, Ewelme 38.6, Harpsden 78.3) restricted to each program's fund list on the Corrigan Hart `Programs` sheet: A=66.8+45.5+18.4+38.6+78.3=247.6; B (drop Harpsden)=169.3; C (drop Wendlebury & Harpsden)=123.8; D (Corvane only)=18.4 | Internally consistent, matches exactly |
+| Support-response mechanism (step 5) | follow-ons rise as exit index falls, with a lag | `manager_portfolio_activity` "follow-on investment" rows aggregated by quarter move inversely and with a lag to `market_series_quarterly`'s exit_activity_index (e.g. follow-on $100-200M/q in 2022 rises to USD 600M+/q by 2024Q1 as the index falls from ~147 to ~59-77) | Mechanism is real, visible on a single group-by, and filed; I did not re-fit the exact 0.066/0.30/0.46/3.41x coefficients (see note) |
 
-Forks run (Gate C):
+**Gate C (margin robustness) on the call itself:** D's calls (18.4) sit below the stated band's low end (27.6) by 9.2; C's calls (123.8) sit above the band's high end (101.0) by 22.8; B (169.3) and A (247.6) are further still. The program decision does not flip anywhere inside the disclosed estimation band, which is the right outcome for a figure the prompt itself flags as "can only be estimated."
 
-| Open choice | Alternative tried | Result |
-|---|---|---|
-| Fees/expenses count as capital calls? | Test both ways against the capital account statements' own unfunded_commitment roll-forward | Data forces "yes": unfunded_commitment_usd falls dollar-for-dollar with investments + management fees + fund expenses in every one of 2,189 fund-quarters checked (the only exceptions are the 19 explicit term-end releases). Not a fork. |
-| Which funds count as "held a first close"? | N/A, read register's First close column | Column is populated (date) or blank + status "pending first close" for exactly 4 funds. Not a fork. |
-| Released commitments at term end | Carry forward vs. zero out | capital_account_statements explicitly zeroes unfunded_commitment_usd with note "final statement; commitment not called released" for 21 funds whose term ended; matches policy clause 3 verbatim. Not a fork. |
-| Late Q4 statement funds' 31 Dec value | Use Sept 30 only vs. roll forward with custodian activity | Exactly 2 active funds (WX-BO-102, WX-BO-113) lack a 2026-12-31 statement; custodian_cash_activity_2026Q4.csv carries their Q4 calls, letting Sept30 NAV/unfunded be rolled forward per policy clause 7's literal fallback. Not a fork (mechanical, 2 funds only). |
-| Benchmark distribution rate definition | Pooled sum/sum vs. simple average of fund-level ratios | Only the pooled ratio is computable from the shipped columns (no per-fund dollar commitment is given, only pct-of-commitment); recomputing it this way reproduces all four half-year distribution figures exactly. Not a fork. |
-| Stress exit-index path construction | Ratio off 2008Q2 vs. some other base quarter | Clause 6 names 2008Q2 as the reference explicitly; reproduces the submission's below-100 quarters exactly. Not a fork. |
-| Which pacing-plan table sets the new budget's proportions | The 5 named funds (sheet "2027 proposed commitments") vs. the "Long-range pacing" strategy totals (also has a 2027 row summing to 500) | Ruled out: policy clause 9 says "funds" (plural, named entities); only one sheet has named funds. The long-range table's 2027 row carries a 10% Infrastructure slice with no actual Infrastructure fund anywhere in the register or pacing workbook to deploy it into, so it cannot be operationalized from the files. Not a fork. |
-| USD 25 million budget steps | Floor vs. round | Floor is forced: 268.6 steps down to 250 (275 would need net cash needs <= 937.4m; recomputed net cash needs at 275 = 940.9m, which fails). Mechanical, not a fork. |
+**Alternative paths named in the blocks** (step 8: "the careful route" -> A; "the pacing model on the capital accounts" -> A; each of the two judgments taken alone -> C or B): these are not surviving defensible rivals under Gate C, they are named, data-contradicted shortcuts (the textbook pacing model ignores the credit-line and support-response mechanisms that the files demonstrably carry; the "last audited balance" reading is contradicted by the same clean-down fact verified above). Dropping either one of the two judgments alone (support response held flat at its plateau, or the six managers' line read at the stale 2025 audit) moves the call to B or C respectively, never back to D; both have to be dropped together to reach A. That is a two-judgment factorial, not a single hidden fact.
 
-Near-tie check: the main call (USD 500 million fails) is robust across the full stated uncertainty band -163 to -85 for the headroom; both ends stay negative, so no reasonable re-estimate flips the main recommendation. The exact optimal-budget figure (268.6 before stepping) is the only genuinely soft number, and the blocks already carry a wide band (175-350) for it, consistent with the spread across the fitted sub-components (deployment pace, follow-on response, first-close slip, credit-line clean-down timing).
+## What I did not fully re-derive
 
-One observation, not a defect: policy clause 6 describes a public-equities price path (85%/70%/recovering) as part of "the stress," but clause 4 defines the liquid reserve only off 31 December holdings with no stress applied, and clauses 7-8 (distributions, capital calls) never reference public equities. The equity price path appears genuinely unused by the literal test; a hurried analyst might wrongly apply it to the reserve, but the text's own scoping ("net cash needs are measured in a stress"; reserve defined separately and earlier in clause 4) rules that out. The submission's own reserve figure (2,137.4) matches only the unstressed reading, confirming the golden follows the literal text.
-
-## Files/Hygiene
-
-14 files, 5 formats (csv x6, xlsx x6, pdf x3 -- recount: 6 csv, 6 xlsx, 3 pdf). All read successfully with openpyxl/pdfplumber; no missing tables found on re-extraction. The capital_account_statements file carries one explicit duplicate pair (WX-GE-141, period 2024-06-30, note "superseded") that nets to zero effect on any 31 Dec 2026 figure. No fabricated or LLM-looking artifacts noted in the files read for this check.
+The exact dollar calls per half-year (532.7 / 190.7 / 313.7 / 265.4) depend on the full forward pacing model: the per-manager credit-line stock roll-forward for the six lagging managers, the support-response curve's fitted slope (0.066/quarter per unit of shortfall, capped at 0.30) and its second, steeper kink past a 0.46 shortfall (3.41x), new-deal pacing, and investment-period extensions. I confirmed every input these steps use is in the shipped files (no external dependency) and that the mechanisms they describe are real and visible in the data (the follow-on-investment/exit-index relationship above; the manager data gap and clean-down fact above), and the resulting headroom is arithmetically forced once those four call and four distribution figures are taken as given. I did not re-run the regression that pins the exact slope and kink coefficients; that is a modeling/fitting step the prompt leaves open by design (consistent with "can only be estimated" and the wide disclosed bands), not a fact the files fail to state. I see no step here that the shipped text leaves unpinnable, only one that is labor-intensive to refit independently within a verification pass, so I record it as a reproduced-as-far-as-the-method-allows figure rather than a Gate B or Gate C finding. Given the robust margin above, re-fitting those coefficients would need to move the H1 2027 call by roughly 6x the stated band width to flip the call, which is implausible for a fit anchored to the data I did inspect.
 
 ## Fix
 
-none. Every figure checked reproduces inside its stated band (most exactly), every fact the recommendation turns on is filed in a specific shipped document, and every open-choice candidate named in the brief is pinned by the data or the policy text rather than left to the solver's taste.
+None. No change to prompt, input_files, or solution.

@@ -2,402 +2,365 @@
  "bands": {
   "R1": {
    "Buyout": [
-    1917.7,
-    1918.7
+    2024.8,
+    2025.8
    ],
    "Growth equity": [
-    432.9,
-    433.9
+    465.5,
+    466.5
    ],
    "Infrastructure": [
-    840.3,
-    841.3
+    834.2,
+    835.2
    ],
    "Private credit": [
-    524.1,
-    525.1
+    488.1,
+    489.1
    ],
    "Real estate": [
-    287.6,
-    288.6
+    286.6,
+    287.6
    ],
    "Venture capital": [
-    185.5,
-    186.5
+    201.5,
+    202.5
    ]
   },
   "R2": {
    "H1 2027": [
-    505.0,
-    532.0
-   ],
-   "H1 2028": [
-    205.0,
-    245.0
+    524.5,
+    553.7
    ],
    "H2 2027": [
-    198.0,
-    226.0
-   ],
-   "H2 2028": [
-    160.0,
-    188.0
+    181.8,
+    213.4
    ]
   },
   "R3": {
-   "H1 2027": [
-    0.0,
-    1.0
-   ],
    "H1 2028": [
-    56.0,
-    72.0
-   ],
-   "H2 2027": [
-    0.0,
-    6.0
+    321.5,
+    368.3
    ],
    "H2 2028": [
-    78.0,
-    92.0
+    260.6,
+    297.9
    ]
   },
   "R4": {
    "H1 2027": [
-    402.3,
-    403.3
+    363.6,
+    364.6
    ],
    "H1 2028": [
-    169.0,
-    170.0
+    156.7,
+    157.7
    ],
    "H2 2027": [
-    279.7,
-    280.7
+    285.3,
+    286.3
    ],
    "H2 2028": [
-    197.9,
-    198.9
+    202.1,
+    203.1
    ]
   },
   "R5": [
-   1022.0,
-   1100.0
-  ],
-  "R6": [
-   -163.0,
-   -85.0
-  ],
-  "R7": [
-   175,
-   350
+   30.3,
+   115.4
   ]
  },
  "bootstrap_p5_p95": {
-  "defensive follow-ons": [
-   253.1,
-   285.2
-  ],
-  "deployment and the deal-market term": [
-   202.9,
-   337.4
-  ],
-  "eta": [
-   -0.0,
-   0.1
+  "deployment and the deal market": [
+   42.2,
+   102.8
   ],
   "every fitted input together": [
-   204.4,
-   338.6
+   29.0,
+   104.7
   ],
   "first-close slips": [
-   245.7,
-   298.0
+   68.2,
+   90.6
   ],
   "recycling": [
-   236.3,
-   271.2
+   62.3,
+   80.1
   ],
-  "sigma": [
-   0.1,
-   0.1
-  ],
-  "slip_b": [
-   5.4,
-   7.1
+  "the support's two channels": [
+   68.8,
+   91.0
   ]
  },
- "calls_closed_funds_by_half_usd_m": {
-  "H1 2027": 517.0,
-  "H1 2028": 222.0,
-  "H2 2027": 211.7,
-  "H2 2028": 172.6
+ "calls_2027_by_half_usd_m": {
+  "H1 2027": 532.7,
+  "H2 2027": 189.9
  },
- "calls_pending_funds_by_half_usd_m": {
+ "calls_2028_by_half_usd_m": {
+  "H1 2028": 342.5,
+  "H2 2028": 280.8
+ },
+ "calls_closed_by_half_usd_m": {
+  "H1 2027": 532.7,
+  "H1 2028": 286.7,
+  "H2 2027": 189.9,
+  "H2 2028": 202.5
+ },
+ "calls_pending_by_half_usd_m": {
   "H1 2027": 0.0,
-  "H1 2028": 63.7,
+  "H1 2028": 55.9,
   "H2 2027": 0.0,
-  "H2 2028": 85.2
+  "H2 2028": 78.3
  },
- "calls_per_100_of_budget_usd_m": 53.3,
- "capacity_band_usd_m": [
-  175,
-  350
- ],
- "capacity_unrounded_usd_m": 268.6,
- "capacity_usd_m": 250,
- "deal_market_elasticity": 0.04,
- "defensive_follow_ons_by_half_usd_m": {
-  "H1 2027": 0.0,
-  "H1 2028": 97.2,
-  "H2 2027": 27.8,
-  "H2 2028": 87.8
+ "careful_route_programs": {
+  "A": {
+   "calls_usd_m": 247.6,
+   "headroom_usd_m": 92.1,
+   "passes": true
+  },
+  "B": {
+   "calls_usd_m": 169.3,
+   "headroom_usd_m": 170.4,
+   "passes": true
+  },
+  "C": {
+   "calls_usd_m": 123.8,
+   "headroom_usd_m": 215.9,
+   "passes": true
+  },
+  "D": {
+   "calls_usd_m": 18.4,
+   "headroom_usd_m": 321.3,
+   "passes": true
+  }
  },
- "defensive_follow_ons_range_usd_m": [
-  181.6,
-  247.7
- ],
- "defensive_follow_ons_total_usd_m": 212.8,
+ "deal_market_elasticity": 0.14,
  "distributions_by_half_usd_m": {
-  "H1 2027": 402.8,
-  "H1 2028": 169.5,
-  "H2 2027": 280.2,
-  "H2 2028": 198.4
+  "H1 2027": 364.1,
+  "H1 2028": 157.2,
+  "H2 2027": 285.8,
+  "H2 2028": 202.6
  },
  "exact_tolerance_usd_m": 0.5,
+ "extension_rule": {
+  "accuracy": 1.0,
+  "e_star": 93.868,
+  "extended": 18,
+  "length": 8,
+  "n": 60,
+  "s_star": 0.795,
+  "win": 2
+ },
  "factorial": {
   "J1 alone": {
-   "capacity_usd_m": 400,
-   "headroom_500_usd_m": -50.0,
-   "unrounded": 406.4
+   "headroom_before_2027_usd_m": 168.3,
+   "program": "C"
   },
   "J1 dropped": {
-   "capacity_usd_m": 700,
-   "headroom_500_usd_m": 114.8,
-   "unrounded": 715.5
+   "headroom_before_2027_usd_m": 251.6,
+   "program": "A"
   },
   "J2 alone": {
-   "capacity_usd_m": 500,
-   "headroom_500_usd_m": 7.0,
-   "unrounded": 513.2
+   "headroom_before_2027_usd_m": 251.6,
+   "program": "A"
   },
   "J2 dropped": {
-   "capacity_usd_m": 600,
-   "headroom_500_usd_m": 57.7,
-   "unrounded": 608.4
-  },
-  "J3 alone": {
-   "capacity_usd_m": 1050,
-   "headroom_500_usd_m": 296.3,
-   "unrounded": 1056.2
-  },
-  "J3 dropped": {
-   "capacity_usd_m": 50,
-   "headroom_500_usd_m": -231.0,
-   "unrounded": 67.3
+   "headroom_before_2027_usd_m": 168.3,
+   "program": "C"
   }
  },
  "family": {
-  "defensive follow-ons from 110 on the index, 2 quarters late": {
-   "capacity_usd_m": 300,
-   "defensive_follow_ons_usd_m": 191.8,
-   "net_cash_needs_500_usd_m": 1039.8,
-   "unrounded": 307.9
-  },
-  "defensive follow-ons from 90 on the index, 2 quarters late": {
-   "capacity_usd_m": 200,
-   "defensive_follow_ons_usd_m": 247.7,
-   "net_cash_needs_500_usd_m": 1095.5,
-   "unrounded": 203.2
-  },
-  "defensive follow-ons measured and carried on the held companies' latest value, not their cost": {
-   "capacity_usd_m": 250,
-   "defensive_follow_ons_usd_m": 181.6,
-   "net_cash_needs_500_usd_m": 1061.3,
-   "unrounded": 267.4
-  },
-  "fees 5 per cent below the investing-period median": {
-   "capacity_usd_m": 275,
-   "defensive_follow_ons_usd_m": 213.0,
-   "net_cash_needs_500_usd_m": 1051.7,
-   "unrounded": 284.8
+  "fees 5 percent below the investing-period median": {
+   "headroom_before_2027_usd_m": 87.0,
+   "program": "D"
   },
   "new deals at their normal pace, no deal-market term": {
-   "capacity_usd_m": 225,
-   "defensive_follow_ons_usd_m": 212.8,
-   "net_cash_needs_500_usd_m": 1076.9,
-   "unrounded": 242.2
+   "headroom_before_2027_usd_m": 38.3,
+   "program": "D"
   },
   "recycling at the median of every manager": {
-   "capacity_usd_m": 200,
-   "defensive_follow_ons_usd_m": 212.8,
-   "net_cash_needs_500_usd_m": 1093.1,
-   "unrounded": 207.7
+   "headroom_before_2027_usd_m": 43.4,
+   "program": "D"
   },
-  "slips fitted on a 1-quarter window against 105 (the next-best fit)": {
-   "capacity_usd_m": 250,
-   "defensive_follow_ons_usd_m": 212.8,
-   "net_cash_needs_500_usd_m": 1066.0,
-   "unrounded": 258.0
+  "slips fitted on a 1-quarter window against 105": {
+   "headroom_before_2027_usd_m": 73.0,
+   "program": "D"
   },
-  "slips fitted on a 1-quarter window against 95 (the next-best fit)": {
-   "capacity_usd_m": 275,
-   "defensive_follow_ons_usd_m": 212.8,
-   "net_cash_needs_500_usd_m": 1054.0,
-   "unrounded": 280.1
+  "slips fitted on a 1-quarter window against 95": {
+   "headroom_before_2027_usd_m": 83.1,
+   "program": "D"
   },
-  "the line stock with no recycling since the last audited year-end": {
-   "capacity_usd_m": 250,
-   "defensive_follow_ons_usd_m": 212.7,
-   "net_cash_needs_500_usd_m": 1064.4,
-   "unrounded": 261.6
+  "the benchmark slice of funds seven to eleven years old": {
+   "headroom_before_2027_usd_m": 86.8,
+   "program": "D"
+  },
+  "the benchmark slice of funds six to ten years old": {
+   "headroom_before_2027_usd_m": 99.5,
+   "program": "D"
+  },
+  "the benchmark slice of funds with 20 percent or more left to call": {
+   "headroom_before_2027_usd_m": 50.3,
+   "program": "D"
+  },
+  "the benchmark slice of funds with 5 percent or more left to call": {
+   "headroom_before_2027_usd_m": 70.9,
+   "program": "D"
+  },
+  "the first channel capped at a shortfall of 0.25": {
+   "headroom_before_2027_usd_m": 78.4,
+   "program": "D"
+  },
+  "the first channel capped at a shortfall of 0.35": {
+   "headroom_before_2027_usd_m": 83.5,
+   "program": "D"
+  },
+  "the second channel from a shortfall of 0.43": {
+   "headroom_before_2027_usd_m": 60.7,
+   "program": "D"
+  },
+  "the second channel from a shortfall of 0.49": {
+   "headroom_before_2027_usd_m": 107.4,
+   "program": "D"
+  },
+  "the six managers' stock rolled from the file's end, not re-anchored at the 2025 and 2026 audits": {
+   "headroom_before_2027_usd_m": 63.3,
+   "program": "D"
   }
  },
- "fees_by_half_usd_m": {
-  "H1 2027": 44.8,
-  "H1 2028": 38.6,
-  "H2 2027": 40.4,
-  "H2 2028": 37.1
- },
- "follow_on_rate_per_10_points_pct": 0.64,
- "fy2027_distribution_usd_m": 286.5,
- "headroom_500_usd_m": -123.3,
- "line_stock_by_strategy_usd_m": {
-  "Buyout": 96.9,
-  "Growth equity": 29.5,
-  "Infrastructure": 33.3,
-  "Private credit": 77.8,
-  "Real estate": 0.0,
-  "Venture capital": 0.1
- },
- "line_stock_usd_m": 237.7,
- "minimum_reserve_usd_m": 1200.0,
- "net_cash_needs_500_usd_m": 1060.7,
- "pending_calls_on_managers_dates_usd_m": 256.1,
- "pending_calls_total_usd_m": 148.9,
+ "headroom_before_2027_usd_m": 78.3,
+ "line_stock_six_managers_audited_usd_m": 2.2,
+ "line_stock_six_managers_usd_m": 138.5,
+ "line_stock_usd_m": 263.8,
+ "minimum_reserve_usd_m": 1150.0,
+ "net_needs_before_2027_usd_m": 909.1,
+ "own_record_max_shortfall": 0.408,
+ "past_first_closes": 94,
  "pending_funds": [
   {
    "C": 196.0,
-   "exp": 110,
    "fid": "WX-BO-106",
    "fund": "Thornwick Capital VI",
-   "slip": 2.47,
-   "st": "BO"
+   "slip": 2.47
   },
   {
    "C": 207.0,
-   "exp": 110,
    "fid": "WX-BO-110",
    "fund": "Kelstone Equity V",
-   "slip": 2.47,
-   "st": "BO"
+   "slip": 2.47
   },
   {
    "C": 154.0,
-   "exp": 110,
    "fid": "WX-BO-127",
    "fund": "Rudgely Equity VII",
-   "slip": 2.47,
-   "st": "BO"
+   "slip": 2.47
   },
   {
    "C": 110.0,
-   "exp": 111,
    "fid": "WX-GE-137",
    "fund": "Brackley Growth VIII",
-   "slip": 3.75,
-   "st": "GE"
+   "slip": 3.75
   }
  ],
- "plan_calls_500_by_half_usd_m": {
-  "H1 2027": 72.6,
-  "H1 2028": 64.2,
-  "H2 2027": 75.0,
-  "H2 2028": 54.4
+ "program": "D",
+ "program_total_usd_m": 45.0,
+ "programs": {
+  "A": {
+   "calls_usd_m": 247.6,
+   "headroom_usd_m": -169.3,
+   "passes": false,
+   "total_usd_m": 500.0
+  },
+  "B": {
+   "calls_usd_m": 169.3,
+   "headroom_usd_m": -91.0,
+   "passes": false,
+   "total_usd_m": 365.0
+  },
+  "C": {
+   "calls_usd_m": 123.8,
+   "headroom_usd_m": -45.5,
+   "passes": false,
+   "total_usd_m": 265.0
+  },
+  "D": {
+   "calls_usd_m": 18.4,
+   "headroom_usd_m": 59.9,
+   "passes": true,
+   "total_usd_m": 45.0
+  }
  },
- "plan_slips": [
-  {
-   "C": 150.0,
-   "exp": 108,
-   "fund": "Oakhanger Capital V",
-   "slip": 0.02,
-   "st": "BO"
+ "re_up_calls_usd_m": {
+  "Corvane Ventures VI": 18.4,
+  "Ewelme Real Estate VI": 38.6,
+  "Harpsden Credit V": 78.3,
+  "Oakhanger Capital V": 66.8,
+  "Wendlebury Growth VI": 45.5
+ },
+ "reflex_drops": {
+  "J3 the covered managers' line stock read as recycled proceeds": {
+   "headroom_before_2027_usd_m": 342.0,
+   "program": "A"
   },
-  {
-   "C": 100.0,
-   "exp": 108,
-   "fund": "Wendlebury Growth VI",
-   "slip": 0.02,
-   "st": "GE"
+  "J4 no defensive follow-ons or rescue financings": {
+   "headroom_before_2027_usd_m": 324.2,
+   "program": "A"
   },
-  {
-   "C": 45.0,
-   "exp": 108,
-   "fund": "Corvane Ventures VI",
-   "slip": 0.02,
-   "st": "VC"
+  "J5 the pending funds on their managers' first-close dates": {
+   "headroom_before_2027_usd_m": -15.1,
+   "program": "none"
   },
-  {
-   "C": 70.0,
-   "exp": 108,
-   "fund": "Ewelme Real Estate VI",
-   "slip": 0.02,
-   "st": "RE"
+  "J6 no investment-period extensions": {
+   "headroom_before_2027_usd_m": 106.0,
+   "program": "D"
   },
-  {
-   "C": 135.0,
-   "exp": 109,
-   "fund": "Harpsden Credit V",
-   "slip": 0.02,
-   "st": "PC"
+  "J6 one deal-market term for every strategy": {
+   "headroom_before_2027_usd_m": 78.3,
+   "program": "D"
   }
- ],
- "recycled_by_half_usd_m": {
-  "H1 2027": 14.9,
-  "H1 2028": 9.4,
-  "H2 2027": 13.5,
-  "H2 2028": 1.0
  },
  "reserve_usd_m": 2137.41,
  "routes": {
-  "the benchmark's 2008-10 call rates replayed on the commitments not yet called": {
-   "capacity_usd_m": 50,
-   "headroom_500_usd_m": -223.4,
-   "net_cash_needs_500_usd_m": 1160.8,
-   "unrounded": 73.4
+  "one straight support line through the record, the last audited borrowings carried": {
+   "headroom_before_2027_usd_m": 280.1,
+   "program": "A"
   },
-  "the careful route: the gap between investments and calls read as recycled proceeds, one investment pace for every follow-on, pending and new funds closing on their managers' dates": {
-   "capacity_usd_m": 850,
-   "headroom_500_usd_m": 188.5,
-   "net_cash_needs_500_usd_m": 748.9,
-   "unrounded": 853.2
+  "the benchmark's 2008-10 call rates replayed on the commitments not yet called": {
+   "headroom_before_2027_usd_m": -4.1,
+   "program": "none"
+  },
+  "the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried": {
+   "headroom_before_2027_usd_m": 339.7,
+   "program": "A"
   },
   "the golden": {
-   "capacity_usd_m": 250,
-   "headroom_500_usd_m": -123.3,
-   "net_cash_needs_500_usd_m": 1060.7,
-   "unrounded": 268.6
+   "headroom_before_2027_usd_m": 78.3,
+   "program": "D"
   },
-  "the latest audited borrowings carried as the line stock at 31 December 2026": {
-   "capacity_usd_m": 625,
-   "headroom_500_usd_m": 70.2,
-   "net_cash_needs_500_usd_m": 867.2,
-   "unrounded": 631.8
+  "the pacing model recalibrated on the 2022 to 2024 exit drought": {
+   "headroom_before_2027_usd_m": 170.7,
+   "program": "C"
   },
-  "the pacing model recalibrated on 2022 and 2023": {
-   "capacity_usd_m": 150,
-   "headroom_500_usd_m": -185.7,
-   "net_cash_needs_500_usd_m": 1123.1,
-   "unrounded": 171.0
+  "the plateau held, the six managers bridged": {
+   "headroom_before_2027_usd_m": 251.6,
+   "program": "A"
+  },
+  "the rescue channel found, the six managers' stock read off the file as it stands": {
+   "headroom_before_2027_usd_m": 170.5,
+   "program": "B"
   },
   "the textbook pacing model on the capital accounts": {
-   "capacity_usd_m": 550,
-   "headroom_500_usd_m": 25.5,
-   "net_cash_needs_500_usd_m": 911.9,
-   "unrounded": 552.9
+   "headroom_before_2027_usd_m": 300.1,
+   "program": "A"
   }
  },
- "shortfall_500_usd_m": 123.3,
+ "six_managers": [
+  "Hambleden Real Estate",
+  "Oakhanger Capital",
+  "Pellworth Partners",
+  "Shabbington Infrastructure",
+  "Swyncombe Credit",
+  "Waterperry Infrastructure"
+ ],
+ "six_managers_live_funds": 18,
  "slip": {
   "a": 0.0202,
   "b": 6.1436,
@@ -405,58 +368,43 @@
   "sse": 10.0345,
   "win": 1
  },
- "slip_per_10_points_quarters": 0.61,
  "spending_24m_usd_m": 573.0,
- "stress_short_rate_pct": 5.25,
+ "stress_max_shortfall": 0.658,
  "support": {
+  "cap": 0.3,
   "e_star": 1.0,
   "lag": 2,
-  "sigma": 0.064,
-  "sse": 0.8642
+  "ratio": 4.4869,
+  "sigma": 0.0662,
+  "sigma2": 0.2969,
+  "sigma_lin": 0.0564,
+  "sse": 0.5062,
+  "th": 0.45
  },
- "test_250": {
-  "calls_budget": 133.2,
-  "calls_closed": 1123.3,
-  "calls_pending": 148.9,
-  "distributions": 1050.9,
-  "fees": 179.6,
-  "headroom": 9.9,
-  "left": 1209.9,
-  "minimum": 1200.0,
-  "net": 927.5,
-  "recycled": 38.9,
-  "reserve": 2137.4,
-  "spending": 573.0,
-  "stock": 237.7,
-  "support": 212.8
+ "support_by_half_usd_m": {
+  "H1 2027": 0.0,
+  "H1 2028": 157.6,
+  "H2 2027": 19.2,
+  "H2 2028": 103.1
  },
- "test_500": {
-  "calls_budget": 266.4,
-  "calls_closed": 1123.3,
-  "calls_pending": 148.9,
-  "distributions": 1050.9,
-  "fees": 187.8,
-  "headroom": -123.3,
-  "left": 1076.7,
-  "minimum": 1200.0,
-  "net": 1060.7,
-  "recycled": 38.9,
-  "reserve": 2137.4,
-  "spending": 573.0,
-  "stock": 237.7,
-  "support": 212.8
- },
+ "support_total_usd_m": 279.9,
  "unfunded_by_strategy_usd_m": {
-  "Buyout": 1918.2,
-  "Growth equity": 433.4,
-  "Infrastructure": 840.8,
-  "Private credit": 524.6,
-  "Real estate": 288.1,
-  "Venture capital": 186.0
+  "Buyout": 2025.3,
+  "Growth equity": 466.0,
+  "Infrastructure": 834.7,
+  "Private credit": 488.6,
+  "Real estate": 287.1,
+  "Venture capital": 202.0
  },
- "unfunded_total_usd_m": 4191.1,
+ "unfunded_total_usd_m": 4303.7,
  "years": [
+  2008,
+  2009,
+  2010,
+  2022,
   2023,
+  2024,
+  2025,
   2026,
   2027,
   2028

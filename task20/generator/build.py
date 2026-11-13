@@ -57,7 +57,7 @@ SOURCES = {
     PK.F_MKT: ("Simulated quarterly market series (exit activity index, public equity index, short rate)", "evidence"),
     DC.F_LIQ: ("Simulated year-end liquid holdings report", "evidence"),
     DC.F_SPEND: ("Simulated spending distributions by fiscal year", "evidence"),
-    DC.F_PLAN: ("Simulated consultant's draft pacing plan for 2027", "evidence"),
+    DC.F_PLAN: ("Simulated consultant's draft pacing plan for 2027, with its alternative programs", "evidence"),
     DC.F_PEER: ("Simulated consultant's peer endowment survey", "distractor"),
     DC.F_POLICY: ("The endowment's liquidity policy (written for this task)", "standard"),
     DC.F_IPS: ("The endowment's investment policy statement (written for this task)", "distractor"),
@@ -80,25 +80,27 @@ def build_into(root):
     DC.policy(os.path.join(tgt, DC.F_POLICY)); DC.ips(os.path.join(tgt, DC.F_IPS)); DC.capplan(os.path.join(tgt, DC.F_CAPPLAN))
     for name, (cr, lb, c0, c1, co) in WORKBOOKS.items():
         PP.normalize_ooxml(os.path.join(tgt, name), cr, lb, c0, c1, excel=True, company=co)
-    R = A.full(tgt)
+    R = A.full5(tgt)
     F, E = FG.write(R, root)
     GD.workbook(F, R, os.path.join(gld, GD.XLSX))
     PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Caitlin Hill", "Caitlin Hill", "2027-03-13T15:02:00Z", "2027-03-16T19:41:26Z",
                        excel=True, company="Wexmoor University")
     GD.memo(F, R, os.path.join(gld, GD.MEMO))
+    PP.normalize_docx(os.path.join(gld, GD.MEMO), "Caitlin Hill", "Caitlin Hill", "2027-03-16T13:21:00Z", "2027-03-16T20:07:00Z",
+                      revision=7, total_time=86, seed="task20-memo-2027", company="Wexmoor University")
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F, R))
     pulled = {n: dt.date(*SAVED[n][:3]).isoformat() for n in SAVED}
-    meta = {"task": "task20", "architecture": 4, "as_of": AS_OF, "position_date": "2026-12-31",
-            "decision": "the largest 2027 private-fund commitment budget Wexmoor University's endowment can approve under its liquidity policy",
+    meta = {"task": "task20", "architecture": 5, "as_of": AS_OF, "position_date": "2026-12-31",
+            "decision": "which of Corrigan Hart's 2027 commitment programs Wexmoor University's endowment can adopt under its liquidity policy",
             "deliverables": [GD.XLSX, GD.MEMO],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
-            "stated_inputs": ["500", "2027", "2028", "2026"],
+            "stated_inputs": ["2027", "2028", "2026", format(int(DC.CUSHION), ","), str(int(DC.CUSHION))],
             "field_terms": ["capital call", "distribution", "unfunded commitment", "first close", "subscription line", "recycling",
-                            "pacing", "liquidity", "stress"],
+                            "pacing", "liquidity", "stress", "follow-on", "rescue financing", "investment period"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
                           "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund "
-                                     "programme, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"}
+                                     "program, its managers, their portfolio companies, an industry benchmark and the market), CC BY 4.0"}
                       for n, (s, r) in sorted(SOURCES.items())}}
     json.dump(meta, open(os.path.join(root, "metadata.json"), "w"), indent=1)
     return F

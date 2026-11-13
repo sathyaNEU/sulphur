@@ -1,60 +1,74 @@
-# task20 determinism check, pass 2
+# Determinism check, pass 2 — task20
 
-## Verdict
+## Verdict: DETERMINISTIC
 
-DETERMINISTIC
+## Disposition: APPROVE
 
-## Disposition
-
-APPROVE
+No model rerun needed. Every figure I could fully reconstruct from the shipped files reproduced the submission's
+numbers exactly (not just within band); the one component I could only partially rebuild (the stressed capital
+calls) is explicitly licensed by the policy itself as a judgment call, and the specific rival shortcuts the design
+anticipates are each reproducible but fall outside the stated bands and are each ruled out by a named, filed fact.
 
 ## Evidence
 
-### Mechanical recomputation (independent, from the shipped files)
+Fresh unzip of target.zip into an isolated workspace; all figures below were recomputed independently from the 14
+shipped files (capital account statements, custodian cash activity, fund audited financials, industry benchmark,
+liquid holdings, manager portfolio activity, market series, peer survey, private commitment register, spending
+distributions, pacing plan, and the three PDFs) using only the method the policy PDF and the answer blocks state.
 
-| Figure | Block value (band) | My recomputation | Match |
+| Figure | Submission value | My recomputation | Match |
 |---|---|---|---|
-| Liquid reserve at policy factors | 2,137.4 | 2,137.41 (cash/MMF/UST 499.7x1.0 + IG bonds 383.5x0.9 + public equities 1,380.7x0.7 + redeemable-within-24mo hedge funds 362.3x0.9 + non-redeemable hedge funds 412.8x0 + other 152x0) | Exact. Confirms the pass-2 fix: computed using plain 31 Dec values, no stress revaluation. |
-| Spending (8 quarters) | 573.0 | 8 x (286.5/4) = 573.0, FY2027 approved distribution read from spending_distributions_FY2014_FY2027.csv | Exact |
-| Commitments not yet called, by strategy | Buyout 1,918.2; Growth equity 433.4; VC 186.0; RE 288.1; Infra 840.8; PC 524.6; total 4,191.1 | Buyout 1,918.2; Growth equity 433.4; VC 186.0; RE 288.1; Infra 840.8; PC 524.6; total 4,191.0 | Exact per strategy, total within the stated 0.5 tolerance. Independently rebuilt from capital_account_statements (superseded row dropped), custodian Q4 activity for the 2 late funds (WX-BO-102, WX-BO-113), and the register's 4 pending-first-close funds at full commitment. No fund had both a lapsed term and a nonzero unfunded balance, so the "released at term end" rule binds nothing in this cut, consistent with the data. |
-| Distributions in the stress, by half-year | H1'27 402.8 (402.3-403.3); H2'27 280.2 (279.7-280.7); H1'28 169.5 (169.0-170.0); H2'28 198.4 (197.9-198.9) | 402.80; 280.18; 169.51; 198.36 | All land at the center of the stated band. Rebuilt by summing, per quarter, each Wexmoor fund's 31-Dec-2026 value (late 2 funds adjusted by custodian Q4 net) times its strategy's rate = sum(benchmark distributions_pct_of_commitment that quarter) / sum(benchmark nav_pct_of_commitment at prior quarter-end), for the matching 2008Q3-2010Q2 quarter. |
-| Net cash needs at USD 500m budget | 1,060.7 | 573.0 + 1,123.3 (first-close calls) + 148.9 (yet-to-close calls) + 266.5 (new-budget calls at 53.3/100m x 5) - 1,050.9 (distributions) = 1,060.8 | Within rounding (five inputs each rounded to 0.1) |
-| Headroom at USD 500m | -123.3 | 2,137.4 - 1,060.7 - 1,200 = -123.3 | Exact |
-| Headroom at USD 250m | +9.9 | 2,137.4 - 927.55 - 1,200 = 9.85 | Within rounding |
-| Largest budget that passes (pre-step) | 268.6 | Solve 794.3 + 0.533X = 937.4 => X = 268.5 | Matches; confirms stepping DOWN (not nearest) to 250, since I separately verified 275 fails the test by about 3.5m headroom |
-| First-close slip coefficient | 0.61 quarters per 10 points below 100 | Regressed slip (quarters) on index deficit/10 across all 90 historical first closes in the register (reference = exit index at the quarter before the originally expected close): slope through origin 0.621, OLS slope 0.614 (intercept ~0.02), R²=0.85 | Matches closely; a real, well-fit empirical relationship, not an arbitrary pick |
-| First-close slip applied to the 4 pending funds | 2.5 and 3.8 quarters | My regression-based slip for the stress path: ~2.43-2.47 quarters (3 funds due Q3'27) and ~3.70-3.77 quarters (1 fund due Q4'27) | Close but not exact (within about 0.1-0.3 quarters); consistent with a well-determined fit, not a planted number |
-| Subscription-line clean-down mechanism | "2022 and 2023 calls show each manager cleaning its lines down" | fund_audited_financials: total credit facility borrowings across all funds = 0 in FY2022, FY2023 and FY2024 (versus USD 2.9-5.6bn in 2019-2021), matching the elevated short-rate years | Mechanism confirmed present and visible in the data |
-| Capital calls include fees and expenses | (used throughout Results 4/5) | unfunded_commitment_usd decreases, every period, by exactly contributions_investments + contributions_management_fees + contributions_fund_expenses (checked on WX-BO-102's last 4 statements) | Exact; closes the fork, the file's own arithmetic forces fees/expenses into "capital calls" |
-| Defensive follow-on coefficient | 0.64 pct of cost per quarter per 10 points below 100, fit on 2020 and 2022-2024 | Reconstructed two readings of "share of those companies' cost": (a) follow-on $ / cost basis of the full held-2y+ population -> slope 0.41 (R²=0.99); (b) follow-on $ / cost basis of only the companies that received a follow-on that quarter -> slope 1.18. The stated 0.64 sits inside this bracket | Could not pin the exact denominator convention with certainty; qualitative relationship (rises as the lagged exit index falls below 100) is strong and real in both readings. See note below. |
+| Liquid reserve at policy factors | 2,137.4 | 2,137.41 (cash/MM/T-bills 100% + IG bonds 90% + public equities 70% + hedge funds "redeemable within 24 months" 90%, all 19 holdings, classes read verbatim off the file's own "Policy liquidity class" column) | Exact |
+| Spending, 8 quarters | 573.0 | 573.0 (`spending_distributions...csv`: FY2027 `approved_distribution_usd_m` = 286.5; 8 × (286.5/4)) | Exact |
+| Distributions in stress, H1'27/H2'27/H1'28/H2'28 | 364.1 / 285.8 / 157.2 / 202.6 | 364.1 / 285.8 / 157.2 / 202.6 (fund NAV at 31 Dec 2026 by strategy, with the 2 late statements trued up via custodian Q4 cash, × the industry benchmark's strategy distribution rate in the matching 2008Q3–2010Q2 quarter, summed per policy section 7's literal wording) | Exact, all 4 |
+| Commitments not yet called at 31 Dec 2026, by strategy | Buyout 2,025.3; Growth equity 466.0; Venture capital 202.0; Real estate 287.1; Infrastructure 834.7; Private credit 488.6; total 4,303.7 | identical to the cent after excluding the one superseded `WX-GE-141` row (no net effect, values tie), truing up the 2 late statements (`WX-BO-102`, `WX-BO-113`) with `custodian_cash_activity_2026Q4.csv`, adding the 4 pending-first-close funds at full commitment, and confirming zero "released" cases (every fund whose term has already ended already shows 0 unfunded) | Exact, all 6 strategies + total |
+| Program commitment totals A/B/C/D | 500 / 365 / 265 / 45 | 500 / 365 / 265 / 45, read directly off `corrigan_hart_pacing_plan_2027.xlsx` sheet "Programs" | Exact |
+| Headroom before any 2027 commitment | 78.3 (30.3 to 115.4) | 78.2 from Reserve 2,137.41 − Spending 573.0 − Calls 1,345.9 + Distributions 1,009.7 − Minimum 1,150, using the submission's own calls total (I could not independently rebuild the calls total to the decimal — see below) | Within 0.1 of stated value; consistent with per-line rounding |
+| 6-manager credit-line "last audited balance" rival | 2.2 (named as the wrong path, → headroom 168.3, program C) | 2.24, reproduced exactly by scaling each of the six managers' active funds' FY2025 (or latest) audited "Credit facility borrowings" by Wexmoor's commitment/fund-size share | Exact — confirms this rival is real, and that it lands at 168.3, outside the stated band (30.3–115.4) |
 
-### Gate C: the 10 named forks
+**Forks run (Gate C):**
 
-1. **Half-year scenario** (H1/H2 2027, H1/H2 2028): pinned by the prompt itself. Closed.
-2. **Which funds count as having held a first close**: pinned by the register's First close date (null only for the 4 "pending first close" status rows). Closed.
-3. **Fees and expenses as capital calls**: closed by the capital account arithmetic above and by custodian_cash_activity, which records only one combined "capital call" movement type (a solver cannot split it even if they wanted to).
-4. **Released commitments at term end**: pinned by liquidity policy section 3; checked and currently binds zero funds (no fund has both a lapsed term and a nonzero unfunded balance), so it cannot move the figure regardless of reading.
-5. **The late-statement value**: pinned verbatim by policy section 7 (30 Sept value + Q4 calls - Q4 distributions per the custodian). Used directly; distributions reproduced almost exactly.
-6. **The benchmark rate**: pinned verbatim by policy section 7 (quarter's distributions_pct_of_commitment over prior-quarter nav_pct_of_commitment, summed over the strategy's benchmark funds). Used directly; reproduced almost exactly.
-7. **The stress path**: pinned by policy section 6 (exit index path from 2008Q3-2010Q2 scaled to the pre-test level; short rate +2.5pp; confirmed 31-Dec-2026 short rate 2.75% + 2.5 = 5.25%, matching Step 4's figure exactly).
-8. **The budget's spread across the pacing plan**: closed by the fix. The "2027 proposed commitments" sheet (Oakhanger 150 / Wendlebury 100 / Corvane 45 / Ewelme 70 / Harpsden 135, by strategy) and the "Long-range pacing" sheet's 2027 row (150/100/45/70/0/135) now agree exactly, so there is no longer a choice between two different "proportions."
-9. **The USD 25 million steps**: pinned by policy section 5. Verified the step is applied by rounding DOWN to the largest passing multiple (250, not 275, since 275 fails by about 3.5m), not by nearest rounding.
-10. **Whether the reserve is revalued along the stress**: closed by the fix. Policy section 4 now states explicitly: "The factors stand for the stress in section 6, so the holdings are counted at their 31 December values and not revalued along its path." My from-scratch reserve computation using plain 31-Dec values and the liquidity-class factors alone reproduces 2,137.4 exactly, with no additional stress revaluation step; the alternative reading (apply the section 6 equity stress schedule to the reserve) is now explicitly ruled out by this sentence.
+1. **Six managers' credit-line stock — roll-forward (138.5) vs. last audited balance (2.2).** Ruled out: the
+   audited-financials file's own `Fiscal year end` column shows its latest point for Dec-FYE funds is 31 Dec 2025,
+   a full year stale against the policy's 31 Dec 2026 test date (section 2); more current information (capital
+   account statements and 19 other managers' activity data) runs to 31 Dec 2026 and is filed. I also confirmed the
+   mechanism is visibly carried by the data, not invented: `fund_audited_financials` shows credit facility
+   borrowings at ~0 for nearly every fund at every fiscal year end (habitual clean-down before audit), while the
+   19 managers whose activity file runs to 2026 show continuing investment activity between those year ends that
+   the LP's own capital calls do not fully track — the same gap-reopens-after-clean-down pattern the six managers
+   would show if their file didn't stop in 2024. Both readings are computable from the files, but only the
+   roll-forward is current as of the stated test date; the naive reading lands at headroom 168.3, outside the
+   stated band.
+2. **Support response — fitted curve extended on the benchmark's deeper 2008-09 history vs. held flat at the
+   endowment's own observed plateau.** The policy's own stress (section 6) is calibrated to 2008Q3–2010Q2, deeper
+   than the shortfall the endowment's own funds have on record (consistent with the Step-by-Step's "the stress
+   goes further than the record"); the industry benchmark file is the only filed source with a deeper crisis to
+   extend against. Holding flat lands at headroom 251.6 (program A), outside the stated band.
+3. **"Net cash needs of the eight quarters" — single cumulative test vs. a running quarter-by-quarter minimum.**
+   Ruled out as a live fork: policy section 4 states the reserve is "counted at their 31 December values and not
+   revalued along its path," i.e. there is no time-varying reserve to check at interim points — the test is
+   necessarily the single difference the section 5 sentence literally states, which is what I used above and what
+   reproduces 78.2–78.3.
+4. **Harvesting funds whose term ends inside the 2027-28 window — released vs. called in full.** Checked for
+   leverage on the final figures: the 10 funds in this category carry ~USD 242.7m of unfunded commitment, but
+   their actual 2025-26 capital-call pace (from `capital_account_statements`) totals only ~USD 2.1m/quarter
+   combined (~USD 16.8m over 8 quarters flat-extrapolated) — low enough that whichever convention is used for the
+   residual, the swing is small next to the 1,345.9m total calls. This is not a material fork.
+5. **"Capital calls... judged on the evidence the Office of Investments holds" (policy section 8).** This is the
+   policy's own license for the calls figures to carry real estimation freedom, unlike distributions (section 7,
+   an exact formula) or the reserve (section 4, exact factors) — consistent with the bands the submission states
+   only on the calls-dependent figures (headroom, the four half-year calls totals) and not on the exactly-filed
+   ones (reserve, spending, distributions, commitments not yet called).
 
-No surviving defensible alternative was found for any of the 10 named forks; each is closed by a specific named fact in the policy text, the register, the custodian file, or the capital account arithmetic itself.
+**Residual gap (reported honestly, not as a defect):** I could not fully rebuild the four half-year calls totals
+(532.7 / 189.9 / 342.5 / 280.8) to the decimal inside budget — the "pace fitted to the covered funds" roll-forward
+and the benchmark curve-splice are genuinely laborious multi-step computations, not a lookup. Every input they need
+(six-manager cutoff, audited credit-facility borrowings, manager-level investment activity, exit index, benchmark
+cashflows) is filed; I verified the method's *inputs* and its *named rivals'* consequences exactly (table above),
+but not the final modeled total bit-for-bit. I found no contradiction, and the program decision has real margin
+(D clears by 59.9m of headroom; C fails even at the top of the stated headroom band, 115.4 against C's 123.8 of
+calls) — this is not a knife-edge that the unverified piece could plausibly flip on its own.
 
-### Gate B
+## Fix: none
 
-Every decisive fact traces to a shipped file: the liquidity class factors and their meaning (policy section 4, matches liquid_holdings_2026-12-31.xlsx's own class labels verbatim, including "redeemable within 24 months" matching the policy's "within the eight quarters"); the USD 1,200m minimum and USD 25m steps (policy section 5); the stress definition (policy section 6, reproduced against market_series_quarterly); the distribution and capital-call conventions (policy sections 7-8); the FY2027 approved distribution of 286.5 (spending_distributions CSV, not the IPS's formula, which is background only and not needed); the pacing plan proportions (corrigan_hart_pacing_plan_2027.xlsx, both sheets now agreeing). No external dependency found. No vocabulary gap: "first close," "credit facility," "pacing," "unfunded commitment" etc. are literal column headers in the shipped files, directly observed.
-
-### Gates D and E
-
-The difficulty is analytical (reconciling late statements, superseded rows, and pending funds; correctly fitting rather than naively extrapolating the first-close-slip and follow-on relationships; applying the stress definition literally), not semantic. The prompt commits to one call ("the largest 2027 total that passes") and pins population/window/unit for each supplementary ask (by strategy, by half-year, by first-close status, "commitments made by the end of 2026" excluding the new budget). No bundling, no goal-vagueness found.
-
-## Note (not a fix)
-
-The defensive follow-on coefficient (0.64 pct per 10 points, feeding the USD 212.8m Critical Component 2 figure) is the one place I could not pin the exact "share of cost" denominator convention by independent reconstruction; my two natural readings bracket the stated value (0.41 and 1.18 against 0.64) rather than confirming it to the decimal. This does not reach the tightest-banded figure: the 2-quarter lag means the lagged exit index is still above 100 for all of H1 2027 (the quarters feeding the tightly-banded 517.0, band 505.0-532.0), so the follow-on effect lands entirely in H2 2027 and 2028, whose bands are proportionally wider (+-6.6% to +-9%). The policy itself leaves the capital-call method open ("judged from their record," section 8), so this is reported as a residual uncertainty, not a determinism defect.
-
-## Fix
-
-None.
+The task is forced from the shipped files as written; no prompt, input-file or answer-block change is indicated.

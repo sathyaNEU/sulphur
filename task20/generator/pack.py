@@ -28,6 +28,8 @@ MGR_NAMES = {
     "IN1": "Garsington Infrastructure", "IN2": "Shabbington Infrastructure", "IN3": "Waterperry Infrastructure",
     "PC1": "Harpsden Credit", "PC2": "Lewknor Credit Partners", "PC3": "Bix Direct Lending", "PC4": "Swyncombe Credit",
 }
+# the managers whose company-level reporting stopped after 2024 (the look-through feed covers the others)
+SUMMARY_ONLY = sorted(str(x) for x in np.random.default_rng(10).choice([g for g in ["BO1", "BO2", "BO3", "BO4", "BO5", "BO6", "BO7", "BO8", "GE1", "GE2", "GE3", "VC1", "VC2", "VC3", "VC4", "RE1", "RE2", "RE3", "IN1", "IN2", "IN3", "PC1", "PC2", "PC3", "PC4"]], 6, replace=False))
 ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
 STRAT_NAME = {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate", "IN": "Infrastructure", "PC": "Private credit"}
 
@@ -38,6 +40,46 @@ def qend(i):
 def qmid(i, frac=0.5):
     a = qend(i - 1) + dt.timedelta(days=1); b = qend(i)
     return a + dt.timedelta(days=int((b - a).days * frac))
+
+_ON = ["Bra", "Cor", "Dal", "Fen", "Gal", "Hal", "Jor", "Kel", "Lum", "Mar", "Nor", "Ost", "Pel", "Quen", "Ros", "Sel", "Tal",
+       "Ver", "Wyn", "Zel", "Ard", "Bel", "Cal", "Dor", "Eld", "Fal", "Gry", "Hev", "Kav", "Lor", "Mav", "Nel", "Orv", "Pra", "Rul",
+       "Sav", "Tem", "Ul", "Vel", "Wex"]
+_END = ["exa", "ira", "ion", "ova", "ent", "ara", "ix", "ona", "ia", "eon", "ana", "ora", "ell", "yn", "eta", "ium", "ari", "ovo",
+        "anta", "ido"]
+_SECTOR = {"BO": ["Industries", "Packaging", "Foods", "Services", "Manufacturing", "Distribution", "Brands", "Components", "Group"],
+           "GE": ["Software", "Health", "Payments", "Logistics", "Learning", "Systems", "Analytics", "Insurance Services"],
+           "VC": ["Labs", "Bio", "Robotics", "Security", "Health", "AI", "Energy", "Therapeutics", "Networks"],
+           "PC": ["Holdings", "Industries", "Services", "Software", "Healthcare", "Logistics", "Brands"]}
+_PLACE = ["Linden", "Cedar", "Harbor", "Maple", "Willow", "Granite", "Summit", "Brook", "Hawthorn", "Aspen", "Juniper", "Sycamore",
+          "Laurel", "Birch", "Copper", "Falcon", "Heron", "Prairie", "Mesa", "Canyon", "Bluff", "Sterling", "Quarry", "Orchard"]
+_RE = ["Court Apartments", "Point Logistics Center", "Ridge Medical Office", "Self Storage", "Crossing Industrial Park",
+       "Commons Shopping Center", "Plaza Office", "Park Life Science Campus", "Station Apartments"]
+_IN = ["Solar", "Wind", "Water Utility", "Fiber", "Energy Storage", "Gas Storage", "Data Center", "Transit Parking", "Renewable Gas"]
+_BEND = ["Hollow", "Creek", "Flats", "Bend", "Valley", "Mill", "Springs", "Fork"]
+_NAMES = {}
+
+
+def company_name(fid, st, dno):
+    """the name a manager's report gives the company, property, asset or borrower behind one deal; one name each."""
+    key = (fid, dno)
+    if key in _NAMES:
+        return _NAMES[key]
+    used = set(_NAMES.values())
+    k = 0
+    while True:
+        rng = np.random.default_rng(zlib.crc32(("%s-%d-%d" % (fid, dno, k)).encode()))
+        if st == "RE":
+            nm = "%s %s" % (_PLACE[rng.integers(len(_PLACE))], _RE[rng.integers(len(_RE))])
+        elif st == "IN":
+            nm = "%s %s %s" % (_PLACE[rng.integers(len(_PLACE))], _BEND[rng.integers(len(_BEND))], _IN[rng.integers(len(_IN))])
+        else:
+            brand = _ON[rng.integers(len(_ON))] + _END[rng.integers(len(_END))]
+            nm = "%s %s" % (brand, _SECTOR[st][rng.integers(len(_SECTOR[st]))])
+        if nm not in used:
+            _NAMES[key] = nm
+            return nm
+        k += 1
+
 
 def build_world():
     E, S, R = Wd.market()
@@ -144,7 +186,9 @@ def write_all(Wo, H, tgt):
         nm = MGR_NAMES[f["gp"]["id"]]
         for e in H[fid]["log"]:
             kind, _, dno, q, a, b = e
-            co = "%s portfolio %02d" % (f["name"].split()[0], dno + 1)
+            if f["gp"]["id"] in SUMMARY_ONLY and q > qi(2024, 4):
+                continue          # these managers moved to quarterly letters in 2025: no company-level file since
+            co = company_name(fid, f["gp"]["st"], dno)
             if kind == "new":
                 act.append([fid, nm, co, qmid(q, 0.45).isoformat(), "initial investment", "%.3f" % a, ""])
             elif kind == "follow_on":
@@ -184,7 +228,8 @@ def write_all(Wo, H, tgt):
     # ---------------------------------------------------------------- the commitment register
     wb = Workbook(); ws = wb.active; ws.title = "Register"
     ws.append(["Fund ID", "Fund", "Manager", "Strategy", "Vintage", "Commitment (USD m)", "Fund size (USD m)", "Commitment date",
-               "First close expected at commitment", "First close", "Investment period ends", "Term ends", "Status"])
+               "First close expected at commitment", "First close", "Investment period (years, per agreement)", "Investment period ends",
+               "Term ends", "Status"])
     for c in ws[1]: c.font = Font(bold=True)
     reg_n = 0
     for f in sorted(fs, key=lambda x: x["id"]):
@@ -193,12 +238,14 @@ def write_all(Wo, H, tgt):
         closed = f["fc"] <= H_END
         status = "pending first close" if not closed else ("investing" if H_END < f["fc"] + st["ip"] else
                                                            ("harvesting" if H_END < f["fc"] + st["life"] else "liquidated"))
+        ip_end = H[f["id"]]["o"]["ip_end"] if (closed and f["id"] in H) else (f["fc"] + st["ip"])
         ws.append([f["id"], f["name"], MGR_NAMES[f["gp"]["id"]], STRAT_NAME[f["gp"]["st"]], f["vint"], f["C"],
                    f["size"] if closed else None, qmid(f["commit_q"], 0.5), qend(f["exp_fc"]), qend(f["fc"]) if closed else None,
-                   qend(f["fc"] + st["ip"] - 1) if closed else None, qend(f["fc"] + st["life"]) if closed else None, status])
+                   st["ip"] // 4 if closed else None, qend(ip_end - 1) if closed else None, qend(f["fc"] + st["life"]) if closed else None, status])
         reg_n += 1
-    for row in ws.iter_rows(min_row=2, min_col=8, max_col=12):
-        for c in row: c.number_format = "yyyy-mm-dd"
+    for row in ws.iter_rows(min_row=2, min_col=8, max_col=13):
+        for c in row:
+            if c.column != 11: c.number_format = "yyyy-mm-dd"
     wb.save(os.path.join(tgt, F_REG)); rows[F_REG] = reg_n
     # ---------------------------------------------------------------- the industry benchmark (per cent of commitment)
     bench = Wd.benchmark_funds(Wo["gps"])

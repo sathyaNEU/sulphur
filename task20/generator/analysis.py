@@ -68,9 +68,14 @@ def load(tgt):
     L["E"] = np.array([float(r["exit_activity_index_2015_100"]) for r in mk]); L["S"] = np.array([float(r["public_equity_total_return_index"]) for r in mk])
     L["R"] = np.array([float(r["short_rate_pct"]) for r in mk])
     L["bench"] = rows(P("industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv"))
+    L["cov"] = coverage(L)
     L["hold"] = sheet(P("liquid_holdings_2026-12-31.xlsx"))
     L["spend"] = {int(r["fiscal_year"]): float(r["approved_distribution_usd_m"]) for r in rows(P("spending_distributions_FY2014_FY2027.csv"))}
     names = {r["Fund"]: fid for fid, r in L["reg"].items()}
+    L["programs"] = []
+    for r in sheet(P("corrigan_hart_pacing_plan_2027.xlsx"), "Programs"):
+        if r["Program"]: L["programs"].append(dict(code=r["Program"], desc=r["Description"], funds=[x.strip() for x in str(r["Funds committed in 2027"]).split(";")],
+                                                     total=float(r["Total (USD m)"])))
     L["plan"] = []
     for r in sheet(P("corrigan_hart_pacing_plan_2027.xlsx"), "2027 proposed commitments"):
         if r["Fund"] == "Total" or not r["Strategy"]: continue
@@ -82,7 +87,7 @@ def load(tgt):
 # ------------------------------------------------------------------------------------------------ the policy
 FACTORS = {"Cash, money market funds and US Treasuries": 1.00, "Investment-grade bonds": 0.90, "Public equities": 0.70,
            "Hedge funds: redeemable within 24 months": 0.90}
-CUSHION = 1200.0
+CUSHION = 1150.0
 GRID = 25.0
 
 def reserve(L):
@@ -91,6 +96,20 @@ def reserve(L):
 
 def spending24(L):
     return 2.0 * L["spend"][2027]
+
+def coverage(L):
+    """the quarter each manager's company-level activity ends, for the managers whose funds' statements run on past it
+    (the look-through feed stopped): {manager: last activity quarter}."""
+    act_end = defaultdict(lambda: -1); st_end = defaultdict(lambda: -1)
+    for fid, r in L["reg"].items():
+        m = r["Manager"]
+        if L["act"].get(fid): act_end[m] = max(act_end[m], max(e[0] for e in L["act"][fid]))
+        if L["st"].get(fid): st_end[m] = max(st_end[m], max(L["st"][fid]))
+    return {m: q for m, q in act_end.items() if st_end.get(m, -1) == H_END and q <= H_END - 4}
+
+def covered_to(L, fid):
+    """the last quarter the activity file covers the fund (H_END where the feed runs on)."""
+    return L.get("cov", {}).get(L["reg"][fid]["Manager"], H_END)
 
 def share(L, fid):
     r = L["reg"][fid]
@@ -128,11 +147,13 @@ def gap_series(L, fid):
         out[q] = (ci - cc, cp, proc.get(q, 0.0))
     return out
 
-def line_stock(L, recycling="manager"):
+def line_stock(L, recycling="manager", bridge=True, at=None, uncovered="bridged"):
     """the capital each manager has invested on its fund's subscription line and not yet called, at the endowment's
     share, at 31 December 2026: the gap between investments and investment calls less the proceeds the fund recycled,
     the recycled amount read off the audited year-ends (gap less the audited borrowings) and carried to the end of 2026
-    at the fund's own recycling rate while it is still investing."""
+    at the manager's own recycling rate while the fund is still investing. For a manager whose company-level file
+    stopped, the gap cannot be formed after the file ends: its funds' stock is their latest audited borrowings grown as
+    the covered managers' stock grew from the same audit date (bridge=False: the file read as it stands)."""
     res = {}
     rho_m = defaultdict(list)
     per = {}
@@ -142,39 +163,93 @@ def line_stock(L, recycling="manager"):
         if not g: continue
         sh = share(L, fid)
         aud = L["aud"].get(fid, {})
+        cov = covered_to(L, fid) if bridge else H_END
         ip_end = q_of(r["Investment period ends"].date() if hasattr(r["Investment period ends"], "date") else r["Investment period ends"])
         pts = []
-        for qa, a in sorted(aud.items()):
-            if qa in g:
+        for qa, a_ in sorted(aud.items()):
+            if qa in g and qa <= cov:
                 gap, cp, _ = g[qa]
-                rec = gap - a["Credit facility borrowings"] * sh
-                pts.append((qa, rec, cp, a["Credit facility borrowings"] * sh))
-        per[fid] = dict(g=g, pts=pts, sh=sh, ip_end=ip_end, mgr=r["Manager"], size=float(r["Fund size (USD m)"]))
+                rec = gap - a_["Credit facility borrowings"] * sh
+                pts.append((qa, rec, cp, a_["Credit facility borrowings"] * sh))
+        per[fid] = dict(g=g, pts=pts, sh=sh, ip_end=ip_end, mgr=r["Manager"], size=float(r["Fund size (USD m)"]), cov=cov, aud=aud)
         if len(pts) >= 1 and pts[-1][2] > 0:
-            # recycling rate: recycled over proceeds realised while investing
             cp_ip = sum(g[q][2] for q in g if q <= min(pts[-1][0], ip_end))
             if cp_ip > 1e-6:
                 rho_m[r["Manager"]].append(max(pts[-1][1], 0.0) / cp_ip)
-    for fid, x in per.items():
+    def path(x):
+        """the rebuilt stock at each quarter from the last usable audit to the end of 2026."""
         g, pts, sh = x["g"], x["pts"], x["sh"]
-        if pts:
-            qa, rec, cp, line_a = pts[-1]
-        else:   # no audited year-end yet: nothing recycled before the first realisation
-            qa, rec = min(g) - 1, 0.0
+        if pts: qa, rec = pts[-1][0], pts[-1][1]
+        else: qa, rec = min(g) - 1, 0.0
         rho = float(np.median(rho_m[x["mgr"]])) if (recycling == "manager" and rho_m.get(x["mgr"])) else 0.0
         cap = 0.15 * x["size"] * sh
-        rec_end = rec
+        out, rec_q = {}, rec
         for q in range(qa + 1, H_END + 1):
-            if q <= x["ip_end"]:
-                rec_end = min(rec_end + rho * g[q][2], cap)
-        gap_end = g[H_END][0]
-        res[fid] = max(gap_end - rec_end, 0.0)
+            if q <= x["ip_end"]: rec_q = min(rec_q + rho * g[q][2], cap)
+            out[q] = max(g[q][0] - rec_q, 0.0)
+        if pts: out[qa] = max(pts[-1][3], 0.0)
+        return out
+    paths = {fid: path(x) for fid, x in per.items() if x["cov"] == H_END}
+    for fid, x in per.items():
+        if x["cov"] == H_END:
+            res[fid] = paths[fid].get(H_END, 0.0)
+            continue
+        # the bridge: the stock where the file stops, rolled on the fitted pace less the statements' investment calls,
+        # re-anchored at each later audited year-end (hurried: "zero", the file's gap as it stands; "audited", the latest
+        # audited borrowings carried to 31 December 2026)
+        if uncovered == "zero": res[fid] = 0.0
+        elif uncovered == "audited":
+            aud = {q: v for q, v in x["aud"].items() if v.get("Credit facility borrowings") is not None}
+            res[fid] = aud[max(aud)]["Credit facility borrowings"] * x["sh"] if aud else 0.0
+        else: res[fid] = uncovered_path(L, fid, x)["stock"]
     return res, per
+
+_DEP = {}
+
+def _dep_fit(L):
+    k = id(L)
+    if k not in _DEP: _DEP[k] = deploy_rates(L)
+    return _DEP[k]
+
+BRIDGE = {"anchor": True}
+
+def uncovered_path(L, fid, x=None, anchor=None):
+    """for a fund whose manager's company-level file stopped: the investments after the file ends at the pace fitted
+    on the covered quarters, the line stock rolled from the file's last quarter (investments less the statements'
+    investment calls) and re-anchored at each later audit, and the companies held, their cost reduced by the
+    statements' returned capital and the new investments added as they are made."""
+    anchor = BRIDGE["anchor"] if anchor is None else anchor
+    r = L["reg"][fid]; sh = share(L, fid); C = float(r["Commitment (USD m)"]); st = STRATS[r["Strategy"]]
+    fc = q_of(r["First close"].date() if hasattr(r["First close"], "date") else r["First close"])
+    ipe = q_of(r["Investment period ends"].date() if hasattr(r["Investment period ends"], "date") else r["Investment period ends"])
+    cov = covered_to(L, fid)
+    dep, eta = _dep_fit(L)
+    g = gap_series(L, fid)
+    inv = sum(a_ * sh for q, t, co, a_, cb in L["act"].get(fid, []) if t in ("initial investment", "follow-on investment") and q <= cov)
+    stock = 0.0
+    if g and cov in g:
+        # the stock at the file's last quarter: the gap less the recycled amount read at the last audit before it
+        x = x or {}
+        pts = [p for p in (x.get("pts") or []) if p[0] <= cov]
+        rec = pts[-1][1] if pts else 0.0
+        stock = max(g[cov][0] - rec, 0.0)
+    s = L["st"].get(fid, {}); aud = L["aud"].get(fid, {})
+    new, q_start = {}, max(cov + 1, fc)
+    for q in range(q_start, H_END + 1):
+        a_ = (q - fc) // 4
+        room = max(C - inv, 0.0) if q < ipe else 0.0
+        I = _cell(dep, st, a_, 0.05) * room * max(min(L["E"][q] / 100.0, 1.4), 0.4) ** (eta[st] if isinstance(eta, dict) else eta)
+        inv += I; new[q] = I
+        stock = max(stock + I - s.get(q, {}).get("contributions_investments_usd", 0.0), 0.0)
+        if anchor and q in aud and aud[q].get("Credit facility borrowings") is not None:
+            stock = aud[q]["Credit facility borrowings"] * sh
+    roc = sum(s[q]["distributions_return_of_capital_usd"] for q in range(cov + 1, H_END + 1) if q in s)
+    return dict(stock=stock, new=new, inv=inv, roc=roc, cov=cov)
 
 # ------------------------------------------------------------------------------------------------ the stress path
 def stress_market(L):
     """the policy's scenario: exits as 2008Q3-2010Q2 relative to 2008Q2 on the 2026Q4 level; equities 85, 70, then five
-    points a quarter back to 100 per cent; short rates up 2.5 points."""
+    points a quarter back to 100 percent; short rates up 2.5 points."""
     E, S, R = L["E"], L["S"], L["R"]
     e = np.concatenate([E, np.zeros(8)]); s = np.concatenate([S, np.zeros(8)]); r = np.concatenate([R, np.zeros(8)])
     eq = [0.85, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00]
@@ -185,7 +260,7 @@ def stress_market(L):
     return e, s, r
 
 # ------------------------------------------------------------------------------------------------ fund states and rates
-def fund_state(L, fid, stock):
+def fund_state(L, fid, stock, bridge=True):
     r = L["reg"][fid]; st = STRATS[r["Strategy"]]; C = float(r["Commitment (USD m)"])
     s = L["st"].get(fid, {})
     paid = sum(v["contributions_investments_usd"] + v["contributions_management_fees_usd"] + v["contributions_fund_expenses_usd"] for v in s.values())
@@ -198,12 +273,21 @@ def fund_state(L, fid, stock):
     ipe = q_of(r["Investment period ends"].date() if hasattr(r["Investment period ends"], "date") else r["Investment period ends"]) if r["Investment period ends"] else None
     sh = C / float(r["Fund size (USD m)"]) if r["Fund size (USD m)"] else None
     inv = sum(a for q, t, co, a, cb in L["act"].get(fid, []) if t in ("initial investment", "follow-on investment")) * (sh or 0)
+    if fc is not None and covered_to(L, fid) < H_END:
+        if bridge:
+            inv = uncovered_path(L, fid)["inv"]
+        else:   # the file to its last quarter, then the capital called since as what was invested
+            cov = covered_to(L, fid)
+            inv = sum(a for q, t, co, a, cb in L["act"].get(fid, []) if t in ("initial investment", "follow-on investment") and q <= cov) * (sh or 0)
+            inv += sum(v["contributions_investments_usd"] for q, v in s.items() if q > cov)
     fee_last = s[max(s)]["contributions_management_fees_usd"] if s else 0.0
-    return dict(fid=fid, st=st, C=C, paid=paid, unf=C - paid, nav=nav, fc=fc, ipe=ipe, sh=sh, inv=inv, mgr=r["Manager"],
+    te = r["Term ends"]
+    term = q_of(te.date() if hasattr(te, "date") else te) if te else None
+    return dict(fid=fid, st=st, C=C, paid=paid, unf=C - paid, nav=nav, fc=fc, ipe=ipe, sh=sh, inv=inv, mgr=r["Manager"], term=term,
                 stock=stock.get(fid, 0.0), fee_q=fee_last, pending=(r["Status"] == "pending first close"), liquidated=(r["Status"] == "liquidated"),
                 exp_fc=q_of(r["First close expected at commitment"].date() if hasattr(r["First close expected at commitment"], "date") else r["First close expected at commitment"]))
 
-def deploy_rates(L, defensive=False):
+def deploy_rates(L, defensive=False, covered_only=True, by_strategy=False):
     """investments as a share of the commitment not yet invested, by strategy and year since first close, with the deal
     market's elasticity fitted on the exit index. The follow-ons into companies held two years or more are the
     defensive kind and are left out (defensive=True keeps them in, the hurried reading of the activity file)."""
@@ -220,7 +304,8 @@ def deploy_rates(L, defensive=False):
                 allinv[q] += a * sh
                 if defensive or not (co in first and q - first[co] >= 8): inv[q] += a * sh
         cum = 0.0
-        for q in range(fc, H_END + 1):
+        end = covered_to(L, fid) if covered_only else H_END
+        for q in range(fc, end + 1):
             a = (q - fc) // 4
             room = max(C - cum, 0.0)
             if room > 0.02 * C and a < 7:
@@ -229,8 +314,17 @@ def deploy_rates(L, defensive=False):
     # the deal market's elasticity by least squares on the amounts, each cell's rate the ratio of sums at that elasticity
     cells = defaultdict(list)
     for st, a, y, e, room in obs: cells[(st, a)].append((y * room, room, max(min(e / 100.0, 1.4), 0.4)))
+    if by_strategy:
+        out_rate, out_eta = {}, {}
+        for st in sorted({k[0] for k in cells}):
+            r_, e_ = _fit_cells({k: v for k, v in cells.items() if k[0] == st})
+            out_rate.update(r_); out_eta[st] = e_
+        return out_rate, out_eta
+    return _fit_cells(cells)
+
+def _fit_cells(cells):
     best = None
-    for eta in np.round(np.arange(-0.6, 1.01, 0.02), 2):
+    for eta in np.round(np.arange(-1.0, 1.01, 0.02), 2):
         sse = 0.0; rate = {}
         for k, v in cells.items():
             I = np.array([x[0] for x in v]); R_ = np.array([x[1] for x in v]); M = np.array([x[2] for x in v]) ** eta
@@ -302,8 +396,21 @@ def _cell(tab, st, a, default):
     return default
 
 # ------------------------------------------------------------------------------------------------ deals held, support, recycling
-def held_deals(L, fid):
-    """the fund's companies still held at 31 December 2026 (endowment share): cost, first investment quarter, last value."""
+def held_deals(L, fid, bridge=True):
+    """the fund's companies still held at 31 December 2026 (endowment share): cost, first investment quarter, last value.
+    Where the manager's company-level file stopped, the companies held when it stopped, their cost reduced by the
+    capital the statements return since, and the investments made since (bridge=False: the file as it stands)."""
+    if bridge and covered_to(L, fid) < H_END and L["reg"][fid]["First close"]:
+        held = _held_from_file(L, fid)
+        up = uncovered_path(L, fid)
+        tot = sum(d["cost"] for d in held)
+        keep = max(1.0 - up["roc"] / tot, 0.0) if tot > 0 else 0.0
+        out = [dict(d, cost=d["cost"] * keep, fv=d["fv"] * keep) for d in held]
+        out += [dict(co="since %d" % q, q0=q, cost=I, fv=I) for q, I in up["new"].items() if I > 0]
+        return out
+    return _held_from_file(L, fid)
+
+def _held_from_file(L, fid):
     sh = share(L, fid)
     first = {}; cost = defaultdict(float); last_val = {}; gone = set()
     for q, t, co, a, cb in L["act"].get(fid, []):
@@ -313,7 +420,7 @@ def held_deals(L, fid):
         elif t == "valuation": last_val[co] = (q, a * sh, cb * sh)
     return [dict(co=c, q0=first[c], cost=cost[c], fv=last_val.get(c, (None, cost[c]))[1]) for c in first if c not in gone]
 
-def support_points(L, basis="cost"):
+def support_points(L, basis="cost", covered_only=True):
     """per BO/GE/VC fund and quarter: follow-ons into companies held two years or more (the defensive kind) and the
     cost of those companies at the start of the quarter (basis "value": their latest valuation instead)."""
     out = []
@@ -325,7 +432,7 @@ def support_points(L, basis="cost"):
         byq = defaultdict(list)
         for e in ev: byq[e[0]].append(e)
         if not byq: continue
-        for q in range(min(byq), H_END + 1):
+        for q in range(min(byq), (covered_to(L, fid) if covered_only else H_END) + 1):
             if basis == "value":
                 pool = sum(val.get(c, 0.0) for c in alive if q - first[c] >= 8)
             else:
@@ -340,6 +447,11 @@ def support_points(L, basis="cost"):
                 elif t == "valuation": val[co] = a * sh
             if pool > 1.0: out.append((q, s_q, pool))
     return out
+
+def own_record_max_shortfall(L, lag=2):
+    """the deepest exit-market shortfall (lagged as the support fit lags it) over the quarters the endowment's own funds
+    show defensive follow-ons on a pool of companies held two years or more."""
+    return max(max(0.0, 1.0 - L["E"][q - lag] / 100.0) for q, _, _ in support_points(L))
 
 def support_model(L, prm=None, lags=(1, 2, 3), stars=(0.90, 1.00, 1.10), table=None, pts=None):
     """defensive follow-ons per quarter as a share of the cost of companies held two years or more, on how far the exit
@@ -357,6 +469,48 @@ def support_model(L, prm=None, lags=(1, 2, 3), stars=(0.90, 1.00, 1.10), table=N
             if table is not None: table.append((lag, es, sig, sse))
             if best is None or sse < best[0]: best = (sse, sig, lag, es)
     return dict(sigma=best[1], lag=best[2], e_star=best[3], sse=best[0])
+
+def support_two_channel(L, covered_only=True, caps=(0.20, 0.25, 0.30, 0.35, 0.40, 9.0), table=None):
+    """the first channel on the endowment's own funds (defensive follow-ons on the aged cost, two quarters after the exit
+    index, capped where the managers' reserves run out, the cap chosen by fit); the second channel from the benchmark's
+    funds past their investment period, where new deals cannot move: their calls per unit of commitment by quarter
+    against the same shortfall, the rise past a threshold over the plateau giving the second channel's size relative
+    to the first (threshold by fit)."""
+    pts = support_points(L, covered_only=covered_only)
+    q = np.array([p[0] for p in pts]); s = np.array([p[1] for p in pts]); pool = np.array([p[2] for p in pts]); y = s / pool
+    sf = np.maximum(0.0, 1.0 - L["E"][np.maximum(q - 2, 0)] / 100.0)
+    best = None
+    for cap in caps:
+        x = np.minimum(sf, cap); sig = float(np.sum(pool * x * y) / np.sum(pool * x * x)); sse = float(np.sum(pool * (y - sig * x) ** 2))
+        if table is not None: table.append(("cap", cap, sig, sse))
+        if best is None or sse < best[0]: best = (sse, cap, sig)
+    _, cap, sig1 = best
+    bq = bench_old_calls(L)
+    qs = np.array(sorted(bq)); c = np.array([bq[k] for k in qs]); sfb = np.array([max(0.0, 1.0 - L["E"][k - 2] / 100.0) for k in qs])
+    b2 = None
+    for th in np.round(np.arange(0.36, 0.56, 0.01), 2):
+        X = np.column_stack([np.ones(len(qs)), np.minimum(sfb, cap), np.maximum(0.0, sfb - th)])
+        coef, *_ = np.linalg.lstsq(X, c, rcond=None); sse = float(np.sum((c - X @ coef) ** 2))
+        if table is not None: table.append(("threshold", float(th), float(coef[2] / coef[1]) if coef[1] > 0 else 0.0, sse))
+        if b2 is None or sse < b2[0]: b2 = (sse, float(th), coef)
+    _, th, coef = b2
+    ratio = float(coef[2] / coef[1]) if coef[1] > 0 else 0.0
+    return dict(sigma=sig1, cap=cap, lag=2, e_star=1.0, th=th, ratio=ratio, sigma2=sig1 * ratio, sse=best[0])
+
+def bench_old_calls(L, lo=25, hi=44, q0=None, q1=None, min_unfunded=10.0):
+    """the benchmark's buyout, growth and venture funds past their investment period and its follow-on window (more than
+    six years from the vintage, so new deals and routine follow-ons cannot move their calls) and with commitment left to
+    call: mean calls per unit of commitment by quarter, 2004 to 2014."""
+    q0 = qi(2004, 1) if q0 is None else q0; q1 = qi(2014, 4) if q1 is None else q1
+    byq = defaultdict(list); paid = defaultdict(float)
+    for r in sorted(L["bench"], key=lambda r: (r["benchmark_fund"], r["period_end"])):
+        key = r["benchmark_fund"]; c = float(r["contributions_pct_of_commitment"])
+        if r["strategy"] in ("Buyout", "Growth equity", "Venture capital"):
+            qq = q_of(D(r["period_end"])); age = qq - qi(int(r["vintage"]), 1)
+            if lo <= age <= hi and q0 <= qq <= q1 and float(r["nav_pct_of_commitment"]) > 5 and 100.0 - paid[key] >= min_unfunded:
+                byq[qq].append(c / 100.0)
+        paid[key] += c
+    return {k: float(np.mean(v)) for k, v in byq.items()}
 
 def recycling_rates(L, per, hurried=False):
     """each manager's share of proceeds kept and reinvested while investing: the audited gap less the borrowings over
@@ -379,35 +533,50 @@ def project2(L, states, plan, budget, sw, fit, mkt):
     the clean-down. Distributions: each fund's 31 December value times its strategy's 2008-10 benchmark rate.
     sw: line ('rebuilt' or 'recycled'), support ('measured' or 'none'), closes ('slip' or 'expected')."""
     e, s, r = mkt
-    out = {k: np.zeros(len(e)) for k in ("call_inv", "call_pend", "call_plan", "dist", "support", "stock", "fees", "recycled", "fees_closed")}
+    out = {k: np.zeros(len(e)) for k in ("call_inv", "call_pend", "call_plan", "dist", "support", "stock", "fees", "recycled", "fees_closed", "extended")}
     rho = fit["rho_h"] if sw["line"] == "recycled" else fit["rho"]
     dep = fit["dep_h"] if sw["support"] == "none" and "dep_h" in fit else fit["dep"]
     eta = fit["eta_h"] if sw["support"] == "none" and "eta_h" in fit else fit["eta"]
+    if sw.get("market") == "pooled": dep, eta = fit["dep_p"], fit["eta_p"]
     def closes(exp_q):
         """the first-close quarters with their weights: the expected slip split between the two quarters around it."""
         if sw["closes"] == "expected": return [(exp_q, 1.0)]
         sl = expected_slip(fit, e, exp_q); k = int(math.floor(sl)); fr = sl - k
         return [(exp_q + k, 1.0 - fr), (exp_q + k + 1, fr)] if fr > 1e-9 else [(exp_q + k, 1.0)]
-    def run(st, C, fc, inv0, paid0, nav0, stock, deals, mgr, key):
+    def run(st, C, fc, inv0, paid0, nav0, stock, deals, mgr, key, ipe=None, term=None):
         inv, paid, nav = inv0, paid0, nav0
-        ipe = fc + (20 if st not in ("RE", "PC") else (16 if st == "RE" else 12))
+        if ipe is None: ipe = fc + (20 if st not in ("RE", "PC") else (16 if st == "RE" else 12))
+        ext_q = ipe if (sw.get("extensions", "rule") == "rule" and "ext" in fit and ipe in W and key == "call_inv") else None
         deals = [dict(d) for d in deals]
         cap_rec = 0.15 * C; rec_c = 0.0
         for k, q in enumerate(W):
             dx = nav0 * fit["drate"].get((st, k), 0.0)
             out["dist"][q] += dx
             if q < fc: continue
+            if term is not None and q > term: continue       # the term has ended: the commitment not called is released
+            if ext_q is not None and q == ext_q:
+                weak = float(np.mean([e[q - j] for j in range(1, fit["ext"]["win"] + 1)])) < fit["ext"]["e_star"]
+                if weak and inv / C < fit["ext"]["s_star"]:
+                    ipe = ipe + fit["ext"]["length"]; out["extended"][q] += C          # the period extended
             a = (q - fc) // 4
             # the fee: on the commitment while investing, on the cost of the companies still held afterwards
             fee = fit["fee"][st] * C if q < ipe else fit["fee"][st] * sum(d["cost"] for d in deals)
             room = max(C - inv, 0.0) if q < ipe else 0.0
-            md = max(min(e[q] / 100.0, 1.4), 0.4) ** eta
-            I = _cell(dep, st, a, 0.05) * room * md
+            md = max(min(e[q] / 100.0, 1.4), 0.4) ** (eta[st] if isinstance(eta, dict) else eta)
+            ip_years = {"RE": 4, "PC": 3}.get(st, 5)
+            I = _cell(dep, st, min(a, ip_years - 1), 0.05) * room * md       # an extended period invests at its last year's pace
             sup = 0.0
-            if sw["support"] == "measured" and st in ("BO", "GE", "VC"):
+            if sw["support"] != "none" and st in ("BO", "GE", "VC"):
                 sp = fit["support"]
                 pool = sum(d["cost"] for d in deals if q - d["q0"] >= 8)
-                sup = min(sp["sigma"] * max(0.0, sp["e_star"] - e[max(q - sp["lag"], 0)] / 100.0) / sp["e_star"] * pool, max(C - paid - I - fee, 0.0))
+                sfq = max(0.0, sp["e_star"] - e[max(q - sp["lag"], 0)] / 100.0) / sp["e_star"]
+                if sw["support"] == "two_channel":
+                    rate = sp["sigma"] * min(sfq, sp["cap"]) + sp["sigma2"] * max(0.0, sfq - sp["th"])
+                elif sw["support"] == "capped":           # the first channel's plateau held past the record
+                    rate = sp["sigma"] * min(sfq, sp["cap"])
+                else:                                     # one straight line through the record, carried on
+                    rate = sp["sigma_lin"] * sfq
+                sup = min(rate * pool, max(C - paid - I - fee, 0.0))
             rc = min(rho.get(mgr, 0.0) * dx, max(cap_rec - rec_c, 0.0), I + sup) if q < ipe else 0.0
             rec_c += rc
             call = max(I + sup + fee - rc, 0.0) + (stock if q == W[0] else 0.0)
@@ -433,10 +602,11 @@ def project2(L, states, plan, budget, sw, fit, mkt):
                 run(x["st"], x["C"] * wgt, fc, 0.0, 0.0, 0.0, 0.0, [], x["mgr"], "call_pend")
         else:
             st_ = x["stock"] if sw["line"] == "rebuilt" else 0.0
-            deals = held_deals(L, x["fid"])
+            deals = held_deals(L, x["fid"], bridge=sw.get("uncovered", "bridged") == "bridged")
             if fit["support"].get("basis") == "value":
                 deals = [dict(d, cost=d["fv"]) for d in deals]
-            run(x["st"], x["C"], x["fc"], x["inv"], x["paid"], max(x["nav"], 0.0), st_, deals, x["mgr"], "call_inv")
+            run(x["st"], x["C"], x["fc"], x["inv"], x["paid"], max(x["nav"], 0.0), st_, deals, x["mgr"], "call_inv",
+                ipe=(x["ipe"] + 1) if x.get("ipe") is not None else None, term=x.get("term"))
     tot = sum(p["C"] for p in plan)
     for p in plan:
         for fc, wgt in closes(p["exp_fc"]):
@@ -445,14 +615,20 @@ def project2(L, states, plan, budget, sw, fit, mkt):
 
 project3 = project2
 
-def fit_all2(L):
+def fit_all2(L, coverage="bridged"):
+    """every fitted input. coverage "bridged": the fits on the quarters the company-level file covers and the uncovered
+    funds bridged from the complete records; "as_is": the file read as it stands."""
+    cov_only = coverage == "bridged"
     mkt = stress_market(L)
-    dep, eta = deploy_rates(L)
-    dep_h, eta_h = deploy_rates(L, defensive=True)
-    stock, per = line_stock(L)
-    fit = dict(dep=dep, eta=eta, dep_h=dep_h, eta_h=eta_h, slip=slip_model(L), fee=fee_rates(L), beta=nav_beta(L),
-               support=support_model(L), rho=recycling_rates(L, per), rho_h=recycling_rates(L, per, hurried=True),
-               drate=bench_rates_2008(L))
+    dep, eta = deploy_rates(L, covered_only=cov_only)
+    dep_h, eta_h = deploy_rates(L, defensive=True, covered_only=cov_only)
+    dep_p, eta_p = deploy_rates(L, covered_only=cov_only, by_strategy=False)
+    stock, per = line_stock(L, bridge=cov_only)
+    sp = support_two_channel(L, covered_only=cov_only)
+    sp["sigma_lin"] = support_model(L, pts=support_points(L, covered_only=cov_only))["sigma"]
+    fit = dict(dep=dep, eta=eta, dep_h=dep_h, eta_h=eta_h, dep_p=dep_p, eta_p=eta_p, slip=slip_model(L), fee=fee_rates(L), beta=nav_beta(L),
+               support=sp, rho=recycling_rates(L, per), rho_h=recycling_rates(L, per, hurried=True),
+               drate=bench_rates_2008(L), coverage=coverage, ext=extension_rule(L))
     return fit, mkt, stock, per
 
 # ------------------------------------------------------------------------------------------------ the policy's distributions
@@ -511,17 +687,17 @@ def project_rates(L, states, plan, budget, fit, rate_of):
     sets them, pending and new funds from their expected first close."""
     e = fit["mkt"][0]
     out = {k: np.zeros(len(e)) for k in ("call_inv", "call_pend", "call_plan", "dist", "support", "stock", "fees", "recycled", "fees_closed")}
-    def run(st, C, unf, fc, nav0, key):
+    def run(st, C, unf, fc, nav0, key, term=None):
         for k, q in enumerate(W):
             out["dist"][q] += nav0 * fit["drate"].get((st, k), 0.0)
-            if q < fc: continue
+            if q < fc or (term is not None and q > term): continue
             a = (q - fc) // 4
             c = rate_of(st, a, k) * unf
             unf -= c; out[key][q] += c
     for x in states:
         if x.get("liquidated"): continue
         if x["pending"]: run(x["st"], x["C"], x["C"], x["exp_fc"], 0.0, "call_pend")
-        else: run(x["st"], x["C"], max(x["unf"], 0.0), x["fc"], max(x["nav"], 0.0), "call_inv")
+        else: run(x["st"], x["C"], max(x["unf"], 0.0), x["fc"], max(x["nav"], 0.0), "call_inv", term=x.get("term"))
     tot = sum(p["C"] for p in plan)
     for p in plan:
         C = budget * p["C"] / tot; run(p["st"], C, C, p["exp_fc"], 0.0, "call_plan")
@@ -657,7 +833,7 @@ def full(tgt, boot=40):
     f = dict(fit); f["eta"] = 0.0
     fam.append(("new deals at their normal pace, no deal-market term", outcome(L, proj(GOLDEN, f))))
     f = dict(fit); f["fee"] = {k: v * 0.95 for k, v in fit["fee"].items()}
-    fam.append(("fees 5 per cent below the investing-period median", outcome(L, proj(GOLDEN, f))))
+    fam.append(("fees 5 percent below the investing-period median", outcome(L, proj(GOLDEN, f))))
     stp, _ = line_stock(L, recycling="none")
     fam.append(("the line stock with no recycling since the last audited year-end", outcome(L, proj(GOLDEN, stt=[fund_state(L, fid, stp) for fid in L["reg"]]))))
     R["family"] = fam
@@ -690,5 +866,207 @@ def full(tgt, boot=40):
             for k in keys: f[k] = fb[k]
             bs[name].append(outcome(L, proj(GOLDEN, f))["B"])
         bs["eta"].append(fb["eta"]); bs["sigma"].append(fb["support"]["sigma"]); bs["slip_b"].append(fb["slip"]["b"])
+    R["boot"] = {k: [float(x) for x in v] for k, v in bs.items()}
+    return R
+
+def extension_points(L):
+    """every fund whose agreed investment period ended by the end of 2026: whether the register shows it extended, the
+    share of its commitment invested by the agreed end and the exit index over the four quarters before it."""
+    out = []
+    for fid, r in L["reg"].items():
+        if not r["First close"] or not r["Investment period ends"] or not r["Investment period (years, per agreement)"]: continue
+        fc = q_of(r["First close"].date() if hasattr(r["First close"], "date") else r["First close"])
+        ipe = q_of(r["Investment period ends"].date() if hasattr(r["Investment period ends"], "date") else r["Investment period ends"])
+        agreed = fc + 4 * int(r["Investment period (years, per agreement)"])
+        if agreed > H_END: continue
+        C = float(r["Commitment (USD m)"]); sh = share(L, fid)
+        inv = sum(a_ * sh for q, t, co, a_, cb in L["act"].get(fid, []) if t in ("initial investment", "follow-on investment") and q < agreed) / C
+        out.append((ipe + 1 > agreed, inv, {w_: float(np.mean([L["E"][agreed - k] for k in range(1, w_ + 1)])) for w_ in (1, 2, 4)}, fid,
+                    (ipe + 1 - agreed) if ipe + 1 > agreed else 0))
+    return out
+
+def extension_rule(L, table=None):
+    """the rule that sorts the register's extended periods from the rest: an extension when the exit index over the
+    quarters before the agreed end (the window by fit) sits below e_star and the fund has invested less than s_star of
+    its commitment, each threshold set midway between the nearest cases either side; the length is the register's own."""
+    pts = extension_points(L)
+    best = None
+    for win in (1, 2, 4):
+        for e_star in (80.0, 85.0, 90.0, 95.0, 100.0, 105.0):
+            for s_star in np.round(np.arange(0.50, 0.90, 0.01), 2):
+                ok = sum((p[2][win] < e_star and p[1] < s_star) == p[0] for p in pts)
+                if table is not None: table.append((win, e_star, float(s_star), ok))
+                if best is None or ok > best[0]: best = (ok, win, e_star, float(s_star))
+    ok, win, e0, s0 = best
+    ext = [p for p in pts if p[0]]
+    if ext:
+        hi_s = max(p[1] for p in ext); lo_s = min([p[1] for p in pts if not p[0] and p[2][win] < e0 and p[1] > hi_s] or [s0])
+        hi_e = max(p[2][win] for p in ext); lo_e = min([p[2][win] for p in pts if not p[0] and p[1] < s0 and p[2][win] > hi_e] or [e0])
+        s_star, e_star = (hi_s + lo_s) / 2.0, (hi_e + lo_e) / 2.0
+        length = int(np.median([p[4] for p in ext]))
+    else:
+        s_star, e_star, length = s0, e0, 4
+    return dict(win=win, e_star=float(e_star), s_star=float(s_star), length=length, accuracy=ok / float(len(pts)), n=len(pts), extended=len(ext))
+
+# ------------------------------------------------------------------------------------------------ architecture 5: the programs
+GOLDEN5 = dict(line="rebuilt", support="two_channel", closes="slip", coverage="bridged", uncovered="bridged", market="by_strategy", extensions="rule")
+REFLEX5 = dict(line="rebuilt", support="capped", closes="slip", coverage="bridged", uncovered="audited", market="by_strategy", extensions="rule")
+
+def evaluate(L, sw, fit=None, mkt=None, stock=None):
+    """the policy's test for every program on one route: the calls and distributions of the commitments made by the end
+    of 2026 by half-year, the room above the minimum before any 2027 commitment, each program's calls and result, and
+    the program the policy adopts."""
+    if fit is None:
+        fit, mkt, _, _ = fit_all2(L)
+    bridged = sw.get("uncovered", "bridged") == "bridged"
+    if stock is None:
+        stock, _ = line_stock(L, bridge=True, uncovered=sw.get("uncovered", "bridged"))
+    states = [fund_state(L, fid, stock, bridge=bridged) for fid in L["reg"]]
+    o = project2(L, states, L["plan"], 0.0, sw, fit, mkt)
+    RES, SPEND = reserve(L), spending24(L)
+    calls = o["call_inv"] + o["call_pend"]
+    need0 = float(calls[W].sum() - o["dist"][W].sum())
+    H0 = round(round(RES, 1) - round(SPEND + need0, 1) - CUSHION, 1)
+    by_fund = {}
+    for p in L["plan"]:
+        op = project2(L, states, [p], p["C"], sw, fit, mkt)
+        by_fund[p["fund"]] = round(float(op["call_plan"][W].sum()), 1)
+    progs = []
+    for pr in L["programs"]:
+        c = round(sum(by_fund[f] for f in pr["funds"]), 1)
+        progs.append(dict(code=pr["code"], total=pr["total"], calls=c, headroom=round(H0 - c, 1), passes=H0 - c >= 0))
+    passing = [p for p in progs if p["passes"]]
+    adopt = max(passing, key=lambda p: p["total"])["code"] if passing else "none"
+    stk = sum(v for f, v in stock.items() if L["reg"][f]["Status"] != "liquidated")
+    return dict(R2={h: v for h, v in list(halves(calls).items())[:2]}, R3={h: v for h, v in list(halves(calls).items())[2:]},
+                R4=halves(o["dist"]), R5=H0, R7=adopt, programs=progs, by_fund=by_fund, support=halves(o["support"]),
+                stock=round(stk, 1), closed=halves(o["call_inv"]), pending=halves(o["call_pend"]), need0=round(need0, 1))
+
+def _support_variant(L, fit, th=None, lo=25, hi=44, mu=10.0, cap=None):
+    """the two-channel support refitted with one choice changed (the second channel's threshold, the benchmark slice,
+    the first channel's cap)."""
+    sp = dict(fit["support"])
+    if cap is not None:
+        pts = support_points(L); q = np.array([p[0] for p in pts]); s = np.array([p[1] for p in pts]); pool = np.array([p[2] for p in pts]); y = s / pool
+        sfv = np.maximum(0.0, 1.0 - L["E"][np.maximum(q - 2, 0)] / 100.0); x = np.minimum(sfv, cap)
+        sp["cap"] = cap; sp["sigma"] = float(np.sum(pool * x * y) / np.sum(pool * x * x))
+    th = sp["th"] if th is None else th
+    bq = bench_old_calls(L, lo, hi, min_unfunded=mu); qs = np.array(sorted(bq)); c = np.array([bq[k] for k in qs])
+    sfb = np.array([max(0.0, 1.0 - L["E"][k - 2] / 100.0) for k in qs])
+    X = np.column_stack([np.ones(len(qs)), np.minimum(sfb, sp["cap"]), np.maximum(0.0, sfb - th)]); coef, *_ = np.linalg.lstsq(X, c, rcond=None)
+    sp.update(th=th, ratio=float(coef[2] / coef[1]), sigma2=sp["sigma"] * float(coef[2] / coef[1]))
+    f = dict(fit); f["support"] = sp
+    return f
+
+def full5(tgt, boot=30):
+    L = load(tgt)
+    fit, mkt, stock, per = fit_all2(L); fit["mkt"] = mkt
+    ev = lambda sw, f=None, stk=None: evaluate(L, sw, f or fit, mkt, stk)
+    R = dict(L=L, fit=fit, stock=stock, per=per, mkt=mkt)
+    g = ev(GOLDEN5); unf, pend = unfunded(L); g["R1"] = by_strategy(unf)
+    R["golden"] = g
+    R["reserve"], R["spending24"], R["cushion"] = round(reserve(L), 2), spending24(L), CUSHION
+    R["uncovered"] = sorted(L["cov"])
+    live = {fid: v for fid, v in stock.items() if L["reg"][fid]["Status"] != "liquidated"}
+    R["line_stock_total"] = round(sum(live.values()), 1)
+    R["line_stock_uncovered"] = round(sum(v for fid, v in live.items() if L["reg"][fid]["Manager"] in L["cov"]), 1)
+    aud_stock, _ = line_stock(L, bridge=True, uncovered="audited")
+    R["line_stock_uncovered_audited"] = round(sum(v for fid, v in aud_stock.items() if L["reg"][fid]["Status"] != "liquidated"
+                                                  and L["reg"][fid]["Manager"] in L["cov"]), 1)
+    R["pending"] = [dict(fid=fid, fund=L["reg"][fid]["Fund"], C=float(L["reg"][fid]["Commitment (USD m)"]),
+                         slip=round(expected_slip(fit, mkt[0], q_of(L["reg"][fid]["First close expected at commitment"].date())), 2))
+                    for fid in L["reg"] if L["reg"][fid]["Status"] == "pending first close"]
+    # the passes
+    careful = ev(REFLEX5); careful["R1"] = g["R1"]
+    ta = ta_fit(L)
+    states_q = [fund_state(L, fid, stock) for fid in L["reg"]]
+    def rates_route(rate_of):
+        """the policy's test with every existing fund and re-up calling at a rate on its commitment not yet called."""
+        o = project_rates(L, states_q, L["plan"], 0.0, fit, rate_of)
+        RES, SPEND = reserve(L), spending24(L)
+        calls = o["call_inv"] + o["call_pend"]; need0 = float(calls[W].sum() - o["dist"][W].sum())
+        H0 = round(round(RES, 1) - round(SPEND + need0, 1) - CUSHION, 1)
+        progs = []
+        for pr in L["programs"]:
+            c = 0.0
+            for f_ in pr["funds"]:
+                p = next(x for x in L["plan"] if x["fund"] == f_)
+                op = project_rates(L, states_q, [p], p["C"], fit, rate_of); c += float(op["call_plan"][W].sum())
+            progs.append(dict(code=pr["code"], total=pr["total"], calls=round(c, 1), headroom=round(H0 - c, 1), passes=H0 - c >= 0))
+        passing = [p for p in progs if p["passes"]]
+        hv = halves(calls)
+        return dict(R2={h: hv[h] for h in HALVES[:2]}, R3={h: hv[h] for h in HALVES[2:]}, R4=halves(o["dist"]), R5=H0,
+                    R7=max(passing, key=lambda p: p["total"])["code"] if passing else "none", programs=progs)
+    def quick_eval():
+        out = rates_route(ta_rate_of(ta))
+        out.update(R4=dist_quick(L, fit), R1=by_strategy(unfunded_quick(L)))
+        return out
+    quick = quick_eval()
+    R["passes"] = dict(quick=quick, careful=careful, thorough=g)
+    # each reflex dropped alone from the golden (the design note's stump factorial)
+    R["reflex_drops"] = {k: ev(sw) for k, sw in (("J3 the covered managers' line stock read as recycled proceeds", dict(GOLDEN5, line="recycled")),
+                                                 ("J4 no defensive follow-ons or rescue financings", dict(GOLDEN5, support="none")),
+                                                 ("J5 the pending funds on their managers' first-close dates", dict(GOLDEN5, closes="expected")),
+                                                 ("J6 no investment-period extensions", dict(GOLDEN5, extensions="none")),
+                                                 ("J6 one deal-market term for every strategy", dict(GOLDEN5, market="pooled")))}
+    R["own_record_max_shortfall"] = round(own_record_max_shortfall(L), 3)
+    R["stress_max_shortfall"] = round(max(max(0.0, 1.0 - mkt[0][q - fit["support"]["lag"]] / 100.0) for q in W), 3)
+    R["six_live_funds"] = sum(1 for r in L["reg"].values() if r["Manager"] in L["cov"] and r["Status"] in ("investing", "harvesting"))
+    R["past_first_closes"] = sum(1 for r in L["reg"].values() if r.get("First close") and r.get("First close expected at commitment"))
+    # the routes beside them
+    R["routes"] = [("the golden", g),
+                   ("the careful route: the support curve's plateau held past the record, the six managers' last audited borrowings carried", careful),
+                   ("the textbook pacing model on the capital accounts", quick),
+                   ("one straight support line through the record, the last audited borrowings carried", ev(dict(GOLDEN5, support="linear", uncovered="audited"))),
+                   ("the rescue channel found, the six managers' stock read off the file as it stands", ev(dict(GOLDEN5, uncovered="zero"))),
+                   ("the plateau held, the six managers bridged", ev(dict(GOLDEN5, support="capped"))),
+                   ("the benchmark's 2008-10 call rates replayed on the commitments not yet called", rates_route(bench_rate_of(bench_call_rates(L), ta))),
+                   ("the pacing model recalibrated on the 2022 to 2024 exit drought", rates_route(ta_rate_of(ta_fit(L, qi(2022, 1), qi(2024, 4)))))]
+    # the golden family
+    fam = []
+    for th in (0.43, 0.49):
+        fam.append(("the second channel from a shortfall of %.2f" % th, ev(GOLDEN5, _support_variant(L, fit, th=th))))
+    for lo, hi, mu, tag in ((25, 40, 10.0, "funds six to ten years old"), (28, 44, 10.0, "funds seven to eleven years old"),
+                            (25, 44, 5.0, "funds with 5 percent or more left to call"), (25, 44, 20.0, "funds with 20 percent or more left to call")):
+        fam.append(("the benchmark slice of %s" % tag, ev(GOLDEN5, _support_variant(L, fit, lo=lo, hi=hi, mu=mu))))
+    for cap in (0.25, 0.35):
+        fam.append(("the first channel capped at a shortfall of %.2f" % cap, ev(GOLDEN5, _support_variant(L, fit, cap=cap))))
+    f = dict(fit); f["rho"] = {m: float(np.median(list(fit["rho"].values()))) for m in fit["rho"]}
+    fam.append(("recycling at the median of every manager", ev(GOLDEN5, f)))
+    f = dict(fit); f["eta"] = {k: 0.0 for k in fit["eta"]} if isinstance(fit["eta"], dict) else 0.0
+    fam.append(("new deals at their normal pace, no deal-market term", ev(GOLDEN5, f)))
+    f = dict(fit); f["fee"] = {k: v * 0.95 for k, v in fit["fee"].items()}
+    fam.append(("fees 5 percent below the investing-period median", ev(GOLDEN5, f)))
+    tab = []; slip_model(L, table=tab); tab.sort(key=lambda t: t[4])
+    for t in tab[1:3]:
+        f = dict(fit); f["slip"] = dict(a=t[2], b=t[3], win=t[0], ref=t[1])
+        fam.append(("slips fitted on a %d-quarter window against %.0f" % (t[0], t[1]), ev(GOLDEN5, f)))
+    # the six managers' bridge, rolled from the file's last quarter without re-anchoring at the later audits
+    BRIDGE["anchor"] = False
+    stk2, _ = line_stock(L)
+    fam.append(("the six managers' stock rolled from the file's end, not re-anchored at the 2025 and 2026 audits", ev(GOLDEN5, None, stk2)))
+    BRIDGE["anchor"] = True
+    R["family"] = fam
+    # the factorial
+    fac = {}
+    for tag, sw in [("J1 dropped", dict(GOLDEN5, support="capped")), ("J2 dropped", dict(GOLDEN5, uncovered="audited")),
+                    ("J1 alone", dict(REFLEX5, support="two_channel")), ("J2 alone", dict(REFLEX5, uncovered="bridged"))]:
+        fac[tag] = ev(sw); fac[tag]["R1"] = g["R1"]
+    R["factorial"] = fac
+    # the bootstrap over funds
+    rng = np.random.default_rng(5); fids = list(L["reg"]); bs = defaultdict(list)
+    for b in range(boot):
+        pick = rng.choice(len(fids), len(fids), replace=True)
+        Lb = dict(L); Lb["reg"], Lb["st"], Lb["act"], Lb["aud"] = {}, {}, {}, {}
+        for j, i in enumerate(pick):
+            fid = fids[i]; k = "%s#%d" % (fid, j)
+            Lb["reg"][k] = L["reg"][fid]; Lb["st"][k] = L["st"].get(fid, {}); Lb["act"][k] = L["act"].get(fid, []); Lb["aud"][k] = L["aud"].get(fid, {})
+        Lb["cov"] = L["cov"]
+        fb, _, _, _ = fit_all2(Lb)
+        for name, keys in (("deployment and the deal market", ("dep", "eta")), ("the support's two channels", ("support",)),
+                           ("first-close slips", ("slip",)), ("recycling", ("rho",)), ("every fitted input together", ("dep", "eta", "support", "slip", "fee", "rho"))):
+            f = dict(fit)
+            for k in keys: f[k] = fb[k]
+            bs[name].append(ev(GOLDEN5, f)["R5"])
     R["boot"] = {k: [float(x) for x in v] for k, v in bs.items()}
     return R

@@ -24,7 +24,14 @@ F_SPEND = "spending_distributions_FY2014_FY2027.csv"
 F_PLAN = "corrigan_hart_pacing_plan_2027.xlsx"
 F_PEER = "peer_endowment_survey_2025.xlsx"
 
-CUSHION = 1200.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
+CUSHION = 1150.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
+# Corrigan Hart's alternatives for 2027: the full program and three with re-ups deferred to 2028
+PROGRAMS = [
+    ("A", "The full 2027 program", ("BO", "GE", "VC", "RE", "PC")),
+    ("B", "The credit re-up deferred to 2028", ("BO", "GE", "VC", "RE")),
+    ("C", "The growth and credit re-ups deferred to 2028", ("BO", "VC", "RE")),
+    ("D", "The venture re-up only", ("VC",)),
+]
 
 # the holdings at 31 December 2026 (USD m) and the class the Office of Investments assigns each
 HOLDINGS = [
@@ -85,21 +92,21 @@ def policy(path):
                    "and does not count.", body),
          Paragraph("4. Liquid reserve", h2),
          Paragraph("The liquid reserve is the endowment's holdings at 31 December, each counted at the share of its value its "
-                   "liquidity class allows: cash, money market funds and US Treasuries 100 per cent; investment-grade bonds "
-                   "90 per cent; public equities 70 per cent; hedge funds the endowment can redeem with the proceeds received "
-                   "within the eight quarters 90 per cent; all other holdings nothing. The factors stand for the stress in section "
+                   "liquidity class allows: cash, money market funds and US Treasuries 100 percent; investment-grade bonds "
+                   "90 percent; public equities 70 percent; hedge funds the endowment can redeem with the proceeds received "
+                   "within the eight quarters 90 percent; all other holdings nothing. The factors stand for the stress in section "
                    "6, so the holdings are counted at their 31 December values and not revalued along its path. The Office of "
                    "Investments assigns each holding its class in the year-end holdings report.", body),
          Paragraph("5. The test", h2),
          Paragraph("A budget passes when the liquid reserve less the net cash needs of the eight quarters is at least the "
                    "minimum reserve the Investment Committee sets each year. For the 2027 budget the minimum reserve is "
-                   "USD %s million. Budgets are set in multiples of USD 25 million." % format(int(CUSHION), ","), body),
+                   "USD %s million." % format(int(CUSHION), ","), body),
          Paragraph("6. The stress", h2),
          Paragraph("Net cash needs are measured in a stress this policy sets. The exit market, read on the exit activity "
                    "index, follows its path from the third quarter of 2008 to the second quarter of 2010 relative to its "
                    "level in the second quarter of 2008, starting from its level in the last quarter before the test. "
-                   "Public equities stand at 85 per cent of their 31 December level in the first quarter and 70 per cent "
-                   "in the second, then recover five points a quarter to 100 per cent. Short-term interest rates stand 2.5 "
+                   "Public equities stand at 85 percent of their 31 December level in the first quarter and 70 percent "
+                   "in the second, then recover five points a quarter to 100 percent. Short-term interest rates stand 2.5 "
                    "percentage points above their 31 December level throughout.", body),
          Paragraph("7. Distributions in the stress", h2),
          Paragraph("In each quarter of the stress, each fund distributes its value at 31 December times the distribution "
@@ -110,11 +117,12 @@ def policy(path):
                    "the value at 30 September plus the fourth quarter's capital calls less its distributions as the "
                    "custodian recorded them.", body),
          Paragraph("8. Capital calls in the stress", h2),
-         Paragraph("Capital calls are those the endowment's own managers can be expected to make in the stress, judged from "
-                   "their record in the endowment's funds.", body),
-         Paragraph("9. The budget's new commitments", h2),
-         Paragraph("A budget's new commitments are spread across the funds of the year's pacing plan in the plan's "
-                   "proportions.", body),
+         Paragraph("Capital calls are those the endowment's managers can be expected to make in the stress, judged on the "
+                   "evidence the Office of Investments holds.", body),
+         Paragraph("9. The year's new commitments", h2),
+         Paragraph("The pacing plan's commitments are tested each at its proposed size. Where the plan sets out alternative "
+                   "programs, the Investment Committee adopts the program with the largest total of new commitments that "
+                   "passes; where none passes, the endowment makes no new commitments in the year.", body),
          Paragraph("10. Reporting", h2),
          Paragraph("The Office of Investments reports the result to the Investment Committee with the budget, and the "
                    "Committee may approve any budget up to the largest that passes.", body),
@@ -140,8 +148,8 @@ def ips(path):
                    "university's costs, measured over rolling ten-year periods.", body),
          Paragraph("2. Spending", h2),
          Paragraph("The distribution for each fiscal year (1 July to 30 June) is approved by the trustees in June. It is "
-                   "70 per cent of the previous year's distribution raised by the Higher Education Price Index, plus 30 "
-                   "per cent of 4.5 per cent of the endowment's value at the preceding 31 December. The trustees may "
+                   "70 percent of the previous year's distribution raised by the Higher Education Price Index, plus 30 "
+                   "percent of 4.5 percent of the endowment's value at the preceding 31 December. The trustees may "
                    "depart from the rule in an extraordinary year.", body),
          Paragraph("3. Asset allocation", h2), t, Spacer(1, 6),
          Paragraph("4. Rebalancing", h2),
@@ -178,7 +186,7 @@ def capplan(path):
          Paragraph("Projects", h2), t, Spacer(1, 6),
          Paragraph("Debt", h2),
          Paragraph("After the two series the university's debt rises from USD 612 million to USD 871 million. Debt service "
-                   "stays below 5.5 per cent of operating expenses in every year of the plan, inside the 7 per cent limit "
+                   "stays below 5.5 percent of operating expenses in every year of the plan, inside the 7 percent limit "
                    "of the debt policy. The university keeps USD 150 million of operating liquidity, separate from the "
                    "endowment, against its bonds' covenants.", body),
          Paragraph("Gifts", h2),
@@ -244,6 +252,13 @@ def pacing_plan(path, plan_funds, names):
                    "IN": "Infrastructure", "PC": "Private credit"}[f["gp"]["st"]], f["C"], "Q%d 2027" % Wd.qq(f["commit_q"]),
                    "Q%d %d" % (Wd.qq(f["exp_fc"]), Wd.qy(f["exp_fc"])), "Re-up"])
     ws.append(["Total", "", "", sum(f["C"] for f in plan_funds), "", "", ""])
+    wp = wb.create_sheet("Programs")
+    wp.append(["Program", "Description", "Funds committed in 2027", "Total (USD m)"])
+    for c in wp[1]: c.font = Font(bold=True)
+    by = {f["gp"]["st"]: f for f in plan_funds}
+    for code, desc, sts in PROGRAMS:
+        fs = [by[s] for s in sts if s in by]
+        wp.append([code, desc, "; ".join(f["name"] for f in fs), sum(f["C"] for f in fs)])
     ws2 = wb.create_sheet("Long-range pacing")
     ws2.append(["Year", "Buyout", "Growth equity", "Venture capital", "Real estate", "Infrastructure", "Private credit", "Total (USD m)"])
     for c in ws2[1]: c.font = Font(bold=True)
@@ -257,8 +272,8 @@ def pacing_plan(path, plan_funds, names):
         ws2.append([y] + v + [sum(v)])
     ws3 = wb.create_sheet("Notes")
     for line in ["Draft for discussion with the Office of Investments, 7 December 2026, for the Investment Committee's March 2027 meeting.",
-                 "The 2027 programme continues existing relationships; no new managers are proposed for 2027, and infrastructure resumes in 2028.",
-                 "Commitments are sized to keep the private allocation near its 52 per cent policy target by 2031.",
+                 "The 2027 program continues existing relationships; no new managers are proposed for 2027, and infrastructure resumes in 2028.",
+                 "Commitments are sized to keep the private allocation near its 52 percent policy target by 2031.",
                  "Corrigan Hart LLC, Private Markets Advisory."]:
         ws3.append([line])
     wb.save(path)
