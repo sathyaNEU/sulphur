@@ -888,6 +888,70 @@
    "move": "a second record at another grain set aside because it lacks unit identities and fine timing",
    "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
    "quote": "Read the AMI daily aggregates but excluded them from interruption attribution because they lack customer-level identities and minute-level event timing."
+  },
+  {
+   "id": "R47",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a clearing house's margin-rate rule recovered from its rate notices against the settlement prices (look-back quantile, review day, tolerance) and replayed through a stress",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Margin rates respond to observed price risk and notice timing, with correct year, quarter and month cascading."
+  },
+  {
+   "id": "R48",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a trading desk's selling rule recovered from its trade capture with each date's budget vintage (threshold, weekly pace, budget resets) and replayed through a stress instead of freezing the book",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Trading follows the empirically reconstructed Tuesday rule, including budget resets."
+  },
+  {
+   "id": "R49",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a storage-and-release (dispatch) model fitted on the weeks before the stress year and held out on the stress year itself, recursive and one-step errors reported",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Dispatch was fitted on 205 pre-2022 weeks and tested on 52 held-out weeks, with one-step RMSE of 0.041047 GWh/week and recursive RMSE of 0.046759 GWh/week."
+  },
+  {
+   "id": "R50",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a lagged trailing-average transfer price recovered from the invoices against monthly market prices, the spot reading rejected on its pricing error",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "The group transfer price uses monthly system prices from M-13 through M-2, not current spot."
+  },
+  {
+   "id": "R51",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "a fixed-price bilateral supply contract counted in a hedge ratio the policy defines as all fixed-price sales of budgeted output",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "These include fixed-price bilateral sales and use the latest approved generation budgets."
+  },
+  {
+   "id": "R52",
+   "kind": "reflex",
+   "class": "self-verification",
+   "move": "the forward method run on the earlier stress year's opening book and reproduced against that year's cash records to certify it",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "the same-method replay requires EUR 548.417 million on 26 August 2022; actual cash records show EUR 548.457 million on 26 August 2022."
+  },
+  {
+   "id": "N28",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "inputs another process re-sets during the forecast window (budgets, plans, the counterparty's own schedule) held at their latest supplied values",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Future generation budgets remain at the latest supplied long-range values."
+  },
+  {
+   "id": "N29",
+   "kind": "named_assumption",
+   "class": "stopped at the first story",
+   "move": "the practice the history shows preferred over a correction the written policy requires once the forecast crosses its limit",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "The simulation follows observed trading practice, not an invented compliance correction."
   }
  ]
 }

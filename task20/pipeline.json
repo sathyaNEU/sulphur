@@ -1,6 +1,6 @@
 {
  "task": "task20",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
@@ -47,7 +47,15 @@
   },
   "triage": "",
   "recorded": "",
-  "history": []
+  "history": [
+   {
+    "architecture": 3,
+    "date": "2026-11-13",
+    "run1": "not reported (pasted: runs/arch3_run1.md; every deep step made unprompted; 208.4 on the daily-move reading, 328.7 under the level copy it rejected)",
+    "run2": "not reported",
+    "triage": "none (returned at review)"
+   }
+  ]
  },
  "returned": [
   {
@@ -73,15 +81,21 @@
    "source": "author",
    "repair": "design",
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
+  },
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "repair": "design",
+   "commit": "re-root to architecture 4: the review returned annex (a) open, and the pasted run made every deep step of architecture 3, so pinning alone would land it"
   }
  ],
  "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "RETURNED",
+  "date": "2026-11-13",
+  "note": "not deterministic: annex (a) of the liquidity standard reads two ways (each mapped day's one-day 2022 move, EUR 208m and a EUR 250m facility, against the level copy, 328.8m and EUR 350m); depth level 4 on the reviewer's reading; runs/arch3_review.md"
  },
  "source_concept": "Quant_Finance_Deep_Reasoning_Concepts.md, Concept 3 (author's note of 2026-11-11)"
 }
