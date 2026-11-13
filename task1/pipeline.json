@@ -1,20 +1,21 @@
 {
  "task": "task1",
- "status": "PAUSED",
+ "status": "BUILD",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 5,
  "loops": 0,
- "call": "provisional: raise Flex, Onbeperkt and Gezin in January 2027 and hold Standaard",
- "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan; R3 extra cancellations per subscription at the first 2027 bill by plan and country; R4 extra downgrades per subscription by plan and country; R5 each plan's change in its October base's 2027 contribution if its rise goes ahead; R6 the rises to go ahead",
+ "call": "let the January 2027 rises go ahead on Flex, Gezin, Onbeperkt and hold Standaard (EUR -12.4 per October 2026 subscription in 2027)",
+ "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12",
+  "checks": "96 checks, 0 FAIL"
  },
  "leak": {
   "leak_py": "",
@@ -30,12 +31,12 @@
   "gate_h": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": 41.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 14.0,
+  "careful": 41.5,
+  "thorough": 100.0,
+  "largest_hint": "no single sentence rescues a graded result on the careful route; the crossing plus one valuation rescues the call"
  },
  "runs": {
   "run1": null,
@@ -58,5 +59,5 @@
   "date": "",
   "note": ""
  },
- "resume": "PAUSED 2026-11-12 at stage 2 of architecture 5 (re-drawn on the author's word in the restored Kraanvogel world, generator from 87422aa): the decision is which January 2027 price rises go ahead plan by plan, on each plan's October 2026 base's 2027 contribution at EUR 0.40 per counted hour; world.py now carries a price history (each plan rose in one country in 2025 and the other in 2026), a rival price scan by country (pack.write_rival), and a rise response at the first higher bill (extra cancellations and downgrades, a step where the new price passes the rival's) with cap-hit churn on Flex and Standaard; methods.r5_rises estimates the response by event against the other country and values past downgraders' realised months. Measured: truth and golden both raise Flex, Onbeperkt and Gezin and hold Standaard; shortcuts land on four distinct wrong sets (pooled response all four; per-plan response Standaard, Onbeperkt, Gezin; the 2026 share Flex alone; the live log alone Flex and Gezin); the downgrade-free route lands on the golden set (not priced). Next: widen the per-plan margins (EUR 1.6 to 3 per subscription now) by larger rise gains or larger events, register the v5 card, write the note, prompt, figures, effort, golden and submission, gates, stage 4."
+ "resume": "stage 4: leak reader and determinism judge spawned on the architecture 5 cut (gates.py 0 FAIL, checks 58 of 58, verify 29 of 29, byte-identical b40525c27049bd18 class)"
 }

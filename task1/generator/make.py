@@ -52,7 +52,7 @@ def goldens(fig):
 
 def main(once):
     BD.build(TARGET)
-    fig, E, GD = EP.run(TARGET)
+    fig, E, GD = EP.run_all(TARGET)
     json.dump(fig, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, default=float)
     json.dump(E, open(os.path.join(HERE, "effort.json"), "w"), indent=1, default=float)
     goldens(fig)

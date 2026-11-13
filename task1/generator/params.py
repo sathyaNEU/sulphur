@@ -19,11 +19,11 @@ PRICE0 = {"FLEX": 9.49, "STD": 13.99, "ONB": 17.99, "GEZ": 21.99}         # 2023
 RISES = {(2025, "BE"): ("STD", "ONB"), (2025, "NL"): ("FLEX", "GEZ"), (2026, "NL"): ("STD", "ONB"),
          (2026, "BE"): ("FLEX", "GEZ")}
 RIVAL = {"NL": {"FLEX": 9.79, "STD": 15.49, "ONB": 19.49, "GEZ": 23.49},   # the rival's comparable plans
-         "BE": {"FLEX": 9.39, "STD": 14.49, "ONB": 18.49, "GEZ": 22.49}}
+         "BE": {"FLEX": 9.39, "STD": 15.29, "ONB": 18.49, "GEZ": 22.49}}
 RIVAL_NAME = {"FLEX": "Luistr Basis 10 uur", "STD": "Luistr Plus 30 uur", "ONB": "Luistr Onbeperkt",
               "GEZ": "Luistr Familie"}
 RISE27 = ("FLEX", "STD", "ONB", "GEZ")    # the rises the price list announces for January 2027
-PRICE27 = {"FLEX": 10.99, "STD": 15.99, "ONB": 19.99, "GEZ": 24.99}       # from 1 January 2027
+PRICE27 = {"FLEX": 11.49, "STD": 15.99, "ONB": 19.99, "GEZ": 26.49}       # from 1 January 2027
 CAP = {"FLEX": 10.0, "STD": 30.0, "ONB": None, "GEZ": None}               # hours of listening a month
 MAX_PROFILES = {"FLEX": 1, "STD": 1, "ONB": 2, "GEZ": 4}
 VAT = {"NL": 0.09, "BE": 0.06}
@@ -33,12 +33,12 @@ RATE27 = 0.40                        # 2027 to 2029 agreement: EUR per counted h
 FEE27 = {"FLEX": 13.90, "STD": 44.20, "ONB": 14.20, "GEZ": 54.80}         # agency fee per trial start, spring 2027
 
 # behaviour
-CAMPAIGN = {2023: 1250, 2024: 1480, 2025: 1620, 2026: 1700}               # spring trial starts, January to March
+CAMPAIGN = {2023: 1900, 2024: 2200, 2025: 2400, 2026: 2550}               # spring trial starts, January to March
 CAMPAIGN_MIX = {"FLEX": 0.22, "STD": 0.30, "ONB": 0.28, "GEZ": 0.20}
-ORGANIC = 150                        # organic trial starts a month (14-day trial)
+ORGANIC = 225                        # organic trial starts a month (14-day trial)
 ORGANIC_MIX = {"FLEX": 0.30, "STD": 0.36, "ONB": 0.22, "GEZ": 0.12}
-BASE0 = 3300                         # paying accounts in January 2023
-HOURS = {"FLEX": 6.4, "STD": 12.6, "ONB": 27.5, "GEZ": 10.0}              # adult content hours a settled month
+BASE0 = 5000                         # paying accounts in January 2023
+HOURS = {"FLEX": 6.4, "STD": 12.6, "ONB": 23.0, "GEZ": 10.0}              # adult content hours a settled month
 CHILD_HOURS = 7.5
 COMMUTER = {"FLEX": 0.12, "STD": 0.18, "ONB": 0.80, "GEZ": 0.10}
 CONVERT = {"FLEX": 0.56, "STD": 0.63, "ONB": 0.58, "GEZ": 0.55}
@@ -78,3 +78,4 @@ def price_of(plan, country, m, rise27=RISE27):
         if y >= yy and plan in RISES.get((yy, country), ()):
             p = PRICE[plan]
     return p
+SEL = 0.6                            # how much more light listeners answer a rise

@@ -1,43 +1,170 @@
 {
  "bands": {
-  "contribution": {
+  "R2": {
    "Flex": [
-    13.16,
-    13.52
+    4.99,
+    5.09
    ],
    "Gezin": [
-    21.16,
-    22.22
+    28.84,
+    29.42
    ],
    "Onbeperkt": [
-    -3.65,
-    -2.5
+    34.04,
+    34.72
    ],
    "Standaard": [
-    12.31,
-    13.41
+    9.82,
+    10.02
    ]
   },
-  "counted_per_month": {
-   "Flex": [
-    5.29,
-    5.39
+  "R3": {
+   "Flex Flanders": [
+    -0.3,
+    4.37
    ],
+   "Flex Netherlands": [
+    -0.3,
+    4.37
+   ],
+   "Gezin Flanders": [
+    -0.3,
+    0.3
+   ],
+   "Gezin Netherlands": [
+    24.95,
+    29.64
+   ],
+   "Onbeperkt Flanders": [
+    3.15,
+    4.29
+   ],
+   "Onbeperkt Netherlands": [
+    15.11,
+    16.7
+   ],
+   "Standaard Flanders": [
+    23.93,
+    28.49
+   ],
+   "Standaard Netherlands": [
+    23.93,
+    28.49
+   ]
+  },
+  "R4": {
+   "Gezin Flanders": [
+    -0.3,
+    0.3
+   ],
+   "Gezin Netherlands": [
+    3.1,
+    3.74
+   ],
+   "Onbeperkt Flanders": [
+    0.51,
+    1.44
+   ],
+   "Onbeperkt Netherlands": [
+    23.5,
+    25.98
+   ],
+   "Standaard Flanders": [
+    15.67,
+    17.51
+   ],
+   "Standaard Netherlands": [
+    15.67,
+    17.51
+   ]
+  },
+  "R5": {
    "Gezin": [
-    27.67,
-    28.41
+    99.34,
+    114.42
    ],
    "Onbeperkt": [
-    31.06,
-    31.72
+    61.45,
+    70.43
    ],
    "Standaard": [
-    10.39,
-    10.6
+    36.6,
+    46.91
+   ]
+  },
+  "R6": {
+   "Flex": [
+    1.03,
+    1.05
+   ],
+   "Gezin": [
+    1.08,
+    1.1
+   ],
+   "Onbeperkt": [
+    1.09,
+    1.11
+   ],
+   "Standaard": [
+    1.07,
+    1.09
+   ]
+  },
+  "R7": {
+   "Flex": [
+    2.98,
+    4.63
+   ],
+   "Gezin": [
+    5.03,
+    7.04
+   ],
+   "Onbeperkt": [
+    3.0,
+    5.1
+   ],
+   "Standaard": [
+    -14.34,
+    -12.06
    ]
   }
  },
- "careful_lead": "Onbeperkt",
+ "careful": {
+  "change_2027": {
+   "Flex": 1.7,
+   "Gezin": 19.9,
+   "Onbeperkt": 1.7,
+   "Standaard": 1.2
+  },
+  "extra_cancel": {
+   "Flex Flanders": 10.0,
+   "Flex Netherlands": 10.0,
+   "Gezin Flanders": 7.7,
+   "Gezin Netherlands": 7.7,
+   "Onbeperkt Flanders": 14.7,
+   "Onbeperkt Netherlands": 14.7,
+   "Standaard Flanders": 6.6,
+   "Standaard Netherlands": 6.6
+  },
+  "leaver_hours_ratio": {
+   "Flex": 1.0,
+   "Gezin": 1.0,
+   "Onbeperkt": 1.0,
+   "Standaard": 1.0
+  }
+ },
+ "careful_raise": [
+  "Flex",
+  "Gezin",
+  "Onbeperkt",
+  "Standaard"
+ ],
+ "change_2027": {
+  "Flex": 3.3,
+  "Gezin": 5.3,
+  "Onbeperkt": 4.7,
+  "Standaard": -12.4
+ },
  "clauses": [
   2.1,
   2.2,
@@ -46,186 +173,286 @@
   3.1,
   3.2,
   3.3,
-  3.4,
   3.5,
-  3.6,
-  3.7,
-  3.8
+  3.8,
+  3.9,
+  3.1
  ],
- "contribution": {
-  "Flex": 13.3,
-  "Gezin": 22.0,
-  "Onbeperkt": -3.6,
-  "Standaard": 12.4
- },
- "contribution_detail": {
-  "Flex": {
-   "counted hours": 23.7,
-   "fee (EUR)": 13.9,
-   "remuneration (EUR)": 9.48
-  },
-  "Gezin": {
-   "counted hours": 247.1,
-   "fee (EUR)": 54.8,
-   "remuneration (EUR)": 98.86
-  },
-  "Onbeperkt": {
-   "counted hours": 280.9,
-   "fee (EUR)": 14.2,
-   "remuneration (EUR)": 112.35
-  },
-  "Standaard": {
-   "counted hours": 81.8,
-   "fee (EUR)": 44.2,
-   "remuneration (EUR)": 32.7
-  }
- },
  "counted_per_month": {
-  "Flex": 5.34,
-  "Gezin": 27.95,
-  "Onbeperkt": 31.37,
-  "Standaard": 10.49
+  "Flex": 5.04,
+  "Gezin": 29.13,
+  "Onbeperkt": 34.38,
+  "Standaard": 9.92
  },
- "fee": {
-  "Flex": 13.9,
-  "Gezin": 54.8,
-  "Onbeperkt": 14.2,
-  "Standaard": 44.2
+ "downgrader_value": {
+  "Gezin": 100.3,
+  "Onbeperkt": 69.7,
+  "Standaard": 46.4
  },
- "horizon_months": 24,
- "lead_margin_eur": 8.7,
- "lead_plan": "Gezin",
- "lead_plan_code": "GEZ",
- "paying_oct": {
-  "Flex": 376,
-  "Gezin": 731,
-  "Onbeperkt": 1004,
-  "Standaard": 858
- },
- "paying_oct_total": 2969,
- "rate": 0.4,
- "remuneration_2027_band": [
-  191900,
-  207300
+ "events": [
+  {
+   "country": "Flanders",
+   "crossed": false,
+   "extra_cancel": 8.6,
+   "extra_down": 2.6,
+   "plan": "Standaard",
+   "subscriptions": 336,
+   "year": 2025
+  },
+  {
+   "country": "Flanders",
+   "crossed": true,
+   "extra_cancel": 15.9,
+   "extra_down": 24.7,
+   "plan": "Onbeperkt",
+   "subscriptions": 359,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": true,
+   "extra_cancel": 12.0,
+   "extra_down": 0.0,
+   "plan": "Flex",
+   "subscriptions": 321,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": false,
+   "extra_cancel": -1.6,
+   "extra_down": -0.7,
+   "plan": "Gezin",
+   "subscriptions": 587,
+   "year": 2025
+  },
+  {
+   "country": "Netherlands",
+   "crossed": false,
+   "extra_cancel": 2.2,
+   "extra_down": 2.5,
+   "plan": "Standaard",
+   "subscriptions": 790,
+   "year": 2026
+  },
+  {
+   "country": "Netherlands",
+   "crossed": false,
+   "extra_cancel": 4.0,
+   "extra_down": 1.1,
+   "plan": "Onbeperkt",
+   "subscriptions": 969,
+   "year": 2026
+  },
+  {
+   "country": "Flanders",
+   "crossed": false,
+   "extra_cancel": 4.1,
+   "extra_down": 0.0,
+   "plan": "Flex",
+   "subscriptions": 111,
+   "year": 2026
+  },
+  {
+   "country": "Flanders",
+   "crossed": true,
+   "extra_cancel": 28.2,
+   "extra_down": 3.4,
+   "plan": "Gezin",
+   "subscriptions": 247,
+   "year": 2026
+  }
  ],
- "remuneration_2027_base": 202600,
+ "extra_cancel": {
+  "Flex Flanders": 4.1,
+  "Flex Netherlands": 4.1,
+  "Gezin Flanders": 0.0,
+  "Gezin Netherlands": 28.2,
+  "Onbeperkt Flanders": 4.0,
+  "Onbeperkt Netherlands": 15.9,
+  "Standaard Flanders": 25.2,
+  "Standaard Netherlands": 25.2
+ },
+ "extra_down": {
+  "Gezin Flanders": 0.0,
+  "Gezin Netherlands": 3.4,
+  "Onbeperkt Flanders": 1.1,
+  "Onbeperkt Netherlands": 24.7,
+  "Standaard Flanders": 16.5,
+  "Standaard Netherlands": 16.5
+ },
+ "hold": [
+  "Standaard"
+ ],
+ "leaver_hours_ratio": {
+  "Flex": 1.04,
+  "Gezin": 1.09,
+  "Onbeperkt": 1.1,
+  "Standaard": 1.08
+ },
+ "paying_oct": {
+  "Flex": 494,
+  "Gezin": 1021,
+  "Onbeperkt": 1434,
+  "Standaard": 1218
+ },
+ "paying_oct_total": 4167,
+ "price26": {
+  "Flex": 9.99,
+  "Gezin": 22.99,
+  "Onbeperkt": 18.99,
+  "Standaard": 14.99
+ },
+ "price27": {
+  "Flex": 11.49,
+  "Gezin": 26.49,
+  "Onbeperkt": 19.99,
+  "Standaard": 15.99
+ },
+ "quick_raise": [
+  "Flex",
+  "Gezin"
+ ],
+ "raise": [
+  "Flex",
+  "Gezin",
+  "Onbeperkt"
+ ],
+ "rate": 0.4,
+ "rival_be": {
+  "Flex": 9.39,
+  "Gezin": 22.49,
+  "Onbeperkt": 18.49,
+  "Standaard": 15.29
+ },
+ "rival_family": {
+  "downgraders valued on their own hours capped at the lower plan's, with the cap response": [
+   "Flex",
+   "Gezin",
+   "Onbeperkt"
+  ],
+  "re-sent warehouse rows summed": [
+   "Flex",
+   "Gezin",
+   "Onbeperkt"
+  ],
+  "the first bill alone as the response window": [
+   "Flex",
+   "Gezin",
+   "Onbeperkt"
+  ],
+  "the same country a year earlier as the control where the record holds it": [
+   "Flex",
+   "Gezin",
+   "Onbeperkt"
+  ]
+ },
+ "rival_nl": {
+  "Flex": 9.79,
+  "Gezin": 23.49,
+  "Onbeperkt": 19.49,
+  "Standaard": 15.49
+ },
  "routes": {
-  "streamed seconds read as hours, today's profile export": {
-   "contribution": {
-    "Flex": 16.6,
-    "Gezin": 29.0,
-    "Onbeperkt": 70.2,
-    "Standaard": 28.5
-   },
-   "counted_per_month": {
+  "a downgrade counted as an exit from the plan": {
+   "change_2027": {
     "Flex": 3.3,
-    "Gezin": 23.17,
-    "Onbeperkt": 11.96,
-    "Standaard": 5.33
+    "Gezin": 4.4,
+    "Onbeperkt": 8.4,
+    "Standaard": -19.0
    },
-   "lead": "Onbeperkt",
-   "remuneration_2027": 115300
+   "raise": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt"
+   ]
+  },
+  "each plan's own past response": {
+   "change_2027": {
+    "Flex": 1.8,
+    "Gezin": 20.8,
+    "Onbeperkt": 5.2,
+    "Standaard": 2.4
+   },
+   "raise": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt",
+    "Standaard"
+   ]
+  },
+  "one response for every rise, scaled by the rise": {
+   "change_2027": {
+    "Flex": 2.6,
+    "Gezin": 19.5,
+    "Onbeperkt": 5.8,
+    "Standaard": 0.8
+   },
+   "raise": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt",
+    "Standaard"
+   ]
   },
   "the 2026 remuneration basis carried (52 per cent of net revenue)": {
-   "contribution": {
-    "Flex": 5.4,
-    "Gezin": 36.7,
-    "Onbeperkt": 48.1,
-    "Standaard": 1.6
+   "change_2027": {
+    "Flex": 1.4,
+    "Gezin": -9.4,
+    "Onbeperkt": -7.8,
+    "Standaard": -9.8
    },
-   "counted_per_month": {
-    "Flex": 5.34,
-    "Gezin": 27.95,
-    "Onbeperkt": 31.37,
-    "Standaard": 10.49
-   },
-   "lead": "Onbeperkt",
-   "remuneration_2027": 209000
+   "raise": [
+    "Flex"
+   ]
   },
-  "the careful route: the live roll-up's positions, today's profile export": {
-   "contribution": {
-    "Flex": 15.1,
-    "Gezin": 23.8,
-    "Onbeperkt": 45.5,
-    "Standaard": 23.0
+  "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average": {
+   "change_2027": {
+    "Flex": 1.7,
+    "Gezin": 19.9,
+    "Onbeperkt": 1.7,
+    "Standaard": 1.2
    },
-   "counted_per_month": {
-    "Flex": 4.29,
-    "Gezin": 26.29,
-    "Onbeperkt": 18.8,
-    "Standaard": 7.1
-   },
-   "lead": "Onbeperkt",
-   "remuneration_2027": 149900
+   "raise": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt",
+    "Standaard"
+   ]
   },
   "the golden": {
-   "contribution": {
-    "Flex": 13.3,
-    "Gezin": 22.0,
-    "Onbeperkt": -3.6,
-    "Standaard": 12.4
+   "change_2027": {
+    "Flex": 3.3,
+    "Gezin": 5.3,
+    "Onbeperkt": 4.7,
+    "Standaard": -12.4
    },
-   "counted_per_month": {
-    "Flex": 5.34,
-    "Gezin": 27.95,
-    "Onbeperkt": 31.37,
-    "Standaard": 10.49
-   },
-   "lead": "Gezin",
-   "remuneration_2027": 202600
+   "raise": [
+    "Flex",
+    "Gezin",
+    "Onbeperkt"
+   ]
   },
-  "the licence renewals merged, today's profile export": {
-   "contribution": {
-    "Flex": 14.2,
-    "Gezin": 10.4,
-    "Onbeperkt": 3.3,
-    "Standaard": 19.8
+  "the quick route": {
+   "change_2027": {
+    "Flex": 1.0,
+    "Gezin": 3.2,
+    "Onbeperkt": -3.4,
+    "Standaard": -1.6
    },
-   "counted_per_month": {
-    "Flex": 4.64,
-    "Gezin": 31.52,
-    "Onbeperkt": 28.58,
-    "Standaard": 8.1
-   },
-   "lead": "Standaard",
-   "remuneration_2027": 197700
+   "raise": [
+    "Flex",
+    "Gezin"
+   ]
   },
-  "the live roll-up's positions, the profiles each charge lists": {
-   "contribution": {
-    "Flex": 14.2,
-    "Gezin": 32.6,
-    "Onbeperkt": 42.7,
-    "Standaard": 16.1
+  "the response read off the new price's gap to the rival, in a straight line": {
+   "change_2027": {
+    "Flex": -10.4,
+    "Gezin": -122.2,
+    "Onbeperkt": -1.4,
+    "Standaard": -8.6
    },
-   "counted_per_month": {
-    "Flex": 4.94,
-    "Gezin": 23.56,
-    "Onbeperkt": 20.51,
-    "Standaard": 9.27
-   },
-   "lead": "Onbeperkt",
-   "remuneration_2027": 153000
+   "raise": []
   }
- },
- "runner_up": "Flex",
- "spring24": {
-  "Flex net revenue": 36.67,
-  "Flex paying months": 3.78,
-  "Flex share paying": 54.3,
-  "Gezin net revenue": 175.66,
-  "Gezin paying months": 8.46,
-  "Gezin share paying": 56.6,
-  "Onbeperkt net revenue": 122.95,
-  "Onbeperkt paying months": 7.14,
-  "Onbeperkt share paying": 60.7,
-  "Standaard net revenue": 89.33,
-  "Standaard paying months": 6.51,
-  "Standaard share paying": 65.1
- },
- "spring24_trial_starts": {
-  "Flex": 337,
-  "Gezin": 309,
-  "Onbeperkt": 440,
-  "Standaard": 436
  }
 }

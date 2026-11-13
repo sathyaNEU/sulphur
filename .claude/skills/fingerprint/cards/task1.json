@@ -1,238 +1,299 @@
 {
- "task": "task1",
- "project": "sulfur",
- "architecture": "v4",
- "drawn": "2026-11-12",
- "slot_note": "",
- "domain": "product-analytics",
- "client_domain": "product-analytics",
- "subdomain": "retention-cohort-lifetime-value-modeling",
- "niche": "a Dutch and Flemish audiobook subscription app (four plans: Flex 10 hours, Standaard 30 hours, Onbeperkt, Gezin with up to four profiles) choosing which plan its spring 2027 paid campaign leads with, valued over each sign-up's first 24 months after the publishers' 2027 per-hour remuneration replaces the 2026 revenue share",
- "objective": "forecasting",
- "shape": "02",
- "decision_type": "pick_one_of_n",
- "answer_unit": "named_option",
- "answer": "lead the spring 2027 campaign with Gezin (EUR 22.0 per trial start over 24 months after EUR 0.40 per counted hour and the agency's fee, EUR 8.7 ahead of Flex); not Onbeperkt, which the careful route leads with",
- "answer_source": "task1/generator/figures.json at commit 87422aa (folder removed on retirement)",
- "gap": [
-  "objective",
-  "population"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G12",
-  "G2",
-  "G9"
- ],
- "gate_g": "forecasting",
- "calibration_form": "counterparty_acknowledgement",
- "stump_strategy": "stated_rule_hard_construction",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "other",
- "stump_class": "analytical",
- "analyst_test": "A careful but hurried analyst cleans the exports, reconciles the session log to the publishers' statements and scales its hours up to them in proportion, joins sessions to today's profiles and plans, and values each plan's sign-ups on hours that miss the offline listening the licence renewals alone carry (heaviest on Onbeperkt) and that count Gezin's re-listening across the two channels, so it leads with Onbeperkt.",
- "domain_test": "Each result is a subscription cohort quantity the LTV task type estimates (plan-level survival and net revenue per sign-up over 24 months, counted listening per paying subscription-month under the publishers' counting rule, the remuneration it costs), and the counting rule, offline licences, family profiles and per-hour royalties belong to audio subscriptions; swap the nouns into a hospital or a factory and none of the quantities exists.",
- "layer2_family": "estimation_fit",
- "layer2_pattern": "own:counted-hours-by-plan-from-two-reporting-channels",
- "layer1": [
-  "session export rows re-sent by the app after a reconnect",
-  "profile ids of removed family profiles absent from today's profile table",
-  "playback speed recorded per session, content hours against wall time",
-  "test and staff accounts",
-  "app-store subscriptions reported in the stores' own monthly proceeds reports",
-  "publisher codes renamed in the 2025 catalogue migration"
- ],
- "stakeholder_role": "the head of growth, who sets the spring 2027 campaign's lead plan with finance",
- "role_family": "product_manager",
- "scoring_unit": "per active unit per period",
- "spine": {
-  "file": "listening_sessions_2025-01_2026-10.csv",
-  "rows": 574311,
-  "entity": "one listening session",
-  "grain": "profile x title x session",
-  "source": "synthetic"
- },
- "forum": "committee_or_panel",
- "forcing_event": "launch_or_rollout",
- "org_family": "media_or_publishing",
- "world": {
-  "geography": "the Netherlands and Flanders",
-  "currency": "EUR",
-  "org_type": "an audiobook and e-book subscription app",
-  "invented_names": [
-   "Kraanvogel Luisterboeken",
-   "Stichting Uitgeverslicenties Luisterboek"
-  ],
-  "people": [
-   "Romy Korsman",
-   "Hugo Brouwer",
-   "Tara Martens"
-  ]
- },
- "deliverables": [
-  "spring_campaign_2027_plans.xlsx",
-  "spring_campaign_2027.pptx"
- ],
- "opening_move": "question-first",
- "question_form": "which",
- "driver": "The cost of each option's future entrants is a per-unit charge on a quantity the organisation's own counting engine produces from two reporting channels, one of which the main activity record never sees and which is concentrated in some options, under a rule that counts each item once across both channels, so the activity record scaled to the engine's totals misprices the options in opposite directions and the latest cost per entrant reflects a charging basis that ends.",
- "driver_concrete": "Each plan's first-24-month contribution per spring 2027 trial start is its net revenue over the plan's spring 2024 trial starts' realised months at 2027 prices less EUR 0.40 per counted hour (the 2027 agreement, replacing 2026's 52 per cent of revenue) and the agency's fee, where counted hours are the furthest position each profile first reaches in each title across the live roll-up and the positions downloaded titles report at licence renewal, attributed to the account whose charge listed the profile that month.",
- "stump": "A careful but hurried analyst takes the live roll-up as the listening (it reproduces the 2026 statements exactly) and joins it to today's profile export, which misses Onbeperkt's downloaded listening and credits Gezin with the histories its moved-in profiles brought, and leads with Onbeperkt instead of Gezin; the licence channel alone leads with Standaard.",
- "answer_shape": "forecast-bands-drivers",
- "weight": "hard-to-measure",
- "chain_signature": [
-  "assembly-reconciliation",
-  "missingness-measurement",
-  "data-discovery",
-  "modeling",
-  "forecasting",
-  "forecasting",
-  "synthesis"
- ],
- "results": "R1 paying subscriptions by plan at 31 Oct 2026; R2 counted hours per paying subscription-month by plan, Nov 2025-Oct 2026; R3 share of each plan's counted hours reported only at licence renewal; R4 each plan's spring 2024 sign-ups: 24-month paying months and net revenue per sign-up; R5 each plan's 24-month contribution per spring 2027 sign-up; R6 the 2027 remuneration bill; R7 the lead plan",
- "one_fact_test": "the licence server's renewals carry the positions of titles played from downloads; moves the careful route from Onbeperkt to Standaard and rescues R6 alone, 1 of 6",
- "strategy_label": "UNTESTED",
- "mechanism_source": "design_note",
- "differentiation": {},
- "lineage": [
-  {
-   "architecture": "v1",
-   "fate": "spent 2026-11-09: the project lead's review returned the single-deep-step design (one constructed factor, the tutors' stopping hump, placed in the forward cohort by an onboarding pause and surge; every graded figure came out of one projection)",
-   "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
-   "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
-   "shell": null
-  },
-  {
-   "architecture": "v2",
-   "fate": "spent 2026-11-10: the platform's holistic audit failed the uploaded cut on determinism; repaired (judge DETERMINISTIC APPROVE) but the uploaded run's own methods land the repaired commitment (66.5 of 93 graded weight), the single-total risk: one cut of one total cannot be both forced and hard",
-   "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate has decayed on a cohort whose exits also run with the calendar, a size adjustment at each anniversary set by how much of its capacity each unit uses on a book whose capacity per user has drifted, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so every trailing extrapolation and the recent pooled rates overstate the forward total, and the committed figure is the largest step a filed band, carrying the estimates' own sampling error and nothing else, meets at a stated chance.",
-   "stump": "A careful but hurried analyst rebuilds the October 2026 ARR correctly, then applies the mean realised uplift to the contracts still to reprice, pools renewal exit and seat-cut rates without utilisation, first renewals or group exits, carries the Team plan's last three months' exit rates, values the open pipeline at the CRM's stage probabilities and draws accounts independently for the band, and files a commitment above the draft, clearing it, when large contracts negotiate the rise down, seat cuts and exits follow utilisation on a book sold more seats per user each year, the autumn is the Team plan's cancellation peak and the January excess has faded, old open deals rarely close and parent groups leave together, so the commitment sits below the draft; and a ten-minute trailing extrapolation clears the draft by a wide margin because the trailing year carries the price rise and the padded seats as if they recurred.",
-   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "the",
-    "rounding opener": "give",
-    "deliverable set": "docx+xlsx"
-   }
-  },
-  {
-   "architecture": "v3",
-   "fate": "spent 2026-11-12: returned twice on forcing and determinism by the platform's review (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection were open modelling choices no file pinned, and a return rate not tied to early reading alone funded 9 lines; its deciding lessons (vintage_or_cohort_drift, completion_of_young_cohorts) are on the client's closed page of 2026-11-12",
-   "driver": "Each candidate's value per unit of cost is the payment stream of its future entrants, whose first large drop sits at a price step set by the candidate's own terms and the full price it steps to, whose later decline follows a usage trait the newest entrants carry differently from the record (seen only in a second log at another grain, never in their early survival), which a scheduled price change cuts again at a size read only from an earlier change's whole window and the entrants' tenure at it, and which continues through returns recorded under other identities, so a ranking under a fixed budget on each candidate's own history funds a different set.",
-   "driver_concrete": "Each 2027 acquisition line's expected 36-month net revenue per start, set by its 2027 introductory offer and the April 2027 list price at the step-up, the usage its newest starts show in the reading log (social and partner down since late 2025, search up since spring 2025), the April 2027 rise's excess cancellations read from the April 2025 rise including the notice-letter exits and the larger response of first-year subscribers, and later subscriptions by the same household under new customer numbers, ranked per euro of planned spend until the budget is spent.",
-   "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, reads the April 2025 jump in end-of-intro exits as a period rather than as the full price, reads the 2025 rise's cancellations from April on pooled over tenure and counts later subscriptions on the customer number, so the four paid social lines and two cashback lines clear 3.5 times their cost and the plan funds 14 lines for EUR 141,575 instead of 8 for EUR 84,308.",
-   "skeleton": {
-    "decision_form": "allocation_under_budget",
-    "answer_pattern": "naive_set_overfunds",
-    "lessons": [
-     "vintage_or_cohort_drift",
-     "unit_identity_across_systems",
-     "analog_event_calibration",
-     "completion_of_young_cohorts"
-    ],
-    "mechanisms": [
-     "intro_offer_step_up_exit",
-     "reading_log_usage_decline_newest_starts",
-     "price_rise_excess_cancellation",
-     "household_returns_under_new_numbers"
-    ],
-    "detection": [
-     "second_source_at_other_grain",
-     "natural_experiment_in_record"
-    ],
-    "moves": [
-     "per_cohort_curves",
-     "link_records_by_parsed_key",
-     "analog_calibration_loo",
-     "complete_cohorts_from_later_rates"
-    ],
-    "file_roles": [
-     "governing_standard",
-     "primary_record",
-     "second_grain_source",
-     "schedule_or_plan",
-     "quotes_or_costs",
-     "crosswalk_or_migration_map",
-     "unused_distractor"
-    ]
-   },
-   "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "i",
-    "deliverable set": "xlsx"
-   },
-   "gap": [
+  "task": "task1",
+  "project": "sulfur",
+  "architecture": "v5",
+  "drawn": "2026-11-12",
+  "slot_note": "",
+  "domain": "product-analytics",
+  "client_domain": "product-analytics",
+  "subdomain": "retention-cohort-lifetime-value-modeling",
+  "niche": "a Dutch and Flemish audiobook subscription app deciding which of its four plans' announced January 2027 price rises go ahead, on each plan's October 2026 base's 2027 contribution under a per-hour publisher remuneration",
+  "objective": "forecasting",
+  "shape": "02",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "let the January 2027 rises go ahead on Flex, Gezin, Onbeperkt and hold Standaard (Standaard EUR -12.4 per October subscription in 2027; Flex 3.3, Onbeperkt 4.7, Gezin 5.3)",
+  "answer_source": "task1/generator/figures.json raise, change_2027",
+  "gap": [
     "time",
     "population"
-   ],
-   "pattern": [
+  ],
+  "pattern": [
     "none"
-   ],
-   "gate_g": "forecasting",
-   "decision_type": "designation_set"
-  }
- ],
- "lineage_shells": [
-  {
-   "question form": "whether",
-   "second-sentence opener": "the",
-   "rounding opener": "give",
-   "deliverable set": "docx+xlsx"
+  ],
+  "generators": [
+    "G14",
+    "G6",
+    "G9"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "realised_outcome_roster",
+  "stump_strategy": "other",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "register",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried analyst finds the 2025 and 2026 rises, reads each plan's own past response and carries it to 2027, counts a downgrade as a lost subscription and values those who leave at the plan's average, and lets all four rises through.",
+  "domain_test": "Each result is a subscription price-response and LTV quantity (extra cancellations and downgrades at the first bill, each plan's change in its base's contribution under a per-hour content cost); the plan ladder, the rival's price point, downgrades and per-hour royalties belong to subscription products, and a noun swap into a hospital or factory leaves no such quantities.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:price-response-step-at-a-rival-price-valued-by-who-answers",
+  "layer1": [
+    "session export rows re-sent by the app after a reconnect",
+    "profile ids of removed family profiles absent from today's profile table",
+    "playback speed recorded per session, content hours against wall time",
+    "test and staff accounts",
+    "app-store subscriptions reported in the stores' own monthly proceeds reports",
+    "publisher codes renamed in the 2025 catalogue migration"
+  ],
+  "stakeholder_role": "the head of growth, who sets the spring 2027 campaign's lead plan with finance",
+  "role_family": "product_manager",
+  "scoring_unit": "per active unit per period",
+  "spine": {
+    "file": "listening_sessions_2025-01_2026-10.csv",
+    "rows": 574311,
+    "entity": "one listening session",
+    "grain": "profile x title x session",
+    "source": "synthetic"
   },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "i",
-   "deliverable set": "xlsx"
+  "forum": "committee_or_panel",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "media_or_publishing",
+  "world": {
+    "geography": "the Netherlands and Flanders",
+    "currency": "EUR",
+    "org_type": "an audiobook and e-book subscription app",
+    "invented_names": [
+      "Kraanvogel Luisterboeken",
+      "Stichting Uitgeverslicenties Luisterboek"
+    ],
+    "people": [
+      "Romy Korsman",
+      "Hugo Brouwer",
+      "Tara Martens"
+    ]
+  },
+  "deliverables": [
+    "price_rises_2027.xlsx",
+    "price_rises_2027.pptx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "Each option's go or hold rests on the response of its existing members to a change, which past changes show as a step where the new level passes an outside reference, not a slope in the change or a property of the option, and on what each kind of answer is worth, which depends on who gives it and on a cost that falls on usage, so the option's own history, a pooled slope and an average-member valuation each land on a different wrong set.",
+  "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; past rises lost and moved down subscriptions mainly where the new price passed the rival's comparable plan (read against the other region, with the rival's December scan), heavy listeners switching and light ones moving down, so Standaard (passing the rival in both regions in 2027, never before) holds and Flex, Onbeperkt and Gezin go ahead.",
+  "stump": "A careful but hurried analyst carries each plan's own past response to 2027, counts downgrades as exits and values leavers at the plan's average, and lets all four rises through; fixing only the crossing still holds Gezin.",
+  "answer_shape": "forecast-bands-drivers",
+  "weight": "modeling",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "causal-reasoning",
+    "causal-reasoning",
+    "forecasting",
+    "synthesis"
+  ],
+  "results": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
+  "one_fact_test": "the crossing sentence rescues none of the graded results on the careful route (Gezin still held); a sentence naming the crossing and one valuation rescues the call",
+  "strategy_label": "UNTESTED",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "mark169": "mark169 v1 forecast a limit exceeded in one cell of a recurring cycle that one demand component dominates; here a price response is read as a step at an outside reference price across staged rises and valued by who answers under a usage cost, and decides a go-or-hold per plan"
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "fate": "spent 2026-11-09: the project lead's review returned the single-deep-step design (one constructed factor, the tutors' stopping hump, placed in the forward cohort by an onboarding pause and surge; every graded figure came out of one projection)",
+      "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
+      "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
+      "shell": null
+    },
+    {
+      "architecture": "v2",
+      "fate": "spent 2026-11-10: the platform's holistic audit failed the uploaded cut on determinism; repaired (judge DETERMINISTIC APPROVE) but the uploaded run's own methods land the repaired commitment (66.5 of 93 graded weight), the single-total risk: one cut of one total cannot be both forced and hard",
+      "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate has decayed on a cohort whose exits also run with the calendar, a size adjustment at each anniversary set by how much of its capacity each unit uses on a book whose capacity per user has drifted, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so every trailing extrapolation and the recent pooled rates overstate the forward total, and the committed figure is the largest step a filed band, carrying the estimates' own sampling error and nothing else, meets at a stated chance.",
+      "stump": "A careful but hurried analyst rebuilds the October 2026 ARR correctly, then applies the mean realised uplift to the contracts still to reprice, pools renewal exit and seat-cut rates without utilisation, first renewals or group exits, carries the Team plan's last three months' exit rates, values the open pipeline at the CRM's stage probabilities and draws accounts independently for the band, and files a commitment above the draft, clearing it, when large contracts negotiate the rise down, seat cuts and exits follow utilisation on a book sold more seats per user each year, the autumn is the Team plan's cancellation peak and the January excess has faded, old open deals rarely close and parent groups leave together, so the commitment sits below the draft; and a ten-minute trailing extrapolation clears the draft by a wide margin because the trailing year carries the price rise and the padded seats as if they recurred.",
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "the",
+        "rounding opener": "give",
+        "deliverable set": "docx+xlsx"
+      }
+    },
+    {
+      "architecture": "v3",
+      "fate": "spent 2026-11-12: returned twice on forcing and determinism by the platform's review (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection were open modelling choices no file pinned, and a return rate not tied to early reading alone funded 9 lines; its deciding lessons (vintage_or_cohort_drift, completion_of_young_cohorts) are on the client's closed page of 2026-11-12",
+      "driver": "Each candidate's value per unit of cost is the payment stream of its future entrants, whose first large drop sits at a price step set by the candidate's own terms and the full price it steps to, whose later decline follows a usage trait the newest entrants carry differently from the record (seen only in a second log at another grain, never in their early survival), which a scheduled price change cuts again at a size read only from an earlier change's whole window and the entrants' tenure at it, and which continues through returns recorded under other identities, so a ranking under a fixed budget on each candidate's own history funds a different set.",
+      "driver_concrete": "Each 2027 acquisition line's expected 36-month net revenue per start, set by its 2027 introductory offer and the April 2027 list price at the step-up, the usage its newest starts show in the reading log (social and partner down since late 2025, search up since spring 2025), the April 2027 rise's excess cancellations read from the April 2025 rise including the notice-letter exits and the larger response of first-year subscribers, and later subscriptions by the same household under new customer numbers, ranked per euro of planned spend until the budget is spent.",
+      "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, reads the April 2025 jump in end-of-intro exits as a period rather than as the full price, reads the 2025 rise's cancellations from April on pooled over tenure and counts later subscriptions on the customer number, so the four paid social lines and two cashback lines clear 3.5 times their cost and the plan funds 14 lines for EUR 141,575 instead of 8 for EUR 84,308.",
+      "skeleton": {
+        "decision_form": "allocation_under_budget",
+        "answer_pattern": "naive_set_overfunds",
+        "lessons": [
+          "vintage_or_cohort_drift",
+          "unit_identity_across_systems",
+          "analog_event_calibration",
+          "completion_of_young_cohorts"
+        ],
+        "mechanisms": [
+          "intro_offer_step_up_exit",
+          "reading_log_usage_decline_newest_starts",
+          "price_rise_excess_cancellation",
+          "household_returns_under_new_numbers"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "natural_experiment_in_record"
+        ],
+        "moves": [
+          "per_cohort_curves",
+          "link_records_by_parsed_key",
+          "analog_calibration_loo",
+          "complete_cohorts_from_later_rates"
+        ],
+        "file_roles": [
+          "governing_standard",
+          "primary_record",
+          "second_grain_source",
+          "schedule_or_plan",
+          "quotes_or_costs",
+          "crosswalk_or_migration_map",
+          "unused_distractor"
+        ]
+      },
+      "shell": {
+        "question form": "how-much",
+        "second-sentence opener": "i",
+        "deliverable set": "xlsx"
+      },
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "designation_set"
+    },
+    {
+      "architecture": "v4",
+      "fate": "spent 2026-11-12 at stage 4: the determinism judge sent it back (Gate G planted_defect_flip: two record corrections, the licence renewals merged and profiles dated by the charges, made by reflex on its first pass)",
+      "driver": "The cost of each option's future entrants is a per-unit charge on a quantity the organisation's own counting engine produces from two reporting channels, one of which the main activity record never sees and which is concentrated in some options, under a rule that counts each item once across both channels, so the activity record scaled to the engine's totals misprices the options in opposite directions and the latest cost per entrant reflects a charging basis that ends.",
+      "driver_concrete": "Each plan's first-24-month contribution per spring 2027 trial start is its net revenue over the plan's spring 2024 trial starts' realised months at 2027 prices less EUR 0.40 per counted hour (the 2027 agreement, replacing 2026's 52 per cent of revenue) and the agency's fee, where counted hours are the furthest position each profile first reaches in each title across the live roll-up and the positions downloaded titles report at licence renewal, attributed to the account whose charge listed the profile that month.",
+      "stump": "A careful but hurried analyst takes the live roll-up as the listening (it reproduces the 2026 statements exactly) and joins it to today's profile export, which misses Onbeperkt's downloaded listening and credits Gezin with the histories its moved-in profiles brought, and leads with Onbeperkt instead of Gezin; the licence channel alone leads with Standaard.",
+      "skeleton": {
+        "decision_form": "pick_one_of_few_options",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "unmetered_component",
+          "time_varying_membership",
+          "exposure_seen_only_in_linked_record",
+          "forward_window_structure_change"
+        ],
+        "mechanisms": [
+          "offline_listening_reported_only_at_licence_renewal",
+          "counted_hours_furthest_position_first_reached_across_channels",
+          "family_profiles_added_and_removed",
+          "plan_switches_dated",
+          "per_hour_remuneration_replaces_revenue_share",
+          "trial_month_listening_unpaid"
+        ],
+        "detection": [
+          "control_total_gap",
+          "second_source_at_other_grain",
+          "document_defines_estimand",
+          "flow_step_at_dated_operation"
+        ],
+        "moves": [
+          "link_records_by_parsed_key",
+          "rebuild_membership_from_operations_log",
+          "per_cohort_curves"
+        ],
+        "file_roles": [
+          "governing_standard",
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "schedule_or_plan",
+          "quotes_or_costs",
+          "field_legend_or_dictionary",
+          "unused_distractor"
+        ]
+      },
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "i'd",
+        "deliverable set": "xlsx"
+      },
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "pick_one_of_n"
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "give",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "i",
+      "deliverable set": "xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "i'd",
+      "deliverable set": "xlsx"
+    }
+  ],
+  "architecture_spent": null,
+  "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks). Skeleton relabelled after the send-back: the call turned on a coverage gap (the licence renewals held exactly the positions the live roll-up lacked, so a union was the remedy) and a stale roster (the charges' profile lists dated membership), not on inverting a recording algorithm; record_algorithm_inversion stays untried. RETIRED 2026-11-12 on the author's word: the folder removed from the repo (every file in git at 87422aa); the card stays as spent so the guard keeps the four dead architectures in its duplicate check. Architecture 5 (2026-11-12, on the author's word, in the restored Kraanvogel world): the January 2027 rises plan by plan. stump_strategy other: a measured response step at an outside reference price, valued by who answers under a usage cost.",
+  "registered": "2026-11-13T01:16:12Z",
+  "shell": {
+    "question form": "which",
+    "second-sentence opener": "i'd",
+    "deliverable set": "pptx+xlsx"
+  },
+  "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "response_at_crossing_point",
+      "behavioural_response_measured",
+      "marginal_not_average",
+      "forward_window_structure_change"
+    ],
+    "mechanisms": [
+      "price_rise_response_step_at_rival_price",
+      "heavy_listeners_switch_light_listeners_downgrade",
+      "downgraders_keep_paying_under_cap",
+      "per_hour_remuneration_replaces_revenue_share",
+      "rises_staged_by_region_and_year"
+    ],
+    "detection": [
+      "natural_experiment_in_record",
+      "second_source_at_other_grain",
+      "document_defines_estimand"
+    ],
+    "moves": [
+      "measure_response_shape_from_events",
+      "refit_comparison_on_unaffected",
+      "per_cohort_curves"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "second_grain_source",
+      "reference_register",
+      "schedule_or_plan",
+      "unused_distractor"
+    ]
   }
- ],
- "architecture_spent": true,
- "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks). Skeleton relabelled after the send-back: the call turned on a coverage gap (the licence renewals held exactly the positions the live roll-up lacked, so a union was the remedy) and a stale roster (the charges' profile lists dated membership), not on inverting a recording algorithm; record_algorithm_inversion stays untried. RETIRED 2026-11-12 on the author's word: the folder removed from the repo (every file in git at 87422aa); the card stays as spent so the guard keeps the four dead architectures in its duplicate check.",
- "registered": "2026-11-12T23:07:18Z",
- "shell": {
-  "question form": "which",
-  "second-sentence opener": "i'd",
-  "deliverable set": "xlsx"
- },
- "skeleton": {
-  "decision_form": "pick_one_of_few_options",
-  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-  "lessons": [
-   "unmetered_component",
-   "time_varying_membership",
-   "exposure_seen_only_in_linked_record",
-   "forward_window_structure_change"
-  ],
-  "mechanisms": [
-   "offline_listening_reported_only_at_licence_renewal",
-   "counted_hours_furthest_position_first_reached_across_channels",
-   "family_profiles_added_and_removed",
-   "plan_switches_dated",
-   "per_hour_remuneration_replaces_revenue_share",
-   "trial_month_listening_unpaid"
-  ],
-  "detection": [
-   "control_total_gap",
-   "second_source_at_other_grain",
-   "document_defines_estimand",
-   "flow_step_at_dated_operation"
-  ],
-  "moves": [
-   "link_records_by_parsed_key",
-   "rebuild_membership_from_operations_log",
-   "per_cohort_curves"
-  ],
-  "file_roles": [
-   "governing_standard",
-   "primary_record",
-   "second_grain_source",
-   "reference_register",
-   "schedule_or_plan",
-   "quotes_or_costs",
-   "field_legend_or_dictionary",
-   "unused_distractor"
-  ]
- }
 }

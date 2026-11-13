@@ -109,19 +109,18 @@ GUIDELINE = [
         "collected, on the plan charged.",
         "3.3 An account's counted hours in a month are the counted hours (licence agreement, schedule B) of the "
         "profiles that belonged to the account in that month.",
-        "3.4 A trial start on a plan is a consumer account that started a campaign's trial on that plan. A spring "
-        "2027 trial start on a plan is taken to be like the plan's trial starts in the spring 2024 campaign "
-        "(January to March 2024): their accounts' paying months, plans held and counted hours in the trial start's "
-        "month and the 23 months after it, at the 2027 list prices, VAT by country and the app stores' fees.",
         "3.5 Net revenue is what Kraanvogel keeps of the charges collected: the charge less VAT, less the app "
         "store's fee on a store subscription (Apple 30 per cent of the price net of VAT in a subscription's first "
         "12 paid months and 15 per cent after; Google 15 per cent), less refunds.",
-        "3.6 The contribution of a trial start over its first 24 months is the net revenue its account brings in "
-        "those months, less the remuneration on the account's counted hours in those months at the licence "
-        "agreement's rate, less the agency's fee per trial start.",
-        "3.7 A campaign leads with the plan whose trial starts bring the largest contribution per trial start.",
-        "3.8 Remuneration forecasts use the licence agreement in force in the forecast months and the current "
-        "price list, including the changes it announces, and assume no other change of terms or prices."]),
+        "3.8 Forecasts use the licence agreement in force in the forecast months, the current price list including "
+        "the changes it announces, and the rivals' prices as last scanned, and assume no other change of terms or "
+        "prices.",
+        "3.9 A subscription's contribution in a period is its net revenue in the period less the remuneration on "
+        "its account's counted hours in the period at the licence agreement's rate.",
+        "3.10 A January price rise goes ahead on a plan when it raises the 2027 contribution of the subscriptions "
+        "paying on that plan at 31 October 2026, followed through 2027, against holding the plan's 2026 price. "
+        "A rise's extra cancellations and extra downgrades are those at a subscription's first bill at the new "
+        "price beyond what the same months would have brought without the rise."]),
 ]
 
 
@@ -137,10 +136,10 @@ def write_pdfs(folder):
          dt.datetime(2026, 9, 22, 10, 4, tzinfo=CEST), dt.datetime(2026, 9, 24, 15, 31, tzinfo=CEST))
     _doc(os.path.join(folder, FILES["guide"]),
          "Growth planning guideline, version 3",
-         GUIDELINE, "Version 3 replaces version 2 (February 2025): 3.3 and 3.6 take the remuneration of the 2027 "
-         "licence agreement; 3.4 names the spring 2024 campaign. Owner: finance controller.",
+         GUIDELINE, "Version 3 replaces version 2 (February 2025): 3.3 and 3.9 take the remuneration of the 2027 "
+         "licence agreement; 3.10 sets how a January price rise is judged. Owner: finance controller.",
          [["Owner", "Finance (controller)"], ["Approved", "6 October 2026, management team"],
-          ["Applies to", "Acquisition campaigns from January 2027"]],
+          ["Applies to", "Acquisition campaigns and price changes from January 2027"]],
          "Kraanvogel Luisterboeken B.V., finance", "Growth planning guideline", "Growth planning guideline v3",
          dt.datetime(2026, 10, 1, 9, 12, tzinfo=CEST), dt.datetime(2026, 10, 6, 16, 48, tzinfo=CEST))
     rows = [["Plan", "Listening", "Profiles", "Per month from 1 January 2027 (NL and BE, VAT included)"]]
@@ -149,8 +148,9 @@ def write_pdfs(folder):
         rows.append([P.PLAN_NAME[pl], lis, prof, "EUR %.2f" % P.PRICE27[pl]])
     _doc(os.path.join(folder, FILES["price"]), "Price list from 1 January 2027",
          [("Subscriptions", [rows, "Prices until 31 December 2026: Flex EUR 9.99, Standaard EUR 14.99, Onbeperkt "
-           "EUR 18.99, Gezin EUR 22.99. Existing subscriptions move to the new price at their first billing date in "
-           "2027; subscribers were told by e-mail from 2 November 2026.",
+           "EUR 18.99, Gezin EUR 22.99, in the Netherlands and in Flanders. Existing subscriptions move to the new "
+           "price at their first billing date in 2027; subscribers are told by e-mail from 2 November 2026. A rise "
+           "may still be withdrawn for a plan until 30 November 2026.",
            "Listening hours that are not used do not carry over to the next month. In the app stores the price is "
            "the store's nearest price point."])],
          "", [["Issued", "28 October 2026"], ["Valid from", "1 January 2027"]],

@@ -20,6 +20,7 @@ WHAT = {
     "pod": "podcast plays, January 2025 to October 2026",
     "ebk": "e-book reading, January 2025 to October 2026",
     "rev": "app store reviews, 2026",
+    "riv": "the pricing team's monthly scan of the rival's comparable plans, January 2024 to October 2026",
 }
 DOCS = {"schB": "schedule B of the 2027 to 2029 licence agreement with the publishers' foundation",
         "guide": "finance's growth planning guideline, version 3",
@@ -35,8 +36,8 @@ def write(path):
     for k, v in DOCS.items():
         files[docs.FILES[k]] = {"source": GEN, "covers": v, "pulled": PULL, "license": "proprietary, fictional organisation"}
     meta = {"task": "task1", "as_of": "2026-11-10", "organisation": "Kraanvogel Luisterboeken B.V. (fictional)",
-            "decision": "which plan the spring 2027 acquisition campaign leads with",
+            "decision": "which of the January 2027 price rises go ahead, plan by plan",
             "deliverables": ["a workbook", "a short deck"],
-            "distractor_files": [pack.FILES["pod"], pack.FILES["ebk"], pack.FILES["rev"]],
+            "distractor_files": [pack.FILES["pod"], pack.FILES["ebk"], pack.FILES["rev"], docs.FILES["quote"]],
             "files": files}
     json.dump(meta, open(path, "w"), indent=1, sort_keys=True)

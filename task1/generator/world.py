@@ -58,7 +58,7 @@ class Profile:
         self.owner = owner
         self.rng = rng
         base = P.HOURS[plan] if adult else P.CHILD_HOURS
-        self.intensity = float(rng.lognormal(math.log(base), 0.55))
+        self.intensity = float(rng.lognormal(math.log(base), 1.05 if (adult and plan == "ONB") else 0.55))
         self.commuter = bool(rng.random() < (P.COMMUTER[plan] if adult else 0.0))
         if adult:
             self.offline_pref = float(rng.beta(9, 1.6)) if self.commuter else float(rng.beta(1.0, 14))
@@ -336,8 +336,10 @@ def simulate(seed=P.SEED, rise27=P.RISE27):
                     # new price passes the rival's comparable plan
                     pct = (new_p - old_p) / old_p
                     cross = old_p <= P.RIVAL[a["country"]][plan] < new_p
-                    hz += 0.008 + 0.30 * pct + (0.165 if cross else 0.0)
-                    pdown = 0.006 + 0.20 * pct + (0.095 if cross else 0.0)
+                    light = min(max(math.exp(-P.SEL * a["eng"]), 0.3), 3.2)   # light listeners answer a rise first
+                    heavy = min(max(math.exp(P.SEL * a["eng"]), 0.3), 3.2)    # past the rival, heavy ones switch
+                    hz += (0.008 + 0.30 * pct) * light + (0.165 * heavy if cross else 0.0)
+                    pdown = (0.006 + 0.20 * pct + (0.320 if cross else 0.0)) * light
                     lower = {"STD": "FLEX", "ONB": "STD", "GEZ": "ONB"}.get(plan)
                     if lower and r.random() < pdown and len(a["profiles"]) <= P.MAX_PROFILES[lower]:
                         a["plan"] = plan = lower
