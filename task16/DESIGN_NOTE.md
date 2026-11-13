@@ -355,8 +355,7 @@ are not. Neither is another reading: each is an easier method on the same filed 
 
 ## Prompt contract
 
-A voice rewrite keeps: why the answer must be estimated (no record shows which of a rule's links would join two
-different patients); the question (whether One Chart can link patient records automatically when the two indexes
+A voice rewrite keeps: the question (whether One Chart can link patient records automatically when the two indexes
 convert on 5 April 2027, and under which of the conversion plan's candidate rules); the policy's limit of one
 expected false merge per 2,000 automatic links; each rule's automatic links, estimated false merges and false merges
 per 2,000 links; the distinct patients the converted index will hold and how many both indexes hold; whether any
@@ -365,6 +364,8 @@ patients still under more than one active record once its links are made; a spre
 adds a rounding instruction, a method (no twins, chance, independence, birth dates, 1 January, frequencies, names,
 blood groups, delivery log, pilot, merge history, SSN, subscriber or nicknames), a warning, an attached file's name, a
 role or reader, or a count the data hold (no four rules).
+
+The opening clause on why the answer must be estimated (no record shows which of a rule's links would join two different patients) was cut at the author's direction on 2026-11-13 as immaterial to the analysis; the asks still call the false merges estimated.
 
 ## Pre-ship check
 
