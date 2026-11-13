@@ -1,42 +1,42 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "PAUSED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 5,
  "loops": 0,
- "call": "let the January 2027 rises go ahead on Flex, Gezin, Onbeperkt and hold Standaard (EUR -12.4 per October 2026 subscription in 2027)",
+ "call": "let only Onbeperkt's January 2027 rise go ahead and hold Flex, Standaard and Gezin (Onbeperkt EUR 4.7, Flex -1.4, Standaard -13.2, Gezin -10.3 per October 2026 subscription in 2027)",
  "chain": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
  "precut": {
   "exit": 0,
   "date": "2026-11-12",
-  "checks": "96 checks, 0 FAIL"
+  "checks": "gates.py 0 FAIL on the repaired cut"
  },
  "leak": {
   "leak_py": "REVIEW (clause numbers and ordinary vocabulary; device_id; shell quota), every line harmless",
-  "reader": "clean (leak_check_report.md, Solver's-eye read)"
+  "reader": "OWED (the price list and the rival scan changed)"
  },
  "duplicate_check": {
   "heart": "WARN (skeleton.lesson_taught marginal_not_average as a supporting step)",
   "nearest": "severity none against everything on file"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
+  "verdict": "OWED (the repaired cut moved the call, every R7 figure and three pack files; the first cut's DETERMINISTIC no longer applies)",
   "disposition": "APPROVE (its one FIX_NOW, a wording note on the December scan, ruled mistaken: the step describes the 2025 and 2026 rises, whose December scans ship)",
   "gate_h": "not run by the judge under the 2026-11-13 scope (83dc482); the build's record: no one thing, 5 results over 4 areas, best single hint 0 of 5",
   "report": "task1/determinism_check_report.md (determinism only; the paying base and the crossing pattern recomputed; the four per-plan euro changes not recomputed by the thread)"
  },
- "paper_pair": 41.5,
+ "paper_pair": 34.5,
  "effort": {
-  "quick": 14.0,
-  "careful": 41.5,
+  "quick": 7.0,
+  "careful": 34.5,
   "thorough": 100.0,
-  "largest_hint": "no single sentence rescues a graded result on the careful route; the crossing plus one valuation rescues the call"
+  "largest_hint": "no single sentence rescues a graded result on the careful route; the crossing plus the downgrade valuation rescues the call"
  },
  "runs": {
   "run1": null,
@@ -51,7 +51,14 @@
   "recorded": "",
   "history": []
  },
- "returned": [],
+ "returned": [
+  {
+   "date": "2026-11-12",
+   "by": "holistic audit (pasted by the author)",
+   "why": "the 2027 Gezin rise (EUR 3.50, EUR 3.00 past Luistr Familie) and Flex rise (EUR 1.50) lay outside every past rise's size (EUR 0.50 to 1.00) and overshoot (EUR 0.20 to 0.50), so how the response grows with the rise was open and a dose-scaled reading withdrew Gezin; the platform run withdrew Flex and Gezin on log-dose scaling",
+   "repair": "each 2027 rise set to the plan's own past rise in euros (Flex 10.49, Gezin 23.99); the rival's July 2026 list-price rise in the scan (Basis 10 uur 10.29 in both regions, Plus 30 uur 15.59 in Flanders) keeps every crossing EUR 0.20 to 0.50 past the rival; dose forms in the golden family and perturbations; a replayed truth (eight 2027 replays, rises against held prices) in checks.py; the profiles export dated to the cut (100 profiles pointed at accounts opened in 2027)"
+  }
+ ],
  "approved": null,
  "submitted": null,
  "portal": {
@@ -59,5 +66,5 @@
   "date": "",
   "note": ""
  },
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py task1 --rewrite, then leak.py) and uploads it with target.zip; the golden ZIP and the four answer blocks are in task1/"
+ "resume": "stage 4 on the repaired cut: the isolated leak reader and the determinism judge together (/leak-check task1 and the judge), every finding fixed in the generator, then gates.py, audit_containers.py and RESHIPPED (task1); the author's prompt is unchanged and names no price"
 }

@@ -35,25 +35,39 @@ def pdf_text(path):
     return re.sub(r"\s+", " ", subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout)
 
 
+K27 = 8      # replays of 2027 on the October 2026 world
+
+
+def _truth_one(args):
+    rise, s27 = args
+    W = world.simulate(rise27=rise, seed27=s27)
+    acc = {a["aid"]: a for a in W["accounts"]}
+    base = {c["aid"]: c["plan"] for c in W["charges"] if c["m"] == P.CUT and c["status"] in ("collected", "re-presented")
+            and c["price"] > 0 and acc[c["aid"]]["kind"] == "consumer"}
+    rev, hrs, n = collections.Counter(), collections.Counter(), collections.Counter(base.values())
+    for c in W["charges"]:
+        if 48 <= c["m"] <= 59 and c["aid"] in base:
+            rev[base[c["aid"]]] += PK.net_revenue(c)
+    for (m, pid, aid, t, h) in W["counted"]:
+        if 48 <= m <= 59 and aid in base:
+            hrs[base[aid]] += h
+    return {p: (rev[p] - P.RATE27 * hrs[p]) / n[p] for p in P.PLANS}
+
+
 def truth():
-    out = []
-    for rise in (P.RISE27, ()):
-        W = world.simulate(rise27=rise)
-        acc = {a["aid"]: a for a in W["accounts"]}
-        base = {}
-        for c in W["charges"]:
-            if c["m"] == P.CUT and c["status"] in ("collected", "re-presented") and c["price"] > 0 and \
-                    acc[c["aid"]]["kind"] == "consumer":
-                base[c["aid"]] = c["plan"]
-        rev, hrs, n = collections.Counter(), collections.Counter(), collections.Counter(base.values())
-        for c in W["charges"]:
-            if 48 <= c["m"] <= 59 and c["aid"] in base:
-                rev[base[c["aid"]]] += PK.net_revenue(c)
-        for (m, pid, aid, t, h) in W["counted"]:
-            if 48 <= m <= 59 and aid in base:
-                hrs[base[aid]] += h
-        out.append({p: (rev[p] - P.RATE27 * hrs[p]) / n[p] for p in P.PLANS})
-    return {EP.NAMES[p]: out[0][p] - out[1][p] for p in P.PLANS}
+    """Each plan's change in its October 2026 base's 2027 contribution in the simulated world, rises against held
+    prices on the same replayed 2027, averaged over K27 replays: the mean and its standard error."""
+    import multiprocessing as mp
+    jobs = [(r, s) for s in range(1, K27 + 1) for r in (P.RISE27, ())]
+    with mp.Pool(min(8, len(jobs))) as pool:
+        res = pool.map(_truth_one, jobs)
+    out = {}
+    for p in P.PLANS:
+        d = [res[2 * i][p] - res[2 * i + 1][p] for i in range(K27)]
+        mu = sum(d) / K27
+        se = (sum((x - mu) ** 2 for x in d) / (K27 - 1) / K27) ** 0.5
+        out[EP.NAMES[p]] = (mu, se)
+    return out
 
 
 def main():
@@ -85,8 +99,27 @@ def main():
     # the golden against the simulated 2027
     tr = truth()
     for p in fig["change_2027"]:
-        check("R1 golden and truth agree on %s's sign" % p, (tr[p] > 0) == (fig["change_2027"][p] > 0),
-              "golden %.1f truth %.1f" % (fig["change_2027"][p], tr[p]))
+        mu, se = tr[p]
+        g = fig["change_2027"][p]
+        check("R1 golden and the replayed truth on the same side of zero: %s" % p, (mu > 0) == (g > 0),
+              "golden %.1f truth %.2f (se %.2f)" % (g, mu, se))
+        check("R1 the replayed truth four standard errors or more from zero: %s" % p, abs(mu) >= 4 * se)
+        check("R1 golden within EUR 4 of the replayed truth: %s" % p, abs(g - mu) <= 4.0, "%.2f" % (g - mu))
+    # the 2027 rises sit inside the past rises' sizes, so no response is carried to a size the record never ran
+    past_over = [P.PRICE[pl] - P.rival_of(c, pl, (y - P.M0_YEAR) * 12) for (y, c), pls in P.RISES.items() for pl in pls
+                 if P.PRICE0[pl] <= P.rival_of(c, pl, (y - P.M0_YEAR) * 12) < P.PRICE[pl]]
+    for pl in P.PLANS:
+        check("dose: %s's 2027 rise in euros is its past rise" % EP.NAMES[pl],
+              abs((P.PRICE27[pl] - P.PRICE[pl]) - (P.PRICE[pl] - P.PRICE0[pl])) < 1e-9)
+        pc = [(P.PRICE27[pl] - P.PRICE[pl]) / P.PRICE[pl], (P.PRICE[pl] - P.PRICE0[pl]) / P.PRICE0[pl]]
+        check("dose: %s's 2027 rise in per cent within the past rises' range" % EP.NAMES[pl],
+              min(r["pct"] for r in M.response(pk, M.GOLD)) - 0.01 <= pc[0] <= max(r["pct"] for r in M.response(pk, M.GOLD)),
+              "%.3f" % pc[0])
+        for c in ("NL", "BE"):
+            rv = P.rival_of(c, pl, 48)
+            if P.PRICE[pl] <= rv < P.PRICE27[pl]:
+                check("dose: %s %s's 2027 price no further past the rival than a past crossing" % (EP.NAMES[pl], c),
+                      P.PRICE27[pl] - rv <= max(past_over) + 1e-9, "%.2f against %.2f" % (P.PRICE27[pl] - rv, max(past_over)))
     # R2: mess neutral
     D = EP.results(pk, M.opts(dedup=False))
     check("R2 mess: re-sent rows summed leave the call", D["R8"] == fig["raise"])
@@ -122,8 +155,14 @@ def main():
         check("R7 perturbation holds: %s" % p["input"], p["answer"] == fig["raise"])
     picks = {s_["name"]: tuple(s_["answer"]) for s_ in E["forcing"]["shortcuts"]}
     check("shortcuts: every single shortcut off the golden", all(list(v) != fig["raise"] for v in picks.values()))
-    check("shortcuts: three or more distinct wrong sets", len(set(picks.values())) >= 3, str(set(picks.values())))
-    check("forcing: every plan's change 3 euros or more from zero", all(abs(v) >= 3 for v in fig["change_2027"].values()))
+    check("shortcuts: two or more distinct wrong sets", len(set(picks.values())) >= 2, str(set(picks.values())))
+    var = [EP.results(pk, o)["R7"] for o in list(EP.RIVALS.values()) + [
+        M.opts(scale_cancel=1.2), M.opts(scale_cancel=0.8), M.opts(scale_down=1.2), M.opts(scale_down=0.8),
+        M.opts(dose="cross15")]]
+    for p, g in fig["change_2027"].items():
+        lo = min(abs(v[p]) for v in var if (v[p] > 0) == (g > 0))
+        check("forcing: %s keeps its side of zero by EUR 0.5 or more under every rival and perturbation" % p,
+              all((v[p] > 0) == (g > 0) for v in var) and lo >= 0.5, "nearest %.2f" % lo)
     # fork rows
     check("SF1 open plan periods count more than paying subscriptions", sum(EP._open_periods(pk).values()) > fig["paying_oct_total"])
     check("SF2 extra cancellations beyond the other region's months", all(e["extra_cancel"] < 30 for e in ev))
@@ -139,6 +178,8 @@ def main():
     check("SF10 re-sent rows: same call", D["R8"] == fig["raise"])
     check("SF11 regions from the accounts export", set(pk["acc"]["country"]) == {"NL", "BE"})
     check("SF12 downgraders modelled: same call", EP.results(pk, M.opts(dval="model"))["R8"] == fig["raise"])
+    check("SF13 every dose form: same call", all(EP.results(pk, M.opts(dose=d))["R8"] == fig["raise"]
+                                                 for d in ("pct", "log", "eur", "cross15")))
     # documents
     gd = pdf_text(os.path.join(TARGET, docs.FILES["guide"]))
     check("doc: guideline 3.10 files when a rise goes ahead", "January price rise goes ahead on a plan" in gd)

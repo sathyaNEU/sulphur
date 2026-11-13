@@ -129,12 +129,14 @@ def deck(path, f):
         "100 leave at the first bill and %.1f move down, and its October subscriptions bring EUR %.1f less each in "
         "2027." % (f["price27"]["Standaard"], f["extra_cancel"]["Standaard Netherlands"],
                    f["extra_down"]["Standaard Netherlands"], -c["Standaard"]),
-        "Onbeperkt and Gezin pass the rival only in the Netherlands; with the light listeners who move down kept "
-        "and the heavy listeners who leave costing more in hours than they pay, they gain EUR %.1f and EUR %.1f a "
-        "subscription." % (c["Onbeperkt"], c["Gezin"]),
-        "Flex stays above the rival either way and gains EUR %.1f." % c["Flex"]], 17)
+        "Gezin's rise passes the rival in the Netherlands, where three in four Gezin subscriptions are: EUR %.1f "
+        "each. Flex's passes it in both regions since the rival raised Basis 10 uur to EUR %.2f in July: EUR %.1f." % (
+            c["Gezin"], f["rival_nl"]["Flex"], c["Flex"]),
+        "Onbeperkt passes the rival only in the Netherlands, and there its light listeners move down to Standaard "
+        "and keep paying while the heavy listeners who leave cost more in hours than they pay: EUR %.1f a "
+        "subscription." % c["Onbeperkt"]], 17)
     s = prs.slides.add_slide(blank)
-    title(s, "Only Standaard's rise loses money in 2027",
+    title(s, "Only Onbeperkt's rise adds to 2027",
           "Change in the October 2026 subscriptions' 2027 contribution if the rise goes ahead, EUR per subscription")
     cd = CategoryChartData()
     cd.categories = PL

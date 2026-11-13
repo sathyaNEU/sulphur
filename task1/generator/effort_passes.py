@@ -14,18 +14,22 @@ RIVALS = {
     "the first bill alone as the response window": M.opts(window="first"),
     "downgraders valued on their own hours capped at the lower plan's, with the cap response": M.opts(dval="model"),
     "re-sent warehouse rows summed": M.opts(dedup=False),
+    "each past response carried in proportion to the rise in per cent": M.opts(dose="pct"),
+    "each past response carried on the log of the price ratio": M.opts(dose="log"),
 }
 ROUTES = {
     "the golden": GOLD,
     "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average": CAREFUL,
     "one response for every rise, scaled by the rise": M.opts(resp="pooled"),
     "each plan's own past response": M.opts(resp="plan"),
+    "each plan's own past rise in the same region": M.opts(resp="region"),
     "the response read off the new price's gap to the rival, in a straight line": M.opts(resp="gap"),
     "a downgrade counted as an exit from the plan": M.opts(down_as_exit=True),
     "the 2026 remuneration basis carried (52 per cent of net revenue)": M.opts(cost="share26"),
     "the quick route": QUICK,
 }
 SINGLE = ["one response for every rise, scaled by the rise", "each plan's own past response",
+          "each plan's own past rise in the same region",
           "the response read off the new price's gap to the rival, in a straight line",
           "the 2026 remuneration basis carried (52 per cent of net revenue)"]
 _TARGET = [None]
@@ -89,8 +93,10 @@ def run_all(target):
         "routes": {nm: {"raise": r["R8"], "change_2027": _r(r["R7"])} for nm, r in out.items()},
         "rival_family": {nm: r["R8"] for nm, r in riv.items()},
         "price26": {NAMES[k]: v for k, v in P.PRICE.items()}, "price27": {NAMES[k]: v for k, v in P.PRICE27.items()},
-        "rival_nl": {NAMES[k]: v for k, v in P.RIVAL["NL"].items()},
-        "rival_be": {NAMES[k]: v for k, v in P.RIVAL["BE"].items()},
+        "rival_nl": {NAMES[k]: P.rival_of("NL", k, P.CUT) for k in P.PLANS},
+        "rival_be": {NAMES[k]: P.rival_of("BE", k, P.CUT) for k in P.PLANS},
+        "rise_eur": {NAMES[k]: round(P.PRICE27[k] - P.PRICE[k], 2) for k in P.PLANS},
+        "hint_cross_onb": round(results(pk, dict(CAREFUL, resp="plan_cross"))["R7"]["Onbeperkt"], 1),
         "rate": P.RATE27, "clauses": [2.1, 2.2, 2.3, 2.4, 3.1, 3.2, 3.3, 3.5, 3.8, 3.9, 3.10],
     }
     return fig, effort(G, C, Q, riv, out, fig), {"pk": pk}
@@ -145,6 +151,8 @@ def effort(G, C, Q, riv, out, fig):
         o = dict(GOLD, scale_cancel=1 + s if k == "extra cancellations" else 1.0,
                  scale_down=1 + s if k == "extra downgrades" else 1.0)
         pert.append({"input": "%s %+d%%" % (k, round(100 * s)), "answer": results(pk, o)["R8"]})
+    pert.append({"input": "the response where a rise passes the rival half as large again",
+                 "answer": results(pk, dict(GOLD, dose="cross15"))["R8"]})
     shortcuts = [{"name": nm, "answer": out[nm]["R8"]} for nm in SINGLE]
     return {"results": res, "hints": hints, "forcing": {"kind": "set", "golden_answer": G["R8"], "golden_family": fam,
                                                           "perturbations": pert, "shortcuts": shortcuts},

@@ -1,23 +1,18 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 18 files read, 46 golden figures and 13 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 49 golden figures and 11 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: million, trailing, golden, pooled, carries, family, months, creation, priced, chosen, accounts, careful, history, nearest, inside, uploaded, hurried, commitment, growth, graded, account, measured, counted, cancellations, defensible
+Stump terms swept: million, trailing, golden, pooled, carries, family, months, creation, chosen, accounts, careful, priced, history, nearest, inside, uploaded, graded, hurried, commitment, growth, account, measured, onbeperkt, platform, counted
 
-## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 4.1 appears: ...new code from the month of the change. B4. Audit B4.1 SUL may have Kraanvogel's counting audited once a...
+## 3 answer figures in the pack (REVIEW 2)
 - **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 3.1 appears: ...ed under schedule C. B3. Statements and payment B3.1 Kraanvogel sends each publisher a statement of it...
 - **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.1 appears: ...nce and the agencies' briefs. 3. Planning figures 3.1 A paying subscription is a consumer account whose...
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.3 appears: ...nthly charge was collected, on the plan charged. 3.3 An account's counted hours in a month are the cou...
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 6 of 25 stump-paragraph terms appear (months, accounts, growth, account, counted, cancellations); read whether the document names the move
-
-## 6 ranking artifacts (INFO 2)
-- **INFO** `price_list_2027.pdf`: names 4 of 13 answer-set candidates; confirm it does not rank them on the decision question
-- **INFO** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: names 4 of 13 answer-set candidates; confirm it does not rank them on the decision question
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 5 of 25 stump-paragraph terms appear (months, accounts, growth, account, counted); read whether the document names the move
+- **REVIEW** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: 3 of 25 stump-paragraph terms appear (growth, account, onbeperkt); read whether the document names the move
 
 ## 8 column names (REVIEW 1)
 - **REVIEW** `licence_server_renewals_2024-01_2026-10.csv`: columns a generator names and an organisation does not: device_id
@@ -29,7 +24,7 @@ Stump terms swept: million, trailing, golden, pooled, carries, family, months, c
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 25% of 20 prompts (cap 20%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 24% of 21 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 18 usable files (10 or more required)
@@ -40,6 +35,8 @@ Stump terms swept: million, trailing, golden, pooled, carries, family, months, c
 ## 2 author vocabulary (clean)
 
 ## 5 announcements (clean)
+
+## 6 ranking artifacts (clean)
 
 ## 7 hidden content (clean)
 

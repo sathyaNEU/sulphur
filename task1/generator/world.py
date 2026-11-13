@@ -91,7 +91,9 @@ def _choose_pool(titles, adult):
     return w
 
 
-def simulate(seed=P.SEED, rise27=P.RISE27):
+def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
+    """seed27 (the clean truth only) redraws every account's and profile's stream from January 2027, so the
+    2027 can be replayed many times on the same October 2026 world; the shipped records end before it."""
     rng = np.random.default_rng(seed)
     pubs, titles = catalogue(rng)
     pop = np.array([t["pop"] for t in titles])
@@ -285,6 +287,11 @@ def simulate(seed=P.SEED, rise27=P.RISE27):
                 counted.append((m, pid, aid, t, pos - prev))
 
     for m in range(0, P.END + 1):
+        if seed27 is not None and m == P.Y2027[0]:
+            for a in accounts:
+                a["rng"] = np.random.default_rng([seed27, int(a["aid"][1:])])
+            for pr in profiles:
+                pr.rng = np.random.default_rng([seed27, int(pr.pid[1:]), 1])
         # acquisition
         y = P.ym(m)[0]
         if m % 12 in (0, 1, 2) and y in P.CAMPAIGN:
@@ -335,7 +342,7 @@ def simulate(seed=P.SEED, rise27=P.RISE27):
                     # the first bill at a higher price: some leave, some move down a plan, the more so where the
                     # new price passes the rival's comparable plan
                     pct = (new_p - old_p) / old_p
-                    cross = old_p <= P.RIVAL[a["country"]][plan] < new_p
+                    cross = old_p <= P.rival_of(a["country"], plan, m) < new_p
                     light = min(max(math.exp(-P.SEL * a["eng"]), 0.3), 3.2)   # light listeners answer a rise first
                     heavy = min(max(math.exp(P.SEL * a["eng"]), 0.3), 3.2)    # past the rival, heavy ones switch
                     hz += (0.008 + 0.30 * pct) * light + (0.165 * heavy if cross else 0.0)
@@ -345,6 +352,11 @@ def simulate(seed=P.SEED, rise27=P.RISE27):
                         a["plan"] = plan = lower
                         a["plan_hist"].append((m, lower, "paid"))
                         hz = 0.0
+                elif (a["kind"] == "consumer" and m >= P.Y2027[0] and old_p and not a.get("bill27")
+                      and plan in ("STD", "ONB", "GEZ")):
+                    r.random()       # the draw a rise would take, so a held price and a rise replay the same 2027
+                if m >= P.Y2027[0]:
+                    a["bill27"] = True
                 if a["kind"] == "consumer" and r.random() < hz:
                     a["end"] = (m, "cancelled")
                     for pr in a["profiles"]:

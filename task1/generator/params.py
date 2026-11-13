@@ -20,10 +20,11 @@ RISES = {(2025, "BE"): ("STD", "ONB"), (2025, "NL"): ("FLEX", "GEZ"), (2026, "NL
          (2026, "BE"): ("FLEX", "GEZ")}
 RIVAL = {"NL": {"FLEX": 9.79, "STD": 15.49, "ONB": 19.49, "GEZ": 23.49},   # the rival's comparable plans
          "BE": {"FLEX": 9.39, "STD": 15.29, "ONB": 18.49, "GEZ": 22.49}}
+RIVAL_MOVE = (42, {("NL", "FLEX"): 10.29, ("BE", "FLEX"): 10.29, ("BE", "STD"): 15.59})    # the rival's July 2026 rise
 RIVAL_NAME = {"FLEX": "Luistr Basis 10 uur", "STD": "Luistr Plus 30 uur", "ONB": "Luistr Onbeperkt",
               "GEZ": "Luistr Familie"}
 RISE27 = ("FLEX", "STD", "ONB", "GEZ")    # the rises the price list announces for January 2027
-PRICE27 = {"FLEX": 11.49, "STD": 15.99, "ONB": 19.99, "GEZ": 26.49}       # from 1 January 2027
+PRICE27 = {"FLEX": 10.49, "STD": 15.99, "ONB": 19.99, "GEZ": 23.99}       # from 1 January 2027
 CAP = {"FLEX": 10.0, "STD": 30.0, "ONB": None, "GEZ": None}               # hours of listening a month
 MAX_PROFILES = {"FLEX": 1, "STD": 1, "ONB": 2, "GEZ": 4}
 VAT = {"NL": 0.09, "BE": 0.06}
@@ -67,6 +68,11 @@ def days_in(m):
     y, mo = ym(m)
     nxt = dt.date(y + (mo == 12), mo % 12 + 1, 1)
     return (nxt - dt.date(y, mo, 1)).days
+
+
+def rival_of(country, plan, m):
+    """The rival's comparable plan's list price in month m (VAT included)."""
+    return RIVAL_MOVE[1].get((country, plan), RIVAL[country][plan]) if m >= RIVAL_MOVE[0] else RIVAL[country][plan]
 
 
 def price_of(plan, country, m, rise27=RISE27):

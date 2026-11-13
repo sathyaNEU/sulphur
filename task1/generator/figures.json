@@ -20,12 +20,12 @@
   },
   "R3": {
    "Flex Flanders": [
-    -0.3,
-    4.37
+    10.8,
+    12.6
    ],
    "Flex Netherlands": [
-    -0.3,
-    4.37
+    10.8,
+    12.6
    ],
    "Gezin Flanders": [
     -0.3,
@@ -40,15 +40,15 @@
     4.29
    ],
    "Onbeperkt Netherlands": [
-    15.11,
+    14.28,
     16.7
    ],
    "Standaard Flanders": [
-    23.93,
+    22.25,
     28.49
    ],
    "Standaard Netherlands": [
-    23.93,
+    22.25,
     28.49
    ]
   },
@@ -58,7 +58,7 @@
     0.3
    ],
    "Gezin Netherlands": [
-    3.1,
+    2.95,
     3.74
    ],
    "Onbeperkt Flanders": [
@@ -66,30 +66,30 @@
     1.44
    ],
    "Onbeperkt Netherlands": [
-    23.5,
+    22.2,
     25.98
    ],
    "Standaard Flanders": [
-    15.67,
+    14.57,
     17.51
    ],
    "Standaard Netherlands": [
-    15.67,
+    14.57,
     17.51
    ]
   },
   "R5": {
    "Gezin": [
-    99.34,
-    114.42
+    98.47,
+    114.41
    ],
    "Onbeperkt": [
     61.45,
-    70.43
+    70.37
    ],
    "Standaard": [
-    36.6,
-    46.91
+    32.25,
+    42.39
    ]
   },
   "R6": {
@@ -112,27 +112,27 @@
   },
   "R7": {
    "Flex": [
-    2.98,
-    4.63
+    -1.73,
+    -0.98
    ],
    "Gezin": [
-    5.03,
-    7.04
+    -10.57,
+    -8.83
    ],
    "Onbeperkt": [
     3.0,
-    5.1
+    5.11
    ],
    "Standaard": [
-    -14.34,
-    -12.06
+    -15.08,
+    -11.55
    ]
   }
  },
  "careful": {
   "change_2027": {
-   "Flex": 1.7,
-   "Gezin": 19.9,
+   "Flex": -0.9,
+   "Gezin": 1.0,
    "Onbeperkt": 1.7,
    "Standaard": 1.2
   },
@@ -154,16 +154,15 @@
   }
  },
  "careful_raise": [
-  "Flex",
   "Gezin",
   "Onbeperkt",
   "Standaard"
  ],
  "change_2027": {
-  "Flex": 3.3,
-  "Gezin": 5.3,
+  "Flex": -1.4,
+  "Gezin": -10.3,
   "Onbeperkt": 4.7,
-  "Standaard": -12.4
+  "Standaard": -13.2
  },
  "clauses": [
   2.1,
@@ -185,9 +184,9 @@
   "Standaard": 9.92
  },
  "downgrader_value": {
-  "Gezin": 100.3,
+  "Gezin": 99.5,
   "Onbeperkt": 69.7,
-  "Standaard": 46.4
+  "Standaard": 41.9
  },
  "events": [
   {
@@ -264,8 +263,8 @@
   }
  ],
  "extra_cancel": {
-  "Flex Flanders": 4.1,
-  "Flex Netherlands": 4.1,
+  "Flex Flanders": 12.0,
+  "Flex Netherlands": 12.0,
   "Gezin Flanders": 0.0,
   "Gezin Netherlands": 28.2,
   "Onbeperkt Flanders": 4.0,
@@ -281,7 +280,10 @@
   "Standaard Flanders": 16.5,
   "Standaard Netherlands": 16.5
  },
+ "hint_cross_onb": -4.2,
  "hold": [
+  "Flex",
+  "Gezin",
   "Standaard"
  ],
  "leaver_hours_ratio": {
@@ -304,51 +306,50 @@
   "Standaard": 14.99
  },
  "price27": {
-  "Flex": 11.49,
-  "Gezin": 26.49,
+  "Flex": 10.49,
+  "Gezin": 23.99,
   "Onbeperkt": 19.99,
   "Standaard": 15.99
  },
- "quick_raise": [
-  "Flex",
-  "Gezin"
- ],
+ "quick_raise": [],
  "raise": [
-  "Flex",
-  "Gezin",
   "Onbeperkt"
  ],
  "rate": 0.4,
+ "rise_eur": {
+  "Flex": 0.5,
+  "Gezin": 1.0,
+  "Onbeperkt": 1.0,
+  "Standaard": 1.0
+ },
  "rival_be": {
-  "Flex": 9.39,
+  "Flex": 10.29,
   "Gezin": 22.49,
   "Onbeperkt": 18.49,
-  "Standaard": 15.29
+  "Standaard": 15.59
  },
  "rival_family": {
   "downgraders valued on their own hours capped at the lower plan's, with the cap response": [
-   "Flex",
-   "Gezin",
+   "Onbeperkt"
+  ],
+  "each past response carried in proportion to the rise in per cent": [
+   "Onbeperkt"
+  ],
+  "each past response carried on the log of the price ratio": [
    "Onbeperkt"
   ],
   "re-sent warehouse rows summed": [
-   "Flex",
-   "Gezin",
    "Onbeperkt"
   ],
   "the first bill alone as the response window": [
-   "Flex",
-   "Gezin",
    "Onbeperkt"
   ],
   "the same country a year earlier as the control where the record holds it": [
-   "Flex",
-   "Gezin",
    "Onbeperkt"
   ]
  },
  "rival_nl": {
-  "Flex": 9.79,
+  "Flex": 10.29,
   "Gezin": 23.49,
   "Onbeperkt": 19.49,
   "Standaard": 15.49
@@ -356,26 +357,36 @@
  "routes": {
   "a downgrade counted as an exit from the plan": {
    "change_2027": {
-    "Flex": 3.3,
-    "Gezin": 4.4,
+    "Flex": -1.4,
+    "Gezin": -11.2,
     "Onbeperkt": 8.4,
     "Standaard": -19.0
    },
    "raise": [
-    "Flex",
-    "Gezin",
     "Onbeperkt"
    ]
   },
   "each plan's own past response": {
    "change_2027": {
-    "Flex": 1.8,
-    "Gezin": 20.8,
+    "Flex": -0.9,
+    "Gezin": 1.9,
     "Onbeperkt": 5.2,
-    "Standaard": 2.4
+    "Standaard": 2.3
    },
    "raise": [
-    "Flex",
+    "Gezin",
+    "Onbeperkt",
+    "Standaard"
+   ]
+  },
+  "each plan's own past rise in the same region": {
+   "change_2027": {
+    "Flex": -0.8,
+    "Gezin": 1.2,
+    "Onbeperkt": 3.8,
+    "Standaard": 2.3
+   },
+   "raise": [
     "Gezin",
     "Onbeperkt",
     "Standaard"
@@ -383,13 +394,12 @@
   },
   "one response for every rise, scaled by the rise": {
    "change_2027": {
-    "Flex": 2.6,
-    "Gezin": 19.5,
+    "Flex": -0.1,
+    "Gezin": 1.0,
     "Onbeperkt": 5.8,
-    "Standaard": 0.8
+    "Standaard": 0.6
    },
    "raise": [
-    "Flex",
     "Gezin",
     "Onbeperkt",
     "Standaard"
@@ -397,24 +407,21 @@
   },
   "the 2026 remuneration basis carried (52 per cent of net revenue)": {
    "change_2027": {
-    "Flex": 1.4,
-    "Gezin": -9.4,
+    "Flex": -1.1,
+    "Gezin": -16.9,
     "Onbeperkt": -7.8,
-    "Standaard": -9.8
+    "Standaard": -10.2
    },
-   "raise": [
-    "Flex"
-   ]
+   "raise": []
   },
   "the careful route: each plan's own past response, a downgrade counted as an exit, leavers at the plan's average": {
    "change_2027": {
-    "Flex": 1.7,
-    "Gezin": 19.9,
+    "Flex": -0.9,
+    "Gezin": 1.0,
     "Onbeperkt": 1.7,
     "Standaard": 1.2
    },
    "raise": [
-    "Flex",
     "Gezin",
     "Onbeperkt",
     "Standaard"
@@ -422,35 +429,30 @@
   },
   "the golden": {
    "change_2027": {
-    "Flex": 3.3,
-    "Gezin": 5.3,
+    "Flex": -1.4,
+    "Gezin": -10.3,
     "Onbeperkt": 4.7,
-    "Standaard": -12.4
+    "Standaard": -13.2
    },
    "raise": [
-    "Flex",
-    "Gezin",
     "Onbeperkt"
    ]
   },
   "the quick route": {
    "change_2027": {
-    "Flex": 1.0,
-    "Gezin": 3.2,
+    "Flex": -0.3,
+    "Gezin": -5.7,
     "Onbeperkt": -3.4,
     "Standaard": -1.6
    },
-   "raise": [
-    "Flex",
-    "Gezin"
-   ]
+   "raise": []
   },
   "the response read off the new price's gap to the rival, in a straight line": {
    "change_2027": {
-    "Flex": -10.4,
-    "Gezin": -122.2,
+    "Flex": -0.7,
+    "Gezin": -21.6,
     "Onbeperkt": -1.4,
-    "Standaard": -8.6
+    "Standaard": -7.2
    },
    "raise": []
   }

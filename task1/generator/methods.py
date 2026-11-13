@@ -364,8 +364,30 @@ def response(pk, o):
     return rows
 
 
-def rise_effect(rows, pl, cross, o, gap=0.0):
-    """The 2027 extra cancellation and downgrade rates for a plan whose new price crosses the rival's or not."""
+def rise_effect(rows, pl, cross, o, gap=0.0, country=None):
+    """The 2027 extra cancellation and downgrade rates for a plan whose new price crosses the rival's or not, carried
+    from the plan's past rise to the size of its 2027 rise where a dose form is asked for (golden: as read)."""
+    xc, xd = _rise_effect(rows, pl, cross, o, gap, country)
+    k = dose(pl, o.get("dose"))
+    if o.get("dose") == "cross15":
+        k = 1.5 if cross else 1.0
+    return xc * k, xd * k
+
+
+def dose(pl, form):
+    """How a past rise's response is carried to the 2027 rise's size: in proportion to the rise in per cent ("pct"),
+    to the log of the price ratio ("log"), or to the rise in euros ("eur"); 1 when the response is carried as read."""
+    p0, p1, p2 = P.PRICE0[pl], P.PRICE[pl], P.PRICE27[pl]
+    if form == "pct":
+        return ((p2 - p1) / p1) / ((p1 - p0) / p0)
+    if form == "log":
+        return np.log(p2 / p1) / np.log(p1 / p0)
+    if form == "eur":
+        return (p2 - p1) / (p1 - p0)
+    return 1.0
+
+
+def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
     if o.get("resp") == "gap":
         w = np.array([r["n"] for r in rows], float)
         X = np.column_stack([np.ones(len(rows)), [r["gap"] for r in rows]])
@@ -394,6 +416,8 @@ def rise_effect(rows, pl, cross, o, gap=0.0):
         sel = rows
     elif o.get("resp") == "plan":
         sel = [r for r in rows if r["plan"] == pl]
+    elif o.get("resp") == "region":
+        sel = [r for r in rows if r["plan"] == pl and r["country"] == country]
     else:
         sel = [r for r in rows if r["cross"] == cross]
     wc = sum(r["n"] * r["x_cancel"] for r in sel) / sum(r["n"] for r in sel)
@@ -548,7 +572,7 @@ def r5_rises(pk, o):
         for c in ("NL", "BE"):
             n = int((base[base["plan_code"] == pl]["country"] == c).sum())
             cross = P.PRICE[pl] <= pk["rival"][(2027, c, pl)] < P.PRICE27[pl]
-            xc, xd = rise_effect(rows, pl, cross, o, gap=max(P.PRICE27[pl] - pk["rival"][(2027, c, pl)], 0.0))
+            xc, xd = rise_effect(rows, pl, cross, o, gap=max(P.PRICE27[pl] - pk["rival"][(2027, c, pl)], 0.0), country=c)
             if not o.get("down", True):
                 xd = 0.0
             xc, xd = xc * o.get("scale_cancel", 1.0), xd * o.get("scale_down", 1.0)

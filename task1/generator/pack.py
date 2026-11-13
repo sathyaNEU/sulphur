@@ -148,7 +148,8 @@ def write(W, target, rng):
             created = date_of(cm, int(pr.rng.integers(1, 28)) if False else 1 + (int(pr.pid[1:]) % 27))
         status = "removed" if (pr.removed is not None and pr.removed <= P.CUT) else "active"
         rem = date_of(pr.removed, 1 + (int(pr.pid[1:]) % 25)).isoformat() if status == "removed" else ""
-        rows.append([pr.pid, pr.acc, created.isoformat(), "adult" if pr.adult else "child", status, rem])
+        then = [aid for (hm, aid) in pr.history if hm <= P.CUT][-1]      # the account it stood on at the export
+        rows.append([pr.pid, then, created.isoformat(), "adult" if pr.adult else "child", status, rem])
     counts["prof"] = _w(os.path.join(target, FILES["prof"]),
                         ["profile_id", "account_id", "created_on", "profile_type", "status", "removed_on"], rows)
     # the warehouse's live playback roll-up, with the rows a re-sync sends twice
@@ -270,7 +271,7 @@ def write_rival(target, rng):
     for m in range(P.REC0, P.CUT + 1):
         for c in ("NL", "BE"):
             for pl in P.PLANS:
-                base = P.RIVAL[c][pl]
+                base = P.rival_of(c, pl, m)
                 promo = (m % 12 in (6, 7)) and rng.random() < 0.35
                 price = round(base * 0.85 - 0.01, 2) if promo else base
                 rows.append([P.month_label(m), c, P.RIVAL_NAME[pl], "%.2f" % price, "promotion" if promo else ""])
