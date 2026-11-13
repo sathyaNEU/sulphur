@@ -54,13 +54,14 @@ def write(R, root):
         "ewma_peak_m": r1(R["ewma"]["peak"]), "ewma_im_m": r1(R["ewma"]["im"]),
         "ror_share_pct": int(round(100 * Pm["plants"]["ror_share"])), "ror_cap": int(Pm["plants"]["ror_cap"]),
         "below_n": int(R["below"][0]), "months_n": int(R["below"][1]),
+        "rule_match_n": int(Pm["rule"]["match"]), "rule_notices_n": int(Pm["rule"]["notices"]),
     }
     single = [abs(x["peak"] / g["peak"] - 1) for n, x in R["shortcuts"][2:] if "paid on delivery" not in n and "maximum at once" not in n]
     F["single_lo_pct"], F["single_hi_pct"] = int(math.floor(100 * min(single))), int(math.ceil(100 * max(single)))
     fam_peaks = [x["peak"] for n, x in R["family"]]
     F["band_peak_lo"], F["band_peak_hi"] = 320, 345
     F.update({"band_im_lo": 57.0, "band_im_hi": 63.0, "band_out_lo": "1,700", "band_out_hi": "1,790",
-              "band_da_lo": 78.0, "band_da_hi": 86.0, "band_rec_lo": 160.0, "band_rec_hi": 182.0, "book_tol": 0.03,
+              "band_da_lo": 78.0, "band_da_hi": 86.0, "band_rec_lo": 155.0, "band_rec_hi": 182.0, "book_tol": 0.03,
               "ratio_tol": 0.5, "c22_rec_tol": 3, "c22_method_tol": 15, "careful_facility_m": 300,
               "nosmelter_facility_m": 450, "smelter_mw": 100, "smelter_px": "38.00"})
     assert F["band_peak_lo"] <= min(fam_peaks) and max(fam_peaks) <= F["band_peak_hi"], fam_peaks
@@ -119,7 +120,7 @@ def write(R, root):
                      "thorough": {"output_gwh": F["out_gwh"], "dayahead_m": F["da_net_m"]}}, precedent=["N02", "L37"]),
         dict(id="R6", name="payments received from supply customers, 1 January to the peak (EUR million)",
              graded_as="Ask 3", figure="rec_m", depends=[], independent="the sales ledger and the contract register",
-             golden=F["rec_m"], band=[160.0, 182.0], partly=[150.0, 190.0],
+             golden=F["rec_m"], band=[155.0, 182.0], partly=[145.0, 190.0],
              passes={"quick": r1(quick["rec"]), "careful": {"value": r1(careful["rec"]), "grade": "missed",
                                                            "why": "the affiliate taken at spot like the other customers"},
                      "thorough": F["rec_m"]}, precedent=["L26"]),

@@ -79,6 +79,9 @@ def main():
     check("SF12 the facility rounds up to the next EUR 50 million", F["facility_m"] == 50 * -(-F["peak_m"] // 50))
     check("SF13 the opening book from the statement agrees with the trade capture", abs(F["book_open_2027_twh"] - 1.848) < 0.01)
     check("SF14 the October 2027 budget falls after the peak", F["peak_date"].endswith("August 2027"))
+    check("SF15 the book at the peak counts only energy still to be delivered after the peak date", F["book_peak_2027_twh"] < 0.7)
+    j = int(path["cum"].argmax())
+    check("SF16 the peak date is the first business day at the largest value", all(path["cum"][i] < path["cum"][j] for i in range(j)))
     print("%d FAIL" % len(fails))
     sys.exit(1 if fails else 0)
 

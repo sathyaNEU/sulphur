@@ -99,7 +99,19 @@ def standard(path):
          Paragraph("2. Stress requirement", h2),
          Paragraph("The stress requirement is the largest cumulative net cash outflow of the hedge program during the "
                    "year, counted from the year's first business day, in a year whose market prices and inflows repeat "
-                   "those of 2022. The stress year is built from the company's own records as follows.", body),
+                   "those of 2022. Treasury builds that year from the company's own records as set out in the annex.",
+                   body),
+         Paragraph("3. Net cash outflow", h2),
+         Paragraph("Net cash outflow is variation margin, delivery settlement and changes in initial margin paid to "
+                   "NEX Clearing, plus day-ahead purchases less day-ahead sales, less payments received from supply "
+                   "customers, each counted on the day the cash moves. Interest, fees, taxes and operating costs are "
+                   "left out.", body),
+         Paragraph("4. Review", h2),
+         Paragraph("Treasury computes the requirement each December for the coming year and again whenever the hedge "
+                   "book, the supply contracts or NEX Clearing's margin practice change materially. The facility "
+                   "committed for 2026 is EUR 150 million.", body),
+         Spacer(1, 6),
+         Paragraph("Annex. Building the stress year", h2),
          Paragraph("(a) Every delivery month's forward price on the risk system's daily curve moves on each business "
                    "day by the percentage the forward for the same calendar month moved on the corresponding day of "
                    "2022 (the same date in 2022, or the latest 2022 business day before it), starting from the curve "
@@ -111,15 +123,6 @@ def standard(path):
                    "the same ISO week to its normal.", body),
          Paragraph("(d) Everything else runs as it runs in practice: the trading desk's hedging, the plants' operation "
                    "within the regulation licence, the supply contracts and NEX Clearing's margining.", body),
-         Paragraph("3. Net cash outflow", h2),
-         Paragraph("Net cash outflow is variation margin, delivery settlement and changes in initial margin paid to "
-                   "NEX Clearing, plus day-ahead purchases less day-ahead sales, less payments received from supply "
-                   "customers, each counted on the day the cash moves. Interest, fees, taxes and operating costs are "
-                   "left out.", body),
-         Paragraph("4. Review", h2),
-         Paragraph("Treasury computes the requirement each December for the coming year and again whenever the hedge "
-                   "book, the supply contracts or NEX Clearing's margin practice change materially. The facility "
-                   "committed for 2026 is EUR 150 million.", body),
          Spacer(1, 8),
          Paragraph("Hallingvass Kraft AS, Treasury. Internal.", small)]
     O.build(path, s, "Liquidity standard: committed margin facility", "Jorunn Solberg", "Liquidity standard",

@@ -196,7 +196,13 @@ def infer_rule(Dd):
             err = sum(float(np.mean(np.abs(r[t][sel] / obs[t][sel] - 1))) for t in "MQY")
             if best is None or err < best[0]:
                 best = (err, look, q)
-    return dict(look=best[1], q=best[2], band=band, review_wd=review_wd, fit_error=best[0])
+    start = {t: obs[t][0] for t in "MQY"}
+    _, sim = C.rule_rates(days, px, ret, best[1], best[2], band, review_wd, start)
+    act = {(d, t): r for d, t, r in Dd["notices"] if d >= dt.date(2019, 1, 1)}
+    got = {(d, t): r for d, t, r in sim if d >= dt.date(2019, 1, 1)}
+    match = sum(1 for k, r in act.items() if k in got and abs(got[k] - r) < 0.006)
+    return dict(look=best[1], q=best[2], band=band, review_wd=review_wd, fit_error=best[0], match=match,
+                notices=len(act), extra=len(set(got) - set(act)))
 
 
 # ------------------------------------------------------------------------------------------------------ the desk
@@ -687,8 +693,13 @@ def snapshot(Dd, g):
     j = g["j"]
     d = g["peak_day"]
     mw = g["book"]["mw_by_day"][j]
-    book = {y: round(-sum(mw.get(k, 0.0) * C.month_hours(k) for k in year_months(y)
-                           if mi_date(k + 1) > d) / 1e6, 3) for y in (2027, 2028, 2029, 2030)}
+    def left(k):
+        # energy still to be delivered after the date: whole months ahead, the rest of the current month
+        if mi_date(k) > d:
+            return C.month_hours(k)
+        return max((mi_date(k + 1) - d).days - 1, 0) * 24.0
+    book = {y: round(-sum(mw.get(k, 0.0) * left(k) for k in year_months(y) if mi_date(k + 1) > d) / 1e6, 3)
+            for y in (2027, 2028, 2029, 2030)}
     out_to = sum(v for c, v in g["out_day"].items() if dt.date(2027, 1, 1) <= c <= d) / 1e3
     return dict(peak=g["peak"] / 1e6, day=d, book=book, im=g["im"][j] / 1e6, da_net=-g["da"][:j + 1].sum() / 1e6,
                 rec=g["rec"][:j + 1].sum() / 1e6, vm=g["vm"][:j + 1].sum() / 1e6, dlv=g["dlv"][:j + 1].sum() / 1e6,

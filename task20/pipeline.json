@@ -21,13 +21,13 @@
   "reader": "no leak; realism note: the liquidity standard reads like a specification (move the stress-year construction to an annex)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "task22 v1, severity none"
+  "heart": "WARN (forcing event redrawn to other after task4 v13)",
+  "nearest": "mark182 0.05"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": "running (run id t20v3a)"
+  "verdict": "NOT_DETERMINISTIC (pass 1, t20v3a)",
+  "disposition": "SEND_BACK on the prompt (the hedge book at the peak: contracted or still to be delivered) and FIX_NOW on the customer-payments band; both fixed",
+  "report": "determinism_check_report.md; pass 2 (t20v3b) running"
  },
  "paper_pair": 29.0,
  "effort": {
@@ -75,7 +75,7 @@
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
   }
  ],
- "resume": "stage 4: read task20/determinism_check_report.md from the judge (run t20v3a); fix every finding and the leak reader's realism note (the liquidity standard's stress-year construction moved to an annex) in one generator pass; re-run python3 .claude/skills/build-pipeline/gates.py task20 --full; re-judge once only if a graded figure, the prompt or the pack moved; cut the zips, run audit_containers.py task20, set READY and commit READY (task20)",
+ "resume": "stage 4: read task20/determinism_check_report_pass2.md (run t20v3b) and the leak reader's re-read; fix any finding in the generator; re-run gates.py task20 --full; cut the zips, run audit_containers.py task20, set READY and commit READY (task20)",
  "approved": null,
  "submitted": null,
  "portal": {

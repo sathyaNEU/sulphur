@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, architecture, quarter, contract, missed, affiliate, careful, dropped, prototype, second, result, hardening, clearing, licence, points, engine, deposits, written, storage, notices, hurried, policy, method, golden, inside
+Stump terms swept: record, architecture, quarter, contract, affiliate, missed, careful, dropped, prototype, second, result, hardening, clearing, licence, points, golden, inside, engine, deposits, written, storage, notices, hurried, policy, method
 
 ## 4 design-note vocabulary (REVIEW 4)
 - **REVIEW** `hallingvass_regulation_licence_extract.pdf`: 3 of 25 stump-paragraph terms appear (second, licence, storage); read whether the document names the move
@@ -12,12 +12,8 @@ Stump terms swept: record, architecture, quarter, contract, missed, affiliate, c
 - **REVIEW** `hk_liquidity_standard_2026.pdf`: 4 of 25 stump-paragraph terms appear (record, contract, clearing, licence); read whether the document names the move
 - **REVIEW** `nex_clearing_margin_summary.pdf`: 3 of 25 stump-paragraph terms appear (quarter, clearing, notices); read whether the document names the move
 
-## 9 dates after the setting (REVIEW 5)
-- **REVIEW** `hk_sales_ledger_2018_2026.csv`: 4 ISO dates after 2026-12-31, e.g. 2027-01-02
-- **REVIEW** `hk_supply_contracts_register.xlsx`: 2 ISO dates after 2026-12-31, e.g. 2028-12-31, 2029-12-31
-- **REVIEW** `nex_daily_settlement_2018_2026.csv`: 8554 ISO dates after 2026-12-31, e.g. 2027-01-01, 2027-01-31, 2027-02-01, 2027-02-28, 2027-03-01
-- **REVIEW** `nex_dayahead_settlements_2018_2026.csv`: 2 ISO dates after 2026-12-31, e.g. 2027-01-04
-- **REVIEW** `nex_positions_month_end_2017_2026.csv`: 56 ISO dates after 2026-12-31, e.g. 2027-01-01, 2027-12-31, 2028-01-01, 2028-12-31
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)

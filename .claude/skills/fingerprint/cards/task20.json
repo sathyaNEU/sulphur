@@ -57,7 +57,7 @@
   "source": "simulated by task20/generator (a seeded Nordic-style power market, hydrology and one generator); no public data"
  },
  "forum": "other",
- "forcing_event": "purchase_order_or_contract",
+ "forcing_event": "other",
  "org_family": "utility_or_infrastructure",
  "world": {
   "geography": "Norway",
