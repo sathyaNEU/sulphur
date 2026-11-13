@@ -30,6 +30,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 FIRST = 1
 
+
+def carded():
+    """Numbers with a fingerprint card on file. A retired build's folder leaves the tree but its card stays as spent,
+    so its number is never handed out again (a new card would overwrite the spent record the guard reads)."""
+    d = os.path.join(REPO, ".claude", "skills", "fingerprint", "cards")
+    out = set()
+    for f in os.listdir(d) if os.path.isdir(d) else []:
+        m = re.match(r"task(\d+)\.json$", f)
+        if m:
+            out.add(int(m.group(1)))
+    return out
+
 ORDER = ["DRAWING", "DESIGN", "BUILD", "READY", "RUNS", "SUBMITTED", "APPROVED", "RETURNED", "PAUSED", "RETIRED"]
 # What `next` picks first: work the author is waiting on, then work in flight, oldest number first.
 PRIORITY = ["RETURNED", "PAUSED", "RUNS", "BUILD", "DESIGN", "DRAWING"]
@@ -90,7 +102,7 @@ def main(argv):
         return 0
     cmd = argv[0]
     if cmd == "new":
-        used = {int(t[4:]) for t in ts}
+        used = {int(t[4:]) for t in ts} | carded()
         n = FIRST
         while n in used:
             n += 1
@@ -103,7 +115,7 @@ def main(argv):
                 if p.get("status") == st:
                     print("%s  %s  resume: %s" % (t, st, p.get("resume", "(none recorded)")))
                     return 0
-        used = {int(t[4:]) for t in ts}
+        used = {int(t[4:]) for t in ts} | carded()
         n = FIRST
         while n in used:
             n += 1
