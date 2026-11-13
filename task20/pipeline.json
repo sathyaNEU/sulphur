@@ -1,11 +1,11 @@
 {
  "task": "task20",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 6,
+ "stage_name": "runs",
  "updated": "2026-11-13",
  "doctrine": "throughout",
  "call": "Approve a 2027 private-fund budget of no more than USD 250 million (268.6 before the policy's USD 25 million steps; band 175 to 350), not Corrigan Hart's USD 500 million, which fails by USD 123.3 million",
@@ -42,11 +42,11 @@
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+   "run1": "none that moves a result (R2's last half-year cell 156.88 against 160)",
+   "run2": "the pending funds' first closes on their managers' dates (dismissed own evidence, J3)"
   },
-  "triage": "",
-  "recorded": "",
+  "triage": "runs/triage.md: LANDED by run 1 (all three stumps made unprompted); estimated 96.0 and 51.7 on effort.json's weights, scores not reported",
+  "recorded": "2026-11-13",
   "history": [
    {
     "architecture": 3,
@@ -54,6 +54,13 @@
     "run1": "not reported (pasted: runs/arch3_run1.md; every deep step made unprompted; 208.4 on the daily-move reading, 328.7 under the level copy it rejected)",
     "run2": "not reported",
     "triage": "none (returned at review)"
+   },
+   {
+    "architecture": 4,
+    "date": "2026-11-13",
+    "run1": "not reported (runs/arch4_run1.md: on the golden, every deep step made unprompted)",
+    "run2": "not reported (runs/arch4_run2.md: off the call, J3 lost)",
+    "triage": "landed; redesign"
    }
   ]
  },
@@ -87,9 +94,16 @@
    "source": "review",
    "repair": "design",
    "commit": "re-root to architecture 4: the review returned annex (a) open, and the pasted run made every deep step of architecture 3, so pinning alone would land it"
+  },
+  {
+   "date": "2026-11-13",
+   "architecture": 4,
+   "by": "platform round 1",
+   "why": "run 1 made the line stock, the defensive follow-ons and the slipped closes unprompted and filed USD 250 million; the three stumps are reflexes R63 to R65",
+   "route": "re-root to architecture 5 (a landed scaffold is never re-pointed)"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py --rewrite and leak.py on the rewrite), uploads it with target.zip; then /triage-runs task20 with both run scores",
+ "resume": "stage 1 for architecture 5: the draw (guard recent, coverage, mechanisms, slots; the stump screen on paper against R63 to R66 and N34, N35, L46), a new decision form and new deciding lessons; architecture 4's identity moves to the card's lineage",
  "approved": null,
  "submitted": null,
  "portal": {

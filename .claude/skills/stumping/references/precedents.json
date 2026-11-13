@@ -1120,6 +1120,62 @@
    "move": "a usage forecast from each account's recent history certified by a pooled holdout bias that cannot see the stayers' response in the months after a rise in the rising plan and country, and the call that response decided filed wrong",
    "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
    "quote": "Forecast account usage used recent history, plan/profile differences and seasonality. ... Usage holdout bias ranged from -0.34% to +2.07%."
+  },
+  {
+   "id": "R63",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "capital a fund's manager has invested on its subscription line and not yet called, rebuilt from the managers' activity against the capital called and the funds' audited borrowings, and called in the first stress quarter once the stressed rate passes the managers' limits",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "The stressed short rate is 5.25%, which causes 239.40 of opening LP-equivalent borrowing to enter first-quarter calls."
+  },
+  {
+   "id": "R64",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "defensive follow-ons into older holdings separated from new deployment and fitted on the exit market with their own lag, checked on a later holdout",
+   "source": "task20/runs/arch4_run2.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Separated initial investment, scheduled follow-ons, delayed support, financing repayment, fees and expenses. ... The two-quarter-lag support model has later holdout R-squared 0.980620."
+  },
+  {
+   "id": "R65",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "pending funds' first closes delayed by a market-conditioned slip estimated from past closes, their calls moved past the managers' expected dates",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "First-close timing is estimated, not assumed certain. ... Market-conditioned delays move their expected calls into 2028."
+  },
+  {
+   "id": "R66",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a structural cash-flow model calibrated to a cutoff and forecast over a held-out later window, scored against a fixed age-curve rival",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Calibrated through 2022Q4 and forecast 2023-2024 for 70 commitments ... Aggregate-quarter weighted absolute percentage error was 6.54%, compared with 8.21% for an internally fitted fixed age curve"
+  },
+  {
+   "id": "N34",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a response fitted inside the record's range carried by its fitted form to a deeper stress than the record holds, the extrapolation named and left untested",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Support during the deepest stress extrapolates beyond the historical range."
+  },
+  {
+   "id": "N35",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "weakly identified unit-level rates pooled across the units, named and kept",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Weakly identified recycling fractions are pooled"
+  },
+  {
+   "id": "L46",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "pending funds closed on their managers' expected first-close dates although the register records how closes slip when the exit market is weak, so their calls start a year early and no budget passes",
+   "source": "task20/runs/arch4_run2.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "2027 H2: first-close-held calls 224.87; yet-to-close calls 92.83; total calls 317.70"
   }
  ]
 }
