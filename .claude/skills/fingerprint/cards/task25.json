@@ -1,0 +1,154 @@
+{
+  "task": "task25",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-13",
+  "slot_note": "",
+  "domain": "general-statistics-data-science",
+  "subdomain": "benchmarking-and-ablations",
+  "niche": "the gap between an AI lab's controlled throughput benchmark and the language-model pretraining runs it plans, cause by cause, carried to each H1 2027 run's own conditions (data-parallel width and document mix, packing rule, hall power load, works calendar)",
+  "objective": "comparative-explanation",
+  "shape": "03",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G7",
+    "G2",
+    "G16"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "parallel_run_overlap",
+  "stump_strategy": "other",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass reproduces each run's benchmark days, corrects attention for the run's own document mix at its mean, adds Poisson interruptions, restarts and the calendar's planned works, and files almost every H1 2027 run as fitting its window, because it carries per-rank cost at its mean (the step waits for the slowest of up to a thousand data-parallel ranks), sequences as full (best-fit packing pads a long-form mix by about a sixth) and each run's throughput as its own (hall B's draw passes its contracted load for February and March and the provider lowers GPU power hall-wide).",
+  "domain_test": "The field's own statistics decide: an expected maximum over data-parallel ranks of a per-rank load quadratic in document length, the expected fill of a best-fit packing process under a heavy-tailed length mix, and a throttle response measured on the intervals a hall crossed its cap; with warehouse or hospital nouns there is no rank to wait for, no packed sequence to pad and no throughput benchmark to bridge.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:slowest_rank_of_packed_workload",
+  "layer1": [
+    "step counters restarted at resumes",
+    "log rows replayed after restarts",
+    "UTC against Helsinki local time in the provider's files",
+    "run IDs renamed at a resume",
+    "telemetry gaps",
+    "GB against GiB",
+    "a cooling fault that slowed one row of hall A until its December repair"
+  ],
+  "stakeholder_role": "head of training infrastructure",
+  "role_family": "operations_director",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "step_log_2026.csv",
+    "rows": 0,
+    "entity": "one 50-step logging interval of one training run",
+    "grain": "run x 50 optimizer steps",
+    "source": "synthetic"
+  },
+  "forum": "committee_or_panel",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "software_or_platform",
+  "world": {
+    "geography": "Finland",
+    "currency": "EUR",
+    "org_type": "AI research lab training its own language models on two leased GPU halls at a colocation campus",
+    "invented_names": [
+      "Saukko Labs Oy",
+      "Pohjoisvirta Datacenters",
+      "Kaivola campus",
+      "Kide model family",
+      "hall A",
+      "hall B"
+    ],
+    "people": [
+      "Pia Kuosmanen",
+      "Esa Airaksinen",
+      "Marja Laine"
+    ]
+  },
+  "deliverables": [
+    "h1_2027_throughput_bridge.xlsx",
+    "h1_2027_run_windows_note.md"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-much",
+  "driver": "Each future unit's rate sits at operating conditions no past unit reached and is rebuilt cause by cause from partial records at finer grains: the slowest of many parallel workers on a convex per-worker load, the expected fill of a packing process under a heavy-tailed size mix, and a throttle read off the intervals a shared supply crossed its cap; a pooled benchmark-to-actual factor or the mean worker files most of the late units as on time and some fitting units as late.",
+  "driver_concrete": "Each H1 2027 run's days are the benchmark's bridged by the slowest data-parallel rank on the run's own document mix (per-rank timings joined to the packing log), the fill of best-fit packing on the 2027 long-form mix (the Q4 2026 extension runs' padding against the manifest), and hall B's throttle at its 2027 load (five-minute hall draw against the step logs), so the 2026 benchmark-to-actual ratio or the mean rank files most late runs as fitting and the textbook full-context formula files the many-sequence runs as late.",
+  "stump": "The careful but hurried pass files no H1 2027 run (or one) as late, carrying per-rank cost at its mean, sequences as full and each run's throughput independent of hall B's load, with the planned works hours.",
+  "answer_shape": "bridge",
+  "weight": "modeling",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "decomposition-attribution",
+    "modeling",
+    "modeling",
+    "missingness-measurement",
+    "modeling",
+    "forecasting",
+    "forecasting",
+    "synthesis"
+  ],
+  "results": "R1 the 2026 run ledger reconciled to scheduler GPU-hours; R2 the 2026 bridge from benchmark days to actual days by cause; R3 the per-rank cost model and each 2027 long-context run's slowest-rank overhead; R4 each 2027 long-context run's packing fill; R5 hall B's throttle response and each hall B run's capped share in 2027; R6 interruptions, restarts and lost work per 2027 run; R7 days lost to works per run at the overrun record; R8 each 2027 run's expected days with an 80 per cent range against its window; R9 the late set with each late run's fix",
+  "one_fact_test": "'the step waits for the rank whose sequences hold the long documents' rescues R3 and the two runs it flips in R8: 2 of 9",
+  "strategy_label": "UNTESTED (own: no client strategy carries a throughput benchmark bridged to production runs at conditions never run)",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "mark111": "mark111 ranks a closed quarter's causes whose leader stops operating in the forward season; here each cause grows at conditions the record never reached (more data-parallel ranks on heavier mixes, a packing rule that pads, a hall held past its cap), and each is rebuilt from a finer-grained record, not a seasonal provider switch"
+  },
+  "lineage": [],
+  "notes": "stump_strategy other: conditions the record never reached at three grains (the slowest of the data-parallel ranks, the fill of best-fit packing, a hall past its contracted power). Weight modeling repeats task24 inside the last five (WARN): each 2027 cause is a modelling build at conditions no 2026 run reached, which is where the work sits; the answer shape (a bridge) and the decision form differ from task24's.",
+  "skeleton": {
+    "decision_form": "ranked_causes_bridge",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "non_additive_aggregation",
+      "forward_window_structure_change",
+      "response_at_crossing_point",
+      "scheduled_completion_slippage"
+    ],
+    "mechanisms": [
+      "attention_cost_quadratic_in_packed_document_length",
+      "synchronous_step_waits_for_slowest_data_parallel_rank",
+      "best_fit_packing_pads_a_long_form_mix",
+      "hall_power_cap_lowers_gpu_power_hall_wide",
+      "provider_major_works_overrun_their_plan",
+      "row_cooling_fault_slows_nodes_under_sustained_load"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "naive_ignores_what_it_should_depend_on",
+      "natural_experiment_in_record"
+    ],
+    "moves": [
+      "simulate_with_fitted_inputs",
+      "compute_on_joint_path",
+      "measure_response_shape_from_events",
+      "bridge_by_contribution",
+      "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+      "primary_record",
+      "second_grain_source",
+      "incumbent_figure_or_method",
+      "shortlist_or_candidates",
+      "governing_standard",
+      "reference_register",
+      "exogenous_long_record",
+      "field_legend_or_dictionary",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-13T15:11:19Z"
+}

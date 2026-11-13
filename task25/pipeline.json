@@ -1,0 +1,61 @@
+{
+ "task": "task25",
+ "status": "DESIGN",
+ "domain": "general-statistics-data-science",
+ "subdomain": "benchmarking-and-ablations",
+ "objective": "comparative-explanation",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-13",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 the 2026 run ledger reconciled to scheduler GPU-hours; R2 the 2026 bridge from benchmark days to actual days by cause; R3 the per-rank cost model and each 2027 long-context run's slowest-rank overhead; R4 each 2027 long-context run's packing fill; R5 hall B's throttle response and each hall B run's capped share in 2027; R6 interruptions, restarts and lost work per 2027 run; R7 days lost to works per run at the overrun record; R8 each 2027 run's expected days with an 80 per cent range against its window; R9 the late set with each late run's fix",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": ""
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "stage 2: write the design note's results chain, hidden factor record, stump factorial, effort test and fork tables to precut exit 0; the world's numbers prototyped in scratchpad/proto",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
+}
