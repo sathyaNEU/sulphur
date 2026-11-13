@@ -1,11 +1,11 @@
 {
  "task": "task6",
- "status": "PAUSED",
+ "status": "APPROVED",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 4,
- "stage_name": "check",
- "updated": "2026-11-09",
+ "stage": 7,
+ "stage_name": "approved",
+ "updated": "2026-11-13",
  "stump": "",
  "architecture": 7,
  "loops": 1,
@@ -62,8 +62,9 @@
    "commit": "RESHIPPED (task6) 2026-11-09"
   }
  ],
- "resume": "stage 4: the author rules on judge pass 5's Gate H SEND_BACK (the run on file contradicts its careful-run estimate; the two deciding incidents share R2's one judgment). Either re-judge this hardened cut (pass 6) and go READY and RESHIPPED, or harden further (scheduled-job roots on the internal services so the root split is not one group-by; a second deciding incident on different evidence), or re-root. Backup of the shipped cut: ~/Documents/task6_arch7_backup_2026-11-09.zip",
- "approved": null,
+ "resume": "none: approved on review (architecture 7, levelled up, the cut on file)",
+ "approved": "2026-11-11",
+ "approval_source": "the author's report of 2026-11-11 (approved on review; architecture 7 levelled up, the cut on file; the run scores are not in the repo), already filed in corpus/approved.json and the run record; confirmed by the author on 2026-11-13",
  "delivered": null,
  "portal": {
   "status": "Failed final review",
@@ -74,8 +75,8 @@
   "note": "returned at final review: the breach list turns on one thing"
  },
  "portal_id": "4b456953-2f2b-421b-96c8-ea3ec25c3a32",
- "portal_status": "RETURNED",
- "portal_status_date": "2026-11-09",
+ "portal_status": "APPROVED",
+ "portal_status_date": "2026-11-11",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
  "zip_md5": "b8177b9bc9e3845148aebe0fc3915220",
@@ -94,17 +95,32 @@
  "golden_zip_md5": "4f9f8968dee3830a9bd6514befee8b06",
  "paper_pair": 44.3,
  "runs": {
-  "run1": 73,
-  "run2": 83,
-  "average": 78.0,
-  "counterfactual_average": 86.5,
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "method shortcut: each service's own spans post-stratified by its own hour, partner-gateway 1.4, four services",
-   "run2": "landed the call; lost the incident ask by reading the export's final service lists from the declaration (5.2 misread)"
+   "run1": "",
+   "run2": ""
   },
-  "triage": "FIX_ASKS",
-  "recorded": "2026-11-08",
-  "history": []
+  "triage": "",
+  "recorded": "",
+  "note": "architecture 7 (levelled up) approved on review; its run scores are not in the repo",
+  "history": [
+   {
+    "architecture": 6,
+    "date": "2026-11-08",
+    "run1": 73,
+    "run2": 83,
+    "average": 78.0,
+    "counterfactual_average": 86.5,
+    "first_wrong_step": {
+     "run1": "method shortcut: each service's own spans post-stratified by its own hour, partner-gateway 1.4, four services",
+     "run2": "landed the call; lost the incident ask by reading the export's final service lists from the declaration (5.2 misread)"
+    },
+    "triage": "FIX_ASKS"
+   }
+  ]
  },
  "gates_at_reship": "gates.py task6 --full, 2026-11-09 (hardened): checks (incl. the backtest and placebo-calibrated detectors), verify, rebuild byte-identical, precut, effort, figures, containers, surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only (accepted)",
  "doctrine": "throughout",
