@@ -171,7 +171,7 @@ def ratios(P, WK, pay_r, R):
 
 # ------------------------------------------------------------------ a request's cost per image
 CFG = dict(care_spread=True, care_prior=2.0, max_reviews=4, week_noise=True, paid_week="clock", video_terms="full",
-           rev_ratio="centre", hinge="per_annotator", qa="logit_const", floor="average")
+           rev_ratio="centre", hinge="per_annotator", qa="logit_const", floor="average", staff_basis="images")
 
 
 def staff_for(T, kind):
@@ -191,6 +191,10 @@ def request_cost(T, F, kind, sample, c1=True, c2=True, c3=True, H=None, key=None
     beta = F["time"]["beta"] * scale.get("time", 1.0)
     speed = F["time"]["speed"]
     staff = staff if staff is not None else staff_for(T, kind)
+    if cfg.get("staff_basis") == "hours":     # contracted hours of work, so the faster annotators deliver more images
+        staff = staff.copy()
+        w = staff.scheduled_hours / staff.annotator_id.map(F["time"]["speed"]).fillna(1.0)
+        staff["share"] = w / w.sum()
     sh = staff.share.to_numpy()
     if kind == "box":
         X = np.column_stack([np.ones(len(sample))] + [sample[c].to_numpy(float) for c in COUNT_COLS])

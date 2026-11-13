@@ -48,10 +48,10 @@ CHUNK = 25
 # polygons: (mean polygons, k, mean vertices, occlusion); video: (mean on screen, births per frame, sequences)
 PROJECTS = [
     ("P26-0412", "Tarnwell Auto", "box", "street", 0, 12, 0.7, (14, 6, 0.30, 0.45, 0.22)),
-    ("P26-0417", "Corvane Mobility", "box", "street", 2, 15, 1.1, (19, 6, 0.32, 0.43, 0.28)),
+    ("P26-0417", "Vantorra Mobility", "box", "street", 2, 15, 1.1, (19, 6, 0.32, 0.43, 0.28)),
     ("P26-0423", "Halsey Robotics", "box", "street", 6, 20, 0.9, (24, 7, 0.34, 0.42, 0.31)),
     ("P26-0431", "Tarnwell Auto", "box", "street", 9, 24, 1.0, (29, 7, 0.36, 0.41, 0.33)),
-    ("P26-0446", "Corvane Mobility", "box", "street", 14, 26, 0.6, (44, 8, 0.38, 0.40, 0.38)),
+    ("P26-0446", "Vantorra Mobility", "box", "street", 14, 26, 0.6, (44, 8, 0.38, 0.40, 0.38)),
     ("P26-0458", "Ilvane Vision", "box", "street", 18, 29, 0.5, (57, 8, 0.39, 0.40, 0.40)),
     ("P26-0414", "Shelfgrid Retail", "box", "retail", 0, 11, 0.9, (22, 9, 0.44, 0.42, 0.06)),
     ("P26-0427", "Quaymart Analytics", "box", "retail", 5, 18, 0.9, (28, 9, 0.45, 0.42, 0.07)),
@@ -82,11 +82,11 @@ PROJECTS = [
 
 # Q1 2027 requests (the decision); offered prices are set in the RFQs (docs.py), from the clients' own budgets
 REQUESTS = {
-    "A": dict(client="Corvane Mobility", kind="box", scene="street", volume=12000, model=(125, 9, 0.42, 0.40, 0.55)),
-    "B": dict(client="Shelfgrid Retail", kind="box", scene="retail", volume=24000, model=(106, 12, 0.58, 0.36, 0.09)),
-    "C": dict(client="Ardley Autonomy", kind="video", scene="highway", volume=90000, model=(27, 0.26, 0.25)),
-    "D": dict(client="Brindle Pallet Systems", kind="polygon", scene="pallet", volume=15000, model=(15, 5, 42.0, 0.18)),
-    "E": dict(client="Kestrin Warehousing", kind="box", scene="warehouse", volume=30000, model=(12, 5, 0.07, 0.36, 0.05)),
+    "A": dict(client="Vantorra Mobility", kind="box", scene="street", volume=2000, model=(125, 9, 0.42, 0.40, 0.55)),
+    "B": dict(client="Shelfgrid Retail", kind="box", scene="retail", volume=6000, model=(106, 12, 0.58, 0.36, 0.09)),
+    "C": dict(client="Ardley Autonomy", kind="video", scene="highway", volume=60000, model=(27, 0.26, 0.25)),
+    "D": dict(client="Brindle Pallet Systems", kind="polygon", scene="pallet", volume=4000, model=(15, 5, 42.0, 0.18)),
+    "E": dict(client="Kestrin Warehousing", kind="box", scene="warehouse", volume=20000, model=(12, 5, 0.07, 0.36, 0.05)),
 }
 
 

@@ -145,6 +145,9 @@ RIVALS = [("issue intensities with every annotator's care set to one", dict(care
           ("paid weeks at contracted hours rather than the clock's", dict(paid_week="contract")),
           ("video time on tracks starting and objects on screen, without track ends", dict(video_terms="no_ends")),
           ("reviewer paid time per review second pooled across centres", dict(rev_ratio="pooled"))]
+# a reading the pricing policy rules out (it allots images, not hours, in proportion to contracted hours): run as a check
+STAFF_HOURS = ("each annotator's share of the request as contracted hours of work, faster annotators delivering more images",
+               dict(staff_basis="hours"))
 
 
 def compute(target, quick=False):
@@ -177,6 +180,8 @@ def compute(target, quick=False):
     for name, cfg in RIVALS:
         v = {k: cost(T, F, H, k, cfg=cfg)["cost"] for k in "ABCDE"}
         G["rivals"][name] = dict(costs=v, answer=accept_set(v, prices))
+    v = {k: cost(T, F, H, k, cfg=STAFF_HOURS[1])["cost"] for k in "ABCDE"}
+    G["staff_hours"] = dict(costs=v, answer=accept_set(v, prices))
     G["perturb"] = {}
     for name, sc in [("per-object time 5 per cent higher", dict(time=1.05)), ("per-object time 5 per cent lower", dict(time=0.95)),
                      ("issue intensities 10 per cent higher", dict(issues=1.10)), ("issue intensities 10 per cent lower", dict(issues=0.90)),

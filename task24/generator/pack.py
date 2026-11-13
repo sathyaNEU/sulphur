@@ -24,7 +24,7 @@ F = dict(passes="pellucid_task_passes_2026-04-06_2026-11-01.csv", reviews="qa_re
          roster="staff_roster_2026-11-06.xlsx", projects="project_register_2026.csv",
          archive="video_delivery_archive_2026.sqlite", survey="pulse_survey_2026_q2_q3.csv",
          gpu="prelabel_gpu_usage_2026.csv")
-SAMPLES = {"A": "corvane_CRV-2027-014_preview_labels.json", "B": "shelfgrid_SG27-03_preview_labels.json",
+SAMPLES = {"A": "vantorra_VTA-2027-014_preview_labels.json", "B": "shelfgrid_SG27-03_preview_labels.json",
            "C": "ardley_HWY-Q1-27_preview_sequences.json", "D": "brindle_BPS-2027-02_preview_labels.json",
            "E": "kestrin_KW-2701_preview_labels.json"}
 

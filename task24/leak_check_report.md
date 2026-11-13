@@ -1,25 +1,28 @@
 # leak check, task24
 
-**Verdict: REVIEW.** 22 files read, 52 golden figures and 10 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 22 files read, 53 golden figures and 10 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: corvane, ardley, objects, shelfgrid, shortcut, missed, method, kestrin, hurried, reflex, re-return, carried, tracks, screen, object, images, projects, closed, modeling, brindle, record, re-review, per-object, accepts, annotators
+Stump terms swept: vantorra, ardley, objects, shelfgrid, shortcut, method, kestrin, missed, hurried, reflex, re-return, carried, images, tracks, brindle, screen, object, projects, closed, modeling, record, re-review, per-object, accepts, annotators
 
 ## 3 answer figures in the pack (REVIEW 2)
-- **REVIEW** `pricing_policy_FIN-POL-04.pdf`: golden figure 1.55 appears: ...d in proportion to review time; (c) overhead: USD 1.55 per paid hour of annotators and of reviewers on t...
 - **REVIEW** `pricing_policy_FIN-POL-04.pdf`: golden figure 1.18 appears: ...e client offers per image (per frame) is at least 1.18 times its expected cost of delivery. Where it is...
+- **REVIEW** `pricing_policy_FIN-POL-04.pdf`: golden figure 1.55 appears: ...d in proportion to review time; (c) overhead: USD 1.55 per paid hour of annotators and of reviewers on t...
 
 ## 4 design-note vocabulary (REVIEW 3)
 - **REVIEW** `annotator_pay_policy_2026.pdf`: 3 of 25 stump-paragraph terms appear (object, record, annotators); read whether the document names the move
-- **REVIEW** `pricing_policy_FIN-POL-04.pdf`: 3 of 25 stump-paragraph terms appear (projects, record, annotators); read whether the document names the move
+- **REVIEW** `pricing_policy_FIN-POL-04.pdf`: 4 of 25 stump-paragraph terms appear (images, projects, record, annotators); read whether the document names the move
 - **REVIEW** `qa_review_standard_QA-STD-03.pdf`: 3 of 25 stump-paragraph terms appear (objects, missed, object); read whether the document names the move
+
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 32% of 22 prompts (cap 30%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 35% of 23 prompts (cap 30%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 22 usable files (10 or more required)
@@ -37,7 +40,6 @@ Stump terms swept: corvane, ardley, objects, shelfgrid, shortcut, missed, method
 
 ## 8 column names (clean)
 
-## 9 dates after the setting (clean)
 
 ## Solver's-eye read
 
@@ -51,3 +53,5 @@ Isolated reader (Sonnet, medium effort), fresh copies of prompt.txt and target/ 
 6. One thing: none filed or planted settles most of the prompt; the pricing policy settles the framing and the accept line, while the estimates (work, returns and re-returns from the previews and the history, the range) remain open work.
 
 Rulings on the REVIEW lines: (a) the pricing policy's two figures, harmless (filed conventions, not computed results); (b) the question-form quota, harmless (a style quota).
+
+Second read on the final cut (fresh copies, after the pricing policy's staffing sentence, the requests' volumes and the client rename): no ranking file, no helper file, no answer figure, nothing planted; the filed sentences quoted are the WHAT (the allotment of images by contracted hours, the cost lines, the allocation by tool time, the acceptance line), and the estimation of minutes, returns and re-reviews, the floor's top-ups and the range remains open work. Rulings: the pricing policy's two figures harmless (policy parameters); the question-form quota harmless.

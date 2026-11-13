@@ -53,9 +53,10 @@ def pricing_policy(path):
                    "projects in proportion to the labelling tool's active time.", body),
          Paragraph("3. Who works a request", h2),
          Paragraph("A request is costed as worked at both delivery centres by the annotators on the staff roster at the "
-                   "costing date who hold the request's skill (bounding boxes, polygons or video tracking), each annotator's "
-                   "share of the work in proportion to their contracted weekly hours, and an annotator's weeks on the request "
-                   "spent on it. The work is reviewed by the QA reviewers of the annotator's centre.", body),
+                   "costing date who hold the request's skill (bounding boxes, polygons or video tracking). Each of them is "
+                   "allotted a share of the request's images (frames for video tracking) in proportion to their contracted "
+                   "weekly hours, and an annotator's weeks on the request are spent on it. The work is reviewed by the QA "
+                   "reviewers of the annotator's centre.", body),
          Paragraph("4. Acceptance", h2),
          Paragraph("A request is accepted when the price the client offers per image (per frame) is at least 1.18 times its "
                    "expected cost of delivery. Where it is not, the lowest price at which it could be accepted is 1.18 times "
@@ -121,7 +122,7 @@ def qa_standard(path):
 
 
 RFQ = {
-    "A": dict(file="RFQ_Corvane_CRV-2027-014.pdf", ref="CRV-2027-014", contact="Maria Osborn, Data Operations",
+    "A": dict(file="RFQ_Vantorra_VTA-2027-014.pdf", ref="VTA-2027-014", contact="Maria Osborn, Data Operations",
               data="dashcam stills at crowded city-centre junctions and market streets, 1920 by 1080, daytime and dusk", spec="bounding boxes on every road user "
               "(cars, pedestrians, cyclists, buses), occlusion flag on each", unit="image",
               sent=dt.datetime(2026, 10, 27, 17, 5, tzinfo=dt.timezone(dt.timedelta(hours=-4)))),

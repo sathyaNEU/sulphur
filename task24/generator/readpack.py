@@ -13,7 +13,7 @@ FILES = dict(passes="pellucid_task_passes_2026-04-06_2026-11-01.csv", reviews="q
              punch="punch_clock_2026-04-06_2026-11-01.csv", pay="pay_register_2026_apr_oct.xlsx",
              roster="staff_roster_2026-11-06.xlsx", projects="project_register_2026.csv",
              archive="video_delivery_archive_2026.sqlite")
-SAMPLES = {"A": "corvane_CRV-2027-014_preview_labels.json", "B": "shelfgrid_SG27-03_preview_labels.json",
+SAMPLES = {"A": "vantorra_VTA-2027-014_preview_labels.json", "B": "shelfgrid_SG27-03_preview_labels.json",
            "C": "ardley_HWY-Q1-27_preview_sequences.json", "D": "brindle_BPS-2027-02_preview_labels.json",
            "E": "kestrin_KW-2701_preview_labels.json"}
 WEEK0 = dt.date(2026, 4, 6)

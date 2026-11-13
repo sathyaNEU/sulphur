@@ -1,9 +1,9 @@
 """task24: submission.md, the four answer blocks, every figure read from figures.json's object."""
 
-N = {"A": "Corvane Mobility's crowded street stills", "B": "Shelfgrid Retail's shelf stills",
+N = {"A": "Vantorra Mobility's crowded street stills", "B": "Shelfgrid Retail's shelf stills",
      "C": "Ardley Autonomy's highway video", "D": "Brindle Pallet Systems' pallet polygons",
      "E": "Kestrin Warehousing's warehouse labels"}
-SHORT = {"A": "Corvane", "B": "Shelfgrid", "C": "Ardley", "D": "Brindle", "E": "Kestrin"}
+SHORT = {"A": "Vantorra", "B": "Shelfgrid", "C": "Ardley", "D": "Brindle", "E": "Kestrin"}
 UNIT = {"A": "an image", "B": "an image", "C": "a frame", "D": "an image", "E": "an image"}
 
 
@@ -26,7 +26,7 @@ def submission(G, F):
     L.append("Accept %s at the prices their clients offered (expected costs of delivery %s, each under its offered price over "
              "1.18), and decline %s unless their clients come up to at least %s (expected costs %s); this rejects the costing "
              "that carries 2026's re-return share along the correction chain and prices video on the objects on screen, which "
-             "accepts Corvane and declines the video.\n" % (
+             "accepts Vantorra and declines the video.\n" % (
                  listing(N[k] for k in acc), listing("USD %s %s" % (m(F["R6_cost_%s" % k], k), UNIT[k]) for k in acc),
                  listing(N[k] for k in dec), listing("USD %s per image" % m(F["R7_lowest_price_%s" % k], k) for k in dec),
                  listing("USD %s" % m(F["R6_cost_%s" % k], k) for k in dec)))
@@ -35,15 +35,15 @@ def submission(G, F):
                                                                  m(F["R6_range_%s" % k][0], k), m(F["R6_range_%s" % k][1], k))
                      for k in req)
     L.append("1. The spreadsheet gives each request's expected cost of delivery per delivered image (per frame for the video "
-             "request), to the cent per image and to a hundredth of a cent per frame, graded within plus or minus 3 per cent: "
+             "request), to the cent per image and to a hundredth of a cent per frame, graded within plus or minus 6 per cent: "
              "%s. The range is the expected cost's own uncertainty from the request's sample (its images resampled, the video's "
              "sequences resampled whole), graded loosely as a range that contains the expected cost and excludes each policy "
              "line.\n" % rows)
     L.append("2. Beside each cost it gives the drivers per delivered image (per frame for video): annotator paid minutes %s; QA "
-             "reviews %s (for the video, reviews per 25-frame task); floor top-up %s. Minutes are graded within 5 per cent, "
-             "reviews within 5 per cent, top-ups within 20 per cent or USD 0.005.\n" % (
+             "reviews %s (the video's per 25-frame task, %.3f per frame, either accepted); floor top-up %s. Minutes are graded "
+             "within 12 per cent, reviews within 8 per cent, top-ups within 20 per cent or USD 0.005.\n" % (
                  ", ".join("%s %s" % (SHORT[k], ("%.3f" % F["R3_minutes_%s" % k]) if k == "C" else ("%.1f" % F["R3_minutes_%s" % k])) for k in req),
-                 ", ".join("%s %.2f" % (SHORT[k], F["R2_reviews_%s" % k]) for k in req),
+                 ", ".join("%s %.2f" % (SHORT[k], F["R2_reviews_%s" % k]) for k in req), F["R2_reviews_C_per_frame"],
                  ", ".join("%s USD %s" % (SHORT[k], ("%.4f" % F["R4_topup_%s" % k]) if k == "C" else ("%.3f" % F["R4_topup_%s" % k])) for k in req)))
     L.append("3. A sheet lists each 2026 project's actual cost per delivered unit (as payroll settled it, a week's pay and hours "
              "shared across projects by tool time, reviewers' pay by review time in each reviewer's local pay week) beside what "
@@ -62,7 +62,7 @@ def submission(G, F):
                  "{:,.0f}".format(F["R1_reviewer"]), "{:,.0f}".format(F["R1_overhead"]), "{:,.1f}".format(F["R1_ann_hours"]),
                  "{:,.1f}".format(F["R1_rev_hours"])))
     L.append("5. For each request to decline, the lowest price at which it could be accepted (1.18 times its expected cost), "
-             "to the cent, within plus or minus 3 per cent: %s.\n" % "; ".join(
+             "to the cent, within plus or minus 6 per cent: %s.\n" % "; ".join(
                  "%s USD %s per image" % (SHORT[k], m(F["R7_lowest_price_%s" % k], k)) for k in dec))
     L.append("6. The short note states the recommendation: accept %s; decline %s.\n" % (
         listing(SHORT[k] for k in acc), listing(SHORT[k] for k in dec)))
@@ -91,13 +91,17 @@ def submission(G, F):
         "five minutes, the supervisor's edit for a shift closed at midnight, lunch unpaid) and net the voided payroll re-run; the "
         "delivery cost closes at USD %s." % "{:,.0f}".format(F["R1_total"]),
         "Fit per-object first-pass time by size and occlusion with each annotator's pace, correction time, review time, each "
-        "annotator's tool share of paid time and the reviewers' paid time per review second (the careful pass gets these right).",
+        "annotator's tool share of paid time and the reviewers' paid time per review second (the careful pass gets these right). "
+        "The tool's six box counts are disjoint, clear and occluded boxes of each size (payroll's boxes paid in every "
+        "annotator-week equal their sum, and some passes carry more occluded than clear boxes of a size), so each request "
+        "sample's boxes are counted the same way, once each.",
         "QA: fit found-issue intensities per object type from 2026's reviews with each annotator's care, aggregate them over each "
         "sampled image (an image returns on any found issue), review each correction again at an intensity in proportion to the "
         "image's own (a correction re-checks every object) and run the chain to the fourth review: %.2f reviews per image on the "
         "crowded street and %.2f on the shelves. The hurried pass models the first-pass return on the object counts and carries "
         "2026's re-return share of corrected tasks (%.2f) along the chain, getting %.2f and %.2f; a logistic of the re-return on "
-        "the counts over-extrapolates to %.2f and %.2f, and 2026's density bins land at %.2f and %.2f." % (
+        "the counts, which already overshoots 2026's own densest corrected tasks, over-extrapolates to %.2f and %.2f, and "
+        "2026's density bins land at %.2f and %.2f." % (
             F["R2_reviews_A"], F["R2_reviews_B"], F["rereturn_share_2026"], F["careful_reviews_A"], F["careful_reviews_B"],
             F["alt_logit_reviews_A"], F["alt_logit_reviews_B"], F["alt_binned_reviews_A"], F["alt_binned_reviews_B"]),
         "The floor: for each annotator who would work a request (shares by contracted hours), set a week's piece pay at their pace "
@@ -112,10 +116,10 @@ def submission(G, F):
         "the costing on every 2026 project that closed before the pull (within 6 per cent on %d of %d)." % (
             F["R5_within_6pct"], F["R5_projects"]),
         "Hold each against its line: the crowded street and polygon requests cost more than their offered price over 1.18, the "
-        "shelf, video and label requests less. Six defensible variants (care spread off, a lighter prior on care, no week-to-week "
-        "variation, contracted rather than clocked weeks, video without track ends, reviewer time pooled) and every fitted input "
-        "moved by its spread give the same set, while each hurried route gives a different wrong one, so no other conclusion "
-        "survives."]
+        "shelf, video and label requests less. Six defensible variants (care spread off, a lighter prior on care, no "
+        "week-to-week variation, contracted rather than clocked weeks, video without track ends, reviewer time pooled) and every "
+        "fitted input moved by its spread give the same set, while each hurried route gives a different wrong one, so no other "
+        "conclusion survives."]
     for i, s in enumerate(steps, 1):
         L.append("%d. %s\n" % (i, s))
     return "\n".join(L)

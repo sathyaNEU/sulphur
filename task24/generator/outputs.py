@@ -11,7 +11,7 @@ import postprocess as PP
 import world as Wd
 
 REQ = "ABCDE"
-NAMES = {"A": "Corvane Mobility CRV-2027-014", "B": "Shelfgrid Retail SG27-03", "C": "Ardley Autonomy HWY-Q1-27",
+NAMES = {"A": "Vantorra Mobility VTA-2027-014", "B": "Shelfgrid Retail SG27-03", "C": "Ardley Autonomy HWY-Q1-27",
          "D": "Brindle Pallet Systems BPS-2027-02", "E": "Kestrin Warehousing KW-2701"}
 GRADED_PROJECTS = ["P26-0446", "P26-0441", "P26-0434"]
 CLOSED_BY = "2026-10-18"          # projects whose register end date falls by Sunday 18 October: every chain closed at the pull
@@ -76,6 +76,11 @@ def build_figures(G):
     out["range_level_pct"] = 80
     out["topup_band_pct"] = 20
     out["topup_band_usd"] = 0.005
+    out["cost_band_pct"] = 6
+    out["minutes_band_pct"] = 12
+    out["reviews_band_pct"] = 8
+    out["R2_reviews_C_per_frame"] = r(req["C"]["reviews"] / req["C"]["unit_per_task"], 3)
+    out["rivals_run"] = len(G["rivals"])
     out["margin"] = Wd.MARGIN
     out["overhead_rate"] = Wd.OVERHEAD_PER_PAID_HOUR
     out["rereturn_share_2026"] = r(G["F"]["returns"]["rereturn"], 3)
@@ -101,14 +106,15 @@ def build_effort(G, FG):
     cost_bands = {}
     for k in REQ:
         vals = [c[k] for c in fam_costs] + [req[k]["cost"]]
-        cost_bands[k] = [r(min(vals) * 0.985, 4), r(max(vals) * 1.015, 4)]
-    rev_bands = {k: [r(req[k]["reviews"] * 0.95, 3), r(req[k]["reviews"] * 1.05, 3)] for k in REQ}
-    min_bands = {k: [r(req[k]["ann_min"] * 0.95, 4), r(req[k]["ann_min"] * 1.05, 4)] for k in REQ}
+        g = FG["R6_cost_%s" % k]
+        cost_bands[k] = [r(min(g * 0.94, min(vals) * 0.985), 4), r(max(g * 1.06, max(vals) * 1.015), 4)]
+    rev_bands = {k: [r(FG["R2_reviews_%s" % k] * 0.92, 3), r(FG["R2_reviews_%s" % k] * 1.08, 3)] for k in REQ}
+    min_bands = {k: [r(FG["R3_minutes_%s" % k] * 0.88, 4), r(FG["R3_minutes_%s" % k] * 1.12, 4)] for k in REQ}
     top_bands = {k: [r(max(0.0, req[k]["topup"] * 0.80 - (0.0005 if k == "C" else 0.005)), 4),
                      r(req[k]["topup"] * 1.20 + (0.0005 if k == "C" else 0.005), 4)] for k in REQ}
     proj_bands = {p: [r(G["costing_golden"][p] * 0.95, 4), r(G["costing_golden"][p] * 1.05, 4)] for p in GRADED_PROJECTS}
     range_bands = {c: [r(v * 0.94, 4), r(v * 1.06, 4)] for c, v in FG["R8_range"].items()}
-    low_bands = {k: [r(v * 0.97, 4), r(v * 1.03, 4)] for k, v in FG["R9_lowest_price"].items()}
+    low_bands = {k: [r(v * 0.94, 4), r(v * 1.06, 4)] for k, v in FG["R9_lowest_price"].items()}
     quick_name = "2026's delivery cost per object carried to each request"
     quick = G["extra"][quick_name]["costs"]
     quick_ans = G["extra"][quick_name]["answer"]
@@ -220,7 +226,8 @@ def workbook(G, FG, path, author, created, modified):
     for i, w in enumerate(widths):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i + 1)].width = w
     ws.append([])
-    ws.append(["Video request C: QA reviews are per 25-frame task; all other figures per frame."])
+    ws.append(["Video request C: QA reviews are per 25-frame task (%.3f per frame); all other figures per frame." %
+               FG["R2_reviews_C_per_frame"]])
     ws2 = wb.create_sheet("2026 projects")
     ws2.append(["Project", "Scene", "Unit", "Delivered units", "Actual cost per unit (USD)", "Costing per unit (USD)", "Gap",
                 "Closed by 18 October"])

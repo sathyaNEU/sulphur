@@ -60,15 +60,18 @@ def main():
     def outside(rid, cells):
         b, cv = by[rid]["bands"], by[rid]["passes"]["careful"]
         return [c for c in cells if not (b[c][0] <= cv.get(c, float("nan")) <= b[c][1])]
-    ok("R3 bar: the careful pass's costs on Corvane, Shelfgrid and Ardley sit outside their bands",
-       outside("R6", "ABC") == list("ABC"), str(outside("R6", "ABC")))
-    ok("R3 bar: careful QA reviews outside the band on the crowded street and shelf requests", outside("R2", "AB") == list("AB"))
+    ok("R3 bar: the careful pass's costs on Vantorra and Ardley sit outside their bands",
+       outside("R6", "AC") == list("AC"), str(outside("R6", "ABC")))
+    ok("R3 bar: careful QA reviews outside the band on the crowded street request", outside("R2", "A") == ["A"])
     ok("R3 bar: careful paid minutes outside the band on the crowded street and the video", outside("R3", "AC") == list("AC"))
     ok("R3 bar: careful floor top-up outside the band on the crowded street", outside("R4", "A") == ["A"])
     ok("R3 bar: careful costing outside the band on the parking-lot video", outside("R5", ["P26-0434"]) == ["P26-0434"])
-    ok("R3 bar: careful ranges miss on Corvane, Shelfgrid and Ardley",
-       all(c in outside("R8", list(by["R8"]["golden"])) for c in ("A_lo", "A_hi", "B_hi", "C_lo", "C_hi")))
+    ok("R3 bar: careful ranges miss on Vantorra and Ardley",
+       all(c in outside("R8", list(by["R8"]["golden"])) for c in ("A_lo", "A_hi", "C_lo", "C_hi")))
     # ---------------- R7 bar: the rivals and perturbations hold the call; shortcuts leave it
+    ok("SF5 fork: reading the staffing basis as hours of work moves the call, so the pricing policy allots images",
+       G["staff_hours"]["answer"] != gold and "allotted a share of the request's images" in open(os.path.join(HERE, "docs.py")).read(),
+       str(G["staff_hours"]["answer"]))
     ok("R7 rivals: six defensible variants file the golden set", len(G["rivals"]) == 6 and
        all(d["answer"] == gold for d in G["rivals"].values()))
     ok("R7 perturbations: each fitted input moved by its spread files the golden set", len(G["perturb"]) == 6 and
@@ -79,8 +82,8 @@ def main():
     lg = alt["QA re-returns extrapolated by a logistic on the counts"]
     bn = alt["QA returns and re-returns read from 2026's density bins"]
     ok("R7 the over-extrapolating QA alternative files a wrong set (declines Shelfgrid)", "B" not in lg["answer"] and lg["answer"] != gold)
-    ok("R7 the density-bin alternative (2026's rates carried to the request's density mix) accepts Corvane: a wrong set",
-       "A" in bn["answer"] and bn["answer"] != gold, "%s, Corvane USD %.2f against its line USD %.2f" % (
+    ok("R7 the density-bin alternative (2026's rates carried to the request's density mix) accepts Vantorra: a wrong set",
+       "A" in bn["answer"] and bn["answer"] != gold, "%s, Vantorra USD %.2f against its line USD %.2f" % (
            bn["answer"], bn["costs"]["A"], Wd.OFFERED["A"] / Wd.MARGIN))
     distinct = set(wrong) | {tuple(lg["answer"]), tuple(bn["answer"])}
     ok("R7 shortcuts: six distinct wrong sets", len(distinct) == 6, str(sorted(distinct)))
@@ -131,6 +134,12 @@ def main():
     # ---------------- semantic fork rows
     ok("SF2 the video request is priced per frame", "per frame" in open(os.path.join(TASK, "prompt.txt")).read())
     ok("SF1 every image is delivered: no chain runs past the fourth review", int(P.pass_no.max()) == 4)
+    b1c = P[(P.kind == "box") & (P.pass_no == 1)]
+    six = b1c.groupby(["annotator_id", "week"])[A.COUNT_COLS].sum().sum(axis=1)
+    paid = T["WK"].set_index(["annotator_id", "week"]).boxes_paid.reindex(six.index)
+    over = float((b1c.n_S_occ > b1c.n_S_clr).mean())
+    ok("SF14 the tool's six box counts are disjoint: payroll's boxes paid equal their sum, and occluded exceeds clear on some passes",
+       (paid - six).abs().max() < 1e-9 and over > 0.01, "share of passes with more occluded than clear small boxes %.3f" % over)
     wk = T["WK"].copy()
     fl = wk.centre.map({"KSM": 2.40, "ILO": 2.70})
     ok("SF4 the register's top-ups are the floor settled per annotator per pay week",

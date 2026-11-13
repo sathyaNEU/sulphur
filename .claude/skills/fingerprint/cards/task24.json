@@ -12,7 +12,7 @@
  "shape": "01",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "Accept Shelfgrid Retail's shelf stills, Ardley Autonomy's highway video and Kestrin Warehousing's warehouse labels at the offered prices; decline Corvane Mobility's crowded street stills and Brindle Pallet Systems' pallet polygons unless their clients come up to at least USD 7.01 and USD 1.95 per image.",
+ "answer": "Accept Shelfgrid Retail's shelf stills, Ardley Autonomy's highway video and Kestrin Warehousing's warehouse labels at the offered prices; decline Vantorra Mobility's crowded street stills and Brindle Pallet Systems' pallet polygons unless their clients come up to at least USD 7.01 and USD 1.95 per image.",
  "answer_source": "submission.md Final Recommendation; generator/figures.json call",
  "gap": [
   "population",
@@ -66,7 +66,7 @@
   "org_type": "data-labeling vendor with a managed annotation workforce",
   "invented_names": [
    "Pellucid Annotation",
-   "Corvane Mobility",
+   "Vantorra Mobility",
    "Shelfgrid Retail",
    "Ardley Autonomy",
    "Brindle Pallet Systems",

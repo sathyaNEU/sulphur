@@ -29,7 +29,7 @@ FG = json.load(open(os.path.join(HERE, "figures.json")))
 BAD = []
 W0 = dt.date(2026, 4, 6)
 CNT = ["obj_small", "obj_small_occl", "obj_medium", "obj_medium_occl", "obj_large", "obj_large_occl"]
-KEY_OF_CLIENT = {"corvane": "A", "shelfgrid": "B", "ardley": "C", "brindle": "D", "kestrin": "E"}
+KEY_OF_CLIENT = {"vantorra": "A", "shelfgrid": "B", "ardley": "C", "brindle": "D", "kestrin": "E"}
 KIND = {"A": "box", "B": "box", "C": "video", "D": "polygon", "E": "box"}
 OFFSET_H = {"KSM": 3, "ILO": 8}
 
@@ -77,8 +77,8 @@ ok("pricing policy files the line (1.18) and the overhead (USD 1.55 per paid hou
    MARGIN == FG["margin"] and OVH == FG["overhead_rate"], "%s, %s" % (MARGIN, OVH))
 ok("pricing policy files the week's pay shared across projects by tool active time",
    re.search(r"shared\s+across\s+the\s+projects\s+in\s+proportion\s+to\s+the\s+labelling\s+tool's\s+active\s+time", pricing) is not None)
-ok("pricing policy files the staffing: roster at the costing date, shares by contracted hours",
-   re.search(r"in\s+proportion\s+to\s+their\s+contracted\s+weekly\s+hours", pricing) is not None)
+ok("pricing policy files the staffing: roster at the costing date, images allotted by contracted hours",
+   re.search(r"allotted\s+a\s+share\s+of\s+the\s+request's\s+images\s+\(frames\s+for\s+video\s+tracking\)\s+in\s+proportion\s+to\s+their\s+contracted\s+weekly\s+hours", pricing) is not None)
 ok("pay policy files four piece rates, two floors and two lunch breaks",
    all(v == v for v in list(RATE.values()) + list(FLOOR.values()) + list(LUNCH.values())), "%s %s %s" % (RATE, FLOOR, LUNCH))
 ok("QA standard files the return on any found issue and the fourth review",
