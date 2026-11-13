@@ -204,7 +204,7 @@ ROUNDING = (r"to the nearest \w+|to (?:one|two|three|\d) decimal(?: place)?s?|a 
 
 
 def task_no(path):
-    m = re.search(r"task(\d+)", path)
+    m = re.search(r"task(\d+)", os.path.basename(os.path.normpath(path)))
     return int(m.group(1)) if m else -1
 
 
