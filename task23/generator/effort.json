@@ -1,0 +1,973 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the municipal waste placed in cell 5 through October 2026, in short tons",
+   "graded_as": "Ask 3",
+   "figure": "R1_cell5_msw_tons",
+   "depends": [],
+   "independent": "the scale tickets and the daily log",
+   "golden": 574197,
+   "band": [
+    568455.03,
+    579938.97
+   ],
+   "partly": [
+    556971.09,
+    591422.91
+   ],
+   "passes": {
+    "quick": 648207,
+    "careful": 574197,
+    "thorough": 574197
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the site's actual methane emission in 2025, metric tons",
+   "graded_as": "Component 1",
+   "figure": "R2_actual_2025_t",
+   "depends": [],
+   "independent": "the campaigns, the drone flights, the chambers and the barometer",
+   "golden": 4924,
+   "band": [
+    4431.6,
+    5416.4
+   ],
+   "partly": [
+    3939.2,
+    5908.8
+   ],
+   "passes": {
+    "quick": 2149,
+    "careful": 3537,
+    "thorough": 4924
+   },
+   "precedent": [
+    "N12",
+    "L28"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the per cent change in cell 4's methane generation from 2022 to the twelve months to October 2026",
+   "graded_as": "Component 2",
+   "figure": "R3_cell4_generation_change_pct",
+   "depends": [],
+   "independent": "the wellfield readings, the register and the pump work orders",
+   "golden": 85.1,
+   "band": [
+    77.1,
+    93.1
+   ],
+   "partly": [
+    69.1,
+    101.1
+   ],
+   "passes": {
+    "quick": 28.7,
+    "careful": 28.7,
+    "thorough": 85.1
+   },
+   "precedent": [
+    "L02",
+    "L26"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the methane cell 5 will generate in 2027, metric tons",
+   "graded_as": "Ask 5",
+   "figure": "R4_cell5_generation_2027_t",
+   "depends": [
+    "R1",
+    "R3"
+   ],
+   "independent": "",
+   "golden": 3752,
+   "band": [
+    3301.76,
+    4202.24
+   ],
+   "partly": [
+    2814.0,
+    4690.0
+   ],
+   "passes": {
+    "quick": 2074,
+    "careful": 959,
+    "thorough": 3752
+   },
+   "precedent": [
+    "L11",
+    "L02",
+    "N04"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the share of the methane reaching cell 5's cover in 2027 that it oxidizes, per cent",
+   "graded_as": "Ask 6",
+   "figure": "R5_cell5_oxidized_share_2027_pct",
+   "depends": [
+    "R4"
+   ],
+   "independent": "",
+   "golden": 17.1,
+   "band": [
+    13.1,
+    21.1
+   ],
+   "partly": [
+    9.1,
+    25.1
+   ],
+   "passes": {
+    "quick": 10.0,
+    "careful": 39.3,
+    "thorough": 17.1
+   },
+   "precedent": [
+    "N04",
+    "L22"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "the bridge from the 2025 report and the survey to the actual 2025 emission, metric tons",
+   "graded_as": "Ask 2",
+   "figure": "R6_bridge",
+   "depends": [
+    "R2"
+   ],
+   "independent": "",
+   "golden": {
+    "collection efficiency": 3280,
+    "oxidation": -467,
+    "the hours the campaigns did not sample": 1387
+   },
+   "bands": {
+    "collection efficiency": [
+     2788.0,
+     3772.0
+    ],
+    "oxidation": [
+     -717.0,
+     -217.0
+    ],
+    "the hours the campaigns did not sample": [
+     897.0,
+     1877.0
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "collection efficiency": 0,
+     "oxidation": 0,
+     "the hours the campaigns did not sample": 0
+    },
+    "careful": {
+     "collection efficiency": 2274,
+     "oxidation": -646,
+     "the hours the campaigns did not sample": 0
+    },
+    "thorough": {
+     "collection efficiency": 3280,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "precedent": [
+    "N12",
+    "L22"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "the 2027 emission under each package in a year of normal weather, metric tons",
+   "graded_as": "Component 3",
+   "figure": "R7_emissions_2027_t",
+   "depends": [
+    "R2",
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "package A": 6942,
+    "package B": 6385,
+    "package C": 5549,
+    "package D": 4495,
+    "package E": 4095
+   },
+   "bands": {
+    "package A": [
+     6456.1,
+     7427.9
+    ],
+    "package B": [
+     5938.1,
+     6832.0
+    ],
+    "package C": [
+     5160.6,
+     5937.4
+    ],
+    "package D": [
+     4180.4,
+     4809.7
+    ],
+    "package E": [
+     3808.4,
+     4381.7
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "package A": 2149,
+     "package B": 2149,
+     "package C": 2149,
+     "package D": 2149,
+     "package E": 2149
+    },
+    "careful": {
+     "package A": 4015,
+     "package B": 3925,
+     "package C": 3169,
+     "package D": 2987,
+     "package E": 2704
+    },
+    "thorough": {
+     "package A": 6942,
+     "package B": 6385,
+     "package C": 5549,
+     "package D": 4495,
+     "package E": 4095
+    }
+   },
+   "precedent": [
+    "L11",
+    "N12",
+    "N04",
+    "L22"
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "the cheapest package that keeps 2027 at or under the limit",
+   "graded_as": "Recommendation",
+   "figure": "R8_package",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": "package D",
+   "passes": {
+    "quick": "package A",
+    "careful": "package A",
+    "thorough": "package D"
+   },
+   "precedent": [
+    "N12",
+    "N04",
+    "L22"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "Cell 4's collected gas is flat because the leachate that sped its decay also flooded its lower wells; the wells it did not flood show the faster decay.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "Waste holds gas while the barometer rises and lets it out as it falls, and the campaigns only fly on settled days after fronts.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "A cover oxidizes a nearly fixed amount per square metre, so the share it oxidizes falls as the flux through it rises.",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": "package D",
+   "golden": true
+  },
+  {
+   "name": "the careful but hurried route",
+   "answer": "package A"
+  },
+  {
+   "name": "no pressure correction",
+   "answer": "package C"
+  },
+  {
+   "name": "one decay for every cell",
+   "answer": "package B"
+  },
+  {
+   "name": "the study's cover-type oxidation",
+   "answer": "package C"
+  },
+  {
+   "name": "the reporting rule's 10 per cent oxidation",
+   "answer": "package C"
+  },
+  {
+   "name": "no pressure correction and one decay",
+   "answer": "package A"
+  },
+  {
+   "name": "no pressure correction and the study's oxidation",
+   "answer": "package A"
+  },
+  {
+   "name": "one decay and the study's oxidation",
+   "answer": "package A"
+  },
+  {
+   "name": "the rule's default decay and potential, uncalibrated, with the study's oxidation",
+   "answer": "package A"
+  },
+  {
+   "name": "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation",
+   "answer": "no package"
+  },
+  {
+   "name": "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation",
+   "answer": "no package"
+  },
+  {
+   "name": "the closed cells' level with both decay rates and the study's oxidation",
+   "answer": "package C"
+  },
+  {
+   "name": "the quick pass",
+   "answer": "package A"
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "line": "the Council's 2027 limit of 5,100 metric tons",
+  "golden_answer": "package D",
+  "golden_family": [
+   {
+    "name": "the golden: an exponential pressure lag fitted on both soil-cover chambers, the state's campaigns, cell 5 calibrated on its spring 2026 campaigns, a saturating oxidation",
+    "answer": "package D"
+   },
+   {
+    "name": "the pressure lag fixed at 12 hours",
+    "answer": "package D"
+   },
+   {
+    "name": "the pressure lag fixed at 20 hours",
+    "answer": "package D"
+   },
+   {
+    "name": "cell 4's chamber alone",
+    "answer": "package D"
+   },
+   {
+    "name": "the campaigns and the drone flights weighted by their uncertainty",
+    "answer": "package D"
+   },
+   {
+    "name": "oxidation as a logistic in the log of the flux",
+    "answer": "package D"
+   },
+   {
+    "name": "cell 5 on cell 4's methane potential",
+    "answer": "package D"
+   },
+   {
+    "name": "the faster decay ramped in over three months",
+    "answer": "package D"
+   },
+   {
+    "name": "the faster decay ramped in over six months",
+    "answer": "package D"
+   },
+   {
+    "name": "package C's gain as the pilot's mean flow ratio",
+    "answer": "package D"
+   },
+   {
+    "name": "the level set by the closed cells' collected gas at the closure plan's design collection",
+    "answer": "package D"
+   },
+   {
+    "name": "all three chambers pooled in the pressure fit",
+    "answer": "package D"
+   },
+   {
+    "name": "oxidation as a capacity with its own half-saturation flux",
+    "answer": "package D"
+   },
+   {
+    "name": "cell 4's collection efficiency held at its August to October 2026 level",
+    "answer": "package D"
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the campaigns' pressure factor +0.03",
+    "answer": "package D"
+   },
+   {
+    "input": "the campaigns' pressure factor -0.03",
+    "answer": "package D"
+   },
+   {
+    "input": "the recirculated decay rate +8 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "the recirculated decay rate -8 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "the dry decay rate +10 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "the dry decay rate -10 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "the covers' oxidation capacity +15 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "the covers' oxidation capacity -15 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "package C's pump gain +20 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "package C's pump gain -20 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "cell 5's spring calibration +7 per cent",
+    "answer": "package D"
+   },
+   {
+    "input": "cell 5's spring calibration -7 per cent",
+    "answer": "package D"
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the careful but hurried route",
+    "answer": "package A"
+   },
+   {
+    "name": "no pressure correction",
+    "answer": "package C"
+   },
+   {
+    "name": "one decay for every cell",
+    "answer": "package B"
+   },
+   {
+    "name": "the study's cover-type oxidation",
+    "answer": "package C"
+   },
+   {
+    "name": "the reporting rule's 10 per cent oxidation",
+    "answer": "package C"
+   },
+   {
+    "name": "no pressure correction and one decay",
+    "answer": "package A"
+   },
+   {
+    "name": "no pressure correction and the study's oxidation",
+    "answer": "package A"
+   },
+   {
+    "name": "one decay and the study's oxidation",
+    "answer": "package A"
+   },
+   {
+    "name": "the rule's default decay and potential, uncalibrated, with the study's oxidation",
+    "answer": "package A"
+   },
+   {
+    "name": "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation",
+    "answer": "no package"
+   },
+   {
+    "name": "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation",
+    "answer": "no package"
+   },
+   {
+    "name": "the closed cells' level with both decay rates and the study's oxidation",
+    "answer": "package C"
+   }
+  ]
+ },
+ "factorial": {
+  "golden_answer": "package D",
+  "reflex_route": {
+   "answer": "package A",
+   "packages_t": {
+    "A": 4015,
+    "B": 3925,
+    "C": 3169,
+    "D": 2987,
+    "E": 2704
+   }
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "the recirculated decay read on the wells the leachate did not flood, carried to cell 5 from July 2026",
+    "kind": "stump",
+    "precedent": [
+     "L02",
+     "L26",
+     "N04"
+    ],
+    "hurried": "cell 4's flat collected gas read as no change in its decay; cell 5 carried at the dry decay",
+    "dropped": {
+     "answer": "package B",
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5",
+      "R7",
+      "R8"
+     ],
+     "packages_t": {
+      "A": 5221,
+      "B": 5011,
+      "C": 4114,
+      "D": 3749,
+      "E": 3292
+     }
+    },
+    "alone": {
+     "answer": "package A",
+     "results_rescued": [
+      "R3"
+     ],
+     "packages_t": {
+      "A": 4574,
+      "B": 4360,
+      "C": 3653,
+      "D": 3220,
+      "E": 2976
+     }
+    }
+   },
+   {
+    "id": "J2",
+    "name": "the campaigns and drone flights carried to every hour through the pressure response the chambers record",
+    "kind": "stump",
+    "precedent": [
+     "N12",
+     "L28"
+    ],
+    "hurried": "the campaigns' mean rate times the year's hours, confirmed by the drone flights",
+    "dropped": {
+     "answer": "package C",
+     "results_moved": [
+      "R2",
+      "R4",
+      "R6",
+      "R7",
+      "R8"
+     ],
+     "packages_t": {
+      "A": 5663,
+      "B": 5190,
+      "C": 4370,
+      "D": 3485,
+      "E": 3243
+     }
+    },
+    "alone": {
+     "answer": "package A",
+     "results_rescued": [
+      "R2"
+     ],
+     "packages_t": {
+      "A": 4986,
+      "B": 4872,
+      "C": 4117,
+      "D": 3887,
+      "E": 3433
+     }
+    }
+   },
+   {
+    "id": "J3",
+    "name": "the cover's oxidation evaluated at each cell's own flux",
+    "kind": "stump",
+    "precedent": [
+     "N04",
+     "L22"
+    ],
+    "hurried": "the 2019 study's mean share for each cover",
+    "dropped": {
+     "answer": "package C",
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ],
+     "packages_t": {
+      "A": 5713,
+      "B": 5443,
+      "C": 4735,
+      "D": 4191,
+      "E": 3787
+     }
+    },
+    "alone": {
+     "answer": "package A",
+     "results_rescued": [],
+     "packages_t": {
+      "A": 4211,
+      "B": 4036,
+      "C": 3153,
+      "D": 2855,
+      "E": 2569
+     }
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the forecast built cell by cell, each package acting on its own cell",
+    "kind": "reflex",
+    "precedent": [
+     "R25"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "the greenhouse gas report's figure reproduced from its own equation",
+    "kind": "reflex",
+    "precedent": [
+     "R18"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "the pilot pumps' gain read from the pumped wells' flows",
+    "kind": "reflex",
+    "precedent": [
+     "R14"
+    ]
+   },
+   {
+    "id": "J7",
+    "name": "the tickets' voids, reissues and missing cell codes",
+    "kind": "reflex",
+    "precedent": [
+     "R01"
+    ]
+   }
+  ]
+ },
+ "margins": {
+  "limit_t": 5100.0,
+  "golden": {
+   "A": 6942,
+   "B": 6385,
+   "C": 5549,
+   "D": 4495,
+   "E": 4095
+  },
+  "family": {
+   "the golden: an exponential pressure lag fitted on both soil-cover chambers, the state's campaigns, cell 5 calibrated on its spring 2026 campaigns, a saturating oxidation": {
+    "A": 6942,
+    "B": 6385,
+    "C": 5549,
+    "D": 4495,
+    "E": 4095
+   },
+   "the pressure lag fixed at 12 hours": {
+    "A": 7052,
+    "B": 6488,
+    "C": 5651,
+    "D": 4583,
+    "E": 4170
+   },
+   "the pressure lag fixed at 20 hours": {
+    "A": 6778,
+    "B": 6232,
+    "C": 5398,
+    "D": 4365,
+    "E": 3986
+   },
+   "cell 4's chamber alone": {
+    "A": 6938,
+    "B": 6382,
+    "C": 5546,
+    "D": 4492,
+    "E": 4093
+   },
+   "the campaigns and the drone flights weighted by their uncertainty": {
+    "A": 6942,
+    "B": 6385,
+    "C": 5549,
+    "D": 4495,
+    "E": 4095
+   },
+   "oxidation as a logistic in the log of the flux": {
+    "A": 6929,
+    "B": 6376,
+    "C": 5526,
+    "D": 4477,
+    "E": 4077
+   },
+   "cell 5 on cell 4's methane potential": {
+    "A": 6893,
+    "B": 6344,
+    "C": 5508,
+    "D": 4470,
+    "E": 4071
+   },
+   "the faster decay ramped in over three months": {
+    "A": 6934,
+    "B": 6380,
+    "C": 5543,
+    "D": 4493,
+    "E": 4093
+   },
+   "the faster decay ramped in over six months": {
+    "A": 6926,
+    "B": 6374,
+    "C": 5536,
+    "D": 4491,
+    "E": 4090
+   },
+   "package C's gain as the pilot's mean flow ratio": {
+    "A": 6942,
+    "B": 6385,
+    "C": 5490,
+    "D": 4436,
+    "E": 4058
+   },
+   "the level set by the closed cells' collected gas at the closure plan's design collection": {
+    "A": 7008,
+    "B": 6454,
+    "C": 5617,
+    "D": 4567,
+    "E": 4151
+   },
+   "all three chambers pooled in the pressure fit": {
+    "A": 6874,
+    "B": 6322,
+    "C": 5486,
+    "D": 4441,
+    "E": 4050
+   },
+   "oxidation as a capacity with its own half-saturation flux": {
+    "A": 6875,
+    "B": 6324,
+    "C": 5484,
+    "D": 4445,
+    "E": 4044
+   },
+   "cell 4's collection efficiency held at its August to October 2026 level": {
+    "A": 6971,
+    "B": 6415,
+    "C": 5557,
+    "D": 4503,
+    "E": 4102
+   }
+  },
+  "perturbations": {
+   "the campaigns' pressure factor +0.03": {
+    "A": 6717,
+    "B": 6175,
+    "C": 5341,
+    "D": 4316,
+    "E": 3944
+   },
+   "the campaigns' pressure factor -0.03": {
+    "A": 7183,
+    "B": 6612,
+    "C": 5773,
+    "D": 4688,
+    "E": 4258
+   },
+   "the recirculated decay rate +8 per cent": {
+    "A": 7154,
+    "B": 6556,
+    "C": 5727,
+    "D": 4588,
+    "E": 4197
+   },
+   "the recirculated decay rate -8 per cent": {
+    "A": 6725,
+    "B": 6212,
+    "C": 5368,
+    "D": 4401,
+    "E": 3992
+   },
+   "the dry decay rate +10 per cent": {
+    "A": 6975,
+    "B": 6399,
+    "C": 5578,
+    "D": 4485,
+    "E": 4101
+   },
+   "the dry decay rate -10 per cent": {
+    "A": 6918,
+    "B": 6379,
+    "C": 5529,
+    "D": 4509,
+    "E": 4094
+   },
+   "the covers' oxidation capacity +15 per cent": {
+    "A": 7030,
+    "B": 6450,
+    "C": 5620,
+    "D": 4529,
+    "E": 4121
+   },
+   "the covers' oxidation capacity -15 per cent": {
+    "A": 6845,
+    "B": 6315,
+    "C": 5472,
+    "D": 4460,
+    "E": 4068
+   },
+   "package C's pump gain +20 per cent": {
+    "A": 6942,
+    "B": 6385,
+    "C": 5385,
+    "D": 4331,
+    "E": 3992
+   },
+   "package C's pump gain -20 per cent": {
+    "A": 6942,
+    "B": 6385,
+    "C": 5715,
+    "D": 4661,
+    "E": 4199
+   },
+   "cell 5's spring calibration +7 per cent": {
+    "A": 7197,
+    "B": 6599,
+    "C": 5762,
+    "D": 4624,
+    "E": 4224
+   },
+   "cell 5's spring calibration -7 per cent": {
+    "A": 6688,
+    "B": 6173,
+    "C": 5337,
+    "D": 4367,
+    "E": 3967
+   }
+  },
+  "shortcuts": {
+   "the careful but hurried route": {
+    "A": 4015,
+    "B": 3925,
+    "C": 3169,
+    "D": 2987,
+    "E": 2704
+   },
+   "no pressure correction": {
+    "A": 5663,
+    "B": 5190,
+    "C": 4370,
+    "D": 3485,
+    "E": 3243
+   },
+   "one decay for every cell": {
+    "A": 5221,
+    "B": 5011,
+    "C": 4114,
+    "D": 3749,
+    "E": 3292
+   },
+   "the study's cover-type oxidation": {
+    "A": 5713,
+    "B": 5443,
+    "C": 4735,
+    "D": 4191,
+    "E": 3787
+   },
+   "the reporting rule's 10 per cent oxidation": {
+    "A": 5958,
+    "B": 5686,
+    "C": 4905,
+    "D": 4358,
+    "E": 3992
+   },
+   "no pressure correction and one decay": {
+    "A": 4211,
+    "B": 4036,
+    "C": 3153,
+    "D": 2855,
+    "E": 2569
+   },
+   "no pressure correction and the study's oxidation": {
+    "A": 4574,
+    "B": 4360,
+    "C": 3653,
+    "D": 3220,
+    "E": 2976
+   },
+   "one decay and the study's oxidation": {
+    "A": 4986,
+    "B": 4872,
+    "C": 4117,
+    "D": 3887,
+    "E": 3433
+   },
+   "the rule's default decay and potential, uncalibrated, with the study's oxidation": {
+    "A": 4514,
+    "B": 4314,
+    "C": 3563,
+    "D": 3159,
+    "E": 2918
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation": {
+    "A": 9232,
+    "B": 8566,
+    "C": 7714,
+    "D": 6437,
+    "E": 5703
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation": {
+    "A": 7738,
+    "B": 7322,
+    "C": 6615,
+    "D": 5776,
+    "E": 5152
+   },
+   "the closed cells' level with both decay rates and the study's oxidation": {
+    "A": 6034,
+    "B": 5685,
+    "C": 4977,
+    "D": 4272,
+    "E": 3909
+   }
+  }
+ },
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

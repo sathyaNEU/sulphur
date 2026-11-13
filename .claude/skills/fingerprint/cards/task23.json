@@ -24,7 +24,7 @@
   ],
   "generators": [
     "G3",
-    "G2",
+    "G14",
     "G16"
   ],
   "gate_g": "decomposition_attribution",
@@ -33,7 +33,7 @@
   "decisive_rule_filed": true,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
+  "context_artifact": "close_out_summary",
   "stump_class": "analytical",
   "analyst_test": "The careful but hurried pass reproduces the GHG report's figure from its own method, builds waste in place by cell and material from the scale tickets, weights collection by where the gas is made and converts every flow correctly, but takes the state's tracer campaigns (which the division's drone flights confirm) as the 2026 emission although both only fly in dry steady weather after fronts, when rising pressure holds gas in the waste, reads cell 4's flat collected gas as recirculation having changed nothing although the same leachate sped the decay and flooded the lower wells, and applies the 2019 study's daily-cover oxidation to cell 5 although oxidation saturates far below cell 5's flux, so it files a cheaper package than the one that meets the target.",
   "domain_test": "Every result is a quantity a landfill gas engineer or an emissions inventory analyst estimates: waste in place by cell and its methane potential, first-order decay with the rate each cell's moisture sets, collection efficiency by well and cover, methane oxidation in cover soil as a function of the flux through it, and an annual emission from short whole-site tracer measurements carried through the gas held and released as barometric pressure moves; swap the landfill for a warehouse or a hospital and stored gas, decay rates, flooded well screens and soil oxidation stop meaning anything.",
@@ -79,7 +79,7 @@
     ]
   },
   "deliverables": [
-    "fernhallow_methane_2026_2027.xlsx",
+    "fernhallow_methane_2025_2027.xlsx",
     "council_briefing_2027_gas_package.pptx"
   ],
   "opening_move": "question-first",
@@ -93,13 +93,13 @@
     "assembly-reconciliation",
     "missingness-measurement",
     "investigation-loops",
+    "forecasting",
     "modeling",
     "decomposition-attribution",
     "forecasting",
-    "uncertainty",
     "synthesis"
   ],
-  "results": "R1 waste in place by cell at the end of October 2026 in methane-potential terms, from the scale tickets and the historical tonnage; R2 the site's actual 2026 methane emission from the state's campaigns and the drone flights carried to every hour through the pressure response the chambers record; R3 cell 4's methane generation and collection efficiency since recirculation, from the dry and pumped wells against the flooded ones; R4 the share of cell 5's 2027 uncollected methane its cover oxidizes at cell 5's own flux; R5 the bridge from the 2026 GHG report figure to the actual 2026 emission, by collection, oxidation and generation; R6 the 2027 emission under each package A to E; R7 the 90 per cent range on the chosen package's 2027 emission; R8 the cheapest package that keeps 2027 under the county's target",
+  "results": "R1 the municipal waste placed in cell 5 from its opening to the end of October 2026, from the scale tickets; R2 the site's actual 2025 methane emission, the state's campaigns and the drone flights carried to every hour through the pressure response the chambers record; R3 the change in cell 4's methane generation from 2022 to the twelve months to October 2026, read on the wells the leachate did not flood and the wells given pumps; R4 the methane cell 5 will generate in 2027, its spring 2026 level carried on the decay its own recirculation sets from July 2026; R5 the share of the methane reaching cell 5's cover in 2027 that the cover oxidizes, at cell 5's own flux; R6 the bridge from the 2025 GHG report and from the state survey's 2025 figure to the actual 2025 emission; R7 the 2027 emission under each package A to E in a year of normal weather; R8 the cheapest package that keeps 2027 at or under the Council's limit",
   "one_fact_test": "to be computed on the careful pass (effort.json hints): the pressure sentence is expected to rescue R2 alone, the recirculation sentence R3, the oxidation sentence R4; none rescues R6 or R8",
   "strategy_label": "OWN (no client strategy carries a landfill methane balance; the client's emissions-table ETL strategy is the nearest by task type and shares no step)",
   "mechanism_source": "design_note",

@@ -1,0 +1,727 @@
+{
+ "R1_cell5_msw_tons": 574197,
+ "R2_actual_2025_t": 4924,
+ "R3_cell4_generation_change_pct": 85.1,
+ "R4_cell5_generation_2027_t": 3752,
+ "R5_cell5_oxidized_share_2027_pct": 17.1,
+ "R6_bridge": {
+  "collection efficiency": 3280,
+  "oxidation": -467,
+  "the hours the campaigns did not sample": 1387
+ },
+ "R7_emissions_2027_t": {
+  "package A": 6942,
+  "package B": 6385,
+  "package C": 5549,
+  "package D": 4495,
+  "package E": 4095
+ },
+ "R8_package": "package D",
+ "limit_t": 5100.0,
+ "report_2025_t": 2149,
+ "survey_2025_t": 3537,
+ "residual_2025_t": -38,
+ "collected_2025_t": 8354,
+ "generated_2025_t": 14293,
+ "pressure_lag_h": 16,
+ "pressure_coef_per_hpa": 0.1,
+ "campaign_factor_2025": 0.711,
+ "campaign_factor_2026": 0.792,
+ "kd_per_year": 0.0495,
+ "kw_per_year": 0.1249,
+ "share_wet": 0.448,
+ "r_dry": 1.263,
+ "r_wet": 2.575,
+ "ce4_now": 0.47,
+ "pump_gain_t_month": 122.3,
+ "careful_package": "package A",
+ "careful_R7": {
+  "package A": 4015,
+  "package B": 3925,
+  "package C": 3169,
+  "package D": 2987,
+  "package E": 2704
+ },
+ "drops": {
+  "J1": "package B",
+  "J2": "package C",
+  "J3": "package C"
+ },
+ "cells_2027_D": {
+  "cell 1": 7,
+  "cell 2": 24,
+  "cell 3": 49,
+  "cell 4": 2832,
+  "cell 5": 1482
+ },
+ "cells_2027_C": {
+  "cell 1": 7,
+  "cell 2": 24,
+  "cell 3": 49,
+  "cell 4": 2832,
+  "cell 5": 2548
+ },
+ "_extra": {
+  "drone_2025_t": 3832,
+  "drone_2025_corr_t": 5172,
+  "campaigns_2025": 4,
+  "campaigns_2026": 4,
+  "flights_2025": 4,
+  "campaign_mean_2025_kg_h": 403.8,
+  "campaign_corr_2025_kg_h": 562.1,
+  "drone_factor_2025": 0.736,
+  "hours_in_year": 8760,
+  "study_mean_pct": {
+   "active": 39.3,
+   "final": 70.1,
+   "intermediate": 18.3
+  },
+  "sat_v15_g_m2_d": {
+   "final": 22.1,
+   "intermediate": 15.5,
+   "active": 27.0
+  },
+  "sat_q10": 1.89,
+  "rule": {
+   "ox_pct": 10,
+   "de": 0.99,
+   "ce_2025": 0.7844
+  },
+  "cell4": {
+   "wells": 58,
+   "dry": 32,
+   "flooded": 26,
+   "pumped": 8,
+   "dry_change_pct": 26.3,
+   "pumped_change_pct": 149.1,
+   "pumped_full_yield_change_pct": 157.5,
+   "collected_change_pct": 28.7,
+   "share_reached_pct": 44.8,
+   "yield_loss": 0.82,
+   "pumped_submergence": 0.04
+  },
+  "decay": {
+   "kd": 0.0495,
+   "kw": 0.1249
+  },
+  "s5_over_s4": 1.014,
+  "pressure": {
+   "lag_h": 16,
+   "coef_per_hpa": 0.1
+  },
+  "costs_usd_m": {
+   "package A": 0.0,
+   "package B": 0.64,
+   "package C": 1.21,
+   "package D": 2.38,
+   "package E": 5.95
+  },
+  "careful": {
+   "R1": 574197,
+   "R2": 3537,
+   "R3": 28.7,
+   "R4": 959,
+   "R5": 39.3,
+   "R7": {
+    "package A": 4015,
+    "package B": 3925,
+    "package C": 3169,
+    "package D": 2987,
+    "package E": 2704
+   },
+   "R8": "package A"
+  },
+  "drops": {
+   "J1": {
+    "answer": "package B",
+    "R7": {
+     "package A": 5221,
+     "package B": 5011,
+     "package C": 4114,
+     "package D": 3749,
+     "package E": 3292
+    }
+   },
+   "J2": {
+    "answer": "package C",
+    "R7": {
+     "package A": 5663,
+     "package B": 5190,
+     "package C": 4370,
+     "package D": 3485,
+     "package E": 3243
+    }
+   },
+   "J3": {
+    "answer": "package C",
+    "R7": {
+     "package A": 5713,
+     "package B": 5443,
+     "package C": 4735,
+     "package D": 4191,
+     "package E": 3787
+    }
+   }
+  },
+  "shortcuts": {
+   "the careful but hurried route": {
+    "answer": "package A",
+    "R7": {
+     "package A": 4015,
+     "package B": 3925,
+     "package C": 3169,
+     "package D": 2987,
+     "package E": 2704
+    }
+   },
+   "no pressure correction": {
+    "answer": "package C",
+    "R7": {
+     "package A": 5663,
+     "package B": 5190,
+     "package C": 4370,
+     "package D": 3485,
+     "package E": 3243
+    }
+   },
+   "one decay for every cell": {
+    "answer": "package B",
+    "R7": {
+     "package A": 5221,
+     "package B": 5011,
+     "package C": 4114,
+     "package D": 3749,
+     "package E": 3292
+    }
+   },
+   "the study's cover-type oxidation": {
+    "answer": "package C",
+    "R7": {
+     "package A": 5713,
+     "package B": 5443,
+     "package C": 4735,
+     "package D": 4191,
+     "package E": 3787
+    }
+   },
+   "the reporting rule's 10 per cent oxidation": {
+    "answer": "package C",
+    "R7": {
+     "package A": 5958,
+     "package B": 5686,
+     "package C": 4905,
+     "package D": 4358,
+     "package E": 3992
+    }
+   },
+   "no pressure correction and one decay": {
+    "answer": "package A",
+    "R7": {
+     "package A": 4211,
+     "package B": 4036,
+     "package C": 3153,
+     "package D": 2855,
+     "package E": 2569
+    }
+   },
+   "no pressure correction and the study's oxidation": {
+    "answer": "package A",
+    "R7": {
+     "package A": 4574,
+     "package B": 4360,
+     "package C": 3653,
+     "package D": 3220,
+     "package E": 2976
+    }
+   },
+   "one decay and the study's oxidation": {
+    "answer": "package A",
+    "R7": {
+     "package A": 4986,
+     "package B": 4872,
+     "package C": 4117,
+     "package D": 3887,
+     "package E": 3433
+    }
+   },
+   "the rule's default decay and potential, uncalibrated, with the study's oxidation": {
+    "answer": "package A",
+    "R7": {
+     "package A": 4514,
+     "package B": 4314,
+     "package C": 3563,
+     "package D": 3159,
+     "package E": 2918
+    }
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and a saturating oxidation": {
+    "answer": "no package",
+    "R7": {
+     "package A": 9232,
+     "package B": 8566,
+     "package C": 7714,
+     "package D": 6437,
+     "package E": 5703
+    }
+   },
+   "the rule's default potential, uncalibrated, with both decay rates and the study's oxidation": {
+    "answer": "no package",
+    "R7": {
+     "package A": 7738,
+     "package B": 7322,
+     "package C": 6615,
+     "package D": 5776,
+     "package E": 5152
+    }
+   },
+   "the closed cells' level with both decay rates and the study's oxidation": {
+    "answer": "package C",
+    "R7": {
+     "package A": 6034,
+     "package B": 5685,
+     "package C": 4977,
+     "package D": 4272,
+     "package E": 3909
+    }
+   }
+  },
+  "family": {
+   "the golden: an exponential pressure lag fitted on both soil-cover chambers, the state's campaigns, cell 5 calibrated on its spring 2026 campaigns, a saturating oxidation": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6942,
+     "package B": 6385,
+     "package C": 5549,
+     "package D": 4495,
+     "package E": 4095
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3752,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3280,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "the pressure lag fixed at 12 hours": {
+    "answer": "package D",
+    "R7": {
+     "package A": 7052,
+     "package B": 6488,
+     "package C": 5651,
+     "package D": 4583,
+     "package E": 4170
+    },
+    "R2": 4922,
+    "R3": 85.1,
+    "R4": 3795,
+    "R5": 16.9,
+    "R6": {
+     "collection efficiency": 3355,
+     "oxidation": -461,
+     "the hours the campaigns did not sample": 1385
+    }
+   },
+   "the pressure lag fixed at 20 hours": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6778,
+     "package B": 6232,
+     "package C": 5398,
+     "package D": 4365,
+     "package E": 3986
+    },
+    "R2": 4851,
+    "R3": 85.1,
+    "R4": 3687,
+    "R5": 17.4,
+    "R6": {
+     "collection efficiency": 3169,
+     "oxidation": -477,
+     "the hours the campaigns did not sample": 1314
+    }
+   },
+   "cell 4's chamber alone": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6938,
+     "package B": 6382,
+     "package C": 5546,
+     "package D": 4492,
+     "package E": 4093
+    },
+    "R2": 4920,
+    "R3": 85.1,
+    "R4": 3750,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3277,
+     "oxidation": -468,
+     "the hours the campaigns did not sample": 1383
+    }
+   },
+   "the campaigns and the drone flights weighted by their uncertainty": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6942,
+     "package B": 6385,
+     "package C": 5549,
+     "package D": 4495,
+     "package E": 4095
+    },
+    "R2": 4940,
+    "R3": 85.1,
+    "R4": 3752,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3280,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1404
+    }
+   },
+   "oxidation as a logistic in the log of the flux": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6929,
+     "package B": 6376,
+     "package C": 5526,
+     "package D": 4477,
+     "package E": 4077
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3730,
+    "R5": 17.0,
+    "R6": {
+     "collection efficiency": 3246,
+     "oxidation": -424,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "cell 5 on cell 4's methane potential": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6893,
+     "package B": 6344,
+     "package C": 5508,
+     "package D": 4470,
+     "package E": 4071
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3701,
+    "R5": 17.3,
+    "R6": {
+     "collection efficiency": 3279,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "the faster decay ramped in over three months": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6934,
+     "package B": 6380,
+     "package C": 5543,
+     "package D": 4493,
+     "package E": 4093
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3741,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3276,
+     "oxidation": -468,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "the faster decay ramped in over six months": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6926,
+     "package B": 6374,
+     "package C": 5536,
+     "package D": 4491,
+     "package E": 4090
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3727,
+    "R5": 17.2,
+    "R6": {
+     "collection efficiency": 3271,
+     "oxidation": -468,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "package C's gain as the pilot's mean flow ratio": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6942,
+     "package B": 6385,
+     "package C": 5490,
+     "package D": 4436,
+     "package E": 4058
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3752,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3280,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "the level set by the closed cells' collected gas at the closure plan's design collection": {
+    "answer": "package D",
+    "R7": {
+     "package A": 7008,
+     "package B": 6454,
+     "package C": 5617,
+     "package D": 4567,
+     "package E": 4151
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3738,
+    "R5": 17.2,
+    "R6": {
+     "collection efficiency": 3367,
+     "oxidation": -459,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "all three chambers pooled in the pressure fit": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6874,
+     "package B": 6322,
+     "package C": 5486,
+     "package D": 4441,
+     "package E": 4050
+    },
+    "R2": 4847,
+    "R3": 85.1,
+    "R4": 3724,
+    "R5": 17.2,
+    "R6": {
+     "collection efficiency": 3234,
+     "oxidation": -471,
+     "the hours the campaigns did not sample": 1310
+    }
+   },
+   "oxidation as a capacity with its own half-saturation flux": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6875,
+     "package B": 6324,
+     "package C": 5484,
+     "package D": 4445,
+     "package E": 4044
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3736,
+    "R5": 18.9,
+    "R6": {
+     "collection efficiency": 3319,
+     "oxidation": -477,
+     "the hours the campaigns did not sample": 1387
+    }
+   },
+   "cell 4's collection efficiency held at its August to October 2026 level": {
+    "answer": "package D",
+    "R7": {
+     "package A": 6971,
+     "package B": 6415,
+     "package C": 5557,
+     "package D": 4503,
+     "package E": 4102
+    },
+    "R2": 4924,
+    "R3": 85.1,
+    "R4": 3752,
+    "R5": 17.1,
+    "R6": {
+     "collection efficiency": 3280,
+     "oxidation": -467,
+     "the hours the campaigns did not sample": 1387
+    }
+   }
+  },
+  "nearest": {
+   "C_min_t": 5337,
+   "C_min_pct": 4.6,
+   "C_name": "cell 5's spring calibration -7 per cent",
+   "C_over_t": 237,
+   "D_max_t": 4688,
+   "D_max_pct": 8.1,
+   "D_name": "the campaigns' pressure factor -0.03"
+  },
+  "perturbations": {
+   "the campaigns' pressure factor +0.03": {
+    "answer": "package D",
+    "C": 5341,
+    "D": 4316
+   },
+   "the campaigns' pressure factor -0.03": {
+    "answer": "package D",
+    "C": 5773,
+    "D": 4688
+   },
+   "the recirculated decay rate +8 per cent": {
+    "answer": "package D",
+    "C": 5727,
+    "D": 4588
+   },
+   "the recirculated decay rate -8 per cent": {
+    "answer": "package D",
+    "C": 5368,
+    "D": 4401
+   },
+   "the dry decay rate +10 per cent": {
+    "answer": "package D",
+    "C": 5578,
+    "D": 4485
+   },
+   "the dry decay rate -10 per cent": {
+    "answer": "package D",
+    "C": 5529,
+    "D": 4509
+   },
+   "the covers' oxidation capacity +15 per cent": {
+    "answer": "package D",
+    "C": 5620,
+    "D": 4529
+   },
+   "the covers' oxidation capacity -15 per cent": {
+    "answer": "package D",
+    "C": 5472,
+    "D": 4460
+   },
+   "package C's pump gain +20 per cent": {
+    "answer": "package D",
+    "C": 5385,
+    "D": 4331
+   },
+   "package C's pump gain -20 per cent": {
+    "answer": "package D",
+    "C": 5715,
+    "D": 4661
+   },
+   "cell 5's spring calibration +7 per cent": {
+    "answer": "package D",
+    "C": 5762,
+    "D": 4624
+   },
+   "cell 5's spring calibration -7 per cent": {
+    "answer": "package D",
+    "C": 5337,
+    "D": 4367
+   }
+  },
+  "implied_l0_m3_per_ton": {
+   "campaigns cell 4": 76,
+   "campaigns cell 5": 77,
+   "closed cells": 76
+  },
+  "plots": 44,
+  "ce4_zones": {
+   "dry": 0.64,
+   "wet": 0.37
+  },
+  "cell5_acres": 24.2,
+  "bands": {
+   "R1_pct": 1,
+   "R2_pct": 10,
+   "R3_points": 8,
+   "R4_pct": 12,
+   "R5_points": 4,
+   "R6_collection_pct": 15,
+   "R6_oxidation_t": 250,
+   "R6_survey_gap_t": 490,
+   "R7_pct": 7
+  },
+  "ce4_cap_pct": 86,
+  "ce_closed_pct": 90,
+  "s5_spread_pct": 7,
+  "tau_rivals_h": [
+   12,
+   20
+  ],
+  "tau_grid_h": [
+   4,
+   48
+  ]
+ },
+ "_quick": {
+  "R1_cell5_msw_tons": 648207,
+  "R2_actual_2025_t": 2149,
+  "R3_cell4_generation_change_pct": 28.7,
+  "R4_cell5_generation_2027_t": 2074,
+  "R5_cell5_oxidized_share_2027_pct": 10.0,
+  "R6_bridge": {
+   "collection efficiency": 0,
+   "oxidation": 0,
+   "the hours the campaigns did not sample": 0
+  },
+  "R7_emissions_2027_t": {
+   "package A": 2149,
+   "package B": 2149,
+   "package C": 2149,
+   "package D": 2149,
+   "package E": 2149
+  },
+  "R8_package": "package A"
+ },
+ "_filed": {
+  "reported_2025": 2149,
+  "survey_2025": 3537,
+  "rule_gen_2025": 10649.045159207462,
+  "rule_ce_2025": 0.7844402277039848,
+  "history": [
+   [
+    2021,
+    7947,
+    1137
+   ],
+   [
+    2022,
+    8191,
+    1172
+   ],
+   [
+    2023,
+    9430,
+    1350
+   ],
+   [
+    2024,
+    8905,
+    1274
+   ],
+   [
+    2025,
+    8354,
+    2149
+   ]
+  ],
+  "wip_tons": 10081000.0
+ },
+ "_truth": {
+  "actual_2025_t": 4903,
+  "emissions_2027_t": {
+   "package A": 6725,
+   "package B": 6194,
+   "package C": 5233,
+   "package D": 4228,
+   "package E": 3914
+  },
+  "cell5_generation_2027_t": 3597,
+  "cell4_generation_change_pct": 85.5
+ }
+}

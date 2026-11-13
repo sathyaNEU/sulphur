@@ -1,40 +1,41 @@
 {
  "task": "task23",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "subdomain": "emissions-inventory",
  "objective": "comparative-explanation",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: the cheapest 2027 gas collection package that keeps Fernhallow Regional Landfill under Kelloway County's 2027 methane target, with the actual 2026 emission behind the GHG report and the state survey",
- "chain": "R1 waste in place by cell in methane-potential terms; R2 the actual 2026 emission from the campaigns and drone flights carried to every hour through the chambers' pressure response; R3 cell 4's generation and collection efficiency since recirculation from the dry and pumped wells against the flooded ones; R4 cell 5's oxidized share at its own flux; R5 the bridge from the 2026 GHG report to the actual 2026 emission; R6 the 2027 emission under each package A to E; R7 the 90 per cent range on the chosen package; R8 the cheapest package under the target",
+ "call": "fund package D (USD 2.38 million: horizontal collectors in cell 5 and pumps in cell 4's flooded wells from May 2027, 18 vertical wells with pumps in cell 5 from June): 2027 at 4,479 t against the Council's 5,100 t limit, package C at 5,538 t over it; Fernhallow emitted 4,923 t in 2025 against the report's 2,166 t and the survey's 3,532 t",
+ "chain": "R1 cell 5's municipal waste through October 2026 (574,197 short tons); R2 the actual 2025 emission from the campaigns carried to every hour through the chambers' pressure response (4,923 t); R3 cell 4's generation change from 2022 read on the dry and pumped wells (+85.4 per cent); R4 cell 5's 2027 generation on the recirculated decay (3,769 t); R5 cell 5's cover oxidation at its own 2027 flux (17.1 per cent); R6 the 2025 bridge (collection +3,238, oxidation -473, the survey's unsampled hours +1,391); R7 2027 by package (6,962; 6,403; 5,538; 4,479; 4,087); R8 package D",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (no LEAK; generic stump words and column-name REVIEW lines for the reader)",
+  "reader": "isolated reader on the cut pack: no instruction, no ranking or helper file, no answer figure, no single item that makes the task routine; package C's condition ruled scope (harmless); realism notes fixed (drone times, blower outages); read and rulings in leak_check_report.md"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "skeleton severity none against everything on file (nearest task1 v5); nearest driver task6 v1 at 0.05; guard check PASS on the registered card"
+  "heart": "PASS",
+  "nearest": "skeleton severity none against everything on file (nearest task1 v5); nearest driver task6 v1 at 0.05; guard check PASS on the registered card",
+  "surface": "one promoted pair, task22 vs task23 on the shared G3 label (by build number); adjudicated: task22 is a gas distribution district balance (meter temperature, diversion, leak loss; ETL, reconciled table), task23 a landfill methane balance (barometric pumping, flooded wells, saturating oxidation; comparative, bridge); no shared step, data structure or answer shape"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "pass 1: DETERMINISTIC on the call, two figures not pinned (FIX_NOW)",
+  "disposition": "pass 1 findings fixed: ticket wording; the pressure fit made robust to pooling the chambers (cell 3 response near the soil covers) and its specification stated; the oxidation form and cell 5's area stated; rivals added in checks.py; pass 2 running on the rebuilt cut",
+  "report": "determinism_check_report.md (pass 1); determinism_check_report_pass2.md (pass 2, pending)"
  },
- "paper_pair": null,
+ "paper_pair": 20.8,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 13.9,
+  "careful": 20.8,
+  "thorough": 100.0,
+  "largest_hint": "each sentence rescues one result or none (pressure R2, recirculation R3, oxidation none)"
  },
  "runs": {
   "run1": null,
@@ -50,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "",
+ "resume": "stage 4: read determinism_check_report_pass2.md (the judge's second pass on the cut of 2026-11-13, target.zip sha256 8624caeb2ccc78de); fix any finding in the generator, rebuild (python3 task23/generator/make.py), re-run python3 .claude/skills/build-pipeline/gates.py task23 --full; then stage 5: python3 task23/generator/cut.py, audit_containers.py task23 exit 0, pipeline READY, commit READY (task23) on main with target.zip, golden.zip and golden/ added with git add -f, pull --rebase and push",
  "approved": null,
  "submitted": null,
  "portal": {
