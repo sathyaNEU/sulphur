@@ -864,6 +864,30 @@
    "move": "each unit's response read off its own single past event, the events never split by a condition that varies across them",
    "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
    "quote": "Each region-plan has only one historical price event."
+  },
+  {
+   "id": "R46",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "event times rebuilt from the physical device record (SCADA, UTC) and the outage system's civil times reconciled to them, archive replays removed and daylight-saving ambiguities settled on the device clock",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Converted ADMS UTC timestamps to fixed CST and reconciled OMS civil times to SCADA. All 588 lockouts matched OMS records ... Delayed storm entries and the fall-back-hour ambiguity were resolved using physical SCADA evidence rather than trusting the OMS start minute."
+  },
+  {
+   "id": "N26",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "one remote weather station (the airport) taken to stand for the conditions at the equipment, and a low-current measurement carried to the operating condition, both named and left untested",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Airport ambient proxies cabinet temperature, and resistance measured at 5 A is extrapolated to 30 A. These assumptions justify proof testing, especially near the cutoff."
+  },
+  {
+   "id": "N27",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a second record at another grain set aside because it lacks unit identities and fine timing",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Read the AMI daily aggregates but excluded them from interruption attribution because they lack customer-level identities and minute-level event timing."
   }
  ]
 }
