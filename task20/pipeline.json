@@ -1,11 +1,11 @@
 {
  "task": "task20",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
  "call": "commit EUR 350 million for 2027 (from EUR 150 million): the hedge program's cumulative net cash outflow in a year whose prices and inflows repeat 2022 peaks at EUR 328.8 million on 27 August 2027",
@@ -18,16 +18,16 @@
  },
  "leak": {
   "leak_py": "REVIEW (dates and vocabulary, ruled harmless)",
-  "reader": "no leak; realism note: the liquidity standard reads like a specification (move the stress-year construction to an annex)"
+  "reader": "no leak (two reads); the standard now reads as a company standard"
  },
  "duplicate_check": {
   "heart": "WARN (forcing event redrawn to other after task4 v13)",
   "nearest": "mark182 0.05"
  },
  "judge": {
-  "verdict": "NOT_DETERMINISTIC (pass 1, t20v3a)",
-  "disposition": "SEND_BACK on the prompt (the hedge book at the peak: contracted or still to be delivered) and FIX_NOW on the customer-payments band; both fixed",
-  "report": "determinism_check_report.md; pass 2 (t20v3b) running"
+  "verdict": "DETERMINISTIC (pass 2, t20v3b)",
+  "disposition": "APPROVE (pass 1 t20v3a: SEND_BACK on the prompt and a FIX_NOW band, both fixed)",
+  "report": "determinism_check_report.md, determinism_check_report_pass2.md"
  },
  "paper_pair": 29.0,
  "effort": {
@@ -75,7 +75,7 @@
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
   }
  ],
- "resume": "stage 4: read task20/determinism_check_report_pass2.md (run t20v3b) and the leak reader's re-read; fix any finding in the generator; re-run gates.py task20 --full; cut the zips, run audit_containers.py task20, set READY and commit READY (task20)",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
