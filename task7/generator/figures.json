@@ -1,140 +1,434 @@
 {
  "annuity": 9.4,
  "bands": {
-  "loss": {
+  "cust": {
    "ASH-113": [
-    -137.5,
-    -109.95
+    642.86,
+    718.31
    ],
    "ASH-116": [
-    -6.95,
-    -0.44
+    358.31,
+    399.7
    ],
    "ASH-219": [
-    -129.65,
-    -101.34
+    1005.14,
+    1111.54
    ],
    "ASH-222": [
-    -138.27,
-    -110.91
+    928.53,
+    1025.27
    ],
    "CDB-113": [
-    -52.61,
-    -41.12
+    1262.07,
+    1393.51
    ],
    "CDB-116": [
-    -34.02,
-    -26.76
+    674.31,
+    750.1
    ],
    "CDB-219": [
-    -103.61,
-    -82.81
+    579.92,
+    649.39
    ],
    "CDB-222": [
-    -12.38,
-    -5.88
+    905.12,
+    999.76
    ],
    "ELC-113": [
-    -29.18,
-    -19.58
+    915.4,
+    1022.21
    ],
    "ELC-116": [
-    -12.44,
-    -5.17
+    605.88,
+    675.68
    ],
    "ELC-219": [
-    -21.43,
-    -14.66
+    990.87,
+    1102.54
    ],
    "ELC-222": [
-    -32.84,
-    -24.98
+    566.98,
+    628.04
    ],
    "FRV-113": [
-    -8.81,
-    -2.02
+    1501.25,
+    1657.42
    ],
    "FRV-116": [
-    -127.1,
-    -99.27
+    594.55,
+    661.37
    ],
    "FRV-219": [
-    -24.99,
-    -17.86
+    773.83,
+    854.32
    ],
    "FRV-222": [
-    -8.78,
-    -2.02
+    682.63,
+    753.63
    ],
    "GBR-113": [
-    -79.15,
-    -63.31
+    1073.46,
+    1196.5
    ],
    "GBR-116": [
-    -96.53,
-    -75.98
+    716.95,
+    799.02
    ],
    "GBR-219": [
-    -32.23,
-    -24.65
+    494.16,
+    547.87
    ],
    "GBR-222": [
-    -39.85,
-    -31.5
+    989.56,
+    1093.23
    ],
    "HOL-113": [
-    -10.44,
-    -4.07
+    1107.72,
+    1222.83
    ],
    "HOL-116": [
-    -7.59,
-    -1.2
+    344.82,
+    381.71
    ],
    "HOL-219": [
-    -7.17,
-    -0.93
+    525.16,
+    588.52
    ],
    "HOL-222": [
-    -7.97,
-    -1.3
+    505.44,
+    565.16
+   ]
+  },
+  "cvrf": {
+   "ASH-113": [
+    0.45,
+    0.51
+   ],
+   "ASH-116": [
+    0.53,
+    0.59
+   ],
+   "ASH-219": [
+    0.58,
+    0.64
+   ],
+   "ASH-222": [
+    0.77,
+    0.85
+   ],
+   "CDB-113": [
+    0.77,
+    0.85
+   ],
+   "CDB-116": [
+    0.44,
+    0.48
+   ],
+   "CDB-219": [
+    0.48,
+    0.54
+   ],
+   "CDB-222": [
+    0.52,
+    0.58
+   ],
+   "ELC-113": [
+    0.5,
+    0.56
+   ],
+   "ELC-116": [
+    0.61,
+    0.68
+   ],
+   "ELC-219": [
+    0.47,
+    0.53
+   ],
+   "ELC-222": [
+    0.64,
+    0.71
+   ],
+   "FRV-113": [
+    0.77,
+    0.85
+   ],
+   "FRV-116": [
+    0.47,
+    0.52
+   ],
+   "FRV-219": [
+    0.77,
+    0.85
+   ],
+   "FRV-222": [
+    0.78,
+    0.86
+   ],
+   "GBR-113": [
+    0.46,
+    0.51
+   ],
+   "GBR-116": [
+    0.63,
+    0.71
+   ],
+   "GBR-219": [
+    0.41,
+    0.45
+   ],
+   "GBR-222": [
+    0.41,
+    0.46
+   ],
+   "HOL-113": [
+    0.77,
+    0.85
+   ],
+   "HOL-116": [
+    0.58,
+    0.64
+   ],
+   "HOL-219": [
+    0.45,
+    0.5
+   ],
+   "HOL-222": [
+    0.53,
+    0.59
+   ]
+  },
+  "energy": {
+   "ASH-113": [
+    35191.0,
+    35545.0
+   ],
+   "ASH-116": [
+    16897.0,
+    17067.0
+   ],
+   "ASH-219": [
+    46219.0,
+    46683.0
+   ],
+   "ASH-222": [
+    29993.0,
+    30295.0
+   ],
+   "CDB-113": [
+    40680.0,
+    41088.0
+   ],
+   "CDB-116": [
+    38734.0,
+    39123.0
+   ],
+   "CDB-219": [
+    31312.0,
+    31626.0
+   ],
+   "CDB-222": [
+    43186.0,
+    43620.0
+   ],
+   "ELC-113": [
+    45654.0,
+    46112.0
+   ],
+   "ELC-116": [
+    24581.0,
+    24828.0
+   ],
+   "ELC-219": [
+    51996.0,
+    52519.0
+   ],
+   "ELC-222": [
+    21967.0,
+    22187.0
+   ],
+   "FRV-113": [
+    48290.0,
+    48776.0
+   ],
+   "FRV-116": [
+    35494.0,
+    35851.0
+   ],
+   "FRV-219": [
+    25010.0,
+    25262.0
+   ],
+   "FRV-222": [
+    21856.0,
+    22076.0
+   ],
+   "GBR-113": [
+    58350.0,
+    58937.0
+   ],
+   "GBR-116": [
+    28267.0,
+    28551.0
+   ],
+   "GBR-219": [
+    29955.0,
+    30257.0
+   ],
+   "GBR-222": [
+    59373.0,
+    59969.0
+   ],
+   "HOL-113": [
+    35722.0,
+    36081.0
+   ],
+   "HOL-116": [
+    38154.0,
+    38538.0
+   ],
+   "HOL-219": [
+    29092.0,
+    29384.0
+   ],
+   "HOL-222": [
+    28799.0,
+    29089.0
+   ]
+  },
+  "loss": {
+   "ASH-113": [
+    43.99,
+    56.33
+   ],
+   "ASH-116": [
+    24.84,
+    32.76
+   ],
+   "ASH-219": [
+    46.43,
+    61.64
+   ],
+   "ASH-222": [
+    3.61,
+    11.01
+   ],
+   "CDB-113": [
+    13.1,
+    22.69
+   ],
+   "CDB-116": [
+    57.8,
+    73.4
+   ],
+   "CDB-219": [
+    111.84,
+    144.41
+   ],
+   "CDB-222": [
+    16.35,
+    23.46
+   ],
+   "ELC-113": [
+    27.86,
+    36.15
+   ],
+   "ELC-116": [
+    5.52,
+    12.4
+   ],
+   "ELC-219": [
+    57.33,
+    73.85
+   ],
+   "ELC-222": [
+    32.04,
+    43.69
+   ],
+   "FRV-113": [
+    8.98,
+    17.67
+   ],
+   "FRV-116": [
+    145.18,
+    185.79
+   ],
+   "FRV-219": [
+    7.46,
+    15.65
+   ],
+   "FRV-222": [
+    -0.7,
+    5.8
+   ],
+   "GBR-113": [
+    65.03,
+    83.31
+   ],
+   "GBR-116": [
+    51.61,
+    70.51
+   ],
+   "GBR-219": [
+    19.4,
+    26.06
+   ],
+   "GBR-222": [
+    46.08,
+    58.14
+   ],
+   "HOL-113": [
+    4.37,
+    11.95
+   ],
+   "HOL-116": [
+    34.25,
+    44.87
+   ],
+   "HOL-219": [
+    14.27,
+    21.12
+   ],
+   "HOL-222": [
+    102.31,
+    134.08
    ]
   },
   "room": {
    "ASH-113": [
-    4.45,
-    4.63
+    4.7,
+    4.89
    ],
    "ASH-116": [
     4.7,
     4.9
    ],
    "ASH-219": [
-    4.63,
-    4.82
+    4.53,
+    4.72
    ],
    "ASH-222": [
-    4.05,
-    4.21
-   ],
-   "CDB-113": [
     4.7,
     4.9
    ],
+   "CDB-113": [
+    4.7,
+    4.89
+   ],
    "CDB-116": [
-    2.34,
-    2.44
+    4.69,
+    4.88
    ],
    "CDB-219": [
-    4.55,
-    4.73
+    4.59,
+    4.77
    ],
    "CDB-222": [
     4.7,
     4.9
    ],
    "ELC-113": [
-    3.93,
-    4.09
+    4.7,
+    4.9
    ],
    "ELC-116": [
     4.7,
@@ -142,23 +436,23 @@
    ],
    "ELC-219": [
     4.7,
-    4.9
+    4.89
    ],
    "ELC-222": [
-    4.08,
-    4.25
+    4.69,
+    4.89
    ],
    "FRV-113": [
     4.7,
     4.9
    ],
    "FRV-116": [
-    3.44,
-    3.58
+    4.34,
+    4.52
    ],
    "FRV-219": [
     4.7,
-    4.9
+    4.89
    ],
    "FRV-222": [
     4.7,
@@ -169,12 +463,12 @@
     4.9
    ],
    "GBR-116": [
-    4.53,
-    4.71
+    4.69,
+    4.88
    ],
    "GBR-219": [
     4.7,
-    4.89
+    4.9
    ],
    "GBR-222": [
     4.7,
@@ -185,260 +479,283 @@
     4.9
    ],
    "HOL-116": [
-    4.7,
-    4.9
+    2.38,
+    2.48
    ],
    "HOL-219": [
     4.7,
     4.9
    ],
    "HOL-222": [
-    4.7,
-    4.9
+    4.14,
+    4.31
    ]
   },
   "save": {
    "ASH-113": [
-    1001.32,
-    1091.36
+    593.07,
+    667.77
    ],
    "ASH-116": [
-    742.6,
-    807.7
+    329.43,
+    370.98
    ],
    "ASH-219": [
-    638.47,
-    708.52
+    950.67,
+    1057.93
    ],
    "ASH-222": [
-    764.32,
-    835.52
+    920.76,
+    1018.43
    ],
    "CDB-113": [
-    519.64,
-    570.29
+    1242.95,
+    1376.84
    ],
    "CDB-116": [
-    283.0,
-    308.79
+    609.49,
+    683.72
    ],
    "CDB-219": [
-    679.82,
-    746.05
+    452.23,
+    520.84
    ],
    "CDB-222": [
-    597.04,
-    648.12
+    885.27,
+    979.8
    ],
    "ELC-113": [
-    1103.34,
-    1204.12
+    883.44,
+    990.16
    ],
    "ELC-116": [
-    902.81,
-    983.03
+    596.75,
+    666.88
    ],
    "ELC-219": [
-    404.68,
-    443.0
+    925.62,
+    1036.6
    ],
    "ELC-222": [
-    572.83,
-    624.38
+    528.34,
+    590.96
    ],
    "FRV-113": [
-    886.58,
-    964.9
+    1487.01,
+    1645.01
    ],
    "FRV-116": [
-    444.74,
-    492.41
+    430.42,
+    494.53
    ],
    "FRV-219": [
-    1113.94,
-    1217.27
+    761.55,
+    843.5
    ],
    "FRV-222": [
-    807.99,
-    879.12
+    679.91,
+    751.25
    ],
    "GBR-113": [
-    1148.09,
-    1250.87
+    999.86,
+    1121.77
    ],
    "GBR-116": [
-    395.48,
-    437.14
+    654.5,
+    739.34
    ],
    "GBR-219": [
-    1185.98,
-    1289.29
+    471.79,
+    524.78
    ],
    "GBR-222": [
-    786.42,
-    862.0
+    938.25,
+    1040.32
    ],
    "HOL-113": [
-    439.98,
-    478.46
+    1099.03,
+    1215.2
    ],
    "HOL-116": [
-    995.84,
-    1080.6
+    305.18,
+    342.23
    ],
    "HOL-219": [
-    554.22,
-    603.3
+    507.56,
+    570.72
    ],
    "HOL-222": [
-    698.6,
-    760.47
+    386.81,
+    447.4
    ]
   },
-  "trial": {
-   "ASH-222": [
-    0.38,
-    0.68
-   ],
-   "CDB-113": [
-    0.61,
-    0.67
-   ],
-   "CDB-116": [
-    0.42,
-    0.55
-   ],
-   "CDB-222": [
-    0.64,
-    0.83
-   ],
-   "FRV-219": [
-    0.62,
-    0.7
-   ],
-   "GBR-116": [
-    0.59,
-    0.65
-   ],
-   "HOL-116": [
-    0.73,
-    0.82
-   ],
-   "HOL-222": [
-    0.78,
-    0.91
-   ]
-  },
+  "total": [
+   11425.0,
+   12698.0
+  ],
   "trial_mean": [
-   0.63,
-   0.69
+   0.66,
+   0.72
   ]
  },
  "break_even_mwh": {
-  "ASH-113": 970.0,
-  "ASH-116": 392.0,
-  "ASH-219": 873.0,
-  "ASH-222": 856.0,
-  "CDB-113": 672.0,
-  "CDB-116": 719.0,
-  "CDB-219": 849.0,
-  "CDB-222": 664.0,
-  "ELC-113": 740.0,
-  "ELC-116": 638.0,
-  "ELC-219": 631.0,
-  "ELC-222": 828.0,
-  "FRV-113": 498.0,
-  "FRV-116": 985.0,
-  "FRV-219": 846.0,
-  "FRV-222": 529.0,
-  "GBR-113": 953.0,
-  "GBR-116": 821.0,
-  "GBR-219": 1032.0,
-  "GBR-222": 737.0,
-  "HOL-113": 521.0,
-  "HOL-116": 637.0,
-  "HOL-219": 524.0,
-  "HOL-222": 474.0
+  "ASH-113": 686.0,
+  "ASH-116": 748.0,
+  "ASH-219": 1114.0,
+  "ASH-222": 605.0,
+  "CDB-113": 696.0,
+  "CDB-116": 709.0,
+  "CDB-219": 1057.0,
+  "CDB-222": 737.0,
+  "ELC-113": 811.0,
+  "ELC-116": 531.0,
+  "ELC-219": 844.0,
+  "ELC-222": 942.0,
+  "FRV-113": 734.0,
+  "FRV-116": 1079.0,
+  "FRV-219": 618.0,
+  "FRV-222": 425.0,
+  "GBR-113": 896.0,
+  "GBR-116": 888.0,
+  "GBR-219": 614.0,
+  "GBR-222": 850.0,
+  "HOL-113": 657.0,
+  "HOL-116": 962.0,
+  "HOL-219": 599.0,
+  "HOL-222": 917.0
  },
  "cost": {
-  "ASH-113": 437600.0,
-  "ASH-116": 176800.0,
-  "ASH-219": 394100.0,
-  "ASH-222": 386400.0,
-  "CDB-113": 303000.0,
-  "CDB-116": 324300.0,
-  "CDB-219": 382900.0,
-  "CDB-222": 299800.0,
-  "ELC-113": 334100.0,
-  "ELC-116": 287700.0,
-  "ELC-219": 284900.0,
-  "ELC-222": 373700.0,
-  "FRV-113": 224900.0,
-  "FRV-116": 444600.0,
-  "FRV-219": 381800.0,
-  "FRV-222": 238800.0,
-  "GBR-113": 429900.0,
-  "GBR-116": 370400.0,
-  "GBR-219": 465500.0,
-  "GBR-222": 332400.0,
-  "HOL-113": 234900.0,
-  "HOL-116": 287200.0,
-  "HOL-219": 236500.0,
-  "HOL-222": 213800.0
+  "ASH-113": 309400.0,
+  "ASH-116": 337700.0,
+  "ASH-219": 502600.0,
+  "ASH-222": 273000.0,
+  "CDB-113": 314200.0,
+  "CDB-116": 319900.0,
+  "CDB-219": 476900.0,
+  "CDB-222": 332500.0,
+  "ELC-113": 366100.0,
+  "ELC-116": 239700.0,
+  "ELC-219": 380600.0,
+  "ELC-222": 424900.0,
+  "FRV-113": 331400.0,
+  "FRV-116": 487000.0,
+  "FRV-219": 278800.0,
+  "FRV-222": 191800.0,
+  "GBR-113": 404200.0,
+  "GBR-116": 400600.0,
+  "GBR-219": 277100.0,
+  "GBR-222": 383400.0,
+  "HOL-113": 296400.0,
+  "HOL-116": 434100.0,
+  "HOL-219": 270300.0,
+  "HOL-222": 413600.0
  },
+ "cust_mwh": {
+  "ASH-113": 671.0,
+  "ASH-116": 373.0,
+  "ASH-219": 1038.0,
+  "ASH-222": 958.0,
+  "CDB-113": 1302.0,
+  "CDB-116": 701.0,
+  "CDB-219": 607.0,
+  "CDB-222": 934.0,
+  "ELC-113": 955.0,
+  "ELC-116": 631.0,
+  "ELC-219": 1030.0,
+  "ELC-222": 587.0,
+  "FRV-113": 1548.0,
+  "FRV-116": 618.0,
+  "FRV-219": 798.0,
+  "FRV-222": 704.0,
+  "GBR-113": 1118.0,
+  "GBR-116": 746.0,
+  "GBR-219": 512.0,
+  "GBR-222": 1021.0,
+  "HOL-113": 1142.0,
+  "HOL-116": 357.0,
+  "HOL-219": 550.0,
+  "HOL-222": 528.0
+ },
+ "cvrf": {
+  "ASH-113": 0.47,
+  "ASH-116": 0.55,
+  "ASH-219": 0.6,
+  "ASH-222": 0.79,
+  "CDB-113": 0.8,
+  "CDB-116": 0.45,
+  "CDB-219": 0.5,
+  "CDB-222": 0.54,
+  "ELC-113": 0.52,
+  "ELC-116": 0.64,
+  "ELC-219": 0.49,
+  "ELC-222": 0.67,
+  "FRV-113": 0.8,
+  "FRV-116": 0.49,
+  "FRV-219": 0.79,
+  "FRV-222": 0.8,
+  "GBR-113": 0.48,
+  "GBR-116": 0.66,
+  "GBR-219": 0.43,
+  "GBR-222": 0.43,
+  "HOL-113": 0.8,
+  "HOL-116": 0.6,
+  "HOL-219": 0.47,
+  "HOL-222": 0.55
+ },
+ "cvrf_hi": 0.8,
+ "cvrf_lo": 0.43,
  "energy_mwh": {
-  "ASH-113": 63.0,
-  "ASH-116": 23.0,
-  "ASH-219": 35.0,
-  "ASH-222": 57.0,
-  "CDB-113": 24.0,
-  "CDB-116": 34.0,
-  "CDB-219": 45.0,
-  "CDB-222": 23.0,
-  "ELC-113": 48.0,
-  "ELC-116": 28.0,
-  "ELC-219": 19.0,
-  "ELC-222": 26.0,
-  "FRV-113": 28.0,
-  "FRV-116": 34.0,
-  "FRV-219": 46.0,
-  "FRV-222": 25.0,
-  "GBR-113": 65.0,
-  "GBR-116": 23.0,
-  "GBR-219": 47.0,
-  "GBR-222": 41.0,
-  "HOL-113": 18.0,
-  "HOL-116": 33.0,
-  "HOL-219": 21.0,
-  "HOL-222": 22.0
+  "ASH-113": 35368.0,
+  "ASH-116": 16982.0,
+  "ASH-219": 46451.0,
+  "ASH-222": 30144.0,
+  "CDB-113": 40884.0,
+  "CDB-116": 38928.0,
+  "CDB-219": 31469.0,
+  "CDB-222": 43403.0,
+  "ELC-113": 45883.0,
+  "ELC-116": 24705.0,
+  "ELC-219": 52258.0,
+  "ELC-222": 22077.0,
+  "FRV-113": 48533.0,
+  "FRV-116": 35672.0,
+  "FRV-219": 25136.0,
+  "FRV-222": 21966.0,
+  "GBR-113": 58643.0,
+  "GBR-116": 28409.0,
+  "GBR-219": 30106.0,
+  "GBR-222": 59671.0,
+  "HOL-113": 35902.0,
+  "HOL-116": 38346.0,
+  "HOL-219": 29238.0,
+  "HOL-222": 28944.0
  },
  "funded": [
-  "ASH-113",
-  "ELC-113",
-  "FRV-113",
-  "GBR-113",
-  "ASH-116",
-  "ELC-116",
-  "HOL-116",
-  "FRV-219",
-  "GBR-219",
-  "HOL-219",
-  "FRV-222",
-  "GBR-222",
-  "HOL-222"
- ],
- "headmetered": [
   "CDB-113",
   "ELC-113",
   "FRV-113",
+  "GBR-113",
+  "HOL-113",
+  "ELC-116",
+  "ELC-219",
+  "FRV-219",
+  "ASH-222",
+  "CDB-222",
+  "FRV-222",
+  "GBR-222"
+ ],
+ "headmetered": [
+  "ELC-113",
   "HOL-113",
   "CDB-116",
   "ELC-116",
-  "FRV-116",
-  "ASH-219",
-  "HOL-219",
+  "GBR-116",
+  "CDB-219",
+  "ELC-219",
+  "GBR-219",
   "ASH-222",
-  "CDB-222"
+  "GBR-222",
+  "HOL-222"
  ],
  "ids": [
   "ASH-113",
@@ -468,66 +785,66 @@
  ],
  "kind": {
   "ASH-113": "res",
-  "ASH-116": "com",
-  "ASH-219": "rural",
-  "ASH-222": "res",
-  "CDB-113": "rural",
-  "CDB-116": "rural",
-  "CDB-219": "res",
+  "ASH-116": "rural",
+  "ASH-219": "res",
+  "ASH-222": "com",
+  "CDB-113": "com",
+  "CDB-116": "res",
+  "CDB-219": "rural",
   "CDB-222": "res",
-  "ELC-113": "com",
-  "ELC-116": "com",
-  "ELC-219": "rural",
+  "ELC-113": "res",
+  "ELC-116": "res",
+  "ELC-219": "res",
   "ELC-222": "rural",
   "FRV-113": "com",
   "FRV-116": "rural",
-  "FRV-219": "res",
+  "FRV-219": "com",
   "FRV-222": "com",
   "GBR-113": "res",
   "GBR-116": "rural",
   "GBR-219": "res",
   "GBR-222": "res",
-  "HOL-113": "res",
-  "HOL-116": "res",
+  "HOL-113": "com",
+  "HOL-116": "rural",
   "HOL-219": "res",
-  "HOL-222": "com"
+  "HOL-222": "rural"
  },
- "largest_loss_rise_mwh": 126.0,
+ "largest_loss_rise_mwh": 168.0,
  "loss_mwh": {
-  "ASH-113": -125.0,
-  "ASH-116": -4.0,
-  "ASH-219": -116.0,
-  "ASH-222": -126.0,
-  "CDB-113": -47.0,
-  "CDB-116": -31.0,
-  "CDB-219": -94.0,
-  "CDB-222": -9.0,
-  "ELC-113": -26.0,
-  "ELC-116": -9.0,
-  "ELC-219": -18.0,
-  "ELC-222": -30.0,
-  "FRV-113": -6.0,
-  "FRV-116": -115.0,
-  "FRV-219": -22.0,
-  "FRV-222": -6.0,
-  "GBR-113": -72.0,
-  "GBR-116": -87.0,
-  "GBR-219": -29.0,
-  "GBR-222": -36.0,
-  "HOL-113": -7.0,
-  "HOL-116": -5.0,
-  "HOL-219": -4.0,
-  "HOL-222": -5.0
+  "ASH-113": 51.0,
+  "ASH-116": 29.0,
+  "ASH-219": 56.0,
+  "ASH-222": 8.0,
+  "CDB-113": 20.0,
+  "CDB-116": 66.0,
+  "CDB-219": 129.0,
+  "CDB-222": 20.0,
+  "ELC-113": 32.0,
+  "ELC-116": 9.0,
+  "ELC-219": 67.0,
+  "ELC-222": 40.0,
+  "FRV-113": 15.0,
+  "FRV-116": 168.0,
+  "FRV-219": 13.0,
+  "FRV-222": 3.0,
+  "GBR-113": 75.0,
+  "GBR-116": 63.0,
+  "GBR-219": 23.0,
+  "GBR-222": 53.0,
+  "HOL-113": 9.0,
+  "HOL-116": 41.0,
+  "HOL-219": 18.0,
+  "HOL-222": 120.0
  },
  "loss_rate_report": 0.061,
  "memo_body": [
   [
    "What the trial measured",
-   "On the eight trial feeders the energy drawn fell by 0.67 percent on average (0.64, 0.53, 0.61, 0.76, 0.67, 0.66, 0.67, 0.82, feeder by feeder) for each 1 percent the regulators actually took off the feeder-head voltage. The ON days did not all run: on some the pilot regulators stayed in local mode, and each ON day ramped down over its first hour, so a reading on the day's assignment alone understates the response."
+   "On the eight trial feeders the energy drawn fell by 0.70 percent on average (0.80, 0.65, 0.60, 0.59, 0.80, 0.59, 0.80, 0.79, feeder by feeder) for each 1 percent the regulators actually took off the feeder-head voltage. The ON days did not all run: on some the pilot regulators stayed in local mode, and each ON day ramped down over its first hour."
   ],
   [
    "Carrying it to every feeder and every hour",
-   "The trial ran in spring and autumn on eight feeders. Water heaters and resistive heat draw less at a lower voltage only until their thermostats keep them on longer, so over a day they give their energy back; every other load answers in proportion to its share. Each feeder's share of thermostatic load hour by hour comes from its own load against the weather and the 2025 appliance survey; scaled to what the trial measured, that gives each feeder's response through the whole year, lower in winter where resistive heat is common."
+   "The trial ran in spring and autumn on eight feeders. Water heaters and resistive heat draw less at a lower voltage only until their thermostats keep them on longer, so over a day they give their energy back; every other load answers in proportion to its share. Each feeder's share of thermostatic load hour by hour comes from its own load against the weather, the 2025 appliance survey and the 2024 load research; scaled to what the trial measured, that gives each feeder's response through the whole year, from 0.43 to 0.80 percent per 1 percent, lowest where resistive heat is common."
   ],
   [
    "How far each feeder can go",
@@ -535,224 +852,205 @@
   ],
   [
    "Losses",
-   "Lowering the voltage raises the current the constant-power loads draw, so on most feeders the lines' own losses rise and give back part of the customers' saving; current squared, fitted on the feeders with substation revenue meters, puts the change between -126 and -4 MWh a year. The annual report's 6.1 percent loss rate, added in proportion, gets the sign wrong."
+   "Lowering the voltage raises the current the constant-power loads draw, so on 24 of the 24 feeders the lines' own losses rise and give back part of the customers' saving, by up to 168 MWh a year; current squared, fitted on the feeders with substation revenue meters, sets the change. The annual report's 6.1 percent loss rate, added in proportion, gets the sign wrong."
   ],
   [
    "What a quicker reading would fund",
-   "Reading the trial on its assignment, carrying the trial feeders' average to the rest at the trial's 4.8 V all year and adding 6.1 percent for losses funds ASH-113, ASH-116, ASH-222, CDB-219, ELC-113, ELC-116, FRV-113, FRV-219, FRV-222, GBR-113, GBR-219, GBR-222, HOL-116, HOL-222 instead."
+   "Carrying the trial feeders' average response to the rest, flat through the year, and adding 6.1 percent for losses funds ASH-113, ASH-219, ASH-222, CDB-113, CDB-116, CDB-222, ELC-113, ELC-116, ELC-219, FRV-113, FRV-219, FRV-222, GBR-113, GBR-219, GBR-222, HOL-113, HOL-219 instead."
   ]
  ],
- "memo_call": "Put voltage optimization on ASH-113, ASH-116, ELC-113, ELC-116, FRV-113, FRV-219, FRV-222, GBR-113, GBR-219, GBR-222, HOL-116, HOL-219, HOL-222 in the 2027 capital program. Under VO-1 each of them saves more energy at its substation breaker over a year like 2026 than its equipment costs: together 12,336 MWh a year for $4,047,000 installed. The other 11 feeders do not clear their cost.",
+ "memo_call": "Put voltage optimization on ASH-222, CDB-113, CDB-222, ELC-113, ELC-116, ELC-219, FRV-113, FRV-219, FRV-222, GBR-113, GBR-222, HOL-113 in the 2027 capital program. Under VO-1 each of them saves more energy at its substation breaker over a year like 2026 than its equipment costs: together 11,818 MWh a year for $3,792,100 installed. The other 12 feeders do not clear their cost.",
  "memo_head": [
   "Platte Ridge Public Power District, System Planning",
   "To: Joseph Harmon, manager of distribution engineering    From: Mary Wilson, system planning    Date: 20 November 2026"
  ],
- "memo_title": "Voltage optimization in 2027: 13 feeders, $4,047,000",
+ "memo_title": "Voltage optimization in 2027: 12 feeders, $3,792,100",
  "method": [
   "Customer energy: the meter data management system's feeder interval sums, the October re-sent rows dropped.",
   "Trial: each trial feeder's daily customer energy over its same-class untested feeders' on the same day, on the trial days, regressed on the day's achieved feeder-head reduction (bus SCADA less the pilot regulator's output) with heating, cooling and day-type terms.",
-  "Makeup: each feeder's quarter-hour load regressed on its quarter-of-day by day-type profile with heating and cooling degrees; heating split between resistive heat and heat pumps by the survey's holdings at the 2024 load research's 12,100 and 4,350 kWh a year; water heating at the load research's 3,200 kWh a year a heater of the survey's holding.",
+  "Makeup: each feeder's quarter-hour load regressed on its quarter-of-day by day-type profile with heating and cooling degrees; heating split between resistive heat and heat pumps by the survey's holdings at the 2024 load research's draws; water heating at the load research's yearly use a heater of the survey's holding.",
   "Response: thermostatic load gives its energy back; every other load answers in proportion to its share, scaled to the trial's measured response (the median over the trial feeders of trial response over non-thermostatic share).",
   "Volts: hour by hour, the far-end meters' lowest reading less 115 V, at most 4.8 V; the trial's ON days restored to normal running.",
   "Losses: head-meter energy less customer energy against current squared times the register's ohms, fitted on the head-metered feeders; applied at each feeder's load and voltage with and without VO.",
   "Value: yearly MWh at the substation times USD 48 times 9.4 (VO-1 2.4), against the 2027 capital plan's estimate."
  ],
+ "n_loss_rise": 24,
  "org": "Platte Ridge Public Power District",
  "price": 48.0,
  "room_v": {
-  "ASH-113": 4.54,
+  "ASH-113": 4.8,
   "ASH-116": 4.8,
-  "ASH-219": 4.73,
-  "ASH-222": 4.13,
+  "ASH-219": 4.62,
+  "ASH-222": 4.8,
   "CDB-113": 4.8,
-  "CDB-116": 2.39,
-  "CDB-219": 4.64,
+  "CDB-116": 4.79,
+  "CDB-219": 4.68,
   "CDB-222": 4.8,
-  "ELC-113": 4.01,
+  "ELC-113": 4.8,
   "ELC-116": 4.8,
   "ELC-219": 4.8,
-  "ELC-222": 4.16,
+  "ELC-222": 4.79,
   "FRV-113": 4.8,
-  "FRV-116": 3.51,
+  "FRV-116": 4.43,
   "FRV-219": 4.8,
   "FRV-222": 4.8,
   "GBR-113": 4.8,
-  "GBR-116": 4.62,
+  "GBR-116": 4.79,
   "GBR-219": 4.8,
   "GBR-222": 4.8,
   "HOL-113": 4.8,
-  "HOL-116": 4.8,
+  "HOL-116": 2.43,
   "HOL-219": 4.8,
-  "HOL-222": 4.8
+  "HOL-222": 4.23
  },
  "routes": {
-  "J1 dropped (the trial read on the volts its regulators actually took off, not on the day's assignment)": [
-   "ELC-113",
-   "FRV-113",
-   "GBR-113",
-   "ASH-116",
-   "ELC-116",
-   "HOL-116",
-   "FRV-219",
-   "FRV-222",
-   "HOL-222"
-  ],
   "J2 dropped (each untested feeder's response built from its own makeup, not the trial feeders' average)": [
    "ASH-113",
+   "CDB-113",
    "ELC-113",
    "FRV-113",
    "GBR-113",
-   "ASH-116",
+   "HOL-113",
+   "CDB-116",
    "ELC-116",
-   "HOL-116",
-   "CDB-219",
+   "ASH-219",
+   "ELC-219",
    "FRV-219",
-   "GBR-219",
    "HOL-219",
+   "ASH-222",
+   "CDB-222",
    "FRV-222",
-   "GBR-222",
-   "HOL-222"
+   "GBR-222"
   ],
   "J3 dropped (the response carried through the year hour by hour, thermostatic load giving its energy back)": [
    "ASH-113",
+   "CDB-113",
    "ELC-113",
    "FRV-113",
    "GBR-113",
-   "ASH-116",
+   "HOL-113",
+   "CDB-116",
    "ELC-116",
-   "HOL-116",
+   "ELC-219",
    "FRV-219",
    "GBR-219",
    "HOL-219",
    "ASH-222",
+   "CDB-222",
    "FRV-222",
-   "GBR-222",
-   "HOL-222"
-  ],
-  "J4 dropped (the volts each feeder can give hour by hour from its far-end meters, not the trial's 4 percent)": [
-   "ASH-113",
-   "ELC-113",
-   "FRV-113",
-   "GBR-113",
-   "ASH-116",
-   "ELC-116",
-   "HOL-116",
-   "FRV-219",
-   "GBR-219",
-   "HOL-219",
-   "ASH-222",
-   "FRV-222",
-   "GBR-222",
-   "HOL-222"
+   "GBR-222"
   ],
   "J5 dropped (the change in line losses from current squared, not the annual report's 6.1 percent added in proportion)": [
    "ASH-113",
+   "CDB-113",
    "ELC-113",
    "FRV-113",
    "GBR-113",
-   "ASH-116",
+   "HOL-113",
+   "CDB-116",
    "ELC-116",
-   "HOL-116",
+   "ELC-219",
+   "FRV-219",
+   "ASH-222",
+   "CDB-222",
+   "FRV-222",
+   "GBR-222"
+  ],
+  "the careful route (the reflex route)": [
+   "ASH-113",
+   "CDB-113",
+   "ELC-113",
+   "FRV-113",
+   "GBR-113",
+   "HOL-113",
+   "CDB-116",
+   "ELC-116",
+   "ASH-219",
+   "ELC-219",
    "FRV-219",
    "GBR-219",
    "HOL-219",
    "ASH-222",
+   "CDB-222",
    "FRV-222",
-   "GBR-222",
-   "HOL-222"
-  ],
-  "the careful route (the reflex route)": [
-   "ASH-113",
-   "ELC-113",
-   "FRV-113",
-   "GBR-113",
-   "ASH-116",
-   "ELC-116",
-   "HOL-116",
-   "CDB-219",
-   "FRV-219",
-   "GBR-219",
-   "ASH-222",
-   "FRV-222",
-   "GBR-222",
-   "HOL-222"
+   "GBR-222"
   ]
  },
  "save_mwh": {
-  "ASH-113": 1033.0,
-  "ASH-116": 768.0,
-  "ASH-219": 668.0,
-  "ASH-222": 790.0,
-  "CDB-113": 540.0,
-  "CDB-116": 292.0,
-  "CDB-219": 706.0,
-  "CDB-222": 616.0,
-  "ELC-113": 1142.0,
-  "ELC-116": 934.0,
-  "ELC-219": 420.0,
-  "ELC-222": 592.0,
-  "FRV-113": 917.0,
-  "FRV-116": 462.0,
-  "FRV-219": 1156.0,
-  "FRV-222": 835.0,
-  "GBR-113": 1187.0,
-  "GBR-116": 412.0,
-  "GBR-219": 1224.0,
-  "GBR-222": 818.0,
-  "HOL-113": 455.0,
-  "HOL-116": 1027.0,
-  "HOL-219": 573.0,
-  "HOL-222": 723.0
+  "ASH-113": 620.0,
+  "ASH-116": 344.0,
+  "ASH-219": 982.0,
+  "ASH-222": 950.0,
+  "CDB-113": 1282.0,
+  "CDB-116": 634.0,
+  "CDB-219": 477.0,
+  "CDB-222": 914.0,
+  "ELC-113": 922.0,
+  "ELC-116": 622.0,
+  "ELC-219": 963.0,
+  "ELC-222": 547.0,
+  "FRV-113": 1534.0,
+  "FRV-116": 450.0,
+  "FRV-219": 785.0,
+  "FRV-222": 701.0,
+  "GBR-113": 1043.0,
+  "GBR-116": 683.0,
+  "GBR-219": 489.0,
+  "GBR-222": 968.0,
+  "HOL-113": 1133.0,
+  "HOL-116": 316.0,
+  "HOL-219": 532.0,
+  "HOL-222": 408.0
  },
- "total_cost": 4047000.0,
- "total_save_mwh": 12336.0,
+ "total_cost": 3792100.0,
+ "total_save_mwh": 11818.0,
  "trial": [
-  "CDB-113",
-  "CDB-116",
-  "GBR-116",
+  "HOL-113",
+  "ELC-116",
   "HOL-116",
+  "ELC-219",
   "FRV-219",
+  "GBR-219",
   "ASH-222",
-  "CDB-222",
-  "HOL-222"
+  "FRV-222"
  ],
  "trial_effect": {
-  "ASH-222": 0.66,
-  "CDB-113": 0.64,
-  "CDB-116": 0.53,
-  "CDB-222": 0.67,
-  "FRV-219": 0.67,
-  "GBR-116": 0.61,
-  "HOL-116": 0.76,
-  "HOL-222": 0.82
+  "ASH-222": 0.8,
+  "ELC-116": 0.65,
+  "ELC-219": 0.59,
+  "FRV-219": 0.8,
+  "FRV-222": 0.79,
+  "GBR-219": 0.59,
+  "HOL-113": 0.8,
+  "HOL-116": 0.6
  },
- "trial_mean": 0.67,
- "trial_mean_assigned": 0.54,
+ "trial_mean": 0.7,
+ "trial_mean_assigned": 0.53,
  "value_ratio": {
-  "ASH-113": 1.06,
-  "ASH-116": 1.96,
-  "ASH-219": 0.77,
-  "ASH-222": 0.92,
-  "CDB-113": 0.8,
-  "CDB-116": 0.41,
-  "CDB-219": 0.83,
-  "CDB-222": 0.93,
-  "ELC-113": 1.54,
-  "ELC-116": 1.46,
-  "ELC-219": 0.67,
-  "ELC-222": 0.71,
-  "FRV-113": 1.84,
-  "FRV-116": 0.47,
-  "FRV-219": 1.37,
-  "FRV-222": 1.58,
-  "GBR-113": 1.25,
-  "GBR-116": 0.5,
-  "GBR-219": 1.19,
-  "GBR-222": 1.11,
-  "HOL-113": 0.87,
-  "HOL-116": 1.61,
-  "HOL-219": 1.09,
-  "HOL-222": 1.52
+  "ASH-113": 0.9,
+  "ASH-116": 0.46,
+  "ASH-219": 0.88,
+  "ASH-222": 1.57,
+  "CDB-113": 1.84,
+  "CDB-116": 0.89,
+  "CDB-219": 0.45,
+  "CDB-222": 1.24,
+  "ELC-113": 1.14,
+  "ELC-116": 1.17,
+  "ELC-219": 1.14,
+  "ELC-222": 0.58,
+  "FRV-113": 2.09,
+  "FRV-116": 0.42,
+  "FRV-219": 1.27,
+  "FRV-222": 1.65,
+  "GBR-113": 1.16,
+  "GBR-116": 0.77,
+  "GBR-219": 0.8,
+  "GBR-222": 1.14,
+  "HOL-113": 1.73,
+  "HOL-116": 0.33,
+  "HOL-219": 0.89,
+  "HOL-222": 0.45
  },
  "vnom": 120.0
 }

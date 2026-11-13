@@ -2,7 +2,7 @@
 and its 2027 voltage optimization program. Time is local standard time (CST, UTC-6) at 15-minute resolution over 2026."""
 import datetime as dt
 
-SEED = 3077
+SEED = 4009
 YEAR = 2026
 Q = 96                                  # quarter-hours a day
 ND = 365

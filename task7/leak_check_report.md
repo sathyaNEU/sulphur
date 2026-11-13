@@ -1,16 +1,20 @@
 # leak check, task7
 
-**Verdict: REVIEW.** 16 files read, 121 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 16 files read, 236 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, golden, buildings, record, controls, insulation, carried, million, heating, author, default, season, landed, seasons, patients, building, report, family, graded, reflex, careful, sentence, december, spread, lived-in
+Stump terms swept: architecture, golden, buildings, record, controls, insulation, million, carried, heating, author, default, careful, family, reflex, season, landed, report, seasons, patients, building, graded, prompt, method, sentence, reading
 
-## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: golden figure 115 appears: ...the feeder at or above 114 V plus a 1 V margin (115 V on the 120 V base) in that hour, and never by m...
-- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: golden figure 4.8 appears: ...) in that hour, and never by more than 4 percent (4.8 V on the 120 V base). 2.4 Energy saved is valued...
-- **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 6.1 appears: ...Wh Retail sales 1,132,800 MWh Distribution losses 6.1 percent of energy delivered Distribution feeders...
-- **REVIEW** `vo_trial_protocol_2026.pdf`: golden figure 4.8 appears: ...lator's schedule lowers its output by 4 percent (4.8 V) from midnight, returning to normal at the foll...
+## 3 answer figures in the pack (REVIEW 5)
+- **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 450 appears: ...pace heating 4,200 kWh Central air conditioning 2,450 kWh Homes metered by end use 212 Notes Distributi...
+- **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 6.1 appears: ...MWh Retail sales 854,300 MWh Distribution losses 6.1 percent of energy delivered Distribution feeders...
+- **REVIEW** `annual_report_2025_system_statistics.pdf`: golden figure 854 appears: ...the distribution system 913,700 MWh Retail sales 854,300 MWh Distribution losses 6.1 percent of energy...
+- **REVIEW** `mdm_feeder_interval_kwh_2026.csv`: golden figure 45,883 appears: ...26-01-01 20:45,728.6,1762,A FRV-113,2026-01-01 20:45,883.9,671,A FRV-116,2026-01-01 20:45,1411.3,1871,A FR...
+- **REVIEW** `substation_revenue_meters_15min_2026.csv`: golden figure 45,883 appears: ...-113,2026-03-12 15:30,872.9 ELC-113,2026-03-12 15:45,883.2 ELC-113,2026-03-12 16:00,891.7 ELC-113,2026-03-...
+
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `VO-1_voltage_optimization_program_standard.pdf`: 3 of 25 stump-paragraph terms appear (record, carried, reading); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -25,8 +29,6 @@ Stump terms swept: architecture, golden, buildings, record, controls, insulation
 ## 1 file names (clean)
 
 ## 2 author vocabulary (clean)
-
-## 4 design-note vocabulary (clean)
 
 ## 5 announcements (clean)
 

@@ -45,7 +45,7 @@ def build(target, seed=P.SEED):
     n["wx"] = pack.write_wx(w, target, rng)
     n["survey"] = pack.write_survey(w, O, ids, target, rng)
     n["out"], n["der"] = pack.write_distractors(w, ids, target, rng)
-    docs.write_pdfs(target)
+    docs.write_pdfs(target, w)
     docs.write_register(os.path.join(target, pack.FILES["reg_x"]), w, O, ids)
     docs.write_plan(os.path.join(target, pack.FILES["plan_x"]), w, ids)
     postprocess.normalize_ooxml(os.path.join(target, pack.FILES["reg_x"]), "Joseph Harmon", "Anthony Harris",

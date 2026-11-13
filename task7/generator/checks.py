@@ -72,6 +72,10 @@ def main():
     check("truth: no feeder's golden saving more than 15 percent off the world's", max(abs(e) for e in err) < 0.15, "%.3f" % max(abs(e) for e in err))
     check("truth: every feeder's value over cost 5 percent or more from the line", min(abs(v - 1) for v in truth_vc.values()) >= 0.05,
           "%.3f" % min(abs(v - 1) for v in truth_vc.values()))
+    ce = [fig["cust_mwh"][ids[f]] / w.truth[f]["cust_mwh"] - 1 for f in range(P.NF)]
+    check("truth: golden customer-meter savings within 5 percent of the world's on average", abs(np.mean(ce)) < 0.05, "%+.3f" % np.mean(ce))
+    le = [abs(fig["loss_mwh"][ids[f]] + w.truth[f]["loss_mwh"]) for f in range(P.NF)]
+    check("truth: golden loss rise within 15 MWh of the world's on every feeder", max(le) < 15, "%.1f" % max(le))
     check("golden: every feeder 5 percent or more from the line", min(abs(v - 1) for v in fig["value_ratio"].values()) >= 0.05)
     # the golden family, the perturbations, the factorial
     for m in E["forcing"]["golden_family"]:
@@ -81,7 +85,9 @@ def main():
     F = E["factorial"]
     nec = [j for j in F["judgments"] if j["kind"] == "stump" and sorted(j["dropped"]["answer"]) != sorted(fig["funded"])]
     suf = [j for j in F["judgments"] if j["kind"] == "stump" and sorted(j["alone"]["answer"]) == sorted(fig["funded"])]
-    check("factorial: five stumps each necessary", len(nec) == 5, str(len(nec)))
+    check("factorial: three stumps each necessary", len(nec) == 3, str(len(nec)))
+    dist = {tuple(sorted(j["dropped"]["answer"])) for j in nec}
+    check("factorial: the single drops land on three distinct wrong sets", len(dist) == 3, str(len(dist)))
     check("factorial: no stump sufficient alone", not suf)
     check("factorial: the reflex route misses the call", sorted(F["reflex_route"]["answer"]) != sorted(fig["funded"]))
     # the documents
@@ -104,12 +110,17 @@ def main():
     check("SF6 feeder-head voltage is the bus or the pilot regulator's output", "pilot regulator's output where one is installed" in std)
     check("SF7 far-end voltage is the bellwethers' hourly minimum", "bellwether meters' hourly minimum readings" in std)
     check("SF8 heating draws filed by the load research, the ratio's rivals file the golden",
-          "12,100 kWh" in ar and "4,350 kWh" in ar and all(v == gold for k, v in fam.items() if "heat pump home" in k))
+          bool(re.search(r"Electric resistance space heating [\d,]+ kWh", ar)) and bool(re.search(r"Heat pump space heating [\d,]+ kWh", ar)) and all(v == gold for k, v in fam.items() if "heat pump home" in k))
     check("SF9 the trial's weather terms without squares file the golden", fam["the trial's weather terms without squares"] == gold)
     check("SF10 re-sent rows are exact copies, dropped", PK.FILES["ami"] and dup_identical())
-    check("SF11 water heating filed by the load research", "3,200 kWh" in ar)
+    check("SF11 water heating filed by the load research", bool(re.search(r"Electric water heater [\d,]+ kWh", ar)))
     check("SF12 the trial's control from every untested feeder files the golden",
           fam["the trial's control every untested feeder, not the same class"] == gold)
+    check("SF13 the trial's scale as the mean of the trial feeders' ratios files the golden",
+          fam["the trial's scale the mean of the trial feeders' ratios, not the median"] == gold)
+    check("SF14 the loss fit with a no-load term files the golden", fam["the loss fit with a no-load term"] == gold)
+    check("SF15 the average reduction is over the year's hours (the prompt's 'over the year')", "over the year" in open(os.path.join(TASK, "prompt.txt")).read())
+    check("SF16 the loss change is a rise, positive when losses grow (the prompt's 'rise')", "rise in its own line losses" in open(os.path.join(TASK, "prompt.txt")).read())
     # mess and the read-back
     R = V.read_pack(TARGET)
     raw = sum(1 for _ in open(os.path.join(TARGET, PK.FILES["ami"]))) - 1

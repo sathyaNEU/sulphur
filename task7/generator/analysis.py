@@ -13,12 +13,12 @@ import params as P
 
 GOLD = {1: True, 2: True, 3: True, 4: True, 5: True}
 # the analyst's settings a rival may choose differently (the golden family varies them)
-OPT = dict(cop=12100 / 4350, whkw=3200 / 8.76e6, quad=True, win=2, ctrl="class", tctl="class", comp=None, lam=1.0, lossk=1.0, room=0.0)
+OPT = dict(cop=None, whkw=None, quad=True, win=2, ctrl="class", tctl="class", lamstat="median", lossfit="origin", comp=None, lam=1.0, lossk=1.0, room=0.0)
 
 
 def reset():
     """clear every cached estimate (between golden-family members)"""
-    for fn in (tap_events, pooled_exponents, makeup, eta_structural, saving2, saving):
+    for fn in (tap_events, pooled_exponents, makeup, eta_structural, parts2, saving):
         d = fn.__defaults__
         if d:
             for x in d:
@@ -147,6 +147,8 @@ def loss_k(O):
         xs.append(x)
         ys.append(L)
     x, y = np.concatenate(xs), np.concatenate(ys)
+    if OPT["lossfit"] == "intercept":                               # a no-load term (core and meter losses) beside I squared R
+        return float(np.linalg.lstsq(np.column_stack([np.ones(len(x)), x]), y, rcond=None)[0][1])
     return float((x * y).sum() / (x * x).sum())
 
 
@@ -256,9 +258,10 @@ def makeup(O, f, cache={}):
     S = O.ami[f] * 4
     heat, cool = weather_split(O, f)
     sv = O.survey[f]
-    rs = sv["sat_res_heat"] * OPT["cop"] / max(sv["sat_res_heat"] * OPT["cop"] + sv["sat_hp"], 1e-9)
+    cop = OPT["cop"] if OPT["cop"] is not None else O.lr["res_heat"] / O.lr["hp"]
+    rs = sv["sat_res_heat"] * cop / max(sv["sat_res_heat"] * cop + sv["sat_hp"], 1e-9)
     base_all = np.clip(S - heat - cool, 1e-6, None)
-    wh = np.minimum(sv["sat_ewh"] * O.cust[f] * OPT["whkw"], 0.6 * base_all)
+    wh = np.minimum(sv["sat_ewh"] * O.cust[f] * (OPT["whkw"] if OPT["whkw"] is not None else O.lr["ewh"] / 8.76e6), 0.6 * base_all)
     sh = dict(base=(base_all - wh) / S, TH=(wh + heat * rs) / S, HP=heat * (1 - rs) / S, AC=cool / S)
     cache[(id(O), f)] = sh
     return sh
@@ -345,12 +348,18 @@ def eta_structural(O, f, J, cache={}):
         for g in O.trial:
             wS = O.ami[g][sel]
             ratios.append(trial_effect(O, g, J[1]) / float((nonth(g)[sel] * wS).sum() / wS.sum()))
-        cache[key] = float(np.median(ratios))                       # one noisy trial feeder does not set the scale
+        cache[key] = float(np.median(ratios) if OPT["lamstat"] == "median" else np.mean(ratios))
     return nonth(f) * cache[key] * OPT["lam"]
 
 
-def saving2(O, f, J, cache={}):
+def saving2(O, f, J):
     """annual MWh at the substation, the structural route"""
+    return parts2(O, f, J)["total"]
+
+
+def parts2(O, f, J, cache={}):
+    """the yearly saving's parts: at the customer meters, the rise in the feeder's own losses (MWh a year, positive when
+    losses rise), at the substation, and the yearly response per 1 per cent of voltage removed at the customer meters"""
     key = (id(O), "tr", J[1])
     if key not in cache:
         cache[key] = {g: trial_effect(O, g, J[1]) for g in O.trial}
@@ -380,7 +389,9 @@ def saving2(O, f, J, cache={}):
         dl = l0 - l1
     else:
         dl = P.LOSS_RATE_REPORT * dcust
-    return float((dcust + dl).sum() * 0.25)
+    cust = float(dcust.sum() * 0.25)
+    return {"cust": cust, "loss_rise": -float(dl.sum() * 0.25), "total": float((dcust + dl).sum() * 0.25),
+            "cvrf": cust / max(float((dvq * S).sum() * 0.25), 1e-9)}
 
 
 def call2(O, J):

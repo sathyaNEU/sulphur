@@ -1,34 +1,26 @@
 {
  "task": "task7",
- "status": "BUILD",
+ "status": "PAUSED",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
  "stage": 3,
  "stage_name": "build",
  "updated": "2026-11-13",
- "stump": "level 5 by the stump factorial: the trial on its achieved dose, each feeder's makeup, the give-back through the year, the far-end volts, the losses from current squared",
+ "stump": "level 5 by the stump factorial: each feeder's makeup, the thermostatic give-back through the year, the losses from current squared (the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes)",
  "architecture": 12,
  "loops": 1,
  "precut": {
   "exit": 0,
-  "date": "2026-11-12",
-  "note": "1 WARN: nearest chains task21 (answered in the note)"
+  "date": "2026-11-13",
+  "note": "WARN R2 upstream of R4 to R9 (earned, answered in the note); WARN nearest chains"
  },
  "leak": {
   "leak_py": "REVIEW (the call's words in EV-4; stump terms in EV-4 and the pilot plan), each ruled harmless",
   "reader": "no leak: nothing ranks the options, no answer figure or name, no one thing settles the task; it reads EV-4 4.1 and DPS-7 2.2 as the replay's frame with the option simulations left to the analyst"
  },
  "duplicate_check": {
-  "heart": "BLOCK on 2026-11-13, identical on the card as committed at READY (71b70e6) and on the repaired card: ban.weight (hard-to-measure, as task13 v4), ban.calibration (pilot_log, as task8 v19) and test.same_driver (objective, G2, method_or_model_selection, as task2 v4's lineage); the colliding cards were drawn 2026-11-10 and 11-11, before this architecture (11-12), and this repair moved none of those axes; the skeleton screen (the client's duplicate test) is clear; handed to the author",
-  "surface": ""
- },
- "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW, applied (answer blocks only)",
-  "date": "2026-11-13",
-  "scope": "Sequence replayed transformer by transformer and night by night to 13 (band 12 to 14), every open reading of the queue, ready-by, charge time and clock run; Stagger sampled at 100 draws to 29.5 (band 28.5 to 31.0) after the judge corrected its own script (0.95 applied twice, pre-July blocks piled on 1 July); costs, totals and the flip fee not recomputed by the judge",
-  "fixes": "Step-by-Step 3 states the clock; Step-by-Step 6 the charge time, the ready-by and that a late charger counts ahead of every later one; Critical Component 2 the same",
-  "report": "task7/determinism_check_report.md"
+  "heart": "WARN only on 2026-11-13 after re-registering with weight, calibration, context artifact and forcing event redrawn against task23 and task24",
+  "surface": "PASS"
  },
  "returned": [
   {
@@ -114,7 +106,7 @@
    "route": "REDESIGN under the stump factorial (stumping Part 3.3)"
   }
  ],
- "resume": "architecture 12 built (seed 3077); next: gates.py task7, then stage 4 (leak reader and judge) on the author's word",
+ "resume": "stage 3 done on seed 4009 (checks 55 of 55, gates.py 8 of 8 with 3 WARN answered in the note, containers clean, careful 47.0, quick 25.0); next: stage 4 (leak reader and determinism judge together) on the author's word, then READY and the author's prompt rewrite",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,

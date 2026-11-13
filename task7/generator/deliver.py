@@ -31,43 +31,41 @@ def workbook(path, F):
     wb = Workbook()
     ws = wb.active
     ws.title = "Decision"
-    hdr = ["Feeder", "Class", "Yearly saving at the substation (MWh)", "Present value of the saving (USD)",
-           "Installed cost (USD)", "Value over cost", "2027 program"]
+    hdr = ["Feeder", "Class", "Yearly saving at the customer meters (MWh)", "Rise in the feeder's own line losses (MWh a year)",
+           "Yearly saving at the substation (MWh)", "Present value of the saving (USD)", "Installed cost (USD)", "Value over cost",
+           "2027 program"]
     ws.append(hdr)
     for i in F["ids"]:
         pv = F["save_mwh"][i] * F["price"] * F["annuity"]
-        ws.append([i, CLS[F["kind"][i]], F["save_mwh"][i], round(pv, -2), F["cost"][i], F["value_ratio"][i],
-                   "VO in 2027" if i in F["funded"] else "Not in 2027"])
+        ws.append([i, CLS[F["kind"][i]], F["cust_mwh"][i], F["loss_mwh"][i], F["save_mwh"][i], round(pv, -2), F["cost"][i],
+                   F["value_ratio"][i], "VO in 2027" if i in F["funded"] else "Not in 2027"])
     ws2 = wb.create_sheet("Trial")
     ws2.append(["Trial feeder", "Change in energy per 1% of feeder-head voltage removed (%)"])
     for i in F["trial"]:
         ws2.append([i, F["trial_effect"][i]])
     ws2.append(["Average", F["trial_mean"]])
-    ws3 = wb.create_sheet("Voltage")
-    ws3.append(["Feeder", "Average reduction the equipment could hold over the year (V, 120 V base)"])
+    ws3 = wb.create_sheet("Feeders")
+    ws3.append(["Feeder", "2026 energy at the customer meters (MWh)", "Average reduction the equipment could hold over the year (V, 120 V base)",
+                "Yearly change in customer energy per 1% of voltage removed (%)"])
     for i in F["ids"]:
-        ws3.append([i, F["room_v"][i]])
-    ws4 = wb.create_sheet("Losses")
-    ws4.append(["Feeder", "Change in the feeder's own line losses (MWh a year; negative: losses rise)"])
-    for i in F["ids"]:
-        ws4.append([i, F["loss_mwh"][i]])
-    ws5 = wb.create_sheet("Method")
+        ws3.append([i, F["energy_mwh"][i], F["room_v"][i], F["cvrf"][i]])
+    ws4 = wb.create_sheet("Method")
     for line in F["method"]:
-        ws5.append([line])
-    for s in (ws, ws2, ws3, ws4):
+        ws4.append([line])
+    for s in (ws, ws2, ws3):
         for c in s[1]:
             c.font = Font(bold=True)
             c.fill = PatternFill("solid", fgColor="DCE3EE")
             c.alignment = Alignment(wrap_text=True, vertical="top")
         s.freeze_panes = "B2"
-    for col, w in zip("ABCDEFG", (11, 13, 18, 18, 14, 11, 14)):
+    for col, w in zip("ABCDEFGHI", (11, 13, 16, 16, 16, 16, 14, 11, 14)):
         ws.column_dimensions[col].width = w
     ws2.column_dimensions["A"].width = 13
     ws2.column_dimensions["B"].width = 34
-    ws3.column_dimensions["B"].width = 36
-    ws4.column_dimensions["B"].width = 36
-    ws5.column_dimensions["A"].width = 118
-    for r in ws5.iter_rows():
+    for col, w in zip("ABCD", (11, 20, 30, 30)):
+        ws3.column_dimensions[col].width = w
+    ws4.column_dimensions["A"].width = 118
+    for r in ws4.iter_rows():
         r[0].alignment = Alignment(wrap_text=True, vertical="top")
     wb.save(path)
     postprocess.normalize_ooxml(path, "Mary Wilson", "Mary Wilson", "2026-11-17T15:10:00Z", "2026-11-20T21:34:16Z",

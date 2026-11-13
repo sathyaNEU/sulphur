@@ -5,6 +5,8 @@ import datetime as dt
 import os
 import sys
 
+import numpy as np
+
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill
 from reportlab.lib import colors
@@ -100,25 +102,46 @@ PROTOCOL = [
         "regulators and their communications."]),
 ]
 
-AR = [
-    ("System statistics, 2025", [
-        [["Measure", "2025"], ["Retail customers", "52,140"], ["Energy delivered to the distribution system", "1,206,400 MWh"],
-         ["Retail sales", "1,132,800 MWh"], ["Distribution losses", "6.1 percent of energy delivered"],
-         ["Distribution feeders", "24, on six substations"], ["Miles of distribution line", "1,872"],
-         ["System peak", "268.4 MW (21 July 2025, 17:00)"], ["SAIDI, excluding major event days", "88.6 minutes"]]]),
-    ("Residential load research, 2024", [
-        [["End use (homes that have it)", "Average annual use"], ["Electric water heater", "3,200 kWh"],
-         ["Electric resistance space heating", "12,100 kWh"], ["Heat pump space heating", "4,350 kWh"],
-         ["Central air conditioning", "2,300 kWh"], ["Homes metered by end use", "212"]]]),
+def annual_report(w):
+    """the 2025 system statistics and the 2024 load research, from the District's own load: 2025 ran a little lighter
+    than 2026, and the load research is its metering sample's normal-weather average for each end use"""
+    import world as W
+    cust = sum(f["customers"] for f in w.F)
+    sales = sum(float(S.sum()) * 0.25 for S in w.S) * 0.983
+    delivered = sales / (1 - P.LOSS_RATE_REPORT - 0.004)
+    peak = max(float(sum(w.S).max()) * (1 + P.LOSS_RATE_REPORT), 1.0)
+    miles = sum(f["L"] for f in w.F) * 4.6
+    hdd = np.clip(58 - w.T, 0, None)
+    cdd = np.clip(w.T - 68, 0, None)
+    hr = np.arange(len(w.T)) % 24 + 0.5
+    acp = 0.6 + 0.4 * np.clip(np.sin(np.pi * (hr - 9) / 13), 0, None)
+    r = np.random.default_rng(P.SEED + 41)
+    def lr(x, step):
+        return int(round(x * (1 + r.normal(0, 0.006)) / step) * step)
+    ewh = lr(W.KW["ewh"] * 0.8128 * 8760, 50)
+    res = lr(W.KW["res_heat"] * hdd.sum() / 40.0, 50)
+    hp = int(round(res / (W.KW["res_heat"] / W.KW["hp"]) / 50) * 50)
+    ac = lr(W.KW["ac"] * (cdd / 18.0 * acp).sum(), 50)
+    return [
+        ("System statistics, 2025", [
+            [["Measure", "2025"], ["Retail customers", format(int(round(cust * 0.992, -1)), ",")],
+             ["Energy delivered to the distribution system", "%s MWh" % format(int(round(delivered, -2)), ",")],
+             ["Retail sales", "%s MWh" % format(int(round(sales, -2)), ",")], ["Distribution losses", "6.1 percent of energy delivered"],
+             ["Distribution feeders", "24, on six substations"], ["Miles of distribution line", format(int(round(miles, -1)), ",")],
+             ["System peak", "%.1f MW (21 July 2025, 17:00)" % (peak * 0.97)], ["SAIDI, excluding major event days", "88.6 minutes"]]]),
+        ("Residential load research, 2024", [
+            [["End use (homes that have it)", "Average annual use"], ["Electric water heater", "%s kWh" % format(ewh, ",")],
+             ["Electric resistance space heating", "%s kWh" % format(res, ",")], ["Heat pump space heating", "%s kWh" % format(hp, ",")],
+             ["Central air conditioning", "%s kWh" % format(ac, ",")], ["Homes metered by end use", "212"]]]),
     ("Notes", [
         "Distribution losses are energy delivered to the distribution system less retail sales and the District's own "
         "use, as a share of energy delivered. Retail sales are billed sales adjusted to the calendar year. Load research "
         "averages are for the homes in the 2024 end-use metering sample that have each end use, weather-normalized to the "
         "District's 30-year normal."]),
-]
+    ]
 
 
-def write_pdfs(target):
+def write_pdfs(target, w):
     _doc(os.path.join(target, FILES["std"]), "VO-1 Voltage optimization program standard",
          [["Standard", "VO-1, revision 2"], ["Approved", "8 October 2026, Board of Directors"], ["Owner", "Distribution Engineering"]],
          STANDARD, "Joseph Harmon", "VO-1", "Platte Ridge PPD  VO-1 rev 2", dt.datetime(2026, 9, 21, 10, 4, tzinfo=CDT),
@@ -128,7 +151,7 @@ def write_pdfs(target):
          "VO trial protocol", "Platte Ridge PPD  SP-2026-03", dt.datetime(2026, 1, 5, 14, 12, tzinfo=CST),
          dt.datetime(2026, 1, 6, 9, 40, tzinfo=CST), producer="LibreOffice 25.8")
     _doc(os.path.join(target, FILES["ar"]), "Annual Report 2025: system statistics",
-         [["Extract", "pages 14 and 15"], ["Published", "April 2026"], ["Prepared by", "Finance"]], AR, "Bruce Hart",
+         [["Extract", "pages 14 and 15"], ["Published", "April 2026"], ["Prepared by", "Finance"]], annual_report(w), "Bruce Hart",
          "Annual report 2025", "Platte Ridge PPD  Annual Report 2025", dt.datetime(2026, 3, 30, 11, 2, tzinfo=CDT),
          dt.datetime(2026, 4, 9, 16, 45, tzinfo=CDT), widths=[90, 72], producer="LibreOffice 26.2")
 

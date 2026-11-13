@@ -64,7 +64,7 @@ def write_ami(w, O, ids, target, rng):
         rep[drop] = (n * rng.uniform(0.6, 0.95, drop.sum())).astype(int)
         est = rep < 0.85 * n
         for q in range(P.NQ):
-            rows.append([ids[i], ts(q), "%.3f" % k[q], int(rep[q]), "E" if est[q] else "A"])
+            rows.append([ids[i], ts(q), "%.1f" % (k[q] * 1000.0), int(rep[q]), "E" if est[q] else "A"])
     # a re-sent batch: one feeder-week delivered twice in the October export
     j = [r for r in rows if r[1].startswith("2026-10-1") and r[0] == ids[3]][:672]
     rows += [list(r) for r in j]
@@ -76,7 +76,7 @@ def write_head(w, O, ids, target):
     rows = []
     for i in O.headmetered:
         for q in range(P.NQ):
-            rows.append([ids[i], ts(q), "%.3f" % O.head[i][q]])
+            rows.append([ids[i], ts(q), "%.1f" % (O.head[i][q] * 1000.0)])
     return _w(os.path.join(target, FILES["head"]), ["feeder_id", "interval_start_cst", "kwh_delivered"], rows)
 
 

@@ -11,7 +11,7 @@
   "shape": "other",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Put voltage optimisation on ASH-113, ELC-113, FRV-113, GBR-113, ASH-116, ELC-116, HOL-116, FRV-219, GBR-219, HOL-219, FRV-222, GBR-222 and HOL-222 in the 2027 capital programme",
+  "answer": "Put voltage optimization on CDB-113, ELC-113, FRV-113, GBR-113, HOL-113, ELC-116, ELC-219, FRV-219, ASH-222, CDB-222, FRV-222, GBR-222 in the 2027 capital program (12 feeders, 11,818 MWh a year at the substation for USD 3,792,100 installed)",
   "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
   "gap": [
     "objective",
@@ -27,14 +27,14 @@
     "G16"
   ],
   "gate_g": "decomposition_attribution",
-  "calibration_form": "pilot_log",
+  "calibration_form": "other",
   "stump_strategy": "causal_design",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A careful but hurried pass cleans the meter export, regresses the trial's daily energy on its ON days with weather and day-type terms against comparable untested feeders, and carries that response flat to every feeder and all year at the trial's 4.8 V, adding the annual report's 6.1 per cent for losses: it funds 14 feeders with CDB-219 and ASH-222 in and HOL-219 out, because the trial read on assignment understates the response (some ON days never ran), the untested feeders' own makeup and thermostatic give-back move each feeder's response by season, the far end caps the volts on long lines and the losses rise rather than fall under a lower voltage",
+  "analyst_test": "A careful but hurried pass cleans the meter export, reads the trial on the regulators' achieved volts with weather and day-type terms against comparable untested feeders (0.70 percent per percent), sets each feeder's volts from its far-end meters hour by hour as VO-1 spells, then carries the trial feeders' average to every feeder flat through the year and adds the annual report's 6.1 percent for losses: it funds 17 feeders, ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong, because each untested feeder's own makeup and the thermostatic give-back move its yearly response from 0.43 to 0.80 and the losses rise rather than fall under a lower voltage",
   "domain_test": "Conservation voltage reduction M&V: a load's energy response per volt depends on what it is (constant impedance, constant power, thermostatic), the service floor binds at the far end of each feeder, and line losses go with current squared; swap feeders for servers and there is no voltage floor, thermostat or I squared R",
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:a randomised voltage trial carried through partial instruments to feeders and hours it never covered",
@@ -57,7 +57,7 @@
     "source": "synthetic"
   },
   "forum": "board_of_directors",
-  "forcing_event": "budget_or_appropriation",
+  "forcing_event": "launch_or_rollout",
   "org_family": "utility_or_infrastructure",
   "world": {
     "geography": "United States, Nebraska (Platte Ridge Public Power District, fictional, east-central Nebraska)",
@@ -86,9 +86,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "where",
-  "driver": "The decisive quantity is each unit's yearly saving under an intervention a randomised trial measured on a few units on the days it actually ran: the response has to be read on the dose achieved, carried to each untested unit through its own makeup and through every hour of the year with the part that recovers itself given back, capped hour by hour by each unit's own limit, and netted of a loss that rises as the square of the current; each carry alone moves a different set of units across the cost line.",
-  "driver_concrete": "Platte Ridge funds VO on a feeder when its yearly energy saving at the substation breaker, valued at USD 48 a MWh times 9.4, covers its capital-plan cost: the 2026 trial read on the volts its regulators took off (bus SCADA less regulator output; some ON days stayed in local mode) gives 0.67 per cent per 1 per cent, carried to each feeder by its non-thermostatic share from its own load against the weather and the survey (water heaters and resistive heat give their energy back), at the volts its far-end bellwethers allow above 115 V, less the rise in its line losses from current squared fitted on the head-metered feeders",
-  "stump": "The trial on its assignment (0.54), the trial feeders' average for the rest, flat through the year at 4.8 V and 6.1 per cent added for losses funds 14 feeders (CDB-219 and ASH-222 in, HOL-219 out); each correction alone still leaves two to five feeders wrong; all five give the 13",
+  "driver": "The decisive quantity is each unit's yearly saving under an intervention a randomized trial measured on a few units in two seasons: the measured response has to be carried to each untested unit through its own makeup and through every hour of the year with the part that recovers itself given back, and netted of a loss that rises as the square of the current; each carry alone moves a different set of units across the cost line.",
+  "driver_concrete": "Platte Ridge funds VO on a feeder when its yearly energy saving at the substation breaker, valued at USD 48 a MWh times 9.4, covers its capital-plan cost: the 2026 trial read on the regulators' achieved volts gives 0.70 percent per percent, carried to each feeder by its non-thermostatic share from its own load against the weather, the survey and the load research (water heaters and resistive heat give their energy back), at the volts its far end allows, less the rise in its line losses from current squared fitted on the head-metered feeders",
+  "stump": "The trial feeders' average carried to every feeder flat through the year, with the report's 6.1 percent added for losses, funds 17 feeders (ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong); each correction alone still leaves four or five feeders wrong; all three give the 12",
   "differentiation": {
     "task13": "task13 is a FLISR outage remedy on relay and outage records; task7 v12 is a CVR energy saving from a randomised trial",
     "task22": "task22 is a feeder energy balance for revenue protection; task7 v12 measures an intervention's response and carries it to a capital programme"
@@ -622,49 +622,46 @@
       "deliverable set": "csv+docx"
     }
   ],
-  "notes": "architecture 12 (2026-11-13): a new world on the author's word after architecture 11 was landed; five deciding methods the data force, none on the client's closed page (the seasons step sits next to seasonal_shift_calibration; its fix is a makeup estimated from the year's load and the survey with a give-back, not a factor calibrated on a target season), level 5 by the stump factorial",
+  "notes": "architecture 12 (2026-11-13): a new world on the author's word after architecture 11 was landed; three deciding methods the data force (each feeder's makeup, the thermostatic give-back through the year, the losses from current squared), none on the client's closed page (the seasons step sits next to seasonal_shift_calibration; its fix is a makeup estimated from the year's load and the survey with a give-back, not a factor calibrated on a target season); the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes; level 5 by the stump factorial. Calibration 'other': the trial calibrates the response's scale and the head-metered feeders the loss coefficient, which no listed organ names. Axes redrawn at stage 3 against task23 and task24 (filed earlier the same morning): weight, calibration, context artifact, forcing event (launch_or_rollout: the 2027 VO rollout; budget_or_appropriation and vote_or_meeting repeat task23 and task20)",
   "answer_shape": "flagged-set",
-  "weight": "modeling",
+  "weight": "hard-to-measure",
   "chain_signature": [
     "assembly-reconciliation",
     "causal-reasoning",
     "missingness-measurement",
+    "modeling",
+    "forecasting",
     "decomposition-attribution",
     "forecasting",
+    "synthesis",
     "synthesis"
   ],
-  "results": "R1 each feeder's 2026 energy at the customer meters; R2 the trial's change in energy per 1 per cent of voltage removed, averaged over the trial feeders; R3 each feeder's average achievable reduction in volts over the year; R4 the change in each feeder's own line losses; R5 each feeder's yearly saving at the substation; R6 the feeders funded",
+  "results": "R1 each feeder's 2026 energy at the customer meters; R2 the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders; R3 each feeder's average achievable reduction in volts over the year; R4 each feeder's yearly change in customer energy per 1 percent of voltage removed; R5 its yearly saving at the customer meters; R6 the rise in its own line losses; R7 its yearly saving at the substation; R8 the feeders funded; R9 the program's total yearly saving at the substation",
   "architecture_spent": false,
   "skeleton": {
     "decision_form": "set_over_threshold",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "instrument_noncompliance",
       "latent_structure_estimation",
       "cancellation_of_offsetting_effects",
-      "position_on_network_effect",
       "nonlinear_functional_of_path"
     ],
     "mechanisms": [
-      "pilot_regulators_left_in_local_mode_on_on_days",
-      "on_days_ramp_down_over_the_first_hour",
       "thermostatic_load_recovers_its_energy",
-      "far_end_service_floor_caps_reduction",
+      "load_makeup_differs_by_feeder",
       "constant_power_load_draws_more_current_at_lower_voltage",
-      "load_makeup_differs_by_feeder"
+      "far_end_service_floor_caps_reduction",
+      "pilot_regulators_left_in_local_mode_on_on_days"
     ],
     "detection": [
       "second_source_at_other_grain",
-      "measurement_at_another_network_point",
       "naive_ignores_what_it_should_depend_on",
       "conservation_residual_sign",
       "document_defines_estimand"
     ],
     "moves": [
-      "instrument_on_assignment",
       "impute_by_model_at_own_drivers",
       "simulate_with_fitted_inputs",
-      "allocate_by_network_position",
       "compute_on_joint_path"
     ],
     "file_roles": [
@@ -685,5 +682,5 @@
     "second-sentence opener": "a",
     "deliverable set": "docx+xlsx"
   },
-  "registered": "2026-11-13T09:01:15Z"
+  "registered": "2026-11-13T09:28:19Z"
 }

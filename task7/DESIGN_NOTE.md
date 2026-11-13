@@ -1,16 +1,16 @@
-# task7: which of Platte Ridge PPD's 24 feeders receive voltage optimisation in the 2027 capital programme
+# task7: which of Platte Ridge PPD's 24 feeders receive voltage optimization in the 2027 capital program
 
 ## Draw
 
 Subdomain: Energy efficiency & demand response evaluation (energy-systems-utilities, efficiency-savings-verification)
 Analysis type: Experiment & Causal
-Answer shape: a flagged set with the evidence (the feeders funded, each feeder's yearly saving at the substation with its band, and the trial's measured response behind it)
-Weight: modeling: each feeder's yearly saving at the substation is built from three models fitted on the pack (its load's makeup against the weather and the survey, its far end hour by hour, its losses against current squared) and the trial's measured response; no record holds it (the trial ran on eight feeders in spring and autumn); the last two builds sat in assembly (task22) and investigation (task9), and hard-to-measure was redrawn because task20 holds it
-Data-native sentence: the randomised trial measured the energy response to a voltage cut on eight feeders on the days its regulators actually ran, the tap changers move every feeder's voltage a few thousand times a year but only for a half-hour read that thermostats undo, the customer meters miss the line losses and the far-end meters set how far each feeder can go, so each part of the yearly saving has to be assigned to the record that sees it
-Guard (registered card, 2026-11-13): gap redrawn from population to objective (population with G13 and a designated set repeats task8's lineage), forum board_of_directors (the District's board approves the capital programme; executive_team and line_manager_or_team repeat task9 and task13); WARN repeat.deliverables docx+xlsx (task9): a planner's workbook and memo is what this reader uses; WARN house_lesson position_on_network_effect (task9, task13): a supporting step here (the far end caps the volts), the call turns first on instrument_noncompliance; WARN house_shell set_over_threshold: the decision is a funded set against each feeder's own cost under VO-1 2.1, no other form is honest
+Answer shape: a flagged set with the evidence (the feeders funded, each feeder's yearly saving at the substation with its band, its own yearly response, its losses, and the trial's measured response behind them)
+Weight: hard-to-measure: each feeder's yearly energy saving at its substation breaker under VO, which no record holds (the trial ran on eight feeders in spring and autumn; the decision needs every feeder's whole year, net of its own losses); it is built from three models fitted on the pack (its load's makeup against the weather, the survey and the load research; its far end hour by hour; its losses against current squared); the last two builds sat in synthesis (task23) and modeling (task24)
+Data-native sentence: the randomized trial measured the energy response to a voltage cut on eight feeders in spring and autumn, the customer meters miss the lines' own losses and the far-end meters set how far each feeder can go, so each feeder's yearly saving has to be rebuilt from its own load's makeup through every hour of the year, its far end and its losses
+Guard (registered card, re-registered 2026-11-13 after task23 and task24 were filed earlier the same morning): gap objective (population with G13 and a designated set repeats task8's lineage); forum board_of_directors (the District's board approves the capital program; executive_team and line_manager_or_team repeat task9 and task13); forcing event launch_or_rollout (budget_or_appropriation repeats task23, vote_or_meeting task20); calibration other (the trial calibrates the response's scale and the head-metered feeders the loss coefficient; pilot_log repeats task23); context artifact register (the feeder register and the capital plan; filed_standard repeats task23); WARN overuse.weight hard-to-measure (task20, five builds back): the honest weight; WARN repeat.gate_g decomposition_attribution (task23): the saving is assigned part by part to the record that sees it; WARN repeat.decision designation_set and repeat.deliverables docx+xlsx (task24): a funded set and a planner's workbook and memo are what this decision is; WARN house_lesson cancellation_of_offsetting_effects (task9, task23) and nonlinear_functional_of_path (task13, task24): each sits beside latent_structure_estimation, which no live build teaches; WARN chain_near task6: the chain's areas, not its lessons
 People: Joseph Harmon (manager of distribution engineering, owner of VO-1), Mary Wilson (system planning, whose workbook and memo the golden are), Bruce Hart (finance), Anthony Harris (GIS and register) (`guard.py names --geo US --seed 1113`). None appears in the prompt.
 
-Architecture 12, 2026-11-13, a new world on the author's word after architecture 11 (Hollins Creek's EV charging default) was landed by the platform run on every graded result (task7/runs/arch11/run1.md: the night-by-night Stagger replay a reflex under EV-4 4.3, the Sequence rule written in the proposal). Built to the stump factorial from the draw: five methods the data force, each prototyped on paper and then on the generator's own estimators before the pack was cut.
+Architecture 12, 2026-11-13, a new world on the author's word after architecture 11 (Hollins Creek's EV charging default) was landed by the platform run on every graded result (task7/runs/arch11/run1.md). Built to the stump factorial: five candidate methods prototyped on the generator's own estimators; two (the trial on its achieved dose, the far end's volts) turned out to be spelled by VO-1 and are reflexes here, three decide.
 
 ## Stump screen
 
@@ -18,166 +18,176 @@ Written at the draw on 2026-11-13, each candidate prototyped in a scratch simula
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
-| the trial read on the volts its regulators took off, not on the day's assignment | the response taken at the scheduled 4 per cent (N24, L04) | the pilot regulator log against the bus SCADA, quarter-hour | none | kept (J1) |
-| an untested feeder's response from its own makeup, not the trial feeders' average | each feeder like the trial feeders (N25, L15) | each feeder's load against the weather, the appliance survey | none | kept (J2) |
+| an untested feeder's response from its own makeup, not the trial feeders' average | each feeder like the trial feeders (N25, L15) | each feeder's load against the weather, the appliance survey, the load research | none | kept (J2) |
 | the response carried hour by hour through the year, thermostatic load giving its energy back | a spring and autumn figure carried flat (N12, L15) | the year's load against the weather, the survey's resistive heat and water heaters | 1 (near the closed seasons card: answered in Closed strategies) | kept (J3) |
-| the volts each feeder can give from its far-end meters | the trial's 4.8 V scaled to every feeder (N01, L17) | the bellwether meters' hourly minimum voltages | none | kept (J4) |
 | the losses from current squared, not the annual report's rate added in proportion | an unmeasured component spread in proportion (N21, L22) | the substation revenue meters against the customer sums, the register's ohms | none | kept (J5) |
-| Stagger-style persistence or random-start correlation, a GIS mis-mapping of coordinated groups, offline fallback nights | tried in architecture 11's world | - | 3 (filed text contradicted, a literal replay catches it, too weak) | dropped (Tried and rejected) |
+| the trial read on the volts its regulators took off, not on the day's assignment | the response taken at the scheduled 4 percent (N24, L04) | the pilot regulator log against the bus SCADA | 1 (filed: VO-1 3.1 names the regulator's output as feeder-head voltage) | reflex (J1) |
+| the volts each feeder can give from its far-end meters | the trial's 4.8 V scaled to every feeder (N01, L17) | the bellwether meters' hourly minimum voltages | 1 (filed: VO-1 2.3 and 3.1 name the hour and the meters) | reflex (J4) |
 
 ## Deep reasoning
 
 Task type: efficiency-savings-verification (Energy efficiency & demand response evaluation), which serves Experiment & Causal
-Domain test: every result is a conservation-voltage-reduction measurement and verification quantity: a randomised on/off trial's energy response per volt, each feeder's achievable voltage reduction against the service minimum, the change in its line losses, and its yearly energy saving at the substation against the equipment's cost; the distribution planner's own M&V work
-Swap: "fund voltage optimisation where the far end has room, the load is not thermostatic and the losses do not undo the saving" read with servers for feeders loses its meaning: there is no service voltage floor, no thermostat, no line loss growing with the square of current
-Where the weight sits: R5, each feeder's yearly saving at the substation, built from the trial (R2), each feeder's makeup through the year, its far end (R3) and its losses (R4); long because every feeder-quarter is rebuilt from records at four grains (quarter-hour meter sums, hourly far-end minima, the trial's daily records, the register), not clever
+Domain test: every result is a conservation-voltage-reduction measurement and verification quantity: a randomized on/off trial's energy response per volt, each feeder's own yearly response from what its load is made of, its achievable reduction against the service floor, the change in its line losses, and its yearly saving at the substation against the equipment's cost; the distribution planner's own M&V work
+Swap: "fund voltage optimization where the load is not thermostatic and the losses do not undo the saving" read with servers for feeders loses its meaning: there is no service voltage floor, no thermostat, no line loss growing with the square of current
+Where the weight sits: R4 and R7, each feeder's own yearly response and its yearly saving at the substation, built from the trial (R2), each feeder's makeup through the year, its far end (R3) and its losses (R6); long because every feeder-quarter is rebuilt from records at four grains (quarter-hour meter sums, hourly far-end minima, the trial's daily records, the register and the survey), not clever
 Layer 1: the MDM export's re-sent October block and its estimated intervals (meters not reporting), the bus SCADA's lost scans, the regulator log's mixed-case modes, the weather station's missing reports, the bellwether meters three to a feeder (the lowest each hour counts); each made by the system that exports the file, none deciding a feeder on its own
-Not one thing: the strongest single piece is the dose (J1): told it alone, the careful route still files ASH-219, ASH-222, CDB-116, CDB-219 wrong; each of the other four alone leaves two to five feeders wrong; one sentence rescues one result of six at most
-One-fact test: "read the trial on the volts its regulators actually took off" rescues R2 only (1 of 6); "the volts come from the far-end meters" rescues R3 only; the other three rescue none (effort.json hints)
-Not semantics: every field read right (the modes, the SCADA voltages, the bellwether minima, the survey codes, the register's ohms) still leaves the careful route funding 14 feeders, ASH-222, CDB-219, HOL-219 wrong, because each of the five is an estimate a reading cannot make
-Not rule application: VO-1 files what is compared (energy at the breaker over a year like 2026 against normal running, 115 V hour by hour, the 4.8 V cap, USD 48 and 9.4); no filed procedure measures the response, carries it to a feeder or an hour, sets a feeder's volts or prices its losses
+Not one thing: the strongest single piece is the makeup (J2) or the give-back (J3): told either alone, the careful route still files four feeders wrong; the losses alone leave five wrong; no single sentence rescues any of the nine results
+One-fact test: each of the three stumps' sentences rescues none of the nine results on its own (effort.json hints); the call needs all three
+Not semantics: every field read right (the modes, the SCADA voltages, the bellwether minima, the survey codes, the load research, the register's ohms) still leaves the careful route funding 17 feeders, ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong, because each of the three is an estimate a reading cannot make
+Not rule application: VO-1 files what is compared and with which records (energy at the breaker over a year like 2026 against normal running, 115 V hour by hour, the 4.8 V cap, USD 48 and 9.4, feeder-head and far-end voltage); no filed procedure carries the response to a feeder or an hour or prices its losses
 Estimand: VO-1 2.1 to 2.4 and 3.1 to 3.2; the trial protocol's design; the capital plan's costs; the prompt's per-feeder quantities
-No decoy: the annual report's 6.1 per cent is a correct system statistic (energy delivered less retail sales over energy delivered) and answers a different quantity; no document argues a feeder
+No decoy: the annual report's 6.1 percent is a correct system statistic (energy delivered less retail sales over energy delivered) and answers a different quantity; no document argues a feeder
 No replay: no result re-derives a published figure
-Pinned: the heating and water-heating draws by the annual report's load research; every rival in the golden family (a resistive home at 2.5 or 3.2 times a heat pump home's heating draw, the trial's weather terms without squares, the trial's control from every untested feeder) files the same 13 feeders, nearest 6.1 per cent from the line; the trial scale moved by twice its sampling error (4.6 per cent), the loss coefficient by 20 per cent and the far-end readings by 0.2 V each hold the call; the world's own 2027 funds the same feeders, every feeder 6.2 per cent or more from the line, the golden's savings within 4.5 per cent of the world's on average
-Run forecast: R2 lost to dismissed own evidence (the local-mode ON days seen and the assignment read anyway), R3 and R4 to a method shortcut (the trial's volts and the report's loss rate carried), R5 and R6 to the stack of shortcuts (each feeder like the trial average, spring carried flat); R1 earned
-Strategy label: OWN (a randomised voltage trial carried through instruments with different blind spots to feeders and hours it never covered)
-Depth level: 5 by the stump factorial: five necessary methods (dose, makeup, seasons with the give-back, headroom, losses), none sufficient, the single drops on four distinct wrong sets; the reflex route funds 14 feeders
-Lesson: a voltage response measured on a few feeders on their best-behaved days is a structure, not a number: thermostats give it back, the far end caps it, the lines take part of it, and each feeder carries it in its own proportions; no build on file teaches the set
+Pinned: the heating and water-heating draws by the annual report's load research; every rival in the golden family (a resistive home at 2.5 or 3.2 times a heat pump home's heating draw, the trial's weather terms without squares, the trial's control from every untested feeder, the trial's scale as the mean of the trial feeders' ratios, the loss fit with a no-load term) files the same 12 feeders, nearest 4.8 percent from the line; the trial scale moved by twice its sampling error (4.6 percent), the loss coefficient by 20 percent and the far-end readings by 0.2 V each hold the call; the world's own 2027 funds the same feeders, every feeder 8.0 percent or more from the line, the golden's savings within 0.6 percent of the world's on average
+Run forecast: R4 to R9 lost to a method shortcut (the trial feeders' average carried flat to every feeder and all year, the report's 6.1 percent added for losses); R1 to R3 earned (the export cleaned, the trial on the regulators' achieved volts and the far end's volts are what VO-1 and the files spell)
+Strategy label: OWN (a randomized voltage trial carried through instruments with different blind spots to feeders and hours it never covered)
+Depth level: 5 by the stump factorial: three necessary methods (makeup, give-back, losses), none sufficient, the single drops on three distinct wrong sets; the reflex route funds 17 feeders
+Lesson: a voltage response measured on a few feeders in two seasons is a structure, not a number: thermostats give it back, the lines take part of it, and each feeder carries it in its own proportions; no build on file teaches the set
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | each feeder's 2026 energy at the customer meters (MWh) | assembly and reconciliation | VO-1 3.1; the MDM export | within 2 MWh | method shortcut: the export summed with its re-sent block | - | Ask 1 |
-| R2 | the trial's change in energy per 1 per cent of voltage removed, averaged over the trial feeders | causal reasoning | VO-1 3.1 (feeder-head voltage); the trial protocol | the golden family, 0.64 to 0.69 | dismissed own evidence: the regulator log's local-mode ON days seen and the trial read on its assignment | independent: the trial records | Component 2 |
-| R3 | the average reduction in volts each feeder could be held at over the year | missingness and measurement | VO-1 2.3 | the golden family | method shortcut: the trial's 4.8 V carried to every feeder | independent: the far-end meters | Ask 3 |
-| R4 | the change in each feeder's own line losses (MWh a year) | decomposition and attribution | VO-1 2.2 (energy at the breaker) | the golden family, 10 per cent or 3 MWh | method shortcut: the annual report's 6.1 per cent added in proportion | R3 | Ask 4 |
-| R5 | each feeder's yearly energy saving at the substation (MWh) | forecasting | VO-1 2.2 to 2.4 | the golden family, 3 per cent or 8 MWh | method shortcut: the trial feeders' average carried flat at 4.8 V | R2, R3, R4 | Component 1 |
-| R6 | the feeders that receive VO in 2027 | synthesis | VO-1 2.1 | exact | method shortcut: the careful route funds 14 | R5 | Recommendation |
+| R1 | each feeder's 2026 energy at the customer meters (MWh) | assembly and reconciliation | VO-1 3.1; the MDM export | within 0.5 percent | method shortcut: the export summed with its re-sent block | - | Ask 1 |
+| R2 | the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders | causal reasoning | VO-1 3.1 (feeder-head voltage); the trial protocol | 0.66 to 0.72 | dismissed own evidence: the local-mode ON days seen and the trial read on its assignment (0.53) | independent: the trial records | Ask 2 |
+| R3 | the average reduction in volts each feeder could be held at over the year | missingness and measurement | VO-1 2.3 and 3.1 | the golden family, 2 percent or 0.05 V | method shortcut: the trial's 4.8 V carried to every feeder | independent: the far-end meters | Ask 3 |
+| R4 | each feeder's yearly change in customer energy per 1 percent of voltage removed | modeling | the prompt (yearly, at the customer meters) | the golden family, 3 percent or 0.01 | method shortcut: the trial feeders' average (0.70) carried to every feeder flat through the year | R2 | Component 2 |
+| R5 | each feeder's yearly energy saving at the customer meters (MWh) | forecasting | VO-1 2.2 and 2.3 | the golden family, 3 percent or 8 MWh | method shortcut: the trial average at each feeder's volts, flat through the year | R3, R4 | Ask 4 |
+| R6 | the rise in each feeder's own line losses (MWh a year) | decomposition and attribution | VO-1 2.2 (energy at the breaker) | the golden family, 10 percent or 3 MWh | method shortcut: the annual report's 6.1 percent added in proportion (a fall) | R3, R5 | Component 3 |
+| R7 | each feeder's yearly energy saving at the substation (MWh) | forecasting | VO-1 2.2 to 2.4 | the golden family, 3 percent or 8 MWh | method shortcut: R5's flat carry with 6.1 percent added | R5, R6 | Component 1 |
+| R8 | the feeders that receive VO in 2027 | synthesis | VO-1 2.1 | exact | method shortcut: the careful route funds 17 | R7 | Recommendation |
+| R9 | the 2027 program's total yearly saving at the substation (MWh) | synthesis | VO-1 2.1 and 2.2 | the golden family, 3 percent | method shortcut: the careful route's 17 feeders summed | R7, R8 | Ask 5 |
 
-Carry-forward: R1, R2 and R3 stand on their own records; R4 uses R3's volts; R5 falls with R2, R3 and R4; R6 with R5; a run with one feeder's figures wrong still earns the others' cells.
+Carry-forward: R1, R2 and R3 stand on their own records; R4 uses R2's trial scale; R5 falls with R3 and R4; R6 with R3 and R5's load change; R7 with R5 and R6; R8 and R9 with R7; a run with one feeder's figures wrong still earns the others' cells. R3 sits upstream of R5 to R9, but it is filed and earned by the careful column, so a slip there is a cleaning slip, not the price; R2 likewise feeds R4 to R9 through the trial's scale and is earned by the careful column (VO-1 3.1 names the regulator's output), so the price sits in R4, R6 and their sums.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| some ON days never ran (communications) and each ramped down over its first hour | constructed (every trial feeder, both windows, a share set by each regulator's link) | no: all eight trial feeders, 10 to 38 per cent of ON days | a targeted query (regulator mode and output against the bus) | modelling (the response on the achieved dose) | keep |
-| thermostatic load gives its energy back over a day | constructed (water heaters and resistive heat on every residential and rural feeder, all year) | no: every feeder with electric water heating or resistive heat | modelling (the load's makeup against the weather and the survey) | modelling | keep |
-| the far end caps the reduction, hour by hour | constructed (every feeder's voltage drop with its length, conductor and load) | no: every feeder; it binds on the long and heavy ones | a targeted query (the bellwether minima) | modelling (hour by hour against 115 V) | keep |
-| losses rise as constant-power loads draw more current at a lower voltage | constructed (current squared on every feeder) | no: every feeder, most on long rural lines | modelling (head meters against customer sums and the register) | modelling | keep |
+| some ON days never ran (communications) and each ramped down over its first hour | constructed (every trial feeder, both windows, a share set by each regulator's link) | no: all eight trial feeders | a targeted query (regulator mode and output against the bus) | one routine step, and VO-1 3.1 spells it | keep (earned, not priced) |
+| thermostatic load gives its energy back over a day | constructed (water heaters and resistive heat on every residential and rural feeder, all year) | no: every feeder with electric water heating or resistive heat | modeling (the load's makeup against the weather, the survey and the load research) | modeling | keep |
+| each feeder's load is its own mix of base, thermostatic, heat pump and cooling load | constructed (every feeder's holdings from its customers) | no: all 24 feeders | modeling (the weather regression and the survey) | modeling | keep |
+| losses rise as constant-power loads draw more current at a lower voltage | constructed (current squared on every feeder) | no: all 24 feeders, most on long rural lines | modeling (head meters against customer sums and the register) | modeling | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 each feeder's 2026 energy at the customer meters (MWh) | Right | Right | Right |
-| R2 the trial's change in energy per 1 per cent of voltage removed, averaged over the trial feeders | Missed | Missed | Right |
-| R3 the average reduction in volts each feeder could be held at over the year | Missed | Missed | Right |
-| R4 the change in each feeder's own line losses (MWh a year) | Missed | Missed | Right |
-| R5 each feeder's yearly energy saving at the substation (MWh) | Missed | Missed | Right |
-| R6 the feeders that receive voltage optimisation in 2027 | Missed | Partly | Right |
-| Roughly | 1 of 6 | 1.5 of 6 | 6 of 6 |
+| R1 each feeder's 2026 energy at the customer meters (MWh) | Partly | Right | Right |
+| R2 the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders | Missed | Right | Right |
+| R3 the average reduction in volts each feeder could be held at over the year | Partly | Right | Right |
+| R4 each feeder's yearly change in customer energy per 1 percent of voltage removed | Missed | Missed | Right |
+| R5 each feeder's yearly energy saving at the customer meters (MWh) | Missed | Missed | Right |
+| R6 the rise in each feeder's own line losses (MWh a year) | Missed | Missed | Right |
+| R7 each feeder's yearly energy saving at the substation (MWh) | Missed | Missed | Right |
+| R8 the feeders that receive VO in 2027 | Partly | Partly | Right |
+| R9 the 2027 program's total yearly saving at the substation (MWh) | Missed | Missed | Right |
+| Roughly | 1.5 of 9 | 3.5 of 9 | 9 of 9 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: the trial read on the volts its regulators actually took off, not on the day's assignment; rescues 1 of 6 results
-Pair estimate: 32.3 (measured by effort.py on generator/effort.json; the careful pass is the reflex route)
+Largest single hint: each untested feeder's response from its own makeup (or the give-back, or the losses); rescues 0 of 9 results
+Pair estimate: 47.0 (measured by effort.py on generator/effort.json; the careful pass is the reflex route)
 
 ## Stump factorial
 
-Reflex route: every move a run makes unprompted or the files spell out set right (the export cleaned, the trial regressed with weather and day-type terms against comparable feeders, energy at the breaker, 115 V and 4.8 V, USD 48 and 9.4), every stump hurried: the trial on its assignment, the trial feeders' average for the untested feeders, flat through the year, the trial's 4.8 V everywhere, the report's 6.1 per cent added; it funds 14 feeders (ASH-222, CDB-219, HOL-219 wrong).
+Reflex route: every move a run makes unprompted or the files spell out set right (the export cleaned, the trial regressed on the regulators' achieved volts with weather and day-type terms against comparable feeders, the far end's volts hour by hour, energy at the breaker, 115 V and 4.8 V, USD 48 and 9.4), every stump hurried: the trial feeders' average for the untested feeders, flat through the year, the report's 6.1 percent added; it funds 17 feeders (ASH-113, ASH-219, CDB-116, GBR-219, HOL-219 wrong).
 
 | Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
 |---|---|---|---|---|---|---|
-| J1 the trial read on the volts its regulators actually took off | stump | the day's assignment | N24, L04 | moves ASH-113, GBR-219, GBR-222, HOL-219 | leaves ASH-219, ASH-222, CDB-116, CDB-219 wrong; R2 rescued (1 of 6) | yes |
-| J2 each untested feeder's response from its own makeup | stump | the trial feeders' average | N25, L15 | moves CDB-219 | leaves ASH-222, HOL-219 wrong; none rescued | no |
-| J3 the response through the year, thermostatic load giving its energy back | stump | the spring and autumn figure flat | N12, L15 | moves ASH-222 | leaves ASH-222, CDB-219, HOL-219 wrong; none rescued | no |
-| J4 the volts from the far-end meters, hour by hour | stump | the trial's 4.8 V | N01, L17 | moves ASH-222 | leaves ASH-222, CDB-219, HOL-219 wrong; R3 rescued (1 of 6) | yes |
-| J5 the losses from current squared | stump | the report's 6.1 per cent in proportion | N21, L22 | moves ASH-222, CDB-219 | leaves ASH-222, CDB-219, ELC-116, GBR-219, HOL-219 wrong; none rescued | no |
+| J2 each untested feeder's response from its own makeup | stump | the trial feeders' average | N25, L15 | moves ASH-113, ASH-219, CDB-116, HOL-219 | leaves four wrong; none rescued | no |
+| J3 the response through the year, thermostatic load giving its energy back | stump | the spring and autumn figure flat | N12, L15 | moves ASH-113, CDB-116, GBR-219, HOL-219 | leaves four wrong; none rescued | no |
+| J5 the losses from current squared | stump | the report's 6.1 percent in proportion | N21, L22 | moves ASH-113, CDB-116 | leaves five wrong; none rescued | no |
+| J1 the trial on the regulators' achieved volts | reflex | - | VO-1 3.1 (filed) | same call | - | - |
+| J4 the far end's volts hour by hour | reflex | - | VO-1 2.3 and 3.1 (filed) | same call | - | - |
 | J6 the export cleaned and the far-end lowest reading taken | reflex | - | R04, R05 | same call | - | - |
 | J7 energy at the breaker, 115 V, 4.8 V, USD 48 and 9.4 | reflex | - | VO-1 (filed) | same call | - | - |
 
-Level: 5 (five necessary stumps, none sufficient, the single drops on four distinct wrong answers)
+Level: 5 (three necessary stumps, none sufficient, the single drops on three distinct wrong answers, the reflex route on a fourth)
 
 ## Data provenance
 
-Source: generated by the seeded generator in task7/generator from a simulated public power district: weather at the quarter-hour; each feeder's load built from its customers' appliance holdings (base load, electric water heating, resistive heat, heat pumps, air conditioning) driven by the weather and the calendar; each substation bus under its load tap changer, stepping 5/8 per cent when the transmission voltage drifts out of its band; the trial's pilot regulators with their communication failures and settling; every load answering the voltage at its own exponent, thermostatic load recovering with its thermostat; line losses with current squared; far-end voltages from each feeder's drop
-Behaves like the real thing: conservation voltage reduction factors of 0.5 to 0.9 per feeder, the give-back of resistive water heating and space heat, ANSI Range A binding at the far end of long rural lines, losses rising under CVR where constant-power load dominates, LTC operation a few times a day
-Genuine patterns: (1) winter and summer peaks with the weather, (2) commercial weekday shapes against residential evening peaks, (3) LTC taps clustering with the transmission voltage's daily swing, (4) far-end voltage falling with load and line length, (5) loss shares of 1 to 13 per cent, highest on the long rural lines
+Source: generated by the seeded generator in task7/generator from a simulated public power district: weather at the quarter-hour; each feeder's load built from its customers' appliance holdings (base load, electric water heating, resistive heat, heat pumps, air conditioning) driven by the weather and the calendar; each substation bus under its load tap changer, stepping 5/8 percent when the transmission voltage drifts out of its band; the trial's pilot regulators with their communication failures and settling; every load answering the voltage at its own exponent, thermostatic load recovering with its thermostat; line losses with current squared; far-end voltages from each feeder's drop; the annual report's statistics and load research from the same load
+Behaves like the real thing: conservation voltage reduction factors of 0.4 to 0.8 per feeder, the give-back of resistive water heating and space heat, ANSI Range A binding at the far end of long rural lines, losses rising under CVR where constant-power load dominates, LTC operation a few times a day
+Genuine patterns: (1) winter and summer peaks with the weather, (2) commercial weekday shapes against residential evening peaks, (3) LTC taps clustering with the transmission voltage's daily swing, (4) far-end voltage falling with load and line length, (5) loss shares rising with line length and load
 Problems by process: the MDM's re-sent block and estimated intervals; the SCADA historian's lost scans; the weather station's missing reports; the regulator log's case drift; three bellwethers a feeder
 License: not applicable (generated data)
 Used as is: not applicable (generated data)
-Breadth: 16 files, 24 feeders on six substations, 841,632 meter intervals, 630,720 bellwether hours, 10,595 tap operations, 2,297 survey households, 84 MB
+Breadth: 16 files, 24 feeders on six substations, 841,632 meter intervals, 630,720 bellwether hours, about 10,000 tap operations, about 2,300 survey households, 84 MB
 
 ## Template check
 
-Chain signature: assembly-reconciliation, causal-reasoning, missingness-measurement, decomposition-attribution, forecasting, synthesis
-Question form: which (which feeders receive VO); answered by a funded set with each feeder's figures
-Nearest build: task13 (grid reliability, Kotuku) shares the energy domain and position on the network as a supporting lesson; its decision is an outage remedy, its records relays and outage logs; task22 shares the utility setting and nothing in the chain
+Chain signature: assembly-reconciliation, causal-reasoning, missingness-measurement, modeling, forecasting, decomposition-attribution, forecasting, synthesis, synthesis
+Question form: where (where VO goes, feeder by feeder); answered by a funded set with each feeder's figures
+Nearest build: task13 (grid reliability) shares the energy domain; its decision is an outage remedy, its records relays and outage logs; task22 shares the utility setting and nothing in the chain
 Abstraction sentence: none writable against a build on file.
 
 ## Frontier check
 
-Precedents: R2 (N24 the response read at the trigger only; L04 the caveat flagged and the recorded outcome kept), R3 (N01 proportional scaling; L17 the average unit), R4 (N21 an unmeasured component spread in proportion; L22 the published formula), R5 (N25 each unit off its own or the pooled event; N12 a season's rate carried; L15 an assumed response), R6 (N25, L15)
-Shallow path checks: R2: the assignment reading passes a randomisation balance check and reproduces the ON-minus-OFF difference; only the regulator log against the bus SCADA (another record, quarter-hourly) shows the ON days that never ran; R3: the trial's 4.8 V is what the trial achieved on its feeders; only the far-end meters (hourly, another record) show where 115 V binds; R4: the report's 6.1 per cent reproduces the system's losses exactly; only the head meters against the customer sums (quarter-hourly) show losses rising under a lower voltage; R5: the trial average reproduces the trial feeders' mean; only each feeder's load against the weather and the survey shows its own makeup
-Assumption made false: "the response is a first-bill pulse at the scheduled dose" (N24), false because some ON days never ran, tested by the regulator log; "the same response everywhere and all year" (N25, N12), false because thermostatic load gives its energy back and its share moves by feeder and season, tested by the load and the survey; "losses scale with load" (N21), false because constant-power loads draw more current at a lower voltage, tested by the head meters
-Forcing: the line is each feeder's present value over its installed cost at 1.0; the golden family's nearest is 6.1 per cent from it; the drops land 3 to 25 per cent across; the trial scale moved by 4.6 per cent (twice its bootstrap error of 2.3 per cent), the loss coefficient by 20 per cent and the far-end readings by 0.2 V each leave the call; the world's own 2027 funds the same feeders
-Noun swap: nearest by skeleton.py check is read at register; the decision form (a funded set over a value-to-cost line) and the five lessons differ from every card on file
-Closed strategies: the call turns on latent_structure_estimation and instrument_noncompliance, neither on the closed page; the seasons step sits next to the closed seasons card (seasonal_shift_calibration): its fix is not a factor calibrated on a target season's record but a makeup estimated from the year's load and the survey, with thermostatic load giving its energy back; no closed lesson decides a feeder
+Precedents: R4 (N25 each unit off the pooled event; N12 a season's rate carried; L15 an assumed response), R5 (N25, L15), R6 (N21 an unmeasured component spread in proportion; L22 the published formula), R7 (N25, L15), R8 (N25, L15), R9 (N25, L15)
+Shallow path checks: R4 and R5: the trial average reproduces the trial feeders' measured mean and a hold-out of trial feeders confirms it; only each feeder's load against the weather and the survey (another record, quarter-hourly) shows its own makeup and its winter give-back; R6: the report's 6.1 percent reproduces the system's losses exactly; only the head meters against the customer sums (quarter-hourly) show losses rising under a lower voltage
+Assumption made false: "the same response everywhere and all year" (N25, N12), false because thermostatic load gives its energy back and its share moves by feeder and season, tested by the load, the survey and the load research; "losses scale with load" (N21), false because constant-power loads draw more current at a lower voltage, tested by the head meters
+Forcing: the line is each feeder's present value over its installed cost at 1.0; the golden family's nearest is 4.8 percent from it; the drops land on three distinct wrong sets; the trial scale moved by 4.6 percent (twice its bootstrap error), the loss coefficient by 20 percent and the far-end readings by 0.2 V each leave the call; the world's own 2027 funds the same feeders
+Noun swap: nearest by skeleton.py check is read at register; the decision form (a funded set over a value-to-cost line) and the three lessons differ from every card on file
+Closed strategies: the call turns on latent_structure_estimation, cancellation_of_offsetting_effects and nonlinear_functional_of_path, none on the closed page; the seasons step sits next to the closed seasons card (seasonal_shift_calibration): its fix is not a factor calibrated on a target season's record but a makeup estimated from the year's load and the survey, with thermostatic load giving its energy back; no closed lesson decides a feeder
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | a feeder's yearly saving | at the customer meters / at the substation breaker | at the breaker | VO-1 2.2 |
+| SF1 | a feeder's yearly saving | at the customer meters / at the substation breaker | both asked; the decision at the breaker | VO-1 2.2 |
 | SF2 | the comparison | 2026 as operated / 2026 as the feeder normally runs | normal running, the trial's ON days restored | VO-1 2.2 |
 | SF3 | the voltage floor | 114 V / 115 V | 115 V, hour by hour | VO-1 2.3 |
-| SF4 | the cap | 4 per cent of the feeder's own voltage / 4.8 V on the 120 V base | 4.8 V on the 120 V base | VO-1 2.3 |
+| SF4 | the cap | 4 percent of the feeder's own voltage / 4.8 V on the 120 V base | 4.8 V on the 120 V base | VO-1 2.3 |
 | SF5 | the value | one year / the equipment's life | USD 48 a MWh times 9.4 | VO-1 2.4 |
-| SF6 | voltage removed in the trial | the scheduled 4 per cent / the feeder-head reduction recorded | the recorded reduction | VO-1 3.1 (feeder-head voltage is the bus or the pilot regulator's output) |
+| SF6 | voltage removed in the trial | the scheduled 4 percent / the feeder-head reduction recorded | the recorded reduction | VO-1 3.1 (feeder-head voltage is the bus or the pilot regulator's output) |
 | SF7 | far-end voltage | one bellwether / the lowest of the feeder's bellwethers | the lowest each hour | VO-1 3.1 |
-| SF8 | heating split | by households / by heating draw | by draw, the load research's 12,100 and 4,350 kWh | the annual report's load research; the ratio at 2.5 or 3.2 is same call |
-| SF9 | trial weather terms | linear / with squares | with squares | same call (the average 0.65 against 0.67, inside the band) |
+| SF8 | heating split | by households / by heating draw | by draw, the load research's figures | the annual report's load research; the ratio at 2.5 or 3.2 is same call |
+| SF9 | trial weather terms | linear / with squares | with squares | same call |
 | SF10 | re-sent rows | summed / dropped | dropped | the repeated rows are exact copies of the same feeder and interval |
-| SF11 | a water heater's draw | an engineering figure / the load research | the load research's 3,200 kWh a year | the annual report's load research |
+| SF11 | a water heater's draw | an engineering figure / the load research | the load research's yearly use | the annual report's load research |
 | SF12 | the trial's control | same-class untested feeders / every untested feeder | same class | same call |
+| SF13 | the trial's scale | median / mean of the trial feeders' ratios | median | same call |
+| SF14 | the loss fit | through the origin / with a no-load term | through the origin | same call |
+| SF15 | the average reduction | over the year's hours / weighted by energy | over the year's hours | the prompt's "over the year" |
+| SF16 | the loss change | a fall / a rise | a rise, positive when losses grow | the prompt's "the rise in its own line losses" |
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 | population: the district's 24 feeders in the register |
-| 2 | unit of account: the feeder; MWh a year; volts on the 120 V base |
+| 1 | population: the District's 24 feeders in the register |
+| 2 | unit of account: the feeder; MWh a year; volts on the 120 V base; percent per percent |
 | 3 | attribution window: a year like 2026 (VO-1 2.2) |
 | 4 | as-of: records to 13 November 2026 (exports 2 to 16 November) |
 | 5 | version basis: VO-1 revision 2; the 2027 capital plan |
-| 6 | denominator: per 1 per cent of feeder-head voltage removed |
-| 7 | weighting: none across feeders; each decided on its own |
+| 6 | denominator: per 1 percent of feeder-head voltage removed |
+| 7 | weighting: none across feeders; each decided on its own; the trial average counts each trial feeder once |
 | 8 | window length: the trial's two windows; the year for the saving |
 | 9 | boundary inclusivity: equals or exceeds (VO-1 2.1) |
 | 10 | rounding path: none filed; precision in the answer blocks |
-| 11 | tie-break: none needed (nearest 6.1 per cent from the line) |
+| 11 | tie-break: none needed (nearest 4.8 percent from the line) |
 | 12 | maturity: the trial closed on 13 November |
 | 13 | order of operations: response, makeup, volts, losses, value |
 | 14 | row order: the register's |
 | 15 | duplicate resolution: re-sent rows dropped |
-| 16 | identity normalisation: feeder ids as the register |
+| 16 | identity normalization: feeder ids as the register |
 | 17 | netting: losses netted at the breaker |
 | 18 | dimensional units: kWh by quarter, MWh a year, volts on 120 V |
 | 19 | code semantics: regulator modes VO and LOCAL (any case) |
-| 20 | integerisation: none |
-| 21 | clause scope: VO-1 applies to the 2027 programme |
+| 20 | integerization: none |
+| 21 | clause scope: VO-1 applies to the 2027 program |
 | 22 | forward window contents: a year like 2026, the 2027 capital plan |
 
 ## Literal reader
 
-VO-1 2.1 to 2.4 executed word for word on the read-back pack, with the trial read on its recorded feeder-head reduction (3.1), gives the 13 feeders and each feeder's figures in the answer blocks.
+VO-1 2.1 to 2.4 executed word for word on the read-back pack, with the trial read on its recorded feeder-head reduction (3.1), gives the 12 feeders and each feeder's figures in the answer blocks.
 
 ## Prompt contract
 
-A voice rewrite may not drop or change: the question (which feeders get VO in the 2027 capital programme); the workbook and the short memo; the decision and the yearly saving at the substation in MWh for each feeder; each feeder's 2026 energy at the customer meters, average achievable reduction in volts over the year and change in its own line losses in MWh a year; the trial's change in energy per 1 per cent of voltage removed, averaged over its feeders. It must never add: a method, the trial's failures, thermostats, a file name, a role, a count of feeders, rounding.
+A voice rewrite may not drop or change: the question (where VO goes in the 2027 capital program, feeder by feeder); the workbook and the short memo; for each feeder its 2026 energy at the customer meters, its average achievable reduction in volts over the year, its yearly change in customer energy per 1 percent of voltage removed, its yearly saving at the customer meters and at the substation, and the rise in its own line losses; the program's total yearly saving at the substation; the trial's change in energy per 1 percent of voltage removed, averaged over its feeders. It must never add: a method, the trial's failures, thermostats, a file name, a role, a count of feeders, rounding.
 
 ## Tried and rejected
+
 
 - The note's decisive rung, per feeder the smaller of expected buyers and hosting slots: a stated connection standard, a per-feeder hosting map and a neighbourhood-to-feeder join whose keys line up hand it to any solver who reads them, its driver sits nearest task106's, and as labelled it BLOCKs on ban.pattern C (task119), ban.calibration pilot_log (task122) and test.same_driver_older (a signature spent in nine builds); kept as rung 2.
 - Resistance-to-heat-pump netting (each resistance conversion frees feeder headroom for oil or propane conversions): the connection standard either states a per-heat-pump assessment, which contradicts the netting and is a counter-pin, or states a net-change rule, which hands it over; a corpus of past approvals would refute the stop rung, which L1 forbids.
@@ -542,3 +552,5 @@ A voice rewrite may not drop or change: the question (which feeders get VO in th
 - 2026-11-13, architecture 11 after the holistic check: the Sequence count (11, USD 160,300) and the flip fee (USD 156) rested on three readings no file settled (whether the queue waits for a late charger: 7 if not; the ready-by for a session with none in the app: 14 or 16 at 15 or 30 minutes before the unplug; how hourly reads become quarter-hours: the golden's per-hour excess scaled by the square root of homes was filed nowhere). Closed by filing all three at their authority (the proposal's rule now says each charger waits for every one before it, the earlier plug-in first, both products on the quarter-hour; EV-4 4.1 the replay's frame and ready-by at the unplug time rounded down; DPS-7 revision 5's 2.2 and Table 2 peaking factors by nameplate, set from the 48 monitors and applied monitored or not, with Table 1's missing 50 kVA pole-mount row), not by keeping any open: the golden moved (own 53, Stagger 29.7, Sequence 13 and USD 196,700, flip USD 153) and the bands carry the rivals plus one marginal unit either side. The quarter-hour lift is no longer a judgment, so the depth line is level 4 on three judgments, not 5 on four. Re-judged once (Sequence replayed transformer by transformer to 13; Stagger sampled to 29.5 once the judge's own script stopped applying 0.95 twice and piling pre-July blocks onto 1 July): DETERMINISTIC, FIX_NOW, three answer-block sentences (the late charger counts ahead of every later one, energy over the recorded charge time, the clock six hours behind UTC), applied; the leak reader found no leak.
 - 2026-11-13, architecture 11 (Hollins Creek's EV Overnight default) retired: the platform run landed every graded result (task7/runs/arch11/run1.md); its retrofits were each tried and refused on paper: per-device Stagger persistence (contradicts the proposal's wording; filing it hands it over), offline fallback on shared nights (a literal replay catches it, or nothing pins it), Sequence on the uncorrected GIS (plus or minus 2 transformers), charging taper (moves every figure, never the default, one sentence rescues four results).
 - 2026-11-13, architecture 12 prototypes: per-feeder tap-event cells (too noisy alone: the commercial morning ramp and on-the-hour temperature steps contaminated them; the same-class peer control fixed the ramps, but heat pumps and resistive heat could not be told apart in the fit, so the compressor response was left to the trial's scale with every non-thermostatic load answering in proportion); an energy-weighted trial scale (one noisy trial feeder moved it 10 per cent; the median of the trial feeders' ratios holds it to 2.3 per cent).
+- 2026-11-13, after the DRAWN commit (f1493be), the review before stage 4: J1 (the trial on its achieved dose) and J4 (the far end's volts) were stumps on paper but VO-1 3.1 and 2.3 spell both, so a careful run executes them; moved to the reflex side, the careful pass rose to 55, and seed 3077's three remaining stumps dropped onto two wrong sets only; the world was re-searched on the new reflex definition (1,200 seeds) and seed 4009 kept (three distinct single-drop sets, every rival and perturbation 4.8 percent or more from the line, the golden within 0.6 percent of the world's savings); two asks added that the stumps decide (each feeder's yearly response, the saving at the customer meters) and the program total; R2 graded on the trial feeders' average, since a linear-weather trial fit moved single trial feeders by up to 40 percent while the average moved 4 percent.
+- 2026-11-13, the same review: the customer-meter export wrote MWh into a column headed kWh (each feeder's energy a thousand times small), fixed in the writer; the loss change was filed negative for a rise against the prompt's plain reading, now asked and filed as a rise; the annual report's customers and sales now come from the same load as the pack.

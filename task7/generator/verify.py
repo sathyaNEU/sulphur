@@ -53,10 +53,10 @@ def read_pack(target):
         if k in seen:
             continue
         seen.add(k)
-        O.ami[idx[r["feeder_id"]]][_q(r["interval_start_cst"])] = float(r["kwh"])
+        O.ami[idx[r["feeder_id"]]][_q(r["interval_start_cst"])] = float(r["kwh"]) / 1000.0
     O.head = {i: np.zeros(P.NQ) for i in O.headmetered}
     for r in _rows(target, "head"):
-        O.head[idx[r["feeder_id"]]][_q(r["interval_start_cst"])] = float(r["kwh_delivered"])
+        O.head[idx[r["feeder_id"]]][_q(r["interval_start_cst"])] = float(r["kwh_delivered"]) / 1000.0
     # bus SCADA, a lost scan filled from its neighbours
     O.vbus = {}
     by = {s: np.full(P.NQ, np.nan) for s in P.SUBSTATIONS}
@@ -118,4 +118,12 @@ def read_pack(target):
         c["ac"] += r["central_air"] == "Yes"
     O.survey = {i: dict(n=c["n"], sat_res_heat=c["res"] / c["n"], sat_hp=c["hp"] / c["n"], sat_ewh=c["ewh"] / c["n"],
                         sat_ac=c["ac"] / c["n"]) for i, c in cnt.items()}
+    # the annual report's load research (kWh a year per home with the end use)
+    import re, subprocess
+    txt = re.sub(r"\s+", " ", subprocess.run(["pdftotext", "-layout", os.path.join(target, D.FILES["ar"]), "-"],
+                                             capture_output=True, text=True).stdout)
+    def kwh(label):
+        return float(re.search(re.escape(label) + r" ([\d,]+) kWh", txt).group(1).replace(",", ""))
+    O.lr = dict(ewh=kwh("Electric water heater"), res_heat=kwh("Electric resistance space heating"),
+                hp=kwh("Heat pump space heating"), ac=kwh("Central air conditioning"))
     return O
