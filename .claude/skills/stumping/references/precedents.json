@@ -752,6 +752,70 @@
    "move": "an effect measured on a trial's participants assumed to transport to the new applicants",
    "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
    "quote": "Converting the fitted log-IV effects into gas-saving percentages assumes a conditional multiplicative effect model and transportability from pilot compliers to current applicants."
+  },
+  {
+   "id": "R38",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "a switching or operations log replayed on the network (old device names matched by normalised pole tags beyond the supplied crosswalk) so each period's membership is rebuilt, rather than today's structure carried back",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "It replays 124 switch operations rather than applying the current feeder labels to every historical month. Seven legacy operations required exact normalized pole-tag matching beyond the supplied crosswalk."
+  },
+  {
+   "id": "R39",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a sub-meter's missing hours rebuilt from the upstream meter's balance after the losses and own use between them, rather than carried at the sub-meter's own average",
+   "source": "task22/runs/arch1_run2.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "Missing active power was constrained by upstream delivery energy after station losses, station service and other measured feeders. The critical 249-hour CHL-3 gap reconstructed 714.5 MWh."
+  },
+  {
+   "id": "R40",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a physical loss computed interval by interval on the network (resistance times the squared flow of each segment, core and load losses by unit) at current loads and dated layout, the old study's percentage rejected",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "The model uses current loading and dated topology, not a uniform historical loss percentage."
+  },
+  {
+   "id": "R41",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "new connections' demand measured on energized analogs' interval records and validated by site hold-out, the applied or connected load rejected",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "The component model's site-holdout RMSE was 18.611859 kW, compared with 42.628525 kW for a pooled connected-load model."
+  },
+  {
+   "id": "R42",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "unmetered deemed loads recomputed from the asset inventory's input ratings, operating hours and dated conversions instead of the deemed billing quantity",
+   "source": "task22/runs/arch1_run2.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "Used 2,367 lamps, including 1,769 recorded LED conversions, rather than fixed billed lighting allowances."
+  },
+  {
+   "id": "N20",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "consumption between two actual meter reads spread evenly over the days it covers when it is carried to calendar months",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); run 2 the same",
+   "quote": "Calendar allocation is estimated where hourly meters are unavailable. Actual-to-actual consumption is allocated uniformly by day. (run 2: Non-interval consumption is uniformly calendarized between reads.)"
+  },
+  {
+   "id": "N21",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an unmeasured component (load no meter records) placed across the system in proportion to the metered quantities",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); run 2 names it as a material uncertainty",
+   "quote": "Unknown unmetered demand is allocated with observed service-load shares. (run 2: Unmeasured voltage, phase imbalance and the location of unmetered use remain material uncertainties.)"
+  },
+  {
+   "id": "N22",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "planned additions or works taken to start in full on their scheduled dates, with no slip or ramp",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12)",
+   "quote": "Connections start immediately on scheduled dates, with no assumed ramp-up, weather uplift, generic growth, or authorized theft recovery."
   }
  ]
 }

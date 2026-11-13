@@ -1,23 +1,23 @@
 {
   "task": "task22",
   "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-12",
+  "architecture": "v2",
+  "drawn": "2026-11-13",
   "slot_note": "",
   "domain": "energy-systems-utilities",
   "subdomain": "distribution-losses-energy-balance",
   "client_domain": "energy-systems-utilities",
-  "client_subdomain": "Energy Systems & Utilities (distribution losses and the feeder energy balance; closest client task types: load forecasting, grid reliability)",
-  "niche": "a city-owned electric utility's feeder energy balance: the non-technical loss each of fourteen 12.47 kV feeders carried in the twelve months to September 2026, for the 2027 revenue protection sweep of four feeders, and the lines' and transformers' own losses in 2027",
+  "client_subdomain": "Energy Systems & Utilities (gas distribution losses and the district gas balance; closest client task types: load forecasting, grid reliability)",
+  "niche": "a city-owned gas utility's district gas balance: each of fourteen pressure districts' leak loss in the twelve months to September 2026 against the 1.0 per cent line of the 2027 main replacement program, and which districts' non-compensating meters the 2027 changeout replaces",
   "objective": "etl",
-  "shape": "03",
-  "decision_type": "ranked_slate_under_cap",
+  "shape": "10",
+  "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Sweep CHL-2, APT-4, NTH-4 and CHL-3 in 2027 (non-technical loss 1,310, 1,122, 700 and 699 MWh in the twelve months to September 2026; NTH-3 next at 503); 2027 technical losses 13,455 MWh on the fourteen feeders",
-  "answer_source": "task22/submission.md block 1; generator/figures.json",
+  "answer": "",
+  "answer_source": "",
   "gap": [
     "objective",
-    "population"
+    "time"
   ],
   "pattern": [
     "none"
@@ -25,127 +25,226 @@
   "generators": [
     "G3",
     "G2",
-    "G13"
+    "G16"
   ],
-  "gate_g": "decomposition_attribution",
-  "calibration_form": "settled_transaction_ledger",
-  "stump_strategy": "decomposition_attribution",
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "parallel_run_overlap",
+  "stump_strategy": "grain_or_unit",
   "decisive_rule_filed": true,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_model",
+  "context_artifact": "filed_standard",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass conforms every meter and bill, ties each feeder's purchases to the delivery points and reproduces the utility's annual line loss exactly, but subtracts the 2019 loss study's technical losses scaled to 2026 energy, keeps today's GIS feeder for every customer and carries the feeder metering's missing hours at the feeder's own average, so the residual it ranks still holds the far-end loads' extra network losses, a lateral moved between feeders in April 2026 and the load one feeder carried for its neighbour through the January ice storm, and it sweeps the wrong four.",
-  "domain_test": "Every result is a quantity a distribution utility computes from its own metering: a feeder energy balance closed against the wholesale delivery points, technical losses as the square of each segment's current at the loads' positions on the network plus the transformers' core and load losses, and the 2027 losses from the planned connections at their measured demand; swap feeders for water zones and the losses stop following the square of the flow through each shared segment, so the deciding judgment has no counterpart.",
+  "analyst_test": "The careful but hurried pass conforms every read, corrector and account, rebuilds the regulator stations' missing days from the gate balance and reproduces the utility's reported loss exactly, but converts the non-compensating meters' winter volumes with the gas temperature the 2024-25 logger study ties to the airport's air temperature, which held while air and soil moved together and overstates the 2025-26 under-registration once deep snow kept the soil warm, spreads each read evenly over its days, and books every account whose winter use collapsed (new snowbirds with it) as diversion or none of them, so it designates and funds different districts.",
+  "domain_test": "Every result is a quantity a gas distribution utility's measurement engineers compute: each pressure district's sendout at its regulator stations against what its customers' meters took at base conditions, the under-registration of meters that do not correct for gas temperature from the temperature the gas actually has in buried services, cycle reads carried to calendar months on the district's own daily sendout, diversion told from seasonal absence, and the leak loss left; swap gas districts for electric feeders and the meter that registers volume at its own temperature, the soil's hold on that temperature under snow and the base conditions stop meaning anything.",
   "layer2_family": "field_method",
-  "layer2_pattern": "own:a-feeder-energy-balance-whose-technical-term-is-the-square-of-each-segment-current-at-the-loads-positions",
+  "layer2_pattern": "own:a-district-gas-balance-whose-largest-correction-is-the-gas-temperature-at-meters-that-register-actual-volume",
   "layer1": [
-    "feeder breaker metering hourly from the substation SCADA historian with communication gaps, frozen values and daylight-saving duplicates",
-    "wholesale delivery point meters hourly in hour-ending local time",
-    "billing reads on twenty AMR cycles with estimated reads and their true-ups, and AMI meters read at month ends",
-    "a GIS export that holds today's connectivity and an OMS switching log whose device names follow the pre-2024 scheme for older switches",
-    "streetlight and area-light inventory with LED conversions billed at the old lamp's deemed kWh until the account is updated",
-    "net-metered customers with delivered and received registers",
-    "large power customers on hourly interval meters",
-    "transformer register with installs and changeouts"
+    "regulator station correctors daily with communication gaps, a stuck temperature transmitter and a corrector in fixed-factor mode for weeks",
+    "AMR cycle reads on twenty business-day cycles with estimated reads, register rollovers, meter exchanges with final and initial reads, and an extract re-run that repeats a month",
+    "accounts opened and closed on premises with move-in reads, vacant premises and owner billing",
+    "a meter register whose temperature-compensation flag and location are filled in for most meters and blank or stale for some",
+    "the airport's hourly weather with missing hours and a sensor swap",
+    "the soil station's daily file with frozen-probe days",
+    "commercial correctors' daily summaries with uncorrected and corrected volume, average gas temperature and pressure, and fixed-factor days",
+    "damage reports with estimated gas lost",
+    "work orders with planned and completed dates"
   ],
-  "stakeholder_role": "the electric utility's engineering manager, preparing the 2027 revenue protection plan and the 2027 power cost budget's loss figure for the utility director",
-  "role_family": "operations_director",
+  "stakeholder_role": "the city gas utility's engineering manager, preparing the 2027 LAUF reduction program's district designations and meter changeouts for the Utilities Commission",
+  "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "cis_meter_reads_2023-08-01_2026-11-01.csv",
-    "rows": 364982,
-    "entity": "one meter read on one service point (AMI month-end or AMR cycle read, actual or estimated), with the kWh delivered and received since the previous read",
-    "grain": "service point x read",
+    "file": "amr_meter_reads_2023-08_2026-10.csv",
+    "rows": 0,
+    "entity": "one meter read on one premise (actual or estimated), with the index and the cubic feet registered since the previous read",
+    "grain": "meter x read",
     "source": "synthetic"
   },
-  "forum": "line_manager_or_team",
+  "forum": "board_of_directors",
   "forcing_event": "budget_or_appropriation",
   "org_family": "local_government",
   "world": {
-    "geography": "north-east Oklahoma, United States (a fictional city's municipal electric utility)",
+    "geography": "west-central Minnesota, United States (a fictional city's municipal gas utility)",
     "currency": "USD",
-    "org_type": "municipal electric utility (public power, a city department) buying all its power from a joint action agency",
+    "org_type": "municipal gas utility (a city department governed by an appointed Utilities Commission) buying gas at one city gate",
     "invented_names": [
-      "City of Delmont",
-      "Delmont Power and Light",
-      "Bluestem Municipal Power Agency"
+      "City of Brandvold",
+      "Brandvold Public Utilities",
+      "Brandvold Utilities Commission"
     ],
     "people": [
-      "Dustin Jones",
-      "Heidi Hester"
+      "Marc Gilbert",
+      "Jocelyn Murray"
     ]
   },
   "deliverables": [
-    "dpl_feeder_energy_balance_2023-10_2026-09.xlsx",
-    "revenue_protection_2027_memo.pdf"
+    "bpu_district_gas_balance_2023-10_2026-09.xlsx",
+    "lauf_program_2027_commission.pptx"
   ],
   "opening_move": "question-first",
-  "question_form": "where",
-  "driver": "The quantity wanted for each unit is the residual of a balance the physics must close, and the largest term subtracted before it is a network loss that grows with the square of the flow through each shared segment, so it depends on where along the network each unit's load now sits rather than on a percentage set at an older load and layout; the units' membership changed over the window by dated operations, and their own input record is missing in the hours those operations were busiest.",
-  "driver_concrete": "Each feeder's non-technical loss is what is left of the energy that entered it after its customers' metered use, the city's unmetered lights and its technical losses; the technical losses are the square of each segment's current at the 2026 positions of its loads (far-end licensed grows and a cold store raise them well beyond the 2019 study's percentage), the customers on each feeder change with the switching log (a lateral moved in April 2026, the January ice storm's emergency tie), and the breaker metering's missing hours are filled from the delivery point balance, not at the feeder's average.",
-  "stump": "The careful but hurried pass ranks the feeders on what is left after the 2019 study's technical percentages at 2026 energy, today's GIS feeder for every customer and the metering gaps carried at each feeder's own average, so it sweeps the feeder whose excess is the far-end loads' network losses (APT-3) and the donor of the April 2026 lateral (NTH-3) in place of NTH-4 and CHL-3, the feeder that carried its neighbour through the January ice storm with its own metering down.",
-  "answer_shape": "bridge",
-  "weight": "assembly",
+  "question_form": "which",
+  "driver": "Each unit's wanted quantity is what is left of a balance whose largest subtracted term was registered by instruments at their own physical state rather than the standard basis, over periods that are not the calendar's; the incumbent converts that term with a proxy that moved with the true driver only in the years it was checked on, so in the target year, when the two came apart, it overstates the correction; the residual also needs each period re-cut on the unit's own daily profile, unrecorded draws told from seasonal absence by the season only one of them touches, and the forward work carried at the pace past work actually ran.",
+  "driver_concrete": "Each district's leak loss is its regulator stations' gas less what its customers took at base conditions, the utility's own use, reported damage losses and diversion; the non-compensating meters register gas at the temperature it has in the buried service, which follows the soil, and the 2024-25 logger study's tie to the airport's air temperature held only while air and soil moved together, so in the deep-snow winter of 2025-26 it overstates the under-registration; the cycle reads are carried to months on the district's own daily sendout, diversion is told from new snowbirds by the summer base load, and the 2027 changeouts finish at the pace the 2024 and 2025 programs did.",
+  "stump": "The careful but hurried pass converts the non-compensating meters with the logger study's air-temperature tie, spreads each read evenly over its days and books new snowbirds as diversion (or no diversion at all), so it leaves the districts whose losses are leaks under the 1.0 per cent line, designates the districts whose excess is diversion and timing, and funds changeouts where most meters sit indoors.",
+  "answer_shape": "reconciled-table",
+  "weight": "measurement",
   "chain_signature": [
     "assembly-reconciliation",
-    "assembly-reconciliation",
     "missingness-measurement",
-    "modeling",
+    "missingness-measurement",
+    "exploration-triage",
     "decomposition-attribution",
-    "decomposition-attribution",
-    "modeling",
-    "forecasting",
-    "synthesis"
+    "synthesis",
+    "synthesis",
+    "forecasting"
   ],
-  "results": "R1 each feeder's energy in over the twelve months to September 2026 with the metering gaps filled from the delivery point balance; R2 each feeder's customers and metered use month by month with the switching log replayed on the network; R3 the unmetered lights' and own use's real consumption against what is billed; R4 each feeder's technical losses at the 2026 load positions; R5 each feeder's non-technical loss; R6 the rise in line loss from the twelve months to September 2024 bridged to technical, non-technical, lights and billing timing; R7 the 2027 large loads' demand as a share of their applied kW, measured on the comparable connections already in service; R8 each feeder's 2027 technical losses; R9 the four feeders the sweep covers",
-  "one_fact_test": "the switching-log sentence rescues R2 alone; the delivery-point, positions and measured-demand sentences one result each: 1 of 9 at most (effort.json hints, computed on the careful pass)",
-  "strategy_label": "OWN (no client strategy carries a feeder energy balance; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
+  "results": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services (soil and the commercial correctors), indoor meters at basement temperature; R4 the accounts that took gas without authorization, told from new snowbirds by the summer base load, and their volume; R5 each district's leak loss in the twelve months to September 2026 as a share of its gas in; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the meters the 2027 plan schedules that are changed before the 2027-28 heating season at the pace past changeouts ran",
+  "one_fact_test": "the gas-temperature sentence rescues R3 and R7; the daily-shape, summer-base-load and past-pace sentences one result each: 2 of 8 at most (to be computed on the careful pass)",
+  "strategy_label": "OWN (no client strategy carries a gas balance; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
   "doctrine": "results-chain-2026-11-09",
   "depth_level": 5,
   "skeleton": {
-    "decision_form": "ranked_list_under_cap",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
     "lessons": [
-      "nonlinear_functional_of_path",
-      "time_varying_membership",
-      "conservation_residual_attribution",
-      "position_on_network_effect",
-      "impute_by_resembling_units"
+      "exposure_basis_decoupled",
+      "record_algorithm_inversion",
+      "unmetered_component",
+      "scheduled_completion_slippage"
     ],
     "mechanisms": [
-      "primary_i2r_losses_on_feeder_segments",
-      "switching_log_replayed_on_feeder_graph",
-      "delivery_point_balance_fills_feeder_metering_gaps",
-      "far_end_load_growth_raises_losses",
-      "deemed_light_kwh_after_led_conversion",
-      "licensed_grow_demand_factor"
+      "non_compensating_meter_registers_gas_at_service_temperature",
+      "snow_cover_holds_soil_temperature_above_air",
+      "cycle_reads_spread_on_district_daily_sendout",
+      "student_rentals_empty_over_winter_break",
+      "bypassed_meter_takes_summer_base_load_too",
+      "snowbird_winter_absence",
+      "changeout_pace_slower_where_meters_are_indoors"
     ],
     "detection": [
-      "layout_or_physics",
-      "flow_step_at_dated_operation",
-      "conservation_residual_sign",
       "second_source_at_other_grain",
-      "naive_ignores_what_it_should_depend_on"
+      "record_time_against_event_time",
+      "unchanged_signal_diverges",
+      "back_test_on_held_out_period"
     ],
     "moves": [
-      "compute_on_joint_path",
-      "allocate_by_network_position",
-      "rebuild_membership_from_operations_log",
-      "weighted_balance_reconciliation",
-      "impute_by_model_at_own_drivers"
+      "rate_on_driver_exposure",
+      "invert_recording_algorithm",
+      "impute_by_model_at_own_drivers",
+      "empirical_completion_from_past_works",
+      "weighted_balance_reconciliation"
     ],
     "file_roles": [
       "primary_record",
       "second_grain_source",
       "reference_register",
-      "crosswalk_or_migration_map",
       "incumbent_figure_or_method",
-      "schedule_or_plan",
       "governing_standard",
+      "schedule_or_plan",
+      "exogenous_long_record",
       "unused_distractor"
     ]
   },
-  "notes": "Drawn 2026-11-12 after the client's closed strategies page: every lesson in the chain is off it (skeleton.py closed). The house task type distribution-losses-energy-balance was added to vocab.json in the SKILLS commit of the same day so energy serves ETL.",
-  "registered": "2026-11-12T14:48:55Z"
+  "notes": "Architecture 2, re-rooted 2026-11-12 after architecture 1 (Delmont Power and Light's feeder energy balance) was landed by both platform runs (runs/arch1_triage.md). New world, dataset and shell (a city gas utility in Minnesota; which districts; a reconciled table; a workbook and a Word memo). The deciding lessons come from what the arch 1 runs named and waved through (N20 uniform calendarization, N22 scheduled starts) and from an exposure basis that decoupled in the target winter; arch 1's lessons (nonlinear path, network position, time-varying membership) are not reused, and the balance residual is a supporting frame only.",
+  "lineage": [
+    {
+      "architecture": "v1",
+      "fate": "spent 2026-11-12 on its first platform round: both runs (pasted by the author) landed the call (CHL-2, APT-4, NTH-4, CHL-3) and all but one or two graded figures each; every judgment the effort test priced as lost (the switching log replayed with pole-tag matching, the breaker gaps rebuilt from the delivery point, hourly I2R on the GIS at current loads, the new loads' demand from interval analogs, the lights from the inventory) was made unprompted; runs/arch1_triage.md",
+      "driver": "The quantity wanted for each unit is the residual of a balance the physics must close, and the largest term subtracted before it is a network loss that grows with the square of the flow through each shared segment, so it depends on where along the network each unit's load now sits rather than on a percentage set at an older load and layout; the units' membership changed over the window by dated operations, and their own input record is missing in the hours those operations were busiest.",
+      "stump": "The careful but hurried pass ranks the feeders on what is left after the 2019 study's technical percentages at 2026 energy, today's GIS feeder for every customer and the metering gaps carried at each feeder's own average, so it sweeps the feeder whose excess is the far-end loads' network losses (APT-3) and the donor of the April 2026 lateral (NTH-3) in place of NTH-4 and CHL-3, the feeder that carried its neighbour through the January ice storm with its own metering down.",
+      "answer": "Sweep CHL-2, APT-4, NTH-4 and CHL-3 in 2027 (non-technical loss 1,310, 1,122, 700 and 699 MWh in the twelve months to September 2026; NTH-3 next at 503); 2027 technical losses 13,455 MWh on the fourteen feeders",
+      "decision_type": "ranked_slate_under_cap",
+      "question_form": "where",
+      "answer_shape": "bridge",
+      "weight": "assembly",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "assembly-reconciliation",
+        "missingness-measurement",
+        "modeling",
+        "decomposition-attribution",
+        "decomposition-attribution",
+        "modeling",
+        "forecasting",
+        "synthesis"
+      ],
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "decomposition_attribution",
+      "skeleton": {
+        "decision_form": "ranked_list_under_cap",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "nonlinear_functional_of_path",
+          "time_varying_membership",
+          "conservation_residual_attribution",
+          "position_on_network_effect",
+          "impute_by_resembling_units"
+        ],
+        "mechanisms": [
+          "primary_i2r_losses_on_feeder_segments",
+          "switching_log_replayed_on_feeder_graph",
+          "delivery_point_balance_fills_feeder_metering_gaps",
+          "far_end_load_growth_raises_losses",
+          "deemed_light_kwh_after_led_conversion",
+          "licensed_grow_demand_factor"
+        ],
+        "detection": [
+          "layout_or_physics",
+          "flow_step_at_dated_operation",
+          "conservation_residual_sign",
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on"
+        ],
+        "moves": [
+          "compute_on_joint_path",
+          "allocate_by_network_position",
+          "rebuild_membership_from_operations_log",
+          "weighted_balance_reconciliation",
+          "impute_by_model_at_own_drivers"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "crosswalk_or_migration_map",
+          "incumbent_figure_or_method",
+          "schedule_or_plan",
+          "governing_standard",
+          "unused_distractor"
+        ]
+      },
+      "shell": null,
+      "world": {
+        "geography": "north-east Oklahoma, United States (a fictional city's municipal electric utility)",
+        "currency": "USD",
+        "org_type": "municipal electric utility (public power, a city department) buying all its power from a joint action agency",
+        "invented_names": [
+          "City of Delmont",
+          "Delmont Power and Light",
+          "Bluestem Municipal Power Agency"
+        ],
+        "people": [
+          "Dustin Jones",
+          "Heidi Hester"
+        ]
+      }
+    }
+  ],
+  "lineage_shells": [],
+  "architecture_spent": false,
+  "differentiation": {
+    "task5": "task5 v2 read each dwelling's occupancy from its own meter's departure from its typical day; this build converts registered gas volumes to base conditions with the gas temperature buried services actually carry (not the air temperature the incumbent tied it to), re-cuts cycle reads on each district's daily sendout and decides a residual against a filed per-district line"
+  },
+  "registered": "2026-11-13T02:35:57Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "nothing",
+    "deliverable set": "pdf+xlsx"
+  }
 }

@@ -1,27 +1,110 @@
 {
  "task": "task22",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "Sweep CHL-2, APT-4, NTH-4 and CHL-3 in 2027 (non-technical loss 1,310, 1,122, 700 and 699 MWh in the twelve months to September 2026, NTH-3 next at 503); 2027 technical losses 13,455 MWh on the fourteen feeders",
- "chain": "R1 each feeder's energy in, metering gaps filled from the delivery point balance; R2 each feeder's customers and metered use with the switching log replayed on the network; R3 the unmetered lights' and own use's real consumption against what is billed; R4 each feeder's technical losses at the 2026 load positions; R5 each feeder's non-technical loss; R6 the line loss rise bridged; R7 the 2027 large loads' demand as a share of applied kW; R8 each feeder's 2027 technical losses; R9 the four feeders swept",
- "architecture": 1,
+ "call": "",
+ "chain": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services; R4 the accounts that took gas without authorization, told from new snowbirds; R5 each district's leak loss in the twelve months to September 2026; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the scheduled 2027 changeouts done before the 2027-28 heating season",
+ "architecture": 2,
  "loops": 0,
- "precut": {"exit": 0, "date": "2026-11-12"},
- "leak": {"leak_py": "REVIEW (2026-11-12, --asof 2026-11-05: 7 REVIEW lines ruled harmless, no LEAK)", "reader": "two isolated reads: the first found the AMR meter split naming three of the four and the 2026 application numbering (both fixed in the generator); the second, on the final cut, no leak and no realism defect"},
- "duplicate_check": {"heart": "WARN (overuse.forum, repeat.deliverables), 2026-11-12", "nearest": "task13 v4"},
- "judge": {"verdict": "DETERMINISTIC", "disposition": "APPROVE", "gate_h": "pass (one thing none; best hint one correction of three; first pass not cold, R7 re-priced Right gives pair 34.6)", "report": "task22/determinism_check_report.md"},
- "paper_pair": 20.8,
- "effort": {"quick": 13.9, "careful": 20.8, "thorough": 100.0, "largest_hint": "The GIS shows today's network; the switching log moved customers between feeders (rescues R2, 1 of 9)"},
- "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null, "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
- "returned": [],
- "resume": "",
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "WARN at register (strategy risk, chain near task8 v19, question form, two house WARNs), 2026-11-13",
+  "nearest": "task4 v13 (skeleton severity none)"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 1,
+    "recorded": "2026-11-12",
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "first_wrong_step": {
+     "run1": "R4 near miss: APT-3's technical losses low (other demand by service-load shares), APT-3's residual 655.6 outside its band",
+     "run2": "R6 near miss: the bridge's non-technical part 0.008 outside its band"
+    },
+    "triage": "REDESIGN, architecture spent: both runs landed the call (CHL-2, APT-4, NTH-4, CHL-3) and all but one or two figures; every priced judgment made unprompted (runs/arch1_triage.md); scores not pasted",
+    "arch1": {
+     "call": "Sweep CHL-2, APT-4, NTH-4 and CHL-3 in 2027 (non-technical loss 1,310, 1,122, 700 and 699 MWh in the twelve months to September 2026, NTH-3 next at 503); 2027 technical losses 13,455 MWh on the fourteen feeders",
+     "chain": "R1 each feeder's energy in, metering gaps filled from the delivery point balance; R2 each feeder's customers and metered use with the switching log replayed on the network; R3 the unmetered lights' and own use's real consumption against what is billed; R4 each feeder's technical losses at the 2026 load positions; R5 each feeder's non-technical loss; R6 the line loss rise bridged; R7 the 2027 large loads' demand as a share of applied kW; R8 each feeder's 2027 technical losses; R9 the four feeders swept",
+     "precut": {
+      "exit": 0,
+      "date": "2026-11-12"
+     },
+     "leak": {
+      "leak_py": "REVIEW (2026-11-12, --asof 2026-11-05: 7 REVIEW lines ruled harmless, no LEAK)",
+      "reader": "two isolated reads: the first found the AMR meter split naming three of the four and the 2026 application numbering (both fixed in the generator); the second, on the final cut, no leak and no realism defect"
+     },
+     "duplicate_check": {
+      "heart": "WARN (overuse.forum, repeat.deliverables), 2026-11-12",
+      "nearest": "task13 v4"
+     },
+     "judge": {
+      "verdict": "DETERMINISTIC",
+      "disposition": "APPROVE",
+      "gate_h": "pass (one thing none; best hint one correction of three; first pass not cold, R7 re-priced Right gives pair 34.6)",
+      "report": "task22/determinism_check_report.md"
+     },
+     "paper_pair": 20.8,
+     "effort": {
+      "quick": 13.9,
+      "careful": 20.8,
+      "thorough": 100.0,
+      "largest_hint": "The GIS shows today's network; the switching log moved customers between feeders (rescues R2, 1 of 9)"
+     }
+    }
+   }
+  ]
+ },
+ "returned": [
+  {
+   "date": "2026-11-12",
+   "source": "triage",
+   "repair": "design",
+   "commit": ""
+  }
+ ],
+ "resume": "stage 2: prototype the district parameters in a scratch script (every district 12 per cent or more from both lines under the golden, each shortcut flipping its own districts), then the results chain, effort test, frontier check, fork and closure tables and prompt; precut.py exit 0",
  "approved": null,
  "submitted": null,
- "portal": {"status": "", "date": "", "note": ""}
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
 }
