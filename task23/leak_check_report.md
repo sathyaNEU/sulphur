@@ -4,13 +4,13 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: campaigns, oxidation, carried, pressure, record, golden, missed, flights, emission, chambers, collected, efficiency, options, design, closed, calibration, chamber, forecast, second, hurried, nearest, potential, spring, tickets, recirculation
+Stump terms swept: campaigns, oxidation, carried, pressure, record, golden, missed, flights, emission, chambers, collected, closed, efficiency, chamber, options, design, calibration, forecast, second, hurried, nearest, potential, spring, tickets, recirculation
 
 ## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `council_agenda_lfg_capital_2027.pdf`: carries 14 of 17 distinctive words of the committed call: "Fund package D (USD 2.38 million): it is the cheapest package that keeps 2027 at or under the Council's 5,100-ton limit,"
 
 ## 4 design-note vocabulary (REVIEW 3)
-- **REVIEW** `council_agenda_lfg_capital_2027.pdf`: 7 of 25 stump-paragraph terms appear (campaigns, carried, record, emission, options, design); read whether the document names the move
+- **REVIEW** `council_agenda_lfg_capital_2027.pdf`: 7 of 25 stump-paragraph terms appear (campaigns, carried, record, emission, closed, options); read whether the document names the move
 - **REVIEW** `ghg_annual_report_RY2025.pdf`: 5 of 25 stump-paragraph terms appear (oxidation, record, emission, collected, efficiency); read whether the document names the move
 - **REVIEW** `tessaline_whole_site_methane_2025_2026.pdf`: 4 of 25 stump-paragraph terms appear (campaigns, carried, emission, second); read whether the document names the move
 
@@ -22,6 +22,9 @@ Stump terms swept: campaigns, oxidation, carried, pressure, record, golden, miss
 - **REVIEW** `surface_emission_monitoring_quarterly.csv`: columns a generator names and an organisation does not: flag
 - **REVIEW** `tessaline_campaign_results.csv`: columns a generator names and an organisation does not: air_temp_c
 - **REVIEW** `wellfield_monitoring_2019-2026.csv`: columns a generator names and an organisation does not: temp_f
+
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -45,8 +48,6 @@ Stump terms swept: campaigns, oxidation, carried, pressure, record, golden, miss
 ## 6 ranking artifacts (clean)
 
 ## 7 hidden content (clean)
-
-## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read

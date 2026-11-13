@@ -328,6 +328,7 @@ Closed strategies: the call turns on cancellation_of_offsetting_effects (one tre
 | SF16 | methane in metric tons | metric tons of methane; short tons; CO2 equivalent | metric tons of methane | the prompt, the resolution and the report |
 | SF17 | the weather of R5's year | normal weather as for the call; 2025's | normals | same band: 2025's soil temperatures give 17.5 per cent against 17.1 |
 | SF18 | the waste in short tons | the tickets' net tons (short tons); metric tonnes | short tons | the prompt's "short tons" and the tickets' net_tons column |
+| SF19 | cell 5's cover area in 2027 | its 24.2-acre footprint (the Cells sheet); the 2025 report's 14.6 acres filled | the footprint | the options paper ("across its whole footprint since July 13, 2026") and the lifts in the daily log and the fill plan; the 14.6 acres would give 12.8 per cent and the same call |
 
 ## Closure table
 
@@ -384,8 +385,8 @@ attached file's name, a role, or a count the data hold.
   measurement, investigation loops, forecasting, modeling, decomposition and attribution, synthesis), each pinned by a
   filed sentence (Resolution 2025-41's definition, limit and least-cost rule; the options paper's works, dates, design
   capture and cell 5's recirculation date; the report's equation) or the prompt (the units, the windows, the bridge's
-  order) and the data, with the bands the answer blocks state; precut 0 FAIL; checks.py 112 of 112; verify.py 27 of 27
-  on its own path; two rebuilds byte-identical; figures_check 122 of 122.
+  order) and the data, with the bands the answer blocks state; precut 0 FAIL; checks.py 113 of 113; verify.py 27 of 27
+  on its own path; two rebuilds byte-identical; figures_check 123 of 123.
 - Hidden factor record against the cut data: every chamber breathes with the barometer (cell 3's geomembrane cap
   too); the fair-weather rule lowers the 2026 campaigns (0.792) and the drone flights (0.736) as well as the 2025
   campaigns (0.711); 26 of cell 4's 58 wells flooded, 8 pumped; recirculation in both open cells; the share oxidized
@@ -407,6 +408,18 @@ attached file's name, a role, or a count the data hold.
   single item that makes the task routine; every filed sentence it quoted executes to the golden's convention; its
   package C point is the package's scope (harmless) and its realism notes were fixed in the generator (drone times,
   blower outages); leak_check_report.md carries the read and the rulings.
+- Stage 4 determinism judge: pass 1 DETERMINISTIC on the call with two figures not pinned (its pressure fit pooled
+  cell 3's chamber, then simulated at a third of the soil covers' response, with a half-life lag: 0.059 per hPa and
+  2025 at 4,250 to 4,300 t; the oxidation form unstated) and the ticket step misworded, all fixed in the generator and
+  the blocks; pass 2 DETERMINISTIC on the rebuilt cut (0.0997 per hPa, the campaigns' factor 0.711 and 2025 at 4,922 t
+  reproduced by the stated specification; lags 8 to 24 hours and a standard-time campaign clock all inside the band;
+  Q10 1.891 reproduced), with one solution-side finding, cell 5's cover area, closed in Step 6 and checks.py SF19.
+- Gate WARNs answered: precut's R3 upstream of four results (R4, R5, R7 and R8 each need work of their own: the
+  largest hint rescues R3 alone), its two routine factors (the shift to cell 5 and the scale-house materials, a reflex
+  step and R1's assembly, neither the call) and nearest chains (Template check); the voice gate's deliverable quota
+  (the Council's medium); the leak sweep's REVIEW lines (ruled above); heart's house lesson: task7 v12, drawn after
+  this build (its DRAWN commit follows task23's), took cancellation_of_offsetting_effects as well, so the count rose
+  after the draw; this build keeps its precedence by draw order.
 - Containers: audit_containers exit 0 on the pack, the golden and both zips.
 
 ## Tried and rejected

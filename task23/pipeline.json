@@ -1,15 +1,15 @@
 {
  "task": "task23",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "subdomain": "emissions-inventory",
  "objective": "comparative-explanation",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "fund package D (USD 2.38 million: horizontal collectors in cell 5 and pumps in cell 4's flooded wells from May 2027, 18 vertical wells with pumps in cell 5 from June): 2027 at 4,479 t against the Council's 5,100 t limit, package C at 5,538 t over it; Fernhallow emitted 4,923 t in 2025 against the report's 2,166 t and the survey's 3,532 t",
- "chain": "R1 cell 5's municipal waste through October 2026 (574,197 short tons); R2 the actual 2025 emission from the campaigns carried to every hour through the chambers' pressure response (4,923 t); R3 cell 4's generation change from 2022 read on the dry and pumped wells (+85.4 per cent); R4 cell 5's 2027 generation on the recirculated decay (3,769 t); R5 cell 5's cover oxidation at its own 2027 flux (17.1 per cent); R6 the 2025 bridge (collection +3,238, oxidation -473, the survey's unsampled hours +1,391); R7 2027 by package (6,962; 6,403; 5,538; 4,479; 4,087); R8 package D",
+ "call": "fund package D (USD 2.38 million: horizontal collectors in cell 5 and pumps in cell 4's flooded wells from May 2027, 18 vertical wells with pumps in cell 5 from June): 2027 at 4,495 t against the Council's 5,100 t limit, package C at 5,549 t over it; Fernhallow emitted 4,924 t in 2025 against the report's 2,149 t and the survey's 3,537 t",
+ "chain": "R1 cell 5's municipal waste through October 2026 (574,197 short tons); R2 the actual 2025 emission from the campaigns carried to every hour through the chambers' pressure response (4,924 t); R3 cell 4's generation change from 2022 read on the dry and pumped wells (+85.1 per cent); R4 cell 5's 2027 generation on the recirculated decay (3,752 t); R5 cell 5's cover oxidation at its own 2027 flux (17.1 per cent); R6 the 2025 bridge (collection +3,280, oxidation -467, the survey's unsampled hours +1,387); R7 2027 by package (6,942; 6,385; 5,549; 4,495; 4,095); R8 package D",
  "architecture": 1,
  "loops": 0,
  "precut": {
@@ -21,14 +21,14 @@
   "reader": "isolated reader on the cut pack: no instruction, no ranking or helper file, no answer figure, no single item that makes the task routine; package C's condition ruled scope (harmless); realism notes fixed (drone times, blower outages); read and rulings in leak_check_report.md"
  },
  "duplicate_check": {
-  "heart": "PASS",
+  "heart": "PASS with WARN: the deciding lesson is also on task9 v3 and on task7 v12, drawn after this build; precedence by draw order",
   "nearest": "skeleton severity none against everything on file (nearest task1 v5); nearest driver task6 v1 at 0.05; guard check PASS on the registered card",
   "surface": "one promoted pair, task22 vs task23 on the shared G3 label (by build number); adjudicated: task22 is a gas distribution district balance (meter temperature, diversion, leak loss; ETL, reconciled table), task23 a landfill methane balance (barometric pumping, flooded wells, saturating oxidation; comparative, bridge); no shared step, data structure or answer shape"
  },
  "judge": {
-  "verdict": "pass 1: DETERMINISTIC on the call, two figures not pinned (FIX_NOW)",
-  "disposition": "pass 1 findings fixed: ticket wording; the pressure fit made robust to pooling the chambers (cell 3 response near the soil covers) and its specification stated; the oxidation form and cell 5's area stated; rivals added in checks.py; pass 2 running on the rebuilt cut",
-  "report": "determinism_check_report.md (pass 1); determinism_check_report_pass2.md (pass 2, pending)"
+  "verdict": "DETERMINISTIC (pass 2, on the rebuilt cut)",
+  "disposition": "pass 1 DETERMINISTIC on the call with two figures not pinned, fixed; pass 2 one solution-side finding (cell 5's cover area) closed in Step 6 and checks.py SF19, no figure, prompt or pack moved",
+  "report": "determinism_check_report.md (pass 1); determinism_check_report_pass2.md (pass 2)"
  },
  "paper_pair": 20.8,
  "effort": {
@@ -51,12 +51,17 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4: read determinism_check_report_pass2.md (the judge's second pass on the cut of 2026-11-13, target.zip sha256 8624caeb2ccc78de); fix any finding in the generator, rebuild (python3 task23/generator/make.py), re-run python3 .claude/skills/build-pipeline/gates.py task23 --full; then stage 5: python3 task23/generator/cut.py, audit_containers.py task23 exit 0, pipeline READY, commit READY (task23) on main with target.zip, golden.zip and golden/ added with git add -f, pull --rebase and push",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "",
   "date": "",
   "note": ""
+ },
+ "prompt_rewritten": false,
+ "zips": {
+  "target.zip": "8624caeb2ccc78de",
+  "golden.zip": "7230be79cd557f64"
  }
 }

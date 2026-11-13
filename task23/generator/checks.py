@@ -68,6 +68,7 @@ def main():
     Gf, Cf = RS.figures(G), RS.figures(C)
     files = sorted(os.listdir(target))
     lim = P.LIMIT_T
+    plan_text = pdf_text(os.path.join(target, P.FILES["plan"]))
 
     # ------------------------------------------------------------------------ R1: the field's raw material ships
     ok("R1 every scale ticket since January 2021 ships", len(F["tickets"]) > 200000, len(F["tickets"]))
@@ -253,6 +254,15 @@ def main():
     ok("R7 the judge's reading (all three chambers, a 16-hour half-life not chosen by fit) stays inside every band and "
        "on package %s (2025 at %.0f t, C %.0f t)" % (Rh["R8"], Rh["R2"], Rh["R7"]["C"]), not outh and Rh["R8"] == G["R8"],
        outh)
+    F6 = dict(F)
+    cl6 = F["cells"].copy()
+    cl6.loc[cl6["cell"] == 5, "footprint_acres"] = figs["_extra"]["cell5_acres_2025_report"]
+    F6["cells"] = cl6
+    R6x = A.run(F6, {}, {})
+    ok("SF19 ruled out by the options paper (leachate across cell 5's whole footprint) and the lifts: the 2025 report's "
+       "%.1f acres for cell 5 in 2027 gives an oxidized share of %.1f per cent and still files package %s"
+       % (figs["_extra"]["cell5_acres_2025_report"], R6x["R5"], R6x["R8"]),
+       R6x["R8"] == G["R8"] and has(plan_text, "across its whole footprint"))
     for how in ("dp12", "dp24"):
         Bx = A.baro_fit(F, how, cache["wx"])
         Rx = A.run(F, dict(baro=how), cache)

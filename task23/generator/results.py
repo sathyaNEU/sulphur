@@ -354,6 +354,7 @@ def extra(F, Rg, Rc, fam, sc, pt, jud, cache):
     x["plots"] = int(F["oxplots"]["plot_id"].nunique())
     x["ce4_zones"] = {k: round(v, 2) for k, v in Rg["ce4_zones"].items()}
     x["cell5_acres"] = float(F["cells"].set_index("cell").loc[5, "footprint_acres"])
+    x["cell5_acres_2025_report"] = round(P.RULE_AREAS_2025["none"] / 4046.86, 1)
     x["bands"] = {"R1_pct": 1, "R2_pct": 10, "R3_points": 8, "R4_pct": 12, "R5_points": 4, "R6_collection_pct": 15,
                   "R6_oxidation_t": 250, "R6_survey_gap_t": round(GAP_HALF_T), "R7_pct": 7}
     x["ce4_cap_pct"] = round(100 * P.CE4_CAP)

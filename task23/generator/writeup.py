@@ -152,10 +152,13 @@ def write(figs, E, path):
       "oxidized is V/(V + J), J the flux reaching the cover from below (the plot's surface flux over one less its "
       "share) and V = V15 x Q10^((T - 15)/10) at the plot's soil temperature, V15 for each cover and one Q10 (%s) for "
       "all: daily cover takes about %s g per square meter a day at 15 C. Cell 5's flux is its uncollected methane over "
-      "its 24.2 acres (the Cells sheet). At the flux cell 5 will carry in 2027 and normal "
+      "its %s-acre footprint (the Cells sheet): by 2027 its lifts and leachate lines cover the whole footprint (the "
+      "options paper; the daily log's fourth lift and the fill plan's fifth), while the 2025 report's %s acres is the "
+      "area filled in 2025. At the flux cell 5 will carry in 2027 and normal "
       "soil temperatures it oxidizes **%s per cent**; the study's daily-cover mean (%s per cent) was measured at a small "
       "fraction of that flux."
-      % (x["plots"], _f(x["sat_q10"], 2), _f(x["sat_v15_g_m2_d"]["active"], 1), _f(figs["R5_cell5_oxidized_share_2027_pct"], 1),
+      % (x["plots"], _f(x["sat_q10"], 2), _f(x["sat_v15_g_m2_d"]["active"], 1), _f(x["cell5_acres"], 1),
+         _f(x["cell5_acres_2025_report"], 1), _f(figs["R5_cell5_oxidized_share_2027_pct"], 1),
          _f(x["study_mean_pct"]["active"], 1)))
     A("7. Bridged 2025 in the order of the report's equation: actual generation in place of the rule's collection "
       "efficiency adds **%s tons**, each cover's oxidation at its own monthly flux in place of 10 per cent changes it "
