@@ -622,7 +622,7 @@
       "deliverable set": "csv+docx"
     }
   ],
-  "notes": "architecture 12 (2026-11-13): a new world on the author's word after architecture 11 was landed; three deciding methods the data force (each feeder's makeup, the thermostatic give-back through the year, the losses from current squared), none on the client's closed page (the seasons step sits next to seasonal_shift_calibration; its fix is a makeup estimated from the year's load and the survey with a give-back, not a factor calibrated on a target season); the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes; level 5 by the stump factorial. Calibration 'other': the trial calibrates the response's scale and the head-metered feeders the loss coefficient, which no listed organ names. Axes redrawn at stage 3 against task23 and task24 (filed earlier the same morning): weight, calibration, context artifact, forcing event (launch_or_rollout: the 2027 VO rollout; budget_or_appropriation and vote_or_meeting repeat task23 and task20)",
+  "notes": "architecture 12 (2026-11-13): a new world on the author's word after architecture 11 was landed; three deciding methods the data force (each feeder's makeup, the thermostatic give-back through the year, the losses from current squared), none on the client's closed page (the seasons step sits next to seasonal_shift_calibration; its fix is a makeup estimated from the year's load and the survey with a give-back, not a factor calibrated on a target season); the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes; level 5 by the stump factorial. Calibration 'other': the trial calibrates the response's scale and the head-metered feeders the loss coefficient, which no listed organ names. Axes redrawn at stage 3 against task23 and task24 (filed earlier the same morning): weight, calibration, context artifact, forcing event (launch_or_rollout: the 2027 VO rollout; budget_or_appropriation and vote_or_meeting repeat task23 and task20) RETIRED 2026-11-13: architecture 12 returned by the platform's holistic audit (every priced stump a run reflex, the transport unpinned); no Energy x Experiment redesign kept three stumps on the screen; replaced by task26.",
   "answer_shape": "flagged-set",
   "weight": "hard-to-measure",
   "chain_signature": [
@@ -637,7 +637,7 @@
     "synthesis"
   ],
   "results": "R1 each feeder's 2026 energy at the customer meters; R2 the trial's change in energy per 1 percent of voltage removed, averaged over the trial feeders; R3 each feeder's average achievable reduction in volts over the year; R4 each feeder's yearly change in customer energy per 1 percent of voltage removed; R5 its yearly saving at the customer meters; R6 the rise in its own line losses; R7 its yearly saving at the substation; R8 the feeders funded; R9 the program's total yearly saving at the substation",
-  "architecture_spent": false,
+  "architecture_spent": true,
   "skeleton": {
     "decision_form": "set_over_threshold",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
