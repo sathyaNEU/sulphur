@@ -144,7 +144,9 @@
   "position_on_network_effect": "the same load or fault has a different effect by where it sits on a radial or graph structure (voltage drop and losses grow with distance, delay with hops), so an equivalent factor calibrated on an old spatial mix misstates a new one",
   "record_algorithm_inversion": "the stored record is the output of a recording algorithm (exception reporting, estimation and editing, a rolling register, a billing cycle), so the algorithm is inverted before anything is measured; never decided by reading one field",
   "coincidental_agreement_joint_frequencies": "distinct units agree on every identifying field by chance far more often than the product of the fields' own frequencies implies, because the fields are dependent and concentrated where the rule runs (first names by birth cohort and community, surnames by community, dates heaped on conventions), so a match rule's false-merge rate is read from the joint distribution of the population it runs on, never from independent per-field rates",
-  "lot_size_cycle_stock": "a stock is held because supply arrives in lots the process sizes (a brew, a production run, a trunk load), so it scales with the lot and the number of items rather than with throughput"
+  "lot_size_cycle_stock": "a stock is held because supply arrives in lots the process sizes (a brew, a production run, a trunk load), so it scales with the lot and the number of items rather than with throughput",
+  "response_before_the_trigger": "an announced change is answered between its announcement and the date it bites (cancellations at the bill after the notice), so a response read only at the effective date misses it and the window is read from the announcement",
+  "intensive_margin_response": "a price change moves how much the staying units use, not only whether they stay, so under a cost priced per unit of use the stayers' consumption response is measured, not assumed unchanged"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
