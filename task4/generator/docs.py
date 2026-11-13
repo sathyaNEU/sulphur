@@ -1,16 +1,16 @@
-"""The documents: Havørn Regional's reliability programme and spares standard, the October 2026 reliability report and
-a pool provider's 2027 offer, each a Word document exported to PDF by LibreOffice Writer through the house writer. The
-report's figures are read off the shipped records by the same cleaning the analysis uses, so it reproduces from the
-pack by its own stated method."""
+"""The documents: Wrenfold's keg fleet standard, the Northern Keg Exchange's monthly statements, the keg maker's
+quotation and the Maplestead listing agreement. Each office document is a Word document; the PDFs are exported by
+LibreOffice Writer through the house writer. Documents describe the business and its terms; none describes a method."""
 import datetime as dt
 import os
 import sys
+from collections import defaultdict
 
-import numpy as np
-import pandas as pd
+from docx import Document
+from docx.shared import Pt
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import KeepTogether, PageBreak, Paragraph, Spacer, Table, TableStyle
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
@@ -18,7 +18,8 @@ sys.path.insert(0, WRITERS)
 import officepdf as O  # noqa: E402
 import params as P  # noqa: E402
 
-CET = dt.timezone(dt.timedelta(hours=1))
+GMT = dt.timezone(dt.timedelta(hours=0))
+BST = dt.timezone(dt.timedelta(hours=1))
 MM = 2.835
 
 
@@ -41,165 +42,157 @@ def _grid(rows, widths, cell):
 
 STANDARD = [
     ("1. Scope", [
-        "This standard sets how Havørn Regional's continuing airworthiness organisation reports the reliability of the "
-        "repairable components it pools (rotables) and how the rotable pool is planned. It applies to every pooled "
-        "part number on the DHC-8-315 fleet."]),
+        "This standard covers the planning of Wrenfold's returnable keg fleet: the 50, 30 and 20 litre stainless "
+        "kegs the brewery fills at Brighouse and delivers from its four depots. Casks are planned under the cask "
+        "standard (issue 2) and are not covered here."]),
     ("2. Terms", [
-        "2.1 An unscheduled removal is a removal of a unit for a suspected or confirmed defect, recorded in the "
-        "maintenance system with reason UNSCH (U before 6 May 2024), whatever the shop or repairer later finds. A "
-        "removal for scheduled maintenance or a modification (SCHED, formerly S) and a removal for fitment to another "
-        "aircraft (CONV, formerly C) are not unscheduled removals.",
-        "2.2 A unit found serviceable by the shop or the repairer is recorded as no fault found.",
-        "2.3 A part number's pool is its units beyond those installed on the fleet: serviceable units in Bodø main "
-        "stores or a station kit, unserviceable units at the Bodø component shop or a repairer, and new units on "
-        "order. The pool's size is its spares.",
-        "2.4 A unit's turnaround runs from its removal to its return to serviceable stock."]),
-    ("3. Reliability reporting", [
-        "3.1 The reliability report is issued monthly for the twelve months to the end of the report month.",
-        "3.2 A part number's mean time between unscheduled removals is the flight hours its installed positions flew "
-        "in the twelve months divided by its unscheduled removals in the same twelve months.",
-        "3.3 The watch list holds every serial with three or more unscheduled removals in the twelve months to the "
-        "end of the report month."]),
-    ("4. Spares planning", [
-        "4.1 Each part number's spares for the coming calendar year are set in the December plan, for the units in "
-        "service at the plan date under the flying programme issued for that year.",
-        "4.2 A part number's fill rate over a year is the share of its unscheduled removals in that year for which a "
-        "serviceable unit was held in the pool, in Bodø main stores or a station kit, when the unit was removed.",
-        "4.3 A part number holds the fewest spares that give an expected fill rate over the year of at least 95 per "
-        "cent, with the year's unscheduled removals at their expected rate: the rate the record from January 2023 to "
-        "the end of the latest reliability report's twelve months shows for units like those in service, every "
-        "unscheduled removal counted.",
-        "4.4 The plan states each part number's expected unscheduled removals in the year with an 80 per cent range: "
-        "the 10th to the 90th percentile of the year's removals, carrying both the year's chance variation and the "
-        "uncertainty in the expected rate itself.",
-        "4.5 The Bodø component shop's annual plan sets the days each technician is rostered and the bench hours a "
-        "technician on duty gives to rotable repair once the contracted third-party work is done."]),
-    ("5. Withdrawal of serials", [
-        "5.1 A serial is withdrawn and replaced by a new unit when its position would see at least 1.5 more "
-        "unscheduled removals over a year with the serial kept in service than with a new unit fitted in its place.",
-        "5.2 The removals a withdrawal saves are counted for the position over the year: while a serial is away for "
-        "repair its position carries another unit."]),
-    ("6. Responsibilities", [
-        "6.1 The reliability engineer issues the monthly report and the watch list. The rotables and stores "
-        "controller keeps the pool records. The technical director approves the December plan and every withdrawal."]),
+        "2.1 The fleet of a size is Wrenfold's own kegs of that size that exist and can still be filled: at Brighouse "
+        "(washer yard, cold store, keg repair cage), at a depot or on a depot's lorry, at customers' premises, or "
+        "with the Northern Keg Exchange on their way back to Brighouse. A condemned keg, and a keg that will not "
+        "come back, is not part of the fleet.",
+        "2.2 A keg is lost in the trade when it went out full to a customer and will not come back. The kegs lost in "
+        "a period are the net fall in the fleet over the period, other than kegs bought and kegs condemned in it.",
+        "2.3 Kegs in circulation are the fleet's kegs other than clean empties standing in the Brighouse washer yard.",
+        "2.4 Normal weather is, for each calendar day, the average daily maximum temperature at the Leeds Weather "
+        "Centre over 2016 to 2025.",
+        "2.5 The season is the 21 weeks from Monday 3 May to Sunday 26 September 2027. A size's busiest week is the "
+        "season week, Monday to Sunday, with the most kegs of that size in circulation on average over its seven "
+        "days."]),
+    ("3. The fleet target", [
+        "3.1 The fleet of each size in its busiest week of the season, at normal weather and with every plan the "
+        "company has filed for the year, is to cover the kegs of that size in circulation that week and a working "
+        "float of clean empties at the washer equal to two days of that size's fills at its average daily rate over "
+        "the season (fills run Monday to Saturday).",
+        "3.2 The year's keg order is placed with the maker by the third Friday of December and sized so the fleet "
+        "meets 3.1. Kegs bought join the fleet when they arrive at Brighouse."]),
+    ("4. Records", [
+        "4.1 The depot gate counters count kegs through each depot's gate by size: full kegs loaded to the delivery "
+        "lorries, and empty kegs unloaded from them.",
+        "4.2 The washer log records each shift's kegs presented at the washer and what became of them.",
+        "4.3 The keg register lists every keg bought, by serial, with its status.",
+        "4.4 The stocktake on 30 November counts every keg on Wrenfold's sites by size and condition.",
+        "4.5 Sales representatives count Wrenfold's kegs on site at a sample of customers each quarter.",
+        "4.6 Kegs bought since March 2024, and every 20 litre keg, carry an RFID tag read when filled, when delivered "
+        "and when presented at the washer."]),
 ]
 
 
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, continuing airworthiness" % P.ORG, small),
-         Paragraph("Reliability programme and rotable spares standard", h1),
-         Paragraph("CAME part 1.10, issue 6, approved by the technical director 2 September 2026. Replaces issue 5 "
-                   "(March 2024). Owner: the reliability engineer.", small), Spacer(1, 4)]
+    s = [Paragraph(P.ORG + ", supply chain", small), Paragraph("Keg fleet standard", h1),
+         Paragraph("Issue 3, approved by the head of supply chain on 6 October 2026. Replaces issue 2 (January 2024). "
+                   "Owner: the keg fleet manager.", small), Spacer(1, 4)]
     for head, paras in STANDARD:
         s.append(Paragraph(head, h2))
         for t in paras:
             s.append(Paragraph(t, body))
     s.append(Paragraph("Revisions", h2))
     s.append(_grid([["Issue", "Date", "Change"],
-                    ["4", "January 2023", "monthly reporting; the watch list at three removals in twelve months"],
-                    ["5", "March 2024", "2.1 reason codes after the maintenance system upgrade; 2.3 station kits"],
-                    ["6", "September 2026", "4.2 to 4.5 restated for the December plan; 5.1 and 5.2 added"]],
+                    ["1", "March 2021", "first issue"],
+                    ["2", "January 2024", "20 litre kegs added"],
+                    ["3", "October 2026", "2.4 and 2.5 restated for the 2027 order; 4.6 RFID reads"]],
                    [16, 30, 126], cell))
-    O.build(path, s, "Reliability programme and rotable spares standard, issue 6", P.PEOPLE["reliability"],
-            "%s continuing airworthiness" % P.ORG, "%s. Reliability programme and rotable spares standard, issue 6." % P.ORG,
-            dt.datetime(2026, 9, 2, 10, 14, tzinfo=dt.timezone(dt.timedelta(hours=2))),
-            dt.datetime(2026, 9, 2, 10, 41, tzinfo=dt.timezone(dt.timedelta(hours=2))), producer="LibreOffice 7.6")
+    O.build(path, s, "Keg fleet standard, issue 3", P.PEOPLE["fleet"], P.ORG + " supply chain",
+            "%s. Keg fleet standard, issue 3." % P.ORG,
+            dt.datetime(2026, 10, 6, 9, 41, tzinfo=BST), dt.datetime(2026, 10, 6, 10, 3, tzinfo=BST),
+            producer="LibreOffice 7.6")
 
 
-def report_figures(F):
-    """The October report's figures, read off the shipped records: each part number's twelve months of unscheduled
-    removals, its installed positions' flight hours, the mean time between them, the share found serviceable, the 2027
-    outlook at that rate on the programme's planned flight hours, and the watch list."""
-    import analysis as A
-    R = F["removals"]
-    U = R[(R["reason"] == "UNSCH") & (R["date"] >= A.Y26[0]) & (R["date"] <= A.Y26[1])]
-    D = F["day"]
-    fh12 = float(D[(D["date"] >= A.Y26[0]) & (D["date"] <= A.Y26[1])]["fh"].sum())
-    cyc12 = int(D[(D["date"] >= A.Y26[0]) & (D["date"] <= A.Y26[1])]["cyc"].sum())
-    X = A.expo_2027(F)
-    fh27 = float(X["fh"].sum())
-    rows = []
-    for p in P.PARTS:
-        k = p["k"]
-        u = U[U["k"] == k]
-        n = len(u)
-        pos_fh = fh12 * p["pos"]
-        found = u[u["finding"] != ""]
-        nff = float((found["finding"] == "NFF").mean() * 100) if len(found) else 0.0
-        rows.append({"k": k, "pn": p["pn"], "name": p["name"], "qpa": p["pos"], "pool": P.POOL[k], "n12": n,
-                     "mtbur": pos_fh / n if n else float("nan"), "nff": nff,
-                     "proj": n * fh27 / fh12 if fh12 else 0.0})
-    L = A.listed(F)
-    wl = []
-    for sn, r in L.iterrows():
-        u = U[U["serial_off"] == sn]
-        wl.append({"serial": sn, "k": r["k"], "pn": P.PART[r["k"]]["pn"], "name": P.PART[r["k"]]["name"],
-                   "n12": int(r["n"]), "last": u["date"].max().date(), "aircraft": ", ".join(sorted(u["aircraft"].unique()))})
+def exchange(path, w):
+    body, h1, h2, small, cell = _styles()
+    ev = w.ev
+    handed = defaultdict(lambda: defaultdict(int))
+    for d, pile in ev["exchange_out"]:
+        for s, n in pile.items():
+            handed[(d.year, d.month)][s] += n
+    back = defaultdict(lambda: defaultdict(int))
+    for d, kid, s in ev["back_exchange"]:
+        back[(d.year, d.month)][s] += 1
+    held = defaultdict(lambda: defaultdict(int))
     months = []
-    for m in pd.period_range("2025-11", "2026-10", freq="M"):
-        g = D[D["date"].dt.to_period("M") == m]
-        months.append((m.strftime("%b %Y"), float(g["fh"].sum()), int(g["cyc"].sum())))
-    return {"rows": rows, "watch": wl, "fh12": fh12, "cyc12": cyc12, "fh27": fh27, "months": months}
+    y, m = 2024, 1
+    while (y, m) <= (2026, 11):
+        months.append((y, m))
+        m += 1
+        if m == 13:
+            y, m = y + 1, 1
+    ends = {}
+    for (y, m) in months:
+        nx = dt.date(y + (m == 12), m % 12 + 1, 1)
+        ends[(y, m)] = nx - dt.timedelta(days=1)
+    for d, kid, bk in ev["exch_taken"]:
+        k = w.kegs[kid]
+        arrive = d + dt.timedelta(days=12)
+        for ym, e in ends.items():
+            if arrive <= e < bk:
+                held[ym][k.size] += 1
+    s = []
+    for i, ym in enumerate(months):
+        e = ends[ym]
+        part = [Paragraph(P.EXCHANGE + " (members' keg clearing)", small),
+                Paragraph("Member statement: %s, %s" % (P.ORG, e.strftime("%B %Y")), h2),
+                Paragraph("Member no. NKE-0147. Statement period 1 to %d %s." % (e.day, e.strftime("%B %Y")), small)]
+        rows = [["", "50 l", "30 l", "20 l"],
+                ["Kegs handed in by the member (other members' kegs)"] + [str(handed[ym][s_]) for s_ in P.SIZES],
+                ["Member's own kegs returned to the member"] + [str(back[ym][s_]) for s_ in P.SIZES],
+                ["Member's own kegs held at month end, awaiting return"] + [str(held[ym][s_]) for s_ in P.SIZES]]
+        part.append(_grid(rows, [92, 26, 26, 26], cell))
+        fee = 0.9 * sum(handed[ym].values()) + 1.4 * sum(back[ym].values())
+        part.append(Paragraph("Clearing fees for the period: GBP %.2f (handling GBP 0.90 a keg handed in, GBP 1.40 a "
+                              "keg returned). Payable 30 days from statement." % fee, small))
+        part.append(Spacer(1, 10))
+        s.append(KeepTogether(part))
+        if i % 3 == 2 and i != len(months) - 1:
+            s.append(PageBreak())
+    O.build(path, s, "Member statements January 2024 to November 2026", "NKE member services", P.EXCHANGE,
+            "%s, statements for member NKE-0147" % P.EXCHANGE,
+            dt.datetime(2026, 12, 1, 8, 12, tzinfo=GMT), dt.datetime(2026, 12, 1, 8, 12, tzinfo=GMT),
+            producer="LibreOffice 7.6")
 
 
-def report(path, F):
+def quote(path):
     body, h1, h2, small, cell = _styles()
-    R = report_figures(F)
-    s = [Paragraph("%s, continuing airworthiness" % P.ORG, small),
-         Paragraph("Reliability report, October 2026", h1),
-         Paragraph("Rotables on the DHC-8-315 fleet, twelve months to 31 October 2026. Issued 9 November 2026 by the "
-                   "reliability engineer.", small), Spacer(1, 4),
-         Paragraph("1. Fleet utilisation", h2),
-         Paragraph("The fleet flew %s flight hours and %s cycles in the twelve months." %
-                   ("{:,.0f}".format(R["fh12"]), "{:,}".format(R["cyc12"])), body)]
-    s.append(_grid([["Month", "Flight hours", "Cycles"]] +
-                   [[m, "{:,.0f}".format(fh), "{:,}".format(c)] for m, fh, c in R["months"]], [30, 30, 30], cell))
-    s.append(Paragraph("2. Rotable reliability", h2))
-    s.append(Paragraph("Mean time between unscheduled removals is the installed positions' flight hours over the "
-                       "unscheduled removals (standard 3.2). No fault found is the share of the removals the shop or "
-                       "repairer has reported on.", body))
-    rows = [["Part number", "Description", "QPA", "Pool", "Unscheduled removals", "MTBUR (FH)", "No fault found"]]
-    for r in R["rows"]:
-        rows.append([r["pn"], r["name"], r["qpa"], r["pool"], r["n12"], "{:,.0f}".format(r["mtbur"]), "%.0f%%" % r["nff"]])
-    s.append(_grid(rows, [22, 50, 10, 11, 24, 20, 20], cell))
-    s.append(Paragraph("3. Watch list", h2))
-    s.append(Paragraph("Serials with three or more unscheduled removals in the twelve months (standard 3.3). "
-                       "Engineering has entered the replacement of the listed serials in the 2027 budget.", body))
-    rows = [["Serial", "Part number", "Description", "Removals", "Last removal", "Aircraft"]]
-    for w in R["watch"]:
-        rows.append([w["serial"], w["pn"], w["name"], w["n12"], w["last"].isoformat(), w["aircraft"]])
-    s.append(_grid(rows, [17, 20, 44, 16, 20, 40], cell))
-    O.build(path, s, "Reliability report, October 2026", P.PEOPLE["reliability"], "%s continuing airworthiness" % P.ORG,
-            "%s. Reliability report, October 2026." % P.ORG,
-            dt.datetime(2026, 11, 9, 8, 52, tzinfo=CET), dt.datetime(2026, 11, 9, 9, 37, tzinfo=CET), producer="LibreOffice 7.6")
-    return R
+    s = [Paragraph(P.MAKER + ", Remscheid", small), Paragraph("Quotation LF-26-1187", h1),
+         Paragraph("To: %s, Brighouse, attn. %s. Date: 19 November 2026. Valid to 31 December 2026." %
+                   (P.ORG, P.PEOPLE["fleet"]), body),
+         Paragraph("Stainless steel DIN kegs, Wrenfold livery embossing, A-type spear, RFID tag fitted and encoded, "
+                   "serials continuing the customer's ranges.", body),
+         _grid([["Keg", "Unit price (GBP)", "Minimum per order line", "Pallet"],
+                ["50 l DIN", "96.40", "200", "8 kegs"], ["30 l DIN", "84.10", "200", "12 kegs"],
+                ["20 l slim", "71.80", "100", "18 kegs"]], [40, 34, 44, 30], cell),
+         Spacer(1, 6),
+         Paragraph("Delivery: orders confirmed by 18 December 2026 are produced in the February slot and delivered to "
+                   "Brighouse in the week beginning 26 April 2027. Later orders take the next slot (July 2027).", body),
+         Paragraph("Prices ex works, carriage GBP 410 a load of up to 22 pallets. Payment 50 per cent with order, 50 "
+                   "per cent on delivery.", body)]
+    O.build(path, s, "Quotation LF-26-1187", "Jana Brettschneider", P.MAKER, "%s. Quotation LF-26-1187" % P.MAKER,
+            dt.datetime(2026, 11, 19, 14, 5, tzinfo=dt.timezone(dt.timedelta(hours=1))),
+            dt.datetime(2026, 11, 19, 14, 22, tzinfo=dt.timezone(dt.timedelta(hours=1))), producer="LibreOffice 7.5")
 
 
-def offer(path):
-    """A pool provider's 2027 proposal: exchange access per part number at a monthly fee, sent to the technical
-    director in October. The spares plan does not read it."""
-    body, h1, h2, small, cell = _styles()
-    prov = "Nordkapp Component Pool AS"
-    s = [Paragraph(prov, small), Paragraph("Pool access proposal for %s, 2027" % P.ORG, h1),
-         Paragraph("Reference NCP-2027-114, 21 October 2026. Valid until 31 January 2027.", small), Spacer(1, 4),
-         Paragraph("1. Service", h2),
-         Paragraph("Access to %s's DHC-8 rotable pool at Bodø and Tromsø: an exchange unit dispatched within 24 hours "
-                   "of an unscheduled removal for AOG requests and 72 hours otherwise, the removed unit returned to us "
-                   "within 10 days. Units are supplied with an EASA Form 1." % prov, body),
-         Paragraph("2. Monthly access fees", h2)]
-    rows = [["Part number", "Description", "Monthly fee per aircraft (NOK)", "Exchange fee per unit (NOK)"]]
-    rng = np.random.default_rng(P.SEED + 31)
-    for p in P.PARTS:
-        if p["k"] in ("NWS", "FLA", "HYP"):
-            continue
-        rows.append([p["pn"], p["name"], "{:,.0f}".format(p["price"] * float(rng.uniform(0.0011, 0.0019))),
-                     "{:,.0f}".format(p["price"] * float(rng.uniform(0.09, 0.16)))])
-    s.append(_grid(rows, [24, 60, 40, 40], cell))
-    s.append(Paragraph("3. Terms", h2))
-    s.append(Paragraph("Fees are fixed for 2027 and invoiced monthly in arrears. The agreement runs for three years "
-                       "with a twelve-month notice. Units lost or beyond economic repair through misuse are charged at "
-                       "list price.", body))
-    O.build(path, s, "Pool access proposal 2027", "Jorunn Christensen", prov, "%s, proposal NCP-2027-114." % prov,
-            dt.datetime(2026, 10, 21, 14, 3, tzinfo=dt.timezone(dt.timedelta(hours=2))),
-            dt.datetime(2026, 10, 21, 14, 25, tzinfo=dt.timezone(dt.timedelta(hours=2))), producer="LibreOffice 7.5")
+def agreement(path, plans):
+    doc = Document()
+    st = doc.styles["Normal"]
+    st.font.name = "Calibri"
+    st.font.size = Pt(10.5)
+    doc.add_heading("Listing agreement: %s and %s" % (P.ESTATE, P.ORG), level=1)
+    doc.add_paragraph("Heads of terms agreed on 14 October 2026 between %s (the pub company) and %s (the brewer). "
+                      "Signed for the brewer by %s, trade sales director." % (P.ESTATE, P.ORG, P.PEOPLE["sales"]))
+    items = [
+        "Estate: the pub company's %d pubs in West and North Yorkshire listed in the schedule held by the brewer's "
+        "trade sales team (the 2027 plan workbook, sheet Maplestead pubs)." % len(plans["estate"]),
+        "Range: every pub lists Wrenfold Pils (50 l), Calder Pale, Wrenfold IPA and Heron Lager (30 l) on a "
+        "dedicated tap each, replacing the pub company's current supplier's lines.",
+        "Start: the first deliveries run in the weeks of 12, 19 and 26 April 2027 by pub, as scheduled.",
+        "Delivery: once a week on a fixed day from the nearest Wrenfold depot; orders by 14:00 the day before.",
+        "Containers: the pub company's pubs are exempt from keg deposits, as for its other suppliers. Kegs remain "
+        "the brewer's property.",
+        "Expected volumes: the schedule gives each pub's expected kegs a week by line, taken from the pub company's "
+        "own sales of the lines being replaced over the twelve months to September 2026.",
+        "Term: three years from the first delivery, with a review after the first summer.",
+    ]
+    for i, t in enumerate(items):
+        doc.add_paragraph("%d. %s" % (i + 1, t))
+    doc.add_paragraph("Commercial terms (prices, retrospective discount) are in the separate pricing letter and are "
+                      "not repeated here.")
+    doc.save(path)

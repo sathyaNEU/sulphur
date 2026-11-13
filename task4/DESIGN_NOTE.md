@@ -26,7 +26,7 @@ precedent, 7 a plausible shallower story, 8 across the data, 9 worth the call.
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
-| The depot gate counters count every empty a driver brings back, other brewers' kegs included, and own kegs picked up by other brewers come back months later through the Northern Keg Exchange and the recovery agent, so the gate's fulls out less empties in shows a small loss | the counters' empties are Wrenfold's own kegs, and a gap that closes is the loss (L28, L26) | the washer log's shift counts of kegs rejected as another brewer's, at another grain and days later; the exchange's monthly statements; the recovery agent's monthly returns | none | kept |
+| The depot gate counters count every empty a driver brings back, other brewers' kegs included, and own kegs picked up by other brewers come back months later through the Northern Keg Exchange and the recovery agent, so the gate's fulls out less empties in shows a small loss | the counters' empties are Wrenfold's own kegs, and a gap that closes is the loss (L28, L26) | the washer log's shift counts of kegs rejected as another brewer's, at another grain and days later; the exchange's monthly statements; the recovery agent's monthly returns | 9 on the call (the gate loss enters both the 2026 circulation and the fleet in the busiest week and cancels in the order) | kept as a graded ask (R1), not a call-moving trap |
 | The keg register still carries as active every keg lost since the November 2023 reconciliation wrote off the untraced ones, so the register overstates the usable fleet by about three years of losses | the register is the fleet (L04, N13) | the 30 November stocktakes on site, the tagged kegs' last reads, the gate flows year by year | none | kept |
 | Each pub line holds one keg on tap plus cover for its delivery interval, so Maplestead's 240 pubs, each listing two low-volume lines delivered weekly, hold far more kegs than the fleet's keg turns give their volume | kegs in the trade scale with the volume a new contract brings (N01, L15) | the outlet keg audits (physical counts each quarter at sampled pubs) and the delivery visits' running stock against each line's rate, the dispense installs log for the lines | none (nearest closed card, transport to a new mix: the fix here is a holding model per dispense line, fixed on tap plus a rate times the delivery cover, not a reweighting to bands) | kept |
 | A Foundry brew fills its whole lot of 20 litre kegs at once and they wait full until sold, so widening the range from 8 to 18 beers at a lower volume each ties up kegs in the cold store in proportion to the lot and the number of beers, not to the range's volume | the full stock carries at 2026's days of cover (N12, L17) | the 2027 brew plan's lots against the fills log and the tagged kegs' fill-to-dispatch times | none | kept |
@@ -36,6 +36,237 @@ precedent, 7 a plausible shallower story, 8 across the data, 9 worth the call.
 The four kept are independent: no one sentence rescues two of them (the loss residual, the register's untraced kegs,
 the holding per dispense line and the lot-size full stock each sit on their own records and their own size of keg
 mostly: 50 litre for the first two, 30 litre for the third, 20 litre for the fourth).
+
+## Deep reasoning
+
+Task type: regression-classification-model-diagnostics (forecasting a returnable keg fleet's requirement and its usable stock, house inventory and demand planning)
+Domain test: every result is a keg-fleet quantity a brewery's supply chain estimates: the year's loss in the trade (a
+  stock-flow residual of fills, returns and kegs out), the usable fleet (a hidden stock rebuilt from site counts and
+  tagged trips), the busiest week's deliveries (a weather and calendar regression with its range), a customer line's
+  holding (one keg on tap plus its order cover, fitted on the reps' counts), the cold store under a lot-size brew plan
+  (a stock walked from racking and dispatch), the kegs in circulation (rebuilt from the washer and fills and fitted on
+  deliveries) and the order
+Swap: written for a hospital's pharmacy, "kegs on tap", "the washer", "other brewers' kegs in the empties", "the keg
+  exchange" and "a 200-keg brew" stop making sense; the returnable-container loop, its foreign-container and exchange
+  flows and its lot-sized filling are the brewing trade's own
+Where the weight sits: attribution, where every keg is: the register's 21,897 active fifty-litre kegs against a fleet
+  of about 18,530, the loss split from the other brewers' kegs and the exchange, the 2027 need split into the existing
+  trade, the new pubs' lines, the cold store and the float; each part needs its own record and its own model
+Layer 1: delivery visits keyed on handhelds (duplicated re-syncs, blank empties, plus or minus one keyed by eye), RFID
+  reads missed at pubs and doubled at the washer, tags replaced and re-mapped, gate counters down and keyed next day,
+  sizes written 50, 50L and K50, accounts renumbered on a change of licensee, the recovery agent's serials written
+  with spaces; none decides a result
+Not one thing: the strongest single piece is the register's untraced kegs (R2); a run that nails it still has to
+  measure the year's loss past the other brewers' kegs (R1), forecast the busiest week (R3), hold the Maplestead lines
+  at a keg on tap plus cover (R4), walk the cold store through 200-keg lots (R5) and rebuild the circulation (R6)
+One-fact test: "the keg register still lists every keg lost since its last reconciliation" rescues R2 (1 of 7); the
+  30 and 20 litre orders still fall short on the estate's and the Foundry range's turns
+Not semantics: every field read correctly, the register's ACTIVE status is still the register's; the gate counters'
+  empties_in is what came through the gate; a run reading both correctly still files the register and the gate's loss
+Not rule application: the standard defines the fleet, the loss, circulation, normal weather and the target; no filed
+  procedure measures the kegs out, the holding per line, the cold store or the circulation
+Estimand: the standard 2.1 (fleet), 2.2 (loss), 2.3 (circulation), 2.4 (normal weather), 2.5 (the season and a
+  size's busiest week), 3.1 (the target: circulation plus two days' season fills); the prompt names each ask's
+  population, window and unit; the plan workbook files every 2027 input (Maplestead's pubs, the new taps, the range,
+  the brews)
+No decoy: no memo or draft carries a figure; the register and the gate counters are the business's own records,
+  each reproducing exactly by its own definition, and the asks price the fleet and the loss on the standard's footing
+No replay: no result re-derives a published figure; the exchange statements and the stocktakes are counts
+Pinned: each result's rivals run on the cut pack (results.py FAMILY and PERTURB, effort.json forcing): seven rival
+  methods (the tagged kegs scaled by the register's tagged share among them, the stage 4 judge's one fork) and eight
+  perturbations file the same order bands
+Run forecast: R1 self-confirming check (the gate reconciliation closes), R2 dismissed own evidence (the register
+  against the stocktake), R4 and R5 method shortcut at the fleet's turns, R6 and R7 carried from them; R3 earned
+Strategy label: own: a returnable fleet's need and stock rebuilt from the records that each see only part of it
+Depth level: 5 (four independent judgments in different records, each moving a different size's order; seven
+  shortcuts landing on five different wrong orders)
+Lesson: a returnable fleet's need and stock are never recorded: the register and the gate counts each see something
+  else, and the new business's kegs follow its lines and its brews, not its volume at the fleet's turns
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | own kegs lost in the trade in the twelve months to 30 Nov 2026, by size: 1,210, 630, 170 | assembly-reconciliation | standard 2.2; the washer log, the filling log, repairs, the tagged trips | 1,090 to 1,360; 540 to 780; 150 to 200 | self-confirming check: the gate counters' fulls out less empties in (318, 155, 15), a reconciliation that closes on other brewers' kegs | - | Ask 2 |
+| R2 | usable kegs at 30 Nov 2026: 18,530, 10,880, 4,290 | missingness-measurement | standard 2.1; the stocktake and the tagged kegs out | 18,140 to 19,450; 10,660 to 11,360; 4,200 to 4,380 | dismissed own evidence: the register's 21,897, 12,860, 4,787 active kegs | - | Component 1 |
+| R3 | the most kegs delivered in one week of the 2027 season at normal weather, with the 80 per cent range over the 2016 to 2025 summers: 5,990, 3,400, 850 | forecasting | standard 2.4 and 2.5; the gate counts, the weather | within 5 per cent, each range end within 5 per cent | method shortcut: last summer's busiest week carried | - | Ask 4 |
+| R4 | kegs held at the Maplestead pubs in the busiest week: 1,180 (50 l), 2,240 (30 l) | modeling | the plan's schedule, the reps' counts, the dispense register | 1,090 to 1,250; 2,100 to 2,690 | dismissed own evidence and method shortcut: the estate's volume at the fleet's days out | - | Component 3 |
+| R5 | full Foundry kegs in the cold store in the 20 l busiest week: 2,280 | modeling | the stocktake, the brew plan, the range | 2,030 to 2,370 | method shortcut: the November days of cover | - | Component 4 |
+| R6 | kegs the fleet must cover in each size's busiest week: 19,800, 13,670, 5,320 | decomposition-attribution | standard 2.3, 2.5, 3.1 | 19,240 to 20,860; 13,250 to 14,390; 5,020 to 5,460 | dismissed own evidence: the estate and range at the fleet's turns | R4, R5 | Ask 7 |
+| R7 | kegs to buy: 2,090, 3,230, 1,130 | synthesis | standard 3.1, 3.2; the quotation's arrival week | 1,900 to 2,250; 2,950 to 3,850; 900 to 1,250 | dismissed own evidence: the register and the turns (0, 400, 160) | R2, R4, R5, R6 | Recommendation |
+
+Carry-forward: R1 to R5 each rest on their own records and are graded on their own; R6 is graded on its figure with
+the existing trade's circulation as its independent input; R7 on its own figure, so a slip on R4 costs R4, R6's 30
+litre cell and R7's 30 litre cell only.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| other brewers' kegs in the drivers' empties | constructed (the trade's habit, every visit at every depot) | no: every depot, every size, every week | modelling: the washer's rejects against the gates at another grain | modelling (the loss as a residual of own returns and kegs out) | keep |
+| own kegs back through the exchange and the recovery agent | constructed (every channel) | no | the exchange statements, the agent's returns | modelling | keep |
+| kegs lost since the 2023 reconciliation still active in the register | constructed (losses every week since) | no: every lot, every size | the stocktake against the register and the tagged trips | modelling (the fleet as a hidden stock) | keep |
+| a line's holding of a keg on tap plus cover | constructed (every outlet's ordering) | no: every line in the trade; it bites where lines are slow | the reps' counts against the lines' own rates | modelling (a fixed plus cover fit) | keep |
+| 200-keg lots across up to 18 Foundry beers | filed (the 2027 plan's brews and range) | no: every 20 litre beer | the brew plan against the stocktake | modelling (a walk of the cold store) | keep |
+| seasonal customers holding kegs over the winter | constructed | no | the accounts' seasons against the tagged trips | supporting (completion by account type) | keep as support |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 own kegs lost in the trade in the year to November 2026 | Missed | Missed | Right |
+| R2 usable kegs owned at 30 November 2026 | Missed | Missed | Right |
+| R3 the busiest week's deliveries at normal weather with the 80 per cent range | Missed | Right | Right |
+| R4 the kegs the Maplestead pubs hold in the busiest week | Missed | Partly | Right |
+| R5 full Foundry kegs in the cold store in the 20 litre busiest week | Missed | Missed | Right |
+| R6 kegs needed in circulation in each size's busiest week | Missed | Partly | Right |
+| R7 kegs to buy by size | Missed | Missed | Right |
+| Roughly | 0 of 7 | 2 of 7 | 7 of 7 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass computed end to end in generator/results.py on the cut pack)
+Largest single hint: the keg register still lists every keg lost since its last reconciliation; rescues 1 of 7 results
+Pair estimate: 38.5 (quick 7.0, thorough 100)
+
+## Data provenance
+
+Source: generated by the seeded generator in task4/generator from a simulated regional brewer
+Behaves like the real thing: each customer line sells by the calendar and the warmth over 17 C, orders up to its
+  delivery interval and a week of cover with a keg on each tap, and empties go back with the drivers (other brewers'
+  kegs among them), to other brewers and the exchange, to scrap; the washer rejects foreign kegs and sends damaged ones
+  to repair; mainstream beers fill to stock, Foundry beers in whole lots; tagged kegs are read when filled, delivered
+  and washed; keg losses of 5 to 7 per cent of the fleet a year match the trade's published range
+Genuine patterns: (1) the summer, Christmas and bank holiday peaks and a quiet January; (2) the warmth response,
+  strongest on lager; (3) free-trade losses halving after deposits from April 2024; (4) seasonal clubs holding kegs
+  over the winter; (5) slow lines holding as many kegs as busy ones
+Problems by process: duplicated handheld re-syncs; missed and doubled RFID reads; replaced tags; counter outages
+  keyed next day; three size codes; renumbered accounts; serials written with spaces by the recovery agent
+Breadth: 19 files (16 used, the cask register and the packaging line's OEE unused), about 30 tables, 550,000 RFID
+  reads, 206,000 delivery visits, 1,900 accounts, 300 planned pubs, 18 beers; choosing the records that see each part
+  of the fleet is the work
+
+## Template check
+
+Chain signature: assembly-reconciliation, missingness-measurement, forecasting, uncertainty, modeling, modeling,
+  decomposition-attribution, synthesis
+Question form: how-many (an order by size, with the figures behind it)
+Nearest build: task9 v3 (ranked causes bridged into a forecast) shares stock_flow_accounting only; the decision form,
+  the other lessons and the file roles differ
+
+## Frontier check
+
+Precedents: R1 L28, L26 (a reconciliation certified by a check that cannot see the foreign kegs); R2 L04, N13 (the
+  register taken as the state at the decision date after noting it is a register); R4 N01, L15 (a new contract's kegs
+  scaled with its volume); R5 N12, L17 (a rate learned at the old lot size carried, the average beer for the marginal
+  one); R6 N01, N12; R7 L04, N01
+Shallow path checks: the gate route's year closes to within a fraction of a per cent of fills, and the register
+  reconciles to the lots bought less those written off; only the washer's rejects (shift grain) and the stocktake
+  with the tagged trips (site and keg grain) refute them; the turns route back-tests on 2026's own fleet, which held
+  no slow estate and no 200-keg lots
+Assumption made false: kegs in the trade scale with volume (the turns); the world's ordering holds a keg on tap and a
+  week's cover on every line, so a slow new line holds two to three kegs whatever it sells (the reps' counts test it),
+  and the 2027 brew plan's lots hold a hundred kegs a beer whatever the beer sells (the plan tests it)
+Forcing: the order bands per size from the golden family alone (1,900 to 2,250, 2,950 to 3,850, 900 to 1,250);
+  seven rival methods (the judge's register-share scaling among them) inside every band, and eight perturbations tested
+  against those bands (the loss and the holding moved by their rivals' spread, the days on the way and circulation's
+  response by 20 per cent) all inside; seven shortcuts outside on at least one size (the careful route 0, 400,
+  160; the register 0, 1,250, 630; the estate at turns 2,390 on 30 litre; the cold store at days of
+  cover 660 on 20 litre; the whole fleet at turns 4,400 on 50 litre); the gate-count loss alone moves no order (the
+  2026 circulation and the fleet in the busiest week both carry it) and is graded on its own ask
+Noun swap: task9 v3 (skeleton.py nearest): its sort-yield causes swapped into kegs carry stock_flow_accounting and
+  second_source_at_other_grain only; decision form, the other lessons, the moves and the answer pattern differ; severity
+  none
+Closed strategies: the call turns on the fleet as a hidden stock and the new lines' fixed holding and lot-size stock
+  (lot_size_cycle_stock, fixed_nuisance_component, off the client's page; nearest card the pooled effect carried to a
+  new mix, whose fix is a reweighting where this one is a holding per dispense line); censoring is kept as a support
+  (the open trips completed from the same weeks a year before): the effort.json routes show the call standing without it
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | kegs lost in the trade | gross losses / net of kegs found and returned | net, as the standard's residual | standard 2.2; checks.py SF1 |
+| SF2 | usable kegs | the register's active kegs / own kegs that exist and can still be filled | the latter | standard 2.1; checks.py SF2 |
+| SF3 | busiest week | the most deliveries / the most kegs in circulation | deliveries for Ask 4 (the prompt), circulation for the rest | standard 2.5; the prompt's wording |
+| SF4 | normal weather | a forecast year / the 2016 to 2025 daily average | the average | standard 2.4 |
+| SF5 | the 80 per cent range | a residual interval / the busiest week over the 2016 to 2025 summers' weather | the summers | the prompt names the summers |
+| SF6 | kegs the fleet must cover | circulation only / circulation and the washer float | with the float | standard 3.1 |
+| SF7 | kegs held at the Maplestead pubs | at the pubs / with their kegs on the way | at the pubs | the prompt (held at the pubs) |
+| SF8 | full Foundry kegs | cold store / with the depots | cold store | the prompt (in the cold store) |
+| SF9 | the fleet the order is set against | today's / in the busiest week | the busiest week | standard 3.1 and 3.2 |
+| SF10 | the loss to the busiest week | by days / by kegs sent | by kegs sent | same call (810 against 820 for 50 litre) |
+| SF11 | kegs bought lost before the busiest week | counted / not | not | same call (about 10 a size) |
+
+## Closure table
+
+| Axis | Closure |
+|---|---|
+| 1 | Population: Wrenfold's own 50, 30 and 20 litre kegs; casks excluded (standard 1) |
+| 2 | Unit of account: kegs, by size |
+| 3 | Attribution window: a keg's fill, return and loss by its date |
+| 4 | As-of dating: the stocktakes of 30 November; the exports of 2 December 2026 |
+| 5 | Version basis: one export of each file; the register as at 30 November 2026 |
+| 6 | Denominator: the loss per keg sent out; the holding per line |
+| 7 | Weighting: none; every keg counts once |
+| 8 | Window length: the loss over the twelve months to 30 November 2026; the season's 21 weeks (standard 2.5) |
+| 9 | Boundary inclusivity: 1 December 2025 to 30 November 2026 inclusive; weeks Monday to Sunday |
+| 10 | Rounding path: full precision, kegs rounded once to the nearest ten |
+| 11 | Tie-break: none needed; each size's busiest week is the maximum of a smooth weekly series |
+| 12 | Maturity and censoring: trips open at 30 November 2026 completed from the same weeks of 2025 by account type |
+| 13 | Order of operations: assemble, loss, fleet, forecast, holdings, cold store, circulation, order |
+| 14 | Row order: no step depends on file order |
+| 15 | Duplicate resolution: re-synced visits kept once; reads of one tag at one point seconds apart kept once |
+| 16 | Identity normalisation: replaced tags mapped to their serials; renumbered accounts through account_changes |
+| 17 | Netting against gross: own kegs back net of repaired kegs presented again |
+| 18 | Dimensional units: kegs, kegs a week, days |
+| 19 | Code and status semantics: register ACTIVE, WRITTEN_OFF, CONDEMNED; washer rejected_not_ours another brewer's keg |
+| 20 | Integerisation: kegs whole, to the nearest ten |
+| 21 | Clause scope: the standard's terms apply to every size alike |
+| 22 | Forward window contents: the plan workbook (Maplestead, new taps, range, brews), the quotation's arrival week and the history to 30 November 2026 drive 2027 |
+
+## Literal reader
+
+Standard 2.1 executed word for word gives the fleet as kegs that exist (not the register); 2.2 gives the loss as
+fills less own returns less the rise in kegs out; 2.3 and 2.5 give the busiest week per size from circulation; 3.1
+adds two days of the season's fills; the quotation's 26 April arrival puts the bought kegs in the fleet before the
+season; the plan's sheets give every 2027 line, tap, beer, window and brew. Each executed sentence produces its
+result's estimand, never its value.
+
+## Prompt contract
+
+A rewrite keeps: the order by size for the busiest week of summer 2027; the loss in the twelve months to 30 November
+2026; the usable kegs at 30 November 2026; the most kegs delivered in one week at normal weather with its 80 per cent
+range over the 2016 to 2025 summers; the kegs held at the Maplestead pubs; the full Foundry kegs in the cold store in
+the 20 litre busiest week; the kegs the fleet has to cover in each busiest week; a spreadsheet and a one-page PDF note. It
+never adds the register, the gate counters, the washer, turns, a keg on tap or a lot size.
+
+## Leak rulings
+
+- Stage 4 judge (DETERMINISTIC, FIX_NOW): the tagged kegs out scaled by the tagged share of fills or of the register's
+  active kegs; closed by adding the register-share reading to the golden family and widening the fleet and need bands
+  to carry it (the order bands hold: the reading lifts the fleet and the 2026 circulation together); no pin was
+  written, since a sentence choosing the fills share would point at the register's untraced kegs (R2); no golden
+  figure and no pack file moved (target.zip 487a6d659cbc5bf1 before and after), so no re-judge.
+
+- keg_fleet_standard_issue3.pdf, the business's own vocabulary (record, register, standard, counts, circulation):
+  harmless; the standard defines the fleet, the loss as the net fall in the fleet, circulation, normal weather and the
+  target, and names no record that sees any of them (2.2's earlier wording and 4.3's reconciliation sentence were taken
+  out before stage 4 for naming the move).
+- keg_fleet_standard_issue3.pdf, column names (condition, depot, presented, serial, shift, site): harmless; section 4
+  is the standard's list of the records the organisation keeps, one line each, describing fields and never a step.
+- Coincident numbers in the exchange statements, the gate counts, the filling and washer logs and the quotation:
+  harmless; ordinary record values (monthly counts, shift counts, a price) that equal rounded golden figures by chance.
+- prompt.txt shell quota (pdf+xlsx at 25 per cent of recent prompts): a WARN the author's voice rewrite answers.
+
+## Pre-ship check
+
+- The hidden factor record against the cut pack: every factor runs across the depots, sizes and weeks (checks.py S1 to
+  S7, R1 to R7); the 2027 lot size is filed in the plan, nothing else about it is.
+- The effort test against effort.py: quick 7.0, careful but hurried 38.5, thorough 100; the note's table is
+  effort.py's own markdown.
+- The golden against the simulation's truth (checks.py T1 to T7): the fleet within 1 per cent, the loss within 5 per
+  cent, the need within 4 per cent, the order within 25 per cent (the 2027 run's own churn closes 3 per cent more
+  pubs than it opens, which no forecast from the record can see).
+- Containers from the house writers, distinct stamps, both zips at each file's own save time (audit_containers.py).
 
 ## Tried and rejected
 

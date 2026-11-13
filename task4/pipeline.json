@@ -1,43 +1,45 @@
 {
  "task": "task4",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "supply-chain-logistics",
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
  "architecture": 13,
  "loops": 0,
- "call": "to be filled when the pack is cut: kegs to buy per size for summer 2027",
+ "call": "order 2090 fifty-litre, 3230 thirty-litre and 1130 twenty-litre kegs for summer 2027",
  "chain": "R1 own kegs lost in the trade in the year to November 2026 by size; R2 usable kegs owned at 30 November 2026 by size; R3 the busiest week's fills in 2027 at normal weather with its range; R4 the kegs the Maplestead estate's lines hold; R5 the full Foundry kegs at the brewery in the busiest week; R6 the kegs needed in circulation in the busiest week by size and component; R7 the kegs to buy by size",
  "stump": "the careful pass reconciles the gate counters for the loss, takes the register as the fleet, and carries 2026's keg turns to the new estate and the widened Foundry range",
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12",
+  "note": "0 FAIL, 1 WARN (nearest chains)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (the standard's own vocabulary and column names, coincident record numbers; rulings in the note)",
+  "reader": "isolated reader on target.zip 487a6d659cbc5bf1: clean on all six questions; realism read genuine"
  },
  "duplicate_check": {
-  "heart": "",
-  "guard_check": "WARN (skeleton.house_lesson x2, closed censoring as support)",
-  "skeleton": "severity none against every card, lineage entry and client task"
+  "heart": "WARN only (skeleton.lesson_closed_support, skeleton.house_lesson)",
+  "guard_check": "WARN",
+  "skeleton": "severity none against every card, lineage entry and client task; nearest task9 v3"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW",
+  "report": "determinism_check_report.md",
+  "notes": "one fork (tagged share of fills or of the register's active kegs) closed by adding the reading to the golden family and widening the fleet and need bands; no figure or pack file moved, so no re-judge"
  },
- "paper_pair": null,
+ "paper_pair": 38.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 38.5,
+  "thorough": 100.0,
+  "largest_hint": "the keg register still lists every keg lost since its last reconciliation: rescues 1 of 7"
  },
  "returned": [
   {
@@ -100,7 +102,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: prototype the keg simulation, write the results chain, effort and fork tables, prompt; precut.py",
+ "resume": "",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -267,9 +269,15 @@
    }
   ]
  },
- "gates": {},
- "zip_sha256_16": null,
- "golden_zip_sha256_16": null,
+ "gates": {
+  "gates_py": "0 FAIL, 3 WARN",
+  "checks": "88 of 88",
+  "verify": "0 FAIL",
+  "byte_identical": true,
+  "containers": "PASS"
+ },
+ "zip_sha256_16": "487a6d659cbc5bf1",
+ "golden_zip_sha256_16": "d3bfc0a5d6dcae89",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",

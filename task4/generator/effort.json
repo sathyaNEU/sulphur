@@ -1,1008 +1,352 @@
 {
  "results": [
   {
-   "id": "R2",
-   "name": "the landing-driven parts' 2027 unscheduled removals",
-   "graded_as": "Component 1",
-   "figure": "rem_cyc",
+   "id": "R1",
+   "name": "own kegs lost in the trade in the year to November 2026",
+   "graded_as": "Ask 2",
+   "figure": "loss",
    "golden": {
-    "SG": 59,
-    "BRK": 51,
-    "BAV": 40
+    "50": 1210,
+    "30": 630,
+    "20": 170
    },
-   "depends": [],
-   "independent": "the legs and the changes",
    "bands": {
-    "SG": [
-     57.538411526798555,
-     65.35963747582059
+    "50": [
+     1090,
+     1360
     ],
-    "BRK": [
-     50.48793405151539,
-     53.726138259381656
+    "30": [
+     540,
+     780
     ],
-    "BAV": [
-     38.98723543532417,
-     43.600155367071146
+    "20": [
+     150,
+     200
     ]
    },
+   "depends": [],
+   "independent": "",
    "passes": {
     "quick": {
-     "SG": 41,
-     "BRK": 36,
-     "BAV": 34
+     "50": 320,
+     "30": 160,
+     "20": 20
     },
     "careful": {
      "value": {
-      "SG": 41,
-      "BRK": 36,
-      "BAV": 34
+      "50": 320,
+      "30": 160,
+      "20": 20
      },
-     "grade": "right",
-     "why": "both platform runs on the architecture 12 cut landed all three inside their bands (59.9, 50.8, 39.8 and 63.6, 51.9, 39.6), as the stage 4 judge's blind pass did"
+     "grade": "missed",
+     "why": "the depot gate counters' fulls out less empties in, which closes because other brewers' kegs fill the empties and own kegs come back through the exchange and the recovery agent unseen by the gates"
     },
     "thorough": {
-     "SG": 59,
-     "BRK": 51,
-     "BAV": 40
+     "50": 1210,
+     "30": 630,
+     "20": 170
     }
    },
    "precedent": [
-    "N04",
-    "N01"
+    "L28",
+    "L26"
    ],
-   "partly_share": 0.5
+   "partly_share": 0.67
+  },
+  {
+   "id": "R2",
+   "name": "usable kegs owned at 30 November 2026",
+   "graded_as": "Component 1",
+   "figure": "fleet",
+   "golden": {
+    "50": 18530,
+    "30": 10880,
+    "20": 4290
+   },
+   "bands": {
+    "50": [
+     18140,
+     19450
+    ],
+    "30": [
+     10660,
+     11360
+    ],
+    "20": [
+     4200,
+     4380
+    ]
+   },
+   "depends": [],
+   "independent": "",
+   "passes": {
+    "quick": {
+     "50": 21900,
+     "30": 12860,
+     "20": 4790
+    },
+    "careful": {
+     "value": {
+      "50": 21900,
+      "30": 12860,
+      "20": 4790
+     },
+     "grade": "missed",
+     "why": "the keg register's active kegs, which still carry every keg lost since the November 2023 reconciliation"
+    },
+    "thorough": {
+     "50": 18530,
+     "30": 10880,
+     "20": 4290
+    }
+   },
+   "precedent": [
+    "L04",
+    "N13"
+   ],
+   "partly_share": 0.67
   },
   {
    "id": "R3",
-   "name": "the watch-list serials worth withdrawing",
-   "graded_as": "Component 3",
-   "figure": "scrap_set",
-   "golden": [
-    "ADC9270",
-    "C3880",
-    "FD7205",
-    "RT4534",
-    "SG6792",
-    "V210070",
-    "V2715",
-    "WH1688"
-   ],
-   "depends": [],
-   "independent": "the changes and the findings",
-   "passes": {
-    "quick": [
-     "ADC7694",
-     "ADC7843",
-     "ADC9270",
-     "BT70286",
-     "C2568",
-     "C3880",
-     "FD4650",
-     "FD4995",
-     "FD6368",
-     "FD6703",
-     "FD7032",
-     "FD7205",
-     "RT4534",
-     "RT5479",
-     "SG5990",
-     "SG6792",
-     "V210070",
-     "V210279",
-     "V211535",
-     "V211776",
-     "V2715",
-     "V29424",
-     "WH1688"
-    ],
-    "careful": {
-     "value": [
-      "C2568",
-      "RT4534",
-      "SG6792",
-      "V2715"
-     ],
-     "grade": "partly",
-     "why": "the platform runs set the aircraft's repeat removals apart: one named the eight, the other seven of them and a victim; the computed confirmed-failure pass names four"
-    },
-    "thorough": [
-     "ADC9270",
-     "C3880",
-     "FD7205",
-     "RT4534",
-     "SG6792",
-     "V210070",
-     "V2715",
-     "WH1688"
-    ]
-   },
-   "precedent": [
-    "L03",
-    "L13"
-   ]
-  },
-  {
-   "id": "R3b",
-   "name": "the removals withdrawing the whole watch list saves",
-   "graded_as": "Ask 3",
-   "figure": "saving",
-   "golden": 34,
-   "depends": [],
-   "independent": "the changes and the findings",
-   "band": [
-    30.452196557947655,
-    37.17064281943548
-   ],
-   "partly": [
-    25.884367074255508,
-    42.746239242350796
-   ],
-   "passes": {
-    "quick": 64,
-    "careful": {
-     "value": 14,
-     "grade": "partly",
-     "why": "the platform runs' fleet replays saved 31.3 and 30.2, one inside the band and one at its edge; the computed confirmed-failure pass saves 14"
-    },
-    "thorough": 34
-   },
-   "precedent": [
-    "L03",
-    "L14"
-   ]
-  },
-  {
-   "id": "R4",
-   "name": "the propeller control's 2027 removals and spares",
-   "graded_as": "Component 4",
-   "figure": "pec",
+   "name": "the busiest week's deliveries at normal weather with the 80 per cent range",
+   "graded_as": "Ask 4",
+   "figure": "deliv",
    "golden": {
-    "removals": 19,
-    "spares": 5
+    "50": 5990,
+    "30": 3400,
+    "20": 850
    },
-   "depends": [],
-   "independent": "the repairers' orders and the stores snapshot",
    "bands": {
-    "removals": [
-     18.158017078644612,
-     20.817686658210256
+    "50": [
+     5680,
+     6290
     ],
-    "spares": [
-     5,
-     5
+    "30": [
+     3220,
+     3570
+    ],
+    "20": [
+     810,
+     900
     ]
    },
+   "depends": [],
+   "independent": "",
    "passes": {
     "quick": {
-     "removals": 14,
-     "spares": 7
+     "50": 5980,
+     "30": 3110,
+     "20": 770
     },
     "careful": {
      "value": {
-      "removals": 21,
-      "spares": 6
+      "50": 5990,
+      "30": 3400,
+      "20": 850
      },
-     "grade": "partly",
-     "why": "both platform runs read the bulletin from the snapshot and held five spares, with removals at 15.9 and 17.4, under the band"
+     "grade": "right",
+     "why": "a weather and calendar regression on the weekly deliveries is the field's textbook move and frontier runs make it unprompted"
     },
     "thorough": {
-     "removals": 19,
-     "spares": 5
+     "50": 5990,
+     "30": 3400,
+     "20": 850
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the kegs the Maplestead pubs hold in the busiest week",
+   "graded_as": "Component 3",
+   "figure": "estate",
+   "golden": {
+    "50": 1180,
+    "30": 2240
+   },
+   "bands": {
+    "50": [
+     1090,
+     1250
+    ],
+    "30": [
+     2100,
+     2690
+    ]
+   },
+   "depends": [],
+   "independent": "",
+   "passes": {
+    "quick": {
+     "50": 1490,
+     "30": 1840
+    },
+    "careful": {
+     "value": {
+      "50": 1490,
+      "30": 1840
+     },
+     "grade": "partly",
+     "why": "the estate's volume at the fleet's average days out per trip: the 50 litre line sells near the fleet's pace and lands close, the slow 30 litre lines hold far more than their volume at the fleet's turns"
+    },
+    "thorough": {
+     "50": 1180,
+     "30": 2240
     }
    },
    "precedent": [
-    "L12",
-    "L11"
+    "N01",
+    "L15"
    ],
    "partly_share": 0.5
   },
   {
    "id": "R5",
-   "name": "every part number's expected 2027 unscheduled removals",
-   "graded_as": "Ask 1",
-   "figure": "rem",
+   "name": "full Foundry kegs in the cold store in the 20 litre busiest week",
+   "graded_as": "Component 4",
+   "figure": "store_t",
    "golden": {
-    "SG": 59,
-    "BRK": 51,
-    "BAV": 40,
-    "NWS": 13,
-    "BAT": 26,
-    "CPC": 24,
-    "FLA": 6,
-    "ADC": 23,
-    "WXR": 29,
-    "VHF": 25,
-    "PEC": 19,
-    "PDT": 8,
-    "HYP": 3,
-    "FBP": 7,
-    "WHC": 15,
-    "FDU": 16
+    "20": 2280
    },
-   "depends": [],
-   "independent": "the legs, the changes and the programme",
    "bands": {
-    "SG": [
-     57.538411526798555,
-     65.35963747582059
-    ],
-    "BRK": [
-     50.48793405151539,
-     53.726138259381656
-    ],
-    "BAV": [
-     38.98723543532417,
-     43.600155367071146
-    ],
-    "NWS": [
-     10.710763825089664,
-     14.08019144397252
-    ],
-    "BAT": [
-     24.389856213321398,
-     27.575392870308907
-    ],
-    "CPC": [
-     22.890844129719817,
-     26.872712648231115
-    ],
-    "FLA": [
-     4.668630174259547,
-     6.83505051390625
-    ],
-    "ADC": [
-     21.10502382059203,
-     24.542151831748924
-    ],
-    "WXR": [
-     25.159235790820226,
-     32.52459505717401
-    ],
-    "VHF": [
-     24.363599801207897,
-     32.612058596260994
-    ],
-    "PEC": [
-     18.158017078644612,
-     20.817686658210256
-    ],
-    "PDT": [
-     6.468914995564857,
-     9.669605196565632
-    ],
-    "HYP": [
-     2.062193950103468,
-     4.2919644337209135
-    ],
-    "FBP": [
-     5.000587400680817,
-     8.066144943827055
-    ],
-    "WHC": [
-     13.85944432212691,
-     17.071871880302016
-    ],
-    "FDU": [
-     14.838853661373344,
-     20.744757257569333
+    "20": [
+     2030,
+     2370
     ]
    },
+   "depends": [],
+   "independent": "",
    "passes": {
     "quick": {
-     "SG": 41,
-     "BRK": 36,
-     "BAV": 34,
-     "NWS": 9,
-     "BAT": 26,
-     "CPC": 22,
-     "FLA": 9,
-     "ADC": 29,
-     "WXR": 30,
-     "VHF": 35,
-     "PEC": 14,
-     "PDT": 8,
-     "HYP": 3,
-     "FBP": 5,
-     "WHC": 13,
-     "FDU": 27
+     "20": 1750
     },
     "careful": {
      "value": {
-      "SG": 41,
-      "BRK": 36,
-      "BAV": 34,
-      "NWS": 9,
-      "BAT": 26,
-      "CPC": 22,
-      "FLA": 9,
-      "ADC": 29,
-      "WXR": 30,
-      "VHF": 35,
-      "PEC": 21,
-      "PDT": 8,
-      "HYP": 3,
-      "FBP": 5,
-      "WHC": 13,
-      "FDU": 27
+      "20": 1750
      },
-     "grade": "partly",
-     "why": "the platform runs landed ten and twelve of the sixteen lines, the landing-driven ones right and the no-fault-found avionics high"
+     "grade": "missed",
+     "why": "the November stocktake's days of cover carried to the busiest week's deliveries, which misses the 200-keg lots across up to 18 beers"
     },
     "thorough": {
-     "SG": 59,
-     "BRK": 51,
-     "BAV": 40,
-     "NWS": 13,
-     "BAT": 26,
-     "CPC": 24,
-     "FLA": 6,
-     "ADC": 23,
-     "WXR": 29,
-     "VHF": 25,
-     "PEC": 19,
-     "PDT": 8,
-     "HYP": 3,
-     "FBP": 7,
-     "WHC": 15,
-     "FDU": 16
+     "20": 2280
     }
    },
    "precedent": [
-    "L12",
-    "L36"
-   ],
-   "partly_share": 0.5
+    "N12",
+    "L17"
+   ]
   },
   {
    "id": "R6",
-   "name": "the in-house lines' spares through the Bod\u00f8 shop's 2027 queue",
-   "graded_as": "Component 2",
-   "figure": "need_inhouse",
+   "name": "kegs needed in circulation in each size's busiest week",
+   "graded_as": "Ask 7",
+   "figure": "need",
    "golden": {
-    "SG": 8,
-    "BRK": 7,
-    "BAV": 6,
-    "NWS": 4,
-    "BAT": 5
+    "50": 19800,
+    "30": 13670,
+    "20": 5320
    },
-   "depends": [
-    "R2"
-   ],
-   "independent": "",
    "bands": {
-    "SG": [
-     8,
-     9
+    "50": [
+     19240,
+     20860
     ],
-    "BRK": [
-     7,
-     8
+    "30": [
+     13250,
+     14390
     ],
-    "BAV": [
-     6,
-     6
-    ],
-    "NWS": [
-     3,
-     4
-    ],
-    "BAT": [
-     4,
-     5
+    "20": [
+     5020,
+     5460
     ]
    },
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "the 2026 circulation rebuilt from the stocktake, the washer and the fills",
    "passes": {
     "quick": {
-     "SG": 5,
-     "BRK": 5,
-     "BAV": 4,
-     "NWS": 2,
-     "BAT": 3
+     "50": 31640,
+     "30": 17770,
+     "20": 6390
     },
     "careful": {
-     "SG": 5,
-     "BRK": 4,
-     "BAV": 4,
-     "NWS": 2,
-     "BAT": 3
+     "value": {
+      "50": 20340,
+      "30": 13160,
+      "20": 4930
+     },
+     "grade": "partly",
+     "why": "the careful route's need carries the estate and the Foundry range at the fleet's turns: 50 litre lands near, 30 and 20 litre short"
     },
     "thorough": {
-     "SG": 8,
-     "BRK": 7,
-     "BAV": 6,
-     "NWS": 4,
-     "BAT": 5
+     "50": 19800,
+     "30": 13670,
+     "20": 5320
     }
    },
    "precedent": [
-    "L15",
-    "L16"
+    "N01",
+    "N12"
    ],
-   "partly_share": 0.5
+   "partly_share": 0.34
   },
   {
    "id": "R7",
-   "name": "the 80 per cent ranges",
-   "graded_as": "Ask 1",
-   "figure": "range",
+   "name": "kegs to buy by size",
+   "graded_as": "Recommendation",
+   "figure": "buy",
    "golden": {
-    "SG_lo": 48,
-    "BRK_lo": 42,
-    "BAV_lo": 31,
-    "NWS_lo": 9,
-    "BAT_lo": 19,
-    "CPC_lo": 16,
-    "FLA_lo": 2,
-    "ADC_lo": 15,
-    "WXR_lo": 21,
-    "VHF_lo": 18,
-    "PEC_lo": 13,
-    "PDT_lo": 4,
-    "HYP_lo": 1,
-    "FBP_lo": 4,
-    "WHC_lo": 9,
-    "FDU_lo": 9,
-    "SG_hi": 71,
-    "BRK_hi": 61,
-    "BAV_hi": 49,
-    "NWS_hi": 19,
-    "BAT_hi": 36,
-    "CPC_hi": 32,
-    "FLA_hi": 10,
-    "ADC_hi": 31,
-    "WXR_hi": 38,
-    "VHF_hi": 33,
-    "PEC_hi": 26,
-    "PDT_hi": 12,
-    "HYP_hi": 6,
-    "FBP_hi": 11,
-    "WHC_hi": 21,
-    "FDU_hi": 24
+    "50": 2090,
+    "30": 3230,
+    "20": 1130
    },
-   "depends": [
-    "R5"
-   ],
-   "independent": "",
    "bands": {
-    "SG_lo": [
-     46,
-     54
+    "50": [
+     1900,
+     2250
     ],
-    "BRK_lo": [
-     40,
-     44
+    "30": [
+     2950,
+     3850
     ],
-    "BAV_lo": [
-     29,
-     33
-    ],
-    "NWS_lo": [
-     6,
-     10
-    ],
-    "BAT_lo": [
-     17,
-     21
-    ],
-    "CPC_lo": [
-     15,
-     18
-    ],
-    "FLA_lo": [
-     1,
-     4
-    ],
-    "ADC_lo": [
-     14,
-     17
-    ],
-    "WXR_lo": [
-     18,
-     23
-    ],
-    "VHF_lo": [
-     16,
-     20
-    ],
-    "PEC_lo": [
-     12,
-     15
-    ],
-    "PDT_lo": [
-     3,
-     6
-    ],
-    "HYP_lo": [
-     0,
-     2
-    ],
-    "FBP_lo": [
-     2,
-     5
-    ],
-    "WHC_lo": [
-     8,
-     11
-    ],
-    "FDU_lo": [
-     8,
-     11
-    ],
-    "SG_hi": [
-     68,
-     78
-    ],
-    "BRK_hi": [
-     60,
-     64
-    ],
-    "BAV_hi": [
-     48,
-     54
-    ],
-    "NWS_hi": [
-     16,
-     20
-    ],
-    "BAT_hi": [
-     32,
-     37
-    ],
-    "CPC_hi": [
-     30,
-     36
-    ],
-    "FLA_hi": [
-     8,
-     11
-    ],
-    "ADC_hi": [
-     28,
-     33
-    ],
-    "WXR_hi": [
-     33,
-     40
-    ],
-    "VHF_hi": [
-     30,
-     35
-    ],
-    "PEC_hi": [
-     24,
-     27
-    ],
-    "PDT_hi": [
-     10,
-     14
-    ],
-    "HYP_hi": [
-     4,
-     7
-    ],
-    "FBP_hi": [
-     8,
-     12
-    ],
-    "WHC_hi": [
-     20,
-     23
-    ],
-    "FDU_hi": [
-     21,
-     25
+    "20": [
+     900,
+     1250
     ]
    },
-   "passes": {
-    "quick": {
-     "SG_lo": 33,
-     "BRK_lo": 28,
-     "BAV_lo": 27,
-     "NWS_lo": 5,
-     "BAT_lo": 20,
-     "CPC_lo": 16,
-     "FLA_lo": 5,
-     "ADC_lo": 22,
-     "WXR_lo": 23,
-     "VHF_lo": 28,
-     "PEC_lo": 9,
-     "PDT_lo": 5,
-     "HYP_lo": 1,
-     "FBP_lo": 2,
-     "WHC_lo": 9,
-     "FDU_lo": 20,
-     "SG_hi": 49,
-     "BRK_hi": 44,
-     "BAV_hi": 42,
-     "NWS_hi": 13,
-     "BAT_hi": 33,
-     "CPC_hi": 28,
-     "FLA_hi": 13,
-     "ADC_hi": 36,
-     "WXR_hi": 37,
-     "VHF_hi": 43,
-     "PEC_hi": 19,
-     "PDT_hi": 12,
-     "HYP_hi": 5,
-     "FBP_hi": 8,
-     "WHC_hi": 18,
-     "FDU_hi": 34
-    },
-    "careful": {
-     "SG_lo": 34,
-     "BRK_lo": 29,
-     "BAV_lo": 28,
-     "NWS_lo": 6,
-     "BAT_lo": 19,
-     "CPC_lo": 16,
-     "FLA_lo": 5,
-     "ADC_lo": 18,
-     "WXR_lo": 22,
-     "VHF_lo": 26,
-     "PEC_lo": 14,
-     "PDT_lo": 4,
-     "HYP_lo": 1,
-     "FBP_lo": 3,
-     "WHC_lo": 7,
-     "FDU_lo": 19,
-     "SG_hi": 48,
-     "BRK_hi": 44,
-     "BAV_hi": 40,
-     "NWS_hi": 12,
-     "BAT_hi": 34,
-     "CPC_hi": 27,
-     "FLA_hi": 14,
-     "ADC_hi": 40,
-     "WXR_hi": 38,
-     "VHF_hi": 43,
-     "PEC_hi": 29,
-     "PDT_hi": 12,
-     "HYP_hi": 6,
-     "FBP_hi": 7,
-     "WHC_hi": 19,
-     "FDU_hi": 34
-    },
-    "thorough": {
-     "SG_lo": 48,
-     "BRK_lo": 42,
-     "BAV_lo": 31,
-     "NWS_lo": 9,
-     "BAT_lo": 19,
-     "CPC_lo": 16,
-     "FLA_lo": 2,
-     "ADC_lo": 15,
-     "WXR_lo": 21,
-     "VHF_lo": 18,
-     "PEC_lo": 13,
-     "PDT_lo": 4,
-     "HYP_lo": 1,
-     "FBP_lo": 4,
-     "WHC_lo": 9,
-     "FDU_lo": 9,
-     "SG_hi": 71,
-     "BRK_hi": 61,
-     "BAV_hi": 49,
-     "NWS_hi": 19,
-     "BAT_hi": 36,
-     "CPC_hi": 32,
-     "FLA_hi": 10,
-     "ADC_hi": 31,
-     "WXR_hi": 38,
-     "VHF_hi": 33,
-     "PEC_hi": 26,
-     "PDT_hi": 12,
-     "HYP_hi": 6,
-     "FBP_hi": 11,
-     "WHC_hi": 21,
-     "FDU_hi": 24
-    }
-   },
-   "precedent": [
-    "L35"
-   ],
-   "partly_share": 0.5
-  },
-  {
-   "id": "R8",
-   "name": "the spares each line needs",
-   "graded_as": "Ask 2",
-   "figure": "need",
-   "golden": {
-    "SG": 8,
-    "BRK": 7,
-    "BAV": 6,
-    "NWS": 4,
-    "BAT": 5,
-    "CPC": 5,
-    "FLA": 3,
-    "ADC": 5,
-    "WXR": 6,
-    "VHF": 4,
-    "PEC": 5,
-    "PDT": 3,
-    "HYP": 3,
-    "FBP": 3,
-    "WHC": 3,
-    "FDU": 4
-   },
    "depends": [
+    "R2",
+    "R4",
     "R5",
     "R6"
    ],
    "independent": "",
-   "bands": {
-    "SG": [
-     8,
-     9
-    ],
-    "BRK": [
-     7,
-     8
-    ],
-    "BAV": [
-     6,
-     6
-    ],
-    "NWS": [
-     3,
-     4
-    ],
-    "BAT": [
-     4,
-     5
-    ],
-    "CPC": [
-     5,
-     5
-    ],
-    "FLA": [
-     3,
-     3
-    ],
-    "ADC": [
-     4,
-     5
-    ],
-    "WXR": [
-     6,
-     6
-    ],
-    "VHF": [
-     4,
-     4
-    ],
-    "PEC": [
-     5,
-     5
-    ],
-    "PDT": [
-     3,
-     3
-    ],
-    "HYP": [
-     2,
-     3
-    ],
-    "FBP": [
-     3,
-     3
-    ],
-    "WHC": [
-     3,
-     3
-    ],
-    "FDU": [
-     3,
-     4
-    ]
-   },
    "passes": {
     "quick": {
-     "SG": 5,
-     "BRK": 5,
-     "BAV": 4,
-     "NWS": 2,
-     "BAT": 3,
-     "CPC": 4,
-     "FLA": 3,
-     "ADC": 8,
-     "WXR": 7,
-     "VHF": 8,
-     "PEC": 7,
-     "PDT": 4,
-     "HYP": 4,
-     "FBP": 4,
-     "WHC": 6,
-     "FDU": 6
+     "50": 9750,
+     "30": 4910,
+     "20": 1600
     },
     "careful": {
-     "SG": 5,
-     "BRK": 4,
-     "BAV": 4,
-     "NWS": 2,
-     "BAT": 3,
-     "CPC": 4,
-     "FLA": 4,
-     "ADC": 5,
-     "WXR": 6,
-     "VHF": 4,
-     "PEC": 6,
-     "PDT": 3,
-     "HYP": 2,
-     "FBP": 3,
-     "WHC": 3,
-     "FDU": 4
+     "value": {
+      "50": 0,
+      "30": 400,
+      "20": 160
+     },
+     "grade": "missed",
+     "why": "the register's fleet and the turns leave 50 litre unordered and order a tenth of the 30 and 20 litre need"
     },
     "thorough": {
-     "SG": 8,
-     "BRK": 7,
-     "BAV": 6,
-     "NWS": 4,
-     "BAT": 5,
-     "CPC": 5,
-     "FLA": 3,
-     "ADC": 5,
-     "WXR": 6,
-     "VHF": 4,
-     "PEC": 5,
-     "PDT": 3,
-     "HYP": 3,
-     "FBP": 3,
-     "WHC": 3,
-     "FDU": 4
+     "50": 2090,
+     "30": 3230,
+     "20": 1130
     }
    },
    "precedent": [
-    "L11"
-   ],
-   "partly_share": 0.5
-  },
-  {
-   "id": "R9",
-   "name": "the lines to buy and to cut, with how many",
-   "graded_as": "Recommendation",
-   "figure": "call_units",
-   "golden": {
-    "ADC": -3,
-    "BAT": 2,
-    "BAV": 2,
-    "BRK": 2,
-    "CPC": 1,
-    "FBP": -1,
-    "FDU": -2,
-    "HYP": -1,
-    "NWS": 2,
-    "PDT": -1,
-    "PEC": -2,
-    "SG": 3,
-    "VHF": -4,
-    "WHC": -3,
-    "WXR": -1
-   },
-   "depends": [
-    "R8"
-   ],
-   "independent": "",
-   "bands": {
-    "ADC": [
-     -4,
-     -3
-    ],
-    "BAT": [
-     1,
-     2
-    ],
-    "BAV": [
-     2,
-     2
-    ],
-    "BRK": [
-     2,
-     3
-    ],
-    "CPC": [
-     1,
-     1
-    ],
-    "FBP": [
-     -1,
-     -1
-    ],
-    "FDU": [
-     -3,
-     -2
-    ],
-    "HYP": [
-     -2,
-     -1
-    ],
-    "NWS": [
-     1,
-     2
-    ],
-    "PDT": [
-     -1,
-     -1
-    ],
-    "PEC": [
-     -2,
-     -2
-    ],
-    "SG": [
-     3,
-     4
-    ],
-    "VHF": [
-     -4,
-     -4
-    ],
-    "WHC": [
-     -3,
-     -3
-    ],
-    "WXR": [
-     -1,
-     -1
-    ]
-   },
-   "passes": {
-    "quick": {
-     "ADC": 0,
-     "BAT": 0,
-     "BAV": 0,
-     "BRK": 0,
-     "CPC": 0,
-     "FBP": 0,
-     "FDU": 0,
-     "HYP": 0,
-     "NWS": 0,
-     "PDT": 0,
-     "PEC": 0,
-     "SG": 0,
-     "VHF": 0,
-     "WHC": 0,
-     "WXR": 0
-    },
-    "careful": {
-     "ADC": -3,
-     "BAT": 0,
-     "BAV": 0,
-     "BRK": -1,
-     "CPC": 0,
-     "FBP": -1,
-     "FDU": -2,
-     "HYP": -2,
-     "NWS": 0,
-     "PDT": -1,
-     "PEC": -1,
-     "SG": 0,
-     "VHF": -4,
-     "WHC": -3,
-     "WXR": -1
-    },
-    "thorough": {
-     "ADC": -3,
-     "BAT": 2,
-     "BAV": 2,
-     "BRK": 2,
-     "CPC": 1,
-     "FBP": -1,
-     "FDU": -2,
-     "HYP": -1,
-     "NWS": 2,
-     "PDT": -1,
-     "PEC": -2,
-     "SG": 3,
-     "VHF": -4,
-     "WHC": -3,
-     "WXR": -1
-    }
-   },
-   "precedent": [
-    "L11"
-   ],
-   "partly_share": 0.5
+    "L04",
+    "N01"
+   ]
   }
  ],
  "weights": {
@@ -1013,603 +357,323 @@
  },
  "hints": [
   {
-   "sentence": "the starter-generators, brakes and bleed valves wear by landings and engine starts, which the 2027 programme raises while flight hours fall",
+   "sentence": "the keg register still lists every keg lost since its last reconciliation",
    "rescues": [
     "R2"
    ]
   },
   {
-   "sentence": "a no-fault-found removal is often the aircraft's fault, not the unit's",
-   "rescues": []
+   "sentence": "a pub line holds a keg on tap and its delivery cover whatever it sells",
+   "rescues": [
+    "R4"
+   ]
   },
   {
-   "sentence": "the Bod\u00f8 shop's turnaround depends on its load",
-   "rescues": []
+   "sentence": "the 2027 Foundry beers are brewed in 200-keg lots",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "the depots' empties include other brewers' kegs",
+   "rescues": [
+    "R1"
+   ]
   }
  ],
- "hint_values": {
-  "exposure": {
-   "R2": {
-    "SG": 56,
-    "BRK": 50,
-    "BAV": 47
-   },
-   "R8": {
-    "SG": 6,
-    "BRK": 5,
-    "BAV": 5,
-    "NWS": 3,
-    "BAT": 4,
-    "CPC": 5,
-    "FLA": 4,
-    "ADC": 5,
-    "WXR": 6,
-    "VHF": 4,
-    "PEC": 4,
-    "PDT": 3,
-    "HYP": 2,
-    "FBP": 3,
-    "WHC": 3,
-    "FDU": 4
-   }
-  }
- },
  "routes": [
   {
    "name": "golden",
-   "label": "This plan",
+   "label": "This order",
    "answer": [
-    "BUY:BAT",
-    "BUY:BAV",
-    "BUY:BRK",
-    "BUY:CPC",
-    "BUY:NWS",
-    "BUY:SG",
-    "CUT:ADC",
-    "CUT:FBP",
-    "CUT:FDU",
-    "CUT:HYP",
-    "CUT:PDT",
-    "CUT:PEC",
-    "CUT:VHF",
-    "CUT:WHC",
-    "CUT:WXR"
+    "20:in",
+    "30:in",
+    "50:in"
    ],
    "golden": true,
-   "changes": {
-    "SG": 3,
-    "BRK": 2,
-    "BAV": 2,
-    "NWS": 2,
-    "BAT": 2,
-    "CPC": 1,
-    "FLA": 0,
-    "ADC": -3,
-    "WXR": -1,
-    "VHF": -4,
-    "PEC": -2,
-    "PDT": -1,
-    "HYP": -1,
-    "FBP": -1,
-    "WHC": -3,
-    "FDU": -2
+   "buy": {
+    "50": 2090,
+    "30": 3230,
+    "20": 1130
    }
   },
   {
-   "name": "careful but hurried: each part per flight hour, the 2026 average turnaround, Palm's spares",
-   "label": "Every part per flight hour, the 2026 turnaround, Palm's formula",
+   "name": "careful but hurried: gate loss, the register, the fleet's turns",
+   "label": "Register and turns",
    "answer": [
-    "BUY:FLA",
-    "CUT:ADC",
-    "CUT:BRK",
-    "CUT:FBP",
-    "CUT:FDU",
-    "CUT:HYP",
-    "CUT:PDT",
-    "CUT:PEC",
-    "CUT:VHF",
-    "CUT:WHC",
-    "CUT:WXR"
+    "20:under",
+    "30:under",
+    "50:under"
    ],
-   "changes": {
-    "SG": 0,
-    "BRK": -1,
-    "BAV": 0,
-    "NWS": 0,
-    "BAT": 0,
-    "CPC": 0,
-    "FLA": 1,
-    "ADC": -3,
-    "WXR": -1,
-    "VHF": -4,
-    "PEC": -1,
-    "PDT": -1,
-    "HYP": -2,
-    "FBP": -1,
-    "WHC": -3,
-    "FDU": -2
+   "buy": {
+    "50": 0,
+    "30": 400,
+    "20": 160
    }
   },
   {
-   "name": "quick: the October outlook and the pool as it stands",
-   "label": "The pool as it stands",
-   "answer": [],
-   "changes": {
-    "SG": 0,
-    "BRK": 0,
-    "BAV": 0,
-    "NWS": 0,
-    "BAT": 0,
-    "CPC": 0,
-    "FLA": 0,
-    "ADC": 0,
-    "WXR": 0,
-    "VHF": 0,
-    "PEC": 0,
-    "PDT": 0,
-    "HYP": 0,
-    "FBP": 0,
-    "WHC": 0,
-    "FDU": 0
-   }
-  },
-  {
-   "name": "the landing-driven parts on landings alone, the average turnaround",
-   "label": "Landings for the landing-driven parts, the 2026 turnaround, Palm's formula",
+   "name": "quick: last summer's busiest week at the fleet's turns against the register",
+   "label": "Last summer at turns",
    "answer": [
-    "BUY:BAT",
-    "BUY:BAV",
-    "BUY:CPC",
-    "BUY:FLA",
-    "BUY:NWS",
-    "BUY:SG",
-    "CUT:ADC",
-    "CUT:FBP",
-    "CUT:FDU",
-    "CUT:HYP",
-    "CUT:PDT",
-    "CUT:PEC",
-    "CUT:VHF",
-    "CUT:WHC",
-    "CUT:WXR"
+    "20:over",
+    "30:over",
+    "50:over"
    ],
-   "changes": {
-    "SG": 1,
-    "BRK": 0,
-    "BAV": 1,
-    "NWS": 1,
-    "BAT": 1,
-    "CPC": 1,
-    "FLA": 1,
-    "ADC": -3,
-    "WXR": -1,
-    "VHF": -4,
-    "PEC": -3,
-    "PDT": -1,
-    "HYP": -2,
-    "FBP": -1,
-    "WHC": -3,
-    "FDU": -2
+   "buy": {
+    "50": 9750,
+    "30": 4910,
+    "20": 1600
    }
   },
   {
-   "name": "the golden removals on the 2026 average turnaround, Palm's spares",
-   "label": "This plan's removals, the 2026 turnaround, Palm's formula",
+   "name": "shortcut: gate",
+   "label": "gate",
    "answer": [
-    "BUY:BAV",
-    "BUY:CPC",
-    "BUY:NWS",
-    "BUY:SG",
-    "CUT:ADC",
-    "CUT:FBP",
-    "CUT:FDU",
-    "CUT:HYP",
-    "CUT:PDT",
-    "CUT:PEC",
-    "CUT:VHF",
-    "CUT:WHC",
-    "CUT:WXR"
+    "20:in",
+    "30:in",
+    "50:in"
    ],
-   "changes": {
-    "SG": 1,
-    "BRK": 0,
-    "BAV": 1,
-    "NWS": 1,
-    "BAT": 0,
-    "CPC": 1,
-    "FLA": 0,
-    "ADC": -4,
-    "WXR": -1,
-    "VHF": -4,
-    "PEC": -2,
-    "PDT": -1,
-    "HYP": -2,
-    "FBP": -1,
-    "WHC": -3,
-    "FDU": -3
+   "buy": {
+    "50": 2090,
+    "30": 3220,
+    "20": 1140
+   }
+  },
+  {
+   "name": "shortcut: register",
+   "label": "register",
+   "answer": [
+    "20:under",
+    "30:under",
+    "50:under"
+   ],
+   "buy": {
+    "50": 0,
+    "30": 1250,
+    "20": 630
+   }
+  },
+  {
+   "name": "shortcut: estate_turns",
+   "label": "estate_turns",
+   "answer": [
+    "20:in",
+    "30:under",
+    "50:in"
+   ],
+   "buy": {
+    "50": 2020,
+    "30": 2390,
+    "20": 1130
+   }
+  },
+  {
+   "name": "shortcut: store_cover",
+   "label": "store_cover",
+   "answer": [
+    "20:under",
+    "30:in",
+    "50:in"
+   ],
+   "buy": {
+    "50": 2090,
+    "30": 3230,
+    "20": 660
+   }
+  },
+  {
+   "name": "shortcut: fleet_turns",
+   "label": "fleet_turns",
+   "answer": [
+    "20:under",
+    "30:in",
+    "50:over"
+   ],
+   "buy": {
+    "50": 4400,
+    "30": 3740,
+    "20": 180
    }
   }
  ],
  "forcing": {
   "kind": "set",
   "golden_answer": [
-   "BUY:BAT",
-   "BUY:BAV",
-   "BUY:BRK",
-   "BUY:CPC",
-   "BUY:NWS",
-   "BUY:SG",
-   "CUT:ADC",
-   "CUT:FBP",
-   "CUT:FDU",
-   "CUT:HYP",
-   "CUT:PDT",
-   "CUT:PEC",
-   "CUT:VHF",
-   "CUT:WHC",
-   "CUT:WXR"
+   "20:in",
+   "30:in",
+   "50:in"
   ],
   "golden_family": [
    {
-    "name": "a second stream of replays",
+    "name": "the fleet's kegs out at the two stocktakes held equal (no change in the trade)",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "no-fault-found removals without their monthly spread",
+    "name": "the holding read off counted lines within 0.2 kegs a week of the plan's rate",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "every winter at its average frost",
+    "name": "the holding read off counted lines within 0.35 kegs a week of the plan's rate",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "the shop's third-party work day by day as the 2025 and 2026 record shows it",
+    "name": "the straight-line holding fit on every quarter's counts",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "the jobs ready for the bench taken in the order of their removal",
+    "name": "the tagged share of fills taken over the last 60 days",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "the both-exposures removals",
+    "name": "the depots' Foundry stock following the beers on sale and their sales",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "name": "Palm's theorem on the golden removals for the repairers' lines",
+    "name": "the tagged kegs scaled by their share of the register's active kegs",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    }
   ],
   "shortcuts": [
    {
-    "name": "careful but hurried: each part per flight hour, the 2026 average turnaround, Palm's spares",
+    "name": "careful but hurried",
     "answer": [
-     "BUY:FLA",
-     "CUT:ADC",
-     "CUT:BRK",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:under",
+     "30:under",
+     "50:under"
     ]
    },
    {
-    "name": "quick: the October outlook and the pool as it stands",
-    "answer": []
-   },
-   {
-    "name": "the landing-driven parts on landings alone, the average turnaround",
+    "name": "quick",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:CPC",
-     "BUY:FLA",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:over",
+     "30:over",
+     "50:over"
     ]
    },
    {
-    "name": "the golden removals on the 2026 average turnaround, Palm's spares",
+    "name": "register",
     "answer": [
-     "BUY:BAV",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:under",
+     "30:under",
+     "50:under"
+    ]
+   },
+   {
+    "name": "estate_turns",
+    "answer": [
+     "20:in",
+     "30:under",
+     "50:in"
+    ]
+   },
+   {
+    "name": "store_cover",
+    "answer": [
+     "20:under",
+     "30:in",
+     "50:in"
+    ]
+   },
+   {
+    "name": "fleet_turns",
+    "answer": [
+     "20:under",
+     "30:in",
+     "50:over"
     ]
    }
   ],
   "perturbations": [
    {
-    "input": "SG rate on landings -20%",
+    "input": "the year's loss 10 per cent lower (its rivals' spread)",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "BRK rate on landings -20%",
+    "input": "the year's loss 10 per cent higher",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "BAV rate on landings -20%",
+    "input": "the holding per line 8 per cent lower (its rivals' spread)",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "the Bod\u00f8 shop's planned capacity +5%",
+    "input": "the holding per line 8 per cent higher",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "the Bod\u00f8 shop's planned capacity -5%",
+    "input": "the days on the way 20 per cent shorter",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "the propeller control's 2027 rate +20%",
+    "input": "the days on the way 20 per cent longer",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "the frost terms +20%",
+    "input": "circulation's response to deliveries 20 per cent weaker",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    },
    {
-    "input": "every no-fault-found rate +20%",
+    "input": "circulation's response to deliveries 20 per cent stronger",
     "answer": [
-     "BUY:BAT",
-     "BUY:BAV",
-     "BUY:BRK",
-     "BUY:CPC",
-     "BUY:NWS",
-     "BUY:SG",
-     "CUT:ADC",
-     "CUT:FBP",
-     "CUT:FDU",
-     "CUT:HYP",
-     "CUT:PDT",
-     "CUT:PEC",
-     "CUT:VHF",
-     "CUT:WHC",
-     "CUT:WXR"
+     "20:in",
+     "30:in",
+     "50:in"
     ]
    }
   ]

@@ -1,216 +1,224 @@
-"""figures.json and submission.md, from results.compute: every figure the four answer blocks state is emitted here
-from the same object the golden files are written from, never typed."""
+"""figures.json and submission.md, from results.compute: every figure the four answer blocks, the workbook and the
+note state is emitted here from one object, never typed. Kegs are stated to the nearest ten."""
 import json
 
 import numpy as np
 
-import analysis as A
-import golden as GD
 import params as P
 
-NAMES = {k: P.PART[k]["name"] for k in A.PARTS}
-PLURAL = {"SG": "starter-generators", "BRK": "brake assemblies", "BAV": "bleed air shutoff valves",
-          "NWS": "nose wheel steering actuators", "BAT": "main batteries", "CPC": "cabin pressure controllers",
-          "FLA": "flap drive actuators", "ADC": "air data computers", "WXR": "weather radar receiver-transmitters",
-          "VHF": "VHF transceivers", "PEC": "propeller electronic controls", "PDT": "propeller de-ice timers",
-          "HYP": "engine-driven hydraulic pumps", "FBP": "fuel boost pumps", "WHC": "windshield heat controllers",
-          "FDU": "engine fire detection control units"}
+SIZES = (50, 30, 20)
+
+
+def r10(x):
+    return int(round(float(x) / 10.0) * 10)
+
+
+def band(vals, pad=0.03, step=10):
+    lo, hi = min(vals) * (1 - pad), max(vals) * (1 + pad)
+    return int(np.floor(lo / step) * step), int(np.ceil(hi / step) * step)
 
 
 def flat(G):
-    fc, MC, H, Hw = G["fc"], G["MC"], G["H"], G["Hw"]
-    why, cyc_ch, fh_ch, summer = GD.reasons(G)
+    g = G["golden"]
+    fam = list(G["family"].values())
+    per = G.get("perturbed", {})
     f = {}
-    for k in A.PARTS:
-        f["rem_%s" % k] = int(round(fc[k]["total"]))
-        f["rem_lo_%s" % k] = int(np.floor(G["rem_band"][k][0]))
-        f["rem_hi_%s" % k] = int(np.ceil(G["rem_band"][k][1]))
-        f["p10_%s" % k] = int(MC[k]["p10"])
-        f["p90_%s" % k] = int(MC[k]["p90"])
-        f["need_%s" % k] = int(G["need"][k])
-        f["need_lo_%s" % k], f["need_hi_%s" % k] = int(G["need_band"][k][0]), int(G["need_band"][k][1])
-        f["pool_%s" % k] = int(P.POOL[k])
-        f["change_%s" % k] = int(G["calls"][k]) if k in G["robust"] else 0
-        f["hproj_%s" % k] = int(round(H[k]["proj"]))
-        f["hneed_%s" % k] = int(H[k]["spares"])
-        f["qproj_%s" % k] = int(round(G["qproj"][k]))
-        f["installed_%s" % k] = P.FLEET_N * P.PART[k]["pos"]
-    rob = G["robust"]
-    f["buy_units"] = int(sum(G["calls"][k] for k in rob if rob[k][0] == "BUY"))
-    f["cut_units"] = int(-sum(G["calls"][k] for k in rob if rob[k][0] == "CUT"))
-    f["n_buy"] = sum(1 for k in rob if rob[k][0] == "BUY")
-    f["n_cut"] = sum(1 for k in rob if rob[k][0] == "CUT")
-    f["saving"] = int(round(G["saving"]))
-    f["saving_lo"], f["saving_hi"] = int(np.floor(G["saving_band"][0])), int(np.ceil(G["saving_band"][1]))
-    f["saving_face"] = int(round(Hw["face"]))
-    f["saving_cf"] = int(round(Hw["cf_only"]))
-    f["saving_eb"] = int(round(G["saving_eb"]))
-    f["n_listed"] = int(len(G["W"]))
-    f["n_scrap"] = int(len(G["scrap"]))
-    f["n_cf_set"] = int(len(Hw["cf_set"]))
-    f["cyc_ch_pct"] = int(round(cyc_ch * 100))
-    f["fh_ch_pct"] = int(round(-fh_ch * 100))
-    for k in P.IN_HOUSE:
-        f["tat_summer_%s" % k] = int(round(summer.get(k, 0.0)))
-        f["tat_2026_%s" % k] = int(round(H[k]["tat"]))
-    allsum = [t for k, m, t, rep in G["tat_in"] if m in (7, 8)]
-    f["tat_summer"] = int(round(float(np.mean(allsum))))
-    f["val_replay"], f["val_actual"] = round(G["validation"][0], 1), round(G["validation"][1], 1)
-    pb = G["F"]["plan_bench"]
-    f["bench"] = round(float(pb.iloc[:, 2].mean()), 1)
-    f["bench_rot_q1"] = round(float(pb.iloc[1, 4]), 1)
-    f["bench_rot_apr"] = round(float(pb.iloc[4, 4]), 1)
-    f["tat_2026"] = int(round(float(np.mean([H[k]["tat"] for k in P.IN_HOUSE]))))
-    sp = fc["PEC"]["split"]
-    f["pec_cut_pct"] = int(round((1 - sp["rate_mod"] / sp["rate_un"]) * 100))
-    f["pec_mod_now_pct"] = int(round(sp["mod_installed"] / sp["installed"] * 100))
-    f["gap_SG"] = round(2 * G["D"]["SG"]["ll_gap"], 1)
-    f["gap_BRK"] = round(2 * G["D"]["BRK"]["ll_gap"], 1)
-    f["gap_BAV"] = round(2 * G["D"]["BAV"]["ll_gap"], 1)
-    f["scrap_list"] = ", ".join(G["scrap"])
-    f["scrap_set"] = list(G["scrap"])
-    f["call"] = list(G["call_set"])
-    f["call_units"] = {k: int(G["calls"][k]) for k in sorted(G["robust"])}
-    f["fill_pct"], f["range_pct"], f["window_days"] = 95, 80, 120
-    f["pn"] = {k: P.PART[k]["pn"] for k in A.PARTS}
-    f["rem"] = {k: f["rem_%s" % k] for k in A.PARTS}
-    f["rem_cyc"] = {k: f["rem_%s" % k] for k in ("SG", "BRK", "BAV")}
-    f["need"] = {k: f["need_%s" % k] for k in A.PARTS}
-    f["need_inhouse"] = {k: f["need_%s" % k] for k in P.IN_HOUSE}
-    f["pec"] = {"removals": f["rem_PEC"], "spares": f["need_PEC"]}
-    f["range"] = {**{k + "_lo": f["p10_%s" % k] for k in A.PARTS}, **{k + "_hi": f["p90_%s" % k] for k in A.PARTS}}
-    f["why"] = why
+    yl = g["_yl"]
+    for s in SIZES:
+        f["register_%d" % s] = int(G["register"][s])
+        f["fleet_%d" % s] = r10(g["fleet"][s])
+        f["untraced_%d" % s] = f["register_%d" % s] - f["fleet_%d" % s]
+        f["loss_%d" % s] = r10(g["loss"][s])
+        f["sent_%d" % s] = int(yl["sent"][s])
+        f["back_%d" % s] = int(yl["back"][s])
+        f["out1_%d" % s] = r10(yl["out1"][s])
+        f["out2_%d" % s] = r10(yl["out2"][s])
+        f["gate_%d" % s] = int(G["gate_loss"][s])
+        f["deliv_%d" % s] = r10(g["deliv"][s])
+        f["deliv_lo_%d" % s] = r10(g["deliv_lo"][s])
+        f["deliv_hi_%d" % s] = r10(g["deliv_hi"][s])
+        f["deliv_week_%d" % s] = str(g["deliv_week"][s].date())
+        f["week_%d" % s] = str(g["week"][s].date())
+        f["lost_to_week_%d" % s] = r10(g["lost_to_week"][s])
+        f["have_%d" % s] = r10(g["have"][s])
+        f["float_%d" % s] = r10(g["float"][s])
+        f["need_%d" % s] = r10(g["need"][s])
+        f["circ_%d" % s] = r10(g["need"][s] - g["float"][s])
+        parts = g["need_parts"][s]
+        f["part_existing_%d" % s] = r10(parts["existing"])
+        f["part_new_%d" % s] = r10(parts["new_lines"])
+        f["part_pipe_%d" % s] = r10(parts["new_pipe"])
+        f["part_store_%d" % s] = r10(parts["foundry_store"])
+        f["buy_%d" % s] = r10(g["buy"][s])
+        f["elasticity_%d" % s] = round(float(g["elasticity"][s]), 2)
+        # bands: the golden family's spread (and the perturbations for the order), with a small margin
+        f["loss_lo_%d" % s], f["loss_hi_%d" % s] = band([g["loss"][s]] + [G["family"][k]["loss"][s] for k in (
+            "the tagged share of fills taken over the last 60 days",
+            "the tagged kegs scaled by their share of the register's active kegs")], pad=0.10)
+        f["fleet_lo_%d" % s], f["fleet_hi_%d" % s] = band([x["fleet"][s] for x in fam] + [g["fleet"][s]], pad=0.02)
+        f["deliv_band_lo_%d" % s], f["deliv_band_hi_%d" % s] = band([g["deliv"][s]], pad=0.05)
+        f["need_lo_%d" % s], f["need_hi_%d" % s] = band([x["need"][s] for x in fam] + [g["need"][s]], pad=0.025)
+        f["buy_lo_%d" % s], f["buy_hi_%d" % s] = band([x["buy"][s] for x in fam] + [g["buy"][s]], pad=0.06, step=50)
+    for s in (50, 30):
+        f["estate_%d" % s] = r10(g["estate"][s])
+        f["estate_lo_%d" % s], f["estate_hi_%d" % s] = band([x["estate"][s] for x in fam] + [g["estate"][s]], pad=0.03)
+    f["store"] = r10(g["store"])
+    f["store_lo"], f["store_hi"] = band([g["store"]] + [x["store"] for x in fam], pad=0.04)
+    f["pubs"] = len(G["F"]["plan"]["Maplestead pubs"].pub.unique()) if "F" in G else 300
+    f["rec"] = ("Order %s fifty-litre, %s thirty-litre and %s twenty-litre kegs by 18 December for the April delivery. "
+                "The keg register's %s, %s and %s active kegs overstate the fleet by about %s, %s and %s kegs lost "
+                "in the trade since the November 2023 reconciliation, and the Maplestead pubs' slow 30 litre lines and the "
+                "widened Foundry range each need far more kegs than their volumes at the fleet's usual turns suggest."
+                % (_c(f["buy_50"]), _c(f["buy_30"]), _c(f["buy_20"]), _c(f["register_50"]), _c(f["register_30"]),
+                   _c(f["register_20"]), _c(f["untraced_50"]), _c(f["untraced_30"]), _c(f["untraced_20"])))
+    f["note_fleet"] = ("The register still lists every keg that has gone missing since it was last reconciled. Counting "
+                       "what is on our sites at the stocktake and what the tagged kegs show is out with customers, the "
+                       "fleet at 30 November is %s, %s and %s kegs. The trade lost %s, %s and %s kegs in the year to "
+                       "November, once the other brewers' kegs the drivers bring back with ours are taken out of the "
+                       "empties and our kegs coming back through the exchange and the recovery agent are counted in."
+                       % (_c(f["fleet_50"]), _c(f["fleet_30"]), _c(f["fleet_20"]), _c(f["loss_50"]), _c(f["loss_30"]),
+                          _c(f["loss_20"])))
+    f["note_new"] = ("A pub line holds a keg on tap and its delivery cover whatever it sells, so the Maplestead pubs' "
+                     "lines, slow on 30 litre, will hold about %s fifty-litre and %s thirty-litre kegs in the busiest week. The 2027 "
+                     "Foundry range is brewed in 200-keg lots across up to 18 beers, so the cold store will hold about "
+                     "%s full kegs in the twenty-litre busiest week."
+                     % (_c(f["estate_50"]), _c(f["estate_30"]), _c(f["store"])))
+    f["note_range"] = ("At normal weather the busiest delivery week sends out about %s, %s and %s kegs (80 per cent "
+                       "ranges %s to %s, %s to %s and %s to %s over the last ten summers). The order holds for each "
+                       "size across the methods we tried, within %s to %s, %s to %s and %s to %s kegs. Normal weather is a smoothed "
+                       "average day, so its busiest week sits at the low end of the range real summers give: a real "
+                       "summer's hot week lifts its peak above the average's."
+                       % (_c(f["deliv_50"]), _c(f["deliv_30"]), _c(f["deliv_20"]), _c(f["deliv_lo_50"]),
+                          _c(f["deliv_hi_50"]), _c(f["deliv_lo_30"]), _c(f["deliv_hi_30"]), _c(f["deliv_lo_20"]),
+                          _c(f["deliv_hi_20"]), _c(f["buy_lo_50"]), _c(f["buy_hi_50"]), _c(f["buy_lo_30"]),
+                          _c(f["buy_hi_30"]), _c(f["buy_lo_20"]), _c(f["buy_hi_20"])))
     return f
 
 
+def _c(x):
+    return "{:,}".format(int(x))
+
+
 def write_figures(path, f):
-    json.dump(f, open(path, "w"), indent=1, ensure_ascii=False)
-
-
-def _line(f, k):
-    return ("%s %s: %d expected unscheduled removals (band %d to %d), 80 per cent range %d to %d"
-            % (P.PART[k]["pn"], NAMES[k], f["rem_%s" % k], f["rem_lo_%s" % k], f["rem_hi_%s" % k],
-               f["p10_%s" % k], f["p90_%s" % k]))
-
-
-def _need(f, k):
-    lo, hi = f["need_lo_%s" % k], f["need_hi_%s" % k]
-    band = ("%d" % lo) if lo == hi else ("%d to %d" % (lo, hi))
-    ch = f["change_%s" % k]
-    act = ("buy %d" % ch) if ch > 0 else (("cut %d" % -ch) if ch < 0 else "hold")
-    return "%s %s: needs %d (band %s) against %d held, %s" % (P.PART[k]["pn"], NAMES[k], f["need_%s" % k], band,
-                                                              f["pool_%s" % k], act)
+    import effort_passes as EP
+    out = {k: v for k, v in f.items() if not k.startswith(("rec", "note_"))}
+    out.update(EP.composite(f))
+    json.dump(out, open(path, "w"), indent=1)
 
 
 def submission(f, G):
-    rob = G["robust"]
-    buys = [k for k in A.PARTS if k in rob and rob[k][0] == "BUY"]
-    cuts = [k for k in A.PARTS if k in rob and rob[k][0] == "CUT"]
-    holds = [k for k in A.PARTS if k not in rob]
-
-    def items(ks):
-        return ", ".join("%s %d" % (PLURAL[k], abs(f["change_%s" % k])) for k in ks)
+    c = _c
+    h = G["hurried"]
+    car = G["careful"]
     L = []
-    L.append("## Tags\n")
-    L.append("**Domain:** General Statistics & Data Science, Regression, classification & model diagnostics.  ")
-    L.append("**Analytical objective:** Forecasting & Predictive Modeling.\n")
-    L.append("## Final Recommendation\n")
-    L.append("**Buy %d rotable spares for 2027 (%s) and cut %d (%s), and withdraw only the %d watch-list serials whose "
-             "removals follow the serial.** Palm's formula on October's MTBUR and the 2026 average turnaround would "
-             "stock %d starter-generators and %d brake assemblies where the plan needs %d and %d, because it carries landing-driven wear on flight hours "
-             "that fall %d per cent in 2027 while landings rise %d per cent and misses the Bodø shop's summer queue of about "
-             "%d days against %d, and withdrawing all %d listed serials saves about %d removals a year, not the %d their "
-             "counts suggest.\n"
-             % (f["buy_units"], items(buys), f["cut_units"], items(cuts), f["n_scrap"], f["hneed_SG"], f["hneed_BRK"],
-                f["need_SG"], f["need_BRK"], f["fh_ch_pct"], f["cyc_ch_pct"], f["tat_summer"], f["tat_2026"], f["n_listed"], f["saving"],
-                f["saving_face"]))
-    L.append("## Supplementary Questions\n")
-    L.append("### %s\n" % GD.XLSX)
-    L.append("1. The Spares plan 2027 sheet has one row per part number, sixteen in all, in the stores' order, with the "
-             "part number, description, installed positions, pool today, expected 2027 unscheduled removals, the 80 per "
-             "cent range's low and high, the spares needed, the change, the action and what moves the line. Expected "
-             "removals and ranges, whole removals:")
-    for k in A.PARTS:
-        L.append("   - %s." % _line(f, k))
-    L.append("2. Spares needed for the 95 per cent fill rate, whole units:")
-    for k in A.PARTS:
-        L.append("   - %s." % _need(f, k))
-    L.append("3. The change against what the pool holds today: buy %d (%s), cut %d (%s); hold %s.\n"
-             % (f["buy_units"], items(buys), f["cut_units"], items(cuts), ", ".join(PLURAL[k] for k in holds)))
-    L.append("### %s\n" % GD.PPTX)
-    why = f["why"]
-    L.append("4. The lines to buy and to cut, a slide each for the plan, the landing-driven parts, the Bodø shop, the "
-             "watch list and the cuts, with what moves each:")
-    for k in buys + cuts:
-        L.append("   - %s %s %d: %s." % ("Buy" if k in buys else "Cut", PLURAL[k], abs(f["change_%s" % k]), why[k]))
-    L.append("5. Withdrawing every serial on the October watch list saves about %d unscheduled removals a year (band %d "
-             "to %d), counted for each position over the year with another unit fitted while a serial is away for repair."
-             % (f["saving"], f["saving_lo"], f["saving_hi"]))
-    L.append("6. Withdraw %d of the %d listed serials: %s.\n" % (f["n_scrap"], f["n_listed"], f["scrap_list"]))
-    L.append("## Critical Components\n")
-    L.append("1. The starter-generators, brakes and bleed valves fail by landings and starts, not flight hours: "
-             "**%d, %d and %d** expected 2027 removals against %d, %d and %d at October's MTBUR on 2027's flight hours, with landings "
-             "**%d per cent** up and flight hours **%d per cent** down."
-             % (f["rem_SG"], f["rem_BRK"], f["rem_BAV"], f["qproj_SG"], f["qproj_BRK"], f["qproj_BAV"], f["cyc_ch_pct"], f["fh_ch_pct"]))
-    L.append("2. The Bodø shop's queue runs about **%d days** in July and August 2027 against a 2026 average of %d, so "
-             "the in-house lines need **%d, %d, %d, %d and %d** starter-generators, brakes, bleed valves, nose wheel steering "
-             "actuators and batteries." % (f["tat_summer"], f["tat_2026"], f["need_SG"], f["need_BRK"], f["need_BAV"],
-                                            f["need_NWS"], f["need_BAT"]))
-    L.append("3. Of the %d watch-list serials, **%d** have removals that follow the serial; withdrawing the whole list "
-             "saves about **%d** removals a year." % (f["n_listed"], f["n_scrap"], f["saving"]))
-    L.append("4. SB 61-0042 cuts the propeller control's confirmed failures by about %d per cent and spreads with every "
-             "removal, so the line expects **%d** removals in 2027 and needs **%d** of the %d it holds."
-             % (f["pec_cut_pct"], f["rem_PEC"], f["need_PEC"], f["pool_PEC"]))
-    L.append("")
-    L.append("## Step-by-Step\n")
-    L.append("1. Cleaned component_changes_2023-01_2026-11.csv (corrected entries superseding the originals, the S/N "
-             "prefix of 2024's scanners, the two reason vocabularies) and matched each unscheduled removal to its order in "
-             "bodo_shop_work_orders_2023-2026.csv or vendor_repair_orders_2023-2026.xlsx for its finding and its return.")
-    L.append("2. Built each aircraft-month's landings and flight hours from flight_legs_2023-01_2026-11.csv (the re-sent "
-             "days dropped, air time from block less the field's taxi where the off and on times are missing), its base "
-             "from fleet_register.xlsx and its frost from station_weather_daily_2023-2026.csv.")
-    L.append("3. Fitted each part's confirmed failures on landings, flight hours and calendar days in turn: the "
-             "starter-generator, brake and bleed valve follow landings, the record's bases flying sectors of very "
-             "different length (twice the log-likelihood gap %.1f, %.1f and %.1f); the October report's MTBUR, carried to "
-             "2027's flight hours, gives %d, %d and %d." % (f["gap_SG"], f["gap_BRK"], f["gap_BAV"], f["hproj_SG"],
-                                                             f["hproj_BRK"], f["hproj_BAV"]))
-    L.append("4. Took 2027's landings and flight hours from flying_programme_2027.xlsx, the Helgeland routes from 1 April "
-             "flown on sectors of about a quarter of an hour: landings %d per cent up, flight hours %d per cent down, so "
-             "the landing-driven parts expect %d, %d and %d removals." % (f["cyc_ch_pct"], f["fh_ch_pct"], f["rem_SG"],
-                                                                        f["rem_BRK"], f["rem_BAV"]))
-    L.append("5. Rebuilt each propeller control's installed spells and its SB 61-0042 date from the repairers' returns: "
-             "the modified units fail about %d per cent less, %d per cent of the installed units carried the bulletin at the "
-             "snapshot and every removal converts another, so 2027 expects %d removals and the line needs %d of the %d it "
-             "holds; October's MTBUR on 2027's hours gives %d." % (f["pec_cut_pct"], f["pec_mod_now_pct"],
-                                                                           f["rem_PEC"], f["need_PEC"], f["pool_PEC"],
-                                                                           f["qproj_PEC"]))
-    L.append("6. Put the no-fault-found removals at each station's own rate on the 2027 base mix, with more flying based "
-             "at Bodø, where troubleshooting finds the aircraft's faults before units are swapped, and the flight-hour "
-             "parts on 2027's %d per cent fewer hours: the air data computer expects %d removals, the VHF transceiver %d "
-             "and the windshield heat controller %d." % (f["fh_ch_pct"], f["rem_ADC"], f["rem_VHF"], f["rem_WHC"]))
-    L.append("7. Replayed the Bodø shop day by day: on its own record (the roster's staffing, the third-party work booked "
-             "each day, %.1f bench hours a technician) it turns its 2024 to 2026 work round in %.1f days against %.1f "
-             "recorded; on bodo_shop_plan_2027.xlsx (the staggered summer weeks, %.1f rotable bench hours a technician on "
-             "duty to March and %.1f from April) with 2027's removals it runs about %d days in July and August against a "
-             "2026 average of %d, which the average-turnaround route never sees."
-             % (f["bench"], f["val_replay"], f["val_actual"], f["bench_rot_q1"], f["bench_rot_apr"], f["tat_summer"],
-                f["tat_2026"]))
-    L.append("8. Replayed each part's pool through 2027 (each removal's return from the shop replay or the repairer's own "
-             "turnaround, the winters on record, the no-fault-found months' spread) and read the fewest spares giving a "
-             "95 per cent fill rate: the starter-generator needs %d and the brake %d, where Palm's formula on the average "
-             "turnaround gives %d and %d." % (f["need_SG"], f["need_BRK"], f["hneed_SG"], f["hneed_BRK"]))
-    L.append("9. Read the watch list serial by serial: removals its aircraft drove (three or more found serviceable from "
-             "one position inside 120 days, two or more serials) set aside, each serial's own removals over its own "
-             "installed exposure, the part's serials as two groups: %d of %d serials are worth withdrawing and the whole "
-             "list saves about %d; the counts at face value say %d, the confirmed failures alone %d, one shrinkage "
-             "toward the part's rate %d." % (f["n_scrap"], f["n_listed"], f["saving"], f["saving_face"], f["saving_cf"],
-                                            f["saving_eb"]))
-    L.append("10. Set each line's spares against its pool: buy %d on %d lines and cut %d on %d.\n"
-             % (f["buy_units"], f["n_buy"], f["cut_units"], f["n_cut"]))
-    L.append("No other plan survives the files: a per-flight-hour rate is rejected by the bases' own landings, which the "
-             "starter-generator, brake and bleed valve failures follow; the 2026 average turnaround is rejected by the "
-             "shop's own queue, which the replay reproduces before it carries 2027's load; the propeller control's 2026 "
-             "rate is rejected by the repairers' bulletin dates; and the watch list's counts are rejected by the removals "
-             "each serial's aircraft drove and by each serial's own record, which a single shrinkage toward the part's "
-             "rate pulls in too far.")
+    L.append("# Final Recommendation\n")
+    L.append("Order %s new 50 litre kegs, %s new 30 litre kegs and %s new 20 litre kegs by 18 December 2026 for the "
+             "April 2027 delivery, rejecting the register's count of the fleet (which would order no 50 litre kegs at "
+             "all) and the fleet's average keg turns for the Maplestead pubs and the 2027 Foundry range (which would "
+             "order about %s fewer 30 litre and %s fewer 20 litre kegs).\n"
+             % (c(f["buy_50"]), c(f["buy_30"]), c(f["buy_20"]),
+                c(f["buy_30"] - int(round(h["estate_turns"]["buy"][30], -1))),
+                c(f["buy_20"] - int(round(h["store_cover"]["buy"][20], -1)))))
+    L.append("# Supplementary Questions\n")
+    L.append("Every figure is in kegs, stated to the nearest ten, for 50, 30 and 20 litre kegs in that order. The "
+             "spreadsheet carries one sheet for the order's bridge by size and one for each figure below with its "
+             "workings; the note is one or two pages with the order, the table and the reasons.\n")
+    L.append("1. Kegs to buy: %s, %s and %s (accepted %s to %s, %s to %s and %s to %s)."
+             % (c(f["buy_50"]), c(f["buy_30"]), c(f["buy_20"]), c(f["buy_lo_50"]), c(f["buy_hi_50"]),
+                c(f["buy_lo_30"]), c(f["buy_hi_30"]), c(f["buy_lo_20"]), c(f["buy_hi_20"])))
+    L.append("2. Kegs lost in the trade in the twelve months to 30 November 2026: %s, %s and %s (accepted %s to %s, "
+             "%s to %s and %s to %s). The depot gate counters' fulls out less empties in (%s, %s and %s) is not the "
+             "loss: the empties include other brewers' kegs, and own kegs come back through the exchange and the "
+             "recovery agent without passing a gate."
+             % (c(f["loss_50"]), c(f["loss_30"]), c(f["loss_20"]), c(f["loss_lo_50"]), c(f["loss_hi_50"]),
+                c(f["loss_lo_30"]), c(f["loss_hi_30"]), c(f["loss_lo_20"]), c(f["loss_hi_20"]), c(f["gate_50"]),
+                c(f["gate_30"]), c(f["gate_20"])))
+    L.append("3. Usable kegs at 30 November 2026: %s, %s and %s (accepted %s to %s, %s to %s and %s to %s), against "
+             "the register's %s, %s and %s active kegs."
+             % (c(f["fleet_50"]), c(f["fleet_30"]), c(f["fleet_20"]), c(f["fleet_lo_50"]), c(f["fleet_hi_50"]),
+                c(f["fleet_lo_30"]), c(f["fleet_hi_30"]), c(f["fleet_lo_20"]), c(f["fleet_hi_20"]),
+                c(f["register_50"]), c(f["register_30"]), c(f["register_20"])))
+    L.append("4. The most kegs delivered in one week of the 2027 season at normal weather: %s, %s and %s (each "
+             "accepted within 5 per cent), with 80 per cent ranges over the 2016 to 2025 summers of %s to %s, %s to "
+             "%s and %s to %s (each end within 5 per cent). Normal weather is a smoothed average day, so its busiest "
+             "week sits at the low end of the range: each real summer's hot spell lifts its own peak."
+             % (c(f["deliv_50"]), c(f["deliv_30"]), c(f["deliv_20"]), c(f["deliv_lo_50"]), c(f["deliv_hi_50"]),
+                c(f["deliv_lo_30"]), c(f["deliv_hi_30"]), c(f["deliv_lo_20"]), c(f["deliv_hi_20"])))
+    L.append("5. Kegs held at the %d Maplestead pubs in the busiest week: %s fifty-litre (accepted %s to %s) and %s "
+             "thirty-litre (accepted %s to %s)."
+             % (f["pubs"], c(f["estate_50"]), c(f["estate_lo_50"]), c(f["estate_hi_50"]), c(f["estate_30"]),
+                c(f["estate_lo_30"]), c(f["estate_hi_30"])))
+    L.append("6. Full Foundry kegs in the Brighouse cold store in the 20 litre busiest week (week ending %s): %s "
+             "(accepted %s to %s)." % (f["week_20"], c(f["store"]), c(f["store_lo"]), c(f["store_hi"])))
+    L.append("7. Kegs needed in circulation in each size's busiest week, with the washer's float: %s, %s and %s "
+             "(accepted %s to %s, %s to %s and %s to %s); the busiest weeks end %s, %s and %s.\n"
+             % (c(f["need_50"]), c(f["need_30"]), c(f["need_20"]), c(f["need_lo_50"]), c(f["need_hi_50"]),
+                c(f["need_lo_30"]), c(f["need_hi_30"]), c(f["need_lo_20"]), c(f["need_hi_20"]), f["week_50"],
+                f["week_30"], f["week_20"]))
+    L.append("# Critical Components\n")
+    L.append("1. The usable fleet is the kegs on site at the stocktake plus the kegs out with customers that will come "
+             "back, %s, %s and %s, not the register's %s, %s and %s: the register keeps every keg lost since the "
+             "November 2023 reconciliation as active."
+             % (c(f["fleet_50"]), c(f["fleet_30"]), c(f["fleet_20"]), c(f["register_50"]), c(f["register_30"]),
+                c(f["register_20"])))
+    L.append("2. The year's loss is %s, %s and %s kegs once the empties are counted at the washer (another brewer's "
+             "kegs rejected there) and the kegs out in the trade at both stocktakes are carried; the gate counters "
+             "show %s, %s and %s." % (c(f["loss_50"]), c(f["loss_30"]), c(f["loss_20"]), c(f["gate_50"]),
+                                      c(f["gate_30"]), c(f["gate_20"])))
+    L.append("3. Each Maplestead line holds a keg on tap and its weekly cover whatever it sells, read off the reps' "
+             "summer counts at customers' own rates: %s fifty-litre and %s thirty-litre kegs, where the fleet's turns "
+             "give their volume about %s thirty-litre kegs with the kegs on the way."
+             % (c(f["estate_50"]), c(f["estate_30"]), c(r10(G["turns_estate"][30]))))
+    L.append("4. The 2027 Foundry range racks 200-keg lots across up to 18 beers, so the cold store walked from the "
+             "November stocktake through the brew plan holds %s full kegs in the 20 litre busiest week, against %s at "
+             "the November days of cover." % (c(f["store"]), c(r10(h["store_cover"]["store"]))))
+    L.append("5. The kegs needed in circulation are %s, %s and %s in the weeks ending %s, %s and %s: the existing "
+             "trade's circulation rebuilt for 2026 from the stocktake, the washer and the fills and carried on its "
+             "deliveries (circulation rises about %s, %s and %s per cent for each 1 per cent more delivered), plus the "
+             "new lines, the cold store and the float.\n"
+             % (c(f["need_50"]), c(f["need_30"]), c(f["need_20"]), f["week_50"], f["week_30"], f["week_20"],
+                f["elasticity_50"], f["elasticity_30"], f["elasticity_20"]))
+    L.append("# Step-by-Step\n")
+    steps = [
+        "Assemble the records: the depot gate counts (sizes written 50, 50L and K50; outages keyed the next day), "
+        "the washer log by shift, the filling log, the repair jobs, the RFID reads (duplicate reads seconds apart "
+        "dropped, replaced tags mapped back to their serials) and the delivery visits (handheld re-syncs dropped).",
+        "Loss: the kegs filled in the year (%s, %s and %s) less the own kegs back at the washer (washed, sent to "
+        "repair or condemned there, less repaired kegs presented again: %s, %s and %s), less the rise in kegs out "
+        "between the two stocktakes from the tagged trips (%s to %s, %s to %s and %s to %s, scaled by the tagged "
+        "share of fills), gives %s, %s and %s. The hurried route reads the gate counters and files %s, %s and %s: "
+        "its in-and-out reconciliation closes because other brewers' kegs fill the gap."
+        % (c(f["sent_50"]), c(f["sent_30"]), c(f["sent_20"]), c(f["back_50"]), c(f["back_30"]), c(f["back_20"]),
+           c(f["out1_50"]), c(f["out2_50"]), c(f["out1_30"]), c(f["out2_30"]), c(f["out1_20"]), c(f["out2_20"]),
+           c(f["loss_50"]), c(f["loss_30"]), c(f["loss_20"]), c(f["gate_50"]), c(f["gate_30"]), c(f["gate_20"])),
+        "Fleet: the 2026 stocktake's clean empties and repair cage plus the tagged kegs out at 30 November that will "
+        "come back (open trips completed from the same weeks of 2025, seasonal customers on their own), scaled to "
+        "every keg, gives %s, %s and %s. The hurried route takes the register's active kegs."
+        % (c(f["fleet_50"]), c(f["fleet_30"]), c(f["fleet_20"])),
+        "Busiest week's deliveries: weekly deliveries on the calendar, warmth over 17 C, bank holidays, Christmas, "
+        "January and trend, carried through 2027 at normal weather with the Maplestead pubs and the new Foundry taps "
+        "from their start weeks: %s, %s and %s; replaying the 2016 to 2025 summers gives the 80 per cent ranges."
+        % (c(f["deliv_50"]), c(f["deliv_30"]), c(f["deliv_20"])),
+        "Maplestead: a customer's kegs of a size fitted on its taps and its order cover (its own year's rate over its "
+        "delivery interval and a week) across the reps' summer counts; each pub's line at its scheduled rate holds "
+        "%s fifty-litre and %s thirty-litre kegs in all. The hurried route carries their volume at the fleet's days "
+        "out per trip." % (c(f["estate_50"]), c(f["estate_30"])),
+        "Foundry: the cold store from the November stocktake, plus the brew plan's racking, less the range's forecast "
+        "deliveries and the depots' stock beer by beer on sale, peaks at %s in the week ending %s. The hurried route "
+        "carries the November days of cover." % (c(f["store"]), f["week_20"]),
+        "Need: 2026 circulation rebuilt day by day (fleet from the 2025 stocktake run down by the loss, less clean "
+        "empties from the washer and the fills), fitted on deliveries and carried to 2027; plus the new lines with "
+        "their kegs filled and on the way back, the cold store and two days' season fills: %s, %s and %s."
+        % (c(f["need_50"]), c(f["need_30"]), c(f["need_20"])),
+        "Order: the need less the fleet in the busiest week (the fleet at 30 November less the year's loss per keg "
+        "sent out carried to that week, %s, %s and %s): %s, %s and %s. The careful but hurried route (gate loss, "
+        "register, the estate and the Foundry range at the fleet's turns) orders %s, %s and %s."
+        % (c(f["lost_to_week_50"]), c(f["lost_to_week_30"]), c(f["lost_to_week_20"]), c(f["buy_50"]), c(f["buy_30"]),
+           c(f["buy_20"]), c(r10(car["buy"][50])), c(r10(car["buy"][30])), c(r10(car["buy"][20]))),
+        "No other conclusion survives: every rival method lands the order inside its band for each size, the "
+        "register alone leaves 50 litre unordered, the turns alone under-order the 30 litre and 20 litre kegs, and the "
+        "fleet's whole-pool turns over-order 50 litre kegs by about %s." % c(r10(h["fleet_turns"]["buy"][50] - f["buy_50"])),
+    ]
+    for i, t in enumerate(steps):
+        L.append("%d. %s" % (i + 1, t))
     return "\n".join(L) + "\n"

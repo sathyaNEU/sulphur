@@ -1,229 +1,175 @@
-"""Every owed figure, computed once from the shipped files: the golden, the rival methods that set each band, the
-hurried and quick routes the effort test scores, each shortcut's call, and the perturbations the forcing block
-records. golden.py, writeup.py, effort_passes.py and checks.py all read this one object."""
-import copy
-import math
-
+"""Every owed figure, computed from the cut pack by analysis.py: the golden chain, the rival methods that set each
+result's band (the golden family), and the hurried routes the effort test prices. One option set runs the whole
+chain, so a rival or a shortcut is the golden with one step done another way."""
 import numpy as np
 import pandas as pd
 
 import analysis as A
-import params as P
 
-REPS = 600
+SIZES = A.SIZES
+GOLDEN = {"loss": "stock", "fleet": "stock", "hold": "linear", "width": 0.2, "store": "walk", "elastic": None,
+          "share_days": 120, "holding_months": (5, 6, 7, 8, 9), "loss_scale": 1.0, "hold_scale": 1.0,
+          "pipe_scale": 1.0, "elastic_scale": 1.0, "depot_rule": "beers", "share_basis": "fills"}
+_CACHE = {}
 
 
-def _forecast_with(F, D, **kw):
-    """The golden forecast with one modelling choice changed (a rival in the band)."""
-    X = A.expo_2027(F)
-    fr = A.frost_clim(F)
-    out = {}
-    for k in A.PARTS:
-        p = P.PART[k]
-        drv = D[k]["driver"]
-        b = D[k]["beta"]
-        if kw.get("nff_pooled"):
-            nr0 = A.nff_rates(F, k, drv)
-            R = F["removals"]
-            R = R[(R["k"] == k) & (R["reason"] == "UNSCH") & (R["finding"] == "NFF") & (R["date"] <= A.Y26[1])]
-            Dd = F["day"][F["day"]["date"] <= A.Y26[1]]
-            tot = float({"cyc": Dd["cyc"].sum(), "fh": Dd["fh"].sum(), "days": len(Dd)}[drv]) * p["pos"]
-            pooled = len(R) / tot
-            nr = {s: pooled for s in nr0}
-        else:
-            nr = A.nff_rates(F, k, drv)
-        cf = nf = 0.0
-        for _, r in X.iterrows():
-            st = A.station_of(r["grp"])
-            e = {"cyc": r["cyc"], "fh": r["fh"], "days": r["acdays"]}[drv] * p["pos"]
-            frost = fr.get((st, int(r["month"])), 0.0)
-            if kw.get("both") and drv != "days":
-                bb = kw["both"][k]
-                ratio = (r["fh"] / r["cyc"]) if r["cyc"] > 0 else 0.0
-                lam = r["cyc"] * p["pos"] * math.exp(bb[0] + bb[1] * math.log(max(ratio, 1e-6)) + bb[2] * frost)
-            else:
-                lam = e * math.exp(b[0] + (b[1] * frost if len(b) > 1 else 0.0))
-            cf += lam
-            nf += e * nr.get(st, np.mean(list(nr.values())))
-        out[k] = cf + nf
-    # the propeller control converts through its own removals whatever the rest of the model
-    fhm = X.groupby("month")["fh"].sum().to_dict()
-    fhm = {m: fhm.get(m, 0.0) * P.PART["PEC"]["pos"] for m in range(1, 13)}
-    sp = A.pec_split(F)
-    nff_fh = (out["PEC"] - _cf_only(F, D, "PEC")) / max(sum(fhm.values()), 1.0)
-    out["PEC"] = A.pec_forecast(F, fhm, max(nff_fh, 0.0), sp)[0]
+def chain(F, tp, lw, opt):
+    o = dict(GOLDEN)
+    o.update(opt)
+    A.PIPE_DAYS.clear()
+    A.pipe_days(F, tp)
+    for k in A.PIPE_DAYS:
+        A.PIPE_DAYS[k] *= o["pipe_scale"]
+    A.SHARE_DAYS[0] = o["share_days"]
+    A.DEPOT_RULE[0] = o["depot_rule"]
+    A.SHARE_BASIS[0] = o["share_basis"]
+    key = ("yl", o["share_days"], o["share_basis"])
+    if key not in _CACHE:
+        _CACHE[key] = A.year_loss(F, tp)
+    yl = dict(_CACHE[key])
+    yl["loss"] = {s: v * o["loss_scale"] for s, v in yl["loss"].items()}
+    if o["loss"] == "gate":
+        yl = dict(yl)
+        yl["loss"] = A.gate_loss(F)
+    elif o["loss"] == "no_stock_change":
+        yl = dict(yl)
+        yl["loss"] = {s: yl["sent"][s] - yl["back"][s] for s in SIZES}
+    if o["fleet"] == "register":
+        u2 = A.register_active(F)
+    elif o["fleet"] == "register_less_losses":
+        reg = A.register_active(F)
+        y1 = {s: A.fills_between(F, A.T1 - pd.Timedelta(days=730), A.T1 - pd.Timedelta(days=365))[s] -
+              A.own_back(F, A.T1 - pd.Timedelta(days=730), A.T1 - pd.Timedelta(days=365))[s] for s in SIZES}
+        y2 = {s: A.fills_between(F, A.T1 - pd.Timedelta(days=365), A.T1)[s] -
+              A.own_back(F, A.T1 - pd.Timedelta(days=365), A.T1)[s] for s in SIZES}
+        u2 = {s: reg[s] - y1[s] - y2[s] - yl["loss"][s] for s in SIZES}
+    else:
+        u2, _ = A.usable(F, tp, yl["out2"])
+    if "R3" not in _CACHE:
+        _CACHE["R3"] = A.busiest_deliveries(F, lw)
+    R3 = _CACHE["R3"]
+    key = ("hd", o["holding_months"])
+    if key not in _CACHE:
+        _CACHE[key] = A.holding_data(F, o["holding_months"])
+    hd = _CACHE[key]
+    hs = o["hold_scale"]
+    if o["hold"] == "binned":
+        hold = lambda s, r: hs * A.holding_binned(hd, s, r, width=o["width"])
+    elif o["hold"] == "linear":
+        bb = {z: A.fit_holding(hd[(hd.interval == 7.0) & (hd["size"] == z)]) for z in SIZES}
+        hold = lambda s, r: hs * float(A.predict_holding(bb[s], 1, r, 7.0, 1))
+    else:
+        hold = None
+    fg27 = None
+    el = o["elastic"]
+    if o["elastic_scale"] != 1.0:
+        base = A.need_2027(F, tp, yl, R3, lw, hd, hold_fn=hold, fg27=fg27)
+        el = {s: base[s]["elasticity"] * o["elastic_scale"] for s in SIZES}
+    R6 = A.need_2027(F, tp, yl, R3, lw, hd, hold_fn=hold, fg27=fg27, elastic=el)
+    if o["hold"] == "turns":
+        for s in (50, 30):
+            df = R6[s]["weekly"].copy()
+            wk = R6[s]["week"]
+            adj = A.turns_holding(F, tp, R3, s) - (df.loc[wk, "new_lines"] + df.loc[wk, "new_pipe"])
+            df["total"] = df["total"] + adj
+            R6[s] = dict(R6[s], weekly=df, peak=float(df.total.max()), week=df.total.idxmax())
+    if o["store"] == "days_cover":
+        s = 20
+        df = R6[s]["weekly"].copy()
+        for wk in df.index:
+            df.loc[wk, "foundry_store"] = A.foundry_days_of_cover(F, R3, wk)
+        df["total"] = df[["existing", "new_lines", "new_pipe", "foundry_store"]].sum(axis=1)
+        R6[s] = dict(R6[s], weekly=df, peak=float(df.total.max()), week=df.total.idxmax())
+    if o.get("need") == "turns":
+        for s in SIZES:
+            days = A.dwell_at_customers(tp, s)
+            df = R6[s]["weekly"].copy()
+            df["total"] = R3[s]["weekly"].values / 7.0 * days
+            R6[s] = dict(R6[s], weekly=df, peak=float(df.total.max()), week=df.total.idxmax())
+    order = A.order(F, tp, yl, u2, R3, R6)
+    out = {"loss": yl["loss"], "fleet": u2, "deliv": {s: R3[s]["point"] for s in SIZES},
+           "deliv_lo": {s: R3[s]["lo"] for s in SIZES}, "deliv_hi": {s: R3[s]["hi"] for s in SIZES},
+           "deliv_week": {s: R3[s]["week"] for s in SIZES}}
+    out["estate"] = {s: float(R6[s]["weekly"].loc[R6[s]["week"], "new_lines"]) for s in (50, 30)}
+    out["store"] = float(R6[20]["weekly"].loc[R6[20]["week"], "foundry_store"])
+    out["week"] = {s: R6[s]["week"] for s in SIZES}
+    out["need_parts"] = {s: R6[s]["weekly"].loc[R6[s]["week"]].to_dict() for s in SIZES}
+    out["need"] = {s: order[s]["need"] for s in SIZES}
+    out["float"] = {s: order[s]["float"] for s in SIZES}
+    out["have"] = {s: order[s]["have"] for s in SIZES}
+    out["lost_to_week"] = {s: order[s]["lost_to_week"] for s in SIZES}
+    out["buy"] = {s: order[s]["buy"] for s in SIZES}
+    out["elasticity"] = {s: R6[s]["elasticity"] for s in SIZES}
+    out["_R3"] = R3
+    out["_R6"] = R6
+    out["_yl"] = yl
     return out
 
 
-def _cf_only(F, D, k):
-    X = A.expo_2027(F)
-    fr = A.frost_clim(F)
-    b = D[k]["beta"]
-    drv = D[k]["driver"]
-    cf = 0.0
-    for _, r in X.iterrows():
-        st = A.station_of(r["grp"])
-        e = {"cyc": r["cyc"], "fh": r["fh"], "days": r["acdays"]}[drv] * P.PART[k]["pos"]
-        cf += e * math.exp(b[0] + (b[1] * fr.get((st, int(r["month"])), 0.0) if len(b) > 1 else 0.0))
-    return cf
+FAMILY = {
+    "the fleet's kegs out at the two stocktakes held equal (no change in the trade)": {"loss": "no_stock_change"},
+    "the holding read off counted lines within 0.2 kegs a week of the plan's rate": {"hold": "binned", "width": 0.2},
+    "the holding read off counted lines within 0.35 kegs a week of the plan's rate": {"hold": "binned", "width": 0.35},
+    "the straight-line holding fit on every quarter's counts": {"holding_months": (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)},
+    "the tagged share of fills taken over the last 60 days": {"share_days": 60},
+    "the depots' Foundry stock following the beers on sale and their sales": {"depot_rule": "beers_and_rate"},
+    "the tagged kegs scaled by their share of the register's active kegs": {"share_basis": "register"},
+}
+
+HURRIED = {
+    "gate": {"loss": "gate"},
+    "register": {"fleet": "register"},
+    "estate_turns": {"hold": "turns"},
+    "store_cover": {"store": "days_cover"},
+    "fleet_turns": {"need": "turns"},
+}
 
 
-def both_fit(F):
-    """A rival that lets the data weigh landings and hours together: landings as the offset, the hours a landing
-    as a covariate (an elasticity), frost beside them."""
-    out = {}
-    for k in A.PARTS:
-        g = A.panel(F, k, "CF")
-        ok = (g["cyc"] > 0) & (g["fh"] > 0)
-        g = g[ok]
-        X = np.column_stack([np.ones(len(g)), np.log(g["fh"].values / g["cyc"].values), g["frost_rate"].values])
-        b, ll = A.poisson_fit(g["n"].values.astype(float), X, np.log(g["cyc"].values))
-        out[k] = b
-    return out
+def careful_route():
+    """the careful but hurried pass: every file cleaned, the gate counters' loss, the register as the fleet, the
+    estate and the Foundry range carried at the fleet's own turns and days of cover"""
+    return {"loss": "gate", "fleet": "register", "hold": "turns", "store": "days_cover"}
 
 
-def nb_ranges(F, fc):
-    from scipy.stats import nbinom
-    out = {}
-    for k in A.PARTS:
-        mu = float(fc[k]["total"])
-        n_ev = int(((F["removals"]["k"] == k) & (F["removals"]["reason"] == "UNSCH")).sum())
-        var = float(fc[k]["cf"]) + A.nff_dispersion(F, k) * float(fc[k]["nff"]) + mu * mu / max(n_ev, 1)
-        if var <= mu * 1.0001:
-            var = mu * 1.0001
-        p = mu / var
-        r = mu * mu / (var - mu)
-        out[k] = (int(nbinom.ppf(0.10, r, p)), int(nbinom.ppf(0.90, r, p)))
-    return out
+PERTURB = {"the year's loss 10 per cent lower (its rivals' spread)": {"loss_scale": 0.9},
+           "the year's loss 10 per cent higher": {"loss_scale": 1.1},
+           "the holding per line 8 per cent lower (its rivals' spread)": {"hold_scale": 0.92},
+           "the holding per line 8 per cent higher": {"hold_scale": 1.08},
+           "the days on the way 20 per cent shorter": {"pipe_scale": 0.8},
+           "the days on the way 20 per cent longer": {"pipe_scale": 1.2},
+           "circulation's response to deliveries 20 per cent weaker": {"elastic_scale": 0.8},
+           "circulation's response to deliveries 20 per cent stronger": {"elastic_scale": 1.2}}
 
 
-def calls_family(E):
-    """Each golden-family member's change line by line, from effort.json's forcing block (the answers are signs)."""
-    out = []
-    for x in E["forcing"]["golden_family"]:
-        d = {}
-        for a in x["answer"]:
-            act, k = a.split(":")
-            d[k] = 1 if act == "BUY" else -1
-        out.append({k: d.get(k, 0) for k in set(d) | set(a.split(":")[1] for a in E["forcing"]["golden_answer"])})
-    return out
-
-
-def calls(need, pool=None):
-    """The plan's lines that change: each part number's spares needed against what its pool holds."""
-    pool = pool or P.POOL
-    return {k: int(need[k]) - int(pool[k]) for k in A.PARTS}
-
-
-def call_set(ch, min_step=2):
-    """The lines the recommendation names: a purchase or a cut of two units or more."""
-    return sorted(["BUY:%s" % k for k, v in ch.items() if v >= min_step] + ["CUT:%s" % k for k, v in ch.items() if v <= -min_step])
-
-
-def compute(target, reps=REPS):
+def compute(target):
+    _CACHE.clear()
     F = A.load(target)
-    D = A.drivers_cache(F)
-    fc = A.forecast(F, D)
-    MC = A.simulate(F, fc, D, reps=reps, seed=20271)
-    need = {k: MC[k]["need"] for k in A.PARTS}
-    W, saving = A.watch_golden(F, fc, "mixture")
-    Wr, saving_raw = A.watch_golden(F, fc, "raw")
-    We, saving_eb = A.watch_golden(F, fc, "eb")
-    # the saving's rivals: a new unit at the healthy group's rate, and the run that marks a position's own fault read
-    # over 90 or 180 days rather than 120
-    watch_riv = {"a new unit at the healthy group's rate": A.watch_golden(F, fc, "mixture", new_unit="healthy"),
-                 "runs read over 90 days": A.watch_golden(F, fc, "mixture", window=90),
-                 "runs read over 180 days": A.watch_golden(F, fc, "mixture", window=180)}
-    Hw = A.watch_hurried(F)
-    H = A.hurried(F)                                   # careful but hurried: per flight hour, average turnaround
-    Hd = A.hurried(F, exposure="drv", D=D)             # the exposure put right alone
-    Hg = A.hurried(F, exposure="golden", fc=fc)        # the golden removals on the average turnaround
-    # rivals for the removals
-    bf = both_fit(F)
-    riv = {"both exposures": _forecast_with(F, D, both=bf),
-           "no frost term": {k: v["total"] for k, v in A.forecast(F, A.drivers(F, cold=False)).items()},
-           "no-fault-found pooled over stations": _forecast_with(F, D, nff_pooled=True)}
-    # the record's window is filed (standard 4.3: January 2023 to the end of the latest report's months), so no
-    # window rival enters the bands
-    # rivals for the spares (the golden family): another stream of replays, the no-fault-found removals without
-    # their month-to-month spread, the frost of an average winter, the third-party work day by day as the record shows it,
-    # the removals of the both-exposures fit
-    MC2 = A.simulate(F, fc, D, reps=reps, seed=31337)
-    need2 = {k: MC2[k]["need"] for k in A.PARTS}
-    fam = {"a second stream of replays": MC2,
-           "no-fault-found removals without their monthly spread": A.simulate(F, fc, D, reps=reps, seed=4242, no_disp=True),
-           "every winter at its average frost": A.simulate(F, fc, D, reps=reps, seed=5151, no_frost=True),
-           "the shop's third-party work day by day as the 2025 and 2026 record shows it":
-               A.simulate(F, fc, D, reps=reps, seed=6161, other_resample=True),
-           "the jobs ready for the bench taken in the order of their removal":
-               A.simulate(F, fc, D, reps=reps, seed=6363, queue_order="removed")}
-    fc_both = copy.deepcopy(fc)
-    for k in A.PARTS:
-        m = riv["both exposures"][k] / fc[k]["total"] if fc[k]["total"] > 0 else 1.0
-        for c in ("total", "cf", "nff"):
-            fc_both[k][c] = fc[k][c] * m
-    fam["the both-exposures removals"] = A.simulate(F, fc_both, D, reps=reps, seed=7171)
-
-    fam_need = {n: {k: m[k]["need"] for k in A.PARTS} for n, m in fam.items()}
-    # a repairer's line has no shared queue, so Palm's theorem on the golden removals and the repairer's own
-    # turnaround is a defensible method there; the in-house lines keep the replay
-    fam_need["Palm's theorem on the golden removals for the repairers' lines"] = {
-        k: (need[k] if P.PART[k]["shop"] == "BOO" else Hg[k]["spares"]) for k in A.PARTS}
-    # the recommendation's lines: those every member of the golden family moves the same way
-    gold_calls = calls(need)
-    fam_calls = {n: calls(v) for n, v in fam_need.items()}
-    robust = {}
-    for k in A.PARTS:
-        vals = [gold_calls[k]] + [c[k] for c in fam_calls.values()]
-        if all(v > 0 for v in vals):
-            robust[k] = ("BUY", min(vals), max(vals))
-        elif all(v < 0 for v in vals):
-            robust[k] = ("CUT", min(vals), max(vals))
-    need_band = {k: (min([need[k]] + [v[k] for v in fam_need.values()]), max([need[k]] + [v[k] for v in fam_need.values()]))
-                 for k in A.PARTS}
-    def lines(ch):
-        return sorted(["BUY:%s" % k for k, v in ch.items() if v > 0] + ["CUT:%s" % k for k, v in ch.items() if v < 0])
-    robust_set = sorted("%s:%s" % (v[0], k) for k, v in robust.items())
-    routes = [{"name": "golden", "label": "This plan", "answer": robust_set, "golden": True,
-               "changes": {k: (gold_calls[k] if k in robust else 0) for k in A.PARTS}},
-              {"name": "careful but hurried: each part per flight hour, the 2026 average turnaround, Palm's spares",
-               "label": "Every part per flight hour, the 2026 turnaround, Palm's formula",
-               "answer": lines(calls({k: H[k]["spares"] for k in A.PARTS})),
-               "changes": calls({k: H[k]["spares"] for k in A.PARTS})},
-              {"name": "quick: the October outlook and the pool as it stands", "label": "The pool as it stands",
-               "answer": [], "changes": {k: 0 for k in A.PARTS}},
-              {"name": "the landing-driven parts on landings alone, the average turnaround",
-               "label": "Landings for the landing-driven parts, the 2026 turnaround, Palm's formula",
-               "answer": lines(calls({k: Hd[k]["spares"] for k in A.PARTS})),
-               "changes": calls({k: Hd[k]["spares"] for k in A.PARTS})},
-              {"name": "the golden removals on the 2026 average turnaround, Palm's spares",
-               "label": "This plan's removals, the 2026 turnaround, Palm's formula",
-               "answer": lines(calls({k: Hg[k]["spares"] for k in A.PARTS})),
-               "changes": calls({k: Hg[k]["spares"] for k in A.PARTS})}]
-    G = {"fam": fam, "fam_need": fam_need,
-         "F": F, "D": D, "fc": fc, "MC": MC, "MC2": MC2, "need": need, "need2": need2, "W": W, "saving": saving,
-         "saving_raw": saving_raw, "saving_eb": saving_eb, "W_raw": Wr, "W_eb": We, "Hw": Hw, "H": H, "Hd": Hd,
-         "Hg": Hg, "riv": riv, "calls": gold_calls, "call_set": robust_set, "robust": robust, "need_band": need_band,
-         "fam_calls": fam_calls, "routes": routes}
-    # removal bands: the golden and every rival, a whole removal either side; range bands from the family's replays
-    G["rem_band"] = {k: (min([fc[k]["total"]] + [riv[n][k] for n in riv]) - 1.0,
-                         max([fc[k]["total"]] + [riv[n][k] for n in riv]) + 1.0) for k in A.PARTS}
-    # the range's rival without a replay: a negative binomial on the golden's mean, its variance the confirmed
-    # failures' Poisson part, the no-fault-found removals' own monthly overdispersion and the rate's sampling error
-    nb = nb_ranges(F, fc)
-    G["nb_range"] = nb
-    G["p10_band"] = {k: (min([MC[k]["p10"], nb[k][0]] + [m[k]["p10"] for m in fam.values()]) - 1,
-                         max([MC[k]["p10"], nb[k][0]] + [m[k]["p10"] for m in fam.values()]) + 1) for k in A.PARTS}
-    G["p90_band"] = {k: (min([MC[k]["p90"], nb[k][1]] + [m[k]["p90"] for m in fam.values()]) - 1,
-                         max([MC[k]["p90"], nb[k][1]] + [m[k]["p90"] for m in fam.values()]) + 1) for k in A.PARTS}
-    sv = [saving] + [v[1] for v in watch_riv.values()]
-    # the count for the position over the year moves a few removals with how the pool's rotation is carried (the
-    # per-position count here, a fleet replay of the list kept and replaced): the lower edge takes a tenth for it
-    G["saving_band"] = (min(sv) * 0.90, max(sv) * 1.05)
-    G["watch_riv"] = {n: (sorted(v[0].index[v[0]["scrap"]]), v[1]) for n, v in watch_riv.items()}
-    G["scrap"] = sorted(W.index[W["scrap"]])
-    G["tat_in"] = MC["_tat_in"]
-    G["validation"] = A.validate_shop(F, A.shop_inputs(F))
-    import docs
-    G["qproj"] = {x["k"]: x["proj"] for x in docs.report_figures(F)["rows"]}
+    tp = A.trips(F)
+    lw = A.weekly_weather(F)
+    G = {"golden": chain(F, tp, lw, {})}
+    G["perturbed"] = {k: chain(F, tp, lw, v) for k, v in PERTURB.items()}
+    G["family"] = {k: chain(F, tp, lw, v) for k, v in FAMILY.items()}
+    G["hurried"] = {k: chain(F, tp, lw, v) for k, v in HURRIED.items()}
+    G["careful"] = chain(F, tp, lw, careful_route())
+    G["turns_estate"] = {s: A.turns_holding(F, tp, G["golden"]["_R3"], s) for s in (50, 30)}
+    G["quick"], G["quick_deliv"], G["quick_need"] = quick(F, tp, lw)
+    G["register"] = A.register_active(F)
+    G["gate_loss"] = A.gate_loss(F)
+    G["F"] = F
+    G["tp"] = tp
     return G
+
+
+def quick(F, tp, lw):
+    """ten minutes: the register as the fleet, last summer's busiest week's deliveries at the fleet's turns"""
+    reg = A.register_active(F)
+    out, deliv, need = {}, {}, {}
+    for s in SIZES:
+        g = A.gate_daily(F, s).resample("W-SUN").sum()
+        peak = float(g["2026-05-01":"2026-09-30"].max())
+        fills = A.fills_between(F, A.T1, A.T2)[s]
+        turns_days = reg[s] / fills * 365.0
+        deliv[s] = peak
+        need[s] = peak / 7.0 * turns_days
+        out[s] = max(0.0, need[s] - reg[s])
+    return out, deliv, need

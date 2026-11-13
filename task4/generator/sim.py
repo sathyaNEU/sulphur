@@ -1,808 +1,811 @@
-"""The clean truth: Havørn Regional's fleet flown day by day from January 2023 to the end of November 2026, and the
-2027 programme replayed many times from the end of November for the truth the golden is checked against.
+"""The simulated brewery, day by day: the weather, each outlet line's sales, the outlets' cellars and their orders,
+the drivers' visits (fulls delivered, empties collected, other brewers' kegs picked up with them), kegs lost in the
+trade, taken by other brewers' drivers and handed back through the exchange, found by the recovery agent, the depots'
+gates and trunks, the washer, repairs and condemnations, the brew-house's fills (mainstream to a stock target, the
+Foundry beers in whole 120-keg lots), the register and its 2023 reconciliation, and every RFID read of a tagged keg.
 
-The process, as the airline's systems see it. Each aircraft flies rotations out of its base; every leg adds a
-landing, the engines' starts and flight hours to every unit installed on it. Each unit fails on its own exposure
-(landings, starts, hours or days since its last shop visit, a Weibull wear-out), more often on cold days for the parts
-that mind the cold, much more often if it carries a latent defect the shop never clears, less often once the
-propeller control's bulletin is embodied. Aircraft also develop intermittent faults in their own wiring and
-connectors; each symptom is met at the station by swapping the unit or by troubleshooting, and only troubleshooting
-(or a heavy check) finds the fault, so a faulty aircraft goes through serviceable units until someone finds it. Every
-removed unit is replaced from the pool if a spare is in stores, travels to the Bodø shop or a vendor, waits its turn,
-is tested, repaired or found serviceable, and comes back; a pool that runs dry is relieved by robbing an aircraft in
-its check, or the aircraft waits on the ground."""
-import copy
+The history runs to 30 November 2026. The same engine then carries the 30 November state through the 2027 summer at
+normal weather with the plans (Maplestead's pubs, the 18-beer Foundry range), with new kegs drawn whenever the
+washer runs out, which is the truth the checks hold the golden to: the kegs in use in the busiest week and the
+original fleet still usable then."""
 import datetime as dt
 import math
-import zlib
+from collections import defaultdict, deque
 
 import numpy as np
 
 import params as P
 
-DAY = dt.timedelta(days=1)
+ONE = dt.timedelta(days=1)
 
 
-# ----------------------------------------------------------------------------------------------- calendar helpers
-
-def easter(y):
-    a = y % 19
-    b, c = divmod(y, 100)
-    d, e = divmod(b, 4)
-    f = (b + 8) // 25
-    g = (b - f + 1) // 3
-    h = (19 * a + b - d - g + 15) % 30
-    i, k = divmod(c, 4)
-    l = (32 + 2 * e + 2 * i - h - k) % 7
-    m = (a + 11 * h + 22 * l) // 451
-    mo = (h + l - 7 * m + 114) // 31
-    da = ((h + l - 7 * m + 114) % 31) + 1
-    return dt.date(y, mo, da)
+def daterange(a, b):
+    d = a
+    while d <= b:
+        yield d
+        d += ONE
 
 
-def holidays(y):
-    e = easter(y)
-    return {dt.date(y, 1, 1), e - 3 * DAY, e - 2 * DAY, e + DAY, dt.date(y, 5, 1), dt.date(y, 5, 17), e + 39 * DAY,
-            e + 50 * DAY, dt.date(y, 12, 25), dt.date(y, 12, 26)}
+class Weather:
+    """Daily maximum temperature at Leeds (and two stations near the other depots), 2016 to November 2026."""
 
+    def __init__(self, rng):
+        self.days = list(daterange(dt.date(2016, 1, 1), P.ASOF))
+        n = len(self.days)
+        doy = np.array([d.timetuple().tm_yday for d in self.days])
+        base = 13.6 + 7.4 * np.cos(2 * np.pi * (doy - 204) / 365.25)
+        shift = {2016: 0.1, 2017: 0.2, 2018: 1.1, 2019: 0.3, 2020: 0.4, 2021: 0.0, 2022: 1.0, 2023: 0.5, 2024: -0.6,
+                 2025: 1.2, 2026: 0.3}
+        summer = np.array([shift[d.year] if 5 <= d.month <= 9 else 0.3 * shift[d.year] for d in self.days])
+        a = np.zeros(n)
+        e = rng.normal(0, 1.0, n)
+        for i in range(1, n):
+            a[i] = 0.72 * a[i - 1] + 2.4 * e[i]
+        self.leeds = np.round(base + summer + a, 1)
+        self.idx = {d: i for i, d in enumerate(self.days)}
+        offs = {"LDS": 0.0, "YRK": -0.4, "SHF": 0.3}
+        self.station = {k: np.round(self.leeds + v + rng.normal(0, 0.6, n), 1) for k, v in offs.items()}
+        self._normal = {}
+        self.like = None          # replay a past year's weather (the range)
 
-HOL = set()
-for _y in range(2022, 2029):
-    HOL |= holidays(_y)
+    def normal(self, d):
+        """the 2016 to 2025 average for the same calendar day (the standard's normal weather)"""
+        key = (d.month, d.day)
+        if key not in self._normal:
+            vals = []
+            for y in range(2016, 2026):
+                day = min(d.day, 28) if d.month == 2 else d.day
+                vals.append(self.leeds[self.idx[dt.date(y, d.month, day)]])
+            self._normal[key] = float(np.mean(vals))
+        return self._normal[key]
 
-
-def utc_offset(d):
-    def last_sunday(y, m):
-        x = dt.date(y, m, 31)
-        return x - dt.timedelta(days=(x.weekday() + 1) % 7)
-    return 2 if last_sunday(d.year, 3) <= d < last_sunday(d.year, 10) else 1
-
-
-def on_holiday(tech, d):
-    """Each technician's three summer weeks, staggered so the shop never closes (the order turns each year), and one
-    technician's Christmas week."""
-    order = ["SE", "KH", "MB"]
-    k = d.year % 3
-    order = order[k:] + order[:k]
-    wk = d.isocalendar()[1]
-    for i, t in enumerate(order):
-        if t == tech and 27 + 3 * i <= wk <= 29 + 3 * i:
-            return True
-    return d.month == 12 and d.day >= 22 and tech == order[0]
+    def temp(self, d):
+        if d in self.idx:
+            return float(self.leeds[self.idx[d]])
+        if self.like is not None:
+            day = min(d.day, 28) if d.month == 2 else d.day
+            return float(self.leeds[self.idx[dt.date(self.like, d.month, day)]])
+        return self.normal(d)
 
 
 def season(d):
-    s = {1: 0.90, 2: 0.95, 3: 0.98, 4: 1.0, 5: 1.02, 6: 1.08, 7: 1.10, 8: 1.07, 9: 1.01, 10: 0.99, 11: 0.97,
-         12: 0.95}[d.month]
-    if d.weekday() == 5:
-        s *= 0.52
-    elif d.weekday() == 6:
-        s *= 0.74
+    """the trade's calendar beside the weather: a summer lift, a quiet January, the Christmas weeks"""
+    doy = d.timetuple().tm_yday
+    s = 1.0 + 0.10 * math.cos(2 * math.pi * (doy - 200) / 365.25)
+    if d.month == 1:
+        s *= 0.84
+    if d.month == 12 and d.day >= 10:
+        s *= 1.0 + 0.18 * min(1.0, (d.day - 9) / 10)
     return s
 
 
-# ----------------------------------------------------------------------------------------------- weather
-
-def weather(rng, d0, d1):
-    """Daily minimum and maximum temperature at each base: the seasonal cycle, day-to-day persistence, and cold
-    snaps that reach the northern bases together."""
-    days = (d1 - d0).days + 1
-    dates = [d0 + i * DAY for i in range(days)]
-    snaps = np.zeros(days)
-    i = 0
-    while i < days:
-        d = dates[i]
-        if d.month in (11, 12, 1, 2, 3) and rng.random() < 0.021:
-            length = int(rng.integers(3, 11))
-            depth = float(rng.uniform(6, 15))
-            for j in range(length):
-                if i + j < days:
-                    ramp = min(1.0, (j + 1) / 2.0) * min(1.0, (length - j) / 2.0)
-                    snaps[i + j] = max(snaps[i + j], depth * ramp)
-            i += length
-        i += 1
-    out = {}
-    for b, p in P.BASES.items():
-        phi, sd = 0.72, 2.6
-        e = 0.0
-        tmin, tmax = np.zeros(days), np.zeros(days)
-        for k, d in enumerate(dates):
-            doy = d.timetuple().tm_yday
-            clim = (p["jan"] + p["jul"]) / 2 - (p["jul"] - p["jan"]) / 2 * math.cos(2 * math.pi * (doy - 18) / 365.25)
-            e = phi * e + float(rng.normal(0, sd))
-            t = clim + e - p["snap"] * snaps[k] * (0.8 + 0.4 * rng.random())
-            tmin[k] = round(t, 1)
-            tmax[k] = round(t + 4.0 + 3.0 * math.sin(math.pi * doy / 366) ** 2 + float(rng.normal(0, 1.2)), 1)
-        out[b] = {"tmin": tmin, "tmax": tmax}
-    return dates, out, snaps
+def bank(d):
+    if d in P.BANK_HOLIDAYS:
+        return 1.35
+    if d + ONE in P.BANK_HOLIDAYS:
+        return 1.15
+    return 1.0
 
 
-# ----------------------------------------------------------------------------------------------- fleet
+class Keg:
+    __slots__ = ("id", "size", "lot", "tag", "status", "sku", "where", "status_date", "out_at")
 
-TAILS = ["LN-HV" + c for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"] + ["LN-HW" + c for c in "ABCD"]
-
-
-def fleet(rng):
-    """The register: thirty aircraft delivered 1998 to 2007, four bases with a few transfers, a heavy check roughly
-    every two years at Bodø."""
-    msn = sorted(rng.choice(np.arange(503, 641), size=P.FLEET_N, replace=False).tolist())
-    order = rng.permutation(P.FLEET_N)
-    bases = []
-    for b, n in P.BASE_SPLIT.items():
-        bases += [b] * n
-    ac = []
-    for j in range(P.FLEET_N):
-        m = msn[order[j]]
-        y = 1998 + (m - 503) // 15
-        ac.append({"tail": TAILS[j], "msn": int(m), "delivered": dt.date(y, int(rng.integers(1, 13)), int(rng.integers(1, 28))),
-                   "base0": bases[j]})
-    hist = {a["tail"]: [(P.D0, a["base0"])] for a in ac}
-    # temporary detachments: an aircraft lent to another base for a season and returned
-    for t in rng.choice([a["tail"] for a in ac], size=7, replace=False):
-        cur = hist[t][-1][1]
-        when = P.D0 + dt.timedelta(days=int(rng.integers(90, 1250)))
-        new = str(rng.choice([b for b in P.BASES if b != cur]))
-        back = when + dt.timedelta(days=int(rng.integers(45, 160)))
-        if back < P.ASOF - dt.timedelta(days=20):
-            hist[t] += [(when, new), (back, cur)]
-    checks = {}
-    for k, a in enumerate(ac):
-        start = P.D0 + dt.timedelta(days=int(20 + (k * 53) % 720 + rng.integers(0, 20)))
-        lst = []
-        while start < dt.date(2028, 3, 1):
-            length = int(rng.integers(17, 26))
-            lst.append((start, start + dt.timedelta(days=length - 1)))
-            start += dt.timedelta(days=int(rng.integers(690, 770)))
-        checks[a["tail"]] = lst
-    return ac, hist, checks
+    def __init__(self, kid, size, lot, tag):
+        self.id = kid
+        self.size = size
+        self.lot = lot
+        self.tag = tag
+        self.status = "ACTIVE"
+        self.sku = None
+        self.where = None
+        self.status_date = None
+        self.out_at = None
 
 
-def base_on(hist, tail, d):
-    b = hist[tail][0][1]
-    for when, new in hist[tail]:
-        if d >= when:
-            b = new
-    return b
+class Line:
+    __slots__ = ("outlet", "sku", "size", "rate", "taps", "temp_k", "xmas", "ontap", "fulls", "empties", "foundry",
+                 "since")
+
+    def __init__(self, outlet, sku, size, rate, temp_k, xmas, foundry=False, since=None):
+        self.outlet = outlet
+        self.sku = sku
+        self.size = size
+        self.rate = rate
+        self.taps = 2 if rate > P.TWO_TAPS_ABOVE else 1
+        self.temp_k = temp_k
+        self.xmas = xmas
+        self.ontap = []
+        self.fulls = deque()
+        self.empties = []
+        self.foundry = foundry
+        self.since = since
 
 
-def check_on(checks, tail, d):
-    for a, b in checks[tail]:
-        if a <= d <= b:
-            return a
-    return None
+class Outlet:
+    __slots__ = ("id", "channel", "depot", "seasonal", "opened", "closed", "lines", "interval", "days", "group",
+                 "estate", "renumbered")
+
+    def __init__(self, oid, channel, depot, seasonal, opened, closed):
+        self.id = oid
+        self.channel = channel
+        self.depot = depot
+        self.seasonal = seasonal
+        self.opened = opened
+        self.closed = closed
+        self.lines = []
+        self.interval = 7
+        self.days = ()
+        self.group = None
+        self.estate = False
+        self.renumbered = None
 
 
-# ----------------------------------------------------------------------------------------------- flying
-
-def rotation(rng, net, legs_mean, scale):
-    n = int(rng.poisson(legs_mean * scale))
-    if n < 2:
-        return []
-    n -= n % 2
-    w = np.array([x[2] for x in net], dtype=float)
-    w /= w.sum()
-    out = []
-    while len(out) < n:
-        dest, blk, _ = net[int(rng.choice(len(net), p=w))]
-        if rng.random() < 0.18 and len(out) + 4 <= n:
-            dest2, blk2, _ = net[int(rng.choice(len(net), p=w))]
-            if dest2 != dest:
-                link = max(12, int(abs(blk2 - blk)) + 14)
-                out += [("BASE", dest, blk), (dest, dest2, link), (dest2, "BASE", blk2)]
-                continue
-        out += [("BASE", dest, blk), (dest, "BASE", blk)]
-    return out[:n]
+def seasonal_open(d):
+    return 4 <= d.month <= 10
 
 
-def fly_day(rng, base, d, scale, net, legs_mean, winter_slow=1.0):
-    legs = []
-    off = utc_offset(d)
-    t = dt.datetime.combine(d, dt.time(6, 0)) + dt.timedelta(minutes=int(rng.integers(0, 50)))
-    for dep, arr, blk in rotation(rng, net, legs_mean, scale):
-        dep = base if dep == "BASE" else dep
-        arr = base if arr == "BASE" else arr
-        block = max(9, int(round(blk * winter_slow + rng.normal(0, max(2.0, blk * 0.07)))))
-        tx_out = min(P.TAXI.get(dep, P.TAXI_SMALL) + int(rng.integers(0, 4)), block // 3)
-        tx_in = min(P.TAXI.get(arr, P.TAXI_SMALL) + int(rng.integers(0, 3)), block // 3)
-        out_t = t
-        z = dt.timedelta(hours=off)
-        legs.append({"dep": dep, "arr": arr, "out": out_t - z, "off": out_t + dt.timedelta(minutes=tx_out) - z,
-                     "on": out_t + dt.timedelta(minutes=block - tx_in) - z, "in": out_t + dt.timedelta(minutes=block) - z,
-                     "block": block, "flight": block - tx_out - tx_in})
-        t = out_t + dt.timedelta(minutes=block + int(rng.integers(20, 40)))
-    return legs
+def set_route(o, rng):
+    tot = sum(ln.rate for ln in o.lines)
+    o.interval = 3 if tot > P.TWICE_WEEKLY_ABOVE else 7
+    first = int(rng.integers(0, 5 if o.interval == 7 else 2))
+    o.days = (first,) if o.interval == 7 else (first, first + 3)
 
 
-def network_for(base, d, tail, movers):
-    """The network a tail flies on a day: its base's, or the Helgeland package for the movers from April 2027."""
-    if d >= P.HELGELAND and movers.get(tail) == "HEL":
-        return P.HELGELAND_NET, P.HELGELAND_LEGS
-    return P.NETWORK[base], P.LEGS_PER_DAY[base]
-
-
-def base_2027(hist, movers, tail, d):
-    if d >= P.HELGELAND and tail in movers:
-        return "BOO" if movers[tail] == "HEL" else movers[tail]
-    return base_on(hist, tail, d)
-
-
-# ----------------------------------------------------------------------------------------------- parts
-
-KIT_PARTS = ("SG", "BRK", "BAT", "ADC", "VHF", "WXR", "WHC", "FDU", "CPC", "PDT")
-
-POS_NAMES = {"SG": ["ENG 1", "ENG 2"], "PEC": ["ENG 1", "ENG 2"], "HYP": ["ENG 1", "ENG 2"],
-             "BRK": ["LH OB", "LH IB", "RH IB", "RH OB"], "FBP": ["LH TANK", "RH TANK"], "BAV": ["LH", "RH"],
-             "WHC": ["CAPT", "F/O"], "BAT": ["MAIN", "AUX"], "FLA": ["LH", "RH"], "ADC": ["NO 1", "NO 2"],
-             "VHF": ["NO 1", "NO 2"]}
-
-
-def pos_names(k):
-    return POS_NAMES.get(k, ["SINGLE"])
-
-
-def eta(p):
-    return (1000.0 / p["rate"]) / math.gamma(1 + 1 / p["beta"])
-
-
-SN_FORM = {"SG": ("SG", 4100, 4), "BRK": ("B", 10200, 5), "BAV": ("V", 2300, 4), "NWS": ("NS", 700, 3),
-           "BAT": ("BT", 52000, 5), "CPC": ("C", 1800, 4), "FLA": ("FA", 900, 3), "ADC": ("ADC", 6100, 4),
-           "WXR": ("RT", 3300, 4), "VHF": ("V2", 8800, 4), "PEC": ("PEC", 1100, 4), "PDT": ("DT", 450, 3),
-           "HYP": ("HP", 2600, 4), "FBP": ("FP", 5100, 4), "WHC": ("WH", 1500, 4), "FDU": ("FD", 3900, 4)}
-
-
-def new_serial(rng, k, used):
-    pre, base, width = SN_FORM[k]
-    while True:
-        n = base + int(rng.integers(0, 10 ** width // 3))
-        sn = "%s%0*d" % (pre, width, n)
-        if sn not in used:
-            used.add(sn)
-            return sn
-
-
-def exposure_inc(p, cyc, sta, fh):
-    return {"cyc": cyc, "sta": sta, "fh": fh, "cal": 1.0}[p["drv"]]
-
-
-def cold_mult(p, tmin, month):
-    return 1.0 + p["cold"] * max(0.0, -tmin)
-
-
-# ----------------------------------------------------------------------------------------------- the engine
-
-class Engine:
-    """The airline's maintenance state and its daily process; the history and every 2027 replay run it."""
-
-    def __init__(self, seed):
-        self.seed = seed
-        self.rng = np.random.default_rng(seed)
-        self.reseed(seed)
-
-    def reseed(self, seed):
-        """One stream for the flying, one for the shop, one for the aircraft faults, one for each part's own
-        failures and repairs, so a change in one part's process leaves the others' draws where they were."""
-        self.rng = np.random.default_rng(seed)
-        self.srng = np.random.default_rng(seed + 11)
-        self.frng = np.random.default_rng(seed + 13)
-        self.prng = {p["k"]: np.random.default_rng(seed + 100 + i) for i, p in enumerate(P.PARTS)}
-
-    # ---- set-up for the history
-    def setup(self, ac, hist, checks):
-        self.ac, self.hist, self.checks = ac, hist, checks
-        self.tails = [a["tail"] for a in ac]
-        self.used = set()
-        self.units, self.install, self.pool = {}, {}, {k: [] for k in P.PART}
-        for ip, p in enumerate(P.PARTS):
-            k = p["k"]
-            rng = np.random.default_rng(self.seed + 300 + ip)
-            e = eta(p)
-            total = len(self.tails) * p["pos"] + P.POOL[k]
-            sns = [new_serial(rng, k, self.used) for _ in range(total)]
-            rog = rng.random(total) < p["rogue"][0]
-            for j, sn in enumerate(sns):
-                tsn = float(rng.uniform(4000, 38000))
-                rr = p["rogue"][1] * float(rng.uniform(0.7, 1.3))
-                self.units[sn] = {"k": k, "sn": sn, "rogue": bool(rog[j]), "age": float(rng.uniform(0.05, 0.95)) * e,
-                                  "mod": False, "fla_mod": k != "FLA", "tsn": tsn, "csn": tsn * float(rng.uniform(1.15, 1.75)),
-                                  "known": bool(rng.random() > 0.17), "status": "store", "where": None, "new": False,
-                                  "last_visit": None, "rogue_rate": rr}
-            j = 0
-            for t in self.tails:
-                for pos in pos_names(k):
-                    self.install[(t, k, pos)] = sns[j]
-                    self.units[sns[j]]["status"] = "inst"
-                    self.units[sns[j]]["where"] = (t, pos)
-                    j += 1
-            self.pool[k] = sns[j:]
-        # station kits: one unit of each kit part at each outstation, the rest in the Bodø pool
-        self.kits = {(s, k): [] for s in ("TOS", "BGO", "TRD") for k in P.PART}
-        for k in KIT_PARTS:
-            for s in ("TOS", "BGO", "TRD"):
-                if len(self.pool[k]) > 1:
-                    sn = self.pool[k].pop()
-                    self.kits[(s, k)].append(sn)
-                    self.units[sn]["where"] = ("KIT", s)
-        # aircraft-side intermittent faults, through the end of 2027
-        frng = np.random.default_rng(self.seed + 4)
-        self.faults = []
-        years = ((dt.date(2027, 12, 31) - P.D0).days + 1) / 365.25
-        for p in P.PARTS:
-            if p["fault"] <= 0:
-                continue
-            for t in self.tails:
-                for _ in range(int(frng.poisson(p["fault"] * years))):
-                    onset = P.D0 + dt.timedelta(days=int(frng.integers(0, int(years * 365))))
-                    pos = pos_names(p["k"])[int(frng.integers(0, p["pos"]))]
-                    self.faults.append({"id": len(self.faults) + 1, "tail": t, "k": p["k"], "pos": pos, "onset": onset,
-                                        "sym": float(frng.uniform(0.07, 0.16)), "fixed": None, "how": None, "swaps": 0,
-                                        "rng": np.random.default_rng(zlib.crc32(("%d|%s|%s|%s" % (self.seed, p["k"], t, onset)).encode()))})
-        self.faults.sort(key=lambda f: (f["onset"], f["id"]))
-        self.queue, self.returns, self.waiting, self.robbed, self.purchases = [], [], [], [], []
-        self.changes, self.shop_jobs, self.vendor_jobs, self.roster, self.legs, self.expo = [], [], [], [], [], []
-        self.seq = {"cc": {}, "wo": 0, "ro": 0}
-        self.flt_no = {}
-        self.fla_campaign = []
-        self.record = True
-        self.demand = {k: [] for k in P.PART}       # (date, cause) per unscheduled removal, for the fill rate
-        self.backs = {k: [] for k in P.PART}         # (removal date, serviceable return date)
-
-    # ---- numbering
-    def change_no(self, d):
-        """The maintenance system numbers every component change on the fleet; the pooled part numbers are a share
-        of them, so the export's numbers run with gaps."""
-        y = d.year % 100
-        self.seq["cc"][y] = self.seq["cc"].get(y, 0) + 1 + int(zlib.crc32(("%s|%d" % (d, self.seq["cc"].get(y, 0))).encode()) % 7)
-        return "CC-%02d-%05d" % (y, self.seq["cc"][y])
-
-    # ---- the shop and the vendors
-    def send(self, sn, d, station, finding):
-        u = self.units[sn]
-        p = P.PART[u["k"]]
-        r = self.prng[u["k"]]
-        u["status"] = "repair"
-        if p["shop"] == "BOO":
-            arrive = d + dt.timedelta(days=P.BASES[station]["ship_days"] + (1 if station != "BOO" and r.random() < 0.3 else 0))
-            if finding == "NFF":
-                hours = p["nff_work"] * float(r.lognormal(0, 0.25))
-            elif finding == "BER":
-                hours = 0.55 * p["work"] * float(r.lognormal(0, 0.2))
-            else:
-                hours = p["work"] * float(r.lognormal(0, 0.33))
-            self.seq["wo"] += 1
-            parts = arrive
-            if finding == "CF":
-                parts = arrive + dt.timedelta(days=int(round(P.PARTS_WAIT * float(r.lognormal(0, 0.45)))))
-            job = {"wo": "WO%06d" % (310000 + self.seq["wo"]), "k": u["k"], "sn": sn, "arrive": arrive, "removed": d,
-                   "parts": parts, "ready": parts, "hours": hours, "left": hours, "start": None, "done": None,
-                   "finding": finding, "type": "rotable", "text": self.text(u["k"], finding, u["rogue"]), "tech": None}
-            self.queue.append(job)
-            if self.record:
-                self.shop_jobs.append(job)
-        else:
-            out = d + dt.timedelta(days=int(r.integers(1, 4)))
-            mean = p["nff_work"] if finding == "NFF" else p["work"]
-            tat = max(4, int(round(mean * float(r.lognormal(0, 0.28)))))
-            back = out + dt.timedelta(days=tat + int(r.integers(2, 5)))
-            mod = u["k"] == "PEC" and d >= P.SB_DATE and not u["mod"]
-            self.seq["ro"] += 1 + int(zlib.crc32(("ro|%s|%d" % (d, self.seq["ro"])).encode()) % 4)
-            job = {"order": "RO-%05d" % (21000 + self.seq["ro"]), "k": u["k"], "sn": sn, "removed": d, "sent": out,
-                   "at_vendor": out + dt.timedelta(days=int(r.integers(1, 4))), "back": back, "finding": finding,
-                   "text": self.text(u["k"], finding, u["rogue"]), "mod": mod, "vendor": p["vendor"], "ccy": p["ccy"]}
-            if self.record:
-                self.vendor_jobs.append(job)
-            if finding == "BER":
-                u["status"] = "scrap"
-                self.buy(u["k"], back)
-            else:
-                self.returns.append((back, sn, mod))
-                self.backs[u["k"]].append((d, back))
-
-    def buy(self, k, d):
-        r = self.prng[k]
-        lead = int(r.integers(45, 110))
-        sn = new_serial(r, k, self.used)
-        if self.record:
-            self.purchases.append({"k": k, "sn": sn, "ordered": d + dt.timedelta(days=int(r.integers(1, 6))),
-                                   "delivered": d + dt.timedelta(days=lead)})
-        p = P.PART[k]
-        self.units[sn] = {"k": k, "sn": sn, "rogue": bool(r.random() < p["rogue"][0] * 0.5), "age": 0.0,
-                          "mod": k == "PEC" and d >= P.SB_DATE, "fla_mod": True, "tsn": 0.0, "csn": 0.0, "known": True,
-                          "status": "order", "where": None, "new": True, "last_visit": None}
-        self.returns.append((d + dt.timedelta(days=lead), sn, False))
-
-    def text(self, k, finding, rogue):
-        T = TEXTS[k]
-        r = self.prng[k]
-        if finding == "NFF":
-            return str(r.choice(T["nff"]))
-        if finding == "BER":
-            return str(r.choice(T["ber"]))
-        return T["cf"][0] if rogue else str(r.choice(T["cf"]))
-
-    def shop_day(self, d):
-        r = self.srng
-        if d.weekday() >= 5 or d in HOL:
-            return
-        techs = ["SE", "KH", "MB", "OL"]
-        on = []
-        for tch in techs[:P.SHOP_TECHS]:
-            holiday = on_holiday(tch, d)
-            sick = r.random() < 0.045
-            absent = holiday or sick
-            if self.record:
-                self.roster.append({"date": d, "tech": tch, "hours": 0.0 if absent else 7.5,
-                                    "absence": "FERIE" if holiday else ("SYK" if sick else "")})
-            if not absent:
-                on.append(tch)
-        if not on:
-            return
-        share = P.OTHER_WORK_2027 if d >= P.OTHER_FROM else P.OTHER_WORK
-        other = len(on) * P.SHOP_HOURS * share * float(r.uniform(0.85, 1.15))
-        cap = len(on) * P.SHOP_HOURS - other
-        if self.record:
-            self.seq["wo"] += 1
-            self.shop_jobs.append({"wo": "WO%06d" % (310000 + self.seq["wo"]), "k": None, "sn": "", "arrive": d,
-                                   "removed": None, "hours": other, "left": 0.0, "start": d, "done": d, "finding": "",
-                                   "type": "other", "text": str(r.choice(OTHER)), "tech": on[0]})
-        for job in sorted([j for j in self.queue if j["ready"] <= d], key=lambda j: (j["ready"], j["wo"])):
-            if cap <= 1e-9:
-                break
-            if job["start"] is None:
-                job["start"] = d
-                job["tech"] = on[int(r.integers(0, len(on)))]
-            take = min(cap, job["left"])
-            job["left"] -= take
-            cap -= take
-            if job["left"] <= 1e-9:
-                job["done"] = d
-                self.queue.remove(job)
-                if job["finding"] == "BER":
-                    self.units[job["sn"]]["status"] = "scrap"
-                    self.buy(job["k"], d)
-                else:
-                    self.returns.append((d + DAY, job["sn"], False))
-                    self.backs[job["k"]].append((job["removed"], d + DAY))
-
-    def returns_day(self, d):
-        today = [x for x in self.returns if x[0] == d]
-        if not today:
-            return
-        self.returns = [x for x in self.returns if x[0] != d]
-        for _, sn, mod in today:
-            u = self.units[sn]
-            if mod:
-                u["mod"] = True
-            u["last_visit"] = d
-            if u["k"] == "FLA":
-                u["fla_mod"] = True
-            k = u["k"]
-            u["status"] = "store"
-            wait = [x for x in self.waiting if x[1] == k]
-            if wait:
-                tail, _, pos, _ = wait[0]
-                self.waiting.remove(wait[0])
-                self.fit(tail, k, pos, sn)
-                self.log_fit(d, tail, k, pos, sn, "UNSCH", "Fitted, unit awaited from stores")
-                continue
-            home = u.get("from_station")
-            empty = [s for s in ("TOS", "BGO", "TRD") if k in KIT_PARTS and not self.kits[(s, k)]]
-            if home in empty:
-                self.kits[(home, k)].append(sn)
-            elif empty:
-                self.kits[(empty[0], k)].append(sn)
-            else:
-                self.pool[k].append(sn)
-        for donor, k, pos in list(self.robbed):
-            if self.install.get((donor, k, pos)) is None and self.pool[k]:
-                sn = self.pool[k].pop(0)
-                self.fit(donor, k, pos, sn)
-                self.log_fit(d, donor, k, pos, sn, "CONV", "Refitted after removal for another aircraft")
-                self.robbed.remove((donor, k, pos))
-
-    def log_fit(self, d, tail, k, pos, sn, reason, text):
-        if self.record:
-            self.changes.append({"no": self.change_no(d), "date": d, "station": "BOO", "tail": tail, "k": k, "pos": pos,
-                                 "sn_off": "", "sn_on": sn, "reason": reason, "defect": text, "cause": "FIT",
-                                 "tsn": 0.0, "csn": 0.0, "known": False})
-
-    def fit(self, tail, k, pos, sn):
-        self.install[(tail, k, pos)] = sn
-        self.units[sn]["status"] = "inst"
-        self.units[sn]["where"] = (tail, pos)
-
-    # ---- a removal
-    def remove(self, d, station, tail, k, pos, cause, reason="UNSCH"):
-        sn_off = self.install[(tail, k, pos)]
-        u = self.units[sn_off]
-        sn_on = None
-        filled = False
-        u["from_station"] = station
-        if station != "BOO" and self.kits.get((station, k)):
-            sn_on = self.kits[(station, k)].pop(0)
-            filled = True
-        elif self.pool[k]:
-            sn_on = self.pool[k].pop(0)
-            filled = True
-        elif any(self.kits[(s, k)] for s in ("TOS", "BGO", "TRD")):
-            s = [s for s in ("TOS", "BGO", "TRD") if self.kits[(s, k)]][0]
-            sn_on = self.kits[(s, k)].pop(0)
-            filled = True
-        elif reason == "UNSCH":
-            donors = [t for t in self.tails if t != tail and check_on(self.checks, t, d) is not None]
-            for donor in donors:
-                dpos = pos_names(k)[0]
-                cand = self.install.get((donor, k, dpos))
-                if cand:
-                    sn_on = cand
-                    self.install[(donor, k, dpos)] = None
-                    self.robbed.append((donor, k, dpos))
-                    if self.record:
-                        self.changes.append({"no": self.change_no(d), "date": d, "station": "BOO", "tail": donor,
-                                             "k": k, "pos": dpos, "sn_off": cand, "sn_on": "", "reason": "CONV",
-                                             "defect": "Removed for fitment to %s" % tail, "cause": "ROB",
-                                             "tsn": self.units[cand]["tsn"], "csn": self.units[cand]["csn"],
-                                             "known": self.units[cand]["known"]})
-                    break
-        if reason == "UNSCH":
-            self.demand[k].append((d, cause, filled))
-        if self.record:
-            defect = DEFECTS[k][int(self.prng[k].integers(0, len(DEFECTS[k])))]
-            num = str(pos_names(k).index(pos) + 1) if len(pos_names(k)) > 1 else ""
-            if reason == "SCHED":
-                defect = "Removed for SB 27-0089 embodiment"
-            self.changes.append({"no": self.change_no(d), "date": d, "station": station, "tail": tail, "k": k,
-                                 "pos": pos, "sn_off": sn_off, "sn_on": sn_on or "", "reason": reason,
-                                 "defect": defect.format(num).replace("  ", " ").strip(), "cause": cause,
-                                 "tsn": u["tsn"], "csn": u["csn"], "known": u["known"]})
-        if sn_on:
-            self.fit(tail, k, pos, sn_on)
-        else:
-            self.install[(tail, k, pos)] = None
-            self.waiting.append((tail, k, pos, d))
-        if reason == "SCHED":
-            # the flap actuator's bulletin: out to the vendor for the modification, back as a repaired unit
-            u["status"] = "repair"
-            back = d + dt.timedelta(days=int(self.prng[k].integers(18, 30)))
-            self.seq["ro"] += 1
-            if self.record:
-                self.vendor_jobs.append({"order": "RO-%05d" % (21000 + self.seq["ro"]), "k": k, "sn": sn_off, "removed": d,
-                                         "sent": d + DAY, "at_vendor": d + 2 * DAY, "back": back, "finding": "SB",
-                                         "text": "SB 27-0089 embodied (seal kit and rod end), no defect", "mod": False,
-                                         "vendor": P.PART[k]["vendor"], "ccy": P.PART[k]["ccy"]})
-            self.returns.append((back, sn_off, False))
-        else:
-            self.send(sn_off, d, station, cause)
-        u["age"] = 0.0
-        u["where"] = None
-
-    # ---- one day
-    def day(self, d, wx, idx, movers=None, flying=True):
-        r = self.rng
-        self.returns_day(d)
-        self.shop_day(d)
-        for a in self.ac:
-            t = a["tail"]
-            base = base_2027(self.hist, movers, t, d) if movers else base_on(self.hist, t, d)
-            cs = check_on(self.checks, t, d)
-            if cs is not None:
-                if cs == d:
-                    for f in self.faults:
-                        if f["tail"] == t and f["fixed"] is None and f["onset"] <= d and self.frng.random() < 0.74:
-                            f["fixed"], f["how"] = d, "check"
-                continue
-            if any(self.install.get((t, k, pos)) is None for k in P.PART for pos in pos_names(k)):
-                continue
-            net, lm = network_for(base, d, t, movers)
-            legs = fly_day(r, base, d, season(d), net, lm, 1.04 if d.month in (12, 1, 2) else 1.0)
-            cyc = len(legs)
-            if cyc == 0:
-                continue
-            fh = sum(l["flight"] for l in legs) / 60.0
-            sta = cyc + (1 if r.random() < 0.07 else 0)
-            if self.record:
-                for l in legs:
-                    key = (l["dep"], l["arr"])
-                    if key not in self.flt_no:
-                        self.flt_no[key] = 100 + 2 * len(self.flt_no)
-                    self.legs.append({"date": d, "flight": "HV%d" % self.flt_no[key], "tail": t, **l})
-            self.expo.append((d, t, base, cyc, sta, fh))
-            tmin = float(wx[base]["tmin"][idx])
-            # the flap actuator campaign, 2023 to mid-2024: one at a time when a spare is in stores
-            if self.fla_campaign and self.fla_campaign[0][0] <= d and self.fla_campaign[0][1] == t and self.pool["FLA"]:
-                _, _, pos = self.fla_campaign.pop(0)
-                if not self.units[self.install[(t, "FLA", pos)]]["fla_mod"]:
-                    self.remove(d, base, t, "FLA", pos, "SB", reason="SCHED")
-            for p in P.PARTS:
-                k = p["k"]
-                e = eta(p)
-                inc = exposure_inc(p, cyc, sta, fh)
-                cm = cold_mult(p, tmin, d.month)
-                for pos in pos_names(k):
-                    sn = self.install[(t, k, pos)]
-                    if sn is None:
-                        continue
-                    u = self.units[sn]
-                    rk = p["rogue"][2]
-                    mult = cm * (p["rogue"][1] if (u["rogue"] and rk == "cf") else 1.0) * (p.get("sb", 1.0) if u["mod"] else 1.0)
-                    a0 = u["age"]
-                    a1 = a0 + inc
-                    dH = ((a1 / e) ** p["beta"] - (a0 / e) ** p["beta"]) * mult
-                    u["age"] = a1
-                    u["tsn"] += fh
-                    u["csn"] += cyc
-                    lam_nff = inc * p["rate"] / 1000.0 * p["own_nff"] / (1 - p["own_nff"]) * P.BASES[base]["nff_mult"] * \
-                        (cm if p["cold"] > 0 else 1.0)
-                    if u["rogue"] and rk == "nff":
-                        lam_nff += u.get("rogue_rate", p["rogue"][1]) / 330.0
-                    pr = self.prng[k]
-                    x = pr.random()
-                    pcf = 1 - math.exp(-dH)
-                    if x < pcf:
-                        ber = 0.0 if u["rogue"] else p["ber"]
-                        self.remove(d, base, t, k, pos, "BER" if pr.random() < ber else "CF")
-                    elif x < pcf + lam_nff:
-                        self.remove(d, base, t, k, pos, "NFF")
-            for f in self.faults:
-                if f["tail"] != t or f["fixed"] is not None or f["onset"] > d:
-                    continue
-                fr = f["rng"]
-                if fr.random() < f["sym"]:
-                    bp = P.BASES[base]
-                    if fr.random() < bp["swap"]:
-                        if self.install.get((t, f["k"], f["pos"])):
-                            f["swaps"] += 1
-                            self.remove(d, base, t, f["k"], f["pos"], "NFF")
-                        if fr.random() < 0.06:
-                            f["fixed"], f["how"] = d, "line"
-                    elif fr.random() < bp["find"]:
-                        f["fixed"], f["how"] = d, "line"
-
-
-# ----------------------------------------------------------------------------------------------- history and 2027
-
-def movers_of(hist):
-    """From 1 April 2027: four Trondheim and four Bergen aircraft to Bodø for the Helgeland package, the fifth
-    Trondheim aircraft to Tromsø."""
-    at = {t: base_on(hist, t, P.ASOF) for t in hist}
-    trd = sorted(t for t in at if at[t] == "TRD")
-    bgo = sorted(t for t in at if at[t] == "BGO")
-    mv = {t: "HEL" for t in trd[:4] + bgo[:4]}
-    for t in trd[4:]:
-        mv[t] = "TOS"
-    return mv
-
-
-def history(seed=P.SEED):
+def build_world(rng):
     w = type("World", (), {})()
-    w.dates, w.wx, w.snaps = weather(np.random.default_rng(seed + 1), P.D0, dt.date(2027, 12, 31))
-    w.idx = {d: i for i, d in enumerate(w.dates)}
-    w.ac, w.hist, w.checks = fleet(np.random.default_rng(seed + 2))
-    E = Engine(seed + 9)
-    E.setup(w.ac, w.hist, w.checks)
-    # the flap actuator campaign: every installed unit, spread from March 2023
-    crng = np.random.default_rng(seed + 10)
-    order = [(t, pos) for t in E.tails for pos in pos_names("FLA")]
-    crng.shuffle(order)
-    start = dt.date(2023, 3, 6)
-    E.fla_campaign = [(start + dt.timedelta(days=int(5.5 * i)), t, pos) for i, (t, pos) in enumerate(order)]
-    d = P.D0
-    while d <= P.ASOF:
-        E.day(d, w.wx, w.idx[d])
-        d += DAY
-    w.E = E
-    w.movers = movers_of(w.hist)
-    w.rogue_true = {sn for sn, u in E.units.items() if u["rogue"]}
+    w.rng = rng
+    w.weather = Weather(rng)
+    w.sku_info = {s[0]: s for s in P.SKUS}
+    chans = list(P.CHANNELS)
+    cp = np.array([P.CHANNELS[c]["share"] for c in chans])
+    cp = cp / cp.sum()
+    depots = list(P.DEPOT_SHARE)
+    dprob = np.array([P.DEPOT_SHARE[k] for k in depots])
+    horizon = (P.Y27_END - P.D0).days / 365.25
+    n_new = int(round(P.N_OUTLETS * P.OPEN_RATE * horizon))
+    outlets = []
+    groups = ["Pennine Taverns", "Ridings Pub Co", "Aire Valley Inns", "Moorside Leisure"]
+    for i in range(P.N_OUTLETS + n_new):
+        ch = chans[rng.choice(len(chans), p=cp)]
+        dep = depots[rng.choice(len(depots), p=dprob)]
+        seasonal = (ch == "CLUB" and rng.random() < 0.38) or (ch in ("FREE", "REST") and rng.random() < 0.025)
+        if i < P.N_OUTLETS:
+            opened = P.D0 - dt.timedelta(days=int(rng.integers(200, 8000)))
+        else:
+            opened = P.D0 + dt.timedelta(days=int(rng.integers(30, (P.Y27_END - P.D0).days)))
+        t = rng.exponential(1.0 / P.CLOSE_RATE) * 365.25
+        cd = max(opened, P.D0) + dt.timedelta(days=int(t))
+        o = Outlet("W%05d" % (10031 + i * 13), ch, dep, seasonal, opened, cd if cd <= P.Y27_END else None)
+        if ch == "GROUP":
+            o.group = groups[int(rng.integers(0, 4))]
+        for code, (share, med, sd) in P.LINES.items():
+            boost = 1.25 if ch == "GROUP" and code in ("PIL", "HER") else 1.0
+            if rng.random() < share * boost:
+                r = float(med * math.exp(rng.normal(0, sd))) * (1.3 if seasonal else 1.0)
+                if code == "FND":
+                    o.lines.append(Line(o, "FND", 20, r, P.FOUNDRY_TEMP, 1.10, foundry=True))
+                else:
+                    s = w.sku_info[code]
+                    o.lines.append(Line(o, code, s[2], r, s[4], s[5]))
+        if not o.lines:
+            s = w.sku_info["PIL"]
+            o.lines.append(Line(o, "PIL", 50, float(P.LINES["PIL"][1] * math.exp(rng.normal(0, 0.5))), s[4], s[5]))
+        set_route(o, rng)
+        if rng.random() < 0.05 and o.closed is None:
+            o.renumbered = o.opened + dt.timedelta(days=int(rng.integers(400, 4000)))
+        outlets.append(o)
+    w.outlets = outlets
+    kegs = []
+    w.lots = {}
+    for lot, size, bought, n, tagged in P.LOTS:
+        gone = P.LOT_GONE.get(lot, 0.0)
+        w.lots[lot] = {"size": size, "bought": bought, "n": n, "tagged": tagged, "gone": gone}
+        for _ in range(n):
+            k = Keg(len(kegs), size, lot, tagged)
+            if bought < P.D0 and rng.random() < gone:
+                k.status = "WRITTEN_OFF"
+                k.status_date = dt.date(2019 if bought.year < 2019 else 2022, 11, 30)
+            kegs.append(k)
+    w.kegs = kegs
     return w
 
 
-def replay_2027(w, reps, seed=777):
-    """The 2027 programme replayed from the end of November 2026: December 2026 on the November networks, then
-    2027 with the movers at Bodø from 1 April; each replication its own weather and its own draws."""
-    out = []
-    big = ("legs", "changes", "shop_jobs", "vendor_jobs", "roster", "expo", "demand", "backs", "purchases")
-    keep = {b: getattr(w.E, b) for b in big}
-    for b in big:
-        setattr(w.E, b, [] if b not in ("demand", "backs") else {k: [] for k in P.PART})
-    base = copy.deepcopy(w.E)
-    for b in big:
-        setattr(w.E, b, keep[b])
-    for rep in range(reps):
-        E = copy.deepcopy(base)
-        E.reseed(seed + 1000 * rep)
-        frng = np.random.default_rng(seed + 1000 * rep + 7)
-        E.faults = [f for f in E.faults if f["onset"] <= P.ASOF]
-        years = ((P.Y27[1] - P.ASOF).days) / 365.25
-        for p in P.PARTS:
-            if p["fault"] <= 0:
+class Engine:
+    """the brewery and its trade, stepped one day at a time; the state lives here between the history and 2027"""
+
+    def __init__(self, w):
+        self.w = w
+        self.rng = w.rng
+        self.ev = defaultdict(list)
+        self.clean = {s: deque() for s in P.SIZES}
+        self.unbought = []
+        for k in w.kegs:
+            if k.status != "ACTIVE":
                 continue
-            for t in E.tails:
-                for _ in range(int(frng.poisson(p["fault"] * years))):
-                    onset = P.ASOF + dt.timedelta(days=int(frng.integers(1, int(years * 365))))
-                    pos = pos_names(p["k"])[int(frng.integers(0, p["pos"]))]
-                    E.faults.append({"id": 10000 + len(E.faults), "tail": t, "k": p["k"], "pos": pos, "onset": onset,
-                                     "sym": float(frng.uniform(0.07, 0.16)), "fixed": None, "how": None, "swaps": 0,
-                                     "rng": np.random.default_rng(int(frng.integers(0, 2 ** 31)))})
-        E.record = False
-        E.demand = {k: [] for k in P.PART}
-        E.backs = {k: [] for k in P.PART}
-        E.expo = []
-        dates, wx, _ = weather(np.random.default_rng(seed + 1000 * rep + 1), dt.date(2026, 12, 1), dt.date(2027, 12, 31))
-        idx = {d: i for i, d in enumerate(dates)}
-        d = dt.date(2026, 12, 1)
-        while d <= P.Y27[1]:
-            E.day(d, wx, idx[d], movers=w.movers)
-            d += DAY
-        out.append({"demand": E.demand, "backs": E.backs, "expo": E.expo, "faults": E.faults})
-    return out
+            if w.lots[k.lot]["bought"] > P.D0:
+                self.unbought.append(k)
+            else:
+                k.where = "BREWERY"
+                self.clean[k.size].append(k)
+        self.unbought.sort(key=lambda k: (w.lots[k.lot]["bought"], k.id))
+        self.depot_full = {dp: defaultdict(deque) for dp in P.DEPOTS}
+        self.depot_empty = {dp: [] for dp in P.DEPOTS}
+        self.trunk = defaultdict(list)
+        self.exch_pipe = defaultdict(list)
+        self.recov_pipe = defaultdict(list)
+        self.repair = defaultdict(list)
+        self.fg = defaultdict(deque)
+        self.tanks = []
+        self.foreign_pile = {s: 0 for s in P.SIZES}
+        self.foundry_skus = list(P.FOUNDRY_2026[:5])
+        self.foundry_add = {dt.date(2025, 3, 3): "F06", dt.date(2025, 6, 2): "F07", dt.date(2025, 9, 1): "F08"}
+        self.ema = defaultdict(float)
+        self.today = defaultdict(float)
+        for o in w.outlets:
+            if o.opened <= P.D0 and not (o.closed and o.closed < P.D0):
+                for ln in o.lines:
+                    if ln.foundry:
+                        for s in self.foundry_skus:
+                            self.ema[(s, o.depot)] += ln.rate / 7.0 / len(self.foundry_skus)
+                    else:
+                        self.ema[(ln.sku, o.depot)] += ln.rate / 7.0
+        self.unconstrained = False
+        self.new_kegs = 0
+        self.plan = None          # the 2027 Foundry plan: {sku: (start, end, brew dates)}
+        self.record_from = P.H0
+        self.record_to = P.ASOF
+        self.audits = {}          # date -> outlet ids the sales reps count kegs at
+        self.sites = {}           # stocktake dates -> counts by site
+
+    # ---------------------------------------------------------------------------------------------- the day
+    def step(self, d):
+        w, rng, ev = self.w, self.rng, self.ev
+        rec = self.record_from <= d <= self.record_to
+        temp = w.weather.temp(d)
+        while self.unbought and w.lots[self.unbought[0].lot]["bought"] <= d:
+            k = self.unbought.pop(0)
+            k.where = "BREWERY"
+            self.clean[k.size].append(k)
+        if d in self.foundry_add and self.foundry_add[d] not in self.foundry_skus:
+            self.foundry_skus.append(self.foundry_add[d])
+        self.brewery(d, rec)
+        self.sales(d, temp, rec)
+        for o in w.outlets:
+            if o.opened > d or (o.closed and o.closed < d) or d.weekday() not in o.days:
+                continue
+            if o.seasonal and not seasonal_open(d):
+                continue
+            self.visit(o, d, rec)
+        for o in w.outlets:
+            if o.closed == d:
+                self.close_outlet(o, d, rec)
+        for oid in self.audits.get(d, ()):
+            o = self.byid[oid]
+            if o.opened > d or (o.closed and o.closed <= d):
+                continue
+            c = {}
+            for s in P.SIZES:
+                c[s] = [0, 0, 0]
+            for ln in o.lines:
+                c[ln.size][0] += len(ln.fulls)
+                c[ln.size][1] += len(ln.ontap)
+                c[ln.size][2] += len(ln.empties)
+            ev["audit"].append((d, oid, c))
+        for dp in P.DEPOTS:
+            if d.weekday() in P.TRUNK_WEEKDAYS[dp] and self.depot_empty[dp]:
+                arr = d + dt.timedelta(days=max(1, P.TRUNK_DAYS[dp]))
+                for x in self.depot_empty[dp]:
+                    if not isinstance(x, tuple):
+                        x.where = "TRUNK"
+                self.trunk[arr].extend(self.depot_empty[dp])
+                if rec:
+                    own = sum(1 for x in self.depot_empty[dp] if not isinstance(x, tuple))
+                    ev["trunk_back"].append((d, dp, own))
+                self.depot_empty[dp] = []
+        for key in set(self.ema) | set(self.today):
+            self.ema[key] = 0.93 * self.ema[key] + 0.07 * self.today.get(key, 0.0)
+        self.today = defaultdict(float)
+        if d == P.RECON:
+            for k in w.kegs:
+                if k.status == "ACTIVE" and k.where in ("LOST", "RECOVERY"):
+                    k.status = "WRITTEN_OFF"
+                    k.status_date = d
+            for day in list(self.recov_pipe):
+                self.recov_pipe[day] = [k for k in self.recov_pipe[day] if k.status == "ACTIVE"]
+        if d >= P.H0 and (d.weekday() == 6 or d in (P.ASOF, dt.date(2025, 11, 30), dt.date(2024, 11, 30))):
+            ev["stock"].append((d, self.snapshot()))
+        if d in (dt.date(2024, 11, 30), dt.date(2025, 11, 30), P.ASOF):
+            self.sites[d] = self.site_counts()
+            ev["between_ids"].append((d, [(k.id, k.where) for k in w.kegs if k.status == "ACTIVE" and k.where not in
+                                          (None, "LOST", "RECOVERY", "SCRAP", "BREWERY", "REPAIR")]))
+
+    # ---------------------------------------------------------------------------------------------- brewery
+    def brewery(self, d, rec):
+        w, rng, ev = self.w, self.rng, self.ev
+        back = []
+        foreign = {s: 0 for s in P.SIZES}
+        for x in self.trunk.pop(d, []):
+            if isinstance(x, tuple):
+                foreign[x[0]] += x[1]
+            else:
+                back.append(("depot", x))
+        back += [("exchange", k) for k in self.exch_pipe.pop(d, [])]
+        back += [("recovery", k) for k in self.recov_pipe.pop(d, [])]
+        back += [("repair", k) for k in self.repair.pop(d, [])]
+        washed = {s: 0 for s in P.SIZES}
+        damaged = {s: 0 for s in P.SIZES}
+        condemned = {s: 0 for s in P.SIZES}
+        by_route = defaultdict(int)
+        for route, k in back:
+            by_route[(route, k.size)] += 1
+            if rec:
+                if route in ("exchange", "recovery"):
+                    ev["back_" + route].append((d, k.id, k.size))
+                if k.tag and rng.random() < P.READ["RETURN"]:
+                    ev["read"].append((d, k.id, "RETURN", "BRG-WASH"))
+            if route != "repair" and rng.random() < P.DAMAGE:
+                damaged[k.size] += 1
+                if rng.random() < P.CONDEMN:
+                    k.status = "CONDEMNED"
+                    k.status_date = d
+                    k.where = "SCRAP"
+                    condemned[k.size] += 1
+                    if rec:
+                        ev["condemn"].append((d, k.id))
+                    continue
+                k.where = "REPAIR"
+                r = d + dt.timedelta(days=int(rng.integers(*P.REPAIR_DAYS)))
+                self.repair[r].append(k)
+                if rec:
+                    ev["repair"].append((d, k.id, r))
+                continue
+            k.where = "BREWERY"
+            k.sku = None
+            self.clean[k.size].append(k)
+            washed[k.size] += 1
+        if rec:
+            for s in P.SIZES:
+                ev["washer"].append((d, s, washed[s], foreign[s], damaged[s], condemned[s], by_route[("depot", s)],
+                                     by_route[("exchange", s)], by_route[("recovery", s)], by_route[("repair", s)]))
+        for s in P.SIZES:
+            self.foreign_pile[s] += foreign[s]
+        if d.day <= 3 and d.weekday() < 5 and any(self.foreign_pile.values()):
+            if rec:
+                ev["exchange_out"].append((d, dict(self.foreign_pile)))
+            self.foreign_pile = {s: 0 for s in P.SIZES}
+        fills = []
+        for code, name, size, style, tk, xm in P.SKUS:
+            need = sum(self.ema[(code, dp)] for dp in P.DEPOTS)
+            gap = int(math.ceil(need * 3.2)) + 20 - len(self.fg[code])
+            for _ in range(max(0, gap)):
+                k = self.take_clean(size, d)
+                if k is None:
+                    break
+                k.sku, k.where = code, "FG"
+                self.fg[code].append(k)
+                fills.append(k)
+        intank = defaultdict(int)
+        for fd, s, n in self.tanks:
+            intank[s] += n
+        for s in self.active_foundry(d):
+            if self.plan is not None:
+                kegs = self.plan[s][2].get(d, 0)
+                if kegs:
+                    self.tanks.append((d + dt.timedelta(days=P.FOUNDRY_LEAD), s, kegs))
+                    if rec:
+                        ev["brew"].append((d, s, kegs))
+                continue
+            rate = sum(self.ema[(s, dp)] for dp in P.DEPOTS)
+            if rate <= 0:
+                rate = 0.6 * sum(self.ema[(x, dp)] for x in self.foundry_skus for dp in P.DEPOTS) / max(1, len(self.foundry_skus))
+            if len(self.fg[s]) + intank[s] < max(12, rate * (P.FOUNDRY_LEAD + P.FOUNDRY_COVER)):
+                self.tanks.append((d + dt.timedelta(days=P.FOUNDRY_LEAD), s, P.FOUNDRY_LOT))
+                intank[s] += P.FOUNDRY_LOT
+                if rec:
+                    ev["brew"].append((d, s, P.FOUNDRY_LOT))
+        keep = []
+        for fd, s, n in self.tanks:
+            if fd > d:
+                keep.append((fd, s, n))
+                continue
+            got = 0
+            for _ in range(n):
+                k = self.take_clean(20, d)
+                if k is None:
+                    break
+                k.sku, k.where = s, "FG"
+                self.fg[s].append(k)
+                fills.append(k)
+                got += 1
+            if got < n:
+                keep.append((d + ONE, s, n - got))
+                if rec:
+                    ev["short"].append((d, 20, n - got))
+        self.tanks = keep
+        for k in fills:
+            k.out_at = d
+            if rec:
+                ev["fill"].append((d, k.id, k.size, k.sku))
+                if k.tag and rng.random() < P.READ["FILL"]:
+                    ev["read"].append((d, k.id, "FILL", "BRG-RACK"))
+        # Foundry beer past its 120 days in the cold store is poured away and the keg goes back to the washer
+        for code in list(self.fg.keys()):
+            if code.startswith("F"):
+                q = self.fg[code]
+                while q and (d - q[0].out_at).days > P.FOUNDRY_LIFE:
+                    k = q.popleft()
+                    k.where = "REPAIR"
+                    self.repair[d + ONE].append(k)
+                    if rec:
+                        ev["ullage"].append((d, k.id, code))
+        if d.weekday() < 6:
+            on = [c for c in self.fg if c.startswith("F")]
+            for dp in P.DEPOTS:
+                ftot = sum(self.ema[(c, dp)] for c in on)
+                for code in list(self.fg.keys()):
+                    rate = self.ema[(code, dp)] if not code.startswith("F") else ftot / max(1, len(on))
+                    tgt = int(math.ceil(rate * 2.5)) + (2 if code.startswith("F") else 6)
+                    n = min(max(0, tgt - len(self.depot_full[dp][code])), len(self.fg[code]))
+                    for _ in range(n):
+                        k = self.fg[code].popleft()
+                        k.where = "DEPOT"
+                        self.depot_full[dp][code].append(k)
+
+    def take_clean(self, size, d):
+        if self.clean[size]:
+            return self.clean[size].popleft()
+        if not self.unconstrained:
+            return None
+        k = Keg(len(self.w.kegs), size, "NEW", False)
+        self.w.kegs.append(k)
+        self.new_kegs += 1
+        return k
+
+    def active_foundry(self, d):
+        if self.plan is None:
+            return self.foundry_skus
+        return [s for s, (a, b, _) in self.plan.items() if a - dt.timedelta(days=P.FOUNDRY_LEAD + 7) <= d <= b]
+
+    # ---------------------------------------------------------------------------------------------- the trade
+    def rate(self, ln, d, temp):
+        o = ln.outlet
+        g = 0.0 if o.estate else P.GROWTH[o.channel]
+        yrs = (d - dt.date(2024, 1, 1)).days / 365.25
+        r = ln.rate * (1 + g) ** yrs * season(d) * bank(d) * P.DOW[d.weekday()] / 7.0
+        if temp > 17.0:
+            r *= 1.0 + ln.temp_k * (temp - 17.0)
+        else:
+            r *= 1.0 + 0.006 * (temp - 17.0)
+        if d.month == 12 and d.day >= 10:
+            r *= ln.xmas / 1.12
+        return r
+
+    def sales(self, d, temp, rec):
+        rng = self.rng
+        for o in self.w.outlets:
+            if o.opened > d or (o.closed and o.closed < d):
+                continue
+            if o.seasonal and not seasonal_open(d):
+                continue
+            for ln in o.lines:
+                if ln.since and ln.since > d:
+                    continue
+                need = self.rate(ln, d, temp) * ln.size * rng.gamma(4.0, 0.25)
+                while ln.ontap and need > 0:
+                    slot = ln.ontap[0]
+                    take = min(slot[1], need)
+                    slot[1] -= take
+                    need -= take
+                    if slot[1] <= 1e-9:
+                        ln.ontap.pop(0)
+                        self.emptied(ln, slot[0], d, rec)
+                    while len(ln.ontap) < ln.taps and ln.fulls:
+                        nk = ln.fulls.popleft()
+                        nk.where = "ONTAP"
+                        ln.ontap.append([nk, float(ln.size)])
+
+    def emptied(self, ln, k, d, rec):
+        rng, ev = self.rng, self.ev
+        ch = P.CHANNELS[ln.outlet.channel]
+        loss = ch["loss"][0] if d < P.DEPOSIT_DAY else ch["loss"][1]
+        u = rng.random()
+        if u < loss:
+            k.where = "LOST"
+            if rec:
+                ev["lost"].append((d, k.id, ln.outlet.id, "trip"))
+            if rng.random() < P.RECOVER_SHARE:
+                self.recov_pipe[d + dt.timedelta(days=int(rng.integers(*P.RECOV_LAG)))].append(k)
+                k.where = "RECOVERY"
+            return
+        if u < loss + ch["exch"]:
+            back = d + dt.timedelta(days=int(rng.integers(*P.EXCH_LAG)))
+            self.exch_pipe[back].append(k)
+            k.where = "EXCHANGE"
+            if rec:
+                ev["exch_taken"].append((d, k.id, back))
+            return
+        k.where = "EMPTY"
+        ln.empties.append(k)
+
+    def visit(self, o, d, rec):
+        rng, ev = self.rng, self.ev
+        ch = P.CHANNELS[o.channel]
+        coll = {s: 0 for s in P.SIZES}
+        deliv = {s: 0 for s in P.SIZES}
+        for ln in o.lines:
+            for k in ln.empties:
+                k.where = "DEPOT_E"
+                self.depot_empty[o.depot].append(k)
+                coll[ln.size] += 1
+            ln.empties = []
+        foreign = {s: int(rng.poisson(ch["foreign"] * coll[s])) for s in P.SIZES}
+        for s in P.SIZES:
+            if foreign[s]:
+                self.depot_empty[o.depot].append((s, foreign[s]))
+        if not (o.closed and (o.closed - d).days < 7):
+            for ln in o.lines:
+                if ln.since and ln.since > d + dt.timedelta(days=7):
+                    continue
+                target = max(1, int(math.ceil(ln.rate * season(d) * (o.interval + P.COVER_DAYS) / 7.0)))
+                want = max(0, target - len(ln.fulls)) + max(0, ln.taps - len(ln.ontap))
+                for _ in range(want):
+                    k = self.pick_full(self.depot_full[o.depot], ln)
+                    if k is None:
+                        if rec:
+                            ev["short_depot"].append((d, o.depot, ln.sku))
+                        break
+                    k.out_at = d
+                    self.today[(k.sku, o.depot)] += 1
+                    if len(ln.ontap) < ln.taps:
+                        k.where = "ONTAP"
+                        ln.ontap.append([k, float(ln.size)])
+                    else:
+                        k.where = "OUTLET"
+                        ln.fulls.append(k)
+                    deliv[ln.size] += 1
+                    if rec:
+                        ev["deliver"].append((d, k.id, o.id, k.size, k.sku))
+                        if k.tag and rng.random() < P.READ["DELIVER"]:
+                            ev["read"].append((d, k.id, "DELIVER", o.id))
+        if rec:
+            ev["visit"].append((d, o.id, o.depot, deliv, coll, foreign))
+
+    def pick_full(self, stock, ln):
+        if ln.foundry:
+            best = None
+            for code, q in stock.items():
+                if code.startswith("F") and q and (best is None or len(q) > len(stock[best])):
+                    best = code
+            return stock[best].popleft() if best else None
+        q = stock.get(ln.sku)
+        return q.popleft() if q else None
+
+    def close_outlet(self, o, d, rec):
+        rng, ev = self.rng, self.ev
+        for ln in o.lines:
+            held = [s[0] for s in ln.ontap] + list(ln.fulls) + list(ln.empties)
+            ln.ontap, ln.fulls, ln.empties = [], deque(), []
+            for k in held:
+                u = rng.random()
+                if u < P.CLOSE_FATE[0]:
+                    k.where = "DEPOT_E"
+                    self.depot_empty[o.depot].append(k)
+                    continue
+                k.where = "LOST"
+                if rec:
+                    ev["lost"].append((d, k.id, o.id, "closure"))
+                if u < P.CLOSE_FATE[0] + P.CLOSE_FATE[1]:
+                    self.recov_pipe[d + dt.timedelta(days=int(rng.integers(*P.RECOV_LAG)))].append(k)
+                    k.where = "RECOVERY"
+
+    def site_counts(self):
+        out = {}
+        for s in P.SIZES:
+            out[("Brighouse washer yard", "clean empty", s)] = len(self.clean[s])
+            out[("Brighouse cold store", "full", s)] = sum(len(q) for c, q in self.fg.items() if self.sku_size(c) == s)
+            out[("Brighouse keg repair cage", "awaiting repair", s)] = sum(
+                1 for day, ks in self.repair.items() for k in ks if k.size == s)
+            for dp, name in P.DEPOTS.items():
+                out[(name + " depot", "full", s)] = sum(len(q) for c, q in self.depot_full[dp].items()
+                                                         if self.sku_size(c) == s)
+                own = sum(1 for x in self.depot_empty[dp] if not isinstance(x, tuple) and x.size == s)
+                own += sum(1 for day, xs in self.trunk.items() for x in xs
+                           if not isinstance(x, tuple) and x.size == s and P.TRUNK_DAYS[dp] >= 0 and False)
+                out[(name + " depot", "empty", s)] = own
+            out[("in transit to Brighouse", "empty", s)] = sum(1 for day, xs in self.trunk.items() for x in xs
+                                                                if not isinstance(x, tuple) and x.size == s)
+            out[("other brewers' kegs held for the exchange", "foreign", s)] = self.foreign_pile[s] + sum(
+                x[1] for day, xs in self.trunk.items() for x in xs if isinstance(x, tuple) and x[0] == s)
+        return out
+
+    def sku_size(self, code):
+        if code.startswith("F"):
+            return 20
+        return self.w.sku_info[code][2]
+
+    def snapshot(self):
+        out = {s: defaultdict(int) for s in P.SIZES}
+        for k in self.w.kegs:
+            if k.status == "ACTIVE" and k.where is not None:
+                out[k.size][k.where] += 1
+        return {s: dict(v) for s, v in out.items()}
 
 
-TEXTS = {
-    "SG": {"cf": ["Armature shaft bearing rough, brush wear beyond limit; bearing and brushes replaced",
-                  "Brushes worn below minimum length; replaced, commutator skimmed",
-                  "Commutator scored, field winding insulation low; rewound, tested",
-                  "Drive shaft shear section failed; replaced, tested"],
-           "nff": ["No fault found; output and starting torque within limits", "No fault found, tested serviceable"],
-           "ber": ["Armature burnt, housing cracked; beyond economic repair"]},
-    "BRK": {"cf": ["Piston seal leak; seals replaced", "Brake dragging, piston housing scored; housing replaced",
-                   "Heat sink rotor cracked; replaced"],
-            "nff": ["No leak at test pressure; serviceable"], "ber": ["Torque tube cracked; beyond economic repair"]},
-    "BAV": {"cf": ["Butterfly shaft seized, actuator diaphragm torn; overhauled", "Solenoid open circuit; replaced",
-                   "Valve slow to close, piston ring worn; replaced"],
-            "nff": ["No fault found, cycle time within limits"], "ber": ["Body corroded through; beyond economic repair"]},
-    "NWS": {"cf": ["Rack seal leak; resealed", "Servo valve sticking; replaced", "Feedback transducer out of limits; replaced"],
-            "nff": ["No fault found on rig test"], "ber": ["Housing cracked; beyond economic repair"]},
-    "BAT": {"cf": ["Capacity below 85 per cent; cells replaced and reconditioned", "Cell imbalance, two cells reversed; replaced",
-                   "Electrolyte leak, cell case cracked; replaced"],
-            "nff": ["Capacity 102 per cent on test; serviceable"], "ber": ["Seven cells below limit; scrapped"]},
-    "CPC": {"cf": ["Outflow logic card failed; replaced", "Pressure transducer drift; replaced", "Power supply failed; repaired"],
-            "nff": ["No fault found, all modes tested"], "ber": ["Chassis damage; beyond economic repair"]},
-    "FLA": {"cf": ["Ballscrew backlash out of limits; overhauled", "Seal leak, gearbox; repaired"],
-            "nff": ["No fault found"], "ber": ["Ballscrew damaged; beyond economic repair"]},
-    "ADC": {"cf": ["Static pressure module failed; replaced", "Power supply module failed; replaced", "ARINC output card failed; replaced"],
-            "nff": ["No fault found, ATP passed", "No fault found; unit tested to CMM ATP, serviceable"],
-            "ber": ["Water ingress, multiple modules; beyond economic repair"]},
-    "WXR": {"cf": ["Magnetron output low; replaced", "Receiver module failed; replaced", "Modulator failed; repaired"],
-            "nff": ["No fault found, ATP passed", "No fault found; output power and sensitivity in limits"],
-            "ber": ["Magnetron and modulator failed; beyond economic repair"]},
-    "VHF": {"cf": ["Receiver sensitivity low, RF module replaced", "Synthesiser failed; replaced"],
-            "nff": ["No fault found, ATP passed", "No fault found; transmit and receive in limits"],
-            "ber": ["Burnt PA stage; beyond economic repair"]},
-    "PEC": {"cf": ["Channel A processor failed; replaced", "Speed sensor input board failed; repaired",
-                   "Power supply board failed; replaced"],
-            "nff": ["No fault found, ATP passed"], "ber": ["Corrosion damage; beyond economic repair"]},
-    "PDT": {"cf": ["Timer relay contacts burnt; replaced", "Sequencer board failed; replaced"],
-            "nff": ["No fault found"], "ber": ["Case damaged; beyond economic repair"]},
-    "HYP": {"cf": ["Case drain flow high, wear; overhauled", "Shaft seal leak; replaced"],
-            "nff": ["No fault found on test stand"], "ber": ["Pump body cracked; beyond economic repair"]},
-    "FBP": {"cf": ["Motor winding failed; replaced", "Low output pressure, impeller worn; overhauled"],
-            "nff": ["No fault found"], "ber": ["Motor burnt; beyond economic repair"]},
-    "WHC": {"cf": ["Sensor input circuit failed; repaired", "Power stage failed; replaced"],
-            "nff": ["No fault found", "No fault found, ATP passed"], "ber": ["Board damage; beyond economic repair"]},
-    "FDU": {"cf": ["Loop monitoring circuit failed; replaced", "Power supply failed; replaced"],
-            "nff": ["No fault found, ATP passed", "No fault found, loop simulation in limits"],
-            "ber": ["Board burnt; beyond economic repair"]},
-}
+def run_history(w):
+    e = Engine(w)
+    e.byid = {o.id: o for o in w.outlets}
+    arng = np.random.default_rng(P.SEED + 7)
+    q_days = [dt.date(2025, 2, 10), dt.date(2025, 5, 12), dt.date(2025, 8, 11), dt.date(2025, 11, 10),
+              dt.date(2026, 2, 9), dt.date(2026, 5, 11), dt.date(2026, 8, 10), dt.date(2026, 11, 9)]
+    for q in q_days:
+        live = [o for o in w.outlets if o.opened <= q and (o.closed is None or o.closed > q + dt.timedelta(days=30))
+                and not (o.seasonal and not seasonal_open(q))]
+        wt = np.array([sum(ln.rate for ln in o.lines) ** 0.7 for o in live])
+        pick = arng.choice(len(live), size=170, replace=False, p=wt / wt.sum())
+        for j in pick:
+            day = q + dt.timedelta(days=int(arng.integers(0, 18)))
+            if day.weekday() >= 5:
+                day -= dt.timedelta(days=2)
+            e.audits.setdefault(day, []).append(live[j].id)
+    for d in daterange(P.D0, P.ASOF):
+        e.step(d)
+    w.engine = e
+    w.ev = e.ev
+    return w
 
-DEFECTS = {
-    "SG": ["GEN {} caution light, generator tripped off line", "DC GEN {} caution, would not reset",
-           "Slow start ENG {}, starter dropped out late", "GEN {} output fluctuating"],
-    "BRK": ["Brake {} dragging on taxi", "Hydraulic leak at brake {}", "Brake {} binding, wear pin uneven"],
-    "BAV": ["BLEED {} HOT caution", "Bleed valve {} fails to close on test", "BLEED {} caution in descent"],
-    "NWS": ["NOSE STEERING caution on taxi", "Steering shimmy at slow taxi", "Steering not centring"],
-    "BAT": ["MAIN BATT HOT caution", "Battery voltage low on start", "BATT caution, failed capacity check on aircraft"],
-    "CPC": ["CABIN PRESS FAULT light", "Cabin altitude fluctuating in cruise", "AUTO PRESS fault, manual used"],
-    "FLA": ["FLAP DRIVE caution", "Flap asymmetry indication {}"],
-    "ADC": ["ADC {} FAIL flag", "Airspeed disagree caution", "ALT disagree between sides"],
-    "WXR": ["Radar display blank, FAULT annunciated", "Weather radar intermittent picture", "RADAR FAIL on power up"],
-    "VHF": ["VHF {} intermittent receive", "VHF {} weak transmission reported by ATC", "VHF {} no transmit"],
-    "PEC": ["PEC {} FAULT caution", "Propeller {} speed fluctuation", "PEC {} caution on run-up"],
-    "PDT": ["PROP DEICE caution", "De-ice timer fail light", "Prop de-ice cycling irregular"],
-    "HYP": ["HYD {} pressure low", "No {} hydraulic pump low pressure caution"],
-    "FBP": ["FUEL PRESS {} caution", "Boost pump {} low pressure light"],
-    "WHC": ["WSHLD HOT {} caution", "Windshield heat {} inoperative", "WSHLD HEAT {} fault light"],
-    "FDU": ["ENG FIRE warning, no fire", "FIRE DET FAULT", "Fire detection loop fault on test"],
-}
 
-OTHER = ["Main wheel build, tyre change", "Nose wheel build", "Oxygen bottle recharge and test",
-         "Fire bottle weigh and test", "Tyre change, main wheel", "Wheel bearing inspection", "Life jacket inspection",
-         "Emergency locator battery replacement", "Seat belt and harness inspection", "Crew oxygen mask test"]
+# ---------------------------------------------------------------------------------------------- 2027 plans and truth
+def season_factor(d, temp, temp_k):
+    f = season(d) * bank(d)
+    f *= 1.0 + temp_k * (temp - 17.0) if temp > 17.0 else 1.0 + 0.006 * (temp - 17.0)
+    return f
+
+
+def make_plans(w):
+    """the 2027 plans the pack files: Maplestead's pubs and lines, the new Foundry taps, the Foundry brew plan"""
+    rng = np.random.default_rng(P.SEED + 2027)
+    plans = {}
+    depots = list(P.DEPOT_SHARE)
+    dprob = np.array([P.DEPOT_SHARE[k] for k in depots])
+    estate = []
+    for i in range(P.ESTATE_PUBS):
+        dep = depots[rng.choice(len(depots), p=dprob)]
+        start = P.ESTATE_DAY + dt.timedelta(days=7 * int(rng.integers(0, 3)))
+        lines = {}
+        for code, (med, sd) in P.ESTATE_LINES.items():
+            lines[code] = round(float(med * math.exp(rng.normal(0, sd))), 2)
+        estate.append({"pub": "MI%03d" % (i + 1), "depot": dep, "start": start, "lines": lines})
+    plans["estate"] = estate
+    # new Foundry taps at existing accounts from April 2027 (a fifth more Foundry lines)
+    has = [o for o in w.outlets if any(ln.foundry for ln in o.lines) and (o.closed is None or o.closed > P.ASOF)]
+    cand = [o for o in w.outlets if not any(ln.foundry for ln in o.lines) and o.opened <= P.ASOF and
+            (o.closed is None or o.closed > dt.date(2027, 10, 1)) and not o.seasonal]
+    n_new = int(round(len(has) * P.FOUNDRY_OUTLET_GROWTH))
+    pick = rng.choice(len(cand), size=n_new, replace=False)
+    taps = []
+    for j in sorted(pick):
+        o = cand[j]
+        taps.append({"outlet": o.id, "start": dt.date(2027, 4, 5) + dt.timedelta(days=7 * int(rng.integers(0, 4))),
+                     "rate": round(float(P.LINES["FND"][1] * 0.9 * math.exp(rng.normal(0, 0.35))), 2)})
+    plans["foundry_taps"] = taps
+    windows = {s: (dt.date(2026, 12, 1), dt.date(2027, 12, 31)) for s in P.FOUNDRY_2026}
+    windows.update({s: (dt.date(2027, 1, 4), dt.date(2027, 12, 31)) for s in P.FOUNDRY_2027_CORE[8:]})
+    windows.update(P.FOUNDRY_2027_SEASONAL)
+    plans["foundry_windows"] = windows
+    return plans
+
+
+def foundry_brew_plan(w, plans, eng):
+    """the head brewer's 2027 brew plan: each beer's expected dispatch (the range's expected sales shared across the
+    beers on sale), brewed in whole lots whenever its stock and tank fall under its dispatch over the lead time and a
+    week, from the stock each beer holds at the start of December"""
+    exp_lines = []
+    for o in w.outlets:
+        if o.closed is not None and o.closed <= P.ASOF:
+            continue
+        for ln in o.lines:
+            if ln.foundry:
+                exp_lines.append((ln.rate, None, o.channel, o.seasonal))
+    for t in plans["foundry_taps"]:
+        exp_lines.append((t["rate"], t["start"], "FREE", False))
+    stock = defaultdict(int)
+    for s, q in eng.fg.items():
+        stock[s] += len(q)
+    for dp in P.DEPOTS:
+        for s, q in eng.depot_full[dp].items():
+            stock[s] += len(q)
+    tanks = [(fd, s, n) for fd, s, n in eng.tanks]
+    brews = {s: {} for s in plans["foundry_windows"]}
+    for fd, s, n in tanks:          # the brews already in tank at the end of November
+        bd = fd - dt.timedelta(days=P.FOUNDRY_LEAD)
+        brews.setdefault(s, {})[bd] = brews.get(s, {}).get(bd, 0) + n
+    wins = plans["foundry_windows"]
+    for d in daterange(P.ASOF + ONE, P.Y27_END):
+        temp = w.weather.normal(d)
+        tot = 0.0
+        for r, since, ch, seas in exp_lines:
+            if since and since > d:
+                continue
+            if seas and not seasonal_open(d):
+                continue
+            g = P.GROWTH[ch]
+            yrs = (d - dt.date(2024, 1, 1)).days / 365.25
+            tot += r * (1 + g) ** yrs * season_factor(d, temp, P.FOUNDRY_TEMP) / 7.0
+        on = [s for s, (a, b) in wins.items() if a <= d <= b]
+        per = tot / max(1, len(on))
+        for fd, s, n in tanks:
+            if fd == d:
+                stock[s] += n
+        tanks = [x for x in tanks if x[0] > d]
+        for s in on:
+            stock[s] = max(0.0, stock[s] - per)
+        for s, (a, b) in wins.items():
+            if not (a - dt.timedelta(days=P.FOUNDRY_LEAD + 7) <= d <= b - dt.timedelta(days=P.FOUNDRY_LEAD + 21)):
+                continue
+            intank = sum(n for fd, x, n in tanks if x == s)
+            if stock[s] + intank < max(12, per * (P.FOUNDRY_LEAD + P.FOUNDRY_COVER)):
+                tanks.append((d + dt.timedelta(days=P.FOUNDRY_LEAD), s, P.FOUNDRY_LOT_2027))
+                brews[s][d] = brews[s].get(d, 0) + P.FOUNDRY_LOT_2027
+    return {s: (wins[s][0], wins[s][1], brews[s]) for s in wins}
+
+
+def run_2027(w, plans, like=None):
+    """carry the 30 November 2026 state through 2027 with the plans at normal weather (or a past year's), drawing new
+    kegs whenever the washer runs dry; returns the truth the checks hold the golden to"""
+    eng = w.engine
+    rng = w.rng
+    w.weather.like = like
+    eng.record_from = P.ASOF + ONE
+    eng.record_to = P.Y27_END
+    eng.ev = defaultdict(list)
+    eng.unconstrained = True
+    brew = foundry_brew_plan(w, plans, eng)
+    plans["foundry_brews"] = {s: v[2] for s, v in brew.items()}
+    eng.plan = brew
+    eng.foundry_skus = list(brew)
+    sku_info = w.sku_info
+    depots_rng = np.random.default_rng(P.SEED + 99)
+    est_outlets = []
+    for e in plans["estate"]:
+        o = Outlet(e["pub"], "GROUP", e["depot"], False, e["start"], None)
+        o.group = P.ESTATE
+        o.estate = True
+        for code, r in e["lines"].items():
+            s = sku_info[code]
+            o.lines.append(Line(o, code, s[2], r, s[4], s[5]))
+        o.interval = 7
+        o.days = (int(depots_rng.integers(0, 5)),)
+        est_outlets.append(o)
+    w.outlets.extend(est_outlets)
+    byid = {o.id: o for o in w.outlets}
+    for t in plans["foundry_taps"]:
+        o = byid[t["outlet"]]
+        o.lines.append(Line(o, "FND", 20, t["rate"], P.FOUNDRY_TEMP, 1.10, foundry=True, since=t["start"]))
+    daily = []
+    orig_lots = set(w.lots)
+    for d in daterange(P.ASOF + ONE, dt.date(2027, 9, 30)):
+        eng.step(d)
+        if P.SEASON[0] <= d <= P.SEASON[1]:
+            c = {s: defaultdict(int) for s in P.SIZES}
+            orig = {s: 0 for s in P.SIZES}
+            for k in w.kegs:
+                if k.status != "ACTIVE" or k.where in (None, "LOST", "RECOVERY", "SCRAP"):
+                    continue
+                c[k.size][k.where] += 1
+                if k.lot in orig_lots:
+                    orig[k.size] += 1
+            est = {s: 0 for s in P.SIZES}
+            for o in est_outlets:
+                for ln in o.lines:
+                    est[ln.size] += len(ln.ontap) + len(ln.fulls) + len(ln.empties)
+            fgf = {s: 0 for s in P.SIZES}
+            for code, q in eng.fg.items():
+                if code.startswith("F"):
+                    fgf[20] += len(q)
+            for dp in P.DEPOTS:
+                for code, q in eng.depot_full[dp].items():
+                    if code.startswith("F"):
+                        fgf[20] += 0
+            daily.append((d, {s: dict(v) for s, v in c.items()}, orig, est, fgf))
+    w.weather.like = None
+    return {"daily": daily, "ev": eng.ev, "new_kegs": eng.new_kegs, "estate": est_outlets}

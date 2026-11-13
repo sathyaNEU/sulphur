@@ -1,18 +1,24 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 14 files read, 17 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 19 files read, 75 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, record, blocks, golden, standard, replay, platform, removal, exposure, aircraft, in-house, capacity, months, careful, station, landings, report, nothing, stations, missed, reader, counts, method, graded, carries
+Stump terms swept: architecture, record, blocks, golden, register, standard, missed, replay, carries, nothing, reader, counts, careful, energy, capacity, forecast, platform, drifts, graded, tagged, orders, component, stations, circulation, carried
 
-## 2 author vocabulary (REVIEW 2)
-- **REVIEW** `pool_support_offer_2026.pdf`: \bdesign note\b|\bgenerator\b x1: ...fee per aircraft (NOK) Exchange fee per unit (NOK) 23085-016 Starter-generator 673 48,842 2-1577-3 Main wheel brake assembly 232 23,867 3214552-2 Bl...
-- **REVIEW** `reliability_report_2026-10.pdf`: \bdesign note\b|\bgenerator\b x3: ...ol Unscheduled removals MTBUR (FH) No fault found 23085-016 Starter-generator 2 5 47 1,226 28% 2-1577-3 Main wheel brake assembly 4 5 42 2,744 5% 3...
+## 3 answer figures in the pack (REVIEW 9)
+- **REVIEW** `depot_gate_counts_2023-12_2026-11.csv`: golden figure 30,240 appears: ...OK, 2025-08-11,BRG,50,425,427,OK, 2025-08-11,BRG,K30,240,240,OK, 2025-08-11,BRG,20,42,42,OK, 2025-08-11,LD...
+- **REVIEW** `filling_log_2023-12_2026-11.csv`: golden figure 30,240 appears: ...old IPA,30,85,25.5 2024-09-14,FL1,PAL,Calder Pale,30,240,72.0 2024-09-14,FL1,PIL,Wrenfold Pils,50,766,383....
+- **REVIEW** `lindqvist_quotation_LF-26-1187.pdf`: golden figure 100 appears: ...8 kegs 30 l DIN 84.10 200 12 kegs 20 l slim 71.80 100 18 kegs Delivery: orders confirmed by 18 December...
+- **REVIEW** `nke_statements_2024-01_2026-11.pdf`: golden figure 170 appears: ...5 144 22 Member's own kegs returned to the member 170 85 32 Member's own kegs held at month end, awaiti...
+- **REVIEW** `nke_statements_2024-01_2026-11.pdf`: golden figure 840 appears: ...turn 192 102 21 Clearing fees for the period: GBP 840.20 (handling GBP 0.90 a keg handed in, GBP 1.40 a...
+- **REVIEW** `nke_statements_2024-01_2026-11.pdf`: golden figure 155 appears: ...ber's own kegs held at month end, awaiting return 155 98 22 Clearing fees for the period: GBP 766.50 (h...
+- **REVIEW** `nke_statements_2024-01_2026-11.pdf`: golden figure 150 appears: ...handed in by the member (other members' kegs) 244 150 38 Member's own kegs returned to the member 129 7...
+- **REVIEW** `nke_statements_2024-01_2026-11.pdf`: golden figure 100 appears: ...7 48 Member's own kegs returned to the member 191 100 22 Member's own kegs held at month end, awaiting...
+- **REVIEW** `washer_log_2023-12_2026-11.csv`: golden figure 30,240 appears: ...2024-05-04,B,W1,50,370,363,6,1,0 2024-05-04,A,W1,30,240,236,2,2,0 2024-05-04,B,W1,30,215,206,6,2,1 2024-0...
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `reliability_programme_and_spares_standard.pdf`: 8 of 25 stump-paragraph terms appear (record, standard, removal, aircraft, months, station); read whether the document names the move
-- **REVIEW** `reliability_report_2026-10.pdf`: 5 of 25 stump-paragraph terms appear (standard, removal, aircraft, months, report); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `keg_fleet_standard_issue3.pdf`: 5 of 25 stump-paragraph terms appear (record, register, standard, counts, circulation); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -20,19 +26,16 @@ Stump terms swept: architecture, record, blocks, golden, standard, replay, platf
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
-## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 21% of 19 prompts (cap 20%); reword at the role level, not the verb
-
 ## 12 describing content (REVIEW 1)
-- **REVIEW** `reliability_programme_and_spares_standard.pdf`: names 8 column(s) of the data files verbatim (aircraft, date, defect, position, reason, serial): confirm it is the organisation's own record and not a note written for the analyst
+- **REVIEW** `keg_fleet_standard_issue3.pdf`: names 9 column(s) of the data files verbatim (condition, depot, presented, serial, shift, site): confirm it is the organisation's own record and not a note written for the analyst
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 14 usable files (10 or more required)
-- **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
+- **INFO** `-`: 19 usable files (10 or more required)
+- **INFO** `-`: 3 file categories: database, document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
-## 3 answer figures in the pack (clean)
+## 2 author vocabulary (clean)
 
 ## 5 announcements (clean)
 
@@ -41,6 +44,8 @@ Stump terms swept: architecture, record, blocks, golden, standard, replay, platf
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
+## 11 prompt gate (clean)
 
 
 ## Solver's-eye read, reader 3 (architecture 12 repair after the holistic audit, 2026-11-12, one isolated reader on target.zip 09cd473ce2a120aa; condensed, rulings by the main thread)
@@ -67,3 +72,15 @@ Mechanical flags: (a) the register's planned checks and the 2027 programme are p
 3. None. 4. Nothing names itself as the answer.
 6. No single fact: what stays open is the 2027 rate per part under the new programme, the bulletin's effect read from the snapshot and the repairers' orders, and a rogue's signature found only by joining the changes' dwell times to the repairers' findings. Ruling: analysis throughout, no banned finding.
 Realism: nothing reads as generated (invoice amounts in three currencies at their own rates, a gradual engine-trend drift, FERIE and SYK absence codes, a rogue's repeat no-fault-found pattern that reads as real behaviour).
+
+## Solver's-eye read
+
+Isolated reader (general-purpose, sonnet, medium) on a fresh copy of prompt.txt and target/ (target.zip 487a6d659cbc5bf1), 2026-11-12:
+
+1. How the analysis should be done: standard 3.1's target (the fleet in a size's busiest week covers its kegs in circulation and a float of two days' season fills). Ruled: the estimand's convention (what the fleet must cover), filed once; it names no record and no method.
+2. A file ranking or stating a requested figure: none.
+3. A file existing only to help the analyst: none; the standard reads as a genuine dated, versioned internal standard.
+4. A figure or name reading as the answer: none.
+5. Sentences fixing a figure: 2.1 (the fleet is own kegs that exist and can still be filled, not the register count), 2.2 (the loss is the net fall in the fleet less kegs bought and condemned), 2.5 (the busiest week by circulation). Each literal result is the golden's estimand.
+6. One thing making most of it routine: none; the loss and the fleet turn on cross-file reconciliation of partially overlapping instruments, the busiest week on forecasting, the Maplestead and Foundry figures on assembling schedules into a circulation curve; only the final order arithmetic is close to a rule once the upstream figures exist.
+Sweep lines: all four harmless (the standard's vocabulary and column names are the organisation's own record; the coincident numbers are ordinary record values). Realism: reads like genuine brewery exports; nothing LLM-written, padded or planted.

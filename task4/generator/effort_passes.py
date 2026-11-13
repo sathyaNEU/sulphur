@@ -1,158 +1,124 @@
-"""effort.json, written from results.compute: each result's golden and band, the value the quick, careful-but-hurried
-and thorough passes file, each pass computed end to end by its own method on the cut pack; the one-fact hint run
-literally; the routes' calls; the forcing block (the golden family, the shortcuts, each fitted input perturbed)."""
-import copy
+"""effort.json from the generator's own passes on the cut pack: the golden, the careful but hurried route (the gate
+counters' loss, the register as the fleet, the Maplestead pubs and the 2027 Foundry range at the fleet's own turns and
+days of cover) and the quick pass, result by result, with each careful-column loss's precedent, the hints, the routes
+and the forcing on both sides. Arithmetic on the generator's implementations, never a solver."""
 import json
 
-import analysis as A
-import docs
-import params as P
-import results as RS
+from writeup import r10
 
-CYC_PRICED = ("SG", "BRK", "BAV")
+SIZES = (50, 30, 20)
+K = [str(s) for s in SIZES]
 
 
-def _tab(d, keys):
-    return {k: d[k] for k in keys}
+def _cells(d, sizes=SIZES):
+    return {str(s): r10(d[s]) for s in sizes}
 
 
-def build(G):
-    fc, MC, H, Hw, W = G["fc"], G["MC"], G["H"], G["Hw"], G["W"]
-    rem = {k: round(fc[k]["total"]) for k in A.PARTS}
-    hproj = {k: round(H[k]["proj"]) for k in A.PARTS}
-    # the quick pass reads the October report's own 2027 outlook: every part at October's MTBUR, pooled
-    qproj = {k: round(v) for k, v in G["qproj"].items()}
-    rb = G["rem_band"]
-    need = G["need"]
-    nb = {k: list(G["need_band"][k]) for k in A.PARTS}
-    E = {"results": [], "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
-    R = E["results"]
-    R.append({"id": "R2", "name": "the landing-driven parts' 2027 unscheduled removals", "graded_as": "Component 1",
-              "figure": "rem_cyc", "golden": _tab(rem, CYC_PRICED), "depends": [], "independent": "the legs and the changes",
-              "bands": {k: [rb[k][0], rb[k][1]] for k in CYC_PRICED},
-              "passes": {"quick": _tab(qproj, CYC_PRICED),
-                         "careful": {"value": _tab(hproj, CYC_PRICED), "grade": "right",
-                                     "why": "both platform runs on the architecture 12 cut landed all three inside their bands "
-                                            "(59.9, 50.8, 39.8 and 63.6, 51.9, 39.6), as the stage 4 judge's blind pass did"},
-                         "thorough": _tab(rem, CYC_PRICED)},
-              "precedent": ["N04", "N01"], "partly_share": 0.5})
-    R.append({"id": "R3", "name": "the watch-list serials worth withdrawing", "graded_as": "Component 3",
-              "figure": "scrap_set", "golden": G["scrap"], "depends": [], "independent": "the changes and the findings",
-              "passes": {"quick": sorted(Hw["face_set"]),
-                         "careful": {"value": sorted(Hw["cf_set"]), "grade": "partly",
-                                     "why": "the platform runs set the aircraft's repeat removals apart: one named the eight, the "
-                                            "other seven of them and a victim; the computed confirmed-failure pass names four"},
-                         "thorough": G["scrap"]},
-              "precedent": ["L03", "L13"]})
-    R.append({"id": "R3b", "name": "the removals withdrawing the whole watch list saves", "graded_as": "Ask 3",
-              "figure": "saving", "golden": round(G["saving"]), "depends": [], "independent": "the changes and the findings",
-              "band": [G["saving_band"][0], G["saving_band"][1]], "partly": [G["saving_band"][0] * 0.85, G["saving_band"][1] * 1.15],
-              "passes": {"quick": round(Hw["face"]),
-                         "careful": {"value": round(Hw["cf_only"]), "grade": "partly",
-                                     "why": "the platform runs' fleet replays saved 31.3 and 30.2, one inside the band and one "
-                                            "at its edge; the computed confirmed-failure pass saves 14"},
-                         "thorough": round(G["saving"])},
-              "precedent": ["L03", "L14"]})
-    R.append({"id": "R4", "name": "the propeller control's 2027 removals and spares", "graded_as": "Component 4",
-              "figure": "pec", "golden": {"removals": rem["PEC"], "spares": need["PEC"]}, "depends": [],
-              "independent": "the repairers' orders and the stores snapshot",
-              "bands": {"removals": [rb["PEC"][0], rb["PEC"][1]], "spares": nb["PEC"]},
-              "passes": {"quick": {"removals": qproj["PEC"], "spares": P.POOL["PEC"]},
-                         "careful": {"value": {"removals": hproj["PEC"], "spares": H["PEC"]["spares"]}, "grade": "partly",
-                                     "why": "both platform runs read the bulletin from the snapshot and held five spares, with "
-                                            "removals at 15.9 and 17.4, under the band"},
-                         "thorough": {"removals": rem["PEC"], "spares": need["PEC"]}},
-              "precedent": ["L12", "L11"], "partly_share": 0.5})
-    R.append({"id": "R5", "name": "every part number's expected 2027 unscheduled removals", "graded_as": "Ask 1",
-              "figure": "rem", "golden": rem, "depends": [], "independent": "the legs, the changes and the programme",
-              "bands": {k: [rb[k][0], rb[k][1]] for k in A.PARTS},
-              "passes": {"quick": qproj,
-                         "careful": {"value": hproj, "grade": "partly",
-                                     "why": "the platform runs landed ten and twelve of the sixteen lines, the landing-driven "
-                                            "ones right and the no-fault-found avionics high"},
-                         "thorough": rem}, "precedent": ["L12", "L36"], "partly_share": 0.5})
-    inh = list(P.IN_HOUSE)
-    R.append({"id": "R6", "name": "the in-house lines' spares through the Bodø shop's 2027 queue", "graded_as": "Component 2",
-              "figure": "need_inhouse", "golden": _tab(need, inh), "depends": ["R2"], "independent": "",
-              "bands": {k: nb[k] for k in inh},
-              "passes": {"quick": _tab(P.POOL, inh), "careful": {k: H[k]["spares"] for k in inh}, "thorough": _tab(need, inh)},
-              "precedent": ["L15", "L16"], "partly_share": 0.5})
-    p10 = {k: int(MC[k]["p10"]) for k in A.PARTS}
-    p90 = {k: int(MC[k]["p90"]) for k in A.PARTS}
-    gold_rng = {**{k + "_lo": p10[k] for k in A.PARTS}, **{k + "_hi": p90[k] for k in A.PARTS}}
-    hr = {**{k + "_lo": int(H[k]["p10"]) for k in A.PARTS}, **{k + "_hi": int(H[k]["p90"]) for k in A.PARTS}}
-    # the quick pass's range: Poisson quantiles around the October outlook
-    qr = {**{k + "_lo": A._pois_q(qproj[k], 0.10) for k in A.PARTS}, **{k + "_hi": A._pois_q(qproj[k], 0.90) for k in A.PARTS}}
-    rbands = {**{k + "_lo": list(G["p10_band"][k]) for k in A.PARTS}, **{k + "_hi": list(G["p90_band"][k]) for k in A.PARTS}}
-    R.append({"id": "R7", "name": "the 80 per cent ranges", "graded_as": "Ask 1", "figure": "range", "golden": gold_rng,
-              "depends": ["R5"], "independent": "", "bands": rbands,
-              "passes": {"quick": qr, "careful": hr, "thorough": gold_rng}, "precedent": ["L35"], "partly_share": 0.5})
-    R.append({"id": "R8", "name": "the spares each line needs", "graded_as": "Ask 2", "figure": "need", "golden": dict(need),
-              "depends": ["R5", "R6"], "independent": "", "bands": nb,
-              "passes": {"quick": dict(P.POOL), "careful": {k: H[k]["spares"] for k in A.PARTS}, "thorough": dict(need)},
-              "precedent": ["L11"], "partly_share": 0.5})
-    rob = sorted(G["robust"])
-    gch = {k: G["calls"][k] for k in rob}
-    cch = {k: H[k]["spares"] - P.POOL[k] for k in rob}
-    fam_ch = [{k: v[k] for k in rob} for v in G["fam_calls"].values()]
-    R.append({"id": "R9", "name": "the lines to buy and to cut, with how many", "graded_as": "Recommendation",
-              "figure": "call_units", "golden": gch, "depends": ["R8"], "independent": "",
-              "bands": {k: [min([gch[k]] + [c[k] for c in fam_ch]), max([gch[k]] + [c[k] for c in fam_ch])] for k in rob},
-              "passes": {"quick": {k: 0 for k in rob}, "careful": cch, "thorough": gch}, "precedent": ["L11"],
-              "partly_share": 0.5})
-    # the one-fact test: the strongest sentence, executed on the careful pass
-    Hd = G["Hd"]
-    E["hints"] = [{"sentence": "the starter-generators, brakes and bleed valves wear by landings and engine starts, which the "
-                               "2027 programme raises while flight hours fall", "rescues": ["R2"]},
-                  {"sentence": "a no-fault-found removal is often the aircraft's fault, not the unit's", "rescues": []},
-                  {"sentence": "the Bodø shop's turnaround depends on its load", "rescues": []}]
-    E["hint_values"] = {"exposure": {"R2": {k: round(Hd[k]["proj"]) for k in CYC_PRICED},
-                                     "R8": {k: Hd[k]["spares"] for k in A.PARTS}}}
-    E["routes"] = G["routes"]
-    return E
+def composite(f):
+    """the per-size tables figures.json carries for effort.json's figures"""
+    out = {}
+    for key in ("loss", "fleet", "deliv", "need", "buy"):
+        out[key] = {str(s): f["%s_%d" % (key, s)] for s in SIZES}
+    out["estate"] = {str(s): f["estate_%d" % s] for s in (50, 30)}
+    out["store_t"] = {"20": f["store"]}
+    return out
 
 
-def forcing(G, target):
-    """The golden family's calls, the shortcuts' calls, and each fitted input moved by its spread."""
-    F, D, fc = G["F"], G["D"], G["fc"]
-    robust_keys = sorted(G["robust"])
-
-    def answer(need):
-        ch = RS.calls(need)
-        out = []
-        for k in robust_keys:
-            if ch[k] > 0:
-                out.append("BUY:%s" % k)
-            elif ch[k] < 0:
-                out.append("CUT:%s" % k)
-        return sorted(out)
-    fam = [{"name": n, "answer": answer(v)} for n, v in G["fam_need"].items()]
-    sc = [{"name": r["name"], "answer": r["answer"]} for r in G["routes"][1:]]
-    pert = []
-
-    def run(name, fc2=None, **kw):
-        M = A.simulate(F, fc2 or fc, D, reps=RS.REPS, seed=20271, **kw)
-        pert.append({"input": name, "answer": answer({k: M[k]["need"] for k in A.PARTS})})
-    def scaled(f, k, m, parts=("cf", "nff")):
-        for c in parts:
-            f[k]["total"] += (m - 1.0) * f[k][c]
-            f[k][c] *= m
-    for k in CYC_PRICED:
-        f2 = copy.deepcopy(fc)
-        scaled(f2, k, 0.8)
-        run("%s rate on landings -20%%" % k, f2)
-    run("the Bodø shop's planned capacity +5%", cap_mult=1.05)
-    run("the Bodø shop's planned capacity -5%", cap_mult=0.95)
-    f2 = copy.deepcopy(fc)
-    scaled(f2, "PEC", 1.2)
-    run("the propeller control's 2027 rate +20%", f2)
-    run("the frost terms +20%", frost_mult=1.2)
-    f2 = copy.deepcopy(fc)
-    for k in A.PARTS:
-        scaled(f2, k, 1.2, ("nff",))
-    run("every no-fault-found rate +20%", f2)
-    return {"kind": "set", "golden_answer": answer(G["need"]), "golden_family": fam, "shortcuts": sc, "perturbations": pert}
+def build(G, f):
+    g, car, h = G["golden"], G["careful"], G["hurried"]
+    c = composite(f)
+    bands = lambda key, sizes=SIZES: {str(s): [f["%s_lo_%d" % (key, s)], f["%s_hi_%d" % (key, s)]] for s in sizes}
+    res = []
+    res.append({"id": "R1", "name": "own kegs lost in the trade in the year to November 2026", "graded_as": "Ask 2",
+                "figure": "loss", "golden": c["loss"], "bands": bands("loss"), "depends": [], "independent": "",
+                "passes": {"quick": _cells(G["gate_loss"]),
+                           "careful": {"value": _cells(car["loss"]), "grade": "missed",
+                                       "why": "the depot gate counters' fulls out less empties in, which closes "
+                                              "because other brewers' kegs fill the empties and own kegs come back "
+                                              "through the exchange and the recovery agent unseen by the gates"},
+                           "thorough": c["loss"]},
+                "precedent": ["L28", "L26"], "partly_share": 0.67})
+    res.append({"id": "R2", "name": "usable kegs owned at 30 November 2026", "graded_as": "Component 1",
+                "figure": "fleet", "golden": c["fleet"], "bands": bands("fleet"), "depends": [], "independent": "",
+                "passes": {"quick": _cells(G["register"]),
+                           "careful": {"value": _cells(car["fleet"]), "grade": "missed",
+                                       "why": "the keg register's active kegs, which still carry every keg lost since "
+                                              "the November 2023 reconciliation"},
+                           "thorough": c["fleet"]},
+                "precedent": ["L04", "N13"], "partly_share": 0.67})
+    dband = {str(s): [f["deliv_band_lo_%d" % s], f["deliv_band_hi_%d" % s]] for s in SIZES}
+    res.append({"id": "R3", "name": "the busiest week's deliveries at normal weather with the 80 per cent range",
+                "graded_as": "Ask 4", "figure": "deliv", "golden": c["deliv"], "bands": dband, "depends": [],
+                "independent": "",
+                "passes": {"quick": {str(s): r10(G["quick_deliv"][s]) for s in SIZES},
+                           "careful": {"value": c["deliv"], "grade": "right",
+                                       "why": "a weather and calendar regression on the weekly deliveries is the "
+                                              "field's textbook move and frontier runs make it unprompted"},
+                           "thorough": c["deliv"]}})
+    res.append({"id": "R4", "name": "the kegs the Maplestead pubs hold in the busiest week", "graded_as": "Component 3",
+                "figure": "estate", "golden": c["estate"], "bands": bands("estate", (50, 30)), "depends": [],
+                "independent": "",
+                "passes": {"quick": {str(s): r10(G["turns_estate"][s]) for s in (50, 30)},
+                           "careful": {"value": {str(s): r10(G["turns_estate"][s]) for s in (50, 30)},
+                                       "grade": "partly",
+                                       "why": "the estate's volume at the fleet's average days out per trip: the 50 "
+                                              "litre line sells near the fleet's pace and lands close, the slow 30 "
+                                              "litre lines hold far more than their volume at the fleet's turns"},
+                           "thorough": c["estate"]},
+                "precedent": ["N01", "L15"], "partly_share": 0.5})
+    res.append({"id": "R5", "name": "full Foundry kegs in the cold store in the 20 litre busiest week",
+                "graded_as": "Component 4", "figure": "store_t", "golden": c["store_t"],
+                "bands": {"20": [f["store_lo"], f["store_hi"]]}, "depends": [], "independent": "",
+                "passes": {"quick": {"20": r10(h["store_cover"]["store"])},
+                           "careful": {"value": {"20": r10(h["store_cover"]["store"])}, "grade": "missed",
+                                       "why": "the November stocktake's days of cover carried to the busiest week's "
+                                              "deliveries, which misses the 200-keg lots across up to 18 beers"},
+                           "thorough": c["store_t"]},
+                "precedent": ["N12", "L17"]})
+    res.append({"id": "R6", "name": "kegs needed in circulation in each size's busiest week", "graded_as": "Ask 7",
+                "figure": "need", "golden": c["need"], "bands": bands("need"), "depends": ["R4", "R5"],
+                "independent": "the 2026 circulation rebuilt from the stocktake, the washer and the fills",
+                "passes": {"quick": {str(s): r10(G["quick_need"][s]) for s in SIZES},
+                           "careful": {"value": _cells(car["need"]), "grade": "partly",
+                                       "why": "the careful route's need carries the estate and the Foundry range at "
+                                              "the fleet's turns: 50 litre lands near, 30 and 20 litre short"},
+                           "thorough": c["need"]},
+                "precedent": ["N01", "N12"], "partly_share": 0.34})
+    res.append({"id": "R7", "name": "kegs to buy by size", "graded_as": "Recommendation", "figure": "buy",
+                "golden": c["buy"], "bands": bands("buy"), "depends": ["R2", "R4", "R5", "R6"],
+                "independent": "",
+                "passes": {"quick": _cells(G["quick"]),
+                           "careful": {"value": _cells(car["buy"]), "grade": "missed",
+                                       "why": "the register's fleet and the turns leave 50 litre unordered and order "
+                                              "a tenth of the 30 and 20 litre need"},
+                           "thorough": c["buy"]},
+                "precedent": ["L04", "N01"]})
+    hints = [
+        {"sentence": "the keg register still lists every keg lost since its last reconciliation", "rescues": ["R2"]},
+        {"sentence": "a pub line holds a keg on tap and its delivery cover whatever it sells", "rescues": ["R4"]},
+        {"sentence": "the 2027 Foundry beers are brewed in 200-keg lots", "rescues": ["R5"]},
+        {"sentence": "the depots' empties include other brewers' kegs", "rescues": ["R1"]},
+    ]
+    def tok(x):
+        return sorted("%d:%s" % (s, "in" if f["buy_lo_%d" % s] <= x[s] <= f["buy_hi_%d" % s] else
+                                 ("over" if x[s] > f["buy_hi_%d" % s] else "under")) for s in SIZES)
+    routes = [{"name": "golden", "label": "This order", "answer": tok(g["buy"]), "golden": True,
+               "buy": _cells(g["buy"])},
+              {"name": "careful but hurried: gate loss, the register, the fleet's turns", "label": "Register and turns",
+               "answer": tok(car["buy"]), "buy": _cells(car["buy"])},
+              {"name": "quick: last summer's busiest week at the fleet's turns against the register",
+               "label": "Last summer at turns", "answer": tok(G["quick"]), "buy": _cells(G["quick"])}]
+    for k, v in h.items():
+        routes.append({"name": "shortcut: " + k, "label": k, "answer": tok(v["buy"]), "buy": _cells(v["buy"])})
+    forcing = {"kind": "set", "golden_answer": tok(g["buy"]),
+               "golden_family": [{"name": k, "answer": tok(v["buy"])} for k, v in G["family"].items()],
+               "shortcuts": [{"name": "careful but hurried", "answer": tok(car["buy"])},
+                             {"name": "quick", "answer": tok(G["quick"])}] +
+                            [{"name": k, "answer": tok(v["buy"])} for k, v in h.items() if k != "gate"],
+               "perturbations": [{"input": k, "answer": tok(v["buy"])} for k, v in G["perturbed"].items()]}
+    return {"results": res, "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7},
+            "hints": hints, "routes": routes, "forcing": forcing}
 
 
 def write(path, E):
-    json.dump(E, open(path, "w"), indent=1, default=lambda o: o.item() if hasattr(o, "item") else str(o))
+    json.dump(E, open(path, "w"), indent=1)

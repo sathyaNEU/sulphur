@@ -1,75 +1,74 @@
-# determinism-check report, task4 (architecture 12), 2026-11-12
+# Determinism check: task4 (architecture 13, Wrenfold Brewery 2027 keg order)
 
-## Verdict
-DETERMINISTIC
+Scope: Gates A to E only (`guidelines/determinism_judge_system_prompt.md`). Verified against a fresh unzip of
+`target.zip` (sha256 487a6d6...), `prompt.txt` and the four answer blocks of `submission.md`.
 
-**Disposition:** APPROVE
-**Stumping type:** mechanism: method_or_model_selection (with decomposition_attribution, statistical_rigor and forecasting components), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+## Verdict: DETERMINISTIC
 
-## Why
+## Disposition: FIX_NOW
 
-The main recommendation (buy 12 rotable spares on 6 lines, cut 18 on 9, withdraw 8 of the 23 October watch-list serials) and every supplementary answer trace to specific shipped files and reproduce once the full chain in SOLUTION_STEPS is run, not the naive methods the task is built to reject (per-flight-hour MTBUR, the 2026 average shop turnaround, the watch list's face-value counts, a single uniform shrinkage). The isolated judge thread's own blind derivation, built from `target/` and the prompt alone before it opened the graded blocks, independently reproduced the watch-list population (23 serials, exactly), the staggered 2027 summer-leave capacity hit in `bodo_shop_plan_2027.xlsx`, and confirmed from `bodo_shop_roster_2023-2026.csv` and `bodo_shop_work_orders_2023-2026.csv` that the July/August staffing crunch is the shop's real recurring seasonal pattern (present every year 2023-2026), not a one-off construction placed to be caught.
+## Evidence
 
-This is a repair of a prior cut that a holistic audit returned for two specific holes: (A) the in-house lines' spares rode a shop-turnaround model calibrated near saturation with no 2027 roster shipped, and (B) the avionics/watch-list removals rested on an unfiled rate window and an unfiled reading of "repeat removals traced to one aircraft." I tested specifically whether the repair (shipping `bodo_shop_plan_2027.xlsx` and filing the capacity basis and rate's record in standard sections 4.3 and 4.5) actually closes those two holes, or only relocates them. The thread's own blind pass, working from the standard's text alone, found real forks in both: three different turnaround methods gave it 13, 16.5 and roughly 20-25 days (versus the golden's ~22), translating to 5, 6 or 7 starter-generator spares against the golden's stated band of 8 to 9; and three different exposure-window choices for a serial's own rate gave it a materially different qualifying set for the watch list than the golden's 8/~34. Read against the standard's text alone, sections 4.3 and 4.5 govern the spares rate and the shop's capacity basis respectively, not the watch-list test (that is standard 3.2/3.3 and 5.1/5.2), so the thread's confusion about where the watch-list rule is actually filed is itself informative: the repair's own framing ("standard 4.3, 4.5") undersells where the test is pinned.
+### Figures recomputed
 
-I then checked `DESIGN_NOTE.md`'s fork table and frontier check, which the thread could not see (it is excluded from the thread's allow-list by design). Both residual soft spots the thread flagged are already closed there with *run* rivals, not argued ones: SF16 perturbs the shop's filed capacity by 5 per cent either way and the call holds, and the design note's Forcing section states explicitly that the shop's capacity moving by its own spread moves no in-house line by more than one spare (consistent with each line's stated one-wide band); SF18 tests a one-gamma shrinkage rival against the two-group mixture on every listed part's own counts and the mixture is rejected by a likelihood-ratio test on the data itself (2 dlogL 9.3 to 34.3), with the raw per-serial rates filing the same eight serials independently; SF20 re-runs the aircraft-driven-fault detection window at 90, 120 and 180 days and the withdrawn set of eight serials and the saving's band hold under all three. The thread's own crude flat-occupancy model (giving 7 spares, outside the golden's 8-9 band) is the shape of the task's named "method shortcut" (Palm's formula on a flat average turnaround), the deliberate hurried-analyst failure this result is built to catch, not an equally-rigorous rival the design failed to test: the golden's day-by-day replay is self-validated against the shop's own 2024-2026 actual turnaround (13.9 days replayed against 14.4 recorded) before it is run forward on the 2027 plan, a step the thread's flat model does not perform.
-
-Gates A to E pass on the main recommendation and on every supplementary answer I and the thread could check.
-
-## Recomputation ledger
-
-| Figure | Claimed | Judge recomputed | Reproduced |
+| Figure | Blocks' value | Recomputed | In band? |
 |---|---|---|---|
-| October watch-list population | 23 serials | 23 serials (serial_off grouping, reason in {U,UNSCH}, Nov-2025 to Oct-2026, count>=3) | Yes |
-| 8 withdrawn serials | ADC9270, C3880, FD7205, RT4534, SG6792, V210070, V2715, WH1688 | Not independently re-derived to the exact set (thread could not converge on the exact confound threshold from the standard's text alone); design note's SF20 shows the same 8 hold across three window choices (90/120/180 days) | Consistent, via design-note robustness check, not an independent re-derivation |
-| 2027 staggered summer-leave capacity hit (July/August) | ~22 days turnaround July/August 2027 vs ~13 off-season | Reproduced the roster-plan's own "Working days" column exactly (np.busday_count); confirmed the pattern recurs every year 2023-2026 in the shop's actual history (not a one-off); did not independently reproduce the exact 22-day turnaround figure (three rival queue models gave 13, 16.5 and ~20-25 days) | Capacity hit reproduced; exact turnaround figure not independently re-derived, but the design note's SF16 and Forcing section show it is checked robust (+-5% capacity moves no line by more than one spare) |
-| Starter-generator/brake/bleed-valve 2027 removals (landing-driven, not flight-hour) | 59 / 51 / 40 | Not independently re-fit by the thread in the time available, but the exposure-driver claim (landings beat hours by 2(dlogL) 23.8/17.5/18.2) is corroborated by the design note's own cited fit and by both platform runs on the first cut finding this driver | Consistent |
-| In-house spares needed (starter-generator) | 8 (band 8-9) | Thread's flat-occupancy rival gave 7 (outside stated band) | Judged as the task's intended hurried-analyst shortcut, not a defensible rival (see Why) |
+| Fills in the year to 2026-11-30 (50/30/20) | 215,880 / 117,218 / 30,240 | 215,880 / 117,218 / 30,240 (`filling_log...csv`) | exact match |
+| Own kegs back at washer net of repairs re-presented | 214,849 / 116,649 / 29,828 | 214,849 / 116,649 / 29,828, from `washer_log...csv` (washed_ok+rejected_to_repair+condemned_at_inspection) minus `keg_repair_jobs...csv` REPAIRED jobs with `back_to_washer` in the year | exact match |
+| Fills minus own-back (pre-RFID-term loss) | implied 1,031 / 569 / 412 | 1,031 / 569 / 412 | consistent with filed loss of 1,210/630/170 once the RFID kegs-out term (−179/−61/+242) is added |
+| Usable fleet (SQ3), from the stated levels of kegs out (14,120 / 8,750 / 3,070) | 18,530 / 10,880 / 4,290 | clean empties (4,322/2,072/1,209) + repair cage (83/56/12) + kegs out (14,120/8,750/3,070) = 18,525 / 10,878 / 4,291 | inside band (18,140-18,900 / 10,660-11,140 / 4,200-4,380) |
+| Order (50/30/20) from need minus (fleet minus carried loss) | 2,090 / 3,230 / 1,130 | 19,800−17,720=2,080; 13,670−10,440=3,230; 5,320−4,190=1,130 | inside band (rounding of unrounded inputs) |
+| Maplestead pubs population | SQ5: "held at the Maplestead pubs" | `plan_2027.xlsx` "Maplestead pubs" sheet is pub-level only (no customer/account rows outside the 300 pubs); matches the ask's population exactly. "Kegs on the way" in CC3 belongs to the named *rival* (turns) method, not the graded figure | filed, no fork |
+| Foundry range population | SQ6/CC4 | `plan_2027.xlsx` "Foundry range" (18 beers, 200-keg lots, on_sale_from/to windows) and "Foundry brews" give the racking/brew-plan basis directly | filed |
 
-## Competing answers that survived
+### Fork run: RFID "kegs out" scaling basis (the term that decides SQ3/CC1 and the order)
 
-None that the thread could not close once the design note's own rival runs (SF16, SF18, SF20) are weighed against it. Two forks were real and worth recording for the author:
+I rebuilt the kegs-out term from `keg_rfid_reads_2025-06_2026-11.csv`, `keg_register_2026-11-30.xlsx` (`Kegs`,
+`Lots`, `Tag changes`) and `filling_log...csv`. A literal "last RFID event = FILL or DELIVER ⇒ still out" reading
+initially gave a *rise* in tagged kegs out for every size (+313/+132/+409), the opposite sign from the blocks'
+implied fall for 50 and 30 litre. That reading is ruled out by filed text, not a live fork: standard §2.1 ("a keg
+that will not come back is not part of the fleet") and Step 3 ("tagged kegs out ... that will come back") exclude
+kegs lost in the trade from "out"; my literal state machine was carrying every tagged keg lost since the RFID
+rollout (2025-06-01) as permanently "out", which inflates the later date more than the earlier one (left-censoring
+grows with lookback). Once lost kegs are excluded (an open trip is only "out" if it is later observed to return,
+per Step 3's own wording), the gap closes: the residual between my raw rise and the blocks' implied rise matches
+the tagged share of fills times the stated loss almost exactly for all three sizes (e.g. 50 L: 363 raw-gap vs
+0.278 × 1,210 ≈ 337), which is the fingerprint of exactly this carry-forward error, not of an unpinned method
+choice. **This fork is closed by filed text; not a finding.**
 
-1. **Shop-capacity queue-discipline fork (R6/R8, the five in-house lines' spares).** The standard's 4.5 files the shop's rostered days and bench hours (the WHAT) but no queueing formula (the HOW is left open, correctly, per the project's own "WHAT filed, HOW open" rule). A crude, non-self-validated flat-occupancy rival lands outside the golden's stated band for the starter-generator (7 vs 8-9). The design note's own golden method is self-validated against the shop's real 2024-2026 turnaround (13.9 days replayed vs 14.4 recorded) before being run forward, and SF16 plus the Forcing section test capacity perturbed by its own spread without the call moving by more than one spare per line. This is the task's intended "method shortcut" stump, not an open determinism fork, but it is a thin margin on the starter-generator's exact spares count and worth one more named rival in the design note (a second, non-stochastic queue-discipline replay) if the author wants to foreclose it completely.
-2. **Watch-list rate-window/confound-threshold fork (R3/R3b).** Standard sections 4.3/4.5 do not file the watch-list test (that is 3.2/3.3 and 5.1/5.2); the exact aircraft-fault detection window (3+ serviceable removals by 2+ serials inside 120 days) and the two-group mixture's shrinkage are conventions, not word-for-word filed rules. SF18 (likelihood-ratio rejection of a one-gamma shrinkage rival on the data itself) and SF20 (the same 8 serials hold at 90/120/180-day windows) close this as a run rival, not an argued one, which satisfies Gate C, but the repair's own citation of "standard 4.3, 4.5" for this piece is imprecise (the governing text is 3.2/3.3/5.1/5.2); worth a prompt/documentation-only correction, no rerun required.
+A second, live fork remains: **which tagged share to scale the raw tagged-kegs-out count by.**
+- Scaling by the *tagged share of the year's fills* (0.2785 / 0.2281 / ~1.0, computable from RFID `FILL` reads
+  against `filling_log...csv`) reproduces the blocks' stated levels (14,120 / 8,750 / 3,070) and keeps SQ3 and the
+  order inside band, as shown above.
+- Scaling by the *tagged share of the active register fleet* instead (0.2687 / 0.2208 / 1.0, computable from
+  `keg_register_2026-11-30.xlsx` "Lots" and "Kegs") is an equally defensible, equally filed basis for the same
+  extrapolation (a stock-based share rather than a flow-based share). It raises the 50 litre kegs-out level from
+  14,120 to about 14,640 (ratio 0.2785/0.2687), pushing the 50 litre usable fleet to about 19,040, 140 kegs above
+  the stated band's top of 18,900, and moving the order below the band's low end accordingly for 50 litre.
+- Nothing in `keg_fleet_standard_issue3.pdf` or `plan_2027.xlsx` names which share basis to extrapolate a tagged
+  sample to the full fleet by; the Step-by-Step's own wording ("scaled by the tagged share of fills") is the only
+  place the convention is written down, and the Step-by-Step is an answer block, not an input a solver sees before
+  answering. A careful analyst working from the pack alone could reasonably pick either share and, on the 50 litre
+  size, land outside the stated band.
 
-## Spec gates
+No other graded figure's band is at risk from this fork: 30 and 20 litre stay inside their bands under either
+share basis (the ratio difference is too small relative to their wider bands), and it does not reach the Final
+Recommendation's call (order all three sizes) under either reading.
 
-| Gate | Required | Actual | Pass |
-|---|---|---|---|
-| Usable files | 10+ | 14 (0 system files) | Pass |
-| File categories | 2+ | 3 formats present: xlsx (5: bodo_shop_plan_2027, fleet_register, flying_programme_2027, rotable_stores_snapshot, vendor_repair_orders), csv (6: flight_legs, component_changes, bodo_shop_work_orders, bodo_shop_roster, station_weather_daily, engine_trend_monitoring), pdf (3: reliability_report, reliability_programme_and_spares_standard, pool_support_offer) | Pass |
-| Large messy CSV, 20,000+ rows | 1 | flight_legs_2023-01_2026-11.csv, 240,432 rows | Pass |
-| CSV 10-20 printed pages | 1 | Not independently rendered to PDF to count pages; component_changes_2023-01_2026-11.csv (1,692 rows) and bodo_shop_work_orders_2023-2026.csv (1,633 rows) are the plausible candidates by byte size; precut.py's prior 93-check pass (pipeline.json) already covers this gate | Pass (not independently re-verified; relying on precut.py's recorded pass) |
-| metadata.json names 2+ distractors, none labelled inside the ZIP | 2+ | engine_trend_monitoring_2025-2026.csv, pool_support_offer_2026.pdf; neither named as a distractor anywhere inside target/ | Pass |
-| Distractors unused but relevant, reproduce arithmetically and are ruled out by a shipped fact | checked | pool_support_offer_2026.pdf (an alternative pool-support arrangement, unused in SOLUTION_STEPS); engine_trend_monitoring_2025-2026.csv (engine data unrelated to the graded rotable part numbers) | Pass |
-| 1-3 deliverables, all present in golden | 1-3 | 2 (havorn_rotable_spares_2027.xlsx, havorn_rotable_spares_2027.pptx), both present in golden.zip | Pass |
-| Multi-dimensional asks, units stated, no rounding instruction in prompt | checked | prompt.txt carries no rounding instruction; each ask states its unit (removals, spares, per cent) | Pass |
-| Answer shape, 4+ checkable results | 4+ | 9 results in the chain (R2 through R9), each independently checkable | Pass |
-| Golden ZIP holds exactly the requested files | checked | golden.zip: havorn_rotable_spares_2027.xlsx, havorn_rotable_spares_2027.pptx (matches the two deliverables named) | Pass |
-| Nothing reads LLM-generated | checked | thread's light pass found no provenance/authoring tells; not exhaustively re-extracted every table | Pass (light check) |
+### Other gates
+- Gate B (filed facts): every distinctive term in the Final Recommendation and Critical Components (register vs.
+  usable fleet, gate counters vs. trade loss, Maplestead pub-level turns, the Foundry range's 200-keg lots) traces
+  to a named file and sheet; no missing fact found.
+- Gate D/E (the asks): each ask in Supplementary Questions pins one population, one unit (kegs) and one precision
+  (nearest ten); no ask splits on a reading rather than the data.
 
-## Gate G reconciliation
+## Fix
 
-Thread: `mechanism: method_or_model_selection` (with decomposition_attribution, statistical_rigor, forecasting), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`.
+**Where:** `input_files` (`keg_fleet_standard_issue3.pdf`, §4.6) or, failing that, the SQ3 band in `submission.md`.
 
-Design note's "Deep reasoning" section makes the identical case line by line: "Not rule application" (26), "Not semantics" (25), "No decoy" (28), "No replay" (29) are each argued and closed; the task type is named as "event-rate regressions with an exposure offset chosen by likelihood, a two-group mixture on serial counts, a calibrated queue replay and a Monte Carlo pool replay, each checked against the record it was fitted on" (18), which is squarely method/model selection plus decomposition and uncertainty work, not a flip away from a misleading reported number. The report's own MTBUR, watch list and 2026 average turnaround are all correctly computed as the standard defines them (25); the difficulty is in carrying true, correctly-reported figures forward under the right model, the FINE-numbers shape the client wants. No reconciliation gap.
-
-## Gate H reconciliation
-
-Thread's H line: `domain: pass`, `layers: pass`, `results: 6+ graded across 4+ areas`, `one_thing: none`, `effort: quick ~2/16 lines right by luck, careful-hurried loses 4+ of the named critical components, thorough reproduces all`, `one_fact:` the landings-not-hours sentence rescues the exposure-driver result and the headline framing but well under a third of the graded results.
-
-Design note's own "Effort test" table (9 results, R2-R9) grades Quick 0/9, Careful but hurried 4/9, Thorough 9/9, and "One-fact test" names the same landings-driven sentence, rescuing 0 of 9 beyond what both platform runs already earned in the careful column. The two lines agree in shape (quick far under a third, careful meaningfully higher, thorough full marks, one fact rescuing well under a third) even though the result count differs (9 named results in the design note vs the thread's rougher "6+"). The "Hidden factor record" table lists five constructed factors (landing/start wear, aircraft-side intermittent faults, rogue serials, the SB 61-0042 conversion, the Bodø shop's queue and staggered holidays) and marks each "no" under "only in deciding units," i.e. each shows up broadly across the data (all bases, many part numbers, every month), not just where it decides the answer, matching the thread's `one_thing: none` and satisfying the house's stricter version of the shallow-hidden-factor rule. No reconciliation gap: both the independent thread and the design note's own paper argument agree the difficulty runs across the chain, with the two most-at-risk results (the in-house shop-capacity spares and the watch-list withdrawal) each backed by a run rival, not an argued one.
-
-## Stump power (Gate F)
-
-The thread's own blind pass, working only from the files, could not reach the golden's in-house spares figures or its exact watch-list set without the design's own validated methods (self-checked queue replay, the two-group mixture, the 90/120/180-day robustness sweep); a careful-but-hurried run is likeliest to lose exactly the results the design note's Effort test marks Missed or Partly for that column: R6/R8 (the in-house lines' spares, via Palm's formula on a flat 2026 average turnaround instead of the shop's 2027 queue) and R7 (the ranges, via independent-months bootstrapping that ignores shared weather/fault shocks). No single sentence rescues more than the landings-driven exposure result; the two repaired items (shop capacity, watch-list rate/window) both now carry run-tested bands rather than asserted ones.
-
-## Findings, ranked
-
-1. (Informational, not a determinism defect) The repair's citation of standard sections "4.3, 4.5" for the watch-list capacity basis and rate record is imprecise: 4.3 is the spares fill-rate rule and 4.5 is the shop's capacity basis; the watch-list test is actually filed at 3.2/3.3 (rate, watch-list definition) and 5.1/5.2 (the withdrawal rule, the saving's count). This does not affect determinism (the design note's own fork table cites the correct sections, 5.1/5.2, for R3/R3b), but the task's own narrative in the step-by-step/critical-components language could mislead a future reviewer re-checking the repair's provenance claim. Fix: wording only, no rerun.
-2. (Thin margin, closed by a run check, not an argued one) The starter-generator's in-house spares count (needs 8, band 8-9) sits on a queue-discipline modeling choice; a crude non-self-validated rival lands at 7. The design note's SF16 and Forcing section test this with a capacity-spread perturbation (+-5%) and find no line moves by more than one spare, which is consistent with but not identical to testing a structurally different queue-discipline model. No action required to ship; an optional second queue-discipline rival in the design note's fork table would foreclose this completely.
-
-## Next action for the author
-
-None required to ship. Optional, at the author's discretion: correct the watch-list capacity-basis citation from "standard 4.3, 4.5" to "standard 3.2/3.3 and 5.1/5.2" in any author-facing provenance note (not the prompt, not a graded block), and consider adding one more named queue-discipline rival to the design note's fork table for R6/R8 if the author wants the thin starter-generator margin fully foreclosed rather than resting on the capacity-only sensitivity check already on file.
+**What:** Add one sentence to §4.6 of the keg fleet standard pinning the extrapolation basis, e.g.: "RFID-tagged
+counts are scaled to the whole fleet by the tagged share of the size's fills over the same period, not by the
+tagged share of the active register." This closes the fork with a filed convention rather than leaving it to the
+Step-by-Step alone. If the author prefers not to touch the standard, widen the 50 litre usable-kegs band in SQ3
+from 18,140-18,900 to about 18,140-19,050 and the order band in SQ1 correspondingly, so the register-share reading
+also lands inside.

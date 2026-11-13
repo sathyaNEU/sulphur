@@ -1,182 +1,209 @@
 {
  "task": "task4",
- "architecture": 12,
- "title": "Which of a regional airline's rotable part numbers will be short of spares in 2027 and which over-stocked, how many spares each should hold, and which watch-list serials to withdraw",
+ "architecture": 13,
+ "title": "How many 50, 30 and 20 litre kegs a regional brewer buys for summer 2027",
  "domain": "General Statistics & Data Science (house domain Supply Chain & Logistics, inventory planning)",
  "subdomain": "Regression, classification & model diagnostics",
  "objective": "Forecasting & Predictive Modeling",
  "as_of": "2026-11-30",
  "deliverables": [
-  "havorn_rotable_spares_2027.xlsx",
-  "havorn_rotable_spares_2027.pptx"
+  "wrenfold_keg_fleet_2027.xlsx",
+  "wrenfold_keg_order_2027.pdf"
  ],
  "distractor_files": [
-  "engine_trend_monitoring_2025-2026.csv",
-  "pool_support_offer_2026.pdf"
+  "cask_register_2026-11-30.xlsx",
+  "packaging_line_oee_2025-2026.csv"
  ],
  "stated_inputs": [
-  "002",
-  "003",
-  "0042",
-  "01",
-  "016",
-  "1",
-  "1081",
-  "1123",
-  "1131",
-  "12",
-  "1577",
-  "2",
-  "2210",
-  "23085",
-  "3",
-  "3214552",
-  "34",
-  "4",
-  "4078",
-  "4405",
-  "512",
-  "5132",
-  "61",
-  "622",
-  "66158",
-  "7",
-  "7022",
-  "7320",
-  "816534",
-  "822",
-  "9010"
+  "50",
+  "30",
+  "20",
+  "2016",
+  "2025",
+  "2027",
+  "17",
+  "120",
+  "200",
+  "300"
  ],
  "field_terms": [
-  "starter-generator"
+  "keg",
+  "cask",
+  "Foundry",
+  "ullage"
  ],
  "files": [
   {
-   "path": "flight_legs_2023-01_2026-11.csv",
+   "path": "keg_rfid_reads_2025-06_2026-11.csv",
    "format": "csv",
-   "bytes": 24478389,
-   "rows": 240432,
+   "bytes": 32433940,
+   "rows": 544577,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "component_changes_2023-01_2026-11.csv",
+   "path": "delivery_visits_2025-01_2026-11.csv",
    "format": "csv",
-   "bytes": 230161,
-   "rows": 1692,
+   "bytes": 12117144,
+   "rows": 205915,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "bodo_shop_work_orders_2023-2026.csv",
+   "path": "depot_gate_counts_2023-12_2026-11.csv",
    "format": "csv",
-   "bytes": 176449,
-   "rows": 1633,
+   "bytes": 340517,
+   "rows": 11268,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "bodo_shop_roster_2023-2026.csv",
+   "path": "washer_log_2023-12_2026-11.csv",
    "format": "csv",
-   "bytes": 60543,
-   "rows": 2958,
+   "bytes": 203643,
+   "rows": 6253,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "vendor_repair_orders_2023-2026.xlsx",
+   "path": "filling_log_2023-12_2026-11.csv",
+   "format": "csv",
+   "bytes": 257613,
+   "rows": 5653,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "keg_repair_jobs_2023-12_2026-11.csv",
+   "format": "csv",
+   "bytes": 777048,
+   "rows": 11014,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "rep_keg_counts_2025-2026.csv",
+   "format": "csv",
+   "bytes": 64298,
+   "rows": 1360,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "weather_daily_2016-01_2026-11.csv",
+   "format": "csv",
+   "bytes": 482409,
+   "rows": 11961,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "keg_register_2026-11-30.xlsx",
    "format": "xlsx",
-   "bytes": 65687,
+   "bytes": 1742439,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "fleet_register.xlsx",
+   "path": "keg_stocktakes_30nov_2024-2026.xlsx",
    "format": "xlsx",
-   "bytes": 11674,
+   "bytes": 9133,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "rotable_stores_snapshot_2026-11-30.xlsx",
+   "path": "kegtrace_recoveries_2024-2026.xlsx",
    "format": "xlsx",
-   "bytes": 32273,
+   "bytes": 44114,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "flying_programme_2027.xlsx",
+   "path": "plan_2027.xlsx",
    "format": "xlsx",
-   "bytes": 41393,
+   "bytes": 51194,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "station_weather_daily_2023-2026.csv",
-   "format": "csv",
-   "bytes": 149571,
-   "rows": 5720,
+   "path": "wrenfold_erp_extract_2026-12-01.sqlite",
+   "format": "sqlite",
+   "bytes": 2289664,
+   "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "reliability_report_2026-10.pdf",
+   "path": "nke_statements_2024-01_2026-11.pdf",
    "format": "pdf",
-   "bytes": 178210,
+   "bytes": 302213,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "reliability_programme_and_spares_standard.pdf",
+   "path": "keg_fleet_standard_issue3.pdf",
    "format": "pdf",
-   "bytes": 75787,
+   "bytes": 70281,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "engine_trend_monitoring_2025-2026.csv",
-   "format": "csv",
-   "bytes": 505376,
-   "rows": 8392,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-12-01",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "pool_support_offer_2026.pdf",
+   "path": "lindqvist_quotation_LF-26-1187.pdf",
    "format": "pdf",
-   "bytes": 85935,
+   "bytes": 57055,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "bodo_shop_plan_2027.xlsx",
+   "path": "maplestead_listing_agreement_2026-10.docx",
+   "format": "docx",
+   "bytes": 9693,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "cask_register_2026-11-30.xlsx",
    "format": "xlsx",
-   "bytes": 7680,
+   "bytes": 138779,
    "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-12-01",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "packaging_line_oee_2025-2026.csv",
+   "format": "csv",
+   "bytes": 51223,
+   "rows": 992,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-12-01",
    "license": "CC0-1.0 (original work)"
   }
  ],
- "provenance": "Every file is constructed by the seeded generator in task4/generator from a simulated regional airline: the flying, the weather, each component's wear and the aircraft's own faults, the stations' troubleshooting, the Bod\u00f8 shop's queue, the repairers and the pool. The airline, its people, the pool provider and every record are invented; airport codes and the aircraft type are real names used as setting. No real organisation's records are used."
+ "provenance": "Every file is constructed by the seeded generator in task4/generator from a simulated regional brewer: the weather, each customer line's sales, the cellars' orders, the drivers' visits and the other brewers' kegs they pick up, kegs lost in the trade, the keg exchange and the recovery agent, the depots, the washer, repairs, the brew-house and every RFID read. The brewer, its customers, the pub company, the exchange, the agent and the keg maker are invented; place names are real names used as setting. No real organisation's records are used."
 }

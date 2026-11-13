@@ -1,462 +1,520 @@
-"""The data files under target/, written the way Havørn's systems export them: the flight data feed's legs, the
-maintenance system's component changes, the Bodø shop's work orders and roster, the repair vendors' orders, the fleet
-register, the stores snapshot, the 2027 flying programme, the stations' weather, and two files that sit beside the
-work (the engine trend export and a pool provider's offer). Each carries its system's own conventions and mess."""
+"""The pack under target/, written from the simulated brewery's own events: the RFID reads of tagged kegs, every
+delivery visit as the driver's handheld kept it, the depot gate counters, the washer, the fills, the keg register,
+the stocktakes, the reps' keg counts at pubs, repairs, the recovery agent's finds, the ERP database (accounts,
+routes, dispense lines, deposits), the weather and the 2027 plans. Mess is the process's own: drivers key empties by
+eye (other brewers' kegs among them, a blank now and then), handhelds re-sync a visit twice, readers miss tags, a
+counter goes down and is keyed next day, accounts are renumbered when a pub changes hands, sizes are written three
+ways."""
 import csv
 import datetime as dt
+import math
 import os
+import sqlite3
+from collections import defaultdict
 
 import numpy as np
-from openpyxl import Workbook
+import openpyxl
 from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
 
 import params as P
-import sim
 
 FILES = {
-    "legs": "flight_legs_2023-01_2026-11.csv",
-    "changes": "component_changes_2023-01_2026-11.csv",
-    "shop": "bodo_shop_work_orders_2023-2026.csv",
-    "roster": "bodo_shop_roster_2023-2026.csv",
-    "vendor": "vendor_repair_orders_2023-2026.xlsx",
-    "register": "fleet_register.xlsx",
-    "pool": "rotable_stores_snapshot_2026-11-30.xlsx",
-    "programme": "flying_programme_2027.xlsx",
-    "weather": "station_weather_daily_2023-2026.csv",
-    "report": "reliability_report_2026-10.pdf",
-    "standard": "reliability_programme_and_spares_standard.pdf",
-    "ecm": "engine_trend_monitoring_2025-2026.csv",
-    "offer": "pool_support_offer_2026.pdf",
-    "shopplan": "bodo_shop_plan_2027.xlsx",
+    "rfid": "keg_rfid_reads_2025-06_2026-11.csv",
+    "visits": "delivery_visits_2025-01_2026-11.csv",
+    "gate": "depot_gate_counts_2023-12_2026-11.csv",
+    "washer": "washer_log_2023-12_2026-11.csv",
+    "fills": "filling_log_2023-12_2026-11.csv",
+    "repairs": "keg_repair_jobs_2023-12_2026-11.csv",
+    "audits": "rep_keg_counts_2025-2026.csv",
+    "weather": "weather_daily_2016-01_2026-11.csv",
+    "register": "keg_register_2026-11-30.xlsx",
+    "stocktake": "keg_stocktakes_30nov_2024-2026.xlsx",
+    "recovery": "kegtrace_recoveries_2024-2026.xlsx",
+    "plan": "plan_2027.xlsx",
+    "erp": "wrenfold_erp_extract_2026-12-01.sqlite",
+    "exchange": "nke_statements_2024-01_2026-11.pdf",
+    "standard": "keg_fleet_standard_issue3.pdf",
+    "quote": "lindqvist_quotation_LF-26-1187.pdf",
+    "agreement": "maplestead_listing_agreement_2026-10.docx",
+    "cask": "cask_register_2026-11-30.xlsx",
+    "packline": "packaging_line_oee_2025-2026.csv",
 }
-DISTRACTORS = ["ecm", "offer"]
-ICAO = {"BOO": "ENBO", "TOS": "ENTC", "BGO": "ENBR", "TRD": "ENVA"}
-PN_ALT = {"23085-016": "23085016", "2-1577-3": "2-1577-3", "822-1081-003": "8221081-003", "816534-3": "816534-3"}
+DISTRACTORS = ["cask", "packline"]
 
 
-def _iso(t):
-    return t.strftime("%Y-%m-%dT%H:%MZ")
+def serial(k):
+    return "WB%d-%06d" % (k.size, 100000 + k.id)
 
 
-def legs(w, path):
-    """The flight data feed: one row a leg, block and air times in UTC, the flight date local. The feed re-sent three
-    days in March 2025 (both copies kept) and lost the air times on some legs when the ACARS link dropped."""
-    rng = np.random.default_rng(P.SEED + 21)
-    E = w.E
-    resent = {dt.date(2025, 3, 11), dt.date(2025, 3, 12), dt.date(2025, 3, 18)}
-    rows = 0
+def tag_of(k):
+    return "E2801170%08X" % (0x2A000000 + k.id * 7919 % 0x0FFFFFF)
+
+
+def sizecode(s, rng):
+    u = rng.random()
+    return str(s) if u < 0.55 else ("%dL" % s if u < 0.9 else "K%d" % s)
+
+
+def _w(path, header, rows):
     with open(path, "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
-        wr.writerow(["flight_date", "flight_no", "aircraft", "dep", "arr", "out_utc", "off_utc", "on_utc", "in_utc"])
-        batch = []
-        for l in E.legs:
-            gap = rng.random() < 0.004
-            row = [l["date"].isoformat(), l["flight"], l["tail"], l["dep"], l["arr"], _iso(l["out"]),
-                   "" if gap else _iso(l["off"]), "" if gap else _iso(l["on"]), _iso(l["in"])]
-            wr.writerow(row)
-            rows += 1
-            if l["date"] in resent:
-                batch.append(row)
-            elif batch:
-                for b in batch:
-                    wr.writerow(b)
-                    rows += 1
-                batch = []
-    return rows
-
-
-def _sn_variant(rng, sn, d):
-    """Serials as technicians typed them: the maintenance system took the label as scanned (with the 'S/N' prefix)
-    from the 2024 handheld scanners until a fix in October 2024."""
-    if dt.date(2024, 2, 1) <= d <= dt.date(2024, 10, 14) and rng.random() < 0.31:
-        return "S/N " + sn
-    if rng.random() < 0.012:
-        return sn.lower()
-    return sn
-
-
-def reason_code(r, d):
-    if d < dt.date(2024, 5, 6):
-        return {"UNSCH": "U", "SCHED": "S", "CONV": "C"}[r]
-    return r
-
-
-def changes(w, path):
-    """The maintenance system's component changes: one row a change, the unit off and the unit on. A corrected
-    change is sent again as a new row with its number suffixed, the original kept."""
-    rng = np.random.default_rng(P.SEED + 22)
-    E = w.E
-    n = 0
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f)
-        wr.writerow(["change_no", "change_date", "station", "aircraft", "ata", "part_no", "description", "position",
-                     "serial_off", "serial_on", "reason", "defect", "tsn_off", "csn_off"])
-        for c in sorted(E.changes, key=lambda x: (x["date"], x["no"])):
-            p = P.PART[c["k"]]
-            pn = PN_ALT.get(p["pn"], p["pn"]) if c["date"] < dt.date(2023, 9, 1) and rng.random() < 0.5 else p["pn"]
-            tsn = "" if not c["known"] else "%.0f" % c["tsn"]
-            csn = "" if not c["known"] else "%.0f" % c["csn"]
-            row = [c["no"], c["date"].isoformat(), c["station"], c["tail"], p["ata"], pn, p["name"].upper(), c["pos"],
-                   _sn_variant(rng, c["sn_off"], c["date"]) if c["sn_off"] else "", c["sn_on"],
-                   reason_code(c["reason"], c["date"]), c["defect"], tsn if c["sn_off"] else "", csn if c["sn_off"] else ""]
-            if rng.random() < 0.013:
-                # the first entry carried a slip (the unit on typed one digit out, or the wrong position), corrected
-                # the same day by a second entry under the change number with -R1
-                bad = list(row)
-                if c["sn_on"] and c["sn_on"][-1].isdigit() and rng.random() < 0.6:
-                    bad[9] = c["sn_on"][:-1] + str((int(c["sn_on"][-1]) + 1) % 10)
-                else:
-                    names = sim.pos_names(c["k"])
-                    bad[7] = names[(names.index(c["pos"]) + 1) % len(names)] if len(names) > 1 else c["pos"]
-                wr.writerow(bad)
-                row[0] = row[0] + "-R1"
-                n += 1
-            wr.writerow(row)
-            n += 1
-    return n
-
-
-def shop(w, path):
-    """The Bodø shop's work orders: rotable repairs and the shop's other work. A finding code was added to the form
-    in March 2024; before that the finding is in the text alone."""
-    E = w.E
-    n = 0
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f)
-        wr.writerow(["work_order", "order_type", "part_no", "serial", "received", "parts_received", "work_started",
-                     "completed", "finding_code", "finding", "hours_booked", "technician"])
-        for j in sorted(E.shop_jobs, key=lambda x: x["wo"]):
-            if j["arrive"] > P.ASOF:
-                continue
-            if j["type"] == "other":
-                wr.writerow([j["wo"], "OTHER", "", "", j["arrive"].isoformat(), "", j["start"].isoformat(),
-                             j["done"].isoformat(), "", j["text"], "%.1f" % j["hours"], j["tech"]])
-                n += 1
-                continue
-            done = j["done"] if j["done"] and j["done"] <= P.ASOF else None
-            code = ""
-            if j["arrive"] >= dt.date(2024, 3, 4) and done:
-                code = {"CF": "CONF", "NFF": "NFF", "BER": "BER"}[j["finding"]]
-            pr = j["parts"] if j["parts"] != j["arrive"] and j["parts"] <= P.ASOF else None
-            wr.writerow([j["wo"], "ROTABLE", P.PART[j["k"]]["pn"], j["sn"], j["arrive"].isoformat(),
-                         pr.isoformat() if pr else "",
-                         j["start"].isoformat() if j["start"] and j["start"] <= P.ASOF else "",
-                         done.isoformat() if done else "", code, j["text"] if done else "",
-                         "%.1f" % (j["hours"] - (j["left"] if not done else 0)) if j["start"] else "",
-                         j.get("tech") or ""])
-            n += 1
-    return n
-
-
-def roster(w, path):
-    E = w.E
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f)
-        wr.writerow(["date", "technician", "hours_on_duty", "absence"])
-        for r in E.roster:
-            wr.writerow([r["date"].isoformat(), r["tech"], "%.1f" % r["hours"], r["absence"]])
-    return len(E.roster)
-
-
-def _sheet(ws, header, rows, widths=None, money=()):
-    ws.append(header)
-    for c in ws[1]:
-        c.font = Font(bold=True)
-        c.fill = PatternFill("solid", fgColor="DCE6F1")
-        c.alignment = Alignment(vertical="top", wrap_text=True)
-    for r in rows:
-        ws.append(r)
-    for i, wdt in enumerate(widths or [], start=1):
-        ws.column_dimensions[get_column_letter(i)].width = wdt
-    ws.freeze_panes = "A2"
-
-
-def vendor(w, path):
-    """The repair vendors' orders, as the purchasing team keeps them: one row an order, the invoice in the vendor's
-    currency at the invoice date's rate. Orders still at the vendor at the export have no return date."""
-    rng = np.random.default_rng(P.SEED + 23)
-    E = w.E
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Repair orders"
-    rows = []
-    for j in sorted(E.vendor_jobs, key=lambda x: x["order"]):
-        if j["sent"] > P.ASOF:
-            continue
-        back = j["back"] if j["back"] <= P.ASOF else None
-        p = P.PART[j["k"]]
-        if j["finding"] == "SB":
-            cost = p["price"] * 0.035
-        elif j["finding"] == "NFF":
-            cost = p["price"] * float(rng.uniform(0.025, 0.045))
-        elif j["finding"] == "BER":
-            cost = p["price"] * 0.02
-        else:
-            cost = p["price"] * float(rng.uniform(0.08, 0.19))
-        ccy = j["ccy"]
-        fx = 1.0 if ccy == "NOK" else P.FX[ccy] * float(rng.uniform(0.97, 1.03))
-        amount = cost / fx
-        text = j["text"] if back else ""
-        if back and j["mod"]:
-            text = (text + "; " if text else "") + "SB 61-0042 embodied"
-        rows.append([j["order"], j["vendor"], p["pn"], j["sn"], j["sent"], j["at_vendor"] if j["at_vendor"] <= P.ASOF else None,
-                     back, text, round(amount, 2) if back else None, ccy if back else None, round(fx, 4) if back and ccy != "NOK" else None])
-    _sheet(ws, ["Order", "Repairer", "Part number", "Serial", "Shipped to repairer", "Received by repairer",
-                "Returned to Bodø stores", "Repairer's finding", "Invoice amount", "Currency", "NOK per unit"],
-           rows, [10, 30, 14, 10, 12, 12, 14, 60, 12, 8, 10])
-    for row in ws.iter_rows(min_row=2):
-        for c in (row[4], row[5], row[6]):
-            c.number_format = "yyyy-mm-dd"
-    ws2 = wb.create_sheet("New units")
-    rows2 = []
-    for b in sorted(E.purchases, key=lambda x: (x["ordered"], x["sn"])):
-        if b["ordered"] > P.ASOF:
-            continue
-        p = P.PART[b["k"]]
-        rows2.append(["PO-%s-%s" % (b["ordered"].strftime("%y%m"), b["sn"][-3:]), p["pn"], p["name"], b["sn"], b["ordered"],
-                      b["delivered"] if b["delivered"] <= P.ASOF else None])
-    _sheet(ws2, ["Purchase order", "Part number", "Description", "Serial", "Ordered", "Delivered to Bodø stores"],
-           rows2, [16, 14, 34, 11, 12, 16])
-    for row in ws2.iter_rows(min_row=2):
-        row[4].number_format = row[5].number_format = "yyyy-mm-dd"
-    wb.save(path)
+        wr.writerow(header)
+        wr.writerows(rows)
     return len(rows)
 
 
-def shop_plan(w, path):
-    """The Bodø component shop's plan for 2027, issued by the shop supervisor in November: each technician's planned
-    absences from December 2026 through 2027 (the staggered summer weeks, Christmas) and the bench hours the shop
-    plans month by month, the contracted third-party work taken out."""
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Roster plan"
-    techs = ["SE", "KH", "MB"][:P.SHOP_TECHS]
-    rows = []
-    for t in techs:
-        days = []
-        d = dt.date(2026, 12, 1)
-        while d <= dt.date(2027, 12, 31):
-            if d.weekday() < 5 and d not in sim.HOL and sim.on_holiday(t, d):
-                days.append(d)
-            d += sim.DAY
-        run = []
-        for x in days + [None]:
-            if run and (x is None or (x - run[-1]).days > 4):
-                kind = "Summer holiday" if run[0].month in (6, 7, 8, 9) else "Christmas"
-                rows.append([t, kind, run[0], run[-1], len(run)])
-                run = []
-            if x is not None:
-                run.append(x)
-    rows.sort(key=lambda r: (r[2], r[0]))
-    _sheet(ws, ["Technician", "Absence", "From", "To", "Working days"], rows, [12, 16, 12, 12, 13])
-    for row in ws.iter_rows(min_row=2):
-        row[2].number_format = row[3].number_format = "yyyy-mm-dd"
-    ws2 = wb.create_sheet("Bench hours")
-    rows2 = []
-    for y, m in [(2026, 12)] + [(2027, k) for k in range(1, 13)]:
-        share = P.OTHER_WORK_2027 if dt.date(y, m, 1) >= P.OTHER_FROM else P.OTHER_WORK
-        week = int(round(P.SHOP_HOURS * share * 5 * P.SHOP_TECHS))
-        rows2.append([dt.date(y, m, 1), P.SHOP_TECHS, P.SHOP_HOURS, week,
-                      round(P.SHOP_HOURS - week / (5.0 * P.SHOP_TECHS), 1)])
-    _sheet(ws2, ["Month", "Technicians rostered", "Bench hours a technician on duty",
-                 "Contracted third-party work (hours a week, full roster)", "Rotable bench hours a technician on duty"],
-           rows2, [10, 12, 14, 22, 18])
-    for row in ws2.iter_rows(min_row=2):
-        row[0].number_format = "mmm yyyy"
-    wb.save(path)
-    return rows
+def account_of(o, d):
+    """an outlet's account number on a date: a pub that changed hands is opened again under a new number"""
+    if o.renumbered and d >= o.renumbered:
+        return "W%05d" % (int(o.id[1:]) + 50000)
+    return o.id
 
 
-def register(w, path):
-    """The fleet register: aircraft, their base history and heavy checks."""
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Fleet"
+# ------------------------------------------------------------------------------------------------- big records
+def rfid(w, path):
+    rng = np.random.default_rng(P.SEED + 11)
+    byid = w.kegs
     rows = []
-    for a in w.ac:
-        rows.append([a["tail"], P.TYPE, a["msn"], a["delivered"], "PW123"])
-    _sheet(ws, ["Registration", "Type", "MSN", "Delivered", "Engines"], rows, [13, 11, 7, 12, 9])
-    for row in ws.iter_rows(min_row=2):
-        row[3].number_format = "yyyy-mm-dd"
-    ws2 = wb.create_sheet("Base history")
-    rows = []
-    for t, h in w.hist.items():
-        for i, (when, b) in enumerate(h):
-            to = h[i + 1][0] - sim.DAY if i + 1 < len(h) else None
-            rows.append([t, b, when, to])
-    _sheet(ws2, ["Registration", "Base", "From", "To"], rows, [13, 7, 12, 12])
-    for row in ws2.iter_rows(min_row=2):
-        row[2].number_format = row[3].number_format = "yyyy-mm-dd"
-    ws3 = wb.create_sheet("Heavy checks")
-    rows = []
-    for t, lst in w.checks.items():
-        for i, (a, b) in enumerate(lst):
-            if a <= P.ASOF:
-                rows.append([t, "C%d" % (1 + (i % 2)), "BOO", a, b if b <= P.ASOF else None])
-            elif a <= dt.date(2027, 12, 31):
-                rows.append([t, "C%d (planned)" % (1 + (i % 2)), "BOO", a, b])
-    _sheet(ws3, ["Registration", "Check", "Station", "Start", "End"], rows, [13, 14, 8, 12, 12])
-    for row in ws3.iter_rows(min_row=2):
-        row[3].number_format = row[4].number_format = "yyyy-mm-dd"
-    wb.save(path)
-
-
-def pool(w, path):
-    """The stores snapshot at the end of 30 November 2026: every serial of the pooled part numbers, where it is."""
-    E = w.E
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Rotables 2026-11-30"
-    rows = []
-    inst = {sn: key for key, sn in E.install.items() if sn}
-    kit = {}
-    for (s, k), lst in E.kits.items():
-        for sn in lst:
-            kit[sn] = s
-    shop_open = {j["sn"] for j in E.queue}
-    for sn, u in sorted(E.units.items(), key=lambda x: (P.PART[x[1]["k"]]["pn"], x[0])):
-        p = P.PART[u["k"]]
-        if u["status"] == "scrap":
+    retag = {}
+    for k in byid:
+        if k.tag and rng.random() < 0.018:
+            retag[k.id] = (dt.date(2025, 1, 1) + dt.timedelta(days=int(rng.integers(30, 650))),
+                           "E2801191%08X" % (0x3B000000 + k.id * 104729 % 0x0FFFFFF))
+    w.retag = retag
+    outlets = {o.id: o for o in w.outlets}
+    for d, kid, point, loc in w.ev["read"]:
+        if d < P.RFID0:
             continue
-        if sn in inst:
-            t, k, pos = inst[sn]
-            st, loc = "Installed", "%s %s" % (t, pos)
-        elif sn in kit:
-            st, loc = "Serviceable", "Station kit %s" % kit[sn]
-        elif sn in E.pool[u["k"]]:
-            st, loc = "Serviceable", "Bodø main stores"
-        elif sn in shop_open:
-            st, loc = "Unserviceable", "Bodø component shop"
-        elif u["status"] == "order":
-            st, loc = "On order", "New from manufacturer"
-        elif u["status"] == "repair":
-            st, loc = "Unserviceable", "At repairer"
+        k = byid[kid]
+        t = retag.get(kid)
+        tag = t[1] if t and d >= t[0] else tag_of(k)
+        if point == "DELIVER":
+            o = outlets[loc]
+            hh = 7 + int(rng.integers(0, 8))
+            where = account_of(o, d)
+            reader = "HH-%s-%02d" % (o.depot, int(rng.integers(1, 15)))
+        elif point == "FILL":
+            hh = 6 + int(rng.integers(0, 16))
+            where = "BRG-RACK"
+            reader = "RK-%d" % (1 if k.size != 20 else 2)
         else:
-            st, loc = "Serviceable", "Bodø main stores"
-        sb = ""
-        if u["k"] == "PEC":
-            sb = "Incorporated" if u["mod"] else "Not incorporated"
-        rows.append([p["pn"], p["name"], sn, st, loc, sb])
-    _sheet(ws, ["Part number", "Description", "Serial", "Condition", "Location", "SB 61-0042"], rows,
-           [14, 34, 11, 14, 26, 14])
-    wb.save(path)
-    return rows
+            hh = 6 + int(rng.integers(0, 16))
+            where = "BRG-WASH"
+            reader = "WS-%d" % (1 if k.size != 20 else 2)
+        ts = dt.datetime(d.year, d.month, d.day, hh, int(rng.integers(0, 60)), int(rng.integers(0, 60)))
+        rows.append((ts.strftime("%Y-%m-%d %H:%M:%S"), tag, point, where, reader))
+        if rng.random() < 0.021:
+            ts2 = ts + dt.timedelta(seconds=int(rng.integers(1, 9)))
+            rows.append((ts2.strftime("%Y-%m-%d %H:%M:%S"), tag, point, where, reader))
+    rows.sort()
+    return _w(path, ["read_time", "tag_epc", "read_point", "location", "reader_id"], rows)
 
 
-def programme(w, path):
-    """The 2027 flying programme, as network planning issued it: each leg's departures a week and scheduled block
-    minutes by season and operating base, and the aircraft each base is planned to hold month by month."""
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Programme 2027"
+def visits(w, path):
+    rng = np.random.default_rng(P.SEED + 12)
+    outlets = {o.id: o for o in w.outlets}
     rows = []
-    for r in plan_2027(w):
-        grp = "Bodø (Helgeland routes)" if r["grp"] == "HEL" else P.BASES[r["grp"]]["name"]
-        rows.append([r["season"], grp, r["dep"], r["arr"], r["from"], r["to"], round(r["per_week"], 1), int(round(r["block"]))])
-    _sheet(ws, ["Season", "Operated from", "From", "To", "Valid from", "Valid to", "Departures a week",
-                "Block minutes"], rows, [13, 24, 7, 7, 12, 12, 16, 13])
-    for row in ws.iter_rows(min_row=2):
-        row[4].number_format = row[5].number_format = "yyyy-mm-dd"
-    ws2 = wb.create_sheet("Aircraft by base")
+    n = 0
+    seq = defaultdict(int)
+    for d, oid, dep, deliv, coll, foreign in w.ev["visit"]:
+        if d < P.VISITS0:
+            continue
+        o = outlets[oid]
+        seq[(d, dep)] += 1
+        n += 1
+        vid = "DV%s%s%04d" % (d.strftime("%y%m%d"), dep[0], seq[(d, dep)])
+        route = "%s-%02d" % (dep, 1 + (int(oid[1:]) * 7) % (14 if dep in ("BRG", "LDS") else 9))
+        rec = [vid, d.isoformat(), dep, route, account_of(o, d)]
+        for s in P.SIZES:
+            rec.append(deliv[s])
+        for s in P.SIZES:
+            seen = coll[s] + foreign[s]
+            if seen and rng.random() < 0.03:
+                rec.append("")
+                continue
+            err = 0
+            if seen >= 3 and rng.random() < 0.10:
+                err = int(rng.choice([-1, -1, 1]))
+            rec.append(max(0, seen + err))
+        rec.append("" if rng.random() < 0.9 else ["ullage collected", "cellar locked, left at door", "two empties left",
+                                                   "signed by staff"][int(rng.integers(0, 4))])
+        rows.append(rec)
+        if rng.random() < 0.006:
+            rows.append(list(rec))
+    hdr = ["visit_id", "visit_date", "depot", "route", "account", "fulls_50", "fulls_30", "fulls_20",
+           "empties_50", "empties_30", "empties_20", "driver_note"]
+    return _w(path, hdr, rows)
+
+
+def gate(w, path):
+    rng = np.random.default_rng(P.SEED + 13)
+    agg = defaultdict(lambda: [0, 0])
+    for d, oid, dep, deliv, coll, foreign in w.ev["visit"]:
+        for s in P.SIZES:
+            a = agg[(d, dep, s)]
+            a[0] += deliv[s]
+            a[1] += coll[s] + foreign[s]
     rows = []
-    for m in range(1, 13):
-        d = dt.date(2027, m, 15)
-        cnt = P.BASE_2027_Q1 if d < P.HELGELAND else P.BASE_2027_AP
-        rows.append([dt.date(2027, m, 1), cnt["BOO"], cnt["TOS"], cnt["BGO"], cnt["TRD"],
-                     P.HELGELAND_N if d >= P.HELGELAND else 0])
-    _sheet(ws2, ["Month", "Bodø", "Tromsø", "Bergen", "Trondheim", "of which on the Helgeland routes"],
-           rows, [11, 8, 8, 8, 10, 28])
-    for row in ws2.iter_rows(min_row=2):
-        row[0].number_format = "mmm yyyy"
-    wb.save(path)
-    return rows
-
-
-def plan_2027(w, draws=24):
-    """The programme the replays fly: each leg's expected departures a week and its block minutes, by season, base
-    and route, averaged over many draws of the 2027 flying (the aircraft each base holds, the planned checks, the
-    seasons and the weekends)."""
-    rng = np.random.default_rng(P.SEED + 26)
-    seasons = [("Winter 26/27", dt.date(2027, 1, 1), dt.date(2027, 3, 27)),
-               ("Summer 27", dt.date(2027, 3, 28), dt.date(2027, 10, 30)),
-               ("Winter 27/28", dt.date(2027, 10, 31), dt.date(2027, 12, 31))]
-    acc = {}
-    for _ in range(draws):
-        d = dt.date(2027, 1, 1)
-        while d <= dt.date(2027, 12, 31):
-            sname = [s for s, a, b in seasons if a <= d <= b][0]
-            for a in w.ac:
-                t = a["tail"]
-                if sim.check_on(w.checks, t, d) is not None:
+    carry = {}
+    for d in _days(P.H0, P.ASOF):
+        for dep in P.DEPOTS:
+            out_day = d.weekday() == 6
+            for s in P.SIZES:
+                f, e = agg.get((d, dep, s), [0, 0])
+                key = (dep, s)
+                if key in carry:
+                    cf, ce = carry.pop(key)
+                    rows.append((d.isoformat(), dep, sizecode(s, rng), f + cf, e + ce, "MANUAL", "includes %s" %
+                                 (d - dt.timedelta(days=1)).isoformat()))
                     continue
-                base = sim.base_2027(w.hist, w.movers, t, d)
-                net, lm = sim.network_for(base, d, t, w.movers)
-                grp = "HEL" if (d >= P.HELGELAND and w.movers.get(t) == "HEL") else base
-                for dep, arr, blk in sim.rotation(rng, net, lm, sim.season(d)):
-                    dep = base if dep == "BASE" else dep
-                    arr = base if arr == "BASE" else arr
-                    blk_eff = blk * (1.04 if d.month in (12, 1, 2) else 1.0)
-                    key = (sname, grp, dep, arr)
-                    c = acc.setdefault(key, [0, 0.0])
-                    c[0] += 1
-                    c[1] += blk_eff
-            d += sim.DAY
-    out = []
-    for (sname, grp, dep, arr), (n, bsum) in sorted(acc.items()):
-        a, b = [(x[1], x[2]) for x in seasons if x[0] == sname][0]
-        if grp == "HEL":
-            a = max(a, P.HELGELAND)
-        weeks = ((b - a).days + 1) / 7.0
-        out.append({"season": sname, "grp": grp, "dep": dep, "arr": arr, "from": a, "to": b,
-                    "per_week": n / draws / weeks, "block": bsum / n})
-    return out
+                if not out_day and rng.random() < 0.006 and (f or e):
+                    carry[key] = (f, e)
+                    rows.append((d.isoformat(), dep, sizecode(s, rng), "", "", "OUTAGE", "counter down, keyed next day"))
+                    continue
+                if f == 0 and e == 0 and out_day:
+                    continue
+                rows.append((d.isoformat(), dep, sizecode(s, rng), f, e, "OK", ""))
+    return _w(path, ["count_date", "depot", "keg_size", "fulls_out", "empties_in", "counter_status", "remark"], rows)
+
+
+def washer(w, path):
+    rng = np.random.default_rng(P.SEED + 14)
+    rows = []
+    for d, s, washed, foreign, damaged, condemned, r_depot, r_exch, r_rec, r_rep in w.ev["washer"]:
+        line = "W2" if s == 20 else "W1"
+        tot = (washed, foreign, damaged - condemned, condemned)
+        a = [int(rng.binomial(x, 0.55)) for x in tot]
+        b = [x - y for x, y in zip(tot, a)]
+        for shift, v in (("A", a), ("B", b)):
+            presented = sum(v)
+            if presented == 0:
+                continue
+            rows.append((d.isoformat(), shift, line, s, presented, v[0], v[1], v[2], v[3]))
+    hdr = ["wash_date", "shift", "line", "keg_size_l", "presented", "washed_ok", "rejected_not_ours",
+           "rejected_to_repair", "condemned_at_inspection"]
+    return _w(path, hdr, rows)
+
+
+def fills(w, path):
+    agg = defaultdict(int)
+    for d, kid, s, sku in w.ev["fill"]:
+        agg[(d, sku, s)] += 1
+    rows = []
+    for (d, sku, s), n in sorted(agg.items()):
+        line = "FL2" if s == 20 else "FL1"
+        rows.append((d.isoformat(), line, sku, P.FOUNDRY_NAMES.get(sku, w.sku_info[sku][1] if sku in w.sku_info else sku),
+                     s, n, round(n * s / 100.0, 2)))
+    return _w(path, ["fill_date", "filler", "beer_code", "beer", "keg_l", "kegs_filled", "hl_filled"], rows)
+
+
+def repairs(w, path):
+    rng = np.random.default_rng(P.SEED + 15)
+    rows = []
+    faults = ["spear seal leak", "dented chime", "neck damage", "valve stuck", "failed pressure test", "contaminated"]
+    for i, (d, kid, back) in enumerate(w.ev["repair"]):
+        k = w.kegs[kid]
+        rows.append(("RJ%06d" % (i + 1), serial(k), k.size, d.isoformat(), faults[int(rng.integers(0, 6))],
+                     "REPAIRED", back.isoformat() if back <= P.ASOF else ""))
+    for j, (d, kid) in enumerate(w.ev["condemn"]):
+        k = w.kegs[kid]
+        rows.append(("RJ%06d" % (len(w.ev["repair"]) + j + 1), serial(k), k.size, d.isoformat(),
+                     ["corroded body", "split chime", "failed pressure test"][int(rng.integers(0, 3))],
+                     "CONDEMNED", d.isoformat()))
+    rows.sort(key=lambda r: (r[3], r[0]))
+    return _w(path, ["job", "keg_serial", "size_l", "received", "fault", "outcome", "back_to_washer"], rows)
+
+
+def audits(w, path):
+    rng = np.random.default_rng(P.SEED + 16)
+    outlets = {o.id: o for o in w.outlets}
+    reps = ["A. Hodgson", "R. Patel", "S. Whitworth", "D. Marsden", "C. Lund", "M. Shah"]
+    rows = []
+    for d, oid, c in w.ev["audit"]:
+        o = outlets[oid]
+        rec = [d.isoformat(), account_of(o, d), reps[int(rng.integers(0, len(reps)))]]
+        for s in P.SIZES:
+            f, t, e = c[s]
+            rec += [f, t, e]
+        rows.append(rec)
+    hdr = ["count_date", "account", "counted_by", "full_50", "on_tap_50", "empty_50", "full_30", "on_tap_30",
+           "empty_30", "full_20", "on_tap_20", "empty_20"]
+    return _w(path, hdr, rows)
 
 
 def weather(w, path):
-    """The stations' daily climate summaries as the airports' met offices publish them; a few days missing where a
-    sensor was down."""
-    rng = np.random.default_rng(P.SEED + 24)
-    n = 0
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f)
-        wr.writerow(["station", "date", "tmin_c", "tmax_c"])
-        for b in ("BOO", "TOS", "BGO", "TRD"):
-            for i, d in enumerate(w.dates):
-                if d > P.ASOF:
-                    break
-                if rng.random() < 0.003:
-                    wr.writerow([ICAO[b], d.isoformat(), "", ""])
-                else:
-                    wr.writerow([ICAO[b], d.isoformat(), "%.1f" % w.wx[b]["tmin"][i], "%.1f" % w.wx[b]["tmax"][i]])
-                n += 1
-    return n
+    rng = np.random.default_rng(P.SEED + 17)
+    rows = []
+    names = {"LDS": "Leeds Weather Centre", "YRK": "York (Linton)", "SHF": "Sheffield (Weston Park)"}
+    for st, arr in w.weather.station.items():
+        for i, d in enumerate(w.weather.days):
+            if rng.random() < 0.008:
+                rows.append((d.isoformat(), names[st], "", ""))
+                continue
+            tmax = float(arr[i])
+            rain = round(float(max(0.0, rng.gamma(0.55, 3.6) - 0.6)), 1)
+            rows.append((d.isoformat(), names[st], "%.1f" % tmax, "%.1f" % rain))
+    rows.sort()
+    return _w(path, ["date", "station", "tmax_c", "rain_mm"], rows)
 
 
-def ecm(w, path):
-    """Engine condition trend data (the engine shop's export): take-off and cruise snapshots per engine. Nothing in the
-    spares work reads it."""
-    rng = np.random.default_rng(P.SEED + 25)
-    n = 0
-    with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f)
-        wr.writerow(["aircraft", "engine_pos", "engine_sn", "date", "phase", "itt_c", "itt_margin_c", "torque_pct",
-                     "np_pct", "oat_c", "altitude_ft"])
-        esn = {(a["tail"], e): "PCE-FA%04d" % int(rng.integers(1000, 9999)) for a in w.ac for e in (1, 2)}
-        for a in w.ac:
-            for e in (1, 2):
-                drift = float(rng.uniform(-0.04, 0.02))
-                margin = float(rng.uniform(28, 61))
-                d = dt.date(2025, 1, 3)
-                while d <= P.ASOF:
-                    if rng.random() < 0.55:
-                        margin += drift + float(rng.normal(0, 0.6))
-                        for ph, tq, alt in (("TO", 92 + rng.normal(0, 2), 0), ("CRZ", 74 + rng.normal(0, 3), 17000 + 2000 * rng.random())):
-                            oat = float(rng.normal(4 if ph == "TO" else -18, 7))
-                            itt = 765 - margin + 0.9 * oat + (40 if ph == "TO" else 0) + float(rng.normal(0, 4))
-                            wr.writerow([a["tail"], e, esn[(a["tail"], e)], d.isoformat(), ph, "%.0f" % itt,
-                                         "%.0f" % margin, "%.1f" % tq, "%.1f" % (100 if ph == "TO" else 85),
-                                         "%.0f" % oat, "%.0f" % alt])
-                            n += 1
-                    d += dt.timedelta(days=int(rng.integers(3, 9)))
-    return n
+def packline(w, path):
+    rng = np.random.default_rng(P.SEED + 18)
+    rows = []
+    for d in _days(dt.date(2025, 1, 6), P.ASOF):
+        if d.weekday() >= 5:
+            continue
+        for line, fmt, rate in (("CAN1", "440ml can", 9000), ("BTL1", "500ml bottle", 6000)):
+            planned = 7.5 * 60
+            down = float(max(0, rng.normal(48, 25)))
+            run = planned - down
+            good = int(run * rate / 60 * float(rng.uniform(0.86, 0.97)))
+            rows.append((d.isoformat(), line, fmt, round(planned), round(run), good, int(good * rng.uniform(0.004, 0.02)),
+                         round(run / planned * good / (run * rate / 60) * 100, 1)))
+    return _w(path, ["prod_date", "line", "format", "planned_min", "run_min", "good_units", "rejects", "oee_pct"], rows)
+
+
+def _days(a, b):
+    d = a
+    while d <= b:
+        yield d
+        d += dt.timedelta(days=1)
+
+
+# ------------------------------------------------------------------------------------------------- workbooks
+HEAD = Font(bold=True)
+FILL = PatternFill("solid", fgColor="DDE4EE")
+
+
+def _sheet(ws, header, rows, widths=None):
+    ws.append(header)
+    for c in ws[1]:
+        c.font = HEAD
+        c.fill = FILL
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+    for r in rows:
+        ws.append(list(r))
+    if widths:
+        for i, wd in enumerate(widths):
+            ws.column_dimensions[openpyxl.utils.get_column_letter(i + 1)].width = wd
+    ws.freeze_panes = "A2"
+
+
+def register(w, path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Kegs"
+    rows = []
+    for k in w.kegs:
+        if k.lot == "NEW":
+            continue
+        lot = w.lots[k.lot]
+        st, sd = k.status, k.status_date
+        rows.append((serial(k), k.size, k.lot, lot["bought"], tag_of(k) if k.tag else "", st,
+                     sd if sd else None))
+    _sheet(ws, ["serial", "size_l", "lot", "in_service", "tag_epc", "status", "status_date"], rows,
+           [14, 8, 10, 12, 22, 14, 12])
+    for r in ws.iter_rows(min_row=2, min_col=4, max_col=4):
+        for c in r:
+            c.number_format = "dd/mm/yyyy"
+    for r in ws.iter_rows(min_row=2, min_col=7, max_col=7):
+        for c in r:
+            c.number_format = "dd/mm/yyyy"
+    ws2 = wb.create_sheet("Lots")
+    _sheet(ws2, ["lot", "size_l", "in_service", "kegs_bought", "maker", "tagged"],
+           [(lot, v["size"], v["bought"], v["n"], "Lindqvist Fass" if v["bought"].year >= 2016 else "Northfield Kegs",
+             "yes" if v["tagged"] else "no") for lot, v in w.lots.items()], [10, 8, 12, 12, 18, 8])
+    ws3 = wb.create_sheet("Tag changes")
+    _sheet(ws3, ["serial", "old_tag_epc", "new_tag_epc", "changed"],
+           [(serial(w.kegs[kid]), tag_of(w.kegs[kid]), new, d) for kid, (d, new) in sorted(w.retag.items())],
+           [14, 22, 22, 12])
+    wb.save(path)
+
+
+def stocktake(w, path):
+    wb = openpyxl.Workbook()
+    first = True
+    for d in sorted(w.engine.sites):
+        ws = wb.active if first else wb.create_sheet()
+        first = False
+        ws.title = "30 Nov %d" % d.year
+        counts = w.engine.sites[d]
+        sites = []
+        for (site, cond, s), n in counts.items():
+            if (site, cond) not in sites:
+                sites.append((site, cond))
+        rows = []
+        for site, cond in sites:
+            rows.append((site, cond) + tuple(counts.get((site, cond, s), 0) for s in P.SIZES))
+        _sheet(ws, ["site", "condition", "50 l", "30 l", "20 l"], rows, [40, 18, 9, 9, 9])
+        ws.append([])
+        ws.append(["Counted on site at the close of %s; kegs at pubs and with other parties are not counted." %
+                   d.strftime("%-d %B %Y")])
+    wb.save(path)
+
+
+def recovery(w, path):
+    rng = np.random.default_rng(P.SEED + 19)
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Returned"
+    rows = []
+    for d, kid, s in w.ev["back_recovery"]:
+        k = w.kegs[kid]
+        found = ["scrap metal dealer", "closed premises", "another brewer's yard", "festival site", "private address"][
+            int(rng.choice(5, p=[0.38, 0.27, 0.2, 0.08, 0.07]))]
+        sr = serial(k)
+        if rng.random() < 0.3:
+            sr = sr.replace("WB%d-" % k.size, "WB %d ").replace(" %d ", " %d " % k.size) if False else "WB %d %s" % (
+                k.size, sr.split("-")[1])
+        rows.append((d - dt.timedelta(days=int(rng.integers(3, 15))), sr, "%d L" % k.size, found, d))
+    rows.sort(key=lambda r: r[4])
+    _sheet(ws, ["found", "serial_as_read", "size", "where_found", "delivered_to_brighouse"], rows, [12, 16, 8, 24, 14])
+    ws2 = wb.create_sheet("Monthly summary")
+    agg = defaultdict(lambda: defaultdict(int))
+    for d, kid, s in w.ev["back_recovery"]:
+        agg[(d.year, d.month)][s] += 1
+    _sheet(ws2, ["month", "50 l", "30 l", "20 l", "invoice_gbp"],
+           [("%d-%02d" % ym, v[50], v[30], v[20], round(sum(v.values()) * 14.5, 2)) for ym, v in sorted(agg.items())],
+           [10, 8, 8, 8, 12])
+    wb.save(path)
+
+
+def plan(w, plans, path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Maplestead pubs"
+    rows = []
+    for e in plans["estate"]:
+        for code, r in e["lines"].items():
+            rows.append((e["pub"], P.DEPOTS[e["depot"]], e["start"], code, w.sku_info[code][1], w.sku_info[code][2], r))
+    _sheet(ws, ["pub", "depot", "first_delivery_week", "beer_code", "beer", "keg_l", "expected_kegs_per_week"], rows,
+           [8, 22, 14, 8, 16, 7, 12])
+    ws2 = wb.create_sheet("New Foundry taps")
+    _sheet(ws2, ["account", "tap_from", "expected_kegs_per_week"],
+           [(t["outlet"], t["start"], t["rate"]) for t in plans["foundry_taps"]], [10, 12, 12])
+    ws3 = wb.create_sheet("Foundry range")
+    _sheet(ws3, ["beer_code", "beer", "on_sale_from", "on_sale_to", "kegs_per_brew"],
+           [(s, P.FOUNDRY_NAMES[s], a, b, P.FOUNDRY_LOT_2027) for s, (a, b) in plans["foundry_windows"].items()],
+           [8, 26, 12, 12, 10])
+    ws4 = wb.create_sheet("Foundry brews")
+    rows = []
+    for s, br in plans["foundry_brews"].items():
+        for d, n in sorted(br.items()):
+            rows.append((d, s, n, d + dt.timedelta(days=P.FOUNDRY_LEAD)))
+    rows.sort()
+    _sheet(ws4, ["brew_date", "beer_code", "kegs", "racking_date"], rows, [12, 8, 7, 12])
+    ws5 = wb.create_sheet("Volume plan")
+    _sheet(ws5, ["beer_code", "beer", "2026_hl_actual_to_nov", "2027_hl_plan", "note"], plans["volume"],
+           [8, 22, 14, 12, 40])
+    wb.save(path)
+
+
+def cask(w, path):
+    rng = np.random.default_rng(P.SEED + 20)
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Casks"
+    rows = []
+    for i in range(5200):
+        kind = "firkin (72 pt)" if rng.random() < 0.82 else "kilderkin (144 pt)"
+        yr = int(rng.integers(1998, 2024))
+        st = "ACTIVE" if rng.random() < 0.86 else ("WRITTEN_OFF" if rng.random() < 0.7 else "SCRAPPED")
+        rows.append(("CK%05d" % (i + 1), kind, "steel" if yr < 2012 or rng.random() < 0.4 else "plastic", yr, st))
+    _sheet(ws, ["cask_no", "type", "material", "year", "status"], rows, [10, 18, 9, 7, 13])
+    wb.save(path)
+
+
+# ------------------------------------------------------------------------------------------------- database
+def erp(w, plans, path):
+    rng = np.random.default_rng(P.SEED + 21)
+    if os.path.exists(path):
+        os.remove(path)
+    con = sqlite3.connect(path)
+    c = con.cursor()
+    c.execute("""CREATE TABLE accounts (account TEXT PRIMARY KEY, trading_name TEXT, channel TEXT, pub_group TEXT,
+                 depot TEXT, postcode_district TEXT, opened TEXT, closed TEXT, deposit_terms TEXT, season TEXT)""")
+    c.execute("""CREATE TABLE account_changes (old_account TEXT, new_account TEXT, effective TEXT, reason TEXT)""")
+    c.execute("""CREATE TABLE products (beer_code TEXT PRIMARY KEY, beer TEXT, style TEXT, keg_l INTEGER,
+                 abv REAL, range TEXT, list_price_gbp REAL)""")
+    c.execute("""CREATE TABLE delivery_schedule (account TEXT, depot TEXT, weekday TEXT, frequency TEXT,
+                 valid_from TEXT, valid_to TEXT)""")
+    c.execute("""CREATE TABLE dispense_lines (account TEXT, line_no INTEGER, beer_code TEXT, keg_l INTEGER, taps INTEGER,
+                 installed TEXT, removed TEXT)""")
+    c.execute("""CREATE TABLE deposit_ledger (account TEXT, month TEXT, keg_l INTEGER, kegs_charged INTEGER,
+                 kegs_refunded INTEGER, balance_kegs INTEGER, balance_gbp REAL)""")
+    c.execute("""CREATE TABLE depots (depot TEXT PRIMARY KEY, name TEXT, trunk_days TEXT)""")
+    pc = {"BRG": ["HD6", "HX3", "HD5", "HX5", "HD2"], "LDS": ["LS6", "LS11", "LS28", "LS15", "LS9", "WF3"],
+          "YRK": ["YO1", "YO10", "YO24", "YO26", "HG1", "YO61"], "SHF": ["S1", "S10", "S11", "S6", "S35", "S60"]}
+    first = ["Royal", "Black", "Fleece", "Plough", "Woolpack", "Station", "Shoulder", "Cross Keys", "Rose", "Fox",
+             "White Hart", "Bay Horse", "Malt", "Miners", "Railway", "Anchor", "Bridge", "Swan", "Grove", "Crown"]
+    second = ["Inn", "Arms", "Tavern", "Hotel", "Bar", "Club", "Kitchen", "House"]
+    WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+ 
+    for o in w.outlets:
+        if o.estate or o.opened > P.ASOF:
+            continue
+        nm = "%s %s" % (first[int(rng.integers(0, len(first)))], second[int(rng.integers(0, len(second)))])
+        if o.channel == "CLUB":
+            nm = ["Cricket Club", "Golf Club", "Sports & Social", "Rugby Club", "Bowling Club", "Working Men's Club"][
+                int(rng.integers(0, 6))]
+            nm = "%s %s" % (["Ossett", "Elland", "Batley", "Ripon", "Pudsey", "Thirsk", "Penistone", "Otley"][
+                int(rng.integers(0, 8))], nm)
+        terms = "DEPOSIT" if o.channel == "FREE" else "EXEMPT"
+        closed = o.closed.isoformat() if o.closed and o.closed <= P.ASOF else None
+        seas = "APR-OCT" if o.seasonal else "ALL YEAR"
+        dist = pc[o.depot][int(rng.integers(0, len(pc[o.depot])))]
+        if o.renumbered and o.renumbered <= P.ASOF:
+            c.execute("INSERT INTO accounts VALUES (?,?,?,?,?,?,?,?,?,?)",
+                      (o.id, nm, o.channel, o.group, o.depot, dist, o.opened.isoformat(), o.renumbered.isoformat(),
+                       terms, seas))
+            new = account_of(o, o.renumbered)
+            c.execute("INSERT INTO accounts VALUES (?,?,?,?,?,?,?,?,?,?)",
+                      (new, nm, o.channel, o.group, o.depot, dist, o.renumbered.isoformat(), closed, terms, seas))
+            c.execute("INSERT INTO account_changes VALUES (?,?,?,?)",
+                      (o.id, new, o.renumbered.isoformat(), "change of licensee"))
+            accts = [(o.id, o.opened, o.renumbered), (new, o.renumbered, o.closed)]
+        else:
+            c.execute("INSERT INTO accounts VALUES (?,?,?,?,?,?,?,?,?,?)",
+                      (o.id, nm, o.channel, o.group, o.depot, dist, o.opened.isoformat(), closed, terms, seas))
+            accts = [(o.id, o.opened, o.closed)]
+        for acc, a, b in accts:
+            for wd in o.days:
+                c.execute("INSERT INTO delivery_schedule VALUES (?,?,?,?,?,?)",
+                          (acc, o.depot, WD[wd], "weekly" if o.interval == 7 else "twice weekly", a.isoformat(),
+                           b.isoformat() if b and b <= P.ASOF else None))
+        for i, ln in enumerate(o.lines):
+            inst = max(o.opened, dt.date(2015, 1, 1)) + dt.timedelta(days=int(rng.integers(0, 60)))
+            c.execute("INSERT INTO dispense_lines VALUES (?,?,?,?,?,?,?)",
+                      (account_of(o, P.ASOF), i + 1, "FOUNDRY" if ln.foundry else ln.sku, ln.size, ln.taps,
+                       inst.isoformat(), closed))
+    for code, name, size, style, tk, xm in P.SKUS:
+        c.execute("INSERT INTO products VALUES (?,?,?,?,?,?,?)",
+                  (code, name, style, size, {"PIL": 4.4, "GLD": 3.8, "PAL": 4.2, "IPA": 5.6, "HER": 4.8, "BLK": 4.1}[code],
+                   "core", {50: 128.0, 30: 96.0}[size]))
+    for s in sorted(P.FOUNDRY_NAMES):
+        c.execute("INSERT INTO products VALUES (?,?,?,?,?,?,?)",
+                  (s, P.FOUNDRY_NAMES[s], "small batch", 20, round(float(rng.uniform(4.0, 6.8)), 1), "Foundry",
+                   88.0))
+    for dp, name in P.DEPOTS.items():
+        c.execute("INSERT INTO depots VALUES (?,?,?)",
+                  (dp, name, ",".join(WD[i] for i in P.TRUNK_WEEKDAYS[dp])))
+    dep = {50: 30.0, 30: 25.0, 20: 20.0}
+    outlets = {o.id: o for o in w.outlets}
+    led = defaultdict(lambda: [0, 0])
+    for d, oid, depot, deliv, coll, foreign in w.ev["visit"]:
+        o = outlets[oid]
+        if o.channel != "FREE" or d < P.DEPOSIT_DAY:
+            continue
+        for s in P.SIZES:
+            if deliv[s] or coll[s]:
+                x = led[(account_of(o, d), "%d-%02d" % (d.year, d.month), s)]
+                x[0] += deliv[s]
+                x[1] += min(coll[s] + foreign[s], deliv[s] + coll[s])
+    bal = defaultdict(int)
+    for (acc, m, s), (ch, rf) in sorted(led.items(), key=lambda t: (t[0][0], t[0][2], t[0][1])):
+        bal[(acc, s)] += ch - rf
+        c.execute("INSERT INTO deposit_ledger VALUES (?,?,?,?,?,?,?)",
+                  (acc, m, s, ch, rf, bal[(acc, s)], round(bal[(acc, s)] * dep[s], 2)))
+    con.commit()
+    c.execute("VACUUM")
+    con.close()
