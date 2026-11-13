@@ -1,10 +1,10 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-13",
  "stump": "level 5 by the stump factorial: each feeder's makeup, the thermostatic give-back through the year, the losses from current squared (the trial's achieved dose and the far end's volts are filed by VO-1 and sit as reflexes)",
  "architecture": 12,
@@ -22,91 +22,8 @@
   "heart": "WARN only on 2026-11-13 after re-registering with weight, calibration, context artifact and forcing event redrawn against task23 and task24",
   "surface": "PASS"
  },
- "returned": [
-  {
-   "date": "2026-10-16",
-   "portal": "none: hardened at the author's request after the 10/10 audit, before any portal result",
-   "repair": "design",
-   "commit": "the RESHIPPED (task7) commit of 2026-10-16"
-  },
-  {
-   "date": "2026-10-31",
-   "portal": "none: batch 1 keep-and-repair under the rules learned from the approved tasks",
-   "repair": "keep and repair",
-   "moves": "the equipment notes withdrawn (a file describing the data), the prompt without a data count and with a fresh shell, the survivor anatomy written, the ceiling measured on the cut pack (generator/ceiling.py: pair 31.2, mirror leakage 4.9 per cent), submission.md rewritten to the pack, the note's issuer redrawn from the head of system flow to the deputy director of finance (ban.role against task449)",
-   "freeze": "no main-call figure, stump, ladder, default path or call sentence moved, and no ask figure moved",
-   "commit": "RESHIPPED (task7): describing file withdrawn, prompt without a data count, issuer role redrawn, ceiling measured"
-  },
-  {
-   "date": "2026-11-07",
-   "portal": "inputs: the allocation note PDF's Subject was the library placeholder (unspecified) and its Producer and Creator named the organisation, the header comment overwritten; prompt flagged templated (4 of 7 signals)",
-   "repair": "the PDF keeps ReportLab in Producer and Creator and its header comment, Subject 'Allocation note SF-2026-14', Author the organisation; prompt rewritten as one question with each file named where its reason is given; no data file, golden or graded figure changed",
-   "commit": "RESHIPPED (task7) 1ea0a989"
-  },
-  {
-   "date": "2026-11-07",
-   "portal": "the same provenance reading as task482's second review applies: a PDF naming ReportLab reads as generated",
-   "repair": "the allocation note is now written as a Word document and exported by LibreOffice Writer (Producer LibreOffice 24.2, Creator Writer, no library header), Subject and Author kept; no data file, golden or graded figure changed",
-   "commit": "RESHIPPED (task7), LibreOffice-exported PDF, 2026-11-07"
-  },
-  {
-   "date": "2026-11-07",
-   "portal": "FAILED_TO_STUMP: both responses landed the call, each filing the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days freed).",
-   "lesson": "The stump (the South depot's equipment wait running alongside the care wait, so a package frees none of those nights) is a hidden overlap that a careful response finds in the data: both did. A stronger stump needs the field's full method, done carefully, to file the wrong call, with no fit, back-test or reconciliation on the history able to pick the golden route.",
-   "repair": "re-root (architecture 4) in a new client domain and world, 2026-11-07"
-  },
-  {
-   "date": "2026-11-08",
-   "source": "triage",
-   "repair": "rubric",
-   "moves": "security, commitment and sector-share asks and the per-borrower list replaced by the fall-back intake for each borrower taken on and the intake at every envelope from NZ$4.5 to 6.5 million; critical components reworded with numbers frozen; target.zip byte-identical",
-   "freeze": "rubric mode PASS with --allow commitment.Northgate Print,sector_counts.I.1 (coincident values)"
-  },
-  {
-   "date": "2026-11-08",
-   "source": "triage",
-   "repair": "design",
-   "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
-  },
-  {
-   "date": "2026-11-09",
-   "source": "review",
-   "portal": "version 17: stumped, determinism (main, supp), solution (main, supp), task type and stumped type passed; prelim verdict sent back for fixes: the funding answer turns on one thing (the service visits, about 7 per cent off most passed-over buildings and none of the works buildings), and past it the plan's saving-rate and appraisal formulas carry the rest",
-   "repair": "design (re-root to a results chain, architecture 7, same world at the reviewer's direction)",
-   "feedback": "task7/runs/review_2026-11-09.md"
-  },
-  {
-   "date": "2026-11-11",
-   "source": "review",
-   "portal": "returned at review: the deciding step (insulation's payout under roofer capacity, 12 of the 26 roofers on this year's larger roofs) is one constructed hidden factor whose fix is routine once named, and it bit only in insulation; the test responses reproduced the pilot seasons, both per-building transports, the fade, the close counts and every carbon call. The holistic audit on the same version had passed it (level 5, DEEP, pinned; loss concentration high, information only).",
-   "repair": "design (re-root to architecture 9 in the same world at the reviewer's direction: the call moved onto analysis, the capacity out of the decision)",
-   "feedback": "task7/runs/review_2026-11-11.md"
-  },
-  {
-   "date": "2026-11-12",
-   "source": "triage",
-   "repair": "design",
-   "commit": "",
-   "note": "the platform run landed architecture 9; re-rooted to another world"
-  },
-  {
-   "date": "2026-11-13",
-   "source": "review",
-   "portal": "holistic check failed: the Sequence count (11, USD 160,300) and the fee crossover rested on three readings no file settled (whether the queue waits for a late charger; the ready-by for a session with none in the app; how hourly reads become quarter-hours)",
-   "repair": "determinism",
-   "moves": "filed at authority: the proposal's Sequence rule (each charger waits for every one before it, the earlier plug-in first) and a note that both products start on the quarter-hour; EV-4 4.1 (each session keeps its plug-in, energy, charge time and unplug; the covered chargers' own charging out of the hourly reads before DPS-7 brings them to the quarter-hour, each option's charging in at the quarter-hour; ready-by at the unplug time rounded down); DPS-7 revision 5 (2.2 and Table 2 peaking factors by nameplate from the 48 monitors, monitored or not; Table 1's 50 kVA pole-mount row); golden recomputed and bands widened to the rivals plus one marginal unit either side",
-   "figures": "Sequence 13 (12 to 14), USD 196,700 (178,500 to 214,900); Stagger 29.7 (28.5 to 31.0); own 53 (52 to 55); totals USD 249,200, 397,100, 812,200; flip fee USD 153 (128 to 177)",
-   "freeze": "determinism mode: the moved figures allowed by key (the reviewer directed the recompute); rubric mode and both outputs recorded in the report",
-   "commit": "RESHIPPED (task7): determinism, the queue, the ready-by and the quarter-hour filed"
-  },
-  {
-   "date": "2026-11-13",
-   "by": "holistic audit and the platform run (task7/runs/arch11/run1.md)",
-   "why": "the run earned every graded result inside its band and the call (Sequence, 12 replacements, USD 178,500): the night-by-night Stagger replay is a reflex under EV-4 4.3, the Sequence rule is written in the proposal, the own-schedule rebuild a reflex; the 279 sessions no product rule can schedule are an open fork (12 against 13); under the stump factorial the build has no stump",
-   "route": "REDESIGN under the stump factorial (stumping Part 3.3)"
-  }
- ],
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite and leak.py on the rewrite), uploads it with target.zip, then /triage-runs task7",
+ "returned": "the platform's holistic audit of READY b75d025: the transport of the trial response to a year is unpinned (10 or 12 feeders across reasonable variants) and the run did every priced stump by reflex (not valid evidence of difficulty); never uploaded",
+ "resume": "redesign the deciding layer on paper: each new stump screened against the run's toolkit (R67 to R70), the obvious record provably blind, the factor across the data, not closed, holding across the auditor's variant family; retrofit if two or more pass, else re-root in the same domain and analysis type",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,

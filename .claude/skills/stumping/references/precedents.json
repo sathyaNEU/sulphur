@@ -1176,6 +1176,38 @@
    "move": "pending funds closed on their managers' expected first-close dates although the register records how closes slip when the exit market is weak, so their calls start a year early and no budget passes",
    "source": "task20/runs/arch4_run2.md (platform run on architecture 4, pasted by the author 2026-11-13)",
    "quote": "2027 H2: first-close-held calls 224.87; yet-to-close calls 92.83; total calls 317.70"
+  },
+  {
+   "id": "R67",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a randomized day on/off trial with partial compliance read on the achieved dose (bus SCADA less regulator output), daily log ratio to same-class untested feeders with weather and day-of-week terms, OLS and IV both run",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "Trial response, using achieved dose (bus SCADA minus regulator output, daily), each trial feeder's daily energy taken as a log ratio to its same-class untested feeders, with HDD/CDD and day-of-week terms: OLS mean 0.705 and IV mean 0.697"
+  },
+  {
+   "id": "R68",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a trial's energy response carried to untested units and to the whole year by each unit's thermostatic share, built from a survey's holdings times load-research draws, with one per-unit coefficient calibrated on the trial units",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "the run 0.435 and 0.405 ... heating from a weather regression or from survey shares times the 2024 load-research draws; water heating at customers times the survey's electric share times 3,200 kWh; one pooled per-unit coefficient or one per class"
+  },
+  {
+   "id": "R69",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a voltage limit applied hour by hour from the far-end meters' minimum readings against the service floor and the cap, the trial's own days handled",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "Volts and loss rises: the run independently lands within about 2% of the author (e.g. HOL-116 2.41 vs 2.43 V"
+  },
+  {
+   "id": "R70",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "line losses fitted as current squared on the head-metered feeders and applied at the lowered voltage, so constant-power load raises losses under a voltage cut",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "FRV-116 166 vs 168 MWh"
   }
  ]
 }
