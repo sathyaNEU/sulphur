@@ -101,6 +101,12 @@ template them. Each level 4 and 5 task's prompt, inputs, reference solution and 
 **Thinner, not banned.** A legitimate method choice that carries most of the score, with nothing planted, is a
 valid task but a thin one; the client asks for the results around that step. We build the results around it.
 
+**The stump factorial** (`stumping` Part 3.3), on paper at design and computed on the cut pack: every judgment the
+call can turn on is a reflex (runs make it unprompted, or a file spells it out) or a stump (a run has been seen to lose
+it); the careful pass is the reflex route, never a route that also gets a reflex wrong; two or more stumps must each
+move the call when dropped alone, and none may reach the call when fixed alone on the reflex route. Two is level 4,
+three is level 5, one is a one-trick build and dies on paper. `precut.py` and `effort.py` refuse it.
+
 **The one-fact test**, answered in writing for every build: name the single most useful sentence a reviewer could
 give a run and count the results it rescues. It rescues a third of them or fewer, or the build is redesigned.
 

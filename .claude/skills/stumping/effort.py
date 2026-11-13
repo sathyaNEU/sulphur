@@ -59,6 +59,26 @@ architecture 3: plus or minus 20 per cent on exit rates moved the call from 7 li
               "perturbations": [{"input": "new-account ratios -20%", "value": 4.21}, ...]}
   or {"kind": "set", "golden_family": [{"name": "...", "answer": [...]}], "perturbations": [{"input": "...", "answer": [...]}]}
 
+The stump factorial (binding; the guard against a one-trick build dressed as a chain). `"factorial"` records every
+judgment the call can turn on, each run on the cut pack by the generator's own switches:
+
+  "factorial": {"golden_answer": [...],
+                "reflex_route": {"answer": [...]},
+                "judgments": [{"id": "J1", "name": "...", "kind": "stump", "precedent": ["N25"],
+                               "dropped": {"answer": [...], "results_moved": ["R3", "R7", "R8"]},
+                               "alone": {"answer": [...], "results_rescued": ["R3"]}},
+                              {"id": "J4", "name": "...", "kind": "reflex", "precedent": ["R44"]}, ...]}
+
+The reflex route sets every reflex judgment (a move runs make unprompted, or one the files spell out) to the golden's
+choice and every stump to its hurried choice; it is the careful but hurried pass, so the Recommendation's careful
+value must be its answer. `dropped` is the golden with that one judgment hurried; `alone` is the reflex route with that
+one stump fixed. A build passes when two or more stumps are each necessary (dropped alone, the call moves) and none is
+sufficient (fixed alone, the call is still wrong and a third of the results or fewer are rescued): two such stumps is
+level 4, three is level 5, with the single drops on two or more distinct wrong answers. A stump cites a loss or a
+named assumption, never a reflex; a move a platform run made unprompted is a reflex from then on (the run's line goes
+to precedents.json and the judgment's kind changes to reflex). Enforced as FAIL on every build still being built or
+repaired (pipeline status DRAWING, DESIGN, BUILD, PAUSED, RETURNED), WARN on builds already shipped.
+
 Builds whose card was registered before skeleton.RULE_FROM meet both as WARN; every later build meets them as FAIL.
 `--precedents` prints the catalogue.
 
@@ -289,6 +309,74 @@ def note_table(task_dir):
     return out, (float(pn.group(0)) if pn else None)
 
 
+IN_FLIGHT = ("DRAWING", "DESIGN", "BUILD", "PAUSED", "RETURNED")
+
+
+def in_flight(task_dir):
+    try:
+        return (json.load(open(os.path.join(task_dir, "pipeline.json"))).get("status") or "DESIGN") in IN_FLIGHT
+    except Exception:
+        return True
+
+
+def _key(a):
+    return json.dumps(sorted(a) if isinstance(a, list) else a, sort_keys=True)
+
+
+def factorial_rows(task_dir, E, table, n, P):
+    """The stump factorial: two or more stumps each necessary, none sufficient, the careful pass the reflex route."""
+    rows = []
+    strict = in_flight(task_dir)
+
+    def row(check, ok, detail, warn=False):
+        rows.append((check, "PASS" if ok else ("WARN" if (warn or not strict) else "FAIL"), detail))
+
+    F = E.get("factorial")
+    if not F:
+        row("stump factorial recorded", False, "no `factorial` block: list every judgment the call can turn on (stump or "
+            "reflex), the reflex route's answer, and for each stump the answer with it dropped alone from the golden and "
+            "with it fixed alone on the reflex route (stumping Part 3.3)")
+        return rows, None
+    gold = F.get("golden_answer")
+    rr = (F.get("reflex_route") or {}).get("answer")
+    js = F.get("judgments") or []
+    stumps = [j for j in js if j.get("kind") == "stump"]
+    rec = next((t for t in table if (t["block"] or "").lower().startswith("recommendation")), None)
+    if rec is not None and rr is not None:
+        cv = rec["careful"][1]
+        row("the careful pass is the reflex route", _key(cv) == _key(rr),
+            "the Recommendation's careful value is the reflex route's answer" if _key(cv) == _key(rr) else
+            "careful %s, reflex route %s: the careful column sets every reflex judgment right" % (cv, rr))
+    row("the reflex route misses the call", rr is not None and _key(rr) != _key(gold),
+        "reflex route %s, golden %s" % (rr, gold))
+    bad = []
+    for j in js:
+        ids = j.get("precedent") or []
+        kinds = {P[i]["kind"] for i in ids if i in P}
+        if j.get("kind") == "stump" and ("reflex" in kinds or not (kinds & {"loss", "named_assumption"})):
+            bad.append("%s (%s)" % (j.get("id"), ", ".join(ids) or "no precedent"))
+    row("every stump cites a loss or named assumption, none a reflex", not bad,
+        "%d stumps cited" % len(stumps) if not bad else "move to reflex or cite a run's loss: " + "; ".join(bad))
+    nec = [j for j in stumps if _key((j.get("dropped") or {}).get("answer")) != _key(gold)]
+    suff = [j for j in stumps if _key((j.get("alone") or {}).get("answer")) == _key(gold)
+            or len((j.get("alone") or {}).get("results_rescued") or []) > n / 3.0]
+    names = lambda L: ", ".join("%s %s" % (j.get("id"), (j.get("name") or "")[:40]) for j in L)
+    row("two or more stumps each necessary (dropped alone, the call moves)", len(nec) >= 2,
+        "%d necessary of %d stumps: %s" % (len(nec), len(stumps), names(nec) or "none") if len(nec) >= 2 else
+        "%d necessary (%s): a one-trick build; add an independent judgment that moves the call alone" % (
+            len(nec), names(nec) or "none"))
+    row("no stump sufficient alone (fixed alone on the reflex route)", not suff,
+        "each stump alone leaves the call wrong and rescues a third of the results or fewer" if not suff else
+        "fixing one stump rescues the call or more than a third: " + names(suff))
+    wrong = {_key((j.get("dropped") or {}).get("answer")) for j in nec}
+    level = 5 if (len(nec) >= 3 and len(wrong) >= 2 and not suff) else 4 if (len(nec) >= 2 and not suff) else 3
+    row("depth level from the factorial", level >= 4,
+        "level %d: %d necessary stumps, %d distinct wrong answers when one is dropped%s" % (
+            level, len(nec), len(wrong), "" if level == 5 else " (level 5 needs three, on two or more wrong answers)"),
+        warn=level == 4)
+    return rows, level
+
+
 def main(argv):
     args = [a for a in argv if not a.startswith("--")]
     if not args:
@@ -388,6 +476,8 @@ def main(argv):
     row("pair estimate with uncited losses graded Right", cited <= PAIR_TARGET,
         "%.1f (measured %.1f; %d uncited cell%s regraded Right)" % (cited, score["careful"], len(uncited),
                                                                    "" if len(uncited) == 1 else "s"), warn=not nl)
+    frows, level = factorial_rows(task_dir, E, table, n, P)
+    rows.extend(frows)
     F = E.get("forcing")
     if not F:
         row("forcing recorded on both sides", False, "no `forcing` block: the golden family, the shortcuts and each "

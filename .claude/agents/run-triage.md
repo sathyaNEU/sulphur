@@ -77,6 +77,14 @@ If a run file or the scores are missing, stop and say which.
    method the prompt never asked for, a critical component with no criterion. List them; the author edits the
    rubric only for these.
 
+## Reflexes the run made
+
+Before the route, list every judgment in the design note's `## Stump factorial` (and in `effort.json` `factorial`) that
+this run made unprompted, with the run's own line. Each becomes a reflex precedent in
+`.claude/skills/stumping/references/precedents.json` (kind `reflex`, the quote verbatim) and the judgment's kind turns
+reflex; if fewer than two stumps then stay necessary and insufficient, the route is `REDESIGN` whatever the scores
+(stumping Part 3.3), because the next round would land on the same single trick.
+
 ## Verdict and route
 
 **Precedence.** `FIX_DETERMINISM` first (any `defensible_alternative`); then `SURFACE_RISK` when any of these hold:

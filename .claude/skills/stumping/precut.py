@@ -42,6 +42,15 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
                            as a supporting step and the route showing it alone leaves the call standing); and the
                            card's skeleton screen (fingerprint Part 1b, the closed rule included) clear
 
+  ## Stump factorial       the one-trick guard (stumping Part 3.3), on paper before the generator: `Reflex route:` (every
+                           move a run makes unprompted or the files spell out set right, every stump hurried, and the
+                           answer it files), and a table, one row per judgment the call can turn on, with columns
+                           Judgment | Kind (stump or reflex) | Hurried choice | Evidence (precedents.json ids) |
+                           Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told;
+                           refused below two stumps whose "Dropped alone" moves the call, when any stump's "Fixed alone"
+                           reaches the golden, or when a stump's evidence is a reflex or not a loss or named assumption;
+                           FAIL on a build still being built or repaired, WARN on one already shipped
+
 A build already READY, in runs or shipped under the retired single-deep-step design meets its old contract and a
 WARN naming the retirement: it is not re-shipped until it is re-rooted to the results chain.
 
@@ -618,6 +627,71 @@ def words_hit(text, table):
     """The keys of `table` whose words appear in `text` (lower-cased, whole-phrase substring)."""
     low = " " + re.sub(r"\s+", " ", (text or "").lower()) + " "
     return [k for k, ws in table.items() if any(w in low for w in ws)]
+
+
+IN_FLIGHT = ("DRAWING", "DESIGN", "BUILD", "PAUSED", "RETURNED")
+
+
+def factorial_rows(task_dir, secs):
+    """The stump factorial on paper: two or more stumps each necessary, none sufficient alone."""
+    try:
+        st = json.load(open(os.path.join(task_dir, "pipeline.json"))).get("status") or "DESIGN"
+    except Exception:
+        st = "DESIGN"
+    strict = st in IN_FLIGHT
+    rows = []
+
+    def row(check, ok, detail):
+        rows.append((check, "PASS" if ok else ("FAIL" if strict else "WARN"), detail))
+
+    sf = section(secs, "Stump factorial")
+    row("section Stump factorial", sf is not None, "present" if sf is not None else
+        "## Stump factorial missing (stumping Part 3.3: each stump necessary alone, none sufficient alone, on paper "
+        "before the generator)")
+    if sf is None:
+        return rows
+    rr = labelled(sf, "Reflex route") or ""
+    row("stump factorial: Reflex route", len(rr) >= 20, rr[:110] or "missing")
+    t = find_table(sf, "judgment", "kind") or []
+    if not t:
+        row("stump factorial table", False, "no table with Judgment and Kind columns")
+        return rows
+    h = t[0]
+    ck, cd, ca, ce, cr = (col(h, "kind"), col(h, "dropped"), col(h, "fixed alone", "alone"), col(h, "evidence"),
+                          col(h, "routine"))
+    if None in (ck, cd, ca, ce):
+        row("stump factorial columns", False, "need Kind, Evidence, Dropped alone from the golden, Fixed alone on the reflex route")
+        return rows
+    try:
+        known = {p["id"]: p for p in json.load(open(os.path.join(HERE, "references", "precedents.json")))["precedents"]}
+    except Exception:
+        known = {}
+    data = [r for r in t[1:] if r and len(r) > max(ck, cd, ca, ce)]
+    stumps = [r for r in data if re.search(r"\bstump\b", r[ck], re.I)]
+    nec = [r for r in stumps if not re.match(r"\s*(same call|the golden|none)\b", r[cd], re.I)]
+    suff = [r for r in stumps if re.search(r"\b(the golden|golden call|rescues the call|same as the golden)\b", r[ca], re.I)]
+    badev = []
+    for r in stumps:
+        ids = re.findall(r"\b([LNR]\d{2})\b", r[ce])
+        kinds = {known[i]["kind"] for i in ids if i in known}
+        if "reflex" in kinds or not (kinds & {"loss", "named_assumption"}):
+            badev.append(r[0][:40])
+    row("stump factorial: two or more stumps each move the call when dropped alone", len(nec) >= 2,
+        "%d of %d stumps necessary%s" % (len(nec), len(stumps), "" if len(nec) >= 2 else
+                                         ": a one-trick design; add an independent judgment that moves the call alone"))
+    row("stump factorial: no stump reaches the golden when fixed alone", not suff,
+        "none sufficient" if not suff else "sufficient alone: " + "; ".join(r[0][:40] for r in suff))
+    row("stump factorial: each stump cites a loss or named assumption, never a reflex", not badev,
+        "cited" if not badev else "fix: " + "; ".join(badev))
+    if cr is not None:
+        routine = [r for r in stumps if len(r) > cr and re.match(r"\s*yes\b", r[cr], re.I)]
+        rows.append(("stump factorial: not every stump a routine step once told",
+                     "PASS" if len(routine) < len(stumps) or not stumps else "WARN",
+                     "%d of %d stumps a routine step once told" % (len(routine), len(stumps))))
+    lvl = 5 if len(nec) >= 3 and not suff else 4 if len(nec) >= 2 and not suff else 3
+    rows.append(("stump factorial: depth level on paper", "PASS" if lvl == 5 else "WARN" if lvl == 4 else
+                 ("FAIL" if strict else "WARN"), "level %d (%d necessary stumps)" % (lvl, len(nec))))
+    return rows
 
 
 def col(header, *names):
@@ -1265,6 +1339,7 @@ def main(argv):
     rows = check_note(task_dir, open(note, encoding="utf-8", errors="replace").read())
     rows.append(prompt_gate(task_dir))
     if not any(r[0] == "doctrine" for r in rows):
+        rows.extend(factorial_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.append(effort_gate(task_dir))
     fails = [r for r in rows if r[1] == "FAIL"]
     for check, level, detail in rows:

@@ -397,6 +397,42 @@ cut pack), every one on the golden's side; the shortcuts, every one across the l
 its defensible spread, the call holding. A shortcut that lands on the golden's side is a result the runs earn; a
 rival across the line is an open fork (`determinism-check`).
 
+### 3.3 The stump factorial: no build ships on one trick
+
+**Why this exists.** task1 architecture 5 passed every gate (careful pass 34.5, "no single hint rescues a result", a
+level 5 claim) and was still one trick: its careful route was written by hand and set wrong two judgments the
+platform run then made unprompted (downgraders kept paying, each account valued on its own usage, R43 and R44), so
+the hint test was measured against a strawman. Read against the run's own route, one sentence (the response jumps
+where the new price passes the rival's) rescued four of five results, and the factor shows in one cross-tab of the
+eight past rises: banned item 4. The gates priced difficulty against a route no frontier run takes.
+
+**The rule.** List every judgment the call can turn on, each a switch in the generator. Each is a **reflex** (a move
+a frontier run makes unprompted, by `precedents.json` reflex ids or a platform run's own text, or one a filed
+document spells out) or a **stump** (a move a run has been seen to lose or to name and wave through, cited by a loss
+or named-assumption id). Then:
+
+- **The reflex route** sets every reflex right and every stump hurried. It is the careful but hurried pass: never a
+  route that also gets a reflex wrong. Its answer must miss the call.
+- **Necessary.** Each stump, dropped alone from the golden (everything else right), moves the call.
+- **Not sufficient.** Each stump, fixed alone on the reflex route, leaves the call wrong and rescues a third of the
+  results or fewer. This is the one-fact test, run where the runs actually stand.
+- **The level.** Two such stumps is level 4; three, with the single drops on two or more distinct wrong answers, is
+  level 5. One is a one-trick build and is redesigned, whatever the chain around it looks like.
+- **Run evidence overrides the design.** When a platform run makes a priced judgment unprompted, its line goes into
+  `precedents.json` as a reflex, the judgment turns reflex, and the factorial is re-run before anything else.
+- **A stump that is a constructed factor, fixed by one routine step once told and visible in one cross-tab** is
+  banned item 4 on its own; inside the factorial it may stand only beside other stumps that each move the call.
+
+**Where it is enforced.** On paper at stage 2: the design note's `## Stump factorial` (the `Reflex route:` line and
+one row per judgment: Judgment, Kind, Hurried choice, Evidence, Dropped alone from the golden, Fixed alone on the
+reflex route, One routine step once told), which `precut.py` refuses below two necessary stumps or with a sufficient
+one; prototype the switches in a scratch script against the clean truth before the generator is written, and kill the
+draw there if it is one trick. On the cut pack at stage 3: the generator writes `effort.json`'s `factorial` block from
+its own switches (the reflex route, and each stump dropped alone and fixed alone, with the results each moves), and
+`effort.py` refuses a careful pass that is not the reflex route, a stump citing a reflex, fewer than two necessary
+stumps or any sufficient one. FAIL on every build being built or repaired; WARN on shipped builds until they are next
+touched.
+
 ## Part 3b. The depth scale
 
 `guidelines/client/depth-scale-2026-11-09.md` is the client's own reading of 17 real submitted tasks on five levels:
@@ -578,6 +614,8 @@ measurements.
 - [ ] Four or more results across three or more areas, each pinned, banded, graded, with a hurried failure the runs
       make; no analytical result carrying more than half the others; the carry-forward line
 - [ ] Every hidden factor through the three conditions and the house rule; none refused
+- [ ] The stump factorial (Part 3.3) on paper before the generator and computed on the cut pack: the careful pass is
+      the reflex route, two or more stumps each necessary, none sufficient alone, level 4 at two and 5 at three
 - [ ] The effort test measured by `effort.py`: quick a third or less, strictly increasing, thorough all, the
       largest hint a third or less, the pair estimate 50 or under
 - [ ] Data provenance: the process simulated or the public source, three or more genuine patterns, problems by

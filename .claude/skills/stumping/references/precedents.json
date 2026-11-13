@@ -816,6 +816,54 @@
    "move": "planned additions or works taken to start in full on their scheduled dates, with no slip or ramp",
    "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12)",
    "quote": "Connections start immediately on scheduled dates, with no assumed ramp-up, weather uplift, generic growth, or authorized theft recovery."
+  },
+  {
+   "id": "R43",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a plan change at a price rise modelled as its own outcome and the downgrader kept paying on the lower plan, not counted as a lost subscription",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Used jointly normalized outcome odds so cancellation, downgrade, upgrade, payment loss and continuation remain mutually exclusive."
+  },
+  {
+   "id": "R44",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "each subscription valued on its own account-level usage history (leavers, stayers and switchers), not on its plan's average",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Usage follows individual history and destination-plan economics."
+  },
+  {
+   "id": "R45",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a past response carried to a rise of another size by a dose scaling (the log of the price ratio), and the scaling tested in sensitivities",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Scaled price-pulse effects by relative log-price changes: 2.7245 for Flex, 0.9354 for Standaard, 0.9487 for Onbeperkt and 3.1865 for Gezin."
+  },
+  {
+   "id": "N23",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "no consumption response to a price rise: the subscriptions that stay are assumed to listen as before",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "No additional consumption response to price is assumed."
+  },
+  {
+   "id": "N24",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "the response to an announced change taken at the first bill only, with no response between the announcement and the bill",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "The response is a first-bill pulse. There is no separately modeled November announcement effect"
+  },
+  {
+   "id": "N25",
+   "kind": "named_assumption",
+   "class": "narrow look at broad data",
+   "move": "each unit's response read off its own single past event, the events never split by a condition that varies across them",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Each region-plan has only one historical price event."
   }
  ]
 }
