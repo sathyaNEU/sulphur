@@ -1,79 +1,36 @@
 # leak check, task20
 
-**Verdict: REVIEW.** 27 files read, 127 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 30 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, contract, deposits, delivery, missed, quarters, issuer, inside, releases, issuers, revenue, comparable, re-issued, regional, descriptor, careful, payments, detail, midwest, dropped, engine, customer, carries, october, history
+Stump terms swept: record, architecture, quarter, contract, missed, affiliate, careful, dropped, prototype, second, result, hardening, clearing, licence, points, engine, deposits, written, storage, notices, hurried, policy, method, golden, inside
 
-## 1 file names (REVIEW 19)
-- **REVIEW** `bmh_8k_ex99-1_2021-06-09.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2021-12-08.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2022-02-24.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2022-06-08.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2022-09-07.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2022-12-07.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2023-02-23.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2023-06-07.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2023-09-06.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2023-12-06.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2024-02-29.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2024-06-12.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2024-09-11.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2024-12-11.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2025-02-27.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2025-06-11.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2025-09-10.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
-- **REVIEW** `bmh_8k_ex99-1_2025-12-10.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
+## 4 design-note vocabulary (REVIEW 4)
+- **REVIEW** `hallingvass_regulation_licence_extract.pdf`: 3 of 25 stump-paragraph terms appear (second, licence, storage); read whether the document names the move
+- **REVIEW** `hk_hedging_policy_2025.docx`: 4 of 25 stump-paragraph terms appear (second, clearing, points, policy); read whether the document names the move
+- **REVIEW** `hk_liquidity_standard_2026.pdf`: 4 of 25 stump-paragraph terms appear (record, contract, clearing, licence); read whether the document names the move
+- **REVIEW** `nex_clearing_margin_summary.pdf`: 3 of 25 stump-paragraph terms appear (quarter, clearing, notices); read whether the document names the move
 
-## 3 answer figures in the pack (REVIEW 9)
-- **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: golden figure 1.61 appears: ...$ 1.61 $ 1.40 $ 2.60 $ 2.09 Di...
-- **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: golden figure 1.39 appears: ...r diluted share, compared with $72.7 million, or $1.39 per diluted share, a year ago. At the end of the...
-- **REVIEW** `bmh_8k_ex99-1_2021-12-08.txt`: golden figure 1.71 appears: ...$ 1.71 $ 1.59 $ 4.33 $ 3.68 Di...
-- **REVIEW** `bmh_8k_ex99-1_2022-09-07.txt`: golden figure 1.61 appears: ...$ 1.92 $ 1.61 $ 3.11 $ 2.60 Diluted...
-- **REVIEW** `bmh_8k_ex99-1_2022-12-07.txt`: golden figure 1.71 appears: ...$ 1.82 $ 1.71 $ 4.94 $ 4.33 Diluted...
-- **REVIEW** `bmh_8k_ex99-1_2022-02-24.txt`: carries 13 of 19 distinctive words of the committed call: 'Short Brindle & Moss into the 26 February 2026 release of its fiscal 2025 fourth quarter: net sales of USD 1,471.2 milli'
-- **REVIEW** `bmh_8k_ex99-1_2023-02-23.txt`: carries 13 of 19 distinctive words of the committed call: 'Short Brindle & Moss into the 26 February 2026 release of its fiscal 2025 fourth quarter: net sales of USD 1,471.2 milli'
-- **REVIEW** `bmh_8k_ex99-1_2024-02-29.txt`: carries 13 of 19 distinctive words of the committed call: 'Short Brindle & Moss into the 26 February 2026 release of its fiscal 2025 fourth quarter: net sales of USD 1,471.2 milli'
-- **REVIEW** `bmh_8k_ex99-1_2025-02-27.txt`: carries 13 of 19 distinctive words of the committed call: 'Short Brindle & Moss into the 26 February 2026 release of its fiscal 2025 fourth quarter: net sales of USD 1,471.2 milli'
-
-## 4 design-note vocabulary (REVIEW 20)
-- **REVIEW** `bmh_10k_fy2024_excerpts.pdf`: 4 of 25 stump-paragraph terms appear (record, contract, delivery, midwest); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2021-06-09.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2021-09-08.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2021-12-08.txt`: 4 of 25 stump-paragraph terms appear (contract, deposits, customer, october); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2022-02-24.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2022-06-08.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2022-09-07.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2022-12-07.txt`: 4 of 25 stump-paragraph terms appear (contract, deposits, customer, october); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2023-02-23.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2023-06-07.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2023-09-06.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2023-12-06.txt`: 4 of 25 stump-paragraph terms appear (contract, deposits, customer, october); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2024-02-29.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2024-06-12.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2024-09-11.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2024-12-11.txt`: 4 of 25 stump-paragraph terms appear (contract, deposits, customer, october); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2025-02-27.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2025-06-11.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2025-09-10.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-- **REVIEW** `bmh_8k_ex99-1_2025-12-10.txt`: 3 of 25 stump-paragraph terms appear (contract, deposits, customer); read whether the document names the move
-
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
+## 9 dates after the setting (REVIEW 5)
+- **REVIEW** `hk_sales_ledger_2018_2026.csv`: 4 ISO dates after 2026-12-31, e.g. 2027-01-02
+- **REVIEW** `hk_supply_contracts_register.xlsx`: 2 ISO dates after 2026-12-31, e.g. 2028-12-31, 2029-12-31
+- **REVIEW** `nex_daily_settlement_2018_2026.csv`: 8554 ISO dates after 2026-12-31, e.g. 2027-01-01, 2027-01-31, 2027-02-01, 2027-02-28, 2027-03-01
+- **REVIEW** `nex_dayahead_settlements_2018_2026.csv`: 2 ISO dates after 2026-12-31, e.g. 2027-01-04
+- **REVIEW** `nex_positions_month_end_2017_2026.csv`: 56 ISO dates after 2026-12-31, e.g. 2027-01-01, 2027-12-31, 2028-01-01, 2028-12-31
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
-## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'xlsx' at 21% of 19 prompts (cap 20%); reword at the role level, not the verb
-
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 27 usable files (10 or more required)
+- **INFO** `-`: 18 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
+## 1 file names (clean)
+
 ## 2 author vocabulary (clean)
+
+## 3 answer figures in the pack (clean)
 
 ## 5 announcements (clean)
 
@@ -82,6 +39,8 @@ Stump terms swept: record, contract, deposits, delivery, missed, quarters, issue
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
+## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

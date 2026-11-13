@@ -13,8 +13,6 @@ import sys
 import tempfile
 from zoneinfo import ZoneInfo
 
-import numpy as np
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 TASK = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
@@ -24,76 +22,48 @@ import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
 import pack as PK  # noqa: E402
 import postprocess as PP  # noqa: E402
-import releases as RL  # noqa: E402
-import world as W  # noqa: E402
+import sim as S  # noqa: E402
 import writeup as WU  # noqa: E402
 
-ZONE = "America/New_York"
-NY = ZoneInfo(ZONE)
-AS_OF = "2026-02-05"
-# exports with no stamp of their own: the time each was pulled or written (New York)
+ZONE = "Europe/Oslo"
+OSL = ZoneInfo(ZONE)
+AS_OF = "2026-12-31"
+# exports with no stamp of their own: the time each was pulled (Oslo)
 SAVED = {
-    PK.F_PANEL: (2026, 2, 2, 9, 41, 7),
-    PK.F_HIST: (2026, 2, 2, 9, 41, 52),
-    PK.F_DESC: (2026, 2, 2, 9, 43, 10),
-    PK.F_STREET: (2026, 2, 4, 17, 12, 3),
-    PK.F_WEB: (2026, 2, 2, 11, 5, 44),
-    PK.F_APP: (2026, 2, 3, 8, 30, 15),
+    PK.F_SETTLE: (2026, 12, 31, 8, 12, 40), PK.F_CURVE: (2026, 12, 31, 7, 55, 3), PK.F_PARAMS: (2026, 12, 31, 8, 14, 22),
+    PK.F_STMT: (2026, 12, 31, 8, 16, 9), PK.F_POS: (2026, 12, 31, 8, 17, 51), PK.F_TRADES: (2026, 12, 31, 9, 2, 14),
+    PK.F_HYDRO: (2026, 12, 31, 10, 31, 0), PK.F_PLANT: (2026, 12, 31, 10, 44, 37), PK.F_LEDGER: (2026, 12, 31, 13, 5, 12),
+    PK.F_DA: (2026, 12, 31, 8, 21, 46), PK.F_FX: (2026, 12, 31, 8, 3, 55), PK.F_HDD: (2026, 12, 30, 15, 40, 18),
 }
 DISTRACTORS = {
-    PK.F_WEB: "the panel vendor's weekly site visits to brindlemoss.com: it looks like a second read on the quarter's "
-              "demand but counts visits, which held up through the holiday quarter while purchases per visit fell",
-    PK.F_APP: "a third-party estimate of the Brindle & Moss app's daily category rank and downloads: it looks like a "
-              "read on customer engagement and bears on no result",
+    PK.F_FX: "daily EUR/NOK fixings: every price, margin and invoice in the pack is in euro, so it bears on no result",
+    PK.F_HDD: "weekly heating degree days for the company's area: they look like a driver of the retail affiliate's "
+              "load, but supply volumes are contracted on fixed profiles and output follows inflow and storage",
 }
 SOURCES = {
-    PK.F_PANEL: ("Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids, "
-                 "the issuers' feeds as concatenated", "evidence"),
-    PK.F_HIST: ("Simulated Kestrel delivery history: the trailing weeks of each weekly delivery as first delivered",
-                "evidence"),
-    PK.F_DESC: ("Simulated Kestrel monthly spend and transactions by raw merchant descriptor", "evidence"),
-    DC.F_FILING: ("Brindle & Moss 10-K excerpts compiled by the desk (written for this task, figures simulated)", "evidence"),
-    PK.F_STREET: ("Simulated sell-side estimates of fourth-quarter fiscal 2025 net sales", "evidence"),
-    DC.F_MODEL: ("The desk's third-quarter card model (simulated, reproducible from the panel and the releases)",
-                 "incumbent"),
-    PK.F_WEB: ("Simulated weekly site visit estimates for brindlemoss.com", "distractor"),
-    PK.F_APP: ("Simulated daily app category rank and download estimates", "distractor"),
+    PK.F_SETTLE: ("Simulated Nordvik Energy Exchange daily settlement prices for base-load futures", "evidence"),
+    PK.F_CURVE: ("Simulated risk system daily monthly forward curve", "evidence"),
+    PK.F_PARAMS: ("Simulated NEX Clearing margin rate notices", "evidence"),
+    PK.F_STMT: ("Simulated NEX Clearing daily clearing statements for the hedge account", "evidence"),
+    PK.F_POS: ("Simulated NEX Clearing month-end position statements", "evidence"),
+    PK.F_TRADES: ("Simulated trade capture export of the hedge desk", "evidence"),
+    PK.F_HYDRO: ("Simulated weekly inflow and storage as reported to the regulator, with weekly normals", "evidence"),
+    PK.F_PLANT: ("Simulated monthly output by plant", "evidence"),
+    PK.F_LEDGER: ("Simulated billing system extract of supply invoices and payments", "evidence"),
+    PK.F_DA: ("Simulated day-ahead market settlements of the company's net position", "evidence"),
+    PK.F_FX: ("Simulated EUR/NOK daily fixings", "distractor"),
+    PK.F_HDD: ("Simulated weekly heating degree days", "distractor"),
+    DC.F_POLICY: ("The company's hedging policy (written for this task)", "standard"),
+    DC.F_STANDARD: ("The company's liquidity standard for the margin facility (written for this task)", "standard"),
+    DC.F_NEXDOC: ("NEX Clearing's public margining summary (written for this task)", "evidence"),
+    DC.F_LICENCE: ("Extract from the reservoirs' regulation licence (written for this task)", "standard"),
+    DC.F_BUDGET: ("The company's budget vintages (simulated)", "evidence"),
+    DC.F_CONTRACTS: ("The company's supply contract register (written for this task)", "evidence"),
 }
-
-
-def reported_inputs(F):
-    """figures the answer blocks quote from the filed records (inputs, not results), as the records print them"""
-    out = set()
-    for k in ("deposits_q3_m", "deposits_base_m", "deposits_q3fy24_m", "contract_fy2024_m", "contract_9m_fy2024_m",
-              "base_net_sales_m", "fern_base_m"):
-        out.add("%.1f" % F[k])
-        out.add("{:,.1f}".format(F[k]))
-    return sorted(out)
 
 
 def sha(path):
     return hashlib.sha256(open(path, "rb").read()).hexdigest()
-
-
-def write_pack(tgt):
-    w = W.simulate(PK.SEED)
-    o = PK.write_all(tgt, w, PK.street_mid(w))
-    DC.filing(os.path.join(tgt, DC.F_FILING), PK.regions_by_year(w), PK.by_year(w, w.fern_q), PK.by_year(w, w.contract_q))
-    # the desk's third-quarter model, from the shipped files by its own stated method
-    R0 = A.run(tgt)
-    inc = A.incumbent(R0)
-    rows = [(k.replace("FY", "Fiscal ").replace(" Q", " Q"), round(100 * x, 2), round(100 * y, 2)) for k, x, y in inc["rows"]]
-    q3 = [("Per-card spend growth, fiscal 2025 Q3 (%)", round(100 * inc["x_q3"], 2)),
-          ("Fitted net sales growth, fiscal 2025 Q3 (%)", round(100 * inc["g_q3"], 2)),
-          ("Fiscal 2024 Q3 net sales (USD m)", round(inc["q3_base"], 1)),
-          ("Model estimate, fiscal 2025 Q3 net sales (USD m)", round(inc["q3_forecast"], 1)),
-          ("Reported, 10 December 2025 (USD m)", round(inc["q3_actual"], 1))]
-    DC.model(os.path.join(tgt, DC.F_MODEL), rows, inc["fit"], inc["rmse"], q3)
-    PP.normalize_ooxml(os.path.join(tgt, DC.F_MODEL), "Audrey Hanson", "Audrey Hanson", "2025-11-03T20:14:00Z",
-                       "2025-12-11T22:37:41Z", excel=True, company="Larkhill Partners LP")
-    rows_n = dict(o["rows"])
-    rows_n[DC.F_MODEL] = len(rows)
-    return w, rows_n, o["releases"]
 
 
 def build_into(root):
@@ -101,37 +71,39 @@ def build_into(root):
     gld = os.path.join(root, "golden")
     for d in (tgt, gld):
         os.makedirs(d, exist_ok=True)
-    w, rows, rel = write_pack(tgt)
+    W = S.World()
+    rows = PK.write_all(W, tgt)
+    DC.write_all(tgt, W)
+    PP.normalize_docx(os.path.join(tgt, DC.F_POLICY), "Markus Hanssen", "Helge Saether", "2024-11-27T13:02:00Z",
+                      "2024-12-11T15:48:00Z", 9, 214, "task20-policy", title="Hedging policy for power sales",
+                      company="Hallingvass Kraft AS")
+    PP.normalize_ooxml(os.path.join(tgt, DC.F_BUDGET), "Sindre Sandvik", "Sindre Sandvik", "2017-10-05T09:12:00Z",
+                       "2026-10-08T14:20:31Z", excel=True, company="Hallingvass Kraft AS")
+    PP.normalize_ooxml(os.path.join(tgt, DC.F_CONTRACTS), "Jorunn Solberg", "Jorunn Solberg", "2019-11-14T10:40:00Z",
+                       "2026-06-02T11:05:44Z", excel=True, company="Hallingvass Kraft AS")
     R = A.full(tgt)
     F, E = FG.write(R, root)
     GD.workbook(F, R, os.path.join(gld, GD.XLSX))
-    PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Audrey Hanson", "Audrey Hanson", "2026-02-04T19:12:00Z",
-                       "2026-02-06T15:48:26Z", excel=True, company="Larkhill Partners LP")
+    PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Sindre Sandvik", "Jorunn Solberg", "2027-01-04T08:20:00Z",
+                       "2027-01-06T16:42:09Z", excel=True, company="Hallingvass Kraft AS")
     GD.note(F, R, os.path.join(gld, GD.NOTE))
-    PP.normalize_docx(os.path.join(gld, GD.NOTE), "Audrey Hanson", "Audrey Hanson", "2026-02-05T22:03:00Z",
-                      "2026-02-06T16:21:00Z", 5, 87, "task20-note", title="BMH Q4 FY2025 net sales",
-                      company="Larkhill Partners LP")
+    PP.normalize_docx(os.path.join(gld, GD.NOTE), "Jorunn Solberg", "Jorunn Solberg", "2027-01-06T13:10:00Z",
+                      "2027-01-06T17:02:00Z", 4, 63, "task20-note", title="Margin facility for 2027",
+                      company="Hallingvass Kraft AS")
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F))
     pulled = {n: dt.date(*SAVED[n][:3]).isoformat() for n in SAVED}
-    pulled[DC.F_FILING] = "2025-03-27"
-    pulled[DC.F_MODEL] = "2025-12-11"
-    sources = dict(SOURCES)
-    for fn, (k, d) in rel.items():
-        pulled[fn] = d.isoformat()
-        sources[fn] = ("Simulated Brindle & Moss earnings release for %s (8-K exhibit 99.1 as saved from EDGAR)" % k,
-                       "evidence")
-    meta = {"task": "task20", "architecture": 2, "as_of": AS_OF,
-            "decision": "whether Brindle & Moss's fourth-quarter fiscal 2025 net sales land above or below the "
-                        "sell-side consensus, and the position to take into the print",
+    meta = {"task": "task20", "architecture": 3, "as_of": AS_OF,
+            "decision": "the committed margin facility Hallingvass Kraft needs for 2027 under its liquidity standard",
             "deliverables": [GD.XLSX, GD.NOTE],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
-            "stated_inputs": ["80", "13", "14", "53", "52", "31", "27"] + reported_inputs(F),
-            "field_terms": ["net sales", "panel", "issuer", "descriptor", "comparable", "consensus", "deposits", "contract"],
+            "stated_inputs": ["2022", "2027", "2026", "2021", "50", "150", "700", "38.00", "100", "70", "1,800", "300"],
+            "field_terms": ["margin", "variation margin", "initial margin", "facility", "hedge ratio", "cascade",
+                            "day-ahead", "inflow", "storage", "settlement"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
-                          "license": "generated for this task by task20/generator (a seeded simulation of the retailer, "
-                                     "the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"}
-                      for n, (s, r) in sorted(sources.items())}}
+                          "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style "
+                                     "power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"}
+                      for n, (s, r) in sorted(SOURCES.items())}}
     json.dump(meta, open(os.path.join(root, "metadata.json"), "w"), indent=1)
     return F
 
@@ -156,10 +128,7 @@ def install(root):
         shutil.copy(os.path.join(root, f), os.path.join(HERE, f))
     for f in ("submission.md", "metadata.json"):
         shutil.copy(os.path.join(root, f), os.path.join(TASK, f))
-    fallback = {n: dt.datetime(*v, tzinfo=NY) for n, v in SAVED.items()}
-    for k_, fn in enumerate(sorted(f for f in os.listdir(os.path.join(TASK, "target")) if f.startswith("bmh_8k_"))):
-        d = dt.date.fromisoformat(fn[-14:-4])
-        fallback[fn] = dt.datetime(d.year, d.month, d.day, 8, 2 + (7 * k_) % 50, (13 * k_) % 60, tzinfo=NY)
+    fallback = {n: dt.datetime(*v, tzinfo=OSL) for n, v in SAVED.items()}
     PP.own_mtimes(os.path.join(TASK, "target"), fallback)
     PP.own_mtimes(os.path.join(TASK, "golden"), {})
     PP.zip_folder(os.path.join(TASK, "target"), os.path.join(TASK, "target.zip"), zone=ZONE)
@@ -178,11 +147,9 @@ def main():
         if diff:
             print("NOT byte-identical:", diff)
             sys.exit(1)
-        print("two builds byte-identical over %d files" % len(ha))
-        shutil.rmtree(b)
+        print("two builds byte-identical (%d files)" % len(ha))
     install(a)
-    shutil.rmtree(a)
-    print("installed")
+    print("installed into", TASK)
 
 
 if __name__ == "__main__":

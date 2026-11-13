@@ -2,525 +2,373 @@
  "results": [
   {
    "id": "R1",
-   "name": "the panel's own steps: the delivered panel, the latest weeks completed, the licensed shops and cafes out, issuers in every week of both quarters on spend per open card",
-   "graded_as": "Ask 3 (panel steps)",
-   "figure": "r1_panel",
+   "name": "the open exchange book at 31 December 2026 (TWh by delivery year)",
+   "graded_as": "Ask 2",
+   "figure": "r1_book_open",
    "depends": [],
-   "independent": "the panel, its delivery history and descriptor detail",
+   "independent": "the month-end position statement",
    "golden": {
-    "the delivered panel, every issuer": -21.86,
-    "the latest weeks completed": 1.22,
-    "the licensed shops and cafes taken out": -0.87,
-    "issuers in every week of both quarters, spend per open card": 30.74
+    "2027": 1.848,
+    "2028": 0.685
    },
    "bands": {
-    "the delivered panel, every issuer": [
-     -22.16,
-     -21.56
+    "2027": [
+     1.838,
+     1.858
     ],
-    "the latest weeks completed": [
-     0.91,
-     1.99
-    ],
-    "the licensed shops and cafes taken out": [
-     -1.52,
-     -0.56
-    ],
-    "issuers in every week of both quarters, spend per open card": [
-     29.97,
-     31.38
+    "2028": [
+     0.675,
+     0.6950000000000001
     ]
    },
    "passes": {
     "quick": {
-     "the delivered panel, every issuer": -21.86,
-     "the latest weeks completed": 0.0,
-     "the licensed shops and cafes taken out": 0.0,
-     "issuers in every week of both quarters, spend per open card": 0.0
+     "2027": 1.848,
+     "2028": 0.685
     },
     "careful": {
-     "the delivered panel, every issuer": -21.86,
-     "the latest weeks completed": 1.22,
-     "the licensed shops and cafes taken out": -0.87,
-     "issuers in every week of both quarters, spend per open card": 30.74
+     "2027": 1.848,
+     "2028": 0.685
     },
     "thorough": {
-     "the delivered panel, every issuer": -21.86,
-     "the latest weeks completed": 1.22,
-     "the licensed shops and cafes taken out": -0.87,
-     "issuers in every week of both quarters, spend per open card": 30.74
+     "2027": 1.848,
+     "2028": 0.685
     }
    }
   },
   {
    "id": "R2",
-   "name": "KS-01's re-issued book: the Midwest's like-for-like growth without it and card-visible growth at the company's mix",
-   "graded_as": "Component 1",
-   "figure": "r2_reissue",
+   "name": "hedge ratios at 31 December 2026 as the policy counts them (per cent)",
+   "graded_as": "Ask 3",
+   "figure": "r2_ratios",
    "depends": [
     "R1"
    ],
-   "independent": "",
+   "independent": "the contract register and the position statement",
    "golden": {
-    "midwest_pct": -2.09,
-    "visible_growth_pct": 3.9
+    "2027": 68.6,
+    "2028": 39.6,
+    "2029": 22.2
    },
    "bands": {
-    "midwest_pct": [
-     -2.75,
-     -1.59
+    "2027": [
+     68.1,
+     69.1
     ],
-    "visible_growth_pct": [
-     3.1,
-     4.7
+    "2028": [
+     39.1,
+     40.1
+    ],
+    "2029": [
+     21.7,
+     22.7
     ]
    },
    "passes": {
-    "quick": null,
+    "quick": {
+     "2027": 46.5,
+     "2028": 17.4,
+     "2029": 0.0
+    },
     "careful": {
-     "midwest_pct": 9.51,
-     "visible_growth_pct": 7.18
+     "value": {
+      "2027": 46.5,
+      "2028": 17.4,
+      "2029": 0.0
+     },
+     "grade": "missed",
+     "why": "the exchange book divided by budgeted output; the smelter's fixed-price contract is a supply contract in another file"
     },
     "thorough": {
-     "midwest_pct": -2.09,
-     "visible_growth_pct": 3.9
+     "2027": 68.6,
+     "2028": 39.6,
+     "2029": 22.2
     }
    },
    "precedent": [
-    "N01",
-    "N07"
+    "L38",
+    "N03"
    ]
   },
   {
    "id": "R3",
-   "name": "the company's regional mix and what the re-weight is worth",
-   "graded_as": "Component 2",
-   "figure": "r3_mix",
+   "name": "the exchange book at the peak (TWh for 2028, 2029 and 2030)",
+   "graded_as": "Ask 2",
+   "figure": "r3_book_peak",
    "depends": [
-    "R1"
+    "R1",
+    "R2"
    ],
-   "independent": "the 10-K's net sales by region",
+   "independent": "",
    "golden": {
-    "the company's regional mix": -2.04,
-    "company_weight_midwest_pct": 23.87
+    "2028": 2.222,
+    "2029": 1.077,
+    "2030": 0.964
    },
    "bands": {
-    "the company's regional mix": [
-     -4.81,
-     -1.33
+    "2028": [
+     2.175,
+     2.279
     ],
-    "company_weight_midwest_pct": [
-     23.82,
-     23.92
+    "2029": [
+     1.047,
+     1.16
+    ],
+    "2030": [
+     0.934,
+     1.046
     ]
    },
    "passes": {
-    "quick": null,
+    "quick": {
+     "2028": 0.685,
+     "2029": -0.0,
+     "2030": -0.0
+    },
     "careful": {
-     "the company's regional mix": -2.04,
-     "company_weight_midwest_pct": 23.87
+     "value": {
+      "2028": 2.02,
+      "2029": 0.955,
+      "2030": 0.219
+     },
+     "grade": "missed",
+     "why": "the book grown along the policy's minimum ladder on exchange positions"
     },
     "thorough": {
-     "the company's regional mix": -2.04,
-     "company_weight_midwest_pct": 23.87
+     "2028": 2.222,
+     "2029": 1.077,
+     "2030": 0.964
     }
-   }
+   },
+   "precedent": [
+    "L15",
+    "N03"
+   ]
   },
   {
    "id": "R4",
-   "name": "customer deposits at the quarter's end and what revenue on delivery is worth",
-   "graded_as": "Component 3",
-   "figure": "r4_deposits",
+   "name": "initial margin at the peak (EUR million)",
+   "graded_as": "Component 1, Ask 2",
+   "figure": "im_peak_m",
    "depends": [
-    "R2",
     "R3"
    ],
    "independent": "",
-   "golden": {
-    "deposits_q4_m": 335.2,
-    "revenue on delivery": -2.19
-   },
-   "bands": {
-    "deposits_q4_m": [
-     326.8,
-     340.2
-    ],
-    "revenue on delivery": [
-     -3.4,
-     -1.54
-    ]
-   },
-   "passes": {
-    "quick": null,
-    "careful": {
-     "deposits_q4_m": null,
-     "revenue on delivery": 0.0
-    },
-    "thorough": {
-     "deposits_q4_m": 335.2,
-     "revenue on delivery": -2.19
-    }
-   },
-   "precedent": [
-    "N02",
-    "L07",
-    "N12"
-   ]
-  },
-  {
-   "id": "R5",
-   "name": "contract sales: last year's fourth quarter rebuilt from the fiscal year and the nine months, this quarter's run rate, and what separating them is worth",
-   "graded_as": "Component 4",
-   "figure": "r5_contract",
-   "depends": [],
-   "independent": "the earnings releases",
-   "golden": {
-    "contract_base_m": 54.5,
-    "contract_q4_m": 17.7,
-    "contract at its run rate": -2.55
-   },
-   "bands": {
-    "contract_base_m": [
-     54.3,
-     54.7
-    ],
-    "contract_q4_m": [
-     16.7,
-     19.5
-    ],
-    "contract at its run rate": [
-     -3.12,
-     -2.25
-    ]
-   },
-   "passes": {
-    "quick": null,
-    "careful": {
-     "contract_base_m": null,
-     "contract_q4_m": null,
-     "contract at its run rate": 0.0
-    },
-    "thorough": {
-     "contract_base_m": 54.5,
-     "contract_q4_m": 17.7,
-     "contract at its run rate": -2.55
-    }
-   },
-   "precedent": [
-    "L10",
-    "L11"
-   ]
-  },
-  {
-   "id": "R6",
-   "name": "the range's record: each past quarter's error, the record's root mean square error and the quarters inside",
-   "graded_as": "Ask 2",
-   "figure": "r6_record",
-   "depends": [
-    "R2",
-    "R4",
-    "R5"
+   "golden": 59.7,
+   "band": [
+    57.0,
+    63.0
    ],
-   "independent": "",
-   "golden": {
-    "FY2022 Q1": 0.51,
-    "FY2022 Q2": -1.29,
-    "FY2022 Q3": 0.45,
-    "FY2022 Q4": -0.06,
-    "FY2023 Q1": -0.27,
-    "FY2023 Q2": 0.05,
-    "FY2023 Q3": -2.37,
-    "FY2023 Q4": -1.11,
-    "FY2024 Q1": -0.55,
-    "FY2024 Q2": 0.5,
-    "FY2024 Q3": -0.42,
-    "FY2024 Q4": -3.44,
-    "FY2025 Q1": -0.59,
-    "FY2025 Q2": -0.97,
-    "FY2025 Q3": 0.01,
-    "golden_rmse_pp": 1.24,
-    "coverage_in": 13
-   },
-   "bands": {
-    "FY2022 Q1": [
-     0.34,
-     1.53
-    ],
-    "FY2022 Q2": [
-     -1.46,
-     -0.48
-    ],
-    "FY2022 Q3": [
-     0.3,
-     1.21
-    ],
-    "FY2022 Q4": [
-     -0.22,
-     0.61
-    ],
-    "FY2023 Q1": [
-     -1.27,
-     0.28
-    ],
-    "FY2023 Q2": [
-     -0.51,
-     0.63
-    ],
-    "FY2023 Q3": [
-     -2.91,
-     -1.82
-    ],
-    "FY2023 Q4": [
-     -1.68,
-     -0.53
-    ],
-    "FY2024 Q1": [
-     -1.1,
-     0.11
-    ],
-    "FY2024 Q2": [
-     -0.01,
-     1.39
-    ],
-    "FY2024 Q3": [
-     -1.11,
-     0.13
-    ],
-    "FY2024 Q4": [
-     -4.37,
-     -2.88
-    ],
-    "FY2025 Q1": [
-     -1.11,
-     -0.06
-    ],
-    "FY2025 Q2": [
-     -1.55,
-     -0.39
-    ],
-    "FY2025 Q3": [
-     -0.57,
-     0.64
-    ],
-    "golden_rmse_pp": [
-     0.92,
-     1.61
-    ],
-    "coverage_in": [
-     12,
-     14
-    ]
-   },
+   "partly": [
+    54.0,
+    66.0
+   ],
    "passes": {
-    "quick": null,
+    "quick": 5.0,
     "careful": {
-     "FY2022 Q1": -0.38,
-     "FY2022 Q2": -1.71,
-     "FY2022 Q3": 1.04,
-     "FY2022 Q4": 1.57,
-     "FY2023 Q1": -2.08,
-     "FY2023 Q2": 2.49,
-     "FY2023 Q3": -1.04,
-     "FY2023 Q4": 1.4,
-     "FY2024 Q1": -0.67,
-     "FY2024 Q2": 0.37,
-     "FY2024 Q3": -0.0,
-     "FY2024 Q4": -1.49,
-     "FY2025 Q1": -2.63,
-     "FY2025 Q2": -0.91,
-     "FY2025 Q3": 0.99,
-     "golden_rmse_pp": 1.45,
-     "coverage_in": 12
+     "value": 98.0,
+     "grade": "missed",
+     "why": "2022's rates as a share of price carried to 2027"
     },
-    "thorough": {
-     "FY2022 Q1": 0.51,
-     "FY2022 Q2": -1.29,
-     "FY2022 Q3": 0.45,
-     "FY2022 Q4": -0.06,
-     "FY2023 Q1": -0.27,
-     "FY2023 Q2": 0.05,
-     "FY2023 Q3": -2.37,
-     "FY2023 Q4": -1.11,
-     "FY2024 Q1": -0.55,
-     "FY2024 Q2": 0.5,
-     "FY2024 Q3": -0.42,
-     "FY2024 Q4": -3.44,
-     "FY2025 Q1": -0.59,
-     "FY2025 Q2": -0.97,
-     "FY2025 Q3": 0.01,
-     "golden_rmse_pp": 1.24,
-     "coverage_in": 13
-    }
+    "thorough": 59.7
    },
    "precedent": [
-    "L28",
+    "L26",
     "L37"
    ]
   },
   {
+   "id": "R5",
+   "name": "output and day-ahead purchases net of sales, 1 January to the peak",
+   "graded_as": "Component 2, Ask 3",
+   "figure": "r5_out_da",
+   "depends": [],
+   "independent": "the hydrology, plant and day-ahead records",
+   "golden": {
+    "output_gwh": 1743,
+    "dayahead_m": 82.3
+   },
+   "bands": {
+    "output_gwh": [
+     1700,
+     1790
+    ],
+    "dayahead_m": [
+     78.0,
+     86.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "output_gwh": 775,
+     "dayahead_m": 1.1
+    },
+    "careful": {
+     "value": {
+      "output_gwh": 1143,
+      "dayahead_m": 58.2
+     },
+     "grade": "missed",
+     "why": "2022's own output shortfall carried to 2027"
+    },
+    "thorough": {
+     "output_gwh": 1743,
+     "dayahead_m": 82.3
+    }
+   },
+   "precedent": [
+    "N02",
+    "L37"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "payments received from supply customers, 1 January to the peak (EUR million)",
+   "graded_as": "Ask 3",
+   "figure": "rec_m",
+   "depends": [],
+   "independent": "the sales ledger and the contract register",
+   "golden": 173.7,
+   "band": [
+    160.0,
+    182.0
+   ],
+   "partly": [
+    150.0,
+    190.0
+   ],
+   "passes": {
+    "quick": 83.4,
+    "careful": {
+     "value": 108.3,
+     "grade": "missed",
+     "why": "the affiliate taken at spot like the other customers"
+    },
+    "thorough": 173.7
+   },
+   "precedent": [
+    "L26"
+   ]
+  },
+  {
    "id": "R7",
-   "name": "the quarter's net sales with its 80 per cent range",
-   "graded_as": "Ask 1",
-   "figure": "r7_forecast",
+   "name": "the stress requirement, its date and the facility",
+   "graded_as": "Recommendation",
+   "figure": "r7_peak_facility",
    "depends": [
-    "R2",
+    "R3",
     "R4",
     "R5",
     "R6"
    ],
    "independent": "",
    "golden": {
-    "forecast_m": 1471.2,
-    "range_low_m": 1447.7,
-    "range_high_m": 1494.7
+    "peak_m": 328.8,
+    "facility_m": 350
    },
    "bands": {
-    "forecast_m": [
-     1460.3,
-     1483.4
+    "peak_m": [
+     320,
+     345
     ],
-    "range_low_m": [
-     1432.5,
-     1461.8
-    ],
-    "range_high_m": [
-     1483.7,
-     1510.8
+    "facility_m": [
+     350,
+     350
     ]
    },
    "passes": {
     "quick": {
-     "forecast_m": 1671.9,
-     "range_low_m": null,
-     "range_high_m": null
+     "peak_m": 17.2,
+     "facility_m": 50
     },
     "careful": {
-     "forecast_m": 1590.2,
-     "range_low_m": 1562.6,
-     "range_high_m": 1617.9
+     "value": {
+      "peak_m": 297.1,
+      "facility_m": 300
+     },
+     "grade": "missed",
+     "why": "the careful route's own parts added up"
     },
     "thorough": {
-     "forecast_m": 1471.2,
-     "range_low_m": 1447.7,
-     "range_high_m": 1494.7
+     "peak_m": 328.8,
+     "facility_m": 350
     }
    },
    "precedent": [
-    "N02",
-    "N05"
+    "L11",
+    "L37"
    ]
   },
   {
    "id": "R8",
-   "name": "what the regional mix, KS-01's book, revenue on delivery and contract are worth",
-   "graded_as": "Ask 3 (company steps)",
-   "figure": "r8_bridge",
-   "depends": [
-    "R2",
-    "R3",
-    "R4",
-    "R5"
-   ],
-   "independent": "",
+   "name": "the same requirement for 2022 on the end-2021 book against 2022's records",
+   "graded_as": "Ask 4",
+   "figure": "r8_check",
+   "depends": [],
+   "independent": "the 2022 statements, day-ahead settlements and ledger",
    "golden": {
-    "the company's regional mix": -2.04,
-    "KS-01's re-issued book taken out": -3.28,
-    "revenue on delivery": -2.19,
-    "contract at its run rate": -2.55
+    "records_m": 548.5,
+    "method_m": 548.2
    },
    "bands": {
-    "the company's regional mix": [
-     -4.81,
-     -1.33
+    "records_m": [
+     545.5,
+     551.5
     ],
-    "KS-01's re-issued book taken out": [
-     -3.58,
-     -0.35
-    ],
-    "revenue on delivery": [
-     -3.4,
-     -1.54
-    ],
-    "contract at its run rate": [
-     -3.12,
-     -2.25
-    ]
-   },
-   "passes": {
-    "quick": null,
-    "careful": {
-     "the company's regional mix": -2.04,
-     "KS-01's re-issued book taken out": 0.0,
-     "revenue on delivery": 0.0,
-     "contract at its run rate": 0.0
-    },
-    "thorough": {
-     "the company's regional mix": -2.04,
-     "KS-01's re-issued book taken out": -3.28,
-     "revenue on delivery": -2.19,
-     "contract at its run rate": -2.55
-    }
-   },
-   "precedent": [
-    "L11"
-   ]
-  },
-  {
-   "id": "R9",
-   "name": "the call against the street",
-   "graded_as": "Recommendation",
-   "figure": "r9_call",
-   "depends": [
-    "R7"
-   ],
-   "independent": "",
-   "golden": {
-    "call": "short",
-    "range_high_m": 1494.7
-   },
-   "bands": {
-    "range_high_m": [
-     1483.7,
-     1510.8
+    "method_m": [
+     533.5,
+     563.5
     ]
    },
    "passes": {
     "quick": {
-     "call": "long",
-     "range_high_m": null
+     "value": {
+      "records_m": 548.5,
+      "method_m": null
+     },
+     "grade": "partly",
+     "why": "the records read, no method run"
     },
     "careful": {
-     "call": "long",
-     "range_high_m": 1617.9
+     "records_m": 548.5,
+     "method_m": 548.5
     },
     "thorough": {
-     "call": "short",
-     "range_high_m": 1494.7
+     "records_m": 548.5,
+     "method_m": 548.2
     }
-   },
-   "precedent": [
-    "L28",
-    "N02"
-   ]
+   }
   }
  ],
  "hints": [
   {
-   "sentence": "from October 2025 KS-01's cards include part of KS-06's book, re-issued, and those accounts spend more at the brand than KS-01's own",
+   "sentence": "the desk's hedge ratio counts the smelter's fixed-price supply contract",
    "rescues": [
     "R2"
    ]
   },
   {
-   "sentence": "custom orders are paid when placed and recognised when delivered, and the design studios' December and January orders are still in customer deposits at the quarter's end",
+   "sentence": "the desk steps to the policy maximum, three points a week, once the year contract is a quarter above its budget price",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "NEX's rates are the 99th percentile of the front contract's two-day moves over 250 days, reviewed weekly",
    "rescues": [
     "R4"
    ]
   },
   {
-   "sentence": "last year's fourth quarter held a large contract delivery that no card carries",
+   "sentence": "the reservoir opens near the licence floor, so the dry spring cuts output below the committed supply",
    "rescues": [
     "R5"
+   ]
+  },
+  {
+   "sentence": "the affiliate pays the average system price of the twelve months ending two months before delivery",
+   "rescues": [
+    "R6"
    ]
   }
  ],
@@ -529,266 +377,265 @@
    "name": "golden",
    "golden": true,
    "answer": [
-    1471.2,
-    "short"
+    350
    ]
   },
   {
-   "name": "issuers in every week of both quarters on spend per open card, the company's regional mix, net sales grown with it (careful but hurried)",
+   "name": "the book as it stood, rates held, output at budget, every customer at spot (quick)",
    "answer": [
-    1590.2,
-    "long"
+    50
    ]
   },
   {
-   "name": "the same, reported growth regressed on it over past quarters",
+   "name": "the policy's minimum ladder on exchange positions, 2022's rates as a share of price, output carried from 2022's own shortfall, the affiliate at spot (careful but hurried)",
    "answer": [
-    1588.2,
-    "long"
+    300
    ]
   },
   {
-   "name": "KS-01's book taken out, nothing else",
+   "name": "the desk held to the policy minimum, nothing else",
    "answer": [
-    1541.5,
-    "no position"
+    250
    ]
   },
   {
-   "name": "revenue on delivery, nothing else",
+   "name": "the desk moved to the policy maximum at once, nothing else",
    "answer": [
-    1549.4,
-    "long"
+    300
    ]
   },
   {
-   "name": "contract at its run rate, nothing else",
+   "name": "the book frozen at the year end, nothing else",
    "answer": [
-    1549.5,
-    "long"
+    250
    ]
   },
   {
-   "name": "everything but KS-01's book",
+   "name": "the smelter's contract left out of the hedge ratio, nothing else",
    "answer": [
-    1510.2,
-    "no position"
+    450
    ]
   },
   {
-   "name": "everything but revenue on delivery",
+   "name": "rates held at the year end, nothing else",
    "answer": [
-    1502.5,
-    "no position"
+    300
    ]
   },
   {
-   "name": "everything but contract at its run rate",
+   "name": "rates scaled with the front price, nothing else",
    "answer": [
-    1509.0,
-    "no position"
+    300
    ]
   },
   {
-   "name": "deposits at last year's ratio to payments",
+   "name": "2022's rates as a share of price, nothing else",
    "answer": [
-    1513.3,
-    "no position"
+    400
    ]
   },
   {
-   "name": "the deposits' change moved as a year earlier",
+   "name": "output at budget, nothing else",
    "answer": [
-    1502.5,
-    "no position"
+    250
    ]
   },
   {
-   "name": "contract at last year's fourth quarter",
+   "name": "output carried from 2022's own shortfall, nothing else",
    "answer": [
-    1508.1,
-    "no position"
+    300
    ]
   },
   {
-   "name": "everything but the company's regional mix",
+   "name": "output scaled with the week's inflow, nothing else",
    "answer": [
-    1524.7,
-    "no position"
+    300
    ]
   },
   {
-   "name": "the desk's third-quarter model carried to the fourth quarter",
+   "name": "the affiliate at spot, nothing else",
    "answer": [
-    1610.7,
-    "long"
+    300
    ]
   },
   {
-   "name": "fiscal 2025's reported growth carried into the quarter",
+   "name": "customers paid on delivery, nothing else",
    "answer": [
-    1561.4,
-    "no position"
+    350
    ]
   },
   {
-   "name": "the issuers in both quarters, raw spend, on last year's net sales (quick)",
+   "name": "rates re-estimated as an exponentially weighted volatility, nothing else",
    "answer": [
-    1671.9,
-    "long"
+    350
    ]
   }
  ],
  "forcing": {
-  "kind": "numeric",
-  "line": 1518.0,
-  "golden_side": "below",
+  "kind": "set",
+  "golden_answer": [
+   350
+  ],
   "golden_family": [
    {
     "name": "the golden route",
-    "value": 1494.7
+    "answer": [
+     350
+    ],
+    "value": 328.8
    },
    {
-    "name": "spend per open card issuer by issuer",
-    "value": 1493.6
+    "name": "a smooth response of the desk, sold up to the maximum in a straight line with the price",
+    "answer": [
+     350
+    ],
+    "value": 330.2
    },
    {
-    "name": "cards of the same age",
-    "value": 1488.7
+    "name": "rates at the nearest-rank quantile",
+    "answer": [
+     350
+    ],
+    "value": 328.8
    },
    {
-    "name": "the regional mix of fiscal 2023",
-    "value": 1493.1
-   },
-   {
-    "name": "fiscal 2024's regional mix rolled forward a year",
-    "value": 1497.6
-   },
-   {
-    "name": "the deposit window at seven weeks",
-    "value": 1495.1
-   },
-   {
-    "name": "the deposit window at nine weeks",
-    "value": 1501.9
-   },
-   {
-    "name": "contract at the median of the last four quarters",
-    "value": 1495.4
-   },
-   {
-    "name": "a re-issued book read at a three per cent rise",
-    "value": 1494.7
-   },
-   {
-    "name": "a re-issued book read at a ten per cent rise",
-    "value": 1494.7
-   },
-   {
-    "name": "the record from fiscal 2023 only",
-    "value": 1497.3
-   },
-   {
-    "name": "the re-issued book's region set aside",
-    "value": 1500.8
-   },
-   {
-    "name": "the re-issued book's newest open years set aside",
-    "value": 1497.3
-   },
-   {
-    "name": "an issuer with a re-issued book left out of every quarter",
-    "value": 1496.8
-   },
-   {
-    "name": "retail growth calibrated by regression on past quarters, contract at its run rate",
-    "value": 1505.8
-   }
-  ],
-  "shortcuts": [
-   {
-    "name": "issuers in every week of both quarters on spend per open card, the company's regional mix, net sales grown with it (careful but hurried)",
-    "value": 1617.9
-   },
-   {
-    "name": "the same, reported growth regressed on it over past quarters",
-    "value": 1613.0
-   },
-   {
-    "name": "KS-01's book taken out, nothing else",
-    "value": 1570.0
-   },
-   {
-    "name": "revenue on delivery, nothing else",
-    "value": 1573.8
-   },
-   {
-    "name": "contract at its run rate, nothing else",
-    "value": 1574.1
-   },
-   {
-    "name": "everything but KS-01's book",
-    "value": 1531.6
-   },
-   {
-    "name": "everything but revenue on delivery",
-    "value": 1529.9
-   },
-   {
-    "name": "everything but contract at its run rate",
-    "value": 1533.6
-   },
-   {
-    "name": "deposits at last year's ratio to payments",
-    "value": 1531.8
-   },
-   {
-    "name": "the deposits' change moved as a year earlier",
-    "value": 1529.9
-   },
-   {
-    "name": "contract at last year's fourth quarter",
-    "value": 1532.8
-   },
-   {
-    "name": "everything but the company's regional mix",
-    "value": 1548.9
-   },
-   {
-    "name": "the desk's third-quarter model carried to the fourth quarter",
-    "value": 1637.5
-   },
-   {
-    "name": "fiscal 2025's reported growth carried into the quarter",
-    "value": 1605.4
+    "name": "rates on a 252-day look-back",
+    "answer": [
+     350
+    ],
+    "value": 328.5
    }
   ],
   "perturbations": [
    {
-    "input": "the last week's completeness -3 per cent",
-    "value": 1496.5
+    "input": "the desk's threshold at 1.20 of budget",
+    "answer": [
+     350
+    ],
+    "value": 337.6
    },
    {
-    "input": "the last week's completeness +3 per cent",
-    "value": 1493.0
+    "input": "the desk's threshold at 1.30 of budget",
+    "answer": [
+     350
+    ],
+    "value": 328.8
    },
    {
-    "input": "the licensed shops' and cafes' share -20 per cent",
-    "value": 1495.9
+    "input": "the desk at 2.5 points a week",
+    "answer": [
+     350
+    ],
+    "value": 324.9
    },
    {
-    "input": "the licensed shops' and cafes' share +20 per cent",
-    "value": 1494.1
+    "input": "the desk at 3.5 points a week",
+    "answer": [
+     350
+    ],
+    "value": 331.3
    },
    {
-    "input": "the range from the record's 10th and 90th percentile errors",
-    "value": 1500.0
+    "input": "release response 20 per cent flatter",
+    "answer": [
+     350
+    ],
+    "value": 327.8
    },
    {
-    "input": "the record's mean error added back, the range from its standard deviation",
-    "value": 1500.8
+    "input": "release response 20 per cent steeper",
+    "answer": [
+     350
+    ],
+    "value": 329.3
+   },
+   {
+    "input": "payment habits three days slower",
+    "answer": [
+     350
+    ],
+    "value": 339.1
+   },
+   {
+    "input": "payment habits three days faster",
+    "answer": [
+     350
+    ],
+    "value": 331.7
+   },
+   {
+    "input": "the affiliate's window lagged one month",
+    "answer": [
+     350
+    ],
+    "value": 324.2
+   },
+   {
+    "input": "the affiliate's window lagged three months",
+    "answer": [
+     350
+    ],
+    "value": 331.6
    }
   ],
-  "notes": "Values are the top of each route's 80 per cent range (the call is short only while the whole range sits below the street's figure). Each deep step left out on its own leaves the range across the line (no position); two or three left out land long."
+  "shortcuts": [
+   {
+    "name": "the book as it stood, rates held, output at budget, every customer at spot (quick)",
+    "value": 17.2
+   },
+   {
+    "name": "the policy's minimum ladder on exchange positions, 2022's rates as a share of price, output carried from 2022's own shortfall, the affiliate at spot (careful but hurried)",
+    "value": 297.1
+   },
+   {
+    "name": "the desk held to the policy minimum, nothing else",
+    "value": 227.4
+   },
+   {
+    "name": "the desk moved to the policy maximum at once, nothing else",
+    "value": 285.4
+   },
+   {
+    "name": "the book frozen at the year end, nothing else",
+    "value": 211.1
+   },
+   {
+    "name": "the smelter's contract left out of the hedge ratio, nothing else",
+    "value": 438.5
+   },
+   {
+    "name": "rates held at the year end, nothing else",
+    "value": 284.1
+   },
+   {
+    "name": "rates scaled with the front price, nothing else",
+    "value": 292.7
+   },
+   {
+    "name": "2022's rates as a share of price, nothing else",
+    "value": 386.2
+   },
+   {
+    "name": "output at budget, nothing else",
+    "value": 207.7
+   },
+   {
+    "name": "output carried from 2022's own shortfall, nothing else",
+    "value": 282.8
+   },
+   {
+    "name": "output scaled with the week's inflow, nothing else",
+    "value": 277.4
+   },
+   {
+    "name": "the affiliate at spot, nothing else",
+    "value": 265.9
+   },
+   {
+    "name": "customers paid on delivery, nothing else",
+    "value": 312.0
+   }
+  ],
+  "notes": "The call is the facility, the requirement rounded up to the next EUR 50 million. Every golden-family method and every fitted input moved by its spread files EUR 350 million; the shortcuts file between EUR 50 million and EUR 450 million."
  }
 }

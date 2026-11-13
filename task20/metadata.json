@@ -1,237 +1,168 @@
 {
  "task": "task20",
- "architecture": 2,
- "as_of": "2026-02-05",
- "decision": "whether Brindle & Moss's fourth-quarter fiscal 2025 net sales land above or below the sell-side consensus, and the position to take into the print",
+ "architecture": 3,
+ "as_of": "2026-12-31",
+ "decision": "the committed margin facility Hallingvass Kraft needs for 2027 under its liquidity standard",
  "deliverables": [
-  "bmh_q4fy25_revenue_nowcast.xlsx",
-  "bmh_q4fy25_nowcast_note.docx"
+  "hallingvass_margin_facility_2027.xlsx",
+  "margin_facility_2027_note.docx"
  ],
  "distractors": [
-  "appmetric_bmh_app_daily.csv",
-  "kestrel_web_visits_bmh_weekly.csv"
+  "eurnok_daily_2018_2026.csv",
+  "hk_heating_degree_days_weekly.csv"
  ],
  "distractor_notes": {
-  "kestrel_web_visits_bmh_weekly.csv": "the panel vendor's weekly site visits to brindlemoss.com: it looks like a second read on the quarter's demand but counts visits, which held up through the holiday quarter while purchases per visit fell",
-  "appmetric_bmh_app_daily.csv": "a third-party estimate of the Brindle & Moss app's daily category rank and downloads: it looks like a read on customer engagement and bears on no result"
+  "eurnok_daily_2018_2026.csv": "daily EUR/NOK fixings: every price, margin and invoice in the pack is in euro, so it bears on no result",
+  "hk_heating_degree_days_weekly.csv": "weekly heating degree days for the company's area: they look like a driver of the retail affiliate's load, but supply volumes are contracted on fixed profiles and output follows inflow and storage"
  },
  "stated_inputs": [
-  "80",
-  "13",
-  "14",
-  "53",
-  "52",
-  "31",
-  "27",
-  "1,483.7",
-  "100.4",
-  "109.1",
-  "1483.7",
-  "202.0",
-  "220.7",
-  "282.1",
-  "45.9"
+  "2022",
+  "2027",
+  "2026",
+  "2021",
+  "50",
+  "150",
+  "700",
+  "38.00",
+  "100",
+  "70",
+  "1,800",
+  "300"
  ],
  "field_terms": [
-  "net sales",
-  "panel",
-  "issuer",
-  "descriptor",
-  "comparable",
-  "consensus",
-  "deposits",
-  "contract"
+  "margin",
+  "variation margin",
+  "initial margin",
+  "facility",
+  "hedge ratio",
+  "cascade",
+  "day-ahead",
+  "inflow",
+  "storage",
+  "settlement"
  ],
  "rows": {
-  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": 163620,
-  "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": 909,
-  "kestrel_bmh_descriptor_detail_monthly.csv": 3275,
-  "bmh_q4fy25_street_estimates.csv": 11,
-  "kestrel_web_visits_bmh_weekly.csv": 261,
-  "appmetric_bmh_app_daily.csv": 1068,
-  "bmh_8k_ex99-1_2021-06-09.txt": 85,
-  "bmh_8k_ex99-1_2021-09-08.txt": 85,
-  "bmh_8k_ex99-1_2021-12-08.txt": 85,
-  "bmh_8k_ex99-1_2022-02-24.txt": 87,
-  "bmh_8k_ex99-1_2022-06-08.txt": 85,
-  "bmh_8k_ex99-1_2022-09-07.txt": 85,
-  "bmh_8k_ex99-1_2022-12-07.txt": 85,
-  "bmh_8k_ex99-1_2023-02-23.txt": 87,
-  "bmh_8k_ex99-1_2023-06-07.txt": 85,
-  "bmh_8k_ex99-1_2023-09-06.txt": 85,
-  "bmh_8k_ex99-1_2023-12-06.txt": 85,
-  "bmh_8k_ex99-1_2024-02-29.txt": 89,
-  "bmh_8k_ex99-1_2024-06-12.txt": 85,
-  "bmh_8k_ex99-1_2024-09-11.txt": 87,
-  "bmh_8k_ex99-1_2024-12-11.txt": 87,
-  "bmh_8k_ex99-1_2025-02-27.txt": 91,
-  "bmh_8k_ex99-1_2025-06-11.txt": 87,
-  "bmh_8k_ex99-1_2025-09-10.txt": 87,
-  "bmh_8k_ex99-1_2025-12-10.txt": 87,
-  "larkhill_bmh_card_model_q3fy25.xlsx": 14
+  "nex_daily_settlement_2018_2026.csv": 36176,
+  "hk_risk_curve_daily_2018_2026.csv": 109128,
+  "nex_margin_parameters_2018_2026.csv": 246,
+  "nex_clearing_statements_2018_2026.csv": 2258,
+  "nex_positions_month_end_2017_2026.csv": 596,
+  "hk_trade_capture_2018_2026.csv": 441,
+  "hk_hydrology_weekly_2017_2026.csv": 522,
+  "hk_plant_output_monthly_2017_2026.csv": 600,
+  "hk_sales_ledger_2018_2026.csv": 438,
+  "nex_dayahead_settlements_2018_2026.csv": 3287,
+  "eurnok_daily_2018_2026.csv": 2257,
+  "hk_heating_degree_days_weekly.csv": 522
  },
  "files": {
-  "appmetric_bmh_app_daily.csv": {
-   "source": "Simulated daily app category rank and download estimates",
+  "eurnok_daily_2018_2026.csv": {
+   "source": "Simulated EUR/NOK daily fixings",
    "role": "distractor",
-   "pull_date": "2026-02-03",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
   },
-  "bmh_10k_fy2024_excerpts.pdf": {
-   "source": "Brindle & Moss 10-K excerpts compiled by the desk (written for this task, figures simulated)",
+  "hallingvass_regulation_licence_extract.pdf": {
+   "source": "Extract from the reservoirs' regulation licence (written for this task)",
+   "role": "standard",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_budget_vintages_2016_2026.xlsx": {
+   "source": "The company's budget vintages (simulated)",
    "role": "evidence",
-   "pull_date": "2025-03-27",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
   },
-  "bmh_8k_ex99-1_2021-06-09.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2021Q1 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2021-06-09",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2021-09-08.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2021Q2 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2021-09-08",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2021-12-08.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2021Q3 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2021-12-08",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2022-02-24.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2021Q4 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2022-02-24",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2022-06-08.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2022Q1 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2022-06-08",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2022-09-07.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2022Q2 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2022-09-07",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2022-12-07.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2022Q3 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2022-12-07",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2023-02-23.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2022Q4 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2023-02-23",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2023-06-07.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2023Q1 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2023-06-07",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2023-09-06.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2023Q2 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2023-09-06",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2023-12-06.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2023Q3 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2023-12-06",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2024-02-29.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2023Q4 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2024-02-29",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2024-06-12.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2024Q1 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2024-06-12",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2024-09-11.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2024Q2 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2024-09-11",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2024-12-11.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2024Q3 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2024-12-11",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2025-02-27.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2024Q4 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2025-02-27",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2025-06-11.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2025Q1 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2025-06-11",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2025-09-10.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2025Q2 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2025-09-10",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_8k_ex99-1_2025-12-10.txt": {
-   "source": "Simulated Brindle & Moss earnings release for FY2025Q3 (8-K exhibit 99.1 as saved from EDGAR)",
-   "role": "evidence",
-   "pull_date": "2025-12-10",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "bmh_q4fy25_street_estimates.csv": {
-   "source": "Simulated sell-side estimates of fourth-quarter fiscal 2025 net sales",
-   "role": "evidence",
-   "pull_date": "2026-02-04",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": {
-   "source": "Simulated Kestrel delivery history: the trailing weeks of each weekly delivery as first delivered",
-   "role": "evidence",
-   "pull_date": "2026-02-02",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "kestrel_bmh_descriptor_detail_monthly.csv": {
-   "source": "Simulated Kestrel monthly spend and transactions by raw merchant descriptor",
-   "role": "evidence",
-   "pull_date": "2026-02-02",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": {
-   "source": "Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids, the issuers' feeds as concatenated",
-   "role": "evidence",
-   "pull_date": "2026-02-02",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
-  },
-  "kestrel_web_visits_bmh_weekly.csv": {
-   "source": "Simulated weekly site visit estimates for brindlemoss.com",
+  "hk_heating_degree_days_weekly.csv": {
+   "source": "Simulated weekly heating degree days",
    "role": "distractor",
-   "pull_date": "2026-02-02",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+   "pull_date": "2026-12-30",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
   },
-  "larkhill_bmh_card_model_q3fy25.xlsx": {
-   "source": "The desk's third-quarter card model (simulated, reproducible from the panel and the releases)",
-   "role": "incumbent",
-   "pull_date": "2025-12-11",
-   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  "hk_hedging_policy_2025.docx": {
+   "source": "The company's hedging policy (written for this task)",
+   "role": "standard",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_hydrology_weekly_2017_2026.csv": {
+   "source": "Simulated weekly inflow and storage as reported to the regulator, with weekly normals",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_liquidity_standard_2026.pdf": {
+   "source": "The company's liquidity standard for the margin facility (written for this task)",
+   "role": "standard",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_plant_output_monthly_2017_2026.csv": {
+   "source": "Simulated monthly output by plant",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_risk_curve_daily_2018_2026.csv": {
+   "source": "Simulated risk system daily monthly forward curve",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_sales_ledger_2018_2026.csv": {
+   "source": "Simulated billing system extract of supply invoices and payments",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_supply_contracts_register.xlsx": {
+   "source": "The company's supply contract register (written for this task)",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "hk_trade_capture_2018_2026.csv": {
+   "source": "Simulated trade capture export of the hedge desk",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_clearing_margin_summary.pdf": {
+   "source": "NEX Clearing's public margining summary (written for this task)",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_clearing_statements_2018_2026.csv": {
+   "source": "Simulated NEX Clearing daily clearing statements for the hedge account",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_daily_settlement_2018_2026.csv": {
+   "source": "Simulated Nordvik Energy Exchange daily settlement prices for base-load futures",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_dayahead_settlements_2018_2026.csv": {
+   "source": "Simulated day-ahead market settlements of the company's net position",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_margin_parameters_2018_2026.csv": {
+   "source": "Simulated NEX Clearing margin rate notices",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
+  },
+  "nex_positions_month_end_2017_2026.csv": {
+   "source": "Simulated NEX Clearing month-end position statements",
+   "role": "evidence",
+   "pull_date": "2026-12-31",
+   "license": "generated for this task by task20/generator (a seeded simulation of a Nordic-style power market, a hydro generator, its hedge desk, clearing house and customers), CC BY 4.0"
   }
  }
 }

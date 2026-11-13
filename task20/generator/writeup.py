@@ -1,207 +1,50 @@
-"""task20 architecture 2 (second hardening): submission.md, the four answer blocks and the tags, every figure from figures.json."""
-import golden as GD
+"""submission.md: the four answer blocks, every figure from figures.json."""
 
-
-def usd(x):
-    return "USD {:,.1f} million".format(x)
-
-
-def mn(x):
-    return "{:,.1f}".format(x)
-
-
-def q(k):
-    return k.replace("FY", "fiscal ").replace(" Q", " Q")
+PROMPT = ("How large must Hallingvass Kraft's committed margin facility be for 2027 under its liquidity standard? Give "
+          "the stress requirement in EUR million, the date it peaks and the facility it sets. At that date, give the "
+          "exchange hedge book in TWh for each delivery year from 2027 to 2030 and the initial margin in EUR million; "
+          "and from 1 January to that date, the output in GWh, and day-ahead purchases net of sales and customer "
+          "payments received, both in EUR million. Give each delivery year's hedge ratio from 2027 to 2029 at 31 "
+          "December 2026 in per cent, and the requirement worked out the same way for 2022 on the book at the end "
+          "of 2021, beside what the 2022 records show, in EUR million with its date. A spreadsheet with the daily "
+          "path and a short note.")
 
 
 def text(F):
-    br = dict(F["bridge_pp"])
-    bl = F["bridge_pp"]
-    rg, rk = F["regional_pct"], F["regional_with_ks01_pct"]
-    cw, pw = F["company_weights_pct"], F["panel_weights_pct"]
-    e = F["errors_pp"]
-    sm, sh, sl = F["shortcut_m"], F["shortcut_high_m"], F["shortcut_low_m"]
-    hi = F["family_high_m"]
-    B = F["bands"]
-    bb = B["bridge_pp"]
-    sign = "below" if F["growth_pct"] < 0 else "above"
-    L = []
-    L.append("# task20 submission: Brindle & Moss's fourth-quarter fiscal 2025 net sales from the Kestrel card panel, "
-             "against the street's figure")
-    L.append("")
-    L.append("## Tags")
-    L.append("")
-    L.append("**Domain:** Quantitative Finance and Trading, Quantitative Finance (alternative data: a card-transaction "
-             "panel's nowcast of a listed retailer's quarterly net sales, validated on rolling origins, against the "
-             "consensus).")
-    L.append("**Analytical objective:** Forecasting & Predictive Modeling.")
-    L.append("")
-    L.append("## Final Recommendation")
-    L.append("")
-    L.append("**Short Brindle & Moss into the %s release of its fiscal 2025 fourth quarter: net sales of %s, %.2f%% %s the "
-             "%s of a year earlier, with an 80%% range of USD %s to %s million that sits wholly below the street's %s.** "
-             "This rejects the panel's like-for-like read taken to net sales (issuers in both quarters on spend per "
-             "card at the company's regional mix, %s, a beat), the same with any one of the three corrections left out "
-             "(KS-01's re-issued book kept, %s; the December custom orders counted as sales, %s; last year's contract "
-             "delivery grown with retail, %s; each no position), and the desk's third-quarter model carried forward (%s)."
-             % (F["release"], usd(F["forecast_m"]), F["growth_abs_pct"], sign, usd(F["base_net_sales_m"]),
-                mn(F["range_low_m"]), mn(F["range_high_m"]), usd(F["street_m"]), usd(sm["careful"]),
-                usd(sm["no_reissue"]), usd(sm["no_deposits"]), usd(sm["no_contract"]), usd(sm["desk_model"])))
-    L.append("")
-    L.append("## Supplementary Questions")
-    L.append("")
-    L.append("### %s" % GD.XLSX)
-    L.append("")
-    L.append("1. The quarter's net sales with its 80%% range, on a Call sheet: %s (band USD %s to %s million), growth "
-             "%.2f%% on %s, range from USD %s million (band USD %s to %s million) to USD %s million (band USD %s to %s "
-             "million), the range being the estimate plus and minus 1.2816 times the record's root mean square error "
-             "(%.2f points of growth), and the street's %s (the mean of %d estimates; median %s)."
-             % (usd(F["forecast_m"]), mn(B["forecast_m"][0]), mn(B["forecast_m"][1]), F["growth_pct"],
-                usd(F["base_net_sales_m"]), mn(F["range_low_m"]), mn(B["range_low_m"][0]), mn(B["range_low_m"][1]),
-                mn(F["range_high_m"]), mn(B["range_high_m"][0]), mn(B["range_high_m"][1]), F["band_pp"],
-                usd(F["street_m"]), F["street_n"], usd(F["street_median_m"])))
-    errs = "; ".join("%s %+.2f (%.2f to %.2f)" % (q(k), v, B["errors_pp"][k][0], B["errors_pp"][k][1])
-                     for k, v in e.items())
-    L.append("2. How the range would have held, on a Record sheet with one row per quarter from %s to %s: the estimate "
-             "built as it would have been three weeks before each release (the panel as delivered on 2 February 2026, "
-             "whose weeks before the latest are complete; the issuers in every week of both quarters less any with a "
-             "re-issued book between them; the regional mix of the fiscal year before; deposits and contract from the "
-             "releases before that quarter's), reported growth, the error in points of year-on-year growth, and whether "
-             "it fell inside. The errors: %s. Root mean square error %.2f points (%.2f to %.2f); %d of %d quarters "
-             "inside the range at that error (%d to %d); inside a range built only on the errors before each, %d of the %d "
-             "quarters from %s (with at least four errors before it; %d to %d) and %d of the %d from %s (with at least "
-             "six; %d to %d); "
-             "the largest miss %.2f points in %s; the mean error %+.2f points, and with it added back and the range set "
-             "from the errors' standard deviation the top of the range is USD %s million, still below the street. "
-             "The panel's like-for-like growth taken straight to net sales, set beside it, has a root mean square error "
-             "of %.2f points and misses the third quarter of fiscal 2025 by %.2f."
-             % (q(F["first_origin"]), q(F["last_origin"]), errs, F["golden_rmse_pp"], B["golden_rmse_pp"][0],
-                B["golden_rmse_pp"][1], F["coverage_in"], F["origins"], B["coverage_in"][0], B["coverage_in"][1],
-                F["coverage_asof_in"], F["coverage_asof_n"], q(F["first_asof_origin"]), B["coverage_asof_in"][0],
-                B["coverage_asof_in"][1], F["coverage_asof6_in"], F["coverage_asof6_n"], q(F["first_asof6_origin"]),
-                B["coverage_asof6_in"][0], B["coverage_asof6_in"][1], F["largest_miss_pp"], q(F["largest_miss_q"]),
-                F["record_mean_error_pp"],
-                mn(F["perturb_m"]["the record's mean error added back, the range from its standard deviation"]),
-                F["shortcut_rmse_pp"]["careful"], F["careful_q3_error_pp"]))
-    steps = "; ".join("%s %+.2f (%.2f to %.2f)" % (k, v, bb[k][0], bb[k][1]) for k, v in bl)
-    L.append("3. What each step from the card data to net sales is worth in points of year-on-year growth (weekly "
-             "averages), on a Bridge sheet, from the delivered panel's growth on the same quarter a year earlier (every "
-             "issuer, raw spend, the panel's own regional weights) to net sales, in the order applied: the panel's three "
-             "steps first, at the panel's own regional weights with KS-01 kept, then the company's four at the company's "
-             "weights; each band covers every order of the steps within its group: %s; growth after the panel's own steps %.2f%%, at the company's mix %.2f%%, "
-             "without KS-01's book %.2f%%, retail net sales %.2f%%, net sales %.2f%%. A Regions sheet gives each billing "
-             "region's growth per open card with KS-01 kept and without it (Northeast %.2f%% and %.2f%%, Southeast "
-             "%.2f%% and %.2f%%, Midwest %.2f%% and %.2f%%, West %.2f%% and %.2f%%) beside the company's fiscal 2024 "
-             "weights (%.2f, %.2f, %.2f, %.2f); an Issuers sheet KS-01's Midwest cards week by week (up %.2f%% in the "
-             "four weeks to 26 October 2025); a Deposits sheet the deposits at each quarter end, the custom-order share "
-             "of the brand's spend in the last eight weeks (%.2f%% against %.2f%% a year earlier) and the quarter's "
-             "closing deposits of %s (USD %s to %s million) against %s at the end of the third quarter; a Contract sheet "
-             "each quarter's contract sales, last year's fourth quarter of %s (USD %s to %s million) as the fiscal "
-             "year's %s less the nine months' %s, and this quarter's run rate of %s (USD %s to %s million)."
-             % (steps, F["pooled_with_ks01_pct"], F["visible_with_ks01_pct"], F["visible_growth_pct"],
-                F["retail_growth_pct"], F["growth_pct"], rk["Northeast"], rg["Northeast"], rk["Southeast"],
-                rg["Southeast"], rk["Midwest"], rg["Midwest"], rk["West"], rg["West"], cw["Northeast"],
-                cw["Southeast"], cw["Midwest"], cw["West"], F["ks01_mw_cards_rise_pct"], F["custom_q4_pct"],
-                F["custom_base_pct"], usd(F["deposits_q4_m"]), mn(B["deposits_q4_m"][0]), mn(B["deposits_q4_m"][1]),
-                usd(F["deposits_q3_m"]), usd(F["contract_base_m"]), mn(B["contract_base_m"][0]),
-                mn(B["contract_base_m"][1]), usd(F["contract_fy2024_m"]), usd(F["contract_9m_fy2024_m"]),
-                usd(F["contract_q4_m"]), mn(B["contract_q4_m"][0]), mn(B["contract_q4_m"][1])))
-    L.append("4. The call on the Call sheet: short, because the top of the range (%s) sits %s below the street's figure; "
-             "every reasonable rival keeps the top between USD %s and %s million."
-             % (usd(F["range_high_m"]), usd(F["range_gap_m"]), mn(min(hi.values())), mn(max(hi.values()))))
-    L.append("")
-    L.append("### %s" % GD.NOTE)
-    L.append("")
-    L.append("5. One page to the portfolio manager from the consumer analyst: the call and the estimate with its range "
-             "against the street, the bridge from the delivered panel to net sales, a paragraph on why the panel reads a "
-             "beat and the quarter is not one (KS-01's re-issued book, the December custom orders still in deposits, "
-             "last year's contract delivery), the record, and what would change the call.")
-    L.append("")
-    L.append("## Critical Components")
-    L.append("")
-    L.append("1. KS-01's Midwest cards rose **%.2f%%** in the four weeks to 26 October 2025 as KS-06's fell and its feed "
-             "ended: a book of re-issued accounts that spend like long-held cards. Kept, it lifts the Midwest's growth "
-             "per open card to %.2f%%; without KS-01 the Midwest reads **%.2f%%** and card-visible growth at the "
-             "company's fiscal 2024 regional mix is **%.2f%%** (not %.2f%%)."
-             % (F["ks01_mw_cards_rise_pct"], rk["Midwest"], rg["Midwest"], F["visible_growth_pct"],
-                F["visible_with_ks01_pct"]))
-    L.append("2. The panel's own regional weights tilt to the Southeast once KS-06 has left; re-weighting to the "
-             "company's fiscal 2024 net sales by region (Midwest **%.2f%%**) is worth **%.2f** points in the order "
-             "applied." % (cw["Midwest"], br["the company's regional mix"]))
-    L.append("3. Custom orders are paid when placed and recognised on delivery about eight weeks later; their share of the "
-             "brand's spend in the quarter's last eight weeks was **%.2f%%** against %.2f%% a year earlier, so customer "
-             "deposits close the quarter near **%s** against %s at the end of October, and revenue on delivery is worth "
-             "**%.2f** points of growth." % (F["custom_q4_pct"], F["custom_base_pct"], usd(F["deposits_q4_m"]),
-                                            usd(F["deposits_q3_m"]), br["revenue on delivery"]))
-    L.append("4. Last year's fourth quarter held **%s** of contract sales (the fiscal year's %s less the first nine "
-             "months' %s), a delivery no card carries; at this quarter's run rate of **%s**, separating contract from "
-             "retail is worth **%.2f** points." % (usd(F["contract_base_m"]), usd(F["contract_fy2024_m"]),
-                                                   usd(F["contract_9m_fy2024_m"]), usd(F["contract_q4_m"]),
-                                                   br["contract at its run rate"]))
-    L.append("")
-    L.append("## Step-by-Step")
-    L.append("")
-    L.append("1. The delivered panel, every issuer and merchant id, moved %+.2f%% on the same quarter a year earlier, "
-             "mostly because KS-06's feed ends with the week beginning 26 October 2025 and the latest weeks are still "
-             "posting. Region labels differ by issuer feed (NE, NORTHEAST, North East) and are mapped to the four regions."
-             % bl[0][1])
-    L.append("2. Each issuer's first-delivered share of a week's final spend at lags 0 to 2 (medians over the 27 "
-             "deliveries) completes the latest weeks (%+.2f points); the Hollister's shop-in-shops and the cafes, the "
-             "licensees' sales, come out of the brand id by month (%+.2f points); the issuers in every week of both "
-             "quarters (%s) on spend per open card give like-for-like growth of %.2f%% (%+.2f points)."
-             % (bl[1][1], bl[2][1], ", ".join(F["issuers_both"]), F["pooled_with_ks01_pct"], bl[3][1]))
-    L.append("3. The 10-K's fiscal 2024 Brindle & Moss net sales by region weight each region's growth: %.2f%% (%+.2f "
-             "points). The hurried analysis stops here and files that growth for net sales: %s, range USD %s to %s "
-             "million, a beat, with a record (root mean square error %.2f points) that looks sound because no past "
-             "comparison held a re-issued book in its largest issuer, a December custom event this large or a base "
-             "quarter with a contract delivery this large."
-             % (F["visible_with_ks01_pct"], br["the company's regional mix"], usd(sm["careful"]), mn(sl["careful"]),
-                mn(sh["careful"]), F["shortcut_rmse_pp"]["careful"]))
-    L.append("4. KS-01 is in both quarters but is not the same book: its Midwest cards rose %.2f%% in the four weeks to "
-             "26 October as KS-06's fell, and its spend per card rose with them, where cards on an issuer's file move "
-             "about one per cent a month (KS-02's Southeast cards jumped the same way, %.2f%% in the four weeks to 21 May 2023). Leaving "
-             "KS-01 out, the Midwest reads %.2f%% rather than %.2f%%, and card-visible growth is %.2f%% (%+.2f points)."
-             % (F["ks01_mw_cards_rise_pct"], F["ks02_se_rise_pct"], rg["Midwest"], rk["Midwest"],
-                F["visible_growth_pct"], br["KS-01's re-issued book taken out"]))
-    L.append("5. Customers pay when they order and custom pieces are recognised on delivery, so retail net sales are "
-             "payments less the change in customer deposits (the balance sheet line in each release; it runs near eight "
-             "weeks of custom orders). Last year's closing deposits (%s), scaled by the brand's payments, the share of "
-             "them in the quarter's last eight weeks (%.2f%% against %.2f%%) and the custom-order share of those weeks "
-             "(%.2f%% against %.2f%%, the design studios and the site's custom-order descriptor), give %s at the "
-             "quarter's end against %s in October: retail net sales %s (%.2f%%, %+.2f points)."
-             % (usd(F["deposits_base_m"]), F["trail_q4_pct"], F["trail_base_pct"], F["custom_q4_pct"],
-                F["custom_base_pct"], usd(F["deposits_q4_m"]), usd(F["deposits_q3_m"]), usd(F["retail_q4_m"]),
-                F["retail_growth_pct"], br["revenue on delivery"]))
-    cq = F["contract_by_q"]
-    L.append("6. The fourth-quarter releases give contract sales for the fiscal year only: last year's fourth quarter is "
-             "%s less the nine months' %s, %s, against a run rate of %s (the median of the last eight quarters). Such "
-             "deliveries do not recur: %s in fiscal 2022 Q2 was followed by %s a year on, %s in fiscal 2023 Q3 by %s, and "
-             "fourth quarters ran %s to %s in fiscal 2021 to 2023. No card carries contract, so retail grows with the "
-             "panel and contract is added at its run rate: net sales %s, %.2f%% (%+.2f points)."
-             % (usd(F["contract_fy2024_m"]), usd(F["contract_9m_fy2024_m"]), usd(F["contract_base_m"]),
-                usd(F["contract_q4_m"]), usd(cq["FY2022 Q2"]), usd(cq["FY2023 Q2"]), usd(cq["FY2023 Q3"]),
-                usd(cq["FY2024 Q3"]), usd(min(cq["FY2021 Q4"], cq["FY2022 Q4"], cq["FY2023 Q4"])),
-                usd(max(cq["FY2021 Q4"], cq["FY2022 Q4"], cq["FY2023 Q4"])), usd(F["forecast_m"]), F["growth_pct"],
-                br["contract at its run rate"]))
-    L.append("7. The same chain at each of the %d quarters from %s to %s, on what was known then (KS-02 left out of the "
-             "comparisons its May 2023 book touches): root mean square error %.2f points, %d inside; the range is the "
-             "estimate plus and minus %.2f points, USD %s to %s million, below the street's %s."
-             % (F["origins"], q(F["first_origin"]), q(F["last_origin"]), F["golden_rmse_pp"], F["coverage_in"],
-                F["band_pp"], mn(F["range_low_m"]), mn(F["range_high_m"]), usd(F["street_m"])))
-    L.append("")
-    L.append("No other conclusion survives. Each correction left out on its own leaves the range across the street "
-             "(KS-01 kept USD %s to %s million; no revenue on delivery USD %s to %s million; contract grown with retail "
-             "USD %s to %s million); two left out land long, or no position when the one handled is KS-01's book "
-             "(USD %s to %s million), and all three left out land long; every reasonable rival (spend per card issuer by "
-             "issuer or on cards of the same age, the fiscal 2023 or rolled-forward mix, a seven- or nine-week deposit "
-             "window, contract at a four-quarter run rate, a re-issued book read at 3 or 10 per cent, KS-01's Midwest "
-             "cards or its newest open years set aside instead of KS-01, KS-01 left out of every quarter, the record "
-             "from fiscal 2023) keeps the top between USD %s and %s million; and the last week's completeness 3%% either way, "
-             "the licensed share a fifth either way, the range from the record's error percentiles and the record's mean "
-             "error added back keep it between USD %s and %s million."
-             % (mn(sl["no_reissue"]), mn(sh["no_reissue"]), mn(sl["no_deposits"]), mn(sh["no_deposits"]),
-                mn(sl["no_contract"]), mn(sh["no_contract"]), mn(sl["only_reissue"]), mn(sh["only_reissue"]),
-                mn(min(hi.values())), mn(max(hi.values())),
-                mn(min(F["perturb_m"].values())), mn(max(F["perturb_m"].values()))))
-    L.append("")
-    return "\n".join(L)
+    f = F
+    return """# task20: Hallingvass Kraft's committed margin facility for 2027
+
+## Final Recommendation
+
+Commit EUR {facility_m} million for 2027 (EUR {facility_2026_m} million is committed for 2026): in a year whose prices and inflows repeat 2022, the hedge program's cumulative net cash outflow peaks at EUR {peak_m} million on {peak_date} (any figure from EUR {band_peak_lo} million to EUR {band_peak_hi} million and from 23 to 31 August 2027 is within method), which the standard rounds up to EUR {facility_m} million. Reject the EUR {careful_facility_m} million the careful but hurried route reaches (the book grown along the policy's minimum on exchange positions, 2022's own margin rates and output carried over, the affiliate paid at spot) and the EUR {nosmelter_facility_m} million a hedge ratio counted on exchange positions alone gives.
+
+## Supplementary Questions
+
+1. Stress requirement: EUR {peak_m} million (band EUR {band_peak_lo} to {band_peak_hi} million, one decimal), peaking on {peak_date} (band 23 to 31 August 2027); facility EUR {facility_m} million, exact.
+2. At {peak_date}: exchange hedge book still to be delivered, 2027 {book_peak_2027_twh} TWh, 2028 {book_peak_2028_twh} TWh, 2029 {book_peak_2029_twh} TWh, 2030 {book_peak_2030_twh} TWh (each within {book_tol} TWh); initial margin EUR {im_peak_m} million (band EUR {band_im_lo} to {band_im_hi} million).
+3. From 1 January 2027 to the peak: output {out_gwh_txt} GWh (band {band_out_lo} to {band_out_hi} GWh); day-ahead purchases net of sales EUR {da_net_m} million (band EUR {band_da_lo} to {band_da_hi} million); payments received from supply customers EUR {rec_m} million (band EUR {band_rec_lo} to {band_rec_hi} million).
+4. Hedge ratios at 31 December 2026 as the policy counts them (fixed-price sales over budgeted generation): 2027 {ratio_2027_pct} per cent, 2028 {ratio_2028_pct} per cent, 2029 {ratio_2029_pct} per cent (each within {ratio_tol} points).
+5. 2022: the same method on the book at the end of 2021 through 2022's own prices and inflows gives EUR {c22_method_m} million on {c22_method_date} (band EUR {c22_actual_m} million plus or minus {c22_method_tol} million); the 2022 records (NEX statements, day-ahead settlements and customer payments) show EUR {c22_actual_m} million on {c22_actual_date} (within EUR {c22_rec_tol} million).
+6. The spreadsheet carries the daily path of the stress year (variation margin, delivery settlement, initial margin and its change, day-ahead purchases less sales, customer payments, the net outflow and its cumulative sum), the book by month end, NEX's rates by day and output by month; the note gives the facility, the peak and its parts, and the 2022 check.
+
+## Critical Components
+
+1. The hedge ratio counts the fixed-price Fjordal Aluminium contract ({smelter_mw} MW at EUR {smelter_px}/MWh to 2029) as the policy's "sold forward at a fixed price" does: at 31 December 2026 the ratios are {ratio_2027_pct}, {ratio_2028_pct} and {ratio_2029_pct} per cent, against {ratio_ex_2027_pct}, {ratio_ex_2028_pct} and {ratio_ex_2029_pct} per cent on the exchange book alone, and only this basis reproduces every trade the desk made since 2018; counted on exchange positions the desk would sell enough more to push the requirement to EUR {nosmelter_peak_m} million.
+2. The desk steps each delivery year to the policy maximum, {desk_speed_pts} points a week, once its year contract trades more than {desk_theta} times its October budget price, and sells nothing above the minimum otherwise (this rule reproduces the trade capture exactly); in the stress year that puts {book_peak_2028_twh} TWh of 2028, {book_peak_2029_twh} TWh of 2029 and {book_peak_2030_twh} TWh of 2030 on the exchange at the peak, against a requirement of EUR {min_peak_m} million if the book only follows the minimum.
+3. NEX's rate for each class is the front contract's settlement price times the {rule_q_pct}th percentile of its absolute two-day log moves over the last {rule_look} business days, reviewed on Thursdays and changed when the indicated rate is more than {rule_band_pct} per cent from the rate in force; replayed on 2027 this gives initial margin of EUR {im_peak_m} million at the peak, where 2022's own rates as a share of price give EUR {pct2022_im_m} million (2022's look-back still held December 2021) and rates held at the year end give a requirement of EUR {const_peak_m} million.
+4. Storage opens 2027 at {storage_open_gwh} GWh against a licence floor of {floor_gwh} GWh: the plants' release falls in a straight line with storage below normal and stops at the floor, so 2022's dry spring holds output to {out_gwh_txt} GWh by the peak and the supply contracts' shortfall is bought day-ahead (EUR {da_net_m} million net); 2022's own shortfall carried over, or output scaled with each week's inflow, gives EUR {ratio22_peak_m} million or EUR {inflow_peak_m} million.
+5. Hallingvass Straum pays the average system price of the {aff_window} months ending {aff_lag} months before delivery (every invoice since 2019 to the cent), so customer payments to the peak are EUR {rec_m} million; paid at spot like the other customers, the requirement falls to EUR {affspot_peak_m} million.
+
+## Step-by-Step
+
+1. Rebuild the book: the position statement of 30 December 2026 gives {book_open_2027_twh} TWh of 2027 and {book_open_2028_twh} TWh of 2028 on the exchange; the trade capture agrees once cancelled trades are dropped, amended prices kept and the MWh-entered trades converted.
+2. Read the hedge policy against the books: on exchange positions alone the next delivery year sat more than five points below the policy minimum at {below_n} of the {months_n} month ends since 2020, a gap the Fjordal contract's fixed-price volume closes; counted with it, the ratios at the year end are {ratio_2027_pct}, {ratio_2028_pct} and {ratio_2029_pct} per cent. A hurried pass applies the ladder to exchange positions and sells too much.
+3. Recover the desk's rule from the trade capture against the October budget prices: it sells only to the minimum until a year contract trades {desk_theta} times budget, then {desk_speed_pts} points a week to the maximum. The policy's minimum ladder (EUR {min_peak_m} million) and selling to the maximum at once both miss it.
+4. Recover NEX's rule from the margin notices and the front contracts' settlement prices (look-back, percentile, review day and tolerance each reproduce the notices) and run it through the stress year from the 2026 look-back. 2022's rates as a share of price (EUR {pct2022_peak_m} million) carry December 2021 in their window; rates held at the year end (EUR {const_peak_m} million) or scaled with the front price miss the stress altogether.
+5. Build the stress year as the standard says: each forward month moved by 2022's percentage on the same date, the system price at 2022's ratio to the front month, each week's inflow at 2022's ratio to normal.
+6. Run the plants from the year-end storage: run-of-river takes {ror_share_pct} per cent of inflow up to {ror_cap} GWh a week, the reservoirs release their normal plan scaled down in a straight line with storage below normal and never below the licence floor; output to the peak is {out_gwh_txt} GWh, and the shortfall against committed supply is bought day-ahead and settled the next business day.
+7. Price the customers as the ledger shows: Fjordal at EUR {smelter_px}, Nesbyen and Bygdenett at the month's average system price, Hallingvass Straum on its twelve-month lagged average; each pays on its own habit ({lag_smelter}, {lag_pulp}, {lag_affiliate} and {lag_grid} days after the invoice).
+8. Add the day's cash: variation margin and delivery settlement against NEX's settlement prices, the change in initial margin at the replayed rates, day-ahead net purchases, less customer payments. The cumulative sum peaks at EUR {peak_m} million on {peak_date}; the standard sets EUR {facility_m} million.
+9. Check the method on 2022 itself: from the end-2021 book it gives EUR {c22_method_m} million on {c22_method_date}, against EUR {c22_actual_m} million on {c22_actual_date} in the records. The check cannot tell the hurried route from the right one, since 2022's own rates and output reproduce 2022 by construction; each of the five steps is fixed by its own record instead.
+10. No other size survives: every defensible variant (the desk's threshold and pace, the rule's quantile convention and look-back, the release response, the payment habits and the affiliate's window) lands between EUR {band_peak_lo} million and EUR {band_peak_hi} million and sets EUR {facility_m} million, while each hurried step alone moves the requirement by {single_lo_pct} to {single_hi_pct} per cent and the careful but hurried pass lands at EUR {careful_peak_m} million (a EUR {careful_facility_m} million facility).
+""".format(**f)

@@ -1,914 +1,796 @@
-"""task20 architecture 2 analysis (second hardening): Brindle & Moss's fourth-quarter fiscal 2025 net sales nowcast, computed from the
-shipped files in target/ alone, with the rivals that set each band and the hurried routes effort.json prices.
-
-One route function carries every method: the panel's normalisation (spend per open card, per issuer, cards of the same
-age, or raw spend), the issuers compared (every issuer, those in every week of both quarters, and those less any issuer
-whose cards took a re-issued book between the two quarters), the regional weights (the company's prior-year brand net
-sales by region, or the panel's own spend), the step from customer payments to net sales (revenue on delivery through
-the customer deposits at the quarter's end, or none), and contract sales (at the run rate of the quarters before, or
-inside one growth rate for all of net sales). The golden is spend per open card on the issuers in every week of both
-quarters less KS-01 (whose cards took KS-06's re-issued book in October 2025), at the company's fiscal 2024 regional
-mix, with the quarter-end deposits scaled from last year's by the last eight weeks' payments and custom-order share,
-and contract at the median of the eight quarters before."""
+"""The golden, computed from target/ alone: each process is recovered from its own record (NEX's rate rule from the
+notices and settlement prices, the desk's rule from the trade capture, the plants from the hydrology and plant
+output, the affiliate's price and every customer's payment habit from the sales ledger), then the liquidity
+standard's stress year is replayed on the 2027 book. Also every hurried route, the rivals and the 2022 check."""
+import csv
+import datetime as dt
+import math
 import os
 import re
 import subprocess
+from collections import defaultdict
 
 import numpy as np
-import pandas as pd
+from docx import Document
+from openpyxl import load_workbook
 
-import docs as DC
-import pack as PK
+import common as C
+import replay as RP
+from common import mi, mi_date, month_hours, hours_year, year_months, cprice
 
-REGIONS = ["Northeast", "Southeast", "Midwest", "West"]
-Z80 = 1.2816                  # the two-sided 80 per cent normal quantile
-ACQUIRED = pd.Timestamp("2024-06-02")
-TQ, BQ = "FY2025 Q4", "FY2024 Q4"
-JUMP = 0.05                   # a four-week rise in an issuer's cards in a region larger than this is a re-issued book
-NUM = {"thirteen": 13, "fourteen": 14}
-ORDN = {"first": 1, "second": 2, "third": 3, "fourth": 4}
-
-
-def norm_region(x):
-    k = re.sub(r"[^A-Z]", "", str(x).upper())
-    return {"NE": "Northeast", "NORTHEAST": "Northeast", "SE": "Southeast", "SOUTHEAST": "Southeast",
-            "MW": "Midwest", "MIDWEST": "Midwest", "W": "West", "WEST": "West"}[k]
+D = dt.date.fromisoformat
+CLS = {"Base Month": "M", "Base Quarter": "Q", "Base Year": "Y"}
+CUSTOMERS = {"Fjordal Aluminium AS": "SMELTER", "Nesbyen Treforedling AS": "PULP", "Hallingvass Straum AS": "AFFILIATE",
+             "Bygdenett AS": "GRID"}
 
 
-# ---------------------------------------------------------------------------------------------------------- the files
-def _nums(s):
-    out = []
-    for tok in re.findall(r"\(?[\d,]+\)?|--", s):
-        if tok == "--":
-            out.append(0.0)
-            continue
-        neg = tok.startswith("(")
-        v = float(tok.strip("()").replace(",", ""))
-        out.append(-v if neg else v)
-    return out
+def rows(path):
+    with open(path, newline="") as f:
+        return list(csv.DictReader(f))
 
 
-def _row(block, label):
-    for ln in block.splitlines():
-        if ln[:52].strip() == label:
-            return _nums(ln[52:])
-    return None
+def pdftext(path):
+    return subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
 
 
-def read_release(path):
-    txt = open(path).read()
-    m = re.search(r"results for the (\w+) quarter of fiscal (\d{4}), the (\w+) weeks ended (\w+ \d+, \d{4})", txt)
-    fq, fy, weeks, end = ORDN[m.group(1)], int(m.group(2)), NUM[m.group(3)], pd.Timestamp(m.group(4))
-    inc = txt.split("STATEMENTS OF INCOME")[1].split("NET SALES BY BRAND")[0]
-    brand = txt.split("NET SALES BY BRAND")[1].split("BALANCE SHEETS")[0]
-    bs = txt.split("BALANCE SHEETS")[1]
-    ns = _row(inc, "Net sales")
-    ct = _row(brand, "Contract") or _row(brand, "B&M Contract")
-    fern = _row(brand, "Fernhollow") or [0.0] * len(ct)
-    dep = _row(bs, "Customer deposits")
-    return dict(key="FY%d Q%d" % (fy, fq), fy=fy, fq=fq, weeks=weeks, end=end, ns=ns, ct=ct, fern=fern, dep=dep)
-
-
-def read_releases(tgt):
-    rel = {}
-    for f in sorted(os.listdir(tgt)):
-        if f.startswith("bmh_8k_ex99-1_"):
-            r = read_release(os.path.join(tgt, f))
-            r["file"] = f
-            rel[r["key"]] = r
-    rows, dep = [], {}
-    for k, r in rel.items():
-        q_ns = r["ns"][0] / 1000.0
-        if r["fq"] < 4:
-            ct, fern = r["ct"][0] / 1000.0, r["fern"][0] / 1000.0
-        else:
-            q3 = rel["FY%d Q3" % r["fy"]]
-            ct = (r["ct"][0] - q3["ct"][2]) / 1000.0
-            fern = (r["fern"][0] - q3["fern"][2]) / 1000.0
-        rows.append(dict(fiscal_quarter=k, period_end=r["end"], weeks=r["weeks"],
-                         period_start=r["end"] - pd.Timedelta(days=7 * r["weeks"] - 1), net_sales=q_ns,
-                         contract=round(ct, 3), fern=round(fern, 3), release=r["file"]))
-        dep[k] = r["dep"][0] / 1000.0
-        if k == "FY2021 Q1":
-            dep["FY2020 Q4"] = r["dep"][1] / 1000.0
-    res = pd.DataFrame(rows).sort_values("period_end").reset_index(drop=True)
-    last = res.iloc[-1]
-    res.loc[len(res)] = dict(fiscal_quarter=TQ, period_end=last.period_end + pd.Timedelta(days=91), weeks=13,
-                             period_start=last.period_end + pd.Timedelta(days=1), net_sales=np.nan, contract=np.nan,
-                             fern=np.nan, release="")
-    return res, dep, rel
-
-
-def read_regions(path):
-    txt = subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout
-    block = txt.split("Net sales by brand and region")[1].split("Acquisition")[0]
-    years = [int(y) for y in re.findall(r"Fiscal (\d{4})", block)]
-    reg = pd.DataFrame({"fiscal_year": ["FY%d" % y for y in years]})
-    for r in REGIONS:
-        m = re.search(r"^\s*%s\s+([\d,\.\s]+)$" % r, block, re.M)
-        reg[r] = [float(x.replace(",", "")) for x in m.group(1).split()][:len(years)]
-    return reg
-
-
+# ------------------------------------------------------------------------------------------------------ loading
 def load(tgt):
-    _CACHE.clear()
-    P = {}
-    P["results"], P["deposits"], P["releases"] = read_releases(tgt)
-    P["regions"] = read_regions(os.path.join(tgt, DC.F_FILING))
-    pan = pd.read_csv(os.path.join(tgt, PK.F_PANEL), dtype={"card_open_year": str})
-    pan["week_start"] = pd.to_datetime(pan.week_start)
-    codes = {c: norm_region(c) for c in pan.billing_region.unique()}
-    pan["billing_region"] = pan.billing_region.map(codes)
-    P["panel"] = pan
-    hist = pd.read_csv(os.path.join(tgt, PK.F_HIST))
-    hist["delivery_date"] = pd.to_datetime(hist.delivery_date)
-    hist["week_start"] = pd.to_datetime(hist.week_start)
-    P["hist"] = hist
-    P["desc"] = pd.read_csv(os.path.join(tgt, PK.F_DESC))
-    P["street"] = pd.read_csv(os.path.join(tgt, PK.F_STREET))
-    res = P["results"]
-    P["keys"] = list(res.fiscal_quarter)
-    P["qyear"] = {r.fiscal_quarter: r.period_start.year for r in res.itertuples()}
-    P["start"] = dict(zip(res.fiscal_quarter, res.period_start))
-    P["end"] = dict(zip(res.fiscal_quarter, res.period_end))
-    return P
+    P = lambda f: os.path.join(tgt, f)
+    Dd = {}
+    # settlement prices: one row per (day, delivery period), duplicates dropped
+    sp = defaultdict(dict)
+    for r in rows(P("nex_daily_settlement_2018_2026.csv")):
+        s, e = D(r["delivery_start"]), D(r["delivery_end"])
+        ks = list(range(mi(s.year, s.month), mi(e.year, e.month) + 1))
+        sp[D(r["trade_date"])][(r["product"], ks[0], len(ks))] = float(r["settlement_eur_mwh"])
+    Dd["settle"] = dict(sp)
+    Dd["sdays"] = sorted(sp)
+    # the risk system's curve
+    cv = defaultdict(dict)
+    for r in rows(P("hk_risk_curve_daily_2018_2026.csv")):
+        if r["curve_id"] != "HK_SYS":
+            continue
+        y, m = map(int, r["delivery_month"].split("-"))
+        cv[D(r["as_of"])][mi(y, m)] = float(r["forward_eur_mwh"])
+    Dd["curve"] = dict(cv)
+    # notices
+    Dd["notices"] = [(D(r["effective_date"]), CLS[r["product_class"]], float(r["margin_eur_per_mwh"]))
+                     for r in rows(P("nex_margin_parameters_2018_2026.csv"))]
+    # statements (the restated line replaces the superseded one)
+    st = {}
+    for r in rows(P("nex_clearing_statements_2018_2026.csv")):
+        if r["status"] == "superseded":
+            continue
+        st[D(r["statement_date"])] = {k: float(r[k]) for k in ("variation_margin", "delivery_settlement",
+                                                               "initial_margin_requirement", "initial_margin_change",
+                                                               "net_cash_to_nex")}
+    Dd["stmt"] = st
+    # month-end positions, spread to delivery months
+    pos = defaultdict(dict)
+    for r in rows(P("nex_positions_month_end_2017_2026.csv")):
+        s, e = D(r["delivery_start"]), D(r["delivery_end"])
+        for k in range(mi(s.year, s.month), mi(e.year, e.month) + 1):
+            pos[D(r["month_end"])][k] = pos[D(r["month_end"])].get(k, 0.0) + float(r["position_mw"])
+    Dd["pos"] = dict(pos)
+    # trade capture: the last state of each trade; cancelled trades out, rebooked ones in
+    tr = {}
+    for r in rows(P("hk_trade_capture_2018_2026.csv")):
+        tid = r["trade_id"]
+        if r["status"] == "CANCEL":
+            tr.pop(tid, None)
+            continue
+        con = r["contract"]
+        y = int(con[5:]) if con.startswith("NSBY ") else 2000 + int(con[-2:])
+        q = float(r["quantity"])
+        mw = q / hours_year(y) if r["unit"] == "MWh" else q
+        tr[tid] = (D(r["trade_date"]), y, -mw if r["side"] == "SELL" else mw, float(r["price_eur_mwh"]))
+    Dd["trades"] = sorted(tr.values())
+    # hydrology
+    hy = []
+    for r in rows(P("hk_hydrology_weekly_2017_2026.csv")):
+        hy.append(dict(week=D(r["week_start"]), iso=r["iso_week"], inflow=float(r["inflow_gwh"]) if r["inflow_gwh"] else None,
+                       storage=float(r["storage_gwh"]), normal_inflow=float(r["normal_inflow_gwh"]),
+                       normal_pct=float(r["normal_storage_pct"]), pct=float(r["storage_pct"])))
+    Dd["hydro"] = hy
+    # plant output
+    po = defaultdict(lambda: defaultdict(float))
+    for r in rows(P("hk_plant_output_monthly_2017_2026.csv")):
+        y, m = map(int, r["month"].split("-"))
+        po[mi(y, m)][r["plant_type"]] += float(r["output_mwh"])
+    Dd["plant"] = {k: dict(v) for k, v in po.items()}
+    # sales ledger
+    led = []
+    for r in rows(P("hk_sales_ledger_2018_2026.csv")):
+        led.append(r)
+    Dd["ledger"] = led
+    # day-ahead (system price for every calendar day)
+    da, spot = {}, {}
+    for r in rows(P("nex_dayahead_settlements_2018_2026.csv")):
+        c = D(r["delivery_date"])
+        spot[c] = float(r["system_price_eur_mwh"])
+        da[c] = (float(r["sold_mwh"]) - float(r["bought_mwh"]), float(r["net_amount_eur"]), D(r["settlement_date"]))
+    Dd["da"], Dd["spot"] = da, spot
+    # budgets
+    wb = load_workbook(P("hk_budget_vintages_2016_2026.xlsx"), data_only=True)
+    bud = []
+    for r in list(wb["Budget vintages"].iter_rows(values_only=True))[1:]:
+        s = r[0].date() if isinstance(r[0], dt.datetime) else r[0]
+        bud.append((s, int(r[1]), float(r[2]), float(r[3]) * 1e3))
+    Dd["bud"] = bud
+    # supply contracts and profiles
+    wb = load_workbook(P("hk_supply_contracts_register.xlsx"), data_only=True)
+    reg = list(wb["Supply contracts"].iter_rows(values_only=True))[1:]
+    Dd["register"] = reg
+    prof = list(wb["Profiles"].iter_rows(values_only=True))[1:]
+    Dd["retail_prof"] = [float(r[1]) for r in prof]
+    Dd["loss_prof"] = [float(r[2]) for r in prof]
+    # policy ladder
+    doc = Document(P("hk_hedging_policy_2025.docx"))
+    lad = []
+    for row in doc.tables[0].rows[1:]:
+        c = [x.text for x in row.cells]
+        tau = 0.0 if "started" in c[0] else int(re.match(r"(\d+)", c[0]).group(1)) / 12.0
+        lad.append((tau, int(re.match(r"(\d+)", c[1]).group(1)) / 100.0, int(re.match(r"(\d+)", c[2]).group(1)) / 100.0))
+    Dd["ladder"] = sorted(lad)
+    lic = pdftext(P("hallingvass_regulation_licence_extract.pdf"))
+    Dd["floor"] = float(re.search(r"below\s+([\d,]+)\s+GWh", lic).group(1).replace(",", ""))
+    Dd["capacity"] = float(re.search(r"hold\s+([\d,]+)\s+GWh", lic).group(1).replace(",", ""))
+    std = pdftext(P("hk_liquidity_standard_2026.pdf"))
+    Dd["rounding"] = float(re.search(r"next EUR\s+(\d+)\s+million", std).group(1)) * 1e6
+    Dd["facility_2026"] = float(re.search(r"committed for 2026 is EUR\s+(\d+)\s+million", std).group(1)) * 1e6
+    return Dd
 
 
-_CACHE = {}
+# ------------------------------------------------------------------------------------------------------ prices
+def front_price_series(Dd, days):
+    """front contract settlement price per class per day, and the same contract's daily log return."""
+    px = {t: np.zeros(len(days)) for t in "MQY"}
+    ret = {t: np.zeros(len(days)) for t in "MQY"}
+    prevmap = None
+    for i, d in enumerate(days):
+        fm = C.front_months(d)
+        today = Dd["settle"][d]
+        for t, name in (("M", "Base Month"), ("Q", "Base Quarter"), ("Y", "Base Year")):
+            key = (name, fm[t][0], len(fm[t]))
+            px[t][i] = today[key]
+            if prevmap is not None and key in prevmap:
+                ret[t][i] = math.log(today[key] / prevmap[key])
+        prevmap = today
+    return px, ret
 
 
-def res_of(P, k, col):
-    return float(P["results"].set_index("fiscal_quarter")[col][k])
-
-
-def prev_q(P, k):
-    keys = P["keys"]
-    i = keys.index(k)
-    return keys[i - 1] if i > 0 else "FY2020 Q4"
-
-
-def weeks_of(P, k):
-    return res_of(P, k, "weeks")
-
-
-# ------------------------------------------------------------------------------------------- the immature weeks
-def completion_factors(P, stat="median", last_n=None):
-    """each issuer's first-delivered share of a week's final spend at lags 0, 1 and 2: the week as first delivered
-    against the same week three or more weeks later, over the delivery history"""
-    h = P["hist"]
-    dels = sorted(h.delivery_date.unique())
-    if last_n:
-        dels = dels[-last_n - 3:]
-    f = {}
-    for d in dels:
-        g0 = h[h.delivery_date == d]
-        for iss, g in g0.groupby("issuer_code"):
-            for wk in g.week_start:
-                lag = (pd.Timestamp(d) - wk).days // 7 - 1          # lag 0: the week ended two days before delivery
-                if lag not in (0, 1, 2):
-                    continue
-                later = h[(h.issuer_code == iss) & (h.week_start == wk) & (h.delivery_date >= d + pd.Timedelta(days=21))]
-                if later.empty:
-                    continue
-                fin = later.sort_values("delivery_date").spend_usd.iloc[-1]
-                f.setdefault((iss, lag), []).append(float(g[g.week_start == wk].spend_usd.iloc[0]) / fin)
-    agg = np.median if stat == "median" else np.mean
-    return {k: float(agg(v)) for k, v in f.items()}
-
-
-# ------------------------------------------------------------------------------------- the reporting entity
-LICENSED = "HOLLISTERS|CAFE"
-CUSTOM = "DESIGN STUDIO|CUSTOM"
-
-
-def excluded_share(P):
-    """the licensed shop-in-shops' and cafes' share of the brand merchant id's spend, by month"""
-    b = P["desc"][P["desc"].merchant_id == "M0412"].copy()
-    b["out"] = b.descriptor.str.contains(LICENSED, regex=True)
-    tot = b.groupby("month").spend_usd.sum()
-    return b[b.out].groupby("month").spend_usd.sum().reindex(tot.index).fillna(0) / tot
-
-
-def quarter_of(P, weeks):
-    out = pd.Series(index=weeks.index, dtype=object)
-    for r in P["results"].itertuples():
-        out[(weeks >= r.period_start) & (weeks <= r.period_end)] = r.fiscal_quarter
+def rate_series_from_notices(Dd, days):
+    out = {t: np.zeros(len(days)) for t in "MQY"}
+    nts = sorted(Dd["notices"])
+    for t in "MQY":
+        cur, j, lst = None, 0, [x for x in nts if x[1] == t]
+        for i, d in enumerate(days):
+            while j < len(lst) and lst[j][0] <= d:
+                cur = lst[j][2]
+                j += 1
+            out[t][i] = cur
     return out
 
 
-def panel_entity(P, cf, complete=True, exclude=True, share_scale=1.0):
-    """the reporting entity's panel spend: the brand id less the licensed shops and cafes, the site, and Fernhollow
-    from its acquisition; the latest weeks completed by each issuer's completion factors"""
-    key = ("entity", id(cf) if cf else None, tuple(sorted(cf.items())) if cf else None, complete, exclude, share_scale)
-    if key in _CACHE:
-        return _CACHE[key]
-    pan = P["panel"].copy()
-    if exclude:
-        sh = excluded_share(P) * share_scale
-        mon = pan.week_start.dt.to_period("M").astype(str)
-        keep = np.where(pan.merchant_id == "M0412", 1 - mon.map(sh).fillna(0).values, 1.0)
-        pan["spend_usd"] = pan.spend_usd * keep
-    pan = pan[(pan.merchant_id != "M2290") | (pan.week_start >= ACQUIRED)].copy()
-    if complete and cf:
-        last = pan.week_start.max()
-        lag = ((last - pan.week_start).dt.days // 7).clip(upper=3)
-        fac = np.array([cf.get((i, l), 1.0) if l < 3 else 1.0 for i, l in zip(pan.issuer_code, lag)])
-        pan["spend_usd"] = pan.spend_usd / fac
-    pan["fq"] = quarter_of(P, pan.week_start).values
-    pan.attrs["tok"] = len(_CACHE) + 1
-    _CACHE[key] = pan
-    return pan
+def infer_rule(Dd):
+    """the look-back, quantile, tolerance and review day that reproduce every notice from the settlement prices."""
+    days = [d for d in Dd["sdays"] if d >= dt.date(2018, 1, 2)]
+    px, ret = front_price_series(Dd, days)
+    eff = [x for x in Dd["notices"] if x[0] > dt.date(2018, 1, 2)]
+    wds = [d.weekday() for d, t, r in eff]
+    review_wd = (max(set(wds), key=wds.count) - 1) % 7
+    changes = []
+    for t in "MQY":
+        lst = sorted(x for x in Dd["notices"] if x[1] == t)
+        changes += [abs(b[2] / a[2] - 1) for a, b in zip(lst, lst[1:])]
+    # the smallest change, read through the two-decimal rounding of published rates
+    band = max(b for b in (0.05, 0.10, 0.15, 0.20) if b <= min(changes) + 0.006)
+    obs = rate_series_from_notices(Dd, days)
+    best = None
+    for look in (60, 120, 125, 250, 252, 500):
+        for q in (0.95, 0.975, 0.98, 0.985, 0.99, 0.995):
+            start = {t: obs[t][0] for t in "MQY"}
+            r, _ = C.rule_rates(days, px, ret, look, q, band, review_wd, start)
+            # compare from the second year, once the window is full of the file's own days
+            sel = slice(260, None)
+            err = sum(float(np.mean(np.abs(r[t][sel] / obs[t][sel] - 1))) for t in "MQY")
+            if best is None or err < best[0]:
+                best = (err, look, q)
+    return dict(look=best[1], q=best[2], band=band, review_wd=review_wd, fit_error=best[0])
 
 
-# ------------------------------------------------------------------------------- the panel's issuers and their books
-def card_series(P):
-    """each issuer's panel cards by billing region and week (cards are repeated on each merchant row)"""
-    if "cards" not in _CACHE:
-        pan = P["panel"]
-        c = pan.drop_duplicates(["week_start", "issuer_code", "billing_region", "card_open_year"])
-        _CACHE["cards"] = c.groupby(["issuer_code", "billing_region", "week_start"]).panel_cards.sum()
-    return _CACHE["cards"]
+# ------------------------------------------------------------------------------------------------------ the desk
+def budget_fns(bud):
+    def px(d, y):
+        return max(((s, p) for (s, yy, p, g) in bud if yy == y and s <= d), key=lambda x: x[0])[1]
+
+    def gen(d, y):
+        return max(((s, g) for (s, yy, p, g) in bud if yy == y and s <= d), key=lambda x: x[0])[1]
+    return px, gen
 
 
-def reissues(P, jump=JUMP):
-    """weeks in which an issuer's cards in a region rose by more than `jump` over four weeks, outside the issuer's first
-    eight weeks: a book of accounts re-issued under the issuer's codes"""
-    return reissue_flags(P, jump)[0]
+def smelter(Dd):
+    r = next(x for x in Dd["register"] if x[0] == "Fjordal Aluminium AS")
+    mw = float(re.match(r"([\d.]+)\s*MW", r[4]).group(1))
+    price = float(re.search(r"EUR\s+([\d.]+)", r[5]).group(1))
+    y0 = (r[2].date() if isinstance(r[2], dt.datetime) else r[2]).year
+    y1 = (r[3].date() if isinstance(r[3], dt.datetime) else r[3]).year
+    return mw, price, y0, y1
 
 
-def reissue_flags(P, jump=JUMP):
-    """the re-issued books' weeks by issuer, and by issuer and region"""
-    key = ("reissues", jump)
-    if key not in _CACHE:
-        cs = card_series(P)
-        out, by_reg = {}, {}
-        for (iss, reg), s in cs.groupby(level=[0, 1]):
-            s = s.droplevel([0, 1]).sort_index()
-            r4 = s / s.shift(4) - 1
-            hit = r4[(r4 > jump) & (np.arange(len(r4)) >= 8)]
-            for wk in hit.index:
-                out.setdefault(iss, set()).add(pd.Timestamp(wk))
-                by_reg.setdefault((iss, reg), set()).add(pd.Timestamp(wk))
-        _CACHE[key] = ({k: sorted(v) for k, v in out.items()}, {k: sorted(v) for k, v in by_reg.items()})
-    return _CACHE[key]
+def fixed_phys_fn(Dd, count=True):
+    mw, price, y0, y1 = smelter(Dd)
+    return (lambda y: mw * hours_year(y) if (count and y0 <= y <= y1) else 0.0)
 
 
-def issuers_for(P, sub, q, b, how, conv=True, jump=JUMP, book="issuer"):
-    """the issuers compared: every issuer (all), those reporting in every week of both quarters, less (conv) any issuer
-    whose cards took a re-issued book between the base quarter's start and the target quarter's end (book "issuer"),
-    or that ever took one (book "always"); books "region" and "newest" keep the issuer and set aside part of it later"""
-    if how == "all":
-        return sorted(sub.issuer_code.unique())
-    weeks = sub.groupby("fq").week_start.nunique()
-    cov = sub.groupby(["issuer_code", "fq"]).week_start.nunique().unstack()
-    keep = [i for i in cov.index if cov.loc[i].get(q, 0) == weeks.get(q, 0) and cov.loc[i].get(b, 0) == weeks.get(b, 0)]
-    if conv and book in ("issuer", "always"):
-        lo, hi = P["start"][b], P["end"][q]
-        rs = reissues(P, jump)
-        keep = [i for i in keep if not any((book == "always") or (lo <= wk <= hi) for wk in rs.get(i, []))]
-    return keep
+def curves_by_day(Dd, days):
+    return [Dd["curve"][d] for d in days]
 
 
-def set_aside(P, sc, q, b, jump=JUMP, book="region"):
-    """part of an issuer set aside for a re-issued book between the two quarters: the region whose cards jumped
-    (region), or the open years from the book's own year on in the target quarter and from the year before in the base
-    (newest)"""
-    lo, hi = P["start"][b], P["end"][q]
-    out = sc
-    if book == "region":
-        for (iss, reg), wks in reissue_flags(P, jump)[1].items():
-            if any(lo <= wk <= hi for wk in wks):
-                out = out[~((out.issuer_code == iss) & (out.billing_region == reg))]
-    elif book == "newest":
-        for iss, wks in reissue_flags(P, jump)[0].items():
-            w = [wk for wk in wks if lo <= wk <= hi]
-            if not w:
+def desk_history(Dd, theta, speed, rule="step", count=True):
+    """replays a candidate desk rule over 2018 to 2026 from the end-2017 book and returns its sales by week and year."""
+    days = [d for d in Dd["sdays"] if d >= dt.date(2018, 1, 2)]
+    bpx, bgen = budget_fns(Dd["bud"])
+    mw = {k: v for k, v in Dd["pos"][max(x for x in Dd["pos"] if x.year == 2017)].items()}
+    desk = C.make_desk(Dd["ladder"], bpx, bgen, fixed_phys_fn(Dd, count), rule, theta, speed)
+    sales = defaultdict(float)
+    for i, d in enumerate(days):
+        curve = Dd["curve"][d]
+        add = desk(i, d, curve, mw)
+        for k, dm in add.items():
+            mw[k] = mw.get(k, 0.0) + dm
+        for y in {mi_date(k).year for k in add}:
+            sales[(d, y)] += -add[year_months(y)[0]]
+        for k in [k for k in mw if mi_date(k + 1) <= d]:
+            mw.pop(k)
+    return dict(sales)
+
+
+def actual_sales(Dd):
+    s = defaultdict(float)
+    for d, y, mw, px in Dd["trades"]:
+        s[(d, y)] += -mw
+    return dict(s)
+
+
+def infer_desk(Dd):
+    act = actual_sales(Dd)
+    res = []
+    for th in [1.10 + 0.01 * j for j in range(31)]:
+        for sp in (0.02, 0.025, 0.03, 0.035, 0.04):
+            sim = desk_history(Dd, math.log(th), sp)
+            keys = set(act) | set(sim)
+            err = sum(abs(act.get(k, 0.0) - sim.get(k, 0.0)) for k in keys)
+            res.append((err, th, sp))
+    res.sort()
+    best = res[0][0]
+    ok = [r for r in res if r[0] <= best + 1e-6]
+    ths = sorted(r[1] for r in ok)
+    sp = ok[0][2]
+    # without the smelter's contract in the ratio no threshold reproduces the sales
+    alt = min(sum(abs(act.get(k, 0.0) - v.get(k, 0.0)) for k in set(act) | set(v))
+              for v in [desk_history(Dd, math.log(t), sp, count=False) for t in (1.15, 1.25, 1.35)])
+    return dict(theta_lo=ths[0], theta_hi=ths[-1], theta=0.5 * (ths[0] + ths[-1]), speed=sp, err=best,
+                err_without_smelter=alt, total_mw=sum(act.values()))
+
+
+# ------------------------------------------------------------------------------------------------------ the plants
+def weeks_by_iso(Dd):
+    return {(h["week"].isocalendar()[0], h["week"].isocalendar()[1]): h for h in Dd["hydro"]}
+
+
+def infer_plants(Dd):
+    """run-of-river share and cap from the run-of-river plants' monthly output; the reservoir plants' release policy
+    from the weekly storage balance against the normal storage curve; the floor from the licence."""
+    hy = Dd["hydro"]
+    best = None
+    for s in [0.20 + 0.005 * j for j in range(25)]:
+        for cap in range(40, 85, 5):
+            ror = defaultdict(float)
+            bad = set()
+            for h in hy:
+                for dd in range(7):
+                    c = h["week"] + dt.timedelta(days=dd)
+                    k = mi(c.year, c.month)
+                    if h["inflow"] is None:
+                        bad.add(k)
+                        continue
+                    ror[k] += min(s * h["inflow"], cap) / 7.0 * 1000.0
+            err = sum((ror[k] - v.get("run-of-river", 0.0)) ** 2 for k, v in Dd["plant"].items()
+                      if k in ror and k not in bad and k >= mi(2017, 2))
+            if best is None or err < best[0]:
+                best = (err, s, cap)
+    s, cap = best[1], best[2]
+    capacity = Dd["capacity"]
+    guide = {}
+    for h in hy:
+        n = min(h["week"].isocalendar()[1], 52)
+        guide[n] = h["normal_pct"] / 100.0 * capacity
+    ninfl = {}
+    for h in hy:
+        ninfl[min(h["week"].isocalendar()[1], 52)] = h["normal_inflow"]
+    plan = {}
+    for n in range(1, 53):
+        prev = guide[n - 1] if n > 1 else guide[52]
+        plan[n] = (1 - s) * ninfl[n] - (guide[n] - prev)
+    # release by week from the storage balance, and its response to storage against normal
+    xs, ys = [], []
+    for a, b in zip(hy, hy[1:]):
+        if b["inflow"] is None or b["storage"] >= capacity - 0.5 or b["storage"] <= Dd["floor"] + 0.5:
+            continue
+        n = min(b["week"].isocalendar()[1], 52)
+        rel = a["storage"] + (1 - s) * b["inflow"] - b["storage"]
+        xs.append(a["storage"] / guide[n] - 1)
+        ys.append(rel / plan[n])
+    xs, ys = np.array(xs), np.array(ys)
+    hi = float(np.max(ys))
+    inner = ys < hi - 0.01
+    # release falls in a straight line with storage below normal; the licence floor is the only lower limit
+    slope = float(np.sum(xs[inner] * (ys[inner] - 1)) / np.sum(xs[inner] ** 2))
+    lo = 0.0
+    return dict(ror_share=s, ror_cap=cap, plan=plan, guide=guide, slope=slope, lo=lo, hi=hi, floor=Dd["floor"],
+                capacity=capacity, normal_inflow=ninfl)
+
+
+def plant_run(pm, inflow, lev0, wnum):
+    lev = lev0
+    out, levs = [], []
+    for infl, n in zip(inflow, wnum):
+        ror = min(pm["ror_share"] * infl, pm["ror_cap"])
+        to_res = (1 - pm["ror_share"]) * infl
+        mult = min(max(1 + pm["slope"] * (lev / pm["guide"][n] - 1), pm["lo"]), pm["hi"])
+        rel = min(pm["plan"][n] * mult, max(0.0, lev + to_res - pm["floor"]))
+        lev = min(lev + to_res - rel, pm["capacity"])
+        out.append(ror + rel)
+        levs.append(lev)
+    return np.array(out), np.array(levs)
+
+
+# ------------------------------------------------------------------------------------------------------ customers
+def monthly_spot(spot):
+    acc = defaultdict(list)
+    for c, v in spot.items():
+        acc[mi(c.year, c.month)].append(v)
+    return {k: float(np.mean(v)) for k, v in acc.items()}
+
+
+def invoices_of(Dd, cu_key):
+    out = []
+    for r in Dd["ledger"]:
+        if r["doc_type"] != "INV" or CUSTOMERS[r["customer"]] != cu_key:
+            continue
+        y, m = map(int, r["period"].split("-"))
+        out.append(dict(k=mi(y, m), px=float(r["price_eur_mwh"]), mwh=float(r["mwh"]), amt=float(r["amount_eur"]),
+                        doc=D(r["doc_date"]), paid=D(r["paid_date"]) if r["paid_date"] else None))
+    return out
+
+
+def infer_affiliate(Dd):
+    spm = monthly_spot(Dd["spot"])
+    inv = [x for x in invoices_of(Dd, "AFFILIATE") if x["k"] >= mi(2019, 3)]
+    best = None
+    k0 = min(spm)
+    for win in range(1, 25):
+        for lag in range(0, 5):
+            use = [i for i in inv if i["k"] - lag - win + 1 >= k0]
+            if len(use) < 36:
                 continue
-            y = min(wk.year for wk in w)
-            yr = pd.to_numeric(out.card_open_year.str.replace("<=", "", regex=False), errors="coerce")
-            drop = (out.issuer_code == iss) & (((out.fq == q) & (yr >= y)) | ((out.fq == b) & (yr >= y - 1)))
-            out = out[~drop]
-    return out
+            err = max(abs(np.mean([spm[x] for x in range(i["k"] - lag - win + 1, i["k"] - lag + 1)]) - i["px"]) for i in use)
+            if best is None or err < best[0]:
+                best = (err, win, lag)
+    spot_err = max(abs(spm[i["k"]] - i["px"]) / i["px"] for i in inv)
+    return dict(window=best[1], lag=best[2], max_abs_err=best[0], spot_max_rel_err=spot_err)
 
 
-# ------------------------------------------------------------------------------------------------ growth on the panel
-def regional(P, pan, q, b, how="per_card", issuers="const", conv=True, fern_ok=True, jump=JUMP, book="issuer"):
-    """year-on-year growth of quarter q over quarter b (weekly averages) by billing region, and the base quarter's
-    panel spend by region. how: per_card (spend per open card, pooled over the issuers), lfl (spend per open card issuer
-    by issuer, weighted by the base quarter's spend), same_age (each open year against the open year one later, on the
-    base quarter's cards), total (spend)"""
-    key = ("regional", pan.attrs.get("tok"), q, b, how, issuers, conv, fern_ok, jump, book)
-    if key in _CACHE:
-        return _CACHE[key]
-    sub = pan[pan.fq.isin([q, b])]
-    if not fern_ok:
-        sub = sub[sub.merchant_id != "M2290"]
-    n = {k: sub[sub.fq == k].week_start.nunique() for k in (q, b)}
-    keep = issuers_for(P, sub, q, b, issuers, conv, jump, book)
-    sc = sub[sub.issuer_code.isin(keep)]
-    if conv and book in ("region", "newest"):
-        sc = set_aside(P, sc, q, b, jump, book)
-    s = sc.groupby(["fq", "billing_region"]).spend_usd.sum()
-    pw = {r: float(s[b][r]) for r in REGIONS}
+def infer_lags(Dd):
     out = {}
-    if how == "total":
-        out = {r: (s[q][r] / n[q]) / (s[b][r] / n[b]) - 1 for r in REGIONS}
-    else:
-        cards = sc.drop_duplicates(["week_start", "issuer_code", "billing_region", "card_open_year"])
-        if how == "per_card":
-            c = cards.groupby(["fq", "billing_region"]).panel_cards.sum()
-            out = {r: (s[q][r] / c[q][r]) / (s[b][r] / c[b][r]) - 1 for r in REGIONS}
-        elif how == "lfl":
-            si = sc.groupby(["fq", "billing_region", "issuer_code"]).spend_usd.sum()
-            ci = cards.groupby(["fq", "billing_region", "issuer_code"]).panel_cards.sum()
-            for r in REGIONS:
-                num = den = 0.0
-                for i in keep:
-                    if (r, i) not in si[b].index or (r, i) not in si[q].index:
-                        continue
-                    num += si[b][(r, i)] * (si[q][(r, i)] / ci[q][(r, i)]) / (si[b][(r, i)] / ci[b][(r, i)])
-                    den += si[b][(r, i)]
-                out[r] = num / den - 1
-        elif how == "same_age":
-            A = cards.groupby(["fq", "billing_region", "card_open_year"]).panel_cards.sum()
-            S = sc.groupby(["fq", "billing_region", "card_open_year"]).spend_usd.sum()
-            dy = P["qyear"][q] - P["qyear"][b]
-
-            def older(y, d):
-                if y.startswith("<="):
-                    return y
-                v = int(y) + d
-                return "<=%d" % PK.OLDEST if v <= PK.OLDEST else str(v)
-            for r in REGIONS:
-                num = den = 0.0
-                for (rr, y), ab in A[b].items():
-                    y2 = older(y, dy) if not y.startswith("<=") else y
-                    if rr != r or ab <= 0 or (r, y2) not in A[q].index:
-                        continue
-                    num += ab * S[q][(r, y2)] / A[q][(r, y2)]
-                    den += S[b][(r, y)]
-                out[r] = num / den - 1
-    _CACHE[key] = (out, pw)
-    return out, pw
-
-
-def company_weights(P, fy):
-    row = P["regions"][P["regions"].fiscal_year == fy].iloc[0]
-    v = np.array([row[r] for r in REGIONS], dtype=float)
-    return dict(zip(REGIONS, v / v.sum()))
-
-
-def rolled_weights(P, fy):
-    """fiscal year fy's regional mix rolled forward one year by each region's growth in fy"""
-    reg = P["regions"].set_index("fiscal_year")
-    prev = "FY%d" % (int(fy[2:]) - 1)
-    if prev not in reg.index:
-        return company_weights(P, fy)
-    v = np.array([reg.loc[fy, r] ** 2 / reg.loc[prev, r] for r in REGIONS])
-    return dict(zip(REGIONS, v / v.sum()))
-
-
-def growth(P, pan, q, b, how="per_card", mix="company", fern_ok=True, wfy=None, issuers="const", conv=True, jump=JUMP,
-           book="issuer"):
-    """card-visible growth of q over b: regional growth at the company's prior-year mix (or the panel's own)"""
-    rg, pw = regional(P, pan, q, b, how, issuers, conv, fern_ok, jump, book)
-    if mix == "company":
-        w = company_weights(P, wfy or "FY%d" % (int(q[2:6]) - 1))
-    elif mix == "rolled":
-        w = rolled_weights(P, wfy or "FY%d" % (int(q[2:6]) - 1))
-    else:
-        t = sum(pw.values())
-        w = {r: pw[r] / t for r in REGIONS}
-    return sum(rg[r] * w[r] for r in REGIONS)
-
-
-# ------------------------------------------------------------------------------ the company's quarters
-def fern_both(P, q, b):
-    return P["start"][q] >= ACQUIRED and P["start"][b] >= ACQUIRED
-
-
-def net_sales(P, k, fern_ok=True):
-    v = res_of(P, k, "net_sales")
-    return v - (0.0 if fern_ok else res_of(P, k, "fern"))
-
-
-def contract(P, k):
-    return res_of(P, k, "contract")
-
-
-def retail(P, k, fern_ok=True):
-    return net_sales(P, k, fern_ok) - contract(P, k)
-
-
-def payments(P, k, fern_ok=True):
-    """what retail customers paid in the quarter: retail net sales plus the change in customer deposits"""
-    return retail(P, k, fern_ok) + P["deposits"][k] - P["deposits"][prev_q(P, k)]
-
-
-def organic_growth(P, q, b, fern_in_both):
-    """reported net sales growth of q over b, weekly averages, Fernhollow taken out unless consolidated in both"""
-    return (net_sales(P, q, fern_in_both) / weeks_of(P, q)) / (net_sales(P, b, fern_in_both) / weeks_of(P, b)) - 1
-
-
-def ct_hat(P, q, rule="median8"):
-    """contract sales for quarter q from the quarters reported before it"""
-    keys = P["keys"]
-    i = keys.index(q)
-    hist = [contract(P, k) for k in keys[max(0, i - 8):i]]
-    if rule == "median8":
-        return float(np.median(hist))
-    if rule == "median4":
-        return float(np.median(hist[-4:]))
-    if rule == "mean4":
-        return float(np.mean(hist[-4:]))
-    if rule == "mean8":
-        return float(np.mean(hist))
-    if rule == "last_year":
-        return contract(P, keys[i - 4])
-    raise ValueError(rule)
-
-
-# ----------------------------------------------------------------------------------- revenue on delivery
-def banner_profile(P, pan, q):
-    """the panel's weekly spend at the brand's ids (stores and site, not Fernhollow) over quarter q's weeks, on the
-    issuers present in every week of it, as shares of the quarter"""
-    key = ("profile", pan.attrs.get("tok"), q)
-    if key not in _CACHE:
-        sub = pan[(pan.fq == q) & (pan.merchant_id != "M2290")]
-        nw = sub.week_start.nunique()
-        cov = sub.groupby("issuer_code").week_start.nunique()
-        wk = sub[sub.issuer_code.isin(cov[cov == nw].index)].groupby("week_start").spend_usd.sum().sort_index()
-        _CACHE[key] = (wk / wk.sum()).values
-    return _CACHE[key]
-
-
-def trailing(profile, L):
-    """the share of a quarter's payments made in its last L weeks (L fractional)"""
-    v = profile[::-1]
-    n = int(np.floor(L))
-    fr = L - n
-    return float(v[:n].sum() + (fr * v[n] if n < len(v) else 0.0))
-
-
-def custom_share(P, q, days=56):
-    """the custom-order share of the brand's panel spend over the last `days` of quarter q, from the monthly descriptor
-    detail (months weighted by their days in the window): the design studios and the site's custom orders against the
-    brand ids less the licensed shops and cafes"""
-    key = ("custom", q, days)
-    if key not in _CACHE:
-        d = P["desc"]
-        end = P["end"][q]
-        win = pd.date_range(end - pd.Timedelta(days=days - 1), end, freq="D")
-        wts = pd.Series(1.0, index=win).groupby(win.strftime("%Y-%m")).sum()
-        b = d[d.merchant_id.isin(["M0412", "M0413"]) & ~d.descriptor.str.contains(LICENSED, regex=True)]
-        b = b[b.month.isin(wts.index)]
-        mt = b[b.descriptor.str.contains(CUSTOM, regex=True)].groupby("month").spend_usd.sum()
-        al = b.groupby("month").spend_usd.sum()
-        w_ = pd.Series({m: wts[m] / pd.Period(m).days_in_month for m in wts.index})
-        _CACHE[key] = float((mt.reindex(w_.index).fillna(0) * w_).sum() / (al.reindex(w_.index).fillna(0) * w_).sum())
-    return _CACHE[key]
-
-
-def deposit_weeks(P, k):
-    """customer deposits at the quarter's end in weeks of the brand's payments that quarter"""
-    return P["deposits"][k] / (payments(P, k, False) / weeks_of(P, k))
-
-
-DEP_DAYS = {"mto": 56, "mto_7w": 49, "mto_9w": 63, "mto_q": 91}
-
-
-def convert(P, q, b, x, fern_ok, rule="mto", pan=None):
-    """net sales growth of q over b (retail, contract aside) from payments growth x: payments rebuilt from b's, the
-    deposits at q's end estimated, net sales the payments less the change in deposits. Rules: mto (last year's deposits
-    scaled by the brand's payments, the share of them in the last eight weeks and the custom-order share of those
-    weeks; mto_7w, mto_9w and mto_q the same over seven weeks, nine weeks and the whole quarter), ratio (last year's
-    deposits scaled by the payments), flat (the deposits' change a year earlier scaled by the payments, which is what
-    growing last year's net sales at the payments' rate assumes), none (net sales grow with the payments)"""
-    wq, wb = weeks_of(P, q), weeks_of(P, b)
-    if rule == "none":
-        rq = retail(P, b, fern_ok) / wb * (1 + x) * wq
-        return (rq / wq) / (retail(P, b, fern_ok) / wb) - 1, dict(rev_q=rq, dep_change=None, pay_q=None, dep_q=None)
-    pay_b = payments(P, b, fern_ok)
-    pay_q = pay_b / wb * (1 + x) * wq
-    bshare = payments(P, b, False) / pay_b
-    bp_q, bp_b = pay_q * bshare, payments(P, b, False)
-    q1 = prev_q(P, q)
-    dep_b = P["deposits"][b]
-    if rule in DEP_DAYS:
-        L = DEP_DAYS[rule] / 7.0
-        tq = trailing(banner_profile(P, pan, q), L)
-        tb = trailing(banner_profile(P, pan, b), L)
-        dep_q = dep_b * (bp_q * tq * custom_share(P, q, DEP_DAYS[rule])) / (bp_b * tb * custom_share(P, b, DEP_DAYS[rule]))
-    elif rule == "ratio":
-        dep_q = dep_b * bp_q / bp_b
-    elif rule == "flat":
-        dep_q = P["deposits"][q1] + (dep_b - P["deposits"][prev_q(P, b)]) * bp_q / bp_b
-    else:
-        raise ValueError(rule)
-    chg = dep_q - P["deposits"][q1]
-    rev_q = pay_q - chg
-    return (rev_q / wq) / (retail(P, b, fern_ok) / wb) - 1, dict(pay_q=pay_q, dep_change=chg, rev_q=rev_q, dep_q=dep_q)
-
-
-def to_total(P, q, b, g_ret, fern_ok, ct):
-    """net sales growth of q over b: retail from its growth, contract from its run rate (ct), or the retail growth
-    applied to all of net sales (ct None)"""
-    if not ct:
-        return g_ret
-    wq, wb = weeks_of(P, q), weeks_of(P, b)
-    tot_q = retail(P, b, fern_ok) / wb * (1 + g_ret) * wq + ct_hat(P, q, ct)
-    return (tot_q / wq) / (net_sales(P, b, fern_ok) / wb) - 1
-
-
-def origins_of(P, first="FY2022 Q1", last=None):
-    keys = P["keys"]
-    return keys[keys.index(first):(keys.index(last) + 1 if last else -1)]
-
-
-def route(P, pan, how="per_card", mix="company", issuers="const", conv=True, dep="mto", ct="median8", reg=False,
-          origins=None, wfy_lag=1, target=TQ, jump=JUMP, record_dep=None, book="issuer"):
-    """the route's growth for the target quarter and its rolling-origin record: at each past quarter the same method on
-    what was known then (the issuers and re-issued books seen by that quarter's end, the prior fiscal year's regional
-    mix, the deposits estimated, contract from the quarters before); with reg, reported growth regressed on the route
-    over the origins before it (six or more). record_dep: the deposits as later reported in the record (a look-ahead)"""
-    keys = P["keys"]
-    origins = origins or origins_of(P)
-    bq = keys[keys.index(target) - 4]
-    first_fy = int(P["regions"].fiscal_year.iloc[0][2:])
-    wfy = lambda q: "FY%d" % max(int(q[2:6]) - wfy_lag, first_fy)
-
-    def one(q, b, fo, dep_rule):
-        x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump, book)
-        g = x
-        if dep_rule:
-            g, _ = convert(P, q, b, x, fo, dep_rule, pan)
-        return x, to_total(P, q, b, g, fo, ct), g
-    fo_t = True
-    pay_t, xt, gt = one(target, bq, fo_t, dep)
-    if reg == "retail":
-        # reported retail growth (net sales less contract) regressed on the route's retail growth over the origins
-        # before the target; contract added at its run rate
-        rx, ry = [], []
-        errs = {}
-        for q in origins:
-            b = keys[keys.index(q) - 4]
-            fo = fern_both(P, q, b)
-            _, xq, gq = one(q, b, fo, dep)
-            yr = (retail(P, q, fo) / weeks_of(P, q)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
-            if len(rx) >= 6:
-                c = np.linalg.lstsq(np.column_stack([np.ones(len(rx)), rx]), ry, rcond=None)[0]
-                errs[q] = float(to_total(P, q, b, c[0] + c[1] * gq, fo, ct) - organic_growth(P, q, b, fo))
-            rx.append(float(gq))
-            ry.append(float(yr))
-        fit = np.linalg.lstsq(np.column_stack([np.ones(len(rx)), rx]), ry, rcond=None)[0]
-        g = float(to_total(P, target, bq, fit[0] + fit[1] * gt, fo_t, ct))
-        e = np.array(list(errs.values()))
-        rmse = float(np.sqrt(np.mean(e ** 2)))
-        asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
-        asof6 = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(6, len(e))]
-        return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=rx, ys=ry, fit=fit,
-                    origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
-                    inside_asof=int(sum(asof)), n_asof=len(asof), inside_asof6=int(sum(asof6)), n_asof6=len(asof6))
-    xs, ys, errs = [], [], {}
-    for q in origins:
-        b = keys[keys.index(q) - 4]
-        fo = fern_both(P, q, b)
-        if record_dep == "actual":
-            x = growth(P, pan, q, b, how, mix, fo, wfy(q), issuers, conv, jump, book)
-            rev = payments(P, b, fo) / weeks_of(P, b) * (1 + x) * weeks_of(P, q) - (
-                P["deposits"][q] - P["deposits"][prev_q(P, q)])
-            g = (rev / weeks_of(P, q)) / (retail(P, b, fo) / weeks_of(P, b)) - 1
-            x = to_total(P, q, b, g, fo, ct)
-        else:
-            _, x, _ = one(q, b, fo, dep)
-        y = organic_growth(P, q, b, fo)
-        if reg:
-            if len(xs) >= 6:
-                c = np.linalg.lstsq(np.column_stack([np.ones(len(xs)), xs]), ys, rcond=None)[0]
-                errs[q] = float(c[0] + c[1] * x - y)
-        else:
-            errs[q] = float(x - y)
-        xs.append(float(x))
-        ys.append(float(y))
-    fit = None
-    if reg:
-        fit = np.linalg.lstsq(np.column_stack([np.ones(len(xs)), xs]), ys, rcond=None)[0]
-        g = float(fit[0] + fit[1] * xt)
-    else:
-        g = float(xt)
-    e = np.array(list(errs.values()))
-    rmse = float(np.sqrt(np.mean(e ** 2)))
-    # the range as it could have been built at each quarter: the errors of the quarters before it (four or more)
-    asof = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(4, len(e))]
-    asof6 = [abs(e[i]) <= Z80 * float(np.sqrt(np.mean(e[:i] ** 2))) for i in range(6, len(e))]
-    return dict(growth=g, x=float(xt), pay_growth=float(pay_t), rmse=rmse, errs=errs, xs=xs, ys=ys, fit=fit,
-                origins=list(origins), inside=int(sum(abs(v) <= Z80 * rmse for v in e)), n=len(e),
-                inside_asof=int(sum(asof)), n_asof=len(asof), inside_asof6=int(sum(asof6)), n_asof6=len(asof6))
-
-
-def with_range(R, base):
-    g, b = R["growth"], Z80 * R["rmse"]
-    R.update(forecast=base * (1 + g), low=base * (1 + g - b), high=base * (1 + g + b), band=b)
-    return R
-
-
-def call_of(R, street):
-    return "short" if R["high"] < street else ("long" if R["low"] > street else "no position")
-
-
-# -------------------------------------------------------------------------------------------------------- the run
-def run(tgt):
-    P = load(tgt)
-    keys = P["keys"]
-    base = net_sales(P, BQ)
-    est = P["street"].q4_fy2025_net_sales_usd_m
-    street = float(np.mean(est))
-    cf = completion_factors(P)
-    pan = panel_entity(P, cf)
-    out = dict(P=P, cf=cf, pan=pan, base=base, street=street, street_median=float(np.median(est)),
-               street_n=int(len(est)))
-    # the base quarter rebuilt from the releases: contract and Fernhollow by subtraction, the deposits
-    q3fy24 = P["releases"]["FY2024 Q3"]
-    q4fy24 = P["releases"][BQ]
-    out.update(ct_fy2024=q4fy24["ct"][0] / 1000.0, ct_9m_fy2024=q3fy24["ct"][2] / 1000.0, ct_base=contract(P, BQ),
-               fern_base=res_of(P, BQ, "fern"), retail_base=retail(P, BQ), dep_base=P["deposits"][BQ],
-               dep_q3fy24=P["deposits"]["FY2024 Q3"], dep_q3=P["deposits"]["FY2025 Q3"],
-               pay_base=payments(P, BQ, True))
-    # the issuers: who reports in both quarters, and whose cards took a re-issued book
-    out["reissues"] = reissues(P)
-    sub = pan[pan.fq.isin([TQ, BQ])]
-    out["issuers_both"] = issuers_for(P, sub, TQ, BQ, "const", conv=False)
-    out["issuers_used"] = issuers_for(P, sub, TQ, BQ, "const", conv=True)
-    cs = card_series(P)
-    out["ks01_mw_cards"] = {str(k.date()): float(v) for k, v in cs[("KS-01", "Midwest")].items()
-                            if pd.Timestamp("2025-09-21") <= k <= pd.Timestamp("2025-11-16")}
-    # comparable growth by region, with and without KS-01's book, at the panel's mix and at the company's
-    rg, pw = regional(P, pan, TQ, BQ)
-    rg_in, _ = regional(P, pan, TQ, BQ, conv=False)
-    cw = company_weights(P, "FY2024")
-    tot = sum(pw.values())
-    out.update(regional=rg, regional_with_ks01=rg_in, company_w=cw, panel_w={r: pw[r] / tot for r in REGIONS},
-               g_idx=sum(rg[r] * cw[r] for r in REGIONS), g_pooled=sum(rg[r] * pw[r] / tot for r in REGIONS),
-               g_idx_with_ks01=sum(rg_in[r] * cw[r] for r in REGIONS))
-    # payments to net sales: the deposits at the quarter's end
-    g_ret, cv = convert(P, TQ, BQ, out["g_idx"], True, "mto", pan)
-    out.update(retail_growth=g_ret, retail_q4=cv["rev_q"], pay_q4=cv["pay_q"], dep_q4_est=cv["dep_q"],
-               dep_change=cv["dep_change"], dep_change_base=P["deposits"][BQ] - P["deposits"]["FY2024 Q3"],
-               custom_q=custom_share(P, TQ), custom_b=custom_share(P, BQ),
-               trail_q=trailing(banner_profile(P, pan, TQ), 8.0), trail_b=trailing(banner_profile(P, pan, BQ), 8.0),
-               dep_weeks={k: deposit_weeks(P, k) for k in keys[:-1]})
-    # contract at its run rate
-    out["ct_hat"] = ct_hat(P, TQ, "median8")
-    out["ct_hist"] = {k: contract(P, k) for k in keys[:-1]}
-    # the golden route, its record and range
-    G = with_range(route(P, pan), base)
-    out["golden"] = G
-    out["growth"] = G["growth"]
-    out["forecast"], out["range"] = G["forecast"], (G["low"], G["high"])
-    out["call"] = call_of(G, street)
-    # the entity and the immature weeks as figures
-    d = P["desc"]
-    days = pd.date_range(P["start"][TQ], P["end"][TQ], freq="D")
-    qm = sorted(set(days.strftime("%Y-%m")))
-    b = d[(d.merchant_id == "M0412") & d.month.isin(qm)]
-    out["excluded_months"] = qm
-    out["excluded_share"] = float(b[b.descriptor.str.contains(LICENSED, regex=True)].spend_usd.sum() / b.spend_usd.sum())
-    raw_c = panel_entity(P, cf, complete=False)
-    out["completion_uplift"] = float(pan[pan.fq == TQ].spend_usd.sum() / raw_c[raw_c.fq == TQ].spend_usd.sum() - 1)
-    out["cf_last_week"] = {k[0]: v for k, v in cf.items() if k[1] == 0}
-    out["bridge"], out["bridge_orders"] = bridge(out)
+    for cu in ("SMELTER", "PULP", "AFFILIATE", "GRID"):
+        d = [(i["paid"] - i["doc"]).days for i in invoices_of(Dd, cu) if i["paid"]]
+        out[cu] = float(np.median(d))
     return out
 
 
-PANEL_STEPS = ("the latest weeks completed", "the licensed shops and cafes taken out",
-               "issuers in every week of both quarters, spend per open card")
-COMPANY_STEPS = ("the company's regional mix", "KS-01's re-issued book taken out", "revenue on delivery",
-                 "contract at its run rate")
+def committed_fn(Dd):
+    mw_s = smelter(Dd)[0]
+    pulp = next(x for x in Dd["register"] if x[0] == "Nesbyen Treforedling AS")
+    mw_p = float(re.match(r"([\d.]+)\s*MW", pulp[4]).group(1))
+    aff = next(x for x in Dd["register"] if x[0] == "Hallingvass Straum AS")
+    gwh_a = float(re.match(r"([\d,.]+)\s*GWh", aff[4]).group(1).replace(",", ""))
+    grid = next(x for x in Dd["register"] if x[0] == "Bygdenett AS")
+    gwh_g = float(re.search(r"([\d,.]+)\s*GWh", grid[4]).group(1).replace(",", ""))
+    rp, lp = Dd["retail_prof"], Dd["loss_prof"]
+
+    def com(k):
+        h, m = month_hours(k), k % 12
+        return {"SMELTER": mw_s * h, "PULP": mw_p * h, "AFFILIATE": gwh_a * 1e3 * rp[m], "GRID": gwh_g * 1e3 * lp[m]}
+    return com
 
 
-def bridge(out):
-    """growth after each step from the delivered panel (every issuer, every merchant id, raw spend, the panel's own
-    regional mix) to net sales: the panel's three steps (KS-01 kept, the panel's own mix) and the company's four, in the
-    golden's order, and each step's worth under every order of its group"""
-    import itertools
-    P, cf = out["P"], out["cf"]
+def invoice_day(k):
+    d, cnt = mi_date(k + 1), 0
+    while True:
+        if C.is_bday(d):
+            cnt += 1
+            if cnt == 3:
+                return d
+        d += dt.timedelta(days=1)
 
-    def panel_state(S):
-        pan = panel_entity(P, cf, complete="the latest weeks completed" in S,
-                           exclude="the licensed shops and cafes taken out" in S)
-        lfl = "issuers in every week of both quarters, spend per open card" in S
-        rg, pw = regional(P, pan, TQ, BQ, "per_card" if lfl else "total", "const" if lfl else "all", False)
-        t = sum(pw.values())
-        return sum(rg[r] * pw[r] / t for r in REGIONS)
 
-    _, pw_in = regional(P, out["pan"], TQ, BQ, conv=False)
-    _, pw_ex = regional(P, out["pan"], TQ, BQ, conv=True)
+def pay_day(doc, lag):
+    d = doc + dt.timedelta(days=int(round(lag)))
+    while not C.is_bday(d):
+        d += dt.timedelta(days=1)
+    return d
 
-    def company_state(S):
-        conv = "KS-01's re-issued book taken out" in S
-        rg, pw = (out["regional"], pw_ex) if conv else (out["regional_with_ks01"], pw_in)
-        if "the company's regional mix" in S:
-            w = out["company_w"]
+
+# ------------------------------------------------------------------------------------------------------ the replay
+def opening(Dd, rule, lags, aff, year_end=dt.date(2026, 12, 30)):
+    """the state the stress year starts from, read from the records."""
+    days = [d for d in Dd["sdays"] if dt.date(2018, 1, 2) <= d <= year_end]
+    px, ret = front_price_series(Dd, days)
+    obs = rate_series_from_notices(Dd, days)
+    _, ret_full = front_price_series(Dd, days)
+    hist_two = {t: list(ret[t] + np.concatenate([[0.0], ret[t][:-1]])) for t in "MQY"}
+    mw = dict(Dd["pos"][year_end])
+    f_last = {}
+    for k in mw:
+        s = mi_date(k)
+        if s <= year_end:
+            ltd = C.prev_bday(s)
+            f_last[k] = Dd["settle"][ltd][("Base Month", k, 1)]
+    st = Dd["stmt"][year_end]
+    hyd = Dd["hydro"][-1]
+    # receivables still open at the year end, paid on each customer's habit
+    rec_open = []
+    for r in Dd["ledger"]:
+        if r["doc_type"] != "INV" or r["paid_date"]:
+            continue
+        cu = CUSTOMERS[r["customer"]]
+        pay = pay_day(D(r["doc_date"]), lags[cu])
+        rec_open.append((pay, float(r["amount_eur"])))
+    return dict(mw=mw, open_curve=Dd["curve"][year_end], im0=st["initial_margin_requirement"], f_last=f_last,
+                spot_hist={c: v for c, v in Dd["spot"].items() if c <= dt.date(2026, 12, 31)},
+                rates_in_force={t: float(obs[t][-1]) for t in "MQY"}, hist_two=hist_two,
+                last1={t: float(ret[t][-1]) for t in "MQY"}, level=hyd["storage"], last_week=hyd,
+                rec_open=rec_open, spot_m=monthly_spot({c: v for c, v in Dd["spot"].items() if c <= dt.date(2026, 12, 31)}),
+                ref_ret_hist=ret, ref_px_hist=px, rates_hist=obs, days_hist=days)
+
+
+def stress_prices(Dd):
+    bd22 = sorted(d for d in Dd["curve"] if d.year == 2022 or d == dt.date(2021, 12, 30))
+    curves22 = {d: Dd["curve"][d] for d in bd22}
+    spot22 = {c: v for c, v in Dd["spot"].items() if c.year == 2022}
+    return RP.stress_prices(Dd["curve"][dt.date(2026, 12, 30)], curves22, spot22, bd22)
+
+
+def models(Dd, P, desk_rule="step", rates_kind="rule", out_kind="res", aff_kind="formula", count_phys=True,
+           rec_kind="habit", beta=0.30, theta=None, speed=None, year=2027):
+    rule, desk_p, pm, aff, lags = P["rule"], P["desk"], P["plants"], P["aff"], P["lags"]
+    com = committed_fn(Dd)
+
+    def rates(days, curves, st):
+        px, ret = C.ref_series(days, curves, st["open_curve"])
+        if rates_kind == "rule":
+            r, _ = C.rule_rates(days, px, ret, rule["look"], rule["q"], rule["band"], rule["review_wd"],
+                                st["rates_in_force"], st["hist_two"], st["last1"])
+            return r
+        if rates_kind == "const":
+            return {t: np.full(len(days), st["rates_in_force"][t]) for t in "MQY"}
+        if rates_kind == "price":
+            p0 = {t: st["ref_px_hist"][t][-1] for t in "MQY"}
+            return {t: st["rates_in_force"][t] * px[t] / p0[t] for t in "MQY"}
+        if rates_kind == "pct2022":
+            hd = st["days_hist"]
+            idx = {d: i for i, d in enumerate(hd)}
+            out = {}
+            for t in "MQY":
+                ser = []
+                for d in days:
+                    c22 = RP.corresponding_2022(d, set(hd))
+                    i22 = idx[c22]
+                    ser.append(px[t][len(ser)] * st["rates_hist"][t][i22] / st["ref_px_hist"][t][i22])
+                out[t] = np.array(ser)
+            return out
+        if rates_kind == "ewma":
+            out = {}
+            for t in "MQY":
+                rh, ph, oh = st["ref_ret_hist"][t], st["ref_px_hist"][t], st["rates_hist"][t]
+                v = float(np.var(rh[:60]))
+                sig = []
+                for x in rh:
+                    v = 0.94 * v + 0.06 * x ** 2
+                    sig.append(math.sqrt(v))
+                sig = np.array(sig)
+                kfit = float(np.exp(np.mean(np.log(oh[250:] / (sig[250:] * ph[250:])))))
+                v = sig[-1] ** 2
+                ser = []
+                for j in range(len(days)):
+                    v = 0.94 * v + 0.06 * ret[t][j] ** 2
+                    ser.append(kfit * math.sqrt(v) * px[t][j])
+                out[t] = np.array(ser)
+            return out
+        raise ValueError(rates_kind)
+
+    def desk(days, curves, st):
+        bud = [b for b in Dd["bud"] if b[0] < dt.date(year, 1, 1)]
+        # the October budget of the stress year, set the way the vintages show: forward of the three months before
+        oct1 = dt.date(year, 10, 1)
+        idx = [j for j, d in enumerate(days) if d < oct1][-60:]
+        set_on = next(d for d in days if d >= oct1)
+        for y in range(year + 1, year + 5):
+            ks = year_months(y)
+            vals = [cprice(curves[j], ks) for j in idx if all(k in curves[j] for k in ks)]
+            if vals:
+                bud.append((set_on, y, round(P["budget_margin"] * float(np.mean(vals)), 2),
+                            max(g for (s, yy, p, g) in bud if yy == max(x[1] for x in bud))))
+        bpx, bgen = budget_fns(bud)
+        th = math.log(theta if theta else desk_p["theta"])
+        return C.make_desk(Dd["ladder"], bpx, bgen, fixed_phys_fn(Dd, count_phys), desk_rule, th,
+                           speed or desk_p["speed"], beta)
+
+    def supply(days, curves, spot_all, st):
+        # output: the stress inflows through the plants from the year-end storage
+        hy22 = {h["week"].isocalendar()[1]: h for h in Dd["hydro"] if h["week"].isocalendar()[0] == 2022}
+        weeks, infl = RP.stress_inflows(lambda n: pm["normal_inflow"][min(n, 52)],
+                                        {n: h["inflow"] for n, h in hy22.items()},
+                                        {n: h["normal_inflow"] for n, h in hy22.items()}, year=year)
+        wn = [min(w.isocalendar()[1], 52) for w in weeks]
+        lw = st["last_week"]
+        prev = Dd["hydro"][-2]
+        last_rel = prev["storage"] + (1 - pm["ror_share"]) * lw["inflow"] - lw["storage"]
+        last_out = min(pm["ror_share"] * lw["inflow"], pm["ror_cap"]) + last_rel
+        if out_kind == "res":
+            outw, _ = plant_run(pm, infl, st["level"], wn)
         else:
-            t = sum(pw.values())
-            w = {r: pw[r] / t for r in REGIONS}
-        x = sum(rg[r] * w[r] for r in REGIONS)
-        if "revenue on delivery" in S:
-            x, _ = convert(P, TQ, BQ, x, True, "mto", out["pan"])
-        if "contract at its run rate" in S:
-            x = to_total(P, TQ, BQ, x, True, "median8")
-        return x
+            norm = np.array([pm["normal_inflow"][n] for n in wn])
+            nout = np.array([min(pm["ror_share"] * x, pm["ror_cap"]) + pm["plan"][n] for x, n in zip(norm, wn)])
+            if out_kind == "budget":
+                outw = nout
+            elif out_kind == "inflow":
+                outw = nout * infl / norm
+            elif out_kind == "ratio22":
+                # 2022's output against the normal week, carried to 2027
+                o22 = {}
+                for a, b in zip(Dd["hydro"], Dd["hydro"][1:]):
+                    if b["week"].isocalendar()[0] == 2022:
+                        n = b["week"].isocalendar()[1]
+                        o22[n] = min(pm["ror_share"] * b["inflow"], pm["ror_cap"]) + (a["storage"] + (1 - pm["ror_share"]) * b["inflow"] - b["storage"])
+                outw = np.array([nout[i] * o22[n] / nout[i] for i, n in enumerate(wn)])
+            else:
+                raise ValueError(out_kind)
+        out_day = {}
+        for c, (net, amt, sd) in Dd["da"].items():
+            if (c.year == year - 1 and c.month == 12) or c < weeks[0] and c.year == year:
+                k = mi(c.year, c.month)
+                out_day[c] = net + sum(com(k).values()) / C.month_days(k)
+        c = dt.date(year, 1, 1)
+        while c < weeks[0]:
+            if c not in out_day:
+                out_day[c] = last_out / 7.0 * 1000.0
+            c += dt.timedelta(days=1)
+        for i, wk in enumerate(weeks):
+            for dd in range(7):
+                out_day[wk + dt.timedelta(days=dd)] = outw[i] / 7.0 * 1000.0
+        com_day = {}
+        c = dt.date(year - 1, 12, 1)
+        while c <= dt.date(year, 12, 31):
+            k = mi(c.year, c.month)
+            com_day[c] = sum(com(k).values()) / C.month_days(k)
+            c += dt.timedelta(days=1)
+        spm = dict(st["spot_m"])
+        acc = defaultdict(list)
+        for c, v in spot_all.items():
+            if c.year == year:
+                acc[mi(c.year, c.month)].append(v)
+        spm.update({k: float(np.mean(v)) for k, v in acc.items()})
+        invoices = list(st["rec_open"])
+        mw_s, px_s, y0, y1 = smelter(Dd)
+        for k in range(mi(year - 1, 12), mi(year, 12) + 1):
+            if year == 2022 and k == mi(2021, 12):
+                continue  # December 2021's invoices are in the ledger with the day they were paid
+            cm = com(k)
+            for cu in ("SMELTER", "PULP", "AFFILIATE", "GRID"):
+                if cu == "SMELTER":
+                    price = px_s
+                elif cu == "AFFILIATE" and aff_kind == "formula":
+                    price = float(np.mean([spm[x] for x in range(k - aff["lag"] - aff["window"] + 1, k - aff["lag"] + 1)]))
+                else:
+                    price = spm[k]
+                amt = cm[cu] * price
+                if rec_kind == "sameday":
+                    invoices.append(("month", k, amt))
+                else:
+                    invoices.append((pay_day(invoice_day(k), lags[cu]), amt))
+        if rec_kind == "sameday":
+            inv2 = []
+            for x in invoices:
+                if x[0] == "month":
+                    _, k, amt = x
+                    ds = [d for d in days if mi(d.year, d.month) == k]
+                    inv2 += [(d, amt / len(ds)) for d in ds]
+                else:
+                    inv2.append(x)
+            invoices = inv2
+        return out_day, com_day, invoices
 
-    cache = {}
-    orders = {k: [] for k in PANEL_STEPS + COMPANY_STEPS}
-    for group, fn in ((PANEL_STEPS, panel_state), (COMPANY_STEPS, company_state)):
-        for perm in itertools.permutations(group):
-            done = []
-            prev = cache.setdefault(tuple(sorted(done)) + (fn.__name__,), fn(set(done)))
-            for st in perm:
-                done.append(st)
-                key = tuple(sorted(done)) + (fn.__name__,)
-                if key not in cache:
-                    cache[key] = fn(set(done))
-                orders[st].append(cache[key] - prev)
-                prev = cache[key]
-    g0 = cache[("panel_state",)]
-    vals = [("the delivered panel, every issuer", g0)]
-    done, prev = [], g0
-    for st in PANEL_STEPS:
-        done.append(st)
-        v = cache[tuple(sorted(done)) + ("panel_state",)]
-        vals.append((st, v - prev))
-        prev = v
-    done, prev = [], cache[("company_state",)]
-    for st in COMPANY_STEPS:
-        done.append(st)
-        v = cache[tuple(sorted(done)) + ("company_state",)]
-        vals.append((st, v - prev))
-        prev = v
-    out["g_pooled_with_ks01"] = cache[("company_state",)]
-    return vals, orders
-
-
-def family(out):
-    """the golden family: defensible rivals of the golden route, each with its range"""
-    P, pan, base = out["P"], out["pan"], out["base"]
-    F = {"the golden route": out["golden"]}
-    F["spend per open card issuer by issuer"] = with_range(route(P, pan, how="lfl"), base)
-    F["cards of the same age"] = with_range(route(P, pan, how="same_age"), base)
-    F["the regional mix of fiscal 2023"] = with_range(route(P, pan, wfy_lag=2), base)
-    F["fiscal 2024's regional mix rolled forward a year"] = with_range(route(P, pan, mix="rolled"), base)
-    F["the deposit window at seven weeks"] = with_range(route(P, pan, dep="mto_7w"), base)
-    F["the deposit window at nine weeks"] = with_range(route(P, pan, dep="mto_9w"), base)
-    F["contract at the median of the last four quarters"] = with_range(route(P, pan, ct="median4"), base)
-    F["a re-issued book read at a three per cent rise"] = with_range(route(P, pan, jump=0.03), base)
-    F["a re-issued book read at a ten per cent rise"] = with_range(route(P, pan, jump=0.10), base)
-    F["the record from fiscal 2023 only"] = with_range(route(P, pan, origins=origins_of(P, "FY2023 Q1")), base)
-    # other ways to set a re-issued book aside, the same way at every origin of the record (KS-02 in fiscal 2023 to
-    # 2024, KS-01 at the end): the region whose cards jumped, the newest open years, or the issuer in every quarter
-    F["the re-issued book's region set aside"] = with_range(route(P, pan, book="region"), base)
-    F["the re-issued book's newest open years set aside"] = with_range(route(P, pan, book="newest"), base)
-    F["an issuer with a re-issued book left out of every quarter"] = with_range(route(P, pan, book="always"), base)
-    F["retail growth calibrated by regression on past quarters, contract at its run rate"] = with_range(
-        route(P, pan, reg="retail"), base)
-    return F
-
-
-def rivals_ruled_out(out):
-    """rivals the data rule out, run to show where they land"""
-    P, pan, base = out["P"], out["pan"], out["base"]
-    R = {}
-    R["raw spend on the issuers in both quarters"] = with_range(route(P, pan, how="total"), base)
-    R["deposits at last year's ratio to payments"] = with_range(route(P, pan, dep="ratio"), base)
-    R["the deposits' change moved as a year earlier"] = with_range(route(P, pan, dep="flat"), base)
-    R["the custom-order share over the whole quarter"] = with_range(route(P, pan, dep="mto_q"), base)
-    R["contract at the mean of the last four quarters, last year's contract included"] = with_range(
-        route(P, pan, ct="mean4"), base)
-    R["contract at last year's fourth quarter"] = with_range(route(P, pan, ct="last_year"), base)
-    R["KS-01 kept"] = with_range(route(P, pan, conv=False), base)
-    R["the chain calibrated by regression on past quarters"] = with_range(route(P, pan, reg=True), base)
-    return R
+    return dict(rates=rates, desk=desk, supply=supply)
 
 
-def shortcuts(out):
-    """the hurried routes: what each files for the quarter, with its own record and range"""
-    P, pan, base, cf = out["P"], out["pan"], out["base"], out["cf"]
-    S = {}
-    # the careful but hurried pass: the textbook panel work and the company's mix, then net sales grown with it
-    S["careful"] = with_range(route(P, pan, conv=False, dep=None, ct=None), base)
-    S["careful_regressed"] = with_range(route(P, pan, conv=False, dep=None, ct=None, reg=True), base)
-    # one deep step at a time on top of the careful pass, and every pair
-    S["only_reissue"] = with_range(route(P, pan, conv=True, dep=None, ct=None), base)
-    S["only_deposits"] = with_range(route(P, pan, conv=False, dep="mto", ct=None), base)
-    S["only_contract"] = with_range(route(P, pan, conv=False, dep=None, ct="median8"), base)
-    S["no_reissue"] = with_range(route(P, pan, conv=False), base)
-    S["no_deposits"] = with_range(route(P, pan, dep=None), base)
-    S["no_contract"] = with_range(route(P, pan, ct=None), base)
-    S["deposit_ratio"] = with_range(route(P, pan, dep="ratio"), base)
-    S["deposit_flat"] = with_range(route(P, pan, dep="flat"), base)
-    S["contract_last_year"] = with_range(route(P, pan, ct="last_year"), base)
-    S["panel_mix"] = with_range(route(P, pan, mix="panel"), base)
-    inc_pan = panel_entity(P, cf, complete=True, exclude=False)
-    S["desk_model"] = with_range(route(P, inc_pan, mix="panel", conv=False, dep=None, ct=None, reg=True), base)
-    keys = P["keys"]
-    S["trend"] = with_range(trend_route(P), base)
-    p0 = panel_entity(P, cf, complete=False, exclude=False)
-    S["quick"] = dict(growth=growth(P, p0, TQ, BQ, "total", "panel", True, None, "const", False))
-    S["quick"]["forecast"] = base * (1 + S["quick"]["growth"])
-    S["delivered"] = dict(growth=growth(P, p0, TQ, BQ, "total", "panel", True, None, "all", False))
-    S["delivered"]["forecast"] = base * (1 + S["delivered"]["growth"])
-    out["organic"] = {q: organic_growth(P, q, keys[keys.index(q) - 4], fern_both(P, q, keys[keys.index(q) - 4]))
-                      for q in origins_of(P)}
-    return S
+def infer_budget_margin(Dd):
+    """the October budget price as a share of the year contract's average over the 60 business days before it."""
+    r = []
+    days = Dd["sdays"]
+    for s, y, p, g in Dd["bud"]:
+        if s.year < 2018:
+            continue
+        idx = [d for d in days if d < s][-60:]
+        vals = [Dd["settle"][d].get(("Base Year", mi(y, 1), 12)) for d in idx]
+        vals = [v for v in vals if v]
+        if len(vals) > 50:
+            r.append(p / float(np.mean(vals)))
+    return round(float(np.median(r)), 3)
 
 
-def trend_route(P):
-    """reported growth carried: the mean of the last three quarters' year-on-year growth, with the same rule's record"""
-    keys = P["keys"]
-
-    def yoy(k):
-        b = keys[keys.index(k) - 4]
-        return organic_growth(P, k, b, fern_both(P, k, b))
-
-    def forecast(q):
-        prev = keys[keys.index(q) - 3:keys.index(q)]
-        return float(np.mean([yoy(k) for k in prev]))
-    errs = {q: forecast(q) - yoy(q) for q in origins_of(P, "FY2022 Q4")}
-    e = np.array(list(errs.values()))
-    return dict(growth=forecast(TQ), rmse=float(np.sqrt(np.mean(e ** 2))), errs=errs, n=len(e),
-                inside=int(sum(abs(v) <= Z80 * np.sqrt(np.mean(e ** 2)) for v in e)))
+def params(Dd):
+    return dict(rule=infer_rule(Dd), desk=infer_desk(Dd), plants=infer_plants(Dd), aff=infer_affiliate(Dd),
+                lags=infer_lags(Dd), budget_margin=infer_budget_margin(Dd))
 
 
-def variants(out):
-    """each supporting result's rivals, for its band"""
-    P, cf, pan = out["P"], out["cf"], out["pan"]
-    V = {}
-    raw_c = panel_entity(P, cf, complete=False)
-    tot_raw = raw_c[raw_c.fq == TQ].spend_usd.sum()
-    for name, kw in (("mean factors", dict(stat="mean")), ("the last thirteen deliveries", dict(last_n=13))):
-        c2 = completion_factors(P, **kw)
-        p2 = panel_entity(P, c2)
-        V.setdefault("completion", {})[name] = float(p2[p2.fq == TQ].spend_usd.sum() / tot_raw - 1)
-    V["regional"] = {}
-    for how in ("lfl", "same_age"):
-        rg, _ = regional(P, pan, TQ, BQ, how)
-        V["regional"][how] = rg
-    rg = out["regional"]
-    V["visible"] = {"fiscal 2024 mix": out["g_idx"],
-                    "fiscal 2023 mix": sum(rg[r] * company_weights(P, "FY2023")[r] for r in REGIONS),
-                    "fiscal 2024 mix rolled forward": sum(rg[r] * rolled_weights(P, "FY2024")[r] for r in REGIONS)}
-    for how in ("lfl", "same_age"):
-        V["visible"]["%s at fiscal 2024 mix" % how] = sum(V["regional"][how][r] * out["company_w"][r] for r in REGIONS)
-    V["dep_q4"], V["dep_points"] = {}, {}
-    for rule in ("mto", "mto_7w", "mto_9w"):
-        for vk, vg in V["visible"].items():
-            g, cv = convert(P, TQ, BQ, vg, True, rule, pan)
-            V["dep_q4"]["%s, %s" % (rule, vk)] = cv["dep_q"]
-            V["dep_points"]["%s, %s" % (rule, vk)] = g - vg
-    V["ct_hat"] = {r: ct_hat(P, TQ, r) for r in ("median8", "median4", "mean8", "mean4", "last_year")}
-    V["reissue_jump"] = {j: issuers_for(P, pan[pan.fq.isin([TQ, BQ])], TQ, BQ, "const", True, j)
-                         for j in (0.02, 0.03, 0.05, 0.08, 0.10, 0.12)}
-    return V
+def run_stress(Dd, P, prices=None, **kw):
+    st = opening(Dd, P["rule"], P["lags"], P["aff"])
+    prices = prices or stress_prices(Dd)
+    return RP.run(st, prices, models(Dd, P, **kw))
 
 
-def incumbent(out):
-    """the desk's third-quarter model as its workbook states it: spend per open card on the issuers in both quarters,
-    the brand ids as delivered, reported growth regressed on it over the quarters to the second quarter of fiscal 2025"""
-    P, cf = out["P"], out["cf"]
-    inc_pan = panel_entity(P, cf, complete=True, exclude=False)
-    org = origins_of(P, "FY2022 Q1", "FY2025 Q2")
-    R = route(P, inc_pan, mix="panel", conv=False, dep=None, ct=None, reg=True, target="FY2025 Q3", origins=org)
-    q3_base = net_sales(P, "FY2024 Q3")
-    return dict(rows=list(zip(org, R["xs"], R["ys"])), fit=R["fit"], rmse=R["rmse"], errs=R["errs"], x_q3=R["x"],
-                g_q3=R["growth"], q3_base=q3_base, q3_forecast=q3_base * (1 + R["growth"]),
-                q3_actual=net_sales(P, "FY2025 Q3"))
+# ------------------------------------------------------------------------------------------------------ 2022 check
+def actual_2022(Dd):
+    """the hedge program's cumulative net cash outflow in 2022 as the records show it."""
+    days = [d for d in Dd["sdays"] if d.year == 2022]
+    idx = {d: i for i, d in enumerate(days)}
+    flow = np.zeros(len(days))
+    for d in days:
+        flow[idx[d]] += Dd["stmt"][d]["net_cash_to_nex"]
+    for c, (net, amt, sd) in Dd["da"].items():
+        if sd in idx:
+            flow[idx[sd]] -= amt
+    for r in Dd["ledger"]:
+        if r["paid_date"] and r["paid_eur"]:
+            p = D(r["paid_date"])
+            if p in idx:
+                flow[idx[p]] -= float(r["paid_eur"])
+    c = np.cumsum(flow)
+    j = int(np.argmax(c))
+    return dict(peak=float(c[j]), day=days[j], cum=c, days=days)
 
 
-def perturbations(out):
-    """each fitted or stated input moved by its defensible spread; the value is the top of the golden's 80 per cent range"""
-    P, pan, base = out["P"], out["pan"], out["base"]
-    res = {}
-    for f in (0.97, 1.03):
-        cf = {k: min(1.0, v * f) if k[1] == 0 else v for k, v in out["cf"].items()}
-        res["the last week's completeness %+d per cent" % round(100 * (f - 1))] = with_range(
-            route(P, panel_entity(P, cf)), base)["high"]
-    for f in (0.8, 1.2):
-        res["the licensed shops' and cafes' share %+d per cent" % round(100 * (f - 1))] = with_range(
-            route(P, panel_entity(P, out["cf"], share_scale=f)), base)["high"]
-    G = out["golden"]
-    e = np.array(list(G["errs"].values()))
-    res["the range from the record's 10th and 90th percentile errors"] = base * (1 + G["growth"] - float(np.quantile(e, 0.1)))
-    res["the record's mean error added back, the range from its standard deviation"] = base * (
-        1 + G["growth"] - float(e.mean()) + Z80 * float(e.std()))
-    return res
+def method_2022(Dd, P):
+    """the same method run on the book at the end of 2021 through 2022's own prices and inflows."""
+    ye = dt.date(2021, 12, 30)
+    st = opening(Dd, P["rule"], P["lags"], P["aff"], year_end=ye)
+    st["rec_open"] = []
+    for r in Dd["ledger"]:
+        if r["doc_type"] == "INV" and r["period"] <= "2021-12" and r["paid_date"] and D(r["paid_date"]).year == 2022:
+            st["rec_open"].append((D(r["paid_date"]), float(r["amount_eur"])))
+    hyd = [h for h in Dd["hydro"] if h["week"] <= dt.date(2021, 12, 27)]
+    st["level"], st["last_week"] = hyd[-1]["storage"], hyd[-1]
+    bd22 = sorted(d for d in Dd["curve"] if d.year == 2022 or d == ye)
+    curves22 = {d: Dd["curve"][d] for d in bd22}
+    spot22 = {c: v for c, v in Dd["spot"].items() if c.year == 2022}
+    prices = RP.stress_prices(Dd["curve"][ye], curves22, spot22, bd22, year=2022)
+    m = models(Dd, P, year=2022)
+    return RP.run(st, prices, m)
 
 
-def full(tgt):
-    out = run(tgt)
-    out["family"] = family(out)
-    out["ruled_out"] = rivals_ruled_out(out)
-    out["shortcuts"] = shortcuts(out)
-    out["incumbent"] = incumbent(out)
-    out["perturb"] = perturbations(out)
-    out["variants"] = variants(out)
+# ------------------------------------------------------------------------------------------------------ results
+def snapshot(Dd, g):
+    """the results a run reports from a stress path: the peak and its date, and the parts at the peak."""
+    j = g["j"]
+    d = g["peak_day"]
+    mw = g["book"]["mw_by_day"][j]
+    book = {y: round(-sum(mw.get(k, 0.0) * C.month_hours(k) for k in year_months(y)
+                           if mi_date(k + 1) > d) / 1e6, 3) for y in (2027, 2028, 2029, 2030)}
+    out_to = sum(v for c, v in g["out_day"].items() if dt.date(2027, 1, 1) <= c <= d) / 1e3
+    return dict(peak=g["peak"] / 1e6, day=d, book=book, im=g["im"][j] / 1e6, da_net=-g["da"][:j + 1].sum() / 1e6,
+                rec=g["rec"][:j + 1].sum() / 1e6, vm=g["vm"][:j + 1].sum() / 1e6, dlv=g["dlv"][:j + 1].sum() / 1e6,
+                dim=g["dim"][:j + 1].sum() / 1e6, out=out_to)
+
+
+def hedge_ratios(Dd, d=dt.date(2026, 12, 30)):
+    bpx, bgen = budget_fns(Dd["bud"])
+    fp = fixed_phys_fn(Dd)
+    mw = Dd["pos"][d]
+    out = {}
+    for y in (2027, 2028, 2029):
+        ex = -sum(mw.get(k, 0.0) * month_hours(k) for k in year_months(y))
+        g = bgen(d, y)
+        out[y] = dict(exchange=ex / g, policy=(ex + fp(y)) / g, exchange_twh=ex / 1e6, gen_twh=g / 1e6)
     return out
+
+
+def below_minimum(Dd):
+    """month ends since 2020 at which next year's exchange positions alone sat below the policy minimum."""
+    bpx, bgen = budget_fns(Dd["bud"])
+    n = b = 0
+    for me, mw in Dd["pos"].items():
+        if me < dt.date(2020, 1, 1):
+            continue
+        y = me.year + 1
+        lo, hi = C.ladder(max((dt.date(y, 1, 1) - me).days / 365.25, 0.0), Dd["ladder"])
+        ex = -sum(mw.get(k, 0.0) * month_hours(k) for k in year_months(y)) / bgen(me, y)
+        n += 1
+        b += ex < lo - 0.05
+    return b, n
+
+
+def facility(peak_m, rounding_m):
+    return math.ceil(peak_m / rounding_m - 1e-9) * rounding_m
+
+
+def full(tgt, quick_only=False):
+    Dd = load(tgt)
+    Pm = params(Dd)
+    prices = stress_prices(Dd)
+    R = dict(params=Pm, rounding=Dd["rounding"] / 1e6, facility_2026=Dd["facility_2026"] / 1e6)
+    g = RP.run(opening(Dd, Pm["rule"], Pm["lags"], Pm["aff"]), prices, models(Dd, Pm))
+    R["golden_path"] = g
+    R["golden"] = snapshot(Dd, g)
+    R["facility"] = facility(R["golden"]["peak"], R["rounding"])
+    R["facility_of"] = lambda p: facility(p, R["rounding"])
+    R["ratios"] = hedge_ratios(Dd)
+    R["below"] = below_minimum(Dd)
+    R["book_open"] = {y: round(-sum(Dd["pos"][dt.date(2026, 12, 30)].get(k, 0.0) * month_hours(k)
+                                    for k in year_months(y) if mi_date(k) >= dt.date(2027, 1, 1)) / 1e6, 3)
+                      for y in (2027, 2028, 2029, 2030)}
+    a22, m22 = actual_2022(Dd), method_2022(Dd, Pm)
+    R["check2022"] = dict(actual=a22["peak"] / 1e6, actual_day=a22["day"], method=m22["peak"] / 1e6, method_day=m22["peak_day"])
+    st0 = opening(Dd, Pm["rule"], Pm["lags"], Pm["aff"])
+    R["storage_open"] = st0["level"]
+    if quick_only:
+        return R
+
+    def run(P=None, **kw):
+        P = P or Pm
+        return snapshot(Dd, RP.run(opening(Dd, P["rule"], P["lags"], P["aff"]), prices, models(Dd, P, **kw)))
+
+    def with_(**ch):
+        import copy
+        P = copy.deepcopy(Pm)
+        for path, v in ch.items():
+            a, b = path.split("__")
+            P[a][b] = v
+        return P
+    fam = [("the golden route", R["golden"]),
+           ("a smooth response of the desk, sold up to the maximum in a straight line with the price", run(desk_rule="linear")),
+           ("the desk's threshold at 1.20 of budget", run(theta=1.20)),
+           ("the desk's threshold at 1.30 of budget", run(theta=1.30)),
+           ("the desk at 2.5 points a week", run(speed=0.025)),
+           ("the desk at 3.5 points a week", run(speed=0.035)),
+           ("rates at the nearest-rank quantile", run(with_(rule__q=0.99, rule__look=250))),
+           ("rates on a 252-day look-back", run(with_(rule__look=252))),
+           ("release response 20 per cent flatter", run(with_(plants__slope=Pm["plants"]["slope"] * 0.8))),
+           ("release response 20 per cent steeper", run(with_(plants__slope=Pm["plants"]["slope"] * 1.2))),
+           ("payment habits three days slower", run(with_(**{"lags__" + c: v + 3 for c, v in Pm["lags"].items()}))),
+           ("payment habits three days faster", run(with_(**{"lags__" + c: v - 3 for c, v in Pm["lags"].items()}))),
+           ("the affiliate's window lagged one month", run(with_(aff__lag=Pm["aff"]["lag"] - 1))),
+           ("the affiliate's window lagged three months", run(with_(aff__lag=Pm["aff"]["lag"] + 1)))]
+    R["family"] = fam
+    sc = [("the book as it stood, rates held, output at budget, every customer at spot (quick)",
+           run(desk_rule="frozen", rates_kind="const", out_kind="budget", aff_kind="spot", rec_kind="sameday")),
+          ("the policy's minimum ladder on exchange positions, 2022's rates as a share of price, output carried from "
+           "2022's own shortfall, the affiliate at spot (careful but hurried)",
+           run(desk_rule="min", count_phys=False, rates_kind="pct2022", out_kind="ratio22", aff_kind="spot")),
+          ("the desk held to the policy minimum, nothing else", run(desk_rule="min")),
+          ("the desk moved to the policy maximum at once, nothing else", run(desk_rule="max_now")),
+          ("the book frozen at the year end, nothing else", run(desk_rule="frozen")),
+          ("the smelter's contract left out of the hedge ratio, nothing else", run(count_phys=False)),
+          ("rates held at the year end, nothing else", run(rates_kind="const")),
+          ("rates scaled with the front price, nothing else", run(rates_kind="price")),
+          ("2022's rates as a share of price, nothing else", run(rates_kind="pct2022")),
+          ("output at budget, nothing else", run(out_kind="budget")),
+          ("output carried from 2022's own shortfall, nothing else", run(out_kind="ratio22")),
+          ("output scaled with the week's inflow, nothing else", run(out_kind="inflow")),
+          ("the affiliate at spot, nothing else", run(aff_kind="spot")),
+          ("customers paid on delivery, nothing else", run(rec_kind="sameday"))]
+    R["shortcuts"] = sc
+    R["ewma"] = run(rates_kind="ewma")
+    return R

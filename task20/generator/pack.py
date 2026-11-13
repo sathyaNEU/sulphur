@@ -1,258 +1,347 @@
-"""task20 architecture 2 pack (second hardening): the records a long-short fund's research desk holds on Brindle & Moss three weeks before
-its fourth-quarter fiscal 2025 release: the Kestrel Spend Panel's weekly delivery (the issuers' feeds as the vendor
-concatenates them) and its delivery history, the panel's monthly spend by raw descriptor, the company's earnings
-releases (releases.py), the street's estimates, and two alternative-data feeds the desk also buys. analysis.py reads
-only what this module, releases.py and docs.py write."""
+"""Writes the record files of target/ from the world (sim.py). Each file is the output of the process that keeps it:
+the exchange's settlement file, the risk system's curve store, the clearing house's notices and statements, the trade
+capture system, the hydrology database, the plant SCADA monthly export, the billing system and the day-ahead
+market's settlements. Mess comes from those processes, never from a decision."""
 import csv
+import datetime as dt
+import math
 import os
-
 import numpy as np
-import pandas as pd
+import common as C
+import sim as S
+from common import mi, mi_date, month_hours, cprice
 
-import releases as RL
-import world as W
+F_SETTLE = "nex_daily_settlement_2018_2026.csv"
+F_CURVE = "hk_risk_curve_daily_2018_2026.csv"
+F_PARAMS = "nex_margin_parameters_2018_2026.csv"
+F_STMT = "nex_clearing_statements_2018_2026.csv"
+F_POS = "nex_positions_month_end_2017_2026.csv"
+F_TRADES = "hk_trade_capture_2018_2026.csv"
+F_HYDRO = "hk_hydrology_weekly_2017_2026.csv"
+F_PLANT = "hk_plant_output_monthly_2017_2026.csv"
+F_LEDGER = "hk_sales_ledger_2018_2026.csv"
+F_DA = "nex_dayahead_settlements_2018_2026.csv"
+F_FX = "eurnok_daily_2018_2026.csv"
+F_HDD = "hk_heating_degree_days_weekly.csv"
 
-SEED = 17
-STREET_GROWTH = 0.05             # the street's retail growth for the quarter
-ISSUER_CODES = {"A": "KS-01", "B": "KS-02", "C": "KS-03", "D": "KS-04", "E": "KS-05", "F": "KS-06"}
-FEED_ORDER = ["C", "A", "E", "B", "F", "D"]
-REGION_CODE = {"KS-01": dict(zip(W.REGIONS, W.REGIONS)),
-               "KS-02": dict(zip(W.REGIONS, [r.upper() for r in W.REGIONS])),
-               "KS-03": dict(zip(W.REGIONS, W.REGIONS)),
-               "KS-04": dict(zip(W.REGIONS, ["NE", "SE", "MW", "W"])),
-               "KS-05": dict(zip(W.REGIONS, ["North East", "South East", "Mid-West", "West"])),
-               "KS-06": dict(zip(W.REGIONS, W.REGIONS))}
-MERCH = {"M0412": "BRINDLE & MOSS", "M0413": "BRINDLEMOSS.COM", "M2290": "FERNHOLLOW OUTFITTERS"}
-MERCH_FEED = {"KS-02": {"M0412": "BRINDLE AND MOSS", "M0413": "BRINDLEMOSS COM", "M2290": "FERNHOLLOW OUTFITTERS"},
-              "KS-05": {"M0412": "Brindle & Moss", "M0413": "brindlemoss.com", "M2290": "Fernhollow Outfitters"}}
-OLDEST = 2014                    # the vendor reports accounts opened in 2014 or earlier as one bucket
-F_PANEL = "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv"
-F_HIST = "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv"
-F_DESC = "kestrel_bmh_descriptor_detail_monthly.csv"
-F_STREET = "bmh_q4fy25_street_estimates.csv"
-F_WEB = "kestrel_web_visits_bmh_weekly.csv"
-F_APP = "appmetric_bmh_app_daily.csv"
+CUST_NAME = {"SMELTER": "Fjordal Aluminium AS", "PULP": "Nesbyen Treforedling AS", "AFFILIATE": "Hallingvass Straum AS",
+             "GRID": "Bygdenett AS"}
+PLANTS = [("Kvitebrekka", "run-of-river", 0.55), ("Tinnhylla", "run-of-river", 0.45),
+          ("Hallingvass I", "reservoir", 0.40), ("Hallingvass II", "reservoir", 0.35), ("Djupetjern", "reservoir", 0.25)]
+START = dt.date(2018, 1, 1)
+NEW_CODES = dt.date(2020, 4, 1)
+MON = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
 
 
-def write_csv(path, header, rows):
+def w(path, header, rows):
     with open(path, "w", newline="") as f:
-        wr = csv.writer(f, lineterminator="\n")
-        wr.writerow(header)
-        wr.writerows(rows)
+        cw = csv.writer(f, lineterminator="\r\n")
+        cw.writerow(header)
+        cw.writerows(rows)
     return len(rows)
 
 
-def open_year(ow):
-    """the calendar year the card account was opened at the issuer (a re-issued account carries its re-issue date)"""
-    return (W.FY_START + pd.Timedelta(days=7 * int(ow))).year
+def contract_code(t, k, d):
+    s = mi_date(k)
+    q = (s.month - 1) // 3 + 1
+    if d < NEW_CODES:
+        yy = "%02d" % (s.year % 100)
+        return {"M": "ENOM%s-%s" % (MON[s.month - 1], yy), "Q": "ENOQ%d-%s" % (q, yy), "Y": "ENOYR-%s" % yy}[t]
+    return {"M": "NSBM %d-%02d" % (s.year, s.month), "Q": "NSBQ %d-Q%d" % (s.year, q), "Y": "NSBY %d" % s.year}[t]
 
 
-def year_label(y):
-    return "<=%d" % OLDEST if y <= OLDEST else str(y)
-
-
-def panel_arrays(w):
-    """spend and cards by week x issuer x region x open-year bucket x vendor merchant id, complete (before posting lags)"""
-    years = sorted({max(open_year(c[2]), OLDEST) for c in w.co})
-    yi = {y: n for n, y in enumerate(years)}
-    I, R, Y = len(w.issuers), 4, len(years)
-    sp = np.zeros((W.W, I, R, Y, 3))
-    cards = np.zeros((W.W, I, R, Y))
-    tx = np.zeros((W.W, I, R, Y, 3))
-    mcol = {0: 0, 1: 0, 4: 0, 5: 0, 2: 1, 3: 2}             # stores, outlet, licensed, cafe -> M0412; web; fernhollow
-    for c, x in enumerate(w.co):
-        i, j, ow = x[0], x[1], x[2]
-        y = yi[max(open_year(ow), OLDEST)]
-        cards[:, i, j, y] += w.active[:, c]
-        for m, col in mcol.items():
-            sp[:, i, j, y, col] += w.spend[:, c, m]
-            tx[:, i, j, y, col] += w.txns[:, c, m]
-    return years, sp, cards, tx
-
-
-def completeness(w, delivery, i, wk):
-    return w.comp.get((delivery, i, wk), 1.0)
-
-
-def write_panel(path, w, years, sp, cards, tx):
-    d = w.deliveries[-1]
-    rows = []
-    for name in FEED_ORDER:
-        i = w.issuers.index(name)
-        code = ISSUER_CODES[name]
-        rc = REGION_CODE[code]
-        mn = MERCH_FEED.get(code, MERCH)
-        for t in range(W.W):
-            ws = W.CAL.week_start.iloc[t].date().isoformat()
-            f = completeness(w, d, i, t)
-            for j, reg in enumerate(W.REGIONS):
-                for y, yr in enumerate(years):
-                    n = cards[t, i, j, y]
-                    if n < 0.5:
-                        continue
-                    for col, mid in enumerate(MERCH):
-                        s = sp[t, i, j, y, col] * f
-                        if s <= 0:
-                            continue
-                        rows.append([ws, code, rc[reg], year_label(yr), mid, mn[mid], "%d" % round(n),
-                                     "%d" % round(tx[t, i, j, y, col] * f), "%.2f" % s])
-    return write_csv(path, ["week_start", "issuer_code", "billing_region", "card_open_year", "merchant_id", "merchant_name",
-                            "panel_cards", "txn_count", "spend_usd"], rows)
-
-
-def write_history(path, w, sp):
-    rows = []
-    tot = sp.sum(axis=(2, 3, 4))                              # week x issuer
-    for d in w.deliveries:
-        last = W.week_of(d - pd.Timedelta(days=8))
-        for i, iss in enumerate(w.issuers):
-            for t in range(last - 5, last + 1):
-                if tot[t, i] <= 0:
-                    continue
-                rows.append([d.date().isoformat(), ISSUER_CODES[iss], W.CAL.week_start.iloc[t].date().isoformat(),
-                             "%.2f" % (tot[t, i] * completeness(w, d, i, t))])
-    return write_csv(path, ["delivery_date", "issuer_code", "week_start", "spend_usd"], rows)
-
-
-STORE_CITIES = {"Northeast": ["BOSTON MA", "HARTFORD CT", "PROVIDENCE RI", "ALBANY NY", "PHILADELPHIA PA", "NEWARK NJ"],
-                "Southeast": ["ATLANTA GA", "CHARLOTTE NC", "RALEIGH NC", "TAMPA FL", "ORLANDO FL", "NASHVILLE TN"],
-                "Midwest": ["CHICAGO IL", "COLUMBUS OH", "INDIANAPOLIS IN", "MINNEAPOLIS MN", "DETROIT MI", "ST LOUIS MO"],
-                "West": ["DENVER CO", "PHOENIX AZ", "PORTLAND OR", "SEATTLE WA", "SACRAMENTO CA", "SALT LAKE CTY UT"]}
-STUDIO_CITIES = ["BOSTON MA", "ATLANTA GA", "CHICAGO IL", "DENVER CO", "PHILADELPHIA PA", "CHARLOTTE NC",
-                 "MINNEAPOLIS MN", "SEATTLE WA", "TAMPA FL", "PHOENIX AZ", "COLUMBUS OH"]
-POS_CHANGE = pd.Period("2024-08", "M")          # the stores' terminals re-keyed: new descriptor format
-TICKET = dict(store=290.0, studio=2650.0, outlet=140.0, web=240.0, paypal=230.0, custom=2240.0, lic=95.0, cafe=14.0,
-              fern=180.0, fernweb=165.0)
-
-
-def write_descriptors(path, w):
-    """panel-wide monthly spend and transactions by raw descriptor: the vendor's name match puts the licensed
-    shop-in-shops and the cafes under the brand's merchant id; custom orders are rung at the design studios' terminals
-    and under the site's custom-order descriptor"""
-    rd = np.random.default_rng(4412)
-    months = pd.period_range("2021-02", "2026-01", freq="M")
-    wk_month = W.CAL.week_start.dt.to_period("M")
-    rows = []
-    tot = w.spend.sum(1)                                       # week x merchant (panel-wide, complete)
-    mto = w.spend.sum(1)[:, [0, 2]] * w.mto_share[:, None]          # week x (stores, site): made-to-order spend
-    stores = [(k, c) for k, c in enumerate([c for reg in W.REGIONS for c in STORE_CITIES[reg]])]
-    split_store = rd.dirichlet(np.ones(len(stores)) * 6)
-    studio_w = rd.uniform(0.7, 1.3, len(STUDIO_CITIES))
-    outlet_names = ["BRINDLE MOSS OUTLET #%02d %s" % (k + 1, c) for k, c in enumerate(["PRIMM NV", "LEESBURG VA",
-                                                                                         "WRENTHAM MA", "AURORA IL"])]
-    lic_names = ["B&M AT HOLLISTERS #%03d %s" % (k + 11, c) for k, c in
-                 enumerate(["KING OF PRUSSIA PA", "SCHAUMBURG IL", "SCOTTSDALE AZ", "BELLEVUE WA", "PARAMUS NJ", "TROY MI",
-                            "FRISCO TX", "BUCKHEAD GA"])]
-    cafe_names = ["BRINDLE CAFE BOSTON MA", "BRINDLE CAFE CHICAGO IL", "SQ *BRINDLE CAFE DENVER"]
-    split_out, split_lic, split_cafe = rd.dirichlet(np.ones(4) * 5), rd.dirichlet(np.ones(8) * 4), rd.dirichlet(np.ones(3) * 5)
-    for m in months:
-        sel = (wk_month == m).values
-        if not sel.any():
-            continue
-        s = tot[sel].sum(0)
-        m_ = mto[sel].sum(0)
-        new = m >= POS_CHANGE
-        jitter = lambda n: np.exp(rd.normal(0, 0.03, n))
-        mstart = m.to_timestamp()
-        # the studios open at their dates; a new studio ramps over its first months
-        ages = [(mstart - s_).days / 30.4 for s_ in w.studios]
-        wts = np.array([studio_w[k] * min(1.0, 0.35 + 0.65 * a / 4.0) if a >= 0 else 0.0 for k, a in enumerate(ages)])
-        st_names = [("BRINDLE&MOSS DESIGN STUDIO %s" % c[:-3]) if new else ("BRINDLE & MOSS DESIGN STUDIO %s" % c)
-                    for c in STUDIO_CITIES]
-        sto_names = [("BRINDLE&MOSS %04d %s" % (100 + 7 * k, c)) if new else ("BRINDLE & MOSS #%04d %s" % (100 + 7 * k, c))
-                     for k, c in stores]
-        groups = [(sto_names, s[0] - m_[0], split_store, "store"), (st_names, m_[0], wts / wts.sum(), "studio"),
-                  (outlet_names, s[1], split_out, "outlet"), (lic_names, s[4], split_lic, "lic"),
-                  (cafe_names, s[5], split_cafe, "cafe")]
-        for names, base, split, kind in groups:
-            v = base * split * jitter(len(names))
-            v = v * base / v.sum()
-            for nm, x in zip(names, v):
-                if x <= 0:
-                    continue
-                rows.append([str(m), "M0412", nm, "%.2f" % x, "%d" % round(x / TICKET[kind] * np.exp(rd.normal(0, 0.04)))])
-        custom_name = "BRINDLEMOSS.COM CUSTOM" if m < pd.Period("2023-01", "M") else "BRINDLEMOSS CUSTOM ORDER"
-        for nm, x, kind in zip(["BRINDLEMOSS.COM", "PAYPAL *BRINDLEMOSS", custom_name],
-                               np.r_[(s[2] - m_[1]) * np.array([0.86, 0.14]), m_[1]], ["web", "paypal", "custom"]):
-            rows.append([str(m), "M0413", nm, "%.2f" % x, "%d" % round(x / TICKET[kind] * np.exp(rd.normal(0, 0.04)))])
-        for nm, x, kind in zip(["FERNHOLLOW OUTFITTERS #%02d" % (k + 1) for k in range(5)] + ["FERNHOLLOW.COM"],
-                               s[3] * np.r_[rd.dirichlet(np.ones(5) * 5) * 0.8, 0.2], ["fern"] * 5 + ["fernweb"]):
-            rows.append([str(m), "M2290", nm, "%.2f" % x, "%d" % round(x / TICKET[kind] * np.exp(rd.normal(0, 0.04)))])
-    return write_csv(path, ["month", "merchant_id", "descriptor", "spend_usd", "txn_count"], rows)
-
-
-def write_street(path, street_mid):
-    """the sell-side's current estimates of the quarter's net sales, each broker's estimate before the third-quarter
-    results and its rating"""
-    rs = np.random.default_rng(9031)
-    brokers = ["Abernathy Rowe", "Calloway Securities", "Dunmore & Pike", "Eastlake Capital Markets", "Granger Whitfield",
-               "Halsey Brothers", "Ironbridge Research", "Kinsale Partners", "Marlow Street", "Northgate Equity", "Pell & Sutter"]
-    est = street_mid * (1 + rs.normal(0, 0.006, len(brokers)))
-    est = est - est.mean() + street_mid
-    dates = sorted(pd.Timestamp("2025-12-11") + pd.Timedelta(days=int(x)) for x in rs.integers(0, 55, len(brokers)))
-    prior = est * (1 + rs.normal(0.004, 0.003, len(brokers)))
-    ratings = ["Buy", "Hold", "Buy", "Hold", "Buy", "Sell", "Hold", "Hold", "Buy", "Hold", "Sell"]
-    rows = [[b, d.date().isoformat(), "%.1f" % e, "%.1f" % p_, r] for b, d, e, p_, r in zip(brokers, dates, est, prior, ratings)]
-    return write_csv(path, ["broker", "estimate_date", "q4_fy2025_net_sales_usd_m", "prior_q4_fy2025_net_sales_usd_m",
-                            "rating"], rows)
-
-
-def write_web(path, w):
-    rw = np.random.default_rng(5150)
-    rows = []
-    season = W.season_index()
-    for t in range(W.W):
-        visits = 2.3e6 * w.traffic[t] * season[t] * w.web[t] / 0.17 * np.exp(rw.normal(0, 0.06)) * (1 + 0.15 * t / W.W)
-        rows.append([W.CAL.week_start.iloc[t].date().isoformat(), "brindlemoss.com", "%d" % round(visits),
-                     "%.2f" % (0.62 + 0.0004 * t + rw.normal(0, 0.01)), "%.1f" % (4.1 + rw.normal(0, 0.3))])
-    return write_csv(path, ["week_start", "domain", "est_visits", "mobile_share", "avg_pages_per_visit"], rows)
-
-
-def write_app(path, w):
-    ra = np.random.default_rng(7777)
-    days = pd.date_range("2023-03-01", "2026-01-31", freq="D")
-    rows = []
-    rank = 140.0
-    for d in days:
-        rank = max(20.0, min(400.0, rank * np.exp(ra.normal(0, 0.05)) + (-(d.month in (11, 12)) * 0.6)))
-        rows.append([d.date().isoformat(), "US", "Shopping", "Brindle & Moss", "%d" % round(rank),
-                     "%d" % round(3000 * np.exp(ra.normal(0, 0.3)) * (1.6 if d.month in (11, 12)else 1.0))])
-    return write_csv(path, ["date", "country", "category", "app", "category_rank", "est_downloads"], rows)
-
-
-def regions_by_year(w):
-    """the 10-K's net sales of the Brindle & Moss brand by region: each quarter's brand net sales (net sales less
-    Fernhollow and Contract) split by the regions' recognised sales, summed over the fiscal year (USD million)"""
-    out = {}
-    for fy in W.FY_NAMES[:-1]:
-        tot = np.zeros(4)
-        for q in [n for n, k in enumerate(W.QKEYS) if k.startswith(fy)]:
-            brand = w.rev_q[q] - w.fern_q[q] - w.contract_q[q]
-            tot += w.rev_q_region[q] * brand / w.rev_q_region[q].sum()
-        out[fy] = [round(float(x), 1) for x in tot]
+def listed(d):
+    k0 = mi(d.year, d.month)
+    out = [("M", [k0 + j]) for j in range(1, 7)]
+    fq0 = mi(d.year, 3 * ((d.month - 1) // 3) + 1) + 3
+    out += [("Q", [fq0 + 3 * (j - 1) + x for x in range(3)]) for j in range(1, 7)]
+    out += [("Y", C.year_months(d.year + j)) for j in range(1, 5)]
     return out
 
 
-def by_year(w, arr):
-    return {fy: round(float(sum(arr[n] for n, k in enumerate(W.QKEYS) if k.startswith(fy))), 1) for fy in W.FY_NAMES[:-1]}
+PRODUCT = {"M": "Base Month", "Q": "Base Quarter", "Y": "Base Year"}
 
 
-def street_mid(w):
-    """the sell-side's figure: retail net sales grown at fiscal 2025's pace, contract at its run rate"""
-    n = len(W.QKEYS) - 1
-    return round(float(w.retail_q[n - 4]) * (1 + STREET_GROWTH) + float(np.median(w.contract_q[n - 8:n])))
+def settlement(W, tgt):
+    rows = []
+    dup = []
+    for i, d in enumerate(W.days):
+        if d < START or d == dt.date(2019, 11, 21):
+            continue
+        for t, ks in listed(d):
+            e = mi_date(ks[-1] + 1) - dt.timedelta(days=1)
+            r = [d.isoformat(), contract_code(t, ks[0], d), PRODUCT[t], mi_date(ks[0]).isoformat(), e.isoformat(),
+                 "%.3f" % cprice(W.curves[i], ks)]
+            rows.append(r)
+            if dt.date(2023, 5, 8) <= d <= dt.date(2023, 5, 12):
+                dup.append(list(r))
+    # the exchange's re-sent file for the week of 8 May 2023 was appended twice
+    at = next(j for j, r in enumerate(rows) if r[0] == "2023-05-15")
+    rows = rows[:at] + dup + rows[at:]
+    return w(os.path.join(tgt, F_SETTLE), ["trade_date", "contract", "product", "delivery_start", "delivery_end",
+                                           "settlement_eur_mwh"], rows)
 
 
-def write_all(tgt, w, street):
-    years, sp, cards, tx = panel_arrays(w)
-    rows = {}
-    rows[F_PANEL] = write_panel(os.path.join(tgt, F_PANEL), w, years, sp, cards, tx)
-    rows[F_HIST] = write_history(os.path.join(tgt, F_HIST), w, sp)
-    rows[F_DESC] = write_descriptors(os.path.join(tgt, F_DESC), w)
-    rows[F_STREET] = write_street(os.path.join(tgt, F_STREET), street)
-    rows[F_WEB] = write_web(os.path.join(tgt, F_WEB), w)
-    rows[F_APP] = write_app(os.path.join(tgt, F_APP), w)
-    rel, F, pre = RL.write_all(tgt, w)
-    for f in rel:
-        rows[f] = sum(1 for _ in open(os.path.join(tgt, f)))
-    return dict(rows=rows, years=years, releases=rel, reported=F, fy2020=pre)
+def curve(W, tgt):
+    rows = []
+    for i, d in enumerate(W.days):
+        if d < START:
+            continue
+        k0 = mi(d.year, d.month)
+        for k in range(k0 + 1, k0 + 49):
+            s = mi_date(k)
+            rows.append([d.isoformat(), "%d-%02d" % (s.year, s.month), "%.3f" % W.curves[i][k], "HK_SYS"])
+            # the June 2021 parallel run of the new curve builder, a second curve id carried for a month
+            if dt.date(2021, 6, 1) <= d <= dt.date(2021, 6, 30) and k <= k0 + 36:
+                rows.append([d.isoformat(), "%d-%02d" % (s.year, s.month), "%.3f" % (W.curves[i][k] * (1 + 0.0004 * ((k * 7 + i) % 5 - 2))), "HK_SYS_V2"])
+    return w(os.path.join(tgt, F_CURVE), ["as_of", "delivery_month", "forward_eur_mwh", "curve_id"], rows)
+
+
+def params(W, tgt):
+    rows, n = [], 4100
+    first = {}
+    for d, t, r in W.notices:
+        if d < START:
+            first[t] = (d, r)
+    cls = {"M": "Base Month", "Q": "Base Quarter", "Y": "Base Year"}
+    for t in "MQY":
+        d, r = first[t]
+        n += 1
+        rows.append(["NEX-CM-%d" % n, "2017-12-29", "2018-01-02", cls[t], "%.2f" % W.rates[t][W.didx[dt.date(2018, 1, 2)]]])
+    for d, t, r in sorted((x for x in W.notices if x[0] >= START), key=lambda x: (x[0], "MQY".index(x[1]))):
+        n += 1
+        rows.append(["NEX-CM-%d" % n, C.prev_bday(d).isoformat(), d.isoformat(), cls[t], "%.2f" % r])
+    return w(os.path.join(tgt, F_PARAMS), ["notice_no", "published", "effective_date", "product_class",
+                                           "margin_eur_per_mwh"], rows)
+
+
+def statements(W, tgt):
+    r = W.res
+    rows = []
+    im_prev = None
+    for i, d in enumerate(W.days):
+        im = r["im"][i]
+        if d < START:
+            im_prev = im
+            continue
+        vm, dl = r["vm"][i], r["dlv"][i]
+        dim = im - im_prev
+        im_prev = im
+        row = [d.isoformat(), "HKK-HEDGE", "EUR", "%.2f" % vm, "%.2f" % dl, "%.2f" % im, "%.2f" % dim,
+               "%.2f" % (vm + dl + dim), ""]
+        if d == dt.date(2022, 3, 8):
+            bad = list(row)
+            bad[3] = "%.2f" % (vm * 1.07)
+            bad[7] = "%.2f" % (vm * 1.07 + dl + dim)
+            bad[8] = "superseded"
+            rows.append(bad)
+            row[8] = "restated"
+        rows.append(row)
+    return w(os.path.join(tgt, F_STMT), ["statement_date", "account", "currency", "variation_margin",
+                                         "delivery_settlement", "initial_margin_requirement", "initial_margin_change",
+                                         "net_cash_to_nex", "status"], rows)
+
+
+def positions(W, tgt):
+    rows = []
+    months = sorted({mi(d.year, d.month) for d in W.days})
+    for k in months:
+        ds = [d for d in W.days if mi(d.year, d.month) == k]
+        d = ds[-1]
+        if d < dt.date(2017, 12, 1):
+            continue
+        mw = W.res["mw_by_day"][W.didx[d]]
+        seen = set()
+        for kk in sorted(mw):
+            cl = C.margin_class(kk, d)
+            s = mi_date(kk)
+            if cl == "Y":
+                key, ks = ("Y", s.year), C.year_months(s.year)
+            elif cl == "Q":
+                q0 = mi(s.year, 3 * ((s.month - 1) // 3) + 1)
+                key, ks = ("Q", q0), [q0, q0 + 1, q0 + 2]
+            else:
+                key, ks = ("M", kk), [kk]
+            if key in seen:
+                continue
+            seen.add(key)
+            if mi_date(ks[-1] + 1) <= d:
+                continue
+            e = mi_date(ks[-1] + 1) - dt.timedelta(days=1)
+            rows.append([d.isoformat(), "HKK-HEDGE", contract_code(cl, ks[0], d), PRODUCT[cl],
+                         mi_date(ks[0]).isoformat(), e.isoformat(), "%.1f" % mw[kk]])
+    return w(os.path.join(tgt, F_POS), ["month_end", "account", "contract", "product", "delivery_start",
+                                        "delivery_end", "position_mw"], rows)
+
+
+def trades(W, tgt):
+    rng = np.random.default_rng(404)
+    rows = []
+    n = 70000
+    traders = ["MHA", "MHA", "SSA", "MHA", "TBR"]
+    for d, add in W.res["trades"]:
+        if d < START:
+            continue
+        years = sorted({mi_date(k).year for k in add})
+        for y in years:
+            ks = C.year_months(y)
+            mw = -add[ks[0]]
+            px = cprice(W.curves[W.didx[d]], ks)
+            n += 1
+            # clips of up to 10 MW, as the desk executes on screen
+            left = int(round(mw))
+            while left > 0:
+                clip = int(min(left, rng.integers(3, 11)))
+                left -= clip
+                n += 1
+                unit, qty = ("MW", "%d" % clip)
+                if d < dt.date(2021, 2, 1) and rng.random() < 0.35:
+                    unit, qty = ("MWh", "%d" % (clip * C.hours_year(y)))
+                t = dt.time(9 + int(rng.integers(0, 7)), int(rng.integers(0, 60)))
+                pr = px * (1 + rng.normal(0, 0.0015))
+                rows.append(["HK%06d" % n, d.isoformat(), t.strftime("%H:%M"), "HKK-HEDGE", contract_code("Y", ks[0], d),
+                             "SELL", qty, unit, "%.2f" % pr, "NEW", traders[int(rng.integers(0, len(traders)))], "NEX"])
+    # amendments and cancellations, as the capture system logs them
+    out = []
+    for j, r in enumerate(rows):
+        out.append(r)
+        if j % 53 == 7:
+            a = list(r)
+            a[9] = "AMEND"
+            a[8] = "%.2f" % (float(r[8]) + 0.05)
+            out.append(a)
+        if j % 97 == 31:
+            c = list(r)
+            c[9] = "CANCEL"
+            out.append(c)
+            nb = list(r)
+            nb[0] = r[0] + "R"
+            out.append(nb)
+    return w(os.path.join(tgt, F_TRADES), ["trade_id", "trade_date", "trade_time", "account", "contract", "side",
+                                           "quantity", "unit", "price_eur_mwh", "status", "trader", "venue"], out)
+
+
+def hydrology(W, tgt):
+    rows = []
+    g = W.guide()
+    for i, wk in enumerate(W.weeks):
+        iso = wk.isocalendar()
+        n = min(iso[1], 52)
+        infl = "%.1f" % W.inflow[i]
+        status = "final"
+        if dt.date(2019, 2, 4) <= wk <= dt.date(2019, 2, 18):
+            infl = ""
+            status = "gauge outage"
+        if wk >= dt.date(2026, 11, 16):
+            status = "provisional"
+        rows.append(["%d-W%02d" % (iso[0], iso[1]), wk.isoformat(), infl, "%.1f" % W.level[i],
+                     "%.1f" % (100 * W.level[i] / S.P["res_cap"]), "%.1f" % W.normal_week(n),
+                     "%.1f" % (100 * g[n] / S.P["res_cap"]), status])
+    return w(os.path.join(tgt, F_HYDRO), ["iso_week", "week_start", "inflow_gwh", "storage_gwh", "storage_pct",
+                                          "normal_inflow_gwh", "normal_storage_pct", "status"], rows)
+
+
+def plant_output(W, tgt):
+    rng = np.random.default_rng(77)
+    ror, rel = {}, {}
+    for i, wk in enumerate(W.weeks):
+        for dd in range(7):
+            c = wk + dt.timedelta(days=dd)
+            k = mi(c.year, c.month)
+            ror[k] = ror.get(k, 0.0) + W.ror_w[i] / 7.0 * 1000.0
+            rel[k] = rel.get(k, 0.0) + W.rel_w[i] / 7.0 * 1000.0
+    rows = []
+    for k in sorted(ror):
+        s = mi_date(k)
+        if s.year > 2026:
+            continue
+        for name, typ, sh in PLANTS:
+            base = ror[k] if typ == "run-of-river" else rel[k]
+            val = base * sh
+            nm = name
+            if name == "Djupetjern" and s >= dt.date(2021, 1, 1):
+                nm = "Djupetjern kraftverk"
+            rows.append(["%d-%02d" % (s.year, s.month), nm, typ, "%.0f" % val])
+    return w(os.path.join(tgt, F_PLANT), ["month", "plant", "plant_type", "output_mwh"], rows)
+
+
+def ledger(W, tgt):
+    rows = []
+    n = 220000
+    for x in W.invoices:
+        cu, k, inv = x["cu"], x["k"], x["doc"]
+        if inv > dt.date(2026, 12, 31):
+            continue  # the extract was taken on 31 December 2026
+        s = mi_date(k)
+        n += 1
+        acct = {"SMELTER": "10411", "PULP": "10388", "AFFILIATE": "10102" if s < dt.date(2023, 4, 1) else "10977",
+                "GRID": "10560"}[cu]
+        paid = x["pay"].isoformat() if x["pay"] <= dt.date(2026, 12, 31) else ""
+        amt = x["amt"]
+        row = ["F%d" % n, "INV", CUST_NAME[cu], acct, "%d-%02d" % (s.year, s.month), "%.0f" % x["mwh"], "%.2f" % x["px"],
+               "%.2f" % amt, inv.isoformat(), (inv + dt.timedelta(days=30)).isoformat(), paid, "%.2f" % amt if paid else ""]
+        # the pulp mill pays some invoices in two parts
+        if cu == "PULP" and k % 17 == 5 and paid:
+            part = round(amt * 0.6, 2)
+            row[11] = "%.2f" % part
+            rows.append(row)
+            later = S.pay_date(x["pay"], 9)
+            rows.append(["F%d" % n, "PAY", CUST_NAME[cu], acct, row[4], "", "", "", "", "", later.isoformat(),
+                         "%.2f" % (amt - part)])
+            continue
+        rows.append(row)
+        if cu == "GRID" and k % 23 == 11:
+            n += 1
+            cr = round(x["mwh"] * 0.012)
+            rows.append(["F%d" % n, "CRN", CUST_NAME[cu], acct, row[4], "%.0f" % -cr, "%.2f" % x["px"],
+                         "%.2f" % (-cr * x["px"]), (inv + dt.timedelta(days=12)).isoformat(), "", "", ""])
+    return w(os.path.join(tgt, F_LEDGER), ["doc_no", "doc_type", "customer", "customer_account", "period", "mwh",
+                                           "price_eur_mwh", "amount_eur", "doc_date", "due_date", "paid_date",
+                                           "paid_eur"], rows)
+
+
+def dayahead(W, tgt):
+    rows = []
+    for c in W.cdays:
+        if c < START:
+            continue
+        k = mi(c.year, c.month)
+        com = sum(S.committed(k).values()) / C.month_days(k)
+        out = W.out_day[c]
+        net = out - com
+        sold, bought = (net, 0.0) if net > 0 else (0.0, -net)
+        sp = W.spot[c]
+        settle = C.next_bday(c)
+        rows.append([c.isoformat(), "%.1f" % sold, "%.1f" % bought, "%.2f" % sp, "%.2f" % (net * sp), settle.isoformat()])
+    return w(os.path.join(tgt, F_DA), ["delivery_date", "sold_mwh", "bought_mwh", "system_price_eur_mwh",
+                                       "net_amount_eur", "settlement_date"], rows)
+
+
+def fx(W, tgt):
+    rng = np.random.default_rng(12)
+    x, rows = math.log(9.6), []
+    for d in W.days:
+        x += rng.normal(0, 0.004) + 0.00004
+        if d >= START:
+            rows.append([d.isoformat(), "%.4f" % math.exp(x)])
+    return w(os.path.join(tgt, F_FX), ["date", "eur_nok"], rows)
+
+
+def hdd(W, tgt):
+    rng = np.random.default_rng(13)
+    rows = []
+    for wk in W.weeks:
+        n = wk.isocalendar()[1]
+        base = max(0.0, 15.5 + 9.5 * math.cos(2 * math.pi * (n - 3) / 52.0))
+        rows.append([wk.isoformat(), "%.1f" % max(0.0, 7 * base + rng.normal(0, 9))])
+    return w(os.path.join(tgt, F_HDD), ["week_start", "heating_degree_days"], rows)
+
+
+def write_all(W, tgt):
+    os.makedirs(tgt, exist_ok=True)
+    n = {}
+    for name, fn in ((F_SETTLE, settlement), (F_CURVE, curve), (F_PARAMS, params), (F_STMT, statements),
+                     (F_POS, positions), (F_TRADES, trades), (F_HYDRO, hydrology), (F_PLANT, plant_output),
+                     (F_LEDGER, ledger), (F_DA, dayahead), (F_FX, fx), (F_HDD, hdd)):
+        n[name] = fn(W, tgt)
+    return n

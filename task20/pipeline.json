@@ -1,24 +1,24 @@
 {
  "task": "task20",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 the open book at 31 December 2026; R2 the desk's response and the 2027 book through the replay; R3 NEX Clearing's margin-rate rule; R4 the margin path; R5 the replayed year's output from the opening reservoir; R6 the receipts' timing; R7 the peak cumulative net outflow and its date; R8 the method on the 2022 book against 2022's statements; R9 the facility bridged from the opening-book figure",
+ "call": "commit EUR 350 million for 2027 (from EUR 150 million): the hedge program's cumulative net cash outflow in a year whose prices and inflows repeat 2022 peaks at EUR 328.8 million on 27 August 2027",
+ "chain": "R1 the open book (1.848 TWh of 2027); R2 hedge ratios counting the Fjordal contract (68.6, 39.6, 22.2 per cent); R3 the book at the peak (2.222, 1.077, 0.964 TWh of 2028 to 2030); R4 initial margin at the peak (EUR 59.7 million); R5 output 1,743 GWh and day-ahead net purchases EUR 82.3 million; R6 customer payments EUR 173.7 million; R7 the requirement EUR 328.8 million on 27 August 2027, facility EUR 350 million; R8 2022 method EUR 548.2 million against records EUR 548.5 million",
  "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (dates and vocabulary, ruled harmless)",
+  "reader": "no leak; realism note: the liquidity standard reads like a specification (move the stress-year construction to an annex)"
  },
  "duplicate_check": {
   "heart": "",
@@ -27,14 +27,14 @@
  "judge": {
   "verdict": "",
   "disposition": "",
-  "report": ""
+  "report": "running (run id t20v3a)"
  },
- "paper_pair": null,
+ "paper_pair": 29.0,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 23.5,
+  "careful": 29.0,
+  "thorough": 100.0,
+  "largest_hint": "rescues 1 of 8"
  },
  "runs": {
   "run1": null,
@@ -75,7 +75,7 @@
    "commit": "second hardening at the author's direction: depth level 5, three deep steps found only by profiling the data"
   }
  ],
- "resume": "",
+ "resume": "stage 4: read task20/determinism_check_report.md from the judge (run t20v3a); fix every finding and the leak reader's realism note (the liquidity standard's stress-year construction moved to an annex) in one generator pass; re-run python3 .claude/skills/build-pipeline/gates.py task20 --full; re-judge once only if a graded figure, the prompt or the pack moved; cut the zips, run audit_containers.py task20, set READY and commit READY (task20)",
  "approved": null,
  "submitted": null,
  "portal": {
