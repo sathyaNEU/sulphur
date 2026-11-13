@@ -93,8 +93,8 @@ def register_frames(w, rng):
     st = []
     for d in P.DISTRICTS:
         for s in d["drs"]:
-            st.append(dict(Station=s, PressureDistrict=d["name"], OutletPressurePsig=35 if s[:2] in (
-                "OT", "DT", "RS", "NE", "EG", "SQ", "HV", "LV") else 25, Corrector="EVC-II", MeteringSince="2021"))
+            st.append(dict(Station=s, PressureDistrict=d["name"], OutletPressurePsig=int(round(w.press_nom[s])),
+                           Corrector="EVC-I" if s in P.PT_ONLY_STATIONS else "EVC-II", MeteringSince="2021"))
     stations = pd.DataFrame(st)
     ev = w.evc
     corr = pd.DataFrame(dict(Account=ev["account"], PressureDistrict=ev["district"].map(P.DNAME),
@@ -219,7 +219,13 @@ def distractors(w, rng):
                         InstallDate=w.dates[int(rng.integers(100, w.D - 10))],
                         Equipment=str(rng.choice(["Water heater 0.67 UEF", "Smart thermostat", "Water heater 0.70 UEF"])),
                         RebateUSD=int(rng.choice([50, 75, 100]))))
-    reb = pd.DataFrame(reb).sort_values("InstallDate").reset_index(drop=True)
+    for c in w.dualfuel:
+        if c["rebated"]:
+            reb.append(dict(RebateNo="R%05d" % (4100 + len(reb)), PremiseID=int(pr.at[c["i"], "premise"]),
+                            InstallDate=c["conv"], Equipment="Dual-fuel heat pump controls",
+                            RebateUSD=int(rng.choice([250, 300]))))
+    reb = pd.DataFrame(reb).sort_values(["InstallDate", "PremiseID"], kind="mergesort").reset_index(drop=True)
+    reb["RebateNo"] = ["R%05d" % (4100 + k) for k in range(len(reb))]    # numbered in the order applications closed
     cng = []
     for i in range(w.D):
         if w.dates[i] < dt.date(2024, 1, 2) or w.days[i].dayofweek >= 6:

@@ -1,7 +1,8 @@
 """task22 architecture 2, the independent verifier: the graded figures recomputed from target/ by code that shares
-nothing with analysis.py (its own period builder, station rebuild, calendarization, gas temperature fit and leak
-arithmetic), each checked against figures.json inside its band. The diversion volumes are the one input taken from
-figures.json's account list, re-measured here on each account's own reads.
+nothing with analysis.py (its own real-gas basis fitted on the EVC-II stations' records, period builder, station
+rebuild, calendarization, gas temperature fit and leak arithmetic), each checked against figures.json inside its
+band. The premises that took gas without authorization and their volumes are the one input taken from figures.json's
+premise list; their accounts are read here from the accounts file.
 
     python3 task22/generator/verify.py
 """
@@ -41,7 +42,30 @@ def main():
     s2d = dict(zip(st["Station"], st["PressureDistrict"]))
     bad = drs["CorrectedMcf"].isna() | drs["Alarm"].fillna("").str.contains("COMM|PXDCR|STUCK")
     gate = pd.read_csv(f["gate"], parse_dates=["GasDay"])
+    sgd = dict(zip(gate["GasDay"].dt.date, gate["SpecificGravity"]))
     gate = dict(zip(gate["GasDay"].dt.date, gate["CorrectedMcf"]))
+    # the real-gas basis: atmospheric pressure from the customer correctors' own ratios, each station's recorded
+    # factor over its pressure-and-temperature factor, the supercompressibility fitted on the stations that carry it
+    ev = pd.read_csv(f["evc"], parse_dates=["GasDay"])
+    okv = (ev["Status"] == "OK") & (ev["UncorrectedMcf"] > 1)
+    patm = float(np.median(ev.loc[okv, "CorrectedMcf"] / ev.loc[okv, "UncorrectedMcf"] * P.P_BASE *
+                           (ev.loc[okv, "AvgGasTempF"] + 459.67) / P.R_BASE - ev.loc[okv, "AvgPressurePsig"]))
+    ok("Z atmospheric pressure from the correctors' ratios", abs(patm - 13.98) < 0.02, patm)
+    gd = ~bad & drs["UncorrectedMcf"].gt(1)
+    xs = drs.loc[gd, "CorrectedMcf"] / drs.loc[gd, "UncorrectedMcf"] / ((drs.loc[gd, "AvgPressurePsig"] + patm) / P.P_BASE
+                                                                       * P.R_BASE / (drs.loc[gd, "AvgTempF"] + 459.67))
+    med = xs.groupby(drs.loc[gd, "Station"]).median()
+    pto = sorted(med.index[med < 1.0015])
+    ok("Z the stations whose recorded factor is pressure and temperature alone", pto == sorted(P.PT_ONLY_STATIONS), pto)
+    zz = drs.loc[gd & ~drs["Station"].isin(pto)]
+    dp = zz["AvgPressurePsig"] + patm - P.P_BASE
+    bz = np.linalg.lstsq(np.c_[dp, dp * (zz["AvgTempF"] - 50)], xs[zz.index].values - 1, rcond=None)[0]
+
+    def fpv2(p_psia, t_f):
+        return 1 + bz[0] * (p_psia - P.P_BASE) + bz[1] * (p_psia - P.P_BASE) * (t_f - 50)
+    m_ = drs["Station"].isin(pto) & drs["CorrectedMcf"].notna()
+    drs.loc[m_, "CorrectedMcf"] = drs.loc[m_, "CorrectedMcf"] * fpv2(drs.loc[m_, "AvgPressurePsig"] + patm,
+                                                                    drs.loc[m_, "AvgTempF"])
     vol = {s: np.zeros(D) for s in s2d}
     okd = {s: np.zeros(D, bool) for s in s2d}
     for r, b in zip(drs.itertuples(), bad):
@@ -68,12 +92,14 @@ def main():
         din[s2d[s]] = din.get(s2d[s], np.zeros(D)) + vol[s]
     W = (days >= pd.Timestamp(P.W0)) & (days <= pd.Timestamp(P.W1))
     tot_in = sum(v[W].sum() for v in din.values())
-    g1 = FIG["R1_gas_in"]
-    ok("R1 fourteen districts' gas in", abs(tot_in / g1["fourteen districts, twelve months to September 2026"] - 1)
-       < 0.003, tot_in)
-    jan = (days >= "2026-01-01") & (days <= "2026-01-31")
-    ok("R1 Riverside January 2026", abs(din["Riverside"][jan].sum() / g1["Riverside, January 2026"] - 1) < 0.015,
-       din["Riverside"][jan].sum())
+    g1 = FIG["R1_basis"]
+    for d in ("Riverside", "College Hill"):
+        k_ = "%s, gas in, twelve months to September 2026" % d
+        ok("R1 %s's twelve months on the real-gas basis" % d, abs(din[d][W].sum() / g1[k_] - 1) < 0.003,
+           (din[d][W].sum(), g1[k_]))
+    dec = (days >= "2025-12-01") & (days <= "2025-12-31")
+    ok("R1 Lakeview December 2025", abs(din["Lakeview"][dec].sum() / g1["Lakeview, gas in, December 2025"] - 1) < 0.015,
+       din["Lakeview"][dec].sum())
     # the reads: actual-to-actual periods on each meter
     rd = pd.read_csv(f["reads"], dtype={"MeterID": str}).drop_duplicates()
     rd = rd[rd["ReadType"] != "E"].copy()
@@ -129,26 +155,21 @@ def main():
         if not istc:
             out[d]["under"] += bil * (fac - 1)
             out[d]["bil_ntc"] += bil
-    g2 = FIG["R2_billed_months"]
-    cj = (days >= "2026-01-01") & (days <= "2026-01-31")
-    ok("R2 College Hill January 2026 billed volume", abs(out["College Hill"]["bil"][cj].sum() /
-                                                          g2["College Hill, January 2026"] - 1) < 0.02,
-       out["College Hill"]["bil"][cj].sum())
-    g3 = FIG["R3_under"]
-    for d in ("Riverside", "Lakeview"):
-        v = out[d]["under"][W].sum()
-        ok("R3 %s under-registration" % d, abs(v / g3["%s, Mcf" % d] - 1) < 0.06, v)
-    for d in ("College Hill", "Airport", "Halvorsen"):
-        v = 100 * out[d]["under"][W].sum() / out[d]["bil_ntc"][W].sum()
-        ok("R3 %s under-registration share" % d, abs(v - g3["%s, per cent" % d]) < 0.2, v)
+    ntc = {}
+    for r in reg.itertuples():
+        if not tc.get(r.MeterID, False):
+            ntc[r.PressureDistrict] = ntc.get(r.PressureDistrict, 0) + 1
     # corrector customers, own use, damage
-    ev = pd.read_csv(f["evc"], parse_dates=["GasDay"])
     corr = pd.read_excel(f["register"], sheet_name="Corrector accounts")
     ev["d"] = ev["Account"].map(dict(zip(corr["Account"], corr["PressureDistrict"])))
     ev["r"] = (ev["CorrectedMcf"] / ev["UncorrectedMcf"]).where(ev["Status"] == "OK")
     ev["r"] = ev.groupby("Account")["r"].transform(lambda s: s.fillna(s.rolling(21, center=True, min_periods=1).median())
                                                    .ffill().bfill())
     ev["v"] = np.where(ev["Status"] == "OK", ev["CorrectedMcf"], ev["UncorrectedMcf"] * ev["r"])
+    ev["t"] = ev["AvgGasTempF"].where(ev["Status"] == "OK")
+    ev["t"] = ev.groupby("Account")["t"].transform(lambda s: s.fillna(s.rolling(21, center=True, min_periods=1)
+                                                                       .median()).ffill().bfill())
+    ev["v"] = ev["v"] * fpv2(ev["AvgPressurePsig"] + patm, ev["t"])
     evw = ev[(ev["GasDay"] >= pd.Timestamp(P.W0)) & (ev["GasDay"] <= pd.Timestamp(P.W1))].groupby("d")["v"].sum()
     ou = pd.read_excel(f["own_use"], skiprows=2)
     ou = ou[ou["Month"].astype(str).str.match(r"^20(25-1[0-2]|26-0[1-9])$")].dropna(subset=["PressureDistrict"])
@@ -156,29 +177,35 @@ def main():
     dm = pd.read_excel(f["damage"], parse_dates=["Date"])
     dm = dm[(dm["Date"] >= pd.Timestamp(P.W0)) & (dm["Date"] <= pd.Timestamp(P.W1))].groupby("PressureDistrict")[
         "EstimatedGasLostMcf"].sum()
-    acc = pd.DataFrame(FIG["_extra"]["diversion_accounts"])
-    div = acc.groupby(acc["district"].map(P.DNAME))["mcf_window"].sum() if len(acc) else pd.Series(dtype=float)
+    ok("R1 East Industrial's corrector customers on the real-gas basis",
+       abs(evw.get("East Industrial", 0) / g1["East Industrial, corrector customers, twelve months to September 2026"]
+           - 1) < 0.003, evw.get("East Industrial", 0))
+    prem = pd.DataFrame(FIG["_extra"]["diversion_premises"])
+    div = prem.groupby(prem["district"].map(P.DNAME))["mcf_window"].sum() if len(prem) else pd.Series(dtype=float)
+    accs = pd.read_csv(f["accounts"], parse_dates=["StartDate", "EndDate"])
+    n_acc = 0
+    for r in prem.itertuples():
+        m0 = max(pd.Period(r.first_month, "M").start_time, pd.Timestamp(P.W0))
+        a_ = accs[(accs["PremiseID"] == r.PremiseID) & (accs["StartDate"] <= pd.Timestamp(P.W1)) &
+                  (accs["EndDate"].fillna(pd.Timestamp(P.SIM1)) >= m0)]
+        n_acc += len(a_)
+    g2 = FIG["R2_unauthorized"]
+    ok("R2 premises and their accounts", len(prem) == g2["premises"] and n_acc == g2["accounts"], (len(prem), n_acc))
+    for k_, v_ in FIG["R5_unauthorized_mcf"].items():
+        ok("R5 %s" % k_, abs(div.get(k_.replace(", Mcf", ""), 0) - v_) <= max(1.0, 0.25 * v_), v_)
     leak = {}
     for d in out:
         inn = din[d][W].sum()
         lk = inn - out[d]["bil"][W].sum() - out[d]["under"][W].sum() - evw.get(d, 0) - own.get(d, 0) - dm.get(d, 0) \
             - div.get(d, 0)
         leak[d] = 100 * lk / inn
-    for d, v in FIG["R5_leak_pct"].items():
-        ok("R5 %s leak share" % d, abs(leak[d] - v) < 0.10, (round(leak[d], 3), v))
-    des = sorted(d for d, v in leak.items() if v > P.LEAK_LINE)
-    ok("R6 the districts over the 1.0 line", des == sorted(FIG["R6_designated"]), des)
-    # the 2027 plan at the 2024-25 pace
-    wo = pd.read_csv(f["workorders"], parse_dates=["PlannedDate", "CompletedDate"])
-    pl = pd.read_excel(f["plan2027"], skiprows=2).dropna(subset=["PlannedDate"])
-    pl = pl[pd.to_numeric(pl["PremiseID"], errors="coerce").notna()]
-    done = 0.0
-    for lc, g in pl.groupby("MeterLocation"):
-        lag = (wo.loc[wo["MeterLocation"] == lc, "CompletedDate"] - wo.loc[wo["MeterLocation"] == lc, "PlannedDate"]
-               ).dt.days.fillna(10 ** 6).values
-        for p_ in pd.to_datetime(g["PlannedDate"]):
-            done += (lag <= (pd.Timestamp(P.SEASON_2027) - p_).days - 1).mean()
-    ok("R8 changeouts done before the 2027-28 season", abs(done / FIG["R8_done_before_season"] - 1) < 0.04, done)
+    for d, v_ in FIG["R3_leak_pct"].items():
+        ok("R3 %s leak share" % d, abs(leak[d] - v_) < 0.10, (round(leak[d], 3), v_))
+    des = sorted(d for d, v_ in leak.items() if v_ > P.LEAK_LINE)
+    ok("R4 the districts over the 1.0 line", des == sorted(FIG["R4_designated"]), des)
+    cho = sorted(d for d in out if ntc.get(d, 0) >= P.CHANGEOUT_MIN_METERS and out[d]["bil_ntc"][W].sum() > 0 and
+                 100 * out[d]["under"][W].sum() / out[d]["bil_ntc"][W].sum() > P.CHANGEOUT_LINE)
+    ok("R6 the districts over the 3.5 line with 100 such meters", cho == sorted(FIG["R6_changeout"]), cho)
     print("\n%d verified, %d failed" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
 

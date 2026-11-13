@@ -1,41 +1,41 @@
 {
  "task": "task22",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 6,
- "stage_name": "runs",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist; 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 668 of 976 scheduled changeouts done before the 2027-28 season",
- "chain": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services; R4 the accounts that took gas without authorization, told from new snowbirds; R5 each district's leak loss in the twelve months to September 2026; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the scheduled 2027 changeouts done before the 2027-28 heating season",
+ "call": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist; 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist",
+ "chain": "R1 each district's gas in and its corrector customers on one real-gas basis (four EVC-I station correctors and every customer corrector correct for pressure and temperature only); R2 the premises where gas was taken without authorization and their accounts, told from households away for the winter (May test) and dual-fuel heat pumps (cold-day response); R3 each district's leak loss share; R4 the main replacement set; R5 the gas taken without authorization by district; R6 the changeout set (reflex)",
  "architecture": 2,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
-  "date": "2026-11-12"
+  "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "REVIEW (2026-11-12: 6 REVIEW lines, each ruled harmless in leak_check_report.md; no LEAK)",
-  "reader": "three isolated reads on architecture 2: the first (fresh cut) and the second (after the stage 4 fixes) found no ranking file, no helping file and no answer figure; their points were fixed in one pass each (the meter-access clause removed; the accounts, the billed month and the leak loss share pinned in the prompt); the third, on the re-pinned prompt only, found no method, file, count or rounding named and every ask determinate (leak_check_report.md)"
+  "leak_py": "REVIEW (2026-11-13, --asof 2026-11-05: 12 REVIEW lines, each ruled harmless in the design note's Pre-ship check; no LEAK)",
+  "reader": "one isolated read on the redesigned pack (Sonnet, medium): no sentence hands over a priced step; its LEAK was the rules' thresholds and Rule 3's carve-out (the filed decision lines), ruled harmless (leak_check_report.md, Solver's-eye read); it read Schedule G-3's corrected volume as already at base conditions, the hurried reading R1 prices"
  },
  "duplicate_check": {
-  "heart": "WARN (strategy risk, chain near task8 v19, question form, house lessons and shell), 2026-11-12",
-  "nearest": "task4 v13 (skeleton severity none)"
+  "heart": "WARN (strategy risk, driver near this slot's v2a, repeat.decision), 2026-11-13; weight, calibration, stump strategy, forcing event and context artifact redrawn at re-registration",
+  "nearest": "task4 arch 12, task4 v13, task9 v3 (skeleton severity none)"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "passes": "four: the first read a stale target.zip (re-cut); DETERMINISTIC and APPROVE on the fresh cut, on the prompt's first two pins and on the re-pinned share window",
+  "passes": "two on the redesign: the first cut, then once on the final cut after the prompt's 'any premises' and the rebates' numbering (no fix either time)",
   "report": "task22/determinism_check_report.md"
  },
- "paper_pair": 40.5,
+ "paper_pair": 14.0,
  "effort": {
   "quick": 7.0,
-  "careful": 40.5,
+  "careful": 14.0,
   "thorough": 100.0,
-  "largest_hint": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm; the commercial correctors log what the gas actually was (rescues R3 and R7, 2 of 8)"
+  "largest_hint": "Four of the station correctors and every customer corrector correct for pressure and temperature only; at 25 to 58 psig the gas is not an ideal gas (rescues R1, 1 of 6)"
  },
  "runs": {
   "run1": 49.0,
@@ -107,12 +107,13 @@
    "note": "reward 71.0, stumped type match failed: the call rested on the unauthorized-use screen alone; golden fixes: premise 3135379 a furnace tap, the step 4 count, premises against accounts"
   }
  ],
- "resume": "RETURNED: redesign at stage 2 in the same world: keep the diversion-against-absence judgment the runs lost, demote the judgments they made unprompted (R71 to R74), add two or more stumps that each move the call (the stump factorial), fix the golden's furnace tap, count and unit",
+ "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py --rewrite, leak.py), uploads it with target.zip, then /triage-runs task22 with both runs and the rubric",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "sent back for fixes",
   "date": "2026-11-13",
   "note": "version 13, reward 71.0, stumped failed, stumped type match failed, determinism and solution passed (runs/arch2_review_2026-11-13.md)"
- }
+ },
+ "level": 5
 }

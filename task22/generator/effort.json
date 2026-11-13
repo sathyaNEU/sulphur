@@ -2,252 +2,125 @@
  "results": [
   {
    "id": "R1",
-   "name": "each district's gas in at its regulator stations, faulty days rebuilt from the gate",
+   "name": "each district's gas in and its corrector customers on one real-gas basis at base conditions",
    "graded_as": "Ask 1",
-   "figure": "R1_gas_in",
+   "figure": "R1_basis",
    "depends": [],
-   "independent": "the regulator station correctors and the city gate",
+   "independent": "the regulator station correctors, the customer correctors and the city gate",
    "golden": {
-    "Riverside, January 2026": 22715.3,
-    "Lakeview, December 2025": 13568.6,
-    "fourteen districts, twelve months to September 2026": 1844373.0
+    "Riverside, gas in, twelve months to September 2026": 128796.0,
+    "College Hill, gas in, twelve months to September 2026": 305841.0,
+    "East Industrial, corrector customers, twelve months to September 2026": 397372.0,
+    "Lakeview, gas in, December 2025": 13536.7
    },
    "bands": {
-    "Riverside, January 2026": [
-     22374.57,
-     23056.03
+    "Riverside, gas in, twelve months to September 2026": [
+     128409.61,
+     129182.39
     ],
-    "Lakeview, December 2025": [
-     13365.07,
-     13772.13
+    "College Hill, gas in, twelve months to September 2026": [
+     304923.48,
+     306758.52
     ],
-    "fourteen districts, twelve months to September 2026": [
-     1838839.88,
-     1849906.12
+    "East Industrial, corrector customers, twelve months to September 2026": [
+     396179.88,
+     398564.12
+    ],
+    "Lakeview, gas in, December 2025": [
+     13333.65,
+     13739.75
     ]
    },
    "partly_share": 0.5,
    "passes": {
     "quick": {
-     "Riverside, January 2026": 12943.3,
-     "Lakeview, December 2025": 11976.8,
-     "fourteen districts, twelve months to September 2026": 1824662.0
+     "Riverside, gas in, twelve months to September 2026": 117339.0,
+     "College Hill, gas in, twelve months to September 2026": 302902.0,
+     "East Industrial, corrector customers, twelve months to September 2026": 395152.0,
+     "Lakeview, gas in, December 2025": 11937.6
     },
     "careful": {
-     "Riverside, January 2026": 22715.3,
-     "Lakeview, December 2025": 13568.6,
-     "fourteen districts, twelve months to September 2026": 1844373.0
+     "Riverside, gas in, twelve months to September 2026": 128005.0,
+     "College Hill, gas in, twelve months to September 2026": 304510.0,
+     "East Industrial, corrector customers, twelve months to September 2026": 395152.0,
+     "Lakeview, gas in, December 2025": 13536.2
     },
     "thorough": {
-     "Riverside, January 2026": 22715.3,
-     "Lakeview, December 2025": 13568.6,
-     "fourteen districts, twelve months to September 2026": 1844373.0
-    }
-   }
-  },
-  {
-   "id": "R2",
-   "name": "the volume billed for each district's meters, carried to calendar months",
-   "graded_as": "Component 4",
-   "figure": "R2_billed_months",
-   "depends": [],
-   "independent": "the cycle reads and the regulator stations' daily volumes",
-   "golden": {
-    "College Hill, January 2026": 16638.8,
-    "North End, March 2026": 14000.3,
-    "Old Town, October 2025": 8105.3,
-    "Halvorsen, October 2025": 3293.3
-   },
-   "bands": {
-    "College Hill, January 2026": [
-     16306.02,
-     16971.58
-    ],
-    "North End, March 2026": [
-     13720.29,
-     14280.31
-    ],
-    "Old Town, October 2025": [
-     7943.19,
-     8267.41
-    ],
-    "Halvorsen, October 2025": [
-     3227.43,
-     3359.17
-    ]
-   },
-   "partly_share": 0.5,
-   "passes": {
-    "quick": {
-     "College Hill, January 2026": 16169.3,
-     "North End, March 2026": 12828.5,
-     "Old Town, October 2025": 3991.3,
-     "Halvorsen, October 2025": 2049.4
-    },
-    "careful": {
-     "College Hill, January 2026": 15647.2,
-     "North End, March 2026": 12788.1,
-     "Old Town, October 2025": 7997.9,
-     "Halvorsen, October 2025": 3280.7
-    },
-    "thorough": {
-     "College Hill, January 2026": 16638.8,
-     "North End, March 2026": 14000.3,
-     "Old Town, October 2025": 8105.3,
-     "Halvorsen, October 2025": 3293.3
+     "Riverside, gas in, twelve months to September 2026": 128796.0,
+     "College Hill, gas in, twelve months to September 2026": 305841.0,
+     "East Industrial, corrector customers, twelve months to September 2026": 397372.0,
+     "Lakeview, gas in, December 2025": 13536.7
     }
    },
    "precedent": [
-    "N20"
+    "L28"
+   ]
+  },
+  {
+   "id": "R2",
+   "name": "the premises where gas was taken without authorization, and their accounts",
+   "graded_as": "Component 1",
+   "figure": "R2_unauthorized",
+   "depends": [],
+   "independent": "each premise's reads against its own weather response a year earlier",
+   "golden": {
+    "premises": 16,
+    "accounts": 18
+   },
+   "bands": {
+    "premises": [
+     15,
+     17
+    ],
+    "accounts": [
+     17,
+     19
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "premises": 0,
+     "accounts": 0
+    },
+    "careful": {
+     "premises": 101,
+     "accounts": 110
+    },
+    "thorough": {
+     "premises": 16,
+     "accounts": 18
+    }
+   },
+   "precedent": [
+    "L47",
+    "N36"
    ]
   },
   {
    "id": "R3",
-   "name": "the under-registration of the meters that do not compensate for gas temperature",
-   "graded_as": "Component 1",
-   "figure": "R3_under",
-   "depends": [],
-   "independent": "the loggers, the soil station and the commercial correctors",
-   "golden": {
-    "Riverside, Mcf": 3645.0,
-    "Lakeview, Mcf": 2406.0,
-    "College Hill, per cent": 3.05,
-    "Airport, per cent": 2.99,
-    "Halvorsen, per cent": 4.61
-   },
-   "bands": {
-    "Riverside, Mcf": [
-     3426.3,
-     3863.7
-    ],
-    "Lakeview, Mcf": [
-     2261.64,
-     2550.36
-    ],
-    "College Hill, per cent": [
-     2.85,
-     3.25
-    ],
-    "Airport, per cent": [
-     2.79,
-     3.19
-    ],
-    "Halvorsen, per cent": [
-     4.41,
-     4.81
-    ]
-   },
-   "partly_share": 0.5,
-   "passes": {
-    "quick": {
-     "Riverside, Mcf": 0.0,
-     "Lakeview, Mcf": 0.0,
-     "College Hill, per cent": 0.0,
-     "Airport, per cent": 0.0,
-     "Halvorsen, per cent": 0.0
-    },
-    "careful": {
-     "Riverside, Mcf": 4452.0,
-     "Lakeview, Mcf": 2919.0,
-     "College Hill, per cent": 3.65,
-     "Airport, per cent": 3.62,
-     "Halvorsen, per cent": 5.67
-    },
-    "thorough": {
-     "Riverside, Mcf": 3645.0,
-     "Lakeview, Mcf": 2406.0,
-     "College Hill, per cent": 3.05,
-     "Airport, per cent": 2.99,
-     "Halvorsen, per cent": 4.61
-    }
-   },
-   "precedent": [
-    "L22",
-    "L37",
-    "N04"
-   ]
-  },
-  {
-   "id": "R4",
-   "name": "the accounts that took gas without authorization, and their volume",
-   "graded_as": "Component 3",
-   "figure": "R4_diversion",
-   "depends": [],
-   "independent": "each account's reads against its own weather response a year earlier",
-   "golden": {
-    "accounts": 15,
-    "Elm Grove, Mcf": 568.0,
-    "East Industrial, Mcf": 1310.0,
-    "Sundquist, Mcf": 267.0
-   },
-   "bands": {
-    "accounts": [
-     14,
-     16
-    ],
-    "Elm Grove, Mcf": [
-     426.0,
-     710.0
-    ],
-    "East Industrial, Mcf": [
-     982.5,
-     1637.5
-    ],
-    "Sundquist, Mcf": [
-     200.25,
-     333.75
-    ]
-   },
-   "partly_share": 0.5,
-   "passes": {
-    "quick": {
-     "accounts": 0,
-     "Elm Grove, Mcf": 0.0,
-     "East Industrial, Mcf": 0.0,
-     "Sundquist, Mcf": 0.0
-    },
-    "careful": {
-     "accounts": 61,
-     "Elm Grove, Mcf": 688.0,
-     "East Industrial, Mcf": 1321.0,
-     "Sundquist, Mcf": 269.0
-    },
-    "thorough": {
-     "accounts": 15,
-     "Elm Grove, Mcf": 568.0,
-     "East Industrial, Mcf": 1310.0,
-     "Sundquist, Mcf": 267.0
-    }
-   },
-   "precedent": [
-    "L26"
-   ]
-  },
-  {
-   "id": "R5",
    "name": "each district's leak loss in the twelve months to September 2026, per cent of its gas in",
    "graded_as": "Component 2",
-   "figure": "R5_leak_pct",
+   "figure": "R3_leak_pct",
    "depends": [
     "R1",
-    "R2",
-    "R3",
-    "R4"
+    "R2"
    ],
    "independent": "",
    "golden": {
-    "Riverside": 1.25,
+    "Riverside": 1.17,
     "Lakeview": 1.21,
     "Sundquist": 1.35,
+    "East Industrial": 0.67,
     "Halvorsen": 0.83,
-    "Elm Grove": 0.69,
-    "East Industrial": 0.59,
-    "College Hill": 0.78
+    "Elm Grove": 0.67,
+    "College Hill": 0.78,
+    "Downtown": 1.35
    },
    "bands": {
     "Riverside": [
-     1.15,
-     1.35
+     1.07,
+     1.27
     ],
     "Lakeview": [
      1.11,
@@ -257,66 +130,73 @@
      1.25,
      1.45
     ],
+    "East Industrial": [
+     0.57,
+     0.77
+    ],
     "Halvorsen": [
      0.73,
      0.93
     ],
     "Elm Grove": [
-     0.59,
-     0.79
-    ],
-    "East Industrial": [
-     0.49,
-     0.69
+     0.57,
+     0.77
     ],
     "College Hill": [
      0.68,
      0.88
+    ],
+    "Downtown": [
+     1.25,
+     1.45
     ]
    },
    "partly_share": 0.5,
    "passes": {
     "quick": {
-     "Riverside": -3.96,
-     "Lakeview": 1.73,
-     "Sundquist": 5.22,
-     "Halvorsen": 4.12,
-     "Elm Grove": 3.53,
-     "East Industrial": 0.72,
-     "College Hill": 0.72
+     "Riverside": -5.43,
+     "Lakeview": 1.8,
+     "Sundquist": 5.26,
+     "East Industrial": 0.66,
+     "Halvorsen": 4.22,
+     "Elm Grove": 3.45,
+     "College Hill": 0.33,
+     "Downtown": 1.94
     },
     "careful": {
-     "Riverside": 0.59,
-     "Lakeview": -0.03,
-     "Sundquist": 0.83,
-     "Halvorsen": 0.2,
-     "Elm Grove": -0.1,
-     "East Industrial": 0.52,
-     "College Hill": 0.7
+     "Riverside": 0.18,
+     "Lakeview": 0.19,
+     "Sundquist": 0.64,
+     "East Industrial": 1.14,
+     "Halvorsen": 0.44,
+     "Elm Grove": 0.45,
+     "College Hill": 0.37,
+     "Downtown": 1.12
     },
     "thorough": {
-     "Riverside": 1.25,
+     "Riverside": 1.17,
      "Lakeview": 1.21,
      "Sundquist": 1.35,
+     "East Industrial": 0.67,
      "Halvorsen": 0.83,
-     "Elm Grove": 0.69,
-     "East Industrial": 0.59,
-     "College Hill": 0.78
+     "Elm Grove": 0.67,
+     "College Hill": 0.78,
+     "Downtown": 1.35
     }
    },
    "precedent": [
-    "L22",
-    "L26",
-    "N20"
+    "L47",
+    "N36",
+    "L28"
    ]
   },
   {
-   "id": "R6",
+   "id": "R4",
    "name": "the districts that enter the 2027-2029 main replacement program",
    "graded_as": "Recommendation",
-   "figure": "R6_designated",
+   "figure": "R4_designated",
    "depends": [
-    "R5"
+    "R3"
    ],
    "independent": "",
    "golden": [
@@ -340,6 +220,7 @@
     ],
     "careful": [
      "Downtown",
+     "East Industrial",
      "Old Town"
     ],
     "thorough": [
@@ -351,20 +232,75 @@
     ]
    },
    "precedent": [
-    "L22",
-    "L26",
-    "N20"
+    "L47",
+    "N36",
+    "L28"
    ]
   },
   {
-   "id": "R7",
-   "name": "the districts where the 2027 meter changeout goes",
+   "id": "R5",
+   "name": "the gas taken without authorization, by district",
    "graded_as": "Ask 2",
-   "figure": "R7_changeout",
-   "depends": [
-    "R3"
-   ],
-   "independent": "",
+   "figure": "R5_unauthorized_mcf",
+   "depends": [],
+   "independent": "each premise's reads against its own weather response a year earlier",
+   "golden": {
+    "Elm Grove, Mcf": 464.0,
+    "East Industrial, Mcf": 1330.0,
+    "Sundquist, Mcf": 266.0,
+    "Old Town, Mcf": 157.0
+   },
+   "bands": {
+    "Elm Grove, Mcf": [
+     348.0,
+     580.0
+    ],
+    "East Industrial, Mcf": [
+     997.5,
+     1662.5
+    ],
+    "Sundquist, Mcf": [
+     199.5,
+     332.5
+    ],
+    "Old Town, Mcf": [
+     117.75,
+     196.25
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "Elm Grove, Mcf": 0.0,
+     "East Industrial, Mcf": 0.0,
+     "Sundquist, Mcf": 0.0,
+     "Old Town, Mcf": 0.0
+    },
+    "careful": {
+     "Elm Grove, Mcf": 709.0,
+     "East Industrial, Mcf": 1329.0,
+     "Sundquist, Mcf": 730.0,
+     "Old Town, Mcf": 459.0
+    },
+    "thorough": {
+     "Elm Grove, Mcf": 464.0,
+     "East Industrial, Mcf": 1330.0,
+     "Sundquist, Mcf": 266.0,
+     "Old Town, Mcf": 157.0
+    }
+   },
+   "precedent": [
+    "L47",
+    "N36"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "the districts where the 2027 meter changeout goes",
+   "graded_as": "Recommendation 2",
+   "figure": "R6_changeout",
+   "depends": [],
+   "independent": "the loggers, the soil station and the register",
    "golden": [
     "Elm Grove",
     "Halvorsen",
@@ -377,10 +313,7 @@
    "passes": {
     "quick": [],
     "careful": [
-     "Airport",
-     "College Hill",
      "Elm Grove",
-     "East Industrial",
      "Halvorsen",
      "Lakeview",
      "North End",
@@ -397,65 +330,31 @@
      "Riverside",
      "Sundquist"
     ]
-   },
-   "precedent": [
-    "L22",
-    "L37",
-    "N04"
-   ]
-  },
-  {
-   "id": "R8",
-   "name": "the scheduled 2027 changeouts done before the 2027-28 heating season",
-   "graded_as": "Ask 3",
-   "figure": "R8_done_before_season",
-   "depends": [],
-   "independent": "the 2024-25 work orders and the 2027 plan",
-   "golden": 668,
-   "band": [
-    641.28,
-    694.72
-   ],
-   "partly": [
-    614.56,
-    721.44
-   ],
-   "passes": {
-    "quick": 976,
-    "careful": 976,
-    "thorough": 668
-   },
-   "precedent": [
-    "N22",
-    "N03"
-   ]
+   }
   }
  ],
  "hints": [
   {
-   "sentence": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm; the commercial correctors log what the gas actually was.",
+   "sentence": "Four of the station correctors and every customer corrector correct for pressure and temperature only; at 25 to 58 psig the gas is not an ideal gas.",
    "rescues": [
-    "R3",
-    "R7"
+    "R1"
    ]
+  },
+  {
+   "sentence": "A household away for the winter is back at its own weather response in May; a tap or a bypass is not.",
+   "rescues": []
+  },
+  {
+   "sentence": "A dual-fuel heat pump leaves the furnace the whole load on the coldest days, read period by read period.",
+   "rescues": []
+  },
+  {
+   "sentence": "Gas in a buried service runs near the soil's temperature, and the 2025-26 snow kept the soil warm.",
+   "rescues": []
   },
   {
    "sentence": "Spread each read period's gas over its days the way the district's own regulator station took it.",
-   "rescues": [
-    "R2"
-   ]
-  },
-  {
-   "sentence": "A snowbird's winter use keeps some heating and comes back in summer; a bypass or a furnace tap does not.",
-   "rescues": [
-    "R4"
-   ]
-  },
-  {
-   "sentence": "Past changeouts finished at the pace access allowed, slowest where the meter is inside.",
-   "rescues": [
-    "R8"
-   ]
+   "rescues": []
   }
  ],
  "routes": [
@@ -471,72 +370,269 @@
    "golden": true
   },
   {
-   "name": "the logger study's straight line on the airport's air",
+   "name": "every fall in use booked as gas taken without authorization (the dual-fuel homes aside)",
    "answer": [
     "Downtown",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
+   ]
+  },
+  {
+   "name": "every lost heating response booked as a furnace tap, no cold-day test",
+   "answer": [
+    "Downtown",
+    "Lakeview",
     "Old Town"
    ]
   },
   {
-   "name": "the 2019 consultant's monthly mean air temperature",
-   "answer": []
-  },
-  {
-   "name": "each read spread evenly over its days",
+   "name": "every corrector's volume taken as recorded",
    "answer": [
     "Downtown",
-    "Halvorsen",
-    "Lakeview",
-    "Old Town",
-    "Riverside",
-    "Sundquist"
-   ]
-  },
-  {
-   "name": "bills taken in the month they were read",
-   "answer": [
-    "Downtown",
-    "Lakeview",
-    "Old Town",
-    "Riverside",
-    "Sundquist"
-   ]
-  },
-  {
-   "name": "no diversion subtracted",
-   "answer": [
-    "Downtown",
-    "Elm Grove",
     "East Industrial",
     "Lakeview",
     "Old Town",
-    "Riverside",
     "Sundquist"
    ]
   },
   {
-   "name": "every collapse in use booked as diversion",
+   "name": "the careful but hurried route (all three)",
    "answer": [
     "Downtown",
+    "East Industrial",
+    "Old Town"
+   ]
+  },
+  {
+   "name": "every fall booked and every corrector as recorded, the gas temperature on the study's air line",
+   "answer": [
+    "Downtown",
+    "East Industrial"
+   ]
+  },
+  {
+   "name": "every fall booked and every corrector as recorded, reads spread evenly over their days",
+   "answer": [
+    "Downtown",
+    "East Industrial",
+    "Old Town"
+   ]
+  },
+  {
+   "name": "every fall in use booked as gas taken without authorization (rebated homes aside)",
+   "answer": [
+    "Downtown",
+    "Old Town"
+   ]
+  },
+  {
+   "name": "no gas taken without authorization subtracted",
+   "answer": [
+    "Downtown",
+    "Elm Grove",
+    "Lakeview",
     "Old Town",
     "Riverside",
     "Sundquist"
    ]
   },
   {
-   "name": "the careful but hurried route",
+   "name": "each faulty station day at the station's interpolated share of the gate",
    "answer": [
     "Downtown",
-    "Old Town"
+    "Lakeview",
+    "Old Town",
+    "Riverside",
+    "Sundquist"
    ]
   }
  ],
+ "factorial": {
+  "golden_answer": [
+   "Downtown",
+   "Lakeview",
+   "Old Town",
+   "Riverside",
+   "Sundquist"
+  ],
+  "reflex_route": {
+   "answer": [
+    "Downtown",
+    "East Industrial",
+    "Old Town"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "J1",
+    "name": "a household away for the winter told from a tap by its heating response in May",
+    "kind": "stump",
+    "precedent": [
+     "L47",
+     "N36"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "Old Town",
+      "Riverside",
+      "Sundquist"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Downtown",
+      "East Industrial",
+      "Lakeview",
+      "Old Town"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J2",
+    "name": "a dual-fuel heat pump told from a furnace tap by its cold-day response",
+    "kind": "stump",
+    "precedent": [
+     "N36"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "Lakeview",
+      "Old Town"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Downtown",
+      "East Industrial",
+      "Old Town",
+      "Sundquist"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J3",
+    "name": "every corrector put on the real-gas basis (supercompressibility)",
+    "kind": "stump",
+    "precedent": [
+     "L28"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "East Industrial",
+      "Lakeview",
+      "Old Town",
+      "Sundquist"
+     ],
+     "results_moved": [
+      "R1",
+      "R3",
+      "R4"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Downtown",
+      "Old Town"
+     ],
+     "results_rescued": [
+      "R1"
+     ]
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the gas temperature in the buried services on the soil",
+    "kind": "reflex",
+    "precedent": [
+     "R71"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "Old Town"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R6"
+     ]
+    }
+   },
+   {
+    "id": "J5",
+    "name": "the cycle reads carried to months on a weather shape",
+    "kind": "reflex",
+    "precedent": [
+     "R72"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "Halvorsen",
+      "Lakeview",
+      "Old Town",
+      "Riverside",
+      "Sundquist"
+     ],
+     "results_moved": [
+      "R3",
+      "R4"
+     ]
+    }
+   },
+   {
+    "id": "J6",
+    "name": "the stations' faulty days rebuilt from the gate",
+    "kind": "reflex",
+    "precedent": [
+     "R74",
+     "R39"
+    ],
+    "dropped": {
+     "answer": [
+      "Downtown",
+      "Sundquist"
+     ],
+     "results_moved": [
+      "R1",
+      "R3",
+      "R4"
+     ]
+    }
+   }
+  ]
+ },
  "forcing": {
   "kind": "set",
   "line": "leak loss over 1.0 per cent of the gas delivered into the district",
+  "golden_answer": [
+   "Downtown",
+   "Lakeview",
+   "Old Town",
+   "Riverside",
+   "Sundquist"
+  ],
   "golden_family": [
    {
-    "name": "the golden: each read spread on its district's daily sendout, gas temperature tied to the soil",
+    "name": "each read spread on a base-and-degree-day fit of its district's sendout",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -546,7 +642,7 @@
     ]
    },
    {
-    "name": "reads spread on a base-and-degree-day fit of each district's sendout",
+    "name": "the outdoor gas temperature tied to the commercial correctors' gas temperature",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -556,7 +652,7 @@
     ]
    },
    {
-    "name": "gas temperature tied to the commercial correctors' gas temperature",
+    "name": "supercompressibility from Hall and Yarborough",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -566,7 +662,97 @@
     ]
    },
    {
-    "name": "both rivals together",
+    "name": "supercompressibility fitted on the EVC-II stations' own records",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the three rivals together",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "every fall in use booked as gas taken without authorization (the dual-fuel homes aside)",
+    "answer": [
+     "Downtown",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "every lost heating response booked as a furnace tap, no cold-day test",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town"
+    ]
+   },
+   {
+    "name": "every corrector's volume taken as recorded",
+    "answer": [
+     "Downtown",
+     "East Industrial",
+     "Lakeview",
+     "Old Town",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the careful but hurried route (all three)",
+    "answer": [
+     "Downtown",
+     "East Industrial",
+     "Old Town"
+    ]
+   },
+   {
+    "name": "every fall booked and every corrector as recorded, the gas temperature on the study's air line",
+    "answer": [
+     "Downtown",
+     "East Industrial"
+    ]
+   },
+   {
+    "name": "every fall booked and every corrector as recorded, reads spread evenly over their days",
+    "answer": [
+     "Downtown",
+     "East Industrial",
+     "Old Town"
+    ]
+   },
+   {
+    "name": "every fall in use booked as gas taken without authorization (rebated homes aside)",
+    "answer": [
+     "Downtown",
+     "Old Town"
+    ]
+   },
+   {
+    "name": "no gas taken without authorization subtracted",
+    "answer": [
+     "Downtown",
+     "Elm Grove",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "each faulty station day at the station's interpolated share of the gate",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -658,7 +844,7 @@
     ]
    },
    {
-    "input": "diversion volumes -20%",
+    "input": "unauthorized volumes -20%",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -668,7 +854,7 @@
     ]
    },
    {
-    "input": "diversion volumes +20%",
+    "input": "unauthorized volumes +20%",
     "answer": [
      "Downtown",
      "Lakeview",
@@ -679,10 +865,703 @@
    }
   ]
  },
+ "battery": {
+  "count": 12,
+  "answers": [
+   "[\"Downtown\", \"Lakeview\", \"Old Town\", \"Riverside\", \"Sundquist\"]"
+  ],
+  "changeout_answers": [
+   "[\"Elm Grove\", \"Halvorsen\", \"Lakeview\", \"North End\", \"Prairie Rose\", \"Riverside\", \"Sundquist\"]"
+  ],
+  "variants": [
+   {
+    "name": "supercompressibility dak, reads shape, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.566,
+     "Riverside": 1.171,
+     "College Hill": 0.776,
+     "North End": 0.589,
+     "Westgate": 0.397,
+     "Lakeview": 1.21,
+     "Prairie Rose": 0.252,
+     "Heritage Park": 0.18,
+     "East Industrial": 0.666,
+     "Downtown": 1.353,
+     "Airport": 0.668,
+     "Elm Grove": 0.669,
+     "Halvorsen": 0.83,
+     "Sundquist": 1.349
+    }
+   },
+   {
+    "name": "supercompressibility dak, reads shape, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.572,
+     "Riverside": 1.193,
+     "College Hill": 0.78,
+     "North End": 0.614,
+     "Westgate": 0.399,
+     "Lakeview": 1.233,
+     "Prairie Rose": 0.261,
+     "Heritage Park": 0.181,
+     "East Industrial": 0.667,
+     "Downtown": 1.356,
+     "Airport": 0.674,
+     "Elm Grove": 0.692,
+     "Halvorsen": 0.858,
+     "Sundquist": 1.379
+    }
+   },
+   {
+    "name": "supercompressibility dak, reads fit, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.578,
+     "Riverside": 1.198,
+     "College Hill": 0.784,
+     "North End": 0.62,
+     "Westgate": 0.406,
+     "Lakeview": 1.222,
+     "Prairie Rose": 0.282,
+     "Heritage Park": 0.186,
+     "East Industrial": 0.667,
+     "Downtown": 1.358,
+     "Airport": 0.671,
+     "Elm Grove": 0.702,
+     "Halvorsen": 0.83,
+     "Sundquist": 1.377
+    }
+   },
+   {
+    "name": "supercompressibility dak, reads fit, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.584,
+     "Riverside": 1.221,
+     "College Hill": 0.787,
+     "North End": 0.646,
+     "Westgate": 0.408,
+     "Lakeview": 1.245,
+     "Prairie Rose": 0.29,
+     "Heritage Park": 0.187,
+     "East Industrial": 0.668,
+     "Downtown": 1.362,
+     "Airport": 0.676,
+     "Elm Grove": 0.725,
+     "Halvorsen": 0.858,
+     "Sundquist": 1.406
+    }
+   },
+   {
+    "name": "supercompressibility hy, reads shape, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.577,
+     "Riverside": 1.196,
+     "College Hill": 0.792,
+     "North End": 0.589,
+     "Westgate": 0.397,
+     "Lakeview": 1.21,
+     "Prairie Rose": 0.251,
+     "Heritage Park": 0.179,
+     "East Industrial": 0.65,
+     "Downtown": 1.361,
+     "Airport": 0.66,
+     "Elm Grove": 0.669,
+     "Halvorsen": 0.828,
+     "Sundquist": 1.349
+    }
+   },
+   {
+    "name": "supercompressibility hy, reads shape, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.583,
+     "Riverside": 1.218,
+     "College Hill": 0.795,
+     "North End": 0.614,
+     "Westgate": 0.399,
+     "Lakeview": 1.233,
+     "Prairie Rose": 0.259,
+     "Heritage Park": 0.18,
+     "East Industrial": 0.651,
+     "Downtown": 1.364,
+     "Airport": 0.666,
+     "Elm Grove": 0.692,
+     "Halvorsen": 0.857,
+     "Sundquist": 1.379
+    }
+   },
+   {
+    "name": "supercompressibility hy, reads fit, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.589,
+     "Riverside": 1.223,
+     "College Hill": 0.799,
+     "North End": 0.62,
+     "Westgate": 0.406,
+     "Lakeview": 1.222,
+     "Prairie Rose": 0.28,
+     "Heritage Park": 0.185,
+     "East Industrial": 0.651,
+     "Downtown": 1.366,
+     "Airport": 0.663,
+     "Elm Grove": 0.702,
+     "Halvorsen": 0.828,
+     "Sundquist": 1.377
+    }
+   },
+   {
+    "name": "supercompressibility hy, reads fit, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.595,
+     "Riverside": 1.245,
+     "College Hill": 0.803,
+     "North End": 0.645,
+     "Westgate": 0.408,
+     "Lakeview": 1.245,
+     "Prairie Rose": 0.289,
+     "Heritage Park": 0.187,
+     "East Industrial": 0.652,
+     "Downtown": 1.369,
+     "Airport": 0.668,
+     "Elm Grove": 0.725,
+     "Halvorsen": 0.857,
+     "Sundquist": 1.406
+    }
+   },
+   {
+    "name": "supercompressibility fit, reads shape, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.569,
+     "Riverside": 1.173,
+     "College Hill": 0.783,
+     "North End": 0.588,
+     "Westgate": 0.4,
+     "Lakeview": 1.208,
+     "Prairie Rose": 0.253,
+     "Heritage Park": 0.18,
+     "East Industrial": 0.671,
+     "Downtown": 1.359,
+     "Airport": 0.676,
+     "Elm Grove": 0.671,
+     "Halvorsen": 0.829,
+     "Sundquist": 1.349
+    }
+   },
+   {
+    "name": "supercompressibility fit, reads shape, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.575,
+     "Riverside": 1.195,
+     "College Hill": 0.787,
+     "North End": 0.614,
+     "Westgate": 0.402,
+     "Lakeview": 1.232,
+     "Prairie Rose": 0.262,
+     "Heritage Park": 0.181,
+     "East Industrial": 0.673,
+     "Downtown": 1.363,
+     "Airport": 0.682,
+     "Elm Grove": 0.694,
+     "Halvorsen": 0.858,
+     "Sundquist": 1.379
+    }
+   },
+   {
+    "name": "supercompressibility fit, reads fit, gas temperature soil",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.581,
+     "Riverside": 1.2,
+     "College Hill": 0.791,
+     "North End": 0.62,
+     "Westgate": 0.409,
+     "Lakeview": 1.22,
+     "Prairie Rose": 0.283,
+     "Heritage Park": 0.186,
+     "East Industrial": 0.672,
+     "Downtown": 1.365,
+     "Airport": 0.679,
+     "Elm Grove": 0.704,
+     "Halvorsen": 0.829,
+     "Sundquist": 1.377
+    }
+   },
+   {
+    "name": "supercompressibility fit, reads fit, gas temperature evc",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ],
+    "leak": {
+     "Old Town": 1.587,
+     "Riverside": 1.222,
+     "College Hill": 0.795,
+     "North End": 0.645,
+     "Westgate": 0.411,
+     "Lakeview": 1.244,
+     "Prairie Rose": 0.291,
+     "Heritage Park": 0.188,
+     "East Industrial": 0.674,
+     "Downtown": 1.368,
+     "Airport": 0.684,
+     "Elm Grove": 0.727,
+     "Halvorsen": 0.858,
+     "Sundquist": 1.406
+    }
+   }
+  ],
+  "detection": [
+   {
+    "name": "collapse cut 0.35",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "collapse cut 0.45",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "home in May at 0.60 of the household's own weather response",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "home in May at 0.80 of the household's own weather response",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "cold-day slope over 0.2 of the household's own",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "cold-day slope over 0.4 of the household's own",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "switchover at or below 5 F",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "switchover at or below 15 F",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "summer base cut 0.3",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "summer base cut 0.5",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "runs of four low months",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "vacancy at 1 months",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "vacancy at 3 months",
+    "answer": [
+     "Downtown",
+     "Lakeview",
+     "Old Town",
+     "Riverside",
+     "Sundquist"
+    ],
+    "premises": 16,
+    "changeout": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   }
+  ]
+ },
  "changeout_forcing": {
   "golden_family": [
    {
-    "name": "the golden: each read spread on its district's daily sendout, gas temperature tied to the soil",
+    "name": "each read spread on a base-and-degree-day fit of its district's sendout",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -694,7 +1573,7 @@
     ]
    },
    {
-    "name": "reads spread on a base-and-degree-day fit of each district's sendout",
+    "name": "the outdoor gas temperature tied to the commercial correctors' gas temperature",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -706,7 +1585,7 @@
     ]
    },
    {
-    "name": "gas temperature tied to the commercial correctors' gas temperature",
+    "name": "supercompressibility from Hall and Yarborough",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -718,7 +1597,19 @@
     ]
    },
    {
-    "name": "both rivals together",
+    "name": "supercompressibility fitted on the EVC-II stations' own records",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the three rivals together",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -828,7 +1719,7 @@
     ]
    },
    {
-    "input": "diversion volumes -20%",
+    "input": "unauthorized volumes -20%",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -840,7 +1731,7 @@
     ]
    },
    {
-    "input": "diversion volumes +20%",
+    "input": "unauthorized volumes +20%",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -854,7 +1745,55 @@
   ],
   "shortcuts": [
    {
-    "name": "the logger study's straight line on the airport's air",
+    "name": "every fall in use booked as gas taken without authorization (the dual-fuel homes aside)",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "every lost heating response booked as a furnace tap, no cold-day test",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "every corrector's volume taken as recorded",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "the careful but hurried route (all three)",
+    "answer": [
+     "Elm Grove",
+     "Halvorsen",
+     "Lakeview",
+     "North End",
+     "Prairie Rose",
+     "Riverside",
+     "Sundquist"
+    ]
+   },
+   {
+    "name": "every fall booked and every corrector as recorded, the gas temperature on the study's air line",
     "answer": [
      "Airport",
      "College Hill",
@@ -869,24 +1808,7 @@
     ]
    },
    {
-    "name": "the 2019 consultant's monthly mean air temperature",
-    "answer": [
-     "Airport",
-     "College Hill",
-     "Downtown",
-     "Elm Grove",
-     "East Industrial",
-     "Halvorsen",
-     "Lakeview",
-     "North End",
-     "Old Town",
-     "Prairie Rose",
-     "Riverside",
-     "Sundquist"
-    ]
-   },
-   {
-    "name": "each read spread evenly over its days",
+    "name": "every fall booked and every corrector as recorded, reads spread evenly over their days",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -898,7 +1820,7 @@
     ]
    },
    {
-    "name": "bills taken in the month they were read",
+    "name": "every fall in use booked as gas taken without authorization (rebated homes aside)",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -910,7 +1832,7 @@
     ]
    },
    {
-    "name": "no diversion subtracted",
+    "name": "no gas taken without authorization subtracted",
     "answer": [
      "Elm Grove",
      "Halvorsen",
@@ -922,24 +1844,9 @@
     ]
    },
    {
-    "name": "every collapse in use booked as diversion",
+    "name": "each faulty station day at the station's interpolated share of the gate",
     "answer": [
      "Elm Grove",
-     "Halvorsen",
-     "Lakeview",
-     "North End",
-     "Prairie Rose",
-     "Riverside",
-     "Sundquist"
-    ]
-   },
-   {
-    "name": "the careful but hurried route",
-    "answer": [
-     "Airport",
-     "College Hill",
-     "Elm Grove",
-     "East Industrial",
      "Halvorsen",
      "Lakeview",
      "North End",
@@ -952,325 +1859,535 @@
  },
  "margins": {
   "Old Town": {
-   "leak_pct": 1.606,
-   "ur_pct": 2.019,
+   "leak_pct": 1.566,
+   "ur_pct": 2.043,
    "ntc_meters": 501,
    "family_leak": [
-    1.606,
-    1.619,
-    1.611,
-    1.623
+    1.578,
+    1.572,
+    1.577,
+    1.569,
+    1.595
+   ],
+   "battery_leak": [
+    1.566,
+    1.572,
+    1.578,
+    1.584,
+    1.577,
+    1.583,
+    1.589,
+    1.595,
+    1.569,
+    1.575,
+    1.581,
+    1.587
    ],
    "perturbed_leak": [
-    1.62,
-    1.592,
-    1.484,
-    1.727,
-    1.612,
-    1.6,
-    1.636,
-    1.575,
-    1.619,
-    1.593
+    1.582,
+    1.551,
+    1.444,
+    1.688,
+    1.572,
+    1.561,
+    1.597,
+    1.536,
+    1.586,
+    1.546
    ]
   },
   "Riverside": {
-   "leak_pct": 1.25,
-   "ur_pct": 4.683,
+   "leak_pct": 1.171,
+   "ur_pct": 4.749,
    "ntc_meters": 749,
    "family_leak": [
-    1.25,
-    1.278,
-    1.268,
-    1.296
+    1.198,
+    1.193,
+    1.196,
+    1.173,
+    1.245
+   ],
+   "battery_leak": [
+    1.171,
+    1.193,
+    1.198,
+    1.221,
+    1.196,
+    1.218,
+    1.223,
+    1.245,
+    1.173,
+    1.195,
+    1.2,
+    1.222
    ],
    "perturbed_leak": [
-    1.308,
-    1.191,
-    1.25,
-    1.25,
-    1.272,
-    1.227,
-    1.268,
-    1.231,
-    1.264,
-    1.235
+    1.235,
+    1.107,
+    1.171,
+    1.171,
+    1.193,
+    1.149,
+    1.19,
+    1.153,
+    1.182,
+    1.16
    ]
   },
   "College Hill": {
-   "leak_pct": 0.777,
-   "ur_pct": 3.05,
+   "leak_pct": 0.776,
+   "ur_pct": 2.993,
    "ntc_meters": 505,
    "family_leak": [
-    0.777,
-    0.785,
+    0.784,
     0.78,
-    0.788
+    0.792,
+    0.783,
+    0.803
+   ],
+   "battery_leak": [
+    0.776,
+    0.78,
+    0.784,
+    0.787,
+    0.792,
+    0.795,
+    0.799,
+    0.803,
+    0.783,
+    0.787,
+    0.791,
+    0.795
    ],
    "perturbed_leak": [
-    0.787,
-    0.767,
-    0.746,
-    0.807,
     0.786,
-    0.768,
+    0.766,
+    0.744,
+    0.808,
     0.785,
-    0.769,
-    0.777,
-    0.777
+    0.767,
+    0.784,
+    0.768,
+    0.776,
+    0.776
    ]
   },
   "North End": {
-   "leak_pct": 0.59,
-   "ur_pct": 4.709,
+   "leak_pct": 0.589,
+   "ur_pct": 4.777,
    "ntc_meters": 792,
    "family_leak": [
-    0.59,
-    0.622,
-    0.61,
-    0.642
+    0.62,
+    0.614,
+    0.589,
+    0.588,
+    0.645
+   ],
+   "battery_leak": [
+    0.589,
+    0.614,
+    0.62,
+    0.646,
+    0.589,
+    0.614,
+    0.62,
+    0.645,
+    0.588,
+    0.614,
+    0.62,
+    0.645
    ],
    "perturbed_leak": [
-    0.657,
-    0.523,
-    0.59,
-    0.59,
-    0.592,
+    0.662,
+    0.515,
     0.589,
-    0.61,
-    0.57,
+    0.589,
     0.59,
-    0.59
+    0.587,
+    0.609,
+    0.569,
+    0.589,
+    0.589
    ]
   },
   "Westgate": {
-   "leak_pct": 0.396,
-   "ur_pct": 4.261,
+   "leak_pct": 0.397,
+   "ur_pct": 4.324,
    "ntc_meters": 69,
    "family_leak": [
-    0.396,
-    0.405,
-    0.398,
-    0.407
+    0.406,
+    0.399,
+    0.397,
+    0.4,
+    0.408
+   ],
+   "battery_leak": [
+    0.397,
+    0.399,
+    0.406,
+    0.408,
+    0.397,
+    0.399,
+    0.406,
+    0.408,
+    0.4,
+    0.402,
+    0.409,
+    0.411
    ],
    "perturbed_leak": [
-    0.402,
+    0.403,
     0.391,
-    0.393,
-    0.399,
-    0.44,
-    0.352,
-    0.416,
-    0.376,
-    0.396,
-    0.396
+    0.394,
+    0.4,
+    0.441,
+    0.353,
+    0.417,
+    0.377,
+    0.397,
+    0.397
    ]
   },
   "Lakeview": {
-   "leak_pct": 1.211,
-   "ur_pct": 4.71,
+   "leak_pct": 1.21,
+   "ur_pct": 4.779,
    "ntc_meters": 542,
    "family_leak": [
-    1.211,
-    1.223,
-    1.23,
-    1.242
+    1.222,
+    1.233,
+    1.21,
+    1.208,
+    1.245
+   ],
+   "battery_leak": [
+    1.21,
+    1.233,
+    1.222,
+    1.245,
+    1.21,
+    1.233,
+    1.222,
+    1.245,
+    1.208,
+    1.232,
+    1.22,
+    1.244
    ],
    "perturbed_leak": [
-    1.273,
-    1.148,
-    1.211,
-    1.211,
-    1.22,
-    1.202,
-    1.241,
-    1.181,
-    1.211,
-    1.211
+    1.278,
+    1.141,
+    1.21,
+    1.21,
+    1.219,
+    1.201,
+    1.24,
+    1.18,
+    1.21,
+    1.21
    ]
   },
   "Prairie Rose": {
-   "leak_pct": 0.253,
-   "ur_pct": 4.671,
+   "leak_pct": 0.252,
+   "ur_pct": 4.74,
    "ntc_meters": 285,
    "family_leak": [
+    0.282,
+    0.261,
+    0.251,
     0.253,
+    0.289
+   ],
+   "battery_leak": [
+    0.252,
+    0.261,
+    0.282,
+    0.29,
+    0.251,
+    0.259,
+    0.28,
+    0.289,
+    0.253,
+    0.262,
     0.283,
-    0.26,
-    0.29
+    0.291
    ],
    "perturbed_leak": [
-    0.276,
-    0.231,
-    0.253,
-    0.253,
-    0.306,
-    0.2,
-    0.272,
-    0.234,
-    0.253,
-    0.253
+    0.277,
+    0.227,
+    0.252,
+    0.252,
+    0.305,
+    0.199,
+    0.271,
+    0.233,
+    0.252,
+    0.252
    ]
   },
   "Heritage Park": {
-   "leak_pct": 0.182,
-   "ur_pct": 4.743,
+   "leak_pct": 0.18,
+   "ur_pct": 4.814,
    "ntc_meters": 29,
    "family_leak": [
-    0.182,
-    0.188,
-    0.183,
-    0.189
+    0.186,
+    0.181,
+    0.179,
+    0.18,
+    0.187
+   ],
+   "battery_leak": [
+    0.18,
+    0.181,
+    0.186,
+    0.187,
+    0.179,
+    0.18,
+    0.185,
+    0.187,
+    0.18,
+    0.181,
+    0.186,
+    0.188
    ],
    "perturbed_leak": [
-    0.186,
-    0.179,
-    0.182,
-    0.182,
-    0.2,
-    0.165,
-    0.207,
-    0.158,
-    0.182,
-    0.182
+    0.183,
+    0.176,
+    0.18,
+    0.18,
+    0.197,
+    0.162,
+    0.205,
+    0.155,
+    0.18,
+    0.18
    ]
   },
   "East Industrial": {
-   "leak_pct": 0.585,
-   "ur_pct": 2.907,
+   "leak_pct": 0.666,
+   "ur_pct": 2.932,
    "ntc_meters": 142,
    "family_leak": [
-    0.585,
-    0.586,
-    0.589,
-    0.589
+    0.667,
+    0.667,
+    0.65,
+    0.671,
+    0.652
+   ],
+   "battery_leak": [
+    0.666,
+    0.667,
+    0.667,
+    0.668,
+    0.65,
+    0.651,
+    0.651,
+    0.652,
+    0.671,
+    0.673,
+    0.672,
+    0.674
    ],
    "perturbed_leak": [
-    0.594,
-    0.577,
-    0.559,
-    0.612,
-    0.59,
-    0.58,
-    0.598,
-    0.573,
-    0.722,
-    0.448
+    0.669,
+    0.662,
+    0.655,
+    0.677,
+    0.668,
+    0.664,
+    0.671,
+    0.66,
+    0.723,
+    0.608
    ]
   },
   "Downtown": {
    "leak_pct": 1.353,
-   "ur_pct": 1.404,
+   "ur_pct": 1.418,
    "ntc_meters": 475,
    "family_leak": [
-    1.353,
-    1.359,
+    1.358,
     1.356,
-    1.362
+    1.361,
+    1.359,
+    1.369
+   ],
+   "battery_leak": [
+    1.353,
+    1.356,
+    1.358,
+    1.362,
+    1.361,
+    1.364,
+    1.366,
+    1.369,
+    1.359,
+    1.363,
+    1.365,
+    1.368
    ],
    "perturbed_leak": [
     1.36,
-    1.347,
-    1.215,
-    1.491,
+    1.346,
+    1.214,
+    1.49,
     1.355,
-    1.352,
-    1.377,
-    1.33,
+    1.351,
+    1.376,
+    1.329,
     1.445,
-    1.262
+    1.261
    ]
   },
   "Airport": {
-   "leak_pct": 0.646,
-   "ur_pct": 2.986,
+   "leak_pct": 0.668,
+   "ur_pct": 3.02,
    "ntc_meters": 204,
    "family_leak": [
-    0.646,
-    0.645,
-    0.653,
-    0.651
+    0.671,
+    0.674,
+    0.66,
+    0.676,
+    0.668
+   ],
+   "battery_leak": [
+    0.668,
+    0.674,
+    0.671,
+    0.676,
+    0.66,
+    0.666,
+    0.663,
+    0.668,
+    0.676,
+    0.682,
+    0.679,
+    0.684
    ],
    "perturbed_leak": [
-    0.665,
-    0.628,
-    0.591,
-    0.701,
-    0.675,
-    0.617,
-    0.667,
-    0.625,
-    0.646,
-    0.646
+    0.682,
+    0.654,
+    0.63,
+    0.706,
+    0.688,
+    0.648,
+    0.683,
+    0.653,
+    0.668,
+    0.668
    ]
   },
   "Elm Grove": {
-   "leak_pct": 0.691,
-   "ur_pct": 4.662,
+   "leak_pct": 0.669,
+   "ur_pct": 4.732,
    "ntc_meters": 544,
    "family_leak": [
-    0.691,
-    0.724,
-    0.71,
-    0.743
+    0.702,
+    0.692,
+    0.669,
+    0.671,
+    0.725
+   ],
+   "battery_leak": [
+    0.669,
+    0.692,
+    0.702,
+    0.725,
+    0.669,
+    0.692,
+    0.702,
+    0.725,
+    0.671,
+    0.694,
+    0.704,
+    0.727
    ],
    "perturbed_leak": [
-    0.751,
-    0.631,
-    0.691,
-    0.691,
-    0.706,
-    0.676,
-    0.716,
-    0.666,
-    0.811,
-    0.571
+    0.735,
+    0.603,
+    0.669,
+    0.669,
+    0.684,
+    0.655,
+    0.694,
+    0.644,
+    0.766,
+    0.572
    ]
   },
   "Halvorsen": {
-   "leak_pct": 0.826,
-   "ur_pct": 4.611,
+   "leak_pct": 0.83,
+   "ur_pct": 4.678,
    "ntc_meters": 407,
    "family_leak": [
-    0.826,
-    0.827,
-    0.849,
-    0.85
+    0.83,
+    0.858,
+    0.828,
+    0.829,
+    0.857
+   ],
+   "battery_leak": [
+    0.83,
+    0.858,
+    0.83,
+    0.858,
+    0.828,
+    0.857,
+    0.828,
+    0.857,
+    0.829,
+    0.858,
+    0.829,
+    0.858
    ],
    "perturbed_leak": [
-    0.897,
-    0.755,
-    0.826,
-    0.826,
-    0.858,
-    0.794,
-    0.864,
-    0.788,
-    0.826,
-    0.826
+    0.907,
+    0.752,
+    0.83,
+    0.83,
+    0.861,
+    0.798,
+    0.868,
+    0.791,
+    0.83,
+    0.83
    ]
   },
   "Sundquist": {
-   "leak_pct": 1.347,
-   "ur_pct": 4.619,
+   "leak_pct": 1.349,
+   "ur_pct": 4.678,
    "ntc_meters": 432,
    "family_leak": [
-    1.347,
-    1.375,
-    1.37,
-    1.398
+    1.377,
+    1.379,
+    1.349,
+    1.349,
+    1.406
+   ],
+   "battery_leak": [
+    1.349,
+    1.379,
+    1.377,
+    1.406,
+    1.349,
+    1.379,
+    1.377,
+    1.406,
+    1.349,
+    1.379,
+    1.377,
+    1.406
    ],
    "perturbed_leak": [
-    1.42,
-    1.273,
-    1.347,
-    1.347,
-    1.377,
-    1.316,
-    1.384,
-    1.309,
-    1.431,
-    1.262
+    1.43,
+    1.269,
+    1.349,
+    1.349,
+    1.38,
+    1.319,
+    1.388,
+    1.311,
+    1.434,
+    1.265
    ]
   }
  },

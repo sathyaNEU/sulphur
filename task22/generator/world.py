@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 
 import params as P
+import zfactor as ZF
 
 
 def _rng(k):
@@ -44,7 +45,8 @@ def weather(w):
         damp[_win(w, "%d-09-12" % y, "%d-10-25" % y)] = 0.35
     air = norm + e * damp
     for a, b, d in [("2023-12-01", "2024-02-29", 8.0), ("2024-12-20", "2025-02-20", -4.0),
-                    ("2025-12-01", "2026-02-28", -3.0), ("2025-10-01", "2025-10-11", -6.5),
+                    ("2025-12-01", "2026-02-28", -3.0), ("2026-01-20", "2026-01-27", -16.0),
+                    ("2025-10-01", "2025-10-11", -6.5),
                     ("2026-09-22", "2026-10-03", 2.5)]:
         air[_win(w, a, b)] += d
     w.air = air
@@ -82,6 +84,16 @@ def weather(w):
     w.s2, w.s4, w.s8, w.s20, w.s40 = s2, s4, s8, s20, s40
     w.hdd60 = np.clip(60.0 - air, 0, None)
     w.hdd_eff = 0.7 * w.hdd60 + 0.3 * np.concatenate([[w.hdd60[0]], w.hdd60[:-1]])
+
+
+def gas_quality(w):
+    """The interstate supply's specific gravity at the city gate's analyser, day by day."""
+    rng = _rng(15)
+    doy = w.days.dayofyear.values
+    e = np.zeros(w.D)
+    for i in range(1, w.D):
+        e[i] = 0.9 * e[i - 1] + rng.normal(0, 0.0006)
+    w.sg = P.GAS_SG + 0.0022 * np.sin(2 * np.pi * (doy - 40) / 365.25) + e
 
 
 # ------------------------------------------------------------------------------------------------------- premises
@@ -345,6 +357,26 @@ def use(w):
         f = float(rng.uniform(0.82, 0.92))
         U[i, d0:] = base[i] + (U[i, d0:] - base[i]) * f
         w.rebates.append((i, w.dates[d0], f))
+    # dual-fuel heat pumps: from the conversion the heat pump carries the house above its switchover temperature
+    # and the furnace (on the gas meter) only below it, with a few degrees of shared operation in between
+    rng2 = _rng(13)
+    w.dualfuel = []
+    for d in P.DISTRICTS:
+        cand = pr.index[(pr["district"] == d["code"]) & (pr["cls"] == "RES") & (pr["kind"] == "occ")]
+        cand = [i for i in cand if i not in set(int(x) for x in reb)]
+        k = int(round(P.DUAL_FUEL[d["code"]] * len(cand)))
+        for i in rng2.choice(cand, k, replace=False) if k else []:
+            u = rng2.random()
+            if u < 0.14:
+                conv = dt.date(2024, 5, 1) + dt.timedelta(days=int(rng2.integers(0, 150)))
+            else:
+                conv = dt.date(2025, 4, 15) + dt.timedelta(days=int(rng2.integers(0, 190)))
+            t_sw = float(rng2.uniform(-8.0, 2.0))
+            d0 = (conv - P.SIM0).days
+            share = np.clip((t_sw + 5.0 - w.air[d0:]) / 5.0, 0.0, 1.0)
+            heat = U[i, d0:] - base[i]
+            U[i, d0:] = base[i] * (1 + rng2.normal(0, 0.04, len(heat))) + np.clip(heat, 0, None) * share
+            w.dualfuel.append(dict(i=int(i), conv=conv, t_sw=t_sw, rebated=bool(rng2.random() < P.DUAL_FUEL_REBATED)))
     w.U = np.clip(U, 0.0, None)
     w.brk, w.summer = brk, summer
 
@@ -357,7 +389,9 @@ def bypasses(w):
     cases = []
     for d in P.DISTRICTS:
         full, part = d["byp"]
+        conv = set(c["i"] for c in w.dualfuel)
         cand = pr.index[(pr["district"] == d["code"]) & (pr["cls"] == "RES") & ~pr["tc"] & (pr["kind"] == "occ")]
+        cand = [i for i in cand if i not in conv]
         pick = rng.choice(cand, full + part, replace=False) if full + part else []
         for j, i in enumerate(pick):
             start = dt.date(2025, 9, 1) + dt.timedelta(days=int(rng.integers(0, 140)))
@@ -449,6 +483,11 @@ def evc_customers(w):
                              outdoor=outdoor, press=press,
                              name="Brandvold State University central plant" if big else None))
             k += 1
+    rng3 = _rng(14)
+    for code, name, b, sl, psig in P.EVC_LINE:
+        rows.append(dict(account="E%05d" % EVC_IDS[k], district=code, base=b * float(rng3.uniform(0.95, 1.05)),
+                         slope=sl, outdoor=False, press=psig, name=name))
+        k += 1
     ev = pd.DataFrame(rows)
     n = len(ev)
     wk = (w.days.dayofweek.values >= 5)
@@ -528,25 +567,31 @@ def regulator_stations(w):
                 share = 1 - (true_station[d["drs"][0]] / w.inflow[d["code"]])
             true_station[s] = w.inflow[d["code"]] * share
     w.true_station = true_station
-    press_nom = {s: (35.0 if s[:2] in ("OT", "DT", "RS", "NE", "EG", "SQ", "HV", "LV") else 25.0) for s in w.stations}
+    press_nom = {s: P.STATION_PSIG.get(s, 35.0 if s[:2] in ("OT", "DT", "RS", "NE", "EG", "SQ", "HV", "LV") else 25.0)
+                 for s in w.stations}
+    w.press_nom = press_nom
     for s in w.stations:
         v = true_station[s].copy()
         pr_ = press_nom[s] + rng.normal(0, 0.6, w.D)
         T = w.s40 * 0.6 + w.s20 * 0.4 + rng.normal(0, 0.4, w.D)
-        unc = v * (P.P_BASE / (pr_ + P.P_ATM)) * ((T + 459.67) / P.R_BASE)
-        rec = v.copy()
+        f2 = ZF.fpv2(pr_ + P.P_ATM, T, w.sg)
+        pt = s in P.PT_ONLY_STATIONS
+        unc = v * (P.P_BASE / (pr_ + P.P_ATM)) * ((T + 459.67) / P.R_BASE) / f2
+        rec = unc * ((pr_ + P.P_ATM) / P.P_BASE) * (P.R_BASE / (T + 459.67)) * (1.0 if pt else f2)
         alarm = np.array([""] * w.D, dtype=object)
         miss = rng.random(w.D) < 0.004
         if s == "RS-1":
             miss |= _win(w, "2026-01-12", "2026-01-25")
         if s == "LV-1":
             m = _win(w, "2025-12-04", "2025-12-21")
-            rec[m] = unc[m] * ((25.0 + P.P_ATM) / P.P_BASE) * (P.R_BASE / (T[m] + 459.67))
+            rec[m] = (unc[m] * ((25.0 + P.P_ATM) / P.P_BASE) * (P.R_BASE / (T[m] + 459.67))
+                      * ZF.fpv2(25.0 + P.P_ATM, T[m], w.sg[m]))
             alarm[m] = "PXDCR FAIL FIXED P"
             pr_ = np.where(m, 25.0, pr_)
         if s == "WG-1":
             m = _win(w, "2026-02-03", "2026-02-11")
-            rec[m] = unc[m] * ((pr_[m] + P.P_ATM) / P.P_BASE) * (P.R_BASE / (55.0 + 459.67))
+            rec[m] = (unc[m] * ((pr_[m] + P.P_ATM) / P.P_BASE) * (P.R_BASE / (55.0 + 459.67))
+                      * ZF.fpv2(pr_[m] + P.P_ATM, 55.0, w.sg[m]))
             alarm[m] = "TXMTR STUCK"
             T = np.where(m, 55.0, T)
         if s == "CH-1":
@@ -570,7 +615,7 @@ def regulator_stations(w):
     gate = tot + hp + heater
     btu = 1038 + rng.normal(0, 4, w.D)
     g = pd.DataFrame(dict(GasDay=w.dates, CorrectedMcf=np.round(gate, 1), HeatingValueBtuScf=np.round(btu, 1),
-                          Dth=np.round(gate * btu / 1000.0, 1),
+                          SpecificGravity=np.round(w.sg, 4), Dth=np.round(gate * btu / 1000.0, 1),
                           AvgPressurePsig=np.round(612 + rng.normal(0, 9, w.D), 0),
                           AvgTempF=np.round(w.s40 * 0.7 + 14 + rng.normal(0, 0.5, w.D), 1)))
     w.gate = g[g["GasDay"] >= dt.date(2023, 9, 1)].reset_index(drop=True)
@@ -586,7 +631,7 @@ def evc_records(w):
         pmeter = e["press"] + P.P_ATM
         T = w.evcT[j]
         U = w.evcU[j]
-        unc = U * (P.P_BASE / pmeter) * ((T + 459.67) / P.R_BASE)
+        unc = U * (P.P_BASE / pmeter) * ((T + 459.67) / P.R_BASE) / ZF.fpv2(pmeter, T, w.sg)
         fixed = np.zeros(w.D, bool)
         if rng.random() < 0.12:
             a = int(rng.integers(100, w.D - 30))
@@ -600,7 +645,8 @@ def evc_records(w):
                                  UncorrectedMcf=round(float(unc[i]), 2), AvgPressurePsig=round(e["press"], 1),
                                  AvgGasTempF=60.0, Status="FIXED FACTOR"))
             else:
-                rows.append(dict(GasDay=w.dates[i], Account=e["account"], CorrectedMcf=round(float(U[i]), 2),
+                corr = unc[i] * (pmeter / P.P_BASE) * (P.R_BASE / (T[i] + 459.67))
+                rows.append(dict(GasDay=w.dates[i], Account=e["account"], CorrectedMcf=round(float(corr), 2),
                                  UncorrectedMcf=round(float(unc[i]), 2),
                                  AvgPressurePsig=round(e["press"] + float(rng.normal(0, 0.05)), 2),
                                  AvgGasTempF=round(float(T[i]), 1), Status="OK"))
@@ -639,6 +685,7 @@ def build():
     w = World()
     calendar(w)
     weather(w)
+    gas_quality(w)
     premises(w)
     programs(w)
     plan_2027(w)

@@ -8,12 +8,12 @@
   "subdomain": "distribution-losses-energy-balance",
   "client_domain": "energy-systems-utilities",
   "client_subdomain": "Energy Systems & Utilities (gas distribution losses and the district gas balance; closest client task types: load forecasting, grid reliability)",
-  "niche": "a city-owned gas utility's district gas balance: each of fourteen pressure districts' leak loss in the twelve months to September 2026 against the 1.0 per cent line of the 2027 main replacement program, and which districts' non-compensating meters the 2027 changeout replaces",
+  "niche": "a city-owned gas utility's district gas balance put on one real-gas basis: each of fourteen pressure districts' leak loss in the twelve months to September 2026 against the 1.0 per cent line of the 2027-2029 main replacement program, the gas taken without authorization told from households away and dual-fuel heat pumps, and which districts' non-compensating meters the 2027 changeout replaces",
   "objective": "etl",
   "shape": "10",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist (leak loss 1.35, 1.21, 1.61, 1.25 and 1.35 per cent of gas in, twelve months to September 2026); 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 668 of the 976 scheduled 2027 changeouts done before the 2027-28 heating season",
+  "answer": "Main replacement 2027-2029: Downtown, Lakeview, Old Town, Riverside and Sundquist (leak loss 1.35, 1.21, 1.57, 1.17 and 1.35 per cent of gas in, twelve months to September 2026); 2027 changeout: Elm Grove, Halvorsen, Lakeview, North End, Prairie Rose, Riverside and Sundquist; 16 premises (18 accounts) took gas without authorization",
   "answer_source": "task22/submission.md block 1; generator/figures.json",
   "gap": [
     "objective",
@@ -28,15 +28,15 @@
     "G16"
   ],
   "gate_g": "method_or_model_selection",
-  "calibration_form": "parallel_run_overlap",
-  "stump_strategy": "grain_or_unit",
+  "calibration_form": "gold_standard_subsample",
+  "stump_strategy": "stated_rule_hard_construction",
   "decisive_rule_filed": true,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass conforms every read, corrector and account, rebuilds the regulator stations' missing days from the gate balance and reproduces the utility's reported loss exactly, but converts the non-compensating meters' winter volumes with the gas temperature the 2024-25 logger study ties to the airport's air temperature, which held while air and soil moved together and overstates the 2025-26 under-registration once deep snow kept the soil warm, spreads each read evenly over its days, and books every account whose winter use collapsed (new snowbirds with it) as diversion or none of them, so it designates and funds different districts.",
-  "domain_test": "Every result is a quantity a gas distribution utility's measurement engineers compute: each pressure district's sendout at its regulator stations against what its customers' meters took at base conditions, the under-registration of meters that do not correct for gas temperature from the temperature the gas actually has in buried services, cycle reads carried to calendar months on the district's own daily sendout, diversion told from seasonal absence, and the leak loss left; swap gas districts for electric feeders and the meter that registers volume at its own temperature, the soil's hold on that temperature under snow and the base conditions stop meaning anything.",
+  "analyst_test": "The careful but hurried pass makes every move the platform runs made on this world (the soil-aware gas temperature, degree-day calendarization, the station repairs) and takes every corrector's volume as recorded, so the four EVC-I stations and every customer corrector stay short of the gas's supercompressibility (Riverside's gas in low, East Industrial's process customers low), and books every fall in use as gas taken without authorization, so the households away for the winter and the dual-fuel heat pumps are deducted as theft: it designates Downtown, East Industrial and Old Town and drops Lakeview, Riverside and Sundquist.",
+  "domain_test": "Every result is a quantity a gas utility's measurement engineers compute: each district's sendout and each process customer's gas at base conditions on one real-gas basis (a corrector that corrects for pressure and temperature alone is short of the supercompressibility at 25 to 58 psig), the gas taken through bypasses and furnace taps told from absence and from a dual-fuel heat pump's cold-day furnace load, and the leak loss left; swap gas districts for electric feeders and supercompressibility, the furnace's switchover and base conditions stop meaning anything.",
   "layer2_family": "field_method",
   "layer2_pattern": "own:a-district-gas-balance-whose-largest-correction-is-the-gas-temperature-at-meters-that-register-actual-volume",
   "layer1": [
@@ -48,7 +48,10 @@
     "the soil station's daily file with frozen-probe days",
     "commercial correctors' daily summaries with uncorrected and corrected volume, average gas temperature and pressure, and fixed-factor days",
     "damage reports with estimated gas lost",
-    "work orders with planned and completed dates"
+    "work orders with planned and completed dates",
+    "the gate analyser's daily specific gravity beside the heating value",
+    "station and customer correctors reporting uncorrected volume, pressure and temperature",
+    "appliance rebates with dual-fuel controls rebates for a quarter of the conversions"
   ],
   "stakeholder_role": "the city gas utility's engineering manager, preparing the 2027 LAUF reduction program's district designations and meter changeouts for the Utilities Commission",
   "role_family": "capacity_planner",
@@ -61,7 +64,7 @@
     "source": "synthetic"
   },
   "forum": "board_of_directors",
-  "forcing_event": "budget_or_appropriation",
+  "forcing_event": "statutory_or_regulatory_filing",
   "org_family": "local_government",
   "world": {
     "geography": "west-central Minnesota, United States (a fictional city's municipal gas utility)",
@@ -83,23 +86,21 @@
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "Each unit's wanted quantity is what is left of a balance whose largest subtracted term was registered by instruments at their own physical state rather than the standard basis, over periods that are not the calendar's; the incumbent converts that term with a proxy that moved with the true driver only in the years it was checked on, so in the target year, when the two came apart, it overstates the correction; the residual also needs each period re-cut on the unit's own daily profile, unrecorded draws told from seasonal absence by the season only one of them touches, and the forward work carried at the pace past work actually ran.",
-  "driver_concrete": "Each district's leak loss is its regulator stations' gas less what its customers took at base conditions, the utility's own use, reported damage losses and diversion; the non-compensating meters register gas at the temperature it has in the buried service, which follows the soil, and the 2024-25 logger study's tie to the airport's air temperature held only while air and soil moved together, so in the deep-snow winter of 2025-26 it overstates the under-registration; the cycle reads are carried to months on the district's own daily sendout, diversion is told from new snowbirds by the summer base load, and the 2027 changeouts finish at the pace the 2024 and 2025 programs did.",
-  "stump": "The careful but hurried pass converts the non-compensating meters with the logger study's air-temperature tie, spreads each read evenly over its days and books new snowbirds as diversion (or no diversion at all), so it leaves the districts whose losses are leaks under the 1.0 per cent line, designates the districts whose excess is diversion and timing, and funds changeouts where most meters sit indoors.",
+  "driver": "Each unit's wanted quantity is the residual of a balance whose terms come from instruments on two recording algorithms, one of which leaves out a physical correction that the other carries and that grows with each instrument's own operating state, so every term is put on one basis before the residual is read; the residual also needs unrecorded draws told from two lawful falls in use, one by the unit's response when it is home again and one by a response confined to the coldest days.",
+  "driver_concrete": "Each district's leak loss is its regulator stations' gas less what its customers took at base conditions, the station heaters, the damage reports and the gas taken without authorization; four EVC-I station correctors and every customer corrector correct for pressure and temperature only, so Riverside's gas in and East Industrial's process customers at 52 to 55 psig are short of the gas's supercompressibility until put on the EVC-II stations' real-gas basis; of the 112 premises whose use fell, 16 took gas (9 bypasses, 7 furnace taps), while the households back at their weather response in May were away and the homes whose furnace took its whole past load on the coldest days only had added dual-fuel heat pumps.",
+  "stump": "The careful but hurried pass takes every corrector's corrected volume as base volume and books every fall in use as theft, so it designates Downtown, East Industrial and Old Town: East Industrial rises over the line on its process customers' missing supercompressibility, Riverside falls under it on its EVC-I station's, and Lakeview and Sundquist fall under it on deducted absences and dual-fuel homes.",
   "answer_shape": "reconciled-table",
-  "weight": "measurement",
+  "weight": "triage",
   "chain_signature": [
     "assembly-reconciliation",
-    "missingness-measurement",
-    "missingness-measurement",
     "exploration-triage",
     "decomposition-attribution",
     "synthesis",
-    "synthesis",
-    "forecasting"
+    "exploration-triage",
+    "synthesis"
   ],
-  "results": "R1 each district's gas in at its regulator stations, corrector gaps and fixed-factor days rebuilt from the gate balance; R2 each district's customer use carried from cycle reads to calendar months on its own daily sendout; R3 the non-compensating meters' under-registration from the gas temperature in the buried services (soil and the commercial correctors), indoor meters at basement temperature; R4 the accounts that took gas without authorization, told from new snowbirds by the summer base load, and their volume; R5 each district's leak loss in the twelve months to September 2026 as a share of its gas in; R6 the districts designated for the 2027-2029 main replacement program; R7 the districts whose non-compensating meters the 2027 changeout replaces; R8 the meters the 2027 plan schedules that are changed before the 2027-28 heating season at the pace past changeouts ran",
-  "one_fact_test": "the gas-temperature sentence rescues R3 and R7 (2 of 8); the daily-shape, diversion and past-pace sentences one result each (effort.json hints, computed on the careful pass)",
+  "results": "R1 each district's gas in and its corrector customers on one real-gas basis; R2 the premises where gas was taken without authorization and their accounts; R3 each district's leak loss share; R4 the main replacement set; R5 the gas taken without authorization by district; R6 the changeout set",
+  "one_fact_test": "the supercompressibility sentence rescues R1 (1 of 6); the May-test and cold-day sentences rescue none alone; no sentence reaches the main set (effort.json hints, computed on the careful pass)",
   "strategy_label": "OWN (no client strategy carries a gas balance; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
   "doctrine": "results-chain-2026-11-09",
   "depth_level": 5,
@@ -107,32 +108,37 @@
     "decision_form": "set_over_threshold",
     "answer_pattern": "naive_set_swaps_members",
     "lessons": [
-      "exposure_basis_decoupled",
-      "record_algorithm_inversion",
+      "conservation_residual_attribution",
+      "behavioural_response_measured",
       "unmetered_component",
-      "scheduled_completion_slippage"
+      "record_algorithm_inversion",
+      "exposure_basis_decoupled"
     ],
     "mechanisms": [
-      "non_compensating_meter_registers_gas_at_service_temperature",
-      "snow_cover_holds_soil_temperature_above_air",
-      "cycle_reads_spread_on_district_daily_sendout",
-      "student_rentals_empty_over_winter_break",
+      "pt_only_correctors_omit_supercompressibility",
+      "evc_ii_station_correctors_carry_supercompressibility",
+      "line_pressure_process_customers",
+      "dual_fuel_heat_pump_furnace_below_switchover",
+      "snowbird_winter_absence_home_in_may",
       "bypassed_meter_takes_summer_base_load_too",
-      "snowbird_winter_absence",
-      "changeout_pace_slower_where_meters_are_indoors"
+      "furnace_tap_keeps_base_load",
+      "non_compensating_meter_registers_gas_at_service_temperature",
+      "cycle_reads_spread_on_district_daily_sendout"
     ],
     "detection": [
+      "layout_or_physics",
       "second_source_at_other_grain",
-      "record_time_against_event_time",
-      "unchanged_signal_diverges",
-      "back_test_on_held_out_period"
+      "measurement_at_another_network_point",
+      "conservation_residual_sign",
+      "naive_ignores_what_it_should_depend_on"
     ],
     "moves": [
-      "rate_on_driver_exposure",
+      "weighted_balance_reconciliation",
       "invert_recording_algorithm",
+      "measure_response_shape_from_events",
       "impute_by_model_at_own_drivers",
-      "empirical_completion_from_past_works",
-      "weighted_balance_reconciliation"
+      "rate_on_driver_exposure",
+      "variant_sweep_holds_call"
     ],
     "file_roles": [
       "primary_record",
@@ -145,7 +151,7 @@
       "unused_distractor"
     ]
   },
-  "notes": "Architecture 2, re-rooted 2026-11-12 after architecture 1 (Delmont Power and Light's feeder energy balance) was landed by both platform runs (runs/arch1_triage.md). New world, dataset and shell (a city gas utility in Minnesota; which districts; a reconciled table; a workbook and a Word memo). The deciding lessons come from what the arch 1 runs named and waved through (N20 uniform calendarization, N22 scheduled starts) and from an exposure basis that decoupled in the target winter; arch 1's lessons (nonlinear path, network position, time-varying membership) are not reused, and the balance residual is a supporting frame only.",
+  "notes": "Architecture 2, re-rooted 2026-11-12 after architecture 1 (Delmont Power and Light's feeder energy balance) was landed by both platform runs (runs/arch1_triage.md). New world, dataset and shell (a city gas utility in Minnesota; which districts; a reconciled table; a workbook and a Word memo). The deciding lessons come from what the arch 1 runs named and waved through (N20 uniform calendarization, N22 scheduled starts) and from an exposure basis that decoupled in the target winter; arch 1's lessons (nonlinear path, network position, time-varying membership) are not reused, and the balance residual is a supporting frame only. Redesigned 2026-11-13 after the review (runs/arch2_review_2026-11-13.md): the unauthorized-use screen the runs lost stays, split into two independent judgments (absence by the May test, dual-fuel heat pumps by the cold-day response), beside a third in another term (the correctors' real-gas basis); the soil temperature, calendarization, station repairs and changeout pace both runs made unprompted are reflexes priced Right, the 2027 changeout count is no longer asked. conservation_residual_attribution leads because the call needs every balance term on one basis before the residual is read. context_artifact register (2026-11-13 redesign): the premise meter register's stations and corrector accounts sheets (each station's corrector model, each customer's delivery pressure, each meter's compensation and location) are the stakeholder's file the deciding work reads; filed_standard met task1 v5 inside the three-build window. Redrawn at re-registration (2026-11-13, the window moved to task25, task20 v5 and task1 v5): weight triage (112 falls in use across 10,282 premises read one by one for their cause; measurement and modeling are the last two builds'), calibration gold_standard_subsample (the dual-fuel controls rebates and the revenue protection cases are the verified subsamples the classification is checked on; parallel_run_overlap repeats task25), stump strategy stated_rule_hard_construction (the rules file leak loss and base conditions in full; the difficulty is building each term on one basis across files and grains; grain_or_unit repeats task24). forcing_event statutory_or_regulatory_filing: Resolution 2026-11 has the Engineering Manager file the districts with the Utilities Commission by December 1, 2026 (budget_or_appropriation repeats task25).",
   "lineage": [
     {
       "architecture": "v1",
@@ -234,6 +240,66 @@
           "Heidi Hester"
         ]
       }
+    },
+    {
+      "architecture": "v2a",
+      "fate": "returned at review 2026-11-13 (reward 71.0, stumped type match failed): both runs filed Downtown, Old Town, Riverside and Sundquist and lost only the unauthorized-use screen; the soil temperature, degree-day calendarization, station repairs and changeout pace were made unprompted (R71 to R74); redesigned in the same world with new deciding lessons",
+      "driver": "Each unit's wanted quantity is what is left of a balance whose largest subtracted term was registered by instruments at their own physical state rather than the standard basis, over periods that are not the calendar's; the incumbent converts that term with a proxy that moved with the true driver only in the years it was checked on, so in the target year, when the two came apart, it overstates the correction; the residual also needs each period re-cut on the unit's own daily profile, unrecorded draws told from seasonal absence by the season only one of them touches, and the forward work carried at the pace past work actually ran.",
+      "stump": "The careful but hurried pass converts the non-compensating meters with the logger study's air-temperature tie, spreads each read evenly over its days and books new snowbirds as diversion (or no diversion at all), so it leaves the districts whose losses are leaks under the 1.0 per cent line, designates the districts whose excess is diversion and timing, and funds changeouts where most meters sit indoors.",
+      "skeleton": {
+        "decision_form": "set_over_threshold",
+        "answer_pattern": "naive_set_swaps_members",
+        "lessons": [
+          "exposure_basis_decoupled",
+          "record_algorithm_inversion",
+          "unmetered_component",
+          "scheduled_completion_slippage"
+        ],
+        "mechanisms": [
+          "non_compensating_meter_registers_gas_at_service_temperature",
+          "snow_cover_holds_soil_temperature_above_air",
+          "cycle_reads_spread_on_district_daily_sendout",
+          "student_rentals_empty_over_winter_break",
+          "bypassed_meter_takes_summer_base_load_too",
+          "snowbird_winter_absence",
+          "changeout_pace_slower_where_meters_are_indoors"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "record_time_against_event_time",
+          "unchanged_signal_diverges",
+          "back_test_on_held_out_period"
+        ],
+        "moves": [
+          "rate_on_driver_exposure",
+          "invert_recording_algorithm",
+          "impute_by_model_at_own_drivers",
+          "empirical_completion_from_past_works",
+          "weighted_balance_reconciliation"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "incumbent_figure_or_method",
+          "governing_standard",
+          "schedule_or_plan",
+          "exogenous_long_record",
+          "unused_distractor"
+        ]
+      },
+      "chain_signature": [
+        "assembly-reconciliation",
+        "missingness-measurement",
+        "missingness-measurement",
+        "exploration-triage",
+        "decomposition-attribution",
+        "synthesis",
+        "synthesis",
+        "forecasting"
+      ],
+      "answer_shape": "reconciled-table",
+      "weight": "measurement"
     }
   ],
   "lineage_shells": [
@@ -247,7 +313,7 @@
   "differentiation": {
     "task5": "task5 v2 read each dwelling's occupancy from its own meter's departure from its typical day; this build converts registered gas volumes to base conditions with the gas temperature buried services actually carry (not the air temperature the incumbent tied it to), re-cuts cycle reads on each district's daily sendout and decides a residual against a filed per-district line"
   },
-  "registered": "2026-11-13T02:35:57Z",
+  "registered": "2026-11-13T21:17:51Z",
   "shell": {
     "question form": "which",
     "second-sentence opener": "i",

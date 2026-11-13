@@ -31,7 +31,7 @@ DISTRICTS = [
          cycles=[3, 4, 5, 6], byp=(1, 1), cbyp=0, ci=0.55, drs=["OT-1", "OT-2"]),
     dict(code="RS", name="Riverside", res=980, com=40, ntc=0.76, out=1.00, stu=0.0, sbo=0.02, sbn=0.005, leak=1.31,
          cycles=[13, 14, 15, 16], byp=(0, 1), cbyp=0, ci=0.25, drs=["RS-1"]),
-    dict(code="CH", name="College Hill", res=820, com=46, ntc=0.62, out=0.62, stu=0.38, sbo=0.0, sbn=0.0, leak=0.76,
+    dict(code="CH", name="College Hill", res=820, com=46, ntc=0.62, out=0.58, stu=0.38, sbo=0.0, sbn=0.0, leak=0.76,
          cycles=[12, 13, 14], byp=(0, 0), cbyp=0, ci=0.10, drs=["CH-1"]),
     dict(code="NE", name="North End", res=960, com=30, ntc=0.81, out=1.00, stu=0.0, sbo=0.02, sbn=0.005, leak=0.61,
          cycles=[14, 15, 16, 17], byp=(0, 0), cbyp=0, ci=0.05, drs=["NE-1"]),
@@ -44,7 +44,7 @@ DISTRICTS = [
     dict(code="HP", name="Heritage Park", res=760, com=20, ntc=0.05, out=1.00, stu=0.0, sbo=0.01, sbn=0.003, leak=0.18,
          cycles=[19, 20], byp=(0, 0), cbyp=0, ci=0.0, drs=["HP-1"]),
     dict(code="EI", name="East Industrial", res=140, com=124, ntc=0.55, out=0.58, stu=0.0, sbo=0.0, sbn=0.0,
-         leak=0.51, cycles=[6, 7, 8], byp=(0, 0), cbyp=2, ci=0.15, drs=["EI-1"]),
+         leak=0.60, cycles=[6, 7, 8], byp=(0, 0), cbyp=2, ci=0.15, drs=["EI-1"]),
     dict(code="DT", name="Downtown", res=520, com=162, ntc=0.72, out=0.20, stu=0.06, sbo=0.0, sbn=0.0, leak=1.42,
          cycles=[1, 2, 3], byp=(0, 0), cbyp=1, ci=0.60, drs=["DT-1", "DT-2"]),
     dict(code="AP", name="Airport", res=260, com=72, ntc=0.62, out=0.70, stu=0.0, sbo=0.0, sbn=0.003, leak=0.66,
@@ -59,9 +59,33 @@ DISTRICTS = [
 DCODES = [d["code"] for d in DISTRICTS]
 DNAME = {d["code"]: d["name"] for d in DISTRICTS}
 
+# regulator station outlet pressures (psig): the industrial loop east of the river and the airport park run higher
+STATION_PSIG = {"EI-1": 58.0, "AP-1": 45.0}
+# station correctors: the 2021 metering program fitted EVC-II units (pressure, temperature and supercompressibility);
+# four stations kept the EVC-I units moved from customer sites, which correct for pressure and temperature only, as
+# every customer corrector does
+PT_ONLY_STATIONS = ["RS-1", "OT-2", "DT-2", "CH-1"]
+GAS_SG = 0.592            # the interstate supply's specific gravity, about which the gate's analyser moves day to day
+
 # large customers on electronic volume correctors (telemetered, billed on corrected volume)
 EVC = {"OT": 3, "RS": 2, "CH": 7, "NE": 1, "WG": 2, "LV": 1, "PR": 2, "HP": 2, "EI": 16, "DT": 12, "AP": 7, "EG": 1,
        "HV": 1, "SQ": 1}
+
+# process customers taking gas at line pressure on the industrial loop and in the airport park (district, name,
+# base Mcf a day, heating slope Mcf per degree day, delivery psig)
+EVC_LINE = [("EI", "creamery", 215.0, 0.9, 55.0),
+            ("EI", "malt elevator and kiln", 175.0, 0.4, 54.0),
+            ("EI", "foundry", 140.0, 0.6, 53.0),
+            ("EI", "fiberboard plant", 110.0, 1.1, 53.0),
+            ("EI", "rendering plant", 70.0, 0.5, 52.0),
+            ("AP", "asphalt plant", 70.0, 0.3, 42.0),
+            ("AP", "aircraft hangars", 30.0, 1.6, 40.0)]
+
+# dual-fuel heat pumps added to gas-heated homes: the share of each district's occupied homes converted, most
+# between April and October 2025; the furnace runs only below each system's switchover temperature
+DUAL_FUEL = {"OT": 0.004, "RS": 0.005, "CH": 0.003, "NE": 0.004, "WG": 0.006, "LV": 0.004, "PR": 0.007,
+             "HP": 0.006, "EI": 0.0, "DT": 0.003, "AP": 0.004, "EG": 0.005, "HV": 0.006, "SQ": 0.028}
+DUAL_FUEL_REBATED = 0.25  # the share of conversions whose dual-fuel controls rebate is on file
 
 # the 2024-25 gas temperature study: loggers at meter inlets, November 2024 to April 2025
 STUDY0, STUDY1 = dt.date(2024, 11, 1), dt.date(2025, 4, 30)

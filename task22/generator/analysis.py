@@ -10,7 +10,9 @@ method choice a switch, so the golden and each hurried route run on the same cod
       div     golden (collapses split into diversion and absence by the summer base load and the winter heating
               response) | all (every collapse booked as diversion) | none
       drs     rebuild (faulty station days rebuilt from the gate balance) | raw (as recorded, gaps as zero)
-      plan    pace (the 2024-25 work orders' completion by meter location) | plan (every meter on its date)
+      z       dak | hy | fit (every corrector put on the real-gas basis: the pressure-and-temperature-only
+              correctors' volumes times the supercompressibility factor, from Dranchuk and Abou-Kassem, from Hall and
+              Yarborough, or fitted on the EVC-II stations' own records) | rec (every corrector's volume as recorded)
 """
 import datetime as dt
 import os
@@ -19,6 +21,7 @@ import numpy as np
 import pandas as pd
 
 import params as P
+import zfactor as ZF
 
 DAY0 = dt.date(2023, 8, 1)
 DAY1 = P.SIM1
@@ -26,8 +29,8 @@ DAYS = pd.date_range(DAY0, DAY1, freq="D")
 ND = len(DAYS)
 MONTHS = pd.period_range("2023-10", "2026-09", freq="M")
 WIN = (DAYS >= pd.Timestamp(P.W0)) & (DAYS <= pd.Timestamp(P.W1))
-GOLDEN = dict(cal="shape", temp="soil", div="golden", drs="rebuild", plan="pace", k_scale=1.0, in_shift=0.0,
-              dmg_scale=1.0, own_scale=1.0, div_scale=1.0)
+GOLDEN = dict(cal="shape", temp="soil", div="golden", drs="rebuild", z="dak", k_scale=1.0, in_shift=0.0,
+              dmg_scale=1.0, own_scale=1.0, div_scale=1.0, home_cut=0.7, df_cut=0.3, df_tmax=10)
 
 
 def _d(x):
@@ -67,13 +70,9 @@ def load(target):
     F["damage"]["Date"] = pd.to_datetime(F["damage"]["Date"]).dt.date
     F["own_use"] = pd.read_excel(f["own_use"], skiprows=2).dropna(subset=["Month"])
     F["own_use"] = F["own_use"][F["own_use"]["Month"].astype(str).str.match(r"^\d{4}-\d{2}$")]
-    F["workorders"] = pd.read_csv(f["workorders"])
-    for c in ("PlannedDate", "CompletedDate"):
-        F["workorders"][c] = pd.to_datetime(F["workorders"][c]).dt.date
-    F["plan2027"] = pd.read_excel(f["plan2027"], skiprows=2).dropna(subset=["PremiseID"])
-    F["plan2027"] = F["plan2027"][pd.to_numeric(F["plan2027"]["PremiseID"], errors="coerce").notna()]
-    F["plan2027"]["PlannedDate"] = pd.to_datetime(F["plan2027"]["PlannedDate"]).dt.date
     F["lauf_report"] = pd.read_excel(f["lauf_report"], skiprows=2)
+    F["rebates"] = pd.read_csv(f["rebates"])
+    F["rebates"]["InstallDate"] = _d(F["rebates"]["InstallDate"])
     F["_rp_path"] = f["rp_cases"]
     return F
 
@@ -134,11 +133,75 @@ def periods(F, reg, meter_tc):
     return p[["PremiseID", "MeterID", "district", "cls", "outdoor", "tc", "start", "end", "ccf"]].reset_index(drop=True)
 
 
+# ------------------------------------------------------------------------------------------- real-gas basis
+def p_atm(F):
+    """The absolute pressure the correctors add to gauge pressure: solved from the customer correctors' own
+    corrected-to-uncorrected ratios on their measured temperature (each is (gauge + atmospheric) / 14.73 x 519.67 /
+    (temperature + 459.67) for a pressure-and-temperature corrector)."""
+    ev = F["evc"]
+    ok = ev["Status"].eq("OK") & ev["UncorrectedMcf"].gt(1)
+    r = ev.loc[ok, "CorrectedMcf"] / ev.loc[ok, "UncorrectedMcf"]
+    pa = r * P.P_BASE * (ev.loc[ok, "AvgGasTempF"] + 459.67) / P.R_BASE - ev.loc[ok, "AvgPressurePsig"]
+    return float(np.round(np.median(pa), 2))
+
+
+def station_factor(F):
+    """Each station corrector's recorded factor over the pressure-and-temperature factor, gas day by gas day."""
+    drs = F["drs"]
+    pa = p_atm(F)
+    ok = drs["Alarm"].fillna("").eq("") & drs["UncorrectedMcf"].gt(1)
+    d = drs[ok].copy()
+    d["ptf"] = (d["AvgPressurePsig"] + pa) / P.P_BASE * P.R_BASE / (d["AvgTempF"] + 459.67)
+    d["excess"] = d["CorrectedMcf"] / d["UncorrectedMcf"] / d["ptf"]
+    return d, pa
+
+
+def pt_only_stations(F):
+    d, _ = station_factor(F)
+    med = d.groupby("Station")["excess"].median()
+    return sorted(med.index[med < 1.0015]), med
+
+
+def fit_fpv2(F):
+    """Supercompressibility fitted on the EVC-II stations' own records: the factor's excess over one on the
+    absolute pressure's excess over base, and on that times the gas temperature."""
+    d, pa = station_factor(F)
+    pto, _ = pt_only_stations(F)
+    d = d[~d["Station"].isin(pto)]
+    dp = d["AvgPressurePsig"] + pa - P.P_BASE
+    X = np.column_stack([dp, dp * (d["AvgTempF"] - 50.0)])
+    b = np.linalg.lstsq(X, d["excess"].values - 1.0, rcond=None)[0]
+    return lambda p_psia, t_f, sg: 1.0 + b[0] * (p_psia - P.P_BASE) + b[1] * (p_psia - P.P_BASE) * (t_f - 50.0)
+
+
+def fpv2_fn(F, how):
+    if how in ("dak", "hy", "papay"):
+        return lambda p, t, sg: ZF.fpv2(p, t, sg, how)
+    if how == "fit":
+        return fit_fpv2(F)
+    return None
+
+
+def gate_sg(F):
+    g = F["gate"].set_index("GasDay")["SpecificGravity"].astype(float)
+    return g.reindex([d.date() for d in DAYS]).interpolate().bfill().ffill()
+
+
 # ------------------------------------------------------------------------------------------- regulator stations
-def stations_daily(F, how="rebuild"):
+def stations_daily(F, how="rebuild", z="dak"):
     st = F["stations"].set_index("Station")["PressureDistrict"]
     code = {v: k for k, v in P.DNAME.items()}
     drs = F["drs"].copy()
+    f = fpv2_fn(F, z)
+    if f is not None:
+        # the EVC-I stations correct for pressure and temperature only: put them on the EVC-II stations' basis
+        pto, _ = pt_only_stations(F)
+        pa = p_atm(F)
+        sg = gate_sg(F)
+        m = drs["Station"].isin(pto) & drs["CorrectedMcf"].notna()
+        sgd = drs.loc[m, "GasDay"].map(sg)
+        drs.loc[m, "CorrectedMcf"] = drs.loc[m, "CorrectedMcf"] * f(drs.loc[m, "AvgPressurePsig"] + pa,
+                                                                    drs.loc[m, "AvgTempF"], sgd)
     drs["bad"] = drs["CorrectedMcf"].isna() | drs["Alarm"].isin(["COMM FAIL", "PXDCR FAIL FIXED P", "TXMTR STUCK"])
     piv = drs.pivot(index="GasDay", columns="Station", values="CorrectedMcf")
     bad = drs.pivot(index="GasDay", columns="Station", values="bad").fillna(True).astype(bool)
@@ -147,6 +210,15 @@ def stations_daily(F, how="rebuild"):
     gate = F["gate"].set_index("GasDay")["CorrectedMcf"].reindex(piv.index)
     if how == "raw":
         q = piv.fillna(0.0)
+    elif how == "share":
+        # each faulty day carried at the station's own share of the gate, interpolated from the days around it
+        q = piv.copy()
+        share = piv.where(~bad).div(gate, axis=0)
+        share = share.interpolate(limit_direction="both")
+        for s in piv.columns:
+            m = bad[s] & gate.notna()
+            q.loc[m, s] = gate[m] * share.loc[m, s]
+        q = q.fillna(0.0)
     else:
         q = piv.copy()
         allbad = bad.any(axis=1)
@@ -173,7 +245,7 @@ def stations_daily(F, how="rebuild"):
 
 
 # ------------------------------------------------------------------------------------------- corrector customers
-def evc_daily(F):
+def evc_daily(F, z="dak"):
     ev = F["evc"].copy()
     ev["ratio"] = ev["CorrectedMcf"] / ev["UncorrectedMcf"].replace(0, np.nan)
     ev = ev.sort_values(["Account", "GasDay"])
@@ -182,6 +254,15 @@ def evc_daily(F):
     ev["r_fill"] = ev.groupby("Account")["r_ok"].transform(lambda s: s.rolling(15, center=True, min_periods=3).median())
     ev["r_fill"] = ev.groupby("Account")["r_fill"].transform(lambda s: s.ffill().bfill())
     ev["mcf"] = np.where(good, ev["CorrectedMcf"], ev["UncorrectedMcf"] * ev["r_fill"])
+    f = fpv2_fn(F, z)
+    if f is not None:
+        # every customer corrector corrects for pressure and temperature only: the real-gas volume at base
+        # conditions is its volume times the supercompressibility factor at its own pressure and temperature
+        ev["t_ok"] = ev["AvgGasTempF"].where(good)
+        ev["t_fill"] = ev.groupby("Account")["t_ok"].transform(
+            lambda s: s.rolling(15, center=True, min_periods=3).median().ffill().bfill())
+        sg = gate_sg(F)
+        ev["mcf"] = ev["mcf"] * f(ev["AvgPressurePsig"] + p_atm(F), ev["t_fill"], ev["GasDay"].map(sg))
     acc = F["correctors"].set_index("Account")["PressureDistrict"]
     code = {v: k for k, v in P.DNAME.items()}
     ev["district"] = ev["Account"].map(acc).map(code)
@@ -321,15 +402,46 @@ def history_diversion(F):
     return out
 
 
-def diversion(F, reg, pm, Wx, how="golden", fac=None, cut=0.4, run=3, heat_kept_cut=0.15, base_kept_cut=0.5,
-              summer_cut=0.4, vacant_months=2, heating_month=True):
-    """Accounts whose use collapsed against their own weather response of the year before, outside vacant spells
-    and meter exchanges: those whose summer base load also went (a bypass) or whose winter use lost its heating
-    response while keeping its base (a furnace tap) took gas without authorization; those whose winter use kept a
-    reduced heating response and whose summer came back (an absence) did not. A run of low months must reach into
-    the heating season (October to April): a student rental's summer away recurs every year and is no collapse."""
+def cold_day_response(F, per, Wx, prem, start_month, b_slope, grid=(-10, -5, 0, 5, 10, 15, 30, 60)):
+    """A collapsed premise's FY2026 heating read period by period against the degree days of its cold days only: a
+    dual-fuel heat pump leaves the furnace (on the meter) the whole load below its switchover and none above, so the
+    period's gas is the base plus the premise's own past slope times the degree days on days colder than the
+    switchover. Returns the best switchover and the fitted cold-day slope over the premise's own past slope."""
+    p = per[(per["PremiseID"] == prem)]
+    t0 = _di(start_month)
+    p = p[(p["start"].map(_di) >= t0) & (p["end"] <= P.W1) & (p["end"].map(lambda d: d.month in (11, 12, 1, 2, 3, 4)))]
+    if len(p) < 3 or b_slope <= 0:
+        return None, 0.0
+    air, hdd = Wx["air"], Wx["hdd60"]
+    best = (None, 0.0, np.inf)
+    for T in grid:
+        ch = np.where(air < T, hdd, 0.0)
+        cum = np.concatenate([[0.0], np.cumsum(ch)])
+        X = np.column_stack([(p["end"].map(_di) - p["start"].map(_di)).values.astype(float),
+                             (cum[p["end"].map(_di).values] - cum[p["start"].map(_di).values])])
+        y = p["ccf"].values.astype(float)
+        bb = np.linalg.lstsq(X, y, rcond=None)[0]
+        bb = np.clip(bb, 0, None)
+        sse = float(((X @ bb - y) ** 2).sum())
+        if sse < best[2]:
+            best = (T, float(bb[1]) / b_slope, sse)
+    return best[0], best[1]
+
+
+def diversion(F, reg, pm, Wx, how="golden", fac=None, cut=0.4, run=3, home_cut=0.7, df_cut=0.3, df_tmax=10,
+              summer_cut=0.4, vacant_months=2, heating_month=True, per=None, tap_cut=None):
+    """Premises whose use collapsed against their own weather response of the year before, outside vacant spells
+    and meter exchanges. Those whose summer base load also went (a bypass) or whose winter use lost its heating
+    response (a furnace tap) took gas without authorization; those whose winter use kept a reduced heating response
+    (an absence) did not; and a lost heating response that comes back in full on the coldest days, read period by
+    read period, is a dual-fuel heat pump the household added (no gas taken), as is any premise with a dual-fuel
+    controls rebate on file. A run of low months must reach into the heating season (October to April): a student
+    rental's summer away recurs every year and is no collapse.
+        how  golden (bypasses and taps) | nodf (no cold-day test: dual-fuel homes kept as taps) | allx (every
+             collapse booked but the dual-fuel homes) | all (every collapse booked, rebated homes aside) | none"""
     if how == "none":
         return pd.DataFrame(columns=["PremiseID", "district", "kind", "mcf_window"])
+    rebated = set(F["rebates"].loc[F["rebates"]["Equipment"].eq("Dual-fuel heat pump controls"), "PremiseID"])
     months = [str(m) for m in pd.period_range("2023-09", "2026-10", freq="M")]
     mp = pd.period_range("2023-09", "2026-10", freq="M")
     hdd = np.array([Wx["hdd60"][(DAYS.year == m.year) & (DAYS.month == m.month)].sum() for m in mp])
@@ -338,6 +450,7 @@ def diversion(F, reg, pm, Wx, how="golden", fac=None, cut=0.4, run=3, heat_kept_
     fy26 = [i for i, m in enumerate(mp) if P.W0 <= m.start_time.date() <= dt.date(2026, 9, 1)]
     summer26 = [i for i, m in enumerate(mp) if m.start_time.date() in
                 [dt.date(2026, 6, 1), dt.date(2026, 7, 1), dt.date(2026, 8, 1)]]
+    home26 = [i for i, m in enumerate(mp) if (m.year, m.month) == (2026, 5)]
     acc = F["accounts"]
     exch = reg.set_index("PremiseID")["ExchangeDate"]
     res = reg.set_index("PremiseID")
@@ -388,19 +501,29 @@ def diversion(F, reg, pm, Wx, how="golden", fac=None, cut=0.4, run=3, heat_kept_
         if not pd.isna(ex) and P.W0 <= ex <= P.W1:
             continue
         summer_ratio = y[summer26].sum() / max(pred[summer26].sum(), 1e-9)
-        w_idx = [i for i in low]
+        home_ratio = y[home26].sum() / max(pred[home26].sum(), 1e-9)
+        w_idx = low[1:] if len(low) >= 4 else list(low)     # the month the fall began is part old, part new
         Xw = np.column_stack([ndays[w_idx], hdd[w_idx]])
         bw = np.linalg.lstsq(Xw, y[w_idx], rcond=None)[0]
         heat_kept = bw[1] / max(b[1], 1e-9)
         base_kept = bw[0] / max(b[0], 1e-9)
+        # May 2026: the heating month after the winter when an away household is home again
+        m0, m1 = dt.date(2026, 5, 1), dt.date(2026, 5, 31)
+        may_open = 0
+        for r in a.itertuples():
+            s_ = r.StartDate
+            e_ = dt.date(2100, 1, 1) if pd.isna(r.EndDate) else r.EndDate
+            if pd.isna(s_):
+                continue
+            may_open += max(0, (min(e_, m1) - max(s_, m0)).days)
         if summer_ratio < summer_cut:
             kind = "bypass"
-        elif heat_kept < heat_kept_cut and base_kept > base_kept_cut:
-            kind = "furnace tap"
+        elif may_open < 15:
+            kind = "turnover"        # the premise changed hands over the spring: no test month
+        elif home_ratio >= home_cut:
+            kind = "absence"         # the heating response is back in May, when the household is home
         else:
-            kind = "absence"
-        if how == "golden" and kind == "absence":
-            continue
+            kind = "furnace tap"
         first = min(low)
         start = first
         for i in range(first - 1, max(first - 4, 0), -1):
@@ -408,13 +531,28 @@ def diversion(F, reg, pm, Wx, how="golden", fac=None, cut=0.4, run=3, heat_kept_
                 start = i
             else:
                 break
+        t_sw, df_ratio = None, 0.0
+        if kind == "furnace tap" and per is not None:
+            t_sw, df_ratio = cold_day_response(F, per, Wx, prem, mp[first].start_time.date(), b[1])
+        is_df = t_sw is not None and t_sw <= df_tmax and df_ratio >= df_cut
+        reb = int(prem) in rebated
+        if how != "diag":
+            if reb or kind == "turnover":
+                continue
+            if how in ("golden", "nodf") and kind == "absence":
+                continue
+            if how in ("golden", "allx") and is_df:
+                continue
         f = 1.0
         if fac is not None and not res.at[prem, "tc_now"]:
             f = fac["out" if res.at[prem, "outdoor"] else "in"]
         short = sum(max(0.0, pred[i] - y[i]) * (f[i] if fac is not None and not np.isscalar(f) else 1.0)
                     for i in fy26 if i >= start)
         out.append(dict(PremiseID=int(prem), district=res.at[prem, "district"], kind=kind, ccf_window=short,
-                        first_month=months[start]))
+                        first_month=months[start], heat_kept=round(float(heat_kept), 3),
+                        home=round(float(home_ratio), 3), summer=round(float(summer_ratio), 3),
+                        dual_fuel=bool(is_df), rebated=bool(reb),
+                        cold_day_slope=round(float(df_ratio), 3), switchover=t_sw))
     df = pd.DataFrame(out)
     if len(df):
         df["mcf_window"] = df["ccf_window"] * P.PF / 10.0
@@ -430,13 +568,16 @@ def run(F, opts=None, cache=None):
         cache["wx"] = weather(F)
         cache["reg"], cache["meter_tc"] = register(F)
         cache["per"] = periods(F, cache["reg"], cache["meter_tc"])
-        cache["evc"], cache["evc_rows"] = evc_daily(F)
     Wx, reg, per = cache["wx"], cache["reg"], cache["per"]
-    key = ("drs", o["drs"])
+    key = ("evc", o["z"])
     if key not in cache:
-        cache[key] = stations_daily(F, o["drs"])
+        cache[key] = evc_daily(F, o["z"])
+    evc = cache[key][0]
+    key = ("drs", o["drs"], o["z"])
+    if key not in cache:
+        cache[key] = stations_daily(F, o["drs"], o["z"])
     inflow = cache[key]
-    key = ("alloc", o["cal"], o["drs"])
+    key = ("alloc", o["cal"], o["drs"], o["z"])
     if key not in cache:
         cache[key] = allocate(per, weights(o["cal"], inflow, Wx))
     daily, pm = cache[key]
@@ -454,9 +595,11 @@ def run(F, opts=None, cache=None):
     mp = pd.period_range("2023-09", "2026-10", freq="M")
     fac = {k: np.array([v[(DAYS.year == m.year) & (DAYS.month == m.month)].mean() for m in mp])
            for k, v in (("out", fac_out), ("in", fac_in))}
-    key = ("div", o["div"], o["cal"], o["drs"], o["temp"], o["k_scale"], o["in_shift"])
+    key = ("div", o["div"], o["cal"], o["drs"], o["z"], o["temp"], o["k_scale"], o["in_shift"], o["home_cut"],
+           o["df_cut"], o["df_tmax"])
     if key not in cache:
-        cache[key] = diversion(F, reg, pm, Wx, o["div"], fac)
+        cache[key] = diversion(F, reg, pm, Wx, o["div"], fac, home_cut=o["home_cut"], df_cut=o["df_cut"],
+                               df_tmax=o["df_tmax"], per=per)
     div = cache[key]
     if "hist_div" not in cache:
         cache["hist_div"] = history_diversion(F)
@@ -495,7 +638,7 @@ def run(F, opts=None, cache=None):
                 under += b * (f - 1)
                 billed_ntc += b
         out[c] = dict(inflow=inflow[c], billed=billed, delivered=delivered, under=under, billed_ntc=billed_ntc,
-                      evc=cache["evc"].get(c, np.zeros(ND)), own=own[c], dmg=dmg[c])
+                      evc=evc.get(c, np.zeros(ND)), own=own[c], dmg=dmg[c])
     # monthly table
     rows = []
     for c in P.DCODES:
@@ -526,26 +669,5 @@ def run(F, opts=None, cache=None):
     designated = sorted(agg.index[agg["leak_pct"] > P.LEAK_LINE])
     elig = agg[agg["ntc_meters"] >= P.CHANGEOUT_MIN_METERS]
     changeout = sorted(elig.index[elig["ur_pct"] > P.CHANGEOUT_LINE])
-    plan = plan_2027(F, o["plan"])
     return dict(opts=o, monthly=mon, agg=agg, designated=designated, changeout=changeout, diversion=div,
-                plan=plan, tpar=tpar, daily=out)
-
-
-def plan_2027(F, how="pace"):
-    pl = F["plan2027"]
-    n = len(pl)
-    if how == "plan":
-        return dict(n=n, done=n, by_loc={})
-    wo = F["workorders"]
-    lag = {}
-    for loc, g in wo.groupby("MeterLocation"):
-        l = [10 ** 6 if pd.isna(c) else (c - p).days for p, c in zip(g["PlannedDate"], g["CompletedDate"])]
-        lag[loc] = np.array(l)
-    done = 0.0
-    by = {}
-    for r in pl.itertuples():
-        room = (P.SEASON_2027 - r.PlannedDate).days - 1
-        p = float((lag[r.MeterLocation] <= room).mean())
-        done += p
-        by[r.MeterLocation] = by.get(r.MeterLocation, 0.0) + p
-    return dict(n=n, done=done, by_loc=by)
+                tpar=tpar, daily=out)

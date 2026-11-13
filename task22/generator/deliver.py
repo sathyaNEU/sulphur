@@ -1,7 +1,7 @@
 """task22 architecture 2, the golden deliverables: the engineering manager's workbook (each district's monthly gas
-balance, the twelve months to September 2026, the accounts that took gas without authorization, the gas temperature
-the meters saw, the 2027 changeouts' pace) and the short deck for the Utilities Commission, both from the results
-that write figures.json."""
+balance, the twelve months to September 2026, the real-gas basis of the station and customer correctors, the
+premises where gas was taken without authorization, the falls in use that took no gas, the gas temperature the
+meters saw) and the short deck for the Utilities Commission, both from the results that write figures.json."""
 import datetime as dt
 import os
 
@@ -85,16 +85,68 @@ def workbook(path, R, figs, F):
     for col in "JL":
         for j in range(4, k + 1):
             ws["%s%d" % (col, j)].number_format = PCT
+    ws.freeze_panes = "B4"
     ws.cell(row=k + 2, column=1, value="Main replacement: leak loss over 1.0% of gas in (Rule 1). Changeout: "
             "under-registration over 3.5% of the billed volume, at least 100 meters (Rule 2).").font = Font(italic=True,
                                                                                                          size=8)
-    ws = wb.create_sheet("Without authorization")
-    ws["A1"] = "Accounts that took gas without authorization, October 2025 to September 2026"
+    ws = wb.create_sheet("Real-gas basis")
+    ws["A1"] = "Gas in and corrector customers on one basis at 14.73 psia and 60 F, twelve months to September 2026"
     ws["A1"].font = Font(bold=True, size=12)
-    _hdr(ws, 3, ["Premise", "District", "Finding", "Use first fell", "Gas not registered, Mcf"], [11, 15, 14, 13, 14])
-    dv = R["diversion"].sort_values(["district", "PremiseID"]) if len(R["diversion"]) else []
-    for d in (dv.itertuples() if len(dv) else []):
-        ws.append([int(d.PremiseID), P.DNAME[d.district], d.kind, d.first_month, round(d.mcf_window, 0)])
+    ws["A2"] = ("Each station corrector's corrected-to-uncorrected ratio over its pressure and temperature factor "
+                "(the median gas day): the EVC-II units carry the gas's supercompressibility, the EVC-I units and every "
+                "customer corrector do not. Supercompressibility from Dranchuk and Abou-Kassem on the gate's specific "
+                "gravity.")
+    ws["A2"].font = Font(italic=True, size=8)
+    b = figs["_extra"]["basis"]
+    _hdr(ws, 4, ["Station", "District", "Corrector", "Outlet psig", "Recorded factor over P and T"], [10, 15, 11, 10, 14])
+    for s in b["stations"]:
+        ws.append([s["station"], s["district"], s["corrector"], s["psig"], s["factor"]])
+        ws.cell(row=ws.max_row, column=5).number_format = "0.0000"
+    r0 = ws.max_row + 2
+    _hdr(ws, r0, ["District", "Gas in, as recorded", "Gas in, real-gas basis", "Corrector customers, as corrected",
+                  "Corrector customers, at base conditions"])
+    for name, v in b["districts"].items():
+        ws.append([name, v["gas_in_recorded"], v["gas_in_real"], v["corrector_recorded"], v["corrector_real"]])
+    for col in "BCDE":
+        for k in range(r0 + 1, ws.max_row + 1):
+            ws["%s%d" % (col, k)].number_format = MCF
+    ws = wb.create_sheet("Without authorization")
+    ws["A1"] = "Premises where gas was taken without authorization, October 2025 to September 2026"
+    ws["A1"].font = Font(bold=True, size=12)
+    _hdr(ws, 3, ["Premise", "District", "Account(s)", "Finding", "Use first fell", "Gas taken, Mcf"],
+         [11, 15, 18, 13, 13, 12])
+    for p in sorted(figs["_extra"]["diversion_premises"], key=lambda x: (P.DCODES.index(x["district"]),
+                                                                          x["PremiseID"])):
+        ws.append([int(p["PremiseID"]), P.DNAME[p["district"]], ", ".join(str(a) for a in p["accounts"]), p["kind"],
+                   p["first_month"], round(p["mcf_window"], 0)])
+        ws.cell(row=ws.max_row, column=6).number_format = MCF
+    ws.append([])
+    ws.append(["%d premises, %d accounts" % (figs["R2_unauthorized"]["premises"], figs["R2_unauthorized"]["accounts"]),
+               None, None, None, None, round(sum(p["mcf_window"] for p in figs["_extra"]["diversion_premises"]), 0)])
+    ws.cell(row=ws.max_row, column=6).number_format = MCF
+    ws.freeze_panes = "A4"
+    ws = wb.create_sheet("Falls in use, no gas taken")
+    ws["A1"] = "Premises whose use fell in the twelve months without gas taken: away for the winter, dual-fuel heat " \
+               "pumps, changed hands"
+    ws["A1"].font = Font(bold=True, size=12)
+    _hdr(ws, 3, ["Premise", "District", "Reading", "Use first fell", "May 2026 use over own weather response",
+                 "Cold-day slope over own heating slope", "Switchover, F", "Dual-fuel rebate on file"],
+         [11, 15, 22, 13, 16, 16, 12, 12])
+    for p in figs["_extra"]["falls_not_theft"]:
+        if p["kind"] == "turnover":
+            reading = "changed hands over the spring"
+        elif p["rebated"]:
+            reading = "dual-fuel heat pump (rebate on file)"
+        elif p["dual_fuel"]:
+            reading = "dual-fuel heat pump"
+        else:
+            reading = "away for the winter"
+        ws.append([int(p["PremiseID"]), P.DNAME[p["district"]], reading, p["first_month"], round(p["home"], 2),
+                   round(p["cold_day_slope"], 2), p["switchover"] if p["switchover"] == p["switchover"] else None,
+                   "Yes" if p["rebated"] else "No"])
+        for cc in (5, 6):
+            ws.cell(row=ws.max_row, column=cc).number_format = "0.00"
+    ws.freeze_panes = "A4"
     ws = wb.create_sheet("Gas temperature")
     ws["A1"] = "Gas temperature at meters without compensation, monthly mean, F"
     ws["A1"].font = Font(bold=True, size=12)
@@ -109,15 +161,25 @@ def workbook(path, R, figs, F):
         msk = (A.DAYS.year == m.year) & (A.DAYS.month == m.month)
         ws.append([str(m), round(float(Wx["air"][msk].mean()), 1), round(float(T_out[msk].mean()), 1),
                    round(float(T_in[msk].mean()), 1)])
-    ws = wb.create_sheet("2027 changeouts")
-    ws["A1"] = "Changeouts the 2027 plan schedules, done before November 1, 2027 at the 2024-25 pace"
+    ws = wb.create_sheet("Notes")
+    ws["A1"] = "Notes"
     ws["A1"].font = Font(bold=True, size=12)
-    pl = R["plan"]
-    _hdr(ws, 3, ["Meter location", "Meters scheduled", "Expected done before the season"], [15, 15, 18])
-    plan = F["plan2027"]
-    for loc in ("Outside", "Inside"):
-        ws.append([loc, int((plan["MeterLocation"] == loc).sum()), round(pl["by_loc"].get(loc, 0.0), 0)])
-    ws.append(["All", pl["n"], round(pl["done"], 0)])
+    notes = [
+        "Base conditions are 14.73 psia and 60 F (Resolution 2026-11, section 2); every volume in this workbook is at "
+        "base conditions.",
+        "Gas in is each district's regulator stations, the faulty gas days rebuilt from the city gate less the other "
+        "stations. The four EVC-I station correctors and every customer corrector correct for pressure and temperature "
+        "only; their volumes are put on the EVC-II stations' basis with the gas's supercompressibility (Dranchuk and "
+        "Abou-Kassem on the gate analyser's daily specific gravity, atmospheric pressure %.2f psia)." % figs["_extra"]["p_atm"],
+        "Billed volume is each actual-to-actual read period carried to the calendar month on its district's daily "
+        "station volume; estimated reads fold into the next actual read.",
+        "Gas taken without authorization is counted by premise; a premise that changed hands during a bypass lists "
+        "each account that held it.",
+        "Extracts of November 2 to 5, 2026; the twelve months end September 30, 2026.",
+    ]
+    for i, t in enumerate(notes, 3):
+        ws.cell(row=i, column=1, value=t).alignment = Alignment(wrap_text=True, vertical="top")
+    ws.column_dimensions["A"].width = 120
     wb.save(path)
 
 
@@ -154,17 +216,19 @@ def deck(path, R, figs):
     des = [P.DNAME[c] for c in R["designated"]]
     cho = [P.DNAME[c] for c in R["changeout"]]
     s = prs.slides.add_slide(blank)
-    title(s, "2027 LAUF program: mains in %s; meters in %d districts" % (", ".join(des), len(cho)),
+    words = {5: "five", 6: "six", 7: "seven", 8: "eight", 4: "four", 3: "three"}
+    title(s, "2027 LAUF program: mains in %s; meters in %s districts" % (", ".join(des), words.get(len(cho), len(cho))),
           "Utilities Commission, December 2026")
     text(s, 457200, 1500000, 11277600, 4600000, [
         "Main replacement 2027-2029 (Rule 1): %s. Each lost more than 1.0%% of its gas to leaks in the twelve months "
         "to September 2026." % ", ".join(des),
-        "Meter changeout 2027 (Rule 2): %s." % ", ".join(cho),
-        "Of the %d changeouts already scheduled in Old Town and Downtown, about %d will be done before the 2027-28 "
-        "heating season; meters inside take an appointment." % (R["plan"]["n"], int(round(R["plan"]["done"])))], 17)
+        "Meter changeout 2027 (Rule 2): %s, beside the changeouts already scheduled in Old Town and Downtown." %
+        ", ".join(cho),
+        "Not in the program: East Industrial, whose excess over the line was its process customers' correctors, and "
+        "every district whose fall in use was households away or on dual-fuel heat pumps."], 17)
     s = prs.slides.add_slide(blank)
-    title(s, "Leak loss by district, twelve months to September 2026",
-          "Per cent of gas in at the regulator stations; the program line is 1.0%")
+    title(s, "%s districts lost more than 1.0%% of their gas to leaks" % words.get(len(des), len(des)).capitalize(),
+          "Leak loss, per cent of gas in at the regulator stations, twelve months to September 2026")
     cd = CategoryChartData()
     order = sorted(P.DCODES, key=lambda c: -float(agg.loc[c, "leak_pct"]))
     cd.categories = [P.DNAME[c] for c in order]
@@ -186,17 +250,23 @@ def deck(path, R, figs):
     title(s, "Most of the reported LAUF is gas the meters did not register",
           "Twelve months to September 2026, Mcf")
     tot = agg.sum()
+    bd = figs["_extra"]["basis"]["districts"]
+    st_gap = sum(v["gas_in_real"] - v["gas_in_recorded"] for v in bd.values())
+    ev_gap = sum(v["corrector_real"] - v["corrector_recorded"] for v in bd.values())
     text(s, 457200, 1450000, 11277600, 4700000, [
-        "Gas in at the regulator stations: {:,.0f} Mcf; leak loss {:,.0f} Mcf ({:.2f}%).".format(
-            tot["inflow"], tot["leak"], 100 * tot["leak"] / tot["inflow"]),
-        "Meters without temperature compensation registered the gas at the temperature it reached them, near the "
-        "soil's under the 2025-26 snow, not the airport's air: {:,.0f} Mcf more than they billed.".format(tot["under"]),
-        "Gas taken without authorization: {:,.0f} Mcf at {} accounts (bypasses and furnace taps).".format(
-            tot["div"], figs["R4_diversion"]["accounts"]),
+        "Gas in at the regulator stations: {:,.0f} Mcf, of which {:,.0f} Mcf the four EVC-I station correctors leave "
+        "out; leak loss {:,.0f} Mcf ({:.2f}%).".format(tot["inflow"], st_gap, tot["leak"],
+                                                       100 * tot["leak"] / tot["inflow"]),
+        "Corrector customers took {:,.0f} Mcf at base conditions, {:,.0f} Mcf more than their correctors bill: the "
+        "gas's supercompressibility at 25 to 58 psig.".format(tot["evc"], ev_gap),
+        "Meters without temperature compensation: {:,.0f} Mcf more than they billed.".format(tot["under"]),
+        "Gas taken without authorization: {:,.0f} Mcf at {} premises (bypasses and furnace taps).".format(
+            tot["div"], figs["R2_unauthorized"]["premises"]),
         "Own use {:,.0f} Mcf; third-party damage {:,.0f} Mcf as reported.".format(tot["own"], tot["dmg"])], 16)
     s = prs.slides.add_slide(blank)
-    title(s, "Where the meters under-register", "Under-registration, per cent of the volume billed for meters "
-                                                "without compensation; Rule 2's line is 3.5%")
+    title(s, "%s districts' meters without compensation under-register more than 3.5%%" %
+          words.get(len(cho), len(cho)).capitalize(),
+          "Under-registration, per cent of the volume billed for those meters; districts with 100 or more of them")
     cd = CategoryChartData()
     elig = [c for c in P.DCODES if int(agg.loc[c, "ntc_meters"]) >= P.CHANGEOUT_MIN_METERS]
     order = sorted(elig, key=lambda c: -float(agg.loc[c, "ur_pct"]))

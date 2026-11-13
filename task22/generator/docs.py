@@ -167,8 +167,8 @@ def rate_schedules(path):
         P_("Meters on Schedules G-1 and G-2 are read monthly on the Utility's reading cycles. The billing volume is the "
            "volume the meter registered since the previous reading, in ccf, multiplied by the pressure factor %.4f "
            "for the standard delivery pressure of 7 inches water column at Brandvold's elevation. Meters on Schedule "
-           "G-3 are billed on the corrected volume their electronic volume corrector records, in Mcf at 14.73 psia "
-           "and 60 degrees Fahrenheit." % P.PF),
+           "G-3 are billed in Mcf on the volume their electronic volume corrector records, corrected for the pressure "
+           "and temperature the corrector measures to 14.73 psia and 60 degrees Fahrenheit." % P.PF),
         P_("3. Estimated bills", H2),
         P_("When no reading is obtained the Utility bills an estimated volume. The next actual reading corrects the "
            "estimate, and the difference is billed or credited on that bill."),
