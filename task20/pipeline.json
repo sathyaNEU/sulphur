@@ -1,40 +1,40 @@
 {
  "task": "task20",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "commit EUR 350 million for 2027 (from EUR 150 million): the hedge program's cumulative net cash outflow in a year whose prices and inflows repeat 2022 peaks at EUR 328.8 million on 27 August 2027",
- "chain": "R1 the open book (1.848 TWh of 2027); R2 hedge ratios counting the Fjordal contract (68.6, 39.6, 22.2 per cent); R3 the book at the peak (2.222, 1.077, 0.964 TWh of 2028 to 2030); R4 initial margin at the peak (EUR 59.7 million); R5 output 1,743 GWh and day-ahead net purchases EUR 82.3 million; R6 customer payments EUR 173.7 million; R7 the requirement EUR 328.8 million on 27 August 2027, facility EUR 350 million; R8 2022 method EUR 548.2 million against records EUR 548.5 million",
- "architecture": 3,
+ "call": "",
+ "chain": "R1 unfunded and pending commitments at 31 December 2026 by strategy; R2 the capital the managers have invested and not yet called at 31 December 2026; R3 the distributions' lagged, asymmetric response to the exit market; R4 the pending funds' first closes and first calls; R5 calls and distributions on the 2026 commitments over 2027-2028 by half-year; R6 the policy's 24-month net cash need and headroom at the consultant's USD 500 million; R7 the largest 2027 budget that passes",
+ "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-13"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (dates and vocabulary, ruled harmless)",
-  "reader": "no leak (two reads); the standard now reads as a company standard"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (forcing event redrawn to other after task4 v13)",
-  "nearest": "mark182 0.05"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC (pass 2, t20v3b)",
-  "disposition": "APPROVE (pass 1 t20v3a: SEND_BACK on the prompt and a FIX_NOW band, both fixed)",
-  "report": "determinism_check_report.md, determinism_check_report_pass2.md"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 29.0,
+ "paper_pair": null,
  "effort": {
-  "quick": 23.5,
-  "careful": 29.0,
-  "thorough": 100.0,
-  "largest_hint": "rescues 1 of 8"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -97,5 +97,5 @@
   "date": "2026-11-13",
   "note": "not deterministic: annex (a) of the liquidity standard reads two ways (each mapped day's one-day 2022 move, EUR 208m and a EUR 250m facility, against the level copy, 328.8m and EUR 350m); depth level 4 on the reviewer's reading; runs/arch3_review.md"
  },
- "source_concept": "Quant_Finance_Deep_Reasoning_Concepts.md, Concept 3 (author's note of 2026-11-11)"
+ "source_concept": "re-root at the author's word (2026-11-13) after architecture 3's review return and run evidence: private-markets commitment capacity under an endowment's liquidity policy"
 }
