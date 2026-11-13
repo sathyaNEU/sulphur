@@ -1,106 +1,113 @@
 {
   "task": "task20",
   "project": "sulfur",
-  "architecture": "v2",
-  "drawn": "2026-11-11",
-  "slot_note": "Re-root of task20 (architecture 1, the VaR exception classification, spent 2026-11-11: the determinism judge's isolated first pass landed nearly every result) onto the author's Concept 3 from the same concept note: a card-transaction panel's nowcast of a retailer's quarterly revenue before it reports. A new world, dataset and shell; the Quantitative Finance claim moves to Forecasting & Predictive Modeling.",
+  "architecture": "v3",
+  "drawn": "2026-11-13",
+  "slot_note": "architecture 3, re-rooted to another world and dataset on 2026-11-13 on the author's word (v2 spent: its deciding steps on or next to the client's closed page, stump strategy blocked against task4 v12): a Norwegian hydro generator sizes its committed margin facility for 2027 on the largest cumulative net cash outflow its exchange hedge book would face in a year whose prices and inflows repeat 2022",
   "domain": "quantitative-finance",
-  "subdomain": "strategy-backtesting-evaluation",
+  "subdomain": "liquidity-funding-balance-sheet",
   "client_domain": "quantitative-finance",
-  "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
+  "niche": "a hydro generator's exchange hedge book and the committed facility that funds its margin and delivery settlements, sized on a stress year replayed on the 2027 book",
   "objective": "forecasting",
-  "shape": "single-figure",
-  "decision_type": "go_hold_or_stop",
+  "shape": "02",
+  "decision_type": "dial_setting",
   "answer_unit": "currency",
-  "answer": "short: USD 1,471.2 million (1,447.7 to 1,494.7) against the street's 1,518.0",
-  "answer_source": "generator/figures.json",
+  "answer": "",
+  "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
   "gap": [
     "time",
-    "population"
+    "objective"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G6",
+    "G13",
     "G16",
-    "G17"
+    "G3"
   ],
   "gate_g": "forecasting",
-  "calibration_form": "censored_or_lagged_release",
-  "stump_strategy": "forecast_method_backtest",
+  "calibration_form": "prior_period_close_out",
+  "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "close_out_summary",
+  "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass completes the latest weeks, takes the licensed shops out, keeps the issuers reporting in every week of both quarters on spend per open card and re-weights to the company's regions (+7.18%), then grows last year's net sales with it: 1,590.2 million, long. It keeps KS-01, whose Midwest cards took a block of re-issued premium accounts in October 2025, reads the customer deposits line without turning payments into revenue on delivery, and never rebuilds last year's fourth-quarter contract delivery from the fiscal year less the nine months; its own record (1.45 points) looks sound because no past comparison carried all three.",
-  "domain_test": "Nowcasting a company's reported revenue from a consumer card panel before the release, with the panel's churn, ageing cards, immature weeks and its coverage of the company's tender rebuilt so the growth index tracks revenue, and the range earned on rolling origins, is what an alternative-data research desk does to size a position into an earnings release.",
-  "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:card-panel-revenue-nowcast",
+  "analyst_test": "A careful but hurried pass rebuilds the open book from the trade log, replays 2022's percentage moves on it day by day with the clearing house's margin rates scaled by price, nets the hedged output at spot and lands near the book's own 2022 outflow scaled to 2027; it misses that the desk keeps selling ahead of the ladder when prices run above budget, that the clearing house resets rates from its own volatility estimate with a review band and a floor, that each quarter cascades into front months that carry higher rates and move more, that the hedged output is paid five to seven weeks after the month, and that a reservoir opening low cuts a dry year's output below the hedged volume.",
+  "domain_test": "Liquidity risk of a commodity hedge program: margin is cash now while the hedged output is cash later, the clearing house's margin rates follow its own volatility estimate, futures cascade into front months that move most, and hydro output falls with the reservoir in the dry years that lift prices; swap the nouns for a retailer's FX hedge or a bank's loan book and the cascade, the margin algorithm, the reservoir and the delivery settlement stop making sense.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own: a stress year replayed on a forward hedge book whose size, contract mix, margin rates, hedged output and cash timing each respond to the stress through their own process",
   "layer1": [
-    "weekly panel deliveries restating their latest weeks",
-    "issuer onboarding and offboarding inside the record",
-    "issuer feeds with their own region spellings and merchant names",
-    "merchant descriptors mixing company stores, design studios, the web, licensed shop-in-shops, cafes and an acquired banner, re-keyed at a terminal change",
-    "a 4-5-4 fiscal calendar with a 53-week year",
-    "earnings releases as saved text, in thousands, with formats drifting across years and fourth quarters given for the year only",
-    "an oldest card-open-year bucket"
+    "a trade log with amendments, cancellations, give-ups between two clearing accounts and quantities in MW per hour on some rows and MWh on others",
+    "positions reported by the clearing house only at month ends after cascades, under contract codes the trade log does not use",
+    "margin statements with restated days and a holiday calendar",
+    "settlement prices with missing days, an exchange code change and a duplicated week",
+    "weekly inflows and reservoir levels with a gauge outage and provisional weeks revised later",
+    "a sales ledger with credit notes, part payments and one customer moved to a new account number"
   ],
-  "stakeholder_role": "a consumer-sector analyst on a long-short fund's research desk, whose portfolio manager takes a position into an earnings release only when the whole range clears the street's figure (not named in the prompt)",
-  "role_family": "research_desk",
-  "scoring_unit": "per episode",
+  "stakeholder_role": "treasurer of a hydro generator preparing the board risk committee's renewal of the committed margin facility for 2027",
+  "role_family": "finance_controller",
+  "scoring_unit": "other",
   "spine": {
-    "file": "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv",
-    "rows": 163620,
-    "entity": "one row is one week's settled spend at one merchant id by one issuer feed's cardholders of one billing region and one card-open year",
-    "grain": "week x issuer x billing region x card-open year x merchant id",
-    "source": "simulated by task20/generator (a seeded retailer, card panel and its deliveries); no public series"
+    "file": "nex_daily_settlement_2018_2026.csv",
+    "rows": 0,
+    "entity": "one listed contract's daily settlement price",
+    "grain": "contract x trading day",
+    "source": "simulated by task20/generator (a seeded Nordic-style power market, hydrology and one generator); no public data"
   },
-  "forum": "other",
-  "forcing_event": "period_close",
-  "org_family": "financial_institution",
+  "forum": "committee_or_panel",
+  "forcing_event": "purchase_order_or_contract",
+  "org_family": "utility_or_infrastructure",
   "world": {
-    "geography": "United States",
-    "currency": "USD",
-    "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
+    "geography": "Norway",
+    "currency": "EUR",
+    "org_type": "hydro generator hedging its output on a Nordic-style power exchange (all names fictional)",
     "invented_names": [
-      "Brindle & Moss",
-      "Kestrel Spend Panel",
-      "Larkhill Partners"
+      "Hallingvass Kraft AS",
+      "Nordvik Energy Exchange",
+      "NEX Clearing"
     ],
     "people": [
-      "Audrey Hanson",
-      "Robert Campbell"
+      "Jorunn Solberg",
+      "Markus Hanssen",
+      "Sindre Sandvik"
     ]
   },
   "deliverables": [
-    "bmh_q4fy25_revenue_nowcast.xlsx",
-    "bmh_q4fy25_nowcast_note.docx"
+    "hallingvass_margin_facility_2027.xlsx",
+    "margin_facility_2027_note.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "whether",
-  "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose members can be re-keyed between sources without any note, so a unit present in both periods is not the same unit; the sample measures what is paid while the target books it later and excludes a component paid outside the sample, whose base period held a one-off; and the range is earned on past origins that could not see any of the three at this size.",
-  "driver_concrete": "Spend per open card on the issuers in every week of both quarters less KS-01 (its cards took KS-06's premium book in October 2025), at the company's fiscal 2024 regional mix, gives customer payments; net sales are payments less the change in customer deposits, the deposits at the quarter's end estimated from last year's by the last eight weeks' payments and custom-order share; contract, which no card carries, enters at its run rate after last year's fourth quarter is rebuilt as the fiscal year less the nine months; the range from a record built at each past quarter on what was known then.",
-  "stump": "A careful solver builds the comparable panel and re-weights it to the company's regions, then grows last year's net sales with it (USD 1,590.2 million, long): KS-01 stays in because it reports in both quarters, the December custom orders stay in sales, and last year's contract delivery is grown with retail; any one of the three corrections alone leaves the range across the street.",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "validation",
+  "question_form": "how-much",
+  "driver": "The decisive quantity is the largest cumulative net cash outflow of a hedge book through a replayed stress year, where the book's size, the contracts it sits in, the clearing house's margin rates, the hedged output and the timing of the cash that output brings in each respond to the stress through their own process, so each is rebuilt from its own record and replayed day by day rather than carried from the opening state or scaled from the stress year's own outcome.",
+  "driver_concrete": "Hallingvass Kraft's board renews the committed margin facility for 2027 at the largest cumulative net cash outflow the hedge book would face in a year whose prices and inflows repeat 2022: the book grows as the desk sells ahead of the ladder above budget, quarters cascade into front months with higher rates and larger moves, NEX Clearing resets its rates from its own volatility estimate with a review band and a floor, the hedged output is paid weeks after delivery, and a reservoir opening low cuts the dry year's output below the hedged volume.",
+  "stump": "The opening book with 2022's moves and constant margin rates, the output netted at spot, gives a facility near the current one; each of the five processes (the desk's response, the cascade, the margin algorithm, the receipts' timing, the reservoir-dependent output) moves the peak by more than the golden family's spread, and the shortcuts land on different wrong sizes.",
+  "answer_shape": "timeline",
+  "weight": "modeling",
   "chain_signature": [
-    "missingness-measurement",
-    "data-discovery",
+    "assembly-reconciliation",
     "modeling",
     "missingness-measurement",
-    "assembly-reconciliation",
-    "validation",
+    "modeling",
     "forecasting",
-    "decomposition-attribution",
-    "synthesis"
+    "assembly-reconciliation",
+    "synthesis",
+    "self-verification",
+    "decomposition-attribution"
   ],
-  "results": "R1 the panel's own steps to like-for-like growth (9.22% with KS-01); R2 KS-01's re-issued book (Midwest -2.09% without it against 9.51%; card-visible growth 3.90%); R3 the company's regional mix (-2.04 points); R4 deposits at the quarter's end (USD 335.2 million) and revenue on delivery (-2.19 points); R5 contract (last year's fourth quarter USD 54.5 million by subtraction, run rate 17.7; -2.55 points); R6 the record (1.24 points over 15 quarters); R7 net sales and range (USD 1,471.2 million, 1,447.7 to 1,494.7); R8 the company steps; R9 short",
-  "one_fact_test": "largest single hint (KS-01's re-issued book, or revenue on delivery, or last year's contract) rescues one result each, 1 of 9",
-  "strategy_label": "WORKS IN FORM",
+  "results": "R1 the open book at 31 December 2026 by delivery month (assembly); R2 the desk's hedge ratio as a function of price against budget, and the 2027 book through the replay (modeling); R3 NEX Clearing's margin-rate rule recovered from its rate history (measurement); R4 the margin path through the replay (modeling); R5 output in the replayed year from the opening reservoir (forecasting); R6 the receipts' timing from the sales ledger (assembly); R7 the peak cumulative net outflow and its date (synthesis); R8 the method replayed on the 2022 book against 2022's statements (self-verification); R9 the facility size bridged from the opening-book figure (decomposition)",
+  "one_fact_test": "the largest single hint (the desk sells ahead of the ladder above budget, or rates follow the clearing house's own volatility estimate) rescues one result each, at most 2 of 9 with its dependents",
+  "strategy_label": "UNTESTED (own: a stress year replayed on a forward hedge book; nearest atlas entry Quantitative Finance 10, a payment forecast with honest bands)",
   "mechanism_source": "design_note",
-  "differentiation": {},
+  "differentiation": {
+    "task20 v2": "v2 nowcast a retailer's quarter from a card panel (left truncation, a re-issued book, revenue on delivery); v3 sizes a generator's margin facility on a replayed stress year (a margin algorithm, a hedging response, a cascade, receipts in arrears, reservoir-dependent output)",
+    "task4": "task4 forecasts rotable spares from a removal history; v3 replays a stress year on a financial book with five processes, no failure rates",
+    "task7": "task7 replays chargers on transformer peaks to pick a charging default; v3 replays a price and inflow year on a hedge book to set a facility, a financial cash path not a physical load",
+    "task22": "task22 conforms a distribution energy balance; v3 is a forecast of a cash path",
+    "mark169": "mark169 forecasts a parole return rate through a processing route a filed act closes; v3 forecasts a cash path through a stress year on a forward hedge book, five processes each rebuilt from its own record, no closed route",
+    "mark162": "mark162 replays a device capped at a setting (v2) or a restart burst setting version uptake (v1) on a physical load; v3 recovers a clearing house's margin-rate rule from its rate history and replays it, with four other processes, on a forward hedge book's cash path"
+  },
   "lineage": [
     {
       "architecture": "v1",
@@ -147,58 +154,177 @@
           "unused_distractor"
         ]
       }
+    },
+    {
+      "domain": "quantitative-finance",
+      "subdomain": "strategy-backtesting-evaluation",
+      "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
+      "objective": "forecasting",
+      "shape": "single-figure",
+      "decision_type": "go_hold_or_stop",
+      "answer_unit": "currency",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G16",
+        "G17"
+      ],
+      "gate_g": "forecasting",
+      "calibration_form": "censored_or_lagged_release",
+      "stump_strategy": "forecast_method_backtest",
+      "context_artifact": "close_out_summary",
+      "layer2_family": "forecast_uncertainty",
+      "role_family": "research_desk",
+      "scoring_unit": "per episode",
+      "forum": "other",
+      "forcing_event": "period_close",
+      "org_family": "financial_institution",
+      "world": {
+        "geography": "United States",
+        "currency": "USD",
+        "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
+        "invented_names": [
+          "Brindle & Moss",
+          "Kestrel Spend Panel",
+          "Larkhill Partners"
+        ],
+        "people": [
+          "Audrey Hanson",
+          "Robert Campbell"
+        ]
+      },
+      "deliverables": [
+        "bmh_q4fy25_revenue_nowcast.xlsx",
+        "bmh_q4fy25_nowcast_note.docx"
+      ],
+      "opening_move": "question-first",
+      "question_form": "whether",
+      "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose members can be re-keyed between sources without any note, so a unit present in both periods is not the same unit; the sample measures what is paid while the target books it later and excludes a component paid outside the sample, whose base period held a one-off; and the range is earned on past origins that could not see any of the three at this size.",
+      "answer_shape": "forecast-bands-drivers",
+      "weight": "validation",
+      "chain_signature": [
+        "missingness-measurement",
+        "data-discovery",
+        "modeling",
+        "missingness-measurement",
+        "assembly-reconciliation",
+        "validation",
+        "forecasting",
+        "decomposition-attribution",
+        "synthesis"
+      ],
+      "skeleton": {
+        "decision_form": "act_if_interval_clears_line",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "left_truncated_ages",
+          "stock_flow_accounting",
+          "normal_period_correction",
+          "unmetered_component",
+          "validation_cannot_see_condition"
+        ],
+        "mechanisms": [
+          "premium_book_reissued_inside_constant_issuer",
+          "earlier_outside_book_reissued_by_another_issuer",
+          "revenue_recognised_on_delivery",
+          "custom_event_grows_with_new_studios",
+          "contract_lumps_quarterly_only_by_subtraction",
+          "issuer_entry_and_exit_break_panel",
+          "issuer_propensity_differs",
+          "panel_regional_mix_differs_from_company",
+          "posting_lag_leaves_latest_weeks_short",
+          "licensed_and_acquired_descriptors"
+        ],
+        "detection": [
+          "naive_depends_on_what_it_should_not",
+          "second_source_at_other_grain",
+          "back_test_on_held_out_period",
+          "residual_by_subgroup"
+        ],
+        "moves": [
+          "exclude_contaminated_comparison",
+          "nowcast_from_same_point_prior_years",
+          "stratify_by_mix_and_reweight_to_target",
+          "back_test_select_estimator",
+          "bridge_by_contribution"
+        ],
+        "file_roles": [
+          "primary_record",
+          "panel_or_survey_sample",
+          "second_grain_source",
+          "reference_register",
+          "calendar_or_closures",
+          "incumbent_figure_or_method",
+          "unused_distractor"
+        ]
+      },
+      "shell": {
+        "question form": "when",
+        "second-sentence opener": "the",
+        "deliverable set": "xlsx"
+      },
+      "architecture": "v2",
+      "status": "spent",
+      "date": "2026-11-13",
+      "why": "spent on the author's word before upload: after the client's overused-strategies page of 2026-11-12, two of its three deciding steps (a premium book re-issued under an issuer present in both quarters, last year's contract lump) sit on or next to closed cards and its regional reweight is closed; the stump strategy blocked at heart against task4 v12; only the deposits step (revenue on delivery against card payments) was open"
     }
   ],
-  "notes": "Concept 3 of the author's note of 2026-11-11, chosen at the re-root because its answer is an estimate no record holds (the release comes after the call), the anatomy of the two approved builds; the call is the quarter's revenue with a range and a backtest, beside the street's figure. | 2026-11-12 second hardening of architecture 2 at the author's direction (depth level 5, three deep steps found only by profiling the data): the vendor bulletin, the filing's revenue recognition paragraph, the tender split and the private-label table are gone; the company's quarters come from fifteen-plus earnings releases saved as text; KS-01 re-issues KS-06's premium book before KS-06's feed ends, and KS-02 an outside book in May 2023; contract is given for the year only in fourth quarters. | forum other: the portfolio manager takes or declines the position on the analyst's note, a trading decision with no committee and no line-management sign-off.",
+  "lineage_shells": [
+    {
+      "question form": "when",
+      "second-sentence opener": "the",
+      "deliverable set": "xlsx"
+    }
+  ],
+  "notes": "architecture 3 (2026-11-13): drawn after the stump screen on paper (five kept, three dropped); deciding lesson record_algorithm_inversion (the clearing house's margin-rate rule), off the closed page and untaught on file, beside four independent processes",
+  "architecture_spent": false,
   "skeleton": {
-    "decision_form": "act_if_interval_clears_line",
+    "decision_form": "banded_call_on_figure",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "left_truncated_ages",
-      "stock_flow_accounting",
-      "normal_period_correction",
-      "unmetered_component",
-      "validation_cannot_see_condition"
+      "record_algorithm_inversion",
+      "behavioural_response_measured",
+      "time_varying_membership",
+      "conservation_residual_attribution",
+      "nonlinear_functional_of_path"
     ],
     "mechanisms": [
-      "premium_book_reissued_inside_constant_issuer",
-      "earlier_outside_book_reissued_by_another_issuer",
-      "revenue_recognised_on_delivery",
-      "custom_event_grows_with_new_studios",
-      "contract_lumps_quarterly_only_by_subtraction",
-      "issuer_entry_and_exit_break_panel",
-      "issuer_propensity_differs",
-      "panel_regional_mix_differs_from_company",
-      "posting_lag_leaves_latest_weeks_short",
-      "licensed_and_acquired_descriptors"
+      "margin_rates_reset_from_clearing_house_volatility_with_band_and_floor",
+      "desk_sells_ahead_of_ladder_when_price_above_budget",
+      "quarters_cascade_into_front_months_with_higher_rates_and_moves",
+      "hedged_output_paid_weeks_after_delivery_while_margin_is_daily",
+      "reservoir_opening_low_cuts_dry_year_output_below_hedge"
     ],
     "detection": [
-      "naive_depends_on_what_it_should_not",
       "second_source_at_other_grain",
-      "back_test_on_held_out_period",
-      "residual_by_subgroup"
+      "naive_ignores_what_it_should_depend_on",
+      "record_time_against_event_time"
     ],
     "moves": [
-      "exclude_contaminated_comparison",
-      "nowcast_from_same_point_prior_years",
-      "stratify_by_mix_and_reweight_to_target",
-      "back_test_select_estimator",
-      "bridge_by_contribution"
+      "replay_event_by_event",
+      "measure_response_shape_from_events",
+      "impute_by_model_at_own_drivers"
     ],
     "file_roles": [
       "primary_record",
-      "panel_or_survey_sample",
       "second_grain_source",
-      "reference_register",
-      "calendar_or_closures",
-      "incumbent_figure_or_method",
+      "governing_standard",
+      "schedule_or_plan",
+      "exogenous_long_record",
+      "event_timeline",
       "unused_distractor"
     ]
   },
-  "registered": "2026-11-12T01:01:29Z",
   "shell": {
     "question form": "when",
     "second-sentence opener": "the",
     "deliverable set": "xlsx"
-  }
+  },
+  "registered": "2026-11-13T01:20:04Z"
 }

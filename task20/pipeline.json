@@ -1,43 +1,40 @@
 {
  "task": "task20",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "quantitative-finance",
- "subdomain": "strategy-backtesting-evaluation",
+ "subdomain": "liquidity-funding-balance-sheet",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-12",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,471.2 million (-0.84%), 80% range USD 1,447.7 to 1,494.7 million, wholly below the street's USD 1,518.0 million",
- "chain": "R1 the panel's own steps (like-for-like 9.22% with KS-01); R2 KS-01's re-issued book (Midwest -2.09% without it, 9.51% with; card-visible 3.90%); R3 the regional mix (-2.04 points); R4 deposits at the quarter's end (USD 335.2 million), revenue on delivery -2.19 points; R5 contract (last year's Q4 USD 54.5 million by subtraction, run rate 17.7; -2.55 points); R6 the record (1.24 points over 15 quarters, 13 inside); R7 net sales and range; R8 the company steps; R9 short",
- "architecture": 2,
- "loops": 2,
+ "call": "",
+ "chain": "R1 the open book at 31 December 2026; R2 the desk's response and the 2027 book through the replay; R3 NEX Clearing's margin-rate rule; R4 the margin path; R5 the replayed year's output from the opening reservoir; R6 the receipts' timing; R7 the peak cumulative net outflow and its date; R8 the method on the 2022 book against 2022's statements; R9 the facility bridged from the opening-book figure",
+ "architecture": 3,
+ "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-12"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (0 LEAK; the releases and their labels answered harmless)",
-  "reader": "no data dictionary, no ranking file, no answer figure, nothing planted; the desk model's method notes removed on its finding"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (validation_cannot_see_condition on 3 live builds; forum other)",
-  "nearest": "task5 v4 (severity none)"
+  "heart": "",
+  "nearest": "task22 v1, severity none"
  },
  "judge": {
-  "verdict": "pass 1 DETERMINISTIC, FIX_NOW (made); pass 2 DETERMINISTIC, APPROVE",
-  "disposition": "APPROVE after the FIX_NOW repairs; optional tidy-ups made",
-  "gate_h": "pass (one_thing none; H3 watch item answered by KS-02's 2023 book, the earlier December bulges and the earlier contract deliveries, all graded in the record)",
-  "report": "determinism_check_report.md",
-  "first_pass": "both passes missed KS-01's book (pass 2 read it as a new studio) and the deposits; filed USD 1,539 to 1,540 million, long or no position; careful column priced on them 39.6"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 26.8,
+ "paper_pair": null,
  "effort": {
-  "quick": 7.0,
-  "careful": 26.8,
-  "thorough": 100.0,
-  "careful_on_judge_first_pass": 39.6,
-  "largest_hint": "any one of the three deep steps (KS-01's book, revenue on delivery, last year's contract): rescues 1 of 9"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
