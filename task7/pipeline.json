@@ -1,21 +1,37 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "stump": "",
  "architecture": 11,
  "loops": 0,
- "precut": {},
- "leak": {},
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-12",
+  "note": "1 WARN: nearest chains task21 (answered in the note)"
+ },
+ "leak": {
+  "leak_py": "REVIEW, no LEAK (2026-11-12, --asof 2026-11-06): the policy shares the call's ordinary words; the pilot plan names its own design",
+  "reader": "2026-11-12 reader 1: questions 2 to 4 none, question 6 no one thing; EV-4 4.3 ('a transformer counts at its chance') pointed at simulating random starts: reworded to the estimand ('An option's cost is its expected cost.'); a negative kVA at solar-export hours fixed. Reader 2 on the fixed cut: nothing to fix; it reads 4.3 as an expectation whose method stays open"
+ },
  "duplicate_check": {
   "heart": "",
   "surface": ""
  },
- "judge": {},
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "order_kept": true,
+  "gate_h": "pass: 8 to 9 results graded across five or more areas; one_thing none; the best single hint rescues about 2 of 9; closed: none decides",
+  "first_pass": "blind: derived 1,313 chargers, 382 transformers, the fees, the totals and the USD 156 flip fee exactly before opening the blocks",
+  "scope": "did not re-run the 382-transformer night-by-night replays (Stagger draws, Sequence's rule): the counts 52, 27.5 and 11 were checked for rule-correctness and consistency, not reproduced figure for figure",
+  "careful_estimate": "the judge put the careful pass at about 4 to 6 of 9 against the measured 3 of 9 (effort.json routes)",
+  "report": "task7/determinism_check_report.md"
+ },
  "returned": [
   {
    "date": "2026-10-16",
@@ -84,7 +100,7 @@
    "note": "the platform run landed architecture 9; re-rooted to another world"
   }
  ],
- "resume": "DESIGN: architecture 11 drawn and registered (card v11, 2026-11-13T00:09Z): Hollins Creek Electric Association's EV Overnight default for 2027 (own schedules, Quillpoint Stagger random start, Quillpoint Sequence coordination) judged on the distribution transformers each leaves over 120 per cent of nameplate on their highest 15-minute load in July and August of a summer like 2026; next: the generator (world, pack, documents, golden, routes), then the design note's sections and precut",
+ "resume": "READY: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py), uploads it with target.zip and pastes the four blocks; then the two platform runs and /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -400,19 +416,43 @@
    }
   ]
  },
- "paper_pair": null,
+ "paper_pair": 40.5,
  "subdomain": "tariff-demand-response-evaluation",
- "call": "",
+ "call": "make Quillpoint Sequence the EV Overnight default for 2027 and carry 11 transformer replacements (USD 160,300) in the 2027 work plan: USD 212,800 for the year against Stagger's USD 365,200 and own schedules' USD 794,600",
  "doctrine": "throughout",
- "chain": "",
- "effort": {},
+ "chain": "R1 chargers enrolled (Ask 7) and R1b transformers serving them (Ask 10); R2 the pilot's change at 23:00 to 23:15 (Component 4, Ask 6); R3 own schedules' transformers over (Component 3); R4 Stagger's, at their chance (Component 1); R5 Sequence's (Component 2); R6 each option's fee, replacements and total (Asks 3 to 5); R7 the default and the work plan's replacements (Recommendation, Ask 1); R8 the flip fee (Ask 8)",
+ "effort": {
+  "quick": 20.8,
+  "careful": 40.5,
+  "thorough": 100.0,
+  "largest_hint": "each of three sentences rescues 1 of 9 (R4, R5, R3)"
+ },
  "prompt_rewritten": false,
- "zips": {},
+ "zips": {
+  "target.zip": "1baac88003043001413c47ad18a4bd5736e095e2abf7cc40836d29dc05c05e75",
+  "golden.zip": "1bb6070daada3e1aab800f08cc9ca31583b7e1371dc25c47435fb8288df52192"
+ },
  "level_up": {
   "date": "2026-11-10",
   "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",
   "why": "a run on the READY cut lost only on the drivers (level 3 in practice); one sentence would have given it the call",
   "added": "contractors on every quote, the 2019 completions by firm, 12 of 26 roofers still quoting, an EUR 8.2 million budget with its order and the EUR 120 basis filed in the committee's request; R8c and R11 (what the round pays and how many applications are paid once the works are done by 30 September)",
   "gates": "make.py 237 checks; make.py --twice SAME; gates.py 0 FAIL 4 WARN (precut R1 upstream, voice no rounding sentence at the author's word, leak REVIEW no LEAK, heart WARN as before); effort careful 46.0, hint 5 of 15, 4 wrong sets"
- }
+ },
+ "gates_stage3": {
+  "date": "2026-11-12",
+  "checks": "49 of 49",
+  "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW; heart WARNs answered)",
+  "effort": "careful 40.5 cited",
+  "figures_check": "PASS (69 figures)",
+  "containers": "PASS"
+ },
+ "gates_stage5": {
+  "date": "2026-11-12",
+  "checks": "49 of 49",
+  "gates_py": "0 FAIL, 3 WARN (precut nearest chains; leak REVIEW, ruled; heart WARNs answered)",
+  "effort_check": "careful 40.5 cited, 5 distinct wrong answers, 6 rivals and 4 perturbations on Sequence",
+  "containers": "PASS"
+ },
+ "stump_screen": "run after the build: keeps A (Stagger's season coincidence, the deciding trap); B (Sequence's filed rule) and C (own schedules restored, near a closed card) are graded work a careful run can earn; D (the quarter-hour lift) is texture"
 }

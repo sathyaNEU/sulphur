@@ -1,4 +1,4 @@
-"""task7 architecture 10 build: the world, the pack under target/, the documents, the checks, the golden deliverables,
+"""task7 architecture 11 build: the world, the pack under target/, the documents, the checks, the golden deliverables,
 figures.json, effort.json, submission.md, metadata.json and both zips. `python3 make.py` builds in place;
 `python3 make.py --twice` builds twice into scratch folders and fails unless the two packs, goldens and zips are
 byte-identical."""
@@ -22,46 +22,43 @@ import postprocess as PP  # noqa: E402
 import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
-DISTRACTORS = ["ercot_residential_dr_potential_2025.pdf", "der_interconnections_2026.csv"]
+DISTRACTORS = ["state_ev_registrations_by_zip_2019-2026.csv", "net_metering_interconnections_2026.csv"]
 COVERS = {
-    "ami_15min_reads_peak_partners_2024_2026.csv": "the research sample's 15-minute reads, 13:00 to 21:00, on event days and quiet weekdays, 2024 to 2026",
-    "member_accounts_2026.csv": "residential member accounts: service address, meter, meter type and exchanges, substation",
-    "peak_partners_roster_2026-10-30.csv": "every thermostat ever enrolled in Peak Partners, its provider, account, channel, dates and swaps",
-    "mv_event_assignments_2024_2026.csv": "the randomised halves of every test event",
-    "peak_partners_event_log_2024_2026.xlsx": "every event called, 2024 to 2026, and each provider's event settings",
-    "corvane_event_report_2024_2026.csv": "Corvane's event reports",
-    "lumivale_dr_events_cedar_brake.csv": "Lumivale's event reports",
-    "ardena_event_outcomes.csv": "Ardena's event reports",
-    "ondera_events_cbec.csv": "Ondera's event reports",
-    "kitebrook_events_2024_2026.csv": "Kitebrook's event reports",
-    "pinecrest_home_events.csv": "Pinecrest Home's event reports",
-    "ercot_4cp_intervals_2016_2026.csv": "ERCOT's 4CP intervals, 2016 to 2026",
-    "weather_kcdr_hourly_2024_2026.csv": "hourly temperature at the KCDR station, June to September 2024 to 2026",
-    "calder_cad_residential_2026.csv": "the Calder appraisal district's residential roll: situs, living area, year built",
-    "provider_quotes_summer_2027.xlsx": "the six providers' quotes for summer 2027",
-    "board_policy_412_demand_response_providers.pdf": "the board's policy on demand-response provider renewals",
-    "transmission_charge_notice_2027.pdf": "the co-op's 2027 transmission charge per kW of 4CP load",
-    "peak_partners_mv_plan_2024.pdf": "the programme's measurement and verification plan",
-    "peak_partners_member_guide_2026.pdf": "the member and provider guide to an event",
-    "ercot_residential_dr_potential_2025.pdf": "a research group's study of residential demand response potential in ERCOT",
-    "der_interconnections_2026.csv": "members' interconnected rooftop solar systems",
+    "mdm_hourly_phw_2026-07-01_2026-08-31.csv": "hourly net kWh for every meter on the Prairie Hollow substation, July and August 2026",
+    "mdm_hourly_lkr_2026-07-01_2026-08-31.csv": "hourly net kWh for every meter on the Larkin Ridge substation, July and August 2026",
+    "mdm_hourly_stb_2026-07-01_2026-08-31.csv": "hourly net kWh for every meter on the Stonebrook substation, July and August 2026",
+    "quillpoint_sessions_2024-06_2026-09.csv": "every enrolled charger's charging sessions, June to September 2024 to 2026, in UTC",
+    "ev_overnight_roster_2026-11-02.csv": "every charger ever enrolled on the EV Overnight rate, with swaps and closures",
+    "pilot_assignment_2025.csv": "each charger's half of the managed-charging pilot",
+    "gis_service_points_2026-10-30.csv": "each service point's meter, address and transformer location",
+    "ami_meter_exchanges_2026.csv": "meters exchanged in 2026",
+    "transformer_register_2026.csv": "the distribution transformer register",
+    "distribution_work_orders_2025_2026.xlsx": "completed distribution work orders, 2025 and 2026",
+    "transformer_monitors_15min_2026-07_08.csv": "15-minute kW and kVA on the 48 monitored transformers, July and August 2026",
+    "weather_station_hourly_2024-2026.csv": "hourly temperature and humidity at the association's station, June to September",
+    "quillpoint_proposal_2027.xlsx": "the charging platform's 2027 products and fees",
+    "board_policy_EV-4_charging_default.pdf": "the board's policy for choosing the EV Overnight charging default",
+    "dps-7_distribution_transformer_loading.pdf": "the planning standard for transformer limits and replacement costs",
+    "ev_overnight_pilot_plan_2025.pdf": "the managed-charging pilot's plan",
+    "rate_schedule_EV-1_2026.pdf": "the EV Overnight rate",
+    "state_ev_registrations_by_zip_2019-2026.csv": "the state's quarterly EV registrations by ZIP code",
+    "net_metering_interconnections_2026.csv": "members' net-metered rooftop solar systems",
 }
 UTC = dt.timezone.utc
 EXPORTS = {
-    "ami_15min_reads_peak_partners_2024_2026.csv": dt.datetime(2026, 11, 2, 7, 12, 41, tzinfo=UTC),
-    "member_accounts_2026.csv": dt.datetime(2026, 11, 2, 7, 20, 3, tzinfo=UTC),
-    "peak_partners_roster_2026-10-30.csv": dt.datetime(2026, 10, 30, 23, 2, 17, tzinfo=UTC),
-    "mv_event_assignments_2024_2026.csv": dt.datetime(2026, 10, 1, 14, 45, 9, tzinfo=UTC),
-    "corvane_event_report_2024_2026.csv": dt.datetime(2026, 10, 3, 2, 10, 55, tzinfo=UTC),
-    "lumivale_dr_events_cedar_brake.csv": dt.datetime(2026, 10, 2, 16, 31, 12, tzinfo=UTC),
-    "ardena_event_outcomes.csv": dt.datetime(2026, 10, 5, 20, 4, 38, tzinfo=UTC),
-    "ondera_events_cbec.csv": dt.datetime(2026, 10, 6, 13, 22, 50, tzinfo=UTC),
-    "kitebrook_events_2024_2026.csv": dt.datetime(2026, 10, 2, 9, 1, 27, tzinfo=UTC),
-    "pinecrest_home_events.csv": dt.datetime(2026, 10, 7, 18, 47, 3, tzinfo=UTC),
-    "ercot_4cp_intervals_2016_2026.csv": dt.datetime(2026, 10, 15, 21, 15, 0, tzinfo=UTC),
-    "weather_kcdr_hourly_2024_2026.csv": dt.datetime(2026, 10, 1, 6, 44, 32, tzinfo=UTC),
-    "calder_cad_residential_2026.csv": dt.datetime(2026, 8, 3, 15, 30, 11, tzinfo=UTC),
-    "der_interconnections_2026.csv": dt.datetime(2026, 10, 27, 17, 8, 50, tzinfo=UTC),
+    "mdm_hourly_phw_2026-07-01_2026-08-31.csv": dt.datetime(2026, 11, 3, 14, 12, 41, tzinfo=UTC),
+    "mdm_hourly_lkr_2026-07-01_2026-08-31.csv": dt.datetime(2026, 11, 3, 14, 19, 8, tzinfo=UTC),
+    "mdm_hourly_stb_2026-07-01_2026-08-31.csv": dt.datetime(2026, 11, 3, 14, 27, 55, tzinfo=UTC),
+    "quillpoint_sessions_2024-06_2026-09.csv": dt.datetime(2026, 10, 2, 9, 4, 17, tzinfo=UTC),
+    "ev_overnight_roster_2026-11-02.csv": dt.datetime(2026, 11, 2, 15, 41, 3, tzinfo=UTC),
+    "pilot_assignment_2025.csv": dt.datetime(2026, 10, 2, 9, 6, 50, tzinfo=UTC),
+    "gis_service_points_2026-10-30.csv": dt.datetime(2026, 10, 30, 22, 15, 29, tzinfo=UTC),
+    "ami_meter_exchanges_2026.csv": dt.datetime(2026, 11, 2, 16, 2, 11, tzinfo=UTC),
+    "transformer_register_2026.csv": dt.datetime(2026, 10, 1, 13, 30, 2, tzinfo=UTC),
+    "transformer_monitors_15min_2026-07_08.csv": dt.datetime(2026, 9, 8, 18, 44, 36, tzinfo=UTC),
+    "weather_station_hourly_2024-2026.csv": dt.datetime(2026, 10, 5, 12, 0, 9, tzinfo=UTC),
+    "state_ev_registrations_by_zip_2019-2026.csv": dt.datetime(2026, 10, 20, 17, 25, 0, tzinfo=UTC),
+    "net_metering_interconnections_2026.csv": dt.datetime(2026, 10, 27, 20, 8, 50, tzinfo=UTC),
 }
 
 
@@ -75,7 +72,7 @@ def build(task_dir, gen_dir):
     counts = PK.write_all(w, target)
     DC.write_all(target, w)
     CK.RESULTS.clear()
-    C = CK.run(target)
+    C = CK.run(target, w)
     if os.environ.get("T7_CHECK_LOG"):
         with open(os.environ["T7_CHECK_LOG"], "w", encoding="utf-8") as fh:
             for name, ok, d in CK.RESULTS:
@@ -93,19 +90,19 @@ def build(task_dir, gen_dir):
     WU.write(F, os.path.join(task_dir, "submission.md"))
     files = sorted(os.listdir(target))
     meta = {
-        "task": "task7", "title": "Cedar Brake Electric Cooperative: which thermostat providers to renew for summer 2027",
+        "task": "task7", "title": "Hollins Creek Electric Association: the EV Overnight rate's charging default for 2027",
         "domain": "Energy Systems & Utilities", "task_type": "energy efficiency and demand response evaluation",
-        "objective": "Experiment & Causal Analysis", "as_of": "2026-11-02",
-        "deliverables": ["provider_renewals_2027_memo.docx", "provider_renewals_2027_workbook.xlsx"],
+        "objective": "Experiment & Causal Analysis", "as_of": "2026-11-06",
+        "deliverables": ["ev_overnight_default_2027_memo.docx", "ev_overnight_transformers_2027.csv"],
         "distractor_files": DISTRACTORS,
         "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
-                        "largest_file": "ami_15min_reads_peak_partners_2024_2026.csv", "largest_file_rows": counts["ami_rows"],
-                        "long_file": "corvane_event_report_2024_2026.csv",
-                        "long_file_rows": counts["reports"]["Corvane"]},
+                        "largest_file": "quillpoint_sessions_2024-06_2026-09.csv", "largest_file_rows": counts["sessions"],
+                        "long_file": "mdm_hourly_stb_2026-07-01_2026-08-31.csv",
+                        "long_file_rows": counts["mdm_hourly_stb_2026-07-01_2026-08-31.csv"]},
         "sources": [{"files": "all files under target/",
-                     "origin": "constructed for this task around a fictional Texas electric cooperative, its members, its "
-                               "thermostat providers, a fictional appraisal district and weather station; every record "
-                               "and figure is invented", "date": "2026-11-02", "license": "CC BY 4.0 (original work)"}],
+                     "origin": "constructed for this task around a fictional Colorado electric cooperative, its members, its "
+                               "charging platform, its network and its weather station; every record and figure is invented",
+                     "date": "2026-11-06", "license": "CC BY 4.0 (original work)"}],
         "files": [{"path": f, "format": os.path.splitext(f)[1][1:], "bytes": os.path.getsize(os.path.join(target, f)),
                    "covers": COVERS.get(f, ""), "made": "constructed by task7/generator/make.py (seeded, deterministic)"}
                   for f in files],
@@ -113,9 +110,9 @@ def build(task_dir, gen_dir):
     with open(os.path.join(task_dir, "metadata.json"), "w", encoding="utf-8") as fh:
         json.dump(meta, fh, indent=1, ensure_ascii=False)
     PP.own_mtimes(target, EXPORTS)
-    PP.own_mtimes(golden, {})
-    PP.zip_folder(target, os.path.join(task_dir, "target.zip"), zone="America/Chicago")
-    PP.zip_folder(golden, os.path.join(task_dir, "golden.zip"), zone="America/Chicago")
+    PP.own_mtimes(golden, {"ev_overnight_transformers_2027.csv": dt.datetime(2026, 11, 12, 22, 31, 4, tzinfo=UTC)})
+    PP.zip_folder(target, os.path.join(task_dir, "target.zip"), zone="America/Denver")
+    PP.zip_folder(golden, os.path.join(task_dir, "golden.zip"), zone="America/Denver")
     return F, C, counts
 
 
@@ -149,8 +146,9 @@ def main():
         sys.exit(0 if ok else 1)
     F, C, counts = build(TASK, HERE)
     print(json.dumps(counts, indent=1))
-    print("renewed %s; kW %s; lines %s; careful %s -> %s; MW %.2f net %s; n27 %s" % (
-        F["renewed"], F["kw"], F["bar_kw"], F["care_kw"], F["care_set"], F["mw"], F["net_usd"], F["n27"]))
+    print("call %s; over own %s stagger %s sequence %s; totals %s %s %s; flip %s; pilot %s; chargers %s; transformers %s" % (
+        F["call"], F["own"]["over"], F["stagger"]["over"], F["sequence"]["over"], F["own"]["total"], F["stagger"]["total"],
+        F["sequence"]["total"], F["flip_fee"], F["pilot_effect"], F["n_chargers"], F["n_tx"]))
     print("%d checks passed" % len(CK.RESULTS))
 
 

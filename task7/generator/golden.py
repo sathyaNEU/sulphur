@@ -1,391 +1,398 @@
-"""task7 architecture 10: the estimators, from the pack alone (verify.Pack).
+"""task7 architecture 11: the estimators, from the pack alone (verify.Pack).
 
-The golden: each provider's reduction per assigned device on the randomised test events, measured on the research sample
-(held-back half against called half, 15 minutes at a time) and split into the shed of a device still in the event and the
-share still in it (the reports); the shed carried to each 4CP day's heat by a straight line in temperature and to the
-fleet's homes by each home's cooling slope as the appraisal roll predicts it; the share read on the 4CP days themselves,
-cohort by cohort (channel, years enrolled), and weighted to the devices that will be enrolled on 1 July 2027; the
-product read at each 4CP interval's place in the provider's window, an uncalled day counted as nothing; the twelve
-intervals averaged.
-
-The routes the shortcuts take are the same functions with one carry or another left out."""
+A summer like 2026 is July and August 2026 as metered, with each charger enrolled on 1 November 2026 charged as an option
+would charge its 2026 sessions (Board Policy EV-4). The golden replays every transformer night by night at the quarter-hour:
+its homes' hourly reads less the enrolled chargers' own charging, lifted to the quarter-hour by the monitored transformers'
+highest quarter-hour above each hour, plus the enrolled chargers' sessions as each option would run them: the members' own
+schedules (each charger's own-schedule history, the managed quarter's read from summer 2024, else what the member said at
+enrolment), Quillpoint Stagger's random start (each transformer at its chance of being over, over many draws) and Quillpoint
+Sequence (one charger at a time in ready-by order, a late charger alongside). The hurried routes are coded beside it."""
 import datetime as dt
+from collections import Counter, defaultdict
 
 import numpy as np
 
 import verify as V
 
-STEP = 15
-AT = STEP / 2                   # where in a 15-minute interval "still in the event" is read: its middle
-ASOF = dt.date(2026, 10, 30)
-JULY27 = dt.date(2027, 7, 1)
-CH = ("app", "mail", "retail")
-TEN_EDGES = (1.0, 2.0, 3.0)
+Q = V.Q
+ND = V.NDAY
+L = (ND + 1) * Q
+WIN = ND * Q
+OFF = 23 * 4
+LIMIT, PF = 1.20, 0.95
+FEE = {"own": 0.0, "stagger": 18.0, "sequence": 40.0}
+COST = {25.0: 10800, 37.5: 11400, 50.0: 18200, 75.0: 21500, 100.0: 26900}
+OPTIONS = ("own", "stagger", "sequence")
+EVE0 = dt.date(2026, 6, 30)        # the first evening whose charging reaches into July
+K_RANDOM = 400
+DECLARED = {"Charger timer 23:00": "t2300", "Charger timer 23:30": "t2330", "Charger timer 00:00": "t0000",
+            "Car's departure schedule": "ready", "When I plug in": "now"}
 
 
-def ten_band(t):
-    return int(np.searchsorted(TEN_EDGES, t, side="right"))
+def qofday(t):
+    return t.hour * 4 + t.minute // 15
 
 
-def tenure(v, d):
-    return max(0.0, (d - v["joined"]).days / 365.25)
+def evening_q(night, t):
+    """quarter index of time t counted from 00:00 on the evening's own date"""
+    return (t.date() - night).days * Q + qofday(t)
 
 
-def provider_devices(P, p):
-    return [v for v in P.dev.values() if v["p"] == p]
+def place(series, a, e, p):
+    qn = e / p * 4.0
+    k = a
+    while qn > 1e-9 and k < len(series):
+        if k >= 0:
+            series[k] += p * min(1.0, qn)
+        qn -= 1.0
+        k += 1
 
 
-def ami_devices(P, p):
-    acc = set(P.ami_accts)
-    return [v for v in provider_devices(P, p) if v["acct"] in acc]
+def actual_quarters(P, k, n=WIN):
+    """a charger's metered charging in July and August 2026 at the quarter-hour, from its session times"""
+    s15 = np.zeros(n)
+    t0 = dt.datetime(2026, 7, 1, tzinfo=V.MDT)
+    for s in P.sess.get(k, []):
+        a = (s["start"] - t0).total_seconds() / 900.0
+        b = (s["end"] - t0).total_seconds() / 900.0
+        if b <= 0 or a >= n:
+            continue
+        p = s["kwh"] / ((b - a) / 4.0)
+        for q in range(max(0, int(np.floor(a))), min(n, int(np.ceil(b)))):
+            ov = min(b, q + 1) - max(a, q)
+            if ov > 0:
+                s15[q] += p * ov
+    return s15
 
 
-def status(P, v, d, minute, end=False):
-    """(received, still in the event at `minute`) for a device called on day d; a device a provider left out of its
-    report was not reached"""
-    rep = P.rep.get((d, v["pid"]))
-    if rep is None:
-        return False, False
-    received, ov = rep
-    if not received:
-        return False, False
-    if ov is None:
-        return True, True
-    return True, ov > minute
+def own_setting(P, k, mode="history"):
+    """a charger's own setting: read from its own-schedule sessions (2026 for the own three-quarters, summer 2024 for the
+    managed quarter), or what the member said at enrolment where it has none"""
+    cache = P.__dict__.setdefault("_own_cache", {})
+    if (k, mode) not in cache:
+        cache[(k, mode)] = _own_setting(P, k, mode)
+    return cache[(k, mode)]
 
 
-# ---------------------------------------------------------------- test events: the reduction and the share in the event
-def test_tables(P, p, adjust=True):
-    """for each test event: the interval means of the held-back and called halves of the research sample's devices, the
-    called half's share received and still in the event at each interval's midpoint, and the temperature"""
-    s = P.settings[p]
+def _own_setting(P, k, mode):
+    decl = DECLARED.get(P.ch[k].get("declared"))
+    if mode == "declared":
+        return decl
+    half = P.half.get(k)
+    cand = [s for s in P.sess.get(k, []) if (s["night"].year == 2026 if half == "own" else s["night"] < dt.date(2025, 5, 12))]
+    votes = Counter()
+    for s in cand:
+        if s["mode"] == "IMMEDIATE":
+            votes["now"] += 1
+        elif s["mode"] == "VEHICLE_SCHEDULE":
+            votes["ready"] += 1
+        elif s["mode"] == "CHARGER_SCHEDULE":
+            votes[{"23:00": "t2300", "23:30": "t2330", "00:00": "t0000"}.get(s["start"].strftime("%H:%M"), "t2300")] += 1
+    return votes.most_common(1)[0][0] if votes else decl
+
+
+def own_start(setting, plug, dep, e, p):
+    q = int(np.ceil(e / p * 4))
+    if setting == "t2300":
+        return max(plug, OFF)
+    if setting == "t2330":
+        return max(plug, OFF + 2)
+    if setting == "t0000":
+        return max(plug, Q)
+    if setting == "ready":
+        return max(plug, dep - q - 2)
+    return plug
+
+
+# ---- one pass over the pack: every transformer's base and sessions --------------------------------------------------------
+class Book:
+    def __init__(self, P):
+        self.P = P
+        self.tx_ch = defaultdict(list)
+        for k in P.enrolled:
+            self.tx_ch[P.sp_tx[P.ch[k]["sp"]]].append(k)
+        self.rate_ch = defaultdict(list)
+        for k, c in P.ch.items():
+            self.rate_ch[P.sp_tx[c["sp"]]].append(k)
+        self.ev15 = {k: actual_quarters(P, k) for k in P.ch}
+        self.sess = {k: self._sessions(k) for k in P.enrolled}
+        self.bh = {t: self._base_hourly(t) for t in self.tx_ch}
+        self.bh_mon = {t: self._base_hourly(t) for t in P.mon}
+        self.obs = {t: self._observed(t) for t in self.tx_ch}
+
+    def _sessions(self, k):
+        P = self.P
+        out = []
+        for s in P.sess.get(k, []):
+            if not (EVE0 <= s["night"] <= dt.date(2026, 8, 31)):
+                continue
+            o = (s["night"] - V.JUL1).days * Q
+            pq = evening_q(s["night"], s["plug"]) + (1 if (s["plug"].minute % 15 or s["plug"].second) else 0)
+            out.append((o, pq, evening_q(s["night"], s["unplug"]), s["kwh"], P.ch[k]["kw"], s))
+        return out
+
+    def _base_hourly(self, t):
+        """the transformer's homes as metered, less the charging of the chargers enrolled on 1 November 2026"""
+        P = self.P
+        b = np.zeros(ND * 24)
+        for sp in P.tx_sps[t]:
+            if sp in P.ami:
+                b += P.ami[sp]
+        for k in self.tx_ch.get(t, []):
+            b -= self.ev15[k].reshape(-1, 4).mean(1)
+        return b
+
+    def _observed(self, t):
+        b = np.zeros(ND * 24)
+        for sp in self.P.tx_sps[t]:
+            if sp in self.P.ami:
+                b += self.P.ami[sp]
+        return b
+
+    def homes(self, t):
+        return len(self.P.tx_sps[t])
+
+
+def hourly_excess(B):
+    """the monitored transformers' highest quarter-hour above its hour, by hour of day, per square root of homes"""
+    P = B.P
+    rec = defaultdict(list)
+    for t, mon in P.mon.items():
+        bh = B.bh_mon[t]
+        ev = np.zeros(WIN)
+        for k in B.tx_ch.get(t, []):
+            ev += B.ev15[k]
+        tot_m = np.nanmean(mon.reshape(-1, 4), axis=1)
+        tot_h = bh + ev.reshape(-1, 4).mean(1)
+        ok = ~np.isnan(tot_m)
+        ratio = float(np.sum(tot_m[ok]) / np.sum(tot_h[ok]))           # the monitor reads its own losses too
+        base = mon / ratio - ev
+        m = base.reshape(-1, 4)
+        good = ~np.isnan(m).any(axis=1)
+        excess = (np.nanmax(m, axis=1) - np.nanmean(m, axis=1))[good]
+        hours = (np.arange(ND * 24) % 24)[good]
+        n = max(B.homes(t), 1)
+        for h in range(24):
+            rec[h].append(np.mean(excess[hours == h]) / np.sqrt(n))
+    return np.array([np.mean(rec[h]) for h in range(24)])
+
+
+def peak_lift(B, K=60):
+    """rival: each option's summer peak on a monitored transformer's quarter-hour base less the same on its hourly base,
+    fitted to the square root of its homes"""
+    P = B.P
+    rec = {o: [] for o in OPTIONS}
+    for t, mon in P.mon.items():
+        bh = B.bh_mon[t]
+        ev = np.zeros(WIN)
+        for k in B.tx_ch.get(t, []):
+            ev += B.ev15[k]
+        tot_m = np.nanmean(mon.reshape(-1, 4), axis=1)
+        tot_h = bh + ev.reshape(-1, 4).mean(1)
+        ok = ~np.isnan(tot_m)
+        ratio = float(np.sum(tot_m[ok]) / np.sum(tot_h[ok]))
+        hb = np.repeat(bh, 4)
+        b15 = np.where(np.isnan(mon), hb * 1.0, mon / ratio - ev)
+        f15 = np.concatenate([b15, np.repeat(b15[-32:].mean(), Q)])
+        fh = np.concatenate([hb, np.repeat(hb[-32:].mean(), Q)])
+        sess = [s for k in B.tx_ch.get(t, []) for s in B.sess[k]]
+        sets = [own_setting(P, k) for k in B.tx_ch.get(t, []) for _ in B.sess[k]]
+        n = B.homes(t)
+        rec["own"].append((n, season_max(f15, own_blocks(sess, sets)) - season_max(fh, own_blocks(sess, sets))))
+        rec["sequence"].append((n, season_max(f15, sequence_blocks(sess)) - season_max(fh, sequence_blocks(sess))))
+        _, a = random_peaks(f15, sess, np.random.default_rng(1), K)
+        _, b = random_peaks(fh, sess, np.random.default_rng(1), K)
+        rec["stagger"].append((n, float(np.mean(a - b))))
+    fit = {}
+    for o, v in rec.items():
+        x = np.sqrt(np.array([a for a, _ in v], dtype=float))
+        y = np.array([b for _, b in v])
+        fit[o] = float((x * y).sum() / (x * x).sum())
+    return fit
+
+
+def base15(bh, n_homes, lift):
+    up = np.tile(lift, ND) * np.sqrt(max(n_homes, 1))
+    s = np.repeat(bh + up, 4)
+    return np.concatenate([s, np.repeat(s[-32:].mean(), Q)])        # the night after 31 August is outside the window
+
+
+# ---- the three options ---------------------------------------------------------------------------------------------------------
+def season_max(base, blocks):
+    s = base.copy()
+    for (a, e, p) in blocks:
+        place(s, a, e, p)
+    return s[:WIN].max()
+
+
+def own_blocks(sess, settings):
+    return [(o + own_start(st, plug, dep, e, p), e, p) for (o, plug, dep, e, p, _), st in zip(sess, settings)]
+
+
+def sequence_blocks(sess, perfect=False):
+    bynight = defaultdict(list)
+    for i, s in enumerate(sess):
+        bynight[s[0]].append(i)
     out = []
-    devs = ami_devices(P, p)
-    for e in P.events:
-        if e["kind"] != "test":
-            continue
-        d = e["date"]
-        call, hold, sh = [], [], []
-        for v in devs:
-            if not V.active(v, d):
-                continue
-            g = P.assign.get((e["code"], v["pid"]))
-            x = P.ami.get((v["acct"], d))
-            if g is None or x is None:
-                continue
-            if g:
-                call.append(x)
-                sh.append([status(P, v, d, m + AT)[1] if m + STEP / 2 < s["e"] else status(P, v, d, s["e"])[1]
-                           for m in P.ami_mins])
-                sh[-1] = [float(z) for z in sh[-1]]
-                sh[-1].append(float(status(P, v, d, 0)[0]))
-            else:
-                hold.append(x)
-        if len(call) < 5 or len(hold) < 5:
-            continue
-        call, hold, sh = np.array(call), np.array(hold), np.array(sh)
-        if adjust:
-            # each interval regressed on the half and the home's own 13:00 to 14:30 load that day, before any event
-            X = np.vstack([call, hold])
-            g_ = np.r_[np.ones(len(call)), np.zeros(len(hold))]
-            pre = np.nanmean(X[:, :6], axis=1)
-            red = np.zeros(X.shape[1])
-            for k in range(X.shape[1]):
-                ok = np.isfinite(X[:, k]) & np.isfinite(pre)
-                A = np.vstack([np.ones(ok.sum()), g_[ok], pre[ok]]).T
-                b, *_ = np.linalg.lstsq(A, X[ok, k], rcond=None)
-                red[k] = -b[1]
-        else:
-            red = np.nanmean(hold, axis=0) - np.nanmean(call, axis=0)
-        S = sh[:, :-1].mean(axis=0)
-        R = sh[:, -1].mean()
-        T = np.array([V.temp_at(P, d, m + STEP / 2) for m in P.ami_mins])
-        out.append(dict(date=d, red=red, S=S, R=R, T=T, n=(len(call), len(hold))))
+    for o, idx in bynight.items():
+        free = OFF
+        for i in sorted(idx, key=lambda i: (sess[i][2], sess[i][1])):
+            _, plug, dep, e, p, _ = sess[i]
+            q = int(np.ceil(e / p * 4))
+            lo = max(plug, OFF)
+            st = max(free, lo)
+            if not perfect and st + q > dep:
+                st = max(lo, dep - q)
+            out.append((o + st, e, p))
+            free = max(free, st + q)
     return out
 
 
-def fit_line(x, y, w=None):
-    x, y = np.asarray(x, float), np.asarray(y, float)
-    ok = np.isfinite(x) & np.isfinite(y)
-    w = np.ones(ok.sum()) if w is None else np.asarray(w, float)[ok]
-    A = np.vstack([np.ones(ok.sum()), x[ok]]).T * np.sqrt(w)[:, None]
-    b, *_ = np.linalg.lstsq(A, y[ok] * np.sqrt(w), rcond=None)
-    return b
+def random_peaks(base, sess, rng, K=K_RANDOM):
+    """the summer peak under Stagger over K draws of every session's random start"""
+    if not sess:
+        return None, np.full(K, base[:WIN].max())
+    S = len(sess)
+    lo = np.array([max(s[1], OFF) for s in sess])
+    qn = np.array([s[3] / s[4] * 4 for s in sess])
+    qi = np.ceil(qn).astype(int)
+    hi = np.maximum(lo, np.array([s[2] for s in sess]) - qi)
+    st = lo[None, :] + np.floor(rng.random((K, S)) * (hi - lo + 1)[None, :]).astype(int)
+    o = np.array([s[0] for s in sess]) + 2 * Q
+    p = np.array([s[4] for s in sess])
+    nf = np.floor(qn).astype(int)
+    fr = qn - nf
+    diff = np.zeros((K, L + 2 * Q + 64))
+    a = o[None, :] + st
+    rows = np.repeat(np.arange(K), S)
+    np.add.at(diff, (rows, a.ravel()), np.tile(p, K))
+    np.add.at(diff, (rows, (a + nf[None, :]).ravel()), np.tile(p * (fr - 1), K))
+    np.add.at(diff, (rows, (a + nf[None, :] + 1).ravel()), -np.tile(p * fr, K))
+    ev = np.cumsum(diff, axis=1)[:, 2 * Q:2 * Q + L]
+    return None, (base[None, :] + ev)[:, :WIN].max(axis=1)
 
 
-def shed_model(P, p, how="split", adjust=True):
-    """per interval of the export window, a straight line in temperature of the reduction per assigned device ("itt",
-    the hurried read) or of the shed per device still in the event and, after the window, the snapback per device that
-    ran to the end and, before it, the pre-cool per device reached ("split")"""
-    s = P.settings[p]
-    tabs = test_tables(P, p, adjust)
-    lines = []
-    for k, m in enumerate(P.ami_mins):
-        mid = m + STEP / 2
-        xs, ys = [], []
-        for t in tabs:
-            if how == "itt":
-                y = t["red"][k]
-            elif mid < s["s"]:
-                y = t["red"][k] / max(t["R"], 1e-6)
-            else:
-                y = t["red"][k] / max(t["S"][k], 1e-6)
-            xs.append(t["T"][k])
-            ys.append(y)
-        lines.append(fit_line(xs, ys))
-    return dict(lines=lines, tabs=tabs)
-
-
-def shed_at(P, model, minute, T):
-    k = int((minute - P.ami_mins[0]) // STEP)
-    k = min(max(k, 0), len(P.ami_mins) - 1)
-    b = model["lines"][k]
-    return float(b[0] + b[1] * T)
-
-
-# ---------------------------------------------------------------- the homes: each home's cooling slope from the roll
-def cooling_slopes(P):
-    """each research-sample home's afternoon load against the day's heat on its quiet days (no event, or held back):
-    kW per degree, the air conditioning its size and age set"""
-    quiet = {}
-    for e in P.events:
-        quiet[e["date"]] = e
-    by_acct = {}
-    devs = {v["acct"]: v for v in P.dev.values()}
-    for (a, d), x in P.ami.items():
-        e = P.ev_by_date.get(d)
-        if e is not None:
-            v = devs.get(a)
-            if e["kind"] == "alert" or v is None:
-                continue
-            g = P.assign.get((e["code"], v["pid"]))
-            if g is None or g:
-                continue
-        y = np.nanmean(x[8:20])                      # 15:00 to 18:00
-        T = float(np.mean([V.temp_at(P, d, m) for m in range(900, 1080, 30)]))
-        by_acct.setdefault(a, []).append((T, y))
-    slope = {}
-    for a, pts in by_acct.items():
-        if len(pts) < 8:
+def managed_profile(B):
+    """the managed quarter's mean charging per enrolled charger per night, by quarter from the evening's 00:00"""
+    P = B.P
+    prof = np.zeros(2 * Q + 16)
+    n = 0
+    for k in P.enrolled:
+        if P.half.get(k) != "managed":
             continue
-        b = fit_line([t for t, _ in pts], [y for _, y in pts])
-        slope[a] = b[1]
-    return slope
+        n += 1
+        for (o, plug, dep, e, p, s) in B.sess[k]:
+            if s["night"] < V.JUL1:
+                continue
+            place(prof, evening_q(s["night"], s["start"]), e, p)
+    return prof / max(n, 1) / ND
 
 
-def home_model(P, slope, form="log"):
-    """a home's cooling slope from its living area and year built in the appraisal roll, fitted on the research sample"""
-    X, y = [], []
-    for a, s in slope.items():
-        h = P.home.get(a)
-        if h is None or s <= 0:
-            continue
-        sq, yb = h
-        age = np.clip((2005 - yb) / 40.0, 0, 1.2)
-        if form == "log":
-            X.append([1, np.log(sq), age])
-            y.append(np.log(s))
+# ---- the replay -----------------------------------------------------------------------------------------------------------------
+def replay(B, seed=7, lift="excess", own="history", stagger="draws", sequence="filed", K=K_RANDOM, tables=None):
+    """every transformer serving an enrolled charger, each option's summer peak and its chance of being over its limit"""
+    P = B.P
+    rng = np.random.default_rng(seed)
+    tables = tables or {}
+    exc = tables.get("excess") if lift in ("excess",) else None
+    if lift == "excess" and exc is None:
+        exc = hourly_excess(B)
+    pl = tables.get("peak") if lift == "peak" else None
+    if lift == "peak" and pl is None:
+        pl = peak_lift(B)
+    mprof = managed_profile(B) if stagger == "profile" else None
+    out = {}
+    for t in sorted(B.tx_ch):
+        kva = P.kva[t]
+        limit = LIMIT * kva * PF
+        n_h = B.homes(t)
+        b = base15(B.bh[t], n_h, exc if lift == "excess" else np.zeros(24))
+        up = {o: (pl[o] * np.sqrt(n_h) if lift == "peak" else 0.0) for o in OPTIONS}
+        sess = [s for k in B.tx_ch[t] for s in B.sess[k]]
+        sets = [own_setting(P, k, own if own != "observed" else "history") for k in B.tx_ch[t] for _ in B.sess[k]]
+        r = dict(kva=kva, limit=limit, chargers=len(B.tx_ch[t]), homes=n_h, cost=COST.get(kva, 0), area=P.area.get(t, ""))
+        if own == "observed":                     # the 2026 loads as metered, a quarter of the chargers managed
+            pk = B.obs[t].max()
         else:
-            X.append([1, sq / 1000.0, age, sq / 1000.0 * age])
-            y.append(s)
-    X, y = np.array(X), np.array(y)
-    b, *_ = np.linalg.lstsq(X, y, rcond=None)
+            pk = season_max(b, own_blocks(sess, sets)) + up["own"]
+        r["own_peak"], r["own_p"] = float(pk), float(pk > limit)
+        if stagger == "draws":
+            _, pks = random_peaks(b, sess, rng, K)
+            pks = pks + up["stagger"]
+            r["stagger_peak"], r["stagger_p"] = float(np.mean(pks)), float((pks > limit).mean())
+        else:                                    # the managed quarter's average night times the transformer's chargers
+            s = b.copy()
+            for d in range(-1, ND):
+                lo = d * Q
+                seg = mprof * len(B.tx_ch[t])
+                a0, a1 = max(0, lo), min(L, lo + len(seg))
+                s[a0:a1] += seg[a0 - lo:a1 - lo]
+            pk = s[:WIN].max() + up["stagger"]
+            r["stagger_peak"], r["stagger_p"] = float(pk), float(pk > limit)
+        if sequence == "as_stagger":
+            r["sequence_peak"], r["sequence_p"] = r["stagger_peak"], r["stagger_p"]
+        else:
+            pk = season_max(b, sequence_blocks(sess, perfect=(sequence == "perfect"))) + up["sequence"]
+            r["sequence_peak"], r["sequence_p"] = float(pk), float(pk > limit)
+        out[t] = r
+    return out
 
-    def pred(a):
-        h = P.home.get(a)
+
+def totals(out, n_chargers):
+    res = {}
+    for o in OPTIONS:
+        over = sum(r[o + "_p"] for r in out.values())
+        rep = sum(r[o + "_p"] * r["cost"] for r in out.values())
+        fee = FEE[o] * n_chargers
+        res[o] = dict(over=over, replace=rep, fee=fee, total=fee + rep)
+    res["call"] = min(OPTIONS, key=lambda o: res[o]["total"])
+    return res
+
+
+def pilot_effect(B):
+    """kW per enrolled charger in the 23:00 to 23:15 quarter, July and August 2026, managed quarter less own three-quarters"""
+    P = B.P
+    tot = {"managed": [], "own": []}
+    for k, c in P.ch.items():
+        if c["enrolled"] > V.JUL1 or (c["closed"] is not None and c["closed"] <= dt.date(2026, 9, 1)):
+            continue
+        h = P.half.get(k)
         if h is None:
-            return np.nan
-        sq, yb = h
-        age = np.clip((2005 - yb) / 40.0, 0, 1.2)
-        if form == "log":
-            return float(np.exp(b[0] + b[1] * np.log(sq) + b[2] * age))
-        return float(b[0] + b[1] * sq / 1000.0 + b[2] * age + b[3] * sq / 1000.0 * age)
-    return pred
-
-
-# ---------------------------------------------------------------- next summer's devices
-def attrition(P, ch):
-    """devices leaving a year, per device-year enrolled, 2021 to the roster date, by channel"""
-    ex = left = 0.0
-    for v in P.dev.values():
-        if v["ch"] != ch:
             continue
-        end = v["left"] or ASOF
-        ex += max(0.0, (end - v["joined"]).days / 365.25)
-        left += v["left"] is not None
-    return left / ex if ex else 0.0
+        tot[h].append(B.ev15[k].reshape(ND, Q)[:, OFF].mean())
+    return dict(effect=float(np.mean(tot["managed"]) - np.mean(tot["own"])), n_managed=len(tot["managed"]),
+                n_own=len(tot["own"]), own=float(np.mean(tot["own"])), managed=float(np.mean(tot["managed"])))
 
 
-def fleet_2027(P, p, how="channel"):
-    """(device, weight) of the devices expected enrolled on 1 July 2027: today's, each surviving at its channel's rate,
-    and the quote's new enrolments, each like the provider's recent enrolments through that channel"""
-    rate = {ch: attrition(P, ch) for ch in CH}
-    yrs = (JULY27 - ASOF).days / 365.25
-    out = []
-    for v in provider_devices(P, p):
-        if not V.active(v, ASOF):
-            continue
-        r = rate[v["ch"]] if how == "channel" else np.mean(list(rate.values()))
-        out.append((dict(v, kind="now"), float(np.exp(-r * yrs))))
-    recent = [v for v in provider_devices(P, p) if v["joined"] >= dt.date(2025, 1, 1)]
-    for ch, n in P.quote[p]["new"].items():
-        if n <= 0:
-            continue
-        like = [v for v in recent if v["ch"] == ch] or [v for v in provider_devices(P, p) if v["ch"] == ch] or recent
-        for k in range(n):
-            src = like[k % len(like)]
-            out.append((dict(src, kind="new", ch=ch, joined=dt.date(2027, 3, 15)), float(np.exp(-rate[ch] * 0.3))))
-    return out
+def flip_fee(res, n_chargers):
+    """the Sequence fee per charger-year at which Stagger would cost the same"""
+    return (res["stagger"]["total"] - res["sequence"]["replace"]) / n_chargers
 
 
-def n_2027(P, p):
-    return sum(w for _, w in fleet_2027(P, p))
+ROUTES = {
+    # the careful but hurried pass: the pilot's per-charger effect as an average night, coordination as one charger at a
+    # time, own schedules as metered in 2026, peaks off the hourly reads
+    "careful": dict(lift="none", own="observed", stagger="profile", sequence="perfect"),
+    "quick": dict(lift="none", own="observed", stagger="profile", sequence="as_stagger"),
+    "no_J1": dict(stagger="profile"),
+    "no_J3_perfect": dict(sequence="perfect"),
+    "no_J3_as_stagger": dict(sequence="as_stagger"),
+    "no_own": dict(own="observed"),
+    "no_lift": dict(lift="none"),
+}
+RIVALS = {
+    "peak_lift": dict(lift="peak"),
+    "no_lift": dict(lift="none"),
+    "declared_own": dict(own="declared"),
+    "seed_11": dict(seed=11),
+    "seed_23": dict(seed=23),
+}
 
 
-# ---------------------------------------------------------------- the share in the event: a device-level model
-def called_devices(P, p, d):
-    e = P.ev_by_date.get(d)
-    out = []
-    for v in provider_devices(P, p):
-        if not V.active(v, d):
-            continue
-        if e is not None and e["kind"] == "test" and not P.assign.get((e["code"], v["pid"])):
-            continue
-        out.append(v)
-    return out
-
-
-def logit_fit(X, y, iters=40):
-    b = np.zeros(X.shape[1])
-    for _ in range(iters):
-        z = X @ b
-        mu = 1 / (1 + np.exp(-z))
-        W_ = mu * (1 - mu) + 1e-9
-        H = X.T @ (X * W_[:, None]) + 1e-6 * np.eye(X.shape[1])
-        b = b + np.linalg.solve(H, X.T @ (y - mu))
-    return b
-
-
-def share_model(P, p, days, minute_of):
-    """in the event (reached and not yet overridden) at the given minute, device by device on the given days: a day's
-    own level, the channel and the years enrolled"""
-    rows, y = [], []
-    for j, d in enumerate(days):
-        for v in called_devices(P, p, d):
-            rows.append((j, v["ch"], tenure(v, d)))
-            y.append(float(status(P, v, d, minute_of(d))[1]))
-    nd = len(days)
-    X = np.zeros((len(rows), nd + 3))
-    for k, (j, ch, t) in enumerate(rows):
-        X[k, j] = 1
-        X[k, nd] = ch == "mail"
-        X[k, nd + 1] = ch == "retail"
-        X[k, nd + 2] = t
-    has = [X[:, nd].any(), X[:, nd + 1].any()]
-    keep = [i for i in range(nd)] + [nd + k for k in range(2) if has[k]] + [nd + 2]
-    b = np.zeros(nd + 3)
-    b[keep] = logit_fit(X[:, keep], np.array(y))
-    return dict(b=b, days=list(days), nd=nd)
-
-
-def predict_share(m, d, mix):
-    """the model's share in the event on day d for a set of (device, weight) at the tenure they have on the 2027
-    date of that day (or the day itself)"""
-    j = m["days"].index(d)
-    b, nd = m["b"], m["nd"]
-    num = den = 0.0
-    for v, w, t in mix:
-        z = b[j] + b[nd] * (v["ch"] == "mail") + b[nd + 1] * (v["ch"] == "retail") + b[nd + 2] * t
-        num += w / (1 + np.exp(-z))
-        den += w
-    return num / den
-
-
-def observed_share(P, p, d, minute):
-    vs = called_devices(P, p, d)
-    return sum(status(P, v, d, minute)[1] for v in vs) / max(len(vs), 1)
-
-
-def fleet_mix(fleet, d):
-    d27 = dt.date(2027, d.month, d.day)
-    return [(v, w, tenure(v, d27)) for v, w in fleet]
-
-
-def sample_mix(P, p, d):
-    return [(v, 1.0, tenure(v, d)) for v in ami_devices(P, p) if V.active(v, d)]
-
-
-# ---------------------------------------------------------------- the value at the 4CP intervals
-def transport(P, p, fleet, slope_pred):
-    """the fleet's predicted cooling slope over the research sample's devices' own: how much more (or less) a device in
-    the fleet sheds than one in the sample"""
-    num = [(slope_pred(v["acct"]), w) for v, w in fleet]
-    num = [(x, w) for x, w in num if np.isfinite(x)]
-    den = [slope_pred(v["acct"]) for v in ami_devices(P, p)]
-    den = [x for x in den if np.isfinite(x)]
-    return (sum(x * w for x, w in num) / sum(w for _, w in num)) / float(np.mean(den))
-
-
-def at_minute(s, mid):
-    return min(mid, s["e"]) if mid >= s["e"] else mid
-
-
-def value(P, p, j2=True, j3=True, j4=True, slope_pred=None, fleet_how="channel", shed=None, itt=None, detail=None):
-    """kW per device enrolled on 1 July 2027 that the provider takes off the co-op's load in the 4CP intervals of a
-    summer like 2024 to 2026. The golden carries the test events' shed per device in the event to each 4CP day's heat,
-    to the fleet's homes (j4) and multiplies it by the share in the event that day for the 2027 fleet's cohorts (j2 and
-    j3). Without j2 the test events' own reduction per assigned device is read at the 4CP interval and adjusted for
-    the 2027 cohorts on the test events (j3) or the fleet's homes (j4)."""
-    s = P.settings[p]
-    fleet = fleet_2027(P, p, fleet_how)
-    tf = transport(P, p, fleet, slope_pred) if j4 else 1.0
-    cps = [cp for cp in P.cps if cp["called"]]
-    if j2:
-        model = shed or shed_model(P, p, "split")
-        days = [cp["date"] for cp in cps]
-        sm = share_model(P, p, days, lambda d: at_minute(s, next(c["start"] for c in cps if c["date"] == d) + AT))
-        tot = 0.0
-        for cp in cps:
-            d, mid = cp["date"], cp["start"] + STEP / 2
-            sh = shed_at(P, model, mid, V.temp_at(P, d, mid)) * tf
-            if j3:
-                S = predict_share(sm, d, fleet_mix(fleet, d))
-            else:
-                S = observed_share(P, p, d, at_minute(s, cp["start"] + AT))
-            tot += sh * (1.0 if mid < s["s"] else S)
-            if detail is not None:
-                detail[d] = dict(shed=sh, share=S, kw=sh * (1.0 if mid < s["s"] else S), T=V.temp_at(P, d, mid))
-        return tot / len(P.cps)
-    model = itt or shed_model(P, p, "itt")
-    tests = [t["date"] for t in model["tabs"]]
-    tot = 0.0
-    for cp in cps:
-        d, mid = cp["date"], cp["start"] + STEP / 2
-        v = shed_at(P, model, mid, V.temp_at(P, d, mid)) * tf
-        if j3 and mid >= s["s"]:
-            at = at_minute(s, mid)
-            sm = share_model(P, p, tests, lambda _d: at)
-            r27 = np.mean([predict_share(sm, td, fleet_mix(fleet, td)) for td in tests])
-            rs = np.mean([predict_share(sm, td, sample_mix(P, p, td)) for td in tests])
-            v *= r27 / rs
-        tot += v
-    return tot / len(P.cps)
-
-
-def hurried_itt(P, p, quick=False):
-    """the reduction per assigned device read straight off the test events: a straight line in temperature at each 4CP
-    interval (the careful but hurried read), or the event window's average on the test events (the quick read)"""
-    s = P.settings[p]
-    model = shed_model(P, p, "itt")
-    if quick:
-        vals = []
-        for t in model["tabs"]:
-            k0 = int((s["s"] - P.ami_mins[0]) // STEP)
-            k1 = int((s["e"] - P.ami_mins[0]) // STEP)
-            vals.append(np.nanmean(t["red"][k0:k1]))
-        return float(np.mean(vals))
-    return value(P, p, False, False, False, itt=model)
-
-
-def renewed(P, kw):
-    return [p for p in P.providers if kw[p] * P.rate > P.quote[p]["price"]]
+def solve(P):
+    B = Book(P)
+    tables = {"excess": hourly_excess(B)}
+    g = replay(B, tables=tables)
+    n = len(P.enrolled)
+    res = totals(g, n)
+    return dict(B=B, tables=tables, out=g, res=res, n=n, pilot=pilot_effect(B), flip=flip_fee(res, n))

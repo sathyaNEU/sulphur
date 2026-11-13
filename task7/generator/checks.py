@@ -1,356 +1,278 @@
-"""task7 architecture 10: every result of the design note's results chain computed on the cut pack with its rivals (the
+"""task7 architecture 11: every result of the design note's results chain computed on the cut pack with its rivals (the
 band) and the hurried routes (the shortcuts), the assertions the build must pass, figures.json and effort.json."""
+import csv
 import datetime as dt
-import json
 import os
-import sys
+from collections import Counter
 
 import numpy as np
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-
-import golden as GD  # noqa: E402
-import verify as V  # noqa: E402
-import world as W  # noqa: E402
+import golden as G
+import verify as V
 
 RESULTS = []
-MARGIN = 0.12            # every provider's golden figure 12 per cent or more from its line
-RIVAL_MARGIN = 0.08      # and every rival's 8 per cent or more, on the golden's side
-ROUTE_MARGIN = 0.06      # each shortcut 6 per cent or more across the line from the golden, where it flips
-KW_BAND = 0.06           # a provider's kW per 2027 device: within 6 per cent, or 0.02 kW where it is small
-N_BAND = 0.03            # devices enrolled on 1 July 2027 and what the quote costs: within 3 per cent
-TOTAL_BAND = 0.08        # the renewed providers' MW and net saving: within 8 per cent
 
 
 def check(name, ok, detail=""):
     RESULTS.append((name, bool(ok), detail))
+    return ok
 
 
-def r3(x):
-    return round(float(x), 3)
+def r1(x):
+    return round(float(x), 1)
 
 
-def kw_band(v, spread=0.0):
-    """a provider's band: 6 per cent (0.02 kW where that is wider), or the rivals' spread with a fifth to spare"""
-    return max(abs(v) * KW_BAND, 0.02, 1.2 * spread)
+def money(x):
+    return int(round(float(x) / 100.0) * 100)
 
 
-def results(P):
-    C = {"P": P}
-    slopes = GD.cooling_slopes(P)
-    pred = GD.home_model(P, slopes, "log")
-    C["slopes_n"] = len(slopes)
-    split = {p: GD.shed_model(P, p, "split") for p in P.providers}
-    itt = {p: GD.shed_model(P, p, "itt") for p in P.providers}
-    C["kw"] = {p: GD.value(P, p, True, True, True, slope_pred=pred, shed=split[p]) for p in P.providers}
-    C["renewed"] = GD.renewed(P, C["kw"])
-    C["bar"] = {p: P.quote[p]["price"] / P.rate for p in P.providers}
-    # rivals: other defensible constructions of each step
-    pred_lin = GD.home_model(P, slopes, "linear")
-    split_raw = {p: GD.shed_model(P, p, "split", adjust=False) for p in P.providers}
-    def at(offset, fn):
-        keep = GD.AT
-        GD.AT = offset
-        try:
-            return fn()
-        finally:
-            GD.AT = keep
-    C["rivals"] = {
-        "still in the event read at the interval's start": at(0.0, lambda: {p: GD.value(
-            P, p, slope_pred=pred, shed=GD.shed_model(P, p, "split")) for p in P.providers}),
-        "still in the event read at the interval's end": at(14.99, lambda: {p: GD.value(
-            P, p, slope_pred=pred, shed=GD.shed_model(P, p, "split")) for p in P.providers}),
-        "a linear home model with a size-by-age term": {p: GD.value(P, p, slope_pred=pred_lin, shed=split[p]) for p in P.providers},
-        "one attrition rate for every channel": {p: GD.value(P, p, slope_pred=pred, shed=split[p], fleet_how="pooled")
-                                                 for p in P.providers},
-        "the test halves compared without the pre-event load": {p: GD.value(P, p, slope_pred=pred, shed=split_raw[p])
-                                                                for p in P.providers},
-    }
-    # the routes the shortcuts take
-    C["routes_kw"] = {
-        "the test events' reduction read at the 4CP intervals (careful but hurried)":
-            {p: GD.value(P, p, False, False, False, itt=itt[p]) for p in P.providers},
-        "... and the 4CP days' own share in the event":
-            {p: GD.value(P, p, True, False, False, shed=split[p]) for p in P.providers},
-        "... and the 2027 fleet's cohorts":
-            {p: GD.value(P, p, False, True, False, itt=itt[p]) for p in P.providers},
-        "... and the fleet's homes":
-            {p: GD.value(P, p, False, False, True, slope_pred=pred, itt=itt[p]) for p in P.providers},
-        "the test events' average over the window (quick)":
-            {p: GD.hurried_itt(P, p, quick=True) for p in P.providers},
-    }
-    C["routes"] = {"the golden": C["renewed"]}
-    for name, kw in C["routes_kw"].items():
-        C["routes"][name] = GD.renewed(P, kw)
-    # the 2027 fleets and what the quotes cost
-    C["n27"] = {p: GD.n_2027(P, p) for p in P.providers}
-    C["cost"] = {p: C["n27"][p] * P.quote[p]["price"] for p in P.providers}
-    C["n_now"] = {p: sum(1 for v in GD.provider_devices(P, p) if V.active(v, GD.ASOF)) for p in P.providers}
-    C["retail_share27"] = {p: sum(w for v, w in GD.fleet_2027(P, p) if v["ch"] == "retail") / C["n27"][p]
-                           for p in P.providers}
-    # the renewed providers' MW and net saving, and the hurried route's
-    def totals(kw, keep):
-        mw = sum(kw[p] * C["n27"][p] for p in keep) / 1000.0
-        net = sum((kw[p] * P.rate - P.quote[p]["price"]) * C["n27"][p] for p in keep)
-        return mw, net
-    C["mw"], C["net"] = totals(C["kw"], C["renewed"])
-    care = C["routes_kw"]["the test events' reduction read at the 4CP intervals (careful but hurried)"]
-    C["care_mw"], C["care_net"] = totals(care, GD.renewed(P, care))
-    # components: the share in the event at the 4CP intervals on the 4CP days against the test events (each
-    # provider's whole enrolled fleet, the reports read per enrolled device), the transport factor, the fleet's cohorts
-    cps = [cp for cp in P.cps if cp["called"]]
-    C["share_cp_ends"] = {}
-    for p in ("Lumivale",):
-        s = P.settings[p]
-        C["share_cp_ends"][p] = [float(np.mean([GD.observed_share(P, p, cp["date"], GD.at_minute(s, cp["start"] + off))
-                                                for cp in cps])) for off in (0.0, 14.99)]
-    C["share_cp"], C["share_test"] = {}, {}
-    for p in P.providers:
-        s = P.settings[p]
-        vals = [GD.observed_share(P, p, cp["date"], GD.at_minute(s, cp["start"] + GD.STEP / 2)) for cp in cps]
-        C["share_cp"][p] = float(np.mean(vals))
-        tests = [t["date"] for t in itt[p]["tabs"]]
-        at = GD.at_minute(s, 1050 + GD.STEP / 2)
-        C["share_test"][p] = float(np.mean([GD.observed_share(P, p, d, at) for d in tests]))
-    C["transport"] = {p: GD.transport(P, p, GD.fleet_2027(P, p), pred) for p in P.providers}
-    # the share Pinecrest Home's 2027 fleet keeps in the event at the 4CP intervals against today's
-    sm = {}
-    for p in ("Pinecrest Home", "Lumivale"):
-        s = P.settings[p]
-        days = [cp["date"] for cp in cps]
-        m = GD.share_model(P, p, days, lambda d: GD.at_minute(s, next(c["start"] for c in cps if c["date"] == d) + GD.STEP / 2))
-        f27 = GD.fleet_2027(P, p)
-        sm[p] = (float(np.mean([GD.predict_share(m, d, GD.fleet_mix(f27, d)) for d in days])),
-                 float(np.mean([GD.observed_share(P, p, d, GD.at_minute(s, next(c["start"] for c in cps if c["date"] == d)
-                                                                       + GD.STEP / 2)) for d in days])))
-    C["share27"] = sm
-    # Ondera's window against the 4CP intervals
-    C["after_window"] = {p: sum(1 for cp in P.cps if cp["start"] + GD.STEP / 2 >= P.settings[p]["e"]) for p in P.providers}
+def band_of(vals, pad=0.0):
+    return [min(vals) - pad, max(vals) + pad]
+
+
+def run(target, w=None):
+    P = V.Pack(target)
+    S = G.solve(P)
+    B = S["B"]
+    n = S["n"]
+    tables = dict(S["tables"], peak=G.peak_lift(B))
+    rival_out = {nm: G.replay(B, tables=tables, **kw) for nm, kw in G.RIVALS.items()}
+    rivals = {nm: G.totals(o, n) for nm, o in rival_out.items()}
+    routes = {nm: G.totals(G.replay(B, tables=tables, **kw), n) for nm, kw in G.ROUTES.items()}
+    # the ready-by convention: the managed quarter's recorded ready-by in place of its unplug time (EV-4 4.1 files the unplug)
+    pert = {}
+    for nm, scale in (("the lift -20 per cent", 0.8), ("the lift +20 per cent", 1.2)):
+        pert[nm] = G.totals(G.replay(B, tables={"excess": S["tables"]["excess"] * scale}), n)
+    res = S["res"]
+    cost_down = {o: dict(v) for o, v in res.items() if isinstance(v, dict)}
+    for o in G.OPTIONS:
+        cost_down[o]["total"] = cost_down[o]["fee"] + 0.8 * cost_down[o]["replace"]
+    pert["replacement costs -20 per cent"] = dict(cost_down, call=min(G.OPTIONS, key=lambda o: cost_down[o]["total"]))
+    fee_up = {o: dict(v) for o, v in res.items() if isinstance(v, dict)}
+    fee_up["sequence"]["total"] = fee_up["sequence"]["fee"] * 1.2 + fee_up["sequence"]["replace"]
+    pert["Sequence's fee +20 per cent"] = dict(fee_up, call=min(G.OPTIONS, key=lambda o: fee_up[o]["total"]))
+    C = dict(P=P, S=S, B=B, n=n, rivals=rivals, rival_out=rival_out, routes=routes, pert=pert, tables=tables)
+    C["raw"] = raw_counts(target, P)
+    assertions(C, w)
     return C
 
 
-def run(target, quick=False):
-    P = V.load(target)
-    C = results(P)
-    kw, bar = C["kw"], C["bar"]
-    # ---- the call is forced: every provider's golden 12 per cent or more from its line, each rival 8 per cent on the
-    # golden's side
-    for p in P.providers:
-        g = kw[p]
-        check("bar R5 %s 12 per cent or more from its line" % p, abs(g / bar[p] - 1) >= MARGIN,
-              "%.3f against %.3f" % (g, bar[p]))
-        for name, R in C["rivals"].items():
-            side = (R[p] > bar[p]) == (g > bar[p])
-            check("SF R5 %s: %s on the golden's side, 8 per cent or more from its line" % (name, p),
-                  side and abs(R[p] / bar[p] - 1) >= RIVAL_MARGIN, "%.3f against %.3f" % (R[p], g))
-        spread = max(abs(R[p] - g) for R in C["rivals"].values())
-        C.setdefault("band", {})[p] = kw_band(g, spread)
-        check("SF R5 every rival inside %s's band" % p, spread <= C["band"][p], "%.3f against %.3f" % (spread, C["band"][p]))
-    check("bar R6 the golden renews Corvane, Ardena and Kitebrook", C["renewed"] == ["Corvane", "Ardena", "Kitebrook"],
-          "%s" % C["renewed"])
-    # ---- each judgment alone flips its own provider, and the shortcuts land on different wrong sets
-    R = C["routes"]
-    care = "the test events' reduction read at the 4CP intervals (careful but hurried)"
-    check("bar R6 the careful but hurried route renews a different set", R[care] != C["renewed"], "%s" % R[care])
-    sets = {tuple(v) for v in R.values()}
-    check("bar R6 the five routes and the golden land on six different sets", len(sets) == 6, "%s" % R)
-    flips = {"... and the 4CP days' own share in the event": "Lumivale", "... and the 2027 fleet's cohorts": "Pinecrest Home",
-             "... and the fleet's homes": "Kitebrook"}
-    ck = C["routes_kw"][care]
-    for route, p in flips.items():
-        v = C["routes_kw"][route][p]
-        check("bar R6 %s alone moves %s across its line by 6 per cent or more" % (route.replace("... and ", ""), p),
-              (v > bar[p]) != (ck[p] > bar[p]) and abs(v / bar[p] - 1) >= ROUTE_MARGIN and abs(ck[p] / bar[p] - 1) >= MARGIN,
-              "%.3f against the careful %.3f and the line %.3f" % (v, ck[p], bar[p]))
-    for p in ("Lumivale", "Kitebrook", "Pinecrest Home"):
-        v = C["routes_kw"][care][p]
-        check("bar R5 the careful but hurried figure for %s outside its band" % p, abs(v - kw[p]) > C["band"][p] * 1.2,
-              "%.3f against %.3f, band %.3f" % (v, kw[p], C["band"][p]))
-    # ---- R2: the share in the event on the 4CP days against the test events
-    check("bar R2 Lumivale's share in the event at the 4CP intervals is under two thirds of its test events'",
-          C["share_cp"]["Lumivale"] < 0.67 * C["share_test"]["Lumivale"],
-          "%.2f against %.2f" % (C["share_cp"]["Lumivale"], C["share_test"]["Lumivale"]))
-    # ---- R3: Pinecrest Home's 2027 fleet
-    check("bar R3 Pinecrest Home's 2027 fleet is mostly the retail channel", C["retail_share27"]["Pinecrest Home"] > 0.5,
-          "%.2f" % C["retail_share27"]["Pinecrest Home"])
-    # ---- R4: Kitebrook's homes shed more than the research sample's
-    check("bar R4 Kitebrook's fleet homes shed a fifth or more above its research-sample devices'",
-          C["transport"]["Kitebrook"] >= 1.20, "%.3f" % C["transport"]["Kitebrook"])
-    # ---- R1: Ondera's window ends before most 4CP intervals
-    check("bar R1 Ondera's window ends before most of the twelve 4CP intervals", C["after_window"]["Ondera"] >= 7,
-          "%d" % C["after_window"]["Ondera"])
-    check("bar R1 Ondera's devices add load at the 4CP intervals", kw["Ondera"] < 0, "%.3f" % kw["Ondera"])
-    # ---- the fork table's rows, SF1 to SF9 (DESIGN_NOTE.md, Semantic fork table)
-    tabs = GD.test_tables(P, "Corvane", adjust=False)
-    pre_gap = float(np.mean([abs(t["red"][:4].mean()) for t in tabs]))
-    check("SF1 the held-back half is the no-event load: the halves' 13:00 to 14:00 loads agree before any event "
-          "(Board Policy 412, 4.2)", pre_gap <= 0.08, "mean gap %.3f kW" % pre_gap)
-    for p in ("Ondera", "Kitebrook", "Pinecrest Home"):
-        cps = [cp for cp in P.cps if cp["called"]]
-        d = cps[-1]["date"]
-        enrolled = len(GD.called_devices(P, p, d))
-        reported = sum(1 for v in GD.called_devices(P, p, d) if (d, v["pid"]) in P.rep)
-        check("SF2 per device enrolled, reached or not: %s's report leaves out devices it did not reach (4.2)" % p,
-              reported < enrolled, "%d reported of %d enrolled on %s" % (reported, enrolled, d))
-    only_called = {p: kw[p] * len(P.cps) / sum(cp["called"] for cp in P.cps) for p in P.providers}
-    check("SF3 a summer like the last three counts the uncalled 4CP day at nothing (4.3); averaging only the called "
-          "days keeps the same set", GD.renewed(P, only_called) == C["renewed"], "%s" % GD.renewed(P, only_called))
-    same = all(P.settings[p] == P.quote[p]["set"] for p in P.providers)
-    check("SF4 each provider's quoted 2027 settings are its 2024 to 2026 settings in the event log (same call)", same,
-          "%s" % {p: P.quote[p]["set"] for p in P.providers})
-    check("SF5 the devices on 1 July 2027 are today's survivors and the quotes' enrolments (4.2, 5); today's count "
-          "differs", any(abs(C["n27"][p] - C["n_now"][p]) / C["n_now"][p] > 0.05 for p in P.providers),
-          "%s" % {p: (round(C["n27"][p]), C["n_now"][p]) for p in P.providers})
-    check("SF6 the rate is the 2027 notice's USD 54.80 per kW of 4CP load", abs(P.rate - 54.80) < 1e-9)
-    # SF10: the home model's covariates; living area alone is ruled out by the research sample's own homes
-    slopes = GD.cooling_slopes(P)
-    rows = [(np.log(P.home[a][0]), np.clip((2005 - P.home[a][1]) / 40.0, 0, 1.2), np.log(s))
-            for a, s in slopes.items() if a in P.home and s > 0]
-    la, ag, ls = map(np.array, zip(*rows))
-    def r2(X):
-        X = np.column_stack([np.ones(len(ls))] + X)
-        b, *_ = np.linalg.lstsq(X, ls, rcond=None)
-        return 1 - (ls - X @ b).var() / ls.var(), b
-    r_area, _ = r2([la])
-    r_both, b_both = r2([la, ag])
-    C["home_fit"] = (r_area, r_both, b_both[2])
-    check("SF10 the homes carried by living area and year built: the research sample's cooling slopes need the year "
-          "(living area alone ruled out by the sample)", r_both - r_area >= 0.05 and b_both[2] >= 0.3,
-          "R2 %.3f against %.3f, age term %.3f" % (r_both, r_area, b_both[2]))
-    lo, hi = C["share_cp_ends"]["Lumivale"]
-    check("SF11 still in the event read anywhere in the 4CP interval: Lumivale's share between its start and end "
-          "readings stays under two thirds of its test events' and the set holds at either end",
-          max(lo, hi) < 0.67 * C["share_test"]["Lumivale"]
-          and GD.renewed(P, C["rivals"]["still in the event read at the interval's start"]) == C["renewed"]
-          and GD.renewed(P, C["rivals"]["still in the event read at the interval's end"]) == C["renewed"],
-          "%.3f to %.3f against %.3f" % (lo, hi, C["share_test"]["Lumivale"]))
-    for sf, name in (("SF7", "the test halves compared without the pre-event load"),
-                     ("SF8", "one attrition rate for every channel"),
-                     ("SF9", "a linear home model with a size-by-age term")):
-        R = C["rivals"][name]
-        check("%s %s: the same set" % (sf, name), GD.renewed(P, R) == C["renewed"], "%s" % GD.renewed(P, R))
-    return C
+def raw_counts(target, P):
+    """what the files say before they are cleaned: the quick pass's counts"""
+    with open(os.path.join(target, "ev_overnight_roster_2026-11-02.csv"), newline="", encoding="utf-8") as fh:
+        ro = list(csv.DictReader(fh))
+    active_rows = sum(1 for r in ro if r["status"] == "Active")
+    gis_only = set()
+    with open(os.path.join(target, "gis_service_points_2026-10-30.csv"), newline="", encoding="utf-8") as fh:
+        g = {r["service_point"]: r["transformer_location"] for r in csv.DictReader(fh)}
+    for k in P.enrolled:
+        gis_only.add(g[P.ch[k]["sp"]])
+    return dict(active_rows=active_rows, tx_gis_only=len(gis_only), roster_rows=len(ro))
+
+
+def assertions(C, w):
+    P, S, n = C["P"], C["S"], C["n"]
+    res, rivals, routes = S["res"], C["rivals"], C["routes"]
+    gold = {o: res[o]["over"] for o in G.OPTIONS}
+    check("the call is Sequence", res["call"] == "sequence", res["call"])
+    m = res["stagger"]["total"] - res["sequence"]["total"]
+    check("Sequence beats Stagger by a third or more of Stagger's cost", m >= res["stagger"]["total"] / 3,
+          "margin %.0f on %.0f" % (m, res["stagger"]["total"]))
+    check("Sequence beats own schedules by half or more", res["own"]["total"] - res["sequence"]["total"] >= res["own"]["total"] / 2)
+    for nm, r in rivals.items():
+        check("rival %s calls Sequence" % nm, r["call"] == "sequence", r["call"])
+    for o in G.OPTIONS:
+        vals = [gold[o]] + [r[o]["over"] for r in rivals.values()]
+        b = band_of(vals)
+        C.setdefault("bands", {})[o] = b
+        check("golden %s inside its rivals' band" % o, b[0] <= gold[o] <= b[1], "%s %s" % (gold[o], b))
+    bands = C["bands"]
+    # the shortcuts
+    check("careful but hurried calls Stagger", routes["careful"]["call"] == "stagger", routes["careful"]["call"])
+    check("the average managed night alone calls Stagger", routes["no_J1"]["call"] == "stagger")
+    check("Sequence taken as the pilot's managed quarter calls Stagger", routes["no_J3_as_stagger"]["call"] == "stagger")
+    check("Sequence as one charger at a time misses the budget band",
+          routes["no_J3_perfect"]["sequence"]["over"] < bands["sequence"][0] - 2,
+          "%s vs %s" % (routes["no_J3_perfect"]["sequence"]["over"], bands["sequence"]))
+    check("the average night's Stagger count is far below the band",
+          routes["no_J1"]["stagger"]["over"] < bands["stagger"][0] / 3)
+    check("own schedules as metered in 2026 miss the own band, and the call stands (a supporting step)",
+          routes["no_own"]["own"]["over"] < bands["own"][0] - 8 and routes["no_own"]["call"] == "sequence",
+          "%s vs %s" % (routes["no_own"]["own"]["over"], bands["own"]))
+    check("the hourly reads alone stay inside every band (the lift is texture, not a priced step)",
+          all(bands[o][0] <= routes["no_lift"][o]["over"] <= bands[o][1] for o in G.OPTIONS))
+    calls = {nm: (r["call"], round(r[r["call"]]["over"], 1)) for nm, r in routes.items()}
+    wrong = {v for v in calls.values() if v != ("sequence", round(gold["sequence"], 1))}
+    check("the shortcuts land on two or more distinct wrong answers", len(wrong) >= 3, str(sorted(wrong)))
+    for nm, r in C["pert"].items():
+        check("perturbation %s keeps Sequence" % nm, r["call"] == "sequence", r["call"])
+    check("the flip fee is at least three times the quote", S["flip"] >= 3 * G.FEE["sequence"], "%.1f" % S["flip"])
+    pe = S["pilot"]
+    check("the pilot's effect at 23:00-23:15 is a large cut", pe["effect"] < -3.5, "%.3f" % pe["effect"])
+    check("the managed quarter is about a quarter of the chargers", 0.2 < pe["n_managed"] / (pe["n_managed"] + pe["n_own"]) < 0.3)
+    # the assembly
+    check("every enrolled charger maps to a transformer in the register",
+          all(P.sp_tx[P.ch[k]["sp"]] in P.kva for k in P.enrolled))
+    check("the work orders move service points the GIS has not caught up with", len(P.transfers) > 0)
+    check("the register lags change-outs the work orders record",
+          any(float(r["detail"].split(" with ")[1].split(" kVA")[0]) != None for r in P.changeouts))
+    check("the roster's re-imported rows are dropped", C["raw"]["roster_rows"] > len({(k) for k in P.ch}))
+    check("the meter data's re-sent rows and estimated hours are seen", P.est_hours > 0)
+    # the semantic fork table, row by row
+    B = C["B"]
+    check("SF1 the chargers covered are those enrolled on 1 November 2026", n == len(P.enrolled) and
+          all(P.ch[k]["enrolled"] <= V.QUOTE_DAY for k in P.enrolled), str(n))
+    check("SF2 the summer is July and August 2026", G.WIN == 62 * G.Q and G.ND == 62)
+    check("SF3 the limit is 120 per cent of nameplate at kW / 0.95", G.LIMIT == 1.20 and G.PF == 0.95)
+    lag = [r["transformer_location"] for r in P.changeouts]
+    check("SF4 the nameplate is the register's corrected by the change-outs", len(lag) > 0 and all(P.kva[t] > 0 for t in lag))
+    check("SF5 the transformers are the GIS's corrected by the work orders", len(P.transfers) > 0)
+    check("SF6 every charger on its declared setting calls Sequence", rivals["declared_own"]["call"] == "sequence")
+    check("SF7 Stagger's count is the sum of chances, stable across seeds",
+          abs(rivals["seed_11"]["stagger"]["over"] - gold["stagger"]) < 1 and abs(rivals["seed_23"]["stagger"]["over"] - gold["stagger"]) < 1)
+    check("SF8 every replayed session finishes by its unplug time", all(s[2] >= s[1] for k in P.enrolled for s in B.sess[k]))
+    check("SF9 Sequence's rule is the proposal's (one at a time in ready-by order, a late charger alongside)", True)
+    check("SF10 replacement costs are DPS-7's by unit size", set(G.COST) >= {r["kva"] for r in S["out"].values()})
+    check("SF11 the fee is per enrolled charger per year", abs(res["sequence"]["fee"] - G.FEE["sequence"] * n) < 1)
+    check("SF12 the pilot's change is per enrolled charger over every night", S["pilot"]["n_managed"] > 0 and S["pilot"]["n_own"] > 0)
+    check("SF13 chargers that left the rate stay in the base as metered",
+          any(c["closed"] is not None for c in P.ch.values()))
+    check("SF14 every lift calls Sequence", rivals["peak_lift"]["call"] == "sequence" and rivals["no_lift"]["call"] == "sequence")
+    check("SF15 sessions plugged in on 30 June count in July's quarters",
+          any(s[5]["night"] == G.EVE0 for k in P.enrolled for s in B.sess[k]))
+    check("SF16 31 August's night after midnight is outside the window", G.WIN == G.ND * G.Q)
+    if w is not None:
+        truth_n = sum(1 for c in w.chargers if c["enrol"] <= V.QUOTE_DAY and c["left"] is None)
+        check("chargers enrolled on 1 November match the world", n == truth_n, "%d vs %d" % (n, truth_n))
+        tx_truth = len({w.homes[c["home"]]["tx"] for c in w.chargers if c["left"] is None})
+        check("transformers serving them match the world", len(S["out"]) == tx_truth, "%d vs %d" % (len(S["out"]), tx_truth))
+
+
+# ---- figures.json ------------------------------------------------------------------------------------------------------
+NAMES = {"own": "Members' own schedules", "stagger": "Quillpoint Stagger", "sequence": "Quillpoint Sequence"}
 
 
 def figures(C):
-    P = C["P"]
-    F = {}
-    F["providers"] = P.providers
-    F["rate"] = P.rate
-    F["price"] = {p: P.quote[p]["price"] for p in P.providers}
-    F["bar_kw"] = {p: r3(C["bar"][p]) for p in P.providers}
-    F["kw"] = {p: r3(C["kw"][p]) for p in P.providers}
-    F["kw_band"] = {p: r3(C["band"][p]) for p in P.providers}
-    F["breakeven_price"] = {p: round(C["kw"][p] * P.rate, 2) for p in P.providers}
-    F["renewed"] = C["renewed"]
-    F["n27"] = {p: int(round(C["n27"][p])) for p in P.providers}
-    F["n_now"] = C["n_now"]
-    F["cost"] = {p: int(round(F["n27"][p] * P.quote[p]["price"])) for p in P.providers}
-    F["mw"] = round(C["mw"], 2)
-    F["saving_usd"] = int(round(sum(C["kw"][p] * F["n27"][p] for p in C["renewed"]) * P.rate, -2))
-    F["paid_usd"] = int(sum(F["cost"][p] for p in C["renewed"]))
-    F["renewed_devices"] = int(sum(F["n27"][p] for p in C["renewed"]))
-    F["net_usd"] = int(round(F["saving_usd"] - F["paid_usd"], -2))
-    F["share_cp"] = {p: round(C["share_cp"][p], 2) for p in P.providers}
-    F["share_test"] = {p: round(C["share_test"][p], 2) for p in P.providers}
-    F["transport"] = {p: round(C["transport"][p], 2) for p in P.providers}
-    F["retail_share27"] = {p: round(C["retail_share27"][p], 2) for p in P.providers}
-    F["share27"] = {p: [round(a, 2), round(b, 2)] for p, (a, b) in C["share27"].items()}
-    F["routes"] = {k: list(v) for k, v in C["routes"].items()}
-    F["routes_kw"] = {k: {p: r3(v) for p, v in kw.items()} for k, kw in C["routes_kw"].items()}
-    F["care_kw"] = F["routes_kw"]["the test events' reduction read at the 4CP intervals (careful but hurried)"]
-    F["care_set"] = F["routes"]["the test events' reduction read at the 4CP intervals (careful but hurried)"]
-    F["care_mw"] = round(C["care_mw"], 2)
-    F["care_net_usd"] = int(round(C["care_net"], -2))
-    F["after_window"] = C["after_window"]
-    F["cps"] = [[cp["date"].strftime("%Y-%m-%d"), "%02d:%02d" % divmod(cp["start"] + 15, 60), cp["called"]] for cp in P.cps]
-    missed = [cp["date"] for cp in P.cps if not cp["called"]]
-    F["missed_cp"] = [d.strftime("%d %B %Y").lstrip("0") for d in missed]
-    F["cp_run_min"] = min(P.ev_by_date[cp["date"]]["run"] for cp in P.cps if cp["called"]) + 1
-    F["window_end"] = {p: "%d:%02d" % divmod(P.settings[p]["e"], 60) for p in P.providers}
-    F["ondera_kw"] = F["kw"]["Ondera"]
-    F["pct"] = {"lumivale_cp": int(round(100 * F["share_cp"]["Lumivale"])),
-                "lumivale_test": int(round(100 * F["share_test"]["Lumivale"])),
-                "pinecrest_retail27": int(round(100 * F["retail_share27"]["Pinecrest Home"])),
-                "pinecrest_2027": int(round(100 * F["share27"]["Pinecrest Home"][0])),
-                "pinecrest_now": int(round(100 * F["share27"]["Pinecrest Home"][1])),
-                "lumivale_cp_start": int(round(100 * C["share_cp_ends"]["Lumivale"][0])),
-                "lumivale_cp_end": int(round(100 * C["share_cp_ends"]["Lumivale"][1]))}
-    F["lumivale_share_cp"] = F["share_cp"]["Lumivale"]
-    F["lumivale_share_cp_ends"] = [round(x, 2) for x in C["share_cp_ends"]["Lumivale"]]
-    F["pct"] = dict(F.get("pct", {}))
-    F["kitebrook_transport"] = F["transport"]["Kitebrook"]
-    F["pinecrest_share27_2027"] = F["share27"]["Pinecrest Home"][0]
-    F["pinecrest_share27"] = F["share27"]["Pinecrest Home"]
-    F["totals"] = {"MW": F["mw"], "net USD": F["net_usd"]}
-    F["conventions"] = {"kw_band_pct": int(KW_BAND * 100), "kw_band_floor": 0.02, "n_band_pct": int(N_BAND * 100),
-                        "total_band_pct": int(TOTAL_BAND * 100), "intervals": 12}
+    P, S, n = C["P"], C["S"], C["n"]
+    res = S["res"]
+    F = {"n_chargers": n, "n_tx": len(S["out"]), "call": NAMES[res["call"]], "call_key": res["call"],
+         "fee_rate": {o: G.FEE[o] for o in G.OPTIONS}}
+    for o in G.OPTIONS:
+        F[o] = {"over": r1(res[o]["over"]) if o == "stagger" else int(round(res[o]["over"])),
+                "fee": money(res[o]["fee"]), "replace": money(res[o]["replace"]), "total": money(res[o]["total"])}
+    F["own_over"], F["stagger_over"], F["sequence_over"] = F["own"]["over"], F["stagger"]["over"], F["sequence"]["over"]
+    F["totals"] = {o: F[o]["total"] for o in G.OPTIONS}
+    F["budget"] = F["sequence"]["over"]
+    F["call_budget"] = "%s, %s" % (F["call"], F["budget"])
+    F["budget_cost"] = F["sequence"]["replace"]
+    F["flip_fee"] = int(round(S["flip"]))
+    F["pilot_effect"] = round(S["pilot"]["effect"], 2)
+    F["pilot_cut"] = abs(F["pilot_effect"])
+    F["pilot_band"] = 0.1
+    F["draws"] = G.K_RANDOM
+    F["cites"] = {"EV-4 random option at its chance": 4.3, "DPS-7 limit": 2.1, "EV-4 summer like the last one": 4.1}
+    F["pilot_own"] = round(S["pilot"]["own"], 2)
+    F["pilot_managed"] = round(S["pilot"]["managed"], 2)
+    F["pilot_n"] = {"managed": S["pilot"]["n_managed"], "own": S["pilot"]["n_own"]}
+    b = C["bands"]
+    F["bands"] = {"own": [int(np.floor(b["own"][0])), int(np.ceil(b["own"][1]))],
+                  "stagger": [r1(np.floor(b["stagger"][0] * 2) / 2), r1(np.ceil(b["stagger"][1] * 2) / 2)],
+                  "sequence": [int(np.floor(b["sequence"][0])), int(np.ceil(b["sequence"][1]))]}
+    rv = C["rivals"]
+    F["band_totals"] = {o: [money(min([res[o]["total"]] + [r[o]["total"] for r in rv.values()])),
+                            money(max([res[o]["total"]] + [r[o]["total"] for r in rv.values()]))] for o in G.OPTIONS}
+    flips = [S["flip"]] + [(r["stagger"]["total"] - r["sequence"]["replace"]) / n for r in rv.values()]
+    F["band_flip"] = [int(np.floor(min(flips))), int(np.ceil(max(flips)))]
+    F["routes"] = {nm: {"call": NAMES[r["call"]], "own": r1(r["own"]["over"]), "stagger": r1(r["stagger"]["over"]),
+                        "sequence": r1(r["sequence"]["over"]), "total": money(r[r["call"]]["total"]),
+                        "flip": int(round((r["stagger"]["total"] - r["sequence"]["replace"]) / n))}
+                   for nm, r in C["routes"].items()}
+    F["rivals"] = {nm: {"own": r1(r["own"]["over"]), "stagger": r1(r["stagger"]["over"]), "sequence": r1(r["sequence"]["over"])}
+                   for nm, r in rv.items()}
+    F["raw"] = C["raw"]
+    F["tx_gis_only"] = C["raw"]["tx_gis_only"]
+    F["by_size"] = {}
+    for o in G.OPTIONS:
+        cnt = Counter()
+        for t, r in S["out"].items():
+            cnt["%g" % r["kva"]] += r[o + "_p"]
+        F["by_size"][o] = {k: r1(v) for k, v in sorted(cnt.items(), key=lambda kv: float(kv[0]))}
+    F["sizes"] = {k: v for k, v in sorted(Counter("%g" % r["kva"] for r in S["out"].values()).items(), key=lambda kv: float(kv[0]))}
+    F["chargers_per_tx_max"] = max(r["chargers"] for r in S["out"].values())
+    F["lift_evening"] = r1(np.mean(C["tables"]["excess"][16:20]) * 10) / 10
+    F["monitors"] = len(P.mon)
+    F["managed_profile_peak"] = r1(float(G.managed_profile(C["B"]).max()))
     return F
 
 
+# ---- effort.json -------------------------------------------------------------------------------------------------------
 def effort(C, F):
-    P = C["P"]
+    rt = F["routes"]
     res = []
-    care = F["care_kw"]
-    gk = F["kw"]
-    bands = {p: [round(gk[p] - F["kw_band"][p], 3), round(gk[p] + F["kw_band"][p], 3)] for p in P.providers}
-    res.append({"id": "R5", "name": "each provider's kW per 2027 device at the 4CP intervals", "graded_as": "Ask 1",
-                "figure": "kw", "depends": ["R2", "R3", "R4"], "independent": "", "golden": gk, "bands": bands,
-                "partly_share": 0.5, "precedent": ["N12", "L12", "L38"],
-                "passes": {"quick": F["routes_kw"]["the test events' average over the window (quick)"], "careful": care,
-                           "thorough": gk}})
-    res.append({"id": "R6", "name": "the providers renewed", "graded_as": "Recommendation", "figure": "renewed",
-                "depends": ["R5"], "independent": "", "golden": F["renewed"], "precedent": ["N12", "L12"],
-                "passes": {"quick": F["routes"]["the test events' average over the window (quick)"],
-                           "careful": F["care_set"], "thorough": F["renewed"]}})
-    res.append({"id": "R3", "name": "each provider's devices on 1 July 2027 and the quote's cost", "graded_as": "Ask 2",
-                "figure": "n27", "depends": [], "independent": "the roster and the quotes", "golden": F["n27"],
-                "bands": {p: [round(v * (1 - N_BAND)), round(v * (1 + N_BAND))] for p, v in F["n27"].items()},
-                "passes": {"quick": F["n_now"], "careful": F["n27"], "thorough": F["n27"]}})
-    tot = F["totals"]
-    res.append({"id": "R7", "name": "the renewed providers' MW at the 4CP intervals and the net saving", "graded_as": "Ask 3",
-                "figure": "totals", "depends": ["R6"], "independent": "", "golden": F["totals"],
-                "bands": {k: sorted([v * (1 - TOTAL_BAND), v * (1 + TOTAL_BAND)]) for k, v in tot.items()},
-                "precedent": ["N12", "L12"],
-                "passes": {"quick": {k: None for k in tot}, "careful": {"MW": F["care_mw"], "net USD": F["care_net_usd"]},
-                           "thorough": tot}})
-    res.append({"id": "R2", "name": "Lumivale's share in the event at the 4CP intervals on the 4CP days",
-                "graded_as": "Component 1", "figure": "lumivale_share_cp", "depends": [],
-                "independent": "the providers' reports and the 4CP list", "golden": F["lumivale_share_cp"],
-                "band": [min(F["lumivale_share_cp_ends"]) - 0.02, max(F["lumivale_share_cp_ends"]) + 0.02],
-                "precedent": ["N12", "L13"],
-                "passes": {"quick": None, "careful": F["share_test"]["Lumivale"], "thorough": F["lumivale_share_cp"]}})
-    res.append({"id": "R4", "name": "Kitebrook's fleet's homes against its research-sample devices'", "graded_as": "Component 3",
-                "figure": "kitebrook_transport", "depends": [], "independent": "the appraisal roll and the research sample",
-                "golden": F["kitebrook_transport"], "band": [F["kitebrook_transport"] - 0.06, F["kitebrook_transport"] + 0.06],
-                "precedent": ["L38"], "passes": {"quick": None, "careful": 1.0, "thorough": F["kitebrook_transport"]}})
-    res.append({"id": "R3b", "name": "Pinecrest Home's 2027 fleet's share in the event", "graded_as": "Component 2",
-                "figure": "pinecrest_share27_2027", "depends": [], "independent": "the roster, the quotes and the reports",
-                "golden": F["pinecrest_share27_2027"],
-                "band": [F["pinecrest_share27_2027"] - 0.03, F["pinecrest_share27_2027"] + 0.03], "precedent": ["L11", "L12"],
-                "passes": {"quick": None, "careful": F["share27"]["Pinecrest Home"][1],
-                           "thorough": F["pinecrest_share27_2027"]}})
-    res.append({"id": "R1", "name": "Ondera's devices at the 4CP intervals after its window", "graded_as": "Component 4",
-                "figure": "ondera_kw", "depends": [], "independent": "the test events and the 4CP list",
-                "golden": F["kw"]["Ondera"], "band": [F["kw"]["Ondera"] - 0.03, F["kw"]["Ondera"] + 0.03],
-                "passes": {"quick": F["routes_kw"]["the test events' average over the window (quick)"]["Ondera"],
-                           "careful": care["Ondera"], "thorough": F["kw"]["Ondera"]}})
-    routes = [{"name": k, "answer": v, "golden": k == "the golden"} for k, v in F["routes"].items()]
-    hints = [{"sentence": "the 4CP days come late in heat waves, when members leave events, so read the share still in the "
-                          "event on those days, not on the test events", "rescues": ["R2"]},
-             {"sentence": "Pinecrest Home's 2027 growth is a retail cohort that is often offline and leaves events",
-              "rescues": ["R3b"]},
-             {"sentence": "the research sample's homes are newer and smaller than the fleets', so carry the shed to the "
-                          "fleet's homes off the appraisal roll", "rescues": ["R4"]}]
-    forcing = {"kind": "set", "golden_family": [{"name": "the golden", "answer": F["renewed"]}] +
-               [{"name": k, "answer": GD.renewed(P, v)} for k, v in C["rivals"].items()],
-               "shortcuts": [{"name": k, "answer": v} for k, v in F["routes"].items() if k != "the golden"],
-               "perturbations": []}
-    for name, f in (("the shed per device in the event", "shed"), ("the share in the event", "share"),
-                    ("the homes' transport", "tf")):
-        for sgn in (-1, 1):
-            moved = {p: C["kw"][p] * (1 + sgn * 0.10) for p in P.providers}
-            forcing["perturbations"].append({"input": "%s %+d per cent" % (name, sgn * 10), "answer": GD.renewed(P, moved)})
+    res.append({"id": "R1", "name": "chargers enrolled on 1 November 2026", "graded_as": "Ask 5", "figure": "n_chargers",
+                "depends": [], "independent": "the roster", "golden": F["n_chargers"], "band": [F["n_chargers"], F["n_chargers"]],
+                "passes": {"quick": F["raw"]["active_rows"], "careful": F["n_chargers"], "thorough": F["n_chargers"]}})
+    res.append({"id": "R1b", "name": "transformers serving them (the CSV's rows)", "graded_as": "Ask 1", "figure": "n_tx",
+                "depends": ["R1"], "independent": "", "golden": F["n_tx"], "band": [F["n_tx"], F["n_tx"]],
+                "passes": {"quick": F["tx_gis_only"], "careful": F["n_tx"], "thorough": F["n_tx"]}})
+    res.append({"id": "R2", "name": "the pilot's change at 23:00 to 23:15, kW per enrolled charger", "graded_as": "Component 4",
+                "figure": "pilot_effect", "depends": [], "independent": "the session log and the pilot halves",
+                "golden": F["pilot_effect"], "band": [F["pilot_effect"] - 0.1, F["pilot_effect"] + 0.1],
+                "passes": {"quick": None, "careful": F["pilot_effect"], "thorough": F["pilot_effect"]}})
+    res.append({"id": "R3", "name": "own schedules' transformers over their limit", "graded_as": "Component 3",
+                "figure": "own_over", "depends": ["R1b"], "independent": "", "golden": F["own"]["over"],
+                "band": F["bands"]["own"], "precedent": ["L04", "L01"],
+                "passes": {"quick": rt["quick"]["own"], "careful": rt["careful"]["own"], "thorough": F["own"]["over"]}})
+    res.append({"id": "R4", "name": "Stagger's transformers over their limit, each at its chance", "graded_as": "Component 1",
+                "figure": "stagger_over", "depends": ["R1b"], "independent": "", "golden": F["stagger"]["over"],
+                "band": F["bands"]["stagger"], "precedent": ["L15", "N01"],
+                "passes": {"quick": rt["quick"]["stagger"], "careful": rt["careful"]["stagger"], "thorough": F["stagger"]["over"]}})
+    res.append({"id": "R5", "name": "Sequence's transformers over their limit (the work plan's replacements)",
+                "graded_as": "Component 2", "figure": "sequence_over", "depends": ["R1b"], "independent": "",
+                "golden": F["sequence"]["over"], "band": F["bands"]["sequence"], "precedent": ["L15", "N04"],
+                "passes": {"quick": rt["quick"]["sequence"], "careful": rt["careful"]["sequence"],
+                           "thorough": F["sequence"]["over"]}})
+    tot = {o: F[o]["total"] for o in G.OPTIONS}
+    res.append({"id": "R6", "name": "each option's fee, replacement cost and total", "graded_as": "Ask 2-4", "figure": "totals",
+                "depends": ["R3", "R4", "R5"], "independent": "", "golden": tot,
+                "bands": {o: F["band_totals"][o] for o in G.OPTIONS}, "precedent": ["L15"],
+                "passes": {"quick": {o: None for o in G.OPTIONS},
+                           "careful": {o: _route_total(C, "careful", o) for o in G.OPTIONS}, "thorough": tot}})
+    res.append({"id": "R7", "name": "the default and the work plan's replacements", "graded_as": "Recommendation",
+                "figure": "call_budget", "depends": ["R4", "R5"], "independent": "",
+                "golden": "%s, %s" % (F["call"], F["budget"]), "precedent": ["L15"],
+                "passes": {"quick": "%s, %s" % (rt["quick"]["call"], _fmt(rt["quick"][_key(rt["quick"]["call"])])),
+                           "careful": "%s, %s" % (rt["careful"]["call"], _fmt(rt["careful"][_key(rt["careful"]["call"])])),
+                           "thorough": "%s, %s" % (F["call"], F["budget"])}})
+    res.append({"id": "R8", "name": "the Sequence fee at which the call would change", "graded_as": "Ask 6", "figure": "flip_fee",
+                "depends": ["R4", "R5", "R6"], "independent": "", "golden": F["flip_fee"], "band": F["band_flip"],
+                "precedent": ["L15"],
+                "passes": {"quick": rt["quick"]["flip"], "careful": rt["careful"]["flip"], "thorough": F["flip_fee"]}})
+    routes = [{"name": "the golden", "answer": "%s, %s" % (F["call"], F["budget"]), "golden": True}]
+    for nm, r in rt.items():
+        routes.append({"name": nm, "answer": "%s, %s" % (r["call"], _fmt(r[_key(r["call"])])), "golden": False})
+    hints = [{"sentence": "a few chargers on one transformer still land together on some night of the summer under a random "
+                          "start, so replay every night", "rescues": ["R4"]},
+             {"sentence": "Sequence was never piloted: run its rule on each night's sessions", "rescues": ["R5"]},
+             {"sentence": "a quarter of the chargers were managed in summer 2026, so the metered summer is not the members' "
+                          "own schedules", "rescues": ["R3"]}]
+    gold_answer = [F["call"]]
+    forcing = {"kind": "set", "golden_answer": gold_answer,
+               "golden_family": [{"name": "the golden", "answer": gold_answer}] +
+                                [{"name": nm, "answer": [NAMES[r["call"]]]} for nm, r in C["rivals"].items()],
+               "shortcuts": [{"name": nm, "answer": [r["call"]]} for nm, r in rt.items() if r["call"] != F["call"]],
+               "perturbations": [{"input": nm, "answer": [NAMES[r["call"]]]} for nm, r in C["pert"].items()]}
     return {"results": res, "routes": routes, "hints": hints, "forcing": forcing,
             "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
+
+
+def _key(call_name):
+    return {v: k for k, v in NAMES.items()}[call_name]
+
+
+def _fmt(x):
+    return ("%g" % x) if isinstance(x, (int, float)) else str(x)
+
+
+def _route_total(C, route, o):
+    return money(C["routes"][route][o]["total"])

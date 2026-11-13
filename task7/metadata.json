@@ -1,184 +1,170 @@
 {
  "task": "task7",
- "title": "Cedar Brake Electric Cooperative: which thermostat providers to renew for summer 2027",
+ "title": "Hollins Creek Electric Association: the EV Overnight rate's charging default for 2027",
  "domain": "Energy Systems & Utilities",
  "task_type": "energy efficiency and demand response evaluation",
  "objective": "Experiment & Causal Analysis",
- "as_of": "2026-11-02",
+ "as_of": "2026-11-06",
  "deliverables": [
-  "provider_renewals_2027_memo.docx",
-  "provider_renewals_2027_workbook.xlsx"
+  "ev_overnight_default_2027_memo.docx",
+  "ev_overnight_transformers_2027.csv"
  ],
  "distractor_files": [
-  "ercot_residential_dr_potential_2025.pdf",
-  "der_interconnections_2026.csv"
+  "state_ev_registrations_by_zip_2019-2026.csv",
+  "net_metering_interconnections_2026.csv"
  ],
  "input_gates": {
-  "files": 21,
+  "files": 19,
   "formats": [
    "csv",
    "pdf",
    "xlsx"
   ],
-  "largest_file": "ami_15min_reads_peak_partners_2024_2026.csv",
-  "largest_file_rows": 189652,
-  "long_file": "corvane_event_report_2024_2026.csv",
-  "long_file_rows": 132200
+  "largest_file": "quillpoint_sessions_2024-06_2026-09.csv",
+  "largest_file_rows": 277803,
+  "long_file": "mdm_hourly_stb_2026-07-01_2026-08-31.csv",
+  "long_file_rows": 91633
  },
  "sources": [
   {
    "files": "all files under target/",
-   "origin": "constructed for this task around a fictional Texas electric cooperative, its members, its thermostat providers, a fictional appraisal district and weather station; every record and figure is invented",
-   "date": "2026-11-02",
+   "origin": "constructed for this task around a fictional Colorado electric cooperative, its members, its charging platform, its network and its weather station; every record and figure is invented",
+   "date": "2026-11-06",
    "license": "CC BY 4.0 (original work)"
   }
  ],
  "files": [
   {
-   "path": "ami_15min_reads_peak_partners_2024_2026.csv",
+   "path": "ami_meter_exchanges_2026.csv",
    "format": "csv",
-   "bytes": 40388813,
-   "covers": "the research sample's 15-minute reads, 13:00 to 21:00, on event days and quiet weekdays, 2024 to 2026",
+   "bytes": 3894,
+   "covers": "meters exchanged in 2026",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "ardena_event_outcomes.csv",
-   "format": "csv",
-   "bytes": 4274142,
-   "covers": "Ardena's event reports",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "board_policy_412_demand_response_providers.pdf",
+   "path": "board_policy_EV-4_charging_default.pdf",
    "format": "pdf",
-   "bytes": 55037,
-   "covers": "the board's policy on demand-response provider renewals",
+   "bytes": 55200,
+   "covers": "the board's policy for choosing the EV Overnight charging default",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "calder_cad_residential_2026.csv",
-   "format": "csv",
-   "bytes": 4321006,
-   "covers": "the Calder appraisal district's residential roll: situs, living area, year built",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "corvane_event_report_2024_2026.csv",
-   "format": "csv",
-   "bytes": 9778311,
-   "covers": "Corvane's event reports",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "der_interconnections_2026.csv",
-   "format": "csv",
-   "bytes": 114567,
-   "covers": "members' interconnected rooftop solar systems",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "ercot_4cp_intervals_2016_2026.csv",
-   "format": "csv",
-   "bytes": 1419,
-   "covers": "ERCOT's 4CP intervals, 2016 to 2026",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "ercot_residential_dr_potential_2025.pdf",
-   "format": "pdf",
-   "bytes": 55070,
-   "covers": "a research group's study of residential demand response potential in ERCOT",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "kitebrook_events_2024_2026.csv",
-   "format": "csv",
-   "bytes": 1840271,
-   "covers": "Kitebrook's event reports",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "lumivale_dr_events_cedar_brake.csv",
-   "format": "csv",
-   "bytes": 6688245,
-   "covers": "Lumivale's event reports",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "member_accounts_2026.csv",
-   "format": "csv",
-   "bytes": 4013882,
-   "covers": "residential member accounts: service address, meter, meter type and exchanges, substation",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "mv_event_assignments_2024_2026.csv",
-   "format": "csv",
-   "bytes": 4065737,
-   "covers": "the randomised halves of every test event",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "ondera_events_cbec.csv",
-   "format": "csv",
-   "bytes": 2430712,
-   "covers": "Ondera's event reports",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "peak_partners_event_log_2024_2026.xlsx",
+   "path": "distribution_work_orders_2025_2026.xlsx",
    "format": "xlsx",
-   "bytes": 10063,
-   "covers": "every event called, 2024 to 2026, and each provider's event settings",
+   "bytes": 9418,
+   "covers": "completed distribution work orders, 2025 and 2026",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "peak_partners_member_guide_2026.pdf",
+   "path": "dps-7_distribution_transformer_loading.pdf",
    "format": "pdf",
-   "bytes": 58403,
-   "covers": "the member and provider guide to an event",
+   "bytes": 62459,
+   "covers": "the planning standard for transformer limits and replacement costs",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "peak_partners_mv_plan_2024.pdf",
+   "path": "ev_overnight_pilot_plan_2025.pdf",
    "format": "pdf",
-   "bytes": 49914,
-   "covers": "the programme's measurement and verification plan",
+   "bytes": 47354,
+   "covers": "the managed-charging pilot's plan",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "peak_partners_roster_2026-10-30.csv",
+   "path": "ev_overnight_roster_2026-11-02.csv",
    "format": "csv",
-   "bytes": 918056,
-   "covers": "every thermostat ever enrolled in Peak Partners, its provider, account, channel, dates and swaps",
+   "bytes": 129472,
+   "covers": "every charger ever enrolled on the EV Overnight rate, with swaps and closures",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "pinecrest_home_events.csv",
+   "path": "gis_service_points_2026-10-30.csv",
    "format": "csv",
-   "bytes": 2143173,
-   "covers": "Pinecrest Home's event reports",
+   "bytes": 245573,
+   "covers": "each service point's meter, address and transformer location",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "provider_quotes_summer_2027.xlsx",
+   "path": "mdm_hourly_lkr_2026-07-01_2026-08-31.csv",
+   "format": "csv",
+   "bytes": 13782242,
+   "covers": "hourly net kWh for every meter on the Larkin Ridge substation, July and August 2026",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "mdm_hourly_phw_2026-07-01_2026-08-31.csv",
+   "format": "csv",
+   "bytes": 7951375,
+   "covers": "hourly net kWh for every meter on the Prairie Hollow substation, July and August 2026",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "mdm_hourly_stb_2026-07-01_2026-08-31.csv",
+   "format": "csv",
+   "bytes": 16062962,
+   "covers": "hourly net kWh for every meter on the Stonebrook substation, July and August 2026",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "net_metering_interconnections_2026.csv",
+   "format": "csv",
+   "bytes": 17528,
+   "covers": "members' net-metered rooftop solar systems",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "pilot_assignment_2025.csv",
+   "format": "csv",
+   "bytes": 67150,
+   "covers": "each charger's half of the managed-charging pilot",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "quillpoint_proposal_2027.xlsx",
    "format": "xlsx",
-   "bytes": 6850,
-   "covers": "the six providers' quotes for summer 2027",
+   "bytes": 6652,
+   "covers": "the charging platform's 2027 products and fees",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
-   "path": "transmission_charge_notice_2027.pdf",
-   "format": "pdf",
-   "bytes": 50662,
-   "covers": "the co-op's 2027 transmission charge per kW of 4CP load",
-   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
-  },
-  {
-   "path": "weather_kcdr_hourly_2024_2026.csv",
+   "path": "quillpoint_sessions_2024-06_2026-09.csv",
    "format": "csv",
-   "bytes": 216906,
-   "covers": "hourly temperature at the KCDR station, June to September 2024 to 2026",
+   "bytes": 37281852,
+   "covers": "every enrolled charger's charging sessions, June to September 2024 to 2026, in UTC",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "rate_schedule_EV-1_2026.pdf",
+   "format": "pdf",
+   "bytes": 60884,
+   "covers": "the EV Overnight rate",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "state_ev_registrations_by_zip_2019-2026.csv",
+   "format": "csv",
+   "bytes": 4752,
+   "covers": "the state's quarterly EV registrations by ZIP code",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "transformer_monitors_15min_2026-07_08.csv",
+   "format": "csv",
+   "bytes": 2619672,
+   "covers": "15-minute kW and kVA on the 48 monitored transformers, July and August 2026",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "transformer_register_2026.csv",
+   "format": "csv",
+   "bytes": 22945,
+   "covers": "the distribution transformer register",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "weather_station_hourly_2024-2026.csv",
+   "format": "csv",
+   "bytes": 307496,
+   "covers": "hourly temperature and humidity at the association's station, June to September",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   }
  ]

@@ -1,4 +1,4 @@
-"""task7 architecture 10: the pack's data files, each written as the system that keeps it writes it."""
+"""task7 architecture 11: the pack's data files, each written the way the system that keeps it writes it."""
 import csv
 import datetime as dt
 import os
@@ -10,92 +10,17 @@ from openpyxl.styles import Font
 import postprocess
 import world as W
 
-CT = dt.timezone(dt.timedelta(hours=-5))          # Central daylight time, all summer
+MDT = dt.timezone(dt.timedelta(hours=-6))
+MST = dt.timezone(dt.timedelta(hours=-7))
 UTC = dt.timezone.utc
-STREETS = ["Oak", "Mesquite", "Pecan", "Live Oak", "Cypress", "Bluebonnet", "Ranch", "Hill Country", "Lakeview", "Granite",
-           "Post Oak", "Elm", "Cedar", "Sycamore", "Prairie", "Spring", "Bridle", "Quail", "Dove", "Wildflower", "Limestone",
-           "Turkey Creek", "Crystal", "Deer", "Sunset", "Canyon", "Arrowhead", "Juniper", "Mockingbird", "Shady Grove"]
-TYPES = [("ST", "STREET"), ("DR", "DRIVE"), ("LN", "LANE"), ("TRL", "TRAIL"), ("CT", "COURT"), ("RD", "ROAD"), ("LOOP", "LOOP"),
-         ("PASS", "PASS"), ("CV", "COVE")]
-CITIES_N = [("Marble Ridge", "78654"), ("Spicewood Hills", "78669"), ("Liberty Grove", "78611")]
-CITIES_S = [("Calder", "78605"), ("Bertram Flats", "78605"), ("Oatmeal Creek", "78605"), ("Shovel Mountain", "78636")]
-RCH = {"app": "Provider app", "mail": "Co-op mailer", "retail": "Retail instant rebate"}
-MODELS = {"Corvane": ["Corvane C3", "Corvane C4 Pro"], "Lumivale": ["Lumivale One", "Lumivale Mini"],
-          "Ardena": ["Ardena T2", "Ardena T2+"], "Ondera": ["Ondera Smart 5"], "Kitebrook": ["Kitebrook K7", "Kitebrook K9"],
-          "Pinecrest Home": ["Pinecrest Home Smart", "Pinecrest Home Smart Lite"]}
-
-
-def addresses(w, rng):
-    """every parcel's situs: the appraisal district's form and the co-op's form of the same address"""
-    n = len(w.parcel["south"])
-    cad, coop, city = [], [], []
-    for k in range(n):
-        south = bool(w.parcel["south"][k])
-        if south and rng.random() < 0.45:
-            road = int(rng.integers(100, 480))
-            num = int(rng.integers(100, 9900))
-            if rng.random() < 0.7:
-                cad.append("%d COUNTY ROAD %d" % (num, road))
-                coop.append("%d CR %d" % (num, road))
-            else:
-                fm = int(rng.choice([1431, 243, 963, 2341, 3509]))
-                cad.append("%d FM %d" % (num, fm))
-                coop.append("%d FARM TO MARKET %d" % (num, fm) if rng.random() < 0.5 else "%d FM RD %d" % (num, fm))
-        else:
-            num = int(rng.integers(100, 4800))
-            st = STREETS[int(rng.integers(0, len(STREETS)))]
-            ab, full = TYPES[int(rng.integers(0, len(TYPES)))]
-            cad.append("%d %s %s" % (num, st.upper(), full))
-            coop.append("%d %s %s" % (num, st.title(), ab.title()))
-        c = (CITIES_S if south else CITIES_N)[int(rng.integers(0, 3 if not south else 4))]
-        city.append(c)
-    # make the CAD forms unique
-    seen = {}
-    for k, a in enumerate(cad):
-        key = (a, city[k][0])
-        if key in seen:
-            num = int(a.split(" ")[0]) + 2 * (seen[key] + 1)
-            rest = a.split(" ", 1)[1]
-            cad[k] = "%d %s" % (num, rest)
-            coop[k] = "%d %s" % (num, coop[k].split(" ", 1)[1])
-            seen[key] += 1
-        else:
-            seen[key] = 0
-    w.cad_addr, w.coop_addr, w.city = cad, coop, city
-
-
-def ids(w, rng):
-    """account and meter numbers; the provider's own device ids, some replaced; the research sample's meter exchanges"""
-    n = len(w.parcel["south"])
-    w.acct = {int(h): 1000000 + int(k) * 7 + int(rng.integers(0, 7)) for k, h in enumerate(w.member)}
-    w.meter = {int(h): 60000000 + int(rng.integers(0, 9999999)) for h in w.member}
-    w.prog_id = {r["i"]: "PP-%05d" % (r["i"] + 1000) for r in w.dev}
-
-    def dev_id(p, k):
-        if p == "Corvane":
-            return "CVN-%06X" % (0x3A0000 + k * 37)
-        if p == "Lumivale":
-            return "LV%09d" % (200000000 + k * 113)
-        if p == "Ardena":
-            return "ARD-%08x" % (0x1f000000 + k * 7919)
-        if p == "Ondera":
-            return "OND%07d" % (4400000 + k * 3)
-        if p == "Kitebrook":
-            return "KB-%05d" % (10000 + k)
-        return "PH%08d" % (30000000 + k * 11)
-    w.dev_id, w.dev_prev = {}, {}
-    for r in w.dev:
-        w.dev_id[r["i"]] = dev_id(r["p"], r["i"])
-        if rng.random() < 0.04 and r["joined"] < dt.date(2025, 6, 1):
-            # the thermostat was swapped for a new one; reports before the swap carry the old id
-            when = r["joined"] + dt.timedelta(days=int(rng.integers(120, 700)))
-            if when < dt.date(2026, 10, 1) and (r["left"] is None or when < r["left"]):
-                w.dev_prev[r["i"]] = (dev_id(r["p"], r["i"] + 50000), when)
-    # 15-minute meters exchanged in the research sample during 2025
-    w.meter_prev = {}
-    for h in w.ami_homes:
-        if rng.random() < 0.03:
-            w.meter_prev[h] = (60000000 + int(rng.integers(0, 9999999)), dt.date(2025, int(rng.integers(3, 11)), 15))
+ORG = "Hollins Creek Electric Association"
+SUBST = {"Prairie Hollow": "PHW", "Larkin Ridge": "LKR", "Stonebrook": "STB"}
+STREETS = ["Juniper", "Sage", "Buckskin", "Yucca", "Pronghorn", "Kestrel", "Bluestem", "Wagon Wheel", "Saddle", "Cottonwood",
+           "Prairie Star", "Thunderhead", "Antelope", "Meadowlark", "Rimrock", "Sandstone", "Larkspur", "Aspen", "Coyote",
+           "Plum Creek", "Elk Ridge", "Granite", "Clover", "Windmill", "Silver Sage", "Ponderosa", "Red Hawk", "Big Sky"]
+SUFFIX = ["St", "Dr", "Ln", "Ct", "Way", "Cir", "Trl", "Pl", "Ave"]
+MAKES = {7.2: [("Voltlane", "HC32"), ("Ampwright", "Home 32")], 9.6: [("Voltlane", "HC40"), ("Corrin", "Wallbox 40")],
+         11.5: [("Ampwright", "Home 48"), ("Corrin", "Wallbox 48"), ("Voltlane", "HC48")]}
 
 
 def write_csv(path, header, rows):
@@ -106,293 +31,371 @@ def write_csv(path, header, rows):
             wr.writerow(r)
 
 
-def ami_file(w, rng, target):
-    mins = np.arange(W.AMI_FROM, W.AMI_TO, W.STEP)
-    cols = ["kwh_%02d%02d" % divmod(m + W.STEP, 60) for m in mins]
-    rows = []
-    for h in w.ami_homes:
-        for d in w.ami_days:
-            v = w.ami_load[(h, d)]
-            m = w.meter[h]
-            if h in w.meter_prev and d < w.meter_prev[h][1]:
-                m = w.meter_prev[h][0]
-            vals = ["%.3f" % x for x in v]
+def ids(w, rng):
+    """service points, meters, transformer locations, charger serials, accounts and addresses"""
+    loc = []
+    used = set()
+    for t in w.tx:
+        a = W.AREAS[t["area"]]["prefix"]
+        while True:
+            k = "%s-%04d" % (a, int(rng.integers(1000, 9999)))
+            if k not in used:
+                used.add(k)
+                break
+        loc.append(k)
+    w.loc = loc
+    H = len(w.homes)
+    sp = rng.choice(np.arange(3100000, 3999999), size=H, replace=False)
+    w.sp = ["%d" % s for s in sp]
+    mt = rng.choice(np.arange(410000000, 489999999), size=H + len(w.exchanged) + 5, replace=False)
+    w.meter = ["%d" % m for m in mt[:H]]
+    w.new_meter = {}
+    k = H
+    for hi in sorted(w.exchanged):
+        w.new_meter[hi] = "%d" % mt[k]
+        k += 1
+    w.acct = ["%07d" % a for a in rng.choice(np.arange(1100000, 1899999), size=H, replace=False)]
+    seen = set()
+    w.addr = []
+    for hi, h in enumerate(w.homes):
+        while True:
+            a = "%d %s %s" % (int(rng.integers(100, 9800)), STREETS[int(rng.integers(0, len(STREETS)))],
+                              SUFFIX[int(rng.integers(0, len(SUFFIX)))])
+            if a not in seen:
+                seen.add(a)
+                break
+        w.addr.append(a)
+    # charger serials (a swapped charger gets a second serial from its swap date)
+    w.serial, w.serial2, w.make = [], {}, []
+    for ci, c in enumerate(w.chargers):
+        mk, md = MAKES[c["power"]][int(rng.integers(0, len(MAKES[c["power"]])))]
+        w.make.append((mk, md))
+        w.serial.append("%s-%s%06d" % (mk[:2].upper(), md[-2:], int(rng.integers(0, 999999))))
+        if c["swap"] is not None:
+            w.serial2[ci] = "%s-%s%06d" % (mk[:2].upper(), md[-2:], int(rng.integers(0, 999999)))
+
+
+def serial_on(w, ci, d):
+    c = w.chargers[ci]
+    if c["swap"] is not None and d >= c["swap"]:
+        return w.serial2[ci]
+    return w.serial[ci]
+
+
+def ami_files(w, rng, target):
+    """the meter data system's hourly export, one file per substation: hour-ending columns, local time, net kWh"""
+    tot = (w.B + w.U + w.A).astype(np.float64)
+    H = len(w.homes)
+    hourly = tot[:, :W.NDAY * W.Q].reshape(H, W.NDAY, 24, 4).mean(axis=3)       # kW averaged over the hour = kWh in it
+    rows = {a: [] for a in SUBST}
+    counts = {}
+    est_total = 0
+    for hi, h in enumerate(w.homes):
+        area = h["area"]
+        ex = w.exchanged.get(hi)
+        exh = int(rng.integers(8, 16))
+        for d in range(W.NDAY):
+            day = W.JUL1 + dt.timedelta(days=d)
+            v = hourly[hi, d].copy()
+            miss = rng.random(24) < 0.006
             if rng.random() < 0.004:
-                for j in rng.choice(len(vals), int(rng.integers(1, 4)), replace=False):
-                    vals[j] = ""
-            rows.append([m, d.strftime("%Y-%m-%d")] + vals)
-            if rng.random() < 0.002:
-                rows.append([m, d.strftime("%Y-%m-%d")] + vals)          # the day re-sent by the head end
-    rows.sort(key=lambda r: (r[1], r[0]))
-    write_csv(os.path.join(target, "ami_15min_reads_peak_partners_2024_2026.csv"), ["meter_number", "read_date"] + cols, rows)
+                s = int(rng.integers(0, 20))
+                miss[s:s + int(rng.integers(3, 6))] = True
+            est = 0
+            if miss.any() and not miss.all():
+                good = np.where(~miss)[0]
+                v[miss] = np.interp(np.where(miss)[0], good, v[good])
+                est = int(miss.sum())
+                est_total += est
+            vals = ["%.3f" % x for x in v]
+            status = "E" if est else "A"
+            if ex is not None and day == ex:
+                old = vals[:exh] + [""] * (24 - exh)
+                new = [""] * exh + vals[exh:]
+                rows[area].append([w.meter[hi], day.isoformat(), "KWH", status, est] + old)
+                rows[area].append([w.new_meter[hi], day.isoformat(), "KWH", status, est] + new)
+            else:
+                m = w.new_meter[hi] if (ex is not None and day > ex) else w.meter[hi]
+                rows[area].append([m, day.isoformat(), "KWH", status, est] + vals)
+    # a re-sent block in each export: forty meter-days delivered twice
+    for area, rr in rows.items():
+        k0 = int(rng.integers(0, len(rr) - 400))
+        rr[k0 + 200:k0 + 200] = [list(x) for x in rr[k0:k0 + 40]]
+        hdr = ["meter_no", "read_date", "uom", "day_status", "estimated_hours"] + ["he%02d" % k for k in range(1, 25)]
+        name = "mdm_hourly_%s_2026-07-01_2026-08-31.csv" % SUBST[area].lower()
+        write_csv(os.path.join(target, name), hdr, rr)
+        counts[name] = len(rr)
+    counts["estimated_hours"] = est_total
+    return counts
+
+
+def sessions_file(w, rng, target):
+    """Quillpoint's charging-session export: every enrolled charger's sessions, June to September 2024 to 2026, in UTC"""
+    rows = []
+    sid = 7000000
+    for ci, c in enumerate(w.chargers):
+        for (d, plug, dep, e, pm, dm), a in zip(w.sess[ci], w.act[ci]):
+            if a is None:
+                continue
+            p = c["power"]
+            base = dt.datetime(d.year, d.month, d.day, tzinfo=MDT)
+            pin = base + dt.timedelta(minutes=pm)
+            st = base + dt.timedelta(minutes=15 * a["start"])
+            en = st + dt.timedelta(minutes=e / p * 60)
+            unp = base + dt.timedelta(minutes=dm)
+            if unp < en:
+                unp = en + dt.timedelta(minutes=int(rng.integers(1, 9)))
+            mode = {"managed": "QP_STAGGER", "t2300": "CHARGER_SCHEDULE", "t2330": "CHARGER_SCHEDULE",
+                    "t0000": "CHARGER_SCHEDULE", "ready": "VEHICLE_SCHEDULE", "now": "IMMEDIATE"}[a["mode"]]
+            ready = ""
+            if a["ready"] is not None:
+                ready = (base + dt.timedelta(minutes=15 * a["ready"])).strftime("%H:%M")
+            sid += int(rng.integers(1, 4))
+            rows.append(["QS%d" % sid, serial_on(w, ci, d), pin.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                         st.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"), en.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                         unp.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"), "%.2f" % e, "%.1f" % (p * float(rng.uniform(0.97, 1.0))),
+                         mode, ready])
+            if rng.random() < 0.008:                       # plugged in again for a few minutes, nothing drawn
+                t0 = unp + dt.timedelta(minutes=int(rng.integers(20, 300)))
+                sid += 1
+                rows.append(["QS%d" % sid, serial_on(w, ci, d), t0.astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"), "", "",
+                             (t0 + dt.timedelta(minutes=int(rng.integers(3, 25)))).astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                             "0.00", "0.0", mode, ready])
+    rows.sort(key=lambda r: (r[2], r[1]))
+    # a re-sent batch: one night's sessions delivered twice in the 2026 export
+    k = [i for i, r in enumerate(rows) if r[2].startswith("2026-08-1")]
+    if k:
+        rows[k[-1] + 1:k[-1] + 1] = [list(r) for r in rows[k[0]:k[0] + 120]]
+    hdr = ["session_id", "charger_serial", "plugged_in_utc", "charge_start_utc", "charge_end_utc", "unplugged_utc", "energy_kwh",
+           "peak_kw", "control_mode", "ready_by_local"]
+    write_csv(os.path.join(target, "quillpoint_sessions_2024-06_2026-09.csv"), hdr, rows)
     return len(rows)
 
 
-def accounts_file(w, rng, target):
-    rows = []
-    sub_n = ["Marble Ridge North", "Liberty Grove"]
-    sub_s = ["Calder", "Shovel Mountain", "Oatmeal Creek"]
-    ami = set(w.ami_homes)
-    for h in w.member:
-        h = int(h)
-        south = bool(w.parcel["south"][h])
-        typ = "15-minute" if h in ami else ("15-minute" if (not south and rng.random() < 0.08) else "hourly")
-        prev, setd = "", "2019-%02d-%02d" % (int(rng.integers(3, 12)), int(rng.integers(1, 28)))
-        if h in w.meter_prev:
-            prev, setd = w.meter_prev[h][0], w.meter_prev[h][1].strftime("%Y-%m-%d")
-        elif typ == "15-minute":
-            setd = "2023-%02d-%02d" % (int(rng.integers(2, 10)), int(rng.integers(1, 28)))
-        sub = (sub_s if south else sub_n)[int(rng.integers(0, 3 if south else 2))]
-        rows.append([w.acct[h], w.coop_addr[h], w.city[h][0], w.city[h][1], w.meter[h], typ, setd, prev, sub,
-                     "RES" if rng.random() < 0.93 else "RES-TOU"])
-    write_csv(os.path.join(target, "member_accounts_2026.csv"),
-              ["account_number", "service_address", "city", "zip", "meter_number", "meter_type", "meter_set_date",
-               "prior_meter_number", "substation", "rate_code"], rows)
+DECLARED = {"t2300": "Charger timer 23:00", "t2330": "Charger timer 23:30", "t0000": "Charger timer 00:00",
+            "ready": "Car's departure schedule", "now": "When I plug in"}
 
 
 def roster_file(w, rng, target):
     rows = []
-    for r in w.dev:
-        prev = w.dev_prev.get(r["i"])
-        rows.append([w.prog_id[r["i"]], w.acct[r["home"]], r["p"], w.dev_id[r["i"]],
-                     r["joined"].strftime("%Y-%m-%d"), r["left"].strftime("%Y-%m-%d") if r["left"] else "",
-                     RCH[r["ch"]], MODELS[r["p"]][int(rng.integers(0, len(MODELS[r["p"]])))],
-                     prev[0] if prev else "", prev[1].strftime("%Y-%m-%d") if prev else ""])
-    dup = [list(rows[int(k)]) for k in rng.choice(len(rows), 37, replace=False)]
-    rows += dup                                                     # rows written twice by the 2025 re-import
-    rows.sort(key=lambda x: (x[2], x[4], x[0]))
-    write_csv(os.path.join(target, "peak_partners_roster_2026-10-30.csv"),
-              ["program_id", "account_number", "provider", "device_id", "enrolled_on", "unenrolled_on", "channel",
-               "thermostat_model", "previous_device_id", "device_changed_on"], rows)
+    for ci, c in enumerate(w.chargers):
+        hi = c["home"]
+        mk, md = w.make[ci]
+        status = "Active" if c["left"] is None else "Closed"
+        closed = c["left"].isoformat() if c["left"] is not None else ""
+        decl = DECLARED[c["declared"]]
+        rows.append([w.acct[hi], w.sp[hi], w.serial[ci], mk, md, "%.1f" % c["power"], c["enrol"].isoformat(),
+                     "Replaced" if c["swap"] is not None else status,
+                     c["swap"].isoformat() if c["swap"] is not None else closed, "", decl])
+        if c["swap"] is not None:
+            rows.append([w.acct[hi], w.sp[hi], w.serial2[ci], mk, md, "%.1f" % c["power"], c["swap"].isoformat(), status, closed,
+                         w.serial[ci], decl])
+    # a re-imported block: some members' rows twice, the second time with the account number unpadded
+    extra = []
+    for k in rng.choice(len(rows), size=14, replace=False):
+        r = list(rows[int(k)])
+        r[0] = str(int(r[0]))
+        extra.append(r)
+    rows += extra
+    rows.sort(key=lambda r: (r[6], r[2]))
+    hdr = ["member_account", "service_point", "charger_serial", "make", "model", "rated_kw", "enrolled_on", "status",
+           "status_date", "replaces_serial", "usual_charging_at_enrolment"]
+    write_csv(os.path.join(target, "ev_overnight_roster_2026-11-02.csv"), hdr, rows)
     return len(rows)
-
-
-def did_on(w, r, d):
-    prev = w.dev_prev.get(r["i"])
-    return prev[0] if (prev and d < prev[1]) else w.dev_id[r["i"]]
-
-
-def hhmm(minute):
-    return "%02d:%02d" % divmod(int(minute), 60)
-
-
-def local_dt(d, minute, sec=0):
-    return dt.datetime(d.year, d.month, d.day, int(minute) // 60, int(minute) % 60, sec, tzinfo=CT)
-
-
-def provider_reports(w, rng, target):
-    """each provider's event report, in its own layout: a row per device it dispatched (both halves of nothing: on a test
-    event only the called half), with what happened"""
-    counts = {}
-    for p in W.PROVIDERS:
-        q = W.PROG[p]
-        rows = []
-        for e in w.events:
-            d = e["date"]
-            for r in w.dev:
-                if r["p"] != p:
-                    continue
-                out = w.out.get((e["id"], r["i"]))
-                if out is None or not out[0]:
-                    continue
-                called, offline, ov = out
-                dv = did_on(w, r, d)
-                sec = int(rng.integers(0, 60))
-                if p == "Corvane":
-                    ref = "CBEC-%s-%s" % (d.strftime("%m%d"), "PK" if e["kind"] == "alert" else "MV")
-                    st = local_dt(d, q["s"]).astimezone(UTC)
-                    en = local_dt(d, q["e"]).astimezone(UTC)
-                    oo = local_dt(d, ov, sec).astimezone(UTC).strftime("%Y-%m-%dT%H:%M:%SZ") if ov is not None else ""
-                    rows.append([ref, st.strftime("%Y-%m-%dT%H:%M:%SZ"), en.strftime("%Y-%m-%dT%H:%M:%SZ"), dv,
-                                 "N" if offline else "Y", oo])
-                elif p == "Lumivale":
-                    rows.append([d.strftime("%Y-%m-%d"), "Cedar Brake PP", dv, "not_delivered" if offline else "delivered",
-                                 hhmm(ov) if ov is not None else ""])
-                elif p == "Ardena":
-                    out_s = "Offline" if offline else ("Opted Out" if ov is not None else "Completed")
-                    ts = local_dt(d, ov, sec).strftime("%m/%d/%Y %H:%M:%S") if ov is not None else ""
-                    rows.append([d.strftime("%m/%d/%Y"), "Peak" if e["kind"] == "alert" else "M&V", dv, out_s, ts])
-                elif p == "Ondera":
-                    if offline:
-                        continue
-                    rows.append([d.strftime("%Y-%m-%d"), dv, "override" if ov is not None else "ok",
-                                 int(ov - q["s"]) if ov is not None else ""])
-                elif p == "Kitebrook":
-                    if offline:
-                        continue
-                    oo = local_dt(d, ov, sec).astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S") if ov is not None else ""
-                    rows.append([d.strftime("%Y%m%d"), dv, oo])
-                else:
-                    if offline:
-                        continue
-                    rows.append([d.strftime("%Y-%m-%d"), dv, "true" if ov is not None else "false",
-                                 local_dt(d, ov, sec).strftime("%Y-%m-%dT%H:%M:%S") if ov is not None else ""])
-                    if rng.random() < 0.003:
-                        rows.append(list(rows[-1]))                          # re-sent with the next day's batch
-        name, header = {
-            "Corvane": ("corvane_event_report_2024_2026.csv",
-                        ["event_ref", "event_start_utc", "event_end_utc", "device_serial", "ack", "opt_out_utc"]),
-            "Lumivale": ("lumivale_dr_events_cedar_brake.csv",
-                         ["date", "program", "thermostat_id", "delivery", "override_time"]),
-            "Ardena": ("ardena_event_outcomes.csv", ["EventDate", "EventType", "DeviceID", "Outcome", "OptOutTimestamp"]),
-            "Ondera": ("ondera_events_cbec.csv", ["event_date", "device", "status", "override_minute"]),
-            "Kitebrook": ("kitebrook_events_2024_2026.csv", ["EVENT_DATE", "DEVICE", "OVERRIDE_UTC"]),
-            "Pinecrest Home": ("pinecrest_home_events.csv", ["date", "device_id", "opted_out", "opt_out_time"]),
-        }[p]
-        write_csv(os.path.join(target, name), header, rows)
-        counts[p] = len(rows)
-    return counts
 
 
 def assignment_file(w, target):
     rows = []
-    for e in w.events:
-        if e["kind"] != "test":
-            continue
-        for r in w.dev:
-            out = w.out.get((e["id"], r["i"]))
-            if out is None:
-                continue
-            rows.append([e["code"], w.prog_id[r["i"]], "call" if out[0] else "hold"])
-    write_csv(os.path.join(target, "mv_event_assignments_2024_2026.csv"), ["event_id", "program_id", "group"], rows)
-    return len(rows)
+    for ci, c in enumerate(w.chargers):
+        on = max(W.RAND_DAY, c["enrol"])
+        rows.append([w.serial[ci], "Stagger" if c["arm"] == "managed" else "Own schedule", on.isoformat(),
+                     "2025-05 split" if c["enrol"] < W.RAND_DAY else "at enrolment"])
+    rows.sort(key=lambda r: r[0])
+    write_csv(os.path.join(target, "pilot_assignment_2025.csv"), ["charger_serial", "pilot_half", "assigned_on", "assignment"], rows)
 
 
-def event_log(w, rng, target):
+def gis_file(w, rng, target):
+    """the GIS export: each service point's current meter and the transformer location it is drawn on"""
+    lag = w.splits[-1]                    # the last split's transfers not yet posted to the GIS
+    rows = []
+    for hi, h in enumerate(w.homes):
+        t = h["tx"]
+        if hi in lag["moved"]:
+            t = lag["parent"]
+        m = w.new_meter.get(hi, w.meter[hi])
+        tt = w.tx[t]
+        rows.append([w.sp[hi], m, w.addr[hi], "PRAIRIE HOLLOW" if tt["area"] == "Prairie Hollow" else "HOLLINS CREEK", w.loc[t],
+                     SUBST[tt["area"]], "%s-%d" % (SUBST[tt["area"]], 1 + (t % 4)), "ABC"[t % 3]])
+    rows.sort(key=lambda r: r[0])
+    write_csv(os.path.join(target, "gis_service_points_2026-10-30.csv"),
+              ["service_point", "meter_no", "premise_address", "city", "transformer_location", "substation", "feeder", "phase"], rows)
+
+
+def exchange_file(w, rng, target):
+    rows = []
+    for hi in sorted(w.exchanged):
+        d = w.exchanged[hi]
+        rows.append([w.sp[hi], w.meter[hi], w.new_meter[hi], d.isoformat(), "%02d:%02d" % (int(rng.integers(8, 16)), int(rng.integers(0, 60))),
+                     str(rng.choice(["Failed register", "Comms failure", "Damaged glass", "Recall batch 22-7"]))])
+    write_csv(os.path.join(target, "ami_meter_exchanges_2026.csv"),
+              ["service_point", "old_meter_no", "new_meter_no", "exchanged_on", "time_local", "reason"], rows)
+
+
+def register_file(w, rng, target):
+    rows = []
+    lagging = set(w.replaced[:3])
+    for t in w.tx:
+        kva = t["kva"]
+        year = t["year"]
+        if t["idx"] in lagging:
+            kva = t["old_kva"]
+        elif "replaced_on" in t:
+            year = 2026
+        mf = str(rng.choice(["Ermco", "Howard", "Central Moloney", "Eaton"]))
+        rows.append([w.loc[t["idx"]], SUBST[t["area"]], "Pole-mount" if t["mount"] == "pole" else "Pad-mount", "1",
+                     ("%g" % kva), year, mf, "%s%07d" % (mf[:2].upper(), int(rng.integers(0, 9999999)))])
+    rows.sort(key=lambda r: r[0])
+    write_csv(os.path.join(target, "transformer_register_2026.csv"),
+              ["transformer_location", "substation", "mount", "phases", "kva", "installed", "manufacturer", "unit_serial"], rows)
+
+
+def work_orders(w, rng, target):
     wb = Workbook()
     ws = wb.active
-    ws.title = "events"
-    ws.append(["event_id", "date", "type", "notice_sent", "providers", "notes"])
-    for e in w.events:
-        note = ""
-        if e["kind"] == "alert" and rng.random() < 0.12:
-            note = "4CP probability high in the 14:00 forecast update"
-        ws.append([e["code"], e["date"], "4CP alert" if e["kind"] == "alert" else "M&V test",
-                   "13:%02d" % int(rng.integers(5, 55)), "all", note])
+    ws.title = "Completed work orders"
+    ws.append(["work_order", "type", "transformer_location", "service_point", "detail", "completed_on", "crew"])
+    rows = []
+    for x in w.replaced:
+        t = w.tx[x]
+        rows.append(["WO-%d" % int(rng.integers(260000, 269999)), "Transformer change-out", w.loc[x], "",
+                     "Replaced %g kVA with %g kVA" % (t["old_kva"], t["kva"]), t["replaced_on"], str(rng.choice(["Line 2", "Line 4"]))])
+    for sp in w.splits:
+        rows.append(["WO-%d" % int(rng.integers(260000, 269999)), "New transformer", w.loc[sp["child"]], "",
+                     "Set %g kVA %s-mount" % (w.tx[sp["child"]]["kva"], w.tx[sp["child"]]["mount"]), sp["on"], "Line 3"])
+        for hi in sp["moved"]:
+            rows.append(["WO-%d" % int(rng.integers(260000, 269999)), "Service transfer", w.loc[sp["child"]], w.sp[hi],
+                         "Service moved from %s" % w.loc[sp["parent"]], sp["on"] + dt.timedelta(days=int(rng.integers(0, 3))), "Line 3"])
+    for k in range(60):
+        typ = str(rng.choice(["Pole replacement", "Vegetation", "Meter base repair", "Streetlight", "Underground locate"]))
+        rows.append(["WO-%d" % int(rng.integers(250000, 269999)), typ, w.loc[int(rng.integers(0, len(w.tx)))], "",
+                     "", dt.date(2025, 3, 1) + dt.timedelta(days=int(rng.integers(0, 600))), str(rng.choice(["Line 1", "Line 2", "Line 4", "Contract"]))])
+    rows.sort(key=lambda r: r[5])
+    for r in rows:
+        ws.append(r)
     for c in ws[1]:
         c.font = Font(bold=True)
-    ws.column_dimensions["A"].width = 10
-    ws.column_dimensions["B"].width = 12
-    ws.column_dimensions["C"].width = 11
-    ws.column_dimensions["F"].width = 52
-    for row in ws.iter_rows(min_row=2, min_col=2, max_col=2):
+    for col, wd in zip("ABCDEFG", (11, 22, 20, 14, 34, 13, 10)):
+        ws.column_dimensions[col].width = wd
+    for row in ws.iter_rows(min_row=2, min_col=6, max_col=6):
         for c in row:
             c.number_format = "yyyy-mm-dd"
-    ws2 = wb.create_sheet("provider settings")
-    ws2.append(["provider", "summers", "event start", "event end", "pre-cool (minutes)", "setback (F)"])
-    for p in W.PROVIDERS:
-        q = W.PROG[p]
-        ws2.append([p, "2024-2026", hhmm(q["s"]), hhmm(q["e"]), q["pre"], q["d"]])
-    for c in ws2[1]:
-        c.font = Font(bold=True)
-    for col, wd in zip("ABCDEF", (16, 11, 11, 10, 16, 11)):
-        ws2.column_dimensions[col].width = wd
-    path = os.path.join(target, "peak_partners_event_log_2024_2026.xlsx")
+    path = os.path.join(target, "distribution_work_orders_2025_2026.xlsx")
     wb.save(path)
-    postprocess.normalize_ooxml(path, "Mary Hampton", "Mary Hampton", "2024-05-21T14:12:00Z", "2026-10-02T15:31:00Z",
-                                "Peak Partners event log", excel=True, company="Cedar Brake Electric Cooperative")
+    postprocess.normalize_ooxml(path, "Glenda Thompson", "Sandra Bernard", "2025-03-03T15:12:00Z", "2026-10-29T17:44:00Z",
+                                "Completed work orders", excel=True, company=ORG)
 
 
-def ercot_file(w, rng, target):
+def monitors_file(w, rng, target):
+    """the 48 monitored transformers' 15-minute load, interval-ending, local time"""
+    tot = (w.B + w.U + w.A).astype(np.float64)
     rows = []
-    for y in range(2016, 2027):
-        for k, m in enumerate((6, 7, 8, 9)):
-            if y in W.YEARS:
-                d = w.cp_days[W.YEARS.index(y) * 4 + k]
-                start = w.cp_time[d]
-            else:
-                d = dt.date(y, m, int(rng.integers(8, 28)))
-                while d.weekday() >= 5:
-                    d += dt.timedelta(days=1)
-                start = int(960 + 15 * int(rng.integers(0, 3)) + (15 if y >= 2021 and rng.random() < 0.5 else 0))
-            load = 62000 + (y - 2016) * 2100 + {6: 0, 7: 2400, 8: 3300, 9: -1500}[m] + int(rng.normal(0, 900))
-            rows.append([y, m, d.strftime("%m/%d/%Y"), hhmm(start + 15), load])
-    write_csv(os.path.join(target, "ercot_4cp_intervals_2016_2026.csv"),
-              ["Year", "Month", "Date", "Interval Ending (CPT)", "ERCOT Load (MW)"], rows)
-
-
-def weather_file(w, target):
-    rows = []
-    for d in w.days:
-        i = w.di[d]
-        for hr in range(1, 25):
-            rows.append(["KCDR", d.strftime("%Y-%m-%d"), hr, "%.1f" % W.temp_at(w, i, hr * 60 - 30)])
-    write_csv(os.path.join(target, "weather_kcdr_hourly_2024_2026.csv"), ["station", "date", "hour_ending", "temp_f"], rows)
-
-
-def cad_file(w, rng, target):
-    P = w.parcel
-    rows = []
-    for k in range(len(P["south"])):
-        yb = int(P["yb"][k])
-        rows.append(["R%06d" % (100000 + k * 3), w.cad_addr[k], w.city[k][0].upper(), w.city[k][1], "A1",
-                     int(P["sqft"][k]), yb, yb if rng.random() < 0.8 else yb + int(rng.integers(5, 25)),
-                     int(P["stories"][k]), ["R3", "R4", "R5", "R6"][int(rng.integers(0, 4))],
-                     "Y" if rng.random() < 0.11 else "", "%.2f" % (rng.lognormal(-1.2, 0.9) if P["south"][k] else rng.lognormal(-1.9, 0.4)),
-                     int(round(P["sqft"][k] * (140 + 60 * rng.random()) + 30000, -2))])
-    rows.sort(key=lambda r: r[0])
-    write_csv(os.path.join(target, "calder_cad_residential_2026.csv"),
-              ["prop_id", "situs_address", "situs_city", "situs_zip", "state_cd", "living_area_sf", "yr_blt",
-               "eff_yr_blt", "stories", "class_cd", "pool", "land_acres", "market_value"], rows)
+    for x in w.monitored:
+        hs = [hi for hi, h in enumerate(w.homes) if h["tx"] == x]
+        kw = tot[hs, :W.NDAY * W.Q].sum(0) * 1.012 + 0.06
+        pf = np.clip(0.975 - 0.024 * (kw / max(kw.max(), 1)) + rng.normal(0, 0.004, kw.size), 0.92, 0.99)
+        kva = np.abs(kw) / pf                      # apparent power has no sign; solar exports show as negative kW
+        gap = rng.random(kw.size) < 0.004
+        for d in range(W.NDAY):
+            day = (W.JUL1 + dt.timedelta(days=d)).isoformat()
+            sl = slice(d * W.Q, (d + 1) * W.Q)
+            rows.append([w.loc[x], day, "kW"] + ["" if g else "%.1f" % v for v, g in zip(kw[sl], gap[sl])])
+            rows.append([w.loc[x], day, "kVA"] + ["" if g else "%.1f" % v for v, g in zip(kva[sl], gap[sl])])
+    hdr = ["transformer_location", "date", "quantity"] + ["%02d:%02d" % divmod(15 * (k + 1), 60) for k in range(W.Q)]
+    write_csv(os.path.join(target, "transformer_monitors_15min_2026-07_08.csv"), hdr, rows)
     return len(rows)
 
 
-def quotes_file(w, target):
+def weather_file(w, rng, target):
+    rows = []
+    for year in (2024, 2025, 2026):
+        wx = w.wx[year]
+        for k, d in enumerate(wx["days"]):
+            for h in range(24):
+                t = wx["hourly"][k * 24 + h]
+                rh = float(np.clip(70 - 1.1 * (t - 55) + rng.normal(0, 6), 8, 98))
+                rows.append(["HCEA-WX1", d.isoformat(), "%02d:00" % h, "%.1f" % t, "%.0f" % rh])
+    write_csv(os.path.join(target, "weather_station_hourly_2024-2026.csv"),
+              ["station", "date_lst", "hour_lst", "dry_bulb_f", "rel_humidity_pct"], rows)
+
+
+def quote_file(w, target):
     wb = Workbook()
     ws = wb.active
-    ws.title = "quotes"
-    ws.append(["provider", "price per enrolled device, summer 2027 (USD)", "includes member incentive",
-               "new enrolments planned Jan-May 2027: provider app", "retail instant rebate", "co-op mailer",
-               "event start", "event end", "pre-cool (minutes)", "setback (F)", "note"])
-    notes = {"Pinecrest Home": "Retail partnership with Hill Country Home & Hardware: instant rebate and enrolment at the till",
-             "Ondera": "Event schedule unchanged from 2024-2026", "Kitebrook": "Dealer installs continue in the south service area"}
-    for p in W.PROVIDERS:
-        q = W.PROG[p]
-        n = q["new27"]
-        ws.append([p, q["price"], "yes", n.get("app", 0), n.get("retail", 0), n.get("mail", 0), hhmm(q["s"]), hhmm(q["e"]),
-                   q["pre"], q["d"], notes.get(p, "")])
+    ws.title = "2027 proposal"
+    ws.append(["product", "what it does each night", "fee per enrolled charger per year (USD)", "what the association provides"])
+    ws.append(["Quillpoint Stagger",
+               "Starts each session at a random time, drawn evenly over the quarter-hours from the later of plug-in and 23:00 "
+               "to the latest start that still finishes by the member's ready-by time; the session then charges without a "
+               "break. The same as the pilot's managed half.", W.FEE["stagger"], "The enrolled chargers"])
+    ws.append(["Quillpoint Sequence",
+               "On each transformer, charges the enrolled chargers one at a time from the later of plug-in and 23:00, in the "
+               "order of their ready-by times, each starting when the one before it finishes; a charger that could not "
+               "otherwise finish by its ready-by time starts at its latest start, alongside whichever are charging.",
+               W.FEE["sequence"], "The enrolled chargers and the transformer each one is on"])
+    ws.append([])
+    ws.append(["Fees are quoted on the chargers enrolled on the EV Overnight rate on 1 November 2026, for calendar 2027."])
+    ws.append(["Members cannot pause a managed session; the ready-by time is set in the Quillpoint app."])
     for c in ws[1]:
         c.font = Font(bold=True)
-    for col, wd in zip("ABCDEFGHIJK", (16, 20, 11, 18, 12, 11, 10, 10, 11, 10, 60)):
+    for col, wd in zip("ABCD", (20, 90, 18, 34)):
         ws.column_dimensions[col].width = wd
-    for row in ws.iter_rows(min_row=2, min_col=2, max_col=2):
-        for c in row:
-            c.number_format = "0.00"
-    path = os.path.join(target, "provider_quotes_summer_2027.xlsx")
+    path = os.path.join(target, "quillpoint_proposal_2027.xlsx")
     wb.save(path)
-    postprocess.normalize_ooxml(path, "Renee Henry", "Renee Henry", "2026-10-12T16:20:00Z", "2026-10-28T21:05:00Z",
-                                "Provider quotes, summer 2027", excel=True, company="Cedar Brake Electric Cooperative")
+    postprocess.normalize_ooxml(path, "Joshua Baker", "Joshua Baker", "2026-10-14T19:02:00Z", "2026-10-27T16:48:00Z",
+                                "Hollins Creek EA: 2027 managed charging proposal", excel=True, company="Quillpoint")
+
+
+def registrations_file(w, rng, target):
+    rows = []
+    zips = ["80601", "80603", "80621", "80640", "80642", "80643", "80651"]
+    for z in zips:
+        n = float(rng.uniform(60, 240))
+        for y in range(2019, 2027):
+            for q in (1, 2, 3, 4):
+                if y == 2026 and q == 4:
+                    continue
+                n *= float(rng.uniform(1.04, 1.11))
+                rows.append([z, "%dQ%d" % (y, q), int(n * 0.72), int(n * 0.28)])
+    write_csv(os.path.join(target, "state_ev_registrations_by_zip_2019-2026.csv"), ["zip", "quarter", "bev", "phev"], rows)
 
 
 def solar_file(w, rng, target):
     rows = []
-    for h in w.member:
-        if rng.random() < 0.055:
-            rows.append([w.acct[int(h)], "%.2f" % (rng.lognormal(np.log(7.5), 0.3)), "%04d-%02d-%02d" % (
-                int(rng.integers(2016, 2027)), int(rng.integers(1, 13)), int(rng.integers(1, 28))),
-                ["string", "microinverter"][int(rng.integers(0, 2))], "net metered"])
-    write_csv(os.path.join(target, "der_interconnections_2026.csv"),
-              ["account_number", "system_kw_dc", "interconnected_on", "inverter_type", "billing"], rows)
+    for hi, h in enumerate(w.homes):
+        if h["pv"]:
+            rows.append([w.sp[hi], "%.1f" % h["pv"], "%.1f" % (h["pv"] * 0.82),
+                         str(rng.choice(["Net metering", "Net metering", "Net metering (legacy)"])),
+                         (dt.date(2017, 1, 1) + dt.timedelta(days=int(rng.integers(0, 3400)))).isoformat()])
+    rows.sort(key=lambda r: r[4])
+    write_csv(os.path.join(target, "net_metering_interconnections_2026.csv"),
+              ["service_point", "dc_kw", "ac_kw", "program", "interconnected_on"], rows)
 
 
 def write_all(w, target):
-    rng = np.random.default_rng(W.SEED + 1)
-    for k, e in enumerate(w.events):
-        yr = e["date"].year % 100
-        n = sum(1 for x in w.events[: k + 1] if x["year"] == e["year"])
-        e["code"] = "E%02d-%02d" % (yr, n)
-    addresses(w, rng)
+    rng = np.random.default_rng(W.SEED + 11)
     ids(w, rng)
     counts = {}
-    counts["ami_rows"] = ami_file(w, rng, target)
-    accounts_file(w, rng, target)
-    counts["roster_rows"] = roster_file(w, rng, target)
-    counts["reports"] = provider_reports(w, rng, target)
-    counts["assignment_rows"] = assignment_file(w, target)
-    event_log(w, rng, target)
-    ercot_file(w, rng, target)
-    weather_file(w, target)
-    counts["cad_rows"] = cad_file(w, rng, target)
-    quotes_file(w, target)
+    counts.update(ami_files(w, rng, target))
+    counts["sessions"] = sessions_file(w, rng, target)
+    counts["roster"] = roster_file(w, rng, target)
+    assignment_file(w, target)
+    gis_file(w, rng, target)
+    exchange_file(w, rng, target)
+    register_file(w, rng, target)
+    work_orders(w, rng, target)
+    counts["monitor_rows"] = monitors_file(w, rng, target)
+    weather_file(w, rng, target)
+    quote_file(w, target)
+    registrations_file(w, rng, target)
     solar_file(w, rng, target)
     return counts

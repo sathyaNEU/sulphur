@@ -16,6 +16,172 @@ Data-native sentence: the pilot randomised chargers, not transformers, so the ra
 People: Eileen Casey (manager of distribution planning), Chad Wyatt (pilot manager), Rebekah Fleming (rates analyst), Joshua Baker
   (Quillpoint's account manager), Sandra Bernard (engineering, the planning standard)
 
+## Deep reasoning
+
+Task type: energy efficiency & demand response evaluation (tariff-demand-response-evaluation): a randomised managed-charging pilot on a time-of-use EV rate, evaluated for the rate's default on the distribution transformers it loads
+Domain test: every result is a distribution-planning or demand-response quantity: the pilot's randomised change in a charger's load at the off-peak start, each distribution transformer's highest 15-minute load of a summer under a charging design (how often a few 7.2 to 11.5 kW blocks coincide on one transformer on top of its homes' evening and night load), the replacements DPS-7's 120 per cent limit calls for, and each option's cost for the year
+Swap: "which charging default for a cooperative's EV rate, judged on its distribution transformers' summer peaks" with servers and jobs for transformers and chargers: the tariff's 23:00 off-peak start, the 15-minute kVA limit at a 0.95 planning power factor, the summer air-conditioning base, the transformer sizes and the work plan's change-outs stop making sense
+Where the weight sits: R4 and R5, each of the 382 transformers' highest quarter-hour of July and August under two designs the record holds only in part: Stagger replayed night by night with 400 draws of every session's random start, Sequence (never piloted) replayed by its filed rule on each night's plug-ins, energy and unplug times; long because every transformer-night is rebuilt from records at two grains (hourly reads at the homes, minute-level sessions at the chargers), not clever
+Layer 1: hourly reads exported per substation in local time, hour-ending, with estimated hours filled by interpolation and a re-sent block in each file; meters exchanged mid-summer (the exchange day split across two meter numbers); the session log in UTC with a re-sent batch and empty plug-ins; chargers swapped under new serials; the roster's re-imported rows with the account number unpadded; one split's service transfers not yet posted to the GIS; three change-outs the register has not caught up with; monitor gaps and the transformer's own losses in the monitors; each made by the system that keeps the file, none deciding a result
+Not one thing: the call needs two independent judgments: Stagger's season coincidence replayed night by night (without it the pilot's average managed night files Stagger with 1 over) and Sequence replayed by its rule (without it Sequence is either the pilot's managed quarter, which files Stagger, or one charger at a time, which files Sequence with 1 replacements); the members' own schedules restored moves the own count (52 against 28 off the 2026 meters) and the 15-minute lift moves each count by a few; one sentence rescues one result
+One-fact test: the strongest sentence ("a few chargers on one transformer still land together on some night of the summer under a random start, so replay every night") rescues R4 alone; the call still needs Sequence's own replay and the budget its forced overlaps (effort.json: 1 of 9)
+Not semantics: every field read right (hour-ending reads, UTC sessions, swaps, exchanges, transfers, change-outs, the halves, the ready-by column) and the careful route still files Stagger with 0 replacements, because none of the judgments is a reading: one is a maximum over nights of a sum, one a schedule replayed under a rule, one a status quo rebuilt charger by charger
+Not rule application: EV-4 files what is compared (an option's expected fee plus replacements in a summer like the last one, the chargers the quote covers, own schedules as their owners set them), DPS-7 the limit, the kVA convention and the installed costs, the proposal the two products' rules and fees; nothing files how a transformer's summer peak is estimated under a design from hourly reads and sessions, that the pilot's average night misprices it, or how the managed quarter's own settings are known
+Estimand: Board Policy EV-4 sections 3 and 4.1 to 4.3; DPS-7 sections 2.1 to 2.3, 3 and 4; the proposal (fees per enrolled charger per year, the chargers enrolled on 1 November 2026, each product's rule); the pilot plan section 3 (R2's comparison and its per-charger, every-night footing); the prompt
+No decoy: no memo, draft or stakeholder figure; the proposal describes its products' rules and prices and ranks nothing; the state's EV registrations and the net-metering list rank nothing and decide nothing
+No replay: no result re-derives a published figure and no stated number is wrong
+Pinned: the rivals run on the cut pack (the monitored transformers' option-by-option peak lift in place of the per-hour excess, no lift at all, every charger on its declared setting, two other random seeds) all call Sequence; own schedules span 49 to 59, Stagger 25.5 to 33.5, Sequence 10 to 12, the flip fee USD 145 to 204; the ready-by is the unplug time (EV-4 4.1)
+Run forecast: a frontier run reads every file, cleans the reads and the sessions, measures the pilot's change at 23:00 from the randomised halves (-4.95 kW, R2 earned), and then carries the pilot's average managed night to each transformer (R4 lost: 0 over), takes Sequence as one charger at a time or as the pilot's managed quarter (R5 lost), reads own schedules off the 2026 meters (R3 lost: 28), and files Stagger (R6 to R8 lost); method shortcut at R4 and R5, dismissed own evidence at R3
+Strategy label: OWN (no client strategy carries a randomised per-charger effect to shared transformers' season peaks; the nearest, Engineering and Physical Sciences 9, sizing a battery when the month's peak is not known in advance, works a peak functional on one meter)
+Depth level: 5 on the client's scale: four independent judgments (Stagger's season coincidence, Sequence's replay, own schedules restored, the quarter-hour lift), the call needing the first two together, and the shortcuts landing on different wrong answers (Stagger with 0 or 1 replacements, Stagger again with Sequence taken as the pilot's quarter, Sequence with 1 replacements, own schedules at 28)
+Lesson: an effect randomised on the units is not the effect on the shared resource they load: the decision's quantity is the summer's maximum of a sum of a few blocks on each transformer, which the average night hides, and a design the pilot never ran is replayed on the record's own windows; no task on file teaches it (non_additive_aggregation untaught, skeleton.py lessons)
+
+## Stump screen
+
+Run after the build (the card was registered before the screen existed), every candidate through the nine tests of
+stumping/references/stump-screen.md (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data, 5 two records at
+two grains, 6 an assumption waved through with its precedent, 7 a plausible shallower story, 8 across the data, 9 worth the
+call):
+
+| Candidate | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Kept |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A: Stagger's season coincidence on each transformer (the average managed night against the summer's worst quarter-hour) | yes | yes | yes | yes | yes (hourly reads, minute sessions) | yes (N01) | yes (the pilot's own profile reproduces its means) | yes | yes (flips the call to Stagger alone) | kept: the deciding trap |
+| B: Sequence's forced overlaps (its rule replayed on each night's windows) | yes | yes | no: the proposal files the rule, its late-charger clause included | yes | yes | yes (N04) | yes (one charger at a time) | yes | yes (as the pilot's quarter it flips the call) | dropped as a trap, kept as a result: its trigger is filed, so a careful run that replays the rule earns it |
+| C: own schedules restored for the managed quarter | near a closed card (supporting only) | yes | no: the pilot plan files the managed quarter | yes | yes (halves against sessions) | yes (L04) | yes (the 2026 meters reconcile) | yes | no: alone it leaves the call standing | dropped as a trap, kept as a supporting result |
+| D: the quarter-hour lift over hourly reads | yes | yes | no: DPS-7 files the 15-minute support | yes | yes (monitors) | no | no | yes | no: every lift stays inside the bands | dropped: texture |
+
+Read straight, the screen keeps one trap (A), which the call needs; B and C are graded work a hurried route skips (the
+measured routes lose them) but a careful run can earn, because their triggers are written down. Depth rests on A plus the
+work around it, not on three independent traps.
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | chargers enrolled on 1 November 2026 (1,313) | assembly-reconciliation | the proposal's basis; the roster (swaps, closures, re-imported rows) | exact | narrow look at broad data: the roster's Active rows counted with the re-imported duplicates (the quick pass); the careful pass is right | independent: the roster | Ask 7 |
+| R1b | transformers serving them (382, the CSV's rows) | assembly-reconciliation | DPS-7 4: the GIS as corrected by the work orders | exact | narrow look at broad data: the GIS alone, without the split's transfers; the careful pass is right | R1 | Ask 10 |
+| R2 | the pilot's change at 23:00 to 23:15 (-4.95 kW per enrolled charger) | causal-reasoning | the pilot plan 3 (per enrolled charger, every night, managed quarter against own schedules) | plus or minus 0.1 | method shortcut: the hourly reads at 23:00 to 24:00 in place of the quarter (the quick pass); the careful pass is right | independent: the sessions and the halves | Component 4, Ask 6 |
+| R3 | own schedules' transformers over their limit (52) | causal-reasoning | EV-4 4.2 (as each owner set it) | 49 to 59 | dismissed own evidence: the 2026 meters as the status quo (28) | R1b | Component 3, Ask 2 |
+| R4 | Stagger's transformers over their limit, at their chance (27.5) | modeling | EV-4 4.1, 4.3; the proposal's rule | 25.5 to 33.5 | method shortcut: the pilot's average night times the chargers (0) | R1b | Component 1, Ask 2 |
+| R5 | Sequence's transformers over their limit (11) | modeling | EV-4 4.1; the proposal's rule | 10 to 12 | method shortcut: one charger at a time (1) or the pilot's quarter (27.5) | R1b | Component 2, Ask 2 |
+| R6 | each option's fee, replacements and total (Sequence USD 212,800, Stagger USD 365,200, own USD 794,600) | synthesis | EV-4 3; DPS-7 3; the proposal's fees | each total's rivals' span | method shortcut, carried from the hurried counts | R3, R4, R5 | Asks 3 to 5 |
+| R7 | the default and the work plan's replacements (Sequence, 11, USD 160,300) | synthesis | EV-4 3 and 5 | the call exact; the count 10 to 12 | method shortcut: Stagger | R4, R5 | Recommendation, Ask 1 |
+| R8 | the Sequence fee at which the call changes (USD 156 a charger) | uncertainty | EV-4 3 | USD 145 to 204 | method shortcut, carried from the hurried counts | R4, R5, R6 | Ask 8 |
+
+Carry-forward: R1, R2 stand alone; R3, R4 and R5 each rest only on the assembly (R1b) and each other's judgments are independent, so a slip on one costs only its own count and the totals built on it; R6 to R8 fall with the counts they use.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| random starts that still coincide on some night | constructed, the process of random starts over 62 nights | no: every transformer with two or more chargers | modelling (a maximum over nights of a sum) | modelling | keep |
+| Sequence's forced overlaps on heavy nights | constructed, energy against the hours to departure | no: every transformer on its heavy nights | modelling (the rule replayed on each night's windows) | modelling | keep |
+| the managed quarter inside the 2026 meters | constructed, the pilot's design | no: a quarter of chargers on every substation | a targeted query (the halves against the sessions) | modelling (each charger's own setting) | keep (supporting; its omission alone leaves the call standing) |
+| peaks inside the hour the hourly reads cannot see | constructed, appliances and air-conditioning cycling | no: every transformer, every hour | the monitors at another grain | modelling (a lift from the monitored transformers) | keep (texture: every reasonable lift stays inside the bands) |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 chargers enrolled | Missed | Right | Right |
+| R1b transformers serving them | Right | Right | Right |
+| R2 the pilot's change at 23:00 | Missed | Right | Right |
+| R3 own schedules' transformers over | Missed | Missed | Right |
+| R4 Stagger's transformers over | Missed | Missed | Right |
+| R5 Sequence's transformers over | Missed | Missed | Right |
+| R6 each option's cost | Missed | Missed | Right |
+| R7 the default and its replacements | Missed | Missed | Right |
+| R8 the flip fee | Missed | Missed | Right |
+| Roughly | 1 of 9 | 3 of 9 | 9 of 9 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (quick 20.8, careful but hurried 40.5, thorough 100)
+Largest single hint: "a few chargers on one transformer still land together on some night of the summer under a random start, so replay every night"; rescues 1 of 9 results (R4); each of the other two sentences rescues one (R5, R3)
+Pair estimate: 40.5
+Judge's note: the stage 4 judge put the careful pass at about 4 to 6 of 9 results where the measured routes give 3 of 9; the table is the generator's measurement of the coded routes, and the platform's runs are the measurement that counts
+
+## Data provenance
+
+Source: generated by task7/generator (world.py simulates the association's homes, EVs, chargers, pilot, network and systems; pack.py writes each file the way its system writes it); no public data
+Behaves like the real thing: homes' load at the quarter-hour from a household baseline, central air that follows a Front Range summer's heat with each house's thermal lag and compressor cycling, dryers, cooking, hot tubs and rooftop solar; EVs that drive, come home between 16:00 and 21:00, plug in on most evenings, leave around 07:00 and charge at 7.2, 9.6 or 11.5 kW; an off-peak price from 23:00 that most own schedules start at; a randomised pilot that managed one charger in four; a meter data system that keeps hourly reads and fills gaps; a platform that logs sessions in UTC; a GIS and a register that lag the work orders
+Genuine patterns: (1) the 23:00 step on own schedules against a spread under Stagger, (2) evening air-conditioning peaks that follow the heat with a lag and drop through the night, (3) weekday and weekend driving with Sunday-night top-ups and weekend trips, (4) adoption clustered by street (transformers with none to nine chargers), (5) peaks inside the hour that hourly reads average away
+Problems by process: estimated hours (the meter data system's interpolation), a re-sent block in each meter export and a re-sent session batch (export retries), meters exchanged mid-summer (failed registers and a recall), chargers swapped under warranty (new serials linked in the roster), re-imported roster rows (a migration that dropped leading zeros), a split's transfers not yet in the GIS and three change-outs not yet in the register (posting lag), monitor gaps (communications)
+License: none needed: generated for this task and released with it as CC BY 4.0 (metadata.json)
+Used as is: nothing public is used
+Breadth: 19 files in three formats; 382 transformers serving 1,313 enrolled chargers, about 3,500 meters' hourly reads, 257,000 sessions over three summers, 48 monitored transformers; which transformers, nights and chargers decide a count is the work
+
+## Template check
+
+Chain signature: assembly-reconciliation, causal-reasoning, causal-reasoning, modeling, modeling, synthesis, synthesis, uncertainty
+Question form: what (the default, and what its replacements cost the work plan)
+Nearest build: task22 (Delmont Power and Light's feeder energy balance): another utility network, but its answer is a ranked set of feeders from a loss bridge, its lessons the square of current, a switching log and a residual; this one picks one of three charging designs from a randomised pilot on each transformer's coincident summer peak; skeleton severity none against every card and client task
+Guard warnings: repeat.decision (a pick among a few options, as task16's) is a cooperative's choice of three charging designs, not a record-linkage method; skeleton.house_lesson (queue_or_capacity_replay on mark117 and task4 v12) is a supporting move here (Sequence's rule replayed), the deciding lesson being non_additive_aggregation; precut's nearest chains (task21, scenarios with the flip point) has its weight in modeling quote feeds, this one in a hard-to-measure quantity
+Abstraction sentence: none writable against a build on file: no card carries a randomised per-unit effect replayed onto shared capacities' season maxima with an unpiloted design replayed on the record's windows
+
+## Frontier check
+
+Precedents: R3 L04 and L01 (dismissed own evidence: the 2026 meters read as the status quo though the halves file shows a managed quarter); R4 L15 and N01 (method shortcut: the pilot's per-charger change carried as an average night, an enlarged fleet assumed to scale in proportion); R5 L15 and N04 (method shortcut: Sequence assumed one charger at a time, or the pilot's quarter, instead of replayed); R6 to R8 L15 (they rest on the hurried counts)
+Shallow path checks: R4: the average managed night reproduces the managed quarter's mean load at every quarter-hour and the pilot's -4.95 kW change exactly; refuted by a check of another kind, the monitored transformers' 15-minute load (transformer_monitors_15min_2026-07_08.csv, another grain) on transformers with two or more managed chargers, which shows them landing together on some nights; R5: one charger at a time is what the product's name suggests and keeps every transformer under; refuted by the rule's own clause run on each night's sessions (energy and unplug times in the session log); R3: the 2026 meters reconcile to the monitors; refuted by the halves file and the sessions' control mode (a quarter of chargers under Stagger all summer)
+Assumption made false: "a managed design's effect on a transformer is the pilot's average change per charger times its chargers" (diversity smooths it): false here because a transformer serves two to nine chargers and its limit is the summer's single worst quarter-hour, so the average hides the nights they coincide; tested on the monitored transformers and by replaying the sessions
+Forcing: the line is the cheapest option; the golden family (the per-hour lift, the monitored-peak lift, no lift, declared settings, two seeds) all call Sequence, the nearest at USD 231,000 against Stagger's lowest USD 341,100; the shortcuts call Stagger (the average night, Sequence taken as the pilot's quarter) or Sequence with 1 replacements; the lift moved 20 per cent each way, replacement costs down 20 per cent and Sequence's fee up 20 per cent all keep Sequence; the flip fee is USD 156 against the quoted 40
+Noun swap: nearest on file by skeleton.py check is depth:279e74f2 (a crew's days replayed through capacity): the replay move and the queue lesson carry across; the decision form, the deciding lesson, the mechanisms, the detection and the file roles do not; severity none
+Closed strategies: the call turns on non_additive_aggregation (a transformer's summer maximum of a sum of a few chargers' blocks), on no card of the client's page (none of the five families touches a maximum over a shared resource's season; skeleton.py closed lists no neighbour); the supporting step R3 (own schedules restored because the 2026 meters hold a managed quarter) sits near "Outcomes are hidden by the intervention itself" and "Controls were partly treated" (no selection on risk and no interference here, but the metered record carries the treatment): its route alone (no_own in effort.json) moves the own count to 28 and the call stays Sequence; the 15-minute lift is texture (no_lift stays inside every band)
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | chargers counted | enrolled 1 November 2026; on the board's date; on 1 June 2026 | 1 November 2026 | the proposal ("quoted on the chargers enrolled on 1 November 2026"); EV-4 3 |
+| SF2 | a summer like the last one | July and August 2026 as metered; June to September; weather-normalised | July and August 2026 | EV-4 4.1; DPS-7 2.1 |
+| SF3 | over its limit | 15-minute kVA above 120 per cent; hourly; monitored kVA | 15-minute kW / 0.95 | DPS-7 2.1, 2.2 ("whether or not the transformer is monitored") |
+| SF4 | nameplate | register; register corrected by change-outs | corrected | DPS-7 2.3, 4 |
+| SF5 | transformers serving | GIS; GIS corrected by work orders | corrected | DPS-7 4 |
+| SF6 | own schedules for the managed quarter | own-schedule history then declared; declared only | history then declared | EV-4 4.2 (rival in band: declared only, 51) |
+| SF7 | a random option's count | expected (each at its chance); one draw; majority | expected | EV-4 4.3 (an option's cost is its expected cost) |
+| SF8 | ready-by in the replay | unplug time; recorded ready-by | unplug time | EV-4 4.1 ("each session finishing by the time it was unplugged") |
+| SF9 | Sequence's rule | the proposal's text | as filed | the proposal |
+| SF10 | replacement cost | DPS-7's installed cost by unit; times the chance for Stagger | as filed | DPS-7 3; EV-4 3, 4.3 |
+| SF11 | fee | per enrolled charger per year times the chargers covered | as filed | the proposal; EV-4 3 |
+| SF12 | the pilot's change | per enrolled charger, every night of July and August, 23:00 to 23:15, managed less own | as filed | the pilot plan 3; the prompt |
+| SF13 | chargers that left the rate | as metered; removed | as metered | EV-4 4.2 |
+| SF14 | the lift to 15 minutes | per-hour excess; monitored peak; none | per-hour excess | same call (all rivals Sequence; bands span them) |
+| SF15 | sessions plugged in on 30 June | their July quarters counted; left out | counted | EV-4 4.1 (July as metered holds them); same call |
+| SF16 | 31 August's night after midnight | outside; inside | outside | DPS-7 2.1 (July and August) |
+
+## Closure table
+
+| # | Axis | Reading | Move |
+|---|---|---|---|
+| 1 | Population | chargers enrolled on 1 November 2026; transformers serving them | filed: the proposal; DPS-7 4 |
+| 2 | Unit of account | transformers over their limit; USD for the year; kW per enrolled charger | filed: EV-4 3; the pilot plan 3 |
+| 3 | Attribution window | July and August 2026 as metered | filed: EV-4 4.1; DPS-7 2.1 |
+| 4 | As-of dating | the roster of 2 November, the quote of 1 November 2026 | the files' own dates |
+| 5 | Version basis | a swapped charger's sessions under both serials | the roster's replaces_serial |
+| 6 | Denominator | every enrolled charger, every night (R2) | filed: the pilot plan 3 |
+| 7 | Weighting | Stagger's transformers at their chance | filed: EV-4 4.3 |
+| 8 | Window length | the season's highest quarter-hour | filed: DPS-7 2.1 |
+| 9 | Boundary inclusivity | over when above 120 per cent | filed: DPS-7 2.1 ("exceeds") |
+| 10 | Rounding path | none in the prompt; figures at their natural precision | the answer blocks |
+| 11 | Tie-break | none needed (the totals differ by USD 150,000 and more) | - |
+| 12 | Maturity and censoring | 2027 not observed; judged on a summer like the last one | filed: EV-4 3, 4.1 |
+| 13 | Order of operations | assemble, base, replay each option, lift, test, cost | the golden's steps; same call in every order |
+| 14 | Row order | the CSV by substation then location | - |
+| 15 | Duplicate resolution | re-sent meter rows, re-sent sessions, re-imported roster rows dropped | keys: meter and date; session id; service point, serial and date |
+| 16 | Identity normalisation | old meters to service points; swapped serials to one charger | the exchange log; the roster |
+| 17 | Netting against gross | net kWh at solar homes; enrolled charging removed from the base | EV-4 4.1 ("as metered") |
+| 18 | Dimensional units | kWh in an hour to kW; kW to kVA at 0.95 | the export's header; DPS-7 2.2 |
+| 19 | Code and status semantics | control modes; Active, Closed, Replaced | the files' own codes |
+| 20 | Integerisation | counts whole except Stagger's chance-weighted count | filed: EV-4 4.3 |
+| 21 | Clause scope | EV-4 section 4 for all three options | filed |
+| 22 | Forward window contents | 2027 judged on 2026's sessions and loads | filed: EV-4 4.1 |
+
+## Literal reader
+
+EV-4 section 3 makes the default the cheapest option for the year; 4.1 to 4.3 make an option's cost its fee plus the replacements it leaves when every covered charger replays its July and August 2026 sessions as the option would, each finishing by its unplug time, the members' own schedules as each owner set them and every option at its expected cost (so Stagger's transformers at their chance); DPS-7 2.1 to 2.3 make a transformer over when its highest 15-minute load in July and August is above 120 per cent of the nameplate in service, at kW / 0.95, and section 3 prices the replacement; the proposal fixes the fees, the chargers covered and each product's rule. Executed word for word on the cut pack these give Sequence with 11 replacements; the literal reader's open choices (how to lift hourly reads to the quarter-hour, which record shows an owner's setting) are run as rivals and all give Sequence.
+
+## Prompt contract
+
+May not drop or change: the question (the EV Overnight rate's charging default from summer 2027, and what the replacements it leaves cost the 2027 work plan); a short memo with the call and a CSV with a row for each transformer serving the rate's chargers; for each option the transformers it leaves over their limit, the platform's fee, the replacements' cost and the total; the kW per charger the pilot's managed charging took off an enrolled home's load from 23:00 to 23:15; the chargers enrolled; the fee per charger at which the call would change. Must never add: the policy's comparison or its summer, the limit, a method (an average night, a replay, a chance, a lift, a monitor, a setting), a warning, an attached file's name, a role, a rounding instruction or a count the data hold.
+
 ## Tried and rejected
 - The note's decisive rung, per feeder the smaller of expected buyers and hosting slots: a stated connection standard, a per-feeder hosting map and a neighbourhood-to-feeder join whose keys line up hand it to any solver who reads them, its driver sits nearest task106's, and as labelled it BLOCKs on ban.pattern C (task119), ban.calibration pilot_log (task122) and test.same_driver_older (a signature spent in nine builds); kept as rung 2.
 - Resistance-to-heat-pump netting (each resistance conversion frees feeder headroom for oil or propane conversions): the connection standard either states a per-heat-pump assessment, which contradicts the netting and is a counter-pin, or states a net-change rule, which hands it over; a corpus of past approvals would refute the stop rung, which L1 forbids.
@@ -368,3 +534,12 @@ People: Eileen Casey (manager of distribution planning), Chad Wyatt (pilot manag
   consecutive hot event days; the 2027 retail cohort and the fleet's homes are 'The pooled effect does not transfer to a target with
   a different mix'), so the call was a stack of closed lessons; the guard read it only as near because the card named another key.
   The world, its dataset and its shell go with it; architecture 11 decides on coincidence at a shared transformer, off the page.
+- 2026-11-12, architecture 11 at calibration: half the chargers in the managed half made the 2026 meters alone call 'keep own
+  schedules' (the metered summer's count fell below Sequence's), so a step near the closed 'outcome hidden by the intervention' card
+  would have decided; the pilot manages one charger in four instead, and the route that reads own schedules off the meters now
+  leaves the call standing (no_own in effort.json).
+- 2026-11-12, architecture 11 at calibration: the managed half's own settings drawn from the own half's distribution or set to the
+  commonest timer moved the own count by 13 (64 against 77); the roster now carries the usual charging each member gave at
+  enrolment, as the rate schedule says it is asked, and the declared-only rival sits inside the band.
+- 2026-11-12, architecture 11 at calibration: the monitored transformers' option-by-option peak lift as the golden put Stagger 6
+  above the world's quarter-hour truth; the per-hour excess lands closest to the truth and is the golden, the peak lift a rival.

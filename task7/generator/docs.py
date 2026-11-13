@@ -1,7 +1,7 @@
-"""task7 architecture 10: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer (officepdf.py).
-They file the WHAT (what the board renews on, what a reduction is, which intervals and which devices, the rate, how the
-test events are drawn and what the research sample is, what an event does to a thermostat) and say nothing of how an
-impact is estimated, carried to the peak days, to next summer's devices or to the fleet's homes."""
+"""task7 architecture 11: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer (officepdf.py).
+They file the WHAT (what the board chooses the default on, what a summer like the last one is, which chargers and which
+transformers count, the limit and the replacement costs, how the pilot's managed quarter was drawn and how its results are
+reported, the rate's hours) and say nothing of how a transformer's summer peak is estimated under an option."""
 import datetime as dt
 import os
 
@@ -11,12 +11,13 @@ from reportlab.platypus import Paragraph, Table
 import officepdf
 import world as W
 
-CT = dt.timezone(dt.timedelta(hours=-5))
-CST = dt.timezone(dt.timedelta(hours=-6))
-H1 = ParagraphStyle("h1", fontName="Helvetica-Bold", fontSize=14, spaceAfter=6, textColor="#22415E")
-H2 = ParagraphStyle("h2", fontName="Helvetica-Bold", fontSize=10.5, spaceBefore=8, spaceAfter=3, textColor="#22415E")
+MT = dt.timezone(dt.timedelta(hours=-6))
+MST = dt.timezone(dt.timedelta(hours=-7))
+H1 = ParagraphStyle("h1", fontName="Helvetica-Bold", fontSize=14, spaceAfter=6, textColor="#2F4B2F")
+H2 = ParagraphStyle("h2", fontName="Helvetica-Bold", fontSize=10.5, spaceBefore=8, spaceAfter=3, textColor="#2F4B2F")
 BODY = ParagraphStyle("b", fontName="Helvetica", fontSize=9.2, spaceAfter=4)
 SMALL = ParagraphStyle("s", fontName="Helvetica", fontSize=8, spaceAfter=2, textColor="#444444")
+ORG = "Hollins Creek Electric Association"
 
 
 def P(t, st=BODY):
@@ -27,149 +28,115 @@ def T(rows, widths):
     return Table(rows, colWidths=widths)
 
 
-def hhmm(m):
-    return "%d:%02d" % divmod(int(m), 60)
-
-
 def policy(target):
-    s = [P("Cedar Brake Electric Cooperative", SMALL), P("Board Policy 412: Demand-response providers", H1),
-         P("Adopted by the board of directors on 24 October 2023; section 4 revised 17 March 2026.", SMALL),
+    s = [P(ORG, SMALL), P("Board Policy EV-4: The EV Overnight rate's charging default", H1),
+         P("Adopted by the board of directors on 20 February 2025; section 4 revised 17 September 2026.", SMALL),
          P("1 Purpose", H2),
-         P("ERCOT allocates the transmission cost of its system to each distribution service provider on that provider's "
-           "load in the four 15-minute intervals in which ERCOT's own load peaked in June, July, August and September of "
-           "the year before (the 4CP intervals). The co-op pays its wholesale transmission charge on its average load in "
-           "those four intervals. Peak Partners, the co-op's bring-your-own-thermostat programme, lowers that load: on "
-           "the days the co-op expects a 4CP interval it asks the members' thermostats, through the providers that "
-           "connect them, to run warmer for a few hours."),
-         P("2 Providers", H2),
-         P("A provider is a thermostat company whose platform dispatches the co-op's events to the thermostats its "
-           "members enrolled. Each provider runs the event its own way, within the settings it files with the co-op each "
-           "summer, and is paid a price per enrolled device for the summer, which includes the member's incentive."),
-         P("3 Renewal", H2),
-         P("The board renews a provider's contract for a summer when the transmission cost its devices are expected to "
-           "save that summer is more than the co-op would pay the provider for them."),
-         P("4 The saving", H2),
-         P("4.1 The saving is the provider's reduction of the co-op's load in the 4CP intervals, averaged over the four, "
-           "times the transmission rate in the co-op's current notice."),
-         P("4.2 The reduction in an interval is what the co-op's load would have been in that interval without the "
-           "provider's event, less what it was. It is counted per device enrolled with the provider on 1 July of the "
-           "summer, whether or not the device takes part in a given event."),
-         P("4.3 A summer is judged as one like the last three: over the twelve 4CP intervals of the three summers before "
-           "it, with the co-op calling its 4CP alerts as it called them on those days, and each provider running its "
-           "event with the settings it has quoted."),
-         P("5 What the co-op pays", H2),
-         P("The co-op pays the provider's quoted price per device enrolled on 1 July, for the summer."),
-         P("6 Review", H2),
-         P("Energy Programs brings the providers' quotes and its appraisal to the board's November meeting each year.")]
-    officepdf.build(os.path.join(target, "board_policy_412_demand_response_providers.pdf"), s,
-                    "Board Policy 412: Demand-response providers", "Charles Hardin", "Board Policy 412",
-                    "Cedar Brake Electric Cooperative | Board Policy 412",
-                    dt.datetime(2026, 3, 17, 10, 4, tzinfo=CT), dt.datetime(2026, 3, 18, 9, 12, tzinfo=CT),
-                    producer="LibreOffice 25.2", font="Liberation Sans", body_pt=9.2, margin_mm=22, top_mm=20,
-                    bottom_mm=18)
+         P("Members on the EV Overnight rate charge their cars at home on networked chargers enrolled with the association's "
+           "charging platform. The charging default is how those chargers charge unless the member is told otherwise. This "
+           "policy sets how the board chooses it."),
+         P("2 The options", H2),
+         P("The default is one of three options: the members' own schedules, under which each charger charges as its owner "
+           "has set it; or one of the two products the platform offers, as its current proposal describes them."),
+         P("3 Choosing the default", H2),
+         P("Each November the board sets the default for the following calendar year. It chooses the option with the lowest "
+           "cost to the association for that year. An option's cost is the platform's quoted fee for the chargers the quote "
+           "covers, plus the replacement cost, under Distribution Planning Standard DPS-7, of each distribution transformer "
+           "serving one of those chargers that the option would leave over its limit in a summer like the last one."),
+         P("4 A summer like the last one", H2),
+         P("4.1 A summer like the last one is July and August of the last summer as metered at the homes each transformer "
+           "serves, with every charger the quote covers charging its sessions of that July and August (plugged in, energy "
+           "drawn, unplugged) as the option would charge them, each session finishing by the time it was unplugged."),
+         P("4.2 Under the members' own schedules a charger charges as its owner set it. A charger that has left the rate is "
+           "taken as it was metered."),
+         P("4.3 An option's cost is its expected cost."),
+         P("5 The work plan", H2),
+         P("The transformers the chosen default would leave over their limit are replaced before the next summer and are "
+           "carried in that year's construction work plan.")]
+    officepdf.build(os.path.join(target, "board_policy_EV-4_charging_default.pdf"), s,
+                    "Board Policy EV-4: The EV Overnight rate's charging default", "Board of Directors", "Board Policy EV-4",
+                    ORG + " | Board Policy EV-4",
+                    dt.datetime(2026, 9, 17, 9, 40, tzinfo=MT), dt.datetime(2026, 9, 18, 8, 55, tzinfo=MT),
+                    producer="LibreOffice 25.2", font="Liberation Sans", body_pt=9.2, margin_mm=22, top_mm=20, bottom_mm=18)
 
 
-def rate_notice(target):
-    rows = [["Charge", "Basis", "Rate from 1 January 2027"],
-            ["Transmission (TCOS pass-through)", "per kW of 4CP load, a year", "$%.2f" % W.RATE],
-            ["Wholesale energy", "per kWh", "per the power supply agreement"]]
-    s = [P("Cedar Brake Electric Cooperative, Finance and Rates", SMALL),
-         P("Wholesale transmission charge for 2027", H1),
-         P("28 October 2026", SMALL),
-         P("ERCOT published the 2026 4CP intervals on 15 October 2026. The co-op's 2027 transmission charge is set on its "
-           "average load in those four intervals at the rate below, billed in twelve equal monthly amounts through the "
-           "co-op's wholesale power supplier."),
-         T(rows, [170, 150, 150]),
-         P("The rate is the one the board's appraisals use for 2027."),
-         P("Prepared by Matthew Santos, rates analyst.", SMALL)]
-    officepdf.build(os.path.join(target, "transmission_charge_notice_2027.pdf"), s,
-                    "Wholesale transmission charge for 2027", "Matthew Santos", "Transmission charge 2027",
-                    "Cedar Brake Electric Cooperative | Finance and Rates",
-                    dt.datetime(2026, 10, 28, 15, 40, tzinfo=CT), dt.datetime(2026, 10, 28, 16, 2, tzinfo=CT),
-                    producer="LibreOffice 25.8", font="Carlito", body_pt=9.5, margin_mm=20, top_mm=18, bottom_mm=18)
+def standard(target):
+    rows = [["Unit in service", "Replaced by", "Installed cost"]]
+    for kva in (25.0, 37.5, 50.0, 75.0, 100.0):
+        mount = "pole-mount" if kva <= 37.5 else "pad-mount"
+        rows.append(["%g kVA %s" % (kva, mount), "%g kVA %s" % (W.NEXT[kva], "pole-mount" if W.NEXT[kva] <= 50 and kva <= 37.5 else "pad-mount"),
+                     "$%s" % format(W.COST[kva], ",")])
+    s = [P(ORG + ", Engineering", SMALL), P("Distribution Planning Standard DPS-7: Distribution transformer loading", H1),
+         P("Revision 4, 3 November 2025. Owner: Sandra Bernard, engineering supervisor.", SMALL),
+         P("1 Scope", H2),
+         P("This standard sets when a single-phase distribution transformer serving residential load is over its limit and "
+           "what replacing it costs, for the construction work plan and for any board policy that relies on it."),
+         P("2 The limit", H2),
+         P("2.1 A transformer is over its limit in a summer when its highest 15-minute load in July and August exceeds 120 "
+           "per cent of its nameplate kVA."),
+         P("2.2 A transformer's load in a 15-minute interval is the demand of the homes it serves in that interval. For "
+           "planning, load in kVA is that demand in kW divided by 0.95, whether or not the transformer is monitored."),
+         P("2.3 The nameplate is that of the unit in service at the date of the study."),
+         P("3 Replacement", H2),
+         P("A transformer over its limit is replaced by the next standard size before the following summer, at the installed "
+           "cost below (crew, unit, connections and disposal)."),
+         T(rows, [140, 140, 90]),
+         P("4 Records", H2),
+         P("Connectivity is taken from the GIS as corrected by completed work orders; a unit's nameplate from the transformer "
+           "register as corrected by completed change-outs.")]
+    officepdf.build(os.path.join(target, "dps-7_distribution_transformer_loading.pdf"), s,
+                    "DPS-7 Distribution transformer loading", "Sandra Bernard", "Distribution Planning Standard DPS-7",
+                    ORG + " | Engineering",
+                    dt.datetime(2025, 11, 3, 14, 5, tzinfo=MST), dt.datetime(2025, 11, 4, 10, 18, tzinfo=MST),
+                    producer="LibreOffice 24.8", font="Carlito", body_pt=9.5, margin_mm=20, top_mm=18, bottom_mm=18)
 
 
-def mv_plan(target):
-    s = [P("Cedar Brake Electric Cooperative, Energy Programs", SMALL),
-         P("Peak Partners: measurement and verification plan, 2024 to 2026", H1),
-         P("Issued 14 May 2024 by Renee Henry, manager of energy programs.", SMALL),
-         P("1 Test events", H2),
-         P("Each summer the co-op calls eight test events on weekdays in June to September, none on a day with a 4CP "
-           "alert or next to one. On each test event the co-op divides every provider's enrolled devices into two halves "
-           "at random, calls one half and holds the other back; the assignment is kept in the event assignment file. "
-           "Each provider runs a test event as it runs any other event."),
-         P("2 4CP alerts", H2),
-         P("On the weekdays the co-op's 4CP forecast flags, it calls every enrolled device. No device is held back on an "
-           "alert day."),
-         P("3 The research sample", H2),
-         P("The co-op fitted 15-minute interval meters on the Marble Ridge North and Liberty Grove substations in 2023. "
-           "The research sample is the Peak Partners homes on those meters that enrolled before 1 June 2024. The co-op "
-           "exports their 15-minute reads, 13:00 to 21:00, on every event day and on eight weekdays each summer without "
-           "an event. Every other member's meter records hourly and is not exported for the programme."),
-         P("4 Provider reports", H2),
-         P("After each event each provider sends its report: a row for each device it dispatched and what happened to "
-           "it, in the provider's own layout. The roster of enrolled devices is the co-op's."),
-         P("5 Results", H2),
-         P("Energy Programs reports each summer's results to the board with the providers' quotes for the next summer.")]
-    officepdf.build(os.path.join(target, "peak_partners_mv_plan_2024.pdf"), s,
-                    "Peak Partners: measurement and verification plan", "Renee Henry", "M&V plan",
-                    "Cedar Brake Electric Cooperative | Energy Programs",
-                    dt.datetime(2024, 5, 14, 11, 20, tzinfo=CT), dt.datetime(2024, 5, 14, 13, 2, tzinfo=CT),
-                    producer="LibreOffice 24.2", font="DejaVu Sans", body_pt=9.0, margin_mm=24, top_mm=20,
-                    bottom_mm=20)
+def pilot_plan(target):
+    s = [P(ORG + ", Member Programs", SMALL), P("EV Overnight managed charging pilot, 2025 and 2026", H1),
+         P("Issued 28 April 2025 by Chad Wyatt, pilot manager.", SMALL),
+         P("1 Design", H2),
+         P("On 12 May 2025 the platform draws one in four of the chargers then enrolled on the EV Overnight rate, at random, "
+           "for its Stagger product. A charger enrolled after that day is drawn the same way when it enrols. The other three "
+           "in four keep charging on their owners' own schedules. A member in the managed quarter sets a ready-by time in "
+           "the app and cannot pause a managed session."),
+         P("2 Data", H2),
+         P("The platform reads every enrolled charger, managed or not, and keeps each session's plug-in, start, end and "
+           "unplug times and its energy. The meter data system keeps every member's hourly reads. In 2024 the association "
+           "fitted 15-minute load monitors to 48 distribution transformers chosen at random within each size class."),
+         P("3 Results", H2),
+         P("The pilot's results are reported per enrolled charger, averaged over every night of July and August whether the "
+           "car was plugged in or not, the managed quarter against the chargers on their owners' own schedules."),
+         P("4 Enrolment", H2),
+         P("Enrolment on the EV Overnight rate pauses on 1 June 2026 and reopens once the board has set the default for "
+           "2027 under Board Policy EV-4.")]
+    officepdf.build(os.path.join(target, "ev_overnight_pilot_plan_2025.pdf"), s,
+                    "EV Overnight managed charging pilot", "Chad Wyatt", "Pilot plan", ORG + " | Member Programs",
+                    dt.datetime(2025, 4, 28, 11, 20, tzinfo=MT), dt.datetime(2025, 4, 28, 15, 2, tzinfo=MT),
+                    producer="LibreOffice 24.8", font="DejaVu Sans", body_pt=9.0, margin_mm=24, top_mm=20, bottom_mm=20)
 
 
-def guide(target):
-    rows = [["Provider", "Event window", "Pre-cool", "Setback"]]
-    for p in W.PROVIDERS:
-        q = W.PROG[p]
-        rows.append([p, "%s to %s" % (hhmm(q["s"]), hhmm(q["e"])), ("%d minutes" % q["pre"]) if q["pre"] else "none",
-                     "%d F" % q["d"]])
-    s = [P("Peak Partners", SMALL), P("How a Peak Partners event works", H1),
-         P("Member and provider guide, summer 2026", SMALL),
-         P("When the co-op calls an event, your thermostat company sends your thermostat the event. For the event window "
-           "your thermostat runs a few degrees warmer than your own setting, and some companies cool your home a little "
-           "before the window starts. When the window ends your thermostat goes back to your own setting."),
-         P("You can leave an event at any time by changing the temperature on the thermostat or in the app. Your "
-           "thermostat then goes back to your own setting for the rest of the window."),
-         P("Your thermostat has to be connected to your home's wifi to receive an event. If it is not connected when the "
-           "event is sent, it runs as normal."),
-         P("Event settings for summer 2026", BODY),
-         T(rows, [120, 110, 90, 70]),
-         P("Your incentive is paid by your thermostat company each summer you stay enrolled.")]
-    officepdf.build(os.path.join(target, "peak_partners_member_guide_2026.pdf"), s,
-                    "How a Peak Partners event works", "Mary Hampton", "Member and provider guide",
-                    "Peak Partners | Cedar Brake Electric Cooperative",
-                    dt.datetime(2026, 4, 22, 9, 30, tzinfo=CT), dt.datetime(2026, 4, 23, 14, 11, tzinfo=CT),
-                    producer="LibreOffice 25.2", font="Liberation Sans", body_pt=9.4, margin_mm=20, top_mm=18,
-                    bottom_mm=18)
-
-
-def study(target):
-    rows = [["Programme type", "Typical reduction per device, first event hour", "Cost per kW-year"],
-            ["Utility-installed thermostat", "1.0 to 1.4 kW", "$45 to $80"],
-            ["Bring your own thermostat", "0.7 to 1.1 kW", "$35 to $70"],
-            ["Peak-time rebate (behavioural)", "0.1 to 0.3 kW", "$60 to $140"]]
-    s = [P("Gulf and Plains Energy Research", SMALL),
-         P("Residential demand response in ERCOT: potential to 2030", H1),
-         P("Summary report, September 2025", SMALL),
-         P("This study estimates the residential summer demand response that ERCOT's distribution service providers "
-           "could enrol by 2030, from a survey of 31 programmes and the housing stock of each weather zone."),
-         T(rows, [170, 170, 110]),
-         P("Programme results vary with the event design, the climate and the homes enrolled. The study's ranges are "
-           "drawn from programme evaluations filed between 2019 and 2024 and are not adjusted to any one utility."),
-         P("Potential by weather zone, 2030: Coast 410 MW, North Central 520 MW, South Central 360 MW, West 90 MW.")]
-    officepdf.build(os.path.join(target, "ercot_residential_dr_potential_2025.pdf"), s,
-                    "Residential demand response in ERCOT: potential to 2030", "Gulf and Plains Energy Research",
-                    "Summary report", "Gulf and Plains Energy Research | Summary report",
-                    dt.datetime(2025, 9, 9, 8, 15, tzinfo=CT), dt.datetime(2025, 9, 9, 8, 50, tzinfo=CT),
-                    producer="LibreOffice 25.2", font="DejaVu Sans", body_pt=9.0, margin_mm=25, top_mm=22,
-                    bottom_mm=22)
+def rate_schedule(target):
+    rows = [["Period", "Hours", "Energy charge"],
+            ["Off-peak", "23:00 to 07:00, every day", "$0.068 per kWh"],
+            ["On-peak", "15:00 to 19:00, weekdays June to September", "$0.284 per kWh"],
+            ["Standard", "all other hours", "$0.121 per kWh"],
+            ["Monthly service charge", "", "$19.50"]]
+    s = [P(ORG, SMALL), P("Rate Schedule EV-1: EV Overnight", H1), P("Effective 1 January 2026", SMALL),
+         P("Availability", H2),
+         P("To residential members who charge an electric vehicle at home on a networked Level 2 charger enrolled with the "
+           "association's charging platform. At enrolment the member says how the car usually charges."),
+         T(rows, [110, 200, 90]),
+         P("Charges are billed on the member's hourly meter reads. The charging default under Board Policy EV-4 applies to "
+           "every enrolled charger.", SMALL),
+         P("Prepared by Rebekah Fleming, rates analyst.", SMALL)]
+    officepdf.build(os.path.join(target, "rate_schedule_EV-1_2026.pdf"), s, "Rate Schedule EV-1: EV Overnight",
+                    "Rebekah Fleming", "Rate Schedule EV-1", ORG + " | Rates",
+                    dt.datetime(2025, 12, 4, 16, 30, tzinfo=MST), dt.datetime(2025, 12, 9, 9, 12, tzinfo=MST),
+                    producer="LibreOffice 24.8", font="Liberation Sans", body_pt=9.4, margin_mm=20, top_mm=18, bottom_mm=18)
 
 
 def write_all(target, w):
     policy(target)
-    rate_notice(target)
-    mv_plan(target)
-    guide(target)
-    study(target)
+    standard(target)
+    pilot_plan(target)
+    rate_schedule(target)

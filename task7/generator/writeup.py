@@ -1,123 +1,115 @@
-"""task7 architecture 10: submission.md, the four answer blocks, every figure from figures.json at the precision the
-golden deliverables print it (kW to the thousandth, shares in whole per cent, devices whole, money to the dollar, the
-totals' dollars to the hundred, MW to the hundredth), every band from the generator's own conventions."""
-
-
-def n(v):
-    return format(int(round(v)), ",")
+"""task7 architecture 11: submission.md, the four answer blocks, every figure from figures.json at the precision the
+golden deliverables print it (counts whole, Stagger's chance-weighted count to a tenth, kW to the hundredth, money to the
+hundred dollars, the flip fee to the dollar), every band from the rivals run on the cut pack."""
 
 
 def usd(v):
     return "$" + format(int(round(v)), ",")
 
 
-def pct(v):
-    return "%d%%" % int(round(100 * v))
+def cnt(F, o):
+    v = F[o]["over"]
+    return ("%.1f" % v) if o == "stagger" else "%d" % v
+
+
+def band(F, o):
+    b = F["bands"][o]
+    return ("%.1f and %.1f" % (b[0], b[1])) if o == "stagger" else "%d and %d" % (b[0], b[1])
+
+
+def reps(x):
+    return "%g replacement%s" % (x, "" if x == 1 else "s")
 
 
 def write(F, path):
-    ps = F["providers"]
-    kw, bar = F["kw"], F["bar_kw"]
-    care = F["care_kw"]
-    cv = F["conventions"]
-    keep = F["renewed"]
-    drop = [p for p in ps if p not in keep]
+    o, s, q = F["own"], F["stagger"], F["sequence"]
+    rc, rq = F["routes"]["careful"], F["routes"]["no_J3_perfect"]
+    bt = F["band_totals"]
     L = ["## Tags", "",
-         "**Domain:** Energy Systems & Utilities, energy efficiency and demand response evaluation.",
+         "**Domain:** Energy Systems & Utilities, energy efficiency and demand response evaluation (tariff and "
+         "demand-response evaluation).",
          "**Analytical objective:** Experiment & Causal Analysis.", "",
          "## Final Recommendation", ""]
-    L.append("**Renew %s and %s for summer 2027; do not renew %s or %s.** Kitebrook's 2027 devices take %.3f kW each off "
-             "our load in the 4CP intervals against the %.3f kW its price needs, Lumivale's %.3f against %.3f and Pinecrest "
-             "Home's %.3f against %.3f. This rejects reading the test events' own reduction at the 4CP intervals, which "
-             "renews Lumivale (%.3f kW) and Pinecrest Home (%.3f kW) and drops Kitebrook (%.3f kW): the 4CP days come late "
-             "in heat waves, when members leave events; Pinecrest Home's 2027 fleet is mostly retail-rebate devices; and "
-             "Kitebrook's homes are larger and older than the research sample's."
-             % (", ".join(keep[:-1]), keep[-1], ", ".join(drop[:-1]), drop[-1], kw["Kitebrook"], bar["Kitebrook"],
-                kw["Lumivale"], bar["Lumivale"], kw["Pinecrest Home"], bar["Pinecrest Home"], care["Lumivale"],
-                care["Pinecrest Home"], care["Kitebrook"]))
-    L += ["", "## Supplementary Questions", "", "### provider_renewals_2027_workbook.xlsx", ""]
-    L.append("1. Sheet 'providers', each provider's kW per device enrolled on 1 July 2027 taken off the co-op's load in the "
-             "4CP intervals of a summer like 2024 to 2026, each within the kW given beside it (the spread of the "
-             "defensible methods): %s. Sheet '4CP intervals' gives each of the %d intervals, the %s "
-             "interval at nothing for every provider (no alert was called)."
-             % (", ".join("%s %.3f (within %.3f)" % (p, kw[p], F["kw_band"][p]) for p in ps), cv["intervals"],
-                " and ".join(F["missed_cp"])))
-    L.append("2. Sheets 'providers' and '2027 fleets', each provider's devices enrolled on 1 July 2027 and what its quote "
-             "would cost (each within %d per cent): %s." % (cv["n_band_pct"], "; ".join(
-                 "%s %s devices, %s" % (p, n(F["n27"][p]), usd(F["cost"][p])) for p in ps)))
-    L.append("3. Sheet 'providers', the renewed providers (%s) in all: %.2f MW off the co-op's 4CP load, saving %s of "
-             "transmission cost, %s net of the %s their quotes cost (each within %d per cent)."
-             % (", ".join(keep), F["mw"], usd(F["saving_usd"]), usd(F["net_usd"]), usd(F["paid_usd"]), cv["total_band_pct"]))
-    L += ["", "### provider_renewals_2027_memo.docx", ""]
-    L.append("4. A memo of about a page for the board: the call first, a table of each provider's kW per 2027 device "
-             "against the kW its price needs, its devices, its quote's cost and the verdict, a chart of the six against "
-             "their lines, and short paragraphs on why the test events overstate Lumivale and Pinecrest Home and "
-             "understate Kitebrook, and on Ondera's window.")
+    L.append("**Make Quillpoint Sequence the EV Overnight rate's charging default for 2027 and carry %d transformer "
+             "replacements (%s) in the 2027 work plan**: at %s for the year it costs less than Quillpoint Stagger (%s) or "
+             "the members' own schedules (%s). This rejects Stagger, which the pilot's average managed night shows "
+             "clearing every transformer (%g over, %s), because a random start still lets the few chargers on a small "
+             "transformer land together on some night of the summer: replayed night by night, Stagger leaves %s over."
+             % (q["over"], usd(q["replace"]), usd(q["total"]), usd(s["total"]), usd(o["total"]),
+                rc["stagger"], usd(rc["total"]), cnt(F, "stagger")))
+    L += ["", "## Supplementary Questions", "", "### ev_overnight_default_2027_memo.docx", ""]
+    L.append("1. The call, in the memo's title and first paragraph: Quillpoint Sequence as the 2027 default, with %d "
+             "transformer replacements in the 2027 work plan (between %d and %d) costing %s." %
+             (q["over"], F["bands"]["sequence"][0], F["bands"]["sequence"][1], usd(q["replace"])))
+    L.append("2. Transformers serving the rate's chargers that each option leaves over their limit in a summer like 2026: "
+             "members' own schedules %d (between %s), Quillpoint Stagger %s with each transformer at its chance of being "
+             "over (between %s), Quillpoint Sequence %d (between %s)." %
+             (o["over"], band(F, "own"), cnt(F, "stagger"), band(F, "stagger"), q["over"], band(F, "sequence")))
+    L.append("3. The platform's fee for the %s enrolled chargers for 2027: own schedules $0, Stagger %s ($%g a charger), "
+             "Sequence %s ($%g a charger)." % (format(F["n_chargers"], ","), usd(s["fee"]), F["fee_rate"]["stagger"],
+                                                  usd(q["fee"]), F["fee_rate"]["sequence"]))
+    L.append("4. What the replacements would cost at DPS-7's installed costs: own schedules %s, Stagger %s, Sequence %s "
+             "(each within the spread of its count)." % (usd(o["replace"]), usd(s["replace"]), usd(q["replace"])))
+    L.append("5. The total for 2027: own schedules %s (between %s and %s), Stagger %s (between %s and %s), Sequence %s "
+             "(between %s and %s)." % (usd(o["total"]), usd(bt["own"][0]), usd(bt["own"][1]), usd(s["total"]),
+                                         usd(bt["stagger"][0]), usd(bt["stagger"][1]), usd(q["total"]),
+                                         usd(bt["sequence"][0]), usd(bt["sequence"][1])))
+    L.append("6. The pilot's managed charging took %.2f kW per enrolled charger off the 23:00 to 23:15 interval in July "
+             "and August 2026 (within 0.1 kW): %.2f kW in the managed quarter against %.2f kW on the owners' own "
+             "schedules." % (abs(F["pilot_effect"]), F["pilot_managed"], F["pilot_own"]))
+    L.append("7. Chargers enrolled on the rate on 1 November 2026: %s." % format(F["n_chargers"], ","))
+    L.append("8. The call changes if Sequence's fee rises above about $%d per charger for the year (between $%d and $%d), "
+             "where Stagger would cost the same." % (F["flip_fee"], F["band_flip"][0], F["band_flip"][1]))
+    L.append("9. A chart of the transformers over their limit under each option, stacked by transformer size.")
+    L += ["", "### ev_overnight_transformers_2027.csv", ""]
+    L.append("10. %d rows, one for each transformer serving an enrolled charger, with its location, substation, kVA, "
+             "15-minute limit in kW, homes, enrolled chargers, and its summer peak in kW under each option: own schedules "
+             "(%d marked over), Stagger (its mean peak and its chance of being over, the chances summing to %s) and "
+             "Sequence (%d marked over), with the replacement cost." % (F["n_tx"], o["over"], cnt(F, "stagger"), q["over"]))
     L += ["", "## Critical Components", ""]
-    L.append("1. On the 4CP days **%s** of Lumivale's enrolled devices were still in its event at the middle of the 4CP "
-             "interval (between %d%% at its end and %d%% at its start; the band runs 2 points beyond both), against "
-             "**%s** of its called devices on the test events at 17:30 (within 3 points)."
-             % ("%d%%" % F["pct"]["lumivale_cp"], min(F["pct"]["lumivale_cp_start"], F["pct"]["lumivale_cp_end"]),
-                max(F["pct"]["lumivale_cp_start"], F["pct"]["lumivale_cp_end"]), "%d%%" % F["pct"]["lumivale_test"]))
-    L.append("2. Pinecrest Home's 2027 fleet is **%s** retail-rebate devices and keeps **%s** of its devices in the event "
-             "at the 4CP intervals, against **%s** of today's fleet on the 4CP days (each within 3 points)."
-             % ("%d%%" % F["pct"]["pinecrest_retail27"], "%d%%" % F["pct"]["pinecrest_2027"],
-                "%d%%" % F["pct"]["pinecrest_now"]))
-    L.append("3. Kitebrook's 2027 fleet sheds **%.2f** times what its research-sample devices shed, by the homes' cooling "
-             "slopes from living area and year built (within 0.06)." % F["transport"]["Kitebrook"])
-    L.append("4. Ondera's event ends at %s, before **%d** of the twelve 4CP intervals, so its devices add load there: "
-             "**%.3f** kW per device." % (F["window_end"]["Ondera"], F["after_window"]["Ondera"], kw["Ondera"]))
+    L.append("1. Quillpoint Stagger leaves **%s** transformers over their limit (between %s), not the **%g** the pilot's "
+             "average managed night suggests." % (cnt(F, "stagger"), band(F, "stagger"), rc["stagger"]))
+    L.append("2. Quillpoint Sequence leaves **%d** transformers over (between %s): its rule has to start a late charger "
+             "alongside others on heavy nights, where one charger at a time would leave **%g**." %
+             (q["over"], band(F, "sequence"), rq["sequence"]))
+    L.append("3. The members' own schedules leave **%d** transformers over (between %s), not the **%g** the 2026 meters "
+             "show with a quarter of the chargers under Stagger." % (o["over"], band(F, "own"), rc["own"]))
+    L.append("4. The pilot's managed charging took **%.2f kW** per enrolled charger off 23:00 to 23:15." % abs(F["pilot_effect"]))
     L += ["", "## Step-by-Step", ""]
-    s = 1
-    L.append("%d. Put the six providers' reports on one footing (`corvane_event_report_2024_2026.csv` and "
-             "`kitebrook_events_2024_2026.csv` on UTC, the rest local; Corvane, Lumivale and Ardena list unreached devices, "
-             "Ondera, Kitebrook and Pinecrest Home leave them out) and keyed each row to its programme id through "
-             "`peak_partners_roster_2026-10-30.csv`, swapped thermostats included; mapped the research sample's meters "
-             "through `member_accounts_2026.csv`, exchanges included." % s)
-    s += 1
-    L.append("%d. Measured each provider's reduction on the 24 randomised test events "
-             "(`mv_event_assignments_2024_2026.csv`, `ami_15min_reads_peak_partners_2024_2026.csv`): held-back half against "
-             "called half, 15 minutes at a time, each home's own 13:00 to 14:30 load that day as the covariate." % s)
-    s += 1
-    L.append("%d. Split the reduction into the shed of a device still in the event (a straight line in the interval's "
-             "temperature, `weather_kcdr_hourly_2024_2026.csv`) and the share still in it, every enrolled device in the "
-             "denominator." % s)
-    s += 1
-    L.append("%d. Read the share on the 4CP days themselves (`ercot_4cp_intervals_2016_2026.csv` against "
-             "`peak_partners_event_log_2024_2026.xlsx`): each 4CP day is the %s or later alert day of a heat wave, and "
-             "Lumivale keeps %s at the 4CP interval against %s on the test events. The hurried reading takes the test "
-             "events' reduction straight to the 4CP intervals." % (s, {2: "second", 3: "third", 4: "fourth"}[F["cp_run_min"]],
-                                                                    "%d%%" % F["pct"]["lumivale_cp"],
-                                                                    "%d%%" % F["pct"]["lumivale_test"]))
-    s += 1
-    L.append("%d. Carried each fleet to 1 July 2027 (the devices enrolled now, each at its channel's leaving rate since "
-             "2021, and the quotes' new enrolments (`provider_quotes_summer_2027.xlsx`) like the provider's recent enrolments through "
-             "the same channel); the share in the event modelled device by device on the 4CP days (the day, the channel, "
-             "the years enrolled) and taken for the 2027 fleet. Pinecrest Home's fleet becomes %s retail and keeps %s in "
-             "the event." % (s, "%d%%" % F["pct"]["pinecrest_retail27"], "%d%%" % F["pct"]["pinecrest_2027"]))
-    s += 1
-    L.append("%d. Carried the shed to each fleet's homes: each research-sample home's cooling slope off its quiet days, "
-             "predicted for every home from living area and year built in `calder_cad_residential_2026.csv` matched by "
-             "address (county roads and FM roads in two forms); Kitebrook's fleet sheds %.2f times its sample devices'."
-             % (s, F["transport"]["Kitebrook"]))
-    s += 1
-    L.append("%d. Read each provider at each 4CP interval's place in its window (Ondera's after its %s end), "
-             "%s at nothing, and averaged the twelve: %s." % (s, F["window_end"]["Ondera"], " and ".join(F["missed_cp"]),
-                                                             ", ".join("%s %.3f" % (p, kw[p]) for p in ps)))
-    s += 1
-    L.append("%d. Set each against the kW its quoted price needs at $%.2f per kW "
-             "(`board_policy_412_demand_response_providers.pdf`, `transmission_charge_notice_2027.pdf`): %s clear it; "
-             "%s do not." % (s, F["rate"], ", ".join(keep),
-                                                                                ", ".join(drop)))
-    s += 1
-    L.append("%d. The renewed providers' %s devices take %.2f MW off the 4CP load and save %s, %s net of their quotes."
-             % (s, n(F["renewed_devices"]), F["mw"], usd(F["saving_usd"]), usd(F["net_usd"])))
-    L.append("")
-    L.append("No other conclusion survives. Reading the test events' reduction at the 4CP intervals renews Lumivale and "
-             "Pinecrest Home and drops Kitebrook, but the 4CP days' own reports show Lumivale's members leaving its long, "
-             "deep event late in a heat wave, the quotes and the roster put Pinecrest Home's 2027 fleet in the retail "
-             "channel that is often offline and leaves events, and the appraisal roll puts Kitebrook's fleet in homes "
-             "that shed far more than the research sample's. Each correction alone moves its own provider across its line, "
-             "and every defensible variant of each (a linear home model, one leaving rate for every channel, the test "
-             "halves compared without the pre-event load) keeps the same three renewed.")
-    open(path, "w", encoding="utf-8").write("\n".join(L) + "\n")
+    L.append("1. From `ev_overnight_roster_2026-11-02.csv`, with the re-imported rows dropped, each swapped charger "
+             "followed to its replacement and the closed ones left out: %s chargers enrolled on 1 November 2026." %
+             format(F["n_chargers"], ","))
+    L.append("2. Through `gis_service_points_2026-10-30.csv`, the transfers in `distribution_work_orders_2025_2026.xlsx` "
+             "and `ami_meter_exchanges_2026.csv`, they sit on %d transformers; each one's nameplate is the register's as "
+             "corrected by the change-outs (DPS-7 section 4)." % F["n_tx"])
+    L.append("3. Each transformer's base is its homes' hourly reads (the three `mdm_hourly_` files, re-sent rows dropped) "
+             "less the enrolled chargers' charging from `quillpoint_sessions_2024-06_2026-09.csv`, put from UTC onto "
+             "local time.")
+    L.append("4. The pilot's randomised comparison (`pilot_assignment_2025.csv`): the managed quarter charged %.2f kW per "
+             "enrolled charger at 23:00 to 23:15 against %.2f on own schedules. Carried to the transformers as the managed "
+             "quarter's average night times their chargers, it puts Stagger at %g transformers over, the shallow read." %
+             (F["pilot_managed"], F["pilot_own"], rc["stagger"]))
+    L.append("5. The limit is each transformer's single highest quarter-hour of the summer (DPS-7 2.1), so Stagger is "
+             "replayed night by night on every charger's 2026 sessions with its random start drawn %s times: the few "
+             "chargers on a small transformer still coincide on some nights, and Stagger leaves %s over at their chance "
+             "(EV-4 4.3)." % (format(400, ","), cnt(F, "stagger")))
+    L.append("6. Sequence, never piloted, is run by its rule in `quillpoint_proposal_2027.xlsx` on each night's plug-ins, "
+             "energy and unplug times: on heavy nights a late charger starts alongside, and %d transformers stay over, "
+             "where one charger at a time would leave %g." % (q["over"], rq["sequence"]))
+    L.append("7. Own schedules are rebuilt for every charger (its own-schedule sessions, the managed quarter's from summer "
+             "2024, or the usual charging the member gave at enrolment): %d over, where the 2026 loads as metered give %g."
+             % (o["over"], rc["own"]))
+    L.append("8. Every option's base is lifted from the hourly reads to the quarter-hour by the highest quarter-hour above "
+             "each hour on the %d monitored transformers (`transformer_monitors_15min_2026-07_08.csv`), scaled by the "
+             "square root of a transformer's homes." % F["monitors"])
+    L.append("9. At DPS-7's installed costs and Quillpoint's fees, Sequence costs %s, Stagger %s and own schedules %s; "
+             "Sequence stays cheapest until its fee passes about $%d a charger." %
+             (usd(q["total"]), usd(s["total"]), usd(o["total"]), F["flip_fee"]))
+    L += [""]
+    L.append("No other conclusion survives. The pilot's average night prices a coincidence it cannot see, so it files "
+             "Stagger with nothing to replace; taking Sequence as the pilot's managed quarter files Stagger again, and "
+             "taking it as one charger at a time files Sequence with %s, where its own rule leaves %d. The 2026 "
+             "meters are not the members' own schedules, and every replay that lifts the hourly reads to the quarter-hour "
+             "another way (the monitored transformers' peaks, or none at all) still calls Sequence." % (reps(rq["sequence"]), q["over"]))
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(L) + "\n")
