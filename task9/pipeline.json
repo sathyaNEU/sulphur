@@ -1,42 +1,41 @@
 {
   "task": "task9",
-  "status": "READY",
+  "status": "DESIGN",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 5,
-  "stage_name": "ready",
-  "updated": "2026-11-12",
+  "stage": 2,
+  "stage_name": "design",
+  "updated": "2026-11-13",
   "doctrine": "throughout",
-  "call": "take the conditioner disk out of the full PM under Rev G and change it after 1,010 wafers of its own use on PU-1 and PU-2 and 840 on PU-3 and PU-4, saving about USD 519,000 a year against Rev F",
-  "chain": "R1 the ring's loss at sort on wafers sorted 1 April to 31 August (0.90 points; good die P-A 139,000, P-B 14,000, P-C 226,000); R2 the parts' and tools' shares (the disk 96.3 per cent, the pad 3.7, the rest none); R3 the units final test lost on lots finished in the window (P-A 44,300, P-B 3,500, P-C 67,100); R4 each unit's onset and climb on lot A165-L2603, the disks every unit runs now (840 and 640 wafers; 15.8 and 23.5 points per 1,000); R5 each unit's count under Rev G with sort and final test priced (1,010 and 840, the call); R6 the yearly saving against Rev F (USD 519,000)",
-  "architecture": 2,
+  "call": "",
+  "chain": "R1 the June to September shortfall in good die per wafer for VX40 and VP12 against January to March; R2 the slurry loop's slower flow by each polisher's distance along it, its VX40 cost and VR90 Q1 cost; R3 the pre-gate bench's metal build-up under the July chemical life, its VX40 cost and VR90 Q1 cost at the plan's loading; R4 DP2B's thick edge and CM3's thin-edge tune cancelling on the wafers that run both, its VX40 cost, the plan's CM3 harmonisation alone and its VR90 Q1 cost; R5 the contact-etch polymer per RF second on ET1B and ET3A, VR90's Q1 cost at the 2,400-wafer clean and the interval that holds it; R6 VR90's entitlement at the line's January to March performance at its own die area; R7 VR90's Q1 2027 yield under the plan and with the changes, and the wafer starts",
+  "architecture": 3,
   "loops": 0,
   "precut": {
-    "exit": 0,
-    "date": "2026-11-11"
+    "exit": null,
+    "date": ""
   },
   "leak": {
-    "leak_py": "REVIEW (4 lines ruled in the note's pre-ship check)",
-    "reader": "two reads (2026-11-11, and 2026-11-12 after the prompt fix): nothing handed over, no one thing; two realism tells fixed in the generator"
+    "leak_py": "",
+    "reader": ""
   },
   "duplicate_check": {
-    "heart": "WARN (overuse.weight, repeat.decision, repeat.question_form, skeleton.house_lesson, skeleton.house_shell)",
-    "nearest": "task1 v3, task21 v1, depth:b9efebd1, mark179 v5, task18 v1 (skeleton severity none)"
+    "heart": "",
+    "nearest": ""
   },
   "judge": {
-    "verdict": "DETERMINISTIC",
-    "disposition": "FIX_NOW, applied in one pass (the causes' frame pinned in the prompt, the stores wording, the low pair's climb floor and the high pair's onset floor, final test's bands, the saving by pair, the side figures)",
-    "gate_h": "domain pass, layers pass, one_thing none; stump power 45 to 60",
-    "report": "task9/determinism_check_report.md",
-    "first_pass": "blind: R1 inside, R2 the disk named (no share table), R3 outside (final test in proportion to the sort excess), R4 lot found (7 of 8 cells), R5 outside (1,244, 1,235, 937, 896), R6 inside (about 556,000)"
+    "verdict": "",
+    "disposition": "",
+    "gate_h": "",
+    "report": ""
   },
-  "paper_pair": 23.0,
+  "paper_pair": null,
   "effort": {
-    "quick": 7.0,
-    "careful": 23.0,
-    "thorough": 100.0,
-    "largest_hint": "the disks fitted since May come from a faster-wearing supplier lot (rescues R4, R6: 2 of 6)"
+    "quick": null,
+    "careful": null,
+    "thorough": null,
+    "largest_hint": ""
   },
   "runs": {
     "run1": null,
@@ -52,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 6: the author rewrites the prompt in their own words (voice-check.py task9 --rewrite), uploads it with target.zip, generates the two runs, then /triage-runs task9",
+  "resume": "stage 2: the fab simulator (truth) and the rivals on the clean truth, then the design note to precut exit 0",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -61,7 +60,7 @@
     "note": ""
   },
   "prompt_rewritten": false,
-  "source": "the author's Concept 2, \"The edge-ring on Fab 2's wafers\" (/root/.claude/uploads/2ddb3641-4769-5139-aa6d-71f6eadaeff9/453e2ae7-4.md, prepared 2026-11-10)",
+  "source": "the author's brief of 2026-11-13 (a re-root of the cleared slot: five to six independent judgments off the client's closed page, a pack of about 40 MB with 20 to 30 related tables)",
   "slot_history": "the author cleared the slot on 2026-11-11; the quantitative-finance architectures are in git history and the card's lineage; architecture 1 of the cleared slot (Concept 1, drive replacements) was spent at stage 4 on 2026-11-11 (PAUSED commit 1614e25, determinism judge SEND_BACK)",
   "history": [
     {
@@ -99,6 +98,10 @@
     {
       "date": "2026-11-11",
       "event": "stage 4: leak reader clean of method and answer leaks (two realism tells fixed); judge DETERMINISTIC FIX_NOW, but its blind first pass landed every result, so back to stage 2"
+    },
+    {
+      "date": "2026-11-13",
+      "event": "architecture 2 (the edge ring, READY, never uploaded) superseded at the author's word: one of its call's two steps was the client's closed young-cohort lesson behind a serial join; architecture 3 drawn in a new fab world (Varnholt Halbleiter Fab 2, Dresden) with five independent lessons off the closed page; card registered at WARN"
     }
   ],
   "careful_repriced_on_judge": "about 51 to 58",
