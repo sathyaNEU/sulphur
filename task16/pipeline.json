@@ -1,41 +1,41 @@
 {
  "task": "task16",
- "status": "DRAWING",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-12",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: whether the One Chart conversion links patient records automatically in April 2027 and under which of four candidate rules, read from each rule's estimated false merges per 2,000 automatic links against the patient identity policy's cap of one",
- "chain": "R1 distinct patients in the converted index and patients in both legacy indexes; R2 the exact name, birth date and sex rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN and birth date rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
+ "call": "run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against HIM-14's one; Rule A 2.97 (106.7 false merges), Rule C 5.44 (153, twins), Rule D 7.12 (164); not Rule A, which the engine's chance rates put at 0.14",
+ "chain": "R1 the converted index (220,669 distinct patients, 76,062 in both indexes); R2 rule A's false merges from chance agreement on the joint cells of names, birth years and 1 January heaping (106.7); R3 rule C's twins the pilot never saw (153); R4 rule D's twins under a parent's SSN (164); R5 Calder Bay records holding two or more patients (568); R6 the rule (B); R7 patients left under more than one record after Rule B (48,754)",
  "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-12"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (no LEAK), 2026-11-12, --asof 2026-11-04",
+  "reader": "one isolated read at medium effort, 2026-11-12, on cut 7eeb799e: no leak, no ranking file, no helper file, no one thing"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (strategy_risk, chain_near task3 v7, overuse.weight; answered in the note)",
+  "nearest": "skeleton severity none against everything on file; nearest task4 v12, task20 v2, task13 v4"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "task16/determinism_check_report.md",
+  "note": "rule links, cap arithmetic, rule A's estimate, overlays and blood bank counts reproduced; the linked index not rebuilt in budget, its fixed-weight rival asserted inside the bands in checks.py"
  },
- "paper_pair": null,
+ "paper_pair": 34.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 34.5,
+  "thorough": 100.0,
+  "largest_hint": "A patient's own records can disagree on blood group, from a mislabelled specimen or a record that holds two patients; rescues 2 of 7 (R6, R7)"
  },
  "runs": {
   "run1": null,
@@ -126,12 +126,13 @@
   ]
  },
  "returned": [],
- "resume": "stage 2: the results chain, bands and forks for architecture 3, run on the generator's clean truth, then precut.py task16",
+ "resume": "stage 6: the author rewrites the prompt for voice, uploads prompt and target.zip, pastes the two runs for /triage-runs",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "",
   "date": "",
   "note": ""
- }
+ },
+ "prompt_rewritten": false
 }

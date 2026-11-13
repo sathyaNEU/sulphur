@@ -1,0 +1,373 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the converted index: distinct patients and patients held by both legacy indexes",
+   "graded_as": "Ask 3",
+   "figure": "R1_index",
+   "depends": [],
+   "independent": "the two indexes and Calder Bay's merge history",
+   "golden": {
+    "distinct patients": 220669,
+    "patients in both indexes": 76062
+   },
+   "bands": {
+    "distinct patients": [
+     217358,
+     223979
+    ],
+    "patients in both indexes": [
+     74160,
+     77964
+    ]
+   },
+   "passes": {
+    "quick": {
+     "distinct patients": 243159,
+     "patients in both indexes": 62323
+    },
+    "careful": {
+     "distinct patients": 220509,
+     "patients in both indexes": 75797
+    },
+    "thorough": {
+     "distinct patients": 220669,
+     "patients in both indexes": 76062
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "rule A's false merges (two different patients agreeing on name, birth date and sex)",
+   "graded_as": "Component 1",
+   "figure": "R2_rule_a_false",
+   "depends": [],
+   "independent": "the two indexes",
+   "golden": 106.7,
+   "band": [
+    65,
+    170
+   ],
+   "partly": [
+    45.5,
+    221.0
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 12.1,
+    "thorough": 106.7
+   },
+   "precedent": [
+    "L22",
+    "L35"
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "rule C's false merges (twins with near-identical first names in one household)",
+   "graded_as": "Component 2",
+   "figure": "R3_rule_c_false",
+   "depends": [],
+   "independent": "the indexes, the delivery log, the blood bank results",
+   "golden": 153,
+   "band": [
+    70,
+    220
+   ],
+   "partly": [
+    49.0,
+    286.0
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 0,
+    "thorough": 153
+   },
+   "precedent": [
+    "L28"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "rule D's false merges (one SSN and birth date on two people's records)",
+   "graded_as": "Ask 1",
+   "figure": "R4_rule_d_false",
+   "depends": [],
+   "independent": "the indexes and the delivery log",
+   "golden": 164,
+   "band": [
+    140,
+    250
+   ],
+   "partly": [
+    98.0,
+    325.0
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 143,
+    "thorough": 164
+   }
+  },
+  {
+   "id": "R5",
+   "name": "Calder Bay records holding two or more patients",
+   "graded_as": "Ask 2",
+   "figure": "R5_overlays",
+   "depends": [],
+   "independent": "Calder Bay's merge history, the delivery log and the blood bank results",
+   "golden": 568,
+   "band": [
+    480,
+    660
+   ],
+   "partly": [
+    336.0,
+    858.0
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 0,
+    "thorough": 568
+   },
+   "precedent": [
+    "L03"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "the rule the conversion runs",
+   "graded_as": "Recommendation",
+   "figure": "R6_rule",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": "B",
+   "passes": {
+    "quick": "A",
+    "careful": "A",
+    "thorough": "B"
+   },
+   "precedent": [
+    "L28"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "patients left under more than one record once the chosen rule's links are made",
+   "graded_as": "Ask 4",
+   "figure": "R7_left_after_rule",
+   "depends": [
+    "R1",
+    "R6"
+   ],
+   "independent": "",
+   "golden": 48754,
+   "band": [
+    47291,
+    50217
+   ],
+   "partly": [
+    33103.7,
+    65282.1
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 20986,
+    "thorough": 48754
+   },
+   "precedent": [
+    "L28"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ },
+ "routes": [
+  {
+   "name": "no correction (every rule's links taken as true)",
+   "answer": "A"
+  },
+  {
+   "name": "only chance",
+   "answer": "C"
+  },
+  {
+   "name": "only twins",
+   "answer": "A"
+  },
+  {
+   "name": "only ssn",
+   "answer": "A"
+  },
+  {
+   "name": "only chance, twins",
+   "answer": "D"
+  },
+  {
+   "name": "only chance, ssn",
+   "answer": "C"
+  },
+  {
+   "name": "only twins, ssn",
+   "answer": "A"
+  },
+  {
+   "name": "all three corrections (the golden)",
+   "answer": "B",
+   "golden": true
+  },
+  {
+   "name": "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)",
+   "answer": "A"
+  },
+  {
+   "name": "every rule's false merges from the blood bank's results as they read",
+   "answer": "none"
+  },
+  {
+   "name": "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in",
+   "answer": "none"
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "Two different patients here often share a first name, last name, birth date and sex: names cluster by community and birth year, and many birth dates were recorded as 1 January.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "Twins share a household, a surname and a birth date, and some have near-identical first names.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "From March 2019 Calder Bay merged a new registration into an existing record with the same last name, birth date and sex.",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "A patient's own records can disagree on blood group, from a mislabelled specimen or a record that holds two patients.",
+   "rescues": [
+    "R6",
+    "R7"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "golden_answer": "B",
+  "golden_family": [
+   {
+    "name": "rule A by birth decade only (no surname communities)",
+    "answer": "B",
+    "rule_a": 70.8
+   },
+   {
+    "name": "rule A with light shrinkage of each community's 1 January share",
+    "answer": "B",
+    "rule_a": 113.3
+   },
+   {
+    "name": "rule A with heavy shrinkage of each community's 1 January share",
+    "answer": "B",
+    "rule_a": 98.5
+   },
+   {
+    "name": "every rule's false merges from the blood bank's results net of wrong blood in tube and of the records holding two patients",
+    "answer": "B",
+    "marker": {
+     "A": 204.9,
+     "B": 0.0,
+     "C": 59.2,
+     "D": 74.0
+    }
+   },
+   {
+    "name": "rule C from the evidence on the linked pair alone",
+    "answer": "B",
+    "rule_c": 76.0
+   },
+   {
+    "name": "rule D from incompatible first names alone",
+    "answer": "B",
+    "rule_d": 143.0
+   },
+   {
+    "name": "rule D with blood groups added",
+    "answer": "B",
+    "rule_d": 173.0
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "no correction (every rule's links taken as true)",
+    "answer": "A"
+   },
+   {
+    "name": "only chance",
+    "answer": "C"
+   },
+   {
+    "name": "only twins",
+    "answer": "A"
+   },
+   {
+    "name": "only ssn",
+    "answer": "A"
+   },
+   {
+    "name": "only chance, twins",
+    "answer": "D"
+   },
+   {
+    "name": "only chance, ssn",
+    "answer": "C"
+   },
+   {
+    "name": "only twins, ssn",
+    "answer": "A"
+   },
+   {
+    "name": "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)",
+    "answer": "A"
+   },
+   {
+    "name": "every rule's false merges from the blood bank's results as they read",
+    "answer": "none"
+   },
+   {
+    "name": "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in",
+    "answer": "none"
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "rule A's estimate 30 per cent lower",
+    "answer": "B"
+   },
+   {
+    "input": "rule C's estimate 30 per cent lower",
+    "answer": "B"
+   },
+   {
+    "input": "rule D's estimate 30 per cent lower",
+    "answer": "B"
+   },
+   {
+    "input": "rule B's estimate 50 per cent higher",
+    "answer": "B"
+   }
+  ]
+ }
+}

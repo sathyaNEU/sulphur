@@ -1,268 +1,275 @@
 {
-  "task": "task16",
-  "project": "sulfur",
-  "architecture": "v3",
-  "drawn": "2026-11-12",
-  "slot_note": "",
-  "domain": "general-statistics-data-science",
-  "subdomain": "data-integration-record-linkage-entity-resolution",
-  "niche": "a merged South Texas health system's enterprise master patient index before its April 2027 conversion to one electronic record: which candidate rule may join two patient records without review inside the patient identity policy's cap on false merges, read from the chance agreements, the twins and the inherited identifiers each rule would join, with the overlays an earlier registration rule already made and the duplicates left for review",
-  "objective": "etl",
-  "shape": "04",
-  "decision_type": "pick_one_of_n",
-  "answer_unit": "named_option",
-  "answer": "",
-  "answer_source": "task16/generator/figures.json (call)",
-  "gap": [
+ "task": "task16",
+ "project": "sulfur",
+ "architecture": "v3",
+ "drawn": "2026-11-12",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "data-integration-record-linkage-entity-resolution",
+ "niche": "a merged South Texas health system's enterprise master patient index before its April 2027 conversion to one electronic record: which candidate rule may join two patient records without review inside the patient identity policy's cap on false merges, read from the chance agreements, the twins and the inherited identifiers each rule would join, with the overlays an earlier registration rule already made and the duplicates left for review",
+ "objective": "etl",
+ "shape": "04",
+ "decision_type": "pick_one_of_n",
+ "answer_unit": "named_option",
+ "answer": "Run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against the policy's one; Rule A 2.97, Rule C 5.44, Rule D 7.12 per 2,000; 568 Calder Bay overlays to split; 220,669 distinct patients, 76,062 in both indexes, 48,754 left under more than one record",
+ "answer_source": "task16/generator/figures.json (call)",
+ "gap": [
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G16",
+  "G10",
+  "G3",
+  "G17"
+ ],
+ "gate_g": "binding_constraint",
+ "calibration_form": "physical_verification",
+ "stump_strategy": "identity_resolution",
+ "decisive_rule_filed": true,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "planning_thread",
+ "stump_class": "analytical",
+ "analyst_test": "A careful but hurried analyst links the two indexes by fuzzy name, birth date and address matching, reads the specification's agreement weights and the pilot's reviewed pairs, sees one SSN carried by a whole family and drops the SSN rule, then scores the name rules on independent per-field chance rates and the pilot's labels: it files the exact name, birth date and sex rule as safe, because independent field rates miss how often two different patients in Port Calder share a name, a birthday and a sex, and it would pass the fuzzy first-name rule too, because the pilot never reviewed a twin pair; checked on the blood groups as they read, every rule fails, Rule B included.",
+ "domain_test": "Every result is a record-linkage statistic: a deduplicated patient index reconciled to both legacy indexes, each candidate rule's false merges estimated without labels (chance agreement from the population's joint distribution of names, birth cohorts and birth dates; co-resident twins; an identifier inherited from an insurance subscriber), the overlays a deterministic merge rule left in one index, and the duplicates a rule leaves; swap in another method's object (a capture-recapture total, a classifier's held-out accuracy) and the decision stops making sense, because no labelled set covers the pairs the rules decide.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:false-merges-of-match-rules-estimated-without-labels",
+ "layer1": [
+  "compound Hispanic surnames recorded four ways (both, hyphenated, paternal only, maternal only)",
+  "Vietnamese names entered family name first at some registrations",
+  "nicknames and short forms at registration",
+  "birth dates with day and month swapped",
+  "1 January birth dates on records registered from foreign documents",
+  "apartment addresses with and without unit numbers",
+  "phone numbers in four formats",
+  "SSNs with and without dashes, blank or all-zero placeholders",
+  "medical record numbers with system prefixes and leading zeros",
+  "merge history stamped in UTC"
+ ],
+ "stakeholder_role": "the health system's director of health information management, who heads its patient records and data office and recommends the conversion's automatic linking rule to the One Chart steering committee",
+ "role_family": "statistical_office_head",
+ "scoring_unit": "per boarded entity",
+ "spine": {
+  "file": "calder_bay_patient_index_2026-11-02.csv",
+  "rows": 157799,
+  "entity": "one patient record (medical record number) in a legacy master patient index",
+  "grain": "record",
+  "source": "synthetic"
+ },
+ "forum": "executive_team",
+ "forcing_event": "cutover_or_migration",
+ "org_family": "hospital_or_health_provider",
+ "world": {
+  "geography": "Port Calder, a fictional city on the Texas Gulf coast, United States",
+  "currency": "USD",
+  "org_type": "a health system formed in 2025 by merging two hospital groups, each keeping its own patient index",
+  "invented_names": [
+   "Port Calder",
+   "Calder Bay Health",
+   "Rosario Medical Group",
+   "Halvard Identity",
+   "One Chart"
+  ],
+  "people": [
+   "Brenda Hartman",
+   "Felicia Soto",
+   "Richard Wood"
+  ]
+ },
+ "deliverables": [
+  "one_chart_autolink_rule_evaluation.xlsx",
+  "one_chart_autolink_recommendation.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "whether",
+ "driver": "The decisive quantity is how often each candidate rule for joining two records without review would join two different people, a rate no labelled set covers: the identifying fields agree by chance far more often than independent per-field rates imply because they are dependent and locally concentrated, some units share every field but one through kinship, one source stored a related unit's identifier in the unit's own field, and an earlier deterministic rule already joined units the record now holds as one, so each rule's error is estimated from the population's joint distribution and checked against attributes the rules never used.",
+ "driver_concrete": "Each candidate auto-link rule's false merges at the One Chart conversion are estimated without labels: the exact first name, last name, birth date and sex rule joins patients who share a common local name and a birthday by chance, read from the joint distribution of first names by birth cohort and community, surnames by community and birth dates heaped on 1 January, and checked against blood groups that conflict inside linked pairs; the fuzzy first-name rule joins co-resident twins with similar names; the SSN and birth date rule joins twins registered under a parent's SSN before Rosario's 2021 registration change; and Calder Bay's 2019 last name, birth date and sex auto-merge already overlaid patients the conversion would inherit as one record.",
+ "stump": "A careful but hurried analyst scores the candidate rules with the matching engine's chance rates or the records' own per-field rates and the HIM pilot's reviewed pairs, drops the SSN rule once it sees one SSN on a whole family, and picks the exact name, birth date and sex rule, whose false merges run about three times the policy's cap because same-name, same-birthday strangers are common in Port Calder's concentrated names; correcting that alone moves it to the fuzzy first-name rule, which the pilot never checked on a twin pair; and a pass that prices every rule from the blood bank's results as they read condemns all four, because one patient's records disagree on mislabelled specimens and on Calder Bay records that hold two patients.",
+ "answer_shape": "ranked-list-cap",
+ "weight": "hard-to-measure",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "modeling",
+  "validation",
+  "investigation-loops",
+  "missingness-measurement",
+  "modeling",
+  "synthesis"
+ ],
+ "results": "R1 distinct patients in the converted index and patients held by both legacy indexes; R2 the exact rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
+ "one_fact_test": "'two different patients here often share a name, a birthday and a sex' rescues R2 alone (1 of 7); 'twins share every field but their first names' rescues R3 and part of R5; neither moves the call alone",
+ "strategy_label": "OWN",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "architecture_spent": false,
+ "lineage": [
+  {
+   "architecture": "v1",
+   "drawn": "2026-11-10",
+   "fate": "spent 2026-11-11 on the platform: one run earned every graded result in 28 minutes (two candidate calibrations compared by leave-one-out error, the slowdown read in matched cells, a response surface with a fitted breakpoint validated on held-out configurations, configurations and calibration pairs resampled separately); six results sat on one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities, and bands wide enough for every sound method graded nothing (REDESIGN, re-rooted to another world)",
+   "domain": "general-statistics-data-science",
+   "subdomain": "scaling-laws",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "pick_one_of_n",
+   "gap": [
+    "objective",
     "population"
-  ],
-  "pattern": [
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
+   ],
+   "generators": [
+    "G1",
+    "G14",
     "G16",
-    "G10",
-    "G3",
-    "G17"
-  ],
-  "gate_g": "binding_constraint",
-  "calibration_form": "physical_verification",
-  "stump_strategy": "identity_resolution",
-  "decisive_rule_filed": true,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "planning_thread",
-  "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst links the two indexes by fuzzy name, birth date and address matching, reads the vendor specification's agreement weights and the HIM pilot's reviewed pairs, sees one SSN carried by a whole family and drops the SSN rule, then scores the name rules on the specification's independent per-field chance rates and the pilot's labels: it files the exact name, birth date and sex rule as safe, because independent field rates miss how often two different patients in Port Calder share a name, a birthday and a sex, and it would pass the fuzzy first-name rule too, because the pilot never reviewed a twin pair (twins scored above its review band and were linked unreviewed).",
-  "domain_test": "Every result is a record-linkage statistic: a deduplicated patient index reconciled to both legacy indexes, each candidate rule's false merges estimated without labels (chance agreement from the population's joint distribution of names, birth cohorts and birth dates; co-resident twins; an identifier inherited from an insurance subscriber), the overlays a deterministic merge rule left in one index, and the duplicates a rule leaves; swap in another method's object (a capture-recapture total, a classifier's held-out accuracy) and the decision stops making sense, because no labelled set covers the pairs the rules decide.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:false-merges-of-match-rules-estimated-without-labels",
-  "layer1": [
-    "compound Hispanic surnames recorded four ways (both, hyphenated, paternal only, maternal only)",
-    "Vietnamese names entered family name first at some registrations",
-    "nicknames and short forms at registration",
-    "birth dates with day and month swapped",
-    "1 January birth dates on records registered from foreign documents",
-    "apartment addresses with and without unit numbers",
-    "phone numbers in four formats",
-    "SSNs with and without dashes, blank or all-zero placeholders",
-    "medical record numbers with system prefixes and leading zeros",
-    "merge history stamped in UTC"
-  ],
-  "stakeholder_role": "the health system's director of health information management, who sets the conversion's automatic linking rule for the One Chart steering committee",
-  "role_family": "compliance_or_audit",
-  "scoring_unit": "per boarded entity",
-  "spine": {
-    "file": "",
-    "rows": 0,
-    "entity": "one patient record (medical record number) in a legacy master patient index",
-    "grain": "record",
-    "source": "synthetic"
-  },
-  "forum": "executive_team",
-  "forcing_event": "cutover_or_migration",
-  "org_family": "hospital_or_health_provider",
-  "world": {
-    "geography": "Port Calder, a fictional city on the Texas Gulf coast, United States",
-    "currency": "USD",
-    "org_type": "a health system formed in 2025 by merging two hospital groups, each keeping its own patient index",
-    "invented_names": [
-      "Port Calder",
-      "Calder Bay Health",
-      "Rosario Medical Group",
-      "Halvard Identity",
-      "One Chart"
-    ],
-    "people": [
-      "Brenda Hartman",
-      "Felicia Soto",
-      "Richard Wood"
-    ]
-  },
-  "deliverables": [],
-  "opening_move": "question-first",
-  "question_form": "whether",
-  "driver": "The decisive quantity is how often each candidate rule for joining two records without review would join two different people, a rate no labelled set covers: the identifying fields agree by chance far more often than independent per-field rates imply because they are dependent and locally concentrated, some units share every field but one through kinship, one source stored a related unit's identifier in the unit's own field, and an earlier deterministic rule already joined units the record now holds as one, so each rule's error is estimated from the population's joint distribution and checked against attributes the rules never used.",
-  "driver_concrete": "Each candidate auto-link rule's false merges at the One Chart conversion are estimated without labels: the exact first name, last name, birth date and sex rule joins patients who share a common local name and a birthday by chance, read from the joint distribution of first names by birth cohort and community, surnames by community and birth dates heaped on 1 January, and checked against blood groups that conflict inside linked pairs; the fuzzy first-name rule joins co-resident twins with similar names; the SSN and birth date rule joins twins registered under a parent's SSN before Rosario's 2021 registration change; and Calder Bay's 2019 last name, birth date and sex auto-merge already overlaid patients the conversion would inherit as one record.",
-  "stump": "A careful but hurried analyst scores the candidate rules with the vendor's independent per-field chance rates and the HIM pilot's reviewed pairs, rejects the SSN rule once it sees one SSN on a whole family, and picks the exact name, birth date and sex rule, whose false merges run several times the policy's cap because same-name, same-birthday strangers are common in Port Calder's concentrated names; on the same checks the fuzzy first-name rule passes too, because the pilot never reviewed a twin pair.",
-  "answer_shape": "ranked-list-cap",
-  "weight": "validation",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "modeling",
-    "validation",
-    "investigation-loops",
+    "G6"
+   ],
+   "gate_g": "forecasting",
+   "stump_strategy": "other",
+   "answer_shape": "ranked-list-cap",
+   "weight": "investigation",
+   "chain_signature": [
     "missingness-measurement",
+    "investigation-loops",
     "modeling",
+    "forecasting",
+    "uncertainty",
     "synthesis"
-  ],
-  "results": "R1 distinct patients in the converted index and patients held by both legacy indexes; R2 the exact rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
-  "one_fact_test": "'two different patients here often share a name, a birthday and a sex' rescues R2 alone (1 of 7); 'twins share every field but their first names' rescues R3 and part of R5; neither moves the call alone",
-  "strategy_label": "OWN",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "architecture_spent": false,
-  "lineage": [
-    {
-      "architecture": "v1",
-      "drawn": "2026-11-10",
-      "fate": "spent 2026-11-11 on the platform: one run earned every graded result in 28 minutes (two candidate calibrations compared by leave-one-out error, the slowdown read in matched cells, a response surface with a fitted breakpoint validated on held-out configurations, configurations and calibration pairs resampled separately); six results sat on one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities, and bands wide enough for every sound method graded nothing (REDESIGN, re-rooted to another world)",
-      "domain": "general-statistics-data-science",
-      "subdomain": "scaling-laws",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "pick_one_of_n",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G1",
-        "G14",
-        "G16",
-        "G6"
-      ],
-      "gate_g": "forecasting",
-      "stump_strategy": "other",
-      "answer_shape": "ranked-list-cap",
-      "weight": "investigation",
-      "chain_signature": [
-        "missingness-measurement",
-        "investigation-loops",
-        "modeling",
-        "forecasting",
-        "uncertainty",
-        "synthesis"
-      ],
-      "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
-      "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead."
-    },
-    {
-      "architecture": "v2",
-      "drawn": "2026-11-11",
-      "domain": "general-statistics-data-science",
-      "subdomain": "data-integration-record-linkage-entity-resolution",
-      "objective": "etl",
-      "shape": "07",
-      "decision_type": "designation_set",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G12",
-        "G3",
-        "G6",
-        "G14",
-        "G17"
-      ],
-      "gate_g": "method_or_model_selection",
-      "stump_strategy": "other",
-      "answer_shape": "reconciled-table",
-      "weight": "assembly",
-      "chain_signature": [
-        "assembly-reconciliation",
-        "missingness-measurement",
-        "missingness-measurement",
-        "synthesis",
-        "causal-reasoning",
-        "forecasting",
-        "forecasting",
-        "uncertainty",
-        "synthesis"
-      ],
-      "driver": "The share of first-line handlings that needed no further contact is read by linking each handling to later contacts on the same item across four channel records, and the linked record misses follow-ups in two unrelated ways that each have to be estimated (one channel takes the item's key only when its line is quiet, so the keyed share falls exactly when follow-ups surge; one channel's cases are counted in the link only once finished, while the open ones sit in a weekly count by age); the season to be planned then draws its handlings from items in a worse state mix than the weeks observed, in proportions set by how often items in each state generate a handling at all, less an intervention that cuts that rate and has to be measured from a staggered roll-out; each estimate moves different categories across the line and none alone lands the set.",
-      "stump": "A careful but hurried analyst links the four logs, restores the unkeyed calls and the open cases the standard says the records lack, then carries October's rates into the season unchanged (Track and trace 76.5 per cent, kept) and ranges them by resampling conversations (plus or minus 0.34); built from the plan's parcels at each delivery outcome's contact rate with the alerts' 41 per cent cut, Track and trace comes to 70.7 and is handed back, and the range is plus or minus 1.2.",
-      "fate": "spent 2026-11-11 at stage 4: judged DETERMINISTIC and APPROVE, and sent back by the judge thread's own first pass, which at medium effort and before it saw the answers landed all eleven rates and the set inside the bands in about four minutes (careful column repriced near 70): every estimate in the chain was a join and a ratio over ingredients a file labels (the standard's capture and backlog sentences, the outcome class column, the plan's alert sheet); re-rooted to another world, dataset and shell as architecture 3",
-      "skeleton": {
-        "decision_form": "set_over_threshold",
-        "answer_pattern": "naive_set_swaps_members",
-        "lessons": [
-          "linkage_missing_not_at_random",
-          "observation_window_coverage",
-          "heterogeneity_carried_to_decision"
-        ],
-        "mechanisms": [
-          "ivr_key_captured_when_line_quiet",
-          "open_written_cases_in_weekly_backlog",
-          "season_late_parcel_mix"
-        ],
-        "detection": [
-          "control_total_gap"
-        ],
-        "moves": [
-          "inverse_inclusion_weights",
-          "impute_by_model_at_own_drivers",
-          "link_records_by_parsed_key",
-          "stratify_by_mix_and_reweight_to_target"
-        ],
-        "file_roles": [
-          "primary_record",
-          "second_grain_source",
-          "reference_register",
-          "governing_standard",
-          "schedule_or_plan",
-          "unused_distractor"
-        ]
-      },
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "in",
-        "deliverable set": "xlsx"
-      }
-    }
-  ],
-  "lineage_shells": [
-    {
-      "question form": "whether",
-      "second-sentence opener": "in",
-      "deliverable set": "xlsx"
-    }
-  ],
-  "notes": "Architecture 3, drawn 2026-11-12 after architecture 2 was sent back at stage 4 by the judge thread's first pass. Deciding lesson coincidental_agreement_joint_frequencies, added to skeleton_vocab.json in the SKILLS commit of the same day because no key held it honestly (unknown_generating_process is the generic neighbour, the client's example 9). Strategy identity_resolution (three_rules.strategy_risk WARN): the call turns on estimated error rates, never on one identifier read correctly. Calibration organ: the clinical record (blood groups, newborn encounters, admissions) that the rules never use, so physical_verification; the HIM pilot's reviewed pairs are the hurried route's check (gold_standard_subsample is held by task7 in the window).",
-  "shell": {},
-  "skeleton": {
-    "decision_form": "pick_one_of_few_options",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+   ],
+   "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
+   "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead."
+  },
+  {
+   "architecture": "v2",
+   "drawn": "2026-11-11",
+   "domain": "general-statistics-data-science",
+   "subdomain": "data-integration-record-linkage-entity-resolution",
+   "objective": "etl",
+   "shape": "07",
+   "decision_type": "designation_set",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G12",
+    "G3",
+    "G6",
+    "G14",
+    "G17"
+   ],
+   "gate_g": "method_or_model_selection",
+   "stump_strategy": "other",
+   "answer_shape": "reconciled-table",
+   "weight": "assembly",
+   "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "missingness-measurement",
+    "synthesis",
+    "causal-reasoning",
+    "forecasting",
+    "forecasting",
+    "uncertainty",
+    "synthesis"
+   ],
+   "driver": "The share of first-line handlings that needed no further contact is read by linking each handling to later contacts on the same item across four channel records, and the linked record misses follow-ups in two unrelated ways that each have to be estimated (one channel takes the item's key only when its line is quiet, so the keyed share falls exactly when follow-ups surge; one channel's cases are counted in the link only once finished, while the open ones sit in a weekly count by age); the season to be planned then draws its handlings from items in a worse state mix than the weeks observed, in proportions set by how often items in each state generate a handling at all, less an intervention that cuts that rate and has to be measured from a staggered roll-out; each estimate moves different categories across the line and none alone lands the set.",
+   "stump": "A careful but hurried analyst links the four logs, restores the unkeyed calls and the open cases the standard says the records lack, then carries October's rates into the season unchanged (Track and trace 76.5 per cent, kept) and ranges them by resampling conversations (plus or minus 0.34); built from the plan's parcels at each delivery outcome's contact rate with the alerts' 41 per cent cut, Track and trace comes to 70.7 and is handed back, and the range is plus or minus 1.2.",
+   "fate": "spent 2026-11-11 at stage 4: judged DETERMINISTIC and APPROVE, and sent back by the judge thread's own first pass, which at medium effort and before it saw the answers landed all eleven rates and the set inside the bands in about four minutes (careful column repriced near 70): every estimate in the chain was a join and a ratio over ingredients a file labels (the standard's capture and backlog sentences, the outcome class column, the plan's alert sheet); re-rooted to another world, dataset and shell as architecture 3",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
     "lessons": [
-      "coincidental_agreement_joint_frequencies",
-      "inherited_attribute_from_other_unit",
-      "validation_cannot_see_condition",
-      "record_algorithm_inversion"
+     "linkage_missing_not_at_random",
+     "observation_window_coverage",
+     "heterogeneity_carried_to_decision"
     ],
     "mechanisms": [
-      "same_name_same_birthday_strangers_in_concentrated_names",
-      "first_names_by_birth_cohort_and_community",
-      "birth_dates_heaped_on_january_first",
-      "co_resident_twins_with_similar_names",
-      "subscriber_ssn_on_dependent_records",
-      "last_name_birthdate_sex_auto_merge_overlays"
+     "ivr_key_captured_when_line_quiet",
+     "open_written_cases_in_weekly_backlog",
+     "season_late_parcel_mix"
     ],
     "detection": [
-      "conflict_marker_in_linked_pairs",
-      "second_source_at_other_grain",
-      "selection_rule_in_the_record"
+     "control_total_gap"
     ],
     "moves": [
-      "chance_agreement_on_joint_distribution",
-      "invert_recording_algorithm",
-      "em_latent_fit"
+     "inverse_inclusion_weights",
+     "impute_by_model_at_own_drivers",
+     "link_records_by_parsed_key",
+     "stratify_by_mix_and_reweight_to_target"
     ],
     "file_roles": [
-      "primary_record",
-      "second_grain_source",
-      "incumbent_figure_or_method",
-      "governing_standard",
-      "shortlist_or_candidates",
-      "panel_or_survey_sample",
-      "unused_distractor"
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "governing_standard",
+     "schedule_or_plan",
+     "unused_distractor"
     ]
-  },
-  "registered": "2026-11-13T00:05:41Z"
+   },
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "in",
+    "deliverable set": "xlsx"
+   }
+  }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "whether",
+   "second-sentence opener": "in",
+   "deliverable set": "xlsx"
+  }
+ ],
+ "notes": "Architecture 3, drawn 2026-11-12 after architecture 2 was sent back at stage 4 by the judge thread's first pass. Deciding lesson coincidental_agreement_joint_frequencies, added to skeleton_vocab.json in the SKILLS commit of the same day because no key held it honestly (unknown_generating_process is the generic neighbour, the client's example 9). Strategy identity_resolution (three_rules.strategy_risk WARN): the call turns on estimated error rates, never on one identifier read correctly. Calibration organ: the clinical record (blood groups, newborn encounters, admissions) that the rules never use, so physical_verification; the HIM pilot's reviewed pairs are the hurried route's check (gold_standard_subsample is held by task7 in the window). 2026-11-12 stage 2: the window moved after registration (task20 v2 now weighs validation, task13 v4 is compliance_or_audit), so ban.weight and ban.role fired on the registered card; weight redrawn to hard-to-measure (each rule's false merges are a quantity no record holds, read through instruments with blind spots: the more honest label, validation in the vocabulary being a model proved on unseen data) and role family to statistical_office_head (HIM is the health system's patient records and data office).",
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "can",
+  "deliverable set": "docx+xlsx"
+ },
+ "skeleton": {
+  "decision_form": "pick_one_of_few_options",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "coincidental_agreement_joint_frequencies",
+   "inherited_attribute_from_other_unit",
+   "validation_cannot_see_condition",
+   "record_algorithm_inversion"
+  ],
+  "mechanisms": [
+   "same_name_same_birthday_strangers_in_concentrated_names",
+   "first_names_by_birth_cohort_and_community",
+   "birth_dates_heaped_on_january_first",
+   "co_resident_twins_with_similar_names",
+   "subscriber_ssn_on_dependent_records",
+   "last_name_birthdate_sex_auto_merge_overlays"
+  ],
+  "detection": [
+   "conflict_marker_in_linked_pairs",
+   "second_source_at_other_grain",
+   "selection_rule_in_the_record"
+  ],
+  "moves": [
+   "chance_agreement_on_joint_distribution",
+   "invert_recording_algorithm",
+   "em_latent_fit"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "incumbent_figure_or_method",
+   "governing_standard",
+   "shortlist_or_candidates",
+   "panel_or_survey_sample",
+   "unused_distractor"
+  ]
+ },
+ "registered": "2026-11-13T00:05:41Z"
 }

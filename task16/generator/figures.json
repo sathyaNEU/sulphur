@@ -1,0 +1,248 @@
+{
+ "R1_index": {
+  "distinct patients": 220669,
+  "patients in both indexes": 76062
+ },
+ "R2_rule_a_false": 106.7,
+ "R3_rule_c_false": 153,
+ "R4_rule_d_false": 164,
+ "R5_overlays": 568,
+ "R6_rule": "B",
+ "R7_left_after_rule": 48754,
+ "active_records": 311965,
+ "bands": {
+  "R1_index": {
+   "distinct patients": [
+    217358,
+    223979
+   ],
+   "patients in both indexes": [
+    74160,
+    77964
+   ]
+  },
+  "R2_rule_a_false": [
+   65,
+   170
+  ],
+  "R3_rule_c_false": [
+   70,
+   220
+  ],
+  "R4_rule_d_false": [
+   140,
+   250
+  ],
+  "R5_overlays": [
+   480,
+   660
+  ],
+  "R7_left_after_rule": [
+   47291,
+   50217
+  ]
+ },
+ "cap_lines": {
+  "A": 35.9,
+  "B": 19.9,
+  "C": 28.1,
+  "D": 23.0
+ },
+ "cap_per": 2000,
+ "careful_index": {
+  "distinct patients": 220509,
+  "patients in both indexes": 75797
+ },
+ "careful_left": 20986,
+ "careful_left_after_B": 48717,
+ "careful_overlays": 0,
+ "careful_rate_per_2000": {
+  "A": 0.34,
+  "B": 0.0,
+  "C": 0.0,
+  "D": 6.21
+ },
+ "careful_rule": "A",
+ "careful_rule_false": {
+  "A": 12.1,
+  "B": 0.0,
+  "C": 0.0,
+  "D": 143.0
+ },
+ "cited_sections": {
+  "plan": 7.2,
+  "policy": 3
+ },
+ "duplicate_share": {
+  "A": 4.0,
+  "B": 6.0
+ },
+ "family_rule_a_range": [
+  70.8,
+  113.3
+ ],
+ "family_rule_c_pair": 76.0,
+ "family_rule_d_names": 143.0,
+ "golden_family": {
+  "every rule's false merges from the blood bank's results net of wrong blood in tube and of the records holding two patients": "B",
+  "rule A by birth decade only (no surname communities)": "B",
+  "rule A with heavy shrinkage of each community's 1 January share": "B",
+  "rule A with light shrinkage of each community's 1 January share": "B",
+  "rule C from the evidence on the linked pair alone": "B",
+  "rule D from incompatible first names alone": "B",
+  "rule D with blood groups added": "B"
+ },
+ "incumbent_false": {
+  "A": 4.95,
+  "B": 0.0,
+  "C": 0.0,
+  "D": 2.16
+ },
+ "incumbent_rate_per_2000": {
+  "A": 0.14,
+  "B": 0.0,
+  "C": 0.0,
+  "D": 0.09
+ },
+ "indep_local": 12.1,
+ "indep_vendor": 5.0,
+ "interval_level": 95,
+ "marker": {
+  "A": {
+   "as_read": 409.8,
+   "discordant": 30,
+   "discordant_clear": 21,
+   "expected_one_patient": 6.1,
+   "expected_one_patient_clear": 6.1,
+   "links": 71728,
+   "net": 204.9,
+   "net_of_wbit": 326.3,
+   "typed_links": 8043,
+   "typed_links_clear": 7997
+  },
+  "B": {
+   "as_read": 96.8,
+   "discordant": 7,
+   "discordant_clear": 3,
+   "expected_one_patient": 3.3,
+   "expected_one_patient_clear": 3.3,
+   "links": 39810,
+   "net": 0.0,
+   "net_of_wbit": 50.7,
+   "typed_links": 4410,
+   "typed_links_clear": 4390
+  },
+  "C": {
+   "as_read": 206.6,
+   "discordant": 15,
+   "discordant_clear": 9,
+   "expected_one_patient": 4.7,
+   "expected_one_patient_clear": 4.7,
+   "links": 56207,
+   "net": 59.2,
+   "net_of_wbit": 141.2,
+   "typed_links": 6252,
+   "typed_links_clear": 6220
+  },
+  "D": {
+   "as_read": 202.0,
+   "discordant": 16,
+   "discordant_clear": 10,
+   "expected_one_patient": 4.2,
+   "expected_one_patient_clear": 4.2,
+   "links": 46046,
+   "net": 74.0,
+   "net_of_wbit": 149.0,
+   "typed_links": 5588,
+   "typed_links_clear": 5553
+  }
+ },
+ "marker_a_birth_year": {
+  "all": 1984.6,
+  "typed": 1976.9,
+  "years_older": 8
+ },
+ "marker_a_interval": [
+  95,
+  357
+ ],
+ "marker_noise": {
+  "disagreeing": 25,
+  "p_diff": 0.652835,
+  "per_specimen": 0.000492,
+  "records": 23085,
+  "specimens": 50832
+ },
+ "overlays_as_typed": 1119,
+ "overlays_forms": 513,
+ "perturbations": {
+  "rule A's estimate 30 per cent lower": "B",
+  "rule B's estimate 50 per cent higher": "B",
+  "rule C's estimate 30 per cent lower": "B",
+  "rule D's estimate 30 per cent lower": "B"
+ },
+ "quick_rule": "A",
+ "rate_bands": {
+  "A": [
+   1.81,
+   4.74
+  ],
+  "B": [
+   0.0,
+   0.75
+  ],
+  "C": [
+   2.49,
+   7.83
+  ],
+  "D": [
+   6.08,
+   10.86
+  ]
+ },
+ "routes": {
+  "all three corrections (the golden)": "B",
+  "every rule's false merges from the blood bank's results as they read": "none",
+  "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in": "none",
+  "no correction (every rule's links taken as true)": "A",
+  "only chance": "C",
+  "only chance, ssn": "C",
+  "only chance, twins": "D",
+  "only ssn": "A",
+  "only twins": "A",
+  "only twins, ssn": "A",
+  "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)": "A"
+ },
+ "rule_a_shares": {
+  "nguyen": 0.321,
+  "pre1980": 0.637
+ },
+ "rule_a_shares_pct": {
+  "nguyen": 32,
+  "pre1980": 64
+ },
+ "rule_b_band": [
+  0,
+  15
+ ],
+ "rule_d_names_unalike": 2650,
+ "rule_d_similar_named_twins": 21,
+ "rule_false": {
+  "A": 106.7,
+  "B": 5.0,
+  "C": 153.0,
+  "D": 164.0
+ },
+ "rule_links": {
+  "A": 71728,
+  "B": 39810,
+  "C": 56207,
+  "D": 46046
+ },
+ "rule_rate_per_2000": {
+  "A": 2.97,
+  "B": 0.25,
+  "C": 5.44,
+  "D": 7.12
+ }
+}
