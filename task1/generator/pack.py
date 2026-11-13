@@ -78,42 +78,49 @@ def write(W, target, rng):
         rows.append([a["aid"], created.isoformat(), a["country"], a["kind"], src, a["trial_days"]])
     counts["acc"] = _w(os.path.join(target, FILES["acc"]),
                        ["account_id", "created_on", "country", "account_type", "signup_source", "trial_days"], rows)
-    # plan periods (from January 2024)
+    # plan periods (from January 2024): one row per plan held, ended by a plan change, by the subscription ending,
+    # or open at the export; a subscription taken up again on the same account opens a new period
     rows = []
+    reason = {"cancelled": "cancelled", "debit_returned": "payment_failed", "refunded": "refund"}
     for a in W["accounts"]:
         if a["created"][0] > P.CUT:
             continue
         ev = []
-        for (m, plan, phase) in a["plan_hist"]:
+        for (m, plan, phase, bday) in a["plan_hist"]:
             if phase == "trial":
                 d = a.get("orig_start") or date_of(*a["created"])
             elif a["trial_days"] and ev and ev[-1][2] == "trial":
                 d = date_of(*a["first_charge"])
             else:
-                d = date_of(m, a["bill_day"]) if m != a["created"][0] or not a["trial_days"] else date_of(*a["first_charge"])
+                d = date_of(m, bday) if m != a["created"][0] or not a["trial_days"] else date_of(*a["first_charge"])
                 if a.get("orig_start") and m == 0 and phase == "paid" and not ev:
                     d = a["orig_start"]
             ev.append((d, plan, phase))
-        end = None
+        ends = [(date_of(lm, bday) - dt.timedelta(days=1), reason[why]) for (lm, mr, why, bday) in a.get("returns", [])]
         if a["end"] is not None:
             em, why = a["end"]
             if why == "trial_not_converted":
-                end = (date_of(*a["first_charge"]) - dt.timedelta(days=1), "trial_ended")
+                ends.append((date_of(*a["first_charge"]) - dt.timedelta(days=1), "trial_ended"))
             elif a.get("moved_out") == em:
-                end = (date_of(em, 1) - dt.timedelta(days=1), "cancelled")
+                ends.append((date_of(em, 1) - dt.timedelta(days=1), "cancelled"))
             else:
-                end = (date_of(em, a["bill_day"]) - dt.timedelta(days=1), {"cancelled": "cancelled",
-                       "debit_returned": "payment_failed", "refunded": "refund"}[why])
+                ends.append((date_of(em, a["bill_day"]) - dt.timedelta(days=1), reason[why]))
         for j, (d, plan, phase) in enumerate(ev):
-            nxt = ev[j + 1][0] - dt.timedelta(days=1) if j + 1 < len(ev) else (end[0] if end else None)
-            reason = (end[1] if (end and j + 1 == len(ev)) else ("plan_change" if j + 1 < len(ev) else ""))
+            nxt_start = ev[j + 1][0] if j + 1 < len(ev) else None
+            stop = [e for e in ends if e[0] >= d - dt.timedelta(days=1) and (nxt_start is None or e[0] < nxt_start)]
+            if stop:
+                nxt, why = min(stop)
+            elif nxt_start is not None:
+                nxt, why = nxt_start - dt.timedelta(days=1), "plan_change"
+            else:
+                nxt, why = None, ""
             if nxt is not None and nxt < P.month_start(P.REC0):
                 continue
             if nxt is not None and nxt > dt.date(2026, 10, 31):
-                nxt, reason = None, ""
+                nxt, why = None, ""
             if d > dt.date(2026, 10, 31):
                 continue
-            rows.append([a["aid"], plan, d.isoformat(), nxt.isoformat() if nxt else "", phase, reason])
+            rows.append([a["aid"], plan, d.isoformat(), nxt.isoformat() if nxt else "", phase, why])
     counts["plan"] = _w(os.path.join(target, FILES["plan"]),
                         ["account_id", "plan_code", "period_start", "period_end", "phase", "end_reason"], rows)
     # payments

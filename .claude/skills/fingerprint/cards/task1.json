@@ -12,7 +12,7 @@
  "shape": "02",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "let only Gezin's January 2027 rise go ahead and hold Flex, Standaard and Onbeperkt (Gezin EUR 6.1 per October 2026 subscription in 2027; Flex -4.4, Standaard -14.8, Onbeperkt -4.6); three stumps by the factorial of 2026-11-13",
+ "answer": "let Standaard's and Gezin's January 2027 rises go ahead and hold Flex and Onbeperkt (Standaard EUR 2.3 and Gezin 5.4 per October 2026 subscription in 2027; Flex -3.3, Onbeperkt -4.8); two stumps by the factorial, repaired on the holistic audit of 2026-11-13",
  "answer_source": "task1/generator/figures.json raise, change_2027",
  "gap": [
   "time",
@@ -32,12 +32,12 @@
  "decisive_rule_filed": false,
  "official_decoy": false,
  "validated_decoy": false,
- "context_artifact": "register",
+ "context_artifact": "filed_standard",
  "stump_class": "analytical",
- "analyst_test": "A careful but hurried analyst finds the 2025 and 2026 rises, reads each plan's own past response and carries it to 2027, counts a downgrade as a lost subscription and values those who leave at the plan's average, and lets all four rises through.",
- "domain_test": "Each result is a subscription price-response and LTV quantity (extra cancellations and downgrades at the first bill, each plan's change in its base's contribution under a per-hour content cost); the plan ladder, the rival's price point, downgrades and per-hour royalties belong to subscription products, and a noun swap into a hospital or factory leaves no such quantities.",
+ "analyst_test": "A careful but hurried analyst reads the eight past rises by whether they passed the rival, keeps downgraders paying and values each account on its own listening, then carries the October cohort with stopping as final and each account's recent hours, and lets Onbeperkt and Gezin through.",
+ "domain_test": "Each result is a subscription price-response and LTV quantity (the first bill's extra cancellations and downgrades, the stopped subscriptions' return, the stayers' extra listening, the base still paying and its per-hour remuneration, each plan's change in contribution); reactivation, plan ladders, a rival's price point and per-hour royalties belong to subscription products, and a noun swap into a hospital or factory leaves no such quantities.",
  "layer2_family": "estimation_fit",
- "layer2_pattern": "own:price-response-step-at-a-rival-price-valued-by-who-answers",
+ "layer2_pattern": "own:stopped-pool-returns-and-stayers-use-more-after-a-price-rise-under-a-per-use-cost",
  "layer1": [
   "session export rows re-sent by the app after a reconnect",
   "profile ids of removed family profiles absent from today's profile table",
@@ -79,21 +79,24 @@
  ],
  "opening_move": "question-first",
  "question_form": "which",
- "driver": "Each option's go or hold rests on the response of its existing members to a change, which past changes show as a step where the new level passes an outside reference, not a slope in the change or a property of the option, and on what each kind of answer is worth, which depends on who gives it and on a cost that falls on usage, so the option's own history, a pooled slope and an average-member valuation each land on a different wrong set.",
- "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; past rises lost and moved down subscriptions mainly where the new price passed the rival's comparable plan, lost light listeners at the December bill after the price e-mail, and on Onbeperkt raised the stayers' listening as single-profile accounts added their second profile, so Standaard (past the rival in both regions), Flex (its light listeners at the e-mail) and Onbeperkt (the e-mail and the second profile) hold and Gezin goes ahead.",
- "stump": "The platform run's own route (each plan's own past rise in its region, read at the first bill, downgraders kept and each account on its own listening) lets Onbeperkt and Standaard through; the crossing alone lets Flex, Gezin and Onbeperkt through, the December leavers alone none, the stayers' listening alone Standaard.",
+ "driver": "Each option's go or hold rests on what a change does to its existing members over the year, where the members it loses form a pool that comes back at its own rate and at the new terms, and the members who stay use more for months after the change under a cost charged per unit of use, so a fixed group with stopping as final and use held at its recent level, either correction alone, or a pooled response each land on a different wrong set.",
+ "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; the subscriptions a rise loses at the December and first bills partly take a plan up again within the year (light listeners most, before the summer), paying the new price, and those that stay listen more for months after the bill (heavy listeners most), so Standaard goes ahead only with the returns, Onbeperkt holds only with the stayers' extra hours, Flex holds because its 2027 price passes the rival's Basis 10 uur as its 2025 Dutch rise did, and Gezin goes ahead either way.",
+ "stump": "The platform run's own route (the crossing read with the plan below's profile limit, the December leavers, downgraders kept, each account on its own listening, EUR 0.40 a counted hour) treats a stop as final and the stayers' listening as unchanged and lets Onbeperkt and Gezin through; the returns alone let Standaard, Onbeperkt and Gezin through, the stayers' listening alone Gezin only.",
  "answer_shape": "forecast-bands-drivers",
  "weight": "modeling",
  "chain_signature": [
   "assembly-reconciliation",
   "causal-reasoning",
   "causal-reasoning",
+  "modeling",
+  "causal-reasoning",
+  "forecasting",
   "forecasting",
   "forecasting",
   "synthesis"
  ],
- "results": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100 by plan and region; R7 each plan's change in its October base's 2027 contribution; R8 the rises that go ahead",
- "one_fact_test": "the crossing sentence rescues R3 and R4 (2 of 6) and not the call; the other two rescue none",
+ "results": "R1 paying subscriptions by plan at 31 Oct 2026; R3 extra cancellations per 100 at the first 2027 bill by plan and region; R4 extra downgrades per 100; R9 paying on any plan at 31 Dec 2027 with the rise; R2 the 2027 remuneration per October subscription with the rise; R7 each plan's change in its October base's 2027 contribution; R5 of those that stop by Dec 2027, per 100 paying then; R6 the stayers' extra counted hours over 2027; R8 the rises that go ahead",
+ "one_fact_test": "the returns sentence rescues R5 and R9 (2 of 9) and not the call; the listening sentence R6 (1 of 9)",
  "strategy_label": "UNTESTED",
  "mechanism_source": "design_note",
  "differentiation": {
@@ -255,8 +258,8 @@
   }
  ],
  "architecture_spent": null,
- "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks). Skeleton relabelled after the send-back: the call turned on a coverage gap (the licence renewals held exactly the positions the live roll-up lacked, so a union was the remedy) and a stale roster (the charges' profile lists dated membership), not on inverting a recording algorithm; record_algorithm_inversion stays untried. RETIRED 2026-11-12 on the author's word: the folder removed from the repo (every file in git at 87422aa); the card stays as spent so the guard keeps the four dead architectures in its duplicate check. Architecture 5 (2026-11-12, on the author's word, in the restored Kraanvogel world): the January 2027 rises plan by plan. stump_strategy other: a measured response step at an outside reference price, valued by who answers under a usage cost.",
- "registered": "2026-11-13T01:16:12Z",
+ "notes": "architecture 4, a new world after architecture 3 (Medienhaus Brueckenhafen) was returned on determinism a second time and its deciding lessons were closed by the client's page of 2026-11-12. stump_strategy stated_rule_hard_construction (strategy_risk WARN): the counting rule and the per-hour rate are filed in full; the difficulty is building counted hours by plan from two reporting channels and dated membership. context_artifact other: the publishers' 2027 agreement schedule and the agency's campaign quote. Spent 2026-11-12 at stage 4: the determinism judge sent architecture 4 back (Gate G planted_defect_flip: the call turns on two record-handling corrections, the licence renewals merged and the profiles dated by the charges; its first pass made both before seeing the blocks). Skeleton relabelled after the send-back: the call turned on a coverage gap (the licence renewals held exactly the positions the live roll-up lacked, so a union was the remedy) and a stale roster (the charges' profile lists dated membership), not on inverting a recording algorithm; record_algorithm_inversion stays untried. RETIRED 2026-11-12 on the author's word: the folder removed from the repo (every file in git at 87422aa); the card stays as spent so the guard keeps the four dead architectures in its duplicate check. Architecture 5 (2026-11-12, on the author's word, in the restored Kraanvogel world): the January 2027 rises plan by plan. stump_strategy other: a measured response step at an outside reference price, valued by who answers under a usage cost. Repaired 2026-11-13 on the holistic audit (runs/arch5_audit_2026-11-13.md): Standaard's never-seen crossing and the Onbeperkt second-profile uplift removed; the rival's Plus 30 uur at EUR 16.99 so Standaard never passes it, the rival's Basis 10 uur at EUR 9.79 in both countries until July 2026 (EUR 10.29 after) and its Flemish Onbeperkt and Familie brought to its Dutch prices then, so no plan sits above the rival before any rise and Flex's 2027 rise passes it as both its past rises did (closing the stage 4 judge's pass 3 fork on what passing the rival means); stopped subscriptions return (by listening, months since, season) and the holder listens more after a rise (the heavier the more, fading); the platform run's crossing and December leavers turned reflex (R61, R62); deciding lessons stopped_units_return and intensive_margin_response, level 4. context_artifact filed_standard (the growth planning guideline, schedule B of the 2027 licence agreement and the price list are the documents the analysis reads); it was register, which met task8 v19 inside the three-build window once builds marked spent upstream on 2026-11-13 left the live list.",
+ "registered": "2026-11-13T10:02:39Z",
  "shell": {
   "question form": "which",
   "second-sentence opener": "i'd",
@@ -266,15 +269,17 @@
   "decision_form": "set_over_threshold",
   "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
   "lessons": [
+   "stopped_units_return",
+   "intensive_margin_response",
    "response_at_crossing_point",
-   "behavioural_response_measured",
    "response_before_the_trigger",
-   "intensive_margin_response"
+   "marginal_not_average"
   ],
   "mechanisms": [
+   "stopped_subscriptions_return_light_listeners_first",
+   "stayers_listen_more_after_rise_heaviest_most",
    "price_rise_response_step_at_rival_price",
    "announcement_leavers_before_first_bill",
-   "stayers_add_profile_after_rise",
    "per_hour_remuneration_replaces_revenue_share",
    "rises_staged_by_region_and_year"
   ],

@@ -9,9 +9,7 @@ Choices (opts):
   cost        "rate27" golden: EUR 0.40 per counted hour; "share26": 52 per cent of net revenue (the 2026 basis)
   dedup       True golden: a re-sent warehouse row dropped; False summed
   lic_month   "renewal" golden: a renewal's position counted in its own month; "next": in the month after
-  r6          the 2027 forecast's form: "plan_tenure" golden survival by plan and tenure band, "plan" by plan
-              alone; hours "season" golden by plan and calendar month, "flat" the twelve months' mean, "own" each
-              account's own twelve months
+  the rest are architecture 5's judgments, each named where it is read (forecast() and the functions it calls)
 """
 import os
 
@@ -22,7 +20,10 @@ import params as P
 import pack as PK
 
 GOLD = {"channels": ("live", "lic"), "basis": "position", "member": "dated", "cost": "rate27", "dedup": True,
-        "lic_month": "renewal", "r6_surv": "plan_tenure", "r6_hours": "season"}
+        "lic_month": "renewal",
+        # architecture 5
+        "resp": "model", "window": "first", "control": "other", "announce": True, "who": "band", "ret": "band",
+        "sal": "within", "surv": "plan_tenure_band", "dval": "realised", "down": True}
 
 
 def opts(**kw):
@@ -184,124 +185,6 @@ def r2(pk, o):
     return {pl: float(g.loc[pl, "sum"] / g.loc[pl, "count"]) for pl in P.PLANS}
 
 
-# ------------------------------------------------------------------ the spring 2024 trial starts
-
-def cohort(pk):
-    a = pk["acc"]
-    c = a[a["signup_source"].str.startswith("VJ24-") & (a["account_type"] == "consumer")].copy()
-    c["m0"] = c["created_on"].str[:7].map(midx)
-    c = c[c["m0"].isin(P.SPRING24)]
-    c["plan"] = c["signup_source"].str[5:]
-    return c
-
-
-def net27(pm):
-    """Each paying month re-rated at the 2027 list price of the plan held, VAT by country, store fee by route and
-    paid month (Apple 30 per cent in a subscription's first 12 paid months, 15 after; Google 15)."""
-    pm = pm.sort_values(["account_id", "m"]).copy()
-    pm["k"] = pm.groupby("account_id").cumcount() + 1
-    price = pm["plan_code"].map(P.PRICE27)
-    fee = np.where(pm["route"] == "apple", np.where(pm["k"] <= 12, 0.30, 0.15),
-                   np.where(pm["route"] == "google", 0.15, 0.0))
-    pm["net27"] = price / (1 + pm["vat_rate"]) * (1 - fee)
-    pm["net_paid"] = pm["amount_eur"] / (1 + pm["vat_rate"]) * (1 - fee)
-    return pm
-
-
-def r4_r5(pk, o):
-    c = cohort(pk)
-    pm = paying_months(pk)
-    allpm = net27(pm[pm["account_id"].isin(set(c["account_id"]))])
-    allpm = allpm.merge(c[["account_id", "m0"]], on="account_id")
-    win = allpm[(allpm["m"] >= allpm["m0"]) & (allpm["m"] < allpm["m0"] + P.HORIZON)]
-    h = attribute(pk, o).merge(c[["account_id", "m0"]], on="account_id")
-    h = h[(h["m"] >= h["m0"]) & (h["m"] < h["m0"] + P.HORIZON)]
-    r4, r5, detail = {}, {}, {}
-    for pl in P.PLANS:
-        ids = set(c.loc[c["plan"] == pl, "account_id"])
-        n = len(ids)
-        w = win[win["account_id"].isin(ids)]
-        conv = w["account_id"].nunique() / n
-        months = len(w) / n
-        rev = w["net27"].sum() / n
-        hrs = h.loc[h["account_id"].isin(ids), "hours"].sum() / n
-        if o["cost"] == "share26":
-            cost = P.SHARE26 * w["net_paid"].sum() / n
-        else:
-            cost = P.RATE27 * hrs
-        r4[pl] = {"trial starts": n, "share paying": conv, "paying months": months, "net revenue": rev}
-        r5[pl] = rev - cost - P.FEE27[pl]
-        detail[pl] = {"counted hours": hrs, "remuneration": cost, "fee": P.FEE27[pl]}
-    return r4, r5, detail
-
-
-# ------------------------------------------------------------------ the 2027 remuneration of the October base
-
-def r6(pk, o):
-    pm = paying_months(pk)
-    base = pm[pm["m"] == P.CUT][["account_id", "plan_code"]]
-    # tenure: paying months on file to October 2026
-    ten = pm[pm["m"] <= P.CUT].groupby("account_id").size()
-    base = base.assign(ten=base["account_id"].map(ten))
-    band = lambda t: np.where(t <= 6, 0, np.where(t <= 18, 1, 2))
-    # monthly continuation from one paying month to the next, November 2024 to October 2026
-    pp = pm[["account_id", "m", "plan_code"]].copy()
-    pp["ten"] = pp.groupby("account_id").cumcount() + 1
-    nxt = set(zip(pp["account_id"], pp["m"] - 1))
-    obs = pp[(pp["m"] >= P.CUT - 24) & (pp["m"] < P.CUT)].copy()
-    obs["stay"] = [(a, m) in nxt for a, m in zip(obs["account_id"], obs["m"])]
-    if o["r6_surv"] == "plan":
-        obs["b"] = 0
-    else:
-        obs["b"] = band(obs["ten"].values)
-    rate = obs.groupby(["plan_code", "b"])["stay"].mean().to_dict()
-    # counted hours per paying month, by plan and calendar month, the twelve months to October 2026
-    h = attribute(pk, o)
-    pm12 = pm[pm["m"].isin(P.R2_MONTHS)].merge(h, on=["account_id", "m"], how="left").fillna({"hours": 0.0})
-    pm12["cal"] = pm12["m"] % 12
-    by = pm12.groupby(["plan_code", "cal"])["hours"].mean().to_dict()
-    flat = pm12.groupby("plan_code")["hours"].mean().to_dict()
-    own = pm12.groupby("account_id")["hours"].mean().to_dict()
-    season = {k: by[k] / flat[k[0]] for k in by}
-    total = 0.0
-    for a, pl, t in zip(base["account_id"], base["plan_code"], base["ten"]):
-        s = 1.0
-        tt = t
-        for m in range(P.CUT + 1, P.END + 1):
-            b = 0 if o["r6_surv"] == "plan" else int(band(np.array([tt]))[0])
-            s *= rate.get((pl, b), 0.95)
-            tt += 1
-            if m < 48:
-                continue
-            cal = m % 12
-            if o["r6_hours"] == "flat":
-                hh = flat[pl]
-            elif o["r6_hours"] == "own":
-                hh = own.get(a, flat[pl]) * season[(pl, cal)]
-            else:
-                hh = by[(pl, cal)]
-            total += s * hh
-    if o["cost"] == "share26":
-        # the 2026 cost carried: the base's 2027 revenue at 52 per cent
-        rev = 0.0
-        for a, pl, t in zip(base["account_id"], base["plan_code"], base["ten"]):
-            s, tt = 1.0, t
-            for m in range(P.CUT + 1, P.END + 1):
-                b = 0 if o["r6_surv"] == "plan" else int(band(np.array([tt]))[0])
-                s *= rate.get((pl, b), 0.95)
-                tt += 1
-                if m >= 48:
-                    rev += s * P.PRICE27[pl] / 1.082
-        return P.SHARE26 * rev
-    return P.RATE27 * total
-
-
-def all_results(pk, o):
-    R = {"R1": r1(pk), "R2": r2(pk, o)}
-    R["R4"], R["R5"], R["detail"] = r4_r5(pk, o)
-    R["R6"] = r6(pk, o)
-    R["R7"] = max(R["R5"], key=R["R5"].get)
-    return R
 
 
 # ------------------------------------------------------------------ architecture 5: the January 2027 rises
@@ -309,152 +192,451 @@ def all_results(pk, o):
 LOWER = {"STD": "FLEX", "ONB": "STD", "GEZ": "ONB"}
 RISE_EVENTS = [(2025, "BE", "STD"), (2025, "BE", "ONB"), (2025, "NL", "FLEX"), (2025, "NL", "GEZ"),
                (2026, "NL", "STD"), (2026, "NL", "ONB"), (2026, "BE", "FLEX"), (2026, "BE", "GEZ")]
+BANDS = (3.0, 8.0, 20.0)       # counted hours per paying month: under 3, 3 to 8, 8 to 20, 20 and more
+NB = len(BANDS) + 1
+TEN = (6, 18)                  # paying months on file: 6 or fewer, 7 to 18, more
+KMAX = 30                      # months after a lapse the return model reaches
 
 
 def _country(pk):
     return dict(zip(pk["acc"]["account_id"], pk["acc"]["country"]))
 
 
-def rival(pk):
-    """The rival's comparable price by country and plan, as last scanned before each January."""
-    r = pk.get("rival")
-    return r
+def lband(h):
+    return int(np.searchsorted(BANDS, h, side="right"))
 
 
-def response(pk, o):
-    """Extra cancellations and extra downgrades per subscription at the first bill of a January rise, by event,
-    against the same plan in the other country over the same months."""
-    pm = paying_months(pk)
-    cty = _country(pk)
-    pm = pm.assign(country=pm["account_id"].map(cty))
-    by = {(a, m): pl for a, m, pl in zip(pm["account_id"], pm["m"], pm["plan_code"])}
-    h = attribute(pk, o)
-    hv = {(a, m): x for a, m, x in zip(h["account_id"], h["m"], h["hours"])}
-    rows = []
-    for (y, c, pl) in RISE_EVENTS:
-        dec = (y - P.M0_YEAR) * 12 - 1
-        base = pm[(pm["m"] == dec) & (pm["plan_code"] == pl)]
-        pre = {a: np.mean([hv.get((a, m), 0.0) for m in (dec - 2, dec - 1, dec)]) for a in base["account_id"]}
-        out = {}
-        prior = pm[(pm["m"] == dec - 12) & (pm["plan_code"] == pl) & (pm["country"] == c)]
-        for grp, sel in (("rise", base["country"] == c), ("other", base["country"] != c)):
-            if grp == "other" and o.get("control") == "prior" and len(prior) > 0:
-                ids, d0 = prior["account_id"], dec - 12
-            else:
-                ids, d0 = base.loc[sel, "account_id"], dec
-            n = len(ids)
-            if o.get("window") == "first":
-                left = sum(1 for a in ids if (a, d0 + 1) not in by)
-            else:
-                left = sum(1 for a in ids if (a, d0 + 1) not in by and (a, d0 + 2) not in by)
-            down = sum(1 for a in ids if LOWER.get(pl) and by.get((a, d0 + 1)) == LOWER.get(pl))
-            out[grp] = (n, left / n, down / n)
-            if grp == "rise":
-                ids = base.loc[sel, "account_id"]
-                lv = [pre[a] for a in ids if (a, dec + 1) not in by and (a, dec + 2) not in by]
-                dn = [pre[a] for a in ids if LOWER.get(pl) and by.get((a, dec + 1)) == LOWER.get(pl)]
-                allh = np.mean([pre[a] for a in ids])
-                out["hrs"] = (np.mean(lv) / allh if lv else 1.0, np.mean(dn) / allh if dn else 1.0, len(lv), len(dn))
-        rv = pk["rival"][(y, c, pl)]
-        old, new = P.PRICE0[pl], P.PRICE[pl]
-        rows.append({"year": y, "country": c, "plan": pl, "n": out["rise"][0], "pct": (new - old) / old,
-                     "cross": old <= rv < new, "gap": max(new - rv, 0.0), "x_cancel": out["rise"][1] - out["other"][1],
-                     "x_down": out["rise"][2] - out["other"][2], "h_left": out["hrs"][0], "h_down": out["hrs"][1],
-                     "n_left": out["hrs"][2], "n_down": out["hrs"][3]})
-    return rows
+def tband(t):
+    return 0 if t <= TEN[0] else 1 if t <= TEN[1] else 2
 
 
-def later_responses(pk, o):
-    """For each past rise event, against the same plan in the other region over the same months: the extra leaving
-    at the December bill after the price e-mail (those paying in November who do not pay in December), with the
-    listening of those who left against the plan's average; and the change in counted hours per paying month of the
-    subscriptions that stayed on the plan, from the three months before the rise to its third to sixth month."""
-    key = ("later", o["channels"], o["member"], o.get("dedup", True))
+def _kg(k):
+    return k if k <= 12 else 13 if k <= 18 else 14 if k <= 24 else 15
+
+
+def _hkey(o):
+    return (o["channels"], o["basis"], o["dedup"], o["lic_month"], o["member"])
+
+
+def panel(pk, o):
+    """The paying months {(account, month): plan}, the accounts on each plan in each month, each account's counted
+    hours {(account, month): hours} and its paying months in order."""
+    key = ("panel",) + _hkey(o)
     if key in pk:
         return pk[key]
     pm = paying_months(pk)
-    cty = _country(pk)
-    pm = pm.assign(country=pm["account_id"].map(cty))
-    by = {(a, m): pl for a, m, pl in zip(pm["account_id"], pm["m"], pm["plan_code"])}
+    by = dict(zip(zip(pm["account_id"], pm["m"]), pm["plan_code"]))
+    on, months = {}, {}
+    for a, m, pl in zip(pm["account_id"], pm["m"], pm["plan_code"]):
+        on.setdefault((m, pl), []).append(a)
+        months.setdefault(a, []).append(m)
+    for a in months:
+        months[a].sort()
     h = attribute(pk, o)
-    hv = {(a, m): x for a, m, x in zip(h["account_id"], h["m"], h["hours"])}
-    out = []
+    hv = dict(zip(zip(h["account_id"], h["m"]), h["hours"]))
+    pk[key] = (by, on, hv, months)
+    return pk[key]
+
+
+def _pre(hv, a, m, n=3):
+    return sum(hv.get((a, k), 0.0) for k in range(m - n + 1, m + 1)) / n
+
+
+def _rates(ids, ok, bands):
+    n = len(ids)
+    nb, kb = [0] * NB, [0] * NB
+    k = 0
+    for a, b in zip(ids, bands):
+        hit = ok(a)
+        nb[b] += 1
+        kb[b] += hit
+        k += hit
+    return n, (k / n if n else 0.0), nb, kb
+
+
+def _diff(kb1, nb1, kb2, nb2):
+    return [kb1[b] / nb1[b] - kb2[b] / nb2[b] if nb1[b] and nb2[b] else 0.0 for b in range(NB)]
+
+
+def profiles_per_charge(pk):
+    """{(account, month): the number of profiles the month's collected charge lists}."""
+    if "nprof" in pk:
+        return pk["nprof"]
+    p = pk["pay"]
+    q = p[p["paying"]].sort_values(["account_id", "m", "charged_on"]).drop_duplicates(["account_id", "m"], keep="last")
+    n = q["profiles_on_subscription"].fillna("").str.split(";").map(lambda x: len([y for y in x if y]))
+    pk["nprof"] = dict(zip(zip(q["account_id"], q["m"]), n))
+    return pk["nprof"]
+
+
+def first_bill_model(rows, o):
+    """The first bill's extra response per listening band, pooled over the past rises in proportion to the rise in
+    per cent (or the log of the price ratio, 'log'): where the new price stayed on its side of the rival's, the extra
+    cancellations per band and per unit of the rise, and the extra downgrades per band among the subscriptions whose
+    profiles fit the plan below; where it passed the rival's, the extra cancellations beyond that, per band."""
+    dose = (lambda r: np.log(1 + r["pct"])) if o.get("dose") == "log" else (lambda r: r["pct"])
+    nc = [r for r in rows if not r["cross"]]
+    num_c, den_c, num_d, den_d = np.zeros(NB), np.zeros(NB), np.zeros(NB), np.zeros(NB)
+    for r in nc:
+        w = np.array(r["nb"], float)
+        num_c += w * np.array(r["xb_cancel"])
+        den_c += w * dose(r)
+        if r["plan"] in LOWER:
+            wf = np.array(r["nb_fit"], float)
+            num_d += wf * np.array(r["xb_down_fit"])
+            den_d += wf * dose(r)
+    kc = num_c / np.maximum(den_c, 1e-9)
+    kd = num_d / np.maximum(den_d, 1e-9)
+    num_s, den_s = np.zeros(NB), np.zeros(NB)
+    for r in rows:
+        if r["cross"]:
+            w = np.array(r["nb"], float)
+            num_s += w * (np.array(r["xb_cancel"]) - kc * dose(r))
+            den_s += w
+    ks = num_s / np.maximum(den_s, 1e-9)
+    # a band no event holds borrows its neighbour's rate
+    for v in (kc, kd, ks):
+        for b in range(NB):
+            if not np.isfinite(v[b]):
+                v[b] = 0.0
+    return kc, kd, ks, dose
+
+
+def response(pk, o):
+    """Each past rise's extra cancellations and extra downgrades per subscription at its first bill at the higher
+    price (January; or the January and February bills), against the same plan in the other country over the same
+    months (or the same country a year before), overall and by listening band (the account's counted hours per paying
+    month over the October to December before), and whether the new price passed the rival's comparable plan as
+    scanned in the December before."""
+    key = ("resp",) + _hkey(o) + (o.get("window", "first"), o.get("control", "other"))
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    cty = _country(pk)
+    nprof = profiles_per_charge(pk)
+    rows = []
     for (y, c, pl) in RISE_EVENTS:
         dec = (y - P.M0_YEAR) * 12 - 1
-        nov = pm[(pm["m"] == dec - 1) & (pm["plan_code"] == pl)]
-        ann, ann_h = {}, None
-        for grp, sel in (("rise", nov["country"] == c), ("other", nov["country"] != c)):
-            ids = list(nov.loc[sel, "account_id"])
-            gone = [a for a in ids if (a, dec) not in by]
-            ann[grp] = len(gone) / len(ids)
-            if grp == "rise":
-                pre = lambda a: np.mean([hv.get((a, m), 0.0) for m in (dec - 3, dec - 2, dec - 1)])
-                allh = np.mean([pre(a) for a in ids])
-                ann_h = np.mean([pre(a) for a in gone]) / allh if gone and allh else 1.0
-        base = pm[(pm["m"] == dec) & (pm["plan_code"] == pl)]
-        use = {}
-        for grp, sel in (("rise", base["country"] == c), ("other", base["country"] != c)):
-            ids = [a for a in base.loc[sel, "account_id"] if all(by.get((a, m)) == pl for m in range(dec + 1, dec + 7))]
-            before = sum(hv.get((a, m), 0.0) for a in ids for m in (dec - 2, dec - 1, dec)) / (3 * len(ids))
-            after = sum(hv.get((a, m), 0.0) for a in ids for m in range(dec + 3, dec + 7)) / (4 * len(ids))
-            use[grp] = after / before - 1.0 if before else 0.0
-        out.append({"year": y, "country": c, "plan": pl, "x_announce": ann["rise"] - ann["other"], "h_announce": ann_h,
-                    "x_use": use["rise"] - use["other"]})
+        out = {}
+        for grp in ("rise", "other"):
+            prior = [a for a in on.get((dec - 12, pl), []) if cty[a] == c] if dec - 12 >= P.REC0 + 2 else []
+            if grp == "other" and o.get("control") == "prior" and prior:
+                d0 = dec - 12
+                ids = prior
+            else:
+                d0 = dec
+                ids = [a for a in on.get((dec, pl), []) if (cty[a] == c) == (grp == "rise")]
+            bands = [lband(_pre(hv, a, d0)) for a in ids]
+            lo = LOWER.get(pl)
+            fits = [lo is not None and nprof.get((a, d0), 1) <= P.MAX_PROFILES[lo] for a in ids]
+            if o.get("window") == "two":
+                left = lambda a, d0=d0: (a, d0 + 1) not in by and (a, d0 + 2) not in by
+            else:
+                left = lambda a, d0=d0: (a, d0 + 1) not in by
+            down = lambda a, d0=d0: lo is not None and by.get((a, d0 + 1)) == lo
+            el = [a for a, f in zip(ids, fits) if f]
+            out[grp] = (_rates(ids, left, bands), _rates(ids, down, bands),
+                        _rates(el, down, [b for b, f in zip(bands, fits) if f]))
+        rv = pk["rival"][(y, c, pl)]
+        (n1, c1, nb1, kb1), (_, d1, _, db1), (ne1, _, eb1, eh1) = out["rise"]
+        (n2, c2, nb2, kb2), (_, d2, _, db2), (ne2, _, eb2, eh2) = out["other"]
+        rows.append({"year": y, "country": c, "plan": pl, "n": n1, "pct": (P.PRICE[pl] - P.PRICE0[pl]) / P.PRICE0[pl],
+                     "cross": P.PRICE0[pl] <= rv < P.PRICE[pl], "x_cancel": c1 - c2, "x_down": d1 - d2, "nb": nb1,
+                     "xb_cancel": _diff(kb1, nb1, kb2, nb2), "xb_down": _diff(db1, nb1, db2, nb2),
+                     "nb_fit": eb1, "xb_down_fit": _diff(eh1, eb1, eh2, eb2), "n_fit": ne1})
+    pk[key] = rows
+    return rows
+
+
+def announce(pk, o):
+    """Each past rise's extra leaving at the December bill after the price e-mail of 1 December: of the subscriptions
+    paying on the plan in November, those not paying in December, against the same plan in the other country,
+    overall and by listening band (September to November)."""
+    key = ("ann",) + _hkey(o)
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    cty = _country(pk)
+    rows = []
+    for (y, c, pl) in RISE_EVENTS:
+        dec = (y - P.M0_YEAR) * 12 - 1
+        res = {}
+        for grp in ("rise", "other"):
+            ids = [a for a in on.get((dec - 1, pl), []) if (cty[a] == c) == (grp == "rise")]
+            res[grp] = _rates(ids, lambda a: (a, dec) not in by, [lband(_pre(hv, a, dec - 1)) for a in ids])
+        (n1, r1, nb1, kb1), (n2, r2, nb2, kb2) = res["rise"], res["other"]
+        rows.append({"year": y, "country": c, "plan": pl, "n": n1, "x_announce": r1 - r2, "nb": nb1,
+                     "xb": _diff(kb1, nb1, kb2, nb2)})
+    pk[key] = rows
+    return rows
+
+
+def gradient(rows, key, sel):
+    """The pooled profile of an extra response across listening bands: each band's extra rate over the events
+    selected, weighted by the band's subscriptions, against the events' overall extra rate."""
+    num, den = np.zeros(NB), np.zeros(NB)
+    for r in rows:
+        if sel(r):
+            num += np.array(r["nb"], float) * np.array(r[key])
+            den += np.array(r["nb"], float)
+    tot = num.sum() / max(den.sum(), 1.0)
+    if tot <= 1e-9:
+        return np.ones(NB)
+    return np.clip((num / np.maximum(den, 1.0)) / tot, 0.0, None)
+
+
+def lapses(pk, o):
+    """Every stop in a consumer subscription's payments before November 2026: the first month unpaid, the listening
+    band before it (counted hours per paying month over the last three paying months), whether that month's debit
+    came back unpaid, and the month it paid again if it did. A refund ends a subscription for good and is left out."""
+    key = ("lapses",) + _hkey(o)
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    p = pk["pay"]
+    q = p[p["consumer"]]
+    st = lambda s: set(zip(q.loc[q["status"] == s, "account_id"], q.loc[q["status"] == s, "m"]))
+    failed = st("returned") - st("re-presented")
+    refunded = st("refunded")
+    rows = []
+    for a, ms in months.items():
+        for i, m in enumerate(ms):
+            nxt = ms[i + 1] if i + 1 < len(ms) else None
+            if nxt == m + 1 or m >= P.CUT:
+                continue
+            first = m + 1
+            if (a, first) in refunded:
+                continue
+            last = ms[max(0, i - 2):i + 1]
+            h = sum(hv.get((a, k), 0.0) for k in last) / len(last)
+            rows.append((a, first, nxt, lband(h), "failed" if (a, first) in failed else "cancelled", by[(a, m)]))
+    pk[key] = rows
+    return rows
+
+
+def return_hazard(pk, o):
+    """The monthly chance that a lapsed subscription pays again, from every lapse to October 2026, each at risk
+    until it paid again or the records end: for a cancelled subscription a log-linear model in the listening band (or
+    none, 'pooled'), the months since the lapse (each of the first twelve, then groups to 30) and the calendar month,
+    fitted by iterative proportional fitting (the Poisson maximum likelihood for those margins); for a returned debit
+    the months since the lapse alone. Returns (h[band, k, cal], h_failed[k])."""
+    key = ("rethaz",) + _hkey(o) + (o.get("ret", "band"),)
+    if key in pk:
+        return pk[key]
+    pooled = o.get("ret") == "pooled"
+    ret = np.zeros((NB, 16, 12))
+    risk = np.zeros((NB, 16, 12))
+    fr, fk = np.zeros(KMAX + 1), np.zeros(KMAX + 1)
+    for (a, first, back, b, why, pl) in lapses(pk, o):
+        kb = back - first if back is not None else None
+        for k in range(1, min(P.CUT - first, KMAX) + 1):
+            if kb is not None and k > kb:
+                break
+            hit = 1.0 if kb == k else 0.0
+            if why == "failed":
+                fr[k] += hit
+                fk[k] += 1
+            else:
+                bb = 0 if pooled else b
+                g, cal = _kg(k), (first + k) % 12
+                ret[bb, g, cal] += hit
+                risk[bb, g, cal] += 1
+    nb = 1 if pooled else NB
+    A, B, C = np.ones(nb), np.ones(16), np.ones(12)
+    R, X = ret[:nb], risk[:nb]
+    for _ in range(200):
+        A = R.sum((1, 2)) / np.maximum((X * B[None, :, None] * C[None, None, :]).sum((1, 2)), 1e-12)
+        B = np.where(X.sum((0, 2)) > 0, R.sum((0, 2)) / np.maximum((X * A[:, None, None] * C[None, None, :]).sum((0, 2)),
+                                                                   1e-12), 0.0)
+        C = R.sum((0, 1)) / np.maximum((X * A[:, None, None] * B[None, :, None]).sum((0, 1)), 1e-12)
+    h = A[:, None, None] * B[None, :, None] * C[None, None, :]
+    if pooled:
+        h = np.repeat(h, NB, axis=0)
+    hk = np.zeros((NB, KMAX + 1, 12))
+    for k in range(1, KMAX + 1):
+        hk[:, k, :] = h[:, _kg(k), :]
+    hf = np.where(fk > 0, fr / np.maximum(fk, 1), 0.0)
+    pk[key] = (np.clip(hk, 0.0, 1.0), np.clip(hf, 0.0, 1.0))
+    return pk[key]
+
+
+def continuation(pk, o):
+    """Each month's chance that a paying subscription pays the next month, November 2024 to October 2026: by plan,
+    paying months on file and listening band (the three months to the month; 'plan_tenure': by plan and paying months
+    alone), leaving out the months a past rise reached the plan in its country (the November before to the February
+    after) and each subscription's first three months back after a lapse, which carry their own chance by plan."""
+    key = ("cont",) + _hkey(o) + (o.get("surv", "plan_tenure_band"),)
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    cty = _country(pk)
+    rm = {}
+    for (y, c, pl) in RISE_EVENTS:
+        j = (y - P.M0_YEAR) * 12
+        rm.setdefault((c, pl), set()).update(range(j - 2, j + 2))
+    back = {}
+    for (a, first, nxt, b, why, pl) in lapses(pk, o):
+        if nxt is not None:
+            for k in range(3):
+                back[(a, nxt + k)] = 1
+    lb_on = o.get("surv", "plan_tenure_band") == "plan_tenure_band"
+    cnt = {}
+    cntr = {}
+    for a, ms in months.items():
+        for i, m in enumerate(ms):
+            if not (P.CUT - 24 <= m < P.CUT):
+                continue
+            pl = by[(a, m)]
+            if m in rm.get((cty[a], pl), ()):
+                continue
+            stay = (a, m + 1) in by
+            if (a, m) in back:
+                s = cntr.setdefault(pl, [0, 0])
+            else:
+                kk = (pl, tband(i + 1), lband(_pre(hv, a, m)) if lb_on else 0)
+                s = cnt.setdefault(kk, [0, 0])
+            s[0] += stay
+            s[1] += 1
+    rate = {k: v[0] / v[1] for k, v in cnt.items()}
+    rr = {pl: v[0] / v[1] for pl, v in cntr.items()}
+    pk[key] = (rate, rr)
+    return pk[key]
+
+
+def salience(pk, o):
+    """How much more the subscriptions that stayed on the plan listened after each past rise, by months since its
+    first bill (1 is January), as a share of what they would have listened: the hours of the accounts paying on the
+    plan in December and in every month to that one, against their own October to December hours, the rise country's ratio over
+    the other country's (which carries the season and the fade with tenure) ('within'); or every subscription paying
+    on the plan in the month against all those paying in October to December ('average'). Per plan the mean of its
+    rises; a fade fitted across the plans (a plan's level, one common rate). Returns ({plan: [r_1 .. r_12]},
+    {plan: [(k, r, n)]}, tau)."""
+    key = ("sal",) + _hkey(o) + (o.get("sal", "within"), o.get("sal_fit", "common"))
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    cty = _country(pk)
+    per = {pl: {} for pl in P.PLANS}
+    for (y, c, pl) in RISE_EVENTS:
+        dec = (y - P.M0_YEAR) * 12 - 1
+        K = 11 if y == 2025 else P.CUT - dec
+        base = {}
+        for grp in ("rise", "other"):
+            ids = [a for a in on.get((dec, pl), []) if (cty[a] == c) == (grp == "rise")]
+            base[grp] = {a: _pre(hv, a, dec) for a in ids}
+        for k in range(1, K + 1):
+            d = {}
+            for grp in ("rise", "other"):
+                inside = lambda a: (cty[a] == c) == (grp == "rise")
+                if o.get("sal") == "average":
+                    now = [a for a in on.get((dec + k, pl), []) if inside(a)]
+                    bef = [(a, mm) for mm in (dec - 2, dec - 1, dec) for a in on.get((mm, pl), []) if inside(a)]
+                    d[grp] = ((sum(hv.get((a, dec + k), 0.0) for a in now) / max(len(now), 1))
+                              / max(sum(hv.get(x, 0.0) for x in bef) / max(len(bef), 1), 1e-9))
+                else:
+                    ids = [a for a in base[grp] if all(by.get((a, dec + j)) == pl for j in range(1, k + 1))]
+                    d[grp] = (sum(hv.get((a, dec + k), 0.0) for a in ids)
+                              / max(sum(base[grp][a] for a in ids), 1e-9))
+            per[pl].setdefault(k, []).append((d["rise"] / d["other"] - 1.0, len(base["rise"])))
+    obs = {pl: [(k, sum(u * n for u, n in v) / sum(n for u, n in v), sum(n for u, n in v)) for k, v in sorted(d.items())]
+           for pl, d in per.items()}
+    best = None
+    for tau in np.arange(0.5, 12.01, 0.1):
+        sse, amp = 0.0, {}
+        for pl, ob in obs.items():
+            e = np.array([np.exp(-(k - 1) / tau) for k, u, n in ob])
+            u = np.array([u for k, u, n in ob])
+            w = np.array([n for k, u, n in ob], float)
+            amp[pl] = float((w * u * e).sum() / (w * e * e).sum())
+            sse += float((w * (u - amp[pl] * e) ** 2).sum())
+        if best is None or sse < best[0]:
+            best = (sse, tau, amp)
+    _, tau, amp = best
+    taus = {pl: tau for pl in P.PLANS}
+    if o.get("sal_fit") == "per_plan":
+        # each plan its own fade rate as well as its own level
+        for pl, ob in obs.items():
+            e_best = None
+            for tp in np.arange(0.5, 12.01, 0.1):
+                e = np.array([np.exp(-(k - 1) / tp) for k, u, n in ob])
+                u = np.array([u for k, u, n in ob])
+                w = np.array([n for k, u, n in ob], float)
+                a_ = float((w * u * e).sum() / (w * e * e).sum())
+                sse = float((w * (u - a_ * e) ** 2).sum())
+                if e_best is None or sse < e_best[0]:
+                    e_best = (sse, float(tp), a_)
+            taus[pl], amp[pl] = e_best[1], e_best[2]
+    if o.get("sal") == "none":
+        path = {pl: [0.0] * 12 for pl in P.PLANS}
+    elif o.get("sal_fit") == "observed":
+        # the months the past rises observed, as read, and the fitted fade beyond them
+        path = {}
+        for pl in P.PLANS:
+            seen = {k: u for k, u, n in obs[pl]}
+            path[pl] = [seen[k] if k in seen else amp[pl] * float(np.exp(-(k - 1) / taus[pl])) for k in range(1, 13)]
+    elif o.get("sal") == "persist":
+        path = {pl: [float(np.mean([amp[pl] * np.exp(-(k - 1) / taus[pl]) for k in range(1, 7)]))] * 12 for pl in P.PLANS}
+    else:
+        path = {pl: [amp[pl] * float(np.exp(-(k - 1) / taus[pl])) for k in range(1, 13)] for pl in P.PLANS}
+    pk[key] = (path, obs, float(tau))
+    return pk[key]
+
+
+def season(pk, o):
+    """Each plan's counted hours per paying month by calendar month over the twelve months to October 2026, against
+    the plan's twelve-month mean; and each October 2026 subscription's own counted hours per paying month there."""
+    key = ("seas",) + _hkey(o)
+    if key in pk:
+        return pk[key]
+    pm = paying_months(pk)
+    h = attribute(pk, o)
+    j = pm[pm["m"].isin(P.R2_MONTHS)].merge(h, on=["account_id", "m"], how="left").fillna({"hours": 0.0})
+    j["cal"] = j["m"] % 12
+    flat = j.groupby("plan_code")["hours"].mean().to_dict()
+    by = j.groupby(["plan_code", "cal"])["hours"].mean().to_dict()
+    s = {(pl, c): by[(pl, c)] / flat[pl] for (pl, c) in by}
+    own = j.groupby("account_id")["hours"].mean().to_dict()
+    pk[key] = (s, own)
+    return pk[key]
+
+
+def downgrader_path(pk, o, pl):
+    """What a subscription that moved down a plan at a past rise brought over its next twelve months: its paying
+    months on the lower plan (or any) re-rated at the 2027 price of the plan paid and the cost basis on its own counted
+    hours, and the share still paying in the twelfth month; the mean over the 2025 and 2026 rises."""
+    key = ("dpath", pl) + _hkey(o) + (o["cost"],)
+    if key in pk:
+        return pk[key]
+    by, on, hv, months = panel(pk, o)
+    lo = LOWER[pl]
+    vals, last, rem = [], [], []
+    for y in (2025, 2026):
+        dec = (y - P.M0_YEAR) * 12 - 1
+        for a in on.get((dec, pl), []):
+            if by.get((a, dec + 1)) != lo:
+                continue
+            v = r_ = 0.0
+            for k in range(dec + 1, dec + 13):
+                if (a, k) in by:
+                    net = P.PRICE27[by[(a, k)]] / 1.08
+                    c_ = P.SHARE26 * net if o["cost"] == "share26" else P.RATE27 * hv.get((a, k), 0.0)
+                    v += net - c_
+                    r_ += c_
+            vals.append(v)
+            rem.append(r_)
+            last.append((a, dec + 12) in by)
+    out = (float(np.mean(vals)) if vals else 0.0, float(np.mean(last)) if last else 0.0, len(vals),
+           float(np.mean(rem)) if rem else 0.0)
     pk[key] = out
     return out
 
 
-def later_effect(pk, rows, pl, cross, o, country=None):
-    """The 2027 extra leaving at the December bill (every 2027 rise is announced on 1 December) and the stayers'
-    change in counted hours, each read off the plan's own past rises (in its region where the first-bill response is
-    read that way); zero where the choice leaves it out."""
-    L = later_responses(pk, o)
-    own = [r for r in L if r["plan"] == pl]
-    if o.get("resp") == "region":
-        own = [r for r in own if r["country"] == country] or own
-    ann = float(np.mean([r["x_announce"] for r in own])) * o.get("scale_announce", 1.0) if o.get("announce", True) else 0.0
-    ann_h = float(np.mean([r["h_announce"] for r in own]))
-    use = float(np.mean([r["x_use"] for r in own])) * o.get("scale_use", 1.0) if o.get("use", True) else 0.0
-    if o.get("use_sign") and len({r["x_use"] > 0 for r in [x for x in L if x["plan"] == pl]}) > 1:
-        use = 0.0                     # the plan's two rises disagree on the sign: read as no change
-    return max(ann, 0.0), ann_h, use
-
-
-def rise_effect(rows, pl, cross, o, gap=0.0, country=None):
-    """The 2027 extra cancellation and downgrade rates for a plan whose new price crosses the rival's or not, carried
-    from the plan's past rise to the size of its 2027 rise where a dose form is asked for (golden: as read)."""
-    xc, xd = _rise_effect(rows, pl, cross, o, gap, country)
-    k = dose(pl, o.get("dose"))
-    if o.get("dose") == "cross15":
-        k = 1.5 if cross else 1.0
-    return xc * k, xd * k
-
-
-def dose(pl, form):
-    """How a past rise's response is carried to the 2027 rise's size: in proportion to the rise in per cent ("pct"),
-    to the log of the price ratio ("log"), or to the rise in euros ("eur"); 1 when the response is carried as read."""
-    p0, p1, p2 = P.PRICE0[pl], P.PRICE[pl], P.PRICE27[pl]
-    if form == "pct":
-        return ((p2 - p1) / p1) / ((p1 - p0) / p0)
-    if form == "log":
-        return np.log(p2 / p1) / np.log(p1 / p0)
-    if form == "eur":
-        return (p2 - p1) / (p1 - p0)
-    return 1.0
-
-
-def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
-    if o.get("resp") == "gap":
-        w = np.array([r["n"] for r in rows], float)
-        X = np.column_stack([np.ones(len(rows)), [r["gap"] for r in rows]])
-        out = []
-        for k in ("x_cancel", "x_down"):
-            yv = np.array([r[k] for r in rows])
-            b = np.linalg.lstsq(X * np.sqrt(w)[:, None], yv * np.sqrt(w), rcond=None)[0]
-            out.append(max(b[0] + b[1] * gap, 0.0))
-        return out[0], (0.0 if pl == "FLEX" else out[1])
-    if o.get("resp") == "plan_step":
-        # each plan's own level and one step where a rise passes the rival, fitted on the eight events together
+def _resp_rate(rows, pl, cross, c, kind, o):
+    """A 2027 rise's extra cancellation and downgrade rates for a plan in a country, read off the past rises:
+    'kind' the plan's own rises of the same kind (passing the rival's price or not), 'region' the plan's own rise in
+    that country, 'plan' the plan's two rises together, 'pooled' all eight, 'plan_step' each plan's level and one step
+    where a rise passes the rival fitted on the eight; and the events it is read from."""
+    if kind == "plan_step":
         w = np.array([r["n"] for r in rows], float)
         X = np.column_stack([[1.0 if r["plan"] == q else 0.0 for r in rows] for q in P.PLANS] +
                             [[1.0 if r["cross"] else 0.0 for r in rows]])
@@ -462,268 +644,227 @@ def _rise_effect(rows, pl, cross, o, gap=0.0, country=None):
         out = []
         for k in ("x_cancel", "x_down"):
             yv = np.array([r[k] for r in rows])
-            if k == "x_down":     # Flex has no plan below it: its events carry no downgrade
-                keep = np.array([r["plan"] != "FLEX" for r in rows])
-                b = np.linalg.lstsq((X * np.sqrt(w)[:, None])[keep], (yv * np.sqrt(w))[keep], rcond=None)[0]
-            else:
-                b = np.linalg.lstsq(X * np.sqrt(w)[:, None], yv * np.sqrt(w), rcond=None)[0]
-            out.append(max(float(x0 @ b), 0.0))
-        return out[0], (0.0 if pl == "FLEX" else out[1])
-    lo = -1.0 if o.get("noclip") else 0.0     # a response read as measured, or floored at none
-    if o.get("resp", "plan_cross") in ("plan_cross", "cross_mean"):
-        own = [r for r in rows if r["plan"] == pl and r["cross"] == cross]
-        if own:
-            sel = own
-        elif o.get("resp") == "cross_mean":
-            # no rise of its own of this kind: the plain mean of every past rise of that kind
-            kind = [r for r in rows if r["cross"] == cross]
-            xc = float(np.mean([r["x_cancel"] for r in kind]))
-            xd = float(np.mean([r["x_down"] for r in kind if r["plan"] in LOWER]))
-            return max(xc, lo), (0.0 if pl == "FLEX" else max(xd, lo))
-        else:
-            base = [r for r in rows if r["plan"] == pl and not r["cross"]]
-            inc = []
-            for q in P.PLANS:
-                a = [r for r in rows if r["plan"] == q and r["cross"]]
-                b = [r for r in rows if r["plan"] == q and not r["cross"]]
-                if a and b:
-                    inc.append((a[0]["x_cancel"] - b[0]["x_cancel"], a[0]["x_down"] - b[0]["x_down"], q))
-            xc = base[0]["x_cancel"] + np.mean([i[0] for i in inc])
-            xd = base[0]["x_down"] + np.mean([i[1] for i in inc if i[2] in LOWER])
-            return max(xc, lo), (0.0 if pl == "FLEX" else max(xd, lo))
-    elif o.get("resp") == "pooled":
-        sel = rows
-    elif o.get("resp") == "plan":
-        sel = [r for r in rows if r["plan"] == pl]
-    elif o.get("resp") == "region":
-        sel = [r for r in rows if r["plan"] == pl and r["country"] == country]
+            keep = np.array([k == "x_cancel" or r["plan"] != "FLEX" for r in rows])
+            b = np.linalg.lstsq((X * np.sqrt(w)[:, None])[keep], (yv * np.sqrt(w))[keep], rcond=None)[0]
+            out.append(float(x0 @ b))
+        ev = [r for r in rows if r["plan"] == pl and r["cross"] == cross] or [r for r in rows if r["plan"] == pl]
+        return out[0], out[1], ev
+    if kind == "region":
+        ev = [r for r in rows if r["plan"] == pl and r["country"] == c]
+    elif kind == "plan":
+        ev = [r for r in rows if r["plan"] == pl]
+    elif kind == "pooled":
+        ev = list(rows)
     else:
-        sel = [r for r in rows if r["cross"] == cross]
-    wc = sum(r["n"] * r["x_cancel"] for r in sel) / sum(r["n"] for r in sel)
-    wd = sum(r["n"] * r["x_down"] for r in sel) / sum(r["n"] for r in sel)
-    if o.get("resp") != "plan" and pl == "FLEX":
-        wd = 0.0
-    return max(wc, lo), max(wd, lo)
+        ev = [r for r in rows if r["plan"] == pl and r["cross"] == cross] or [r for r in rows if r["cross"] == cross]
+    n = sum(r["n"] for r in ev)
+    return sum(r["n"] * r["x_cancel"] for r in ev) / n, sum(r["n"] * r["x_down"] for r in ev) / n, ev
 
 
-def downgrader_realised(pk, o, pl):
-    """What the subscriptions that moved down a plan at the 2025 and 2026 rises brought over their next twelve
-    months on the lower plan, re-rated at the lower plan's 2027 price and the cost basis: their own paying months
-    and counted hours."""
-    lo = LOWER[pl]
-    pm = paying_months(pk)
-    h = attribute(pk, o)
-    hv = {(a, m): x for a, m, x in zip(h["account_id"], h["m"], h["hours"])}
-    by = {(a, m): p_ for a, m, p_ in zip(pm["account_id"], pm["m"], pm["plan_code"])}
-    vals = []
-    for y in (2025, 2026):
-        dec = (y - P.M0_YEAR) * 12 - 1
-        for (a, m), p_ in list(by.items()):
-            if m != dec or p_ != pl or by.get((a, dec + 1)) != lo:
-                continue
-            v = 0.0
-            for k in range(dec + 1, dec + 13):
-                if (a, k) in by:
-                    net = P.PRICE27[by[(a, k)]] / 1.08
-                    hh = hv.get((a, k), 0.0)
-                    if o.get("down_mean"):
-                        hh = None
-                    cost = P.SHARE26 * net if o["cost"] == "share26" else P.RATE27 * (hh if hh is not None else 0.0)
-                    v += net - cost
-            vals.append(v)
-    return float(np.mean(vals)) if vals else 0.0, len(vals)
-
-
-def cap_response(pk, o):
-    """How much more often a Flex or Standaard subscription ends after a month whose listening reached the plan's
-    hours: next-month leaving after a capped month against months that came close (golden), or against every other
-    month (the naive ratio, which heavy listeners' loyalty pulls down)."""
-    key = ("cap", o.get("cap_lo", 0.6), o.get("cap_hi", 0.9), o.get("cap_naive", False), o["channels"], o["member"])
-    if key in pk:
-        return pk[key]
-    pm = paying_months(pk)
-    h = attribute(pk, o)
-    hv = {(a, m): x for a, m, x in zip(h["account_id"], h["m"], h["hours"])}
-    keys = set(zip(pm["account_id"], pm["m"]))
-    hi, lo = o.get("cap_hi", 0.9), o.get("cap_lo", 0.6)
-    cnt = {"cap": [0, 0], "near": [0, 0]}
-    for a, m, pl in zip(pm["account_id"], pm["m"], pm["plan_code"]):
-        if pl not in ("FLEX", "STD") or not (P.CUT - 24 <= m < P.CUT - 1) or m % 12 == 11:
-            continue
-        cap = P.CAP[pl]
-        x = hv.get((a, m), 0.0) / cap
-        left = (a, m + 1) not in keys
-        if x >= hi:
-            g = "cap"
-        elif (x >= lo) or o.get("cap_naive"):
-            g = "near"
-        else:
-            continue
-        cnt[g][0] += 1
-        cnt[g][1] += left
-    r = (cnt["cap"][1] / cnt["cap"][0]) / (cnt["near"][1] / cnt["near"][0])
-    pk[key] = r
-    return r
-
-
-def _own_hours(pk, o, pl, country=None):
-    """Each subscription's own counted hours per paying month on its plan, November 2025 to October 2026."""
-    pm = paying_months(pk)
+def forecast(pk, o):
+    """Each plan's subscriptions paying at 31 October 2026, carried month by month from November 2026 to December 2027
+    with the plan's January 2027 rise and with its 2026 price held (the other plans at the price list's 2027 prices),
+    each on its own paying months, listening, country and billing route:
+      - each month it pays on, or stops, at its plan's continuation for its paying months and listening band;
+      - with the rise, the light listeners' extra leaving at the December bill after the 1 December e-mail (the plan's
+        own two rises), then the extra cancellations and downgrades at the January bill (the plan's own rise of the
+        same kind: passing the rival's price as last scanned or not), each spread over the listening bands by the
+        past rises' pooled profile;
+      - a stopped subscription pays again at the return model's chance for its band, months since and calendar month,
+        at the price then in force, and stops more often in its first three months back;
+      - a subscription that moves down pays the lower plan, valued on the past downgraders' own twelve months;
+      - the subscriptions that stay through the January bill use the stayers' extra counted hours of the past rises;
+      - each paying month brings its price net of VAT and the store's fee, less EUR 0.40 for each counted hour (its
+        own hours per paying month, by the plan's calendar months), or 48 per cent of net revenue on the 2026 basis.
+    Returns per plan the change in the October subscriptions' 2027 contribution per subscription, how many of them
+    pay on any plan in December 2027 with the rise, the January rates per 100 reaching the bill by country, how many of
+    every 100 the rise loses are paying again in December 2027, and the stayers' extra counted hours over 2027."""
+    by, on, hv, months = panel(pk, o)
     cty = _country(pk)
-    h = attribute(pk, o)
-    pm12 = pm[pm["m"].isin(P.R2_MONTHS) & (pm["plan_code"] == pl)].merge(h, on=["account_id", "m"], how="left")
-    pm12 = pm12.fillna({"hours": 0.0})
-    own = pm12.groupby("account_id")["hours"].mean()
-    base = set(pm[(pm["m"] == P.CUT) & (pm["plan_code"] == pl)]["account_id"])
-    own = own[own.index.isin(base)]
-    if country:
-        own = own[[cty[a] == country for a in own.index]]
-    return own.values
-
-
-def downgrader_value(pk, o, pl, stay_lower, cm, scale=1.0):
-    """What a subscription that moves down a plan at its first 2027 bill brings in 2027: the lower plan's 2027 price
-    less EUR 0.40 on its own hours capped at the lower plan's hours, while it keeps paying; a month that would run
-    past the cap ends the subscription cm times as often."""
-    lo = LOWER[pl]
-    hrs = _own_hours(pk, o, pl) * scale
-    if o.get("down_mean"):
-        hrs = np.full(len(hrs), hrs.mean())
-    cap = P.CAP[lo] or 1e9
-    net = P.PRICE27[lo] / 1.08
-    base_hz = 1 - stay_lower
-    vals = []
-    for hh in hrs:
-        used = min(hh, cap)
-        cost = P.SHARE26 * net if o["cost"] == "share26" else P.RATE27 * used
-        hz = base_hz * (cm if hh >= 0.9 * cap else 1.0)
-        s, v = 1.0, 0.0
-        for k in range(12):
-            v += s * (net - cost)
-            s *= (1 - hz)
-        vals.append(v)
-    return float(np.mean(vals))
-
-
-def base_survival(pk, o):
-    """Each plan's October 2026 subscriptions' expected share still paying 1 to 14 months on (November 2026 to
-    December 2027) at held prices: each subscription carried month by month on its plan's continuation for its
-    tenure band (six paying months or fewer, seven to eighteen, more), November 2024 to October 2026; and each
-    plan's continuation in the longest band, for a subscription that moves onto it."""
-    key = ("surv", o.get("r6_surv", "plan_tenure"))
-    if key in pk:
-        return pk[key]
-    pm = paying_months(pk)
-    base = pm[pm["m"] == P.CUT][["account_id", "plan_code"]]
-    ten = pm[pm["m"] <= P.CUT].groupby("account_id").size()
-    band = lambda t: 0 if t <= 6 else 1 if t <= 18 else 2
-    pp = pm[["account_id", "m", "plan_code"]].copy()
-    pp["ten"] = pp.groupby("account_id").cumcount() + 1
-    nxt = set(zip(pp["account_id"], pp["m"] - 1))
-    obs = pp[(pp["m"] >= P.CUT - 24) & (pp["m"] < P.CUT)].copy()
-    obs["stay"] = [(a, m) in nxt for a, m in zip(obs["account_id"], obs["m"])]
-    # the months a past rise reached the plan in its region (the e-mail to the second bill) carry the rise's own
-    # response, read separately; they stay out of the ordinary continuation
-    cty = _country(pk)
-    rm = {}
-    for (y, c, pl) in RISE_EVENTS:
-        rm.setdefault((c, pl), set()).update(range((y - P.M0_YEAR) * 12 - 2, (y - P.M0_YEAR) * 12 + 2))
-    obs = obs[[m not in rm.get((cty.get(a), pl), ()) for a, m, pl in zip(obs["account_id"], obs["m"], obs["plan_code"])]]
-    obs["b"] = 0 if o.get("r6_surv", "plan_tenure") == "plan" else [band(t) for t in obs["ten"]]
-    rate = obs.groupby(["plan_code", "b"])["stay"].mean().to_dict()
-    prof = {}
-    for pl in P.PLANS:
-        ts = [int(ten[a]) for a in base.loc[base["plan_code"] == pl, "account_id"]]
-        acc = np.zeros(14)
-        for t in ts:
-            s = 1.0
-            for k in range(14):
-                s *= rate.get((pl, 0 if o.get("r6_surv", "plan_tenure") == "plan" else band(t + k)), 0.95)
-                acc[k] += s
-        prof[pl] = list(acc / len(ts))
-    long_rate = {pl: rate.get((pl, 0 if o.get("r6_surv", "plan_tenure") == "plan" else 2), 0.95) for pl in P.PLANS}
-    pk[key] = (prof, long_rate)
-    return pk[key]
-
-
-def r5_rises(pk, o):
-    """Each plan's change in its October 2026 base's 2027 contribution (EUR per subscription) if its January
-    2027 rise goes ahead, against holding the 2026 price; the plans to raise are those that gain."""
     rows = response(pk, o)
+    ann = announce(pk, o)
+    rate, rr = continuation(pk, o)
+    path, obs, tau = salience(pk, dict(o, sal=o.get("sal", "within") if o.get("sal") != "none" else "within"))
+    if o.get("sal") == "none":
+        path = {pl: [0.0] * 12 for pl in P.PLANS}
+    seas, own = season(pk, o)
+    haz, hfail = return_hazard(pk, o) if o.get("ret", "band") != "none" else (None, None)
+    if haz is not None and o.get("scale_ret", 1.0) != 1.0:
+        haz = np.clip(haz * o["scale_ret"], 0.0, 1.0)
     pm = paying_months(pk)
-    cty = _country(pk)
-    base = pm[pm["m"] == P.CUT].assign(country=lambda d: d["account_id"].map(cty))
-    h = attribute(pk, o)
-    pm12 = pm[pm["m"].isin(P.R2_MONTHS)].merge(h, on=["account_id", "m"], how="left").fillna({"hours": 0.0})
-    hours = pm12.groupby("plan_code")["hours"].mean().to_dict()
-    # monthly continuation by plan over the latest two years
-    keys = set(zip(pm["account_id"], pm["m"]))
-    obs = pm[(pm["m"] >= P.CUT - 24) & (pm["m"] < P.CUT)]
-    stay = obs.assign(s=[(a, m + 1) in keys for a, m in zip(obs["account_id"], obs["m"])]).groupby("plan_code")["s"].mean()
-    out, detail = {}, {}
+    last_route = pm.sort_values("m").drop_duplicates("account_id", keep="last").set_index("account_id")["route"].to_dict()
+    nfile = {a: len(ms) for a, ms in months.items()}
+    who = o.get("who", "band") == "band"
+    g_ann = gradient(ann, "xb", lambda r: True) if who else np.ones(NB)
+    g_cn = gradient(rows, "xb_cancel", lambda r: not r["cross"]) if who else np.ones(NB)
+    g_cx = gradient(rows, "xb_cancel", lambda r: r["cross"]) if who else np.ones(NB)
+    g_dn = gradient(rows, "xb_down", lambda r: r["plan"] in LOWER and not r["cross"]) if who else np.ones(NB)
+    g_dx = gradient(rows, "xb_down", lambda r: r["plan"] in LOWER and r["cross"]) if who else np.ones(NB)
+    share = o["cost"] == "share26"
+    nprof = profiles_per_charge(pk)
+    kc, kd, ks, _ = first_bill_model(rows, o)
+    out = {}
     for pl in P.PLANS:
-        s = stay[pl]
-        prof, long_rate = base_survival(pk, o)
-        surv = prof[pl][2:14]                           # paying in Jan to Dec 2027 from October 2026
-        S = sum(surv)
-        net26, net27 = P.PRICE[pl] / 1.08, P.PRICE27[pl] / 1.08
-        cost = (P.SHARE26 * net26) if o["cost"] == "share26" else P.RATE27 * hours[pl]
-        cost27 = (P.SHARE26 * net27) if o["cost"] == "share26" else cost
-        keep_value = S * (net26 - cost)              # a subscription kept on the plan through 2027, price held
-        if o.get("who", "own") == "own" and o["cost"] != "share26":
-            evs = [r for r in rows if r["plan"] == pl]
-            ev_c = [r for r in rows if r["plan"] == pl and r["cross"]]
-            ev_c = ev_c or [r for r in rows if r["cross"]]
-            rl = sum(r["h_left"] * r["n_left"] for r in evs) / max(sum(r["n_left"] for r in evs), 1)
-            rl_c = sum(r["h_left"] * r["n_left"] for r in ev_c) / max(sum(r["n_left"] for r in ev_c), 1)
-            ev_n = [r for r in rows if r["plan"] == pl and not r["cross"]]
-            rl_n = sum(r["h_left"] * r["n_left"] for r in ev_n) / max(sum(r["n_left"] for r in ev_n), 1)
-            rd = sum(r["h_down"] * r["n_down"] for r in evs) / max(sum(r["n_down"] for r in evs), 1) if pl in LOWER else 1.0
-        else:
-            rl = rd = rl_c = rl_n = 1.0
-        leave_value = S * (net26 - P.RATE27 * hours[pl] * rl) if o["cost"] != "share26" else keep_value
-        keep_down = S * (net26 - P.RATE27 * hours[pl] * rd) if o["cost"] != "share26" else keep_value
-        gain = S * ((net27 - cost27) - (net26 - cost))
-        cm = 1.0 if o.get("no_cap_churn") else cap_response(pk, o)
-        if pl in LOWER and o.get("dval", "realised") == "realised":
-            dval = downgrader_realised(pk, o, pl)[0]
-        else:
-            dval = downgrader_value(pk, o, pl, stay.get(LOWER.get(pl), 0.95), cm, rd) if pl in LOWER else 0.0
-        tot, xs, end = 0.0, {}, 0.0
+        ids_all = [a for a in on.get((P.CUT, pl), [])]
+        xa_pl = float(np.mean([r["x_announce"] for r in ann if r["plan"] == pl])) * o.get("scale_announce", 1.0)
+        if not o.get("announce", True):
+            xa_pl = 0.0
+        dval, dlast, _, drem = downgrader_path(pk, o, pl) if pl in LOWER else (0.0, 0.0, 0, 0.0)
+        tot_change, end27, n_all = 0.0, 0.0, 0
+        cells, xleft, xback, sal_h = {}, 0.0, 0.0, 0.0
+        sal_acc = [0.0, 0.0]
+        rem_acc = [0.0]
         for c in ("NL", "BE"):
-            n = int((base[base["plan_code"] == pl]["country"] == c).sum())
-            cross = P.PRICE[pl] <= pk["rival"][(2027, c, pl)] < P.PRICE27[pl]
-            xc, xd = rise_effect(rows, pl, cross, o, gap=max(P.PRICE27[pl] - pk["rival"][(2027, c, pl)], 0.0), country=c)
-            if not o.get("down", True):
-                xd = 0.0
-            xc, xd = xc * o.get("scale_cancel", 1.0), xd * o.get("scale_down", 1.0)
+            ids = [a for a in ids_all if cty[a] == c]
+            n = len(ids)
+            if not n:
+                continue
+            lb = np.array([lband(_pre(hv, a, P.CUT)) for a in ids])
+            h_own = np.array([own.get(a, 0.0) for a in ids])
+            t0 = np.array([nfile[a] for a in ids])
+            rt = [last_route.get(a, "web") for a in ids]
+            vat = P.VAT[c]
+            cross27 = P.PRICE[pl] <= pk["rival"][(2027, c, pl)] < P.PRICE27[pl]
+            fits = np.array([pl in LOWER and nprof.get((a, P.CUT), 1) <= P.MAX_PROFILES[LOWER[pl]] for a in ids])
+
+            def spread(x, g):
+                """Per-account rates with the plan's average x over the October base, spread by the band profile."""
+                gi = g[lb]
+                return np.clip(x * gi / max(gi.mean(), 1e-9), 0.0, 1.0)
+            if o.get("resp", "model") == "model":
+                d27 = np.log(P.PRICE27[pl] / P.PRICE[pl]) if o.get("dose") == "log" else (P.PRICE27[pl] - P.PRICE[pl]) / P.PRICE[pl]
+                xc_i = np.clip(d27 * kc[lb] + (ks[lb] if cross27 else 0.0), 0.0, 1.0)
+                xd_i = np.clip(np.where(fits, d27 * kd[lb], 0.0), 0.0, 1.0)
+                ev = [r for r in rows if r["cross"] == cross27]
+            else:
+                xc, xd, ev = _resp_rate(rows, pl, cross27, c, o.get("resp"), o)
+                if not o.get("noclip"):
+                    xc, xd = max(xc, 0.0), max(xd, 0.0)
+                xc_i, xd_i = spread(xc, g_cx if cross27 else g_cn), spread(xd, g_dx if cross27 else g_dn)
+            xc_i = xc_i * o.get("scale_cancel", 1.0)
+            xd_i = np.zeros(n) if (pl == "FLEX" or not o.get("down", True)) else xd_i * o.get("scale_down", 1.0)
             if o.get("down_as_exit"):
-                xc, xd = xc + xd, 0.0
-            rlx = rl_c if cross else rl_n
-            lv = S * (net26 - P.RATE27 * hours[pl] * rlx) if o["cost"] != "share26" else keep_value
-            d = (1 - xc - xd) * gain - xc * lv - xd * (keep_down - dval)
-            xa, ha, use = later_effect(pk, rows, pl, cross, o, country=c)
-            ha = ha if (o.get("who", "own") == "own" and o["cost"] != "share26") else 1.0
-            # the subscriptions that stay listen more: counted hours from the fourth month of 2027 on
-            if o["cost"] != "share26":
-                d = d - (1 - xc - xd) * sum(surv[3:]) * P.RATE27 * hours[pl] * use
-            # leaving at the December bill: the whole of 2027 at the held price, lost, and no rise on it
-            ann_v = S * (net26 - (P.RATE27 * hours[pl] * ha if o["cost"] != "share26" else P.SHARE26 * net26))
-            d = (1 - xa) * d - xa * ann_v
-            xs.setdefault("later", {})[c] = {"announce": xa, "use": use}
-            tot += n * d
-            # still paying at 31 December 2027 (on any plan) if the rise goes ahead
-            lo = LOWER.get(pl)
-            s_lo = long_rate.get(lo, s) if lo else s
-            end += n * (1 - xa) * ((1 - xc - xd) * prof[pl][13] + xd * prof[pl][2] * s_lo ** 11)
-            xs[c] = {"cross": cross, "extra_cancel": xc, "extra_down": xd, "n": n}
-        nb = sum(v["n"] for k, v in xs.items() if k in ("NL", "BE"))
-        out[pl] = tot / nb
-        xs["paying_end27"] = end
-        xs["downgrader_value"] = dval
-        xs["keep_value"] = keep_value
-        xs["leave_value"] = leave_value
-        xs["h_ratio"] = (rl, rd)
-        xs["h_cross"] = (rl_c, rl_n)
-        detail[pl] = xs
-    return out, detail, rows
+                xc_i, xd_i = xc_i + xd_i, np.zeros(n)
+            xa_i = spread(xa_pl, g_ann)
+
+            def run(rise):
+                pay = np.ones(n)                 # paying, never stopped since October
+                pr = np.zeros(n)                 # paying again, back for more than three months
+                back = np.zeros((4, n))          # paying again, back 0 to 3 months (0: this month)
+                lap = np.zeros((KMAX + 2, n))    # stopped, by months since
+                xl = np.zeros((KMAX + 2, n))     # the rise's extra leavers, stopped
+                xb = np.zeros((4, n))            # the rise's extra leavers, paying again
+                xp = np.zeros(n)                 # ... back for more than three months
+                down = np.zeros(n)
+                stayers = np.zeros(n)
+                contrib = np.zeros(n)
+                reach = np.zeros(n)
+                left_x = np.zeros(n)
+                for k, m in enumerate(range(P.CUT + 1, P.END + 1), 1):
+                    cal = m % 12
+                    t = t0 + k - 1
+                    q = np.array([1.0 - rate.get((pl, tband(ti), b if o.get("surv", "plan_tenure_band") ==
+                                                  "plan_tenure_band" else 0), 0.95) for ti, b in zip(t, lb)])
+                    qr = 1.0 - rr.get(pl, 0.95)
+                    # stop or carry on (returned this month do not decide); with the rise, the e-mail's extra
+                    # leavers at the December bill and the first bill's extra cancellations and downgrades in January,
+                    # each a share of the subscriptions paying into the month, as the past rises were read
+                    ex = np.zeros(n)
+                    dn = np.zeros(n)
+                    if rise and m == P.CUT + 2:
+                        ex = xa_i
+                    if rise and m == P.CUT + 3:
+                        reach = pay + back[1:].sum(0)
+                        ex, dn = xc_i, xd_i
+                    f_pay = np.minimum(q + ex, 1.0 - dn)
+                    f_back = np.minimum(qr + ex, 1.0 - dn)
+                    l_pay, e_pay, d_pay = pay * q, pay * (f_pay - q), pay * dn
+                    l_back, e_back, d_back = back[1:] * qr, back[1:] * (f_back - qr), back[1:] * dn
+                    lx_back, lx_p = xb[1:] * qr, xp * q
+                    l_pr = pr * q
+                    pr = pr - l_pr
+                    pay = pay - l_pay - e_pay - d_pay
+                    back[1:] = back[1:] - l_back - e_back - d_back
+                    xb[1:], xp = xb[1:] - lx_back, xp - lx_p
+                    new_lap = l_pay + l_back.sum(0) + l_pr
+                    new_xl = lx_back.sum(0) + lx_p + e_pay + e_back.sum(0)
+                    left_x += e_pay + e_back.sum(0)
+                    if rise and m == P.CUT + 3:
+                        down = d_pay + d_back.sum(0)
+                        stayers = pay + back[1:].sum(0)
+                    # stopped subscriptions pay again
+                    if haz is not None:
+                        hk = haz[lb, :, cal]                       # (n, KMAX + 1)
+                        r_lap = (lap[1:KMAX + 1] * hk[:, 1:].T).sum(0)
+                        r_xl = (xl[1:KMAX + 1] * hk[:, 1:].T).sum(0)
+                        lap[1:KMAX + 1] *= (1.0 - hk[:, 1:].T)
+                        xl[1:KMAX + 1] *= (1.0 - hk[:, 1:].T)
+                    else:
+                        r_lap = r_xl = np.zeros(n)
+                    back[0], xb[0] = r_lap, r_xl
+                    # this month's contribution (2027 only)
+                    if m >= P.Y2027[0]:
+                        price = P.PRICE27[pl] if rise else P.PRICE[pl]
+                        paying = pay + pr + back.sum(0) + xb.sum(0) + xp
+                        fee = np.array([0.30 if (r_ == "apple" and t0_ + k <= 12) else (0.15 if r_ in ("apple", "google")
+                                        else 0.0) for r_, t0_ in zip(rt, t0)])
+                        net = price / (1 + vat) * (1 - fee)
+                        cost = 0.52 * net if share else P.RATE27 * h_own * seas.get((pl, cal), 1.0)
+                        contrib += paying * (net - cost)
+                        if rise:
+                            rem_acc[0] += float((paying * (0.52 * net if share else
+                                                           P.RATE27 * h_own * seas.get((pl, cal), 1.0))).sum())
+                        if rise and not share:
+                            u = path[pl][m - P.Y2027[0]] * o.get("scale_sal", 1.0)
+                            contrib -= stayers * P.RATE27 * u * h_own * seas.get((pl, cal), 1.0)
+                            sal_acc[0] += float((stayers * u * h_own * seas.get((pl, cal), 1.0)).sum())
+                            rem_acc[0] += float((stayers * P.RATE27 * u * h_own * seas.get((pl, cal), 1.0)).sum())
+                            sal_acc[1] += float(stayers.sum())
+                        if rise:
+                            stayers *= (1.0 - q)
+                    # move the clocks on
+                    lap[2:KMAX + 2] = lap[1:KMAX + 1].copy()
+                    lap[1] = new_lap
+                    xl[2:KMAX + 2] = xl[1:KMAX + 1].copy()
+                    xl[1] = new_xl
+                    pr = pr + back[3]
+                    back[1:4] = back[0:3].copy()
+                    back[0] = 0.0
+                    xp = xp + xb[3]
+                    xb[1:4] = xb[0:3].copy()
+                    xb[0] = 0.0
+                end = pay + pr + back.sum(0) + xb.sum(0) + xp
+                again = pr + back.sum(0) + xb.sum(0) + xp
+                return contrib, end, reach, down, left_x, (again, 1.0 - pay - down)
+            c_h, e_h, _, _, _, _ = run(False)
+            c_r, e_r, reach, down, left_x, (again, stopped) = run(True)
+            # the downgraders, valued on the past downgraders' own twelve months (or modelled: their own hours capped at
+            # the lower plan's, on the lower plan's continuation for long-standing subscriptions)
+            dv = down * dval
+            if o.get("dval") == "model" and pl in LOWER:
+                lo = LOWER[pl]
+                cap = P.CAP[lo] or 1e9
+                s_lo = rate.get((lo, 2, 1), rate.get((lo, 2, 0), 0.95))
+                vals, surv = np.zeros(n), 1.0
+                for m27 in P.Y2027:
+                    net_lo = P.PRICE27[lo] / (1 + vat)
+                    use = np.minimum(h_own * seas.get((pl, m27 % 12), 1.0), cap)
+                    vals += surv * (net_lo - (0.52 * net_lo if share else P.RATE27 * use))
+                    surv *= s_lo
+                dv = down * vals
+            rem_acc[0] += float((down * drem).sum())
+            tot_change += float((c_r - c_h + dv).sum())
+            end27 += float(e_r.sum() + (down * dlast).sum())
+            n_all += n
+            rc = float(reach.sum())
+            cells[c] = {"cross": bool(cross27), "extra_cancel": float((reach * xc_i).sum() / rc),
+                        "extra_down": float((reach * xd_i).sum() / rc), "n": n,
+                        "events": ["%d %s" % (r["year"], r["country"]) for r in ev]}
+            xleft += float(stopped.sum())
+            xback += float(again.sum())
+        sal_h = 12.0 * sal_acc[0] / sal_acc[1] if sal_acc[1] else 0.0      # per subscription staying all 2027
+        out[pl] = {"change": tot_change / n_all, "end27": end27, "cells": cells, "n": n_all,
+                   "back_share": (xback / xleft) if xleft else 0.0,     # of those that stop by December 2027, paying then
+                   "sal_hours": sal_h, "xa": xa_pl, "remun": rem_acc[0] / n_all,
+                   "tau": tau}
+    return out

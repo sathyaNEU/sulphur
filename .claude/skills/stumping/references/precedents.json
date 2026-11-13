@@ -1088,6 +1088,38 @@
    "move": "an event-study estimate around a recurring calendar change, with each record's local timing and the rule in force computed",
    "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
    "quote": "the run passed the base count, the timing pattern and the event-window estimate"
+  },
+  {
+   "id": "R61",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a price response carried to a configuration a unit never ran by a small pooled model of the past events (the rise's size, whether it passed the rival's price, whether the subscription's profiles fit the plan below), chosen by leaving whole events out",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Selected small models using price-change size, crossing a rival's price, and compatibility with the next-lower plan. Leaving entire historical events out, cancellation prediction error was 4.64 per 100 versus 10.64 for a price-change-only model"
+  },
+  {
+   "id": "R62",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "the leaving between a price announcement and the first bill at the new price modelled as its own effect beside the first bill's response",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Included ordinary November attrition, December anticipation and a one-time first-bill response."
+  },
+  {
+   "id": "N33",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "a subscription that stops is gone for the forecast window: no return to the service on the same account is modelled, the fixed cohort carried with cancellation as an end",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "No reactivation, new acquisition or post-cancellation reporting costs are forecast."
+  },
+  {
+   "id": "L45",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a usage forecast from each account's recent history certified by a pooled holdout bias that cannot see the stayers' response in the months after a rise in the rising plan and country, and the call that response decided filed wrong",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Forecast account usage used recent history, plan/profile differences and seasonality. ... Usage holdout bias ranged from -0.34% to +2.07%."
   }
  ]
 }

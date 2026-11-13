@@ -46,7 +46,7 @@ def goldens(fig):
                                 "2026-11-09T08:22:00Z", "2026-11-11T15:47:12Z", excel=True, company=ORG)
     postprocess.normalize_pptx(os.path.join(GOLDEN, deliver.FILES["deck"]), "Tara Martens", "Romy Korsman",
                                "2026-11-10T13:05:00Z", "2026-11-11T16:31:40Z",
-                               title="Spring campaign 2027: lead plan", company=ORG)
+                               title="January 2027 price rises", company=ORG)
     postprocess.own_mtimes(GOLDEN, {})
 
 

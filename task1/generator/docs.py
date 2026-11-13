@@ -153,7 +153,15 @@ def write_pdfs(folder):
            "price at their first billing date in 2027; subscribers are told by e-mail on 1 December 2026. A rise "
            "may still be withdrawn for a plan until 30 November 2026.",
            "Listening hours that are not used do not carry over to the next month. In the app stores the price is "
-           "the store's nearest price point."])],
+           "the store's nearest price point."]),
+          ("Earlier price changes", [
+              "1 January 2025, in Flanders: Standaard from EUR %.2f to EUR %.2f and Onbeperkt from EUR %.2f to EUR %.2f; "
+              "in the Netherlands: Flex from EUR %.2f to EUR %.2f and Gezin from EUR %.2f to EUR %.2f. Subscribers were "
+              "told by e-mail on 1 December 2024." % (P.PRICE0["STD"], P.PRICE["STD"], P.PRICE0["ONB"], P.PRICE["ONB"],
+                                                     P.PRICE0["FLEX"], P.PRICE["FLEX"], P.PRICE0["GEZ"], P.PRICE["GEZ"]),
+              "1 January 2026, in the Netherlands: Standaard and Onbeperkt; in Flanders: Flex and Gezin; each to the "
+              "price above. Subscribers were told by e-mail on 1 December 2025.",
+              "Before 2025 the prices had not changed since 2022."])],
          "", [["Issued", "28 October 2026"], ["Valid from", "1 January 2027"]],
          "Kraanvogel Luisterboeken B.V., commercial", "Price list 2027", "Price list 2027",
          dt.datetime(2026, 10, 27, 14, 20, tzinfo=CET), dt.datetime(2026, 10, 28, 9, 2, tzinfo=CET),

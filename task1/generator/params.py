@@ -15,15 +15,15 @@ PLANS = ["FLEX", "STD", "ONB", "GEZ"]
 PLAN_NAME = {"FLEX": "Kraanvogel Flex", "STD": "Kraanvogel Standaard", "ONB": "Kraanvogel Onbeperkt",
              "GEZ": "Kraanvogel Gezin"}
 PRICE = {"FLEX": 9.99, "STD": 14.99, "ONB": 18.99, "GEZ": 22.99}          # by 2026, VAT included
-PRICE0 = {"FLEX": 9.49, "STD": 13.99, "ONB": 17.99, "GEZ": 21.99}         # 2023 and 2024
+PRICE0 = {"FLEX": 9.49, "STD": 13.49, "ONB": 17.99, "GEZ": 21.99}         # 2023 and 2024
 RISES = {(2025, "BE"): ("STD", "ONB"), (2025, "NL"): ("FLEX", "GEZ"), (2026, "NL"): ("STD", "ONB"),
          (2026, "BE"): ("FLEX", "GEZ")}
-RIVAL = {"NL": {"FLEX": 9.79, "STD": 15.49, "ONB": 20.49, "GEZ": 24.49},   # the rival's comparable plans
-         "BE": {"FLEX": 9.39, "STD": 15.49, "ONB": 18.49, "GEZ": 22.49}}
+RIVAL = {"NL": {"FLEX": 9.79, "STD": 16.99, "ONB": 20.49, "GEZ": 24.49},   # the rival's comparable plans
+         "BE": {"FLEX": 9.79, "STD": 16.99, "ONB": 18.49, "GEZ": 22.49}}
 RIVAL_NAME = {"FLEX": "Luistr Basis 10 uur", "STD": "Luistr Plus 30 uur", "ONB": "Luistr Onbeperkt",
               "GEZ": "Luistr Familie"}
 RISE27 = ("FLEX", "STD", "ONB", "GEZ")    # the rises the price list announces for January 2027
-PRICE27 = {"FLEX": 10.49, "STD": 15.99, "ONB": 19.99, "GEZ": 23.99}       # from 1 January 2027
+PRICE27 = {"FLEX": 10.49, "STD": 16.49, "ONB": 19.99, "GEZ": 23.99}       # from 1 January 2027
 CAP = {"FLEX": 10.0, "STD": 30.0, "ONB": None, "GEZ": None}               # hours of listening a month
 MAX_PROFILES = {"FLEX": 1, "STD": 1, "ONB": 2, "GEZ": 4}
 VAT = {"NL": 0.09, "BE": 0.06}
@@ -69,8 +69,14 @@ def days_in(m):
     return (nxt - dt.date(y, mo, 1)).days
 
 
+RIVAL_JUL26 = {"FLEX": 10.29, "ONB": 20.49, "GEZ": 24.49}   # July 2026: the rival raises its Basis 10 uur in both
+                                     # countries and brings its Flemish Onbeperkt and Familie to its Dutch prices
+
+
 def rival_of(country, plan, m):
     """The rival's comparable plan's list price in month m (VAT included)."""
+    if m >= 42 and plan in RIVAL_JUL26:
+        return RIVAL_JUL26[plan]
     return RIVAL[country][plan]
 
 
@@ -85,6 +91,18 @@ def price_of(plan, country, m, rise27=RISE27):
     return p
 SEL = 0.6                            # how much more light listeners answer a rise
 STEP, STEP_DOWN, SEL_X = 0.12, 0.320, 1.4   # past the rival: the extra leaving and moving down; how much heavier the leavers
-ANNOUNCE = 0.055                     # the December bill after the price e-mail: light listeners leave before the new price
+ANNOUNCE = 0.038                     # the December bill after the price e-mail: light listeners leave before the new price
 ANN_SEL = 1.0                        # how much more light listeners leave at the e-mail
-SHARE_ADD = 0.11                     # an account used by one profile on a plan with more starts to share, months 1 to 3 after a rise
+# a subscription that ends by cancelling, or by a debit returned and not re-presented, can come back on the same account
+RET0 = 0.08                          # monthly return hazard in the first month after leaving, an average listener
+RET_SEL = 0.8                        # light listeners come back more often
+RET_TAU = 5.0                        # months over which the return hazard falls by e
+RET_SEASON = [1.0, 0.85, 0.9, 1.0, 1.2, 1.4, 1.4, 1.1, 0.9, 0.9, 0.9, 1.1]
+RET_FAIL = 0.22                      # a returned debit: the extra chance of coming back in each of the next two months
+RET_MAX = 30                         # months after which a lapsed account no longer comes back
+RET_CHURN = 1.6                      # how much more often a returned subscription ends in its first three months back
+# the account holder listens more after the first bill at a higher price, the heavier listener the more, fading
+SAL_U = 0.25
+SAL_REF = 25.0                       # hours of a settled month at which the holder takes the uplift as is
+SAL_POW = 2.0
+SAL_TAU = 4.0                        # months over which the uplift falls by e

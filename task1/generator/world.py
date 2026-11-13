@@ -1,7 +1,9 @@
 """The simulated business, month by month from January 2023 to December 2027.
 
 Accounts start a trial (a spring campaign's 30 days, or 14 days organically), pay monthly on their billing day by web
-(iDEAL then SEPA direct debit, or card) or through an app store, switch plans, and end; a Gezin or Onbeperkt account
+(iDEAL then SEPA direct debit, or card) or through an app store, switch plans, and end; an account that ends by
+cancelling or on a failed debit can take its subscription up again on the same account, light listeners sooner and
+more often, more of them before the summer; a Gezin or Onbeperkt account
 holds more than one profile, profiles are added, removed, and moved out to accounts of their own at a month start.
 Each profile listens title by title: new progress through the titles it is reading, and re-listening of titles it has
 finished (children above all), streamed or played from a download. The app reports a streamed title's position as it
@@ -91,9 +93,11 @@ def _choose_pool(titles, adult):
     return w
 
 
-def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
+def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None, sal_off27=False, ret_off27=False):
     """seed27 (the clean truth only) redraws every account's and profile's stream from January 2027, so the
-    2027 can be replayed many times on the same October 2026 world; the shipped records end before it."""
+    2027 can be replayed many times on the same October 2026 world; the shipped records end before it. sal_off27 and
+    ret_off27 (the truth's decomposition only) switch off the holder's extra listening after a 2027 rise and the
+    return of subscriptions that end from November 2026."""
     rng = np.random.default_rng(seed)
     pubs, titles = catalogue(rng)
     pop = np.array([t["pop"] for t in titles])
@@ -147,7 +151,7 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
         else:
             for pr in start_profiles:
                 a["profiles"].append(pr)
-        a["plan_hist"].append((m, plan, "trial" if trial_days else "paid"))
+        a["plan_hist"].append((m, plan, "trial" if trial_days else "paid", a["bill_day"]))
         return a
 
     # the base in January 2023: paying accounts with tenures up to four years
@@ -175,6 +179,10 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
         ten = m - pr.first_month
         fade = 0.74 + 0.26 * math.exp(-max(ten, 0) / 5.0)
         h = pr.intensity * P.SEASON[cal] * fade * float(r.lognormal(0, 0.33)) * (1.38 if trial else 1.0)
+        rm = a.get("rise_m")
+        if pr.owner and rm is not None and m >= rm and not (sal_off27 and rm >= P.Y2027[0]):
+            # the holder, told of the higher price and billed it, listens more for a while, the heavier the more
+            h *= 1.0 + P.SAL_U * min((pr.intensity / P.SAL_REF) ** P.SAL_POW, 3.0) * math.exp(-(m - rm) / P.SAL_TAU)
         if r.random() < (0.07 if pr.adult else 0.05):
             h *= 0.05
         cap = P.CAP[a["plan"]]
@@ -311,6 +319,8 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
         while ia < len(accounts):
             a = accounts[ia]
             ia += 1
+            if a["end"] is not None and a.get("lapse") and a["kind"] == "consumer":
+                _come_back(a, m, ret_off27)
             if a["end"] is not None or a["created"][0] > m:
                 continue
             r = a["rng"]
@@ -323,19 +333,21 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                 q = P.CONVERT[plan] * (1.0 + 0.25 * math.tanh(a["eng"]))
                 if a["kind"] != "consumer" or r.random() < q:
                     a["status"] = "paid"
-                    a["plan_hist"].append((m, plan, "paid"))
+                    a["plan_hist"].append((m, plan, "paid", a["bill_day"]))
                 else:
                     a["end"] = (m, "trial_not_converted")
                     for pr in a["profiles"]:
                         pr.removed = pr.removed or m
                     continue
-            if a["status"] == "paid" and charge_month and a["paid_months"] > 0:
+            if a["status"] == "paid" and charge_month and a["paid_months"] > 0 and a.get("ret_m") != m:
                 # leave at the end of the cycle, switch plan, or carry on
                 ten = a["paid_months"] + a.get("tenure", 0)
                 hz = P.CHURN[plan] * (1.45 if ten <= 3 else 1.0 if ten <= 12 else 0.72)
                 hz *= math.exp(-0.32 * a["eng"]) * (1.0 + 0.08 * math.sin(2 * math.pi * (m % 12 - 7) / 12))
                 if a.get("capped_now"):
                     hz *= 2.3
+                if a.get("ret_m") is not None and m - a["ret_m"] <= 3:
+                    hz *= P.RET_CHURN
                 new_p = P.price_of(plan, a["country"], m, rise27)
                 old_p = a.get("last_price")
                 lt = min(max(math.exp(-P.ANN_SEL * a["eng"]), 0.2), 4.0)
@@ -349,12 +361,12 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                     a["rise_m"], a["rise_cross"] = m, cross
                     light = min(max(math.exp(-P.SEL * a["eng"]), 0.3), 3.2)   # light listeners answer a rise first
                     heavy = min(max(math.exp(P.SEL_X * a["eng"]), 0.3), 3.2)  # past the rival, heavy ones switch
-                    hz += (0.008 + 0.30 * pct) * light + (P.STEP * heavy if cross else 0.0)
-                    pdown = (0.006 + 0.20 * pct + (P.STEP_DOWN if cross else 0.0)) * light
+                    hz += (0.004 + 0.30 * pct) * light + (P.STEP * heavy if cross else 0.0)
+                    pdown = (0.004 + 0.20 * pct + (P.STEP_DOWN if cross else 0.0)) * light
                     lower = {"STD": "FLEX", "ONB": "STD", "GEZ": "ONB"}.get(plan)
                     if lower and r.random() < pdown and len(a["profiles"]) <= P.MAX_PROFILES[lower]:
                         a["plan"] = plan = lower
-                        a["plan_hist"].append((m, lower, "paid"))
+                        a["plan_hist"].append((m, lower, "paid", a["bill_day"]))
                         hz = 0.0
                 elif (a["kind"] == "consumer" and m >= P.Y2027[0] and old_p and not a.get("bill27")
                       and plan in ("STD", "ONB", "GEZ")):
@@ -363,6 +375,7 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                     a["bill27"] = True
                 if a["kind"] == "consumer" and r.random() < hz:
                     a["end"] = (m, "cancelled")
+                    a["lapse"] = (m, a["eng"], "cancelled")
                     for pr in a["profiles"]:
                         pr.removed = pr.removed or m
                     continue
@@ -371,12 +384,11 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                     nw = str(r.choice(alt))
                     if not (nw in ("FLEX", "STD") and len(a["profiles"]) > 1):
                         a["plan"] = plan = nw
-                        a["plan_hist"].append((m, nw, "paid"))
+                        a["plan_hist"].append((m, nw, "paid", a["bill_day"]))
             # profiles added to family accounts, moved out at a month start, removed
             if a["kind"] == "consumer" and a["status"] == "paid":
                 cap = P.MAX_PROFILES[plan]
-                share = P.SHARE_ADD if (len(a["profiles"]) == 1 and 1 <= m - a.get("rise_m", -99) <= 3) else 0.0  # one user starts to share
-                if len(a["profiles"]) < cap and r.random() < (0.012 if plan == "GEZ" else 0.006) + share:
+                if len(a["profiles"]) < cap and r.random() < (0.012 if plan == "GEZ" else 0.006):
                     pr = Profile("P%07d" % (next_prof[0] + int(r.integers(1, 9))), a["aid"], plan == "ONB" or
                                  r.random() < 0.5, m, plan, np.random.default_rng(int(r.integers(1 << 62))), owner=False)
                     next_prof[0] = int(pr.pid[1:])
@@ -411,6 +423,8 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
                         status = "collected"
                     else:
                         a["end"] = (m, "debit_returned")
+                        if a["kind"] == "consumer":
+                            a["lapse"] = (m, a["eng"], "debit_returned")
                 if status == "refunded":
                     a["end"] = (m, "refunded")
                 if status == "collected":
@@ -441,6 +455,29 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
         _flush_late(accounts, m, report_late, licences, engine_count)
     return {"pubs": pubs, "titles": titles, "accounts": accounts, "profiles": profiles, "live": live,
             "licences": licences, "counted": counted, "charges": charges}
+
+
+def _come_back(a, m, ret_off27=False):
+    """A lapsed subscription takes its plan up again on the same account at its own new billing day: the chance falls
+    with the months since it ended, is higher for a light listener and before the summer, and a returned debit comes
+    back soonest. It pays the plan's price of the month it returns and starts with no rise to answer."""
+    lm, leng, why = a["lapse"]
+    k = m - lm
+    if not (1 <= k <= P.RET_MAX) or (ret_off27 and lm >= P.CUT + 1):
+        return
+    r = a["rng"]
+    h = P.RET0 * min(max(math.exp(-P.RET_SEL * leng), 0.3), 3.0) * math.exp(-(k - 1) / P.RET_TAU) * P.RET_SEASON[m % 12]
+    if why == "debit_returned" and k <= 2:
+        h += P.RET_FAIL
+    if r.random() < h:
+        a.setdefault("returns", []).append((lm, m, why, a["bill_day"]))
+        a["end"], a["lapse"], a["status"] = None, None, "paid"
+        a["bill_day"] = int(r.integers(1, 29))
+        a["plan_hist"].append((m, a["plan"], "paid", a["bill_day"]))
+        a["last_price"], a["ret_m"] = None, m
+        for pr in a["profiles"]:
+            if pr.removed == lm:
+                pr.removed = None
 
 
 def _flush_late(accounts, m, report_late, licences, engine_count):
