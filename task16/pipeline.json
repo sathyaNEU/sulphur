@@ -1,12 +1,12 @@
 {
  "task": "task16",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-12",
+ "updated": "2026-11-13",
  "doctrine": "throughout",
  "call": "run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against HIM-14's one; Rule A 2.97 (106.7 false merges), Rule C 5.44 (153, twins), Rule D 7.12 (164); not Rule A, which the engine's chance rates put at 0.14",
  "chain": "R1 the converted index (220,669 distinct patients, 76,062 in both indexes); R2 rule A's false merges from chance agreement on the joint cells of names, birth years and 1 January heaping (106.7); R3 rule C's twins the pilot never saw (153); R4 rule D's twins under a parent's SSN (164); R5 Calder Bay records holding two or more patients (568); R6 the rule (B); R7 patients left under more than one record after Rule B (48,754)",
@@ -125,14 +125,23 @@
    }
   ]
  },
- "returned": [],
- "resume": "stage 6: the author rewrites the prompt for voice, uploads prompt and target.zip, pastes the two runs for /triage-runs",
+ "returned": [
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "by": "the reviewer's sheet (pasted by the author; runs/review_2026-11-13.md)",
+   "why": "not difficult enough: Rules A, C and D fail on directly countable evidence (the delivery log's twins, blood-discordant links), so the call collapsed to Rule B or none, lost only by a reserve on B's eight blood mismatches; the step 4 count 30 against the file's 32 of 8,043",
+   "repair": "design",
+   "commit": ""
+  }
+ ],
+ "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "sent back for fixes",
+  "date": "2026-11-13",
+  "note": "review sheet: reward 78.0, stumped failed, determinism and solution passed (main and supp); task aab5f553-ce77-401d-81b3-ca7e7215bfcb"
  },
  "prompt_rewritten": false
 }
