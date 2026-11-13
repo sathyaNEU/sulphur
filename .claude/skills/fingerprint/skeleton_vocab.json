@@ -151,7 +151,8 @@
   "bounded_outcome_headroom": "an uplift measured in points where the outcome had room to rise shrinks as the unit nears the outcome's bound, so it is modelled at the item or unit level with the bound and read at the target's own level",
   "calibrated_proxy_for_lost_attribute": "an attribute the target period no longer records is rebuilt from a field every period carries, with a rule calibrated and validated on the periods that record both and its error carried into the estimate",
   "level_and_mix_from_two_sources": "a complete source holds the level and a detailed but partial source the mix, with the partial source's coverage moving between periods, so each part of the estimand is taken from the source that sees it and a coverage change is never read as a change in the quantity",
-  "turnover_not_stock_driver": "the work or cost is driven by what enters and leaves (arrivals, new and ended tracks, openings and closures) rather than by what is present, so a rate per unit present, fitted where turnover ran at one level, misstates a regime whose turnover runs at another"
+  "turnover_not_stock_driver": "the work or cost is driven by what enters and leaves (arrivals, new and ended tracks, openings and closures) rather than by what is present, so a rate per unit present, fitted where turnover ran at one level, misstates a regime whose turnover runs at another",
+  "stopped_units_return": "a unit that stops is not gone: the stopped form a pool that comes back at its own rate (by who stopped, how long ago and the season), at the terms then in force, so a fixed group carried with stopping as final understates both what a change keeps and the group's end count"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
