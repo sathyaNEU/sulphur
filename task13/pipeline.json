@@ -1,6 +1,6 @@
 {
  "task": "task13",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "etl",
@@ -211,15 +211,23 @@
     }
    },
    "commit": ""
+  },
+  {
+   "date": "2026-11-13",
+   "source": "review",
+   "by": "the reviewer's sheet (pasted by the author; runs/review_2026-11-13.md)",
+   "why": "not difficult enough: the runs reproduced the fault register, the repeat locations, the guards, the washing sections and the fixed places; cause signatures clean, the washing list identical from 0.029 to 0.080 mg/cm2; they parted only on a cause label",
+   "repair": "design",
+   "commit": ""
   }
  ],
- "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py task13 --rewrite and leak.py must pass), uploads it with target.zip, pastes the four answer blocks from submission.md and the golden ZIP; then /triage-runs task13",
+ "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "sent back for fixes",
+  "date": "2026-11-13",
+  "note": "review sheet: reward 75.0, stumped failed, determinism and solution passed (main and supp); task 238b1307-701b-4f8b-b44d-c64277f77336"
  },
  "notes": "architecture 5 drawn 2026-11-13 at the author's assignment (Energy Systems & Utilities x Data Extraction & Conformation); work in worktree .claude/worktrees/task13-arch4 (detached at origin/main)",
  "prompt_rewritten": false,
