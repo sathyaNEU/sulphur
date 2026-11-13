@@ -415,6 +415,8 @@ def later_effect(pk, rows, pl, cross, o, country=None):
     ann = float(np.mean([r["x_announce"] for r in own])) * o.get("scale_announce", 1.0) if o.get("announce", True) else 0.0
     ann_h = float(np.mean([r["h_announce"] for r in own]))
     use = float(np.mean([r["x_use"] for r in own])) * o.get("scale_use", 1.0) if o.get("use", True) else 0.0
+    if o.get("use_sign") and len({r["x_use"] > 0 for r in [x for x in L if x["plan"] == pl]}) > 1:
+        use = 0.0                     # the plan's two rises disagree on the sign: read as no change
     return max(ann, 0.0), ann_h, use
 
 

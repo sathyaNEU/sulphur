@@ -1,19 +1,16 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 18 files read, 48 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 47 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: million, golden, trailing, carries, family, pooled, december, accounts, months, onbeperkt, creation, chosen, platform, hurried, priced, inside, uploaded, nearest, commitment, growth, graded, history, account, missed, measured
+Stump terms swept: million, golden, trailing, carries, family, pooled, december, months, onbeperkt, accounts, creation, chosen, platform, hurried, priced, inside, uploaded, nearest, commitment, growth, graded, history, account, missed, measured
 
-## 3 answer figures in the pack (REVIEW 4)
+## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 0.40 appears: ...For each month Kraanvogel pays each publisher EUR 0.40 for every counted hour of the publisher's titles...
-- **REVIEW** `SUL_licence_agreement_2027-2029_schedule_B.pdf`: golden figure 3.2 appears: ...month and pays within 30 days of the statement. B3.2 A publisher whose code changes keeps its statemen...
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.2 appears: ...ng on the month's last day, on the plan charged. 3.2 A paying subscription-month is a consumer account...
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: golden figure 3.5 appears: ...iles that belonged to the account in that month. 3.5 Net revenue is what Kraanvogel keeps of the charg...
 
 ## 4 design-note vocabulary (REVIEW 3)
-- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 4 of 25 stump-paragraph terms appear (accounts, months, growth, account); read whether the document names the move
+- **REVIEW** `growth_planning_guideline_2026-10.pdf`: 4 of 25 stump-paragraph terms appear (months, accounts, growth, account); read whether the document names the move
 - **REVIEW** `price_list_2027.pdf`: 3 of 25 stump-paragraph terms appear (december, onbeperkt, nearest); read whether the document names the move
 - **REVIEW** `spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf`: 3 of 25 stump-paragraph terms appear (onbeperkt, growth, account); read whether the document names the move
 

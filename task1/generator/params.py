@@ -87,4 +87,4 @@ SEL = 0.6                            # how much more light listeners answer a ri
 STEP, STEP_DOWN, SEL_X = 0.12, 0.320, 1.4   # past the rival: the extra leaving and moving down; how much heavier the leavers
 ANNOUNCE = 0.055                     # the December bill after the price e-mail: light listeners leave before the new price
 ANN_SEL = 1.0                        # how much more light listeners leave at the e-mail
-SHARE_ADD = 0.08                     # an Onbeperkt account on one profile adds the second it pays for, months 1 to 3 after a rise
+SHARE_ADD = 0.11                     # an account used by one profile on a plan with more starts to share, months 1 to 3 after a rise

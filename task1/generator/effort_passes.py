@@ -39,6 +39,7 @@ RIVALS = {
     "each past response carried in proportion to the rise in per cent": M.opts(dose="pct"),
     "each past response carried on the log of the price ratio": M.opts(dose="log"),
     "each plan's own level and one step where a rise passes the rival, fitted on the eight events": M.opts(resp="plan_step"),
+    "the stayers' listening counted only where the plan's two rises agree in sign": M.opts(use_sign=True),
 }
 ROUTES = {
     "the golden": GOLD,

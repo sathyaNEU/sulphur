@@ -120,7 +120,8 @@ GUIDELINE = [
         "3.10 A January price rise goes ahead on a plan when it raises the 2027 contribution of the subscriptions "
         "paying on that plan at 31 October 2026, followed through 2027, against holding the plan's 2026 price. "
         "A rise's extra cancellations and extra downgrades are those at a subscription's first bill at the new "
-        "price beyond what the same months would have brought without the rise."]),
+        "price beyond what the same months would have brought without the rise, counted among the subscriptions "
+        "that reach that bill."]),
 ]
 
 

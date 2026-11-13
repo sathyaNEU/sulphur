@@ -8,47 +8,47 @@
    "depends": [],
    "independent": "the October base",
    "golden": {
-    "Flex": 689,
-    "Standaard": 1226,
-    "Onbeperkt": 1453,
-    "Gezin": 1014
+    "Flex": 697,
+    "Standaard": 1222,
+    "Onbeperkt": 1461,
+    "Gezin": 1010
    },
    "bands": {
     "Flex": [
-     688.5,
-     689.5
+     696.5,
+     697.5
     ],
     "Standaard": [
-     1225.5,
-     1226.5
+     1221.5,
+     1222.5
     ],
     "Onbeperkt": [
-     1452.5,
-     1453.5
+     1460.5,
+     1461.5
     ],
     "Gezin": [
-     1013.5,
-     1014.5
+     1009.5,
+     1010.5
     ]
    },
    "passes": {
     "quick": {
-     "Flex": 755,
-     "Standaard": 1303,
-     "Onbeperkt": 1535,
-     "Gezin": 1041
+     "Flex": 763,
+     "Standaard": 1299,
+     "Onbeperkt": 1543,
+     "Gezin": 1037
     },
     "careful": {
-     "Flex": 689,
-     "Standaard": 1226,
-     "Onbeperkt": 1453,
-     "Gezin": 1014
+     "Flex": 697,
+     "Standaard": 1222,
+     "Onbeperkt": 1461,
+     "Gezin": 1010
     },
     "thorough": {
-     "Flex": 689,
-     "Standaard": 1226,
-     "Onbeperkt": 1453,
-     "Gezin": 1014
+     "Flex": 697,
+     "Standaard": 1222,
+     "Onbeperkt": 1461,
+     "Gezin": 1010
     }
    }
   },
@@ -60,47 +60,47 @@
    "depends": [],
    "independent": "the 2025 and 2026 rises",
    "golden": {
-    "Flex Netherlands": 4.5,
-    "Flex Flanders": 4.5,
+    "Flex Netherlands": 2.6,
+    "Flex Flanders": 2.6,
     "Standaard Netherlands": 21.2,
     "Standaard Flanders": 21.2,
-    "Onbeperkt Netherlands": 2.9,
-    "Onbeperkt Flanders": 2.9,
+    "Onbeperkt Netherlands": 2.7,
+    "Onbeperkt Flanders": 2.7,
     "Gezin Netherlands": 0.0,
     "Gezin Flanders": 0.0
    },
    "bands": {
     "Flex Netherlands": [
      -0.3,
-     4.78
+     2.92
     ],
     "Flex Flanders": [
      -0.3,
-     4.78
+     2.92
     ],
     "Standaard Netherlands": [
-     17.81,
-     22.23
+     17.73,
+     22.33
     ],
     "Standaard Flanders": [
-     17.81,
-     22.23
+     17.73,
+     22.33
     ],
     "Onbeperkt Netherlands": [
-     1.32,
-     3.23
+     1.24,
+     3.01
     ],
     "Onbeperkt Flanders": [
-     1.32,
-     3.23
+     1.24,
+     3.01
     ],
     "Gezin Netherlands": [
      -0.3,
-     3.55
+     2.98
     ],
     "Gezin Flanders": [
      -0.3,
-     3.55
+     2.98
     ]
    },
    "precedent": [
@@ -110,32 +110,32 @@
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "Flex Netherlands": 6.0,
-     "Flex Flanders": 6.0,
-     "Standaard Netherlands": 9.2,
-     "Standaard Flanders": 9.2,
-     "Onbeperkt Netherlands": 9.2,
-     "Onbeperkt Flanders": 9.2,
-     "Gezin Netherlands": 9.2,
-     "Gezin Flanders": 9.2
+     "Flex Netherlands": 5.8,
+     "Flex Flanders": 5.8,
+     "Standaard Netherlands": 9.0,
+     "Standaard Flanders": 9.0,
+     "Onbeperkt Netherlands": 9.0,
+     "Onbeperkt Flanders": 9.0,
+     "Gezin Netherlands": 9.0,
+     "Gezin Flanders": 9.0
     },
     "careful": {
      "Flex Netherlands": 10.9,
-     "Flex Flanders": 4.5,
-     "Standaard Netherlands": 1.7,
+     "Flex Flanders": 2.6,
+     "Standaard Netherlands": 1.8,
      "Standaard Flanders": 5.3,
-     "Onbeperkt Netherlands": 2.9,
+     "Onbeperkt Netherlands": 2.7,
      "Onbeperkt Flanders": 14.4,
      "Gezin Netherlands": 0.0,
-     "Gezin Flanders": 28.9
+     "Gezin Flanders": 27.0
     },
     "thorough": {
-     "Flex Netherlands": 4.5,
-     "Flex Flanders": 4.5,
+     "Flex Netherlands": 2.6,
+     "Flex Flanders": 2.6,
      "Standaard Netherlands": 21.2,
      "Standaard Flanders": 21.2,
-     "Onbeperkt Netherlands": 2.9,
-     "Onbeperkt Flanders": 2.9,
+     "Onbeperkt Netherlands": 2.7,
+     "Onbeperkt Flanders": 2.7,
      "Gezin Netherlands": 0.0,
      "Gezin Flanders": 0.0
     }
@@ -149,8 +149,8 @@
    "depends": [],
    "independent": "the 2025 and 2026 rises",
    "golden": {
-    "Standaard Netherlands": 15.6,
-    "Standaard Flanders": 15.6,
+    "Standaard Netherlands": 16.1,
+    "Standaard Flanders": 16.1,
     "Onbeperkt Netherlands": 1.0,
     "Onbeperkt Flanders": 1.0,
     "Gezin Netherlands": 0.0,
@@ -158,20 +158,20 @@
    },
    "bands": {
     "Standaard Netherlands": [
-     13.79,
-     18.18
+     14.18,
+     18.62
     ],
     "Standaard Flanders": [
-     13.79,
-     18.18
+     14.18,
+     18.62
     ],
     "Onbeperkt Netherlands": [
      0.46,
-     3.01
+     2.9
     ],
     "Onbeperkt Flanders": [
      0.46,
-     3.01
+     2.9
     ],
     "Gezin Netherlands": [
      -0.3,
@@ -202,11 +202,11 @@
      "Onbeperkt Netherlands": 1.0,
      "Onbeperkt Flanders": 22.2,
      "Gezin Netherlands": 0.0,
-     "Gezin Flanders": 4.5
+     "Gezin Flanders": 5.3
     },
     "thorough": {
-     "Standaard Netherlands": 15.6,
-     "Standaard Flanders": 15.6,
+     "Standaard Netherlands": 16.1,
+     "Standaard Flanders": 16.1,
      "Onbeperkt Netherlands": 1.0,
      "Onbeperkt Flanders": 1.0,
      "Gezin Netherlands": 0.0,
@@ -226,25 +226,25 @@
    "independent": "",
    "golden": {
     "Flex": -4.4,
-    "Standaard": -14.8,
-    "Onbeperkt": -4.6,
+    "Standaard": -15.5,
+    "Onbeperkt": -5.9,
     "Gezin": 6.1
    },
    "bands": {
     "Flex": [
-     -4.75,
-     -2.62
+     -4.66,
+     -3.16
     ],
     "Standaard": [
-     -15.79,
-     -13.27
+     -16.41,
+     -14.03
     ],
     "Onbeperkt": [
-     -4.96,
-     -3.9
+     -6.26,
+     -5.05
     ],
     "Gezin": [
-     1.82,
+     2.49,
      6.36
     ]
    },
@@ -255,21 +255,21 @@
    ],
    "passes": {
     "quick": {
-     "Flex": -3.4,
-     "Standaard": -4.4,
-     "Onbeperkt": -7.7,
-     "Gezin": -6.9
+     "Flex": -3.6,
+     "Standaard": -4.6,
+     "Onbeperkt": -7.6,
+     "Gezin": -7.0
     },
     "careful": {
-     "Flex": -1.1,
-     "Standaard": 3.4,
-     "Onbeperkt": 2.6,
-     "Gezin": -0.6
+     "Flex": -0.9,
+     "Standaard": 3.3,
+     "Onbeperkt": 2.4,
+     "Gezin": 0.4
     },
     "thorough": {
      "Flex": -4.4,
-     "Standaard": -14.8,
-     "Onbeperkt": -4.6,
+     "Standaard": -15.5,
+     "Onbeperkt": -5.9,
      "Gezin": 6.1
     }
    }
@@ -285,27 +285,27 @@
    ],
    "independent": "",
    "golden": {
-    "Flex": 141,
-    "Standaard": 283,
-    "Onbeperkt": 677,
-    "Gezin": 664
+    "Flex": 149,
+    "Standaard": 279,
+    "Onbeperkt": 700,
+    "Gezin": 660
    },
    "bands": {
     "Flex": [
-     135,
-     153
+     143,
+     158
     ],
     "Standaard": [
-     277,
-     297
+     273,
+     294
     ],
     "Onbeperkt": [
-     663,
-     698
+     685,
+     720
     ],
     "Gezin": [
      628,
-     677
+     673
     ]
    },
    "precedent": [
@@ -315,22 +315,22 @@
    "partly_share": 0.75,
    "passes": {
     "quick": {
-     "Flex": 138.0,
-     "Standaard": 331.0,
-     "Onbeperkt": 635.0,
-     "Gezin": 602.0
+     "Flex": 144.0,
+     "Standaard": 324.0,
+     "Onbeperkt": 656.0,
+     "Gezin": 600.0
     },
     "careful": {
-     "Flex": 154.0,
-     "Standaard": 384.0,
-     "Onbeperkt": 698.0,
-     "Gezin": 628.0
+     "Flex": 163.0,
+     "Standaard": 378.0,
+     "Onbeperkt": 716.0,
+     "Gezin": 633.0
     },
     "thorough": {
-     "Flex": 141,
-     "Standaard": 283,
-     "Onbeperkt": 677,
-     "Gezin": 664
+     "Flex": 149,
+     "Standaard": 279,
+     "Onbeperkt": 700,
+     "Gezin": 660
     }
    }
   },
@@ -353,6 +353,7 @@
    "passes": {
     "quick": [],
     "careful": [
+     "Gezin",
      "Onbeperkt",
      "Standaard"
     ],
@@ -385,6 +386,7 @@
   ],
   "reflex_route": {
    "answer": [
+    "Gezin",
     "Onbeperkt",
     "Standaard"
    ]
@@ -554,6 +556,12 @@
     "answer": [
      "Gezin"
     ]
+   },
+   {
+    "name": "the stayers' listening counted only where the plan's two rises agree in sign",
+    "answer": [
+     "Gezin"
+    ]
    }
   ],
   "perturbations": [
@@ -646,6 +654,7 @@
   {
    "name": "the careful route: each plan's own past rise in its region, read at the first bill alone",
    "answer": [
+    "Gezin",
     "Onbeperkt",
     "Standaard"
    ],

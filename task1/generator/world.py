@@ -375,7 +375,7 @@ def simulate(seed=P.SEED, rise27=P.RISE27, seed27=None):
             # profiles added to family accounts, moved out at a month start, removed
             if a["kind"] == "consumer" and a["status"] == "paid":
                 cap = P.MAX_PROFILES[plan]
-                share = P.SHARE_ADD if (plan == "ONB" and 1 <= m - a.get("rise_m", -99) <= 3) else 0.0
+                share = P.SHARE_ADD if (len(a["profiles"]) == 1 and 1 <= m - a.get("rise_m", -99) <= 3) else 0.0  # one user starts to share
                 if len(a["profiles"]) < cap and r.random() < (0.012 if plan == "GEZ" else 0.006) + share:
                     pr = Profile("P%07d" % (next_prof[0] + int(r.integers(1, 9))), a["aid"], plan == "ONB" or
                                  r.random() < 0.5, m, plan, np.random.default_rng(int(r.integers(1 << 62))), owner=False)
