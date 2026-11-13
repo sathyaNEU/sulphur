@@ -102,6 +102,10 @@ CLOSED_LABEL = "Closed strategies"
 # From SCREEN_FROM (the author's direction, 2026-11-13): the design note carries `## Stump screen`, three or more
 # candidate traps put through the eleven tests of references/stump-screen.md on paper before any code, three kept.
 SCREEN_FROM = "2026-11-13T00:45:00Z"
+# From OPEN_FROM (the review round of 2026-11-13: task1 v5, task16 v3 and task13 v5 sent back as not difficult enough at
+# rewards 83, 78 and 75, each with one member of its call a run could get wrong): the design note carries
+# `## Open members`, two or more members opened by different stumps, and a `Direct route:` line (SKILL.md Part 3.4)
+OPEN_FROM = "2026-11-14T00:00:00Z"
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
 PAIR_TARGET = 50.0
@@ -735,6 +739,61 @@ def pinning_rows(task_dir, secs):
     one = bool(re.search(r"\b(one|1|a single) (answer|set|call)\b|\bsame (call|answer|set)\b|\bevery variant\b", vb, re.I))
     row("pinning list: Variant battery run and files one answer", n >= 12 and one,
         vb[:110] if vb else "no `Variant battery:` line (twelve or more variants of every modelled transport, one answer)")
+    return rows
+
+
+def open_members_rows(task_dir, secs):
+    """A call is only as hard as the members a run can get wrong: two or more open members (the reflex route or the
+    direct route files them wrong and a stump brings them back), each opened by a different stump, and the direct route
+    written (SKILL.md Part 3.4). FAIL on a build in flight registered from OPEN_FROM, WARN otherwise."""
+    try:
+        st = json.load(open(os.path.join(task_dir, "pipeline.json"))).get("status") or "DESIGN"
+    except Exception:
+        st = "DESIGN"
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        reg = ""
+    strict = st in IN_FLIGHT and (not reg or reg >= OPEN_FROM)
+    rows = []
+
+    def row(check, ok, detail):
+        rows.append((check, "PASS" if ok else ("FAIL" if strict else "WARN"), detail))
+    om = section(secs, "Open members")
+    row("section Open members", om is not None, "present" if om is not None else
+        "## Open members missing (SKILL.md Part 3.4: count the members a run can get wrong, not the stumps)")
+    if om is None:
+        return rows
+    t = find_table(om, "member", "opened") or []
+    data = [r for r in t[1:] if r and any(c.strip() for c in r)] if t else []
+    co = col(t[0], "opened") if t else None
+    cr, cd = (col(t[0], "reflex"), col(t[0], "direct")) if t else (None, None)
+    opened = []
+    for r in data:
+        by = r[co].strip().lower() if co is not None and len(r) > co else ""
+        right = [r[c].strip().lower() for c in (cr, cd) if c is not None and len(r) > c]
+        if by and not by.startswith("forced") and not all(re.match(r"(right|same|golden)\b", x) for x in right if x):
+            opened.append(re.split(r"[ ,;(]", by)[0])
+    row("open members: two or more, each opened by a different stump", len(set(opened)) >= 2,
+        "%d open of %d members, opened by %s" % (len(opened), len(data), ", ".join(sorted(set(opened))) or "none"))
+    # each opener is a stump of the factorial (whose evidence effort.py holds to a loss or a named assumption), never a
+    # judgment the factorial or the run record calls a reflex
+    fs = section(secs, "Stump factorial")
+    ft = find_table(fs, "judgment", "kind") if fs else None
+    stumps = set()
+    if ft:
+        ck = col(ft[0], "kind")
+        for r in ft[1:]:
+            if r and ck is not None and len(r) > ck and r[ck].strip().lower().startswith("stump"):
+                stumps.add(re.split(r"[ ,;(]", r[0].strip().lower())[0])
+    bad = sorted(set(o for o in opened if o not in stumps))
+    if opened:
+        row("open members: each opened by a stump of the factorial", not bad and bool(ft),
+            "openers %s are stumps of the factorial" % ", ".join(sorted(set(opened))) if not bad and ft else
+            "not a stump in ## Stump factorial: %s" % (", ".join(bad) if bad else "no factorial table"))
+    dr = labelled(om, "Direct route") or ""
+    row("open members: the direct route written", len(dr) > 40, dr[:110] if dr else
+        "no `Direct route:` line (the pack's most direct evidence read raw, per member, and what it files)")
     return rows
 
 
@@ -1385,6 +1444,7 @@ def main(argv):
     if not any(r[0] == "doctrine" for r in rows):
         rows.extend(factorial_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.extend(pinning_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
+        rows.extend(open_members_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.append(effort_gate(task_dir))
     fails = [r for r in rows if r[1] == "FAIL"]
     for check, level, detail in rows:

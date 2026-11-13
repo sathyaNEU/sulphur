@@ -1288,6 +1288,94 @@
    "move": "the line balances of managers whose company-level reports stop rolled forward to the test date from the complete capital accounts and audits, not carried at the last audited balance",
    "source": "task20/runs/arch5_holistic_audit.md (the platform's holistic audit of architecture 5, pasted by the author 2026-11-13; the run's text was not pasted, so the move is read off the audit's loss map)",
    "quote": "Run losses: calls in H2 2027, H1 2028 and H2 2028, the headroom, and the recommendation. All trace to S5/S6"
+  },
+  {
+   "id": "R76",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a stopped subscription followed back onto its plan by a returns model built unprompted, rather than the stop taken as final",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the past-rise comparison against the other region, the rival-conditioned transfer under guideline 3.8 and a returns model"
+  },
+  {
+   "id": "R77",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "each past response carried to the target conditional on whether its new price passes the rival's at the latest scan, read against the same plan in the other region",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the past-rise comparison against the other region, the rival-conditioned transfer under guideline 3.8"
+  },
+  {
+   "id": "R78",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "the decision's base cohort and a contract's billable usage rebuilt from two usage sources (app progress and licence-server renewals)",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the same October 2026 base on every plan, the counted hours including licence-server renewal positions"
+  },
+  {
+   "id": "R79",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "candidate options eliminated by a direct count of documented failures in a confirming file (twins in a delivery log, blood-discordant links with different identifiers) against the policy allowance, with no model of the error rate",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "Rule C joins 45 documented twin pairs from the delivery log against an allowance of about 28 ... A solver does not need a careful false-merge model to rule these out."
+  },
+  {
+   "id": "R80",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "each candidate rule's link counts reproduced by applying the matching specification's standardization rules",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "The link counts themselves are mechanical once the standardization rules in the specification are applied"
+  },
+  {
+   "id": "R81",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "events reconciled across two device exports on different clocks and units, the SCADA sequence and the outage system into one register, and repeat locations corrected for a second source's infeed",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the same 436 faults by year ... the same repeat locations including the solar-corrected Line 9 structure 137"
+  },
+  {
+   "id": "R82",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a deposit build-up with rain cleaning carried from each section's last wash to set which sections are due",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the same nine washing sections (Line 2 sections 1 to 5 and 7; Line 3 sections 4, 5 and 7)"
+  },
+  {
+   "id": "R83",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "a cause's signature (load share, hour, season, rain) read off the confirmed reference cases and applied to the whole event population",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the four hot-load clusters contain 18 rain-free fault hours with elevated loading, supporting clearance/contact investigations"
+  },
+  {
+   "id": "N39",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "the stayers' own consumption response to a price rise assumed away, so the rise's saving on the leavers' costs is counted and the stayers' extra cost is not",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "No new acquisition, route changes, further price changes or independent price-induced listening change is assumed"
+  },
+  {
+   "id": "L49",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "an option's residual discordant evidence held as a reserve against approving it instead of resolved (the mismatches were overlays on earlier merge survivors), so the right option was not approved",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "They only stopped short of approving it because of a reserve for \"seven unresolved blood-discordant pairs\""
+  },
+  {
+   "id": "L50",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a cause withheld where the run's own evidence supported it (peak-load, rain-free contacts filed as unknown); the reviewer read it as a labelling choice, not evidence of difficulty",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "high loading does not by itself prove vegetation"
   }
  ]
 }

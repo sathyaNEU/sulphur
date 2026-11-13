@@ -49,7 +49,10 @@ high: task10 arch 6 at 38.4 on paper came back at about 97, task16 arch 1 at 46.
 judges' own first passes priced task16 arch 2 (46.7 on paper) at about 70 and task13 arch 2 (16.2) at about 73. The
 levelled-up task10 arch 7 and task4 arch 10 went the same way (the author's report of 2026-11-11). So a careful
 column cell is priced lost only when a precedent shows a frontier run losing that kind of move (`effort.py`, Part
-3.2), and the next draw is built where Part 1b says the runs lose.
+3.2), and the next draw is built where Part 1b says the runs lose. The review round of 2026-11-13 sent three
+builds back for difficulty that had passed every gate here: task1 v5 (reviewer reward 83, paper careful 40.0, level 4
+claimed), task16 v3 (78, paper 34.5, level 5 claimed) and task13 v5 (75, paper 34.5, six stumps claimed). Each had one
+member of its call a run could get wrong; Part 3.4 is the rule that came out of it.
 
 **What the four approved builds share** (the author's reports of 2026-11-11 and 2026-11-12: task6 v7, the latency
 error budgets; task457, the conflict-of-interest docket shipped as task14 architecture 1; task2 v6, the
@@ -461,6 +464,63 @@ its own switches (the reflex route, and each stump dropped alone and fixed alone
 `effort.py` refuses a careful pass that is not the reflex route, a stump citing a reflex, fewer than two necessary
 stumps or any sufficient one. FAIL on every build being built or repaired; WARN on shipped builds until they are next
 touched.
+
+### 3.4 Open members: a call is only as hard as the members a run can get wrong
+
+**Why this exists.** The 2026-11-13 review round (`references/sulfur-record.md`) returned task1 v5, task16 v3 and
+task13 v5 with the same sentence: "the task is not difficult enough". All three cleared the factorial on paper, and all
+three were decided in practice by one member:
+- task1: four plans, three near-forced. Flex's 2027 price passes the rival in both regions as both its past rises did;
+  Gezin sat at +5.4 (band 3.1 to 6.3), wide of everything the returns or the transfer moved; Standaard stayed positive
+  under every transfer a run would make. Only Onbeperkt was open, and only through the stayers' listening.
+- task16: four rules, three failed on a direct count. The delivery log listed 45 and 76 twin pairs against allowances
+  of 28 and 23, and Rule A had 16 blood-discordant links with different SSNs against about 0.3 expected, so the call
+  collapsed to Rule B or no rule. The runs reproduced the link counts, the eliminations and a central estimate for B,
+  and lost only by reserving on B's eight blood mismatches.
+- task13: six stumps on paper, and the runs made all six. The grow-in signature sat at 0.99 to 1.02 of the p99 load,
+  12:00 to 16:00, June to September, exactly as in the patrol-confirmed cases. The washing list was identical from
+  0.029 to 0.080 mg/cm2. The runs parted from the golden only on a cause label.
+
+Three habits produced it, and each is now a rule.
+
+**1. Count open members, not stumps.** List every member of the call (each plan, rule, site, list item or package
+boundary). A member is **open** when the reflex route (Part 3.3) or the direct route (rule 2) files it wrong, and a stump
+is what brings it back. A member every route files right is **forced**: its points go to every run, however many
+stumps act elsewhere. Stumps that all act on one member, or that a run makes, open one member. **The level is read off
+open members**: two open members opened by different stumps is level 4, three is level 5. One is a one-trick build,
+whatever the factorial says. `precut.py` reads the note's `## Open members` table, and refuses a build in flight
+registered from 2026-11-14 with fewer than two open members or with two opened by the same stump.
+
+**2. The direct route is a shortcut, and it is implemented.** For every member, write the route that reads the pack's
+most direct evidence at face value, and run it in the generator beside the other shortcuts. The direct evidence is:
+- the documented cases counted (the delivery log's twins, the patrol-confirmed faults);
+- the confirming file read raw (the blood typing, the reference study);
+- the confirmed reference cases' signature copied onto the population;
+- the incumbent's own transfer (both past rises crossed, so this one does).
+
+When the direct route files a member right, the member is forced. Confirming evidence must **test the estimate, never
+settle it**: it is partial or biased the way the real process makes it. The typed patients skew older than the linked
+ones, the log shows only twins registered on one visit, the confirmed cases are the clean ones, a rival cause
+shares the signature. Reading it raw then lands wrong, and only the model brings it back.
+
+**3. Place each open member between the family and the stump.** For an open member, the honest family's spread is
+smaller than its margin, which is smaller than the stump's worth on it, each with a buffer. Forcing is measured against
+the honest family only. A forcing return is never fixed by widening every margin past every stump's worth: that turns
+the open members forced (task1's Gezin, task16's Rule A at about twice its allowance, task13's washing list). Widen
+against the family, keep the shortcuts and the direct route across the line, and put the members on different sides
+for different reasons.
+
+**And three cautions that came with it:**
+- **Ask for the step, not only the call.** Give each stump a graded intermediate result of its own: the share of stops
+  paying again, the stayers' extra hours, B's resolved false merges, the contact load of each grow-in span. Results the
+  reflex route earns (reproduced counts, procedure-stated steps, assembly) carry no more than a third of the ask weight.
+  Every one of the three reviews asked for this first.
+- **No clean signature.** A cause or response whose signature is a generator constant (a fixed load band, fixed hours
+  and months, a smooth plan-graded fade) is modelled on sight. Give it noise, a rival explanation with an overlapping
+  signature, and few or ambiguous reference cases, so the signature has to be estimated from the population.
+- **A borrowed precedent prices nothing the pack makes easy.** A loss id from another build's run prices a cell only
+  where that run faced the move with no easier route in front of it. A move a reviewer or a platform run of ours saw
+  made is a reflex wherever it recurs (R76 to R83).
 
 ## Part 3b. The depth scale
 

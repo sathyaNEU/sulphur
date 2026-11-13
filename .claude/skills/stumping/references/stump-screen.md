@@ -17,7 +17,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    dropped and why.
 4. Only then register the card, prototype the numbers in a scratch script and write the generator.
 
-## The eleven tests (every kept trap answers YES to all eleven)
+## The thirteen tests (every kept trap answers YES to all thirteen)
 
 1. **Off the closed page.** Not one of the client's 34 closed strategies (`guidelines/client/learning-modules/
    overused-strategies-2026-11-12.md`; same mechanism and the same kind of fix is the same lesson, whatever the
@@ -63,6 +63,14 @@ nothing in-house solves the task, so the idea has to be right before it is built
    call needs, measured in a prototype before the card is registered. task7's compressor energy response read off
    load tap changer steps came out at -0.21 (0.22) over 16,179 events against a true -0.30, too loose to pin any
    feeder, and died there.
+12. **No easier second route.** Read the pack's most direct evidence for the trap at face value: count the documented
+   cases, read the confirming file raw, copy the confirmed reference cases' signature. It must land wrong. task16 v3's
+   twins sat in the delivery log and its false links in the blood typing, and task13 v5's grow-ins matched the patrol
+   reports to the hour, so the runs never needed the model (`../SKILL.md` Part 3.4, rule 2).
+13. **It opens its own member.** The trap moves a member of the call that no other kept trap moves and that the
+   reflex route files wrong, and the member's margin sits between the honest family's spread and the trap's worth.
+   Three traps acting on one member open one member: task1 v5 had three, and only Onbeperkt was in play
+   (`../SKILL.md` Part 3.4, rules 1 and 3).
 
 ## Measured dead: never draw these again
 
