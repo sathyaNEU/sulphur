@@ -98,7 +98,7 @@ def policy(path):
         P_("Calder Rosario Health  |  Health Information Management", LH),
         P_("HIM-14: Patient identity integrity", TITLE),
         P_("Effective 1 July 2026. Owner: Brenda Hartman, Director of Health Information Management. Approved by the "
-           "One Chart steering committee on 23 June 2026."),
+           "Calder Rosario Health executive team on 23 June 2026."),
         P_("1. Scope", H2),
         P_("This policy governs the enterprise master patient index of Calder Rosario Health and the patient records it "
            "joins, including the conversion of the Calder Bay and Rosario indexes into One Chart."),
@@ -130,9 +130,9 @@ def plan(path):
            "One Chart goes live on Monday 5 April 2027. Both patient indexes load into the Halvard enterprise master "
            "patient index during the conversion weekend."),
         P_("7.2 Candidate automatic linking rules", H2),
-        P_("The steering committee will decide at its December 2026 meeting whether the conversion links records "
-           "automatically, and under which of these rules, under HIM-14. Fields are compared as the matching engine "
-           "standardizes them."),
+        P_("Calder Rosario Health's executive team will decide at its December 2026 meeting whether the conversion "
+           "links records automatically, and under which of these rules, under HIM-14. Fields are compared as the "
+           "matching engine standardizes them."),
         T(rows, [14, 150]),
         Spacer(1, 6),
         P_(PLAN_SCOPE),

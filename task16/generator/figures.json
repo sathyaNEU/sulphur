@@ -1,102 +1,310 @@
 {
  "R1_index": {
-  "distinct patients": 220669,
-  "patients in both indexes": 76062
+  "distinct patients": 212402,
+  "patients in both indexes": 69318
  },
- "R2_rule_a_false": 106.7,
- "R3_rule_c_false": 153,
- "R4_rule_d_false": 164,
- "R5_overlays": 568,
+ "R2_rule_a_false": 59.5,
+ "R3_rule_c_false": 41,
+ "R4_rule_d_false": 104,
+ "R5_overlays": 556,
  "R6_rule": "B",
- "R7_left_after_rule": 48754,
- "active_records": 311965,
+ "R7_left_after_rule": 44567,
+ "R8_rule_b_false": 3,
+ "R9_overlay_links": {
+  "links": 124,
+  "records split": 119
+ },
+ "active_records": 294713,
+ "allowances": {
+  "A": 32.2,
+  "B": 17.8,
+  "C": 25.2,
+  "D": 21.4
+ },
  "bands": {
   "R1_index": {
    "distinct patients": [
-    217358,
-    223979
+    209215,
+    215588
    ],
    "patients in both indexes": [
-    74160,
-    77964
+    67585,
+    71051
    ]
   },
   "R2_rule_a_false": [
-   65,
-   170
+   42.1,
+   70.8
   ],
   "R3_rule_c_false": [
-   70,
-   220
+   34,
+   48
   ],
   "R4_rule_d_false": [
-   140,
-   250
+   85,
+   191
   ],
   "R5_overlays": [
-   480,
-   660
+   471,
+   601
   ],
   "R7_left_after_rule": [
-   47291,
-   50217
-  ]
+   43229,
+   45904
+  ],
+  "R8_rule_b_false": [
+   0,
+   8
+  ],
+  "R9_overlay_links": {
+   "links": [
+    105,
+    144
+   ],
+   "records split": [
+    101,
+    138
+   ]
+  }
  },
  "cap_lines": {
-  "A": 35.9,
-  "B": 19.9,
-  "C": 28.1,
-  "D": 23.0
+  "A": 32.2,
+  "B": 17.8,
+  "C": 25.2,
+  "D": 21.4
  },
  "cap_per": 2000,
- "careful_index": {
-  "distinct patients": 220509,
-  "patients in both indexes": 75797
+ "careful_documented": {
+  "A": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 2,
+   "links_read": 28918,
+   "typed": 1517
+  },
+  "B": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 1,
+   "links_read": 35566,
+   "typed": 2213
+  },
+  "C": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 16,
+   "links_read": 50411,
+   "typed": 3122
+  },
+  "D": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 59,
+   "links_read": 42835,
+   "typed": 3416
+  }
  },
- "careful_left": 20986,
- "careful_left_after_B": 48717,
+ "careful_index": {
+  "distinct patients": 212202,
+  "patients in both indexes": 69066
+ },
+ "careful_left": 19133,
+ "careful_left_after_B": 44535,
  "careful_overlays": 0,
  "careful_rate_per_2000": {
-  "A": 0.34,
-  "B": 0.0,
-  "C": 0.0,
-  "D": 6.21
+  "A": 0.26,
+  "B": 6.86,
+  "C": 0.63,
+  "D": 4.86
  },
  "careful_rule": "A",
  "careful_rule_false": {
-  "A": 12.1,
-  "B": 0.0,
-  "C": 0.0,
-  "D": 143.0
+  "A": 8.5,
+  "B": 122.0,
+  "C": 16.0,
+  "D": 104.0
  },
  "cited_sections": {
   "plan": 7.2,
   "policy": 3
  },
- "duplicate_share": {
-  "A": 4.0,
-  "B": 6.0
+ "documented": {
+  "A": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 2,
+   "links_read": 28918,
+   "typed": 1517
+  },
+  "B": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 1,
+   "links_read": 35566,
+   "typed": 2213
+  },
+  "C": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 16,
+   "links_read": 50411,
+   "typed": 3122
+  },
+  "D": {
+   "discordant_other_ssn": 0,
+   "documented_twins": 59,
+   "links_read": 42835,
+   "typed": 3416
+  }
  },
- "family_rule_a_range": [
-  70.8,
-  113.3
+ "duplicate_share": {
+  "A": 3.8,
+  "B": 5.4
+ },
+ "factorial": {
+  "S_A": {
+   "alone": {
+    "answer": "C",
+    "results_rescued": [
+     "R2"
+    ]
+   },
+   "dropped": {
+    "answer": "A",
+    "results_moved": [
+     "R2",
+     "R6",
+     "R7",
+     "R9"
+    ]
+   }
+  },
+  "S_B": {
+   "alone": {
+    "answer": "A",
+    "results_rescued": [
+     "R8"
+    ]
+   },
+   "dropped": {
+    "answer": "none",
+    "results_moved": [
+     "R6",
+     "R7",
+     "R8",
+     "R9"
+    ]
+   }
+  },
+  "S_C": {
+   "alone": {
+    "answer": "A",
+    "results_rescued": [
+     "R3"
+    ]
+   },
+   "dropped": {
+    "answer": "C",
+    "results_moved": [
+     "R3",
+     "R6",
+     "R7",
+     "R9"
+    ]
+   }
+  }
+ },
+ "family": [
+  {
+   "answer": "B",
+   "member": "A",
+   "name": "rule A's document dates read by birth decade alone, no surname communities",
+   "value": 49.5
+  },
+  {
+   "answer": "B",
+   "member": "A",
+   "name": "rule A with each community's 1 January share lightly shrunk toward its decade",
+   "value": 61.6
+  },
+  {
+   "answer": "B",
+   "member": "A",
+   "name": "rule A with each community's 1 January share heavily shrunk toward its decade",
+   "value": 57.2
+  },
+  {
+   "answer": "B",
+   "member": "C",
+   "name": "rule C on the linkage at a match probability of 0.3",
+   "value": 41.0
+  },
+  {
+   "answer": "B",
+   "member": "C",
+   "name": "rule C on the linkage at a match probability of 0.7",
+   "value": 41.0
+  },
+  {
+   "answer": "B",
+   "member": "B",
+   "name": "rule B with the mismatches a record's own disagreeing typings explain counted as false merges too",
+   "value": 3.0
+  },
+  {
+   "answer": "B",
+   "member": "B",
+   "name": "rule B with every link a visit, a delivery or differing blood groups shows counted, the overlaid records' mismatches left out",
+   "value": 3.0
+  },
+  {
+   "answer": "B",
+   "member": "D",
+   "name": "rule D from incompatible first names alone",
+   "value": 100.0
+  },
+  {
+   "answer": "B",
+   "member": "D",
+   "name": "rule D with blood groups added",
+   "value": 106.0
+  },
+  {
+   "answer": "B",
+   "member": "D",
+   "name": "rule D on a name rule without typing slips, with the delivery log and one visit",
+   "value": 166.0
+  }
  ],
- "family_rule_c_pair": 76.0,
- "family_rule_d_names": 143.0,
+ "family_range": {
+  "A": [
+   49.5,
+   61.6
+  ],
+  "B": [
+   3.0,
+   3.0
+  ],
+  "C": [
+   41.0,
+   41.0
+  ],
+  "D": [
+   100.0,
+   166.0
+  ]
+ },
  "golden_family": {
-  "every rule's false merges from the blood bank's results net of wrong blood in tube and of the records holding two patients": "B",
-  "rule A by birth decade only (no surname communities)": "B",
-  "rule A with heavy shrinkage of each community's 1 January share": "B",
-  "rule A with light shrinkage of each community's 1 January share": "B",
-  "rule C from the evidence on the linked pair alone": "B",
+  "rule A with each community's 1 January share heavily shrunk toward its decade": "B",
+  "rule A with each community's 1 January share lightly shrunk toward its decade": "B",
+  "rule A's document dates read by birth decade alone, no surname communities": "B",
+  "rule B with every link a visit, a delivery or differing blood groups shows counted, the overlaid records' mismatches left out": "B",
+  "rule B with the mismatches a record's own disagreeing typings explain counted as false merges too": "B",
+  "rule C on the linkage at a match probability of 0.3": "B",
+  "rule C on the linkage at a match probability of 0.7": "B",
   "rule D from incompatible first names alone": "B",
-  "rule D with blood groups added": "B"
+  "rule D on a name rule without typing slips, with the delivery log and one visit": "B",
+  "rule D with blood groups added": "B",
+  "the golden": "B"
  },
  "incumbent_false": {
-  "A": 4.95,
+  "A": 4.42,
   "B": 0.0,
   "C": 0.0,
-  "D": 2.16
+  "D": 1.93
  },
  "incumbent_rate_per_2000": {
   "A": 0.14,
@@ -104,145 +312,247 @@
   "C": 0.0,
   "D": 0.09
  },
- "indep_local": 12.1,
- "indep_vendor": 5.0,
+ "indep_local": 8.5,
+ "indep_vendor": 4.4,
  "interval_level": 95,
+ "left_by_rule": {
+  "A": 19171,
+  "B": 44567,
+  "C": 31719,
+  "D": 39996,
+  "none": 75022
+ },
  "marker": {
   "A": {
-   "as_read": 409.8,
-   "discordant": 30,
-   "discordant_clear": 21,
-   "expected_one_patient": 6.1,
-   "expected_one_patient_clear": 6.1,
-   "links": 71728,
-   "net": 204.9,
-   "net_of_wbit": 326.3,
-   "typed_links": 8043,
-   "typed_links_clear": 7997
+   "as_read": 131.3,
+   "discordant": 5,
+   "discordant_clear": 2,
+   "expected_one_patient": 2.0,
+   "expected_one_patient_clear": 2.0,
+   "links": 64484,
+   "net": 1.1,
+   "net_of_wbit": 79.7,
+   "typed_links": 3730,
+   "typed_links_clear": 3713
   },
   "B": {
-   "as_read": 96.8,
-   "discordant": 7,
-   "discordant_clear": 3,
-   "expected_one_patient": 3.3,
-   "expected_one_patient_clear": 3.3,
-   "links": 39810,
-   "net": 0.0,
-   "net_of_wbit": 50.7,
-   "typed_links": 4410,
-   "typed_links_clear": 4390
+   "as_read": 122.0,
+   "discordant": 5,
+   "discordant_clear": 2,
+   "expected_one_patient": 1.2,
+   "expected_one_patient_clear": 1.2,
+   "links": 35566,
+   "net": 20.8,
+   "net_of_wbit": 93.8,
+   "typed_links": 2213,
+   "typed_links_clear": 2201
   },
   "C": {
-   "as_read": 206.6,
-   "discordant": 15,
-   "discordant_clear": 9,
-   "expected_one_patient": 4.7,
-   "expected_one_patient_clear": 4.7,
-   "links": 56207,
-   "net": 59.2,
-   "net_of_wbit": 141.2,
-   "typed_links": 6252,
-   "typed_links_clear": 6220
+   "as_read": 122.6,
+   "discordant": 5,
+   "discordant_clear": 2,
+   "expected_one_patient": 1.6,
+   "expected_one_patient_clear": 1.6,
+   "links": 50411,
+   "net": 8.9,
+   "net_of_wbit": 82.2,
+   "typed_links": 3122,
+   "typed_links_clear": 3106
   },
   "D": {
-   "as_read": 202.0,
-   "discordant": 16,
-   "discordant_clear": 10,
-   "expected_one_patient": 4.2,
-   "expected_one_patient_clear": 4.2,
-   "links": 46046,
-   "net": 74.0,
-   "net_of_wbit": 149.0,
-   "typed_links": 5588,
-   "typed_links_clear": 5553
+   "as_read": 38.1,
+   "discordant": 2,
+   "discordant_clear": 0,
+   "expected_one_patient": 1.8,
+   "expected_one_patient_clear": 1.8,
+   "links": 42835,
+   "net": 0.0,
+   "net_of_wbit": 3.8,
+   "typed_links": 3416,
+   "typed_links_clear": 3405
   }
  },
  "marker_a_birth_year": {
-  "all": 1984.6,
-  "typed": 1976.9,
-  "years_older": 8
+  "all": 1983.3,
+  "typed": 1955.9,
+  "years_older": 27
  },
  "marker_a_interval": [
-  95,
-  357
+  0,
+  138
  ],
  "marker_noise": {
-  "disagreeing": 25,
-  "p_diff": 0.652835,
-  "per_specimen": 0.000492,
-  "records": 23085,
-  "specimens": 50832
+  "disagreeing": 11,
+  "p_diff": 0.658585,
+  "per_specimen": 0.000379,
+  "records": 12802,
+  "specimens": 28986
  },
- "overlays_as_typed": 1119,
- "overlays_forms": 513,
+ "open_members": [
+  {
+   "allowance": 32.2,
+   "direct": 4.4,
+   "direct_right": false,
+   "family_spread": 10.0,
+   "golden": 59.5,
+   "margin": 27.3,
+   "member": "A",
+   "opened_by": "S_A",
+   "reflex": 8.5,
+   "reflex_right": false
+  },
+  {
+   "allowance": 17.8,
+   "direct": 122.0,
+   "direct_right": false,
+   "family_spread": 0.0,
+   "golden": 3.0,
+   "margin": -14.8,
+   "member": "B",
+   "opened_by": "S_B",
+   "reflex": 122.0,
+   "reflex_right": false
+  },
+  {
+   "allowance": 25.2,
+   "direct": 16.0,
+   "direct_right": false,
+   "family_spread": 0.0,
+   "golden": 41.0,
+   "margin": 15.8,
+   "member": "C",
+   "opened_by": "S_C",
+   "reflex": 16.0,
+   "reflex_right": false
+  },
+  {
+   "allowance": 21.4,
+   "direct": 104.0,
+   "direct_right": true,
+   "family_spread": 62.0,
+   "golden": 104.0,
+   "margin": 82.6,
+   "member": "D",
+   "opened_by": "forced",
+   "reflex": 104.0,
+   "reflex_right": true
+  }
+ ],
+ "overlay_links_all": {
+  "A": {
+   "links": 225,
+   "records": 212
+  },
+  "B": {
+   "links": 124,
+   "records": 119
+  },
+  "C": {
+   "links": 173,
+   "records": 165
+  },
+  "D": {
+   "links": 115,
+   "records": 110
+  }
+ },
+ "overlays_as_typed": 1028,
+ "overlays_forms": 512,
+ "overlays_forms_golden": 512,
  "perturbations": {
-  "rule A's estimate 30 per cent lower": "B",
-  "rule B's estimate 50 per cent higher": "B",
-  "rule C's estimate 30 per cent lower": "B",
-  "rule D's estimate 30 per cent lower": "B"
+  "rule A's estimate 20 per cent lower": "B",
+  "rule B's estimate three times higher": "B",
+  "rule C's estimate 20 per cent lower": "B",
+  "rule D's estimate 20 per cent lower": "B"
  },
  "quick_rule": "A",
  "rate_bands": {
   "A": [
-   1.81,
-   4.74
+   1.31,
+   2.2
   ],
   "B": [
    0.0,
-   0.75
+   0.45
   ],
   "C": [
-   2.49,
-   7.83
+   1.35,
+   1.9
   ],
   "D": [
-   6.08,
-   10.86
+   3.97,
+   8.92
   ]
  },
+ "resolve_b": {
+  "discordant": 5,
+  "left": 2,
+  "left_pairs": [
+   [
+    131213,
+    206096
+   ],
+   [
+    95610,
+    247549
+   ]
+  ],
+  "mislabel": 0,
+  "overlay": 3,
+  "overlay_same_ssn": 2,
+  "typed": 2213
+ },
  "routes": {
-  "all three corrections (the golden)": "B",
-  "every rule's false merges from the blood bank's results as they read": "none",
-  "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in": "none",
-  "no correction (every rule's links taken as true)": "A",
-  "only chance": "C",
-  "only chance, ssn": "C",
-  "only chance, twins": "D",
-  "only ssn": "A",
-  "only twins": "A",
-  "only twins, ssn": "A",
-  "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)": "A"
+  "every rule from the blood bank's results as they read": "none",
+  "every rule from the blood bank's results net of wrong blood in tube": "D",
+  "rule B's blood mismatches net of wrong blood in tube and of the records holding two patients, scaled from its typed links to all of them as if they were a sample": "none",
+  "rule C at the twins the delivery log and one visit document, the rest golden": "C",
+  "the engine's national chance rates and the pilot's reviewed pairs": "A",
+  "the golden with S_A dropped (rule A's false merges from the joint distribution of first n)": "A",
+  "the golden with S_B dropped (rule B's blood mismatches explained: the records that hold t)": "none",
+  "the golden with S_C dropped (rule C's false merges from the twins the probabilistic linka)": "C",
+  "the golden: every stump right": "B",
+  "the reflex route (the careful but hurried pass): the documented failures counted, rule B's mismatches held": "A",
+  "the reflex route with S_A fixed alone": "C",
+  "the reflex route with S_B fixed alone": "A",
+  "the reflex route with S_C fixed alone": "A"
  },
  "rule_a_shares": {
-  "nguyen": 0.321,
-  "pre1980": 0.637
+  "before_1960": 0.119,
+  "jan1_heavy": 0.025,
+  "men_since_1975": 0.338
  },
  "rule_a_shares_pct": {
-  "nguyen": 32,
-  "pre1980": 64
+  "before_1960": 12,
+  "jan1_heavy": 2,
+  "men_since_1975": 34
  },
  "rule_b_band": [
   0,
-  15
+  8
  ],
- "rule_d_names_unalike": 2650,
- "rule_d_similar_named_twins": 21,
+ "rule_c_at": {
+  "0.3": 41.0,
+  "0.7": 41.0
+ },
+ "rule_d_names_unalike": 2429,
+ "rule_d_similar_named_twins": 4,
  "rule_false": {
-  "A": 106.7,
-  "B": 5.0,
-  "C": 153.0,
-  "D": 164.0
+  "A": 59.5,
+  "B": 3.0,
+  "C": 41.0,
+  "D": 104.0
  },
  "rule_links": {
-  "A": 71728,
-  "B": 39810,
-  "C": 56207,
-  "D": 46046
+  "A": 64484,
+  "B": 35566,
+  "C": 50411,
+  "D": 42835
  },
  "rule_rate_per_2000": {
-  "A": 2.97,
-  "B": 0.25,
-  "C": 5.44,
-  "D": 7.12
+  "A": 1.85,
+  "B": 0.17,
+  "C": 1.63,
+  "D": 4.86
  }
 }

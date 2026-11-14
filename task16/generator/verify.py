@@ -189,6 +189,50 @@ def main():
         abs(as_read - mk["as_read"]) <= 0.5 and typed == mk["typed_links"] and disc == mk["discordant"],
         (round(as_read, 1), typed, disc))
 
+    # ---------------------------------------------------------------- the direct reads: rule A's different-SSN mismatches, rule B's
+    ssn = R["ssn"].to_numpy()
+    bset = set(B_)
+    oth = typed_ao = 0
+    for x, y in A_:
+        if (x, y) in bset:
+            continue
+        sx, sy = set(typ.get(mrn[x], [])), set(typ.get(mrn[y], []))
+        if sx and sy:
+            typed_ao += 1
+            oth += (not (sx & sy)) and ssn[x] != "" and ssn[y] != "" and ssn[x] != ssn[y]
+    da = figs["documented"]["A"]
+    say("direct route: rule A's blood-discordant links with different SSNs among those rule B does not make, as stated",
+        oth == da["discordant_other_ssn"] and typed_ao == da["typed"], (oth, typed_ao, da))
+    discb = typedb = 0
+    for x, y in B_:
+        sx, sy = set(typ.get(mrn[x], [])), set(typ.get(mrn[y], []))
+        if sx and sy:
+            typedb += 1
+            discb += not (sx & sy)
+    rb = figs["resolve_b"]
+    say("R8 rule B's typed links and their blood mismatches, as stated", discb == rb["discordant"] and typedb == rb["typed"],
+        (discb, typedb, rb["discordant"], rb["typed"]))
+
+    # ---------------------------------------------------------------- rule C: the twins the files document
+    dl = pd.read_csv(f_("labor_delivery_log"), dtype=str, keep_default_na=False)
+    born = defaultdict(list)
+    for mm, nm, t in zip(dl["MOTHER_MRN"], dl["NEWBORN_MRN"], pd.to_datetime(dl["DELIVERY_DTTM"])):
+        if mm:
+            cb = nm.startswith("CB")
+            born[fin(mm) if cb else mm].append((t, fin(nm) if cb else nm))
+    sibs = set()
+    for lst in born.values():
+        for (t1, n1), (t2, n2) in combinations(sorted(lst), 2):
+            if abs((t2 - t1).total_seconds()) <= 86400 and n1 != n2:
+                sibs |= {(n1, n2), (n2, n1)}
+    sysv, made = R["sys"].to_numpy(), R["created"].to_numpy()
+
+    def one_visit(x, y):
+        return sysv[x] == sysv[y] and abs(int((made[x] - made[y]) / np.timedelta64(1, "m"))) <= 90
+    nc = sum(1 for x, y in C_ if (mrn[x], mrn[y]) in sibs or one_visit(x, y))
+    say("R3 rule C's links two newborns of one delivery or one registration visit document, as stated",
+        nc == figs["documented"]["C"]["documented_twins"], (nc, figs["documented"]["C"]["documented_twins"]))
+
     # ---------------------------------------------------------------- rule D: two first names under one SSN
     last = R["last"].to_numpy()
 
@@ -246,10 +290,12 @@ def main():
     ov = wb["Overlays to split"]
     listed = {ov.cell(row=r, column=1).value for r in range(4, ov.max_row + 1)} - {None}
     say("workbook: the overlays listed are the records counted", listed == hit, (len(listed), len(hit)))
-    import zipfile
-    memo = [x for x in os.listdir(gold) if x.endswith(".docx")][0]
-    xml = zipfile.ZipFile(os.path.join(gold, memo)).read("word/document.xml").decode("utf8")
-    text = re.sub(r"<[^>]+>", "", xml)
+    from pypdf import PdfReader
+    memo = [x for x in os.listdir(gold) if x.endswith(".pdf")][0]
+    rd = PdfReader(os.path.join(gold, memo))
+    text = re.sub(r"\s+", " ", " ".join(pg.extract_text() or "" for pg in rd.pages))
+    say("memo: one page", len(rd.pages) == 1, len(rd.pages))
+    say("memo: addressed to the executive team that decides", "To: Calder Rosario Health executive team" in text)
     for v in ("{:,}".format(figs["rule_links"]["B"]), "%d Calder Bay records" % figs["R5_overlays"],
               "{:,}".format(figs["R1_index"]["distinct patients"]), "{:,}".format(figs["R7_left_after_rule"])):
         say("memo states %s" % v, v in text)

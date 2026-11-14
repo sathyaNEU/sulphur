@@ -4,7 +4,7 @@ patient indexes, their families, homes and identifiers, what registrars typed at
 2019 registration rule merged, and the clinical events each record carries."""
 import datetime as dt
 
-SEED = 16031
+SEED = 16041
 EXTRACT = dt.date(2026, 11, 2)                 # every extract cut on this Monday
 AS_OF = dt.date(2026, 11, 4)
 MERGER = dt.date(2025, 7, 1)
@@ -30,14 +30,33 @@ USE_B = {"north": 0.34, "south": 0.87}
 FOREIGN = {"H": [(1900, 1969, 0.42), (1970, 1989, 0.30), (1990, 2030, 0.08)],
            "V": [(1900, 1974, 0.88), (1975, 1989, 0.52), (1990, 2030, 0.08)],
            "W": [(1900, 2030, 0.03)], "B": [(1900, 2030, 0.04)], "O": [(1900, 2030, 0.35)]}
-JAN1_FOREIGN = {"H": 0.10, "V": 0.31, "W": 0.02, "B": 0.03, "O": 0.06}
-JUL1_FOREIGN = {"H": 0.012, "V": 0.03, "W": 0.0, "B": 0.0, "O": 0.01}
+JAN1_FOREIGN = {"H": 0.05, "V": 0.12, "W": 0.02, "B": 0.03, "O": 0.04}
+JUL1_FOREIGN = {"H": 0.006, "V": 0.015, "W": 0.0, "B": 0.0, "O": 0.005}
+
+# young foreign-born men who came for the shrimp fleet and the port's yards, single on arrival, their birth dates as
+# their documents carry them (the day often unrecorded); share of each community's households
+WORKER_P = {"H": 0.07, "V": 0.12}
+WORKER_BORN = (1990, 6.0, 1978, 2003)            # mean, spread, earliest, latest birth year
+WORKER_FOREIGN = 0.9
+JAN1_WORKER = {"H": 0.30, "V": 0.40}
+WORKER_NAME_SHIFT = 30
+# the names their home towns gave boys of their years (a worker born abroad draws from these, not the Texas curves)
+WORKER_NAMES = {"H": "Jose 16;Juan 10;Luis 6;Carlos 6;Miguel 5;Francisco 5;Jesus 5;Pedro 4;Antonio 4;Manuel 4;Javier 4;"
+                     "Mario 3;Ramon 3;Raul 3;Jorge 3;Ricardo 2;Roberto 2;Fernando 2;Sergio 2;Alejandro 2;Victor 2;Oscar 2;"
+                     "Eduardo 2;Rafael 2;Martin 2;Arturo 1.5;Hector 1.5;Gerardo 1.5;Ruben 1.5;Armando 1.5;Alfredo 1;Ivan 1;"
+                     "Julio 1;Cesar 1;Ernesto 1;Ignacio 1;Rogelio 1;Gilberto 1;Enrique 1;Andres 1",
+                "V": "Hung 9;Thanh 8;Minh 7;Tuan 7;Dung 6;Hai 6;Long 5;Nam 5;Son 4;Quang 4;Duc 4;Phong 3;Hoang 3;Binh 3;"
+                     "Cuong 3;Khanh 3;Vinh 3;Tam 2;Thang 2;Tri 2;Huy 2;Khoa 2;Bao 2;Tien 2;Hieu 2;Phuc 2;Loc 1.5;Nhan 1.5"}
+TOP_NAME_DAMP = {"Maria": 0.5, "Jose": 0.55, "Juan": 0.7, "Guadalupe": 0.7, "Jesus": 0.8, "Mary": 0.7, "Lan": 0.8, "Mai": 0.8,
+                 "Hung": 0.8, "Thanh": 0.8}           # first name -> factor on its weight in every community's curves
 
 TWIN_RATE = 0.0165                               # twin deliveries per delivery
 TWIN_SAME_SEX = 0.66
 TWIN_MZ_GIVEN_SAME_SEX = 0.45
-TWIN_SIMILAR_NAMES = 0.28
+TWIN_SIMILAR_NAMES = 0.13
 TWIN_SAME_NAME = 0.002
+TWIN_SAME_VISIT = 0.25                           # a twin's first registration at a system on its twin's visit
+BORN_ELSEWHERE = 0.40                             # children born since 2006 outside the two systems (families moving in)
 
 # blood groups by community (ABO and Rh)
 ABO_RH = {"H": {"O+": 0.555, "A+": 0.305, "B+": 0.075, "AB+": 0.02, "O-": 0.02, "A-": 0.018, "B-": 0.005, "AB-": 0.002},
@@ -46,6 +65,8 @@ ABO_RH = {"H": {"O+": 0.555, "A+": 0.305, "B+": 0.075, "AB+": 0.02, "O-": 0.02, 
           "V": {"O+": 0.39, "A+": 0.27, "B+": 0.25, "AB+": 0.07, "O-": 0.01, "A-": 0.005, "B-": 0.004, "AB-": 0.001},
           "O": {"O+": 0.40, "A+": 0.31, "B+": 0.12, "AB+": 0.04, "O-": 0.06, "A-": 0.05, "B-": 0.015, "AB-": 0.005}}
 WBIT = 1 / 2600                                  # wrong blood in tube, per specimen
+# blood bank typings a year per record by age and sex (surgery, pregnancy and transfusion drive them)
+TYPING = dict(base=0.0, over55=0.085, preg=0.012, child=0.003, man=0.010, mid_woman=0.012)
 
 # registration: what a registrar types
 P_NICKNAME = 0.055

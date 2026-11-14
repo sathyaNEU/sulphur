@@ -824,3 +824,73 @@ def index_figures(Rx, root, rule_b):
     act["rb"] = [uf.find(i) for i in act.index]
     left = int((act.groupby("root")["rb"].nunique() >= 2).sum())
     return dict(persons=persons, both=both, left=left)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# the direct reads of the confirming files, and what the overlays do to a rule's links
+# ---------------------------------------------------------------------------------------------------------------
+
+def documented_failures(R, F, links):
+    """The pack's most direct evidence on each rule, counted as it stands (the reviewers' runs' read, R79): the links
+    whose two records are two newborns of one delivery or were registered on one visit, and the blood-discordant links
+    whose two records carry different SSNs (rule A counted on the links rule B does not make)."""
+    typ = typings(F)
+    bt = {k: set(x[1] for x in v) for k, v in typ.items()}
+    m, ssn = R["mrn"].to_numpy(), R["ssn"].to_numpy()
+    bset = set(zip(*links["B"]))
+    out = {}
+    for k in RULES:
+        ia, ib = links[k]
+        ev = two_people(R, F, ia, ib)
+        doc = int((ev["delivery"] | ev["same_visit"]).sum())
+        sel = [(x, y) for x, y in zip(ia, ib) if not (k == "A" and (x, y) in bset)]
+        typed = disc = 0
+        for x, y in sel:
+            sx, sy = bt.get(m[x]), bt.get(m[y])
+            if not (sx and sy):
+                continue
+            typed += 1
+            if not (sx & sy) and ssn[x] and ssn[y] and ssn[x] != ssn[y]:
+                disc += 1
+        out[k] = dict(links_read=len(sel), documented_twins=doc, typed=typed, discordant_other_ssn=disc)
+    return out
+
+
+def overlay_links(R, link, overlay_mrns):
+    """A rule's links that touch a record holding two or more patients, and the distinct such records they touch (each
+    split before the conversion under HIM-14 section 4)."""
+    ia, ib = link
+    m = R["mrn"].to_numpy()
+    ov = set(overlay_mrns)
+    touch = [(x, y) for x, y in zip(ia, ib) if m[x] in ov or m[y] in ov]
+    recs = set(m[x] for x, _ in touch if m[x] in ov) | set(m[y] for _, y in touch if m[y] in ov)
+    return dict(links=len(touch), records=len(recs))
+
+
+def resolve_discordant(R, F, link, overlay_mrns):
+    """Each blood-discordant link of a rule (both records typed, no group in common) read against what explains it:
+    a record that holds two patients (an overlay, split before the conversion), a record whose own typings disagree
+    (a mislabelled specimen), or neither (left as a link between two patients)."""
+    typ = typings(F)
+    bt = {k: set(x[1] for x in v) for k, v in typ.items()}
+    m, ssn = R["mrn"].to_numpy(), R["ssn"].to_numpy()
+    ov = set(overlay_mrns)
+    out = dict(discordant=0, overlay=0, overlay_same_ssn=0, mislabel=0, left=0, typed=0, left_pairs=[])
+    for x, y in zip(*link):
+        sx, sy = bt.get(m[x]), bt.get(m[y])
+        if not (sx and sy):
+            continue
+        out["typed"] += 1
+        if sx & sy:
+            continue
+        out["discordant"] += 1
+        if m[x] in ov or m[y] in ov:
+            out["overlay"] += 1
+            if ssn[x] and ssn[x] == ssn[y]:
+                out["overlay_same_ssn"] += 1
+        elif len(sx) > 1 or len(sy) > 1:
+            out["mislabel"] += 1
+        else:
+            out["left"] += 1
+            out["left_pairs"].append((int(x), int(y)))
+    return out

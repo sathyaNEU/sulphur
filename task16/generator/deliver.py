@@ -1,20 +1,19 @@
 """task16 golden deliverables: HIM's evaluation workbook (each candidate rule's automatic links and false merges, rule
 A's chance agreement by community, the converted index, Calder Bay's overlays to split) and its one-page memo to the
-One Chart steering committee, both from the same results that write figures.json."""
+health system's executive team, both from the same results that write figures.json."""
 import datetime as dt
 import os
 
 import openpyxl
-from docx import Document
-from docx.shared import Pt
 from openpyxl.styles import Alignment, Font
+from reportlab.lib.styles import ParagraphStyle
 
 import analysis as A
 import docs as DC
 import postprocess
 
 WORKBOOK = "one_chart_autolink_rule_evaluation.xlsx"
-MEMO = "one_chart_autolink_recommendation.docx"
+MEMO = "one_chart_autolink_recommendation.pdf"
 AUTHOR = "Brenda Hartman"
 ORG = "Calder Rosario Health"
 LABEL = {"A": "Rule A", "B": "Rule B", "C": "Rule C", "D": "Rule D"}
@@ -46,12 +45,19 @@ def community_table(F, R):
 
 
 def community_shares(F, R):
-    """Rule A's expected merges of two different patients: the shares among Nguyen patients and among patients born
-    before 1980."""
-    t = community_table(F, R)
-    tot = t["exp"].sum()
-    return dict(nguyen=float(t.loc[t["last"] == "NGUYEN", "exp"].sum() / tot),
-                pre1980=float(t.loc[t["decade"] < 1980, "exp"].sum() / tot))
+    """Rule A's expected merges of two different patients: the shares among men born since 1975 and among patients
+    born before 1960, and among cells whose community records 1 January for a tenth or more of its births."""
+    e = A.person_entries(R)
+    h = A.heap_rates(e)
+    e = e.assign(decade=(e["y"] // 10) * 10).join(h, on=["last", "decade"])
+    c = e.groupby(["first", "last", "sex", "y"]).agg(n=("n", "size"), r=("n", "mean"), h1=("h1", "mean"),
+                                                     h7=("h7", "mean")).reset_index()
+    c = c[c["n"] >= 2].copy()
+    c["exp"] = c["n"] * (c["n"] - 1) / 2.0 * A.p_same_day(c["h1"].to_numpy(), c["h7"].to_numpy()) * c["r"] ** 2
+    tot = float(c["exp"].sum())
+    return dict(men_since_1975=float(c.loc[(c["sex"] == "M") & (c["y"] >= 1975), "exp"].sum() / tot),
+                before_1960=float(c.loc[c["y"] < 1960, "exp"].sum() / tot),
+                jan1_heavy=float(c.loc[c["h1"] >= 0.10, "exp"].sum() / tot))
 
 
 def write(F, G, figs, gold_dir):
@@ -96,8 +102,8 @@ def write(F, G, figs, gold_dir):
     # rule A by community
     ws = wb.create_sheet("Rule A by community")
     sh = community_shares(F, R)
-    ws["A1"] = ("Rule A's merges of two different patients: %.0f per cent among Nguyen patients, %.0f per cent among "
-                "patients born before 1980" % (100 * sh["nguyen"], 100 * sh["pre1980"]))
+    ws["A1"] = ("Rule A's merges of two different patients: %.0f per cent among men born since 1975, %.0f per cent among "
+                "patients born before 1960" % (100 * sh["men_since_1975"], 100 * sh["before_1960"]))
     ws["A1"].font = Font(bold=True, size=12)
     _hdr(ws, 3, ["Last name", "Birth decade", "Expected false merges", "Name and year cells", "Born 1 January (share)"],
          [16, 12, 16, 16, 18])
@@ -126,9 +132,16 @@ def write(F, G, figs, gold_dir):
     ws["A1"].font = Font(bold=True, size=12)
     _hdr(ws, 3, ["Check", "Rule A", "Rule B", "Rule C", "Rule D", "Rule the policy would run"], [58, 10, 10, 10, 10, 16])
     mk = G["marker"]
+    doc, nz0 = G["documented"], G["noise"]
+    direct = {k: (doc[k]["discordant_other_ssn"] / nz0["p_diff"] * doc[k]["links_read"] / max(doc[k]["typed"], 1)
+                  + (G["incumbent"][k]["false"] if k in ("A", "B", "D") else 0.0)) for k in A.RULES}
     checks = [
         ("The engine's national chance rates (rules A, B, D) and the 2026 pilot's reviewed pairs (rule C)",
          {k: G["incumbent"][k]["false"] for k in A.RULES}),
+        ("Two newborns of one delivery or two records made on one registration visit, counted",
+         {k: float(doc[k]["documented_twins"]) for k in A.RULES}),
+        ("The national rates, raised by the blood-discordant links whose records carry different SSNs (rule A on the "
+         "links rule B does not make)", direct),
         ("Blood bank results on each rule's typed links, as they read", {k: mk[k]["as_read"] for k in A.RULES}),
         ("Blood bank results net of mislabelled specimens", {k: mk[k]["net_of_wbit"] for k in A.RULES}),
         ("Blood bank results net of mislabelled specimens and of records holding two patients",
@@ -141,12 +154,14 @@ def write(F, G, figs, gold_dir):
             ws.cell(row=i, column=j, value=round(float(f[k]), 1)).number_format = "0.0"
         ok = [k for k in A.RULES if 2000.0 * f[k] / G["links"][k] <= 1.0]
         ws.cell(row=i, column=6, value=LABEL[max(ok, key=lambda k: G["links"][k])] if ok else "None (all reviewed)")
-    ws.cell(row=10, column=1, value=(
-        "The blood bank results rest on the links whose two records were both typed and cannot see twins who share a "
-        "group, so they test rule A's estimate rather than measure it."))
-    ws.cell(row=10, column=1).alignment = Alignment(wrap_text=True)
-    ws.merge_cells(start_row=10, start_column=1, end_row=10, end_column=6)
-    ws.row_dimensions[10].height = 30
+    ws.cell(row=12, column=1, value=(
+        "The blood bank's results come from the transfusion service, whose patients are mostly over 55, so they see "
+        "almost none of the working-age men and children where rule A's chance merges sit, and none of the twins who "
+        "share a group; the delivery log holds only births in the two hospitals since 2006. They test each estimate "
+        "rather than measure it."))
+    ws.cell(row=12, column=1).alignment = Alignment(wrap_text=True)
+    ws.merge_cells(start_row=12, start_column=1, end_row=12, end_column=6)
+    ws.row_dimensions[12].height = 44
     ws.freeze_panes = "A4"
     # the converted index
     ws = wb.create_sheet("Index")
@@ -158,10 +173,37 @@ def write(F, G, figs, gold_dir):
             ("Patients held by both Calder Bay and Rosario", G["both"]),
             ("Calder Bay records holding two or more patients (to split before conversion)", G["overlays"]),
             ("Patients still under more than one active record once %s's links are made" % LABEL[G["rule"]], G["left"]),
+            ("%s's links that touch a record holding two or more patients" % LABEL[G["rule"]], G["overlay_links"]["links"]),
+            ("Records holding two or more patients those links touch, split before they are made", G["overlay_links"]["records"]),
             ("Active records in the two indexes", len(R))]
     for i, (a_, b_) in enumerate(rows, 4):
         ws.cell(row=i, column=1, value=a_)
         ws.cell(row=i, column=2, value=b_).number_format = MWH
+    # rule B's blood mismatches, each read against what explains it
+    ws = wb.create_sheet("Rule B blood mismatches")
+    rb = G["resolve_b"]
+    ws["A1"] = ("%s's %d blood mismatches: %d on records holding two patients, %d on records whose own typings disagree, "
+                "%d left as false merges" % (LABEL["B"], rb["discordant"], rb["overlay"], rb["mislabel"], rb["left"]))
+    ws["A1"].font = Font(bold=True, size=12)
+    _hdr(ws, 3, ["Record", "Linked record", "Name", "Birth date", "Groups on the record", "Groups on the linked record",
+                 "Same SSN", "Read as"], [14, 14, 28, 12, 16, 18, 10, 46])
+    typ = A.typings(F)
+    m_, ssn_ = R["mrn"].to_numpy(), R["ssn"].to_numpy()
+    ov = set(G["overlay_mrns"])
+    i = 4
+    for x, y in zip(*G["_links"]["B"]):
+        sx, sy = set(t[1] for t in typ.get(m_[x], [])), set(t[1] for t in typ.get(m_[y], []))
+        if not sx or not sy or (sx & sy):
+            continue
+        why = ("a record holding two patients, split before the conversion" if (m_[x] in ov or m_[y] in ov) else
+               "a record whose own typings disagree (a mislabelled specimen)" if (len(sx) > 1 or len(sy) > 1) else
+               "two patients: a false merge")
+        vals = [m_[x], m_[y], "%s, %s" % (R["last"].iloc[x], R["first"].iloc[x]), R["dob"].iloc[x].strftime("%m/%d/%Y"),
+                ", ".join(sorted(sx)), ", ".join(sorted(sy)), "Yes" if ssn_[x] and ssn_[x] == ssn_[y] else "No", why]
+        for j, v in enumerate(vals, 1):
+            ws.cell(row=i, column=j, value=v)
+        i += 1
+    ws.freeze_panes = "A4"
     # overlays worklist
     ws = wb.create_sheet("Overlays to split")
     ws["A1"] = "%d Calder Bay records hold two or more patients: split before the conversion" % G["overlays"]
@@ -205,48 +247,51 @@ def write(F, G, figs, gold_dir):
 
 def memo(G, figs, path):
     assert G["rule"] == "B", "the memo's argument is written for Rule B"
-    d = Document()
-    st = d.styles["Normal"]
-    st.font.name = "Calibri"
-    st.font.size = Pt(10.5)
-    for line in ("Calder Rosario Health  |  Health Information Management", "To: One Chart steering committee",
-                 "From: Brenda Hartman, Director of Health Information Management", "Date: 9 November 2026"):
-        p = d.add_paragraph(line)
-        p.paragraph_format.space_after = Pt(0)
-    p = d.add_paragraph()
-    p.add_run("Automatic linking at the One Chart conversion: run Rule B").bold = True
+    head = ParagraphStyle("memo_head", parent=DC.BODY, spaceAfter=0, leading=12.4)
+    title = ParagraphStyle("memo_title", parent=DC.BODY, fontName="Helvetica-Bold", fontSize=11, spaceBefore=8,
+                           spaceAfter=6)
+    note = ParagraphStyle("memo_note", parent=DC.BODY, fontName="Helvetica-Oblique", fontSize=8, leading=10)
     f, rt, n = G["false"], G["rate"], G["links"]
-    d.add_paragraph(
+    rb, ovl, sh = G["resolve_b"], G["overlay_links"], figs["rule_a_shares"]
+    doc = G["documented"]
+    story = [DC.P_("Calder Rosario Health  |  Health Information Management", DC.LH),
+             DC.P_("To: Calder Rosario Health executive team", head),
+             DC.P_("From: Brenda Hartman, Director of Health Information Management", head),
+             DC.P_("Date: 9 November 2026", head),
+             DC.P_("Automatic linking at the One Chart conversion: run Rule B", title)]
+    story.append(DC.P_(
         "Run Rule B (first name, last name, birth date, sex and street address the same) at the 5 April conversion. It "
         "joins %s pairs of records and, by our estimate, %.0f of them are two different patients: %.2f per 2,000 links, "
-        "inside the policy's one. It links the fewest pairs of the four, and it is the only one inside the policy."
-        % ("{:,}".format(n["B"]), f["B"], rt["B"]))
-    d.add_paragraph(
+        "inside the policy's one. Its %d blood-group mismatches do not count against it as they stand: %d sit on Calder "
+        "Bay records that already hold two patients, which we split before the conversion, and %d %s left as false "
+        "merges, with the twins a single registration visit shows."
+        % ("{:,}".format(n["B"]), f["B"], rt["B"], rb["discordant"], rb["overlay"], rb["left"],
+           "is" if rb["left"] == 1 else "are")))
+    story.append(DC.P_(
         "Rule A, the same without the address, joins %s pairs, and about %.0f would merge two different patients (%.2f "
-        "per 2,000). Port Calder's names are concentrated: a first name runs in one birth cohort, a surname in one "
-        "community, and many birth dates from foreign documents were recorded as 1 January, so two patients share a "
-        "name, a birthday and a sex far more often than the engine's chance rates allow (they put Rule A at %.2f)."
-        % ("{:,}".format(n["A"]), f["A"], rt["A"], figs["incumbent_rate_per_2000"]["A"]))
-    d.add_paragraph(
+        "per 2,000). Port Calder's names cluster by community and birth year, and many of the men who came to work the "
+        "boats and the yards carry the 1 January birth dates their documents gave them; %.0f per cent of Rule A's chance "
+        "merges are among men born since 1975. The engine's national rates put Rule A at %.2f, and the blood bank cannot "
+        "see these merges: its patients are mostly over 55."
+        % ("{:,}".format(n["A"]), f["A"], rt["A"], 100 * sh["men_since_1975"], figs["incumbent_rate_per_2000"]["A"])))
+    story.append(DC.P_(
         "Rule C, which accepts near-identical first names at a shared address or phone, joins %s pairs and would merge "
-        "about %.0f pairs of twins (%.2f per 2,000); the pilot never reviewed a twin pair because twins scored above its "
-        "review band. Rule D, on SSN and birth date, joins %s pairs and would merge about %.0f (%.2f per 2,000), mostly "
-        "twins registered at Rosario under a parent's SSN before June 2021."
-        % ("{:,}".format(n["C"]), f["C"], rt["C"], "{:,}".format(n["D"]), f["D"], rt["D"]))
-    d.add_paragraph(
+        "about %.0f pairs of twins (%.2f per 2,000). The delivery log and our registration times show only %d of them: "
+        "most twins here were registered on different visits or born before their families moved to Port Calder. Rule D, "
+        "on SSN and birth date, joins %s pairs and would merge about %.0f (%.2f per 2,000), mostly twins registered at "
+        "Rosario under a parent's SSN before June 2021."
+        % ("{:,}".format(n["C"]), f["C"], rt["C"], doc["C"]["documented_twins"], "{:,}".format(n["D"]), f["D"],
+           rt["D"])))
+    story.append(DC.P_(
         "Before the conversion, HIM splits %d Calder Bay records that already hold two or more patients, merged by its "
-        "registration system since March 2019. The converted index will hold about %s distinct patients, %s of them "
-        "known to both groups, and %s will still sit under more than one record once Rule B runs, for the review "
-        "worklist." % (G["overlays"], "{:,}".format(G["persons"]), "{:,}".format(G["both"]), "{:,}".format(G["left"])))
-    d.add_paragraph("Detail, by rule and by community, in the evaluation workbook.")
-    p = d.add_paragraph()
-    r_ = p.add_run("False merges are counted as HIM-14 section 3 counts them, for each pair of records a rule would "
-                   "join, on the 2 November 2026 extracts the conversion plan takes as its baseline.")
-    r_.italic = True
-    r_.font.size = Pt(8.5)
-    for para in d.paragraphs:
-        para.paragraph_format.space_after = Pt(6) if para.text and not para.text.startswith(("To:", "From:", "Date:", "Calder")) else para.paragraph_format.space_after
-    d.save(path)
-    postprocess.normalize_docx(path, "Brenda Hartman", "Brenda Hartman", "2026-11-09T14:05:00Z", "2026-11-09T22:31:00Z",
-                               revision=4, total_time=38, seed=16, title="Automatic linking at the One Chart conversion",
-                               company=ORG)
+        "registration system since March 2019; %d of Rule B's links touch %d of them. The converted index will hold about "
+        "%s distinct patients, %s of them known to both groups, and %s will still sit under more than one record once Rule "
+        "B runs, for the review worklist." % (G["overlays"], ovl["links"], ovl["records"], "{:,}".format(G["persons"]),
+                                              "{:,}".format(G["both"]), "{:,}".format(G["left"]))))
+    story.append(DC.P_("Detail, by rule and by community, in the evaluation workbook."))
+    story.append(DC.P_("False merges are counted as HIM-14 section 3 counts them, for each pair of records a rule would "
+                       "join, on the 2 November 2026 extracts the conversion plan takes as its baseline.", note))
+    DC.officepdf.build(path, story, "Automatic linking at the One Chart conversion", AUTHOR,
+                       "One Chart automatic linking: the recommended rule",
+                       "Calder Rosario Health  |  Health Information Management",
+                       dt.datetime(2026, 11, 9, 8, 5, tzinfo=DC.CST), dt.datetime(2026, 11, 9, 16, 31, tzinfo=DC.CST))

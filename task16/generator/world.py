@@ -38,7 +38,7 @@ def first_name_tables():
         names = [r[0] for r in rows]
         peak = np.array([float(r[1]) for r in rows])
         width = np.array([float(r[2]) for r in rows])
-        wt = np.array([float(r[3]) for r in rows])
+        wt = np.array([float(r[3]) * P.TOP_NAME_DAMP.get(r[0], 1.0) for r in rows])
         m = wt[None, :] * np.exp(-0.5 * ((years[:, None] - peak[None, :]) / width[None, :]) ** 2)
         m = m / m.sum(axis=1, keepdims=True)
         out[key] = (np.array(names), np.cumsum(m, axis=1))
@@ -103,15 +103,21 @@ def foreign_share(g, year):
 
 def people(w):
     rng = stream("people")
+    rw = stream("worker_names")
+    worker_names = {}
+    for g_, txt in P.WORKER_NAMES.items():
+        nm = [x.split()[0] for x in txt.split(";")]
+        wt = np.array([float(x.split()[1]) for x in txt.split(";")])
+        worker_names[g_] = (nm, np.cumsum(wt) / wt.sum())
     fn = first_name_tables()
     tail = first_name_tail()
     rt = stream("first_tail")
     sn = surname_tables()
     persons = []
 
-    def new_person(fam, role, g, sex, bdate, surname_p, surname_m, foreign, side):
+    def new_person(fam, role, g, sex, bdate, surname_p, surname_m, foreign, side, name_year=None):
         pid = len(persons)
-        yi = min(max(bdate.year, Y0), Y1) - Y0
+        yi = min(max(bdate.year if name_year is None else name_year, Y0), Y1) - Y0
         names, cum = fn[(g, sex)]
         first = names[draw(cum[yi], rng.random())]
         if rt.random() < P.FIRST_TAIL[g]:
@@ -143,6 +149,21 @@ def people(w):
         # the family head's birth year: the patients born 1925 to 2004
         hy = int(np.clip(rng.normal(1968, 17), 1925, 2004))
         kind = rng.choice(["couple_kids", "couple", "single_parent", "single"], p=[0.50, 0.17, 0.13, 0.20])
+        if P.WORKER_P.get(g, 0.0) > 0 and rng.random() < P.WORKER_P[g]:
+            mu, sd, lo, hi = P.WORKER_BORN
+            wy = int(np.clip(rng.normal(mu, sd), lo, hi))
+            wfor = rng.random() < P.WORKER_FOREIGN
+            if wfor and rng.random() < P.JAN1_WORKER[g]:
+                wd = dt.date(wy, 1, 1)
+            else:
+                wd = legal_dob(g, wy, wfor)
+            ny = wy - P.WORKER_NAME_SHIFT if wfor else None      # named as their home towns name boys, not as Texas does
+            p = new_person(fam, "adult", g, "M", wd, surname(g), surname(g) if g == "H" else None, wfor, side, name_year=ny)
+            if wfor and g in P.WORKER_NAMES:
+                wn, wc = worker_names[g]
+                p["first"] = wn[draw(wc, rw.random())]
+            p["compound"] = g == "H" and wfor and rng.random() < P.COMPOUND_SURNAME["H"] * 1.4
+            continue
         mfor = rng.random() < foreign_share(g, hy)
         if kind == "single":
             sex = "F" if rng.random() < 0.52 else "M"
@@ -459,9 +480,11 @@ def registrations(w):
                 p["birth_sys"] = w.persons[tw]["birth_sys"]
             else:
                 p["birth_sys"] = "A" if (rng.random() < (0.78 if north else 0.24)) else "B"
+                if P.BORN_ELSEWHERE > 0 and rng.random() < P.BORN_ELSEWHERE:
+                    p["birth_sys"] = None                  # born before the family moved to Port Calder
             if p["birth_sys"] == "A":
                 ua = True
-            else:
+            elif p["birth_sys"] == "B":
                 ub = True
         p["uses"] = [s for s, u in (("A", ua), ("B", ub)) if u]
     # a mother who delivered at a hospital is registered there before her first delivery there
@@ -494,7 +517,7 @@ def registrations(w):
                     d0 = lo + dt.timedelta(days=int(rng.integers(0, max(1, (cap - lo).days))))
                 # twins are usually brought in together: the second twin's first registration on the same visit
                 tw = p["twin"]
-                if 0 <= tw < p["pid"] and (tw, s) in first_visit and start <= first_visit[(tw, s)] < end and rng.random() < 0.72:
+                if 0 <= tw < p["pid"] and (tw, s) in first_visit and start <= first_visit[(tw, s)] < end and rng.random() < P.TWIN_SAME_VISIT:
                     d0 = first_visit[(tw, s)]
             first_visit[(p["pid"], s)] = d0
             regs = [(d0, newborn)]
@@ -662,7 +685,17 @@ def clinical(w):
         end = min(p["death"] or P.EXTRACT, P.EXTRACT)
         for s in p.get("uses", []):
             age = (dt.date(2021, 1, 1) - p["dob"]).days / 365.25
-            rate = 0.035 + (0.04 if age > 55 else 0.0) + (0.03 if p["sex"] == "F" and 18 < age < 42 else 0.0)
+            T = P.TYPING
+            if T.get("child") is None:
+                rate = T["base"] + (T["over55"] if age > 55 else 0.0) + (T["preg"] if p["sex"] == "F" and 18 < age < 42 else 0.0)
+            elif age < 18:
+                rate = T["child"]
+            elif age > 55:
+                rate = T["over55"]
+            elif p["sex"] == "F":
+                rate = T["preg"] if age < 42 else T["mid_woman"]
+            else:
+                rate = T["man"]
             n = int(rng.poisson(rate * 9))
             for _ in range(n):
                 d0 = max(P.FIRST_REG, p["dob"], dt.date(2016, 1, 1))
@@ -696,7 +729,7 @@ def clinical(w):
 
 
 RENAME_FIRST = {"CLAUDE": "CLYDE", "WHITNEY": "BRITTANY"}
-RENAME_LAST = {"WHITNEY": "WHITLEY"}
+RENAME_LAST = {"WHITNEY": "WHITLEY", "CLAUDE": "CLAUD"}
 
 
 def build():

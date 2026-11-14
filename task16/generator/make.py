@@ -46,17 +46,31 @@ def typed_years(F, R, link):
 def build(task_dir, gen_out):
     target = os.path.join(task_dir, "target")
     gold = os.path.join(task_dir, "golden")
-    for d in (target, gold):
+    for d in ((gold,) if os.environ.get("TASK16_CACHE") and os.path.exists(os.environ["TASK16_CACHE"]) else (target, gold)):
         if os.path.isdir(d):
             shutil.rmtree(d)
-    W = WD.build()
-    F0 = RC.frames(W)
-    counts = PK.write(F0, target)
-    F = GD.load(target)
-    S = RS.setup(F)
-    G = RS.golden(F, S)
-    C = RS.careful(F, S)
-    Q = RS.quick(F, S)
+    cache = os.environ.get("TASK16_CACHE")            # a scratch pickle of the slow passes, for iterating on the writers
+    if cache and os.path.exists(cache):
+        import pickle
+        W, counts, G, C, Q = pickle.load(open(cache, "rb"))
+        F = GD.load(target) if os.path.isdir(target) else None
+        if F is None:
+            F0 = RC.frames(W)
+            counts = PK.write(F0, target)
+            F = GD.load(target)
+        S = RS.setup(F)
+    else:
+        W = WD.build()
+        F0 = RC.frames(W)
+        counts = PK.write(F0, target)
+        F = GD.load(target)
+        S = RS.setup(F)
+        G = RS.golden(F, S)
+        C = RS.careful(F, S)
+        Q = RS.quick(F, S)
+        if cache:
+            import pickle
+            pickle.dump((W, counts, G, C, Q), open(cache, "wb"))
     fo = FO.run(F, G, C, S)
     R, eq, voc, links = S
     root = G["_root"][:len(R)]
@@ -73,7 +87,7 @@ def build(task_dir, gen_out):
     sim_twins = int((comp & (ev["same_visit"] | ev["delivery"])).sum())
     extra = dict(routes=[dict(name=r["name"], answer=r["answer"], **({"golden": True} if r["golden"] else {}))
                          for r in fo["routes"]],
-                 hints=fo["hints"], forcing=fo["forcing"],
+                 hints=fo["hints"], forcing=fo["forcing"], factorial=fo["factorial"],
                  figures=dict(active_records=int(len(R)), overlays_as_typed=int(A.overlays(F, eq, "raw")[0]),
                               overlays_forms=int(A.overlays(F, eq, "golden", namecheck="forms")[0]),
                               duplicate_share=dup, rule_d_names_unalike=unalike,
@@ -83,7 +97,12 @@ def build(task_dir, gen_out):
                               cited_sections={"plan": 7.2, "policy": 3},
                               routes={r["name"]: r["answer"] for r in fo["routes"]},
                               golden_family={x["name"]: x["answer"] for x in fo["forcing"]["golden_family"]},
-                              perturbations={x["input"]: x["answer"] for x in fo["forcing"]["perturbations"]}))
+                              perturbations={x["input"]: x["answer"] for x in fo["forcing"]["perturbations"]},
+                              open_members=fo["members"], family=fo["family"], allowances=fo["allow"],
+                              documented=G["documented"], resolve_b=G["resolve_b"], overlay_links_all=G["overlay_links_all"],
+                              left_by_rule=G["left_by_rule"], rule_c_at=G["c_at"], overlays_forms_golden=G["overlays_forms"],
+                              careful_documented=C["documented"],
+                              factorial={j["id"]: dict(dropped=j.get("dropped"), alone=j.get("alone")) for j in fo["factorial"]["judgments"] if j["kind"] == "stump"}))
     figs, E = RS.write(F, gen_out, G, C, Q, extra)
     figs.update(WU.derived(figs, fo))
     json.dump(figs, open(os.path.join(gen_out, "figures.json"), "w"), indent=1, sort_keys=True, default=RS._plain)

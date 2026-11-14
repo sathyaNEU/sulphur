@@ -78,8 +78,9 @@ def main(fast=False):
        truth)
     for k in A.RULES:
         g = figs["rule_false"][k]
-        ok("truth: the golden's rule %s estimate within 15 per cent or 5 of the truth" % k,
-           abs(g - truth[k]) <= max(5, 0.15 * truth[k]), (g, truth[k]))
+        tol = 0.30 if k == "A" else 0.15        # rule A's false merges come in lumpy pairs of people; HIM-14 caps the expected count
+        ok("truth: the golden's rule %s estimate within %d per cent or 5 of the world's realized count" % (k, int(100 * tol)),
+           abs(g - truth[k]) <= max(5, tol * truth[k]), (g, truth[k]))
     holds = {}
     for r in W.recs:
         holds.setdefault(r["final"], set()).add(r["pid"])
@@ -109,9 +110,9 @@ def main(fast=False):
     rt = figs["rule_rate_per_2000"]
     ok("call: rule B, the only rule inside the cap", figs["R6_rule"] == "B" and rt["B"] <= 1.0 and
        all(rt[k] > 1.0 for k in "ACD"), rt)
-    ok("margin: rule B at half the cap or less, rules A, C and D at twice it or more", rt["B"] <= 0.5 and
-       all(rt[k] >= 2.0 for k in "ACD"), rt)
-    ok("call: the careful but hurried pass files rule A", figs["careful_rule"] == "A", figs["careful_rule"])
+    ok("margin: rule B at half its line or less, rules A and C at 1.3 times theirs or more, rule D at twice", rt["B"] <= 0.5 and
+       rt["A"] >= 1.3 and rt["C"] >= 1.3 and rt["D"] >= 2.0, rt)
+    ok("call: the careful but hurried pass (the reflex route) files rule A", figs["careful_rule"] == "A", figs["careful_rule"])
     ok("call: the quick pass files rule A", figs["quick_rule"] == "A", figs["quick_rule"])
     fo = E["forcing"]
     wrong = {s["answer"] for s in fo["shortcuts"]}
@@ -121,19 +122,41 @@ def main(fast=False):
        [x["answer"] for x in fo["golden_family"]])
     ok("forcing: every perturbation leaves rule B", all(x["answer"] == "B" for x in fo["perturbations"]),
        [x["answer"] for x in fo["perturbations"]])
-    routes = figs["routes"]
-    ok("routes: the chance agreement alone moves the call to rule C", routes["only chance"] == "C")
-    ok("routes: the twins alone leave rule A", routes["only twins"] == "A")
-    ok("routes: the chance agreement and the twins with the SSN unread file rule D", routes["only chance, twins"] == "D")
+    fac = {j["id"]: j for j in E["factorial"]["judgments"] if j["kind"] == "stump"}
+    ok("factorial: each stump dropped alone moves the call to its own wrong answer (A, C, no rule)",
+       (fac["S_A"]["dropped"]["answer"], fac["S_C"]["dropped"]["answer"], fac["S_B"]["dropped"]["answer"]) == ("A", "C", "none"),
+       {k: v["dropped"]["answer"] for k, v in fac.items()})
+    ok("factorial: no stump fixed alone on the reflex route reaches rule B",
+       all(v["alone"]["answer"] != "B" for v in fac.values()), {k: v["alone"]["answer"] for k, v in fac.items()})
+    mem = {m["member"]: m for m in figs["open_members"]}
+    ok("open members: rules A, B and C open, each by its own stump, rule D forced",
+       [mem[k]["opened_by"] for k in "ABCD"] == ["S_A", "S_B", "S_C", "forced"], [mem[k]["opened_by"] for k in "ABCD"])
+    for k in "ABC":
+        mm = mem[k]
+        worth = abs(mm["golden"] - mm["reflex"])
+        ok("open member %s: the family's spread under its margin, the margin under its stump's worth" % k,
+           mm["family_spread"] < abs(mm["margin"]) < worth, (mm["family_spread"], mm["margin"], round(worth, 1)))
+        ok("open member %s: the direct route files it wrong" % k, not mm["direct_right"], (mm["direct"], mm["allowance"]))
+    doc = figs["documented"]
+    ok("direct route: rule A's blood-discordant links with different SSNs (the links rule B does not make) one or none",
+       doc["A"]["discordant_other_ssn"] <= 1, doc["A"])
+    ok("direct route: rule C's documented twins under its line", doc["C"]["documented_twins"] < figs["rule_links"]["C"] / 2000,
+       doc["C"])
+    ok("direct route: rule D's documented twins already over its line (a forced member)",
+       doc["D"]["documented_twins"] > figs["rule_links"]["D"] / 2000, doc["D"])
+    rb_ = figs["resolve_b"]
+    ok("R8: rule B's blood mismatches add up (overlay, mislabel, left)", rb_["overlay"] + rb_["mislabel"] + rb_["left"] ==
+       rb_["discordant"] and rb_["overlay"] >= 2, rb_)
+    ok("R8: rule B's blood mismatches read as they stand put it over its line", figs["marker"]["B"]["as_read"] >
+       figs["rule_links"]["B"] / 2000, figs["marker"]["B"]["as_read"])
+    ok("R9: rule B's links touching an overlaid record, the records among R5's", 0 < figs["R9_overlay_links"]["records split"]
+       <= figs["R5_overlays"] and figs["R9_overlay_links"]["links"] >= figs["R9_overlay_links"]["records split"],
+       figs["R9_overlay_links"])
 
     # ---------------------------------------------------------------- rivals, result by result
-    for x in fo["golden_family"]:
-        if "rule_a" in x:
-            ok("R2 rival inside the band: %s" % x["name"], inside(x["rule_a"], BAND["R2_rule_a_false"]), x["rule_a"])
-        if "rule_c" in x:
-            ok("R3 rival inside the band: %s" % x["name"], inside(x["rule_c"], BAND["R3_rule_c_false"]), x["rule_c"])
-        if "rule_d" in x and not x["name"].startswith("rule D from incompatible"):
-            ok("R4 rival inside the band: %s" % x["name"], inside(x["rule_d"], BAND["R4_rule_d_false"]), x["rule_d"])
+    for x in figs["family"]:
+        key = {"A": "R2_rule_a_false", "C": "R3_rule_c_false", "D": "R4_rule_d_false", "B": "R8_rule_b_false"}[x["member"]]
+        ok("%s rival inside the band: %s" % (key[:2], x["name"]), inside(x["value"], BAND[key]), x["value"])
     # the rivals outside a band, each with the data that rules it out
     e = A.person_entries(R).assign(decade=lambda d: (d["y"] // 10) * 10, j1=lambda d: (d["d"] == "0101"))
     by = e.groupby(["last", "decade"]).agg(n=("j1", "size"), j1=("j1", "mean")).reset_index()
@@ -145,9 +168,6 @@ def main(fast=False):
        (top["ratio"] >= 3).all(), top[["last", "decade", "n", "j1", "ratio"]].round(3).values.tolist())
     ok("R2 ruled out: the blood groups net of their errors, from typed patients older than rule A's links",
        not inside(figs["marker"]["A"]["net"], BAND["R2_rule_a_false"]), figs["marker"]["A"]["net"])
-    names_only = next(x["rule_d"] for x in fo["golden_family"] if x["name"].startswith("rule D from incompatible"))
-    ok("R4 rival inside the band: rule D from incompatible first names alone", inside(names_only, BAND["R4_rule_d_false"]),
-       names_only)
     ia, ib = links["D"]
     forms = A.NameForms(eq)
     fn, ln = R["first"].to_numpy(), R["last"].to_numpy()
@@ -157,18 +177,6 @@ def main(fast=False):
     for lab, extra in (("names and the delivery log only", ev["delivery"]), ("names and one visit only", ev["same_visit"])):
         v = int((inc | extra).sum())
         ok("R4 rival inside the band: %s" % lab, inside(v, BAND["R4_rule_d_false"]), v)
-    eqg = A.equivalents(F["names"])
-
-    def plain(x, y):
-        if x == y or A.jw_py(x, y) >= 0.85 or (eqg.get(x, set()) & eqg.get(y, set())):
-            return True
-        tx, ty = x.split(" ")[0], y.split(" ")[0]
-        return tx == ty or A.jw_py(tx, ty) >= 0.85 or bool(eqg.get(tx, set()) & eqg.get(ty, set()))
-    crude = np.array([not (plain(fn[x], fn[y]) or (plain(fn[x], ln[y]) and plain(ln[x], fn[y]))) for x, y in zip(ia, ib)],
-                     bool)
-    v = int((crude | ev["same_visit"] | ev["delivery"]).sum())
-    ok("R4 rival inside the band: a name rule without typing slips, with the delivery log and one visit",
-       inside(v, BAND["R4_rule_d_false"]), v)
     ok("R4 the shortcut outside the band: every link whose names are unalike as typed",
        not inside(figs["rule_d_names_unalike"], BAND["R4_rule_d_false"]), figs["rule_d_names_unalike"])
     mk = figs["marker"]
@@ -185,7 +193,7 @@ def main(fast=False):
        mk["C"]["net"] < 0.5 * figs["rule_false"]["C"], (mk["C"]["net"], figs["rule_false"]["C"]))
     by = figs["marker_a_birth_year"]
     ok("R2 named data: the typed links behind the blood groups' check are older than rule A's links (a selected sample)",
-       by["typed"] <= by["all"] - 3, by)
+       by["typed"] <= by["all"] - 15, by)
     import writeup as WU
     lo_, hi_ = WU.poisson_net(mk["A"], figs["marker_noise"]["p_diff"])
     ok("R2 the blood groups' interval holds the golden's rule A estimate", lo_ <= figs["R2_rule_a_false"] <= hi_,
@@ -196,10 +204,10 @@ def main(fast=False):
        (figs["indep_vendor"], figs["indep_local"]))
     ok("R4 the careful pass's names-only count inside the band (a result careful runs land)",
        inside(figs["careful_rule_false"]["D"], BAND["R4_rule_d_false"]), figs["careful_rule_false"]["D"])
-    ok("rule B's band holds the golden, the blood groups net of their errors and the truth, all under its cap",
-       figs["rule_b_band"][0] <= min(figs["rule_false"]["B"], mk["B"]["net"], truth["B"]) and
-       max(figs["rule_false"]["B"], mk["B"]["net"], truth["B"]) <= figs["rule_b_band"][1] < figs["rule_links"]["B"] / 2000,
-       (figs["rule_false"]["B"], mk["B"]["net"], truth["B"], figs["rule_b_band"]))
+    ok("rule B's band holds the golden and the truth, all under its line; the mismatches scaled as a sample outside it",
+       figs["rule_b_band"][0] <= min(figs["rule_false"]["B"], truth["B"]) and
+       max(figs["rule_false"]["B"], truth["B"]) <= figs["rule_b_band"][1] < figs["rule_links"]["B"] / 2000 and
+       not inside(mk["B"]["net"], figs["rule_b_band"]), (figs["rule_false"]["B"], mk["B"]["net"], truth["B"], figs["rule_b_band"]))
     for nc, ev, label in (("forms", True, "the looser name forms (Jaro-Winkler 0.85, a typed slip, swapped order)"),
                           ("equiv", False, "the names alone, no clinical evidence")):
         n_ov = A.overlays(F, eq, "golden", namecheck=nc, evidence=ev)[0]
@@ -253,16 +261,12 @@ def main(fast=False):
        not in pol.lower())
 
     allv = []
-    for x in fo["golden_family"]:
+    for x in figs["family"]:
         f_ = dict(figs["rule_false"])
-        for key, rk in (("rule_a", "A"), ("rule_c", "C"), ("rule_d", "D")):
-            if key in x:
-                f_[rk] = x[key]
-        if "marker" in x:
-            f_ = dict(x["marker"])
+        f_[x["member"]] = x["value"]
         allv.append({k: 2000.0 * f_[k] / figs["rule_links"][k] for k in A.RULES})
-    ok("SF9 expected false merges: no rival puts rule B over 0.5 per 2,000 or rule A, C or D under 1.5",
-       all(v["B"] <= 0.5 and min(v["A"], v["C"], v["D"]) >= 1.5 for v in allv),
+    ok("SF9 expected false merges: no rival puts rule B over 0.5 per 2,000 or rule A, C or D under 1.3",
+       all(v["B"] <= 0.5 and min(v["A"], v["C"], v["D"]) >= 1.3 for v in allv),
        [{k: round(x, 2) for k, x in v.items()} for v in allv][:3])
     ok("SF11 twins are two patients: the policy's false merge is a link between two different patients' records",
        "two different patients" in pol)
@@ -272,6 +276,25 @@ def main(fast=False):
     ok("SF16 per 2,000 links: each rate is 2,000 times the false merges over the rule's automatic links",
        all(abs(figs["rule_rate_per_2000"][k] - round(2000.0 * figs["rule_false"][k] / figs["rule_links"][k], 2)) < 0.011
            for k in A.RULES))
+
+    ok("SF17 a link touching an overlay is judged on the patient the record was registered for, the overlay split first",
+       "registered for that patient" in pol and "split before the conversion" in norm(pol) and
+       figs["R8_rule_b_false"] <= figs["resolve_b"]["left"] + doc["B"]["documented_twins"] + 1, figs["resolve_b"])
+    bb = F["blood"]
+    fin = A.survivors(F)
+    typed_mrn = {fin(x) if x.startswith("CB") else x for x in bb["MRN"]}
+    age = (pd.Timestamp("2026-11-02") - R["dob"]).dt.days / 365.25
+    over55 = float((age[R["mrn"].isin(typed_mrn)] > 55).mean())
+    ok("SF18 rule B's mismatches counted as found: the typed records are a selected sample (most over 55), and the "
+       "mismatches scaled as a sample fall outside R8's band", over55 > 0.6 and not inside(mk["B"]["net"], BAND["R8_rule_b_false"]),
+       (round(over55, 3), mk["B"]["net"]))
+    ovl = A.overlay_links(R, links["B"], set(figs["R9_overlay_links"] and A.overlays(F, eq, "golden")[1]))
+    ok("SF19 the recommended rule's links touching an overlay, each pair once, and the distinct records they touch",
+       ovl == {"links": figs["R9_overlay_links"]["links"], "records": figs["R9_overlay_links"]["records split"]}, ovl)
+    first_birth = pd.to_datetime(F["deliveries"]["DELIVERY_DTTM"]).min()
+    ok("SF20 the confirming files test what they cover: the delivery log starts in 2006, and its documented twins fall "
+       "short of rule C's golden", first_birth.year >= 2006 and doc["C"]["documented_twins"] < figs["rule_false"]["C"],
+       (str(first_birth.date()), doc["C"]["documented_twins"], figs["rule_false"]["C"]))
 
     # ---------------------------------------------------------------- the routine factors decide nothing
     ok("routine: the SSN read correctly still leaves rule D over the cap on names alone",

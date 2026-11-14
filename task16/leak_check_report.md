@@ -1,22 +1,18 @@
 # leak check, task16
 
-**Verdict: REVIEW.** 13 files read, 37 golden figures and 6 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 13 files read, 39 golden figures and 5 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: groups, architecture, agreement, chance, engine, overlays, missed, priced, result, nothing, checks, delivery, careful, golden, closed, configuration, results, population, linked, specification, weight, lesson, review, january, counts
+Stump terms swept: mismatches, delivery, documented, missed, linkage, careful, agreement, engine, chance, different, counted, holding, groups, history, closed, overlays, community, decade, overlay, national, stands, discordant, reflex, population, confirming
 
 ## 3 answer figures in the pack (REVIEW 2)
 - **REVIEW** `one_chart_empi_conversion_plan.pdf`: carries 3 of 3 distinctive words of the committed call: 'Run Rule B at the One Chart conversion:'
 - **REVIEW** `patient_identity_policy_him-14.pdf`: carries 3 of 3 distinctive words of the committed call: 'Run Rule B at the One Chart conversion:'
 
-## 4 design-note vocabulary (REVIEW 3)
-- **REVIEW** `halvard_match_6_specification.pdf`: 6 of 25 stump-paragraph terms appear (chance, engine, linked, specification, weight, review); read whether the document names the move
-- **REVIEW** `one_chart_empi_conversion_plan.pdf`: 3 of 25 stump-paragraph terms appear (engine, review, january); read whether the document names the move
-- **REVIEW** `patient_identity_policy_him-14.pdf`: 4 of 25 stump-paragraph terms appear (overlays, result, results, review); read whether the document names the move
-
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `halvard_match_6_specification.pdf`: 4 of 25 stump-paragraph terms appear (engine, chance, different, national); read whether the document names the move
+- **REVIEW** `patient_identity_policy_him-14.pdf`: 4 of 25 stump-paragraph terms appear (different, history, overlays, overlay); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -37,43 +33,45 @@ Stump terms swept: groups, architecture, agreement, chance, engine, overlays, mi
 
 ## 8 column names (clean)
 
+## 9 dates after the setting (clean)
+
 ## 11 prompt gate (clean)
 
 
 ## Solver's-eye read
 
-### 1. Sentences that dictate how a part of the analysis should be done
-- HIM-14 section 3: "Automatic linking may be enabled at the conversion only under a rule whose expected false merges are no more than one per 2,000 automatic links, counting each pair of records the rule would join. Where more than one rule meets this, the conversion uses the rule that joins the most pairs; where none does, every link is made after HIM review." The eligibility test and the tie-break, once each rule's figures are known.
-- Conversion plan 7.2: "Each candidate rule is applied to every pair of active records in the two indexes, across and within each index, as the indexes stand at the conversion; the 2 November 2026 extracts are the planning baseline." Fixes the comparison population (active records, within- and cross-index) and the snapshot date.
-- Match 6 spec section 1 gives the standardization steps (case-fold names, USPS-reduce addresses, 10-digit phone, 9-digit SSN with all-zero/all-nine as missing) both indexes must pass through before any rule is applied.
-- Match 6 spec section 3: "Candidate pairs are drawn by birth date, by SSN, by phone and by the first four letters of the last name with the birth year" describes the engine's own blocking keys.
+1. No sentence tells the analyst how to estimate the false merge rate, the hard step. Two sentences fix scope only. Conversion plan (`one_chart_empi_conversion_plan.pdf`) 7.2: "Each candidate rule is applied to every pair of active records in the two indexes, across and within each index, as the indexes stand at the conversion; the 2 November 2026 extracts are the planning baseline." That fixes population and comparison, not method. The matching specification (`halvard_match_6_specification.pdf`) section 1 is the clearest "how": "names are upper-cased with accents and punctuation removed and hyphens read as spaces; a last name is compared as a whole and token by token; street addresses are reduced to house number, street name and suffix in USPS abbreviations, with unit designators removed; phone numbers to ten digits; SSNs to nine digits, with all-zero and all-nine values treated as missing." The plan invokes this by reference ("Fields are compared as the matching engine standardizes them"), so it is a stated comparison convention, not a hint on estimating false merges. Policy (`patient_identity_policy_him-14.pdf`) section 3 states the organisation's own selection rule: "Automatic linking may be enabled at the conversion only under a rule whose expected false merges are no more than one per 2,000 automatic links... Where more than one rule meets this, the conversion uses the rule that joins the most pairs; where none does, every link is made after HIM review." Already paraphrased in the prompt, it says how to choose among estimated rates, not how to produce them, so it is not an estimation hint.
 
-### 2. File that ranks or scores the candidate rules
-None. No file scores or ranks rules A-D against each other or names a recommended rule. `halvard_pilot_review_2026.xlsx` scores individual candidate *pairs* (SCORE 19.2-30.9, a human HIM_DECISION of Same patient/Different patients/Cannot determine) under the engine's separate weighted-score mechanism, not under rules A-D, and carries no rule-level tally.
+2. None. No file scores or ranks Rules A to D against each other. The matching specification scores pairs by its own weighted scheme (sections 2 to 3) for the engine's routine linking, a different mechanism, never applied to this question.
 
-### 3. File that exists only to help the analyst
-None found; everything reads as a plausible business or system artifact (policy, conversion plan, vendor spec, merge log, pilot QA log, blood-bank and L&D operational logs). The two furthest from load-bearing are `registration_volumes_2024-2026.xlsx` and `rosario_duplicate_report_summary_2025-2026.xlsx`, both monthly aggregates with no patient-level key, so neither can be joined to a specific rule's output; they read as plausible distractor candidates rather than analyst crutches.
+3. None. Every file reads as a real organisational artifact: a policy, a vendor spec, a program plan, a pilot review, a merge history, a duplicate report, registration counts, blood bank results, death notices, a delivery log, and the engine's own name equivalence table (named "Name Equivalence Table v6" inside the spec it serves, so it is the engine's reference file, not an analyst crib sheet).
 
-### 4. Figure or name that reads as the answer rather than context
-The closest is the Match 6 spec's closing line: "At the national reference rates, two different people agree on first name, last name, birth date and sex with a chance of about one in 10 billion pairs." That sentence is reproduced from the weight table's own u-values (first/last/DOB/sex "Different"-complement rates), and the same table lets the same style of figure be built for rules B and D by one more multiplication. No rule name, memo line, or column is flagged "recommended," "answer," or similar.
+4. None found. No figure or name states a rule's link count, false merge count, or distinct patient count anywhere, and no row is labelled as the recommended rule or as an overlay or duplicate patient.
 
-### 5. Filed sentence whose literal execution fixes a figure or population
-- HIM-14 section 3 (quoted above): literal execution, once the four rules' false-merge figures exist, mechanically picks the rule (highest-volume rule clearing the 1-per-2,000 bar, or "manual" if none clears it). It fixes the selection step, not the figures feeding it.
-- The "about one in 10 billion" sentence: taken literally, it lets a solver report a national-reference collision chance as the false-merge estimate for rule A (and, by the same multiplication, B and D) without ever touching either patient index. In words, that would produce a reassuringly small, population-blind rate, not a figure grounded in this hospital's own name, address and birth-date overlap.
-- Conversion plan 7.2's "every pair of active records": literal execution fixes the universe as active records only, which is not a column in either index and must be read off `calder_bay_merge_history` (a record retired into a survivor is no longer active).
+5. Three sentences fix scope or convention literally. Conversion plan 7.2 (quoted above): literally, test every pair within Calder Bay, within Rosario, and across the two 2 November extracts; the files already carry only non-retired MRNs (no MRN retired in `calder_bay_merge_history_2006-2026.csv` reappears in `calder_bay_patient_index_2026-11-02.csv`), so every row already counts as active. Policy section 3 (quoted above): literally, a rule qualifies only if its own false merges per 2,000 links is at or under 1; among qualifying rules the one with the most automatic links is named; if none qualifies, every link goes to HIM review and no rule is recommended. Policy section 2: "A record that also holds the information of another patient is an overlay" and "A patient held under more than one active record is a duplicate." Literally, "records already holding two or more patients" means overlays, and "patients still sitting under more than one active record" means duplicates counted after the chosen rule's links are applied.
 
-### 6. Is there one thing that makes most of the task routine?
-No. The HIM-14 tie-break only consumes already-computed rule-level false-merge figures; nothing states those figures for any rule. The "one in 10 billion" shortcut reaches only 3 of 4 rules (not rule C's OR/fuzzy logic), and describes national randoms rather than this population if taken at face value, so it is a plausible wrong turn, not an answer. Per ask: automatic-link counts under A-D turn on analysis (standardizing and comparing ~312,000 records at scale, including rule C's equivalence-table/Jaro-Winkler/OR logic), not a single field read. The false-merge estimate per rule turns on analysis; no filed figure exists for any rule against this population, and the national u-values are a tempting but non-local shortcut. Distinct patients in the converted index turns on analysis, sequenced behind the overlay split HIM-14 section 4 requires first. Patients already held by both indexes is its own cross-system question, stated nowhere. Calder Bay overlays turn on detection, since no column flags one; it must be built from inconsistencies across files, no single one labelled as the signal. Residual duplicates after the chosen rule's links turn on analysis, chained from the rule choice.
+6. No single thing settles most of the ask. The main call turns on the policy's selection rule once rates are known, a rule application, but the rates are analysis: no file hands over a false merge count for any rule, and the one HIM-reviewed sample (`halvard_pilot_review_2026.xlsx`) covers only pairs that already fell in the engine's own 19 to 31 review band, narrower than each rule's own criteria, so using it is inference, not lookup. Part by part: "each rule's automatic links" turns on reading the rule definitions and the standardization paragraph correctly at scale, not estimation. "Estimated false merges" and "false merges per 2,000 links" turn on analysis. "Distinct patients the converted index will hold" and "how many both indexes already hold" turn on analysis (clustering linked pairs, and finding pre-existing cross-index identity, which no file gives in full). "Whether any Calder Bay records already hold two or more patients" turns on catching an anomaly across files, not one field: nothing is flagged as an overlay anywhere, while `blood_bank_type_screen_2016-2026.csv` (a few MRNs carry more than one ABO value) and `calder_bay_merge_history_2006-2026.csv` (some survivor and retired identities disagree on name or birth date) carry raw signal that must be cross-checked, not read off. "Patients still under more than one record" and "links touching an overlay record" turn on analysis built on the prior results, not a new filed fact.
 
-### Realism
-All three PDFs show Producer "LibreOffice" / Creator "Writer" with distinct creation timestamps (Apr, Jun, Oct 2026), consistent with real exports. Facility names are varied and plausible (CB Bayside/Main/North; RMG Rosario/Children's), not flat placeholders. A spot check found no all-zero/all-nine SSNs in the Calder Bay index and no `LAST_ACTIVITY`/`LAST_ENC_DT` dates after the 2 Nov 2026 extract in either index. The pilot review file (986 rows, three decision categories including a small "Cannot determine" bucket, varied reviewer initials and dates) reads as genuine QA output. The merge history mixes MANUAL (HIM initials) and AUTO (REGSVC) merges across two decades, a realistic operational mix. One cross-document wrinkle: conversion-plan rule C's Jaro-Winkler cutoff (0.92) is stricter than the Match 6 spec's own "Similar" band (0.88 or more), so the spec's u-value for "Similar" is not a drop-in rate for rule C's narrower band. Both figures are stated plainly, so this reads as a real mismatch between a committee's chosen rule and a vendor's generic calibration, not a planted defect.
+**Flags**
+one_chart_empi_conversion_plan.pdf: harmless. No "recommend," "preferred," "ranked" or "passing" anywhere in its text; its only hits are generic ("will decide," "under which"), and it never says which of Rule A to D passes.
+patient_identity_policy_him-14.pdf: harmless. Its hits are "approve" (the policy's own approval line) and the section 3 selection sentence, the organisation's general rule for picking among rates once known, already paraphrased in the prompt, naming no specific rule.
 
-No leak found.
+Verdict: NO LEAK. No file ranks, scores or names a recommended rule, states a false merge figure, or computes any part of the estimate; the two flagged files carry only generic policy and procedural language already echoed in the prompt.
 
-Read on the cut target.zip 7eeb799edc9c9775 (2026-11-12) by one isolated reader at medium effort, given only prompt.txt and a fresh unzip of target.zip.
+### Main thread's rulings (2026-11-13, architecture 4, cut 4c1045ec)
 
-### The main thread's rulings on the REVIEW lines
-
-- Sweep 3, the plan and the policy carry the words of the call (Rule, B, One Chart conversion): the plan defines the four rules and the policy governs the conversion; neither ranks a rule. Harmless.
-- Sweep 4, the specification (chance, engine, weight) and the policy (overlays, result, results, history): the engine's own weights document and the policy's definitions and record keeping; neither names a step. Harmless.
-- Reader question 5, "active records": both index extracts hold active records only, so the plan's population executes as the files stand; the merge history adds evidence, not rows. Harmless.
+- REVIEW 3, answer figures: the plan and the policy carry the words of the rules and the conversion because they
+  define them; the reader found no rule marked recommended, passing, preferred or ranked. Harmless.
+- REVIEW 4, design-note vocabulary: the specification's engine, chance and national rates are its own account of
+  the engine's scoring (the incumbent figure the golden supersedes on Rule A); the policy's different, history and
+  overlay words are its definitions of a false merge, a duplicate and an overlay. Neither says how to estimate a
+  rule's false merges. Harmless.
+- Reader Q1 and Q5, the specification's standardization and the plan's section 7.2: the comparison convention and
+  the population each rule's links are counted on (a reflex the golden and the blocks follow, R80); executed
+  literally they give the golden's links. The policy's section 3 is the decision rule the prompt names; it chooses
+  once the rates are estimated and produces none of them.
+- Reader Q6, the blood bank's records with two ABO values and the merge history's names that disagree: the raw
+  evidence the overlay count is built from, which no column flags; analysis, as the reader says.
+- An earlier read of cut b787faf9 (the same pack with a steering committee deciding) also found no leak; it read the
+  specification's national rate as the figure closest to an answer, the incumbent's claim, and Rule C's 0.92 against
+  the specification's 0.88 as two thresholds for two uses, each landing on the golden.

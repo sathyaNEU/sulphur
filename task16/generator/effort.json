@@ -8,31 +8,31 @@
    "depends": [],
    "independent": "the two indexes and Calder Bay's merge history",
    "golden": {
-    "distinct patients": 220669,
-    "patients in both indexes": 76062
+    "distinct patients": 212402,
+    "patients in both indexes": 69318
    },
    "bands": {
     "distinct patients": [
-     217358,
-     223979
+     209215,
+     215588
     ],
     "patients in both indexes": [
-     74160,
-     77964
+     67585,
+     71051
     ]
    },
    "passes": {
     "quick": {
-     "distinct patients": 243159,
-     "patients in both indexes": 62323
+     "distinct patients": 232623,
+     "patients in both indexes": 56679
     },
     "careful": {
-     "distinct patients": 220509,
-     "patients in both indexes": 75797
+     "distinct patients": 212202,
+     "patients in both indexes": 69066
     },
     "thorough": {
-     "distinct patients": 220669,
-     "patients in both indexes": 76062
+     "distinct patients": 212402,
+     "patients in both indexes": 69318
     }
    }
   },
@@ -43,23 +43,24 @@
    "figure": "R2_rule_a_false",
    "depends": [],
    "independent": "the two indexes",
-   "golden": 106.7,
+   "golden": 59.5,
    "band": [
-    65,
-    170
+    42.1,
+    70.8
    ],
    "partly": [
-    45.5,
-    221.0
+    29.5,
+    92.0
    ],
    "passes": {
     "quick": 0.0,
-    "careful": 12.1,
-    "thorough": 106.7
+    "careful": 8.5,
+    "thorough": 59.5
    },
    "precedent": [
     "L22",
-    "L35"
+    "L35",
+    "L28"
    ]
   },
   {
@@ -68,23 +69,24 @@
    "graded_as": "Component 2",
    "figure": "R3_rule_c_false",
    "depends": [],
-   "independent": "the indexes, the delivery log, the blood bank results",
-   "golden": 153,
+   "independent": "the indexes, the delivery log, the registrations' times",
+   "golden": 41,
    "band": [
-    70,
-    220
+    34,
+    48
    ],
    "partly": [
-    49.0,
-    286.0
+    23.8,
+    62.4
    ],
    "passes": {
     "quick": 0,
-    "careful": 0,
-    "thorough": 153
+    "careful": 16,
+    "thorough": 41
    },
    "precedent": [
-    "L28"
+    "L28",
+    "L03"
    ]
   },
   {
@@ -94,19 +96,19 @@
    "figure": "R4_rule_d_false",
    "depends": [],
    "independent": "the indexes and the delivery log",
-   "golden": 164,
+   "golden": 104,
    "band": [
-    140,
-    250
+    85,
+    191
    ],
    "partly": [
-    98.0,
-    325.0
+    59.5,
+    248.3
    ],
    "passes": {
     "quick": 0,
-    "careful": 143,
-    "thorough": 164
+    "careful": 104,
+    "thorough": 104
    }
   },
   {
@@ -116,22 +118,23 @@
    "figure": "R5_overlays",
    "depends": [],
    "independent": "Calder Bay's merge history, the delivery log and the blood bank results",
-   "golden": 568,
+   "golden": 556,
    "band": [
-    480,
-    660
+    471,
+    601
    ],
    "partly": [
-    336.0,
-    858.0
+    329.7,
+    781.3
    ],
    "passes": {
     "quick": 0,
     "careful": 0,
-    "thorough": 568
+    "thorough": 556
    },
    "precedent": [
-    "L03"
+    "L03",
+    "L49"
    ]
   },
   {
@@ -142,7 +145,7 @@
    "depends": [
     "R2",
     "R3",
-    "R4"
+    "R8"
    ],
    "independent": "",
    "golden": "B",
@@ -152,7 +155,9 @@
     "thorough": "B"
    },
    "precedent": [
-    "L28"
+    "L22",
+    "L28",
+    "L49"
    ]
   },
   {
@@ -165,22 +170,91 @@
     "R6"
    ],
    "independent": "",
-   "golden": 48754,
+   "golden": 44567,
    "band": [
-    47291,
-    50217
+    43229,
+    45904
    ],
    "partly": [
-    33103.7,
-    65282.1
+    30260.3,
+    59675.2
    ],
    "passes": {
     "quick": 0,
-    "careful": 20986,
-    "thorough": 48754
+    "careful": 19133,
+    "thorough": 44567
    },
    "precedent": [
-    "L28"
+    "L28",
+    "L49"
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "rule B's false merges once its blood mismatches are explained",
+   "graded_as": "Component 3",
+   "figure": "R8_rule_b_false",
+   "depends": [],
+   "independent": "the blood bank results, Calder Bay's merge history",
+   "golden": 3,
+   "band": [
+    0,
+    8
+   ],
+   "partly": [
+    0.0,
+    10.4
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 122,
+    "thorough": 3
+   },
+   "precedent": [
+    "L49"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "the recommended rule's links that touch a record holding two or more patients, and the records split",
+   "graded_as": "Ask 5",
+   "figure": "R9_overlay_links",
+   "depends": [
+    "R5",
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "links": 124,
+    "records split": 119
+   },
+   "bands": {
+    "links": [
+     105,
+     144
+    ],
+    "records split": [
+     101,
+     138
+    ]
+   },
+   "passes": {
+    "quick": {
+     "links": 0,
+     "records split": 0
+    },
+    "careful": {
+     "links": 0,
+     "records split": 0
+    },
+    "thorough": {
+     "links": 124,
+     "records split": 119
+    }
+   },
+   "precedent": [
+    "L49",
+    "L03"
    ]
   }
  ],
@@ -192,75 +266,76 @@
  },
  "routes": [
   {
-   "name": "no correction (every rule's links taken as true)",
-   "answer": "A"
-  },
-  {
-   "name": "only chance",
-   "answer": "C"
-  },
-  {
-   "name": "only twins",
-   "answer": "A"
-  },
-  {
-   "name": "only ssn",
-   "answer": "A"
-  },
-  {
-   "name": "only chance, twins",
-   "answer": "D"
-  },
-  {
-   "name": "only chance, ssn",
-   "answer": "C"
-  },
-  {
-   "name": "only twins, ssn",
-   "answer": "A"
-  },
-  {
-   "name": "all three corrections (the golden)",
+   "name": "the golden: every stump right",
    "answer": "B",
    "golden": true
   },
   {
-   "name": "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)",
+   "name": "the reflex route (the careful but hurried pass): the documented failures counted, rule B's mismatches held",
    "answer": "A"
   },
   {
-   "name": "every rule's false merges from the blood bank's results as they read",
+   "name": "the golden with S_A dropped (rule A's false merges from the joint distribution of first n)",
+   "answer": "A"
+  },
+  {
+   "name": "the reflex route with S_A fixed alone",
+   "answer": "C"
+  },
+  {
+   "name": "the golden with S_C dropped (rule C's false merges from the twins the probabilistic linka)",
+   "answer": "C"
+  },
+  {
+   "name": "the reflex route with S_C fixed alone",
+   "answer": "A"
+  },
+  {
+   "name": "the golden with S_B dropped (rule B's blood mismatches explained: the records that hold t)",
    "answer": "none"
   },
   {
-   "name": "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in",
+   "name": "the reflex route with S_B fixed alone",
+   "answer": "A"
+  },
+  {
+   "name": "every rule from the blood bank's results as they read",
    "answer": "none"
+  },
+  {
+   "name": "every rule from the blood bank's results net of wrong blood in tube",
+   "answer": "D"
+  },
+  {
+   "name": "rule B's blood mismatches net of wrong blood in tube and of the records holding two patients, scaled from its typed links to all of them as if they were a sample",
+   "answer": "none"
+  },
+  {
+   "name": "the engine's national chance rates and the pilot's reviewed pairs",
+   "answer": "A"
+  },
+  {
+   "name": "rule C at the twins the delivery log and one visit document, the rest golden",
+   "answer": "C"
   }
  ],
  "hints": [
   {
-   "sentence": "Two different patients here often share a first name, last name, birth date and sex: names cluster by community and birth year, and many birth dates were recorded as 1 January.",
+   "sentence": "Two different patients here often share a first name, last name, birth date and sex: names cluster by community and birth year, and many men who came to work the boats carry 1 January birth dates.",
    "rescues": [
     "R2"
    ]
   },
   {
-   "sentence": "Twins share a household, a surname and a birth date, and some have near-identical first names.",
+   "sentence": "Many twins in the indexes were never registered together and were born outside the two hospitals, so neither the delivery log nor the visits show them.",
    "rescues": [
     "R3"
    ]
   },
   {
-   "sentence": "From March 2019 Calder Bay merged a new registration into an existing record with the same last name, birth date and sex.",
+   "sentence": "Rule B's blood mismatches sit on Calder Bay records that already hold two patients, or on a record whose own typings disagree.",
    "rescues": [
-    "R5"
-   ]
-  },
-  {
-   "sentence": "A patient's own records can disagree on blood group, from a mislabelled specimen or a record that holds two patients.",
-   "rescues": [
-    "R6",
-    "R7"
+    "R8"
    ]
   }
  ],
@@ -269,104 +344,233 @@
   "golden_answer": "B",
   "golden_family": [
    {
-    "name": "rule A by birth decade only (no surname communities)",
-    "answer": "B",
-    "rule_a": 70.8
+    "name": "the golden",
+    "answer": "B"
    },
    {
-    "name": "rule A with light shrinkage of each community's 1 January share",
-    "answer": "B",
-    "rule_a": 113.3
+    "name": "rule A's document dates read by birth decade alone, no surname communities",
+    "answer": "B"
    },
    {
-    "name": "rule A with heavy shrinkage of each community's 1 January share",
-    "answer": "B",
-    "rule_a": 98.5
+    "name": "rule A with each community's 1 January share lightly shrunk toward its decade",
+    "answer": "B"
    },
    {
-    "name": "every rule's false merges from the blood bank's results net of wrong blood in tube and of the records holding two patients",
-    "answer": "B",
-    "marker": {
-     "A": 204.9,
-     "B": 0.0,
-     "C": 59.2,
-     "D": 74.0
-    }
+    "name": "rule A with each community's 1 January share heavily shrunk toward its decade",
+    "answer": "B"
    },
    {
-    "name": "rule C from the evidence on the linked pair alone",
-    "answer": "B",
-    "rule_c": 76.0
+    "name": "rule C on the linkage at a match probability of 0.3",
+    "answer": "B"
+   },
+   {
+    "name": "rule C on the linkage at a match probability of 0.7",
+    "answer": "B"
+   },
+   {
+    "name": "rule B with the mismatches a record's own disagreeing typings explain counted as false merges too",
+    "answer": "B"
+   },
+   {
+    "name": "rule B with every link a visit, a delivery or differing blood groups shows counted, the overlaid records' mismatches left out",
+    "answer": "B"
    },
    {
     "name": "rule D from incompatible first names alone",
-    "answer": "B",
-    "rule_d": 143.0
+    "answer": "B"
    },
    {
     "name": "rule D with blood groups added",
-    "answer": "B",
-    "rule_d": 173.0
+    "answer": "B"
+   },
+   {
+    "name": "rule D on a name rule without typing slips, with the delivery log and one visit",
+    "answer": "B"
    }
   ],
   "shortcuts": [
    {
-    "name": "no correction (every rule's links taken as true)",
+    "name": "the reflex route (the careful but hurried pass): the documented failures counted, rule B's mismatches held",
     "answer": "A"
    },
    {
-    "name": "only chance",
+    "name": "the golden with S_A dropped (rule A's false merges from the joint distribution of first n)",
+    "answer": "A"
+   },
+   {
+    "name": "the reflex route with S_A fixed alone",
     "answer": "C"
    },
    {
-    "name": "only twins",
+    "name": "the golden with S_C dropped (rule C's false merges from the twins the probabilistic linka)",
+    "answer": "C"
+   },
+   {
+    "name": "the reflex route with S_C fixed alone",
     "answer": "A"
    },
    {
-    "name": "only ssn",
+    "name": "the golden with S_B dropped (rule B's blood mismatches explained: the records that hold t)",
+    "answer": "none"
+   },
+   {
+    "name": "the reflex route with S_B fixed alone",
     "answer": "A"
    },
    {
-    "name": "only chance, twins",
+    "name": "every rule from the blood bank's results as they read",
+    "answer": "none"
+   },
+   {
+    "name": "every rule from the blood bank's results net of wrong blood in tube",
     "answer": "D"
    },
    {
-    "name": "only chance, ssn",
+    "name": "rule B's blood mismatches net of wrong blood in tube and of the records holding two patients, scaled from its typed links to all of them as if they were a sample",
+    "answer": "none"
+   },
+   {
+    "name": "the engine's national chance rates and the pilot's reviewed pairs",
+    "answer": "A"
+   },
+   {
+    "name": "rule C at the twins the delivery log and one visit document, the rest golden",
     "answer": "C"
-   },
-   {
-    "name": "only twins, ssn",
-    "answer": "A"
-   },
-   {
-    "name": "the careful but hurried pass (the SSN rule dropped on sight, the rest on the engine's checks)",
-    "answer": "A"
-   },
-   {
-    "name": "every rule's false merges from the blood bank's results as they read",
-    "answer": "none"
-   },
-   {
-    "name": "every rule's false merges from the blood bank's results net of wrong blood in tube, the records holding two patients left in",
-    "answer": "none"
    }
   ],
   "perturbations": [
    {
-    "input": "rule A's estimate 30 per cent lower",
+    "input": "rule A's estimate 20 per cent lower",
     "answer": "B"
    },
    {
-    "input": "rule C's estimate 30 per cent lower",
+    "input": "rule C's estimate 20 per cent lower",
     "answer": "B"
    },
    {
-    "input": "rule D's estimate 30 per cent lower",
+    "input": "rule D's estimate 20 per cent lower",
     "answer": "B"
    },
    {
-    "input": "rule B's estimate 50 per cent higher",
+    "input": "rule B's estimate three times higher",
     "answer": "B"
+   }
+  ]
+ },
+ "factorial": {
+  "golden_answer": "B",
+  "reflex_route": {
+   "answer": "A"
+  },
+  "judgments": [
+   {
+    "id": "S_A",
+    "name": "rule A's false merges from the joint distribution of first names, surnames, sex and birth years, each pair's chance of one birth date read from its surname community's document dates",
+    "kind": "stump",
+    "precedent": [
+     "L22",
+     "L35",
+     "L28"
+    ],
+    "member": "A",
+    "dropped": {
+     "answer": "A",
+     "results_moved": [
+      "R2",
+      "R6",
+      "R7",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": "C",
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "S_C",
+    "name": "rule C's false merges from the twins the probabilistic linkage keeps apart, the delivery log's and the visits' twins and the ones neither shows",
+    "kind": "stump",
+    "precedent": [
+     "L28",
+     "L03"
+    ],
+    "member": "C",
+    "dropped": {
+     "answer": "C",
+     "results_moved": [
+      "R3",
+      "R6",
+      "R7",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": "A",
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "S_B",
+    "name": "rule B's blood mismatches explained: the records that hold two patients and the specimens a record's own typings contradict, the rest left as false merges",
+    "kind": "stump",
+    "precedent": [
+     "L49"
+    ],
+    "member": "B",
+    "dropped": {
+     "answer": "none",
+     "results_moved": [
+      "R6",
+      "R7",
+      "R8",
+      "R9"
+     ]
+    },
+    "alone": {
+     "answer": "A",
+     "results_rescued": [
+      "R8"
+     ]
+    }
+   },
+   {
+    "id": "J1",
+    "name": "each rule's links reproduced by the engine's standardization",
+    "kind": "reflex",
+    "precedent": [
+     "R80"
+    ]
+   },
+   {
+    "id": "J2",
+    "name": "the confirming files' documented failures counted against each rule's allowance",
+    "kind": "reflex",
+    "precedent": [
+     "R79"
+    ]
+   },
+   {
+    "id": "J3",
+    "name": "rule D's links whose first names are not one person's, the subscriber's SSN on a dependent",
+    "kind": "reflex",
+    "precedent": [
+     "R79",
+     "R14"
+    ]
+   },
+   {
+    "id": "J4",
+    "name": "both indexes conformed and a probabilistic linkage of the active records",
+    "kind": "reflex",
+    "precedent": [
+     "R01",
+     "R20"
+    ]
    }
   ]
  }

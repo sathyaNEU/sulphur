@@ -1,9 +1,9 @@
 {
  "task": "task16",
  "project": "sulfur",
- "architecture": "v3",
- "drawn": "2026-11-12",
- "slot_note": "",
+ "architecture": "v4",
+ "drawn": "2026-11-13",
+ "slot_note": "architecture 4, redesigned in the same world on 2026-11-13 at the reviewer's request after architecture 3 was sent back for difficulty: the data retuned so the confirming files' direct counts land wrong on three of the four rules (Rule A's chance merges among working-age men with document birth dates the transfusion service's older patients never show; Rule C's twins registered apart or born elsewhere that the delivery log never shows; Rule B's blood mismatches that the records holding two patients explain)",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "niche": "a merged South Texas health system's enterprise master patient index before its April 2027 conversion to one electronic record: which candidate rule may join two patient records without review inside the patient identity policy's cap on false merges, read from the chance agreements, the twins and the inherited identifiers each rule would join, with the overlays an earlier registration rule already made and the duplicates left for review",
@@ -11,7 +11,7 @@
  "shape": "04",
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
- "answer": "Run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against the policy's one; Rule A 2.97, Rule C 5.44, Rule D 7.12 per 2,000; 568 Calder Bay overlays to split; 220,669 distinct patients, 76,062 in both indexes, 48,754 left under more than one record",
+ "answer": "Rule B (0.17 false merges per 2,000 links); Rules A (1.85), C (1.63) and D (4.86) over the policy's one",
  "answer_source": "task16/generator/figures.json (call)",
  "gap": [
   "population"
@@ -33,7 +33,7 @@
  "validated_decoy": false,
  "context_artifact": "planning_thread",
  "stump_class": "analytical",
- "analyst_test": "A careful but hurried analyst links the two indexes by fuzzy name, birth date and address matching, reads the specification's agreement weights and the pilot's reviewed pairs, sees one SSN carried by a whole family and drops the SSN rule, then scores the name rules on independent per-field chance rates and the pilot's labels: it files the exact name, birth date and sex rule as safe, because independent field rates miss how often two different patients in Port Calder share a name, a birthday and a sex, and it would pass the fuzzy first-name rule too, because the pilot never reviewed a twin pair; checked on the blood groups as they read, every rule fails, Rule B included.",
+ "analyst_test": "The careful but hurried pass reproduces every rule's links, counts the confirming files' documented failures against each allowance with no model of the error rate (the reviewers' runs' own move, R79), prices Rule A at the chance each field's own rate gives (its blood check showing no discordant link with different SSNs), passes Rule C on the 16 twins the delivery log and the visits document, holds Rule B's blood mismatches against it, and runs Rule A.",
  "domain_test": "Every result is a record-linkage statistic: a deduplicated patient index reconciled to both legacy indexes, each candidate rule's false merges estimated without labels (chance agreement from the population's joint distribution of names, birth cohorts and birth dates; co-resident twins; an identifier inherited from an insurance subscriber), the overlays a deterministic merge rule left in one index, and the duplicates a rule leaves; swap in another method's object (a capture-recapture total, a classifier's held-out accuracy) and the decision stops making sense, because no labelled set covers the pairs the rules decide.",
  "layer2_family": "estimation_fit",
  "layer2_pattern": "own:false-merges-of-match-rules-estimated-without-labels",
@@ -49,7 +49,7 @@
   "medical record numbers with system prefixes and leading zeros",
   "merge history stamped in UTC"
  ],
- "stakeholder_role": "the health system's director of health information management, who heads its patient records and data office and recommends the conversion's automatic linking rule to the One Chart steering committee",
+ "stakeholder_role": "the health system's director of health information management, who heads its patient records and data office and recommends the conversion's automatic linking rule to the health system's executive team",
  "role_family": "statistical_office_head",
  "scoring_unit": "per boarded entity",
  "spine": {
@@ -81,13 +81,13 @@
  },
  "deliverables": [
   "one_chart_autolink_rule_evaluation.xlsx",
-  "one_chart_autolink_recommendation.docx"
+  "one_chart_autolink_recommendation.pdf"
  ],
  "opening_move": "question-first",
  "question_form": "whether",
- "driver": "The decisive quantity is how often each candidate rule for joining two records without review would join two different people, a rate no labelled set covers: the identifying fields agree by chance far more often than independent per-field rates imply because they are dependent and locally concentrated, some units share every field but one through kinship, one source stored a related unit's identifier in the unit's own field, and an earlier deterministic rule already joined units the record now holds as one, so each rule's error is estimated from the population's joint distribution and checked against attributes the rules never used.",
- "driver_concrete": "Each candidate auto-link rule's false merges at the One Chart conversion are estimated without labels: the exact first name, last name, birth date and sex rule joins patients who share a common local name and a birthday by chance, read from the joint distribution of first names by birth cohort and community, surnames by community and birth dates heaped on 1 January, and checked against blood groups that conflict inside linked pairs; the fuzzy first-name rule joins co-resident twins with similar names; the SSN and birth date rule joins twins registered under a parent's SSN before Rosario's 2021 registration change; and Calder Bay's 2019 last name, birth date and sex auto-merge already overlaid patients the conversion would inherit as one record.",
- "stump": "A careful but hurried analyst scores the candidate rules with the matching engine's chance rates or the records' own per-field rates and the HIM pilot's reviewed pairs, drops the SSN rule once it sees one SSN on a whole family, and picks the exact name, birth date and sex rule, whose false merges run about three times the policy's cap because same-name, same-birthday strangers are common in Port Calder's concentrated names; correcting that alone moves it to the fuzzy first-name rule, which the pilot never checked on a twin pair; and a pass that prices every rule from the blood bank's results as they read condemns all four, because one patient's records disagree on mislabelled specimens and on Calder Bay records that hold two patients.",
+ "driver": "The decisive quantities are each candidate rule's expected errors, which no record holds and each confirming record sees only in part: chance agreement concentrated where the field values are dependent and locally clustered (a cohort whose documents carry one default date) and invisible to a check drawn from a selected subset; pairs a household confirms only when its own process recorded them; and conflicts that a record holding two units explains, read off the recording rule that made it.",
+ "driver_concrete": "Which rule One Chart may run turns on Rule A's 59.5 chance merges (1.85 per 2,000), a third of them among men who came to work the boats with 1 January document dates, which the engine's national rates (4.4) and the blood bank (its patients born 27 years earlier than Rule A's linked ones) do not see; on Rule C's 41 twins (1.63), of which the delivery log and the registration visits show 16; and on Rule B's five blood mismatches, three on Calder Bay records that hold two patients, which leave it at 3 (0.17).",
+ "stump": "A careful pass that counts the documented failures and holds Rule B's mismatches runs Rule A; the golden runs Rule B; dropping the chance agreement alone gives Rule A, the undocumented twins alone Rule C, the mismatches explained alone no rule; fixing any one alone on the careful route still misses Rule B.",
  "answer_shape": "ranked-list-cap",
  "weight": "hard-to-measure",
  "chain_signature": [
@@ -96,16 +96,77 @@
   "validation",
   "investigation-loops",
   "missingness-measurement",
+  "synthesis",
   "modeling",
-  "synthesis"
+  "investigation-loops",
+  "assembly-reconciliation"
  ],
- "results": "R1 distinct patients in the converted index and patients held by both legacy indexes; R2 the exact rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
- "one_fact_test": "'two different patients here often share a name, a birthday and a sex' rescues R2 alone (1 of 7); 'twins share every field but their first names' rescues R3 and part of R5; neither moves the call alone",
- "strategy_label": "OWN",
+ "results": "R1 the converted index (212,402 distinct patients, 69,318 in both indexes); R2 rule A's false merges (59.5); R3 rule C's twins (41); R4 rule D's false merges (104); R5 Calder Bay records holding two or more patients (556); R6 the rule (B); R7 patients left under more than one record after Rule B (44,567); R8 rule B's false merges once its blood mismatches are explained (3); R9 Rule B's links touching a record that holds two patients (124) and those records (119)",
+ "one_fact_test": "the most useful single sentences each rescue one of nine results (effort.json hints): the chance-agreement sentence rescues R2 (the call moves to Rule C), the undocumented-twins sentence R3 (the call stays Rule A), the overlay sentence R8 (the call stays Rule A)",
+ "strategy_label": "F10 Identity resolution, in its live form, with three members opened by three different stumps",
  "mechanism_source": "design_note",
  "differentiation": {},
  "architecture_spent": false,
  "lineage": [
+  {
+   "architecture": "v3",
+   "driver": "The decisive quantity is how often each candidate rule for joining two records without review would join two different people, a rate no labelled set covers: the identifying fields agree by chance far more often than independent per-field rates imply because they are dependent and locally concentrated, some units share every field but one through kinship, one source stored a related unit's identifier in the unit's own field, and an earlier deterministic rule already joined units the record now holds as one, so each rule's error is estimated from the population's joint distribution and checked against attributes the rules never used.",
+   "driver_concrete": "Each candidate auto-link rule's false merges at the One Chart conversion are estimated without labels: the exact first name, last name, birth date and sex rule joins patients who share a common local name and a birthday by chance, read from the joint distribution of first names by birth cohort and community, surnames by community and birth dates heaped on 1 January, and checked against blood groups that conflict inside linked pairs; the fuzzy first-name rule joins co-resident twins with similar names; the SSN and birth date rule joins twins registered under a parent's SSN before Rosario's 2021 registration change; and Calder Bay's 2019 last name, birth date and sex auto-merge already overlaid patients the conversion would inherit as one record.",
+   "stump": "A careful but hurried analyst scores the candidate rules with the matching engine's chance rates or the records' own per-field rates and the HIM pilot's reviewed pairs, drops the SSN rule once it sees one SSN on a whole family, and picks the exact name, birth date and sex rule, whose false merges run about three times the policy's cap because same-name, same-birthday strangers are common in Port Calder's concentrated names; correcting that alone moves it to the fuzzy first-name rule, which the pilot never checked on a twin pair; and a pass that prices every rule from the blood bank's results as they read condemns all four, because one patient's records disagree on mislabelled specimens and on Calder Bay records that hold two patients.",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "coincidental_agreement_joint_frequencies",
+     "inherited_attribute_from_other_unit",
+     "validation_cannot_see_condition",
+     "record_algorithm_inversion"
+    ],
+    "mechanisms": [
+     "same_name_same_birthday_strangers_in_concentrated_names",
+     "first_names_by_birth_cohort_and_community",
+     "birth_dates_heaped_on_january_first",
+     "co_resident_twins_with_similar_names",
+     "subscriber_ssn_on_dependent_records",
+     "last_name_birthdate_sex_auto_merge_overlays"
+    ],
+    "detection": [
+     "conflict_marker_in_linked_pairs",
+     "second_source_at_other_grain",
+     "selection_rule_in_the_record"
+    ],
+    "moves": [
+     "chance_agreement_on_joint_distribution",
+     "invert_recording_algorithm",
+     "em_latent_fit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "incumbent_figure_or_method",
+     "governing_standard",
+     "shortlist_or_candidates",
+     "panel_or_survey_sample",
+     "unused_distractor"
+    ]
+   },
+   "answer": "Run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against the policy's one; Rule A 2.97, Rule C 5.44, Rule D 7.12 per 2,000; 568 Calder Bay overlays to split; 220,669 distinct patients, 76,062 in both indexes, 48,754 left under more than one record",
+   "analyst_test": "A careful but hurried analyst links the two indexes by fuzzy name, birth date and address matching, reads the specification's agreement weights and the pilot's reviewed pairs, sees one SSN carried by a whole family and drops the SSN rule, then scores the name rules on independent per-field chance rates and the pilot's labels: it files the exact name, birth date and sex rule as safe, because independent field rates miss how often two different patients in Port Calder share a name, a birthday and a sex, and it would pass the fuzzy first-name rule too, because the pilot never reviewed a twin pair; checked on the blood groups as they read, every rule fails, Rule B included.",
+   "weight": "hard-to-measure",
+   "chain_signature": [
+    "assembly-reconciliation",
+    "modeling",
+    "validation",
+    "investigation-loops",
+    "missingness-measurement",
+    "modeling",
+    "synthesis"
+   ],
+   "results": "R1 distinct patients in the converted index and patients held by both legacy indexes; R2 the exact rule's false merges (chance agreement); R3 the fuzzy first-name rule's false merges (co-resident twins); R4 the SSN rule's false merges (identifiers inherited from a subscriber); R5 Calder Bay records that hold two patients (the 2019 auto-merge inverted); R6 the duplicate pairs the chosen rule leaves for review; R7 the rule the conversion runs",
+   "one_fact_test": "'two different patients here often share a name, a birthday and a sex' rescues R2 alone (1 of 7); 'twins share every field but their first names' rescues R3 and part of R5; neither moves the call alone",
+   "strategy_label": "OWN",
+   "spent": "sent back at review 2026-11-13 (reward 78, stumped failed, determinism and solution passed): Rules A, C and D failed on direct counts in the confirming files (the delivery log's 45 and 76 twin pairs against allowances of 28 and 23; Rule A's 16 blood-discordant links with different SSNs against about 0.3), so the call collapsed to Rule B or none; architecture 4 keeps the world, the policy line and the determinism, as the reviewer asked, and moves each member's decision onto estimation the direct counts get wrong"
+  },
   {
    "architecture": "v1",
    "drawn": "2026-11-10",
@@ -232,24 +293,24 @@
  "shell": {
   "question form": "which",
   "second-sentence opener": "can",
-  "deliverable set": "docx+xlsx"
+  "deliverable set": "pdf+xlsx"
  },
  "skeleton": {
   "decision_form": "pick_one_of_few_options",
   "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
   "lessons": [
    "coincidental_agreement_joint_frequencies",
-   "inherited_attribute_from_other_unit",
-   "validation_cannot_see_condition",
-   "record_algorithm_inversion"
+   "record_algorithm_inversion",
+   "frame_population_mismatch"
   ],
   "mechanisms": [
    "same_name_same_birthday_strangers_in_concentrated_names",
-   "first_names_by_birth_cohort_and_community",
-   "birth_dates_heaped_on_january_first",
-   "co_resident_twins_with_similar_names",
-   "subscriber_ssn_on_dependent_records",
-   "last_name_birthdate_sex_auto_merge_overlays"
+   "working_age_men_with_document_birth_dates",
+   "transfusion_service_typing_skewed_to_older_patients",
+   "co_resident_twins_registered_apart_or_born_elsewhere",
+   "last_name_birthdate_sex_auto_merge_overlays",
+   "overlay_records_carrying_a_second_patients_typing",
+   "subscriber_ssn_on_dependent_records"
   ],
   "detection": [
    "conflict_marker_in_linked_pairs",
@@ -271,5 +332,5 @@
    "unused_distractor"
   ]
  },
- "registered": "2026-11-13T00:05:41Z"
+ "registered": "2026-11-13T23:00:59Z"
 }

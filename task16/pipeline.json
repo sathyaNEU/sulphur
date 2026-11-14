@@ -1,6 +1,6 @@
 {
  "task": "task16",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
@@ -8,34 +8,37 @@
  "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 39,810 links, about 5 false merges, 0.25 per 2,000 against HIM-14's one; Rule A 2.97 (106.7 false merges), Rule C 5.44 (153, twins), Rule D 7.12 (164); not Rule A, which the engine's chance rates put at 0.14",
- "chain": "R1 the converted index (220,669 distinct patients, 76,062 in both indexes); R2 rule A's false merges from chance agreement on the joint cells of names, birth years and 1 January heaping (106.7); R3 rule C's twins the pilot never saw (153); R4 rule D's twins under a parent's SSN (164); R5 Calder Bay records holding two or more patients (568); R6 the rule (B); R7 patients left under more than one record after Rule B (48,754)",
- "architecture": 3,
+ "call": "run Rule B (exact first name, last name, birth date, sex and street address) at the 5 April 2027 conversion: 35,566 links, about 3 false merges once its 5 blood mismatches are explained (3 on records holding two patients), 0.17 per 2,000 against HIM-14's one; Rule A 1.85 (59.5 chance merges the national rates and the blood bank do not see), Rule C 1.63 (41 twins, 16 documented), Rule D 4.86",
+ "chain": "R1 the converted index (212,402 distinct patients, 69,318 in both); R2 rule A's false merges (59.5); R3 rule C's twins (41); R4 rule D's false merges (104); R5 Calder Bay records holding two or more patients (556); R8 rule B's false merges once its blood mismatches are explained (3); R6 the rule (B); R7 patients left under more than one record after Rule B (44,567); R9 Rule B's links touching a record that holds two patients (124) and those records (119)",
+ "architecture": 4,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-12"
+  "date": "2026-11-13",
+  "checks": "112 checks, 0 FAIL, 2 WARN"
  },
  "leak": {
-  "leak_py": "REVIEW (no LEAK), 2026-11-12, --asof 2026-11-04",
-  "reader": "one isolated read at medium effort, 2026-11-12, on cut 7eeb799e: no leak, no ranking file, no helper file, no one thing"
+  "leak_py": "REVIEW (no LEAK), 2026-11-13, --asof 2026-11-04, the dates sweep and the prompt gate clean",
+  "reader": "two isolated reads at medium effort, 2026-11-13: cut b787faf9 and the final cut 4c1045ec (the executive team deciding, the PDF note), both NO LEAK, no ranking file, no helper file, no one thing"
  },
  "duplicate_check": {
-  "heart": "WARN (strategy_risk, chain_near task3 v7, overuse.weight; answered in the note)",
-  "nearest": "skeleton severity none against everything on file; nearest task4 v12, task20 v2, task13 v4"
+  "heart": "BLOCK ban.weight against task24 v2 (registered 2026-11-13T20:36:55Z, before this card's 23:00:59Z; another subdomain, nothing shared): the author's exception of 2026-11-13, recorded in the note's Draw; WARNs strategy_risk, chain_near task3, overuse.forum and the skeleton's lessons answered in the note",
+  "nearest": "skeleton clear (2 WARN); nearest drivers task16 v3 (lineage) 0.13, mark179 0.06, mark258 0.05; the client's seven templating signals clear",
+  "read": "2026-11-13, after the pull to 40e1603"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "report": "task16/determinism_check_report.md",
-  "note": "rule links, cap arithmetic, rule A's estimate, overlays and blood bank counts reproduced; the linked index not rebuilt in budget, its fixed-weight rival asserted inside the bands in checks.py"
+  "report": "task16/determinism_check_report_pass3.md",
+  "note": "pass 2 on cut b787faf9 and pass 3 on the final cut 4c1045ec both DETERMINISTIC and APPROVE: every rule's links (A and C inside the stated 0.1 per cent), the lines, rule B's five mismatches resolved record by record (3 false merges, 0.17 per 2,000), overlays and rule B's links on them inside their bands; no fork moves a figure or the call; the EM linkage not refit in budget, its rivals asserted in checks.py"
  },
- "paper_pair": 34.5,
+ "paper_pair": 29.0,
  "effort": {
-  "quick": 7.0,
-  "careful": 34.5,
+  "quick": 15.0,
+  "careful": 29.0,
   "thorough": 100.0,
-  "largest_hint": "A patient's own records can disagree on blood group, from a mislabelled specimen or a record that holds two patients; rescues 2 of 7 (R6, R7)"
+  "level": 5,
+  "largest_hint": "the chance-agreement sentence rescues R2 (one of nine; each stump's sentence rescues one)"
  },
  "runs": {
   "run1": null,
@@ -132,10 +135,11 @@
    "by": "the reviewer's sheet (pasted by the author; runs/review_2026-11-13.md)",
    "why": "not difficult enough: Rules A, C and D fail on directly countable evidence (the delivery log's twins, blood-discordant links), so the call collapsed to Rule B or none, lost only by a reserve on B's eight blood mismatches; the step 4 count 30 against the file's 32 of 8,043",
    "repair": "design",
-   "commit": ""
+   "commit": "RESHIPPED (task16): architecture 4",
+   "route": "architecture 4 in the same world at the reviewer's request: the confirming files' direct counts land wrong on three members (A, B, C), each opened by its own stump; level 5 under stumping Part 3.4"
   }
  ],
- "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word",
+ "resume": "stage 6: the author rewrites the prompt for voice (voice-check.py --rewrite, then leak.py; keep the note asked for as a PDF), uploads it and target.zip, and pastes both runs and the rubric for /triage-runs",
  "approved": null,
  "submitted": null,
  "portal": {
