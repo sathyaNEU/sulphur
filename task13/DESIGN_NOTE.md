@@ -3,159 +3,228 @@
 ## Draw
 
 Subdomain: Energy Systems & Utilities, grid reliability and outage analysis (`grid-reliability-outage-analysis`; the
-  69 kV fault record a cooperative's reliability engineer conforms from relays, SCADA, the control room and the field)
-Analysis type: Data Extraction & Conformation (ETL / Pipeline Build): the author's assignment of 2026-11-12. Two
-  relay vendors' event exports, a legacy target log, the SCADA sequence of events, the control room's outage log, the
-  outage system's database, a solar farm's own protection export, five weather records, the lightning record and the
-  field records (patrols, the environmental team's roost survey, test insulators, washing, vegetation and maintenance
-  work) conformed to one row per fault, with the counts, locations, causes and member impact computed from it
-Answer shape: a flagged set with the evidence (the repeat locations and sections the work list flags, each with its
-  cause, its located faults and the fix), on top of the conformed fault table
-Weight: assembly (building one fault record a crew can be sent from: each fault located, timed and caused from
-  instruments that each see part of it); the last two live cards sit on measurement (task22) and attribution (task4)
-Data-native sentence: a 69 kV fault is recorded by the relays at both ends of its line, each computing its own
-  distance on its own clock as if the fault had no resistance and nothing fed it from the side, by a SCADA clock that
-  knows only breakers, by a control room that codes a cause from what the weather looked like, and by nothing at all
-  where no crew went, so where a fault was and what caused it exist only in the relation between the two ends'
-  residual currents and the network behind each end on that date, the weather at the line rather than the airport,
-  the conductor's temperature that afternoon and the field teams' own records
+  69 kV fault record a cooperative's reliability engineer conforms from relays, SCADA, the control room, the field
+  records and the weather)
+Analysis type: Data Extraction & Conformation (ETL / Pipeline Build), the author's assignment of 2026-11-12. Architecture
+  6 is the reviewer's own level-up of architecture 5 in the same world (the send-back of 2026-11-13: "Keep the data
+  package, the procedure and the committed fault register. Then move the decision onto analysis that this data can
+  support"): the same 28 files, RP-04 Rev 4 with one clause added (a repair for any other cause), the same register
+Answer shape: a reconciled table plus findings (the conformed fault table and the reconciled review workbook, with the
+  work list as their findings: each repeat location's cause and fix, each washing section due on its deposit); the work
+  list goes to the cooperative's monthly reliability review (the manager of engineering chairing, with the line
+  superintendent, vegetation management and environmental compliance)
+Weight: attribution (each repeat place's cause told from a rival that shares its signature, and each section's salt
+  from the wind that brought it); architecture 5 sat on assembly, and the last two live cards sit on measurement
+  (task22) and attribution (task25), the card's WARN answered here: the weight is the honest one for the new chain
+Data-native sentence: a 69 kV fault's cause is written down only by people who saw something nearby (a patrol's
+  live oak, a crew's salt film, an airport's fog), so a cracked insulator on a Gulf line passes for salt, a conductor
+  sagging onto the 12.47 kV circuit under it passes for a tree, and a section washed in October passes for clean, and
+  each is told only by the relation between the faults and a record of another grain: the deposit carried night by
+  night from the washing log, the conductor's temperature at each contact summer after summer against the trims, and
+  the onshore wind the test insulators' gains follow through the days after their last reading
 People: Brittany Melton (reliability engineer, the golden's author), Thomas Evans (manager of engineering), Derek
-  Hart (system operations supervisor), Joanna Choi (environmental compliance specialist), Allison Ward (vegetation
-  management coordinator), Andrew Russell (transmission planning engineer), Julie Peterson (line superintendent), from
-  `guard.py names --geo "United States" --seed 1305` and `--seed 1306`; none is named in the prompt. Card WARNs answered: people.first Thomas against mark126 (an older Mark build, a different world); overuse.objective (ETL on 4 of the last 12) is the author's assignment. ban.pairing (energy x etl against task22) registered with --force at the author's direction of 2026-11-12
+  Hart, Joanna Choi, Allison Ward, Andrew Russell, Julie Peterson, as drawn for architecture 5 (`guard.py names --geo
+  "United States" --seed 1305` and `--seed 1306`); none is named in the prompt. Card WARNs answered: people.first
+  Thomas against mark126 (an older Mark build, another world); repeat.decision designation_set against task22 (the work
+  list is the reviewer's own decision for this task); repeat.question_form what against task1 v6 (the reviewer's own
+  question for this task, kept at the resubmission); skeleton.house_lesson exposure_basis_decoupled (J3's supporting
+  lesson, not the deciding one, which is rival_process_by_state_dependence, on no build); skeleton.house_shell
+  set_over_threshold (a work list over RP-04's filed rules is that form; the reviewer asked to keep it). ban.pairing
+  (energy x ETL against task22) registered with --force at the author's assignment of 2026-11-12, as architecture 5 was.
+  Redrawn after the rebase onto task1 v6 (drawn and registered before this card on 2026-11-13): answer shape
+  reconciled-table for flagged-set (the ETL deliverable set; flagged-set described the memo alone), decisive pattern E,
+  conditioned yield, for D (each place's events read as a rate conditioned on the state its named cause depends on, the
+  deciding lesson; D named the instruments), forum committee_or_panel for line_manager_or_team (the reliability review
+  shares the crews' winter time across engineering, the lines and vegetation)
 
 ## Stump screen
 
-Written at the draw on 2026-11-13, before the card and before any code. Tests: 1 off the closed page, 2 not a reflex,
-3 nothing filed, 4 clean data, 5 two records, 6 the waved-through assumption, 7 a plausible shallower story, 8 across
-the data, 9 worth the call.
+Written on 2026-11-13 after the send-back, before the generator was touched: architecture 5's six stumps (S1 to S6)
+were all made by the platform's runs and are reflexes now (R81 to R83), so every candidate here is new, and each
+went through the thirteen tests (`references/stump-screen.md`: 1 off the closed page, 2 not a reflex, 3 nothing filed,
+4 clean data, 5 two records, 6 the waved-through assumption, 7 a plausible shallower story, 8 across the data, 9
+worth the call, 10 the run's alternative ruled out by named data, 11 the golden can measure it, 12 no easier second
+route, 13 it opens its own member).
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
-| Fault resistance and load flow move each relay's own distance toward the sending end (tree contacts by 1 to 6 km, arcs by under a span); the residual current's split between the two ends follows only the zero-sequence network | the relay's distance taken as the location, both ends averaged (L22: the formula's no-resistance assumption, contradicted by the tree contacts' low currents) | the other terminal's export at another format and clock, and the protection study's line-out zero-sequence source impedances | none | kept (S1) |
-| Inland's 138/69 kV autotransformer replaced in March 2024 (a stronger ground source behind Inland), so the split of a 2022 or 2023 fault on an Inland line reads against the 2022 study | today's network for the whole history (N09) | the 2022 protection study beside the 2025 one, and Inland's relay settings changed in 2024 | none | kept (S2) |
-| The solar farm tapped on Shell Ridge-Ponder Creek steps the 69 kV through a grounded-wye transformer, so it feeds ground current into every fault beyond the tap, by night as well as by day; Ponder Creek's electromechanical relays keep no record | the farm's export set aside as a generator's log with its own clock and names (L38, N27), or no infeed at night | the solar farm's own protection export (local standard time, kA) and the substation register's transformer windings | none | kept (S3) |
-| Night faults on the coast come from three causes: fog flashovers on salted porcelain, bird streamers at roost structures, failing insulators in light rain; the coastal airport's visibility misses the bay's fog and finds fog the bay never had | the airport stands for the conditions at the line (N26) and the environmental survey is unrelated (L38); every humid-night coastal fault booked as contamination (L26) | the cooperative's own substation weather stations by the bay (dewpoint spread, from March 2023), the environmental team's roost survey, the washing log | none | kept (S4) |
-| A grow-in contact needs the conductor hot (sagged) on a still afternoon; fall-ins and storm debris come on gusty afternoons; both are summer afternoon faults with no stroke | every non-lightning summer afternoon fault, or the control room's TREE code, taken as vegetation (L26, L04) | the hourly line loading beside the bay and inland weather (conductor temperature), the lightning record on the true time | none | kept (S5) |
-| A coastal section's salt deposit builds from its last wash or soaking rain at its own rate and flashes over only past a level, so the sections due before the fog season are not the ones that flashed over before | the past flashovers taken as the present state, or October's test readings as December's (N02, N13) | the test insulators' monthly deposits, the washing log and daily rain, against the deposit at each past flashover | none | kept (S6) |
-| Lightning backflashovers recurring at towers with high footing resistance | a tower's count read at face value | footing resistance survey | 2 (stroke matching is R32), lineage (architecture 3's lightning protection referral) | dropped |
-| Member-minutes from the outage system's dispatcher-closed times instead of the SCADA restorations | the outage system's durations | the sequence of events | 2 (R46: the architecture 4 run rebuilt every time from the device record) | dropped (kept as a Right-scored result, R5) |
-| A field switching move the GIS never recorded, found from paired load steps | today's topology | hourly loading | 8 (one transfer, only in the deciding units), 4 (a re-key once found) | dropped |
-| Conductor sag at the 2027 planning case's loads against the vegetation survey | the 2026 peak carried to 2027 | the planning case | 3 (the planning case files the loads, and the sag formula is executed), and a forward total | dropped |
+| A cracked post insulator on a Gulf line flashes whenever it is wet; with the salt film on it, fog nights are the dangerous ones, so its flashovers fall on the nights the section's salt also flashes and the patrols find salt film and flash marks | fog-night flashovers on the Gulf porcelain are salt, and the few at low deposits are noise in the level (L48, L26; R83 copies the inland strings' light-rain signature) | the washing log and the deposit carried to each flashover night: a place that keeps flashing over when its section holds a fraction of the level, after each of five washes | none | kept (J1) |
+| One span's 69 kV conductor, sagged hot at the summer peak, reaches the 12.47 kV circuit built under it; its contacts look like a grow-in's (hot, still, no stroke) and the first patrol blamed the live oak in the span, which was then trimmed | a summer contact with no stroke at a span with a tree is a grow-in, and contacts after a trim are regrowth (L47, L26; R83's peak-load signature) | the conductor temperature at each contact from the hourly loading and the station weather, summer by summer against the vegetation work orders: a tree's contact temperature falls as it grows and jumps at a trim; this span's has held through its trim | none | kept (J2) |
+| Salt rides onto the Gulf porcelain on the onshore wind, most of it on a few blowy days ahead of fronts; the four southerly days of 23 to 26 October came after every October test reading and after two sections were washed | the deposit builds at the test insulators' average rate, and a section washed in mid-October is clean on 31 October (L15, N13) | the station winds against the test insulators' monthly gains: each interval's gain follows its onshore wind (a constant rate leaves 59 per cent more unexplained), and the late October blow put twice the level on the shore sections washed before it | none | kept (J3) |
+| Grow-in contacts on calm evenings at moderate load as well as on peak afternoons, the wind setting the conductor's heat as much as the load | a contact needs the peak load (R83) | the hourly loading with the station wind and temperature | 13 (the same conductor-temperature reading as J2 resolves it), 8 (the evening contacts are few) | dropped (texture: contacts spread over loads and hours) |
+| A hot-spot trim that bought one season, so a span trimmed after its last contact reaches the conductor again at the 2027 peak | a completed trim certifies the span (N11) | the contact history after past trims | 13 (the same trajectory reading as J2 rescues both), 3 (needs a forward clearing rule filed) | dropped |
+| The work list ranked under the crews' winter crew-days by the member-minutes each item would save in 2027 (the reviewer's idea 2 and 5) | each location's historical member-minutes a year | the network's backups and each cause's reclose record | 9 (the honest family's spread on a forward value per item exceeds most margins), lineage (architecture 4's 2027 forecast was returned on determinism) | dropped |
+| Washing sections placed near the level so the rain-cleaning rate decides them (the reviewer's suggestion) | the rain-cleaning model | the test insulators | 2 (R82: the runs fit build-up with rain cleaning by reflex), 9 (the family's own spread over rain models would straddle the level) | dropped; J3 makes the deposit fit decide through the wind instead |
+| Architecture 5's stumps (two-ended location, Inland's source change, the solar infeed, the roost survey and bay fog, conductor heat for grow-ins, the deposit from the last wash) | - | - | 2 (made by the platform's runs, R81 to R83) | dropped (reflexes) |
 
-Kept: six, each independent (no one sentence of help rescues two of them): S1 and S2 move the located spans of the
-grow-in contacts, S3 the tap line's repeat location, S4 the night repeat locations and their fixes, S5 which summer
-faults are grow-ins, S6 the sections washed before the fog season.
+Kept: three, independent (no one sentence of help rescues two: J1 is read on the deposit at each flashover, J2 on the
+contact temperature against the trims, J3 on the wind after the last reading), each opening its own member: J1 the
+string at Line 2 structure 63, J2 the clearance at Line 6 structures 57-58, J3 the washes of Line 2 sections 1 and 6.
 
 ## Deep reasoning
 
-Task type: Grid reliability & outage analysis, the client's task type in Energy Systems & Utilities that serves Data Extraction & Conformation here: the 69 kV fault record conformed from the relays, SCADA, the control room, the outage system, the weather and the field records, with each fault's location, cause and member impact and the work list computed from it
-Domain test: the results are the protection and reliability engineer's own quantities (a fault's place from the zero-sequence network behind each end of its line on its date, the ground current a grounded-wye generator step-up adds beyond a tap, a conductor's temperature from its heat balance, a porcelain string's salt deposit against its flashover level, member interruptions on the five-minute line), and the engineer uses them to send crews to structures
-Swap: rewritten for a water utility's main breaks ("which mains to replace, from the pressure loggers at both ends"), nothing carries: no fault resistance biases a distance calculation, no residual current splits between two ends, no ground source sits at a tap, no conductor sags hot and no salt flashes over, so every result stops making sense
-Where the weight sits: assembly: one row per fault a crew can be sent from, built from two vendors' exports on two clocks and units, SCADA, the control room and the outage system, each fault located from both ends' residual currents against the network on its date and caused from the weather at the line, the strokes, the survey and the conductor's heat; the work is long because every one of 436 faults needs all of it
-Layer 1: relay exports in two formats (UTC and miles; local time, km and kA), two relay clocks drifting until resynchronised (Mesquite Flat in 2024, Caney Bend in 2025), records lost to overwritten buffers, Ponder Creek's electromechanical relays keeping only targets, structures renumbered on Lines 8 and 13 after their 2023 rebuilds, dispatcher-closed restorations in the outage system, operators' cause codes from the weather look, station telemetry gaps, airport units and the solar farm's export on standard time all year; every careful run cleans each the same way and none decides a result
-Not one thing: the strongest single piece is S1 (each fault placed by the split of its residual current between the two ends): a run that nails it still files the wrong grow-in list without S2 and S5, the wrong night list without S4, the wrong tap location without S3 and the wrong wash list without S6, and earns no result from it alone
-One-fact test: the most useful single sentence is "the solar farm's step-up feeds ground current into every fault beyond the tap, by night as well", which rescues R4 alone, 1 of 10 results; the residual-current sentence rescues none alone
-Not semantics: every field, unit and RP-04 clause read correctly (the fault, the year, the causes, the location, the repeat location, the member interruption, the washing rule) still leaves the relays' distances biased, the airport's fog off the line, the roosts unseen, the tap infeed uncorrected and each section's deposit on 31 October unknown, so every hurried result is still wrong
-Not rule application: RP-04 defines what a fault, a repeat location, a member interruption and a due section are, and performs none of the location, cause, infeed or deposit work; once every filed rule is applied, where each fault was, what caused it and each section's salt on 31 October are still left to judge
-Estimand: RP-04 Rev 4 files the fault (one protection sequence on one line, switching and tests excluded), the year (in a November report 2026 runs 1 January to 31 October), the location (the structure nearest, numbered as on today's inventory; a span by both numbers), the nine causes, the member interruption (more than five minutes, to the restoration of supply to the member's substation), the repeat location (three or more faults of one cause on one line within 400 m since 1 January 2022, salt left to washing), the work list (each open repeat location with its fix, and each section due) and due for washing (the 31 October deposit at or above the deposit at which the porcelain has flashed over in fog); the prompt asks for each by type
-No decoy: nothing is written to carry a wrong answer: the relays' distances are what real locators print, the airports' records are the airports', the control room's codes are the operators' own at the time and the outage system's restorations are the dispatchers' closings; none argues a list, and deleting every one leaves each result as hard
-No replay: no result re-derives a published figure; the locations, causes, 2026 member figures and work list exist only in the conformed record
-Pinned: 18 rival methods (fog at a dew point spread of 0.3 or 0.8 C, storms at 2 or 5 strokes or within 6 or 10 km, the conductor at 36 or 44 C, front gusts of 8.5 or 11 m/s, the flashover level at the 5th or 10th percentile, the deposit rate from the nearest test site or linear in distance, soaking rain keeping 35 or 60 per cent, the repeat window at 350 or 450 m) each file the golden's 25-item work list, six perturbations (the deposit rate and the flashover level by 20 per cent, the conductor threshold by 4 C) hold it, and the counts sit inside 1 a year and 2 a cause, the member figures inside 2 per cent
-Run forecast: R2 (method shortcut: the relays' own distances on today's network), R3 and R6 (dismissed own evidence: the roost survey and the bay stations set aside for the airport), R4 (dismissed own evidence: the solar farm's export set aside), R7 (dismissed own evidence: past flashovers taken as today's salt), and R8, R9 and the recommendation (R10) with them; R1 and R5 are expected landed
-Strategy label: own (nearest in the atlas, Quantitative Finance and Trading 5, trade reports conformed into one record per trade, Data Extraction & Conformation, assembly then a quantity the public data hide; none of its chain is used)
-Depth level: 5: six independent stumps, each necessary and none sufficient, the single drops landing on six different wrong work lists (1 to 18 items off the golden's 25) and the reflex route on a seventh (32 items off)
-Lesson: a fault record is built, not read: each instrument computes its own number under its own assumptions (a locator's distance with no resistance and no infeed, an airport's weather, an operator's code), and where a fault was, what caused it and what the crews do next come from the physics joining two ends' records, the conditions at the asset and its maintained state; no build on file teaches fault location from the network behind both ends (skeleton.py: position_on_network_effect untaught; severity none against everything on file)
+Task type: Grid reliability & outage analysis, the client's task type in Energy Systems & Utilities that serves Data
+  Extraction & Conformation here: the 69 kV fault record conformed from the relays, SCADA, the control room, the outage
+  system, the weather and the field records, with each fault's place, cause and member impact, each section's deposit
+  and the work list computed from it
+Domain test: the results are the reliability engineer's own quantities (a fault's cause from what the line saw, a
+  conductor's temperature from its heat balance at each contact, a porcelain section's salt deposit against its
+  flashover level, member interruptions on the five-minute line), and the engineer sends crews to structures with them
+Swap: rewritten for a water utility's main breaks, nothing carries: no insulator flashes when wet, no conductor sags
+  hot onto a circuit below, no salt rides an onshore wind onto porcelain, so every result stops making sense
+Where the weight sits: attribution: each repeat place's cause separated from a rival that shares its signature
+  (salt against a cracked string, a tree against a circuit below), and each section's salt from the wind that brought
+  it after the last reading; the conformed record underneath is heavy and a reflex
+Layer 1: two relay vendors' exports on two clocks and units, records lost to overwritten buffers, electromechanical
+  relays at Ponder Creek keeping targets only, Lines 8 and 13 renumbered, test trips in SCADA, the outage system's
+  late closings, the airports' units, the solar farm's standard time; none decides a result on its own
+Not one thing: J1, J2 and J3 each open a different member through a different record; a run that nails one still has
+  the other two members and their results to earn, and the conformed record, member impact and the forced members to
+  build
+One-fact test: the most useful single sentence is J3's ("each section's deposit carried to 31 October on the onshore
+  wind the test insulators' gains follow, through the southerly blow after the last readings"); it rescues R6 and R7,
+  2 of 10 (agrees with the Effort test's largest hint)
+Not semantics: every field, unit and clause read correctly still files salt at Line 2 structure 63, a grow-in at Line 6
+  57-58 and clean washes on Line 2 sections 1 and 6: what separates them is estimated, not read
+Not rule application: RP-04 files the WHAT (a repeat location, the work list, due on the 31 October deposit at or above
+  the flashover level); which faults are a string's and which a tree's, and what each section holds on 31 October, no
+  filed procedure performs
+Estimand: RP-04 Rev 4 fixes the fault, the location, the nine causes, the member interruption and member-minutes, the
+  repeat location, the work list (with a repair for any other cause) and "due for washing" on the 31 October deposit
+No decoy: nothing is written to carry a wrong answer: the patrols write what a crew saw, the washing log what the crews
+  did, the test insulators what they held; each is true and each is partial
+No replay: no result re-derives a published figure; no stated number is wrong
+Pinned: 34 rivals and six perturbations file the same 30-item list (Pinning list); the shortcuts land 1 to 7 items
+  away on seven distinct wrong lists
+Run forecast: R4 (dismissed own evidence: the low-deposit fog flashovers kept as noise in the level), R5 (stopped at
+  the first story: a contact after a trim read as regrowth), R6 and R7 (method shortcut: a constant rate carried past
+  the last reading), with R2, R8 and the work list falling with them
+Strategy label: a rival cause sharing the signature, told apart by the state the true cause ignores (own; nearest
+  open-ground entries: the named-and-waved assumption, a response measured, the target period no instrument covers)
+Depth level: 5: three independent judgments in three different terms, each opening its own member, the single drops on
+  three distinct wrong lists, no single fix reaching the call
+Lesson: a cause is a process with a state it depends on, so the faults that come when that state says they cannot
+  (salt on freshly washed porcelain, a tree that does not grow, clean porcelain after a blow) belong to something else;
+  no build on file teaches it
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | the 69 kV faults by year: 2022 96, 2023 93, 2024 83, 2025 84, 2026 (January to October) 80; 436 in all | assembly and reconciliation | RP-04's fault and year; the SCADA sequence of events and both relay exports | 1 a year | narrow look at broad data in the quick pass (the control room log's trip rows, 2025 at 90); a careful run conforms both exports to SCADA by reflex (R01, R28, R29, R46) and lands it | - | Ask 1 |
-| R6 | the 2026 faults by cause: lightning 9, bird or other animal 6, salt contamination 16, insulator failure 16, vegetation grown in 14, vegetation from outside the right of way 8, vehicle 5, hardware 2, unknown 4 | exploration and triage | RP-04's nine causes; the strokes, the bay stations, the roost survey, the loading, the patrols | 2 a cause | dismissed own evidence: the roost survey set aside as an environmental file and the airport's codes taken for the line's weather, so the birds read as failing strings (bird 0, insulator 20) | R1 | Ask 2 |
-| R5 | the 2026 member interruptions and member-minutes: 57,024 and 1,227,611, by line (Line 2 16,115 and 179,995; Line 5 11,171 and 172,224; Line 8 10,259 and 354,807; Line 9 1,168 and 27,196; Line 10 14,894 and 199,267; Line 13 3,417 and 294,124) | decomposition and attribution | RP-04's member interruption; SCADA trips, recloses and transfers; members by feeder | 2 per cent | unfinished chain in the quick pass (the outage system's dispatcher-closed restorations, 2,350,200 member-minutes); a careful run rebuilds the restorations from SCADA by reflex (R46) and lands it | R1 | Ask 3 |
-| R2 | the vegetation repeat locations: spans to clear at Line 10 47-48 and 88-89, Line 14 63-64, Line 6 57-58; hazard trees at Line 11 118-120 and Line 13 103-107 | missingness and measurement | RP-04's location and repeat location; both ends' residual currents; the 2022 and 2025 studies' line-out sources with the register's 14 March 2024; the hourly loading and weather | a structure within 2, a span within 1 | method shortcut: the relays' own distances (both ends averaged) taken as the location though they assume no fault resistance and no infeed; dismissed own evidence on today's network for 2022 and 2023; stopped at the first story that a summer afternoon fault with no stroke is a tree: spans at Line 10 35-36, Line 13 90-91 and Line 6 48-49 and a stand at Line 13 93-96 | R1 | Component 1 |
-| R3 | the night repeat locations: perch guards at Line 6 79, Line 7 31 and 52, Line 12 104, Line 14 117, Line 16 23; strings to replace at Line 2 63, Line 5 88, Line 15 57 | investigation loops | RP-04's causes and repeat location; the bay stations' dew point, the roost survey's structures, rain and hour | a structure within 2 | dismissed own evidence: the roost survey and the bay stations set aside for the airport's codes; stopped at the first story that a repeated night fault on porcelain is a failing string: strings at 11 places and no guards | R1 | Component 2 |
-| R4 | the tap line's repeat location: Line 9 structure 137, 3.2 km past the solar tap | missingness and measurement | the solar farm's export and the 2025 study's step-up data; Shell Ridge's record | a structure within 2 | dismissed own evidence: the solar farm's export set aside as a generator's log on another clock with no structure numbers, so Shell Ridge's distance stands at structure 148 | R1 | Component 3 |
-| R7 | the washing sections due before the fog season: Line 2 sections 1 to 5 and 7, Line 3 sections 4, 5 and 7 | forecasting | RP-04's washing rule; the test insulators, the washing log, daily rain and the fog flashovers | exact (every level and rate rival files the same nine) | dismissed own evidence: every section that ever flashed over taken as due, so Line 1 section 3 and Line 2 section 6, washed in October, go on and Line 3 sections 4, 5 and 7 and Line 2 section 7 drop off | independent: the test insulators, the washing log and daily rain (its level also reads R6's fog flashovers) | Component 4 |
-| R8 | every open repeat location with its cause and fix (the 16 of R2, R3 and R4) and the seven fixed after their last fault | synthesis | RP-04's repeat location and work list; the maintenance and vegetation work orders | a structure within 2, a span within 1 | dismissed own evidence and method shortcut as at R2 to R4 | R2, R3, R4 | Ask 4 |
-| R9 | the memo's work list: each open repeat location's fix and the nine sections washed before 1 December | synthesis | RP-04's work list | exact set (every rival files the same 25 items) | dismissed own evidence and method shortcut as at R2, R3, R4 and R7 | R2, R3, R4, R7 | Ask 5 |
-| R10 | the work list: 6 perch guards, 4 strings, 9 sections washed, 2 hazard-tree stands, 4 spans cleared | synthesis | RP-04's work list | exact set | dismissed own evidence and method shortcut as at R2, R3, R4 and R7 | R2, R3, R4, R7 | Recommendation |
+| R1 | the 69 kV faults by year: 2022 103, 2023 104, 2024 78, 2025 85, 2026 (January to October) 74; 444 in all | assembly and reconciliation | RP-04's fault and year; the SCADA sequence of events and both relay exports | 1 a year | narrow look at broad data in the quick pass (the control room log's own rows); a careful run conforms both exports to SCADA by reflex (R01, R28, R29, R46, R81) and lands it | - | Ask 1 |
+| R2 | the 2026 faults by cause: lightning 11, bird or other animal 6, salt contamination 8, insulator failure 17, vegetation grown in 11, vegetation from outside the right of way 8, vehicle 4, equipment or hardware 4, unknown 5 | exploration and triage | RP-04's nine causes; the strokes, the stations, the survey, the loading, the deposit series, the trims | 2 a cause (3 for equipment or hardware and for other or unknown) | dismissed own evidence: the Gulf string's fog flashovers booked as salt (salt 15, insulator 9) and the Line 6 contacts as grow-ins (grown in 14, hardware 2) | R1 | Ask 2 |
+| R3 | the 2026 member interruptions and member-minutes: 52,306 and 1,502,951, by line | decomposition and attribution | RP-04's member interruption; SCADA trips, recloses and transfers; members by feeder | 2 per cent | unfinished chain in the quick pass (the outage system's dispatcher-closed times); a careful run rebuilds them from SCADA by reflex (R46) and lands it | R1 | Ask 3 |
+| R4 | the failing string on the Gulf lines: Line 2 structure 63, 11 flashovers since 25 September 2025, 5 below 0.6 of the median deposit at the Gulf's fog flashovers (lowest 0.008 mg/cm2) after the five washes of Line 2 section 4 | investigation loops | RP-04's insulator failure and repeat location; the washing log; the deposit series | a structure within 2 | dismissed own evidence: every fog-night flashover on the Gulf porcelain booked as salt (salt is no repeat location), the low ones kept as noise in the level | R1 | Component 1 |
+| R5 | the summer contact place that is not a tree: Line 6 structures 57-58, its conductor temperature at contact 41 to 43 C since the 9 August 2022 trim (-0.3 C a year) where every grow-in's falls 1.7 to 2.9 C a year; the clearance to the 12.47 kV circuit below restored | investigation loops | RP-04's equipment or hardware and its repair; the loading, the station weather, the vegetation work orders, the structure inventory's underbuild | a span within 1 | stopped at the first story: the patrol's live oak and the confirmed grow-ins' signature (hot, still, no stroke) copied, the contacts after the trim read as regrowth: clear the span | R1 | Component 2 |
+| R6 | the sections washed in October before the blow that are due again: Line 2 sections 1 and 6 (0.103 and 0.111 mg/cm2 on 31 October, 1.95 and 2.08 times the level) | forecasting | RP-04's due for washing; the test insulators, the station winds, the washing log and rain | due in every family variant (1.14 times the level or more) | method shortcut: the deposit at the test insulators' average rate (0.6 times the level), or the latest test reading, carried past the last reading | independent: the test insulators, the station winds, the washing log and rain | Component 3 |
+| R7 | each washing section's salt deposit on 31 October 2026, against the flashover level of 0.053 mg/cm2 | missingness and measurement | RP-04's deposit on the section's porcelain on 31 October; the same records | the golden family's range per section (stated in the answer block) | method shortcut as at R6: the average-rate deposits fall outside the family's band | independent: as R6 | Ask 5 |
+| R8 | every open repeat location with its cause and fix (17) and the seven fixed after their last fault | synthesis | RP-04's repeat location and work list; the maintenance and vegetation work orders | a structure within 2, a span within 1 | dismissed own evidence and first story as at R4 and R5 | R4, R5 | Ask 4 |
+| R9 | the memo's work list: 6 perch guards, 4 strings, 13 sections washed before 1 December, 2 hazard-tree stands, 4 spans cleared and the clearance restored at Line 6 57-58 | synthesis | RP-04's work list | exact set | dismissed own evidence, stopped at the first story and method shortcut as at R4, R5 and R6 | R4, R5, R6 | Ask 6 |
+| R10 | the work list | synthesis | RP-04's work list | exact set | dismissed own evidence, stopped at the first story and method shortcut as at R4, R5 and R6 | R4, R5, R6 | Recommendation |
 
-Carry-forward: R7 is graded on inputs of its own (the test insulators, the washing log and rain; only its flashover level reads R6's fog faults, and that level moved 20 per cent leaves the same nine); R4 stands on Line 9's records alone; R2 and R3 fall only with their own stumps, never with each other; R8, R9 and the recommendation (R10) fall with whichever of R2, R3, R4 and R7 a run misses, and R1 and R5 stand on the conformed record a careful run builds by reflex.
+Carry-forward: R6 and R7 stand on the test insulators, the winds, the washing log and rain alone; R4 and R5 each stand
+on their own records and never on each other; R2 and R8 fall with R4 and R5, R9 and the recommendation with R4, R5
+and R6; R1 and R3 stand on the conformed record a careful run builds by reflex.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| Fault resistance and load flow biasing each single-ended relay distance (tree contacts at 14 to 38 ohms, insulator arcs under 1) | constructed by the physics: every fault solved on its sequence networks with its cause's resistance | no: every fault on every line, largest at the tree contacts | modelling: both ends' residual currents against the zero-sequence network | modelling | keep |
-| Inland's autotransformer replaced on 14 March 2024, a stronger ground source behind Inland | constructed and filed (the substation register, both protection studies, the 2024 settings) | no: every fault on an Inland line before the date | a targeted query: the register's dates beside the studies' | routine once seen, inside S1's modelling | keep |
-| The solar farm's grounded-wye step-up and neutral reactor feeding every fault beyond the tap | constructed by the physics and filed (the register and the 2025 study) | no: every Line 9 fault beyond the tap since February 2023, day and night | modelling: the infeed ratio from two exports on two clocks | modelling | keep |
-| Bay fog the airport's codes miss and report; streamers at roosts; cracked strings in light rain | constructed by the weather and bird processes | no: every coastal night fault and every surveyed roost | modelling: the stations' dew point, the survey's structures, rain and hour | modelling | keep |
-| Conductor heat on still afternoons for grow-ins; storms and fronts for fall-ins | constructed by the load and weather processes | no: every summer afternoon fault on every line | modelling: a heat balance per fault hour | modelling | keep |
-| Each section's salt carried from its last wash or soaking rain | constructed by the deposit process | no: every coastal section | modelling: the rate fitted on the test insulators, carried through the washing log and rain | modelling | keep |
+| A cracked string flashes whenever it is wet; on the Gulf porcelain the salt film makes fog the dangerous wetting | constructed by the insulator process: every cracked string on the system flashes in fog and light rain, the inland ones mostly in rain | no: every cracked string, the replaced inland ones as well; the Gulf one is where fog dominates | modelling: the deposit carried to each flashover night against the salt's own level | modelling | keep |
+| A conductor sagged hot reaches whatever is below it: trees that grow, and at one span the 12.47 kV circuit on the same poles | constructed by the thermal process: every summer contact on every line comes from the conductor's temperature against a clearance | no: every grow-in span and the underbuild span; underbuild runs along eight lines | modelling: the conductor temperature at each contact, summer by summer, against the trims | modelling | keep |
+| Salt arrives on the onshore wind, most on the blowy days ahead of fronts | constructed by the weather and deposit processes: every day's deposit on every section and test insulator follows the onshore wind | no: every section and every test site since 2022; the late October blow reaches all the coast | modelling: the test insulators' interval gains against the station winds, carried day by day | modelling | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 the 69 kV faults by year, January 2022 to October 2026 | Partly | Right | Right |
-| R6 the 2026 faults by cause | Missed | Partly | Right |
-| R5 the 2026 member interruptions, member-minutes and momentary member events from 69 kV faults | Missed | Right | Right |
-| R3 the night repeat locations: roost structures for perch guards and failing strings | Missed | Missed | Right |
-| R4 the tap line's repeat location | Missed | Missed | Right |
-| R2 the vegetation repeat locations: grow-in spans to clear and hazard-tree stands | Missed | Missed | Right |
-| R7 the washing sections due before the fog season | Missed | Missed | Right |
-| R8 every open repeat location with its cause and fix | Missed | Missed | Right |
-| R9 the memo's work list: each open repeat location's fix and the sections washed before 1 December | Missed | Missed | Right |
-| R10 the work list | Missed | Missed | Right |
-| Roughly | 0.5 of 10 | 2.5 of 10 | 10 of 10 |
+| R1 the 69 kV faults by year, January 2022 to October 2026 | Missed | Right | Right |
+| R2 the 2026 faults by cause | Missed | Partly | Right |
+| R3 the 2026 member interruptions, member-minutes and momentary member events from 69 kV faults | Missed | Right | Right |
+| R4 the failing string on the Gulf lines: Line 2 structure 63 | Missed | Missed | Right |
+| R5 the summer contact place that is not a tree: the clearance to restore at Line 6 structures 57-58 | Missed | Missed | Right |
+| R6 the sections washed in October before the blow that are due again: Line 2 sections 1 and 6 | Missed | Missed | Right |
+| R7 each washing section's salt deposit on 31 October 2026 | Missed | Missed | Right |
+| R8 every open repeat location with its cause and fix | Missed | Partly | Right |
+| R9 the memo's work list | Missed | Partly | Right |
+| R10 the work list | Missed | Partly | Right |
+| Roughly | 0 of 10 | 4 of 10 | 10 of 10 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: the solar farm's ground infeed taken out of Shell Ridge's distance; rescues 1 of 10 results
-Pair estimate: 34.5
+Largest single hint: each section's deposit carried to 31 October on the onshore wind the test insulators' gains follow, through the southerly blow after the last readings; rescues 2 of 10 results
+Pair estimate: 44.3
 
 ## Stump factorial
 
-Reflex route: every move a run makes unprompted set right (one fault per protection sequence across both terminals' exports, the SCADA sequence of events and the control room log, vendor B's local time and the drifting clocks set on SCADA, R01, R28, R29, R46; lightning matched to strokes on the true time, R32; member impact from the sequence of events and members by feeder, R46; the patrols read and the work already done applied, R02), every stump hurried. It files the fault counts and the 2026 member figures right and misses the call: the relays' own distances on today's network place the grow-in spans at Line 10 35-36 and Line 6 48-49 and add Line 13 90-91, the airport's codes with no survey turn the roosts into failing strings (strings at 11 places, no guards), Shell Ridge's distance puts the tap line's string at structure 148, and every section that ever flashed over is washed (Line 1 section 3 and Line 2 sections 1 to 6, two of them washed in October). This route is the careful but hurried pass, 32 items off the golden's 25.
+Reflex route: every move a run makes unprompted set right (one fault per protection sequence across both exports, the
+SCADA sequence and the control room log, the clocks set on SCADA, R01, R28, R29, R46; each fault located from both
+ends against its date's network with the solar infeed taken out, R81; strokes on the true time, R32; each cause's
+signature read off the confirmed cases with the roost survey and the stations' fog, R83; member impact from SCADA,
+R46; the deposit built from each wash with rain cleaning, R82; the work done applied, R02), every stump hurried. It
+files the fault counts and the member impact right and misses the call: Line 2 structure 63's flashovers go to salt
+(no string), Line 6 structures 57-58 are cleared as a grow-in, and Line 2 sections 1 and 6 stay clean at 0.6 times the
+level. This route is the careful but hurried pass, 5 items off the golden's 30.
 
 | Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
 |---|---|---|---|---|---|---|
-| S1 each fault located by the split of its residual current between the two ends against the line-out zero-sequence sources | stump | the relays' own distances, both ends averaged | L22 | spans at Line 10 35-36 and Line 6 48-49, Line 13's stand split into 84-91 and 93-96, Line 11's stand, Line 14's span and Line 14 117's guards lost: 12 items off, R2, R3 and R6 move | the clearing list still carries Line 13 90-91 (S5) and misses Line 10 47-48 (S2), the night list stays strings: no result rescued | no (a two-port zero-sequence solution per fault) |
-| S2 faults before 14 March 2024 read against the 2022 study | stump | the 2025 study for every fault | N09 | Line 10 47-48 loses its 2022 and 2023 contacts and drops off: 1 item, R2 moves | nothing else fixed: no result rescued | yes (the date-matched study), but invisible in any one table and only beside S1 |
-| S3 the solar farm's ground infeed corrected out of Shell Ridge's distance with the farm's own residual current | stump | Shell Ridge's distance as recorded, the farm's export set aside | L38, N27 | the tap line's string moves from structure 137 to 148: 2 items, R4 moves | R4 only (1 of 10) | no (the infeed ratio per fault from two exports on two clocks) |
-| S4 night coastal faults split three ways on the bay stations' dew point, the roost survey and the light-rain signature | stump | the airport's codes as the fog, the survey set aside | N26, L38, L26 | the six roosts and three other places as strings, no guards, Line 1 sections 2 and 3 and Line 2 section 6 washed: 18 items off, R3, R6 and R7 move | R3 only on the night faults' cause, still placed by the relays: no result rescued | no |
-| S5 grow-in contacts told by the conductor's temperature on still afternoons, storms and fronts set apart | stump | every summer afternoon fault with no stroke | L26, L04 | Line 13's pine stand also listed as a span at 104-105: 1 item, R2 and R6 move | with S1 hurried the spans stay misplaced: no result rescued | no (a conductor heat balance per fault hour) |
-| S6 each coastal section's deposit carried from its last wash or soaking rain at its own rate against the flashover level | stump | every section with past flashovers | N02, N13 | Line 2 section 6 (washed 21 October) on, Line 3 sections 4 and 5 off: 3 items, R7 moves | with S4 hurried the flashover level is learned from mixed faults: R7 still wrong | no |
+| J1 the failing string on the Gulf line told from the salt by its flashovers at deposits the salt has never flashed at | stump | every fog-night flashover on the Gulf porcelain booked as salt, the low ones noise in the level | L48, L26 | no string at Line 2 structure 63: 1 item, R2, R4 and R8 move | the clearing at Line 6 and the two sections stay wrong: R4 only (1 of 10) | no (a deposit series carried night by night from the washing log, then each place's flashovers against it) |
+| J2 a summer contact place read on its own contact temperatures against its trims: the conductor reaching the circuit under it, not a tree | stump | the patrol's oak and the confirmed grow-ins' signature copied, the contacts after the trim read as regrowth | L47, L26 | Line 6 structures 57-58 cleared instead of re-sagged: 2 items, R2, R5 and R8 move | R5 only (1 of 10) | no (a heat balance at every contact hour, then each place's trajectory against its trims) |
+| J3 each section's deposit carried to 31 October on the onshore wind the test insulators' gains follow, through the southerly blow after the last readings | stump | the test insulators' average rate (or the latest reading) carried past the last reading | L15, N13 | Line 2 sections 1 and 6 left clean: 2 items, R6 and R7 move | R6 and R7 (2 of 10) | no (a wind-driven deposit fitted on the readings, carried day by day) |
 | X1 one fault per protection sequence, clocks set on SCADA | reflex | - | R01, R28, R29, R46 | the fault count moves by several a year | - | - |
 | X2 lightning matched to strokes on the true time | reflex | - | R32 | lightning counted under other causes | - | - |
 | X3 member impact from the sequence of events and members by feeder | reflex | - | R46 | the 2026 member-minutes from the dispatchers' closing times | - | - |
-| X4 the work already done applied (guards fitted, strings replaced, spans trimmed after a contact) | reflex | - | R02 | fixed places stay on the list | - | - |
+| X4 the work already done applied (guards, replaced strings, trims) | reflex | - | R02 | fixed places stay on the list | - | - |
+| X5 each fault located from both ends against the date's network, the solar infeed taken out | reflex | - | R81 | spans and the tap string misplaced | - | - |
+| X6 a deposit build-up with rain cleaning carried from each section's last wash | reflex | - | R82 | sections washed in October and August misread | - | - |
+| X7 each cause's signature read off the confirmed cases (strokes, roosts, the stations' fog, light rain, peak load) | reflex | - | R83 | birds as strings, trees as unknown | - | - |
 
-Level: 5 (six stumps, each necessary; none reaches the call alone; the single drops land on six different wrong work lists)
+Level: 5 (three necessary stumps, none sufficient, the single drops on three distinct wrong lists)
+
+## Open members
+
+The call has 30 members. 27 are forced (every route files them right: the six perch guards by the survey and the
+roost-season hours, the three inland and tap strings by light rain and the solar correction, the two stands, the four
+grow-in spans, the eleven other washing sections, the seven fixed places). Three are open, each by its own stump.
+
+| Member | Golden margin | Family spread | Reflex route | Direct route | Opened by |
+|---|---|---|---|---|---|
+| replace the string at Line 2 structure 63 | 5 flashovers below 0.6 of the median salt deposit where 3 flag it; no other Gulf place has 2 | flags it under every cut from 0.5 to 0.7 and with four required | wrong: all 11 flashovers booked as salt, no repeat location | wrong: the patrols' salt film and flash marks, the inland strings' light-rain signature, no work order | J1 |
+| restore the clearance at Line 6 structures 57-58 (not clear the span) | contact temperature -0.3 C a year since the trim against a cut of -0.8; every grow-in -1.7 to -2.9 | flags it alone under every cut from -0.6 to -1.0 and with five contacts required | wrong: cleared as a grow-in | wrong: the patrol's live oak, the confirmed grow-ins' signature, the trim taken as vegetation work | J2 |
+| wash Line 2 sections 1 and 6 | 1.95 and 2.08 times the level | 1.14 times the level at the lowest of 34 variants (a linear wind) | wrong: 0.6 times the level at the average rate | wrong for section 6 (washed after its site's last reading, taken as clean); section 1 lands due only because the never-washed test string's own reading is read as the section | J3 |
+| the 27 other members | 1.9 times the level or 0.24 times it at the nearest washing section; the repeat places by 3 or more faults | none move | right | right | forced |
+
+Direct route: for each member, the pack's most direct evidence read at face value, run in the generator as "the direct
+route" (passes.py, effort.json `direct_route`): the patrols' findings counted as causes (salt film and flash marks at
+Line 2 structure 63, a live oak under Line 6 structures 57-58), the confirmed cases' signatures copied onto the
+population (the replaced strings flash in light rain, the confirmed grow-ins on hot still afternoons) and each
+section's latest test reading read raw with the washing log (washed since the reading, clean). It files the string as
+salt, clears the Line 6 span and leaves Line 2 section 6 clean: every open member wrong, because the patrols see what
+is beside a fault, the confirmed strings are the inland ones and the test insulators' last reading came before the
+blow.
 
 ## Data provenance
 
 Source: generated by the generator (task13/generator, seeds 51301 to 51303) from a simulated cooperative: a 69 kV network of 12 substations, 16 lines and 1,868 structures with its weather, loads, fault processes, protection, operations and field work, each written into its own system's export
-Behaves like the real thing: single-line-to-ground faults solved on sequence networks with each cause's fault resistance, so single-ended reactance distances run long or short with resistance and infeed as published single-ended locator studies show (IEEE C37.114); conductor temperature from an IEEE 738-style heat balance; equivalent salt deposit density building with nearness to the Gulf, partly kept by soaking rain and reset by washing, flashing over in fog above a level as contamination studies describe; streamer faults at roosts before dawn in the roost season; member interruptions on IEEE 1366's five-minute line
-Genuine patterns: (1) summer convective lightning and grow-ins against the winter roost and fog seasons (2) the deposit gradient from the shore inland (3) daily load and solar cycles carried into conductor temperature, load growth across 2022 to 2026 and the 2026 drought after June
-Problems by process: two relay vendors' exports (UTC and miles; local time, km and kA); relay clocks drifting until resynchronised; records lost to overwritten buffers; electromechanical relays at Ponder Creek keeping only targets; structures renumbered after rebuilds; outage-system restorations closed late by dispatchers; operators' cause codes from the weather look; station telemetry gaps; airport units; the solar farm's export on standard time all year
-Breadth: 28 files, two of them unused; 436 faults on 16 lines; 1,868 structures; 2,070 relay records; 42,779 SCADA events; 62,856 strokes; 184,944 station-hours; 42,332 hourly loading rows; 12,617 outage-system rows; which record sees which part of a fault is the work
+Behaves like the real thing: single-line-to-ground faults solved on sequence networks with each cause's fault resistance; conductor temperature from an IEEE 738-style heat balance at the weather the nearest station records; equivalent salt deposit density building with nearness to the Gulf and the onshore wind (sea salt rises steeply with the wind, so the deposit follows its square), halved by soaking rain and reset by washing, flashing over in fog above a level; cracked porcelain flashing over when wet; streamer faults at roosts before dawn in the roost season; member interruptions on IEEE 1366's five-minute line
+Genuine patterns: (1) summer convective lightning and contacts against the winter roost and fog seasons (2) the deposit gradient from the shore inland and its rise on the sea breeze and the return flow ahead of fronts (3) daily load and solar cycles carried into conductor temperature, load growth across 2022 to 2026 and the 2026 drought after June
+Problems by process: two relay vendors' exports (UTC and miles; local time, km and kA); relay clocks drifting until resynchronised; records lost to overwritten buffers; electromechanical relays at Ponder Creek keeping only targets; structures renumbered after rebuilds; outage-system restorations closed late by dispatchers; operators' cause codes from the weather look; patrols that record what they see beside a fault; station telemetry gaps; airport units; the solar farm's export on standard time all year
+Breadth: 28 files, two of them unused; 444 faults on 16 lines; 1,868 structures; about 2,100 relay records; 42,808 SCADA events; 62,856 strokes; 184,944 station-hours; 42,332 hourly loading rows; 12,688 outage-system rows; which record sees which part of a fault is the work
 
 ## Template check
 
-Chain signature: assembly and reconciliation, missingness and measurement, investigation loops, missingness and measurement, decomposition and attribution, exploration and triage, forecasting, synthesis (the card's)
-Question form: what (what goes on the work list), with three deliverables asked by type
-Nearest build: task6 v7 shares the flagged-set shape (precut's nearest-chain WARN), but its chain runs from a trace store's keep rate through uncertainty to attribution and none of its steps carries here; task9 v3 by skeleton (a fab's sort-yield shortfall split across tools, ranked causes with their contributions): one shared lesson, a 0.50 file-role overlap, severity none; task22's feeder energy balance (energy and ETL, the pairing registered with --force at the author's direction) sat on measurement with a reconciled balance as its answer, another chain and shape
+Chain signature: assembly and reconciliation, exploration and triage, decomposition and attribution, investigation loops, investigation loops, forecasting, missingness and measurement, synthesis (the card's)
+Question form: what (what goes on the 69 kV work list), with three deliverables asked by type
+Precut's nearest-chain WARN: task22, task5 and task8 share the reconciled-table shape (every ETL deliverable set is a reconciled table with findings); their chains (a district gas balance on one real-gas basis, a census nowcast, a test-equating chain) and weights (triage, a hard-to-measure quantity, measurement) carry none of these steps: no flashover against a deposit, no contact against a trim, no salt on the wind
+Nearest build: architecture 5 of this slot (the same work list and file roles, at the reviewer's request): its deciding lessons (position on a network, exposure seen only in a linked record) are now reflexes here, and none of its six stumps carries; task22 (energy and ETL) sat on a district gas balance with another chain and shape
 
 ## Frontier check
 
-Precedents: R2 L22 (method shortcut), N09 and L04 (dismissed own evidence), L26 (stopped at the first story); R3 N26 and L38 (dismissed own evidence), L26 (first story); R4 L38 and N27 (dismissed own evidence); R6 N26 and L38; R7 N02 and N13 (dismissed own evidence); R8 L22, N09, N26, L38, N27, L26; R9 and the recommendation L22, N26, N02; R1 and R5 are Right, earned by the runs' reflexes (the hygiene battery and the SCADA rebuild)
-Shallow path checks: R2's hurried clusters repeat tightly because each relay's bias is the same at every contact, so a consistency check passes; the residual split from both exports against the studies refutes it, and the patrols sent to the relays' distances found nothing; R3's and R6's hurried labels agree with the control room's contamination codes, both read off the airport; the stations' dew point at the line, the survey's structures and the pre-dawn November to March timing in any weather refute them; R4's Shell Ridge distances agree with one another at structure 148; the farm's own residual current (another export, another clock) with the step-up's data in the 2025 study refutes it at 137; R7's history list reproduces every past fog flashover by construction; the washing log (two of its sections washed in October) and the deposit carried to 31 October from the test insulators' rate and the rain refute it
-Assumption made false: a run lists "the relay's fault location is accurate", "the airport's weather stands for the lines", "the network has not changed", "the generator's log is unrelated" and "past flashovers mark where the salt is" and waves them through; here the locators assume no fault resistance and no infeed while tree contacts burn at 14 to 38 ohms, the bay fog misses the airport, Inland's ground source changed in March 2024, the farm's step-up feeds ground current at all hours, and a section washed in October holds little salt, each tested from a second file at another grain (the other end's export and the studies, the stations and survey, the register, the farm's export, the washing log and test insulators)
-Forcing: a set decision of 25 items; the 18 golden-family rivals each file the identical 25 (nearest distance 0), six input perturbations (the deposit rate and the flashover level by 20 per cent, the conductor threshold by 4 C) each file the identical 25, and the shortcuts land 1 to 32 items away on seven distinct wrong lists (S2 or S5 hurried 1, S3 2, S6 3, S1 12, S4 18, the reflex route 32)
-Noun swap: the nearest by skeleton.py check is task9 v3 (a fab's sort-yield shortfall by tool): its nouns swapped in carry no decision form (a reconciled record against a ranked bridge), one lesson (position on a network), none of the mechanisms and only generic detections and answer pattern; severity none, and none against the client's corpus or this slot's lineage
-Closed strategies: the call turns on position_on_network_effect (each fault's place from the zero-sequence network behind both ends), which is not on the client's closed page; the nearest closed cards are instrument change (no instrument changed: the locators compute as they always did, and their bias is physics on every fault) and dependent capture (the relays capture every fault; their number is biased, not their capture); the chain keeps no closed lesson as a supporting step (skeleton.py closed: 0 of 4 lessons closed)
+Precedents: R2 L48 and L47 (dismissed own evidence); R4 L48 (dismissed own evidence), L26 (first story); R5 L47 and L26 (first story); R6 and R7 L15 (method shortcut), N13 (the latest state taken as the end state); R8, R9 and the recommendation L48, L47, L15; R1 and R3 are Right, earned by the runs' reflexes (the hygiene battery, the SCADA rebuild)
+Shallow path checks: R4's hurried labels agree with the patrols (salt film and flash marks) and with the stations' fog, and its level from all fog flashovers still back-tests on the sections that flashed; only the deposit carried night by night from the washing log refutes it (11 flashovers after five washes, 5 below 0.6 of the median salt deposit, no other Gulf structure flashing then); R5's hurried label agrees with the first patrol, the confirmed grow-ins' signature and the rising count of contacts each summer; only the contact temperature against the trim refutes it (flat for four summers where every grow-in falls 1.7 to 2.9 C a year); R6's constant rate back-tests on the monthly readings (its error is the readings' scatter) and the latest reading agrees with it; only the station winds over the intervals (a constant rate leaves 59 per cent more unexplained) and the days after the last reading refute it
+Assumption made false: a run lists "fog-night flashovers on the coast are salt contamination", "the patrol's finding is the cause", "the deposit builds at the test insulators' rate" and "a section washed in October is clean for the fog season" and waves them through; here a cracked string flashes in fog at any deposit, the patrol saw only the oak beside a contact with the circuit below, the deposit rides the onshore wind and the late October blow came after the last readings, each tested from a record at another grain (the washing log against each flashover night, the loading and station weather against the trims, the station winds against the readings' intervals)
+Forcing: a set decision of 30 items; the 34 golden-family rivals and six perturbations file the identical 30 (Line 2 sections 1 and 6 at 1.14 times the level or more under the farthest rival, a linear wind), and the shortcuts land 1 to 7 items away on seven distinct wrong lists (J1 hurried 1, J2 hurried 2, J3 hurried 2, the reflex route 5, the direct route 4, the latest reading 1, every flashed section 7, a constant rate on the lowest deposit 2)
+Noun swap: the nearest by skeleton.py check is this slot's architecture 5 (its nouns are the same): the decision form and file roles carry by the reviewer's request; the lessons (a rival process's signature told by the state it ignores, a response measured beyond the last reading, a stock carried through a period no instrument covers), the detections and the moves do not; against task22, task25 and the client's library the nearest carry one generic move
+Closed strategies: the call turns on a rival cause sharing the signature, told apart by the state the true cause depends on (the deposit, the clearance's growth) and on the wind carried beyond the last reading; none is on the client's closed page: the nearest closed cards are "the instrument changed" (no instrument changed: the patrols, the test insulators and the stations read as they always did) and "a co-occurring change" (the blow is the season's weather on every section, not a change beside a treatment); the chain keeps no closed lesson as a supporting step
 
 ## Semantic fork table
 
@@ -164,79 +233,118 @@ Closed strategies: the call turns on position_on_network_effect (each fault's pl
 | SF1 | a fault | each breaker trip; each protection sequence on one line | one protection sequence (trips, reclosing, lockout within 60 s) on one line | RP-04 "Fault": the sequence counts once; switching, testing and maintenance operations are not faults; a fault another line's relay sees without tripping is not that line's |
 | SF2 | since January 2022, each year, 2026 | calendar years; 2026 to date of the files | 2022 to 2025 whole, 2026 1 January to 31 October | RP-04 "Year"; no fault crosses a year boundary between UTC and Central |
 | SF3 | where it was | the relay's distance; the structure | the structure nearest the fault, numbered as today; a span by both numbers | RP-04 "Fault location" |
-| SF4 | what caused it | the operators' codes; the outage system's codes; the procedure's categories | the nine causes | RP-04 "Cause" |
+| SF4 | what caused it | the operators' codes; the outage system's codes; the patrols' findings; the procedure's categories | the nine causes, each fault's from what the line saw | RP-04 "Cause"; only 2026's are graded |
 | SF5 | repeat location | any two faults near each other; three of one cause within 400 m | three or more of one cause on one line within a run of 400 m or less since 1 January 2022, salt left to washing | RP-04 "Repeat location"; the 350 m and 450 m windows file the same list (same call) |
-| SF6 | fixed | any fix ever; a fix after the last fault | a fix of that cause after the location's last fault | RP-04 "Work list": "whose cause has not been fixed since its last fault" |
+| SF6 | fixed | any fix ever; a fix after the last fault | a fix of that cause after the location's last fault; a trim is no fix for a conductor reaching a circuit | RP-04 "Work list": "whose cause has not been fixed since its last fault" |
 | SF7 | member interruption | any outage; more than five minutes | more than five minutes; five or less is momentary | RP-04 "Member interruption"; no restoration falls between 21 seconds and 6 minutes |
 | SF8 | member-minutes | to the dispatcher's closing; to supply restored at the member's substation | to the restoration of supply to the member's substation | RP-04 "Member interruption" |
 | SF9 | by line | the line serving the members; the faulted line | the faulted line, which is the line serving its tap's members at the time | same call |
-| SF10 | the work list | the repeat locations; with the washing | each open repeat location with its fix and each section due for washing | RP-04 "Work list" |
-| SF11 | due for washing | sections with past flashovers; the latest test reading; the section's deposit on 31 October | the section's deposit on 31 October at or above the flashover deposit | RP-04 "Due for washing before the fog season": the deposit is on the section's porcelain on 31 October, and the test insulators are never washed |
-| SF12 | the deposit at which the porcelain has flashed over | the lowest at a past fog flashover; the 5th or 10th percentile | the lowest at a past fog flashover | same call (all three file the same nine sections) |
+| SF10 | the work list | the repeat locations; with the washing | each open repeat location with its fix (a repair for any cause outside the four named) and each section due for washing | RP-04 "Work list", Rev 4 as filed with the clause "for any other cause, the repair that removes it" |
+| SF11 | due for washing | sections with past flashovers; the latest test reading; the section's deposit on 31 October | the section's deposit on 31 October at or above the flashover deposit | RP-04 "Due for washing before the fog season": the deposit is on the section's porcelain on 31 October; the test insulators are never washed; the latest reading predates the blow |
+| SF12 | the deposit at which the porcelain has flashed over | the lowest at a past salt flashover; the 5th, 10th or 20th percentile | the 10th percentile of the deposits at the salt flashovers | same call (all four file the same 13 sections; the level 0.028 to 0.064) |
 | SF13 | this winter and before summer 2027 | the order of the work; the list | the list; washing before 1 December, the fog season's start | RP-04 "The fog season runs from 1 December to 31 March"; no other timing is graded |
 | SF14 | the 69 kV system | the lines; the lines and taps | the 16 lines in the line register, the solar tap's spur part of Line 9 | the line register's Lines and Solar tap sheets (same call) |
+| SF15 | the cause of a contact with the circuit under a span | other or unknown; equipment or hardware other than insulators | equipment or hardware other than insulators: the 69 kV conductor's own clearance | RP-04's causes; the answer block holds those two 2026 cells within 3, which covers the three Line 6 contacts read either way, and the repair ("for any other cause, the repair that removes it") is the same |
+| SF16 | a salt flashover against a cracked string's | every fog-night flashover on the Gulf porcelain; the place's own deposit history | a place whose fog flashovers come three times or more below 0.6 of the median salt deposit is a cracked string, its wet flashovers from the first such or its first in light rain onward | same call: cuts 0.5 to 0.7 and four required flag the same place; the salt never flashes below its level in the record |
+
+## Pinning list
+
+| Constant | Golden value | Home |
+|---|---|---|
+| the share of salt that comes whatever the wind | 0.28, fitted across the test sites | esdd_monitoring_2022-2026.xlsx against substation_weather_stations_2023-2026.csv; measured spread 0 to 0.5, the same list |
+| the wind's power in the deposit | 2 (the square of the onshore component) | esdd_monitoring_2022-2026.xlsx (power 1 fits 6 per cent worse, 3 and 4 alike); measured spread 1 to 3, the same list |
+| the bearing the Gulf's wind blows from | 140 degrees | the shore's normal on structure_inventory_69kv_2026.csv's coordinates; measured spread 125 to 155, the same list |
+| a soaking rain's keep | 0.45, from readings either side of one soaking day | esdd_monitoring_2022-2026.xlsx; measured spread 0.35 to 0.6, the same list |
+| the rate against distance from the Gulf | an exponential with a floor, fitted on the eight sites | esdd_monitoring_2022-2026.xlsx Sites sheet; measured spread over the nearest site and two log-linear fits, the same list |
+| the flashover level | 10th percentile of the deposits at the salt flashovers | the fault table's salt flashovers on the deposit series from insulator_washing_log_2022-2026.xlsx; measured spread 0.028 to 0.064 (lowest, 5th, 20th percentiles), the same list |
+| the low-deposit cut for a cracked string | 0.6 of the median salt deposit, three or more | the deposit series at the Gulf's fog flashovers (insulator_washing_log_2022-2026.xlsx); measured spread 0.5 to 0.7 and four required, the same place |
+| the contact trajectory cut | -0.8 C a year over four or more contacts since the last trim, in three or more summers | scada_line_loading_hourly_2022-2026.csv with the station weather and vegetation_work_orders_2022-2026.csv; measured spread -0.6 to -1.0 and five required, the same place |
+| the conductor heat balance | IEEE 738 at 850 W/m2 of sun, the nearest station's wind and air within 18 km, the nearer airport otherwise | scada_line_loading_hourly_2022-2026.csv and the weather files; measured spread over thresholds 36 and 44 C, the same list |
+
+Variant battery: 34 variants (every convention above at the values the field uses, each alternative source, the
+salt's wind share in and out) and six input perturbations file one answer, the same 30-item list.
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 | Population: every protection sequence on the 16 lines from 1 January 2022 to 31 October 2026 (RP-04 "Fault" and "Year"); feeder breakers are 12 kV, single-ended trips with no fault record are relay tests, backup-zone pickups are other lines' faults; C1 asserted on the count |
+| 1 | Population: every protection sequence on the 16 lines from 1 January 2022 to 31 October 2026 (RP-04 "Fault" and "Year"); feeder breakers are 12 kV, single-ended trips with no fault record are relay tests, backup-zone pickups are other lines' faults; asserted on the count |
 | 2 | Unit of account: one fault per sequence per line; one repeat location per structure or run; one washing section per the log's Sections sheet |
-| 3 | Attribution window: each fault's Central date sets its year; none crosses a year boundary between UTC and Central (C1, asserted) |
+| 3 | Attribution window: each fault's Central date sets its year; none crosses a year boundary between UTC and Central (asserted) |
 | 4 | As-of dating: 31 October 2026 for the deposit and the work done; today's inventory for structure numbers (RP-04) |
 | 5 | Version basis: the network as it stood at each fault (the register's 14 March 2024, both studies); structure numbers as today (RP-04) |
-| 6 | Denominator: none; every result is a count, a sum or a set |
+| 6 | Denominator: the flashover level for each section's ratio; no other |
 | 7 | Weighting: none |
-| 8 | Window length: repeat locations since 1 January 2022 (RP-04); the deposit rate fitted on every test reading, its rivals filing the same nine (C1) |
+| 8 | Window length: repeat locations since 1 January 2022 (RP-04); the deposit fitted on every test reading since 2022 |
 | 9 | Boundary inclusivity: "at or above", "more than five minutes", "no more than 400 m", "three or more" (RP-04); nothing sits on a boundary (the level moved 20 per cent, the window 50 m, the same list) |
-| 10 | Rounding path: counts exact; member-minutes summed then rounded once, graded within 2 per cent |
+| 10 | Rounding path: counts exact; member-minutes summed then rounded once, graded within 2 per cent; deposits to the thousandth of a mg/cm2 |
 | 11 | Tie-break: none; no ranking is graded |
 | 12 | Maturity and censoring: 2026 runs to 31 October (RP-04); no outage is open at that date |
-| 13 | Order of operations: locate, cause, group, then take off what was fixed after the last fault (RP-04 "Work list"); grouping before or after the fixed check files the same list |
+| 13 | Order of operations: locate, cause, group, then take off what was fixed after the last fault (RP-04 "Work list") |
 | 14 | Row order: none; faults sorted by time |
 | 15 | Duplicate resolution: each export's rows per reclose shot collapse to one fault per sequence; two terminals' records are one fault (RP-04 "Fault") |
 | 16 | Identity normalisation: relay names to lines through the settings workbook; Lines 8 and 13's former numbers through the inventory; the solar farm's events to Line 9 faults by time on standard time |
 | 17 | Netting against gross: none |
-| 18 | Dimensional units: miles and km, amperes and kA, Fahrenheit, knots, statute miles and inches at the airports, mg/cm2 for deposits; each carried in its file |
-| 19 | Code and status semantics: the operators' and the outage system's cause codes are their own records, not RP-04's causes, and no result reads them as such |
+| 18 | Dimensional units: miles and km, amperes and kA, Fahrenheit, knots, inches at the airports, m/s and degrees at the stations, mg/cm2 for deposits; each carried in its file |
+| 19 | Code and status semantics: the operators', the outage system's and the patrols' causes are their own records, not RP-04's causes |
 | 20 | Integerisation: counts and members are whole by construction |
-| 21 | Clause scope: salt contamination is left to washing and is not a repeat location (RP-04); insulator failure is one |
+| 21 | Clause scope: salt contamination is left to washing and is not a repeat location (RP-04); insulator failure and equipment or hardware are |
 | 22 | Forward window contents: the fog season, 1 December to 31 March (RP-04); the washing is judged on the deposit on 31 October, and no future fault count is asked |
 
 ## Literal reader
 
-The prompt asks what goes on the 69 kV work list, a CSV of every 69 kV fault since January 2022 with where it was, what caused it and its member interruptions and member-minutes, a workbook with faults by line and cause each year, the 2026 member interruptions and member-minutes by line and every repeat location with its cause and whether it has been fixed since its last fault, and a one-page memo with the work list. Read word for word against RP-04 Rev 4 those execute to: 436 faults (96, 93, 83, 84, 80 by year); the 2026 causes (9, 6, 16, 16, 14, 8, 5, 2, 4); 57,024 member interruptions and 1,227,611 member-minutes, by line; the 16 open repeat locations with their causes and the seven fixed after their last fault; the nine sections whose 31 October deposit is at or above the lowest deposit at a past fog flashover; and the 25-item work list. No sentence names a method, and every reading a sentence leaves open files the same results or is ruled out in the fork table.
+The prompt asks what goes on the 69 kV work list, a CSV of every 69 kV fault since January 2022 with where it was,
+what caused it and its member interruptions and member-minutes, a workbook with faults by line and cause each year,
+the 2026 member interruptions and member-minutes by line, every repeat location with its cause and whether it has been
+fixed since its last fault, and each washing section's salt deposit on 31 October, and a one-page memo with the work
+list. Read word for word against RP-04 Rev 4 those execute to: 444 faults (103, 104, 78, 85, 74 by year); the 2026
+causes; 52,306 member interruptions and 1,502,951 member-minutes, by line; the 17 open repeat locations with their causes
+and the seven fixed after their last fault; each section's deposit against the 0.053 mg/cm2 level, 13 due; and the
+30-item work list. No sentence names a method, and every reading a sentence leaves open files the same results or is
+ruled out in the fork table.
 
 ## Prompt contract
 
-A voice rewrite keeps: the question (what goes on the 69 kV work list for the 2026-27 winter and before summer 2027); the CSV of every 69 kV fault since January 2022 with where it was, what caused it and its member interruptions and member-minutes; the workbook's three parts (faults by line and cause for each year, the 2026 member interruptions and member-minutes by line, every repeat location with its cause and whether it has been fixed since its last fault); the one-page memo with the work list; three deliverables, each by type. It never adds a rounding instruction, a method or step (no "two-ended", "residual", "infeed", "fog stations", "survey", "conductor temperature", "deposit model"), a warning, an attached file's name, a role or reader, or a count the data hold (436 faults, 16 lines, 25 items).
+A voice rewrite keeps: the question (what goes on the 69 kV work list for the 2026-27 winter and before summer 2027);
+the CSV of every 69 kV fault since January 2022 with where it was, what caused it and its member interruptions and
+member-minutes; the workbook's four parts (faults by line and cause for each year, the 2026 member interruptions and
+member-minutes by line, every repeat location with its cause and whether it has been fixed since its last fault, each
+washing section's salt deposit on 31 October); the one-page memo with the work list; three deliverables, each by type.
+It never adds a rounding instruction, a method or step (no "wind", "conductor temperature", "trajectory", "underbuild",
+"cracked", "deposit model", "after the wash"), a warning, an attached file's name, a role or reader, or a count the
+data hold (444 faults, 16 lines, 30 items, 13 sections).
 
 ## Leak review
 
-leak.py (as of 2026-11-12) REVIEW, each line ruled: `lightning_strokes_2022-2026.csv` "294,124" is one stroke's error-ellipse axes (semi-major 294 m, semi-minor 124 m) sitting side by side, a coincidence of digits with Line 13's member-minutes, harmless; `reliability_reporting_procedure_rev4.docx` carries the stump terms and column words because it is the cooperative's own reporting procedure defining the fault, the location, the causes, the member interruption, the repeat location, the work list and the washing rule (the WHAT), and its records section lists the systems of record by owner, naming no step, comparison or method, harmless; `relay_records_gridvue_2022-2026.json` "generated" and "device" are the vendor export's own envelope and record keys, harmless; `substation_weather_stations_2023-2026.csv` "air_temp_c" is the station historian's export header beside "rh_pct" and "rain_mm", harmless.
+leak.py (as of 2026-11-12) REVIEW, each line ruled: `reliability_reporting_procedure_rev4.docx` carries five stump terms
+and fourteen column words because it is the cooperative's own reporting procedure defining the fault, the location,
+the causes, the member interruption, the repeat location, the work list and the washing rule (the WHAT); its records
+section lists the systems of record by owner, naming no step, comparison or method, harmless; `relay_records_gridvue_2022-2026.json`
+"generated" and "device" are the vendor export's own envelope and record keys, harmless;
+`substation_weather_stations_2023-2026.csv` "air_temp_c" is the station historian's export header beside "rh_pct",
+"wind_ms" and "rain_mm", harmless.
 
 ## Pre-ship check
 
-- Card registered with --force on ban.pairing only (energy x ETL against task22, the author's assignment of 2026-11-12,
-  reason in the card's notes); skeleton severity none against every card, lineage entry and client task (nearest
-  task9 v3); the deciding lesson (position on a network) off the closed page; the frontier check written; the cited
-  pair estimate 34.5.
-- The process behind the files simulated before any result was named (network, weather, loads, fault processes,
-  protection, operations, field work); the weight (assembly) differs from the last two live cards (measurement,
-  attribution).
-- Ten results across seven areas, each pinned, banded and graded; no analytical result is the only input of more than
-  half the others (R8, R9 and R10 are the synthesis rows).
-- Every factor runs across the data (the hidden factor record): fault resistance on every fault, Inland's source on
-  every Inland-line fault before March 2024, the solar step-up on every Line 9 fault past the tap, the bay fog, roosts
-  and cracked strings on every coastal night fault, conductor heat on every summer afternoon fault, the deposit on
-  every coastal section; checks.py holds the golden against the world (37 of 37).
-- The effort test measured by effort.py: quick 12.5, careful but hurried 34.5, thorough 100; the largest single hint
-  rescues 1 of 10; the stump factorial at level 5 (six stumps, each necessary, none sufficient).
-- Forcing on both sides: 18 rivals and six perturbations file the identical 25-item list; the shortcuts land 1 to 32
-  items away on seven distinct wrong lists.
-- Gates on the final cut: precut, effort, voice, leak (REVIEW, ruled), figures, containers, surface; heart BLOCKs only
-  on the pairing above; checks.py 37 of 37, verify.py 12 of 12 (an independent recompute from the pack); two builds
-  byte-identical.
+- Card re-registered as architecture 6 with the reviewer's level-up in its lineage: skeleton severity none against every
+  card, lineage entry and client task (decision form set_over_threshold, the deciding lesson
+  rival_process_by_state_dependence on no build); ban.pairing forced at the author's assignment, as architecture 5 was;
+  the other WARNs answered in the Draw.
+- The process behind the files simulated before any result was named, with the three new processes run across the data
+  (every cracked string flashes when wet, every summer contact is the conductor's heat against a clearance, every
+  section's salt follows the onshore wind); checks.py holds the golden against the world (59 of 59), verify.py
+  recomputes the graded figures by its own code (15 of 15).
+- Ten results across seven areas; three open members, each opened by its own stump (Line 2 structure 63 by J1, Line 6
+  structures 57-58 by J2, Line 2 sections 1 and 6 by J3), the reflex route and the direct route filing each wrong; the
+  27 other members forced.
+- The effort test measured by effort.py: quick 7.0, careful but hurried 44.3, thorough 100; the largest single hint
+  rescues 2 of 10; the stump factorial at level 5.
+- Forcing on both sides: 34 rivals and six perturbations file the identical 30-item list (the re-salted sections at 1.14
+  times the level or more); the shortcuts land 1 to 7 items away on seven distinct wrong lists.
+- The golden memo renders on one page (449 words); the golden ZIP holds the three requested files.
+- Gates on the final cut: precut (one WARN answered), effort, voice, leak (REVIEW, ruled), figures, containers, surface;
+  heart BLOCKs only on the pairing above; two builds byte-identical, and a fresh world and a cached one now cut the same
+  pack (the designed places' list is filled on both, so the routine vegetation orders keep clear of them either way).
 
 ## Tried and rejected
 
@@ -373,3 +481,38 @@ leak.py (as of 2026-11-12) REVIEW, each line ruled: `lightning_strokes_2022-2026
 - Architecture 5 at the build, insulator flashovers at up to 5 ohms of fault resistance: the tap line's infeed
   correction carried errors near 0.85 km (about four structures) and the tap string's band failed; an arc across a
   cracked porcelain bell burns at 0.3 to 0.9 ohms, and the corrected distance now lands within a structure.
+- Architecture 5 as a whole (Laguna Prieta EC's 69 kV work list, READY 9c27294, uploaded): sent back at review on
+  2026-11-13 (reward 75, stumped failed, determinism and solution passed; task13/runs/review_2026-11-13.md). The runs
+  made all six priced stumps (two-ended location, Inland's source change, the solar infeed, the roost survey with the
+  bay fog, conductor heat for grow-ins, each section's deposit from its last wash: R81 to R83); every grow-in sat at
+  0.99 to 1.02 of the line's p99 load on summer afternoons as in the confirmed cases, and the washing list held from
+  0.029 to 0.080 mg/cm2; the 18 rivals filed one list, so every member was forced. Architecture 6 keeps the world, the
+  data package, RP-04 and the register at the reviewer's request and moves the call onto three judgments in three
+  different terms, each opening its own member.
+- Architecture 6 at the design, the reviewer's crew-day ranking by member-minutes avoided in 2027 (ideas 2 and 5): a
+  forward value per item multiplies a repeat rate, a member impact by network position and a fix's effect, so the honest
+  family's spread per item exceeded most margins, and architecture 4's 2027 forecast was returned on determinism; the
+  work list stays RP-04's.
+- Architecture 6 at the design, washing sections placed near the level so the rain-cleaning rate decides them (the
+  reviewer's suggestion): the runs fit build-up with rain cleaning by reflex (R82), and the family's own spread over rain
+  models would straddle the level; the deposit fit is made to matter through the onshore wind beyond the last reading.
+- Architecture 6 at the prototype, the wind-driven salt with a seasonal factor only: the winter deposit fell to half and
+  the salt flashovers from 55 to 10; the cool season's light wind now comes back off the Gulf between fronts, the base
+  rate rose by half, and the record carries 55 to 60 salt flashovers again.
+- Architecture 6 at the prototype, every cracked string flashing in fog at any hour: the reflex's own unexplained-cluster
+  rule caught the Gulf string through its evening flashovers; its fog flashovers now fall at night (22:00 to 09:00), as
+  the salt's do.
+- Architecture 6 at the prototype, the replaced strings at Line 1 structure 49 and Line 3 structure 41: on the Gulf
+  lines they flashed in fog too, so the confirmed cases' own signature would have pointed at Line 2 structure 63 (an
+  easier second route); they stand on inland lines (Line 8 structure 49, Line 11 structure 41), and the confirmed
+  strings all flash in light rain.
+- Architecture 6 at the prototype, the contact processes on each place's simulated weather: the golden reads the nearest
+  station (or airport), and at spans far from the stations its conductor temperatures drifted from the world's by several
+  degrees, so a real grow-in (Line 14) read flat; the contact processes now run on the weather the instruments record.
+- Architecture 6 at the prototype, a three-day blow and the October washes on 19 and 21 October: a linear wind put Line 2
+  section 1 at 0.95 of the level; the blow runs four days (23 to 26 October) and the washes fall on 17 and 20 October, the
+  lowest rival at 1.14 and the average rate still at 0.6.
+- Architecture 6 at the build, the pack cut from a cached world: the module's list of designed places (roosts, strings,
+  grow-in spans, pine stands) was filled only when the world was simulated fresh, so a cached world let routine
+  herbicide and hazard-tree orders fall at those places; the list is filled on every world now, both paths cut one pack,
+  and no graded figure moved.

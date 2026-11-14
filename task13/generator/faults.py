@@ -20,8 +20,8 @@ import loads as L
 
 # fault resistance by cause (ohm): arcs across insulators and streamers are low, tree contacts high
 RF = {'lightning': (6.0, 28.0), 'bird': (0.8, 3.2), 'fog': (1.5, 4.5), 'insulator': (0.3, 0.9),
-      'growin': (14.0, 38.0), 'fallin': (3.0, 22.0), 'vehicle': (0.5, 4.0), 'hardware': (0.5, 3.0),
-      'unknown': (0.8, 9.0)}
+      'growin': (9.0, 38.0), 'fallin': (3.0, 22.0), 'vehicle': (0.5, 4.0), 'hardware': (0.5, 3.0),
+      'clearance': (4.0, 13.0), 'unknown': (0.8, 9.0)}
 
 # roost structures: line, structure no., the survey site, birds in a typical winter, guards fitted (UTC) or None
 ROOSTS = [
@@ -41,31 +41,51 @@ CRACKED = [
     ('L05', 88, dt.datetime(2024, 5, 20, tzinfo=C.UTC), 0.017, 560.0, False),
     ('L15', 57, dt.datetime(2025, 1, 15, tzinfo=C.UTC), 0.018, 480.0, False),
     ('L09', None, dt.datetime(2024, 2, 5, tzinfo=C.UTC), 0.013, 520.0, False),   # beyond the solar tap
-    ('L03', 41, dt.datetime(2023, 6, 1, tzinfo=C.UTC), 0.024, 400.0, True),       # fails for good, replaced
+    ('L11', 41, dt.datetime(2023, 6, 1, tzinfo=C.UTC), 0.024, 400.0, True),       # fails for good, replaced
     ('L13', 72, dt.datetime(2022, 2, 1, tzinfo=C.UTC), 0.030, 300.0, True),       # fails for good, replaced
-    ('L01', 49, dt.datetime(2022, 3, 1, tzinfo=C.UTC), 0.030, 300.0, True),       # fails for good, replaced
+    ('L08', 49, dt.datetime(2022, 3, 1, tzinfo=C.UTC), 0.030, 300.0, True),       # fails for good, replaced
 ]
 TAP_STRING_KM = 26.65            # the cracked string on Shell Ridge-Ponder Creek, 3.25 km beyond the solar tap
 # grow-in spans: line, back structure no., contact temperature in May 2022 (deg C), trimmed for the cycle (UTC)
 GROWIN = [
-    # line, back structure no., contact temperature in May 2022 (deg C), cycle trims (UTC, deg C the trim buys)
-    ('L10', 47, 51.0, [(dt.datetime(2024, 2, 13, 15, 0, tzinfo=C.UTC), 5.0)]),    # contacts 2022-23, again 2025-26
-    ('L10', 88, 55.0, []),
-    ('L14', 62, 57.0, []),
-    ('L14', 131, 57.5, []),
-    ('L12', 44, 54.5, []),
-    ('L06', 57, 48.5, []),
-    ('L05', 101, 53.5, []),
-    ('L15', 33, 55.0, [(dt.datetime(2025, 2, 11, 15, 0, tzinfo=C.UTC), 25.0)]),   # cleared in the 2025 cycle
-    ('L11', 64, 55.5, []),
+    # line, back structure no., contact temperature in May 2022 (deg C), cycle trims (UTC, deg C the trim buys), the
+    # summer whose first contact burns the tree down and gets the span cleared
+    ('L10', 47, 51.0, [(dt.datetime(2024, 2, 13, 15, 0, tzinfo=C.UTC), 5.0)], None),    # contacts 2022-23, again 2025-26
+    ('L10', 88, 55.0, [], None),
+    ('L14', 62, 57.0, [], None),
+    ('L14', 131, 55.0, [], 2026),
+    ('L12', 44, 54.5, [], 2023),
+    ('L05', 101, 47.0, [], 2026),
+    ('L15', 33, 55.0, [(dt.datetime(2025, 2, 11, 15, 0, tzinfo=C.UTC), 25.0)], None),   # cleared in the 2025 cycle
+    ('L11', 64, 55.5, [], None),
 ]
 GROWTH_C = 2.0          # deg C a year the trees take off the contact temperature
+# a span where the 69 kV conductor, sagged hot, comes within flashover distance of the 12.47 kV circuit built under it on
+# the same poles: line, back structure no., the conductor temperature (deg C) at which it reaches it with the circuit
+# below at 32 C, and how much the circuit's own sag (deg C of the 69 kV conductor per deg C of air) moves that
+UNDERBUILD = [('L06', 57, 42.0, 0.30)]
+GULF_FROM = 140.0       # the bearing the Gulf's wind blows from onto this shore
+SALT_BG = 0.25          # the share of the salt that arrives whatever the wind; the rest comes on the onshore wind
 # dead pine stands outside the right of way (line, structure no. range) that drop limbs in gusts
 DANGER = [('L13', 104, 106, 0.30, 0.0006), ('L11', 118, 120, 0.04, 0.0016)]   # summer storm and winter front odds
 GULF_LINES = ('L01', 'L02', 'L03', 'L04')
 
 
 _SOURCES = []
+
+
+def fill_sources(net):
+    """the places the designed fault processes sit (roosts, cracked strings, grow-in spans, dead pine stands), which the
+    random causes and the routine vegetation work keep clear of; filled on every world, fresh or cached"""
+    del _SOURCES[:]
+    for lid, no, *_ in ROOSTS:
+        _SOURCES.append((lid, net['lines'][lid]['structures'][no - 1]['km']))
+    for lid, no, *_ in CRACKED:
+        _SOURCES.append((lid, TAP_STRING_KM if no is None else net['lines'][lid]['structures'][no - 1]['km']))
+    for lid, no, *_ in GROWIN:
+        _SOURCES.append((lid, net['lines'][lid]['structures'][no - 1]['km']))
+    for lid, a, b, *_ in DANGER:
+        _SOURCES.append((lid, (net['lines'][lid]['structures'][a - 1]['km'] + net['lines'][lid]['structures'][b - 1]['km']) / 2))
 
 
 def _near_source(lid, km, tol):
@@ -87,6 +107,29 @@ def _structure_xy(net):
             pts.append((st['x'], st['y']))
             keys.append((lid, st['no']))
     return np.array(pts), keys
+
+
+def onshore_exposure(wx, code):
+    """each local day's onshore wind exposure at a place: the mean over its hours of the squared component of the wind
+    blowing from the Gulf"""
+    s = wx['series'][code]
+    u = s['wind'] * np.maximum(0.0, np.cos(np.radians(s['wdir'] - GULF_FROM)))
+    e = np.zeros(len(wx['days']))
+    n = np.zeros(len(wx['days']))
+    np.add.at(e, wx['hday'], u ** 2)
+    np.add.at(n, wx['hday'], 1.0)
+    return e / np.maximum(n, 1.0)
+
+
+def salt_factor(wx, codes):
+    """each day's salt delivery against the long-run mean, at the mean of the places given: a background share and the
+    rest carried on the onshore wind"""
+    cache = wx.setdefault('_salt', {})
+    key = tuple(codes)
+    if key not in cache:
+        e = np.mean([onshore_exposure(wx, c) for c in codes], axis=0)
+        cache[key] = SALT_BG + (1.0 - SALT_BG) * e / e.mean()
+    return cache[key]
 
 
 def onshore_factor(month):
@@ -127,7 +170,7 @@ def wash_sections(net):
 
 def deposit_rate(shore_km, onshore=1.0):
     """salt deposit accumulation, mg per cm2 per day, falling off with distance from the Gulf"""
-    return 0.0042 * math.exp(-shore_km / 1.8) * onshore + 0.00005
+    return 0.0064 * math.exp(-shore_km / 1.8) * onshore + 0.00008
 
 
 RAIN_KEEP = ((12.0, 0.50), (5.0, 0.85))      # a soaking rain leaves half the deposit, a moderate one 85 per cent
@@ -189,24 +232,16 @@ def _random_place(net, rng, faults, cause):
 
 def simulate(net, wx, ld, washes):
     streams = {k: np.random.default_rng(C.EV_SEED * 101 + i) for i, k in
-               enumerate(['add', 'lightning', 'bird', 'fog', 'insulator', 'growin', 'fallin', 'random'])}
+               enumerate(['add', 'lightning', 'bird', 'fog', 'insulator', 'growin', 'fallin', 'random', 'clearance'])}
     rng = streams['add']
     nh = C.NH
     h_rec0 = C.hour_index(C.REC0)
     faults = []
-    del _SOURCES[:]
-    for lid, no, *_ in ROOSTS:
-        _SOURCES.append((lid, net['lines'][lid]['structures'][no - 1]['km']))
-    for lid, no, *_ in CRACKED:
-        _SOURCES.append((lid, TAP_STRING_KM if no is None else net['lines'][lid]['structures'][no - 1]['km']))
-    for lid, no, *_ in GROWIN:
-        _SOURCES.append((lid, net['lines'][lid]['structures'][no - 1]['km']))
-    for lid, a, b, *_ in DANGER:
-        _SOURCES.append((lid, (net['lines'][lid]['structures'][a - 1]['km'] + net['lines'][lid]['structures'][b - 1]['km']) / 2))
+    fill_sources(net)
 
     def add(h, sec, lid, km, cause, perm, phases=None, rf=None, extra=None):
         rng = streams[{'lightning': 'lightning', 'bird': 'bird', 'fog': 'fog', 'insulator': 'insulator', 'growin': 'growin',
-                       'fallin': 'fallin'}.get(cause, 'random')]
+                       'fallin': 'fallin', 'clearance': 'clearance'}.get(cause, 'random')]
         km = min(max(float(km), 0.03), net['lines'][lid]['length'] - 0.03)
         st = N.structure_at(net, lid, km)
         if phases is None:
@@ -305,9 +340,9 @@ def simulate(net, wx, ld, washes):
             di = days.index(w['date']) if w['date'] in days else None
             if di is not None:
                 wash_days.setdefault(di, []).append(w)
+        fac = salt_factor(wx, rain_codes[lid])
         for di, d in enumerate(days):
-            onshore = onshore_factor(d.month)
-            dep += rates * onshore
+            dep += rates * fac[di]
             dep *= rain_keep(rain[di])
             for w in wash_days.get(di, ()):
                 for k, s in enumerate(sts):
@@ -344,7 +379,8 @@ def simulate(net, wx, ld, washes):
                 last_fault_h = h
 
     rng = streams['insulator']
-    # ---- cracked strings: flash over in light rain at any hour, faster as the crack grows
+    # ---- cracked strings: flash over whenever the porcelain is wet, in light rain at any hour or in fog, faster as the
+    # crack grows; on the Gulf lines the salt film makes the fog nights the dangerous ones and light rain rinses it
     st_places = {}
     replaced = {}
     for lid, no, onset, haz0, efold, fails in CRACKED:
@@ -353,19 +389,27 @@ def simulate(net, wx, ld, washes):
         code = min(W.PLACES, key=lambda c: math.hypot(W.PLACES[c][0] - st['x'], W.PLACES[c][1] - st['y']))
         pr = wx['series'][code]['precip']
         h0 = max(C.hour_index(onset), 0)
+        gulf = lid in GULF_LINES and st['insulator'] == 'porcelain'
+        k_fog, k_rain = (4.0, 0.15) if gulf else (4.0, 1.0)
         n_here = 0
         quiet_until = -1
         for h in range(h0, nh):
-            if pr[h] < 0.25 or pr[h] >= 2.5 or h < quiet_until:
+            if h < quiet_until:
+                continue
+            wet_rain = 0.25 <= pr[h] < 2.5
+            wet_fog = ((not wet_rain) and (hour[h] >= 22 or hour[h] <= 9) and (h in fog_index or wx['bay_fog_day'][wx['hday'][h]])
+                       and W.fog_at(wx, st['x'], st['y'], h))
+            if not (wet_rain or wet_fog):
                 continue
             if wx['front'][wx['hday'][h]] > 1.5 or _storm_near(wx, st['x'], st['y'], h, 15.0):
                 continue
             age = (h - h0) / 24.0
-            if rng.random() < haz0 * math.exp(age / efold):
+            if rng.random() < haz0 * (k_fog if wet_fog else k_rain) * math.exp(age / efold):
                 n_here += 1
                 perm = fails and n_here >= 4
                 add(h, rng.uniform(0, 3600), lid, st['km'] + rng.normal(0, 0.01), 'insulator', perm,
-                    extra=dict(string=st['no']))
+                    rf=(float(rng.uniform(*RF['fog'])) if gulf else None),
+                    extra=dict(string=st['no'], wet='fog' if wet_fog else 'rain'))
                 quiet_until = h + 48
                 if perm:
                     replaced[(lid, st['no'])] = C.ts_of(h) + dt.timedelta(hours=float(rng.uniform(5, 30)))
@@ -375,14 +419,13 @@ def simulate(net, wx, ld, washes):
     rng = streams['growin']
     # ---- grow-in contacts: the conductor hot and sagged on a still afternoon reaches the tree
     trims = {}
-    for lid, back_no, t0c, cycle in GROWIN:
+    for lid, back_no, t0c, cycle, burn_year in GROWIN:
         line = net['lines'][lid]
         s0 = line['structures'][back_no - 1]
         s1 = line['structures'][back_no]
         km = (s0['km'] + s1['km']) / 2.0
         code = min(W.PLACES, key=lambda c: math.hypot(W.PLACES[c][0] - s0['x'], W.PLACES[c][1] - s0['y']))
-        temp = wx['series'][code]['temp']
-        wind = wx['series'][code]['wind']
+        temp, wind, wsrc = W.instrumented_series(wx, s0['x'], s0['y'])
         amps = ld['amps'][lid]
         prc = wx['series'][code]['precip']
         cand = [h for h in range(h_rec0, nh) if 12 <= hour[h] <= 19 and month[h] in (5, 6, 7, 8, 9, 10)
@@ -398,10 +441,9 @@ def simulate(net, wx, ld, washes):
             tcontact = t0c - GROWTH_C * (wx['year'][h] - 2022) + raise_c
             if h < refractory:
                 continue
-            tc = L.conductor_temp(float(amps[h]), line['conductor'], float(temp[h]), float(wind[h]),
-                                  L.solar_irradiance(h, wx, code))
-            if tc >= tcontact and rng.random() < 0.20:
-                perm = rng.random() < 0.06
+            tc = L.conductor_temp(float(amps[h]), line['conductor'], float(temp[h]), float(wind[h]), 850.0)
+            if tc >= tcontact - 2.5 and rng.random() < 0.22 / (1.0 + math.exp(-(tc - tcontact) / 0.9)):
+                perm = burn_year is not None and wx['year'][h] == burn_year
                 add(h, rng.uniform(0, 3600), lid, km + rng.normal(0, 0.02), 'growin', perm,
                     extra=dict(span=(s0['no'], s1['no']), tc=tc))
                 refractory = h + 24 * 21
@@ -410,6 +452,37 @@ def simulate(net, wx, ld, washes):
                     done = True
         for (td, r) in cycle:
             trims.setdefault((lid, s0['no']), td)
+
+    rng = streams['clearance']
+    # ---- the 69 kV conductor reaching the 12.47 kV circuit built under it: a fixed clearance, so the same conductor
+    # temperature each summer (moved a little by the lower circuit's own sag in the heat), whatever is done to the
+    # trees in the span; the vegetation crew trims the live oak there a few weeks after the first contact
+    for lid, back_no, t_ub, k_air in UNDERBUILD:
+        line = net['lines'][lid]
+        s0 = line['structures'][back_no - 1]
+        s1 = line['structures'][back_no]
+        km = (s0['km'] + s1['km']) / 2.0
+        code = min(W.PLACES, key=lambda c: math.hypot(W.PLACES[c][0] - s0['x'], W.PLACES[c][1] - s0['y']))
+        temp, wind, wsrc = W.instrumented_series(wx, s0['x'], s0['y'])
+        amps = ld['amps'][lid]
+        prc = wx['series'][code]['precip']
+        cand = [h for h in range(h_rec0, nh) if 11 <= hour[h] <= 19 and month[h] in (5, 6, 7, 8, 9, 10)
+                and prc[h] < 0.1 and not _storm_near(wx, s0['x'], s0['y'], h, 15.0)]
+        refractory = -1
+        first = None
+        for h in cand:
+            if h < refractory:
+                continue
+            tc = L.conductor_temp(float(amps[h]), line['conductor'], float(temp[h]), float(wind[h]), 850.0)
+            reach = t_ub + k_air * (float(temp[h]) - 32.0)
+            if tc >= reach - 2.0 and rng.random() < 0.15 / (1.0 + math.exp(-(tc - reach) / 0.8)):
+                add(h, rng.uniform(0, 3600), lid, km + rng.normal(0, 0.02), 'clearance', False,
+                    extra=dict(span=(s0['no'], s1['no']), tc=tc))
+                refractory = h + 24 * 21
+                if first is None:
+                    first = C.ts_of(h)
+        if first is not None:
+            trims[(lid, s0['no'])] = first + dt.timedelta(days=float(rng.uniform(28, 45)))
 
     rng = streams['fallin']
     # ---- limbs and trees blown in: the two dead pine stands, in winter fronts and under summer storm cells

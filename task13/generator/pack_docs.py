@@ -58,7 +58,7 @@ def write_structures(w, path):
     with open(path, 'w', newline='') as fh:
         wr = csv.writer(fh)
         wr.writerow(['structure_id', 'line', 'structure_no', 'former_no', 'km_from_terminal_a', 'structure_type', 'insulator',
-                     'insulator_installed', 'latitude', 'longitude', 'gulf_shore_km'])
+                     'insulator_installed', 'underbuild', 'latitude', 'longitude', 'gulf_shore_km'])
         for lid in sorted(net['lines']):
             for s in net['lines'][lid]['structures']:
                 la, lo = E.latlon(s['x'], s['y'])
@@ -66,7 +66,7 @@ def write_structures(w, path):
                 if lid in REBUILT:
                     former = s['no'] + REBUILT[lid][1] if s['no'] + REBUILT[lid][1] > 0 else ''
                 wr.writerow(['%s-%03d' % (lid, s['no']), line_no(lid), s['no'], former, '%.2f' % s['km'], s['kind'],
-                             s['insulator'], s['ins_year'], '%.5f' % la, '%.5f' % lo, '%.2f' % s['shore_km']])
+                             s['insulator'], s['ins_year'], s['underbuild'], '%.5f' % la, '%.5f' % lo, '%.2f' % s['shore_km']])
     return len(net['structures'])
 
 
@@ -197,8 +197,8 @@ def write_procedure(path):
               'the washing programme section by section and is not entered as a repeat location.'),
         ('p', 'Work list. Each repeat location whose cause has not been fixed since its last fault, with the fix for its '
               'cause: perch guards and streamer shields for birds; replacement for an insulator failure; clearing the span '
-              'for vegetation grown into the line; removal of the hazard trees for vegetation from outside the right of way. '
-              'And each washing section due for washing before the fog season.'),
+              'for vegetation grown into the line; removal of the hazard trees for vegetation from outside the right of way; '
+              'for any other cause, the repair that removes it. And each washing section due for washing before the fog season.'),
         ('p', 'Due for washing before the fog season. A washing section is due when the salt deposit on its porcelain '
               'insulators on 31 October is at or above the deposit at which the cooperative\'s 69 kV porcelain line posts '
               'have flashed over in fog. The fog season runs from 1 December to 31 March.'),

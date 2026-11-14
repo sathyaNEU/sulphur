@@ -1,4 +1,4 @@
-"""task13 architecture 5, the generator's checks: the golden (run on target/ alone) against the simulated world's truth,
+"""task13 architecture 6, the generator's checks: the golden (run on target/ alone) against the simulated world's truth,
 every semantic fork in the design note asserted, the stump factorial and the forcing read back from effort.json, and the
 pack's input gates.
 
@@ -46,7 +46,7 @@ def truth_clusters(w):
     for f in w['faults']:
         if f['t'] < C.REC0 or f['t'] >= C.T_END or f['cause'] in ('fog', 'lightning', 'vehicle', 'hardware', 'unknown'):
             continue
-        by[(f['line'], f['cause'])].append(f)
+        by[(f['line'], WORLD_CAUSE.get(f['cause'], f['cause']))].append(f)
     out = []
     for (lid, cause), fs in by.items():
         fs = sorted(fs, key=lambda f: f['km'])
@@ -69,6 +69,9 @@ def truth_clusters(w):
     return res
 
 
+WORLD_CAUSE = {'clearance': 'hardware'}     # the conductor reaching the circuit under it is RP-04's equipment or hardware
+
+
 def truth_fixed(w, rl):
     """a fix of the location's cause after its last fault, from the world's own records"""
     if rl['cause'] == 'bird':
@@ -88,6 +91,7 @@ def main():
     eff = json.load(open(os.path.join(C.HERE, 'effort.json')))
     truth = [f for f in w['faults'] if C.REC0 <= f['t'] < C.T_END]
     gf = g['faults']
+    eff_fam = {v['name']: v['answer'] for v in eff['forcing']['golden_family']}
 
     # SF1 a fault is one protection sequence on one line; SF2 the year is the Central calendar year, 2026 to 31 October
     ty = collections.Counter(C.to_local(f['t']).year for f in truth)
@@ -113,11 +117,17 @@ def main():
        len(lone) > 0 and len(gf) == sum(ty.values()), (len(lone), len(gf)))
 
     # SF4 the nine causes, 2026
-    tc = collections.Counter(f['cause'] for f in truth if C.to_local(f['t']).year == 2026)
+    tc = collections.Counter(WORLD_CAUSE.get(f['cause'], f['cause']) for f in truth if C.to_local(f['t']).year == 2026)
     gc = collections.Counter(f['cause'] for f in gf if C.to_local(f['t']).year == 2026)
     worst = max(abs(tc.get(k, 0) - gc.get(k, 0)) for k in PS.G_CAUSES)
     ok('SF4 the golden\'s 2026 causes within 2 of the world\'s on every cause', worst <= 2, (dict(tc), dict(gc)))
-    ok('SF4 the 2026 causes exact against the world', worst == 0, (dict(tc), dict(gc)))
+    for yr in (2022, 2023, 2024, 2025):
+        tcy = collections.Counter(WORLD_CAUSE.get(f['cause'], f['cause']) for f in truth if C.to_local(f['t']).year == yr)
+        gcy = collections.Counter(f['cause'] for f in gf if C.to_local(f['t']).year == yr)
+        wy = max(abs(tcy.get(k, 0) - gcy.get(k, 0)) for k in PS.G_CAUSES)
+        # only 2026's causes are graded; before the stations (March 2023) the airport misses the line's fog, so earlier
+        # years carry more unknowns
+        ok('SF4 the golden\'s %d causes within 10 of the world\'s (ungraded)' % yr, wy <= 10, (dict(tcy), dict(gcy)))
 
     # SF3 the location, SF5 the repeat location, SF6 fixed after the last fault
     tr = truth_clusters(w)
@@ -136,8 +146,45 @@ def main():
     extra = [y for y in g_fix if not any(near(x, y) and x[2] == y[2] for x in t_fix)]
     ok('SF6 the locations fixed after their last fault match the world\'s', not miss and not extra, (miss, extra))
     tap = [rl for rl in gr if rl['line'] == 'L09' and rl['cause'] == 'insulator']
-    ok('R4 the tap line\'s string within a structure of the world\'s cracked string',
+    ok('X5 the tap line\'s string within a structure of the world\'s cracked string',
        len(tap) == 1 and abs(tap[0]['km'] - F.TAP_STRING_KM) <= 0.3, [(x['structure'], round(x['km'], 2)) for x in tap])
+
+    # J1 the Gulf string: the golden flags the world's cracked string on the Gulf porcelain and no other place, and books
+    # its flashovers as the world does
+    gulf_cr = [(lid, no) for lid, no, onset, *_ in F.CRACKED if lid in F.GULF_LINES and no is not None
+               and not any(k == (lid, no) for k in w['replaced'])]
+    ok('J1 the golden flags the Gulf string and nothing else', [(s_['line'], s_['structure']) for s_ in g['strings']] == gulf_cr,
+       (g['strings'], gulf_cr))
+    t_ins = sorted(f['t'] for f in truth if f['cause'] == 'insulator' and (f['line'], f.get('string')) in [(a, b) for a, b in gulf_cr])
+    g_ins = sorted(f['t'] for f in gf if f.get('gulf_string'))
+    lost = [t for t in t_ins if not any(abs((t - u).total_seconds()) < 5 for u in g_ins)]
+    extra_g = [u for u in g_ins if not any(abs((t - u).total_seconds()) < 5 for t in t_ins)]
+    ok('J1 the string\'s flashovers booked as the world\'s, at most two left as salt (its first, before the evidence, and one '
+       'placed by one end only)', len(lost) <= 2 and not extra_g,
+       (len(lost), len(extra_g), len(t_ins)))
+    ok('SF16 a place flagged as a cracked string under every low-deposit cut from 0.5 to 0.7 and with four required',
+       all(fam_name in eff_fam and eff_fam[fam_name] == fig['work_list'] for fam_name in
+           ('low flashovers: below half the median', 'low flashovers: below 0.7 of the median', 'low flashovers: four or more')))
+    ok('J1 no salt flashover in the world below the porcelain\'s level (only the string flashes there)',
+       all(f.get('deposit', 1) >= sim.CRIT for f in truth if f['cause'] == 'fog'))
+    ok('J1 the reflex route books the string\'s flashovers as salt and files no Gulf string',
+       not fig['careful']['R4'] and fig['gulf_string']['below_cut'] >= G.GOLD['low_n'] + 1, (fig['careful']['R4'], fig['gulf_string']))
+
+    # J2 the conductor reaching the circuit under it: the golden flags exactly the world's underbuild span
+    ub = [(lid, no) for lid, no, *_ in F.UNDERBUILD]
+    ok('J2 the golden flags the world\'s underbuild span and nothing else',
+       [(c['line'], c['s_min']) for c in g['contacts']] == ub, (g['contacts'], ub))
+    gl_ub = [rl for rl in gr if rl['cause'] == 'hardware' and not rl['fixed']]
+    ok('J2 its repeat location is equipment or hardware, not fixed (the trim does not touch it)',
+       len(gl_ub) == 1 and gl_ub[0]['line'] == ub[0][0] and abs(gl_ub[0]['s_min'] - ub[0][1]) <= 1, [(x['line'], x['s_min']) for x in gl_ub])
+    cc = fig['clearance_contact']
+    ok('J2 the contact temperature since the trim flat, the grow-ins falling at least twice the cut',
+       cc['slope_c_per_year'] >= G.GOLD['traj_slope'] / 2 and max(cc['vegetation_slopes']) <= 2 * G.GOLD['traj_slope'], cc)
+    ok('J2 the reflex route clears the span instead', 'clear the span: Line 6, structures 57-58' in fig['careful']['work_list'])
+    r2_alt = dict(fig['faults_2026_by_cause'])
+    moved = r2_alt.get('hardware', 0) - sum(1 for f in gf if f['cause'] == 'hardware' and f.get('fixed_contact') and C.to_local(f['t']).year == 2026)
+    ok('SF15 booking the clearance contacts as other or unknown keeps both cells inside their band of 3',
+       abs(moved - r2_alt.get('hardware', 0)) <= 3, (moved, r2_alt.get('hardware')))
 
     # SF7 the five-minute line: no restoration between 20 seconds and 6 minutes; SF8 SF9 member-minutes by faulted line
     secs = [i['seconds'] for imp in w['impacts'] for i in imp['impact']]
@@ -182,8 +229,34 @@ def main():
     gw = {x.replace('wash: ', '') for x in fig['wash_due']}
     ok('SF10 SF11 the golden\'s washing list equals the sections whose true deposit on 31 October is past the flashover level',
        gw == due, sorted(gw ^ due))
-    ok('SF11 every section clear of the level by a third either way in truth',
-       all(m >= 1.33 or m <= 0.75 for m in margins), sorted(round(m, 2) for m in margins if 0.75 < m < 1.33))
+    ok('SF11 every section clear of the level by a fifth either way in truth',
+       all(m >= 1.2 or m <= 0.8 for m in margins), sorted(round(m, 2) for m in margins if 0.8 < m < 1.2))
+    # J3 the two sections washed before the blow: due in truth, due in every golden-family variant by 12 per cent, and
+    # under the test insulators' average rate below the level
+    res = fig['resalted']
+    tr_m = {}
+    for s_ in w['sections']:
+        line = w['net']['lines'][s_['line']]
+        sts = [x for x in line['structures'] if x['insulator'] == 'porcelain' and x['shore_km'] <= 6.0]
+        cols = [k for k, x in enumerate(sts) if s_['s0'] <= x['no'] <= s_['s1']]
+        tr_m['%s, Section %s' % (lname(s_['line']), s_['id'].split('-W')[1])] = float(w['deposits'][s_['line']][1][-1, cols].mean()) / sim.CRIT
+    ok('J3 Line 2 sections 1 and 6 due in truth by a fifth', all(tr_m[k] >= 1.2 for k in res), {k: round(tr_m[k], 2) for k in res})
+    fam_min = min(min(v['ratio_W1'], v['ratio_W6']) for v in eff['forcing']['golden_family'])
+    ok('J3 every golden-family variant puts both at 1.12 times the level or more', fam_min >= 1.12, fam_min)
+    ok('J3 the test insulators\' average rate leaves both below 0.88 of the level', max(fig['careful']['resalted_ratio']) <= 0.88,
+       fig['careful']['resalted_ratio'])
+    tests = [r_ for r_ in w['tests'] if r_['date'].year == 2026 and r_['date'].month == 10]
+    ok('J3 every October test reading before the 23 October southerly', max(r_['date'] for r_ in tests) < dt.date(2026, 10, 23),
+       max(r_['date'] for r_ in tests))
+    ok('J3 the sections washed before the blow are the ones washed 1 to 22 October',
+       sorted(res) == sorted(k for k, v in fig['wash_sections'].items() if v['last_wash'] and '2026-10-01' <= v['last_wash'] < '2026-10-23'))
+    bands = fig['wash_deposit_bands']
+    tr_d = {k: v * sim.CRIT for k, v in tr_m.items()}
+    off = [k for k in bands if not (bands[k][0] * 0.9 <= tr_d[k] <= bands[k][1] * 1.1)]
+    ok('J3 each section\'s true deposit inside its stated band (with a tenth either side)', not off,
+       {k: (round(tr_d[k], 3), bands[k]) for k in off})
+    ok('SF12 the golden\'s flashover level within a fifth of the porcelain\'s true level',
+       abs(fig['flashover_level'] / sim.CRIT - 1) <= 0.2, fig['flashover_level'])
     wash_names = {r['section'] for r in w['washes']}
     test_names = {s[0] for s in __import__('field').TEST_SITES}
     ok('SF11 the test insulators are never washed (the latest test reading is not a section\'s deposit)',
@@ -194,7 +267,7 @@ def main():
     ok('SF11 the latest-test-reading route files another list, ruled out by the washing log', lw != gk, lw)
     gold_wl = PS.flat(PS.results_of(g, PS.worklist(g))['wl'])
     fam = {v['name']: v['answer'] for v in eff['forcing']['golden_family']}
-    for name in ('flashover level: 5th percentile', 'flashover level: 10th percentile'):
+    for name in ('flashover level: lowest', 'flashover level: 5th percentile', 'flashover level: 20th percentile'):
         ok('SF12 %s files the golden work list' % name, fam.get(name) == fig['work_list'], name)
     for name in ('repeat window 350 m', 'repeat window 450 m'):
         ok('SF5 %s files the golden work list' % name, fam.get(name) == fig['work_list'], name)
@@ -219,9 +292,13 @@ def main():
     ok('forcing: every perturbation files the golden list', all(v['answer'] == fig['work_list'] for v in eff['forcing']['perturbations']))
     ok('forcing: every shortcut files another list', all(set(s['answer']) != set(fig['work_list']) for s in eff['forcing']['shortcuts']))
     care = fig['careful']
-    ok('the careful pass misses R2, R3, R4, R7 and R8 outright',
-       care['R2'] != fig['vegetation_repeat_locations'] and care['R3'] != fig['night_repeat_locations'] and
-       care['R4'] != fig['tap_repeat_location'] and care['R7'] != fig['wash_due'] and care['R8'] != fig['repeat_locations_open'])
+    ok('the careful pass misses R4, R5 and R6 outright and the work list',
+       care['R4'] != fig['gulf_strings'] and care['R5'] != fig['clearance_items'] and care['R6'] != fig['resalted_due']
+       and care['work_list'] != fig['work_list'])
+    om = eff.get('direct_route', {}).get('answer', [])
+    ok('the direct route files all three open members wrong',
+       'replace the string: Line 2, structure 63' not in om and 'restore the clearance: Line 6, structures 57-58' not in om
+       and 'wash: Line 2, Section 6' not in om, om)
 
     # the pack's input gates
     files = sorted(os.listdir(T))

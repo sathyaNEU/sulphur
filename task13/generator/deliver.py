@@ -17,11 +17,11 @@ import passes as PS
 CAUSE_NAME = {'lightning': 'lightning', 'bird': 'bird or other animal', 'fog': 'salt contamination',
               'insulator': 'insulator failure', 'growin': 'vegetation grown into the line',
               'fallin': 'vegetation from outside the right of way', 'vehicle': 'vehicle or other third party',
-              'hardware': 'equipment or hardware', 'unknown': 'other or unknown'}
+              'hardware': 'equipment or hardware other than insulators', 'unknown': 'other or unknown'}
 FIX = {'bird': 'perch guards and streamer shields', 'insulator': 'replace the string', 'growin': 'clear the span',
-       'fallin': 'remove the hazard trees'}
+       'fallin': 'remove the hazard trees', 'hardware': 'restore the clearance to the 12.47 kV circuit below (re-sag the span)'}
 BY_WHEN = {'bird': '15 December 2026', 'insulator': '31 December 2026', 'fallin': '31 March 2027', 'growin': '1 May 2027',
-           'wash': '1 December 2026'}
+           'hardware': '1 May 2027', 'wash': '1 December 2026'}
 
 
 def build_golden(target, golden, w=None):
@@ -56,7 +56,7 @@ def write_csv(r, d, rep_id, path):
             L = d['lines'][f['line']]
             lt = C.to_local(f['t'])
             imp = f.get('impact') or dict(sustained=0, minutes=0.0, momentary=0)
-            span = '%d-%d' % f['span'] if (f['cause'] in ('growin', 'fallin') and f.get('span')) else ''
+            span = '%d-%d' % f['span'] if (f['cause'] in ('growin', 'fallin', 'hardware') and f.get('span')) else ''
             wr.writerow(['F%04d' % (i + 1), lt.strftime('%Y-%m-%d'), lt.strftime('%H:%M:%S'), PS.lname(f['line']),
                          d['stations'][L['a']]['name'], d['stations'][L['b']]['name'],
                          '' if f['km'] is None else '%.2f' % f['km'], '' if f['structure'] is None else f['structure'], span,
@@ -77,8 +77,13 @@ NOTES = [['Item', 'Note'],
                                  "the SCADA sequence of events and the monthly members by feeder (RP-04)"],
          ['Repeat location', 'three or more faults of one cause on one line within 400 m since 1 January 2022; salt contamination is left '
                              'to the washing programme (RP-04)'],
-         ['Washing', 'a section is due when its deposit on 31 October is at or above the lowest deposit at a past fog flashover; the fog '
-                     'season runs from 1 December to 31 March (RP-04)'],
+         ['Washing', 'a section is due when its deposit on 31 October is at or above the deposit at which the porcelain has flashed '
+                     'over in fog, read as the tenth percentile of the deposits at the salt flashovers since 2022; the fog season '
+                     'runs from 1 December to 31 March (RP-04)'],
+         ['Deposit', "each section carried day by day from its washes: the test insulators' gains between readings with no "
+                     "wetting rain follow the onshore wind at the substation stations (the Port Alcorn airport before them), so "
+                     "the rate is set by each section's distance from the Gulf and each day's onshore wind, and a soaking rain "
+                     "leaves about half"],
          ['Times', "Central time throughout; each relay's clock set against SCADA, the solar farm's export read on standard time"]]
 
 
@@ -109,25 +114,27 @@ def write_xlsx(r, d, reps, fig, path):
     s3.append(['All lines', t['sustained'], t['member_minutes'], t['momentary']])
     s4 = [['Ref', 'Line', 'Structures', 'Cause', 'Faults', 'First', 'Last', 'Fix', 'Status']]
     for rl in reps:
-        place = ('%d-%d' % rl['span']) if rl['cause'] == 'growin' and rl['span'] else (
+        place = ('%d-%d' % rl['span']) if rl['cause'] in ('growin', 'hardware') and rl['span'] else (
             '%d-%d' % (rl['s_min'], rl['s_max']) if rl['cause'] == 'fallin' else str(rl['structure']))
         status = 'fixed after its last fault' if rl['fixed'] else 'on the work list'
         s4.append([rl['rid'], PS.lname(rl['line']), place, CAUSE_NAME[rl['cause']], rl['n'], C.to_local(rl['first']).date(),
                    C.to_local(rl['last']).date(), FIX[rl['cause']], status])
-    s5 = [['Section', 'Structures', 'Distance from the Gulf (km)', 'Deposit 31 Oct 2026 (mg/cm2)', 'Due before the fog season']]
+    s5 = [['Section', 'Structures', 'Distance from the Gulf (km)', 'Last washed', 'Deposit 31 Oct 2026 (mg/cm2)',
+           'Times the flashover level', 'Due before the fog season']]
+    lv = r['deposits']['level']
     for _, row in d['wash_sections'].iterrows():
         lid = 'L%02d' % int(str(row['Line']).split()[1])
         sid = '%s-W%s' % (lid, str(row['Section']).split()[-1])
         v = r['deposits']['sections'][sid]
         s5.append(['%s, %s' % (row['Line'], row['Section']), '%d-%d' % (int(row['From structure']), int(row['To structure'])),
-                   round(v['dist'], 2), round(v['deposit'], 3), 'yes' if v['due'] else 'no'])
-    s5.append(['Flashover level (lowest deposit at a fog flashover)', '', '', round(r['deposits']['level'], 3), ''])
+                   round(v['dist'], 2), v['last_wash'], round(v['deposit'], 3), round(v['deposit'] / lv, 1), 'yes' if v['due'] else 'no'])
+    s5.append(['Flashover level (tenth percentile of the deposits at the salt flashovers)', '', '', '', round(lv, 3), 1.0, ''])
     s6 = [['No.', 'Work', 'Line', 'Structures', 'Cause', 'By']]
     k = 0
-    for cause in ('bird', 'insulator', 'fallin', 'growin'):
+    for cause in ('bird', 'insulator', 'fallin', 'growin', 'hardware'):
         for rl in [x for x in reps if x['cause'] == cause and not x['fixed']]:
             k += 1
-            place = ('%d-%d' % rl['span']) if cause == 'growin' and rl['span'] else (
+            place = ('%d-%d' % rl['span']) if cause in ('growin', 'hardware') and rl['span'] else (
                 '%d-%d' % (rl['s_min'], rl['s_max']) if cause == 'fallin' else str(rl['structure']))
             s6.append([k, FIX[cause], PS.lname(rl['line']), place, CAUSE_NAME[cause], BY_WHEN[cause]])
     for _, row in d['wash_sections'].iterrows():
@@ -138,13 +145,47 @@ def write_xlsx(r, d, reps, fig, path):
             s6.append([k, 'wash the insulators', str(row['Line']), '%d-%d (%s)' % (int(row['From structure']), int(row['To structure']), row['Section']),
                        CAUSE_NAME['fog'], BY_WHEN['wash']])
     care = fig['careful']
+    gs, cc = fig['gulf_string'], fig['clearance_contact']
     s7 = [['Shortcut', 'What it sends the crews to'],
-          ["The relays' own distances (both ends averaged) on the 2025 study, every summer afternoon fault with no stroke taken as a tree",
-           '; '.join(x.replace('clear the span: ', '').replace('remove the hazard trees: ', 'hazard trees ') for x in care['R2']) or 'none'],
-          ["The airport's visibility as the fog and the roost survey left out, faults placed by the relays' distances",
-           'no perch guards; string replacement at ' + '; '.join(x.replace('replace the string: ', '') for x in care['R3'])],
-          ["Shell Ridge's distance on the solar tap line as recorded, the solar farm's export left out", '; '.join(x.replace('replace the string: ', '') for x in care['R4'])],
-          ['Every section with a past fog flashover washed, the fog read off the airport', '; '.join(x.replace('wash: ', '') for x in care['R7'])]]
+          ["Every fog-night flashover on the Gulf porcelain booked as salt, the inland strings' light-rain flashovers as the "
+           "insulator signature", 'no string on the Gulf lines; %s structure %d left for the washing crews' % (gs['line'], gs['structure'])],
+          ["Every summer afternoon contact with no stroke at a span with trees booked as a grow-in, as the patrol's live oak "
+           "suggested", 'clear the span: %s, structures %s, though the oak was cut back in %s' % (cc['line'], cc['structures'],
+                                                                                              cc['trim'][:7])],
+          ["Each section's deposit at the test insulators' average daily rate, or the latest test reading at the nearest site",
+           'Line 2 sections 1 and 6 left as washed in October (%s and %s times the level on that reading of the record)'
+           % tuple('%.1f' % x for x in care['resalted_ratio'])],
+          ['All three together (the reflex route)', '; '.join(x for x in care['work_list'] if x not in fig['work_list'])
+           + ' on the list; missing ' + '; '.join(x for x in fig['work_list'] if x not in care['work_list'])]]
+    # the evidence behind the three judgments, fault by fault
+    ser = r['deposits']['series']
+    s8 = [['Date', 'Time', 'Line', 'Structure', 'Weather at the line', 'Section', 'Last washed before',
+           'Section deposit that day (mg/cm2)', 'Times the flashover level', 'Booked as']]
+    for f in sorted([f for f in r['faults'] if f['line'] == 'L%02d' % int(gs['line'].split()[1]) and f['structure'] is not None
+                     and abs(f['structure'] - gs['structure']) <= 1 and f['cause'] in ('insulator', 'fog')], key=lambda f: f['t']):
+        sid = G.section_of({'sections': ser}, f)
+        if sid is None:
+            continue
+        day = C.to_local(f['t']).date()
+        last = max([w for w in ser[sid]['washes'] if w <= day], default=None)
+        dep = ser[sid]['series'][day]
+        s8.append([day, C.to_local(f['t']).strftime('%H:%M'), PS.lname(f['line']), f['structure'],
+                   'light rain' if (f.get('sig') or {}).get('rain') else 'fog or dew', PS.wash_label(sid).replace('wash: ', ''),
+                   last, round(dep, 3), round(dep / lv, 1), CAUSE_NAME[f['cause']]])
+    s9 = [['Line', 'Span', 'Date', 'Time', 'Line current (A)', 'Air (C)', 'Wind (m/s)', 'Conductor (C)', 'Last trim before',
+           'Booked as']]
+    vv = d['veg']
+    for f in sorted([f for f in r['faults'] if f['cause'] in ('growin', 'hardware') and f.get('span') and
+                     isinstance(f.get('sig'), dict) and f['sig'].get('tc')], key=lambda f: (int(f['line'][1:]), f['structure'], f['t'])):
+        lname = PS.lname(f['line'])
+        day = C.to_local(f['t']).date()
+        tr = [x for x in vv[(vv['line'] == lname) & vv['work_type'].isin(['HOT SPOT', 'CYCLE TRIM'])].itertuples()
+              if int(x.from_structure) <= f['span'][1] and f['span'][0] <= int(x.to_structure)
+              and dt.date.fromisoformat(str(x.completed)[:10]) <= day]
+        last = max((dt.date.fromisoformat(str(x.completed)[:10]) for x in tr), default=None)
+        sg = f['sig']
+        s9.append([lname, '%d-%d' % f['span'], day, C.to_local(f['t']).strftime('%H:%M'), sg.get('amps'), sg.get('tair'),
+                   sg.get('wind'), round(sg['tc'], 1), last, CAUSE_NAME[f['cause']]])
     O.xlsx(path, [('Faults by line and year', ['69 kV faults by line and year', 'One fault per protection operation sequence on one line (RP-04)'],
                    s1, [9, 34, 8, 8, 8, 8, 14, 8], {}),
                   ('2026 by cause', ['2026 faults (January to October) by cause and line'], s2, [36] + [5] * 16 + [9], {}),
@@ -152,8 +193,13 @@ def write_xlsx(r, d, reps, fig, path):
                    s3, [12, 18, 16, 18], {1: '#,##0', 2: '#,##0', 3: '#,##0'}),
                   ('Repeat locations', ['Three or more faults of one cause within 400 m on one line since 1 January 2022'],
                    s4, [7, 9, 12, 36, 7, 11, 11, 30, 24], {5: 'yyyy-mm-dd', 6: 'yyyy-mm-dd'}),
-                  ('Washing sections', ['Salt deposit on each section\'s porcelain on 31 October 2026'], s5, [44, 11, 14, 16, 16], {}),
-                  ('Work list', ['69 kV work list, winter 2026-27 and before summer 2027'], s6, [5, 30, 9, 22, 36, 17], {}),
+                  ('Washing sections', ['Salt deposit on each section\'s porcelain on 31 October 2026'], s5, [44, 11, 14, 12, 16, 14, 16],
+                   {3: 'yyyy-mm-dd', 4: '0.000', 5: '0.0'}),
+                  ('Work list', ['69 kV work list, winter 2026-27 and before summer 2027'], s6, [5, 44, 9, 22, 40, 17], {}),
+                  ('Line 2 str 63', ['Flashovers at %s structure %d and its neighbours, against the section deposit' % (gs['line'], gs['structure'])],
+                   s8, [11, 6, 8, 9, 14, 18, 13, 16, 12, 30], {0: 'yyyy-mm-dd', 6: 'yyyy-mm-dd'}),
+                  ('Summer contacts', ['Summer afternoon contacts with no stroke: conductor temperature at each, against the trims'],
+                   s9, [8, 8, 11, 6, 12, 8, 9, 12, 14, 40], {2: 'yyyy-mm-dd', 8: 'yyyy-mm-dd'}),
                   ('Shortcuts', ['What the quicker readings of the same records would have sent the crews to'], s7, [60, 110], {}),
                   ('Notes', ['Definitions and conventions'], NOTES, [20, 120], {})],
            'xlsx', '69 kV fault review 2026', C.PEOPLE['reliability'], table=C.GOLD_STAMP)
@@ -161,13 +207,15 @@ def write_xlsx(r, d, reps, fig, path):
 
 def write_memo(r, fig, path):
     reps = [x for x in r['repeat'] if not x['fixed']]
-    lst = lambda cause: ', '.join('%s str %s' % (PS.lname(x['line']), (('%d-%d' % x['span']) if cause == 'growin' and x['span'] else
-                                                                       ('%d-%d' % (x['s_min'], x['s_max']) if cause == 'fallin' else x['structure'])))
-                                  for x in sorted(reps, key=lambda x: (int(x['line'][1:]), x['s_min'])) if x['cause'] == cause)
+    lst = lambda cause, skip=(): ', '.join(
+        '%s str %s' % (PS.lname(x['line']), (('%d-%d' % x['span']) if cause in ('growin', 'hardware') and x['span'] else
+                                            ('%d-%d' % (x['s_min'], x['s_max']) if cause == 'fallin' else x['structure'])))
+        for x in sorted(reps, key=lambda x: (int(x['line'][1:]), x['s_min'])) if x['cause'] == cause and (x['line'], x['structure']) not in skip)
     by_line = collections.OrderedDict()
     for x in fig['wash_due']:
         ln, sec = x.replace('wash: ', '').split(', Section ')
         by_line.setdefault(ln, []).append(int(sec))
+
     def secs(v):
         v = sorted(v)
         runs, cur = [], [v[0]]
@@ -179,36 +227,42 @@ def write_memo(r, fig, path):
                 cur = [a]
         runs.append(cur)
         parts = []
-        for r in runs:
-            parts += ['%d to %d' % (r[0], r[-1])] if len(r) > 2 else [str(x) for x in r]
+        for rr in runs:
+            parts += ['%d to %d' % (rr[0], rr[-1])] if len(rr) > 2 else [str(x) for x in rr]
         return parts[0] if len(parts) == 1 else ', '.join(parts[:-1]) + ' and ' + parts[-1]
-    wash = '; '.join('%s sections %s' % (ln, secs(v)) for ln, v in by_line.items())
+    wash = '; '.join('%s %s %s' % (ln, 'sections' if len(v) > 1 else 'section', secs(v)) for ln, v in by_line.items())
     t = fig['member_impact_2026']
     n26 = fig['faults_2026']
+    gs, cc, rs = fig['gulf_string'], fig['clearance_contact'], fig['resalted']
+    gulf = [x for x in reps if x['cause'] == 'insulator' and x['line'] in ('L01', 'L02', 'L03', 'L04')]
     blocks = [
         ('title', 'Memo'),
-        ('p', 'To: Thomas Evans, Manager of Engineering\nFrom: Brittany Melton, Reliability Engineer\nDate: 12 November 2026\nRe: 69 kV work list, winter 2026-27 and before summer 2027'),
-        ('p', 'The 69 kV system had %d faults from January to October this year. They caused %s member interruptions and %s '
-              'member-minutes. The fault table and the review workbook attached have every fault since January 2022, located and with '
-              'its cause.' % (n26, f'{t["sustained"]:,}', f'{t["member_minutes"]:,}')),
+        ('p', 'To: Reliability review (Thomas Evans, chair; Julie Peterson; Allison Ward)\nFrom: Brittany Melton, Reliability Engineer\nDate: 12 November 2026\nRe: 69 kV work list, winter 2026-27 and before summer 2027'),
+        ('p', 'The 69 kV system had %d faults from January to October, with %s member interruptions and %s member-minutes. The '
+              'fault table and the review workbook have every fault since January 2022, located and caused.'
+              % (n26, f'{t["sustained"]:,}', f'{t["member_minutes"]:,}')),
         ('h', 'This winter'),
-        ('p', 'Perch guards and streamer shields by 15 December, at %s. These are the structures the environmental team\'s survey '
-              'has birds roosting on. Their faults come before dawn between November and March whatever the fog is doing, so washing '
-              'would not touch them.' % lst('bird')),
-        ('p', 'Replace the strings by 31 December at %s. Each keeps flashing over in light rain at any hour. The one on Line 9 is '
-              '%.1f km past the solar farm tap: Shell Ridge\'s relay reads it nearer Ponder Creek because the farm\'s step-up feeds '
-              'ground current into the fault, at night as well as by day.' % (lst('insulator'), fig['tap_string_beyond_tap_km'])),
-        ('p', 'Wash before 1 December: %s. The insulators there carry more salt than the porcelain has flashed over at. Nothing has '
-              'soaked them since early June, and the August washes near the shore have built back up. The sections washed in '
-              'late October were still below it on 31 October.' % wash),
-        ('p', 'Remove the hazard trees by the end of March at %s. Their faults come with fronts and summer storms, from dead '
-              'pines outside the right of way, so trimming the span will not stop them.' % lst('fallin')),
+        ('p', 'Perch guards and streamer shields by 15 December at %s, the roost structures in the environmental survey.' % lst('bird')),
+        ('p', 'Replace the strings by 31 December at %s. The Line 9 one is %.1f km past the solar tap; Shell Ridge reads it '
+              'short because the farm feeds ground current into the fault. %s structure %d looked like salt, but it kept '
+              'flashing over after each of the five washes of %s, %d times below any deposit the salt has flashed at, while '
+              'the rest of the section stayed quiet. The string is cracked.'
+              % (lst('insulator'), fig['tap_string_beyond_tap_km'], gs['line'], gs['structure'], gs['section'], gs['below_level'])),
+        ('p', 'Wash before 1 December: %s. Their deposit on 31 October is at or above the %.3f mg/cm2 the porcelain has flashed '
+              'over at; nothing has soaked the coast since June. Line 2 sections 1 and 6, washed on %s and %s, took the four days '
+              'of southerly wind before the 27 October front and held %.1f and %.1f times the level again by 31 October.'
+              % (wash, fig['flashover_level'], dt.date.fromisoformat(rs['Line 2, Section 1']['last_wash']).strftime('%d %B').lstrip('0'),
+                 dt.date.fromisoformat(rs['Line 2, Section 6']['last_wash']).strftime('%d %B').lstrip('0'),
+                 rs['Line 2, Section 1']['ratio'], rs['Line 2, Section 6']['ratio'])),
+        ('p', 'Remove the hazard trees by the end of March at %s: dead pines outside the right of way, down with fronts and storms.'
+              % lst('fallin')),
         ('h', 'Before next summer'),
-        ('p', 'Clear the spans by 1 May at %s. These are the trees the conductor reaches when it sags hot on still afternoons. '
-              'They are located by how each fault\'s ground current split between the two ends of the line; the relays\' own '
-              'distances put them %.1f to %.1f km away. The Line 10 span counts its 2022 and 2023 contacts as well, read against '
-              'the 2022 protection study (before the new Inland transformer).' % (lst('growin'), fig['growin_relay_offset_km'][0],
-                                                                                  fig['growin_relay_offset_km'][1])),
+        ('p', 'Clear the spans by 1 May at %s, where the conductor reaches a tree that comes closer every summer.' % lst('growin')),
+        ('p', 'Restore the clearance at %s structures %s by 1 May. It is not a tree: the oak there was cut back in %s, yet the '
+              'conductor has gone on touching at the same %.0f to %.0f C every summer, where every grow-in touches about 2 C cooler '
+              'each year. It is reaching the 12.47 kV circuit built under it; re-sag the span.'
+              % (cc['line'], cc['structures'], dt.date.fromisoformat(cc['trim']).strftime('%B %Y'), cc['contact_temperature'][0],
+                 cc['contact_temperature'][1])),
         ('small', 'Repeat locations, the work list and the washing rule are as RP-04 Rev 4 defines them. Structure numbers are as on '
                   'today\'s inventory; Lines 8 and 13 were renumbered after their 2023 rebuilds.'),
     ]

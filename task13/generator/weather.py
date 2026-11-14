@@ -1,7 +1,8 @@
 """Hourly weather on the coastal bend, September 2021 to October 2026, simulated as a regional state with local
 departures: temperature and dew point on the season and the hour, the summer sea breeze, winter fronts, convective
-cells that rain and strike lightning where they track, tropical rain in late summer, and the summer and autumn of 2026
-with no soaking rain at the coast after 4 June. Fog comes two ways: Gulf sea fog in patches that roll onto a stretch
+cells that rain and strike lightning where they track, tropical rain in late summer, the strong southerly return flow
+off the Gulf for a day to three ahead of each front, and the summer and autumn of 2026 with no soaking rain at the coast
+after 4 June (a weak dry front on 27 October behind four days of it). Fog comes two ways: Gulf sea fog in patches that roll onto a stretch
 of the shore on winter and spring nights and reach a few kilometres inland, and radiation fog over the bay's marshes
 on calm, clear winter nights. Every location's weather is the state at its own place; each instrument records the
 place it stands (the Port Alcorn airport on the Gulf side, the inland regional airport, and from March 2023 the
@@ -24,6 +25,31 @@ PLACES = {
     'INL': N.ST['INL']['xy'], 'PND': N.ST['PND']['xy'],
 }
 STATION_CODES = ['PAL', 'SHR', 'SED', 'TUL', 'CAN', 'MSQ']
+STATION_LAG = {'PAL': 0, 'SHR': 0, 'TUL': 0, 'SED': 41, 'CAN': 9, 'MSQ': 96}     # days after the first readings
+AIRPORT_TOWN = {'APT': (76.0, 27.0), 'INA': (16.0, 54.0)}
+
+
+def instrumented_series(wx, x, y):
+    """the weather at a place as the instruments give it: the nearest substation station within 18 km once it reads,
+    otherwise the nearer airport (by the town it serves); hourly temperature, wind and the place used"""
+    import common as C_
+    nh = C_.NH
+    temp = np.zeros(nh)
+    wind = np.zeros(nh)
+    src = np.empty(nh, dtype=object)
+    ap = min(AIRPORT_TOWN, key=lambda k: math.hypot(AIRPORT_TOWN[k][0] - x, AIRPORT_TOWN[k][1] - y))
+    temp[:] = wx['series'][ap]['temp']
+    wind[:] = wx['series'][ap]['wind']
+    src[:] = ap
+    near = sorted(STATION_CODES, key=lambda c: math.hypot(PLACES[c][0] - x, PLACES[c][1] - y))[:2]
+    for c in reversed(near):
+        if math.hypot(PLACES[c][0] - x, PLACES[c][1] - y) > 18.0:
+            continue
+        h0 = C_.hour_index(C_.STATIONS_FROM + dt.timedelta(days=STATION_LAG[c]))
+        temp[h0:] = wx['series'][c]['temp'][h0:]
+        wind[h0:] = wx['series'][c]['wind'][h0:]
+        src[h0:] = c
+    return temp, wind, src
 
 
 def shore_coord(x, y):
@@ -138,9 +164,27 @@ def simulate():
                 lh = tstart + u
                 strokes.append((i, lh, x, y, float(rng.lognormal(math.log(24.0), 0.55)) * (1 if rng.random() < 0.9 else -1)))
 
+    # the return flow ahead of each front: a day to three of strong southerly wind off the Gulf, on its own stream so
+    # nothing drawn above moves; and a weak dry front on 27 October 2026 behind four such days
+    xr = np.random.default_rng(C.WX_SEED + 7001)
+    i27 = dindex.get(dt.date(2026, 10, 27))
+    if i27 is not None:
+        for j in range(3):
+            front[i27 + j] = max(front[i27 + j], 3.4 * (1.0 - j / 3.0))
+    pref = np.zeros(nd)
+    for i in range(1, nd):
+        if front[i] > 0 and front[i - 1] == 0:
+            k = int(xr.integers(1, 4))
+            s_ = float(xr.uniform(0.45, 1.0))
+            for j in range(1, k + 1):
+                if i - j >= 0 and front[i - j] == 0:
+                    pref[i - j] = max(pref[i - j], s_ * (1.0 - 0.15 * (j - 1)))
+    if i27 is not None:
+        for j, v in ((1, 1.5), (2, 1.75), (3, 1.7), (4, 1.3)):
+            pref[i27 - j] = v
     out = dict(days=days, hday=hday, hour=hour, month=month, year=year, doy=doy, date=date, front=front, conv=conv,
                frontal_rain=frontal_rain, fog_events=fog_events, bay_fog_day=bay_fog_day, strokes=strokes, cells=cells,
-               shore_len=shore_len)
+               shore_len=shore_len, pref=pref)
 
     # per place hourly series
     series = {}
@@ -171,6 +215,18 @@ def simulate():
         calm = 1.2 + 0.8 * coastal
         wind = calm + breeze + front[hday] * 0.8 + np.abs(prng.normal(0, 0.8, nh))
         wdir = np.where(breeze > 1.0, 135 + prng.normal(0, 20, nh), np.where(front[hday] > 1.0, 350 + prng.normal(0, 25, nh), prng.uniform(0, 360, nh))) % 360
+        on = pref[hday] > 0
+        if on.any():
+            xp = np.random.default_rng(C.WX_SEED * 53 + sum(ord(c) for c in code))
+            pw = pref[hday] * (6.2 * coastal + 1.6) * (0.8 + 0.4 * xp.random(nh))
+            wind = np.where(on, wind + pw, wind)
+            wdir = np.where(on, (168 + xp.normal(0, 14, nh)) % 360, wdir)
+        # between fronts the cool season's light wind mostly comes back off the Gulf
+        xq = np.random.default_rng(C.WX_SEED * 59 + sum(ord(c) for c in code))
+        dayon = xq.random(nd) < 0.55
+        back = ((month >= 10) | (month <= 3)) & (breeze <= 1.0) & (front[hday] <= 1.0) & dayon[hday] & ~on
+        wdir = np.where(back, (150 + xq.normal(0, 30, nh)) % 360, wdir)
+        wind = np.where(back, wind + 1.2 * coastal, wind)
         gust = wind * (1.35 + 0.25 * prng.random(nh))
         precip = np.zeros(nh)
         # frontal rain spread over the first 8 to 14 hours of the day, regionally with local scatter

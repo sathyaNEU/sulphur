@@ -1,6 +1,6 @@
 {
  "task": "task13",
- "status": "RETURNED",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "etl",
@@ -8,36 +8,36 @@
  "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "this winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 9 structure 137 among them, 3.2 km past the solar tap), wash 9 coastal sections before 1 December and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans",
- "chain": "R1 the 69 kV faults by year (436); R6 the 2026 faults by cause; R5 the 2026 member interruptions and member-minutes by line; R2 the vegetation repeat locations (4 spans, 2 stands); R3 the night repeat locations (6 perch guards, 3 strings); R4 the tap line's string (Line 9 structure 137); R7 the 9 washing sections due; R8 every open repeat location with its cause; R9 the memo's work list; R10 the work list",
- "stump": "six stumps on the factorial (level 5): S1 the residual current's split between the line ends against the line-out zero-sequence sources, S2 Inland's 2024 source change, S3 the solar farm's ground infeed at the tap, S4 night coastal faults split on the bay stations' fog, the roost survey and light rain, S5 grow-ins told by the conductor's temperature, S6 each section's salt deposit carried from its last cleaning",
- "architecture": 5,
+ "call": "this winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 2 structure 63 on the Gulf among them), wash 13 coastal sections before 1 December (Line 2 sections 1 and 6, washed in October, among them) and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans and restore the clearance at Line 6 structures 57-58",
+ "chain": "R1 the 69 kV faults by year (444); R2 the 2026 faults by cause; R3 the 2026 member interruptions and member-minutes by line; R4 the failing string on the Gulf lines (Line 2 structure 63); R5 the clearance contact at Line 6 structures 57-58; R6 the sections washed in October before the blow that are due again (Line 2 sections 1 and 6); R7 each section's deposit on 31 October; R8 every repeat location with its cause; R9 the memo's work list; R10 the work list",
+ "stump": "three stumps on the factorial (level 5), each opening its own member: J1 the Gulf string told from the salt by its flashovers below anything the salt has flashed at, J2 the Line 6 contacts told from a grow-in by their flat contact temperature through the trim, J3 each section's deposit carried on the onshore wind through the blow after the last test readings",
+ "architecture": 6,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "REVIEW (2026-11-13, as of 2026-11-12; four REVIEW lines ruled harmless in the note)",
-  "reader": "clean (2026-11-13): nothing quoted for question 1 beyond RP-04's definitions, no ranking or answer-bearing file, the repeat-location sentence executes to the golden, no single rescuing fact"
+  "leak_py": "REVIEW (2026-11-13, as of 2026-11-12; three REVIEW lines ruled harmless in the note and the report)",
+  "reader": "CLEAN (2026-11-13): nothing quoted for question 1 beyond RP-04's definitions, no ranking or helper file, no single rescuing fact, no realism tell"
  },
  "duplicate_check": {
-  "heart": "BLOCK ban.pairing only (energy x etl against task22, the author's assignment; registered --force, reason in the card notes); surface WARN people.first Thomas",
-  "nearest": "skeleton severity none against everything on file (nearest task9 v3)"
+  "heart": "BLOCK ban.pairing only (energy x etl against task22, the author's assignment; registered --force, reason in the card notes); answer shape, pattern and forum redrawn after the rebase onto task1 v6; surface WARN people.first Thomas",
+  "nearest": "skeleton severity none against everything on file, this slot's lineage included"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
   "disposition": "APPROVE",
-  "report": "determinism_check_report.md (2026-11-13; one non-blocking note: the flashover level carried no band, closed by stating 0.029 to 0.039 mg/cm2 across the eight rival fits, each filing the same nine sections, and how the level is read)"
+  "report": "determinism_check_report.md (2026-11-13, no fix) and determinism_check_report_pass2.md (2026-11-13, on the final cut after the cached-world fix moved routine vegetation rows; no graded figure moved; its one cosmetic note, the memo addressee, made)"
  },
- "paper_pair": 34.5,
+ "paper_pair": 44.3,
  "effort": {
-  "quick": 12.5,
-  "careful": 34.5,
+  "quick": 7.0,
+  "careful": 44.3,
   "thorough": 100.0,
-  "largest_hint": "the solar farm's ground infeed taken out of Shell Ridge's distance; rescues 1 of 10"
+  "largest_hint": "each section's deposit carried to 31 October on the onshore wind the test insulators' gains follow, through the blow after the last readings; rescues 2 of 10"
  },
- "cited_pair": 34.5,
+ "cited_pair": 44.3,
  "runs": {
   "run1": null,
   "run2": null,
@@ -66,6 +66,15 @@
     "run2": null,
     "run2_note": "one run generated",
     "verdict": "REDESIGN (landed, and returned by the holistic audit on determinism)",
+    "recorded": "2026-11-13"
+   },
+   {
+    "architecture": 5,
+    "run1": null,
+    "run1_note": "two platform runs, scores not pasted; the reviewer: the runs reproduced the register, the repeat locations, the guards, the washing list and the fixed places",
+    "run2": null,
+    "run2_note": "",
+    "verdict": "RETURNED at review (reward 75.0, stumped failed, determinism and solution passed)",
     "recorded": "2026-11-13"
    }
   ]
@@ -217,17 +226,17 @@
    "source": "review",
    "by": "the reviewer's sheet (pasted by the author; runs/review_2026-11-13.md)",
    "why": "not difficult enough: the runs reproduced the fault register, the repeat locations, the guards, the washing sections and the fixed places; cause signatures clean, the washing list identical from 0.029 to 0.080 mg/cm2; they parted only on a cause label",
-   "repair": "design",
+   "repair": "design: architecture 6, the reviewer's level-up in the same world (the data package, RP-04 and the register kept, one RP-04 clause added: a repair for any other cause); architecture 5's six stumps demoted to reflexes, three new independent stumps each opening its own work-list item",
    "commit": ""
   }
  ],
- "resume": "redesign from stage 2 under stumping Part 3.4 (open members, the direct route, margins between the family and the stump), or retire, on the author's word",
+ "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py --rewrite, leak.py), resubmits the same platform task (238b1307-701b-4f8b-b44d-c64277f77336) with target.zip and the four answer blocks from submission.md; then /triage-runs task13",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "sent back for fixes",
+  "status": "sent back for fixes; fixed, ready to resubmit",
   "date": "2026-11-13",
-  "note": "review sheet: reward 75.0, stumped failed, determinism and solution passed (main and supp); task 238b1307-701b-4f8b-b44d-c64277f77336"
+  "note": "review sheet of 2026-11-13: reward 75.0, stumped failed, determinism and solution passed; architecture 6 answers it"
  },
  "notes": "architecture 5 drawn 2026-11-13 at the author's assignment (Energy Systems & Utilities x Data Extraction & Conformation); work in worktree .claude/worktrees/task13-arch4 (detached at origin/main)",
  "prompt_rewritten": false,
@@ -244,5 +253,10 @@
   "checks": "37 of 37",
   "verify": "12 of 12",
   "rebuild": "byte-identical"
- }
+ },
+ "open_members": [
+  "replace the string: Line 2, structure 63 (J1)",
+  "restore the clearance: Line 6, structures 57-58 (J2)",
+  "wash: Line 2, Sections 1 and 6 (J3)"
+ ]
 }

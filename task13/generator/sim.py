@@ -11,7 +11,7 @@ import loads as L
 import network as N
 import weather as W
 
-CACHE = os.path.join(tempfile.gettempdir(), 'task13_v5_world_cache')
+CACHE = os.path.join(tempfile.gettempdir(), 'task13_v6_world_cache')
 SIM_FILES = ('common', 'network', 'weather', 'loads', 'faults', 'field', 'relays', 'ops', 'sim')
 CRIT = 0.052          # the deposit (mg per cm2 ESDD) past which the Gulf lines' porcelain flashes over in fog
 
@@ -42,7 +42,9 @@ def world(refresh=False):
     p = os.path.join(CACHE, 'world.pkl')
     src = max(os.path.getmtime(os.path.join(C.HERE, f + '.py')) for f in SIM_FILES if os.path.exists(os.path.join(C.HERE, f + '.py')))
     if not refresh and os.path.exists(p) and os.path.getmtime(p) > src:
-        return pickle.load(open(p, 'rb'))
+        w = pickle.load(open(p, 'rb'))
+        F.fill_sources(w['net'])        # the module's own list, which a cached world does not carry
+        return w
     w = simulate()
     pickle.dump(w, open(p, 'wb'))
     return w

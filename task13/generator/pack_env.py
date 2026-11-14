@@ -71,9 +71,7 @@ def write_asos(rows, path, station):
 
 def station_rows(wx, rng):
     rows = []
-    start = {'PAL': C.STATIONS_FROM, 'SHR': C.STATIONS_FROM, 'TUL': C.STATIONS_FROM,
-             'SED': C.STATIONS_FROM + dt.timedelta(days=41), 'CAN': C.STATIONS_FROM + dt.timedelta(days=9),
-             'MSQ': C.STATIONS_FROM + dt.timedelta(days=96)}
+    start = {c: C.STATIONS_FROM + dt.timedelta(days=W.STATION_LAG[c]) for c in W.STATION_CODES}
     names = {'PAL': 'PORT ALCORN SUB', 'SHR': 'SHELL RIDGE SUB', 'SED': 'SEDGE POINT SUB', 'TUL': 'TULE MARSH SUB',
              'CAN': 'CANEY BEND SUB', 'MSQ': 'MESQUITE FLAT SUB'}
     for code in W.STATION_CODES:
@@ -349,7 +347,7 @@ def veg_rows(w, rng):
     # spans the grow-ins still reach: no cycle trim may cover them after their last contact
     last_contact = {}
     for f in w['faults']:
-        if f['cause'] == 'growin':
+        if f['cause'] in ('growin', 'clearance'):
             key = (f['line'], f['span'][0])
             last_contact[key] = max(last_contact.get(key, f['t']), f['t'])
     protect = [(lid, no) for (lid, no) in last_contact

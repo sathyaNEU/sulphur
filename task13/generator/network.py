@@ -85,6 +85,11 @@ INL_Z0 = {'old': 9.8, 'new': 3.6}            # Inland's ground source, 75 MVA (t
 import datetime as _dt
 REBUILT = {'L13': (_dt.date(2023, 4, 18), 9), 'L08': (_dt.date(2023, 9, 26), -6)}
 
+# stretches of line carrying the cooperative's 12.47 kV distribution circuits built under the 69 kV on the same poles
+# (structure no. from, to)
+UNDERBUILT = {'L01': (20, 35), 'L02': (28, 40), 'L06': (41, 76), 'L10': (30, 44), 'L12': (38, 50), 'L14': (58, 72),
+              'L15': (45, 55), 'L16': (1, 999)}
+
 # the solar farm: tap on L09 at km TAP_KM from Shell Ridge, a 1.6 km tap line to the farm's 69/34.5 kV step-up
 TAP_LINE = 'L09'
 TAP_KM = 23.4
@@ -197,6 +202,10 @@ def build(rng=None):
         for st in net['lines'][lid]['structures']:
             if k0 <= st['km'] <= k1:
                 st['insulator'], st['ins_year'] = 'polymer', yr
+    for lid, line in net['lines'].items():
+        a, b = UNDERBUILT.get(lid, (0, -1))
+        for st in line['structures']:
+            st['underbuild'] = '12.47 kV' if a <= st['no'] <= b else ''
     for name, lid, km, members, feeders, backup, alt, moab in TAPS:
         net['taps'].append(dict(name=name, line=lid, km=km, members=members, feeders=feeders, backup=backup, alt=alt,
                                 moab=moab))

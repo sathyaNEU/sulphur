@@ -8,6 +8,7 @@ import sqlite3
 import numpy as np
 
 import common as C
+import faults as F
 import network as N
 import weather as W
 
@@ -298,6 +299,9 @@ FINDINGS = {
     'lightning': ['shattered insulator at {s}', 'arrester blown at {s}, replaced'],
     'unknown': ['patrolled the line, nothing found'],
 }
+# what a crew writes at the span where the conductor reaches the circuit below: the live oak in the span is what it sees
+UNDERBUILD_FIRST = 'live oak under the conductors in span {s}, top limbs about 10 ft below the bottom phase, referred to vegetation'
+UNDERBUILD_LATER = 'patrolled {s}, oak in the span cut back last year, nothing found'
 
 
 def _str_txt(no, rng):
@@ -316,8 +320,28 @@ def patrol_rows(w):
     net = w['net']
     rng = np.random.default_rng(C.EV_SEED + 1111)
     rows = []
+    first_ub = {}
+    for f in w['faults']:
+        if f['cause'] == 'clearance' and f['line'] not in first_ub:
+            first_ub[f['line']] = f['id']
     for f in w['faults']:
         line = net['lines'][f['line']]
+        if f['cause'] == 'clearance':
+            lt = C.to_local(f['t'])
+            no = f['span'][0]
+            stxt = '%s-%s' % (_str_txt(no, rng), no + 1)
+            if f['id'] == first_ub[f['line']]:
+                d = lt + dt.timedelta(days=float(rng.uniform(0.6, 2.5)))
+                rows.append(dict(date=d.date(), line='Line %d' % int(f['line'][1:]), frm=no - 6, to=no + 7,
+                                 crew=str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7'])),
+                                 find=UNDERBUILD_FIRST.format(s=stxt), ref=f['id']))
+            elif rng.random() < 0.3:
+                d = lt + dt.timedelta(days=float(rng.uniform(0.6, 6)))
+                rows.append(dict(date=d.date(), line='Line %d' % int(f['line'][1:]), frm=no - 6, to=no + 7,
+                                 crew=str(rng.choice(['Crew 2', 'Crew 4', 'Crew 5', 'Crew 7'])),
+                                 find=(UNDERBUILD_LATER.format(s=stxt) if rng.random() < 0.5 else
+                                       'patrolled %s to %s, nothing found' % (_str_txt(no - 6, rng), no + 7)), ref=f['id']))
+            continue
         rel = f['records'].get('a') if f['records'].get('a', {}).get('family') not in (None, 'EM') else f['records'].get('b')
         rep_km = None
         if rel and rel.get('family') not in (None, 'EM') and not rel.get('lost') and -1.0 <= rel['dist_km'] <= 1.6 * line['length']:
@@ -351,6 +375,9 @@ def patrol_rows(w):
                 find = str(rng.choice(FINDINGS[f['cause']])).format(s=_str_txt(sn, rng))
                 if f['cause'] == 'insulator':
                     find = 'flash marks on the porcelain at %s, string looks sound, left in service' % _str_txt(sn, rng)
+                    if f.get('wet') == 'fog' and f['line'] in F.GULF_LINES:
+                        # on the Gulf lines every string carries the salt film a crew sees first
+                        find = str(rng.choice(FINDINGS['fog'])).format(s=_str_txt(sn, rng))
                 if f['cause'] == 'growin':
                     find = 'scorched branch near %s, no clearance problem seen from the ground' % _str_txt(sn, rng)
             else:

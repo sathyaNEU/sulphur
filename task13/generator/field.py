@@ -1,6 +1,7 @@
 """The line crews' insulator washing on the Gulf lines and the test insulators the cooperative samples each month.
 Washing: before most fog seasons and after a run of flashovers, a section at a time, some autumns skipped; in 2026 the
-crews washed some sections in late winter, some in August after the drought set in and some in October. The test
+crews washed some sections in late winter, some in August after the drought set in and the rest in the October round,
+which reached some sections before the southerly blow of 24 to 26 October. The test
 insulators hang at eight sites from the Gulf shore to the bay and inland; they are never washed, so each monthly
 reading is the deposit since the last soaking rain at that site's distance from the Gulf."""
 import datetime as dt
@@ -44,50 +45,41 @@ def washing_schedule(net, wx, rng=None):
             if yr >= 2022 and rng.random() < 0.30:
                 d = dt.date(yr, int(rng.choice([3, 4])), int(rng.integers(1, 28)))
                 out.append(dict(section=s['id'], line=s['line'], s0=s['s0'], s1=s['s1'], date=d, why='after flashovers'))
+    out = [x for x in out if not (x['section'] == 'L02-W4' and x['date'] >= dt.date(2024, 7, 1))]
+    s4 = [x for x in secs if x['id'] == 'L02-W4'][0]
+    for d, why in L02W4_WASHES:
+        out.append(dict(section='L02-W4', line=s4['line'], s0=s4['s0'], s1=s4['s1'], date=dt.date.fromisoformat(d), why=why))
     return secs, out
 
 
+# the 2026 washes, section by section: the crews' after-flashover washes in winter, the August hot washes once the
+# drought set in, and the October pre-season round, which reached some sections before the southerly blow of 24 to 26
+# October and the rest after the front; Line 3 section 5 was not reached in 2026
+PLAN_2026 = {
+    'L01-W1': [('2026-03-12', 'after flashovers')], 'L01-W2': [('2026-10-28', 'pre-season')],
+    'L01-W3': [('2026-10-29', 'pre-season')], 'L01-W4': [('2026-10-29', 'pre-season')],
+    'L01-W5': [('2026-03-13', 'after flashovers')],
+    'L02-W1': [('2026-10-17', 'pre-season')], 'L02-W2': [('2026-08-11', 'hot wash')], 'L02-W3': [('2026-08-12', 'hot wash')],
+    'L02-W4': [('2026-01-26', 'after flashovers'), ('2026-02-23', 'after flashovers'), ('2026-03-24', 'after flashovers')],
+    'L02-W5': [('2026-08-18', 'hot wash')], 'L02-W6': [('2026-10-20', 'pre-season')], 'L02-W7': [('2026-08-04', 'hot wash')],
+    'L03-W1': [('2026-10-27', 'pre-season')], 'L03-W2': [('2026-10-28', 'pre-season')], 'L03-W3': [('2026-10-30', 'pre-season')],
+    'L03-W4': [('2026-03-19', 'after flashovers')], 'L03-W5': [], 'L03-W6': [('2026-10-30', 'pre-season')],
+    'L03-W7': [('2026-08-20', 'hot wash')],
+    'L04-W1': [('2026-03-16', 'after flashovers')], 'L04-W2': [('2026-10-27', 'pre-season')],
+    'L04-W3': [('2026-10-28', 'pre-season')],
+}
+# Line 2 section 4's washes from the autumn of 2024, the crews answering its runs of flashovers
+L02W4_WASHES = [('2024-11-12', 'pre-season'), ('2025-11-18', 'pre-season'), ('2025-12-15', 'after flashovers')]
+
+
 def plan_2026(net, wx, secs, washes, crit, rng=None):
-    """the 2026 washes: March for some, August for some near the shore, October for some, none for the rest, chosen so
-    each section's deposit on 31 October sits clear of the flashover level"""
-    rng = rng or np.random.default_rng(C.EV_SEED + 202)
-    days = wx['days']
-    rain = {c: W.daily_rain(wx, c) for c in ('APT', 'PAL', 'SHR', 'SED')}
-    codes = {'L01': ('PAL', 'APT'), 'L02': ('PAL', 'SHR'), 'L03': ('SHR', 'SED'), 'L04': ('APT', 'PAL')}
-    end = days.index(dt.date(2026, 10, 31))
+    """the 2026 washes as the crews did them"""
+    by = {x['id']: x for x in secs}
     plan = []
-    for s in secs:
-        r = (rain[codes[s['line']][0]] + rain[codes[s['line']][1]]) / 2.0
-        rate = F.deposit_rate(s['shore'])
-
-        def oct31(wash_day):
-            dep = rate * 60.0
-            for di in range(days.index(dt.date(2026, 1, 1)), end + 1):
-                d = days[di]
-                dep += rate * F.onshore_factor(d.month)
-                dep *= F.rain_keep(r[di])
-                if wash_day is not None and d == wash_day:
-                    dep = 0.003
-            return dep
-
-        choice = None
-        none = oct31(None)
-        aug = dt.date(2026, 8, int(rng.integers(3, 21)))
-        octo = dt.date(2026, 10, int(rng.integers(19, 29)))
-        mar = dt.date(2026, 3, int(rng.integers(2, 27)))
-        dep_aug = oct31(aug)
-        u = rng.random()
-        if none <= 0.5 * crit:
-            choice = mar if u < 0.5 else None                     # far from the shore: whatever was done, below
-        elif dep_aug >= 1.8 * crit and u < 0.45:
-            choice = aug                                          # near the shore, washed in August, back over
-        elif none >= 1.8 * crit and u < 0.75:
-            choice = None if u < 0.5 else mar                     # not washed since the drought began: over
-        else:
-            choice = octo                                         # washed in October: clean
-        if choice is not None:
-            plan.append(dict(section=s['id'], line=s['line'], s0=s['s0'], s1=s['s1'], date=choice,
-                             why={3: 'after flashovers', 8: 'hot wash', 10: 'pre-season'}[choice.month]))
+    for sid, ws in PLAN_2026.items():
+        s = by[sid]
+        for d, why in ws:
+            plan.append(dict(section=sid, line=s['line'], s0=s['s0'], s1=s['s1'], date=dt.date.fromisoformat(d), why=why))
     return plan
 
 
@@ -103,10 +95,11 @@ def test_readings(wx, rng=None):
                    key=lambda c: math.hypot(W.PLACES[c][0] - x, W.PLACES[c][1] - y))
         r = W.daily_rain(wx, best)
         rate = F.deposit_rate(sd)
+        fac = F.salt_factor(wx, [best])
         dep = rate * 60.0
         series = {}
         for di, d in enumerate(days):
-            dep += rate * F.onshore_factor(d.month)
+            dep += rate * fac[di]
             dep *= F.rain_keep(r[di])
             series[d] = dep
         near[code] = (sd, series)

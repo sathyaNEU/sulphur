@@ -1,142 +1,141 @@
 {
  "faults_by_year": {
-  "2022": 96,
-  "2023": 93,
-  "2024": 83,
-  "2025": 84,
-  "2026": 80
+  "2022": 103,
+  "2023": 104,
+  "2024": 78,
+  "2025": 85,
+  "2026": 74
  },
- "faults_total": 436,
- "faults_2026": 80,
+ "faults_total": 444,
+ "faults_2026": 74,
  "faults_by_line_year": {
   "Line 1": {
-   "2022": 5,
-   "2023": 4,
+   "2022": 2,
+   "2023": 3,
    "2024": 1,
    "2025": 2,
    "2026": 1
   },
   "Line 2": {
-   "2022": 11,
-   "2023": 10,
-   "2024": 12,
+   "2022": 14,
+   "2023": 17,
+   "2024": 5,
    "2025": 19,
-   "2026": 24
+   "2026": 18
   },
   "Line 3": {
-   "2022": 1,
-   "2023": 3,
-   "2024": 8,
-   "2025": 5,
+   "2022": 3,
+   "2023": 6,
+   "2024": 2,
+   "2025": 7,
    "2026": 1
   },
   "Line 4": {
-   "2022": 2,
-   "2023": 6,
+   "2022": 3,
+   "2023": 5,
    "2024": 1,
-   "2025": 1,
    "2026": 2
   },
   "Line 5": {
    "2022": 3,
    "2023": 5,
    "2024": 6,
-   "2025": 6,
-   "2026": 3
+   "2025": 4,
+   "2026": 5
   },
   "Line 6": {
-   "2022": 1,
-   "2023": 3,
-   "2024": 7,
-   "2025": 4,
-   "2026": 8
+   "2022": 2,
+   "2023": 4,
+   "2024": 8,
+   "2025": 3,
+   "2026": 5
   },
   "Line 7": {
    "2022": 12,
-   "2023": 12,
-   "2024": 9,
-   "2025": 4,
-   "2026": 4
-  },
-  "Line 8": {
-   "2022": 4,
-   "2023": 3,
-   "2024": 3,
+   "2023": 11,
+   "2024": 10,
    "2025": 4,
    "2026": 2
   },
+  "Line 8": {
+   "2022": 8,
+   "2023": 2,
+   "2024": 4,
+   "2025": 4,
+   "2026": 4
+  },
   "Line 9": {
    "2022": 4,
-   "2023": 8,
-   "2024": 3,
-   "2025": 4,
-   "2026": 7
-  },
-  "Line 10": {
-   "2022": 5,
-   "2023": 3,
+   "2023": 6,
    "2024": 3,
    "2025": 4,
    "2026": 5
   },
-  "Line 11": {
+  "Line 10": {
    "2022": 7,
-   "2023": 2,
-   "2024": 4,
-   "2025": 10,
+   "2023": 7,
+   "2024": 5,
+   "2025": 6,
+   "2026": 7
+  },
+  "Line 11": {
+   "2022": 8,
+   "2023": 6,
+   "2024": 7,
+   "2025": 8,
    "2026": 3
   },
   "Line 12": {
-   "2022": 9,
+   "2022": 8,
    "2023": 11,
-   "2024": 5,
-   "2025": 2,
-   "2026": 1
+   "2024": 6,
+   "2025": 1,
+   "2026": 3
   },
   "Line 13": {
-   "2022": 11,
+   "2022": 12,
    "2023": 7,
    "2024": 11,
    "2025": 6,
-   "2026": 4
+   "2026": 6
   },
   "Line 14": {
-   "2022": 9,
+   "2022": 6,
    "2023": 7,
    "2024": 6,
-   "2025": 6,
+   "2025": 8,
    "2026": 6
   },
   "Line 15": {
    "2022": 4,
-   "2023": 6,
-   "2024": 2,
-   "2025": 4,
-   "2026": 6
+   "2023": 5,
+   "2024": 1,
+   "2025": 6,
+   "2026": 3
   },
   "Line 16": {
-   "2022": 8,
-   "2023": 3,
+   "2022": 7,
+   "2023": 2,
    "2024": 2,
    "2025": 3,
    "2026": 3
   }
  },
  "faults_2026_by_cause": {
-  "lightning": 9,
+  "lightning": 11,
   "bird": 6,
-  "fog": 16,
-  "insulator": 16,
-  "growin": 14,
+  "fog": 8,
+  "insulator": 17,
+  "growin": 11,
   "fallin": 8,
-  "vehicle": 5,
-  "hardware": 2,
-  "unknown": 4
+  "vehicle": 4,
+  "hardware": 4,
+  "unknown": 5
  },
  "member_impact_2026": {
-  "sustained": 57024,
-  "member_minutes": 1227611,
-  "momentary": 371583
+  "sustained": 52306,
+  "member_minutes": 1502951,
+  "momentary": 337786
  },
  "member_impact_2026_by_line": {
   "Line 1": {
@@ -145,105 +144,133 @@
    "momentary": 7750
   },
   "Line 2": {
-   "sustained": 16115,
-   "member_minutes": 179995,
-   "momentary": 176730
+   "sustained": 8067,
+   "member_minutes": 85090,
+   "momentary": 136513
   },
   "Line 3": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 4259
+   "momentary": 4232
   },
   "Line 4": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 5456
+   "momentary": 5439
   },
   "Line 5": {
    "sustained": 11171,
-   "member_minutes": 172224,
-   "momentary": 5595
+   "member_minutes": 167070,
+   "momentary": 16799
   },
   "Line 6": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 30922
+   "momentary": 19317
   },
   "Line 7": {
-   "sustained": 0,
-   "member_minutes": 0,
-   "momentary": 6506
+   "sustained": 1621,
+   "member_minutes": 82952,
+   "momentary": 1625
   },
   "Line 8": {
    "sustained": 10259,
-   "member_minutes": 354807,
-   "momentary": 0
+   "member_minutes": 472247,
+   "momentary": 10318
   },
   "Line 9": {
    "sustained": 1168,
-   "member_minutes": 27196,
-   "momentary": 30506
+   "member_minutes": 25732,
+   "momentary": 21365
   },
   "Line 10": {
    "sustained": 14894,
-   "member_minutes": 199267,
-   "momentary": 22337
+   "member_minutes": 258643,
+   "momentary": 37231
   },
   "Line 11": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 13328
+   "momentary": 13344
   },
   "Line 12": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 5730
+   "momentary": 17220
   },
   "Line 13": {
-   "sustained": 3417,
-   "member_minutes": 294124,
-   "momentary": 3416
+   "sustained": 5126,
+   "member_minutes": 411217,
+   "momentary": 5132
   },
   "Line 14": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 24011
+   "momentary": 23999
   },
   "Line 15": {
    "sustained": 0,
    "member_minutes": 0,
-   "momentary": 35037
+   "momentary": 17502
   }
  },
- "night_repeat_locations": [
-  "perch guards: Line 12, structure 104",
-  "perch guards: Line 14, structure 117",
-  "perch guards: Line 16, structure 23",
-  "perch guards: Line 6, structure 79",
-  "perch guards: Line 7, structure 31",
-  "perch guards: Line 7, structure 52",
-  "replace the string: Line 15, structure 57",
-  "replace the string: Line 2, structure 63",
-  "replace the string: Line 5, structure 88"
+ "gulf_string": {
+  "line": "Line 2",
+  "structure": 63,
+  "flashovers": 11,
+  "first": "2025-09-25",
+  "last": "2026-05-17",
+  "below_level": 9,
+  "below_cut": 5,
+  "lowest_deposit": 0.0083,
+  "median_fog_deposit": 0.0635,
+  "section": "Line 2, Section 4",
+  "section_washes_2025_26": [
+   "2025-11-18",
+   "2025-12-15",
+   "2026-01-26",
+   "2026-02-23",
+   "2026-03-24"
+  ]
+ },
+ "gulf_strings": [
+  "replace the string: Line 2, structure 63"
  ],
- "tap_repeat_location": [
-  "replace the string: Line 9, structure 137"
+ "clearance_items": [
+  "restore the clearance: Line 6, structures 57-58"
  ],
- "vegetation_repeat_locations": [
+ "clearance_contact": {
+  "line": "Line 6",
+  "structures": "57-58",
+  "contacts_since_trim": 6,
+  "trim": "2022-08-09",
+  "slope_c_per_year": -0.3,
+  "contact_temperature": [
+   41.4,
+   43.2
+  ],
+  "vegetation_slopes": [
+   -2.9,
+   -1.7
+  ]
+ },
+ "spans_to_clear": [
   "clear the span: Line 10, structures 47-48",
   "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 14, structures 63-64",
-  "clear the span: Line 6, structures 57-58",
-  "remove the hazard trees: Line 11, structures 118-120",
-  "remove the hazard trees: Line 13, structures 103-107"
+  "clear the span: Line 11, structures 64-65",
+  "clear the span: Line 14, structures 62-63"
+ ],
+ "resalted_due": [
+  "wash: Line 2, Section 1",
+  "wash: Line 2, Section 6"
  ],
  "repeat_locations_open": [
   "clear the span: Line 10, structures 47-48",
   "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 14, structures 63-64",
-  "clear the span: Line 6, structures 57-58",
+  "clear the span: Line 11, structures 64-65",
+  "clear the span: Line 14, structures 62-63",
   "perch guards: Line 12, structure 104",
-  "perch guards: Line 14, structure 117",
+  "perch guards: Line 14, structure 118",
   "perch guards: Line 16, structure 23",
   "perch guards: Line 6, structure 79",
   "perch guards: Line 7, structure 31",
@@ -253,26 +280,32 @@
   "replace the string: Line 15, structure 57",
   "replace the string: Line 2, structure 63",
   "replace the string: Line 5, structure 88",
-  "replace the string: Line 9, structure 137"
+  "replace the string: Line 9, structure 136",
+  "restore the clearance: Line 6, structures 57-58"
  ],
  "wash_due": [
+  "wash: Line 1, Section 1",
+  "wash: Line 1, Section 5",
   "wash: Line 2, Section 1",
   "wash: Line 2, Section 2",
   "wash: Line 2, Section 3",
   "wash: Line 2, Section 4",
   "wash: Line 2, Section 5",
+  "wash: Line 2, Section 6",
   "wash: Line 2, Section 7",
   "wash: Line 3, Section 4",
   "wash: Line 3, Section 5",
-  "wash: Line 3, Section 7"
+  "wash: Line 3, Section 7",
+  "wash: Line 4, Section 1"
  ],
+ "wash_due_count": 13,
  "work_list": [
   "clear the span: Line 10, structures 47-48",
   "clear the span: Line 10, structures 88-89",
-  "clear the span: Line 14, structures 63-64",
-  "clear the span: Line 6, structures 57-58",
+  "clear the span: Line 11, structures 64-65",
+  "clear the span: Line 14, structures 62-63",
   "perch guards: Line 12, structure 104",
-  "perch guards: Line 14, structure 117",
+  "perch guards: Line 14, structure 118",
   "perch guards: Line 16, structure 23",
   "perch guards: Line 6, structure 79",
   "perch guards: Line 7, structure 31",
@@ -282,34 +315,40 @@
   "replace the string: Line 15, structure 57",
   "replace the string: Line 2, structure 63",
   "replace the string: Line 5, structure 88",
-  "replace the string: Line 9, structure 137",
+  "replace the string: Line 9, structure 136",
+  "restore the clearance: Line 6, structures 57-58",
+  "wash: Line 1, Section 1",
+  "wash: Line 1, Section 5",
   "wash: Line 2, Section 1",
   "wash: Line 2, Section 2",
   "wash: Line 2, Section 3",
   "wash: Line 2, Section 4",
   "wash: Line 2, Section 5",
+  "wash: Line 2, Section 6",
   "wash: Line 2, Section 7",
   "wash: Line 3, Section 4",
   "wash: Line 3, Section 5",
-  "wash: Line 3, Section 7"
+  "wash: Line 3, Section 7",
+  "wash: Line 4, Section 1"
  ],
  "work_list_counts": {
   "guards": 6,
   "strings": 4,
   "spans": 4,
   "stands": 2,
-  "wash": 9
+  "clearance": 1,
+  "wash": 13
  },
  "repeat_locations": [
   {
    "line": "Line 6",
    "cause": "bird",
    "structure": 79,
-   "s_min": 79,
-   "s_max": 79,
+   "s_min": 78,
+   "s_max": 80,
    "span": [
-    78,
-    79
+    79,
+    80
    ],
    "faults": 4,
    "first": "2024-01-02",
@@ -323,8 +362,8 @@
    "s_min": 30,
    "s_max": 31,
    "span": [
-    30,
-    31
+    31,
+    32
    ],
    "faults": 10,
    "first": "2022-11-24",
@@ -335,7 +374,7 @@
    "line": "Line 7",
    "cause": "bird",
    "structure": 38,
-   "s_min": 38,
+   "s_min": 37,
    "s_max": 39,
    "span": [
     37,
@@ -353,8 +392,8 @@
    "s_min": 51,
    "s_max": 53,
    "span": [
-    51,
-    52
+    52,
+    53
    ],
    "faults": 15,
    "first": "2022-01-28",
@@ -366,7 +405,7 @@
    "cause": "bird",
    "structure": 96,
    "s_min": 95,
-   "s_max": 96,
+   "s_max": 97,
    "span": [
     96,
     97
@@ -394,14 +433,14 @@
   {
    "line": "Line 14",
    "cause": "bird",
-   "structure": 117,
-   "s_min": 117,
-   "s_max": 118,
+   "structure": 118,
+   "s_min": 118,
+   "s_max": 119,
    "span": [
-    117,
-    118
+    118,
+    119
    ],
-   "faults": 9,
+   "faults": 8,
    "first": "2022-01-28",
    "last": "2025-12-09",
    "fixed": false
@@ -410,7 +449,7 @@
    "line": "Line 16",
    "cause": "bird",
    "structure": 23,
-   "s_min": 23,
+   "s_min": 22,
    "s_max": 24,
    "span": [
     23,
@@ -428,8 +467,8 @@
    "s_min": 118,
    "s_max": 120,
    "span": [
-    118,
-    119
+    119,
+    120
    ],
    "faults": 10,
    "first": "2022-02-04",
@@ -446,7 +485,7 @@
     104,
     105
    ],
-   "faults": 25,
+   "faults": 24,
    "first": "2022-06-26",
    "last": "2026-08-15",
    "fixed": false
@@ -454,21 +493,96 @@
   {
    "line": "Line 5",
    "cause": "growin",
-   "structure": 101,
-   "s_min": 100,
+   "structure": 102,
+   "s_min": 101,
    "s_max": 102,
    "span": [
     101,
     102
    ],
    "faults": 4,
-   "first": "2022-12-15",
+   "first": "2023-07-31",
+   "last": "2026-06-06",
+   "fixed": true
+  },
+  {
+   "line": "Line 10",
+   "cause": "growin",
+   "structure": 48,
+   "s_min": 47,
+   "s_max": 49,
+   "span": [
+    47,
+    48
+   ],
+   "faults": 6,
+   "first": "2022-06-22",
+   "last": "2026-08-23",
+   "fixed": false
+  },
+  {
+   "line": "Line 10",
+   "cause": "growin",
+   "structure": 88,
+   "s_min": 87,
+   "s_max": 89,
+   "span": [
+    88,
+    89
+   ],
+   "faults": 6,
+   "first": "2022-06-25",
+   "last": "2026-08-23",
+   "fixed": false
+  },
+  {
+   "line": "Line 11",
+   "cause": "growin",
+   "structure": 65,
+   "s_min": 64,
+   "s_max": 66,
+   "span": [
+    64,
+    65
+   ],
+   "faults": 5,
+   "first": "2023-07-30",
+   "last": "2026-08-22",
+   "fixed": false
+  },
+  {
+   "line": "Line 14",
+   "cause": "growin",
+   "structure": 62,
+   "s_min": 62,
+   "s_max": 63,
+   "span": [
+    62,
+    63
+   ],
+   "faults": 4,
+   "first": "2023-07-30",
+   "last": "2026-07-12",
+   "fixed": false
+  },
+  {
+   "line": "Line 14",
+   "cause": "growin",
+   "structure": 131,
+   "s_min": 130,
+   "s_max": 132,
+   "span": [
+    130,
+    131
+   ],
+   "faults": 4,
+   "first": "2023-07-18",
    "last": "2026-06-11",
    "fixed": true
   },
   {
    "line": "Line 6",
-   "cause": "growin",
+   "cause": "hardware",
    "structure": 57,
    "s_min": 57,
    "s_max": 58,
@@ -477,74 +591,44 @@
     58
    ],
    "faults": 7,
-   "first": "2023-07-31",
-   "last": "2026-09-06",
-   "fixed": false
-  },
-  {
-   "line": "Line 10",
-   "cause": "growin",
-   "structure": 47,
-   "s_min": 47,
-   "s_max": 49,
-   "span": [
-    47,
-    48
-   ],
-   "faults": 4,
-   "first": "2022-06-23",
-   "last": "2026-07-14",
-   "fixed": false
-  },
-  {
-   "line": "Line 10",
-   "cause": "growin",
-   "structure": 88,
-   "s_min": 88,
-   "s_max": 88,
-   "span": [
-    88,
-    89
-   ],
-   "faults": 4,
    "first": "2022-06-25",
-   "last": "2026-08-21",
+   "last": "2026-08-25",
    "fixed": false
   },
   {
-   "line": "Line 14",
-   "cause": "growin",
+   "line": "Line 2",
+   "cause": "insulator",
    "structure": 63,
-   "s_min": 63,
+   "s_min": 62,
    "s_max": 64,
    "span": [
     63,
     64
    ],
-   "faults": 3,
-   "first": "2026-06-11",
-   "last": "2026-08-05",
+   "faults": 11,
+   "first": "2025-09-25",
+   "last": "2026-05-17",
    "fixed": false
   },
   {
-   "line": "Line 14",
-   "cause": "growin",
-   "structure": 131,
-   "s_min": 131,
-   "s_max": 133,
+   "line": "Line 5",
+   "cause": "insulator",
+   "structure": 88,
+   "s_min": 87,
+   "s_max": 88,
    "span": [
-    131,
-    132
+    87,
+    88
    ],
-   "faults": 5,
-   "first": "2022-06-25",
-   "last": "2026-07-13",
-   "fixed": true
+   "faults": 6,
+   "first": "2024-10-21",
+   "last": "2026-08-19",
+   "fixed": false
   },
   {
-   "line": "Line 1",
+   "line": "Line 8",
    "cause": "insulator",
-   "structure": 48,
+   "structure": 49,
    "s_min": 48,
    "s_max": 49,
    "span": [
@@ -557,64 +641,34 @@
    "fixed": true
   },
   {
-   "line": "Line 2",
-   "cause": "insulator",
-   "structure": 63,
-   "s_min": 62,
-   "s_max": 64,
-   "span": [
-    62,
-    63
-   ],
-   "faults": 10,
-   "first": "2024-09-23",
-   "last": "2026-10-15",
-   "fixed": false
-  },
-  {
-   "line": "Line 3",
-   "cause": "insulator",
-   "structure": 42,
-   "s_min": 41,
-   "s_max": 43,
-   "span": [
-    42,
-    43
-   ],
-   "faults": 3,
-   "first": "2024-02-26",
-   "last": "2024-11-30",
-   "fixed": true
-  },
-  {
-   "line": "Line 5",
-   "cause": "insulator",
-   "structure": 88,
-   "s_min": 87,
-   "s_max": 89,
-   "span": [
-    87,
-    88
-   ],
-   "faults": 6,
-   "first": "2024-11-15",
-   "last": "2026-05-06",
-   "fixed": false
-  },
-  {
    "line": "Line 9",
    "cause": "insulator",
-   "structure": 137,
-   "s_min": 136,
-   "s_max": 138,
+   "structure": 136,
+   "s_min": 135,
+   "s_max": 137,
    "span": [
     136,
     137
    ],
-   "faults": 9,
-   "first": "2024-03-19",
-   "last": "2026-10-15",
+   "faults": 6,
+   "first": "2024-11-15",
+   "last": "2026-04-19",
    "fixed": false
+  },
+  {
+   "line": "Line 11",
+   "cause": "insulator",
+   "structure": 40,
+   "s_min": 40,
+   "s_max": 41,
+   "span": [
+    40,
+    41
+   ],
+   "faults": 4,
+   "first": "2023-10-15",
+   "last": "2024-09-23",
+   "fixed": true
   },
   {
    "line": "Line 13",
@@ -623,11 +677,11 @@
    "s_min": 71,
    "s_max": 72,
    "span": [
-    71,
-    72
+    72,
+    73
    ],
-   "faults": 3,
-   "first": "2022-03-18",
+   "faults": 4,
+   "first": "2022-02-27",
    "last": "2022-08-10",
    "fixed": true
   },
@@ -641,254 +695,440 @@
     56,
     57
    ],
-   "faults": 6,
-   "first": "2025-03-13",
-   "last": "2026-10-15",
+   "faults": 4,
+   "first": "2025-05-27",
+   "last": "2026-05-17",
    "fixed": false
   }
  ],
- "flashover_level": 0.0316,
- "deposit_rate_fit": [
-  -6.3142,
-  -0.1792
- ],
- "soaking_rain_keep": 0.44,
+ "flashover_level": 0.0531,
+ "soaking_rain_keep": 0.45,
+ "salt_background": 0.28,
  "wash_sections": {
   "Line 1, Section 1": {
-   "deposit": 0.0109,
+   "deposit": 0.1638,
+   "ratio": 3.08,
    "gulf_km": 3.38,
-   "due": false
+   "due": true,
+   "last_wash": "2026-03-12"
   },
   "Line 1, Section 2": {
-   "deposit": 0.0133,
+   "deposit": 0.0065,
+   "ratio": 0.12,
    "gulf_km": 3.69,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-28"
   },
   "Line 1, Section 3": {
-   "deposit": 0.0139,
+   "deposit": 0.0051,
+   "ratio": 0.1,
    "gulf_km": 3.84,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-29"
   },
   "Line 1, Section 4": {
-   "deposit": 0.0122,
+   "deposit": 0.0052,
+   "ratio": 0.1,
    "gulf_km": 3.8,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-29"
   },
   "Line 1, Section 5": {
-   "deposit": 0.0078,
+   "deposit": 0.1517,
+   "ratio": 2.86,
    "gulf_km": 3.53,
-   "due": false
+   "due": true,
+   "last_wash": "2026-03-13"
   },
   "Line 2, Section 1": {
-   "deposit": 0.0894,
+   "deposit": 0.1033,
+   "ratio": 1.95,
    "gulf_km": 1.95,
-   "due": true
+   "due": true,
+   "last_wash": "2026-10-17"
   },
   "Line 2, Section 2": {
-   "deposit": 0.0912,
+   "deposit": 0.3,
+   "ratio": 5.65,
    "gulf_km": 1.53,
-   "due": true
+   "due": true,
+   "last_wash": "2026-08-11"
   },
   "Line 2, Section 3": {
-   "deposit": 0.1006,
+   "deposit": 0.3411,
+   "ratio": 6.42,
    "gulf_km": 1.27,
-   "due": true
+   "due": true,
+   "last_wash": "2026-08-12"
   },
   "Line 2, Section 4": {
-   "deposit": 0.1862,
+   "deposit": 0.564,
+   "ratio": 10.62,
    "gulf_km": 1.21,
-   "due": true
+   "due": true,
+   "last_wash": "2026-03-24"
   },
   "Line 2, Section 5": {
-   "deposit": 0.0928,
+   "deposit": 0.3129,
+   "ratio": 5.89,
    "gulf_km": 1.36,
-   "due": true
+   "due": true,
+   "last_wash": "2026-08-18"
   },
   "Line 2, Section 6": {
-   "deposit": 0.0164,
+   "deposit": 0.1105,
+   "ratio": 2.08,
    "gulf_km": 1.66,
-   "due": false
+   "due": true,
+   "last_wash": "2026-10-20"
   },
   "Line 2, Section 7": {
-   "deposit": 0.0967,
+   "deposit": 0.2539,
+   "ratio": 4.78,
    "gulf_km": 1.93,
-   "due": true
+   "due": true,
+   "last_wash": "2026-08-04"
   },
   "Line 3, Section 1": {
-   "deposit": 0.0076,
+   "deposit": 0.0114,
+   "ratio": 0.22,
    "gulf_km": 2.5,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-27"
   },
   "Line 3, Section 2": {
-   "deposit": 0.009,
+   "deposit": 0.007,
+   "ratio": 0.13,
    "gulf_km": 3.28,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-28"
   },
   "Line 3, Section 3": {
-   "deposit": 0.0088,
+   "deposit": 0.0041,
+   "ratio": 0.08,
    "gulf_km": 3.47,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-30"
   },
   "Line 3, Section 4": {
-   "deposit": 0.1556,
+   "deposit": 0.2166,
+   "ratio": 4.08,
    "gulf_km": 3.38,
-   "due": true
+   "due": true,
+   "last_wash": "2026-03-19"
   },
   "Line 3, Section 5": {
-   "deposit": 0.1671,
+   "deposit": 0.261,
+   "ratio": 4.91,
    "gulf_km": 3.02,
-   "due": true
+   "due": true,
+   "last_wash": "2025-09-17"
   },
   "Line 3, Section 6": {
-   "deposit": 0.0112,
+   "deposit": 0.0049,
+   "ratio": 0.09,
    "gulf_km": 2.45,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-30"
   },
   "Line 3, Section 7": {
-   "deposit": 0.1986,
+   "deposit": 0.2147,
+   "ratio": 4.04,
    "gulf_km": 2.06,
-   "due": true
+   "due": true,
+   "last_wash": "2026-08-20"
   },
   "Line 4, Section 1": {
-   "deposit": 0.01,
+   "deposit": 0.169,
+   "ratio": 3.18,
    "gulf_km": 3.32,
-   "due": false
+   "due": true,
+   "last_wash": "2026-03-16"
   },
   "Line 4, Section 2": {
-   "deposit": 0.0079,
+   "deposit": 0.0088,
+   "ratio": 0.17,
    "gulf_km": 3.38,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-27"
   },
   "Line 4, Section 3": {
-   "deposit": 0.0115,
+   "deposit": 0.0103,
+   "ratio": 0.19,
    "gulf_km": 2.25,
-   "due": false
+   "due": false,
+   "last_wash": "2026-10-28"
   }
  },
+ "wash_deposits": {
+  "Line 1, Section 1": 0.1638,
+  "Line 1, Section 2": 0.0065,
+  "Line 1, Section 3": 0.0051,
+  "Line 1, Section 4": 0.0052,
+  "Line 1, Section 5": 0.1517,
+  "Line 2, Section 1": 0.1033,
+  "Line 2, Section 2": 0.3,
+  "Line 2, Section 3": 0.3411,
+  "Line 2, Section 4": 0.564,
+  "Line 2, Section 5": 0.3129,
+  "Line 2, Section 6": 0.1105,
+  "Line 2, Section 7": 0.2539,
+  "Line 3, Section 1": 0.0114,
+  "Line 3, Section 2": 0.007,
+  "Line 3, Section 3": 0.0041,
+  "Line 3, Section 4": 0.2166,
+  "Line 3, Section 5": 0.261,
+  "Line 3, Section 6": 0.0049,
+  "Line 3, Section 7": 0.2147,
+  "Line 4, Section 1": 0.169,
+  "Line 4, Section 2": 0.0088,
+  "Line 4, Section 3": 0.0103
+ },
+ "wash_deposit_bands": {
+  "Line 1, Section 1": [
+   0.1401,
+   0.2337
+  ],
+  "Line 1, Section 2": [
+   0.006,
+   0.0085
+  ],
+  "Line 1, Section 3": [
+   0.0047,
+   0.0065
+  ],
+  "Line 1, Section 4": [
+   0.0047,
+   0.0065
+  ],
+  "Line 1, Section 5": [
+   0.1293,
+   0.2271
+  ],
+  "Line 2, Section 1": [
+   0.0682,
+   0.1641
+  ],
+  "Line 2, Section 2": [
+   0.2333,
+   0.3741
+  ],
+  "Line 2, Section 3": [
+   0.2434,
+   0.4255
+  ],
+  "Line 2, Section 4": [
+   0.3929,
+   0.6689
+  ],
+  "Line 2, Section 5": [
+   0.2298,
+   0.3936
+  ],
+  "Line 2, Section 6": [
+   0.0697,
+   0.1813
+  ],
+  "Line 2, Section 7": [
+   0.2161,
+   0.3145
+  ],
+  "Line 3, Section 1": [
+   0.0093,
+   0.0121
+  ],
+  "Line 3, Section 2": [
+   0.0064,
+   0.0085
+  ],
+  "Line 3, Section 3": [
+   0.004,
+   0.0047
+  ],
+  "Line 3, Section 4": [
+   0.1876,
+   0.3091
+  ],
+  "Line 3, Section 5": [
+   0.2281,
+   0.332
+  ],
+  "Line 3, Section 6": [
+   0.0044,
+   0.005
+  ],
+  "Line 3, Section 7": [
+   0.1781,
+   0.2729
+  ],
+  "Line 4, Section 1": [
+   0.1448,
+   0.2365
+  ],
+  "Line 4, Section 2": [
+   0.0079,
+   0.0113
+  ],
+  "Line 4, Section 3": [
+   0.0078,
+   0.0109
+  ]
+ },
+ "resalted": {
+  "Line 2, Section 1": {
+   "deposit": 0.1033,
+   "ratio": 1.95,
+   "gulf_km": 1.95,
+   "due": true,
+   "last_wash": "2026-10-17"
+  },
+  "Line 2, Section 6": {
+   "deposit": 0.1105,
+   "ratio": 2.08,
+   "gulf_km": 1.66,
+   "due": true,
+   "last_wash": "2026-10-20"
+  }
+ },
+ "resalted_lowest_family_ratio": 1.14,
  "careful": {
   "work_list": [
-   "clear the span: Line 10, structures 35-36",
-   "clear the span: Line 13, structures 90-91",
-   "clear the span: Line 6, structures 48-49",
-   "remove the hazard trees: Line 13, structures 93-96",
-   "replace the string: Line 12, structure 105",
-   "replace the string: Line 12, structure 97",
-   "replace the string: Line 14, structure 115",
+   "clear the span: Line 10, structures 47-48",
+   "clear the span: Line 10, structures 88-89",
+   "clear the span: Line 11, structures 64-65",
+   "clear the span: Line 14, structures 62-63",
+   "clear the span: Line 6, structures 57-58",
+   "perch guards: Line 12, structure 104",
+   "perch guards: Line 14, structure 118",
+   "perch guards: Line 16, structure 23",
+   "perch guards: Line 6, structure 79",
+   "perch guards: Line 7, structure 31",
+   "perch guards: Line 7, structure 52",
+   "remove the hazard trees: Line 11, structures 118-120",
+   "remove the hazard trees: Line 13, structures 103-107",
    "replace the string: Line 15, structure 57",
-   "replace the string: Line 16, structure 23",
-   "replace the string: Line 2, structure 63",
    "replace the string: Line 5, structure 88",
-   "replace the string: Line 6, structure 77",
-   "replace the string: Line 7, structure 30",
-   "replace the string: Line 7, structure 37",
-   "replace the string: Line 7, structure 51",
-   "replace the string: Line 9, structure 148",
-   "wash: Line 1, Section 3",
-   "wash: Line 2, Section 1",
+   "replace the string: Line 9, structure 136",
+   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 5",
    "wash: Line 2, Section 2",
    "wash: Line 2, Section 3",
    "wash: Line 2, Section 4",
    "wash: Line 2, Section 5",
-   "wash: Line 2, Section 6"
+   "wash: Line 2, Section 7",
+   "wash: Line 3, Section 4",
+   "wash: Line 3, Section 5",
+   "wash: Line 3, Section 7",
+   "wash: Line 4, Section 1"
   ],
-  "R6": {
-   "lightning": 9,
-   "bird": 0,
-   "fog": 16,
-   "insulator": 20,
-   "growin": 15,
-   "fallin": 7,
-   "vehicle": 5,
-   "hardware": 2,
+  "R2": {
+   "lightning": 11,
+   "bird": 6,
+   "fog": 15,
+   "insulator": 9,
+   "growin": 14,
+   "fallin": 8,
+   "vehicle": 4,
+   "hardware": 1,
    "unknown": 6
   },
-  "R7": [
-   "wash: Line 1, Section 3",
+  "R4": [],
+  "R5": [],
+  "R6": [],
+  "wash": [
+   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 5",
+   "wash: Line 2, Section 2",
+   "wash: Line 2, Section 3",
+   "wash: Line 2, Section 4",
+   "wash: Line 2, Section 5",
+   "wash: Line 2, Section 7",
+   "wash: Line 3, Section 4",
+   "wash: Line 3, Section 5",
+   "wash: Line 3, Section 7",
+   "wash: Line 4, Section 1"
+  ],
+  "R7": {
+   "Line 2, Section 1": 0.0324,
+   "Line 2, Section 6": 0.0309
+  },
+  "resalted_ratio": [
+   0.63,
+   0.6
+  ]
+ },
+ "direct": {
+  "work_list": [
+   "clear the span: Line 10, structures 47-48",
+   "clear the span: Line 10, structures 88-89",
+   "clear the span: Line 11, structures 64-65",
+   "clear the span: Line 14, structures 62-63",
+   "clear the span: Line 6, structures 57-58",
+   "perch guards: Line 12, structure 104",
+   "perch guards: Line 14, structure 118",
+   "perch guards: Line 16, structure 23",
+   "perch guards: Line 6, structure 79",
+   "perch guards: Line 7, structure 31",
+   "perch guards: Line 7, structure 52",
+   "remove the hazard trees: Line 11, structures 118-120",
+   "remove the hazard trees: Line 13, structures 103-107",
+   "replace the string: Line 15, structure 57",
+   "replace the string: Line 5, structure 88",
+   "replace the string: Line 9, structure 136",
+   "wash: Line 1, Section 1",
+   "wash: Line 1, Section 5",
    "wash: Line 2, Section 1",
    "wash: Line 2, Section 2",
    "wash: Line 2, Section 3",
    "wash: Line 2, Section 4",
    "wash: Line 2, Section 5",
-   "wash: Line 2, Section 6"
-  ],
-  "R2": [
-   "clear the span: Line 10, structures 35-36",
-   "clear the span: Line 13, structures 90-91",
-   "clear the span: Line 6, structures 48-49",
-   "remove the hazard trees: Line 13, structures 93-96"
-  ],
-  "R3": [
-   "replace the string: Line 12, structure 105",
-   "replace the string: Line 12, structure 97",
-   "replace the string: Line 14, structure 115",
-   "replace the string: Line 15, structure 57",
-   "replace the string: Line 16, structure 23",
-   "replace the string: Line 2, structure 63",
-   "replace the string: Line 5, structure 88",
-   "replace the string: Line 6, structure 77",
-   "replace the string: Line 7, structure 30",
-   "replace the string: Line 7, structure 37",
-   "replace the string: Line 7, structure 51"
-  ],
-  "R4": [
-   "replace the string: Line 9, structure 148"
-  ],
-  "R8": [
-   "clear the span: Line 10, structures 35-36",
-   "clear the span: Line 13, structures 90-91",
-   "clear the span: Line 6, structures 48-49",
-   "remove the hazard trees: Line 13, structures 93-96",
-   "replace the string: Line 12, structure 105",
-   "replace the string: Line 12, structure 97",
-   "replace the string: Line 14, structure 115",
-   "replace the string: Line 15, structure 57",
-   "replace the string: Line 16, structure 23",
-   "replace the string: Line 2, structure 63",
-   "replace the string: Line 5, structure 88",
-   "replace the string: Line 6, structure 77",
-   "replace the string: Line 7, structure 30",
-   "replace the string: Line 7, structure 37",
-   "replace the string: Line 7, structure 51",
-   "replace the string: Line 9, structure 148"
+   "wash: Line 2, Section 7",
+   "wash: Line 3, Section 4",
+   "wash: Line 3, Section 5",
+   "wash: Line 3, Section 7",
+   "wash: Line 4, Section 1"
   ]
  },
  "quick": {
   "R1": {
-   "2022": 96,
-   "2023": 93,
-   "2024": 82,
-   "2025": 90,
-   "2026": 81
+   "2022": 103,
+   "2023": 104,
+   "2024": 86,
+   "2025": 88,
+   "2026": 78
   },
   "R5": {
-   "sustained": 57024,
-   "member_minutes": 2350200,
+   "sustained": 52306,
+   "member_minutes": 2548579,
    "momentary": 0
   },
   "R6": {
-   "lightning": 13,
+   "lightning": 15,
    "bird": 0,
-   "fog": 15,
+   "fog": 14,
    "insulator": 0,
-   "growin": 9,
-   "fallin": 7,
-   "vehicle": 5,
-   "hardware": 2,
-   "unknown": 30
+   "growin": 6,
+   "fallin": 10,
+   "vehicle": 4,
+   "hardware": 1,
+   "unknown": 28
   }
  },
- "growin_relay_offset_km": [
-  1.9,
-  9.6
- ],
- "tap_string_beyond_tap_km": 3.2,
+ "tap_string_beyond_tap_km": 3.1,
  "tap_km": 23.4,
  "filed": {
   "system_kv": 69,
-  "repeat_location_m": 400
+  "repeat_location_m": 400,
+  "underbuild_kv": 12.47
  },
+ "deposit_fit": {
+  "wind_error": 3.31,
+  "constant_error": 5.26,
+  "constant_worse_pct": 59
+ },
+ "family_size": 34,
  "flashover_level_band": [
-  0.029,
-  0.039
+  0.028,
+  0.064
  ]
 }

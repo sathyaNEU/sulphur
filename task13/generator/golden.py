@@ -29,10 +29,12 @@ import common as C
 
 MI = 1.609344
 GOLD = dict(loc='ratio', study_by_date=True, tap_infeed=True, fog='stations', survey=True, growin='thermal',
-            deposit='stock',
+            # the three judgments the call turns on
+            gulf_string='deposit', contacts='trajectory', deposit='wind',
             # the golden family's knobs: each at the golden's setting
-            fog_dep=0.5, storm_n=3, storm_km=8.0, tc_min=40.0, gust_min=9.5, level='min', keep=None, rate='loglin',
-            src_scale=1.0, win_km=0.4)
+            fog_dep=0.5, storm_n=3, storm_km=8.0, tc_min=40.0, gust_min=9.5, level='pct', keep=None, rate='expfloor',
+            src_scale=1.0, win_km=0.4, wind_k=2.0, gulf_from=140.0, wind_src='stations', low_cut=0.6, low_n=3,
+            traj_n=4, traj_slope=-0.8, level_q=10)
 
 
 def _wb(path, sheet, header_row=None):
@@ -344,6 +346,7 @@ def weather_index(d):
     return aptd, swd
 
 
+APT_XY, INA_XY = (76.0, 27.0), (16.0, 54.0)      # the airports, by the towns they serve
 STATION_XY = {'PORT ALCORN SUB': (76.0, 27.0), 'SHELL RIDGE SUB': (88.0, 43.0), 'SEDGE POINT SUB': (97.0, 60.0),
               'TULE MARSH SUB': (68.0, 31.0), 'CANEY BEND SUB': (60.0, 41.0), 'MESQUITE FLAT SUB': (36.0, 44.0)}
 
@@ -448,10 +451,17 @@ def classify(d, faults, opts):
             rain = src.rain_mm >= 0.25
             tair, wind = src.air_temp_c, src.wind_ms
         else:
-            fog = a is not None and isinstance(a.wxcodes, str) and ('FG' in a.wxcodes or (opts['fog'] == 'airport' and 'BR' in a.wxcodes))
-            rain = a is not None and (a.rain_mm or 0) >= 0.25
-            tair = a.tc if a is not None else 25.0
-            wind = (a.sknt / 1.94384) if a is not None and not pd.isna(a.sknt) else 2.0
+            # away from the stations, the nearer of the two airports (Port Alcorn on the Gulf, the regional one at Inland)
+            if math.hypot(ref[0] - INA_XY[0], ref[1] - INA_XY[1]) < math.hypot(ref[0] - APT_XY[0], ref[1] - APT_XY[1]) and b is not None:
+                a2 = b
+                rain_a2 = float(pd.to_numeric(str(getattr(b, 'p01i', 0)).replace('T', '0.001'), errors='coerce') or 0) * 25.4
+            else:
+                a2 = a
+                rain_a2 = (a.rain_mm or 0) if a is not None else 0.0
+            fog = a2 is not None and isinstance(a2.wxcodes, str) and ('FG' in a2.wxcodes or (opts['fog'] == 'airport' and 'BR' in a2.wxcodes))
+            rain = a2 is not None and (rain_a2 or 0) >= 0.25
+            tair = a2.tc if a2 is not None else 25.0
+            wind = (a2.sknt / 1.94384) if a2 is not None and not pd.isna(a2.sknt) else 2.0
         night = lt.hour >= 21 or lt.hour <= 10
         porcelain = False
         if xy is not None:
@@ -460,14 +470,17 @@ def classify(d, faults, opts):
         near_roost = any(l == f['line'] and abs(n - (f['structure'] or -99)) <= 2 for (l, n) in roost_set)
         summer_pm = lt.month in (5, 6, 7, 8, 9, 10) and 12 <= lt.hour <= 20
         tc = None
+        amps = None
         if summer_pm:
             lr = loadd.get(hr)
             L = d['lines'][f['line']]
             col = [c for c in (lr or {}) if c.endswith('_L%d_AMPS' % int(f['line'][1:]))]
             if lr is not None and col:
-                tc = conductor_temp(float(lr[col[0]]), L['conductor'], tair, wind, 850.0)
+                amps = float(lr[col[0]])
+                tc = conductor_temp(amps, L['conductor'], tair, wind, 850.0)
         f['sig'] = dict(storm=storm, gust=gust, fog=fog, rain=rain, night=night, roost=near_roost and lt.month in (11, 12, 1, 2, 3) and lt.hour <= 7,
-                        summer_pm=summer_pm, tc=tc, gulf_porcelain=(f['line'] in gulf and porcelain))
+                        summer_pm=summer_pm, tc=tc, gulf_porcelain=(f['line'] in gulf and porcelain),
+                        amps=(round(amps) if amps is not None else None), tair=round(float(tair), 1), wind=round(float(wind), 1))
         sg = f['sig']
         if opts['growin'] == 'season' and summer_pm:
             f['cause'] = 'growin'
@@ -538,8 +551,10 @@ def settle_clusters(faults, opts):
                 cause = 'bird'
             elif sum(1 for x in sg if x.get('summer_pm') and not x.get('storm')) / max(1, len(sg)) >= 0.75:
                 cause = 'growin'
-            else:
+            elif share('rain') + share('fog') >= 0.6:
                 cause = 'insulator'
+            else:
+                cause = 'unknown'
             for g in grp:
                 if not g.get('patrol'):
                     g['cause'] = cause
@@ -569,7 +584,7 @@ def repeat_locations(d, faults, win_km=0.4):
     """three or more faults of one cause within 400 m on one line since January 2022 (salt contamination excepted):
     every 400 m window holding three, windows that overlap read as one place"""
     out = []
-    for cause in ('bird', 'insulator', 'growin', 'fallin'):
+    for cause in ('bird', 'insulator', 'growin', 'fallin', 'hardware'):
         by = defaultdict(list)
         for f in faults:
             if f['cause'] == cause and f['km'] is not None:
@@ -617,8 +632,8 @@ def fixed_since(d, rl):
     last = C.to_local(rl['last']).date()
     lname = 'Line %d' % int(rl['line'][1:])
     lo, hi = rl['s_min'] - 1, rl['s_max'] + 1
-    if rl['cause'] in ('bird', 'insulator'):
-        typ = 'AVIAN' if rl['cause'] == 'bird' else 'INSULATOR'
+    if rl['cause'] in ('bird', 'insulator', 'hardware'):
+        typ = {'bird': 'AVIAN', 'insulator': 'INSULATOR', 'hardware': 'HARDWARE'}[rl['cause']]
         m = d['maint']
         m = m[(m['line'] == lname) & (m['work_type'] == typ)]
         for _, r in m.iterrows():
@@ -701,8 +716,42 @@ def daily_rain_series(d):
     return st, ap
 
 
-def deposit_model(d, faults, opts):
-    """each washing section's deposit on 31 October 2026 against the flashover level"""
+def onshore_series(d, opts):
+    """each local day's onshore wind exposure, the mean over the day's hours of the squared (or k-th power) component of
+    the wind blowing from the Gulf: at each coastal substation station from its first readings, at the Port Alcorn
+    airport before them (and everywhere when the stations are not used); each normalised to its own mean"""
+    k = opts['wind_k']
+    brg = opts['gulf_from']
+    apt = d['apt'].copy()
+    apt['t'] = pd.to_datetime(apt['valid']).dt.tz_localize('UTC').dt.tz_convert(C.ZONE)
+    apt['day'] = apt['t'].dt.date
+    u = pd.to_numeric(apt['sknt'], errors='coerce') / 1.94384 * np.maximum(0.0, np.cos(np.radians(pd.to_numeric(apt['drct'], errors='coerce') - brg)))
+    apt['e'] = np.power(u.fillna(0.0), k)
+    ap = apt.groupby('day')['e'].mean()
+    out = {}
+    sw = d['stations_wx'].copy()
+    sw['day'] = pd.to_datetime(sw['hour_local']).dt.date
+    us = sw['wind_ms'] * np.maximum(0.0, np.cos(np.radians(sw['wind_dir_deg'] - brg)))
+    sw['e'] = np.power(us, k)
+    for n in ('PORT ALCORN SUB', 'SHELL RIDGE SUB', 'SEDGE POINT SUB', 'TULE MARSH SUB'):
+        se = sw[sw['station'] == n].groupby('day')['e'].mean()
+        if opts['wind_src'] == 'stations' and len(se):
+            # the airport before the station, scaled to the station over the months both ran
+            both = sorted(set(se.index) & set(ap.index))
+            sc = float(se.loc[both].mean() / ap.loc[both].mean()) if both else 1.0
+            ser = (ap * sc).to_dict()
+            ser.update(se.to_dict())
+        else:
+            ser = ap.to_dict()
+        m = float(np.mean(list(ser.values())))
+        out[n] = {k_: v / m for k_, v in ser.items()}
+    return out
+
+
+def deposit_series(d, opts):
+    """each washing section's salt deposit day by day from January 2022 to 31 October 2026: the test insulators' gains
+    between readings with no wetting rain, fitted to the days and the onshore wind each interval carried, the rate set
+    by distance from the Gulf, carried from each wash with the rain's cleaning"""
     s = d['structures']
     secs = d['wash_sections']
     ws = d['washing']
@@ -715,39 +764,77 @@ def deposit_model(d, faults, opts):
     site_station = {}
     for _, r in sites.iterrows():
         x, y = _xy(float(r['Latitude']), float(r['Longitude']))
-        site_station[r['Site']] = min(STATION_XY, key=lambda n: math.hypot(STATION_XY[n][0] - x, STATION_XY[n][1] - y))
+        site_station[r['Site']] = min(('PORT ALCORN SUB', 'SHELL RIDGE SUB', 'SEDGE POINT SUB', 'TULE MARSH SUB'),
+                                      key=lambda n: math.hypot(STATION_XY[n][0] - x, STATION_XY[n][1] - y))
+    expo = onshore_series(d, opts) if opts['deposit'] == 'wind' else None
 
     def rain(stations, day):
         vals = [st_rain.get((n, day)) for n in stations]
         vals = [v for v in vals if v is not None and not pd.isna(v)]
         return float(np.mean(vals)) if vals else float(ap_rain.get(day, 0.0))
 
-    # accumulation between readings with no rain of 5 mm or more in between, by site
-    rates = {}
+    def fac(stations, day):
+        if expo is None:
+            return 1.0
+        return float(np.mean([expo[n].get(day, 1.0) for n in stations]))
+
+    # each site: the gain a day over intervals with no rain of 5 mm or more, against the interval's mean onshore wind;
+    # one rate a site, and one share of the salt that comes whatever the wind, chosen across the sites together
+    ints = {}
     for site, g in rd.groupby('Site'):
         g = g.sort_values('date')
-        sl = []
+        L = []
         for (_, a), (_, b) in zip(g.iterrows(), g.iloc[1:].iterrows()):
             days = (b['date'] - a['date']).days
-            wet = any(rain([site_station[site]], a['date'] + dt.timedelta(days=k)) >= 5.0 for k in range(1, days + 1))
+            span = [a['date'] + dt.timedelta(days=k) for k in range(1, days + 1)]
+            wet = any(rain([site_station[site]], dd) >= 5.0 for dd in span)
             if not wet and days >= 10 and b['ESDD (mg/cm2)'] > a['ESDD (mg/cm2)']:
-                sl.append((b['ESDD (mg/cm2)'] - a['ESDD (mg/cm2)']) / days)
-        if sl:
-            rates[site] = float(np.median(sl))
+                L.append(((b['ESDD (mg/cm2)'] - a['ESDD (mg/cm2)']) / days,
+                          float(np.mean([fac([site_station[site]], dd) for dd in span]))))
+        if L:
+            ints[site] = L
+
+    def fit_r(bg_):
+        rr, err = {}, 0.0
+        for site, L in ints.items():
+            x = np.array([bg_ + (1.0 - bg_) * m for _, m in L])
+            y = np.array([gg for gg, _ in L])
+            r_ = float((x * y).sum() / (x * x).sum())
+            rr[site] = r_
+            err += float((((y - r_ * x) / max(float(np.mean(y)), 1e-9)) ** 2).sum())
+        return rr, err
+    if expo is None:
+        rates = {site: float(np.median([gg for gg, _ in L])) for site, L in ints.items()}
+        bg = 1.0
+        fit_err = fit_r(1.0)[1]
+    else:
+        bg = min(np.linspace(0.0, 1.0, 41), key=lambda b_: fit_r(b_)[1])
+        bg = float(opts['salt_bg']) if opts.get('salt_bg') is not None else float(bg)
+        rates, fit_err = fit_r(bg)
     shore = dict(zip(sites['Site'], sites['Gulf shore (km)']))
     xs = np.array([float(shore[k]) for k in rates])
     ys = np.array([rates[k] for k in rates])
-    # rate falls off exponentially with distance from the Gulf: log-linear fit
-    A = np.vstack([np.ones_like(xs), xs]).T
-    coef, *_ = np.linalg.lstsq(A, np.log(np.maximum(ys, 1e-6)), rcond=None)
     if opts.get('rate') == 'nearest':
         sd = sorted((float(shore[k]), rates[k]) for k in rates)
         rate_at = lambda dist: min(sd, key=lambda p: abs(p[0] - dist))[1]
-    elif opts.get('rate') == 'linear':
-        cl = np.polyfit(xs, ys, 1)
-        rate_at = lambda dist: max(1e-5, float(np.polyval(cl, dist)))
-    else:
+    elif opts.get('rate') == 'loglin':
+        A = np.vstack([np.ones_like(xs), xs]).T
+        coef, *_ = np.linalg.lstsq(A, np.log(np.maximum(ys, 1e-6)), rcond=None)
         rate_at = lambda dist: float(math.exp(coef[0] + coef[1] * dist))
+    elif opts.get('rate') == 'loglin_coast':
+        m = xs <= 5.0
+        A = np.vstack([np.ones(int(m.sum())), xs[m]]).T
+        coef, *_ = np.linalg.lstsq(A, np.log(np.maximum(ys[m], 1e-6)), rcond=None)
+        rate_at = lambda dist: float(math.exp(coef[0] + coef[1] * dist))
+    else:
+        # a rate falling off exponentially with distance onto a floor, least squares on the sites
+        from scipy.optimize import curve_fit
+        fn = lambda x, a, lam, c: a * np.exp(-x / lam) + c
+        try:
+            (pa, pl, pc), _ = curve_fit(fn, xs, ys, p0=(float(ys.max()) * 1.5, 1.8, float(ys.min())), maxfev=20000)
+        except Exception:
+            pa, pl, pc = float(ys.max()) * 1.5, 1.8, float(ys.min())
+        rate_at = lambda dist: max(1e-6, float(fn(dist, pa, pl, pc)))
     if opts.get('rate_scale'):
         _ra = rate_at
         rate_at = lambda dist: _ra(dist) * opts['rate_scale']
@@ -758,14 +845,14 @@ def deposit_model(d, faults, opts):
         for (_, a), (_, b) in zip(g.iterrows(), g.iloc[1:].iterrows()):
             days = (b['date'] - a['date']).days
             r = [rain([site_station[site]], a['date'] + dt.timedelta(days=k)) for k in range(1, days + 1)]
-            if sum(1 for x in r if x >= 12.0) == 1 and sum(1 for x in r if 5.0 <= x < 12.0) == 0:
-                acc = rates.get(site, 0.0) * days
+            if sum(1 for x in r if x >= 12.0) == 1 and sum(1 for x in r if 5.0 <= x < 12.0) == 0 and site in rates:
+                acc = rates[site] * sum(bg + (1.0 - bg) * fac([site_station[site]], a['date'] + dt.timedelta(days=k))
+                                        for k in range(1, days + 1))
                 keeps.append(max(0.0, (b['ESDD (mg/cm2)'] - acc)) / a['ESDD (mg/cm2)'])
     keep = float(np.median(keeps)) if keeps else 0.5
     if opts.get('keep') is not None:
         keep = opts['keep']
     keep_mod = 0.85
-    out = {}
     day0, day_end = dt.date(2022, 1, 1), dt.date(2026, 10, 31)
     sec_dep = {}
     for _, r in secs.iterrows():
@@ -779,7 +866,7 @@ def deposit_model(d, faults, opts):
         series = {}
         day = day0
         while day <= day_end:
-            dep += rate
+            dep += rate * ((bg + (1.0 - bg) * fac(near_station[lid], day)) if expo is not None else 1.0)
             rr = rain(near_station[lid], day)
             if rr >= 12.0:
                 dep *= keep
@@ -789,64 +876,208 @@ def deposit_model(d, faults, opts):
                 dep = 0.003
             series[day] = dep
             day += dt.timedelta(days=1)
-        sec_dep[sid] = dict(line=lid, s0=int(r['From structure']), s1=int(r['To structure']), dist=dist, series=series)
-    # the deposit at each fog flashover, and the level
-    at_flash = []
+        sec_dep[sid] = dict(line=lid, s0=int(r['From structure']), s1=int(r['To structure']), dist=dist, series=series,
+                            washes=sorted(washes))
+    return dict(sections=sec_dep, rates=rates, bg=bg, keep=keep, day_end=day_end, fit_err=fit_err,
+                n_intervals=sum(len(L) for L in ints.values()))
+
+
+def section_of(dep, f):
+    for sid, sd in dep['sections'].items():
+        if sd['line'] == f['line'] and sd['s0'] <= f['structure'] <= sd['s1']:
+            return sid
+    return None
+
+
+def settle_gulf_strings(d, faults, dep, opts):
+    """a failing string on a Gulf line hides among the fog flashovers: it flashes whenever it is wet, salt or no salt,
+    so it keeps flashing over at deposits the salt has never flashed at; a place with three or more fog flashovers below
+    six tenths of the median deposit at the Gulf's fog flashovers is a failing string, and its wet flashovers from the
+    first of those (or its first in light rain) onward are its own"""
+    if opts['gulf_string'] != 'deposit':
+        return []
+    fog = []
     for f in faults:
-        if f['cause'] != 'fog' or f['structure'] is None:
-            continue
-        for sid, sd in sec_dep.items():
-            if sd['line'] == f['line'] and sd['s0'] <= f['structure'] <= sd['s1']:
-                at_flash.append(sd['series'][C.to_local(f['t']).date()])
-    if not at_flash:
-        level = None
-    elif opts.get('level') == 'p5':
-        level = float(np.percentile(at_flash, 5))
-    elif opts.get('level') == 'p10':
-        level = float(np.percentile(at_flash, 10))
-    else:
-        level = float(np.min(at_flash))
-    if level is not None and opts.get('level_scale'):
-        level *= opts['level_scale']
+        if f['cause'] == 'fog' and f['structure'] is not None:
+            sid = section_of(dep, f)
+            if sid is not None:
+                fog.append((f, dep['sections'][sid]['series'][C.to_local(f['t']).date()]))
+    if not fog:
+        return []
+    med = float(np.median([v for _, v in fog]))
+    low = [(f, v) for f, v in fog if v < opts['low_cut'] * med]
+    flagged = []
+    by = defaultdict(list)
+    for f, v in low:
+        by[f['line']].append(f)
+    for lid, fs in by.items():
+        fs.sort(key=lambda f: f['km'])
+        for i, f in enumerate(fs):
+            grp = [g for g in fs[i:] if g['km'] - f['km'] <= opts['win_km']]
+            if len(grp) >= opts['low_n']:
+                no = int(np.median([g['structure'] for g in grp]))
+                if not any(l == lid and abs(n - no) <= 2 for l, n, _ in flagged):
+                    flagged.append((lid, no, min(g['t'] for g in grp)))
+    out = []
+    for lid, no, t_low in flagged:
+        wet = [f for f in faults if f['line'] == lid and f['structure'] is not None and abs(f['structure'] - no) <= 1
+               and (f['cause'] == 'fog' or (f['cause'] == 'unknown' and isinstance(f.get('sig'), dict) and f['sig'].get('rain')))]
+        rain_first = [f['t'] for f in wet if f['cause'] == 'unknown']
+        first = min([t_low] + rain_first)
+        for f in wet:
+            if f['t'] >= first:
+                f['cause'] = 'insulator'
+                f['gulf_string'] = True
+        out.append(dict(line=lid, structure=no, first=first, median=med))
+    return out
+
+
+def settle_replaced_strings(d, faults, opts):
+    """a string replaced as cracked (the maintenance orders) flashed over before it failed: the flashovers at its
+    structure in the year before the replacement that nothing else explains (booked as salt or left unknown) are its own"""
+    m = d['maint']
+    m = m[m['work_type'] == 'INSULATOR']
+    for _, r in m.iterrows():
+        lid = 'L%02d' % int(str(r['line']).split()[1])
+        day = pd.Timestamp(r['completed']).date()
+        no = plate_to_current(d, lid, int(r['structure']), pd.Timestamp(r['opened']).date())
+        for f in faults:
+            if f['line'] != lid or f['structure'] is None or abs(f['structure'] - no) > 1:
+                continue
+            fd = C.to_local(f['t']).date()
+            if f['cause'] in ('fog', 'unknown') and day - dt.timedelta(days=365) <= fd <= day:
+                f['cause'] = 'insulator'
+    return faults
+
+
+def settle_contacts(d, faults, opts):
+    """summer contacts at one place read on their own history: a tree's contact temperature falls as it grows and jumps
+    when it is trimmed; a conductor reaching something fixed under it touches at the same temperature summer after
+    summer, whatever is done to the trees there. A place with four or more contacts since its last trim, over three or
+    more summers, whose contact temperature has not fallen by 0.8 C a year is not vegetation"""
+    if opts['contacts'] != 'trajectory':
+        return []
+    by = defaultdict(list)
+    for f in faults:
+        if f['cause'] == 'growin' and f['km'] is not None and isinstance(f.get('sig'), dict) and f['sig'].get('tc') is not None:
+            by[f['line']].append(f)
+    v = d['veg']
+    out = []
+    for lid, fs in by.items():
+        fs.sort(key=lambda f: f['km'])
+        wins = []
+        for i, f in enumerate(fs):
+            grp = [g for g in fs[i:] if g['km'] - f['km'] <= opts['win_km']]
+            if len(grp) >= 3:
+                wins.append(grp)
+        merged = []
+        for grp in wins:
+            if merged and grp[0]['km'] <= merged[-1][-1]['km']:
+                ids = {id(x) for x in merged[-1]}
+                merged[-1] = merged[-1] + [g for g in grp if id(g) not in ids]
+            else:
+                merged.append(list(grp))
+        lname = 'Line %d' % int(lid[1:])
+        vv = v[(v['line'] == lname) & v['work_type'].isin(['HOT SPOT', 'CYCLE TRIM'])]
+        for grp in merged:
+            lo = min(g['structure'] for g in grp) - 1
+            hi = max(g['structure'] for g in grp) + 1
+            last_contact = max(C.to_local(g['t']).date() for g in grp)
+            trims = []
+            for _, r in vv.iterrows():
+                day = pd.Timestamp(r['completed']).date()
+                a = plate_to_current(d, lid, int(r['from_structure']), day)
+                b = plate_to_current(d, lid, int(r['to_structure']), day)
+                if a <= hi and lo <= b and day <= last_contact:
+                    trims.append(day)
+            t_trim = max(trims) if trims else None
+            after = [g for g in grp if t_trim is None or C.to_local(g['t']).date() > t_trim]
+            summers = {C.to_local(g['t']).year for g in after}
+            if len(after) < opts['traj_n'] or len(summers) < 3:
+                continue
+            x = np.array([C.to_local(g['t']).year + C.to_local(g['t']).timetuple().tm_yday / 365.25 for g in after])
+            y = np.array([g['sig']['tc'] for g in after])
+            slope = float(np.polyfit(x, y, 1)[0])
+            if slope >= opts['traj_slope']:
+                for g in grp:
+                    g['cause'] = 'hardware'
+                    g['fixed_contact'] = True
+                out.append(dict(line=lid, s_min=lo + 1, s_max=hi - 1, slope=slope, n=len(after), trim=t_trim,
+                                tc=[round(float(t), 1) for t in y]))
+    return out
+
+
+def deposit_model(d, faults, dep, opts):
+    """each washing section's deposit on 31 October 2026 against the deposit at which the porcelain has flashed over in
+    fog (the salt flashovers' own deposits)"""
+    secs = dep['sections']
+    rd = d['esdd'].copy()
+    rd['date'] = pd.to_datetime(rd['Date sampled']).dt.date
+    sites = d['esdd_sites']
+    s = d['structures']
+    day_end = dep['day_end']
+    at_flash = []
     flashed = defaultdict(int)
     for f in faults:
         if f['cause'] != 'fog' or f['structure'] is None:
             continue
-        for sid, sd in sec_dep.items():
-            if sd['line'] == f['line'] and sd['s0'] <= f['structure'] <= sd['s1']:
-                flashed[sid] += 1
-    # the latest test reading at the site nearest each section (the hurried state of the deposit)
+        sid = section_of(dep, f)
+        if sid is not None:
+            at_flash.append(secs[sid]['series'][C.to_local(f['t']).date()])
+            flashed[sid] += 1
+    if not at_flash:
+        level = None
+    elif opts.get('level') == 'min':
+        level = float(np.min(at_flash))
+    else:
+        level = float(np.percentile(at_flash, opts['level_q']))
+    if level is not None and opts.get('level_scale'):
+        level *= opts['level_scale']
     latest = {}
     for site, g_ in rd.groupby('Site'):
         g_ = g_.sort_values('date')
         latest[site] = float(g_.iloc[-1]['ESDD (mg/cm2)'])
     site_xy = {r['Site']: _xy(float(r['Latitude']), float(r['Longitude'])) for _, r in sites.iterrows()}
-    for sid, sd in sec_dep.items():
+    out = {}
+    for sid, sd in secs.items():
         sub = s[(s['lid'] == sd['line']) & (s['structure_no'] >= sd['s0']) & (s['structure_no'] <= sd['s1'])]
         cx, cy = _xy(float(sub['latitude'].mean()), float(sub['longitude'].mean()))
         near_site = min(site_xy, key=lambda k: math.hypot(site_xy[k][0] - cx, site_xy[k][1] - cy))
-        if opts['deposit'] == 'stock':
-            due = level is not None and sd['series'][day_end] >= level
-        elif opts['deposit'] == 'history':
+        last_wash = max([w for w in sd['washes'] if w <= day_end], default=None)
+        if opts['deposit'] == 'history':
             due = flashed[sid] > 0
+        elif opts['deposit'] == 'latest':
+            # the latest test reading at the nearest site, a section washed since that reading taken as clean
+            rd_s = rd[rd['Site'] == near_site].sort_values('date')
+            washed_after = last_wash is not None and last_wash >= rd_s.iloc[-1]['date']
+            due = level is not None and (not washed_after) and latest[near_site] >= level
         else:
-            due = level is not None and latest[near_site] >= level
+            due = level is not None and sd['series'][day_end] >= level
         out[sid] = dict(deposit=sd['series'][day_end], dist=sd['dist'], due=due, flashed=flashed[sid], test_site=near_site,
-                        test_latest=latest[near_site])
-    return dict(sections=out, level=level, rates=rates, coef=coef.tolist(), keep=keep, at_flash=at_flash)
+                        test_latest=latest[near_site], last_wash=last_wash)
+    return dict(sections=out, level=level, rates=dep['rates'], bg=dep['bg'], keep=dep['keep'], at_flash=at_flash)
 
 
-def run(target, opts=None):
+_LOADED = {}
+
+
+def run(target, opts=None, d=None):
     opts = dict(GOLD, **(opts or {}))
-    d = load(target)
+    if d is None:
+        d = load(target)
     d['src_scale'] = opts.get('src_scale', 1.0)
     faults = build_faults(d)
     locate(d, faults, opts)
     classify(d, faults, opts)
     settle_clusters(faults, opts)
+    contacts = settle_contacts(d, faults, opts)
+    settle_replaced_strings(d, faults, opts)
+    dep = deposit_series(d, opts)
+    strings = settle_gulf_strings(d, faults, dep, opts)
     rls = repeat_locations(d, faults, opts['win_km'])
     for rl in rls:
         rl['fixed'] = fixed_since(d, rl)
     impact = member_impact(d, faults)
-    dep = deposit_model(d, faults, opts)
-    return dict(d=d, faults=faults, repeat=rls, impact=impact, deposits=dep)
+    deps = deposit_model(d, faults, dep, opts)
+    deps['series'] = dep['sections']
+    return dict(d=d, faults=faults, repeat=rls, impact=impact, deposits=deps, contacts=contacts, strings=strings)

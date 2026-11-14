@@ -1,6 +1,6 @@
 {
  "task": "task13",
- "architecture": 5,
+ "architecture": 6,
  "as_of": "2026-11-12",
  "decision": "the 69 kV work list for the 2026-27 winter and before summer 2027",
  "deliverables": [
@@ -13,17 +13,17 @@
  "pull_dates": "system extracts saved up to 3 November 2026; documents as filed",
  "counts": {
   "strokes": 62856,
-  "er": 1020,
-  "gv": 1050,
-  "soe": 42779,
-  "oms": 12617,
+  "er": 1079,
+  "gv": 1018,
+  "soe": 42808,
+  "oms": 12688,
   "members": 4408,
   "structures": 1868,
   "loading": 42332,
   "apt": 42196,
   "inl_apt": 42178,
   "stations": 184944,
-  "ipp": 805
+  "ipp": 775
  },
  "distractor_files": [
   "tower_and_pole_condition_survey_2025.xlsx",
@@ -32,31 +32,31 @@
  "files": [
   {
    "file": "control_room_69kv_log_2022-2026.xlsx",
-   "bytes": 25009,
+   "bytes": 25771,
    "saved": "2026-11-01",
    "distractor": false
   },
   {
    "file": "coyote_draw_solar_protection_events_2023-2026.csv",
-   "bytes": 50226,
+   "bytes": 48075,
    "saved": "2026-10-30",
    "distractor": false
   },
   {
    "file": "esdd_monitoring_2022-2026.xlsx",
-   "bytes": 19917,
+   "bytes": 20026,
    "saved": "2026-10-27",
    "distractor": false
   },
   {
    "file": "inland_regional_airport_hourly_2022-2026.csv",
-   "bytes": 2439767,
+   "bytes": 2442414,
    "saved": "2026-11-02",
    "distractor": false
   },
   {
    "file": "insulator_washing_log_2022-2026.xlsx",
-   "bytes": 11404,
+   "bytes": 11620,
    "saved": "2026-10-23",
    "distractor": false
   },
@@ -68,13 +68,13 @@
   },
   {
    "file": "line_maintenance_work_orders_2022-2026.csv",
-   "bytes": 27685,
+   "bytes": 27688,
    "saved": "2026-11-02",
    "distractor": false
   },
   {
    "file": "line_patrol_reports_2022-2026.xlsx",
-   "bytes": 13377,
+   "bytes": 14280,
    "saved": "2026-10-30",
    "distractor": false
   },
@@ -98,13 +98,13 @@
   },
   {
    "file": "ponder_creek_relay_targets_2022-2026.xlsx",
-   "bytes": 8317,
+   "bytes": 8402,
    "saved": "2026-10-28",
    "distractor": false
   },
   {
    "file": "port_alcorn_airport_hourly_2022-2026.csv",
-   "bytes": 2462363,
+   "bytes": 2468819,
    "saved": "2026-11-02",
    "distractor": false
   },
@@ -122,13 +122,13 @@
   },
   {
    "file": "relay_events_eventrecall_export_2022-2026.csv",
-   "bytes": 77151,
+   "bytes": 81762,
    "saved": "2026-11-03",
    "distractor": false
   },
   {
    "file": "relay_records_gridvue_2022-2026.json",
-   "bytes": 299259,
+   "bytes": 290248,
    "saved": "2026-11-03",
    "distractor": false
   },
@@ -140,7 +140,7 @@
   },
   {
    "file": "reliability_reporting_procedure_rev4.docx",
-   "bytes": 10566,
+   "bytes": 10587,
    "saved": "2024-02-27",
    "distractor": false
   },
@@ -152,19 +152,19 @@
   },
   {
    "file": "scada_line_loading_hourly_2022-2026.csv",
-   "bytes": 16961148,
+   "bytes": 16961114,
    "saved": "2026-11-03",
    "distractor": false
   },
   {
    "file": "scada_soe_2022-2026.csv",
-   "bytes": 2700506,
+   "bytes": 2702253,
    "saved": "2026-11-03",
    "distractor": false
   },
   {
    "file": "structure_inventory_69kv_2026.csv",
-   "bytes": 147894,
+   "bytes": 151133,
    "saved": "2026-10-30",
    "distractor": false
   },
@@ -176,7 +176,7 @@
   },
   {
    "file": "substation_weather_stations_2023-2026.csv",
-   "bytes": 11685467,
+   "bytes": 11695938,
    "saved": "2026-11-02",
    "distractor": false
   },
@@ -188,7 +188,7 @@
   },
   {
    "file": "vegetation_work_orders_2022-2026.csv",
-   "bytes": 12591,
+   "bytes": 12414,
    "saved": "2026-11-02",
    "distractor": false
   },

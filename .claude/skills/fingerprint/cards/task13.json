@@ -1,7 +1,7 @@
 {
   "task": "task13",
   "project": "sulfur",
-  "architecture": "v5",
+  "architecture": 6,
   "drawn": "2026-11-13",
   "slot_note": "the author reassigned the slot to Energy Systems & Utilities x Data Extraction & Conformation on 2026-11-12, after architecture 4's platform run landed R1 to R3 and the holistic audit returned it on determinism: a new world, dataset, decision form and shell, six independent stumps on the stump factorial (level 5)",
   "domain": "energy-systems-utilities",
@@ -12,30 +12,30 @@
   "shape": "15",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "This winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 9 structure 137, 3.2 km past the solar tap, among them), wash 9 coastal sections before 1 December and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans (25 items)",
+  "answer": "This winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 2 structure 63 on the Gulf among them), wash 13 coastal sections before 1 December (Line 2 sections 1 and 6, washed in October, among them) and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans and restore the clearance at Line 6 structures 57-58 (30 items)",
   "answer_source": "submission.md Final Recommendation, from generator/figures.json",
   "gap": [
-    "population",
+    "objective",
     "time"
   ],
   "pattern": [
-    "D"
+    "E"
   ],
   "generators": [
-    "G3",
+    "G14",
     "G2",
-    "G12"
+    "G3"
   ],
-  "gate_g": "etl_conformance",
+  "gate_g": "decomposition_attribution",
   "calibration_form": "physical_verification",
   "stump_strategy": "classification_error",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "register",
+  "context_artifact": "filed_standard",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass conforms every export, sets every relay clock on SCADA, matches lightning to strokes and rebuilds the 2026 member impact from the sequence of events, then locates each fault by the relays' own distances (both ends averaged) on the 2025 protection study, sets the solar farm's export aside, reads fog off the coastal airport with the roost survey set aside, counts every non-lightning summer afternoon fault as vegetation and washes every section that ever flashed over: it clears spans 1 to 6 km from the grow-in contacts, loses Inland's span, sends the tap line's crew to a structure near Ponder Creek, books roost streamers as contamination and failing strings as fog, and washes sections cleaned in October, each by a different route.",
-  "domain_test": "Every result is a quantity a cooperative's reliability and protection engineers compute from the 69 kV fault record: a fault's location from the zero-sequence current division between its line's terminals against the protection study's line-out source impedances on that date, the ground infeed of a grounded-wye generator step-up at a tap, a flashover's cause from fog at the line, roost structures and light rain, a grow-in contact from the conductor's heat balance, and an insulator deposit's build-up against its flashover level; with a hospital's or a warehouse's nouns there is no terminal, zero-sequence source, infeed, streamer, sag or salt deposit to carry any of it.",
+  "analyst_test": "The careful but hurried pass makes every architecture 5 move (two-ended location, the source change, the solar infeed, the roost survey and the stations' fog, conductor heat, the deposit from each wash) and books every fog-night flashover on the Gulf porcelain as salt, copies the patrol's live oak and the confirmed grow-ins' signature onto Line 6 structures 57-58, and carries each section's deposit at the test insulators' average rate: it leaves Line 2 structure 63 to the washing crews, clears a span whose contacts are with the circuit below, and takes Line 2 sections 1 and 6 as clean at 0.6 times the level.",
+  "domain_test": "Every result is a quantity a cooperative's reliability engineer computes from the 69 kV fault record: a flashover's cause against the salt deposit carried on the porcelain from its washes, a contact's cause from the conductor's heat balance summer by summer against the trims, a porcelain section's deposit on the onshore wind against its flashover level, member interruptions on the five-minute line; a noun swap to mains, pumps or roads leaves no insulator, sag or salt for any of them",
   "layer2_family": "field_method",
   "layer2_pattern": "own:fault-records-located-by-the-residual-split-and-caused-by-conditions-at-the-line",
   "layer1": [
@@ -60,7 +60,7 @@
     "grain": "terminal x event",
     "source": "synthetic (a fictional Texas coastal electric cooperative's relay exports, SCADA, control room log, outage database and field records, January 2022 to October 2026; seeded world in task13/generator)"
   },
-  "forum": "line_manager_or_team",
+  "forum": "committee_or_panel",
   "forcing_event": "season_or_peak",
   "org_family": "cooperative_or_member_body",
   "world": {
@@ -91,24 +91,24 @@
   ],
   "opening_move": "question-first",
   "question_form": "what",
-  "driver": "The decisive quantities are where each event happened and what caused it, which no record states: each endpoint instrument computes a position as if the event had no impedance and nothing fed it from the side, so the position comes from how the event's residual flow split between the two endpoints against the network behind each on that date, corrected for a side source that feeds every event beyond it at all hours; the cause comes from conditions measured at the asset by the owner's own sensors and a third party's survey rather than the nearest public station, and from the asset's thermal state rather than the season; and the forward work from a deposit carried from its last reset at each unit's own rate against the level at which it failed before.",
-  "driver_concrete": "Each 69 kV fault's location is the split of its residual current between the two terminals solved against the protection study's line-out zero-sequence sources for its date (the 2022 study before Inland's autotransformer replacement in March 2024), with the solar farm's ground infeed taken out of Shell Ridge's distance on the tap line; night faults on the coast are split into fog flashovers, bird streamers and failing strings on the bay stations' dewpoint spread, the roost survey and light rain; summer grow-ins are told by the conductor's temperature on still afternoons; and the sections washed before the fog season are those whose salt deposit, carried from the last wash or soaking rain at the section's own rate, passes the level at which they flashed over.",
-  "stump": "The careful but hurried pass locates faults by the relays' own distances on today's study, sets the solar farm's export aside, reads fog off the airport with the roost survey set aside, counts every summer afternoon fault with no stroke as a tree and washes every section that ever flashed over, so it clears the wrong spans, drops Inland's span, puts the tap line's string near Ponder Creek, replaces strings at the roost structures instead of fitting guards, and washes sections cleaned in October while missing four that are due.",
-  "answer_shape": "flagged-set",
-  "weight": "assembly",
+  "driver": "The decisive quantities are what caused each repeat place and what each section holds at the decision date, which the records name only through what an observer saw beside the event: a rival process gives the same signature as the named one, so each place is read on the state the named process depends on (the deposit carried night by night from the resets, the threshold of contact year by year against the interventions), and the stock at the decision date is carried through the days after the last measurement on the driver the measurements' own gains follow, not at their average rate.",
+  "driver_concrete": "A cracked post insulator at Line 2 structure 63 on the Gulf flashes over on fog nights at any deposit, so the golden reads the deposit carried to each flashover night from the washing log and finds it flashing over after each of five washes, below anything the salt has flashed at; the conductor at Line 6 structures 57-58 reaches the 12.47 kV circuit built under it at the same 41 to 43 C every summer since the oak there was cut back, where every grow-in falls 1.7 to 2.9 C a year; and the test insulators' gains follow the onshore wind, so the southerly blow of 23 to 26 October after the last readings put Line 2 sections 1 and 6, washed on 17 and 20 October, back at twice the flashover level.",
+  "stump": "The careful but hurried pass makes every architecture 5 move (two-ended location, the source change, the solar infeed, the roost survey and the stations' fog, conductor heat, the deposit from each wash) and books every fog-night flashover on the Gulf porcelain as salt, copies the patrol's live oak and the confirmed grow-ins' signature onto Line 6 structures 57-58, and carries each section's deposit at the test insulators' average rate: it leaves Line 2 structure 63 to the washing crews, clears a span whose contacts are with the circuit below, and takes Line 2 sections 1 and 6 as clean at 0.6 times the level.",
+  "answer_shape": "reconciled-table",
+  "weight": "attribution",
   "chain_signature": [
     "assembly-reconciliation",
-    "missingness-measurement",
-    "investigation-loops",
-    "missingness-measurement",
-    "decomposition-attribution",
     "exploration-triage",
+    "decomposition-attribution",
+    "investigation-loops",
+    "investigation-loops",
     "forecasting",
+    "missingness-measurement",
     "synthesis"
   ],
-  "results": "R1 the conformed fault count by year; R2 the grow-in spans to clear; R3 the night repeat locations by cause (roost structures, failing strings); R4 the tap line's repeat location; R5 the 2026 member interruptions and member-minutes by line; R6 the 2026 faults by cause; R7 the coastal sections washed before the fog season; the work list and its dates on top",
-  "one_fact_test": "the residual-split sentence rescues no result alone (R2 also needs S2 and S5); the survey-and-bay-fog sentence rescues R3 (1 of 7)",
-  "strategy_label": "OWN (no client strategy carries a fault record; the client's emissions-table ETL strategy is the nearest by type and shares no step)",
+  "results": "R1 the conformed fault count by year; R2 the 2026 faults by cause; R3 the 2026 member interruptions and member-minutes by line; R4 the failing string on the Gulf lines (Line 2 structure 63); R5 the summer contact place that is not a tree (Line 6 structures 57-58, the clearance to the circuit below); R6 the sections washed in October before the blow that are due again; R7 each section's deposit on 31 October; R8 every repeat location with its cause and fix; the work list on top",
+  "one_fact_test": "the deposit carried on the onshore wind through the blow after the last readings; rescues R6 and R7, 2 of 10",
+  "strategy_label": "own: a rival cause sharing the signature told by the state the named cause depends on, and a stock carried past the last reading on its driver",
   "mechanism_source": "design_note",
   "differentiation": {},
   "lineage": [
@@ -342,41 +342,96 @@
       },
       "architecture": "v4 (Blue Earth Valley Power, the 22 automated FLISR loops: 2026 avoided interruptions netted on the commission definition, controls to re-battery at -27 C, receiving settings before summer, 2027 as the loops stand)",
       "fate": "spent 2026-11-12 after upload: the platform run landed R1, R2 and R3 (task13/runs/arch4_run1.md) and the holistic audit returned the build on determinism (the battery fitting window and the 2027 forecast's four conventions); the author reassigned the slot to Energy Systems & Utilities x Data Extraction & Conformation"
+    },
+    {
+      "architecture": "v5 (Laguna Prieta Electric Cooperative, the 69 kV work list for the 2026-27 winter and before summer 2027 from one conformed table of every fault since January 2022)",
+      "fate": "returned at review 2026-11-13 after upload (reward 75, stumped failed, determinism and solution passed): the runs made all six priced stumps (two-ended location, Inland's source change, the solar infeed, the roost survey with the bay fog, conductor heat for grow-ins, each section's deposit from its last wash; R81 to R83), the cause signatures were clean and the washing list held from 0.029 to 0.080 mg/cm2, so every member was forced; architecture 6 is the reviewer's level-up in the same world (the data package, RP-04 and the register kept), with new deciding lessons",
+      "driver": "The decisive quantities are where each event happened and what caused it, which no record states: each endpoint instrument computes a position as if the event had no impedance and nothing fed it from the side, so the position comes from how the event's residual flow split between the two endpoints against the network behind each on that date, corrected for a side source that feeds every event beyond it at all hours; the cause comes from conditions measured at the asset by the owner's own sensors and a third party's survey rather than the nearest public station, and from the asset's thermal state rather than the season; and the forward work from a deposit carried from its last reset at each unit's own rate against the level at which it failed before.",
+      "driver_concrete": "Each 69 kV fault's location is the split of its residual current between the two terminals solved against the protection study's line-out zero-sequence sources for its date (the 2022 study before Inland's autotransformer replacement in March 2024), with the solar farm's ground infeed taken out of Shell Ridge's distance on the tap line; night faults on the coast are split into fog flashovers, bird streamers and failing strings on the bay stations' dewpoint spread, the roost survey and light rain; summer grow-ins are told by the conductor's temperature on still afternoons; and the sections washed before the fog season are those whose salt deposit, carried from the last wash or soaking rain at the section's own rate, passes the level at which they flashed over.",
+      "stump": "The careful but hurried pass locates faults by the relays' own distances on today's study, sets the solar farm's export aside, reads fog off the airport with the roost survey set aside, counts every summer afternoon fault with no stroke as a tree and washes every section that ever flashed over, so it clears the wrong spans, drops Inland's span, puts the tap line's string near Ponder Creek, replaces strings at the roost structures instead of fitting guards, and washes sections cleaned in October while missing four that are due.",
+      "answer": "This winter fit perch guards at 6 roost structures, replace 4 cracked strings (Line 9 structure 137, 3.2 km past the solar tap, among them), wash 9 coastal sections before 1 December and remove the hazard trees at 2 dead pine stands; before summer 2027 clear 4 grow-in spans (25 items)",
+      "skeleton": {
+        "decision_form": "reconciled_record_or_table",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "position_on_network_effect",
+          "exposure_seen_only_in_linked_record",
+          "nonlinear_functional_of_path",
+          "renewal_resets_hazard"
+        ],
+        "mechanisms": [
+          "fault_resistance_and_load_flow_bias_single_ended_relay_distance",
+          "residual_current_split_between_line_ends_locates_fault",
+          "bulk_autotransformer_replacement_changes_zero_sequence_source",
+          "grounded_wye_solar_tap_feeds_ground_fault_current_day_and_night",
+          "bay_fog_unseen_by_coastal_airport_visibility",
+          "bird_streamers_at_roost_structures_in_roost_season",
+          "failing_porcelain_flashes_in_light_rain_at_any_hour",
+          "grow_in_contact_needs_hot_sagged_conductor_on_still_afternoon",
+          "salt_deposit_builds_from_last_wash_or_soaking_rain"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "layout_or_physics",
+          "measurement_at_another_network_point",
+          "record_time_against_event_time"
+        ],
+        "moves": [
+          "allocate_by_network_position",
+          "compute_on_joint_path",
+          "link_records_by_parsed_key",
+          "rate_on_driver_exposure",
+          "replay_event_by_event"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "governing_standard",
+          "exogenous_long_record",
+          "event_timeline",
+          "field_legend_or_dictionary",
+          "unused_distractor"
+        ]
+      },
+      "shell": {
+        "question form": "what",
+        "second-sentence opener": "send",
+        "deliverable set": "csv+docx+xlsx"
+      }
     }
   ],
-  "notes": "Architecture 5, re-rooted 2026-11-13. The analysis type is the author's assignment of 2026-11-12 (Energy Systems & Utilities x Data Extraction & Conformation); grid-reliability-outage-analysis serves ETL from SKILLS 9e6c911. role_family other: the stakeholder is the cooperative's manager of engineering setting the line crews' work (field_unit_lead, operations_director and capacity_planner sit on the last three live cards). The energy x etl pairing repeats task22 inside the axis window by the author's direction; registered with --force on that ban only.",
+  "notes": "Architecture 5, re-rooted 2026-11-13. The analysis type is the author's assignment of 2026-11-12 (Energy Systems & Utilities x Data Extraction & Conformation); grid-reliability-outage-analysis serves ETL from SKILLS 9e6c911. role_family other: the stakeholder is the cooperative's manager of engineering setting the line crews' work (field_unit_lead, operations_director and capacity_planner sit on the last three live cards). The energy x etl pairing repeats task22 inside the axis window by the author's direction; registered with --force on that ban only. Architecture 6, the reviewer's level-up of architecture 5 in the same world (2026-11-13): the work list is the same decision (a flagged set over RP-04's filed rules, set_over_threshold; architecture 5's card labelled it by its weight as reconciled_record_or_table), with every deciding lesson new. Lesson key rival_process_by_state_dependence added to skeleton_vocab.json: no key on file names a rival process told apart by the state the named one depends on (unknown_generating_process needs a published formula, dated_cause_by_own_metric a dated onset). Weight attribution: the cause separation and the deposit's attribution to the wind carry the work. Gap objective first: the patrols' salt film and live oak, the stations' fog and the test insulators' readings are each correct and none is what the work list is scored on (the cause, the 31 October deposit); Gate G decomposition_attribution: each place's flashovers and contacts assigned to the right cause and each section's salt to the wind that brought it. The prompt's shell (what | send | csv+docx+xlsx) is architecture 5's: this is the same platform task fixed at the reviewer's request (keep the data package, the procedure and the register), not a re-root, so architecture 5's shell is not entered in lineage_shells. Context artifact filed_standard: the work list is drawn under RP-04 Rev 4, the procedure the manager of engineering works from (architecture 5 named the fault register). ban.pairing (energy x ETL against task22) registered with --force again at the author's assignment of 2026-11-12: this is the same platform task fixed at the reviewer's request, so its domain and analysis type cannot move. Redrawn after the rebase onto task1 v6 (drawn and registered before this card on 2026-11-13): answer shape reconciled-table (the conformed fault table and the reconciled workbook with the work list as its findings, the honest shape for an ETL deliverable set; flagged-set described only the memo); decisive pattern E, conditioned yield (each place's flashovers or contacts read as a rate conditioned on the state its named cause depends on, which is the deciding lesson; D, two grains, described the instruments); forum committee_or_panel (the work list goes to the cooperative's monthly reliability review, the manager of engineering chairing with the line superintendent, vegetation management and environmental compliance, who share the crews' winter time).",
   "skeleton": {
-    "decision_form": "reconciled_record_or_table",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
     "lessons": [
-      "position_on_network_effect",
-      "exposure_seen_only_in_linked_record",
-      "nonlinear_functional_of_path",
-      "renewal_resets_hazard"
+      "rival_process_by_state_dependence",
+      "exposure_basis_decoupled",
+      "observation_window_coverage"
     ],
     "mechanisms": [
-      "fault_resistance_and_load_flow_bias_single_ended_relay_distance",
-      "residual_current_split_between_line_ends_locates_fault",
-      "bulk_autotransformer_replacement_changes_zero_sequence_source",
-      "grounded_wye_solar_tap_feeds_ground_fault_current_day_and_night",
-      "bay_fog_unseen_by_coastal_airport_visibility",
-      "bird_streamers_at_roost_structures_in_roost_season",
-      "failing_porcelain_flashes_in_light_rain_at_any_hour",
-      "grow_in_contact_needs_hot_sagged_conductor_on_still_afternoon",
-      "salt_deposit_builds_from_last_wash_or_soaking_rain"
+      "cracked_post_insulator_flashes_when_wet_at_any_deposit",
+      "salt_flashover_only_above_its_deposit_level",
+      "crews_wash_after_runs_of_flashovers",
+      "conductor_sag_reaches_underbuilt_distribution_circuit",
+      "tree_growth_lowers_contact_temperature_each_summer",
+      "trim_raises_contact_temperature",
+      "patrol_records_the_culprit_beside_the_fault",
+      "salt_deposit_follows_square_of_onshore_wind",
+      "prefrontal_southerly_blow_after_last_test_reading"
     ],
     "detection": [
+      "naive_ignores_what_it_should_depend_on",
       "second_source_at_other_grain",
-      "layout_or_physics",
-      "measurement_at_another_network_point",
-      "record_time_against_event_time"
+      "record_time_against_event_time",
+      "layout_or_physics"
     ],
     "moves": [
-      "allocate_by_network_position",
       "compute_on_joint_path",
-      "link_records_by_parsed_key",
+      "per_unit_model_then_rank",
       "rate_on_driver_exposure",
-      "replay_event_by_event"
+      "measure_response_shape_from_events"
     ],
     "file_roles": [
       "primary_record",
@@ -385,7 +440,6 @@
       "governing_standard",
       "exogenous_long_record",
       "event_timeline",
-      "field_legend_or_dictionary",
       "unused_distractor"
     ]
   },
@@ -399,16 +453,21 @@
       "question form": "whether",
       "second-sentence opener": "for",
       "deliverable set": "csv"
+    },
+    {
+      "question form": "how-many",
+      "second-sentence opener": "no",
+      "deliverable set": "pdf+xlsx"
     }
   ],
   "client_subdomain": "Energy Systems & Utilities (grid reliability and outage analysis: the 69 kV fault record)",
   "doctrine": "results-chain-2026-11-09",
   "depth_level": 5,
   "architecture_spent": false,
-  "registered": "2026-11-13T05:21:40Z",
+  "registered": "2026-11-14T00:15:39Z",
   "shell": {
-    "question form": "how-many",
-    "second-sentence opener": "no",
-    "deliverable set": "pdf+xlsx"
+    "question form": "what",
+    "second-sentence opener": "send",
+    "deliverable set": "csv+docx+xlsx"
   }
 }

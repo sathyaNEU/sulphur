@@ -7,7 +7,7 @@ import common as C
 CAUSE_NAME = {'lightning': 'lightning', 'bird': 'bird or other animal', 'fog': 'salt contamination',
               'insulator': 'insulator failure', 'growin': 'vegetation grown into the line',
               'fallin': 'vegetation from outside the right of way', 'vehicle': 'vehicle or other third party',
-              'hardware': 'equipment or hardware', 'unknown': 'other or unknown'}
+              'hardware': 'equipment or hardware other than insulators', 'unknown': 'other or unknown'}
 
 
 def n(x):
@@ -37,8 +37,20 @@ def wash_text(items):
         toks = []
         for r in runs:
             toks += (['%d to %d' % (r[0], r[-1])] if len(r) >= 3 else [str(a) for a in r])
-        out.append('%s sections %s' % (ln, toks[0] if len(toks) == 1 else ', '.join(toks[:-1]) + ' and ' + toks[-1]))
+        out.append('%s %s %s' % (ln, 'sections' if len(v) > 1 else 'section', toks[0] if len(toks) == 1 else ', '.join(toks[:-1]) + ' and ' + toks[-1]))
     return '; '.join(out)
+
+
+def day(iso):
+    import datetime as dt_
+    d = dt_.date.fromisoformat(iso[:10])
+    return '%d %s %d' % (d.day, d.strftime('%B'), d.year)
+
+
+def day_short(iso):
+    import datetime as dt_
+    d = dt_.date.fromisoformat(iso[:10])
+    return '%d %s' % (d.day, d.strftime('%B'))
 
 
 def write(path):
@@ -48,109 +60,132 @@ def write(path):
     strings = places(wl, 'replace the string: ')
     spans = places(wl, 'clear the span: ')
     stands = places(wl, 'remove the hazard trees: ')
+    clear = places(wl, 'restore the clearance: ')
     yr = f['faults_by_year']
     c6 = f['faults_2026_by_cause']
     mi = f['member_impact_2026']
     byl = f['member_impact_2026_by_line']
     care = f['careful']
+    gs, cc, rs = f['gulf_string'], f['clearance_contact'], f['resalted']
     fixed = [r for r in f['repeat_locations'] if r['fixed']]
-    tap = f['tap_repeat_location'][0].replace('replace the string: ', '')
-    care_tap = care['R4'][0].replace('replace the string: ', '') if care['R4'] else 'none'
-    lo, hi = f['growin_relay_offset_km']
+    tap = [x for x in strings if x.startswith('Line 9,')][0]
     sust_lines = [(k, v) for k, v in byl.items() if v['sustained']]
     lines_txt = '; '.join('%s %s and %s' % (k, n(v['sustained']), n(v['member_minutes'])) for k, v in sust_lines)
-    care_strings = places(care['R3'], 'replace the string: ')
-    care_spans = care['R2']
+    lv, band = f['flashover_level'], f['flashover_level_band']
+    w1, w6 = rs['Line 2, Section 1'], rs['Line 2, Section 6']
+    cw1, cw6 = care['resalted_ratio']
+    db = f['wash_deposit_bands']
+    due_txt = '; '.join('%s %.3f (%.3f to %.3f)' % (k, v['deposit'], db[k][0], db[k][1]) for k, v in f['wash_sections'].items() if v['due'])
+    clean = [k for k, v in f['wash_sections'].items() if not v['due']]
+    clean_max = max(f['wash_sections'][k]['ratio'] for k in clean)
+    vs = cc['vegetation_slopes']
     out = []
     out.append('## Tags\n')
     out.append('**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities, grid reliability and outage analysis '
                '(the 69 kV fault record).')
     out.append('**Analytical objective:** Data Extraction & Conformation (ETL / Pipeline Build).\n')
     out.append('## Final Recommendation\n')
-    out.append('**This winter, fit perch guards at %d roost structures, replace %d cracked strings (%s among them, %.1f km past '
-               'the solar tap), wash %d coastal sections before 1 December and remove the hazard trees at %d dead pine stands; '
-               'before next summer, clear %d grow-in spans.** Not the list the relays\' own distances, the airport\'s fog and the '
-               'past flashovers give, which replaces strings at the roost structures, clears spans where the relays put the tree '
-               'contacts (%.1f to %.1f km from the trees) and washes sections already cleaned in October.\n' % (len(guards), len(strings), tap, f['tap_string_beyond_tap_km'],
-                                                            len(f['wash_due']), len(stands), len(spans), lo, hi))
+    out.append('**This winter, fit perch guards at %d roost structures, replace %d cracked strings (%s on the Gulf among them), wash %d '
+               'coastal sections before 1 December (Line 2 sections 1 and 6, washed in October, among them) and remove the hazard '
+               'trees at %d dead pine stands; before next summer, clear %d grow-in spans and restore the clearance at %s, where the '
+               'conductor reaches the 12.47 kV circuit built under it.** Not the list the fog nights, the patrols and the test '
+               'insulators\' average rate give, which leaves %s to the washing crews, clears a span whose oak was cut back in %s, and '
+               'takes Line 2 sections 1 and 6 as clean at %.1f times the level where the late October wind left them at %.1f and %.1f.\n'
+               % (len(guards), len(strings), strings[[i for i, x in enumerate(strings) if x.startswith(gs['line'] + ',')][0]],
+                  len(f['wash_due']), len(stands), len(spans), clear[0], '%s structure %d' % (gs['line'], gs['structure']),
+                  cc['trim'][:4], max(cw1, cw6), w1['ratio'], w6['ratio']))
     out.append('## Supplementary Questions\n')
     out.append('### %s\n' % C.DELIVERABLES[0])
     out.append('1. One row per 69 kV fault since 1 January 2022, %d rows, in time order: date and time (Central), line and its '
-               'terminals, distance from terminal A, the structure (and the span for a tree), fault type, cause in the procedure\'s '
-               'categories, whether it cleared on reclose, members interrupted, member-minutes, momentary members, and the repeat '
-               'location it belongs to. Faults by year: 2022 %d, 2023 %d, 2024 %d, 2025 %d, 2026 (January to October) %d, each '
-               'within 1.\n' % (f['faults_total'], yr['2022'], yr['2023'], yr['2024'], yr['2025'], yr['2026']))
+               'terminals, distance from terminal A, the structure (and the span for a contact or a tree), fault type, cause in the '
+               'procedure\'s categories, whether it cleared on reclose, members interrupted, member-minutes, momentary members, and '
+               'the repeat location it belongs to. Faults by year: 2022 %d, 2023 %d, 2024 %d, 2025 %d, 2026 (January to October) %d, '
+               'each within 1.\n' % (f['faults_total'], yr['2022'], yr['2023'], yr['2024'], yr['2025'], yr['2026']))
     out.append('### %s\n' % C.DELIVERABLES[1])
-    out.append('2. Faults by line and cause for each year. The 2026 faults by cause: %s, each within 2.' %
-               ', '.join('%s %d' % (CAUSE_NAME[k], c6[k]) for k in ['lightning', 'bird', 'fog', 'insulator', 'growin', 'fallin',
-                                                                     'vehicle', 'hardware', 'unknown']))
+    out.append('2. Faults by line and cause for each year. The 2026 faults by cause: %s, each within 2%s.' %
+               (', '.join('%s %d' % (CAUSE_NAME[k], c6[k]) for k in ['lightning', 'bird', 'fog', 'insulator', 'growin', 'fallin',
+                                                                     'vehicle', 'hardware', 'unknown']),
+               ' (equipment or hardware and other or unknown each within 3, the Line 6 contacts read as either)'))
     out.append('3. The 2026 member interruptions and member-minutes by line: %s member interruptions and %s member-minutes in all, '
                'each within 2 per cent; by line (interruptions and member-minutes) %s; no other line had a member out for more '
                'than five minutes.' % (n(mi['sustained']), n(mi['member_minutes']), lines_txt))
     out.append('4. Every repeat location with its cause, a structure within 2 of the one given (a span within 1): perch guards at '
                '%s (bird or other animal); replace the string at %s (insulator failure); clear the span at %s (vegetation grown into '
-               'the line); remove the hazard trees at %s (vegetation from outside the right of way). Fixed after their last fault: '
-               '%s.\n' % ('; '.join(guards), '; '.join(strings), '; '.join(spans), '; '.join(stands),
-                          '; '.join('%s structure %d (%s)' % (r['line'], r['structure'], CAUSE_NAME[r['cause']]) for r in fixed)))
+               'the line); remove the hazard trees at %s (vegetation from outside the right of way); restore the clearance at %s '
+               '(equipment or hardware other than insulators: the conductor reaching the 12.47 kV circuit under it). Fixed after '
+               'their last fault: %s.' % ('; '.join(guards), '; '.join(strings), '; '.join(spans), '; '.join(stands), clear[0],
+                                          '; '.join('%s structure %d (%s)' % (r['line'], r['structure'], CAUSE_NAME[r['cause']]) for r in fixed)))
+    out.append('5. Each washing section\'s salt deposit on 31 October 2026 in mg/cm2, with the range across reasonable fits, against '
+               'the flashover level of %.3f mg/cm2 (%.3f to %.3f): due, %s; the other %d sections (%s), washed after the 27 October '
+               'front, hold %.1f times the level or less.\n'
+               % (lv, band[0], band[1], due_txt, len(clean), ', '.join(clean), clean_max))
     out.append('### %s\n' % C.DELIVERABLES[2])
-    out.append('5. One page to the manager of engineering: this winter the perch guards, the four strings, the washing before 1 '
-               'December (%s) and the hazard trees; before next summer the four spans; each with why the crew goes there.\n'
-               % wash_text(f['wash_due']))
+    out.append('6. One page to the reliability review (the manager of engineering with the line superintendent and the '
+               'vegetation management coordinator): this winter the perch guards, the four strings, the washing before 1 '
+               'December (%s) and the hazard trees; before next summer the four spans and the clearance at %s; each with why the '
+               'crew goes there.\n' % (wash_text(f['wash_due']), clear[0]))
     out.append('## Critical Components\n')
-    out.append('1. The trees: grow-in spans to clear at **%s** and the hazard-tree stands at **%s**, located by how each fault\'s '
-               'residual current split between the two ends of its line, Line 10\'s 2022 and 2023 contacts read against the 2022 '
-               'protection study; the relays\' own distances put them **%.1f to %.1f km** away.' % ('; '.join(spans), '; '.join(stands), lo, hi))
-    out.append('2. The night faults at **%d** roost structures are bird streamers (perch guards), not salt, and the **%d** strings that '
-               'flash over in light rain at any hour are failing porcelain.' % (len(guards), len(strings)))
-    out.append('3. The string on the solar tap line is at **%s**, %.1f km past the tap, not where Shell Ridge\'s relay reads it (%s).' %
-               (tap, f['tap_string_beyond_tap_km'], care_tap))
-    out.append('4. **%d** washing sections are due before the fog season (%s): their deposit on 31 October is at or above the '
-               '**%.3f mg/cm2** at which the porcelain has flashed over in fog (%.3f to %.3f under the other defensible fits, every one '
-               'of which files the same %d sections).\n' % (len(f['wash_due']), wash_text(f['wash_due']), f['flashover_level'],
-                                                         f['flashover_level_band'][0], f['flashover_level_band'][1], len(f['wash_due'])))
+    out.append('1. **%s structure %d** is a cracked string, not salt: its **%d** flashovers since %s came on fog nights on %s, which '
+               'the crews washed five times from November to March, and **%d** of them fell below **%.2f** of the median deposit at the '
+               'Gulf\'s fog flashovers (the lowest at **%.3f** mg/cm2, %.1f times the level) while the rest of the section stayed '
+               'quiet; replace it.' % (gs['line'], gs['structure'], gs['flashovers'], day(gs['first']), gs['section'], gs['below_cut'],
+                                      0.6, gs['lowest_deposit'], gs['lowest_deposit'] / lv))
+    out.append('2. **%s structures %s** are not a grow-in: since the oak there was cut back (%s) the conductor has reached something '
+               'at **%.0f to %.0f C** every summer (a change of **%+.1f C a year**), where every grow-in\'s contact temperature falls '
+               '**%.1f to %.1f C a year**; the span carries the 12.47 kV underbuild, so the clearance is restored and the span is not '
+               'cleared.' % (cc['line'], cc['structures'], day(cc['trim']), cc['contact_temperature'][0], cc['contact_temperature'][1],
+                            cc['slope_c_per_year'], -vs[1], -vs[0]))
+    out.append('3. **Line 2 sections 1 and 6**, washed on %s and %s, are due again: **%.3f** and **%.3f** mg/cm2 on 31 October, '
+               '**%.1f** and **%.1f** times the level, the onshore wind of 23 to 26 October carried through from the test insulators\' '
+               'gains; read at their average rate they hold %.1f and %.1f times it.\n'
+               % (day_short(w1['last_wash']), day_short(w6['last_wash']), w1['deposit'], w6['deposit'], w1['ratio'], w6['ratio'], cw1, cw6))
     out.append('## Step-by-Step\n')
     steps = [
-        'Built one fault per two-ended trip sequence in `%s` (both terminals\' breakers out within a second; single-ended protection '
-        'trips with no fault record are relay tests) and matched every relay record in `%s` (UTC, miles) and `%s` (local time, km, kA) '
-        'on its own clock, set against SCADA: %d faults, %d of them in 2026.' % (C.FILES['soe'], C.FILES['er'], C.FILES['gv'],
-                                                                                  f['faults_total'], yr['2026']),
-        'Located each fault by how its residual current split between the two terminals, solved against the line-out zero-sequence '
-        'sources in `%s` for faults before Inland\'s new autotransformer (14 March 2024, `%s`) and `%s` after. The relays\' own '
-        'distances assume no fault resistance and no infeed, and put the tree contacts %.1f to %.1f km from their spans; the 2025 study '
-        'for every fault moves Line 10\'s 2022 and 2023 contacts off the span at structures 47-48, which then drops off the list.' % (C.FILES['study22'], C.FILES['subs'],
-                                                                                                    C.FILES['study25'], lo, hi),
-        'On Line 9, past the tap, Ponder Creek keeps no record, so Shell Ridge\'s distance was corrected for the solar farm\'s ground '
-        'current from its own export (`%s`, Central Standard Time): its grounded-wye step-up feeds every fault beyond the tap, by night '
-        'as well. The string is at %s; the uncorrected distance reads %s.' % (C.FILES['ipp'], tap, care_tap),
-        'Caused each fault from what was there at the time: a stroke within a second along the line (`%s`), thunderstorms and fronts '
-        'for trees from outside the right of way, the roost survey\'s structures (`%s`) for pre-dawn faults in roost season, fog at '
-        'the cooperative\'s own stations (`%s`) for salt on the Gulf lines\' porcelain, and the conductor\'s heat from `%s` for grow-ins. '
-        'The airport\'s visibility misses the fog at the line and the survey left out leaves the roosts reading as failing strings: '
-        'that route replaces strings at %d places and fits no guards.' % (C.FILES['strokes'], C.FILES['avian'], C.FILES['stations'],
-                                                                         C.FILES['loading'], len(care_strings)),
-        'Grouped faults of one cause within 400 m (procedure RP-04) and took off what was fixed after the last fault (`%s`, `%s`, '
-        'the numbers Lines 8 and 13 carried before their 2023 rebuilds mapped through `%s`): %d perch guards, %d strings, %d spans, %d stands. Counting '
-        'every summer afternoon fault as a tree also lists the Line 13 pine stand as a span to clear.' % (C.FILES['maint'], C.FILES['veg'],
-                                                                                                       C.FILES['structures'], len(guards),
-                                                                                                       len(strings), len(spans), len(stands)),
+        'Built one fault per two-ended trip sequence in `%s`, matched every relay record in `%s` and `%s` on its own clock set '
+        'against SCADA, located each fault from both ends against the protection study in force on its date (`%s`, `%s`) and took '
+        'the solar farm\'s ground infeed (`%s`) out of Shell Ridge\'s distance on Line 9: %d faults, %d of them in 2026, the tap '
+        'line\'s string at %s.' % (C.FILES['soe'], C.FILES['er'], C.FILES['gv'], C.FILES['study22'], C.FILES['study25'],
+                                    C.FILES['ipp'], f['faults_total'], yr['2026'], tap),
+        'Caused each fault from what was there at the time: strokes on the true time (`%s`), storms and fronts for trees from '
+        'outside the right of way, the roost survey (`%s`) for pre-dawn faults in roost season, fog at the cooperative\'s own '
+        'stations (`%s`) for the Gulf porcelain, light rain for the inland strings, and the conductor\'s heat (`%s`) for summer '
+        'contacts.' % (C.FILES['strokes'], C.FILES['avian'], C.FILES['stations'], C.FILES['loading']),
+        'Carried each washing section\'s deposit day by day: the never-washed test insulators\' gains (`%s`) between readings with '
+        'no wetting rain follow each interval\'s onshore wind at the stations (a constant rate leaves %d per cent more unexplained), '
+        'so the rate is set by distance from the Gulf and each day\'s onshore wind, carried from each wash in `%s` with the rain\'s '
+        'cleaning. Line 2 sections 1 and 6, washed on %s and %s, took the four days of southerly wind before the 27 October front, '
+        'after every October reading: %.1f and %.1f times the level on 31 October. At the test insulators\' average rate, or read off '
+        'the latest test reading, they stay below it.' % (C.FILES['esdd'], f['deposit_fit']['constant_worse_pct'], C.FILES['washing'],
+                                                          day_short(w1['last_wash']), day_short(w6['last_wash']), w1['ratio'], w6['ratio']),
+        'Read the deposit at every fog-night flashover on the Gulf porcelain: the median is %.3f mg/cm2, and %s structure %d '
+        'flashed over %d times below %.2f of it, after each of the five washes of %s, in fog and in light rain, while no other '
+        'structure there flashed. Salt flashes over only above its level; a cracked string flashes whenever it is wet. Booking '
+        'every fog-night flashover as salt leaves it off the list and drags the level down with it.' % (gs['median_fog_deposit'], gs['line'],
+                                                                                              gs['structure'], gs['below_cut'], 0.6, gs['section']),
+        'Took the level as the tenth percentile of the deposits at the remaining salt flashovers: %.3f mg/cm2 (%.3f to %.3f across '
+        'the lowest, the 5th and the 20th percentiles and the other fits). %d sections are at or above it.' % (lv, band[0], band[1],
+                                                                                                     len(f['wash_due'])),
+        'Read each summer contact place on its own contact temperatures since its last trim (`%s`): every grow-in reaches its tree '
+        '%.1f to %.1f C cooler each summer as it grows; %s structures %s have touched at %.0f to %.0f C every summer since the oak '
+        'there was cut back on %s, as the patrol asked. A tree does not stand still for four summers; the span carries the 12.47 kV '
+        'underbuild (`%s`). Copying the patrol and the confirmed grow-ins\' signature (hot, still, no stroke) clears the span instead.'
+        % (C.FILES['veg'], -vs[1], -vs[0], cc['line'], cc['structures'], cc['contact_temperature'][0], cc['contact_temperature'][1],
+           day(cc['trim']), C.FILES['structures']),
+        'Grouped faults of one cause within 400 m (procedure RP-04) and took off what was fixed after the last fault (`%s`, `%s`): '
+        '%d perch guards, %d strings, %d spans, %d stands and the clearance at %s.' % (C.FILES['maint'], C.FILES['veg'], len(guards),
+                                                                                       len(strings), len(spans), len(stands), clear[0]),
         'Rebuilt the 2026 member impact from the SCADA trips, transfers and recloses and `%s`: %s member interruptions and %s '
-        'member-minutes; the outage system\'s dispatcher-closed times overstate the minutes.' % (C.FILES['members'], n(mi['sustained']),
-                                                                                                n(mi['member_minutes'])),
-        'Carried each washing section\'s deposit from its last wash (`%s`) or soaking rain at its own rate, the rate fitted on the never-'
-        'washed test insulators in `%s` against distance from the Gulf; the level is the lowest deposit carried to the day of a '
-        'salt-contamination flashover in the fault table, %.3f mg/cm2: %d sections are at or above it. Washing every section that '
-        'ever flashed over would wash %d, sections cleaned in October among them.'
-        % (C.FILES['washing'], C.FILES['esdd'], f['flashover_level'], len(f['wash_due']), len(care['R7'])),
+        'member-minutes.' % (C.FILES['members'], n(mi['sustained']), n(mi['member_minutes'])),
     ]
-    for i, s in enumerate(steps):
-        out.append('%d. %s' % (i + 1, s))
+    for i, st in enumerate(steps):
+        out.append('%d. %s' % (i + 1, st))
     out.append('')
-    out.append('No other list survives the files. A relay\'s distance is a calculation that assumes a fault with no resistance and '
-               'nothing feeding it from the side; the two ends\' residual currents are not, and the patrols sent to the relays\' '
-               'distances after the tree contacts found nothing. The airport reports one point by the Gulf shore, and its codes miss fog '
-               'that the cooperative\'s own stations record along the lines and report fog the lines did not have; the survey and the '
-               'stations see what was at the structure. A section\'s past flashovers are not its salt today: nothing has '
-               'soaked the coast since June and the October washes are clean.')
+    out.append('No other list survives the files. Salt cannot flash over on porcelain washed four days earlier, so the flashovers '
+               'that kept coming at %s structure %d after every wash are the string\'s; a tree grows, so a conductor that has touched at '
+               'the same temperature for four summers and through a trim is touching something fixed; and the test insulators\' gains '
+               'follow the onshore wind, so sections washed before the late October blow did not stay clean because the last reading '
+               'came before it. The three are independent: each shortcut alone leaves a different item wrong, and every reasonable '
+               'variant of each fit (%d of them) files the same list.' % (gs['line'], gs['structure'], f['family_size']))
     open(path, 'w').write('\n'.join(out) + '\n')
 
 
