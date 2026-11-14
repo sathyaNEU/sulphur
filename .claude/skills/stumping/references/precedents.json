@@ -1376,6 +1376,62 @@
    "move": "a cause withheld where the run's own evidence supported it (peak-load, rain-free contacts filed as unknown); the reviewer read it as a labelling choice, not evidence of difficulty",
    "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
    "quote": "high loading does not by itself prove vegetation"
+  },
+  {
+   "id": "R84",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "each step's time taken as the slowest data-parallel rank's load, modelled from the rank-level traces and the loader's packing manifests",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "rank-imbalance modelling"
+  },
+  {
+   "id": "R85",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a packing rule replayed on the length sample to each run's padding fill, the run's own rule and mix",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "best-fit packing replay"
+  },
+  {
+   "id": "R86",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a power meter read as censored at its contract and the excess over contract rebuilt from the scheduler's node states",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "a censored power meter"
+  },
+  {
+   "id": "R87",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "interruptions priced from the stop log: rates by node, run and hall, restart time and lost work per stop, charged to each run",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "interruption pricing"
+  },
+  {
+   "id": "R88",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "provider works' planned hours scaled by the actual-to-planned ratio of the same work type in the work-order history",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "a works overrun"
+  },
+  {
+   "id": "R89",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "a hall's booked blocks checked against its node count, an extended block's rebooking conflict caught and the later run deferred",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "The run caught this and deferred kide-13b-v4 by 3.0 days"
+  },
+  {
+   "id": "R90",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "the benchmark days of every configuration and the 2026 GPU-days held reproduced exactly from the registry, the benchmark file and the configs",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "All 11 benchmark days reproduce from tpbench_results and the configs"
   }
  ]
 }
