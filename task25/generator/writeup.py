@@ -57,8 +57,9 @@ def write(path, fig, G):
     L.append("1. Sheet \"Runs H1 2027\": one row per run in window order with run, hall, window start and end, window "
              "days, benchmark days, expected days, the 80 per cent range, the expected finish date, whether it is "
              "inside its window and the days past the window's end, late runs shaded; a bar chart of expected against "
-             "window days under the table. Expected days are graded to 0.1 within 3 per cent, the range ends within 5 "
-             "per cent and the finish date within one day:")
+             "window days under the table. Expected days are graded to 0.1 within 3 per cent (5 per cent on "
+             "kide-8b-lc64), the range ends within 5 per cent (7 per cent on kide-8b-lc64) and the finish date within "
+             "one day:")
     for k in ORDER:
         r = runs[k]
         s = "   - %s: benchmark %s days; expected %s days (80 per cent range %s to %s); finishes %s; window %d days" % (
@@ -81,9 +82,10 @@ def write(path, fig, G):
              "per step of a job with nodes in both of hall B's pods, %s per cent (within 2.5 points), read off %s, "
              "the registered runs with nodes in both pods and steps outside capped hours, against the runs in one pod; "
              "each hall B run's mean step stretch in 2027, within 2.5 points, of %s per "
-             "cent; the research pool's busy nodes in hall B with %s of its %s reserved, %s (within 25), and with "
+             "cent; the research pool's busy nodes in hall B (nodes the registry's runs hold from launch to finish "
+             "counted as reserved) with %s of its %s reserved, %s (within 25), and with "
              "%s reserved, none (at most 12); its busy share of the unreserved nodes at light reserved load %s (within "
-             "0.03); the works overrun ratios %s (major) and %s (routine)."
+             "0.05); the works overrun ratios %s (major) and %s (routine)."
              % ("%.3f" % fig["beta"], g0(G["CM"]["rows"]),
                 ", ".join("%s %s per cent" % (k, f1(fig["overhead_pct_%s" % k])) for k in RS.LC_RUNS),
                 "%.3f" % fig["fill_kide-34b-sci"], f1(fig["pod_penalty_pct"]),
@@ -113,11 +115,11 @@ def write(path, fig, G):
     L.append("")
     L.append("1. A job with nodes in both of hall B's pods runs **%s per cent** slower per step: the three registered runs "
              "that straddled in 2026 (%s) ran %s of what their benchmark, mix and width predict against %s for the "
-             "runs inside one pod, and kide-8b-v4's reserved rows 16 and 17 are the only 2027 block across the boundary, "
+             "runs inside one pod, and kide-8b-v4's reserved rows %s and %s are the only 2027 block across the boundary, "
              "**%s days** of its %s."
              % (f1(fig["pod_penalty_pct"]), ", ".join(k for k in fig["pod_runs_2026"] if k != "kide-70b-scale"),
-                "%.3f" % fig["pod_ratio_both"], "%.3f" % fig["pod_ratio_one"], "%.1f" % fig["bridge_kide-8b-v4_4"],
-                f1(fig["days_kide-8b-v4"])))
+                "%.3f" % fig["pod_ratio_both"], "%.3f" % fig["pod_ratio_one"], fig["pod_block_names"][0], fig["pod_block_names"][1],
+                "%.1f" % fig["bridge_kide-8b-v4_4"], f1(fig["days_kide-8b-v4"])))
     L.append("2. Hall B's meter reads its contract whenever the hall wanted more; with the draw fitted as a line in "
              "the allocated nodes (%s kW and %s kW a node) and the step stretch fitted on the excess rebuilt from "
              "the node states, and the research pool backing off to none once the reservations hold %d nodes, "

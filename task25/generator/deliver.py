@@ -245,9 +245,10 @@ def note(path, G, fig, X):
                 fig["bridge_kide-34b-v3_5"], fig["bridge_kide-34b-16k_5"]))
     L.append("4. **A block across both pods runs slower.** The 2026 runs whose nodes sat in both of hall B's pods "
              "(%s) took %.1f per cent longer per step than their benchmark, mix and width predict, and the runs inside "
-             "one pod did not. kide-8b-v4's block, rows 16 and 17 of the reservation ledger, is the only 2027 booking "
+             "one pod did not. kide-8b-v4's block, %s and %s in the roadmap, is the only 2027 booking "
              "across the boundary: it adds %.1f days and is what puts a 75-day window at %.1f."
-             % (", ".join(fig["pod_runs_2026"]), fig["pod_penalty_pct"], fig["bridge_kide-8b-v4_4"], fig["days_kide-8b-v4"]))
+             % (", ".join(fig["pod_runs_2026"]), fig["pod_penalty_pct"], fig["pod_block_names"][0], fig["pod_block_names"][1],
+                fig["bridge_kide-8b-v4_4"], fig["days_kide-8b-v4"]))
     L.append("")
     L.append("Works matter at the margin: in 2025 and 2026 major works ran %.2f times their planned hours, so the hall A "
              "re-cabling in March costs kide-34b-lc64 %.1f days, about twice what the notice's planned hours imply."

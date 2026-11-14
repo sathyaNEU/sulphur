@@ -115,7 +115,7 @@ No replay: no result re-derives a published figure; the benchmark days are the b
   to reproduce, and no stated number in the pack is wrong
 Pinned: rivals run on the clean truth in `generator/results.py` (`battery`): fifteen variants of the hall B chain and
   five of the cost model and the rates, each filing the same seven late runs and moving no run's days by more than
-  2.3 per cent; the pinning list names every constant and its home
+  1.34 per cent; the pinning list names every constant and its home
 Run forecast: R5 lost to dismissed own evidence (the node lists name the pod and the run files the residual under
   start-ups and drift); R7 and R6 lost to a method shortcut (the pool at its 2026 mean share where the response was
   needed); R8, R10, R11 and R12 lost as an unfinished chain on the hall B runs; R9 lost to a method shortcut on kide-8b-v4 and kide-34b-v3; R2 partly
@@ -224,15 +224,15 @@ Level: 4: two necessary stumps (P, Q), neither sufficient alone, their single dr
 | Member | Opened by | Reflex route | Direct route | Golden |
 |---|---|---|---|---|
 | kide-120b-v1 | forced | right: late (1.24) | right: late (1.29) | late (1.140) |
-| kide-13b-code-lc32 | forced | right: late (1.15) | right: late (1.06) | late (1.143) |
+| kide-13b-code-lc32 | forced | right: late (1.14) | right: late (1.06) | late (1.143) |
 | kide-13b-lc32 | forced | right: fits (0.88) | right: fits (0.79) | fits (0.850) |
 | kide-13b-v4 | forced | right: fits (0.92) | right: fits (0.76) | fits (0.857) |
 | kide-34b-16k | forced | right: late (1.29) | right: late (1.05) | late (1.144) |
-| kide-34b-lc64 | forced | right: late (1.17) | wrong: fits (0.71; no 2026 twin at that context and width, which the careful pass makes right by reflex, R84 to R86) | late (1.169) |
+| kide-34b-lc64 | forced | right: late (1.15) | wrong: fits (0.71; no 2026 twin at that context and width, which the careful pass makes right by reflex, R84 to R86) | late (1.154) |
 | kide-34b-sci | forced | right: late (1.15) | wrong: fits (0.85; no 2026 twin at that context and width, which the careful pass makes right by reflex, R84 to R86) | late (1.150) |
 | kide-34b-v3 | Q | wrong: late (1.05) | right: fits (0.91; its twin kide-34b-v1-r2 ran unthrottled at the benchmark's rate) | fits (0.955) |
 | kide-70b-v2 | forced | right: fits (0.84) | right: fits (0.82) | fits (0.840) |
-| kide-8b-lc64 | forced | right: late (1.17) | wrong: fits (0.68; no 2026 twin at that context and width, which the careful pass makes right by reflex, R84 to R86) | late (1.177) |
+| kide-8b-lc64 | forced | right: late (1.14) | wrong: fits (0.68; no 2026 twin at that context and width, which the careful pass makes right by reflex, R84 to R86) | late (1.138) |
 | kide-8b-v4 | P | wrong: fits (0.94) | wrong: fits (0.82; the nearest 2026 run in hall B is a one-pod 8B ablation) | late (1.060) |
 
 Direct route: each run's benchmark days over the realised rate (steady tokens per GPU-second over its benchmark's) of
@@ -242,8 +242,8 @@ Direct route: each run's benchmark days over the realised rate (steady tokens pe
   widths), and kide-34b-v3 fitting like its twin kide-34b-v1-r2, which ran unthrottled: the 2026 record read at face
   value settles neither open member, and the reflex route's replay with the pool at its mean share files kide-34b-v3
   late
-Margins: the honest family (twenty variants) moves no run's days by more than 2.3 per cent; kide-8b-v4 sits 6.0 per
-  cent over its window with the pod penalty, 14.6 per cent under it without it and 5.9 per cent under it on the
+Margins: the honest family (twenty variants) moves no run's days by more than 1.34 per cent; kide-8b-v4 sits 6.0 per
+  cent over its window with the pod penalty, 14.6 per cent under it without it and 6.0 per cent under it on the
   reflex route; kide-34b-v3 sits 4.5 per cent under its window, 5.2 per cent over it with the pool at its mean
   share: each margin is larger than the family's spread and smaller than its stump's worth
 
@@ -263,21 +263,22 @@ Margins: the honest family (twenty variants) moves no run's days by more than 2.
 | the checkpoint interval | every plan_2027/configs yaml (every_minutes) and the lost steps of runs/interruptions_2026.csv | 30 minutes |
 | hall B's draw: kW with no node allocated, kW per allocated node | measured: provider/hall_it_load_2026.csv against cluster/node_states_2026.csv on the intervals clear of the contract; spread 0.07 per cent on any run's days across clear thresholds of 40, 60 and 120 kW and a floor of 600 allocated nodes | 1612.0 kW and 8.32 kW |
 | the throttle response (stretch against the excess over contract) | measured: runs/step_log_2026.csv against the rebuilt excess; spread 1.34 per cent on any run's days across a quadratic, a straight line, a banded mean and a local baseline | 24.6 per cent at 20 per cent over |
-| the pod penalty | measured: runs/node_allocations_2026.csv against runs/step_log_2026.csv; spread 21.1 to 22.1 per cent across the weighted, registered-only and per-twin estimates | 22.0 per cent |
+| the pod penalty | measured: runs/node_allocations_2026.csv against runs/step_log_2026.csv; spread 21.0 to 22.1 per cent across the weighted, registered-only and per-twin estimates | 22.0 per cent |
 | the research pool's light-load share and its back-off | measured: cluster/node_states_2026.csv less the held nodes of runs/run_registry_2026.csv, by the registered load through the draw line; spread 0.0 per cent on any run's days across a binned curve, a cut-off and a logistic curve and three light-load definitions | 0.446 of the unreserved nodes at light load, none at 768 reserved |
 | the attention coefficient | measured: profiling/rank_step_samples_2026.csv joined to profiling/packing_manifests_2026.jsonl; spread 1.319 to 1.324 across run subsets | 1.324 |
 | interruption rates, restart minutes and lost work | measured: runs/interruptions_2026.csv and provider/incident_log_2026.csv; spread 20 per cent either way holds the call | per node-day by hall, per run-day, per hall-day |
 | the works overrun ratio by type | measured: provider/work_orders_2025_2026.csv; spread mean against median 0.0 per cent | 1.98 major, 1.07 routine |
 | the first launch after a window opens | measured: runs/run_registry_2026.csv (launched_utc); spread no delay against the mean 0.35 per cent | about 37 minutes |
-| document lengths by source and each mix's shares | data/doc_length_sample.csv and data/data_mixes.csv; spread another packing seed 2.3 per cent | the sample as filed |
+| document lengths by source, each mix's token shares, the rank count and the cut | data/doc_length_sample.csv, data/data_mixes.csv (token_share) and every plan_2027/configs yaml (parallelism.data, documents cut at seq_len); spread another packing seed 0.24 per cent, and the slowest-rank overheads of the three few-sequence runs move by 1.0 point or less across four other production streams (`checks.py` BT6) | the sample as filed, token shares, sequences dealt to parallelism.data ranks, documents cut at the sequence length (the readings that differ, document shares for token shares, whole documents with no cut and the rank count taken as the GPU count, are each excluded by a filed fact, asserted in BT7) |
+| the benchmark corpus's stream | benchmark/tpbench_harness.yaml (the length distribution: median, sigma and maximum) against benchmark/tpbench_results.csv; spread 1.4 per cent (sd over forty streams of 3e8 tokens, BT5 asserts 1.0 or more) and 0.2 per cent at the golden's length | replayed at 1.2e10 tokens, where the 64k-context slowest-rank cost has converged (within 0.5 per cent across other streams of that length, BT4); an ordinary stream moves kide-8b-lc64's expected days with it, which is why that run's days carry a band of 5 per cent in the answer blocks |
 | each configuration's benchmark rate | benchmark/tpbench_results.csv | as measured, tokens per GPU-second |
 
 Variant battery: 15 variants of the hall B chain and its neighbours (the clear threshold at 60 and 120 kW, the draw
   line on 600 or more nodes, the contract at the meter's ceiling, the throttle as a line and as banded means, the
   stretch against local steady steps, the pod penalty from the registered runs and from each run's twin, the pool as
   a cut-off, a logistic curve and from three light-load definitions, the median works overrun, another packing seed,
-  no launch delay), every variant files the same seven late runs and none moves a run's days by more than 2.3 per cent
-  (kide-8b-lc64 on another packing seed); beside them five rivals of the cost model and the rates (the attention
+  no launch delay), every variant files the same seven late runs and none moves a run's days by more than 1.34 per cent
+  (kide-13b-v4, on the throttle as a straight line in the excess); beside them five rivals of the cost model and the rates (the attention
   coefficient at its lowest and highest per-run fit, lengths from a fitted lognormal, a normal approximation to the
   slowest rank, hardware stops pooled over halls) and fourteen perturbations (each fitted input moved by its spread,
   the pod penalty by 4 points, the pool's light-load share by 0.1, the draw line's slope by 1 per cent) file the same call
@@ -440,15 +441,26 @@ halls), a file name, a rounding instruction, a role or a reader, a warning.
 
 ## Pre-ship check
 
-Read against the built pack on 2026-11-13. The hidden factor record holds on the cut data: the slowest-rank wait
-shows in every 2026 long-context run (overheads of 18 to 23 per cent on four sequences per rank), best-fit padding in
-both 2026 best-fit runs (fills above 0.99), the hall B cap on 39 days touching every hall B run then, the row 6 fault
-on hall A's September and October jobs; none sits only in a deciding unit. The effort test agrees with `effort.py`
-(quick 7.0, careful but hurried 44.4, thorough 100; the largest hint rescues one result). `checks.py` passes 117
-assertions (the world's replay files the same seven late runs and every run's days within 4 per cent; eight rivals
-and ten perturbations hold; the distractors deleted leave every figure unchanged), `verify.py` recomputes 17 figures
-on its own code path, two builds are byte-identical, the containers audit clean, `leak.py` returns REVIEW only (2027
-plan dates, a coincidental 18,900 inside a node name, generic words in the two PDFs).
+Read against the built pack on 2026-11-14. The hidden factor record holds on the cut data (`checks.py` R5): the
+slowest-rank wait shows in every 2026 long-context run, best-fit padding in both 2026 best-fit runs, the hall B cap on
+123 days touching 14 of the 21 hall B runs then, the pod boundary in the four 2026 runs whose node lists name both pods
+(three registered runs and the January scale test) beside sixteen runs inside one pod, the pool's back-off in the 2026
+record, the row 6 fault on hall A's September and October jobs; none sits only in a deciding unit. The effort test agrees
+with `effort.py` (quick 7.0, careful but hurried 44.5, thorough 100; the largest hint rescues two of twelve results).
+`checks.py` passes 176 assertions (the world's replay files the same seven late runs and every run's days within 4 per
+cent; twenty rivals and fourteen perturbations hold; the distractors deleted leave every figure unchanged; the reflex
+route's back-test BT1 to BT3; the benchmark corpus's replay converged and the overheads steady across streams, BT4 to
+BT7), `verify.py` recomputes 20 figures on its own code path, two builds are byte-identical, the containers audit is
+clean, `leak.py` returns REVIEW only (the 2027 plan's dates, a figure inside a list of document lengths, generic words in
+the two PDFs; the filed node counts are listed under `stated_inputs`), the isolated leak reader returned CLEAN, and the
+determinism judge returned DETERMINISTIC and APPROVE on its second and third passes (second: the throttle rebuilt six
+ways moves no run by more than a day and no block is over-booked on hall B's 1,024 nodes, its optional widening of the
+overhead band was not made and its observation on kide-8b-lc64's days led to the converged replay of the benchmark
+corpus and a band of 5 per cent on that run; third, on the final cut: every long replay of the overheads inside 3
+points, the draw line and the pool by a method other than the Step-by-Step's, no over-booking, and two wording notes
+taken into the answer blocks, the basis of the reserved nodes and a band of 0.05 on the light-load share, see Tried and
+rejected). `guard.py heart` BLOCKs on four axis bans against task9 v3 and task23, builds that
+precede this one in draw order; the card's axes are unchanged since the draw and the author rules.
 
 ## Tried and rejected
 
@@ -459,6 +471,8 @@ plan dates, a coincidental 18,900 inside a node name, generic words in the two P
 - 2026-11-13, at the draw: the run's analysis type as Forecasting (BLOCK, ban.pairing against task24's General Statistics x Forecasting); drawn as Comparative Analysis & Explanation, which the bridge from benchmark to production is.
 - 2026-11-13, at the draw: cross-pod gradient reduction and hot-spare exhaustion as stumps (dropped, see the screen); the row 6 cooling fault and the works overrun kept only as supporting steps.
 - 2026-11-14, the reviewer's audit of architecture 1 (`runs/holistic_audit_2026-11-13.md`, pasted by the author): three findings. Determinism not pinned: the hall B stretch chain rested on a fitted would-be draw biased by a per-model draw (0.93 to 1.02) and a pool factor of 0.95 that the world set and no file held, and the audit run's method gave 17.7 days of throttle on kide-120b-v1 against 13.47. A graded figure infeasible: the reserved blocks filled hall B's 1,024 nodes from 22 February and kide-34b-v3's extension to about 16 March collided with kide-13b-v4's 15 March launch (1,152 nodes), with no precedence between "launches when its window opens" and the extension. And the audit run reached the same seven late runs, so every move of the draw's stumps (S1, S18, S3, S4) was a reflex (R84 to R90). Repaired in place: one draw per node, hall-level stops that idle the hall, the pool's admission against the contract, a pod penalty for jobs across hall B's two pods, a ledger of blocks by rows with no block sharing rows inside its window and a stated wait for nodes still held, a variant battery of twenty rivals and fourteen perturbations, and the two new stumps (P, Q) opening kide-8b-v4 and kide-34b-v3; the call is still seven of eleven late but with a different seven.
+- 2026-11-14, the determinism judge's second pass (APPROVE, one optional fix): widening the slowest-rank overhead band on kide-8b-lc64 and kide-13b-code-lc32 from 3 to 6 points: not made, the overheads recompute within 1.0 point across four other production streams (BT6) and the judge's own replica differed by guessing the rank layout; the same pass's observation that kide-8b-lc64's days sit at the edge of their 3 per cent band was right in a different place: the expected days moved up to 5 per cent with the seed of the benchmark corpus's stream (the golden's own seed sat 2 per cent high), fixed at the source by replaying that corpus at a converged length (BT4, BT5) and a band of 5 per cent on kide-8b-lc64's days.
+- 2026-11-14, the determinism judge's third pass (APPROVE, two wording notes): the research pool's light-load share is 0.40 to 0.41 on the judge's registry binning and 0.45 on the golden's (the intervals below 88 per cent of the contract), so its band is 0.05 and not 0.03; and the pool's reserved nodes are the registry's runs held from launch to finish (CAR section 2), which a reading from the allocation segments would not give (405 busy nodes at 512 reserved), so the ask states the basis. Answer-block edits only, no pack change.
 - 2026-11-14, at the repair: a per-model draw per node (a published utilisation by size) as the throttle's stump: the client's closed composition card, and the mix changes only the intercept the draw line already fits; dropped.
 - 2026-11-14: a neighbouring pod's load slowing a job through shared spine capacity: the client's closed spillover card; dropped.
 - 2026-11-14: a trainer release changing the step by about three per cent from 1 August: a break built into the data that one cross-tab shows and one dummy fixes (banned item 4); dropped.

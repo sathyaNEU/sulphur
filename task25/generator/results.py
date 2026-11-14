@@ -162,6 +162,7 @@ def build(G, mc_n=160):
     fig["pod_penalty_pct"] = rnd(100 * PEN["pen"], 1)
     fig["pod_runs_2026"] = sorted(k for k, v in G["flags"].items() if v)
     fig["pod_runs_2027"] = sorted(k for k, r in runs.items() if r["both"])
+    fig["pod_block_names"] = sorted(runs[fig["pod_runs_2027"][0]]["rows"])   # the rows the roadmap's block column names for the one straddling block
     fig["pod_ratio_one"] = rnd(PEN["ratio_one"], 3)
     fig["pod_ratio_both"] = rnd(PEN["ratio_both"], 3)
     fig["pool_share"] = rnd(PR["plateau"], 3)

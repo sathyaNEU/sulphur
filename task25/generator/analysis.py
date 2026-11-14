@@ -177,6 +177,10 @@ def contract_kw(hall):
 
 
 # ------------------------------------------------------------------ the length sample and the packing replay
+HARNESS_TOKENS = 1.2e10     # tokens of the benchmark corpus the golden replays
+HARNESS_STREAMS = {}        # shared by every golden call of a process: a stream depends on its seed, context and corpus only
+
+
 class Packer:
     def __init__(self, F, seed=20271):
         self.by_src = {s: g["length_tokens"].values.astype(np.int64) for s, g in F["lengths"].groupby("source")}
@@ -195,15 +199,19 @@ class Packer:
         return self.cache[key]
 
     def harness(self, F, C):
-        key = ("harness", C)
-        if key not in self.cache:
-            h = F["harness"]["corpus"]["doc_length"]
+        """The benchmark corpus replayed at a length where its slowest-rank cost has converged: the harness file files
+        the corpus by its length distribution only, so every analyst draws their own stream, and a stream of 3e8 tokens
+        moves the 64k-context runs' days by 1.5 to 2 per cent (sd) from one seed to the next. The golden is the converged
+        value (0.2 per cent at 1.2e10 tokens); the answer blocks' bands carry the spread of an ordinary stream."""
+        h = F["harness"]["corpus"]["doc_length"]
+        med, sig, cap = h["median_tokens"], h["sigma"], h["max_tokens"]
+        key = (self.seed, C, med, sig, cap)
+        if key not in HARNESS_STREAMS:
             rng = np.random.default_rng(self.seed + 7 + C)
-            med, sig, cap = h["median_tokens"], h["sigma"], h["max_tokens"]
-            docs = W.draw_docs({"x": 1.0}, 3.0e8, rng, sources={"x": (med, sig, cap)})
+            docs = W.draw_docs({"x": 1.0}, HARNESS_TOKENS, rng, sources={"x": (med, sig, cap)})
             S, Fl, _ = W.pack(docs, C, "sequential")
-            self.cache[key] = (S, Fl)
-        return self.cache[key]
+            HARNESS_STREAMS[key] = (S, Fl)
+        return HARNESS_STREAMS[key]
 
 
 def step_units(S, kf, beta, D, g, seed, steps=3000):

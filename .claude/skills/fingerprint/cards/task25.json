@@ -11,7 +11,7 @@
  "shape": "03",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "Re-plan seven of the eleven H1 2027 runs: kide-120b-v1 (85.5 days against 75), kide-13b-code-lc32 (8.0 days against 7), kide-34b-16k (61.8 days against 54), kide-34b-lc64 (15.2 days against 13), kide-34b-sci (23.0 days against 20), kide-8b-lc64 (15.3 days against 13), kide-8b-v4 (79.5 days against 75) finish past their windows; kide-13b-lc32, kide-13b-v4, kide-34b-v3, kide-70b-v2 fit.",
+ "answer": "Re-plan seven of the eleven H1 2027 runs: kide-120b-v1 (85.5 days against 75), kide-13b-code-lc32 (8.0 days against 7), kide-34b-16k (61.8 days against 54), kide-34b-lc64 (15.0 days against 13), kide-34b-sci (23.0 days against 20), kide-8b-lc64 (14.8 days against 13), kide-8b-v4 (79.5 days against 75) finish past their windows; kide-13b-lc32, kide-13b-v4, kide-34b-v3, kide-70b-v2 fit.",
  "answer_source": "submission.md Final Recommendation, from generator/figures.json",
  "gap": [
   "objective",

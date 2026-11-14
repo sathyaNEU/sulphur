@@ -33,15 +33,15 @@
    "independent": "2026's own records",
    "golden": {
     "benchmark GPU-days": 1217311.0,
-    "the runs' own mixes at the mean rank": -41695.0,
-    "waiting for the slowest rank": 59159.0,
+    "the runs' own mixes at the mean rank": -42066.0,
+    "waiting for the slowest rank": 59128.0,
     "padding in packed sequences": 6.0,
-    "blocks across both pods": 152587.0,
-    "hall B held to its contracted load": 49963.0,
+    "blocks across both pods": 152513.0,
+    "hall B held to its contracted load": 49968.0,
     "hall A row 6 cooling fault": 5288.0,
     "interruptions and restarts": 31962.0,
     "provider works": 34582.0,
-    "other": -4155.0,
+    "other": -3682.0,
     "GPU-days held": 1505010.0
    },
    "bands": {
@@ -50,24 +50,24 @@
      1229484.11
     ],
     "the runs' own mixes at the mean rank": [
-     -46698.4,
-     -36691.6
+     -47113.92,
+     -37018.08
     ],
     "waiting for the slowest rank": [
-     52059.92,
-     66258.08
+     52032.64,
+     66223.36
     ],
     "padding in packed sequences": [
      -1494.0,
      1506.0
     ],
     "blocks across both pods": [
-     134276.56,
-     170897.44
+     134211.44,
+     170814.56
     ],
     "hall B held to its contracted load": [
-     43967.44,
-     55958.56
+     43971.84,
+     55964.16
     ],
     "hall A row 6 cooling fault": [
      3788.0,
@@ -82,8 +82,8 @@
      38731.84
     ],
     "other": [
-     -5655.0,
-     -2655.0
+     -5182.0,
+     -2182.0
     ],
     "GPU-days held": [
      1497484.95,
@@ -95,28 +95,28 @@
     "quick": null,
     "careful": {
      "benchmark GPU-days": 1217311.0,
-     "the runs' own mixes at the mean rank": -41695.0,
-     "waiting for the slowest rank": 59159.0,
+     "the runs' own mixes at the mean rank": -42066.0,
+     "waiting for the slowest rank": 59128.0,
      "padding in packed sequences": 6.0,
      "blocks across both pods": 0.0,
-     "hall B held to its contracted load": 49963.0,
+     "hall B held to its contracted load": 49968.0,
      "hall A row 6 cooling fault": 5288.0,
      "interruptions and restarts": 31962.0,
      "provider works": 34582.0,
-     "other": 148432.0,
+     "other": 148831.0,
      "GPU-days held": 1505010.0
     },
     "thorough": {
      "benchmark GPU-days": 1217311.0,
-     "the runs' own mixes at the mean rank": -41695.0,
-     "waiting for the slowest rank": 59159.0,
+     "the runs' own mixes at the mean rank": -42066.0,
+     "waiting for the slowest rank": 59128.0,
      "padding in packed sequences": 6.0,
-     "blocks across both pods": 152587.0,
-     "hall B held to its contracted load": 49963.0,
+     "blocks across both pods": 152513.0,
+     "hall B held to its contracted load": 49968.0,
      "hall A row 6 cooling fault": 5288.0,
      "interruptions and restarts": 31962.0,
      "provider works": 34582.0,
-     "other": -4155.0,
+     "other": -3682.0,
      "GPU-days held": 1505010.0
     }
    },
@@ -348,11 +348,11 @@
     "kide-13b-lc32": 10.2,
     "kide-13b-v4": 34.3,
     "kide-34b-16k": 61.8,
-    "kide-34b-lc64": 15.2,
+    "kide-34b-lc64": 15.0,
     "kide-34b-sci": 23.0,
     "kide-34b-v3": 36.3,
     "kide-70b-v2": 39.5,
-    "kide-8b-lc64": 15.3,
+    "kide-8b-lc64": 14.8,
     "kide-8b-v4": 79.5
    },
    "bands": {
@@ -377,8 +377,8 @@
      63.653999999999996
     ],
     "kide-34b-lc64": [
-     14.744,
-     15.655999999999999
+     14.549999999999999,
+     15.450000000000001
     ],
     "kide-34b-sci": [
      22.31,
@@ -393,8 +393,8 @@
      40.685
     ],
     "kide-8b-lc64": [
-     14.841000000000001,
-     15.759
+     14.356,
+     15.244000000000002
     ],
     "kide-8b-v4": [
      77.115,
@@ -419,15 +419,15 @@
     "careful": {
      "kide-120b-v1": 93.0,
      "kide-13b-code-lc32": 8.0,
-     "kide-13b-lc32": 10.6,
+     "kide-13b-lc32": 10.5,
      "kide-13b-v4": 36.9,
      "kide-34b-16k": 69.7,
-     "kide-34b-lc64": 15.2,
+     "kide-34b-lc64": 15.0,
      "kide-34b-sci": 23.0,
      "kide-34b-v3": 40.0,
      "kide-70b-v2": 39.5,
-     "kide-8b-lc64": 15.3,
-     "kide-8b-v4": 70.6
+     "kide-8b-lc64": 14.8,
+     "kide-8b-v4": 70.5
     },
     "thorough": {
      "kide-120b-v1": 85.5,
@@ -435,11 +435,11 @@
      "kide-13b-lc32": 10.2,
      "kide-13b-v4": 34.3,
      "kide-34b-16k": 61.8,
-     "kide-34b-lc64": 15.2,
+     "kide-34b-lc64": 15.0,
      "kide-34b-sci": 23.0,
      "kide-34b-v3": 36.3,
      "kide-70b-v2": 39.5,
-     "kide-8b-lc64": 15.3,
+     "kide-8b-lc64": 14.8,
      "kide-8b-v4": 79.5
     }
    },
@@ -512,11 +512,11 @@
     "kide-13b-lc32": 132.2,
     "kide-13b-v4": 121.3,
     "kide-34b-16k": 134.8,
-    "kide-34b-lc64": 74.2,
+    "kide-34b-lc64": 74.0,
     "kide-34b-sci": 124.0,
     "kide-34b-v3": 67.3,
     "kide-70b-v2": 49.5,
-    "kide-8b-lc64": 158.3,
+    "kide-8b-lc64": 157.8,
     "kide-8b-v4": 110.5
    },
    "bands": {
@@ -541,8 +541,8 @@
      135.8
     ],
     "kide-34b-lc64": [
-     73.2,
-     75.2
+     73.0,
+     75.0
     ],
     "kide-34b-sci": [
      123.0,
@@ -557,8 +557,8 @@
      50.5
     ],
     "kide-8b-lc64": [
-     157.3,
-     159.3
+     156.8,
+     158.8
     ],
     "kide-8b-v4": [
      109.5,
@@ -583,15 +583,15 @@
     "careful": {
      "kide-120b-v1": 124.0,
      "kide-13b-code-lc32": 25.0,
-     "kide-13b-lc32": 132.6,
+     "kide-13b-lc32": 132.5,
      "kide-13b-v4": 123.9,
      "kide-34b-16k": 142.7,
-     "kide-34b-lc64": 74.2,
+     "kide-34b-lc64": 74.0,
      "kide-34b-sci": 124.0,
      "kide-34b-v3": 71.0,
      "kide-70b-v2": 49.5,
-     "kide-8b-lc64": 158.3,
-     "kide-8b-v4": 101.6
+     "kide-8b-lc64": 157.8,
+     "kide-8b-v4": 101.5
     },
     "thorough": {
      "kide-120b-v1": 116.5,
@@ -599,11 +599,11 @@
      "kide-13b-lc32": 132.2,
      "kide-13b-v4": 121.3,
      "kide-34b-16k": 134.8,
-     "kide-34b-lc64": 74.2,
+     "kide-34b-lc64": 74.0,
      "kide-34b-sci": 124.0,
      "kide-34b-v3": 67.3,
      "kide-70b-v2": 49.5,
-     "kide-8b-lc64": 158.3,
+     "kide-8b-lc64": 157.8,
      "kide-8b-v4": 110.5
     }
    },
@@ -630,20 +630,20 @@
     "p90_kide-13b-lc32": 10.3,
     "p10_kide-13b-v4": 34.1,
     "p90_kide-13b-v4": 34.4,
-    "p10_kide-34b-16k": 61.5,
-    "p90_kide-34b-16k": 62.0,
-    "p10_kide-34b-lc64": 14.9,
-    "p90_kide-34b-lc64": 15.6,
+    "p10_kide-34b-16k": 61.6,
+    "p90_kide-34b-16k": 62.1,
+    "p10_kide-34b-lc64": 14.7,
+    "p90_kide-34b-lc64": 15.4,
     "p10_kide-34b-sci": 22.9,
     "p90_kide-34b-sci": 23.1,
     "p10_kide-34b-v3": 36.1,
     "p90_kide-34b-v3": 36.5,
     "p10_kide-70b-v2": 39.3,
-    "p90_kide-70b-v2": 39.7,
-    "p10_kide-8b-lc64": 15.2,
-    "p90_kide-8b-lc64": 15.3,
-    "p10_kide-8b-v4": 78.4,
-    "p90_kide-8b-v4": 80.8
+    "p90_kide-70b-v2": 39.6,
+    "p10_kide-8b-lc64": 14.7,
+    "p90_kide-8b-lc64": 14.9,
+    "p10_kide-8b-v4": 78.7,
+    "p90_kide-8b-v4": 80.3
    },
    "bands": {
     "p10_kide-120b-v1": [
@@ -679,20 +679,20 @@
      36.12
     ],
     "p10_kide-34b-16k": [
-     58.425,
-     64.575
+     58.519999999999996,
+     64.68
     ],
     "p90_kide-34b-16k": [
-     58.9,
-     65.10000000000001
+     58.995,
+     65.205
     ],
     "p10_kide-34b-lc64": [
-     14.155,
-     15.645000000000001
+     13.964999999999998,
+     15.435
     ],
     "p90_kide-34b-lc64": [
-     14.819999999999999,
-     16.38
+     14.629999999999999,
+     16.17
     ],
     "p10_kide-34b-sci": [
      21.755,
@@ -715,24 +715,24 @@
      41.265
     ],
     "p90_kide-70b-v2": [
-     37.715,
-     41.685
+     37.62,
+     41.580000000000005
     ],
     "p10_kide-8b-lc64": [
-     14.44,
-     15.959999999999999
+     13.964999999999998,
+     15.435
     ],
     "p90_kide-8b-lc64": [
-     14.535,
-     16.065
+     14.155,
+     15.645000000000001
     ],
     "p10_kide-8b-v4": [
-     74.48,
-     82.32000000000001
+     74.765,
+     82.635
     ],
     "p90_kide-8b-v4": [
-     76.75999999999999,
-     84.84
+     76.285,
+     84.315
     ]
    },
    "partly_share": 0.6,
@@ -747,20 +747,20 @@
      "p90_kide-13b-lc32": 10.6,
      "p10_kide-13b-v4": 36.7,
      "p90_kide-13b-v4": 37.0,
-     "p10_kide-34b-16k": 69.4,
-     "p90_kide-34b-16k": 69.9,
-     "p10_kide-34b-lc64": 14.9,
-     "p90_kide-34b-lc64": 15.6,
+     "p10_kide-34b-16k": 69.5,
+     "p90_kide-34b-16k": 70.1,
+     "p10_kide-34b-lc64": 14.7,
+     "p90_kide-34b-lc64": 15.4,
      "p10_kide-34b-sci": 22.9,
      "p90_kide-34b-sci": 23.1,
      "p10_kide-34b-v3": 39.8,
      "p90_kide-34b-v3": 40.2,
      "p10_kide-70b-v2": 39.3,
-     "p90_kide-70b-v2": 39.7,
-     "p10_kide-8b-lc64": 15.2,
-     "p90_kide-8b-lc64": 15.3,
-     "p10_kide-8b-v4": 69.6,
-     "p90_kide-8b-v4": 71.7
+     "p90_kide-70b-v2": 39.6,
+     "p10_kide-8b-lc64": 14.7,
+     "p90_kide-8b-lc64": 14.9,
+     "p10_kide-8b-v4": 69.8,
+     "p90_kide-8b-v4": 71.2
     },
     "thorough": {
      "p10_kide-120b-v1": 85.0,
@@ -771,20 +771,20 @@
      "p90_kide-13b-lc32": 10.3,
      "p10_kide-13b-v4": 34.1,
      "p90_kide-13b-v4": 34.4,
-     "p10_kide-34b-16k": 61.5,
-     "p90_kide-34b-16k": 62.0,
-     "p10_kide-34b-lc64": 14.9,
-     "p90_kide-34b-lc64": 15.6,
+     "p10_kide-34b-16k": 61.6,
+     "p90_kide-34b-16k": 62.1,
+     "p10_kide-34b-lc64": 14.7,
+     "p90_kide-34b-lc64": 15.4,
      "p10_kide-34b-sci": 22.9,
      "p90_kide-34b-sci": 23.1,
      "p10_kide-34b-v3": 36.1,
      "p90_kide-34b-v3": 36.5,
      "p10_kide-70b-v2": 39.3,
-     "p90_kide-70b-v2": 39.7,
-     "p10_kide-8b-lc64": 15.2,
-     "p90_kide-8b-lc64": 15.3,
-     "p10_kide-8b-v4": 78.4,
-     "p90_kide-8b-v4": 80.8
+     "p90_kide-70b-v2": 39.6,
+     "p10_kide-8b-lc64": 14.7,
+     "p90_kide-8b-lc64": 14.9,
+     "p10_kide-8b-v4": 78.7,
+     "p90_kide-8b-v4": 80.3
     }
    },
    "precedent": [
@@ -807,23 +807,23 @@
    "independent": "",
    "golden": {
     "kide-120b-v1|benchmark days": 78.77,
-    "kide-120b-v1|the run's own mix at the mean rank": -2.25,
+    "kide-120b-v1|the run's own mix at the mean rank": -2.27,
     "kide-120b-v1|waiting for the slowest rank": 2.75,
     "kide-120b-v1|padding in packed sequences": 0.0,
     "kide-120b-v1|a block across both pods": 0.0,
     "kide-120b-v1|hall B held to its contracted load": 3.61,
     "kide-120b-v1|interruptions and restarts": 2.18,
     "kide-120b-v1|provider works and the window's opening": 0.41,
-    "kide-120b-v1|expected days": 85.48,
+    "kide-120b-v1|expected days": 85.45,
     "kide-13b-code-lc32|benchmark days": 6.35,
-    "kide-13b-code-lc32|the run's own mix at the mean rank": -0.27,
-    "kide-13b-code-lc32|waiting for the slowest rank": 1.91,
+    "kide-13b-code-lc32|the run's own mix at the mean rank": -0.3,
+    "kide-13b-code-lc32|waiting for the slowest rank": 1.9,
     "kide-13b-code-lc32|padding in packed sequences": 0.0,
     "kide-13b-code-lc32|a block across both pods": 0.0,
     "kide-13b-code-lc32|hall B held to its contracted load": 0.0,
     "kide-13b-code-lc32|interruptions and restarts": 0.03,
     "kide-13b-code-lc32|provider works and the window's opening": 0.03,
-    "kide-13b-code-lc32|expected days": 8.05,
+    "kide-13b-code-lc32|expected days": 8.01,
     "kide-13b-lc32|benchmark days": 9.12,
     "kide-13b-lc32|the run's own mix at the mean rank": -0.16,
     "kide-13b-lc32|waiting for the slowest rank": 0.84,
@@ -832,43 +832,43 @@
     "kide-13b-lc32|hall B held to its contracted load": 0.0,
     "kide-13b-lc32|interruptions and restarts": 0.05,
     "kide-13b-lc32|provider works and the window's opening": 0.37,
-    "kide-13b-lc32|expected days": 10.23,
+    "kide-13b-lc32|expected days": 10.22,
     "kide-13b-v4|benchmark days": 30.96,
     "kide-13b-v4|the run's own mix at the mean rank": -1.17,
     "kide-13b-v4|waiting for the slowest rank": 1.14,
     "kide-13b-v4|padding in packed sequences": 0.0,
     "kide-13b-v4|a block across both pods": 0.0,
-    "kide-13b-v4|hall B held to its contracted load": 2.87,
+    "kide-13b-v4|hall B held to its contracted load": 2.86,
     "kide-13b-v4|interruptions and restarts": 0.41,
     "kide-13b-v4|provider works and the window's opening": 0.07,
-    "kide-13b-v4|expected days": 34.28,
+    "kide-13b-v4|expected days": 34.27,
     "kide-34b-16k|benchmark days": 56.71,
-    "kide-34b-16k|the run's own mix at the mean rank": -1.63,
+    "kide-34b-16k|the run's own mix at the mean rank": -1.59,
     "kide-34b-16k|waiting for the slowest rank": 2.49,
     "kide-34b-16k|padding in packed sequences": 0.0,
     "kide-34b-16k|a block across both pods": 0.0,
-    "kide-34b-16k|hall B held to its contracted load": 2.87,
+    "kide-34b-16k|hall B held to its contracted load": 2.86,
     "kide-34b-16k|interruptions and restarts": 0.93,
     "kide-34b-16k|provider works and the window's opening": 0.42,
-    "kide-34b-16k|expected days": 61.78,
+    "kide-34b-16k|expected days": 61.82,
     "kide-34b-lc64|benchmark days": 7.97,
-    "kide-34b-lc64|the run's own mix at the mean rank": 0.19,
-    "kide-34b-lc64|waiting for the slowest rank": 3.93,
+    "kide-34b-lc64|the run's own mix at the mean rank": 0.03,
+    "kide-34b-lc64|waiting for the slowest rank": 3.85,
     "kide-34b-lc64|padding in packed sequences": 0.0,
     "kide-34b-lc64|a block across both pods": 0.0,
     "kide-34b-lc64|hall B held to its contracted load": 0.0,
     "kide-34b-lc64|interruptions and restarts": 0.06,
     "kide-34b-lc64|provider works and the window's opening": 3.08,
-    "kide-34b-lc64|expected days": 15.23,
+    "kide-34b-lc64|expected days": 14.99,
     "kide-34b-sci|benchmark days": 17.1,
-    "kide-34b-sci|the run's own mix at the mean rank": 0.45,
+    "kide-34b-sci|the run's own mix at the mean rank": 0.47,
     "kide-34b-sci|waiting for the slowest rank": 0.57,
     "kide-34b-sci|padding in packed sequences": 4.67,
     "kide-34b-sci|a block across both pods": 0.0,
     "kide-34b-sci|hall B held to its contracted load": 0.0,
     "kide-34b-sci|interruptions and restarts": 0.18,
     "kide-34b-sci|provider works and the window's opening": 0.03,
-    "kide-34b-sci|expected days": 23.0,
+    "kide-34b-sci|expected days": 23.01,
     "kide-34b-v3|benchmark days": 34.63,
     "kide-34b-v3|the run's own mix at the mean rank": -0.88,
     "kide-34b-v3|waiting for the slowest rank": 0.93,
@@ -886,25 +886,25 @@
     "kide-70b-v2|hall B held to its contracted load": 0.0,
     "kide-70b-v2|interruptions and restarts": 0.5,
     "kide-70b-v2|provider works and the window's opening": 0.37,
-    "kide-70b-v2|expected days": 39.47,
+    "kide-70b-v2|expected days": 39.46,
     "kide-8b-lc64|benchmark days": 8.6,
-    "kide-8b-lc64|the run's own mix at the mean rank": 1.04,
-    "kide-8b-lc64|waiting for the slowest rank": 5.56,
+    "kide-8b-lc64|the run's own mix at the mean rank": 0.73,
+    "kide-8b-lc64|waiting for the slowest rank": 5.39,
     "kide-8b-lc64|padding in packed sequences": 0.0,
     "kide-8b-lc64|a block across both pods": 0.0,
     "kide-8b-lc64|hall B held to its contracted load": 0.0,
     "kide-8b-lc64|interruptions and restarts": 0.05,
     "kide-8b-lc64|provider works and the window's opening": 0.03,
-    "kide-8b-lc64|expected days": 15.27,
+    "kide-8b-lc64|expected days": 14.79,
     "kide-8b-v4|benchmark days": 62.02,
-    "kide-8b-v4|the run's own mix at the mean rank": -1.76,
+    "kide-8b-v4|the run's own mix at the mean rank": -1.78,
     "kide-8b-v4|waiting for the slowest rank": 1.46,
     "kide-8b-v4|padding in packed sequences": 0.0,
-    "kide-8b-v4|a block across both pods": 13.57,
+    "kide-8b-v4|a block across both pods": 13.56,
     "kide-8b-v4|hall B held to its contracted load": 3.39,
     "kide-8b-v4|interruptions and restarts": 0.43,
     "kide-8b-v4|provider works and the window's opening": 0.41,
-    "kide-8b-v4|expected days": 79.53
+    "kide-8b-v4|expected days": 79.49
    },
    "bands": {
     "kide-120b-v1|benchmark days": [
@@ -912,8 +912,8 @@
      88.2224
     ],
     "kide-120b-v1|the run's own mix at the mean rank": [
-     -2.6,
-     -1.9
+     -2.62,
+     -1.92
     ],
     "kide-120b-v1|waiting for the slowest rank": [
      2.4,
@@ -940,20 +940,20 @@
      0.76
     ],
     "kide-120b-v1|expected days": [
-     75.22240000000001,
-     95.7376
+     75.196,
+     95.70400000000001
     ],
     "kide-13b-code-lc32|benchmark days": [
      5.588,
      7.111999999999999
     ],
     "kide-13b-code-lc32|the run's own mix at the mean rank": [
-     -0.62,
-     0.07999999999999996
+     -0.6499999999999999,
+     0.04999999999999999
     ],
     "kide-13b-code-lc32|waiting for the slowest rank": [
-     1.56,
-     2.26
+     1.5499999999999998,
+     2.25
     ],
     "kide-13b-code-lc32|padding in packed sequences": [
      -0.35,
@@ -976,8 +976,8 @@
      0.38
     ],
     "kide-13b-code-lc32|expected days": [
-     7.0840000000000005,
-     9.016
+     7.0488,
+     8.9712
     ],
     "kide-13b-lc32|benchmark days": [
      8.025599999999999,
@@ -1012,8 +1012,8 @@
      0.72
     ],
     "kide-13b-lc32|expected days": [
-     9.0024,
-     11.457600000000001
+     8.9936,
+     11.4464
     ],
     "kide-13b-v4|benchmark days": [
      27.2448,
@@ -1036,8 +1036,8 @@
      0.35
     ],
     "kide-13b-v4|hall B held to its contracted load": [
-     2.52,
-     3.22
+     2.51,
+     3.21
     ],
     "kide-13b-v4|interruptions and restarts": [
      0.06,
@@ -1048,16 +1048,16 @@
      0.42
     ],
     "kide-13b-v4|expected days": [
-     30.166400000000003,
-     38.3936
+     30.157600000000002,
+     38.382400000000004
     ],
     "kide-34b-16k|benchmark days": [
      49.9048,
      63.5152
     ],
     "kide-34b-16k|the run's own mix at the mean rank": [
-     -1.98,
-     -1.2799999999999998
+     -1.94,
+     -1.2400000000000002
     ],
     "kide-34b-16k|waiting for the slowest rank": [
      2.14,
@@ -1072,8 +1072,8 @@
      0.35
     ],
     "kide-34b-16k|hall B held to its contracted load": [
-     2.52,
-     3.22
+     2.51,
+     3.21
     ],
     "kide-34b-16k|interruptions and restarts": [
      0.5800000000000001,
@@ -1084,20 +1084,20 @@
      0.77
     ],
     "kide-34b-16k|expected days": [
-     54.3664,
-     69.1936
+     54.4016,
+     69.2384
     ],
     "kide-34b-lc64|benchmark days": [
      7.0136,
      8.9264
     ],
     "kide-34b-lc64|the run's own mix at the mean rank": [
-     -0.15999999999999998,
-     0.54
+     -0.31999999999999995,
+     0.38
     ],
     "kide-34b-lc64|waiting for the slowest rank": [
-     3.4584,
-     4.4016
+     3.388,
+     4.312
     ],
     "kide-34b-lc64|padding in packed sequences": [
      -0.35,
@@ -1120,16 +1120,16 @@
      3.4496
     ],
     "kide-34b-lc64|expected days": [
-     13.4024,
-     17.0576
+     13.1912,
+     16.788800000000002
     ],
     "kide-34b-sci|benchmark days": [
      15.048000000000002,
      19.152
     ],
     "kide-34b-sci|the run's own mix at the mean rank": [
-     0.10000000000000003,
-     0.8
+     0.12,
+     0.82
     ],
     "kide-34b-sci|waiting for the slowest rank": [
      0.21999999999999997,
@@ -1156,8 +1156,8 @@
      0.38
     ],
     "kide-34b-sci|expected days": [
-     20.240000000000002,
-     25.759999999999998
+     20.248800000000003,
+     25.7712
     ],
     "kide-34b-v3|benchmark days": [
      30.474400000000003,
@@ -1228,20 +1228,20 @@
      0.72
     ],
     "kide-70b-v2|expected days": [
-     34.733599999999996,
-     44.2064
+     34.7248,
+     44.1952
     ],
     "kide-8b-lc64|benchmark days": [
      7.568,
      9.632
     ],
     "kide-8b-lc64|the run's own mix at the mean rank": [
-     0.6900000000000001,
-     1.3900000000000001
+     0.38,
+     1.08
     ],
     "kide-8b-lc64|waiting for the slowest rank": [
-     4.892799999999999,
-     6.2272
+     4.7432,
+     6.0367999999999995
     ],
     "kide-8b-lc64|padding in packed sequences": [
      -0.35,
@@ -1264,16 +1264,16 @@
      0.38
     ],
     "kide-8b-lc64|expected days": [
-     13.4376,
-     17.1024
+     13.0152,
+     16.564799999999998
     ],
     "kide-8b-v4|benchmark days": [
      54.577600000000004,
      69.4624
     ],
     "kide-8b-v4|the run's own mix at the mean rank": [
-     -2.11,
-     -1.4100000000000001
+     -2.13,
+     -1.4300000000000002
     ],
     "kide-8b-v4|waiting for the slowest rank": [
      1.1099999999999999,
@@ -1284,8 +1284,8 @@
      0.35
     ],
     "kide-8b-v4|a block across both pods": [
-     11.941600000000001,
-     15.1984
+     11.9328,
+     15.1872
     ],
     "kide-8b-v4|hall B held to its contracted load": [
      2.9832,
@@ -1300,8 +1300,8 @@
      0.76
     ],
     "kide-8b-v4|expected days": [
-     69.9864,
-     89.0736
+     69.9512,
+     89.02879999999999
     ]
    },
    "partly_share": 0.6,
@@ -1309,68 +1309,68 @@
     "quick": null,
     "careful": {
      "kide-120b-v1|benchmark days": 78.77,
-     "kide-120b-v1|the run's own mix at the mean rank": -2.25,
+     "kide-120b-v1|the run's own mix at the mean rank": -2.27,
      "kide-120b-v1|waiting for the slowest rank": 2.75,
      "kide-120b-v1|padding in packed sequences": 0.0,
      "kide-120b-v1|a block across both pods": 0.0,
-     "kide-120b-v1|hall B held to its contracted load": 10.81,
+     "kide-120b-v1|hall B held to its contracted load": 10.8,
      "kide-120b-v1|interruptions and restarts": 2.49,
      "kide-120b-v1|provider works and the window's opening": 0.45,
-     "kide-120b-v1|expected days": 93.01,
+     "kide-120b-v1|expected days": 92.99,
      "kide-13b-code-lc32|benchmark days": 6.35,
-     "kide-13b-code-lc32|the run's own mix at the mean rank": -0.27,
-     "kide-13b-code-lc32|waiting for the slowest rank": 1.91,
+     "kide-13b-code-lc32|the run's own mix at the mean rank": -0.3,
+     "kide-13b-code-lc32|waiting for the slowest rank": 1.9,
      "kide-13b-code-lc32|padding in packed sequences": 0.0,
      "kide-13b-code-lc32|a block across both pods": 0.0,
      "kide-13b-code-lc32|hall B held to its contracted load": 0.0,
      "kide-13b-code-lc32|interruptions and restarts": 0.03,
      "kide-13b-code-lc32|provider works and the window's opening": 0.03,
-     "kide-13b-code-lc32|expected days": 8.05,
+     "kide-13b-code-lc32|expected days": 8.01,
      "kide-13b-lc32|benchmark days": 9.12,
      "kide-13b-lc32|the run's own mix at the mean rank": -0.16,
      "kide-13b-lc32|waiting for the slowest rank": 0.84,
      "kide-13b-lc32|padding in packed sequences": 0.0,
      "kide-13b-lc32|a block across both pods": 0.0,
      "kide-13b-lc32|hall B held to its contracted load": 0.0,
-     "kide-13b-lc32|interruptions and restarts": 0.31,
+     "kide-13b-lc32|interruptions and restarts": 0.3,
      "kide-13b-lc32|provider works and the window's opening": 0.44,
-     "kide-13b-lc32|expected days": 10.55,
+     "kide-13b-lc32|expected days": 10.54,
      "kide-13b-v4|benchmark days": 30.96,
      "kide-13b-v4|the run's own mix at the mean rank": -1.17,
      "kide-13b-v4|waiting for the slowest rank": 1.14,
      "kide-13b-v4|padding in packed sequences": 0.0,
      "kide-13b-v4|a block across both pods": 0.0,
-     "kide-13b-v4|hall B held to its contracted load": 5.2,
+     "kide-13b-v4|hall B held to its contracted load": 5.19,
      "kide-13b-v4|interruptions and restarts": 0.65,
-     "kide-13b-v4|provider works and the window's opening": 0.08,
-     "kide-13b-v4|expected days": 36.86,
+     "kide-13b-v4|provider works and the window's opening": 0.09,
+     "kide-13b-v4|expected days": 36.85,
      "kide-34b-16k|benchmark days": 56.71,
-     "kide-34b-16k|the run's own mix at the mean rank": -1.63,
+     "kide-34b-16k|the run's own mix at the mean rank": -1.59,
      "kide-34b-16k|waiting for the slowest rank": 2.49,
      "kide-34b-16k|padding in packed sequences": 0.0,
      "kide-34b-16k|a block across both pods": 0.0,
-     "kide-34b-16k|hall B held to its contracted load": 6.48,
+     "kide-34b-16k|hall B held to its contracted load": 6.47,
      "kide-34b-16k|interruptions and restarts": 1.17,
      "kide-34b-16k|provider works and the window's opening": 4.49,
-     "kide-34b-16k|expected days": 69.69,
+     "kide-34b-16k|expected days": 69.73,
      "kide-34b-lc64|benchmark days": 7.97,
-     "kide-34b-lc64|the run's own mix at the mean rank": 0.19,
-     "kide-34b-lc64|waiting for the slowest rank": 3.93,
+     "kide-34b-lc64|the run's own mix at the mean rank": 0.03,
+     "kide-34b-lc64|waiting for the slowest rank": 3.85,
      "kide-34b-lc64|padding in packed sequences": 0.0,
      "kide-34b-lc64|a block across both pods": 0.0,
      "kide-34b-lc64|hall B held to its contracted load": 0.0,
      "kide-34b-lc64|interruptions and restarts": 0.06,
      "kide-34b-lc64|provider works and the window's opening": 3.08,
-     "kide-34b-lc64|expected days": 15.23,
+     "kide-34b-lc64|expected days": 14.99,
      "kide-34b-sci|benchmark days": 17.1,
-     "kide-34b-sci|the run's own mix at the mean rank": 0.45,
+     "kide-34b-sci|the run's own mix at the mean rank": 0.47,
      "kide-34b-sci|waiting for the slowest rank": 0.57,
      "kide-34b-sci|padding in packed sequences": 4.67,
      "kide-34b-sci|a block across both pods": 0.0,
      "kide-34b-sci|hall B held to its contracted load": 0.0,
      "kide-34b-sci|interruptions and restarts": 0.18,
      "kide-34b-sci|provider works and the window's opening": 0.03,
-     "kide-34b-sci|expected days": 23.0,
+     "kide-34b-sci|expected days": 23.01,
      "kide-34b-v3|benchmark days": 34.63,
      "kide-34b-v3|the run's own mix at the mean rank": -0.88,
      "kide-34b-v3|waiting for the slowest rank": 0.93,
@@ -1379,7 +1379,7 @@
      "kide-34b-v3|hall B held to its contracted load": 4.33,
      "kide-34b-v3|interruptions and restarts": 0.6,
      "kide-34b-v3|provider works and the window's opening": 0.37,
-     "kide-34b-v3|expected days": 39.99,
+     "kide-34b-v3|expected days": 39.98,
      "kide-70b-v2|benchmark days": 38.54,
      "kide-70b-v2|the run's own mix at the mean rank": -0.9,
      "kide-70b-v2|waiting for the slowest rank": 0.95,
@@ -1388,45 +1388,45 @@
      "kide-70b-v2|hall B held to its contracted load": 0.0,
      "kide-70b-v2|interruptions and restarts": 0.5,
      "kide-70b-v2|provider works and the window's opening": 0.37,
-     "kide-70b-v2|expected days": 39.47,
+     "kide-70b-v2|expected days": 39.46,
      "kide-8b-lc64|benchmark days": 8.6,
-     "kide-8b-lc64|the run's own mix at the mean rank": 1.04,
-     "kide-8b-lc64|waiting for the slowest rank": 5.56,
+     "kide-8b-lc64|the run's own mix at the mean rank": 0.73,
+     "kide-8b-lc64|waiting for the slowest rank": 5.39,
      "kide-8b-lc64|padding in packed sequences": 0.0,
      "kide-8b-lc64|a block across both pods": 0.0,
      "kide-8b-lc64|hall B held to its contracted load": 0.0,
      "kide-8b-lc64|interruptions and restarts": 0.05,
      "kide-8b-lc64|provider works and the window's opening": 0.03,
-     "kide-8b-lc64|expected days": 15.27,
+     "kide-8b-lc64|expected days": 14.79,
      "kide-8b-v4|benchmark days": 62.02,
-     "kide-8b-v4|the run's own mix at the mean rank": -1.76,
+     "kide-8b-v4|the run's own mix at the mean rank": -1.78,
      "kide-8b-v4|waiting for the slowest rank": 1.46,
      "kide-8b-v4|padding in packed sequences": 0.0,
      "kide-8b-v4|a block across both pods": 0.0,
-     "kide-8b-v4|hall B held to its contracted load": 7.93,
+     "kide-8b-v4|hall B held to its contracted load": 7.92,
      "kide-8b-v4|interruptions and restarts": 0.46,
      "kide-8b-v4|provider works and the window's opening": 0.45,
-     "kide-8b-v4|expected days": 70.55
+     "kide-8b-v4|expected days": 70.52
     },
     "thorough": {
      "kide-120b-v1|benchmark days": 78.77,
-     "kide-120b-v1|the run's own mix at the mean rank": -2.25,
+     "kide-120b-v1|the run's own mix at the mean rank": -2.27,
      "kide-120b-v1|waiting for the slowest rank": 2.75,
      "kide-120b-v1|padding in packed sequences": 0.0,
      "kide-120b-v1|a block across both pods": 0.0,
      "kide-120b-v1|hall B held to its contracted load": 3.61,
      "kide-120b-v1|interruptions and restarts": 2.18,
      "kide-120b-v1|provider works and the window's opening": 0.41,
-     "kide-120b-v1|expected days": 85.48,
+     "kide-120b-v1|expected days": 85.45,
      "kide-13b-code-lc32|benchmark days": 6.35,
-     "kide-13b-code-lc32|the run's own mix at the mean rank": -0.27,
-     "kide-13b-code-lc32|waiting for the slowest rank": 1.91,
+     "kide-13b-code-lc32|the run's own mix at the mean rank": -0.3,
+     "kide-13b-code-lc32|waiting for the slowest rank": 1.9,
      "kide-13b-code-lc32|padding in packed sequences": 0.0,
      "kide-13b-code-lc32|a block across both pods": 0.0,
      "kide-13b-code-lc32|hall B held to its contracted load": 0.0,
      "kide-13b-code-lc32|interruptions and restarts": 0.03,
      "kide-13b-code-lc32|provider works and the window's opening": 0.03,
-     "kide-13b-code-lc32|expected days": 8.05,
+     "kide-13b-code-lc32|expected days": 8.01,
      "kide-13b-lc32|benchmark days": 9.12,
      "kide-13b-lc32|the run's own mix at the mean rank": -0.16,
      "kide-13b-lc32|waiting for the slowest rank": 0.84,
@@ -1435,43 +1435,43 @@
      "kide-13b-lc32|hall B held to its contracted load": 0.0,
      "kide-13b-lc32|interruptions and restarts": 0.05,
      "kide-13b-lc32|provider works and the window's opening": 0.37,
-     "kide-13b-lc32|expected days": 10.23,
+     "kide-13b-lc32|expected days": 10.22,
      "kide-13b-v4|benchmark days": 30.96,
      "kide-13b-v4|the run's own mix at the mean rank": -1.17,
      "kide-13b-v4|waiting for the slowest rank": 1.14,
      "kide-13b-v4|padding in packed sequences": 0.0,
      "kide-13b-v4|a block across both pods": 0.0,
-     "kide-13b-v4|hall B held to its contracted load": 2.87,
+     "kide-13b-v4|hall B held to its contracted load": 2.86,
      "kide-13b-v4|interruptions and restarts": 0.41,
      "kide-13b-v4|provider works and the window's opening": 0.07,
-     "kide-13b-v4|expected days": 34.28,
+     "kide-13b-v4|expected days": 34.27,
      "kide-34b-16k|benchmark days": 56.71,
-     "kide-34b-16k|the run's own mix at the mean rank": -1.63,
+     "kide-34b-16k|the run's own mix at the mean rank": -1.59,
      "kide-34b-16k|waiting for the slowest rank": 2.49,
      "kide-34b-16k|padding in packed sequences": 0.0,
      "kide-34b-16k|a block across both pods": 0.0,
-     "kide-34b-16k|hall B held to its contracted load": 2.87,
+     "kide-34b-16k|hall B held to its contracted load": 2.86,
      "kide-34b-16k|interruptions and restarts": 0.93,
      "kide-34b-16k|provider works and the window's opening": 0.42,
-     "kide-34b-16k|expected days": 61.78,
+     "kide-34b-16k|expected days": 61.82,
      "kide-34b-lc64|benchmark days": 7.97,
-     "kide-34b-lc64|the run's own mix at the mean rank": 0.19,
-     "kide-34b-lc64|waiting for the slowest rank": 3.93,
+     "kide-34b-lc64|the run's own mix at the mean rank": 0.03,
+     "kide-34b-lc64|waiting for the slowest rank": 3.85,
      "kide-34b-lc64|padding in packed sequences": 0.0,
      "kide-34b-lc64|a block across both pods": 0.0,
      "kide-34b-lc64|hall B held to its contracted load": 0.0,
      "kide-34b-lc64|interruptions and restarts": 0.06,
      "kide-34b-lc64|provider works and the window's opening": 3.08,
-     "kide-34b-lc64|expected days": 15.23,
+     "kide-34b-lc64|expected days": 14.99,
      "kide-34b-sci|benchmark days": 17.1,
-     "kide-34b-sci|the run's own mix at the mean rank": 0.45,
+     "kide-34b-sci|the run's own mix at the mean rank": 0.47,
      "kide-34b-sci|waiting for the slowest rank": 0.57,
      "kide-34b-sci|padding in packed sequences": 4.67,
      "kide-34b-sci|a block across both pods": 0.0,
      "kide-34b-sci|hall B held to its contracted load": 0.0,
      "kide-34b-sci|interruptions and restarts": 0.18,
      "kide-34b-sci|provider works and the window's opening": 0.03,
-     "kide-34b-sci|expected days": 23.0,
+     "kide-34b-sci|expected days": 23.01,
      "kide-34b-v3|benchmark days": 34.63,
      "kide-34b-v3|the run's own mix at the mean rank": -0.88,
      "kide-34b-v3|waiting for the slowest rank": 0.93,
@@ -1489,25 +1489,25 @@
      "kide-70b-v2|hall B held to its contracted load": 0.0,
      "kide-70b-v2|interruptions and restarts": 0.5,
      "kide-70b-v2|provider works and the window's opening": 0.37,
-     "kide-70b-v2|expected days": 39.47,
+     "kide-70b-v2|expected days": 39.46,
      "kide-8b-lc64|benchmark days": 8.6,
-     "kide-8b-lc64|the run's own mix at the mean rank": 1.04,
-     "kide-8b-lc64|waiting for the slowest rank": 5.56,
+     "kide-8b-lc64|the run's own mix at the mean rank": 0.73,
+     "kide-8b-lc64|waiting for the slowest rank": 5.39,
      "kide-8b-lc64|padding in packed sequences": 0.0,
      "kide-8b-lc64|a block across both pods": 0.0,
      "kide-8b-lc64|hall B held to its contracted load": 0.0,
      "kide-8b-lc64|interruptions and restarts": 0.05,
      "kide-8b-lc64|provider works and the window's opening": 0.03,
-     "kide-8b-lc64|expected days": 15.27,
+     "kide-8b-lc64|expected days": 14.79,
      "kide-8b-v4|benchmark days": 62.02,
-     "kide-8b-v4|the run's own mix at the mean rank": -1.76,
+     "kide-8b-v4|the run's own mix at the mean rank": -1.78,
      "kide-8b-v4|waiting for the slowest rank": 1.46,
      "kide-8b-v4|padding in packed sequences": 0.0,
-     "kide-8b-v4|a block across both pods": 13.57,
+     "kide-8b-v4|a block across both pods": 13.56,
      "kide-8b-v4|hall B held to its contracted load": 3.39,
      "kide-8b-v4|interruptions and restarts": 0.43,
      "kide-8b-v4|provider works and the window's opening": 0.41,
-     "kide-8b-v4|expected days": 79.53
+     "kide-8b-v4|expected days": 79.49
     }
    },
    "precedent": [
@@ -1542,7 +1542,7 @@
    "pod_penalty_pct": 22.0,
    "throttle": [
     0.934,
-    1.484
+    1.485
    ]
   },
   {
@@ -1553,7 +1553,7 @@
    "pod_penalty_pct": 22.0,
    "throttle": [
     0.934,
-    1.485
+    1.486
    ]
   },
   {
@@ -1564,7 +1564,7 @@
    "pod_penalty_pct": 22.0,
    "throttle": [
     0.902,
-    1.566
+    1.567
    ]
   },
   {
@@ -1597,7 +1597,7 @@
    "pod_penalty_pct": 22.0,
    "throttle": [
     0.915,
-    1.539
+    1.54
    ]
   },
   {
@@ -1615,11 +1615,11 @@
    "name": "the pod penalty from each straddling run over its model's best-recorded run in one pod",
    "same": true,
    "worst": "kide-8b-v4",
-   "dev_pct": -0.8,
-   "pod_penalty_pct": 21.1,
+   "dev_pct": -0.88,
+   "pod_penalty_pct": 21.0,
    "throttle": [
     0.931,
-    1.51
+    1.513
    ]
   },
   {
@@ -1659,7 +1659,7 @@
    "name": "works at the median overrun ratio",
    "same": true,
    "worst": "kide-34b-lc64",
-   "dev_pct": 0.64,
+   "dev_pct": 0.65,
    "pod_penalty_pct": 22.0,
    "throttle": [
     0.933,
@@ -1669,8 +1669,8 @@
   {
    "name": "another packing and dealing seed",
    "same": true,
-   "worst": "kide-8b-lc64",
-   "dev_pct": -2.3,
+   "worst": "kide-34b-sci",
+   "dev_pct": 0.24,
    "pod_penalty_pct": 21.9,
    "throttle": [
     0.933,

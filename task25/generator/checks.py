@@ -20,6 +20,7 @@ import cutpack as CP  # noqa: E402
 import params as P  # noqa: E402
 import results as RS  # noqa: E402
 import truth2027 as T  # noqa: E402
+import world as W  # noqa: E402
 
 OUT = []
 OPEN = {"kide-8b-v4": "P", "kide-34b-v3": "Q"}     # the two members of the call a run can get wrong, and the stump that opens each
@@ -198,6 +199,50 @@ def main(fast=False):
     ok("BT3 the pooled benchmark-to-held ratio (%.3f over 2026) fails a leave-one-run-out check by 25 per cent or more on a large run"
        % (bt["held"].sum() / bt["bench"].sum()), max(loo) >= 25 and abs(bt["held"].sum() / bt["bench"].sum() - fig["f26_ratio"]) < 0.0006,
        (round(max(loo), 1), round(bt["held"].sum() / bt["bench"].sum(), 3)))
+    # BT4 to BT6: the benchmark corpus's slowest-rank cost and the 2027 overheads across independent streams. The harness file
+    # files the corpus by its length distribution only, so each analyst draws a stream of their own.
+    hc = G["F"]["harness"]["corpus"]["doc_length"]
+    Nb, Lb, db = P.MODELS["8B"]
+    Cb, gb = 65536, 2
+    kfb = Lb * db * Cb / Nb
+
+    def harness_cost(ntok, seed):
+        rng = np.random.default_rng(seed)
+        docs = W.draw_docs({"x": 1.0}, ntok, rng, sources={"x": (hc["median_tokens"], hc["sigma"], hc["max_tokens"])})
+        Sx, _, _ = W.pack_sequential(docs, Cb)
+        return A.step_units(Sx, kfb, G["CM"]["beta"], 64, gb, seed=int(Cb + gb))[0]
+
+    Sg, _ = G["PK"].harness(G["F"], Cb)
+    cost_g = A.step_units(Sg, kfb, G["CM"]["beta"], 64, gb, seed=int(Cb + gb))[0]
+    conv = [harness_cost(A.HARNESS_TOKENS, 5000 + i) for i in range(3)]
+    ok("BT4 the golden's replay of the benchmark corpus has converged: three other streams of its length put the 64k-context "
+       "slowest-rank cost within 0.5 per cent of it", max(abs(c / cost_g - 1) for c in conv) <= 0.005,
+       [round(c / cost_g - 1, 4) for c in conv])
+    few = np.array([harness_cost(3.0e8, 6000 + i) for i in range(40)])
+    ok("BT5 a stream of 3e8 tokens does not converge: its cost moves by 1.0 per cent or more (sd over forty streams), which "
+       "is why the expected days of kide-8b-lc64 carry a band of 5 per cent", few.std(ddof=1) / few.mean() >= 0.010,
+       round(few.std(ddof=1) / few.mean(), 4))
+    ovs = {}
+    for k in ("kide-13b-code-lc32", "kide-34b-lc64", "kide-8b-lc64"):
+        r_ = runs[k]
+        kf_ = r_["L"] * r_["d"] * r_["C"] / r_["N"]
+        vals = []
+        for sd_ in (31, 32, 33, 34):
+            Sx, _ = A.Packer(G["F"], seed=sd_).stream(r_["mix"], r_["C"], r_["rule"])
+            em, eb = A.step_units(Sx, kf_, G["CM"]["beta"], r_["D"], r_["g"], seed=sd_)
+            vals.append(100 * (em / eb - 1))
+        ovs[k] = [round(v - fig["overhead_pct_%s" % k], 2) for v in vals]
+    ok("BT6 the three few-sequence runs' slowest-rank overheads move by 1.0 point or less across four other production streams "
+       "(the band is 3 points)", all(abs(d_) <= 1.0 for v in ovs.values() for d_ in v), ovs)
+    cfg_dir = os.path.join(target, "plan_2027", "configs")
+    cfg_txt = [open(os.path.join(cfg_dir, f)).read() for f in sorted(os.listdir(cfg_dir))]
+    mix_cols = list(pd.read_csv(os.path.join(target, "data", "data_mixes.csv"), nrows=1).columns)
+    harn_txt = open(os.path.join(target, "benchmark", "tpbench_harness.yaml")).read()
+    ok("BT7 the files pin the replay's three readings: the mixes' unit is named token_share, every config files the cut at seq_len and "
+       "its data-parallel size, and the harness file files the same cut",
+       "token_share" in mix_cols and len(cfg_txt) == 11 and
+       all(("cut at seq_len" in t or "cut into seq_len pieces" in t) and re.search(r"parallelism:\n\s+tensor: \d+\n\s+data: \d+", t) for t in cfg_txt) and
+       "cut at the sequence length" in harn_txt, (mix_cols, len(cfg_txt)))
     # SF13: the pool's busy nodes in the 2027 plan, three readings
     pr0 = dict(G["PR"])
     pr0["plateau"] = 0.0
