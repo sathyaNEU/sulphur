@@ -46,6 +46,7 @@ def write(task_dir):
         "decision": "which H1 2027 pretraining runs will not reach their token budgets inside their reserved GPU windows, and how many days each will take against its benchmark",
         "deliverables": ["h1_2027_throughput_bridge.xlsx", "h1_2027_run_windows_note.md"],
         "pull_date": "2026-11-06",
+        "as_of": "2026-11-06",
         "record_window": "2026-01-01 to 2026-10-31",
         "generated": True,
         "license": "synthetic data, CC0; no third-party data",

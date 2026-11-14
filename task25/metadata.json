@@ -7,6 +7,7 @@
   "h1_2027_run_windows_note.md"
  ],
  "pull_date": "2026-11-06",
+ "as_of": "2026-11-06",
  "record_window": "2026-01-01 to 2026-10-31",
  "generated": true,
  "license": "synthetic data, CC0; no third-party data",
@@ -145,16 +146,6 @@
    "covers": "the training team's launch config for kide-34b-v3",
    "license": "synthetic, CC0"
   },
-  "plan_2027/configs/kide-13b-lc32.yaml": {
-   "source": "generated (simulated Saukko Labs Oy systems)",
-   "covers": "the training team's launch config for kide-13b-lc32",
-   "license": "synthetic, CC0"
-  },
-  "plan_2027/configs/kide-8b-lc64.yaml": {
-   "source": "generated (simulated Saukko Labs Oy systems)",
-   "covers": "the training team's launch config for kide-8b-lc64",
-   "license": "synthetic, CC0"
-  },
   "plan_2027/configs/kide-34b-16k.yaml": {
    "source": "generated (simulated Saukko Labs Oy systems)",
    "covers": "the training team's launch config for kide-34b-16k",
@@ -168,6 +159,16 @@
   "plan_2027/configs/kide-13b-v4.yaml": {
    "source": "generated (simulated Saukko Labs Oy systems)",
    "covers": "the training team's launch config for kide-13b-v4",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-13b-lc32.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-13b-lc32",
+   "license": "synthetic, CC0"
+  },
+  "plan_2027/configs/kide-8b-lc64.yaml": {
+   "source": "generated (simulated Saukko Labs Oy systems)",
+   "covers": "the training team's launch config for kide-8b-lc64",
    "license": "synthetic, CC0"
   }
  }

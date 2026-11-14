@@ -90,7 +90,10 @@ def assign_nodes(runs, rng):
     for r in order:
         h = r["hall"]
         while True:
-            s, e = r["start"], r["plan_end"] + dt.timedelta(days=2)
+            # a block is kept for the run's planned window, a margin for the overrun the registry shows (a quarter of a
+            # long run's length) and two days; the nodes are only reused after that
+            s = r["start"]
+            e = r["plan_end"] + dt.timedelta(days=2 + 0.25 * (r["plan_end"] - r["start"]).days)
             free = free_for(h, s, e)
             if len(free) >= r["nodes"]:
                 break
@@ -100,8 +103,19 @@ def assign_nodes(runs, rng):
         if r["run_id"] == "kide-8b-v3":
             pick = [n for n in free if n.split("-")[1] in ("r04", "r05", "r06", "r07")][: r["nodes"]]
         elif r["run_id"].startswith("abl-"):
-            idx = sorted(rng.choice(len(free), size=r["nodes"], replace=False))
-            pick = [free[i] for i in idx]
+            # the scheduler's topology-aware plugin places a job inside one pod when a pod has room (a run of
+            # consecutive free nodes from a random offset), across both only when neither does
+            pods = {}
+            for n in free:
+                pods.setdefault(n.split("-")[1] if h == "B" else "p0", []).append(n)
+            roomy = [p for p in sorted(pods) if len(pods[p]) >= r["nodes"]]
+            if roomy:
+                lst = pods[roomy[int(rng.integers(0, len(roomy)))]]
+                k = int(rng.integers(0, len(lst) - r["nodes"] + 1))
+                pick = lst[k:k + r["nodes"]]
+            else:
+                idx = sorted(rng.choice(len(free), size=r["nodes"], replace=False))
+                pick = [free[i] for i in idx]
         else:
             pick = free[: r["nodes"]]
         assert len(pick) == r["nodes"], r["run_id"]
@@ -227,13 +241,14 @@ def simulate(seed=P.SEED):
     for r in runs:
         r["events"] = interruptions(r, rng, hevents, works_utc)
     # two passes: busy nodes -> throttle -> progress -> ends -> busy nodes again
+    stops = stop_masks(works_utc, hevents)
     ends = {r["run_id"]: dt.datetime.combine(r["plan_end"], dt.time(12, 0)) for r in runs}
     for _ in range(3):
-        busy, draw, x = hall_load(runs, ends, nodes, rng_seed=seed + 7)
+        busy, draw, x = hall_load(runs, ends, nodes, rng_seed=seed + 7, stops=stops)
         for r in runs:
             progress(r, x, nodes[r["run_id"]], keep_rows=False)
             ends[r["run_id"]] = r["end_ts"] if r["end_ts"] else T_END
-    busy, draw, x = hall_load(runs, ends, nodes, rng_seed=seed + 7)
+    busy, draw, x = hall_load(runs, ends, nodes, rng_seed=seed + 7, stops=stops)
     rng_log = np.random.default_rng(seed + 11)
     for r in runs:
         progress(r, x, nodes[r["run_id"]], keep_rows=True, rng=rng_log)
@@ -283,33 +298,34 @@ def interruptions(r, rng, hevents, works_utc):
     return ev
 
 
-def hall_load(runs, ends, nodes, rng_seed):
-    """Busy nodes, would-be draw and excess over contract per hall on the five-minute grid. Registered and ablation
-    runs hold their nodes from launch to end (drawing far less while restarting); the research pool takes a weekly
-    and monthly patterned share of the nodes no run holds."""
+def stop_masks(works_utc, hevents):
+    """Intervals in which a hall is handed back (provider works) or shed by a facility event: no job runs."""
+    m = {h: np.zeros(NI, bool) for h in P.HALLS}
+    for w in works_utc:
+        m[w["hall"]][max(0, gi(w["a"])):min(NI, gi(w["b"]) + 1)] = True
+    for e in hevents:
+        i = gi(e["ts"])
+        if 0 <= i < NI:
+            m[e["hall"]][i:min(NI, i + int(math.ceil(e["minutes"] * 60 / STEP_S)))] = True
+    return m
+
+
+def hall_load(runs, ends, nodes, rng_seed, stops):
+    """Busy nodes, draw and excess over contract per hall on the five-minute grid. Registered and ablation runs hold
+    their nodes from launch to end; the research pool takes a weekly and monthly patterned share of the nodes no run
+    holds and backs off as the load without it nears the contract (`world.hall_draw`); a hall-level stop leaves the
+    hall idle."""
     rng = np.random.default_rng(rng_seed)
     busy, draw, x = {}, {}, {}
     for h, hp in P.HALLS.items():
-        N = hp["rows"] * hp["slots"]
         held = np.zeros(NI)
-        run_kw = np.zeros(NI)
         for r in runs:
             if r["hall"] != h:
                 continue
             a = max(0, gi(r["launch"]))
             b = min(NI, gi(ends[r["run_id"]]) + 1)
-            if b <= a:
-                continue
-            up = np.ones(b - a)
-            for e in r["events"]:
-                i = gi(e["ts"]) - a
-                j = i + int(math.ceil(e["down_min"] * 60 / STEP_S))
-                if 0 <= i < len(up):
-                    up[i:max(i + 1, j)] = 0.0
-            held[a:b] += r["nodes"]
-            kw = hp["node_kw"] * P.DRAW_BY_MODEL[r["model"]]
-            run_kw[a:b] += r["nodes"] * (up * kw + (1 - up) * hp["idle_kw"] * 1.6)
-        free = N - held
+            if b > a:
+                held[a:b] += r["nodes"]
         days = np.arange(NI) * STEP_S / 86400.0
         dates = [T0 + dt.timedelta(days=float(d)) for d in days[::288]]
         wk = np.repeat([P.POOL_WEEKLY[d.weekday()] for d in dates], 288)[:NI]
@@ -321,13 +337,8 @@ def hall_load(runs, ends, nodes, rng_seed):
         for i in range(1, NI):
             ar[i] = 0.995 * ar[i - 1] + e[i]
         share = np.clip(P.POOL_BUSY[h] * wk * mo * diurnal * (1 + ar), 0.05, 0.98)
-        pool = np.floor(free * share + rng.random(NI))
-        pool_kw = pool * hp["node_kw"] * 0.95
-        idle = N - held - pool
-        d = run_kw + pool_kw + idle * hp["idle_kw"] + hp["infra_kw"]
-        busy[h] = held + pool
-        draw[h] = d
-        x[h] = np.maximum(0.0, d / hp["contract_kw"] - 1.0)
+        busy[h], draw[h] = W.hall_draw(hp, held, share, stops[h], rng)
+        x[h] = np.maximum(0.0, draw[h] / hp["contract_kw"] - 1.0)
     return busy, draw, x
 
 
@@ -342,13 +353,14 @@ def progress(r, x, run_nodes, keep_rows=False, rng=None):
         f0, f1 = gi(dt.datetime.combine(P.ROW6_FAULT[0], dt.time(13, 20))), gi(dt.datetime.combine(P.ROW6_FAULT[1], dt.time(9, 0)))
         slow[f0:f1] = P.ROW6_SLOW
     drift_rng = np.random.default_rng(zlib.crc32(r["run_id"].encode()) % (1 << 31))
-    e = drift_rng.standard_normal(NI) * 0.0011
+    e = drift_rng.standard_normal(NI) * 0.0005
     drift = np.empty(NI)
     acc = 0.0
     for i in range(NI):
         acc = 0.9993 * acc + e[i]
         drift[i] = acc
-    step_s = r["step_s"] * thr * slow * (1.0 + drift)     # seconds per step on the grid
+    strad = 1.0 + P.STRADDLE if (r["hall"] == "B" and len({n.split("-")[1] for n in run_nodes}) > 1) else 1.0
+    step_s = r["step_s"] * thr * slow * strad * (1.0 + drift)     # seconds per step on the grid
     rate = STEP_S / step_s                                # steps per grid interval
     tok_step = r["tok_step"]
     target_steps = r["budget"] / tok_step

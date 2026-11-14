@@ -15,10 +15,12 @@ HDR = PatternFill("solid", fgColor="DCE6F1")
 LATE = PatternFill("solid", fgColor="F8CBAD")
 THIN = Side(style="thin", color="B7B7B7")
 LABELS_27 = ["Benchmark days", "Own mix at the mean rank", "Waiting for the slowest rank", "Padding",
-             "Hall B held to its contract", "Interruptions and restarts", "Works and window opening", "Expected days"]
+             "Block across both pods", "Hall B held to its contract", "Interruptions and restarts",
+             "Works and window opening", "Expected days"]
 LABELS_26 = ["Benchmark GPU-days", "Own mixes at the mean rank", "Waiting for the slowest rank", "Padding",
-             "Hall B held to its contract", "Hall A row 6 cooling fault", "Interruptions and restarts",
-             "Provider works", "Other (start-ups, final checkpoints, step drift)", "GPU-days held"]
+             "Blocks across both pods", "Hall B held to its contract", "Hall A row 6 cooling fault",
+             "Interruptions and restarts", "Provider works", "Other (start-ups, final checkpoints, step drift)",
+             "GPU-days held"]
 
 
 def _hdr(ws, row, cols, widths=None):
@@ -85,7 +87,7 @@ def workbook(path, G, fig, X):
     wb2 = wb.create_sheet("Bridge 2027")
     wb2["A1"] = "Each run from its benchmark days to its expected days, cause by cause (days, in this order)"
     wb2["A1"].font = Font(bold=True, size=12)
-    _hdr(wb2, 3, ["Run"] + LABELS_27, [21, 11, 12, 13, 9, 13, 13, 13, 10])
+    _hdr(wb2, 3, ["Run"] + LABELS_27, [21, 11, 12, 13, 9, 12, 13, 13, 13, 10])
     wb2.freeze_panes = "B4"
     for i, r in enumerate(rows, 4):
         k = r["run_id"]
@@ -93,8 +95,8 @@ def workbook(path, G, fig, X):
         for j in range(len(LABELS_27)):
             c = wb2.cell(row=i, column=2 + j, value=fig["bridge_%s_%d" % (k, j)])
             c.number_format = "0.00"
-    wb2.cell(row=5 + n, column=1, value="Order: benchmark, then mix, slowest rank, padding, hall B, interruptions, works; "
-                                         "each cause added to the ones before it.").font = Font(italic=True, size=9)
+    wb2.cell(row=5 + n, column=1, value="Order: benchmark, then mix, slowest rank, padding, the block across both pods, hall B, "
+                                         "interruptions, works; each cause added to the ones before it.").font = Font(italic=True, size=9)
 
     w3 = wb.create_sheet("Bridge 2026")
     w3["A1"] = "2026 as a whole: the benchmark's GPU-days to the GPU-days the runs held (CAR-2027-1 section 6)"
@@ -104,10 +106,10 @@ def workbook(path, G, fig, X):
         w3.cell(row=4 + i, column=1, value=lab)
         c = w3.cell(row=4 + i, column=2, value=fig["b26_%d" % i])
         c.number_format = "#,##0"
-    w3.cell(row=16, column=1, value="Held by hall: A").font = Font(bold=True)
-    w3.cell(row=16, column=2, value=fig["held_2026_A"]).number_format = "#,##0"
-    w3.cell(row=17, column=1, value="Held by hall: B").font = Font(bold=True)
-    w3.cell(row=17, column=2, value=fig["held_2026_B"]).number_format = "#,##0"
+    w3.cell(row=17, column=1, value="Held by hall: A").font = Font(bold=True)
+    w3.cell(row=17, column=2, value=fig["held_2026_A"]).number_format = "#,##0"
+    w3.cell(row=18, column=1, value="Held by hall: B").font = Font(bold=True)
+    w3.cell(row=18, column=2, value=fig["held_2026_B"]).number_format = "#,##0"
 
     w4 = wb.create_sheet("Causes")
     w4["A1"] = "The causes as measured on the 2026 record"
@@ -126,10 +128,22 @@ def workbook(path, G, fig, X):
     for x in (5, 10, 15, 20):
         lines.append(("Hall B step stretch at %d per cent over contract (per cent)" % x, fig["throttle_pct_x%02d" % x],
                       "step_log against excess rebuilt from node_states, %d capped days" % fig["capped_days_2026"]))
+    lines.append(("Extra time per step for a job with nodes in both hall B pods (per cent)", fig["pod_penalty_pct"],
+                  "steady step over the step its benchmark, mix and width predict: %s against %s, runs in both pods "
+                  "against runs in one" % ("%.3f" % fig["pod_ratio_both"], "%.3f" % fig["pod_ratio_one"])))
+    lines.append(("2026 runs with nodes in both pods", ", ".join(fig["pod_runs_2026"]), "node_allocations_2026"))
+    lines.append(("2027 runs with a block across both pods", ", ".join(fig["pod_runs_2027"]), "the roadmap's blocks"))
     for k in sorted(X["stretch"]):
         lines.append(("Mean step stretch in 2027, %s (per cent)" % k, fig["stretch_pct_%s" % k],
-                      "2027 reservations with the pool's 2026 share of free nodes"))
-    lines += [("Research pool's busy share of unreserved hall B nodes", fig["pool_share"], "node_states less registered runs"),
+                      "2027 reservations, the pool at its measured back-off"))
+    lines += [("Hall B draw line: kW at no allocated node, kW per allocated node", "%s, %s" % tuple(fig["draw_line"]),
+               "hall_it_load on the intervals clear of the contract against node_states"),
+              ("Research pool's busy share of unreserved hall B nodes at light reserved load", fig["pool_share"],
+               "node_states less registered runs"),
+              ("Research pool's busy nodes with 512 of hall B's nodes reserved", fig["pool_nodes_512"],
+               "its share by reserved load"),
+              ("Research pool's busy nodes with 800 of hall B's nodes reserved", fig["pool_nodes_800"],
+               "its share by reserved load"),
               ("Major works, actual over planned hours (mean)", fig["works_ratio_major"], "work_orders_2025_2026"),
               ("Routine works, actual over planned hours (mean)", fig["works_ratio_routine"], "work_orders_2025_2026")]
     for i, (a, b, c) in enumerate(lines, 4):
@@ -144,7 +158,12 @@ def workbook(path, G, fig, X):
     w5.cell(row=4, column=1, value="Expected days (this workbook)")
     w5.cell(row=4, column=2, value=", ".join(fig["call_late_runs"]))
     names = [("the benchmark's days alone", "quick: benchmark days"),
-             ("benchmark at each run's mean rank, interruptions, planned works", "careful but hurried"),
+             ("benchmark at each run's mean rank with interruptions and planned works hours",
+              "shallow: mean rank, full sequences, no throttle, planned works hours"),
+             ("each run's benchmark days over its nearest 2026 run's realised rate", "direct: the nearest 2026 run's realised rate"),
+             ("every cause but the pod boundary and the pool's back-off (the pool at its mean share)", "careful but hurried"),
+             ("expected days with no pod penalty", "drop P (no pod penalty)"),
+             ("expected days with the pool at its 2026 mean share of free nodes", "drop Q (the pool at its mean share)"),
              ("the full-context FLOPs formula for attention", "the full-context FLOPs formula"),
              ("2026's held-over-benchmark ratio (%.3f) on every run" % fig["f26_ratio"], "the 2026 benchmark-to-held ratio"),
              ("expected days with each rank at its mean", "drop S1 (the mean rank)"),
@@ -160,11 +179,16 @@ def workbook(path, G, fig, X):
         ("Window", "From 00:00 UTC on the window's start date to 00:00 UTC on its end date (CAR-2027-1 section 2)."),
         ("Finished", "When the trainer's token count, which excludes padding, reaches the run's budget (section 3)."),
         ("Inside its window", "Expected finish at or before the window's end (section 4)."),
-        ("Late blocks", "Kept until the run finishes, nothing else booked on them (section 2); hall B's load carries them."),
-        ("Bridge order", "Benchmark, own mix at the mean rank, slowest rank, padding, hall B, interruptions, works; "
-                         "each cause added to the ones before it, so the items add to the expected days."),
+        ("Late blocks", "Kept until the run finishes, nothing else booked on them (section 2); hall B's load carries them. "
+                        "No block shares rows with an earlier one inside its window, so no later run waits for nodes."),
+        ("Pods", "A block's pod is read from its node names in the roadmap; the penalty is read from the 2026 runs "
+                 "whose allocations name both."),
+        ("Bridge order", "Benchmark, own mix at the mean rank, slowest rank, padding, the block across both pods, hall B, "
+                         "interruptions, works; each cause added to the ones before it, so the items add to the "
+                         "expected days."),
         ("80 per cent range", "160 draws of the 2026 record: interruption counts, restart and lost-work times, the "
-                              "throttle fit by capped day, each work's overrun from its type's 2025-26 ratios, the pool."),
+                              "throttle fit by capped day, each work's overrun from its type's 2025-26 ratios, the "
+                              "pod penalty and the pool's light-load share."),
         ("Rounding", "Days to 0.1 (bridge items to 0.01), GPU-days to the unit, shares and ratios to three places."),
     ]
     w6.column_dimensions["A"].width = 20
@@ -198,7 +222,7 @@ def note(path, G, fig, X):
                                                                     r["window_days"]) for r in fit_rows) + ".")
     L.append("")
     L.append("Every window was sized on the throughput benchmark, and the benchmark runs at conditions none of these "
-             "runs will see. Three things make up most of the gap.")
+             "runs will see. Four things make up most of the gap.")
     L.append("")
     L.append("1. **The step waits for the slowest rank.** Attention cost grows with the square of each document's "
              "length, and each step ends when the data-parallel rank holding the longest documents finishes. With one or "
@@ -209,29 +233,40 @@ def note(path, G, fig, X):
     L.append("2. **The scientific run pads.** Best-fit packing that keeps each paper whole fills %.1f per cent of each "
              "16k sequence on the kide-34b-sci mix, so the run needs %.1f more days for the same real tokens."
              % (100 * fig["fill_kide-34b-sci"], fig["bridge_kide-34b-sci_3"]))
-    L.append("3. **Hall B is held to its contract.** With the February to April reservations hall B would draw up to "
-             "%.0f per cent past its %s kW contract, and the provider holds it there by lowering GPU power, which on "
-             "2026's %d capped days stretched every hall B job's steps (%.1f per cent at 20 per cent over). That adds "
-             "%.1f, %.1f and %.1f days to kide-120b-v1, kide-34b-v3 and kide-34b-16k."
-             % (100 * max(0.0, (G["kwB"][0] + G["kwB"][1] * 1024) / 8100.0 - 1), format(8100, ","), fig["capped_days_2026"],
-                fig["throttle_pct_x20"], fig["bridge_kide-120b-v1_4"], fig["bridge_kide-34b-v3_4"], fig["bridge_kide-34b-16k_4"]))
+    L.append("3. **Hall B is held to its contract.** Its jobs' steps stretch when the hall would draw past its %s kW "
+             "(%.1f per cent at 20 per cent over, on 2026's %d capped days), and the research pool is what keeps "
+             "the hall under it: the pool took about %d of the 512 unreserved nodes in 2026 when the reservations were light "
+             "and none once they held 768 or more, so in February to mid-March, with 800 nodes reserved, the pool is "
+             "off and the stretch is small (kide-34b-v3 %.1f per cent), and from the end of March, with 896 reserved "
+             "and no pool, it is %.1f per cent on kide-13b-v4. That adds %.1f, %.1f and %.1f days to kide-120b-v1, "
+             "kide-34b-v3 and kide-34b-16k."
+             % (format(8100, ","), fig["throttle_pct_x20"], fig["capped_days_2026"], int(fig["pool_nodes_512"]),
+                fig["stretch_pct_kide-34b-v3"], fig["stretch_pct_kide-13b-v4"], fig["bridge_kide-120b-v1_5"],
+                fig["bridge_kide-34b-v3_5"], fig["bridge_kide-34b-16k_5"]))
+    L.append("4. **A block across both pods runs slower.** The 2026 runs whose nodes sat in both of hall B's pods "
+             "(%s) took %.1f per cent longer per step than their benchmark, mix and width predict, and the runs inside "
+             "one pod did not. kide-8b-v4's block, rows 16 and 17 of the reservation ledger, is the only 2027 booking "
+             "across the boundary: it adds %.1f days and is what puts a 75-day window at %.1f."
+             % (", ".join(fig["pod_runs_2026"]), fig["pod_penalty_pct"], fig["bridge_kide-8b-v4_4"], fig["days_kide-8b-v4"]))
     L.append("")
     L.append("Works matter at the margin: in 2025 and 2026 major works ran %.2f times their planned hours, so the hall A "
-             "re-cabling in March and the hall B chilled-water work in May cost kide-34b-lc64 and kide-8b-lc64 %.1f and "
-             "%.1f days, about twice what the notice's planned hours imply."
-             % (fig["works_ratio_major"], fig["works_days_kide-34b-lc64"], fig["works_days_kide-8b-lc64"]))
+             "re-cabling in March costs kide-34b-lc64 %.1f days, about twice what the notice's planned hours imply."
+             % (fig["works_ratio_major"], fig["works_days_kide-34b-lc64"]))
     L.append("")
     L.append("**What I would change before the windows lock.** Extend each late window to its expected days, or remove "
              "the cause. For the three long-context runs, deal sequences to ranks by their attention cost rather than in "
-             "turn. For kide-34b-sci, let papers split across sequences. For hall B, take enough load out of February to "
-             "April to keep it under contract, for example by moving kide-8b-v4 to hall A after kide-70b-v2.")
+             "turn. For kide-34b-sci, let papers split across sequences. For kide-8b-v4, give it a block inside one pod "
+             "(kide-34b-16k at 192 nodes leaves pod 1 two rows free) or extend its window to %.0f days. Hall B's load "
+             "in March and April is what the 120b and the 16k run on; take load out of it only if their windows "
+             "cannot move." % fig["days_kide-8b-v4"])
     L.append("")
     L.append("2026 bears this out: the runs held %s GPU-days against the %s their benchmarks implied. Waiting for the "
-             "slowest rank added %s, interruptions and restarts %s, hall B's cap %s and provider works %s; shorter "
-             "documents than the benchmark's corpus gave back %s. The workbook has every run's bridge and range."
-             % (format(int(fig["b26_9"]), ","), format(int(fig["b26_0"]), ","), format(int(fig["b26_2"]), ","),
-                format(int(fig["b26_6"]), ","), format(int(fig["b26_4"]), ","), format(int(fig["b26_7"]), ","),
-                format(int(-fig["b26_1"]), ",")))
+             "slowest rank added %s, blocks across both pods %s, interruptions and restarts %s, hall B's cap %s and "
+             "provider works %s; shorter documents than the benchmark's corpus gave back %s. The workbook has every "
+             "run's bridge and range."
+             % (format(int(fig["b26_10"]), ","), format(int(fig["b26_0"]), ","), format(int(fig["b26_2"]), ","),
+                format(int(fig["b26_4"]), ","), format(int(fig["b26_7"]), ","), format(int(fig["b26_5"]), ","),
+                format(int(fig["b26_8"]), ","), format(int(-fig["b26_1"]), ",")))
     L.append("")
     L.append("Days are counted from 00:00 UTC on each window's start, as CAR-2027-1 counts them, and every late block "
              "is kept until its run finishes, which is what keeps hall B loaded into April. The ranges in the workbook "

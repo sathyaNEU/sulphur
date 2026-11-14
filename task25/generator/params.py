@@ -31,10 +31,15 @@ U_DENSE = {"1B": 0.40, "3B": 0.44, "8B": 0.47, "13B": 0.49, "34B": 0.51, "70B": 
 BETA = 1.32
 STEP_OVERHEAD = 0.026               # optimizer step and exposed reduction, share of a step's mean compute
 RANK_JITTER = 0.004                 # per-rank, per-step kernel noise (sd, multiplicative)
-DRAW_BY_MODEL = {"1B": 0.93, "3B": 0.95, "8B": 0.97, "13B": 0.98, "34B": 1.00, "70B": 1.01, "120B": 1.02}
 # throttle: a step's compute stretches by THR1*x + THR2*x^2 when the hall's would-be draw exceeds its contract by x
 THR1, THR2 = 0.95, 1.20
 METER_NOISE_KW = 14.0
+# a job whose nodes sit in both of hall B's pods pays for the pod boundary: its gradient reduction crosses the spine
+# every step, and the whole ring runs at the slowest link
+STRADDLE = 0.22
+# the pool backs off as the hall nears its contract: its scheduler stops starting jobs once the load without the
+# pool is POOL_KNEE of the contract, and has none running by POOL_ZERO (a linear back-off between)
+POOL_KNEE, POOL_ZERO = 0.88, 0.97
 
 # the Kide family: params, layers, d_model, kv heads, vocab
 MODELS = {
@@ -85,7 +90,7 @@ ROW6_FAULT = (dt.date(2026, 9, 14), dt.date(2026, 10, 19))      # hall A row 6 c
 ROW6_SLOW = 1.19
 
 # ---- the research pool (jobs outside the run registry) -------------------------------------------------------
-POOL_BUSY = {"A": 0.55, "B": 0.38}      # mean busy share of nodes no registered run holds
+POOL_BUSY = {"A": 0.55, "B": 0.46}      # mean busy share of nodes no registered run holds
 POOL_WEEKLY = (1.00, 1.03, 1.04, 1.04, 1.02, 0.91, 0.88)   # Monday to Sunday
 POOL_MONTHLY = {1: 0.98, 2: 1.02, 3: 1.03, 4: 1.01, 5: 1.00, 6: 0.98, 7: 0.90, 8: 0.95, 9: 1.03, 10: 1.04,
                 11: 1.03, 12: 0.96}
@@ -115,29 +120,37 @@ CAPPED_TARGET_DAYS = (26, 36)   # the hall B days the 2026 schedule leaves over 
 # ---- the H1 2027 roadmap ----------------------------------------------------------------------------------------
 # (run_id, model, hall, nodes, context, mix, packing, seqs_per_rank, window_start, window_end, budget_tokens, purpose)
 ROADMAP_2027 = [
-    ("kide-70b-v2", "70B", "A", 256, 8192, "pt-web-27", "sequential", 8, "2027-01-11", "2027-02-27", 7.650e12,
+    ("kide-70b-v2", "70B", "A", 256, 8192, "pt-web-27", "sequential", 8, "2027-01-11", "2027-02-27", 7.65e12,
      "continued pretraining"),
     ("kide-13b-code-lc32", "13B", "A", 32, 32768, "lc-repo-27", "sequential", 2, "2027-01-18", "2027-01-25", 0.655e12,
      "repository-level code, long context"),
-    ("kide-34b-lc64", "34B", "A", 64, 65536, "lc-books-27", "sequential", 1, "2027-03-01", "2027-03-14", 0.655e12,
+    ("kide-34b-lc64", "34B", "A", 64, 65536, "lc-books-27", "sequential", 1, "2027-03-01", "2027-03-14", 0.673e12,
      "long-context extension"),
-    ("kide-34b-sci", "34B", "A", 128, 16384, "sci-27", "best_fit", 8, "2027-04-12", "2027-05-02", 3.350e12,
+    ("kide-34b-sci", "34B", "A", 128, 16384, "sci-27", "best_fit", 8, "2027-04-12", "2027-05-02", 3.353e12,
      "scientific continued pretraining"),
-    ("kide-120b-v1", "120B", "B", 512, 8192, "pt-web-27", "sequential", 4, "2027-02-01", "2027-04-17", 17.200e12,
+    ("kide-120b-v1", "120B", "B", 480, 8192, "pt-web-27", "sequential", 4, "2027-02-01", "2027-04-17", 18.19e12,
      "flagship pretraining"),
-    ("kide-34b-v3", "34B", "B", 256, 8192, "pt-web-27", "sequential", 8, "2027-02-01", "2027-03-11", 14.750e12,
+    ("kide-34b-v3", "34B", "B", 256, 8192, "pt-web-27", "sequential", 8, "2027-02-01", "2027-03-11", 14.64e12,
      "pretraining"),
-    ("kide-13b-lc32", "13B", "B", 64, 32768, "lc-light-27", "sequential", 16, "2027-04-19", "2027-05-01", 2.100e12,
-     "long-context continued pretraining"),
-    ("kide-8b-lc64", "8B", "B", 32, 65536, "lc-books8-27", "sequential", 2, "2027-05-10", "2027-05-23", 0.995e12,
-     "long-context extension"),
-    ("kide-34b-16k", "34B", "B", 192, 16384, "pt16-27", "sequential", 8, "2027-02-22", "2027-04-17", 15.350e12,
+    ("kide-34b-16k", "34B", "B", 224, 16384, "pt16-27", "sequential", 8, "2027-03-15", "2027-05-08", 20.43e12,
      "16k pretraining"),
-    ("kide-8b-v4", "8B", "B", 64, 8192, "pt-web-27", "sequential", 16, "2027-02-01", "2027-04-17", 20.850e12,
+    ("kide-8b-v4", "8B", "B", 64, 8192, "pt-web-27", "sequential", 16, "2027-02-01", "2027-04-17", 24.97e12,
      "pretraining"),
-    ("kide-13b-v4", "13B", "B", 128, 8192, "pt-web-27", "sequential", 8, "2027-03-15", "2027-04-24", 14.100e12,
+    ("kide-13b-v4", "13B", "B", 128, 8192, "pt-web-27", "sequential", 8, "2027-03-29", "2027-05-08", 15.63e12,
      "pretraining"),
+    ("kide-13b-lc32", "13B", "B", 64, 32768, "lc-light-27", "sequential", 16, "2027-05-03", "2027-05-15", 2.25e12,
+     "long-context continued pretraining"),
+    ("kide-8b-lc64", "8B", "B", 32, 65536, "lc-books8-27", "sequential", 2, "2027-05-24", "2027-06-06", 1.436e12,
+     "long-context extension"),
 ]
+# the reservation ledger: each run's block of whole rows (32 nodes a row; hall B's rows 1 to 16 are pod 1, 17 to 32
+# pod 2), as the provider's reservation desk assigned them in the order the blocks were booked
+BLOCKS_2027 = {
+    "kide-70b-v2": ("A", 1, 8), "kide-13b-code-lc32": ("A", 9, 9), "kide-34b-lc64": ("A", 10, 11),
+    "kide-34b-sci": ("A", 12, 15),
+    "kide-120b-v1": ("B", 18, 32), "kide-34b-v3": ("B", 1, 8), "kide-34b-16k": ("B", 9, 15),
+    "kide-8b-v4": ("B", 16, 17), "kide-13b-v4": ("B", 1, 4), "kide-13b-lc32": ("B", 5, 6), "kide-8b-lc64": ("B", 7, 7),
+}
 WORKS_2027 = [
     # (work id, hall, type, start local, planned hours, title)
     ("PV-27-014", "A", "major", dt.datetime(2027, 3, 8, 6, 0), 36.0, "Hall A spine re-cabling, rows 1 to 16"),
@@ -148,7 +161,7 @@ WORKS_2027 = [
     ("PV-27-034", "B", "routine", dt.datetime(2027, 5, 12, 7, 0), 6.0, "Hall B quarterly UPS inspection"),
 ]
 TARGETS_2027 = {   # golden days over window, the world's design (asserted on the cut pack, never typed downstream)
-    "kide-70b-v2": 0.84, "kide-13b-code-lc32": 1.15, "kide-34b-lc64": 1.14, "kide-34b-sci": 1.15,
-    "kide-120b-v1": 1.14, "kide-34b-v3": 1.15, "kide-13b-lc32": 0.84, "kide-8b-lc64": 1.16, "kide-34b-16k": 1.14,
-    "kide-8b-v4": 0.85, "kide-13b-v4": 0.85,
+    "kide-70b-v2": 0.845, "kide-13b-code-lc32": 1.147, "kide-34b-lc64": 1.14, "kide-34b-sci": 1.148,
+    "kide-120b-v1": 1.14, "kide-34b-v3": 0.955, "kide-13b-lc32": 0.85, "kide-8b-lc64": 1.15, "kide-34b-16k": 1.14,
+    "kide-8b-v4": 1.065, "kide-13b-v4": 0.85,
 }

@@ -156,6 +156,46 @@ def main():
         b = bench[(bench.model == r.model) & (bench.context_tokens == r.seq_len) & (bench.seqs_per_rank == r.seqs_per_rank) & (bench.hall == "A")].iloc[0]
         bd = r.token_budget / (b.tokens_per_gpu_s * r.gpus) / 86400
         chk("V9 %s benchmark days recompute" % r.run_id, abs(bd - fig["bench_days_%s" % r.run_id]) < 0.06, "%.2f" % bd)
+    # the hall B draw line, the pod boundary and the pool, each on its own code path
+    st = rd("cluster/node_states_2026.csv")
+    sb = st[st.hall == "B"].copy()
+    sb["t"] = pd.to_datetime(sb["ts_utc"])
+    mt = meter[meter.hall == "HALL-B"].copy()
+    lt = pd.to_datetime(mt["timestamp_local"]).dt.tz_localize("Europe/Helsinki", ambiguous="NaT", nonexistent="NaT")
+    mt["t"] = lt.dt.tz_convert("UTC")
+    jj = sb.merge(mt[["t", "it_load_kw"]].dropna(), on="t")
+    jj = jj[jj["it_load_kw"] < 8060]
+    slope, icpt = np.polyfit(jj["allocated"], jj["it_load_kw"], 1)
+    chk("V11 hall B's draw is a line in the allocated nodes: %.2f kW a node, %.0f kW at none" % (slope, icpt),
+        abs(slope / fig["draw_line"][1] - 1) < 0.01 and abs(icpt / fig["draw_line"][0] - 1) < 0.02)
+    stp = rd("runs/step_log_2026.csv")
+    stp["run_id"] = stp["run_id"].map(lambda x: prev.get(x, x))
+    stp["t"] = pd.to_datetime(stp["ts_utc"])
+    stp = stp.drop_duplicates(["run_id", "tokens_seen"])
+    sb2 = sb.set_index("t")
+    stp["alloc"] = stp["t"].dt.floor("5min").map(sb2["allocated"])
+    def steady(rid):
+        g = stp[(stp.run_id == rid) & (stp["alloc"] <= 770)]    # the draw line puts 770 allocated nodes under the contract
+        return float(g["step_time_ms"].median()), len(g)
+    a_, na = steady("kide-34b-v1-r2")
+    b_, nb = steady("kide-34b-v1b")
+    chk("V12 the twin 34B runs (same mix, width and sequences per rank) differ by the pod boundary: %.1f per cent on %d and "
+        "%d rows" % (100 * (b_ / a_ - 1), na, nb), na > 200 and nb > 200 and abs(100 * (b_ / a_ - 1) - fig["pod_penalty_pct"]) < 6.0)
+    ledger = reg.assign(L=L, F=Fz)
+    sbt = sb["t"].values
+    held = np.zeros(len(sb))
+    for r in ledger[ledger["hall"] == "B"].itertuples():
+        held += ((sbt >= np.datetime64(r.L.tz_localize(None) if r.L.tzinfo else r.L)) &
+                 (sbt < np.datetime64(r.F.tz_localize(None) if r.F.tzinfo else r.F))) * r.nodes
+    alloc = sb["allocated"].values.astype(float)
+    free = 1024 - held
+    reg_ratio = (icpt + slope * held) / 8100.0
+    ok_ = (free > 32) & (alloc > 0)
+    pool_share = np.clip(alloc - held, 0, None)[ok_] / free[ok_]
+    rr_ = reg_ratio[ok_]
+    chk("V13 the pool keeps %.2f of the unreserved nodes busy under 80 per cent of the contract and %.3f at 97 per cent or more"
+        % (pool_share[rr_ < 0.8].mean(), pool_share[rr_ >= 0.97].mean()),
+        abs(pool_share[rr_ < 0.8].mean() - fig["pool_share"]) < 0.03 and pool_share[rr_ >= 0.97].mean() < 0.02)
     # the call: expected finish against the window end
     late = sorted(k for k in cfgs if fig["days_%s" % k] > fig["window_%s" % k])
     chk("V10 the late set follows from the expected days and windows", late == fig["call_late_runs"])

@@ -167,6 +167,27 @@ def throttle(x):
     return 1.0 + P.THR1 * x + P.THR2 * x * x
 
 
+def pool_phi(base_ratio):
+    """The research pool's admission: it starts no job once the load without it is POOL_KNEE of the contract and has
+    none running by POOL_ZERO (a linear back-off between)."""
+    return np.clip((P.POOL_ZERO - np.asarray(base_ratio, dtype=float)) / (P.POOL_ZERO - P.POOL_KNEE), 0.0, 1.0)
+
+
+def hall_draw(hp, held, share, stop, rng, backoff=True):
+    """Busy nodes and IT draw (kW) per interval of one hall. `held` is the nodes the registered runs (and the blocks of
+    runs finished early, on backfill) occupy; the research pool takes `share` of the free nodes, scaled by its
+    back-off against the contract; a hall-level stop (works, a facility event) leaves every node idle. The same
+    process writes the 2026 meter and the 2027 truth."""
+    N = hp["rows"] * hp["slots"]
+    free = N - held
+    base = (held * hp["node_kw"] + free * hp["idle_kw"] + hp["infra_kw"]) / hp["contract_kw"]
+    phi = pool_phi(base) if backoff else np.ones(len(held))
+    pool = np.minimum(np.floor(free * share * phi + rng.random(len(held))), free)
+    busy = np.where(stop, 0.0, held + pool)
+    draw = busy * hp["node_kw"] + (N - busy) * hp["idle_kw"] + hp["infra_kw"]
+    return busy, draw
+
+
 # ------------------------------------------------------------------ nodes
 def node_names(hall):
     h = P.HALLS[hall]
@@ -180,6 +201,17 @@ def node_names(hall):
             for r in range(1, h["rows"] // h["pods"] + 1):
                 for s in range(1, h["slots"] + 1):
                     out.append("kb-p%d-r%02d-%02d" % (p, r, s))
+    return out
+
+
+def block_nodes(hall, r0, r1):
+    """The nodes of a reservation's rows r0 to r1 (hall-wide row numbers; hall B's rows 1 to 16 are pod 1)."""
+    h = P.HALLS[hall]
+    per = h["rows"] // h["pods"]
+    out = []
+    for r in range(r0, r1 + 1):
+        for s in range(1, h["slots"] + 1):
+            out.append("ka-r%02d-%02d" % (r, s) if hall == "A" else "kb-p%d-r%02d-%02d" % (1 + (r - 1) // per, 1 + (r - 1) % per, s))
     return out
 
 

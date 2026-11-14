@@ -31,11 +31,21 @@ def run_specs(budgets=None, cm=None, rng=None, sources=None, beta=P.BETA, steps=
         emax, emean, sd = W.step_stats(cost, nodes, g, rng, steps=steps)
         dense = W.dense_seconds(model, C, hall)
         b = budgets[rid] if budgets else budget
+        pods = block_pods(rid)
         out.append(dict(run_id=rid, model=model, hall=hall, nodes=nodes, C=C, mix=mix, rule=rule, g=g,
+                        strad=1.0 + P.STRADDLE if len(pods) > 1 else 1.0, pods=pods,
                         ws=dt.date.fromisoformat(ws), we=dt.date.fromisoformat(we), budget=b, emax=emax,
                         emean=emean, fill=float(F.mean()), dense_s=dense,
                         step_s=emax * dense * (1 + P.STEP_OVERHEAD), tok_step=nodes * g * C * float(F.mean())))
     return out
+
+
+def block_pods(rid):
+    """The pods a 2027 block's rows lie in (hall B's rows 1 to 16 are pod 1, 17 to 32 pod 2; hall A has one)."""
+    hall, r0, r1 = P.BLOCKS_2027[rid]
+    if hall == "A":
+        return (1,)
+    return tuple(sorted({1 + (r - 1) // 16 for r in range(r0, r1 + 1)}))
 
 
 def works_windows(rng, ratio=True):
@@ -49,7 +59,8 @@ def works_windows(rng, ratio=True):
     return out
 
 
-def replay_once(specs, rng, pool_share=P.POOL_BUSY, throttle_on=True, works_ratio=True, overrun_extends=True):
+def replay_once(specs, rng, pool_share=P.POOL_BUSY, throttle_on=True, works_ratio=True, overrun_extends=True,
+                backoff=True, straddle=True):
     """One draw of H1 2027: interruptions, works and the hall B load, with each run kept on its block until it
     finishes. Returns days from each window's 00:00 UTC to its token budget."""
     works = works_windows(rng, ratio=works_ratio)
@@ -71,10 +82,10 @@ def replay_once(specs, rng, pool_share=P.POOL_BUSY, throttle_on=True, works_rati
         runs.append(r)
     ends = {r["run_id"]: dt.datetime.combine(r["we"], dt.time(0)) for r in runs}
     for _ in range(4):
-        x = hall_x(runs, ends, rng_seed=int(rng.integers(1 << 30)), pool_share=pool_share) if throttle_on else \
-            {h: np.zeros(NI) for h in P.HALLS}
+        x = hall_x(runs, ends, int(rng.integers(1 << 30)), works, hall_ev, pool_share=pool_share, backoff=backoff) \
+            if throttle_on else {h: np.zeros(NI) for h in P.HALLS}
         for r in runs:
-            d = _progress(r, x)
+            d = _progress(r, x, straddle)
             ends[r["run_id"]] = r["launch"] + dt.timedelta(days=d) if overrun_extends else \
                 max(r["launch"] + dt.timedelta(days=d), dt.datetime.combine(r["we"], dt.time(0)))
     return {r["run_id"]: (ends[r["run_id"]] - dt.datetime.combine(r["ws"], dt.time(0))).total_seconds() / 86400
@@ -114,39 +125,46 @@ def _events(r, rng, hall_ev, works):
     return ev
 
 
-def hall_x(runs, ends, rng_seed, pool_share=P.POOL_BUSY):
+def hall_x(runs, ends, rng_seed, works, hall_ev, pool_share=P.POOL_BUSY, backoff=True):
+    """Each hall's excess over contract on the grid: every registered run holds its nodes from its window's opening
+    to the later of its window's end and its own finish (the block is extended, CAR-2027-1 section 2; a block whose
+    run finished early runs backfill jobs to the window's end), and the research pool and the hall-level stops follow
+    the same process as the 2026 record's (`world.hall_draw`)."""
     rng = np.random.default_rng(rng_seed)
     x = {}
+    stops = {h: np.zeros(NI, bool) for h in P.HALLS}
+    for w in works:
+        stops[w["hall"]][max(0, gi(w["a"])):max(0, min(NI, gi(w["b"]) + 1))] = True
+    for e in hall_ev:
+        i = gi(e["ts"])
+        if 0 <= i < NI:
+            stops[e["hall"]][i:min(NI, i + int(math.ceil(e["minutes"] / 5.0)))] = True
+    idx = np.arange(NI)
+    dates = [T0 + dt.timedelta(days=d) for d in range(DAYS)]
+    wk = np.repeat([P.POOL_WEEKLY[d.weekday()] for d in dates], 288)
+    mo = np.repeat([P.POOL_MONTHLY[d.month] for d in dates], 288)
+    diurnal = 1 + 0.05 * np.sin(((idx * 300 / 3600.0) % 24 - 9) / 24 * 2 * math.pi)
     for h, hp in P.HALLS.items():
         N = hp["rows"] * hp["slots"]
         held = np.zeros(NI)
-        kw = np.zeros(NI)
         for r in runs:
             if r["hall"] != h:
                 continue
             a = max(0, gi(dt.datetime.combine(r["ws"], dt.time(0))))
             b = min(NI, max(gi(dt.datetime.combine(r["we"], dt.time(0))), gi(ends[r["run_id"]]) + 1))
             held[a:b] += r["nodes"]
-            kw[a:b] += r["nodes"] * hp["node_kw"] * P.DRAW_BY_MODEL[r["model"]]
-        free = N - held
-        idx = np.arange(NI)
-        dates = [T0 + dt.timedelta(days=d) for d in range(DAYS)]
-        wk = np.repeat([P.POOL_WEEKLY[d.weekday()] for d in dates], 288)
-        mo = np.repeat([P.POOL_MONTHLY[d.month] for d in dates], 288)
-        hour = (idx * 300 / 3600.0) % 24
-        diurnal = 1 + 0.05 * np.sin((hour - 9) / 24 * 2 * math.pi)
+        assert held.max() <= N, "hall %s over-booked: %d nodes held of %d" % (h, held.max(), N)
         share = np.clip(pool_share[h] * wk * mo * diurnal, 0.05, 0.98)
-        pool = free * share
-        d = kw + pool * hp["node_kw"] * 0.95 + (N - held - pool) * hp["idle_kw"] + hp["infra_kw"]
-        x[h] = np.maximum(0.0, d / hp["contract_kw"] - 1.0)
+        _, draw = W.hall_draw(hp, held, share, stops[h], rng, backoff=backoff)
+        x[h] = np.maximum(0.0, draw / hp["contract_kw"] - 1.0)
     return x
 
 
-def _progress(r, x):
+def _progress(r, x, straddle=True):
     """Days from launch to the budget (continuous, on the grid), stops rolled back to the last checkpoint."""
     a = gi(r["launch"])
     thr = W.throttle(x[r["hall"]]) if r["hall"] == "B" else np.ones(NI)
-    rate = 300.0 / (r["step_s"] * thr)
+    rate = 300.0 / (r["step_s"] * thr * (r["strad"] if straddle else 1.0))
     target = r["budget"] / r["tok_step"]
     cum = 0.0
     cur = a

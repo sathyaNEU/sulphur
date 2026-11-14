@@ -13,6 +13,7 @@ from reportlab.platypus import Paragraph, Spacer, Table
 import officepdf
 import params as P
 import postprocess
+import world as W
 
 HEL = ZoneInfo("Europe/Helsinki")
 SS = getSampleStyleSheet()
@@ -44,7 +45,8 @@ def allocation_rules(path):
         p("2. Blocks and windows", H2),
         p("A reservation holds a block of whole nodes in one hall. Its window runs from 00:00 UTC on the window's start "
           "date to 00:00 UTC on its end date, as listed in the H1 2027 roadmap. A block's run launches when its window "
-          "opens."),
+          "opens, or, where the block's nodes are still held by an earlier reservation's run, when that run has "
+          "finished and the nodes are handed back, whichever is later."),
         p("Nodes that no reservation holds run the research pool, which schedules its own jobs."),
         p("A block whose run finishes before its window ends runs backfill research jobs on its nodes until the window "
           "ends. If a run is still training when its window ends, its block is extended until the run finishes, and "
@@ -79,7 +81,7 @@ def service_schedule(path):
     rows = [["Hall", "GPU equipment", "Nodes", "Contracted IT capacity", "Cooling"],
             ["HALL-A", P.HALLS["A"]["gpu"], "512", "%s kW" % format(int(P.HALLS["A"]["contract_kw"]), ","),
              "CRAC units 1 to 8, chilled-water loop A"],
-            ["HALL-B", P.HALLS["B"]["gpu"], "1,024 (two pods of 512)", "%s kW" % format(int(P.HALLS["B"]["contract_kw"]), ","),
+            ["HALL-B", P.HALLS["B"]["gpu"], "1,024", "%s kW" % format(int(P.HALLS["B"]["contract_kw"]), ","),
              "Rear-door heat exchangers, chilled-water loop B"]]
     story = [
         p("%s" % P.PROVIDER, LH),
@@ -133,7 +135,7 @@ def roadmap_xlsx(path):
     ws = wb.active
     ws.title = "H1 2027 runs"
     hdr = ["run_id", "purpose", "model", "hall", "nodes", "gpus", "seq_len", "seqs_per_rank", "data_mix", "packing",
-           "window_start", "window_end", "token_budget", "config"]
+           "window_start", "window_end", "token_budget", "block", "config"]
     ws.append(["Saukko Labs: H1 2027 pretraining roadmap, version 7 (%s)" % P.ROADMAP_DATE.strftime("%d %b %Y")])
     ws.append([])
     ws.append(hdr)
@@ -141,20 +143,23 @@ def roadmap_xlsx(path):
         c.font = Font(bold=True)
         c.fill = PatternFill("solid", fgColor="DDE7F0")
     for (rid, model, hall, nodes, C, mix, rule, g, wst, wen, budget, purpose) in P.ROADMAP_2027:
+        h, r0, r1 = P.BLOCKS_2027[rid]
         ws.append([rid, purpose, model, hall, nodes, nodes * P.GPUS_PER_NODE, C, g, mix, rule,
-                   dt.date.fromisoformat(wst), dt.date.fromisoformat(wen), int(budget), "configs/%s.yaml" % rid])
+                   dt.date.fromisoformat(wst), dt.date.fromisoformat(wen), int(budget),
+                   W.compress(W.block_nodes(h, r0, r1)), "configs/%s.yaml" % rid])
     for row in ws.iter_rows(min_row=4, max_row=3 + len(P.ROADMAP_2027)):
         row[10].number_format = "yyyy-mm-dd"
         row[11].number_format = "yyyy-mm-dd"
         row[12].number_format = "#,##0"
-    widths = [20, 34, 7, 6, 7, 7, 8, 13, 13, 11, 12, 12, 19, 30]
+    widths = [20, 34, 7, 6, 7, 7, 8, 13, 13, 11, 12, 12, 19, 44, 30]
     for i, w in enumerate(widths):
         ws.column_dimensions[chr(65 + i)].width = w
     ws["A1"].font = Font(bold=True, size=12)
     ws2 = wb.create_sheet("Changes")
     ws2.append(["Version", "Date", "Change"])
     ws2.append([6, dt.date(2026, 10, 21), "Windows and budgets agreed at the committee's 21 October meeting"])
-    ws2.append([7, dt.date(2026, 11, 4), "kide-13b-v4 added in hall B from 15 March; kide-13b-lc32 moved to 64 nodes"])
+    ws2.append([7, dt.date(2026, 11, 4), "kide-13b-v4 added in hall B from 29 March; kide-34b-16k moved to 15 March at 224 "
+                "nodes and kide-120b-v1 set at 480; blocks booked with the provider's reservation desk"])
     for c in ("A", "B", "C"):
         ws2.column_dimensions[c].width = {"A": 9, "B": 12, "C": 90}[c]
     wb.save(path)

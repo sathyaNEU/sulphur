@@ -138,7 +138,7 @@ def allocations(rec):
                              end_utc=fmt_ts(end.replace(microsecond=0)), nodes=W.compress(nodes)))
             if s["kind"] == "hw_node":
                 bad = nodes[int(rng.integers(0, len(nodes)))]
-                spare = [n for n in names_all if n not in nodes]
+                spare = [n for n in names_all if n not in nodes and (r["hall"] == "A" or n[:5] == bad[:5])]
                 if spare:
                     nodes[nodes.index(bad)] = spare[int(rng.integers(0, len(spare)))]
                 s["node"] = bad
