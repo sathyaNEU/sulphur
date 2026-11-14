@@ -22,7 +22,7 @@
  "R2_dashboard_RM22": 65.7,
  "R3_order": {
   "account_billing": 85.0,
-  "device_troubleshooting": 67.4,
+  "device_troubleshooting": 67.3,
   "mix": 77.3,
   "order_delivery": 88.6,
   "product_howto": 87.4,
@@ -124,10 +124,10 @@
  },
  "acc_ratio_troubleshooting": 0.675,
  "alpha_df": 4,
- "alpha_lr": 4.4,
+ "alpha_lr": 4.3,
  "bands": {
   "desk": [
-   18000,
+   22000,
    61000
   ],
   "mix": 1.0,
@@ -176,9 +176,8 @@
   38000,
   38000,
   39000,
-  39000,
   40000,
-  41000
+  40000
  ],
  "info_ratio_troubleshooting": 0.059,
  "is_error_lr": 106.2,
@@ -206,13 +205,13 @@
    "option": 70000
   },
   "J3": {
-   "cost_usd": 355200,
-   "desk": 87000,
-   "option": 100000
+   "cost_usd": 358200,
+   "desk": 89000,
+   "option": 90000
   },
   "J4": {
-   "cost_usd": 187200,
-   "desk": 52000,
+   "cost_usd": 190800,
+   "desk": 53000,
    "option": 0
   },
   "reflex": {

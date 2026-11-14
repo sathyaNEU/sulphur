@@ -128,6 +128,21 @@ def main():
     flat = " ".join(pol.split())
     ok("SF1 accuracy is against the reply at least two of three technicians choose", "at least two of the three choose" in flat)
     ok("SF5 every pair counts, whatever the split", "Every pair counts, whatever the split" in flat)
+    ok("SF3 expected accuracy is the point forecast of section 7, not a bootstrap mean or a quantile",
+       "Expected accuracy is the point forecast of section 7" in flat and "the point forecast" in flat
+       and "does not move it" in flat)
+    ok("SF16 the curve's form is filed: 1 - 0.5 x (1 + T/K)^(-b), a scale per type, one bend, no ceiling below 1",
+       "1 - 0.5 x (1 + T/K)^(-b)" in flat and "a single bend fitted for all ticket types together" in flat
+       and "no ceiling below 1" in flat and A.GOLDEN["form"] == "power" and A.GOLDEN["alpha"] == "pooled")
+    ok("SF17 the ceiling against the standard: pairs the standard's reply is the better one, plus half the equal pairs",
+       "plus half the share of pairs whose replies are as good as each other" in flat)
+    ok("SF16 the logistic curve no longer sits in the golden family (section 7.1 files the form)",
+       not any("logistic" in f["name"] for f in EF["forcing"]["golden_family"]))
+    g0 = A.golden(V)
+    for nm, o in (("counted", dict(value="raw")), ("accuracy-weighted", dict(value="acc"))):
+        alt = A.golden(V, o)
+        ok("SF18 the training signal read as labels %s fits the record worse than in information (2 dNLL %.1f)" % (nm, 2 * (alt["nll"] - g0["nll"])),
+           2 * (alt["nll"] - g0["nll"]) > 20)
     q = " ".join(RP.pdf_text(os.path.join(TGT, RP.FILES["quote"])).split())
     ok("SF7 the desk's tool has no no-preference choice, so ordered equals usable", "does not offer 'no preference'" in q)
     ok("SF14 the desk's order is at least 10,000 in steps of 1,000", V["min_order"] == 10000 and V["step"] == 1000)

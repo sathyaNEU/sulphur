@@ -9,7 +9,6 @@ import analysis as A
 import readpack as RP
 
 FAMILY = [  # defensible rivals: each a different but sound method on the same estimand
-    ("the learning curve as a logistic in log label information", dict(form="hill")),
     ("each run's pull a share of the square root of its labels' crowd share", dict(tilt="sqrt")),
     ("each source's error as its plain disagreement with unanimous technicians", dict(errors="plain")),
     ("the contrast in three bins, not nine", dict(bins="coarse")),

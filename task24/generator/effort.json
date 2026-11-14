@@ -191,7 +191,7 @@
     "returns_refunds": 81.7,
     "account_billing": 85.0,
     "product_howto": 87.4,
-    "device_troubleshooting": 67.4,
+    "device_troubleshooting": 67.3,
     "mix": 77.3
    },
    "bands": {
@@ -212,8 +212,8 @@
      89.4
     ],
     "device_troubleshooting": [
-     65.4,
-     69.4
+     65.3,
+     69.3
     ],
     "mix": [
      76.3,
@@ -243,7 +243,7 @@
      "returns_refunds": 81.7,
      "account_billing": 85.0,
      "product_howto": 87.4,
-     "device_troubleshooting": 67.4,
+     "device_troubleshooting": 67.3,
      "mix": 77.3
     }
    }
@@ -633,7 +633,7 @@
    ],
    "golden": 38000,
    "band": [
-    18000,
+    22000,
     61000
    ],
    "passes": {
@@ -745,17 +745,11 @@
  ],
  "forcing": {
   "kind": "set",
-  "what": "the cheapest purchase that reaches the bar: Ardentdesk carries it, with no more than three tranches (30,000) of the option beside it (the Ardentdesk volume graded between 18,000 and 61,000)",
+  "what": "the cheapest purchase that reaches the bar: Ardentdesk carries it, with no more than three tranches (30,000) of the option beside it (the Ardentdesk volume graded between 22,000 and 61,000)",
   "golden_answer": [
    "Ardentdesk, at most a tranche of the option"
   ],
   "golden_family": [
-   {
-    "name": "the learning curve as a logistic in log label information",
-    "answer": [
-     "Ardentdesk, at most a tranche of the option"
-    ]
-   },
    {
     "name": "each run's pull a share of the square root of its labels' crowd share",
     "answer": [
@@ -857,25 +851,25 @@
     ]
    },
    {
-    "input": "alpha plus its spread (0.0532 on 0.665)",
+    "input": "alpha plus its spread (0.0531 on 0.665)",
     "answer": [
      "Ardentdesk, at most a tranche of the option"
     ]
    },
    {
-    "input": "alpha minus its spread (0.0532 on 0.665)",
+    "input": "alpha minus its spread (0.0531 on 0.665)",
     "answer": [
      "Ardentdesk, at most a tranche of the option"
     ]
    },
    {
-    "input": "kappa plus its spread (0.0376 on 0.478)",
+    "input": "kappa plus its spread (0.0375 on 0.478)",
     "answer": [
      "Ardentdesk, at most a tranche of the option"
     ]
    },
    {
-    "input": "kappa minus its spread (0.0376 on 0.478)",
+    "input": "kappa minus its spread (0.0375 on 0.478)",
     "answer": [
      "Ardentdesk, at most a tranche of the option"
     ]

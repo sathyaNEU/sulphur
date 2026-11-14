@@ -61,7 +61,7 @@ def launch_policy(path):
          Paragraph("Auto-send launches for every ticket type at once when the reward model in production is expected "
                    "to reach %.1f per cent accuracy on the planned 2027 ticket mix: each ticket type's accuracy "
                    "weighted by its share of the tickets the 2027 operating plan forecasts for the year. Expected "
-                   "accuracy is the mean of the forecast, not a high or low case." % (100 * Wd.BAR), body),
+                   "accuracy is the point forecast of section 7, not a high or low case." % (100 * Wd.BAR), body),
          Paragraph("4. The Q1 2027 model", h2),
          Paragraph("The next reward model will be trained in April 2027 on every usable comparison delivered in 2026 "
                    "and every usable comparison delivered in Q1 2027, and put into production if it is expected to "
@@ -78,6 +78,19 @@ def launch_policy(path):
          Paragraph("The reward-model run register, the evaluation pipeline's item records, the shadow review log and "
                    "the 2026 label audit are kept by Support Automation. Vendor deliveries are kept as each vendor "
                    "exports them.", body),
+         Paragraph("7. Forecasting accuracy", h2),
+         Paragraph("7.1 Accuracy is forecast from the record of past training runs. On a pair one of whose replies is "
+                   "better than the other, the chance that the reward model prefers the better reply rises with the "
+                   "training signal it has had on the pair's ticket type as 1 - 0.5 x (1 + T/K)^(-b), where T is that "
+                   "training signal, K a scale fitted for each ticket type and b a single bend fitted for all ticket "
+                   "types together. The curve has no ceiling below 1. On a pair whose two replies are as good as each "
+                   "other, the reward model's preferred reply is the standard's reply half of the time.", body),
+         Paragraph("7.2 A reward model that always preferred the better reply would reach, on a ticket type, the share "
+                   "of the type's pairs on which the standard's reply is the better one, plus half the share of pairs "
+                   "whose replies are as good as each other. Forecast accuracy against the standard is read on that "
+                   "basis.", body),
+         Paragraph("7.3 The forecast is the curve at the values fitted on the record: the point forecast. A range may "
+                   "be reported beside it and does not move it.", body),
          Spacer(1, 6),
          Paragraph("Approved by Bridget Sanders, Head of Support Automation, 26 October 2026.", small)]
     created = dt.datetime(2026, 10, 26, 10, 12, tzinfo=NZ)
