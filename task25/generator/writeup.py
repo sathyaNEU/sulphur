@@ -78,14 +78,16 @@ def write(path, fig, G):
                 g0(fig["held_2026_A"]), g0(fig["held_2026_B"])))
     L.append("4. Sheet \"Causes\": the attention coefficient %s (within 0.03) from %s joined rank-steps; the slowest-rank "
              "overhead over the mean rank, within 3 points, of %s; kide-34b-sci's fill %s (within 0.015); the extra time "
-             "per step of a job with nodes in both of hall B's pods, %s per cent (within 2.5 points), read off %s "
-             "against the runs in one pod; each hall B run's mean step stretch in 2027, within 2.5 points, of %s per "
+             "per step of a job with nodes in both of hall B's pods, %s per cent (within 2.5 points), read off %s, "
+             "the registered runs with nodes in both pods and steps outside capped hours, against the runs in one pod; "
+             "each hall B run's mean step stretch in 2027, within 2.5 points, of %s per "
              "cent; the research pool's busy nodes in hall B with %s of its %s reserved, %s (within 25), and with "
              "%s reserved, none (at most 12); its busy share of the unreserved nodes at light reserved load %s (within "
              "0.03); the works overrun ratios %s (major) and %s (routine)."
              % ("%.3f" % fig["beta"], g0(G["CM"]["rows"]),
                 ", ".join("%s %s per cent" % (k, f1(fig["overhead_pct_%s" % k])) for k in RS.LC_RUNS),
-                "%.3f" % fig["fill_kide-34b-sci"], f1(fig["pod_penalty_pct"]), ", ".join(fig["pod_runs_2026"]),
+                "%.3f" % fig["fill_kide-34b-sci"], f1(fig["pod_penalty_pct"]),
+                ", ".join(k for k in fig["pod_runs_2026"] if k != "kide-70b-scale"),
                 ", ".join("%s %s" % (k[12:], f1(fig[k])) for k in sorted(fig) if k.startswith("stretch_pct_")),
                 fig["pool_levels"][0], g0(fig["hall_b_nodes"]), g0(fig["pool_nodes_512"]), fig["pool_levels"][1],
                 "%.3f" % fig["pool_share"], "%.2f" % fig["works_ratio_major"], "%.2f" % fig["works_ratio_routine"]))

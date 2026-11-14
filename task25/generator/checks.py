@@ -177,6 +177,27 @@ def main(fast=False):
     ok("SF1 days are wall-clock from 00:00 UTC on the window's start", all(fig["days_%s" % k] > fig["bench_days_%s" % k] for k in runs))
     ok("SF7 the 80 per cent range brackets the expected days", all(fig["p10_%s" % k] <= fig["days_%s" % k] + 0.6 and
                                                                   fig["p90_%s" % k] >= fig["days_%s" % k] - 0.6 for k in runs))
+    # BT1 to BT3: the reflex route back-tested on the 2026 runs, and the pooled benchmark-to-held ratio held out one run at a time
+    b26_, per26 = A.bridge_2026(G)
+    bt = pd.DataFrame([dict(run_id=k, held=v["held"], bench=v["bench"], resid=100 * (v["other"] + v["pod"]) / v["held"],
+                            both=bool(G["flags"].get(k, False))) for k, v in per26.items()])
+    big_ = bt[bt["held"] > 2000]
+    ok("BT1 the reflex route leaves 2.5 per cent or less on every run of over 2,000 GPU-days inside one pod and 13 to 18 per cent "
+       "on each run across both pods, and every run across both pods is one of the large ones",
+       len(big_) == 13 and big_[~big_["both"]]["resid"].abs().max() <= 2.5 and 13 <= big_[big_["both"]]["resid"].min() and
+       big_[big_["both"]]["resid"].max() <= 18 and bool(bt[bt["both"]]["held"].gt(2000).all()),
+       (len(big_), round(big_[~big_["both"]]["resid"].abs().max(), 2), round(big_[big_["both"]]["resid"].min(), 1), round(big_[big_["both"]]["resid"].max(), 1)))
+    ok("BT2 so the reflex route's median miss over the 53 runs is 1.5 per cent or less and its mean over the 13 large runs 4 to 7",
+       len(bt) == 53 and bt["resid"].abs().median() <= 1.5 and 4 <= big_["resid"].abs().mean() <= 7,
+       (round(bt["resid"].abs().median(), 2), round(big_["resid"].abs().mean(), 2)))
+    loo = []
+    for k in big_["run_id"]:
+        o = bt[bt["run_id"] != k]
+        loo.append(abs(100 * (o["held"].sum() / o["bench"].sum() * float(bt.loc[bt["run_id"] == k, "bench"].iloc[0]) /
+                              float(bt.loc[bt["run_id"] == k, "held"].iloc[0]) - 1)))
+    ok("BT3 the pooled benchmark-to-held ratio (%.3f over 2026) fails a leave-one-run-out check by 25 per cent or more on a large run"
+       % (bt["held"].sum() / bt["bench"].sum()), max(loo) >= 25 and abs(bt["held"].sum() / bt["bench"].sum() - fig["f26_ratio"]) < 0.0006,
+       (round(max(loo), 1), round(bt["held"].sum() / bt["bench"].sum(), 3)))
     # SF13: the pool's busy nodes in the 2027 plan, three readings
     pr0 = dict(G["PR"])
     pr0["plateau"] = 0.0

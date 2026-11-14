@@ -362,7 +362,7 @@ def harness_yaml():
             "timed_steps: 300\n"
             "metric: tokens_per_gpu_s   # real tokens over wall-clock, timed steps only\n"
             "corpus:\n"
-            "  kind: synthetic\n"
+            "  kind: random_tokens\n"
             "  doc_length: {distribution: lognormal, median_tokens: %d, sigma: %.1f, max_tokens: %d}\n"
             "  seed: 1729\n"
             "packing: sequential   # documents end to end, cut at the sequence length, document-masked attention\n"

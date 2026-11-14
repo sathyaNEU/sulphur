@@ -48,9 +48,9 @@ what the pool does as the reservations grow.
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
 | A job whose nodes sit in both of hall B's pods sends every gradient reduction over the spine between them and runs about a fifth slower at every step; the benchmark's 64-node slice sits in one pod on an idle hall, so no benchmark figure carries it; the 2027 ledger lays exactly one block (kide-8b-v4, rows 16 and 17) across the boundary because the pods cannot be tiled by the plan's block sizes | the benchmark's rate and the cost model's step carried to every block, the pod named in each node list left unread and the residual filed as start-ups and drift (N09 the topology assumed uniform over the history, N04 a transfer past the benchmark's range) | the 2026 node allocations (the node names carry the pod) against each run's steady step over the step its benchmark, mix and width predict; the roadmap's block column | none (not a reflex: no reflex id carries a topology term and the audit run's moves stop at the cost model; nothing filed names a pod; two records at two grains; a plausible shallower story, the residual under "other"; across the data: three registered runs and the scale test in 2026, the ledger's one block; worth one member of the call) | kept (P) |
-| Hall B's research pool takes its 2026 mean share (a third) of the nodes no reservation holds, whatever the reservations hold; its scheduler in fact stops admitting jobs as the load without it nears the contract and has none running by 97 per cent of it, so with 800 nodes reserved (February to mid-March) the pool is off and the hall is nearly unthrottled, while a pool at its mean share adds about eighty nodes of load | a mean share used where a response is needed (L15 a behavioural response assumed instead of measured, N28 an input another process re-sets held at its latest supplied value) | node states less the registry's held nodes, against the load the registered runs alone put on the hall through the fitted draw line, in the 2026 intervals at 512 reserved and at 768 or more | none (not a reflex: the audit run's replay held the pool at one share; two records at two grains; the shallower story is a throttle that is simply larger; across the data: 2026's 27 days at 768 or more reserved and eight months at lighter loads; worth one member) | kept (Q) |
+| Hall B's research pool takes its 2026 mean share (about two fifths) of the nodes no reservation holds, whatever the reservations hold; its scheduler in fact stops admitting jobs as the load without it nears the contract and has none running by 97 per cent of it, so with 800 nodes reserved (February to mid-March) the pool is off and the hall is nearly unthrottled, while a pool at its mean share adds about ninety nodes of load | a mean share used where a response is needed (L15 a behavioural response assumed instead of measured, N28 an input another process re-sets held at its latest supplied value) | node states less the registry's held nodes, against the load the registered runs alone put on the hall through the fitted draw line, in the 2026 intervals at 512 reserved and at 768 or more | none (not a reflex: the audit run's replay held the pool at one share; two records at two grains; the shallower story is a throttle that is simply larger; across the data: 2026's 27 days at 768 or more reserved and eight months at lighter loads; worth one member) | kept (Q) |
 | Provider works ran well past their planned hours in 2025 and 2026 and the 2027 calendar books a hall A re-cabling and a hall B chilled-water upgrade inside reserved windows | works at their planned hours (N22, N03, L46) | the provider's 2025-26 work orders, planned against actual hours by type | 2 (the audit run priced the overrun unprompted, R88) | kept as a supporting result: each window's days lost to works are a column of the 2027 bridge, priced Right by the careful pass |
-| The slowest data-parallel rank sets each step, best-fit packing pads a long-form mix, and the provider holds hall B to its contract on a meter that reads the cap | the mean rank, full sequences, a meter taken as the draw (N04, L22, L26, L38) | per-rank timings with packing manifests, the packing replay, the meter against node states | 2 (the audit run made each, R84 to R86) | dropped as stumps of this draw; kept as results R3, R4 and R5 |
+| The slowest data-parallel rank sets each step, best-fit packing pads a long-form mix, and the provider holds hall B to its contract on a meter that reads the cap | the mean rank, full sequences, a meter taken as the draw (N04, L22, L26, L38) | per-rank timings with packing manifests, the packing replay, the meter against node states | 2 (the audit run made each, R84 to R86) | dropped as stumps of this draw; kept as results R3, R4 and R7 |
 | Each model draws its own power per node (a published utilisation by size) so hall B's would-be draw depends on the mix of runs | a draw per node taken as one constant | the meter against the allocation record by model mix | 1 and 4 (a closed composition card; the mix changes only the intercept the line already fits) | dropped |
 | A neighbouring pod's load slows a job through shared spine capacity | the idle benchmark slice taken as the production fabric | the step logs of jobs beside a large run | 1 (the client's closed spillover card) | dropped |
 | A trainer release (kd-train 2.4) changed the step by about three per cent from 1 August | a step time taken as one process throughout 2026 | the trainer version column against steady steps | 8 and the hidden-factor screen (a break built into the data that one cross-tab shows; one sentence leaves a dummy) | dropped |
@@ -75,9 +75,9 @@ Swap: "the long-context runs need 15 per cent more days because each step waits 
   bridged from, the cap read off a metered hall, the spine between two pods a job's nodes are laid across and the
   token budget a padded sequence does not count; the chain stops making sense outside a synchronous data-parallel
   trainer in a power-capped, two-pod hall
-Where the weight sits: modeling and measurement: R5 (the throttle response measured on 2026's capped intervals once
+Where the weight sits: modeling and measurement: R7 (the throttle response measured on 2026's capped intervals once
   their excess is rebuilt, replayed on hall B's 2027 load with the pool at the share the registered load leaves it),
-  R10 (the pod penalty read from the allocations and the steady steps, applied to the ledger's blocks) and R11 (the
+  R5 (the pod penalty read from the allocations and the steady steps, applied to the ledger's blocks) and R6 (the
   pool's busy nodes as a function of the reserved load, measured at light and heavy loads in 2026 and read at the
   plan's) are each a model built and checked on its own record; R3 and R4 (the rank cost model and the packing replay)
   are built the same way and are made unprompted
@@ -89,11 +89,10 @@ Layer 1: the trainer's step counter restarts at zero after some resumes (a v2.3 
   September to its repair on 19 October 2026; none decides a result, each cleaned the same way by every careful run
 Not one thing: the call rests on two members a run can get wrong (kide-8b-v4, late only with the pod penalty; kide-34b-v3, fitting
   only with the pool's back-off), each opened by its own stump, beside nine members every route files as the golden
-  does; a run that has found one still files the other wrongly, and each stump has its own graded result (R10, R11
-  and R5) and its own cells in the bridge, so the one-fact sentence rescues 2 of the 12 results
-One-fact test: the most useful single sentence is "a job whose nodes sit in both of hall B's pods runs about a fifth slower than the benchmark's idle slice"; it rescues R10 and the pod cell of
-  the bridges and leaves the pool's response, kide-34b-v3's verdict and the hall B runs' days to their own work (effort.py:
-  the largest hint rescues 2 of 12 results)
+  does; a run that has found one still files the other wrongly, and each stump has its own graded result (R5, R6
+  and R7) and its own cells in the bridge, so the one-fact sentence rescues 2 of the 12 results
+One-fact test: the most useful single sentence is "the research pool takes no hall B nodes once the reservations alone nearly fill the contract"; it rescues R6 and R7 and leaves the pod penalty (R5),
+  kide-8b-v4's verdict and the hall B runs' days to their own work (effort.py: the largest hint rescues 2 of 12 results)
 Not semantics: every field, unit and clause read correctly (the token budget counts real tokens, a window runs from
   00:00 UTC on its first day, the meter is the hall's IT load, a block's rows are the nodes it holds) still leaves
   the reflex route at two verdicts wrong: the hurried figures come from carrying a rate and a mean share to
@@ -117,9 +116,9 @@ No replay: no result re-derives a published figure; the benchmark days are the b
 Pinned: rivals run on the clean truth in `generator/results.py` (`battery`): fifteen variants of the hall B chain and
   five of the cost model and the rates, each filing the same seven late runs and moving no run's days by more than
   2.3 per cent; the pinning list names every constant and its home
-Run forecast: R10 lost to dismissed own evidence (the node lists name the pod and the run files the residual under
-  start-ups and drift); R5 and R11 lost to a method shortcut (the pool at its 2026 mean share where the response was
-  needed); R8, R12, R13 and R14 lost as an unfinished chain on the hall B runs; R9 lost on kide-8b-v4 and kide-34b-v3; R2 partly
+Run forecast: R5 lost to dismissed own evidence (the node lists name the pod and the run files the residual under
+  start-ups and drift); R7 and R6 lost to a method shortcut (the pool at its 2026 mean share where the response was
+  needed); R8, R10, R11 and R12 lost as an unfinished chain on the hall B runs; R9 lost to a method shortcut on kide-8b-v4 and kide-34b-v3; R2 partly
   (the pod item left in the residual); R1, R3, R4 and the interruption and works columns are earned by reflex
 Strategy label: UNTESTED (own: no client strategy bridges a throughput benchmark to production runs at conditions
   never run; the machine-learning strategies 1 to 4 are loss and evaluation curves)
@@ -141,23 +140,23 @@ Lesson: a benchmark measures throughput at the conditions it ran (a short synthe
 | R2 | the 2026 bridge from benchmark-implied GPU-days to GPU-days held, by cause (mix attention, slowest rank, padding, blocks across both pods, hall B throttle, row 6 cooling, interruptions and restarts, works, residual) | decomposition-attribution | the stated attribution order in the answer blocks; each cause measured on its own record | each item within 12 per cent of its own size or 1,500 GPU-days, the total exact | dismissed own evidence: the straddling runs' extra time left in the residual beside start-ups and drift, though the node lists name the pod | R1 | Component 4 |
 | R3 | the per-rank cost model (the attention coefficient) and each 2027 long-context run's slowest-rank overhead over its mean rank | modeling | the profiled 2026 runs' per-rank timings joined to the packing log; each run's config (ranks, sequences per rank) and the 2027 length sample | overhead within 3 points | method shortcut: the mean rank or the full-context formula (made right by reflex, R84) | independent: traces, packing log, 2027 sample | Ask 4 |
 | R4 | each best-fit 2027 run's packing fill (real tokens per sequence position) | modeling | the 2027 configs' packing rule and the 2027 length sample; the Q4 2026 packing logs | within 1.5 points | method shortcut: full sequences (made right by reflex, R85) | independent: 2027 sample and rule | Ask 4 |
-| R5 | hall B's throttle response (step-time inflation at each excess over contract) and each hall B run's mean inflation in 2027, from the excess rebuilt from the allocation record, the reservations' load and the research pool's response to it | missingness-measurement | hall B's five-minute meter, node states and the 2026 step logs (the draw as a line in the allocated nodes); the roadmap's blocks and the pool's share by reserved load | each run's inflation within 2.5 points | method shortcut: the pool at its 2026 mean share of the free nodes where its response to the reserved load was needed (the throttle on the rebuilt excess made right by reflex, R86) | R10 | Component 2 |
-| R8 | each 2027 run's expected days from its window's start to its token budget | forecasting | R3 to R5, R10 and R11 on each run's config, budget, block and window; interruptions and works priced from the 2026 log and the work orders (made right by reflex, R87, R88) | expected days within 3 per cent | method shortcut: the hall B runs built without the pod penalty and with the pool at its mean share, so kide-8b-v4 fits and kide-34b-v3 is late and every hall B run is 4 to 13 per cent off | R3, R4, R5, R10, R11 | Ask 1 |
-| R9 | the runs that will not finish inside their windows | synthesis | the reservation terms' test (expected finish inside the window) | exact set | unfinished chain: two members filed wrongly (kide-34b-v3 late, kide-8b-v4 fitting) with every other member right | R8 | Recommendation |
-| R10 | the extra time a step takes when a job's nodes lie in both of hall B's pods, per cent, and which 2027 blocks do | investigation-loops | the 2026 node allocations (the node names carry the pod) against each run's steady step over the step its benchmark, mix and width predict; the roadmap's block column | within 2.5 points | dismissed own evidence: the node lists name the pod and the runs' residuals separate by it, the extra time filed as start-ups and drift | independent: allocations, step logs, benchmark | Component 1 |
-| R11 | hall B's nodes the research pool keeps busy while the reservations hold 800 of its 1,024 (none), against light reserved load (its share of the unreserved nodes) | missingness-measurement | node states less the registry's held nodes, by the load the registered runs alone put on the hall through the fitted draw line, in 2026 | 800 reserved: none to 12 nodes | method shortcut: the pool at its 2026 mean share where the share depends on the reserved load | independent: node states, registry, meter | Component 3 |
-| R12 | each 2027 run's finish, in days from 1 January 2027 | forecasting | R8 and the window's start | within 1 day | method shortcut: the hall B runs' finishes from the hurried days | R8 | Ask 1 |
-| R13 | the 80 per cent range of each 2027 run's days | uncertainty | 160 draws of the 2026 record's own spreads (interruption counts and costs, the throttle fit, the works ratios, the pod penalty, the pool's light-load share) | range ends within 5 per cent | method shortcut: the hurried days' range | R8 | Ask 1 |
-| R14 | each 2027 run's bridge from its benchmark days to its expected days, cause by cause (mix, slowest rank, padding, block across both pods, hall B, interruptions, works) | decomposition-attribution | the stated order in the answer blocks; each cause as measured above | each item within 0.35 days or 12 per cent | dismissed own evidence: the pod column left at zero and the hall B column carrying the pool at its mean share | R3, R4, R5, R10, R11 | Ask 2 |
+| R5 | the extra time a step takes when a job's nodes lie in both of hall B's pods, per cent, and which 2027 blocks do | investigation-loops | the 2026 node allocations (the node names carry the pod) against each run's steady step over the step its benchmark, mix and width predict; the roadmap's block column | within 2.5 points | dismissed own evidence: the node lists name the pod and the runs' residuals separate by it, the extra time filed as start-ups and drift | independent: allocations, step logs, benchmark | Component 1 |
+| R6 | hall B's nodes the research pool keeps busy while the reservations hold 800 of its 1,024 (none), against light reserved load (its share of the unreserved nodes) | missingness-measurement | node states less the registry's held nodes, by the load the registered runs alone put on the hall through the fitted draw line, in 2026 | 800 reserved: none to 12 nodes | method shortcut: the pool at its 2026 mean share where the share depends on the reserved load | independent: node states, registry, meter | Component 3 |
+| R7 | hall B's throttle response (step-time inflation at each excess over contract) and each hall B run's mean inflation in 2027, from the excess rebuilt from the allocation record, the reservations' load and the research pool's response to it | missingness-measurement | hall B's five-minute meter, node states and the 2026 step logs (the draw as a line in the allocated nodes); the roadmap's blocks and the pool's share by reserved load | each run's inflation within 2.5 points | method shortcut: the pool at its 2026 mean share of the free nodes where its response to the reserved load was needed (the throttle on the rebuilt excess made right by reflex, R86) | R5, R6 | Component 2 |
+| R8 | each 2027 run's expected days from its window's start to its token budget | forecasting | R3 to R7 on each run's config, budget, block and window; interruptions and works priced from the 2026 log and the work orders (made right by reflex, R87, R88) | expected days within 3 per cent | method shortcut: the hall B runs built without the pod penalty and with the pool at its mean share, so kide-8b-v4 fits and kide-34b-v3 is late and every hall B run is 4 to 13 per cent off | R3, R4, R5, R6, R7 | Ask 1 |
+| R9 | the runs that will not finish inside their windows | synthesis | the reservation terms' test (expected finish inside the window) | exact set | method shortcut: the two stumps hurried, so two members are filed wrongly (kide-34b-v3 late, kide-8b-v4 fitting) with every other member right | R8 | Recommendation |
+| R10 | each 2027 run's finish, in days from 1 January 2027 | forecasting | R8 and the window's start | within 1 day | method shortcut: the hall B runs' finishes from the hurried days | R8 | Ask 1 |
+| R11 | the 80 per cent range of each 2027 run's days | uncertainty | 160 draws of the 2026 record's own spreads (interruption counts and costs, the throttle fit, the works ratios, the pod penalty, the pool's light-load share) | range ends within 5 per cent | method shortcut: the hurried days' range | R8 | Ask 1 |
+| R12 | each 2027 run's bridge from its benchmark days to its expected days, cause by cause (mix, slowest rank, padding, block across both pods, hall B, interruptions, works) | decomposition-attribution | the stated order in the answer blocks; each cause as measured above | each item within 0.35 days or 12 per cent | dismissed own evidence: the pod column left at zero and the hall B column carrying the pool at its mean share | R3, R4, R5, R6, R7 | Ask 2 |
 
-Interruptions (the days each run loses to stops and restarts) and the provider works' days are columns of R14's bridge
+Interruptions (the days each run loses to stops and restarts) and the provider works' days are columns of R12's bridge
 and of the 2026 bridge, priced from the 2026 interruption log and the 2025-26 work orders by every careful run
 (R87, R88), so they carry no result of their own.
 
 Carry-forward: R1 stands alone on the allocation record and R2 on 2026's own records, so a run that slips in 2027
-loses neither; R3, R4, R10 and R11 each stand on their own inputs and are graded run by run or figure by figure, so a
-slip on one cause costs only that cause's cells and the verdicts it decides; R5, R8, R9, R12, R13 and R14 fall with
-the causes they rest on, and only for the runs those causes reach (R10's error reaches kide-8b-v4, R11's and R5's the
+loses neither; R3, R4, R5 and R6 each stand on their own inputs and are graded run by run or figure by figure, so a
+slip on one cause costs only that cause's cells and the verdicts it decides; R7, R8, R9, R10, R11 and R12 fall with
+the causes they rest on, and only for the runs those causes reach (R5's error reaches kide-8b-v4, R6's and R7's the
 hall B runs from February to April), so no one slip costs more than two of the eleven verdicts.
 
 ## Hidden factor record
@@ -180,19 +179,19 @@ hall B runs from February to April), so no one slip costs more than two of the e
 | R2 the 2026 bridge from benchmark GPU-days to GPU-days held, by cause | Missed | Partly | Right |
 | R3 each long-context 2027 run's slowest-rank overhead over its mean rank, per cent | Missed | Right | Right |
 | R4 kide-34b-sci's packing fill | Missed | Right | Right |
-| R5 each hall B run's mean step stretch in 2027 from the hall held to its contract, per cent | Missed | Missed | Right |
+| R5 the extra time a step takes when a job's nodes lie in both of hall B's pods, per cent | Missed | Missed | Right |
+| R6 hall B's nodes the research pool keeps busy while the reservations hold 800 of its 1,024 | Missed | Missed | Right |
+| R7 each hall B run's mean step stretch in 2027 from the hall held to its contract, per cent | Missed | Missed | Right |
 | R8 each 2027 run's expected days from its window's start | Missed | Missed | Right |
 | R9 the runs that will not finish inside their windows | Missed | Partly | Right |
-| R10 the extra time a step takes when a job's nodes lie in both of hall B's pods, per cent | Missed | Missed | Right |
-| R11 hall B's nodes the research pool keeps busy while the reservations hold 800 of its 1,024 | Missed | Missed | Right |
-| R12 each 2027 run's finish, in days from 1 January 2027 | Missed | Missed | Right |
-| R13 the 80 per cent range of each 2027 run's days | Missed | Missed | Right |
-| R14 each 2027 run's bridge from its benchmark days to its expected days, cause by cause | Missed | Partly | Right |
+| R10 each 2027 run's finish, in days from 1 January 2027 | Missed | Missed | Right |
+| R11 the 80 per cent range of each 2027 run's days | Missed | Missed | Right |
+| R12 each 2027 run's bridge from its benchmark days to its expected days, cause by cause | Missed | Partly | Right |
 | Roughly | 0 of 12 | 4.5 of 12 | 12 of 12 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: "a job whose nodes sit in both of hall B's pods runs about a fifth slower than the benchmark's idle slice"; rescues 1 of 12 results (R10; the pod cells of the bridges and the verdict on kide-8b-v4 stay
-  with the pool's response and the other causes)
+Largest single hint: "the research pool takes no hall B nodes once the reservations alone nearly fill the contract"; rescues 2 of 12 results (R6, R7; the pod penalty, kide-8b-v4's verdict and the hall B runs' days
+  stay with the other stump and the causes)
 Pair estimate: 44.5 (measured by effort.py on the cut pack, every careful loss cited; quick 7.0, thorough 100.0)
 
 ## Stump factorial
@@ -312,8 +311,8 @@ Breadth: fifty-three 2026 runs over two halls and 1,536 nodes, eleven 2027 runs,
 
 ## Template check
 
-Chain signature: assembly-reconciliation, decomposition-attribution, modeling, modeling, missingness-measurement,
-  forecasting, synthesis, investigation-loops, missingness-measurement, forecasting, uncertainty,
+Chain signature: assembly-reconciliation, decomposition-attribution, modeling, modeling, investigation-loops,
+  missingness-measurement, missingness-measurement, forecasting, synthesis, forecasting, uncertainty,
   decomposition-attribution
 Question form: which (which runs will not finish inside their windows), with how much (each run's days against the
   benchmark's)
@@ -328,18 +327,21 @@ Nearest build: (guard WARN on chains shared in shape or weight with task19, task
 
 ## Frontier check
 
-Precedents: result 10 (the pod boundary) N09 (the topology assumed uniform over the history, here over the plan's
-  blocks), N04 (a model's transfer to a new range named and left untested); results 5 and 11 (the pool's response) L15
+Precedents: result 5 (the pod boundary) N09 (the topology assumed uniform over the history, here over the plan's
+  blocks), N04 (a model's transfer to a new range named and left untested); results 6 and 7 (the pool's response and the stretch) L15
   (a behavioural response assumed instead of measured), N28 (an input another process re-sets held at its latest
   supplied value); result 2 N09, L26 (a plausible shallower story passing its own checks: the residual filed as
-  start-ups and drift); results 8, 9, 12, 13 and 14 inherit N09, L15 and L36 (a transfer fitted on the pilot's range
+  start-ups and drift); results 8, 9, 10, 11 and 12 inherit N09, L15 and L36 (a transfer fitted on the pilot's range
   carried to faster duties)
-Shallow path checks: the reflex route back-tested on the 2026 runs reproduces their held GPU-days within 6 per cent
-  run by run on the runs inside one pod and misses the three across both by their extra time, which a pooled
-  benchmark-to-held ratio (1.236 over 2026) passes a leave-one-run-out check on because the straddlers' share of the
-  GPU-days is a fifth (L37); the checks of another kind: each hall B run's steady step over its predicted step,
-  split by the pods its node list names (1.00 against 1.21), and the pool's busy nodes against the registered load
-  (a third to a half of the free nodes up to 640 reserved, none from 768), in two records at two grains
+Shallow path checks: the reflex route back-tested on the 2026 runs (`checks.py` BT1 to BT3) leaves 2.0 per cent or less on
+  each of the nine runs of over 2,000 GPU-days inside one pod and 13.5 to 17.0 per cent on each of the four across
+  both pods, a median miss of 1.1 per cent over the 53 runs and a mean of 5.6 per cent over the 13 large ones, so a run
+  that reports the median reads a validated route with four outliers, and the pods those four lie across are named
+  only in the node lists (L26, L37); the pooled benchmark-to-held ratio (1.236 over 2026) is the route that fails its
+  own leave-one-run-out check, by 30 per cent on the worst large run; the checks of another kind: each hall B run's
+  steady step over its predicted step, split by the pods its node list names (1.00 against 1.21), and the pool's busy
+  nodes against the registered load (about 0.45 of the free nodes up to 640 reserved, none from 768), in two records
+  at two grains
 Assumption made false: "throughput measured in 2026 carries to 2027 at each run's FLOPs" (N04): the 2027 long-context
   runs pair heavier mixes with fewer sequences per rank and more ranks, the scientific run's packer pads, hall B is
   reserved past its contracted power for two months with a pool that backs off as the reservations near the contract,
@@ -356,7 +358,12 @@ Forcing: the line is each run's window; the golden keeps every forced run at 0.8
 Noun swap: nearest by `skeleton.py check` is task7 arch 11 (severity none): its decision form (one of a few options)
   and answer pattern (no single correction clears) differ, its lessons share non_additive_aggregation only through a
   seasonal coincidence of chargers, its mechanisms, detection and file roles do not carry; task24 (severity none)
-  shares the lesson key and the common pattern, nothing else
+  shares the lesson key and the common pattern, nothing else; the card's two house warnings are answered: the lesson
+  key position_on_network_effect is shared in name only with task9 v3 (a shared feed's damage grows with each unit's
+  distance along it) and task13 v5 (an event's position from the relay's residua), where here a job's place across a
+  pod boundary is read from node lists and its penalty as a constant from the jobs that lay across it, and the
+  decision form set_over_threshold is the committee's own decision (the set of runs over each run's own window) beside
+  a bridge answer shape, a different chain and a different file set
 Closed strategies: the call turns on P (position_on_network_effect, a job's place across two pods) and Q
   (behavioural_response_measured, a pool's admission as the reservations grow), both open ground; the nearest closed
   cards are "spillover" (no treated-control comparison is contaminated: the penalty is the job's own, read from the

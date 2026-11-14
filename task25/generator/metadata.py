@@ -49,6 +49,7 @@ def write(task_dir):
         "as_of": "2026-11-06",
         "record_window": "2026-01-01 to 2026-10-31",
         "generated": True,
+        "stated_inputs": ["1,024", "512"],     # hall B's and hall A's node counts, as the provider's service schedule states them
         "license": "synthetic data, CC0; no third-party data",
         "distractor_files": [CP.FILES[k] for k in CP.DISTRACTORS],
         "files": files,

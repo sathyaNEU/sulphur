@@ -4,8 +4,8 @@
  "domain": "general-statistics-data-science",
  "subdomain": "benchmarking-and-ablations",
  "objective": "comparative-explanation",
- "stage": 3,
- "stage_name": "build",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-14",
  "doctrine": "throughout",
  "call": "re-plan seven of eleven H1 2027 runs (kide-120b-v1, kide-13b-code-lc32, kide-34b-16k, kide-34b-lc64, kide-34b-sci, kide-8b-lc64, kide-8b-v4 finish past their windows); kide-13b-lc32, kide-13b-v4, kide-34b-v3, kide-70b-v2 fit",
@@ -14,27 +14,27 @@
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-13"
+  "date": "2026-11-14"
  },
  "leak": {
-  "leak_py": "REVIEW (2027 plan dates, a coincidental figure inside a node name, generic words in two PDFs; ruled harmless)",
-  "reader": "no leak: no file ranks the runs, nothing reads as the answer, quoted sentences are the filed WHAT and execute to the golden's endpoints; no single fact settles the task"
+  "leak_py": "REVIEW (2027 plan dates, a figure inside a list of document lengths, generic words in the two PDFs; ruled harmless; hall B's and hall A's node counts as the schedule states them listed under stated_inputs)",
+  "reader": "CLEAN (isolated read of 2026-11-14 on the repaired pack): no sentence names a step, no file ranks the runs, no single fact settles the task; one mild tell, kind: synthetic in the harness config, reworded in the generator"
  },
  "duplicate_check": {
-  "heart": "WARN (weight against task24, Gate G against task7, house lesson non_additive_aggregation)",
-  "nearest": "mark111 at 0.05 (differentiated); skeleton severity none against every card, lineage and client task"
+  "heart": "BLOCK on four axis bans against builds that precede this one in draw order (ban.pattern G7 and ban.artifact capacity_report against task9 v3, ban.shape 03 and ban.forcing_event budget_or_appropriation against task23); the card's axes are unchanged since DRAWN, and the same card at the READY commit already BLOCKed on ban.weight (task24) and ban.forcing_event (task23); the author rules",
+  "nearest": "skeleton check against every card, lineage and client task: severity none"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "report": "determinism_check_report.md (blocks read before the data; the attention coefficient's exact filter left as a noted gap, recomputed by verify.py at 1.319 inside its band)"
+  "verdict": "pending",
+  "disposition": "",
+  "report": "determinism_check_report_pass2.md (pass 2 running at the pause)"
  },
- "paper_pair": 44.4,
+ "paper_pair": 44.5,
  "effort": {
   "quick": 7.0,
-  "careful": 44.4,
+  "careful": 44.5,
   "thorough": 100.0,
-  "largest_hint": "each step waits for the data-parallel rank whose sequences hold the long documents (rescues 1 of 9)"
+  "largest_hint": "the research pool takes no hall B nodes once the reservations alone nearly fill the contract (rescues 2 of 12: R6 and R7)"
  },
  "runs": {
   "run1": null,
@@ -50,7 +50,7 @@
   "history": []
  },
  "returned": [],
- "resume": "repair of the audit of 2026-11-13 (runs/holistic_audit_2026-11-13.md): world, golden, results, checks, answer blocks and the design note's new sections are rebuilt; remaining: gates.py task25 --full, the leak reader and the determinism judge together on the cut pack, fixes in one pass, cut.py for both zips, audit_containers.py exit 0, then RESHIPPED on main with git add -f for target.zip, golden.zip and golden/",
+ "resume": "stage 4: the determinism judge's pass 2 (determinism_check_report_pass2.md) is running on the pack cut at 00:49 on 2026-11-14; the isolated leak reader returned CLEAN. Generator edits made and not yet built: writeup.py (the Causes ask lists the three registered straddling runs), metadata.py (stated_inputs 1,024 and 512), pack.py (harness corpus kind random_tokens), checks.py (BT1 to BT3, the reflex route's back-test). Remaining: read the judge's report and fix every finding in the generator in one pass; python3 task25/generator/make.py in place; python3 .claude/skills/build-pipeline/gates.py task25 --full (the heart BLOCK is the draw-order window, see duplicate_check); python3 task25/generator/cut.py; audit_containers.py task25 exit 0; write the design note's Pre-ship check from the final results; set READY with loops 1 and a returned entry; commit RESHIPPED with git add -f for target.zip, golden.zip and the golden files",
  "approved": null,
  "submitted": null,
  "portal": {

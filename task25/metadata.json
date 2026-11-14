@@ -10,6 +10,10 @@
  "as_of": "2026-11-06",
  "record_window": "2026-01-01 to 2026-10-31",
  "generated": true,
+ "stated_inputs": [
+  "1,024",
+  "512"
+ ],
  "license": "synthetic data, CC0; no third-party data",
  "distractor_files": [
   "provider/energy_invoices_2026.xlsx",

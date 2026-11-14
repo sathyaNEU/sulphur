@@ -334,6 +334,7 @@
  "finish_kide-70b-v2": "2027-02-19",
  "finish_kide-8b-lc64": "2027-06-08",
  "finish_kide-8b-v4": "2027-04-21",
+ "hall_b_nodes": 1024,
  "held_2026_A": 236323.0,
  "held_2026_B": 1268687.0,
  "held_2026_total": 1505010.0,
@@ -362,6 +363,7 @@
  "interrupt_days_kide-8b-lc64": 0.05,
  "interrupt_days_kide-8b-v4": 0.43,
  "joined_rank_steps": 19424,
+ "light_load_pct": 88,
  "overhead_pct": {
   "kide-13b-code-lc32": 31.3,
   "kide-13b-lc32": 9.4,
@@ -415,9 +417,14 @@
  "pod_runs_2027": [
   "kide-8b-v4"
  ],
+ "pool_levels": [
+  512,
+  800
+ ],
  "pool_nodes_512": 227.0,
  "pool_nodes_800": 0.0,
  "pool_nodes_800_const": 90.0,
+ "pool_off_nodes": 768,
  "pool_share": 0.446,
  "pool_share_mean": 0.403,
  "range_ends": {

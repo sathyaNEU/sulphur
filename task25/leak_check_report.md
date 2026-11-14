@@ -1,23 +1,33 @@
 # leak check, task25
 
-**Verdict: REVIEW.** 31 files read, 152 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 31 files read, 150 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: packing, record, window, per-rank, missed, sequences, excess, reflex, attention, length, expected, throttle, interruptions, documents, long-context, formula, best-fit, planned, method, sequence, provider, measured, sample, shortcut, independent
+Stump terms swept: reflex, missed, packing, record, penalty, window, expected, excess, method, shortcut, modelling, rebuilt, throttle, research, reservations, blocks, unprompted, hurried, constructed, replayed, best-fit, interruptions, slowest, rescues, per-rank
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `profiling/rank_step_samples_2026.csv`: golden figure 18,900 appears: ...kide-8b-v3,936000,2026-09-10T10:27:13Z,81,ka-r06-18,900.0,46.4,23.8 kide-8b-v3,936000,2026-09-10T10:27:13...
+- **REVIEW** `profiling/packing_manifests_2026.jsonl`: golden figure 236,323 appears: ...50,3431,3385,173,3588,4021,657,2373,1525,345,1548,236,323,551],[1490,670,752,729,593,908,66,161,1931,2710,8...
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `policy/compute_allocation_rules_CAR-2027-1.pdf`: 7 of 25 stump-paragraph terms appear (window, sequences, length, expected, planned, sequence); read whether the document names the move
-- **REVIEW** `provider/service_schedule_S3_kaivola.pdf`: 3 of 25 stump-paragraph terms appear (record, planned, provider); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `policy/compute_allocation_rules_CAR-2027-1.pdf`: 4 of 25 stump-paragraph terms appear (window, expected, research, blocks); read whether the document names the move
 
 ## 8 column names (REVIEW 1)
 - **REVIEW** `runs/interruptions_2026.csv`: Python-style nulls or booleans (nan/None/True/False) in the first rows
 
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
+## 9 dates after the setting (REVIEW 12)
+- **REVIEW** `plan_2027/configs/kide-120b-v1.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-02-01, 2027-04-17
+- **REVIEW** `plan_2027/configs/kide-13b-code-lc32.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-01-18, 2027-01-25
+- **REVIEW** `plan_2027/configs/kide-13b-lc32.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-05-03, 2027-05-15
+- **REVIEW** `plan_2027/configs/kide-13b-v4.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-03-29, 2027-05-08
+- **REVIEW** `plan_2027/configs/kide-34b-16k.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-03-15, 2027-05-08
+- **REVIEW** `plan_2027/configs/kide-34b-lc64.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-03-01, 2027-03-14
+- **REVIEW** `plan_2027/configs/kide-34b-sci.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-04-12, 2027-05-02
+- **REVIEW** `plan_2027/configs/kide-34b-v3.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-02-01, 2027-03-11
+- **REVIEW** `plan_2027/configs/kide-70b-v2.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-01-11, 2027-02-27
+- **REVIEW** `plan_2027/configs/kide-8b-lc64.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-05-24, 2027-06-06
+- **REVIEW** `plan_2027/configs/kide-8b-v4.yaml`: 2 ISO dates after 2026-11-06, e.g. 2027-02-01, 2027-04-17
+- **REVIEW** `plan_2027/roadmap_h1_2027.xlsx`: 22 ISO dates after 2026-11-06, e.g. 2027-01-11, 2027-01-18, 2027-01-25, 2027-02-01, 2027-02-27
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -42,55 +52,40 @@ Stump terms swept: packing, record, window, per-rank, missed, sequences, excess,
 
 ## Solver's-eye read
 
-### 1. Sentence or file that tells you how to do a step
-`policy/compute_allocation_rules_CAR-2027-1.pdf` is the one filed rulebook and pins several steps directly:
-- Window: "A reservation holds a block of whole nodes in one hall. Its window runs from 00:00 UTC on the window's start date to 00:00 UTC on its end date, as listed in the H1 2027 roadmap. A block's run launches when its window opens."
-- Finish definition: "A run finishes when the trainer's token count reaches the run's token budget. The trainer counts training tokens; padding positions in a packed sequence are not tokens and are not counted."
-- The comparison and the 80 per cent: "A run is planned to finish inside its window when its expected finish falls at or before 00:00 UTC on the window's end date. The committee asks for each run's expected days from its window's start to its finish, and the range within which it will finish four times in five." This is the literal source of the prompt's "inside the window" test and "80 per cent range."
-- Provider works: "Works the provider has notified stop every job in the hall they affect for as long as they last; jobs resume from their last checkpoint when the hall is handed back."
-- The 2026 bridge formulas (quoted under Q5).
+One isolated reader (Sonnet, medium) on fresh copies of `prompt.txt` and the unzipped `target.zip`, 2026-11-14, no design
+note, generator or answer blocks, the six questions plus two more; verdict **CLEAN**.
 
-Minor: `benchmark/tpbench_harness.yaml` states "hall_load: other jobs drained from the slice's rows during timing," telling the solver what the benchmark excludes, not what to compute.
+1. Methods stated: only the conventions of `policy/compute_allocation_rules_CAR-2027-1.pdf` (section 2 the window clock
+   and the block's extension and hand-back, section 3 padding is not counted, section 4 the committee's test and the
+   expected days, section 5 works stop every job in the hall, section 6 the GPU-days held and the benchmark GPU-days).
+   The reader read them as definitions and conventions, not analytical moves; the harness config's conditions
+   (`checkpointing: off`, `hall_load: other jobs drained`) as a description of the benchmark naming no step.
+2. No file ranks or scores the candidates; the roadmap lists windows and budgets only.
+3. No file exists only to help the analyst; the profiling files read as the organisation's own data, the energy
+   invoices and checkpoint evaluations as plausible and unused.
+4. No figure or name reads as the answer; the roadmap's Changes sheet is context.
+5. The filed sentences, read literally, are the window clock, the finish definition (real tokens, padding excluded), the
+   committee's test, the works' stop and the section 6 formulas; the reader found no sentence that states the
+   decomposition the prompt asks for. They execute to the golden's endpoints (the GPU-days held and the benchmark days).
+6. No single dominant item: the rules settle a clock and two definitions (reading a convention), the causes sit across
+   interruptions, manifests, rank samples, the hall's meter, node states and document lengths and need analysis; nothing
+   looks planted beyond ordinary mess (mixed spellings of one fault code, local-time dates in the provider's logs).
+7. Machine-made tells: only `kind: synthetic` and `seed: 1729` in the benchmark harness config (rated mild); the corpus
+   kind is reworded to `random_tokens` in the generator. Containers are the word processor's and the spreadsheet
+   application's, with shared strings and real-looking authors; no hidden sheets, comments or defined names.
+8. The sweep's flagged files, each read: the provider's service schedule holds facts and a timezone convention only;
+   the manifests' coinciding number is a document length; the allocation rules file rules and name no move; the
+   interruptions file has 104 blank node fields on software and hall events and no null or boolean tokens; the plan
+   files are the organisation's forward plan.
 
-### 2. File that already ranks or scores the candidates
-None. `plan_2027/roadmap_h1_2027.xlsx` ("H1 2027 runs") lists the 11 candidate runs (window_start, window_end, token_budget, config) with no risk flag, note or finish-date column; neither workbook has a hidden sheet, comment or formula. No CSV/YAML/JSONL contains "risk," "late," "miss," "delay," "flag," or a totals row. Nothing pre-scores any run.
+### Rulings on the sweep's REVIEW lines
 
-### 3. File that exists only to help the analyst
-`benchmark/tpbench_harness.yaml`: a short methods note on how `tpbench_results.csv` was produced (synthetic corpus, warmup/timed steps, the drained-hall condition); it describes that file, measuring nothing itself. `provider/service_schedule_S3_kaivola.pdf` does the same for the provider files: contracted node counts per hall, metering cadence ("reported as a five-minute average in kW"), notice periods for works, field notes rather than data.
-
-### 4. Figure or name that reads as the answer
-None found: no pre-flagged run, no totals row, nothing hidden in either workbook, nothing unusual in the PDFs. The only name that draws the eye is `kide-120b-v1`, the single 120B "flagship" run (largest token_budget, 17.2 trillion, window 1 Feb to 17 Apr 2027), a property of the data, not a stated verdict.
-
-### 5. Filed sentence that literally fixes a graded figure or population
-`policy/compute_allocation_rules_CAR-2027-1.pdf`, section 6: "For the review of 2026 the committee counts a run's GPU-days held as its allocated nodes, times eight GPUs a node, times the hours from its launch to its final checkpoint, divided by 24. A run still training at the end of the review period (00:00 UTC on 1 November 2026) counts to then. Every run launched in 2026 is in the review." Literal result: for every run in `runs/run_registry_2026.csv` (all 53, including the one still "running"), GPU-days held = nodes x 8 x (hours launch-to-final-checkpoint, capped at 2026-11-01) / 24, nothing subtracted for interruptions or idle time.
-
-Same section: "The GPU-days a run's benchmark implies are its training tokens divided by the benchmark's tokens per GPU-second for its configuration (model, sequence length, sequences per rank and hall), divided by 86,400." Literal result: join each run to its one matching row in `benchmark/tpbench_results.csv` on those four keys, divide tokens by that rate and by 86,400. I verified all 53 2026 runs and all 11 2027 runs match exactly one benchmark row on (model, context_tokens, seqs_per_rank, hall), so the join never needs interpolation.
-
-Section 3's padding sentence (quoted under Q1) also literally excludes `pad` entries in `profiling/packing_manifests_2026.jsonl`, and any padding implicit in a "sequential" cut, from any token count measured against a budget.
-
-### 6. One thing that would make most of it routine?
-No. At least four separately filed, independent mechanisms sit between benchmark days and real days: (a) the benchmark's idle-hall condition versus real contention (`tpbench_harness.yaml` vs. `cluster/node_states_2026.csv`); (b) unplanned hardware, software and facility interruptions with checkpoint rewind (`runs/interruptions_2026.csv`, 297 rows, 4 kinds); (c) scheduled provider works stopping a whole hall for a fixed span, some forward-dated into H1 2027 itself (`provider/planned_works_h1_2027.pdf`, `provider/work_orders_2025_2026.csv`); (d) data-mix and packing differences (`kide-34b-sci` alone uses "best_fit" packing; mixes range from 92 per cent papers to 63 per cent web; `data/doc_length_sample.csv` gives per-source length distributions unlike the benchmark's synthetic corpus).
-
-The rulebook settles outright only: both endpoints of the 2026 fleet-wide bridge (formula plus a clean 1:1 lookup), and the wording of the "inside window" test and "80 per cent" ask (naming the question, not answering it). Everything else (the per-run 2027 forecast, each run's cause-by-cause split, the range's actual width, the finish date, the recommendation) requires combining the remaining files and is not resolved by any single sentence. So: the window-test comparison and the token-counting convention are read-the-definition items; the 2026 bridge's endpoints are follow-the-formula-and-look-up items; the rest turns on analysis.
-
-### Realism tells
-- The three PDFs are LibreOffice Writer exports with distinct authors/dates (`Esa Airaksinen`, 2 Nov 2026; `Tauno Kainulainen`, 28 Oct 2026 and 18 Dec 2025); no FPDF/ReportLab signature.
-- `data/doc_length_sample.csv` has exactly 20,000 rows for each of its 8 sources (160,000 total): an unusually even split, though the filename ("sample") makes a deliberate fixed-size draw plausible.
-- `provider/hall_it_load_2026.csv` genuinely carries about 83-84 gaps per hall, matching the service schedule's "collector outages leave gaps in the meter export; the provider does not backfill them": documented mess, not sloppy mess.
-- Every 2026 and 2027 run matches exactly one `tpbench_results.csv` config: convenient (no gaps to interpolate across), but plausible for a team that benchmarks every config it runs.
-
-### Rulings (main thread, 2026-11-13)
-
-- Question 1 and 5 (the allocation rules): harmless. The quoted sentences are the WHAT the determinism contract
-  requires filed (the window, the real-token budget, the test, the extension, the 2026 accounting); they name no
-  step of the analysis, and executed literally they give the golden's endpoints (the GPU-days held and the
-  benchmark's GPU-days).
-- Question 3 (the harness config and the service schedule): harmless. The harness config is the benchmark's own
-  configuration file and the service schedule the provider's contract schedule, each in its genre; neither names a
-  mechanism.
-- Question 6: no single fact settles the task; the reader named four separately filed mechanisms and none of the
-  three judgments the call turns on.
-- Realism: the 20,000 documents per source are the data team's stratified sample (a fixed n per source), kept; every
-  run matching a benchmark row is the harness's job (it times every planned configuration), kept.
-- Sweep REVIEW lines: 2027 dates in the plan files are plans; 18,900 inside a node name followed by a millisecond
-  value is a coincidence; the PDFs' generic words name no move; the work orders now carry the export's own headers.
+- Sweep 3, `packing_manifests_2026.jsonl` (a figure of the answer blocks inside a list of document lengths): a
+  coincidence, harmless. `provider/service_schedule_S3_kaivola.pdf` (hall B's and hall A's node counts, 1,024 and 512,
+  also named in the answer blocks as the reservation levels' base): the schedule's own stated parameters, listed under
+  `stated_inputs` in `metadata.json`, which cleared the sweep's LEAK.
+- Sweep 4, the allocation rules (window, expected, research, blocks): ordinary rule vocabulary; the reader found no
+  move named. Harmless.
+- Sweep 8, `interruptions_2026.csv`: blank node fields on software and hall events, no tokens. Harmless.
+- Sweep 9, the plan files: the 2027 plan's own dates, forward-looking by design. Harmless.
+- Sweep 11, the prompt shell quota (a spreadsheet in 21 per cent of 24 prompts): the author rewrites the prompt for voice.
