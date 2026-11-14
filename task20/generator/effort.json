@@ -8,148 +8,154 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "Buyout": 1601.8,
-    "Growth equity": 421.4,
+    "Buyout": 1614.4,
+    "Growth equity": 443.5,
     "Venture capital": 223.7,
-    "Real estate": 581.2,
-    "Infrastructure": 1172.7,
+    "Real estate": 581.0,
+    "Infrastructure": 1169.8,
     "Private credit": 474.0
    },
    "bands": {
     "Buyout": [
-     1601.3,
-     1602.3
+     1613.9,
+     1614.9
     ],
     "Growth equity": [
-     420.9,
-     421.9
+     443.0,
+     444.0
     ],
     "Venture capital": [
      223.2,
      224.2
     ],
     "Real estate": [
-     580.7,
-     581.7
+     580.5,
+     581.5
     ],
     "Infrastructure": [
-     1172.2,
-     1173.2
+     1169.3,
+     1170.3
     ],
     "Private credit": [
      473.5,
      474.5
     ]
    },
-   "partly_share": 0.75,
+   "partly_share": 0.5,
    "passes": {
     "quick": {
-     "Buyout": 1619.2,
-     "Growth equity": 421.4,
+     "Buyout": 1631.8,
+     "Growth equity": 443.5,
      "Venture capital": 223.7,
-     "Real estate": 581.2,
-     "Infrastructure": 1172.7,
+     "Real estate": 581.0,
+     "Infrastructure": 1169.8,
      "Private credit": 474.0
     },
     "careful": {
-     "Buyout": 1601.8,
-     "Growth equity": 421.4,
+     "Buyout": 1614.4,
+     "Growth equity": 443.5,
      "Venture capital": 223.7,
-     "Real estate": 581.2,
-     "Infrastructure": 1172.7,
+     "Real estate": 581.0,
+     "Infrastructure": 1169.8,
      "Private credit": 474.0
     },
     "thorough": {
-     "Buyout": 1601.8,
-     "Growth equity": 421.4,
+     "Buyout": 1614.4,
+     "Growth equity": 443.5,
      "Venture capital": 223.7,
-     "Real estate": 581.2,
-     "Infrastructure": 1172.7,
+     "Real estate": 581.0,
+     "Infrastructure": 1169.8,
      "Private credit": 474.0
     }
    }
   },
   {
    "id": "R2",
-   "name": "capital calls in the policy's stress on the commitments made by the end of 2026, each half of 2027",
-   "graded_as": "Component 2",
-   "figure": "calls_2027_by_half_usd_m",
+   "name": "the successor closes: the funds whose investment periods their managers' next funds' first closes end inside the eight quarters, and the calls that takes off",
+   "graded_as": "Component 3",
+   "figure": "successor_result",
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 700.5,
-    "H2 2027": 366.7
+    "funds": 7,
+    "calls_taken_off_usd_m": 131.6
    },
    "bands": {
-    "H1 2027": [
-     685.4,
-     726.8
+    "funds": [
+     7,
+     7
     ],
-    "H2 2027": [
-     356.9,
-     374.8
+    "calls_taken_off_usd_m": [
+     123.5,
+     139.8
     ]
    },
-   "partly_share": 0.75,
+   "partly_share": 0.5,
    "precedent": [
     "N28",
-    "N03",
-    "N13"
+    "N03"
    ],
    "passes": {
     "quick": {
-     "H1 2027": 470.6,
-     "H2 2027": 465.2
+     "funds": 0,
+     "calls_taken_off_usd_m": 0.0
     },
     "careful": {
-     "H1 2027": 706.8,
-     "H2 2027": 345.0
+     "funds": 0,
+     "calls_taken_off_usd_m": 0.0
     },
     "thorough": {
-     "H1 2027": 700.5,
-     "H2 2027": 366.7
+     "funds": 7,
+     "calls_taken_off_usd_m": 131.6
     }
    }
   },
   {
    "id": "R3",
-   "name": "capital calls in the policy's stress on the commitments made by the end of 2026, each half of 2028",
-   "graded_as": "Component 3",
-   "figure": "calls_2028_by_half_usd_m",
+   "name": "the refinancing calls: the property and infrastructure loans that fall due in the eight quarters, their balance and the shortfalls the funds call",
+   "graded_as": "Component 2",
+   "figure": "refinancing_result",
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2028": 450.1,
-    "H2 2028": 438.2
+    "loans_due": 23,
+    "balance_due_usd_m": 839.6,
+    "calls_usd_m": 254.9
    },
    "bands": {
-    "H1 2028": [
-     436.5,
-     472.0
+    "loans_due": [
+     23,
+     23
     ],
-    "H2 2028": [
-     425.5,
-     453.8
+    "balance_due_usd_m": [
+     839.1,
+     840.1
+    ],
+    "calls_usd_m": [
+     240.6,
+     268.2
     ]
    },
-   "partly_share": 0.75,
+   "partly_share": 0.5,
    "precedent": [
     "N28",
-    "N03",
     "N13"
    ],
    "passes": {
     "quick": {
-     "H1 2028": 379.8,
-     "H2 2028": 330.8
+     "loans_due": 0,
+     "balance_due_usd_m": 0.0,
+     "calls_usd_m": 0.0
     },
     "careful": {
-     "H1 2028": 440.7,
-     "H2 2028": 371.5
+     "loans_due": 0,
+     "balance_due_usd_m": 0.0,
+     "calls_usd_m": 0.0
     },
     "thorough": {
-     "H1 2028": 450.1,
-     "H2 2028": 438.2
+     "loans_due": 23,
+     "balance_due_usd_m": 839.6,
+     "calls_usd_m": 254.9
     }
    }
   },
@@ -161,66 +167,126 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "H1 2027": 685.6,
-    "H2 2027": 466.2,
-    "H1 2028": 273.9,
-    "H2 2028": 291.3
+    "H1 2027": 603.6,
+    "H2 2027": 443.4,
+    "H1 2028": 237.9,
+    "H2 2028": 265.8
    },
    "bands": {
     "H1 2027": [
-     685.1,
-     686.1
+     603.1,
+     604.1
     ],
     "H2 2027": [
-     465.7,
-     466.7
+     442.9,
+     443.9
     ],
     "H1 2028": [
-     273.4,
-     274.4
+     237.4,
+     238.4
     ],
     "H2 2028": [
-     290.8,
-     291.8
+     265.3,
+     266.3
     ]
    },
-   "partly_share": 0.75,
+   "partly_share": 0.5,
    "passes": {
     "quick": {
-     "H1 2027": 683.9,
-     "H2 2027": 465.0,
-     "H1 2028": 273.2,
-     "H2 2028": 290.8
+     "H1 2027": 601.9,
+     "H2 2027": 442.4,
+     "H1 2028": 237.4,
+     "H2 2028": 265.3
     },
     "careful": {
-     "H1 2027": 685.6,
-     "H2 2027": 466.2,
-     "H1 2028": 273.9,
-     "H2 2028": 291.3
+     "H1 2027": 603.6,
+     "H2 2027": 443.4,
+     "H1 2028": 237.9,
+     "H2 2028": 265.8
     },
     "thorough": {
-     "H1 2027": 685.6,
-     "H2 2027": 466.2,
-     "H1 2028": 273.9,
-     "H2 2028": 291.3
+     "H1 2027": 603.6,
+     "H2 2027": 443.4,
+     "H1 2028": 237.9,
+     "H2 2028": 265.8
     }
    }
   },
   {
    "id": "R5",
-   "name": "the headroom above the minimum reserve before any 2027 commitment",
+   "name": "capital calls in the policy's stress on the commitments made by the end of 2026, each half of 2027 and 2028",
    "graded_as": "Ask 3",
-   "figure": "headroom_before_2027_usd_m",
+   "figure": "calls_by_half_usd_m",
    "depends": [
     "R2",
-    "R3",
-    "R4"
+    "R3"
    ],
    "independent": "",
-   "golden": 214.3,
+   "golden": {
+    "H1 2027": 749.1,
+    "H2 2027": 564.5,
+    "H1 2028": 475.6,
+    "H2 2028": 369.5
+   },
+   "bands": {
+    "H1 2027": [
+     741.2,
+     756.0
+    ],
+    "H2 2027": [
+     555.5,
+     573.0
+    ],
+    "H1 2028": [
+     468.1,
+     482.1
+    ],
+    "H2 2028": [
+     361.2,
+     389.5
+    ]
+   },
+   "partly_share": 0.5,
+   "precedent": [
+    "N28",
+    "N03",
+    "N13"
+   ],
+   "passes": {
+    "quick": {
+     "H1 2027": 468.3,
+     "H2 2027": 463.0,
+     "H1 2028": 377.0,
+     "H2 2028": 328.3
+    },
+    "careful": {
+     "H1 2027": 740.6,
+     "H2 2027": 474.6,
+     "H1 2028": 463.9,
+     "H2 2028": 362.6
+    },
+    "thorough": {
+     "H1 2027": 749.1,
+     "H2 2027": 564.5,
+     "H1 2028": 475.6,
+     "H2 2028": 369.5
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the headroom above the minimum reserve before any 2027 commitment",
+   "graded_as": "Ask 4",
+   "figure": "headroom_before_2027_usd_m",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": 209.7,
    "band": [
-    180.9,
-    238.4
+    187.5,
+    223.4
    ],
    "precedent": [
     "N28",
@@ -228,20 +294,18 @@
     "N13"
    ],
    "passes": {
-    "quick": 523.3,
-    "careful": 305.7,
-    "thorough": 214.3
+    "quick": 731.8,
+    "careful": 326.7,
+    "thorough": 209.7
    }
   },
   {
-   "id": "R6",
+   "id": "R7",
    "name": "the program the policy lets the Investment Committee adopt",
    "graded_as": "Recommendation",
    "figure": "program",
    "depends": [
-    "R2",
-    "R3",
-    "R4"
+    "R6"
    ],
    "independent": "",
    "golden": "B",
@@ -259,11 +323,13 @@
  ],
  "hints": [
   {
-   "sentence": "a fund's investment period ends when its manager's next fund holds its first close, and 5 of the endowment's funds have a successor closing in 2027 or 2028",
-   "rescues": []
+   "sentence": "a fund's investment period ends when its manager's next fund holds its first close, and 7 of the endowment's funds have a successor closing in 2027 or 2028",
+   "rescues": [
+    "R2"
+   ]
   },
   {
-   "sentence": "16 of the real-asset funds' property and infrastructure loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values",
+   "sentence": "23 of the real-asset funds' property and infrastructure loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values",
    "rescues": [
     "R3"
    ]
@@ -277,7 +343,7 @@
   "judgments": [
    {
     "id": "S1",
-    "name": "the investment periods the successor funds' first closes end: the clause read off each manager's past successions, the close dated on the slip the exit market gives",
+    "name": "the investment periods the successor funds' first closes end: the clause read off each manager's past successions, each live fund's successor found among the pending funds and the plan, the period cut at its first close",
     "kind": "stump",
     "precedent": [
      "N28",
@@ -288,17 +354,20 @@
      "results_moved": [
       "R2",
       "R5",
-      "R6"
+      "R6",
+      "R7"
      ]
     },
     "alone": {
      "answer": "A",
-     "results_rescued": []
+     "results_rescued": [
+      "R2"
+     ]
     }
    },
    {
     "id": "S2",
-    "name": "the property and infrastructure loans that fall due in the stress, refinanced at the lenders' limit fitted on the past refinancings, on the values the stress path gives, the gaps called",
+    "name": "the property and infrastructure loans that fall due in the stress, refinanced at the lenders' limit fitted on the past refinancings, on the values the stress path gives, the shortfalls called within each fund's commitment",
     "kind": "stump",
     "precedent": [
      "N28",
@@ -307,10 +376,10 @@
     "dropped": {
      "answer": "A",
      "results_moved": [
-      "R2",
       "R3",
       "R5",
-      "R6"
+      "R6",
+      "R7"
      ]
     },
     "alone": {
@@ -322,58 +391,42 @@
    },
    {
     "id": "J1",
-    "name": "the calls on companies already held past the endowment's own record read off the benchmark's funds past their investment period (policy section 8)",
+    "name": "the capital invested through the credit facilities and not yet called, as policy section 8 files it (the latest audited borrowings plus the investments since less the capital called for them since, counted in the first quarter)",
     "kind": "reflex",
     "precedent": [
-     "R51",
-     "R64"
+     "R63",
+     "R18"
     ]
    },
    {
     "id": "J2",
-    "name": "the six managers' line balances estimated to 31 December from the capital accounts and the audits (policy section 8)",
+    "name": "buyout, growth and venture funds past their investment periods on the benchmark's rate as policy section 8 files it (the vintage rule, the value basis, the whole rate)",
     "kind": "reflex",
     "precedent": [
-     "R75",
-     "R63"
-    ]
-   },
-   {
-    "id": "J3",
-    "name": "the covered managers' capital invested on lines and not yet called, called at the clean-down",
-    "kind": "reflex",
-    "precedent": [
-     "R63"
-    ]
-   },
-   {
-    "id": "J4",
-    "name": "defensive follow-ons on the held companies' cost, two quarters after the exit index, the plateau fitted",
-    "kind": "reflex",
-    "precedent": [
-     "R64"
-    ]
-   },
-   {
-    "id": "J5",
-    "name": "pending funds' first closes slipped on the exit market",
-    "kind": "reflex",
-    "precedent": [
-     "R65"
-    ]
-   },
-   {
-    "id": "J6",
-    "name": "investment periods extended where the register's record shows, new investment at the managers' pace (policy section 8)",
-    "kind": "reflex",
-    "precedent": [
-     "R14",
+     "R18",
      "R51"
     ]
    },
    {
-    "id": "J7",
-    "name": "statements cleaned; distributions, reserve and spending as the policy sets them",
+    "id": "J3",
+    "name": "the pace of new investments as policy section 8 files it (first and follow-on investments over the commitment not yet invested, by strategy and year since first close)",
+    "kind": "reflex",
+    "precedent": [
+     "R18",
+     "R14"
+    ]
+   },
+   {
+    "id": "J4",
+    "name": "first closes still to come on their managers' dates (policy section 8)",
+    "kind": "reflex",
+    "precedent": [
+     "R18"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "statements cleaned; distributions, reserve, spending and the cap at the commitment as the policy sets them",
     "kind": "reflex",
     "precedent": [
      "R01",
@@ -381,14 +434,12 @@
     ]
    },
    {
-    "id": "J8",
-    "name": "fees, recycling, the fits chosen by fit and back-tested, a bootstrap over funds",
+    "id": "J6",
+    "name": "fees and expenses as policy section 8 files them (each fund's latest statement; the strategy's median quarter for a fund yet to close)",
     "kind": "reflex",
     "precedent": [
-     "R14",
-     "R36",
-     "R66",
-     "R04"
+     "R18",
+     "R14"
     ]
    }
   ]
@@ -402,55 +453,15 @@
     "answer": "B"
    },
    {
-    "name": "the second channel from a shortfall of 0.38",
+    "name": "investment periods extended in the stress as the register shows past weak exit markets extended them",
     "answer": "B"
    },
    {
-    "name": "the second channel from a shortfall of 0.44",
+    "name": "the pace leaving out quarters with under 2 percent of the commitment left",
     "answer": "B"
    },
    {
-    "name": "the benchmark slice of funds six to ten years old",
-    "answer": "B"
-   },
-   {
-    "name": "the benchmark slice of funds seven to eleven years old",
-    "answer": "B"
-   },
-   {
-    "name": "the benchmark slice of funds with 5 percent or more left to call",
-    "answer": "B"
-   },
-   {
-    "name": "the benchmark slice of funds with 20 percent or more left to call",
-    "answer": "B"
-   },
-   {
-    "name": "the first channel capped at a shortfall of 0.25",
-    "answer": "B"
-   },
-   {
-    "name": "the first channel capped at a shortfall of 0.35",
-    "answer": "B"
-   },
-   {
-    "name": "recycling at the median of every manager",
-    "answer": "B"
-   },
-   {
-    "name": "fees 5 percent below the investing-period median",
-    "answer": "B"
-   },
-   {
-    "name": "slips fitted on a 1-quarter window against 95",
-    "answer": "B"
-   },
-   {
-    "name": "slips fitted on a 1-quarter window against 105",
-    "answer": "B"
-   },
-   {
-    "name": "the six managers' facility balances rolled from the file's end, not re-anchored at the later audits",
+    "name": "the pace summed over the funds' whole commitments, not Wexmoor's share of them",
     "answer": "B"
    },
    {
@@ -458,15 +469,15 @@
     "answer": "B"
    },
    {
-    "name": "the lenders' limit fitted at the grid's next-best cap and spread",
+    "name": "the lenders' limit read straight off the refinancings granted within 0.35 points of the stressed rate",
     "answer": "B"
    },
    {
-    "name": "the assets' rate sensitivity at 0.000",
+    "name": "the assets' rate sensitivity at 0.025",
     "answer": "B"
    },
    {
-    "name": "the assets' rate sensitivity at 0.020",
+    "name": "the assets' rate sensitivity at 0.045",
     "answer": "B"
    },
    {
@@ -475,6 +486,14 @@
    },
    {
     "name": "the assets' equity sensitivity at 0.75",
+    "answer": "B"
+   },
+   {
+    "name": "the assets' value response fitted on every quarter of every asset, the first four years included",
+    "answer": "B"
+   },
+   {
+    "name": "a maturing loan's shortfall met before the fund's other calls within the commitment it has left",
     "answer": "B"
    }
   ],
@@ -500,51 +519,39 @@
     "answer": "A"
    },
    {
+    "name": "the loans refinanced at the stressed rate on the values of 31 December 2026",
+    "answer": "A"
+   },
+   {
+    "name": "the loans refinanced at 31 December's rate on the stressed values",
+    "answer": "A"
+   },
+   {
+    "name": "the benchmark's rate of section 8 carried to the property, infrastructure and credit funds past their periods, the loans rolled over as they stand",
+    "answer": "A"
+   },
+   {
+    "name": "the same benchmark rate for every strategy on the careful route",
+    "answer": "A"
+   },
+   {
     "name": "the textbook pacing model on the capital accounts",
     "answer": "A"
    },
    {
-    "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-    "answer": "D"
+    "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+    "answer": "A"
    },
    {
-    "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+    "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
+    "answer": "A"
+   },
+   {
+    "name": "the latest audited borrowings carried as the facility balances",
     "answer": "A"
    }
   ],
   "perturbations": [
-   {
-    "input": "deployment at the bootstrap's 5th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "deployment at the bootstrap's 95th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "the support's two channels at the bootstrap's 5th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "the support's two channels at the bootstrap's 95th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "first-close slips at the bootstrap's 5th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "first-close slips at the bootstrap's 95th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "recycling at the bootstrap's 5th percentile",
-    "answer": "B"
-   },
-   {
-    "input": "recycling at the bootstrap's 95th percentile",
-    "answer": "B"
-   },
    {
     "input": "the lenders' limit and the assets' values at the bootstrap's 5th percentile",
     "answer": "B"
@@ -554,11 +561,99 @@
     "answer": "B"
    },
    {
+    "input": "the fee and expense rates at the bootstrap's 5th percentile",
+    "answer": "B"
+   },
+   {
+    "input": "the fee and expense rates at the bootstrap's 95th percentile",
+    "answer": "B"
+   },
+   {
     "input": "every fitted input together at the bootstrap's 5th percentile",
     "answer": "B"
    },
    {
     "input": "every fitted input together at the bootstrap's 95th percentile",
+    "answer": "B"
+   },
+   {
+    "input": "the refinancing shortfalls at 80 percent of the estimate",
+    "answer": "B"
+   },
+   {
+    "input": "the refinancing shortfalls at 120 percent of the estimate",
+    "answer": "B"
+   },
+   {
+    "input": "the fee and expense rates of the funds yet to close at 80 percent of the filed median",
+    "answer": "B"
+   },
+   {
+    "input": "the fee and expense rates of the funds yet to close at 120 percent of the filed median",
+    "answer": "B"
+   },
+   {
+    "input": "the lenders' limit lower by 0.02 of value",
+    "answer": "B"
+   },
+   {
+    "input": "the lenders' limit higher by 0.02 of value",
+    "answer": "B"
+   },
+   {
+    "input": "the pace of new investments at 95 percent of the filed ratio",
+    "answer": "B"
+   },
+   {
+    "input": "the pace of new investments at 105 percent of the filed ratio",
+    "answer": "B"
+   },
+   {
+    "input": "section 8's benchmark funds at a vintage 5 or more years before the quarter's year",
+    "answer": "B"
+   },
+   {
+    "input": "section 8's benchmark funds at a vintage 7 or more years before the quarter's year",
+    "answer": "B"
+   },
+   {
+    "input": "section 8's benchmark rate less the same funds' rate over the eight quarters before the stress window",
+    "answer": "B"
+   },
+   {
+    "input": "the pace over the commitment not yet called",
+    "answer": "B"
+   },
+   {
+    "input": "the pace as the average of the fund-quarters' own rates, not the ratio of the sums",
+    "answer": "B"
+   },
+   {
+    "input": "the pace's years counted from the quarter after the first close",
+    "answer": "B"
+   },
+   {
+    "input": "proceeds reinvested at each manager's audited rate netted from the calls",
+    "answer": "B"
+   },
+   {
+    "input": "no cap at the commitment a fund has left",
+    "answer": "B"
+   },
+   {
+    "input": "the funds' own fees and expenses added on top of section 8's benchmark rate",
+    "answer": "B"
+   },
+   {
+    "input": "the facility balances less proceeds reinvested since the last audit at each manager's audited rate",
+    "answer": "B"
+   },
+   {
+    "input": "the facility balances as the investments less the capital called for them, the audited borrowings set aside",
+    "answer": "B"
+   },
+   {
+    "input": "the fee after a fund's investment period on the cost it still holds",
     "answer": "B"
    }
   ]
@@ -595,17 +690,42 @@
    "golden": false
   },
   {
+   "name": "the loans refinanced at the stressed rate on the values of 31 December 2026",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the loans refinanced at 31 December's rate on the stressed values",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the benchmark's rate of section 8 carried to the property, infrastructure and credit funds past their periods, the loans rolled over as they stand",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the same benchmark rate for every strategy on the careful route",
+   "answer": "A",
+   "golden": false
+  },
+  {
    "name": "the textbook pacing model on the capital accounts",
    "answer": "A",
    "golden": false
   },
   {
-   "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
-   "answer": "D",
+   "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+   "answer": "A",
    "golden": false
   },
   {
-   "name": "the pacing model recalibrated on the 2022 to 2024 exit drought",
+   "name": "the benchmark's 2008-10 call rates replayed on the commitments not yet called",
+   "answer": "A",
+   "golden": false
+  },
+  {
+   "name": "the latest audited borrowings carried as the facility balances",
    "answer": "A",
    "golden": false
   }

@@ -8,34 +8,35 @@
  "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
- "call": "Adopt program B (Oakhanger Capital V, Wendlebury Growth VI, Corvane Ventures VI and Ewelme Real Estate VI, USD 365 million) and defer Harpsden Credit V to 2028: before any 2027 commitment the policy's stress leaves USD 214.3 million above the USD 1,535 million minimum (band 180.9 to 238.4), enough for B's USD 180.1 million of calls but not A's 288.9",
- "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 stressed calls on the commitments made by the end of 2026, each half of 2027 (the investment periods the successor funds' first closes end, the first property and infrastructure loans falling due); R3 the same, each half of 2028 (the loans refinanced at the lenders' stressed limit on the stressed values, the 2028 successor closes); R4 distributions by half-year at the policy's 2008-10 rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
+ "call": "Adopt program B (Oakhanger Capital V, Wendlebury Growth VI and Corvane Ventures VI, USD 245 million) and defer Ewelme Real Estate VI and Harpsden Credit V to 2028: before any 2027 commitment the policy's stress leaves USD 209.7 million above the USD 1,170 million minimum (band 187.5 to 223.4), enough for B's USD 119.2 million of calls but not A's 291.7; not program A (the careful reading, 326.7) nor program C (the loans refinanced, the successor closes missed, 78.1)",
+ "chain": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the successor closes (the funds whose investment periods end the quarter before their managers' next funds' first closes, and the calls that takes off); R3 the refinancing calls (the property and infrastructure loans falling due in the stress, refinanced at the lenders' limit on the stressed rate and values, the shortfalls called); R4 distributions by half-year at the policy's 2008-10 rates; R5 stressed calls on the commitments made by the end of 2026, by half-year; R6 the headroom above the minimum before any 2027 commitment; R7 the program the policy lets the Committee adopt",
  "architecture": 6,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-13"
  },
  "leak": {
-  "leak_py": "REVIEW only (the plan's Notes, the survey's About, the two policies' vocabulary, the plan's program list, the prompt's shell quota), every line ruled harmless",
-  "reader": "architecture 6, pass 1: no leak, no ranking, no helper file; its FY2028 spending remark answered by policy section 3 (no fix)"
+  "leak_py": "REVIEW only on the final cut (the plan's Notes, the survey's About, the two policies' vocabulary, the plan's program list, dates after the pull that are maturities and scheduled ends, the prompt's shell quota), every line ruled harmless in the note",
+  "reader": "three isolated reads on the repair: no answer, no ranking, no helper file, the successor closes never named; two announcements found and removed in the generator (section 8's stand-alone closing line, then the words 'for whatever purpose' in its opening sentence); not re-run after the second removal (words deleted, none added)"
  },
  "duplicate_check": {
-  "heart": "WARN (task type, weight investigation against task9, deliverables docx+xlsx, question form which)",
+  "heart": "WARN on the final cut before the pull (task type, overuse.weight investigation against task9, decision pick_one_of_n against task23, deliverables docx+xlsx, question form which). BLOCK after the pull of 2026-11-13 on one axis, ban.weight (investigation against task9 v3): task16's reship re-stamped its card at 23:00Z and moved past this card (registered 11:46Z, unchanged), which pulled task9 v3 into this card's last-two window. Not relabelled and not re-registered; the author's override or a redraw of the weight is owed before /approve",
   "nearest": "skeleton severity none against every card, the client corpus and the lineage (architecture 5's lessons are this build's filed reflexes)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (pass 4)",
+  "verdict": "DETERMINISTIC (pass 6 and its addendum on the final rebuild)",
   "disposition": "APPROVE",
-  "report": "determinism_check_report_pass3.md (FIX_NOW: the six managers' stale loan records, closed by convergence, SF23) and determinism_check_report_pass4.md (APPROVE, no fixes)"
+  "passes": "two on the repair and one narrow re-check: pass 5 FIX_NOW (new investments and the calls of funds past their periods not rebuilt, a stack of two unsaid choices landing on C; closed by taking the fitted extension out of the golden and filing the facility balance and the fees in policy section 8), pass 6 APPROVE (headroom rebuilt at 211.2), the addendum APPROVE (206.6 against 209.7; fees 180.8 is the line before the cap and 743 the changes sixteen quarters on, both now stated in Steps 4 and 6)",
+  "report": "determinism_check_report_pass5.md, determinism_check_report_pass6.md (with its addendum)"
  },
- "paper_pair": 43.7,
+ "paper_pair": 34.5,
  "effort": {
-  "quick": 16.2,
-  "careful": 43.7,
+  "quick": 20.8,
+  "careful": 34.5,
   "thorough": 100.0,
   "level": 4,
-  "largest_hint": "16 of the real-asset funds' loans fall due in 2027 and 2028 and lenders will refinance them on the stressed rate and values; rescues 1 of 6 (the successor sentence rescues none)"
+  "largest_hint": "a fund's investment period ends when its manager's next fund holds its first close; rescues 1 of 7"
  },
  "runs": {
   "run1": null,
@@ -118,15 +119,25 @@
    "why": "the two judgments the program turned on (the six managers' line stock, the 2009 support slope) were forced by no file, and the Final Recommendation as pasted was architecture 4's stale text; pinning both as asked makes them filed reflexes",
    "route": "architecture 6 in the same world on the user's instruction to fix the task: the pins filed in policy section 8, the call rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress",
    "commit": "RESHIPPED (task20)"
+  },
+  {
+   "date": "2026-11-13",
+   "architecture": 6,
+   "source": "review (the platform's holistic audit, runs/arch6_holistic_audit.md)",
+   "repair": "determinism",
+   "why": "every fixed figure reproduced and depth held at level 4, but the call was not forced: program B passed by 34.2 with the band's low end 0.8 above its line, and the rescue calls' basis (the age that defines past the investment period, the basis, gross or excess), the pacing basis, the first-close slips and the pace each moved the headroom by more",
+   "route": "both of the audit's fixes in the same architecture: policy section 8 now files every reflex basis (the pace, first closes on the managers' dates, the benchmark rate for buyout, growth and venture funds past their periods, how the facility balance is formed, fees and expenses), and the programs and the minimum reserve are re-sized so the golden sits 90.5 above program B's line and 82.0 under A's against a rival family of 195.5 to 215.4; the two stumps (successor closes, refinancing calls) untouched in kind and each still necessary, neither sufficient",
+   "freeze": "freeze.py check FAILS in both modes by design: the audit's second fix re-sizes the call, so the graded figures, the card and the note moved; a fresh snapshot was taken on the final cut",
+   "commit": "RESHIPPED (task20)"
   }
  ],
- "resume": "the author uploads target.zip with prompt.txt (the prompt is unchanged from architecture 5, so the author's own voice rewrite stands; run voice-check.py --rewrite and leak.py if it is rewritten again), pastes architecture 6's blocks from submission.md (the Final Recommendation now opens on program B), then /triage-runs task20 with both runs pasted",
+ "resume": "first the author rules on heart's ban.weight BLOCK (a window shift, see duplicate_check; precedents task9 and task23 on 2026-11-13). Then the author uploads task20/target.zip with prompt.txt (unchanged, so the author's own voice rewrite stands; run voice-check.py --rewrite and leak.py if it is rewritten again), replaces the four answer blocks with submission.md's (the minimum is now USD 1,170 million, program B is the buyout, growth and venture re-ups, the headroom 209.7) and the golden files with golden.zip's, regenerates the runs, then /triage-runs task20 with both runs pasted",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "RETURNED",
   "date": "2026-11-13",
-  "note": "holistic audit of architecture 5: correct figures, not deterministic (two unforced judgments), stale Final Recommendation; depth level 4; runs/arch5_holistic_audit.md"
+  "note": "holistic audit of architecture 6: every fixed figure reproduced, depth level 4, not deterministic (the rescue calls' basis, the pacing basis and the first-close slips unforced; program B passed by 34.2); runs/arch6_holistic_audit.md. Repaired and reshipped the same day; the re-upload is owed"
  },
  "source_concept": "re-root at the author's word (2026-11-13) after architecture 3's review return and run evidence: private-markets commitment capacity under an endowment's liquidity policy",
  "history": [
@@ -141,6 +152,10 @@
   {
    "date": "2026-11-13",
    "event": "READY: architecture 5, program D; stage 4 pass 2 clean (judge DETERMINISTIC APPROVE; reader no unlock); every free gate passing"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "architecture 6 returned by the holistic audit as not deterministic; repaired in place (section 8 files the reflex bases, the call re-sized), judge pass 5 FIX_NOW then pass 6 and its addendum APPROVE, three leak reads with two announcements removed, gates.py --full 0 FAIL, containers PASS, two builds byte-identical; READY and reshipped"
   }
  ]
 }

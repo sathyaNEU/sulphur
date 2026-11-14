@@ -80,7 +80,7 @@ def build_into(root):
     DC.policy(os.path.join(tgt, DC.F_POLICY)); DC.ips(os.path.join(tgt, DC.F_IPS)); DC.capplan(os.path.join(tgt, DC.F_CAPPLAN))
     for name, (cr, lb, c0, c1, co) in WORKBOOKS.items():
         PP.normalize_ooxml(os.path.join(tgt, name), cr, lb, c0, c1, excel=True, company=co)
-    R = A.full5(tgt)
+    R = A.full(tgt)
     F, E = FG.write(R, root)
     GD.workbook(F, R, os.path.join(gld, GD.XLSX))
     PP.normalize_ooxml(os.path.join(gld, GD.XLSX), "Caitlin Hill", "Caitlin Hill", "2027-03-13T15:02:00Z", "2027-03-16T19:41:26Z",
@@ -97,7 +97,7 @@ def build_into(root):
             "stated_inputs": ["2027", "2028", "2026", format(int(DC.CUSHION), ","), str(int(DC.CUSHION))],
             "field_terms": ["capital call", "distribution", "unfunded commitment", "first close", "subscription line", "recycling",
                             "pacing", "liquidity", "stress", "follow-on", "rescue financing", "investment period", "successor fund",
-                            "refinancing", "loan maturity", "loan-to-value"],
+                            "refinancing", "loan maturity", "loan-to-value", "credit facility", "vintage"],
             "rows": rows,
             "files": {n: {"source": s, "role": r, "pull_date": pulled.get(n, AS_OF),
                           "license": "generated for this task by task20/generator (a seeded simulation of an endowment's private-fund "
@@ -135,9 +135,10 @@ def install(root):
 
 
 def main():
-    if "--into" in sys.argv:                     # the second build, in a process of its own
-        build_into(sys.argv[sys.argv.index("--into") + 1])
-        return
+    for flag in ("--into", "--out"):             # one build into a given folder (the second build runs so, in a process of its own)
+        if flag in sys.argv:
+            build_into(sys.argv[sys.argv.index(flag) + 1])
+            return
     once = "--once" in sys.argv
     a = tempfile.mkdtemp(prefix="task20a-")
     build_into(a)

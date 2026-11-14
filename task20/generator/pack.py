@@ -28,9 +28,6 @@ MGR_NAMES = {
     "IN1": "Garsington Infrastructure", "IN2": "Shabbington Infrastructure", "IN3": "Waterperry Infrastructure",
     "PC1": "Harpsden Credit", "PC2": "Lewknor Credit Partners", "PC3": "Bix Direct Lending", "PC4": "Swyncombe Credit",
 }
-# the managers whose company-level reporting stopped after 2024 (the look-through feed covers the others; the property and
-# infrastructure managers report asset by asset, loans included, through it to the end)
-SUMMARY_ONLY = sorted(str(x) for x in np.random.default_rng(10).choice([g for g in ["BO1", "BO2", "BO3", "BO4", "BO5", "BO6", "BO7", "BO8", "GE1", "GE2", "GE3", "VC1", "VC2", "VC3", "VC4", "PC1", "PC2", "PC3", "PC4"]], 6, replace=False))
 ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"]
 STRAT_NAME = {"BO": "Buyout", "GE": "Growth equity", "VC": "Venture capital", "RE": "Real estate", "IN": "Infrastructure", "PC": "Private credit"}
 
@@ -41,6 +38,12 @@ def qend(i):
 def qmid(i, frac=0.5):
     a = qend(i - 1) + dt.timedelta(days=1); b = qend(i)
     return a + dt.timedelta(days=int((b - a).days * frac))
+
+def value_day(i, key, lo=0.06, hi=0.92):
+    """a business day inside quarter i, the fund's own (a custodian books each movement on the day the cash moves)."""
+    d = qmid(i, lo + (hi - lo) * (zlib.crc32(key.encode()) % 1000) / 1000.0)
+    while d.weekday() > 4: d -= dt.timedelta(days=1)
+    return d
 
 _ON = ["Bra", "Cor", "Dal", "Fen", "Gal", "Hal", "Jor", "Kel", "Lum", "Mar", "Nor", "Ost", "Pel", "Quen", "Ros", "Sel", "Tal",
        "Ver", "Wyn", "Zel", "Ard", "Bel", "Cal", "Dor", "Eld", "Fal", "Gry", "Hev", "Kav", "Lor", "Mav", "Nel", "Orv", "Pra", "Rul",
@@ -179,8 +182,8 @@ def write_all(Wo, H, tgt):
                    money((ci) * 1e6), money(cf * 1e6), money(other * 1e6), money(roc * 1e6), money(gain * 1e6), money(inc * 1e6),
                    money(nav), money(unf), "N", "final statement; commitment not called released" if final else ""]
             if q == H_END and fid in late:
-                cash_rows += [[qmid(q, 0.3).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)]] if (ci + cf + other) > 0 else []
-                cash_rows += [[qmid(q, 0.8).isoformat(), fid, "distribution", money(dist * 1e6)]] if dist > 0 else []
+                cash_rows += [[value_day(q, fid + "-call", 0.06, 0.70).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)]] if (ci + cf + other) > 0 else []
+                cash_rows += [[value_day(q, fid + "-dist", 0.25, 0.94).isoformat(), fid, "distribution", money(dist * 1e6)]] if dist > 0 else []
                 continue
             if fid in restated and q == qi(2024, 2):
                 old = list(row); old[11] = money(nav * 1.012); old[6] = money(cf * 1e6 * 1.08); old[13] = "N"; old[14] = "superseded"
@@ -188,8 +191,8 @@ def write_all(Wo, H, tgt):
                 row[13] = "Y"; row[4] = (qend(q) + dt.timedelta(days=118)).isoformat()
             st_rows.append(row)
             if q == H_END:
-                if ci + cf + other > 0: cash_rows.append([qmid(q, 0.3).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)])
-                if dist > 0: cash_rows.append([qmid(q, 0.8).isoformat(), fid, "distribution", money(dist * 1e6)])
+                if ci + cf + other > 0: cash_rows.append([value_day(q, fid + "-call", 0.06, 0.70).isoformat(), fid, "capital call", money((ci + cf + other) * 1e6)])
+                if dist > 0: cash_rows.append([value_day(q, fid + "-dist", 0.25, 0.94).isoformat(), fid, "distribution", money(dist * 1e6)])
     rows[F_STMT] = w_csv(os.path.join(tgt, F_STMT), ["fund_id", "fund_name", "manager", "period_end", "statement_date",
         "contributions_investments_usd", "contributions_management_fees_usd", "contributions_fund_expenses_usd",
         "distributions_return_of_capital_usd", "distributions_realized_gain_usd", "distributions_income_usd",
@@ -203,8 +206,6 @@ def write_all(Wo, H, tgt):
         nm = MGR_NAMES[f["gp"]["id"]]
         for e in H[fid]["log"]:
             kind, _, dno, q, a, b = e
-            if f["gp"]["id"] in SUMMARY_ONLY and q > qi(2024, 4):
-                continue          # these managers moved to quarterly letters in 2025: no company-level file since
             co = company_name(fid, f["gp"]["st"], dno)
             if kind == "new":
                 act.append([fid, nm, co, qmid(q, 0.45).isoformat(), "initial investment", "%.3f" % a, ""])
@@ -240,8 +241,10 @@ def write_all(Wo, H, tgt):
             if not june and y == 2026: continue            # the 2026 accounts arrive in the spring
             fv = rec["fv"].get(qe, 0.0); line = rec["line"].get(qe, 0.0); cost = rec["cost"].get(qe, 0.0)
             contrib_f = (o["call_inv"][:qe + 1].sum() + o["call_fee"][:qe + 1].sum() + o["call_exp"][:qe + 1].sum()) / sh
-            cash = 0.004 * f["size"]
-            accr = o["call_fee"][qe] / sh * 0.33
+            # the fund's cash at its year-end: a few tenths of a percent of its size, different each year
+            cash = (0.002 + 0.006 * (zlib.crc32(("%s-cash-%d" % (fid, y)).encode()) % 1000) / 1000.0) * f["size"]
+            # fees and costs accrued and unpaid at the year-end: a fifth to a half of a quarter's fee, different each year
+            accr = o["call_fee"][qe] / sh * (0.20 + 0.28 * (zlib.crc32(("%s-accr-%d" % (fid, y)).encode()) % 1000) / 1000.0)
             pc = fv + cash - line - accr
             ws.append([fid, f["name"], qend(qe), round(f["size"] * 1000), round(cost * 1000), round(fv * 1000), round(cash * 1000),
                        round(line * 1000), round(accr * 1000), round(pc * 1000), round((f["size"] - contrib_f) * 1000)])
@@ -260,11 +263,12 @@ def write_all(Wo, H, tgt):
         if f["vint"] > 2026: continue
         st = Wd.ST[f["gp"]["st"]]
         closed = f["fc"] <= H_END
-        status = "pending first close" if not closed else ("investing" if H_END < f["fc"] + st["ip"] else
-                                                           ("harvesting" if H_END < f["fc"] + st["life"] else "liquidated"))
         ip_end = H[f["id"]]["o"]["ip_end"] if (closed and f["id"] in H) else (f["fc"] + st["ip"])
+        status = "pending first close" if not closed else ("investing" if H_END + 1 < ip_end else
+                                                           ("harvesting" if H_END < f["fc"] + st["life"] else "liquidated"))
         ws.append([f["id"], f["name"], MGR_NAMES[f["gp"]["id"]], STRAT_NAME[f["gp"]["st"]], f["vint"], f["C"],
-                   f["size"] if closed else None, qmid(f["commit_q"], 0.5), qend(f["exp_fc"]), qend(f["fc"]) if closed else None,
+                   f["size"] if closed else None, qmid(f["commit_q"], 0.12 + 0.76 * (zlib.crc32(("%s-commit" % f["id"]).encode()) % 1000) / 1000.0),
+                   qend(f["exp_fc"]), qend(f["fc"]) if closed else None,
                    st["ip"] // 4 if closed else None, qend(ip_end - 1) if closed else None, qend(f["fc"] + st["life"]) if closed else None, status])
         reg_n += 1
     for row in ws.iter_rows(min_row=2, min_col=8, max_col=13):

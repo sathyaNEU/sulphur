@@ -14,12 +14,19 @@ import analysis as A
 XLSX = "wexmoor_2027_program_test.xlsx"
 MEMO = "commitment_program_2027_memo.docx"
 QL = lambda q: "Q%d %d" % (q % 4 + 1, A.Q0 + q // 4)
-NAMES = {"A": "the full program", "B": "the credit re-up deferred", "C": "the growth and credit re-ups deferred", "D": "the venture re-up only"}
 
 
 USD = "#,##0.0"
 WHOLE = "#,##0"
 TIDY = lambda t: t[:1].upper() + t[1:]
+NUMW = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
+# the other forecasts on the Sensitivity sheet, in the office's own words
+SAY = {"the careful route: every investment period to its registered end, the real-asset loans rolled over as they stand":
+           "every investment period to its registered end, the real-asset loans rolled over as they stand",
+       "the same benchmark rate for every strategy on the careful route":
+           "section 8's benchmark rate for every strategy's funds past their periods, the periods to their registered ends and the loans as they stand",
+       "the textbook pacing model on the capital accounts": "calls at each strategy's past rate on the commitment not yet called, from the capital accounts",
+       "the pacing model recalibrated on the 2022 to 2024 exit drought": "the same rates taken from 2022 to 2024 alone"}
 
 
 def _fmt(ws, cols, fmt, first=2, last=None):
@@ -89,11 +96,14 @@ def workbook(F, R, path):
     line("Calls on the commitments made by the end of 2026", calls)
     line("   funds that have held a first close", g["closed"])
     line("   funds yet to hold one", g["pending"])
-    line("   of which defensive follow-ons and rescue financings", g["support"])
+    line("   of which facility balances called", {hh: (F["line_stock_usd_m"] if hh == A.HALVES[0] else 0.0) for hh in A.HALVES})
+    line("   of which new investments at the pace of section 8", g["new"])
+    line("   of which fees and fund expenses", g["fees"])
+    line("   of which buyout, growth and venture funds past their periods, at the benchmark's rate", g["old"])
     line("   of which property and infrastructure loans refinanced short of their balance", g["refi"])
     line("Distributions, the policy's 2008-10 rates", g["R4"])
     _fmt(h, "BCDEF", USD); h.freeze_panes = "B2"
-    h.column_dimensions["A"].width = 52
+    h.column_dimensions["A"].width = 78
     for col in "BCDEF": h.column_dimensions[col].width = 13
     # the re-ups
     p = wb.create_sheet("Re-ups")
@@ -117,24 +127,19 @@ def workbook(F, R, path):
     # the successor closes
     sc = wb.create_sheet("Successor closes")
     sc.append(["Fund", "Manager", "Investment period ends (register)", "Successor fund", "Successor's first close (manager's date)",
-               "Successor's first close in the stress, where its new investments stop"])
+               "Last quarter of new investments"])
     for c in sc[1]: c.font = bold; c.alignment = Alignment(wrap_text=True, vertical="top")
-    plan_fc = {x["fund"]: x["exp_fc"] for x in L["plan"]}
-    reg_by_name = {r["Fund"]: r for r in L["reg"].values()}
     for e in F["successor_events"]:
         r = L["reg"][e["fid"]]
-        s_r = reg_by_name.get(e["successor"])
-        mgr_q = plan_fc.get(e["successor"]) if s_r is None else A._qd(s_r["First close expected at commitment"])
         ie = r["Investment period ends"]; ie = ie.date() if hasattr(ie, "date") else ie
-        k = int(e["close"] + 1e-9); fr = round(e["close"] - k, 2)
-        when = QL(k) if fr < 0.005 else "%s (weight %.2f) or %s (%.2f)" % (QL(k), 1 - fr, QL(k + 1), fr)
-        sc.append([e["fund"], r["Manager"], ie.strftime("%d %B %Y").lstrip("0"), e["successor"], QL(mgr_q), when])
+        k = int(round(e["close"]))
+        sc.append([e["fund"], r["Manager"], ie.strftime("%d %B %Y").lstrip("0"), e["successor"], QL(k), QL(k - 1)])
     sc.append([])
     sc.append(["Managers whose past funds' investment periods ended at the successor's first close", "; ".join(F["clause_managers"])])
     sc.append(["Managers whose past funds' periods ran on past the successor's first close", "; ".join(F["no_clause_managers"]) or "none"])
     sc.append(["Effect on the headroom before any 2027 commitment (USD m)", F["successor_effect_usd_m"]])
     sc.cell(sc.max_row, 2).number_format = USD
-    for col, w in zip("ABCDEF", (34, 30, 18, 28, 18, 40)): sc.column_dimensions[col].width = w
+    for col, w in zip("ABCDEF", (34, 30, 18, 28, 18, 18)): sc.column_dimensions[col].width = w
     sc.freeze_panes = "B2"
     # the asset loans
     al = wb.create_sheet("Asset loans")
@@ -153,49 +158,84 @@ def workbook(F, R, path):
     al.append(["Called by the funds within their commitments, by half-year (USD m)"] + [F["refinancing_calls_by_half_usd_m"][h] for h in A.HALVES])
     for k in range(2, 6): al.cell(al.max_row, k).number_format = USD
     al.append(["Lenders' limit fitted on the refinancings since mid-2022 (%d): the lower of a cap and kappa over the rate plus a spread" % lr["n"],
-               "cap %.3f" % lr["cap_post"], "kappa %.3f" % lr["kappa"], "spread %.2f" % lr["spread"]])
+               "cap %.3f" % lr["cap_post"], "kappa %.3f" % lr["kappa"], "spread %.2f" % lr["spread"], "at %.2f%%: %.3f" % (F["stressed_rate_pct"], F["lender_limit_stressed"])])
+    al.append(["Refinancings in the activity file since 2013, and those at a lower balance with the fund investing the difference",
+               F["refinancings_in_record"], F["refinancings_short_in_record"]])
     al.append(["Asset values on their own valuations (%d quarters): equities a quarter late, the short rate" % vr["n"], "beta %.2f" % vr["beta"], "c %.3f" % vr["c"]])
-    for col, w in zip("ABCDEFGH", (34, 18, 12, 14, 16, 18, 16, 16)): al.column_dimensions[col].width = w
+    al.append([])
+    al.append(["Past refinancings the lenders' limit is read from", "Asset", "Quarter", "Loan replaced (USD m)", "New loan (USD m)",
+               "Asset value then: valuation the quarter before plus the loan replaced (USD m)", "New loan over value", "Short rate (%)",
+               "Fitted limit at that rate", "In the fit (since mid-2022)"])
+    for c in al[al.max_row]: c.font = bold; c.alignment = Alignment(wrap_text=True, vertical="top")
+    for x in A.refinancing_table(L, R["fit"]):
+        al.append([L["reg"][x["fid"]]["Fund"], x["co"], QL(x["q"]), round(x["old"], 2), round(x["new"], 2), round(x["value"], 2), round(x["ltv"], 4),
+                   round(x["rate"], 2), round(x["limit"], 4), "yes" if x["fitted"] else "no"])
+        for k in (4, 5, 6): al.cell(al.max_row, k).number_format = USD
+        for k in (7, 9): al.cell(al.max_row, k).number_format = "0.0%"
+    for col, w in zip("ABCDEFGHIJ", (34, 18, 12, 14, 16, 18, 16, 16, 12, 12)): al.column_dimensions[col].width = w
     al.freeze_panes = "B2"; al.auto_filter.ref = "A1:H%d" % (len(F["loans_due"]) + 1)
-    # the line stock
-    ls = wb.create_sheet("Credit-line stock")
-    ls.append(["Fund ID", "Fund", "Manager", "Invested on lines, not yet called, 31 Dec 2026 (USD m)", "Basis"])
-    for c in ls[1]: c.font = bold
+    # the facility balances
+    ls = wb.create_sheet("Facility balances")
+    ls.append(["Fund ID", "Fund", "Manager", "Latest audited year-end", "Borrowings on it (USD m)", "Investments since (USD m)",
+               "Called for investments since (USD m)", "Invested through the credit facility, not yet called, 31 Dec 2026 (USD m)"])
+    for c in ls[1]: c.font = bold; c.alignment = Alignment(wrap_text=True, vertical="top")
+    ft = A.facility_table(L, R["per"])
     for fid, v in sorted(R["stock"].items(), key=lambda kv: -kv[1]):
         r = L["reg"][fid]
         if r["Status"] == "liquidated" or v < 0.05: continue
-        basis = ("Company-level reports stop after Q4 2024: rolled from that quarter on the covered funds' pace, less the investment "
-                 "capital called, re-anchored at each later audit" if r["Manager"] in L["cov"] else
-                 "Investments at Wexmoor's share less the investment capital called, less recycled proceeds")
-        ls.append([fid, r["Fund"], r["Manager"], round(v, 1), basis])
-    ls.append(["Total", "", "", F["line_stock_usd_m"], ""])
+        x = ft[fid]
+        ls.append([fid, r["Fund"], r["Manager"], ("FY%d" % (A.Q0 + x["audit"] // 4)) if x["audit"] is not None else "none yet",
+                   round(x["borrowings"], 1), round(x["invested_since"], 1), round(x["called_since"], 1), round(v, 1)])
+    ls.append(["Total", "", "", "", "", "", "", F["line_stock_usd_m"]])
     for c in ls[ls.max_row]: c.font = bold
-    _fmt(ls, "D", USD); ls.freeze_panes = "B2"
-    for col, w in zip("ABCDE", (11, 28, 26, 20, 104)): ls.column_dimensions[col].width = w
-    ls["D1"].alignment = Alignment(wrap_text=True, vertical="top")
-    ls.auto_filter.ref = "A1:E%d" % (ls.max_row - 1)
-    # the support response
-    sp = wb.create_sheet("Support response")
-    s_ = F["support"]
-    sp.append(["Fitted on", "Parameter", "Value"])
-    for c in sp[1]: c.font = bold
-    for src, lbl, v, fmt in (("Wexmoor's funds, 2013-26", "Defensive follow-ons per quarter, share of the cost of companies held two years or more, per unit of shortfall", s_["sigma"], "0.000"),
-                             ("Wexmoor's funds, 2013-26", "Shortfall at which the managers' reserves cap them", s_["cap"], "0%"),
-                             ("Wexmoor's funds, 2013-26", "Lag behind the exit index (quarters)", s_["lag"], "0"),
-                             ("Benchmark funds past their investment period, 2004-14", "Shortfall past which rescue financings start", s_["th"], "0%"),
-                             ("Benchmark funds past their investment period, 2004-14", "Rescue financings per unit of shortfall past it, relative to the first channel", s_["ratio"], "0.00"),
-                             ("Benchmark funds past their investment period, 2004-14", "Rescue financings per quarter, per unit of shortfall past it", s_["sigma2"], "0.000")):
-        sp.append([src, lbl, v]); sp.cell(sp.max_row, 3).number_format = fmt
-    sp.append([])
-    sp.append(["Quarter", "Benchmark funds more than six years old with commitment left to call: calls, share of commitment", "Exit shortfall two quarters before"])
-    t0 = sp.max_row
-    for c in sp[t0]: c.font = bold
-    bq = A.bench_old_calls(L)
-    for q in sorted(bq):
-        if A.qi(2007, 1) <= q <= A.qi(2012, 4):
-            sp.append([QL(q), round(bq[q], 5), round(max(0.0, 1.0 - L["E"][q - 2] / 100.0), 3)])
-            sp.cell(sp.max_row, 2).number_format = "0.00%"; sp.cell(sp.max_row, 3).number_format = "0.0%"
-    sp.column_dimensions["A"].width = 46; sp.column_dimensions["B"].width = 96; sp.column_dimensions["C"].width = 18
+    ls.append([])
+    ls.append(["Basis (policy section 8): the borrowings on each fund's latest audited balance sheet, plus its investments since and less the "
+               "capital called for investments since, at Wexmoor's share and never below nil; no allowance for proceeds reinvested since."])
+    ls.append(["Latest audited borrowings, as they stood at each fund's last year-end (USD m)", "", "", "", "", "", "", F["line_stock_audited_usd_m"]])
+    _fmt(ls, "EFGH", USD); ls.freeze_panes = "B2"
+    for col, w in zip("ABCDEFGH", (11, 30, 28, 14, 14, 14, 16, 24)): ls.column_dimensions[col].width = w
+    # the bases section 8 sets
+    pb = wb.create_sheet("Policy bases")
+    pb.append(["Pace of new investments (section 8): investments, first and follow-on, over the commitment not yet invested, percent a quarter"])
+    pb["A1"].font = bold
+    years = sorted({a_ for (st, a_) in R["fit"]["pace"]})
+    pb.append(["Strategy"] + ["Year %d" % (a_ + 1) for a_ in years] + ["Fund-quarters"])
+    for c in pb[pb.max_row]: c.font = bold
+    inv_s = {v: k for k, v in A.STRATS.items()}
+    for s_ in A.STRAT_ORDER:
+        st = A.STRATS[s_]
+        pb.append([s_] + [round(100 * R["fit"]["pace"][(st, a_)], 2) if (st, a_) in R["fit"]["pace"] else None for a_ in years]
+                  + [sum(n for (s2, a_), n in R["fit"]["pace_n"].items() if s2 == st)])
+        for k in range(2, 2 + len(years)): pb.cell(pb.max_row, k).number_format = "0.00"
+    pb.append([])
+    pb.append(["Benchmark call rate for funds past their investment periods (section 8): contributions of funds with a vintage %d or more years "
+               "before, over their value a quarter earlier, percent" % F["benchmark_vintage_years"]])
+    pb[pb.max_row][0].font = bold
+    pb.append(["Strategy"] + [QL(A.qi(2008, 3) + k) for k in range(8)] + ["Eight quarters"])
+    for c in pb[pb.max_row]: c.font = bold
+    for st in A.EQUITY:
+        pb.append([inv_s[st]] + F["old_fund_rates_pct"][st] + [F["old_fund_rate_8q_pct"][st]])
+        for k in range(2, 11): pb.cell(pb.max_row, k).number_format = "0.00"
+    pb.append([])
+    pb.append(["Buyout, growth and venture funds past their investment periods at 31 December 2026", F["old_funds_31dec"]])
+    pb.append(["Their value at 31 December 2026 (USD m)", F["old_funds_value_usd_m"]]); pb.cell(pb.max_row, 2).number_format = USD
+    pb.append(["Their calls and those of the funds whose periods end in the stress, eight quarters (USD m)", F["old_fund_calls_total_usd_m"]]); pb.cell(pb.max_row, 2).number_format = USD
+    pb.append(["Funds yet to hold a first close, on their managers' dates"] + ["%s %s" % (x["fund"], QL(x["close"])) for x in F["pending_funds"]])
+    pb.append([])
+    pb.append(["Fee and expenses of a fund yet to close (section 8): the median quarter of the strategy's funds in their investment periods, "
+               "percent of commitment a quarter"])
+    pb[pb.max_row][0].font = bold
+    pb.append(["Strategy", "Management fee", "Fund expenses"])
+    for c in pb[pb.max_row]: c.font = bold
+    for s_ in A.STRAT_ORDER:
+        st = A.STRATS[s_]
+        if st in F["fee_rate_pct"]:
+            pb.append([s_, F["fee_rate_pct"][st], F["expense_rate_pct"][st]])
+            for k in (2, 3): pb.cell(pb.max_row, k).number_format = "0.000"
+    pb.append(["Every other fund: the fee and expenses of its latest quarterly statement; a buyout, growth or venture fund past its investment "
+               "period calls the benchmark's rate alone. Eight quarters (USD m)", F["fees_total_usd_m"]]); pb.cell(pb.max_row, 2).number_format = USD
+    pb.column_dimensions["A"].width = 86
+    for col in "BCDEFGHIJK": pb.column_dimensions[col].width = 12
     # sensitivity
     se = wb.create_sheet("Sensitivity")
     se.append(["Method or input", "Program", "Headroom before 2027 (USD m)"])
@@ -203,13 +243,21 @@ def workbook(F, R, path):
     se.append(["This workbook", F["program"], F["headroom_before_2027_usd_m"]])
     for n, v in F["family"].items(): se.append([TIDY(n), v["program"], v["headroom_before_2027_usd_m"]])
     se.append([])
+    se.append(["Section 8's bases read another way", "Program", "Headroom before 2027 (USD m)"])
+    for c in se[se.max_row]: c.font = bold
+    for n, v in F["readings"].items(): se.append([TIDY(n), v["program"], v["headroom_before_2027_usd_m"]])
+    se.append([])
+    se.append(["Other ways of forecasting the calls", "Program", "Headroom before 2027 (USD m)"])
+    for c in se[se.max_row]: c.font = bold
+    for n, v in list(F["routes"].items())[1:]: se.append([TIDY(SAY.get(n, n)), v["program"], v["headroom_before_2027_usd_m"]])
+    se.append([])
     se.append(["Bootstrap over funds, 5th and 95th percentiles of the headroom (USD m)", "5th", "95th"])
     for c in se[se.max_row]: c.font = bold
     for k, v in F["bootstrap_p5_p95"].items(): se.append([TIDY(k), v[0], v[1]])
     _fmt(se, "BC", USD); se.freeze_panes = "A2"
     for row in se.iter_rows(min_row=2):
         if row[1].value is not None and isinstance(row[1].value, str): row[1].alignment = Alignment(horizontal="center")
-    se.column_dimensions["A"].width = 84; se.column_dimensions["B"].width = 10; se.column_dimensions["C"].width = 16
+    se.column_dimensions["A"].width = 124; se.column_dimensions["B"].width = 10; se.column_dimensions["C"].width = 16
     # notes
     nt = wb.create_sheet("Notes")
     nt.append(["Notes"]); nt["A1"].font = bold
@@ -220,11 +268,14 @@ def workbook(F, R, path):
               "Figures are USD million at Wexmoor's share of each fund, to one decimal; proposed commitments are the plan's sizes. "
               "Halves are calendar halves.",
               "Commitments released at a fund's term end are excluded; commitments to funds yet to hold a first close count in full (section 3).",
-              "Two funds' fourth-quarter statements had not arrived by 12 March 2027; their 31 December values are the 30 September values "
-              "plus the quarter's calls less its distributions in the custodian's records (section 7).",
+              "%s funds' fourth-quarter statements had not arrived by 12 March 2027; their 31 December values are the 30 September values "
+              "plus the quarter's calls less its distributions in the custodian's records (section 7)." % NUMW.get(F["late_statements"], str(F["late_statements"])),
               "One manager restated its second-quarter 2024 statement; the superseded line is left out.",
-              "Six managers' company-level reports stop after the fourth quarter of 2024 while their statements and audits continue (%s); "
-              "their funds' line balances are carried as the Credit-line stock sheet sets out." % ", ".join(F["six_managers"])):
+              "Section 8 sets the pace of new investments, the dates of first closes still to come, the calls of buyout, growth and venture "
+              "funds past their investment periods, how the facility balances are formed and the quarter they count in, and the fees and "
+              "expenses; the Policy bases and Facility balances sheets carry them. No investment period is extended in the stress. "
+              "When each fund's investment period ends and what the property and infrastructure loans cost at maturity are judged on "
+              "the register and the managers' activity reports (sheets Successor closes and Asset loans)."):
         nt.append([t]); nt.cell(nt.max_row, 1).alignment = Alignment(wrap_text=True, vertical="top")
     nt.column_dimensions["A"].width = 120
     wb.save(path)
@@ -266,7 +317,6 @@ def memo(F, R, path):
         p(t, lead, after=10 if lead == "Subject: " else 0)
     big = fails[-1] if fails else adopt
     andl = lambda xs: ", ".join(xs[:-1]) + " and " + xs[-1] if len(xs) > 1 else "".join(xs)
-    NUM = {2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"}
     p("Adopt program %s (%s, USD %.0f million) and defer %s to 2028. Before any 2027 commitment the policy's stress leaves "
       "USD %.1f million above the USD %s million minimum. Program %s's re-ups would call USD %.1f million over the eight quarters "
       "and leave USD %.1f million to spare; program %s's would call USD %.1f million and take the reserve USD %.1f million below the "
@@ -280,21 +330,22 @@ def memo(F, R, path):
       "succession for %d managers. %s of our funds have a successor closing inside the eight quarters (%s), so their new "
       "investments stop earlier than the register's period ends say. That takes USD %.1f million off the calls; held to their "
       "registered ends, the headroom would be USD %.1f million and program %s would be the largest to pass."
-      % (len(F["clause_managers"]), NUM.get(len(ev), str(len(ev))), andl([e["fund"] for e in ev]), F["successor_effect_usd_m"],
+      % (len(F["clause_managers"]), NUMW.get(len(ev), str(len(ev))), andl([e["fund"] for e in ev]), F["successor_effect_usd_m"],
          F["factorial"]["S1 dropped"]["headroom_before_2027_usd_m"], F["factorial"]["S1 dropped"]["program"]))
     lr = F["lender_rule"]
     p("Second, %d loans on our property and infrastructure funds' assets fall due in 2027 and 2028 (USD %.1f million at our share). "
       "Lenders have refinanced since mid-2022 at the lower of %.0f percent of value and what the asset's income carries at the "
-      "rate then; at the stress's higher rate, and on values that fall with it, they would grant USD %.1f million less than the "
-      "balances, and the funds would call USD %.1f million of it from us. Carried as they stand, the loans would leave USD %.1f "
-      "million of headroom and program %s would appear to pass."
-      % (F["loans_due_count"], F["loans_due_balance_usd_m"], 100 * lr["cap_post"], F["loans_due_gap_usd_m"],
+      "rate then, about %.0f percent of value at the stress's rate; on values that fall with the stress they would grant USD %.1f "
+      "million less than the balances, and the funds would call USD %.1f million of it from us. Carried as they stand, the loans "
+      "would leave USD %.1f million of headroom and program %s would appear to pass."
+      % (F["loans_due_count"], F["loans_due_balance_usd_m"], 100 * lr["cap_post"], 100 * F["lender_limit_stressed"], F["loans_due_gap_usd_m"],
          F["refinancing_calls_total_usd_m"], F["factorial"]["S2 dropped"]["headroom_before_2027_usd_m"], F["factorial"]["S2 dropped"]["program"]))
-    p("The rest follows the policy: the capital our managers have invested on credit lines (USD %.1f million, of which USD %.1f "
-      "million for the six managers whose company-level files stop after 2024, estimated from their capital accounts and audits) "
-      "is called in the first quarter, and the calls on companies already held past the shortfall our own record reaches are read "
-      "off the benchmark's funds past their investment period in 2008 to 2010 (USD %.1f million over the eight quarters)."
-      % (F["line_stock_usd_m"], F["line_stock_six_managers_usd_m"], F["support_total_usd_m"]))
+    p("The rest follows section 8 of the policy as written: the capital our managers have invested through their credit facilities "
+      "(USD %.1f million) counts in the first quarter, new investments run at each strategy's pace while a fund's investment period "
+      "lasts (USD %s million), funds yet to hold a first close call from their managers' dates, and the %d buyout, growth and "
+      "venture funds past their investment periods call at the benchmark's rate for 2008 to 2010 (USD %.1f million with those whose "
+      "periods end in the stress)."
+      % (F["line_stock_usd_m"], format(F["new_investments_total_usd_m"], ",.1f"), F["old_funds_31dec"], F["old_fund_calls_total_usd_m"]))
     t = doc.add_table(rows=1, cols=5); t.style = "Table Grid"
     hdr = t.rows[0].cells; hdr[0].text = "USD million"
     for i, hh in enumerate(A.HALVES): hdr[i + 1].text = hh
@@ -306,10 +357,13 @@ def memo(F, R, path):
         for i, hh in enumerate(A.HALVES):
             row[i + 1].text = "%.1f" % d[hh]; row[i + 1].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
     p("Source: Office of Investments, 2027 program test workbook; the policy's stress on the position at 31 December 2026.", size=8, after=8)
+    fam = [v["headroom_before_2027_usd_m"] for v in F["family"].values()]
     p("The commitments not yet called at 31 December total USD %s million. The workbook carries the test, each program, the "
-      "successor closes, the loans that fall due, the line balances fund by fund, the support response and the sensitivities; "
-      "the alternative fits on its Sensitivity sheet and a bootstrap over funds all leave program %s as the largest that passes."
-      % (format(F["unfunded_total_usd_m"], ",.1f"), adopt))
-    p("Two funds' fourth-quarter statements had not arrived by 12 March; as section 7 of the policy provides, their 31 December "
-      "values are the 30 September values plus the quarter's calls less its distributions in the custodian's records.", size=8, after=0)
+      "successor closes, the loans that fall due, the facility balances fund by fund, the bases section 8 sets and the "
+      "sensitivities; the alternative fits on its Sensitivity sheet leave the headroom between USD %.1f and %.1f million and "
+      "program %s the largest that passes."
+      % (format(F["unfunded_total_usd_m"], ",.1f"), min(fam), max(fam), adopt))
+    p("%s funds' fourth-quarter statements had not arrived by 12 March; as section 7 of the policy provides, their 31 December "
+      "values are the 30 September values plus the quarter's calls less its distributions in the custodian's records."
+      % NUMW.get(F["late_statements"], str(F["late_statements"])), size=8, after=0)
     doc.save(path)

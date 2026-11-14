@@ -1,7 +1,8 @@
 """the world's own 2027-28 under the policy's stress: the calls of the commitments made by the end of 2026 per quarter,
 split between the funds that have held a first close and those yet to, the refinancing calls, and each 2027 re-up's own
-calls (not graded; checks the golden). policy=True runs the stress as the policy's test does, with no allowance for a
-slower deal market; policy=False lets the world's managers slow down as they would."""
+calls (not graded; anchors the golden's estimates: the facility balances, the refinancing calls, the re-ups). The world
+runs as its managers would (first closes slipping, proceeds reinvested); the policy's test fixes those on set bases, so
+the totals are not compared, only what the golden estimates. policy=True holds the deal market at its normal pace."""
 import numpy as np, world as Wd, pack as PK
 from world import H_END, W
 

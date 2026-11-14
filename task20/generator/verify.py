@@ -1,5 +1,7 @@
-"""Independent verifier: recomputes the assembly figures, the reserve, the spending and the policy's distributions from
-target/ with plain parsing (no analysis.py), and reads the golden workbook back against figures.json."""
+"""Independent verifier: recomputes the assembly figures, the reserve, the spending, the policy's distributions and the
+bases section 8 files (the pace of new investments, the benchmark's call rate for funds past their investment periods)
+from target/ with plain parsing (no analysis.py), reads the filed sentences back from the shipped policy, and reads the
+golden workbook and memo back against figures.json."""
 import csv
 import datetime as dt
 import json
@@ -80,24 +82,102 @@ for fid, r in reg.items():
 for i, h in enumerate(["H1 2027", "H2 2027", "H1 2028", "H2 2028"]):
     v = dist[2 * i] + dist[2 * i + 1]
     ok("distributions %s" % h, abs(v - F["distributions_by_half_usd_m"][h]) < 0.06, "%.2f against %.1f" % (v, F["distributions_by_half_usd_m"][h]))
-# the six managers whose company-level rows stop after 2024 while their funds still report
+# every live manager's company-level rows run to the fourth quarter of 2026
 last = {}
 for r in rows("manager_portfolio_activity_2013_2026.csv"):
     d = dt.date.fromisoformat(r["date"])
     if r["manager"] not in last or d > last[r["manager"]]:
         last[r["manager"]] = d
 live_mgr = {r["Manager"] for r in reg.values() if r["Status"] in ("investing", "harvesting")}
-stopped = sorted(m for m, d in last.items() if d <= dt.date(2024, 12, 31) and m in live_mgr)
-ok("the managers whose company-level rows stop after 2024", stopped == F["six_managers"], "; ".join(stopped))
-# the shortfall the stress reaches against the endowment's own record
-ex = {}
-for r in rows("market_series_quarterly_2000Q1_2026Q4.csv"):
-    d = dt.date.fromisoformat(r["quarter_end"]); ex[d.year * 4 + (d.month - 1) // 3] = float(r["exit_activity_index_2015_100"])
-q26, q08 = 2026 * 4 + 3, 2008 * 4 + 1
-path = [ex[q26] * ex[q08 + 1 + k] / ex[q08] for k in range(8)]
-lagged = [ex[q26 - 1], ex[q26]] + path[:6]
-deep = max(max(0.0, 1.0 - v / 100.0) for v in lagged)
-ok("the stress takes the exit shortfall past the second channel's threshold", deep > F["support"]["th"], "%.3f against %.2f" % (deep, F["support"]["th"]))
+ok("every live manager's company-level rows reach the fourth quarter of 2026", all(m in last and last[m] >= dt.date(2026, 10, 1) for m in live_mgr),
+   "; ".join(sorted(m for m in live_mgr if m not in last or last[m] < dt.date(2026, 10, 1))) or "%d managers" % len(live_mgr))
+# section 8's benchmark call rate: funds with a vintage six or more years before the quarter's year, contributions over the value a quarter earlier
+ST = {"Buyout": "BO", "Growth equity": "GE", "Venture capital": "VC"}
+cn = defaultdict(float); cd = defaultdict(float); prev = {}
+for r in sorted(rows("industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv"), key=lambda r: (r["benchmark_fund"], r["period_end"])):
+    d = dt.date.fromisoformat(r["period_end"]); q = d.year * 4 + (d.month - 1) // 3
+    p = prev.get(r["benchmark_fund"])
+    if p and p[0] == q - 1 and 2008 * 4 + 2 <= q <= 2010 * 4 + 1 and d.year - int(r["vintage"]) >= F["benchmark_vintage_years"] and r["strategy"] in ST:
+        cn[(ST[r["strategy"]], q - (2008 * 4 + 2))] += float(r["contributions_pct_of_commitment"]); cd[(ST[r["strategy"]], q - (2008 * 4 + 2))] += p[1]
+    prev[r["benchmark_fund"]] = (q, float(r["nav_pct_of_commitment"]))
+for s_ in ("BO", "GE", "VC"):
+    tot = 100 * sum(cn[(s_, k)] / cd[(s_, k)] for k in range(8))
+    ok("benchmark call rate, eight quarters, %s" % s_, abs(tot - F["old_fund_rate_8q_pct"][s_]) < 0.006, "%.3f against %.2f" % (tot, F["old_fund_rate_8q_pct"][s_]))
+# the funds that rate applies to at 31 December: buyout, growth and venture funds whose investment period has ended
+old = [fid for fid, r in reg.items() if r["Status"] not in ("liquidated", "pending first close") and r["Strategy"] in ST
+       and (r["Investment period ends"].date() if hasattr(r["Investment period ends"], "date") else r["Investment period ends"]) <= dt.date(2026, 12, 31)]
+ok("funds past their investment periods at 31 December (buyout, growth, venture)", len(old) == F["old_funds_31dec"]
+   and all(reg[f]["Status"] == "harvesting" for f in old), "%d funds" % len(old))
+ok("their value at 31 December", abs(sum(max(nav.get(f, 0.0), 0.0) for f in old) - F["old_funds_value_usd_m"]) < 0.06,
+   "%.2f against %.1f" % (sum(max(nav.get(f, 0.0), 0.0) for f in old), F["old_funds_value_usd_m"]))
+# section 8's pace: investments, first and follow-on, over the commitment not yet invested, by strategy and year since first close
+ST6 = {"Buyout": "BO", "Growth equity": "GE", "Venture capital": "VC", "Real estate": "RE", "Infrastructure": "IN", "Private credit": "PC"}
+qn = lambda d: d.year * 4 + (d.month - 1) // 3
+dd = lambda x: x.date() if hasattr(x, "date") else x
+invq = defaultdict(float)
+for r in rows("manager_portfolio_activity_2013_2026.csv"):
+    if r["record_type"] in ("initial investment", "follow-on investment"):
+        invq[(r["fund_id"], qn(dt.date.fromisoformat(r["date"])))] += float(r["amount_usd_m"])
+pn = defaultdict(float); pd_ = defaultdict(float)
+for fid, r in reg.items():
+    if not r["First close"] or not r["Fund size (USD m)"]:
+        continue
+    C = float(r["Commitment (USD m)"]); sh = C / float(r["Fund size (USD m)"])
+    fc = qn(dd(r["First close"])); ipl = min(qn(dd(r["Investment period ends"])), 2026 * 4 + 3)
+    cum = 0.0
+    for q in range(fc, ipl + 1):
+        key = (ST6[r["Strategy"]], (q - fc) // 4)
+        pn[key] += invq.get((fid, q), 0.0) * sh; pd_[key] += max(C - cum, 0.0)
+        cum += invq.get((fid, q), 0.0) * sh
+bad = [k for k in pd_ if pd_[k] > 0 and abs(100 * pn[k] / pd_[k] - F["pace_pct"].get("%s year %d" % (k[0], k[1] + 1), -9)) > 0.006]
+ok("the pace of new investments by strategy and year since first close", not bad and len(pd_) == len(F["pace_pct"]), "%d cells" % len(pd_))
+# section 8's facility balances: the latest audited borrowings, plus the investments since, less the capital called for investments since
+audb = {}
+for r in sheet("fund_audited_financials_FY2013_FY2026.xlsx", "Audited accounts"):
+    d = dd(r["Fiscal year end"])
+    if r["Fund ID"] not in audb or d > audb[r["Fund ID"]][0]:
+        audb[r["Fund ID"]] = (d, float(r["Credit facility borrowings (USD thousands)"]) / 1000.0)
+callq = defaultdict(float); stq4 = set()
+for r in rows("capital_account_statements_2013Q1_2026Q4.csv"):
+    if r["note"] == "superseded":
+        continue
+    d = dt.date.fromisoformat(r["period_end"])
+    callq[(r["fund_id"], qn(d))] += float(r["contributions_investments_usd"]) / 1e6
+    if d == dt.date(2026, 12, 31): stq4.add(r["fund_id"])
+for r in rows("custodian_cash_activity_2026Q4.csv"):
+    if r["fund_id"] not in stq4 and r["movement"] == "capital call":
+        callq[(r["fund_id"], 2026 * 4 + 3)] += float(r["amount_usd"]) / 1e6
+firstact = {}
+for (fid, q) in invq:
+    firstact[fid] = min(firstact.get(fid, q), q)
+fb = 0.0
+for fid, r in reg.items():
+    if r["Status"] in ("pending first close", "liquidated") or fid not in firstact or not r["Fund size (USD m)"]:
+        continue
+    sh = float(r["Commitment (USD m)"]) / float(r["Fund size (USD m)"])
+    qa, bor = (qn(audb[fid][0]), audb[fid][1] * sh) if fid in audb and qn(audb[fid][0]) >= min(firstact[fid], min(q for (f2, q) in callq if f2 == fid)) else (-1, 0.0)
+    since_i = sum(v for (f2, q), v in invq.items() if f2 == fid and q > qa) * sh
+    since_c = sum(v for (f2, q), v in callq.items() if f2 == fid and q > qa)
+    fb += max(bor + since_i - since_c, 0.0)
+ok("the facility balances as section 8 forms them", abs(fb - F["line_stock_usd_m"]) < 0.06, "%.2f against %.1f" % (fb, F["line_stock_usd_m"]))
+# the sentences the policy files, read back from the shipped PDF
+from pdfminer.high_level import extract_text
+import re
+pol = re.sub(r"\s+", " ", extract_text(T("wexmoor_endowment_liquidity_policy_2025.pdf"))).replace("\u2019", "'")
+ok("policy reads back (control: section 7's benchmark sentence)", "times the distribution rate of its strategy in the matching quarter from the third quarter of 2008" in pol, "%d characters" % len(pol))
+for name, sent in (("the minimum reserve", "the minimum reserve is USD %s million" % format(int(F["minimum_reserve_usd_m"]), ",")),
+                   ("the cap at the commitment", "no fund is taken to call more than the part of its commitment it has not yet called"),
+                   ("the pace", "first and follow-on, in the quarter over their commitments not yet invested at the start of it"),
+                   ("the commitment not yet invested", "A commitment not yet invested is the commitment less the endowment's share of the investments the fund has made"),
+                   ("first closes", "is taken to hold it in the quarter its manager has given"),
+                   ("the benchmark funds", "with a vintage year six or more years before the year of that quarter"),
+                   ("the rate taken whole", "The rate is taken whole"),
+                   ("the facility balances", "counts as called in the first quarter of the stress, at its balance at 31 December"),
+                   ("how the facility balance is formed", "the borrowings on the fund's latest audited balance sheet, plus the investments the fund has made since"),
+                   ("no proceeds reinvested since", "No allowance is made for proceeds reinvested since the balance sheet"),
+                   ("fees and expenses", "the management fee and the fund expenses of its latest quarterly statement"),
+                   ("every call counts, judged on the evidence", "Capital calls are all those the endowment's managers can be expected to make in the stress, judged on the evidence")):
+    ok("policy files %s" % name, sent in pol)
 # the plan's programs
 wb = load_workbook(T("corrigan_hart_pacing_plan_2027.xlsx"), data_only=True)
 prog = {r[0]: r for r in wb["Programs"].iter_rows(min_row=2, values_only=True) if r[0]}
@@ -148,6 +228,9 @@ ok("workbook: calls by half", list(hy["Calls on the commitments made by the end 
 ok("workbook: distributions by half", list(hy["Distributions, the policy's 2008-10 rates"]) == [F["distributions_by_half_usd_m"][h] for h in H])
 ok("workbook: the refinancing calls by half", list(hy["   of which property and infrastructure loans refinanced short of their balance"]) == [F["refinancing_calls_by_half_usd_m"][h] for h in H])
 scs = [r[0] for r in wb["Successor closes"].iter_rows(min_row=2, values_only=True) if r[0] and r[5]]
+ok("workbook: the facility balances total", abs([r for r in wb["Facility balances"].iter_rows(values_only=True) if r[0] == "Total"][0][7] - F["line_stock_usd_m"]) < 1e-9)
+ok("workbook: new investments and the funds past their periods by half", list(hy["   of which new investments at the pace of section 8"]) == [F["new_investments_by_half_usd_m"][h] for h in H]
+   and list(hy["   of which buyout, growth and venture funds past their periods, at the benchmark's rate"]) == [F["old_fund_calls_by_half_usd_m"][h] for h in H])
 ok("workbook: the successor closes", scs == F["successor_funds"], "; ".join(scs))
 al = {r[0]: r for r in wb["Asset loans"].iter_rows(min_row=2, values_only=True) if r[0]}
 ok("workbook: the loans' shortfall", abs(al["Total"][7] - F["loans_due_gap_usd_m"]) < 1e-9 and len([k for k in al if k != "Total" and al[k][2]]) >= 1)

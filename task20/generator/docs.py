@@ -24,12 +24,12 @@ F_SPEND = "spending_distributions_FY2014_FY2027.csv"
 F_PLAN = "corrigan_hart_pacing_plan_2027.xlsx"
 F_PEER = "peer_endowment_survey_2025.xlsx"
 
-CUSHION = 1535.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
+CUSHION = 1170.0          # the minimum reserve the Investment Committee set for the 2027 budget (USD m)
 # Corrigan Hart's alternatives for 2027: the full program and three with re-ups deferred to 2028
 PROGRAMS = [
     ("A", "The full 2027 program", ("BO", "GE", "VC", "RE", "PC")),
-    ("B", "The credit re-up deferred to 2028", ("BO", "GE", "VC", "RE")),
-    ("C", "The growth and credit re-ups deferred to 2028", ("BO", "VC", "RE")),
+    ("B", "The credit and real estate re-ups deferred to 2028", ("BO", "GE", "VC")),
+    ("C", "The buyout, credit and real estate re-ups deferred to 2028", ("GE", "VC")),
     ("D", "The venture re-up only", ("VC",)),
 ]
 
@@ -89,7 +89,8 @@ def policy(path):
                    "from the private funds. The spending distribution of each quarter is one quarter of the distribution "
                    "the trustees approved for the fiscal year in which the test is run. Commitments to funds that have not "
                    "held a first close count in full. A commitment's part not called when its fund's term ends is released "
-                   "and does not count.", body),
+                   "and does not count, and no fund is taken to call more than the part of its commitment it has not yet "
+                   "called.", body),
          Paragraph("4. Liquid reserve", h2),
          Paragraph("The liquid reserve is the endowment's holdings at 31 December, each counted at the share of its value its "
                    "liquidity class allows: cash, money market funds and US Treasuries 100 percent; investment-grade bonds "
@@ -119,15 +120,44 @@ def policy(path):
                    "the value at 30 September plus the fourth quarter's capital calls less its distributions as the "
                    "custodian recorded them.", body),
          Paragraph("8. Capital calls in the stress", h2),
-         Paragraph("Capital calls are those the endowment's managers can be expected to make in the stress, judged on the "
-                   "evidence the Office of Investments holds. Where the stress takes the exit market further below its "
-                   "normal level than the endowment's own funds have experienced, the calls managers make on the companies "
-                   "their funds already hold are judged on the industry benchmark's funds that were past their investment "
-                   "periods from 2008 to 2010. No allowance is made for managers finding fewer new companies to invest in "
-                   "while the exit market is weak. Capital a manager has invested through a fund's credit facility and not yet "
-                   "called counts at its balance at 31 December; where the manager's reports to the Office stop before that "
-                   "date, the balance is estimated to 31 December from the fund's capital account statements and audited "
-                   "accounts.", body),
+         Paragraph("Capital calls are all those the endowment's managers can be expected to make in the stress, judged "
+                   "on the evidence the Office of Investments holds. So that one year's test can be set beside the last, "
+                   "the Office takes the following on a set basis.", body),
+         Paragraph("<b>New investments.</b> While its investment period runs, a fund invests at the pace the endowment's "
+                   "funds of its strategy have kept in the same year since first close: over the quarters those funds "
+                   "spent in their investment periods in that year, their investments in companies and assets, first "
+                   "and follow-on, in the quarter over their commitments not yet invested at the start of it, each "
+                   "summed and each at the endowment's share of the fund. A commitment not yet invested is the "
+                   "commitment less the endowment's share of the investments the fund has made. "
+                   "Years are counted from the quarter of the first close. The pace is applied to the fund's commitment "
+                   "not yet invested at the start of each quarter, and the investments count as called in the quarter "
+                   "they are made. No allowance is made, up or down, for the state of the exit market, and none for "
+                   "proceeds a manager keeps back to reinvest.", body),
+         Paragraph("<b>First closes.</b> A fund that has not held its first close is taken to hold it in the quarter its "
+                   "manager has given.", body),
+         Paragraph("<b>Buyout, growth equity and venture funds past their investment periods.</b> In each quarter of the "
+                   "stress such a fund calls its value at 31 December times the call rate of its strategy in the matching "
+                   "quarter from the third quarter of 2008 in the industry cash-flow benchmark: the contributions in that "
+                   "quarter of the benchmark's funds of the strategy with a vintage year six or more years before the year "
+                   "of that quarter, over those funds' value at the end of the previous quarter, each summed over those "
+                   "funds. The rate is taken whole, with nothing taken off for the calls such funds make in ordinary "
+                   "markets, and stands for the fund's fees and expenses and for the follow-on and rescue financings of "
+                   "the companies it holds.", body),
+         Paragraph("<b>Credit facilities.</b> Capital a manager has invested through a fund's credit facility and not yet "
+                   "called counts as called in the first quarter of the stress, at its balance at 31 December. The "
+                   "balance is taken as the borrowings on the fund's latest audited balance sheet, plus the investments "
+                   "the fund has made since the date of that balance sheet and less the capital it has called for "
+                   "investments since, at the endowment's share of the fund and never less than nil; a fund with no "
+                   "audited balance sheet is counted in the same way from its first investment. Where a fund's statement "
+                   "for the fourth quarter has not arrived, the calls the custodian recorded in the quarter are taken as "
+                   "called for investments. No allowance is made for proceeds reinvested since the balance sheet.", body),
+         Paragraph("<b>Management fees and fund expenses.</b> A fund calls in each quarter the management fee and the "
+                   "fund expenses of its latest quarterly statement, except a buyout, growth equity or venture fund past "
+                   "its investment period, whose fees and expenses are within the rate above. A fund that has not held "
+                   "its first close calls, from the quarter of its "
+                   "first close, the fee and the expenses of the median quarter, each as a share of commitment, among "
+                   "the quarters the endowment's funds of its strategy have spent in their investment periods after the "
+                   "quarter of first close.", body),
          Paragraph("9. The year's new commitments", h2),
          Paragraph("The pacing plan's commitments are tested each at its proposed size. Where the plan sets out alternative "
                    "programs, the Investment Committee adopts the program with the largest total of new commitments that "

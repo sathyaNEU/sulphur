@@ -22,8 +22,8 @@
   "2027",
   "2028",
   "2026",
-  "1,535",
-  "1535"
+  "1,170",
+  "1170"
  ],
  "field_terms": [
   "capital call",
@@ -41,15 +41,17 @@
   "successor fund",
   "refinancing",
   "loan maturity",
-  "loan-to-value"
+  "loan-to-value",
+  "credit facility",
+  "vintage"
  ],
  "rows": {
   "capital_account_statements_2013Q1_2026Q4.csv": 2303,
-  "custodian_cash_activity_2026Q4.csv": 104,
-  "manager_portfolio_activity_2013_2026.csv": 23357,
+  "custodian_cash_activity_2026Q4.csv": 105,
+  "manager_portfolio_activity_2013_2026.csv": 24866,
   "fund_audited_financials_FY2013_FY2026.xlsx": 531,
   "private_commitment_register_2026-12-31.xlsx": 98,
-  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": 69551,
+  "industry_fund_cashflow_benchmark_2000Q1_2026Q2.csv": 69567,
   "market_series_quarterly_2000Q1_2026Q4.csv": 108,
   "liquid_holdings_2026-12-31.xlsx": 18,
   "spending_distributions_FY2014_FY2027.csv": 14,

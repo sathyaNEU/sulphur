@@ -3,15 +3,15 @@
  "project": "sulfur",
  "architecture": "v6",
  "drawn": "2026-11-13",
- "slot_note": "architecture 6, rebuilt in the same world on 2026-11-13 after the holistic audit of architecture 5: the audit's pins (the support basis past the record and the six managers' line balances, policy section 8) make architecture 5's stumps reflexes, and the call is rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress",
+ "slot_note": "architecture 6, rebuilt in the same world on 2026-11-13 after the holistic audit of architecture 5: the audit's pins (the support basis past the record and the six managers' line balances, policy section 8) make architecture 5's stumps reflexes, and the call is rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress; repaired the same day after the holistic audit of architecture 6 (not forced: the rescue calls' basis, the pacing basis and the first-close slips were open, and program B passed by 34.2): policy section 8 now files those bases, the programs and the minimum reserve are re-sized so program B clears both its lines, and the two deciding judgments are unchanged",
  "domain": "quantitative-finance",
  "subdomain": "liquidity-funding-balance-sheet",
- "niche": "an endowment choosing among its consultant's 2027 private-fund programs under its liquidity policy, from the calls its existing funds will make in a stress deeper than its own record and with part of its managers' company-level files stopped",
+ "niche": "an endowment choosing among its consultant's 2027 private-fund programs under its liquidity policy, from the calls its existing funds will make in a stress the policy sets, with the pace, the first closes and the old funds' calls on bases the policy files",
  "objective": "forecasting",
  "shape": "04",
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
- "answer": "Program B (Oakhanger Capital V, Wendlebury Growth VI, Corvane Ventures VI and Ewelme Real Estate VI, USD 365 million); A fails",
+ "answer": "Program B (Oakhanger Capital V, Wendlebury Growth VI and Corvane Ventures VI, USD 245 million); A fails",
  "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
  "gap": [
   "time",
@@ -33,7 +33,7 @@
  "validated_decoy": false,
  "context_artifact": "planning_thread",
  "stump_class": "analytical",
- "analyst_test": "The careful but hurried pass makes every reflex (the line stock called at the clean-down, the six managers' balances and the support basis as policy section 8 files them, the defensive follow-ons, the slipped closes, the extensions), holds every investment period to the end the register records and carries the real-asset loans as they stand, and adopts program A.",
+ "analyst_test": "The careful but hurried pass applies every basis policy section 8 files (the pace of new investments, first closes on their managers' dates, buyout, growth and venture funds past their periods on the benchmark's rate, the facility balances in the first quarter) and every reflex, holds every investment period to the end the register records and carries the real-asset loans as they stand, and adopts program A.",
  "domain_test": "Private-markets liquidity planning (unfunded commitments, the managers' deployment and short-term financing, exits and distributions in a stressed exit market, fundraising timelines) decides how much a long-horizon investor can commit; swap the nouns for a retailer's inventory or a bank's deposits and the subscription lines, recycling, exit-driven distributions and first closes stop making sense.",
  "layer2_family": "estimand_identification",
  "layer2_pattern": "own: a program choice under a liquidity test whose stressed calls are cut where the managers' next funds close and raised where the real assets' loans fall due at stressed terms, the two found in the register's past successions and the activity file's loan records and pulling in opposite directions",
@@ -51,7 +51,7 @@
  "scoring_unit": "other",
  "spine": {
   "file": "manager_portfolio_activity_2013_2026.csv",
-  "rows": 21562,
+  "rows": 24866,
   "entity": "one portfolio company's investment, realization or quarter-end valuation in one fund",
   "grain": "fund x portfolio company x date",
   "source": "simulated by task20/generator (a seeded private-markets program, its managers and the exit market); no public data"
@@ -80,9 +80,9 @@
  ],
  "opening_move": "question-first",
  "question_form": "which",
- "driver": "The decisive quantity is a forward stream of obligations shaped by two events in other units' processes inside the window: a unit's window ends when a related unit's own event comes first (read off the past cases where it did, dated on that event's forecast), and contracts carried on old terms reset to the stressed terms at maturity, the holder funding the gap; the two pull the stream in opposite directions, so either alone lands on a wrong answer.",
- "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the investment periods its managers' next funds end (14 managers' agreements stop new investment at the successor's first close; five funds' successors close in 2027-28, USD 46.8 million less called) and on 16 property and infrastructure loans that fall due in the stress (USD 661.9 million at Wexmoor's share), refinanced at the lenders' limit fitted on the refinancings since mid-2022 on values that fall with the stress, leaving USD 138.4 million to call.",
- "stump": "A careful pass that makes every reflex, holds every investment period to its registered end and carries the real-asset loans as they stand adopts program A; the golden is B; fixing the successor closes alone gives A and the loans alone C, and dropping either alone from the golden gives C or A.",
+ "driver": "The decisive quantity is a forward stream of obligations shaped by two events in other units' processes inside the window: a unit's window ends when a related unit's own event comes first (read off the past cases where it did, dated on that event's own schedule), and contracts carried on old terms reset to the stressed terms at maturity, the holder funding the gap; the two pull the stream in opposite directions, so either alone lands on a wrong answer.",
+ "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the investment periods its managers' next funds end (16 managers' agreements stop new investment at the successor's first close; 7 funds' successors close in 2027, USD 131.6 million less called) and on 23 property and infrastructure loans that fall due in the stress (USD 839.6 million at Wexmoor's share), refinanced at the lenders' limit fitted on the refinancings since mid-2022 on values that fall with the stress, leaving USD 254.9 million to call.",
+ "stump": "A careful pass that applies every filed basis and every reflex, holds every investment period to its registered end and carries the real-asset loans as they stand adopts program A; the golden is B; fixing the successor closes alone gives A and the loans alone C, and dropping either alone from the golden gives C or A.",
  "answer_shape": "scenarios-flip",
  "weight": "investigation",
  "chain_signature": [
@@ -90,11 +90,12 @@
   "investigation-loops",
   "modeling",
   "forecasting",
+  "forecasting",
   "synthesis",
   "synthesis"
  ],
- "results": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the stressed calls of the commitments made by the end of 2026 in each half of 2027; R3 the same in each half of 2028 (both carrying the successor funds' first closes and the real-asset loans that fall due); R4 distributions by half at the policy's rates; R5 the headroom above the minimum before any 2027 commitment; R6 the program the policy lets the Committee adopt",
- "one_fact_test": "the most useful single sentences: 'a fund's investment period ends when its manager's next fund holds its first close, and five of the endowment's funds have a successor closing in 2027 or 2028' and '16 of the real-asset funds' loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values'; each rescues 1 of 6 results and leaves the program wrong (effort.json hints)",
+ "results": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the successor closes (the funds whose investment periods their managers' next funds' first closes end, and the calls that takes off); R3 the refinancing calls (the property and infrastructure loans that fall due and the shortfalls the funds call); R4 distributions by half at the policy's rates; R5 the stressed calls of the commitments made by the end of 2026 in each half of 2027 and 2028; R6 the headroom above the minimum before any 2027 commitment; R7 the program the policy lets the Committee adopt",
+ "one_fact_test": "the most useful single sentences: 'a fund's investment period ends when its manager's next fund holds its first close, and 7 of the endowment's funds have a successor closing in 2027 or 2028' and '23 of the real-asset funds' loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values'; each rescues 1 of 7 results and leaves the program wrong (effort.json hints)",
  "strategy_label": "UNTESTED (term_ended_by_another_units_event with terms_reset_at_maturity)",
  "mechanism_source": "design_note",
  "differentiation": {
@@ -105,7 +106,7 @@
   "task10": "task10 v1 reads a paid tier's capacity only in the periods a volunteer tier fell short; v4 reads an investor's coming calls from capital its managers financed on credit, with an asymmetric exit response and slipped closes beside it, for a private-fund commitment budget",
   "task20 v5": "v5 turned on a response past the record's plateau read off another record's deep episode and a level rebuilt where a detailed file stopped; v6 files both and turns on windows another unit's event ends and loans that reset to stressed terms at maturity, two judgments that pull the headroom in opposite directions"
  },
- "notes": "Re-rooted 2026-11-13 from architecture 4, which landed on its first platform round (its three stumps are reflexes R63 to R65). Architecture 5 kept the endowment's world and pack and changed the decision to a pick among the consultant's programs; the platform's holistic audit returned it the same day (its two judgments unforced), and architecture 6 keeps the decision, files architecture 5's two judgments in policy section 8 as the audit asked, and rebuilds the call on the successor funds' first closes and the real-asset loans that fall due in the stress (the world extended with both processes). Stump strategy other (architecture 6): windows ended by another unit's event (the successor funds' first closes, read off the register's past successions) and contract terms reset at maturity (the real-asset loans refinanced at the lenders' stressed limit), two judgments the records force; neither is a forecast-method choice, so architecture 4's and 5's forecast_method_backtest no longer describes the build.",
+ "notes": "Re-rooted 2026-11-13 from architecture 4, which landed on its first platform round (its three stumps are reflexes R63 to R65). Architecture 5 kept the endowment's world and pack and changed the decision to a pick among the consultant's programs; the platform's holistic audit returned it the same day (its two judgments unforced), and architecture 6 keeps the decision, files architecture 5's two judgments in policy section 8 as the audit asked, and rebuilds the call on the successor funds' first closes and the real-asset loans that fall due in the stress (the world extended with both processes). Stump strategy other (architecture 6): windows ended by another unit's event (the successor funds' first closes, read off the register's past successions) and contract terms reset at maturity (the real-asset loans refinanced at the lenders' stressed limit), two judgments the records force; neither is a forecast-method choice, so architecture 4's and 5's forecast_method_backtest no longer describes the build. Repaired 2026-11-13 after the holistic audit of architecture 6 (runs/arch6_holistic_audit.md): the decision form, lessons, detection, moves, file roles and answer pattern are unchanged; the chain's signature gained the two deciding judgments as results of their own (they are the Critical Components) and the mechanisms list dropped the slipped successor closes and the two-channel rescue read (both now bases the policy files).",
  "skeleton": {
   "decision_form": "pick_one_of_few_options",
   "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
@@ -115,12 +116,12 @@
   ],
   "mechanisms": [
    "periods_end_at_the_successor_funds_first_close",
-   "successor_first_closes_slip_with_the_exit_market",
    "real_asset_loans_refinance_at_a_rate_dependent_limit",
    "refinancing_shortfalls_called_from_investors_within_the_commitment",
    "real_asset_values_move_with_equities_a_quarter_late_and_with_the_short_rate",
    "subscription_lines_called_at_the_stress_clean_down",
-   "rescue_financings_past_the_own_records_shortfall_read_off_the_benchmark"
+   "old_funds_calls_on_a_filed_benchmark_rate",
+   "new_investment_at_a_filed_pace"
   ],
   "detection": [
    "natural_experiment_in_record",
