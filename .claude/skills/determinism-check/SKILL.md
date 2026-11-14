@@ -179,6 +179,14 @@ bands are set from the battery, never from a narrower golden family; the design 
 the count and the result. On task7 architecture 12 the house judge approved on the rivals its brief named while the
 auditor's 24 variants moved two feeders across the line; measured afterwards, 96 variants gave 11 distinct funded
 sets, residential feeders moving 11 to 23 percent.
+**A random replay the golden shares with an analyst is swept over seeds and converged in the golden.** A corpus the pack
+files only by its distribution (a benchmark harness's length distribution, a simulator's noise) is a fresh draw for every
+analyst, so the golden's own seed is one draw from the spread it should centre. The battery's "another seed" is a sweep of
+the whole golden over eight seeds or more, never one alternative: on task25 one other packing seed moved the long-context
+runs' days 2.3 percent and eight seeds moved them up to 5.1, because the benchmark corpus's stream at the golden's seed sat
+2 percent off the centre (its slowest-rank cost moves 1.4 percent from stream to stream at 3e8 tokens and 0.2 at 1.2e10).
+The golden replays such a corpus at the length where its cost stops moving, asserted in `checks.py` across other streams of
+that length, and the answer block's band carries an ordinary stream's spread (5 percent on the one run that needs it).
 A build added a clause pinning the grain ("a partner's household-size band has one award level for those
 twelve months ... an award level is not taken claim month by claim month") to close a month-by-month
 reading, and the clause also said the scheme's awards are taken **at** those levels. Read literally that
