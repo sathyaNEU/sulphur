@@ -23,6 +23,197 @@ Screened on paper and in the scratch prototype before the card (`references/stum
 | the 2026 cohorts not yet twelve months old completed from the older cohorts' later months | young cohorts read at their observed months (closed card: completion of young cohorts) | the 2025 cohorts' full twelve months | 1 (closed) | supporting only |
 | SKAN conversion values withheld on small campaign-days read as no conversion | a withheld value is a zero (data semantics) | the postback's own null and the campaign-day counts | 3 and 8 (a field read; banned alone) | texture |
 
+## Deep reasoning
+
+Task type: retention cohort lifetime value modeling (Cohort and LTV modeling: retention curves, customer lifetime value), which serves Forecasting
+Domain test: every result is an acquisition-economics and lifetime-value quantity of a subscription app: the installs each channel bought, their twelve-month net revenue per install, the installs a week a channel's weekly spend buys, the return per euro at the plan's spend and the policy band; the growth analyst's own LTV and payback work.
+Swap: "hold AppLovin because the stores charge its silent subscribers for months, read Meta iOS on every install's conversion value, hold Google because its heavier weeks bring dearer and weaker installs" makes no sense for a hospital or a grid: there is no store report beside an app's own billing sync, no tracking consent, no install postback and no ad auction.
+Where the weight sits: R2, the 2025 installs' twelve-month net revenue per install: the billing records hold a store charge only once the subscriber next opens the app, so the stores' daily reports have to be set against the records month by month, the excess assigned to the subscriptions last seen still set to renew (a share of trials charged at their end and a monthly continuation fitted to the excess), and the iOS networks read over every install's conversion value with each value priced from the network's consenting users and every non-consenting user; then R3 and R4 carry each channel to the plan's weekly spend.
+Layer 1: the attribution partner re-sends some rows after an SDK retry and reports second devices as reinstalls; staff and test accounts carry sandbox charges; Apple reports in Pacific days and Google in UTC; Apple withholds the fine conversion value (and at the lowest tier the coarse one) on small campaigns, and gives only two digits of the source identifier below the top tier; the networks' own install counts credit view-throughs; refunds sit in both the stores' reports and the records. None decides a band.
+Not one thing: three stumps each open their own channel (## Stump factorial, ## Open members): the charges the records never see (AppLovin Android, and Meta Android and Meta iOS on the raw records), tracking consent (Meta iOS, TikTok iOS), the spend response (Google Android); a run that nails one still files two channels wrong.
+One-fact test: the most useful sentence, "a channel's installs come dearer and weaker as its weekly spend rises", rescues R3 on the reflex route and not the call (Meta iOS and TikTok iOS still scale and AppLovin Android is still cut), 1 of 5; the recording sentence and the consent sentence each rescue no whole result (R2 stays partly wrong on the other platform's channels).
+Not semantics: every field read as the dictionary describes it still leaves each hurried result wrong: recorded_at says when the app synced a charge and last_open_at when the account last opened, but nothing says which charges are missing or for whom; att_status is a field, and nothing says the consenting users are the more engaged; the plan is a spend table.
+Not rule application: the growth policy files the measure, the 365-day window, the VAT and commission, and the lines; no filed procedure reconciles the stores' reports with the records, prices non-consenting installs or reads a spend response.
+Estimand: growth policy sections 2.1 to 2.5 (the return, an install, the twelve months, net revenue, prices) and 3 (the lines); the media plan's 52 weekly spends; the prompt's populations (the installs each channel bought from 4 November 2024 to 2 November 2025; the installs the 2027 plan's spend buys), outcome (their twelve-month net revenue), unit (euros per install; installs a week; euros per euro).
+No decoy: no document argues a band; the networks' own install counts and the attribution export's attributed users are what those systems record, and the task prices each channel on the installs the policy defines.
+No replay: no result re-derives a published figure.
+Pinned: R1 within 2 per cent (the postback's install day read as two to four days before its arrival); R2 over the continuation fitted pooled, by store, with its own first month, by calendar cadence or without the last two months, the non-consenting value pooled, by ratio, from coarse values only or with both networks' consenting users pooled; R3 over the month pattern shared, by channel or none, the twelve-month weeks only and a quadratic; R4 over all of them; R5 forced: every variant and every fitted input moved by its spread (the continuation by 0.02, the trial-end share by 20 per cent, the non-consenting value by 10 per cent, each spend slope by 20 per cent) files the golden bands, and the world's own 2027 replayed sixteen times files the same bands (checks.py).
+Run forecast: R2 lost to dismissed own evidence (the stores' excess spread over every account in proportion, N21; the install postbacks set aside for the users the export holds, N27); R3 to a method shortcut (2025's installs per euro carried to the plan, N01, L17); R4 and R5 to all three; R1 earned.
+Strategy label: UNTESTED (record_algorithm_inversion, with linkage_missing_not_at_random and scaling_diminishing_returns)
+Depth level: 5 by the stump factorial and the open members: three necessary stumps, none sufficient, the single drops on three distinct wrong answers; five open channels opened by three different stumps; eleven shortcut routes on eleven distinct wrong calls.
+Lesson: a channel's twelve-month return is a quantity no record holds, and each part of it is read from the instrument that sees it: the stores' reports for the charges the app never synced (assigned to the subscriptions last seen still set to renew, not spread over everyone), the install postbacks for the iOS installs whose users did not allow tracking, the weeks of heavier spend for the plan's own price and quality; no build on file teaches the three together.
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | installs each channel bought from 4 November 2024 to 2 November 2025 (Meta iOS 17,810; TikTok iOS 11,504; Apple Search Ads 5,675; Meta Android 17,670; Google Android 23,062; TikTok Android 17,644; AppLovin Android 26,445) | assembly-reconciliation | policy 2.2; the install postbacks for the iOS networks, the export's first installs for the others | within 2 per cent | method shortcut: the export's attributed iOS installs (the consenting users only) or the networks' own counts | - | Ask 1 |
+| R2 | those installs' twelve-month net revenue per install by channel (Meta iOS EUR 9.12; TikTok iOS EUR 7.65; Apple Search Ads EUR 14.63; Meta Android EUR 8.79; Google Android EUR 8.54; TikTok Android EUR 5.46; AppLovin Android EUR 3.52) | missingness-measurement | policy 2.3 and 2.4; the stores' daily reports, the records' recorded_at, each account's last open and renewal setting; the postbacks' conversion values and the accounts' own first-48-hour value and consent | per channel, 3 per cent or one and a half times the family's spread | dismissed own evidence: the stores' excess spread over every account in proportion to what was recorded, and the iOS networks read on the users who allowed tracking | independent: the 2025 installs' charges | Component 1 |
+| R3 | installs a week at each channel's 2027 weekly spend (Google Android 594) | modeling | the media plan; the 2024 to 2026 weekly spend and installs | within 6 per cent | method shortcut: 2025's installs per euro times the plan's spend | independent: the weekly spend and installs | Ask 2 |
+| R4 | each channel's 2027 return per euro at the plan's weekly spend (Meta iOS 1.04; TikTok iOS 0.78; Apple Search Ads 1.48; Meta Android 1.08; Google Android 1.06; TikTok Android 0.72; AppLovin Android 0.94) | forecasting | policy 2.1; R2 and R3 carried through the plan's 52 weeks | per channel, 3 per cent or one and a half times the family's spread | dismissed own evidence: the proportional excess, the consenting users and 2025's return per euro at 2025's spend | R2, R3 | Component 2 |
+| R5 | each channel's band: scale Apple Search Ads; hold Meta iOS, Meta Android, Google Android, AppLovin Android; cut TikTok iOS, TikTok Android | synthesis | policy section 3 | exact | dismissed own evidence: scales Meta iOS and Google Android, holds TikTok iOS, cuts AppLovin Android | R4 | Recommendation |
+
+Carry-forward: R1, R2 and R3 are graded on inputs of their own (the 2025 installs and their charges; the weekly spend and installs), so a slip on one costs only R4 and R5; R4 is graded per channel, so a run that gets two of three stumps right loses only the channels the third moves.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| a subscriber who stops opening the app keeps paying for months, and the app syncs a charge only at its next open | constructed, the process of client-side receipt sync and forgotten subscriptions | no: every channel, both platforms and organic, from 18% of Apple Search Ads' twelve-month revenue to 38% of AppLovin Android's | modelling: the stores' excess month by month against the candidates' charge dates | modelling (a share of trials charged and a continuation fitted to the excess, carried account by account) | keep |
+| iOS users who allow tracking are the more engaged | constructed, the documented pattern of tracking consent | no: every iOS user, organic and Apple Search Ads included | modelling: the postbacks' value mix against the consenting users' own | modelling (each value priced from the network's consenting and all non-consenting users) | keep |
+| a channel's installs come dearer and weaker as its weekly spend rises | constructed, the auction's response | no: every channel, with pushes on all seven | modelling: weekly installs and value against weekly spend with the month pattern | modelling (a response carried to 52 plan weeks) | keep |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 installs each channel bought from 4 November 2024 to 2 November 2025 | Missed | Right | Right |
+| R2 12-month net revenue per install of those installs, by channel | Missed | Missed | Right |
+| R3 installs a week at each channel's 2027 weekly spend | Partly | Partly | Right |
+| R4 each channel's 2027 return per euro at the plan's weekly spend | Missed | Missed | Right |
+| R5 each channel's band | Missed | Missed | Right |
+| Roughly | 0.5 of 5 | 1.5 of 5 | 5 of 5 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json
+Largest single hint: a channel's installs come dearer and weaker as its weekly spend rises; rescues 1 of 5 results
+Pair estimate: 48.2
+
+## Stump factorial
+
+Reflex route: the iOS networks' installs counted from the postbacks, the export's re-sent rows, reinstalls, staff accounts and sandbox charges left out, net revenue at the policy's VAT and commission, the billing records reconciled to the stores' totals by scaling every account in proportion, the iOS networks valued on their consenting users, 2025's return per euro carried to the plan; it files Meta iOS scale, TikTok iOS hold, Google Android scale and AppLovin Android cut, which misses the call; this route is the careful but hurried pass.
+
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| J1 a store charge reaches the billing records only when the subscriber next opens the app, so the stores' excess belongs to the subscriptions last seen still set to renew | stump | the excess spread over every account in proportion | N21, L44 | AppLovin Android cut | Meta iOS scale, TikTok iOS scale, Google Android scale; no result rescued whole | no: the candidates, a trial-end share and a continuation fitted month by month |
+| J2 iOS users who allow tracking are the more engaged, so the iOS networks are read on every install's conversion value | stump | the networks' consenting users | N27, L03 | Meta iOS scale, TikTok iOS scale | Google Android scale, AppLovin Android cut; no result rescued whole | no: each fine or coarse value priced from two groups of users |
+| J3 a channel's installs come dearer and weaker as its weekly spend rises | stump | 2025's return per euro carried to the plan | N01, L17 | Google Android scale | Meta iOS scale, TikTok iOS scale, AppLovin Android cut; rescues R3 | no: a response fitted with the month pattern and carried to 52 weeks |
+| J4 the iOS networks' installs counted from the install postbacks | reflex | - | R81 | same call | - | - |
+| J5 re-sent rows, reinstalls, staff and test accounts and sandbox charges left out | reflex | - | R80 | same call | - | - |
+| J6 net revenue at the policy's VAT and 15 per cent commission | reflex | - | growth policy 2.4 | same call | - | - |
+
+Level: 5: three necessary stumps, none sufficient, the single drops on three distinct wrong answers; every combination of the three hurried choices files its own wrong call (eleven).
+
+## Open members
+
+| Member | Golden margin | Family spread | Reflex route | Direct route | Opened by |
+|---|---|---|---|---|---|
+| Meta iOS | 1.044, hold (0.144 from 0.90) | 0.011 | 1.675, scale | 1.236, scale | J2 (and J1 on the raw records) |
+| TikTok iOS | 0.779, cut (0.121 from 0.90) | 0.024 | 1.185, hold | 0.875, cut (right) | J2 |
+| Apple Search Ads | 1.483, scale (0.283 from 1.20) | 0.042 | 1.674, scale (right) | 1.236, scale (right) | forced |
+| Meta Android | 1.083, hold (0.117 from 1.20) | 0.007 | 1.126, hold (right) | 0.785, cut | J1 (the raw records) |
+| Google Android | 1.057, hold (0.143 from 1.20) | 0.062 | 1.551, scale | 1.080, hold (right) | J3 (and J1 on the raw records) |
+| TikTok Android | 0.723, cut (0.177 from 0.90) | 0.006 | 0.696, cut (right) | 0.485, cut (right) | forced |
+| AppLovin Android | 0.944, hold (0.044 from 0.90) | 0.009 | 0.833, cut | 0.580, cut | J1 |
+
+Direct route: the pack's most direct evidence read at face value is the billing records as they stand, the attribution export's iOS users and 2025's revenue per euro (generator/analysis.py route recorded, consenters, average): it cuts Meta Android and AppLovin Android (the records miss a quarter and more of their revenue), holds TikTok iOS (its consenting users' value offsets the records' gap) and holds Meta iOS and Google Android only because two errors offset; read with the stores' excess spread in proportion (the reflex route) Meta iOS, TikTok iOS and Google Android scale and AppLovin Android is cut. No confirming file settles a channel: the stores' reports carry no channel, the postbacks carry no revenue, and the plan carries no installs.
+
+## Data provenance
+
+Source: generated by task1/generator from a simulated subscription business (installs bought week by week on seven channels and organic, each user's engagement, first two days, trial, plan, monthly charges, the month they stop opening the app and how long they keep paying, tracking consent, Apple's privacy tiers on the postbacks, the networks' own counts), with the app's, the partner's, the networks' and both stores' records written from it
+Behaves like the real thing: client-side receipt sync leaves charges unrecorded for subscribers who stop opening the app (a known gap of apps without server notifications); forgotten subscriptions keep paying for months; consenting iOS users are the more engaged; Apple withholds conversion values on small campaigns; auctions charge more and reach weaker users as spend rises; the networks' own install counts run above the postbacks
+Genuine patterns: (1) seasonality: January installs come in larger numbers and less engaged, August smaller (2) scale: installs rise less than in proportion to spend, with a wider-inventory share past each channel's norm (3) cohort decay: monthly charges thin month by month, faster for awake subscribers who cancel and slower for silent ones (4) the trial: most charges begin at the seventh day
+Problems by process: the partner's SDK re-sends rows after a retry; reinstalls on second devices; staff and test accounts with sandbox charges; Apple's Pacific days; withheld conversion values; refunds in both sources
+Breadth: eleven files, 329,388 accounts, 192,948 billing events, 339,892 export rows, 58,551 postbacks; seven channels, two stores, three countries, 105 weeks of installs (104 media weeks and the week of the pull); two documents and two distractors
+Distractors: creative_tests_2025-2026.csv and store_ratings_daily_2024-11_2026-10.csv look relevant and decide nothing
+
+## Template check
+
+Chain signature: assembly-reconciliation, missingness-measurement, modeling, forecasting, synthesis
+Question form: which (which band each channel goes in)
+Nearest build: task6, task7 and task13 also file flagged sets (overuse answered): task6 flags services over an error budget from sampled spans and task7 feeders from a trial, both weighted hard-to-measure, and task13 flags work-list items from fault records, weighted assembly; here channels are placed in three bands on a return no record holds, the weight sits in measurement (the charges the records miss, the installs the export cannot see), and no chain on file runs assembly, missingness, modeling, forecasting, synthesis in this order; this slot's architecture 5 forecast each plan's contribution under a price rise, with no stump in common
+
+## Frontier check
+
+Precedents: R2 careful Missed on N21 (an unmeasured component placed across the system in proportion to the metered quantities), L44 (the level read off detailed records instead of the complete summary source) and N27 (a second record at another grain set aside because it lacks unit identities); R3 Partly on N01 (an enlarged commitment assumed to scale in proportion) and L17 (the average unit where the decision buys the marginal one); R4 and R5 Missed on N21, N27 and N01; R1 Right
+Shallow path checks: the proportional route reconciles the records to the stores' totals exactly, so its own control-total check passes; only the excess month by month against the candidates' charge dates refutes it (the excess tracks the subscriptions last seen still set to renew, not the paying base). The consenting users' route reconciles installs to the postbacks; only the postbacks' value mix against the consenting users' (their values run higher) refutes it. 2025's return per euro back-tests on 2025 itself; only the weeks of heavier spend (the 2026 pushes) refute carrying it to the plan
+Assumption made false: the records hold every charge, or the stores' excess is spread like the recorded revenue (false: the excess belongs to subscribers who stopped opening the app, who are concentrated on the low-engagement channels; tested by the stores' daily reports and the accounts' last opens); the consenting users stand for the channel (false: consent rises with engagement; tested by the postbacks); the return at 2025's spend holds at the plan's (false for Google Android, whose plan spends 50% over 2025; tested by the pushes)
+Forcing: the lines are 0.90 and 1.20; the golden family's widest move on any channel is 0.062 (Google Android, B=none), its nearest approach to a line 0.035 (AppLovin Android under B=quad at 0.935); the ten perturbations hold every band (nearest: AppLovin Android at 0.914 with the continuation 0.02 lower); the shortcuts land across a line on every route (the reflex route's nearest crossing AppLovin Android at 0.833 against 0.90)
+Noun swap: nearest on file by skeleton.py check: severity none; swapping in another build's nouns carries no decision form, lesson set or detection unchanged
+Closed strategies: the call turns on record_algorithm_inversion (the records are the output of a sync at each open; nearest closed card, the instrument change, differs: nothing changed, and the fix is an assignment of the stores' excess, not a bridge between two bases), linkage_missing_not_at_random (nearest closed card, self-selection, differs in mechanism and fix: no treatment, and the fix prices each conversion value from two groups, not a within-unit comparison) and scaling_diminishing_returns (no closed card); completion_of_young_cohorts is a supporting check only (the 2025 installs' twelve months are complete; the 2026 installs' first months agree), and no route turns on it
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | an install | a new account's first install; every install row; every postback | a new account's first install | policy 2.2 (a second device, a reinstall, staff and test accounts are not installs) |
+| SF2 | the installs a channel bought | the attribution export's attributed installs; the networks' own counts; the postbacks for the iOS networks and the export for the others | the last | policy 2.2 (each install bought by at most one channel); the networks' counts sum to more installs than the accounts hold |
+| SF3 | twelve-month net revenue | charges in the 365 days from the install; in the twelve calendar months; recorded charges only | the 365 days, every store charge | policy 2.3 (the store charges on its account) |
+| SF4 | net of what | VAT and commission; VAT only; the stores' proceeds as reported | VAT and 15 per cent commission | policy 2.4; the stores' proceeds agree with it |
+| SF5 | the plan's spend | the 2027 total; each of the 52 weeks; an average week | each of the 52 weeks | same call (the average week files the same bands) |
+| SF6 | refunds | netted; ignored | netted | policy 2.3 |
+| SF7 | the 2025 installs' window | 4 November 2024 to 2 November 2025 by install day; the postbacks by arrival day | install day, the postbacks read two to four days back | R1's band holds both |
+| SF8 | the return's denominator | spend as billed; spend per network-counted install | spend as billed | policy 2.1 (per euro of that spend); the plan states spend as the networks bill it |
+| SF9 | a band on a line | 0.90 hold or cut; 1.20 scale or hold | from 0.90 hold, from 1.20 scale | policy section 3 |
+| SF10 | the iOS networks' withheld values | dropped; read as zero; read at the network's coarse or overall value | coarse where given, the network's own value otherwise | the postback's own tier fields; same call |
+| SF11 | the store a charge belongs to | the account's platform; the billing event's store | same call | every account's charges sit in one store |
+| SF12 | a charge's day | the store's transaction time; the app's sync time | the store's transaction time (transaction_at) | policy 2.3 (the store charges on its account); records synced late carry their transaction time; Apple's Pacific days against UTC days: same call |
+| SF13 | the weeks the spend response is read on | the 104 media weeks to 1 November 2026; with the pull week of 2 November | the 104 media weeks | the pull week's postbacks have not all arrived (installs after its first days have none yet); kept where its installs are complete, same call |
+
+## Pinning list
+
+| Constant | Golden value | Home |
+|---|---|---|
+| VAT by storefront | 21, 22, 23 per cent | growth_policy_paid_channels_v2_2026-09.pdf, 2.4 |
+| the stores' commission | 15 per cent | growth_policy_paid_channels_v2_2026-09.pdf, 2.4 |
+| the lines | 0.90, 1.20 | growth_policy_paid_channels_v2_2026-09.pdf, section 3 |
+| the trial | seven days | growth_policy_paid_channels_v2_2026-09.pdf, 2.5 |
+| the plan's weekly spend | 52 weeks by channel | media_plan_2027.xlsx |
+| the share of trials charged at the trial's end among those last seen still set to renew | 0.113 | fitted to the stores' first-charge excess in appstore_subscription_events_daily_2024-11_2026-11.csv and googleplay_subscription_transactions_daily_2024-11_2026-11.csv; measured spread by store |
+| the monthly continuation of a subscription the app no longer sees | 0.889 | fitted to the stores' renewal excess in the same two reports; measured spread by store, with its own first month, by calendar cadence and without the last two months |
+| the install postback's lag | two to four days | skan_postbacks_2024-11-04_2026-11-08.csv against accounts_2026-11-09.csv (R1's band holds both ends) |
+| each channel's spend slope and the month pattern | fitted | ad_spend_daily_2024-11-04_2026-11-08.csv with the installs; measured spread by channel, without the month pattern, on the twelve-month weeks only, quadratic |
+| each conversion value's worth to consenting and non-consenting users | fitted | accounts_2026-11-09.csv and billing_events_2024-11-04_2026-11-08.csv; measured spread pooled, by ratio, coarse only, both networks' consenting users pooled |
+
+Variant battery: 13 variants beside the golden (the continuation by store, with its own first month, by calendar cadence and without the last two months; the non-consenting value pooled, by ratio, from coarse values only and with both networks' consenting users pooled; the spend response by channel, without the month pattern, on the twelve-month weeks only and quadratic) and ten perturbations file one answer, every channel in its golden band; checks.py asserts each against the world's own 2027.
+
+## Closure table
+
+| Axis | Closure |
+|---|---|
+| 1 | Population: the installs each channel bought from 4 November 2024 to 2 November 2025 (R1, R2); the installs the 2027 plan's spend buys (R3 to R5) |
+| 2 | Unit of account: euros per install; installs a week; euros of twelve-month net revenue per euro of spend |
+| 3 | Attribution window: the 365 days from each install's day |
+| 4 | As-of dating: the exports pulled 9 November 2026, data to 8 November 2026 |
+| 5 | Version basis: the growth policy version 2; the media plan's draft of 30 October 2026 |
+| 6 | Denominator: installs as policy 2.2 defines them; spend as the networks bill it |
+| 7 | Weighting: none beyond the installs themselves |
+| 8 | Window length: twelve months per install; 104 weeks of spend; 52 plan weeks |
+| 9 | Boundary inclusivity: an install on 2 November 2025 is in; a charge on day 365 is out |
+| 10 | Rounding path: values at full precision; returns shown to two decimals |
+| 11 | Tie-break: none needed; the nearest channel sits 0.035 from a line under its nearest variant (AppLovin Android, B=quad) |
+| 12 | Maturity and censoring: the 2025 installs' twelve months are complete by 8 November 2026 |
+| 13 | Order of operations: assemble installs, value charges, add the charges the records miss, read the iOS networks, carry to the plan, band |
+| 14 | Row order: no step depends on file order |
+| 15 | Duplicate resolution: a re-sent export row (same install id) counted once; a reinstall is not an install |
+| 16 | Identity normalisation: one account id across the accounts, billing events and export |
+| 17 | Netting against gross: refunds netted |
+| 18 | Dimensional units: euros, VAT included in price_eur, proceeds net of VAT and commission |
+| 19 | Code and status semantics: environment production only; account_type consumer only; the postbacks' fine and coarse values as Apple's tiers give them |
+| 20 | Integerisation: installs a week to the whole install |
+| 21 | Clause scope: the bands apply to 2027 |
+| 22 | Forward window contents: the media plan's weekly spend; prices unchanged (policy 2.5) |
+
+## Literal reader
+
+Executing the shipped sentences word for word: policy 2.1 makes the return the twelve-month net revenue of the installs the plan's spend buys, per euro of it; 2.2 makes an install a new consumer account's first install, bought by at most one channel; 2.3 counts the store charges on the account in the 365 days from the install, less refunds; 2.4 takes VAT and 15 per cent; section 3 sets the lines. The dictionary says recorded_at is when the app synced a transaction, and the stores' reports are the stores' own; read together they carry every charge, and the golden reads each part from the file that holds it. Every literal reading of the prompt's populations, windows and units gives the golden (## Semantic fork table).
+
+## Prompt contract
+
+A voice rewrite may not drop or change: the question (which band each paid channel goes in for 2027 under the growth policy), the plan's weekly spend as the basis, why the answer must be an estimate (the 2027 installs are not twelve months old until 2028), the four asked figures per channel (the installs bought from 4 November 2024 to 2 November 2025, their twelve-month net revenue per install, the installs a week at the 2027 weekly spend, the 2027 return per euro) and the deliverables (a spreadsheet and a short note). It must never add a method, a file name, a rounding instruction, a warning about the billing records, consent or spend, or who is asking.
+
+## Pre-ship check
+
+Re-read against the built pack (cut 90e641dd3185f4cd):
+- Results chain: five results in five areas (assembly-reconciliation, missingness-measurement, modeling, forecasting, synthesis), each banded in the answer blocks; no analytical result feeds more than half of the others (R2 and R3 feed R4 and R5).
+- Effort test: effort.py on the cut pack, quick 20.8, careful but hurried 48.2 (every careful loss cited: N21, L44, N27, N01, L17), thorough 100; the largest single hint rescues R3 alone.
+- Open members: five channels open (Meta iOS, TikTok iOS, Meta Android, Google Android, AppLovin Android) opened by three stumps, two forced (Apple Search Ads, TikTok Android); each open margin sits between its family's spread and its stump's worth (checks.py).
+- Hidden factor record against the cut data: the records miss from 17.8 per cent of Apple Search Ads' 2025 installs' twelve-month revenue to 38.3 per cent of AppLovin Android's; consent 28.3 per cent of Meta iOS's installs and 18.3 per cent of TikTok iOS's; every channel carries 2026 pushes and Google Android's plan spends 50 per cent over 2025; none sits only in a deciding channel.
+- Gate G: no shipped file ranks the channels on their return; the spend file, the plan and the creative tests carry spend and counts, not returns.
+- Forward facing: the call is about 2027 installs, whose twelve months close in 2028.
+- Data: eleven files in two categories (spreadsheet, text), two large CSVs (accounts 329,388 rows, billing events 192,948), two distractors unnamed in the pack; nothing describes the files' columns.
+- Leak: leak.py REVIEW only; the isolated reader's second read (on cut 90e641dd3185f4cd) names no sentence that hands over a priced step and no file that ranks the channels; every line ruled harmless in leak_check_report.md (the WHAT filed in policy 2.1 to 2.4; the two distractors; the export's denied users under organic pointing to the postbacks, R1's reflex; the ratings distractor's own October end).
+- Gates: gates.py task1 --full 0 FAIL (precut, effort, voice, leak REVIEW only, figures, containers PASS, heart and surface clean, checks 78 of 78, verify 21 of 21, two builds byte-identical).
+
 ## Tried and rejected
 
 - Matching new members to the tutor with the most open slots (pricing simulator v1 to v2): every month's new members
@@ -305,3 +496,21 @@ Screened on paper and in the scratch prototype before the card (`references/stum
   member. And the golden failed on identifiability: the value-by-conversion-value map pooled over iOS users carried
   Apple Search Ads' engagement within each value, putting TikTok iOS at 5.27 against the truth's 4.53, while the
   shortcut that reads withheld values as zero landed at 4.24 (off 0.74 against 0.29).
+- 2026-11-13, stage 4 on architecture 6's first cut (9db89e979fe735f2): the determinism judge (pass 5) returned
+  NOT_DETERMINISTIC, SEND_BACK because the growth policy's section 3 rendered blank (its bands table was built with
+  the column widths passed as a dictionary, so the export dropped it), and the isolated reader found the same blank
+  section and three cutoff dates side by side (the accounts and spend extracts stopping on 1 November against a 9
+  November pull, the policy's "records to the end of October"). Fixed in one pass: section 3 states the bands as a
+  sentence and a correctly built table; the fork checks read the shipped PDF's own text (SF9 had read the source); the
+  exports carry the installs of the pull week (2 to 8 November 2026) on a random stream of their own, so every
+  extract runs to 8 November and no media week's draw moves; section 4 reads "records to the start of November"; two
+  forks added (SF12 a charge's day, SF13 the incomplete pull week). Every band held; figures moved at the sampling
+  level only.
+- 2026-11-13, stage 4 judge pass 6 on the fixed cut (90e641dd3185f4cd): pass 5's blank section closed; a new
+  FIX_NOW on the answer blocks only: AppLovin Android's R2 band (3.37 to 3.67, a 0.15 floor) and R3 band (6 per cent)
+  each let a figure inside its band carry the return under 0.90 (0.8997 at R2's floor with R3's point). Fixed in the
+  answer blocks: R2's and R3's bands are each capped per channel at the channel's margin to its nearest line over 2.2,
+  so both at their edges together keep the band (AppLovin Android 2.1 per cent each, the honest family's spread 0.2
+  and 0.4 per cent), asserted corner by corner in checks.py; the stores' excess, which the judge reproduced at 41.4 to
+  41.6 per cent on another basis, is stated as about two fifths. No graded figure, prompt or pack moved (the cut is
+  unchanged), so no further judge pass.

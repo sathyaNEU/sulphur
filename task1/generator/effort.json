@@ -2,897 +2,992 @@
  "results": [
   {
    "id": "R1",
-   "name": "paying subscriptions by plan at 31 October 2026",
+   "name": "installs each channel bought from 4 November 2024 to 2 November 2025",
    "graded_as": "Ask 1",
-   "figure": "paying_oct",
+   "figure": "installs_2025",
    "depends": [],
-   "independent": "the October base",
+   "independent": "the installs themselves",
    "golden": {
-    "Flex": 1371,
-    "Standaard": 2146,
-    "Onbeperkt": 2136,
-    "Gezin": 1224
+    "Meta iOS": 17810,
+    "TikTok iOS": 11504,
+    "Apple Search Ads": 5675,
+    "Meta Android": 17670,
+    "Google Android": 23062,
+    "TikTok Android": 17644,
+    "AppLovin Android": 26445
    },
    "bands": {
-    "Flex": [
-     1370.5,
-     1371.5
+    "Meta iOS": [
+     17453,
+     18167
     ],
-    "Standaard": [
-     2145.5,
-     2146.5
+    "TikTok iOS": [
+     11273,
+     11735
     ],
-    "Onbeperkt": [
-     2135.5,
-     2136.5
+    "Apple Search Ads": [
+     5561,
+     5789
     ],
-    "Gezin": [
-     1223.5,
-     1224.5
+    "Meta Android": [
+     17316,
+     18024
+    ],
+    "Google Android": [
+     22600,
+     23524
+    ],
+    "TikTok Android": [
+     17291,
+     17997
+    ],
+    "AppLovin Android": [
+     25916,
+     26974
     ]
    },
+   "partly_share": 0.8,
    "passes": {
     "quick": {
-     "Flex": 1437,
-     "Standaard": 2223,
-     "Onbeperkt": 2218,
-     "Gezin": 1251
+     "Meta iOS": 5040,
+     "TikTok iOS": 2105,
+     "Apple Search Ads": 5675,
+     "Meta Android": 17670,
+     "Google Android": 23062,
+     "TikTok Android": 17644,
+     "AppLovin Android": 26445
     },
     "careful": {
-     "Flex": 1371,
-     "Standaard": 2146,
-     "Onbeperkt": 2136,
-     "Gezin": 1224
+     "Meta iOS": 17810,
+     "TikTok iOS": 11504,
+     "Apple Search Ads": 5675,
+     "Meta Android": 17670,
+     "Google Android": 23062,
+     "TikTok Android": 17644,
+     "AppLovin Android": 26445
     },
     "thorough": {
-     "Flex": 1371,
-     "Standaard": 2146,
-     "Onbeperkt": 2136,
-     "Gezin": 1224
-    }
-   }
-  },
-  {
-   "id": "R3",
-   "name": "extra cancellations per 100 at the first 2027 bill, by plan and country",
-   "graded_as": "Ask 2",
-   "figure": "extra_cancel",
-   "depends": [],
-   "independent": "the 2025 and 2026 rises",
-   "golden": {
-    "Flex Netherlands": 10.5,
-    "Flex Flanders": 10.5,
-    "Standaard Netherlands": 3.8,
-    "Standaard Flanders": 3.7,
-    "Onbeperkt Netherlands": 0.8,
-    "Onbeperkt Flanders": 0.9,
-    "Gezin Netherlands": 0.5,
-    "Gezin Flanders": 0.6
-   },
-   "bands": {
-    "Flex Netherlands": [
-     9.45,
-     11.73
-    ],
-    "Flex Flanders": [
-     9.54,
-     11.72
-    ],
-    "Standaard Netherlands": [
-     2.68,
-     5.43
-    ],
-    "Standaard Flanders": [
-     2.61,
-     5.43
-    ],
-    "Onbeperkt Netherlands": [
-     -0.3,
-     1.99
-    ],
-    "Onbeperkt Flanders": [
-     -0.3,
-     2.02
-    ],
-    "Gezin Netherlands": [
-     -1.81,
-     2.79
-    ],
-    "Gezin Flanders": [
-     -1.81,
-     2.79
-    ]
-   },
-   "partly_share": 0.75,
-   "passes": {
-    "quick": {
-     "Flex Netherlands": 6.1,
-     "Flex Flanders": 6.1,
-     "Standaard Netherlands": 10.1,
-     "Standaard Flanders": 10.1,
-     "Onbeperkt Netherlands": 10.1,
-     "Onbeperkt Flanders": 10.1,
-     "Gezin Netherlands": 10.1,
-     "Gezin Flanders": 10.1
-    },
-    "careful": {
-     "Flex Netherlands": 10.5,
-     "Flex Flanders": 10.5,
-     "Standaard Netherlands": 3.8,
-     "Standaard Flanders": 3.7,
-     "Onbeperkt Netherlands": 0.8,
-     "Onbeperkt Flanders": 0.9,
-     "Gezin Netherlands": 0.5,
-     "Gezin Flanders": 0.6
-    },
-    "thorough": {
-     "Flex Netherlands": 10.5,
-     "Flex Flanders": 10.5,
-     "Standaard Netherlands": 3.8,
-     "Standaard Flanders": 3.7,
-     "Onbeperkt Netherlands": 0.8,
-     "Onbeperkt Flanders": 0.9,
-     "Gezin Netherlands": 0.5,
-     "Gezin Flanders": 0.6
-    }
-   }
-  },
-  {
-   "id": "R4",
-   "name": "extra downgrades per 100 at the first 2027 bill, by plan and country",
-   "graded_as": "Ask 3",
-   "figure": "extra_down",
-   "depends": [],
-   "independent": "the 2025 and 2026 rises",
-   "golden": {
-    "Standaard Netherlands": 3.4,
-    "Standaard Flanders": 3.4,
-    "Onbeperkt Netherlands": 0.8,
-    "Onbeperkt Flanders": 0.9,
-    "Gezin Netherlands": 0.2,
-    "Gezin Flanders": 0.2
-   },
-   "bands": {
-    "Standaard Netherlands": [
-     3.12,
-     4.0
-    ],
-    "Standaard Flanders": [
-     3.07,
-     4.0
-    ],
-    "Onbeperkt Netherlands": [
-     0.52,
-     3.32
-    ],
-    "Onbeperkt Flanders": [
-     0.54,
-     3.32
-    ],
-    "Gezin Netherlands": [
-     -1.47,
-     0.47
-    ],
-    "Gezin Flanders": [
-     -1.47,
-     0.5
-    ]
-   },
-   "partly_share": 0.75,
-   "passes": {
-    "quick": {
-     "Standaard Netherlands": 0.0,
-     "Standaard Flanders": 0.0,
-     "Onbeperkt Netherlands": 0.0,
-     "Onbeperkt Flanders": 0.0,
-     "Gezin Netherlands": 0.0,
-     "Gezin Flanders": 0.0
-    },
-    "careful": {
-     "Standaard Netherlands": 3.4,
-     "Standaard Flanders": 3.4,
-     "Onbeperkt Netherlands": 0.8,
-     "Onbeperkt Flanders": 0.9,
-     "Gezin Netherlands": 0.2,
-     "Gezin Flanders": 0.2
-    },
-    "thorough": {
-     "Standaard Netherlands": 3.4,
-     "Standaard Flanders": 3.4,
-     "Onbeperkt Netherlands": 0.8,
-     "Onbeperkt Flanders": 0.9,
-     "Gezin Netherlands": 0.2,
-     "Gezin Flanders": 0.2
-    }
-   }
-  },
-  {
-   "id": "R9",
-   "name": "of each plan's October 2026 subscriptions, paying on any plan at 31 December 2027 with the rise",
-   "graded_as": "Ask 4",
-   "figure": "paying_end27",
-   "depends": [
-    "R3",
-    "R4"
-   ],
-   "independent": "",
-   "golden": {
-    "Flex": 591,
-    "Standaard": 1039,
-    "Onbeperkt": 1270,
-    "Gezin": 898
-   },
-   "bands": {
-    "Flex": [
-     574,
-     605
-    ],
-    "Standaard": [
-     1008,
-     1064
-    ],
-    "Onbeperkt": [
-     1237,
-     1299
-    ],
-    "Gezin": [
-     871,
-     921
-    ]
-   },
-   "precedent": [
-    "N33"
-   ],
-   "partly_share": 0.75,
-   "passes": {
-    "quick": {
-     "Flex": 354.0,
-     "Standaard": 735.0,
-     "Onbeperkt": 1022.0,
-     "Gezin": 717.0
-    },
-    "careful": {
-     "Flex": 300.0,
-     "Standaard": 673.0,
-     "Onbeperkt": 1018.0,
-     "Gezin": 801.0
-    },
-    "thorough": {
-     "Flex": 591,
-     "Standaard": 1039,
-     "Onbeperkt": 1270,
-     "Gezin": 898
+     "Meta iOS": 17810,
+     "TikTok iOS": 11504,
+     "Apple Search Ads": 5675,
+     "Meta Android": 17670,
+     "Google Android": 23062,
+     "TikTok Android": 17644,
+     "AppLovin Android": 26445
     }
    }
   },
   {
    "id": "R2",
-   "name": "the 2027 publisher remuneration on each plan's October 2026 subscriptions with the rise, per subscription",
-   "graded_as": "Ask 5",
-   "figure": "remun_2027",
+   "name": "12-month net revenue per install of those installs, by channel",
+   "graded_as": "Component 1",
+   "figure": "v12_2025",
    "depends": [],
-   "independent": "the counted hours and the October base",
+   "independent": "the 2025 installs' charges",
    "golden": {
-    "Flex": 12.1,
-    "Standaard": 27.8,
-    "Onbeperkt": 119.7,
-    "Gezin": 113.6
+    "Meta iOS": 9.12,
+    "TikTok iOS": 7.65,
+    "Apple Search Ads": 14.63,
+    "Meta Android": 8.79,
+    "Google Android": 8.54,
+    "TikTok Android": 5.46,
+    "AppLovin Android": 3.52
    },
    "bands": {
-    "Flex": [
-     11.69,
-     12.48
+    "Meta iOS": [
+     8.849,
+     9.397
     ],
-    "Standaard": [
-     27.03,
-     28.54
+    "TikTok iOS": [
+     7.296,
+     8.009
     ],
-    "Onbeperkt": [
-     113.39,
-     122.35
+    "Apple Search Ads": [
+     14.191,
+     15.069
     ],
-    "Gezin": [
-     110.59,
-     116.22
+    "Meta Android": [
+     8.526,
+     9.053
+    ],
+    "Google Android": [
+     8.28,
+     8.792
+    ],
+    "TikTok Android": [
+     5.298,
+     5.626
+    ],
+    "AppLovin Android": [
+     3.445,
+     3.595
     ]
    },
-   "precedent": [
-    "N23",
-    "L45",
-    "N33"
-   ],
-   "partly_share": 0.75,
+   "partly_share": 0.7,
    "passes": {
     "quick": {
-     "Flex": 25.3,
-     "Standaard": 45.6,
-     "Onbeperkt": 67.0,
-     "Gezin": 90.7
+     "Meta iOS": 10.63,
+     "TikTok iOS": 8.82,
+     "Apple Search Ads": 12.02,
+     "Meta Android": 6.52,
+     "Google Android": 6.4,
+     "TikTok Android": 3.74,
+     "AppLovin Android": 2.17
     },
     "careful": {
-     "Flex": 8.4,
-     "Standaard": 21.9,
-     "Onbeperkt": 101.7,
-     "Gezin": 105.9
+     "Meta iOS": 14.4,
+     "TikTok iOS": 11.95,
+     "Apple Search Ads": 16.29,
+     "Meta Android": 9.36,
+     "Google Android": 9.19,
+     "TikTok Android": 5.36,
+     "AppLovin Android": 3.12
     },
     "thorough": {
-     "Flex": 12.1,
-     "Standaard": 27.8,
-     "Onbeperkt": 119.7,
-     "Gezin": 113.6
+     "Meta iOS": 9.12,
+     "TikTok iOS": 7.65,
+     "Apple Search Ads": 14.63,
+     "Meta Android": 8.79,
+     "Google Android": 8.54,
+     "TikTok Android": 5.46,
+     "AppLovin Android": 3.52
     }
-   }
+   },
+   "precedent": [
+    "N21",
+    "L44",
+    "N27"
+   ]
   },
   {
-   "id": "R7",
-   "name": "each plan's change in its October 2026 subscriptions' 2027 contribution with the rise",
-   "graded_as": "Component 1",
-   "figure": "change_2027",
+   "id": "R3",
+   "name": "installs a week at each channel's 2027 weekly spend",
+   "graded_as": "Ask 2",
+   "figure": "installs_week_2027",
+   "depends": [],
+   "independent": "the weekly spend and installs",
+   "golden": {
+    "Meta iOS": 342,
+    "TikTok iOS": 217,
+    "Apple Search Ads": 113,
+    "Meta Android": 328,
+    "Google Android": 594,
+    "TikTok Android": 328,
+    "AppLovin Android": 498
+   },
+   "bands": {
+    "Meta iOS": [
+     322,
+     362
+    ],
+    "TikTok iOS": [
+     205,
+     230
+    ],
+    "Apple Search Ads": [
+     107,
+     120
+    ],
+    "Meta Android": [
+     312,
+     343
+    ],
+    "Google Android": [
+     559,
+     629
+    ],
+    "TikTok Android": [
+     309,
+     347
+    ],
+    "AppLovin Android": [
+     488,
+     508
+    ]
+   },
+   "partly_share": 0.7,
+   "passes": {
+    "quick": {
+     "Meta iOS": 346.5,
+     "TikTok iOS": 213.4,
+     "Apple Search Ads": 115.7,
+     "Meta Android": 325.5,
+     "Google Android": 666.3,
+     "TikTok Android": 325.3,
+     "AppLovin Android": 498.4
+    },
+    "careful": {
+     "Meta iOS": 346.5,
+     "TikTok iOS": 213.4,
+     "Apple Search Ads": 115.7,
+     "Meta Android": 325.5,
+     "Google Android": 666.3,
+     "TikTok Android": 325.3,
+     "AppLovin Android": 498.4
+    },
+    "thorough": {
+     "Meta iOS": 342,
+     "TikTok iOS": 217,
+     "Apple Search Ads": 113,
+     "Meta Android": 328,
+     "Google Android": 594,
+     "TikTok Android": 328,
+     "AppLovin Android": 498
+    }
+   },
+   "precedent": [
+    "N01",
+    "L17"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "each channel's 2027 return per euro at the plan's weekly spend",
+   "graded_as": "Component 2",
+   "figure": "roas_2027",
    "depends": [
-    "R3",
-    "R4",
-    "R5",
-    "R6"
+    "R2",
+    "R3"
    ],
    "independent": "",
    "golden": {
-    "Flex": -3.3,
-    "Standaard": 2.2,
-    "Onbeperkt": -4.8,
-    "Gezin": 5.4
+    "Meta iOS": 1.04,
+    "TikTok iOS": 0.78,
+    "Apple Search Ads": 1.48,
+    "Meta Android": 1.08,
+    "Google Android": 1.06,
+    "TikTok Android": 0.72,
+    "AppLovin Android": 0.94
    },
    "bands": {
-    "Flex": [
-     -3.77,
-     -2.81
+    "Meta iOS": [
+     1.013,
+     1.075
     ],
-    "Standaard": [
-     0.95,
-     2.96
+    "TikTok iOS": [
+     0.743,
+     0.815
     ],
-    "Onbeperkt": [
-     -5.27,
-     -4.17
+    "Apple Search Ads": [
+     1.419,
+     1.547
     ],
-    "Gezin": [
-     3.15,
-     6.35
+    "Meta Android": [
+     1.051,
+     1.116
+    ],
+    "Google Android": [
+     0.964,
+     1.149
+    ],
+    "TikTok Android": [
+     0.701,
+     0.744
+    ],
+    "AppLovin Android": [
+     0.916,
+     0.973
     ]
    },
-   "precedent": [
-    "N33",
-    "N23",
-    "L45"
-   ],
+   "partly_share": 0.7,
    "passes": {
     "quick": {
-     "Flex": -0.5,
-     "Standaard": -0.8,
-     "Onbeperkt": -3.9,
-     "Gezin": -5.9
+     "Meta iOS": 1.24,
+     "TikTok iOS": 0.87,
+     "Apple Search Ads": 1.24,
+     "Meta Android": 0.78,
+     "Google Android": 1.08,
+     "TikTok Android": 0.48,
+     "AppLovin Android": 0.58
     },
     "careful": {
-     "Flex": -6.1,
-     "Standaard": -0.3,
-     "Onbeperkt": 2.5,
-     "Gezin": 6.9
+     "Meta iOS": 1.67,
+     "TikTok iOS": 1.19,
+     "Apple Search Ads": 1.67,
+     "Meta Android": 1.13,
+     "Google Android": 1.55,
+     "TikTok Android": 0.7,
+     "AppLovin Android": 0.83
     },
     "thorough": {
-     "Flex": -3.3,
-     "Standaard": 2.2,
-     "Onbeperkt": -4.8,
-     "Gezin": 5.4
+     "Meta iOS": 1.04,
+     "TikTok iOS": 0.78,
+     "Apple Search Ads": 1.48,
+     "Meta Android": 1.08,
+     "Google Android": 1.06,
+     "TikTok Android": 0.72,
+     "AppLovin Android": 0.94
     }
-   }
+   },
+   "precedent": [
+    "N21",
+    "N27",
+    "N01"
+   ]
   },
   {
    "id": "R5",
-   "name": "of the subscriptions that stop paying by December 2027, how many per 100 pay again then",
-   "graded_as": "Component 2",
-   "figure": "back_share",
-   "depends": [],
-   "independent": "the lapses to October 2026",
-   "golden": {
-    "Flex": 27.2,
-    "Standaard": 25.8,
-    "Onbeperkt": 22.7,
-    "Gezin": 23.0
-   },
-   "bands": {
-    "Flex": [
-     25.15,
-     29.22
-    ],
-    "Standaard": [
-     23.79,
-     27.85
-    ],
-    "Onbeperkt": [
-     20.3,
-     24.72
-    ],
-    "Gezin": [
-     20.81,
-     25.48
-    ]
-   },
-   "precedent": [
-    "N33",
-    "N24"
-   ],
-   "passes": {
-    "quick": {
-     "Flex": 0.0,
-     "Standaard": 0.0,
-     "Onbeperkt": 0.0,
-     "Gezin": 0.0
-    },
-    "careful": {
-     "Flex": 0.0,
-     "Standaard": 0.0,
-     "Onbeperkt": 0.0,
-     "Gezin": 0.0
-    },
-    "thorough": {
-     "Flex": 27.2,
-     "Standaard": 25.8,
-     "Onbeperkt": 22.7,
-     "Gezin": 23.0
-    }
-   }
-  },
-  {
-   "id": "R6",
-   "name": "the stayers' extra counted hours over 2027 after the rise, per subscription staying all year",
-   "graded_as": "Component 3",
-   "figure": "sal_hours",
-   "depends": [],
-   "independent": "the 2025 and 2026 rises' stayers",
-   "golden": {
-    "Flex": 1.3,
-    "Standaard": 6.2,
-    "Onbeperkt": 37.9,
-    "Gezin": 7.4
-   },
-   "bands": {
-    "Flex": [
-     -0.03,
-     2.38
-    ],
-    "Standaard": [
-     4.95,
-     7.27
-    ],
-    "Onbeperkt": [
-     32.95,
-     42.17
-    ],
-    "Gezin": [
-     6.37,
-     9.04
-    ]
-   },
-   "precedent": [
-    "N23",
-    "L45"
-   ],
-   "passes": {
-    "quick": {
-     "Flex": 0.0,
-     "Standaard": 0.0,
-     "Onbeperkt": 0.0,
-     "Gezin": 0.0
-    },
-    "careful": {
-     "Flex": 0.0,
-     "Standaard": 0.0,
-     "Onbeperkt": 0.0,
-     "Gezin": 0.0
-    },
-    "thorough": {
-     "Flex": 1.3,
-     "Standaard": 6.2,
-     "Onbeperkt": 37.9,
-     "Gezin": 7.4
-    }
-   }
-  },
-  {
-   "id": "R8",
-   "name": "the rises that go ahead",
+   "name": "each channel's band",
    "graded_as": "Recommendation",
-   "figure": "raise",
+   "figure": "call",
    "depends": [
-    "R7"
+    "R4"
    ],
    "independent": "",
    "golden": [
-    "Gezin",
-    "Standaard"
-   ],
-   "precedent": [
-    "N33",
-    "N23"
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "passes": {
-    "quick": [],
+    "quick": [
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: cut",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ],
     "careful": [
-     "Gezin",
-     "Onbeperkt"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: scale",
+     "Meta Android: hold",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: hold"
     ],
     "thorough": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
-   }
+   },
+   "precedent": [
+    "N21",
+    "N27",
+    "N01"
+   ]
   }
  ],
  "hints": [
   {
-   "sentence": "a subscription that stops paying can take its plan up again on the same account, the light listeners soonest, so those a rise loses are not all lost for 2027",
-   "rescues": [
-    "R5",
-    "R9"
-   ]
+   "sentence": "a store charge reaches the billing records only when the subscriber next opens the app",
+   "rescues": []
   },
   {
-   "sentence": "the account holders who stay listen more for months after the bill at the higher price, the heavier listeners most, and each extra hour costs EUR 0.40",
+   "sentence": "iOS users who allow tracking are the more engaged ones",
+   "rescues": []
+  },
+  {
+   "sentence": "a channel's installs come dearer and weaker as its weekly spend rises",
    "rescues": [
-    "R6"
+    "R3"
    ]
   }
  ],
  "factorial": {
   "golden_answer": [
-   "Gezin",
-   "Standaard"
+   "AppLovin Android: hold",
+   "Apple Search Ads: scale",
+   "Google Android: hold",
+   "Meta Android: hold",
+   "Meta iOS: hold",
+   "TikTok Android: cut",
+   "TikTok iOS: cut"
   ],
   "reflex_route": {
    "answer": [
-    "Gezin",
-    "Onbeperkt"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: scale",
+    "Meta Android: hold",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: hold"
    ]
   },
   "judgments": [
    {
     "id": "J1",
-    "name": "a subscription that stops paying can take its plan up again on the same account, the light listeners soonest, so those a rise loses are not all lost for 2027",
+    "name": "a store charge reaches the billing records only when the subscriber next opens the app, so the stores' excess belongs to the subscriptions last seen still set to renew",
     "kind": "stump",
     "precedent": [
-     "N33",
-     "N24"
+     "N21",
+     "L44"
     ],
     "dropped": {
      "answer": [
-      "Gezin"
+      "AppLovin Android: cut",
+      "Apple Search Ads: scale",
+      "Google Android: hold",
+      "Meta Android: hold",
+      "Meta iOS: hold",
+      "TikTok Android: cut",
+      "TikTok iOS: cut"
      ],
      "results_moved": [
       "R2",
-      "R5",
-      "R7",
-      "R9",
-      "R8"
+      "R4",
+      "R5"
      ]
     },
     "alone": {
      "answer": [
-      "Gezin",
-      "Onbeperkt",
-      "Standaard"
+      "AppLovin Android: hold",
+      "Apple Search Ads: scale",
+      "Google Android: scale",
+      "Meta Android: hold",
+      "Meta iOS: scale",
+      "TikTok Android: cut",
+      "TikTok iOS: hold"
      ],
-     "results_rescued": [
-      "R5",
-      "R9"
-     ]
+     "results_rescued": []
     }
    },
    {
     "id": "J2",
-    "name": "the account holders who stay listen more for months after the bill at the higher price, the heavier listeners most, and each extra hour costs EUR 0.40",
+    "name": "iOS users who allow tracking are the more engaged, so the iOS networks are read on every install's conversion value, not on the users the attribution export holds",
     "kind": "stump",
     "precedent": [
-     "N23",
-     "L45"
+     "N27",
+     "L03"
     ],
     "dropped": {
      "answer": [
-      "Gezin",
-      "Onbeperkt",
-      "Standaard"
+      "AppLovin Android: hold",
+      "Apple Search Ads: scale",
+      "Google Android: hold",
+      "Meta Android: hold",
+      "Meta iOS: scale",
+      "TikTok Android: cut",
+      "TikTok iOS: hold"
      ],
      "results_moved": [
       "R2",
-      "R6",
-      "R7",
-      "R8"
+      "R4",
+      "R5"
      ]
     },
     "alone": {
      "answer": [
-      "Gezin"
+      "AppLovin Android: cut",
+      "Apple Search Ads: scale",
+      "Google Android: scale",
+      "Meta Android: hold",
+      "Meta iOS: hold",
+      "TikTok Android: cut",
+      "TikTok iOS: cut"
      ],
-     "results_rescued": [
-      "R6"
-     ]
+     "results_rescued": []
     }
    },
    {
     "id": "J3",
-    "name": "the first bill's response read by whether each past rise passed the rival's price, with the profile limit of the plan below",
-    "kind": "reflex",
+    "name": "a channel's installs come dearer and weaker as its weekly spend rises, so 2025's return per euro does not carry to a plan that spends more",
+    "kind": "stump",
     "precedent": [
-     "R61"
-    ]
+     "N01",
+     "L17"
+    ],
+    "dropped": {
+     "answer": [
+      "AppLovin Android: hold",
+      "Apple Search Ads: scale",
+      "Google Android: scale",
+      "Meta Android: hold",
+      "Meta iOS: hold",
+      "TikTok Android: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "AppLovin Android: cut",
+      "Apple Search Ads: scale",
+      "Google Android: hold",
+      "Meta Android: hold",
+      "Meta iOS: scale",
+      "TikTok Android: cut",
+      "TikTok iOS: scale"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
    },
    {
     "id": "J4",
-    "name": "the light listeners' extra leaving at the December bill after the price e-mail",
+    "name": "the iOS networks' installs counted from the install postbacks, not from the attribution export",
     "kind": "reflex",
     "precedent": [
-     "R62"
+     "R81"
     ]
    },
    {
     "id": "J5",
-    "name": "downgraders kept paying on the lower plan, valued on their own months",
+    "name": "re-sent export rows, reinstalls, staff and test accounts and sandbox charges left out",
     "kind": "reflex",
     "precedent": [
-     "R43"
+     "R80"
     ]
    },
    {
     "id": "J6",
-    "name": "each subscription valued on its own listening",
-    "kind": "reflex",
-    "precedent": [
-     "R44"
-    ]
-   },
-   {
-    "id": "J7",
-    "name": "EUR 0.40 per counted hour, filed in schedule B 2.1",
+    "name": "net revenue at the policy's VAT and 15 per cent commission",
     "kind": "reflex",
     "precedent": []
-   },
-   {
-    "id": "J8",
-    "name": "a past response carried to a rise of another size",
-    "kind": "reflex",
-    "precedent": [
-     "R45"
-    ]
    }
   ]
  },
  "forcing": {
   "kind": "set",
   "golden_answer": [
-   "Gezin",
-   "Standaard"
+   "AppLovin Android: hold",
+   "Apple Search Ads: scale",
+   "Google Android: hold",
+   "Meta Android: hold",
+   "Meta iOS: hold",
+   "TikTok Android: cut",
+   "TikTok iOS: cut"
   ],
   "golden_family": [
    {
     "name": "the golden",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the same country a year earlier as the control where the records reach it",
+    "name": "A=by_store",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the January and February bills as the first bill's window",
+    "name": "A=calendar",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "each past response carried on the log of the price ratio",
+    "name": "A=trim",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "each plan's own rises of the same kind, as they were read",
+    "name": "A=two",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "each plan's own level and one step where a rise passes the rival, fitted on the eight",
+    "name": "B=lastweek",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the plan's continuation by paying months alone",
+    "name": "B=mature",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "downgraders modelled on their own hours at the lower plan's cap",
+    "name": "B=none",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the stayers' fade fitted plan by plan",
+    "name": "B=own",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the stayers' extra listening as observed month by month, no fitted fade",
+    "name": "B=quad",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "re-sent warehouse rows summed",
+    "name": "C=coarse",
     "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   }
-  ],
-  "perturbations": [
-   {
-    "input": "extra cancellations +20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "input": "extra cancellations -20%",
+    "name": "C=netpool",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "input": "extra downgrades +20%",
+    "name": "C=pooled",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "input": "extra downgrades -20%",
+    "name": "C=ratio",
     "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the December leaving +20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the December leaving -20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the stayers' extra listening +20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the stayers' extra listening -20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the return after a stop +20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
-    ]
-   },
-   {
-    "input": "the return after a stop -20%",
-    "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    }
   ],
   "shortcuts": [
    {
-    "name": "the careful route: no return after a stop, the stayers listening as before",
+    "name": "A golden, C golden, B average",
     "answer": [
-     "Gezin",
-     "Onbeperkt"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: scale",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "returns after a stop, the stayers listening as before",
+    "name": "A golden, C consenters, B pooled",
     "answer": [
-     "Gezin",
-     "Onbeperkt",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: hold"
     ]
    },
    {
-    "name": "the stayers' extra listening, no return after a stop",
+    "name": "A golden, C consenters, B average",
     "answer": [
-     "Gezin"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: scale",
+     "Meta Android: hold",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: hold"
     ]
    },
    {
-    "name": "the careful route with each plan's own rises read together",
+    "name": "A prop, C golden, B pooled",
     "answer": [
-     "Onbeperkt"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the careful route with each plan's own rise in its country",
+    "name": "A prop, C golden, B average",
     "answer": [
-     "Onbeperkt"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: scale",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the careful route with the response at the first bill alone",
+    "name": "A prop, C consenters, B pooled",
     "answer": [
-     "Gezin",
-     "Onbeperkt",
-     "Standaard"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: scale"
     ]
    },
    {
-    "name": "the careful route with one response for every rise",
-    "answer": []
-   },
-   {
-    "name": "the careful route on the 2026 basis (52 per cent of net revenue)",
+    "name": "the careful route: the stores' excess spread over every account in proportion, the iOS networks read on their consenting users, 2025's return carried to the plan",
     "answer": [
-     "Gezin"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: scale",
+     "Meta Android: hold",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: hold"
     ]
    },
    {
-    "name": "the careful route with the stayers' listening read off the plan's averages",
+    "name": "A recorded, C golden, B pooled",
     "answer": [
-     "Gezin"
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: cut",
+     "Meta Android: cut",
+     "Meta iOS: cut",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "A recorded, C golden, B average",
+    "answer": [
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: cut",
+     "Meta iOS: cut",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "A recorded, C consenters, B pooled",
+    "answer": [
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: cut",
+     "Meta Android: cut",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the direct route: the billing records as they stand, the consenting users, 2025's return",
+    "answer": [
+     "AppLovin Android: cut",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: cut",
+     "Meta iOS: scale",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    }
   ],
-  "closed_supporting": [
+  "perturbations": [
    {
-    "name": "the golden with returns at one rate for every listener",
+    "input": "silent continuation -0.02",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    },
    {
-    "name": "the golden with the stayers' listening read off the plan's averages",
+    "input": "silent continuation +0.02",
     "answer": [
-     "Gezin",
-     "Standaard"
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "trial-end charge share -20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "trial-end charge share +20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "non-consenting users' value -10%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "non-consenting users' value +10%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "value-per-install slope on spend -20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "value-per-install slope on spend +20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "installs slope on spend -20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "installs slope on spend +20%",
+    "answer": [
+     "AppLovin Android: hold",
+     "Apple Search Ads: scale",
+     "Google Android: hold",
+     "Meta Android: hold",
+     "Meta iOS: hold",
+     "TikTok Android: cut",
+     "TikTok iOS: cut"
     ]
    }
   ]
@@ -901,129 +996,157 @@
   {
    "name": "the golden",
    "answer": [
-    "Gezin",
-    "Standaard"
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": true
   },
   {
-   "name": "the careful route: no return after a stop, the stayers listening as before",
+   "name": "A golden, C golden, B average",
    "answer": [
-    "Gezin",
-    "Onbeperkt"
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: scale",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "returns after a stop, the stayers listening as before",
+   "name": "A golden, C consenters, B pooled",
    "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: hold"
    ],
    "golden": false
   },
   {
-   "name": "the stayers' extra listening, no return after a stop",
+   "name": "A golden, C consenters, B average",
    "answer": [
-    "Gezin"
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: scale",
+    "Meta Android: hold",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: hold"
    ],
    "golden": false
   },
   {
-   "name": "the careful route with each plan's own rises read together",
+   "name": "A prop, C golden, B pooled",
    "answer": [
-    "Onbeperkt"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "the careful route with each plan's own rise in its country",
+   "name": "A prop, C golden, B average",
    "answer": [
-    "Onbeperkt"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: scale",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "the careful route with the response at the first bill alone",
+   "name": "A prop, C consenters, B pooled",
    "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: scale"
    ],
    "golden": false
   },
   {
-   "name": "the careful route with one response for every rise",
-   "answer": [],
-   "golden": false
-  },
-  {
-   "name": "the careful route on the 2026 basis (52 per cent of net revenue)",
+   "name": "the careful route: the stores' excess spread over every account in proportion, the iOS networks read on their consenting users, 2025's return carried to the plan",
    "answer": [
-    "Gezin"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: scale",
+    "Meta Android: hold",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: hold"
    ],
    "golden": false
   },
   {
-   "name": "the careful route with the stayers' listening read off the plan's averages",
+   "name": "A recorded, C golden, B pooled",
    "answer": [
-    "Gezin"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: cut",
+    "Meta Android: cut",
+    "Meta iOS: cut",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "returns at one rate for every listener, the stayers listening as before",
+   "name": "A recorded, C golden, B average",
    "answer": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: cut",
+    "Meta iOS: cut",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "the golden with returns at one rate for every listener",
+   "name": "A recorded, C consenters, B pooled",
    "answer": [
-    "Gezin",
-    "Standaard"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: cut",
+    "Meta Android: cut",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
    "golden": false
   },
   {
-   "name": "the golden with the stayers' listening read off the plan's averages",
+   "name": "the direct route: the billing records as they stand, the consenting users, 2025's return",
    "answer": [
-    "Gezin",
-    "Standaard"
+    "AppLovin Android: cut",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: cut",
+    "Meta iOS: scale",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
-   "golden": false
-  },
-  {
-   "name": "the golden with the stayers' extra listening held at its first months",
-   "answer": [
-    "Gezin",
-    "Standaard"
-   ],
-   "golden": false
-  },
-  {
-   "name": "the golden with every subscription answering at its plan's rate",
-   "answer": [
-    "Gezin",
-    "Standaard"
-   ],
-   "golden": false
-  },
-  {
-   "name": "the golden on the 2026 basis",
-   "answer": [
-    "Gezin",
-    "Standaard"
-   ],
-   "golden": false
-  },
-  {
-   "name": "the quick route",
-   "answer": [],
    "golden": false
   }
  ],

@@ -1,8 +1,8 @@
-"""Kraanvogel's own documents and finance's workbook: schedule B of the 2027 licence agreement with the publishers'
-foundation, the growth planning guideline, the 2027 price list, the agency's quote for the spring 2027 campaign, and
-finance's monthly KPI report. The PDFs are Word documents exported by LibreOffice Writer through the house writer;
-the workbook passes through the house workbook writer with its owner's stamps."""
+"""Zancada's own documents: the growth policy for paid channels (a Word document exported by LibreOffice Writer
+through the house writer), the 2027 media plan workbook, the data dictionary of the exports and the app's
+conversion-value schema."""
 import datetime as dt
+import json
 import os
 import sys
 
@@ -19,16 +19,13 @@ sys.path.insert(0, WRITERS)
 import officepdf as O  # noqa: E402
 import params as P  # noqa: E402
 
-ORG = "Kraanvogel Luisterboeken B.V."
+ORG = P.ORG
 CET = dt.timezone(dt.timedelta(hours=1))
 CEST = dt.timezone(dt.timedelta(hours=2))
 
 FILES = {
-    "schB": "SUL_licence_agreement_2027-2029_schedule_B.pdf",
-    "guide": "growth_planning_guideline_2026-10.pdf",
-    "price": "price_list_2027.pdf",
-    "quote": "spring_campaign_2027_quote_Bureau_Grauwe_Gans.pdf",
-    "kpi": "kpi_monthly_report_2026-09.xlsx",
+    "policy": "growth_policy_paid_channels_v2_2026-09.pdf",
+    "plan": "media_plan_2027.xlsx",
 }
 
 
@@ -70,140 +67,178 @@ def _doc(path, title, sections, meta, header_rows, author, subject, footer, crea
             modified=modified, font="Liberation Sans")
 
 
-SCHEDULE_B = [
-    ("B1. Term and what this schedule replaces", [
-        "This schedule sets the remuneration Kraanvogel pays the publishers represented by the Stichting "
-        "Uitgeverslicenties Luisterboek (SUL) for their audiobooks from 1 January 2027 to 31 December 2029. It "
-        "replaces schedule B of the 2024 agreement, under which Kraanvogel paid each month 52 per cent of its net "
-        "subscription revenue, divided among the publishers in proportion to the seconds of their titles streamed "
-        "in the month."]),
-    ("B2. Remuneration from 1 January 2027", [
-        "B2.1 For each month Kraanvogel pays each publisher EUR 0.40 for every counted hour of the publisher's "
-        "titles in the month.",
-        "B2.2 A profile's counted hours of a title in a month are the hours by which the furthest position the "
-        "profile has reached in the title, as reported by the app in that month, exceeds the furthest position "
-        "reported for that profile and title before the month. Listening again to a part of a title the profile "
-        "has already reached adds nothing.",
-        "B2.3 A position is counted in the month the app reports it to Kraanvogel.",
-        "B2.4 Titles Kraanvogel produces itself and recordings in the public domain are not counted. E-books are "
-        "licensed under schedule C."]),
-    ("B3. Statements and payment", [
-        "B3.1 Kraanvogel sends each publisher a statement of its counted hours and remuneration for each month "
-        "by the 15th of the following month and pays within 30 days of the statement.",
-        "B3.2 A publisher whose code changes keeps its statements under the new code from the month of the change."]),
-    ("B4. Audit", [
-        "B4.1 SUL may have Kraanvogel's counting audited once a year by an auditor of its choice, at its own cost "
-        "unless the audit finds counted hours understated by more than 2 per cent in any month."]),
-]
-
-GUIDELINE = [
-    ("1. Scope", [
-        "This guideline sets the figures Kraanvogel's growth and finance teams use to plan and judge acquisition "
-        "campaigns. It binds growth, finance and the agencies' briefs."]),
-    ("3. Planning figures", [
-        "3.1 A paying subscription is a consumer account whose monthly charge for the billing month covering the "
-        "date was collected. Staff and test accounts are not consumer accounts. A charge returned and not "
-        "re-presented, or refunded, is not collected. The paying subscriptions on a plan at a month end are the "
-        "accounts paying on the month's last day, on the plan charged.",
-        "3.2 A paying subscription-month is a consumer account's calendar month in which its monthly charge was "
-        "collected, on the plan charged.",
-        "3.3 An account's counted hours in a month are the counted hours (licence agreement, schedule B) of the "
-        "profiles that belonged to the account in that month.",
-        "3.5 Net revenue is what Kraanvogel keeps of the charges collected: the charge less VAT, less the app "
-        "store's fee on a store subscription (Apple 30 per cent of the price net of VAT in a subscription's first "
-        "12 paid months and 15 per cent after; Google 15 per cent), less refunds.",
-        "3.8 Forecasts use the licence agreement in force in the forecast months, the current price list including "
-        "the changes it announces, and the rivals' prices as last scanned, and assume no other change of terms or "
-        "prices.",
-        "3.9 A subscription's contribution in a period is its net revenue in the period less the remuneration on "
-        "its account's counted hours in the period at the licence agreement's rate.",
-        "3.10 A January price rise goes ahead on a plan when it raises the 2027 contribution of the subscriptions "
-        "paying on that plan at 31 October 2026, followed through 2027, against holding the plan's 2026 price. "
-        "A rise's extra cancellations and extra downgrades are those at a subscription's first bill at the new "
-        "price beyond what the same months would have brought without the rise, counted among the subscriptions "
-        "that reach that bill."]),
+POLICY = [
+    ("1. What this policy is for", [
+        "This policy sets how Zancada places each paid acquisition channel for the coming year. The head of growth "
+        "proposes the placements with the media plan in November; the head of financial planning signs the year's "
+        "insertion orders with the ad networks on them. It binds growth, finance and the agencies' briefs."]),
+    ("2. A channel's return", [
+        "2.1 A channel's return for a plan year is the 12-month net revenue of the installs the plan's spend on the "
+        "channel buys in that year, per euro of that spend.",
+        "2.2 An install is the first install of a new consumer account. A second device, a reinstall, a staff account "
+        "and a test account are not installs. Each install is bought by at most one channel: the one whose ads drove it.",
+        "2.3 An install's 12-month net revenue is the net revenue of the store charges on its account in the 365 days "
+        "from the day of the install, less the net revenue of any of those charges refunded.",
+        "2.4 The net revenue of a charge is its price less VAT (Spain 21 per cent, Italy 22 per cent, Portugal 23 per "
+        "cent, by the storefront) and less the store's commission of 15 per cent of the price net of VAT (Apple's "
+        "Small Business Program; Google Play's rate on subscriptions).",
+        "2.5 Prices are EUR 9.99 a month and EUR 59.99 a year, each with a seven-day free trial, and do not change in "
+        "2027."]),
+    ("3. Bands", [
+        "3.1 Each paid channel is placed in one of three bands on its return for the plan year: scale when the return "
+        "is 1.20 or more, hold when it is 0.90 or more and under 1.20, and cut when it is under 0.90.",
+        [["Band", "Return", "What it means for the plan year"],
+         ["Scale", "1.20 or more", "the plan's spend is approved and may be raised during the year"],
+         ["Hold", "0.90 or more and under 1.20", "the plan's spend is approved and is not raised"],
+         ["Cut", "under 0.90", "the channel is cut back to creative tests"]]]),
+    ("4. Timing", [
+        "Placements for a plan year are made in November of the year before, on the media plan's weekly spend and "
+        "Zancada's records to the start of November. A plan year's installs are not twelve months old until the year "
+        "after it, so each return is an estimate."]),
 ]
 
 
-def write_pdfs(folder):
-    _doc(os.path.join(folder, FILES["schB"]),
-         "Licence agreement 2027 to 2029: Schedule B, remuneration",
-         SCHEDULE_B, "Agreed on 24 September 2026 between Kraanvogel Luisterboeken B.V., Utrecht, and Stichting "
-         "Uitgeverslicenties Luisterboek, Amsterdam. Schedules A (licensed titles), C (e-books) and D (data) are "
-         "issued separately.",
-         [["Parties", "Kraanvogel Luisterboeken B.V.; Stichting Uitgeverslicenties Luisterboek (SUL)"],
-          ["In force", "1 January 2027"], ["Reference", "SUL-KRV-2027 / B"]],
-         "Kraanvogel Luisterboeken B.V., legal", "Schedule B, remuneration", "SUL-KRV-2027 schedule B",
-         dt.datetime(2026, 9, 22, 10, 4, tzinfo=CEST), dt.datetime(2026, 9, 24, 15, 31, tzinfo=CEST))
-    _doc(os.path.join(folder, FILES["guide"]),
-         "Growth planning guideline, version 3",
-         GUIDELINE, "Version 3 replaces version 2 (February 2025): 3.3 and 3.9 take the remuneration of the 2027 "
-         "licence agreement; 3.10 sets how a January price rise is judged. Owner: finance controller.",
-         [["Owner", "Finance (controller)"], ["Approved", "6 October 2026, management team"],
-          ["Applies to", "Acquisition campaigns and price changes from January 2027"]],
-         "Kraanvogel Luisterboeken B.V., finance", "Growth planning guideline", "Growth planning guideline v3",
-         dt.datetime(2026, 10, 1, 9, 12, tzinfo=CEST), dt.datetime(2026, 10, 6, 16, 48, tzinfo=CEST))
-    rows = [["Plan", "Listening", "Profiles", "Per month from 1 January 2027 (NL and BE, VAT included)"]]
-    for pl, lis, prof in [("FLEX", "10 hours a month", "1"), ("STD", "30 hours a month", "1"),
-                          ("ONB", "unlimited", "up to 2"), ("GEZ", "unlimited", "up to 4")]:
-        rows.append([P.PLAN_NAME[pl], lis, prof, "EUR %.2f" % P.PRICE27[pl]])
-    _doc(os.path.join(folder, FILES["price"]), "Price list from 1 January 2027",
-         [("Subscriptions", [rows, "Prices until 31 December 2026: Flex EUR 9.99, Standaard EUR 14.99, Onbeperkt "
-           "EUR 18.99, Gezin EUR 22.99, in the Netherlands and in Flanders. Existing subscriptions move to the new "
-           "price at their first billing date in 2027; subscribers are told by e-mail on 1 December 2026. A rise "
-           "may still be withdrawn for a plan until 30 November 2026.",
-           "Listening hours that are not used do not carry over to the next month. In the app stores the price is "
-           "the store's nearest price point."]),
-          ("Earlier price changes", [
-              "1 January 2025, in Flanders: Standaard from EUR %.2f to EUR %.2f and Onbeperkt from EUR %.2f to EUR %.2f; "
-              "in the Netherlands: Flex from EUR %.2f to EUR %.2f and Gezin from EUR %.2f to EUR %.2f. Subscribers were "
-              "told by e-mail on 1 December 2024." % (P.PRICE0["STD"], P.PRICE["STD"], P.PRICE0["ONB"], P.PRICE["ONB"],
-                                                     P.PRICE0["FLEX"], P.PRICE["FLEX"], P.PRICE0["GEZ"], P.PRICE["GEZ"]),
-              "1 January 2026, in the Netherlands: Standaard and Onbeperkt; in Flanders: Flex and Gezin; each to the "
-              "price above. Subscribers were told by e-mail on 1 December 2025.",
-              "Before 2025 the prices had not changed since 2022."])],
-         "", [["Issued", "28 October 2026"], ["Valid from", "1 January 2027"]],
-         "Kraanvogel Luisterboeken B.V., commercial", "Price list 2027", "Price list 2027",
-         dt.datetime(2026, 10, 27, 14, 20, tzinfo=CET), dt.datetime(2026, 10, 28, 9, 2, tzinfo=CET),
-         widths=[44, 38, 24, 56])
-    q = [["Lead plan on the landing pages", "Fee per trial start", "Trial"]]
-    for pl in P.PLANS:
-        q.append([P.PLAN_NAME[pl], "EUR %.2f" % P.FEE27[pl], "30 days free"])
-    _doc(os.path.join(folder, FILES["quote"]), "Quote: Kraanvogel spring campaign 2027",
-         [("What we quote", ["Paid social, search and podcast placements from 4 January to 28 March 2027, with "
-                             "landing pages that lead with one plan. We charge per trial start: an account that "
-                             "starts the 30-day trial through the campaign's links. A trial started from an account "
-                             "that has held a subscription before is not charged.", q]),
-          ("Volume and terms", ["We plan for about 1,800 trial starts over the twelve weeks whichever plan the "
-                                "pages lead with. Fees are invoiced monthly on the trial starts Kraanvogel's "
-                                "billing system records; this quote is valid until 30 November 2026."])],
-         "Bureau Grauwe Gans, Haarlem. Ref. GG-2611-KRV.",
-         [["To", "Kraanvogel Luisterboeken B.V., growth"], ["Date", "10 November 2026"]],
-         "Bureau Grauwe Gans", "Quote spring campaign 2027", "GG-2611-KRV",
-         dt.datetime(2026, 11, 9, 16, 40, tzinfo=CET), dt.datetime(2026, 11, 10, 11, 25, tzinfo=CET))
+def write_policy(target):
+    _doc(os.path.join(target, FILES["policy"]), "Growth policy for paid acquisition channels", POLICY, None,
+         [["Document", "Growth policy for paid acquisition channels, version 2"],
+          ["Owner", "Magdalena Requena, head of growth"],
+          ["Approved", "Bernardo Pombo, head of financial planning, 22 September 2026"],
+          ["Replaces", "version 1 of 11 November 2024"]],
+         author="Magdalena Requena", subject="Growth policy, paid channels",
+         footer="%s, growth policy for paid acquisition channels, v2" % ORG,
+         created=dt.datetime(2026, 9, 18, 10, 42, tzinfo=CEST), modified=dt.datetime(2026, 9, 22, 16, 5, tzinfo=CEST),
+         widths=[26, 44, 92])
 
 
-def write_kpi(path, kpi):
-    """Finance's monthly KPI report, January to September 2026."""
+def write_plan(target):
     wb = Workbook()
     ws = wb.active
-    ws.title = "KPI 2026"
-    ws["A1"] = "Kraanvogel Luisterboeken, monthly KPI report 2026 (to September)"
-    ws["A1"].font = Font(bold=True, size=12)
-    head = ["Month", "Paying Flex", "Paying Standaard", "Paying Onbeperkt", "Paying Gezin", "Paying total",
-            "Trial starts", "Net subscription revenue (EUR)", "Publisher remuneration (EUR)"]
-    for j, h in enumerate(head, 1):
-        c = ws.cell(row=3, column=j, value=h)
-        c.font = Font(bold=True)
-        c.fill = PatternFill("solid", fgColor="DDE3EA")
-        c.alignment = Alignment(wrap_text=True)
-    for i, r in enumerate(kpi, 4):
-        for j, v in enumerate(r, 1):
-            c = ws.cell(row=i, column=j, value=v)
-            if j >= 8:
-                c.number_format = "#,##0.00"
-    for col, w in zip("ABCDEFGHI", [10, 11, 13, 13, 11, 11, 11, 18, 18]):
-        ws.column_dimensions[col].width = w
-    ws.cell(row=len(kpi) + 5, column=1, value="Paying: the monthly charge for the billing month covering the "
-            "month's last day collected (growth planning guideline 3.1). Remuneration as stated to SUL.")
-    wb.save(path)
+    ws.title = "Weekly spend 2027"
+    hdr = ["Week starting", "ISO week"] + P.ORDER + ["Total"]
+    ws.append(hdr)
+    bold = Font(bold=True)
+    for c in ws[1]:
+        c.font = bold
+        c.fill = PatternFill("solid", fgColor="DDE6F0")
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+    tot = {c: 0 for c in P.ORDER}
+    for w, (mon, m, sp) in enumerate(P.plan_weeks()):
+        row = [mon, w + 1] + [sp[c] for c in P.ORDER] + [sum(sp.values())]
+        ws.append(row)
+        ws.cell(row=w + 2, column=1).number_format = "dd/mm/yyyy"
+        for k in range(3, 3 + len(P.ORDER) + 1):
+            ws.cell(row=w + 2, column=k).number_format = "#,##0"
+        for c in P.ORDER:
+            tot[c] += sp[c]
+    ws.append(["Total 2027", None] + [tot[c] for c in P.ORDER] + [sum(tot.values())])
+    for c in ws[ws.max_row]:
+        c.font = bold
+        c.number_format = "#,##0"
+    ws.column_dimensions["A"].width = 13
+    for k in range(len(hdr) - 1):
+        ws.column_dimensions[chr(66 + k)].width = 14
+    ws.freeze_panes = "C2"
+    n = wb.create_sheet("Notes")
+    for line in ["Media plan 2027, weekly spend in EUR by channel (spend as the networks bill it).",
+                 "Weeks run Monday to Sunday. Prepared by Rafa Naranjo for the November 2026 placements.",
+                 "Status: draft for the insertion orders, 30 October 2026."]:
+        n.append([line])
+    n.column_dimensions["A"].width = 100
+    wb.save(os.path.join(target, FILES["plan"]))
+
+
+CV_SCHEMA = {
+    "app": "Zancada", "platform": "ios", "skadnetwork_version": "4.0", "window": "postback 1 (0 to 2 days)",
+    "schema_version": 3, "in_use_since": "2024-11-04",
+    "fine_value_bits": {
+        "0-2": {"name": "sessions_bucket", "meaning": "workout sessions started in the first 48 hours",
+                "values": {"0": "0", "1": "1", "2": "2", "3": "3-4", "4": "5-7", "5": "8-11", "6": "12-17", "7": "18 or more"}},
+        "3": {"name": "trial_started", "meaning": "a seven-day free trial started in the first 48 hours"},
+        "4": {"name": "purchased", "meaning": "a paid subscription bought in the first 48 hours without a trial"},
+        "5": {"name": "reserved", "meaning": "always 0"}},
+    "coarse_value": {"high": "purchased, or trial started with 5 or more sessions", "medium": "trial started",
+                     "low": "otherwise"},
+    "lock_window": False,
+}
+
+
+DICTIONARY = """# Data dictionary: exports for the 2027 channel placements
+
+Exports pulled 9 November 2026. Times are UTC unless a field says otherwise. Amounts are in euros.
+
+## accounts_2026-11-09.csv
+One row per Zancada account (the app creates the account at first open).
+- account_id: the account.
+- created_at: the account's first open.
+- platform: ios or android, the platform of the device that created the account.
+- country: the storefront country at creation (ES, IT, PT).
+- account_type: consumer, staff or test.
+- att_status: iOS only. The answer to Apple's App Tracking Transparency prompt as the app last read it (authorized, denied, not_determined).
+- first_48h_value: the conversion value the app computed for the account's first 48 hours under the schema in skan_conversion_value_schema.json, on both platforms.
+- last_open_at: the account's most recent app open.
+- plan_at_last_open: the account's subscription plan as the app read it at the last open (monthly, annual; blank if none).
+- auto_renew_at_last_open: whether that subscription was set to renew as the app read it at the last open (yes, no; blank if none).
+
+## billing_events_2024-11-04_2026-11-08.csv
+Zancada's billing events: the store transactions the app has synced for each account.
+- event_id: the event.
+- account_id: the account.
+- store: app_store or google_play.
+- environment: production or sandbox.
+- product_id: zancada.premium.monthly or zancada.premium.annual.
+- event_type: first_charge, renewal or refund.
+- transaction_at: the store's time of the charge or refund.
+- recorded_at: when the app synced the transaction to Zancada's servers.
+- price_eur: the price charged, VAT included (negative for a refund).
+- storefront: the storefront country of the transaction.
+
+## attribution_installs_2024-11-04_2026-11-08.csv
+The attribution partner's install export: one row per install the partner's SDK reported.
+- install_id: the install.
+- account_id: the Zancada account the install opened.
+- platform: ios or android.
+- install_time: the install's first open as the partner recorded it.
+- media_source: the source the partner attributed the install to (Meta Ads, TikTok For Business, Apple Search Ads, Google Ads, AppLovin, organic).
+- campaign_id: the attributed campaign (blank for organic).
+- att_status: iOS only, as the partner's SDK read it.
+- is_reinstall: true when the partner saw the device or account before.
+
+## skan_postbacks_2024-11-04_2026-11-08.csv
+Apple's SKAdNetwork install postbacks for Zancada's iOS campaigns on Meta and TikTok, as the networks passed them on (first postback).
+- postback_id: the postback.
+- ad_network: meta or tiktok.
+- source_identifier: the campaign's source identifier (four digits, or the last two digits at lower privacy tiers).
+- postback_date, postback_time_utc: when the postback arrived.
+- conversion_value: the fine conversion value (blank when Apple withheld it).
+- coarse_conversion_value: low, medium or high (blank when Apple withheld it).
+- fidelity_type: 1 for a click-through install.
+- redownload: true when Apple flagged a redownload.
+
+## appstore_subscription_events_daily_2024-11_2026-11.csv
+App Store Connect subscription events, by day (Pacific time), product, country and event.
+- event: Paid Subscription from Free Trial, Subscribe, Renew or Refund.
+- units, customer_price_eur, developer_proceeds_eur.
+
+## googleplay_subscription_transactions_daily_2024-11_2026-11.csv
+Google Play Console subscription transactions, by day (UTC), product, country and transaction type.
+- transaction_type: charge_new, charge_renewal or refund.
+- transactions, amount_eur (VAT included), net_eur (after VAT and the store's fee).
+
+## ad_spend_daily_2024-11-04_2026-11-08.csv
+Daily spend by channel and campaign, as the networks billed it.
+- installs_reported_by_network: the installs the network's own reporting credited to the campaign that day.
+
+## media_plan_2027.xlsx
+The 2027 weekly spend by channel.
+
+## creative_tests_2025-2026.csv
+The creative team's A/B tests of ad creatives.
+
+## store_ratings_daily_2024-11_2026-10.csv
+Ratings left in the stores, by day, store and country.
+"""
+
+
+def write_all(target):
+    write_policy(target)
+    write_plan(target)

@@ -1,108 +1,77 @@
-"""The world's constants: Kraanvogel Luisterboeken B.V., Utrecht, an audiobook and e-book subscription app in the
-Netherlands and Flanders. Month index 0 is January 2023; the records ship from January 2024 (month 12) to October
-2026 (month 45); the world runs on to December 2027 (month 59) for the clean truth of the 2027 remuneration."""
+"""Zancada's world: the channels, the calendar, prices, fees, the 2027 plan and the growth policy's bands.
+Every constant the simulator and the documents share lives here."""
 import datetime as dt
 
-SEED = 20261112
-M0_YEAR = 2023
-REC0, CUT, END = 12, 45, 59          # Jan 2024, Oct 2026, Dec 2027
-R2_MONTHS = list(range(CUT - 11, CUT + 1))   # Nov 2025 to Oct 2026
-SPRING24 = (12, 13, 14)              # trial starts January to March 2024
-HORIZON = 24
-Y2027 = list(range(48, 60))
+SEED = 61113
+ORG = "Zancada Fitness S.L."
+APP = "Zancada"
 
-PLANS = ["FLEX", "STD", "ONB", "GEZ"]
-PLAN_NAME = {"FLEX": "Kraanvogel Flex", "STD": "Kraanvogel Standaard", "ONB": "Kraanvogel Onbeperkt",
-             "GEZ": "Kraanvogel Gezin"}
-PRICE = {"FLEX": 9.99, "STD": 14.99, "ONB": 18.99, "GEZ": 22.99}          # by 2026, VAT included
-PRICE0 = {"FLEX": 9.49, "STD": 13.49, "ONB": 17.99, "GEZ": 21.99}         # 2023 and 2024
-RISES = {(2025, "BE"): ("STD", "ONB"), (2025, "NL"): ("FLEX", "GEZ"), (2026, "NL"): ("STD", "ONB"),
-         (2026, "BE"): ("FLEX", "GEZ")}
-RIVAL = {"NL": {"FLEX": 9.79, "STD": 16.99, "ONB": 20.49, "GEZ": 24.49},   # the rival's comparable plans
-         "BE": {"FLEX": 9.79, "STD": 16.99, "ONB": 18.49, "GEZ": 22.49}}
-RIVAL_NAME = {"FLEX": "Luistr Basis 10 uur", "STD": "Luistr Plus 30 uur", "ONB": "Luistr Onbeperkt",
-              "GEZ": "Luistr Familie"}
-RISE27 = ("FLEX", "STD", "ONB", "GEZ")    # the rises the price list announces for January 2027
-PRICE27 = {"FLEX": 10.49, "STD": 16.49, "ONB": 19.99, "GEZ": 23.99}       # from 1 January 2027
-CAP = {"FLEX": 10.0, "STD": 30.0, "ONB": None, "GEZ": None}               # hours of listening a month
-MAX_PROFILES = {"FLEX": 1, "STD": 1, "ONB": 2, "GEZ": 4}
-VAT = {"NL": 0.09, "BE": 0.06}
-STORE_FEE = {"apple": (0.30, 0.15), "google": (0.15, 0.15), "web": (0.0, 0.0)}
-SHARE26 = 0.52                       # 2026 agreement: 52 per cent of net subscription revenue
-RATE27 = 0.40                        # 2027 to 2029 agreement: EUR per counted hour
-FEE27 = {"FLEX": 13.90, "STD": 44.20, "ONB": 14.20, "GEZ": 54.80}         # agency fee per trial start, spring 2027
+LAUNCH = dt.date(2024, 11, 4)          # first paid day, a Monday; the app opened in Spain, Portugal and Italy that week
+WEEKS = 104                            # installs 4 November 2024 to 1 November 2026
+DATA_END = dt.date(2026, 11, 8)        # the last day the exports cover
+PULL = dt.date(2026, 11, 9)
+MATURE_WEEKS = 52                      # installs 4 November 2024 to 2 November 2025, each with its twelve months on file
+END_DAY = (DATA_END - LAUNCH).days
 
-# behaviour
-CAMPAIGN = {2023: 1900, 2024: 2200, 2025: 2400, 2026: 2550}               # spring trial starts, January to March
-CAMPAIGN_MIX = {"FLEX": 0.22, "STD": 0.30, "ONB": 0.28, "GEZ": 0.20}
-ORGANIC = 225                        # organic trial starts a month (14-day trial)
-ORGANIC_MIX = {"FLEX": 0.30, "STD": 0.36, "ONB": 0.22, "GEZ": 0.12}
-BASE0 = 5000                         # paying accounts in January 2023
-HOURS = {"FLEX": 6.4, "STD": 12.6, "ONB": 23.0, "GEZ": 10.0}              # adult content hours a settled month
-CHILD_HOURS = 7.5
-COMMUTER = {"FLEX": 0.12, "STD": 0.18, "ONB": 0.80, "GEZ": 0.10}
-CONVERT = {"FLEX": 0.56, "STD": 0.63, "ONB": 0.58, "GEZ": 0.55}
-CHURN = {"FLEX": 0.060, "STD": 0.052, "ONB": 0.039, "GEZ": 0.036}
-SEASON = [1.03, 0.96, 0.97, 0.98, 0.99, 1.02, 1.21, 1.17, 0.94, 0.95, 0.97, 1.10]
-ROUTE = {"web": 0.68, "apple": 0.21, "google": 0.11}
-COUNTRY = {"NL": 0.71, "BE": 0.29}
-N_PUBLISHERS = 40
+COUNTRIES = ("ES", "IT", "PT")
+COUNTRY_SHARE = (0.60, 0.25, 0.15)
+VAT = {"ES": 0.21, "IT": 0.22, "PT": 0.23}
+COMMISSION = 0.15                      # Apple's Small Business Program and Google Play's subscription rate
+PRICE = {"monthly": 9.99, "annual": 59.99}
+PRODUCT = {"monthly": "zancada.premium.monthly", "annual": "zancada.premium.annual"}
+MONTH_DAYS = 30.4375
 
+# channel: platform, mean engagement, installs a week at the reference weekly spend s0 (EUR), the spend elasticity of
+# installs, the share of installs from wider inventory past s0 (per unit of log spend over s0), the 2026 pushes
+# (first week index, weeks, factor), campaigns, iOS consent intercept, the 2027 plan's weekly spend
+CHANNELS = {
+    "Meta iOS":         dict(ios=True,  mu=0.05,  n=330, s0=2860, el=0.80, xs=0.30, pushes=[(30, 3, 1.6), (82, 3, 1.5)],
+                             camps=5,  ca=-1.00, plan=3020),
+    "TikTok iOS":       dict(ios=True,  mu=-0.20, n=220, s0=2180, el=0.82, xs=0.30, pushes=[(45, 3, 1.5), (95, 2, 1.4)],
+                             camps=9,  ca=-1.50, plan=2180),
+    "Apple Search Ads": dict(ios=True,  mu=0.60,  n=110, s0=1070, el=0.60, xs=0.36, pushes=[(60, 3, 1.5)],
+                             camps=4,  ca=None,  plan=1140),
+    "Meta Android":     dict(ios=False, mu=0.00,  n=330, s0=2740, el=0.80, xs=0.30, pushes=[(40, 3, 1.5), (88, 3, 1.4)],
+                             camps=6,  ca=None,  plan=2740),
+    "Google Android":   dict(ios=False, mu=0.05,  n=420, s0=2380, el=0.65, xs=0.67,
+                             pushes=[(14, 3, 2.0), (33, 3, 2.2), (66, 3, 2.1), (86, 3, 1.9)], camps=5, ca=None, plan=4000),
+    "TikTok Android":   dict(ios=False, mu=-0.45, n=330, s0=2540, el=0.82, xs=0.30, pushes=[(8, 3, 1.7), (74, 2, 1.5)],
+                             camps=12, ca=None,  plan=2540),
+    "AppLovin Android": dict(ios=False, mu=-0.85, n=500, s0=1890, el=0.85, xs=0.22, pushes=[(27, 3, 1.6), (79, 3, 1.5)],
+                             camps=8,  ca=None,  plan=1890),
+}
+ORGANIC = {"organic iOS": dict(ios=True, mu=0.25, n=380), "organic Android": dict(ios=False, mu=0.10, n=450)}
+ORDER = list(CHANNELS)
 
-def ym(m):
-    return M0_YEAR + m // 12, m % 12 + 1
+CONSENT_SLOPE = 0.60                   # iOS tracking consent rises with engagement
+CONSENT_OTHER = -1.20                  # Apple Search Ads and organic iOS users' consent intercept
+EXP_DROP = 0.75                        # wider inventory's users are this much less engaged
 
-
-def month_label(m):
-    y, mo = ym(m)
-    return "%04d-%02d" % (y, mo)
+LINES = (0.90, 1.20)                   # growth policy: cut below 0.90, hold from 0.90, scale from 1.20
+BANDS = ("cut", "hold", "scale")
 
 
-def month_start(m):
-    y, mo = ym(m)
-    return dt.date(y, mo, 1)
+def band(x):
+    return BANDS[0] if x < LINES[0] else (BANDS[1] if x < LINES[1] else BANDS[2])
 
 
-def days_in(m):
-    y, mo = ym(m)
-    nxt = dt.date(y + (mo == 12), mo % 12 + 1, 1)
-    return (nxt - dt.date(y, mo, 1)).days
+def day_date(d):
+    return LAUNCH + dt.timedelta(days=int(d))
 
 
-RIVAL_JUL26 = {"FLEX": 10.29, "ONB": 20.49, "GEZ": 24.49}   # July 2026: the rival raises its Basis 10 uur in both
-                                     # countries and brings its Flemish Onbeperkt and Familie to its Dutch prices
+def net_of(price, country):
+    return price / (1 + VAT[country]) * (1 - COMMISSION)
+
+PLAN_START = dt.date(2027, 1, 4)       # the media plan's first week (Monday)
+SEASON_SPEND = {1: 1.18, 2: 1.05, 3: 1.0, 4: 1.0, 5: 0.98, 6: 0.92, 7: 0.86, 8: 0.82, 9: 1.06, 10: 1.04, 11: 1.0,
+                12: 0.95}
 
 
-def rival_of(country, plan, m):
-    """The rival's comparable plan's list price in month m (VAT included)."""
-    if m >= 42 and plan in RIVAL_JUL26:
-        return RIVAL_JUL26[plan]
-    return RIVAL[country][plan]
-
-
-def price_of(plan, country, m, rise27=RISE27):
-    y = M0_YEAR + m // 12
-    if y >= 2027:
-        return PRICE27[plan] if plan in rise27 else PRICE[plan]
-    p = PRICE0[plan]
-    for yy in (2025, 2026):
-        if y >= yy and plan in RISES.get((yy, country), ()):
-            p = PRICE[plan]
-    return p
-SEL = 0.6                            # how much more light listeners answer a rise
-STEP, STEP_DOWN, SEL_X = 0.12, 0.320, 1.4   # past the rival: the extra leaving and moving down; how much heavier the leavers
-ANNOUNCE = 0.038                     # the December bill after the price e-mail: light listeners leave before the new price
-ANN_SEL = 1.0                        # how much more light listeners leave at the e-mail
-# a subscription that ends by cancelling, or by a debit returned and not re-presented, can come back on the same account
-RET0 = 0.08                          # monthly return hazard in the first month after leaving, an average listener
-RET_SEL = 0.8                        # light listeners come back more often
-RET_TAU = 5.0                        # months over which the return hazard falls by e
-RET_SEASON = [1.0, 0.85, 0.9, 1.0, 1.2, 1.4, 1.4, 1.1, 0.9, 0.9, 0.9, 1.1]
-RET_FAIL = 0.22                      # a returned debit: the extra chance of coming back in each of the next two months
-RET_MAX = 30                         # months after which a lapsed account no longer comes back
-RET_CHURN = 1.6                      # how much more often a returned subscription ends in its first three months back
-# the account holder listens more after the first bill at a higher price, the heavier listener the more, fading
-SAL_U = 0.25
-SAL_REF = 25.0                       # hours of a settled month at which the holder takes the uplift as is
-SAL_POW = 2.0
-SAL_TAU = 4.0                        # months over which the uplift falls by e
+def plan_weeks():
+    """the 2027 media plan's 52 weeks: each week's Monday and the plan's weekly spend by channel"""
+    out = []
+    for w in range(52):
+        mon = PLAN_START + dt.timedelta(days=7 * w)
+        m = (mon + dt.timedelta(days=3)).month
+        out.append((mon, m, {c: round(p["plan"] * SEASON_SPEND[m], -1) for c, p in CHANNELS.items()}))
+    return out

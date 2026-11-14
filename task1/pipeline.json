@@ -1,40 +1,42 @@
 {
  "task": "task1",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-13",
  "doctrine": "throughout",
  "architecture": 6,
  "loops": 0,
- "call": "",
- "chain": "R1 2026 installs and cost per install by channel from the instrument that sees each; R2 the store charges and net revenue the app never recorded, by channel; R3 the iOS ad channels' 12-month net revenue per install over all their installs; R4 Google Android's installs and 12-month net revenue per install at the plan's weekly spend; R5 each channel's 12-month net revenue per euro at the plan's spend; R6 each channel's band",
+ "call": "scale Apple Search Ads; hold Meta iOS, Meta Android, Google Android and AppLovin Android; cut TikTok iOS and TikTok Android (2027 return per euro at the plan's weekly spend: Apple Search Ads 1.48; Meta iOS 1.04, Meta Android 1.08, Google Android 1.06, AppLovin Android 0.94; TikTok iOS 0.78, TikTok Android 0.72)",
+ "chain": "R1 installs each channel bought 4 Nov 2024 to 2 Nov 2025; R2 their 12-month net revenue per install; R3 installs a week at each channel's 2027 weekly spend; R4 each channel's 2027 return per euro; R5 each channel's band",
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-13",
+  "checks": "gates.py task1 --full 0 FAIL, 4 WARN (nearest chains answered in the Template check; prompt shell quota for the author's rewrite; leak REVIEW lines ruled harmless; heart WARN only); checks 117 of 117; verify 21 of 21; two builds byte-identical; containers PASS"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (the plan's Notes sheet, plain policy words, channels beside spend, the 2027 plan's dates; every line harmless)",
+  "reader": "two isolated reads: the first found the policy's blank section 3 and three cutoff dates (fixed); the second, on cut 90e641dd3185f4cd, no sentence that hands over a priced step and no file that ranks the channels (leak_check_report.md, Solver's-eye read and rulings)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "guard check WARN only at the draw (forum overuse, young cohorts supporting, record_algorithm_inversion on task16 v3 and task22 v2); skeleton clear of every card and the slot's lineage"
+  "heart": "WARN (forum overuse; completion_of_young_cohorts a supporting step taught twice; record_algorithm_inversion on task16 v3 and task22 v2; no BLOCK)",
+  "nearest": "skeleton severity none against every card, the client's corpus and the slot's lineage; nearest drivers task1 v4 and v5 (lineage), task8 v9, task18 at 0.04 to 0.05"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "NOT_DETERMINISTIC then fixed",
+  "disposition": "FIX_NOW (pass 6), answer blocks only, shipped without another pass",
+  "report": "task1/determinism_check_report_pass5.md (SEND_BACK: the policy's section 3 rendered blank, fixed in the pack); task1/determinism_check_report_pass6.md (FIX_NOW: AppLovin Android's R2 and R3 bands wide enough to cross 0.90 together, capped per channel and asserted corner by corner; the stores' excess stated as about two fifths)"
  },
- "paper_pair": null,
+ "paper_pair": 48.2,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 20.8,
+  "careful": 48.2,
+  "thorough": 100.0,
+  "factorial": "level 5: J1 the charges the records never see, J2 tracking consent, J3 the spend response, each necessary, none sufficient; five open channels opened by three stumps; eleven shortcut routes on eleven distinct wrong calls",
+  "largest_hint": "a channel's installs come dearer and weaker as its weekly spend rises: rescues R3 (1 of 5), not the call"
  },
  "runs": {
   "run1": null,
@@ -91,5 +93,5 @@
   "date": "2026-11-13",
   "note": "architecture 5 sent back at review (reward 83); architecture 6 drawn the same day in a new world"
  },
- "resume": "architecture 6 drawn 2026-11-13 (card v6 registered 23:07Z): stage 2 design next. Write the arch 6 note sections (Deep reasoning, Results chain, Open members, Stump factorial, Hidden factor record, Effort test, Data provenance, Template check, Frontier check, fork and closure tables, Literal reader, Prompt contract) for the Zancada world in the note's Draw and Stump screen; prototype numbers (scratch, not kept): bands cut < 0.90 <= hold < 1.20 <= scale; targets Meta iOS 1.05 hold, TikTok iOS 0.80 cut, Apple Search Ads 1.45 scale, Meta Android 1.08 hold, Google Android 0.97 hold at a plan spend 1.69x its 2026 level, TikTok Android 0.74 cut, AppLovin about 0.96 hold (widen its margin: one seed of three put its proportional route at 0.907); silent continuation about 0.90 a month against active retention, consent slope 0.6 on engagement, 32 fine conversion values. Then precut.py exit 0 and stage 3 (the arch 5 generator in task1/generator is replaced)."
+ "resume": "READY: the author rewrites prompt.txt in their own words (gate it with voice-check.py task1 --rewrite and leak.py), uploads prompt.txt and target.zip, generates the two runs, then /triage-runs task1 with both runs and the rubric pasted"
 }

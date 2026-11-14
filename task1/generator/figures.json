@@ -1,891 +1,743 @@
 {
- "announce_events": [
-  {
-   "announce": 6.9,
-   "country": "Flanders",
-   "plan": "Standaard",
-   "year": 2025
+ "app_recorded_net": 1971528.76,
+ "band_halfwidths": {
+  "R2": {
+   "AppLovin Android": 0.0214,
+   "Apple Search Ads": 0.03,
+   "Google Android": 0.03,
+   "Meta Android": 0.03,
+   "Meta iOS": 0.03,
+   "TikTok Android": 0.03,
+   "TikTok iOS": 0.0466
   },
-  {
-   "announce": 4.5,
-   "country": "Flanders",
-   "plan": "Onbeperkt",
-   "year": 2025
-  },
-  {
-   "announce": 10.0,
-   "country": "Netherlands",
-   "plan": "Flex",
-   "year": 2025
-  },
-  {
-   "announce": 0.8,
-   "country": "Netherlands",
-   "plan": "Gezin",
-   "year": 2025
-  },
-  {
-   "announce": 5.9,
-   "country": "Netherlands",
-   "plan": "Standaard",
-   "year": 2026
-  },
-  {
-   "announce": 9.1,
-   "country": "Netherlands",
-   "plan": "Onbeperkt",
-   "year": 2026
-  },
-  {
-   "announce": 8.9,
-   "country": "Flanders",
-   "plan": "Flex",
-   "year": 2026
-  },
-  {
-   "announce": -0.1,
-   "country": "Flanders",
-   "plan": "Gezin",
-   "year": 2026
+  "R3": {
+   "AppLovin Android": 0.0214,
+   "Apple Search Ads": 0.06,
+   "Google Android": 0.06,
+   "Meta Android": 0.0489,
+   "Meta iOS": 0.06,
+   "TikTok Android": 0.06,
+   "TikTok iOS": 0.06
   }
- ],
- "announce_pct": {
-  "Flex": 9.4,
-  "Gezin": 0.4,
-  "Onbeperkt": 6.8,
-  "Standaard": 6.4
- },
- "back12_by_band": {
-  "20 and more": 28.2,
-  "3 to 8": 48.1,
-  "8 to 20": 38.0,
-  "under 3": 57.7
- },
- "back_share": {
-  "Flex": 27.2,
-  "Gezin": 23.0,
-  "Onbeperkt": 22.7,
-  "Standaard": 25.8
  },
  "bands": {
-  "CH": {
-   "Flex": [
-    4.59,
-    4.68
+  "AppLovin Android": "hold",
+  "Apple Search Ads": "scale",
+  "Google Android": "hold",
+  "Meta Android": "hold",
+  "Meta iOS": "hold",
+  "TikTok Android": "cut",
+  "TikTok iOS": "cut"
+ },
+ "call": [
+  "AppLovin Android: hold",
+  "Apple Search Ads: scale",
+  "Google Android: hold",
+  "Meta Android: hold",
+  "Meta iOS: hold",
+  "TikTok Android: cut",
+  "TikTok iOS: cut"
+ ],
+ "candidates_renewal": 20336,
+ "candidates_trial": 36218,
+ "consent_share_2025": {
+  "Meta iOS": 0.283,
+  "TikTok iOS": 0.183
+ },
+ "consenter_overstate": {
+  "Meta iOS": 0.446,
+  "TikTok iOS": 0.439
+ },
+ "distinct_wrong_calls": 11,
+ "family": {
+  "AppLovin Android": {
+   "A=by_store": 0.946,
+   "A=calendar": 0.945,
+   "A=golden": 0.944,
+   "A=trim": 0.944,
+   "A=two": 0.944,
+   "B=lastweek": 0.945,
+   "B=mature": 0.948,
+   "B=none": 0.94,
+   "B=own": 0.941,
+   "B=quad": 0.935,
+   "C=coarse": 0.944,
+   "C=netpool": 0.944,
+   "C=pooled": 0.944,
+   "C=ratio": 0.944
+  },
+  "Apple Search Ads": {
+   "A=by_store": 1.481,
+   "A=calendar": 1.484,
+   "A=golden": 1.483,
+   "A=trim": 1.483,
+   "A=two": 1.482,
+   "B=lastweek": 1.483,
+   "B=mature": 1.46,
+   "B=none": 1.525,
+   "B=own": 1.464,
+   "B=quad": 1.491,
+   "C=coarse": 1.483,
+   "C=netpool": 1.483,
+   "C=pooled": 1.483,
+   "C=ratio": 1.483
+  },
+  "Google Android": {
+   "A=by_store": 1.059,
+   "A=calendar": 1.057,
+   "A=golden": 1.057,
+   "A=trim": 1.057,
+   "A=two": 1.056,
+   "B=lastweek": 1.056,
+   "B=mature": 1.054,
+   "B=none": 1.119,
+   "B=own": 1.059,
+   "B=quad": 1.085,
+   "C=coarse": 1.057,
+   "C=netpool": 1.057,
+   "C=pooled": 1.057,
+   "C=ratio": 1.057
+  },
+  "Meta Android": {
+   "A=by_store": 1.085,
+   "A=calendar": 1.084,
+   "A=golden": 1.083,
+   "A=trim": 1.083,
+   "A=two": 1.083,
+   "B=lastweek": 1.083,
+   "B=mature": 1.084,
+   "B=none": 1.076,
+   "B=own": 1.09,
+   "B=quad": 1.089,
+   "C=coarse": 1.083,
+   "C=netpool": 1.083,
+   "C=pooled": 1.083,
+   "C=ratio": 1.083
+  },
+  "Meta iOS": {
+   "A=by_store": 1.043,
+   "A=calendar": 1.045,
+   "A=golden": 1.044,
+   "A=trim": 1.044,
+   "A=two": 1.043,
+   "B=lastweek": 1.044,
+   "B=mature": 1.052,
+   "B=none": 1.051,
+   "B=own": 1.055,
+   "B=quad": 1.045,
+   "C=coarse": 1.049,
+   "C=netpool": 1.048,
+   "C=pooled": 1.043,
+   "C=ratio": 1.035
+  },
+  "TikTok Android": {
+   "A=by_store": 0.724,
+   "A=calendar": 0.724,
+   "A=golden": 0.723,
+   "A=trim": 0.723,
+   "A=two": 0.722,
+   "B=lastweek": 0.723,
+   "B=mature": 0.722,
+   "B=none": 0.717,
+   "B=own": 0.724,
+   "B=quad": 0.728,
+   "C=coarse": 0.723,
+   "C=netpool": 0.723,
+   "C=pooled": 0.723,
+   "C=ratio": 0.723
+  },
+  "TikTok iOS": {
+   "A=by_store": 0.778,
+   "A=calendar": 0.78,
+   "A=golden": 0.779,
+   "A=trim": 0.779,
+   "A=two": 0.779,
+   "B=lastweek": 0.779,
+   "B=mature": 0.774,
+   "B=none": 0.773,
+   "B=own": 0.773,
+   "B=quad": 0.771,
+   "C=coarse": 0.78,
+   "C=netpool": 0.793,
+   "C=pooled": 0.79,
+   "C=ratio": 0.755
+  }
+ },
+ "google_plan_rise": 0.502,
+ "installs_2025": {
+  "AppLovin Android": 26445,
+  "Apple Search Ads": 5675,
+  "Google Android": 23062,
+  "Meta Android": 17670,
+  "Meta iOS": 17810,
+  "TikTok Android": 17644,
+  "TikTok iOS": 11504
+ },
+ "installs_week_2027": {
+  "AppLovin Android": 498,
+  "Apple Search Ads": 113,
+  "Google Android": 594,
+  "Meta Android": 328,
+  "Meta iOS": 342,
+  "TikTok Android": 328,
+  "TikTok iOS": 217
+ },
+ "lines": [
+  0.9,
+  1.2
+ ],
+ "pct": {
+  "consent": {
+   "Meta iOS": 28.3,
+   "TikTok iOS": 18.3
+  },
+  "consenter_overstate": {
+   "Meta iOS": 45.0,
+   "TikTok iOS": 44.0
+  },
+  "google_plan_rise": 50.0,
+  "unrecorded": {
+   "AppLovin Android": 38.3,
+   "Apple Search Ads": 17.8,
+   "Google Android": 25.0,
+   "Meta Android": 25.8,
+   "TikTok Android": 31.6
+  }
+ },
+ "perturbations": [
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
-   "Gezin": [
-    28.65,
-    29.23
+   "input": "silent continuation -0.02",
+   "roas": {
+    "AppLovin Android": 0.914,
+    "Apple Search Ads": 1.463,
+    "Google Android": 1.034,
+    "Meta Android": 1.061,
+    "Meta iOS": 1.023,
+    "TikTok Android": 0.704,
+    "TikTok iOS": 0.762
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
-   "Onbeperkt": [
-    32.01,
-    32.66
+   "input": "silent continuation +0.02",
+   "roas": {
+    "AppLovin Android": 0.978,
+    "Apple Search Ads": 1.506,
+    "Google Android": 1.083,
+    "Meta Android": 1.108,
+    "Meta iOS": 1.067,
+    "TikTok Android": 0.744,
+    "TikTok iOS": 0.798
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
    ],
-   "Standaard": [
-    9.36,
-    9.55
+   "input": "trial-end charge share -20%",
+   "roas": {
+    "AppLovin Android": 0.92,
+    "Apple Search Ads": 1.47,
+    "Google Android": 1.04,
+    "Meta Android": 1.069,
+    "Meta iOS": 1.03,
+    "TikTok Android": 0.709,
+    "TikTok iOS": 0.768
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "trial-end charge share +20%",
+   "roas": {
+    "AppLovin Android": 0.968,
+    "Apple Search Ads": 1.496,
+    "Google Android": 1.074,
+    "Meta Android": 1.098,
+    "Meta iOS": 1.058,
+    "TikTok Android": 0.737,
+    "TikTok iOS": 0.79
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "non-consenting users' value -10%",
+   "roas": {
+    "AppLovin Android": 0.944,
+    "Apple Search Ads": 1.483,
+    "Google Android": 1.057,
+    "Meta Android": 1.083,
+    "Meta iOS": 0.982,
+    "TikTok Android": 0.723,
+    "TikTok iOS": 0.732
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "non-consenting users' value +10%",
+   "roas": {
+    "AppLovin Android": 0.944,
+    "Apple Search Ads": 1.483,
+    "Google Android": 1.057,
+    "Meta Android": 1.083,
+    "Meta iOS": 1.105,
+    "TikTok Android": 0.723,
+    "TikTok iOS": 0.826
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "value-per-install slope on spend -20%",
+   "roas": {
+    "AppLovin Android": 0.943,
+    "Apple Search Ads": 1.481,
+    "Google Android": 1.1,
+    "Meta Android": 1.08,
+    "Meta iOS": 1.044,
+    "TikTok Android": 0.721,
+    "TikTok iOS": 0.777
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "value-per-install slope on spend +20%",
+   "roas": {
+    "AppLovin Android": 0.945,
+    "Apple Search Ads": 1.485,
+    "Google Android": 1.015,
+    "Meta Android": 1.087,
+    "Meta iOS": 1.043,
+    "TikTok Android": 0.724,
+    "TikTok iOS": 0.781
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "installs slope on spend -20%",
+   "roas": {
+    "AppLovin Android": 0.945,
+    "Apple Search Ads": 1.469,
+    "Google Android": 0.994,
+    "Meta Android": 1.086,
+    "Meta iOS": 1.038,
+    "TikTok Android": 0.724,
+    "TikTok iOS": 0.78
+   }
+  },
+  {
+   "answer": [
+    "AppLovin Android: hold",
+    "Apple Search Ads: scale",
+    "Google Android: hold",
+    "Meta Android: hold",
+    "Meta iOS: hold",
+    "TikTok Android: cut",
+    "TikTok iOS: cut"
+   ],
+   "input": "installs slope on spend +20%",
+   "roas": {
+    "AppLovin Android": 0.944,
+    "Apple Search Ads": 1.497,
+    "Google Android": 1.123,
+    "Meta Android": 1.081,
+    "Meta iOS": 1.05,
+    "TikTok Android": 0.721,
+    "TikTok iOS": 0.778
+   }
+  }
+ ],
+ "plan_total": {
+  "AppLovin Android": 97000,
+  "Apple Search Ads": 58530,
+  "Google Android": 205240,
+  "Meta Android": 140600,
+  "Meta iOS": 154970,
+  "TikTok Android": 130300,
+  "TikTok iOS": 111870
+ },
+ "plan_weekly_avg": {
+  "AppLovin Android": 1865,
+  "Apple Search Ads": 1126,
+  "Google Android": 3947,
+  "Meta Android": 2704,
+  "Meta iOS": 2980,
+  "TikTok Android": 2506,
+  "TikTok iOS": 2151
+ },
+ "plan_weeks": 52,
+ "result_bands": {
+  "R1": {
+   "AppLovin Android": [
+    25916,
+    26974
+   ],
+   "Apple Search Ads": [
+    5561,
+    5789
+   ],
+   "Google Android": [
+    22600,
+    23524
+   ],
+   "Meta Android": [
+    17316,
+    18024
+   ],
+   "Meta iOS": [
+    17453,
+    18167
+   ],
+   "TikTok Android": [
+    17291,
+    17997
+   ],
+   "TikTok iOS": [
+    11273,
+    11735
    ]
   },
   "R2": {
-   "Flex": [
-    11.69,
-    12.48
+   "AppLovin Android": [
+    3.445,
+    3.595
    ],
-   "Gezin": [
-    110.59,
-    116.22
+   "Apple Search Ads": [
+    14.191,
+    15.069
    ],
-   "Onbeperkt": [
-    113.39,
-    122.35
+   "Google Android": [
+    8.28,
+    8.792
    ],
-   "Standaard": [
-    27.03,
-    28.54
+   "Meta Android": [
+    8.526,
+    9.053
+   ],
+   "Meta iOS": [
+    8.849,
+    9.397
+   ],
+   "TikTok Android": [
+    5.298,
+    5.626
+   ],
+   "TikTok iOS": [
+    7.296,
+    8.009
    ]
   },
   "R3": {
-   "Flex Flanders": [
-    9.54,
-    11.72
+   "AppLovin Android": [
+    488,
+    508
    ],
-   "Flex Netherlands": [
-    9.45,
-    11.73
+   "Apple Search Ads": [
+    107,
+    120
    ],
-   "Gezin Flanders": [
-    -1.81,
-    2.79
+   "Google Android": [
+    559,
+    629
    ],
-   "Gezin Netherlands": [
-    -1.81,
-    2.79
+   "Meta Android": [
+    312,
+    343
    ],
-   "Onbeperkt Flanders": [
-    -0.3,
-    2.02
+   "Meta iOS": [
+    322,
+    362
    ],
-   "Onbeperkt Netherlands": [
-    -0.3,
-    1.99
+   "TikTok Android": [
+    309,
+    347
    ],
-   "Standaard Flanders": [
-    2.61,
-    5.43
-   ],
-   "Standaard Netherlands": [
-    2.68,
-    5.43
+   "TikTok iOS": [
+    205,
+    230
    ]
   },
   "R4": {
-   "Gezin Flanders": [
-    -1.47,
-    0.5
+   "AppLovin Android": [
+    0.916,
+    0.973
    ],
-   "Gezin Netherlands": [
-    -1.47,
-    0.47
+   "Apple Search Ads": [
+    1.419,
+    1.547
    ],
-   "Onbeperkt Flanders": [
-    0.54,
-    3.32
+   "Google Android": [
+    0.964,
+    1.149
    ],
-   "Onbeperkt Netherlands": [
-    0.52,
-    3.32
+   "Meta Android": [
+    1.051,
+    1.116
    ],
-   "Standaard Flanders": [
-    3.07,
-    4.0
+   "Meta iOS": [
+    1.013,
+    1.075
    ],
-   "Standaard Netherlands": [
-    3.12,
-    4.0
-   ]
-  },
-  "R5": {
-   "Flex": [
-    25.15,
-    29.22
+   "TikTok Android": [
+    0.701,
+    0.744
    ],
-   "Gezin": [
-    20.81,
-    25.48
-   ],
-   "Onbeperkt": [
-    20.3,
-    24.72
-   ],
-   "Standaard": [
-    23.79,
-    27.85
-   ]
-  },
-  "R6": {
-   "Flex": [
-    -0.03,
-    2.38
-   ],
-   "Gezin": [
-    6.37,
-    9.04
-   ],
-   "Onbeperkt": [
-    32.95,
-    42.17
-   ],
-   "Standaard": [
-    4.95,
-    7.27
-   ]
-  },
-  "R7": {
-   "Flex": [
-    -3.77,
-    -2.81
-   ],
-   "Gezin": [
-    3.15,
-    6.35
-   ],
-   "Onbeperkt": [
-    -5.27,
-    -4.17
-   ],
-   "Standaard": [
-    0.95,
-    2.96
-   ]
-  },
-  "R9": {
-   "Flex": [
-    574,
-    605
-   ],
-   "Gezin": [
-    871,
-    921
-   ],
-   "Onbeperkt": [
-    1237,
-    1299
-   ],
-   "Standaard": [
-    1008,
-    1064
+   "TikTok iOS": [
+    0.743,
+    0.815
    ]
   }
  },
- "careful": {
-  "change_2027": {
-   "Flex": -6.1,
-   "Gezin": 6.9,
-   "Onbeperkt": 2.5,
-   "Standaard": -0.3
-  },
-  "paying_end27": {
-   "Flex": 300,
-   "Gezin": 801,
-   "Onbeperkt": 1018,
-   "Standaard": 673
-  },
-  "remun_2027": {
-   "Flex": 8.4,
-   "Gezin": 105.9,
-   "Onbeperkt": 101.7,
-   "Standaard": 21.9
-  }
+ "roas_2025": {
+  "AppLovin Android": 0.94,
+  "Apple Search Ads": 1.5,
+  "Google Android": 1.44,
+  "Meta Android": 1.06,
+  "Meta iOS": 1.06,
+  "TikTok Android": 0.71,
+  "TikTok iOS": 0.76
  },
- "careful_raise": [
-  "Gezin",
-  "Onbeperkt"
- ],
- "change_2027": {
-  "Flex": -3.3,
-  "Gezin": 5.4,
-  "Onbeperkt": -4.8,
-  "Standaard": 2.2
+ "roas_2027": {
+  "AppLovin Android": 0.94,
+  "Apple Search Ads": 1.48,
+  "Google Android": 1.06,
+  "Meta Android": 1.08,
+  "Meta iOS": 1.04,
+  "TikTok Android": 0.72,
+  "TikTok iOS": 0.78
  },
- "clauses": [
-  2.1,
-  2.2,
-  2.3,
-  2.4,
-  3.1,
-  3.2,
-  3.3,
-  3.5,
-  3.8,
-  3.9,
-  3.1
- ],
- "counted_per_month": {
-  "Flex": 4.63,
-  "Gezin": 28.94,
-  "Onbeperkt": 32.34,
-  "Standaard": 9.45
- },
- "cross_2027": {
-  "Flex": true,
-  "Gezin": false,
-  "Onbeperkt": false,
-  "Standaard": false
- },
- "events": [
-  {
-   "country": "Flanders",
-   "crossed": false,
-   "extra_cancel": 7.8,
-   "extra_down": 3.8,
-   "plan": "Standaard",
-   "subscriptions": 526,
-   "year": 2025
-  },
-  {
-   "country": "Flanders",
-   "crossed": true,
-   "extra_cancel": 10.8,
-   "extra_down": 28.0,
-   "plan": "Onbeperkt",
-   "subscriptions": 466,
-   "year": 2025
-  },
-  {
-   "country": "Netherlands",
-   "crossed": true,
-   "extra_cancel": 11.7,
-   "extra_down": 0.0,
-   "plan": "Flex",
-   "subscriptions": 730,
-   "year": 2025
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": -1.5,
-   "extra_down": -1.2,
-   "plan": "Gezin",
-   "subscriptions": 663,
-   "year": 2025
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": 4.0,
-   "extra_down": 3.7,
-   "plan": "Standaard",
-   "subscriptions": 1274,
-   "year": 2026
-  },
-  {
-   "country": "Netherlands",
-   "crossed": false,
-   "extra_cancel": 0.3,
-   "extra_down": 1.2,
-   "plan": "Onbeperkt",
-   "subscriptions": 1283,
-   "year": 2026
-  },
-  {
-   "country": "Flanders",
-   "crossed": true,
-   "extra_cancel": 9.9,
-   "extra_down": 0.0,
-   "plan": "Flex",
-   "subscriptions": 323,
-   "year": 2026
-  },
-  {
-   "country": "Flanders",
-   "crossed": true,
-   "extra_cancel": 29.7,
-   "extra_down": 5.6,
-   "plan": "Gezin",
-   "subscriptions": 299,
-   "year": 2026
-  }
- ],
- "extra_cancel": {
-  "Flex Flanders": 10.5,
-  "Flex Netherlands": 10.5,
-  "Gezin Flanders": 0.6,
-  "Gezin Netherlands": 0.5,
-  "Onbeperkt Flanders": 0.9,
-  "Onbeperkt Netherlands": 0.8,
-  "Standaard Flanders": 3.7,
-  "Standaard Netherlands": 3.8
- },
- "extra_down": {
-  "Gezin Flanders": 0.2,
-  "Gezin Netherlands": 0.2,
-  "Onbeperkt Flanders": 0.9,
-  "Onbeperkt Netherlands": 0.8,
-  "Standaard Flanders": 3.4,
-  "Standaard Netherlands": 3.4
- },
- "fade_months": 5.1,
- "hold": [
-  "Flex",
-  "Onbeperkt"
- ],
- "paying_end27": {
-  "Flex": 591,
-  "Gezin": 898,
-  "Onbeperkt": 1270,
-  "Standaard": 1039
- },
- "paying_end27_total": 3798,
- "paying_oct": {
-  "Flex": 1371,
-  "Gezin": 1224,
-  "Onbeperkt": 2136,
-  "Standaard": 2146
- },
- "paying_oct_total": 6877,
- "per": 100,
- "price0": {
-  "Flex": 9.49,
-  "Gezin": 21.99,
-  "Onbeperkt": 17.99,
-  "Standaard": 13.49
- },
- "price26": {
-  "Flex": 9.99,
-  "Gezin": 22.99,
-  "Onbeperkt": 18.99,
-  "Standaard": 14.99
- },
- "price27": {
-  "Flex": 10.49,
-  "Gezin": 23.99,
-  "Onbeperkt": 19.99,
-  "Standaard": 16.49
- },
- "quick_raise": [],
- "raise": [
-  "Gezin",
-  "Standaard"
- ],
- "rate": 0.4,
- "remun_2027": {
-  "Flex": 12.1,
-  "Gezin": 113.6,
-  "Onbeperkt": 119.7,
-  "Standaard": 27.8
- },
- "rise_eur": {
-  "Flex": 0.5,
-  "Gezin": 1.0,
-  "Onbeperkt": 1.0,
-  "Standaard": 1.5
- },
- "rival_2027": {
-  "Flex Flanders": 10.29,
-  "Flex Netherlands": 10.29,
-  "Gezin Flanders": 24.49,
-  "Gezin Netherlands": 24.49,
-  "Onbeperkt Flanders": 20.49,
-  "Onbeperkt Netherlands": 20.49,
-  "Standaard Flanders": 16.99,
-  "Standaard Netherlands": 16.99
- },
- "rival_family": {
-  "downgraders modelled on their own hours at the lower plan's cap": [
-   "Gezin",
-   "Standaard"
-  ],
-  "each past response carried on the log of the price ratio": [
-   "Gezin",
-   "Standaard"
-  ],
-  "each plan's own level and one step where a rise passes the rival, fitted on the eight": [
-   "Gezin",
-   "Standaard"
-  ],
-  "each plan's own rises of the same kind, as they were read": [
-   "Gezin",
-   "Standaard"
-  ],
-  "re-sent warehouse rows summed": [
-   "Gezin",
-   "Standaard"
-  ],
-  "the January and February bills as the first bill's window": [
-   "Gezin",
-   "Standaard"
-  ],
-  "the plan's continuation by paying months alone": [
-   "Gezin",
-   "Standaard"
-  ],
-  "the same country a year earlier as the control where the records reach it": [
-   "Gezin",
-   "Standaard"
-  ],
-  "the stayers' extra listening as observed month by month, no fitted fade": [
-   "Gezin",
-   "Standaard"
-  ],
-  "the stayers' fade fitted plan by plan": [
-   "Gezin",
-   "Standaard"
-  ]
+ "roas_2027_3dp": {
+  "AppLovin Android": 0.944,
+  "Apple Search Ads": 1.483,
+  "Google Android": 1.057,
+  "Meta Android": 1.083,
+  "Meta iOS": 1.044,
+  "TikTok Android": 0.723,
+  "TikTok iOS": 0.779
  },
  "routes": {
-  "returns after a stop, the stayers listening as before": {
-   "change_2027": {
-    "Flex": -3.0,
-    "Gezin": 7.7,
-    "Onbeperkt": 4.6,
-    "Standaard": 3.4
-   },
-   "raise": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ]
+  "golden|consenters|average": {
+   "AppLovin Android": 0.941,
+   "Apple Search Ads": 1.504,
+   "Google Android": 1.441,
+   "Meta Android": 1.058,
+   "Meta iOS": 1.533,
+   "TikTok Android": 0.709,
+   "TikTok iOS": 1.093
   },
-  "returns at one rate for every listener, the stayers listening as before": {
-   "change_2027": {
-    "Flex": -3.7,
-    "Gezin": 7.8,
-    "Onbeperkt": 4.5,
-    "Standaard": 3.0
-   },
-   "raise": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ]
+  "golden|consenters|pooled": {
+   "AppLovin Android": 0.944,
+   "Apple Search Ads": 1.483,
+   "Google Android": 1.057,
+   "Meta Android": 1.083,
+   "Meta iOS": 1.509,
+   "TikTok Android": 0.723,
+   "TikTok iOS": 1.121
   },
-  "the careful route on the 2026 basis (52 per cent of net revenue)": {
-   "change_2027": {
-    "Flex": -4.0,
-    "Gezin": 3.0,
-    "Onbeperkt": -2.0,
-    "Standaard": -1.4
-   },
-   "raise": [
-    "Gezin"
-   ]
+  "golden|golden|average": {
+   "AppLovin Android": 0.941,
+   "Apple Search Ads": 1.504,
+   "Google Android": 1.441,
+   "Meta Android": 1.058,
+   "Meta iOS": 1.061,
+   "TikTok Android": 0.709,
+   "TikTok iOS": 0.759
   },
-  "the careful route with each plan's own rise in its country": {
-   "change_2027": {
-    "Flex": -6.4,
-    "Gezin": -2.5,
-    "Onbeperkt": 0.3,
-    "Standaard": -1.6
-   },
-   "raise": [
-    "Onbeperkt"
-   ]
+  "golden|golden|pooled": {
+   "AppLovin Android": 0.944,
+   "Apple Search Ads": 1.483,
+   "Google Android": 1.057,
+   "Meta Android": 1.083,
+   "Meta iOS": 1.044,
+   "TikTok Android": 0.723,
+   "TikTok iOS": 0.779
   },
-  "the careful route with each plan's own rises read together": {
-   "change_2027": {
-    "Flex": -6.4,
-    "Gezin": -4.1,
-    "Onbeperkt": 0.2,
-    "Standaard": -1.5
-   },
-   "raise": [
-    "Onbeperkt"
-   ]
+  "prop|consenters|average": {
+   "AppLovin Android": 0.833,
+   "Apple Search Ads": 1.674,
+   "Google Android": 1.551,
+   "Meta Android": 1.126,
+   "Meta iOS": 1.675,
+   "TikTok Android": 0.696,
+   "TikTok iOS": 1.185
   },
-  "the careful route with one response for every rise": {
-   "change_2027": {
-    "Flex": -4.5,
-    "Gezin": -2.5,
-    "Onbeperkt": -2.5,
-    "Standaard": -2.3
-   },
-   "raise": []
+  "prop|consenters|pooled": {
+   "AppLovin Android": 0.839,
+   "Apple Search Ads": 1.665,
+   "Google Android": 1.099,
+   "Meta Android": 1.158,
+   "Meta iOS": 1.643,
+   "TikTok Android": 0.709,
+   "TikTok iOS": 1.212
   },
-  "the careful route with the response at the first bill alone": {
-   "change_2027": {
-    "Flex": -2.1,
-    "Gezin": 7.3,
-    "Onbeperkt": 6.2,
-    "Standaard": 4.6
-   },
-   "raise": [
-    "Gezin",
-    "Onbeperkt",
-    "Standaard"
-   ]
+  "prop|golden|average": {
+   "AppLovin Android": 0.833,
+   "Apple Search Ads": 1.674,
+   "Google Android": 1.551,
+   "Meta Android": 1.126,
+   "Meta iOS": 1.09,
+   "TikTok Android": 0.696,
+   "TikTok iOS": 0.761
   },
-  "the careful route with the stayers' listening read off the plan's averages": {
-   "change_2027": {
-    "Flex": -6.4,
-    "Gezin": 7.7,
-    "Onbeperkt": -9.4,
-    "Standaard": -1.6
-   },
-   "raise": [
-    "Gezin"
-   ]
+  "prop|golden|pooled": {
+   "AppLovin Android": 0.839,
+   "Apple Search Ads": 1.665,
+   "Google Android": 1.099,
+   "Meta Android": 1.158,
+   "Meta iOS": 1.069,
+   "TikTok Android": 0.709,
+   "TikTok iOS": 0.778
   },
-  "the careful route: no return after a stop, the stayers listening as before": {
-   "change_2027": {
-    "Flex": -6.1,
-    "Gezin": 6.9,
-    "Onbeperkt": 2.5,
-    "Standaard": -0.3
-   },
-   "raise": [
-    "Gezin",
-    "Onbeperkt"
-   ]
+  "recorded|consenters|average": {
+   "AppLovin Android": 0.58,
+   "Apple Search Ads": 1.236,
+   "Google Android": 1.08,
+   "Meta Android": 0.785,
+   "Meta iOS": 1.236,
+   "TikTok Android": 0.485,
+   "TikTok iOS": 0.875
   },
-  "the golden": {
-   "change_2027": {
-    "Flex": -3.3,
-    "Gezin": 5.4,
-    "Onbeperkt": -4.8,
-    "Standaard": 2.2
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
+  "recorded|consenters|pooled": {
+   "AppLovin Android": 0.584,
+   "Apple Search Ads": 1.229,
+   "Google Android": 0.765,
+   "Meta Android": 0.807,
+   "Meta iOS": 1.213,
+   "TikTok Android": 0.494,
+   "TikTok iOS": 0.895
   },
-  "the golden on the 2026 basis": {
-   "change_2027": {
-    "Flex": -2.2,
-    "Gezin": 3.4,
-    "Onbeperkt": -0.4,
-    "Standaard": 0.6
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
+  "recorded|golden|average": {
+   "AppLovin Android": 0.58,
+   "Apple Search Ads": 1.236,
+   "Google Android": 1.08,
+   "Meta Android": 0.785,
+   "Meta iOS": 0.804,
+   "TikTok Android": 0.485,
+   "TikTok iOS": 0.562
   },
-  "the golden with every subscription answering at its plan's rate": {
-   "change_2027": {
-    "Flex": -3.2,
-    "Gezin": 5.4,
-    "Onbeperkt": -3.7,
-    "Standaard": 2.3
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
-  },
-  "the golden with returns at one rate for every listener": {
-   "change_2027": {
-    "Flex": -3.9,
-    "Gezin": 5.6,
-    "Onbeperkt": -4.9,
-    "Standaard": 1.8
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
-  },
-  "the golden with the stayers' extra listening held at its first months": {
-   "change_2027": {
-    "Flex": -3.3,
-    "Gezin": 4.4,
-    "Onbeperkt": -8.4,
-    "Standaard": 1.9
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
-  },
-  "the golden with the stayers' listening read off the plan's averages": {
-   "change_2027": {
-    "Flex": -3.3,
-    "Gezin": 8.5,
-    "Onbeperkt": -7.3,
-    "Standaard": 2.0
-   },
-   "raise": [
-    "Gezin",
-    "Standaard"
-   ]
-  },
-  "the quick route": {
-   "change_2027": {
-    "Flex": -0.5,
-    "Gezin": -5.9,
-    "Onbeperkt": -3.9,
-    "Standaard": -0.8
-   },
-   "raise": []
-  },
-  "the stayers' extra listening, no return after a stop": {
-   "change_2027": {
-    "Flex": -6.3,
-    "Gezin": 4.6,
-    "Onbeperkt": -6.9,
-    "Standaard": -1.4
-   },
-   "raise": [
-    "Gezin"
-   ]
+  "recorded|golden|pooled": {
+   "AppLovin Android": 0.584,
+   "Apple Search Ads": 1.229,
+   "Google Android": 0.765,
+   "Meta Android": 0.807,
+   "Meta iOS": 0.789,
+   "TikTok Android": 0.494,
+   "TikTok iOS": 0.574
   }
  },
- "sal_hours": {
-  "Flex": 1.3,
-  "Gezin": 7.4,
-  "Onbeperkt": 37.9,
-  "Standaard": 6.2
+ "shortcut_routes": 11,
+ "silent_q": 0.889,
+ "spend_2025": {
+  "AppLovin Android": 98948,
+  "Apple Search Ads": 55212,
+  "Google Android": 136612,
+  "Meta Android": 146778,
+  "Meta iOS": 153171,
+  "TikTok Android": 135944,
+  "TikTok iOS": 115962
  },
- "uplift_first_month": {
-  "Flex": 4.8,
-  "Gezin": 4.8,
-  "Onbeperkt": 19.7,
-  "Standaard": 11.0
+ "store_excess": 2762178.12,
+ "store_excess_pct": 40.1,
+ "store_excess_share": 0.401,
+ "trial_end_share": 0.113,
+ "unrecorded_share_2025": {
+  "AppLovin Android": 0.383,
+  "Apple Search Ads": 0.178,
+  "Google Android": 0.25,
+  "Meta Android": 0.258,
+  "TikTok Android": 0.316
  },
- "uplift_obs": {
-  "Flex": [
-   [
-    1,
-    9.3
-   ],
-   [
-    2,
-    3.0
-   ],
-   [
-    3,
-    -0.3
-   ],
-   [
-    4,
-    4.5
-   ],
-   [
-    5,
-    -3.6
-   ],
-   [
-    6,
-    -0.7
-   ],
-   [
-    7,
-    0.8
-   ],
-   [
-    8,
-    0.7
-   ],
-   [
-    9,
-    5.6
-   ],
-   [
-    10,
-    6.1
-   ],
-   [
-    11,
-    -2.2
-   ]
-  ],
-  "Gezin": [
-   [
-    1,
-    5.4
-   ],
-   [
-    2,
-    2.7
-   ],
-   [
-    3,
-    2.3
-   ],
-   [
-    4,
-    3.3
-   ],
-   [
-    5,
-    1.2
-   ],
-   [
-    6,
-    3.0
-   ],
-   [
-    7,
-    5.8
-   ],
-   [
-    8,
-    -1.4
-   ],
-   [
-    9,
-    0.7
-   ],
-   [
-    10,
-    2.0
-   ],
-   [
-    11,
-    1.1
-   ]
-  ],
-  "Onbeperkt": [
-   [
-    1,
-    18.9
-   ],
-   [
-    2,
-    16.0
-   ],
-   [
-    3,
-    16.8
-   ],
-   [
-    4,
-    10.0
-   ],
-   [
-    5,
-    5.5
-   ],
-   [
-    6,
-    5.4
-   ],
-   [
-    7,
-    5.7
-   ],
-   [
-    8,
-    8.5
-   ],
-   [
-    9,
-    9.1
-   ],
-   [
-    10,
-    2.3
-   ],
-   [
-    11,
-    -2.3
-   ]
-  ],
-  "Standaard": [
-   [
-    1,
-    9.4
-   ],
-   [
-    2,
-    9.5
-   ],
-   [
-    3,
-    7.5
-   ],
-   [
-    4,
-    8.8
-   ],
-   [
-    5,
-    8.8
-   ],
-   [
-    6,
-    4.2
-   ],
-   [
-    7,
-    3.2
-   ],
-   [
-    8,
-    0.7
-   ],
-   [
-    9,
-    -2.0
-   ],
-   [
-    10,
-    -0.5
-   ],
-   [
-    11,
-    -0.2
-   ]
-  ]
- }
+ "v12_2025": {
+  "AppLovin Android": 3.52,
+  "Apple Search Ads": 14.63,
+  "Google Android": 8.54,
+  "Meta Android": 8.79,
+  "Meta iOS": 9.12,
+  "TikTok Android": 5.46,
+  "TikTok iOS": 7.65
+ },
+ "v12_consenters_2025": {
+  "Meta iOS": 13.19,
+  "TikTok iOS": 11.01
+ },
+ "vpi_2027": {
+  "AppLovin Android": 3.54,
+  "Apple Search Ads": 14.71,
+  "Google Android": 7.02,
+  "Meta Android": 8.94,
+  "Meta iOS": 9.1,
+  "TikTok Android": 5.52,
+  "TikTok iOS": 7.72
+ },
+ "window_days": 365,
+ "window_months": 12
 }

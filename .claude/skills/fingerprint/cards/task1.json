@@ -1,367 +1,367 @@
 {
-  "task": "task1",
-  "project": "sulfur",
-  "architecture": "v6",
-  "drawn": "2026-11-13",
-  "slot_note": "",
-  "domain": "product-analytics",
-  "client_domain": "product-analytics",
-  "subdomain": "retention-cohort-lifetime-value-modeling",
-  "niche": "a Spanish home-workout subscription app placing each of its seven paid acquisition channels in the growth policy's scale, hold or cut band for 2027, on the 12-month net revenue per euro that the 2027 media plan's weekly spend on each channel buys",
-  "objective": "forecasting",
-  "shape": "14",
-  "decision_type": "go_hold_or_stop",
-  "answer_unit": "set_of_items",
-  "answer": "to be filled at READY from generator/figures.json",
-  "answer_source": "task1/generator/figures.json bands, roas_2027",
-  "gap": [
-    "time",
-    "population"
+ "task": "task1",
+ "project": "sulfur",
+ "architecture": "v6",
+ "drawn": "2026-11-13",
+ "slot_note": "",
+ "domain": "product-analytics",
+ "client_domain": "product-analytics",
+ "subdomain": "retention-cohort-lifetime-value-modeling",
+ "niche": "a Spanish home-workout subscription app placing each of its seven paid acquisition channels in the growth policy's scale, hold or cut band for 2027, on the 12-month net revenue per euro that the 2027 media plan's weekly spend on each channel buys",
+ "objective": "forecasting",
+ "shape": "14",
+ "decision_type": "go_hold_or_stop",
+ "answer_unit": "set_of_items",
+ "answer": "scale Apple Search Ads; hold Meta iOS, Meta Android, Google Android and AppLovin Android; cut TikTok iOS and TikTok Android (2027 return per euro at the plan's weekly spend: Apple Search Ads 1.48; Meta iOS 1.04, Meta Android 1.08, Google Android 1.06, AppLovin Android 0.94; TikTok iOS 0.78, TikTok Android 0.72); three stumps, five open channels, eleven shortcut routes on eleven distinct wrong calls",
+ "answer_source": "task1/generator/figures.json bands, roas_2027",
+ "gap": [
+  "time",
+  "population"
+ ],
+ "pattern": [
+  "D"
+ ],
+ "generators": [
+  "G12",
+  "G2",
+  "G14"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "settled_transaction_ledger",
+ "stump_strategy": "informative_censoring",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "planning_thread",
+ "stump_class": "analytical",
+ "analyst_test": "A careful but hurried analyst values each channel on the app's own payment records and scales every user's revenue by the stores' total over the app's (the gap spread in proportion to what was recorded), reads the iOS ad channels on the users the attribution export holds, and carries each channel's 2026 revenue per euro to the 2027 plan's spend; that route scales Meta iOS and TikTok iOS, scales Google Android and cuts AppLovin, against the golden's hold, cut, hold and hold.",
+ "domain_test": "Each result is an acquisition-economics and lifetime-value quantity of a subscription app (installs by channel from the instrument that sees them, the store charges the app never recorded, each channel's 12-month net revenue per install and per euro at a weekly spend); swap the nouns for another field's and the store reports, conversion values and tracking consent stop making sense.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:charges-seen-only-at-the-next-open-tracking-consent-and-a-spend-response-each-on-its-own-channel",
+ "layer1": [
+  "attribution rows re-sent after an SDK retry",
+  "staff and test devices",
+  "store report rows in the stores' own time zones and reporting weeks",
+  "SKAN postbacks with withheld conversion values on small campaign-days",
+  "refunds and price-tier changes on the store reports",
+  "reinstalls on a second device under one account"
+ ],
+ "stakeholder_role": "the head of financial planning, who signs the 2027 insertion orders with the ad networks in December",
+ "role_family": "finance_controller",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "app_users_2024-11_2026-10.csv",
+  "rows": 329388,
+  "entity": "one app account",
+  "grain": "account",
+  "source": "synthetic"
+ },
+ "forum": "line_manager_or_team",
+ "forcing_event": "launch_or_rollout",
+ "org_family": "media_or_publishing",
+ "world": {
+  "geography": "Spain, Portugal and Italy",
+  "currency": "EUR",
+  "org_type": "a home-workout and yoga subscription app",
+  "invented_names": [
+   "Zancada Fitness S.L.",
+   "Zancada"
   ],
-  "pattern": [
-    "D"
-  ],
-  "generators": [
-    "G12",
-    "G2",
-    "G14"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "settled_transaction_ledger",
-  "stump_strategy": "informative_censoring",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "planning_thread",
-  "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst values each channel on the app's own payment records and scales every user's revenue by the stores' total over the app's (the gap spread in proportion to what was recorded), reads the iOS ad channels on the users the attribution export holds, and carries each channel's 2026 revenue per euro to the 2027 plan's spend; that route scales Meta iOS and TikTok iOS, scales Google Android and cuts AppLovin, against the golden's hold, cut, hold and hold.",
-  "domain_test": "Each result is an acquisition-economics and lifetime-value quantity of a subscription app (installs by channel from the instrument that sees them, the store charges the app never recorded, each channel's 12-month net revenue per install and per euro at a weekly spend); swap the nouns for another field's and the store reports, conversion values and tracking consent stop making sense.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:charges-seen-only-at-the-next-open-tracking-consent-and-a-spend-response-each-on-its-own-channel",
-  "layer1": [
-    "attribution rows re-sent after an SDK retry",
-    "staff and test devices",
-    "store report rows in the stores' own time zones and reporting weeks",
-    "SKAN postbacks with withheld conversion values on small campaign-days",
-    "refunds and price-tier changes on the store reports",
-    "reinstalls on a second device under one account"
-  ],
-  "stakeholder_role": "the head of financial planning, who signs the 2027 insertion orders with the ad networks in December",
-  "role_family": "finance_controller",
-  "scoring_unit": "other",
-  "spine": {
-    "file": "app_users_2024-11_2026-10.csv",
-    "rows": 0,
-    "entity": "one app account",
-    "grain": "account",
-    "source": "synthetic"
+  "people": [
+   "Magdalena Requena",
+   "Bernardo Pombo",
+   "Ester Rey",
+   "Rafa Naranjo"
+  ]
+ },
+ "deliverables": [
+  "paid_channels_2027.xlsx",
+  "paid_channels_2027_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "what",
+ "driver": "Each channel's band rests on what a euro of its 2027 spend returns in twelve months, a quantity no record holds: the app's own records hold only the store charges a user's next open showed it, the attribution export holds only the iOS users who allowed tracking, and the plan buys some channels at weekly spends where the auction charges more and returns weaker users; each part of the estimand is read from the instrument that sees it (the stores' sales reports for the charges, the ad networks' conversion postbacks for the iOS installs, the 2026 weeks of heavier spend for the response).",
+ "driver_concrete": "Zancada's growth policy places a paid channel in scale, hold or cut on its 12-month net revenue per euro at the 2027 plan's weekly spend (1.20 and 0.90 the lines). Subscribers who stop opening the app keep paying for months and the app records none of it, so the stores' reports exceed the app's records by about a fifth, unevenly by channel (a third of AppLovin's revenue); iOS users who allow tracking are the more engaged (Meta iOS's consenting users bring about 40 per cent more per install than its installs as a whole); and the plan raises Google Android's weekly spend by about 70 per cent, where its 2026 pushes show dearer and weaker installs.",
+ "stump": "The careful but hurried route (the app's records scaled to the stores' totals in proportion, the attribution export's iOS users, 2026 revenue per euro carried to the plan) files Meta iOS and TikTok iOS scale, Google Android scale and AppLovin cut against the golden's hold, cut, hold and hold; reading the app's records raw cuts Meta iOS, Meta Android, Google Android and AppLovin instead.",
+ "answer_shape": "flagged-set",
+ "weight": "measurement",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "missingness-measurement",
+  "modeling",
+  "forecasting",
+  "synthesis"
+ ],
+ "results": "R1 2026 installs and cost per install by channel from the instrument that sees each; R2 the store charges and net revenue the app never recorded, by channel; R3 the iOS ad channels' 12-month net revenue per install over all their installs; R4 Google Android's installs and 12-month net revenue per install at the plan's weekly spend; R5 each channel's 12-month net revenue per euro at the plan's spend; R6 each channel's band",
+ "one_fact_test": "the recording sentence (a store charge reaches the app's records only at the user's next open) rescues R2 and AppLovin's band (2 of 6); the consent sentence rescues R3 and the two iOS bands' direction (1 of 6 results); the response sentence R4 (1 of 6)",
+ "strategy_label": "UNTESTED",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "mark115": "mark115 forecast a deal mechanic's second response where its new level crosses a rival's, measured on the stores that moved; here no response at a rival's level decides anything: each channel's 12-month return is assembled from three instruments with their own blind spots (store charges the app sees only at the user's next open, iOS installs the attribution export sees only with tracking consent, a spend response seen only in the 2026 pushes), each opening a different channel"
+ },
+ "lineage": [
+  {
+   "architecture": "v1",
+   "fate": "spent 2026-11-09: the project lead's review returned the single-deep-step design (one constructed factor, the tutors' stopping hump, placed in the forward cohort by an onboarding pause and surge; every graded figure came out of one projection)",
+   "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
+   "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
+   "shell": null
   },
-  "forum": "line_manager_or_team",
-  "forcing_event": "launch_or_rollout",
-  "org_family": "media_or_publishing",
-  "world": {
-    "geography": "Spain, Portugal and Italy",
-    "currency": "EUR",
-    "org_type": "a home-workout and yoga subscription app",
-    "invented_names": [
-      "Zancada Fitness S.L.",
-      "Zancada"
-    ],
-    "people": [
-      "Magdalena Requena",
-      "Bernardo Pombo",
-      "Ester Rey",
-      "Rafa Naranjo"
-    ]
+  {
+   "architecture": "v2",
+   "fate": "spent 2026-11-10: the platform's holistic audit failed the uploaded cut on determinism; repaired (judge DETERMINISTIC APPROVE) but the uploaded run's own methods land the repaired commitment (66.5 of 93 graded weight), the single-total risk: one cut of one total cannot be both forced and hard",
+   "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate has decayed on a cohort whose exits also run with the calendar, a size adjustment at each anniversary set by how much of its capacity each unit uses on a book whose capacity per user has drifted, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so every trailing extrapolation and the recent pooled rates overstate the forward total, and the committed figure is the largest step a filed band, carrying the estimates' own sampling error and nothing else, meets at a stated chance.",
+   "stump": "A careful but hurried analyst rebuilds the October 2026 ARR correctly, then applies the mean realised uplift to the contracts still to reprice, pools renewal exit and seat-cut rates without utilisation, first renewals or group exits, carries the Team plan's last three months' exit rates, values the open pipeline at the CRM's stage probabilities and draws accounts independently for the band, and files a commitment above the draft, clearing it, when large contracts negotiate the rise down, seat cuts and exits follow utilisation on a book sold more seats per user each year, the autumn is the Team plan's cancellation peak and the January excess has faded, old open deals rarely close and parent groups leave together, so the commitment sits below the draft; and a ten-minute trailing extrapolation clears the draft by a wide margin because the trailing year carries the price rise and the padded seats as if they recurred.",
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "give",
+    "deliverable set": "docx+xlsx"
+   }
   },
-  "deliverables": [
-    "paid_channels_2027.xlsx",
-    "paid_channels_2027_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "Each channel's band rests on what a euro of its 2027 spend returns in twelve months, a quantity no record holds: the app's own records hold only the store charges a user's next open showed it, the attribution export holds only the iOS users who allowed tracking, and the plan buys some channels at weekly spends where the auction charges more and returns weaker users; each part of the estimand is read from the instrument that sees it (the stores' sales reports for the charges, the ad networks' conversion postbacks for the iOS installs, the 2026 weeks of heavier spend for the response).",
-  "driver_concrete": "Zancada's growth policy places a paid channel in scale, hold or cut on its 12-month net revenue per euro at the 2027 plan's weekly spend (1.20 and 0.90 the lines). Subscribers who stop opening the app keep paying for months and the app records none of it, so the stores' reports exceed the app's records by about a fifth, unevenly by channel (a third of AppLovin's revenue); iOS users who allow tracking are the more engaged (Meta iOS's consenting users bring about 40 per cent more per install than its installs as a whole); and the plan raises Google Android's weekly spend by about 70 per cent, where its 2026 pushes show dearer and weaker installs.",
-  "stump": "The careful but hurried route (the app's records scaled to the stores' totals in proportion, the attribution export's iOS users, 2026 revenue per euro carried to the plan) files Meta iOS and TikTok iOS scale, Google Android scale and AppLovin cut against the golden's hold, cut, hold and hold; reading the app's records raw cuts Meta iOS, Meta Android, Google Android and AppLovin instead.",
-  "answer_shape": "flagged-set",
-  "weight": "measurement",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "missingness-measurement",
-    "modeling",
-    "forecasting",
-    "synthesis"
-  ],
-  "results": "R1 2026 installs and cost per install by channel from the instrument that sees each; R2 the store charges and net revenue the app never recorded, by channel; R3 the iOS ad channels' 12-month net revenue per install over all their installs; R4 Google Android's installs and 12-month net revenue per install at the plan's weekly spend; R5 each channel's 12-month net revenue per euro at the plan's spend; R6 each channel's band",
-  "one_fact_test": "the recording sentence (a store charge reaches the app's records only at the user's next open) rescues R2 and AppLovin's band (2 of 6); the consent sentence rescues R3 and the two iOS bands' direction (1 of 6 results); the response sentence R4 (1 of 6)",
-  "strategy_label": "UNTESTED",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "mark115": "mark115 forecast a deal mechanic's second response where its new level crosses a rival's, measured on the stores that moved; here no response at a rival's level decides anything: each channel's 12-month return is assembled from three instruments with their own blind spots (store charges the app sees only at the user's next open, iOS installs the attribution export sees only with tracking consent, a spend response seen only in the 2026 pushes), each opening a different channel"
-  },
-  "lineage": [
-    {
-      "architecture": "v1",
-      "fate": "spent 2026-11-09: the project lead's review returned the single-deep-step design (one constructed factor, the tutors' stopping hump, placed in the forward cohort by an onboarding pause and surge; every graded figure came out of one projection)",
-      "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
-      "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
-      "shell": null
-    },
-    {
-      "architecture": "v2",
-      "fate": "spent 2026-11-10: the platform's holistic audit failed the uploaded cut on determinism; repaired (judge DETERMINISTIC APPROVE) but the uploaded run's own methods land the repaired commitment (66.5 of 93 graded weight), the single-total risk: one cut of one total cannot be both forced and hard",
-      "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate has decayed on a cohort whose exits also run with the calendar, a size adjustment at each anniversary set by how much of its capacity each unit uses on a book whose capacity per user has drifted, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so every trailing extrapolation and the recent pooled rates overstate the forward total, and the committed figure is the largest step a filed band, carrying the estimates' own sampling error and nothing else, meets at a stated chance.",
-      "stump": "A careful but hurried analyst rebuilds the October 2026 ARR correctly, then applies the mean realised uplift to the contracts still to reprice, pools renewal exit and seat-cut rates without utilisation, first renewals or group exits, carries the Team plan's last three months' exit rates, values the open pipeline at the CRM's stage probabilities and draws accounts independently for the band, and files a commitment above the draft, clearing it, when large contracts negotiate the rise down, seat cuts and exits follow utilisation on a book sold more seats per user each year, the autumn is the Team plan's cancellation peak and the January excess has faded, old open deals rarely close and parent groups leave together, so the commitment sits below the draft; and a ten-minute trailing extrapolation clears the draft by a wide margin because the trailing year carries the price rise and the padded seats as if they recurred.",
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "the",
-        "rounding opener": "give",
-        "deliverable set": "docx+xlsx"
-      }
-    },
-    {
-      "architecture": "v3",
-      "fate": "spent 2026-11-12: returned twice on forcing and determinism by the platform's review (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection were open modelling choices no file pinned, and a return rate not tied to early reading alone funded 9 lines; its deciding lessons (vintage_or_cohort_drift, completion_of_young_cohorts) are on the client's closed page of 2026-11-12",
-      "driver": "Each candidate's value per unit of cost is the payment stream of its future entrants, whose first large drop sits at a price step set by the candidate's own terms and the full price it steps to, whose later decline follows a usage trait the newest entrants carry differently from the record (seen only in a second log at another grain, never in their early survival), which a scheduled price change cuts again at a size read only from an earlier change's whole window and the entrants' tenure at it, and which continues through returns recorded under other identities, so a ranking under a fixed budget on each candidate's own history funds a different set.",
-      "driver_concrete": "Each 2027 acquisition line's expected 36-month net revenue per start, set by its 2027 introductory offer and the April 2027 list price at the step-up, the usage its newest starts show in the reading log (social and partner down since late 2025, search up since spring 2025), the April 2027 rise's excess cancellations read from the April 2025 rise including the notice-letter exits and the larger response of first-year subscribers, and later subscriptions by the same household under new customer numbers, ranked per euro of planned spend until the budget is spent.",
-      "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, reads the April 2025 jump in end-of-intro exits as a period rather than as the full price, reads the 2025 rise's cancellations from April on pooled over tenure and counts later subscriptions on the customer number, so the four paid social lines and two cashback lines clear 3.5 times their cost and the plan funds 14 lines for EUR 141,575 instead of 8 for EUR 84,308.",
-      "skeleton": {
-        "decision_form": "allocation_under_budget",
-        "answer_pattern": "naive_set_overfunds",
-        "lessons": [
-          "vintage_or_cohort_drift",
-          "unit_identity_across_systems",
-          "analog_event_calibration",
-          "completion_of_young_cohorts"
-        ],
-        "mechanisms": [
-          "intro_offer_step_up_exit",
-          "reading_log_usage_decline_newest_starts",
-          "price_rise_excess_cancellation",
-          "household_returns_under_new_numbers"
-        ],
-        "detection": [
-          "second_source_at_other_grain",
-          "natural_experiment_in_record"
-        ],
-        "moves": [
-          "per_cohort_curves",
-          "link_records_by_parsed_key",
-          "analog_calibration_loo",
-          "complete_cohorts_from_later_rates"
-        ],
-        "file_roles": [
-          "governing_standard",
-          "primary_record",
-          "second_grain_source",
-          "schedule_or_plan",
-          "quotes_or_costs",
-          "crosswalk_or_migration_map",
-          "unused_distractor"
-        ]
-      },
-      "shell": {
-        "question form": "how-much",
-        "second-sentence opener": "i",
-        "deliverable set": "xlsx"
-      },
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "gate_g": "forecasting",
-      "decision_type": "designation_set"
-    },
-    {
-      "architecture": "v4",
-      "fate": "spent 2026-11-12 at stage 4: the determinism judge sent it back (Gate G planted_defect_flip: two record corrections, the licence renewals merged and profiles dated by the charges, made by reflex on its first pass)",
-      "driver": "The cost of each option's future entrants is a per-unit charge on a quantity the organisation's own counting engine produces from two reporting channels, one of which the main activity record never sees and which is concentrated in some options, under a rule that counts each item once across both channels, so the activity record scaled to the engine's totals misprices the options in opposite directions and the latest cost per entrant reflects a charging basis that ends.",
-      "driver_concrete": "Each plan's first-24-month contribution per spring 2027 trial start is its net revenue over the plan's spring 2024 trial starts' realised months at 2027 prices less EUR 0.40 per counted hour (the 2027 agreement, replacing 2026's 52 per cent of revenue) and the agency's fee, where counted hours are the furthest position each profile first reaches in each title across the live roll-up and the positions downloaded titles report at licence renewal, attributed to the account whose charge listed the profile that month.",
-      "stump": "A careful but hurried analyst takes the live roll-up as the listening (it reproduces the 2026 statements exactly) and joins it to today's profile export, which misses Onbeperkt's downloaded listening and credits Gezin with the histories its moved-in profiles brought, and leads with Onbeperkt instead of Gezin; the licence channel alone leads with Standaard.",
-      "skeleton": {
-        "decision_form": "pick_one_of_few_options",
-        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-        "lessons": [
-          "unmetered_component",
-          "time_varying_membership",
-          "exposure_seen_only_in_linked_record",
-          "forward_window_structure_change"
-        ],
-        "mechanisms": [
-          "offline_listening_reported_only_at_licence_renewal",
-          "counted_hours_furthest_position_first_reached_across_channels",
-          "family_profiles_added_and_removed",
-          "plan_switches_dated",
-          "per_hour_remuneration_replaces_revenue_share",
-          "trial_month_listening_unpaid"
-        ],
-        "detection": [
-          "control_total_gap",
-          "second_source_at_other_grain",
-          "document_defines_estimand",
-          "flow_step_at_dated_operation"
-        ],
-        "moves": [
-          "link_records_by_parsed_key",
-          "rebuild_membership_from_operations_log",
-          "per_cohort_curves"
-        ],
-        "file_roles": [
-          "governing_standard",
-          "primary_record",
-          "second_grain_source",
-          "reference_register",
-          "schedule_or_plan",
-          "quotes_or_costs",
-          "field_legend_or_dictionary",
-          "unused_distractor"
-        ]
-      },
-      "shell": {
-        "question form": "which",
-        "second-sentence opener": "i'd",
-        "deliverable set": "xlsx"
-      },
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "gate_g": "forecasting",
-      "decision_type": "pick_one_of_n"
-    },
-    {
-      "architecture": "v5",
-      "fate": "spent 2026-11-13: sent back at review (reward 83, stumped failed, determinism and solution passed): one open member. Flex forced by its 2027 price passing the rival in both regions as both past rises did, Gezin's +5.4 wider than any stump, Standaard positive under every transfer; the returns model and the rival-conditioned transfer made unprompted (R76, R77); only Onbeperkt turned on a step the runs lose (the stayers' listening, N39). The world hosts one stump and is spent (runs/review_2026-11-13.md)",
-      "driver": "Each option's go or hold rests on what a change does to its existing members over the year, where the members it loses form a pool that comes back at its own rate and at the new terms, and the members who stay use more for months after the change under a cost charged per unit of use, so a fixed group with stopping as final and use held at its recent level, either correction alone, or a pooled response each land on a different wrong set.",
-      "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; the subscriptions a rise loses at the December and first bills partly take a plan up again within the year (light listeners most, before the summer), paying the new price, and those that stay listen more for months after the bill (heavy listeners most), so Standaard goes ahead only with the returns, Onbeperkt holds only with the stayers' extra hours, Flex holds because its 2027 price passes the rival's Basis 10 uur as its 2025 Dutch rise did, and Gezin goes ahead either way.",
-      "stump": "The platform run's own route (the crossing read with the plan below's profile limit, the December leavers, downgraders kept, each account on its own listening, EUR 0.40 a counted hour) treats a stop as final and the stayers' listening as unchanged and lets Onbeperkt and Gezin through; the returns alone let Standaard, Onbeperkt and Gezin through, the stayers' listening alone Gezin only.",
-      "skeleton": {
-        "decision_form": "set_over_threshold",
-        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-        "lessons": [
-          "stopped_units_return",
-          "intensive_margin_response",
-          "response_at_crossing_point",
-          "response_before_the_trigger",
-          "marginal_not_average"
-        ],
-        "mechanisms": [
-          "stopped_subscriptions_return_light_listeners_first",
-          "stayers_listen_more_after_rise_heaviest_most",
-          "price_rise_response_step_at_rival_price",
-          "announcement_leavers_before_first_bill",
-          "per_hour_remuneration_replaces_revenue_share",
-          "rises_staged_by_region_and_year"
-        ],
-        "detection": [
-          "natural_experiment_in_record",
-          "second_source_at_other_grain",
-          "document_defines_estimand"
-        ],
-        "moves": [
-          "measure_response_shape_from_events",
-          "refit_comparison_on_unaffected",
-          "per_cohort_curves"
-        ],
-        "file_roles": [
-          "governing_standard",
-          "primary_record",
-          "second_grain_source",
-          "reference_register",
-          "schedule_or_plan",
-          "unused_distractor"
-        ]
-      },
-      "shell": {
-        "question form": "which",
-        "second-sentence opener": "i'd",
-        "deliverable set": "pptx+xlsx"
-      },
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "gate_g": "forecasting",
-      "decision_type": "designation_set"
-    }
-  ],
-  "lineage_shells": [
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "give",
-      "deliverable set": "docx+xlsx"
-    },
-    {
-      "question form": "how-much",
-      "second-sentence opener": "i",
-      "deliverable set": "xlsx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "i'd",
-      "deliverable set": "xlsx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "i'd",
-      "deliverable set": "pptx+xlsx"
-    }
-  ],
-  "architecture_spent": null,
-  "notes": "architecture 6, a new world after architecture 5 (the Dutch and Flemish audiobook rises) was sent back at review on 2026-11-13 with one open member. Prototyped before the card (scratch world2/world3): every one of the 11 shortcut routes files at least one channel wrong, 9 to 11 distinct wrong calls, three distinct openers (A the charges the app never records: AppLovin and Meta Android; C tracking consent: Meta iOS and TikTok iOS; B the spend response: Google Android), each open member's margin between the honest family's spread and the stump's worth. stump_strategy informative_censoring: the app observes a subscriber's charges only up to the observer's routine (the user's last open). completion_of_young_cohorts is a supporting step (closed card): the 2026 cohorts completed to twelve months, never the deciding move.",
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "which",
-    "deliverable set": "pptx+xlsx"
-  },
-  "skeleton": {
-    "decision_form": "go_hold_stop_on_figure",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  {
+   "architecture": "v3",
+   "fate": "spent 2026-11-12: returned twice on forcing and determinism by the platform's review (runs/arch3/review_2026-11-12.md): the young starts' completion and the household-return projection were open modelling choices no file pinned, and a return rate not tied to early reading alone funded 9 lines; its deciding lessons (vintage_or_cohort_drift, completion_of_young_cohorts) are on the client's closed page of 2026-11-12",
+   "driver": "Each candidate's value per unit of cost is the payment stream of its future entrants, whose first large drop sits at a price step set by the candidate's own terms and the full price it steps to, whose later decline follows a usage trait the newest entrants carry differently from the record (seen only in a second log at another grain, never in their early survival), which a scheduled price change cuts again at a size read only from an earlier change's whole window and the entrants' tenure at it, and which continues through returns recorded under other identities, so a ranking under a fixed budget on each candidate's own history funds a different set.",
+   "driver_concrete": "Each 2027 acquisition line's expected 36-month net revenue per start, set by its 2027 introductory offer and the April 2027 list price at the step-up, the usage its newest starts show in the reading log (social and partner down since late 2025, search up since spring 2025), the April 2027 rise's excess cancellations read from the April 2025 rise including the notice-letter exits and the larger response of first-year subscribers, and later subscriptions by the same household under new customer numbers, ranked per euro of planned spend until the budget is spent.",
+   "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, reads the April 2025 jump in end-of-intro exits as a period rather than as the full price, reads the 2025 rise's cancellations from April on pooled over tenure and counts later subscriptions on the customer number, so the four paid social lines and two cashback lines clear 3.5 times their cost and the plan funds 14 lines for EUR 141,575 instead of 8 for EUR 84,308.",
+   "skeleton": {
+    "decision_form": "allocation_under_budget",
+    "answer_pattern": "naive_set_overfunds",
     "lessons": [
-      "record_algorithm_inversion",
-      "linkage_missing_not_at_random",
-      "scaling_diminishing_returns",
-      "completion_of_young_cohorts"
+     "vintage_or_cohort_drift",
+     "unit_identity_across_systems",
+     "analog_event_calibration",
+     "completion_of_young_cohorts"
     ],
     "mechanisms": [
-      "store_charges_recorded_only_at_the_next_app_open",
-      "dormant_subscribers_keep_paying_for_months",
-      "ios_tracking_consent_rises_with_engagement",
-      "skan_conversion_values_cover_every_ad_install",
-      "auction_price_and_install_quality_respond_to_weekly_spend",
-      "plan_raises_one_channel_past_its_2026_average"
+     "intro_offer_step_up_exit",
+     "reading_log_usage_decline_newest_starts",
+     "price_rise_excess_cancellation",
+     "household_returns_under_new_numbers"
     ],
     "detection": [
-      "control_total_gap",
-      "second_source_at_other_grain",
-      "natural_experiment_in_record"
+     "second_source_at_other_grain",
+     "natural_experiment_in_record"
     ],
     "moves": [
-      "invert_recording_algorithm",
-      "inverse_inclusion_weights",
-      "measure_response_shape_from_events",
-      "complete_cohorts_from_later_rates"
+     "per_cohort_curves",
+     "link_records_by_parsed_key",
+     "analog_calibration_loo",
+     "complete_cohorts_from_later_rates"
     ],
     "file_roles": [
-      "governing_standard",
-      "primary_record",
-      "second_grain_source",
-      "schedule_or_plan",
-      "quotes_or_costs",
-      "field_legend_or_dictionary",
-      "unused_distractor"
+     "governing_standard",
+     "primary_record",
+     "second_grain_source",
+     "schedule_or_plan",
+     "quotes_or_costs",
+     "crosswalk_or_migration_map",
+     "unused_distractor"
     ]
+   },
+   "shell": {
+    "question form": "how-much",
+    "second-sentence opener": "i",
+    "deliverable set": "xlsx"
+   },
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "designation_set"
   },
-  "registered": "2026-11-13T23:07:29Z"
+  {
+   "architecture": "v4",
+   "fate": "spent 2026-11-12 at stage 4: the determinism judge sent it back (Gate G planted_defect_flip: two record corrections, the licence renewals merged and profiles dated by the charges, made by reflex on its first pass)",
+   "driver": "The cost of each option's future entrants is a per-unit charge on a quantity the organisation's own counting engine produces from two reporting channels, one of which the main activity record never sees and which is concentrated in some options, under a rule that counts each item once across both channels, so the activity record scaled to the engine's totals misprices the options in opposite directions and the latest cost per entrant reflects a charging basis that ends.",
+   "driver_concrete": "Each plan's first-24-month contribution per spring 2027 trial start is its net revenue over the plan's spring 2024 trial starts' realised months at 2027 prices less EUR 0.40 per counted hour (the 2027 agreement, replacing 2026's 52 per cent of revenue) and the agency's fee, where counted hours are the furthest position each profile first reaches in each title across the live roll-up and the positions downloaded titles report at licence renewal, attributed to the account whose charge listed the profile that month.",
+   "stump": "A careful but hurried analyst takes the live roll-up as the listening (it reproduces the 2026 statements exactly) and joins it to today's profile export, which misses Onbeperkt's downloaded listening and credits Gezin with the histories its moved-in profiles brought, and leads with Onbeperkt instead of Gezin; the licence channel alone leads with Standaard.",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "unmetered_component",
+     "time_varying_membership",
+     "exposure_seen_only_in_linked_record",
+     "forward_window_structure_change"
+    ],
+    "mechanisms": [
+     "offline_listening_reported_only_at_licence_renewal",
+     "counted_hours_furthest_position_first_reached_across_channels",
+     "family_profiles_added_and_removed",
+     "plan_switches_dated",
+     "per_hour_remuneration_replaces_revenue_share",
+     "trial_month_listening_unpaid"
+    ],
+    "detection": [
+     "control_total_gap",
+     "second_source_at_other_grain",
+     "document_defines_estimand",
+     "flow_step_at_dated_operation"
+    ],
+    "moves": [
+     "link_records_by_parsed_key",
+     "rebuild_membership_from_operations_log",
+     "per_cohort_curves"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "schedule_or_plan",
+     "quotes_or_costs",
+     "field_legend_or_dictionary",
+     "unused_distractor"
+    ]
+   },
+   "shell": {
+    "question form": "which",
+    "second-sentence opener": "i'd",
+    "deliverable set": "xlsx"
+   },
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "pick_one_of_n"
+  },
+  {
+   "architecture": "v5",
+   "fate": "spent 2026-11-13: sent back at review (reward 83, stumped failed, determinism and solution passed): one open member. Flex forced by its 2027 price passing the rival in both regions as both past rises did, Gezin's +5.4 wider than any stump, Standaard positive under every transfer; the returns model and the rival-conditioned transfer made unprompted (R76, R77); only Onbeperkt turned on a step the runs lose (the stayers' listening, N39). The world hosts one stump and is spent (runs/review_2026-11-13.md)",
+   "driver": "Each option's go or hold rests on what a change does to its existing members over the year, where the members it loses form a pool that comes back at its own rate and at the new terms, and the members who stay use more for months after the change under a cost charged per unit of use, so a fixed group with stopping as final and use held at its recent level, either correction alone, or a pooled response each land on a different wrong set.",
+   "driver_concrete": "Each plan's January 2027 rise goes ahead only if it raises its October 2026 subscriptions' 2027 contribution at EUR 0.40 per counted hour; the subscriptions a rise loses at the December and first bills partly take a plan up again within the year (light listeners most, before the summer), paying the new price, and those that stay listen more for months after the bill (heavy listeners most), so Standaard goes ahead only with the returns, Onbeperkt holds only with the stayers' extra hours, Flex holds because its 2027 price passes the rival's Basis 10 uur as its 2025 Dutch rise did, and Gezin goes ahead either way.",
+   "stump": "The platform run's own route (the crossing read with the plan below's profile limit, the December leavers, downgraders kept, each account on its own listening, EUR 0.40 a counted hour) treats a stop as final and the stayers' listening as unchanged and lets Onbeperkt and Gezin through; the returns alone let Standaard, Onbeperkt and Gezin through, the stayers' listening alone Gezin only.",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "stopped_units_return",
+     "intensive_margin_response",
+     "response_at_crossing_point",
+     "response_before_the_trigger",
+     "marginal_not_average"
+    ],
+    "mechanisms": [
+     "stopped_subscriptions_return_light_listeners_first",
+     "stayers_listen_more_after_rise_heaviest_most",
+     "price_rise_response_step_at_rival_price",
+     "announcement_leavers_before_first_bill",
+     "per_hour_remuneration_replaces_revenue_share",
+     "rises_staged_by_region_and_year"
+    ],
+    "detection": [
+     "natural_experiment_in_record",
+     "second_source_at_other_grain",
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "measure_response_shape_from_events",
+     "refit_comparison_on_unaffected",
+     "per_cohort_curves"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "schedule_or_plan",
+     "unused_distractor"
+    ]
+   },
+   "shell": {
+    "question form": "which",
+    "second-sentence opener": "i'd",
+    "deliverable set": "pptx+xlsx"
+   },
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "designation_set"
+  }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "whether",
+   "second-sentence opener": "the",
+   "rounding opener": "give",
+   "deliverable set": "docx+xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "i",
+   "deliverable set": "xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "i'd",
+   "deliverable set": "xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "i'd",
+   "deliverable set": "pptx+xlsx"
+  }
+ ],
+ "architecture_spent": null,
+ "notes": "architecture 6, a new world after architecture 5 (the Dutch and Flemish audiobook rises) was sent back at review on 2026-11-13 with one open member. Prototyped before the card (scratch world2/world3): every one of the 11 shortcut routes files at least one channel wrong, 9 to 11 distinct wrong calls, three distinct openers (A the charges the app never records: AppLovin and Meta Android; C tracking consent: Meta iOS and TikTok iOS; B the spend response: Google Android), each open member's margin between the honest family's spread and the stump's worth. stump_strategy informative_censoring: the app observes a subscriber's charges only up to the observer's routine (the user's last open). completion_of_young_cohorts is a supporting step (closed card): the 2026 cohorts completed to twelve months, never the deciding move.",
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "which",
+  "deliverable set": "pptx+xlsx"
+ },
+ "skeleton": {
+  "decision_form": "go_hold_stop_on_figure",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "record_algorithm_inversion",
+   "linkage_missing_not_at_random",
+   "scaling_diminishing_returns",
+   "completion_of_young_cohorts"
+  ],
+  "mechanisms": [
+   "store_charges_recorded_only_at_the_next_app_open",
+   "dormant_subscribers_keep_paying_for_months",
+   "ios_tracking_consent_rises_with_engagement",
+   "skan_conversion_values_cover_every_ad_install",
+   "auction_price_and_install_quality_respond_to_weekly_spend",
+   "plan_raises_one_channel_past_its_2026_average"
+  ],
+  "detection": [
+   "control_total_gap",
+   "second_source_at_other_grain",
+   "natural_experiment_in_record"
+  ],
+  "moves": [
+   "invert_recording_algorithm",
+   "inverse_inclusion_weights",
+   "measure_response_shape_from_events",
+   "complete_cohorts_from_later_rates"
+  ],
+  "file_roles": [
+   "governing_standard",
+   "primary_record",
+   "second_grain_source",
+   "schedule_or_plan",
+   "quotes_or_costs",
+   "field_legend_or_dictionary",
+   "unused_distractor"
+  ]
+ },
+ "registered": "2026-11-13T23:07:29Z"
 }
