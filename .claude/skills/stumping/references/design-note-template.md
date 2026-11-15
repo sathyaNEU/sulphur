@@ -24,10 +24,11 @@ People: <from guard.py names>
 ## Stump screen
 
 Written at the draw, before the card is registered and before any code (`references/stump-screen.md`). Three to five
-candidate traps, each through the eleven tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean data,
-5 two records, 6 the waved-through assumption with its precedent, 7 a plausible shallower story, 8 across the data,
-9 worth the call against the variant battery, 10 the run's alternative ruled out by named data, 11 the golden can
-measure it); the three strongest independent ones kept.
+candidate traps, each through the seventeen tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean
+data, 5 two records, 6 the waved-through assumption with its precedent, 7 a plausible shallower story, 8 across the
+data, 9 worth three times the family's spread, 10 the run's alternative ruled out by named data, 11 the golden can
+measure it, 12 no easier second route, 13 its own member, 14 said out loud, 15 the strongest route lands wrong, 16 a
+referee, 17 one sentence does not cover the members); the three strongest independent ones kept.
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
@@ -86,6 +87,23 @@ results that depend on it>
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
 Largest single hint: <the sentence>; rescues N of M results
 Pair estimate: <the careful but hurried pass's rubric score, 50 or under>
+
+## Stump core
+
+Written by the stump architect before the results chain (`../SKILL.md` Part 1d), every figure from
+`generator/core.py` run on the world's arrays, never typed.
+
+Unobserved part: <the decision's quantity, and the part of it no record holds (units, periods, a state, the truth
+  behind a selected or noisy report)>
+Instruments: <each source that sees part of it: the part it sees, its blind spot, and the figure it files read raw>
+Referee: <the slice where the quantity is known or bounded and which does not cover the target; the golden's error on
+  it and each rival's, from core.py; what it files if read raw as the answer>
+Strongest standard route: <per open member, the most rigorous standard design the pack affords, the figure it files,
+  and the file and figure that refute it>
+Said out loud: <per stump, the one sentence that names its problem, and the dependent steps still left after it>
+Worth: <per stump, its worth on its member over the honest family's spread there (three or more), and the band>
+Regimes: <which members the main correction's assumption is checked on, cannot be checked on, fails on, and the basis
+  that decides each; or `second stump` with the member it opens>
 
 ## Stump factorial
 
@@ -180,6 +198,19 @@ uses, each alternative source, each component in and out, pooled against per gro
 
 <what a voice rewrite may not drop or change; what it must never add>
 
+## Build brief
+
+The architect's hand-over to the build (`.claude/agents/stump-architect.md`). The build executes it and changes none
+of it; a gate that cannot pass inside it goes back to the architect.
+
+World: <the organisation, its systems and the process that writes each file, with the dials core.py fixes>
+Frozen: <the core.py switches, effect sizes, margins and estimators the build may not move>
+Files: <each shipped file: the system that writes it, its grain, rows, the mess its process leaves, and what it must
+  and must not carry (the referee slice whole; nothing that settles a member read raw)>
+Never filed: <the sentences, columns, labels and file names that would hand a stump over, each in the words to avoid>
+Goldens: <each deliverable, the figures it carries from figures.json, the rivals and the routes sheet>
+Free: <what the build decides on its own: nouns beyond the people, Layer 1 texture, distractors, document genre>
+
 ## Tried and rejected
 
 - <one line per abandoned approach: what was tried and why it died>
@@ -202,6 +233,8 @@ uses, each alternative source, each component in and out, pooled against per gro
   task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught
   or closed; a decision form on four live builds). From `skeleton.CLOSED_FROM` on: a missing `Closed strategies:`
   line, a deciding lesson on the client's closed page, or a chain of closed lessons only.
+- For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its seven
+  labels, a missing `## Build brief` or one of its six labels, or no `generator/core.py` beside the note.
 - In `effort.py`: a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
   block missing, a golden-family variant across the line, a shortcut on the golden's side, or a perturbation that
   moves the call.

@@ -86,7 +86,8 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 Lineage entries carry theirs, so a re-root meets its own dead architectures. `skeleton.py` (imported by `guard.py
 check`, so register, heart and `/approve` all run it) compares the draw with every card, every lineage entry and
 everything the client has shown us (`corpus/client_skeletons.json`: the five pairs and their sent-back siblings, the
-17 depth-scale tasks, the 15 examples), with no window and no differentiation:
+17 depth-scale tasks, the 15 examples, the three approved review sheets of 2026-11-14 as `review:*`), with no window
+and no differentiation:
 
 - **severity 1** when every deciding lesson, its resolving move, the mechanism, half the specific file roles and a
   specific decision form or answer pattern carry across; **severity 2** when every deciding lesson and a resolving

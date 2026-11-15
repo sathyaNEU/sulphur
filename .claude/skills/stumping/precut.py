@@ -106,6 +106,14 @@ SCREEN_FROM = "2026-11-13T00:45:00Z"
 # rewards 83, 78 and 75, each with one member of its call a run could get wrong): the design note carries
 # `## Open members`, two or more members opened by different stumps, and a `Direct route:` line (SKILL.md Part 3.4)
 OPEN_FROM = "2026-11-14T00:00:00Z"
+# From CORE_FROM (the approved review sheets read 2026-11-14, SKILL.md Part 1d): the note carries `## Stump core` (the
+# architect's seven labelled lines, every figure printed by generator/core.py) and `## Build brief` (the six-line
+# hand-over the build executes), and generator/core.py exists beside the note. FAIL for a build in flight whose card
+# was registered from CORE_FROM on, a WARN before it.
+CORE_FROM = "2026-11-14T12:00:00Z"
+CORE_LABELS = ("Unobserved part", "Instruments", "Referee", "Strongest standard route", "Said out loud", "Worth",
+               "Regimes")
+BRIEF_LABELS = ("World", "Frozen", "Files", "Never filed", "Goldens", "Free")
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
 PAIR_TARGET = 50.0
@@ -1334,6 +1342,30 @@ def screen_rows(task_dir, secs):
     return rows
 
 
+def core_rows(task_dir, secs):
+    """The core (SKILL.md Part 1d): `## Stump core`, `## Build brief` and generator/core.py."""
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        reg = ""
+    live = (not reg or reg >= CORE_FROM) and build_status(task_dir) in IN_FLIGHT
+    bad = "FAIL" if live else "WARN"
+    tail = "" if live else ", registered before the core rule or already shipped"
+    rows = []
+    for name, labels in (("Stump core", CORE_LABELS), ("Build brief", BRIEF_LABELS)):
+        body = section(secs, name)
+        missing = [l for l in labels if not (body and labelled(body, l))]
+        ok = body is not None and not missing
+        rows.append(("section %s" % name, "PASS" if ok else bad,
+                     ("all %d labels" % len(labels)) if ok else
+                     ((("## %s missing" % name) if body is None else ("missing labels: " + ", ".join(missing)))
+                      + " (stumping SKILL.md Part 1d)" + tail)))
+    has = os.path.isfile(os.path.join(task_dir, "generator", "core.py"))
+    rows.append(("generator/core.py", "PASS" if has else bad,
+                 "present" if has else "the architect's prototype of the core is missing (SKILL.md Part 1d)" + tail))
+    return rows
+
+
 def frontier_rows(task_dir, secs):
     """The next-level contract: the Frontier check section and the card's skeleton screen."""
     rows = screen_rows(task_dir, secs)
@@ -1445,6 +1477,7 @@ def main(argv):
         rows.extend(factorial_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.extend(pinning_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.extend(open_members_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
+        rows.extend(core_rows(task_dir, sections(open(note, encoding="utf-8", errors="replace").read())))
         rows.append(effort_gate(task_dir))
     fails = [r for r in rows if r[1] == "FAIL"]
     for check, level, detail in rows:

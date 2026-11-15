@@ -43,6 +43,14 @@ the prompt and the answer blocks. The task passes when the **average of the two 
 60 fails) **and the runs lose for analytical reasons**, and the reviewers read the design as well as the runs.
 **Build to 50 on paper**: `effort.py`'s pair estimate is a model and the platform is the measurement.
 
+**The review reads its strongest run, not the average** (`guidelines/client/approved-reviews-2026-11-14.md`, three
+review sheets of other fellows' approved tasks). The Stumped gate rested on a single GPT-6 Astra run on each (rewards
+22, 17 and 35; our builds that cleared the platform's average came back at 71 to 83), determinism on a blind fork
+audit with the golden replayed across variants and every rival ruled on by a figure computed from the shipped files.
+So the opponent every core is designed against is that run, a pair is submitted only when its higher-scoring run is
+itself under 60, and the judge audits forks the way that review does (`stumping` Part 1d, `run-triage`,
+`determinism-judge`).
+
 **Difficulty throughout.** The client's standard in one line: "A deep task asks for several pieces of genuine
 analysis spread across the work, each ending in a result that can be checked, and more careful work keeps earning
 more. It is never won or lost on one hidden or planted thing that, once caught, flips the whole answer." So every
@@ -159,6 +167,16 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
   closed as deciding lessons (the client's page of 2026-11-12), so the deciding lesson comes from the other three and
   from the open dimensions (conservation, changing structure, non-additive and nonlinear quantities, position on a
   network, hidden state, the recording algorithm; `stumping` Part 1c).
+- **Seven approvals on file decide on the observation process, and our send-backs for difficulty decided on
+  mechanisms of the world** (`stumping` Part 1d): our four below and the three approved sheets of 2026-11-14 all turn
+  on how the record came to hold what it holds, while task1 v5, task13 v5, task22 v2 and task25's first cut turned on
+  a response, a signature, a loss term or a penalty that the rows either carried (modelled on sight) or did not
+  (unforced at audit, then filed into a rule). An open member is opened by an observation-process judgment; the
+  problem may sit in plain sight, because the work is the estimator (one approved run named the selection and filed
+  nothing); the most rigorous standard design the pack affords lands across the line; a referee slice the target
+  does not reach rules between estimators, which is what forces the call while the method stays open; each stump is
+  worth three times the honest family's spread; the estimated quantities carry the rubric's weight. The three sheets
+  are on file as skeletons (`review:*`) and are never reskinned.
 - **The four approved builds** (task6 v7; task457, shipped as task14 architecture 1; task2 v6; task14 v3) share an
   anatomy, never a skeleton: the answer is a quantity the primary record does not hold; several partial instruments
   see it, each with its own blind spot, and the work is assigning each part of the estimand to the one that sees it
@@ -197,16 +215,21 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 
 | Command | What it does | Effort |
 |---|---|---|
-| `/build taskNN <domain> <analysis type>` | intake, draw, design, build, leak reader and judge, ready for the platform; resumes from `pipeline.json` | max |
+| `/draw taskNN <domain> <analysis type>` | the brain alone, in the main thread: the core proved in `generator/core.py`, the card, the note to `precut.py` exit 0 with its Build brief; also re-draws a returned build's core | Fable 5.2, xhigh |
+| `/build taskNN <domain> <analysis type>` | spawns the `stump-architect` for the core unless `/draw` did it, then executes the brief: build, leak reader and judge, ready for the platform; resumes from `pipeline.json` | Opus 5.5, high |
 | `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build | medium |
-| `/fix-determinism taskNN <finding>` | closes a fork on a result (a run's defensible alternative or a judge finding) | max |
-| `/fix-rubric taskNN` | the losses were analytical but the average is 60 or more: reworks the asks so more results are graded | max |
+| `/fix-determinism taskNN <finding>` | closes a fork on a result (a run's defensible alternative or a judge finding) | Opus 5.5, high |
+| `/fix-rubric taskNN` | the losses were analytical but the average is 60 or more: reworks the asks so more results are graded | Opus 5.5, high |
 | `/approve taskNN` | the mechanical sign-off before upload (heart, surface, precut, effort, leak verdict) | medium |
 | `/leak-check taskNN` | `leak.py` plus one isolated reader | medium |
 
-Every spawned agent (the leak reader, the determinism judge, the run triage) runs at medium effort, set in
-`.claude/agents/` or on the `Agent` call. No isolated thread runs on the model's own initiative; the commands above
-license the ones they name.
+**The brain and the body are different models** (`build-pipeline`, Effort per role). The `stump-architect` (Fable
+5.2 at xhigh) designs the core: the three or four independent judgments that stump the review's strongest run,
+proved in `generator/core.py` and handed over as the note's `## Stump core` and `## Build brief`. The build (Opus
+5.5 at high) executes that brief and moves nothing in it; whatever touches the core goes back to the architect. The
+`determinism-judge` runs on Fable 5.2 at high (it stands in for the review's audit), the leak reader on Sonnet at
+medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. No isolated thread
+runs on the model's own initiative; the commands above license the ones they name.
 
 ## The workflow
 
@@ -214,12 +237,15 @@ license the ones they name.
 0 INTAKE   the assigned domain (one of the 21 subdomains) and analysis type (one of the nine); status.py new for
            the number                                                         pipeline.json DRAWING, doctrine throughout
 1 DRAW     guard.py recent, coverage and mechanisms; the strategy atlas; the weight and answer shape not leaned on
-           recently; the stump screen on paper (three to five candidate traps through its eleven tests, the three
-           strongest independent ones kept, stumping/references/stump-screen.md); the card (answer_shape, weight,
+           recently; the stump screen on paper (five or more candidate traps through its seventeen tests, the three
+           strongest that open different members kept, stumping/references/stump-screen.md) and the core proved
+           in generator/core.py (stumping Part 1d); the card (answer_shape, weight,
            chain_signature) through guard.py check, then register             COMMIT "DRAWN (taskNN)"
-2 DESIGN   the results chain, the hidden factor record, the effort test on paper, the data provenance, the
-           template check, fork and closure tables, the asks, prompt.txt      gate: precut.py exit 0
-3 BUILD    generator (simulating the real process), pack, goldens, effort.json, submission.md
+2 DESIGN   the Stump core and the Build brief, the results chain, the hidden factor record, the effort test on
+           paper, the data provenance, the template check, fork and closure tables, the asks, prompt.txt
+           gate: precut.py exit 0 and core.py exit 0         (stages 0 to 2: the stump-architect, Fable 5.2 xhigh)
+3 BUILD    generator around core.py (simulating the real process), pack, goldens, effort.json, submission.md
+           (stages 3 to 5: the build thread, Opus 5.5 high, executing the Build brief)
            gate: generator checks, verify, two byte-identical builds, effort.py, figures_check.py, the realism
            sweep, golden-realism, reduce-house-fixes, leak.py, guard.py surface and heart (or python3 gates.py taskNN)
 4 CHECK    the leak reader and the determinism judge (determinism only) spawned together in the background;
@@ -233,12 +259,13 @@ license the ones they name.
            the review result later: APPROVED or RETURNED                      COMMIT "APPROVED" / "RETURNED"
 ```
 
-One session runs the whole build in its main thread at max effort: design and build are the same hand, and a
-repair is done where the context already is. `python3 .claude/skills/build-pipeline/gates.py taskNN` runs every free
+A build has two hands. The architect designs the core and proves it in numbers before any pack exists; the build
+thread executes the brief, and a repair of the pack is done where the context already is, while a repair of the
+core goes back to the architect. `python3 .claude/skills/build-pipeline/gates.py taskNN` runs every free
 gate in one pass and prints one summary; run it instead of the scripts one by one.
 
 **Speed comes from killing weak ideas on paper** (`build-pipeline`, Speed): the stump screen before the card, the
-numbers prototyped in a scratch script before the generator is written, one review pass by the reader and the judge
+core proved in `generator/core.py` before the generator is written, one review pass by the reader and the judge
 together, and no gate or agent re-run that a fix did not touch.
 
 **The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 20 Project
@@ -249,7 +276,7 @@ Personas come from `guard.py names`, never typed. **Every card carries the clien
 deciding lessons, detection, resolving moves, file roles, answer pattern): `fingerprint/skeleton.py`, run inside
 `guard.py check`, refuses a near copy, a templated build or a variant of anything on file, of the slot's own lineage
 or of any task the client has shown us (`fingerprint/corpus/client_skeletons.json`: the templating page's pairs, the
-17 depth-scale tasks, the 15 examples), and a deciding lesson the dataset already teaches twice; the client swaps the
+17 depth-scale tasks, the 15 examples, the three approved review sheets of 2026-11-14), and a deciding lesson the dataset already teaches twice; the client swaps the
 nouns and counts, so a new setting never clears it.
 
 **Determinism is a construction, not an inspection**: invoke `determinism-check` while the results chain and the

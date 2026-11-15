@@ -93,7 +93,12 @@ a run's first wrong step is a surface class; any result is lost as `missed_plant
 reaches 60; most of both runs' lost weight sits on lessons the client's closed page holds (`closed_risk`). Otherwise
 the score routes below, and a minor surface loss among deep ones is noted, not routed.
 
-- `SUBMIT`: the average is under 60, the counterfactual average is under 60, and no surface condition above holds.
+- `SUBMIT`: the average is under 60, the counterfactual average is under 60, **the higher-scoring run is itself
+  under 60**, and no surface condition above holds. The review's Stumped gate rests on its single strongest run
+  (`guidelines/client/approved-reviews-2026-11-14.md`: approved at 17 to 35; our builds that passed the platform's
+  average came back at 71 to 83), so a pair that passes on the weaker run's slips is not submitted: it routes
+  `FIX_ASKS` when the stronger run's points came from results the reflex route earns, `REDESIGN` when it filed
+  most members of the call right.
   Say whether the losses are spread (strongest) or concentrated on one legitimate step (thinner, still submitted;
   record it for the next draw), and note any minor surface loss.
 - `FIX_DETERMINISM`: a run is `defensible_alternative` on a graded result. Route `/fix-determinism`.
@@ -114,7 +119,7 @@ Write `<task>/runs/triage.md` (or `triage_pass<n>.md` when one exists; never ove
 ```markdown
 # Run triage, <task>, <ISO date>
 **Verdict:** <SUBMIT | FIX_DETERMINISM | SURFACE_RISK | FIX_ASKS | REDESIGN | RUBRIC_EDIT>
-**Scores:** run 1 <x>, run 2 <y>, average <z>; counterfactual <x'>, <y'>, average <z'>
+**Scores:** run 1 <x>, run 2 <y>, average <z>, strongest run <max>; counterfactual <x'>, <y'>, average <z'>
 **Spread:** run 1 lost <k1> results to <c1> deep classes, run 2 <k2> to <c2>; <spread | concentrated on R<n>>; closed_risk <none | the card>
 
 ## Loss map

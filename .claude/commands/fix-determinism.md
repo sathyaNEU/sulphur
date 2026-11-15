@@ -2,7 +2,7 @@
 description: Repair a build where a run took a defensible alternative (triage FIX_DETERMINISM), the determinism judge found a fork, or a reviewer returned it as not deterministic, while the stump held. Closes the judges' fork in the record so the literal reading is the golden, without moving the main call, the stump, the ladder or any graded figure, proves the scope with freeze.py, re-judges once, and re-ships.
 argument-hint: taskNN <the finding: the run's alternative method, the judge's fork or the reviewer's note>
 model: opus
-effort: max
+effort: high
 ---
 
 # /fix-determinism
@@ -11,6 +11,11 @@ The build named in `$ARGUMENTS` has an open reading: a run took a sound method t
 another answer, or a judge or reviewer found two defensible answers. The job is
 to make the shipped text, read literally, land on the golden it already has. The stump and the rubric are
 what passed; they are not touched.
+
+**The core is the architect's.** This thread closes a fork in the record at Opus 5.5 high. When the
+fork-is-the-result test (step 3) says the closing sentence would name what a result's work recognises, or the only
+closure is a filed method, spawn one `stump-architect` agent with the finding: it gives the result a referee slice
+or redesigns it in `generator/core.py`, and this thread then rebuilds. A stump is never pinned into a rule here.
 
 Invoke `determinism-check` and `build-pipeline` first. If the finding is not in `$ARGUMENTS`, read it from
 `runs/triage.md` or `pipeline.json` (`portal`, `returned`) or ask once and stop.
@@ -64,7 +69,7 @@ Exit 1 means a frozen item moved: undo that change and find a closure that does 
 golden itself was the non-literal figure (a `solution_incorrect` the author accepts) is a move allowed, with
 `--allow <figures.json key>` and the reason in the fork-table row.
 
-**6. Re-judge once.** Spawn the `determinism-judge` agent (determinism only, medium effort in its definition) on
+**6. Re-judge once.** Spawn the `determinism-judge` agent (determinism only; its definition sets the model and effort) on
 the rebuilt bundle; this command licenses that one pass. APPROVE: go on. FIX_NOW: make the answer-block edits it
 names and ship without another judge. SEND_BACK: stop and report; the fork needs the prompt or the pack.
 

@@ -67,6 +67,18 @@ chain row also notes the spread (results lost to deep classes per run) from `/tr
 
 ## Lessons
 
+- **The approvals decide on the observation process and are read on the strongest run** (the three review sheets of
+  other fellows' approved tasks, `guidelines/client/approved-reviews-2026-11-14.md`, rewards 22, 17 and 35 on a single
+  GPT-6 Astra run; our four approved builds; against task1 v5, task16 v3, task13 v5 and task22 v2, returned at 83,
+  78, 75 and 71 after clearing the platform's average). In every approval the deciding judgment is what the record
+  cannot hold and the estimator that fills it, with a referee slice ruling between estimators; in the returns it was a
+  mechanism the rows carried or a member the direct evidence settled. The approved runs lost with the problem in
+  plain sight: one named the selection and filed nothing (L53), one built a triple difference on unsuitable controls
+  and committed an interval that straddled the line (L51, L52), one committed gross transitions (L54). Moved into
+  `../SKILL.md` Part 1d, `stump-screen.md` tests 9 and 14 to 17, `precut.py` (`## Stump core`, `## Build brief`,
+  `generator/core.py`), the `stump-architect` agent, the `determinism-judge` (the review's fork audit) and
+  `run-triage` (the higher run under 60).
+
 - **A call is only as hard as the members a run can get wrong** (task1 arch 5, task16 arch 3, task13 arch 5, the review
   round of 2026-11-13, rewards 83, 78 and 75; moved into `../SKILL.md` Part 3.4, `precut.py` `## Open members`, and
   `references/stump-screen.md` tests 12 and 13). Each build cleared the factorial on paper with three to six stumps and

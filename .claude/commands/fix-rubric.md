@@ -2,7 +2,7 @@
 description: Repair a build whose runs lost their points for analytical reasons but whose two-run average came back at 60 or more, because the runs earned results whose only difficulty was a reflex or the losses sat on too few results. Rebuilds or replaces those results so the careful but hurried pass loses more of the chain, with the results that held frozen; proves the scope with freeze.py and effort.py and hands back for new runs.
 argument-hint: taskNN [nothing if runs/triage.md carries the result]
 model: opus
-effort: max
+effort: high
 ---
 
 # /fix-rubric
@@ -12,6 +12,11 @@ and the average still reached 60 because they earned results the design priced a
 or two results. The job is to make more of the chain need work beyond the runs' reflexes, so a careful run in a
 hurry loses more results, in different areas, for analytical reasons. The results that held (the ones both runs
 lost for the reason the chain names) are not touched.
+
+**The core is the architect's.** Which results are rebuilt and what each now turns on is a design judgment:
+spawn one `stump-architect` agent with `runs/triage.md` (the stronger run's earned results first) and let it rework
+`generator/core.py`, the note's `## Stump core` and the `## Build brief`; this thread then executes the brief at
+Opus 5.5 high and proves the scope.
 
 Invoke `supplemental-stumping` (Parts 0, 1 and 6), `stumping` (Parts 1 to 3) and `build-pipeline` first. Read
 `runs/triage.md`, `runs/rubric.md` and both runs; if they are missing, run `/triage-runs` first and stop.

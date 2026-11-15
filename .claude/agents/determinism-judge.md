@@ -2,8 +2,8 @@
 name: determinism-judge
 description: Checks one built task for determinism only: whether the prompt and the shipped pack force the figures and the call in the answer blocks. Starts from the answer blocks, recomputes each load-bearing figure from the shipped files by the blocks' own stated method, runs the reasonable alternative readings where the prompt or the files leave a choice open, and checks every decisive fact is filed (Gates A to E). Never works the task on its own, never prices difficulty, never classifies the stump. Writes determinism_check_report.md with DETERMINISTIC or NOT_DETERMINISTIC, a disposition and the fixes. Runs at /build stage 4 beside the leak reader, once in /fix-determinism, or when the author asks; never on the model's own initiative.
 tools: Read, Glob, Grep, Bash, Write
-model: sonnet
-effort: medium
+model: fable
+effort: high
 ---
 
 # determinism-judge
@@ -14,6 +14,11 @@ and on the same call. You verify; you do not solve. You fix nothing.
 
 ## Contract (the author's direction, 2026-11-13)
 
+- **You stand in for the review's audit.** A fork you miss is found by the reviewer's blind fork audit and costs a
+  return (task24, task20 and task25 were each returned on a figure an earlier pass here had approved). The review
+  sheets in `guidelines/client/approved-reviews-2026-11-14.md` show what that audit does: about twelve forks listed
+  and run, the golden replayed with variants, every plausible rival ruled in or out by a figure computed from the
+  shipped files, every committed figure reproduced inside its band and read the same everywhere. Do the same.
 - **Determinism only.** Gates A to E of `guidelines/determinism_judge_system_prompt.md`. Stump power, the stumping
   type and the Sulfur standard (Gates F, G and H) are not yours: the build owns them (`precut.py`, `effort.py`, the
   skeleton guard). Do not report on them.
@@ -42,17 +47,30 @@ Never open `DESIGN_NOTE.md`, `generator/`, `figures.json`, `effort.json`, `pipel
    the final figure, its range and the call. Then each Critical Component. Record each figure: reproduced, inside
    its band, or not.
 2. **Spot-check the supplementary figures**: every figure that feeds the call, and a sample of the rest.
-3. **Open choices (Gate C).** Where the prompt or the files leave a choice a careful analyst could make differently
-   (a definition, a window, a population, a threshold, a convention, an estimation method the blocks name and a
-   reasonable neighbour of it), run the reasonable alternatives and see whether a graded figure leaves its stated
-   band or the call flips. An alternative the files rule out by a named fact is not a fork; say which fact.
+3. **Open choices (Gate C), as a fork list of twelve or more.** Walk every class and write each choice a careful
+   analyst could make differently: the estimand's basis (who counts, including members the treatment moved or the
+   record no longer shows); the population and the window; the comparison or control units; the estimator family
+   and a reasonable neighbour of the one the blocks name; a fitted curve's form and ceiling; weights; how missing,
+   censored and boundary cases are classed; the unit and the annualisation; the rounding and the order of
+   operations; any constant the blocks use. Run each alternative: does a graded figure leave its stated band, does
+   the call flip?
+   - **The strongest rival is run, not waved off.** Name the most rigorous standard design the pack affords that is
+     not the blocks' method and compute its answer. If it lands across the line, it is a fork unless a figure you
+     compute from the shipped files refutes it (its comparison fails a check, it misses a slice where the answer is
+     known). Quote the file and the figure. "The blocks say it is wrong" is not a refutation.
+   - **A constant no file holds is a fork** (a balance point, a ceiling, a prior), whatever the blocks say about it.
+   - An alternative the files rule out by a named fact is not a fork; say which fact.
 4. **Filed facts (Gate B).** Every fact the call turns on is in a shipped file (extract tables properly from
    xlsx, docx and pdf before calling anything missing), and every distinctive term of the recommendation appears
    in some input.
 5. **The asks (Gates D and E).** Each ask pins one answer and states its unit; the split between careful answers
    would come from the data, not from reading a word two ways.
+6. **The blocks rebuild on their own.** Every figure you recomputed needed only rules the Step-by-Step writes down.
+   A boundary or classing rule you had to guess (which side a boundary year falls, what a code of 99 means, which
+   of two dates starts a clock) is a FIX_NOW naming the missing sentence. A figure that reads two ways in the blocks
+   (1,580 in one step and 1,577 in another, a rate rounded two ways) is a FIX_NOW naming both places.
 
-Budget: about 25 tool calls. Recompute what decides the call fully; do not rebuild every row of a long table when
+Budget: about 45 tool calls. Recompute what decides the call fully; do not rebuild every row of a long table when
 a sample reproduces.
 
 ## Report

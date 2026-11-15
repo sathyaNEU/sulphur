@@ -104,7 +104,29 @@ lessons about where difficulty lives and never a chain to copy:
 5. **The prompt says why the answer must be an estimate** (task457's approval turned on it) and asks for composite
    results, never the intermediate quantity a method would name.
 
-What may not be copied: the chain, the order, the file roles or the decision form of any of them. task14's register
+**The three approved sheets of 2026-11-14** (`guidelines/client/approved-reviews-2026-11-14.md`; other fellows'
+tasks, rewards 22, 17 and 35 on the review's strongest run; `../SKILL.md` Part 1d) have the same anatomy and add
+three things to it:
+
+6. **The problem is in plain sight and the estimator is the work.** The run that scored 17 wrote down that the
+   labelled rows are mostly the bad outcomes and then filed nothing; the run that scored 22 built a triple difference
+   with a placebo. Neither lacked a fact. Each lacked a construction: the unlabelled share re-estimated per arm from
+   signals every unit carries, the treated units' own earlier seasons by the state that sizes the season.
+7. **A referee slice rules between estimators.** A random labelled pilot in one arm, a dated item on two of three
+   conditions, two earlier years with no treatment: the golden reproduces it, each rival misses it by a computed
+   figure, and it does not cover the target. That is what the reviewer's "the data forces" rests on.
+8. **The correction's own check breaks somewhere.** Netting was confirmed by timing on two conditions, bounded on the
+   third and overturned for the older group, so the sentence that names the correction leaves most of the work.
+
+**All seven approvals decide on the observation process; our send-backs for difficulty decided on mechanisms of the
+world.** Read against the eleven dimensions of Part 4: the rows that name what a record cannot hold (triangulating
+instruments, hidden state, the recording algorithm, a balance's residual) are where a member can be opened; the rows
+that are physics or algebra on shipped inputs (position on a network, a nonlinear functional of a path, aggregation
+algebra, lumpy capacity) were computed by the runs as the field's textbook chain (task22 arch 1 and 2, task25's audit
+run, task7 arch 12) and carry supporting results only.
+
+What may not be copied: the chain, the order, the file roles or the decision form of any of them, ours or the three
+sheets' (corpus ids `review:2d1b99c1`, `review:52ab454f`, `review:d311cbf0`). task14's register
 plus panel plus migration plus nowcast, task2's volunteers plus compelled staff plus movers plus ramp, task6's sampled
 spans plus retention plus dated causes and task457's self-reports read to the filing day are each one skeleton on
 file; the guard refuses a severity 1 to 3 match and a lesson they now teach a third time. Two of the four (task2's
@@ -161,4 +183,5 @@ judgments graded in different results).
 4. Write the Frontier check's `Closed strategies:` line: the deciding lesson and why it is not on the page, every
    closed lesson the chain carries and the route showing it alone does not flip the call.
 5. Borrow the approved anatomy (Part 3: a quantity no record holds, instruments with different blind spots, a target
-   no instrument covers), never an approved chain.
+   no instrument covers, an estimator to construct, a referee slice, a check that breaks on some members), never an
+   approved chain.

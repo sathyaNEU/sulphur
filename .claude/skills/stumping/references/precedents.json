@@ -1432,6 +1432,70 @@
    "move": "the benchmark days of every configuration and the 2026 GPU-days held reproduced exactly from the registry, the benchmark file and the configs",
    "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
    "quote": "All 11 benchmark days reproduce from tpbench_results and the configs"
+  },
+  {
+   "id": "L51",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "the most rigorous standard design the pack affords (a triple difference against units not yet treated) built unprompted, on comparison units whose seasonal response differs from the treated units'; its own placebo could not see that difference, and the units' own earlier years, by the state that sizes the season, were the valid counterfactual",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "Astra run +0.625 via triple difference vs AU, NZ, ZA, IN, SG ... has a placebo of its own that does not validate seasonal comparability by tenure and climate"
+  },
+  {
+   "id": "L52",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "an estimate whose own interval straddled the decision line, committed as the call",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "reports its own 95% interval of -0.23 to +1.48 straddling the 0.134 line"
+  },
+  {
+   "id": "L53",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "saw that the outcome label is recorded mostly on the bad outcomes, then declined to estimate the unlabelled majority: every figure not available and the default call for every member, where a labelled calibration sample and signals on every unit supported an estimate per arm",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "identified that thumbed conversations are mostly the bad ones (pilot 22.7 percent good among thumbed vs 75.9 percent among unthumbed), then refused to estimate: all shares and lifts NA, keep for all four categories"
+  },
+  {
+   "id": "L54",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "gross transitions between two reports of a status that cannot reverse committed as the rate of first events; the reverse flow and the event's own dated item, both in the file, never used",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "The run did not compute a netted rate and decline it; it never netted and committed the raw proxies"
+  },
+  {
+   "id": "L55",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the outcome followed only on the units still in their original class, where the treatment itself moved units out of that class (the estimand's basis was pinned by the prompt as everyone treated)",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "the monthly-plan-only reading gives about +0.30 and is the known trap"
+  },
+  {
+   "id": "R91",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "selection of the labelled rows on the outcome noticed unprompted from a calibration sample's own table; noticing it is never the difficulty",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "identified that thumbed conversations are mostly the bad ones"
+  },
+  {
+   "id": "R92",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a difference-in-differences or triple difference with a placebo and an interval built unprompted wherever untreated units ship; the design's machinery is a reflex, its comparison units' validity is not",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "+0.625 via triple difference ... a placebo of its own ... its own 95% interval"
+  },
+  {
+   "id": "R93",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "headline rates, cohort counts, joined row counts and a calibration sample's totals reproduced exactly; reproduced counts price nothing",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "headline rates ... and notified cohort counts reproduce; 161,384 joined conversations and 20,540 thumbed reproduce"
   }
  ]
 }

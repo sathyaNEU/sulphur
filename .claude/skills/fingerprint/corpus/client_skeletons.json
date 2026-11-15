@@ -1,5 +1,5 @@
 {
- "_about": "Every task the client has shown us, as a skeleton in skeleton_vocab.json's keys, so guard.py check can refuse a draw that reskins one and can count how often the client's dataset already teaches a lesson. Sources: the Templated Task Examples page (Project Mark task review, five send-backs, each a pair from one fellow; read 2026-11-11), the Sulfur Depth Scale page with its task detail (guidelines/client/depth-scale-2026-11-09.md and depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/1.txt to 15.txt). status: accepted (in the client's dataset, counts as teaching its lessons), judgment_call (depth level 3, kept about half the time, counted), sent_back (returned; never counts as teaching, but a reskin of it is still refused). The first lesson in each list is the one the call turns on.",
+ "_about": "Every task the client has shown us, as a skeleton in skeleton_vocab.json's keys, so guard.py check can refuse a draw that reskins one and can count how often the client's dataset already teaches a lesson. Sources: the Templated Task Examples page (Project Mark task review, five send-backs, each a pair from one fellow; read 2026-11-11), the Sulfur Depth Scale page with its task detail (guidelines/client/depth-scale-2026-11-09.md and depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/1.txt to 15.txt). status: accepted (in the client's dataset, counts as teaching its lessons), judgment_call (depth level 3, kept about half the time, counted), sent_back (returned; never counts as teaching, but a reskin of it is still refused). The first lesson in each list is the one the call turns on. Added 2026-11-14: three review sheets of other fellows' approved tasks (guidelines/client/approved-reviews-2026-11-14.md), ids review:*, each read from the reviewer's record because the packs are not on file.",
  "entries": [
   {
    "id": "html:grocer-bays",
@@ -1386,6 +1386,120 @@
      "governing_standard",
      "primary_record",
      "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "review:2d1b99c1",
+   "status": "accepted",
+   "source": "guidelines/client/approved-reviews-2026-11-14.md (review sheet, another fellow's approved task, reward 22; the skeleton is read from the reviewer's record, the pack is not on file)",
+   "title": "Subscription price change: does wave four go ahead (the price effect on September churn, a six-piece bridge)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "non_parallel_pre_trend",
+     "treatment_changes_who_is_observed",
+     "seasonal_shift_calibration"
+    ],
+    "mechanisms": [
+     "tenure_widening_september_swing",
+     "notified_accounts_move_plan",
+     "later_wave_markets_in_another_season"
+    ],
+    "detection": [
+     "pre_period_divergence",
+     "residual_by_subgroup",
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "own_history_seasonal_difference",
+     "cohort_follow_up",
+     "exclude_contaminated_comparison",
+     "bridge_by_contribution",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "exogenous_long_record",
+     "event_timeline",
+     "field_legend_or_dictionary"
+    ]
+   }
+  },
+  {
+   "id": "review:52ab454f",
+   "status": "accepted",
+   "source": "guidelines/client/approved-reviews-2026-11-14.md (review sheet, another fellow's approved task, reward 17; the skeleton is read from the reviewer's record, the pack is not on file)",
+   "title": "Assistant A/B test read through thumbs: which of four conversation categories move to the new arm",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_overfunds",
+    "lessons": [
+     "label_observed_by_outcome",
+     "proxy_link_differs_by_arm",
+     "design_weights",
+     "pilot_unrepresentative_selection"
+    ],
+    "mechanisms": [
+     "bad_conversations_thumbed_more",
+     "arm_changes_signal_quality_link",
+     "audit_drawn_from_thumbed_with_cell_caps"
+    ],
+    "detection": [
+     "selection_rule_in_the_record",
+     "second_source_at_other_grain",
+     "naive_depends_on_what_it_should_not"
+    ],
+    "moves": [
+     "prior_shift_reestimate_on_unlabelled",
+     "two_phase_weights",
+     "em_latent_fit",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "panel_or_survey_sample",
+     "sampling_dispositions",
+     "test_or_trial_register",
+     "field_legend_or_dictionary"
+    ]
+   }
+  },
+  {
+   "id": "review:d311cbf0",
+   "status": "accepted",
+   "source": "guidelines/client/approved-reviews-2026-11-14.md (review sheet, another fellow's approved task on public NHIS follow-up data, reward 35; the skeleton is read from the reviewer's record, the pack is not on file)",
+   "title": "Survey follow-up: do annualised first-diagnosis rates for three conditions fire their alerts, and for the 65 and over",
+   "skeleton": {
+    "decision_form": "certify_figure_against_line",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "transitions_inflated_by_response_error"
+    ],
+    "mechanisms": [
+     "ever_told_item_reverses",
+     "diagnosis_age_before_baseline",
+     "older_group_missed_earlier_outnumber_reversals"
+    ],
+    "detection": [
+     "conflict_marker_in_linked_pairs",
+     "record_time_against_event_time",
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "net_impossible_reverse_flows",
+     "link_records_by_parsed_key",
+     "inverse_inclusion_weights",
+     "lee_bounds_or_trimming",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "panel_or_survey_sample",
+     "crosswalk_or_migration_map",
+     "governing_standard",
+     "field_legend_or_dictionary"
     ]
    }
   }

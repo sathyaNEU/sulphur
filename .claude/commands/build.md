@@ -1,8 +1,8 @@
 ---
-description: Build one Sulfur task end to end (intake, draw, design gated by precut.py, build, leak reader and determinism judge together, ready for the platform) in this session's main thread. Takes a task number with the assigned domain and analysis type, or resumes a build from its pipeline.json.
+description: Build one Sulfur task end to end. The core is designed by the stump-architect agent on the strongest model (intake, draw, design gated by precut.py) unless /draw already did it; this thread then executes the architect's Build brief (the pack, the goldens, the answer blocks), runs the leak reader and the determinism judge together, and takes the build to READY. Takes a task number with the assigned domain and analysis type, or resumes a build from its pipeline.json.
 argument-hint: taskNN <domain> <analysis type> [starter kit path] | new <domain> <analysis type> | resume taskNN | taskNN from <stage>
 model: opus
-effort: max
+effort: high
 ---
 
 # /build
@@ -31,26 +31,37 @@ retired single-deep-step design is re-rooted to a results chain before any re-sh
 A build back from the platform is not a `/build`: `/triage-runs` reads the runs and routes it. A landed call comes
 back here as `/build taskNN from 2` with the triage file's loss map in the design note.
 
-**Run the stages in order** in this thread, invoking each stage's skills before its work and leaving a stage only
-when its gate holds.
+**Two hands, one build** (`stumping` Part 1d; `build-pipeline`, Effort per role). The core is the architect's:
+which judgments stump the review's strongest run, the world's dials, every margin, every estimator. This thread is
+the build: it executes the note's `## Build brief` and moves nothing the brief lists under `Frozen:`. The
+frontmatter's model and effort hold for the turn this command runs in; a later message in the same session is
+answered by the session's own model, so a build is continued with `/build resume taskNN`, not with a bare reply.
 
-1. **Do not stop for the author.** When the draw is filed, show it in ten lines (subdomain, task type and analysis
-   type, the decision, where the weight sits, the answer shape, the results chain one line per result with its area
-   and the hurried failure, the largest single hint and the results it rescues, the deliverables, the nearest build
-   from `guard.py mechanisms` including the Mark cards, the guard verdict), commit `DRAWN (taskNN)`, and carry on. A
-   failed gate is fixed and re-run without asking.
-2. **Stage 2 is left only on `precut.py` exit 0.** A chain the careful but hurried pass mostly earns is redesigned,
-   not argued; two failures on the results chain or the effort test re-root the draw before any data is cut. The
-   rivals are run on the clean truth before the pack is cut: every defensible rival on every result lands inside its
-   band or a named fact in the data rules it out.
+**Run the stages in order**, invoking each stage's skills before its work and leaving a stage only when its gate
+holds.
+
+1. **Stages 0 to 2 belong to the architect.** If the task has no `DESIGN_NOTE.md` that passes `precut.py` with its
+   `## Stump core`, `## Build brief` and `generator/core.py`, spawn one `stump-architect` agent (its definition sets
+   Fable 5.2 at xhigh; this invocation licenses it) with the task number, the subdomain, the analysis type, any
+   starter kit path and, for a re-root, the paths of `runs/` and the reviews. Do no design work while it runs. When
+   it returns: run `precut.py taskNN` and `python3 taskNN/generator/core.py` yourself (both exit 0, or the architect
+   is resumed with the output), show the draw in ten lines with the core table, commit `DRAWN (taskNN)`, and carry
+   on. **Do not stop for the author.** A build `/draw` already designed starts at stage 3.
+2. **The brief is executed, not improved.** Read `## Stump core` and `## Build brief` before anything else. The
+   generator imports the world from `generator/core.py` (its process, switches, sizes and estimators) and adds the
+   organisation's systems, the files, the Layer 1 mess and the documents around it. If the cut pack breaks a core
+   assertion, a route lands on the wrong side of its line, a member turns forced, or closing a fork would need a
+   sentence that names a result's work, stop the stage and resume the architect (`SendMessage` to the same agent,
+   or a new `stump-architect` briefed with the note and the failing figure). Never widen a margin, narrow a rival,
+   file a method or add an effect to get a gate through.
 3. **Stage 3 is left only when the free gates are green**: `python3 .claude/skills/build-pipeline/gates.py taskNN
    --full` (generator checks with every fork and the bar block R1 to R7 asserted, `verify`, two byte-identical
    builds, `effort.py` agreeing with the note, `figures_check.py`, `leak.py`, `audit_containers.py`, `guard.py
    surface` and `heart`), plus the realism sweep.
 4. **Stage 4 spawns two agents in one message, in the background:** the leak reader (as `/leak-check` step 4
-   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent (determinism only: it verifies
-   the answer blocks against the prompt and the pack, never works the task on its own and never prices
-   difficulty). This invocation licenses both. While they run, bring the card current and write the pre-ship
+   describes, `model: sonnet`, `effort: medium`) and the `determinism-judge` agent (its definition sets Fable 5.2 at
+   high; determinism only: it verifies the answer blocks against the prompt and the pack the way the review's audit
+   does, never works the task on its own and never prices difficulty). This invocation licenses both. While they run, bring the card current and write the pre-ship
    check. Fix every finding from both in one generator pass; re-judge once only when a fix moved a graded figure,
    the prompt or the pack (an answer-block edit is not re-judged); re-read only if a document or the prompt
    changed.
@@ -60,8 +71,9 @@ when its gate holds.
    and the golden ZIP (exactly the files the prompt requests, each entry at its file's own save time), then run
    `audit_containers.py taskNN` on them and stop on any FAIL (`reduce-house-fixes` H1), set `status` `READY`, commit `READY (taskNN):
    <call>` and push.
-6. **Repairs run in this thread.** Spawn a fresh agent only near the context limit, briefed with `pipeline.json`,
-   the design note and the findings.
+6. **Repairs of the pack, the goldens and the blocks run in this thread; repairs of the core go to the
+   architect** (step 2). Spawn a fresh build agent only near the context limit, briefed with `pipeline.json`, the
+   design note and the findings.
 
 **Write `pipeline.json` at every stage boundary** (with `status` and `updated`), and commit only at the status
 changes `build-pipeline` names. A blocker is removed in this session (redraw the axis, re-root into another task
