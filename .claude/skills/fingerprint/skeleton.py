@@ -3,6 +3,7 @@
 
     python3 .claude/skills/fingerprint/skeleton.py check task19            # or a scratch card .json
     python3 .claude/skills/fingerprint/skeleton.py lessons [--min 2]       # how often each lesson is already taught
+    python3 .claude/skills/fingerprint/skeleton.py open                    # lessons not closed and taught by no accepted task
     python3 .claude/skills/fingerprint/skeleton.py closed [taskNN|card]    # the client's 34 closed strategies; live cards on them
     python3 .claude/skills/fingerprint/skeleton.py matrix                  # every pair on file at severity 1 to 3
     python3 .claude/skills/fingerprint/skeleton.py selftest                # the calibration the rule is held to
@@ -662,11 +663,35 @@ def cmd_selftest():
     return 0 if ok else 1
 
 
+def cmd_open():
+    """The open menu for a draw: every lesson that is not on the client's closed page, not next to a card, and that no
+    accepted client task or approved build teaches, with the live builds of ours that already lean on it."""
+    vocab = load_vocab()
+    shut, near = closed_maps(vocab)
+    cards = load_cards()
+    teach = library_entries() + [e for e in entries_from_cards(cards) if e.get("status") in TEACHING]
+    live = {}
+    for c in cards:
+        for les in ((c.get("skeleton") or {}).get("lessons") or []):
+            live.setdefault(les, []).append("%s v%s" % (c.get("task"), arch_num(c.get("architecture"))))
+    rows = [(len(live.get(les, [])), les) for les in vocab["lessons"]
+            if les not in shut and les not in near and not carriers(les, teach)]
+    rows.sort()
+    print("open lessons (not closed, not next to a closed card, taught by no accepted task), least used by our live builds first:")
+    for n, les in rows:
+        print("  %-42s %s%s" % (les, vocab["lessons"][les][:150],
+                                ("   [ours: " + ", ".join(live[les][:4]) + "]") if n else ""))
+    print("%d open of %d lessons. A lesson here is a prompt for a judgment built from the world's own records, never a chain." % (len(rows), len(vocab["lessons"])))
+    return 0
+
+
 def main(argv):
     if not argv:
         print(__doc__)
         return 2
     cmd = argv[0]
+    if cmd == "open":
+        return cmd_open()
     if cmd == "check" and len(argv) > 1:
         return cmd_check(argv[1])
     if cmd == "lessons":

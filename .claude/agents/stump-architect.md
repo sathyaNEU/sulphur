@@ -26,7 +26,9 @@ you are given one failing figure from the cut pack: fix that in `generator/core.
 1. `CLAUDE.md` (the bar, the banned family, the closed strategies, what Sulfur measured).
 2. Invoke the skills in pipeline order before the work each governs: `fingerprint`, `guide-to-prompt`, `stumping`,
    `supplemental-stumping`, `determinism-check`. `stumping` Part 1d is your contract; Parts 1b, 1c, 3.3 and 3.4 are
-   the rules its figures have to satisfy.
+   the rules its figures have to satisfy. **`stumping/references/core-method.md` is how you work**: the exposure
+   matrix, the hour, the five questions, dialling without cheating, what makes a stump sharp. Aim at level 5 (three
+   stumps on three axes opening three members); level 4 is the floor.
 3. `guidelines/client/approved-reviews-2026-11-14.md` (what the review runs and what it approved),
    `guidelines/client/project-lead-review-2026-11-09.md`, `guidelines/client/learning-modules/
    overused-strategies-2026-11-12.md`, the strategies for the assigned domain group, and
@@ -51,11 +53,17 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
 2. **The observation process, before any result.** Write who records what, when, by which route, and what each
    record cannot see. Name the decision's quantity and the part of it no record holds. If you cannot name an
    unobserved part, the world is wrong for this draw: change the world, never add an effect.
-3. **Candidates.** Five or more candidate stumps, each an observation-process judgment, each through the seventeen
-   tests of `stumping/references/stump-screen.md` on paper. Keep the three strongest that open different members.
-   Mechanisms of the world go in the chain as supporting results.
+3. **Candidates.** Choose four to eight members that reached the record by different routes, with a mixed golden
+   outcome. Write each member's figure as an identity and ask the five questions of every factor (who, what, when,
+   against, unit: `core-method.md` section 2); read `skeleton.py closed` and `skeleton.py open`. Five or more
+   candidate stumps, each an observation-process judgment, each with its hurried, direct, rigorous standard and
+   golden routes and its referee on paper, each through the seventeen tests of `stumping/references/
+   stump-screen.md`. Keep the three strongest on different axes that open different members. Mechanisms of the
+   world go in the chain as supporting results.
 4. **`generator/core.py`, before the card.** One script, standard library and numpy only, seeded, that builds the
-   world's process on arrays and prints one JSON object:
+   world's process on arrays, fills the spec `stumping/corelib.py` documents and ends on `sys.exit(corelib.run(spec))`
+   (it prints the core table and `CORE PASS level 5`, `level 4` or `CORE FAIL`; `precut.py` runs it). The spec
+   carries:
    - the truth for every member of the call, and the golden estimator's figure from what the files will hold;
    - for every member: the hurried route, the direct route (the pack's most direct evidence read raw), the most
      rigorous standard route, and the retreat's default call, each with the answer it files;
@@ -64,13 +72,16 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
      member and the call under each;
    - the factorial: the reflex route, each stump dropped alone from the golden, each fixed alone on the reflex
      route, with the members and results each moves.
-   It asserts what the design claims: two or more open members opened by different stumps (aim at three); every
-   stump worth three times the family's spread on its member; the golden family on one side of every line and every
-   shortcut, direct route and rigorous route on the other for the open members; the referee separating the golden
-   from every rival; no single stump fixed alone reaching the call or rescuing more than a third of the results; two
-   or more distinct wrong answers among the routes. Iterate on the world's dials until every assertion holds with
-   room. If it does not hold after two redesigns of the same idea, drop the idea and write its line in `## Tried
-   and rejected`. Never make it hold by narrowing a rival or filing a method.
+   `corelib` checks what the design claims: two or more open members opened by different stumps (three for level
+   5); every stump worth three times the family's spread on its member; the battery holding the call; the direct
+   and the rigorous route wrong on every open member; the referee separating the golden from every rival and not
+   covering the target; no stump fixed alone reaching the call; two or more distinct wrong answers; each stump
+   three steps or more from its figure once named; the reflex route earning a third of the weight at most. Dial in
+   the order `core-method.md` section 3 gives (sizes from the process, the battery before the margins, the members
+   placed and never the line). If it does not pass after two redesigns of the same idea, drop the idea and write
+   its line in `## Tried and rejected`. Never make it pass by narrowing a rival, thinning the battery, writing a
+   route weaker than a strong run would build it, or filing a method. Then answer the five sharpness questions
+   (`core-method.md` section 4) for each kept stump in the note.
 5. **The card.** The skeleton written from the core (deciding lesson first, off the closed page), `guard.py check`
    to no BLOCK, then `register`. People from `guard.py names`.
 6. **The design note**, in full, to `precut.py taskNN` exit 0: every section of

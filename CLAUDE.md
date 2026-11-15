@@ -225,7 +225,10 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 
 **The brain and the body are different models** (`build-pipeline`, Effort per role). The `stump-architect` (Fable
 5.2 at xhigh) designs the core: the three or four independent judgments that stump the review's strongest run,
-proved in `generator/core.py` and handed over as the note's `## Stump core` and `## Build brief`. The build (Opus
+proved in `generator/core.py` and handed over as the note's `## Stump core` and `## Build brief`. It works by
+`stumping/references/core-method.md` (level 5 as an exposure matrix of members against judgments, five questions
+asked of every factor of each member's figure, three stumps kept on different axes) and its core.py ends on
+`stumping/corelib.py`, which grades the core level 5, level 4 or fail and which `precut.py` runs. The build (Opus
 5.5 at high) executes that brief and moves nothing in it; whatever touches the core goes back to the architect. The
 `determinism-judge` runs on Fable 5.2 at high (it stands in for the review's audit), the leak reader on Sonnet at
 medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. No isolated thread

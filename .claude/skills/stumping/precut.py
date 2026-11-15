@@ -107,12 +107,12 @@ SCREEN_FROM = "2026-11-13T00:45:00Z"
 # `## Open members`, two or more members opened by different stumps, and a `Direct route:` line (SKILL.md Part 3.4)
 OPEN_FROM = "2026-11-14T00:00:00Z"
 # From CORE_FROM (the approved review sheets read 2026-11-14, SKILL.md Part 1d): the note carries `## Stump core` (the
-# architect's seven labelled lines, every figure printed by generator/core.py) and `## Build brief` (the six-line
+# architect's eight labelled lines, every figure printed by generator/core.py, which ends on corelib.run) and `## Build brief` (the six-line
 # hand-over the build executes), and generator/core.py exists beside the note. FAIL for a build in flight whose card
 # was registered from CORE_FROM on, a WARN before it.
 CORE_FROM = "2026-11-14T12:00:00Z"
 CORE_LABELS = ("Unobserved part", "Instruments", "Referee", "Strongest standard route", "Said out loud", "Worth",
-               "Regimes")
+               "Regimes", "Sharp")
 BRIEF_LABELS = ("World", "Frozen", "Files", "Never filed", "Goldens", "Free")
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
@@ -1360,9 +1360,21 @@ def core_rows(task_dir, secs):
                      ("all %d labels" % len(labels)) if ok else
                      ((("## %s missing" % name) if body is None else ("missing labels: " + ", ".join(missing)))
                       + " (stumping SKILL.md Part 1d)" + tail)))
-    has = os.path.isfile(os.path.join(task_dir, "generator", "core.py"))
-    rows.append(("generator/core.py", "PASS" if has else bad,
-                 "present" if has else "the architect's prototype of the core is missing (SKILL.md Part 1d)" + tail))
+    core = os.path.join(task_dir, "generator", "core.py")
+    if not os.path.isfile(core):
+        rows.append(("generator/core.py", bad, "the architect's proof of the core is missing (SKILL.md Part 1d)" + tail))
+        return rows
+    # core.py ends on corelib.run(spec), which prints `CORE PASS level N` and exits 0 only on a core of level 4 or 5
+    try:
+        r = subprocess.run([sys.executable, core], cwd=task_dir, capture_output=True, text=True, timeout=600)
+        out = (r.stdout or "") + (r.stderr or "")
+        m = re.search(r"^CORE PASS level (\d)", out, re.M)
+        ok = r.returncode == 0 and m is not None
+        last = [l for l in out.strip().splitlines() if l.strip()][-1:] or ["no output"]
+        detail = ("corelib: level %s" % m.group(1)) if ok else ("exit %d: %s" % (r.returncode, last[0][:140]))
+    except Exception as e:
+        ok, detail = False, "could not run: %s" % e
+    rows.append(("generator/core.py", "PASS" if ok else bad, detail + ("" if ok else tail)))
     return rows
 
 

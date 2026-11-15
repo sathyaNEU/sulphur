@@ -90,8 +90,9 @@ Pair estimate: <the careful but hurried pass's rubric score, 50 or under>
 
 ## Stump core
 
-Written by the stump architect before the results chain (`../SKILL.md` Part 1d), every figure from
-`generator/core.py` run on the world's arrays, never typed.
+Written by the stump architect before the results chain (`../SKILL.md` Part 1d, `core-method.md`), every figure
+from `generator/core.py` run on the world's arrays, never typed. core.py ends on `corelib.run(spec)`; paste the
+table it prints here and its last line (`CORE PASS level 5` or `level 4`).
 
 Unobserved part: <the decision's quantity, and the part of it no record holds (units, periods, a state, the truth
   behind a selected or noisy report)>
@@ -104,6 +105,9 @@ Said out loud: <per stump, the one sentence that names its problem, and the depe
 Worth: <per stump, its worth on its member over the honest family's spread there (three or more), and the band>
 Regimes: <which members the main correction's assumption is checked on, cannot be checked on, fails on, and the basis
   that decides each; or `second stump` with the member it opens>
+Sharp: <per stump, the five answers of core-method.md section 4: the check its wrong route passes, the commitment its
+  right route needs, the other record that holds the evidence, how the correction differs across members, its own
+  graded figure>
 
 ## Stump factorial
 
@@ -233,8 +237,9 @@ Free: <what the build decides on its own: nouns beyond the people, Layer 1 textu
   task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught
   or closed; a decision form on four live builds). From `skeleton.CLOSED_FROM` on: a missing `Closed strategies:`
   line, a deciding lesson on the client's closed page, or a chain of closed lessons only.
-- For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its seven
-  labels, a missing `## Build brief` or one of its six labels, or no `generator/core.py` beside the note.
+- For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its eight
+  labels, a missing `## Build brief` or one of its six labels, or a `generator/core.py` that is missing or does not
+  exit 0 on `corelib`'s `CORE PASS level 4` or `5`.
 - In `effort.py`: a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
   block missing, a golden-family variant across the line, a shortcut on the golden's side, or a perturbation that
   moves the call.

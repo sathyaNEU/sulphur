@@ -392,16 +392,29 @@ output to invert: Part 1c's hidden-state rows, never its physics-on-a-shipped-ne
    member. Our returns read "a large share of the deliverable is reachable without any judgment". Results the reflex
    route earns carry a third of the rubric weight at most (Part 3.4), a quarter where the chain allows.
 
+**How the core is found** (`references/core-method.md`). Level 5 is an exposure matrix: members down the side,
+judgments across the top, and three or more judgments that each flip a different member, so every shortcut files a
+different wrong answer. The matrix exists because members reached the record by different routes, so the member axis
+is chosen along a difference in how records are made. Each member's figure is written as an identity and every
+factor is asked five questions (who is in the record, what the stored value measures, when it was observed, against
+what it will be compared, at what unit it is recorded); the candidates are the honest "the record does not hold
+that" answers, kept on different axes so no one sentence rescues two. `skeleton.py open` lists the lessons no
+accepted task teaches. A stump is sharp when its wrong route passes its own check, its right route needs a
+commitment the referee supports, its evidence is in another record, its correction is not a constant across members
+and it has a graded figure of its own.
+
 **The core is designed first and handed over as numbers.** The stump architect (`.claude/agents/stump-architect.md`,
 the strongest model at its highest effort; `/draw`, or stages 0 to 2 of `/build`) writes the note's `## Stump core`
 (`Unobserved part:`, `Instruments:`, `Referee:`, `Strongest standard route:`, `Said out loud:`, `Worth:`,
 `Regimes:`) and `generator/core.py`: the world's observation process on arrays, the truth, the golden estimator,
-every route of rule 2, the referee's scores and the variant battery, with the margins asserted. Nothing in the note
-is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
+every route of rule 2, the lattice of shortcuts, the referee's scores and the variant battery, ending on
+`corelib.run(spec)` (`corelib.py`: it prints the core table and `CORE PASS level 5`, `level 4` or `CORE FAIL`, and
+its selftest holds ten cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
 files and documents under the note's `## Build brief` (`World:`, `Frozen:`, `Files:`, `Never filed:`, `Goldens:`,
 `Free:`) and moves no switch, size, margin or estimator in it. When the cut pack breaks a core assertion the build
 stops and the architect is resumed with the failing figure; a margin is never repaired by the builder.
-`precut.py` refuses a card registered from `CORE_FROM` without both sections and `generator/core.py`.
+`precut.py` refuses a card registered from `CORE_FROM` without both sections, or whose `generator/core.py` does not
+exit 0 on `CORE PASS`.
 
 **Never a template.** The three tasks are on file as skeletons (`fingerprint/corpus/client_skeletons.json`, ids
 `review:2d1b99c1`, `review:52ab454f`, `review:d311cbf0`) and the guard refuses a reskin at the pair severities. No
