@@ -19,8 +19,9 @@ spawned agent is that you are the main thread, so you also commit.
   reviewer asked for it; the core is redesigned and re-proved in `generator/core.py`.
 
 When `precut.py taskNN` exits 0: show the author the draw in ten lines, the core table (member, golden and band,
-family spread, the hurried, direct and rigorous routes, opened by), the referee and its scores, and any assertion
-that holds with little room. Commit `DRAWN (taskNN)` on `main` with the task folder and the card, push, and name the
+family spread, the hurried, direct and rigorous routes, opened by), what each route earns on the rubric (each stump
+lost alone, the reflex route, the rigorous standard route), the referee and its scores, and any assertion that holds
+with little room. Commit `DRAWN (taskNN)` on `main` with the task folder and the card, push, and name the
 next step: `/build taskNN from 3`.
 
 Do not build the pack, the goldens or `submission.md` here. A core that will not hold is dropped and redrawn in this

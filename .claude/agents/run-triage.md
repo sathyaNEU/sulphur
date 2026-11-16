@@ -76,6 +76,13 @@ If a run file or the scores are missing, stop and say which.
 7. **Rubric criteria that look wrong or missing**: a criterion that contradicts the golden, one that grades a
    method the prompt never asked for, a critical component with no criterion. List them; the author edits the
    rubric only for these.
+8. **The earned map, for the higher-scoring run.** The review reads its strongest run, so say where that run's
+   points came from. Put every criterion it earned in one of four classes and total the weight of each:
+   `instruction` (a file, a format, a described feature); `no stump on its path` (a count, a rebuilt total, a
+   reconciliation, a figure the design's factorial moves under no stump); `stump made` (a figure downstream of a
+   judgment the run made, named); `stump lost, figure inside its band` (the run lost the judgment and still landed
+   the figure, with the run's value, the golden and the band). The second and fourth classes are points the ask
+   layer gave away (`supplemental-stumping` Part 0); they are what `/fix-rubric` removes.
 
 ## Reflexes the run made
 
@@ -133,6 +140,10 @@ Write `<task>/runs/triage.md` (or `triage_pass<n>.md` when one exists; never ove
 
 ## Run 2
 (the same)
+
+## Earned map (the higher-scoring run)
+<instruction <w>; no stump on its path <w>: <criteria>; stump made <w>: <criteria by judgment>; stump lost, figure
+inside its band <w>: <criteria with the run's value, the golden and the band>>
 
 ## Rubric criteria to edit
 ## Route

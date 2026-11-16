@@ -31,6 +31,12 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 - **Cut incidental figures, never owed ones.** Every figure a component or an ask owes stays (each is a criterion).
   A figure that only shows working (a sub-count, a denominator) goes, except where the Step-by-Step needs it to show
   a result's hard move.
+- **The Recommendation, the Supplementary Questions and the Critical Components state the core's graded figures and
+  no others.** Each figure sentence there becomes a rubric criterion, and a criterion on a figure every route
+  reaches (a joined count, a rebuilt total, a cleaned base, a reconciliation) is a point the run that missed the
+  call still earns (`supplemental-stumping` Part 0). Those figures go in the Step-by-Step, where the reviewer
+  reproduces them and no criterion is generated. For a build with a `generator/core.py`, the stated figures are
+  its `figures` list.
 - **Reproducible, not low-level.** Steps name the file and the method that produce each result; they do not walk
   arithmetic, restate the files' conventions or narrate cleaning. A convention needing a paragraph belongs pinned in
   a shipped file.
@@ -74,7 +80,9 @@ the headline result and the action it supports. This block answers the main reco
 **2. Supplementary Questions.** One clearly labelled answer per sub-ask, numbered in the prompt's order, grouped by
 file under `### <file.ext>` (the golden file's own name; the prompt asks for it by type), in the exact unit asked,
 at one precision with its band where reasonable methods differ (the prompt dictates no rounding). Where an ask is a requested file, the answer
-**describes how that file should look**: its rows, columns, ordering, the figures in it and where the visual sits.
+**describes how that file should look** in one line (its rows and the figures in it), then gives the figures. Every
+described feature of a file or a chart (a column list, an ordering, a colour, where the visual sits) becomes a
+one-point criterion every run earns, so the description is as short as the reader needs.
 Each answer is graded at the main call's bar: it reproduces and is uniquely forced.
 
 > ### district_excess.csv
@@ -88,11 +96,11 @@ Each answer is graded at the main call's bar: it reproduces and is uniquely forc
 - A figure in two places has the same rounding in both; compute it once in code and carry it.
 
 **3. Critical Components.** 2 to 5 load-bearing results **every valid method must compute**, one line each, the
-figure in bold at its rounding everywhere else, **drawn from different areas of the results chain** (an assembly
-result with its gap to a control total, a model's estimate with its band, a backtest's error, an attribution's
-shares, an onset date), never three restatements of one fit. These carry the most rubric weight, so most of them are
-results the careful but hurried pass loses. Test: if a defensible method could skip it and still reach the answer,
-cut it; if the hurried pass also gets it right, it grades nothing but its place in the chain.
+figure in bold at its rounding everywhere else, **one per stump where the core has them** (each stump's own figure:
+the estimate it produces, the share or the size the record does not hold, the referee's score), never three
+restatements of one fit and never an assembly figure. These carry the most rubric weight per line, so every one is
+a figure the careful but hurried pass loses. Test: if a defensible method could skip it and still reach the answer,
+cut it; if the hurried pass also gets it right, it is a free criterion and it goes to the Step-by-Step.
 
 > 1. Testing volume in Brenton rose **104 per cent** year on year against **11 per cent** in Harlow.
 > 2. Harlow's testing-adjusted excess is **41 cases a week** (90 per cent interval **33 to 49**).
@@ -146,8 +154,10 @@ convention; a conditional call; a golden ZIP whose file count differs from the p
 
 - [ ] Exactly the four blocks plus tags; none of the banned blocks
 - [ ] Final Recommendation first, one or two sentences, the deciding figure, what it rejects and why
-- [ ] Supplementary Questions numbered one per sub-ask, grouped by file, each file's look described
-- [ ] Critical Components 2 to 5 from different areas of the chain, most of them results the hurried pass loses
+- [ ] Supplementary Questions numbered one per sub-ask, grouped by file, each file's look described in one line
+- [ ] Critical Components 2 to 5, each a figure the hurried pass loses, one per stump where the core has them
+- [ ] No figure every route reaches is stated in the Recommendation, the Supplementary Questions or the Critical
+      Components (counts, rebuilt totals and bases sit in the Step-by-Step)
 - [ ] Step-by-Step walks every result and shows the hurried analysis it rejects with its figure; closing passage
       names every rival
 - [ ] No incidental figure; shared figures agree everywhere to the same rounding

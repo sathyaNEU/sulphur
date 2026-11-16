@@ -1,61 +1,121 @@
 ---
 name: supplemental-stumping
-description: Turn the results chain into asks and price the rubric for Sulfur's bar (two runs averaging under 60, losing their points in several places for analytical reasons; build to 50 on paper). Every result in the chain is asked for and graded on its own, so a run that skips a result's work loses that result and only the results that depend on it; the pair is priced result by result by effort.py. Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds every ask. Use after stumping fixes the results chain and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
+description: Turn the results chain into asks and price the rubric so a run scores as low as the analysis allows (the Stumped gate reads the review's strongest run against 60; a run that loses any one stump stays at 50 or under and the reflex route in the twenties). Every figure the answer blocks state sits downstream of a stump, the weight is spread across the stumps so none carries it alone, each stump keeps one figure of its own, reflex work is done and never stated as a graded figure, and every band comes from the variant battery; corelib.py prices every route at design and effort.py on the cut pack. Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds every ask. Use after stumping fixes the core and the results chain and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
 ---
 
 # The Ask Layer
 
-The asks are the results chain, asked for. The rubric is generated from the prompt and the four answer blocks, so
-every result the chain names becomes criteria only if an asking sentence and an answer block carry it. A result
-that is computed but never asked is unpriced work; an ask that is not a result of the chain is a lookup. Mark's
-record (`references/evidence.md`, cited as `evidence.md` with its part; the shipped devices with their portal tier in
-`references/proven-in-production.md`) says what models execute; it is kept as the list of things an ask must never
-rest on.
+The asks are the results chain, asked for. The rubric is generated from the prompt and the answer blocks, so what
+the prompt asks and what the blocks state is the rubric: every figure sentence becomes a criterion, and a run earns
+each criterion its own figure lands. The ask layer cannot make a run lose a judgment (that is the core's work,
+`../stumping/SKILL.md` Part 1d). It decides how many points each lost judgment costs, and how many points cost a
+run nothing. Mark's record (`references/evidence.md`, cited as `evidence.md` with its part; the shipped devices with
+their portal tier in `references/proven-in-production.md`) says what models execute; it is kept as the list of
+things an ask must never rest on.
 
-## Part 0. The arithmetic, result by result
+## Part 0. The arithmetic: what a run earns
 
-The client publishes no weights, only their order: the recommendation and critical components carry the most, the
-asks next, instruction-following a small share. Price on Mark's measured split until the Sulfur record says
-otherwise (`../stumping/references/sulfur-record.md`): the call and the critical components 38, the asks 55,
-instruction-following 7. `effort.py` spreads each block's weight over the results graded in it and scores the three
-passes: the bar is the runs' average under 60, the paper target is the careful but hurried pass at 50 or under.
+**The split, measured.** The two generated rubrics on file (task6 architecture 6, 30 criteria; task11, 18 criteria)
+both came to 100 points the same way: the recommendation one criterion of 18; the critical components 18 to 23; the
+asks 50 to 55; instruction-following 9, one point per requested file, per described feature of a file or chart and
+per format rule. Each figure sentence of the Critical Components and the Supplementary Questions became one
+criterion (a sentence naming two members' figures became one criterion that needs both), and no criterion came from
+the Step-by-Step. `../stumping/corelib.py` prices on 18, 20, 53 and 9; `effort.py` keeps 38, 55 and 7 so builds
+stay comparable with the ones already priced.
 
-What that means for the design:
-- **The pair is the share of results a careful run in a hurry loses.** With six results of equal weight the careful
-  pass has to lose about half of the weighted results to sit near 50, so at least three results need a move beyond
-  the runs' reflexes (`../stumping/SKILL.md` Part 0), in different areas so the two runs lose in different places.
-- **The recommendation and the components are priced like the rest.** A call that one result decides prices the
-  task at that result again; the call rests on several, and the components are results from different areas of the
-  chain, never three restatements of one fit.
-- **The paper is optimistic.** Mark measured paper ceilings of 35.1 and 39.4 that came back at 83.5, and 182 gated
-  39.1 against an honest 75.2. So the passes are computed end to end by the generator, the careful column is
-  calibrated to the run record, and the platform's two runs are the only measurement (`/triage-runs`).
+**A run's score is what its route lands.** Every run earns the 9, so 9 is the floor. Above it a run earns the
+recommendation when its call is right, and each figure whose value sits inside the band the blocks state. A frontier
+run does all the reflex work right (`../stumping/references/precedents.json`), so **every figure with no stump on
+its path is a free criterion**, and so is a figure a stump moves by less than its band.
+
+**The review reads its strongest run, and that run loses fewer stumps than the platform's two.** Builds of ours that
+scored 28 to 49 on the platform came back from review at 71 to 83. So the ask layer is priced on two lines, computed
+at design by `generator/core.py` (corelib's rubric table, from the same lattice that proves the core) and again on
+the cut pack by `effort.py`:
+
+- **One stump lost: 50 or under, for every stump.** A run that makes every judgment but one still fails the bar
+  with ten points of room. The recommendation is 18, so each stump on its own takes about 32 of the 73 figure
+  points, which three stumps can only do when their figure sets overlap: most graded figures sit downstream of two
+  stumps or more.
+- **The reflex route: 30 or under, built for the twenties.** A run that loses every stump, or names the problem and
+  declines to estimate, keeps the 9 and a handful of points.
+
+Two more keep the client's standard ("more careful work keeps earning more"; no single sentence of help rescuing
+more than a third): a stump fixed alone on the reflex route earns something (it has a figure of its own), and adds a
+third of the rubric at most.
+
+**Where the points went, on the record.**
+
+| Build | What the asks were | What the run kept |
+|---|---|---|
+| task6 architecture 6 | sited away from the call (releases, rollbacks, cloud cost, incident minutes) | the run off the call scored 73: the 48 points of those asks and 16 of the components; the releases and the cost were dropped ("no figure reads the SLI"), every ask was re-sited onto the stumped SLI, service by service, and the build was approved as architecture 7 |
+| task11 | "deliberately separate from the call" (station loads, carbon fed), 55 points | both runs kept every gradable one; the run that declined the call still scored 54 |
+| task8 | four devices whose discovery is their remedy | both runs found all four |
+| task22 architecture 2, task13 architecture 5, task16 architecture 3, task1 architecture 5 | rebuilt totals, counts and bases stated in the blocks beside the estimates | 71 to 83 at review: "both rebuilt gas in close to your 1,844,373 Mcf", "the same 436 faults by year", "the link counts themselves are mechanical", "the same October 2026 base on every plan" |
+| task20 architecture 4, run 2 | three stumps, each with its own results | one stump lost: an estimated 51.7 on the effort weights |
+| the three approved sheets (`guidelines/client/approved-reviews-2026-11-14.md`) | the estimate, member by member (eight shares and four lifts; three netted rates; six bridge pieces) | 17, 22 and 35: the runs kept the joined counts and headline rates and nothing else; the run that named the selection and declined filed "all shares and lifts NA" |
+
+The client's own lines agree. The rubric page: "Supplementary questions and asks: each hard ask you wrote. A wrong
+analytical path should get them wrong" (`guidelines/client/overview.txt`). And the reviewers' weak mark on a level 5
+task: "much of the work sits away from the deciding step" (b9efebd1).
+
+**The paper is optimistic.** Mark measured paper ceilings of 35.1 and 39.4 that came back at 83.5, and every Sulfur
+paper estimate without a run behind it came back 40 to 60 points high, because a judgment priced as lost was a
+reflex. The rubric table cannot see that: it says what a lost stump costs, never whether the stump is lost. The
+platform's two runs are the only measurement (`/triage-runs`).
 
 ## Part 1. The ask doctrine
 
-1. **Every result is asked for.** One asking sentence (or one numbered sub-ask) per result, in the deliverable's
-   terms, with its unit inside the sentence and no rounding instruction; the answer blocks carry the result's figure at
-   its own precision, with its band where reasonable methods differ. A result that is only a step toward another figure is either asked for or cut from the chain.
-2. **Each ask is graded on its own.** Where the world allows, a later result is asked against an input of its own (a
-   bridge against the forecast file and the actuals; a rule against its alert count on a stated history), so a run
-   that slipped earlier still earns it by doing the step right. The platform grades against the golden, so this is
-   a property of the world and the asking sentence, never of a carry-forward note.
-3. **No ask is won or lost on a surface cause.** A run that loses an ask to a field reading, a filed rule, a planted
+1. **Every stated figure is downstream of a stump.** A figure the prompt asks for and the blocks state is a
+   criterion; it earns its place only when the reflex route files it outside its band. An ask sited on quantities no
+   stump touches (a second family of files, an input of its own, a reconstruction) is collected by the run that
+   missed the call, which is the run the review reads.
+2. **Spread across the stumps, never hung on one.** A core has two matrices, and they are shaped differently. The
+   **call matrix** (members against stumps, the cells that flip a member across its line) is sparse: each stump
+   flips a different member, which is the level (`../stumping/references/core-method.md`). The **figure matrix**
+   (graded figures against stumps) is dense: a real process runs across the data, so each stump moves most members'
+   figures outside their bands while flipping only the members near their lines. Every cell is one of three:
+   *flips* (the effect is larger than the member's margin to its line), *moves* (larger than the figure's band,
+   smaller than the margin), *silent* (inside the band: a free criterion on that route). The approved sheets are
+   this shape: the raw rates were wrong on all three conditions, the pilot transfer on every share of one arm, the
+   wrong counterfactual on all six bridge pieces. A figure downstream of exactly one stump is that judgment
+   restated: each stump gets one of its own (Part 0's ladder) and the rest are compound. A chain where one stump
+   is the only analytical input of most figures is one thing under another name (`precut.py` counts it), so the
+   overlap is between independent stumps, never one stump read at many cells.
+3. **Ask for what the estimate is used for.** The client's level 5 tasks ask follow-ups only the corrected
+   intermediate answers (b9efebd1: the expected charge-offs among the loans still open, the older vintages on the
+   same footing, the plan by funding month; 279e74f2: "Corinne's mid-October plan needs the same figure"), and
+   every review of ours asked for the same thing. The kinds, each drawn from this world's own decision and never
+   from a list: the estimate for every member (the whole column, never spot cells); the estimate carried one step
+   further (a second date, the next period, the stock a month on, the money); the rejected or the incumbent option
+   priced on the golden's footing; each member's distance to its line or its break-even; the size of what the
+   record does not hold. Never name the intermediate the correction produces: an ask that names it hands over the
+   decomposition (`../stumping/references/sulfur-record.md`).
+4. **Reflex work is done, never stated as a graded figure.** Counts, joined totals, rebuilt series, cleaned bases
+   and reconciliations are needed by every route and reached by every frontier run. The prompt does not ask for
+   them, and the Supplementary Questions and the Critical Components do not state them; the Step-by-Step carries
+   them so the reviewer can reproduce the path. The prompt asks for the estimates, never for the table they are
+   built from (a 504-row balance asked for by name is 504 cells a run rebuilds). An assembly result is asked only
+   where the assembly is itself a judgment a run has been seen to lose, cited like any other stump.
+5. **Bands come from the battery and sit inside the stump.** Each stated figure carries the band its twelve or more
+   variants span, with room, and it is stated only where every stump claimed on it moves it outside that band
+   stretched by half again (a narrower miss is a near miss, which the review gives back). A band wide enough to
+   hold the reflex route's figure grades nothing (task16 architecture 1: bands of 0.648 to 0.689 held every careful
+   analysis). A figure whose honest band swallows the stump is cut from the blocks, never narrowed: a band that
+   leaves a defensible variant outside is a fork (`determinism-check`).
+6. **A committed figure for every member.** The prompt asks for the figure on every member, so a run that names the
+   problem and declines to estimate is wrong on every row and not only on the call.
+7. **Sentences are criteria.** One figure sentence is one criterion, all or nothing. Each sentence of the blocks is
+   the deliverable's own row or line, and no sentence holds only figures the reflex route lands. Each file's look
+   is described in one line: every described feature (a column list, a chart element, an ordering) is a point every
+   run earns.
+8. **No ask is won or lost on a surface cause.** A run that loses an ask to a field reading, a filed rule, a planted
    row or a formatting choice is evidence of a surface stump, and the reviewer reads where each run lost its points.
-   Mess sits on the ask paths as texture that every careful run cleans the same way (Part 4), or as an assembly
-   result of its own with a count and a gap to a control total.
-4. **Hard, not long.** No cap on asks and no target count; a few demanding multi-part asks beat many lookups. One ask
-   can span many rows, periods or cells and still resolve to gradable answers; every figure is separately gradable
-   and determinate, with a band where reasonable methods differ (`determinism-check`).
-5. **The answer's shape supplies the criteria.** A ranked list under a cap, a bridge, a timeline, a forecast path
-   with bands, a flagged set with its false-alarm rate: the shape's cells are many gradable criteria, and the
-   results that price the task sit in different cells.
-6. **The asks make the completed work be used, not read.** The client's level 5 tasks ask follow-ups that only the
-   corrected intermediate answers (b9efebd1: the expected charge-offs among the loans still open, the older vintages
-   on the same footing, the 2027 plan by funding month), and price the incumbent's option on the same footing as the
-   golden (279e74f2: "Corinne's mid-October plan needs the same figure"). Each such ask is a result of its own, and a
-   run that kept the pooled or uncorrected figure loses it as well as the call. Never name the intermediate the
-   correction produces: an ask that names it hands over the decomposition (`stumping/references/sulfur-record.md`).
+   Mess sits on the paths as texture that every careful run cleans the same way (Part 4), so a hygiene slip moves no
+   graded figure outside its band.
+9. **Hard, not long.** No cap on asks and no target count. A few asks that each resolve to many gradable figures
+   (a figure per member, per period, per option) beat many lookups, and every figure is separately gradable and
+   determinate.
 
 ## Part 2. What Mark measured, which still binds
 
@@ -76,9 +136,10 @@ drafted:
    and require that it still misses a block of figures: a second device from another family on the same ask,
    its figure block disjoint from the first's (151's deferred-salary reconciliation beside the catch-up halves;
    236's two per ask). A device whose discovery and whose remedy are the same act is a work order (1.0 below).
-3. **Site every ask on quantities the main-call files cannot compute**, not merely on files the call does not
-   read: 151's injured-list asks read ask-only files and were still pinned by the batting lines. The test: with
-   every ask-only file deleted, can the main files yield the figure? If yes, re-site.
+3. **An ask-only file does not keep an ask.** 151's injured-list asks read files the call never opened and were
+   still pinned by the batting lines. Mark's remedy (site every ask on quantities the main-call files cannot
+   compute) is superseded by Part 1 rule 1; the finding stands as the reason an ask sited away from the stumps is
+   never safe.
 4. **Give each device mass and breadth.** Every figure of its ask moves by several bins; no block that is one
    number repeated (187's ten curtailment criteria were one farm-wide number); no median that moves only when a
    mishandled row crosses a mark (118 at 87); 114 needed a 15-hour floor after a 57.
@@ -91,11 +152,12 @@ drafted:
 
 **1.0 A device whose discovery and whose remedy are the same act is not a device.** Noticing that eight
 references each serve two stations IS noticing that the join must go through the address; the hygiene battery
-performs the discovery, and cutting the narration that described it moved nothing (165, 21 of 21). The remedy
-must be a **reconstruction** (a state rebuilt over time from an event log, a deduplication under a key that has
-to be worked out, an allocation whose weight is recorded), never an **estimator**: a choice among estimators
-either shows in the fit (a reflex) or forks the ask (`../stumping` 1.1c read one layer down). The test at design
-time: after the solver has noticed the problem, is there still work to do, and can that work be done wrong?
+performs the discovery, and cutting the narration that described it moved nothing (165, 21 of 21). Mark's
+remedy was a reconstruction (a state rebuilt over time from an event log, a deduplication under a key that has to
+be worked out); on Sulfur the runs do those by reflex, and the work left after noticing is an **estimator built
+across records and ruled on by a referee slice** (`../stumping/SKILL.md` Part 1d), which neither shows in one fit
+nor forks. The test at design time is unchanged: after the solver has noticed the problem, is there still work to
+do, and can that work be done wrong?
 
 **1.1b The blind-response test, at the draw.** For the widest graded component, score the response that applies
 one obvious rate to one obvious size column, the constant response and the all-nil response, before any file
@@ -143,12 +205,15 @@ level, all else ties under every handling.
 
 ## Part 3. Mark rules that Sulfur supersedes, and why
 
-- **"No ask keyed to the call or its construction"** (Mark ban 4; 110 at 84, 464 v2) and **"decoupled in
-  computation"** (Mark 1.3): in Mark a coupled ask was collected by every response that landed the call. Under the
-  results chain every ask is a result with work of its own, so an ask that only restates the call's construction
-  (the same fit read at another cell) double-counts one result and is cut or rebuilt. The surviving half of the
-  rule: no ask hands over a construction (no "for the option you recommend" that a wrong pick can still answer on its
-  own terms, no asking sentence that names the steps).
+- **"No ask keyed to the call or its construction"** (Mark ban 4; 110 at 84, 464 v2), **"decoupled in
+  computation"** (Mark 1.3) and **"each ask graded on an input of its own"**: in Mark a coupled ask was collected by
+  every response that landed the call, so a separate device took points from it. On Sulfur a run that lands every
+  stump is a returned task whatever the asks do, and the run the review reads has missed the call: what it collects
+  is every ask sited away from the stumps (Part 0, task6 architecture 6 and task11). So the asks sit downstream of
+  the stumps. Two halves of the old rule survive. With one stump, coupled asks are that one judgment read at other
+  cells, which is the banned one-thing design, so the coupling is to two or three independent stumps (Part 1 rule
+  2). And no ask hands over a construction: no "for the option you recommend" that a wrong pick can still answer on
+  its own terms, no asking sentence that names the steps.
 - **"An ask's device may turn on data semantics or rule application"** (Mark 2.1): Sulfur reviewers read where each run
   first went wrong, so an ask lost on a reading or a rule marks the task as a surface stump. Every ask's difficulty is
   analytical.
@@ -268,10 +333,11 @@ device at a time, organ and records together; never delete an organ.
 ## Part 6. The returned-task revision
 
 **The losses were analytical but the average reached 60** (`/fix-rubric`, from `/triage-runs`' `FIX_ASKS`, proved by
-`freeze.py check --mode rubric`): read which results both runs earned and why. A result earned only because its
-difficulty was a reflex (the textbook method, a plot, a holdout) is rebuilt around a move beyond it or replaced by a
-result from an area the chain does not yet reach; a critical component that the hurried pass also got right is
-replaced by one it loses. **The runs lost most of their points on one result**: the task is thin, so the fix adds
+`freeze.py check --mode rubric`): read which criteria the higher-scoring run earned and why. A figure with no stump on its path
+leaves the prompt and the blocks (its work stays in the Step-by-Step); a figure a lost stump moved by less than its
+band is replaced by a consequence that stump moves further (Part 1 rule 3); a critical component the run got right
+is replaced by a lost stump's own figure. A result earned because its difficulty was a reflex (the textbook method,
+a plot, a holdout) is a core repair and goes to the architect. **The runs lost most of their points on one result**: the task is thin, so the fix adds
 results that need their own work rather than hardening that one. Never harden by planting.
 
 **A stopping rule checks its fallback is shippable**: "cut the layer back to what the records force" is not a

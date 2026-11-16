@@ -66,8 +66,8 @@ Lesson: <what a model learns by getting every result right, and why no build on 
 |---|---|---|---|---|---|---|---|
 | R1 | <the result, a figure, set or table> | <one of the fourteen areas> | <the data or the stated convention> | <exact, or the range reasonable methods span> | <deep class: what a careful run in a hurry files instead> | - | <Component 1, Ask 3, Recommendation> |
 
-Carry-forward: <how a later result is graded on the solver's own earlier figure, so one slip costs only the
-results that depend on it>
+Carry-forward: <which stumps each graded figure falls with (most sit downstream of two or more), and the one
+figure each stump owns>
 
 ## Hidden factor record
 
@@ -92,7 +92,8 @@ Pair estimate: <the careful but hurried pass's rubric score, 50 or under>
 
 Written by the stump architect before the results chain (`../SKILL.md` Part 1d, `core-method.md`), every figure
 from `generator/core.py` run on the world's arrays, never typed. core.py ends on `corelib.run(spec)`; paste the
-table it prints here and its last line (`CORE PASS level 5` or `level 4`).
+tables it prints here (the core, the figure matrix and what each route earns) and its last line (`CORE PASS level 5`
+or `level 4`).
 
 Unobserved part: <the decision's quantity, and the part of it no record holds (units, periods, a state, the truth
   behind a selected or noisy report)>
@@ -108,6 +109,9 @@ Regimes: <which members the main correction's assumption is checked on, cannot b
 Sharp: <per stump, the five answers of core-method.md section 4: the check its wrong route passes, the commitment its
   right route needs, the other record that holds the evidence, how the correction differs across members, its own
   graded figure>
+Earns: <from core.py's rubric table: what a run that loses each stump alone still earns (50 or under each), the reflex
+  route (30 or under), the rigorous standard route, each stump fixed alone; and the figures the reflex route still
+  lands, each cut from the asks or kept with its reason>
 
 ## Stump factorial
 
@@ -237,9 +241,10 @@ Free: <what the build decides on its own: nouns beyond the people, Layer 1 textu
   task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught
   or closed; a decision form on four live builds). From `skeleton.CLOSED_FROM` on: a missing `Closed strategies:`
   line, a deciding lesson on the client's closed page, or a chain of closed lessons only.
-- For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its eight
+- For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its nine
   labels, a missing `## Build brief` or one of its six labels, or a `generator/core.py` that is missing or does not
   exit 0 on `corelib`'s `CORE PASS level 4` or `5`.
-- In `effort.py`: a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
+- In `effort.py`: for a card under the core rule, a run that loses one stump keeping over 50 or the careful pass
+  earning over 30 on the cut pack; a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
   block missing, a golden-family variant across the line, a shortcut on the golden's side, or a perturbation that
   moves the call.

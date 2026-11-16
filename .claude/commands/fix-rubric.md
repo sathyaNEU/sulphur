@@ -34,8 +34,12 @@ lever.
 - **Rebuild a reflex result around the move beyond it**: the same quantity asked where this world breaks a
   precondition of the textbook method, or where its output has to be carried somewhere the method does not go (into
   a weighted decision, a band that covers, a bridge that reconciles).
-- **Or replace it with a result from an area the chain does not reach** (validation, attribution, self-verification,
-  triage at breadth), asked against an input of its own so it is graded on its own.
+- **Or replace it with a consequence of a stump the runs lost** (`supplemental-stumping` Part 1 rule 3: the
+  estimate for every member, carried one step further, the rejected option on the same footing, the distance to the
+  line), so the figure falls with that stump. A figure with no stump on its path leaves the prompt and the blocks;
+  its work stays in the Step-by-Step.
+- **Read the triage's earned map first**: every criterion the higher-scoring run earned is either instruction-following,
+  a figure no stump touches (cut), or a figure a lost stump moved by less than its band (replace).
 - **Critical components from different areas**, most of them results the hurried pass loses.
 - **No result is won or lost on a surface cause**: no result turns on a field reading, a filed rule, a planted row or
   a built-in factor. Mess stays texture or an assembly result of its own.

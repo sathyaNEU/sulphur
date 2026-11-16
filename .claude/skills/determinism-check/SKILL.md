@@ -27,10 +27,12 @@ row of the design note's `## Results chain`, not only to the recommendation:
   methods differ, use a band"). A band that excludes a defensible rival is a Gate C failure on that result; a band
   wide enough to hold the careful but hurried figure grades nothing, so the hurried figure sits outside every band by
   a margin `checks.py` asserts.
-- **The grader compares every figure to the golden.** A later result built on a wrong earlier figure is wrong unless
-  it is asked against an input of its own; design those inputs into the world (`supplemental-stumping` Part 1) and
-  record them in the `Depends on` column. Never write a band wide enough to absorb an upstream slip: that is a band
-  that grades nothing.
+- **The grader compares every figure to the golden.** A later result built on a wrong earlier figure is wrong, and
+  the design uses that: most graded figures sit downstream of two stumps or more (`supplemental-stumping` Part 1),
+  recorded in the `Depends on` column. So each graded figure is forced on its own account: its band is what the
+  twelve or more variants span on that figure (never only on the call), and a hygiene step on its path is one every
+  careful run takes the same way. Never write a band wide enough to absorb an upstream slip: that is a band that
+  grades nothing.
 - **`generator/effort.json`** carries each result's golden, band and figures.json key; `effort.py` refuses a golden
   that differs from the answer blocks' figure.
 - **The call is forced on both sides, and the audit's perturbation is run before the platform runs it.** Six returns

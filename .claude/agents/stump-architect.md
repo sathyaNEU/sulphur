@@ -71,12 +71,20 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
    - the variant battery (twelve or more defensible rebuilds of the golden's conventions): the family's spread per
      member and the call under each;
    - the factorial: the reflex route, each stump dropped alone from the golden, each fixed alone on the reflex
-     route, with the members and results each moves.
+     route, with the members and results each moves;
+   - the graded figures (`figures`): every figure the answer blocks will state, on the same lattice and on the
+     rigorous standard route. Two to five critical components (each stump's own figure) and the asks: every
+     member's figure and the consequences the prompt will ask for (`supplemental-stumping` Part 1: what the
+     estimate is used for, never a count, a total or a table every run rebuilds).
    `corelib` checks what the design claims: two or more open members opened by different stumps (three for level
    5); every stump worth three times the family's spread on its member; the battery holding the call; the direct
    and the rigorous route wrong on every open member; the referee separating the golden from every rival and not
    covering the target; no stump fixed alone reaching the call; two or more distinct wrong answers; each stump
-   three steps or more from its figure once named; the reflex route earning a third of the weight at most. Dial in
+   three steps or more from its figure once named. And it prices every route on the rubric: a run that loses any
+   one stump earns 50 or under, the reflex route 30 or under (build for the twenties), the rigorous standard route
+   50 or under, each stump fixed alone earns something and a third at most. That needs the figure matrix dense
+   where the call matrix is sparse: each stump's process runs across the members, moving most graded figures
+   outside their bands and flipping only its own member (`core-method.md` section 1 and section 3 item 4). Dial in
    the order `core-method.md` section 3 gives (sizes from the process, the battery before the margins, the members
    placed and never the line). If it does not pass after two redesigns of the same idea, drop the idea and write
    its line in `## Tried and rejected`. Never make it pass by narrowing a rival, thinning the battery, writing a
@@ -86,8 +94,9 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
    to no BLOCK, then `register`. People from `guard.py names`.
 6. **The design note**, in full, to `precut.py taskNN` exit 0: every section of
    `stumping/references/design-note-template.md`, with `## Stump core` carrying only figures core.py printed, the
-   results chain built so the estimated quantities carry the weight (results the reflex route earns hold a third of
-   the rubric weight at most), the fork table and the pinning list closed by referees where the method is the work
+   results chain and the asks built from core.py's `figures` and no others (reflex work is done by every route and
+   is never a stated figure; its counts go to the Step-by-Step), the fork table and the pinning list closed by
+   referees where the method is the work
    and by a filed sentence only for the WHAT, and `## Build brief` written for a reader who has none of your
    context: the world, the frozen dials, every file with what it must and must not carry, the sentences never to
    file, the goldens, and what the build is free to choose.
@@ -110,5 +119,7 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
 
 The draw in ten lines (subdomain, analysis type, the decision, the weight, the answer shape, the results chain one
 line each, the nearest build and the guard's verdict); the core as a small table (member, golden and band, family
-spread, each route's figure, opened by); the referee and its scores; the largest single hint and what it rescues;
+spread, each route's figure, opened by); the figure matrix and what each route earns on the rubric (each stump lost
+alone, the reflex route, the rigorous standard route); the referee and its scores; the largest single hint and what
+it rescues;
 `precut.py`'s last line; and, stated plainly, any assertion that holds with little room and what would break it.

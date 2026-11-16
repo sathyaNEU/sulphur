@@ -67,6 +67,15 @@ chain row also notes the spread (results lost to deep classes per run) from `/tr
 
 ## Lessons
 
+- **A lost stump costs what the asks put downstream of it, and asks sited away from the stumps cost nothing.** The
+  two generated rubrics on file split 18, 18 to 23, 50 to 55 and 9 (recommendation, components, asks,
+  instruction-following), one criterion per figure sentence. task6 architecture 6's run off the call scored 73 on
+  asks that read nothing of the SLI, and the build was approved once every ask was the SLI, service by service;
+  task11's run with no call scored 54 on asks "deliberately separate from the call"; the four review returns of
+  2026-11-13 (71 to 83) each kept rebuilt totals and counts the blocks stated; the three approved sheets (17, 22,
+  35) graded the estimate member by member and little else. A core that is level 5 on the call and sparse on the
+  figures loses one member and the recommendation to a run that drops one stump, and keeps the rest
+  (`supplemental-stumping` Parts 0 and 1; `corelib.py`'s rubric table).
 - **The approvals decide on the observation process and are read on the strongest run** (the three review sheets of
   other fellows' approved tasks, `guidelines/client/approved-reviews-2026-11-14.md`, rewards 22, 17 and 35 on a single
   GPT-6 Astra run; our four approved builds; against task1 v5, task16 v3, task13 v5 and task22 v2, returned at 83,

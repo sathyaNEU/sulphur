@@ -82,6 +82,12 @@ repaired (pipeline status DRAWING, DESIGN, BUILD, PAUSED, RETURNED), WARN on bui
 Builds whose card was registered before skeleton.RULE_FROM meet both as WARN; every later build meets them as FAIL.
 `--precedents` prints the catalogue.
 
+The rubric lines (the review reads its strongest run, which loses fewer stumps than the platform's two). From the
+factorial: a run that loses one stump and nothing else keeps the thorough score less the results that stump moves
+(and the recommendation where the call moves), and that has to be 50 or under for every stump; the careful but
+hurried pass, which is the reflex route, earns 30 or under. FAIL for a build in flight whose card was registered
+from precut.CORE_FROM on, WARN otherwise (supplemental-stumping Part 0, corelib.py).
+
 Exit status: 0 the effort test holds, 1 a FAIL, 2 no effort.json.
 """
 import json
@@ -95,6 +101,7 @@ PASSES = ("quick", "careful", "thorough")
 SCORE = {"right": 1.0, "partly": 0.5, "missed": 0.0}
 DEFAULT_WEIGHTS = {"recommendation": 14.0, "components": 24.0, "asks": 55.0, "instruction": 7.0}
 PAIR_TARGET, BAR = 50.0, 60.0
+ONE_LOST_MAX, REFLEX_MAX = 50.0, 30.0   # the core contract's rubric lines (corelib.py, supplemental-stumping Part 0)
 PRECEDENTS = os.path.join(HERE, "references", "precedents.json")
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 sys.path.insert(0, FINGERPRINT)
@@ -377,6 +384,52 @@ def factorial_rows(task_dir, E, table, n, P):
     return rows, level
 
 
+def core_contract(task_dir):
+    """True when the build's card was registered from precut.CORE_FROM on (or it has no card yet)."""
+    sys.path.insert(0, HERE)
+    import precut as P
+    card = os.path.join(FINGERPRINT, "cards", os.path.basename(task_dir) + ".json")
+    try:
+        reg = json.load(open(card)).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= P.CORE_FROM
+
+
+def rubric_rows(task_dir, E, table, score, scale):
+    """The review reads its strongest run: what a run that loses one stump and nothing else still earns on the cut
+    pack (the thorough score less the results that stump moves and, where the call moves, the recommendation), and
+    what the reflex route earns. FAIL for a build in flight under the core contract, WARN otherwise."""
+    rows = []
+    hard = core_contract(task_dir) and in_flight(task_dir)
+
+    def row(check, ok, detail):
+        rows.append((check, "PASS" if ok else ("FAIL" if hard else "WARN"), detail))
+
+    F = E.get("factorial") or {}
+    gold = F.get("golden_answer")
+    w = {t["id"]: t["weight"] * scale for t in table}
+    rec = {t["id"] for t in table if (t["block"] or "").lower().startswith("recommendation")}
+    kept = []
+    for j in F.get("judgments") or []:
+        if j.get("kind") != "stump":
+            continue
+        d = j.get("dropped") or {}
+        moved = set(d.get("results_moved") or [])
+        if _key(d.get("answer")) != _key(gold):
+            moved |= rec
+        kept.append((score["thorough"] - sum(w.get(r, 0.0) for r in moved), j.get("id")))
+    if kept:
+        row("one stump lost, the run stays under the bar", max(kept)[0] <= ONE_LOST_MAX + 1e-9,
+            "a run that loses only %s (%.0f or under each: more of the graded figures have to sit downstream of "
+            "each stump, supplemental-stumping Part 1)" % (
+                ", ".join("%s keeps %.0f" % (i, k) for k, i in sorted(kept, key=lambda x: str(x[1]))), ONE_LOST_MAX))
+    row("the reflex route on the rubric", score["careful"] <= REFLEX_MAX + 1e-9,
+        "the careful but hurried pass earns %.1f (%.0f or under; the design aims at the twenties)"
+        % (score["careful"], REFLEX_MAX))
+    return rows
+
+
 def main(argv):
     args = [a for a in argv if not a.startswith("--")]
     if not args:
@@ -478,6 +531,7 @@ def main(argv):
                                                                    "" if len(uncited) == 1 else "s"), warn=not nl)
     frows, level = factorial_rows(task_dir, E, table, n, P)
     rows.extend(frows)
+    rows.extend(rubric_rows(task_dir, E, table, score, scale))
     F = E.get("forcing")
     if not F:
         row("forcing recorded on both sides", False, "no `forcing` block: the golden family, the shortcuts and each "

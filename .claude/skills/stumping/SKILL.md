@@ -132,7 +132,7 @@ each, the design note's `## Results chain` row names:
 | Pinned by | the data or the stated convention that makes it determinate (`determinism-check`) |
 | Band | exact, or the range every defensible method lands in |
 | Hurried analyst | the deep class at this result and what a careful run in a hurry files instead |
-| Depends on | earlier results, or `independent: <input>` when the result can be graded on an input of its own |
+| Depends on | the earlier results and the stumps on its path (most figures sit downstream of two stumps or more; `independent: <input>` only for a stump's own figure) |
 | Graded as | the answer block: Recommendation, Component n, Ask n |
 
 The rules:
@@ -155,9 +155,12 @@ whatever a carry-forward line says. A chain where one analytical result feeds mo
 is one thing under another name. So:
 - no analytical result carries more than half of the others (`precut.py` counts it; assembly, discovery and
   framing rows feed everything by nature and are not counted);
-- give later results inputs of their own where the world allows: a bridge graded against the forecast file and the
-  actuals, a monitoring rule graded on its alert count over a stated history, a flagged set graded on its evidence;
-- the `Carry-forward:` line says which results stand alone and which fall with an earlier one.
+- the cure is a second analytical input, never an input of its own. A later result given an input no stump touches
+  is collected by the run that missed the call (task6 architecture 6 at 73 off the call, task11 at 54 with no call:
+  `supplemental-stumping` Part 0). So most graded figures sit downstream of two independent stumps or more, each
+  stump keeps one figure of its own, and a run that loses any one stump stays at 50 or under on the rubric
+  (`corelib.py`'s rubric table);
+- the `Carry-forward:` line says which stumps each graded figure falls with, and which one figure each stump owns.
 
 ### 1.5 The recommendation sits on top
 
@@ -387,10 +390,14 @@ output to invert: Part 1c's hidden-state rows, never its physics-on-a-shipped-ne
    golden's, the accepted bands ran to a third or a half of the estimate either side (0.32 to 0.74 around 0.46 per
    cent), and every variant the reviewer ran kept the call. A stump worth less than three times the honest family's
    spread on its member is dropped at the screen; a margin is never bought by filing the method.
-6. **The weight sits on the estimated quantities.** The losing runs kept what reproduces (joined counts, headline
-   rates, a pilot's totals) and scored 17 to 35, because every other graded figure was the estimate, member by
-   member. Our returns read "a large share of the deliverable is reachable without any judgment". Results the reflex
-   route earns carry a third of the rubric weight at most (Part 3.4), a quarter where the chain allows.
+6. **The weight sits on the estimated quantities, and each stump moves most of them.** The losing runs kept what
+   reproduces (joined counts, headline rates, a pilot's totals) and scored 17 to 35, because every other graded
+   figure was the estimate, member by member, and the process behind each stump ran across every member. Our
+   returns read "a large share of the deliverable is reachable without any judgment". So the core carries a second
+   matrix beside the call's: the graded figures against the stumps, dense where the call's is sparse. `corelib.py`
+   prices every route of the lattice on the rubric and refuses a core where a run that loses any one stump still
+   earns over 50, where the reflex route or the rigorous standard route earns too much (30 and 50), or where a
+   stump has no figure of its own (`supplemental-stumping` Parts 0 and 1).
 
 **How the core is found** (`references/core-method.md`). Level 5 is an exposure matrix: members down the side,
 judgments across the top, and three or more judgments that each flip a different member, so every shortcut files a
@@ -608,7 +615,8 @@ for different reasons.
 **And three cautions that came with it:**
 - **Ask for the step, not only the call.** Give each stump a graded intermediate result of its own: the share of stops
   paying again, the stayers' extra hours, B's resolved false merges, the contact load of each grow-in span. Results the
-  reflex route earns (reproduced counts, procedure-stated steps, assembly) carry no more than a third of the ask weight.
+  reflex route earns (reproduced counts, procedure-stated steps, assembly) are done and never stated as graded figures,
+  so the reflex route earns 30 of the rubric's 100 at most (`supplemental-stumping` Part 1 rule 4).
   Every one of the three reviews asked for this first.
 - **No clean signature.** A cause or response whose signature is a generator constant (a fixed load band, fixed hours
   and months, a smooth plan-graded fade) is modelled on sight. Give it noise, a rival explanation with an overlapping
@@ -801,7 +809,8 @@ measurements.
       family's spread); `## Build brief` written for the build
 - [ ] The process behind the files written before any result; the weight named and rotated
 - [ ] Four or more results across three or more areas, each pinned, banded, graded, with a hurried failure the runs
-      make; no analytical result carrying more than half the others; the carry-forward line
+      make; no analytical result carrying more than half the others; the carry-forward line; the rubric table
+      (one stump lost 50 or under, the reflex route 30 or under, each stump with a figure of its own)
 - [ ] Every hidden factor through the three conditions and the house rule; none refused
 - [ ] The stump factorial (Part 3.3) on paper before the generator and computed on the cut pack: the careful pass is
       the reflex route, two or more stumps each necessary, none sufficient alone, level 4 at two and 5 at three

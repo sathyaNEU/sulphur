@@ -31,7 +31,23 @@ The spec:
             the hurried way and everything else golden. Required keys: each stump alone, all together (the reflex
             route), and all but one (each stump fixed alone on the reflex route).
   referee   {"slice": text, "covers_target": false, "truth": x, "golden": x, "rivals": {route: x, ...}}
-  results   optional [{"id": "R1", "weight": w, "reflex_earns": bool}]   the rubric weight the reflex route earns
+  figures   every figure the answer blocks will state, one per rubric criterion (the recommendation is the call
+            itself and is not listed):
+            {"id": "F3", "block": "component" | "ask", "weight": 1.0 (relative inside its block),
+             "member": name}                     the member's own figure: golden, family, lattice and routes are
+                                                 read from the member, or
+            {"id": ..., "block": ..., "golden": x, "family": [x, ...] (twelve or more), "band": [lo, hi] (optional:
+             the family's range with a quarter of its width as room on each side; "exact": true for a count or a
+             set, which carries neither),
+             "lattice": {"S1": x, "S1+S2": x, ...},   the figure on the same keys as the members' lattice
+             "routes": {"rigorous": x}}               the figure on the most rigorous standard route
+
+The rubric (supplemental-stumping Part 0). The generated rubrics on file split 18 to the recommendation, about 20 to
+the critical components, about 53 to the asks and 9 to instruction-following, which every run earns. A route earns
+a figure when its value sits inside the figure's band stretched by NEAR_MISS about the golden (a narrower miss is a
+near miss, which the review gives back). corelib prices every route of the lattice on that rubric and refuses a core
+where a run that loses any one stump still clears ONE_LOST_MAX, where the reflex route clears REFLEX_MAX, or where
+fixing one stump alone on the reflex route earns nothing or more than a third.
 """
 import itertools
 import json
@@ -44,7 +60,12 @@ WORTH = 3.0          # a stump's worth on its member, over the honest family's s
 REFEREE = 3.0        # each rival's error on the referee slice, over the golden's
 FAMILY_MIN = 12
 STEPS_MIN = 3
-REFLEX_SHARE = 1.0 / 3
+BLOCKS = {"recommendation": 18.0, "components": 20.0, "asks": 53.0, "instruction": 9.0}
+ONE_LOST_MAX = 50.0  # what a run that loses any one stump, and nothing else, may still earn (the bar is 60)
+REFLEX_MAX = 30.0    # what the reflex route (every stump lost) may earn; the design aims at the twenties
+HINT_MAX = 100.0 / 3  # what fixing one stump alone on the reflex route may add
+BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its width on each side
+NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched by this about the golden
 
 
 def _key(ids):
@@ -79,6 +100,102 @@ def _precedent_kinds():
         return {r["id"]: r["kind"] for r in rows}
     except Exception:
         return {}
+
+
+def _num(x):
+    return isinstance(x, (int, float)) and not isinstance(x, bool)
+
+
+def _same(a, b):
+    if _num(a) and _num(b):
+        return abs(a - b) <= 1e-9 * max(1.0, abs(b))
+    if isinstance(a, (list, tuple, set)) and isinstance(b, (list, tuple, set)):
+        return sorted(map(str, a)) == sorted(map(str, b))
+    return str(a).strip().lower() == str(b).strip().lower()
+
+
+def _figures(spec, lat):
+    """Every graded figure resolved to its block, weight, golden, band, family and its value on each lattice key."""
+    out, problems = [], []
+    members = spec.get("members") or {}
+    blocks = {"component": "components", "components": "components", "ask": "asks", "asks": "asks"}
+    for f in spec.get("figures") or []:
+        fid = str(f.get("id") or f.get("member") or "?")
+        m = f.get("member")
+        if m is not None:
+            if m not in members:
+                problems.append("%s names no member" % fid)
+                continue
+            golden, family = members[m]["golden"], list(members[m].get("family") or [])
+            values = {k: v.get(m) for k, v in lat.items()}
+            routes = dict(members[m].get("routes") or {})
+        else:
+            golden, family = f.get("golden"), list(f.get("family") or [])
+            values = {_key(k.split("+")): v for k, v in (f.get("lattice") or {}).items()}
+            routes = {}
+        routes.update(f.get("routes") or {})
+        band = f.get("band")
+        if band is None and _num(golden) and family:
+            lo, hi = min(family + [golden]), max(family + [golden])
+            band = [lo - BAND_ROOM * (hi - lo), hi + BAND_ROOM * (hi - lo)]
+        block = blocks.get(str(f.get("block") or "").lower())
+        if block is None:
+            problems.append("%s has no block (component or ask)" % fid)
+        exact = bool(f.get("exact")) or not _num(golden)
+        out.append({"id": fid, "block": block, "weight": float(f.get("weight", 1.0)), "golden": golden,
+                    "band": None if exact else band, "family": family, "values": values, "routes": routes,
+                    "member": m, "exact": exact})
+    return out, problems
+
+
+def _earned(f, x):
+    """True when a route's value earns the figure: inside the band stretched by NEAR_MISS about the golden."""
+    g, band = f["golden"], f["band"]
+    if x is None:
+        return False
+    if not _num(g) or not _num(x) or band is None:
+        return _same(x, g)
+    return g - NEAR_MISS * (g - band[0]) <= x <= g + NEAR_MISS * (band[1] - g)
+
+
+def _score(figs, call_right, value_of):
+    """What a route earns on the rubric: instruction-following, the recommendation, and each figure it lands."""
+    e = BLOCKS["instruction"] + (BLOCKS["recommendation"] if call_right else 0.0)
+    for b in ("components", "asks"):
+        fs = [f for f in figs if f["block"] == b]
+        tot = sum(f["weight"] for f in fs)
+        if tot > 0:
+            e += BLOCKS[b] * sum(f["weight"] for f in fs if _earned(f, value_of(f))) / tot
+    return e
+
+
+def _route_score(spec, figs, route, gcall):
+    """(score, the figure with no value on the route) for a named route such as the rigorous standard one. A member
+    with no value on the route is taken as right there (a forced member)."""
+    members = spec["members"]
+    vals = {}
+    for f in figs:
+        x = f["routes"].get(route)
+        if x is None and f["member"] is not None:
+            x = f["golden"]
+        if x is None:
+            return None, f["id"]
+        vals[f["id"]] = x
+    mfig = {m: (members[m].get("routes") or {}).get(route, members[m]["golden"]) for m in members}
+    return _score(figs, _calls(spec, mfig) == gcall, lambda f: vals[f["id"]]), None
+
+
+def earnings(spec):
+    """{"figs", "earn": {lattice key: score}, "rigorous": score or None} for a spec whose lattice is complete."""
+    lat = {_key(k.split("+")): v for k, v in (spec.get("lattice") or {}).items()}
+    names = sorted(spec["members"])
+    gcall = _calls(spec, {m: spec["members"][m]["golden"] for m in names})
+    figs, _ = _figures(spec, lat)
+    earn = {}
+    for k, v in lat.items():
+        if all(k in f["values"] for f in figs):
+            earn[k] = _score(figs, _calls(spec, v) == gcall, lambda f, k=k: f["values"][k])
+    return {"figs": figs, "earn": earn, "rigorous": _route_score(spec, figs, "rigorous", gcall)[0] if figs else None}
 
 
 def check(spec):
@@ -206,12 +323,48 @@ def check(spec):
     axes = {stumps[s].get("axis") for s in necessary}
     row("stumps on different axes", len(axes) >= min(len(necessary), 2),
         "axes: %s" % ", ".join(sorted(a for a in axes if a)), warn=True)
-    res = spec.get("results") or []
-    if res:
-        tot = sum(r["weight"] for r in res) or 1.0
-        share = sum(r["weight"] for r in res if r.get("reflex_earns")) / tot
-        row("weight on the estimated quantities", share <= REFLEX_SHARE + 1e-9,
-            "the reflex route earns %.0f%% of the rubric weight (a third at most)" % (100 * share))
+
+    # 10. the rubric: what each route earns on the figures the answer blocks will state
+    figs, fprob = _figures(spec, lat)
+    comps = [f for f in figs if f["block"] == "components"]
+    asks = [f for f in figs if f["block"] == "asks"]
+    if row("graded figures listed", not fprob and 2 <= len(comps) <= 5 and len(asks) >= 2,
+           "%d critical components (two to five) and %d ask figures (two or more)%s" % (
+               len(comps), len(asks), ("; " + "; ".join(fprob)) if fprob else "")):
+        gaps = [f["id"] for f in figs if any(f["values"].get(k) is None for k in need)]
+        loose = []
+        for f in figs:
+            if f["exact"]:
+                continue
+            if len(f["family"]) < FAMILY_MIN:
+                loose.append("%s has %d variants" % (f["id"], len(f["family"])))
+            elif any(not (f["band"][0] <= v <= f["band"][1]) for v in f["family"] + [f["golden"]]):
+                loose.append("%s's band leaves a variant outside (a fork)" % f["id"])
+        row("every graded figure banded by the battery", not gaps and not loose,
+            "each figure's band holds its twelve or more variants" if not gaps and not loose else
+            "; ".join((["no lattice value on " + ", ".join(gaps)] if gaps else []) + loose))
+        if not gaps:
+            earn = {k: _score(figs, lcall[k] == gcall, lambda f, k=k: f["values"][k]) for k in need}
+            base = earn[_key(sids)]
+            one = {s: earn[_key([s])] for s in sids}
+            fixed = {s: earn[_key([t for t in sids if t != s])] for s in sids}
+            silent = [f["id"] for f in figs if _earned(f, f["values"][_key(sids)])]
+            row("one stump lost, the run stays under the bar", max(one.values()) <= ONE_LOST_MAX + 1e-9,
+                "a run that loses only %s (%.0f or under each; the review reads its strongest run)" % (
+                    ", ".join("%s earns %.0f" % (s, one[s]) for s in sids), ONE_LOST_MAX))
+            row("the reflex route on the rubric", base <= REFLEX_MAX + 1e-9,
+                "every stump lost earns %.0f (%.0f or under; %.0f of it is instruction-following); figures it "
+                "still lands: %s" % (base, REFLEX_MAX, BLOCKS["instruction"], ", ".join(silent) or "none"))
+            flat = [s for s in sids if fixed[s] <= base + 1e-9]
+            rich = [s for s in sids if fixed[s] - base > HINT_MAX + 1e-9]
+            row("one stump fixed alone earns more, a third at most", not flat and not rich,
+                "; ".join("%s fixed alone earns %.0f" % (s, fixed[s]) for s in sids) +
+                (("; no figure of its own: " + ", ".join(flat)) if flat else "") +
+                (("; one sentence rescues over a third: " + ", ".join(rich)) if rich else ""))
+            rs, lacking = _route_score(spec, figs, "rigorous", gcall)
+            row("the rigorous standard route on the rubric", rs is not None and rs <= ONE_LOST_MAX + 1e-9,
+                ("it earns %.0f (%.0f or under)" % (rs, ONE_LOST_MAX)) if rs is not None else
+                "%s has no value on the rigorous route, so the strongest run is unpriced" % lacking)
 
     members_opened = [m for m in opened if m in open_members]
     level = 0
@@ -239,10 +392,60 @@ def table(spec):
     return "\n".join(out)
 
 
+def rubric_table(spec):
+    """The figure exposure (which stump moves which graded figure) and what each route earns on the rubric."""
+    stumps, members = spec["stumps"], spec["members"]
+    sids = sorted(stumps)
+    lat = {_key(k.split("+")): v for k, v in spec["lattice"].items()}
+    names = sorted(members)
+    golden = {m: members[m]["golden"] for m in names}
+    gcall = _calls(spec, golden)
+    figs, _ = _figures(spec, lat)
+    if not figs:
+        return ""
+    out = ["| Figure | Block | Golden | Band | %s | Reflex route |" % " | ".join("%s lost" % s for s in sids),
+           "|---|---|---|---|%s---|" % ("---|" * len(sids))]
+
+    def cell(f, k):
+        x = f["values"].get(k)
+        if x is None:
+            return "?"
+        if f["member"] is not None and _member_call(spec, f["member"], x, lat[k]) != _member_call(
+                spec, f["member"], f["golden"], golden):
+            return "flips"
+        return "-" if _earned(f, x) else "moves"
+
+    for f in figs:
+        band = ("%.4g to %.4g" % tuple(f["band"])) if f["band"] else "exact"
+        gold = ("%.4g" % f["golden"]) if _num(f["golden"]) else str(f["golden"])
+        out.append("| %s | %s | %s | %s | %s | %s |" % (
+            f["id"], f["block"] or "?", gold, band, " | ".join(cell(f, _key([s])) for s in sids),
+            {"-": "earned"}.get(cell(f, _key(sids)), "lost")))
+    keys = [(_key([s]), "%s lost alone" % s) for s in sids]
+    keys += [(_key([t for t in sids if t != s]), "%s fixed alone" % s) for s in sids if len(sids) > 2]
+    keys += [(_key(sids), "reflex route (every stump lost)")]
+    out += ["", "| Route | Call | Earns on the rubric |", "|---|---|---|", "| golden | right | 100 |"]
+    for k, label in keys:
+        if k in lat and all(f["values"].get(k) is not None for f in figs):
+            right = _calls(spec, lat[k]) == gcall
+            out.append("| %s | %s | %.0f |" % (label, "right" if right else "wrong",
+                                               _score(figs, right, lambda f, k=k: f["values"][k])))
+    rs, _ = _route_score(spec, figs, "rigorous", gcall)
+    if rs is not None:
+        out.append("| rigorous standard route | %s | %.0f |" % (
+            "right" if _calls(spec, {m: (members[m].get("routes") or {}).get("rigorous", golden[m])
+                                     for m in names}) == gcall else "wrong", rs))
+    return "\n".join(out)
+
+
 def run(spec):
     rows, level = check(spec)
     print(table(spec))
     print()
+    rt = rubric_table(spec)
+    if rt:
+        print(rt)
+        print()
     for name, lv, detail in rows:
         print("%-4s  %-40s %s" % (lv, name, detail))
     fails = sum(1 for r in rows if r[1] == "FAIL")
@@ -253,25 +456,39 @@ def run(spec):
     return 0 if level else 1
 
 
-def _demo():
-    """A three-stump core on four members, each read against a line of 10: three open, one forced."""
-    fam = lambda g: [g + d for d in (-0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.15, -0.15, 0.25)]
+OFFSETS = (-0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.15, -0.15, 0.25)
+DENSE = {"S1": {"a": -4.0, "b": 1.2, "d": -1.5}, "S2": {"b": 4.0, "c": -1.2, "d": -1.3},
+         "S3": {"c": -4.5, "a": -0.5, "d": -1.4}}
+SPARSE = {"S1": {"a": -4.0}, "S2": {"b": 4.0}, "S3": {"c": -4.5, "a": -0.5}}
+
+
+def _demo(eff=None):
+    """A three-stump core on four members, each read against a line of 10: three open, one forced. Each stump flips
+    one member's call and moves most of the other graded figures outside their bands without flipping them."""
+    eff = eff or DENSE
+    fam = lambda g, k=1.0: [g + k * d for d in OFFSETS]
     g = {"a": 12.0, "b": 8.0, "c": 12.5, "d": 15.0}
     members = {m: {"lines": [10.0], "truth": g[m] + 0.1, "golden": g[m], "family": fam(g[m]),
                    "routes": {"direct": {"a": 7.0, "b": 13.0, "c": 6.5, "d": 15.5}[m],
                               "rigorous": {"a": 8.5, "b": 11.5, "c": 8.0, "d": 15.2}[m]}} for m in g}
-    eff = {"S1": {"a": -4.0}, "S2": {"b": 4.0}, "S3": {"c": -4.5, "a": -0.5}}
     stumps = {s: {"axis": ax, "opens": m, "said_out_loud": "the labelled rows are selected on the outcome",
                   "steps_left": 4, "precedents": ["L53"]}
               for s, ax, m in (("S1", "who", "a"), ("S2", "what", "b"), ("S3", "against", "c"))}
-    lattice = {}
-    for n in (1, 2, 3):
-        for combo in itertools.combinations(sorted(eff), n):
-            lattice["+".join(combo)] = {m: g[m] + sum(eff[s].get(m, 0.0) for s in combo) for m in g}
-    return {"task": "selftest", "members": members, "stumps": stumps, "lattice": lattice,
+    combos = [c for n in (1, 2, 3) for c in itertools.combinations(sorted(eff), n)]
+    lattice = {"+".join(c): {m: g[m] + sum(eff[s].get(m, 0.0) for s in c) for m in g} for c in combos}
+    own = {"S1": ("C1", 0.60, 0.03, 0.25, 0.52), "S2": ("C2", 0.30, 0.03, 0.55, 0.41), "S3": ("C3", 40.0, 2.0, 55.0, 47.0)}
+    figures = [{"id": fid, "block": "component", "golden": gold, "family": fam(gold, k),
+                "lattice": {"+".join(c): (hurried if s in c else gold) for c in combos}, "routes": {"rigorous": rig}}
+               for s, (fid, gold, k, hurried, rig) in sorted(own.items())]
+    figures += [{"id": m, "block": "ask", "member": m} for m in sorted(g)]
+    factor = {"S1": 0.8, "S2": 1.3, "S3": 0.7}
+    total = lambda c: 100.0 * (factor["S1"] if "S1" in c else 1) * (factor["S2"] if "S2" in c else 1) * (
+        factor["S3"] if "S3" in c else 1)
+    figures.append({"id": "X", "block": "ask", "golden": 100.0, "family": fam(100.0, 2.5),
+                    "lattice": {"+".join(c): total(c) for c in combos}, "routes": {"rigorous": 84.0}})
+    return {"task": "selftest", "members": members, "stumps": stumps, "lattice": lattice, "figures": figures,
             "referee": {"slice": "a labelled sample the target does not reach", "covers_target": False,
-                        "truth": 0.60, "golden": 0.61, "rivals": {"direct": 0.25, "rigorous": 0.52}},
-            "results": [{"id": "R1", "weight": 20, "reflex_earns": True}, {"id": "R2", "weight": 80, "reflex_earns": False}]}
+                        "truth": 0.60, "golden": 0.61, "rivals": {"direct": 0.25, "rigorous": 0.52}}}
 
 
 def selftest():
@@ -287,11 +504,18 @@ def selftest():
         print("  %s  %-62s level %d%s" % ("PASS" if good else "FAIL", label, level,
                                          (" (fails: " + ", ".join(failed) + ")") if failed else ""))
 
+    def fig(spec, fid):
+        return next(f for f in spec["figures"] if f["id"] == fid)
+
     base = _demo()
     expect("three stumps opening three members", base, 5)
     s = copy.deepcopy(base)                     # two stumps on two members is level 4
     del s["stumps"]["S3"]
     s["lattice"] = {k: v for k, v in s["lattice"].items() if "S3" not in k}
+    s["figures"] = [f for f in s["figures"] if f["id"] != "C3"]
+    for f in s["figures"]:
+        if "lattice" in f:
+            f["lattice"] = {k: v for k, v in f["lattice"].items() if "S3" not in k}
     expect("two stumps opening two members", s, 4)
     s = copy.deepcopy(base)                     # the rigorous standard route files an open member right
     s["members"]["a"]["routes"]["rigorous"] = 11.8
@@ -317,15 +541,37 @@ def selftest():
     s = copy.deepcopy(base)                     # a referee slice that covers the target is a key
     s["referee"]["covers_target"] = True
     expect("a referee slice that covers the target", s, 0, "referee")
-    s = copy.deepcopy(base)                     # the reflex route earns most of the rubric
-    s["results"][0]["weight"], s["results"][1]["weight"] = 60, 40
-    expect("the reflex route earning 60 per cent of the weight", s, 0, "weight")
     s = copy.deepcopy(base)                     # a stump that dies when said out loud
     s["stumps"]["S1"]["steps_left"] = 1
     expect("a stump one step from its figure once named", s, 0, "said out loud")
     s = copy.deepcopy(base)                     # a stump priced on a reflex
     s["stumps"]["S1"]["precedents"] = ["R91"]
     expect("a stump citing a reflex", s, 0, "precedents")
+    # the rubric
+    s = copy.deepcopy(base)                     # no graded figures: the rubric is unpriced
+    s["figures"] = []
+    expect("a core with no graded figures", s, 0, "graded figures")
+    s = _demo(SPARSE)                           # each stump moves its own member's figure and nothing else
+    expect("a run that loses one stump still clears 50 (sparse figures)", s, 0, "one stump lost")
+    s = copy.deepcopy(base)                     # figures no stump touches: counts and totals every run rebuilds
+    keys = list(fig(s, "X")["lattice"])
+    s["figures"] += [{"id": "N%d" % i, "block": "ask", "golden": 1000 + i, "exact": True,
+                      "lattice": {k: 1000 + i for k in keys}, "routes": {"rigorous": 1000 + i}} for i in range(4)]
+    expect("four ask figures no stump touches", s, 0, "the reflex route on the rubric")
+    s = copy.deepcopy(base)                     # a band narrower than the honest family is a fork
+    fig(s, "X")["band"] = [99.5, 100.5]
+    expect("a band that leaves a variant outside", s, 0, "banded by the battery")
+    s = copy.deepcopy(base)                     # a stump with no figure of its own
+    s["figures"] = [f for f in s["figures"] if f["id"] != "C2"]
+    expect("a stump whose fix alone earns nothing", s, 0, "fixed alone")
+    s = copy.deepcopy(base)                     # the strongest run unpriced
+    del fig(s, "X")["routes"]
+    expect("a figure with no value on the rigorous route", s, 0, "rigorous standard route on the rubric")
+    s = copy.deepcopy(base)                     # the rigorous route lands the estimated figures
+    for f in s["figures"]:
+        if "routes" in f:
+            f["routes"]["rigorous"] = f["golden"]
+    expect("a rigorous route that earns over 50", s, 0, "rigorous standard route on the rubric")
     print("SELFTEST %s" % ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 

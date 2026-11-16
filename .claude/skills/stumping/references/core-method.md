@@ -30,6 +30,18 @@ riskiest quarter of its shops, one group answers a follow-up that stands for the
 the observation process differs across members, an observation judgment bears on some members and not others, and
 the matrix fills itself. A world whose members were all observed the same way cannot give level 5; change the world.
 
+**A second matrix prices the rubric** (`supplemental-stumping` Parts 0 and 1). The first matrix is about the call
+and is sparse: one flip per column, in different rows. The second has the graded figures down the side (each
+member's own figure, each stump's own figure, the consequences the prompt asks for) and is dense: the process
+behind a stump runs across the data, so it moves most members' figures outside their bands and flips only the
+members near their lines. Each cell is one of three: *flips* (the effect is larger than the member's margin to its
+line), *moves* (larger than the figure's band, smaller than the margin), *silent* (inside the band, a criterion that
+route earns free). The level is counted on the first matrix; the score a run takes home is read off the second. A
+core that is level 5 on the first and sparse on the second is what came back from review at 71 to 83: the run lost
+one stump, and with it one member's figure and the recommendation, and kept the rest. `corelib` prints both and
+prices every route: a run that loses any one stump earns 50 or under, the reflex route 30 or under (built for the
+twenties), the rigorous standard route 50 or under, and each stump fixed alone earns something and a third at most.
+
 ## 2. The hour
 
 **0 to 10 minutes: the decision and its members.**
@@ -79,12 +91,17 @@ out loud leaves one step. Keep the three that sit on different axes and bear on 
 2. the truth per member, the golden estimator, and one function per route;
 3. the lattice: every member's figure with each subset of stumps made the hurried way (each alone, all together, all
    but one), which is also the routes sheet the golden workbook will carry;
-4. the variant battery: twelve or more defensible rebuilds of the golden's conventions;
+4. the variant battery: twelve or more defensible rebuilds of the golden's conventions, returning every graded
+   figure and not only the members' (each figure's band is what its variants span);
 5. the referee: the golden's figure and each rival's on the slice;
-6. `sys.exit(corelib.run(spec))`.
+6. the graded figures (`figures`): two to five critical components (each stump's own figure) and the ask figures
+   (every member's figure, and the consequences the prompt will ask for), each on the same lattice keys and on the
+   rigorous standard route;
+7. `sys.exit(corelib.run(spec))`.
 
-**55 to 60 minutes.** Copy the printed table into the note's `## Stump core`. Write each stump's sentence said out
-loud and count the steps left. Check the weight: the reflex route earns a third of the rubric at most.
+**55 to 60 minutes.** Copy the printed tables into the note's `## Stump core` (the rubric table under `Earns:`).
+Write each stump's sentence said out loud and count the steps left. Read the figure matrix for silent cells: a
+figure the reflex route still lands is cut from the asks or replaced by a consequence the stumps move further.
 
 ## 3. Dialling the numbers without cheating
 
@@ -100,8 +117,12 @@ The order matters; a core dialled in the wrong order passes the checker and fail
    architect sets is each member's true level. For a member a stump opens: its distance to the line sits above the
    family's spread with room, and below the stump's worth less that spread. For a forced member: far outside every
    route.
-4. **Keep the columns apart.** A stump's effect on members it does not open stays inside their margins; otherwise
-   two stumps act on one member and the level drops by one.
+4. **Keep the flips apart and the moves wide.** Every cell has three numbers: the stump's effect on the member's
+   figure, the figure's band (its family's spread with room) and the member's margin to its line. On the member a
+   stump opens, the effect is larger than the margin. On the other members it sits between the two: under the
+   margin, so two stumps never flip one member and the level holds, and over the band by half again, so the figure
+   is still lost and the rubric takes it. An effect inside the band is a free criterion; raise it through the
+   process (a stronger propensity, a longer lag) or drop the figure from the asks, never by narrowing the band.
 5. **Opposite directions.** Where the world allows it, let stumps push different members different ways (one
    shortcut over-acts, another under-acts). Then "apply every correction" is not a blanket instruction either, and
    the single drops land on distinct wrong calls.
@@ -112,7 +133,10 @@ The order matters; a core dialled in the wrong order passes the checker and fail
 reflex route that lands; a stump that does not move its own member, is worth under three times the family's spread,
 or reaches the call when fixed alone; an open member the direct or the rigorous route files right; fewer than two
 distinct wrong answers; no referee, a referee a rival also passes, or one that covers the target; a stump that is
-one step from its figure once named, or that cites a reflex; a reflex route earning over a third of the weight.
+one step from its figure once named, or that cites a reflex. And on the rubric: no graded figures listed, or fewer
+than two critical components; a band that leaves one of its own variants outside; a run that loses one stump still
+earning over 50; the reflex route earning over 30; the rigorous standard route unpriced or earning over 50; a stump
+whose fix alone earns nothing (no figure of its own) or over a third.
 
 ## 4. What makes a stump sharp
 
@@ -127,7 +151,8 @@ A stump holds against the strongest run when all five are true. Write the five a
 3. **The evidence is in another record at another grain.** No plot or group-by of one file shows it.
 4. **The correction is not a constant.** Its size or its sign differs across members, or its own check breaks on one
    of them, so it cannot be applied once and carried.
-5. **It has a graded figure of its own.** A run that skips it loses that figure as well as the member.
+5. **It has a graded figure of its own, and it moves most of the others.** A run that skips it loses that figure,
+   the member, and every compound figure downstream of it.
 
 And one test of the whole core: read the three said-out-loud sentences together. If a run handed all three still
 has an afternoon of construction left, the core is deep; if the three sentences are the solution, it is three

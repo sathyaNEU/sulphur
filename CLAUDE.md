@@ -51,6 +51,18 @@ So the opponent every core is designed against is that run, a pair is submitted 
 itself under 60, and the judge audits forks the way that review does (`stumping` Part 1d, `run-triage`,
 `determinism-judge`).
 
+**The rubric is priced for the run that loses one stump** (`supplemental-stumping` Parts 0 and 1). The generated
+rubric gives 18 to the recommendation, about 20 to the critical components, about 53 to the asks and 9 to
+instruction-following, one criterion per figure sentence of the blocks, and a run earns every figure its route
+lands. Asks sited away from the stumps were collected in full by runs that missed the call (task6 architecture 6 at
+73, task11 at 54 with no call), and the client's rubric page says "a wrong analytical path should get them wrong".
+So every figure the prompt asks for and the blocks state sits downstream of a stump, most of them downstream of two
+or more (each stump's process runs across the members, moving their figures outside the bands while flipping only
+its own member's call), each stump keeps one figure of its own, and reflex work (counts, rebuilt totals, bases) is
+done and never stated as a graded figure. `corelib.py` at design and `effort.py` on the cut pack refuse a build
+where a run that loses any one stump still earns over 50 or the reflex route over 30; the design aims at the
+twenties.
+
 **Difficulty throughout.** The client's standard in one line: "A deep task asks for several pieces of genuine
 analysis spread across the work, each ending in a result that can be checked, and more careful work keeps earning
 more. It is never won or lost on one hidden or planted thing that, once caught, flips the whole answer." So every
@@ -228,7 +240,8 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 proved in `generator/core.py` and handed over as the note's `## Stump core` and `## Build brief`. It works by
 `stumping/references/core-method.md` (level 5 as an exposure matrix of members against judgments, five questions
 asked of every factor of each member's figure, three stumps kept on different axes) and its core.py ends on
-`stumping/corelib.py`, which grades the core level 5, level 4 or fail and which `precut.py` runs. The build (Opus
+`stumping/corelib.py`, which grades the core level 5, level 4 or fail, prices every route on the rubric, and which
+`precut.py` runs. The build (Opus
 5.5 at high) executes that brief and moves nothing in it; whatever touches the core goes back to the architect. The
 `determinism-judge` runs on Fable 5.2 at high (it stands in for the review's audit), the leak reader on Sonnet at
 medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. No isolated thread
@@ -363,7 +376,8 @@ band where reasonable methods differ: the rivals are run, not argued, and every 
 band or is ruled out by named data. Every term and convention has a row in the design note's fork table, closed by
 a sentence or `same call`, asserted in `checks.py`; `precut.py` refuses an open one. The grader compares every
 figure to the golden, so a later result built on a wrong earlier figure is wrong unless the result names an input
-of its own; the chain is designed so one slip costs only the results that depend on it.
+of its own; the chain is designed so a hygiene slip costs nothing and a lost stump costs every figure downstream
+of it, which is most of them (`supplemental-stumping` Part 1).
 
 **The next-level contract** (every card registered from `skeleton.RULE_FROM`, 2026-11-11; a WARN for builds filed
 before it): the card's skeleton clears `skeleton.py check`; the design note carries `## Frontier check` (`Precedents:`,
@@ -393,14 +407,16 @@ them (not `analysis_report.pdf` by default); a visual where it makes the results
 
 **Asks**: the results, asked for. No cap and no target count; each is hard and multi-dimensional (many rows,
 periods, segments or calculations resolving to gradable answers), its unit inside the asking sentence and no rounding
-instruction (the answer blocks state each figure's precision, with its band where reasonable methods differ). A
-run that skipped a result's work gets that result wrong, and only the results that depend on it
-(`supplemental-stumping`).
+instruction (the answer blocks state each figure's precision, with its band where reasonable methods differ). The
+prompt asks for what the estimates are used for (the figure for every member, carried a step further, the rejected
+option on the same footing), never for a count, a total or a table every run rebuilds, so a run that lost a stump
+gets every ask downstream of it wrong (`supplemental-stumping`).
 
 **Answer blocks** (`submission-writeup`): Final Recommendation (one or two sentences, first, naming what it
-rejects); Supplementary Questions (a numbered list, one number per sub-ask, describing how each requested file
-should look); Critical Components (2 to 5 load-bearing results from different areas of the chain); Step-by-Step (a
-short numbered path from the raw files through each result, showing where the hurried analysis goes wrong), closing
+rejects); Supplementary Questions (a numbered list, one number per sub-ask, each requested file's look in one
+line); Critical Components (2 to 5 load-bearing results, each a figure the hurried pass loses, one per stump where
+the core has them); Step-by-Step (a short numbered path from the raw files through each result, showing where the
+hurried analysis goes wrong, and the only block that carries the counts and bases every route reaches), closing
 on why no other conclusion survives. **The golden ZIP holds exactly the files the prompt requests**, one set of
 numbers everywhere, nothing LLM-looking (`golden-realism`).
 

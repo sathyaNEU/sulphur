@@ -107,12 +107,12 @@ SCREEN_FROM = "2026-11-13T00:45:00Z"
 # `## Open members`, two or more members opened by different stumps, and a `Direct route:` line (SKILL.md Part 3.4)
 OPEN_FROM = "2026-11-14T00:00:00Z"
 # From CORE_FROM (the approved review sheets read 2026-11-14, SKILL.md Part 1d): the note carries `## Stump core` (the
-# architect's eight labelled lines, every figure printed by generator/core.py, which ends on corelib.run) and `## Build brief` (the six-line
+# architect's nine labelled lines, every figure printed by generator/core.py, which ends on corelib.run) and `## Build brief` (the six-line
 # hand-over the build executes), and generator/core.py exists beside the note. FAIL for a build in flight whose card
 # was registered from CORE_FROM on, a WARN before it.
 CORE_FROM = "2026-11-14T12:00:00Z"
 CORE_LABELS = ("Unobserved part", "Instruments", "Referee", "Strongest standard route", "Said out loud", "Worth",
-               "Regimes", "Sharp")
+               "Regimes", "Sharp", "Earns")
 BRIEF_LABELS = ("World", "Frozen", "Files", "Never filed", "Goldens", "Free")
 FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
@@ -1078,8 +1078,8 @@ def check_throughout(task_dir, note_text, secs, dupes):
                 "the widest analytical result, %s, is the only analytical input of %d of the other %d" % (hub, nd, len(res) - 1)
                 if ok else
                 "%s is the only analytical result behind %d of the other %d (%s): a run that misses it loses them all, "
-                "which is one thing under another name; give later results a second analytical input or an input of "
-                "their own (Depends on: \"independent: <input>\")" % (hub, nd, len(res) - 1, ", ".join(sole[hub])))
+                "which is one thing under another name; give later results a second analytical input (another "
+                "stump on their path), never an input no stump touches" % (hub, nd, len(res) - 1, ", ".join(sole[hub])))
             # A linear chain passes the count above when every link is called analytical; it is kept visible here, and
             # the binding test is effort.py's largest single hint on the generator's own hurried passes.
             reach = {x: [y for y in ids if y != x and x in ancestors(y)] for x in hubs}
@@ -1101,8 +1101,8 @@ def check_throughout(task_dir, note_text, secs, dupes):
             "name the move beyond that the result needs: " + ", ".join(unmade))
         cf = labelled(rc, "Carry-forward")
         row("carry-forward stated", bool(cf) and len(cf) >= 20, (cf or "missing")[:110] if cf else
-            "no `Carry-forward:` line: which later results are graded on an input of their own, and which "
-            "fall with an earlier one (the grader compares every figure to the golden)")
+            "no `Carry-forward:` line: which stumps each graded figure falls with, and the one figure each stump "
+            "owns (the grader compares every figure to the golden)")
         graded = [r["graded"].lower() for r in res]
         nogr = [r["id"] for r in res if not r["graded"]]
         row("every result graded in an answer block", not nogr,
