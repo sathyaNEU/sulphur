@@ -1,42 +1,43 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-13",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-16",
  "doctrine": "throughout",
  "architecture": 6,
  "loops": 0,
- "call": "scale Apple Search Ads; hold Meta iOS, Meta Android, Google Android and AppLovin Android; cut TikTok iOS and TikTok Android (2027 return per euro at the plan's weekly spend: Apple Search Ads 1.48; Meta iOS 1.04, Meta Android 1.08, Google Android 1.06, AppLovin Android 0.94; TikTok iOS 0.78, TikTok Android 0.72)",
- "chain": "R1 installs each channel bought 4 Nov 2024 to 2 Nov 2025; R2 their 12-month net revenue per install; R3 installs a week at each channel's 2027 weekly spend; R4 each channel's 2027 return per euro; R5 each channel's band",
+ "call": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, generator/core.py: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.04, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61)",
+ "chain": "R1 the share of each channel's 12-month net revenue the billing records never took in; R2 each iOS network's 12-month net revenue per install; R3 what a budget buys and what the next euro returns; R4 each channel's return per euro and net revenue per install at the plan's weekly spend; R5 the return at the plan's stretch spend; R6 the iOS networks' plan revenue and what the stretch spend adds; R7 each channel's band",
  "precut": {
   "exit": 0,
-  "date": "2026-11-13",
-  "checks": "gates.py task1 --full 0 FAIL, 4 WARN (nearest chains answered in the Template check; prompt shell quota for the author's rewrite; leak REVIEW lines ruled harmless; heart WARN only); checks 117 of 117; verify 21 of 21; two builds byte-identical; containers PASS"
+  "date": "2026-11-16",
+  "checks": "precut.py task1: 114 checks, 0 FAIL, 4 WARN (R1 upstream of the other six by design: every figure is net revenue; nearest chains task6 and task7 answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "REVIEW (the plan's Notes sheet, plain policy words, channels beside spend, the 2027 plan's dates; every line harmless)",
-  "reader": "two isolated reads: the first found the policy's blank section 3 and three cutoff dates (fixed); the second, on cut 90e641dd3185f4cd, no sentence that hands over a priced step and no file that ranks the channels (leak_check_report.md, Solver's-eye read and rulings)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN (forum overuse; completion_of_young_cohorts a supporting step taught twice; record_algorithm_inversion on task16 v3 and task22 v2; no BLOCK)",
-  "nearest": "skeleton severity none against every card, the client's corpus and the slot's lineage; nearest drivers task1 v4 and v5 (lineage), task8 v9, task18 at 0.04 to 0.05"
+  "heart": "",
+  "nearest": "guard.py check task1 on 2026-11-16: WARN only (skeleton.house_lesson: record_algorithm_inversion on task22 v2 and task16 v4); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
-  "verdict": "NOT_DETERMINISTIC then fixed",
-  "disposition": "FIX_NOW (pass 6), answer blocks only, shipped without another pass",
-  "report": "task1/determinism_check_report_pass5.md (SEND_BACK: the policy's section 3 rendered blank, fixed in the pack); task1/determinism_check_report_pass6.md (FIX_NOW: AppLovin Android's R2 and R3 bands wide enough to cross 0.90 together, capped per channel and asserted corner by corner; the stores' excess stated as about two fifths)"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 48.2,
+ "paper_pair": 11,
  "effort": {
-  "quick": 20.8,
-  "careful": 48.2,
-  "thorough": 100.0,
-  "factorial": "level 5: J1 the charges the records never see, J2 tracking consent, J3 the spend response, each necessary, none sufficient; five open channels opened by three stumps; eleven shortcut routes on eleven distinct wrong calls",
-  "largest_hint": "a channel's installs come dearer and weaker as its weekly spend rises: rescues R3 (1 of 5), not the call"
+  "quick": null,
+  "careful": 11,
+  "thorough": 100,
+  "factorial": "corelib CORE PASS level 5: S1 the charges the records never took in (opens AppLovin Android), S2 the installs the export cannot name (opens Meta iOS), S3 what a budget buys (opens Google Android); each necessary alone, none sufficient; seven distinct wrong calls",
+  "rubric": "one stump lost: S1 22, S2 31, S3 32; reflex route 11; rigorous standard route 11; fixed alone S1 16, S2 23, S3 13 (generator/core.py)",
+  "largest_hint": "the consent sentence: no whole result, 13 rubric points; the stores' sentence rescues R1 (1 of 7)"
  },
  "runs": {
   "run1": null,
@@ -93,5 +94,12 @@
   "date": "2026-11-13",
   "note": "architecture 5 sent back at review (reward 83); architecture 6 drawn the same day in a new world"
  },
- "resume": "READY: the author rewrites prompt.txt in their own words (gate it with voice-check.py task1 --rewrite and leak.py), uploads prompt.txt and target.zip, generates the two runs, then /triage-runs task1 with both runs and the rubric pasted"
+ "resume": "/build task1 from 3 (the Build brief in DESIGN_NOTE.md; generator/core.py is the process and the proof)",
+ "redraws": [
+  {
+   "date": "2026-11-16",
+   "why": "the cut of 2026-11-13 (READY 145d6ea, never uploaded) graded its asks on inputs of their own and priced its careful pass at 48.2; under the rule of 18a93a7 the core was redrawn in place",
+   "what": "five consent-gated iOS networks and two Android channels as the plan's members, Apple Search Ads outside the plan as a referee, the unnamed installs priced to add up to the accounts with no channel, what a budget buys in place of the spend response, every ask downstream of a stump"
+  }
+ ]
 }
