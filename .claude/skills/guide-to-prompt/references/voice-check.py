@@ -107,7 +107,11 @@ COUNT_DISCLOSURE = [
 ]
 # The shell a reviewer reads across the corpus, and the share of shipped prompts any one class may hold. The portal
 # holds every accepted task with no window, so the quotas run over every prompt on file, not the last twelve.
-QUOTAS = {"question form": 0.30, "second-sentence opener": 0.20, "deliverable set": 0.20}
+QUOTAS = {"question form": 0.30, "second-sentence opener": 0.20, "deliverable set": 0.35}
+# The house deliverable set: a CSV, a workbook and at most a deck. A written document (a memo, a note, a report, as
+# Word, PDF or Markdown) is the rare exception, kept only where the decision's reader needs one, so the gate warns on
+# it; with three formats in play the set repeats by design, and variety comes from what each file holds.
+WRITTEN = ("docx", "doc", "pdf", "md", "txt")
 
 # Sulfur: the prompt "never names the method, the trap, the comparison group, the confounder, the adjustment or the
 # file that matters, and never warns". FAIL in both modes.
@@ -257,7 +261,7 @@ TYPED = [
     ("xlsx", r"spreadsheets?|workbooks?|excel (?:file|workbook|sheet)s?"),
     ("pptx", r"slide decks?|slides?|decks?|presentations?|powerpoints?"),
     ("pdf", r"pdf (?:notes?|reports?|briefs?|briefings?|documents?|summar(?:y|ies))|pdfs?"),
-    ("docx", r"briefing notes?|memos?|write-?ups?|reports?|word (?:files?|documents?)"),
+    ("docx", r"briefing notes?|memos?|write-?ups?|reports?|word (?:files?|documents?)|notes?|one-pagers?"),
     ("csv", r"csv(?: files?)?"),
     ("ipynb", r"notebooks?"),
     ("py", r"(?:python )?scripts?"),
@@ -492,7 +496,7 @@ def _gate(text, task=None, legacy=False):
                  if attached else ("no pack file named" if pnames else "no pack under target/ to read")))
     out_named = sorted({m.group(0).lower() for m in FILE_TOKEN.finditer(text)} - pnames)
     rows.append(("deliverables asked for by type", "WARN" if out_named else "PASS",
-                 "names %s: a person asks for a spreadsheet or a short note; a file name only where one would "
+                 "names %s: a person asks for a spreadsheet or a few slides; a file name only where one would "
                  "naturally be given" % ", ".join(out_named) if out_named else "by type"))
 
     seq = [m.group(1) for m in re.finditer(SEQUENCING, re.sub(r"\s+", " ", text))]
@@ -543,11 +547,16 @@ def _gate(text, task=None, legacy=False):
 
     files = deliverables(text)
     if not files:
-        rows.append(("deliverables named", "FAIL", "no deliverable asked for, by file name or by type (a spreadsheet, a few slides, a memo)"))
+        rows.append(("deliverables named", "FAIL", "no deliverable asked for, by file name or by type (a spreadsheet, a CSV, a few slides)"))
     elif len(files) > 3:
         rows.append(("deliverables named", "FAIL", "%d files named, three is the ceiling" % len(files)))
     else:
         rows.append(("deliverables named", "PASS", ", ".join(files)))
+    written = [f for f in files if f.rsplit(".", 1)[-1].lower() in WRITTEN]
+    rows.append(("deliverable formats", "WARN" if written else "PASS",
+                 "asks for a written document (%s): the house set is a CSV, a workbook and at most a deck; keep one "
+                 "only where the decision's reader needs it, with the reason in the design note" % ", ".join(written)
+                 if written else "a CSV, a workbook or a deck, no written document"))
     return rows
 
 

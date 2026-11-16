@@ -85,6 +85,17 @@ Shapes 08, 10 and 15 carry the client's own warning: a replay, a scorecard whose
 out, or a conformation never decide a task on their own; they earn their place as results beside results that need
 their own analysis.
 
+**The deliverable formats.** One to three files, and the house set is a CSV, a workbook and at most a deck. The
+workbook holds the results a reader works in, and its first sheet states the call; a CSV holds a table another
+person or system will load (one row per member, period or cell); a few slides are asked for only where the reader
+is a meeting, and the first slide states the call. A written document (a memo, a note, a report or a one-pager, as
+Word, PDF or Markdown) is the rare exception: asked for only where the decision's reader could not use a workbook
+or a deck (a filing, a signed determination, a notice that leaves the organisation), with the reason in the note's
+`## Draw`. What a note would have said goes on the workbook's first sheet or the deck's first slide. A call that
+needs a recommendation never ships as a CSV alone. `voice-check.py` (the `deliverable formats` row) and `guard.py
+check` (`prefer.formats`) warn on a written document. A repair that keeps the prompt keeps its files; a new draw
+and a re-root choose them by this rule.
+
 ## 3. Writing prompt.txt
 
 **Write it the Mark way.** The author's instruction is to learn prompt writing mostly from Mark, whose prompts came out
@@ -122,7 +133,8 @@ each result is (its population, outcome, window and unit, in plain words) and th
 rounding. **May say:** the question, with the candidate set and the hold on the same footing ("or none this
 cycle") where relevant; the forcing fact once (window, date, cut-over, stop rule); the threshold the call is held to;
 each deliverable by its type, as a person asks for it ("a spreadsheet with a before-and-after chart", "a few slides
-for the review"), with its content as a person states it; a file name only where the person would really give one;
+for the review", "a CSV of every feeder"), with its content as a person states it; a file name only where the
+person would really give one;
 the standard the call runs on only where the pack lacks it; a generic threat to validity ("participation was
 voluntary").
 
@@ -191,9 +203,10 @@ the portal returned named the prompt's shell (how many, a workbook with a count-
 bar, nearest N), not its nouns: 182 of 186 Mark prompts ran question, deliverable, side table, chart, rounding. So
 the shell is drawn with the world: the question's form from the decision (a count asks how many, a pick which, a gate
 whether, an amount how much, a date when); the second sentence led by the deliverable, the rule, the date or the use
-rather than "Put ... in" every time; the deliverable set and
-the chart's species varied. `voice-check.py` holds corpus quotas (no question form over 30 per cent of prompts on
-file, no second-sentence opener or deliverable set over 20 per cent) as a WARN.
+rather than "Put ... in" every time; what each file holds and
+the chart's species varied (the format set is small by design, see "The deliverable formats" in section 2, so it is
+never varied by adding a written document). `voice-check.py` holds corpus quotas (no question form over 30 per cent
+of prompts on file, no second-sentence opener over 20, no deliverable set over 35) as a WARN.
 
 **The client's templating checker.** The portal's pattern checker counts seven signals and marks a prompt
 templated at three, borderline at two: files listed up front; steps ("First... Then... Finally"); three or

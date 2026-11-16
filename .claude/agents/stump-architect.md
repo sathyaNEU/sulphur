@@ -101,7 +101,9 @@ event. And in the six places `stumping` Part 1b lists, where they are not closed
    context: the world, the frozen dials, every file with what it must and must not carry, the sentences never to
    file, the goldens, and what the build is free to choose.
 7. **`prompt.txt`** drafted to `guide-to-prompt` (question first, one plain paragraph, a committed figure asked for
-   so a deferral is a wrong answer, no method, no file names, no role).
+   so a deferral is a wrong answer, no method, no file names, no role). The deliverables are a CSV, a workbook and
+   at most a deck; a written document (Word, PDF, Markdown) only as the rare exception section 2 allows, with its
+   reason in the note's `## Draw`.
 8. **`pipeline.json`**: `status` `DESIGN`, `stage` 2, `precut` exit 0 with the date, `resume` `/build taskNN from 3`.
 
 ## Limits

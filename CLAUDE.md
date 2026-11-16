@@ -359,7 +359,7 @@ three at Tier 2, six at Tier 3).
   three-strike policy on LLM-sounding prompts (warning, then one task a week, then offboarding). So the draft is
   short and direct (one plain paragraph under 1,000 characters, question first, no rounding instruction), and it is
   correct and leak-free: it pins the question, what each result is (population, outcome, window, unit), the
-  deliverables by type ("a spreadsheet and a short note"), never dictates rounding (each graded figure's precision
+  deliverables by type ("a spreadsheet and a few slides"), never dictates rounding (each graded figure's precision
   and band are stated in the answer blocks), and never names the method, the
   comparison, the adjustment or a step, never warns, never names an attached file ("see the attached ZIP" or
   nothing) and never says who is asking. The author always rewrites it in their own words; the rewrite comes back
@@ -403,7 +403,11 @@ or exists only to carry a trap.
 
 **Deliverables**: a structured set of results in one of the fourteen answer shapes, with a recommendation on top
 where the decision needs one; one to three files in formats a real analyst would produce for the reader who will use
-them (not `analysis_report.pdf` by default); a visual where it makes the results read at a glance.
+them (not `analysis_report.pdf` by default); a visual where it makes the results read at a glance. **The house set
+is a CSV, a workbook and at most a deck.** A written document (a memo, a note or a report, as Word, PDF or
+Markdown) is the rare exception, asked for only where the decision's reader could not use a workbook or a deck,
+with the reason in the note; the call sits on the workbook's first sheet or the deck's first slide
+(`guide-to-prompt` section 2; `voice-check.py` and `guard.py check` warn on one).
 
 **Asks**: the results, asked for. No cap and no target count; each is hard and multi-dimensional (many rows,
 periods, segments or calculations resolving to gradable answers), its unit inside the asking sentence and no rounding

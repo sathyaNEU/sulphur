@@ -351,6 +351,11 @@ def norm_names(c):
     return {re.sub(r"\s+", " ", n.strip().lower()) for n in names if n and len(n.strip()) > 3 and " " in n.strip()}
 
 
+# The house deliverable set is a CSV, a workbook and at most a deck (guide-to-prompt section 2). A written document
+# (a memo, a note or a report as Word, PDF, Markdown or text) is the rare exception and draws a WARN.
+WRITTEN_FORMATS = ("docx", "doc", "pdf", "md", "txt")
+
+
 def fmt_set(c):
     exts = []
     for d in c.get("deliverables") or []:
@@ -928,7 +933,13 @@ def check(cand, cards, vocab, status=None):
     fs = fmt_set(cand)
     hit = [c for c in recent if fs and fmt_set(c) == fs]
     if hit:
-        add("WARN", "repeat.deliverables", "deliverable format set %s repeats a recent build" % "+".join(fs), tasks(hit))
+        add("WARN", "repeat.deliverables", "deliverable format set %s repeats a recent build" % "+".join(fs), tasks(hit),
+            "vary what each file holds, the answer shape and the chart; never add a written document for variety")
+    written = [e for e in fs if e in WRITTEN_FORMATS]
+    if written:
+        add("WARN", "prefer.formats", "the deliverables carry a written document (%s)" % "+".join(written),
+            fix="the house set is a CSV, a workbook and at most a deck; keep a written document only where the "
+                "decision's reader needs one, with the reason in the design note's Draw")
     if "pdf" in fs:
         n_pdf = sum(1 for c in window if "pdf" in fmt_set(c))
         if n_pdf >= 0.75 * max(1, len(window)):

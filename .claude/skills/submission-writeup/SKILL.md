@@ -128,12 +128,15 @@ standard domain knowledge, naming each rival method and the fact that rules it o
 ## The golden ZIP
 
 - **Exactly the files the prompt requests, in the requested formats, and nothing else.** If the prompt asks for a
-  memo and a CSV, the ZIP holds those two files. A missing file, an extra file or a mismatched format blocks
+  workbook and a CSV, the ZIP holds those two files. The files are a CSV, a workbook and at most a deck; a written
+  document is the rare exception the prompt asks for with a reason (`guide-to-prompt` section 2), never added by the
+  build. A missing file, an extra file or a mismatched format blocks
   confirmation on the platform. Name it `golden.zip` in the task folder, built from `golden/` by the generator.
 - **One set of numbers everywhere**: the recommendation, every answer, the critical components and every table and
   chart in the golden files agree exactly, same rounding. A grader diffs them against each other.
 - **Business-realistic is a gate**: once figures are frozen, run every golden through `golden-realism`.
-- **The recommendation is unmissable** in the files, never inferred from output.
+- **The recommendation is unmissable** in the files, never inferred from output: one sentence on the workbook's
+  first sheet or the deck's first slide, naming what it rejects.
 - **A code deliverable prints the critical components' figures**, not only the answer.
 - **Prefer code-produced artifacts** (a library chart, a script-written workbook, an emitted CSV); a chart in a text
   deliverable still comes from the script.
