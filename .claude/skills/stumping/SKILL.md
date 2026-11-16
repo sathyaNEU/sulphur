@@ -492,7 +492,8 @@ banned. The plantation feeders' dense corridor was constructed, sits in the unit
 tab of interruptions against trim age gives it away, with one filter as the fix: a send-back. And every graded
 figure came out of one Poisson fit, so the chain hung on one result. The rebuilt task would keep the weather work as
 one result among several (a reconciled outage record, the exposure model, the regrowth rate with its band, the
-catch-up's avoided interruptions, the quarter split, the range over the station record) with each graded on its own.
+catch-up's avoided interruptions, the quarter split, the range over the station record), each with work of its
+own and the graded figures spread across the stumps (`supplemental-stumping` Part 1 rule 2).
 
 ## Part 3. The effort test
 

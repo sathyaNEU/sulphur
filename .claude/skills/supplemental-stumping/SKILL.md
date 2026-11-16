@@ -132,10 +132,13 @@ drafted:
    rows. Devices live only in the dimensions the pins leave open: how many rows carry the quantity, which rows
    reached the file, which records are one event, which key is the true one.
 2. **Demand work after the notice, and price the full includer.** The responses at 72 (151, 464) did the full
-   handling the paper cracker said nobody would. Model the response that notices every device and handles it,
-   and require that it still misses a block of figures: a second device from another family on the same ask,
-   its figure block disjoint from the first's (151's deferred-salary reconciliation beside the catch-up halves;
-   236's two per ask). A device whose discovery and whose remedy are the same act is a work order (1.0 below).
+   handling the paper cracker said nobody would. Model the response that notices every problem and handles it
+   the standard way, and require that it still files figures outside their bands. On Sulfur that response is the
+   rigorous standard route, which corelib holds to 50 or under (Part 0), and it holds because each ask sits
+   downstream of a second stump the first one's handling does not reach (Part 1 rule 2). Mark's form of it was a
+   second device from another family on the same ask (151's deferred-salary reconciliation beside the catch-up
+   halves; 236's two per ask). A device whose discovery and whose remedy are the same act is a work order (1.0
+   below).
 3. **An ask-only file does not keep an ask.** 151's injured-list asks read files the call never opened and were
    still pinned by the batting lines. Mark's remedy (site every ask on quantities the main-call files cannot
    compute) is superseded by Part 1 rule 1; the finding stands as the reason an ask sited away from the stumps is
@@ -193,7 +196,9 @@ device whose two handlings both tie. A device a solver meets announced or finds 
 sentence, so closing it hands the ask to every response that reads the sentence and leaving it open is a
 determinism finding (one build went 28.5 to 38.3 to 67.8 as its forks were pinned; another's whole layer was the
 call's own construction and measured 65.5). **Test every ask against the pin the call needs:** if filing what
-the call must file resolves the ask, re-site it onto quantities the call never reads.
+the call must file resolves the ask, the ask is that sentence read back and grades nothing. Replace it with a
+consequence of the estimate that the sentence does not settle (Part 1 rule 3), still downstream of the stumps;
+never move it onto quantities no stump touches (Part 1 rule 1).
 
 **Three bans, kept.** 1 **No filed rule adjudicates a device on the ask's path, and nothing narrates one**: only an
 internal inconsistency finds it (a wrong cardinality, an impossible row, a rollup above its parts). 2 **No
@@ -287,7 +292,8 @@ golden's code and never ships. Every figure is separately gradable, a quantity, 
 **The span floor:** eight or more files and ten to fifteen columns on the golden's causal path, each file moving
 the ask when misread. Split the quantity across sources, route through the resolution chain (fact, correction,
 register, crosswalk, standard), separate the antidotes: hub and spoke, fixed before the spine is cut. No two asks
-share primary device and path.
+hang on the same single stump: each stump owns one figure, and every other ask sits downstream of two stumps or
+more (Part 1 rule 2).
 
 
 **Price the determinism closure before the ask is designed: on the ask side determinism and difficulty trade one
@@ -327,7 +333,7 @@ a correctness check as well as a ceiling lever (190's plain quarterly count was 
 
 Every ask answer recomputes from the bundle, forced by the records; assert every stop and delta, recompute every
 ask in the verifier, and sweep: lazy, necessity matrix, pair simulation on the cut pack, over-cleaner, oracle,
-wrong-path battery, separation count, and a grep for each device's words and any organ stated twice. Repair one
+wrong-path battery, and a grep for each device's words and any organ stated twice. Repair one
 device at a time, organ and records together; never delete an organ.
 
 ## Part 6. The returned-task revision
