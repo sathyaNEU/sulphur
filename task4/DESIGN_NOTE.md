@@ -1,272 +1,291 @@
-# task4: how many 50, 30 and 20 litre kegs Wrenfold Brewery buys for summer 2027
+# task4 design note: Wrenfold Brewery's container fleet for the 2027 summer season
 
 ## Draw
 
-Subdomain: Regression, classification & model diagnostics (General Statistics & Data Science; house domain Supply
-  Chain & Logistics, inventory and demand planning)
+Subdomain: Regression, classification & model diagnostics (General Statistics & Data Science; house domain Supply Chain & Logistics, inventory and demand planning)
 Analysis type: Forecasting & Predictive Modeling
-Answer shape: a bridge from the register to the order, size by size: the kegs owned on paper, the kegs lost and
-  never traced, the usable fleet, the kegs needed in circulation in the busiest week of 2027 by component, and the
-  kegs to buy
-Weight: attribution (where every keg is: in the trade, at the brewery, at a depot, with the exchange, lost; and what
-  each part of the 2027 need is made of); the last builds leaned on modeling (task20, task21, task1), investigation
-  (task9, task18) and hard-to-measure (task7, task13, task19)
-Data-native sentence: a returnable keg is only ever counted where Wrenfold can see it (filled, through a depot gate,
-  scanned at a pub, washed), so the fleet, its losses and what a pub holds are stocks no record holds and every
-  instrument that sees part of them also sees something else
-People: Kim Taylor (head of supply chain, signs the order), Justin Francis (logistics analyst, the golden's author),
-  Edward Moss (keg fleet and washer manager), Louise White (trade sales director, the Maplestead agreement), Amelia
-  Hodgson (head brewer, the Foundry range and the 2027 brew plan), Toby Morley (depot operations, Leeds)
+Answer shape: a forecast with its band and drivers: each container pool's largest weekly shortfall in the 2027 summer season, in the fleet standard's planning case and in its hot case, with what drives it (the rise in the trade's stock, the store's full stock, the year's loss) and the cover the standard's two lines put on it
+Weight: hard-to-measure quantity: the work is three stocks no record holds (what the trade's cellars hold in a summer week, what the cold store will hold under a racking plan not yet run, how many containers the trade has lost), each estimated from the record that sees part of it; task16 and task24 put their weight on a hard-to-measure quantity too, answered in ## Template check, and the three builds before this one leaned on modeling (task3), measurement (task1) and attribution (task13)
+Data-native sentence: a returnable container is only ever counted where Wrenfold can see it (filled, delivered on a docket, counted on site once a year in the quiet week of the trade, counted in a cellar when a rep calls, read by its tag if it is a 20 litre keg), so how many each pool will be short in its worst summer week has to be built from the stocktake of 30 November 2026 by estimating how the trade's stock moves between then and the summer, what the store holds under next summer's racking plan and what the trade loses on the way, each from a record that sees only part of it.
+People: Kim Taylor (head of supply chain, who takes the order to the December order meeting), Justin Francis (logistics analyst, the golden's author), Edward Moss (container fleet and wash line manager), Louise White (trade sales director, the Maplestead agreement), Amelia Hodgson (head brewer, the 2027 brew plan), Toby Morley (depot operations, Leeds) (drawn by `guard.py names` for architecture 13 and kept with the world). None appears in the prompt.
+
+Architecture 14, drawn on 2026-11-17 in the same world as architecture 13 (the 2027 keg order by size, READY at 0e8e5ec and never uploaded), which was set aside before any platform round: it was cut before the open-members, rubric and factorial rules, its asks were bases every route reaches (the loss, the usable fleet, the deliveries, the estate's kegs, the need by component) sited away from the stumps, its decisive steps were nettings of two records (gate counters against exchange statements) and its members were three sizes whose corrections offset inside each. The brewer stays and the question changes: five container pools (50, 30 and 20 litre kegs, firkins and kilderkins), each read against the fleet standard's two lines (nothing, a seasonal hire, a purchase), from one figure per pool that no record holds. The depot gate counters, the wash line's return counts by type and the exchange netting are gone (no record of returning empties by pool exists), tags sit on the 20 litre pool only, and the core is three judgments on three axes proved in `generator/core.py` before any file is cut. A written document is not asked for: the order meeting reads the workbook's first sheet and a few slides.
 
 ## Stump screen
 
-Written at the draw on 2026-11-12, before the card was registered and before any code. Tests: 1 off the closed page,
-2 not a reflex, 3 nothing filed, 4 clean data, 5 two records at two grains, 6 the waved-through assumption with its
-precedent, 7 a plausible shallower story, 8 across the data, 9 worth the call.
+Screened on paper and in `generator/core.py` before the card was registered (`references/stump-screen.md`, the seventeen tests).
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
-| The depot gate counters count every empty a driver brings back, other brewers' kegs included, and own kegs picked up by other brewers come back months later through the Northern Keg Exchange and the recovery agent, so the gate's fulls out less empties in shows a small loss | the counters' empties are Wrenfold's own kegs, and a gap that closes is the loss (L28, L26) | the washer log's shift counts of kegs rejected as another brewer's, at another grain and days later; the exchange's monthly statements; the recovery agent's monthly returns | 9 on the call (the gate loss enters both the 2026 circulation and the fleet in the busiest week and cancels in the order) | kept as a graded ask (R1), not a call-moving trap |
-| The keg register still carries as active every keg lost since the November 2023 reconciliation wrote off the untraced ones, so the register overstates the usable fleet by about three years of losses | the register is the fleet (L04, N13) | the 30 November stocktakes on site, the tagged kegs' last reads, the gate flows year by year | none | kept |
-| Each pub line holds one keg on tap plus cover for its delivery interval, so Maplestead's 240 pubs, each listing two low-volume lines delivered weekly, hold far more kegs than the fleet's keg turns give their volume | kegs in the trade scale with the volume a new contract brings (N01, L15) | the outlet keg audits (physical counts each quarter at sampled pubs) and the delivery visits' running stock against each line's rate, the dispense installs log for the lines | none (nearest closed card, transport to a new mix: the fix here is a holding model per dispense line, fixed on tap plus a rate times the delivery cover, not a reweighting to bands) | kept |
-| A Foundry brew fills its whole lot of 20 litre kegs at once and they wait full until sold, so widening the range from 8 to 18 beers at a lower volume each ties up kegs in the cold store in proportion to the lot and the number of beers, not to the range's volume | the full stock carries at 2026's days of cover (N12, L17) | the 2027 brew plan's lots against the fills log and the tagged kegs' fill-to-dispatch times | none | kept |
-| Kegs in the trade at the summer peak rise less than the fills because a busy line empties its keg sooner, so the fleet's annual turns carried to the busiest week overstate the trade stock | a rate learned in one season carried to another (N12) | the tagged kegs' delivered-to-returned times by month | 2 (one group-by of the tagged trips by month shows it) | supporting step in R6 |
-| Seasonal outlets (cricket clubs, caravan parks, beer gardens) hold their kegs over the winter, so a tagged keg unseen for six months is not lost | an unseen keg is a lost keg | the outlets' seasonal opening in the ERP and the spring returns | 1 (the closed censoring card: unfinished trips completed from settled ones) | supporting step in R2 |
-
-The four kept are independent: no one sentence rescues two of them (the loss residual, the register's untraced kegs,
-the holding per dispense line and the lot-size full stock each sit on their own records and their own size of keg
-mostly: 50 litre for the first two, 30 litre for the third, 20 litre for the fourth).
+| A: a cellar holds a number of containers for each line whatever it sells, plus cover for its delivery interval, so the trade's stock does not move in step with deliveries; no record holds the trade's stock in a summer week | the containers off site at the stocktake move in proportion to deliveries, or deliveries times the weeks a container spends out (N01, L15, L40) | the reps' cellar counts by line against each line's sales and delivery interval; the tracked pool's weekly census | none | kept (S1) |
+| B: the cold store receives each beer a whole racking run at a time, so its stock is half a run per beer on sale beside cover for the week's deliveries, and the 2027 plan lengthens the runs and widens the range | the store's weeks of cover in the same weeks of last season hold next season (N17, N02, L37) | the racking log's runs against the store's Monday position, pool by pool; the 2027 brew plan | none | kept (S2) |
+| C: a container lost in the trade stays on the register, and the only pool whose losses are seen is the tracked one, which is chased and loses far fewer | the tracked pool's loss per delivery holds for every pool (N08, N12, L53) | the stocktakes' on-site counts against the register, year on year, less the trade's own change | none | kept (S3) |
+| D: empties returning through the depot gates, netted with the exchange's statements, roll each pool's fleet back to a count | the gate tallies are the returns | the exchange statements | 4 and 12 (the remedy is a netting of two records, and with return flows on file the trade's stock is a running sum that needs no model) | dropped, and the gate counters left the world |
+| E: the estate's new lines alone hold more than their planned volumes suggest | the estate scales like the existing trade | the cellar counts of comparable lines | 2 and 13 (runs measure new units on analogs unprompted, R41; too small to open a member) | dropped as a stump; it is one term of A |
+| F: the register's lost containers as an error in the fleet's level | the register is the fleet | the stocktakes | 9 and 12 (the level cancels on every route that works in differences from the stocktake, so only an absolute bottom-up route sees it) | not a stump: what is left of it is C's forward loss |
+| G: tags on part of the 50 and 30 litre lots, the loss read from tagged kegs not seen again | the tagged sample stands for its pool | the lot register | 1 and 16 (closed cards: dependent capture, open follow-up; a tagged sample in each pool is a calibration set, and the referee becomes the key) | dropped |
+| H: summers that ran short of containers hid part of the demand | deliveries are demand | the order book against the dockets | 1 (closed card: values at a limit are bounds) | dropped |
+| I: the response of deliveries to a hot week | the season's shape holds in a hot summer | the weather record | 2 (one plot shows it and runs fit weather unprompted, R14) | not a stump: a supporting step of the hot case |
+| J: events and beer festivals on sale-or-return pulling containers out for weeks | the trade is the regular accounts | the event orders | 1 and 8 (a contaminating event in a few weeks, visible in one plot) | dropped |
 
 ## Deep reasoning
 
-Task type: regression-classification-model-diagnostics (forecasting a returnable keg fleet's requirement and its usable stock, house inventory and demand planning)
-Domain test: every result is a keg-fleet quantity a brewery's supply chain estimates: the year's loss in the trade (a
-  stock-flow residual of fills, returns and kegs out), the usable fleet (a hidden stock rebuilt from site counts and
-  tagged trips), the busiest week's deliveries (a weather and calendar regression with its range), a customer line's
-  holding (one keg on tap plus its order cover, fitted on the reps' counts), the cold store under a lot-size brew plan
-  (a stock walked from racking and dispatch), the kegs in circulation (rebuilt from the washer and fills and fitted on
-  deliveries) and the order
-Swap: written for a hospital's pharmacy, "kegs on tap", "the washer", "other brewers' kegs in the empties", "the keg
-  exchange" and "a 200-keg brew" stop making sense; the returnable-container loop, its foreign-container and exchange
-  flows and its lot-sized filling are the brewing trade's own
-Where the weight sits: attribution, where every keg is: the register's 21,897 active fifty-litre kegs against a fleet
-  of about 18,530, the loss split from the other brewers' kegs and the exchange, the 2027 need split into the existing
-  trade, the new pubs' lines, the cold store and the float; each part needs its own record and its own model
-Layer 1: delivery visits keyed on handhelds (duplicated re-syncs, blank empties, plus or minus one keyed by eye), RFID
-  reads missed at pubs and doubled at the washer, tags replaced and re-mapped, gate counters down and keyed next day,
-  sizes written 50, 50L and K50, accounts renumbered on a change of licensee, the recovery agent's serials written
-  with spaces; none decides a result
-Not one thing: the strongest single piece is the register's untraced kegs (R2); a run that nails it still has to
-  measure the year's loss past the other brewers' kegs (R1), forecast the busiest week (R3), hold the Maplestead lines
-  at a keg on tap plus cover (R4), walk the cold store through 200-keg lots (R5) and rebuild the circulation (R6)
-One-fact test: "the keg register still lists every keg lost since its last reconciliation" rescues R2 (1 of 7); the
-  30 and 20 litre orders still fall short on the estate's and the Foundry range's turns
-Not semantics: every field read correctly, the register's ACTIVE status is still the register's; the gate counters'
-  empties_in is what came through the gate; a run reading both correctly still files the register and the gate's loss
-Not rule application: the standard defines the fleet, the loss, circulation, normal weather and the target; no filed
-  procedure measures the kegs out, the holding per line, the cold store or the circulation
-Estimand: the standard 2.1 (fleet), 2.2 (loss), 2.3 (circulation), 2.4 (normal weather), 2.5 (the season and a
-  size's busiest week), 3.1 (the target: circulation plus two days' season fills); the prompt names each ask's
-  population, window and unit; the plan workbook files every 2027 input (Maplestead's pubs, the new taps, the range,
-  the brews)
-No decoy: no memo or draft carries a figure; the register and the gate counters are the business's own records,
-  each reproducing exactly by its own definition, and the asks price the fleet and the loss on the standard's footing
-No replay: no result re-derives a published figure; the exchange statements and the stocktakes are counts
-Pinned: each result's rivals run on the cut pack (results.py FAMILY and PERTURB, effort.json forcing): seven rival
-  methods (the tagged kegs scaled by the register's tagged share among them, the stage 4 judge's one fork) and eight
-  perturbations file the same order bands
-Run forecast: R1 self-confirming check (the gate reconciliation closes), R2 dismissed own evidence (the register
-  against the stocktake), R4 and R5 method shortcut at the fleet's turns, R6 and R7 carried from them; R3 earned
-Strategy label: own: a returnable fleet's need and stock rebuilt from the records that each see only part of it
-Depth level: 5 (four independent judgments in different records, each moving a different size's order; seven
-  shortcuts landing on five different wrong orders)
-Lesson: a returnable fleet's need and stock are never recorded: the register and the gate counts each see something
-  else, and the new business's kegs follow its lines and its brews, not its volume at the fleet's turns
+Task type: regression-classification-model-diagnostics (forecasting a returnable container fleet's shortfall from fitted stock relations and their diagnostics, house inventory and demand planning), which serves Forecasting.
+Domain test: every result is a quantity returnable-asset planning estimates: a pipeline stock by holder from sampled counts (a number per dispense line and a number per container sold), a cycle stock from run sizes and the range on sale, a shrinkage rate from the stock account between counts, and a peak-week shortfall against a float standard with its weather range. The field's analyst builds each from the record that sees it and checks the first on the one pool that is tracked.
+Swap: "How many rental cars of each class will we be short in our worst week next summer?" keeps the banded cover and the forecast and nothing else: a rental car is on a contract or on the lot and both are recorded, nothing holds a stock for each dispense line whatever it sells, nothing arrives a production run at a time, and a lost car is written off. The task stops making sense.
+Where the weight sits: R2 to R4. Each is an estimator of a stock no record holds: R2 fits what a line holds on 3,510 cellar counts by line, sales and delivery interval, checks it on the tracked pool's census and carries it to every line and to the estate's cellars; R3 closes each pool's account between stocktakes and takes out the trade's own change before reading a loss; R4 separates the store's stock into half a run per beer on sale and cover, then rebuilds it under next summer's runs and range.
+Layer 1: delivery dockets keyed by drivers (blanks, a handheld re-sync that duplicates visits); tag reads missed at the outlet, double reads seconds apart, tags replaced and re-mapped; outlet accounts renumbered on a change of owner; container codes written three ways (50, 50L and K50; firkins as FIR, 9G and F9); register serials with and without the maker's prefix; cellar counts on paper forms keyed late, a rep's round missed in holiday weeks. None decides a result: every route cleans them the same way, and each one left uncleaned keeps every graded figure in its band and every pool's cover where it is (`checks.py` at the build).
+Not one thing: the strongest single piece is the cellar relation. A run that nails it still files the 50 litre pool with kegs to spare (-784), the 20 litre pool with kegs to spare (-504) and the firkins as a seasonal hire (306), three covers wrong, because the store and the loss are untouched (S1 fixed alone on the reflex route earns 16 on the rubric).
+One-fact test: "a cellar holds a number of containers for each line whatever it sells, plus cover for its delivery interval, so the trade's stock does not move in step with its sales" rescues R2 and nothing else (1 of 7 results): the store, the loss and every figure downstream still fall with S2 and S3.
+Not semantics: every field, unit, code and clause read correctly leaves the reflex route where it is: a docket line is a delivery, the stocktake is the count on site, the register is the list of containers bought and not condemned, the standard's requirement, fleet, season and lines are as written, and the route still files four covers wrong because of how three stocks behave, not because of what a column means.
+Not rule application: the fleet standard files what a requirement, a fleet, a shortfall, the season, the two cases and the lines are; it performs none of R2 to R6. After every filed rule is applied the analyst still has to estimate what the trade holds in a summer week, what the store holds under the 2027 plan and what the trade loses.
+Estimand: the fleet standard FS-04, clauses 2.1 (a pool's requirement in a week: its containers at customers, full in the cold store, at the depots, in wash and repair, and a float of two days' deliveries), 2.2 (a pool's fleet in a week: its containers on Wrenfold's sites or at its customers), 2.3 (the shortfall: requirement less fleet with no purchase or hire, a negative figure a surplus), 3.1 (the figure reviewed: the pool's largest weekly shortfall in the summer season, the weeks beginning Monday 3 May to Monday 20 September 2027), 3.2 (the planning case: every week at the weather station's normal for the week), 3.3 (the hot case: the season run on the recorded weather of each of the ten summers 2017 to 2026, the second highest of the ten largest weekly shortfalls), 4.1 (no shortfall in the planning case: no cover; a shortfall under the maker's minimum run: a seasonal hire; the minimum run or more: a purchase; the hot case is reported beside it); the maker's quotation (the minimum run per container type); the Maplestead supply agreement's schedule (the lines by container type, their listing dates and weekly volumes); the 2027 brew plan (each beer's container types, racking run and on-sale dates).
+No decoy: no memo, draft or column carries a wrong answer; no document argues for a route; no file ranks or sizes the pools on the question. The register, the stocktakes, the cellar audits and the brew plan are what they say they are.
+No replay: no result re-derives a published figure and no filed number is wrong.
+Pinned: 19 variants of the golden's conventions in `generator/core.py` (the loss over one, two or three years, with and without the trade's own change; the cellar counts fitted as one relation or one line per delivery interval, on all counts or the summer's; one, two or three seasonal harmonics; the weather bend a degree either side; deliveries at the stocktake over four or eight weeks or from the fit; the store's cover as the mean or the median week's; the tracked pool from its census and from the stock account) file one cover for every pool and set every band; each fitted input moved 20 per cent alone, and all four moved two measured spreads to one side together, file the same cover (`core.py --forcing`). The build re-runs the battery and the forcing on the cut pack.
+Run forecast: R2 lost to a method shortcut (the trade's stock sized as deliveries times the weeks a container spends out, the textbook fleet sizing); R3 lost to a narrow look at broad data (the loss read off the one pool that carries tags); R4 lost to a self-confirming check (the store's weeks of cover hold on a held-out 2026, because the runs and the range did not change in the record); R5 to R7 fall with whichever of the three a run loses. The strongest run is expected to make one of the three corrections and lose two.
+Strategy label: other (each part of an unrecorded stock assigned to the record that sees it; no label in `references/sulfur-strategies.md` names a line-level holding relation, a run-sized store stock and a loss from the stock account together)
+Depth level: 5: three independent judgments, each necessary and none sufficient, the three single drops on three different wrong covers and the seven shortcut routes of the lattice on four.
+Lesson: a stock nobody counts is still pinned by the things that hold it: the trade's by its lines and their delivery intervals, the store's by the runs it receives and the beers on sale, the missing containers by what the account cannot otherwise explain; and a ratio to throughput (turns, weeks of cover, a loss per trip) hides all three, because each has a part that does not move with throughput. No build on file teaches a holder's stock with a fixed part per dispense point, a cycle stock under a changed production plan, or a loss taken from a stock account net of the holders' own change.
 
 ## Results chain
 
+Every figure below is from `generator/core.py` on the world's weekly arrays (seed 72417), before any file is cut; the build replaces them with the cut pack's (`generator/figures.json`).
+
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | own kegs lost in the trade in the twelve months to 30 Nov 2026, by size: 1,210, 630, 170 | assembly-reconciliation | standard 2.2; the washer log, the filling log, repairs, the tagged trips | 1,090 to 1,360; 540 to 780; 150 to 200 | self-confirming check: the gate counters' fulls out less empties in (318, 155, 15), a reconciliation that closes on other brewers' kegs | - | Ask 2 |
-| R2 | usable kegs at 30 Nov 2026: 18,530, 10,880, 4,290 | missingness-measurement | standard 2.1; the stocktake and the tagged kegs out | 18,140 to 19,450; 10,660 to 11,360; 4,200 to 4,380 | dismissed own evidence: the register's 21,897, 12,860, 4,787 active kegs | - | Component 1 |
-| R3 | the most kegs delivered in one week of the 2027 season at normal weather, with the 80 per cent range over the 2016 to 2025 summers: 5,990, 3,400, 850 | forecasting | standard 2.4 and 2.5; the gate counts, the weather | within 5 per cent, each range end within 5 per cent | method shortcut: last summer's busiest week carried | - | Ask 4 |
-| R4 | kegs held at the Maplestead pubs in the busiest week: 1,180 (50 l), 2,240 (30 l) | modeling | the plan's schedule, the reps' counts, the dispense register | 1,090 to 1,250; 2,100 to 2,690 | dismissed own evidence and method shortcut: the estate's volume at the fleet's days out | - | Component 3 |
-| R5 | full Foundry kegs in the cold store in the 20 l busiest week: 2,280 | modeling | the stocktake, the brew plan, the range | 2,030 to 2,370 | method shortcut: the November days of cover | - | Component 4 |
-| R6 | kegs the fleet must cover in each size's busiest week: 19,800, 13,670, 5,320 | decomposition-attribution | standard 2.3, 2.5, 3.1 | 19,240 to 20,860; 13,250 to 14,390; 5,020 to 5,460 | dismissed own evidence: the estate and range at the fleet's turns | R4, R5 | Ask 7 |
-| R7 | kegs to buy: 2,090, 3,230, 1,130 | synthesis | standard 3.1, 3.2; the quotation's arrival week | 1,900 to 2,250; 2,950 to 3,850; 900 to 1,250 | dismissed own evidence: the register and the turns (0, 400, 160) | R2, R4, R5, R6 | Recommendation |
+| R1 | each pool's stock account at the four stocktakes (the containers on the register, the containers counted on site, the containers off site) and its weekly deliveries on one container coding: off site at 30 November 2026, 13,939 fifty-litre kegs, 10,708 thirty-litre, 4,492 twenty-litre, 9,572 firkins and 1,026 kilderkins | assembly-reconciliation | the register, the stocktake counts and the delivery dockets | exact on the cut pack | narrow look at broad data: the ten-minute pass reads the register as the fleet and never opens the stocktakes; the careful pass builds the account | - | Step-by-Step |
+| R2 | the rise in the trade's stock from the 30 November 2026 stocktake to each pool's worst week, the estate's cellars included: 6,470 containers over the five pools (2,722 fifty-litre, 2,588 thirty-litre, 635 twenty-litre, 535 firkins, -10 kilderkins), from what a line holds (on the 50 litre pool 2.29 kegs whatever it sells and 0.83 per keg sold a week) | modeling | the cellar audits' counts by line against the dockets' sales and the route plan's delivery intervals; the supply agreement's schedule; the tracked pool's census as the check | 6,126 to 6,836 | method shortcut: the containers off site at the stocktake moved in step with deliveries (9,066) | independent: the cellar audits, the dockets, the route plan and the schedule | Component 1 |
+| R3 | the containers the trade lost in the year to 30 November 2026 on the four pools without tags: 3,922 (1,697 fifty-litre, 1,057 thirty-litre, 1,091 firkins, 77 kilderkins; 0.74, 0.85, 1.51 and 0.65 per cent of deliveries) | decomposition-attribution | the register less the on-site count at two stocktakes, less the trade's own change between them; the dockets | 3,630 to 4,150 | narrow look at broad data: the tracked pool's 0.30 per cent of deliveries carried to every pool (1,299) | independent: the stocktake counts, the register and the dockets (the trade's own change between two November counts is small: left out, the figure stays in its band) | Component 3 |
+| R4 | the full containers in the cold store in each pool's worst week under the 2027 racking plan: 9,389 (3,533 fifty-litre, 2,188 thirty-litre, 2,128 twenty-litre, 1,405 firkins, 135 kilderkins) | forecasting | the store's Monday position against the racking log (0.35 weeks of deliveries beside half a run per beer on sale); the 2027 brew plan's runs, range and on-sale dates | 9,376 to 9,448 | self-confirming check: the store's weeks of cover in the same weeks of 2026 carried to 2027's deliveries (6,163), which a hold-out of 2026 confirms | independent: the Monday position, the racking log and the brew plan | Component 2 |
+| R5 | each pool's largest weekly shortfall in the 2027 summer season in the planning case: 775 fifty-litre kegs, 3,168 thirty-litre, 723 twenty-litre, 1,482 firkins, -490 kilderkins (a surplus) | forecasting | the standard 2.1 to 2.3, 3.1 and 3.2; R2 to R4; deliveries fitted on the season, the trend and the week's temperature; the stocktake of 30 November 2026 | per pool: 505 to 1,083; 3,065 to 3,242; 643 to 795; 1,431 to 1,524; -500 to -462 | dismissed own evidence: with the cellar audits, the brew plan and the stocktakes in hand, the three shortcuts together file 3,964, 2,459, -250, 87 and -571 | R2, R3, R4 | Asks 1 to 5 |
+| R6 | the same in the hot case, the second highest of the ten summers 2017 to 2026: 2,939; 3,453; 948; 1,508; -489 | uncertainty | the standard 3.3; the weather record's ten summers; R2 to R4 | per pool: 2,635 to 3,239; 3,348 to 3,531; 850 to 1,042; 1,457 to 1,549; -500 to -461 | unfinished chain: the same three shortcuts carried through the ten summers file 8,526, 3,181, 212, 131 and -555 | R2, R3, R4 | Asks 6 to 10 |
+| R7 | the cover per pool: a purchase of 30 litre kegs and of firkins, a seasonal hire of 50 and of 20 litre kegs, nothing for kilderkins | synthesis | the standard 4.1; the maker's minimum runs (2,000, 1,500, 1,200, 1,200 and 600) | exact | dismissed own evidence: the reflex route files a purchase of 50 litre kegs, nothing for 20 litre kegs and a seasonal hire of firkins | R5 | Recommendation |
 
-Carry-forward: R1 to R5 each rest on their own records and are graded on their own; R6 is graded on its figure with
-the existing trade's circulation as its independent input; R7 on its own figure, so a slip on R4 costs R4, R6's 30
-litre cell and R7's 30 litre cell only.
+Carry-forward: every graded figure sits downstream of a stump and the ten ask figures of all three. R2's rise in the trade's stock falls with S1 alone and is S1's own figure; R4's store falls with S2 alone and is S2's own; R3's loss falls with S3 alone and is S3's own. Of the ten ask figures, S1 lost alone moves nine outside their bands (all but the 30 litre pool's hot case), S2 lost alone all ten, S3 lost alone eight (the tracked 20 litre pool keeps its tags' loss on every route). R1 is done by every route and is stated in the Step-by-Step only, so no criterion is generated for it; the reflex route lands no graded figure.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| other brewers' kegs in the drivers' empties | constructed (the trade's habit, every visit at every depot) | no: every depot, every size, every week | modelling: the washer's rejects against the gates at another grain | modelling (the loss as a residual of own returns and kegs out) | keep |
-| own kegs back through the exchange and the recovery agent | constructed (every channel) | no | the exchange statements, the agent's returns | modelling | keep |
-| kegs lost since the 2023 reconciliation still active in the register | constructed (losses every week since) | no: every lot, every size | the stocktake against the register and the tagged trips | modelling (the fleet as a hidden stock) | keep |
-| a line's holding of a keg on tap plus cover | constructed (every outlet's ordering) | no: every line in the trade; it bites where lines are slow | the reps' counts against the lines' own rates | modelling (a fixed plus cover fit) | keep |
-| 200-keg lots across up to 18 Foundry beers | filed (the 2027 plan's brews and range) | no: every 20 litre beer | the brew plan against the stocktake | modelling (a walk of the cold store) | keep |
-| seasonal customers holding kegs over the winter | constructed | no | the accounts' seasons against the tagged trips | supporting (completion by account type) | keep as support |
+| a cellar holds a number of containers for each line whatever it sells (one on dispense, one behind it, the empties until the next call) plus cover for its delivery interval | constructed, the trade's ordinary cellar practice | no: every line of all five pools, about 9,000 lines, in every week of the record (2.0 to 3.0 containers a line fixed, 0.8 to 1.2 per container sold a week) | modelling: the cellar audits' counts by line set against each line's sales and delivery interval, checked on the tracked pool's census | modelling (a two-part holding relation fitted by pool, the estate's cellars built line by line, the stocktake used as the level so only the change is modelled) | keep |
+| the cold store receives each beer a whole racking run at a time, and the 2027 brew plan lengthens the runs and widens the range | constructed, batch production to stock | no: every beer of every pool in all three years; the plan changes the runs of all five pools and adds beers to two | modelling: the store's Monday position against the racking log, pool by pool (a store that holds 1.1 weeks of deliveries of one pool and 0.5 of another) | modelling (the stock separated into half a run per beer on sale and cover, rebuilt under the plan's runs, range and dates) | keep |
+| a container lost in the trade stays on the register, the trade loses 0.65 to 1.51 per cent of the containers delivered, and the tagged pool, whose overdue kegs are chased, loses 0.30 | constructed, the published experience of keg and cask fleets | no: every pool in every year (1,697, 1,057, 107, 1,091 and 77 containers in the last year) | modelling: the register less the on-site count at successive stocktakes, net of the trade's own change | modelling (a stock account closed pool by pool across stocktakes and carried forward on deliveries) | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 own kegs lost in the trade in the year to November 2026 | Missed | Missed | Right |
-| R2 usable kegs owned at 30 November 2026 | Missed | Missed | Right |
-| R3 the busiest week's deliveries at normal weather with the 80 per cent range | Missed | Right | Right |
-| R4 the kegs the Maplestead pubs hold in the busiest week | Missed | Partly | Right |
-| R5 full Foundry kegs in the cold store in the 20 litre busiest week | Missed | Missed | Right |
-| R6 kegs needed in circulation in each size's busiest week | Missed | Partly | Right |
-| R7 kegs to buy by size | Missed | Missed | Right |
-| Roughly | 0 of 7 | 2 of 7 | 7 of 7 |
+| R1 each pool's stock account and deliveries | Missed | Right | Right |
+| R2 the rise in the trade's stock to the worst week | Missed | Missed | Right |
+| R3 the containers the trade lost in the year | Missed | Missed | Right |
+| R4 the store's full stock under the 2027 plan | Missed | Missed | Right |
+| R5 each pool's largest weekly shortfall, planning case | Missed | Missed | Right |
+| R6 each pool's largest weekly shortfall, hot case | Missed | Missed | Right |
+| R7 the cover per pool | Missed | Missed | Right |
+| Roughly | 0 of 7 | 1 of 7 | 7 of 7 |
 
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass computed end to end in generator/results.py on the cut pack)
-Largest single hint: the keg register still lists every keg lost since its last reconciliation; rescues 1 of 7 results
-Pair estimate: 38.5 (quick 7.0, thorough 100)
+Measured by: generator/core.py on corelib.py at the draw (the rubric table of ## Stump core); .claude/skills/stumping/effort.py on generator/effort.json once the pack is cut
+Largest single hint: a cellar holds a number of containers for each line whatever it sells, plus cover for its delivery interval, so the trade's stock does not move in step with its sales; rescues 1 of 7 results (R2; 16 rubric points with S1 fixed alone on the reflex route, three covers still wrong)
+Pair estimate: 9 (core.py's rubric table: the reflex route earns instruction-following and no graded figure; a run that loses one stump earns 28, 22 or 33. A model, not a measurement: the paper estimates of earlier builds ran 40 to 60 points under their platform scores, and the platform's two runs are the measurement)
+
+## Stump core
+
+From `python3 task4/generator/core.py` (seed 72417; five pools, 156 weeks of record to the stocktake of 30 November 2026 and 43 weeks of 2027, before any file), every figure as printed. Members are the five pools (FIR firkins, K20, K30 and K50 the keg sizes, KIL kilderkins); the figure is the pool's largest weekly shortfall in the season, in containers; the lines are nil and the maker's minimum run. C1 is the rise in the trade's stock to the worst week over the five pools, C2 the store's full stock in the worst week over the five pools, C3 the year's loss on the four pools without tags; A- rows are the planning case and H- rows the hot case.
+
+| Member | Line | Golden | Family spread | Reflex route | Direct | Rigorous | Opened by |
+|---|---|---|---|---|---|---|---|
+| FIR | 0/1200 | 1482 | 35.9 | 87.23 | 793.5 | -284.6 | S3 |
+| K20 | 0/1200 | 723.1 | 54.7 | -250.2 | 2567 | -569.4 | S2 |
+| K30 | 0/1500 | 3168 | 73.7 | 2459 | 4365 | -255.9 | forced |
+| K50 | 0/2000 | 775.5 | 211 | 3964 | 1.117e+04 | -2512 | S1 |
+| KIL | 0/600 | -490.4 | 21.9 | -571 | -37.24 | -539.6 | forced |
+
+| Figure | Block | Golden | Band | S1 lost | S2 lost | S3 lost | Reflex route |
+|---|---|---|---|---|---|---|---|
+| C1 | components | 6470 | 6126 to 6836 | moves | - | - | lost |
+| C2 | components | 9389 | 9376 to 9448 | - | moves | - | lost |
+| C3 | components | 3922 | 3630 to 4150 | - | - | moves | lost |
+| A-K50 | asks | 775.5 | 504.6 to 1083 | flips | flips | moves | lost |
+| A-K30 | asks | 3168 | 3065 to 3242 | moves | moves | moves | lost |
+| A-K20 | asks | 723.1 | 643.2 to 794.5 | moves | flips | - | lost |
+| A-FIR | asks | 1482 | 1431 to 1524 | flips | flips | flips | lost |
+| A-KIL | asks | -490.4 | -499.8 to -462.3 | moves | moves | moves | lost |
+| H-K50 | asks | 2939 | 2635 to 3239 | moves | moves | moves | lost |
+| H-K30 | asks | 3453 | 3348 to 3531 | - | moves | moves | lost |
+| H-K20 | asks | 947.6 | 849.8 to 1042 | moves | moves | - | lost |
+| H-FIR | asks | 1508 | 1457 to 1549 | moves | moves | moves | lost |
+| H-KIL | asks | -489.1 | -500.2 to -460.6 | moves | moves | moves | lost |
+
+| Route | Call | Earns on the rubric |
+|---|---|---|
+| golden | right | 100 |
+| S1 lost alone | wrong | 28 |
+| S2 lost alone | wrong | 22 |
+| S3 lost alone | wrong | 33 |
+| S1 fixed alone | wrong | 16 |
+| S2 fixed alone | wrong | 21 |
+| S3 fixed alone | wrong | 16 |
+| reflex route (every stump lost) | wrong | 9 |
+| rigorous standard route | wrong | 9 |
+
+CORE PASS level 5  task4 architecture 14
+
+The lattice in containers (50 litre, 30 litre, 20 litre, firkins, kilderkins) and the cover each route files: golden 775, 3,168, 723, 1,482, -490 (hire, buy, hire, buy, nothing); S1 lost 3,595, 2,987, 1,001, 1,151, -514 (buy, buy, hire, hire, nothing); S2 lost -104, 2,476, -504, 1,017, -514 (nothing, buy, nothing, hire, nothing); S3 lost 122, 2,659, 723, 741, -524 (hire, buy, hire, hire, nothing); S1 and S2 lost 2,685, 2,301, -250, 697, -538; S1 and S3 lost 4,883, 3,163, 1,001, 530, -554; S2 and S3 lost -784, 1,972, -504, 306, -545; all three lost 3,964, 2,459, -250, 87, -571 (buy, buy, nothing, hire, nothing). Seeds 1 to 12 of the same world: eleven pass at level 5; seed 7 fails one pricing check (S2 fixed alone earns no figure of its own there, because the store's figure is read in a different worst week).
+
+Unobserved part: each pool's largest weekly shortfall in the 2027 summer season, the requirement of the standard's clause 2.1 less the fleet of clause 2.2. No record holds it, in three parts: the containers at customers in any week (nobody counts the trade; the stocktake counts Wrenfold's own sites once a year, in the week the trade is quietest), the containers the fleet has lost (a container lost in the trade is never taken off the register), and the store's full stock in a summer whose racking runs and range are still a plan.
+Instruments: the stocktake sees every container on Wrenfold's sites on one day a year and nothing in the trade; the register sees every container bought and not condemned on site, lost ones included (read as the fleet and moved with deliveries it files 11,169, 4,365, 2,567, 793 and -37, the direct route); the delivery dockets see every container delivered by line and week and no stock; the reps' cellar audits see what a line holds on the day of a call (3,510 counts over two years) and never a pool's total; the tags see the 20 litre pool's kegs in the trade week by week and its losses, and no other pool; the store's Monday position sees the full stock of the past under the past's runs; the brew plan sees next summer's runs and range and no stock.
+Referee: the tracked pool's containers in the trade from the stocktake of 1 December 2025 to its busiest week of summer 2026, which its tags count and no 2027 week or other pool shares. The census rose by 313 kegs; the golden's cellar relation, fitted on the cellar counts alone, files 380 (off by 67); the trade's stock moved in step with deliveries files 2,169 (off by 1,856, 28 times the golden's error). Read raw as the answer it files nothing for 2027 and nothing for four of the five pools; used as a calibration set (the tracked pool's response of 0.145 carried to every pool) it is the rigorous standard route below, which lands wrong.
+Strongest standard route: on every open member, the tracked pool's measured response carried to the other pools (their off-site stock moved by 0.145 of the proportional change in deliveries), the store regressed on deliveries with its intercept carried, and the tags' loss per delivery: -2,512 fifty-litre (nothing, against a seasonal hire), -569 twenty-litre (nothing, against a seasonal hire), -285 firkins (nothing, against a purchase), and -256 thirty-litre (nothing, against a purchase). It is refuted by the cellar audits (a 50 litre line sells 1.6 kegs a week against a 20 litre line's 0.36, so the part of its stock that moves with sales is several times the tracked pool's), by the brew plan (the regression's intercept is half a run of 2026's beers, and 2027's are longer and more) and by the stock account (1,806 fifty-litre kegs more off site on the register in a year where the tags' rate gives 681).
+Said out loud: S1 "a cellar holds a number of containers for each line whatever it sells, plus cover for its delivery interval, so the trade's stock does not move in step with its sales": four steps left (each line's sales and delivery interval joined to its cellar counts, the holding relation fitted by pool, the estate's cellars built line by line from the schedule, the stocktake taken as the level so the change alone is carried to each summer week). S2 "the store receives each beer a whole racking run at a time, so its stock follows the runs and the number of beers on sale, and both change in 2027": four steps left (the 2026 runs from the racking log, the store's cover as what is left of its Monday position after half a run per beer, the plan's runs, range and on-sale dates, the store rebuilt week by week). S3 "the register never loses a container, and the only pool whose losses are seen is the tracked one, which loses far fewer": four steps left (the account off site by pool at each stocktake, the trade's own change taken out, the loss per container delivered, the loss carried from the stocktake to each summer week).
+Worth: S1 is worth 2,820 kegs on the 50 litre pool, 13.3 times the family's spread of 211; S2 1,227 on the 20 litre pool, 22.4 times 54.7; S3 741 on the firkins, 20.6 times 35.9. The 50 litre family runs 601 to 987 against lines of nil and 2,000 and S1's drop lands at 3,595; the 20 litre family runs 668 to 769 against nil and 1,200 and S2's drop lands at -504; the firkins' family runs 1,446 to 1,508 against 1,200 and S3's drop lands at 741.
+Regimes: second stump on every member. S1's relation is checked on every pool's cellar counts and on the tracked pool's census, and cannot be checked on any other pool's summer stock; it opens the 50 litre pool, whose deliveries swing most with the season. S2's store is checked on three years of Monday positions under unchanged runs and cannot be checked under the 2027 plan; it opens the 20 litre pool, whose range goes from 8 beers to 18. S3's account is checked on the tracked pool (0.37 per cent from the account against 0.30 from the tags) and opens the firkins, which lose most.
+Sharp: S1: its wrong route passes a held-out season of deliveries and reproduces the stocktake by construction, and no stocktake can see how the trade's stock moves with the season, because all four are taken in the same week of the year; its right route commits to a holding relation no file states; the evidence is in the cellar audits against the dockets and in the tracked pool's census; the correction is not a constant (the golden's rise is 49 per cent of the proportional route's on the 50 litre pool, 107 on the 30 litre, 69 on the 20 litre and 264 on the firkins, where the estate's fixed stock outweighs a flat season); its own figure is C1. S2: its wrong route passes a hold-out of 2026 exactly, because the runs and the range were the same in every year of the record (L37); its right route commits to half a run per beer on sale, a quantity no file states, and to reading the plan into the store; the evidence is in the racking log against the Monday position and in the brew plan; the correction runs from 23 kilderkins to 1,193 twenty-litre kegs; its own figure is C2. S3: its wrong route rests on a loss measured exactly (107 kegs in 36,122 deliveries) on the one pool where it can be measured; its right route commits to attributing the growth of the off-site register between the trade's own change and loss; the evidence is in the stocktakes against the register; the correction runs from 0.65 per cent on kilderkins to 1.51 on firkins against the tags' 0.30; its own figure is C3.
+Earns: a run that loses only S1 earns 28, only S2 22, only S3 33 (50 or under each); the reflex route earns 9 and the rigorous standard route 9 (30 and 50 or under), and the reflex route lands no graded figure; S1 fixed alone earns 16, S2 fixed alone 21, S3 fixed alone 16 (each more than the reflex route's 9 and a third at most). No ask is cut: every one of the ten sits downstream of all three stumps.
+
+## Stump factorial
+
+Reflex route: every file cleaned and the container codes brought to one coding; the dockets de-duplicated; deliveries forecast week by week on the season, the trend and the week's temperature, held out on 2026 and run through the ten summers; the estate's lines added from their listing dates at the schedule's volumes; the standard's requirement, fleet, season, cases, float and lines applied as written; the stocktake of 30 November 2026 taken as the containers on site; the trade's stock moved in step with deliveries; the store's weeks of cover carried from the same weeks of 2026; the tracked pool's loss per delivery carried to every pool. It files 3,964, 2,459, -250, 87 and -571: a purchase of 50 and 30 litre kegs, a seasonal hire of firkins and nothing for the 20 litre kegs and the kilderkins, three covers wrong; this route is the careful but hurried pass.
+
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| S1 what a line holds has a part that does not move with its sales, so the trade's rise to the summer is fitted on the cellar counts by line and carried from the stocktake as a change | stump | the containers off site at the stocktake moved in step with deliveries | N01, L15, L40 | a purchase of 50 litre kegs (3,595) and a seasonal hire of firkins (1,151) | nothing for the 50 litre kegs (-784), nothing for the 20 litre kegs (-504) and a seasonal hire of firkins (306), three covers still wrong; rescues R2 | no: the join of counts, sales and intervals, the fit by pool, the estate's cellars and the change from the stocktake are four dependent steps |
+| S2 the store's stock is half a run per beer on sale beside its cover, rebuilt under the 2027 plan's runs and range | stump | the store's weeks of cover in the same weeks of 2026 carried to 2027's deliveries | N17, N02, L37 | nothing for the 50 litre kegs (-104), nothing for the 20 litre kegs (-504) and a seasonal hire of firkins (1,017) | a purchase of 50 litre kegs (4,883) and a seasonal hire of firkins (530), two covers still wrong; rescues R4 | no: the 2026 runs, the cover left after them, the plan's runs and dates and the weekly rebuild are four dependent steps |
+| S3 the loss is what each pool's stock account cannot otherwise explain between stocktakes, never the tracked pool's | stump | the tracked pool's loss per delivery carried to every pool | N08, N12, L53 | a seasonal hire of firkins (741) | a purchase of 50 litre kegs (2,685), nothing for the 20 litre kegs (-250) and a seasonal hire of firkins (697), three covers still wrong; rescues R3 | no: the account by pool, the trade's own change, the rate on deliveries and the carry to each week are four dependent steps |
+| J4 the dockets, the tag reads and the register cleaned: duplicates, missed and double reads, renumbered accounts, three container codings, serial prefixes | reflex | - | R01, R13 | same call | - | - |
+| J5 deliveries fitted on the season, the trend and the week's temperature, held out and run through the recorded summers | reflex | - | R03, R04, R11, R14 | same call | - | - |
+| J6 the estate's new lines sized from the schedule and from comparable lines already supplied | reflex | - | R41 | same call | - | - |
+| J7 the worst week found over every week of the season, in each case | reflex | - | R06, R53 | same call | - | - |
+| J8 the standard's requirement, fleet, season, cases, float and lines as filed | reflex | - | the fleet standard 2.1 to 4.1 | same call | - | - |
+| J9 the register, the stocktakes and the dockets reconciled to one account by pool | reflex | - | R93 | same call | - | - |
+
+Level: 5: three necessary stumps, none sufficient alone, the three single drops on three distinct wrong covers and the seven shortcut routes of the lattice on four.
+
+## Open members
+
+| Member | Golden margin | Family spread | Reflex route | Direct route | Opened by |
+|---|---|---|---|---|---|
+| 50 litre kegs | 775, a seasonal hire (775 above nil, 1,225 under 2,000) | 211 | wrong: 3,964, a purchase | wrong: 11,169, a purchase | S1 |
+| 20 litre kegs | 723, a seasonal hire (723 above nil, 477 under 1,200) | 54.7 | wrong: -250, nothing | wrong: 2,567, a purchase | S2 |
+| firkins | 1,482, a purchase (282 above 1,200) | 35.9 | wrong: 87, a seasonal hire | wrong: 793, a seasonal hire | S3 |
+| 30 litre kegs | 3,168, a purchase (1,668 above 1,500) | 73.7 | right: 2,459, a purchase | right: 4,365, a purchase | forced (its figures are wrong on every shortcut route) |
+| kilderkins | -490, nothing (490 under nil) | 21.9 | right: -571, nothing | right: -37, nothing | forced (as the 30 litre kegs) |
+
+Direct route: the pack's most direct evidence read at face value is the register as the fleet and its turns: the containers on the register moved with the worst week's deliveries over the last year's (`direct` in `generator/core.py`). It carries the lost containers as fleet, moves the whole fleet with deliveries and holds the store inside the turns, and files 11,169 fifty-litre, 4,365 thirty-litre, 2,567 twenty-litre, 793 firkins and -37 kilderkins: a purchase of every keg size and a seasonal hire of firkins, three covers wrong. The second direct reading, the tracked pool's census moved with its deliveries and its response carried to the other pools, is the rigorous standard route of ## Stump core and lands wrong on all three open members and on the 30 litre pool.
 
 ## Data provenance
 
-Source: generated by the seeded generator in task4/generator from a simulated regional brewer
-Behaves like the real thing: each customer line sells by the calendar and the warmth over 17 C, orders up to its
-  delivery interval and a week of cover with a keg on each tap, and empties go back with the drivers (other brewers'
-  kegs among them), to other brewers and the exchange, to scrap; the washer rejects foreign kegs and sends damaged ones
-  to repair; mainstream beers fill to stock, Foundry beers in whole lots; tagged kegs are read when filled, delivered
-  and washed; keg losses of 5 to 7 per cent of the fleet a year match the trade's published range
-Genuine patterns: (1) the summer, Christmas and bank holiday peaks and a quiet January; (2) the warmth response,
-  strongest on lager; (3) free-trade losses halving after deposits from April 2024; (4) seasonal clubs holding kegs
-  over the winter; (5) slow lines holding as many kegs as busy ones
-Problems by process: duplicated handheld re-syncs; missed and doubled RFID reads; replaced tags; counter outages
-  keyed next day; three size codes; renumbered accounts; serials written with spaces by the recovery agent
-Breadth: 19 files (16 used, the cask register and the packaging line's OEE unused), about 30 tables, 550,000 RFID
-  reads, 206,000 delivery visits, 1,900 accounts, 300 planned pubs, 18 beers; choosing the records that see each part
-  of the fleet is the work
+Source: generated by `task4/generator` from a simulated process: a regional brewer's customers (about 1,900 outlets with about 9,000 dispense lines) selling by the calendar and the weather, ordering to their delivery interval with a container on dispense and one behind it; drivers delivering full containers and collecting empties on dockets; the brewery racking each beer a run at a time into a cold store, washing, repairing and condemning returned containers; a register of containers by serial; a count of every site once a year; trade quality reps counting cellars on their rounds; tags on the 20 litre kegs read at filling, delivery and wash, with overdue kegs chased.
+Behaves like the real thing: a line holds the same few containers whatever it sells and more only as its sales and its delivery interval need; lager and keg ale peak in warm weeks and cask ale in the cold months; stock in a store that is fed in batches saws between a run and its cover; returnable fleets lose a few per cent of their containers a year in the trade, casks more than kegs and chased tagged kegs least; a register kept by purchasing knows what was bought and what was condemned on site and nothing of what never came back.
+Genuine patterns: (1) the summer peak of keg beer, the bank holiday weeks and a quiet January, with cask ale running the other way; (2) the response to warm weeks, strongest on lager and absent on cask; (3) slow lines holding nearly as many containers as busy ones, and twice-weekly deliveries to the busiest cellars; (4) the store's stock sawing with each beer's racking runs; (5) losses that differ by container type and are lowest where kegs are chased; (6) growth in the small-batch 20 litre range and a slow decline in cask.
+Problems by process: handheld re-syncs that duplicate docket visits; dockets keyed with blank container codes; missed and doubled tag reads and replaced tags; outlet accounts renumbered on a change of owner; three container codings across the dockets, the register and the store; serials with and without the maker's prefix; cellar counts keyed late from paper forms and rounds missed in holiday weeks. Each comes from the system or the person that writes the record.
+License: none needed (generated).
+Used as is: not applicable (generated).
+Breadth: about twenty files: three years of delivery dockets by line (several hundred thousand rows), the 20 litre pool's tag reads, a register of about 65,000 serials, four stocktakes, 156 Monday positions of the store, three years of racking runs, 3,510 cellar counts, about 1,900 accounts and 9,000 lines, the route plan, ten summers of weather, the brew plan, the supply agreement's schedule, the maker's quotation and the hire terms; choosing which record sees which part of each pool's stock is the work.
 
 ## Template check
 
-Chain signature: assembly-reconciliation, missingness-measurement, forecasting, uncertainty, modeling, modeling,
-  decomposition-attribution, synthesis
-Question form: how-many (an order by size, with the figures behind it)
-Nearest build: task9 v3 (ranked causes bridged into a forecast) shares stock_flow_accounting only; the decision form,
-  the other lessons and the file roles differ
+Chain signature: assembly-reconciliation, modeling, decomposition-attribution, forecasting, forecasting, uncertainty, synthesis
+Question form: how-many (how many containers of each type short in the worst week, and the cover for each)
+Nearest build: task24 (v2) shares the answer shape and the weight (a forecast with its band, a hard-to-measure quantity), task14 (v3) the answer shape and task16 (v4) the weight. task24 forecasts one purchase quantity of specialist labels from a forecasting convention and a validated nowcast; task14 compiles a rents measure from a bond register and a small panel, its weight on measurement; task16 evaluates a record-linkage rule. Here the forecast is five pools' shortfalls, each a difference of three stocks no record holds, estimated from three different records and read against two filed lines; no step, file role or lesson is shared. The guard's other WARNs: `repeat.gate_g` (forecasting, as task1): the assigned analysis type; the figures here are stocks and a shortfall, there a return per euro. `skeleton.lesson_closed_near` and `skeleton.lesson_once` (fixed_nuisance_component): answered in ## Frontier check, Closed strategies. `driver.near` (0.26 against this slot's architecture 13): the same brewer by design; that build sized an order by size from gate counters, the register and keg turns, and this one reads five pools against two lines from line-level holdings, a run-sized store and a stock-account loss. The cover per pool is banded on a figure, the form task3 drew the day before: the members (pools against crossings), the lessons, the instruments and the chain differ throughout, and the question is asked as how many, with a workbook and a deck in place of a workbook and a CSV.
 
 ## Frontier check
 
-Precedents: R1 L28, L26 (a reconciliation certified by a check that cannot see the foreign kegs); R2 L04, N13 (the
-  register taken as the state at the decision date after noting it is a register); R4 N01, L15 (a new contract's kegs
-  scaled with its volume); R5 N12, L17 (a rate learned at the old lot size carried, the average beer for the marginal
-  one); R6 N01, N12; R7 L04, N01
-Shallow path checks: the gate route's year closes to within a fraction of a per cent of fills, and the register
-  reconciles to the lots bought less those written off; only the washer's rejects (shift grain) and the stocktake
-  with the tagged trips (site and keg grain) refute them; the turns route back-tests on 2026's own fleet, which held
-  no slow estate and no 200-keg lots
-Assumption made false: kegs in the trade scale with volume (the turns); the world's ordering holds a keg on tap and a
-  week's cover on every line, so a slow new line holds two to three kegs whatever it sells (the reps' counts test it),
-  and the 2027 brew plan's lots hold a hundred kegs a beer whatever the beer sells (the plan tests it)
-Forcing: the order bands per size from the golden family alone (1,900 to 2,250, 2,950 to 3,850, 900 to 1,250);
-  seven rival methods (the judge's register-share scaling among them) inside every band, and eight perturbations tested
-  against those bands (the loss and the holding moved by their rivals' spread, the days on the way and circulation's
-  response by 20 per cent) all inside; seven shortcuts outside on at least one size (the careful route 0, 400,
-  160; the register 0, 1,250, 630; the estate at turns 2,390 on 30 litre; the cold store at days of
-  cover 660 on 20 litre; the whole fleet at turns 4,400 on 50 litre); the gate-count loss alone moves no order (the
-  2026 circulation and the fleet in the busiest week both carry it) and is graded on its own ask
-Noun swap: task9 v3 (skeleton.py nearest): its sort-yield causes swapped into kegs carry stock_flow_accounting and
-  second_source_at_other_grain only; decision form, the other lessons, the moves and the answer pattern differ; severity
-  none
-Closed strategies: the call turns on the fleet as a hidden stock and the new lines' fixed holding and lot-size stock
-  (lot_size_cycle_stock, fixed_nuisance_component, off the client's page; nearest card the pooled effect carried to a
-  new mix, whose fix is a reweighting where this one is a holding per dispense line); censoring is kept as a support
-  (the open trips completed from the same weeks a year before): the effort.json routes show the call standing without it
+Precedents: R2 careful Missed on N01 (an enlarged contract or fleet assumed to scale in proportion), L15 (assumed a response instead of measuring its shape) and L40 (a relation measured where the outcome had room carried as a constant); R3 Missed on N08 (one stream's factors assumed to transfer to a stream with no record of its own), N12 (a rate learned in one condition carried to another) and L53 (saw the selective record and did not build the estimate); R4 Missed on N17 (a planned change of supply left out of the forward life), N02 (history assumed informative of the forward window) and L37 (a factor certified by a held-out error that cannot see its dependence on the plan's own change); R5 to R7 fall with them. R1 is Right in the careful column: a reproduced account prices nothing.
+Shallow path checks: the proportional trade stock reproduces the stocktake by construction and its deliveries forecast passes a held-out season; only the cellar counts by line (a fixed 2.3 kegs a 50 litre line) and the tracked pool's census (313 against 2,169) refute it, a second file at the grain of a line and a third at the grain of a week. The store's weeks of cover reproduce held-out 2026 because the runs did not change; only the racking log against the Monday position (half a run per beer) and the brew plan refute it. The tags' loss is exact on its pool; only the stock account by pool across stocktakes (1,806 fifty-litre kegs more off site in a year against the tags' 681) refutes its carry.
+Assumption made false: the trade's stock scales with deliveries (false: a line holds a fixed stock whatever it sells; tested by the cellar audits against the dockets and by the tracked pool's census); the store's cover in weeks holds next season (false: the stock is set by run sizes and the number of beers, and the 2027 plan changes both; tested by the racking log against the Monday position); the tracked pool's loss holds for every pool (false: tagged kegs are chased and casks lose most; tested by the stocktakes against the register).
+Forcing: the lines are nil and the maker's minimum run (2,000, 1,500, 1,200, 1,200, 600). Across the 19 variants the nearest approach to a line is the firkins at 1,446 (246 above 1,200), then the 20 litre pool at 769 (431 under 1,200), the kilderkins at -469, the 50 litre pool at 601 (601 above nil) and the 30 litre pool at 3,094; every variant files the golden's five covers. The shortcuts land across the lines: S1 lost 3,595 fifty-litre (1,595 over 2,000), S2 lost -504 twenty-litre, S3 lost 741 firkins (459 under 1,200); the reflex, direct and rigorous routes are wrong on every open member. Each fitted input moved 20 per cent alone (what a line holds per container sold, the store's cover, the loss per container delivered; the season's deliveries 5 per cent) keeps every cover (the 50 litre pool between 110 and 1,441, the firkins between 1,292 and 1,672), and all four moved two measured spreads to one side together keep it (240 and 1,331; 1,369 and 1,602). All four moved 20 per cent together is outside any measured spread (2.8 to 14.6 per cent for the holding relation, 1.0 to 2.8 for the cover, 1.7 to 17.6 for the loss, under 1 for the worst week's deliveries) and moves the 50 litre cover.
+Noun swap: nearest on file by `skeleton.py check`: severity none against every card, the client's corpus and the slot's lineage. task20 architecture 4 and task22 share one lesson (a conservation residual) and one detection; their decision forms, answer patterns and mechanisms differ, and swapping either's nouns in (a gas district's unaccounted volume, a commitment program's balance) carries the residual and nothing else: no holding relation by line, no run-sized store, no forward plan.
+Closed strategies: the call turns on three lessons, none on the client's closed page: fixed_nuisance_component (a stock with a part that does not move with throughput, fitted as a fixed and a per-sale part across lines), lot_size_cycle_stock under forward_window_structure_change (a store set by run sizes and range, which the plan changes) and conservation_residual_attribution (a loss read from what an account cannot otherwise explain). Nearest closed cards and how each differs: "a co-occurring change is tangled with the treatment" (no treatment and no contrast here; nothing is sized on a control outcome and divided out, the fixed part is estimated across 9,000 lines and cancels in a difference from the stocktake); "a fixed-count effect has to be rescaled to each unit's size" (no intervention's effect is quoted as a percentage and rescaled to a base; the quantity is a stock relation with two fitted parts, and the per-sale part alone is carried); "the pooled effect does not transfer to a target with a different mix" (the tracked pool's response is not reweighted to the other pools' mix, each pool's relation is fitted on its own counts; the reweighting route is priced as the rigorous standard route and lands wrong); "two sources that are not independent" (no capture-recapture: tags sit on one pool only). No closed lesson is used as a supporting step, so none is stacked.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | kegs lost in the trade | gross losses / net of kegs found and returned | net, as the standard's residual | standard 2.2; checks.py SF1 |
-| SF2 | usable kegs | the register's active kegs / own kegs that exist and can still be filled | the latter | standard 2.1; checks.py SF2 |
-| SF3 | busiest week | the most deliveries / the most kegs in circulation | deliveries for Ask 4 (the prompt), circulation for the rest | standard 2.5; the prompt's wording |
-| SF4 | normal weather | a forecast year / the 2016 to 2025 daily average | the average | standard 2.4 |
-| SF5 | the 80 per cent range | a residual interval / the busiest week over the 2016 to 2025 summers' weather | the summers | the prompt names the summers |
-| SF6 | kegs the fleet must cover | circulation only / circulation and the washer float | with the float | standard 3.1 |
-| SF7 | kegs held at the Maplestead pubs | at the pubs / with their kegs on the way | at the pubs | the prompt (held at the pubs) |
-| SF8 | full Foundry kegs | cold store / with the depots | cold store | the prompt (in the cold store) |
-| SF9 | the fleet the order is set against | today's / in the busiest week | the busiest week | standard 3.1 and 3.2 |
-| SF10 | the loss to the busiest week | by days / by kegs sent | by kegs sent | same call (810 against 820 for 50 litre) |
-| SF11 | kegs bought lost before the busiest week | counted / not | not | same call (about 10 a size) |
+| SF1 | the summer season | the weeks beginning Monday 3 May to Monday 20 September 2027; the calendar months May to September; June to August | the weeks beginning 3 May to 20 September 2027 | the standard 3.1 files the weeks; the keg pools' worst weeks fall in July and August under every reading, and the cask pools' worst week is the season's last under the filed one: same call |
+| SF2 | a week | Monday to Sunday, as the dockets and the store's Monday position run; Sunday to Saturday | Monday to Sunday | the standard 3.1 ("weeks beginning Monday"); a Sunday start moves every figure inside its band: same call |
+| SF3 | the shortfall | requirement less fleet with no purchase or hire, a negative figure a surplus; floored at nil | requirement less fleet, signed | the standard 2.3 files the signed figure |
+| SF4 | the requirement's parts | containers at customers, full in the cold store, at the depots, in wash and repair, and a float of two days' deliveries; with or without the empties awaiting wash | all five parts, the empties awaiting wash under wash | the standard 2.1 lists the parts and counts empties awaiting wash as in wash |
+| SF5 | the fleet | the containers on Wrenfold's sites or at its customers in the week; the containers on the register | on site or at customers | the standard 2.2; the register is not named there, and the stocktakes show it holds containers that are in neither place |
+| SF6 | the float | two days' deliveries as two sevenths of the week's; two of the week's five delivery days | two sevenths of the week's deliveries | the standard 2.1 states the float as two sevenths of the week's deliveries |
+| SF7 | the planning case | each week at the weather station's normal for the week; at the mean of the ten recorded summers | the station's weekly normal | the standard 3.2 and the weather record's normal column; the ten summers' mean differs by tenths of a degree: same call |
+| SF8 | the hot case | the second highest of the ten largest weekly shortfalls obtained by running the season on each summer 2017 to 2026; an interpolated 90th percentile; the hottest summer | the second highest of ten | the standard 3.3 files it |
+| SF9 | which case decides the cover | the planning case; the hot case | the planning case | the standard 4.1 (the hot case is reported beside it) |
+| SF10 | the lines | nothing at a shortfall of nil or less; a seasonal hire above nil and under the maker's minimum run; a purchase at the minimum run or more | as filed | the standard 4.1 and the maker's quotation (2,000, 1,500, 1,200, 1,200 and 600); no variant comes within 240 of a line |
+| SF11 | the estate's lines | supplied from each pub's listing date at the schedule's weekly volume, on a weekly delivery; from the agreement's start date for all | from each pub's listing date | the supply agreement's schedule lists each pub's date, lines and volumes and its weekly delivery day; all are supplied before the season opens under either reading: same call |
+| SF12 | the stocktake | the count of 30 November 2026 of every Wrenfold site (brewery, cold store, wash line, repair bay, depots), full and empty | every site, full and empty | the stocktake's own count sheets, one per site |
+| SF13 | deliveries at the stocktake | the mean of the four weeks before it; of the eight weeks before; the fitted value | the four weeks before | the eight-week and the fitted readings are in the battery and land in every band: same call |
+| SF14 | the loss year | the year between the last two stocktakes; the last two years; all three | the year to 30 November 2026 | the two and three year readings are in the battery and land in every band: same call |
+| SF15 | the tracked pool's loss | from its tags (a keg not read for 26 weeks and not on site at the stocktake); from its stock account | from its tags | the account's reading is in the battery (0.37 per cent against 0.30) and lands in every band: same call |
+| SF16 | what a line holds | every Wrenfold container of the line's type on the premises on the day of the count, full, on dispense and empty; full only | full, on dispense and empty | the cellar audit form counts the three states in separate columns and the standard 2.1 counts containers at customers whatever their state |
+| SF17 | a container type | the five pools of the standard 1.1 under one coding; the dockets', the register's and the store's own codes | the standard's five pools | the container code table maps the three codings to the five pools |
+| SF18 | a beer's racking run | the containers of one type filled from one racking, as the racking log records each; a brew's whole volume | one racking of one container type | the racking log's rows and the brew plan's run column are per container type |
+| SF19 | a beer on sale in 2027 | from the brew plan's first on-sale date to its last; all year | the plan's dates | the brew plan gives each beer's dates by container type; the summer range is on sale through the season under either reading: same call |
+
+## Pinning list
+
+| Constant | Golden value | Home |
+|---|---|---|
+| the lines | nil and the maker's minimum run: 2,000 fifty-litre, 1,500 thirty-litre, 1,200 twenty-litre, 1,200 firkins, 600 kilderkins | the fleet standard (.pdf), 4.1; the maker's quotation (.pdf) |
+| the season | the weeks beginning Monday 3 May to Monday 20 September 2027 | the fleet standard (.pdf), 3.1 |
+| the requirement's parts and the float | at customers, full in the cold store, at the depots, in wash and repair; two sevenths of the week's deliveries | the fleet standard (.pdf), 2.1 |
+| the planning case | each week at the station's normal | the fleet standard (.pdf), 3.2; the weather record's normal column (.csv) |
+| the hot case | the second highest of the ten summers 2017 to 2026 | the fleet standard (.pdf), 3.3; the weather record (.csv) |
+| the estate's lines, listing dates, weekly volumes and delivery day | 300, 900, 150 and 160 lines from 12 April 2027, a third of the pubs a week | the supply agreement's schedule (.xlsx) |
+| the 2027 racking runs, range and on-sale dates | by beer and container type, the summer plan from 3 May 2027 | the 2027 brew plan (.xlsx) |
+| the 2026 racking runs | by beer and container type | measured from the racking log (.csv), the median run of each beer and type |
+| what a line holds, fixed and per container sold | 1.90 to 3.05 containers a line; 0.83 to 1.16 per container sold a week, fitted | estimated from the cellar audits (.csv), the dockets (.csv) and the route plan (.xlsx); measured spread 2.8 to 14.6 per cent by resampling the counts, and across the battery's fits |
+| the store's cover | 0.34 to 0.35 weeks of deliveries, fitted | estimated from the store's Monday position (.csv) and the racking log (.csv); measured spread 1.0 to 2.8 per cent, mean against median week in the battery |
+| the loss per container delivered | 0.74, 0.85, 1.51 and 0.65 per cent; 0.30 on the tracked pool | estimated from the stocktake counts (.xlsx), the register (.csv) and the dockets (.csv); the tracked pool's from its tag reads; measured spread across one, two and three years of the account |
+| the temperature at which the response to warmth bends | fitted on the record, pool by pool | estimated from the dockets (.csv) and the weather record (.csv); measured spread: a degree either side in the battery |
+| depots, wash and repair per container delivered | 0.55 to 0.60 weeks of deliveries | measured from the stocktake counts by site (.xlsx); the mean of four stocktakes against the last in the battery |
+| the delivery interval of a line | weekly or twice weekly | the route plan (.xlsx) |
+
+Variant battery: 19 variants of the golden route in `generator/core.py` (`FAMILY`: the loss over one, two and three years and with the trade's own change left out; the cellar counts as one relation or one line per delivery interval, on all counts or the summer's; one, two and three seasonal harmonics; the weather bend a degree lower and higher; the store's cover as the mean or the median week's; depots, wash and repair at the mean or the last stocktake; deliveries at the stocktake over four or eight weeks or fitted; the tracked pool from its census and from its account; three pairings) file one answer (every variant files the golden's five covers), and their range with a quarter of its width either side is every figure's band. The build re-runs the battery on the cut pack with every convention the day-level records add (twelve or more variants on each modelled transport) before anything is priced.
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 | Population: Wrenfold's own 50, 30 and 20 litre kegs; casks excluded (standard 1) |
-| 2 | Unit of account: kegs, by size |
-| 3 | Attribution window: a keg's fill, return and loss by its date |
-| 4 | As-of dating: the stocktakes of 30 November; the exports of 2 December 2026 |
-| 5 | Version basis: one export of each file; the register as at 30 November 2026 |
-| 6 | Denominator: the loss per keg sent out; the holding per line |
-| 7 | Weighting: none; every keg counts once |
-| 8 | Window length: the loss over the twelve months to 30 November 2026; the season's 21 weeks (standard 2.5) |
-| 9 | Boundary inclusivity: 1 December 2025 to 30 November 2026 inclusive; weeks Monday to Sunday |
-| 10 | Rounding path: full precision, kegs rounded once to the nearest ten |
-| 11 | Tie-break: none needed; each size's busiest week is the maximum of a smooth weekly series |
-| 12 | Maturity and censoring: trips open at 30 November 2026 completed from the same weeks of 2025 by account type |
-| 13 | Order of operations: assemble, loss, fleet, forecast, holdings, cold store, circulation, order |
+| 1 | Population: the five container pools of the standard 1.1; every line supplied at 30 November 2026 and every estate line of the schedule; every week of the 2027 summer season |
+| 2 | Unit of account: containers (kegs or casks of the pool), whole |
+| 3 | Attribution window: a week, Monday to Sunday; the largest weekly shortfall in the season is one week's figure |
+| 4 | As-of dating: the records close at the stocktake of 30 November 2026; the season is 3 May to 26 September 2027 |
+| 5 | Version basis: the fleet standard FS-04 in force for the 2027 review; the 2027 brew plan as issued; the supply agreement's schedule as signed |
+| 6 | Denominator: containers delivered (the loss per container delivered; the cover in weeks of deliveries) |
+| 7 | Weighting: lines weighted by their sales in the per-sale part of the trade's stock; every week of the store's record counts once |
+| 8 | Window length: the season's 21 weeks; the year between the last two stocktakes for the loss; the four weeks before a stocktake for its deliveries |
+| 9 | Boundary inclusivity: nothing at a shortfall of nil or less; a purchase at the minimum run or more (standard 4.1); the season includes the weeks beginning 3 May and 20 September |
+| 10 | Rounding path: full precision to the end; shortfalls stated in whole containers, each with its band in the answer blocks |
+| 11 | Tie-break: none needed; no variant comes within 240 containers of a line |
+| 12 | Maturity and censoring: the loss is read between stocktakes, never from recent tags still open; the tracked pool's loss counts a keg unread for 26 weeks and not on site at the stocktake |
+| 13 | Order of operations: the account, the holding relation, the loss, the deliveries, the trade's rise, the store, the weekly path, the largest week, the hot case, the cover |
 | 14 | Row order: no step depends on file order |
-| 15 | Duplicate resolution: re-synced visits kept once; reads of one tag at one point seconds apart kept once |
-| 16 | Identity normalisation: replaced tags mapped to their serials; renumbered accounts through account_changes |
-| 17 | Netting against gross: own kegs back net of repaired kegs presented again |
-| 18 | Dimensional units: kegs, kegs a week, days |
-| 19 | Code and status semantics: register ACTIVE, WRITTEN_OFF, CONDEMNED; washer rejected_not_ours another brewer's keg |
-| 20 | Integerisation: kegs whole, to the nearest ten |
-| 21 | Clause scope: the standard's terms apply to every size alike |
-| 22 | Forward window contents: the plan workbook (Maplestead, new taps, range, brews), the quotation's arrival week and the history to 30 November 2026 drive 2027 |
+| 15 | Duplicate resolution: a docket visit re-sent by a handheld (same account, date, route and lines) counted once; a tag read repeated within seconds counted once |
+| 16 | Identity normalisation: one account id across renumberings (the accounts file lists the former id); serials without the maker's prefix; the container code table for the three codings |
+| 17 | Netting against gross: full containers delivered are gross of collections; nothing is netted against empties, of which no record by type exists |
+| 18 | Dimensional units: containers; containers a week; weeks of deliveries; degrees Celsius, weekly means |
+| 19 | Code and status semantics: the register's statuses (active, condemned with its date); the cellar audit's three states; the docket's line types |
+| 20 | Integerisation: nothing is rounded before the cover is read; containers are stated whole |
+| 21 | Clause scope: the standard's lines apply to each pool separately; the hot case is reported and does not decide |
+| 22 | Forward window contents: the 2027 season with the estate's lines from their listing dates, the 2027 brew plan's runs and range, no purchase or hire, and the trade's loss continuing from the stocktake |
 
 ## Literal reader
 
-Standard 2.1 executed word for word gives the fleet as kegs that exist (not the register); 2.2 gives the loss as
-fills less own returns less the rise in kegs out; 2.3 and 2.5 give the busiest week per size from circulation; 3.1
-adds two days of the season's fills; the quotation's 26 April arrival puts the bought kegs in the fleet before the
-season; the plan's sheets give every 2027 line, tap, beer, window and brew. Each executed sentence produces its
-result's estimand, never its value.
+The standard's clauses 2.1 to 2.3, 3.1 to 3.3 and 4.1 executed word for word on the golden's weekly paths file the golden: each pool's requirement in a week is its containers at customers, full in the cold store, at the depots, in wash and repair and two sevenths of the week's deliveries; its fleet is its containers on site or at customers with no purchase or hire; the figure is the largest weekly difference over the weeks beginning 3 May to 20 September 2027, at the station's normals and as the second highest of the ten recorded summers; the cover is read on the planning case against nil and the maker's minimum run. No filed sentence says how the containers at customers, the store's stock or the fleet in a summer week are to be estimated, and none executes to a shortcut's figure: the standard does not name the register as the fleet, weeks of cover as the store, or a loss rate.
 
 ## Prompt contract
 
-A rewrite keeps: the order by size for the busiest week of summer 2027; the loss in the twelve months to 30 November
-2026; the usable kegs at 30 November 2026; the most kegs delivered in one week at normal weather with its 80 per cent
-range over the 2016 to 2025 summers; the kegs held at the Maplestead pubs; the full Foundry kegs in the cold store in
-the 20 litre busiest week; the kegs the fleet has to cover in each busiest week; a spreadsheet and a one-page PDF note. It
-never adds the register, the gate counters, the washer, turns, a keg on tap or a lot size.
+A rewrite keeps: the question in the how-many form with the three covers (buy, hire for the season, leave alone); the reason each shortfall rests on an estimate (nobody counts what is out in the trade or what has been lost there, and summer 2027 has not happened); the figure for every container type by its plain definition and unit (the largest weekly shortfall of the 2027 summer season, in containers), in the standard's planning case and in its hot case; the cover the standard puts on it; a workbook that opens on the cover for each type and a few slides. It never adds: a method, a correction, a record to trust or distrust, a file name, the number of container types, pubs or lines, a rounding rule, a warning, who is asking, or the lines' values as a procedure.
 
-## Leak rulings
+## Build brief
 
-- Stage 4 judge (DETERMINISTIC, FIX_NOW): the tagged kegs out scaled by the tagged share of fills or of the register's
-  active kegs; closed by adding the register-share reading to the golden family and widening the fleet and need bands
-  to carry it (the order bands hold: the reading lifts the fleet and the 2026 circulation together); no pin was
-  written, since a sentence choosing the fills share would point at the register's untraced kegs (R2); no golden
-  figure and no pack file moved (target.zip 487a6d659cbc5bf1 before and after), so no re-judge.
-
-- keg_fleet_standard_issue3.pdf, the business's own vocabulary (record, register, standard, counts, circulation):
-  harmless; the standard defines the fleet, the loss as the net fall in the fleet, circulation, normal weather and the
-  target, and names no record that sees any of them (2.2's earlier wording and 4.3's reconciliation sentence were taken
-  out before stage 4 for naming the move).
-- keg_fleet_standard_issue3.pdf, column names (condition, depot, presented, serial, shift, site): harmless; section 4
-  is the standard's list of the records the organisation keeps, one line each, describing fields and never a step.
-- Coincident numbers in the exchange statements, the gate counts, the filling and washer logs and the quotation:
-  harmless; ordinary record values (monthly counts, shift counts, a price) that equal rounded golden figures by chance.
-- prompt.txt shell quota (pdf+xlsx at 25 per cent of recent prompts): a WARN the author's voice rewrite answers.
-
-## Pre-ship check
-
-- The hidden factor record against the cut pack: every factor runs across the depots, sizes and weeks (checks.py S1 to
-  S7, R1 to R7); the 2027 lot size is filed in the plan, nothing else about it is.
-- The effort test against effort.py: quick 7.0, careful but hurried 38.5, thorough 100; the note's table is
-  effort.py's own markdown.
-- The golden against the simulation's truth (checks.py T1 to T7): the fleet within 1 per cent, the loss within 5 per
-  cent, the need within 4 per cent, the order within 25 per cent (the 2027 run's own churn closes 3 per cent more
-  pubs than it opens, which no forecast from the record can see).
-- Containers from the house writers, distinct stamps, both zips at each file's own save time (audit_containers.py).
+World: Wrenfold Brewery Ltd (West Yorkshire; the brewery, Maplestead Inns and the pooling company are invented) fills 50, 30 and 20 litre kegs, firkins and kilderkins for about 1,900 pubs, clubs and restaurants from its Brighouse cold store and four depots. The day-level engine of `generator/sim.py` is extended, never replaced by the weekly miniature: outlets with dispense lines by beer and container type; sales by the calendar and the week's temperature (keg beer up in warm weeks, cask ale highest in the cold months); each line holding a container on dispense, one behind it and its empties until the next call, ordered to its delivery interval (weekly, the busiest cellars twice weekly); drivers' dockets recording full containers delivered by line and empties collected as one count; the brewery racking each beer a run at a time when its stock falls to its cover; a wash line that condemns a small share; depots holding their own stock; a register by serial that adds purchases and removes containers condemned on site and nothing else, cleaned of missing serials at the count of December 2023; a count of every site in the first days of December 2023, 2024 and 2025 and on 30 November 2026; reps counting cellars by line on their rounds from early 2025; tags on every 20 litre keg read at filling, delivery and wash, with overdue kegs chased by a recovery agent; containers lost in the trade at each pool's own rate. The world's dials are `W` in `core.py` (each pool's sales, season, weather response, growth, lines, what a line holds, loss, cover, depots and wash, beers and runs for 2026 and 2027, estate lines, purchases in the record, the maker's minimum run), with the Maplestead estate listed from 12 April 2027 over three weeks and the summer racking plan and summer range from 3 May 2027.
+Frozen: SEED 72417; the five pools and every dial of `W`; the season (weeks beginning 3 May to 20 September 2027), the estate's listing weeks, the racking plan's start, the float (two sevenths of a week's deliveries), the hot case (second highest of ten summers); the lines (nil and the maker's minimum run); each pool's placement (the world's largest weekly shortfall 1,000, 3,300, 650, 1,500 and -450, idle stock never negative in the record or before the estate arrives); the golden's route (`GOLDEN`), the three hurried choices (`HURRIED`), the direct and the rigorous standard routes, the battery (`FAMILY`) and the forcing (`FORCING`, `spreads`); the tracked pool as the only tagged pool and the referee (its census from the December 2025 stocktake to its busiest week of summer 2026); the asks (the planning case and the hot case per pool) and the three components (C1 the trade's rise, C2 the store, C3 the year's loss on the pools without tags). On the cut pack `generator/results.py` re-runs `corelib` and must print CORE PASS level 5 with one stump lost at 50 or under, the reflex route at 30 or under and every open member opened; a failure there, a member turned forced or a band that swallows a shortcut goes back to the architect.
+Files: (1) the delivery dockets, three years by docket line (date, route, account, line, container code, full delivered; empties collected as one count per visit, never by type), the 20,000-row file and the long printed one, with re-synced duplicates and blank codes; (2) the 20 litre pool's tag reads (fill, delivery, wash) in a database, with missed and doubled reads and replaced tags, enough to count the pool's kegs in the trade week by week and nothing about another pool; (3) the container register by serial (type, maker, lot, purchase date, status, condemned date) with no status for a container lost in the trade; (4) the four stocktakes as count sheets by site and state; (5) the cold store's Monday position, full containers by container type, 156 weeks; (6) the racking log, one row per racking of one beer into one container type; (7) the cellar audits, one row per line counted (date, account, line, full, on dispense, empty), 3,510 rows over 2025 and 2026 with other brewers' containers noted in their own column; (8) accounts and lines, with former account ids; (9) the route plan with each account's delivery days; (10) the weather record, weekly mean temperature and the station's normal, 2017 to 2026; (11) the fleet standard FS-04 with the clauses of the Estimand line and nothing on how any stock is estimated; (12) the 2027 brew plan by beer and container type (racking run, first and last on-sale dates) as plan data; (13) the Maplestead supply agreement's schedule (pub, listing date, lines by container type, weekly volume, delivery day); (14) the maker's quotation (prices, minimum runs, lead times) and the pooling company's seasonal hire terms; (15) the depots' weekly stock by container type; (16) the wash line's daily log (washed, to repair, condemned); (17) the purchase lots; (18) the container code table; (19) the recovery agent's log of chased tagged kegs; (20) two files that look relevant and are unused, never labelled (the packaging line's efficiency log and the trade price list). No file holds the trade's stock, a pool's losses outside the tags, the store's stock by plan, a turn rate or a shortfall; the tracked pool's census ships whole (in the tag reads) and settles no other pool read raw.
+Never filed: a sentence on what a cellar or a line holds, a par level, a float per line or per tap, weeks in trade, cycle time, dwell, turns or a turn rate; cycle stock, half a run, average batch stock, or a sentence that the store's stock depends on run sizes or on the number of beers; a loss rate, shrinkage, missing or unaccounted containers, a write-off of trade losses, or a sentence that the register is not reduced for containers that do not come back; a statement that tagged kegs are lost less often; a requirement, a fleet or a shortfall computed for any pool; a file, sheet or column named for any of these; any document that describes the data files.
+Goldens: `wrenfold_container_fleet_2027.xlsx`: the first sheet states the cover for each pool and what it rejects (pool, largest weekly shortfall in the planning case and in the hot case, the worst week, the maker's minimum run, the cover) with one chart of the five shortfalls against their lines; behind it the weekly path by pool (requirement by part, fleet, shortfall), the holding relation by pool with the tracked pool's check, the stock account and the loss, the store under the 2027 plan, the ten summers, and a routes sheet showing what each shortcut files. `wrenfold_container_order_2027.pptx`: four or five slides for the order meeting (the cover for each pool; what the shortfall is made of; the hot case; what the usual sizing would have ordered). Every figure from `generator/figures.json`, one set of numbers in both files; both through the house writers.
+Free: nouns beyond the people and the invented names; document genre and wording inside the Never filed list; Layer 1 texture and its rates; the two unused files; file names and formats (two or more file categories, the pack at 30 MB or more); the count of accounts and lines by depot; the exact rep rounds; how the miniature's weekly dials are realised day by day, provided `results.py` re-proves the core on the cut pack.
 
 ## Tried and rejected
 
@@ -649,3 +668,23 @@ Architecture 2 and earlier, carried from the agro-climatic note:
 - 2026-11-12, architecture 12 repair, the plan's rotable bench hours at 3.8 from April: the summer queue then moved too few in-house lines (the landings-right route took three of five); at 3.4 a 5 per cent capacity cut pushed the autumn back towards saturation; 3.6 moves every in-house line by one or two spares and no 5 per cent move shifts any line by more than one.
 - 2026-11-12, architecture 12 repair stage 4, the judge's thin margins: its blind thread's flat-occupancy turnaround gave the starter-generator 7 against the golden's 8 to 9 (the named shortcut, without the replay's check on the shop's own record), and its serial windows looked at other sets; closed by run rivals, not argument: the ready jobs taken in removal order joins the golden family, and the serials' record to the snapshot withdraws the same eight (SF21); the note's citation of 4.3 for the withdrawal test corrected to 5.1 and 5.2.
 - 2026-11-12, architecture 12 spent on the author's word after the second holistic audit: the holdings rode a shop queue calibrated near saturation (a knife-edge estimand, 29 days in the golden against the audit's 12 to 17 from the same record) and the avionics rates on an unfiled window, and both platform runs found the landings driver and the watch list's aircraft-driven removals (runs/arch12); re-rooted to architecture 13 in a new world (a regional brewer's keg fleet), with no queue near its limit and every forward input shipped as data.
+- 2026-11-17, architecture 13 (the 2027 keg order by size, READY at 0e8e5ec, never uploaded): set aside before any platform round. Its asks were bases every route reaches (the year's loss, the usable fleet, the busiest week's deliveries, the estate's kegs, the store's Foundry kegs, the need by component), each a criterion a run that missed the order still earned; its decisive steps were nettings of two records (the depot gate counters against the exchange statements, the register against the tags); and its three sizes each took all three corrections, which offset inside a size, so no member was opened by one stump alone. Redrawn as architecture 14 in the same world.
+- 2026-11-17, architecture 14 draw, three keg sizes as the only members: with every correction acting on every size the hurried errors offset inside each (a size's order moved by less than the family's spread on two of three), and the reflex route filed two sizes right. Five pools with different seasons, lines, ranges and losses give each stump a member where it dominates.
+- 2026-11-17, architecture 14 draw, depots, purchase tranches, hire commitments and coupler types as members: each is settled by a filed quantity or a join once the pool's shortfall is known; none carries an estimate of its own.
+- 2026-11-17, architecture 14 draw, tags on part of the 50 and 30 litre lots: a tagged sample inside each pool is a calibration set under a wide instrument, so the loss and the trade's stock read off the sample pool by pool and the referee becomes the key. Tags sit on the 20 litre pool only.
+- 2026-11-17, architecture 14 draw, the loss from tagged kegs not seen again (open follow-up, capture and recapture, depletion curves), past summers' stock-outs as bounds on demand, a hot-year correction and a carry of the size mix: each is a card on the client's closed page of 2026-11-12 and none may decide.
+- 2026-11-17, architecture 14 draw, the trade's response read as an elasticity from a tag count across all pools: one regression of one file, modelled on sight.
+- 2026-11-17, architecture 14 draw, festivals and events on sale-or-return as a stump: a contaminating event in a few weeks that one plot shows, next to a closed card.
+- 2026-11-17, architecture 14 draw, the need and the usable fleet as asks: bases every route reaches, sited away from the stumps; the asks are the shortfalls only, which sit downstream of all three stumps.
+- 2026-11-17, architecture 14 draw, depot gate tallies of returning empties netted with the exchange's statements, to roll each pool's fleet forward: the remedy is a netting of two records, and with return flows on file the trade's stock is a running sum, which makes the cellar relation moot. The gate counters and the wash line's return counts by type left the world; no record of returning empties by pool exists.
+- 2026-11-17, architecture 14 draw, the estate's cellars alone as the trade stump: too small to open a member, and runs size new units on analogs unprompted (R41). The estate is one term of the trade's rise.
+- 2026-11-17, architecture 14 draw, the register's lost containers as an error in the fleet's level: the level cancels on every route that works in differences from the stocktake, so only an absolute bottom-up route sees it; the loss stump keeps the forward loss only.
+- 2026-11-17, architecture 14 core, a firkin loss of 1.2 per cent and a minimum run of 1,000: S3 was worth 1.9 times the family's spread and the direct route filed the firkins right. Reset to 1.5 per cent, a minimum run of 1,200 and a placement of 1,500, with the estate's cask lines cut to 160.
+- 2026-11-17, architecture 14 core, the 2027 racking plan starting in February: the firkins' idle stock went negative before the estate arrived. The plan and the summer range start with the season, on 3 May 2027.
+- 2026-11-17, architecture 14 core, the busiest week by requirement as the estimand: on the cask pools it is a May week while the largest shortfall is the season's last (1,713 against 1,350 in that cut), so the golden and the truth disagreed by construction. The standard files the largest weekly shortfall.
+- 2026-11-17, architecture 14 core, the store's cover read off its lowest weeks, then as a regression slope: the first counted the cycle stock twice (the 20 litre pool 508 high), the second was ill-posed on pools with a flat season (firkins 307 high). The battery's alternative is the median week's cover.
+- 2026-11-17, architecture 14 core, a golden that knew the weather bend (17 C) and the holding relation's form (interval plus one week): constants only the generator holds. The bend is fitted on the record and the relation is fitted with a free term for the interval; re-proved at level 5, S1 lost alone moving from 22 to 28.
+- 2026-11-17, architecture 14 core, the hot case as an interpolated 90th percentile of ten summers: two packages compute it two ways. The standard files the second highest of ten.
+- 2026-11-17, architecture 14 core, a forcing corner of 20 per cent on all four fitted inputs together: outside every measured spread, it moved the 50 litre cover (-875 and 2,586). The corner is run at two measured spreads each to one side (240 and 1,331, same cover) and each input alone at 20 per cent.
+- 2026-11-17, architecture 14 card, behavioural_response_measured as S1's lesson: it sits on two live house builds and is taught once by the client, and S1 is a stock relation, not a response to an intervention. Filed under fixed_nuisance_component, with the nearest closed cards answered in the Frontier check.
+- 2026-11-17, architecture 14 card, a CSV with the workbook and the which form: both repeat task1 and task3. Drawn as a workbook and a deck, asked as how many.
