@@ -11,8 +11,8 @@
   "shape": "07",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "class 3 (automatic barrier) at Rio Toval (12.4 triggering storms a season), Rio Ciadin (10.4), Rio Gelt (4.3), Rio Marden (4.3) and Rio Bianc (4.2); class 2 (seasonal patrol and hand gates) at Rio Sass (1.8); class 1 (signs) at Rio Larin (0.5); from generator/core.py at the draw: three stumps on three axes, three open crossings each opened by its own stump, seven distinct wrong classings across the lattice",
-  "answer_source": "task3/generator/core.py at the draw; task3/generator/figures.json once the pack is cut",
+  "answer": "class 3 (automatic barrier) at Rio Toval (12.39 triggering storms a season), Rio Ciadin (10.50), Rio Marden (4.50), Rio Gelt (4.44) and Rio Bianc (4.11); class 2 (seasonal patrol and hand gates) at Rio Sass (1.83); class 1 (signs) at Rio Larin (0.50); on the cut pack (generator/figures.json): three stumps on three axes, three open crossings each opened by its own stump, seven distinct wrong classings across the lattice, 1,216 variants on one classing",
+  "answer_source": "task3/generator/figures.json on the cut pack; task3/generator/core.py at the draw",
   "gap": [
     "population",
     "time",
@@ -39,20 +39,18 @@
   "layer2_family": "field_method",
   "layer2_pattern": "own:short-duration-intensity-exceedance-at-ungauged-sources-from-a-lossy-bucket-a-radar-contrast-and-a-detectors-timing",
   "layer1": [
-    "tip logs with logger restarts, re-sent uploads and the technician's test tips at each visit",
-    "station clocks in local standard time against a radar product in UTC",
-    "storage gauge visits that slip, so some accounts cover two months",
-    "present-weather codes whose table changed with a firmware release",
-    "radar scans missing in some storms and a pixel grid in projected metres",
-    "station and crossing names spelled three ways across the service's files",
-    "detector outages logged by hand in the maintenance book"
+    "tip logs with logger restarts, re-sent blocks and the technician's tip tests at each visit",
+    "loggers on UTC+1 all year against a visit book in civil time and a radar product in UTC",
+    "storage gauge visits that slip around the first of the month",
+    "a radar pixel grid in projected metres, renumbered at the agency's re-gridding",
+    "long light rain between storms that fills the account and never nears a triggering depth"
   ],
   "stakeholder_role": "the road service's natural hazards office, classing the crossings for the 2027 to 2031 protection programme",
   "role_family": "field_unit_lead",
   "scoring_unit": "other",
   "spine": {
-    "file": "bucket tip logs, one file per station and season",
-    "rows": 600000,
+    "file": "bucket tip logs, one CSV per station, 2009 to 2026",
+    "rows": 905097,
     "entity": "one tip of a station's tipping bucket",
     "grain": "station x tip",
     "source": "synthetic (seeded simulation of storms, buckets, funnels, a detector and a radar)"
@@ -86,7 +84,8 @@
       "Piero Brancaccio",
       "Biagio Borroni",
       "Luca Comboni",
-      "Alfio Cundari"
+      "Alfio Cundari",
+      "Bartolomeo Panatta"
     ]
   },
   "deliverables": [
@@ -96,8 +95,8 @@
   "opening_move": "question-first",
   "question_form": "where",
   "driver": "Each unit's class rests on how often a short-window intensity at a place nobody measures reaches the unit's own filed level, a quantity no record holds: the long point record loses in proportion to the intensity and, on one kind of event, holds part of the input back and releases it afterwards; a second instrument sees the place and the point in the same event, but only as area averages on its own scale; a third holds when the input arrived and not how much; each part of the quantity is taken from the instrument that sees it, each correction moves most units' figures and a different unit across a class line, and no correction alone reaches the classing.",
-  "driver_concrete": "The road service classes a gully crossing on the triggering storms a season at its source area (3 or more: automatic barrier; 1 to 3: seasonal patrol; under 1: signs). The governing gauge is an unheated tipping bucket at the road station below: it loses water while it tips, more the harder it rains (a true 100 mm an hour reads 19 per cent low on the smaller bucket), which the monthly storage gauge account measures only when the loss is fitted on the rate; a source's cloudbursts differ from its gauge's by a factor the yearly rainfall does not carry (Rio Marden 1.38 against a rainfall ratio of 1.06), which the radar's pixel pairs measure storm by storm although the radar's own depths undercount; and on hail days the funnel holds the ice and the bucket tips its melt for an hour or two, so the tips miss a quarter of those storms' 60-minute maximum, which the detector's ten-minute record of when precipitation fell puts back.",
-  "stump": "The careful but hurried route (one account-closing factor per gauge, each source scaled by its yearly rainfall, hail-day tips taken as rain) files 2 barriers, 2 patrols and 3 signs (Rio Gelt 1.2, Rio Marden 0.5 and Rio Bianc 1.9 triggering storms a season against 4.3, 4.3 and 4.2); each stump dropped alone moves its own crossing out of class 3 (Gelt 2.3, Marden 1.4, Bianc 2.6) and no stump fixed alone reaches the classing.",
+  "driver_concrete": "The road service classes a gully crossing on the triggering storms a season at its source area (3 or more: automatic barrier; 1 to 3: seasonal patrol; under 1: signs). The governing gauge is an unheated tipping bucket at the road station below: it loses water while it tips, more the harder it rains (a true 100 mm an hour reads 20 per cent low on the smaller bucket), which the monthly storage gauge account measures only when the loss is fitted on the rate; a source's cloudbursts differ from its gauge's by a factor the yearly rainfall does not carry (Rio Marden 1.38 against a rainfall ratio of 1.06), which the radar's pixel pairs measure storm by storm although the radar's own depths undercount; and on hail days the funnel holds the ice and the bucket tips its melt for an hour or two, so the tips miss a quarter of those storms' 60-minute maximum, which the detector's ten-minute record of when precipitation fell puts back.",
+  "stump": "The careful but hurried route (one account-closing factor per gauge, each source scaled by its yearly rainfall, hail-day tips taken as rain) files 2 barriers, 2 patrols and 3 signs (Rio Gelt 1.2, Rio Marden 0.5 and Rio Bianc 1.9 triggering storms a season against 4.4, 4.5 and 4.1); each stump dropped alone moves its own crossing out of class 3 (Gelt 2.4, Marden 1.4, Bianc 2.6) and no stump fixed alone reaches the classing.",
   "answer_shape": "distribution-cut",
   "weight": "modeling",
   "chain_signature": [
@@ -109,8 +108,8 @@
     "uncertainty",
     "synthesis"
   ],
-  "results": "R1 each station's tips on one clock set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate, stated as the under-read at a true 100 mm an hour; R3 each source area's burst factor against its governing gauge; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches three times a season; R7 the protection class of every crossing",
-  "one_fact_test": "the most useful sentence (a source's cloudbursts are not its gauge's and do not scale with its yearly rainfall) leaves the instrument to choose, the pairs to build and the factor to carry, rescues R2 alone on the reflex route (1 of 6) and 7 rubric points; the bucket sentence and the hail sentence rescue R1 and R3 alone",
+  "results": "R1 each station's tips on one clock set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate, stated as the under-read at a true 100 mm an hour; R3 each source area's burst factor against its governing gauge; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches five times a season; R7 the protection class of every crossing",
+  "one_fact_test": "the most useful sentence (the tipping buckets lose water while they tip, more the harder it rains) leaves the account to build on rates, the form to choose and the water to put back before any window, rescues R2 alone on the reflex route (1 of 7) and 27 rubric points with three classes still wrong; the burst sentence and the hail sentence rescue R3 and R4 alone",
   "strategy_label": "UNTESTED",
   "mechanism_source": "design_note",
   "differentiation": {
@@ -499,7 +498,7 @@
       "fate": "built to READY 2026-11-10 (judge DETERMINISTIC on its third round, paper pair 31.5) and never uploaded; set aside on 2026-11-16 before any platform round, when every unapproved slot was brought to the rules that came after it (open members, 2026-11-13; the rubric priced for the run that loses one stump, 2026-11-15): its two priced results were response-model corrections on mechanisms of the world (a creek's transfer that bends above the marsh, a high water that rides on river flow), the kind the review of 2026-11-13 returned at 75 to 83; its deciding lesson, extrapolation beyond the observed range, sits on four live builds, and its harbor results were asks sited away from the two stumps. One architecture per world, so architecture 8 is a new world."
     }
   ],
-  "notes": "architecture 8 drawn 2026-11-16 as a new world after architecture 7 was set aside before any upload. stump_strategy other: the three judgments are each an instrument's own blind spot (a loss that rises with the rate, an area average against a point, a store that delays the record), assigned part by part to the instrument that sees it; no family key names that. skeleton lessons labelled as a reviewer would: nonlinear_functional_of_path (the loss is convex in the rate, so one factor that closes the totals is its mean; the yearly rainfall ratio is a percentage carried from another level), support_effect (the radar's pixel against the point depth the triggering depth is filed in), stock_flow_accounting (the funnel's ice store, read here in reverse: the tips are the rain less what the funnel is holding).",
+  "notes": "architecture 8 drawn 2026-11-16 as a new world after architecture 7 was set aside before any upload. stump_strategy other: the three judgments are each an instrument's own blind spot (a loss that rises with the rate, an area average against a point, a store that delays the record), assigned part by part to the instrument that sees it; no family key names that. skeleton lessons labelled as a reviewer would: nonlinear_functional_of_path (the loss is convex in the rate, so one factor that closes the totals is its mean; the yearly rainfall ratio is a percentage carried from another level), support_effect (the radar's pixel against the point depth the triggering depth is filed in), stock_flow_accounting (the funnel's ice store, read here in reverse: the tips are the rain less what the funnel is holding). READY 2026-11-17 on the cut pack (target cdbf08e67703c82d): the radar's cell error is one factor over a cell's footprint with its own spread at each station and a uniform under-read, so its depths matched to the research valley's weighing gauges (the rigorous standard route) file two barriers and are refused at the stations' own pixels; corelib on the cut pack level 5, one stump lost 45, 34 and 37, the reflex route 13.",
   "skeleton": {
     "decision_form": "banded_call_on_figure",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
@@ -580,7 +579,7 @@
     }
   ],
   "architecture_spent": false,
-  "status": "DESIGN",
+  "status": "READY",
   "registered": "2026-11-17T02:59:53Z",
   "shell": {
     "question form": "whether",

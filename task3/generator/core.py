@@ -34,25 +34,29 @@ R_SEASONS = 14            # radar storm maxima, 2013 to 2026
 C_SEASONS = 14            # research valley weighing gauges, 2013 to 2026
 T_SEASONS = 600           # the world's own long run, for the truth
 LINE = 3.0                # triggering storms a season from which a crossing is class 3 (automatic barrier)
+EVEN = 5.0                # regulation 3.2: the warning levels rest on the 60-minute depth a source reaches five times a season
 LOW_LINE = 1.0            # from which it is class 2 (seasonal patrol and hand gates); under it, class 1 (signs)
 M = 300                   # minutes kept per storm
 MONTH_P = np.array([0.08, 0.20, 0.30, 0.26, 0.12, 0.04])   # May to October
 
 SIG_Z, SIG_E, CORR_KM = 0.46, 0.34, 5.0      # storm to storm, place to place inside a storm, and its reach
-GAMMA, SIG_B, SIG_NU = 0.28, 0.15, 0.07      # what a pixel keeps of the local factor; the radar's storm and pixel error
+GAMMA, SIG_NU = 0.28, 0.07                   # what a pixel keeps of the local factor; the radar's pixel error
+RAD_LOW = -0.15                              # the radar's depths read low across the valley (log, every cell); a cell's own
+                                             # error is one factor over its footprint, wider where the radar sees the valley worse
 KAPPA = {"A": 0.0014, "B": 0.0024}           # hours per mm: the bucket's loss per unit of rate
 THETA = (55.0, 115.0)                        # the funnel's melt time on a hail day, minutes
 PHI = (0.35, 0.70)                           # the share of a hail storm's burst that falls as ice
 HAIL_Z = (3.5, 5.0)                          # a cell hails from this strength (mm), and always this much above it
 
 DEPOTS = {
-    # name: bucket model, storms a season, median burst (mm), burst length (min), hail share of the larger storms
-    "Valfosca":   dict(model="B", mu=58, zmed=6.2, tau=(5, 14),  hail=0.10, wet=60),
-    "Pradalt":    dict(model="A", mu=56, zmed=5.6, tau=(6, 20),  hail=0.34),
-    "Costarossa": dict(model="A", mu=55, zmed=5.8, tau=(6, 20),  hail=0.86),
-    "Malga Sora": dict(model="A", mu=60, zmed=6.4, tau=(6, 20),  hail=0.30),
-    "Forcella":   dict(model="B", mu=60, zmed=6.6, tau=(8, 24),  hail=0.30),
-    "Rio Scuro":  dict(model="B", mu=58, zmed=6.0, tau=(7, 22),  hail=0.45),    # the research valley
+    # name: bucket model, storms a season, median burst (mm), burst length (min), hail share of the larger storms,
+    # and the spread of the radar's error from cell to cell over this ground (log)
+    "Valfosca":   dict(model="B", mu=58, zmed=6.2, tau=(5, 14),  hail=0.10, wet=60, rad=0.12),
+    "Pradalt":    dict(model="A", mu=56, zmed=5.6, tau=(6, 20),  hail=0.34, rad=0.18),
+    "Costarossa": dict(model="A", mu=55, zmed=5.8, tau=(6, 20),  hail=0.86, rad=0.26),
+    "Malga Sora": dict(model="A", mu=60, zmed=6.4, tau=(6, 20),  hail=0.30, rad=0.23),
+    "Forcella":   dict(model="B", mu=60, zmed=6.6, tau=(8, 24),  hail=0.30, rad=0.15),
+    "Rio Scuro":  dict(model="B", mu=58, zmed=6.0, tau=(7, 22),  hail=0.45, rad=0.37),    # the research valley, a narrow side valley
 }
 # crossing: governing gauge, km from the gauge, burst factor against the gauge, rainfall-normal ratio, and the
 # triggering depth the geotechnical survey filed (mm in 60 minutes at the source area)
@@ -66,23 +70,24 @@ CROSSINGS = {
     "Rio Larin":  dict(depot="Malga Sora", km=4.6, f=0.94, map=1.02, depth=29.0),
 }
 RESEARCH = {
-    "Scuro 1": dict(depot="Rio Scuro", km=0.4, f=0.90, map=1.38, rate=4.0),
-    "Scuro 2": dict(depot="Rio Scuro", km=0.8, f=0.82, map=1.25, rate=4.0),
-    "Scuro 3": dict(depot="Rio Scuro", km=1.2, f=0.88, map=1.44, rate=4.0),
-    "Scuro 4": dict(depot="Rio Scuro", km=1.7, f=0.78, map=1.22, rate=4.0),
+    "Scuro 1": dict(depot="Rio Scuro", km=0.4, f=0.90, map=1.09, rate=4.0),
+    "Scuro 2": dict(depot="Rio Scuro", km=0.8, f=0.82, map=1.14, rate=4.0),
+    "Scuro 3": dict(depot="Rio Scuro", km=1.2, f=0.88, map=1.19, rate=4.0),
+    "Scuro 4": dict(depot="Rio Scuro", km=1.7, f=0.78, map=1.24, rate=4.0),
 }
 ALL = {**CROSSINGS, **RESEARCH}
 OPENED = {"S1": "Rio Gelt", "S2": "Rio Marden", "S3": "Rio Bianc"}
 
 COUNT_FLOOR, DEPTH_FLOOR, OWN_FLOOR = 0.04, 0.015, 0.03   # what two honest rebuilds of a count, a depth and a stump's own figure differ by
-LOSS_WAYS = ("recip", "lin", "scaled")
+LOSS_WAYS = ("recip", "scaled")             # the tipping-time form, alone or with a static factor fitted beside it
 POOL_WAYS = ("model", "gauge")
-STEP_WAYS = (1, 5)                           # the rate read minute by minute, or on five-minute totals
+STEP_WAYS = (1, 2, 3, 5)                     # the rate read on one-, two-, three- or five-minute totals
 SITE_WAYS = ("geo", "median", "sums", "trim", "geo3", "gauge3", "pairs", "upper")
 CRUDE_SITE = ("slope", "top", "q90")         # one-sided selections and unpaired percentiles, each refuted by a figure
 HAIL_WAYS = ("profile", "weighted", "onset", "carried")
 CRUDE_HAIL = ("dry", "even", "optical")      # each refuted by a figure the files hold
-CRUDE_STEP = (10, 15)                        # the rate read on ten- and fifteen-minute totals: the account refuses both
+CRUDE_STEP = (10, 15)                        # the rate read on ten- and fifteen-minute totals: the account refuses each
+CRUDE_FORM = ("lin",)                        # the first-order form: the account refuses it on the 0.1 mm buckets
 
 
 class Rates(dict):
@@ -147,7 +152,7 @@ def storms(name, seasons, rng, record=True):
     out.update(model=d["model"], rec=rec.astype(np.float64), hail=hail, opt=opt, wet=wet, hail10=hail10 > 0.02,
                ivl=ivl, nint=nint, front_rec=fh / (1.0 + kap * fh), check=check,
                base=out["x_true"] * np.exp(-e[:, 0]),
-               rb=np.exp(SIG_B * rng.standard_normal(N)), rnu=SIG_NU * side.standard_normal((N, len(km))))
+               rb=np.exp(RAD_LOW + d["rad"] * rng.standard_normal(N)), rnu=SIG_NU * side.standard_normal((N, len(km))))
     return out
 
 
@@ -399,8 +404,8 @@ def estimate(W, s1="rate", s2="geo", s3="profile", form="recip", pool="model", o
 
 
 def at_line(x, seasons):
-    """The 60-minute depth a source reaches LINE times a season: the triggering depth at which it would sit on the line."""
-    return float(np.sort(x)[::-1][int(round(LINE * seasons)) - 1])
+    """The 60-minute depth a source reaches EVEN times a season (regulation 3.2)."""
+    return float(np.sort(x)[::-1][int(round(EVEN * seasons)) - 1])
 
 
 def upper_mean(x, seasons, per=5):
@@ -428,6 +433,29 @@ def radar_route(W, only=None, seasons=R_SEASONS):
         even[s] = at_line(bias * radar(w, j)[era], seasons)
         upper[s] = upper_mean(bias * radar(w, j)[era], seasons)
     out.even, out.upper = even, upper
+    return out
+
+
+def mapped_route(W, only=None, seasons=R_SEASONS):
+    """The most rigorous standard radar product the pack affords: the radar's depths on the four weighing gauges' pixels
+    mapped quantile to quantile onto what the gauges recorded, the map applied to the radar's depths on each source
+    pixel, and the mapped depths counted against the triggering depth. `.fmap` is the map."""
+    wr = W["Rio Scuro"]
+    era = wr["season"] >= G_SEASONS - C_SEASONS
+    r = np.sort(np.concatenate([radar(wr, 1 + wr["pts"].index(s))[era] for s in RESEARCH]))
+    g = np.sort(np.concatenate([source_max(wr, s)[era] for s in RESEARCH]))
+    fmap = lambda x: np.where(x > r[-1], x * g[-1] / r[-1], np.interp(x, r, g))
+    out, even, upper = Rates(), {}, {}
+    for s, c in ALL.items():
+        if only and s not in only:
+            continue
+        w = W[c["depot"]]
+        e2 = w["season"] >= G_SEASONS - seasons
+        x = fmap(radar(w, 1 + w["pts"].index(s)))
+        out[s] = float(((x >= c["T"]) & e2).sum()) / seasons
+        even[s] = at_line(x[e2], seasons)
+        upper[s] = upper_mean(x[e2], seasons)
+    out.even, out.upper, out.fmap = even, upper, fmap
     return out
 
 
@@ -462,13 +490,16 @@ def main(seed=SEED, quiet=False):
     direct = estimate(W, "raw", "one", "tips")[0]
     index = lat_full["S1+S2+S3"]
     rad = radar_route(W)
+    rig = mapped_route(W)
     car = carried_route(W)
     crude_fam = {"hail " + b: estimate(W, s3=b)[0] for b in CRUDE_HAIL}
     crude_fam.update({"site " + a: estimate(W, s2=a)[0] for a in CRUDE_SITE})
     crude_fam.update({"loss on %d-minute totals" % st: estimate(W, step=st)[0] for st in CRUDE_STEP})
+    crude_fam.update({"loss in its first-order form": estimate(W, form=fo)[0] for fo in CRUDE_FORM})
 
     members = {s: {"lines": [LOW_LINE, LINE], "truth": truth[s], "golden": gold[s], "family": [v[s] for v in fam],
-                   "routes": {"direct": direct[s], "rigorous": rad[s], "index": index[s], "carried": car[s]}} for s in names}
+                   "routes": {"direct": direct[s], "rigorous": rig[s], "index": index[s], "carried": car[s],
+                              "field bias": rad[s]}} for s in names}
     lattice = {k: {s: v[s] for s in names} for k, v in lat_full.items()}
 
     # the stumps' own figures
@@ -511,7 +542,7 @@ def main(seed=SEED, quiet=False):
     figures += [{"id": s, "block": "ask", "member": s} for s in names]
     figures += [{"id": "depth on the line, " + s, "block": "ask", "golden": gold.even[s],
                  "family": [v.even[s] for v in fam], "lattice": {k: v.even[s] for k, v in lat_full.items()},
-                 "routes": {"rigorous": rad.even[s]}} for s in names]
+                 "routes": {"rigorous": rig.even[s]}} for s in names]
     for f in figures:                       # every band holds the battery and the rebuild floor
         g = members[f["member"]]["golden"] if "member" in f else f["golden"]
         fm = members[f["member"]]["family"] if "member" in f else f["family"]
@@ -525,12 +556,13 @@ def main(seed=SEED, quiet=False):
     rcount = lambda v: float(sum(v[s] for s in RESEARCH)) * C_SEASONS
     rv = lambda **kw: estimate(W, only=RESEARCH, seasons=C_SEASONS, **kw)[0]
     rivals = {"bucket put back by one factor": rv(s1="factor"), "source scaled by the rainfall normal": rv(s2="map"),
-              "tips taken as rain on hail days": rv(s3="tips"), "the gauge read raw": rv(s1="raw", s2="one", s3="tips"),
-              "the radar product": radar_route(W, only=RESEARCH, seasons=C_SEASONS)}
+              "tips taken as rain on hail days": rv(s3="tips"), "the gauge read raw": rv(s1="raw", s2="one", s3="tips")}
     others = {"hail water moved only from the dry intervals": rv(s3="dry"), "hail water spread evenly": rv(s3="even"),
               "the detector's own amounts on hail storms": rv(s3="optical"), "each storm by its own pixel pair": rv(s2="pairs"),
               "one hail-day multiplier from the valley": rv(s3="carried"), "the rate read on five-minute totals": rv(step=5),
-              "the pixels' upper deciles": rv(s2="q90"), "the source pixel regressed on the gauge's": rv(s2="slope")}
+              "the pixels' upper deciles": rv(s2="q90"), "the source pixel regressed on the gauge's": rv(s2="slope"),
+              "the radar mapped on these same gauges (in sample)": mapped_route(W, only=RESEARCH, seasons=C_SEASONS),
+              "the radar product, one field bias": radar_route(W, only=RESEARCH, seasons=C_SEASONS)}
     rgold = rv()
     seen_depth = float(np.mean([at_line(source_max(wr, s)[era_c], C_SEASONS) for s in RESEARCH]))
     seen_count = sum(seen(W, s, C_SEASONS) for s in RESEARCH)
@@ -573,13 +605,23 @@ def main(seed=SEED, quiet=False):
         for k, v in lat_full.items():
             p(k + " lost", v)
         p("direct", direct)
-        p("radar", rad)
+        p("radar, one field bias", rad)
+        p("radar mapped on the gauges", rig)
+        xs_r = station_maxima(W, "rate", "profile", "recip", "model", 1)[0]
+        for d, w in W.items():               # what refutes the map: it does not carry from the valley it was made in
+            e2 = w["season"] >= G_SEASONS - R_SEASONS
+            ok = e2 & (xs_r[d] >= 3.0)
+            print("   mapped radar on %s's own pixel: %s storms of 12, 15 and 18 mm against the golden's %s; the radar's scatter about the station's depth %.2f (log sd)" % (
+                d, ", ".join("%d" % int((rig.fmap(radar(w, 0))[e2] >= t).sum()) for t in (12.0, 15.0, 18.0)),
+                ", ".join("%d" % int((xs_r[d][e2] >= t).sum()) for t in (12.0, 15.0, 18.0)),
+                float(np.std(np.log(radar(w, 0)[ok] / xs_r[d][ok])))))
         p("carried", car)
         print("research valley read as a calibration: source over bucket %.3f, hail-day multiplier %.3f" % research_reads(W, kap["Rio Scuro"]))
         for b, v in crude_fam.items():
             p(b, v)
         pe = lambda label, v: print("%-26s" % label + ", ".join("%s %.1f" % (s.replace("Rio ", ""), v.even[s]) for s in names))
         pe("depth golden", gold)
+        pe("depth radar mapped", rig)
         print("%-26s" % "depth family" + ", ".join("%s %.1f-%.1f" % (s.replace("Rio ", ""), min(v.even[s] for v in fam), max(v.even[s] for v in fam)) for s in names))
         for k, v in lat_full.items():
             if "+" not in k:
@@ -631,7 +673,7 @@ def main(seed=SEED, quiet=False):
         gs = storm_max(wr, minutes(wr, "rate", kap["Rio Scuro"]), "profile")
         print("research valley, source over station (weighing gauges over the station's golden maxima; radar contrast; rainfall normal): " + ", ".join(
             "%s %.2f; %.2f; %.2f" % (s, float(source_max(wr, s)[era].sum() / gs[era].sum()), site_factor(wr, s), RESEARCH[s]["map"]) for s in RESEARCH))
-        print("referee (mean of the five largest storms a season, mm; depth reached three times a season, mm; triggering storms seen): "
+        print("referee (mean of the five largest storms a season, mm; depth reached five times a season, mm; triggering storms seen): "
               "weighing gauges %.2f, %.2f and %.0f; golden %.2f, %.2f and %.0f" % (seen_top, seen_depth, seen_count, rtop(rgold), rdepth(rgold), rcount(rgold)))
         for k, v in {**rivals, **others}.items():
             print("   %-46s %.2f, %.2f and %.0f" % (k, rtop(v), rdepth(v), rcount(v)))

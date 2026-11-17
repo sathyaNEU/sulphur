@@ -1,35 +1,35 @@
 {
  "task": "task3",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
- "updated": "2026-11-16",
- "call": "class 3 (automatic barrier) at Rio Toval, Rio Ciadin, Rio Gelt, Rio Marden and Rio Bianc; class 2 (seasonal patrol and hand gates) at Rio Sass; class 1 (signs) at Rio Larin (triggering storms a season to expect, generator/core.py: Rio Toval 12.39, Rio Ciadin 10.39, Rio Gelt 4.33, Rio Marden 4.33, Rio Bianc 4.22; Rio Sass 1.78; Rio Larin 0.50; lines 3.0 and 1.0)",
- "stump": "the reflex route (one factor per station closing the storage gauge account, each station carried to its source area by the rainfall normal's ratio, hail days' tips taken as rain) files Rio Gelt 1.17, Rio Marden 0.50, Rio Bianc 1.89 and Rio Sass 0.50: 2 barriers, 2 patrols and 3 signs; S1 lost alone files Rio Gelt 2.33, S2 lost alone Rio Marden 1.39 and Rio Sass 0.94, S3 lost alone Rio Bianc 2.61",
+ "stage": 5,
+ "stage_name": "ready",
+ "updated": "2026-11-17",
+ "call": "class 3 (automatic barrier) at Rio Toval, Rio Ciadin, Rio Marden, Rio Gelt and Rio Bianc; class 2 (seasonal patrol with hand gates) at Rio Sass; class 1 (signs) at Rio Larin (triggering storms a season to expect, generator/figures.json on the cut pack: Rio Toval 12.39, Rio Ciadin 10.50, Rio Marden 4.50, Rio Gelt 4.44, Rio Bianc 4.11; Rio Sass 1.83; Rio Larin 0.50; lines 3.0 and 1.0)",
+ "stump": "the reflex route (one factor per station closing the storage gauge account, each station carried to its source area by the rainfall normal's ratio, hail days' tips taken as rain) files Rio Gelt 1.17, Rio Marden 0.50, Rio Bianc 1.94 and Rio Sass 0.50: 2 barriers, 2 patrols and 3 signs; S1 lost alone files Rio Gelt 2.39, S2 lost alone Rio Marden 1.39 and Rio Sass 0.94, S3 lost alone Rio Bianc 2.56; the radar's own depths (matched to the research valley's weighing gauges, or adjusted to the stations by one factor) file 2.07, 1.29, 2.21 and 0.43 at the four open crossings",
  "architecture": 8,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-16",
-  "checks": "precut.py task3: 113 checks, 0 FAIL, 3 WARN (nearest chains task17 and task2 answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5; prompt gate PASS (one WARN: 'seasonal' is the class's own name)"
+  "date": "2026-11-17",
+  "checks": "precut.py task3 on the final cut: 0 FAIL, 1 WARN (nearest chains task17 and task2, answered in the Template check); generator/core.py CORE PASS level 5; prompt gate PASS (one WARN: 'seasonal' is the class's own name)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut, three lines, each answered in the note's Leak rulings (the regulation's own vocabulary, the crossings register listing the seven crossings beside their filed fields, 'seasonal' in the prompt as the class's name); no LEAK",
+  "reader": "two reads (Sonnet, medium): pass 1's question-5 finding on regulation 3.2 fixed in the generator; pass 2 on the rebuilt cut: nothing on questions 1 to 4 and 6, 3.2 executed as the golden does, three reading questions (the clock of 2.1's day, complete seasons under 3.1, a fitted level for 3.2) each measured and asserted with no change to the pack (checks.py SF4, SF5, SF20); realism clean"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "guard.py heart task3 on the final cut: WARN only (template.chain_near task17 and task10 v7, repeat.deliverables task1 v6, skeleton.house_lesson stock_flow_accounting), each answered in the note's Template check; surface PASS",
   "nearest": "guard.py check task3 on 2026-11-16: WARN only (template.chain_near task17 and task10 v7, repeat.deliverables task1 v6, skeleton.house_lesson stock_flow_accounting, NOTE same_driver_older mark126), each answered in the note's Template check; skeleton severity none"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "pass 1 NOT_DETERMINISTIC (a narrow send-back on regulation 3.2, with a radar route that reached the classing without a stump): 3.2 pinned and the radar's process repaired in the generator and the core re-proved; pass 2 on the rebuilt cut DETERMINISTIC, FIX_NOW on the answer blocks only, its eight fixes taken in one generator pass with the pack, the prompt and every golden figure unchanged, so no third pass is owed",
+  "report": "determinism_check_report.md (pass 2 in full, the fixes taken, pass 1's summary): the seven classes held in about 300 runs of the blocks' own method; 3.2 executes to all seven depths; both radar routes refused at the stations' own pixels by figures the judge reproduced; fixed: band tops given a storm and a tenth of a millimetre of room and the hail-coded placing crossed with the first-order loss, the tip's stamp and the sliding hour stated (SF26), the account's cut stated in millimetres (SF27), each hail placing, the dry-block share and the rank carry given their rules"
  },
- "paper_pair": 9,
+ "paper_pair": 26.7,
  "runs": {
   "run1": null,
   "run2": null,
@@ -134,13 +134,13 @@
    "commit": ""
   }
  ],
- "resume": "/build task3 from 3 (execute the note's Build brief on core.build(SEED); dataset-generation, submission-writeup, golden-realism, reduce-house-fixes, then the leak reader and the determinism judge at stage 4)",
+ "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task3 once both runs are graded",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "READY",
+  "date": "2026-11-17",
+  "note": "architecture 8 built; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the CSV and the workbook)"
  },
  "history": [
   {
@@ -190,6 +190,10 @@
   {
    "date": "2026-11-16",
    "event": "architecture 7 set aside before any upload and architecture 8 drawn in a new world (the SP 141's gully crossings): core proved in generator/core.py (CORE PASS level 5), card registered, note to precut exit 0; architecture 7's built files removed from the folder (in git at a175067)"
+  },
+  {
+   "date": "2026-11-17",
+   "event": "READY: architecture 8, class 3 at Rio Toval, Rio Ciadin, Rio Marden, Rio Gelt and Rio Bianc, class 2 at Rio Sass, class 1 at Rio Larin; judge DETERMINISTIC after two passes (the radar's process repaired and the core re-proved between them), two leak reads clean"
   }
  ],
  "architectures": [
@@ -231,7 +235,7 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "gates": "",
+ "gates": "gates.py task3 on the final cut, 2026-11-17: 8 gates, 0 FAIL, 4 WARN (precut nearest chains, voice 'seasonal', leak REVIEW, heart three WARNs, each answered in the note); checks.py 129 of 129, verify.py 30 of 30, two builds byte-identical (target cdbf08e67703c82d, target.zip md5 33b5ad2de7bd857a138d2fa42cd1dd75, golden.zip md5 5a38c9da202992c4c9bc0ffb960ff9f6), audit_containers.py 0 FAIL 0 WARN",
  "revision": 0,
  "paper_note": "corelib's rubric table at the draw; the seed sweep passes every corelib check on 14 of 48 seeds, so the build reuses core.build(SEED) and moves no dial",
  "draw": {
@@ -240,15 +244,21 @@
   "depth_level": 5,
   "world": "Val d'Ardesa (invented), eastern Alps, Italy: seven gully crossings of the SP 141 classed for the 2027 to 2031 protection programme"
  },
- "final_cut": {},
+ "final_cut": {
+  "date": "2026-11-17",
+  "target_digest": "cdbf08e67703c82d",
+  "golden_digest": "1bd58fd307ae163b",
+  "target_zip_md5": "33b5ad2de7bd857a138d2fa42cd1dd75",
+  "golden_zip_md5": "5a38c9da202992c4c9bc0ffb960ff9f6"
+ },
  "doctrine": "throughout",
- "chain": "R1 each station's tips set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate (the under-read at a true 100 mm an hour); R3 each source area's burst factor against its governing station; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches three times a season; R7 each crossing's class",
+ "chain": "R1 each station's tips set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate (the under-read at a true 100 mm an hour); R3 each source area's burst factor against its governing station; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches five times a season; R7 each crossing's class",
  "effort": {
-  "quick": null,
-  "careful": 9,
+  "quick": 9.0,
+  "careful": 26.7,
   "thorough": 100,
-  "factorial": "corelib CORE PASS level 5: S1 what the bucket loses by rate (opens Rio Gelt), S2 a source area's bursts against its station's (opens Rio Marden, moves Rio Sass with it), S3 a hail storm's water tipped after the storm (opens Rio Bianc); each necessary alone, none sufficient; seven distinct wrong calls across the lattice, three among the single drops; 384 variants file one classing",
-  "rubric": "one stump lost: S1 26, S2 30, S3 30; reflex route 9; rigorous standard route 9; fixed alone S1 27, S2 16, S3 23 (generator/core.py)",
+  "factorial": "corelib level 5 on the cut pack: S1 what the bucket loses by rate (opens Rio Gelt), S2 a source area's bursts against its station's (opens Rio Marden, moves Rio Sass with it), S3 a hail storm's water tipped after the storm (opens Rio Bianc); each necessary alone, none sufficient; seven distinct wrong classings across the lattice, three among the single drops; 1,216 variants file one classing, and so do the 512 crosses of the first-order loss and the 432 of the hail-coded placing the bands hold",
+  "rubric": "on the final cut (generator/results.py on corelib, figure by figure): one stump lost S1 45.0, S2 33.7, S3 37.5; reflex route 12.8; rigorous standard route (the radar matched to the weighing gauges) 9.0; fixed alone S1 27.0, S2 15.7, S3 23.2; effort.py result by result: careful 26.7, a run that loses one stump keeps 40",
   "largest_hint": "the tipping buckets' sentence rescues R2 (1 of 7 results), 27 rubric points with three classes still wrong"
  }
 }
