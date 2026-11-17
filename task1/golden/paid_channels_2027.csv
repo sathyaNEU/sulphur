@@ -1,0 +1,8 @@
+channel,band,return_plan_spend,return_stretch_spend,net_revenue_12m_per_install_plan_spend_eur,return_next_euro_plan_spend
+Pinterest iOS,scale,1.66,1.29,10.93,0.92
+Google iOS,scale,1.43,1.24,9.87,0.76
+Meta iOS,hold,1.07,0.95,8.81,0.57
+Google Android,hold,1.03,0.93,9.72,0.55
+AppLovin Android,hold,1.03,0.87,5.27,0.71
+Snapchat iOS,cut,0.64,0.61,7.53,0.39
+TikTok iOS,cut,0.61,0.58,6.22,0.36

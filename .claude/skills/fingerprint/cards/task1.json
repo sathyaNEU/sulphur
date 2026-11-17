@@ -12,7 +12,7 @@
   "shape": "14",
   "decision_type": "go_hold_or_stop",
   "answer_unit": "set_of_items",
-  "answer": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, from generator/core.py: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.04, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61); three stumps on three axes, three open channels each opened by its own stump, seven distinct wrong calls across the lattice",
+  "answer": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, from generator/core.py: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.03, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61); three stumps on three axes, three open channels each opened by its own stump, seven distinct wrong calls across the lattice",
   "answer_source": "task1/generator/core.py at the draw; task1/generator/figures.json once the pack is cut",
   "gap": [
     "time",
@@ -51,8 +51,8 @@
   "role_family": "finance_controller",
   "scoring_unit": "other",
   "spine": {
-    "file": "accounts_2026-11-09.csv",
-    "rows": 713534,
+    "file": "accounts_2024-11-04_2026-11-01.csv",
+    "rows": 713697,
     "entity": "one app account",
     "grain": "account",
     "source": "synthetic"

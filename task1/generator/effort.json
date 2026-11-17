@@ -1,0 +1,3378 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the share of AppLovin Android's twelve-month net revenue the billing records never took in (per cent)",
+   "graded_as": "Component 1",
+   "figure": "unrecorded_share_applovin_android_pct",
+   "depends": [],
+   "independent": "the stores' reports, the billing records and the accounts' last opens",
+   "golden": 34.8,
+   "passes": {
+    "quick": 0.0,
+    "careful": 16.2,
+    "thorough": 34.8
+   },
+   "precedent": [
+    "L44",
+    "N21"
+   ],
+   "band": [
+    34.4,
+    35.5
+   ]
+  },
+  {
+   "id": "R2",
+   "name": "Meta iOS's twelve-month net revenue per install over every install it bought in the 52 mature weeks",
+   "graded_as": "Component 2",
+   "figure": "value_per_install_meta_ios",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": 9.08,
+   "passes": {
+    "quick": 3.31,
+    "careful": 10.83,
+    "thorough": 9.08
+   },
+   "precedent": [
+    "L13",
+    "N27",
+    "L53"
+   ],
+   "band": [
+    8.82,
+    9.31
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "what one more euro on top of the plan's weekly spend returns, by channel",
+   "graded_as": "Ask 4",
+   "figure": "next_euro",
+   "depends": [
+    "R1",
+    "R2"
+   ],
+   "independent": "",
+   "golden": {
+    "Meta iOS": 0.57,
+    "TikTok iOS": 0.36,
+    "Snapchat iOS": 0.39,
+    "Google iOS": 0.76,
+    "Pinterest iOS": 0.92,
+    "Google Android": 0.55,
+    "AppLovin Android": 0.71
+   },
+   "passes": {
+    "quick": {
+     "Meta iOS": 0.42,
+     "TikTok iOS": 0.22,
+     "Snapchat iOS": 0.25,
+     "Google iOS": 0.58,
+     "Pinterest iOS": 0.56,
+     "Google Android": 0.61,
+     "AppLovin Android": 0.6
+    },
+    "careful": {
+     "Meta iOS": 1.11,
+     "TikTok iOS": 0.72,
+     "Snapchat iOS": 0.7,
+     "Google iOS": 1.78,
+     "Pinterest iOS": 1.79,
+     "Google Android": 0.71,
+     "AppLovin Android": 0.72
+    },
+    "thorough": {
+     "Meta iOS": 0.57,
+     "TikTok iOS": 0.36,
+     "Snapchat iOS": 0.39,
+     "Google iOS": 0.76,
+     "Pinterest iOS": 0.92,
+     "Google Android": 0.55,
+     "AppLovin Android": 0.71
+    }
+   },
+   "precedent": [
+    "L51",
+    "L37",
+    "L28"
+   ],
+   "bands": {
+    "Meta iOS": [
+     0.52,
+     0.66
+    ],
+    "TikTok iOS": [
+     0.31,
+     0.42
+    ],
+    "Snapchat iOS": [
+     0.35,
+     0.44
+    ],
+    "Google iOS": [
+     0.62,
+     0.86
+    ],
+    "Pinterest iOS": [
+     0.85,
+     1.02
+    ],
+    "Google Android": [
+     0.48,
+     0.57
+    ],
+    "AppLovin Android": [
+     0.62,
+     0.75
+    ]
+   },
+   "partly_share": 0.14
+  },
+  {
+   "id": "R4",
+   "name": "each channel's 2027 return per euro and net revenue per install at the plan's weekly spend",
+   "graded_as": "Ask 1, Ask 3",
+   "figure": "return_and_value_plan",
+   "depends": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "return Meta iOS": 1.07,
+    "return TikTok iOS": 0.61,
+    "return Snapchat iOS": 0.64,
+    "return Google iOS": 1.43,
+    "return Pinterest iOS": 1.66,
+    "return Google Android": 1.03,
+    "return AppLovin Android": 1.03,
+    "value at plan Meta iOS": 8.81,
+    "value at plan TikTok iOS": 6.22,
+    "value at plan Snapchat iOS": 7.53,
+    "value at plan Google iOS": 9.87,
+    "value at plan Pinterest iOS": 10.93,
+    "value at plan Google Android": 9.72,
+    "value at plan AppLovin Android": 5.27
+   },
+   "passes": {
+    "quick": {
+     "return Meta iOS": 0.42,
+     "return TikTok iOS": 0.22,
+     "return Snapchat iOS": 0.25,
+     "return Google iOS": 0.58,
+     "return Pinterest iOS": 0.56,
+     "return Google Android": 0.61,
+     "return AppLovin Android": 0.6,
+     "value at plan Meta iOS": 3.31,
+     "value at plan TikTok iOS": 2.16,
+     "value at plan Snapchat iOS": 2.73,
+     "value at plan Google iOS": 4.0,
+     "value at plan Pinterest iOS": 4.1,
+     "value at plan Google Android": 6.86,
+     "value at plan AppLovin Android": 3.34
+    },
+    "careful": {
+     "return Meta iOS": 1.35,
+     "return TikTok iOS": 0.77,
+     "return Snapchat iOS": 0.79,
+     "return Google iOS": 2.04,
+     "return Pinterest iOS": 1.99,
+     "return Google Android": 0.8,
+     "return AppLovin Android": 0.74,
+     "value at plan Meta iOS": 10.65,
+     "value at plan TikTok iOS": 7.3,
+     "value at plan Snapchat iOS": 8.98,
+     "value at plan Google iOS": 13.61,
+     "value at plan Pinterest iOS": 14.85,
+     "value at plan Google Android": 8.95,
+     "value at plan AppLovin Android": 4.08
+    },
+    "thorough": {
+     "return Meta iOS": 1.07,
+     "return TikTok iOS": 0.61,
+     "return Snapchat iOS": 0.64,
+     "return Google iOS": 1.43,
+     "return Pinterest iOS": 1.66,
+     "return Google Android": 1.03,
+     "return AppLovin Android": 1.03,
+     "value at plan Meta iOS": 8.81,
+     "value at plan TikTok iOS": 6.22,
+     "value at plan Snapchat iOS": 7.53,
+     "value at plan Google iOS": 9.87,
+     "value at plan Pinterest iOS": 10.93,
+     "value at plan Google Android": 9.72,
+     "value at plan AppLovin Android": 5.27
+    }
+   },
+   "precedent": [
+    "N21",
+    "N27"
+   ],
+   "bands": {
+    "return Meta iOS": [
+     1.01,
+     1.11
+    ],
+    "return TikTok iOS": [
+     0.57,
+     0.65
+    ],
+    "return Snapchat iOS": [
+     0.58,
+     0.66
+    ],
+    "return Google iOS": [
+     1.34,
+     1.48
+    ],
+    "return Pinterest iOS": [
+     1.54,
+     1.69
+    ],
+    "return Google Android": [
+     0.98,
+     1.07
+    ],
+    "return AppLovin Android": [
+     0.96,
+     1.09
+    ],
+    "value at plan Meta iOS": [
+     8.52,
+     9.06
+    ],
+    "value at plan TikTok iOS": [
+     6.11,
+     6.58
+    ],
+    "value at plan Snapchat iOS": [
+     7.27,
+     7.79
+    ],
+    "value at plan Google iOS": [
+     9.51,
+     9.99
+    ],
+    "value at plan Pinterest iOS": [
+     10.51,
+     11.11
+    ],
+    "value at plan Google Android": [
+     9.53,
+     9.86
+    ],
+    "value at plan AppLovin Android": [
+     5.16,
+     5.37
+    ]
+   }
+  },
+  {
+   "id": "R5",
+   "name": "each channel's return per euro at the plan's stretch spend",
+   "graded_as": "Ask 2",
+   "figure": "return_stretch",
+   "depends": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "Meta iOS": 0.95,
+    "TikTok iOS": 0.58,
+    "Snapchat iOS": 0.61,
+    "Google iOS": 1.24,
+    "Pinterest iOS": 1.29,
+    "Google Android": 0.93,
+    "AppLovin Android": 0.87
+   },
+   "passes": {
+    "quick": {
+     "Meta iOS": 0.42,
+     "TikTok iOS": 0.22,
+     "Snapchat iOS": 0.25,
+     "Google iOS": 0.58,
+     "Pinterest iOS": 0.56,
+     "Google Android": 0.61,
+     "AppLovin Android": 0.6
+    },
+    "careful": {
+     "Meta iOS": 1.28,
+     "TikTok iOS": 0.77,
+     "Snapchat iOS": 0.78,
+     "Google iOS": 1.96,
+     "Pinterest iOS": 1.88,
+     "Google Android": 0.78,
+     "AppLovin Android": 0.73
+    },
+    "thorough": {
+     "Meta iOS": 0.95,
+     "TikTok iOS": 0.58,
+     "Snapchat iOS": 0.61,
+     "Google iOS": 1.24,
+     "Pinterest iOS": 1.29,
+     "Google Android": 0.93,
+     "AppLovin Android": 0.87
+    }
+   },
+   "precedent": [
+    "L51",
+    "L37",
+    "L28"
+   ],
+   "bands": {
+    "Meta iOS": [
+     0.89,
+     0.99
+    ],
+    "TikTok iOS": [
+     0.54,
+     0.61
+    ],
+    "Snapchat iOS": [
+     0.55,
+     0.63
+    ],
+    "Google iOS": [
+     1.15,
+     1.29
+    ],
+    "Pinterest iOS": [
+     1.22,
+     1.33
+    ],
+    "Google Android": [
+     0.88,
+     0.97
+    ],
+    "AppLovin Android": [
+     0.8,
+     0.91
+    ]
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the plan's twelve-month net revenue on the five iOS networks and what the stretch spend adds",
+   "graded_as": "Component 3, Component 4",
+   "figure": "plan_and_stretch_revenue",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "plan revenue iOS networks": 1219000,
+    "stretch adds": 340000
+   },
+   "passes": {
+    "quick": {
+     "plan revenue iOS networks": 466000,
+     "stretch adds": 290000
+    },
+    "careful": {
+     "plan revenue iOS networks": 1574000,
+     "stretch adds": 594000
+    },
+    "thorough": {
+     "plan revenue iOS networks": 1219000,
+     "stretch adds": 340000
+    }
+   },
+   "precedent": [
+    "L13",
+    "N27",
+    "L53"
+   ],
+   "bands": {
+    "plan revenue iOS networks": [
+     1147000,
+     1240000
+    ],
+    "stretch adds": [
+     319000,
+     366000
+    ]
+   }
+  },
+  {
+   "id": "R7",
+   "name": "each channel's band",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R4"
+   ],
+   "independent": "",
+   "golden": [
+    "AppLovin Android: hold",
+    "Google Android: hold",
+    "Google iOS: scale",
+    "Meta iOS: hold",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ],
+   "passes": {
+    "quick": [
+     "AppLovin Android: cut",
+     "Google Android: cut",
+     "Google iOS: cut",
+     "Meta iOS: cut",
+     "Pinterest iOS: cut",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ],
+    "careful": [
+     "AppLovin Android: cut",
+     "Google Android: cut",
+     "Google iOS: scale",
+     "Meta iOS: scale",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ],
+    "thorough": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   "precedent": [
+    "N21",
+    "N27"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "A store charge reaches the app's billing records only when the subscriber next opens the app, so the stores' excess over the records belongs to subscriptions last seen still set to renew, not to every account in proportion.",
+   "rescues": [
+    "R1"
+   ]
+  },
+  {
+   "sentence": "The attribution export holds an iOS network's installs only where the user allowed tracking, and those users are worth more than the rest even at the same first two days; the rest sit among the accounts with no channel.",
+   "rescues": []
+  },
+  {
+   "sentence": "A week's spend is what the platform chose to deliver of the week's budget given that week's auction, so weeks of high and low spend are not weeks of high and low budgets; what a budget buys shows in the weeks the team moved it.",
+   "rescues": []
+  }
+ ],
+ "factorial": {
+  "golden_answer": [
+   "AppLovin Android: hold",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "reflex_route": {
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: cut",
+    "Google iOS: scale",
+    "Meta iOS: scale",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "S1",
+    "name": "the stores' excess over the billing records belongs to the subscriptions last seen still set to renew whose owners stopped opening the app",
+    "kind": "stump",
+    "precedent": [
+     "N21",
+     "L44"
+    ],
+    "dropped": {
+     "answer": [
+      "AppLovin Android: cut",
+      "Google Android: hold",
+      "Google iOS: scale",
+      "Meta iOS: hold",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_moved": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "AppLovin Android: hold",
+      "Google Android: cut",
+      "Google iOS: scale",
+      "Meta iOS: scale",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_rescued": [
+      "R1"
+     ]
+    }
+   },
+   {
+    "id": "S2",
+    "name": "the installs the export does not name are worth less than the named ones at the same first two days and sit among the accounts with no channel",
+    "kind": "stump",
+    "precedent": [
+     "L53",
+     "N27",
+     "L13"
+    ],
+    "dropped": {
+     "answer": [
+      "AppLovin Android: hold",
+      "Google Android: hold",
+      "Google iOS: scale",
+      "Meta iOS: scale",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_moved": [
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "AppLovin Android: cut",
+      "Google Android: cut",
+      "Google iOS: scale",
+      "Meta iOS: hold",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "S3",
+    "name": "a week's spend is the auction's outcome, so what a budget buys is read on the budget with the delivery beside it",
+    "kind": "stump",
+    "precedent": [
+     "L51",
+     "L37",
+     "L28"
+    ],
+    "dropped": {
+     "answer": [
+      "AppLovin Android: hold",
+      "Google Android: cut",
+      "Google iOS: scale",
+      "Meta iOS: hold",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "AppLovin Android: cut",
+      "Google Android: hold",
+      "Google iOS: scale",
+      "Meta iOS: scale",
+      "Pinterest iOS: scale",
+      "Snapchat iOS: cut",
+      "TikTok iOS: cut"
+     ],
+     "results_rescued": []
+    }
+   },
+   {
+    "id": "J4",
+    "name": "each iOS network's installs counted from its install postbacks",
+    "kind": "reflex",
+    "precedent": [
+     "R81"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "re-sent rows, reinstalls, staff and test accounts and sandbox charges left out",
+    "kind": "reflex",
+    "precedent": [
+     "R80"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "net revenue at the policy's VAT, commission and fee, over the 365 days from the install",
+    "kind": "reflex",
+    "precedent": []
+   },
+   {
+    "id": "J7",
+    "name": "a response curve with a month pattern and held-out weeks fitted to the weekly record",
+    "kind": "reflex",
+    "precedent": [
+     "R92"
+    ]
+   }
+  ]
+ },
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "AppLovin Android: hold",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "golden_family": [
+   {
+    "name": "the golden",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "two-rate continuation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "fit without the last two months",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "thirty-day cadence",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "continuation read on the web subscribers",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "first-48-hour cells in eight groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "first-48-hour cells in four groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "cells of fifty or more",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "each source's consenting installs through one tilt",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "non-consenting installs at the unattributed accounts' value, whatever the network",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "non-consenting installs at Apple Search Ads' ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "each channel's own month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "installs response without the launch quarter",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "value response on the mature weeks' own values",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "one value slope across channels",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "delivery share from the mature weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "installs response on the last 78 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "spend instrumented by the budget",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the budget alone, the delivery left out",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "stores and records compared by calendar month",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the App Store's report days taken as UTC days",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the stores' refunds netted on the day of the refund",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the stores' refunds netted from their renewals",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "calendar months, one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "a postback's install four days before it arrived",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the 365 days and the install week counted from the attribution export's install time",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the annual trials at the monthly trials' share",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the trial-end share and the continuation fitted together",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "first-48-hour values by the sessions bucket alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "first-48-hour values by the trial and purchase bits alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the month pattern of the plan's seven channels, Apple Search Ads left out of the fit",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "installs response on the 52 complete weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "a trend in the installs equation, held at its mid-history level",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "a second-year level in the installs equation, carried",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; each channel's own month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the smearing factor",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the share spent at its mean log",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the share spent averaged over its weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; installs response on the 52 complete weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the launch quarter left out of the installs equation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; installs response on the last 78 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the budget alone, the share spent left out",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; spend instrumented by the budget",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; a trend in the installs equation, held at its mid-history level",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; a second-year level in the installs equation, carried",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; Apple Search Ads in the month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; value per install priced by first-48-hour value over the 104 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the levels set to the history",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; two-rate continuation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; fit without the last two months",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; thirty-day cadence",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; continuation read on the web subscribers",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; first-48-hour cells in eight groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; first-48-hour cells in four groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; cells of fifty or more",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; each source's consenting installs through one tilt",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; non-consenting installs at the unattributed accounts' value, whatever the network",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; non-consenting installs at Apple Search Ads' ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; stores and records compared by calendar month",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the App Store's report days taken as UTC days",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the stores' refunds netted on the day of the refund",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the stores' refunds netted from their renewals",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; calendar months, one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the annual trials at the monthly trials' share",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the trial-end share and the continuation fitted together",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; first-48-hour values by the sessions bucket alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; first-48-hour values by the trial and purchase bits alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; a postback's install four days before it arrived",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations as fitted, value per install on the complete weeks, the share spent at its two-year ratio; the 365 days and the install week counted from the attribution export's install time",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "every first-48-hour value on its own installs, however few",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "non-consenting installs at Apple Search Ads' ratio, value by value",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "non-consenting installs at Apple Search Ads' ratio, value by value, every value on its own installs",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the delivery share of the last 52 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the smearing factor",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; two-rate continuation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; fit without the last two months",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; thirty-day cadence",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; continuation read on the web subscribers",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; stores and records compared by calendar month",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the App Store's report days taken as UTC days",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the stores' refunds netted on the day of the refund",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the stores' refunds netted from their renewals",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; calendar months, one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the annual trials at the monthly trials' share",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the trial-end share and the continuation fitted together",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; first-48-hour cells in eight groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; first-48-hour cells in four groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; cells of fifty or more",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; each source's consenting installs through one tilt",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; non-consenting installs at the unattributed accounts' value, whatever the network",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; non-consenting installs at Apple Search Ads' ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; first-48-hour values by the sessions bucket alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; first-48-hour values by the trial and purchase bits alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; every first-48-hour value on its own installs, however few",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; non-consenting installs at Apple Search Ads' ratio, value by value",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; non-consenting installs at Apple Search Ads' ratio, value by value, every value on its own installs",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; a postback's install four days before it arrived",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the 365 days and the install week counted from the attribution export's install time",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; each channel's own month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; installs response without the launch quarter",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; value response on the mature weeks' own values",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; one value slope across channels",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; delivery share from the mature weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; installs response on the last 78 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; spend instrumented by the budget",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the budget alone, the delivery left out",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the month pattern of the plan's seven channels, Apple Search Ads left out of the fit",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; installs response on the 52 complete weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; a trend in the installs equation, held at its mid-history level",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; a second-year level in the installs equation, carried",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its two-year ratio; the delivery share of the last 52 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the smearing factor",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; two-rate continuation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; fit without the last two months",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; thirty-day cadence",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; continuation read on the web subscribers",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; stores and records compared by calendar month",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the App Store's report days taken as UTC days",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the stores' refunds netted on the day of the refund",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the stores' refunds netted from their renewals",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; calendar months, one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the annual trials at the monthly trials' share",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the trial-end share and the continuation fitted together",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; first-48-hour cells in eight groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; first-48-hour cells in four groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; cells of fifty or more",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; each source's consenting installs through one tilt",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; non-consenting installs at the unattributed accounts' value, whatever the network",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; non-consenting installs at Apple Search Ads' ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; first-48-hour values by the sessions bucket alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; first-48-hour values by the trial and purchase bits alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; every first-48-hour value on its own installs, however few",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; non-consenting installs at Apple Search Ads' ratio, value by value",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; non-consenting installs at Apple Search Ads' ratio, value by value, every value on its own installs",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; a postback's install four days before it arrived",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the 365 days and the install week counted from the attribution export's install time",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; each channel's own month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; installs response without the launch quarter",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; value response on the mature weeks' own values",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; one value slope across channels",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; delivery share from the mature weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; installs response on the last 78 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; spend instrumented by the budget",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the budget alone, the delivery left out",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the month pattern of the plan's seven channels, Apple Search Ads left out of the fit",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; installs response on the 52 complete weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; a trend in the installs equation, held at its mid-history level",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; a second-year level in the installs equation, carried",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent at its mean log; the delivery share of the last 52 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the smearing factor",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; two-rate continuation",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; fit without the last two months",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; thirty-day cadence",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; continuation read on the web subscribers",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; stores and records compared by calendar month",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the App Store's report days taken as UTC days",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the stores' refunds netted on the day of the refund",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the stores' refunds netted from their renewals",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; calendar months, one fit across both stores",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the annual trials at the monthly trials' share",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the trial-end share and the continuation fitted together",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; first-48-hour cells in eight groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; first-48-hour cells in four groups",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; cells of fifty or more",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; each source's consenting installs through one tilt",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; non-consenting installs at the unattributed accounts' value, whatever the network",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; non-consenting installs at Apple Search Ads' ratio",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; first-48-hour values by the sessions bucket alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; first-48-hour values by the trial and purchase bits alone",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; every first-48-hour value on its own installs, however few",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; non-consenting installs at Apple Search Ads' ratio, value by value",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; non-consenting installs at Apple Search Ads' ratio, value by value, every value on its own installs",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; a postback's install four days before it arrived",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the 365 days and the install week counted from the attribution export's install time",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; each channel's own month pattern",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; installs response without the launch quarter",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; value response on the mature weeks' own values",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; one value slope across channels",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; delivery share from the mature weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; installs response on the last 78 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; spend instrumented by the budget",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the budget alone, the delivery left out",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the month pattern of the plan's seven channels, Apple Search Ads left out of the fit",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; installs response on the 52 complete weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; a trend in the installs equation, held at its mid-history level",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; a second-year level in the installs equation, carried",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the equations carried as fitted, the share spent averaged over its weeks; the delivery share of the last 52 weeks",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the billing records trued up to the stores' reports month by month",
+    "answer": [
+     "AppLovin Android: cut",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "every postback priced at the named installs' value by first-48-hour value",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: scale",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "installs and value per install fitted on the week's spend",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: cut",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the billing records trued up to the stores' reports month by month; every postback priced at the named installs' value by first-48-hour value",
+    "answer": [
+     "AppLovin Android: cut",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: scale",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the billing records trued up to the stores' reports month by month; installs and value per install fitted on the week's spend",
+    "answer": [
+     "AppLovin Android: cut",
+     "Google Android: cut",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "every postback priced at the named installs' value by first-48-hour value; installs and value per install fitted on the week's spend",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: cut",
+     "Google iOS: scale",
+     "Meta iOS: scale",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the billing records trued up to the stores' reports month by month; every postback priced at the named installs' value by first-48-hour value; installs and value per install fitted on the week's spend",
+    "answer": [
+     "AppLovin Android: cut",
+     "Google Android: cut",
+     "Google iOS: scale",
+     "Meta iOS: scale",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "name": "the records as they stand, the named installs, the mature year's return carried over",
+    "answer": [
+     "AppLovin Android: cut",
+     "Google Android: cut",
+     "Google iOS: cut",
+     "Meta iOS: cut",
+     "Pinterest iOS: cut",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the share of trial-end candidates the stores charged, a fifth lower",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the monthly lapse of a subscription the app no longer sees, a fifth lower",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the share of trial-end candidates the stores charged, a fifth higher",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the monthly lapse of a subscription the app no longer sees, a fifth higher",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the price ratio of the unnamed installs, a fifth lower",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "each channel's budget elasticity of installs, a fifth lower",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "each channel's value slope on the budget, a fifth lower",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the price ratio of the unnamed installs, a fifth higher",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "each channel's budget elasticity of installs, a fifth higher",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "each channel's value slope on the budget, a fifth higher",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the budget that delivers the plan's spend, 9.6 per cent higher (the delivery share's widest quarter's departure on any channel)",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   },
+   {
+    "input": "the budget that delivers the plan's spend, 9.6 per cent lower (the delivery share's widest quarter's departure on any channel)",
+    "answer": [
+     "AppLovin Android: hold",
+     "Google Android: hold",
+     "Google iOS: scale",
+     "Meta iOS: hold",
+     "Pinterest iOS: scale",
+     "Snapchat iOS: cut",
+     "TikTok iOS: cut"
+    ]
+   }
+  ]
+ },
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "AppLovin Android: hold",
+    "Google Android: hold",
+    "Google iOS: scale",
+    "Meta iOS: hold",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the billing records trued up to the stores' reports month by month",
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: hold",
+    "Google iOS: scale",
+    "Meta iOS: hold",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "every postback priced at the named installs' value by first-48-hour value",
+   "answer": [
+    "AppLovin Android: hold",
+    "Google Android: hold",
+    "Google iOS: scale",
+    "Meta iOS: scale",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "installs and value per install fitted on the week's spend",
+   "answer": [
+    "AppLovin Android: hold",
+    "Google Android: cut",
+    "Google iOS: scale",
+    "Meta iOS: hold",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "the billing records trued up to the stores' reports month by month; every postback priced at the named installs' value by first-48-hour value",
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: hold",
+    "Google iOS: scale",
+    "Meta iOS: scale",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "the billing records trued up to the stores' reports month by month; installs and value per install fitted on the week's spend",
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: cut",
+    "Google iOS: scale",
+    "Meta iOS: hold",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "every postback priced at the named installs' value by first-48-hour value; installs and value per install fitted on the week's spend",
+   "answer": [
+    "AppLovin Android: hold",
+    "Google Android: cut",
+    "Google iOS: scale",
+    "Meta iOS: scale",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "the billing records trued up to the stores' reports month by month; every postback priced at the named installs' value by first-48-hour value; installs and value per install fitted on the week's spend",
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: cut",
+    "Google iOS: scale",
+    "Meta iOS: scale",
+    "Pinterest iOS: scale",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  },
+  {
+   "name": "the records as they stand, the named installs, the mature year's return carried over",
+   "answer": [
+    "AppLovin Android: cut",
+    "Google Android: cut",
+    "Google iOS: cut",
+    "Meta iOS: cut",
+    "Pinterest iOS: cut",
+    "Snapchat iOS: cut",
+    "TikTok iOS: cut"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 18,
+  "components": 20,
+  "asks": 53,
+  "instruction": 9
+ }
+}

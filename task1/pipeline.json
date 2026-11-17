@@ -1,43 +1,43 @@
 {
  "task": "task1",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-16",
  "doctrine": "throughout",
  "architecture": 6,
  "loops": 0,
- "call": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, generator/core.py: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.04, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61)",
+ "call": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, generator/figures.json on the cut pack: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.03, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61)",
  "chain": "R1 the share of each channel's 12-month net revenue the billing records never took in; R2 each iOS network's 12-month net revenue per install; R3 what a budget buys and what the next euro returns; R4 each channel's return per euro and net revenue per install at the plan's weekly spend; R5 the return at the plan's stretch spend; R6 the iOS networks' plan revenue and what the stretch spend adds; R7 each channel's band",
  "precut": {
   "exit": 0,
   "date": "2026-11-16",
-  "checks": "precut.py task1: 114 checks, 0 FAIL, 4 WARN (R1 upstream of the other six by design: every figure is net revenue; nearest chains task6 and task7 answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5; prompt gate PASS"
+  "checks": "precut.py task1 on the final cut: 114 checks, 0 FAIL, 2 WARN (R1 upstream of the other six by design: every figure is net revenue; nearest chains task6 and task7 answered in the Template check); generator/core.py CORE PASS level 5; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut, three lines, each answered in the note's Leak rulings (the policy's own vocabulary, the plan's 2027 week starts, one author on the two budget workbooks); no LEAK",
+  "reader": "two reads (Sonnet, medium): pass 1's two realism notes fixed in the generator; pass 2 on the rebuilt cut: nothing on questions 1, 2, 4 and 6, the conversion-value mapping ruled harmless, every question 5 sentence executes to the golden"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "guard.py heart task1 on the final cut: WARN only (skeleton.house_lesson: record_algorithm_inversion on two other live builds, answered in the Frontier check's Noun swap line); surface PASS",
   "nearest": "guard.py check task1 on 2026-11-16: WARN only (skeleton.house_lesson: record_algorithm_inversion on task22 v2 and task16 v4); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW on the blocks only, both passes; pass 2's eight fixes taken in one generator pass with no golden figure moved, so no third pass is owed",
+  "report": "determinism_check_report.md (pass 2, with pass 1's summary): the seven bands held in 306 runs of the listed ways under up to nine carries; fixed: the floor of 20 on a thin first-48-hour value stated, the carry stated term by term, every way run under the three as-fitted carries (195 variants, nearest 0.068 from a line), Apple Search Ads' ratio as one number refuted on its own trial starters, the last 52 weeks' delivery share in the battery, the closing passage's figures emitted from the battery"
  },
- "paper_pair": 11,
+ "paper_pair": 17.8,
  "effort": {
-  "quick": null,
-  "careful": 11,
+  "quick": 9.0,
+  "careful": 17.8,
   "thorough": 100,
   "factorial": "corelib CORE PASS level 5: S1 the charges the records never took in (opens AppLovin Android), S2 the installs the export cannot name (opens Meta iOS), S3 what a budget buys (opens Google Android); each necessary alone, none sufficient; seven distinct wrong calls",
-  "rubric": "one stump lost: S1 22, S2 31, S3 32; reflex route 11; rigorous standard route 11; fixed alone S1 16, S2 23, S3 13 (generator/core.py)",
-  "largest_hint": "the consent sentence: no whole result, 13 rubric points; the stores' sentence rescues R1 (1 of 7)"
+  "rubric": "on the final cut (generator/results.py on corelib, bands from the 195 variants with half a per cent of the figure each side): one stump lost S1 40.5, S2 29.1, S3 39.8; reflex route 10.9; rigorous standard route 10.9; fixed alone S1 19.7, S2 29.1, S3 25.4; effort.py result by result: careful 17.8, a run that loses only S1 keeps 9, S2 16, S3 22",
+  "largest_hint": "the stores' sentence rescues R1 (1 of 7); the consent sentence and the budget sentence rescue no whole result"
  },
  "runs": {
   "run1": null,
@@ -90,16 +90,17 @@
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "RETURNED",
-  "date": "2026-11-13",
-  "note": "architecture 5 sent back at review (reward 83); architecture 6 drawn the same day in a new world"
+  "status": "READY",
+  "date": "2026-11-16",
+  "note": "architecture 6 redrawn and rebuilt; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the CSV and the workbook)"
  },
- "resume": "/build task1 from 3 (the Build brief in DESIGN_NOTE.md; generator/core.py is the process and the proof)",
+ "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task1 once both runs are graded",
  "redraws": [
   {
    "date": "2026-11-16",
    "why": "the cut of 2026-11-13 (READY 145d6ea, never uploaded) graded its asks on inputs of their own and priced its careful pass at 48.2; under the rule of 18a93a7 the core was redrawn in place",
    "what": "five consent-gated iOS networks and two Android channels as the plan's members, Apple Search Ads outside the plan as a referee, the unnamed installs priced to add up to the accounts with no channel, what a budget buys in place of the spend response, every ask downstream of a stump"
   }
- ]
+ ],
+ "gates": "gates.py task1 --full on the final cut, 2026-11-16: 11 gates, 0 FAIL, 4 WARN (precut, leak REVIEW, containers one author, heart house lesson), checks.py 456 of 456, verify.py 80 of 80, two builds byte-identical (target cf2a85f605ed24ea), audit_containers.py 0 FAIL"
 }
