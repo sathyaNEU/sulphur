@@ -1,277 +1,293 @@
-# task3: which two of Port Tolliver's tidal low points get the FY2028 tide valves
+# task3: the protection class of every gully crossing on the SP 141 for the 2027 to 2031 programme
 
 ## Draw
 
-Subdomain: Engineering and Physical Sciences, Physical & Environmental Sciences (task type: extreme-value and
-  environmental-hazard analysis, tidal high-water exceedance; vocab key climate-weather-extremes)
+Subdomain: Extreme-value & environmental-hazard (return-period) analysis (Physical & Environmental Sciences, climate-weather-extremes)
 Analysis type: Forecasting & Predictive Modeling
-Answer shape: a ranked list under a cap (the five low points ranked on expected tidal flood days in the May 2027 to
-  April 2028 tide year; the program funds the top two), with each low point's count for the closed 2025-26 tide year
-  and the harbor gauge's expected days, range and bridge beside it
-Weight: hard-to-measure (the tidal flood days of low points that have at most a few months of their own water levels,
-  carried from the harbor gauge through each one's own short record); the last three builds sat in synthesis (task1),
-  measurement (task4) and modeling (task7)
-Data-native sentence: the harbor gauge holds seventy years of verified high waters but each low point holds a few
-  weeks or months of its own, taken at one season, and each one's high water departs from the harbor's in its own
-  physical way (a marsh that floods above a level, a river whose flow lifts it, a drain whose lane sits above its
-  rim), so the harbor's forecast reaches the ranking only through five separate estimates
-People: Cheryl Olsen (stormwater utility engineer), Marcus Kidd (capital program manager)
-As-of: 2026-11-10 (data through 2026-10-31)
+Answer shape: a distribution and where it is cut (each source area's seasonal distribution of 60-minute storm maxima, cut at the crossing's triggering depth for the storms a season to expect and at three a season for the depth, with the class the two regulation lines put on it)
+Weight: modeling: the work is three instrument models (what a tipping bucket loses by rate, what a radar's pixel pairs carry of the contrast between a source area and its road station, what an unheated funnel does to a hail storm's minutes), each fitted through a second record and checked on a slice the crossings do not reach; none of the last three builds on file (task16 hard-to-measure, task13 attribution, task1 measurement) puts its work there
+Data-native sentence: the only long record of short-duration rain on the SP 141 is each road station's tipping bucket, which loses water while it tips (more the harder it rains), stands one to five kilometres below the source area whose cloudbursts set off the flows, and on hail days tips the funnel's melt an hour or two after the storm, so how often a source area reaches its triggering depth in 60 minutes has to be estimated from the tips, the storage gauges' monthly account, the detector's ten-minute record of what fell and when, and the radar's storm maxima, each read for the part it sees.
+People: Piero Brancaccio (head of the Servizio Strade Alta Ardesa, who signs the programme), Biagio Borroni (geologist, author of the crossings register and the triggering depths), Luca Comboni (hydrologist of the service, whose workbook the golden is), Alfio Cundari (station technician, who keeps the visit book) (`guard.py names --geo IT --seed 3008 --n 6`). None appears in the prompt.
+
+Architecture 8, a new world drawn on 2026-11-16. Architecture 7 (a Georgia port's tidal low points, READY at a175067 and never uploaded) was set aside before any platform round: its two priced results were response-model corrections on mechanisms of the world, the kind the review of 2026-11-13 returned at 75 to 83, its harbor results were asks sited away from the stumps, and its deciding lesson sits on four live builds. One architecture per world, so the slot moves to a mountain road service, a new dataset and a new core, proved in `generator/core.py` before any file exists. The decision has three classes on two lines (a plain set over one line is on six live builds). A written document is not asked for: the programme's reader works in the workbook, and the classing sits on its first sheet.
+
+## Stump screen
+
+Screened on paper and in `generator/core.py` before the card was registered (`references/stump-screen.md`, the seventeen tests).
+
+| Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
+|---|---|---|---|---|
+| A: a tipping bucket loses the water that falls while it tips, so its shortfall grows with the rate and is largest in the minutes that make a triggering storm | the storage gauge's excess over the tips is spread like the tipped water, one factor per station (N21, L28) | the storage gauges' reads in the visit book against the tips' minute rates, visit interval by visit interval | none | kept |
+| B: a source area's cloudbursts differ from its road station's by a factor of its own (0.78 to 1.38) that the yearly rainfall does not carry | the station stands for its source area, or is carried there by the ratio of their yearly rainfall (N26, N01) | the radar's 60-minute maxima on the source pixel and the station pixel in the same storm, 2013 to 2026, and the research valley's weighing gauges | none | kept |
+| C: on hail and graupel days the unheated funnel holds the ice and the bucket tips its melt over the next hour or two, so the tips have the storm's water and not its minutes | the minutes the tips arrive are the minutes the rain fell (N30, L26) | the detector's ten-minute record of what fell and when against the tips' minutes in the same storm | none | kept |
+| D: the radar's 60-minute maximum on a one-kilometre pixel is an area average and under-reads the point depth the triggering depths are filed in | the radar product at the source pixel is the rain at the source | the radar's station pixel against the station's own corrected maxima | 13 (it opens no member of its own) | not a stump: it is what lands the radar route wrong on every open member, and sits inside B |
+| E: loggers that lose power in the largest storms leave them out of the tip record | the record is complete | the storage gauge account in the months of an outage | 1 and 2 (the client's closed card on outcomes hidden by the event; runs fill a documented gap from a neighbour unprompted, R30 and R74) | dropped |
+| F: older loggers stored clock-hour totals, and a clock hour under-reads the largest 60 consecutive minutes | the hourly total is the 60-minute maximum | the tip-resolution years of the same station | 1, 2 and 3 (closed card: a change of instrument; the fixed-to-sliding factor is the field's textbook constant) | dropped |
+| G: wind takes rain past the orifice of the exposed stations | the gauge catches the rain | a wind record | 2 and 11 (a textbook correction once wind ships, and not measurable from this pack at the precision the lines need) | dropped |
+| H: a crossing fed by several source areas, any of which can set off a flow, counted on the union of their storms | one source area per crossing | the register's list of source areas | 2 and 3 (once the register lists them the union is a join, and a join is a reflex) | dropped |
+| I: storm seasons getting more frequent, the programme's expectation read on a trend | the long-run mean holds | the seasonal counts against the year | 9 and 11 (eighteen seasons of counts cannot carry a trend at the precision the lines need; the regulation files the long-run mean) | dropped |
 
 ## Deep reasoning
 
-Task type: climate-weather-extremes (extreme-value and environmental-hazard analysis: tidal high-water exceedance at
-  low points without long records), serving Forecasting & Predictive Modeling
-Domain test: every result is a count of tidal high waters reaching a level, built the way coastal flood analysis builds
-  it (the tide year's astronomical predictions, a planning mean sea level, each past high water's departure from its
-  prediction less its year's mean sea level) and carried to each low point through a simultaneous record of its own;
-  the coastal engineer's moves are the datum work, the residual at high water, the site's high-water transfer and its
-  bend above the marsh platform, and the river's lift on an upriver reach
-Swap: "fund the two of five stores with the most expected stock-out days next year, carried from the warehouse's
-  long record through each store's few weeks of sales" breaks at once: there is no astronomical forecast of next
-  year's drivers, no marsh platform that bends a store's response above a level, no river whose flow lifts one store,
-  and no lane elevation that a high water reaches or does not
-Where the weight sits: R4 to R6, carrying the harbor's high waters to each low point from a few weeks or months of its
-  own record taken in one season; each needs its own model, checked where the decision lives (above the marsh, at the
-  autumn's flows), not where the campaign's bulk sat
-Layer 1: the hourly export carries October 2026 as preliminary (the verified high waters stop at September); five gauge
-  outages in storms; the high and low waters carry NOAA type codes on local standard time; the three logger exports keep
-  the GMT offset set at launch across a change of daylight time; the Pellam Creek logger sits dry at low water and
-  flatlines; the street sensor reads vehicles as one-sample spikes, ponds in heavy rain at any tide and lost two spells
-  to its battery, one through the 2025 king tides; the inventory is in NAVD88 and the gauge in MLLW; the river file has
-  provisional and estimated days; the 311 export spells each address five ways. None of them decides a result: each is
-  cleaned by reflex and the results that price the task sit after the cleaning
-Not one thing: the strongest single piece is Marsh Road's bend, and a run that nails it still owes River Road's flow
-  transfer, Front Street's lane and outage, the harbor's expected days, range and bridge, every low point's count and
-  the pair's stability; the call needs both site transfers right at once (either alone keeps a wrong pair)
-One-fact test: the most useful single sentence a reviewer could give a careful run ("River Road's high waters ride on
-  the river's flow, and its campaign sat in a wet late winter") rescues R6 only, 1 of 9; the marsh sentence rescues R5
-  only. A sentence naming both site transfers carries two facts, each its own modelling judgment on its own evidence,
-  and even then R2's range and R3's split stay to be earned (5 of 9 rescued, the call among them)
-Not semantics: with every field read correctly (the lane, not the rim; local standard time; NAVD88 to MLLW at 3.42 ft;
-  the weather years 1990-91 to 2025-26; the planning sea level) a straight line through Marsh Road's campaign, one
-  offset from River Road's and a Poisson range still file R2, R5, R6, R7, R8 and R9 wrong
-Not rule application: the guidelines file the WHAT (the tide year, a tidal flood day, the lane as the flooding
-  elevation and the sensor where the lane was not surveyed, the expected days over the weather years on the published
-  predictions at the planning sea level, the 90 per cent range as nine weather years in ten, the top two funded); no
-  filed sentence transfers a harbor high water to a low point, builds the residual at high water, splits the change or
-  counts the pair's years
-Estimand: the guidelines sections 3 and 4 and the prompt fix each result's population (the five low points; the harbor
-  gauge), outcome (tidal flood days, a calendar day in local standard time with the water at or above the lane), window
-  (the 2025-26 tide year observed; the 2027-28 tide year expected), unit (days) and comparison (the ranking; the 2025-26
-  count against the 2027-28 expectation)
-No decoy: no memo, draft or filed figure ranks the low points or states a count; the inventory's rim is labelled a rim
-  beside the lane; the 311 log is the city's service-request export with every category it holds
-No replay: no published figure is re-derived; the planning sea level is an input the program adopts; the harbor's
-  2025-26 count is read from the verified high waters as the bridge's start
-Pinned: R1 inside 25.9 to 27.5 across residual alignments (interpolated 27.0, nearest 26.9) and detrending by month
-  (26.4); a day's largest residual on both its high waters fails the 2025-26 replay (24 against the observed 21). R2
-  across percentile estimators. R3's shares across the six orders. R4 by the sensor (its lowest persistent reading and its first percentile read the same lane, 5.20 ft NAVD88). R5 across
-  the hinge, quadratic, cubic and upper-half straight line (8.70 to 8.76 ft at Marsh Road); one straight line is refuted
-  by its own residuals: it runs above all 13 high waters where the harbor reached 8.3 ft or more, by 0.18 ft on
-  average, its residuals three times the bending transfer's (0.10 against 0.03 ft). R6 by the flow forms that fit within a fifth of the best (power 0.196, linear curved in the harbor's height 0.222,
-  linear 0.230; 10, 11 and 11 days); the square-root (0.322) and logarithmic (1.102) forms, the tide passing undamped (sd 0.115
-  against 0.034 ft) and flows lagged a day or two (1.66 and 3.75) are refuted by the fit; the round 2 judge's own
-  implementation (12.2 days at River Road, 12.2 at Marsh Road, 32 years) sits inside the bands; drift is refuted by the staff checks
-  (0.01 at deployment, 0.02 at retrieval). R7, R8 and R9 across the whole family, the funded pair never moving
-Run forecast: R2 method shortcut (a Poisson range around the mean); R3 unfinished chain (the three changes taken one
-  at a time from 2025-26, adding to 2.2 of the 6.0 days); R5 self-confirming check (one straight line through the
-  campaign, its fit statistics dominated by the tides below the marsh); R6 narrow look (the campaign's single offset,
-  set in a wet late winter, carried to the whole year); R7 to R9 fall with R5 and R6
-Strategy label: Heterogeneity that pooling hides (WORKS IN FORM): each low point responds to the harbor in its own way
-  and the decision weights each response to the tide year's conditions (the king tides above the marsh, the season's
-  flows), never read off a column
-Depth level: 5. Six independent judgments each move a result (Marsh Road's bend, River Road's flow transfer carried to
-  the year's flows, Front Street's lane and outage from the sensor, the residual at high water without the sea level
-  counted twice, the range from the weather years, the bridge's allocation), and the shortcuts land on four different
-  wrong pairs (Marsh Road and Wharf Street; River Road and Wharf Street; River Road and Marsh Road; Front Street and
-  River Road)
-Lesson: a long reference record reaches short-record sites only through each site's own physics checked where the
-  decision lives; the fit that looks best over a campaign's bulk is the wrong carrier when the decision sits above the
-  marsh or in another season's flows, and no build on file carries one reference to several sites by different laws
+Task type: climate weather extremes (Extreme-value & environmental-hazard (return-period) analysis), which serves Forecasting: the frequency with which a short-duration rain depth is reached at ungauged places, carried to a five-year programme.
+Domain test: every result is a quantity of mountain hydrometeorology: a tipping bucket's loss by rain rate, closed against a storage gauge; the contrast between a source area's cloudbursts and its station's, seen by a radar only as pixel averages; hail and graupel held in an unheated funnel and tipped as melt; the seasonal frequency of a 60-minute depth at a place with no gauge. The field's analyst builds each from the instrument that sees it and checks it on a research catchment.
+Swap: "Which stores go on the weekly audit list, judged on how often their hourly sales pass a filed level?" keeps the three classes and nothing else: no instrument loses in proportion to the rate it measures, nothing holds part of the input and releases it afterwards, no second instrument sees the place and the point together as area averages, and the filed level is not a point depth. The task stops making sense.
+Where the weight sits: R2 to R4, the three instrument models. Each is long, not clever: the loss is fitted through 648 visit intervals and applied to every tipped minute before any window is taken; the contrast is measured on about 800 storm pairs a station and carried to four seasons the radar never saw; the hail storms' water is put back in time on 72 to 391 storms a station.
+Layer 1: tips in local standard time and the detector and the radar in UTC (three loggers, three conventions); logger blocks re-sent after a restart; the technician's field-check pours at a visit, which tip the bucket and are in the visit book; visit days that slip around the first of the month; a station's radar pixel renumbered when the agency re-gridded its product; long light rain between storms that fills the account and never nears a triggering depth. None decides a result: every route cleans them the same way.
+Not one thing: the strongest single piece is the bucket's loss by rate. A run that nails it still files Rio Marden in class 2 and Rio Sass in class 1 on the yearly rainfall ratio, and Rio Bianc in class 2 on the hail days' tips (S1 fixed alone on the reflex route: three classes wrong, 27 on the rubric).
+One-fact test: "the tipping buckets lose water while they tip, more the harder it rains" rescues R2 and nothing else (1 of 7 results): the burst factors, the hail storms and every figure downstream still fall with S2 and S3.
+Not semantics: every field, unit, clock and clause read correctly leaves the reflex route where it is: the tips are the tips, the storage gauge is the storage gauge, the triggering depth is a point depth at the source area in 60 consecutive minutes, and the route still files four classes wrong because of what three instruments do to the rain, not because of what a column means.
+Not rule application: the regulation files what a triggering storm is, the season, the lines and the expectation's basis; it performs none of R2 to R6. After every filed rule is applied the analyst still has to decide what the tips lost, what a source area gets against its station, and when a hail storm's water fell.
+Estimand: regulation 2.1 to 2.4 (a storm, the warm season of 1 May to 31 October, a triggering storm as the rain at the crossing's source area reaching the crossing's triggering depth in any 60 consecutive minutes, counted once a storm), 3.1 (the storms a season to expect in a programme are the seasonal mean over every complete warm season of the governing station's tip record), 4.1 (class 3 from 3.0 a season, class 2 from 1.0, class 1 under 1.0); the crossings register (each crossing's governing station and its triggering depth as point rain at the source area, mm in 60 minutes).
+No decoy: no memo, draft or column carries a wrong answer; no document argues for a route; the crossings register holds no class. The rainfall normal, the radar extract and the research valley's gauges are what they say they are.
+No replay: no result re-derives a published figure and no filed number is wrong.
+Pinned: 384 variants of the golden's conventions (three forms of the loss, pooled by bucket model or per station, the rate read by the minute or on five-minute totals, eight ways of the burst factor, four ways of the hail storms) file one classing and set every band; the cruder rivals are each ruled out by a figure from the files (## Semantic fork table).
+Run forecast: R2 lost to a self-confirming check (one factor closes every station's account, and a hold-out of seasons confirms it); R3 lost to dismissed own evidence (the radar extract is opened, found to undercount against the gauges and set aside for the rainfall normal, or used as the answer); R4 lost to stopping at the first story (the hail days' totals close, so the tips are taken as rain); R5 to R7 fall with whichever of the three a run loses. The strongest run is expected to make one of the three corrections and lose two.
+Strategy label: other (each part of an unrecorded quantity assigned to the instrument that sees it; no label in `references/sulfur-strategies.md` names three instrument blind spots)
+Depth level: 5: three independent judgments, each necessary and none sufficient, the three single drops on three different wrong classings and the seven shortcut routes of the lattice on seven.
+Lesson: a record is the output of its instrument, so the same storm is three different numbers in three files, and the estimate is built by giving each part of the quantity to the instrument that sees it: amounts to the bucket once its loss by rate is put back, place to the radar's pairs as a contrast and never as a depth, timing to the detector. No build on file teaches a loss that is convex in the measured rate, a second instrument used only for a ratio, or a store that delays a record.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | the harbor gauge's expected days at its 8.6 ft minor flood threshold in the 2027-28 tide year: 27.0 | forecasting | guidelines 4 (the weather years, the predictions, the planning sea level 0.70 ft) and the record | 25.9 to 27.5 | method shortcut: the count trend over 1990-91 to 2025-26 files 10.8 | - | Ask 1 |
-| R2 | its 90 per cent range: 22 to 31 days | uncertainty | guidelines 4 (nine weather years in ten) | low 19.5 to 23.5, high 30.0 to 35.0 | method shortcut: a Poisson range around the mean, 19 to 36 | R1 | Ask 2 |
-| R3 | the change from the 2025-26 count (21) to 27.0 split into sea level +5.8, tides -0.7, weather +1.0 days, adding to +6.0 | decomposition-attribution | the record and the six orders of applying the changes | sea level 3.8 to 7.3; tides -3.3 to 2.0; weather -1.0 to 2.6; the total 5.0 to 7.0 | unfinished chain: each change taken from 2025-26 alone (+5.0, -3.0, +0.2), adding to 2.2 | R1 | Ask 3 |
-| R4 | Front Street's 2025-26 tidal flood days: 20 (its lane at 5.20 ft NAVD88; 15 recorded by the sensor, 5 in its outage) | missingness-measurement | guidelines 4 (the lane; the sensor where it was not surveyed) and the sensor | 19 to 21 | dismissed own evidence: the drain rim files 44; the sensor alone misses its outage (15) | independent: the street sensor and the harbor's verified high waters | Component 3 |
-| R5 | Marsh Road's and Oyster Creek Road's 2025-26 days: 17 and 8 (Marsh Road floods at a harbor high water of 8.75 ft) | modeling | each campaign's high waters above the marsh platform (data) | Marsh Road 16 to 20, Oyster Creek 7 to 11 | self-confirming check: one straight line through the campaign (Marsh Road 26 at 8.54 ft, Oyster Creek 13) | independent: each campaign and the harbor's verified high waters | Component 1 |
-| R6 | River Road's 2025-26 days: 10, carried day by day on the Brayle's flows | investigation-loops | the campaign's offset against the river's flow, drift ruled out by the staff checks (data) | 8 to 12 | narrow look: the wet late-winter campaign's single offset carried to the whole year (26) | independent: the campaign, the river's daily flows and the harbor's verified high waters | Component 2 |
-| R7 | the five low points' expected 2027-28 days: Wharf Street 32.3, Front Street 25.0, River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2 | forecasting | guidelines 4 and each low point's transfer | Wharf 31.3 to 32.8; Front 23.9 to 25.5; River 11.7 to 18.7; Marsh 11.7 to 18.3; Oyster 0.4 to 1.9 | unfinished chain: the harbor's machinery run right but carried through the straight-line and single-offset transfers (Marsh 33.6, River 37.3, Oyster 9.3) | R1, R4, R5, R6 | Ask 4 |
-| R8 | the two funded: Wharf Street at Market Lane and Front Street at Ferry Lane | synthesis | guidelines 3 (the top two) | exact | unfinished chain: River Road at Hensley Landing and Marsh Road at Pellam Creek | R7 | Recommendation |
-| R9 | the weather years that keep the funded pair on top: 28 of 36 (River Road takes Front Street's place in the other 8) | uncertainty | guidelines 4 (the same weather years) | 27 to 33 | self-confirming check: the hurried pair counted on the hurried transfers holds in 36 | R7, R8 | Ask 5 |
+| R1 | each station's tips on one clock set against its storage gauge, visit interval by visit interval: the storage gauges hold 2.1 to 6.0 per cent more water than the tips (Valfosca 1.060, Forcella 1.053, Rio Scuro 1.044, Malga Sora 1.037, Pradalt 1.028, Costarossa 1.021) | assembly-reconciliation | the tip logs, the visit book's reads and its field-check entries | exact to three decimals on the cut pack | narrow look at broad data: the ten-minute pass never opens the visit book; the careful pass builds the account station by station (reflex R93) | - | Step-by-Step |
+| R2 | each bucket model's loss by rate, stated as what Valfosca's bucket fails to record at a true 100 mm an hour (19.46 per cent) | missingness-measurement | the account of R1 fitted on the tips' rates; the station register's bucket models | 18.88 to 22.42 per cent | self-confirming check: one factor per station closes every season's account and holds on held-out seasons, and puts the shortfall at 5.64 per cent at any rate | independent: the tip logs' rates and the visit book's storage gauge reads | Component 1 |
+| R3 | each source area's burst factor against its governing station (Rio Marden against Pradalt 1.381; 0.948 at Rio Larin to 1.381) | modeling | the radar's 60-minute maxima on the source pixel and the station pixel in the same storm, 2013 to 2026 | Rio Marden 1.34 to 1.423 | dismissed own evidence: the radar extract is in hand and undercounts against the gauges, so the station is carried to its source by the rainfall normal's ratio (1.06 at Rio Marden) | independent: the radar extract's pixel pairs | Component 2 |
+| R4 | the share of the hail storms' 60-minute maximum that the tips miss at Costarossa (24.44 per cent) | investigation-loops | the detector's ten-minute record of what fell and when; the tips of the same storms | 23.7 to 25.17 per cent | stopped at the first story: the hail days' totals close against the storage gauge like any other day's, so the tips are taken as rain where they stand (a share of nil) | independent: the detector log against the tips of the same storms | Component 3 |
+| R5 | the triggering storms a season to expect at each crossing (Rio Toval 12.39, Rio Ciadin 10.39, Rio Gelt 4.33, Rio Marden 4.33, Rio Bianc 4.22, Rio Sass 1.78, Rio Larin 0.50) | forecasting | regulation 2.1 to 2.4 and 3.1; the crossings register's triggering depths; R2 to R4 carried to every storm of 2009 to 2026 | per crossing (Rio Gelt 3.778 to 4.611, Rio Marden 3.944 to 4.611, Rio Bianc 4.053 to 4.444) | dismissed own evidence: one factor, the rainfall normal's ratio and the hail days' tips together file Rio Gelt 1.17, Rio Marden 0.50 and Rio Bianc 1.89 | R2, R3, R4 | Ask 1 |
+| R6 | the 60-minute depth each source area reaches three times a season (Rio Marden 21.47 mm, Rio Toval 20.14, Rio Ciadin 20.12, Rio Gelt 19.29, Rio Bianc 18.68, Rio Larin 17.93, Rio Sass 15.21) | uncertainty | regulation 2.3 and 3.1; R2 to R4 | per crossing (Rio Gelt 18.08 to 19.58 mm, Rio Marden 20.89 to 21.79, Rio Bianc 17.9 to 19.05) | method shortcut: read on the reflex route's storm maxima it files Rio Gelt 15.9 with S1 lost, Rio Marden 16.5 with S2 lost and Rio Bianc 15.1 with S3 lost | R2, R3, R4 | Ask 2 |
+| R7 | each crossing's class: class 3 at Rio Toval, Rio Ciadin, Rio Gelt, Rio Marden and Rio Bianc; class 2 at Rio Sass; class 1 at Rio Larin | synthesis | regulation 4.1 (class 3 from 3.0 a season, class 2 from 1.0) | exact | dismissed own evidence: the reflex route files Rio Gelt and Rio Bianc in class 2 and Rio Marden and Rio Sass in class 1 | R5 | Recommendation |
 
-Carry-forward: R4, R5 and R6 are each graded on inputs of their own (a low point's record with the harbor's observed
-2025-26 high waters) and stand whatever the harbor's forecast; R2 and R3 fall only with R1's machinery, which the careful
-pass earns; R7 needs R1 and every low point's transfer together, so a run that gets one site transfer right keeps that
-low point's 2025-26 count and its row of R7 and loses the others'; R8 needs both site transfers (either alone keeps a
-wrong pair); R9 follows R7.
+Carry-forward: every graded figure sits downstream of a stump and most of two or three. R2's under-read at Valfosca falls with S1 alone and is S1's own figure; R3's burst factor at Rio Marden falls with S2 alone and is S2's own; R4's share at Costarossa falls with S3 alone and is S3's own. R5's seven counts fall with S1 on all seven, with S2 on all seven and with S3 on six (Rio Gelt's is silent under S3: Valfosca sees hail in 72 of 1,051 storms). R6's seven depths fall with S1 on six, S2 on five and S3 on six (Rio Bianc's depth with S3 alone, Rio Gelt's with S1 alone). R7 moves when any one stump is lost. R1's account is reflex work every route does; its factors are stated only in the Step-by-Step.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| a marsh creek's high water rising ever more slowly once the tide tops the marsh platform | constructed (marsh storage simulated at both marsh creeks) | no: Oyster Creek bends the same way and is in no route's funded pair; the inventory's marsh platforms place both bends | modelling: a transfer fitted on each campaign's high waters, a straight line's residuals at the top | modelling: a bending transfer with its break estimated (the client's curved-response example, a legitimate method choice) | keep |
-| River Road's high waters lifted by the river's flow | constructed (setup simulated on the whole upriver reach; the harbor carries a faint lift by month) | no: it runs through the whole campaign and every day of the year | modelling with a second file (the daily flows) and a rival ruled out (logger drift, by the staff checks) | modelling: a flow term carried to each weather year's flows | keep |
-| Front Street's lane standing above its drain rim | constructed (each low point's geometry) | no: every low point's rim sits below its lane in the inventory | measurement: the lowest water level the sensor records on the lane in readings that persist | estimation from a noisy, gappy record | keep |
-| the tide delayed under a surge, so hourly residuals swing through the tide | constructed (the harbor's whole record) | no | the residual at high water against the residual at every hour | routine for a careful run | keep, earned |
-| the sensor's battery outage through the 2025 king tides | constructed (two outages, one in summer) | no: it drops days of every kind | one look at the record's dates | a fill from the harbor at the lane level | keep, texture with a count |
+| a tipping bucket loses the water that arrives while it tips, in proportion to the rate | constructed, the documented behaviour of tipping-bucket gauges | no: all six stations, both bucket models, every tipped minute of eighteen seasons (a true 100 mm an hour reads about 12 per cent low on the 0.2 mm buckets and 19 on the 0.1 mm ones) | modelling: one factor leaves an account residual that follows each interval's burst rain (Valfosca 5.59 mm rms, r 0.90) | modelling (a loss fitted on the rate through the account and put back minute by minute before any 60-minute window) | keep |
+| a source area's cloudbursts stand in a ratio of their own to its station's, unrelated to the ratio of their yearly rainfall | constructed, orographic and convective contrast between a valley floor and the slopes above it | no: all eleven source areas (0.78 to 1.38), the four of the research valley included | modelling: the radar's pixel pairs storm by storm, set against the rainfall normal | modelling (a contrast measured on pairs and carried to the station's corrected maxima, the radar's own depths never used) | keep |
+| an unheated funnel holds hail and graupel and the bucket tips the melt over the next hour or two | constructed, the documented behaviour of unheated gauges in solid precipitation | no: every station (72 storms at Valfosca to 391 at Costarossa of about a thousand each) | modelling: the tips of a hail storm against the detector's intervals (a quarter of the tipped water arrives when the detector logs nothing, 0.1 to 0.2 per cent on rain storms) | modelling (the storm's water placed in time by the detector's record, the amount kept from the bucket) | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 the harbor gauge's expected days at its minor flood threshold, 2027-28 | Missed | Right | Right |
-| R2 its 90 per cent range over the weather years | Missed | Missed | Right |
-| R3 the harbor's change from 2025-26 split into sea level, tides and weather | Missed | Partly | Right |
-| R4 Front Street's 2025-26 tidal flood days from its street sensor | Missed | Right | Right |
-| R5 Marsh Road's and Oyster Creek Road's 2025-26 days through their overmarsh transfers | Missed | Missed | Right |
-| R6 River Road's 2025-26 days through its flow-dependent transfer | Missed | Missed | Right |
-| R7 the five low points' expected 2027-28 tidal flood days | Missed | Missed | Right |
-| R8 the two low points funded | Missed | Missed | Right |
-| R9 how many of the 36 weather years keep the funded pair on top | Missed | Missed | Right |
-| Roughly | 0 of 9 | 2.5 of 9 | 9 of 9 |
+| R1 each station's account against its storage gauge | Missed | Right | Right |
+| R2 each bucket model's loss by rate | Missed | Missed | Right |
+| R3 each source area's burst factor | Missed | Missed | Right |
+| R4 the share of hail storms' 60-minute maximum the tips miss | Missed | Missed | Right |
+| R5 the triggering storms a season at each crossing | Missed | Missed | Right |
+| R6 the 60-minute depth each source area reaches three times a season | Missed | Missed | Right |
+| R7 each crossing's class | Missed | Missed | Right |
+| Roughly | 0 of 7 | 1 of 7 | 7 of 7 |
 
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass computed end to end by
-  analysis.run on the cut pack: the quick pass the count trend, the drain rim and untransferred harbor; the careful
-  pass the harbor's machinery right, a Poisson range, the one-at-a-time bridge, the sensor's lane, straight-line marsh
-  transfers and one river offset)
-Largest single hint: "River Road's high waters ride on the river's flow, and its campaign sat in a wet late winter";
-  rescues 1 of 9 results
-Pair estimate: 31.5
+Measured by: generator/core.py on corelib.py at the draw (the rubric table of ## Stump core); .claude/skills/stumping/effort.py on generator/effort.json once the pack is cut
+Largest single hint: the tipping buckets lose water while they tip, more the harder it rains; rescues 1 of 7 results (R2; 27 rubric points with S1 fixed alone on the reflex route, three classes still wrong)
+Pair estimate: 9 (corelib's rubric table at the draw: the reflex route earns instruction-following and no graded figure; a model, not a measurement, and the platform's two runs are the measurement)
 
-Per figure, the round 3 judge counted the careful pass at 9 of 15 graded figures (the harbor's, Front Street's and
-Wharf Street's are reached by standard method); on the rubric's weights that is about 38 to 40 points, because the call
-and two of the three critical components fall with the site transfers. Its sentence "do not let the sea level enter twice"
-rescues nothing in this careful column (a careful pass back-tests its harbor replay and finds the double count), and
-its two-fact sentence on the marsh and the river rescues 5 of 15 figures.
+## Stump core
+
+From `python3 task3/generator/core.py` (seed 20270213; six stations, eighteen seasons, 6,228 storms), every figure as printed.
+
+| Member | Line | Golden | Family spread | Reflex route | Direct | Rigorous | Opened by |
+|---|---|---|---|---|---|---|---|
+| Rio Bianc | 1/3 | 4.222 | 0.222 | 1.889 | 1.167 | 2.214 | S3 |
+| Rio Ciadin | 1/3 | 10.39 | 0.611 | 15.56 | 5.444 | 6.643 | forced |
+| Rio Gelt | 1/3 | 4.333 | 0.556 | 1.167 | 0.6667 | 2.5 | S1 |
+| Rio Larin | 1/3 | 0.5 | 0.167 | 0.3333 | 0.3333 | 0.07143 | forced |
+| Rio Marden | 1/3 | 4.333 | 0.389 | 0.5 | 0.2222 | 2.143 | S2 |
+| Rio Sass | 1/3 | 1.778 | 0.278 | 0.5 | 0.5 | 0.4286 | forced |
+| Rio Toval | 1/3 | 12.39 | 0.556 | 7.111 | 6.167 | 8.786 | forced |
+
+| Figure | Block | Golden | Band | S1 lost | S2 lost | S3 lost | Reflex route |
+|---|---|---|---|---|---|---|---|
+| C1 the Valfosca bucket's under-read at 100 mm an hour (per cent) | components | 19.46 | 18.88 to 22.42 | moves | - | - | lost |
+| C2 burst factor, Rio Marden against Pradalt | components | 1.381 | 1.34 to 1.423 | - | moves | - | lost |
+| C3 hail storms' 60-minute maximum the tips miss, Costarossa (per cent) | components | 24.44 | 23.7 to 25.17 | - | - | moves | lost |
+| Rio Bianc | asks | 4.222 | 4.053 to 4.444 | moves | moves | flips | lost |
+| Rio Ciadin | asks | 10.39 | 9.778 to 10.8 | moves | moves | moves | lost |
+| Rio Gelt | asks | 4.333 | 3.778 to 4.611 | flips | moves | - | lost |
+| Rio Larin | asks | 0.5 | 0.48 to 0.6667 | moves | moves | moves | lost |
+| Rio Marden | asks | 4.333 | 3.944 to 4.611 | moves | flips | moves | lost |
+| Rio Sass | asks | 1.778 | 1.707 to 2.056 | moves | flips | moves | lost |
+| Rio Toval | asks | 12.39 | 11.83 to 12.88 | moves | moves | moves | lost |
+| depth on the line, Rio Bianc | asks | 18.68 | 17.9 to 19.05 | - | - | moves | lost |
+| depth on the line, Rio Ciadin | asks | 20.12 | 19.34 to 20.42 | moves | moves | moves | lost |
+| depth on the line, Rio Gelt | asks | 19.29 | 18.08 to 19.58 | moves | - | - | lost |
+| depth on the line, Rio Larin | asks | 17.93 | 17.16 to 18.2 | moves | moves | moves | lost |
+| depth on the line, Rio Marden | asks | 21.47 | 20.89 to 21.79 | moves | moves | moves | lost |
+| depth on the line, Rio Sass | asks | 15.21 | 14.98 to 15.43 | moves | moves | moves | lost |
+| depth on the line, Rio Toval | asks | 20.14 | 19.65 to 20.44 | moves | moves | moves | lost |
+
+| Route | Call | Earns on the rubric |
+|---|---|---|
+| golden | right | 100 |
+| S1 lost alone | wrong | 26 |
+| S2 lost alone | wrong | 30 |
+| S3 lost alone | wrong | 30 |
+| S1 fixed alone | wrong | 27 |
+| S2 fixed alone | wrong | 16 |
+| S3 fixed alone | wrong | 23 |
+| reflex route (every stump lost) | wrong | 9 |
+| rigorous standard route | wrong | 9 |
+
+CORE PASS level 5
+
+Unobserved part: the storms a season in which the rain at a crossing's source area reaches the crossing's triggering depth in 60 consecutive minutes, over the 2027 to 2031 programme. No record holds it: no gauge stands in a source area, the seasons have not happened, and three parts of the quantity are missing from the one long record there is: the water the bucket lost in the hardest minutes, what the source area got against the station in each storm, and when a hail storm's water fell.
+Instruments: the tipping bucket sees every storm of eighteen seasons minute by minute at the station, less what it loses by rate and with hail storms' water delayed; read raw against the triggering depths it files Rio Gelt 0.67, Rio Marden 0.22 and Rio Bianc 1.17 storms a season (the direct route). The storage gauge sees the true depth of each visit interval and nothing inside it. The detector sees when precipitation fell and of what kind every ten minutes, with an optical intensity that scatters around the tipped totals by a log sd of 0.31. The radar sees the source pixel and the station pixel in the same storm from 2013, as area averages on its own scale; read as the answer it files Rio Gelt 2.50, Rio Marden 2.14 and Rio Bianc 2.21. The rainfall normal sees yearly totals at every cell; read as the transfer it files Rio Marden 1.39 and Rio Ciadin 18.67.
+Referee: the Rio Scuro research valley, where weighing gauges stood at four source areas for fourteen seasons (2013 to 2026) above a road station with the same bucket, storage gauge and detector as the others; none of the seven crossings is in it. The mean 60-minute depth of each source's five largest storms a season is 15.53 mm at the weighing gauges; the golden's method files 15.44 (off by 0.08), the bucket put back by one factor 13.99, the source scaled by the rainfall normal 24.07, the hail days' tips taken as rain 14.33, the gauge read raw 14.20 and the radar product 12.82 (each rival's miss 15 to 104 times the golden's). The depth reached three times a season and the triggering storms seen agree: 13.57 mm and 190 storms at the weighing gauges, 13.63 and 192 by the golden, 12.52 and 141 by one factor, 21.24 and 773 by the rainfall normal, 12.29 and 144 with hail taken as rain. Read raw as a calibration of the bucket (source over bucket 1.001, carried to every crossing) the valley files the direct route's classing, because its sources get 0.79 to 0.90 of their station's bursts and the crossings' sources 0.95 to 1.38.
+Strongest standard route: on every open member, the radar product bias-adjusted to the gauges and counted at the source pixel against the triggering depth (Rio Gelt 2.50, Rio Marden 2.14, Rio Bianc 2.21, Rio Sass 0.43: class 2, 2, 2 and 1); refuted at the research valley (12.82 mm against 15.53 seen, 99 triggering storms against 190). The careful gauge route (one factor, the rainfall normal's ratio, the hail days' tips) files Rio Gelt 1.17, Rio Marden 0.50, Rio Bianc 1.89 and Rio Sass 0.50; refuted piece by piece by the account's residual (5.59 mm against 1.29 at Valfosca), the valley's sources against the rainfall normal (0.79 to 0.89 seen where it says 1.22 to 1.44) and the detector (24 per cent of the hail storms' tipped water in intervals it logs dry).
+Said out loud: S1 "the tipping buckets lose water while they tip, more the harder it rains": four steps left (the account interval by interval on the tips' rates, the loss fitted by bucket model, the tipped minutes put back before any window, the form and the time step of the rate chosen and defended). S2 "a source area's cloudbursts are not its station's and do not scale with its yearly rainfall": four steps left (the pixel pairs matched storm by storm on one clock, the contrast estimated as a ratio and not as a depth, its carry to the four seasons before the radar, the check on the valley's sources). S3 "on hail days the funnel holds the ice and the bucket tips its melt after the storm has gone": four steps left (the hail storms found from the detector's codes, the tipped water placed in time on the detector's profile, the amount kept from the bucket after the loss is put back, the check on the valley's hail storms).
+Worth: S1 2.00 storms a season on Rio Gelt, 3.6 times the family's spread of 0.556; S2 2.94 on Rio Marden, 7.6 times 0.389; S3 1.61 on Rio Bianc, 7.2 times 0.222. Each open member's family stays 0.78 to 1.06 above the line of 3.0 (Rio Gelt 3.78, Rio Marden 3.94, Rio Bianc 4.06 at the lowest) and each stump's drop lands 0.39 to 1.61 under it (2.33, 1.39, 2.61).
+Regimes: second stump on every member. S1's loss is checked on every station's account and cannot be checked inside a single storm; it is largest at the two 0.1 mm stations of the crossings (Valfosca and Forcella) and opens Rio Gelt. S2's contrast is checked on the research valley's four sources and cannot be checked at a crossing's source; it runs from 0.95 to 1.38 against rainfall ratios of 0.90 to 1.40 with no relation between them, and opens Rio Marden (and moves Rio Sass with it). S3's timing is checked on the valley's hail storms; it matters by the station's share of hail storms (7 per cent at Valfosca, 41 at Costarossa) and opens Rio Bianc.
+Sharp: S1: its wrong route passes the control total (one factor closes each station's account in every season, and on held-out seasons); its right route commits to a loss by rate that no file states; the evidence is in the visit book against the tips' rates; the correction is not a constant (19 per cent at 100 mm an hour on one bucket, 12 on the other, a few per cent in ordinary rain); its own figure is Valfosca's under-read. S2: its wrong route is the field's standard index (the rainfall normal) and agrees with the station on ordinary days; its right route commits to a ratio from an instrument whose depths are wrong; the evidence is in the radar's pairs and the valley's gauges; the correction's sign differs across members (Rio Marden up by 30 per cent against the normal, Rio Ciadin down by 24, Rio Sass up by 9); its own figure is Rio Marden's burst factor. S3: its wrong route passes the account (a hail day's total is right); its right route commits to moving water in time on a record that has no amounts; the evidence is in the detector's log against the tips; the correction runs from nil at a station with little hail to a quarter of the 60-minute maximum on Costarossa's hail storms; its own figure is that share.
+Earns: a run that loses only S1 earns 26, only S2 30, only S3 30 (50 or under each); the reflex route earns 9 and the rigorous standard route 9 (30 and 50 or under), and the reflex route lands no graded figure; S1 fixed alone earns 27, S2 fixed alone 16, S3 fixed alone 23 (each more than 9 and a third at most).
+
+## Stump factorial
+
+Reflex route: the tips, the detector and the radar brought to one clock; re-sent logger blocks and field-check pours left out; storms separated as the regulation files them; the 60-minute maximum taken over every sliding window, a storm counted once; each station's account closed against its storage gauge with one factor; each station carried to its source areas by the rainfall normal's ratio; the hail days' tips taken as rain; the mean over the eighteen seasons, with a hold-out of seasons and a bootstrap. It files class 3 at Rio Ciadin (15.56) and Rio Toval (7.11), class 2 at Rio Bianc (1.89) and Rio Gelt (1.17) and class 1 at Rio Marden (0.50), Rio Sass (0.50) and Rio Larin (0.33): four classes wrong, 9 on the rubric.
+
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| S1 what the bucket loses rises with the rate, so the loss is fitted on the tips' rates through the storage gauge account and put back minute by minute | stump | one factor per station that closes the account | N21, L28 | Rio Gelt class 2 (2.33) | Rio Bianc class 2 (2.00), Rio Marden class 1 (0.94) and Rio Sass class 1 (0.67), three classes still wrong; rescues R2 | no: the account on rates, the fit by bucket model, the put-back before any window, the form and the time step |
+| S2 a source area's bursts against its station's are measured on the radar's pixel pairs as a ratio, and the yearly rainfall does not carry them | stump | the station carried to its source by the rainfall normal's ratio | N26, N01 | Rio Marden class 2 (1.39) and Rio Sass class 1 (0.94) | Rio Bianc class 2 (2.06), Rio Gelt class 2 (2.11), Rio Marden class 2 (2.50) and Rio Sass class 1 (0.56), four classes still wrong; rescues R3 | no: the pairs on one clock, a ratio and not a depth, the seasons before the radar, the valley's check |
+| S3 on hail days the tips have the storm's water and the detector has its minutes | stump | the hail days' tips taken as rain where they stand | N30, L26 | Rio Bianc class 2 (2.61) | Rio Gelt class 2 (1.39), Rio Marden class 1 (0.83) and Rio Sass class 1 (0.78), three classes still wrong; rescues R4 | no: the hail storms from the detector's codes, the water placed on its profile, the amount kept from the bucket, the valley's check |
+| J4 tips in local standard time, the detector and the radar in UTC, brought to one clock | reflex | - | R01, R46 | same call | - | - |
+| J5 re-sent logger blocks and the technician's field-check pours left out | reflex | - | R01 | same call | - | - |
+| J6 the largest total over every 60 consecutive minutes, a storm counted once | reflex | - | R06; regulation 2.3 | same call | - | - |
+| J7 the season, the storm separation, the lines and the eighteen-season mean as filed | reflex | - | regulation 2.1, 2.2, 3.1 and 4.1 | same call | - | - |
+| J8 each station's account set against its storage gauge | reflex | - | R93 | same call | - | - |
+| J9 a hold-out of seasons and a bootstrap of seasons on whatever route is built | reflex | - | R03, R04 | same call | - | - |
+
+Level: 5: three necessary stumps, none sufficient alone, the three single drops on three distinct wrong classings and the seven shortcut routes of the lattice on seven.
+
+## Open members
+
+| Member | Golden margin | Family spread | Reflex route | Direct route | Opened by |
+|---|---|---|---|---|---|
+| Rio Gelt | 4.33, class 3 (1.33 above 3.0) | 0.556 | 1.17, class 2 (wrong) | 0.67, class 1 (wrong) | S1 |
+| Rio Marden | 4.33, class 3 (1.33 above 3.0) | 0.389 | 0.50, class 1 (wrong) | 0.22, class 1 (wrong) | S2 |
+| Rio Bianc | 4.22, class 3 (1.22 above 3.0) | 0.222 | 1.89, class 2 (wrong) | 1.17, class 2 (wrong) | S3 |
+| Rio Sass | 1.78, class 2 (0.78 above 1.0) | 0.278 | 0.50, class 1 (wrong) | 0.50, class 1 (wrong) | S2 (with Rio Marden: S2 dropped alone files 0.94; it has no stump of its own, and on the reflex route it comes back only with S2 and one of the other two) |
+| Rio Ciadin | 10.39, class 3 (7.39 above 3.0) | 0.611 | 15.56, class 3 (right) | 5.44, class 3 (right) | forced (its figures are wrong on every shortcut route) |
+| Rio Toval | 12.39, class 3 (9.39 above 3.0) | 0.556 | 7.11, class 3 (right) | 6.17, class 3 (right) | forced (as Rio Ciadin) |
+| Rio Larin | 0.50, class 1 (0.50 under 1.0) | 0.167 | 0.33, class 1 (right) | 0.33, class 1 (right) | forced |
+
+Direct route: the pack's most direct evidence read at face value is each governing station's tips as they stand, their largest 60 consecutive minutes counted against the crossing's triggering depth (`generator/core.py`, `estimate(W, "raw", "one", "tips")`): it loses the buckets' shortfall, the source areas' contrast and the hail storms' minutes at once and files Rio Gelt 0.67, Rio Marden 0.22, Rio Bianc 1.17 and Rio Sass 0.50, four classes wrong. The research valley read as a calibration and carried to every crossing (`carried_route`) files the same classing (0.67, 0.28, 1.17, 0.50), and the radar product counted at the source pixel (`radar_route`) files 2.50, 2.14, 2.21 and 0.43, four classes wrong.
 
 ## Data provenance
 
-Source: generated by task3/generator from a simulated process: the astronomical tide at the harbor (nineteen
-  constituents on the real lunar and solar arguments with nodal factors), the station's mean sea level (a secular rise
-  accelerating after 1995, a slow ocean-dynamic anomaly, a fast monthly one and a faint river lift), the weather's surge
-  (a background, nor'easters from October to April, tropical systems from August to October, the tide delayed under a
-  positive surge), the Brayle's daily flow (seasonal and log-normal with rain events), and each low point's water level
-  carried from the harbor's by its own physics
-Behaves like the real thing: a semidiurnal tide of about 6.8 ft with spring-neap and perigean cycles on the real dates,
-  the 18.6-year nodal cycle showing in the flood counts (more days around 2015, fewer around 2024); relative sea level
-  rising about 6 mm a year by the 2020s with multi-year anomalies like the US Southeast's in the 2010s; tidal flooding at
-  the minor threshold growing from a few days a year in the 1990s to 20 to 30; the seasonal cycle peaking in October;
-  a river high in late winter and low in autumn
-Genuine patterns: (1) the nodal and perigean cycles in the counts; (2) the seasonal sea level cycle and the autumn king
-  tides; (3) the river's late-winter flows and their year-to-year swing; (4) flood days clustered in storms and king-tide
-  runs; (5) the acceleration of sea level rise and its persistent anomalies
-Problems by process: gauge outages in storms (1979, 1989, 2004, 2016, 2022); October 2026 still preliminary; loggers
-  holding their launch-time GMT offset across the end of daylight time; the creek logger out of water at low tide; the
-  street sensor's vehicle reflections, rain ponding and two battery outages; USGS provisional and estimated days; 311
-  addresses spelled several ways
-License: synthetic, CC0
-Breadth: 15 files; five low points and the gauge; 101,000 verified high and low waters over 72 years, 235,000 hourly
-  heights, 219,000 sensor readings, three campaigns, 13,000 days of flow; three files (the 311 log, the sea level
-  scenarios and the rainfall) look relevant and are not needed, so deciding what to read is work
+Source: generated by `task3/generator` from a simulated process: convective storms over a valley (a cell's strength, its place-to-place variation with a reach of about five kilometres, a burst of 5 to 24 minutes with a trailing rain), long light rain between them, and the instruments that record them (tipping buckets of two models, storage gauges read at a monthly visit, present-weather detectors, a weather radar's storm maxima, four weighing gauges in one research valley). Synthetic; the valley, the road and the service are invented.
+Behaves like the real thing: tipping buckets under-read in proportion to the rate (about 12 and 19 per cent at 100 mm an hour here, inside the range intercomparisons report for uncorrected gauges); unheated gauges delay solid precipitation by the funnel's melt; a radar's hourly accumulation on a one-kilometre pixel is smoother than a point gauge and carries a storm-wide error; storm counts are Poisson by season, 60-minute maxima are heavy-tailed, storms cluster in June to August, and long rain makes more than half of a season's water.
+Genuine patterns: (1) the seasonal cycle of storms (30 per cent in July, 4 in October); (2) heavy-tailed 60-minute maxima whose largest storms are the shortest and hardest; (3) hail and graupel in the stronger cells and at the higher stations (7 per cent of storms at Valfosca, 41 at Costarossa); (4) season-to-season variation in storm counts and in the account's closure; (5) place-to-place variation inside a storm that decays with distance, so nearer source areas follow their station more closely.
+Problems by process: three loggers on three clock conventions (tips in local standard time, detector and radar in UTC); logger restarts that re-send a block; field-check pours at visits; visit days that slip; a radar pixel renumbered at the agency's re-gridding; no radar before 2013; no weighing gauge anywhere but the research valley's sources. Each comes from the instrument or the routine that produces the file, and none sits only where a result is decided.
+License: none needed (generated).
+Used as is: not applicable (generated).
+Breadth: six stations by eighteen seasons of tips (several hundred thousand rows), 648 visit intervals, six detector logs, the radar's maxima on the station and source pixels and their neighbours for fourteen seasons, a rainfall normal grid, eleven source areas, four weighing gauges; which storms, which stations and which pixels to read for which part of the quantity is the work.
 
 ## Template check
 
-Chain signature: forecasting, uncertainty, decomposition-attribution, missingness-measurement, modeling,
-  investigation-loops, forecasting, synthesis, uncertainty
-Question form: which two of five, ranked, with counts, a range, a split and a count of years
-Nearest build: task4 architecture 8 (a fitted model carried to new units through covariates from other registers); here
-  one reference record is carried to five sites by different laws read from each site's own short record, the
-  reference's forecast is built from astronomy, a planning sea level and the residual at high water, and the answer is a
-  ranked list under a cap with its stability
-Abstraction sentence: "carry a long reference record's threshold-exceedance forecast to several short-record units,
-  each through its own unit-specific response law estimated where the decision lives, then rank under a cap" is not
-  writable against task4 (one model, many units, register covariates), task1 (a forecast path built from flows) or the
-  client's design-flood strategy (a frequency curve from neighbours)
+Chain signature: assembly-reconciliation, missingness-measurement, modeling, investigation-loops, forecasting, uncertainty, synthesis
+Question form: where (where an automatic barrier, where a seasonal patrol, where signs)
+Nearest build: task17 and task10 architecture 7 share the answer shape and the weight (a distribution cut, modeling). task17 counts units over a line from one fitted relation after an assembly; task10's last architecture read a design-day demand where a service never ran. Here the distribution is each source area's seasonal storm maxima, cut at two lines into three classes, and the modeling is three instrument models with nothing shared: no chain step of either build recurs in the same place. The deliverable set (a CSV and a workbook) repeats task1's by the house rule; what differs is what each holds (one row per crossing with its class, storms a season and depth; a workbook that opens on the classing with the station corrections and the research valley's check behind it). `stock_flow_accounting` is on three live builds (mark120, task4, task9) as a balance closed over periods; here it labels the funnel's ice store, read in reverse, and is one of three lessons. `precut.py` also names task2 (the approved correction ceiling for a speech recognizer's 2027 staff) on the answer shape: it carries a tail to people who have not used the system by assigning three partial samples, and nothing is transported to a new population here (the units are storms at fixed places, and what differs between records is the instrument). mark126 shares the gap, generator and Gate G triple and nothing of the work (it split joined units to restate a median duration; nothing here is joined or split).
+
+## Frontier check
+
+Precedents: R2 careful Missed on L28 (the estimator certified with checks that cannot see the problem) and N21 (an unmeasured component placed across the system in proportion to the metered quantities); R3 Missed on N26 (one remote station taken to stand for the conditions at the place, named and left untested) and N01 (a quantity assumed to scale in proportion); R4 Missed on L26 (a plausible shallower explanation that passes its own checks) and N30 (a total taken as constant over its duration); R5 to R7 Missed on N21, N26 and L26 together.
+Shallow path checks: one factor per station closes every season's account exactly and predicts held-out seasons' totals, so its own check passes; only the account interval by interval against the tips' rates refutes it (a residual of 5.59 mm rms at Valfosca that follows the interval's burst rain, r 0.90, against 1.29 mm once the loss is fitted on the rate), and the research valley's gauges (13.99 mm against 15.53). The rainfall normal's ratio is the field's standard index and no check on the stations can see it fail; only the radar's pixel pairs (1.381 at Rio Marden against 1.06) and the valley's sources (0.79 to 0.89 of their station's bursts where the normal says 1.22 to 1.44) refute it. The hail days' tips pass the account (a hail day's total is right) and any check on totals; only the detector's intervals refute them (24 per cent of the hail storms' tipped water at Costarossa arrives in intervals the detector logs dry, 0.2 per cent of the rain storms'), and the valley's gauges (14.33 against 15.53).
+Assumption made false: the storage gauge's excess is spread like the tipped water (false: the bucket loses in proportion to the rate; tested by the visit book against the tips' rates); the station stands for its source area up to the ratio of their yearly rainfall (false: bursts are convective and local, totals are orographic; tested by the radar's pairs and the research valley); the minutes the tips arrive are the minutes the rain fell (false on hail and graupel days: the funnel is unheated; tested by the detector's log).
+Forcing: the lines are 3.0 and 1.0 storms a season. The 384 variants' nearest approach to a line is Rio Gelt at 3.78, 0.78 above 3.0, then Rio Sass at 1.78 (0.78 above 1.0), Rio Marden at 3.94 and Rio Bianc at 4.06; Rio Larin's highest is 0.67, 0.33 under 1.0; every variant files the golden's seven classes. The shortcuts land across a line: S1 lost puts Rio Gelt at 2.33, S2 lost Rio Marden at 1.39 and Rio Sass at 0.94, S3 lost Rio Bianc at 2.61, the reflex route 1.17, 0.50, 1.89 and 0.50. Each fitted input moved by a fifth leaves the classing unchanged: the fitted loss times 0.8 and 1.2 (Rio Gelt 3.72 and 5.00), each burst factor's distance from one times 0.8 and 1.2 (Rio Marden 3.39 and 5.50), the hail storms' put-back times 0.8 and 1.2 (Rio Bianc 4.00 and 4.78). Thin: the loss at 0.8 leaves Rio Gelt 0.72 above the line and the burst factor at 0.8 leaves Rio Marden 0.39 above it; a seed sweep with the dials frozen and the triggering depths set on each realization passes every corelib check on 14 of 48 seeds (an easier route lands an open member's class on 13, the referee's margin falls under three on 11, a stump's worth under three family spreads on 8, 3 and 6), so the build reuses `core.build(SEED)` and moves nothing.
+Noun swap: nearest on file by `skeleton.py check`: severity none against every card, the client's corpus and the slot's lineage. task23 and task6 share the anatomy of a quantity no instrument holds and one detection (a control total that does not close); their decision forms, answer patterns, lessons and mechanisms differ, and swapping either's nouns in carries no deciding lesson across.
+Closed strategies: the call turns on nonlinear_functional_of_path (a loss convex in the rate, so the factor that closes the totals is its mean and not its value in the minutes that decide), on support_effect (an area average against a point depth, used only as a ratio) and on stock_flow_accounting read in reverse (a store that delays the record). Nearest closed cards: a change of instrument (no instrument changes here: each has one behaviour throughout, and the fix is a model of it, not a splice at a date); a noisy explanatory variable flattening a slope (the bucket's error is a bias that grows with the rate, not noise, and the fix is fitted through a second record); counts still filling in (the hail storms' water arrives within two hours and no completion by age recovers its minutes); transport to a new mix (the burst factor is a contrast between two places in the same storms, not a rate carried to another population). No closed lesson is kept as a supporting step: the regulation files the long-run mean, so no trend, selection or censoring step exists on any route.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | tide year | May to April; calendar year; water year | 1 May to 30 April | guidelines 4 |
-| SF2 | tidal flood day | any reading; a high water; local daylight or standard time | a calendar day in Eastern Standard Time with the water at or above the flooding elevation | guidelines 4 |
-| SF3 | flooding elevation | drain rim; lane; harbor threshold; Front Street's onset or a regression intercept | the lane low point; Front Street's as the lowest water level its sensor records on the lane | guidelines 4; the sensor reports the water level on the lane, so the lowest persistent reading and its first percentile agree |
-| SF4 | rain ponding on Front Street | counted; not counted | not counted | guidelines 4 (rain alone does not make a tidal flood day) |
-| SF5 | expected days | the latest years; the whole record; the weather years | the average over the tide years 1990-91 to 2025-26 | guidelines 4 |
-| SF6 | the sea level for the tide year | a fitted trend; the latest year; the planning value | 0.70 ft above the 1983-2001 mean sea level | guidelines 4 |
-| SF7 | the 90 per cent range | Poisson; the weather years' 5th to 95th; a bootstrap | nine of the weather years in ten | guidelines 4; every percentile estimator inside the band |
-| SF8 | the residual's sea level | each high water's month; its tide year | its tide year's mean (the planning value is a year's mean) | same call (26.4 against 27.0, inside the band) |
-| SF9 | aligning a weather year's residuals | interpolated; nearest high water; the day's largest | interpolated | same call for nearest; the day's largest fails the 2025-26 replay (24 against the observed 21) |
-| SF10 | Marsh Road's transfer | one straight line; a hinge; a hinge fixed at the inventory's marsh platform; a smooth bend | a hinge with its break estimated | same call for the platform-fixed hinge, quadratic and upper-half line (all in the sweep, the bands cover the round 2 judge's 12.2); the straight line above all 13 high waters at harbor 8.3 ft or more |
-| SF11 | River Road's flow form | power; linear; linear curved in height; square root; logarithmic; the tide undamped; lagged flows | power (best fit) | same call for linear and curved (sums of squares 0.230 and 0.222 against 0.196, inside the bands); square root (0.322), logarithmic (1.102), the tide undamped (sd 0.115 against 0.034) and flows lagged one or two days (1.66, 3.75) refuted by the fit |
-| SF12 | logger drift at River Road | drift; none | none | the staff checks at deployment and retrieval (0.01 and 0.02 ft) |
-| SF13 | logger clocks | local daylight time; the launch offset | the launch offset in each header | the header; pairing by the nearest high water within three hours |
-| SF14 | NAVD88 to MLLW | 3.42 ft; a regional conversion | 3.42 ft | the datums page |
-| SF15 | the bridge's allocation | one order; one at a time; every order averaged | every order averaged, the orders' range reported | same call within the band; one at a time does not add up |
-| SF16 | the harbor's 2025-26 count | the hourly series; the verified high waters | the verified high waters (21) | same call (the hourly maxima give 21) |
-| SF17 | the river's flows in the forecast | the latest year; the climate; each weather year's own | each weather year's own flows beside its weather | guidelines 4 (weather and river flows of the same years) |
-| SF18 | the pair count's years | the weather years; the record | the same 36 weather years | guidelines 4 and the prompt |
-| SF19 | the October 2026 preliminary data | used; not | not needed (the 2025-26 tide year and the weather years end in April 2026) | same call |
-| SF20 | a tie in the ranking | - | none (Front Street 25.0 against River Road 17.1) | margins asserted |
+| SF1 | a storm | rain separated from the next by six hours without a tip at the governing station; three hours; twelve hours | six hours | regulation 2.2 files six hours; the storm layout leaves no dry gap between three and twelve hours, so the three readings give one catalogue: same call |
+| SF2 | 60 consecutive minutes | every sliding window of 60 minutes; clock hours; windows stepped tip by tip | every sliding window, by the minute | regulation 2.3 ("any 60 consecutive minutes") rules out clock hours; windows stepped by the minute and by the tip land inside every band: same call |
+| SF3 | a storm with several exceedances | counted once; counted per exceedance | once | regulation 2.3 ("a storm counts once") |
+| SF4 | the season | 1 May to 31 October; the calendar year | 1 May to 31 October, a storm by the day of its 60-minute maximum | regulation 2.1; no storm's maximum falls within a day of either end: same call |
+| SF5 | the storms a season to expect in the programme | the mean over every complete warm season of the governing station's tip record (2009 to 2026); the radar years; the last ten seasons; a trend carried to 2027 to 2031 | the eighteen-season mean | regulation 3.1 files it |
+| SF6 | rain at the source area | the point depth at the source area; the catchment's average depth; the depth at the crossing | the point depth at the source area | the crossings register's column (triggering depth, point rain at the source area, mm in 60 minutes) and regulation 2.3 |
+| SF7 | the lines | class 3 from 3.0 inclusive, class 2 from 1.0 inclusive; exclusive | inclusive | regulation 4.1; no variant puts a crossing within 0.33 of a line: same call |
+| SF8 | the class's period | one class for the 2027 to 2031 programme; a class a year | one class | regulation 1.2 |
+| SF9 | the governing station | the station the crossings register files; the nearest station on the map | the register's | the crossings register; the two agree for every crossing: same call |
+| SF10 | the rate the loss acts on | the rate between tips or by the minute; five-minute totals; ten- or fifteen-minute totals | by the minute | by the minute and on five-minute totals are both in the battery (same call, inside every band); ten- and fifteen-minute totals are ruled out by the account, whose residual on the 0.1 mm buckets is 2.26 and 3.45 mm rms against 1.25 by the minute (1.31 and 1.48 against 1.11 on the 0.2 mm buckets) |
+| SF11 | the loss's form and pooling | the tipping-time form; its first-order form; the tipping-time form with a static factor; one loss per bucket model or one per station | the tipping-time form, per bucket model | all six in the battery: same call, inside every band |
+| SF12 | the under-read at 100 mm an hour | the share of a true rate of 100 mm an hour the bucket fails to record, under the fitted loss | 19.46 per cent | the band (18.88 to 22.42) holds every form, pooling and time step of the battery |
+| SF13 | the burst factor | the mean log ratio of the source pixel's to the station pixel's 60-minute maximum over the storms where both reach 1 mm; the median; the ratio of sums; a trimmed mean; both pixels over 3 mm; the station pixel over 3 mm; the upper quarter by joint size; each storm carried by its own pair | the mean log ratio | all eight in the battery: same call, inside every band |
+| SF14 | cruder burst factors | the source pixel regressed on the station pixel through the origin; the largest quarter of storms chosen on the station pixel; the two pixels' upper deciles unpaired | not used | each by a figure from the radar extract: the regression gives 1.370 at Rio Marden and its reverse 1.393; the largest quarter chosen on the station pixel gives 1.361 and chosen on the source pixel 1.399; the unpaired upper deciles differ between odd and even seasons by up to 6.2 per cent where the paired mean differs by 1.5 at most. All three file the golden's classes |
+| SF15 | the burst factor before 2013 | the factor measured on 2013 to 2026 applied to 2009 to 2012; the radar years only | applied to all eighteen seasons | regulation 3.1 (every complete season of the tip record); the station register shows no station or source moved |
+| SF16 | a hail storm | a storm with one or more detector intervals coded hail or graupel; a storm on a day with such an interval | a storm with such an interval | the detector's code list; the two readings select the same storms (no day holds two storms): same call |
+| SF17 | when a hail storm's water fell | placed on the detector's ten-minute profile; the same with the hail intervals' intensity rescaled to close the hail storms' totals; the tips kept up to the first hail interval; one hail-day multiplier read at the research valley | the detector's profile | all four in the battery: same call, inside every band |
+| SF18 | cruder hail handlings | only the water tipped in detector-dry intervals moved; the water spread evenly over the wet intervals; the detector's own amounts | not used | each by a figure: at the research valley the first files 14.99 mm and the second 14.42 against 15.53 seen (golden 15.44); the detector's storm totals scatter around the tipped totals by a log sd of 0.31 on rain storms and its amounts file 16.01 and 219 triggering storms against 190 seen |
+| SF19 | the share of the hail storms' maximum the tips miss | one minus the hail storms' tipped 60-minute maxima (loss put back) over the same storms' maxima after placement, summed over Costarossa's hail storms of 2009 to 2026 | 24.44 per cent | the band (23.7 to 25.17) holds every loss form and hail way of the battery |
+| SF20 | the depth reached three times a season | the 54th largest storm maximum of the eighteen seasons; an interpolated quantile | the 54th largest | regulation 3.1's mean (three a season over eighteen seasons is 54 storms); the interpolated reading lands inside every band: same call |
+| SF21 | the long rain between storms | in the account and in the catalogue; left out of the catalogue | in both | its largest 60-minute total is under 7 mm against a lowest triggering depth of 12.5: same call |
+| SF22 | the radar product as the answer | the bias-adjusted source pixel counted against the triggering depth | not used | the research valley: 12.82 mm and 99 triggering storms against 15.53 and 190 seen; the triggering depths are point depths (SF6) |
+
+## Pinning list
+
+| Constant | Golden value | Home |
+|---|---|---|
+| the lines | 3.0 and 1.0 triggering storms a season | the regulation (.pdf), 4.1 |
+| the season, the storm separation, the 60 consecutive minutes | 1 May to 31 October; six hours; any 60 consecutive minutes, once a storm | the regulation (.pdf), 2.1 to 2.3 |
+| the expectation's basis | every complete warm season of the tip record, 2009 to 2026 | the regulation (.pdf), 3.1 |
+| each crossing's triggering depth and governing station | 17.0, 19.5, 16.0, 13.0, 12.5, 17.0, 29.0 mm in 60 minutes | the crossings register (.xlsx) |
+| each station's bucket model and bucket size | 0.1 mm and 0.2 mm | the station register (.xlsx) and the tip logs' own increments (.csv) |
+| the loss per unit of rate | 0.00242 and 0.00139 hours per mm, fitted | estimated from the tip logs and the visit book (.csv); measured spread across three forms, two poolings and two time steps (19.44 to 22.42 per cent at 100 mm an hour on Valfosca's bucket) |
+| each source area's burst factor | 0.948 to 1.381, fitted | estimated from the radar extract (.csv); measured spread across eight ways (1.377 to 1.388 at Rio Marden) |
+| the hail storms' placement in time | the detector's ten-minute profile | the detector log (.csv); measured spread across four ways (23.8 to 24.5 per cent of the maximum at Costarossa) |
+| the hail-day multiplier of one battery way | 1.313 | estimated from the research valley's weighing gauges (.csv) |
+| the rainfall normal's ratios (the reflex route only) | 0.90 to 1.40 | the rainfall normal grid (.csv); no golden figure uses them |
+
+Variant battery: 384 variants of the golden route in `generator/core.py` (three forms of the loss by two poolings by two time steps of the rate, by eight ways of the burst factor, by four ways of the hail storms), and every variant files the same call, the golden's seven classes; the bands are the battery's range padded by the rebuild floor. Eight cruder rivals are run beside it and ruled out by named figures (SF10, SF14, SF18, SF22). The build re-runs the full cross on the cut pack with the tips' own quantisation and the ways the Step-by-Step can be read.
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 Population | the five low points in guidelines 2; the harbor gauge (8673718) |
-| 2 Unit of account | the low point; a tidal flood day |
-| 3 Attribution window | the tide year (SF1) |
-| 4 As-of dating | data through October 2026; the verified high waters through September |
-| 5 Version basis | verified over preliminary (SF19) |
-| 6 Denominator | none (counts) |
-| 7 Weighting | each weather year equally (SF5) |
-| 8 Window length | the 36 weather years 1990-91 to 2025-26 |
-| 9 Boundary inclusivity | at or above the flooding elevation (SF2) |
-| 10 Rounding path | expected days to one decimal, counts whole, levels to 0.01 ft (the prompt) |
-| 11 Tie-break | none needed (SF20) |
-| 12 Maturity and censoring | 2025-26 closed; 2027-28 forward |
-| 13 Order of operations | datums, residuals, transfers, the weather years, rank |
-| 14 Row order | export order |
-| 15 Duplicate resolution | none in the files used |
-| 16 Identity normalisation | low points by LP ID; 311 addresses not used |
-| 17 Netting against gross | none |
-| 18 Dimensional units | feet; NAVD88 to MLLW at 3.42 ft (SF14); inches of water on the lane to feet |
-| 19 Code and status semantics | high and low water types; provisional and estimated flows read |
-| 20 Integerisation | counts whole; expectations averaged |
-| 21 Clause scope | guidelines 4 for every low point and the gauge |
-| 22 Forward window contents | the 2027-28 predicted high waters, the planning sea level and each weather year's residuals and flows |
+| 1 | Population: the seven gully crossings of the crossings register; each crossing's source area; every storm of the governing station's eighteen warm seasons |
+| 2 | Unit of account: triggering storms a season; mm in 60 minutes; per cent of a rate; a ratio of 60-minute maxima |
+| 3 | Attribution window: any 60 consecutive minutes inside a storm, a storm counted once (regulation 2.3) |
+| 4 | As-of dating: the records close on 31 October 2026; the programme is 2027 to 2031 |
+| 5 | Version basis: the regulation in force for the 2027 to 2031 programme; the crossings register's current survey |
+| 6 | Denominator: eighteen complete warm seasons (regulation 3.1) |
+| 7 | Weighting: every season counts once; no storm is weighted |
+| 8 | Window length: 1 May to 31 October; six dry hours between storms; 60 minutes |
+| 9 | Boundary inclusivity: class 3 from 3.0 inclusive, class 2 from 1.0 inclusive; a depth equal to the triggering depth triggers |
+| 10 | Rounding path: full precision to the end; storms a season stated to two decimals, depths to 0.1 mm, each with its band in the answer blocks |
+| 11 | Tie-break: none needed; the nearest any variant comes to a line is 0.33 |
+| 12 | Maturity and censoring: every season of the record is complete; nothing is still filling in |
+| 13 | Order of operations: the clocks, the account, the loss put back, the hail storms placed, the 60-minute maxima, the carry to the source area, the count and the depth, the class |
+| 14 | Row order: no step depends on file order |
+| 15 | Duplicate resolution: a re-sent logger block (same station, same tip times) counted once |
+| 16 | Identity normalisation: one station id across the tip logs, the visit book, the detector log and the registers; the radar's pixels by the register's pixel ids, old and new numbering mapped by the agency's note |
+| 17 | Netting against gross: field-check pours left out of the tips; nothing else netted |
+| 18 | Dimensional units: mm; mm an hour; tips in local standard time, detector and radar in UTC |
+| 19 | Code and status semantics: the detector's precipitation codes as its code list gives them (rain; hail or graupel); the visit book's entry types |
+| 20 | Integerisation: storms are whole; the seasonal mean is not rounded before the class |
+| 21 | Clause scope: the classes apply to the gully crossings of the SP 141 in the register |
+| 22 | Forward window contents: the 2027 to 2031 warm seasons, expected at the long-run seasonal mean (regulation 3.1); no change of stations, crossings or triggering depths |
 
 ## Literal reader
 
-Guidelines 3 ranks the low points on expected tidal flood days and funds the top two: executed on the golden counts it
-funds Wharf Street and Front Street. Guidelines 4 defines the flood day at the lane and, for Front Street, as the sensor
-records water on the lane: executed, it gives 5.20 ft NAVD88 and 20 days. Guidelines 4 fixes the weather years, the
-predictions and the planning sea level: executed with the residual at high water, the harbor expects 27.0 days. No filed
-sentence says how a harbor high water reaches Marsh Road or River Road; the campaigns do.
+Regulation 2.1 to 2.4, 3.1 and 4.1 executed word for word on the golden's storm maxima file the golden: each crossing's count is the storms of 1 May to 31 October, 2009 to 2026, in which the rain at its source area reaches the register's triggering depth in any 60 consecutive minutes, each counted once, over eighteen seasons; 3.0 or more is class 3, 1.0 or more class 2, less class 1. The same sentences executed on the tips as they stand file the direct route (Rio Gelt 0.67, Rio Marden 0.22, Rio Bianc 1.17), and nothing in them says the tips are the rain at the source area: the regulation names the rain at the source area, the register says no gauge stands there, and the station register describes the gauges as equipment. No sentence in any file states a loss, a factor, a delay, a correction or which record to use for what.
 
 ## Prompt contract
 
-A voice rewrite keeps the question (which two of the five low points get the FY2028 valves), the ranking on expected
-tidal flood days in the May 2027 to April 2028 tide year, the count of weather years keeping the same two on top, each
-low point's tidal flood days in the May 2025 to April 2026 tide year, the harbor gauge's expected days at its minor flood
-threshold with a 90 per cent range, the split of its change into sea level, tides and weather, the deliverables by type
-and the rounding. It never names a file, a method (a transfer, a hinge, a flow term, a residual, a Poisson range), a
-low point's physics (the marsh, the river's lift, the sensor's outage) or who is asking.
+A rewrite keeps: the question in the where form with all three classes; the reason the classing rests on an estimate (no gauge stands in the source areas and the programme's seasons have not happened); a committed figure for every crossing; the two figures by their plain definitions and units (the triggering storms a season to expect at each crossing; the 60-minute rain depth, in mm, that each source area reaches three times a season); the 2027 to 2031 programme; a workbook that opens on the classing and a CSV with one row per crossing. It never adds: a method, a correction, an instrument to trust or distrust, a file name, the number of crossings or stations, a rounding rule, a warning, who is asking, or the lines' values as a procedure.
 
-## Leak review
+## Build brief
 
-leak.py --asof 2026-11-10 on the cut pack, REVIEW lines answered (each harmless):
-- the datums page and the USGS RDB file are text files: each is the agency's own export, neither describes the pack;
-- the guidelines carry 8 of the call's 10 distinctive words and 9 candidate names: they list all five low points in
-  section 2 and rank none; six stump terms (record, sensor, carried, guidelines, planning, elevation) are the program's
-  own vocabulary, and the one sentence on the sensor defines Front Street's flooding elevation (the WHAT), not a step;
-- the 311 export and the inventory name the low points beside numbers: addresses, request numbers and elevations, no
-  ranking on expected days;
-- device_id in the street sensor export is the vendor's own column;
-- the predictions run past the as-of date because tide predictions are published ahead (the file's purpose);
-- the prompt's shell quota is a batch warning on the deliverable mix (a spreadsheet and a memo), not a leak.
-- two judge rounds reported Marsh Road's logger reading below its sensor elevation: each logger floors exactly at its
-  inventory sensor elevation (PEL-MR-24 at -1.35 ft, 2,027 dry readings; OYS-CR-25 at -1.10, 1,829; HEN-RR-25 never
-  drains to its -4.80 ft sensor, its lowest reading -3.11), so the report misread a file.
+World: the Servizio Strade Alta Ardesa keeps the provincial road SP 141 dell'Alta Ardesa (eastern Alps, Italy; the valley, the road and the service are invented; files in English with local names). Seven gully crossings (Rio Gelt, Rio Marden, Rio Bianc, Rio Ciadin, Rio Toval, Rio Sass, Rio Larin) are classed for the 2027 to 2031 protection programme. Six road stations (Valfosca, Pradalt, Costarossa, Malga Sora, Forcella, Rio Scuro) each run an unheated tipping bucket logged tip by tip (0.1 mm buckets at Valfosca, Forcella and Rio Scuro, 0.2 mm at the others), a storage gauge the technician reads and empties at a monthly visit, and a present-weather detector logging every ten minutes with precipitation. The regional agency's radar gives 60-minute storm maxima on one-kilometre pixels from 2013. A university programme ran weighing gauges at four source areas of the Rio Scuro valley from 2013 to 2026. The world is `core.build(SEED)` exactly: the build imports `generator/core.py`, calls `build(SEED)` once and writes every file from its arrays (`rec`, `opt`, `wet`, `hail10`, `check`, `front_rec`, `rb`, `rnu`, `e`, `x_true`, each crossing's `T`); it lays the storms and the long rain out on dates and clock times, turns the recorded minutes into tips by continuous accumulation, and adds Layer 1 texture that leaves those arrays recoverable.
+Frozen: SEED 20270213; the seasons (18 of tips, 14 of radar, 14 of weighing gauges); the lines 3.0 and 1.0; every dial of `DEPOTS`, `CROSSINGS` (the triggering depths 17.0, 19.5, 16.0, 13.0, 12.5, 17.0 and 29.0 mm, the governing stations, the rainfall-normal ratios), `RESEARCH`, `KAPPA`, `THETA`, `PHI`, `HAIL_Z`, `GAMMA`, `SIG_*`, `MONTH_P`; the golden estimator (`estimate(W)`: the tipping-time loss fitted per bucket model on minute rates through the account, the mean log ratio of the radar's pixel pairs, the detector's profile on hail storms) and the battery's ways; the three stumps, their members and the graded figures of the figure matrix. Each visit interval holds exactly the storms and the long rain core.py assigns to it (`ivl`), so the account's arrays are core's. The cut pack re-proves the core: the golden's seven classes, each stump's flip of its own member, and the rubric's two lines (one stump lost 50 or under, the reflex route 30 or under) are asserted on figures recomputed from the shipped files, and a figure that leaves its band or a class that moves goes back to the architect.
+Files: (1) tip logs, one CSV per station (station id, tip time to the second in local standard time, bucket increment), 2009 to 2026, several hundred thousand rows in all, with re-sent blocks after restarts and field-check pours at visits; the 20,000-row file and the long printed file are both here. (2) the visit book (CSV): station, visit time, storage gauge read in mm since the last emptying, entry type, the technician's note; visits near the first of each month that slip by a day or three; field-check pours entered with their volume. (3) the detector logs (CSV or one SQLite table): station, interval start in UTC, precipitation code (rain; hail or graupel), optical intensity; one row per ten minutes with precipitation, storms and long rain alike. (4) the radar extract (CSV): storm window in UTC, pixel id, 60-minute maximum in mm, for the station pixels, the source pixels and their neighbours, 2013 to 2026, with the agency's one-page note of the re-gridding that renumbered pixels. (5) the rainfall normal grid (CSV): cell, coordinates, 1991 to 2020 mean annual precipitation, carrying the frozen ratios at the station and source cells. (6) the station register (XLSX): id, name, road km, coordinates, elevation, gauge make and bucket size, heating (none), logger clock, storage gauge, detector, installation dates. (7) the crossings register (XLSX): id, name, road km, source area (coordinates, elevation, area, radar pixel), governing station, triggering depth as point rain at the source area in mm in 60 minutes with the survey's date; no class column. (8) the research valley's event table (CSV): source, storm window, the weighing gauge's 60-minute maximum, 2013 to 2026, whole, with the programme's short data note (what the gauges are, where they stand; nothing about the station's bucket). (9) the regulation (PDF by the house office writer): definitions 2.1 to 2.4, the expectation's basis 3.1, the classes 4.1, the programme 1.2; fields and quantities only. (10) the geotechnical survey's summary table of triggering depths (PDF or XLSX), as texture for the register. (11) two or more unlabelled distractors that look relevant and are unused (for example a daily rain series of a valley station since 1961, the SP 141's traffic counts by section, a snow-depth series). Ten or more usable files in two or more categories, cross-file reasoning required throughout; `metadata.json` outside the ZIP.
+Never filed: a tip duration or any mechanical timing of the bucket; a loss, an intensity correction, a dynamic calibration or a calibration curve; a sentence that the buckets under-read in heavy rain; "melt", "delay", "lag" or "retention" for hail days, or a sentence on what an unheated funnel does; a burst factor, an areal reduction, a representativeness note or any ratio of a source area to a station; a sentence on which record to use for amounts, place or timing; a column or file named for any of the three; a class, a count of triggering storms or a ranking of the crossings anywhere in the pack; the research valley described as a validation or calibration set.
+Goldens: `crossing_classes_2027.xlsx`: the first sheet states the classing (crossing, class, triggering storms a season to expect, the 60-minute depth its source area reaches three times a season, its triggering depth) with one chart of the seven counts against the two lines; behind it the station sheet (each bucket's fitted loss and its under-read by rate), the source sheet (each burst factor beside the rainfall normal's ratio), the hail sheet (hail storms by station and the share of the maximum the tips miss), the research valley's check and the routes and rivals with their figures. `crossing_classes_2027.csv`: one row per crossing with the same five columns. Every figure from `generator/figures.json`, one set of numbers in both files.
+Free: document genre and wording inside the Never filed list (the pack spells it "program", as the prompt does); the stations' and crossings' coordinates, elevations and road km; the layout of storms and long rain on dates (no dry gap between three and twelve hours, no storm maximum within a day of the season's ends, the long rain's 60-minute totals under 7 mm); the neighbour pixels' values; Layer 1 texture and its sizes; the distractors; file names (none naming a stump); the sheet design of the goldens.
 
 ## Tried and rejected
 
@@ -609,3 +625,54 @@ Architecture 6 (the Durrow Creek bridge):
   day's river flow by its UTC date while the USGS file and every analyst read local days, which is why a three-day
   smoothed flow fitted better than the day's own; flows are now local days (the fits tighten five-fold, the power
   form leads), every form within a fifth of the best sits in the sweep, and the bands cover the judge's figures.
+
+Architecture 7 (the Georgia port's tide valves), set aside on 2026-11-16 before any upload:
+- The whole architecture: READY at a175067 and never uploaded. Its two priced results were response-model corrections
+  on mechanisms of the world (the kind the review of 2026-11-13 returned at 75 to 83), its harbor results were asks sited
+  away from the stumps (collected in full by a run off the call under the rule of 18a93a7), and its deciding lesson sits
+  on four live builds. Spent; the slot moves to a new world.
+
+Architecture 8 (the SP 141's gully crossings), at the draw:
+- The frost-night, flood-routing, heat, wind, hail-count, lightning and low-flow worlds: each core was a response of the
+  world the rows carry (modelled on sight) or a textbook return-period fit whose inputs ship (one reflex).
+- An ENSO state response, new gauges replacing old ones, an overlap season, network densification, gauge reassignments:
+  closed cards (a change of instrument, a co-occurring change) or a splice at a date, which is a join.
+- Totalizers at the source areas, a threshold filed in station-gauge units, a weighing gauge beside the research
+  station's bucket: each hands a stump over (the transfer, the loss) as a filed comparison.
+- Logger outages, clock hours against sliding 60 minutes, drizzle gaps, funnel blockage, wind undercatch: screened out
+  (candidates E to G of the stump screen and their kin: closed, textbook or not measurable from the pack).
+- The union across a corridor's source areas as the third stump: once the register lists the areas it is a join.
+- A union nested inside a radar-absolute S2: the radar read as a depth is the rigorous route, which has to land wrong.
+- A line of one storm a season over 16 seasons, and a plain set over one line: counts of 16 storms sit inside any
+  family's spread, and a set over one line is on six live builds; three classes on two lines over 18 seasons instead.
+- The network total as a component, and the 40 largest storms' depth loss as S1's own figure: the first is reflex work,
+  the second moved under S2 and S3 as well, so S1 had no figure of its own.
+- Research sources with a burst factor near one: the valley read as a calibration then landed the open members; the
+  valley's sources sit at 0.78 to 0.90 of their station.
+- Crude hail estimators inside the family (dry intervals only, an even spread, the detector's own amounts): each widened
+  Rio Bianc's band past the stump; each is now refuted by a figure at the research valley (SF18).
+- Hail probability tied to the station's own burst alone: every station then saw the same hail share and S3 opened no
+  member of its own; hail goes with the cell's strength and the station's height.
+- The valley's hail-day multiplier ruled out at the count referee: it files the golden's classes and its tail mean is
+  15.41 against 15.53 seen, so it stays in the family (SF17).
+- Weight hard-to-measure, and real toponyms: the weight is on task16, and real places would make the triggering depths
+  checkable against the outside.
+- A golden family of conventions listed singly: the wider rivals an auditor would run left figures outside the bands;
+  the battery is now the full cross of 384.
+- One random stream shared by all stations: moving one crossing moved every station's storms; each station has its own
+  stream and the source areas a side stream.
+- The triggering-storm count at the research valley as the referee statistic, then the depth reached three times a
+  season: the first agreed by luck of the realization and the second passed on 1 of 8 seeds; the mean depth of each
+  source's five largest storms a season replaces them (golden off by 0.08 mm, rivals by 1.2 to 8.6).
+- Radar pixel noise at 0.11: it biased the storm-by-storm pair carry upward and widened the family; 0.07.
+- The unpaired upper-decile ratio inside the family: it does not replicate between odd and even seasons (up to 6.2 per
+  cent against 1.5); refuted (SF14).
+- The loss read on 10- and 15-minute totals inside the family: Rio Gelt fell to 3.50 and 3.11; the account refuses both
+  (2.26 and 3.45 mm rms against 1.25), so they are refuted rivals (SF10).
+- Triggering depths derived from a target rate on the long run: the 18-season realization sits up to 15 per cent off the
+  long run, so the depths are filed dials.
+- A pixel keeping 0.40 of the local factor: the radar route filed the right class at an open member on many seeds; 0.28.
+- Valfosca's hail share at 0.24: the hail dimension widened the family on S1's member (S1 at 2.4 times the spread);
+  0.10, with a wetter valley floor, gives 3.6.
+- Rio Gelt's rainfall-normal ratio at 1.00: Rio Gelt's figures were downstream of S1 alone and S1 fixed alone earned 31;
+  at 1.03 S2 moves its count without flipping it and S1 fixed alone earns 27.

@@ -1,48 +1,35 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-10",
- "call": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (25.0); River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2; the pair holds in 28 of 36 weather years and under all 72 variants",
- "stump": "Straight-line campaign transfers fund River Road (37.3) and Marsh Road (33.6); the drain rim and the untransferred harbor fund Front Street and River Road",
- "architecture": 7,
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-16",
+ "call": "class 3 (automatic barrier) at Rio Toval, Rio Ciadin, Rio Gelt, Rio Marden and Rio Bianc; class 2 (seasonal patrol and hand gates) at Rio Sass; class 1 (signs) at Rio Larin (triggering storms a season to expect, generator/core.py: Rio Toval 12.39, Rio Ciadin 10.39, Rio Gelt 4.33, Rio Marden 4.33, Rio Bianc 4.22; Rio Sass 1.78; Rio Larin 0.50; lines 3.0 and 1.0)",
+ "stump": "the reflex route (one factor per station closing the storage gauge account, each station carried to its source area by the rainfall normal's ratio, hail days' tips taken as rain) files Rio Gelt 1.17, Rio Marden 0.50, Rio Bianc 1.89 and Rio Sass 0.50: 2 barriers, 2 patrols and 3 signs; S1 lost alone files Rio Gelt 2.33, S2 lost alone Rio Marden 1.39 and Rio Sass 0.94, S3 lost alone Rio Bianc 2.61",
+ "architecture": 8,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-10",
-  "checks": "86 checks, 0 FAIL, 4 WARN"
+  "date": "2026-11-16",
+  "checks": "precut.py task3: 113 checks, 0 FAIL, 3 WARN (nearest chains task17 and task2 answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5; prompt gate PASS (one WARN: 'seasonal' is the class's own name)"
  },
  "leak": {
-  "leak_py": "REVIEW (each line answered in the design note)",
-  "reader": "three reads; round 3: no step named, no ranking file, the literal flood day executes to each low point's own water; realism fixes applied"
+  "leak_py": "",
+  "reader": ""
  },
- "duplicate_check": {},
+ "duplicate_check": {
+  "heart": "",
+  "nearest": "guard.py check task3 on 2026-11-16: WARN only (template.chain_near task17 and task10 v7, repeat.deliverables task1 v6, skeleton.house_lesson stock_flow_accounting, NOTE same_driver_older mark126), each answered in the note's Template check; skeleton severity none"
+ },
  "judge": {
-  "round1": {
-   "bundle": "5cc1927b",
-   "verdict": "NOT_DETERMINISTIC (narrowly)",
-   "disposition": "SEND_BACK",
-   "fixed": "ranking ask dropped; Front's sensor reports the water level; river forms in the band; river record from 1985; bands stated"
-  },
-  "round2": {
-   "bundle": "521db5d2",
-   "verdict": "DETERMINISTIC with SOLUTION_WRONG (River Road, pair years)",
-   "disposition": "FIX_NOW",
-   "fixed": "river flows by local day; forms within a fifth of the best in the sweep; platform hinge; bands cover the judge's figures"
-  },
-  "round3": {
-   "bundle": "0d54ea15f6144e05bef9a00526795bfe",
-   "verdict": "DETERMINISTIC",
-   "disposition": "FIX_NOW on the solution blocks only (the split's tides and weather and River Road's expected days graded as bands), applied; no rerun",
-   "gate_g": "forecasting with decomposition and method selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-   "gate_h": "domain pass, layers pass, 15 graded across 6 areas, one_thing none, borderline one-fact (two-fact sentence 5 of 15)"
-  }
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 31.5,
+ "paper_pair": 9,
  "runs": {
   "run1": null,
   "run2": null,
@@ -147,7 +134,7 @@
    "commit": ""
   }
  ],
- "resume": "upload prompt.txt (after the author's voice rewrite, re-gated by voice-check.py --rewrite and leak.py) and target.zip, generate the two runs, then /triage-runs task3",
+ "resume": "/build task3 from 3 (execute the note's Build brief on core.build(SEED); dataset-generation, submission-writeup, golden-realism, reduce-house-fixes, then the leak reader and the determinism judge at stage 4)",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -195,6 +182,14 @@
   {
    "date": "2026-11-08",
    "event": "architecture 5 (READY at a19fc6c from a parallel session, never uploaded) superseded and architecture 6 drawn (the Durrow Creek bridge) at the author's word: a total rework of the slot"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "READY: architecture 7 (Port Tolliver's FY2028 tide valves) at a175067; never uploaded"
+  },
+  {
+   "date": "2026-11-16",
+   "event": "architecture 7 set aside before any upload and architecture 8 drawn in a new world (the SP 141's gully crossings): core proved in generator/core.py (CORE PASS level 5), card registered, note to precut exit 0; architecture 7's built files removed from the folder (in git at a175067)"
   }
  ],
  "architectures": [
@@ -216,6 +211,16 @@
   {
    "architecture": 6,
    "drawn": "2026-11-08",
+   "fate": "landed by both platform runs on 2026-11-09 (runs/arch6/runs.md); redesigned"
+  },
+  {
+   "architecture": 7,
+   "drawn": "2026-11-10",
+   "fate": "READY at a175067 (Port Tolliver's tide valves), never uploaded; set aside 2026-11-16: its priced results were response-model corrections on mechanisms of the world and its harbor asks sat away from the stumps"
+  },
+  {
+   "architecture": 8,
+   "drawn": "2026-11-16",
    "fate": null
   }
  ],
@@ -226,17 +231,24 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "gates": "precut 86 checks 0 FAIL; gates.py 0 FAIL 4 WARN; checks 534 PASS; verify 7 PASS; audit_containers PASS; effort --check-note PASS; two builds byte-identical over 21 files",
- "revision": 2,
- "paper_note": "a run taking the foothill gauge's median concurrent ratio scores about 84 (pair with a shallow run 52.1)",
+ "gates": "",
+ "revision": 0,
+ "paper_note": "corelib's rubric table at the draw; the seed sweep passes every corelib check on 14 of 48 seeds, so the build reuses core.build(SEED) and moves no dial",
  "draw": {
-  "answer_shape": "ranked-list-cap",
-  "weight": "hard-to-measure",
+  "answer_shape": "distribution-cut",
+  "weight": "modeling",
   "depth_level": 5,
-  "world": "Port Tolliver, Georgia: five tidal low points carried from the harbor tide gauge"
+  "world": "Val d'Ardesa (invented), eastern Alps, Italy: seven gully crossings of the SP 141 classed for the 2027 to 2031 protection programme"
  },
- "final_cut": {
-  "target_zip_md5": "0d54ea15f6144e05bef9a00526795bfe",
-  "golden_zip_md5": "2a3e0a54d6b112825368f99f3c54c9e2"
+ "final_cut": {},
+ "doctrine": "throughout",
+ "chain": "R1 each station's tips set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate (the under-read at a true 100 mm an hour); R3 each source area's burst factor against its governing station; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches three times a season; R7 each crossing's class",
+ "effort": {
+  "quick": null,
+  "careful": 9,
+  "thorough": 100,
+  "factorial": "corelib CORE PASS level 5: S1 what the bucket loses by rate (opens Rio Gelt), S2 a source area's bursts against its station's (opens Rio Marden, moves Rio Sass with it), S3 a hail storm's water tipped after the storm (opens Rio Bianc); each necessary alone, none sufficient; seven distinct wrong calls across the lattice, three among the single drops; 384 variants file one classing",
+  "rubric": "one stump lost: S1 26, S2 30, S3 30; reflex route 9; rigorous standard route 9; fixed alone S1 27, S2 16, S3 23 (generator/core.py)",
+  "largest_hint": "the tipping buckets' sentence rescues R2 (1 of 7 results), 27 rubric points with three classes still wrong"
  }
 }
