@@ -162,7 +162,9 @@
   "transitions_inflated_by_response_error": "a change between two reports of a status that cannot reverse is mostly response error in both directions, so the gross flow is not a rate of first events; the impossible reverse flow and the event's own dated item size the error, the two bases are checked against each other, and a group where they part is decided on the basis its own answers support",
   "anchored_second_reading": "a check reading made in sight of the first reading moves only part of the way to an independent one, so the differences the check records are a fraction of the true ones; the fraction is measured where the same items were also read independently, and the recorded differences are divided by it",
   "state_reset_at_inspection": "each unit is measured at one point of a recurring cycle and the measurement's own feedback resets the unit, which then moves until the next one, so the periods between measurements are placed from the unit's continuous output by time since its last measurement, within unit and net of period, never at the level its measured period shows",
-  "local_standards_linked_by_shared_raters": "measurements made against different local standards share no measured item, so they are put on one basis through the raters common to two standards, each side first taken to its own standard, and the pairwise links adjusted over the network to the reference"
+  "local_standards_linked_by_shared_raters": "measurements made against different local standards share no measured item, so they are put on one basis through the raters common to two standards, each side first taken to its own standard, and the pairwise links adjusted over the network to the reference",
+    "served_state_outlives_source_failure": "a reader is served the last good value for its validity period after the source fails and a fresh one only at the entity's next refresh, so the share of sources failing is not the share of exposures degraded: the served state is replayed entity by entity from the refresh record with its validity and weighted by the exposure each entity carries, and it turns on whether the same entities fail again and again",
+    "experiment_reaches_one_reader": "an experiment withholds an input from one of the services that read it while a failure takes it from all of them, so the experiment prices one reader's use only: each other reader's loss is built from its own record of the exposures it could not serve and its own test, and added"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -255,7 +257,8 @@
   "prior_shift_reestimate_on_unlabelled": "class-conditional signal distributions fitted on a labelled but selected sample, the class share then re-estimated on the unlabelled population",
   "net_impossible_reverse_flows": "the gross flow netted of the flow that cannot happen, validated against the event's dated item where one exists and bounded where none does",
   "own_history_seasonal_difference": "the treated units' own change over the same months of earlier years, by the state that sizes the season, taken as the counterfactual",
-  "network_adjustment_of_pairwise_links": "pairwise differences between units that share a rater, an item or an instrument adjusted by least squares over the network to a reference unit"
+  "network_adjustment_of_pairwise_links": "pairwise differences between units that share a rater, an item or an instrument adjusted by least squares over the network to a reference unit",
+    "add_each_readers_loss_from_its_own_record": "the loss through every other reader of the same input built from that reader's own record of what it could not serve and its own test, per unit it reaches, and added to the first reader's"
  },
  "file_roles": {
   "governing_standard": "a standard, policy, rule or terms that file the WHAT",
