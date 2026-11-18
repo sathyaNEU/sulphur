@@ -1,109 +1,66 @@
-"""Build the pack under target/: the history (sim.py), the data files (pack.py), the documents (docs.py), every office
-container laid out as Office saves it (the house writers), each file's own save time. Then the 2027 truth run, which
-the pack never sees."""
+"""Build target/: lay the world out on the calendar (world.py), write the systems' exports (pack.py) and the
+documents (docs.py), and give every file its own save time."""
 import datetime as dt
 import os
+import shutil
 import sys
-from collections import defaultdict
-
-import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
+sys.path.insert(0, HERE)
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
+                       "writers")
 sys.path.insert(0, WRITERS)
 import postprocess  # noqa: E402
-
 import docs  # noqa: E402
 import pack  # noqa: E402
-import params as P  # noqa: E402
-import sim  # noqa: E402
+import world as WL  # noqa: E402
 
-FILES = pack.FILES
-PACK = list(FILES)
-DISTRACTORS = pack.DISTRACTORS
 GMT = dt.timezone.utc
-OFFICE = {"register": ("2026-11-30T16:40:00Z", "2026-12-01T17:05:00Z", P.PEOPLE["fleet"]),
-          "stocktake": ("2024-12-02T09:10:00Z", "2026-12-01T15:31:00Z", P.PEOPLE["fleet"]),
-          "recovery": ("2026-12-01T10:02:00Z", "2026-12-01T10:02:00Z", "KegTrace accounts"),
-          "plan": ("2026-10-20T13:15:00Z", "2026-11-26T17:48:00Z", P.PEOPLE["sales"]),
-          "cask": ("2026-11-30T15:58:00Z", "2026-11-30T16:20:00Z", P.PEOPLE["fleet"])}
-EXPORTED = {"rfid": dt.datetime(2026, 12, 1, 14, 14, 51, tzinfo=GMT),
-            "visits": dt.datetime(2026, 12, 1, 14, 31, 7, tzinfo=GMT),
-            "gate": dt.datetime(2026, 12, 1, 14, 38, 40, tzinfo=GMT),
-            "washer": dt.datetime(2026, 12, 1, 15, 2, 13, tzinfo=GMT),
-            "fills": dt.datetime(2026, 12, 1, 15, 4, 55, tzinfo=GMT),
-            "repairs": dt.datetime(2026, 12, 1, 15, 9, 26, tzinfo=GMT),
-            "audits": dt.datetime(2026, 11, 27, 16, 44, 2, tzinfo=GMT),
-            "weather": dt.datetime(2026, 12, 1, 11, 26, 30, tzinfo=GMT),
-            "erp": dt.datetime(2026, 12, 1, 15, 40, 18, tzinfo=GMT),
-            "packline": dt.datetime(2026, 12, 1, 18, 2, 44, tzinfo=GMT)}
+F = pack.FILES
+EXPORTED = {
+    F["dockets"]: dt.datetime(2026, 12, 1, 7, 42, 18, tzinfo=GMT),
+    F["tags"]: dt.datetime(2026, 12, 1, 8, 5, 51, tzinfo=GMT),
+    F["register"]: dt.datetime(2026, 12, 1, 9, 14, 3, tzinfo=GMT),
+    F["store"]: dt.datetime(2026, 11, 30, 6, 31, 44, tzinfo=GMT),
+    F["racking"]: dt.datetime(2026, 12, 1, 10, 27, 9, tzinfo=GMT),
+    F["audits"]: dt.datetime(2026, 12, 2, 11, 48, 36, tzinfo=GMT),
+    F["accounts"]: dt.datetime(2026, 12, 1, 14, 2, 27, tzinfo=GMT),
+    F["lines"]: dt.datetime(2026, 12, 1, 14, 6, 55, tzinfo=GMT),
+    F["products"]: dt.datetime(2026, 11, 13, 16, 20, 12, tzinfo=GMT),
+    F["codes"]: dt.datetime(2024, 9, 17, 11, 3, 40, tzinfo=GMT),
+    F["weather"]: dt.datetime(2026, 11, 30, 8, 15, 6, tzinfo=GMT),
+    F["depots"]: dt.datetime(2026, 11, 30, 7, 58, 23, tzinfo=GMT),
+    F["wash"]: dt.datetime(2026, 12, 1, 6, 49, 31, tzinfo=GMT),
+    F["purchases"]: dt.datetime(2026, 12, 1, 9, 36, 47, tzinfo=GMT),
+    F["recovery"]: dt.datetime(2026, 12, 2, 9, 11, 14, tzinfo=GMT),
+    F["packaging"]: dt.datetime(2026, 12, 1, 15, 33, 58, tzinfo=GMT),
+}
+OFFICE = [
+    (pack.FILES["stocktake"], WL.PEOPLE["fleet"], WL.PEOPLE["fleet"], "2023-12-04T16:05:00Z", "2026-11-30T17:21:38Z"),
+    (docs.FILES["plan"], WL.PEOPLE["brewer"], WL.PEOPLE["brewer"], "2026-10-19T09:30:00Z", "2026-11-12T14:46:09Z"),
+    (docs.FILES["schedule"], WL.PEOPLE["sales"], WL.PEOPLE["sales"], "2026-09-28T10:12:00Z", "2026-10-23T11:02:45Z"),
+    (docs.FILES["routes"], WL.PEOPLE["depot"], WL.PEOPLE["depot"], "2026-08-24T08:40:00Z", "2026-09-07T12:18:20Z"),
+    (docs.FILES["prices"], WL.PEOPLE["sales"], WL.PEOPLE["sales"], "2026-02-09T13:25:00Z", "2026-02-23T15:54:02Z"),
+]
 
 
-def volume_plan(w, plans):
-    agg = defaultdict(float)
-    for d, kid, s, sku in w.ev["fill"]:
-        if d.year == 2026:
-            agg[sku if not sku.startswith("F") else "FOUNDRY"] += s / 100.0
-    est = defaultdict(float)
-    for e in plans["estate"]:
-        for code, r in e["lines"].items():
-            wk = (dt.date(2027, 12, 31) - e["start"]).days / 7.0
-            est[code] += r * wk * w.sku_info[code][2] / 100.0
-    taps = sum(t["rate"] * (dt.date(2027, 12, 31) - t["start"]).days / 7.0 * 0.2 for t in plans["foundry_taps"])
-    rows = []
-    for code, name, size, style, tk, xm in P.SKUS:
-        a = agg[code]
-        full = a * 12.4 / 11.0
-        p = full * 1.01 + est.get(code, 0.0)
-        note = "includes Maplestead from April" if code in est else ""
-        rows.append((code, name, round(a), round(p / 10) * 10, note))
-    a = agg["FOUNDRY"]
-    rows.append(("FOUNDRY", "Foundry range", round(a), round((a * 12.4 / 11.0 * 1.12 + taps) / 10) * 10,
-                 "18 beers in 2027 (8 in 2026); new taps from April"))
-    return rows
+def build(target, WD=None):
+    if os.path.isdir(target):
+        shutil.rmtree(target)
+    os.makedirs(target)
+    WD = WD or WL.build()
+    counts, TX = pack.build(WD, target)
+    docs.write_all(target, WD)
+    for name, creator, last, created, modified in OFFICE:
+        postprocess.normalize_ooxml(os.path.join(target, name), creator, last, created, modified, excel=True,
+                                    company=WL.ORG)
+    postprocess.own_mtimes(target, EXPORTED)
+    return dict(counts=counts, TX=TX, WD=WD)
 
 
-def run(target):
-    os.makedirs(target, exist_ok=True)
-    Fp = {k: os.path.join(target, v) for k, v in FILES.items()}
-    rng = np.random.default_rng(P.SEED)
-    w = sim.build_world(rng)
-    w = sim.run_history(w)
-    plans = sim.make_plans(w)
-    # the brew plan is the head brewer's, made from the stock at the end of November
-    brew = sim.foundry_brew_plan(w, plans, w.engine)
-    plans["foundry_brews"] = {s: v[2] for s, v in brew.items()}
-    plans["volume"] = volume_plan(w, plans)
-    n = {}
-    n["rfid"] = pack.rfid(w, Fp["rfid"])
-    n["visits"] = pack.visits(w, Fp["visits"])
-    n["gate"] = pack.gate(w, Fp["gate"])
-    n["washer"] = pack.washer(w, Fp["washer"])
-    n["fills"] = pack.fills(w, Fp["fills"])
-    n["repairs"] = pack.repairs(w, Fp["repairs"])
-    n["audits"] = pack.audits(w, Fp["audits"])
-    n["weather"] = pack.weather(w, Fp["weather"])
-    n["packline"] = pack.packline(w, Fp["packline"])
-    pack.register(w, Fp["register"])
-    pack.stocktake(w, Fp["stocktake"])
-    pack.recovery(w, Fp["recovery"])
-    pack.plan(w, plans, Fp["plan"])
-    pack.cask(w, Fp["cask"])
-    pack.erp(w, plans, Fp["erp"])
-    docs.standard(Fp["standard"])
-    docs.exchange(Fp["exchange"], w)
-    docs.quote(Fp["quote"])
-    docs.agreement(Fp["agreement"], plans)
-    for k, (c, m, who) in OFFICE.items():
-        company = "KegTrace Recovery Services Ltd" if k == "recovery" else P.ORG
-        postprocess.normalize_ooxml(Fp[k], who, who, c, m, excel=True, company=company)
-    postprocess.normalize_docx(Fp["agreement"], P.PEOPLE["sales"], P.PEOPLE["sales"], "2026-10-14T15:20:00Z",
-                               "2026-10-16T09:02:00Z", revision=6, total_time=74, seed=4417, company=P.ORG)
-    postprocess.own_mtimes(target, {FILES[k]: v for k, v in EXPORTED.items()})
-    return w, plans, n
-
-
-def truth(w, plans):
-    """the 2027 summer at normal weather with the plans, unconstrained (never shipped)"""
-    tr = sim.run_2027(w, plans)
-    return tr
+if __name__ == "__main__":
+    o = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else os.path.join(os.path.dirname(HERE), "target")
+    r = build(o)
+    print(r["counts"])
+    for name in sorted(os.listdir(o)):
+        print("%10d  %s" % (os.path.getsize(os.path.join(o, name)), name))

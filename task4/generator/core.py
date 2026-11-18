@@ -52,23 +52,23 @@ NAMES = {"K50": "50 litre keg", "K30": "30 litre keg", "K20": "20 litre keg", "F
 # sales, the world's shortfall the fleet is placed at, lots bought since the reconciliation (week, containers), the
 # maker's minimum run, counts the reps made, and whether the pool carries tags
 W = {
-    "K50": dict(S0=4300, amp=0.20, k=0.045, g=0.000, L=2700, a=2.2, b=0.50, loss=0.0066, c2=0.55, cover=0.35,
-                beers=[("PIL", 0.62, 400, 1600), ("GLD", 0.38, 300, 1000)], new27=[],
-                estate=(300, 0.60), place=1000, lots=[(15, 1800), (70, 1200)], moq=2000, counts=1000, tagged=False),
+    "K50": dict(S0=4300, amp=0.20, k=0.045, g=0.000, L=2700, a=2.2, b=0.50, loss=0.0100, c2=0.55, cover=0.35,
+                beers=[("PIL", 0.62, 400, 2400), ("GLD", 0.38, 300, 1400)], new27=[],
+                estate=(300, 0.60), place=2000, lots=[(15, 1800), (70, 1200)], moq=3500, counts=1000, tagged=False),
     "K30": dict(S0=2400, amp=0.05, k=0.012, g=0.005, L=2600, a=2.1, b=0.50, loss=0.0085, c2=0.55, cover=0.35,
                 beers=[("PAL", 0.35, 250, 800), ("IPA", 0.25, 165, 550), ("HER", 0.22, 165, 500),
                        ("BLK", 0.18, 125, 400)], new27=[],
-                estate=(900, 0.39), place=3300, lots=[(15, 900), (70, 600)], moq=1500, counts=1000, tagged=False),
+                estate=(450, 0.78), place=3300, lots=[(15, 900), (70, 600)], moq=1500, counts=1000, tagged=False),
     "K20": dict(S0=640, amp=0.14, k=0.024, g=0.030, L=1800, a=2.0, b=0.50, loss=0.0030, c2=0.60, cover=0.35,
                 beers=[("F%02d" % i, 1.0 / 8, 120, 200) for i in range(1, 9)],
                 new27=[("F%02d" % i, 200) for i in range(9, 19)],
                 estate=(150, 0.20), place=650, lots=[(15, 650), (70, 650)], moq=1200, counts=700, tagged=True),
-    "FIR": dict(S0=1500, amp=-0.04, k=0.0, g=-0.020, L=1700, a=3.0, b=0.50, loss=0.0150, c2=0.60, cover=0.35,
-                beers=[("BIT", 0.60, 300, 540), ("MLD", 0.20, 150, 270), ("SEA", 0.20, 240, 480)],
-                new27=[("SUM", 240), ("HAR", 240)],
-                estate=(160, 0.60), place=1500, lots=[(40, 800)], moq=1200, counts=650, tagged=False),
-    "KIL": dict(S0=250, amp=-0.04, k=0.0, g=-0.030, L=170, a=3.0, b=0.50, loss=0.0090, c2=0.60, cover=0.35,
-                beers=[("BIK", 1.0, 80, 120)], new27=[],
+    "FIR": dict(S0=1500, amp=-0.15, k=0.0, g=-0.020, L=1700, a=3.0, b=0.50, loss=0.0150, c2=0.60, cover=0.35,
+                beers=[("BIT", 0.60, 300, 700), ("MLD", 0.20, 150, 270), ("SEA", 0.20, 240, 600)],
+                new27=[("SUM", 300), ("HAR", 300)],
+                estate=(160, 0.60), place=1600, lots=[(40, 800)], moq=1200, counts=650, tagged=False),
+    "KIL": dict(S0=250, amp=-0.15, k=0.0, g=-0.030, L=170, a=3.0, b=0.50, loss=0.0200, c2=0.60, cover=0.35,
+                beers=[("BIK", 1.0, 80, 360)], new27=[],
                 estate=(0, 0.0), place=-450, lots=[], moq=600, counts=160, tagged=False),
 }
 SCRAP = 0.0009                        # share of returning containers condemned at the wash
