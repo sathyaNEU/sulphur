@@ -1,132 +1,107 @@
 {
   "task": "task9",
   "project": "sulfur",
-  "architecture": "v3 of the cleared slot (2026-11-13): Varnholt Halbleiter Fab 2's VR90 ramp yield review",
-  "drawn": "2026-11-13",
-  "slot_note": "slot cleared by the author on 2026-11-11; Concept 1 (drive replacements) spent at stage 4 and Concept 2 (an edge ring traced to a conditioner disk) superseded before upload on 2026-11-13, both in lineage; this draw is a new fab, company and pack",
+  "architecture": "v4 of the cleared slot (2026-11-18): Tessel Market's ranking model, what each feature group's degraded service cost search conversion in the third quarter of 2026",
+  "drawn": "2026-11-18",
+  "slot_note": "redraw on 2026-11-18 of v3 (READY 2026-11-13, never uploaded) in the same subdomain and analysis type (General Statistics & Data Science, interpretability; Root-Cause Analysis) with a new world, a new decision form and new deciding lessons: the fab, the wafers and the five physical mechanisms are gone; the core is three judgments on different axes about what a ranking model's ablation tests, its jobs' failure telemetry and its feature store's logs can and cannot hold, proved in task9/generator/core.py at CORE PASS level 5",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "client_domain": "general-statistics-data-science",
   "client_subdomain": "Interpretability",
-  "niche": "a 300 mm automotive fab's June to September sort-yield shortfall split across an oxide slurry loop slowed for energy (its damage growing with each polisher's distance along the loop), a pre-gate wet bench's metal build-up under a longer chemical life, a deposition chamber and a polisher whose edge profiles cancel on the wafers that run both, and contact-etch chambers' polymer load from a test vehicle's deep recipe; then the large-die radar SoC's Q1 2027 sort yield under the ramp plan as filed and with changes",
+  "niche": "an online marketplace attributing a quarter's fall in search conversion to the degraded service of the seven feature groups its ranking model reads, when no record holds what a group's degraded service cost: the model's ablation tests withhold a group from the ranking model alone and for held users only on result pages built fresh, the jobs' telemetry counts failing sources and not the sessions served a default, and three groups are also read by a service that shows the shopper something",
   "objective": "root-cause",
-  "shape": "03",
+  "shape": "other",
   "decision_type": "root_cause_named",
-  "answer_unit": "rate_or_share",
-  "answer": "VR90 sorts at 45.4 per cent in Q1 2027 under the ramp plan as filed and 65.3 per cent with four changes made before its first lots reach the affected steps (SDS-OX1's pump back to its spring setpoint, tank T3 back to the spring chemical life, SH-300-B on DP2B with CM3 back to its standard recipe the same day, ET1B and ET3A wet-cleaned every 1,420 wafers), so the 412,000-unit commitment needs 3,520 wafer starts rather than 5,070; on VX40 the June to September shortfall of 25.2 good die a wafer (VP12 34.8) ranks the DP2B and CM3 edge pair (10.6), the slurry loop (7.3), the bench's chemical life (4.3) and the deep-etch polymer (2.1)",
-  "answer_source": "task9/generator/figures.json (R1 to R7), the golden of the cut pack",
+  "answer_unit": "set_of_items",
+  "answer": "put the stock, price, trend and promise feature groups on the 2027 tier one list (0.10, 0.16, 0.07 and 0.06 points of third-quarter search conversion); leave the seller, history and match groups off it (0.02, 0.03 and 0.02) (generator/core.py on the world's arrays; generator/figures.json once the pack is cut)",
+  "answer_source": "generator/core.py on the world's arrays at the draw; submission.md (Final Recommendation) and generator/figures.json on the cut pack",
   "gap": [
-    "objective",
-    "time"
+    "time",
+    "population"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G7",
-    "G4",
-    "G2",
-    "G3"
+    "G14",
+    "G3",
+    "G8"
   ],
-  "gate_g": "forecasting",
-  "calibration_form": "gold_standard_subsample",
-  "stump_strategy": "forecast_method_backtest",
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "realised_outcome_roster",
+  "stump_strategy": "causal_design",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "capacity_report",
+  "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried review stitches the sort database to the lot and tool histories, measures the shortfall and runs single-step commonality with every rival beside it, then carries each cause on the record it is first seen in: the scratch excess on each polisher's own consumables, the leakage on hours since each bath change, the edge fails on the polisher whose recipe changed, the etch chambers' particles on the PM counter's wafers, and the new product's yield on a die-area formula; each is a different wrong VR90 cost, and the plan's own changes look like recoveries",
-  "domain_test": "Attributing a yield loss across interacting process features (a shared feed's position effect, two features that cancel on the units carrying both), reconstructing a hidden stock from its flows, identifying a wear rate's true exposure basis against the counter that moved in step with it, and reading a yield at a new support from block yields are the interpretability statistician's objects; with the nouns of another field the fab's physics that pins each one (residence time on a loop, a film-thickness budget, drag-in and dilution, polymer per RF second, clustered defects per die area) is gone and no result can be computed",
+  "analyst_test": "a careful but hurried run pools each group's ablation tests by market and device with intervals, weights each job's failure telemetry by the traffic its sources carry and multiplies the two: it puts the stock, price and seller groups on the list and leaves the trend and promise groups off, where the golden lists stock, price, trend and promise and leaves seller off",
+  "domain_test": "every result is a quantity interpretability work on a deployed model estimates: what a feature group is worth to the model's outcome when it is withheld (an ablation effect, here net of the share of the held slice that was never ablated), how much of the population was actually served the ablated input, what the same input is worth to the other models and components that read it, and the attribution of an outcome change across feature groups; swap the nouns for a clinic or a warehouse and an ablation flag, a shared result cache, a value's validity period and a second reader of a feature stop meaning anything",
   "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:true-exposure-basis-and-cancelling-route-pairs",
+  "layer2_pattern": "own:loss-per-feature-group-from-ablations-diluted-by-a-shared-cache-failures-that-outlast-or-undershoot-their-telemetry-and-readers-the-ablation-never-reaches",
   "layer1": [
-    "sort retests and partial re-probes",
-    "split and merged lots",
-    "engineering wafers in production lots",
-    "scrapped wafers before sort",
-    "per-tool export layouts that drift",
-    "tool clocks a few minutes off",
-    "exception-reported facility trend with gaps and a unit change",
-    "back-entered PM rows",
-    "lab results with detection-limit text",
-    "duplicate bench log lines after a controller restart",
-    "lot IDs in two formats"
+    "feature status telemetry by shard and hour in the monitoring system's long layout, with late rows, a restated week and shard names that changed at a migration",
+    "the seller scoring log with one row per seller-night, retried runs written twice and a status vocabulary that changed in June",
+    "ablation and reader test results by day with partial last days, a relaunched test whose first days are superseded and market codes in two schemes",
+    "feed gap, batch run and lag episode logs in UTC and local time by system, the conversion mart in local business days"
   ],
-  "stakeholder_role": "the yield engineering lead presenting to the VR90 ramp readiness review (not named in the prompt)",
-  "role_family": "field_unit_lead",
+  "stakeholder_role": "the product manager for the ranking platform at Tessel Market, who takes the 2027 tier one hardening list to the platform's third-quarter reliability review (not named in the prompt)",
+  "role_family": "product_manager",
   "scoring_unit": "other",
   "spine": {
-    "file": "fab2_yield.sqlite (wafer table)",
-    "rows": 13978,
-    "entity": "one wafer at sort",
-    "grain": "wafer",
-    "source": "synthetic, simulated from the fab's dispatch, tool states, a slurry distribution loop, a wet bench's chemistry, film profiles, etch polymer and clustered defects"
+    "file": "the seller scoring job's log (one row per seller and night it was due), beside the hourly feature status telemetry by shard",
+    "rows": 0,
+    "entity": "one seller's nightly scoring run with its outcome",
+    "grain": "seller and night",
+    "source": "synthetic, simulated from the marketplace's traffic, its feature jobs and stores, its page cache, its experiment platform and its conversion attribution"
   },
-  "forum": "executive_team",
-  "forcing_event": "launch_or_rollout",
-  "org_family": "manufacturer",
+  "forum": "line_manager_or_team",
+  "forcing_event": "period_close",
+  "org_family": "retailer_or_ecommerce",
   "world": {
-    "geography": "Germany, Saxony (Dresden)",
-    "currency": "EUR",
-    "org_type": "semiconductor manufacturer",
+    "geography": "the Netherlands (Utrecht) and five neighbouring markets: Germany, Sweden, Belgium, Austria and Denmark",
+    "currency": "none in the task",
+    "org_type": "an online marketplace whose search results are ordered by a ranking model fed by seven feature groups, each built by its own job or service",
     "invented_names": [
-      "Varnholt Halbleiter",
-      "Fab 2",
-      "VX40",
-      "VP12",
-      "VR90",
-      "VR90-T"
+      "Tessel Market"
     ],
     "people": [
-      "Gitte Ullrich",
-      "Matthias Hertrampf",
-      "Sofia Sorgatz",
-      "Hüseyin Siering",
-      "Detlev Lindau",
-      "Isabelle Hamann",
-      "Gunhild Scheibe",
-      "Oswald Dobes",
-      "Werner Zimmer",
-      "Holger Kaul",
-      "Egon Schacht",
-      "Charlotte Mülichen",
-      "Fredo Döring",
-      "Arne Bohlander",
-      "Raimund Walter",
-      "Danilo Mende",
-      "Lisbeth Roskoth",
-      "Kreszenz Trubin"
+      "Aylin Haack",
+      "Zoey Mahieu",
+      "Milo Veenendaal",
+      "Lorenzo Stoffel",
+      "Jaylinn Smits",
+      "Alicia Boers",
+      "Suus Koster",
+      "Cornelia Hollander",
+      "Maarten Nieuwstraten",
+      "Sem Gerrits",
+      "Boaz Everts",
+      "Amir Keijzer",
+      "Mats Stuivenberg",
+      "Mehmet Miltenburg"
     ]
   },
   "deliverables": [
-    "vr90_ramp_yield_review.xlsx",
-    "vr90_ramp_yield_note.docx"
+    "tessel_feature_group_losses_2026q3.csv",
+    "tessel_tier_one_hardening_2027.xlsx"
   ],
   "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "The decisive quantities are a wear rate carried on the load its true driver sets rather than on the counter that moved in step with it in the record, a shared feed's damage that grows with each unit's distance along it, two units' opposite shifts that cancel on the items passing both, a hidden stock rebuilt from its inflows, dilutions and resets, and a yield read at the new item's own size from joint blocks of the small ones; carried on the counter, on each unit alone, on single-step comparisons, on a time-since-reset proxy and on an independence formula, the new item's planned yield and the changes it needs come out wrong in five different ways.",
-  "driver_concrete": "Varnholt Fab 2's June to September shortfall: the oxide slurry loop slowed from 1.6 to 1.0 m/s for an energy project, so scratches grow with each CMP tool's distance along it; the pre-gate bench's metals build up under the July chemical life; DP2B's new showerhead deposits the edge thick and CM3's May edge-zone tune polishes it thin, cancelling on DP2B to CM3 wafers; and VR90-T's deep contact etch loads ET1B and ET3A with polymer per RF second 1.7 times the others; VR90's Q1 2027 yield under the ramp plan (loop kept slow, July chemical life, CM3 harmonised with DP2B unchanged, 2,400-wafer etch cleans) and with changes, at its 320 mm2 die read from block yields.",
-  "stump": "The careful but hurried review finds the scratch excess on CM3 and CM1 and books it to their own POU filters and pads, carries the leakage on hours since each bath change at the summer's loading, books the edge fails to CM3's May tune and takes the plan's harmonisation as their recovery, keeps the contact-etch cleans at 2,400 wafers or scales them by RF time alone, and reads VR90 on a die-area formula from VX40's die yield; it files VR90's Q1 yield under the plan too high on the loop, the bath, the edge and the etch and too low on the entitlement, and recommends filter and pad changes in place of the loop's speed and the showerhead",
-  "answer_shape": "ranked-causes",
-  "weight": "investigation",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "investigation-loops",
-    "modeling",
-    "causal-reasoning",
-    "forecasting",
-    "missingness-measurement",
-    "synthesis"
-  ],
-  "results": "R1 the shortfall in good die per wafer for VX40 and VP12 sorted 1 June to 30 September 2026 against 1 January to 31 March; R2 the scratch cause and its VX40 cost and VR90 Q1 cost, the loop's flow by each polisher's distance along it, not the polishers' consumables; R3 the pre-gate bath's metal build-up since the chemical life change, its VX40 cost and its VR90 Q1 cost at the Q1 loading; R4 the edge cause, a deposition chamber and a polisher cancelling on the wafers that run both, its VX40 cost, what the plan's polisher harmonisation does alone, and its VR90 Q1 cost; R5 the contact-etch polymer on the VR90 chambers, its VR90 Q1 cost at the filed clean interval and the interval in VR90 wafers that holds it at today's level; R6 VR90's yield with none of the causes at the line's January to March performance, read at its own die area; R7 VR90's Q1 2027 sort yield under the plan as filed and with the changes, and the wafer starts the commitment needs",
-  "doctrine": "throughout",
-  "mechanism_source": "the author's brief of 2026-11-13 (five to six independent judgments off the closed page, a large related pack)",
+  "question_form": "how-much",
+  "driver": "A system's outcome fell over a period in which several of its inputs were served degraded, none of them outright, and each input is to be charged with what its degraded service cost. No record holds that. Each input's worth was measured by withholding it from a random slice, but the slice was served from a store shared with everyone, so the input was withheld only on the part of the slice's exposures built fresh, a part the test record does not hold and another record does, differing by cell and over time. How often each input's sources failed is counted, but a value is served for its validity after its source fails and returns only at its entity's next refresh, so the exposures served a default are rebuilt entity by entity and turn on whether the same entities fail again and again. And the tests withhold an input from one of the services that read it, where a failure takes it from all of them, so the other readers' losses come from their own records and their own tests. One past episode in which a random half of the exposures lost one input outright, on every reader, rules between the ways of putting these together.",
+  "driver_concrete": "Tessel Market puts a feature group on its 2027 tier one list where its degraded service cost 0.05 points of third-quarter search conversion or more. Held users got pages built with the group on 40 to 70 per cent of their page views, by device and before or after June's cache change; the seller scoring job failed 23 per cent of the sellers it was due to score while 1.4 per cent of sessions were served a default over the usual level; the delivery promise, price and history groups lose as much again through the badge, label and strip that read them. Core: stock 0.10, promise 0.06, price 0.16, history 0.03, trend 0.07, seller 0.02, match 0.02 points, where the pooled tests on the weighted telemetry give 0.27, 0.03, 0.08, 0.02, 0.04, 0.22 and 0.01.",
+  "stump": "A careful but hurried analyst takes each ablation test's measured effect as the group's worth (the trend group, withheld on under half the held slice's page views, is left off the list at 0.04 when it cost 0.07), takes the share of sources failing as the share of sessions served a default (the seller group, whose job failed a quarter of its runs while almost every seller kept a valid score, is listed at 0.22 when it cost 0.02) and prices each group through the ranking model alone (the delivery promise group, half of whose cost came through the badge that reads it, is left off at 0.03 when it cost 0.06).",
+  "deep_chain": "(1) the feature registry, the status telemetry, the entity logs, the test records, the edge cache log and the readers' logs on one calendar and one market and device scheme; (2) each group's full effect per session from its ablation tests over the share of the held slice's page views built fresh, by device, net of the default served on the tests' own days; (3) the sessions served each group's default, hour by hour, replayed entity by entity from the gap, batch, lag and scoring logs with each value's validity and weighted by the traffic each entity carries, net of its usual level; (4) each other reader's loss per eligible session from its own test and the sessions it failed to render over its usual rate; (5) April's missed price batches in one serving region reproduced from (2) to (4) against the daily conversion record; (6) each group's third-quarter loss, by month and together; (7) the groups at or over the charter's line and what they cost together",
+  "judgment": "an ablation effect that is a fraction of the group's worth, at a fraction only the edge cache record holds; a default served that the failure telemetry overstates or misses, held only by each entity's own refresh history; a second reader of the same group that no test of the ranking model reaches",
+  "one_fact_test": "the strongest sentence (a user held out of a feature group still gets result pages from the cache every user shares, so the ablation tests measure only part of what a group is worth) rescues S1 only, 1 of 3 judgments, and only once the fresh share is taken by cell and day from the edge cache record and the tests' own default days are netted: the seller group is still listed and the delivery promise group still left off",
+  "strategy_label": "own",
+  "mechanism_source": "design_note",
   "differentiation": {
-    "task9": "re-root into another world (a fab's yield root cause) after the drive-replacement forecast's SEND_BACK: a dial decision, new lessons, a new shell",
-    "task9 chain 2": "the same world's chain rebuilt at stage 2: new deciding lessons (a cohort curve named by serial ranges, a latent stage modelled from lot totals) and a dial decision form in place of the ranked bridge",
-    "task9 v2": "a new world (another fab, company and pack), new deciding lessons (an etch polymer's true exposure basis, a loop's position effect, cancelling edge profiles, a bath's hidden stock, a yield at a new support), a new decision form (ranked causes bridged with a forecast) and a new shell",
-    "mark111": "Mark's 111 v1 traced failures to delays inherited from an earlier period's work through an identifier crosswalk; this build attributes a yield loss across a shared feed's position effect, two cancelling edge profiles, a bath's hidden stock and an etch polymer's true exposure basis, and carries each to a new product's forecast at its own die area; no join decides it"
+    "task9": "the slot's v3 ranked five physical causes of a fab's yield loss in a bridge with a forecast; nothing here is a physical mechanism in the rows and nothing is bridged to a fall: the quantities are what an ablation withholds, what a failed source still serves and which readers a test reaches, each group read against a filed line",
+    "task6": "approved task6 reads services' latency indicators from a sampled trace store (design weights, a retention cut, dated onsets, a source against its victims) and charges incidents to services; here nothing is sampled by a keep rate, no window is missing, no onset is dated and no fault propagates: the quantity is a conversion loss no record holds, built from randomised ablations, a cache record and entity refresh logs",
+    "task25": "task25 bridges a throughput benchmark to planned training runs by network position and a measured behavioural response; here no benchmark is carried to new conditions: an experiment's effect is scaled by the share of its slice that received it and joined to a replayed served state",
+    "task8": "task8's first judgment also divides a recorded difference by a fraction measured elsewhere (a moderator anchored on the mark in sight); here the fraction is a share of exposures on which a randomised arm received its assignment, read from an operational cache record by cell and day, and the other two judgments (a served state replayed by entity, a second reader priced from its own test) have no counterpart there",
+    "task24": "task24 values label sources for a retailer's reply model by their noise against a standard; nothing here is a label, a benchmark or a procurement choice"
   },
   "lineage": [
     {
@@ -770,6 +745,139 @@
       "answer": "take the conditioner disk out of the full PM under Rev G and change it after 1,010 wafers of its own use on PU-1 and PU-2 and 840 on PU-3 and PU-4, saving about USD 519,000 a year against Rev F",
       "spent": true,
       "fate": "superseded on 2026-11-13 before upload, at the author's word: read against the client's closed page of 2026-11-12, one of the two steps its call needed was the closed young-cohort lesson (the current supplier lot's curve, reached through a serial-range join that open-ground.md has since ruled dead as a deciding lesson): pooling the disk lots alone moved both pairs out of their bands, and the judge's blind first pass found the lot on 7 of 8 cells; the author asked for five to six independent judgments off the closed page in a larger related pack, so the slot moves to another fab, company and dataset"
+    },
+    {
+      "answer": "VR90 sorts at 45.4 per cent in Q1 2027 under the ramp plan as filed and 65.3 per cent with four changes made before its first lots reach the affected steps (SDS-OX1's pump back to its spring setpoint, tank T3 back to the spring chemical life, SH-300-B on DP2B with CM3 back to its standard recipe the same day, ET1B and ET3A wet-cleaned every 1,420 wafers), so the 412,000-unit commitment needs 3,520 wafer starts rather than 5,070; on VX40 the June to September shortfall of 25.2 good die a wafer (VP12 34.8) ranks the DP2B and CM3 edge pair (10.6), the slurry loop (7.3), the bench's chemical life (4.3) and the deep-etch polymer (2.1)",
+      "answer_shape": "ranked-causes",
+      "answer_unit": "rate_or_share",
+      "calibration_form": "gold_standard_subsample",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "investigation-loops",
+        "modeling",
+        "causal-reasoning",
+        "forecasting",
+        "missingness-measurement",
+        "synthesis"
+      ],
+      "context_artifact": "capacity_report",
+      "decision_type": "root_cause_named",
+      "deliverables": [
+        "vr90_ramp_yield_review.xlsx",
+        "vr90_ramp_yield_note.docx"
+      ],
+      "domain": "general-statistics-data-science",
+      "drawn": "2026-11-13",
+      "driver": "The decisive quantities are a wear rate carried on the load its true driver sets rather than on the counter that moved in step with it in the record, a shared feed's damage that grows with each unit's distance along it, two units' opposite shifts that cancel on the items passing both, a hidden stock rebuilt from its inflows, dilutions and resets, and a yield read at the new item's own size from joint blocks of the small ones; carried on the counter, on each unit alone, on single-step comparisons, on a time-since-reset proxy and on an independence formula, the new item's planned yield and the changes it needs come out wrong in five different ways.",
+      "driver_concrete": "Varnholt Fab 2's June to September shortfall: the oxide slurry loop slowed from 1.6 to 1.0 m/s for an energy project, so scratches grow with each CMP tool's distance along it; the pre-gate bench's metals build up under the July chemical life; DP2B's new showerhead deposits the edge thick and CM3's May edge-zone tune polishes it thin, cancelling on DP2B to CM3 wafers; and VR90-T's deep contact etch loads ET1B and ET3A with polymer per RF second 1.7 times the others; VR90's Q1 2027 yield under the ramp plan (loop kept slow, July chemical life, CM3 harmonised with DP2B unchanged, 2,400-wafer etch cleans) and with changes, at its 320 mm2 die read from block yields.",
+      "forcing_event": "launch_or_rollout",
+      "forum": "executive_team",
+      "gap": [
+        "objective",
+        "time"
+      ],
+      "gate_g": "forecasting",
+      "generators": [
+        "G7",
+        "G4",
+        "G2",
+        "G3"
+      ],
+      "layer2_family": "estimand_identification",
+      "layer2_pattern": "own:true-exposure-basis-and-cancelling-route-pairs",
+      "objective": "root-cause",
+      "org_family": "manufacturer",
+      "pattern": [
+        "none"
+      ],
+      "question_form": "which",
+      "role_family": "field_unit_lead",
+      "shape": "03",
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "vr",
+        "deliverable set": "xlsx"
+      },
+      "skeleton": {
+        "decision_form": "ranked_causes_bridge",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "exposure_basis_decoupled",
+          "position_on_network_effect",
+          "cancellation_of_offsetting_effects",
+          "stock_flow_accounting",
+          "support_effect"
+        ],
+        "mechanisms": [
+          "etch_polymer_load_by_recipe_chemistry",
+          "slurry_agglomeration_by_loop_residence_time",
+          "deposition_edge_profile_cancelled_by_cmp_zone_tune",
+          "bath_metal_drag_in_spike_dilution_dump_reset",
+          "clustered_random_defects_by_die_area"
+        ],
+        "detection": [
+          "natural_experiment_in_record",
+          "layout_or_physics",
+          "second_source_at_other_grain",
+          "residual_by_subgroup"
+        ],
+        "moves": [
+          "rate_on_driver_exposure",
+          "allocate_by_network_position",
+          "compute_on_joint_path",
+          "replay_event_by_event",
+          "bridge_by_contribution",
+          "variant_sweep_holds_call"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "event_timeline",
+          "schedule_or_plan",
+          "quotes_or_costs",
+          "unused_distractor"
+        ]
+      },
+      "stump": "The careful but hurried review finds the scratch excess on CM3 and CM1 and books it to their own POU filters and pads, carries the leakage on hours since each bath change at the summer's loading, books the edge fails to CM3's May tune and takes the plan's harmonisation as their recovery, keeps the contact-etch cleans at 2,400 wafers or scales them by RF time alone, and reads VR90 on a die-area formula from VX40's die yield; it files VR90's Q1 yield under the plan too high on the loop, the bath, the edge and the etch and too low on the entitlement, and recommends filter and pad changes in place of the loop's speed and the showerhead",
+      "stump_strategy": "forecast_method_backtest",
+      "subdomain": "interpretability",
+      "weight": "investigation",
+      "world": {
+        "geography": "Germany, Saxony (Dresden)",
+        "currency": "EUR",
+        "org_type": "semiconductor manufacturer",
+        "invented_names": [
+          "Varnholt Halbleiter",
+          "Fab 2",
+          "VX40",
+          "VP12",
+          "VR90",
+          "VR90-T"
+        ],
+        "people": [
+          "Gitte Ullrich",
+          "Matthias Hertrampf",
+          "Sofia Sorgatz",
+          "Hüseyin Siering",
+          "Detlev Lindau",
+          "Isabelle Hamann",
+          "Gunhild Scheibe",
+          "Oswald Dobes",
+          "Werner Zimmer",
+          "Holger Kaul",
+          "Egon Schacht",
+          "Charlotte Mülichen",
+          "Fredo Döring",
+          "Arne Bohlander",
+          "Raimund Walter",
+          "Danilo Mende",
+          "Lisbeth Roskoth",
+          "Kreszenz Trubin"
+        ]
+      },
+      "architecture": "v3 of the cleared slot (2026-11-13): Varnholt Halbleiter Fab 2's VR90 ramp yield review",
+      "fate": "spent 2026-11-18 before any upload: READY on 2026-11-13 and never run. It was cut before the core, open-members and rubric rules (no generator/core.py, no Stump core, no Build brief, no Stump factorial), its five judgments were mechanisms of the world (an etch polymer, a slurry loop, cancelling edge profiles, a bath's stock, a yield at a new support) that the rows either carry or do not, the kind the 2026-11-13 send-backs were returned on, and its heart stood at BLOCK (ban.calibration against task19)"
     }
   ],
   "lineage_shells": [
@@ -851,60 +959,69 @@
       "question form": "how-many",
       "second-sentence opener": "a",
       "deliverable set": "pptx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "vr",
+      "deliverable set": "xlsx"
     }
   ],
-  "notes": "re-root on 2026-11-13 at the author's word; five lessons, none closed or next to a closed card, each graded on its own result, and a synthesis that needs all five; the move compute_on_joint_path is used for both the route pairs and the block yields (a block is good only when every die in it is good), no new vocabulary key | 2026-11-13: forcing event redrawn to launch_or_rollout after task22 v2 filed budget_or_appropriation; org_family manufacturer kept by the author's override of the ban.org_family BLOCK against task4 architecture 13 (registered 02:07 UTC, after this world's first registration at 01:31 UTC, and sorted ahead of it by its card's local draw date of 2026-11-12); a semiconductor fab cannot honestly be another kind of organisation",
+  "notes": "v4 (2026-11-18): calibration form realised_outcome_roster stands for April's missed price batches in one of two serving regions (a random half of the users lost one group outright on every reader), which the build uses as the referee and never as the answer. The deciding lesson instrument_noncompliance was on file with no card; served_state_outlives_source_failure and experiment_reaches_one_reader are new keys. The nearest closed card (controls were partly treated, spillover or shared resource) is answered in the note's Closed strategies line: the controls are untouched and the held slice is under-treated, the fix is a ratio to a compliance share read from another record, and no comparison unit is dropped or modelled on its neighbourhood.",
+  "answer_shape": "flagged-set",
+  "weight": "attribution",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "causal-reasoning",
+    "investigation-loops",
+    "data-discovery",
+    "validation",
+    "decomposition-attribution",
+    "synthesis"
+  ],
+  "results": "R1 the registry, telemetry, entity logs, test records, cache log and readers' logs on one calendar and scheme; R2 each group's full effect per session from its ablation tests over the fresh share; R3 the sessions served each group's default, replayed by entity; R4 each other reader's loss from its own test and render log; R5 April's missed price batches reproduced against the daily conversion record; R6 each group's third-quarter loss, by month and together; R7 the groups on the tier one list and what they cost together",
   "skeleton": {
-    "decision_form": "ranked_causes_bridge",
+    "decision_form": "per_unit_diagnosis",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "exposure_basis_decoupled",
-      "position_on_network_effect",
-      "cancellation_of_offsetting_effects",
-      "stock_flow_accounting",
-      "support_effect"
+      "instrument_noncompliance",
+      "served_state_outlives_source_failure",
+      "experiment_reaches_one_reader"
     ],
     "mechanisms": [
-      "etch_polymer_load_by_recipe_chemistry",
-      "slurry_agglomeration_by_loop_residence_time",
-      "deposition_edge_profile_cancelled_by_cmp_zone_tune",
-      "bath_metal_drag_in_spike_dilution_dump_reset",
-      "clustered_random_defects_by_die_area"
+      "held_users_are_served_result_pages_from_the_cache_every_user_shares",
+      "a_value_is_served_for_its_validity_and_returns_at_the_entitys_next_refresh",
+      "the_same_sellers_fail_night_after_night_while_most_keep_a_valid_score",
+      "a_badge_a_label_and_a_strip_read_the_same_feature_groups_as_the_ranking_model",
+      "one_serving_region_missed_price_batches_while_the_other_did_not"
     ],
     "detection": [
-      "natural_experiment_in_record",
-      "layout_or_physics",
       "second_source_at_other_grain",
-      "residual_by_subgroup"
+      "naive_ignores_what_it_should_depend_on",
+      "natural_experiment_in_record"
     ],
     "moves": [
-      "rate_on_driver_exposure",
-      "allocate_by_network_position",
-      "compute_on_joint_path",
+      "instrument_on_assignment",
       "replay_event_by_event",
-      "bridge_by_contribution",
+      "add_each_readers_loss_from_its_own_record",
       "variant_sweep_holds_call"
     ],
     "file_roles": [
       "primary_record",
+      "test_or_trial_register",
       "second_grain_source",
       "reference_register",
       "event_timeline",
-      "schedule_or_plan",
-      "quotes_or_costs",
+      "governing_standard",
       "unused_distractor"
     ]
   },
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "architecture_spent": false,
   "shell": {
     "question form": "which",
     "second-sentence opener": "vr",
-    "deliverable set": "xlsx"
+    "deliverable set": "docx+xlsx"
   },
-  "registered": "2026-11-13T04:28:32Z",
-  "author_override": {
-    "date": "2026-11-13",
-    "gate": "guard.py heart ban.org_family",
-    "against": "task4 (13)",
-    "decision": "ship with the ban recorded (the author's choice)"
-  }
+  "registered": "2026-11-18T11:59:33Z"
 }

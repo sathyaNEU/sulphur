@@ -1,378 +1,324 @@
-# task9: what drove Varnholt Halbleiter Fab 2's June to September sort-yield shortfall, and what VR90 will yield at sort in Q1 2027 under the ramp plan as filed and with the changes it needs
+# task9: how much search conversion each feature group's degraded service cost Tessel Market in the third quarter of 2026, and which groups go on the 2027 tier one list
+
+Architecture 4 of the cleared slot, drawn 2026-11-18. Every figure in this note is `generator/core.py`'s on the world's arrays (seed 9104) until the pack is cut; from then on `generator/figures.json`.
 
 ## Draw
 
-Subdomain: General Statistics & Data Science, Interpretability (feature attribution and mechanistic analysis: a yield
-  shortfall attributed across interacting process features to the mechanisms that carry it, each mechanism's
-  consequence carried to a new product's die and the ramp quarter's operating conditions)
-Analysis type: Root-Cause Analysis, ending in a forecast for the new product's ramp
-Answer shape: ranked causes with their contributions: the June to September shortfall bridged from January to March in
-  good die per VX40 wafer, each cause named with its fix, then VR90's Q1 2027 sort yield from its own entitlement
-  through each cause's cost under the ramp plan as filed to the plan's yield and the recommended plan's yield, with
-  the wafer starts the Q1 commitment needs.
-Weight: investigation. Most of the work is finding five causes that landed in the same months across about twenty-five
-  related files (a slurry loop's facility trend and line list, a wet bench's event log and lab samples, a film's
-  49-site maps and a recipe log, an etch chamber's per-wafer RF record and daily monitor wafers, the sort database),
-  each against the rival its first trace suggests; none of the last three builds (task22's assembly, task16's
-  validation, task7's hard-to-measure quantity) put its weight there.
-Data-native sentence: the sort records see every cause only as fail bins on die, the polishers, benches, chambers and
-  the slurry loop each keep their own logs at their own grain and clock, and the product the ramp needs has never been
-  sorted, so each cause has to be found where its physics leaves a trace (a loop's taps, a film's thickness budget, a
-  bath's chemistry, a chamber's polymer load) and carried to a die nearly four times the size.
-People: Gitte Ullrich (yield engineering lead), Matthias Hertrampf (CMP module engineer), Sofia Sorgatz (facilities,
-  slurry and chemical distribution), Hüseyin Siering (wet process engineer), Detlev Lindau (etch module engineer),
-  Isabelle Hamann (operations planning, owner of the ramp plan), Gunhild Scheibe (fab controlling, owner of the cost
-  inputs), Oswald Dobes (analytical lab); drawn with guard.py names --geo "Germany, Saxony" --seed 9033.
+Subdomain: General Statistics & Data Science (Machine Learning Research), Interpretability
+Analysis type: Root-Cause Analysis
+Answer shape: a flagged set with the evidence: the feature groups whose degraded service cost 0.05 points of search conversion or more, each of the seven groups with its estimate
+Weight: attribution (what each of seven inputs cost an outcome no record splits)
+Data-native sentence: conversion is attributed nightly and swings by a quarter of a point from day to day, so a group that cost a twentieth of a point leaves nothing to read in it, and the three records that do see a group's cost (a randomised ablation of the ranking model, the jobs' failure telemetry, the logs of the stores and of the other services that read the group) each see a different part of it.
+People: Aylin Haack, Zoey Mahieu, Milo Veenendaal, Lorenzo Stoffel, Jaylinn Smits, Alicia Boers, Suus Koster, Cornelia Hollander, Maarten Nieuwstraten, Sem Gerrits, Boaz Everts, Amir Keijzer, Mats Stuivenberg, Mehmet Miltenburg (`guard.py names --geo Netherlands --seed 9104`)
 
-1. Fit: the client's direction for the domain is the regression split across changes that shipped together and a
-   root cause tested against its rivals; the draw takes no client chain (skeleton check: severity none against every
-   card, lineage entry and client task).
-2. Task type: Interpretability, the General Statistics task type that serves Root-Cause: attribution across
-   interacting features, a mechanism's dose on its true exposure and a yield read at a new support are its own objects.
-3. Data: generated, simulating the fab's process (lot starts for three products and a test vehicle, dispatch with bay
-   affinities and tool downtime, an oxide slurry loop whose large particles grow with residence time to each tap, a
-   pre-gate bench whose metals build up between spikes and changes, a deposition chamber's new showerhead and a
-   polisher's edge-zone tune, contact-etch polymer by RF time and recipe chemistry, clustered random defects, a sort
-   program that bins each die on its first failing test, metrology, inspection and e-test sampling plans).
-4. Decision: the changes the VR90 ramp plan needs and the yield and wafer starts the plan should carry, at the ramp
-   readiness review on 24 November 2026; backward on the June to September causes, forward on VR90's Q1 2027 quarter.
-5. Shell: question form which; a spreadsheet and a short note for the ramp review (xlsx and docx).
-6. Card: shape 03, gap objective then time, generators G7, G4, G2, G3, Gate G forecasting, calibration form
-   gold_standard_subsample (the 49-site maps, the lab's investigation samples and the daily monitor wafers against the
-   routine instruments), context artifact capacity_report (the ramp plan), forum executive_team (the fab management
-   team that chairs the ramp readiness review), forcing event launch_or_rollout (VR90's production ramp, whose first
-   lots reach the affected steps before the quarter), organisation manufacturer, role field_unit_lead, strategy
-   forecast_method_backtest. Forum and forcing event were redrawn on 2026-11-13 after task1 v5 and task20 v3 filed
-   committee_or_panel, a vote and a contract into the window, and the forcing event again after task22 v2 filed
-   budget_or_appropriation; the management team and the ramp are what the plan of record itself names as deciding.
-   The organisation family stays manufacturer by the author's override of 2026-11-13: `guard.py heart` BLOCKs it
-   against task4's architecture 13 (a brewery), drawn in a parallel session at 02:07 UTC after this world was filed at
-   01:31 UTC and sorted ahead of it by its card's local draw date; a semiconductor fab cannot honestly be another kind
-   of organisation, and the two builds share no domain, analysis type, answer shape or structure.
-7. Guard (re-registered 2026-11-13 with the redrawn axes): WARN only: overuse.forum (executive_team: here the fab's
-   management team at the ramp review), repeat.gate_g, repeat.deliverables and repeat.question_form against the two
-   builds filed just before, template.chain_near (task18 ranks an island grid's disturbance losses in an investigation; here the
-   ranking is a bridge in good die carried into a new product's forecast, and the skeletons share nothing),
-   skeleton.house_lesson (stock_flow_accounting on mark120 and task20: here the stock is a bath's metal content rebuilt
-   from drag-in, spikes and changes and checked on the lab's investigation samples, one of five lessons).
-8. Slot: architecture 1 (Concept 1) is spent and architecture 2 (Concept 2, the edge ring) superseded, both in the
-   card's lineage; this draw changes the world, the company, the pack, the deciding lessons, the decision form and the
-   shell.
+Weight not leaned on recently: the last three builds put theirs elsewhere (task4 on a quantity that is hard to measure, task5 on assembling the record, task8 on how a mark is measured) and the slot's third architecture on investigation.
+
+Guard: `guard.py check` WARN only on 2026-11-18. overuse.forum (line_manager_or_team on six builds): the forum is the ranking platform's own quarterly reliability review, a team forum, and the three forums nearest it (committee, operations desk, regulator) are inside the ban window. repeat.deliverables (csv+xlsx against task5 and task8): the house set since 2026-11-16; what the files hold differs (a group-by-month loss table and a list with its routes, against a centre table and a head count). `skeleton.py check task9` PASS, severity none against every card, the client's corpus and the slot's lineage; heart WARN.
+
+Retrospective call: the quantity is a closed quarter's loss because a root cause is read on what happened; the decision it feeds (the 2027 list) is forward, and the charter fixes that the list is drawn on the third quarter.
+
+## Stump screen
+
+Screened on paper and in `generator/core.py` before the card was registered (`references/stump-screen.md`, the seventeen tests).
+
+| Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
+|---|---|---|---|---|
+| A: an ablation test withholds a group at the ranking model, and a held user handed a result page from the cache every user shares gets the ranking built with the group, so the test measures the group's worth on 30 to 60 per cent of the held slice's page views, by device and before or after June's cache change | a randomised test's measured effect is the effect of withholding the group (L18, L28) | the edge cache's daily record of page views served from cache and built fresh, by market and device; the serving pipeline's stage order | none | kept (S1) |
+| B: a value is served for its validity after its source fails and returns only at the entity's next refresh, so the share of sources failing is 1.1 to 17 times the share of sessions served a default, by group | the failure telemetry, weighted by traffic, is the exposure (N21, L26) | the feed gap, batch run, lag episode and seller scoring logs, entity by entity, with each group's validity and the traffic each entity carries | none | kept (S2) |
+| C: three groups are also read by a service that shows the shopper something, which fails in the same sessions; an ablation of the ranking model never touches it | the ablation test prices the feature group (L16, N27) | each reader's own render log and its own hidden-arm test | none | kept (S3) |
+| D: a job whose failures its monitor does not record (silent staleness) | the telemetry is complete | the entity log | 2 and 13 (runs reconcile a monitor against its job log unprompted, and it would open the member B opens, on the same axis) | dropped; every failure the logs hold is in the telemetry |
+| E: the ablation flag removes the group and its fallback together, so withholding is worse than a served default | withheld equals degraded | a test of the default itself | 3 and 11 (the golden could not measure the default's worth without a filed constant, which would be a rule) | dropped; a withheld group and a group at its default reach the model identically, and the pipeline file says so by its structure |
+| F: a group worth more in the summer than in the months its tests ran | an effect is constant over the year | the tests by month | 1 (an effect carried to a period with another mix or a fading effect, both closed) | dropped; each group's worth per session is constant within device |
+| G: two groups at their defaults in the same session cost less than the sum | losses add | joint exposure | 9 and 11 (joint exposure is under one per cent of sessions, worth under the family's spread, and no record prices it) | dropped; effects add |
+| H: the daily conversion record regressed on the telemetry, or on the rebuilt exposures with day effects, as the instrument | a regression's interval is its error | its own placebo months and April | 12 (it is the run's alternative, not a trap: it has nothing to fit for the groups that fail in every market at once and misses April's measured cost by half) | kept as a rival in the closure table, priced in `core.py --detail` |
+| I: traffic carried by a failing source differs from its count | sources weigh equally | the traffic shares | 2 (a weight a table ships is applied unprompted) | dropped as a stump; it is the reflex route's own hygiene |
 
 ## Deep reasoning
 
-Task type: Interpretability (feature attribution and mechanistic analysis), serving Root-Cause Analysis: the shortfall
-  attributed across interacting process features, each mechanism modelled on its own exposure, and carried to a new
-  product's die and quarter.
-Domain test: every result is the field's own statistical object: a shortfall against a baseline period on the sort
-  database's die, an attribution across dependent features where a shared feed's effect grades with position and two
-  features cancel on the units that carry both, a hidden stock rebuilt from its flows and calibrated on a sparse second
-  instrument, a wear rate identified on its true exposure against the counter that moved in step with it, and a yield
-  read at a new support from block yields of the small die.
-Swap: "the slurry loop's speed costs the far polishers most, the bench's metals build up between spikes, DP2B and CM3
-  cancel on the wafers that run both, VR90-T's deep etch loads two chambers with polymer, and VR90's big die yields
-  more than a die-area formula says" read with a hospital's or a retailer's nouns has no loop residence, thickness
-  budget, drag-in and dilution, polymer per RF second or clustered defects per square centimetre to compute, so no
-  result can be reached.
-Where the weight sits: R2 to R5 (each cause found against the rival its first trace suggests), long because each needs
-  its own file at its own grain read against the sort database's die and the lot and tool histories.
-Layer 1: sort retests (the tester re-probes part of a wafer after a probe-card clean; 4 per cent of wafers), split and
-  merged lots (rework), wafers scrapped before sort, each polisher's export in its own layout (CM1's clock four minutes
-  fast, CM3's German-locale semicolon file), the slurry loop's trend exception-reported with two outages and a flow unit
-  change to gpm at the April firmware update, back-entered PM rows and rows missing a counter, the bench controller in
-  UTC on WB-2 with repeated lines after watchdog restarts, lab results below the reporting limit as text, lot IDs with a
-  dot until the March MES upgrade, a network outage that left a gap in the etch export; none decides a result (checks.py
-  R2 block).
-Not one thing: the strongest single piece is the slurry loop's position effect (VR90's largest gain, 8.3 points); a
-  run that nails it still has to find the bath's stock, the cancelling pair, the etch basis and VR90's die-area yield,
-  each in its own files, and each moves its own graded figure past its band.
-One-fact test: "the slurry loop's scratching grows with each polisher's distance along it" rescues R2, 1 of 7 results;
-  every other hint rescues one result too (effort.json hints).
-Not semantics: every field and unit read correctly still leaves the far taps' excess on CM1's and CM3's own consumables,
-  the bath carried at the summer's loading, the edge on CM3's tune, the etch cleans on the wafer counter or on RF time
-  alone and VR90 on a die-area formula.
-Not rule application: no filed procedure attributes the shortfall, rebuilds the bath's metal, identifies the polymer
-  load or reads a yield at VR90's die; the ramp plan states the quarter's operating conditions and nothing else.
-Estimand: the prompt fixes the populations (VX40 and VP12 wafers sorted 1 June to 30 September 2026 against those
-  sorted 1 January to 31 March; VR90's Q1 2027 wafers), the outcomes (good die per wafer; sort yield; wafer starts),
-  each cause's VR90 figure as what fixing it alone adds under the ramp plan as filed, and the starts with every cause
-  fixed; the ramp plan fixes the Q1 loading, settings, back-end yields and commitment.
-No decoy: no memo, ticket or draft carries a cause, a share or a yield; the ramp plan states operating conditions and
-  the commitment only, and no file ranks the causes.
-No replay: no result re-derives a published figure; no stated number in the pack is simply wrong.
-Pinned: each result's rivals are run on the cut pack (effort_passes.rivals: block yields read directly, each product's
-  cluster fit alone, VR90 split evenly on CM1 and CM3, particle kill read from VP12, a straight GOI hinge, bin 5 pooled
-  over VX40 and VP12 per mm2 of die, first insertions, the die-killed reading of each VX40 cost) and land inside the
-  bands checks.py asserts; the world's own expected VR90 figures (forward.py) land inside every VR90 band too.
-Run forecast: R2 stopped at the first story (the far taps' excess booked to CM1's and CM3's own filters and pads); R3
-  method shortcut (the bath carried at the summer's loading); R4 dismissed own evidence (DP2B's thick edge set aside
-  because its wafers yield well on average, then CM3's harmonisation taken as the fix); R5 method shortcut (cleans on
-  the wafer counter, or scaled by RF time alone); R6 method shortcut (a die-area formula from VX40's die yield); R7
-  unfinished chain.
-Strategy label: Splitting a regression across changes that shipped together (Machine Learning Research 2), here a sort
-  yield across four causes that landed in the same months, carried into the forecast the ramp needs.
-Depth level: 5: five independent judgments (R2 to R6), each needing its own files and estimation, and the shortcuts land
-  on eight different wrong VR90 answers (effort.json routes) with different wrong change lists.
-Lesson: a yield attribution is finished only when each cause is modelled on its own physics (a feed's position, a
-  film's budget across two steps, a bath's stock, a polymer's true load) and carried to the new product's die and
-  quarter; no build on file teaches the etch basis, the loop, the cancelling pair and the support together.
+Task type: interpretability (feature attribution, probing, mechanistic analysis), the task type the taxonomy has serve Root-Cause Analysis in this subdomain
+Domain test: every result is a quantity interpretability work on a deployed model estimates. A feature group's worth to the model's outcome is an ablation effect, here net of the share of the ablated slice that was never ablated. How much of the population was served the ablated input is the exposure an attribution multiplies it by. What the same input is worth to the other components that read it is the part of an attribution a single-model ablation cannot see. The answer is an attribution of an outcome change across feature groups with its error, checked on an episode where one group was lost outright.
+Swap: with a hospital's nouns (a ward's readmissions charged to seven clinical inputs) an ablation flag evaluated at a ranking stage, a result cache shared across arms, a feature value's validity period and a badge that reads the same feature group stop meaning anything; the estimator has no object left.
+Where the weight sits: R3 and R6. Four groups each need their served state rebuilt from a different log by a different rule (a snapshot's age, a batch's expiry, a lagging partition's counters, a seller's last good score among the nights it was due), each weighted by the traffic its entities carry and netted of what normal service leaves at the default, before any loss is read. The work is long, not clever.
+Layer 1: telemetry rows that arrive late and a restated week (the monitor's own backfill); shard names that changed at the gateway migration; scoring runs written twice by a retried writer and a status vocabulary that changed in June; a relaunched ablation test whose aborted first run is on file; market codes in two schemes; logs in UTC and in local time by system; partial last days in the test records. Each is undone by reflex and none moves a group across the line (`checks.py` asserts each one's effect on every graded figure).
+Not one thing: the strongest single piece is S1 (the cache). A run that nails it still files the seller group on the list and leaves the delivery promise group off, and earns 27 of 100.
+One-fact test: the most useful single sentence is "a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth". It rescues R2 only, 1 of 7 results, and only once the fresh share is joined by market, device and day to each test and the tests' own default days are netted.
+Not semantics: every field, unit and clause read correctly (points of conversion, the charter's line and window, each group's validity in the registry, the readers listed in the pipeline file) still leaves the pooled test effect on the weighted telemetry, which lists the wrong three groups.
+Not rule application: the charter files the quantity and the line and no procedure. No document says how a group's cost is built; applying the charter's line to any wrong estimate is what the hurried routes do.
+Estimand: the reliability charter, section 3: a feature group's quarterly cost is the difference, averaged over all search sessions of the quarter in the six markets, between the search conversion those sessions would have had with the group in normal service to every service that reads it and the conversion as served, in percentage points; normal service is every source refreshing on its schedule; section 4: a group whose cost is 0.05 points or more goes on the tier one list; section 2: the 2027 list is drawn on the third quarter of 2026 (1 July to 30 September, the conversion mart's business days).
+No decoy: no memo, draft or dashboard figure ranks the groups by cost or states a cost. The telemetry answers its own question correctly (how often sources failed). The offline replay workbook and the feature importance table answer theirs (ranking quality offline, split gain) and are not priced on the decision question by any shipped sentence.
+No replay: no result re-derives a published figure; no stated number is wrong.
+Pinned: each result's rivals are run in `core.py` (125 variants of the golden route; the lattice of seven shortcut routes; the direct and rigorous routes; two regressions on the daily record; two seller rivals), every honest variant inside its band and every shortcut ruled out by named data in the closure rows of `## Semantic fork table`.
+Run forecast: R2 method shortcut and self-confirming check (the randomised tests pass every balance and interval check); R3 dismissed own evidence (the logs opened, the telemetry kept because it reconciles to them); R4 narrow look at broad data (the readers' records set aside as another team's product metrics); R5 self-confirming check (April read as an incident, or matched by a ratio); R6 and R7 unfinished chain.
+Strategy label: own (an attribution where each instrument sees one factor of a product and one channel of a sum)
+Depth level: 5: three independent judgments on three axes (what a test withholds, when a failure is served, who reads the group), the three single drops on three distinct wrong lists and the lattice's seven shortcut routes on seven.
+Lesson: an experiment's effect, a failure count and a model's ablation each answer a narrower question than "what did this input's failure cost", and the cost is assembled by giving each factor to the record that sees it. No build on file teaches noncompliance from a shared cache, a served state that outlasts its source, or a second reader outside the experiment.
 
 ## Results chain
 
+Every figure below is `generator/core.py`'s on the world's arrays; the build replaces them with the cut pack's (`generator/figures.json`).
+
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | The shortfall in good die per wafer sorted 1 June to 30 September against 1 January to 31 March: VX40 25.2, VP12 34.8 | assembly-reconciliation | the sort database's final insertion per wafer; the windows and products in the prompt | VX40 24.0 to 26.8; VP12 32.2 to 36.0 | method shortcut: first insertions kept (inside the band; earned) | - | Ask 1 |
-| R2 | The scratch cause: the oxide slurry loop's flow, graded by each polisher's distance along it; 7.3 good die per VX40 wafer; fixing it alone adds 8.3 points to VR90 under the plan | investigation-loops | the loop's trend and line list, the August standby fortnight, the polishers' exports and sort bin 5 | VX40 6.7 to 9.0; VR90 7.5 to 9.7 | stopped at the first story: the far taps' excess booked to CM1's and CM3's own filters and pads, VR90's gain 5.0 | independent: the loop's trend | Component 1, Ask 2 |
-| R3 | The bath cause: tank T3's metals under the July chemical life; 4.3 good die per VX40 wafer; the spring life alone adds 3.1 points to VR90 at the plan's loading | modeling | the bench controller log, the lab's samples, sort bin 6 and the gate oxide areas | VX40 3.7 to 5.6; VR90 2.3 to 3.7 | method shortcut: the bath carried at the summer's loading, VR90's gain 1.6 | independent: the bench log | Ask 3 |
-| R4 | The edge cause: DP2B's thick edge and CM3's thin-edge tune cancelling on the wafers that run both; 10.6 good die per VX40 wafer; SH-300-B alone adds 0.76 points to VR90 under the plan | causal-reasoning | the deposition log, the polishers' exports, the PM and recipe logs, the 49-site maps, sort bins 3 and 4 | VX40 10.0 to 13.0; VR90 0.49 to 1.02 | dismissed own evidence: CM3's tune taken as the cause and its harmonisation as the fix, VR90's gain 0 | independent: the route records | Component 2, Ask 4 |
-| R5 | The etch cause: CT-DEEP-07's polymer on ET1B and ET3A at 1.72 times per RF second; 2.1 good die per VX40 wafer; cleans every 1,420 wafers add 5.5 points to VR90 under the plan | forecasting | the contact-etch summary, the daily monitors, the wet cleans and sort bin 8 | VX40 1.5 to 3.0; VR90 4.9 to 6.0; interval 1,300 to 1,550 | method shortcut: cleans scaled by RF time alone (1,840 wafers, VR90's gain 3.1) or kept on the counter | independent: the etch record | Component 3, Ask 5 |
-| R6 | VR90's Q1 2027 sort yield with every cause fixed: 65.3 per cent | missingness-measurement | January to March's bin 8 read in blocks of VX40 and VP12 die, VR90's own die, gate area and polish time, the plan's loading | 64.3 to 66.4 | method shortcut: a die-area formula (a cluster factor of 2 gives 62.8, Poisson 61.5) | independent: the January to March die maps | Component 4, Ask 6 |
-| R7 | VR90's Q1 2027 sort yield under the ramp plan as filed, 45.4 per cent, and the wafer starts with every cause fixed, 3,520 | synthesis | R2 to R6 and the ramp plan's loading, settings, back-end yields and commitment | plan 43.7 to 46.4; starts 3,470 to 3,580 | unfinished chain: the hurried pieces multiplied give 52.1 per cent | R2, R3, R4, R5, R6 | Recommendation, Component 5, Ask 7 |
+| R1 | the registry, the status telemetry, the gap, batch, lag and scoring logs, the test records, the edge cache record and the readers' records on one calendar and one market and device scheme: per group the tests on file, the entities and the hours covered | assembly-reconciliation | the files themselves; the market and region lookups | exact on the cut pack | narrow look at broad data: the ten-minute pass reads the telemetry and the test summary and never opens the entity logs | - | Step-by-Step |
+| R2 | each group's full effect per session at its default, from its ablation tests over the share of the held slice's page views built fresh, by device, net of the default served on the tests' own days: trend 0.84 points (measured as it stands: 0.42) | causal-reasoning | the ablation results by test, market, device and day; the edge cache record by market, device and day; the pipeline's stage order | trend 0.80 to 0.91 points | self-confirming check: the tests pass their balance checks and intervals, so the measured effect is taken as the group's worth | R1 | Component 1 |
+| R3 | the share of the quarter's sessions served each group's default over what normal service leaves there, rebuilt entity by entity: seller 1.39 per cent (the job's failed share: 23.4 per cent) | investigation-loops | the feed gap, batch run, lag episode and seller scoring logs; each group's validity and refresh in the registry; the traffic shares | seller 1.37 to 1.46 per cent | dismissed own evidence: the logs are opened, the telemetry reconciles to their failure counts and is kept | R1 | Component 2 |
+| R4 | each other reader's cost: its loss per eligible session from its own hidden-arm test times the sessions it failed to render over its usual rate: the promise badge 0.032 points | data-discovery | the readers' render record by hour; the readers' test results; the pipeline's render components | 0.031 to 0.034 points | narrow look at broad data: the readers' records are read as product metrics of another team and set aside | R1 | Component 3 |
+| R5 | April's missed price batches in one serving region, called from R2 to R4 and the hours the prices had expired: 0.405 points over the days touched, against 0.411 in the daily conversion record | validation | the conversion mart by region and day; the batch log's region column | 0.386 to 0.419 points | self-confirming check: the route checked on its own tests' consistency; April read as an incident outside the quarter, or matched by one ratio | R2, R3, R4 | Component 4 |
+| R6 | each group's third-quarter cost: stock 0.102, promise 0.064, price 0.163, history 0.028, trend 0.072, seller 0.025, match 0.019 points; July 0.48, August 0.62, September 0.32; the seven together 0.47 | decomposition-attribution | the charter, section 3; R2, R3, R4; the hourly search sessions | per figure, the tables under `## Stump core` | unfinished chain: the reflex route files 0.267, 0.032, 0.080, 0.021, 0.039, 0.217 and 0.009 | R2, R3, R4 | Asks 1 to 11 |
+| R7 | the tier one list: stock, price, trend and promise; seller, history and match off it; the listed groups cost 0.40 points together | synthesis | the charter, section 4, on R6 | the list exact; together 0.37 to 0.43 points | unfinished chain: the reflex route lists stock, price and seller and leaves trend and promise off | R6 | Recommendation, Ask 12 |
 
-Carry-forward: R1 to R6 each stand on files of their own and are graded alone; R7 is graded against the golden and
-falls with any of R2 to R6, so one missed cause costs its own result and R7, never another cause's result.
+Carry-forward: every graded figure sits downstream of a stump. Trend's full effect (R2) falls with S1 alone and is S1's own; seller's share of sessions (R3) falls with S2 alone and is S2's own; the promise badge's cost (R4) falls with S3 alone and is S3's own. April's call (R5), price, the three months, the seven together and the listed groups together fall with every one of the three. Of the seven groups' costs, S1 moves price, trend, seller and match, S2 moves stock, price, trend and seller, S3 moves promise, price and history. R1's counts are never a graded figure.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| The loop's large particles growing with residence time to each tap | constructed (simulated physics) | no: all four polishers, all products, every period, graded by distance, gone on the standby pump | modelling (per-polisher rates against the loop's flow and the taps' distances) | modelling (the position effect carried to VR90's polishers) | keep |
-| Tank T3's metals building between spikes and drain-and-fills | constructed | no: every lot through both benches, spring and summer, above threshold on some spring lots too | modelling (a replay of the controller log calibrated on the lab's samples) | modelling (the stock at the plan's loading) | keep |
-| DP2B's thick edge and CM3's thin-edge tune | constructed | no: every DP2B wafer since April, every CM3 wafer since May, both products; the pair carries no excess | a targeted query by route, confirmed on the 49-site maps | modelling (what each fix does alone, on VR90's die) | keep |
-| CT-DEEP-07's polymer per RF second | constructed | no: every cycle of ET1B and ET3A, on the monitors and on every product etched late in a cycle | modelling (the onset load and the factor fitted on cycles with different deep shares) | modelling (the clean interval at the Q1 mix) | keep |
-| Defects clustering by wafer and region | constructed | no: every wafer of every product | modelling (block yields) | modelling (the yield at VR90's area) | keep |
+| held users are served cached result pages built with the group, so an ablation's effect scales with the share of page views built fresh | constructed, how an experiment flag evaluated at a ranking stage behaves behind a cache keyed without the arm | no: all four groups that join before the cache (price, trend, seller, match), every test, every market and device, at each cell's own share; absent by construction for the three render-stage groups | modelling: test effects against the fresh share across cells and across June's change | modelling (a ratio of sums by device, net of the tests' own default days) | keep |
+| a value is served for its validity and returns at the entity's next refresh, so failures and defaults served part ways | constructed, how a feature store with a validity period serves | no: stock (2 hours), price (36), trend (6) and seller (120) each at its own ratio; in the first half as in the third quarter | modelling: each entity's state replayed from its own log | modelling (four replays, traffic weights, a counterfactual replay for what normal service leaves) | keep |
+| the same legacy-integration sellers fail every night while the rest fail at random | constructed, how a job that times out on some payloads behaves | no: the seller job only, but across all its 73 degraded nights and both failure kinds | modelling: the scoring log by seller | modelling (it is why the job's failed share and the default served differ by 17 times) | keep |
+| a badge, a label and a strip read three of the groups and fail with them | constructed, how a shared feature store is used | no: promise, price and history, the whole year; price sits over the line and history under it on every route | a targeted query (the pipeline's render components), then modelling | modelling (per eligible session from the reader's own test, times its own excess failures) | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 the June to September shortfall in good die per wafer, VX40 and VP12 | Right | Right | Right |
-| R2 the scratch cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan | Missed | Partly | Right |
-| R3 the bath cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan | Missed | Partly | Right |
-| R4 the edge cause: what it is, its cost per VX40 wafer and what fixing it adds to VR90 under the plan | Missed | Missed | Right |
-| R5 the etch cause: what it is, its cost per VX40 wafer, what fixing it adds to VR90 under the plan, and the clean interval | Missed | Missed | Right |
-| R6 VR90's Q1 2027 sort yield with every cause fixed | Missed | Missed | Right |
-| R7 VR90's Q1 2027 sort yield under the ramp plan as filed, and the wafer starts with every cause fixed | Missed | Missed | Right |
-| Roughly | 1 of 7 | 2 of 7 | 7 of 7 |
+| R1 the records on one calendar and scheme | Missed | Right | Right |
+| R2 each group's full effect | Missed | Missed | Right |
+| R3 the sessions served each default | Missed | Missed | Right |
+| R4 the other readers' costs | Missed | Missed | Right |
+| R5 April's missed batches called | Missed | Missed | Right |
+| R6 each group's cost, by month and together | Missed | Missed | Right |
+| R7 the tier one list | Missed | Missed | Right |
+| Roughly | 0 of 7 | 1 of 7 | 7 of 7 |
 
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: The slurry loop's scratching grows with each polisher's distance along it; rescues 1 of 7 results
-Pair estimate: 25.7 (cited; every careful-column loss cites a precedent); each result carries its block's share plus
-  its own seventh of the asks, because every result is also a sub-ask in Supplementary Questions
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (written by the build from the pack read back); until then the rubric table of `## Stump core` is corelib's on the world's arrays
+Largest single hint: a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth; rescues 1 of 7 results (R2; 27 rubric points with S1 fixed alone on the reflex route, seller still listed and promise still left off)
+Pair estimate: 9 (corelib's price of the careful but hurried pass, the reflex route, which lands no graded figure and earns instruction-following; a model, not a measurement: the platform's two runs are the measurement)
 
-## Stump screen
+## Stump core
 
-| Candidate | 1 closed | 2 reflex | 3 filed | 4 clean data | 5 two grains | 6 assumption | 7 shallower story | 8 across | 9 worth | Kept or dropped |
-|---|---|---|---|---|---|---|---|---|---|---|
-| The slurry loop's scratching growing with each tap's distance (position on a network) | yes | yes | yes | yes | yes | yes (L38) | yes (L26) | yes | yes | kept: the polishers' own consumables are the story the per-polisher fit passes; the standby fortnight and the line list refute it |
-| Tank T3's metals rebuilt from its drag, spikes and drains (a hidden stock) | yes | yes | yes | yes | yes | yes (N12) | yes (L28) | yes | yes | kept: the summer's bath carried to Q1 passes its own fit and misses the plan's loading |
-| DP2B's thick edge cancelled by CM3's thin-edge tune on the wafers that run both | yes | yes | yes | yes | yes | yes (L01) | yes (L26) | yes | yes | kept: single-step commonality blames CM3 and files its harmonisation as the fix |
-| CT-DEEP-07's polymer per RF second against the wafer counter (the true exposure basis) | yes | yes | yes | yes | yes | yes (N04) | yes (L37) | yes | yes | kept: cleans on the counter or scaled by RF time pass the standard chambers' back-test |
-| VR90's yield read at its own die area from block yields (support) | yes | yes | yes | yes | yes | yes (N04) | yes (L22) | yes | yes | kept: a die-area formula passes on VX40's own die yield |
-| Reticle haze repeating at one position in the exposure field | yes | no | yes | yes | no | no | no | yes | no | dropped: stacking fails by field position is a reflex and finding it is the remedy |
-| Copper queue time with nitrogen stocker time excluded | yes | yes | yes | no | yes | yes | yes | yes | yes | dropped: the remedy is reading which stocker held the lot, a field read |
-| Sort bins masked by the first failing test | no | yes | yes | yes | yes | yes | yes | yes | no | dropped: a later test's rate among die still at risk is the closed competing-risk lesson; it stays texture inside every band |
-| Probe-card wear read as process loss | no | no | yes | yes | yes | yes | yes | yes | no | dropped: the closed instrument-change lesson, and retests already show it |
+From `python3 task9/generator/core.py` (seed 9104), pasted, never typed:
+
+| Member | Line | Golden | Family spread | Reflex route | Direct | Rigorous | Opened by |
+|---|---|---|---|---|---|---|---|
+| history | 0.05 | 0.02786 | 0.000165 | 0.02128 | 0.0208 | 0.02128 | forced |
+| match | 0.05 | 0.01863 | 0.000411 | 0.009164 | 0.007798 | 0.009233 | forced |
+| price | 0.05 | 0.1631 | 0.00698 | 0.07957 | 0.04562 | 0.07895 | forced |
+| promise | 0.05 | 0.06435 | 0.000639 | 0.03197 | 0.02933 | 0.03197 | S3 |
+| seller | 0.05 | 0.02462 | 0.00104 | 0.2174 | 0.1465 | 0.2174 | S2 |
+| stock | 0.05 | 0.1023 | 0.0144 | 0.2668 | 0.1623 | 0.267 | forced |
+| trend | 0.05 | 0.07233 | 0.00557 | 0.03899 | 0.0176 | 0.03895 | S1 |
+
+| Figure | Block | Golden | Band | S1 lost | S2 lost | S3 lost | Reflex route |
+|---|---|---|---|---|---|---|---|
+| C1 full effect, trend | components | 0.8432 | 0.8027 to 0.9057 | moves | - | - | lost |
+| C2 sessions served the default, seller | components | 1.393 | 1.371 to 1.456 | - | moves | - | lost |
+| C3 the reader's loss, promise | components | 0.03238 | 0.03234 to 0.03239 | - | - | moves | lost |
+| C4 April's missed batches as called | components | 0.4052 | 0.3857 to 0.4188 | moves | moves | moves | lost |
+| A1 stock | asks | 0.1023 | 0.08195 to 0.1237 | - | moves | - | lost |
+| A1 promise | asks | 0.06435 | 0.0634 to 0.06525 | - | - | flips | lost |
+| A1 price | asks | 0.1631 | 0.153 to 0.1717 | moves | moves | moves | lost |
+| A1 history | asks | 0.02786 | 0.02762 to 0.02805 | - | - | moves | lost |
+| A1 trend | asks | 0.07233 | 0.06653 to 0.08017 | flips | - | - | lost |
+| A1 seller | asks | 0.02462 | 0.02369 to 0.02605 | moves | flips | - | lost |
+| A1 match | asks | 0.01863 | 0.01841 to 0.01917 | moves | - | - | lost |
+| A2 July | asks | 0.4828 | 0.4467 to 0.5143 | moves | moves | moves | lost |
+| A2 August | asks | 0.6185 | 0.578 to 0.6523 | moves | moves | moves | lost |
+| A2 September | asks | 0.3157 | 0.2953 to 0.3336 | moves | moves | moves | lost |
+| A3 all seven | asks | 0.4732 | 0.4409 to 0.5004 | moves | moves | moves | lost |
+| A4 the tier one list | asks | 0.402 | 0.3706 to 0.4292 | moves | moves | moves | lost |
+
+| Route | Call | Earns on the rubric |
+|---|---|---|
+| golden | right | 100 |
+| S1 lost alone | wrong | 32 |
+| S2 lost alone | wrong | 37 |
+| S3 lost alone | wrong | 37 |
+| S1 fixed alone | wrong | 27 |
+| S2 fixed alone | wrong | 18 |
+| S3 fixed alone | wrong | 23 |
+| reflex route (every stump lost) | wrong | 9 |
+| rigorous standard route | wrong | 9 |
+
+PASS  shape                                    7 members, 3 stumps (two or more of each)
+PASS  golden files the truth's call            golden (0, 0, 1, 1, 0, 1, 1), truth (0, 0, 1, 1, 0, 1, 1)
+PASS  variant battery                          125 variants, the call holds under every one
+PASS  lattice complete                         every stump alone, all together, all but one
+PASS  reflex route misses the call             open members: promise, seller, trend
+PASS  stump S1                                 dropped alone moves its member trend (worth 0.0366, 6.6 times the family's spread 0.00557); fixed alone on the reflex route still misses
+PASS  stump S2                                 dropped alone moves its member seller (worth 0.418, 404.0 times the family's spread 0.00104); fixed alone on the reflex route still misses
+PASS  stump S3                                 dropped alone moves its member promise (worth 0.0324, 50.7 times the family's spread 0.000639); fixed alone on the reflex route still misses
+PASS  no easier route on an open member        the direct and the rigorous standard routes land wrong on every open member
+PASS  distinct wrong answers                   7 distinct wrong calls across the lattice, 3 among the single drops
+PASS  referee                                  golden off by 0.00625; rivals off by S1 lost 0.152, S2 lost 0.388, S3 lost 0.125, every stump lost 0.131, rigorous 0.131
+PASS  stumps on different axes                 axes: what, when, who
+PASS  graded figures listed                    4 critical components (two to five) and 12 ask figures (two or more)
+PASS  every graded figure banded by the battery each figure's band holds its twelve or more variants
+PASS  one stump lost, the run stays under the bar a run that loses only S1 earns 32, S2 earns 37, S3 earns 37 (50 or under each; the review reads its strongest run)
+PASS  the reflex route on the rubric           every stump lost earns 9 (30 or under; 9 of it is instruction-following); figures it still lands: none
+PASS  one stump fixed alone earns more, a third at most S1 fixed alone earns 27; S2 fixed alone earns 18; S3 fixed alone earns 23
+PASS  the rigorous standard route on the rubric it earns 9 (50 or under)
+PASS  open members opened by different stumps  3: trend by S1; seller by S2; promise by S3
+CORE PASS level 5  task9 architecture 4
+
+Unobserved part: each group's third-quarter cost, the conversion the quarter's search sessions would have had with the group in normal service to every service that reads it, less the conversion as served. No record holds it: conversion is attributed nightly and kept by day, its daily swings (0.25 points common to the markets, 0.30 within a market) are several times any group's cost, three of the seven groups fail in every market at once, and nothing in the record says which sessions were served which defaults.
+Instruments: (1) the ablation tests of the ranking model (nine a group, fourteen days, a held and a control slice of 4 per cent): they see what the ranking model loses without the group on the held slice's page views built fresh; blind to the cached page views (40 to 70 per cent of them) and to every other reader; read raw they put trend's worth at 0.42 points a session against 0.84. (2) The jobs' failure telemetry by shard and hour: it sees how often sources failed; blind to what was served; weighted by traffic it reads 10.2, 14.2, 9.3 and 23.4 per cent for stock, price, trend and seller against 4.0, 10.6, 8.6 and 1.4 per cent of sessions served a default over the usual level. (3) The entity logs (feed gaps, batch runs, lag episodes, the seller scoring log) and the traffic shares: they see each entity's refreshes; blind to what a default costs. (4) Each other reader's render record and hidden-arm test: they see that reader's own channel; blind to the ranking model. (5) The daily conversion record: it sees every channel at once and cannot tell the groups apart (the two regressions in `--detail`). Reflex figures: 0.267, 0.032, 0.080, 0.021, 0.039, 0.217, 0.009.
+Referee: April's missed price batches. On seven nights between 8 and 23 April the price batch did not reach one of the two serving regions; users are split between the regions by hash and each region has its own page cache, so a random half of the users lost the price group outright on every page and on every reader for the hours the prices had expired. The daily conversion record by region measures 0.411 points over the fourteen days touched. The golden calls 0.405 (off by 0.006); S1 lost 0.260, S2 lost 0.800, S3 lost 0.286, every stump lost and the rigorous route 0.280 (off by 0.125 to 0.388, twenty times the golden's error or more). It does not cover the target: April, one group, and price is over the line on every route. Read raw as the answer it gives price's cost per session at the default and nothing about the other six groups; its ratio to the reflex call carried to every group still lists seller.
+Strongest standard route: trend: every randomised test pooled by market and device with precision weights and intervals, on the traffic-weighted telemetry, files 0.039 (off the list); refuted by the edge cache record (the held slice's pages were built fresh on 30 to 60 per cent of views) and by the measured effects of the four cached-stage groups stepping down in June while the three render-stage groups' do not. promise: the same route files 0.032 (off the list); refuted by the badge's render record (failed renders up from 2 per cent of eligible sessions to 7.6 in the same hours) and the badge's own test (1.1 points per eligible session). seller: the same route files 0.217 (on the list); refuted by the scoring log, where the sessions landing on a seller with no valid score rose 1.39 points over the usual level while the job failed 23 per cent of its runs. The regressions on the daily record are priced in `--detail`: they have nothing to fit for the groups that fail in every market at once (promise, history, trend, seller) and miss April by half.
+Said out loud: S1 "a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth" leaves four dependent steps: which groups join before the cache (the pipeline's stage order); the fresh share by market, device and day joined to each test's days, across June's change; the ratio of sums by device rather than a ratio of means, with the render-stage groups as its placebo; the default the group was already serving on the tests' own days netted (which needs S2). S2 "a value is served for its validity period after its source fails and returns only at its entity's next refresh, so the share of sources failing is not the share of sessions served the default" leaves five: each group's validity and refresh rule; the replay of each entity's state from its own log (a different rule for each of four groups); the traffic each entity carries, by month for sellers; what normal service leaves at the default (sellers with nothing new to score), by replaying the same nights with every failed run taken as scored; the hourly join to sessions. S3 "the ablation tests withhold a group from the ranking model only, and some groups are also read by a service that shows the shopper something and loses it in the same hours" leaves four: which groups have another reader; the reader's loss per eligible session from its own test over the eligible share of its control arm; its failed renders over its usual rate by market, device and hour; the sum with the ranking model's loss, by session.
+Worth: S1 0.0366 points on trend, 6.6 times the family's spread there (0.0056), band 0.067 to 0.080. S2 0.418 on seller, 404 times the spread (0.0010), band 0.0237 to 0.0261. S3 0.0324 on promise, 51 times the spread (0.0006), band 0.0634 to 0.0653 (the build states wider bands where the battery's are narrower than a careful analyst's rounding, never across the line).
+Regimes: S1's correction assumes a measured effect proportional to the fresh share. It is checked on match, seller and price (large effects: the fit of test effects on the fresh share across cells and across June passes through the origin); it cannot be checked on trend alone (its tests are too noisy for an intercept); it fails on stock, promise and history, whose measured effects do not move with the fresh share at all, as the pipeline's stage order says they should not. second stump: S2 opens seller; S3 opens promise.
+Sharp: S1: the check its wrong route passes is every test's balance, sample ratio and interval, and agreement between tests within the first half; the commitment its right route needs is that a cached page reached a held user unchanged; the other record is the edge cache's daily counts; the correction differs across members (none for the three render-stage groups; 1.7 to 3.3 times by device and half-year for the four cached-stage ones); its own graded figure is trend's full effect. S2: its wrong route passes the telemetry's reconciliation to the jobs' own failure counts, and traffic weighting moves it little; its commitment is that a value is served until it expires and that normal service also leaves some entities at the default; the other records are the four entity logs with the traffic shares; the correction differs (2.5 times for stock, 1.3 for price, 1.1 for trend, 17 for seller, none for the request-time groups); its own figure is seller's share of sessions. S3: its wrong route passes for the reason a randomised ablation of the model looks complete; its commitment is that the same failure reaches readers the test never touched; the other records are the readers' render record and tests; the correction differs (as much again for promise, two fifths more for price, a third more for history, none for the four groups nothing else reads); its own figure is the promise badge's cost.
+Earns: a run that loses S1 alone earns 32, S2 alone 37, S3 alone 37 (50 or under each); the reflex route 9 and the rigorous standard route 9 (instruction-following only; the figures the reflex route still lands: none); S1 fixed alone on the reflex route 27, S2 fixed alone 18, S3 fixed alone 23 (each more than the reflex route, none adding over a third).
+
+## Stump factorial
+
+Reflex route: every file read and the unused ones set aside; duplicates, restated telemetry rows, the aborted test and the two code schemes resolved; each group's ablation tests pooled by market and device with precision weights and intervals; each job's failure telemetry weighted by the traffic its shards carry and joined to the hourly sessions; the two multiplied and summed over the quarter; the charter's line applied. It files 0.267, 0.032, 0.080, 0.021, 0.039, 0.217 and 0.009 for stock, promise, price, history, trend, seller and match and lists stock, price and seller: wrong on trend, promise and seller. This route is the careful but hurried pass.
+
+| Judgment | Kind | Hurried choice | Evidence | Dropped alone from the golden | Fixed alone on the reflex route | One routine step once told |
+|---|---|---|---|---|---|---|
+| S1 an ablation's effect is the group's worth on the share of the held slice's page views built fresh, taken by market, device and day from the edge cache record | stump | the measured effect taken as the group's worth | L18, L28 | trend left off the list (0.036) where it is listed; price, seller, match, the months and the totals outside their bands | the list is stock, price, trend and seller: seller listed and promise left off; R2 rescued | no (four dependent steps) |
+| S2 the sessions served a default are replayed entity by entity with each value's validity, weighted by traffic, net of what normal service leaves | stump | the traffic-weighted failure telemetry taken as the exposure | N21, L26 | seller listed (0.443) where it is left off; stock, price, the months and the totals outside their bands | the list is stock and price: trend and promise left off; R3 rescued | no (five dependent steps) |
+| S3 each other reader's cost is built from its own test and its own failed renders and added | stump | the group priced through the ranking model alone | L16, N27 | promise left off the list (0.032) where it is listed; price, history, the months and the totals outside their bands | the list is stock, price, seller and promise: seller listed and trend left off; R4 rescued | no (four dependent steps) |
+| J4 duplicates, restated rows, the aborted test, code schemes, time zones | reflex | - | R01 | same call | - | - |
+| J5 every file read, the unused ones set aside | reflex | - | R02 | same call | - | - |
+| J6 randomised tests pooled with intervals, clustered where the unit asks for it | reflex | - | R55, R04, R67 | same call | - | - |
+| J7 the two regions compared over April's nights with a placebo period and an interval | reflex | - | R92 | same call (it measures the referee and prices no group) | - | - |
+| J8 sources weighted by the traffic the shipped tables give them | reflex | - | R01 | same call | - | - |
+
+Level: 5: three necessary stumps, none sufficient alone, the three single drops on three distinct wrong lists and the lattice's seven shortcut routes on seven.
+
+## Open members
+
+| Member | Golden margin | Family spread | Reflex route | Direct route | Opened by |
+|---|---|---|---|---|---|
+| trend | 0.072, listed (0.022 over the line at 0.05) | 0.0056 | wrong: 0.039, left off | wrong: 0.018, left off | S1 |
+| seller | 0.025, left off (0.025 under the line) | 0.0010 | wrong: 0.217, listed | wrong: 0.147, listed | S2 |
+| promise | 0.064, listed (0.014 over the line) | 0.0006 | wrong: 0.032, left off | wrong: 0.029, left off | S3 |
+| stock | 0.102, listed (0.052 over the line) | 0.0144 | right: 0.267, listed, at two and a half times its cost | right: 0.162, listed | forced |
+| price | 0.163, listed (0.113 over the line) | 0.0070 | right: 0.080, listed, at half its cost | wrong: 0.046, left off | forced |
+| history | 0.028, left off (0.022 under the line) | 0.0002 | right: 0.021, left off | right: 0.021, left off | forced |
+| match | 0.019, left off (0.031 under the line) | 0.0004 | right: 0.009, left off, at half its cost | right: 0.008, left off | forced |
+
+Direct route: the pack's most direct evidence read at face value is each job's own failure figure over the quarter (the share of its shards failing, each shard counted once) times the group's latest ablation test as its record reports it (`direct` in `generator/core.py`). It files 0.162, 0.029, 0.046, 0.021, 0.018, 0.147 and 0.008 and is wrong on all three open members for the reflex route's reasons, with one test's noise and unweighted shards on top; it also drops price.
 
 ## Data provenance
 
-Source: generated by task9/generator from a simulated process (world.py): lot starts for VX40, VP12 and VR90-T,
-  dispatch with bay affinities and tool downtime, the oxide slurry loop's hydraulics and tote changes, the bench tank's
-  chemistry, two film profiles, contact-etch polymer, clustered defects, sort binning on the first failing test, and the
-  metrology, inspection and e-test sampling plans.
-Behaves like the real thing: CMP micro-scratching rises with slurry large-particle counts and filter loading; bath metal
-  contamination follows drag-in and bleed-and-feed dilution; ILD thickness at the edge is set by both deposition and
-  CMP; polymer-flake adders rise past an accumulated load; defect clustering follows the negative binomial die yield.
-Genuine patterns: (1) a weekly rhythm in lot starts and weekend bench loading (2) wafer-to-wafer and regional defect
-  clustering with week-to-week variation (3) tote ageing sawtooth in the loop's particle count and a daily draw cycle in
-  its flow (4) filter ageing on each polisher (5) the edge profile's radial shape (6) the bench's daily sawtooth
-Problems by process: retests after probe-card contamination, rework splits, scraps, a controller replacement and a
-  firmware update in the trend, a watchdog's repeated lines, two tools' clocks and one's locale, a network outage in the
-  etch export, back-entered maintenance rows, values below the lab's reporting limit.
-License: CC BY 4.0 (original work)
-Used as is: not public data.
-Breadth: 29 files (six tables in the yield database), 13,500 sorted wafers with die maps, 660 lots through 38 steps,
-  four polishers, six deposition and six etch chambers, two benches, a loop of four taps; choosing which of them carry
-  a cause is the work.
+Source: generated by the generator from a simulated process (the house route); nothing public is used
+Behaves like the real thing: the generator simulates the marketplace's search traffic by market, device and hour, its seven feature jobs and stores (each with its own entities, refresh rule, validity and failure process), the page cache and its June lifetime change, the experiment platform's ablation and reader tests, the readers' rendering, the nightly attribution of orders to search sessions and the monitoring that counts failures. Conversion carries the diurnal, weekly, promotional and summer structure of retail search and common and market-level daily shocks, so the daily record behaves like a conversion series (noisy, autocorrelated, unable to resolve a twentieth of a point).
+Genuine patterns: (1) diurnal and weekly traffic and conversion, with promotion days and a summer dip, in every market; (2) common and market-level daily shocks to conversion and an hourly shock, serially correlated; (3) heavy-tailed traffic across sellers, chains, sources and partitions; (4) failure processes that differ by job (short feed gaps that cluster on a shared gateway, batches that fail in runs, long lag episodes, a nightly job that fails the same sellers); (5) a cache hit rate that differs by device and market and steps at a lifetime change, with purge days; (6) binomial noise in every test arm.
+Problems by process: late and restated telemetry rows (the monitor's backfill job); renamed shards (the gateway migration); scoring rows written twice (a retried writer); a status vocabulary change (a logging library upgrade in June); an aborted and relaunched test (an experiment misconfigured at launch); two market code schemes (the mart against the serving stack); UTC against local time (system defaults); partial last days (extract time).
+License: none (generated)
+Used as is: not applicable
+Breadth: 20 files or more: seven groups, 51 shards, 8,000 sellers, 63 ablation tests, 3 reader tests, 12 market and device cells, 6,552 hours; deciding which record sees which part of a group's cost is the work.
 
 ## Template check
 
-Chain signature: assembly-reconciliation, investigation-loops, modeling, causal-reasoning, forecasting,
-  missingness-measurement, synthesis
-Question form: which (which causes drove the fall), then what (VR90's yield)
-Nearest build: task18 (an island grid's disturbance losses ranked in an investigation): the same answer shape and weight
-  (guard template.chain_near), but its chain, skeleton and decision form share nothing with this one (skeleton severity
-  none); here the ranking is a bridge in good die carried into a new product's forecast at its own die size.
+Chain signature: assembly-reconciliation, causal-reasoning, investigation-loops, data-discovery, validation, decomposition-attribution, synthesis
+Question form: how much (each group's cost), then which (the groups on the list)
+Nearest build: task6 (approved; a flagged set of services over a filed line in the same subdomain) on shape, and task8 on a recorded effect that is a fraction of the true one. task6's chain is design weights, a retention cut, dated onsets and a source against its victims on a sampled trace store; nothing here is sampled, missing, dated or propagated. task8's fraction is a marker's anchoring measured on scripts marked twice; here it is the share of a randomised arm that received its assignment, from an operational cache record, and the other two judgments have no counterpart there.
+
+Nearest chains (precut WARN, task1, task6 and task7): the three share the flagged-set shape, and their notes' weight lines name several weights; on the cards theirs are measurement and a hard-to-measure quantity against attribution here, and the chains share their first and last areas only (no causal step followed by an entity replay, a second reader and a referee appears in any of them).
 
 ## Frontier check
 
-Precedents: R2 L26, L38 (the far taps' excess on the polishers' own consumables, the loop's trend set aside as
-  unrelated); R3 L36, N12 (a rate learned at one loading carried to another); R4 L01, L06 (DP2B's thick edge measured
-  and set aside, one correction made and the second declined); R5 L36, N04, L37 (a transfer fitted on one recipe mix
-  carried to another, its own back-test unable to see it); R6 L22 (the published die-area formula whose generating
-  assumption the block yields contradict); R7 L32, L11 (the chain built and not carried into VR90's quarter). R1 is
-  Right in the careful column.
-Shallow path checks: R2's consumables reading passes a per-polisher fit with filter age (each polisher's excess holds
-  within its own record) and is refuted by the standby fortnight, when every tap fell to its spring level with the same
-  filters, and by the excess growing with distance in the line list; R3's summer reading passes its own fit of bin 6 on
-  hours since the drain and is refuted by the controller log's lot counts, which put the plan's 31 lots a day beyond
-  every day the summer ran; R4's CM3 reading passes single-step commonality (CM3's wafers fail bin 4) and is refuted by
-  DP2B's wafers on CM3, clean, and its other wafers failing bin 3, which the 49-site maps confirm; R5's counter or RF
-  reading passes a back-test on the standard chambers and is refuted by the monitors on ET1B and ET3A flaking earlier in
-  every cycle that carried CT-DEEP-07; R6's formula passes on VX40's own die yield and is refuted by the block yields of
-  VX40 and VP12, which fall far more slowly with area.
-Assumption made false: a run lists "the polishers' excess is their own condition", "the bench behaves in Q1 as in the
-  summer" and "the fleet clean interval holds for the new recipe" and waves them through; the standby fortnight, the
-  plan's loading and the deep-recipe cycles in the record make each false, in the trend, the bench log and the monitors.
-Forcing: the call is the change set (restore the loop, the spring chemical life, SH-300-B with CM3 harmonised the same
-  day, deep-etch cleans before the polymer flakes); each change's VR90 quarter value is many times its cost (the
-  smallest, the showerhead, about EUR 190,000 of die against EUR 77,000 of part and downtime); all six rival methods file
-  the same set, every shortcut files a different one (eight distinct answers), and scratch rates, bath drag, the polymer
-  factor and the thick-edge kill each moved 20 per cent either way leave the set unchanged (effort.json forcing).
-Noun swap: nearest by skeleton task9's lineage and task22 v1 (a utility's feeder losses, position on a network in a
-  ranked list under a cap), task7 v11 (a coincident peak with support), task4 (exposure basis in a flagged set): swapping
-  their nouns in carries one lesson each and no decision form, detection set or file roles (severity none against each).
-Closed strategies: the lesson the call turns on first is the etch polymer's true exposure basis (exposure_basis_decoupled,
-  off the client's page and next to no closed card); none of the five lessons is closed or next to a closed card (the
-  loop's position effect is a shared feed graded by distance, not a treated unit sharing a resource with controls; the
-  cancelling pair is two process features offsetting on one wafer, not a co-occurring change in a comparison; the
-  support effect reads a yield at a new area, not a widened alert bar), so no closed lesson needs a route of its own.
+Precedents: R2 careful Missed on L18 (every not-yet-treated unit taken as untreated: here every held user taken as withheld) and L28 (the estimator certified with checks that cannot see the problem: balance, sample ratio and intervals of the tests themselves); R3 Missed on N21 (an unmeasured component placed in proportion to the measured ones: sessions at a default placed in proportion to sources failing) and L26 (a plausible shallower reading that passes its own checks: the telemetry reconciles to the jobs' failure counts); R4 Missed on L16 (the unit priced alone where the system adds what it affects: the group priced through the ranking model alone) and N27 (a second record at another grain set aside: the readers' render record and tests); R5, R6 and R7 fall with R2 to R4 and cite the same ids. The assembly result is Right in the careful column and cites nothing.
+Shallow path checks: R2: the tests pass sample-ratio and balance checks, their intervals are tight, and tests within a half-year agree; refuted by a check of another kind, the test effects of the cached-stage groups against the edge cache record's fresh share across cells and across June (a second file at another grain), and by April. R3: the telemetry reconciles to each job's own failure counts and traffic weighting moves it little; refuted by the entity replay (the scoring log by seller and night) and, for price, by April's hours. R4: the ablation of the model is randomised and complete for the model; refuted by the readers' render record in the same hours and the readers' tests. The regressions on the daily record pass their own significance tests; refuted by their placebo months and by April.
+Assumption made false: "an ablation test's effect is the feature group's contribution" (a run names it as an assumption of experiment-based attribution and moves on). The world's process makes it false twice: the flag is evaluated where pages are ranked and most page views are not ranked afresh, and the group has readers outside the model. The edge cache record tests the first and the readers' tests the second. "Failure incidence is exposure" is false because the store serves a value for its validity; the entity logs test it.
+Forcing: the line is 0.05 points. The golden family (125 variants) keeps one call and comes no nearer the line than 0.0137 (promise); the shortcuts sit on the other side by 0.014 (trend with S1 lost, 0.036), 0.018 (promise with S3 lost, 0.032) and 0.39 (seller with S2 lost, 0.443). Each fitted input moved by its measured spread across the battery (full effects 0.6 to 5.4 per cent, default served 0 to 13.1 per cent, readers' costs 0 to 4.7 per cent), up, down and in all eight sign combinations, leaves the call standing (`core.py --forcing`, fourteen rows, nearest approach 0.0137).
+Noun swap: `skeleton.py check task9` PASS, severity none against every card on file, the client's corpus and the slot's lineage. Nearest by element is spent task7 architecture 9 (a natural experiment in the record and an instrument on assignment): its decision form, lessons and mechanisms do not carry; with its nouns swapped in, only the answer pattern (shortcuts on distinct wrong answers) and one move survive.
+Closed strategies: the call turns on instrument_noncompliance (the held slice received its assignment on part of its exposures). The nearest closed card is "Controls were partly treated (spillover or shared resource)": there the treatment reaches the controls and the fix models each unit's treated neighbourhood or drops contaminated controls; here the controls are untouched (held requests do not write to the cache), the treated arm is under-treated, and the fix is the measured effect over a compliance share read from another record, with no unit dropped. Supporting closed lessons that decide nothing: carrying a device-level effect to the quarter's own device mix (composition); the battery's variant that pools effects over every market and device omits it and files the same call. No closed lesson is stacked.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | "wafers sorted" in a window | first insertion; final insertion; by sort start or end | the final insertion's end | same call: the first-insertion reading sits inside R1's band (checks.py) |
-| SF2 | "good die per VX40 wafer each cost" | the die the cause killed; the die its removal would recover | the die its removal recovers | same call: both readings sit inside each cause's VX40 band (checks.py) |
-| SF3 | "what fixing each cause alone would add ... under the ramp plan as filed" | marginal on the plan; standalone against the fixed state | marginal on the plan | the prompt's words (each cause alone, under that plan) |
-| SF4 | "with every cause fixed" for the etch | cleans before the polymer flakes; a cost-optimal interval allowing some flaking | before it flakes | same call: the difference sits inside R6's band at any interval the record supports |
-| SF5 | VR90's polishers | CM1 and CM3 as VR90-T ran them; an even split | VR90-T's own shares | same call: the even split sits inside every band (rivals) |
-| SF6 | the plan's bench loading | 31 lots a day per bench as filed | 31 | the ramp plan's own sentence |
-| SF7 | the plan's CM3 recipe | R7 from 23 November, before VR90's first ILD0 lot | R7 | the ramp plan's own sentence |
-| SF8 | back-end yields for the starts | 99.2 and 98.1 per cent | as filed | the ramp plan's own sentence |
-| SF9 | the cluster model | a negative binomial fit; block yields read directly; one product's blocks alone | the joint fit | same call: every reading inside R6's band |
-| SF10 | the rank | by good die per VX40 wafer | as asked | the four VX40 bands do not overlap (checks.py) |
+| SF1 | search conversion | orders attributed to search sessions over search sessions, in points; orders per visitor; revenue | orders over search sessions, percentage points | the charter, section 3; the mart carries search sessions and attributed orders only |
+| SF2 | a group's cost | the loss against normal service to every reader; the ranking model's loss alone; the fall in conversion since the second quarter shared out | against normal service to every reader | the charter, section 3 ("every service that reads it"); no ask and no document shares out a fall |
+| SF3 | normal service | every source refreshing on its schedule; no session ever at a default | every source refreshing on its schedule, so an entity with nothing new to refresh is in normal service at its default | the charter, section 3; the un-netted reading files seller at 0.046, the same side of the line |
+| SF4 | the window | 1 July to 30 September by the mart's business days; by UTC days | the mart's business days | the charter, section 2; same call under UTC days |
+| SF5 | the line | 0.05 points or more; over 0.05 | 0.05 or more | the charter, section 4; no variant comes within 0.013 of it |
+| SF6 | the average | over all search sessions of the quarter; over hours; over markets equally | over sessions | the charter, section 3 ("averaged over all search sessions") |
+| SF7 | the fresh share | page views built fresh over result page views, by market, device and day; by test; a single figure | by market, device and day | the edge cache record holds page views only; by test is in the battery, same call; a single figure is ruled out by June's step in that record |
+| SF8 | how tests are pooled | by device; by market and device; all together; precision weights; the first half only; from April | by device, session weights, all nine | same call across the battery (thirty-six effect variants crossed with the rest) |
+| SF9 | the default on a test's own days | netted from the measured effect; ignored | netted | same call (the battery's un-netted variant) |
+| SF10 | a snapshot's age when its feed stops | fresh to the minute; half the sync interval; a full interval | half the sync interval (the registry's 15 minutes) | same call (the battery spans 0 to 15 minutes; stock stays over the line by 0.039) |
+| SF11 | when a counter is back after a lag | the hour its partition catches up; one hour later; two | one hour (the registry's window) | same call (the battery spans 0 to 2 hours) |
+| SF12 | a seller's traffic | the month's share; the quarter's | the month's | same call (the battery) |
+| SF13 | what normal service leaves at the default for sellers | the same nights replayed with every failed run taken as scored; the second quarter's level; June's; the first half's | the same nights replayed | same call (the battery; 0.0241 to 0.0257) |
+| SF14 | a reader's cost per session | per eligible session from its own test times its excess failed renders; per session | per eligible session | the reader's test reports eligible sessions by arm and its render record counts eligible sessions; same call pooled or by device |
+| SF15 | a reader's usual failed renders | the second quarter; June; the first half | the second quarter | same call (the battery) |
+| SF16 | two groups at their defaults in one session | the costs add; they compound | they add | named data: joint exposure is under one per cent of sessions and compounding moves no group by 0.001 (`checks.py`) |
+| SF17 | April's days | the fourteen business days the expired hours touch; the seven batch days | the fourteen days touched | named data: the conversion record is daily and the expired hours run from 16:00 to 04:00; both readings leave every rival twenty times further off than the golden |
+| SF18 | the listed groups together | the sum of the listed groups' costs; the fall they explain | the sum of their costs | the prompt ("for the groups on the list together") |
+| SF19 | a month's cost | the cost averaged over that month's sessions; the month's share of the quarter's cost | averaged over that month's sessions | the charter, section 3, applied to the month; the prompt ("for each month of the quarter") |
+| SF20 | a retried scoring run | one run (rows repeated whole); two runs | one run | named data: the repeated rows are identical in every field |
+
+## Pinning list
+
+| Constant | Golden value | Home |
+|---|---|---|
+| the tier one line | 0.05 points of quarterly search conversion, or more | the reliability charter (.pdf), section 4 |
+| the window | the third quarter of 2026 | the reliability charter (.pdf), section 2; the prompt |
+| each group's validity | stock 2 hours, price 36 hours, trend 6 hours, seller 120 hours; none for promise, history and match (read at request time) | the feature registry (.csv, validity column) and the feature store's configuration (.yaml) |
+| each group's refresh rule | stock on each chain feed sync (every 15 minutes); price one batch a day at 04:00; trend hourly windows; seller nightly at 02:00 for sellers with newly settled orders | the feature registry (.csv) and the store configuration; the batch times and the due rows are in the logs themselves, and `checks.py` asserts the two agree |
+| which groups join before the page cache | price, trend, seller and match; stock, promise and history at render | the serving pipeline's configuration (.yaml: stage order and cache key) and the feature registry (.csv, stage column) |
+| which groups another service reads | promise (the delivery promise badge), price (the price match label), history (the buy-again strip) | the serving pipeline's configuration (.yaml: render components and their inputs) and the readers' render record (.csv), which names each reader's group |
+| the share of page views built fresh | 0.30 to 0.60 by device and half-year, by market, device and day | measured: the edge cache's daily record (.csv); taken by day or averaged over each test, measured spread of the full effects under 1 per cent |
+| each group's full effect per session | stock 2.54, promise 0.57, price 1.11, history 1.32, trend 0.84, seller 1.77, match 2.31 points | measured: the ablation results over the fresh share; measured spread 0.6 to 5.4 per cent across the battery |
+| the sessions served each default over the usual level | stock 4.03, promise 5.58, price 10.59, history 1.61, trend 8.58, seller 1.39, match 0.80 per cent | measured: the entity logs replayed, the telemetry for the request-time groups, the traffic shares, the hourly sessions; measured spread 0 to 13.1 per cent |
+| each reader's cost per eligible session | measured by reader and device | measured: the readers' test results; measured spread 0.1 to 4.7 per cent |
+| the referee | 0.411 points over fourteen business days in April, one serving region against the other | the conversion mart by region and day (.csv); the batch log's region column (.csv); the serving regions lookup (.csv) |
+
+Variant battery: 125 variants of the golden route in `generator/core.py` (`VARIANTS`): effects pooled over every market and device, by market and device, by precision, on the first half's tests, on the tests from April, and without netting the tests' own default days; the fresh share averaged over each test; a snapshot fresh to the minute or a full sync interval old; counters back at once or two hours after catch-up; sellers weighted by the quarter's traffic; the sellers' usual level from the second quarter, from June and from the first half; the readers' costs pooled; their usual failed renders from the first half and from June; every single convention and every pair from different dimensions. They file one call.
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 | Population: VX40 and VP12 wafers by sort window; VR90's Q1 2027 wafers, all sorted after the plan's conditions take effect (the plan's own dates); C1 |
-| 2 | Unit of account: good die per wafer for the shortfall and VX40's causes, yield points for VR90, wafers for starts; the prompt names each |
-| 3 | Attribution window: by the final insertion's sort date; no wafer within a day of a window edge changes a figure past its band; C1 |
-| 4 | As-of dating: the pull of 6 November; every figure uses records to then |
-| 5 | Version basis: the final sort insertion; recipe revisions by their own change dates |
-| 6 | Denominator: per wafer sorted; die at risk for the bin fits; C4 against the tested-die reading inside the bands |
-| 7 | Weighting: every wafer equal within a window; C1 |
-| 8 | Window length: the prompt's two windows; the loop's regimes read off its own flow |
-| 9 | Boundary inclusivity: whole days, end inclusive; C1 |
-| 10 | Rounding path: computed unrounded, rounded once at the answer blocks' precision |
-| 11 | Tie-break: none needed; the four causes' bands are disjoint |
-| 12 | Maturity and censoring: only sorted wafers are counted; lots unsorted at the pull are outside both windows |
-| 13 | Order of operations: survival multiplies across mechanisms on each die; the marginal gains are read on the plan |
-| 14 | Row order: no figure depends on file order; the bench replay orders by the controller's own time and sequence |
-| 15 | Duplicate resolution: the controller's repeated lines carry the same sequence number and are dropped; retests by insertion |
-| 16 | Identity normalisation: lot IDs with and without the dot are one lot; wafer by lot and slot in every export |
-| 17 | Netting against gross: no netting; the residual is reported as the line's own variation |
-| 18 | Dimensional units: the trend's flow in L/min then gpm, converted at the unit column; metals in ppb |
-| 19 | Code and status semantics: bins by the database's own bin table; insertions by number; the controller's events by name |
-| 20 | Integerisation: starts rounded to tens once |
-| 21 | Clause scope: the plan's conditions apply to VR90's Q1 2027 wafers |
-| 22 | Forward window contents: the ramp plan is the driver for Q1 2027 (loading, settings, chambers, back-end yields) |
+| 1 | Population: every search session of the third quarter of 2026 in the six markets, on both devices |
+| 2 | Unit of account: percentage points of search conversion (attributed orders over search sessions) |
+| 3 | Attribution window: an order belongs to the business day of its search session, as the mart attributes it |
+| 4 | As-of dating: the records as extracted on 12 October 2026, every third-quarter day attributed |
+| 5 | Version basis: the later telemetry row where a week was restated; the relaunched test, not its aborted run; the charter as approved for 2027 |
+| 6 | Denominator: search sessions of the quarter (of the month for a month's figure) |
+| 7 | Weighting: sessions; shards and sellers by the traffic shares on file |
+| 8 | Window length: effects on every completed test of 2026; the usual level from the same nights replayed; readers' usual rate on the second quarter |
+| 9 | Boundary inclusivity: a cost of exactly 0.05 is listed; none arises; a value is at its default once its age exceeds its validity |
+| 10 | Rounding path: full precision to the end; costs stated to 0.001 point, each with its band |
+| 11 | Tie-break: none needed; no variant comes within 0.013 of the line |
+| 12 | Maturity and censoring: every third-quarter day is attributed; September's tests still running at the quarter's end are read on their completed days |
+| 13 | Order of operations: the records on one calendar, the default served, the full effects net of it, the readers' costs, April, each group's cost by hour and cell, the months and the quarter, the list |
+| 14 | Row order: no step depends on file order |
+| 15 | Duplicate resolution: a row repeated whole is one row; a restated telemetry row replaces the earlier |
+| 16 | Identity normalisation: markets by the lookup's two code schemes; shards by the registry's current and former names |
+| 17 | Netting against gross: a default is charged to the degraded service only over what normal service leaves; a reader's failed renders over its usual rate |
+| 18 | Dimensional units: shares as fractions of sessions or page views; hours in UTC after conversion; points of conversion throughout |
+| 19 | Code and status semantics: run status (scored, failed, and the earlier OK and FAIL), test status (completed, aborted), render outcome (rendered, suppressed) |
+| 20 | Integerisation: none; counts are as recorded |
+| 21 | Clause scope: the line applies to each group separately, on the quarter |
+| 22 | Forward window contents: none forecast; the list is drawn on the closed quarter by the charter's section 2 |
 
 ## Literal reader
 
-Executed word for word, the prompt's asks with the ramp plan's sentences give: the shortfall from each wafer's final
-sort record in the two windows (R1); four causes, each with the good die a VX40 wafer loses to it and its fix (R2 to R5);
-VR90's yield with every cause fixed (R6); what each fix alone adds under the plan as filed, and the plan's own yield and
-the starts with every cause fixed (R2 to R5, R7). No sentence names a method, a comparison or a file.
+The charter's section 4 executed word for word on the golden's seven costs files the golden: 0.102, 0.064, 0.163 and 0.072 are 0.05 or more and are listed; 0.028, 0.025 and 0.019 are not. Section 3 executed word for word names the quantity (the difference between two conversions averaged over the quarter's search sessions, with the group in normal service to every service that reads it) and performs no step of R2 to R6: it does not say how the counterfactual is found. The registry's validity and refresh columns executed literally give each value's state once an entity's log is replayed, and give no share of sessions without the replay and the traffic. No shipped sentence, executed literally, produces a group's cost or an input to it.
 
 ## Prompt contract
 
-A voice rewrite keeps: the two windows and two products; "rank the causes" with good die per VX40 wafer and the fix;
-VR90's Q1 2027 wafers; "with every cause fixed"; "what fixing each cause alone would add ... under the ramp plan as
-filed"; the plan's own yield; the starts with every cause fixed; a spreadsheet and a short note. It never adds a method,
-a file name, a rounding instruction, a warning or who is asking.
+A rewrite keeps: the question in the how-much form (how much search conversion each feature group's degraded service cost in the third quarter of 2026, and which groups that puts on the 2027 tier one list); the reason the answer rests on an estimate (nothing recorded holds that cost); the figures by their plain definition and unit (for each of the seven groups the points of search conversion its degraded service cost over the quarter as the charter defines it, and whether it is listed; the same cost for the seven together, for each month of the quarter and for the listed groups together); the deliverables by type (a spreadsheet that opens on the list with the estimates and a chart; a CSV with one row per group and month giving the cost in points). A rewrite never adds: the cache, page views, fresh or cached pages, compliance or dilution; validity, expiry, staleness, defaults served or replay; a badge, a label, a strip, readers or consumers; April, regions or a check; a file name; a method, a comparison or an adjustment; a rounding rule; who is asking.
 
-## Pre-ship check
+## Build brief
 
-Ruled in the main thread on `leak.py --asof 2026-11-06`'s REVIEW lines (2026-11-13, the stage 4 cut):
-- `shift_handover_ft2_2026.txt` is the FT2 shift book, written up shift by shift by the four crews' leads from what
-  the floor saw (re-probes, holds, PMs and downs, bench controller restarts and alarms); it describes no data.
-- The ramp plan's "300" is the showerhead part SH-300-C, not a figure.
-- The ramp plan carries the call's distinctive words because it is the plan of record for the same tools: its table
-  states each area's condition for VR90's quarter (twelve areas, of which four carry a cause), never a change to make
-  or an effect, and it is the WHAT behind "under the ramp plan as filed".
-- The stump-paragraph terms in the plan (slurry, cleans, conditions, quarter) are the field's own words for its areas.
-- The ECN register's dates after the pull are the effective dates of approved changes (0466, 0473, 0480, 0487), the
-  register's own forward column; every extract's latest record sits before its own export time (H16 check).
+World: Tessel Market, an online marketplace run from Utrecht in six markets (DE, NL, SE, BE, AT, DK; about 1.2 million search sessions a day; app and web), orders search results with a ranking model that reads seven feature groups: stock (14 store-chain feeds, a snapshot valid 2 hours, joined at render), promise (a delivery-time service called at render; also read by the delivery promise badge), price (five competitor price sources, one batch a day at 04:00, valid 36 hours, joined before the page cache; also read by the price match label), history (a profile store read at render; also read by the buy-again strip), trend (24 click-stream partitions, counters valid 6 hours, before the cache), seller (a nightly score for sellers with newly settled orders, valid five nights, before the cache) and match (one index replica a market, before the cache). The engine is `generator/core.py`'s `make_world()`: sessions by market, device and hour; healthy conversion with diurnal, weekly, promotional and summer structure and daily and hourly shocks; each group's worth by cell; the fresh share by cell and day with June's change and purge days; each job's failure process and each entity's served state; orders drawn by serving region; 63 ablation tests and three reader tests; the readers' rendering; April's seven missed batches in one region. The generator writes each system's files from those arrays and reads them back for the golden; it adds no effect of its own.
+Frozen: SEED 9104; every dial of `G`, `MK_W`, `APP`, `DAY_SESS`, `HELD`, `TEST_DAYS`, `READER_TEST`, `READER_HELD`, `SUPP_BASE`, `SPLIT`, `N_SELLERS`, `SELLER_WINDOW`, `SELLER_FAIL`, `CACHE_CHANGE` and the processes of `make_world`; the line (0.05); the window; the referee (April's fourteen days by region); the golden's route (`exposure`, `effects`, `readers`, `view`), the three hurried choices (`LOST`), the direct and rigorous routes, the battery (`VARIANTS`) and the forcing (`spreads`, `--forcing`); the four components (trend's full effect, seller's share of sessions, the promise badge's cost, April as called) and the twelve ask figures (seven groups, three months, the seven together, the listed groups together); the conversion record shipped by business day and never by hour.
+Files: (1) search sessions by market, device and hour from the edge log (78,624 rows, UTC). (2) The conversion mart by business day, market, device and serving region: search sessions and attributed orders (6,552 rows; daily only). (3) Feature status telemetry by group, shard and hour in the monitor's long layout (about 330,000 rows; late and restated rows; renamed shards). (4) The feed gap log, the price batch run log with a column per serving region, and the click-stream lag episode log. (5) The seller scoring log, one row per seller and night due with its status (the largest file, 500,000 rows or more; retried rows; the June status vocabulary). (6) Traffic shares: sellers by month, chains and price sources by market, partitions. (7) The ablation test register and results by test, day, market, device and arm (sessions and orders), with the aborted run; held in a database file. (8) The edge cache's daily record by market and device: result page views served from cache and built fresh. (9) The readers' render record by reader, market, device and hour (eligible sessions, rendered, suppressed) and the readers' test results by reader, market, device and arm (sessions, eligible sessions, orders). (10) The feature registry (group, owner, entity, store, validity, refresh, sync interval, window) and two configuration files as the stack keeps them: the serving pipeline (stage order, cache key and scope, where experiment flags are evaluated, render components and their inputs) and the feature store (validity and refresh by group). (11) Lookups: markets in both code schemes, serving regions, the promotion calendar. (12) An incident and change register (dated tickets with system, type and a one-line title in the operators' words). (13) The reliability charter (two pages; sections 2 to 4 as quoted under Estimand). (14) Unused and unlabelled: the ranking model's offline replay results by group, its feature importance table, its release log. Nothing ships by hour that carries orders; nothing ranks or prices the groups; the referee's days ship whole in the mart and the batch log.
+Never filed: a sentence that a held, ablated or experiment user is served cached pages, that the cache is shared across arms, that test effects are diluted, understated or partial, or any compliance, exposure or treatment-received share; a column of held page views by cache status; that a value outlives, persists past or is still served after a failure, that telemetry overstates or differs from what was served, or any count of sessions at a default; that the same sellers fail repeatedly; that a group has a second, other or downstream reader whose loss adds, or any cost of a badge, label or strip in the third quarter; that April validates, calibrates or tests anything; any group's cost, rank or share of the fall; any file, sheet or column named for a default served, a fresh share by arm, a full effect or a correction. The configuration files state structure (stages, keys, inputs, validity) and no consequence. No document describes the data files.
+Goldens: `tessel_feature_group_losses_2026q3.csv`: one row per group and month (21 rows): the group, the month, its cost in points of search conversion. `tessel_tier_one_hardening_2027.xlsx`: the first sheet states the groups listed, each with its cost, the groups left off and what the estimate rejects (the tests on the telemetry list seller and leave trend and promise off), with one chart of the seven costs against the line; behind it the costs by group and month, the seven together and the listed groups together; the inputs (full effects by device, sessions served each default, readers' costs); April as called against the record; a routes sheet with what each shortcut files beside the golden. Both through the house writers.
+Free: nouns beyond the people and Tessel Market; team, chain, source and partition names; the documents' genre and wording inside the Never filed list; Layer 1 texture and its rates (every item resolving exactly); the unused files' contents; file names and formats inside the input gates; the split of arrays into rows.
 
-The first isolated read (2026-11-13, before the house pass): no sentence gives a method, no file ranks the causes,
-no helper file, nothing reads as the answer; every question 5 sentence executes to the golden (the back-end yields
-and gross die, the commitment in final good units, CM3 on R7 before VR90's first lot, the 21 per cent share, the
-design-limited fallout matching the product sheet); question 6: no one thing, the plan's table the closest because it
-lists the cause areas. Its six realism tells, each fixed in the generator: the plan's table now lists all twelve areas
-VR90 runs through; the ECN register holds 31 changes across the fab's areas, numbered in the order raised (one row
-renumbered to keep that order); the shift book is written from the floor's own events, in varied words, with a crew
-rota of four leads; the MES cut-over of 2 March has its ECN and its shift-book line; the recipe log's follow-on
-reasons are the engineers' own; the facilities log has three people and the lab a two-analyst rota.
+## Architecture 3 record (spent 2026-11-18)
 
-The house pass found and fixed, each in the generator: one VP12 lot sorted after the pull (cut at the pull, 07:40 on 6 November,
-asserted in checks.py); every lot split across both probers with a prober testing about fifteen wafers at once at a
-fixed six-minute step (now one prober a lot, wafers in turn, re-probes after the card clean); the polishers', the
-deposition chambers' and the etch chambers' logs stepping each wafer by a fixed interval (now each tool's own cycle
-times, the realization unchanged); a technician sharing the controller's name (renamed); the bin 5 figures stated as
-bin 5 per wafer but counted on die at risk (the answer blocks and golden now give the raw count with the at-risk count
-beside it); house words in the golden's routes sheet (renamed).
-
-The world's own expected VR90 figures (forward.py, 4,000 draws) against the bands: plan 44.5 in 43.7 to 46.4, every
-cause fixed 65.4 in 64.3 to 66.4, the loop 9.15 in 7.5 to 9.7, the bench 2.94 in 2.3 to 3.7, the showerhead 0.63 in
-0.49 to 1.02, the etch cleans 5.66 in 4.9 to 6.0. The causes' VX40 bands sit 1.1, 1.0 and 0.7 apart.
-
-The first determinism judge stopped without a pass (no Agent tool in its runtime) and drafted a brief for a thread
-that would derive its own answer cold before opening the blocks; that thread was not run (the STOP block's banned
-reader), and the judge was re-run under its definition of 2026-11-13.
-
-Judge pass 2 (2026-11-13): DETERMINISTIC with SOLUTION_WRONG on a figure basis, FIX_NOW. Reproduced: both shortfalls
-(25.25, 34.84) and their first-insertion and all-insertion variants inside the bands, the causes' bands apart, the
-polisher distances' monotone rise, the block yields' non-Poisson fall (about 0.75 to 0.76 at VR90's die), the starts
-arithmetic. Its findings and their repairs: Critical Component 1 now names its windows by polish time (51.5 Hz before
-2 June, 38 Hz from 2 June with the standby fortnight aside), which executes to 18.4, 47.8, 10.1 and 11.7 exactly; the
-edge pair is pinned as one cause in ask 2 (neither change alone removes the loss); the recommendation now reads
-SH-300-B on the day the plan takes CM3 back to R7; the closing passage names the gate oxide basis. Its third
-surviving answer, VR90's polisher set inferred from ILD0-VR appearing only on CM1 and CM3, is now filed in the plan's
-CMP row and ECN-2026-0480 (ILD0-VR qualified on CM1 and CM3 only), a WHAT pin that names no method. The plan changed,
-so the pack is read again (read 3) and judged once more (pass 3).
-
-Re-judge (report determinism_check_report_pass2.md): NOT_DETERMINISTIC, SEND_BACK on two narrow points, everything
-else reproducing (both shortfalls and their variants, Critical Components 1 to 3, the causes' disjoint bands, the
-1,420-wafer clean from the monitors, the plan loading, the starts arithmetic). F1: the plan's deposition row said "both
-chambers of each tool on the qualified SH-300-C showerhead", which read literally puts all six chambers on SH-300-C
-against the PM log's one replacement; the row now files DP2B on SH-300-C since 6 April, the other five on SH-300-B,
-and no replacement due before the end of Q1 2027 (read 3 found the same sentence). F3: four VX40 die tiled from
-January to March on CM1 and CM3 read VR90 with every cause fixed at 67.2 per cent, above the 64.3 to 66.4 band; the
-tiling keeps VX40's 62-second polish against VR90's 76, 2026's bench loading against the plan's, VX40's own share of
-CM3 and VX40's edge die (adjusted for the polish and the gate oxide alone it still reads 66.7), so Step 7 now gives
-VR90's fixed yield part by part from named values and the closing passage rules the tiling out (asserted in
-checks.py). Its SEND_BACK is treated as a repair, not a re-root: both points are closed by filing what the PM log
-already holds and by stating the composition, with no graded figure moved; judged once more as pass 3.
-
-Duplicate gate (2026-11-13, after rebasing on main): `guard.py heart` BLOCKed on two axes against cards filed in
-parallel sessions. The forcing event was redrawn to launch_or_rollout (task22 v2 had filed budget_or_appropriation).
-The organisation family stays manufacturer by the author's override: the BLOCK names task4's architecture 13 (a
-brewery), registered at 02:07 UTC after this world's first registration at 01:31 UTC and sorted ahead of it by its
-card's local draw date; a semiconductor fab cannot honestly be filed as another kind of organisation, and the two
-builds share no domain, analysis type, answer shape or structure. The card carries the override.
-
-Judge pass 3 (determinism_check_report_pass3.md): DETERMINISTIC, FIX_NOW in the answer blocks only. Reproduced: both
-shortfalls with every insertion and clock variant inside the bands, the bin 5 windows exactly, the edge pattern, the
-starts, the composition (65.4 from the rounded parts), the 1,420-wafer clean, the block yields' non-Poisson fall; the
-Poisson, cluster-factor-2, tiling, consumables, RF-time and split-cause rivals each ruled out by named data or inside
-the band. Its fix: Critical Component 2's share of VX40 wafers on DP2B and CM3 named no window and recomputed between
-9.2 and 11.4 by the join used, so the share left the blocks and the note (it grades nothing; the 1.4 and 6.2 built on
-it reproduce); Step 7 now names VR90-T's own split between CM1 and CM3, an even split being a rival held inside every
-band. Read 4 (after the re-judge's repairs): clean of method, ranking, helper and answer leaks, every question 5
-sentence executing to the golden; its five realism notes ruled in the leak report.
+Varnholt Halbleiter Fab 2's VR90 ramp yield review (drawn 2026-11-13, READY the same day, never uploaded): five physical causes of a June to September sort-yield shortfall (an etch polymer's exposure basis, a slurry loop's position effect, cancelling edge profiles, a wet bench's metal stock, a yield at a new die area) ranked in a bridge with a first-quarter forecast, delivered as a workbook and a note. It was cut before the core, open-members and rubric rules: no `generator/core.py`, no Stump core, no Build brief, no Stump factorial, and its judgments were mechanisms of the world that the wafer and tool records either carry (modelled on sight) or do not (unforced), the kind the 2026-11-13 send-backs were returned on. Its heart stood at BLOCK (ban.calibration against task19). Its generator, pack, goldens and reports were removed from the folder when architecture 4 was drawn; they are in git at 70df671 and earlier.
 
 ## Tried and rejected
 
@@ -457,3 +403,61 @@ sentence executing to the golden; its five realism notes ruled in the leak repor
   and the world's own expected VR90 loop gain (8.8 then 9.2 points) sat above the band, because 29 VX40 lots on CM3
   under-sample its scratch rate; reset to 18.2, 0.0043 and 0.48 (gaps of 1.1, 1.0 and 0.7 between the causes' bands)
   and the pooled VX40 and VP12 reading of bin 5 added to the rivals.
+- 2026-11-18, architecture 3 as it stood (the fab's yield bridge): cut before the core, open-members and rubric rules,
+  with no `generator/core.py`; its five causes were mechanisms of the world that the wafer and tool records either carry
+  (modelled on sight) or do not (unforced at audit), the kind returned on 2026-11-13, and its heart stood at BLOCK. The
+  slot is redrawn as architecture 4 and the record is under `## Architecture 3 record`.
+- 2026-11-18, a clinic no-show model refitted weekly on its own log: the causes are instrument changes (closed), the refit
+  lag is measurable from recent residuals, and its forward-state judgment mirrors task8's S2.
+- 2026-11-18, reason-code stores and score-crossing replays as the attribution: deterministic reconstruction, which is
+  record correction, with convention forks on how a distribution is reverted.
+- 2026-11-18, randomised input holdbacks as the whole instrument set: no root-cause estimand of their own, and a trial
+  that records what each unit received is read on the achieved dose unprompted (R67). Kept in architecture 4 as one
+  instrument of three, where the test records nothing of what the held slice was served and the share comes from the
+  edge's own record at another grain.
+- 2026-11-18, training-data attribution by source: the learning law is a mechanism of the world, and a linear model of
+  past runs on their data mix is the field's textbook route.
+- 2026-11-18, an error-cause ledger for a deployed model: its deciding steps are a placebo baseline and dependent capture
+  (both closed) and it sits beside the approved A/B review sheet.
+- 2026-11-18, clinical measurement-process models, fairness proxies, the internals of a large model, coding depth in
+  risk-adjusted mortality, and speech error attribution: hindsight and measurement basis (closed); attenuation-like and
+  sensitive; not simulable so that it behaves like the real thing; another subdomain beside the survey sheet's lesson;
+  beside task2.
+- 2026-11-18, benchmark contamination (how much of each benchmark's score is memorised test content): every identifying
+  step is a closed lesson as the deciding step (a placebo baseline for the twins' difficulty, self-selection for flagged
+  against unflagged items, competing risks for recall against solving, repeated exposure for dose, dependent capture
+  for scan and probe, attenuation for misclassified flags, a bound for the gaps between models).
+- 2026-11-18, failure attribution for retrieval-augmented answers: latent-class estimation with determinism forks, a
+  pool bias next to a treatment that changes who is observed, and chunk crosswalks that are record correction.
+- 2026-11-18, a model's error budget by variance components: a weak fit to the interpretability task type, and the
+  deciding step is a variance beyond sampling noise (closed).
+- 2026-11-18, privacy probing of memorised training records: the dose is repeated exposure (closed) and the canary
+  calibration is the approved proxy-link sheet's.
+- 2026-11-18, attribution of a metric's movement to launches from the experiment registry: the client's strategy 2,
+  with the winner's curse closed.
+- 2026-11-18, user-feedback and red-team logs as the record of a model's failures: labelled by the outcome and sampled
+  on occurrence, both closed.
+- 2026-11-18, a randomised drill on the price group as the referee: four consecutive days at 100 per cent put the route
+  that loses S2 only 14 per cent off, since a failure that lasts for days is served as it is counted. Replaced by April's
+  seven missed batches on separate nights in one serving region, which the daily record measures by region.
+- 2026-11-18, April's misses on alternate days at the first cache levels: the route that loses every stump cancelled to
+  within 12 per cent of the measured cost (S2 doubles, S1 and S3 halve). The fresh share was lowered so that route sits
+  32 per cent low, and the referee lists the three single drops, every stump lost and the rigorous route as rivals.
+- 2026-11-18, the three months and the two totals as asks while S2's inflation was small: the reflex route earned August
+  and both totals by cancellation (0.563 against 0.548) and `corelib` refused it (one stump fixed alone must earn more).
+  The seller and stock failure processes were redrawn so the reflex total is 0.665 against 0.473 and lands nothing.
+- 2026-11-18, the conversion record by hour: an hourly regression with hour and cell effects recovered stock, price,
+  history and match to a few per cent straight from the outcome, on the telemetry as on the rebuilt exposures. The
+  record is the nightly mart by business day (orders are attributed to search sessions by a nightly job) and no hourly
+  orders ship; the two daily regressions are priced as rivals in `core.py --detail`.
+- 2026-11-18, sharp history outages and independent chain gaps: daily event studies and market differences read them
+  off the mart. History's degradation is a chronic read-failure rate during the store's re-shard, and five chains share
+  a gateway whose stalls reach every market on the same days.
+- 2026-11-18, 180,000 and then 900,000 search sessions a day: test noise put the golden family across the line on promise
+  and trend, then left the referee at 9 per cent error on 3 seeds of 10. The world runs at 1.2 million a day with
+  42-day reader tests; 12 of 13 seeds pass at level 5 and the one that fails does so on the referee's noise alone.
+- 2026-11-18, "losses built day by day" as a family variant: it files the golden to the last digit (a no-op) and was
+  dropped from the battery.
+- 2026-11-18, seller as a member opened by the un-netted replay: replayed by entity but not netted of what normal service
+  leaves at the default it files 0.046, under the line, so it moves the figure and not the call; the member is opened by
+  the telemetry route alone (0.217 to 0.443) and the un-netted reading is SF3's closure.

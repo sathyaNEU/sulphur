@@ -1,133 +1,126 @@
 {
-  "task": "task9",
-  "status": "READY",
-  "domain": "general-statistics-data-science",
-  "subdomain": "interpretability",
-  "objective": "root-cause",
-  "stage": 5,
-  "stage_name": "ready",
-  "updated": "2026-11-13",
-  "doctrine": "throughout",
-  "call": "Before VR90's first lots reach the affected steps, restore SDS-OX1's flow, put tank T3 back on its spring life, fit SH-300-B to DP2B on 23 November (the day the plan takes CM3 back to R7) and wet-clean ET1B and ET3A every 1,420 wafers: VR90 then sorts at 65.3 per cent in Q1 2027 and needs 3,520 starts, against 45.4 per cent under the ramp plan as filed",
-  "chain": "R1 the June to September shortfall in good die per wafer for VX40 and VP12 against January to March; R2 the slurry loop's slower flow by each polisher's distance along it, its VX40 cost and VR90 Q1 cost; R3 the pre-gate bench's metal build-up under the July chemical life, its VX40 cost and VR90 Q1 cost at the plan's loading; R4 DP2B's thick edge and CM3's thin-edge tune cancelling on the wafers that run both, its VX40 cost, the plan's CM3 harmonisation alone and its VR90 Q1 cost; R5 the contact-etch polymer per RF second on ET1B and ET3A, VR90's Q1 cost at the 2,400-wafer clean and the interval that holds it; R6 VR90's entitlement at the line's January to March performance at its own die area; R7 VR90's Q1 2027 yield under the plan and with the changes, and the wafer starts",
-  "architecture": 3,
-  "loops": 0,
-  "precut": {
-    "exit": 0,
-    "date": "2026-11-13"
+ "task": "task9",
+ "status": "DESIGN",
+ "domain": "general-statistics-data-science",
+ "subdomain": "interpretability",
+ "objective": "root-cause",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-18",
+ "doctrine": "throughout",
+ "seed": 9104,
+ "call": "put stock (0.102 points of search conversion), price (0.163), trend (0.072) and promise (0.064) on the 2027 tier one list and leave seller (0.025), history (0.028) and match (0.019) off it; the seven groups cost 0.47 points over the quarter and the listed four 0.40 (generator/core.py at the draw, seed 9104; the cut pack's figures replace these at the build)",
+ "stump": "the reflex route (every ablation test pooled by market and device with precision weights, on the traffic-weighted failure telemetry) files 0.267, 0.032, 0.080, 0.021, 0.039, 0.217 and 0.009 and lists stock, price and seller: wrong on trend, promise and seller. S1 (an ablation's effect is the group's worth on the share of the held slice's page views built fresh, read from the edge cache record) opens trend; S2 (the sessions served a default are replayed entity by entity with each value's validity, weighted by traffic, net of what normal service leaves) opens seller; S3 (three groups are also read by a service the ablation never touches, priced from its own test and its own failed renders) opens promise",
+ "chain": "R1 the registry, telemetry, entity logs, test records, cache record and readers' records on one calendar and scheme; R2 each group's full effect per session from its ablation tests over the fresh share; R3 the share of the quarter's sessions served each group's default over what normal service leaves, rebuilt entity by entity; R4 each other reader's cost from its own test and failed renders; R5 April's missed price batches in one serving region reproduced from R2 to R4; R6 each group's third-quarter cost, by month and together; R7 the tier one list and what the listed groups cost together",
+ "architecture": 4,
+ "loops": 0,
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-18",
+  "checks": "precut.py task9: 115 checks, 0 FAIL, 3 WARN (the nearest chains task1, task6 and task7 share the flagged-set shape only, answered in the note's Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on seed 9104 (three stumps on the axes what, when and who, three open members opened by different stumps, one stump lost 32, 37 and 37, reflex route 9, rigorous standard route 9, one stump fixed alone 27, 18 and 23); the call holds under 125 variants and every forcing corner (nearest the line 0.0137); prompt gate PASS"
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": "guard.py check on 2026-11-18: WARN only (overuse.forum line_manager_or_team; repeat.deliverables csv+xlsx against task5 and task8, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "report": ""
+ },
+ "paper_pair": 9,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": "a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth: rescues 1 of 7 (core.py: one stump lost 32, 37 and 37; reflex route 9; rigorous standard route 9; one stump fixed alone 27, 18, 23)"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null
+ },
+ "returned": [],
+ "resume": "DESIGN: the core is proved (python3 task9/generator/core.py, CORE PASS level 5; --forcing holds) and the note carries the Build brief; next is stage 3, the generator around core.py",
+ "approved": null,
+ "submitted": null,
+ "portal": null,
+ "prompt_rewritten": false,
+ "source": "the author's brief of 2026-11-18 (batch 6 to 10: bring each unapproved task to the expected depth, unique, off the closed strategies, three or four stumps on the main recommendation, the rubric in the low thirties)",
+ "slot_history": "the author cleared the slot on 2026-11-11; the quantitative-finance architectures are in git history and the card's lineage; architecture 1 of the cleared slot (Concept 1, drive replacements) was spent at stage 4 on 2026-11-11 (PAUSED commit 1614e25, determinism judge SEND_BACK)",
+ "history": [
+  {
+   "date": "2026-11-11",
+   "event": "slot cleared by the author; new draw from Concept 1 registered"
   },
-  "leak": {
-    "leak_py": "REVIEW (every line ruled harmless in the design note's pre-ship check)",
-    "reader": "four isolated reads, none with a method, ranking, helper or answer leak; every realism tell fixed in the generator or ruled"
+  {
+   "date": "2026-11-11",
+   "event": "generator written and calibrated; paused after a worker restart"
   },
-  "duplicate_check": {
-    "heart": "BLOCK ban.org_family (manufacturer, against task4 architecture 13) overridden by the author on 2026-11-13; forcing event redrawn to launch_or_rollout; no other BLOCK",
-    "nearest": "task18 (chain or shape and weight, WARN)",
-    "date": "2026-11-13, after rebasing on main at 0e8e5ec"
+  {
+   "date": "2026-11-11",
+   "event": "built on seed 9017: the batch found by build-week scan, the per-vault migration call, the survivors' own levels; stage 4 launched"
   },
-  "judge": {
-    "verdict": "pass 3 DETERMINISTIC",
-    "disposition": "FIX_NOW applied in the answer blocks (no pack change)",
-    "gate_h": "not in the judge's scope (determinism only); held by precut.py, effort.py and the skeleton guard",
-    "report": "determinism_check_report.md (pass 2: FIX_NOW), determinism_check_report_pass2.md (re-judge: SEND_BACK on the plan's showerhead row and the tiling rival, both repaired), determinism_check_report_pass3.md (DETERMINISTIC)"
+  {
+   "date": "2026-11-11",
+   "event": "stage 4: leak reader clean; determinism judge NOT_DETERMINISTIC, SEND_BACK on the migration call; paused for the author's decision"
   },
-  "paper_pair": 25.7,
-  "effort": {
-    "quick": 14.9,
-    "careful": 25.7,
-    "thorough": 100.0,
-    "largest_hint": "the slurry loop's scratching grows with each polisher's distance along it: rescues R2, 1 of 7"
+  {
+   "date": "2026-11-11",
+   "event": "re-rooted to the author's Concept 2 (Fab 2's wafer edge-ring) at the author's word after Concept 1's SEND_BACK; card registered"
   },
-  "runs": {
-    "run1": null,
-    "run2": null,
-    "average": null,
-    "counterfactual_average": null,
-    "first_wrong_step": {
-      "run1": "",
-      "run2": ""
-    },
-    "triage": "",
-    "recorded": "",
-    "history": []
+  {
+   "date": "2026-11-11",
+   "event": "stage 2 closed: simulator with downtime-aware dispatch and disk-to-disk spread, analysis and routes, effort passes (pair 38.2), prompt and note; precut exit 0"
   },
-  "returned": [],
-  "resume": "",
-  "approved": null,
-  "submitted": null,
-  "portal": {
-    "status": "",
-    "date": "",
-    "note": ""
+  {
+   "date": "2026-11-11",
+   "event": "stage 3: golden deck, writeup, checks (66 of 66) and build written; a set-iteration order bug in the simulator found and fixed (builds now byte-identical); paused at the author's interruption"
   },
-  "prompt_rewritten": false,
-  "source": "the author's brief of 2026-11-13 (a re-root of the cleared slot: five to six independent judgments off the client's closed page, a pack of about 40 MB with 20 to 30 related tables)",
-  "slot_history": "the author cleared the slot on 2026-11-11; the quantitative-finance architectures are in git history and the card's lineage; architecture 1 of the cleared slot (Concept 1, drive replacements) was spent at stage 4 on 2026-11-11 (PAUSED commit 1614e25, determinism judge SEND_BACK)",
-  "history": [
-    {
-      "date": "2026-11-11",
-      "event": "slot cleared by the author; new draw from Concept 1 registered"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "generator written and calibrated; paused after a worker restart"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "built on seed 9017: the batch found by build-week scan, the per-vault migration call, the survivors' own levels; stage 4 launched"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "stage 4: leak reader clean; determinism judge NOT_DETERMINISTIC, SEND_BACK on the migration call; paused for the author's decision"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "re-rooted to the author's Concept 2 (Fab 2's wafer edge-ring) at the author's word after Concept 1's SEND_BACK; card registered"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "stage 2 closed: simulator with downtime-aware dispatch and disk-to-disk spread, analysis and routes, effort passes (pair 38.2), prompt and note; precut exit 0"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "stage 3: golden deck, writeup, checks (66 of 66) and build written; a set-iteration order bug in the simulator found and fixed (builds now byte-identical); paused at the author's interruption"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "stage 3 closed: verify.py 23 of 23, golden-realism pass on the deck, gates.py --full 0 FAIL; stage 4 launched"
-    },
-    {
-      "date": "2026-11-11",
-      "event": "stage 4: leak reader clean of method and answer leaks (two realism tells fixed); judge DETERMINISTIC FIX_NOW, but its blind first pass landed every result, so back to stage 2"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "architecture 2 (the edge ring, READY, never uploaded) superseded at the author's word: one of its call's two steps was the client's closed young-cohort lesson behind a serial join; architecture 3 drawn in a new fab world (Varnholt Halbleiter Fab 2, Dresden) with five independent lessons off the closed page; card registered at WARN"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "architecture 3 stage 2 closed (precut exit 0, effort pair 25.7) and stage 3 built: a 29-file, 45 MB pack, gates.py --full 0 FAIL; architecture 2's careful_repriced_on_judge (about 51 to 58) and author_override (2026-11-12: the author chose to ship to measure over the house's 50 line (the judge's blind first pass re-priced at about 51 to 58; the client's bar is 60)) retired with it"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "stage 4: read 1 clean (six realism tells); house pass fixed the pull cut, the prober schedule, the tools' fixed time steps, the raw bin 5 figures and the band gaps; world retuned (scratch base 18.2, drag 0.0043, thin-edge kill 0.48) and a pooled bin 5 rival added; read 2 and judge pass 2 running"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "stage 4: read 2 clean; judge pass 2 DETERMINISTIC, FIX_NOW: Critical Component 1 named by polish time, the edge pinned as one cause, the recommendation's SH-300-B day, VR90's polishers filed in the plan and ECN-2026-0480 (ILD0-VR qualified on CM1 and CM3), the gate oxide basis named; figures unchanged"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "stage 4 closed: re-judge SEND_BACK repaired (the plan files the real showerhead configuration; the tiling rival ruled out by VR90's own polish, loading, polisher split and edge die, with the fixed yield shown part by part); judge pass 3 DETERMINISTIC, FIX_NOW applied; four leak reads clean; forcing event redrawn, the org-family ban overridden by the author"
-    },
-    {
-      "date": "2026-11-13",
-      "event": "READY: gates.py --full 10 of 11 green (heart overridden), two byte-identical rebuilds, containers PASS; target.zip de2a0263fb84c75d"
-    }
-  ],
-  "author_override": {
-    "date": "2026-11-13",
-    "gate": "guard.py heart ban.org_family against task4 (13)",
-    "decision": "ship with the ban recorded; a semiconductor fab cannot honestly be another kind of organisation, and task9's world was filed first (01:31 UTC against 02:07 UTC)"
+  {
+   "date": "2026-11-11",
+   "event": "stage 3 closed: verify.py 23 of 23, golden-realism pass on the deck, gates.py --full 0 FAIL; stage 4 launched"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "stage 4: leak reader clean of method and answer leaks (two realism tells fixed); judge DETERMINISTIC FIX_NOW, but its blind first pass landed every result, so back to stage 2"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "architecture 2 (the edge ring, READY, never uploaded) superseded at the author's word: one of its call's two steps was the client's closed young-cohort lesson behind a serial join; architecture 3 drawn in a new fab world (Varnholt Halbleiter Fab 2, Dresden) with five independent lessons off the closed page; card registered at WARN"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "architecture 3 stage 2 closed (precut exit 0, effort pair 25.7) and stage 3 built: a 29-file, 45 MB pack, gates.py --full 0 FAIL; architecture 2's careful_repriced_on_judge (about 51 to 58) and author_override (2026-11-12: the author chose to ship to measure over the house's 50 line (the judge's blind first pass re-priced at about 51 to 58; the client's bar is 60)) retired with it"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "stage 4: read 1 clean (six realism tells); house pass fixed the pull cut, the prober schedule, the tools' fixed time steps, the raw bin 5 figures and the band gaps; world retuned (scratch base 18.2, drag 0.0043, thin-edge kill 0.48) and a pooled bin 5 rival added; read 2 and judge pass 2 running"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "stage 4: read 2 clean; judge pass 2 DETERMINISTIC, FIX_NOW: Critical Component 1 named by polish time, the edge pinned as one cause, the recommendation's SH-300-B day, VR90's polishers filed in the plan and ECN-2026-0480 (ILD0-VR qualified on CM1 and CM3), the gate oxide basis named; figures unchanged"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "stage 4 closed: re-judge SEND_BACK repaired (the plan files the real showerhead configuration; the tiling rival ruled out by VR90's own polish, loading, polisher split and edge die, with the fixed yield shown part by part); judge pass 3 DETERMINISTIC, FIX_NOW applied; four leak reads clean; forcing event redrawn, the org-family ban overridden by the author"
+  },
+  {
+   "date": "2026-11-13",
+   "event": "READY: gates.py --full 10 of 11 green (heart overridden), two byte-identical rebuilds, containers PASS; target.zip de2a0263fb84c75d"
+  },
+  {
+   "date": "2026-11-18",
+   "event": "architecture 3 (the fab's yield bridge, READY, never uploaded) spent: cut before the core, open-members and rubric rules, its judgments mechanisms of the world; its generator, pack, goldens and reports removed from the folder (in git at 70df671 and earlier)"
+  },
+  {
+   "date": "2026-11-18",
+   "event": "architecture 4 drawn: Tessel Market's ranking model, what each feature group's degraded service cost search conversion in the third quarter of 2026; generator/core.py CORE PASS level 5 on seed 9104; card registered at WARN, skeleton PASS; three vocabulary keys added"
   }
+ ]
 }
