@@ -1,47 +1,39 @@
 {
  "task": "task8",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "education-learning-sciences",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-11",
- "call": "fund 874 Reading Forward places, 349.6 tutor hours a week, GBP 349,880 for 2026-27 (range 843 to 915 students), by academy as listed, against the provisional GBP 339,500",
- "stump": "The default path pre-equates the 2027 Level 1 paper on the Board's concurrent Rasch bank and files 22 (careful variants 21), because the Level 2 items earlier Level 1 papers carried looked unshifted for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones; the 2027 paper's twelve long mathematical Level 2 items carry the cost alone, and only both causes and the scale constant fitted together price them (19).",
- "architecture": 19,
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-18",
+ "call": "convert Ardkeel's banked 2025 and 2026 portfolio marks down 3.0 and Dunmoyle's down 6.2, Gortavale's up 2.8, carry Brannock's (0.5), Eskerry's (0.7) and Fennor's (1.2) as banked; the joining boards as a whole stand 1.7 marks above Carrow's standard (generator/core.py at the draw, seed 8134; the cut pack's figures replace these at the build)",
+ "stump": "the reflex route (each board's recorded moderation differences with its own trial severity added, adjustments netted, candidate weights, a centre's last sample carried) files 1.37, 3.05, 2.40, 2.59, 4.59 and 2.47 marks, converts Brannock, Dunmoyle, Eskerry, Fennor and Gortavale down and leaves Ardkeel: wrong on five of six boards. S1 (a moderator records 36 to 71 per cent of a cold difference, measured on trial scripts joined to their live moderation) opens Ardkeel; S2 (a centre marks lower in the years after a sample, read from its own mark sheets) opens Fennor; S3 (each board marks to its own principal, linked to Carrow through the moderators two boards share) opens Gortavale and flips Brannock and Eskerry",
+ "architecture": 20,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-11"
+  "date": "2026-11-18",
+  "checks": "precut.py task8: 113 checks, 0 FAIL, 3 WARN (the nearest chains task13, task19 and task22 share the reconciled table only, answered in the note; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on seed 8134 (three stumps, three open members opened by different stumps, one stump lost 22, 22 and 22, reflex route 9, rigorous standard route 9), --forcing FORCING PASS (nearest line 0.40)"
  },
  "leak": {
-  "leak_py": "REVIEW (exit 1), every line ruled in the note's pre-ship check",
-  "reader": "no leak and no one thing; a post-census fork that moves no placement (SF12 same call) and the workbook's Excel zip stamps, both ruled harmless"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN",
-  "nearest": "task5 v4, severity none (skeleton.py check)"
+  "heart": "",
+  "nearest": "guard.py check on 2026-11-18: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5, repeat.deliverables csv+xlsx against task3 and task5, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "gate_h": "domain pass, layers pass, one_thing none, one_fact about 1 of 6 graded blocks",
-  "report": "task8/determinism_check_report.md",
-  "first_pass": "not a cold read: the thread opened the graded blocks before the data; it re-derived the gain (3.7, band 3.1 to 3.8) and the July level (4.01, band 3.6 to 4.4) from the raw files and did not rebuild the per-academy counts or the conversion tables"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 16.2,
+ "paper_pair": 9,
  "runs": {
   "run1": null,
   "run2": null,
   "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
-  },
-  "triage": "",
-  "recorded": "",
-  "history": []
+  "counterfactual_average": null
  },
  "returned": [
   {
@@ -63,7 +55,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py task8 --rewrite, then leak.py), uploads it with target.zip, and pastes both runs and the rubric for /triage-runs task8",
+ "resume": "DESIGN: the core is proved (python3 task8/generator/core.py, CORE PASS level 5, --forcing FORCING PASS) and the note carries the Build brief; next is stage 3, the generator around core.py",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -88,6 +80,10 @@
   {
    "date": "2026-11-11",
    "event": "READY architecture 19: 874 places, 349.6 hours a week, GBP 349,880 (843 to 915 students); careful pass 16.2 (variants 37.3 and 51.1); judge DETERMINISTIC APPROVE (first pass not cold); reader no leak"
+  },
+  {
+   "date": "2026-11-18",
+   "event": "architecture 19 spent before upload (cut before the core, open-members and rubric rules; two deciding judgments, lessons on or beside the client's closed page of 2026-11-12; head-count asks every route rebuilds); DRAWN architecture 20: Carrow Awards placing six joining boards' banked 2025 and 2026 portfolio marks on its own standard from moderation records that are anchored on the centre's mark, taken once a rota cycle and kept to each board's own standard; core.py CORE PASS level 5 (one stump lost 22, 22, 22; reflex 9; rigorous 9)"
   }
  ],
  "migrated_from": {
@@ -339,14 +335,15 @@
   "source_note": "re-root into a new client domain (a New Zealand independent schools' assessment trust choosing which draft Year 10 science paper to print for November 2027, pre-equated from its Rasch bank); architectures 1 to 16 spent",
   "spent": "2026-11-08 on its first platform round: both runs filed Paper C and every regional figure; triage REDESIGN (runs/triage.md): the prompt's August-against-November gap announced the mechanism, the course outline and Appendix B handed over the join, taught-content recalibration is a textbook IRT reflex, and every ask device was a hygiene item both runs caught"
  },
- "seed": 818025,
+ "seed": 8134,
  "doctrine": "throughout",
  "subdomain": "item-response-theory-test-equating",
- "chain": "R1 valid entry results by academy reconciled to the census; R2 the Lexis trial's second-sitting gain; R3 the Lexis score of Brightway results; R4 the Lexis score of Quill results; R5 the July transition-day dip; R6 Reading Forward students by academy; R7 the change from each academy's own-test list, by test; R8 the trust's hours and cost with a range; R9 tutor hours by academy",
+ "chain": "R1 the seven boards' moderation samples, outcomes, rota years and mark sheets on one schema; R2 the share of a cold difference each board's moderators record; R3 the level of a centre's marks by years since its last sample; R4 each board's live standard against Carrow's; R5 the regulator's 2023 review of Dunmoyle reproduced on the centres not sampled that year; R6 each board's banked marks against Carrow's standard by series and together; R7 the boards the protocol converts, the direction and the conversion, and the boards as a whole",
  "effort": {
-  "quick": 0,
-  "careful": 1,
-  "thorough": 9,
-  "largest_hint": "four Lexis academies tested their intake at the July transition day (2 of 9); careful plus that hint scores 51.1, plus the trial's order 37.3"
- }
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": "each board's moderators mark to their own principal's standard, and the boards' standards differ by several marks: rescues 1 of 7 (core.py: one stump lost 22, 22 and 22; reflex route 9; rigorous standard route 9; one stump fixed alone 16, 18, 21)"
+ },
+ "prompt_rewritten": false
 }
