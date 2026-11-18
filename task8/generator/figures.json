@@ -1,0 +1,2036 @@
+{
+ "adjusted_pct": {
+  "Ardkeel": 4,
+  "Brannock": 16,
+  "Carrow": 4,
+  "Dunmoyle": 12,
+  "Eskerry": 24,
+  "Fennor": 33,
+  "Gortavale": 33
+ },
+ "agreed_gap": {
+  "Ardkeel": -0.28,
+  "Brannock": -0.5,
+  "Carrow": 0.92,
+  "Dunmoyle": -0.34,
+  "Eskerry": 0.55,
+  "Fennor": 0.22,
+  "Gortavale": -0.3
+ },
+ "all_rebuilds": 382,
+ "appointments": 428,
+ "asks": {
+  "Ardkeel": 3.0,
+  "Ardkeel 2025": 3.1,
+  "Ardkeel 2026": 3.0,
+  "Brannock": 0.5,
+  "Brannock 2025": 0.5,
+  "Brannock 2026": 0.4,
+  "Dunmoyle": 6.2,
+  "Dunmoyle 2025": 6.1,
+  "Dunmoyle 2026": 6.3,
+  "Eskerry": 0.7,
+  "Eskerry 2025": 0.5,
+  "Eskerry 2026": 0.8,
+  "Fennor": 1.3,
+  "Fennor 2025": 1.4,
+  "Fennor 2026": 1.1,
+  "Gortavale": -2.8,
+  "Gortavale 2025": -2.9,
+  "Gortavale 2026": -2.6,
+  "whole": 1.7
+ },
+ "banked_candidates": {
+  "Ardkeel": {
+   "2025": 10092,
+   "2026": 9881
+  },
+  "Brannock": {
+   "2025": 12742,
+   "2026": 12521
+  },
+  "Dunmoyle": {
+   "2025": 11734,
+   "2026": 11709
+  },
+  "Eskerry": {
+   "2025": 10000,
+   "2026": 9840
+  },
+  "Fennor": {
+   "2025": 11366,
+   "2026": 11325
+  },
+  "Gortavale": {
+   "2025": 8153,
+   "2026": 8258
+  }
+ },
+ "banked_total": 127621,
+ "beside": {
+  "calls_all_golden": true,
+  "crossed": 160,
+  "fifteen_level": 2.85,
+  "names": [
+   "the share fitted on the last five meetings",
+   "the share fitted on the last five meetings; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; cycle levels on the last six years",
+   "the share fitted on the last five meetings; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; the levels on all fifteen series",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels on the last six years",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; links trimmed at the tenth and ninetieth percentiles; the levels on all fifteen series",
+   "the share fitted on the last five meetings; links at the median",
+   "the share fitted on the last five meetings; links at the median; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; links at the median; cycle levels on the last six years",
+   "the share fitted on the last five meetings; links at the median; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; links at the median; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; links at the median; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; links at the median; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; links at the median; the levels on all fifteen series",
+   "the share fitted on the last five meetings; links unweighted",
+   "the share fitted on the last five meetings; links unweighted; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; links unweighted; cycle levels on the last six years",
+   "the share fitted on the last five meetings; links unweighted; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; links unweighted; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; links unweighted; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; links unweighted; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; links unweighted; the levels on all fifteen series",
+   "the share fitted on the last five meetings; links along the six shortest paths only",
+   "the share fitted on the last five meetings; links along the six shortest paths only; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; links along the six shortest paths only; cycle levels on the last six years",
+   "the share fitted on the last five meetings; links along the six shortest paths only; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; links along the six shortest paths only; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; links along the six shortest paths only; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; links along the six shortest paths only; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; links along the six shortest paths only; the levels on all fifteen series",
+   "the share fitted on the last five meetings; agreed marks at the median",
+   "the share fitted on the last five meetings; agreed marks at the median; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; agreed marks at the median; cycle levels on the last six years",
+   "the share fitted on the last five meetings; agreed marks at the median; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; agreed marks at the median; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; agreed marks at the median; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; agreed marks at the median; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; agreed marks at the median; the levels on all fifteen series",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; cycle levels on the last six years",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; each marker's own mark left out of the consensus they are read against; the levels on all fifteen series",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; cycle levels on the last six years",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; links on the 2023 to 2026 meetings; the levels on all fifteen series",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; cycle levels on the last six years",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; one link a board, on its shortest path to Carrow; the levels on all fifteen series",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels weighted by candidates",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last six years",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last twelve years",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the last two samples averaged before the carry",
+   "the share fitted on the last five meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the levels on all fifteen series",
+   "the share fitted on the last four meetings",
+   "the share fitted on the last four meetings; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; cycle levels on the last six years",
+   "the share fitted on the last four meetings; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; the levels on all fifteen series",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels on the last six years",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; links trimmed at the tenth and ninetieth percentiles; the levels on all fifteen series",
+   "the share fitted on the last four meetings; links at the median",
+   "the share fitted on the last four meetings; links at the median; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; links at the median; cycle levels on the last six years",
+   "the share fitted on the last four meetings; links at the median; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; links at the median; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; links at the median; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; links at the median; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; links at the median; the levels on all fifteen series",
+   "the share fitted on the last four meetings; links unweighted",
+   "the share fitted on the last four meetings; links unweighted; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; links unweighted; cycle levels on the last six years",
+   "the share fitted on the last four meetings; links unweighted; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; links unweighted; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; links unweighted; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; links unweighted; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; links unweighted; the levels on all fifteen series",
+   "the share fitted on the last four meetings; links along the six shortest paths only",
+   "the share fitted on the last four meetings; links along the six shortest paths only; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; links along the six shortest paths only; cycle levels on the last six years",
+   "the share fitted on the last four meetings; links along the six shortest paths only; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; links along the six shortest paths only; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; links along the six shortest paths only; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; links along the six shortest paths only; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; links along the six shortest paths only; the levels on all fifteen series",
+   "the share fitted on the last four meetings; agreed marks at the median",
+   "the share fitted on the last four meetings; agreed marks at the median; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; agreed marks at the median; cycle levels on the last six years",
+   "the share fitted on the last four meetings; agreed marks at the median; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; agreed marks at the median; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; agreed marks at the median; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; agreed marks at the median; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; agreed marks at the median; the levels on all fifteen series",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; cycle levels on the last six years",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; each marker's own mark left out of the consensus they are read against; the levels on all fifteen series",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; cycle levels on the last six years",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; links on the 2023 to 2026 meetings; the levels on all fifteen series",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; cycle levels on the last six years",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; one link a board, on its shortest path to Carrow; the levels on all fifteen series",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels weighted by candidates",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last six years",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last twelve years",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the cycle level and the centre's own change averaged",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the last two samples averaged before the carry",
+   "the share fitted on the last four meetings; agreed marks against the consensus on the 2020 to 2026 meetings; the levels on all fifteen series",
+   "the share as a ratio of means on the agreed marks, the last six meetings",
+   "the share as a ratio of means on the agreed marks, the last five meetings",
+   "the share as a ratio of means on the agreed marks, the last four meetings",
+   "the share as a ratio of means on the agreed marks, the last three meetings",
+   "the levels on all fifteen series",
+   "the levels on all fifteen series; the draw fitted through the origin",
+   "the levels on all fifteen series; the draw on the last five years of trial scripts",
+   "the levels on all fifteen series; the draw with the consensus' own error allowed for",
+   "the levels on all fifteen series; the draw fitted year by year and averaged",
+   "the levels on all fifteen series; the last two samples averaged before the carry",
+   "the levels on all fifteen series; links trimmed at the tenth and ninetieth percentiles",
+   "the levels on all fifteen series; links at the median",
+   "the levels on all fifteen series; links unweighted",
+   "the levels on all fifteen series; links along the six shortest paths only",
+   "the levels on all fifteen series; agreed marks at the median",
+   "the levels on all fifteen series; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+   "the levels on all fifteen series; the share through the origin, the consensus centred on the agreed marks",
+   "the levels on all fifteen series; the share fitted on the agreed marks in place of the consensus",
+   "the levels on all fifteen series; each marker's own mark left out of the consensus they are read against",
+   "the levels on all fifteen series; links on the 2023 to 2026 meetings",
+   "the levels on all fifteen series; one link a board, on its shortest path to Carrow",
+   "the levels on all fifteen series; agreed marks against the consensus on the 2020 to 2026 meetings"
+  ],
+  "nearest": {
+   "board": "Fennor",
+   "distance": 0.44,
+   "reading": "the levels on all fifteen series; the share fitted on the agreed marks in place of the consensus",
+   "value": 1.56
+  },
+  "outside": [],
+  "range": {
+   "Ardkeel": [
+    2.57,
+    3.14
+   ],
+   "Brannock": [
+    0.11,
+    0.92
+   ],
+   "Dunmoyle": [
+    5.88,
+    6.33
+   ],
+   "Eskerry": [
+    0.32,
+    1.28
+   ],
+   "Fennor": [
+    0.98,
+    1.56
+   ],
+   "Gortavale": [
+    -3.51,
+    -2.63
+   ]
+  },
+  "ratio_share_pct": [
+   39.7,
+   40.1
+  ],
+  "rebuilds": 182,
+  "share_pct": [
+   35.1,
+   40.1
+  ]
+ },
+ "board_pairs": 10,
+ "by_series": {
+  "2025": {
+   "Ardkeel": 3.1,
+   "Brannock": 0.5,
+   "Dunmoyle": 6.1,
+   "Eskerry": 0.5,
+   "Fennor": 1.4,
+   "Gortavale": -2.9
+  },
+  "2026": {
+   "Ardkeel": 3.0,
+   "Brannock": 0.4,
+   "Dunmoyle": 6.3,
+   "Eskerry": 0.8,
+   "Fennor": 1.1,
+   "Gortavale": -2.6
+  }
+ },
+ "by_series_band": {
+  "2025": {
+   "Ardkeel": [
+    2.5,
+    3.3
+   ],
+   "Brannock": [
+    -0.1,
+    1.2
+   ],
+   "Dunmoyle": [
+    5.4,
+    6.4
+   ],
+   "Eskerry": [
+    0.0,
+    1.2
+   ],
+   "Fennor": [
+    0.8,
+    1.8
+   ],
+   "Gortavale": [
+    -3.7,
+    -2.4
+   ]
+  },
+  "2026": {
+   "Ardkeel": [
+    2.4,
+    3.3
+   ],
+   "Brannock": [
+    -0.2,
+    1.1
+   ],
+   "Dunmoyle": [
+    5.7,
+    6.7
+   ],
+   "Eskerry": [
+    0.3,
+    1.5
+   ],
+   "Fennor": [
+    0.5,
+    1.7
+   ],
+   "Gortavale": [
+    -3.4,
+    -2.2
+   ]
+  }
+ },
+ "c1": 35.8,
+ "c1_band": [
+  34.2,
+  40.3
+ ],
+ "c2": -3.2,
+ "c2_band": [
+  -3.3,
+  -2.8
+ ],
+ "c3": -6.6,
+ "c3_band": [
+  -7.0,
+  -6.4
+ ],
+ "call": [
+  "Ardkeel down",
+  "Brannock as banked",
+  "Dunmoyle down",
+  "Eskerry as banked",
+  "Fennor as banked",
+  "Gortavale up"
+ ],
+ "centres": {
+  "Ardkeel": 210,
+  "Brannock": 260,
+  "Carrow": 180,
+  "Dunmoyle": 240,
+  "Eskerry": 200,
+  "Fennor": 230,
+  "Gortavale": 170
+ },
+ "converted": {
+  "Ardkeel": 3.0,
+  "Dunmoyle": 6.2,
+  "Gortavale": 2.8
+ },
+ "csv_rows": 2620,
+ "cycle": {
+  "Ardkeel": [
+   -1.05,
+   -0.44
+  ],
+  "Brannock": [
+   -2.05,
+   -1.14
+  ],
+  "Carrow": [],
+  "Dunmoyle": [
+   -1.54,
+   -0.7
+  ],
+  "Eskerry": [
+   -1.45
+  ],
+  "Fennor": [
+   -3.19,
+   -1.59
+  ],
+  "Gortavale": [
+   -1.36
+  ]
+ },
+ "cycle_lower": {
+  "Ardkeel": [
+   1.05,
+   0.44
+  ],
+  "Brannock": [
+   2.05,
+   1.14
+  ],
+  "Carrow": [],
+  "Dunmoyle": [
+   1.54,
+   0.7
+  ],
+  "Eskerry": [
+   1.45
+  ],
+  "Fennor": [
+   3.19,
+   1.59
+  ],
+  "Gortavale": [
+   1.36
+  ]
+ },
+ "distance": {
+  "Ardkeel": 3.0,
+  "Brannock": 0.5,
+  "Dunmoyle": 6.2,
+  "Eskerry": 0.7,
+  "Fennor": 1.3,
+  "Gortavale": -2.8
+ },
+ "distance_2dp": {
+  "Ardkeel": 3.0,
+  "Brannock": 0.48,
+  "Dunmoyle": 6.19,
+  "Eskerry": 0.69,
+  "Fennor": 1.26,
+  "Gortavale": -2.76
+ },
+ "distance_band": {
+  "Ardkeel": [
+   2.4,
+   3.3
+  ],
+  "Brannock": [
+   -0.1,
+   1.1
+  ],
+  "Dunmoyle": [
+   5.6,
+   6.6
+  ],
+  "Eskerry": [
+   0.1,
+   1.3
+  ],
+  "Fennor": [
+   0.7,
+   1.7
+  ],
+  "Gortavale": [
+   -3.6,
+   -2.3
+  ]
+ },
+ "family_calls_all_golden": true,
+ "files": {
+  "total": 42,
+  "unused": 3
+ },
+ "hurried": {
+  "c1": 100,
+  "c2": 0.0,
+  "c3": 0.0,
+  "distance": {
+   "Ardkeel": 1.37,
+   "Brannock": 3.05,
+   "Dunmoyle": 2.4,
+   "Eskerry": 2.59,
+   "Fennor": 4.59,
+   "Gortavale": 2.46
+  },
+  "whole": 2.79
+ },
+ "line": 2.0,
+ "link_people_years": 476,
+ "links": [
+  {
+   "a": "Ardkeel",
+   "b": "Carrow",
+   "difference": 1.69,
+   "people": 9,
+   "person_years": 63
+  },
+  {
+   "a": "Brannock",
+   "b": "Carrow",
+   "difference": 4.86,
+   "people": 7,
+   "person_years": 49
+  },
+  {
+   "a": "Gortavale",
+   "b": "Carrow",
+   "difference": 7.79,
+   "people": 5,
+   "person_years": 35
+  },
+  {
+   "a": "Dunmoyle",
+   "b": "Ardkeel",
+   "difference": -2.04,
+   "people": 11,
+   "person_years": 77
+  },
+  {
+   "a": "Eskerry",
+   "b": "Brannock",
+   "difference": -1.19,
+   "people": 8,
+   "person_years": 56
+  },
+  {
+   "a": "Fennor",
+   "b": "Dunmoyle",
+   "difference": 5.03,
+   "people": 6,
+   "person_years": 42
+  },
+  {
+   "a": "Eskerry",
+   "b": "Ardkeel",
+   "difference": 2.2,
+   "people": 6,
+   "person_years": 42
+  },
+  {
+   "a": "Fennor",
+   "b": "Gortavale",
+   "difference": -3.19,
+   "people": 7,
+   "person_years": 49
+  },
+  {
+   "a": "Brannock",
+   "b": "Dunmoyle",
+   "difference": 5.32,
+   "people": 5,
+   "person_years": 35
+  },
+  {
+   "a": "Gortavale",
+   "b": "Eskerry",
+   "difference": 3.97,
+   "people": 4,
+   "person_years": 28
+  }
+ ],
+ "margin": {
+  "Ardkeel": 1.0,
+  "Brannock": 1.52,
+  "Dunmoyle": 4.19,
+  "Eskerry": 1.31,
+  "Fennor": 0.74,
+  "Gortavale": 0.76
+ },
+ "mark_rows": {
+  "Ardkeel": 151611,
+  "Brannock": 193600,
+  "Carrow": 125841,
+  "Dunmoyle": 180441,
+  "Eskerry": 151175,
+  "Fennor": 174785,
+  "Gortavale": 125059
+ },
+ "mark_rows_total": 1102512,
+ "nearest_any": {
+  "board": "Fennor",
+  "distance": 0.44,
+  "reading": "the levels on all fifteen series; the share fitted on the agreed marks in place of the consensus",
+  "value": 1.56
+ },
+ "nearest_further": {
+  "board": "Gortavale",
+  "distance": 0.44,
+  "reading": "the plain ratio"
+ },
+ "nearest_variant": {
+  "board": "Fennor",
+  "distance": 0.48,
+  "value": 1.52,
+  "variant": "the share fitted on the agreed marks in place of the consensus; each centre's own change in mean mark since its sample, net of the board's year"
+ },
+ "perturbations": [
+  {
+   "board": "Ardkeel",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.71,
+    "Brannock": 0.16,
+    "Dunmoyle": 5.9,
+    "Eskerry": 0.44,
+    "Fennor": 1.03,
+    "Gortavale": -2.94
+   },
+   "input": "the share recorded one spread up",
+   "nearest": 0.71
+  },
+  {
+   "board": "Fennor",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.35,
+    "Brannock": 0.84,
+    "Dunmoyle": 6.51,
+    "Eskerry": 0.97,
+    "Fennor": 1.5,
+    "Gortavale": -2.55
+   },
+   "input": "the share recorded one spread down",
+   "nearest": 0.5
+  },
+  {
+   "board": "Fennor",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.07,
+    "Brannock": 0.53,
+    "Dunmoyle": 6.28,
+    "Eskerry": 0.74,
+    "Fennor": 1.38,
+    "Gortavale": -2.65
+   },
+   "input": "the cycle levels one spread up",
+   "nearest": 0.62
+  },
+  {
+   "board": "Fennor",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.93,
+    "Brannock": 0.43,
+    "Dunmoyle": 6.09,
+    "Eskerry": 0.65,
+    "Fennor": 1.14,
+    "Gortavale": -2.86
+   },
+   "input": "the cycle levels one spread down",
+   "nearest": 0.86
+  },
+  {
+   "board": "Gortavale",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.15,
+    "Brannock": 0.65,
+    "Dunmoyle": 6.32,
+    "Eskerry": 0.84,
+    "Fennor": 1.49,
+    "Gortavale": -2.43
+   },
+   "input": "the standards one spread up",
+   "nearest": 0.43
+  },
+  {
+   "board": "Ardkeel",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.86,
+    "Brannock": 0.31,
+    "Dunmoyle": 6.05,
+    "Eskerry": 0.54,
+    "Fennor": 1.03,
+    "Gortavale": -3.09
+   },
+   "input": "the standards one spread down",
+   "nearest": 0.86
+  },
+  {
+   "board": "Gortavale",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.92,
+    "Brannock": 0.38,
+    "Dunmoyle": 6.13,
+    "Eskerry": 0.63,
+    "Fennor": 1.38,
+    "Gortavale": -2.51
+   },
+   "input": "all three one spread (+1, +1, +1)",
+   "nearest": 0.51
+  },
+  {
+   "board": "Ardkeel",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.63,
+    "Brannock": 0.04,
+    "Dunmoyle": 5.85,
+    "Eskerry": 0.33,
+    "Fennor": 0.92,
+    "Gortavale": -3.17
+   },
+   "input": "all three one spread (+1, +1, -1)",
+   "nearest": 0.63
+  },
+  {
+   "board": "Gortavale",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.79,
+    "Brannock": 0.28,
+    "Dunmoyle": 5.94,
+    "Eskerry": 0.54,
+    "Fennor": 1.14,
+    "Gortavale": -2.72
+   },
+   "input": "all three one spread (+1, -1, +1)",
+   "nearest": 0.72
+  },
+  {
+   "board": "Ardkeel",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 2.49,
+    "Brannock": -0.06,
+    "Dunmoyle": 5.67,
+    "Eskerry": 0.24,
+    "Fennor": 0.68,
+    "Gortavale": -3.38
+   },
+   "input": "all three one spread (+1, -1, -1)",
+   "nearest": 0.49
+  },
+  {
+   "board": "Gortavale",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.56,
+    "Brannock": 1.06,
+    "Dunmoyle": 6.74,
+    "Eskerry": 1.17,
+    "Fennor": 1.86,
+    "Gortavale": -2.12
+   },
+   "input": "all three one spread (-1, +1, +1)",
+   "nearest": 0.12
+  },
+  {
+   "board": "Fennor",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.27,
+    "Brannock": 0.72,
+    "Dunmoyle": 6.46,
+    "Eskerry": 0.86,
+    "Fennor": 1.39,
+    "Gortavale": -2.78
+   },
+   "input": "all three one spread (-1, +1, -1)",
+   "nearest": 0.61
+  },
+  {
+   "board": "Gortavale",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.43,
+    "Brannock": 0.96,
+    "Dunmoyle": 6.55,
+    "Eskerry": 1.08,
+    "Fennor": 1.61,
+    "Gortavale": -2.33
+   },
+   "input": "all three one spread (-1, -1, +1)",
+   "nearest": 0.33
+  },
+  {
+   "board": "Fennor",
+   "call_holds": true,
+   "distance": {
+    "Ardkeel": 3.13,
+    "Brannock": 0.62,
+    "Dunmoyle": 6.28,
+    "Eskerry": 0.77,
+    "Fennor": 1.15,
+    "Gortavale": -2.99
+   },
+   "input": "all three one spread (-1, -1, -1)",
+   "nearest": 0.85
+  }
+ ],
+ "recorded_mean": {
+  "Ardkeel": 1.47,
+  "Brannock": 3.44,
+  "Carrow": 0.85,
+  "Dunmoyle": 2.6,
+  "Eskerry": 3.08,
+  "Fennor": 5.26,
+  "Gortavale": 3.38
+ },
+ "referee": {
+  "band": [
+   5.4,
+   6.3
+  ],
+  "board": "Dunmoyle",
+  "golden": 5.65,
+  "off": 0.12,
+  "raw_all_centres": 5.91,
+  "reflex": 2.42,
+  "review": 5.53,
+  "rigorous_shrunk": 2.21,
+  "rivals": {
+   "S1 lost": {
+    "off": 2.48,
+    "value": 3.05
+   },
+   "S2 lost": {
+    "off": 1.16,
+    "value": 6.69
+   },
+   "S3 lost": {
+    "off": 1.54,
+    "value": 3.99
+   },
+   "rigorous": {
+    "off": 3.45,
+    "value": 2.08
+   }
+  },
+  "series": 2023,
+  "unsampled_centres": 165
+ },
+ "referee_golden": 5.65,
+ "repeat_rows": {
+  "Fennor": 173
+ },
+ "result_grades": {
+  "S1": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S1+S2": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S1+S2+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  },
+  "S1+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  },
+  "S2": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S2+S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  },
+  "S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  }
+ },
+ "review_portfolios": 1908,
+ "rival_awarded_base": {
+  "call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "distance": {
+   "Ardkeel": 2.99,
+   "Brannock": 0.52,
+   "Dunmoyle": 6.33,
+   "Eskerry": 0.71,
+   "Fennor": 1.39,
+   "Gortavale": -2.64
+  },
+  "first_year": {
+   "Ardkeel": -0.93,
+   "Brannock": -0.97,
+   "Dunmoyle": -0.91,
+   "Eskerry": -0.23,
+   "Fennor": -0.62,
+   "Gortavale": 0.26
+  },
+  "outside": [],
+  "whole": 1.75
+ },
+ "rival_consensus_standard": {
+  "call_carrow_only": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "call_every_board": [
+   "Ardkeel as banked",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "carrow_gap": 0.92,
+  "carrow_only": {
+   "Ardkeel": 2.08,
+   "Brannock": -0.44,
+   "Dunmoyle": 5.26,
+   "Eskerry": -0.23,
+   "Fennor": 0.34,
+   "Gortavale": -3.68
+  },
+  "every_board": {
+   "Ardkeel": 1.8,
+   "Brannock": -0.95,
+   "Dunmoyle": 4.93,
+   "Eskerry": 0.32,
+   "Fennor": 0.55,
+   "Gortavale": -3.98
+  }
+ },
+ "rival_cycle_on_awarded": {
+  "call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor down",
+   "Gortavale as banked"
+  ],
+  "distance": {
+   "Ardkeel": 3.08,
+   "Brannock": 1.17,
+   "Dunmoyle": 6.62,
+   "Eskerry": 1.29,
+   "Fennor": 3.11,
+   "Gortavale": -1.94
+  },
+  "first_year": {
+   "Ardkeel": -0.93,
+   "Brannock": -0.97,
+   "Dunmoyle": -0.91,
+   "Eskerry": -0.23,
+   "Fennor": -0.62,
+   "Gortavale": 0.26
+  },
+  "outside": [
+   "Brannock",
+   "Dunmoyle 2025",
+   "Fennor",
+   "Fennor 2025",
+   "Fennor 2026",
+   "Gortavale",
+   "Gortavale 2025",
+   "Gortavale 2026",
+   "whole"
+  ],
+  "referee": 6.28,
+  "referee_off": 0.75,
+  "whole": 2.43
+ },
+ "rival_no_netting": {
+  "boards_wrong": [
+   "Fennor",
+   "Gortavale"
+  ],
+  "call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor down",
+   "Gortavale as banked"
+  ],
+  "distance": {
+   "Ardkeel": 3.06,
+   "Brannock": 0.88,
+   "Dunmoyle": 6.46,
+   "Eskerry": 1.18,
+   "Fennor": 2.02,
+   "Gortavale": -1.84
+  }
+ },
+ "rival_own_mark": {
+  "boards_wrong": [
+   "Brannock",
+   "Eskerry",
+   "Fennor",
+   "Gortavale"
+  ],
+  "call": [
+   "Ardkeel down",
+   "Brannock down",
+   "Dunmoyle down",
+   "Eskerry down",
+   "Fennor down",
+   "Gortavale as banked"
+  ],
+  "corrected_call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "corrected_distance": {
+   "Ardkeel": 3.04,
+   "Brannock": 0.69,
+   "Dunmoyle": 6.0,
+   "Eskerry": 0.62,
+   "Fennor": 1.17,
+   "Gortavale": -2.92
+  },
+  "corrected_outside": [],
+  "corrected_share_pct": {
+   "Ardkeel": 35.4,
+   "Brannock": 61.7,
+   "Dunmoyle": 49.8,
+   "Eskerry": 58.7,
+   "Fennor": 71.2,
+   "Gortavale": 64.5
+  },
+  "distance": {
+   "Ardkeel": 4.31,
+   "Brannock": 2.81,
+   "Dunmoyle": 8.54,
+   "Eskerry": 2.33,
+   "Fennor": 3.2,
+   "Gortavale": -0.35
+  },
+  "marks_a_script": [
+   25,
+   48
+  ],
+  "referee": 7.78,
+  "referee_off": 2.25,
+  "reliability": {
+   "Ardkeel": 0.76,
+   "Brannock": 0.73,
+   "Dunmoyle": 0.68,
+   "Eskerry": 0.75,
+   "Fennor": 0.79,
+   "Gortavale": 0.67
+  },
+  "scripts": {
+   "Ardkeel": 387,
+   "Brannock": 392,
+   "Dunmoyle": 388,
+   "Eskerry": 380,
+   "Fennor": 390,
+   "Gortavale": 376
+  },
+  "share_pct": {
+   "Ardkeel": 26.9,
+   "Brannock": 44.8,
+   "Dunmoyle": 33.8,
+   "Eskerry": 44.2,
+   "Fennor": 56.1,
+   "Gortavale": 43.2
+  }
+ },
+ "rival_plain_ratio": {
+  "call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "distance": {
+   "Ardkeel": 2.96,
+   "Brannock": 1.01,
+   "Dunmoyle": 6.22,
+   "Eskerry": 0.28,
+   "Fennor": 1.11,
+   "Gortavale": -2.44
+  },
+  "outside": [],
+  "share_pct": {
+   "Ardkeel": 36.2,
+   "Brannock": 58.4,
+   "Dunmoyle": 47.9,
+   "Eskerry": 62.7,
+   "Fennor": 71.8,
+   "Gortavale": 59.1
+  },
+  "whole": 1.73
+ },
+ "rival_recent_share": {
+  "five": {
+   "call": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "distance": {
+    "Ardkeel": 2.9,
+    "Brannock": 0.29,
+    "Dunmoyle": 6.11,
+    "Eskerry": 0.49,
+    "Fennor": 1.26,
+    "Gortavale": -2.97
+   },
+   "outside": [],
+   "share_pct": 36.7,
+   "whole": 1.55
+  },
+  "four": {
+   "call": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "distance": {
+    "Ardkeel": 2.83,
+    "Brannock": 0.28,
+    "Dunmoyle": 6.23,
+    "Eskerry": 0.52,
+    "Fennor": 1.31,
+    "Gortavale": -3.16
+   },
+   "outside": [],
+   "share_pct": 37.4,
+   "whole": 1.55
+  }
+ },
+ "rival_review_calibration": {
+  "boards_wrong": [
+   "Ardkeel",
+   "Brannock",
+   "Eskerry",
+   "Fennor",
+   "Gortavale"
+  ],
+  "call": [
+   "Ardkeel as banked",
+   "Brannock down",
+   "Dunmoyle down",
+   "Eskerry down",
+   "Fennor down",
+   "Gortavale down"
+  ],
+  "distance": {
+   "Ardkeel": 1.66,
+   "Brannock": 8.87,
+   "Dunmoyle": 6.14,
+   "Eskerry": 7.58,
+   "Fennor": 15.4,
+   "Gortavale": 8.38
+  },
+  "share_pct": 25.1,
+  "standard": -3.48,
+  "whole": 8.14
+ },
+ "rival_share_by_moderator": {
+  "between": {
+   "Ardkeel": 0.01,
+   "Brannock": 0.108,
+   "Dunmoyle": 0.0,
+   "Eskerry": 0.0,
+   "Fennor": 0.0,
+   "Gortavale": 0.032
+  },
+  "call": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "distance": {
+   "Ardkeel": 3.0,
+   "Brannock": 0.47,
+   "Dunmoyle": 6.19,
+   "Eskerry": 0.69,
+   "Fennor": 1.26,
+   "Gortavale": -2.75
+  },
+  "moderators": {
+   "Ardkeel": 6,
+   "Brannock": 4,
+   "Dunmoyle": 5,
+   "Eskerry": 7,
+   "Fennor": 6,
+   "Gortavale": 11
+  },
+  "outside": [],
+  "whole": 1.68
+ },
+ "rota_years": {
+  "Ardkeel": 3,
+  "Brannock": 3,
+  "Carrow": 1,
+  "Dunmoyle": 3,
+  "Eskerry": 2,
+  "Fennor": 3,
+  "Gortavale": 2
+ },
+ "routes": {
+  "S1": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "distance": {
+    "Ardkeel": 0.44,
+    "Brannock": -1.45,
+    "Dunmoyle": 3.31,
+    "Eskerry": -1.55,
+    "Fennor": -0.99,
+    "Gortavale": -4.78
+   },
+   "name": "the recorded difference taken as the difference",
+   "whole": -0.64
+  },
+  "S1+S2": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "distance": {
+    "Ardkeel": 0.94,
+    "Brannock": -0.44,
+    "Dunmoyle": 4.07,
+    "Eskerry": -0.83,
+    "Fennor": 0.69,
+    "Gortavale": -4.1
+   },
+   "name": "the recorded difference as the difference, the last sample carried",
+   "whole": 0.27
+  },
+  "S1+S2+S3": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 1.37,
+    "Brannock": 3.05,
+    "Dunmoyle": 2.4,
+    "Eskerry": 2.59,
+    "Fennor": 4.59,
+    "Gortavale": 2.46
+   },
+   "name": "the moderation record with the adjustments netted, candidate weights and the last sample carried",
+   "whole": 2.79
+  },
+  "S1+S3": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle as banked",
+    "Eskerry as banked",
+    "Fennor down",
+    "Gortavale as banked"
+   ],
+   "distance": {
+    "Ardkeel": 0.88,
+    "Brannock": 2.04,
+    "Dunmoyle": 1.64,
+    "Eskerry": 1.87,
+    "Fennor": 2.91,
+    "Gortavale": 1.78
+   },
+   "name": "the recorded difference as the difference, each board's own principal as the standard",
+   "whole": 1.88
+  },
+  "S2": {
+   "call": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor down",
+    "Gortavale up"
+   ],
+   "distance": {
+    "Ardkeel": 3.5,
+    "Brannock": 1.49,
+    "Dunmoyle": 6.94,
+    "Eskerry": 1.41,
+    "Fennor": 2.94,
+    "Gortavale": -2.07
+   },
+   "name": "a centre's last sample carried to the years it was not sampled",
+   "whole": 2.59
+  },
+  "S2+S3": {
+   "call": [
+    "Ardkeel down",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 3.94,
+    "Brannock": 4.98,
+    "Dunmoyle": 5.28,
+    "Eskerry": 4.82,
+    "Fennor": 6.84,
+    "Gortavale": 4.49
+   },
+   "name": "the last sample carried, each board's own principal as the standard",
+   "whole": 5.12
+  },
+  "S3": {
+   "call": [
+    "Ardkeel down",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 3.44,
+    "Brannock": 3.97,
+    "Dunmoyle": 4.52,
+    "Eskerry": 4.11,
+    "Fennor": 5.16,
+    "Gortavale": 3.81
+   },
+   "name": "each board's own principal taken as the standard",
+   "whole": 4.2
+  },
+  "direct": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 1.46,
+    "Brannock": 3.49,
+    "Dunmoyle": 2.78,
+    "Eskerry": 3.07,
+    "Fennor": 5.15,
+    "Gortavale": 3.49
+   },
+   "name": "each board's mean recorded difference on the portfolios sampled in 2025 and 2026",
+   "whole": 3.27
+  },
+  "rigorous": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 1.09,
+    "Brannock": 2.55,
+    "Dunmoyle": 2.06,
+    "Eskerry": 3.14,
+    "Fennor": 4.8,
+    "Gortavale": 2.17
+   },
+   "name": "each board's own meeting severity added to the record, adjustments netted, candidate weights, a centre between samples carried at its last sample",
+   "whole": 2.67
+  },
+  "rigorous_shrunk": {
+   "call": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ],
+   "distance": {
+    "Ardkeel": 1.12,
+    "Brannock": 2.56,
+    "Dunmoyle": 2.07,
+    "Eskerry": 3.13,
+    "Fennor": 4.79,
+    "Gortavale": 2.18
+   },
+   "whole": 2.68
+  }
+ },
+ "routes_by_series": {
+  "S1": {
+   "2025": {
+    "Ardkeel": 0.48,
+    "Brannock": -1.43,
+    "Dunmoyle": 3.19,
+    "Eskerry": -1.71,
+    "Fennor": -0.89,
+    "Gortavale": -4.88
+   },
+   "2026": {
+    "Ardkeel": 0.4,
+    "Brannock": -1.48,
+    "Dunmoyle": 3.42,
+    "Eskerry": -1.38,
+    "Fennor": -1.09,
+    "Gortavale": -4.69
+   }
+  },
+  "S1+S2": {
+   "2025": {
+    "Ardkeel": 0.97,
+    "Brannock": -0.43,
+    "Dunmoyle": 4.03,
+    "Eskerry": -0.94,
+    "Fennor": 1.04,
+    "Gortavale": -4.19
+   },
+   "2026": {
+    "Ardkeel": 0.9,
+    "Brannock": -0.44,
+    "Dunmoyle": 4.1,
+    "Eskerry": -0.71,
+    "Fennor": 0.33,
+    "Gortavale": -4.01
+   }
+  },
+  "S1+S2+S3": {
+   "2025": {
+    "Ardkeel": 1.41,
+    "Brannock": 3.06,
+    "Dunmoyle": 2.37,
+    "Eskerry": 2.47,
+    "Fennor": 4.94,
+    "Gortavale": 2.37
+   },
+   "2026": {
+    "Ardkeel": 1.34,
+    "Brannock": 3.05,
+    "Dunmoyle": 2.43,
+    "Eskerry": 2.7,
+    "Fennor": 4.23,
+    "Gortavale": 2.56
+   }
+  },
+  "S1+S3": {
+   "2025": {
+    "Ardkeel": 0.92,
+    "Brannock": 2.06,
+    "Dunmoyle": 1.53,
+    "Eskerry": 1.71,
+    "Fennor": 3.01,
+    "Gortavale": 1.68
+   },
+   "2026": {
+    "Ardkeel": 0.84,
+    "Brannock": 2.01,
+    "Dunmoyle": 1.76,
+    "Eskerry": 2.03,
+    "Fennor": 2.81,
+    "Gortavale": 1.87
+   }
+  },
+  "S2": {
+   "2025": {
+    "Ardkeel": 3.54,
+    "Brannock": 1.51,
+    "Dunmoyle": 6.89,
+    "Eskerry": 1.3,
+    "Fennor": 3.32,
+    "Gortavale": -2.22
+   },
+   "2026": {
+    "Ardkeel": 3.45,
+    "Brannock": 1.48,
+    "Dunmoyle": 7.0,
+    "Eskerry": 1.52,
+    "Fennor": 2.55,
+    "Gortavale": -1.92
+   }
+  },
+  "S2+S3": {
+   "2025": {
+    "Ardkeel": 3.98,
+    "Brannock": 5.0,
+    "Dunmoyle": 5.23,
+    "Eskerry": 4.72,
+    "Fennor": 7.22,
+    "Gortavale": 4.34
+   },
+   "2026": {
+    "Ardkeel": 3.89,
+    "Brannock": 4.97,
+    "Dunmoyle": 5.33,
+    "Eskerry": 4.93,
+    "Fennor": 6.45,
+    "Gortavale": 4.64
+   }
+  },
+  "S3": {
+   "2025": {
+    "Ardkeel": 3.49,
+    "Brannock": 4.01,
+    "Dunmoyle": 4.39,
+    "Eskerry": 3.95,
+    "Fennor": 5.29,
+    "Gortavale": 3.65
+   },
+   "2026": {
+    "Ardkeel": 3.39,
+    "Brannock": 3.93,
+    "Dunmoyle": 4.65,
+    "Eskerry": 4.26,
+    "Fennor": 5.03,
+    "Gortavale": 3.96
+   }
+  }
+ },
+ "rubric": {
+  "fails": [],
+  "fixed_alone": {
+   "S1": 18.5,
+   "S2": 18.5,
+   "S3": 26.8
+  },
+  "level": 5,
+  "one_lost": {
+   "S1": 22.3,
+   "S2": 39.1,
+   "S3": 27.9
+  },
+  "reflex": 9.0,
+  "rigorous": 9.0
+ },
+ "sampled_centres": {
+  "Ardkeel": {
+   "2025": 70,
+   "2026": 74
+  },
+  "Brannock": {
+   "2025": 94,
+   "2026": 91
+  },
+  "Dunmoyle": {
+   "2025": 77,
+   "2026": 75
+  },
+  "Eskerry": {
+   "2025": 102,
+   "2026": 98
+  },
+  "Fennor": {
+   "2025": 62,
+   "2026": 72
+  },
+  "Gortavale": {
+   "2025": 87,
+   "2026": 83
+  }
+ },
+ "sampled_portfolios": {
+  "Ardkeel": 2133,
+  "Brannock": 2775,
+  "Dunmoyle": 2238,
+  "Eskerry": 2962,
+  "Fennor": 1959,
+  "Gortavale": 2474
+ },
+ "share_pct": {
+  "Ardkeel": 35.8,
+  "Brannock": 64.1,
+  "Carrow": 71.4,
+  "Dunmoyle": 48.2,
+  "Eskerry": 57.9,
+  "Fennor": 70.4,
+  "Gortavale": 62.5
+ },
+ "side": {
+  "Ardkeel": "down",
+  "Brannock": "as banked",
+  "Dunmoyle": "down",
+  "Eskerry": "as banked",
+  "Fennor": "as banked",
+  "Gortavale": "up"
+ },
+ "spreads": {
+  "Ardkeel": {
+   "cycle": 0.1,
+   "share_pct": 8.0,
+   "standard": 0.15
+  },
+  "Brannock": {
+   "cycle": 0.08,
+   "share_pct": 6.2,
+   "standard": 0.17
+  },
+  "Dunmoyle": {
+   "cycle": 0.13,
+   "share_pct": 5.5,
+   "standard": 0.14
+  },
+  "Eskerry": {
+   "cycle": 0.09,
+   "share_pct": 5.0,
+   "standard": 0.15
+  },
+  "Fennor": {
+   "cycle": 0.17,
+   "share_pct": 3.1,
+   "standard": 0.23
+  },
+  "Gortavale": {
+   "cycle": 0.21,
+   "share_pct": 3.6,
+   "standard": 0.33
+  }
+ },
+ "standard": {
+  "Ardkeel": -0.44,
+  "Brannock": -3.49,
+  "Carrow": -0.0,
+  "Dunmoyle": 1.67,
+  "Eskerry": -3.42,
+  "Fennor": -3.9,
+  "Gortavale": -6.56
+ },
+ "stated": {
+  "awards": "June 2027",
+  "clauses": [
+   2.1,
+   2.3,
+   3.1,
+   4.1,
+   4.2,
+   5.1,
+   5.2,
+   3.3,
+   3.4,
+   4.5,
+   5.3,
+   5.4,
+   5.5
+  ],
+  "meetings": [
+   2015,
+   2026
+  ],
+  "nine": 9,
+  "register_from": 2020,
+  "review_per_centre": 8,
+  "series": [
+   2025,
+   2026
+  ],
+  "sheets": [
+   2012,
+   2026
+  ],
+  "tolerance": 2.0
+ },
+ "successive_samples": {
+  "correlation": 0.65,
+  "pairs": 6161
+ },
+ "trial_markers": {
+  "Ardkeel": 35,
+  "Brannock": 43,
+  "Carrow": 32,
+  "Dunmoyle": 40,
+  "Eskerry": 36,
+  "Fennor": 38,
+  "Gortavale": 29
+ },
+ "trial_scripts": {
+  "Ardkeel": 480,
+  "Brannock": 480,
+  "Carrow": 480,
+  "Dunmoyle": 480,
+  "Eskerry": 480,
+  "Fennor": 480,
+  "Gortavale": 480
+ },
+ "truth": {
+  "Ardkeel": 3.09,
+  "Brannock": 0.53,
+  "Dunmoyle": 5.81,
+  "Eskerry": 0.58,
+  "Fennor": 1.03,
+  "Gortavale": -3.17
+ },
+ "truth_call": [
+  "Ardkeel down",
+  "Brannock as banked",
+  "Dunmoyle down",
+  "Eskerry as banked",
+  "Fennor as banked",
+  "Gortavale up"
+ ],
+ "two_board_people": 105,
+ "variant_names": [
+  "the draw fitted through the origin",
+  "the draw on the last five years of trial scripts",
+  "the draw with the consensus' own error allowed for",
+  "the draw fitted year by year and averaged",
+  "cycle levels weighted by candidates",
+  "cycle levels on the last six years",
+  "cycle levels on the last twelve years",
+  "each centre's own change in mean mark since its sample, net of the board's year",
+  "the cycle level and the centre's own change averaged",
+  "the last two samples averaged before the carry",
+  "links trimmed at the tenth and ninetieth percentiles",
+  "links at the median",
+  "links unweighted",
+  "links along the six shortest paths only",
+  "agreed marks at the median",
+  "the draw fitted through the origin; cycle levels weighted by candidates",
+  "the draw fitted through the origin; cycle levels on the last six years",
+  "the draw fitted through the origin; cycle levels on the last twelve years",
+  "the draw fitted through the origin; each centre's own change in mean mark since its sample, net of the board's year",
+  "the draw fitted through the origin; the cycle level and the centre's own change averaged",
+  "the draw on the last five years of trial scripts; cycle levels weighted by candidates",
+  "the draw on the last five years of trial scripts; cycle levels on the last six years",
+  "the draw on the last five years of trial scripts; cycle levels on the last twelve years",
+  "the draw on the last five years of trial scripts; each centre's own change in mean mark since its sample, net of the board's year",
+  "the draw on the last five years of trial scripts; the cycle level and the centre's own change averaged",
+  "the draw with the consensus' own error allowed for; cycle levels weighted by candidates",
+  "the draw with the consensus' own error allowed for; cycle levels on the last six years",
+  "the draw with the consensus' own error allowed for; cycle levels on the last twelve years",
+  "the draw with the consensus' own error allowed for; each centre's own change in mean mark since its sample, net of the board's year",
+  "the draw with the consensus' own error allowed for; the cycle level and the centre's own change averaged",
+  "the draw fitted year by year and averaged; cycle levels weighted by candidates",
+  "the draw fitted year by year and averaged; cycle levels on the last six years",
+  "the draw fitted year by year and averaged; cycle levels on the last twelve years",
+  "the draw fitted year by year and averaged; each centre's own change in mean mark since its sample, net of the board's year",
+  "the draw fitted year by year and averaged; the cycle level and the centre's own change averaged",
+  "the draw fitted through the origin; the last two samples averaged before the carry",
+  "the draw on the last five years of trial scripts; the last two samples averaged before the carry",
+  "the draw with the consensus' own error allowed for; the last two samples averaged before the carry",
+  "the draw fitted year by year and averaged; the last two samples averaged before the carry",
+  "the draw fitted through the origin; links trimmed at the tenth and ninetieth percentiles",
+  "the draw fitted through the origin; links at the median",
+  "the draw fitted through the origin; links unweighted",
+  "the draw fitted through the origin; links along the six shortest paths only",
+  "the draw on the last five years of trial scripts; links trimmed at the tenth and ninetieth percentiles",
+  "the draw on the last five years of trial scripts; links at the median",
+  "the draw on the last five years of trial scripts; links unweighted",
+  "the draw on the last five years of trial scripts; links along the six shortest paths only",
+  "the draw with the consensus' own error allowed for; links trimmed at the tenth and ninetieth percentiles",
+  "the draw with the consensus' own error allowed for; links at the median",
+  "the draw with the consensus' own error allowed for; links unweighted",
+  "the draw with the consensus' own error allowed for; links along the six shortest paths only",
+  "the draw fitted year by year and averaged; links trimmed at the tenth and ninetieth percentiles",
+  "the draw fitted year by year and averaged; links at the median",
+  "the draw fitted year by year and averaged; links unweighted",
+  "the draw fitted year by year and averaged; links along the six shortest paths only",
+  "the draw fitted through the origin; agreed marks at the median",
+  "the draw on the last five years of trial scripts; agreed marks at the median",
+  "the draw with the consensus' own error allowed for; agreed marks at the median",
+  "the draw fitted year by year and averaged; agreed marks at the median",
+  "cycle levels weighted by candidates; the last two samples averaged before the carry",
+  "cycle levels on the last six years; the last two samples averaged before the carry",
+  "cycle levels on the last twelve years; the last two samples averaged before the carry",
+  "each centre's own change in mean mark since its sample, net of the board's year; the last two samples averaged before the carry",
+  "the cycle level and the centre's own change averaged; the last two samples averaged before the carry",
+  "cycle levels weighted by candidates; links trimmed at the tenth and ninetieth percentiles",
+  "cycle levels weighted by candidates; links at the median",
+  "cycle levels weighted by candidates; links unweighted",
+  "cycle levels weighted by candidates; links along the six shortest paths only",
+  "cycle levels on the last six years; links trimmed at the tenth and ninetieth percentiles",
+  "cycle levels on the last six years; links at the median",
+  "cycle levels on the last six years; links unweighted",
+  "cycle levels on the last six years; links along the six shortest paths only",
+  "cycle levels on the last twelve years; links trimmed at the tenth and ninetieth percentiles",
+  "cycle levels on the last twelve years; links at the median",
+  "cycle levels on the last twelve years; links unweighted",
+  "cycle levels on the last twelve years; links along the six shortest paths only",
+  "each centre's own change in mean mark since its sample, net of the board's year; links trimmed at the tenth and ninetieth percentiles",
+  "each centre's own change in mean mark since its sample, net of the board's year; links at the median",
+  "each centre's own change in mean mark since its sample, net of the board's year; links unweighted",
+  "each centre's own change in mean mark since its sample, net of the board's year; links along the six shortest paths only",
+  "the cycle level and the centre's own change averaged; links trimmed at the tenth and ninetieth percentiles",
+  "the cycle level and the centre's own change averaged; links at the median",
+  "the cycle level and the centre's own change averaged; links unweighted",
+  "the cycle level and the centre's own change averaged; links along the six shortest paths only",
+  "cycle levels weighted by candidates; agreed marks at the median",
+  "cycle levels on the last six years; agreed marks at the median",
+  "cycle levels on the last twelve years; agreed marks at the median",
+  "each centre's own change in mean mark since its sample, net of the board's year; agreed marks at the median",
+  "the cycle level and the centre's own change averaged; agreed marks at the median",
+  "the last two samples averaged before the carry; links trimmed at the tenth and ninetieth percentiles",
+  "the last two samples averaged before the carry; links at the median",
+  "the last two samples averaged before the carry; links unweighted",
+  "the last two samples averaged before the carry; links along the six shortest paths only",
+  "the last two samples averaged before the carry; agreed marks at the median",
+  "links trimmed at the tenth and ninetieth percentiles; agreed marks at the median",
+  "links at the median; agreed marks at the median",
+  "links unweighted; agreed marks at the median",
+  "links along the six shortest paths only; agreed marks at the median",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels weighted by candidates",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels on the last six years",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels on the last twelve years",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; each centre's own change in mean mark since its sample, net of the board's year",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; the cycle level and the centre's own change averaged",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; the last two samples averaged before the carry",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links trimmed at the tenth and ninetieth percentiles",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links at the median",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links unweighted",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links along the six shortest paths only",
+  "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; agreed marks at the median",
+  "the share through the origin, the consensus centred on the agreed marks",
+  "the share through the origin, the consensus centred on the agreed marks; cycle levels weighted by candidates",
+  "the share through the origin, the consensus centred on the agreed marks; cycle levels on the last six years",
+  "the share through the origin, the consensus centred on the agreed marks; cycle levels on the last twelve years",
+  "the share through the origin, the consensus centred on the agreed marks; each centre's own change in mean mark since its sample, net of the board's year",
+  "the share through the origin, the consensus centred on the agreed marks; the cycle level and the centre's own change averaged",
+  "the share through the origin, the consensus centred on the agreed marks; the last two samples averaged before the carry",
+  "the share through the origin, the consensus centred on the agreed marks; links trimmed at the tenth and ninetieth percentiles",
+  "the share through the origin, the consensus centred on the agreed marks; links at the median",
+  "the share through the origin, the consensus centred on the agreed marks; links unweighted",
+  "the share through the origin, the consensus centred on the agreed marks; links along the six shortest paths only",
+  "the share through the origin, the consensus centred on the agreed marks; agreed marks at the median",
+  "the share fitted on the agreed marks in place of the consensus",
+  "the share fitted on the agreed marks in place of the consensus; cycle levels weighted by candidates",
+  "the share fitted on the agreed marks in place of the consensus; cycle levels on the last six years",
+  "the share fitted on the agreed marks in place of the consensus; cycle levels on the last twelve years",
+  "the share fitted on the agreed marks in place of the consensus; each centre's own change in mean mark since its sample, net of the board's year",
+  "the share fitted on the agreed marks in place of the consensus; the cycle level and the centre's own change averaged",
+  "the share fitted on the agreed marks in place of the consensus; the last two samples averaged before the carry",
+  "the share fitted on the agreed marks in place of the consensus; links trimmed at the tenth and ninetieth percentiles",
+  "the share fitted on the agreed marks in place of the consensus; links at the median",
+  "the share fitted on the agreed marks in place of the consensus; links unweighted",
+  "the share fitted on the agreed marks in place of the consensus; links along the six shortest paths only",
+  "the share fitted on the agreed marks in place of the consensus; agreed marks at the median",
+  "each marker's own mark left out of the consensus they are read against",
+  "each marker's own mark left out of the consensus they are read against; the draw fitted through the origin",
+  "each marker's own mark left out of the consensus they are read against; the draw on the last five years of trial scripts",
+  "each marker's own mark left out of the consensus they are read against; the draw with the consensus' own error allowed for",
+  "each marker's own mark left out of the consensus they are read against; the draw fitted year by year and averaged",
+  "each marker's own mark left out of the consensus they are read against; cycle levels weighted by candidates",
+  "each marker's own mark left out of the consensus they are read against; cycle levels on the last six years",
+  "each marker's own mark left out of the consensus they are read against; cycle levels on the last twelve years",
+  "each marker's own mark left out of the consensus they are read against; each centre's own change in mean mark since its sample, net of the board's year",
+  "each marker's own mark left out of the consensus they are read against; the cycle level and the centre's own change averaged",
+  "each marker's own mark left out of the consensus they are read against; the last two samples averaged before the carry",
+  "each marker's own mark left out of the consensus they are read against; agreed marks at the median",
+  "each marker's own mark left out of the consensus they are read against; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+  "each marker's own mark left out of the consensus they are read against; the share through the origin, the consensus centred on the agreed marks",
+  "each marker's own mark left out of the consensus they are read against; the share fitted on the agreed marks in place of the consensus",
+  "links on the 2023 to 2026 meetings",
+  "links on the 2023 to 2026 meetings; the draw fitted through the origin",
+  "links on the 2023 to 2026 meetings; the draw on the last five years of trial scripts",
+  "links on the 2023 to 2026 meetings; the draw with the consensus' own error allowed for",
+  "links on the 2023 to 2026 meetings; the draw fitted year by year and averaged",
+  "links on the 2023 to 2026 meetings; cycle levels weighted by candidates",
+  "links on the 2023 to 2026 meetings; cycle levels on the last six years",
+  "links on the 2023 to 2026 meetings; cycle levels on the last twelve years",
+  "links on the 2023 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+  "links on the 2023 to 2026 meetings; the cycle level and the centre's own change averaged",
+  "links on the 2023 to 2026 meetings; the last two samples averaged before the carry",
+  "links on the 2023 to 2026 meetings; agreed marks at the median",
+  "links on the 2023 to 2026 meetings; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+  "links on the 2023 to 2026 meetings; the share through the origin, the consensus centred on the agreed marks",
+  "links on the 2023 to 2026 meetings; the share fitted on the agreed marks in place of the consensus",
+  "one link a board, on its shortest path to Carrow",
+  "one link a board, on its shortest path to Carrow; the draw fitted through the origin",
+  "one link a board, on its shortest path to Carrow; the draw on the last five years of trial scripts",
+  "one link a board, on its shortest path to Carrow; the draw with the consensus' own error allowed for",
+  "one link a board, on its shortest path to Carrow; the draw fitted year by year and averaged",
+  "one link a board, on its shortest path to Carrow; cycle levels weighted by candidates",
+  "one link a board, on its shortest path to Carrow; cycle levels on the last six years",
+  "one link a board, on its shortest path to Carrow; cycle levels on the last twelve years",
+  "one link a board, on its shortest path to Carrow; each centre's own change in mean mark since its sample, net of the board's year",
+  "one link a board, on its shortest path to Carrow; the cycle level and the centre's own change averaged",
+  "one link a board, on its shortest path to Carrow; the last two samples averaged before the carry",
+  "one link a board, on its shortest path to Carrow; agreed marks at the median",
+  "one link a board, on its shortest path to Carrow; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+  "one link a board, on its shortest path to Carrow; the share through the origin, the consensus centred on the agreed marks",
+  "one link a board, on its shortest path to Carrow; the share fitted on the agreed marks in place of the consensus",
+  "agreed marks against the consensus on the 2020 to 2026 meetings",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the draw fitted through the origin",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the draw on the last five years of trial scripts",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the draw with the consensus' own error allowed for",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the draw fitted year by year and averaged",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels weighted by candidates",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last six years",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last twelve years",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the cycle level and the centre's own change averaged",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the last two samples averaged before the carry",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; links trimmed at the tenth and ninetieth percentiles",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; links at the median",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; links unweighted",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; links along the six shortest paths only",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the share through the origin, the consensus centred on the agreed marks",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; the share fitted on the agreed marks in place of the consensus",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; each marker's own mark left out of the consensus they are read against",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; links on the 2023 to 2026 meetings",
+  "agreed marks against the consensus on the 2020 to 2026 meetings; one link a board, on its shortest path to Carrow"
+ ],
+ "variant_range": {
+  "Ardkeel": [
+   2.62,
+   3.13
+  ],
+  "Brannock": [
+   0.11,
+   0.9
+  ],
+  "Dunmoyle": [
+   5.76,
+   6.36
+  ],
+  "Eskerry": [
+   0.32,
+   0.96
+  ],
+  "Fennor": [
+   0.88,
+   1.52
+  ],
+  "Gortavale": [
+   -3.14,
+   -2.52
+  ]
+ },
+ "variants": 200,
+ "whole": 1.7,
+ "whole_2dp": 1.68,
+ "whole_band": [
+  1.3,
+  1.9
+ ]
+}

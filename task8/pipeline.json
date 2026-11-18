@@ -1,34 +1,34 @@
 {
  "task": "task8",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "education-learning-sciences",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-18",
- "call": "convert Ardkeel's banked 2025 and 2026 portfolio marks down 3.0 and Dunmoyle's down 6.2, Gortavale's up 2.8, carry Brannock's (0.5), Eskerry's (0.7) and Fennor's (1.2) as banked; the joining boards as a whole stand 1.7 marks above Carrow's standard (generator/core.py at the draw, seed 8134; the cut pack's figures replace these at the build)",
- "stump": "the reflex route (each board's recorded moderation differences with its own trial severity added, adjustments netted, candidate weights, a centre's last sample carried) files 1.37, 3.05, 2.40, 2.59, 4.59 and 2.47 marks, converts Brannock, Dunmoyle, Eskerry, Fennor and Gortavale down and leaves Ardkeel: wrong on five of six boards. S1 (a moderator records 36 to 71 per cent of a cold difference, measured on trial scripts joined to their live moderation) opens Ardkeel; S2 (a centre marks lower in the years after a sample, read from its own mark sheets) opens Fennor; S3 (each board marks to its own principal, linked to Carrow through the moderators two boards share) opens Gortavale and flips Brannock and Eskerry",
+ "call": "convert Ardkeel's banked 2025 and 2026 portfolio marks down 3.0 and Dunmoyle's down 6.2, Gortavale's up 2.8, carry Brannock's (0.5), Eskerry's (0.7) and Fennor's (1.3) as banked; the joining boards as a whole stand 1.7 marks above Carrow's standard (generator/figures.json on the cut pack)",
+ "stump": "the reflex route (each board's recorded moderation differences with its own trial severity added, adjustments netted, candidate weights, a centre's last sample carried) files 1.37, 3.05, 2.40, 2.59, 4.59 and 2.46 marks, converts Brannock, Dunmoyle, Eskerry, Fennor and Gortavale down and leaves Ardkeel: wrong on five of six boards. S1 (a moderator records 36 to 70 per cent of a cold difference, measured on trial scripts joined to their live moderation) opens Ardkeel; S2 (a centre marks lower in the years after a sample, read from its own mark sheets) opens Fennor; S3 (each board marks to its own principal, linked to Carrow through the moderators two boards share) opens Gortavale and flips Brannock and Eskerry",
  "architecture": 20,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-18",
-  "checks": "precut.py task8: 113 checks, 0 FAIL, 3 WARN (the nearest chains task13, task19 and task22 share the reconciled table only, answered in the note; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on seed 8134 (three stumps, three open members opened by different stumps, one stump lost 22, 22 and 22, reflex route 9, rigorous standard route 9), --forcing FORCING PASS (nearest line 0.40)"
+  "checks": "precut.py task8 on the cut pack: 113 checks, 0 FAIL, 1 WARN (the nearest chains task13, task19 and task22 share the reconciled table only, answered in the note); generator/core.py CORE PASS level 5 on seed 8134 after one architect's act at stage 4 (40 scripts at every meeting), re-proved; prompt gate PASS with one templating signal (UK spelling, the setting's own)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut, no LEAK: clause numbers and the protocol's 2.0 under the answer-figure sweep, the fiction's nouns in three documents, UK spelling in the prompt and nine covers strings in metadata.json, each answered in the note's Leak rulings",
+  "reader": "two reads (Sonnet, medium): no sentence that hands over a step, no ranking artifact, no helping file, no answer figure; two realism tells fixed in the generator (480 scripts a board over uneven meetings, then a team of one size at every meeting). The second fix changed who marks and no document or prompt sentence, so it was checked by leak.py and the judge's third pass with no third read"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "guard.py heart task8 on the final cut: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5), each answered in the note's Draw; surface PASS",
   "nearest": "guard.py check on 2026-11-18: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5, repeat.deliverables csv+xlsx against task3 and task5, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "three passes (Fable, high), DETERMINISTIC each time with FIX_NOW on the answer blocks; passes 1 and 2 moved stated ranges and the second realism fix moved 20 pack files, so pass 3 ran on the final pack (target.zip md5 ddf71ed722689fd4eb95840c84f34a7f); its fixes are wording only (a rota rule for the fifteen-series levels, the by-moderator reading's variance and carry, two link forms named, the joining boards' teams, the mixed base by its figure, the rebuild counts dropped), so no fourth pass is owed; its optional Eskerry edges were not taken (the note's Tried and rejected)",
+  "report": "determinism_check_report.md (run a20-p3): every stated figure reproduced, 8,232 crossed rebuilds, 117 single-chain link networks and 27 single forks on the golden's outcomes, none of 306 rebuilds departing in one or two choices outside a range, the strongest rival (the share on the live moderator's own unseen mark) refuted by 7.78 against 5.53 on the review's centres and a one-mark slope of 0.67 to 0.79"
  },
- "paper_pair": 9,
+ "paper_pair": 26.7,
  "runs": {
   "run1": null,
   "run2": null,
@@ -55,7 +55,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "DESIGN: the core is proved (python3 task8/generator/core.py, CORE PASS level 5, --forcing FORCING PASS) and the note carries the Build brief; next is stage 3, the generator around core.py",
+ "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload of target.zip and golden.zip with the four answer blocks, then /triage-runs task8 once both runs are graded",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -340,10 +340,19 @@
  "subdomain": "item-response-theory-test-equating",
  "chain": "R1 the seven boards' moderation samples, outcomes, rota years and mark sheets on one schema; R2 the share of a cold difference each board's moderators record; R3 the level of a centre's marks by years since its last sample; R4 each board's live standard against Carrow's; R5 the regulator's 2023 review of Dunmoyle reproduced on the centres not sampled that year; R6 each board's banked marks against Carrow's standard by series and together; R7 the boards the protocol converts, the direction and the conversion, and the boards as a whole",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": "each board's moderators mark to their own principal's standard, and the boards' standards differ by several marks: rescues 1 of 7 (core.py: one stump lost 22, 22 and 22; reflex route 9; rigorous standard route 9; one stump fixed alone 16, 18, 21)"
+  "quick": 9.0,
+  "careful": 26.7,
+  "thorough": 100.0,
+  "factorial": "corelib level 5 on the cut pack: S1 a moderator records a share of a cold difference, measured on trial scripts joined to their live moderation (opens Ardkeel), S2 a centre marks lower in the years after a sample, read from its own mark sheets (opens Fennor), S3 each board marks to its own principal, linked to Carrow through the moderators two boards share (opens Gortavale); each necessary alone, none sufficient alone on the reflex route",
+  "rubric": "figure by figure on the ranges the blocks state (corelib on the cut pack): one stump lost S1 22.3, S2 39.1, S3 27.9; one fixed alone 18.5, 18.5, 26.8; the reflex route 9.0; the rigorous standard route 9.0",
+  "largest_hint": "each board's moderators mark to their own principal's standard, and the boards' standards differ by several marks: rescues 1 of 7 results"
  },
- "prompt_rewritten": false
+ "prompt_rewritten": false,
+ "final_cut": {
+  "date": "2026-11-18",
+  "target_zip_md5": "ddf71ed722689fd4eb95840c84f34a7f",
+  "golden_zip_md5": "ed4875cd44e78c32b4985a916b9be591",
+  "target_digest": "63cab0309b150d2d",
+  "golden_digest": "e07387ad0396ac4e"
+ }
 }

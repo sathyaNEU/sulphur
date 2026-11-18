@@ -64,7 +64,7 @@ DUAL = [("Ardkeel", "Carrow", 9), ("Brannock", "Carrow", 7), ("Gortavale", "Carr
         ("Eskerry", "Brannock", 8), ("Fennor", "Dunmoyle", 6), ("Eskerry", "Ardkeel", 6),
         ("Fennor", "Gortavale", 7), ("Brannock", "Dunmoyle", 5), ("Gortavale", "Eskerry", 4)]
 DUAL_YEARS = 7
-SIG_T, SIG_M, SIG_H, SIG_P = 3.5, 2.0, 0.8, 1.2   # marks: instructor's error, moderator's, moderator's own lean, principal's
+SIG_T, SIG_M, SIG_H, SIG_P = 3.5, 2.0, 0.8, 0.5   # marks: instructor's error, moderator's, moderator's own lean, principal's
 SIG_W, SIG_PHI = 0.05, 0.08                        # spread of the draw between moderators, of the take-back between centres
 NEX, EX_YEARS = 40, 12                             # trial scripts a year, years of trials on file
 REFEREE = ("Dunmoyle", 2023)                       # the regulator's review: every centre, marked cold at Carrow's standard
@@ -109,7 +109,8 @@ def simulate(seed=SEED, boards=BOARDS):
             mbar[:, ti] = abil + yr_eff[ti] + P["o"] + cur + rng.normal(0, 11.0, nc) / np.sqrt(n)
             cur = (1 - P["psi"]) * cur + dc - np.where(s, phic * g, 0.0) + rng.normal(0, 0.45, nc)
         nex = NEX * EX_YEARS
-        ti = rng.integers(NY - 1 - EX_YEARS, NY - 1, nex)
+        rng.integers(NY - 1 - EX_YEARS, NY - 1, nex)                 # (one draw, so the centres' years stay as proved)
+        ti = np.repeat(np.arange(NY - 1 - EX_YEARS, NY - 1), NEX)    # the Code's 40 scripts at each meeting
         ci = np.array([rng.choice(np.flatnonzero(samp[:, t])) for t in ti])
         x_true = lam[ci, ti] + rng.normal(0, SIG_T, nex)             # centre mark minus the board's live standard
         wx = np.clip(rng.normal(P["w"], SIG_W, nex), 0.05, 0.9)
@@ -118,7 +119,7 @@ def simulate(seed=SEED, boards=BOARDS):
         x = x_true - P["p"] - cons_err                                 # centre mark minus the team's cold consensus
         gap = P["p"] + cons_err - rng.normal(0, SIG_P, nex)            # consensus minus the principal's agreed mark
         W[b] = dict(P=P, grp=grp, lam=lam, G=G, adj=adj, samp=samp, ncand=ncand, mbar=mbar, ns=ns,
-                    ex_x=x, ex_y=y, ex_gap=gap, ex_year=np.array(YEARS)[ti + 1])
+                    ex_x=x, ex_y=y, ex_gap=gap, ex_year=np.array(YEARS)[ti + 1], ex_c=ci, ex_t=ti)
     D = []
     for a, b, m in DUAL:
         ca, cb = boards[a]["o"] + boards[a]["p"], boards[b]["o"] + boards[b]["p"]
@@ -312,7 +313,7 @@ def direct(world, years=BANKED):
     return out
 
 
-def rigorous(world, years=BANKED, subset=None):
+def rigorous(world, years=BANKED, subset=None, shrink=True):
     """The most rigorous standard design the pack affords: moderator severity from each board's own trial (the
     team's cold consensus against the agreed marks, added to the recorded differences), candidate weights, the
     applied adjustments netted, centres not sampled in the year taken from their own last sample shrunk to the
@@ -328,7 +329,7 @@ def rigorous(world, years=BANKED, subset=None):
             allg = w["G"][:, max(0, ti - 5):ti + 1]
             mu = np.nanmean(allg)
             vb = max(np.nanvar(allg) - 1.0, 0.2)
-            sh = vb / (vb + 1.0)
+            sh = vb / (vb + 1.0) if shrink else 1.0
             res = np.where(s, np.nan_to_num(w["G"][:, ti]) + sev - w["adj"][:, ti], 0.0)
             for back in range(1, k):
                 m = w["samp"][:, ti - back] & ~s

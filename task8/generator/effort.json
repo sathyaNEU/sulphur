@@ -1,0 +1,3153 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the seven boards' moderation samples, outcomes, rota years and mark sheets on one schema: each board's mean recorded difference on the samples of 2021 to 2026 (marks)",
+   "graded_as": "Step-by-Step",
+   "figure": "recorded_mean",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "Ardkeel": 1.47,
+    "Brannock": 3.44,
+    "Dunmoyle": 2.6,
+    "Eskerry": 3.08,
+    "Fennor": 5.26,
+    "Gortavale": 3.38,
+    "Carrow": 0.85
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "Ardkeel": 1.47,
+     "Brannock": 3.44,
+     "Dunmoyle": 2.6,
+     "Eskerry": 3.08,
+     "Fennor": 5.26,
+     "Gortavale": 3.38,
+     "Carrow": 0.85
+    },
+    "thorough": {
+     "Ardkeel": 1.47,
+     "Brannock": 3.44,
+     "Dunmoyle": 2.6,
+     "Eskerry": 3.08,
+     "Fennor": 5.26,
+     "Gortavale": 3.38,
+     "Carrow": 0.85
+    }
+   },
+   "precedent": []
+  },
+  {
+   "id": "R2",
+   "name": "the share of a difference found without the centre's marks that each board's moderators record: Ardkeel's (per cent)",
+   "graded_as": "Component 1",
+   "figure": "c1",
+   "depends": [
+    "R1"
+   ],
+   "independent": "each trial script's centre mark and consensus against the live moderator's mark of the same portfolio",
+   "golden": 35.8,
+   "passes": {
+    "quick": null,
+    "careful": 100.0,
+    "thorough": 35.8
+   },
+   "precedent": [
+    "L28",
+    "L22"
+   ],
+   "band": [
+    34.2,
+    40.3
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the level of a centre's marks by years since its last sample: Fennor's centres one year after a sample (marks)",
+   "graded_as": "Component 2",
+   "figure": "c2",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the mark sheets by centre and year against the rota years",
+   "golden": -3.2,
+   "passes": {
+    "quick": null,
+    "careful": 0.0,
+    "thorough": -3.2
+   },
+   "precedent": [
+    "N13",
+    "L37"
+   ],
+   "band": [
+    -3.3,
+    -2.8
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "each board's standard against Carrow's: Gortavale's (marks)",
+   "graded_as": "Component 3",
+   "figure": "c3",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the moderators registered with two boards on both boards' meetings; each board's agreed marks",
+   "golden": -6.6,
+   "passes": {
+    "quick": null,
+    "careful": 0.0,
+    "thorough": -6.6
+   },
+   "precedent": [
+    "N27",
+    "L06"
+   ],
+   "band": [
+    -7.0,
+    -6.4
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the regulator's 2023 review of Dunmoyle reproduced on the centres not sampled that year (marks)",
+   "graded_as": "Step-by-Step",
+   "figure": "referee_golden",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "the review's marks",
+   "golden": 5.65,
+   "passes": {
+    "quick": null,
+    "careful": 2.421274478611043,
+    "thorough": 5.65
+   },
+   "precedent": [
+    "L28",
+    "N13",
+    "N27"
+   ],
+   "band": [
+    5.4,
+    6.3
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "each joining board's banked marks against Carrow's standard, together and by series, and the joining boards as a whole (marks)",
+   "graded_as": "Asks 1 to 19",
+   "figure": "asks",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "Ardkeel": 3.0,
+    "Brannock": 0.5,
+    "Dunmoyle": 6.2,
+    "Eskerry": 0.7,
+    "Fennor": 1.3,
+    "Gortavale": -2.8,
+    "Ardkeel 2025": 3.1,
+    "Brannock 2025": 0.5,
+    "Dunmoyle 2025": 6.1,
+    "Eskerry 2025": 0.5,
+    "Fennor 2025": 1.4,
+    "Gortavale 2025": -2.9,
+    "Ardkeel 2026": 3.0,
+    "Brannock 2026": 0.4,
+    "Dunmoyle 2026": 6.3,
+    "Eskerry 2026": 0.8,
+    "Fennor 2026": 1.1,
+    "Gortavale 2026": -2.6,
+    "whole": 1.7
+   },
+   "passes": {
+    "quick": {
+     "Ardkeel": 1.462040725444153,
+     "Brannock": 3.4944852346261404,
+     "Dunmoyle": 2.7835836116341626,
+     "Eskerry": 3.0708926070551805,
+     "Fennor": 5.1494632600713794,
+     "Gortavale": 3.4889906809213866,
+     "Ardkeel 2025": 1.3940269749518304,
+     "Brannock 2025": 3.5912305516265914,
+     "Dunmoyle 2025": 2.84643179765131,
+     "Eskerry 2025": 3.212324179504354,
+     "Fennor 2025": 5.100225225225225,
+     "Gortavale 2025": 3.566614420062696,
+     "Ardkeel 2026": 1.5315068493150685,
+     "Brannock 2026": 3.3960323291697283,
+     "Dunmoyle 2026": 2.720601237842617,
+     "Eskerry 2026": 2.92716133424098,
+     "Fennor 2026": 5.1988795518207285,
+     "Gortavale 2026": 3.4123539232053424,
+     "whole": 3.2735120138695923
+    },
+    "careful": {
+     "Ardkeel": 1.374284450675078,
+     "Brannock": 3.052052188752106,
+     "Dunmoyle": 2.400148587353723,
+     "Eskerry": 2.587068512384793,
+     "Fennor": 4.586312120811482,
+     "Gortavale": 2.4644146202750186,
+     "Ardkeel 2025": 1.410987840439386,
+     "Brannock 2025": 3.0581175116412913,
+     "Dunmoyle 2025": 2.3683794346100466,
+     "Eskerry 2025": 2.4720255952380956,
+     "Fennor 2025": 4.941327692728801,
+     "Gortavale 2025": 2.371189979732847,
+     "Ardkeel 2026": 1.3367972925431684,
+     "Brannock 2026": 3.045879810806734,
+     "Dunmoyle 2026": 2.431985570725002,
+     "Eskerry 2026": 2.7039820460704607,
+     "Fennor 2026": 4.230011282805985,
+     "Gortavale 2026": 2.5564539148185315,
+     "whole": 2.794667155589535
+    },
+    "thorough": {
+     "Ardkeel": 3.0,
+     "Brannock": 0.5,
+     "Dunmoyle": 6.2,
+     "Eskerry": 0.7,
+     "Fennor": 1.3,
+     "Gortavale": -2.8,
+     "Ardkeel 2025": 3.1,
+     "Brannock 2025": 0.5,
+     "Dunmoyle 2025": 6.1,
+     "Eskerry 2025": 0.5,
+     "Fennor 2025": 1.4,
+     "Gortavale 2025": -2.9,
+     "Ardkeel 2026": 3.0,
+     "Brannock 2026": 0.4,
+     "Dunmoyle 2026": 6.3,
+     "Eskerry 2026": 0.8,
+     "Fennor 2026": 1.1,
+     "Gortavale 2026": -2.6,
+     "whole": 1.7
+    }
+   },
+   "precedent": [
+    "N13",
+    "N27",
+    "L28"
+   ],
+   "bands": {
+    "Ardkeel": [
+     2.4,
+     3.3
+    ],
+    "Brannock": [
+     -0.1,
+     1.1
+    ],
+    "Dunmoyle": [
+     5.6,
+     6.6
+    ],
+    "Eskerry": [
+     0.1,
+     1.3
+    ],
+    "Fennor": [
+     0.7,
+     1.7
+    ],
+    "Gortavale": [
+     -3.6,
+     -2.3
+    ],
+    "Ardkeel 2025": [
+     2.5,
+     3.3
+    ],
+    "Brannock 2025": [
+     -0.1,
+     1.2
+    ],
+    "Dunmoyle 2025": [
+     5.4,
+     6.4
+    ],
+    "Eskerry 2025": [
+     0.0,
+     1.2
+    ],
+    "Fennor 2025": [
+     0.8,
+     1.8
+    ],
+    "Gortavale 2025": [
+     -3.7,
+     -2.4
+    ],
+    "Ardkeel 2026": [
+     2.4,
+     3.3
+    ],
+    "Brannock 2026": [
+     -0.2,
+     1.1
+    ],
+    "Dunmoyle 2026": [
+     5.7,
+     6.7
+    ],
+    "Eskerry 2026": [
+     0.3,
+     1.5
+    ],
+    "Fennor 2026": [
+     0.5,
+     1.7
+    ],
+    "Gortavale 2026": [
+     -3.4,
+     -2.2
+    ],
+    "whole": [
+     1.3,
+     1.9
+    ]
+   },
+   "partly_share": 0.5
+  },
+  {
+   "id": "R7",
+   "name": "the boards the protocol converts and the direction",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "golden": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "passes": {
+    "quick": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ],
+    "careful": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ],
+    "thorough": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   "precedent": [
+    "N13",
+    "N27",
+    "L28"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "A moderator works from the centre's marked record, so the difference a sample records is only part of the difference a marker working cold would find.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "A centre is sampled once in its rota cycle, and the marks it banks in the other years are not given at the level its sampled year shows.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "Each board's moderators are standardised to their own principal, so a board's moderation measures its centres against its own standard and not Carrow's.",
+   "rescues": [
+    "R4"
+   ]
+  }
+ ],
+ "factorial": {
+  "golden_answer": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "reflex_route": {
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "S1",
+    "name": "a moderator's recorded difference is a share of the difference a marker working without the centre's marks finds, measured board by board on the trial scripts joined to the live moderation of the same portfolio",
+    "kind": "stump",
+    "precedent": [
+     "L28",
+     "L22"
+    ],
+    "dropped": {
+     "answer": [
+      "Ardkeel as banked",
+      "Brannock as banked",
+      "Dunmoyle down",
+      "Eskerry as banked",
+      "Fennor as banked",
+      "Gortavale up"
+     ],
+     "results_moved": [
+      "R2",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Ardkeel down",
+      "Brannock down",
+      "Dunmoyle down",
+      "Eskerry down",
+      "Fennor down",
+      "Gortavale down"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "S2",
+    "name": "a centre's marks in the years between samples sit at the level its own mark sheets show for that year after a sample, within centre and net of the board's year",
+    "kind": "stump",
+    "precedent": [
+     "N13",
+     "L37"
+    ],
+    "dropped": {
+     "answer": [
+      "Ardkeel down",
+      "Brannock as banked",
+      "Dunmoyle down",
+      "Eskerry as banked",
+      "Fennor down",
+      "Gortavale up"
+     ],
+     "results_moved": [
+      "R3",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Ardkeel as banked",
+      "Brannock down",
+      "Dunmoyle as banked",
+      "Eskerry as banked",
+      "Fennor down",
+      "Gortavale as banked"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "S3",
+    "name": "each board's standard is placed against Carrow's through the moderators registered with two boards, each side taken to its own agreed marks",
+    "kind": "stump",
+    "precedent": [
+     "N27",
+     "L06"
+    ],
+    "dropped": {
+     "answer": [
+      "Ardkeel down",
+      "Brannock down",
+      "Dunmoyle down",
+      "Eskerry down",
+      "Fennor down",
+      "Gortavale down"
+     ],
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6",
+      "R7"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Ardkeel as banked",
+      "Brannock as banked",
+      "Dunmoyle down",
+      "Eskerry as banked",
+      "Fennor as banked",
+      "Gortavale up"
+     ],
+     "results_rescued": [
+      "R4"
+     ]
+    }
+   },
+   {
+    "id": "J4",
+    "name": "seven layouts on one schema: centres by national roll number, a reissued moderation record replaced by the later one, a batch loaded twice counted once, withdrawn and absent entries left out, blank trial marks left out",
+    "kind": "reflex",
+    "precedent": [
+     "R01",
+     "R13"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "every file read, the three unused ones set aside",
+    "kind": "reflex",
+    "precedent": [
+     "R02"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "the applied adjustments netted and every centre weighted by its candidates",
+    "kind": "reflex",
+    "precedent": [
+     "R18"
+    ]
+   },
+   {
+    "id": "J7",
+    "name": "a severity for each board's moderators from its own meeting, small samples shrunk, a stability check on a centre's successive samples",
+    "kind": "reflex",
+    "precedent": [
+     "R31",
+     "R03",
+     "R16"
+    ]
+   }
+  ]
+ },
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "Ardkeel down",
+   "Brannock as banked",
+   "Dunmoyle down",
+   "Eskerry as banked",
+   "Fennor as banked",
+   "Gortavale up"
+  ],
+  "golden_family": [
+   {
+    "name": "the draw fitted through the origin",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted through the origin; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw on the last five years of trial scripts; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw with the consensus' own error allowed for; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the draw fitted year by year and averaged; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels weighted by candidates; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last six years; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "cycle levels on the last twelve years; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each centre's own change in mean mark since its sample, net of the board's year; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the cycle level and the centre's own change averaged; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the last two samples averaged before the carry; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links trimmed at the tenth and ninetieth percentiles; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links at the median; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links unweighted; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links along the six shortest paths only; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share through the origin, the consensus centred on the agreed marks; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the share fitted on the agreed marks in place of the consensus; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the draw fitted through the origin",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the draw on the last five years of trial scripts",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the draw with the consensus' own error allowed for",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the draw fitted year by year and averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the share through the origin, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each marker's own mark left out of the consensus they are read against; the share fitted on the agreed marks in place of the consensus",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the draw fitted through the origin",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the draw on the last five years of trial scripts",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the draw with the consensus' own error allowed for",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the draw fitted year by year and averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the share through the origin, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "links on the 2023 to 2026 meetings; the share fitted on the agreed marks in place of the consensus",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the draw fitted through the origin",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the draw on the last five years of trial scripts",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the draw with the consensus' own error allowed for",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the draw fitted year by year and averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; agreed marks at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the share through the origin, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "one link a board, on its shortest path to Carrow; the share fitted on the agreed marks in place of the consensus",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the draw fitted through the origin",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the draw on the last five years of trial scripts",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the draw with the consensus' own error allowed for",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the draw fitted year by year and averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels weighted by candidates",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last six years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; cycle levels on the last twelve years",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; each centre's own change in mean mark since its sample, net of the board's year",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the cycle level and the centre's own change averaged",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the last two samples averaged before the carry",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; links trimmed at the tenth and ninetieth percentiles",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; links at the median",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; links unweighted",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; links along the six shortest paths only",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the share as the mean live difference over the mean cold difference, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the share through the origin, the consensus centred on the agreed marks",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; the share fitted on the agreed marks in place of the consensus",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; each marker's own mark left out of the consensus they are read against",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; links on the 2023 to 2026 meetings",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "agreed marks against the consensus on the 2020 to 2026 meetings; one link a board, on its shortest path to Carrow",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the recorded difference taken as the difference",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "a centre's last sample carried to the years it was not sampled",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor down",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "each board's own principal taken as the standard",
+    "answer": [
+     "Ardkeel down",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ]
+   },
+   {
+    "name": "the recorded difference as the difference, the last sample carried",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "name": "the recorded difference as the difference, each board's own principal as the standard",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle as banked",
+     "Eskerry as banked",
+     "Fennor down",
+     "Gortavale as banked"
+    ]
+   },
+   {
+    "name": "the last sample carried, each board's own principal as the standard",
+    "answer": [
+     "Ardkeel down",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ]
+   },
+   {
+    "name": "the moderation record with the adjustments netted, candidate weights and the last sample carried",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ]
+   },
+   {
+    "name": "each board's mean recorded difference on the portfolios sampled in 2025 and 2026",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ]
+   },
+   {
+    "name": "each board's own meeting severity added to the record, adjustments netted, candidate weights, a centre between samples carried at its last sample",
+    "answer": [
+     "Ardkeel as banked",
+     "Brannock down",
+     "Dunmoyle down",
+     "Eskerry down",
+     "Fennor down",
+     "Gortavale down"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the share recorded one spread up",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "the share recorded one spread down",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "the cycle levels one spread up",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "the cycle levels one spread down",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "the standards one spread up",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "the standards one spread down",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, +1, +1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, +1, -1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, -1, +1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, -1, -1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, +1, +1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, +1, -1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, -1, +1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, -1, -1)",
+    "answer": [
+     "Ardkeel down",
+     "Brannock as banked",
+     "Dunmoyle down",
+     "Eskerry as banked",
+     "Fennor as banked",
+     "Gortavale up"
+    ]
+   }
+  ]
+ },
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the recorded difference taken as the difference",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ]
+  },
+  {
+   "name": "a centre's last sample carried to the years it was not sampled",
+   "answer": [
+    "Ardkeel down",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor down",
+    "Gortavale up"
+   ]
+  },
+  {
+   "name": "each board's own principal taken as the standard",
+   "answer": [
+    "Ardkeel down",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  },
+  {
+   "name": "the recorded difference as the difference, the last sample carried",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock as banked",
+    "Dunmoyle down",
+    "Eskerry as banked",
+    "Fennor as banked",
+    "Gortavale up"
+   ]
+  },
+  {
+   "name": "the recorded difference as the difference, each board's own principal as the standard",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle as banked",
+    "Eskerry as banked",
+    "Fennor down",
+    "Gortavale as banked"
+   ]
+  },
+  {
+   "name": "the last sample carried, each board's own principal as the standard",
+   "answer": [
+    "Ardkeel down",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  },
+  {
+   "name": "the moderation record with the adjustments netted, candidate weights and the last sample carried",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  },
+  {
+   "name": "each board's mean recorded difference on the portfolios sampled in 2025 and 2026",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  },
+  {
+   "name": "each board's own meeting severity added to the record, adjustments netted, candidate weights, a centre between samples carried at its last sample",
+   "answer": [
+    "Ardkeel as banked",
+    "Brannock down",
+    "Dunmoyle down",
+    "Eskerry down",
+    "Fennor down",
+    "Gortavale down"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 18,
+  "components": 20,
+  "asks": 53,
+  "instruction": 9
+ }
+}

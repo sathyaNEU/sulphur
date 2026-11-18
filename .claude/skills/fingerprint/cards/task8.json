@@ -12,8 +12,8 @@
   "shape": "other",
   "decision_type": "conformed_dataset",
   "answer_unit": "index_or_score",
-  "answer": "convert Ardkeel's banked marks down 3.0 and Dunmoyle's down 6.2, Gortavale's up 2.8, carry Brannock's (0.5), Eskerry's (0.7) and Fennor's (1.2) as banked; the boards together stand 1.7 marks above Carrow's standard (generator/core.py, seed 8134; the cut pack's figures replace these at the build)",
-  "answer_source": "generator/core.py at the draw; submission.md (Final Recommendation) and generator/figures.json from the build",
+  "answer": "convert Ardkeel's banked marks down 3.0 and Dunmoyle's down 6.2, Gortavale's up 2.8, carry Brannock's (0.5), Eskerry's (0.7) and Fennor's (1.3) as banked; the joining boards as a whole stand 1.7 marks above Carrow's standard (generator/figures.json on the cut pack)",
+  "answer_source": "submission.md (Final Recommendation) and generator/figures.json on the cut pack; generator/core.py proves the same call on the world's arrays",
   "gap": [
     "objective",
     "time"
@@ -39,17 +39,17 @@
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:banked-marks-on-a-reference-standard-from-a-moderation-record-that-is-anchored-on-the-centres-mark-seen-once-a-rota-cycle-and-kept-to-each-boards-own-standard",
   "layer1": [
-    "seven boards' systems with their own layouts: one row per portfolio in some, one row per sample with the marks in a delimited field in others, centre numbers in board prefixes and in the national scheme",
-    "candidate numbers reissued when a candidate re-enters, withdrawn and absent entries left on the mark sheets with no mark",
-    "moderation records resent after an appeal, the later record replacing the earlier",
-    "trial marks keyed by the moderators themselves: blanks where a script was not reached, marks out of the unit's older 80-mark scheme in the earliest years"
+    "seven boards' systems in three layouts: one row per portfolio with the outcome records in their own file (a CSV in one layout, a workbook with day-first dates in another), one row per sample with the candidates and both sets of marks in delimited fields in the third; centre numbers in each board's own scheme and in the national roll",
+    "withdrawn and absent entries left on the mark sheets with no mark, under each system's own status codes; a batch of rows loaded twice into one board's mark sheets",
+    "moderation records keyed wrongly and reissued weeks later, the later record replacing the earlier",
+    "meeting marks keyed by the moderators themselves, blank where a script was not reached"
   ],
   "stakeholder_role": "the director of standards at Carrow Awards, who files the conversion of the legacy boards' banked marks with the examinations regulator before the June 2027 awards",
   "role_family": "research_desk",
   "scoring_unit": "other",
   "spine": {
-    "file": "portfolio_mark_sheets_2012_2026.csv",
-    "rows": 1000000,
+    "file": "seven boards' portfolio mark sheets 2012 to 2026 (the largest BRN_PortfolioMarks_2012-2026.csv, 193,591 rows)",
+    "rows": 1102512,
     "entity": "one candidate's workshop portfolio mark in one series at one centre, as marked by the centre and as awarded by the board",
     "grain": "candidate and series",
     "source": "synthetic"
@@ -78,7 +78,14 @@
       "Christina Flahive",
       "Kate Montague",
       "Dominic McHale",
-      "Owen Hastings"
+      "Owen Hastings",
+      "Lucas Kealty",
+      "Michelle Slattery",
+      "Cody Lavan",
+      "Conchur Gillespie",
+      "Carl MacDwyer",
+      "Patrick Pender",
+      "Elizabeth Reynolds"
     ]
   },
   "deliverables": [
@@ -88,8 +95,8 @@
   "opening_move": "question-first",
   "question_form": "which",
   "driver": "Several bodies each checked their own units' scores by re-scoring a sample, and their records are to be put on one body's standard. A check score is given in sight of the unit's own score, so the difference a check records is a fraction of the difference an independent score would find, a fraction that differs by body and is in no check record: it is measured only where the same items were also scored independently, for another purpose. Each unit is checked once in a cycle of years and its scoring moves between checks, pulled back after each report and drifting until the next, so the years between are at a level the check record never sees and the unit's own complete score record does. And each body's checkers are trained to their own lead, no item was scored by two bodies, and the only bridge is the people who check for two bodies, read where they scored independently for each. Reading the check record raw, with each body's own severity added and the last check carried, passes every check that record offers and puts most bodies on the wrong side of the tolerance.",
-  "driver_concrete": "Carrow Awards converts a legacy board's banked 2025 and 2026 portfolio marks where they stand 2 marks or more from its standard. Moderators record 36 to 71 per cent of a cold difference by board; centres mark 0.4 to 3.2 marks lower in the years after a sample than in the sampled year; the boards' live standards stand 6.5 marks below to 1.8 above Carrow's. Core (seed 8134): Ardkeel 3.0, Brannock 0.5, Dunmoyle 6.2, Eskerry 0.7, Fennor 1.2, Gortavale -2.8 marks above Carrow's standard, where the moderation record with each board's own severity gives 1.1, 2.5, 2.0, 3.1, 4.8, 2.2.",
-  "stump": "A careful but hurried analyst takes a moderator's recorded difference as the difference (Ardkeel, whose moderators record 36 per cent of it, is left alone when it stands 3 marks high), carries a centre's last sample to the years it was not sampled (Fennor, whose centres drop 3 marks after a sample, is converted when it stands 1.2 high) and takes each board's own principal as the standard (Gortavale, whose moderators mark 6.5 below Carrow's, is converted down when it should go up).",
+  "driver_concrete": "Carrow Awards converts a legacy board's banked 2025 and 2026 portfolio marks where they stand 2 marks or more from its standard. Moderators record 36 to 70 per cent of a cold difference by board; centres mark 0.4 to 3.2 marks lower in the years after a sample than in the sampled year; the boards' live standards stand 6.6 marks below to 1.7 above Carrow's. Cut pack: Ardkeel 3.0, Brannock 0.5, Dunmoyle 6.2, Eskerry 0.7, Fennor 1.3, Gortavale -2.8 marks above Carrow's standard, where the moderation record with each board's own severity gives 1.1, 2.6, 2.1, 3.1, 4.8, 2.2.",
+  "stump": "A careful but hurried analyst takes a moderator's recorded difference as the difference (Ardkeel, whose moderators record 36 per cent of it, is left alone when it stands 3 marks high), carries a centre's last sample to the years it was not sampled (Fennor, whose centres drop 3 marks after a sample, is converted when it stands 1.3 high) and takes each board's own principal as the standard (Gortavale, whose moderators mark 6.6 below Carrow's, is converted down when it should go up).",
   "deep_chain": "(1) seven boards' moderation samples, adjustments, rota years and mark sheets on one schema; (2) each trial script joined to the live moderation of the same portfolio, and the share of a cold difference each board's moderators record; (3) the level of a centre's own marks by years since its last sample, within centre and net of the board's year; (4) the people who moderate for two boards, their cold trial marks against each team's consensus, each board's agreed marks against its consensus, and the network adjusted to Carrow; (5) the regulator's 2023 review of Dunmoyle reproduced on the centres not sampled that year; (6) each board's banked marks against Carrow's standard by series and together, and the boards the protocol converts",
   "judgment": "a recorded difference that is a fraction of the true one, at a fraction held only by scripts marked twice for another purpose; a level between samples that only the centre's own marks hold; a standard no portfolio links, carried by the people who mark for two boards",
   "one_fact_test": "the strongest sentence (each board's moderators mark to their own principal's standard, and the boards' standards differ by several marks) rescues S3 only, 1 of 3 judgments, and only once the link is found and built in four steps: Ardkeel is still left alone and Fennor still converted",
@@ -904,9 +911,9 @@
   "client_subdomain": "item-response-theory-test-equating",
   "architecture_spent": false,
   "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "how",
-    "deliverable set": "docx+xlsx"
+    "question form": "which",
+    "second-sentence opener": "nobody",
+    "deliverable set": "csv+xlsx"
   },
   "registered": "2026-11-18T07:20:41Z"
 }
