@@ -1,100 +1,108 @@
 {
   "task": "task5",
   "project": "sulfur",
-  "architecture": "v4 (re-rooted as a results chain in the same State of Franklin world at the author's word after architecture 3 was returned at review: the Department's best estimate of each county's December 2026 covered jobs from the unemployment insurance files as they stood on 15 February 2027, reconciled to the published 2025 total, with the outstanding reports read by cause, this quarter's share of employers in trouble carried to the late batches, the employers liable but with no account yet, the worksite splits not yet in, and a replay on December 2025; second cut after the stage 4 judge's pass, the world redrawn without the seasonal lake resorts and with bands an independent rebuild stays inside)",
-  "drawn": "2026-11-10",
-  "slot_note": "re-root of task5 in the same subdomain, analysis type and world after architecture 3's return at review (one thing); rebuilt as a results chain at the author's word",
+  "architecture": 5,
+  "drawn": "2026-11-17",
+  "slot_note": "redraw on 2026-11-17 of architecture 4 (READY 2026-11-10, never uploaded) in a new world, with a new decision form and new deciding lessons: the unemployment insurance files, the designation set and the late-report nowcast are gone; the core is three judgments on different axes about how a population of citizens abroad comes to be recorded, proved in task5/generator/core.py at CORE PASS level 5",
   "domain": "survey-research-official-statistics",
   "subdomain": "census-register-administrative-data-quality",
   "client_domain": "survey-research-official-statistics",
-  "niche": "a state labor market information section's first certified estimate of each county's December covered jobs from an unemployment insurance report census caught 45 days after the quarter: a quarter of the reports still out for different reasons, new employers' accounts not yet set up, worksite reports trailing the contribution reports, and a housing downturn that makes this quarter unlike the closed ones",
+  "niche": "citizens abroad by consular district at a small state's statistics office: how many of its citizens are usually resident in each of seven partner states of a free-movement area on 1 January 2027, to staff each district by a filed standard, when emigrants seldom deregister, every state's migration tables catch their own share of the moves, and the partners' tables end three years before the date",
   "objective": "etl",
-  "shape": "03",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "Certify Garrow, Kittredge and Ostrom (December 2026 covered jobs an estimated 3.0, 3.0 and 3.1 per cent below December 2025 on the records of 15 February 2027; Bray, the nearest other county, at minus 1.1; the state at plus 0.1)",
-  "answer_source": "task5/submission.md, Final Recommendation",
+  "shape": "15",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "officers by district 8, 10, 8, 7, 3, 5, 13 (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera) on 36,457; 48,181; 36,488; 32,891; 12,399; 22,690; 62,457 citizens resident on 1 January 2027 (generator/core.py at the draw; the cut pack's figures replace these at READY)",
+  "answer_source": "generator/core.py at the draw; submission.md (Final Recommendation) and generator/figures.json from READY",
   "gap": [
-    "time",
-    "population"
+    "objective",
+    "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G3",
-    "G13",
-    "G12"
+    "G5",
+    "G12",
+    "G13"
   ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "censored_or_lagged_release",
-  "stump_strategy": "maturity_censoring",
+  "gate_g": "etl_conformance",
+  "calibration_form": "counterparty_acknowledgement",
+  "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms every file, back-tests the outstanding reports as one pool and carries them at their reporting peers' change with one survival share, develops the employers not yet registered from the register's two dates and splits multi-county employers by their latest worksite report: it loses the reading by cause (employers outstanding on their own kept 0.29 of September, those in late batches 0.96), this quarter's share carried to the late batches, the Lakes counties' split, seven county cells, the designated set (Ostrom alone) and the replay.",
-  "domain_test": "Every result is a quantity an official statistics office produces for an early estimate from an administrative census: the response status of the census at the cut-off, a nonresponse mechanism and the nonrespondents' outcome, a coverage adjustment for units not yet on the frame, an allocation of multi-establishment employers to areas, a revision analysis against the published and the later records. Swap employers for hospitals filing activity returns and no return is missing because the unit died, no account is set up weeks after the unit starts, and no worksite report distributes a total: the chain has nothing to estimate.",
-  "layer2_family": "field_method",
-  "layer2_pattern": "own:an-early-estimate-from-an-administrative-census-completed-component-by-component",
+  "analyst_test": "a careful but hurried run conforms every table, takes each host's own arrivals and departures tables as the flows (the receiving state's count where two reports of a flow differ), rolls each host's 2021 census count forward to the end of its tables and carries the last three years to 2027: it staffs Brennia an officer short and Skarholm, Marovia, Tesmar, Fenmark and Almera one to three officers over",
+  "domain_test": "every result is a quantity official migration statistics estimates: a state's coverage of arrivals and of its own emigrants from the twice-reported flow matrix anchored on a census transition table, intercensal exits as the residual of the population account, the share of moves a home register catches, and a population of citizens abroad on a date no count covers",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:citizens-abroad-from-twice-reported-flows-a-census-anchored-coverage-chain-and-a-home-register-for-the-years-no-partner-covers",
   "layer1": [
-    "amended reports superseding originals and exact resubmissions",
-    "multiple worksite reports splitting an employer's jobs across counties",
-    "predecessor and successor accounts after transfers of business",
-    "county names and codes written differently across the account register and the worksite reports",
-    "NAICS 2017 codes on older accounts beside NAICS 2022",
-    "employers missing two quarters not yet inactivated",
-    "habitual late filers",
-    "paper reports keyed by date only"
+    "state and citizenship codes in three schemes (two letters, three letters, the area's numeric codes)",
+    "flows in persons in most releases and in thousands in two partners'",
+    "revised vintages of the same year republished under a later release date",
+    "the home register's events keyed by municipal clerks: destinations as free text, repeats after a re-sync, events entered weeks late",
+    "census tables by citizenship and by country of birth side by side",
+    "a partner's reference year running July to June until 2014"
   ],
-  "stakeholder_role": "the director of the state Department of Labor's labor market information section, who prepares the Commissioner's certification of each county's December covered employment for the Community Transition Fund",
+  "stakeholder_role": "the head of population statistics at Statistics Orlava, whose estimate of citizens abroad the foreign ministry's posting board staffs the consular districts on",
   "role_family": "statistical_office_head",
   "scoring_unit": "other",
   "spine": {
-    "file": "ui_quarterly_reports_2023q1_2026q4.csv",
-    "rows": 427262,
-    "entity": "one employer account's quarterly contribution report",
-    "grain": "account x quarter",
+    "file": "orlava_register_migration_events_2011_2026.csv",
+    "rows": 250000,
+    "entity": "one deregistration or re-registration of a citizen in Orlava's population register",
+    "grain": "register event",
     "source": "synthetic"
   },
-  "forum": "minister_or_cabinet",
-  "forcing_event": "statutory_or_regulatory_filing",
+  "forum": "committee_or_panel",
+  "forcing_event": "vote_or_meeting",
   "org_family": "research_or_statistics_office",
   "world": {
-    "geography": "United States (the State of Franklin, fictional, and its fourteen counties)",
-    "currency": "USD",
-    "org_type": "state labor market information section",
+    "geography": "Orlava, an invented central European republic of 3.9 million people, and the seven partner states of its free-movement area",
+    "currency": "none in the task",
+    "org_type": "a national statistics office that estimates the citizens living in each partner state for the foreign ministry's consular staffing standard",
     "invented_names": [
-      "State of Franklin",
-      "Garrow County",
-      "Ostrom County",
-      "Community Transition Fund"
+      "Statistics Orlava",
+      "Orlava",
+      "Skarholm",
+      "Brennia",
+      "Marovia",
+      "Tesmar",
+      "Kestria",
+      "Fenmark",
+      "Almera",
+      "Common Movement Area Statistical Office"
     ],
     "people": [
-      "Danielle Fuller",
-      "Matthew Cox",
-      "William Robertson"
+      "Neja Bezjak",
+      "Jani Debeljak",
+      "Emil Bajc",
+      "Kaja Kalan",
+      "Silvo Zver",
+      "Klemen Kokalj"
     ]
   },
   "deliverables": [
-    "ctf_certification_december_2026.xlsx",
-    "ctf_employer_jobs_december_2026.csv",
-    "ctf_certification_memo_2027.docx"
+    "orlava_citizens_abroad_account_2011_2027.csv",
+    "orlava_consular_staffing_estimate_2027.xlsx"
   ],
   "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "A period total is estimated early from a census of unit reports, and the part not yet observed is completed component by component, each from its own evidence: units whose report is out are read by whether the intermediary batch they arrive in has come, and those missing alone are carried at what such units kept on periods old enough for their closures to be recorded; units in late batches are carried at the change of all units whose standing is visible this period, the missing-alone included, because this period's closure rate is several times the closed periods'; units liable but not yet on the register are counted from this period's early registrations and the closed periods' registration delays, at the late registrants' size; and each multi-site unit whose site report is out is split by each site's own seasonal change a year earlier. No one component gives the set of areas below the threshold.",
-  "driver_concrete": "Each Franklin county's December 2026 covered jobs are estimated from the unemployment insurance files as they stood on 15 February 2027: 6,053 of 27,796 liable employers' reports are out, 3,992 of them in payroll agents' late year-end batches (three or more reports received in the same second) and 815 outstanding on their own (kept 0.29 of September jobs on resolved quarters); the housing downturn puts 7.9 per cent of construction jobs with employers outstanding on their own against under one per cent at earlier fourth-quarter cut-offs, so the late batches are carried at the change of every employer whose standing shows (about 590 fewer jobs than the reporters' change); about 590 employers liable for the quarter have no account yet (2,400 jobs, counted from the quarter's 309 registrations so far and the delays of earlier fourth quarters, at the late registrants' 4.3 jobs); and the 185 multi-county employers whose worksite report is out are split by each worksite's own December-on-September change a year earlier, which takes about 260 jobs out of Kittredge, 150 out of Talcott and 80 out of Sayre.",
-  "stump": "The careful pass carries every outstanding report alike, at its reporting peers' change by supersector times the share of such employers that reported in the end at earlier fourth-quarter cut-offs (0.92), develops the unregistered employers, and splits multi-county employers by the latest worksite report: it designates Ostrom, leaves Garrow at minus 1.9 and Kittredge at minus 0.9, and puts five counties outside their ranges by 0.7 of a point or more. With the outstanding reports carried alike and the rest right the set is Kittredge and Ostrom or Kittredge; with the latest worksite split and the rest right, Garrow and Ostrom; the reports received alone designate all fourteen; September carried flat designates Ostrom.",
-  "deep_chain": "R1 census and reconciliation; R2 outstanding by cause and the outcome on resolved quarters; R3 this quarter against the closed ones; R4 the unregistered employers by development; R5 the worksite split by each site's seasonal carry; R6 the county table; R7 the changes; R8 the designation; R9 the replay",
-  "judgment": "several: a nonresponse mechanism read from co-arrival; an outcome measured on mature cohorts; a transport of this quarter's trouble rate to units whose standing is not visible; a development estimate of units not yet registered; a seasonal carry of each worksite",
-  "one_fact_test": "the most useful single sentence (a report out with its agent's whole batch says nothing about the employer, one out on its own usually means trouble) rescues one result of nine on the careful pass; the worksite sentence one; the construction and the registration sentences none; none rescues the designation, which needs the reading by cause and the worksite split together",
-  "strategy_label": "WORKS IN FORM",
+  "question_form": "how-many",
+  "driver": "A standard gives each of several districts a whole number of staff from a head count on a future date, and no record holds the head count. Each district counted its members on two past dates; between and after them every movement is reported twice and incompletely, once by the place it enters at that place's own capture rate and once by the place it leaves at that place's own. The capture rates are published nowhere and the twice-reported matrix fixes them only up to one common factor, which a single independent count of one year's entries pins; exits are caught far less than entries and are the residual of the account between the two counts; and the counterparties' tables end three years before the date, so the last years are seen only by the home side's own record, at a fraction measured on the years both report. Taking each district's own tables, the fuller of the two reports, or rates scaled to the best reporter closes every check the record offers and misplaces the head counts by more than a staff step.",
+  "driver_concrete": "Orlava staffs seven consular districts at one officer for every 5,000 citizens or part of 5,000 resident on 1 January 2027. The hosts' registers catch 0.56 to 1.21 of the citizens arriving and 0.24 to 0.97 of those leaving; Orlava's own catches 0.72 of foreign arrivals (pinned by its 2021 census) and 0.36 of its emigrants; the partners' tables end with 2023. Core: 36,457; 48,181; 36,488; 32,891; 12,399; 22,690; 62,457 citizens and 8, 10, 8, 7, 3, 5, 13 officers (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera), where the hosts' tables carried to 2027 give 9, 9, 11, 9, 3, 6, 15.",
+  "stump": "A careful but hurried analyst takes each host's arrivals table as the arrivals (Brennia, which records 56 per cent of them, is then an officer short), its departures table as the exits (Marovia, which records 24 per cent of them, is three officers over) and carries 2021 to 2023 through the three years no partner's table reaches (Tesmar, where exits rose by three quarters, is an officer over).",
+  "deep_chain": "(1) both reports of every flow among the eight states on one schema for 2011 to 2023, Orlava's own register to 2026, each host's two census counts and its births and deaths of citizens; (2) Orlava's arrival share from its census's foreign citizens who lived abroad a year before, each partner's share of its own emigrants from its flow to Orlava, each host's arrival share from the other partners' citizens moving to it; (3) each host's exits of citizens between its two censuses as the residual of the account on corrected arrivals, and the share its departures table caught; (4) Fenmark's 2016 count reproduced and 2021 to 2023 held out; (5) the share of moves to each host and of exits from it that Orlava's register catches on the years both sides report, and 2024 to 2026 from it; (6) citizens per host on 1 January 2027, officers by the standard, and the citizens who left each host since its 2021 census",
+  "judgment": "a recording share no state publishes, fixed by the matrix only up to a level that one census table pins; exits no table holds, taken from the account between two censuses; three years no partner covers, seen by the home register at a fraction",
+  "one_fact_test": "the strongest sentence (each state records only a share of the people who move in and a share of its own people who move out, a different share in each state) rescues S1 only, 1 of 3 judgments: Marovia is still three officers over and Tesmar one over, and the level still has to be found",
+  "strategy_label": "own",
   "mechanism_source": "design_note",
   "differentiation": {
-    "mark253": "mark253's first architecture reweighted a sample's respondents within classes of a frame attribute that drove both response and the outcome; here no respondent stands in for a nonrespondent and no frame attribute defines the class: whether a missing report carries the outcome is read quarter by quarter from whether the employer's usual batch-mates arrived, and the missing employers' December jobs come from earlier missing employers' own outcomes on quarters old enough for their closures to have been recorded.",
-    "task5": "architecture 3 priced one step (a report missing from a batch that arrived) on a shock built into two counties; here that reading is one result of nine in a statewide downturn every county carries, the designated set needs it in Garrow and each worksite's seasonal carry in Kittredge, and a reconciliation, a transport to the late batches, the employers not yet registered and a replay are graded on their own"
+    "task5": "the slot's earlier architectures designated a set over a threshold from one record (airfields, an emissions inventory, counties' covered jobs with late reports); this build counts officers to a standard from a population no record holds, through recording shares fixed by a twice-reported flow matrix, an account between two censuses and a second register for the uncovered years, with no late report, no frame gap and no designation",
+    "task19": "task19 corrects one register's district counts with a field follow-up and a coverage survey linked without a key (dependent capture channels, linkage missing not at random); here nothing is linked and no list is matched: the quantities are aggregate flows reported by two states each, and the work is the level of each state's recording share and the years no partner covers",
+    "task8": "task8 counts reading groups to a standard from three tests of the same pupils; the standard is the only shared element: here the head count is not measured at all and is built from a stock account",
+    "mark120": "mark120 sizes one capacity figure from an inflow record that understates the draw on the days storage is drawn down, one stock correction on the peak day; here there is no peak and no storage: seven head counts come from flows that two states each report at their own share, the level of the shares is pinned by a census table, the exits are the residual of the account between two censuses, and three years are in no partner's record"
   },
   "lineage": [
     {
@@ -195,9 +203,120 @@
         "ctf_employer_jobs_december_2026.csv"
       ],
       "fate": "returned at review 2026-11-10 (the author's account: one hidden trap decides it; the client's level 5 asks for three or four pieces of genuine analytical rigor with nothing planted). Read against the bar of 2026-11-09: the fourth-quarter shock was built into two counties' exposed employers, whose filing channels were set so the missing-alone reading would see them, and one sentence left a measurement on closed quarters. Never run on the platform."
+    },
+    {
+      "domain": "survey-research-official-statistics",
+      "subdomain": "census-register-administrative-data-quality",
+      "objective": "etl",
+      "shape": "03",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G3",
+        "G13",
+        "G12"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "A period total is estimated early from a census of unit reports, and the part not yet observed is completed component by component, each from its own evidence: units whose report is out are read by whether the intermediary batch they arrive in has come, and those missing alone are carried at what such units kept on periods old enough for their closures to be recorded; units in late batches are carried at the change of all units whose standing is visible this period, the missing-alone included, because this period's closure rate is several times the closed periods'; units liable but not yet on the register are counted from this period's early registrations and the closed periods' registration delays, at the late registrants' size; and each multi-site unit whose site report is out is split by each site's own seasonal change a year earlier. No one component gives the set of areas below the threshold.",
+      "driver_concrete": "Each Franklin county's December 2026 covered jobs are estimated from the unemployment insurance files as they stood on 15 February 2027: 6,053 of 27,796 liable employers' reports are out, 3,992 of them in payroll agents' late year-end batches (three or more reports received in the same second) and 815 outstanding on their own (kept 0.29 of September jobs on resolved quarters); the housing downturn puts 7.9 per cent of construction jobs with employers outstanding on their own against under one per cent at earlier fourth-quarter cut-offs, so the late batches are carried at the change of every employer whose standing shows (about 590 fewer jobs than the reporters' change); about 590 employers liable for the quarter have no account yet (2,400 jobs, counted from the quarter's 309 registrations so far and the delays of earlier fourth quarters, at the late registrants' 4.3 jobs); and the 185 multi-county employers whose worksite report is out are split by each worksite's own December-on-September change a year earlier, which takes about 260 jobs out of Kittredge, 150 out of Talcott and 80 out of Sayre.",
+      "stump": "The careful pass carries every outstanding report alike, at its reporting peers' change by supersector times the share of such employers that reported in the end at earlier fourth-quarter cut-offs (0.92), develops the unregistered employers, and splits multi-county employers by the latest worksite report: it designates Ostrom, leaves Garrow at minus 1.9 and Kittredge at minus 0.9, and puts five counties outside their ranges by 0.7 of a point or more. With the outstanding reports carried alike and the rest right the set is Kittredge and Ostrom or Kittredge; with the latest worksite split and the rest right, Garrow and Ostrom; the reports received alone designate all fourteen; September carried flat designates Ostrom.",
+      "stump_strategy": "maturity_censoring",
+      "forum": "minister_or_cabinet",
+      "forcing_event": "statutory_or_regulatory_filing",
+      "org_family": "research_or_statistics_office",
+      "role_family": "statistical_office_head",
+      "drawn": "2026-11-10",
+      "layer2_family": "field_method",
+      "layer2_pattern": "own:an-early-estimate-from-an-administrative-census-completed-component-by-component",
+      "answer": "Certify Garrow, Kittredge and Ostrom (December 2026 covered jobs an estimated 3.0, 3.0 and 3.1 per cent below December 2025 on the records of 15 February 2027; Bray, the nearest other county, at minus 1.1; the state at plus 0.1)",
+      "deliverables": [
+        "ctf_certification_december_2026.xlsx",
+        "ctf_employer_jobs_december_2026.csv",
+        "ctf_certification_memo_2027.docx"
+      ],
+      "question_form": "what",
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "the",
+        "rounding opener": "county",
+        "deliverable set": "csv+docx"
+      },
+      "world": {
+        "geography": "United States (the State of Franklin, fictional, and its fourteen counties)",
+        "currency": "USD",
+        "org_type": "state labor market information section",
+        "invented_names": [
+          "State of Franklin",
+          "Garrow County",
+          "Ostrom County",
+          "Community Transition Fund"
+        ],
+        "people": [
+          "Danielle Fuller",
+          "Matthew Cox",
+          "William Robertson"
+        ]
+      },
+      "answer_shape": "reconciled-table",
+      "weight": "hard-to-measure",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "missingness-measurement",
+        "causal-reasoning",
+        "missingness-measurement",
+        "forecasting",
+        "decomposition-attribution",
+        "synthesis",
+        "synthesis",
+        "validation"
+      ],
+      "skeleton": {
+        "decision_form": "set_over_threshold",
+        "answer_pattern": "naive_set_swaps_members",
+        "lessons": [
+          "reporting_lag_nowcast",
+          "frame_population_mismatch",
+          "inherited_attribute_from_other_unit"
+        ],
+        "mechanisms": [
+          "payroll_agent_late_year_end_batches",
+          "missing_alone_keep_a_third",
+          "housing_downturn_construction",
+          "liable_employers_without_account",
+          "seasonal_worksite_split"
+        ],
+        "detection": [
+          "record_time_against_event_time",
+          "second_source_at_other_grain"
+        ],
+        "moves": [
+          "nowcast_from_same_point_prior_years",
+          "impute_by_model_at_own_drivers",
+          "frame_reconciliation_with_register"
+        ],
+        "file_roles": [
+          "primary_record",
+          "reference_register",
+          "governing_standard",
+          "frame_or_roster",
+          "second_grain_source",
+          "unused_distractor"
+        ]
+      },
+      "calibration_form": "censored_or_lagged_release",
+      "context_artifact": "published_series",
+      "architecture": "v4 (the State of Franklin unemployment insurance files: each county's December 2026 covered jobs as they stood on 15 February 2027, outstanding reports read by cause, the late batches, employers liable with no account, worksite splits)",
+      "fate": "READY 2026-11-10, never uploaded; redrawn 2026-11-17: its call turned on recent counts still filling in (closed by the client on 2026-11-12), it had no proved core, no stump screen and no open-members table, and its prompt asked for a written memo"
     }
   ],
-  "notes": "re-rooted 2026-11-10 as a results chain in the same world at the author's word (architecture 3 returned at review as turning on one thing). weight hard-to-measure: the December jobs the files do not yet hold. forum redrawn from committee_or_panel (task7 v8 in the window) to minister_or_cabinet: the estimate is prepared for the Commissioner of Labor's certification, which the Act requires by 1 March (statutory_or_regulatory_filing); the Board's designation follows it mechanically. second cut 2026-11-10 after the stage 4 judge's pass (deterministic, FIX_NOW): the seasonal lake resorts removed, the downturn reshaped by employer size, bands with a floor, the careful pass recalibrated to the judge's own derivation. The architecture label reworded at the second cut is the same architecture v4: its own prompt shell, filed for a moment as a lineage shell by that re-registration, was taken back out (lineage_shells holds v1 to v3 only). The registration time is architecture 4's draw (01:59:25Z on 2026-11-10, commit DRAWN (task5)); the card's figures and wording were refreshed at the second cut without a new draw, and the refreshes' later stamps were not kept, so the draw order against builds drawn afterwards (task17, 03:33:57Z) stays the true one.",
+  "notes": "architecture 5 (2026-11-17): count to a standard is on task8 only (a school trust's reading groups); the members, lessons, instruments and chain differ throughout (the design note's Template check). S3's lesson is carried under observation_window_coverage for its fix (the uncovered years taken from a second record at a fraction measured on the overlap); nothing is still filling in and no delay factor is fitted, which the note's Closed strategies line answers.",
   "lineage_shells": [
     {
       "question form": "how-many",
@@ -216,60 +335,70 @@
       "second-sentence opener": "certify",
       "rounding opener": "jobs",
       "deliverable set": "csv+xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "the",
+      "rounding opener": "county",
+      "deliverable set": "csv+docx"
     }
   ],
-  "answer_shape": "reconciled-table",
-  "weight": "hard-to-measure",
+  "answer_shape": "allocation-sensitivity",
+  "weight": "assembly",
   "chain_signature": [
     "assembly-reconciliation",
     "missingness-measurement",
-    "causal-reasoning",
-    "missingness-measurement",
-    "forecasting",
     "decomposition-attribution",
-    "synthesis",
-    "synthesis",
-    "validation"
+    "validation",
+    "modeling",
+    "synthesis"
   ],
-  "results": "R1 the census at the cut-off and the December 2025 total against the published one; R2 the outstanding reports by what their absence means, and what those outstanding on their own keep on quarters whose outcomes have landed; R3 this quarter set against the closed ones, which says whether their evidence carries over; R4 the jobs at employers liable but with no account yet; R5 the county split of employers whose worksite report is out; R6 each county's December 2026 jobs, reported and estimated; R7 each county's change on December 2025; R8 the designated counties; R9 the same estimate replayed on December 2025",
-  "registered": "2026-11-10T01:59:25Z",
+  "results": "R1 both reports of every flow among the eight states on one schema, with each host's census counts and vital events; R2 the recording shares (Orlava's arrival share, each partner's share of its own emigrants, each host's arrival share) and the citizens who moved to each host; R3 each host's exits between its two censuses and the share its departures table caught; R4 Fenmark's 2016 count reproduced and 2021 to 2023 held out; R5 the home register's share of moves and of exits by host, and 2024 to 2026 from it; R6 citizens per host on 1 January 2027, officers by the standard, and the citizens who left each host since its 2021 census",
   "shell": {
     "question form": "which",
     "second-sentence opener": "the",
-    "rounding opener": "county",
     "deliverable set": "csv+docx"
   },
   "skeleton": {
-    "decision_form": "set_over_threshold",
-    "answer_pattern": "naive_set_swaps_members",
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
     "lessons": [
-      "reporting_lag_nowcast",
-      "frame_population_mismatch",
-      "inherited_attribute_from_other_unit"
+      "latent_structure_estimation",
+      "conservation_residual_attribution",
+      "observation_window_coverage",
+      "validation_cannot_see_condition"
     ],
     "mechanisms": [
-      "payroll_agent_late_year_end_batches",
-      "missing_alone_keep_a_third",
-      "housing_downturn_construction",
-      "liable_employers_without_account",
-      "seasonal_worksite_split"
+      "each_state_records_its_own_share_of_arrivals_and_of_its_emigrants",
+      "leavers_rarely_deregister_in_the_host",
+      "partner_tables_end_three_years_before_the_home_register",
+      "home_census_asked_where_people_lived_a_year_before",
+      "one_host_registers_seasonal_stays_as_arrivals"
     ],
     "detection": [
-      "record_time_against_event_time",
-      "second_source_at_other_grain"
+      "second_source_at_other_grain",
+      "control_total_gap",
+      "back_test_on_held_out_period"
     ],
     "moves": [
-      "nowcast_from_same_point_prior_years",
-      "impute_by_model_at_own_drivers",
-      "frame_reconciliation_with_register"
+      "weighted_balance_reconciliation",
+      "ratio_benchmark_adjustment",
+      "back_test_select_estimator",
+      "variant_sweep_holds_call"
     ],
     "file_roles": [
       "primary_record",
+      "second_grain_source",
       "reference_register",
       "governing_standard",
-      "frame_or_roster",
-      "second_grain_source",
+      "crosswalk_or_migration_map",
+      "incumbent_figure_or_method",
       "unused_distractor"
     ]
-  }
+  },
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "client_subdomain": "census-register-administrative-data-quality",
+  "architecture_spent": false,
+  "registered": "2026-11-18T02:12:14Z"
 }
