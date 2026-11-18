@@ -12,8 +12,8 @@
   "shape": "15",
   "decision_type": "quantity_figure",
   "answer_unit": "count",
-  "answer": "officers by district 8, 10, 8, 7, 3, 5, 13 (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera) on 36,457; 48,181; 36,488; 32,891; 12,399; 22,690; 62,457 citizens resident on 1 January 2027 (generator/core.py at the draw; the cut pack's figures replace these at READY)",
-  "answer_source": "generator/core.py at the draw; submission.md (Final Recommendation) and generator/figures.json from READY",
+  "answer": "officers by district 8, 10, 8, 7, 3, 5, 13 (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera) on 36,469; 48,116; 36,684; 32,950; 12,227; 22,826; 62,662 citizens resident on 1 January 2027 (generator/figures.json on the cut pack)",
+  "answer_source": "submission.md (Final Recommendation) and generator/figures.json",
   "gap": [
     "objective",
     "time"
@@ -40,18 +40,16 @@
   "layer2_pattern": "own:citizens-abroad-from-twice-reported-flows-a-census-anchored-coverage-chain-and-a-home-register-for-the-years-no-partner-covers",
   "layer1": [
     "state and citizenship codes in three schemes (two letters, three letters, the area's numeric codes)",
-    "flows in persons in most releases and in thousands in two partners'",
     "revised vintages of the same year republished under a later release date",
-    "the home register's events keyed by municipal clerks: destinations as free text, repeats after a re-sync, events entered weeks late",
-    "census tables by citizenship and by country of birth side by side",
-    "a partner's reference year running July to June until 2014"
+    "the home register's events keyed by municipal clerks: states as free text where the code is blank, repeats after a re-sync, events entered up to six weeks late",
+    "census tables by citizenship and by country of birth side by side"
   ],
   "stakeholder_role": "the head of population statistics at Statistics Orlava, whose estimate of citizens abroad the foreign ministry's posting board staffs the consular districts on",
   "role_family": "statistical_office_head",
   "scoring_unit": "other",
   "spine": {
     "file": "orlava_register_migration_events_2011_2026.csv",
-    "rows": 250000,
+    "rows": 512420,
     "entity": "one deregistration or re-registration of a citizen in Orlava's population register",
     "grain": "register event",
     "source": "synthetic"
@@ -91,7 +89,7 @@
   "opening_move": "question-first",
   "question_form": "how-many",
   "driver": "A standard gives each of several districts a whole number of staff from a head count on a future date, and no record holds the head count. Each district counted its members on two past dates; between and after them every movement is reported twice and incompletely, once by the place it enters at that place's own capture rate and once by the place it leaves at that place's own. The capture rates are published nowhere and the twice-reported matrix fixes them only up to one common factor, which a single independent count of one year's entries pins; exits are caught far less than entries and are the residual of the account between the two counts; and the counterparties' tables end three years before the date, so the last years are seen only by the home side's own record, at a fraction measured on the years both report. Taking each district's own tables, the fuller of the two reports, or rates scaled to the best reporter closes every check the record offers and misplaces the head counts by more than a staff step.",
-  "driver_concrete": "Orlava staffs seven consular districts at one officer for every 5,000 citizens or part of 5,000 resident on 1 January 2027. The hosts' registers catch 0.56 to 1.21 of the citizens arriving and 0.24 to 0.97 of those leaving; Orlava's own catches 0.72 of foreign arrivals (pinned by its 2021 census) and 0.36 of its emigrants; the partners' tables end with 2023. Core: 36,457; 48,181; 36,488; 32,891; 12,399; 22,690; 62,457 citizens and 8, 10, 8, 7, 3, 5, 13 officers (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera), where the hosts' tables carried to 2027 give 9, 9, 11, 9, 3, 6, 15.",
+  "driver_concrete": "Orlava staffs seven consular districts at one officer for every 5,000 citizens or part of 5,000 resident on 1 January 2027. The hosts' registers catch 0.56 to 1.21 of the citizens arriving and 0.24 to 0.97 of those leaving; Orlava's own catches 0.72 of foreign arrivals (pinned by its 2021 census) and 0.36 of its emigrants; the partners' tables end with 2023. Core: 36,469; 48,116; 36,684; 32,950; 12,227; 22,826; 62,662 citizens and 8, 10, 8, 7, 3, 5, 13 officers (Skarholm, Brennia, Marovia, Tesmar, Kestria, Fenmark, Almera), where the hosts' tables carried to 2027 give 9, 9, 11, 9, 3, 6, 15.",
   "stump": "A careful but hurried analyst takes each host's arrivals table as the arrivals (Brennia, which records 56 per cent of them, is then an officer short), its departures table as the exits (Marovia, which records 24 per cent of them, is three officers over) and carries 2021 to 2023 through the three years no partner's table reaches (Tesmar, where exits rose by three quarters, is an officer over).",
   "deep_chain": "(1) both reports of every flow among the eight states on one schema for 2011 to 2023, Orlava's own register to 2026, each host's two census counts and its births and deaths of citizens; (2) Orlava's arrival share from its census's foreign citizens who lived abroad a year before, each partner's share of its own emigrants from its flow to Orlava, each host's arrival share from the other partners' citizens moving to it; (3) each host's exits of citizens between its two censuses as the residual of the account on corrected arrivals, and the share its departures table caught; (4) Fenmark's 2016 count reproduced and 2021 to 2023 held out; (5) the share of moves to each host and of exits from it that Orlava's register catches on the years both sides report, and 2024 to 2026 from it; (6) citizens per host on 1 January 2027, officers by the standard, and the citizens who left each host since its 2021 census",
   "judgment": "a recording share no state publishes, fixed by the matrix only up to a level that one census table pins; exits no table holds, taken from the account between two censuses; three years no partner covers, seen by the home register at a fraction",
@@ -353,12 +351,7 @@
     "modeling",
     "synthesis"
   ],
-  "results": "R1 both reports of every flow among the eight states on one schema, with each host's census counts and vital events; R2 the recording shares (Orlava's arrival share, each partner's share of its own emigrants, each host's arrival share) and the citizens who moved to each host; R3 each host's exits between its two censuses and the share its departures table caught; R4 Fenmark's 2016 count reproduced and 2021 to 2023 held out; R5 the home register's share of moves and of exits by host, and 2024 to 2026 from it; R6 citizens per host on 1 January 2027, officers by the standard, and the citizens who left each host since its 2021 census",
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "the",
-    "deliverable set": "csv+docx"
-  },
+  "results": "R1 both reports of every flow among the eight states on one schema, with each host's census counts and vital events; R2 the recording shares (Orlava's arrival share, each partner's share of its own emigrants, each host's arrival share) and the citizens who moved to each host; R3 each host's exits between its two censuses and the share its departures table caught; R4 Fenmark's 2016 count reproduced and 2021 to 2023 held out; R5 the home register's share of moves and of exits by host, and 2024 to 2026 from it; R6 citizens usually resident in each district on 1 January 2027; R7 citizens who moved away from each district from the 2021 census to the end of 2026; R8 the officers the order gives each district",
   "skeleton": {
     "decision_form": "count_to_standard",
     "answer_pattern": "count_off_by_a_few",
@@ -400,5 +393,10 @@
   "doctrine": "throughout",
   "client_subdomain": "census-register-administrative-data-quality",
   "architecture_spent": false,
-  "registered": "2026-11-18T02:12:14Z"
+  "registered": "2026-11-18T03:17:48Z",
+  "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "the",
+    "deliverable set": "csv+xlsx"
+  }
 }

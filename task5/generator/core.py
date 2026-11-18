@@ -41,9 +41,10 @@ HOSTS = ("Skarholm", "Brennia", "Marovia", "Tesmar", "Kestria", "Fenmark", "Alme
 STATES = (HOME,) + HOSTS
 REFHOST = "Fenmark"
 
-# Each host: citizens at the 2011 census; yearly arrivals from Orlava before and after 2021; the yearly share who
-# leave and its path from 2021; the share of arrivals its register records (a) and of departures (d); `early` tilts
-# the exits of the first half of the decade against the second.
+# Each host: yearly arrivals from Orlava from 2021 (inf); the yearly share who leave (e) and its path from 2021; the
+# share of arrivals its register records (a) and of departures (d). n0, inp and `early` seed the draws of the years
+# from 2021 (`_later`): the core was proved on those years, so they are drawn exactly as at the draw, and the decade
+# before them follows each host's own course (COURSE) and joins them at the 2021 census count.
 W = {
     "Skarholm": dict(n0=25750, inp=2600, inf=1700, e=0.050, epath=[1.0, 1.0, 1.15, 1.3, 1.35, 1.4], a=1.00, d=0.48, early=1.0),
     "Brennia": dict(n0=25500, inp=1800, inf=5600, e=0.060, epath=[1.0, 1.0, 1.1, 1.2, 1.25, 1.3], a=0.55, d=0.40, early=1.0),
@@ -63,28 +64,99 @@ RET, AO = 0.82, 0.50                 # exits that are returns home; returns the 
 WIG = 0.02                           # pair to pair wobble of a recording share
 BIRTH, DEATH = 0.0085, 0.0025        # births to and deaths of citizens abroad, per citizen per year
 
+# The decade to the 2021 census, host by host. Arrivals start at `start` a year, drift by `slope` a year and move to
+# the later level around year `mid` of the decade at `pace` (years): a boom that takes off in 2019 and 2020, a
+# destination that fades through the whole decade, the rest giving way at their own times between 2016 and 2020. The yearly
+# share who leave runs from `f0` of its 2021 value in 2011 to all of it by 2021, bent by `bend`. No host changes
+# level between one year and the next, and the 2011 stock is whatever reaches the host's 2021 census count.
+COURSE = {
+    "Skarholm": dict(start=2470, slope=0.020, mid=7.3, pace=0.80, f0=0.94, bend=1.0),
+    "Brennia": dict(start=1620, slope=0.020, mid=8.9, pace=0.50, f0=1.10, bend=1.6),
+    "Marovia": dict(start=3700, slope=0.035, mid=7.6, pace=0.60, f0=0.93, bend=2.0),
+    "Tesmar": dict(start=2950, slope=0.030, mid=7.9, pace=0.50, f0=1.04, bend=1.0),
+    "Kestria": dict(start=800, slope=0.020, mid=30.0, pace=1.00, f0=0.98, bend=1.0),
+    "Fenmark": dict(start=3000, slope=0.000, mid=5.5, pace=2.20, f0=0.50, bend=1.3),
+    "Almera": dict(start=3750, slope=0.030, mid=6.4, pace=0.90, f0=1.05, bend=1.2),
+}
+# Which draw of the decade's noise each host carries. Fenmark's is placed: of draws 0 to 44, 14 keep every row of
+# the forcing table on the golden's officers, three of those also keep the world's own counts inside every band,
+# and 44 is the one of the three that prices lowest (`python3 core.py` and `--forcing` prove it).
+PLACED = {"Fenmark": 44}
+DRAW = {h: int(os.environ.get("CORE_DRAW_" + h.upper(), PLACED.get(h, 0))) for h in HOSTS}
+
+
+def _later(k, h):
+    """The years from 2021, drawn as at the draw of the core (the proof was run on them): the host's arrays from a
+    2011 stock on level arrivals, of which only the 2021 census count and the years after it are kept."""
+    p = W[h]
+    r_in, r_ex, r_nat = (np.random.default_rng([SEED, k, j]) for j in (1, 2, 3))
+    n = np.zeros(NY + 1)
+    inn, ex, b, dth = np.zeros(NY), np.zeros(NY), np.zeros(NY), np.zeros(NY)
+    n[0] = p["n0"]
+    for t in range(NY):
+        if t < 10:
+            lvl = p["inp"] * (1.0 + 0.02 * (t - 5))
+            rate = p["e"] * (p["early"] if t < 5 else (2.0 - p["early"]) if p["early"] != 1.0 else 1.0)
+        else:
+            lvl = p["inf"] * (1.0 + 0.03 * (t - 12.5))
+            rate = p["e"] * p["epath"][t - 10]
+        inn[t] = r_in.poisson(lvl * r_in.lognormal(0.0, 0.06))
+        ex[t] = r_ex.binomial(int(n[t]), min(0.9, rate * r_ex.lognormal(0.0, 0.05)))
+        b[t] = r_nat.poisson(n[t] * BIRTH * (1.0 + 0.1 * (k % 3 - 1)))
+        dth[t] = r_nat.poisson(n[t] * DEATH)
+        n[t + 1] = n[t] + inn[t] - ex[t] + b[t] - dth[t]
+    return dict(n=n, inn=inn, ex=ex, b=b, dth=dth)
+
+
+def _decade(k, h, n21):
+    """2011 to 2020 on the host's own course (COURSE). The year's noise is drawn once, so the 2021 stock rises with
+    the 2011 stock, and the 2011 stock is the one that arrives at the 2021 census count."""
+    p, c = W[h], COURSE[h]
+    rng = np.random.default_rng([SEED, k, 20, DRAW[h]])
+    z_in, z_ex = rng.lognormal(0.0, 0.06, 10), rng.lognormal(0.0, 0.05, 10)
+    u = rng.normal(0.0, 1.0, (4, 10))                       # the counting noise of arrivals, exits, births, deaths
+    t = np.arange(10)
+    s = 1.0 / (1.0 + np.exp(-(t - c["mid"]) / c["pace"]))
+    lvl = c["start"] * (1.0 + c["slope"] * t) * (1.0 - s) + p["inf"] * (1.0 + 0.03 * (10 - 12.5)) * s
+    rate = p["e"] * (c["f0"] + (1.0 - c["f0"]) * (t / 10.0) ** c["bend"])
+    inn = np.maximum(0.0, np.round(lvl * z_in + np.sqrt(lvl * z_in) * u[0]))
+
+    def run(n0):
+        n, ex, b, dth = np.zeros(11), np.zeros(10), np.zeros(10), np.zeros(10)
+        n[0] = n0
+        for i in range(10):
+            q = min(0.9, rate[i] * z_ex[i])
+            ex[i] = max(0.0, np.round(n[i] * q + np.sqrt(n[i] * q * (1.0 - q)) * u[1, i]))
+            mb, md = n[i] * BIRTH * (1.0 + 0.1 * (k % 3 - 1)), n[i] * DEATH
+            b[i] = max(0.0, np.round(mb + np.sqrt(mb) * u[2, i]))
+            dth[i] = max(0.0, np.round(md + np.sqrt(md) * u[3, i]))
+            n[i + 1] = n[i] + inn[i] - ex[i] + b[i] - dth[i]
+        return n, ex, b, dth
+
+    lo, hi = 1, int(4 * n21)
+    while hi - lo > 1:
+        m = (lo + hi) // 2
+        lo, hi = (m, hi) if run(m)[0][10] < n21 else (lo, m)
+    n0 = min(range(max(1, lo - 60), hi + 60), key=lambda x: (abs(run(x)[0][10] - n21), x))
+    n, ex, b, dth = run(n0)
+    assert abs(n[10] - n21) <= 2, (h, n[10], n21)
+    inn = inn.copy()
+    inn[9] += n21 - n[10]
+    n[10] = n21
+    return dict(n=n, inn=inn, ex=ex, b=b, dth=dth)
+
 
 def simulate():
     """The world: each host's citizens year by year, and everybody's moves between the eight states."""
-    w = {}
+    w, later = {}, {}
     for k, h in enumerate(HOSTS):
-        p = W[h]
-        r_in, r_ex, r_nat = (np.random.default_rng([SEED, k, j]) for j in (1, 2, 3))
-        n = np.zeros(NY + 1)
-        inn, ex, nat = np.zeros(NY), np.zeros(NY), np.zeros(NY)
-        n[0] = p["n0"]
-        for t in range(NY):
-            if t < 10:
-                lvl = p["inp"] * (1.0 + 0.02 * (t - 5))
-                rate = p["e"] * (p["early"] if t < 5 else (2.0 - p["early"]) if p["early"] != 1.0 else 1.0)
-            else:
-                lvl = p["inf"] * (1.0 + 0.03 * (t - 12.5))
-                rate = p["e"] * p["epath"][t - 10]
-            inn[t] = r_in.poisson(lvl * r_in.lognormal(0.0, 0.06))
-            ex[t] = r_ex.binomial(int(n[t]), min(0.9, rate * r_ex.lognormal(0.0, 0.05)))
-            nat[t] = r_nat.poisson(n[t] * BIRTH * (1.0 + 0.1 * (k % 3 - 1))) - r_nat.poisson(n[t] * DEATH)
-            n[t + 1] = n[t] + inn[t] - ex[t] + nat[t]
-        w[h] = dict(n=n, inn=inn, ex=ex, nat=nat)
+        q = _later(k, h)
+        d = _decade(k, h, q["n"][10])
+        o = {x: np.concatenate([d[x], q[x][10:]]) for x in ("inn", "ex", "b", "dth")}
+        o["n"] = np.concatenate([d["n"][:10], q["n"][10:]])
+        o["nat"] = o["b"] - o["dth"]
+        assert np.array_equal(o["n"][1:], o["n"][:-1] + o["inn"] - o["ex"] + o["nat"]), h
+        w[h], later[h] = o, q
     rng = np.random.default_rng([SEED, 100])
     T = {}
     for i in STATES:
@@ -96,7 +168,7 @@ def simulate():
             else:
                 lvl = rng.uniform(300, 3500)
                 T[i, j] = rng.poisson(lvl * np.exp(rng.normal(0, 0.08, NY)) * (1.0 + 0.02 * (np.arange(NY) - 8)))
-    return dict(host=w, T=T)
+    return dict(host=w, T=T, later=later)
 
 
 def records(world):
@@ -115,14 +187,28 @@ def records(world):
             t = world["T"][i, j]
             ra = a[j] * (1.0 + rng.uniform(-WIG, WIG))
             rb = b[i] * (1.0 + rng.uniform(-WIG, WIG))
-            recA[i, j] = (rng.binomial(t.astype(int), ra) if ra < 1 else t + rng.poisson(t * (ra - 1.0))).astype(float)
-            recD[i, j] = rng.binomial(t.astype(int), min(0.999, rb)).astype(float)
+
+            def seen(g, v):
+                return ((g.binomial(v.astype(int), ra) if ra < 1 else v + g.poisson(v * (ra - 1.0))).astype(float),
+                        g.binomial(v.astype(int), min(0.999, rb)).astype(float))
+
+            if i == HOME:                       # the years from 2021 as at the draw, the decade before on its own draws
+                recA[i, j], recD[i, j] = seen(rng, world["later"][j]["inn"])
+                g = np.random.default_rng([SEED, 210, y, DRAW[j]])
+                recA[i, j][:10], recD[i, j][:10] = seen(g, t[:10])
+            else:
+                recA[i, j], recD[i, j] = seen(rng, t)
     R = dict(recA=recA, recD=recD, census_in={i: float(world["T"][i, HOME][9]) for i in HOSTS}, host={})
     for k, h in enumerate(HOSTS):
         rng = np.random.default_rng([SEED, 300, k])
         q = world["host"][h]
-        dep = rng.binomial(q["ex"].astype(int), W[h]["d"]).astype(float)        # the host's departures of citizens
-        ret = rng.binomial(rng.binomial(q["ex"].astype(int), RET), AO).astype(float)   # re-registrations at home
+        lx = world["later"][h]["ex"].astype(int)
+        dep = rng.binomial(lx, W[h]["d"]).astype(float)                          # the host's departures of citizens
+        ret = rng.binomial(rng.binomial(lx, RET), AO).astype(float)             # re-registrations at home
+        g = np.random.default_rng([SEED, 310, k, DRAW[h]])
+        x10 = q["ex"][:10].astype(int)
+        dep[:10] = g.binomial(x10, W[h]["d"])
+        ret[:10] = g.binomial(g.binomial(x10, RET), AO)
         R["host"][h] = dict(n11=float(q["n"][CENSUS_A]), n21=float(q["n"][CENSUS_B]), dep=dep, ret=ret,
                             nat=q["nat"].copy(), n16=float(q["n"][REF]) if h == REFHOST else None)
     return R
@@ -198,6 +284,8 @@ def chain(R, h, o=None, upto=NY):
     ex = rec / d
     b_h = R["recD"][HOME, h][ov].sum() / inn[ov].sum() * o.get("x_b", 1.0)     # the home register's share of moves to h
     r_h = q["ret"][ov].sum() / ex[ov].sum() * o.get("x_r", 1.0)                # and of the exits from h
+    if o.get("home") == "pooled":                                # one share for all seven hosts
+        b_h, r_h = pooled_home(R, o)
     n = q["n21"]
     py = 0.0
     for t in range(10, LAST):
@@ -220,6 +308,27 @@ def chain(R, h, o=None, upto=NY):
     out.update(n=float(n), b_h=float(b_h), r_h=float(r_h), left=float(ex[10:LAST].sum() + ex2.sum()),
                late=float(ex2.sum() / ex[10:LAST].sum()), arr=float(inn[10:LAST].sum() + arr2.sum()), n24=float(n24))
     return out
+
+
+_PC = {}
+
+
+def pooled_home(R, o):
+    """The home register's share of moves and of exits over the seven hosts together."""
+    key = tuple(sorted((k, str(v)) for k, v in o.items() if k != "home"))
+    if key not in _PC:
+        o1 = {k: v for k, v in o.items() if k != "home"}
+        ov = slice(*o.get("ov", (0, LAST)))
+        num_b = den_b = num_r = den_r = 0.0
+        for x in HOSTS:
+            g, q = chain(R, x, o1), R["host"][x]
+            rec = q["ret"][:LAST] if o.get("timing") == "home" else q["dep"][:LAST]
+            num_b += R["recD"][HOME, x][ov].sum()
+            den_b += (R["recA"][HOME, x][:LAST] / g["a"])[ov].sum()
+            num_r += q["ret"][ov].sum()
+            den_r += (rec / g["d"])[ov].sum()
+        _PC[key] = (num_b / den_b, num_r / den_r)
+    return _PC[key]
 
 
 def b_home(R, o=None):
@@ -269,7 +378,11 @@ FAMILY = [
     ("exits timed by the home's re-registrations throughout", {"timing": "home"}),
     ("births less deaths carried as a count", {"nat": "count"}),
     ("the level taken from Fenmark's two half-decade accounts", {"anchor": "referee"}),
+    ("one home register share for all seven hosts", {"home": "pooled"}),
 ]
+_SINGLES = [(n, o) for n, o in FAMILY[1:] if len(o) == 1]
+FAMILY += [(n1 + "; " + n2, dict(o1, **o2)) for k, (n1, o1) in enumerate(_SINGLES) for n2, o2 in _SINGLES[k + 1:]
+           if not set(o1) & set(o2)]
 
 
 def lattice_opts():
@@ -310,28 +423,35 @@ def spreads(R, h):
     return out
 
 
-def main():
-    world = simulate()
-    R = records(world)
+def forcing_rows(R):
+    """Each fitted input moved one measured spread up and down, and all four together: (name, citizens by host)."""
+    sp = {h: spreads(R, h) for h in HOSTS}
+    rows = []
+    for k, label in (("x_a", "the host's arrival share"), ("x_d", "the host's departure share"),
+                     ("x_b", "the home register's share of moves"), ("x_r", "the home register's share of exits")):
+        for sign in (-1.0, 1.0):
+            rows.append(("%s, one spread %s" % (label, "down" if sign < 0 else "up"),
+                         {h: {k: 1.0 + sign * sp[h][k]} for h in HOSTS}))
+    for sign in (-1.0, 1.0):                     # the four are not independent (the last three are fitted on the
+        rows.append(("all four %s together, one spread each" % ("down" if sign < 0 else "up"),   # first), so this overstates
+                     {h: {k: 1.0 + sign * sp[h][k] for k in sp[h]} for h in HOSTS}))
+    return [(name, {h: chain(R, h, o[h])["n"] for h in HOSTS}) for name, o in rows], sp
+
+
+def main(world=None, R=None, task="task5 architecture 5", quiet=False):
+    world = world or simulate()
+    R = R or records(world)
+    _FC.clear()
+    _PC.clear()
     lat_o = lattice_opts()
     reflex = "+".join(sorted(HURRIED))
     V = {h: host_view(world, R, h) for h in HOSTS}
-    if "--forcing" in sys.argv:
+    if "--forcing" in sys.argv and not quiet:
         gold = {h: band(V[h]["golden"]) for h in HOSTS}
-        sp = {h: spreads(R, h) for h in HOSTS}
         bad = 0
         print("%-58s %s" % ("fitted input moved", "  ".join("%8s" % h[:8] for h in HOSTS)))
-        rows = []
-        for k, label in (("x_a", "the host's arrival share"), ("x_d", "the host's departure share"),
-                         ("x_b", "the home register's share of moves"), ("x_r", "the home register's share of exits")):
-            for sign in (-1.0, 1.0):
-                rows.append(("%s, one spread %s" % (label, "down" if sign < 0 else "up"),
-                             {h: {k: 1.0 + sign * sp[h][k]} for h in HOSTS}))
-        for sign in (-1.0, 1.0):                 # the four are not independent (the last three are fitted on the
-            rows.append(("all four %s together, one spread each" % ("down" if sign < 0 else "up"),   # first), so this overstates
-                         {h: {k: 1.0 + sign * sp[h][k] for k in sp[h]} for h in HOSTS}))
-        for name, o in rows:
-            v = {h: chain(R, h, o[h])["n"] for h in HOSTS}
+        rows, sp = forcing_rows(R)
+        for name, v in rows:
             same = all(band(v[h]) == gold[h] for h in HOSTS)
             bad += 0 if same else 1
             print("%-58s %s  %s" % (name, "  ".join("%8.0f" % v[h] for h in HOSTS), "same call" if same else "CALL MOVES"))
@@ -375,7 +495,7 @@ def main():
                            "shares scaled to the fullest recorder": chain(R, REFHOST, RIGOROUS, REF)["n"],
                            "arrivals as recorded, the account closed on departures":
                                chain(R, REFHOST, {"a_mode": "raw"}, REF)["n"]})
-    spec = dict(task="task5 architecture 5", call="lines", members=members, lattice=lat, referee=referee,
+    spec = dict(task=task, call="lines", members=members, lattice=lat, referee=referee,
                 figures=figures, stumps={
                     "S1": dict(axis="against", opens="Brennia",
                                said_out_loud="Each state records only a share of the people who move in and a share "
@@ -392,6 +512,8 @@ def main():
                                              "Orlava's own register, which catches a fraction of the moves.",
                                steps_left=3, precedents=["N13", "N28", "L03"]),
                 })
+    if quiet:
+        return spec
     if "--detail" in sys.argv:
         f = factors(R, {})
         print("Orlava's arrival share %.3f (world %.2f); its emigrants who deregistered %.3f (world %.2f)" % (
@@ -417,7 +539,9 @@ def main():
                       band(v["routes"]["mirror"]) + 1, band(v["mean"]) + 1))
         print("variant deviations from the golden")
         for name, o in FAMILY[1:]:
-            print("  %-78s" % name[:78], " ".join("%6.0f" % (chain(R, h, o)["n"] - V[h]["golden"]) for h in HOSTS))
+            if len(o) == 1:
+                print("  %-78s" % name[:78], " ".join("%6.0f" % (chain(R, h, o)["n"] - V[h]["golden"]) for h in HOSTS))
+        print("  %d variants in all (each convention alone and every two that change different choices)" % len(FAMILY))
         print("the account: census 2011, census 2021, golden 1 January 2024, arrivals and exits 2021 to 2026, the world's")
         for h in HOSTS:
             q, g, w = R["host"][h], G[h], world["host"][h]

@@ -1,0 +1,2848 @@
+{
+ "account": {
+  "Almera": [
+   {
+    "arrivals": 4195,
+    "births_less_deaths": 236,
+    "citizens_1_january": 48428,
+    "exits": 2296,
+    "year": 2011
+   },
+   {
+    "arrivals": 3964,
+    "births_less_deaths": 216,
+    "citizens_1_january": 50563,
+    "exits": 2677,
+    "year": 2012
+   },
+   {
+    "arrivals": 4549,
+    "births_less_deaths": 278,
+    "citizens_1_january": 52067,
+    "exits": 2411,
+    "year": 2013
+   },
+   {
+    "arrivals": 4039,
+    "births_less_deaths": 240,
+    "citizens_1_january": 54483,
+    "exits": 2684,
+    "year": 2014
+   },
+   {
+    "arrivals": 4330,
+    "births_less_deaths": 302,
+    "citizens_1_january": 56078,
+    "exits": 2706,
+    "year": 2015
+   },
+   {
+    "arrivals": 4159,
+    "births_less_deaths": 273,
+    "citizens_1_january": 58005,
+    "exits": 2465,
+    "year": 2016
+   },
+   {
+    "arrivals": 3948,
+    "births_less_deaths": 305,
+    "citizens_1_january": 59972,
+    "exits": 2930,
+    "year": 2017
+   },
+   {
+    "arrivals": 3473,
+    "births_less_deaths": 326,
+    "citizens_1_january": 61295,
+    "exits": 2715,
+    "year": 2018
+   },
+   {
+    "arrivals": 3045,
+    "births_less_deaths": 337,
+    "citizens_1_january": 62378,
+    "exits": 2799,
+    "year": 2019
+   },
+   {
+    "arrivals": 3155,
+    "births_less_deaths": 301,
+    "citizens_1_january": 62961,
+    "exits": 2739,
+    "year": 2020
+   },
+   {
+    "arrivals": 2967,
+    "births_less_deaths": 381,
+    "citizens_1_january": 63678,
+    "exits": 2981,
+    "year": 2021
+   },
+   {
+    "arrivals": 3160,
+    "births_less_deaths": 355,
+    "citizens_1_january": 64045,
+    "exits": 3138,
+    "year": 2022
+   },
+   {
+    "arrivals": 2966,
+    "births_less_deaths": 353,
+    "citizens_1_january": 64422,
+    "exits": 3422,
+    "year": 2023
+   },
+   {
+    "arrivals": 3169,
+    "births_less_deaths": 365,
+    "citizens_1_january": 64319,
+    "exits": 3729,
+    "year": 2024
+   },
+   {
+    "arrivals": 3137,
+    "births_less_deaths": 363,
+    "citizens_1_january": 64124,
+    "exits": 4146,
+    "year": 2025
+   },
+   {
+    "arrivals": 3465,
+    "births_less_deaths": 360,
+    "citizens_1_january": 63479,
+    "exits": 4642,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 62662,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Brennia": [
+   {
+    "arrivals": 1662,
+    "births_less_deaths": 164,
+    "citizens_1_january": 24947,
+    "exits": 1529,
+    "year": 2011
+   },
+   {
+    "arrivals": 1564,
+    "births_less_deaths": 137,
+    "citizens_1_january": 25244,
+    "exits": 1599,
+    "year": 2012
+   },
+   {
+    "arrivals": 1535,
+    "births_less_deaths": 152,
+    "citizens_1_january": 25346,
+    "exits": 1627,
+    "year": 2013
+   },
+   {
+    "arrivals": 1650,
+    "births_less_deaths": 164,
+    "citizens_1_january": 25406,
+    "exits": 1708,
+    "year": 2014
+   },
+   {
+    "arrivals": 1833,
+    "births_less_deaths": 159,
+    "citizens_1_january": 25511,
+    "exits": 1601,
+    "year": 2015
+   },
+   {
+    "arrivals": 1551,
+    "births_less_deaths": 173,
+    "citizens_1_january": 25902,
+    "exits": 1861,
+    "year": 2016
+   },
+   {
+    "arrivals": 1782,
+    "births_less_deaths": 148,
+    "citizens_1_january": 25764,
+    "exits": 1713,
+    "year": 2017
+   },
+   {
+    "arrivals": 1989,
+    "births_less_deaths": 156,
+    "citizens_1_january": 25981,
+    "exits": 1565,
+    "year": 2018
+   },
+   {
+    "arrivals": 2139,
+    "births_less_deaths": 173,
+    "citizens_1_january": 26561,
+    "exits": 1362,
+    "year": 2019
+   },
+   {
+    "arrivals": 3387,
+    "births_less_deaths": 152,
+    "citizens_1_january": 27511,
+    "exits": 1799,
+    "year": 2020
+   },
+   {
+    "arrivals": 5279,
+    "births_less_deaths": 188,
+    "citizens_1_january": 29251,
+    "exits": 1383,
+    "year": 2021
+   },
+   {
+    "arrivals": 4901,
+    "births_less_deaths": 215,
+    "citizens_1_january": 33334,
+    "exits": 1852,
+    "year": 2022
+   },
+   {
+    "arrivals": 5085,
+    "births_less_deaths": 227,
+    "citizens_1_january": 36598,
+    "exits": 2055,
+    "year": 2023
+   },
+   {
+    "arrivals": 5276,
+    "births_less_deaths": 253,
+    "citizens_1_january": 39856,
+    "exits": 2771,
+    "year": 2024
+   },
+   {
+    "arrivals": 5586,
+    "births_less_deaths": 271,
+    "citizens_1_january": 42613,
+    "exits": 3231,
+    "year": 2025
+   },
+   {
+    "arrivals": 5948,
+    "births_less_deaths": 287,
+    "citizens_1_january": 45239,
+    "exits": 3358,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 48116,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Fenmark": [
+   {
+    "arrivals": 2531,
+    "births_less_deaths": 51,
+    "citizens_1_january": 8623,
+    "exits": 312,
+    "year": 2011
+   },
+   {
+    "arrivals": 2763,
+    "births_less_deaths": 69,
+    "citizens_1_january": 10892,
+    "exits": 412,
+    "year": 2012
+   },
+   {
+    "arrivals": 2814,
+    "births_less_deaths": 84,
+    "citizens_1_january": 13312,
+    "exits": 575,
+    "year": 2013
+   },
+   {
+    "arrivals": 2724,
+    "births_less_deaths": 80,
+    "citizens_1_january": 15635,
+    "exits": 569,
+    "year": 2014
+   },
+   {
+    "arrivals": 2356,
+    "births_less_deaths": 96,
+    "citizens_1_january": 17870,
+    "exits": 837,
+    "year": 2015
+   },
+   {
+    "arrivals": 2374,
+    "births_less_deaths": 123,
+    "citizens_1_january": 19484,
+    "exits": 875,
+    "year": 2016
+   },
+   {
+    "arrivals": 2043,
+    "births_less_deaths": 147,
+    "citizens_1_january": 21105,
+    "exits": 1097,
+    "year": 2017
+   },
+   {
+    "arrivals": 2043,
+    "births_less_deaths": 146,
+    "citizens_1_january": 22198,
+    "exits": 1178,
+    "year": 2018
+   },
+   {
+    "arrivals": 1764,
+    "births_less_deaths": 149,
+    "citizens_1_january": 23209,
+    "exits": 1353,
+    "year": 2019
+   },
+   {
+    "arrivals": 1613,
+    "births_less_deaths": 166,
+    "citizens_1_january": 23769,
+    "exits": 1462,
+    "year": 2020
+   },
+   {
+    "arrivals": 1327,
+    "births_less_deaths": 167,
+    "citizens_1_january": 24085,
+    "exits": 1472,
+    "year": 2021
+   },
+   {
+    "arrivals": 1375,
+    "births_less_deaths": 166,
+    "citizens_1_january": 24107,
+    "exits": 1747,
+    "year": 2022
+   },
+   {
+    "arrivals": 1355,
+    "births_less_deaths": 174,
+    "citizens_1_january": 23901,
+    "exits": 1766,
+    "year": 2023
+   },
+   {
+    "arrivals": 1556,
+    "births_less_deaths": 166,
+    "citizens_1_january": 23664,
+    "exits": 1877,
+    "year": 2024
+   },
+   {
+    "arrivals": 1751,
+    "births_less_deaths": 165,
+    "citizens_1_january": 23510,
+    "exits": 2110,
+    "year": 2025
+   },
+   {
+    "arrivals": 1454,
+    "births_less_deaths": 164,
+    "citizens_1_january": 23316,
+    "exits": 2107,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 22826,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Kestria": [
+   {
+    "arrivals": 736,
+    "births_less_deaths": 25,
+    "citizens_1_january": 4173,
+    "exits": 233,
+    "year": 2011
+   },
+   {
+    "arrivals": 797,
+    "births_less_deaths": 32,
+    "citizens_1_january": 4701,
+    "exits": 216,
+    "year": 2012
+   },
+   {
+    "arrivals": 825,
+    "births_less_deaths": 36,
+    "citizens_1_january": 5315,
+    "exits": 281,
+    "year": 2013
+   },
+   {
+    "arrivals": 877,
+    "births_less_deaths": 26,
+    "citizens_1_january": 5894,
+    "exits": 272,
+    "year": 2014
+   },
+   {
+    "arrivals": 739,
+    "births_less_deaths": 39,
+    "citizens_1_january": 6525,
+    "exits": 361,
+    "year": 2015
+   },
+   {
+    "arrivals": 896,
+    "births_less_deaths": 41,
+    "citizens_1_january": 6941,
+    "exits": 349,
+    "year": 2016
+   },
+   {
+    "arrivals": 909,
+    "births_less_deaths": 53,
+    "citizens_1_january": 7530,
+    "exits": 398,
+    "year": 2017
+   },
+   {
+    "arrivals": 941,
+    "births_less_deaths": 60,
+    "citizens_1_january": 8093,
+    "exits": 438,
+    "year": 2018
+   },
+   {
+    "arrivals": 816,
+    "births_less_deaths": 68,
+    "citizens_1_january": 8656,
+    "exits": 442,
+    "year": 2019
+   },
+   {
+    "arrivals": 851,
+    "births_less_deaths": 58,
+    "citizens_1_january": 9099,
+    "exits": 502,
+    "year": 2020
+   },
+   {
+    "arrivals": 876,
+    "births_less_deaths": 51,
+    "citizens_1_january": 9506,
+    "exits": 573,
+    "year": 2021
+   },
+   {
+    "arrivals": 1074,
+    "births_less_deaths": 63,
+    "citizens_1_january": 9859,
+    "exits": 522,
+    "year": 2022
+   },
+   {
+    "arrivals": 913,
+    "births_less_deaths": 46,
+    "citizens_1_january": 10474,
+    "exits": 583,
+    "year": 2023
+   },
+   {
+    "arrivals": 1027,
+    "births_less_deaths": 58,
+    "citizens_1_january": 10851,
+    "exits": 623,
+    "year": 2024
+   },
+   {
+    "arrivals": 872,
+    "births_less_deaths": 61,
+    "citizens_1_january": 11313,
+    "exits": 601,
+    "year": 2025
+   },
+   {
+    "arrivals": 1071,
+    "births_less_deaths": 62,
+    "citizens_1_january": 11644,
+    "exits": 551,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 12227,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Marovia": [
+   {
+    "arrivals": 3528,
+    "births_less_deaths": 225,
+    "citizens_1_january": 29257,
+    "exits": 2531,
+    "year": 2011
+   },
+   {
+    "arrivals": 3579,
+    "births_less_deaths": 227,
+    "citizens_1_january": 30479,
+    "exits": 2560,
+    "year": 2012
+   },
+   {
+    "arrivals": 3795,
+    "births_less_deaths": 246,
+    "citizens_1_january": 31726,
+    "exits": 2457,
+    "year": 2013
+   },
+   {
+    "arrivals": 3666,
+    "births_less_deaths": 219,
+    "citizens_1_january": 33310,
+    "exits": 2729,
+    "year": 2014
+   },
+   {
+    "arrivals": 4134,
+    "births_less_deaths": 228,
+    "citizens_1_january": 34467,
+    "exits": 2973,
+    "year": 2015
+   },
+   {
+    "arrivals": 4336,
+    "births_less_deaths": 246,
+    "citizens_1_january": 35856,
+    "exits": 2836,
+    "year": 2016
+   },
+   {
+    "arrivals": 4701,
+    "births_less_deaths": 264,
+    "citizens_1_january": 37602,
+    "exits": 2791,
+    "year": 2017
+   },
+   {
+    "arrivals": 3775,
+    "births_less_deaths": 249,
+    "citizens_1_january": 39776,
+    "exits": 3427,
+    "year": 2018
+   },
+   {
+    "arrivals": 3312,
+    "births_less_deaths": 300,
+    "citizens_1_january": 40374,
+    "exits": 3547,
+    "year": 2019
+   },
+   {
+    "arrivals": 2994,
+    "births_less_deaths": 280,
+    "citizens_1_january": 40439,
+    "exits": 3439,
+    "year": 2020
+   },
+   {
+    "arrivals": 2934,
+    "births_less_deaths": 278,
+    "citizens_1_january": 40274,
+    "exits": 3580,
+    "year": 2021
+   },
+   {
+    "arrivals": 2838,
+    "births_less_deaths": 285,
+    "citizens_1_january": 39907,
+    "exits": 3361,
+    "year": 2022
+   },
+   {
+    "arrivals": 2999,
+    "births_less_deaths": 256,
+    "citizens_1_january": 39669,
+    "exits": 3856,
+    "year": 2023
+   },
+   {
+    "arrivals": 3336,
+    "births_less_deaths": 267,
+    "citizens_1_january": 39067,
+    "exits": 3932,
+    "year": 2024
+   },
+   {
+    "arrivals": 2885,
+    "births_less_deaths": 265,
+    "citizens_1_january": 38739,
+    "exits": 4579,
+    "year": 2025
+   },
+   {
+    "arrivals": 3223,
+    "births_less_deaths": 255,
+    "citizens_1_january": 37309,
+    "exits": 4102,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 36684,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Skarholm": [
+   {
+    "arrivals": 2735,
+    "births_less_deaths": 153,
+    "citizens_1_january": 28476,
+    "exits": 1222,
+    "year": 2011
+   },
+   {
+    "arrivals": 2933,
+    "births_less_deaths": 168,
+    "citizens_1_january": 30142,
+    "exits": 1313,
+    "year": 2012
+   },
+   {
+    "arrivals": 2654,
+    "births_less_deaths": 142,
+    "citizens_1_january": 31930,
+    "exits": 1580,
+    "year": 2013
+   },
+   {
+    "arrivals": 2708,
+    "births_less_deaths": 164,
+    "citizens_1_january": 33147,
+    "exits": 1573,
+    "year": 2014
+   },
+   {
+    "arrivals": 2507,
+    "births_less_deaths": 173,
+    "citizens_1_january": 34446,
+    "exits": 1785,
+    "year": 2015
+   },
+   {
+    "arrivals": 2906,
+    "births_less_deaths": 161,
+    "citizens_1_january": 35341,
+    "exits": 1671,
+    "year": 2016
+   },
+   {
+    "arrivals": 2471,
+    "births_less_deaths": 192,
+    "citizens_1_january": 36738,
+    "exits": 1918,
+    "year": 2017
+   },
+   {
+    "arrivals": 2166,
+    "births_less_deaths": 189,
+    "citizens_1_january": 37483,
+    "exits": 1861,
+    "year": 2018
+   },
+   {
+    "arrivals": 1746,
+    "births_less_deaths": 200,
+    "citizens_1_january": 37977,
+    "exits": 1943,
+    "year": 2019
+   },
+   {
+    "arrivals": 1647,
+    "births_less_deaths": 194,
+    "citizens_1_january": 37980,
+    "exits": 1819,
+    "year": 2020
+   },
+   {
+    "arrivals": 1598,
+    "births_less_deaths": 178,
+    "citizens_1_january": 38003,
+    "exits": 1846,
+    "year": 2021
+   },
+   {
+    "arrivals": 1943,
+    "births_less_deaths": 232,
+    "citizens_1_january": 37933,
+    "exits": 1954,
+    "year": 2022
+   },
+   {
+    "arrivals": 1779,
+    "births_less_deaths": 213,
+    "citizens_1_january": 38154,
+    "exits": 2220,
+    "year": 2023
+   },
+   {
+    "arrivals": 2054,
+    "births_less_deaths": 207,
+    "citizens_1_january": 37925,
+    "exits": 2623,
+    "year": 2024
+   },
+   {
+    "arrivals": 1803,
+    "births_less_deaths": 205,
+    "citizens_1_january": 37563,
+    "exits": 2354,
+    "year": 2025
+   },
+   {
+    "arrivals": 1806,
+    "births_less_deaths": 203,
+    "citizens_1_january": 37217,
+    "exits": 2757,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 36469,
+    "exits": null,
+    "year": 2027
+   }
+  ],
+  "Tesmar": [
+   {
+    "arrivals": 3054,
+    "births_less_deaths": 100,
+    "citizens_1_january": 19455,
+    "exits": 1304,
+    "year": 2011
+   },
+   {
+    "arrivals": 2893,
+    "births_less_deaths": 127,
+    "citizens_1_january": 21305,
+    "exits": 1258,
+    "year": 2012
+   },
+   {
+    "arrivals": 3285,
+    "births_less_deaths": 142,
+    "citizens_1_january": 23067,
+    "exits": 1363,
+    "year": 2013
+   },
+   {
+    "arrivals": 3065,
+    "births_less_deaths": 116,
+    "citizens_1_january": 25131,
+    "exits": 1516,
+    "year": 2014
+   },
+   {
+    "arrivals": 2979,
+    "births_less_deaths": 142,
+    "citizens_1_january": 26796,
+    "exits": 1533,
+    "year": 2015
+   },
+   {
+    "arrivals": 3498,
+    "births_less_deaths": 137,
+    "citizens_1_january": 28384,
+    "exits": 1853,
+    "year": 2016
+   },
+   {
+    "arrivals": 3565,
+    "births_less_deaths": 157,
+    "citizens_1_january": 30167,
+    "exits": 1850,
+    "year": 2017
+   },
+   {
+    "arrivals": 3450,
+    "births_less_deaths": 177,
+    "citizens_1_january": 32038,
+    "exits": 1942,
+    "year": 2018
+   },
+   {
+    "arrivals": 2840,
+    "births_less_deaths": 166,
+    "citizens_1_january": 33723,
+    "exits": 1960,
+    "year": 2019
+   },
+   {
+    "arrivals": 2805,
+    "births_less_deaths": 171,
+    "citizens_1_january": 34769,
+    "exits": 2010,
+    "year": 2020
+   },
+   {
+    "arrivals": 2362,
+    "births_less_deaths": 177,
+    "citizens_1_january": 35735,
+    "exits": 2085,
+    "year": 2021
+   },
+   {
+    "arrivals": 2840,
+    "births_less_deaths": 211,
+    "citizens_1_january": 36189,
+    "exits": 2299,
+    "year": 2022
+   },
+   {
+    "arrivals": 2614,
+    "births_less_deaths": 174,
+    "citizens_1_january": 36942,
+    "exits": 3338,
+    "year": 2023
+   },
+   {
+    "arrivals": 2990,
+    "births_less_deaths": 188,
+    "citizens_1_january": 36392,
+    "exits": 4296,
+    "year": 2024
+   },
+   {
+    "arrivals": 3233,
+    "births_less_deaths": 182,
+    "citizens_1_january": 35274,
+    "exits": 4628,
+    "year": 2025
+   },
+   {
+    "arrivals": 3127,
+    "births_less_deaths": 176,
+    "citizens_1_january": 34061,
+    "exits": 4413,
+    "year": 2026
+   },
+   {
+    "arrivals": null,
+    "births_less_deaths": null,
+    "citizens_1_january": 32950,
+    "exits": null,
+    "year": 2027
+   }
+  ]
+ },
+ "account_rows": 119,
+ "arrivals_2021_2026": {
+  "Almera": 18864,
+  "Brennia": 32075,
+  "Fenmark": 8818,
+  "Kestria": 5833,
+  "Marovia": 18215,
+  "Skarholm": 10982,
+  "Tesmar": 17166
+ },
+ "births_exceed_deaths_everywhere": true,
+ "c1": 36.3,
+ "c1_band": [
+  35.3,
+  36.8
+ ],
+ "c2": 47.3,
+ "c2_band": [
+  44.9,
+  48.2
+ ],
+ "c3": 1.73,
+ "c3_band": [
+  1.7,
+  1.77
+ ],
+ "call": [
+  "Skarholm 8",
+  "Brennia 10",
+  "Marovia 8",
+  "Tesmar 7",
+  "Kestria 3",
+  "Fenmark 5",
+  "Almera 13"
+ ],
+ "census_2011": {
+  "Almera": 48428,
+  "Brennia": 24947,
+  "Fenmark": 8623,
+  "Kestria": 4173,
+  "Marovia": 29257,
+  "Skarholm": 28476,
+  "Tesmar": 19455
+ },
+ "census_2021": {
+  "Almera": 63678,
+  "Brennia": 29251,
+  "Fenmark": 24085,
+  "Kestria": 9506,
+  "Marovia": 40274,
+  "Skarholm": 38003,
+  "Tesmar": 35735
+ },
+ "census_table_abroad": {
+  "Almera": 2236,
+  "Brennia": 1320,
+  "Fenmark": 1973,
+  "Kestria": 2621,
+  "Marovia": 908,
+  "Skarholm": 2884,
+  "Tesmar": 977
+ },
+ "census_table_abroad_total": 12919,
+ "citizens": {
+  "Almera": 62662,
+  "Brennia": 48116,
+  "Fenmark": 22826,
+  "Kestria": 12227,
+  "Marovia": 36684,
+  "Skarholm": 36469,
+  "Tesmar": 32950
+ },
+ "citizens_2024": {
+  "Almera": 64319,
+  "Brennia": 39856,
+  "Fenmark": 23664,
+  "Kestria": 10851,
+  "Marovia": 39067,
+  "Skarholm": 37925,
+  "Tesmar": 36392
+ },
+ "citizens_band": {
+  "Almera": [
+   62210,
+   62980
+  ],
+  "Brennia": [
+   47390,
+   48710
+  ],
+  "Fenmark": [
+   21710,
+   23560
+  ],
+  "Kestria": [
+   11970,
+   12580
+  ],
+  "Marovia": [
+   36050,
+   37220
+  ],
+  "Skarholm": [
+   36130,
+   36650
+  ],
+  "Tesmar": [
+   32280,
+   33370
+  ]
+ },
+ "closure": {
+  "cap": {
+   "hosts": {
+    "Kestria": {
+     "citizens": 11698,
+     "home_moves_measured_pct": 38.6,
+     "home_moves_pct": 31.8,
+     "left": 5219,
+     "officers": 3
+    },
+    "Skarholm": {
+     "citizens": 36432,
+     "home_moves_measured_pct": 35.9,
+     "home_moves_pct": 35.7,
+     "left": 13835,
+     "officers": 8
+    }
+   },
+   "others_home_moves_pct": [
+    35.1,
+    38.0
+   ],
+   "top": "Kestria"
+  },
+  "census_2021_miss_quoted": {
+   "over": {
+    "by": 273,
+    "host": "Skarholm"
+   },
+   "under": {
+    "by": 382,
+    "host": "Brennia"
+   }
+  },
+  "fits": {
+   "by arrivals, both": {
+    "c2": 50.2,
+    "census_2021_miss": {
+     "Almera": 266,
+     "Brennia": -372,
+     "Fenmark": 75,
+     "Kestria": -261,
+     "Marovia": -52,
+     "Skarholm": 307,
+     "Tesmar": 11
+    },
+    "citizens": {
+     "Almera": 62419,
+     "Brennia": 47292,
+     "Fenmark": 21780,
+     "Kestria": 12084,
+     "Marovia": 36349,
+     "Skarholm": 36971,
+     "Tesmar": 32943
+    },
+    "left": {
+     "Almera": 22942,
+     "Brennia": 14433,
+     "Fenmark": 12599,
+     "Kestria": 3319,
+     "Marovia": 24183,
+     "Skarholm": 12964,
+     "Tesmar": 21082
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 257,
+    "referee_value": 19837
+   },
+   "by arrivals, closed": {
+    "c2": 49.2,
+    "census_2021_miss": {
+     "Almera": 0,
+     "Brennia": 0,
+     "Fenmark": 0,
+     "Kestria": 0,
+     "Marovia": 0,
+     "Skarholm": 0,
+     "Tesmar": 0
+    },
+    "citizens": {
+     "Almera": 62195,
+     "Brennia": 47628,
+     "Fenmark": 21683,
+     "Kestria": 12344,
+     "Marovia": 36391,
+     "Skarholm": 36716,
+     "Tesmar": 32929
+    },
+    "left": {
+     "Almera": 23164,
+     "Brennia": 14099,
+     "Fenmark": 12694,
+     "Kestria": 3062,
+     "Marovia": 24142,
+     "Skarholm": 13217,
+     "Tesmar": 21095
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 234,
+    "referee_value": 19814
+   },
+   "by the 2011 count, both": {
+    "c2": 50.5,
+    "census_2021_miss": {
+     "Almera": 285,
+     "Brennia": -379,
+     "Fenmark": 48,
+     "Kestria": -208,
+     "Marovia": -10,
+     "Skarholm": 292,
+     "Tesmar": 16
+    },
+    "citizens": {
+     "Almera": 62373,
+     "Brennia": 47392,
+     "Fenmark": 21807,
+     "Kestria": 12090,
+     "Marovia": 36419,
+     "Skarholm": 37000,
+     "Tesmar": 32956
+    },
+    "left": {
+     "Almera": 23073,
+     "Brennia": 14560,
+     "Fenmark": 12547,
+     "Kestria": 3421,
+     "Marovia": 24058,
+     "Skarholm": 12887,
+     "Tesmar": 21063
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 231,
+    "referee_value": 19811
+   },
+   "by the 2011 count, closed": {
+    "c2": 49.5,
+    "census_2021_miss": {
+     "Almera": 0,
+     "Brennia": 0,
+     "Fenmark": 0,
+     "Kestria": 0,
+     "Marovia": 0,
+     "Skarholm": 0,
+     "Tesmar": 0
+    },
+    "citizens": {
+     "Almera": 62133,
+     "Brennia": 47735,
+     "Fenmark": 21745,
+     "Kestria": 12298,
+     "Marovia": 36427,
+     "Skarholm": 36757,
+     "Tesmar": 32936
+    },
+    "left": {
+     "Almera": 23311,
+     "Brennia": 14220,
+     "Fenmark": 12608,
+     "Kestria": 3215,
+     "Marovia": 24050,
+     "Skarholm": 13128,
+     "Tesmar": 21083
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 216,
+    "referee_value": 19796
+   },
+   "by the square of arrivals, both": {
+    "c2": 49.5,
+    "census_2021_miss": {
+     "Almera": 310,
+     "Brennia": -371,
+     "Fenmark": 116,
+     "Kestria": -188,
+     "Marovia": -405,
+     "Skarholm": 303,
+     "Tesmar": -78
+    },
+    "citizens": {
+     "Almera": 62435,
+     "Brennia": 47541,
+     "Fenmark": 21743,
+     "Kestria": 12103,
+     "Marovia": 35633,
+     "Skarholm": 36891,
+     "Tesmar": 33174
+    },
+    "left": {
+     "Almera": 22956,
+     "Brennia": 14712,
+     "Fenmark": 12674,
+     "Kestria": 3425,
+     "Marovia": 25538,
+     "Skarholm": 13135,
+     "Tesmar": 20594
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 296,
+    "referee_value": 19876
+   },
+   "by the square of arrivals, closed": {
+    "c2": 48.6,
+    "census_2021_miss": {
+     "Almera": 0,
+     "Brennia": 0,
+     "Fenmark": 0,
+     "Kestria": 0,
+     "Marovia": 0,
+     "Skarholm": 0,
+     "Tesmar": 0
+    },
+    "citizens": {
+     "Almera": 62174,
+     "Brennia": 47876,
+     "Fenmark": 21593,
+     "Kestria": 12291,
+     "Marovia": 35960,
+     "Skarholm": 36639,
+     "Tesmar": 33273
+    },
+    "left": {
+     "Almera": 23215,
+     "Brennia": 14380,
+     "Fenmark": 12822,
+     "Kestria": 3240,
+     "Marovia": 25214,
+     "Skarholm": 13385,
+     "Tesmar": 20496
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 259,
+    "referee_value": 19839
+   },
+   "unweighted, both": {
+    "c2": 51.3,
+    "census_2021_miss": {
+     "Almera": 196,
+     "Brennia": -382,
+     "Fenmark": 48,
+     "Kestria": -316,
+     "Marovia": 31,
+     "Skarholm": 273,
+     "Tesmar": 35
+    },
+    "citizens": {
+     "Almera": 62421,
+     "Brennia": 47028,
+     "Fenmark": 21800,
+     "Kestria": 12067,
+     "Marovia": 36551,
+     "Skarholm": 37087,
+     "Tesmar": 32872
+    },
+    "left": {
+     "Almera": 22856,
+     "Brennia": 14154,
+     "Fenmark": 12556,
+     "Kestria": 3247,
+     "Marovia": 23778,
+     "Skarholm": 12679,
+     "Tesmar": 21230
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 233,
+    "referee_value": 19813
+   },
+   "unweighted, closed": {
+    "c2": 50.4,
+    "census_2021_miss": {
+     "Almera": 0,
+     "Brennia": 0,
+     "Fenmark": 0,
+     "Kestria": 0,
+     "Marovia": 0,
+     "Skarholm": 0,
+     "Tesmar": 0
+    },
+    "citizens": {
+     "Almera": 62256,
+     "Brennia": 47373,
+     "Fenmark": 21738,
+     "Kestria": 12382,
+     "Marovia": 36527,
+     "Skarholm": 36860,
+     "Tesmar": 32826
+    },
+    "left": {
+     "Almera": 23020,
+     "Brennia": 13811,
+     "Fenmark": 12617,
+     "Kestria": 2935,
+     "Marovia": 23803,
+     "Skarholm": 12905,
+     "Tesmar": 21274
+    },
+    "officers": {
+     "Almera": 13,
+     "Brennia": 10,
+     "Fenmark": 5,
+     "Kestria": 3,
+     "Marovia": 8,
+     "Skarholm": 8,
+     "Tesmar": 7
+    },
+    "referee_off": 218,
+    "referee_value": 19798
+   }
+  },
+  "hosts": {
+   "Almera": {
+    "golden_pct": 89.0,
+    "interval_pct": [
+     80.1,
+     93.8
+    ],
+    "outside_senders": true,
+    "senders_pct": [
+     87.0,
+     90.8
+    ],
+    "share_pct": 86.4
+   },
+   "Brennia": {
+    "golden_pct": 55.8,
+    "interval_pct": [
+     53.2,
+     65.3
+    ],
+    "outside_senders": true,
+    "senders_pct": [
+     53.7,
+     57.0
+    ],
+    "share_pct": 58.6
+   },
+   "Fenmark": {
+    "golden_pct": 66.8,
+    "interval_pct": [
+     61.4,
+     65.7
+    ],
+    "outside_senders": true,
+    "senders_pct": [
+     65.7,
+     67.5
+    ],
+    "share_pct": 63.5
+   },
+   "Kestria": {
+    "golden_pct": 121.3,
+    "interval_pct": [
+     122.8,
+     136.7
+    ],
+    "outside_senders": true,
+    "senders_pct": [
+     117.5,
+     124.8
+    ],
+    "share_pct": 129.4
+   },
+   "Marovia": {
+    "golden_pct": 85.2,
+    "interval_pct": [
+     76.8,
+     93.0
+    ],
+    "outside_senders": false,
+    "senders_pct": [
+     83.8,
+     87.6
+    ],
+    "share_pct": 84.1
+   },
+   "Skarholm": {
+    "golden_pct": 100.4,
+    "interval_pct": [
+     92.4,
+     121.0
+    ],
+    "outside_senders": true,
+    "senders_pct": [
+     98.3,
+     103.9
+    ],
+    "share_pct": 104.8
+   },
+   "Tesmar": {
+    "golden_pct": 70.7,
+    "interval_pct": [
+     67.3,
+     73.6
+    ],
+    "outside_senders": false,
+    "senders_pct": [
+     67.3,
+     71.3
+    ],
+    "share_pct": 70.3
+   }
+  },
+  "interval_level_pct": 95,
+  "level": {
+   "accounts": 49,
+   "citizens_range": {
+    "Almera": [
+     62325,
+     62826
+    ],
+    "Brennia": [
+     47818,
+     48490
+    ],
+    "Fenmark": [
+     21994,
+     23210
+    ],
+    "Kestria": [
+     12088,
+     12461
+    ],
+    "Marovia": [
+     36233,
+     36963
+    ],
+    "Skarholm": [
+     36223,
+     36545
+    ],
+    "Tesmar": [
+     32476,
+     33100
+    ]
+   },
+   "home_share_pct": [
+    70.8,
+    72.2
+   ],
+   "inside_every_band": true,
+   "officers_same": true,
+   "readings": {
+    "by arrivals, by host": {
+     "citizens": {
+      "Almera": 62637,
+      "Brennia": 48143,
+      "Fenmark": 22789,
+      "Kestria": 12222,
+      "Marovia": 36662,
+      "Skarholm": 36452,
+      "Tesmar": 32909
+     },
+     "home_share_pct": 71.9
+    },
+    "by arrivals, pooled": {
+     "citizens": {
+      "Almera": 62500,
+      "Brennia": 48295,
+      "Fenmark": 22580,
+      "Kestria": 12197,
+      "Marovia": 36540,
+      "Skarholm": 36360,
+      "Tesmar": 32679
+     },
+     "home_share_pct": 71.2
+    },
+    "by the 2011 count, by host": {
+     "citizens": {
+      "Almera": 62589,
+      "Brennia": 48196,
+      "Fenmark": 22715,
+      "Kestria": 12213,
+      "Marovia": 36619,
+      "Skarholm": 36420,
+      "Tesmar": 32828
+     },
+     "home_share_pct": 71.6
+    },
+    "by the 2011 count, pooled": {
+     "citizens": {
+      "Almera": 62424,
+      "Brennia": 48379,
+      "Fenmark": 22464,
+      "Kestria": 12183,
+      "Marovia": 36473,
+      "Skarholm": 36308,
+      "Tesmar": 32552
+     },
+     "home_share_pct": 70.8
+    },
+    "by the square of arrivals, by host": {
+     "citizens": {
+      "Almera": 62584,
+      "Brennia": 48202,
+      "Fenmark": 22707,
+      "Kestria": 12212,
+      "Marovia": 36615,
+      "Skarholm": 36416,
+      "Tesmar": 32819
+     },
+     "home_share_pct": 71.6
+    },
+    "by the square of arrivals, pooled": {
+     "citizens": {
+      "Almera": 62479,
+      "Brennia": 48318,
+      "Fenmark": 22548,
+      "Kestria": 12193,
+      "Marovia": 36522,
+      "Skarholm": 36345,
+      "Tesmar": 32644
+     },
+     "home_share_pct": 71.1
+    },
+    "unweighted, by host": {
+     "citizens": {
+      "Almera": 62689,
+      "Brennia": 48086,
+      "Fenmark": 22868,
+      "Kestria": 12232,
+      "Marovia": 36708,
+      "Skarholm": 36488,
+      "Tesmar": 32996
+     },
+     "home_share_pct": 72.2
+    },
+    "unweighted, pooled": {
+     "citizens": {
+      "Almera": 62556,
+      "Brennia": 48233,
+      "Fenmark": 22665,
+      "Kestria": 12207,
+      "Marovia": 36590,
+      "Skarholm": 36397,
+      "Tesmar": 32773
+     },
+     "home_share_pct": 71.5
+    }
+   },
+   "rebuilds": 112
+  },
+  "nearest_line": {
+   "citizens": 35633,
+   "distance": 633,
+   "host": "Marovia"
+  },
+  "officers_same": true,
+  "officers_total": 54,
+  "outside_senders": [
+   "Skarholm",
+   "Brennia",
+   "Kestria",
+   "Fenmark",
+   "Almera"
+  ],
+  "pooled_departures": {
+   "Almera": {
+    "census_2021": 63826,
+    "citizens": 62787,
+    "left": 21934,
+    "share_pct": 55.2
+   },
+   "Brennia": {
+    "census_2021": 28846,
+    "citizens": 47751,
+    "left": 15013,
+    "share_pct": 40.8
+   },
+   "Fenmark": {
+    "census_2021": 23579,
+    "citizens": 22173,
+    "left": 11726,
+    "share_pct": 30.2
+   },
+   "Kestria": {
+    "census_2021": 9379,
+    "citizens": 12100,
+    "left": 3578,
+    "share_pct": 93.3
+   },
+   "Marovia": {
+    "census_2021": 40305,
+    "citizens": 36709,
+    "left": 23386,
+    "share_pct": 24.2
+   },
+   "Skarholm": {
+    "census_2021": 38414,
+    "citizens": 36811,
+    "left": 13416,
+    "share_pct": 48.5
+   },
+   "Tesmar": {
+    "census_2021": 35736,
+    "citizens": 32952,
+    "left": 21057,
+    "share_pct": 45.7
+   }
+  },
+  "referee_off": [
+   216,
+   296
+  ],
+  "weightings": 4
+ },
+ "counts": {
+  "blank_codes": 75063,
+  "entered_last": "2027-02-09",
+  "entry_lag_max_days": 42,
+  "pairs": 56,
+  "register_events": 510271,
+  "register_repeats": 2628,
+  "register_rows": 512899,
+  "releases": [
+   "2014",
+   "2026"
+  ],
+  "states": 8,
+  "table_cells": 39936,
+  "table_rows": 41508,
+  "table_rows_superseded": 1572,
+  "years_register": [
+   2011,
+   2026
+  ],
+  "years_tables": [
+   2011,
+   2023
+  ]
+ },
+ "exits_decade": {
+  "Almera": 26421,
+  "Brennia": 16365,
+  "Fenmark": 8672,
+  "Kestria": 3492,
+  "Marovia": 29289,
+  "Skarholm": 16685,
+  "Tesmar": 16589
+ },
+ "face_value_census_gap": 38085,
+ "face_value_census_gap_by_host": {
+  "Almera": 7639,
+  "Brennia": 1072,
+  "Fenmark": -1752,
+  "Kestria": 1902,
+  "Marovia": 16611,
+  "Skarholm": 8892,
+  "Tesmar": -217
+ },
+ "family_calls_all_golden": true,
+ "held_out": {
+  "Almera": {
+   "arrivals": 9093,
+   "carried": 9672,
+   "register_scaled": 9090
+  },
+  "Brennia": {
+   "arrivals": 15265,
+   "carried": 7515,
+   "register_scaled": 15482
+  },
+  "Fenmark": {
+   "arrivals": 4057,
+   "carried": 5420,
+   "register_scaled": 4337
+  },
+  "Kestria": {
+   "arrivals": 2863,
+   "carried": 2608,
+   "register_scaled": 2646
+  },
+  "Marovia": {
+   "arrivals": 8771,
+   "carried": 10081,
+   "register_scaled": 8653
+  },
+  "Skarholm": {
+   "arrivals": 5320,
+   "carried": 5560,
+   "register_scaled": 5327
+  },
+  "Tesmar": {
+   "arrivals": 7816,
+   "carried": 9095,
+   "register_scaled": 7901
+  }
+ },
+ "hurried": {
+  "c1": 44.9,
+  "c2": 100.0,
+  "c3": 1.06
+ },
+ "late_entries": {
+  "outstanding": 1,
+  "over_reach_pct": 1.1,
+  "reach_days": 40,
+  "tail_days": 2,
+  "tail_moves": 172
+ },
+ "late_ratio": {
+  "Almera": 1.31,
+  "Brennia": 1.77,
+  "Fenmark": 1.22,
+  "Kestria": 1.06,
+  "Marovia": 1.17,
+  "Skarholm": 1.28,
+  "Tesmar": 1.73
+ },
+ "left": {
+  "Almera": 22057,
+  "Brennia": 14651,
+  "Fenmark": 11079,
+  "Kestria": 3453,
+  "Marovia": 23410,
+  "Skarholm": 13755,
+  "Tesmar": 21059
+ },
+ "left_band": {
+  "Almera": [
+   21370,
+   22940
+  ],
+  "Brennia": [
+   14080,
+   15420
+  ],
+  "Fenmark": [
+   10340,
+   12040
+  ],
+  "Kestria": [
+   3240,
+   3790
+  ],
+  "Marovia": [
+   22770,
+   24410
+  ],
+  "Skarholm": [
+   13440,
+   14480
+  ],
+  "Tesmar": [
+   20330,
+   22220
+  ]
+ },
+ "margin_to_line": 1469,
+ "mean_route_home_share_pct": 88.1,
+ "natural_2011_2020": {
+  "Almera": 2814,
+  "Brennia": 1578,
+  "Fenmark": 1111,
+  "Kestria": 438,
+  "Marovia": 2484,
+  "Skarholm": 1736,
+  "Tesmar": 1435
+ },
+ "natural_rate_per_1000": {
+  "Almera": 5.67,
+  "Brennia": 6.35,
+  "Fenmark": 7.03,
+  "Kestria": 5.36,
+  "Marovia": 6.83,
+  "Skarholm": 5.46,
+  "Tesmar": 5.16
+ },
+ "nearest_variant": {
+  "citizens": 36218,
+  "distance": 1218,
+  "host": "Skarholm",
+  "variant": "host share as their median; the level taken from Fenmark's two half-decade accounts"
+ },
+ "officers": {
+  "Almera": 13,
+  "Brennia": 10,
+  "Fenmark": 5,
+  "Kestria": 3,
+  "Marovia": 8,
+  "Skarholm": 8,
+  "Tesmar": 7
+ },
+ "officers_change": {
+  "Almera": 0,
+  "Brennia": 4,
+  "Fenmark": 0,
+  "Kestria": 1,
+  "Marovia": -1,
+  "Skarholm": 0,
+  "Tesmar": -1
+ },
+ "officers_in_force": {
+  "Almera": 13,
+  "Brennia": 6,
+  "Fenmark": 5,
+  "Kestria": 2,
+  "Marovia": 9,
+  "Skarholm": 8,
+  "Tesmar": 8
+ },
+ "officers_total": [
+  51,
+  54
+ ],
+ "other_row": {
+  "call_holds": true,
+  "citizens": {
+   "Almera": 62693,
+   "Brennia": 48082,
+   "Fenmark": 22873,
+   "Kestria": 12232,
+   "Marovia": 36712,
+   "Skarholm": 36490,
+   "Tesmar": 33002
+  },
+  "inside_bands": true,
+  "share_pct": 72.2
+ },
+ "perturbations": [
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 62411,
+    "Brennia": 48482,
+    "Fenmark": 22493,
+    "Kestria": 12164,
+    "Marovia": 36443,
+    "Skarholm": 36218,
+    "Tesmar": 32467
+   },
+   "input": "the host's arrival share, one spread down"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 62905,
+    "Brennia": 47766,
+    "Fenmark": 23149,
+    "Kestria": 12287,
+    "Marovia": 36916,
+    "Skarholm": 36708,
+    "Tesmar": 33414
+   },
+   "input": "the host's arrival share, one spread up"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 62061,
+    "Brennia": 47698,
+    "Fenmark": 22350,
+    "Kestria": 12014,
+    "Marovia": 36078,
+    "Skarholm": 35918,
+    "Tesmar": 32102
+   },
+   "input": "the host's departure share, one spread down"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 63232,
+    "Brennia": 48511,
+    "Fenmark": 23265,
+    "Kestria": 12416,
+    "Marovia": 37260,
+    "Skarholm": 36980,
+    "Tesmar": 33736
+   },
+   "input": "the host's departure share, one spread up"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 63081,
+    "Brennia": 48759,
+    "Fenmark": 23145,
+    "Kestria": 12465,
+    "Marovia": 37052,
+    "Skarholm": 36624,
+    "Tesmar": 33210
+   },
+   "input": "the home register's share of moves, one spread down"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 62276,
+    "Brennia": 47518,
+    "Fenmark": 22545,
+    "Kestria": 12021,
+    "Marovia": 36343,
+    "Skarholm": 36323,
+    "Tesmar": 32704
+   },
+   "input": "the home register's share of moves, one spread up"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 62244,
+    "Brennia": 47671,
+    "Fenmark": 22364,
+    "Kestria": 12052,
+    "Marovia": 36359,
+    "Skarholm": 36160,
+    "Tesmar": 32414
+   },
+   "input": "the home register's share of exits, one spread down"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 63054,
+    "Brennia": 48522,
+    "Fenmark": 23228,
+    "Kestria": 12373,
+    "Marovia": 36994,
+    "Skarholm": 36756,
+    "Tesmar": 33447
+   },
+   "input": "the home register's share of exits, one spread up"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 61780,
+    "Brennia": 48241,
+    "Fenmark": 21818,
+    "Kestria": 11987,
+    "Marovia": 35855,
+    "Skarholm": 35468,
+    "Tesmar": 31270
+   },
+   "input": "all four down together, one spread each"
+  },
+  {
+   "call_holds": true,
+   "citizens": {
+    "Almera": 63452,
+    "Brennia": 47952,
+    "Fenmark": 23663,
+    "Kestria": 12394,
+    "Marovia": 37437,
+    "Skarholm": 37322,
+    "Tesmar": 34388
+   },
+   "input": "all four up together, one spread each"
+  }
+ ],
+ "rate": 5000,
+ "referee": {
+  "band": [
+   19410,
+   19620
+  ],
+  "count": 19580,
+  "golden": 19484,
+  "off": 96,
+  "rivals": {
+   "arrivals as recorded, the account closed on departures": {
+    "off": 2090,
+    "value": 17490
+   },
+   "shares scaled about their own average": {
+    "off": 1194,
+    "value": 18386
+   },
+   "shares scaled to the fullest recorder": {
+    "off": 1181,
+    "value": 20761
+   },
+   "the host's tables at face value": {
+    "off": 2637,
+    "value": 16943
+   },
+   "the larger report of each flow": {
+    "off": 2905,
+    "value": 16675
+   }
+  }
+ },
+ "referee_citizens": 19484,
+ "register_arrivals_2020": {
+  "Almera": 1624,
+  "Brennia": 934,
+  "Fenmark": 1388,
+  "Kestria": 1889,
+  "Marovia": 659,
+  "Skarholm": 2085,
+  "Tesmar": 725
+ },
+ "register_arrivals_2020_total": 9304,
+ "register_deregistrations_2011_2026": {
+  "Almera": 20256,
+  "Brennia": 18960,
+  "Fenmark": 12112,
+  "Kestria": 5482,
+  "Marovia": 19735,
+  "Skarholm": 12724,
+  "Tesmar": 17828
+ },
+ "register_deregistrations_2024_2026": {
+  "Almera": 3429,
+  "Brennia": 6229,
+  "Fenmark": 1811,
+  "Kestria": 1145,
+  "Marovia": 3326,
+  "Skarholm": 2032,
+  "Tesmar": 3430
+ },
+ "register_returns_2011_2026": {
+  "Almera": 19645,
+  "Brennia": 13151,
+  "Fenmark": 8416,
+  "Kestria": 3087,
+  "Marovia": 21658,
+  "Skarholm": 12543,
+  "Tesmar": 15773
+ },
+ "register_returns_2021_2023": {
+  "Almera": 3836,
+  "Brennia": 2302,
+  "Fenmark": 2059,
+  "Kestria": 766,
+  "Marovia": 4490,
+  "Skarholm": 2468,
+  "Tesmar": 3243
+ },
+ "register_returns_2024_2026": {
+  "Almera": 5072,
+  "Brennia": 3969,
+  "Fenmark": 2597,
+  "Kestria": 789,
+  "Marovia": 5184,
+  "Skarholm": 3187,
+  "Tesmar": 5588
+ },
+ "result_grades": {
+  "S1": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "right",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S1+S2": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "right",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S1+S2+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S1+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S2": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "right",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S2+S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "right",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "partly"
+  }
+ },
+ "rigorous_c": {
+  "C1": 29.9,
+  "C2": 36.04,
+  "C3": 1.73
+ },
+ "rigorous_home_share_pct": 59.4,
+ "route_officer_totals": {
+  "S1": 55,
+  "S1+S2": 61,
+  "S1+S2+S3": 62,
+  "S1+S3": 57,
+  "S2": 66,
+  "S2+S3": 66,
+  "S3": 55,
+  "direct": 58,
+  "mean": 57,
+  "mirror": 61,
+  "rigorous": 50
+ },
+ "routes": {
+  "S1": {
+   "citizens": {
+    "Almera": 64169,
+    "Brennia": 41429,
+    "Fenmark": 29737,
+    "Kestria": 11698,
+    "Marovia": 38476,
+    "Skarholm": 36432,
+    "Tesmar": 39668
+   },
+   "name": "each host's arrivals table taken as the arrivals",
+   "officers": {
+    "Almera": 13,
+    "Brennia": 9,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 8,
+    "Skarholm": 8,
+    "Tesmar": 8
+   }
+  },
+  "S1+S2": {
+   "citizens": {
+    "Almera": 70597,
+    "Brennia": 42397,
+    "Fenmark": 27477,
+    "Kestria": 13594,
+    "Marovia": 51880,
+    "Skarholm": 43820,
+    "Tesmar": 39391
+   },
+   "name": "the hosts' tables at face value to 2023, 2024 to 2026 from the home register",
+   "officers": {
+    "Almera": 15,
+    "Brennia": 9,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 11,
+    "Skarholm": 9,
+    "Tesmar": 8
+   }
+  },
+  "S1+S2+S3": {
+   "citizens": {
+    "Almera": 71324,
+    "Brennia": 42773,
+    "Fenmark": 27257,
+    "Kestria": 13246,
+    "Marovia": 51395,
+    "Skarholm": 44061,
+    "Tesmar": 40653
+   },
+   "name": "the hosts' tables at face value from the 2021 census, 2021 to 2023 carried forward",
+   "officers": {
+    "Almera": 15,
+    "Brennia": 9,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 11,
+    "Skarholm": 9,
+    "Tesmar": 9
+   }
+  },
+  "S1+S3": {
+   "citizens": {
+    "Almera": 65939,
+    "Brennia": 42028,
+    "Fenmark": 29333,
+    "Kestria": 11448,
+    "Marovia": 39482,
+    "Skarholm": 37840,
+    "Tesmar": 40854
+   },
+   "name": "arrivals as tabled, the account closed between the censuses, 2021 to 2023 carried forward",
+   "officers": {
+    "Almera": 14,
+    "Brennia": 9,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 8,
+    "Skarholm": 8,
+    "Tesmar": 9
+   }
+  },
+  "S2": {
+   "citizens": {
+    "Almera": 72693,
+    "Brennia": 56703,
+    "Fenmark": 30435,
+    "Kestria": 12343,
+    "Marovia": 54594,
+    "Skarholm": 43776,
+    "Tesmar": 44463
+   },
+   "name": "each host's departures table taken as the exits",
+   "officers": {
+    "Almera": 15,
+    "Brennia": 12,
+    "Fenmark": 7,
+    "Kestria": 3,
+    "Marovia": 11,
+    "Skarholm": 9,
+    "Tesmar": 9
+   }
+  },
+  "S2+S3": {
+   "citizens": {
+    "Almera": 73267,
+    "Brennia": 55989,
+    "Fenmark": 29896,
+    "Kestria": 12109,
+    "Marovia": 53933,
+    "Skarholm": 44020,
+    "Tesmar": 45063
+   },
+   "name": "arrivals corrected, departures as tabled, 2021 to 2023 carried forward",
+   "officers": {
+    "Almera": 15,
+    "Brennia": 12,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 11,
+    "Skarholm": 9,
+    "Tesmar": 10
+   }
+  },
+  "S3": {
+   "citizens": {
+    "Almera": 64899,
+    "Brennia": 49056,
+    "Fenmark": 23334,
+    "Kestria": 11997,
+    "Marovia": 38161,
+    "Skarholm": 37866,
+    "Tesmar": 36987
+   },
+   "name": "2021 to 2023 carried through 2024 to 2026",
+   "officers": {
+    "Almera": 13,
+    "Brennia": 10,
+    "Fenmark": 5,
+    "Kestria": 3,
+    "Marovia": 8,
+    "Skarholm": 8,
+    "Tesmar": 8
+   }
+  },
+  "direct": {
+   "citizens": {
+    "Almera": 67622,
+    "Brennia": 36180,
+    "Fenmark": 25706,
+    "Kestria": 11516,
+    "Marovia": 45954,
+    "Skarholm": 41120,
+    "Tesmar": 38290
+   },
+   "name": "each host's 2021 census count and its own tables to 1 January 2024, taken as the latest figure",
+   "officers": {
+    "Almera": 14,
+    "Brennia": 8,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 10,
+    "Skarholm": 9,
+    "Tesmar": 8
+   }
+  },
+  "mean": {
+   "citizens": {
+    "Almera": 65165,
+    "Brennia": 45350,
+    "Fenmark": 26633,
+    "Kestria": 12681,
+    "Marovia": 38904,
+    "Skarholm": 38164,
+    "Tesmar": 37141
+   },
+   "name": "shares scaled about their own average",
+   "officers": {
+    "Almera": 14,
+    "Brennia": 10,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 8,
+    "Skarholm": 8,
+    "Tesmar": 8
+   }
+  },
+  "mirror": {
+   "citizens": {
+    "Almera": 71566,
+    "Brennia": 42933,
+    "Fenmark": 26399,
+    "Kestria": 13526,
+    "Marovia": 47884,
+    "Skarholm": 44237,
+    "Tesmar": 40845
+   },
+   "name": "the larger of the two reports of every flow, the last three years repeated",
+   "officers": {
+    "Almera": 15,
+    "Brennia": 9,
+    "Fenmark": 6,
+    "Kestria": 3,
+    "Marovia": 10,
+    "Skarholm": 9,
+    "Tesmar": 9
+   }
+  },
+  "rigorous": {
+   "citizens": {
+    "Almera": 59751,
+    "Brennia": 51332,
+    "Fenmark": 18396,
+    "Kestria": 11698,
+    "Marovia": 34101,
+    "Skarholm": 34497,
+    "Tesmar": 28075
+   },
+   "name": "shares scaled so the fullest recorder is complete",
+   "officers": {
+    "Almera": 12,
+    "Brennia": 11,
+    "Fenmark": 4,
+    "Kestria": 3,
+    "Marovia": 7,
+    "Skarholm": 7,
+    "Tesmar": 6
+   }
+  }
+ },
+ "routes_c": {
+  "C1": {
+   "S1": 44.89,
+   "S1+S2": 44.89,
+   "S1+S2+S3": 44.89,
+   "S1+S3": 44.89,
+   "S2": 36.27,
+   "S2+S3": 36.27,
+   "S3": 36.27
+  },
+  "C2": {
+   "S1": 47.01,
+   "S1+S2": 100.0,
+   "S1+S2+S3": 100.0,
+   "S1+S3": 47.01,
+   "S2": 100.0,
+   "S2+S3": 100.0,
+   "S3": 47.29
+  },
+  "C3": {
+   "S1": 1.73,
+   "S1+S2": 1.73,
+   "S1+S2+S3": 1.06,
+   "S1+S3": 1.07,
+   "S2": 1.73,
+   "S2+S3": 1.12,
+   "S3": 1.01
+  }
+ },
+ "routes_left": {
+  "S1": {
+   "Almera": 18482,
+   "Brennia": 7091,
+   "Fenmark": 1307,
+   "Kestria": 5219,
+   "Marovia": 18947,
+   "Skarholm": 13835,
+   "Tesmar": 9352
+  },
+  "S1+S2": {
+   "Almera": 12105,
+   "Brennia": 6132,
+   "Fenmark": 3545,
+   "Kestria": 3338,
+   "Marovia": 5670,
+   "Skarholm": 6504,
+   "Tesmar": 9628
+  },
+  "S1+S2+S3": {
+   "Almera": 10777,
+   "Brennia": 4898,
+   "Fenmark": 3292,
+   "Kestria": 3554,
+   "Marovia": 5578,
+   "Skarholm": 5919,
+   "Tesmar": 7288
+  },
+  "S1+S3": {
+   "Almera": 16117,
+   "Brennia": 5636,
+   "Fenmark": 1238,
+   "Kestria": 5339,
+   "Marovia": 17372,
+   "Skarholm": 12089,
+   "Tesmar": 7089
+  },
+  "S2": {
+   "Almera": 12105,
+   "Brennia": 6132,
+   "Fenmark": 3545,
+   "Kestria": 3338,
+   "Marovia": 5670,
+   "Skarholm": 6504,
+   "Tesmar": 9628
+  },
+  "S2+S3": {
+   "Almera": 10854,
+   "Brennia": 5300,
+   "Fenmark": 3375,
+   "Kestria": 3465,
+   "Marovia": 5653,
+   "Skarholm": 5917,
+   "Tesmar": 7498
+  },
+  "S3": {
+   "Almera": 19152,
+   "Brennia": 12174,
+   "Fenmark": 9869,
+   "Kestria": 3576,
+   "Marovia": 21268,
+   "Skarholm": 12021,
+   "Tesmar": 15509
+  }
+ },
+ "rubric": {
+  "fails": [],
+  "fixed_alone": {
+   "S1": 23.2,
+   "S2": 15.7,
+   "S3": 19.5
+  },
+  "level": 5,
+  "one_lost": {
+   "S1": 29.9,
+   "S2": 29.9,
+   "S3": 33.7
+  },
+  "reflex": 12.8,
+  "rigorous": 15.7
+ },
+ "share_home_arrivals_by_citizenship_pct": [
+  70.3,
+  74.2
+ ],
+ "share_home_arrivals_pct": 72.0,
+ "share_home_exits_pct": {
+  "Almera": 40.5,
+  "Brennia": 42.4,
+  "Fenmark": 42.6,
+  "Kestria": 44.4,
+  "Marovia": 41.1,
+  "Skarholm": 41.2,
+  "Tesmar": 41.9
+ },
+ "share_home_moves_pct": {
+  "Almera": 35.1,
+  "Brennia": 37.1,
+  "Fenmark": 38.0,
+  "Kestria": 38.6,
+  "Marovia": 35.2,
+  "Skarholm": 35.9,
+  "Tesmar": 36.7
+ },
+ "share_host_arrivals_pct": {
+  "Almera": 89.0,
+  "Brennia": 55.8,
+  "Fenmark": 66.8,
+  "Kestria": 121.3,
+  "Marovia": 85.2,
+  "Skarholm": 100.4,
+  "Tesmar": 70.7
+ },
+ "share_host_departures_pct": {
+  "Almera": 54.9,
+  "Brennia": 41.9,
+  "Fenmark": 32.0,
+  "Kestria": 96.7,
+  "Marovia": 24.2,
+  "Skarholm": 47.3,
+  "Tesmar": 45.7
+ },
+ "share_partner_emigrants_pct": {
+  "Almera": 69.4,
+  "Brennia": 52.8,
+  "Fenmark": 37.8,
+  "Kestria": 50.8,
+  "Marovia": 44.8,
+  "Skarholm": 81.5,
+  "Tesmar": 61.9
+ },
+ "spreads_pct": {
+  "Almera": {
+   "x_a": 1.8,
+   "x_b": 4.09,
+   "x_d": 2.63,
+   "x_r": 3.21
+  },
+  "Brennia": {
+   "x_a": 2.37,
+   "x_b": 3.66,
+   "x_d": 2.75,
+   "x_r": 4.51
+  },
+  "Fenmark": {
+   "x_a": 1.58,
+   "x_b": 6.23,
+   "x_d": 4.08,
+   "x_r": 7.01
+  },
+  "Kestria": {
+   "x_a": 2.48,
+   "x_b": 7.4,
+   "x_d": 5.75,
+   "x_r": 8.91
+  },
+  "Marovia": {
+   "x_a": 1.94,
+   "x_b": 3.72,
+   "x_d": 2.5,
+   "x_r": 2.5
+  },
+  "Skarholm": {
+   "x_a": 2.64,
+   "x_b": 2.64,
+   "x_d": 3.83,
+   "x_r": 3.83
+  },
+  "Tesmar": {
+   "x_a": 2.07,
+   "x_b": 2.69,
+   "x_d": 3.85,
+   "x_r": 3.85
+  }
+ },
+ "stated": {
+  "board_meeting": "18 March 2027",
+  "c14": "C-14",
+  "census_dates": [
+   "1 January 2011",
+   "1 January 2021",
+   "1 January 2016",
+   "1 January 2020"
+  ],
+  "cycle": [
+   2027,
+   2029
+  ],
+  "months": 24,
+  "order": [
+   "1.1",
+   "2.1",
+   "2.2",
+   "2.3",
+   "3.1",
+   "4.1"
+  ],
+  "order_no": 14,
+  "order_year": 2025,
+  "question": 14,
+  "regulation": [
+   "2",
+   "3",
+   "4",
+   "5",
+   "6"
+  ],
+  "regulation_no": [
+   7,
+   2009
+  ],
+  "release": "May 2026",
+  "twelve_months": 12,
+  "windows": [
+   [
+    2014,
+    2023
+   ],
+   [
+    2016,
+    2023
+   ],
+   [
+    2019,
+    2023
+   ],
+   [
+    2011,
+    2020
+   ],
+   [
+    2021,
+    2023
+   ]
+  ]
+ },
+ "tabled_arrivals_2011_2023": {
+  "Almera": 42666,
+  "Brennia": 19160,
+  "Fenmark": 18083,
+  "Kestria": 13644,
+  "Marovia": 39714,
+  "Skarholm": 29914,
+  "Tesmar": 27735
+ },
+ "tabled_departures_2011_2023": {
+  "Almera": 19736,
+  "Brennia": 9063,
+  "Fenmark": 4370,
+  "Kestria": 4997,
+  "Marovia": 9709,
+  "Skarholm": 10737,
+  "Tesmar": 11114
+ },
+ "truth": {
+  "Almera": 62774,
+  "Brennia": 48083,
+  "Fenmark": 22273,
+  "Kestria": 12219,
+  "Marovia": 36501,
+  "Skarholm": 36421,
+  "Tesmar": 32637
+ },
+ "truth_left": {
+  "Almera": 21926,
+  "Brennia": 15390,
+  "Fenmark": 11816,
+  "Kestria": 3678,
+  "Marovia": 23411,
+  "Skarholm": 13670,
+  "Tesmar": 21576
+ },
+ "truth_officers": {
+  "Almera": 13,
+  "Brennia": 10,
+  "Fenmark": 5,
+  "Kestria": 3,
+  "Marovia": 8,
+  "Skarholm": 8,
+  "Tesmar": 7
+ },
+ "variant_names": [
+  "the golden",
+  "home share as the mean of the seven partners' ratios",
+  "home share as their median",
+  "host share as the mean of the senders' ratios",
+  "host share as their median",
+  "the smallest sender to each host dropped",
+  "shares fitted on 2014 to 2023",
+  "shares fitted on 2011 to 2020",
+  "shares fitted on 2016 to 2023",
+  "home register's shares on 2016 to 2023",
+  "home register's shares on 2019 to 2023",
+  "home register's shares on 2021 to 2023",
+  "home register's shares on 2011 to 2020",
+  "shares on 2014 to 2023 by mean, home shares on 2016 to 2023",
+  "smallest sender dropped, home share by mean, home shares on 2019 to 2023",
+  "exits timed by the home's re-registrations throughout",
+  "births less deaths carried as a count",
+  "the level taken from Fenmark's two half-decade accounts",
+  "one home register share for all seven hosts",
+  "home share as the mean of the seven partners' ratios; host share as the mean of the senders' ratios",
+  "home share as the mean of the seven partners' ratios; host share as their median",
+  "home share as the mean of the seven partners' ratios; the smallest sender to each host dropped",
+  "home share as the mean of the seven partners' ratios; shares fitted on 2014 to 2023",
+  "home share as the mean of the seven partners' ratios; shares fitted on 2011 to 2020",
+  "home share as the mean of the seven partners' ratios; shares fitted on 2016 to 2023",
+  "home share as the mean of the seven partners' ratios; home register's shares on 2016 to 2023",
+  "home share as the mean of the seven partners' ratios; home register's shares on 2019 to 2023",
+  "home share as the mean of the seven partners' ratios; home register's shares on 2021 to 2023",
+  "home share as the mean of the seven partners' ratios; home register's shares on 2011 to 2020",
+  "home share as the mean of the seven partners' ratios; exits timed by the home's re-registrations throughout",
+  "home share as the mean of the seven partners' ratios; births less deaths carried as a count",
+  "home share as the mean of the seven partners' ratios; one home register share for all seven hosts",
+  "home share as their median; host share as the mean of the senders' ratios",
+  "home share as their median; host share as their median",
+  "home share as their median; the smallest sender to each host dropped",
+  "home share as their median; shares fitted on 2014 to 2023",
+  "home share as their median; shares fitted on 2011 to 2020",
+  "home share as their median; shares fitted on 2016 to 2023",
+  "home share as their median; home register's shares on 2016 to 2023",
+  "home share as their median; home register's shares on 2019 to 2023",
+  "home share as their median; home register's shares on 2021 to 2023",
+  "home share as their median; home register's shares on 2011 to 2020",
+  "home share as their median; exits timed by the home's re-registrations throughout",
+  "home share as their median; births less deaths carried as a count",
+  "home share as their median; one home register share for all seven hosts",
+  "host share as the mean of the senders' ratios; the smallest sender to each host dropped",
+  "host share as the mean of the senders' ratios; shares fitted on 2014 to 2023",
+  "host share as the mean of the senders' ratios; shares fitted on 2011 to 2020",
+  "host share as the mean of the senders' ratios; shares fitted on 2016 to 2023",
+  "host share as the mean of the senders' ratios; home register's shares on 2016 to 2023",
+  "host share as the mean of the senders' ratios; home register's shares on 2019 to 2023",
+  "host share as the mean of the senders' ratios; home register's shares on 2021 to 2023",
+  "host share as the mean of the senders' ratios; home register's shares on 2011 to 2020",
+  "host share as the mean of the senders' ratios; exits timed by the home's re-registrations throughout",
+  "host share as the mean of the senders' ratios; births less deaths carried as a count",
+  "host share as the mean of the senders' ratios; the level taken from Fenmark's two half-decade accounts",
+  "host share as the mean of the senders' ratios; one home register share for all seven hosts",
+  "host share as their median; the smallest sender to each host dropped",
+  "host share as their median; shares fitted on 2014 to 2023",
+  "host share as their median; shares fitted on 2011 to 2020",
+  "host share as their median; shares fitted on 2016 to 2023",
+  "host share as their median; home register's shares on 2016 to 2023",
+  "host share as their median; home register's shares on 2019 to 2023",
+  "host share as their median; home register's shares on 2021 to 2023",
+  "host share as their median; home register's shares on 2011 to 2020",
+  "host share as their median; exits timed by the home's re-registrations throughout",
+  "host share as their median; births less deaths carried as a count",
+  "host share as their median; the level taken from Fenmark's two half-decade accounts",
+  "host share as their median; one home register share for all seven hosts",
+  "the smallest sender to each host dropped; shares fitted on 2014 to 2023",
+  "the smallest sender to each host dropped; shares fitted on 2011 to 2020",
+  "the smallest sender to each host dropped; shares fitted on 2016 to 2023",
+  "the smallest sender to each host dropped; home register's shares on 2016 to 2023",
+  "the smallest sender to each host dropped; home register's shares on 2019 to 2023",
+  "the smallest sender to each host dropped; home register's shares on 2021 to 2023",
+  "the smallest sender to each host dropped; home register's shares on 2011 to 2020",
+  "the smallest sender to each host dropped; exits timed by the home's re-registrations throughout",
+  "the smallest sender to each host dropped; births less deaths carried as a count",
+  "the smallest sender to each host dropped; the level taken from Fenmark's two half-decade accounts",
+  "the smallest sender to each host dropped; one home register share for all seven hosts",
+  "shares fitted on 2014 to 2023; home register's shares on 2016 to 2023",
+  "shares fitted on 2014 to 2023; home register's shares on 2019 to 2023",
+  "shares fitted on 2014 to 2023; home register's shares on 2021 to 2023",
+  "shares fitted on 2014 to 2023; home register's shares on 2011 to 2020",
+  "shares fitted on 2014 to 2023; exits timed by the home's re-registrations throughout",
+  "shares fitted on 2014 to 2023; births less deaths carried as a count",
+  "shares fitted on 2014 to 2023; the level taken from Fenmark's two half-decade accounts",
+  "shares fitted on 2014 to 2023; one home register share for all seven hosts",
+  "shares fitted on 2011 to 2020; home register's shares on 2016 to 2023",
+  "shares fitted on 2011 to 2020; home register's shares on 2019 to 2023",
+  "shares fitted on 2011 to 2020; home register's shares on 2021 to 2023",
+  "shares fitted on 2011 to 2020; home register's shares on 2011 to 2020",
+  "shares fitted on 2011 to 2020; exits timed by the home's re-registrations throughout",
+  "shares fitted on 2011 to 2020; births less deaths carried as a count",
+  "shares fitted on 2011 to 2020; the level taken from Fenmark's two half-decade accounts",
+  "shares fitted on 2011 to 2020; one home register share for all seven hosts",
+  "shares fitted on 2016 to 2023; home register's shares on 2016 to 2023",
+  "shares fitted on 2016 to 2023; home register's shares on 2019 to 2023",
+  "shares fitted on 2016 to 2023; home register's shares on 2021 to 2023",
+  "shares fitted on 2016 to 2023; home register's shares on 2011 to 2020",
+  "shares fitted on 2016 to 2023; exits timed by the home's re-registrations throughout",
+  "shares fitted on 2016 to 2023; births less deaths carried as a count",
+  "shares fitted on 2016 to 2023; the level taken from Fenmark's two half-decade accounts",
+  "shares fitted on 2016 to 2023; one home register share for all seven hosts",
+  "home register's shares on 2016 to 2023; exits timed by the home's re-registrations throughout",
+  "home register's shares on 2016 to 2023; births less deaths carried as a count",
+  "home register's shares on 2016 to 2023; the level taken from Fenmark's two half-decade accounts",
+  "home register's shares on 2016 to 2023; one home register share for all seven hosts",
+  "home register's shares on 2019 to 2023; exits timed by the home's re-registrations throughout",
+  "home register's shares on 2019 to 2023; births less deaths carried as a count",
+  "home register's shares on 2019 to 2023; the level taken from Fenmark's two half-decade accounts",
+  "home register's shares on 2019 to 2023; one home register share for all seven hosts",
+  "home register's shares on 2021 to 2023; exits timed by the home's re-registrations throughout",
+  "home register's shares on 2021 to 2023; births less deaths carried as a count",
+  "home register's shares on 2021 to 2023; the level taken from Fenmark's two half-decade accounts",
+  "home register's shares on 2021 to 2023; one home register share for all seven hosts",
+  "home register's shares on 2011 to 2020; exits timed by the home's re-registrations throughout",
+  "home register's shares on 2011 to 2020; births less deaths carried as a count",
+  "home register's shares on 2011 to 2020; the level taken from Fenmark's two half-decade accounts",
+  "home register's shares on 2011 to 2020; one home register share for all seven hosts",
+  "exits timed by the home's re-registrations throughout; births less deaths carried as a count",
+  "exits timed by the home's re-registrations throughout; the level taken from Fenmark's two half-decade accounts",
+  "exits timed by the home's re-registrations throughout; one home register share for all seven hosts",
+  "births less deaths carried as a count; the level taken from Fenmark's two half-decade accounts",
+  "births less deaths carried as a count; one home register share for all seven hosts",
+  "the level taken from Fenmark's two half-decade accounts; one home register share for all seven hosts"
+ ],
+ "variant_range": {
+  "Almera": [
+   62345,
+   62851
+  ],
+  "Brennia": [
+   47611,
+   48482
+  ],
+  "Fenmark": [
+   22024,
+   23247
+  ],
+  "Kestria": [
+   12077,
+   12475
+  ],
+  "Marovia": [
+   36250,
+   37025
+  ],
+  "Skarholm": [
+   36218,
+   36562
+  ],
+  "Tesmar": [
+   32467,
+   33188
+  ]
+ },
+ "variants": 126
+}

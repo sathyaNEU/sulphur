@@ -1,0 +1,2510 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "both reports of every flow among the eight states, Orlava's register to 2026, the censuses and the vital events on one schema: each host's tabled arrivals of Orlavan citizens, 2011 to 2023",
+   "graded_as": "Step-by-Step",
+   "figure": "tabled_arrivals_2011_2023",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "Skarholm": 29914,
+    "Brennia": 19160,
+    "Marovia": 39714,
+    "Tesmar": 27735,
+    "Kestria": 13644,
+    "Fenmark": 18083,
+    "Almera": 42666
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "Skarholm": 29914,
+     "Brennia": 19160,
+     "Marovia": 39714,
+     "Tesmar": 27735,
+     "Kestria": 13644,
+     "Fenmark": 18083,
+     "Almera": 42666
+    },
+    "thorough": {
+     "Skarholm": 29914,
+     "Brennia": 19160,
+     "Marovia": 39714,
+     "Tesmar": 27735,
+     "Kestria": 13644,
+     "Fenmark": 18083,
+     "Almera": 42666
+    }
+   },
+   "precedent": []
+  },
+  {
+   "id": "R2",
+   "name": "the recording shares: the share of Orlava's emigrants to the seven states, 2011 to 2023, who deregistered (per cent)",
+   "graded_as": "Component 1",
+   "figure": "c1",
+   "depends": [
+    "R1"
+   ],
+   "independent": "Orlava's census table against its register; the two reports of every flow",
+   "golden": 36.3,
+   "passes": {
+    "quick": null,
+    "careful": 44.88623268872174,
+    "thorough": 36.3
+   },
+   "precedent": [
+    "L22",
+    "L51",
+    "N27"
+   ],
+   "band": [
+    35.3,
+    36.8
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "each host's exits between its two censuses and the share its departures table holds: Skarholm's (per cent)",
+   "graded_as": "Component 2",
+   "figure": "c2",
+   "depends": [
+    "R1",
+    "R2"
+   ],
+   "independent": "the census pair, the arrivals and the vital events",
+   "golden": 47.3,
+   "passes": {
+    "quick": null,
+    "careful": 100.0,
+    "thorough": 47.3
+   },
+   "precedent": [
+    "L48",
+    "L32",
+    "N10"
+   ],
+   "band": [
+    44.9,
+    48.2
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "Fenmark's count of 1 January 2016 reproduced from its 2011 census (citizens)",
+   "graded_as": "Step-by-Step",
+   "figure": "referee_citizens",
+   "depends": [
+    "R2",
+    "R3"
+   ],
+   "independent": "Fenmark's 2016 count",
+   "golden": 19484,
+   "passes": {
+    "quick": null,
+    "careful": 16943.0,
+    "thorough": 19484
+   },
+   "precedent": [
+    "L28",
+    "L29",
+    "L03"
+   ],
+   "band": [
+    19410,
+    19620
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the home register's shares by host and the moves of 2024 to 2026: Tesmar's exits over those of 2021 to 2023",
+   "graded_as": "Component 3",
+   "figure": "c3",
+   "depends": [
+    "R2",
+    "R3"
+   ],
+   "independent": "Orlava's register after 2023 against the years both report",
+   "golden": 1.73,
+   "passes": {
+    "quick": null,
+    "careful": 1.0646184359619795,
+    "thorough": 1.73
+   },
+   "precedent": [
+    "N13",
+    "N28",
+    "L03"
+   ],
+   "band": [
+    1.7,
+    1.77
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "citizens usually resident in each district on 1 January 2027",
+   "graded_as": "Asks 2 to 8",
+   "figure": "citizens",
+   "depends": [
+    "R2",
+    "R3",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "Skarholm": 36469,
+    "Brennia": 48116,
+    "Marovia": 36684,
+    "Tesmar": 32950,
+    "Kestria": 12227,
+    "Fenmark": 22826,
+    "Almera": 62662
+   },
+   "passes": {
+    "quick": {
+     "Skarholm": 38003,
+     "Brennia": 29251,
+     "Marovia": 40274,
+     "Tesmar": 35735,
+     "Kestria": 9506,
+     "Fenmark": 24085,
+     "Almera": 63678
+    },
+    "careful": {
+     "Skarholm": 44061,
+     "Brennia": 42773,
+     "Marovia": 51395,
+     "Tesmar": 40653,
+     "Kestria": 13246,
+     "Fenmark": 27257,
+     "Almera": 71324
+    },
+    "thorough": {
+     "Skarholm": 36469,
+     "Brennia": 48116,
+     "Marovia": 36684,
+     "Tesmar": 32950,
+     "Kestria": 12227,
+     "Fenmark": 22826,
+     "Almera": 62662
+    }
+   },
+   "precedent": [
+    "N27",
+    "L48",
+    "N13"
+   ],
+   "bands": {
+    "Skarholm": [
+     36130,
+     36650
+    ],
+    "Brennia": [
+     47390,
+     48710
+    ],
+    "Marovia": [
+     36050,
+     37220
+    ],
+    "Tesmar": [
+     32280,
+     33370
+    ],
+    "Kestria": [
+     11970,
+     12580
+    ],
+    "Fenmark": [
+     21710,
+     23560
+    ],
+    "Almera": [
+     62210,
+     62980
+    ]
+   },
+   "partly_share": 0.5
+  },
+  {
+   "id": "R7",
+   "name": "citizens who moved away from each district from the 2021 census to the end of 2026",
+   "graded_as": "Asks 9 to 15",
+   "figure": "left",
+   "depends": [
+    "R3",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "Skarholm": 13755,
+    "Brennia": 14651,
+    "Marovia": 23410,
+    "Tesmar": 21059,
+    "Kestria": 3453,
+    "Fenmark": 11079,
+    "Almera": 22057
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "Skarholm": 5919,
+     "Brennia": 4898,
+     "Marovia": 5578,
+     "Tesmar": 7288,
+     "Kestria": 3554,
+     "Fenmark": 3292,
+     "Almera": 10777
+    },
+    "thorough": {
+     "Skarholm": 13755,
+     "Brennia": 14651,
+     "Marovia": 23410,
+     "Tesmar": 21059,
+     "Kestria": 3453,
+     "Fenmark": 11079,
+     "Almera": 22057
+    }
+   },
+   "precedent": [
+    "N27",
+    "L48",
+    "N13"
+   ],
+   "bands": {
+    "Skarholm": [
+     13440,
+     14480
+    ],
+    "Brennia": [
+     14080,
+     15420
+    ],
+    "Marovia": [
+     22770,
+     24410
+    ],
+    "Tesmar": [
+     20330,
+     22220
+    ],
+    "Kestria": [
+     3240,
+     3790
+    ],
+    "Fenmark": [
+     10340,
+     12040
+    ],
+    "Almera": [
+     21370,
+     22940
+    ]
+   },
+   "partly_share": 0.5
+  },
+  {
+   "id": "R8",
+   "name": "the officers the Order gives each district",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "golden": [
+    "Skarholm 8",
+    "Brennia 10",
+    "Marovia 8",
+    "Tesmar 7",
+    "Kestria 3",
+    "Fenmark 5",
+    "Almera 13"
+   ],
+   "passes": {
+    "quick": [
+     "Skarholm 8",
+     "Brennia 6",
+     "Marovia 9",
+     "Tesmar 8",
+     "Kestria 2",
+     "Fenmark 5",
+     "Almera 13"
+    ],
+    "careful": [
+     "Skarholm 9",
+     "Brennia 9",
+     "Marovia 11",
+     "Tesmar 9",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 15"
+    ],
+    "thorough": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   "precedent": [
+    "N27",
+    "L48",
+    "N13"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "Each state records only a share of the people who move in and a share of its own people who move out, a different share in each state, so no host's arrivals table is the number who arrived.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "People who leave a host mostly leave no record there, so its departures table is a fraction of the exits, a different fraction in each host.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "The partners' tables stop at 2023, and 2024 to 2026 are seen only by Orlava's own register, which catches a fraction of the moves.",
+   "rescues": [
+    "R5"
+   ]
+  }
+ ],
+ "factorial": {
+  "golden_answer": [
+   "Skarholm 8",
+   "Brennia 10",
+   "Marovia 8",
+   "Tesmar 7",
+   "Kestria 3",
+   "Fenmark 5",
+   "Almera 13"
+  ],
+  "reflex_route": {
+   "answer": [
+    "Skarholm 9",
+    "Brennia 9",
+    "Marovia 11",
+    "Tesmar 9",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 15"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "S1",
+    "name": "a host's arrivals table is that host's share of the citizens who arrived; the shares come from the two reports of every flow, and their level from Orlava's census table against its own register",
+    "kind": "stump",
+    "precedent": [
+     "L22",
+     "L51",
+     "N27"
+    ],
+    "dropped": {
+     "answer": [
+      "Skarholm 8",
+      "Brennia 9",
+      "Marovia 8",
+      "Tesmar 8",
+      "Kestria 3",
+      "Fenmark 6",
+      "Almera 13"
+     ],
+     "results_moved": [
+      "R2",
+      "R4",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Skarholm 9",
+      "Brennia 12",
+      "Marovia 11",
+      "Tesmar 10",
+      "Kestria 3",
+      "Fenmark 6",
+      "Almera 15"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "S2",
+    "name": "a host's exits are what its two censuses, the corrected arrivals and the births and deaths leave; its departures table is a share of them",
+    "kind": "stump",
+    "precedent": [
+     "L48",
+     "L32",
+     "N10"
+    ],
+    "dropped": {
+     "answer": [
+      "Skarholm 9",
+      "Brennia 12",
+      "Marovia 11",
+      "Tesmar 9",
+      "Kestria 3",
+      "Fenmark 7",
+      "Almera 15"
+     ],
+     "results_moved": [
+      "R3",
+      "R4",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Skarholm 8",
+      "Brennia 9",
+      "Marovia 8",
+      "Tesmar 9",
+      "Kestria 3",
+      "Fenmark 6",
+      "Almera 14"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "S3",
+    "name": "the moves of 2024 to 2026 come from Orlava's register, at the share of each host's moves it caught in the years both sides report",
+    "kind": "stump",
+    "precedent": [
+     "N13",
+     "N28",
+     "L03"
+    ],
+    "dropped": {
+     "answer": [
+      "Skarholm 8",
+      "Brennia 10",
+      "Marovia 8",
+      "Tesmar 8",
+      "Kestria 3",
+      "Fenmark 5",
+      "Almera 13"
+     ],
+     "results_moved": [
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "Skarholm 9",
+      "Brennia 9",
+      "Marovia 11",
+      "Tesmar 8",
+      "Kestria 3",
+      "Fenmark 6",
+      "Almera 15"
+     ],
+     "results_rescued": [
+      "R5"
+     ]
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the tables, the register and the censuses on one footing: three state codings to one, the latest release of a table, a repeated register event counted once, the state read from the clerk's text where the code is blank, the year of the move",
+    "kind": "reflex",
+    "precedent": [
+     "R01",
+     "R13"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "every file read, the two unused ones set aside",
+    "kind": "reflex",
+    "precedent": [
+     "R02"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "a population at a date rebuilt from a count and the events after it, and checked against the next count",
+    "kind": "reflex",
+    "precedent": [
+     "R57",
+     "R93"
+    ]
+   },
+   {
+    "id": "J7",
+    "name": "the establishment in force reproduced from the 2021 census counts",
+    "kind": "reflex",
+    "precedent": [
+     "R18"
+    ]
+   },
+   {
+    "id": "J8",
+    "name": "several windows tried for a carried value, a hold-out on the latest years and a stress on a fitted rate",
+    "kind": "reflex",
+    "precedent": [
+     "R31",
+     "R03",
+     "R16"
+    ]
+   }
+  ]
+ },
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "Skarholm 8",
+   "Brennia 10",
+   "Marovia 8",
+   "Tesmar 7",
+   "Kestria 3",
+   "Fenmark 5",
+   "Almera 13"
+  ],
+  "golden_family": [
+   {
+    "name": "the golden",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares on 2014 to 2023 by mean, home shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "smallest sender dropped, home share by mean, home shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; host share as the mean of the senders' ratios",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; host share as their median",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; the smallest sender to each host dropped",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as the mean of the seven partners' ratios; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; host share as the mean of the senders' ratios",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; host share as their median",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; the smallest sender to each host dropped",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home share as their median; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; the smallest sender to each host dropped",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as the mean of the senders' ratios; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; the smallest sender to each host dropped",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "host share as their median; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; shares fitted on 2014 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; shares fitted on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; shares fitted on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the smallest sender to each host dropped; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2014 to 2023; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2011 to 2020; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; home register's shares on 2016 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; home register's shares on 2019 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; home register's shares on 2021 to 2023",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; home register's shares on 2011 to 2020",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "shares fitted on 2016 to 2023; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2016 to 2023; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2016 to 2023; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2016 to 2023; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2016 to 2023; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2019 to 2023; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2019 to 2023; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2019 to 2023; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2019 to 2023; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2021 to 2023; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2021 to 2023; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2021 to 2023; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2021 to 2023; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2011 to 2020; exits timed by the home's re-registrations throughout",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2011 to 2020; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2011 to 2020; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "home register's shares on 2011 to 2020; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "exits timed by the home's re-registrations throughout; births less deaths carried as a count",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "exits timed by the home's re-registrations throughout; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "exits timed by the home's re-registrations throughout; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "births less deaths carried as a count; the level taken from Fenmark's two half-decade accounts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "births less deaths carried as a count; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "the level taken from Fenmark's two half-decade accounts; one home register share for all seven hosts",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "each host's arrivals table taken as the arrivals",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 9",
+     "Marovia 8",
+     "Tesmar 8",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "each host's departures table taken as the exits",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 12",
+     "Marovia 11",
+     "Tesmar 9",
+     "Kestria 3",
+     "Fenmark 7",
+     "Almera 15"
+    ]
+   },
+   {
+    "name": "the hosts' tables at face value to 2023, 2024 to 2026 from the home register",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 9",
+     "Marovia 11",
+     "Tesmar 8",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 15"
+    ]
+   },
+   {
+    "name": "2021 to 2023 carried through 2024 to 2026",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 8",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "name": "arrivals as tabled, the account closed between the censuses, 2021 to 2023 carried forward",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 9",
+     "Marovia 8",
+     "Tesmar 9",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 14"
+    ]
+   },
+   {
+    "name": "arrivals corrected, departures as tabled, 2021 to 2023 carried forward",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 12",
+     "Marovia 11",
+     "Tesmar 10",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 15"
+    ]
+   },
+   {
+    "name": "the hosts' tables at face value from the 2021 census, 2021 to 2023 carried forward",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 9",
+     "Marovia 11",
+     "Tesmar 9",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 15"
+    ]
+   },
+   {
+    "name": "each host's 2021 census count and its own tables to 1 January 2024, taken as the latest figure",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 8",
+     "Marovia 10",
+     "Tesmar 8",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 14"
+    ]
+   },
+   {
+    "name": "the larger of the two reports of every flow, the last three years repeated",
+    "answer": [
+     "Skarholm 9",
+     "Brennia 9",
+     "Marovia 10",
+     "Tesmar 9",
+     "Kestria 3",
+     "Fenmark 6",
+     "Almera 15"
+    ]
+   },
+   {
+    "name": "shares scaled so the fullest recorder is complete",
+    "answer": [
+     "Skarholm 7",
+     "Brennia 11",
+     "Marovia 7",
+     "Tesmar 6",
+     "Kestria 3",
+     "Fenmark 4",
+     "Almera 12"
+    ]
+   },
+   {
+    "name": "the 2021 census counts carried",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 6",
+     "Marovia 9",
+     "Tesmar 8",
+     "Kestria 2",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the host's arrival share, one spread down",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the host's arrival share, one spread up",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the host's departure share, one spread down",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the host's departure share, one spread up",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the home register's share of moves, one spread down",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the home register's share of moves, one spread up",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the home register's share of exits, one spread down",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "the home register's share of exits, one spread up",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "all four down together, one spread each",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   },
+   {
+    "input": "all four up together, one spread each",
+    "answer": [
+     "Skarholm 8",
+     "Brennia 10",
+     "Marovia 8",
+     "Tesmar 7",
+     "Kestria 3",
+     "Fenmark 5",
+     "Almera 13"
+    ]
+   }
+  ]
+ },
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Skarholm 8",
+    "Brennia 10",
+    "Marovia 8",
+    "Tesmar 7",
+    "Kestria 3",
+    "Fenmark 5",
+    "Almera 13"
+   ],
+   "golden": true
+  },
+  {
+   "name": "each host's arrivals table taken as the arrivals",
+   "answer": [
+    "Skarholm 8",
+    "Brennia 9",
+    "Marovia 8",
+    "Tesmar 8",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 13"
+   ]
+  },
+  {
+   "name": "each host's departures table taken as the exits",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 12",
+    "Marovia 11",
+    "Tesmar 9",
+    "Kestria 3",
+    "Fenmark 7",
+    "Almera 15"
+   ]
+  },
+  {
+   "name": "the hosts' tables at face value to 2023, 2024 to 2026 from the home register",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 9",
+    "Marovia 11",
+    "Tesmar 8",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 15"
+   ]
+  },
+  {
+   "name": "2021 to 2023 carried through 2024 to 2026",
+   "answer": [
+    "Skarholm 8",
+    "Brennia 10",
+    "Marovia 8",
+    "Tesmar 8",
+    "Kestria 3",
+    "Fenmark 5",
+    "Almera 13"
+   ]
+  },
+  {
+   "name": "arrivals as tabled, the account closed between the censuses, 2021 to 2023 carried forward",
+   "answer": [
+    "Skarholm 8",
+    "Brennia 9",
+    "Marovia 8",
+    "Tesmar 9",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 14"
+   ]
+  },
+  {
+   "name": "arrivals corrected, departures as tabled, 2021 to 2023 carried forward",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 12",
+    "Marovia 11",
+    "Tesmar 10",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 15"
+   ]
+  },
+  {
+   "name": "the hosts' tables at face value from the 2021 census, 2021 to 2023 carried forward",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 9",
+    "Marovia 11",
+    "Tesmar 9",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 15"
+   ]
+  },
+  {
+   "name": "each host's 2021 census count and its own tables to 1 January 2024, taken as the latest figure",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 8",
+    "Marovia 10",
+    "Tesmar 8",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 14"
+   ]
+  },
+  {
+   "name": "the larger of the two reports of every flow, the last three years repeated",
+   "answer": [
+    "Skarholm 9",
+    "Brennia 9",
+    "Marovia 10",
+    "Tesmar 9",
+    "Kestria 3",
+    "Fenmark 6",
+    "Almera 15"
+   ]
+  },
+  {
+   "name": "shares scaled so the fullest recorder is complete",
+   "answer": [
+    "Skarholm 7",
+    "Brennia 11",
+    "Marovia 7",
+    "Tesmar 6",
+    "Kestria 3",
+    "Fenmark 4",
+    "Almera 12"
+   ]
+  },
+  {
+   "name": "the 2021 census counts carried",
+   "answer": [
+    "Skarholm 8",
+    "Brennia 6",
+    "Marovia 9",
+    "Tesmar 8",
+    "Kestria 2",
+    "Fenmark 5",
+    "Almera 13"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 18,
+  "components": 20,
+  "asks": 53,
+  "instruction": 9
+ }
+}

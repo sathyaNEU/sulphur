@@ -1,42 +1,44 @@
 {
  "task": "task5",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "subdomain": "census-register-administrative-data-quality",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-17",
  "doctrine": "throughout",
  "architecture": 5,
  "loops": 0,
- "call": "officers by district for the 2027 to 2029 cycle: Skarholm 8, Brennia 10, Marovia 8, Tesmar 7, Kestria 3, Fenmark 5, Almera 13, on 36,457, 48,181, 36,488, 32,891, 12,399, 22,690 and 62,457 Orlavan citizens resident on 1 January 2027 (generator/core.py at the draw; four more in Brennia and one in Kestria than the establishment in force, one fewer each in Marovia and Tesmar)",
- "chain": "R1 both reports of every flow among the eight states, the home register to 2026, the censuses and the vital events on one schema; R2 the recording shares and the citizens who moved to each host; R3 each host's exits between its censuses and the share its departures table caught; R4 Fenmark's 2016 count reproduced and 2021 to 2023 held out; R5 the home register's shares and the moves of 2024 to 2026; R6 citizens, officers and leavers by district",
- "stump": "the reflex route (each host's arrivals and departures tables at face value from its 2021 census, the last three reported years carried to 2027) files 44,061, 42,773, 51,395, 40,653, 13,246, 27,257 and 71,324 citizens and 9, 9, 11, 9, 3, 6, 15 officers, wrong in six districts; S1 lost alone files Brennia 41,290 (nine), S2 lost alone Marovia 54,484 (eleven), S3 lost alone Tesmar 36,955 (eight)",
+ "call": "officers by district for the 2027 to 2029 cycle: Skarholm 8, Brennia 10, Marovia 8, Tesmar 7, Kestria 3, Fenmark 5, Almera 13, on 36,469, 48,116, 36,684, 32,950, 12,227, 22,826 and 62,662 Orlavan citizens resident on 1 January 2027 (54 officers against 51 in force: four more in Brennia and one in Kestria, one fewer each in Marovia and Tesmar)",
+ "chain": "R1 both reports of every flow among the eight states, the home register to 2026, the censuses and the vital events on one schema; R2 the recording shares and the citizens who moved to each host; R3 each host's exits between its censuses and the share its departures table caught; R4 Fenmark's 2016 count reproduced and 2021 to 2023 held out; R5 the home register's shares and the moves of 2024 to 2026; R6 citizens on 1 January 2027 by district; R7 the citizens who moved away from each district, census 2021 to end 2026; R8 officers by district under the order",
+ "stump": "the reflex route (each host's arrivals and departures tables at face value from its 2021 census, the last three reported years carried to 2027) files 44,061, 42,773, 51,395, 40,653, 13,246, 27,257 and 71,324 citizens and 9, 9, 11, 9, 3, 6, 15 officers, wrong in six districts; S1 lost alone files Brennia 41,429 (nine), S2 lost alone Marovia 54,594 (eleven), S3 lost alone Tesmar 36,987 (eight)",
  "precut": {
   "exit": 0,
   "date": "2026-11-17",
-  "checks": "precut.py task5: 114 checks, 0 FAIL, 4 WARN (R2 upstream of R3 to R6 and the nearest chain task17 answered in the note; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on seed 5127 (the placement is seed-specific, the generator imports the core's world); core.py --forcing exit 0; prompt gate PASS"
+  "checks": "precut.py task5 on the cut pack: 114 checks, 0 FAIL, 2 WARN (R2 upstream of six results and the nearest chain task17, both answered in the note); generator/core.py CORE PASS level 5 on seed 5127 with the decade to 2021 redrawn on smooth courses (the note's Architect's acts at the build); core.py --forcing exit 0; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut, two lines on the establishment order (the district names of its Schedule; the words registered and reports of its clauses), each answered in the note's Leak rulings; no LEAK",
+  "reader": "one read (Sonnet, medium) at stage 4: no sentence that hands over a step, no ranking artifact, no helping file, no answer figure; one realism tell (round whole populations) fixed in the generator as data cells only, no document and no sentence of the prompt, so the reader was not re-run and leak.py was re-run on the final cut"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "guard.py heart task5 on the cut: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1 and task3), each answered in the note; surface PASS",
   "nearest": "guard.py check on 2026-11-17: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1 and task3, skeleton.house_lesson on conservation_residual_attribution and validation_cannot_see_condition, NOTE same_puzzle_older mark120 differentiated), each answered in the note's Draw; skeleton severity none"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "one pass (Fable, high): DETERMINISTIC with SOLUTION_WRONG, FIX_NOW on the answer blocks only; its five findings taken in one generator pass with the prompt, every stated figure and every band unchanged, so no second pass is owed; after the pass the pack changed only in the states' whole populations (own-citizens cells and totals, the population file), which no step, fork or rival reads, recorded in the report",
+  "report": "determinism_check_report.md (the pass in full, then the fixes taken): every stated figure reproduced to the unit, step 8 replayed as 126 rebuilds, 26 forks run; fixed: the census-closure rival ruled by figures (same 54 officers in eight fits, refused by the six senders' reports, the 2021 counts and Fenmark's 2016 count) and the level it gives checked inside every band (70.8 to 72.2 per cent against 72.0, 112 rebuilds), the departure share's account stated, a share above 100 per cent kept, each refused level's rule named, each host's own spread, item 16 without a row count"
  },
- "paper_pair": 13,
+ "paper_pair": 22.2,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": "each state's migration tables hold only that state's own share of the people who move in and of its own people who move out: rescues 1 of 6 (core.py: one stump lost 30, 30 and 30; reflex route 13; rigorous route 16)"
+  "quick": 9.0,
+  "careful": 22.2,
+  "thorough": 100,
+  "factorial": "corelib level 5 on the cut pack: S1 a host's arrivals table is a share of the arrivals, levelled by Orlava's census table (opens Brennia), S2 a host's exits are what its two censuses leave (opens Marovia), S3 the moves of 2024 to 2026 from the home register at its measured share (opens Tesmar); each necessary alone, none sufficient alone on the reflex route",
+  "rubric": "figure by figure (corelib on the cut pack): one stump lost S1 29.9, S2 29.9, S3 33.7; one fixed alone 23.2, 15.7, 19.5; the reflex route 12.8; the rigorous standard route 15.7",
+  "largest_hint": "each state's migration tables hold only that state's own share of the people who move in and of its own people who move out: rescues 1 of 8 results"
  },
  "returned": [
   {
@@ -87,10 +89,14 @@
    "commit": ""
   }
  ],
- "resume": "DESIGN: the core is proved (python3 task5/generator/core.py, CORE PASS level 5) and the note carries the Build brief; next is stage 3, the generator around core.py",
+ "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task5 once both runs are graded",
  "approved": null,
  "delivered": null,
- "portal": null,
+ "portal": {
+  "status": "READY",
+  "date": "2026-11-17",
+  "note": "architecture 5 drawn and built; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the workbook and the CSV)"
+ },
  "portal_id": "",
  "portal_status": "",
  "portal_status_date": "",
@@ -240,6 +246,10 @@
    },
    "status": "READY 2026-11-10, never uploaded",
    "fate": "set aside 2026-11-17 before any platform round: the call turned on reports still filling in (closed by the client on 2026-11-12), no proved core, no stump screen, no open-members table, a memo among the deliverables; redrawn as architecture 5 in a new world"
+  },
+  {
+   "date": "2026-11-17",
+   "event": "architecture 5 (Orlavan citizens abroad and the consular establishment) drawn, built and READY: corelib level 5 on the cut pack, one stump lost 29.9, 29.9 and 33.7, the reflex route 12.8; judge DETERMINISTIC, answer-block fixes taken"
   }
  ],
  "migrated_from": {
@@ -255,5 +265,18 @@
   "average": null,
   "counterfactual_average": null
  },
- "prompt_rewritten": false
+ "prompt_rewritten": false,
+ "gates": "gates.py task5 --full on the final cut, 2026-11-17: 11 gates, 0 FAIL, 3 WARN (precut's two answered WARNs, leak REVIEW, heart three repeats, each answered in the note); checks.py and verify.py green, two builds byte-identical (target c326200a9a89fe8d, golden 9ef0342a7bee900f), audit_containers.py 0 FAIL",
+ "draw": {
+  "answer_shape": "allocation-sensitivity",
+  "weight": "assembly",
+  "depth_level": 5,
+  "world": "Statistics Orlava (invented): Orlavan citizens usually resident in seven partner states on 1 January 2027, read against Order No. 14 of 2025 (one consular officer per 5,000 citizens or part)"
+ },
+ "final_cut": {
+  "date": "2026-11-17",
+  "target_digest": "c326200a9a89fe8d",
+  "target_zip_md5": "e7574eaadc24d3f41d1d98ff338e790e",
+  "golden_zip_md5": "b3c5c800daf426551f0c586b901f0a6b"
+ }
 }
