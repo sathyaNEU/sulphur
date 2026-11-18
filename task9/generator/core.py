@@ -23,8 +23,8 @@ The three stumps (each opens a different group, each leaves several dependent st
              leaves at the default anyway.
   S3 (who)   the tests reach one reader of a group. Three groups are also read by a service that shows the shopper
              something (a promise badge, a price label, a buy-again strip), which loses the value in the same
-             sessions. Its loss is in no ablation of the ranking model. It is in the reader's own render log and
-             its own test.
+             sessions. Its loss is in no ablation of the ranking model. It is in the reader's own test, on the
+             sessions its render log counts as eligible, at the group's own default share.
 
 The referee: in April the price batch failed to reach one of the two serving regions on seven nights. Users are
 split between the regions by hash and each region has its own page cache, so a random half of the users lost the
@@ -485,9 +485,11 @@ def effects(W, o, exp):
     return out
 
 
-def readers(W, o):
-    """Each second reader: its loss per eligible session from its own test, and the share of sessions it failed to
-    render over its own usual rate, cell by hour. S3 lost: nothing."""
+def readers(W, o, exp):
+    """Each second reader: its loss per eligible session from its own test, and the share of sessions in which it
+    lost the group's value, cell by hour: its eligible sessions (its render record) at the group's default share,
+    the same share the ranking model is charged on. Variants read the render record's failed renders instead, over
+    the rate at which the reader fails with the value present, or over an earlier period's rate. S3 lost: nothing."""
     out = {}
     for j in READERS:
         if o.get("s3"):
@@ -499,11 +501,19 @@ def readers(W, o):
             per = np.full(12, np.sum(d * t["nh"]) / np.sum(es * t["nh"]))
         else:
             per = np.array([np.sum((d * t["nh"])[dd::2]) / np.sum((es * t["nh"])[dd::2]) for m, dd in CELLS])
-        sh = r["suppressed"] / np.maximum(W["sess"], 1)
-        lo, hi = {"q2": Q2, "h1": (10, 181), "june": (151, 181)}[o.get("rd_base", "q2")]
-        w = W["sess"][:, lo * 24:hi * 24]
-        base = (r["suppressed"][:, lo * 24:hi * 24].sum(axis=1) / w.sum(axis=1))[:, None]
-        out[j] = dict(per=per * o.get("rd_scale", {}).get(j, 1.0), share=np.clip(sh - base, -1, None), elig=es)
+        sess = np.maximum(W["sess"], 1)
+        kind = o.get("rd_base", "served")
+        if kind == "served":
+            share = r["eligible"] / sess * exp[j]["exc"]
+        elif kind == "own":
+            own = (r["suppressed"].sum(axis=1) - (r["eligible"] * exp[j]["tot"]).sum(axis=1)) / r["eligible"].sum(axis=1)
+            share = (r["suppressed"] - own[:, None] * r["eligible"]) / sess
+        else:
+            lo, hi = {"q2": Q2, "h1": (10, 181), "june": (151, 181)}[kind]
+            w = W["sess"][:, lo * 24:hi * 24]
+            base = (r["suppressed"][:, lo * 24:hi * 24].sum(axis=1) / w.sum(axis=1))[:, None]
+            share = np.clip(r["suppressed"] / sess - base, -1, None)
+        out[j] = dict(per=per * o.get("rd_scale", {}).get(j, 1.0), share=share, elig=es)
     return out
 
 
@@ -511,7 +521,7 @@ def view(W, o=None):
     """Every graded figure on one route."""
     o = o or {}
     exp = exposure(W, o)
-    eff, rd = effects(W, o, exp), readers(W, o)
+    eff, rd = effects(W, o, exp), readers(W, o, exp)
     w = q3w(W)
     hq = slice(Q3[0] * 24, Q3[1] * 24)
     loss, by_month, hourly, parts = {}, {}, np.zeros((12, H)), {}
@@ -647,8 +657,11 @@ DIMS = {
               ("the sellers' usual default share from June", {"seller_base": "june"}),
               ("the sellers' usual default share from the first half", {"seller_base": "h1"})],
     "reader": [("the readers' loss pooled over markets and devices", {"rd_pool": "all"}),
-               ("the readers' usual failed renders from the first half", {"rd_base": "h1"}),
-               ("the readers' usual failed renders from June", {"rd_base": "june"})],
+               ("the readers' failed renders over the rate at which each fails with its group's value present",
+                {"rd_base": "own"}),
+               ("the readers' failed renders over their second-quarter rate", {"rd_base": "q2"}),
+               ("the readers' failed renders over their first-half rate", {"rd_base": "h1"}),
+               ("the readers' failed renders over their June rate", {"rd_base": "june"})],
 }
 
 

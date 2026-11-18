@@ -1,0 +1,2931 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the registry, the status record, the gap, batch, lag and scoring logs, the experiment export, the edge cache record and the render record on one calendar and one market and device scheme: the rows, runs, tests and sources each holds",
+   "graded_as": "Step-by-Step",
+   "figure": "counts",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "files": 23,
+    "unused": 3,
+    "session_rows": 78624,
+    "mart_rows": 6552,
+    "status_rows": 339465,
+    "status_rows_kept": 334425,
+    "status_rows_reloaded": 5040,
+    "gaps": 1633,
+    "lag_episodes": 105,
+    "scoring_rows": 889961,
+    "scoring_runs": 888629,
+    "scoring_repeats": 1332,
+    "sellers": 8000,
+    "experiments": 67,
+    "ablation_tests": 63,
+    "aborted": 1,
+    "holdouts": 3,
+    "render_rows": 235872,
+    "chains": 14,
+    "sources": 5,
+    "partitions": 24,
+    "replicas": 6,
+    "markets": 6,
+    "cells": 12,
+    "hours": 6552,
+    "days": 273,
+    "tests_per_group": 9,
+    "test_days": 14,
+    "holdout_days": 42,
+    "split_batches": 7,
+    "split_days": 14
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "files": 23,
+     "unused": 3,
+     "session_rows": 78624,
+     "mart_rows": 6552,
+     "status_rows": 339465,
+     "status_rows_kept": 334425,
+     "status_rows_reloaded": 5040,
+     "gaps": 1633,
+     "lag_episodes": 105,
+     "scoring_rows": 889961,
+     "scoring_runs": 888629,
+     "scoring_repeats": 1332,
+     "sellers": 8000,
+     "experiments": 67,
+     "ablation_tests": 63,
+     "aborted": 1,
+     "holdouts": 3,
+     "render_rows": 235872,
+     "chains": 14,
+     "sources": 5,
+     "partitions": 24,
+     "replicas": 6,
+     "markets": 6,
+     "cells": 12,
+     "hours": 6552,
+     "days": 273,
+     "tests_per_group": 9,
+     "test_days": 14,
+     "holdout_days": 42,
+     "split_batches": 7,
+     "split_days": 14
+    },
+    "thorough": {
+     "files": 23,
+     "unused": 3,
+     "session_rows": 78624,
+     "mart_rows": 6552,
+     "status_rows": 339465,
+     "status_rows_kept": 334425,
+     "status_rows_reloaded": 5040,
+     "gaps": 1633,
+     "lag_episodes": 105,
+     "scoring_rows": 889961,
+     "scoring_runs": 888629,
+     "scoring_repeats": 1332,
+     "sellers": 8000,
+     "experiments": 67,
+     "ablation_tests": 63,
+     "aborted": 1,
+     "holdouts": 3,
+     "render_rows": 235872,
+     "chains": 14,
+     "sources": 5,
+     "partitions": 24,
+     "replicas": 6,
+     "markets": 6,
+     "cells": 12,
+     "hours": 6552,
+     "days": 273,
+     "tests_per_group": 9,
+     "test_days": 14,
+     "holdout_days": 42,
+     "split_batches": 7,
+     "split_days": 14
+    }
+   },
+   "precedent": []
+  },
+  {
+   "id": "R2",
+   "name": "each group's full effect per session at its default, from its ablation tests over the share of the held slice's result page views built at origin: trend's (points)",
+   "graded_as": "Component 1",
+   "figure": "c1",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the ablation results by test, market, device and day against the edge cache's daily record",
+   "golden": 0.84,
+   "passes": {
+    "quick": null,
+    "careful": 0.4179364618995597,
+    "thorough": 0.84
+   },
+   "precedent": [
+    "L18",
+    "L28"
+   ],
+   "band": [
+    0.8,
+    0.91
+   ]
+  },
+  {
+   "id": "R3",
+   "name": "the share of the quarter's sessions served each group's default over what normal service leaves there, rebuilt source by source: seller's (per cent)",
+   "graded_as": "Component 2",
+   "figure": "c2",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the scoring log by seller and night, each score's validity and the month's traffic by seller",
+   "golden": 1.39,
+   "passes": {
+    "quick": null,
+    "careful": 23.426702618517457,
+    "thorough": 1.39
+   },
+   "precedent": [
+    "N21",
+    "L26"
+   ],
+   "band": [
+    1.37,
+    1.46
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the cost through each component that also reads a group, from its own holdout test and its own render record: the delivery promise badge's (points)",
+   "graded_as": "Component 3",
+   "figure": "c3",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the component holdout results and the render record by hour",
+   "golden": 0.035,
+   "passes": {
+    "quick": null,
+    "careful": 0.0,
+    "thorough": 0.035
+   },
+   "precedent": [
+    "L16",
+    "N27"
+   ],
+   "band": [
+    0.031,
+    0.036
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "April's missed price batches in one serving region, called from R2 to R4 and the hours the prices had expired (points over the business days touched)",
+   "graded_as": "Component 4",
+   "figure": "referee_golden",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "the conversion mart by serving region and day",
+   "golden": 0.405,
+   "passes": {
+    "quick": null,
+    "careful": 0.2802726378291786,
+    "thorough": 0.405
+   },
+   "precedent": [
+    "L28",
+    "N21",
+    "L16"
+   ],
+   "band": [
+    0.385,
+    0.419
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "each feature group's third-quarter cost (points)",
+   "graded_as": "Asks 1 to 7",
+   "figure": "cost",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "stock": 0.102,
+    "promise": 0.067,
+    "price": 0.167,
+    "history": 0.029,
+    "trend": 0.072,
+    "seller": 0.025,
+    "match": 0.019
+   },
+   "passes": {
+    "quick": {
+     "stock": 0.1622618372432546,
+     "promise": 0.029318287511494047,
+     "price": 0.04561736250557429,
+     "history": 0.02080530001194994,
+     "trend": 0.017596288027417185,
+     "seller": 0.1465045960943042,
+     "match": 0.007798457978723205
+    },
+    "careful": {
+     "stock": 0.2667743269328427,
+     "promise": 0.03195604977283374,
+     "price": 0.079566302489722,
+     "history": 0.021282517112713922,
+     "trend": 0.03899325662102194,
+     "seller": 0.21737641176906203,
+     "match": 0.009164287458425577
+    },
+    "thorough": {
+     "stock": 0.102,
+     "promise": 0.067,
+     "price": 0.167,
+     "history": 0.029,
+     "trend": 0.072,
+     "seller": 0.025,
+     "match": 0.019
+    }
+   },
+   "precedent": [
+    "L18",
+    "N21",
+    "L16"
+   ],
+   "bands": {
+    "stock": [
+     0.081,
+     0.124
+    ],
+    "promise": [
+     0.062,
+     0.069
+    ],
+    "price": [
+     0.152,
+     0.175
+    ],
+    "history": [
+     0.027,
+     0.03
+    ],
+    "trend": [
+     0.066,
+     0.081
+    ],
+    "seller": [
+     0.023,
+     0.027
+    ],
+    "match": [
+     0.017,
+     0.022
+    ]
+   },
+   "partly_share": 0.5
+  },
+  {
+   "id": "R7",
+   "name": "the cost of all the groups together over the quarter and over each of its months' search sessions (points)",
+   "graded_as": "Asks 8 to 11",
+   "figure": "asks_together",
+   "depends": [
+    "R2",
+    "R3",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "all groups": 0.48,
+    "July": 0.49,
+    "August": 0.63,
+    "September": 0.32
+   },
+   "passes": {
+    "quick": {
+     "all groups": 0.42990212937271743,
+     "July": 0.36834561454107856,
+     "August": 0.5498800596891669,
+     "September": 0.37044678507331635
+    },
+    "careful": {
+     "all groups": 0.6651131521566219,
+     "July": 0.5816516583852841,
+     "August": 0.8613044846902003,
+     "September": 0.5504379902103587
+    },
+    "thorough": {
+     "all groups": 0.48,
+     "July": 0.49,
+     "August": 0.63,
+     "September": 0.32
+    }
+   },
+   "precedent": [
+    "L18",
+    "N21",
+    "L16"
+   ],
+   "bands": {
+    "all groups": [
+     0.44,
+     0.51
+    ],
+    "July": [
+     0.45,
+     0.53
+    ],
+    "August": [
+     0.58,
+     0.66
+    ],
+    "September": [
+     0.29,
+     0.35
+    ]
+   },
+   "partly_share": 0.5
+  },
+  {
+   "id": "R8",
+   "name": "the groups on the 2027 tier one list",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "golden": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller not listed",
+    "match not listed"
+   ],
+   "passes": {
+    "quick": [
+     "stock listed",
+     "promise not listed",
+     "price not listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ],
+    "careful": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ],
+    "thorough": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   "precedent": [
+    "L18",
+    "N21",
+    "L16"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "A user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth.",
+   "rescues": [
+    "R2"
+   ]
+  },
+  {
+   "sentence": "A value is served for its validity period after its source fails and returns only at its entity's next refresh, so the share of sources failing is not the share of sessions served the default.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "The ablation tests withhold a group from the ranking model only, and some groups are also read by a service that shows the user something and loses it in the same hours.",
+   "rescues": [
+    "R4"
+   ]
+  }
+ ],
+ "factorial": {
+  "golden_answer": [
+   "stock listed",
+   "promise listed",
+   "price listed",
+   "history not listed",
+   "trend listed",
+   "seller not listed",
+   "match not listed"
+  ],
+  "reflex_route": {
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  "judgments": [
+   {
+    "id": "S1",
+    "name": "an ablation test's effect is the group's worth on the share of the held slice's result page views built at origin, taken by market, device and day from the edge cache record",
+    "kind": "stump",
+    "precedent": [
+     "L18",
+     "L28"
+    ],
+    "dropped": {
+     "answer": [
+      "stock listed",
+      "promise listed",
+      "price listed",
+      "history not listed",
+      "trend not listed",
+      "seller not listed",
+      "match not listed"
+     ],
+     "results_moved": [
+      "R2",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "stock listed",
+      "promise not listed",
+      "price listed",
+      "history not listed",
+      "trend listed",
+      "seller listed",
+      "match not listed"
+     ],
+     "results_rescued": [
+      "R2"
+     ]
+    }
+   },
+   {
+    "id": "S2",
+    "name": "the sessions served a group's default are replayed source by source from the gap, batch, lag and scoring logs with each value's validity, weighted by the traffic each source carries, net of what normal service leaves at the default",
+    "kind": "stump",
+    "precedent": [
+     "N21",
+     "L26"
+    ],
+    "dropped": {
+     "answer": [
+      "stock listed",
+      "promise listed",
+      "price listed",
+      "history not listed",
+      "trend listed",
+      "seller listed",
+      "match not listed"
+     ],
+     "results_moved": [
+      "R3",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "stock listed",
+      "promise not listed",
+      "price listed",
+      "history not listed",
+      "trend not listed",
+      "seller not listed",
+      "match not listed"
+     ],
+     "results_rescued": [
+      "R3"
+     ]
+    }
+   },
+   {
+    "id": "S3",
+    "name": "the cost through each component that also reads the group is built from the component's own holdout test and its own render record, and added",
+    "kind": "stump",
+    "precedent": [
+     "L16",
+     "N27"
+    ],
+    "dropped": {
+     "answer": [
+      "stock listed",
+      "promise not listed",
+      "price listed",
+      "history not listed",
+      "trend listed",
+      "seller not listed",
+      "match not listed"
+     ],
+     "results_moved": [
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R8"
+     ]
+    },
+    "alone": {
+     "answer": [
+      "stock listed",
+      "promise listed",
+      "price listed",
+      "history not listed",
+      "trend not listed",
+      "seller listed",
+      "match not listed"
+     ],
+     "results_rescued": [
+      "R4"
+     ]
+    }
+   },
+   {
+    "id": "J4",
+    "name": "the monitor's reloaded week, renamed shards, rows the scoring writer wrote twice, two status vocabularies, the aborted test, the mart's market keys and wall-clock times brought to one calendar and scheme",
+    "kind": "reflex",
+    "precedent": [
+     "R01"
+    ]
+   },
+   {
+    "id": "J5",
+    "name": "every file read, the three unused ones set aside",
+    "kind": "reflex",
+    "precedent": [
+     "R02"
+    ]
+   },
+   {
+    "id": "J6",
+    "name": "the randomised tests pooled by market and device with intervals",
+    "kind": "reflex",
+    "precedent": [
+     "R55",
+     "R04",
+     "R67"
+    ]
+   },
+   {
+    "id": "J7",
+    "name": "the two serving regions compared over April's nights with other weeks as a placebo and an interval",
+    "kind": "reflex",
+    "precedent": [
+     "R92"
+    ]
+   },
+   {
+    "id": "J8",
+    "name": "each source weighted by the traffic the shipped tables give it",
+    "kind": "reflex",
+    "precedent": [
+     "R01"
+    ]
+   }
+  ]
+ },
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "stock listed",
+   "promise listed",
+   "price listed",
+   "history not listed",
+   "trend listed",
+   "seller not listed",
+   "match not listed"
+  ],
+  "golden_family": [
+   {
+    "name": "effects pooled over every market and device",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the fresh share averaged over each test",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects pooled over every market and device; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects cell by cell; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects weighted by the precision of each day's difference; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run before July; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects on the tests run from April; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "effects not netted for the default served on the tests' own days; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; a snapshot fresh the minute its feed stops and back the minute it returns",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; counters back the hour their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; counters back two hours after their partition catches up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; sellers weighted by the quarter's traffic",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the sellers' usual default share from the second quarter",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the sellers' usual default share from June",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the sellers' usual default share from the first half",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the fresh share averaged over each test; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back the hour their partition catches up; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "counters back two hours after their partition catches up; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "sellers weighted by the quarter's traffic; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the second quarter; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from June; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half; the readers' loss pooled over markets and devices",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half; the readers' failed renders over the rate at which each fails with its group's value present",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half; the readers' failed renders over their second-quarter rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half; the readers' failed renders over their first-half rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the sellers' usual default share from the first half; the readers' failed renders over their June rate",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the ablation effects as measured",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the status record's unhealthy share as the share of sessions served the default",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "each group priced through the ranking model alone",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the ablation effects as measured, on the status record's unhealthy share",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the ablation effects as measured, each group priced through the ranking model alone",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the status record's unhealthy share, each group priced through the ranking model alone",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "the pooled ablation effects on the traffic-weighted status record",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "each job's unhealthy share over the quarter (every chain, price source and click-stream partition counted once) times the group's latest ablation test as reported, markets and devices pooled",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price not listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ]
+   },
+   {
+    "name": "every ablation test pooled by market and device with precision weights, on the traffic-weighted status record",
+    "answer": [
+     "stock listed",
+     "promise not listed",
+     "price listed",
+     "history not listed",
+     "trend not listed",
+     "seller listed",
+     "match not listed"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "the full effects one spread up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "the full effects one spread down",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "the default served one spread up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "the default served one spread down",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "the readers' losses one spread up",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "the readers' losses one spread down",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, +1, +1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, +1, -1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, -1, +1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (+1, -1, -1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, +1, +1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, +1, -1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, -1, +1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   },
+   {
+    "input": "all three one spread (-1, -1, -1)",
+    "answer": [
+     "stock listed",
+     "promise listed",
+     "price listed",
+     "history not listed",
+     "trend listed",
+     "seller not listed",
+     "match not listed"
+    ]
+   }
+  ]
+ },
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller not listed",
+    "match not listed"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the ablation effects as measured",
+   "answer": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller not listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "the status record's unhealthy share as the share of sessions served the default",
+   "answer": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "each group priced through the ranking model alone",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller not listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "the ablation effects as measured, on the status record's unhealthy share",
+   "answer": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "the ablation effects as measured, each group priced through the ranking model alone",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller not listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "the status record's unhealthy share, each group priced through the ranking model alone",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "the pooled ablation effects on the traffic-weighted status record",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "each job's unhealthy share over the quarter (every chain, price source and click-stream partition counted once) times the group's latest ablation test as reported, markets and devices pooled",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price not listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ]
+  },
+  {
+   "name": "every ablation test pooled by market and device with precision weights, on the traffic-weighted status record",
+   "answer": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 18,
+  "components": 20,
+  "asks": 53,
+  "instruction": 9
+ }
+}

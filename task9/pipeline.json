@@ -1,43 +1,44 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-18",
  "doctrine": "throughout",
  "seed": 9104,
- "call": "put stock (0.102 points of search conversion), price (0.163), trend (0.072) and promise (0.064) on the 2027 tier one list and leave seller (0.025), history (0.028) and match (0.019) off it; the seven groups cost 0.47 points over the quarter and the listed four 0.40 (generator/core.py at the draw, seed 9104; the cut pack's figures replace these at the build)",
- "stump": "the reflex route (every ablation test pooled by market and device with precision weights, on the traffic-weighted failure telemetry) files 0.267, 0.032, 0.080, 0.021, 0.039, 0.217 and 0.009 and lists stock, price and seller: wrong on trend, promise and seller. S1 (an ablation's effect is the group's worth on the share of the held slice's page views built fresh, read from the edge cache record) opens trend; S2 (the sessions served a default are replayed entity by entity with each value's validity, weighted by traffic, net of what normal service leaves) opens seller; S3 (three groups are also read by a service the ablation never touches, priced from its own test and its own failed renders) opens promise",
- "chain": "R1 the registry, telemetry, entity logs, test records, cache record and readers' records on one calendar and scheme; R2 each group's full effect per session from its ablation tests over the fresh share; R3 the share of the quarter's sessions served each group's default over what normal service leaves, rebuilt entity by entity; R4 each other reader's cost from its own test and failed renders; R5 April's missed price batches in one serving region reproduced from R2 to R4; R6 each group's third-quarter cost, by month and together; R7 the tier one list and what the listed groups cost together",
+ "call": "put stock (0.102 points of search conversion), promise (0.067), price (0.167) and trend (0.072) on the 2027 tier one list and leave history (0.029), seller (0.025) and match (0.019) off it; the seven groups cost 0.48 points over the third quarter of 2026 and the listed four 0.41 (generator/figures.json on the cut pack)",
+ "stump": "the reflex route (each group's ablation tests as reported, on the traffic-weighted status record) files 0.267, 0.032, 0.080, 0.021, 0.039, 0.217 and 0.009 and lists stock, price and seller: wrong on trend, promise and seller. S1 (a test withholds a group only on the held users' pages built at origin, so its effect is taken over that share from the edge cache record: trend 0.84 points a session, not 0.42) opens trend; S2 (a failed source's value is served for its validity, so each source is replayed from its own log, weighted by traffic and net of what normal service leaves: seller 1.39 per cent of sessions, not 23.43) opens seller; S3 (three groups are also read by a page component no ablation withholds, priced from its own holdout and its eligible sessions: the delivery promise badge 0.035 points) opens promise. April's missed price batches in one serving region referee the route: 0.405 called against 0.411 in the mart, the shortcuts 0.260, 0.800 and 0.286",
+ "chain": "R1 the registry, status record, source logs, experiment export, cache record and render record on one calendar and scheme; R2 each group's full effect a session from its ablation tests over the share built at origin; R3 the share of the quarter's sessions served each group's default over normal service, replayed source by source; R4 each page component's cost from its own holdout and eligible sessions; R5 April's missed price batches in one serving region called by R2 to R4 and tested on the mart; R6 each group's third-quarter cost; R7 the groups together over the quarter and each of its months; R8 the 2027 tier one list",
  "architecture": 4,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-18",
-  "checks": "precut.py task9: 115 checks, 0 FAIL, 3 WARN (the nearest chains task1, task6 and task7 share the flagged-set shape only, answered in the note's Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on seed 9104 (three stumps on the axes what, when and who, three open members opened by different stumps, one stump lost 32, 37 and 37, reflex route 9, rigorous standard route 9, one stump fixed alone 27, 18 and 23); the call holds under 125 variants and every forcing corner (nearest the line 0.0137); prompt gate PASS"
+  "checks": "precut.py task9 on the cut pack: 116 checks, 0 FAIL, 2 WARN (R2 upstream of R5 to R8, as R3 and R4 are, answered under the Results chain; the nearest chains task1, task6 and task7 share the flagged-set shape only, answered in the Template check); generator/core.py CORE PASS level 5 on seed 9104 after one architect's act at stage 3 (a component's cost on the group's default share), re-proved; 157 variants one list, nearest the line 0.0137; checks.py 103 assertions, verify.py 110 figures, two byte-identical builds; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut, no LEAK: the release log as a text file, the fiction's nouns in the release log and the charter, and the edge's column name device (declared under field_terms), each answered in the note's Leak rulings",
+  "reader": "two reads (Sonnet, medium): no sentence that says how any part is done, no file ranking the groups on the question, no helping file, no answer figure, the charter's sentences executing to the estimand; the hurried route named as what the pack makes look routine. Two realism tells fixed in the generator (campaign names by season and as one-day events; the experiments' rotation and run lengths filed in the pipeline configuration)"
  },
  "duplicate_check": {
-  "heart": "",
+  "heart": "guard.py heart task9 on the final cut: WARN only (overuse.forum line_manager_or_team; repeat.deliverables csv+xlsx against task5 and task8), each answered in the note's Draw; surface PASS",
   "nearest": "guard.py check on 2026-11-18: WARN only (overuse.forum line_manager_or_team; repeat.deliverables csv+xlsx against task5 and task8, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "three passes of one judge (Fable, high). Pass 1 on the first cut: DETERMINISTIC, FIX_NOW on the answer blocks (six fixes) and one check at source, answered from the world (nothing charged to trend beyond its effect through the ranking model). Pass 2 on the moved pack: DETERMINISTIC, no graded figure moved, five wording fixes. Pass 3, the closing check on the final cut (target.zip md5 0eca88a59d96b3aaeeac93189ef2f52f): DETERMINISTIC, APPROVE, every graded figure, range and the list rebuilt. Open and the author's: the quarter's own three tests keep the list but leave the stated ranges of trend, price and components 1 and 4; the blocks refuse them by the tests' agreement, their standard errors and April",
+  "report": "determinism_check_report.md, determinism_check_report_pass2.md, determinism_check_report_pass3.md"
  },
- "paper_pair": 9,
+ "paper_pair": 26.7,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": "a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth: rescues 1 of 7 (core.py: one stump lost 32, 37 and 37; reflex route 9; rigorous standard route 9; one stump fixed alone 27, 18, 23)"
+  "quick": 9.0,
+  "careful": 26.7,
+  "thorough": 100.0,
+  "factorial": "corelib level 5 on the cut pack: S1 what an ablation test withholds (opens trend), S2 what a failed source goes on serving (opens seller), S3 who else reads the group (opens promise); a run that loses one stump earns 32.2, 36.7 or 36.7 on the stated ranges, the reflex route 9, the rigorous standard route 9, one stump fixed alone 27.2, 18.4 or 27.2",
+  "largest_hint": "a user held out of a feature group still gets result pages from the cache every user shares, so an ablation test measures only part of what the group is worth: rescues 1 of 8"
  },
  "runs": {
   "run1": null,
@@ -46,7 +47,7 @@
   "counterfactual_average": null
  },
  "returned": [],
- "resume": "DESIGN: the core is proved (python3 task9/generator/core.py, CORE PASS level 5; --forcing holds) and the note carries the Build brief; next is stage 3, the generator around core.py",
+ "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload of target.zip and golden.zip with the four answer blocks, then /triage-runs task9 once both runs are graded",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -121,6 +122,17 @@
   {
    "date": "2026-11-18",
    "event": "architecture 4 drawn: Tessel Market's ranking model, what each feature group's degraded service cost search conversion in the third quarter of 2026; generator/core.py CORE PASS level 5 on seed 9104; card registered at WARN, skeleton PASS; three vocabulary keys added"
+  },
+  {
+   "date": "2026-11-18",
+   "event": "READY: architecture 4 built on seed 9104; stage 4 in one repair pass (six answer-block fixes, two realism fixes in the pack), re-judged on the moved pack and closed on the final cut; gates.py --full 0 FAIL, containers PASS"
   }
- ]
+ ],
+ "final_cut": {
+  "date": "2026-11-18",
+  "target_zip_md5": "0eca88a59d96b3aaeeac93189ef2f52f",
+  "golden_zip_md5": "711efab3c73da81f91731ddd0196c192",
+  "target_digest": "bdad1b98c99f5bad",
+  "golden_digest": "2ebdec19db2bc905"
+ }
 }

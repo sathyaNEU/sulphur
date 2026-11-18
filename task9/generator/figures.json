@@ -1,0 +1,2033 @@
+{
+ "all": 0.48,
+ "all_band": [
+  0.44,
+  0.51
+ ],
+ "april": {
+  "band": [
+   0.385,
+   0.419
+  ],
+  "batches": 7,
+  "days": 14,
+  "golden": 0.405,
+  "golden_off_se": 0.4,
+  "off": 0.006,
+  "record": 0.411,
+  "record_se": 0.016,
+  "rivals": {
+   "S1 lost": {
+    "off": 0.151,
+    "value": 0.26
+   },
+   "S2 lost": {
+    "off": 0.389,
+    "value": 0.8
+   },
+   "S3 lost": {
+    "off": 0.125,
+    "value": 0.286
+   },
+   "every stump lost": {
+    "off": 0.131,
+    "value": 0.28
+   },
+   "rigorous": {
+    "off": 0.131,
+    "value": 0.28
+   }
+  }
+ },
+ "april_batch_days": {
+  "golden": 0.77,
+  "off": 0.025,
+  "record": 0.745,
+  "rivals": {
+   "S1": {
+    "off": 0.251,
+    "value": 0.494
+   },
+   "S1+S2+S3": {
+    "off": 0.199,
+    "value": 0.546
+   },
+   "S2": {
+    "off": 0.812,
+    "value": 1.557
+   },
+   "S3": {
+    "off": 0.201,
+    "value": 0.544
+   }
+  }
+ },
+ "asks": {
+  "August": 0.63,
+  "July": 0.49,
+  "September": 0.32,
+  "all groups": 0.48,
+  "history": 0.029,
+  "listed groups": 0.41,
+  "match": 0.019,
+  "price": 0.167,
+  "promise": 0.067,
+  "seller": 0.025,
+  "stock": 0.102,
+  "trend": 0.072
+ },
+ "asks_together": {
+  "August": 0.63,
+  "July": 0.49,
+  "September": 0.32,
+  "all groups": 0.48
+ },
+ "beside": [
+  {
+   "c": [
+    0.8432,
+    1.3926,
+    0.0347,
+    null
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0186,
+    "price": 0.1668,
+    "promise": 0.0666,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "name": "the quarter cut on Utrecht's calendar days",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8432,
+    1.3925,
+    0.0347,
+    0.4052
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0666,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "name": "the monitor's first load of each hour kept",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8406,
+    1.3925,
+    0.0347,
+    0.4052
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0666,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0721
+   },
+   "name": "the aborted test read with the completed ones",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8432,
+    1.3925,
+    0.0347,
+    0.4052
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0288,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0667,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "name": "a component's loss per session of its own test, eligible or not, at its group's default share",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8264,
+    1.3925,
+    0.0347,
+    0.4103
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0288,
+    "match": 0.0186,
+    "price": 0.1692,
+    "promise": 0.0666,
+    "seller": 0.0247,
+    "stock": 0.1023,
+    "trend": 0.0709
+   },
+   "name": "each group's full effect as the mean of its tests' own ratios",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8432,
+    1.3925,
+    0.0347,
+    0.4052
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0288,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0667,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "name": "a component's loss per eligible session market by market",
+   "outside": []
+  },
+  {
+   "c": [
+    0.8435,
+    1.3925,
+    0.0347,
+    0.4051
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0212,
+    "price": 0.165,
+    "promise": 0.0666,
+    "seller": 0.0246,
+    "stock": 0.1048,
+    "trend": 0.072
+   },
+   "name": "every default share taken day by day before it meets the sessions",
+   "outside": []
+  }
+ ],
+ "c1": 0.84,
+ "c1_band": [
+  0.8,
+  0.91
+ ],
+ "c2": 1.39,
+ "c2_band": [
+  1.37,
+  1.46
+ ],
+ "c3": 0.035,
+ "c3_band": [
+  0.031,
+  0.036
+ ],
+ "c4": 0.405,
+ "c4_band": [
+  0.385,
+  0.419
+ ],
+ "call": [
+  "stock listed",
+  "promise listed",
+  "price listed",
+  "history not listed",
+  "trend listed",
+  "seller not listed",
+  "match not listed"
+ ],
+ "conversion": {
+  "fall": 0.53,
+  "q2": 12.29,
+  "q3": 11.76
+ },
+ "core_world_golden": {
+  "history": 0.0288,
+  "match": 0.0186,
+  "price": 0.1671,
+  "promise": 0.0667,
+  "seller": 0.0246,
+  "stock": 0.1023,
+  "trend": 0.0723
+ },
+ "cost": {
+  "history": 0.029,
+  "match": 0.019,
+  "price": 0.167,
+  "promise": 0.067,
+  "seller": 0.025,
+  "stock": 0.102,
+  "trend": 0.072
+ },
+ "cost_band": {
+  "history": [
+   0.027,
+   0.03
+  ],
+  "match": [
+   0.017,
+   0.022
+  ],
+  "price": [
+   0.152,
+   0.175
+  ],
+  "promise": [
+   0.062,
+   0.069
+  ],
+  "seller": [
+   0.023,
+   0.027
+  ],
+  "stock": [
+   0.081,
+   0.124
+  ],
+  "trend": [
+   0.066,
+   0.081
+  ]
+ },
+ "counts": {
+  "ablation_tests": 63,
+  "aborted": 1,
+  "cells": 12,
+  "chains": 14,
+  "days": 273,
+  "experiments": 67,
+  "files": 23,
+  "gaps": 1633,
+  "holdout_days": 42,
+  "holdouts": 3,
+  "hours": 6552,
+  "lag_episodes": 105,
+  "markets": 6,
+  "mart_rows": 6552,
+  "partitions": 24,
+  "render_rows": 235872,
+  "replicas": 6,
+  "scoring_repeats": 1332,
+  "scoring_rows": 889961,
+  "scoring_runs": 888629,
+  "sellers": 8000,
+  "session_rows": 78624,
+  "sources": 5,
+  "split_batches": 7,
+  "split_days": 14,
+  "status_rows": 339465,
+  "status_rows_kept": 334425,
+  "status_rows_reloaded": 5040,
+  "test_days": 14,
+  "tests_per_group": 9,
+  "unused": 3
+ },
+ "csv_rows": 21,
+ "family_calls_all_golden": true,
+ "family_sizes": {
+  "effects": 6,
+  "fresh": 1,
+  "reader": 5,
+  "state": 8
+ },
+ "fresh_share_pct": {
+  "app": {
+   "after": 44,
+   "before": 61,
+   "q3": 44
+  },
+  "web": {
+   "after": 32,
+   "before": 46,
+   "q3": 31
+  }
+ },
+ "full_effect": {
+  "history": 1.32,
+  "match": 2.31,
+  "price": 1.11,
+  "promise": 0.57,
+  "seller": 1.77,
+  "stock": 2.54,
+  "trend": 0.84
+ },
+ "full_effect_device": {
+  "history": {
+   "app": 1.42,
+   "web": 1.15
+  },
+  "match": {
+   "app": 2.49,
+   "web": 2.02
+  },
+  "price": {
+   "app": 1.18,
+   "web": 1.0
+  },
+  "promise": {
+   "app": 0.6,
+   "web": 0.53
+  },
+  "seller": {
+   "app": 1.81,
+   "web": 1.71
+  },
+  "stock": {
+   "app": 2.7,
+   "web": 2.29
+  },
+  "trend": {
+   "app": 0.95,
+   "web": 0.67
+  }
+ },
+ "group_month": {
+  "history": {
+   "August": 0.0675,
+   "July": 0.0038,
+   "September": 0.015,
+   "quarter": 0.0289
+  },
+  "match": {
+   "August": 0.0202,
+   "July": 0.0197,
+   "September": 0.016,
+   "quarter": 0.0186
+  },
+  "price": {
+   "August": 0.185,
+   "July": 0.2786,
+   "September": 0.0358,
+   "quarter": 0.1671
+  },
+  "promise": {
+   "August": 0.079,
+   "July": 0.0292,
+   "September": 0.0921,
+   "quarter": 0.0666
+  },
+  "seller": {
+   "August": 0.031,
+   "July": 0.0167,
+   "September": 0.0262,
+   "quarter": 0.0246
+  },
+  "stock": {
+   "August": 0.1213,
+   "July": 0.1065,
+   "September": 0.0787,
+   "quarter": 0.1023
+  },
+  "trend": {
+   "August": 0.1219,
+   "July": 0.0356,
+   "September": 0.0592,
+   "quarter": 0.0723
+  }
+ },
+ "held_share_pct": 50.01,
+ "hurried": {
+  "all": 0.67,
+  "c1": 0.42,
+  "c2": 23.43,
+  "c3": 0.0,
+  "c4": 0.28,
+  "cost": {
+   "history": 0.021,
+   "match": 0.009,
+   "price": 0.08,
+   "promise": 0.032,
+   "seller": 0.217,
+   "stock": 0.267,
+   "trend": 0.039
+  },
+  "effect": {
+   "history": 1.32,
+   "match": 1.12,
+   "price": 0.56,
+   "promise": 0.57,
+   "seller": 0.93,
+   "stock": 2.62,
+   "trend": 0.42
+  },
+  "list": [
+   "stock",
+   "price",
+   "seller"
+  ],
+  "listed_cost": 0.56,
+  "month": {
+   "August": 0.86,
+   "July": 0.58,
+   "September": 0.55
+  }
+ },
+ "joint_default_pct": 4.13,
+ "line": 0.05,
+ "list": [
+  "stock",
+  "promise",
+  "price",
+  "trend"
+ ],
+ "listed_band": [
+  0.37,
+  0.44
+ ],
+ "listed_cost": 0.41,
+ "lost_alone": {
+  "S1": {
+   "c1": 0.42,
+   "c2": 1.39,
+   "c3": 0.035,
+   "c4": 0.26
+  },
+  "S2": {
+   "c1": 0.85,
+   "c2": 23.43,
+   "c3": 0.035,
+   "c4": 0.8
+  },
+  "S3": {
+   "c1": 0.84,
+   "c2": 1.39,
+   "c3": 0.0,
+   "c4": 0.286
+  }
+ },
+ "margin": {
+  "history": 0.021,
+  "match": 0.031,
+  "price": 0.117,
+  "promise": 0.017,
+  "seller": 0.025,
+  "stock": 0.052,
+  "trend": 0.022
+ },
+ "measured_effect": {
+  "history": 1.32,
+  "match": 1.12,
+  "price": 0.55,
+  "promise": 0.57,
+  "seller": 0.85,
+  "stock": 2.54,
+  "trend": 0.42
+ },
+ "month": {
+  "August": 0.63,
+  "July": 0.49,
+  "September": 0.32
+ },
+ "month_band": {
+  "August": [
+   0.58,
+   0.66
+  ],
+  "July": [
+   0.45,
+   0.53
+  ],
+  "September": [
+   0.29,
+   0.35
+  ]
+ },
+ "nearest_beside": {
+  "distance": 0.0166,
+  "group": "promise",
+  "reading": "the quarter cut on Utrecht's calendar days"
+ },
+ "nearest_variant": {
+  "distance": 0.0137,
+  "group": "promise",
+  "value": 0.0637,
+  "variant": "effects not netted for the default served on the tests' own days; the readers' failed renders over their June rate"
+ },
+ "off_list": [
+  "history",
+  "seller",
+  "match"
+ ],
+ "perturbations": [
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.029,
+    "match": 0.0189,
+    "price": 0.1729,
+    "promise": 0.0672,
+    "seller": 0.025,
+    "stock": 0.1039,
+    "trend": 0.0762
+   },
+   "group": "promise",
+   "input": "the full effects one spread up",
+   "nearest": 0.0172
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0287,
+    "match": 0.0184,
+    "price": 0.1613,
+    "promise": 0.066,
+    "seller": 0.0242,
+    "stock": 0.1007,
+    "trend": 0.0684
+   },
+   "group": "promise",
+   "input": "the full effects one spread down",
+   "nearest": 0.016
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0666,
+    "seller": 0.0255,
+    "stock": 0.116,
+    "trend": 0.074
+   },
+   "group": "promise",
+   "input": "the default served one spread up",
+   "nearest": 0.0166
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0289,
+    "match": 0.0186,
+    "price": 0.1671,
+    "promise": 0.0666,
+    "seller": 0.0237,
+    "stock": 0.0887,
+    "trend": 0.0707
+   },
+   "group": "promise",
+   "input": "the default served one spread down",
+   "nearest": 0.0166
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0299,
+    "match": 0.0186,
+    "price": 0.1724,
+    "promise": 0.069,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "group": "promise",
+   "input": "the readers' losses one spread up",
+   "nearest": 0.019
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0278,
+    "match": 0.0186,
+    "price": 0.1618,
+    "promise": 0.0643,
+    "seller": 0.0246,
+    "stock": 0.1023,
+    "trend": 0.0723
+   },
+   "group": "promise",
+   "input": "the readers' losses one spread down",
+   "nearest": 0.0143
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.03,
+    "match": 0.0189,
+    "price": 0.1782,
+    "promise": 0.0696,
+    "seller": 0.0259,
+    "stock": 0.1177,
+    "trend": 0.0779
+   },
+   "group": "promise",
+   "input": "all three one spread (+1, +1, +1)",
+   "nearest": 0.0196
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.028,
+    "match": 0.0189,
+    "price": 0.1676,
+    "promise": 0.0649,
+    "seller": 0.0259,
+    "stock": 0.1177,
+    "trend": 0.0779
+   },
+   "group": "promise",
+   "input": "all three one spread (+1, +1, -1)",
+   "nearest": 0.0149
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.03,
+    "match": 0.0189,
+    "price": 0.1782,
+    "promise": 0.0696,
+    "seller": 0.0241,
+    "stock": 0.0901,
+    "trend": 0.0745
+   },
+   "group": "promise",
+   "input": "all three one spread (+1, -1, +1)",
+   "nearest": 0.0196
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.028,
+    "match": 0.0189,
+    "price": 0.1676,
+    "promise": 0.0649,
+    "seller": 0.0241,
+    "stock": 0.0901,
+    "trend": 0.0745
+   },
+   "group": "promise",
+   "input": "all three one spread (+1, -1, -1)",
+   "nearest": 0.0149
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0297,
+    "match": 0.0184,
+    "price": 0.1666,
+    "promise": 0.0684,
+    "seller": 0.0251,
+    "stock": 0.1142,
+    "trend": 0.07
+   },
+   "group": "promise",
+   "input": "all three one spread (-1, +1, +1)",
+   "nearest": 0.0184
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0277,
+    "match": 0.0184,
+    "price": 0.1561,
+    "promise": 0.0637,
+    "seller": 0.0251,
+    "stock": 0.1142,
+    "trend": 0.07
+   },
+   "group": "promise",
+   "input": "all three one spread (-1, +1, -1)",
+   "nearest": 0.0137
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0297,
+    "match": 0.0184,
+    "price": 0.1666,
+    "promise": 0.0684,
+    "seller": 0.0233,
+    "stock": 0.0873,
+    "trend": 0.0669
+   },
+   "group": "trend",
+   "input": "all three one spread (-1, -1, +1)",
+   "nearest": 0.0169
+  },
+  {
+   "call_holds": true,
+   "cost": {
+    "history": 0.0277,
+    "match": 0.0184,
+    "price": 0.1561,
+    "promise": 0.0637,
+    "seller": 0.0233,
+    "stock": 0.0873,
+    "trend": 0.0669
+   },
+   "group": "promise",
+   "input": "all three one spread (-1, -1, -1)",
+   "nearest": 0.0137
+  }
+ ],
+ "q3_sessions_m": 123.0,
+ "rank_cost": {
+  "history": 0.021,
+  "match": 0.019,
+  "price": 0.118,
+  "promise": 0.032,
+  "seller": 0.025,
+  "stock": 0.102,
+  "trend": 0.072
+ },
+ "reader_cost": {
+  "history": 0.008,
+  "price": 0.049,
+  "promise": 0.035
+ },
+ "reader_eligible_pct": {
+  "history": 50,
+  "price": 45,
+  "promise": 56
+ },
+ "reader_per_eligible": {
+  "history": 0.93,
+  "price": 1.02,
+  "promise": 1.13
+ },
+ "referee_golden": 0.405,
+ "render_failed_pct": {
+  "history": {
+   "q2": 2.21,
+   "q3": 3.61
+  },
+  "price": {
+   "q2": 2.87,
+   "q3": 12.59
+  },
+  "promise": {
+   "q2": 2.37,
+   "q3": 7.58
+  }
+ },
+ "reported_effect_halves": {
+  "history": {
+   "jan_may": 1.33,
+   "jul_sep": 1.28
+  },
+  "match": {
+   "jan_may": 1.28,
+   "jul_sep": 0.89
+  },
+  "price": {
+   "jan_may": 0.59,
+   "jul_sep": 0.42
+  },
+  "promise": {
+   "jan_may": 0.55,
+   "jul_sep": 0.56
+  },
+  "seller": {
+   "jan_may": 0.96,
+   "jul_sep": 0.67
+  },
+  "stock": {
+   "jan_may": 2.51,
+   "jul_sep": 2.48
+  },
+  "trend": {
+   "jan_may": 0.5,
+   "jul_sep": 0.27
+  }
+ },
+ "result_grades": {
+  "S1": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "partly"
+  },
+  "S1+S2": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "partly"
+  },
+  "S1+S2+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "missed"
+  },
+  "S1+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "partly"
+  },
+  "S2": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "partly",
+   "R7": "missed",
+   "R8": "partly"
+  },
+  "S2+S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "missed",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed",
+   "R8": "partly"
+  },
+  "S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "partly",
+   "R7": "missed",
+   "R8": "partly"
+  }
+ },
+ "rival_april_ratio": {
+  "cost": {
+   "history": 0.031,
+   "match": 0.013,
+   "price": 0.117,
+   "promise": 0.047,
+   "seller": 0.319,
+   "stock": 0.392,
+   "trend": 0.057
+  },
+  "list": [
+   "stock",
+   "price",
+   "trend",
+   "seller"
+  ],
+  "ratio": 1.47,
+  "wrong": [
+   "promise",
+   "seller"
+  ]
+ },
+ "rival_compounding": {
+  "call_holds": true,
+  "cost": {
+   "history": 0.0277,
+   "match": 0.0177,
+   "price": 0.1632,
+   "promise": 0.0644,
+   "seller": 0.0236,
+   "stock": 0.0992,
+   "trend": 0.0698
+  },
+  "most_moved": 0.0039,
+  "outside": []
+ },
+ "rival_daily_regression": {
+  "history": {
+   "cost": 0.013,
+   "se": 0.025
+  },
+  "match": {
+   "cost": 0.024,
+   "se": 0.003
+  },
+  "price": {
+   "cost": 0.136,
+   "se": 0.019
+  },
+  "promise": {
+   "cost": -0.054,
+   "se": 0.091
+  },
+  "seller": {
+   "cost": 0.162,
+   "se": 0.07
+  },
+  "stock": {
+   "cost": 0.159,
+   "se": 0.023
+  },
+  "trend": {
+   "cost": 0.195,
+   "se": 0.036
+  }
+ },
+ "rival_daily_regression_list": [
+  "stock",
+  "price",
+  "trend",
+  "seller"
+ ],
+ "rival_daily_regression_unplaced": {
+  "history": 1.5,
+  "promise": 1.1,
+  "seller": 1.6
+ },
+ "rival_daily_within_day": {
+  "history": {
+   "cost": 11.188,
+   "se": 9.682
+  },
+  "match": {
+   "cost": 0.018,
+   "se": 0.002
+  },
+  "price": {
+   "cost": 0.256,
+   "se": 0.02
+  },
+  "promise": {
+   "cost": -4.002,
+   "se": 7.715
+  },
+  "seller": null,
+  "stock": {
+   "cost": 0.108,
+   "se": 0.015
+  },
+  "trend": {
+   "cost": -8.072,
+   "se": 2.764
+  }
+ },
+ "rival_one_pooled_effect": {
+  "call_holds": true,
+  "cost": {
+   "history": 0.029,
+   "match": 0.019,
+   "price": 0.168,
+   "promise": 0.067,
+   "seller": 0.025,
+   "stock": 0.102,
+   "trend": 0.074
+  }
+ },
+ "rival_replayed_regression": {
+  "all": 0.55,
+  "cost": {
+   "history": 0.033,
+   "match": 0.023,
+   "price": 0.142,
+   "promise": -0.079,
+   "seller": 0.139,
+   "stock": 0.101,
+   "trend": 0.194
+  },
+  "list": [
+   "stock",
+   "price",
+   "trend",
+   "seller"
+  ],
+  "per_session": {
+   "history": 2.05,
+   "match": 2.87,
+   "price": 1.34,
+   "promise": -1.41,
+   "seller": 10.0,
+   "stock": 2.52,
+   "trend": 2.26
+  },
+  "se": {
+   "history": 0.028,
+   "match": 0.003,
+   "price": 0.021,
+   "promise": 0.107,
+   "seller": 0.085,
+   "stock": 0.014,
+   "trend": 0.034
+  },
+  "unplaced": {
+   "history": 0.6,
+   "promise": 1.2,
+   "seller": 1.1
+  }
+ },
+ "rival_seller_independent_nights": {
+  "cost": 0.0029,
+  "served_pct": 0.16
+ },
+ "rival_seller_not_netted": {
+  "call_holds": true,
+  "cost": 0.046,
+  "served_pct": 2.6
+ },
+ "rival_stock_short_gaps": {
+  "call_holds": true,
+  "cost": 0.1026,
+  "inside": true,
+  "served_pct": 4.04
+ },
+ "rival_test_subsets": {
+  "the four tests from June": {
+   "all": 0.48,
+   "c1": 0.74,
+   "c4": 0.427,
+   "c_outside": [
+    "1",
+    "4"
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.029,
+    "match": 0.019,
+    "price": 0.176,
+    "promise": 0.068,
+    "seller": 0.025,
+    "stock": 0.104,
+    "trend": 0.063
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price",
+    "trend"
+   ],
+   "listed_cost": 0.41,
+   "outside": [
+    "price",
+    "trend"
+   ],
+   "trend_from_line": 0.013
+  },
+  "the latest test alone": {
+   "all": 0.46,
+   "c1": 0.55,
+   "c4": 0.41,
+   "c_outside": [
+    "1"
+   ],
+   "call_holds": false,
+   "cost": {
+    "history": 0.028,
+    "match": 0.02,
+    "price": 0.169,
+    "promise": 0.066,
+    "seller": 0.022,
+    "stock": 0.105,
+    "trend": 0.047
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price"
+   ],
+   "listed_cost": 0.34,
+   "outside": [
+    "listed groups",
+    "seller",
+    "trend"
+   ],
+   "trend_from_line": 0.003
+  },
+  "the quarter's own tests": {
+   "all": 0.48,
+   "april_off_se": 1.7,
+   "c1": 0.72,
+   "c4": 0.438,
+   "c_outside": [
+    "1",
+    "4"
+   ],
+   "call_holds": true,
+   "cost": {
+    "history": 0.029,
+    "match": 0.018,
+    "price": 0.181,
+    "promise": 0.067,
+    "seller": 0.024,
+    "stock": 0.104,
+    "trend": 0.061
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price",
+    "trend"
+   ],
+   "listed_cost": 0.41,
+   "outside": [
+    "price",
+    "trend"
+   ],
+   "trend_from_line": 0.011,
+   "trend_from_line_se": 1.5
+  }
+ },
+ "rival_test_subsets_stacked": {
+  "call_holds": true,
+  "nearest": 0.005,
+  "trend": [
+   0.0599,
+   0.0549
+  ]
+ },
+ "rival_usual_level": {
+  "cost": {
+   "history": 0.025,
+   "match": 0.014,
+   "price": 0.153,
+   "promise": 0.062,
+   "seller": 0.024,
+   "stock": 0.096,
+   "trend": 0.064
+  },
+  "list": [
+   "stock",
+   "promise",
+   "price",
+   "trend"
+  ],
+  "q2_default_pct": {
+   "history": 0.21,
+   "match": 0.21,
+   "price": 0.87,
+   "promise": 0.37,
+   "seller": 0.01,
+   "stock": 0.24,
+   "trend": 0.97
+  },
+  "wrong": []
+ },
+ "routes": {
+  "S1": {
+   "all": 0.36,
+   "call": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller not listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.029,
+    "match": 0.009,
+    "price": 0.107,
+    "promise": 0.067,
+    "seller": 0.012,
+    "stock": 0.102,
+    "trend": 0.036
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 1.12,
+    "price": 0.55,
+    "promise": 0.57,
+    "seller": 0.85,
+    "stock": 2.54,
+    "trend": 0.42
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price"
+   ],
+   "listed_cost": 0.28,
+   "month": {
+    "August": 0.47,
+    "July": 0.35,
+    "September": 0.26
+   },
+   "name": "the ablation effects as measured"
+  },
+  "S1+S2": {
+   "all": 0.77,
+   "call": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.029,
+    "match": 0.009,
+    "price": 0.145,
+    "promise": 0.067,
+    "seller": 0.217,
+    "stock": 0.267,
+    "trend": 0.039
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 1.12,
+    "price": 0.56,
+    "promise": 0.57,
+    "seller": 0.93,
+    "stock": 2.62,
+    "trend": 0.42
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price",
+    "seller"
+   ],
+   "listed_cost": 0.7,
+   "month": {
+    "August": 0.99,
+    "July": 0.7,
+    "September": 0.62
+   },
+   "name": "the ablation effects as measured, on the status record's unhealthy share"
+  },
+  "S1+S2+S3": {
+   "all": 0.67,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.009,
+    "price": 0.08,
+    "promise": 0.032,
+    "seller": 0.217,
+    "stock": 0.267,
+    "trend": 0.039
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 1.12,
+    "price": 0.56,
+    "promise": 0.57,
+    "seller": 0.93,
+    "stock": 2.62,
+    "trend": 0.42
+   },
+   "list": [
+    "stock",
+    "price",
+    "seller"
+   ],
+   "listed_cost": 0.56,
+   "month": {
+    "August": 0.86,
+    "July": 0.58,
+    "September": 0.55
+   },
+   "name": "the pooled ablation effects on the traffic-weighted status record"
+  },
+  "S1+S3": {
+   "all": 0.27,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller not listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.009,
+    "price": 0.058,
+    "promise": 0.032,
+    "seller": 0.012,
+    "stock": 0.102,
+    "trend": 0.036
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 1.12,
+    "price": 0.55,
+    "promise": 0.57,
+    "seller": 0.85,
+    "stock": 2.54,
+    "trend": 0.42
+   },
+   "list": [
+    "stock",
+    "price"
+   ],
+   "listed_cost": 0.16,
+   "month": {
+    "August": 0.36,
+    "July": 0.26,
+    "September": 0.2
+   },
+   "name": "the ablation effects as measured, each group priced through the ranking model alone"
+  },
+  "S2": {
+   "all": 1.13,
+   "call": [
+    "stock listed",
+    "promise listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.029,
+    "match": 0.019,
+    "price": 0.227,
+    "promise": 0.067,
+    "seller": 0.443,
+    "stock": 0.267,
+    "trend": 0.079
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 2.31,
+    "price": 1.13,
+    "promise": 0.57,
+    "seller": 1.89,
+    "stock": 2.62,
+    "trend": 0.85
+   },
+   "list": [
+    "stock",
+    "promise",
+    "price",
+    "trend",
+    "seller"
+   ],
+   "listed_cost": 1.08,
+   "month": {
+    "August": 1.43,
+    "July": 1.04,
+    "September": 0.92
+   },
+   "name": "the status record's unhealthy share as the share of sessions served the default"
+  },
+  "S2+S3": {
+   "all": 1.02,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.019,
+    "price": 0.161,
+    "promise": 0.032,
+    "seller": 0.443,
+    "stock": 0.267,
+    "trend": 0.079
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 2.31,
+    "price": 1.13,
+    "promise": 0.57,
+    "seller": 1.89,
+    "stock": 2.62,
+    "trend": 0.85
+   },
+   "list": [
+    "stock",
+    "price",
+    "trend",
+    "seller"
+   ],
+   "listed_cost": 0.95,
+   "month": {
+    "August": 1.3,
+    "July": 0.91,
+    "September": 0.85
+   },
+   "name": "the status record's unhealthy share, each group priced through the ranking model alone"
+  },
+  "S3": {
+   "all": 0.39,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend listed",
+    "seller not listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.019,
+    "price": 0.118,
+    "promise": 0.032,
+    "seller": 0.025,
+    "stock": 0.102,
+    "trend": 0.072
+   },
+   "effect": {
+    "history": 1.32,
+    "match": 2.31,
+    "price": 1.11,
+    "promise": 0.57,
+    "seller": 1.77,
+    "stock": 2.54,
+    "trend": 0.84
+   },
+   "list": [
+    "stock",
+    "price",
+    "trend"
+   ],
+   "listed_cost": 0.29,
+   "month": {
+    "August": 0.51,
+    "July": 0.39,
+    "September": 0.26
+   },
+   "name": "each group priced through the ranking model alone"
+  },
+  "direct": {
+   "all": 0.43,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price not listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.008,
+    "price": 0.046,
+    "promise": 0.029,
+    "seller": 0.147,
+    "stock": 0.162,
+    "trend": 0.018
+   },
+   "list": [
+    "stock",
+    "seller"
+   ],
+   "listed_cost": 0.31,
+   "month": {
+    "August": 0.55,
+    "July": 0.37,
+    "September": 0.37
+   },
+   "name": "each job's unhealthy share over the quarter (every chain, price source and click-stream partition counted once) times the group's latest ablation test as reported, markets and devices pooled"
+  },
+  "rigorous": {
+   "all": 0.66,
+   "call": [
+    "stock listed",
+    "promise not listed",
+    "price listed",
+    "history not listed",
+    "trend not listed",
+    "seller listed",
+    "match not listed"
+   ],
+   "cost": {
+    "history": 0.021,
+    "match": 0.009,
+    "price": 0.079,
+    "promise": 0.032,
+    "seller": 0.217,
+    "stock": 0.267,
+    "trend": 0.039
+   },
+   "list": [
+    "stock",
+    "price",
+    "seller"
+   ],
+   "listed_cost": 0.56,
+   "month": {
+    "August": 0.86,
+    "July": 0.58,
+    "September": 0.55
+   },
+   "name": "every ablation test pooled by market and device with precision weights, on the traffic-weighted status record"
+  }
+ },
+ "rubric": {
+  "fails": [],
+  "fixed_alone": {
+   "S1": 27.2,
+   "S2": 18.4,
+   "S3": 27.2
+  },
+  "level": 5,
+  "one_lost": {
+   "S1": 32.2,
+   "S2": 36.7,
+   "S3": 36.7
+  },
+  "reflex": 9.0,
+  "rigorous": 9.0
+ },
+ "seller": {
+  "fail_after_fail_pct": 34.4,
+  "fail_after_scored_pct": 20.1,
+  "failed_share_q3_pct": 23.39,
+  "runs": 888629,
+  "sellers": 8000,
+  "total_default_pct": 2.6,
+  "usual_default_pct": 1.21
+ },
+ "served_default_pct": {
+  "history": 1.61,
+  "match": 0.8,
+  "price": 10.59,
+  "promise": 5.58,
+  "seller": 1.39,
+  "stock": 4.03,
+  "trend": 8.58
+ },
+ "spreads_pct": {
+  "history": {
+   "effect": 0.6,
+   "reader": 13.4,
+   "served": 0.0
+  },
+  "match": {
+   "effect": 1.4,
+   "reader": 0.0,
+   "served": 0.0
+  },
+  "price": {
+   "effect": 4.9,
+   "reader": 10.8,
+   "served": 0.0
+  },
+  "promise": {
+   "effect": 1.9,
+   "reader": 6.8,
+   "served": 0.0
+  },
+  "seller": {
+   "effect": 1.7,
+   "reader": 0.0,
+   "served": 3.6
+  },
+  "stock": {
+   "effect": 1.5,
+   "reader": 0.0,
+   "served": 13.1
+  },
+  "trend": {
+   "effect": 5.4,
+   "reader": 0.0,
+   "served": 2.2
+  }
+ },
+ "stated": {
+  "batch_hour": "04:00",
+  "expired_from": "16:00",
+  "expired_to": "04:00",
+  "five_nights": 5,
+  "four": 4,
+  "half_sync_minutes": 7.5,
+  "held_pct": 4,
+  "holdout_pct": 10,
+  "hundred": 100,
+  "line": 0.05,
+  "one": 1,
+  "sections": [
+   2.1,
+   3.1,
+   3.2,
+   3.3,
+   3.4,
+   4.1
+  ],
+  "seven": 7,
+  "stock_default_after_minutes": 112.5,
+  "sync_minutes": 15,
+  "three": 3,
+  "ttl_change": "9 June",
+  "ttl_seconds": [
+   300,
+   720
+  ],
+  "twelve": 12,
+  "two": 2,
+  "validity_hours": [
+   2,
+   36,
+   6,
+   120
+  ],
+  "window_hours": 1,
+  "year": [
+   2026,
+   2027
+  ],
+  "zero": 0
+ },
+ "status_unhealthy_pct": {
+  "history": 1.61,
+  "match": 0.8,
+  "price": 14.17,
+  "promise": 5.58,
+  "seller": 23.43,
+  "stock": 10.2,
+  "trend": 9.33
+ },
+ "test_agreement": {
+  "history": {
+   "cost_se_all": 0.0003,
+   "cost_se_latest": 0.001,
+   "cost_se_quarter": 0.0,
+   "df": 8,
+   "from_line_all": -73.6,
+   "pooled": 1.32,
+   "q": 7.8,
+   "se_all": 0.018,
+   "se_latest": 0.051,
+   "se_quarter": 0.03,
+   "se_ratio_quarter": 1.7,
+   "tests": 9
+  },
+  "match": {
+   "cost_se_all": 0.0003,
+   "cost_se_latest": 0.001,
+   "cost_se_quarter": 0.001,
+   "df": 8,
+   "from_line_all": -103.9,
+   "pooled": 2.31,
+   "q": 16.7,
+   "se_all": 0.038,
+   "se_latest": 0.139,
+   "se_quarter": 0.08,
+   "se_ratio_quarter": 2.1,
+   "tests": 9
+  },
+  "price": {
+   "cost_se_all": 0.0042,
+   "cost_se_latest": 0.015,
+   "cost_se_quarter": 0.01,
+   "df": 8,
+   "from_line_all": 28.1,
+   "pooled": 1.1,
+   "q": 6.1,
+   "se_all": 0.039,
+   "se_latest": 0.142,
+   "se_quarter": 0.092,
+   "se_ratio_quarter": 2.3,
+   "tests": 9
+  },
+  "promise": {
+   "cost_se_all": 0.001,
+   "cost_se_latest": 0.003,
+   "cost_se_quarter": 0.002,
+   "df": 8,
+   "from_line_all": 16.3,
+   "pooled": 0.57,
+   "q": 5.5,
+   "se_all": 0.018,
+   "se_latest": 0.057,
+   "se_quarter": 0.032,
+   "se_ratio_quarter": 1.7,
+   "tests": 9
+  },
+  "seller": {
+   "cost_se_all": 0.0005,
+   "cost_se_latest": 0.002,
+   "cost_se_quarter": 0.001,
+   "df": 8,
+   "from_line_all": -47.5,
+   "pooled": 1.77,
+   "q": 9.3,
+   "se_all": 0.038,
+   "se_latest": 0.142,
+   "se_quarter": 0.081,
+   "se_ratio_quarter": 2.1,
+   "tests": 9
+  },
+  "stock": {
+   "cost_se_all": 0.0007,
+   "cost_se_latest": 0.002,
+   "cost_se_quarter": 0.001,
+   "df": 8,
+   "from_line_all": 73.7,
+   "pooled": 2.54,
+   "q": 12.9,
+   "se_all": 0.018,
+   "se_latest": 0.052,
+   "se_quarter": 0.03,
+   "se_ratio_quarter": 1.7,
+   "tests": 9
+  },
+  "trend": {
+   "cost_se_all": 0.0033,
+   "cost_se_latest": 0.013,
+   "cost_se_quarter": 0.007,
+   "df": 8,
+   "from_line_all": 6.7,
+   "pooled": 0.86,
+   "q": 7.9,
+   "se_all": 0.039,
+   "se_latest": 0.149,
+   "se_quarter": 0.087,
+   "se_ratio_quarter": 2.3,
+   "tests": 9
+  }
+ },
+ "trend_arms": {
+  "control": 2.04,
+  "control_se": 0.81,
+  "held": 1.94,
+  "held_expected": 0.44,
+  "held_origin_pct": 48,
+  "held_se": 0.76
+ },
+ "trend_share_spread": {
+  "across_days": 0.0823,
+  "within_day": 0.0002
+ },
+ "truth": {
+  "history": 0.0288,
+  "match": 0.0185,
+  "price": 0.1604,
+  "promise": 0.0665,
+  "seller": 0.025,
+  "stock": 0.1009,
+  "trend": 0.0771
+ },
+ "truth_call": [
+  "stock listed",
+  "promise listed",
+  "price listed",
+  "history not listed",
+  "trend listed",
+  "seller not listed",
+  "match not listed"
+ ],
+ "variant_names": [
+  "effects pooled over every market and device",
+  "effects cell by cell",
+  "effects weighted by the precision of each day's difference",
+  "effects on the tests run before July",
+  "effects on the tests run from April",
+  "effects not netted for the default served on the tests' own days",
+  "the fresh share averaged over each test",
+  "a snapshot fresh the minute its feed stops and back the minute it returns",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "counters back the hour their partition catches up",
+  "counters back two hours after their partition catches up",
+  "sellers weighted by the quarter's traffic",
+  "the sellers' usual default share from the second quarter",
+  "the sellers' usual default share from June",
+  "the sellers' usual default share from the first half",
+  "the readers' loss pooled over markets and devices",
+  "the readers' failed renders over the rate at which each fails with its group's value present",
+  "the readers' failed renders over their second-quarter rate",
+  "the readers' failed renders over their first-half rate",
+  "the readers' failed renders over their June rate",
+  "effects pooled over every market and device; the fresh share averaged over each test",
+  "effects cell by cell; the fresh share averaged over each test",
+  "effects weighted by the precision of each day's difference; the fresh share averaged over each test",
+  "effects on the tests run before July; the fresh share averaged over each test",
+  "effects on the tests run from April; the fresh share averaged over each test",
+  "effects not netted for the default served on the tests' own days; the fresh share averaged over each test",
+  "effects pooled over every market and device; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects pooled over every market and device; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects pooled over every market and device; counters back the hour their partition catches up",
+  "effects pooled over every market and device; counters back two hours after their partition catches up",
+  "effects pooled over every market and device; sellers weighted by the quarter's traffic",
+  "effects pooled over every market and device; the sellers' usual default share from the second quarter",
+  "effects pooled over every market and device; the sellers' usual default share from June",
+  "effects pooled over every market and device; the sellers' usual default share from the first half",
+  "effects cell by cell; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects cell by cell; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects cell by cell; counters back the hour their partition catches up",
+  "effects cell by cell; counters back two hours after their partition catches up",
+  "effects cell by cell; sellers weighted by the quarter's traffic",
+  "effects cell by cell; the sellers' usual default share from the second quarter",
+  "effects cell by cell; the sellers' usual default share from June",
+  "effects cell by cell; the sellers' usual default share from the first half",
+  "effects weighted by the precision of each day's difference; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects weighted by the precision of each day's difference; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects weighted by the precision of each day's difference; counters back the hour their partition catches up",
+  "effects weighted by the precision of each day's difference; counters back two hours after their partition catches up",
+  "effects weighted by the precision of each day's difference; sellers weighted by the quarter's traffic",
+  "effects weighted by the precision of each day's difference; the sellers' usual default share from the second quarter",
+  "effects weighted by the precision of each day's difference; the sellers' usual default share from June",
+  "effects weighted by the precision of each day's difference; the sellers' usual default share from the first half",
+  "effects on the tests run before July; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects on the tests run before July; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects on the tests run before July; counters back the hour their partition catches up",
+  "effects on the tests run before July; counters back two hours after their partition catches up",
+  "effects on the tests run before July; sellers weighted by the quarter's traffic",
+  "effects on the tests run before July; the sellers' usual default share from the second quarter",
+  "effects on the tests run before July; the sellers' usual default share from June",
+  "effects on the tests run before July; the sellers' usual default share from the first half",
+  "effects on the tests run from April; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects on the tests run from April; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects on the tests run from April; counters back the hour their partition catches up",
+  "effects on the tests run from April; counters back two hours after their partition catches up",
+  "effects on the tests run from April; sellers weighted by the quarter's traffic",
+  "effects on the tests run from April; the sellers' usual default share from the second quarter",
+  "effects on the tests run from April; the sellers' usual default share from June",
+  "effects on the tests run from April; the sellers' usual default share from the first half",
+  "effects not netted for the default served on the tests' own days; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "effects not netted for the default served on the tests' own days; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "effects not netted for the default served on the tests' own days; counters back the hour their partition catches up",
+  "effects not netted for the default served on the tests' own days; counters back two hours after their partition catches up",
+  "effects not netted for the default served on the tests' own days; sellers weighted by the quarter's traffic",
+  "effects not netted for the default served on the tests' own days; the sellers' usual default share from the second quarter",
+  "effects not netted for the default served on the tests' own days; the sellers' usual default share from June",
+  "effects not netted for the default served on the tests' own days; the sellers' usual default share from the first half",
+  "effects pooled over every market and device; the readers' loss pooled over markets and devices",
+  "effects pooled over every market and device; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects pooled over every market and device; the readers' failed renders over their second-quarter rate",
+  "effects pooled over every market and device; the readers' failed renders over their first-half rate",
+  "effects pooled over every market and device; the readers' failed renders over their June rate",
+  "effects cell by cell; the readers' loss pooled over markets and devices",
+  "effects cell by cell; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects cell by cell; the readers' failed renders over their second-quarter rate",
+  "effects cell by cell; the readers' failed renders over their first-half rate",
+  "effects cell by cell; the readers' failed renders over their June rate",
+  "effects weighted by the precision of each day's difference; the readers' loss pooled over markets and devices",
+  "effects weighted by the precision of each day's difference; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects weighted by the precision of each day's difference; the readers' failed renders over their second-quarter rate",
+  "effects weighted by the precision of each day's difference; the readers' failed renders over their first-half rate",
+  "effects weighted by the precision of each day's difference; the readers' failed renders over their June rate",
+  "effects on the tests run before July; the readers' loss pooled over markets and devices",
+  "effects on the tests run before July; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects on the tests run before July; the readers' failed renders over their second-quarter rate",
+  "effects on the tests run before July; the readers' failed renders over their first-half rate",
+  "effects on the tests run before July; the readers' failed renders over their June rate",
+  "effects on the tests run from April; the readers' loss pooled over markets and devices",
+  "effects on the tests run from April; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects on the tests run from April; the readers' failed renders over their second-quarter rate",
+  "effects on the tests run from April; the readers' failed renders over their first-half rate",
+  "effects on the tests run from April; the readers' failed renders over their June rate",
+  "effects not netted for the default served on the tests' own days; the readers' loss pooled over markets and devices",
+  "effects not netted for the default served on the tests' own days; the readers' failed renders over the rate at which each fails with its group's value present",
+  "effects not netted for the default served on the tests' own days; the readers' failed renders over their second-quarter rate",
+  "effects not netted for the default served on the tests' own days; the readers' failed renders over their first-half rate",
+  "effects not netted for the default served on the tests' own days; the readers' failed renders over their June rate",
+  "the fresh share averaged over each test; a snapshot fresh the minute its feed stops and back the minute it returns",
+  "the fresh share averaged over each test; a snapshot a quarter of an hour old when its feed stops, and as long again to return",
+  "the fresh share averaged over each test; counters back the hour their partition catches up",
+  "the fresh share averaged over each test; counters back two hours after their partition catches up",
+  "the fresh share averaged over each test; sellers weighted by the quarter's traffic",
+  "the fresh share averaged over each test; the sellers' usual default share from the second quarter",
+  "the fresh share averaged over each test; the sellers' usual default share from June",
+  "the fresh share averaged over each test; the sellers' usual default share from the first half",
+  "the fresh share averaged over each test; the readers' loss pooled over markets and devices",
+  "the fresh share averaged over each test; the readers' failed renders over the rate at which each fails with its group's value present",
+  "the fresh share averaged over each test; the readers' failed renders over their second-quarter rate",
+  "the fresh share averaged over each test; the readers' failed renders over their first-half rate",
+  "the fresh share averaged over each test; the readers' failed renders over their June rate",
+  "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' loss pooled over markets and devices",
+  "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over the rate at which each fails with its group's value present",
+  "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their second-quarter rate",
+  "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their first-half rate",
+  "a snapshot fresh the minute its feed stops and back the minute it returns; the readers' failed renders over their June rate",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' loss pooled over markets and devices",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over the rate at which each fails with its group's value present",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their second-quarter rate",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their first-half rate",
+  "a snapshot a quarter of an hour old when its feed stops, and as long again to return; the readers' failed renders over their June rate",
+  "counters back the hour their partition catches up; the readers' loss pooled over markets and devices",
+  "counters back the hour their partition catches up; the readers' failed renders over the rate at which each fails with its group's value present",
+  "counters back the hour their partition catches up; the readers' failed renders over their second-quarter rate",
+  "counters back the hour their partition catches up; the readers' failed renders over their first-half rate",
+  "counters back the hour their partition catches up; the readers' failed renders over their June rate",
+  "counters back two hours after their partition catches up; the readers' loss pooled over markets and devices",
+  "counters back two hours after their partition catches up; the readers' failed renders over the rate at which each fails with its group's value present",
+  "counters back two hours after their partition catches up; the readers' failed renders over their second-quarter rate",
+  "counters back two hours after their partition catches up; the readers' failed renders over their first-half rate",
+  "counters back two hours after their partition catches up; the readers' failed renders over their June rate",
+  "sellers weighted by the quarter's traffic; the readers' loss pooled over markets and devices",
+  "sellers weighted by the quarter's traffic; the readers' failed renders over the rate at which each fails with its group's value present",
+  "sellers weighted by the quarter's traffic; the readers' failed renders over their second-quarter rate",
+  "sellers weighted by the quarter's traffic; the readers' failed renders over their first-half rate",
+  "sellers weighted by the quarter's traffic; the readers' failed renders over their June rate",
+  "the sellers' usual default share from the second quarter; the readers' loss pooled over markets and devices",
+  "the sellers' usual default share from the second quarter; the readers' failed renders over the rate at which each fails with its group's value present",
+  "the sellers' usual default share from the second quarter; the readers' failed renders over their second-quarter rate",
+  "the sellers' usual default share from the second quarter; the readers' failed renders over their first-half rate",
+  "the sellers' usual default share from the second quarter; the readers' failed renders over their June rate",
+  "the sellers' usual default share from June; the readers' loss pooled over markets and devices",
+  "the sellers' usual default share from June; the readers' failed renders over the rate at which each fails with its group's value present",
+  "the sellers' usual default share from June; the readers' failed renders over their second-quarter rate",
+  "the sellers' usual default share from June; the readers' failed renders over their first-half rate",
+  "the sellers' usual default share from June; the readers' failed renders over their June rate",
+  "the sellers' usual default share from the first half; the readers' loss pooled over markets and devices",
+  "the sellers' usual default share from the first half; the readers' failed renders over the rate at which each fails with its group's value present",
+  "the sellers' usual default share from the first half; the readers' failed renders over their second-quarter rate",
+  "the sellers' usual default share from the first half; the readers' failed renders over their first-half rate",
+  "the sellers' usual default share from the first half; the readers' failed renders over their June rate"
+ ],
+ "variant_range": {
+  "history": [
+   0.0277,
+   0.029
+  ],
+  "match": [
+   0.0185,
+   0.019
+  ],
+  "price": [
+   0.1561,
+   0.1705
+  ],
+  "promise": [
+   0.0637,
+   0.0672
+  ],
+  "seller": [
+   0.0241,
+   0.0257
+  ],
+  "stock": [
+   0.0889,
+   0.1167
+  ],
+  "trend": [
+   0.0688,
+   0.0779
+  ]
+ },
+ "variants": 157
+}
