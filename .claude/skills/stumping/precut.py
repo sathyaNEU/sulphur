@@ -43,8 +43,9 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
                            DECISIVE_FROM on, `Decisive steps:` (the client's page of 11/20: for each stump the
                            answer it owns, which is its critical component, the prompt's words that ask for it, where
                            its evidence sits in the pack, and the figure and the call with each step left out alone
-                           and in pairs); and the card's skeleton screen (fingerprint Part 1b, the closed rule
-                           included) clear
+                           and in pairs); from RUNS_FROM on, `Run routes:`, `Validation handles:` and `Forward
+                           window:` (stumping Part 1d, stump-screen tests 16, 18 and 20); and the card's skeleton
+                           screen (fingerprint Part 1b, the closed rule included) clear
 
   ## Pinning list          every constant the golden's estimator uses that the world also holds (a base temperature, a
                            threshold, an exponent, a share, a draw per unit, a time constant), one row each: Constant |
@@ -110,6 +111,20 @@ CLOSED_LABEL = "Closed strategies"
 # evidence sits, and the figure and the call with each step left out alone and in pairs).
 DECISIVE_FROM = "2026-11-21T08:00:00Z"
 DECISIVE_LABEL = "Decisive steps"
+# From RUNS_FROM (task3 arch 8's two platform runs, 2026-11-21: both filed every class against a paper pair of 26.7,
+# on routes no lattice key held): the note's Frontier check carries `Run routes:` (the generous, calibrated, hedge and
+# cut-off routes, each implemented in core.py's run_routes with the call it files and what it earns), `Validation
+# handles:` (stump-screen test 18: every shipped file that lets a run score a stump's own quantity or the target, and
+# why none does, or the route on it that files wrong) and `Forward window:` (stump-screen test 20: why the window's
+# figure is not the record's own mean, with the figure). FAIL for a card registered from RUNS_FROM on, WARN before.
+RUNS_FROM = "2026-11-21T21:45:00Z"
+RUNS_LABELS = (
+    ("Run routes", "stumping Part 1d: the generous, calibrated, hedge and cut-off routes the runs take, each in "
+     "core.py's run_routes with the call it files"),
+    ("Validation handles", "stump-screen test 18: every shipped file that lets a run score a stump's own quantity or "
+     "the target, and why none does"),
+    ("Forward window", "stump-screen test 20: why the forecast window's figure is not the record's own mean, with the "
+     "figure"))
 # From SCREEN_FROM (the author's direction, 2026-11-13): the design note carries `## Stump screen`, three or more
 # candidate traps put through the eleven tests of references/stump-screen.md on paper before any code, three kept.
 SCREEN_FROM = "2026-11-13T00:45:00Z"
@@ -1328,6 +1343,15 @@ def closed_level(task_dir):
     return not reg or reg >= SK.CLOSED_FROM
 
 
+def runs_level(task_dir):
+    """True when the card was registered from RUNS_FROM on, or no card is registered yet."""
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= RUNS_FROM
+
+
 def decisive_level(task_dir):
     """True when the card was registered from DECISIVE_FROM on, or no card is registered yet."""
     try:
@@ -1425,6 +1449,12 @@ def frontier_rows(task_dir, secs):
                  (v or "missing (stumping Part 1d: each stump's own figure as its critical component, the prompt's "
                   "words that ask for it, where its evidence sits, each step left out alone and in pairs)%s"
                   % ("" if dl else ", registered before the guidelines of 11/20"))[:150]))
+    rl = runs_level(task_dir)
+    for label, why in RUNS_LABELS:
+        v = labelled(fc or "", label)
+        ok = bool(v) and len(v) >= 20
+        rows.append(("frontier check: %s" % label, "PASS" if ok else ("FAIL" if rl else "WARN"),
+                     (v or "missing (%s)%s" % (why, "" if rl else ", registered before the runs' routes rule"))[:150]))
     pv = labelled(fc or "", "Precedents") or ""
     if pv:
         ids = set(re.findall(r"\b([LNR]\d{2})\b", pv))

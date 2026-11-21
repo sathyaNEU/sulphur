@@ -8,19 +8,21 @@ nothing in-house solves the task, so the idea has to be right before it is built
 ## How to run it
 
 1. Write three to five candidate traps for the draw, one line each: the part of the decision's quantity that no
-   record holds and the observation process that hides it, the assumption a careful run states and moves on from,
-   the second record that refutes the assumption, and what the hurried route, the direct route and the most rigorous
-   standard route each file. A candidate that is a mechanism of the world the rows carry (a penalty, a response
+   record holds and the observation process that hides it, the parameter a run must set to reach the figure and the
+   default it reaches for (a pooled value, today's level, a literature constant, the same as another group,
+   independence, a pro-rata split, the face value), the second record that refutes the default without scoring the
+   parameter, and what the hurried route, the direct route, the most rigorous standard route and the four run routes
+   (generous, calibrated, hedge, cut-off: test 19) each file. A candidate that is a mechanism of the world the rows carry (a penalty, a response
    shape, a signature, a loss term) is modelled on sight and is written as a supporting result, never as a trap
    (`../SKILL.md` Part 1d).
-2. Put each candidate through the seventeen tests below. One NO drops it; do not repair a candidate by writing a sentence
+2. Put each candidate through the twenty tests below. One NO drops it; do not repair a candidate by writing a sentence
    into a document.
 3. Keep the three strongest that are independent of one another (no one sentence of help rescues two of them) and
-   write the table into the design note's `## Stump screen` section: each candidate, its seventeen answers, kept or
+   write the table into the design note's `## Stump screen` section: each candidate, its twenty answers, kept or
    dropped and why.
 4. Only then register the card, prototype the numbers in a scratch script and write the generator.
 
-## The seventeen tests (every kept trap answers YES to all seventeen)
+## The twenty tests (every kept trap answers YES to all twenty)
 
 1. **Off the closed page.** Not one of the client's 45 closed strategies (`guidelines/client/learning-modules/
    overused-strategies-2026-11-21.md`; same mechanism and the same kind of fix is the same lesson, whatever the
@@ -52,8 +54,12 @@ nothing in-house solves the task, so the idea has to be right before it is built
    informative of the forward window; N13 the latest rate taken as the end state; N01 an enlarged load assumed to
    scale in proportion; L07 a measurement change flagged and never tested; L37 a check that cannot see the
    condition; L40 to L42 a fitted form or effect held constant past the data's support; L43 and L44 a deferral
-   where the bridge has to be built). The world's process makes it false for the target and weaker in the history, so the run's own
-   back-test still passes.
+   where the bridge has to be built; N42 one instrument model's correction put on another for want of a check). The
+   world's process makes it false for the target and weaker in the history, so the run's own back-test still passes.
+   **A precedent transfers only with its condition**: every named assumption on file was waved through because no
+   shipped file let the run score it. task3 arch 8 cited N21, N26, N01 and N30 for three stumps whose checks it
+   shipped (the storage gauge's account, the radar's pixel pairs, the research valley's gauges), and both runs made
+   all three (R98 to R100). A precedent cited for a stump with a validation handle (test 18) prices nothing.
 7. **A plausible shallower story.** The data offers a wrong explanation that passes its own checks (L26), so a run
    that notices the pattern still files the wrong number.
 8. **Across the data.** The process runs through the history at different sizes, never only in the deciding units,
@@ -97,18 +103,52 @@ nothing in-house solves the task, so the idea has to be right before it is built
    failed for a reason another record shows and its own placebo could not see (L51), where it saw the bias and
    declined to estimate (L53, L43), or where it took a recorded change for the event (L54). If the rigorous route
    lands inside the band, the member is forced.
-16. **A referee, never a key.** The pack holds a slice where the hidden quantity is known or bounded and which does
+16. **A referee or a falsification check, never a key and never a calibration set.** Something shipped rules between
+   estimators, or the call is unforced. Either a slice where the hidden quantity is known or bounded and which does
    not cover the target (a random labelled sample in one arm or one month, a dated item present for some members,
-   earlier periods the treatment never reached, a complete count for one stratum). In the prototype the golden
-   estimator reproduces the slice and each rival misses it by a stated figure; read raw as the answer, the slice
-   files the wrong figure or none. This is what forces the call while the method stays open: a fork a referee closes
-   is still a stump, a fork a filed convention closes is a rule (task24's forecasting convention, task20's filed
-   bases). No referee, no trap.
+   earlier periods the treatment never reached, a complete count for one stratum), or a falsification check: a
+   statistic of the members' own records that the golden's model reproduces and each rival's misses, with no file
+   observing the target (example 17's qualifying share within the households that say they are falling behind,
+   rising across the deadline bands while their share of the sample stays flat; the leave-one-out and leave-two-out
+   table beside it). **A referee is a calibration set first**: task3 arch 8's runs never read the research valley's
+   gauges raw; they calibrated the whole chain on them end to end, conditioned on the radar's ratios, integrated the
+   residual and filed every class (R101). So a slice that observes the target, or a stump's own quantity, under the
+   members' instruments is shipped only where the calibrated run route on it files the wrong call (test 19), and
+   otherwise the falsification check forces the call. In the prototype the golden reproduces the slice or the
+   statistic and each rival misses it by a stated figure. A fork a referee or a falsification check closes is still
+   a stump; a fork a filed convention closes is a rule (task24's forecasting convention, task20's filed bases).
 17. **One sentence does not cover the members.** Either a second, independent trap opens another member (test 13), or
    this trap's own correction has a domain of validity the members cross: its identifying assumption is checked on
    some members, cannot be checked on one (decided by a bound and its break-even) and fails its check on another
    (decided on a second basis the same records support). Name which, with the figures. The arrangement is drawn from
    this world's records and is never the one a build on file used.
+18. **No validation handle.** No shipped file lets a run score the stump's own quantity, or the target, under the
+   members' instruments: a total that closes the loss, a pair that reads the ratio off, a slice that scores the
+   chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there
+   (task3 arch 8: the tipping time fitted through the storage gauge's account, R98; each source's ratio read off the
+   radar's pixel pairs, R99; hail calibrated on the research valley's weighing gauges, R100). The approved runs and
+   the client's hardest examples lost where nothing scores the correction: they saw the signal and kept it as a
+   sensitivity ("not a uniquely identified correction"), cut at a threshold, picked one arm, or declined to estimate
+   (L53, examples 16 and 17). So the parameter is identified only through a covariate the run must build from
+   another file (days to each interview's own deadline, the queue a case opened under, each customer's use count
+   across two systems) or through an internal consistency check, and test 16's falsification check is how the
+   golden shows it; a file that measures the parameter for some units is the closed calibration card (test 1).
+19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
+   the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
+   full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
+   fitted spread, which lifts a tail count above a point plug), the calibrated route (end to end on any slice that
+   observes the target or a stump's quantity), the hedge route (every signal noticed, reported as a sensitivity, the
+   face value central: L53, examples 16 and 17) and the cut-off route (a filter where a fitted model is needed:
+   example 17's best run kept the interviews more than 14 days out). Each files a wrong call, and the misses across
+   them and the shortcuts fall on both sides of a line: at least one member where over-correcting crosses it and one
+   where under-correcting does, so no blanket adjustment lands the call. task3 arch 8 sat every open member 1.1 to
+   1.5 storms above its line with every priced shortcut under it, and the runs' generous corrections filed all seven
+   classes. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
+   call, earns over 50, or the misses fall on one side only.
+20. **A forward window.** The estimand is never the record's own mean or rate restated: the window's figure differs
+   from what the history holds by a process of the world the data measures, and the history-mean route files a
+   stated figure against the golden's. task3 arch 8's regulation defined the storms a season as the mean over the
+   record's warm seasons, so the 2027 to 2031 programme did no work and the task reduced to correcting the record.
 
 ## Measured dead: never draw these again
 
@@ -130,6 +170,10 @@ screen, whatever its domain or nouns.
 | dated works, commissioning or closes carried at the organisation's own record of past slips | task20 arch 4 (R65, one run of two), task10 arch 7 (commissioning by class with censoring, R07); lost once (L46) | 2 (a reflex with occasional misses, never a stump on its own) |
 | a contracted intervention's delivered amount measured from the record's own events, the counterfactual rebuilt outside the window | task10 arch 7's runs (the come-back replayed at the events' megawatts, the cold end read from the hours before the window) | 2 |
 | net against gross load rebuilt from a shipped distributed-generation register and a metered production sample (the peak hour moving later) | the task26 screen against test 2's ingredients rule | 2 |
+| a tipping bucket's loss by rain rate, fitted through a storage gauge's visit-interval account | task3 arch 8, run 2 (R98, a tipping time per station, about 20 per cent at 100 mm an hour against the golden's 20.2) | 18 (the account scores the loss) |
+| an ungauged site's ratio to its station read off a radar's pixel pairs storm by storm | task3 arch 8, both runs (R99; run 1's log mean 0.323 is the golden's 1.38) | 18 (the pairs read the ratio off) and 2 |
+| hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | task3 arch 8, both runs (R100) | 18 and 16 (the slice is a calibration set) |
+| a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | task3 arch 8, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 

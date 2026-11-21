@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and its guidelines of 11/20 (two or more decisive, independent steps, each with its own answer in a requested deliverable as a critical component) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, ninety-seven reflexes and one hundred and eight losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 45 closed strategies (read 2026-11-21, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (an assumption no closed card names, waved through and made false; a shallow path that passes a check of the wrong kind; and the open dimensions: conservation, changing structure, non-additive quantities, position on a network, hidden state, a recording algorithm whose inversion is not a gross-up, recording effects tangled with each other), with the core designed first as stumps of construction against the review's strongest run (Part 1d: an observation-process estimand, the rigorous standard route across the line, a referee slice, a worth of three times the family's spread, written as `## Stump core` with `generator/core.py` and handed to the build as `## Build brief`), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and its guidelines of 11/20 (two or more decisive, independent steps, each with its own answer in a requested deliverable as a critical component) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, one hundred and one reflexes and one hundred and eleven losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 45 closed strategies (read 2026-11-21, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (an assumption no closed card names, waved through and made false; a shallow path that passes a check of the wrong kind; and the open dimensions: conservation, changing structure, non-additive quantities, position on a network, hidden state, a recording algorithm whose inversion is not a gross-up, recording effects tangled with each other), with the core designed first as stumps of construction against the review's strongest run (Part 1d: an observation-process estimand, the rigorous standard route across the line, the runs' four recorded routes (generous, calibrated, hedge, cut-off) landing wrong on both sides of a line, no validation handle, a referee slice or a falsification check (a referee is a calibration set first), a forward window, a worth of three times the family's spread, written as `## Stump core` with `generator/core.py` and handed to the build as `## Build brief`), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -375,11 +375,12 @@ thing a new deciding step may not be):
   commonest corrections are now cards (Part 1d).
 
 **The stump screen, at the draw** (`references/stump-screen.md`): three to five candidate traps written on paper and
-each put through seventeen tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at
-two grains, an assumption the run names and waves through with its precedent, a plausible shallower story, across the
-data, worth three times the variant battery's spread, the run's alternative ruled out by named data, the golden able
-to measure it, no easier second route, its own member, said out loud, the strongest route landing wrong, a referee,
-and one sentence not covering the members) before the card is registered and before any code; the three strongest independent ones are kept
+each put through twenty tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at
+two grains, an assumption the run names and waves through with its precedent and its condition, a plausible shallower
+story, across the data, worth three times the variant battery's spread, the run's alternative ruled out by named data,
+the golden able to measure it, no easier second route, its own member, said out loud, the strongest route landing
+wrong, a referee or a falsification check and never a calibration set, one sentence not covering the members, no
+validation handle, the runs' four routes landing wrong on both sides of a line, and a forward window) before the card is registered and before any code; the three strongest independent ones are kept
 and the table goes in the note's `## Stump screen` (`precut.py` from 2026-11-13). The platform's runs are the only
 measure of difficulty: no judge, reader or in-house pass solves the task, so the idea has to hold on paper first.
 
@@ -459,7 +460,7 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
   decliners), every run got them, and the rubric's weight sits on the fitted steps.
 
 **What the three sheets share**, each a test in the stump screen (`references/stump-screen.md` tests 9 and 14 to
-17) and a line of the note's `## Stump core`:
+20) and a line of the note's `## Stump core`, with rule 7 from our own runs:
 
 1. **Construction, not discovery.** On all three the problem was in plain sight, and the run lost on what to build
    once it is known. One run wrote the selection down and filed every figure as not available (L53); one built a
@@ -473,12 +474,20 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    calibration sample or its record fail for a reason another record shows and its own placebo cannot see; or the run
    retreats, which is a loss only because the prompt asks for a committed figure and the pack carries what an
    estimate needs (L43, L44, L53). A member the rigorous route files right is forced.
-3. **A referee, never a key.** Each sheet's determinism passed on shipped evidence that rules between estimators: a
-   random labelled pilot in one arm, a dated item on two of three conditions, earlier years the treatment never
-   reached. The golden reproduces the slice, each rival misses it by a figure ("pinned out by the pilot", "rebutted
-   by shipped evidence", "fails its own test"), and the slice does not cover the target, so read raw it files the
-   wrong answer or none. The referee is how the method stays open while the call is forced. Where a fork has no
-   referee, the design is changed until it has one; a convention is filed only for the WHAT (Part 5).
+3. **A referee or a falsification check, never a key and never a calibration set.** Each sheet's determinism passed
+   on shipped evidence that rules between estimators: a random labelled pilot in one arm, a dated item on two of
+   three conditions, earlier years the treatment never reached. The golden reproduces the slice, each rival misses it
+   by a figure ("pinned out by the pilot", "rebutted by shipped evidence", "fails its own test"), and the slice does
+   not cover the target. **A referee is a calibration set first**: task3 arch 8's runs never read the research
+   valley's weighing gauges raw; they calibrated the whole chain on them end to end, conditioned on the radar's
+   ratios, integrated the residual and filed every class (R101). So a slice that observes the target, or a stump's
+   own quantity, under the members' instruments is shipped only where the calibrated run route on it (rule 7) files
+   the wrong call. Otherwise the call is forced by a falsification check: a statistic of the members' own records
+   that the golden's model reproduces and each rival misses, with no file observing the target (example 17's
+   qualifying share within the households that say they are falling behind, rising across the deadline bands while
+   their share of the sample stays flat), with the leave-one-out and leave-two-out table beside it. `corelib.py`
+   takes either (`referee` or `falsification`). Where a fork has neither, the design is changed until it has one; a
+   convention is filed only for the WHAT (Part 5).
 4. **One sentence does not cover the members.** "Telling a solver 'net the reversals' still leaves linkage,
    weighting, annualisation, timing validation, the hypertension extension and the older-group break to do." Either
    independent stumps open different members (Part 3.4), or one correction's identifying assumption is checked on
@@ -502,6 +511,28 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    quantity of the decision, and a figure that falls with two stumps is an ask. `corelib.py` refuses a core whose
    component falls with two stumps or with none, or a stump with no component of its own (`critical components
    independent`).
+7. **The runs' recorded routes are the opponent, and the misses fall on both sides of a line.** The careful column is
+   not our hurried route. task3 arch 8 priced one factor per station, the rainfall normal's ratio and hail read as
+   rain; both runs took none of them. They fitted a tipping time through the storage gauge's account (R98), read each
+   source's ratio off the radar's pixel pairs (R99), calibrated hail on the research valley (R100) and integrated the
+   residual into expected counts (R101). Every open member sat 1.1 to 1.5 storms above its line with every priced
+   shortcut under it, so their generous corrections filed all seven classes against a paper pair of 26.7. So
+   `core.py` implements four routes beside the lattice (`run_routes`), each filing a wrong call and each priced on the
+   rubric at 50 or under: the generous route (every correction the pack suggests at full strength, the uncertainty
+   integrated), the calibrated route (end to end on any slice that observes the target or a stump's quantity), the
+   hedge route (every signal noticed and kept as a sensitivity, the face value central: examples 16 and 17, L53) and
+   the cut-off route (a filter where a fitted model is needed: example 17's best run). Across the lattice and these
+   routes the misses fall above and below the golden's classes, so no blanket adjustment lands the call (`both sides
+   of the line`). And no stump has a validation handle (stump-screen test 18): where a shipped file lets a run score
+   the stump's own quantity, the run fits the correction and checks it there. The stump the runs have been seen to
+   lose is a parameter they must set to reach the figure, whose default (a pooled value, today's level, a literature
+   constant, the same as another group, independence, a pro-rata split, the face value) the world's process makes
+   false across every unit, identified only through a covariate the run builds from another file or an internal
+   consistency check, with no file that hands it over (N42: one bucket model's correction put on the other "for want
+   of an independent check", which cost run 1 four figures at the 0.2 mm stations; L53; examples 16 and 17). The
+   estimand is a forward window (test 20): task3 arch 8's regulation made the answer the record's own 18-season mean,
+   so the programme window did no work. The note's Frontier check carries `Run routes:`, `Validation handles:` and
+   `Forward window:` (`precut.py`, from `RUNS_FROM`).
 
 **How the core is found** (`references/core-method.md`). Level 5 is an exposure matrix: members down the side,
 judgments across the top, and three or more judgments that each flip a different member, so every shortcut files a
@@ -520,7 +551,7 @@ the strongest model at its highest effort; `/draw`, or stages 0 to 2 of `/build`
 `Regimes:`) and `generator/core.py`: the world's observation process on arrays, the truth, the golden estimator,
 every route of rule 2, the lattice of shortcuts, the referee's scores and the variant battery, ending on
 `corelib.run(spec)` (`corelib.py`: it prints the core table and `CORE PASS level 5`, `level 4` or `CORE FAIL`, and
-its selftest holds eighteen cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
+its selftest holds twenty-seven cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
 files and documents under the note's `## Build brief` (`World:`, `Frozen:`, `Files:`, `Never filed:`, `Goldens:`,
 `Free:`) and moves no switch, size, margin or estimator in it. When the cut pack breaks a core assertion the build
 stops and the architect is resumed with the failing figure; a margin is never repaired by the builder.
@@ -946,9 +977,10 @@ measurements.
       for every careful-column loss, the shallow path's own checks, the assumption made false, forcing on both sides,
       the noun swap); the cited pair estimate 50 or under
 - [ ] The core first (Part 1d): every open member opened by an observation-process judgment; the stump screen's
-      seventeen tests; `## Stump core` with every figure printed by `generator/core.py` (the hurried, direct and
-      most rigorous standard routes across the line, the referee's scores, each stump worth three times the
-      family's spread); `## Build brief` written for the build
+      twenty tests; `## Stump core` with every figure printed by `generator/core.py` (the hurried, direct and
+      most rigorous standard routes across the line, the four run routes landing wrong on both sides of a line, the
+      referee's or the falsification check's scores, each stump worth three times the family's spread); `## Build
+      brief` written for the build
 - [ ] The process behind the files written before any result; the weight named and rotated
 - [ ] Four or more results across three or more areas, each pinned, banded, graded, with a hurried failure the runs
       make; no analytical result carrying more than half the others; the carry-forward line; the rubric table

@@ -64,8 +64,25 @@ chain row also notes the spread (results lost to deep classes per run) from `/tr
 | task1 arch 5 (cut 3c09048) | 2026-11-13 | product-analytics / retention-cohort-lifetime-value-modeling | forecasting | forecast-bands-drivers | modeling | reviewer reward 83 (platform page: one run 28%) | the stayers' listening assumed away (N39), Onbeperkt filed through | | | | | RETURNED at review, not difficult enough | one open member: Flex forced by its crossing in both regions, Gezin +5.4 wide, Standaard positive under any transfer, the returns and the transfer made unprompted (R81 to R83); task1/runs/review_2026-11-13.md |
 | task16 arch 3 | 2026-11-13 | health-life-sciences / record linkage | data-quality | flagged-set | measurement | reviewer reward 78 | a reserve held on Rule B's eight blood mismatches (L49) | | | | | RETURNED at review, not difficult enough | three of four rules failed on direct counts in confirming files (R79, R80); task16/runs/review_2026-11-13.md |
 | task13 arch 5 | 2026-11-13 | energy-systems-utilities / grid-reliability-outage-analysis | etl | flagged-set | assembly | reviewer reward 75 | a cause label withheld (L50, not counted as difficulty) | | | | | RETURNED at review, not difficult enough | six stumps priced on other builds' losses, all made (R81 to R83); every list item far from its line; task13/runs/review_2026-11-13.md |
+| task3 arch 8 | 2026-11-21 | physical-environmental-sciences / climate-weather-extremes | forecasting | classed-set (seven crossings in three classes, a rate and a depth each) | measurement; missingness-measurement, modeling, investigation-loops, forecasting, uncertainty, synthesis | not reported, on the call (all seven classes; 10 of 14 ask figures in band) | none on the call; S1 missed (one bucket model's correction put on the other, N42), Rio Gelt kept in class 3 by an integrated residual, Rio Marden and Rio Ciadin high on both figures | not reported, on the call (all seven classes; 13 of 14 ask figures in band) | none: S1, S2 and S3 all made (R98 to R101), Rio Larin's count 0.393 under its band | landed (estimated 65 to 80 a run; no score or rubric pasted) | landed | REDESIGN (paper pair 26.7; every open member 1.1 to 1.5 above its line and every priced shortcut under it, so the runs' generous corrections filed every class; the three stumps each shipped a file that scores it; the critical components were never asked for; the estimand was the record's own 18-season mean) | task3/runs/arch8/run1.md, run2.md |
 
 ## Lessons
+
+- **A stump with a validation handle is made, and a one-sided call lands on generous routes** (task3 arch 8, task22
+  arch 1, task13 arch 2; moved into `../SKILL.md` Part 1d rule 7, `stump-screen.md` tests 16 and 18 to 20,
+  `corelib.py` `run_routes` and `both sides of the line`, `precut.py` from `RUNS_FROM`). task3 arch 8 shipped a check
+  beside each stump: the storage gauge's account scored the bucket's loss, the radar's pixel pairs read each source's
+  ratio off, and a research valley of weighing gauges scored the whole chain. Both runs fitted every correction they
+  could check (R98 to R100), calibrated the chain end to end on the valley with the residual integrated (R101) and
+  filed all seven classes against a paper pair of 26.7. task22 arch 1's runs replayed the switching log on the GIS
+  and computed the losses hour by hour because both shipped (R38 to R42); task13 arch 2's pass read each
+  controller's drift off self-tests stamped at true time. The precedents the designs cited (N21, N26, N01, N30) were
+  waved through by runs that had no file to check them against, so they never transferred. The one place a run lost
+  figures was a default it set for want of a check (N42: one bucket model's correction on the other), and it still
+  filed every class because every open member sat 1.1 to 1.5 above its line with every priced shortcut under it:
+  over-correcting was never punished. The live ground is a parameter the run must set, whose default the world
+  makes false across every unit, identified only through a covariate built from another file or an internal
+  consistency check, with the misses on both sides of the line and the four run routes implemented in `core.py`.
 
 - **A lost stump costs what the asks put downstream of it, and asks sited away from the stumps cost nothing.** The
   two generated rubrics on file split 18, 18 to 23, 50 to 55 and 9 (recommendation, components, asks,

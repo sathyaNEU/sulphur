@@ -67,7 +67,7 @@ shortcuts `core.py` prices.
    outcome. Write each member's figure as an identity and ask the five questions of every factor (who, what, when,
    against, unit: `core-method.md` section 2); read `skeleton.py closed` and `skeleton.py open`. Five or more
    candidate stumps, each an observation-process judgment, each with its hurried, direct, rigorous standard and
-   golden routes and its referee on paper, each through the seventeen tests of `stumping/references/
+   golden routes, its four run routes and its referee or falsification check on paper, each through the twenty tests of `stumping/references/
    stump-screen.md`. For each, write the fix in one clause and read it against the closed page's "the fix already
    used" lines: a stump whose whole remedy is a gross-up by a recording share, a factor from checked cases, a
    restated basis, a curve valued at the margin, a knock-on carried forward, a without-it baseline or a held-out

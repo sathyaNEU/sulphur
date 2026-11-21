@@ -30,7 +30,28 @@ The spec:
   lattice   {"S1": {member: x, ...}, "S1+S2": {...}, ...}   every member's figure with exactly those stumps made
             the hurried way and everything else golden. Required keys: each stump alone, all together (the reflex
             route), and all but one (each stump fixed alone on the reflex route).
-  referee   {"slice": text, "covers_target": false, "truth": x, "golden": x, "rivals": {route: x, ...}}
+  referee   {"slice": text, "covers_target": false, "truth": x, "golden": x, "rivals": {route: x, ...}}, or
+  falsification {"check": text, "observes_target": false, "truth": x, "golden": x, "rivals": {route: x, ...}}
+            what forces the call between estimators. A referee is a slice where the hidden quantity is known; a
+            falsification check is a statistic of the members' own records that the golden's model reproduces and
+            each rival's misses (example 17's within-group share across the deadline bands), with no file observing
+            the target or a stump's quantity. One of the two is required. A referee is a calibration set first: a
+            pack that ships one prices the calibrated run route on it (task3 arch 8's two runs calibrated the whole
+            chain on the research valley's gauges and landed every class).
+  run_routes {"generous": {member: x, ...}, "calibrated": {member: x, ...} | {"none": why},
+              "hedge": {member: x, ...}, "cutoff": {member: x, ...} | {"none": why}}
+            the routes frontier runs were seen to take, each implemented on the world's arrays and each filing a
+            wrong call (task3 arch 8, both runs on every class against a paper pair of 26.7; the approved sheets of
+            2026-11-14; examples 16 and 17). generous: every correction the pack suggests applied in full, at the
+            strength the data allows, with the estimate's uncertainty integrated into the figure (expected counts
+            over a fitted spread, not a point plug). calibrated: the whole chain calibrated end to end on any slice
+            that observes the target or a stump's quantity, conditioned on every other instrument shipped, and
+            carried to the members ("none" only when no file observes either). hedge: every signal noticed and
+            reported as a sensitivity, the face value kept as the central figure. cutoff: each signal handled by a
+            filter, a threshold or a subset instead of a fitted model ("none" when no signal admits one). Across
+            the lattice and these routes the misses fall on both sides of a line, so no blanket adjustment lands the
+            call; each route is priced on the rubric like the rigorous standard one, its member figures read from
+            its map and every other figure from the figure's "routes".
   figures   every figure the answer blocks will state (the recommendation is the call itself and is not listed).
             Each figure sentence of the blocks is one rubric criterion, all or nothing: figures stated in one
             sentence share a "sentence" id and are earned together, and a figure with none is its own sentence:
@@ -79,6 +100,8 @@ HINT_MAX = 100.0 / 3  # what fixing one stump alone on the reflex route may add
 BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its width on each side
 NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched by this about the golden
 INDEPENDENT_FROM = "2026-11-21T08:00:00Z"   # the client's guidelines of 11/20: the critical components independent
+RUN_ROUTES = ("generous", "calibrated", "hedge", "cutoff")
+RUNS_FROM = "2026-11-21T21:45:00Z"   # task3 arch 8's runs: the gates' opponent is the runs' recorded routes
 
 
 def _key(ids):
@@ -223,6 +246,34 @@ def _route_score(spec, figs, route, gcall):
     return _score(figs, _calls(spec, mfig) == gcall, lambda f: vals[f["id"]]), None
 
 
+def _run_maps(spec):
+    """({route: {member: x}} for the run routes given as a figure per member, [the routes missing or malformed])."""
+    names = sorted(spec.get("members") or {})
+    rr = spec.get("run_routes") or {}
+    maps, absent = {}, []
+    for name in RUN_ROUTES:
+        v = rr.get(name)
+        if isinstance(v, dict) and names and all(m in v and _num(v[m]) for m in names):
+            maps[name] = {m: float(v[m]) for m in names}
+        elif name in ("calibrated", "cutoff") and isinstance(v, dict) and len(str(v.get("none") or "").strip()) >= 20:
+            continue
+        else:
+            absent.append(name)
+    return maps, absent
+
+
+def _run_route_score(spec, figs, name, mp, gcall):
+    """(score, the figure with no value on the route) for one of the runs' recorded routes: a member's figure from the
+    route's map, every other figure from its "routes"."""
+    vals = {}
+    for f in figs:
+        x = mp[f["member"]] if f["member"] is not None else f["routes"].get(name)
+        if x is None:
+            return None, f["id"]
+        vals[f["id"]] = x
+    return _score(figs, _calls(spec, mp) == gcall, lambda f: vals[f["id"]]), None
+
+
 def earnings(spec):
     """{"figs", "earn": {lattice key: score}, "rigorous": score or None} for a spec whose lattice is complete."""
     lat = {_key(k.split("+")): v for k, v in (spec.get("lattice") or {}).items()}
@@ -345,17 +396,54 @@ def check(spec):
     row("distinct wrong answers", len(wrong) >= 2, "%d distinct wrong calls across the lattice, %d among the single "
         "drops" % (len(wrong), len(singles)))
 
-    # 8. the referee
+    # 8. what forces the call between estimators: a referee slice, or a falsification check on the members' records
     ref = spec.get("referee") or {}
-    if ref:
-        gerr = abs(ref["golden"] - ref["truth"])
-        rerr = {r: abs(x - ref["truth"]) for r, x in (ref.get("rivals") or {}).items()}
+    fal = spec.get("falsification") or {}
+    for kind, obj, flag in (("referee", ref, "covers_target"), ("falsification check", fal, "observes_target")):
+        if not obj:
+            continue
+        gerr = abs(obj["golden"] - obj["truth"])
+        rerr = {r: abs(x - obj["truth"]) for r, x in (obj.get("rivals") or {}).items()}
         sep = bool(rerr) and all(e >= REFEREE * max(gerr, 1e-12) for e in rerr.values())
-        row("referee", sep and ref.get("covers_target") is False,
+        row(kind, sep and obj.get(flag) is False,
             "golden off by %.3g; rivals off by %s%s" % (gerr, ", ".join("%s %.3g" % kv for kv in sorted(rerr.items())),
-            "" if ref.get("covers_target") is False else "; the slice covers the target, so it is a key, not a referee"))
-    else:
-        row("referee", False, "no referee slice: the call is forced by nothing but the golden's own method")
+            "" if obj.get(flag) is False else (
+                "; the slice covers the target, so it is a key, not a referee" if kind == "referee" else
+                "; the check observes the target or a stump's quantity, so it is a referee: file it as one")))
+    if not ref and not fal:
+        row("referee", False, "no referee slice and no falsification check: the call is forced by nothing but the "
+            "golden's own method")
+
+    # 8b. the routes frontier runs were seen to take, each implemented on the world's arrays, each filing a wrong call
+    rreg = _registered(spec)
+    soft = bool(rreg) and rreg < RUNS_FROM
+    maps, absent = _run_maps(spec)
+    if ref and isinstance((spec.get("run_routes") or {}).get("calibrated"), dict) and "calibrated" not in maps:
+        absent.append("calibrated (the pack ships a referee slice, and a referee is a calibration set first: price "
+                      "the route that calibrates the whole chain on it and carries it to the members)")
+    row("run routes listed", not absent,
+        "the four routes the runs take are implemented: %s" % ", ".join(sorted(maps)) if not absent else
+        "missing or not a figure for every member: %s (stumping Part 1d; task3 arch 8's runs took routes no lattice "
+        "key held)%s" % ("; ".join(absent), "; registered before the rule of %s" % RUNS_FROM[:10] if soft else ""),
+        warn=soft)
+    right = sorted(n for n, mp in maps.items() if _calls(spec, mp) == gcall)
+    row("run routes land wrong", bool(maps) and not right,
+        ("each files a wrong call: " + "; ".join("%s %s" % (n, _calls(spec, maps[n])) for n in sorted(maps)))
+        if maps and not right else ("files the golden's call: " + ", ".join(right)) if right else "no run route",
+        warn=soft)
+    if spec.get("call", "lines") != "top_k":
+        dirs = set()
+        for mp in list(lat.values()) + list(maps.values()):
+            for m in names:
+                d = _band(mp[m], members[m]["lines"]) - _band(golden[m], members[m]["lines"])
+                if d:
+                    dirs.add(1 if d > 0 else -1)
+        row("both sides of the line", dirs == {1, -1},
+            "the shortcuts and the run routes miss above and below the golden's classes" if dirs == {1, -1} else
+            "every miss falls %s the golden's class, so a route that errs the other way lands the call (task3 arch "
+            "8: every open member 1.1 to 1.5 above its line, every priced shortcut under it, and the runs' generous "
+            "corrections filed every class)" % ("above" if dirs == {1} else "below" if dirs == {-1} else "on neither side of"),
+            warn=soft)
 
     # 9. independence and weight
     axes = {stumps[s].get("axis") for s in necessary}
@@ -423,6 +511,12 @@ def check(spec):
             row("the rigorous standard route on the rubric", rs is not None and rs <= ONE_LOST_MAX + 1e-9,
                 ("it earns %.0f (%.0f or under)" % (rs, ONE_LOST_MAX)) if rs is not None else
                 "%s has no value on the rigorous route, so the strongest run is unpriced" % lacking)
+            for name in sorted(maps):
+                sc, lacking = _run_route_score(spec, figs, name, maps[name], gcall)
+                row("the %s route on the rubric" % name, sc is not None and sc <= ONE_LOST_MAX + 1e-9,
+                    ("it earns %.0f (%.0f or under; the review reads the strongest run)" % (sc, ONE_LOST_MAX))
+                    if sc is not None else "%s has no value on the %s route, so the run's route is unpriced" % (
+                        lacking, name), warn=soft)
 
     members_opened = [m for m in opened if m in open_members]
     level = 0
@@ -447,6 +541,13 @@ def table(spec):
             m, "/".join("%g" % l for l in mm.get("lines") or []) or "top-k", mm["golden"], sp,
             ("%.4g" % reflex[m]) if m in reflex else "-", ("%.4g" % r["direct"]) if "direct" in r else "-",
             ("%.4g" % r["rigorous"]) if "rigorous" in r else "-", ", ".join(by) or "forced"))
+    maps, _ = _run_maps(spec)
+    if maps:
+        gcall = _calls(spec, {m: members[m]["golden"] for m in members})
+        out += ["", "| Run route | Call | %s |" % " | ".join(sorted(members)), "|---|---|%s" % ("---|" * len(members))]
+        for name in sorted(maps):
+            out.append("| %s | %s | %s |" % (name, "right" if _calls(spec, maps[name]) == gcall else "wrong",
+                                             " | ".join("%.4g" % maps[name][m] for m in sorted(members))))
     return "\n".join(out)
 
 
@@ -493,6 +594,11 @@ def rubric_table(spec):
         out.append("| rigorous standard route | %s | %.0f |" % (
             "right" if _calls(spec, {m: (members[m].get("routes") or {}).get("rigorous", golden[m])
                                      for m in names}) == gcall else "wrong", rs))
+    maps, _ = _run_maps(spec)
+    for name in sorted(maps):
+        sc, _ = _run_route_score(spec, figs, name, maps[name], gcall)
+        if sc is not None:
+            out.append("| %s run route | %s | %.0f |" % (name, "right" if _calls(spec, maps[name]) == gcall else "wrong", sc))
     return "\n".join(out)
 
 
@@ -544,9 +650,19 @@ def _demo(eff=None):
         factor["S3"] if "S3" in c else 1)
     figures.append({"id": "X", "block": "ask", "golden": 100.0, "family": fam(100.0, 2.5),
                     "lattice": {"+".join(c): total(c) for c in combos}, "routes": {"rigorous": 84.0}})
+    run_routes = {"generous": {"a": 13.4, "b": 10.5, "c": 13.6, "d": 16.2},
+                  "calibrated": {"a": 9.5, "b": 8.6, "c": 12.0, "d": 15.4},
+                  "hedge": {"a": 8.6, "b": 9.2, "c": 8.9, "d": 15.6},
+                  "cutoff": {"a": 9.2, "b": 9.6, "c": 9.4, "d": 15.8}}
+    off = {"generous": (0.70, 0.36, 47.0, 112.0), "calibrated": (0.66, 0.24, 45.0, 93.0),
+           "hedge": (0.40, 0.45, 52.0, 80.0), "cutoff": (0.45, 0.40, 50.0, 88.0)}
+    for i, fid in enumerate(("C1", "C2", "C3", "X")):
+        f = next(f for f in figures if f["id"] == fid)
+        f["routes"].update({name: off[name][i] for name in off})
     return {"task": "selftest", "members": members, "stumps": stumps, "lattice": lattice, "figures": figures,
             "referee": {"slice": "a labelled sample the target does not reach", "covers_target": False,
-                        "truth": 0.60, "golden": 0.61, "rivals": {"direct": 0.25, "rigorous": 0.52}}}
+                        "truth": 0.60, "golden": 0.61, "rivals": {"direct": 0.25, "rigorous": 0.52}},
+            "run_routes": run_routes}
 
 
 def selftest():
@@ -647,6 +763,40 @@ def selftest():
         if "routes" in f:
             f["routes"]["rigorous"] = f["golden"]
     expect("a rigorous route that earns over 50", s, 0, "rigorous standard route on the rubric")
+    # the runs' recorded routes (task3 arch 8)
+    s = copy.deepcopy(base)                     # no run routes at all
+    del s["run_routes"]
+    expect("a core with none of the runs' routes", s, 0, "run routes listed")
+    s = copy.deepcopy(base)                     # the generous route files the golden's call
+    s["run_routes"]["generous"] = {"a": 12.4, "b": 8.4, "c": 12.9, "d": 15.4}
+    expect("a generous route that lands the call", s, 0, "run routes land wrong")
+    s = copy.deepcopy(base)                     # a referee shipped and the calibrated route declared absent
+    s["run_routes"]["calibrated"] = {"none": "no file observes the target or any stump's own quantity"}
+    expect("a referee with no calibrated route priced", s, 0, "run routes listed")
+    s = copy.deepcopy(base)                     # no referee, a falsification check on the members' own records
+    del s["referee"]
+    s["run_routes"]["calibrated"] = {"none": "no file observes the target or any stump's own quantity"}
+    s["falsification"] = {"check": "the within-group share across the recording bands", "observes_target": False,
+                          "truth": 0.30, "golden": 0.31, "rivals": {"hedge": 0.15, "generous": 0.40}}
+    expect("a falsification check in place of a referee", s, 5)
+    s2 = copy.deepcopy(s)                       # a falsification check that observes the target is a referee
+    s2["falsification"]["observes_target"] = True
+    expect("a falsification check that observes the target", s2, 0, "falsification check")
+    s = copy.deepcopy(base)                     # every miss below the golden's classes: one-sided
+    for k in s["lattice"]:
+        s["lattice"][k]["b"] = min(s["lattice"][k]["b"], 9.9)
+    s["run_routes"]["generous"]["b"] = 9.6
+    s["run_routes"]["generous"]["a"] = 9.8
+    expect("misses on one side of the line only", s, 0, "both sides of the line")
+    s = copy.deepcopy(base)                     # a run route with no value on a figure
+    del fig(s, "X")["routes"]["hedge"]
+    expect("a run route unpriced on the rubric", s, 0, "the hedge route on the rubric")
+    s = copy.deepcopy(base)                     # the calibrated route earns the estimated figures
+    for f in s["figures"]:
+        if "routes" in f:
+            f["routes"]["calibrated"] = f["golden"]
+    s["run_routes"]["calibrated"] = {"a": 9.5, "b": 8.1, "c": 12.4, "d": 15.0}
+    expect("a calibrated route that earns over 50", s, 0, "the calibrated route on the rubric")
     print("SELFTEST %s" % ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 

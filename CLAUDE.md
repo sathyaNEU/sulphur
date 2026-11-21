@@ -259,6 +259,20 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
   (`stumping/references/stump-screen.md` tests 2, 10 and 11, its measured-dead table, `determinism-check` §1).
 - **Forcing has two sides** (six returns on determinism or forcing): every defensible rival on the golden's side, the
   shortcuts across the line, and the call holding when each fitted input moves by its spread (`effort.json` forcing).
+- **The opponent is the runs' recorded routes, never our hurried one** (task3 arch 8, 2026-11-21: both runs filed all
+  seven classes against a paper pair of 26.7, on routes no lattice key held). The runs fit any correction a shipped
+  file lets them check (a storage account closing a bucket loss, radar pixel pairs reading a ratio off, a slice of
+  gauges scoring the whole chain), apply every correction at full strength with the uncertainty integrated, and
+  calibrate end to end on any slice that observes the target; they lose where nothing checks the correction and they
+  keep the signal as a sensitivity, cut at a threshold or decline (the approved sheets, examples 16 and 17). So
+  `core.py` implements four run routes (generous, calibrated, hedge, cut-off), each filing a wrong call and priced at
+  50 or under; the misses fall on both sides of a line; no stump has a validation handle; a referee is a calibration
+  set first, so the call is forced by a falsification check on the members' own records unless the calibrated route
+  on the referee files wrong; and the estimand is a forward window, never the record's own mean (`corelib.py`
+  `run_routes`, `precut.py` `Run routes:`, `Validation handles:` and `Forward window:`, `stump-screen.md` tests 16
+  and 18 to 20). The stump the runs lose is a parameter they must set, whose default (a pooled value, today's level,
+  a literature constant, the same as another group, independence, a pro-rata split, the face value) the world makes
+  false across every unit, identified only through a covariate built from another file or an internal check.
 
 ## Skill routing (binding)
 
@@ -309,7 +323,7 @@ the model's own initiative; the commands above license the ones they name.
 0 INTAKE   the assigned domain (one of the 21 subdomains) and analysis type (one of the nine); status.py new for
            the number                                                         pipeline.json DRAWING, doctrine throughout
 1 DRAW     guard.py recent, coverage and mechanisms; the strategy atlas; the weight and answer shape not leaned on
-           recently; the stump screen on paper (five or more candidate traps through its seventeen tests, the three
+           recently; the stump screen on paper (five or more candidate traps through its twenty tests, the three
            strongest that open different members kept, stumping/references/stump-screen.md) and the core proved
            in generator/core.py (stumping Part 1d); the card (answer_shape, weight,
            chain_signature) through guard.py check, then register             COMMIT "DRAWN (taskNN)"

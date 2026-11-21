@@ -24,11 +24,13 @@ People: <from guard.py names>
 ## Stump screen
 
 Written at the draw, before the card is registered and before any code (`references/stump-screen.md`). Three to five
-candidate traps, each through the seventeen tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean
-data, 5 two records, 6 the waved-through assumption with its precedent, 7 a plausible shallower story, 8 across the
-data, 9 worth three times the family's spread, 10 the run's alternative ruled out by named data, 11 the golden can
-measure it, 12 no easier second route, 13 its own member, 14 said out loud, 15 the strongest route lands wrong, 16 a
-referee, 17 one sentence does not cover the members); the three strongest independent ones kept.
+candidate traps, each through the twenty tests (1 off the closed page, 2 not a reflex, 3 nothing filed, 4 clean
+data, 5 two records, 6 the waved-through assumption with its precedent and its condition, 7 a plausible shallower
+story, 8 across the data, 9 worth three times the family's spread, 10 the run's alternative ruled out by named data,
+11 the golden can measure it, 12 no easier second route, 13 its own member, 14 said out loud, 15 the strongest route
+lands wrong, 16 a referee or a falsification check, never a calibration set, 17 one sentence does not cover the
+members, 18 no validation handle, 19 the runs' four routes land wrong on both sides of a line, 20 a forward window);
+the three strongest independent ones kept.
 
 | Candidate trap | The assumption a run waves through (precedent) | The second record that refutes it | Tests failed | Kept |
 |---|---|---|---|---|
@@ -178,6 +180,17 @@ Decisive steps: <for each stump: the answer it owns (its critical component, a f
   method), the prompt's words that ask for it and the deliverable it sits in, the file and field where its evidence
   sits, and what is left to do once it is named; then the independence table in one line: the figure and the call
   with each step left out alone and in pairs (corelib's lattice)>
+Run routes: <the four routes frontier runs take, each implemented in core.py's run_routes: generous (every
+  correction the pack suggests at full strength, the uncertainty integrated), calibrated (end to end on any slice
+  that observes the target or a stump's quantity, or "none" and why), hedge (every signal noticed and kept as a
+  sensitivity, the face value central), cut-off (a filter where a fitted model is needed, or "none" and why); for
+  each, the call it files, the member it gets wrong and on which side of the line, and what it earns>
+Validation handles: <every shipped file that lets a run score a stump's own quantity or the target under the
+  members' instruments (a total that closes a loss, a pair that reads a ratio off, a slice that scores the chain), and
+  for each stump why none does; a referee is listed here with the calibrated route's wrong call (stump-screen tests
+  16 and 18)>
+Forward window: <why the window's figure is not the record's own mean or rate restated: the process of the world that
+  moves it, the history-mean route's figure against the golden's (stump-screen test 20)>
 
 ## Semantic fork table
 
@@ -248,7 +261,9 @@ Free: <what the build decides on its own: nouns beyond the people, Layer 1 textu
   line, a deciding lesson on the client's closed page, or a chain of closed lessons only (a lesson closed by a later
   read of the page binds every card registered after that read). From `precut.DECISIVE_FROM` on: a missing
   `Decisive steps:` line, and in `corelib` a critical component that falls with two stumps or with none, or a stump
-  with no component of its own.
+  with no component of its own. From `precut.RUNS_FROM` on: a missing `Run routes:`, `Validation handles:` or
+  `Forward window:` line, and in `corelib` a run route missing, filing the golden's call or earning over 50, misses on
+  one side of the line only, or a referee shipped with no calibrated route priced.
 - For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its nine
   labels, a missing `## Build brief` or one of its six labels, or a `generator/core.py` that is missing or does not
   exit 0 on `corelib`'s `CORE PASS level 4` or `5`.
