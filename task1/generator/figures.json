@@ -1,0 +1,4921 @@
+{
+ "call": [
+  "AppLovin Android: hold",
+  "Google Android: hold",
+  "Google iOS: scale",
+  "Meta iOS: hold",
+  "Pinterest iOS: scale",
+  "Snapchat iOS: cut",
+  "TikTok iOS: cut"
+ ],
+ "bands": {
+  "Meta iOS": "hold",
+  "TikTok iOS": "cut",
+  "Snapchat iOS": "cut",
+  "Google iOS": "scale",
+  "Pinterest iOS": "scale",
+  "Google Android": "hold",
+  "AppLovin Android": "hold"
+ },
+ "by_band": {
+  "scale": [
+   "Google iOS",
+   "Pinterest iOS"
+  ],
+  "hold": [
+   "Meta iOS",
+   "Google Android",
+   "AppLovin Android"
+  ],
+  "cut": [
+   "TikTok iOS",
+   "Snapchat iOS"
+  ]
+ },
+ "figure": {
+  "return Meta iOS": 1.05,
+  "return TikTok iOS": 0.549,
+  "return Snapchat iOS": 0.621,
+  "return Google iOS": 1.45,
+  "return Pinterest iOS": 1.578,
+  "return Google Android": 1.039,
+  "return AppLovin Android": 0.969,
+  "stretch return Meta iOS": 0.928,
+  "stretch return TikTok iOS": 0.519,
+  "stretch return Snapchat iOS": 0.583,
+  "stretch return Google iOS": 1.25,
+  "stretch return Pinterest iOS": 1.175,
+  "stretch return Google Android": 0.941,
+  "stretch return AppLovin Android": 0.846,
+  "installs a week Meta iOS": 789,
+  "installs a week TikTok iOS": 750,
+  "installs a week Snapchat iOS": 643,
+  "installs a week Google iOS": 624,
+  "installs a week Pinterest iOS": 325,
+  "installs a week Google Android": 611,
+  "installs a week AppLovin Android": 932,
+  "value at plan Meta iOS": 5.64,
+  "value at plan TikTok iOS": 4.79,
+  "value at plan Snapchat iOS": 5.93,
+  "value at plan Google iOS": 9.36,
+  "value at plan Pinterest iOS": 10.2,
+  "value at plan Google Android": 9.33,
+  "value at plan AppLovin Android": 4.94,
+  "next euro Meta iOS": 0.556,
+  "next euro TikTok iOS": 0.327,
+  "next euro Snapchat iOS": 0.342,
+  "next euro Google iOS": 0.73,
+  "next euro Pinterest iOS": 0.746,
+  "next euro Google Android": 0.576,
+  "next euro AppLovin Android": 0.616,
+  "stretch next euro Meta iOS": 0.492,
+  "stretch next euro TikTok iOS": 0.309,
+  "stretch next euro Snapchat iOS": 0.321,
+  "stretch next euro Google iOS": 0.629,
+  "stretch next euro Pinterest iOS": 0.556,
+  "stretch next euro Google Android": 0.522,
+  "stretch next euro AppLovin Android": 0.538,
+  "paid per install Meta iOS": 5.78,
+  "paid per install TikTok iOS": 4.98,
+  "paid per install Snapchat iOS": 6.1,
+  "paid per install Google iOS": 9.47,
+  "paid per install Pinterest iOS": 9.37,
+  "paid per install Google Android": 8.6,
+  "paid per install AppLovin Android": 4.87
+ },
+ "figure_band": {
+  "return Meta iOS": [
+   0.981,
+   1.151
+  ],
+  "return TikTok iOS": [
+   0.503,
+   0.592
+  ],
+  "return Snapchat iOS": [
+   0.567,
+   0.649
+  ],
+  "return Google iOS": [
+   1.375,
+   1.517
+  ],
+  "return Pinterest iOS": [
+   1.486,
+   1.705
+  ],
+  "return Google Android": [
+   0.974,
+   1.076
+  ],
+  "return AppLovin Android": [
+   0.902,
+   1.018
+  ],
+  "stretch return Meta iOS": [
+   0.867,
+   1.018
+  ],
+  "stretch return TikTok iOS": [
+   0.475,
+   0.56
+  ],
+  "stretch return Snapchat iOS": [
+   0.532,
+   0.61
+  ],
+  "stretch return Google iOS": [
+   1.165,
+   1.307
+  ],
+  "stretch return Pinterest iOS": [
+   1.106,
+   1.268
+  ],
+  "stretch return Google Android": [
+   0.882,
+   0.974
+  ],
+  "stretch return AppLovin Android": [
+   0.788,
+   0.889
+  ],
+  "installs a week Meta iOS": [
+   761,
+   806
+  ],
+  "installs a week TikTok iOS": [
+   716,
+   774
+  ],
+  "installs a week Snapchat iOS": [
+   605,
+   669
+  ],
+  "installs a week Google iOS": [
+   595,
+   650
+  ],
+  "installs a week Pinterest iOS": [
+   309,
+   330
+  ],
+  "installs a week Google Android": [
+   575,
+   633
+  ],
+  "installs a week AppLovin Android": [
+   872,
+   973
+  ],
+  "value at plan Meta iOS": [
+   5.26,
+   6.18
+  ],
+  "value at plan TikTok iOS": [
+   4.39,
+   5.15
+  ],
+  "value at plan Snapchat iOS": [
+   5.41,
+   6.14
+  ],
+  "value at plan Google iOS": [
+   8.87,
+   9.69
+  ],
+  "value at plan Pinterest iOS": [
+   9.6,
+   11.02
+  ],
+  "value at plan Google Android": [
+   9.12,
+   9.57
+  ],
+  "value at plan AppLovin Android": [
+   4.86,
+   5.02
+  ],
+  "next euro Meta iOS": [
+   0.428,
+   0.622
+  ],
+  "next euro TikTok iOS": [
+   0.28,
+   0.395
+  ],
+  "next euro Snapchat iOS": [
+   0.268,
+   0.389
+  ],
+  "next euro Google iOS": [
+   0.596,
+   0.835
+  ],
+  "next euro Pinterest iOS": [
+   0.701,
+   0.888
+  ],
+  "next euro Google Android": [
+   0.531,
+   0.631
+  ],
+  "next euro AppLovin Android": [
+   0.573,
+   0.717
+  ],
+  "stretch next euro Meta iOS": [
+   0.367,
+   0.558
+  ],
+  "stretch next euro TikTok iOS": [
+   0.262,
+   0.379
+  ],
+  "stretch next euro Snapchat iOS": [
+   0.248,
+   0.368
+  ],
+  "stretch next euro Google iOS": [
+   0.502,
+   0.733
+  ],
+  "stretch next euro Pinterest iOS": [
+   0.52,
+   0.704
+  ],
+  "stretch next euro Google Android": [
+   0.475,
+   0.58
+  ],
+  "stretch next euro AppLovin Android": [
+   0.5,
+   0.652
+  ],
+  "paid per install Meta iOS": [
+   5.4,
+   6.34
+  ],
+  "paid per install TikTok iOS": [
+   4.56,
+   5.35
+  ],
+  "paid per install Snapchat iOS": [
+   5.57,
+   6.31
+  ],
+  "paid per install Google iOS": [
+   8.97,
+   9.81
+  ],
+  "paid per install Pinterest iOS": [
+   8.82,
+   10.11
+  ],
+  "paid per install Google Android": [
+   8.52,
+   8.69
+  ],
+  "paid per install AppLovin Android": [
+   4.82,
+   4.95
+  ]
+ },
+ "return_plan": {
+  "Meta iOS": 1.05,
+  "TikTok iOS": 0.549,
+  "Snapchat iOS": 0.621,
+  "Google iOS": 1.45,
+  "Pinterest iOS": 1.578,
+  "Google Android": 1.039,
+  "AppLovin Android": 0.969
+ },
+ "return_plan_band": {
+  "Meta iOS": [
+   0.981,
+   1.151
+  ],
+  "TikTok iOS": [
+   0.503,
+   0.592
+  ],
+  "Snapchat iOS": [
+   0.567,
+   0.649
+  ],
+  "Google iOS": [
+   1.375,
+   1.517
+  ],
+  "Pinterest iOS": [
+   1.486,
+   1.705
+  ],
+  "Google Android": [
+   0.974,
+   1.076
+  ],
+  "AppLovin Android": [
+   0.902,
+   1.018
+  ]
+ },
+ "return_stretch": {
+  "Meta iOS": 0.928,
+  "TikTok iOS": 0.519,
+  "Snapchat iOS": 0.583,
+  "Google iOS": 1.25,
+  "Pinterest iOS": 1.175,
+  "Google Android": 0.941,
+  "AppLovin Android": 0.846
+ },
+ "return_stretch_band": {
+  "Meta iOS": [
+   0.867,
+   1.018
+  ],
+  "TikTok iOS": [
+   0.475,
+   0.56
+  ],
+  "Snapchat iOS": [
+   0.532,
+   0.61
+  ],
+  "Google iOS": [
+   1.165,
+   1.307
+  ],
+  "Pinterest iOS": [
+   1.106,
+   1.268
+  ],
+  "Google Android": [
+   0.882,
+   0.974
+  ],
+  "AppLovin Android": [
+   0.788,
+   0.889
+  ]
+ },
+ "installs_week": {
+  "Meta iOS": 789,
+  "TikTok iOS": 750,
+  "Snapchat iOS": 643,
+  "Google iOS": 624,
+  "Pinterest iOS": 325,
+  "Google Android": 611,
+  "AppLovin Android": 932
+ },
+ "installs_week_band": {
+  "Meta iOS": [
+   761,
+   806
+  ],
+  "TikTok iOS": [
+   716,
+   774
+  ],
+  "Snapchat iOS": [
+   605,
+   669
+  ],
+  "Google iOS": [
+   595,
+   650
+  ],
+  "Pinterest iOS": [
+   309,
+   330
+  ],
+  "Google Android": [
+   575,
+   633
+  ],
+  "AppLovin Android": [
+   872,
+   973
+  ]
+ },
+ "value_plan": {
+  "Meta iOS": 5.64,
+  "TikTok iOS": 4.79,
+  "Snapchat iOS": 5.93,
+  "Google iOS": 9.36,
+  "Pinterest iOS": 10.2,
+  "Google Android": 9.33,
+  "AppLovin Android": 4.94
+ },
+ "value_plan_band": {
+  "Meta iOS": [
+   5.26,
+   6.18
+  ],
+  "TikTok iOS": [
+   4.39,
+   5.15
+  ],
+  "Snapchat iOS": [
+   5.41,
+   6.14
+  ],
+  "Google iOS": [
+   8.87,
+   9.69
+  ],
+  "Pinterest iOS": [
+   9.6,
+   11.02
+  ],
+  "Google Android": [
+   9.12,
+   9.57
+  ],
+  "AppLovin Android": [
+   4.86,
+   5.02
+  ]
+ },
+ "next_euro": {
+  "Meta iOS": 0.556,
+  "TikTok iOS": 0.327,
+  "Snapchat iOS": 0.342,
+  "Google iOS": 0.73,
+  "Pinterest iOS": 0.746,
+  "Google Android": 0.576,
+  "AppLovin Android": 0.616
+ },
+ "next_euro_band": {
+  "Meta iOS": [
+   0.428,
+   0.622
+  ],
+  "TikTok iOS": [
+   0.28,
+   0.395
+  ],
+  "Snapchat iOS": [
+   0.268,
+   0.389
+  ],
+  "Google iOS": [
+   0.596,
+   0.835
+  ],
+  "Pinterest iOS": [
+   0.701,
+   0.888
+  ],
+  "Google Android": [
+   0.531,
+   0.631
+  ],
+  "AppLovin Android": [
+   0.573,
+   0.717
+  ]
+ },
+ "next_euro_stretch": {
+  "Meta iOS": 0.492,
+  "TikTok iOS": 0.309,
+  "Snapchat iOS": 0.321,
+  "Google iOS": 0.629,
+  "Pinterest iOS": 0.556,
+  "Google Android": 0.522,
+  "AppLovin Android": 0.538
+ },
+ "next_euro_stretch_band": {
+  "Meta iOS": [
+   0.367,
+   0.558
+  ],
+  "TikTok iOS": [
+   0.262,
+   0.379
+  ],
+  "Snapchat iOS": [
+   0.248,
+   0.368
+  ],
+  "Google iOS": [
+   0.502,
+   0.733
+  ],
+  "Pinterest iOS": [
+   0.52,
+   0.704
+  ],
+  "Google Android": [
+   0.475,
+   0.58
+  ],
+  "AppLovin Android": [
+   0.5,
+   0.652
+  ]
+ },
+ "paid_per_install": {
+  "Meta iOS": 5.78,
+  "TikTok iOS": 4.98,
+  "Snapchat iOS": 6.1,
+  "Google iOS": 9.47,
+  "Pinterest iOS": 9.37,
+  "Google Android": 8.6,
+  "AppLovin Android": 4.87
+ },
+ "paid_per_install_band": {
+  "Meta iOS": [
+   5.4,
+   6.34
+  ],
+  "TikTok iOS": [
+   4.56,
+   5.35
+  ],
+  "Snapchat iOS": [
+   5.57,
+   6.31
+  ],
+  "Google iOS": [
+   8.97,
+   9.81
+  ],
+  "Pinterest iOS": [
+   8.82,
+   10.11
+  ],
+  "Google Android": [
+   8.52,
+   8.69
+  ],
+  "AppLovin Android": [
+   4.82,
+   4.95
+  ]
+ },
+ "paid_per_install_android": {
+  "Google Android": 8.6,
+  "AppLovin Android": 4.87
+ },
+ "paid_per_install_ios": {
+  "Meta iOS": 5.78,
+  "TikTok iOS": 4.98,
+  "Snapchat iOS": 6.1,
+  "Google iOS": 9.47,
+  "Pinterest iOS": 9.37
+ },
+ "returns": {
+  "return Meta iOS": 1.05,
+  "return TikTok iOS": 0.549,
+  "return Snapchat iOS": 0.621,
+  "return Google iOS": 1.45,
+  "return Pinterest iOS": 1.578,
+  "return Google Android": 1.039,
+  "return AppLovin Android": 0.969,
+  "stretch return Meta iOS": 0.928,
+  "stretch return TikTok iOS": 0.519,
+  "stretch return Snapchat iOS": 0.583,
+  "stretch return Google iOS": 1.25,
+  "stretch return Pinterest iOS": 1.175,
+  "stretch return Google Android": 0.941,
+  "stretch return AppLovin Android": 0.846
+ },
+ "next_euros": {
+  "next euro Meta iOS": 0.556,
+  "next euro TikTok iOS": 0.327,
+  "next euro Snapchat iOS": 0.342,
+  "next euro Google iOS": 0.73,
+  "next euro Pinterest iOS": 0.746,
+  "next euro Google Android": 0.576,
+  "next euro AppLovin Android": 0.616,
+  "stretch next euro Meta iOS": 0.492,
+  "stretch next euro TikTok iOS": 0.309,
+  "stretch next euro Snapchat iOS": 0.321,
+  "stretch next euro Google iOS": 0.629,
+  "stretch next euro Pinterest iOS": 0.556,
+  "stretch next euro Google Android": 0.522,
+  "stretch next euro AppLovin Android": 0.538
+ },
+ "components": {
+  "S1": {
+   "id": "paid per install AppLovin Android",
+   "value": 4.87,
+   "band": [
+    4.82,
+    4.95
+   ]
+  },
+  "S2": {
+   "id": "paid per install Meta iOS",
+   "value": 5.78,
+   "band": [
+    5.4,
+    6.34
+   ]
+  },
+  "S3": {
+   "id": "installs a week Google Android",
+   "value": 611,
+   "band": [
+    575,
+    633
+   ]
+  }
+ },
+ "routes": {
+  "golden": {
+   "Meta iOS": {
+    "return_plan": 1.05,
+    "return_stretch": 0.928,
+    "installs_week": 789,
+    "value_plan": 5.64,
+    "next_euro": 0.556,
+    "next_euro_stretch": 0.492,
+    "paid_per_install": 5.78,
+    "band": "hold"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.549,
+    "return_stretch": 0.519,
+    "installs_week": 750,
+    "value_plan": 4.79,
+    "next_euro": 0.327,
+    "next_euro_stretch": 0.309,
+    "paid_per_install": 4.98,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.621,
+    "return_stretch": 0.583,
+    "installs_week": 643,
+    "value_plan": 5.93,
+    "next_euro": 0.342,
+    "next_euro_stretch": 0.321,
+    "paid_per_install": 6.1,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.45,
+    "return_stretch": 1.25,
+    "installs_week": 624,
+    "value_plan": 9.36,
+    "next_euro": 0.73,
+    "next_euro_stretch": 0.629,
+    "paid_per_install": 9.47,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.578,
+    "return_stretch": 1.175,
+    "installs_week": 325,
+    "value_plan": 10.2,
+    "next_euro": 0.746,
+    "next_euro_stretch": 0.556,
+    "paid_per_install": 9.37,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 1.039,
+    "return_stretch": 0.941,
+    "installs_week": 611,
+    "value_plan": 9.33,
+    "next_euro": 0.576,
+    "next_euro_stretch": 0.522,
+    "paid_per_install": 8.6,
+    "band": "hold"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.969,
+    "return_stretch": 0.846,
+    "installs_week": 932,
+    "value_plan": 4.94,
+    "next_euro": 0.616,
+    "next_euro_stretch": 0.538,
+    "paid_per_install": 4.87,
+    "band": "hold"
+   }
+  },
+  "direct": {
+   "Meta iOS": {
+    "return_plan": 0.487,
+    "return_stretch": 0.487,
+    "installs_week": 722,
+    "value_plan": 2.5,
+    "next_euro": 0.487,
+    "next_euro_stretch": 0.487,
+    "paid_per_install": 2.5,
+    "band": "cut"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.189,
+    "return_stretch": 0.189,
+    "installs_week": 602,
+    "value_plan": 1.63,
+    "next_euro": 0.189,
+    "next_euro_stretch": 0.189,
+    "paid_per_install": 1.63,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.21,
+    "return_stretch": 0.21,
+    "installs_week": 597,
+    "value_plan": 1.86,
+    "next_euro": 0.21,
+    "next_euro_stretch": 0.21,
+    "paid_per_install": 1.86,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 0.435,
+    "return_stretch": 0.435,
+    "installs_week": 570,
+    "value_plan": 2.81,
+    "next_euro": 0.435,
+    "next_euro_stretch": 0.435,
+    "paid_per_install": 2.81,
+    "band": "cut"
+   },
+   "Pinterest iOS": {
+    "return_plan": 0.408,
+    "return_stretch": 0.408,
+    "installs_week": 420,
+    "value_plan": 2.99,
+    "next_euro": 0.408,
+    "next_euro_stretch": 0.408,
+    "paid_per_install": 2.99,
+    "band": "cut"
+   },
+   "Google Android": {
+    "return_plan": 0.624,
+    "return_stretch": 0.624,
+    "installs_week": 842,
+    "value_plan": 6.6,
+    "next_euro": 0.624,
+    "next_euro_stretch": 0.624,
+    "paid_per_install": 6.6,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.581,
+    "return_stretch": 0.581,
+    "installs_week": 920,
+    "value_plan": 3.13,
+    "next_euro": 0.581,
+    "next_euro_stretch": 0.581,
+    "paid_per_install": 3.13,
+    "band": "cut"
+   }
+  },
+  "rigorous": {
+   "Meta iOS": {
+    "return_plan": 1.622,
+    "return_stretch": 1.552,
+    "installs_week": 819,
+    "value_plan": 8.39,
+    "next_euro": 1.351,
+    "next_euro_stretch": 1.293,
+    "paid_per_install": 8.5,
+    "band": "scale"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.669,
+    "return_stretch": 0.662,
+    "installs_week": 806,
+    "value_plan": 5.44,
+    "next_euro": 0.619,
+    "next_euro_stretch": 0.613,
+    "paid_per_install": 5.59,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.701,
+    "return_stretch": 0.681,
+    "installs_week": 667,
+    "value_plan": 6.45,
+    "next_euro": 0.557,
+    "next_euro_stretch": 0.541,
+    "paid_per_install": 6.56,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.542,
+    "return_stretch": 1.475,
+    "installs_week": 646,
+    "value_plan": 9.62,
+    "next_euro": 1.313,
+    "next_euro_stretch": 1.255,
+    "paid_per_install": 9.7,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.484,
+    "return_stretch": 1.371,
+    "installs_week": 286,
+    "value_plan": 10.88,
+    "next_euro": 1.275,
+    "next_euro_stretch": 1.179,
+    "paid_per_install": 10.21,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.782,
+    "return_stretch": 0.769,
+    "installs_week": 511,
+    "value_plan": 8.39,
+    "next_euro": 0.724,
+    "next_euro_stretch": 0.712,
+    "paid_per_install": 7.88,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.708,
+    "return_stretch": 0.696,
+    "installs_week": 901,
+    "value_plan": 3.73,
+    "next_euro": 0.676,
+    "next_euro_stretch": 0.665,
+    "paid_per_install": 3.7,
+    "band": "cut"
+   }
+  },
+  "S1": {
+   "Meta iOS": {
+    "return_plan": 1.024,
+    "return_stretch": 0.903,
+    "installs_week": 789,
+    "value_plan": 5.5,
+    "next_euro": 0.535,
+    "next_euro_stretch": 0.472,
+    "paid_per_install": 5.64,
+    "band": "hold"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.467,
+    "return_stretch": 0.442,
+    "installs_week": 750,
+    "value_plan": 4.08,
+    "next_euro": 0.277,
+    "next_euro_stretch": 0.262,
+    "paid_per_install": 4.24,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.531,
+    "return_stretch": 0.497,
+    "installs_week": 643,
+    "value_plan": 5.07,
+    "next_euro": 0.283,
+    "next_euro_stretch": 0.266,
+    "paid_per_install": 5.23,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.566,
+    "return_stretch": 1.348,
+    "installs_week": 624,
+    "value_plan": 10.11,
+    "next_euro": 0.783,
+    "next_euro_stretch": 0.674,
+    "paid_per_install": 10.22,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.661,
+    "return_stretch": 1.231,
+    "installs_week": 325,
+    "value_plan": 10.73,
+    "next_euro": 0.772,
+    "next_euro_stretch": 0.572,
+    "paid_per_install": 9.83,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.955,
+    "return_stretch": 0.864,
+    "installs_week": 611,
+    "value_plan": 8.58,
+    "next_euro": 0.524,
+    "next_euro_stretch": 0.474,
+    "paid_per_install": 7.88,
+    "band": "hold"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.736,
+    "return_stretch": 0.641,
+    "installs_week": 932,
+    "value_plan": 3.75,
+    "next_euro": 0.463,
+    "next_euro_stretch": 0.403,
+    "paid_per_install": 3.7,
+    "band": "cut"
+   }
+  },
+  "S2": {
+   "Meta iOS": {
+    "return_plan": 1.734,
+    "return_stretch": 1.534,
+    "installs_week": 789,
+    "value_plan": 9.31,
+    "next_euro": 0.924,
+    "next_euro_stretch": 0.817,
+    "paid_per_install": 9.55,
+    "band": "scale"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.833,
+    "return_stretch": 0.787,
+    "installs_week": 750,
+    "value_plan": 7.27,
+    "next_euro": 0.496,
+    "next_euro_stretch": 0.468,
+    "paid_per_install": 7.55,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.857,
+    "return_stretch": 0.805,
+    "installs_week": 643,
+    "value_plan": 8.18,
+    "next_euro": 0.473,
+    "next_euro_stretch": 0.445,
+    "paid_per_install": 8.42,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.562,
+    "return_stretch": 1.346,
+    "installs_week": 624,
+    "value_plan": 10.08,
+    "next_euro": 0.787,
+    "next_euro_stretch": 0.678,
+    "paid_per_install": 10.19,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.822,
+    "return_stretch": 1.358,
+    "installs_week": 325,
+    "value_plan": 11.77,
+    "next_euro": 0.864,
+    "next_euro_stretch": 0.644,
+    "paid_per_install": 10.82,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 1.039,
+    "return_stretch": 0.941,
+    "installs_week": 611,
+    "value_plan": 9.33,
+    "next_euro": 0.576,
+    "next_euro_stretch": 0.522,
+    "paid_per_install": 8.6,
+    "band": "hold"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.969,
+    "return_stretch": 0.846,
+    "installs_week": 932,
+    "value_plan": 4.94,
+    "next_euro": 0.616,
+    "next_euro_stretch": 0.538,
+    "paid_per_install": 4.87,
+    "band": "hold"
+   }
+  },
+  "S3": {
+   "Meta iOS": {
+    "return_plan": 1.104,
+    "return_stretch": 1.058,
+    "installs_week": 819,
+    "value_plan": 5.71,
+    "next_euro": 0.923,
+    "next_euro_stretch": 0.885,
+    "paid_per_install": 5.78,
+    "band": "hold"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.595,
+    "return_stretch": 0.589,
+    "installs_week": 806,
+    "value_plan": 4.84,
+    "next_euro": 0.552,
+    "next_euro_stretch": 0.546,
+    "paid_per_install": 4.98,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.653,
+    "return_stretch": 0.636,
+    "installs_week": 667,
+    "value_plan": 6.01,
+    "next_euro": 0.527,
+    "next_euro_stretch": 0.513,
+    "paid_per_install": 6.1,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.506,
+    "return_stretch": 1.441,
+    "installs_week": 646,
+    "value_plan": 9.39,
+    "next_euro": 1.285,
+    "next_euro_stretch": 1.23,
+    "paid_per_install": 9.47,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.359,
+    "return_stretch": 1.26,
+    "installs_week": 286,
+    "value_plan": 9.97,
+    "next_euro": 1.175,
+    "next_euro_stretch": 1.09,
+    "paid_per_install": 9.37,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.851,
+    "return_stretch": 0.838,
+    "installs_week": 511,
+    "value_plan": 9.14,
+    "next_euro": 0.791,
+    "next_euro_stretch": 0.779,
+    "paid_per_install": 8.6,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.932,
+    "return_stretch": 0.918,
+    "installs_week": 901,
+    "value_plan": 4.91,
+    "next_euro": 0.895,
+    "next_euro_stretch": 0.882,
+    "paid_per_install": 4.87,
+    "band": "hold"
+   }
+  },
+  "S1+S2": {
+   "Meta iOS": {
+    "return_plan": 1.751,
+    "return_stretch": 1.546,
+    "installs_week": 789,
+    "value_plan": 9.4,
+    "next_euro": 0.92,
+    "next_euro_stretch": 0.812,
+    "paid_per_install": 9.65,
+    "band": "scale"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.701,
+    "return_stretch": 0.662,
+    "installs_week": 750,
+    "value_plan": 6.13,
+    "next_euro": 0.416,
+    "next_euro_stretch": 0.393,
+    "paid_per_install": 6.36,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.758,
+    "return_stretch": 0.71,
+    "installs_week": 643,
+    "value_plan": 7.23,
+    "next_euro": 0.406,
+    "next_euro_stretch": 0.38,
+    "paid_per_install": 7.47,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.687,
+    "return_stretch": 1.452,
+    "installs_week": 624,
+    "value_plan": 10.89,
+    "next_euro": 0.844,
+    "next_euro_stretch": 0.727,
+    "paid_per_install": 11.01,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.957,
+    "return_stretch": 1.452,
+    "installs_week": 325,
+    "value_plan": 12.65,
+    "next_euro": 0.913,
+    "next_euro_stretch": 0.677,
+    "paid_per_install": 11.59,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.955,
+    "return_stretch": 0.864,
+    "installs_week": 611,
+    "value_plan": 8.58,
+    "next_euro": 0.524,
+    "next_euro_stretch": 0.474,
+    "paid_per_install": 7.88,
+    "band": "hold"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.736,
+    "return_stretch": 0.642,
+    "installs_week": 932,
+    "value_plan": 3.75,
+    "next_euro": 0.463,
+    "next_euro_stretch": 0.404,
+    "paid_per_install": 3.7,
+    "band": "cut"
+   }
+  },
+  "S1+S3": {
+   "Meta iOS": {
+    "return_plan": 1.077,
+    "return_stretch": 1.03,
+    "installs_week": 819,
+    "value_plan": 5.57,
+    "next_euro": 0.894,
+    "next_euro_stretch": 0.855,
+    "paid_per_install": 5.64,
+    "band": "hold"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.507,
+    "return_stretch": 0.502,
+    "installs_week": 806,
+    "value_plan": 4.12,
+    "next_euro": 0.469,
+    "next_euro_stretch": 0.465,
+    "paid_per_install": 4.24,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.559,
+    "return_stretch": 0.543,
+    "installs_week": 667,
+    "value_plan": 5.15,
+    "next_euro": 0.443,
+    "next_euro_stretch": 0.431,
+    "paid_per_install": 5.23,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.626,
+    "return_stretch": 1.555,
+    "installs_week": 646,
+    "value_plan": 10.14,
+    "next_euro": 1.384,
+    "next_euro_stretch": 1.323,
+    "paid_per_install": 10.22,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.429,
+    "return_stretch": 1.32,
+    "installs_week": 286,
+    "value_plan": 10.48,
+    "next_euro": 1.227,
+    "next_euro_stretch": 1.134,
+    "paid_per_install": 9.83,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.782,
+    "return_stretch": 0.769,
+    "installs_week": 511,
+    "value_plan": 8.39,
+    "next_euro": 0.724,
+    "next_euro_stretch": 0.712,
+    "paid_per_install": 7.88,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.708,
+    "return_stretch": 0.696,
+    "installs_week": 901,
+    "value_plan": 3.73,
+    "next_euro": 0.676,
+    "next_euro_stretch": 0.665,
+    "paid_per_install": 3.7,
+    "band": "cut"
+   }
+  },
+  "S2+S3": {
+   "Meta iOS": {
+    "return_plan": 1.823,
+    "return_stretch": 1.748,
+    "installs_week": 819,
+    "value_plan": 9.43,
+    "next_euro": 1.53,
+    "next_euro_stretch": 1.467,
+    "paid_per_install": 9.55,
+    "band": "scale"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.903,
+    "return_stretch": 0.893,
+    "installs_week": 806,
+    "value_plan": 7.34,
+    "next_euro": 0.837,
+    "next_euro_stretch": 0.829,
+    "paid_per_install": 7.55,
+    "band": "hold"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.902,
+    "return_stretch": 0.878,
+    "installs_week": 667,
+    "value_plan": 8.29,
+    "next_euro": 0.728,
+    "next_euro_stretch": 0.709,
+    "paid_per_install": 8.42,
+    "band": "hold"
+   },
+   "Google iOS": {
+    "return_plan": 1.621,
+    "return_stretch": 1.552,
+    "installs_week": 646,
+    "value_plan": 10.11,
+    "next_euro": 1.384,
+    "next_euro_stretch": 1.325,
+    "paid_per_install": 10.19,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.568,
+    "return_stretch": 1.455,
+    "installs_week": 286,
+    "value_plan": 11.5,
+    "next_euro": 1.359,
+    "next_euro_stretch": 1.261,
+    "paid_per_install": 10.82,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.851,
+    "return_stretch": 0.838,
+    "installs_week": 511,
+    "value_plan": 9.14,
+    "next_euro": 0.791,
+    "next_euro_stretch": 0.779,
+    "paid_per_install": 8.6,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.932,
+    "return_stretch": 0.918,
+    "installs_week": 901,
+    "value_plan": 4.91,
+    "next_euro": 0.895,
+    "next_euro_stretch": 0.883,
+    "paid_per_install": 4.87,
+    "band": "hold"
+   }
+  },
+  "S1+S2+S3": {
+   "Meta iOS": {
+    "return_plan": 1.842,
+    "return_stretch": 1.763,
+    "installs_week": 819,
+    "value_plan": 9.52,
+    "next_euro": 1.535,
+    "next_euro_stretch": 1.469,
+    "paid_per_install": 9.65,
+    "band": "scale"
+   },
+   "TikTok iOS": {
+    "return_plan": 0.76,
+    "return_stretch": 0.752,
+    "installs_week": 806,
+    "value_plan": 6.18,
+    "next_euro": 0.704,
+    "next_euro_stretch": 0.697,
+    "paid_per_install": 6.36,
+    "band": "cut"
+   },
+   "Snapchat iOS": {
+    "return_plan": 0.799,
+    "return_stretch": 0.776,
+    "installs_week": 667,
+    "value_plan": 7.35,
+    "next_euro": 0.634,
+    "next_euro_stretch": 0.616,
+    "paid_per_install": 7.47,
+    "band": "cut"
+   },
+   "Google iOS": {
+    "return_plan": 1.751,
+    "return_stretch": 1.675,
+    "installs_week": 646,
+    "value_plan": 10.93,
+    "next_euro": 1.491,
+    "next_euro_stretch": 1.427,
+    "paid_per_install": 11.01,
+    "band": "scale"
+   },
+   "Pinterest iOS": {
+    "return_plan": 1.684,
+    "return_stretch": 1.557,
+    "installs_week": 286,
+    "value_plan": 12.35,
+    "next_euro": 1.449,
+    "next_euro_stretch": 1.34,
+    "paid_per_install": 11.59,
+    "band": "scale"
+   },
+   "Google Android": {
+    "return_plan": 0.782,
+    "return_stretch": 0.769,
+    "installs_week": 511,
+    "value_plan": 8.39,
+    "next_euro": 0.724,
+    "next_euro_stretch": 0.712,
+    "paid_per_install": 7.88,
+    "band": "cut"
+   },
+   "AppLovin Android": {
+    "return_plan": 0.708,
+    "return_stretch": 0.696,
+    "installs_week": 901,
+    "value_plan": 3.73,
+    "next_euro": 0.676,
+    "next_euro_stretch": 0.665,
+    "paid_per_install": 3.7,
+    "band": "cut"
+   }
+  }
+ },
+ "route_calls": {
+  "golden": [
+   "AppLovin Android: hold",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "direct": [
+   "AppLovin Android: cut",
+   "Google Android: cut",
+   "Google iOS: cut",
+   "Meta iOS: cut",
+   "Pinterest iOS: cut",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "rigorous": [
+   "AppLovin Android: cut",
+   "Google Android: cut",
+   "Google iOS: scale",
+   "Meta iOS: scale",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S1": [
+   "AppLovin Android: cut",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S2": [
+   "AppLovin Android: hold",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: scale",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S3": [
+   "AppLovin Android: hold",
+   "Google Android: cut",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S1+S2": [
+   "AppLovin Android: cut",
+   "Google Android: hold",
+   "Google iOS: scale",
+   "Meta iOS: scale",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S1+S3": [
+   "AppLovin Android: cut",
+   "Google Android: cut",
+   "Google iOS: scale",
+   "Meta iOS: hold",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ],
+  "S2+S3": [
+   "AppLovin Android: hold",
+   "Google Android: cut",
+   "Google iOS: scale",
+   "Meta iOS: scale",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: hold",
+   "TikTok iOS: hold"
+  ],
+  "S1+S2+S3": [
+   "AppLovin Android: cut",
+   "Google Android: cut",
+   "Google iOS: scale",
+   "Meta iOS: scale",
+   "Pinterest iOS: scale",
+   "Snapchat iOS: cut",
+   "TikTok iOS: cut"
+  ]
+ },
+ "route_names": {
+  "S1": "each recorded charge scaled by its store's ratio of charged to recorded in the charge's period",
+  "S2": "every postback priced at what the network's named installs of the same first-48-hour value paid",
+  "S3": "installs and value per install fitted on the week's spend",
+  "S1+S2": "each recorded charge scaled by its store's ratio of charged to recorded in the charge's period; every postback priced at what the network's named installs of the same first-48-hour value paid",
+  "S1+S3": "each recorded charge scaled by its store's ratio of charged to recorded in the charge's period; installs and value per install fitted on the week's spend",
+  "S2+S3": "every postback priced at what the network's named installs of the same first-48-hour value paid; installs and value per install fitted on the week's spend",
+  "S1+S2+S3": "each recorded charge scaled by its store's ratio of charged to recorded in the charge's period; every postback priced at what the network's named installs of the same first-48-hour value paid; installs and value per install fitted on the week's spend",
+  "direct": "the records as they stand, the installs the export names, the mature year's return carried over",
+  "rigorous": "the stores' true-up period by period, every postback at the named installs' value times Apple Search Ads' ratio, the response fitted on spend"
+ },
+ "distinct_wrong_calls": 7,
+ "route_outside": {
+  "S1": [
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro TikTok iOS",
+   "next euro Google Android",
+   "next euro AppLovin Android",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ],
+  "S2": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Pinterest iOS",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Pinterest iOS",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Pinterest iOS"
+  ],
+  "S3": [
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Pinterest iOS",
+   "return Google Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "next euro AppLovin Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android"
+  ],
+  "S1+S2": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Pinterest iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Pinterest iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "next euro AppLovin Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Pinterest iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ],
+  "S1+S3": [
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Pinterest iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return Meta iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ],
+  "S2+S3": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Google Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Pinterest iOS",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "next euro AppLovin Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Pinterest iOS"
+  ],
+  "S1+S2+S3": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Pinterest iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Pinterest iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ],
+  "direct": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Pinterest iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Snapchat iOS",
+   "installs a week Google iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google iOS",
+   "value at plan Pinterest iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Google iOS",
+   "paid per install Pinterest iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ],
+  "rigorous": [
+   "return Meta iOS",
+   "return TikTok iOS",
+   "return Snapchat iOS",
+   "return Google iOS",
+   "return Pinterest iOS",
+   "return Google Android",
+   "return AppLovin Android",
+   "stretch return Meta iOS",
+   "stretch return TikTok iOS",
+   "stretch return Snapchat iOS",
+   "stretch return Google iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Google Android",
+   "stretch return AppLovin Android",
+   "installs a week Meta iOS",
+   "installs a week TikTok iOS",
+   "installs a week Pinterest iOS",
+   "installs a week Google Android",
+   "value at plan Meta iOS",
+   "value at plan TikTok iOS",
+   "value at plan Snapchat iOS",
+   "value at plan Google Android",
+   "value at plan AppLovin Android",
+   "next euro Meta iOS",
+   "next euro TikTok iOS",
+   "next euro Snapchat iOS",
+   "next euro Google iOS",
+   "next euro Pinterest iOS",
+   "next euro Google Android",
+   "stretch next euro Meta iOS",
+   "stretch next euro TikTok iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro Google iOS",
+   "stretch next euro Pinterest iOS",
+   "stretch next euro Google Android",
+   "stretch next euro AppLovin Android",
+   "paid per install Meta iOS",
+   "paid per install TikTok iOS",
+   "paid per install Snapchat iOS",
+   "paid per install Pinterest iOS",
+   "paid per install Google Android",
+   "paid per install AppLovin Android"
+  ]
+ },
+ "variants": 2801,
+ "variant_counts": {
+  "singles": 40,
+  "pairs": 761,
+  "triples": 2000,
+  "apart": 19,
+  "by_step": {
+   "S1": 10,
+   "S2": 20,
+   "S3": 10
+  },
+  "beside": 17
+ },
+ "band_pad_pct": 0.5,
+ "beside_pad_pct": 1.0,
+ "single_variants": [
+  "one fit across both stores",
+  "two-rate continuation",
+  "fit without the last two months",
+  "thirty-day cadence",
+  "one share charged for every trial-end candidate",
+  "first-48-hour cells in eight groups",
+  "first-48-hour cells in four groups",
+  "cells of fifty or more",
+  "each source's named installs through one tilt",
+  "the ratios fitted separately for lighter and heavier first-48-hour use",
+  "the ratios fitted unweighted",
+  "the ratios fitted by fortnight",
+  "the ratios fitted by four-week period",
+  "the ratios fitted with weights from the fitted revenue",
+  "organic installs' ratio taken from Apple Search Ads",
+  "market-weeks of fewer than a hundred unattributed accounts left out",
+  "the networks' ratios drawn toward their pooled ratio by the fit's own spread",
+  "Google iOS and Pinterest iOS sharing one ratio",
+  "Google iOS, Pinterest iOS and the organic installs sharing one ratio",
+  "Pinterest iOS and the organic installs sharing one ratio",
+  "Google iOS and the organic installs sharing one ratio",
+  "Meta iOS and TikTok iOS sharing one ratio",
+  "TikTok iOS and Snapchat iOS sharing one ratio",
+  "every postback dated back three days",
+  "every postback dated back four days",
+  "each channel's own month pattern",
+  "installs response without the launch quarter",
+  "value response on the mature weeks' own values",
+  "one value slope across channels",
+  "delivery share from the mature weeks",
+  "delivery share from the last 52 weeks",
+  "installs response on the last 78 weeks",
+  "spend instrumented by the budget",
+  "the budget alone, the delivery left out",
+  "the stores and the records compared by calendar month",
+  "the App Store's report days taken as UTC days",
+  "the stores' refunds netted on the day of the refund",
+  "the stores' refunds netted from their renewals",
+  "the install week and the 365 days counted from the attribution export's install time",
+  "a week's month taken from its Monday"
+ ],
+ "beside": {
+  "names": [
+   "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values",
+   "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, unweighted",
+   "the ratios fitted on each market-week's accounts split by pairs of first-48-hour sessions values, with weights from the fitted revenue",
+   "the ratios fitted on each market-week's accounts split by first-48-hour sessions value",
+   "the ratios fitted on each market-week's accounts split by first-48-hour sessions value, unweighted",
+   "the ratios fitted on each market-week's accounts split by first-48-hour sessions value, with weights from the fitted revenue",
+   "the installs equation's own prediction, not rescaled, at the 104 weeks' share of the budgets spent",
+   "the installs equation's own prediction, not rescaled, at the 104 weeks' weekly shares, each put through the delivery term and averaged",
+   "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent",
+   "the installs equation's own prediction, not rescaled, at the mature weeks' weekly shares, each put through the delivery term and averaged",
+   "the installs equation's own prediction, not rescaled, at the last 52 weeks' share of the budgets spent",
+   "the installs equation's own prediction, not rescaled, at the last 52 weeks' weekly shares, each put through the delivery term and averaged",
+   "the first-48-hour values grouped by their sessions bits alone, in eight values",
+   "the first-48-hour values grouped by their sessions bits alone, in four pairs",
+   "the first-48-hour values grouped by their trial and purchase bits alone",
+   "the first-48-hour values grouped by their trial and purchase bits with the sessions split in two",
+   "the value equation fitted on the mature weeks alone"
+  ],
+  "finer_rows": {
+   "ways": 6,
+   "paid_per_install": {
+    "Meta iOS": [
+     5.46,
+     6.28
+    ],
+    "TikTok iOS": [
+     4.61,
+     4.79
+    ],
+    "Snapchat iOS": [
+     5.64,
+     6.24
+    ],
+    "Google iOS": [
+     9.07,
+     9.53
+    ],
+    "Pinterest iOS": [
+     8.91,
+     9.3
+    ]
+   },
+   "return_plan": {
+    "Meta iOS": [
+     0.992,
+     1.14
+    ],
+    "TikTok iOS": [
+     0.509,
+     0.529
+    ],
+    "Snapchat iOS": [
+     0.573,
+     0.635
+    ],
+    "Google iOS": [
+     1.39,
+     1.46
+    ],
+    "Pinterest iOS": [
+     1.502,
+     1.568
+    ]
+   }
+  },
+  "unrescaled": {
+   "ways": 6,
+   "return_plan": {
+    "Meta iOS": [
+     1.036,
+     1.049,
+     1.051,
+     1.065,
+     1.021,
+     1.034
+    ],
+    "TikTok iOS": [
+     0.54,
+     0.548,
+     0.527,
+     0.539,
+     0.555,
+     0.555
+    ],
+    "Snapchat iOS": [
+     0.613,
+     0.617,
+     0.639,
+     0.641,
+     0.587,
+     0.593
+    ],
+    "Google iOS": [
+     1.433,
+     1.457,
+     1.392,
+     1.409,
+     1.481,
+     1.502
+    ],
+    "Pinterest iOS": [
+     1.561,
+     1.57,
+     1.564,
+     1.577,
+     1.558,
+     1.563
+    ],
+    "Google Android": [
+     1.019,
+     1.038,
+     0.985,
+     1.012,
+     1.051,
+     1.065
+    ],
+    "AppLovin Android": [
+     0.951,
+     0.964,
+     0.912,
+     0.92,
+     0.99,
+     1.008
+    ]
+   },
+   "installs_week": {
+    "Meta iOS": [
+     778,
+     788,
+     787,
+     798,
+     769,
+     778
+    ],
+    "TikTok iOS": [
+     739,
+     749,
+     724,
+     740,
+     755,
+     755
+    ],
+    "Snapchat iOS": [
+     634,
+     639,
+     657,
+     658,
+     612,
+     619
+    ],
+    "Google iOS": [
+     617,
+     627,
+     602,
+     609,
+     634,
+     644
+    ],
+    "Pinterest iOS": [
+     322,
+     323,
+     322,
+     325,
+     321,
+     322
+    ],
+    "Google Android": [
+     599,
+     611,
+     582,
+     597,
+     616,
+     624
+    ],
+    "AppLovin Android": [
+     915,
+     927,
+     882,
+     890,
+     946,
+     964
+    ]
+   },
+   "return_span": {
+    "Meta iOS": [
+     1.021,
+     1.065
+    ],
+    "TikTok iOS": [
+     0.527,
+     0.555
+    ],
+    "Snapchat iOS": [
+     0.587,
+     0.641
+    ],
+    "Google iOS": [
+     1.392,
+     1.502
+    ],
+    "Pinterest iOS": [
+     1.558,
+     1.577
+    ],
+    "Google Android": [
+     0.985,
+     1.065
+    ],
+    "AppLovin Android": [
+     0.912,
+     1.008
+    ]
+   },
+   "installs_span": {
+    "Meta iOS": [
+     769,
+     798
+    ],
+    "TikTok iOS": [
+     724,
+     755
+    ],
+    "Snapchat iOS": [
+     612,
+     658
+    ],
+    "Google iOS": [
+     602,
+     644
+    ],
+    "Pinterest iOS": [
+     321,
+     325
+    ],
+    "Google Android": [
+     582,
+     624
+    ],
+    "AppLovin Android": [
+     882,
+     964
+    ]
+   }
+  },
+  "grouped": {
+   "ways": 4,
+   "next_euro": {
+    "Meta iOS": [
+     0.574,
+     0.616
+    ],
+    "TikTok iOS": [
+     0.334,
+     0.365
+    ],
+    "Snapchat iOS": [
+     0.362,
+     0.385
+    ],
+    "Google iOS": [
+     0.754,
+     0.827
+    ],
+    "Pinterest iOS": [
+     0.794,
+     0.855
+    ],
+    "Google Android": [
+     0.573,
+     0.579
+    ],
+    "AppLovin Android": [
+     0.62,
+     0.629
+    ]
+   },
+   "next_euro_stretch": {
+    "Meta iOS": [
+     0.51,
+     0.553
+    ],
+    "TikTok iOS": [
+     0.317,
+     0.349
+    ],
+    "Snapchat iOS": [
+     0.342,
+     0.365
+    ],
+    "Google iOS": [
+     0.653,
+     0.726
+    ],
+    "Pinterest iOS": [
+     0.604,
+     0.665
+    ],
+    "Google Android": [
+     0.519,
+     0.525
+    ],
+    "AppLovin Android": [
+     0.543,
+     0.552
+    ]
+   },
+   "return_plan": {
+    "Meta iOS": [
+     1.04,
+     1.048
+    ],
+    "TikTok iOS": [
+     0.539,
+     0.546
+    ],
+    "Snapchat iOS": [
+     0.623,
+     0.634
+    ],
+    "Google iOS": [
+     1.442,
+     1.463
+    ],
+    "Pinterest iOS": [
+     1.542,
+     1.555
+    ],
+    "Google Android": [
+     1.037,
+     1.04
+    ],
+    "AppLovin Android": [
+     0.969,
+     0.969
+    ]
+   }
+  },
+  "value_weeks": {
+   "ways": 1,
+   "next_euro": {
+    "Meta iOS": [
+     0.573,
+     0.573
+    ],
+    "TikTok iOS": [
+     0.284,
+     0.284
+    ],
+    "Snapchat iOS": [
+     0.352,
+     0.352
+    ],
+    "Google iOS": [
+     0.688,
+     0.688
+    ],
+    "Pinterest iOS": [
+     0.799,
+     0.799
+    ],
+    "Google Android": [
+     0.589,
+     0.589
+    ],
+    "AppLovin Android": [
+     0.586,
+     0.586
+    ]
+   },
+   "next_euro_stretch": {
+    "Meta iOS": [
+     0.509,
+     0.509
+    ],
+    "TikTok iOS": [
+     0.266,
+     0.266
+    ],
+    "Snapchat iOS": [
+     0.331,
+     0.331
+    ],
+    "Google iOS": [
+     0.588,
+     0.588
+    ],
+    "Pinterest iOS": [
+     0.609,
+     0.609
+    ],
+    "Google Android": [
+     0.536,
+     0.536
+    ],
+    "AppLovin Android": [
+     0.506,
+     0.506
+    ]
+   },
+   "return_plan": {
+    "Meta iOS": [
+     1.053,
+     1.053
+    ],
+    "TikTok iOS": [
+     0.54,
+     0.54
+    ],
+    "Snapchat iOS": [
+     0.622,
+     0.622
+    ],
+    "Google iOS": [
+     1.448,
+     1.448
+    ],
+    "Pinterest iOS": [
+     1.553,
+     1.553
+    ],
+    "Google Android": [
+     1.03,
+     1.03
+    ],
+    "AppLovin Android": [
+     0.972,
+     0.972
+    ]
+   }
+  },
+  "edges": [
+   "installs a week AppLovin Android",
+   "installs a week Google Android",
+   "installs a week Google iOS",
+   "installs a week Meta iOS",
+   "installs a week Snapchat iOS",
+   "installs a week TikTok iOS",
+   "next euro AppLovin Android",
+   "next euro Google iOS",
+   "next euro Meta iOS",
+   "next euro Pinterest iOS",
+   "next euro Snapchat iOS",
+   "next euro TikTok iOS",
+   "paid per install Google iOS",
+   "paid per install Meta iOS",
+   "paid per install Pinterest iOS",
+   "paid per install Snapchat iOS",
+   "paid per install TikTok iOS",
+   "return AppLovin Android",
+   "return Google Android",
+   "return Google iOS",
+   "return Meta iOS",
+   "return Pinterest iOS",
+   "return Snapchat iOS",
+   "return TikTok iOS",
+   "stretch next euro AppLovin Android",
+   "stretch next euro Google iOS",
+   "stretch next euro Meta iOS",
+   "stretch next euro Snapchat iOS",
+   "stretch next euro TikTok iOS",
+   "stretch return AppLovin Android",
+   "stretch return Google Android",
+   "stretch return Google iOS",
+   "stretch return Meta iOS",
+   "stretch return Pinterest iOS",
+   "stretch return Snapchat iOS",
+   "stretch return TikTok iOS",
+   "value at plan Google iOS",
+   "value at plan Meta iOS",
+   "value at plan Pinterest iOS",
+   "value at plan Snapchat iOS",
+   "value at plan TikTok iOS"
+  ]
+ },
+ "nearest_variant": {
+  "distance": 0.041,
+  "channel": "AppLovin Android",
+  "variant": "delivery share from the last 52 weeks; the budget alone, the delivery left out"
+ },
+ "nearest_beside": {
+  "distance": 0.012,
+  "channel": "AppLovin Android",
+  "variant": "the installs equation's own prediction, not rescaled, at the mature weeks' share of the budgets spent"
+ },
+ "family_calls_all_golden": true,
+ "crossed": {
+  "crossings": 3047,
+  "moved": [],
+  "nearest": {
+   "distance": 0.004,
+   "channel": "AppLovin Android",
+   "variant": "the installs equation's own prediction, not rescaled, at the last 52 weeks' share of the budgets spent; the budget alone, the delivery left out",
+   "return_plan": 0.905,
+   "line": 0.9
+  },
+  "return_range": {
+   "Meta iOS": [
+    0.961,
+    1.171
+   ],
+   "TikTok iOS": [
+    0.442,
+    0.588
+   ],
+   "Snapchat iOS": [
+    0.538,
+    0.652
+   ],
+   "Google iOS": [
+    1.323,
+    1.535
+   ],
+   "Pinterest iOS": [
+    1.39,
+    1.68
+   ],
+   "Google Android": [
+    0.972,
+    1.08
+   ],
+   "AppLovin Android": [
+    0.905,
+    1.015
+   ]
+  }
+ },
+ "variant_range": {
+  "Meta iOS": [
+   0.992,
+   1.14
+  ],
+  "TikTok iOS": [
+   0.509,
+   0.589
+  ],
+  "Snapchat iOS": [
+   0.573,
+   0.645
+  ],
+  "Google iOS": [
+   1.387,
+   1.502
+  ],
+  "Pinterest iOS": [
+   1.502,
+   1.697
+  ],
+  "Google Android": [
+   0.985,
+   1.067
+  ],
+  "AppLovin Android": [
+   0.912,
+   1.008
+  ]
+ },
+ "corners": {
+  "Meta iOS": {
+   "low": 0.945,
+   "high": 1.176,
+   "band_holds": true
+  },
+  "TikTok iOS": {
+   "low": 0.48,
+   "high": 0.608,
+   "band_holds": true
+  },
+  "Snapchat iOS": {
+   "low": 0.533,
+   "high": 0.67,
+   "band_holds": true
+  },
+  "Google iOS": {
+   "low": 1.31,
+   "high": 1.563,
+   "band_holds": true
+  },
+  "Pinterest iOS": {
+   "low": 1.412,
+   "high": 1.731,
+   "band_holds": true
+  },
+  "Google Android": {
+   "low": 0.956,
+   "high": 1.104,
+   "band_holds": true
+  },
+  "AppLovin Android": {
+   "low": 0.892,
+   "high": 1.029,
+   "band_holds": false
+  }
+ },
+ "channels": {
+  "Meta iOS": {
+   "installs_mature": 37533,
+   "named_mature": 10239,
+   "paid_per_install": 5.78,
+   "recorded_per_install": 4.85,
+   "unrecorded_pct": 16.1,
+   "true_up_per_install": 5.64,
+   "spend_mature": 192317.49,
+   "delivery_share": 0.869,
+   "budget_elasticity": 0.731,
+   "value_slope": -0.202,
+   "spend_elasticity": 0.987,
+   "spend_value_slope": -0.15,
+   "installs_week_plan": 789,
+   "installs_week_spend_fit": 819,
+   "installs_week_history": 699,
+   "plan_weekly_spend": 4236,
+   "plan_year_spend": 220250,
+   "plan_weekly_budget": 4874,
+   "history_weekly_spend": 3601,
+   "year_weekly_spend": 3698,
+   "history_weekly_budget": 4144,
+   "budget_low": 2400,
+   "budget_high": 7190,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 90,
+    "IT": 67,
+    "PT": 58
+   },
+   "stretch_weekly_spend": 5506.2,
+   "stretch_factor": 1.3,
+   "named_pct": 27.3,
+   "named_value": 10.58,
+   "declined_value": 3.98,
+   "named_price_per_install": 9.55,
+   "search_ads_ratio_per_install": 8.59
+  },
+  "TikTok iOS": {
+   "installs_mature": 31308,
+   "named_mature": 8241,
+   "paid_per_install": 4.98,
+   "recorded_per_install": 3.61,
+   "unrecorded_pct": 27.4,
+   "true_up_per_install": 4.24,
+   "spend_mature": 270107.74,
+   "delivery_share": 0.842,
+   "budget_elasticity": 0.793,
+   "value_slope": -0.198,
+   "spend_elasticity": 1.085,
+   "spend_value_slope": -0.157,
+   "installs_week_plan": 750,
+   "installs_week_spend_fit": 806,
+   "installs_week_history": 605,
+   "plan_weekly_spend": 6553,
+   "plan_year_spend": 340780,
+   "plan_weekly_budget": 7784,
+   "history_weekly_spend": 5025,
+   "year_weekly_spend": 5194,
+   "history_weekly_budget": 5968,
+   "budget_low": 3510,
+   "budget_high": 9470,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 77,
+    "IT": 61,
+    "PT": 52
+   },
+   "stretch_weekly_spend": 7536.5,
+   "stretch_factor": 1.15,
+   "named_pct": 26.3,
+   "named_value": 8.42,
+   "declined_value": 3.74,
+   "named_price_per_install": 7.55,
+   "search_ads_ratio_per_install": 6.78
+  },
+  "Snapchat iOS": {
+   "installs_mature": 31063,
+   "named_mature": 8201,
+   "paid_per_install": 6.1,
+   "recorded_per_install": 4.53,
+   "unrecorded_pct": 25.8,
+   "true_up_per_install": 5.23,
+   "spend_mature": 275700.08,
+   "delivery_share": 0.873,
+   "budget_elasticity": 0.757,
+   "value_slope": -0.206,
+   "spend_elasticity": 0.982,
+   "spend_value_slope": -0.175,
+   "installs_week_plan": 643,
+   "installs_week_spend_fit": 667,
+   "installs_week_history": 559,
+   "plan_weekly_spend": 6135,
+   "plan_year_spend": 319030,
+   "plan_weekly_budget": 7024,
+   "history_weekly_spend": 5119,
+   "year_weekly_spend": 5302,
+   "history_weekly_budget": 5861,
+   "budget_low": 2830,
+   "budget_high": 10670,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 75,
+    "IT": 59,
+    "PT": 44
+   },
+   "stretch_weekly_spend": 7055.5,
+   "stretch_factor": 1.15,
+   "named_pct": 26.4,
+   "named_value": 9.16,
+   "declined_value": 5.01,
+   "named_price_per_install": 8.42,
+   "search_ads_ratio_per_install": 7.56
+  },
+  "Google iOS": {
+   "installs_mature": 29637,
+   "named_mature": 8029,
+   "paid_per_install": 9.47,
+   "recorded_per_install": 8.58,
+   "unrecorded_pct": 9.4,
+   "true_up_per_install": 10.22,
+   "spend_mature": 191238.78,
+   "delivery_share": 0.86,
+   "budget_elasticity": 0.683,
+   "value_slope": -0.18,
+   "spend_elasticity": 0.972,
+   "spend_value_slope": -0.118,
+   "installs_week_plan": 624,
+   "installs_week_spend_fit": 646,
+   "installs_week_history": 571,
+   "plan_weekly_spend": 4029,
+   "plan_year_spend": 209520,
+   "plan_weekly_budget": 4686,
+   "history_weekly_spend": 3547,
+   "year_weekly_spend": 3678,
+   "history_weekly_budget": 4125,
+   "budget_low": 2370,
+   "budget_high": 7570,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 93,
+    "IT": 65,
+    "PT": 45
+   },
+   "stretch_weekly_spend": 5439.5,
+   "stretch_factor": 1.35,
+   "named_pct": 27.1,
+   "named_value": 11.38,
+   "declined_value": 8.76,
+   "named_price_per_install": 10.19,
+   "search_ads_ratio_per_install": 9.17
+  },
+  "Pinterest iOS": {
+   "installs_mature": 21825,
+   "named_mature": 6031,
+   "paid_per_install": 9.37,
+   "recorded_per_install": 8.4,
+   "unrecorded_pct": 10.4,
+   "true_up_per_install": 9.83,
+   "spend_mature": 160172.04,
+   "delivery_share": 0.83,
+   "budget_elasticity": 0.695,
+   "value_slope": -0.223,
+   "spend_elasticity": 1.018,
+   "spend_value_slope": -0.153,
+   "installs_week_plan": 325,
+   "installs_week_spend_fit": 286,
+   "installs_week_history": 423,
+   "plan_weekly_spend": 2101,
+   "plan_year_spend": 109240,
+   "plan_weekly_budget": 2532,
+   "history_weekly_spend": 3078,
+   "year_weekly_spend": 3080,
+   "history_weekly_budget": 3710,
+   "budget_low": 2090,
+   "budget_high": 5740,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 76,
+    "IT": 59,
+    "PT": 48
+   },
+   "stretch_weekly_spend": 3676.3,
+   "stretch_factor": 1.75,
+   "named_pct": 27.6,
+   "named_value": 11.87,
+   "declined_value": 8.41,
+   "named_price_per_install": 10.82,
+   "search_ads_ratio_per_install": 9.74
+  },
+  "Apple Search Ads": {
+   "installs_mature": 14695,
+   "named_mature": 14695,
+   "paid_per_install": 14.35,
+   "recorded_per_install": 12.81,
+   "unrecorded_pct": 10.7,
+   "true_up_per_install": 14.97,
+   "spend_mature": 123699.64,
+   "delivery_share": 0.835,
+   "budget_elasticity": 0.675,
+   "value_slope": -0.159,
+   "spend_elasticity": 0.917,
+   "spend_value_slope": -0.132,
+   "installs_week_plan": 348,
+   "installs_week_spend_fit": 372,
+   "installs_week_history": 285,
+   "plan_weekly_spend": 3303,
+   "plan_year_spend": 171760,
+   "plan_weekly_budget": 3956,
+   "history_weekly_spend": 2468,
+   "year_weekly_spend": 2379,
+   "history_weekly_budget": 2956,
+   "budget_low": 1400,
+   "budget_high": 4720,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 104,
+    "IT": 104,
+    "PT": 104
+   }
+  },
+  "Google Android": {
+   "installs_mature": 43785,
+   "named_mature": 43785,
+   "paid_per_install": 8.6,
+   "recorded_per_install": 6.6,
+   "unrecorded_pct": 23.2,
+   "true_up_per_install": 7.88,
+   "spend_mature": 463336.72,
+   "delivery_share": 0.866,
+   "budget_elasticity": 0.713,
+   "value_slope": -0.159,
+   "spend_elasticity": 1.046,
+   "spend_value_slope": -0.116,
+   "installs_week_plan": 611,
+   "installs_week_spend_fit": 511,
+   "installs_week_history": 887,
+   "plan_weekly_spend": 5487,
+   "plan_year_spend": 285320,
+   "plan_weekly_budget": 6336,
+   "history_weekly_spend": 9260,
+   "year_weekly_spend": 8910,
+   "history_weekly_budget": 10693,
+   "budget_low": 5530,
+   "budget_high": 15760,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 92,
+    "IT": 60,
+    "PT": 52
+   },
+   "stretch_weekly_spend": 6858.7,
+   "stretch_factor": 1.25
+  },
+  "AppLovin Android": {
+   "installs_mature": 47814,
+   "named_mature": 47814,
+   "paid_per_install": 4.87,
+   "recorded_per_install": 3.13,
+   "unrecorded_pct": 35.6,
+   "true_up_per_install": 3.7,
+   "spend_mature": 257720.53,
+   "delivery_share": 0.854,
+   "budget_elasticity": 0.801,
+   "value_slope": -0.165,
+   "spend_elasticity": 1.072,
+   "spend_value_slope": -0.111,
+   "installs_week_plan": 932,
+   "installs_week_spend_fit": 901,
+   "installs_week_history": 1001,
+   "plan_weekly_spend": 4749,
+   "plan_year_spend": 246940,
+   "plan_weekly_budget": 5563,
+   "history_weekly_spend": 5228,
+   "year_weekly_spend": 4956,
+   "history_weekly_budget": 6125,
+   "budget_low": 3350,
+   "budget_high": 10470,
+   "moves": 9,
+   "live_weeks": {
+    "ES": 91,
+    "IT": 54,
+    "PT": 46
+   },
+   "stretch_weekly_spend": 6885.8,
+   "stretch_factor": 1.45
+  }
+ },
+ "stores": {
+  "Google Play": {
+   "trial_end_share_monthly": 0.034,
+   "trial_end_share_annual": 0.041,
+   "continuation": 0.971,
+   "first_excess": 836,
+   "renewal_excess": 81579,
+   "renewal_excess_fitted_periods": 80168,
+   "annual_excess": 369,
+   "trial_candidates_monthly": 24884,
+   "trial_candidates_annual": 8907,
+   "renewal_candidates": 9281,
+   "store_first": 29906,
+   "store_renewals": 218632,
+   "store_annual": 15714,
+   "recorded_first": 29070,
+   "recorded_renewals": 137053,
+   "recorded_annual": 15345,
+   "rivals": {
+    "fitted": {
+     "rate": 0.971,
+     "takes_in": 80056,
+     "period_error": 14
+    },
+    "web": {
+     "rate": 0.882,
+     "takes_in": 45768,
+     "period_error": 1433
+    },
+    "seen": {
+     "rate": 0.912,
+     "takes_in": 54435,
+     "period_error": 1072
+    }
+   },
+   "periods": [
+    {
+     "first": 25,
+     "renewals": 0,
+     "fitted": 0.0
+    },
+    {
+     "first": 29,
+     "renewals": 115,
+     "fitted": 115.2
+    },
+    {
+     "first": 42,
+     "renewals": 308,
+     "fitted": 301.8
+    },
+    {
+     "first": 29,
+     "renewals": 543,
+     "fitted": 532.1
+    },
+    {
+     "first": 24,
+     "renewals": 829,
+     "fitted": 829.2
+    },
+    {
+     "first": 26,
+     "renewals": 1108,
+     "fitted": 1118.0
+    },
+    {
+     "first": 36,
+     "renewals": 1426,
+     "fitted": 1448.6
+    },
+    {
+     "first": 37,
+     "renewals": 1710,
+     "fitted": 1713.4
+    },
+    {
+     "first": 25,
+     "renewals": 2040,
+     "fitted": 2032.7
+    },
+    {
+     "first": 26,
+     "renewals": 2452,
+     "fitted": 2434.0
+    },
+    {
+     "first": 43,
+     "renewals": 2679,
+     "fitted": 2650.1
+    },
+    {
+     "first": 34,
+     "renewals": 3124,
+     "fitted": 3101.9
+    },
+    {
+     "first": 36,
+     "renewals": 3342,
+     "fitted": 3300.1
+    },
+    {
+     "first": 34,
+     "renewals": 3810,
+     "fitted": 3795.5
+    },
+    {
+     "first": 37,
+     "renewals": 4024,
+     "fitted": 3999.4
+    },
+    {
+     "first": 32,
+     "renewals": 4389,
+     "fitted": 4384.3
+    },
+    {
+     "first": 36,
+     "renewals": 4899,
+     "fitted": 4900.2
+    },
+    {
+     "first": 33,
+     "renewals": 5096,
+     "fitted": 5094.3
+    },
+    {
+     "first": 32,
+     "renewals": 5654,
+     "fitted": 5659.1
+    },
+    {
+     "first": 38,
+     "renewals": 5782,
+     "fitted": 5767.1
+    },
+    {
+     "first": 31,
+     "renewals": 6366,
+     "fitted": 6342.8
+    },
+    {
+     "first": 22,
+     "renewals": 6420,
+     "fitted": 6417.1
+    },
+    {
+     "first": 34,
+     "renewals": 6993,
+     "fitted": 6990.5
+    },
+    {
+     "first": 37,
+     "renewals": 7059,
+     "fitted": 7128.7
+    },
+    {
+     "first": 58,
+     "renewals": 1411,
+     "fitted": 1374.1
+    }
+   ]
+  },
+  "App Store": {
+   "trial_end_share_monthly": 0.03,
+   "trial_end_share_annual": 0.034,
+   "continuation": 0.97,
+   "first_excess": 935,
+   "renewal_excess": 80267,
+   "renewal_excess_fitted_periods": 78841,
+   "annual_excess": 395,
+   "trial_candidates_monthly": 31410,
+   "trial_candidates_annual": 11762,
+   "renewal_candidates": 9035,
+   "store_first": 35862,
+   "store_renewals": 253559,
+   "store_annual": 19394,
+   "recorded_first": 34927,
+   "recorded_renewals": 173292,
+   "recorded_annual": 18999,
+   "rivals": {
+    "fitted": {
+     "rate": 0.97,
+     "takes_in": 78668,
+     "period_error": 20
+    },
+    "web": {
+     "rate": 0.882,
+     "takes_in": 45077,
+     "period_error": 1407
+    },
+    "seen": {
+     "rate": 0.905,
+     "takes_in": 51511,
+     "period_error": 1139
+    }
+   },
+   "periods": [
+    {
+     "first": 22,
+     "renewals": 0,
+     "fitted": 0.0
+    },
+    {
+     "first": 39,
+     "renewals": 98,
+     "fitted": 102.4
+    },
+    {
+     "first": 41,
+     "renewals": 302,
+     "fitted": 305.1
+    },
+    {
+     "first": 48,
+     "renewals": 550,
+     "fitted": 556.9
+    },
+    {
+     "first": 29,
+     "renewals": 837,
+     "fitted": 835.3
+    },
+    {
+     "first": 38,
+     "renewals": 1135,
+     "fitted": 1125.6
+    },
+    {
+     "first": 40,
+     "renewals": 1512,
+     "fitted": 1509.7
+    },
+    {
+     "first": 30,
+     "renewals": 1832,
+     "fitted": 1807.8
+    },
+    {
+     "first": 20,
+     "renewals": 2136,
+     "fitted": 2125.2
+    },
+    {
+     "first": 31,
+     "renewals": 2513,
+     "fitted": 2494.7
+    },
+    {
+     "first": 39,
+     "renewals": 2741,
+     "fitted": 2725.5
+    },
+    {
+     "first": 34,
+     "renewals": 3154,
+     "fitted": 3121.2
+    },
+    {
+     "first": 43,
+     "renewals": 3389,
+     "fitted": 3377.0
+    },
+    {
+     "first": 31,
+     "renewals": 3830,
+     "fitted": 3808.6
+    },
+    {
+     "first": 45,
+     "renewals": 4012,
+     "fitted": 3987.9
+    },
+    {
+     "first": 32,
+     "renewals": 4348,
+     "fitted": 4308.3
+    },
+    {
+     "first": 37,
+     "renewals": 4790,
+     "fitted": 4774.7
+    },
+    {
+     "first": 36,
+     "renewals": 4966,
+     "fitted": 4933.8
+    },
+    {
+     "first": 49,
+     "renewals": 5447,
+     "fitted": 5417.7
+    },
+    {
+     "first": 31,
+     "renewals": 5605,
+     "fitted": 5572.1
+    },
+    {
+     "first": 40,
+     "renewals": 6060,
+     "fitted": 6094.8
+    },
+    {
+     "first": 31,
+     "renewals": 6147,
+     "fitted": 6158.2
+    },
+    {
+     "first": 39,
+     "renewals": 6622,
+     "fitted": 6668.7
+    },
+    {
+     "first": 43,
+     "renewals": 6815,
+     "fitted": 6856.9
+    },
+    {
+     "first": 67,
+     "renewals": 1426,
+     "fitted": 1357.2
+    }
+   ]
+  }
+ },
+ "web_continuation": 0.882,
+ "period_starts": [
+  "2024-11-04",
+  "2024-12-05",
+  "2025-01-04",
+  "2025-02-04",
+  "2025-03-06",
+  "2025-04-06",
+  "2025-05-06",
+  "2025-06-06",
+  "2025-07-06",
+  "2025-08-05",
+  "2025-09-05",
+  "2025-10-05",
+  "2025-11-05",
+  "2025-12-05",
+  "2026-01-05",
+  "2026-02-04",
+  "2026-03-06",
+  "2026-04-06",
+  "2026-05-06",
+  "2026-06-06",
+  "2026-07-06",
+  "2026-08-06",
+  "2026-09-05",
+  "2026-10-06",
+  "2026-11-05"
+ ],
+ "ratios": {
+  "sources": {
+   "Meta iOS": {
+    "ratio": 0.435,
+    "se": 0.029,
+    "se_one_variance": 0.032,
+    "declined": 27294,
+    "named": 10239
+   },
+   "TikTok iOS": {
+    "ratio": 0.517,
+    "se": 0.034,
+    "se_one_variance": 0.038,
+    "declined": 23068,
+    "named": 8241
+   },
+   "Snapchat iOS": {
+    "ratio": 0.614,
+    "se": 0.034,
+    "se_one_variance": 0.036,
+    "declined": 22862,
+    "named": 8201
+   },
+   "Google iOS": {
+    "ratio": 0.898,
+    "se": 0.039,
+    "se_one_variance": 0.038,
+    "declined": 21608,
+    "named": 8029
+   },
+   "Pinterest iOS": {
+    "ratio": 0.808,
+    "se": 0.038,
+    "se_one_variance": 0.041,
+    "declined": 15794,
+    "named": 6031
+   },
+   "organic iOS": {
+    "ratio": 0.888,
+    "se": 0.047,
+    "se_one_variance": 0.042,
+    "declined": 28270,
+    "named": 11081
+   }
+  },
+  "adding_up": {
+   "named": 1.41,
+   "search_ads": 1.21,
+   "fitted": 1.0
+  },
+  "adding_up_by_market": {
+   "named": {
+    "ES": 1.42,
+    "IT": 1.37,
+    "PT": 1.44
+   },
+   "search_ads": {
+    "ES": 1.21,
+    "IT": 1.17,
+    "PT": 1.23
+   },
+   "fitted": {
+    "ES": 1.01,
+    "IT": 0.99,
+    "PT": 0.99
+   }
+  },
+  "pool": {
+   "accounts": 138896,
+   "paid": 951700,
+   "paid_per_account": 6.85,
+   "network_installs": 110626,
+   "organic_installs": 28270,
+   "market_weeks": 156
+  },
+  "share_tests": {
+   "Meta and TikTok": {
+    "stat": 4.43,
+    "stat_one_variance": 2.95,
+    "df": 1,
+    "point": 3.84,
+    "refused": false
+   },
+   "TikTok and Snapchat": {
+    "stat": 4.49,
+    "stat_one_variance": 3.22,
+    "df": 1,
+    "point": 3.84,
+    "refused": false
+   },
+   "Meta and Snapchat": {
+    "stat": 17.23,
+    "stat_one_variance": 13.4,
+    "df": 1,
+    "point": 3.84,
+    "refused": true
+   },
+   "Meta, TikTok and Snapchat": {
+    "stat": 17.53,
+    "stat_one_variance": 13.53,
+    "df": 2,
+    "point": 5.99,
+    "refused": true
+   },
+   "the four social networks": {
+    "stat": 73.95,
+    "stat_one_variance": 68.17,
+    "df": 3,
+    "point": 7.81,
+    "refused": true
+   },
+   "the five networks": {
+    "stat": 122.92,
+    "stat_one_variance": 119.28,
+    "df": 4,
+    "point": 9.49,
+    "refused": true
+   },
+   "Google and Pinterest": {
+    "stat": 2.87,
+    "stat_one_variance": 2.56,
+    "df": 1,
+    "point": 3.84,
+    "refused": false
+   },
+   "Google, Pinterest and organic": {
+    "stat": 3.01,
+    "stat_one_variance": 2.69,
+    "df": 2,
+    "point": 5.99,
+    "refused": false
+   },
+   "Pinterest and organic": {
+    "stat": 1.14,
+    "stat_one_variance": 1.23,
+    "df": 1,
+    "point": 3.84,
+    "refused": false
+   },
+   "Google and organic": {
+    "stat": 0.02,
+    "stat_one_variance": 0.02,
+    "df": 1,
+    "point": 3.84,
+    "refused": false
+   }
+  },
+  "lent": {
+   "search_ads": {
+    "stat": 352.6,
+    "stat_one_variance": 364.5,
+    "df": 5,
+    "point": 11.07,
+    "ratios": {
+     "Meta iOS": 0.89,
+     "TikTok iOS": 0.89,
+     "Snapchat iOS": 0.89,
+     "Google iOS": 0.89,
+     "Pinterest iOS": 0.89
+    }
+   },
+   "android": {
+    "stat": 90.1,
+    "stat_one_variance": 84.9,
+    "df": 5,
+    "point": 11.07,
+    "ratios": {
+     "Meta iOS": 0.625,
+     "TikTok iOS": 0.625,
+     "Snapchat iOS": 0.625,
+     "Google iOS": 0.77,
+     "Pinterest iOS": 0.625
+    }
+   }
+  },
+  "search_ads_ratio": 0.89,
+  "search_ads_by_flag": [
+   0.805,
+   0.856
+  ],
+  "android_ratio": {
+   "AppLovin Android": 0.625,
+   "Google Android": 0.77
+  },
+  "market_weeks": {
+   "miss_pct": {
+    "fitted": 6.4,
+    "one_ratio": 8.9,
+    "markets_pooled": 7.0,
+    "pool_value": 9.0
+   },
+   "squared_over_fitted": {
+    "fitted": 1.0,
+    "one_ratio": 1.97,
+    "markets_pooled": 1.21,
+    "pool_value": 1.96
+   }
+  },
+  "markets_pooled": {
+   "rows": 52,
+   "rows_market_weeks": 156,
+   "sources": {
+    "Meta iOS": {
+     "ratio": 0.497,
+     "se": 0.082,
+     "ratio_market_weeks": 0.435,
+     "se_market_weeks": 0.029
+    },
+    "TikTok iOS": {
+     "ratio": 0.572,
+     "se": 0.143,
+     "ratio_market_weeks": 0.517,
+     "se_market_weeks": 0.034
+    },
+    "Snapchat iOS": {
+     "ratio": 0.569,
+     "se": 0.123,
+     "ratio_market_weeks": 0.614,
+     "se_market_weeks": 0.034
+    },
+    "Google iOS": {
+     "ratio": 0.702,
+     "se": 0.118,
+     "ratio_market_weeks": 0.898,
+     "se_market_weeks": 0.039
+    },
+    "Pinterest iOS": {
+     "ratio": 0.843,
+     "se": 0.126,
+     "ratio_market_weeks": 0.808,
+     "se_market_weeks": 0.038
+    },
+    "organic iOS": {
+     "ratio": 0.941,
+     "se": 0.121,
+     "ratio_market_weeks": 0.888,
+     "se_market_weeks": 0.047
+    }
+   },
+   "se_times": [
+    2.6,
+    4.1
+   ],
+   "paid_per_install": {
+    "Meta iOS": 6.19,
+    "TikTok iOS": 5.27,
+    "Snapchat iOS": 5.83,
+    "Google iOS": 8.07,
+    "Pinterest iOS": 9.64
+   },
+   "return_plan": {
+    "Meta iOS": 1.125,
+    "TikTok iOS": 0.581,
+    "Snapchat iOS": 0.593,
+    "Google iOS": 1.237,
+    "Pinterest iOS": 1.624,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "wrong": []
+  }
+ },
+ "carry": {
+  "rescale": {
+   "Meta iOS": 1.029,
+   "TikTok iOS": 1.041,
+   "Snapchat iOS": 1.03,
+   "Google iOS": 1.023,
+   "Pinterest iOS": 1.029,
+   "Google Android": 1.036,
+   "AppLovin Android": 1.044
+  },
+  "adds_up_pct": {
+   "at_share_both_years": {
+    "Meta iOS": 98.7,
+    "TikTok iOS": 98.4,
+    "Snapchat iOS": 98.7,
+    "Google iOS": 98.8,
+    "Pinterest iOS": 98.9,
+    "Google Android": 98.0,
+    "AppLovin Android": 98.2
+   },
+   "weekly_shares_both_years": {
+    "Meta iOS": 99.9,
+    "TikTok iOS": 99.8,
+    "Snapchat iOS": 99.4,
+    "Google iOS": 100.5,
+    "Pinterest iOS": 99.5,
+    "Google Android": 99.9,
+    "AppLovin Android": 99.5
+   },
+   "geometric_mean_both_years": {
+    "Meta iOS": 97.2,
+    "TikTok iOS": 96.1,
+    "Snapchat iOS": 97.1,
+    "Google iOS": 97.7,
+    "Pinterest iOS": 97.2,
+    "Google Android": 96.5,
+    "AppLovin Android": 95.8
+   },
+   "median_week_both_years": {
+    "Meta iOS": 99.2,
+    "TikTok iOS": 97.9,
+    "Snapchat iOS": 96.6,
+    "Google iOS": 102.1,
+    "Pinterest iOS": 97.4,
+    "Google Android": 95.9,
+    "AppLovin Android": 95.0
+   },
+   "at_share_first_year": {
+    "Meta iOS": 98.6,
+    "TikTok iOS": 99.5,
+    "Snapchat iOS": 98.1,
+    "Google iOS": 99.1,
+    "Pinterest iOS": 99.9,
+    "Google Android": 97.5,
+    "AppLovin Android": 98.8
+   },
+   "weekly_shares_first_year": {
+    "Meta iOS": 99.9,
+    "TikTok iOS": 101.7,
+    "Snapchat iOS": 98.4,
+    "Google iOS": 100.4,
+    "Pinterest iOS": 100.7,
+    "Google Android": 100.1,
+    "AppLovin Android": 99.7
+   },
+   "geometric_mean_first_year": {
+    "Meta iOS": 97.0,
+    "TikTok iOS": 97.6,
+    "Snapchat iOS": 96.3,
+    "Google iOS": 98.3,
+    "Pinterest iOS": 98.4,
+    "Google Android": 95.9,
+    "AppLovin Android": 95.4
+   },
+   "median_week_first_year": {
+    "Meta iOS": 101.9,
+    "TikTok iOS": 100.6,
+    "Snapchat iOS": 93.8,
+    "Google iOS": 94.6,
+    "Pinterest iOS": 98.3,
+    "Google Android": 93.4,
+    "AppLovin Android": 94.4
+   },
+   "at_share_second_year": {
+    "Meta iOS": 98.7,
+    "TikTok iOS": 97.5,
+    "Snapchat iOS": 99.6,
+    "Google iOS": 98.8,
+    "Pinterest iOS": 98.0,
+    "Google Android": 98.6,
+    "AppLovin Android": 97.8
+   },
+   "weekly_shares_second_year": {
+    "Meta iOS": 100.0,
+    "TikTok iOS": 97.6,
+    "Snapchat iOS": 100.7,
+    "Google iOS": 100.2,
+    "Pinterest iOS": 98.3,
+    "Google Android": 99.9,
+    "AppLovin Android": 99.5
+   },
+   "geometric_mean_second_year": {
+    "Meta iOS": 97.4,
+    "TikTok iOS": 94.4,
+    "Snapchat iOS": 98.3,
+    "Google iOS": 97.0,
+    "Pinterest iOS": 96.0,
+    "Google Android": 97.4,
+    "AppLovin Android": 96.9
+   },
+   "median_week_second_year": {
+    "Meta iOS": 98.7,
+    "TikTok iOS": 94.5,
+    "Snapchat iOS": 96.7,
+    "Google iOS": 102.7,
+    "Pinterest iOS": 96.3,
+    "Google Android": 95.9,
+    "AppLovin Android": 95.9
+   }
+  },
+  "returns": {
+   "at_share_both_years": {
+    "Meta iOS": 1.036,
+    "TikTok iOS": 0.54,
+    "Snapchat iOS": 0.613,
+    "Google iOS": 1.433,
+    "Pinterest iOS": 1.561,
+    "Google Android": 1.019,
+    "AppLovin Android": 0.951
+   },
+   "weekly_shares_both_years": {
+    "Meta iOS": 1.049,
+    "TikTok iOS": 0.548,
+    "Snapchat iOS": 0.617,
+    "Google iOS": 1.457,
+    "Pinterest iOS": 1.57,
+    "Google Android": 1.038,
+    "AppLovin Android": 0.964
+   },
+   "geometric_mean_both_years": {
+    "Meta iOS": 1.025,
+    "TikTok iOS": 0.532,
+    "Snapchat iOS": 0.606,
+    "Google iOS": 1.422,
+    "Pinterest iOS": 1.542,
+    "Google Android": 1.008,
+    "AppLovin Android": 0.936
+   },
+   "median_week_both_years": {
+    "Meta iOS": 1.04,
+    "TikTok iOS": 0.538,
+    "Snapchat iOS": 0.604,
+    "Google iOS": 1.467,
+    "Pinterest iOS": 1.544,
+    "Google Android": 1.003,
+    "AppLovin Android": 0.931
+   },
+   "at_share_first_year": {
+    "Meta iOS": 1.051,
+    "TikTok iOS": 0.527,
+    "Snapchat iOS": 0.639,
+    "Google iOS": 1.392,
+    "Pinterest iOS": 1.564,
+    "Google Android": 0.985,
+    "AppLovin Android": 0.912
+   },
+   "weekly_shares_first_year": {
+    "Meta iOS": 1.065,
+    "TikTok iOS": 0.539,
+    "Snapchat iOS": 0.641,
+    "Google iOS": 1.409,
+    "Pinterest iOS": 1.577,
+    "Google Android": 1.012,
+    "AppLovin Android": 0.92
+   },
+   "geometric_mean_first_year": {
+    "Meta iOS": 1.039,
+    "TikTok iOS": 0.521,
+    "Snapchat iOS": 0.631,
+    "Google iOS": 1.383,
+    "Pinterest iOS": 1.548,
+    "Google Android": 0.974,
+    "AppLovin Android": 0.891
+   },
+   "median_week_first_year": {
+    "Meta iOS": 1.075,
+    "TikTok iOS": 0.531,
+    "Snapchat iOS": 0.62,
+    "Google iOS": 1.346,
+    "Pinterest iOS": 1.546,
+    "Google Android": 0.956,
+    "AppLovin Android": 0.885
+   },
+   "at_share_second_year": {
+    "Meta iOS": 1.021,
+    "TikTok iOS": 0.555,
+    "Snapchat iOS": 0.587,
+    "Google iOS": 1.481,
+    "Pinterest iOS": 1.558,
+    "Google Android": 1.051,
+    "AppLovin Android": 0.99
+   },
+   "weekly_shares_second_year": {
+    "Meta iOS": 1.034,
+    "TikTok iOS": 0.555,
+    "Snapchat iOS": 0.593,
+    "Google iOS": 1.502,
+    "Pinterest iOS": 1.563,
+    "Google Android": 1.065,
+    "AppLovin Android": 1.008
+   },
+   "geometric_mean_second_year": {
+    "Meta iOS": 1.012,
+    "TikTok iOS": 0.543,
+    "Snapchat iOS": 0.582,
+    "Google iOS": 1.461,
+    "Pinterest iOS": 1.536,
+    "Google Android": 1.042,
+    "AppLovin Android": 0.984
+   },
+   "median_week_second_year": {
+    "Meta iOS": 1.021,
+    "TikTok iOS": 0.544,
+    "Snapchat iOS": 0.575,
+    "Google iOS": 1.522,
+    "Pinterest iOS": 1.539,
+    "Google Android": 1.031,
+    "AppLovin Android": 0.977
+   }
+  },
+  "installs_week": {
+   "at_share_both_years": {
+    "Meta iOS": 778,
+    "TikTok iOS": 739,
+    "Snapchat iOS": 634,
+    "Google iOS": 617,
+    "Pinterest iOS": 322,
+    "Google Android": 599,
+    "AppLovin Android": 915
+   },
+   "weekly_shares_both_years": {
+    "Meta iOS": 788,
+    "TikTok iOS": 749,
+    "Snapchat iOS": 639,
+    "Google iOS": 627,
+    "Pinterest iOS": 323,
+    "Google Android": 611,
+    "AppLovin Android": 927
+   },
+   "geometric_mean_both_years": {
+    "Meta iOS": 771,
+    "TikTok iOS": 729,
+    "Snapchat iOS": 628,
+    "Google iOS": 613,
+    "Pinterest iOS": 318,
+    "Google Android": 593,
+    "AppLovin Android": 902
+   },
+   "median_week_both_years": {
+    "Meta iOS": 781,
+    "TikTok iOS": 736,
+    "Snapchat iOS": 627,
+    "Google iOS": 629,
+    "Pinterest iOS": 319,
+    "Google Android": 591,
+    "AppLovin Android": 898
+   },
+   "at_share_first_year": {
+    "Meta iOS": 787,
+    "TikTok iOS": 724,
+    "Snapchat iOS": 657,
+    "Google iOS": 602,
+    "Pinterest iOS": 322,
+    "Google Android": 582,
+    "AppLovin Android": 882
+   },
+   "weekly_shares_first_year": {
+    "Meta iOS": 798,
+    "TikTok iOS": 740,
+    "Snapchat iOS": 658,
+    "Google iOS": 609,
+    "Pinterest iOS": 325,
+    "Google Android": 597,
+    "AppLovin Android": 890
+   },
+   "geometric_mean_first_year": {
+    "Meta iOS": 780,
+    "TikTok iOS": 716,
+    "Snapchat iOS": 650,
+    "Google iOS": 598,
+    "Pinterest iOS": 319,
+    "Google Android": 576,
+    "AppLovin Android": 864
+   },
+   "median_week_first_year": {
+    "Meta iOS": 802,
+    "TikTok iOS": 728,
+    "Snapchat iOS": 640,
+    "Google iOS": 585,
+    "Pinterest iOS": 319,
+    "Google Android": 566,
+    "AppLovin Android": 859
+   },
+   "at_share_second_year": {
+    "Meta iOS": 769,
+    "TikTok iOS": 755,
+    "Snapchat iOS": 612,
+    "Google iOS": 634,
+    "Pinterest iOS": 321,
+    "Google Android": 616,
+    "AppLovin Android": 946
+   },
+   "weekly_shares_second_year": {
+    "Meta iOS": 778,
+    "TikTok iOS": 755,
+    "Snapchat iOS": 619,
+    "Google iOS": 644,
+    "Pinterest iOS": 322,
+    "Google Android": 624,
+    "AppLovin Android": 964
+   },
+   "geometric_mean_second_year": {
+    "Meta iOS": 763,
+    "TikTok iOS": 742,
+    "Snapchat iOS": 608,
+    "Google iOS": 627,
+    "Pinterest iOS": 317,
+    "Google Android": 611,
+    "AppLovin Android": 941
+   },
+   "median_week_second_year": {
+    "Meta iOS": 769,
+    "TikTok iOS": 742,
+    "Snapchat iOS": 602,
+    "Google iOS": 650,
+    "Pinterest iOS": 318,
+    "Google Android": 605,
+    "AppLovin Android": 936
+   }
+  },
+  "wrong": {
+   "at_share_both_years": [],
+   "weekly_shares_both_years": [],
+   "geometric_mean_both_years": [],
+   "median_week_both_years": [],
+   "at_share_first_year": [],
+   "weekly_shares_first_year": [],
+   "geometric_mean_first_year": [
+    "AppLovin Android"
+   ],
+   "median_week_first_year": [
+    "AppLovin Android"
+   ],
+   "at_share_second_year": [],
+   "weekly_shares_second_year": [],
+   "geometric_mean_second_year": [],
+   "median_week_second_year": []
+  },
+  "held": [
+   "at_share_both_years",
+   "at_share_first_year",
+   "at_share_second_year",
+   "weekly_shares_both_years",
+   "weekly_shares_first_year",
+   "weekly_shares_second_year"
+  ],
+  "refused": [
+   "geometric_mean_both_years",
+   "geometric_mean_first_year",
+   "geometric_mean_second_year",
+   "median_week_both_years",
+   "median_week_first_year",
+   "median_week_second_year"
+  ],
+  "held_pct": [
+   97.5,
+   101.7
+  ],
+  "refused_short_pct": [
+   4.2,
+   6.6
+  ],
+  "held_short_pct": 2.5,
+  "refused_pct": [
+   93.4,
+   102.7
+  ],
+  "delivery_slopes": [
+   1.68,
+   1.91
+  ]
+ },
+ "forms": {
+  "weeks": 832,
+  "channels": 8,
+  "added_terms": 8,
+  "point": 1.95,
+  "line": 2.7,
+  "exponential": 33.0,
+  "power": 1.1,
+  "moved_missed_pct": {
+   "power": 3.5,
+   "line": 7.9,
+   "exponential": 6.0
+  },
+  "line_raised_over_lowered": 1.487,
+  "line_returns": {
+   "levels": {
+    "Meta iOS": 1.048,
+    "TikTok iOS": 0.551,
+    "Snapchat iOS": 0.623,
+    "Google iOS": 1.431,
+    "Pinterest iOS": 1.626,
+    "Google Android": 1.055,
+    "AppLovin Android": 0.96
+   },
+   "log": {
+    "Meta iOS": 1.048,
+    "TikTok iOS": 0.551,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.447,
+    "Pinterest iOS": 1.593,
+    "Google Android": 1.053,
+    "AppLovin Android": 0.964
+   }
+  },
+  "line_wrong": {
+   "levels": [],
+   "log": []
+  },
+  "sse": {
+   "power": 2.0177,
+   "line": 2.0446,
+   "exponential": 2.6635,
+   "power_and_budget": 1.9954,
+   "line_and_log": 1.9899
+  },
+  "value_slopes": {
+   "Meta iOS": {
+    "slope": -0.202,
+    "se": 0.023,
+    "spreads_from_nought": 8.7
+   },
+   "TikTok iOS": {
+    "slope": -0.198,
+    "se": 0.024,
+    "spreads_from_nought": 8.2
+   },
+   "Snapchat iOS": {
+    "slope": -0.206,
+    "se": 0.023,
+    "spreads_from_nought": 9.0
+   },
+   "Google iOS": {
+    "slope": -0.18,
+    "se": 0.026,
+    "spreads_from_nought": 6.7
+   },
+   "Pinterest iOS": {
+    "slope": -0.223,
+    "se": 0.03,
+    "spreads_from_nought": 7.4
+   },
+   "Google Android": {
+    "slope": -0.159,
+    "se": 0.026,
+    "spreads_from_nought": 6.0
+   },
+   "AppLovin Android": {
+    "slope": -0.165,
+    "se": 0.022,
+    "spreads_from_nought": 7.4
+   }
+  },
+  "value_slope_range": [
+   -0.223,
+   -0.159
+  ],
+  "value_slope_spreads": 6.0
+ },
+ "shortcuts": {
+  "by_period": {
+   "step": "S1",
+   "rule": "each recorded charge scaled by its store's ratio of charged to recorded in the charge's period",
+   "channel": "AppLovin Android",
+   "return_plan": 0.736,
+   "band": "cut",
+   "paid_per_install": 3.7,
+   "installs_week": 932,
+   "wrong": [
+    "AppLovin Android"
+   ],
+   "earns": 46.9,
+   "asks_kept": 13,
+   "components_kept": [
+    "S2",
+    "S3"
+   ]
+  },
+  "one_factor": {
+   "step": "S1",
+   "rule": "each recorded charge scaled by its store's ratio of charged to recorded over the whole record",
+   "channel": "AppLovin Android",
+   "return_plan": 0.778,
+   "band": "cut",
+   "paid_per_install": 3.9,
+   "installs_week": 932,
+   "wrong": [
+    "AppLovin Android"
+   ],
+   "earns": 56.4,
+   "asks_kept": 18,
+   "components_kept": [
+    "S2",
+    "S3"
+   ]
+  },
+  "seen_rate": {
+   "step": "S1",
+   "rule": "the candidates carried at one less the cancellations the app saw per charge on file",
+   "channel": "AppLovin Android",
+   "return_plan": 0.881,
+   "band": "cut",
+   "paid_per_install": 4.42,
+   "installs_week": 932,
+   "wrong": [
+    "AppLovin Android"
+   ],
+   "earns": 67.8,
+   "asks_kept": 24,
+   "components_kept": [
+    "S2",
+    "S3"
+   ]
+  },
+  "web_rate": {
+   "step": "S1",
+   "rule": "the candidates carried at the continuation of the web checkout's subscribers after their last open",
+   "channel": "AppLovin Android",
+   "return_plan": 0.847,
+   "band": "cut",
+   "paid_per_install": 4.25,
+   "installs_week": 932,
+   "wrong": [
+    "AppLovin Android"
+   ],
+   "earns": 64.0,
+   "asks_kept": 22,
+   "components_kept": [
+    "S2",
+    "S3"
+   ]
+  },
+  "as_recorded": {
+   "step": "S1",
+   "rule": "the billing records as they stand",
+   "channel": "AppLovin Android",
+   "return_plan": 0.624,
+   "band": "cut",
+   "paid_per_install": 3.13,
+   "installs_week": 932,
+   "wrong": [
+    "Meta iOS",
+    "Google Android",
+    "AppLovin Android"
+   ],
+   "earns": 21.3,
+   "asks_kept": 3,
+   "components_kept": [
+    "S3"
+   ]
+  },
+  "named_by_cell": {
+   "step": "S2",
+   "rule": "every postback valued like the network's named installs of the same first-48-hour value",
+   "channel": "Meta iOS",
+   "return_plan": 1.734,
+   "band": "scale",
+   "paid_per_install": 9.55,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 41.3,
+   "asks_kept": 10,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "named_average": {
+   "step": "S2",
+   "rule": "every postback valued at the network's named installs' average",
+   "channel": "Meta iOS",
+   "return_plan": 1.922,
+   "band": "scale",
+   "paid_per_install": 10.58,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS",
+    "TikTok iOS",
+    "Snapchat iOS"
+   ],
+   "earns": 41.3,
+   "asks_kept": 10,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "pool_value": {
+   "step": "S2",
+   "rule": "every unnamed install valued at what the accounts with no channel paid at its first-48-hour value",
+   "channel": "Meta iOS",
+   "return_plan": 1.407,
+   "band": "scale",
+   "paid_per_install": 7.75,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 50.7,
+   "asks_kept": 15,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "search_ads": {
+   "step": "S2",
+   "rule": "the unnamed installs at Apple Search Ads' ratio of declined to allowed",
+   "channel": "Meta iOS",
+   "return_plan": 1.561,
+   "band": "scale",
+   "paid_per_install": 8.59,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 52.6,
+   "asks_kept": 16,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "android": {
+   "step": "S2",
+   "rule": "the unnamed installs at the ratio the same kind of network shows on Android",
+   "channel": "Meta iOS",
+   "return_plan": 1.28,
+   "band": "scale",
+   "paid_per_install": 7.05,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 50.7,
+   "asks_kept": 15,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "one_ratio": {
+   "step": "S2",
+   "rule": "one ratio for every source",
+   "channel": "Meta iOS",
+   "return_plan": 1.384,
+   "band": "scale",
+   "paid_per_install": 7.62,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 50.7,
+   "asks_kept": 15,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "organic_pinned": {
+   "step": "S2",
+   "rule": "organic at Apple Search Ads' ratio and one ratio for the five networks",
+   "channel": "Meta iOS",
+   "return_plan": 1.303,
+   "band": "scale",
+   "paid_per_install": 7.17,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS",
+    "Google iOS"
+   ],
+   "earns": 48.8,
+   "asks_kept": 14,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "four_social": {
+   "step": "S2",
+   "rule": "the fit with Meta, TikTok, Snapchat and Pinterest sharing one ratio",
+   "channel": "Meta iOS",
+   "return_plan": 1.204,
+   "band": "scale",
+   "paid_per_install": 6.63,
+   "installs_week": 789,
+   "wrong": [
+    "Meta iOS"
+   ],
+   "earns": 62.1,
+   "asks_kept": 21,
+   "components_kept": [
+    "S1",
+    "S3"
+   ]
+  },
+  "three_social": {
+   "step": "S2",
+   "rule": "the fit with Meta, TikTok and Snapchat sharing one ratio",
+   "channel": "Meta iOS",
+   "return_plan": 1.149,
+   "band": "hold",
+   "paid_per_install": 6.33,
+   "installs_week": 789,
+   "wrong": [],
+   "earns": 100.0,
+   "asks_kept": 28,
+   "components_kept": [
+    "S1",
+    "S2",
+    "S3"
+   ]
+  },
+  "on_spend": {
+   "step": "S3",
+   "rule": "installs and value per install fitted on the week's spend",
+   "channel": "Google Android",
+   "return_plan": 0.851,
+   "band": "cut",
+   "paid_per_install": 8.6,
+   "installs_week": 511,
+   "wrong": [
+    "Google Android"
+   ],
+   "earns": 43.2,
+   "asks_kept": 11,
+   "components_kept": [
+    "S1",
+    "S2"
+   ]
+  },
+  "last_year": {
+   "step": "S3",
+   "rule": "the return of the year to 2 November 2025 carried over",
+   "channel": "Google Android",
+   "return_plan": 0.812,
+   "band": "cut",
+   "paid_per_install": 8.6,
+   "installs_week": 842,
+   "wrong": [
+    "Google Android"
+   ],
+   "earns": 43.2,
+   "asks_kept": 11,
+   "components_kept": [
+    "S1",
+    "S2"
+   ]
+  }
+ },
+ "check_web": {
+  "subscribers": 240,
+  "charged": 31.79,
+  "estimate": 31.9,
+  "true_up": 13.59,
+  "true_up_one_factor": 18.26,
+  "store_rate_carried": 50.74,
+  "web_rate": 0.878,
+  "fit_subscribers": 5129
+ },
+ "check_android": {
+  "Google Android": {
+   "installs": 20237,
+   "paid": 6.75,
+   "fitted": 7.07,
+   "named": 8.76,
+   "search_ads": 7.5,
+   "one_ratio": 7.09
+  },
+  "AppLovin Android": {
+   "installs": 22869,
+   "paid": 3.28,
+   "fitted": 3.54,
+   "named": 5.25,
+   "search_ads": 4.5,
+   "one_ratio": 4.25
+  }
+ },
+ "android_ratios": {
+  "Google Android": 0.807,
+  "AppLovin Android": 0.675,
+  "organic Android": 0.858
+ },
+ "check_moves": {
+  "moves": 72,
+  "weeks": 286,
+  "missed_pct": {
+   "spend": 13.1,
+   "golden": 3.5
+  },
+  "channels": {
+   "Meta iOS": {
+    "actual": 1.499,
+    "budget_fit": 1.493,
+    "spend_fit": 1.913,
+    "spend_by_budget": 1.514,
+    "budget_alone": 1.531,
+    "moves": 9,
+    "raised": 16,
+    "lowered": 19
+   },
+   "TikTok iOS": {
+    "actual": 1.427,
+    "budget_fit": 1.387,
+    "spend_fit": 1.718,
+    "spend_by_budget": 1.312,
+    "budget_alone": 1.258,
+    "moves": 9,
+    "raised": 16,
+    "lowered": 22
+   },
+   "Snapchat iOS": {
+    "actual": 2.554,
+    "budget_fit": 2.504,
+    "spend_fit": 3.102,
+    "spend_by_budget": 2.619,
+    "budget_alone": 2.736,
+    "moves": 9,
+    "raised": 23,
+    "lowered": 16
+   },
+   "Google iOS": {
+    "actual": 8.076,
+    "budget_fit": 8.385,
+    "spend_fit": 10.392,
+    "spend_by_budget": 7.547,
+    "budget_alone": 7.173,
+    "moves": 9,
+    "raised": 28,
+    "lowered": 6
+   },
+   "Pinterest iOS": {
+    "actual": 18.973,
+    "budget_fit": 18.423,
+    "spend_fit": 24.333,
+    "spend_by_budget": 18.758,
+    "budget_alone": 19.059,
+    "moves": 9,
+    "raised": 34,
+    "lowered": 3
+   },
+   "Apple Search Ads": {
+    "actual": 3.643,
+    "budget_fit": 3.751,
+    "spend_fit": 4.763,
+    "spend_by_budget": 3.801,
+    "budget_alone": 3.857,
+    "moves": 9,
+    "raised": 23,
+    "lowered": 10
+   },
+   "Google Android": {
+    "actual": 1.403,
+    "budget_fit": 1.434,
+    "spend_fit": 1.872,
+    "spend_by_budget": 1.415,
+    "budget_alone": 1.412,
+    "moves": 9,
+    "raised": 15,
+    "lowered": 18
+   },
+   "AppLovin Android": {
+    "actual": 0.933,
+    "budget_fit": 0.908,
+    "spend_fit": 1.179,
+    "spend_by_budget": 0.911,
+    "budget_alone": 0.922,
+    "moves": 9,
+    "raised": 12,
+    "lowered": 25
+   }
+  }
+ },
+ "holdout": {
+  "every_fourth_week": {
+   "spend": 10.0,
+   "golden": 4.1,
+   "budget": 20.2
+  },
+  "last_quarter": {
+   "spend": 12.5,
+   "golden": 3.9,
+   "budget": 21.4
+  }
+ },
+ "steps": {
+  "accounts": 748197,
+  "consumer_accounts": 748034,
+  "other_accounts": 163,
+  "ios_accounts": 405661,
+  "android_accounts": 342373,
+  "attribution_rows": 771674,
+  "postbacks": 300004,
+  "postbacks_used": 297131,
+  "postbacks_dropped": 2873,
+  "billing_rows": 500694,
+  "billing_used": 499890,
+  "billing_twice": 335,
+  "refunded_purchases": 1190,
+  "campaigns": 36,
+  "mature_weeks": 52,
+  "weeks": 104,
+  "plan_weeks": 52,
+  "days": 365,
+  "mature_accounts": 369982,
+  "mature_no_channel": 138896,
+  "no_channel": 273830,
+  "declined_ios_pct": 72.7,
+  "declined_android_pct": 46.4,
+  "renewal_candidates": 18316,
+  "trial_end_candidates": 76963,
+  "monthly_charges_recorded": 456101,
+  "web_subscribers": 17712,
+  "thin_cell": 20,
+  "market_weeks": 156,
+  "early_postback_installs": 85.0
+ },
+ "policy": {
+  "lines": [
+   0.9,
+   1.2
+  ],
+  "vat_pct": [
+   21,
+   22,
+   23
+  ],
+  "commission_pct": 15,
+  "fee_pct": 3,
+  "monthly": 9.99,
+  "annual": 59.99,
+  "trial_days": 7,
+  "version": 3,
+  "cadence_days": 30.4375
+ },
+ "plan_blocks": {
+  "changes": 10,
+  "on_thursday_months": 10,
+  "month_starts": 11,
+  "apart": 5,
+  "apart_on_thursday": 4,
+  "apart_on_monday": 0,
+  "off": 0
+ },
+ "unrecorded_pct": {
+  "low": 9.4,
+  "high": 35.6
+ },
+ "perturbations": [
+  {
+   "input": "the share of trial-end candidates charged",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.042,
+    "TikTok iOS": 0.545,
+    "Snapchat iOS": 0.617,
+    "Google iOS": 1.445,
+    "Pinterest iOS": 1.572,
+    "Google Android": 1.033,
+    "AppLovin Android": 0.962
+   },
+   "nearest": 0.062
+  },
+  {
+   "input": "the share of trial-end candidates charged",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.059,
+    "TikTok iOS": 0.553,
+    "Snapchat iOS": 0.624,
+    "Google iOS": 1.456,
+    "Pinterest iOS": 1.585,
+    "Google Android": 1.045,
+    "AppLovin Android": 0.976
+   },
+   "nearest": 0.076
+  },
+  {
+   "input": "the monthly lapse of a subscription nobody opens",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.055,
+    "TikTok iOS": 0.554,
+    "Snapchat iOS": 0.626,
+    "Google iOS": 1.454,
+    "Pinterest iOS": 1.583,
+    "Google Android": 1.046,
+    "AppLovin Android": 0.979
+   },
+   "nearest": 0.079
+  },
+  {
+   "input": "the monthly lapse of a subscription nobody opens",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.045,
+    "TikTok iOS": 0.544,
+    "Snapchat iOS": 0.616,
+    "Google iOS": 1.447,
+    "Pinterest iOS": 1.574,
+    "Google Android": 1.032,
+    "AppLovin Android": 0.959
+   },
+   "nearest": 0.059
+  },
+  {
+   "input": "Meta iOS's fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 0.945,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.045
+  },
+  {
+   "input": "Meta iOS's fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.156,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.044
+  },
+  {
+   "input": "TikTok iOS's fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.488,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "TikTok iOS's fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.61,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "Snapchat iOS's fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.546,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "Snapchat iOS's fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.696,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "Google iOS's fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.255,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.055
+  },
+  {
+   "input": "Google iOS's fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.646,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "Pinterest iOS's fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.374,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "Pinterest iOS's fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.783,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "the organic installs' fitted ratio",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "the organic installs' fitted ratio",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.05,
+    "TikTok iOS": 0.549,
+    "Snapchat iOS": 0.621,
+    "Google iOS": 1.45,
+    "Pinterest iOS": 1.578,
+    "Google Android": 1.039,
+    "AppLovin Android": 0.969
+   },
+   "nearest": 0.069
+  },
+  {
+   "input": "every channel's budget elasticity of installs",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.027,
+    "TikTok iOS": 0.527,
+    "Snapchat iOS": 0.605,
+    "Google iOS": 1.427,
+    "Pinterest iOS": 1.665,
+    "Google Android": 1.121,
+    "AppLovin Android": 0.986
+   },
+   "nearest": 0.079
+  },
+  {
+   "input": "every channel's budget elasticity of installs",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.072,
+    "TikTok iOS": 0.571,
+    "Snapchat iOS": 0.636,
+    "Google iOS": 1.473,
+    "Pinterest iOS": 1.495,
+    "Google Android": 0.962,
+    "AppLovin Android": 0.951
+   },
+   "nearest": 0.051
+  },
+  {
+   "input": "every channel's value slope",
+   "factor": 0.8,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.056,
+    "TikTok iOS": 0.553,
+    "Snapchat iOS": 0.625,
+    "Google iOS": 1.454,
+    "Pinterest iOS": 1.552,
+    "Google Android": 1.022,
+    "AppLovin Android": 0.966
+   },
+   "nearest": 0.066
+  },
+  {
+   "input": "every channel's value slope",
+   "factor": 1.2,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.044,
+    "TikTok iOS": 0.544,
+    "Snapchat iOS": 0.616,
+    "Google iOS": 1.447,
+    "Pinterest iOS": 1.605,
+    "Google Android": 1.056,
+    "AppLovin Android": 0.972
+   },
+   "nearest": 0.072
+  },
+  {
+   "input": "the delivery share that turns the plan's spend into a budget",
+   "factor": 0.904,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.108,
+    "TikTok iOS": 0.583,
+    "Snapchat iOS": 0.656,
+    "Google iOS": 1.526,
+    "Pinterest iOS": 1.655,
+    "Google Android": 1.098,
+    "AppLovin Android": 1.033
+   },
+   "nearest": 0.092
+  },
+  {
+   "input": "the delivery share that turns the plan's spend into a budget",
+   "factor": 1.096,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.001,
+    "TikTok iOS": 0.52,
+    "Snapchat iOS": 0.59,
+    "Google iOS": 1.385,
+    "Pinterest iOS": 1.512,
+    "Google Android": 0.988,
+    "AppLovin Android": 0.914
+   },
+   "nearest": 0.014
+  },
+  {
+   "input": "the delivery share of the last 26 weeks",
+   "factor": 1.0,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.061,
+    "TikTok iOS": 0.539,
+    "Snapchat iOS": 0.635,
+    "Google iOS": 1.421,
+    "Pinterest iOS": 1.575,
+    "Google Android": 1.004,
+    "AppLovin Android": 0.961
+   },
+   "nearest": 0.061
+  },
+  {
+   "input": "the delivery share of the last 13 weeks",
+   "factor": 1.0,
+   "call_holds": true,
+   "returns": {
+    "Meta iOS": 1.045,
+    "TikTok iOS": 0.545,
+    "Snapchat iOS": 0.655,
+    "Google iOS": 1.407,
+    "Pinterest iOS": 1.562,
+    "Google Android": 0.995,
+    "AppLovin Android": 0.98
+   },
+   "nearest": 0.08
+  }
+ ],
+ "delivery_share_spread_pct": 9.6,
+ "rubric": {
+  "level": 5,
+  "fails": [],
+  "rows": [
+   [
+    "shape",
+    "PASS",
+    "7 members, 3 stumps (two or more of each)"
+   ],
+   [
+    "golden files the truth's call",
+    "PASS",
+    "golden (1, 1, 2, 1, 2, 0, 0), truth (1, 1, 2, 1, 2, 0, 0)"
+   ],
+   [
+    "variant battery",
+    "PASS",
+    "2818 variants, the call holds under every one"
+   ],
+   [
+    "lattice complete",
+    "PASS",
+    "every stump alone, all together, all but one"
+   ],
+   [
+    "reflex route misses the call",
+    "PASS",
+    "open members: AppLovin Android, Google Android, Meta iOS"
+   ],
+   [
+    "stump S1",
+    "PASS",
+    "dropped alone moves its member AppLovin Android (worth 0.233, 4.1 times the family's spread 0.057); fixed alone on the reflex route still misses"
+   ],
+   [
+    "stump S2",
+    "PASS",
+    "dropped alone moves its member Meta iOS (worth 0.684, 7.6 times the family's spread 0.0898); fixed alone on the reflex route still misses"
+   ],
+   [
+    "stump S3",
+    "PASS",
+    "dropped alone moves its member Google Android (worth 0.188, 3.5 times the family's spread 0.0536); fixed alone on the reflex route still misses"
+   ],
+   [
+    "no easier route on an open member",
+    "PASS",
+    "the direct and the rigorous standard routes land wrong on every open member"
+   ],
+   [
+    "distinct wrong answers",
+    "PASS",
+    "7 distinct wrong calls across the lattice, 3 among the single drops"
+   ],
+   [
+    "referee",
+    "PASS",
+    "golden off by 0.261; rivals off by at Apple Search Ads' ratio 1.21, at one ratio for every source 0.969, priced at its installs that allowed tracking, by first-48-hour value 1.97"
+   ],
+   [
+    "stumps on different axes",
+    "PASS",
+    "axes: against, what, who"
+   ],
+   [
+    "graded figures listed",
+    "PASS",
+    "3 critical components (two to five) and 49 ask figures (two or more) in 28 sentences, each one criterion"
+   ],
+   [
+    "every graded figure banded by the battery",
+    "PASS",
+    "each figure's band holds its twelve or more variants"
+   ],
+   [
+    "one stump lost, the run stays under the bar",
+    "PASS",
+    "a run that loses only S1 earns 47, S2 earns 41, S3 earns 43 (50 or under each; the review reads its strongest run)"
+   ],
+   [
+    "the reflex route on the rubric",
+    "PASS",
+    "every stump lost earns 11 (30 or under; 9 of it is instruction-following); figures it still lands: return Pinterest iOS, installs a week Snapchat iOS, installs a week Google iOS, installs a week AppLovin Android, next euro AppLovin Android, stretch next euro AppLovin Android; sentences it lands whole: one more euro, AppLovin Android"
+   ],
+   [
+    "one stump fixed alone earns more, a third at most",
+    "PASS",
+    "S1 fixed alone earns 21; S2 fixed alone earns 27; S3 fixed alone earns 27"
+   ],
+   [
+    "critical components independent",
+    "PASS",
+    "each falls with one stump alone: installs a week Google Android with S3, paid per install AppLovin Android with S1, paid per install Meta iOS with S2"
+   ],
+   [
+    "the rigorous standard route on the rubric",
+    "PASS",
+    "it earns 17 (50 or under)"
+   ],
+   [
+    "open members opened by different stumps",
+    "PASS",
+    "3: AppLovin Android by S1; Meta iOS by S2; Google Android by S3"
+   ]
+  ],
+  "one_lost": {
+   "S1": 46.9,
+   "S2": 41.3,
+   "S3": 43.2
+  },
+  "fixed_alone": {
+   "S1": 21.3,
+   "S2": 27.0,
+   "S3": 27.0
+  },
+  "two_lost": {
+   "S1+S2": 27.0,
+   "S1+S3": 27.0,
+   "S2+S3": 21.3
+  },
+  "reflex": 10.9,
+  "rigorous": 16.6,
+  "lines": 28,
+  "figures": 49,
+  "lands": {
+   "S1": 13,
+   "S2": 10,
+   "S3": 11,
+   "S1+S2": 6,
+   "S1+S3": 6,
+   "S2+S3": 3,
+   "S1+S2+S3": 1
+  },
+  "figures_landed": {
+   "S1": 29,
+   "S2": 23,
+   "S3": 24,
+   "S1+S2": 19,
+   "S1+S3": 15,
+   "S2+S3": 9,
+   "S1+S2+S3": 6
+  },
+  "reflex_lands": [
+   "one more euro, AppLovin Android"
+  ],
+  "reflex_figures": [
+   "return Pinterest iOS",
+   "installs a week Snapchat iOS",
+   "installs a week Google iOS",
+   "installs a week AppLovin Android",
+   "next euro AppLovin Android",
+   "stretch next euro AppLovin Android"
+  ],
+  "referee_separation": [
+   169.3,
+   3.7,
+   15.0
+  ]
+ },
+ "truth": {
+  "Meta iOS": 1.073,
+  "TikTok iOS": 0.538,
+  "Snapchat iOS": 0.618,
+  "Google iOS": 1.439,
+  "Pinterest iOS": 1.522,
+  "Google Android": 1.068,
+  "AppLovin Android": 0.968
+ },
+ "result_grades": {
+  "S1": {
+   "R1": "missed",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "partly",
+   "R7": "partly"
+  },
+  "S2": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "partly",
+   "R7": "partly"
+  },
+  "S3": {
+   "R1": "right",
+   "R2": "right",
+   "R3": "partly",
+   "R4": "right",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S1+S2": {
+   "R1": "missed",
+   "R2": "missed",
+   "R3": "right",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S1+S3": {
+   "R1": "missed",
+   "R2": "missed",
+   "R3": "partly",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "partly"
+  },
+  "S2+S3": {
+   "R1": "right",
+   "R2": "missed",
+   "R3": "partly",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  },
+  "S1+S2+S3": {
+   "R1": "missed",
+   "R2": "missed",
+   "R3": "partly",
+   "R4": "missed",
+   "R5": "missed",
+   "R6": "missed",
+   "R7": "missed"
+  }
+ }
+}

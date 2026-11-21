@@ -9,6 +9,7 @@ proved.
     python3 task1/generator/core.py            # the core table and CORE PASS / CORE FAIL
     python3 task1/generator/core.py --explore  # the dials' diagnostics, while designing
 """
+import math
 import os
 import sys
 
@@ -452,6 +453,25 @@ def _monthly_counts(O, mask, which):
     return out
 
 
+def refine(err, q, step):
+    """a least-squares fit in one unknown finished on the real line: a golden-section search one grid step either
+    side of the grid's best point"""
+    lo, hi = q - step, min(q + step, 0.999)
+    g = (5.0 ** 0.5 - 1.0) / 2.0
+    a, b = hi - g * (hi - lo), lo + g * (hi - lo)
+    fa, fb = err(a), err(b)
+    for _ in range(60):
+        if fa <= fb:
+            hi, b, fb = b, a, fa
+            a = hi - g * (hi - lo)
+            fa = err(a)
+        else:
+            lo, a, fa = a, b, fb
+            b = lo + g * (hi - lo)
+            fb = err(b)
+    return 0.5 * (lo + hi)
+
+
 def s1_fit(O, split="store", trim=0, form="geo", cadence=MONTH_DAYS):
     """the share of trial-end candidates charged and the monthly continuation of a silent subscription, fitted to the
     stores' excess over the records, month by month"""
@@ -487,6 +507,10 @@ def s1_fit(O, split="store", trim=0, form="geo", cadence=MONTH_DAYS):
                 err = (((w @ Mr + c_m * (w @ Mf)) - R)[use] ** 2).sum()
                 if best is None or err < best[0]:
                     best = (err, q, q if q1 is None else q1)
+        if form != "two":                                          # the one-rate fit, finished on the real line
+            pw = np.arange(1, K + 1)
+            q = refine(lambda x: float((((x ** pw) @ Mr + c_m * ((x ** pw) @ Mf) - R)[use] ** 2).sum()), best[1], 0.002)
+            best = (None, q, q)
         for pl in g:
             fits[pl] = dict(c_m=c_m, c_a=c_a, q=best[1], q1=best[2])
     return fits
@@ -607,16 +631,23 @@ def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_
 # --------------------------------------------------------------------------------------------------------------
 
 LEVELS = {"one": 1, "tier2": 2, "tier4": 4, "tier8": 8}
+CELL_ROWS = {"market-week-pair": 2, "market-week-bucket": 1}     # sessions values to a row of the fit
 FITKEYS = ("rows", "weight", "markets", "org_pin", "span", "minpool", "group", "shrink", "r_nudge")
 GROUPS = {"kind": (("Meta iOS", "TikTok iOS", "Snapchat iOS", "Pinterest iOS"),),      # the social networks as one
           "social": (("Meta iOS", "TikTok iOS", "Snapchat iOS"),),
+          # the groupings a five per cent test of equal ratios lets through under one reading of the fit's spread or
+          # the other (s2_equal_test with the row-by-row spread, and with one variance for every row)
           "pair": (("Meta iOS", "TikTok iOS"),),
           "pair2": (("TikTok iOS", "Snapchat iOS"),),
-          # the groupings the fit's own spread cannot tell apart at the five per cent point (s2_equal_test)
           "gp": (("Google iOS", "Pinterest iOS"),),
           "gpo": (("Google iOS", "Pinterest iOS", "organic iOS"),),
           "po": (("Pinterest iOS", "organic iOS"),),
           "go": (("Google iOS", "organic iOS"),)}
+
+
+def groups_of(group):
+    """the sets of sources that share one ratio under a grouping; two groupings taken at once are joined by a plus"""
+    return tuple(g for key in group.split("+") for g in GROUPS[key])
 
 
 def tier(cv, levels=4):
@@ -631,7 +662,15 @@ def tier(cv, levels=4):
     return np.minimum(bucket // 2, 3) + 4 * ((trial == 1) | (paid == 1))
 
 
+# groupings that keep one part of the first-48-hour value and drop the rest: the sessions bits alone (their eight
+# values or four pairs), the trial and purchase bits alone, and those two bits with the sessions split in two
+ALONE = {"sess8": lambda cv: cv & 7, "sess4": lambda cv: (cv & 7) // 2, "tp4": lambda cv: (cv >> 3) & 3,
+         "tp8": lambda cv: 2 * ((cv >> 3) & 3) + ((cv & 7) >= 4)}
+
+
 def _cells(cv, cells):
+    if cells in ALONE:
+        return ALONE[cells](np.asarray(cv))
     return np.asarray(cv) if cells == "fine" else tier(cv, LEVELS[cells])
 
 
@@ -726,7 +765,7 @@ def s2_fit(O, v, cells="fine", minn=20, tilt="cell", ios=True, rows="market-week
     gid = list(range(len(srcs)))                                   # sources that share one ratio share a column
     if group:
         names = [SOURCES[i] for i in srcs]
-        for g in GROUPS[group]:
+        for g in groups_of(group):
             idx = [names.index(nm) for nm in g if nm in names]
             for j in idx[1:]:
                 gid[j] = gid[idx[0]]
@@ -735,18 +774,41 @@ def s2_fit(O, v, cells="fine", minn=20, tilt="cell", ios=True, rows="market-week
     wg = np.arange(MATURE) // span
     nw = int(wg.max()) + 1
     Xc = [S["nc"][i] * T["vc"][i][None, None, :] for i in srcs]
+    # a finer grain for the fit's rows: each market-week split by the first-48-hour sessions the accounts carry (the
+    # eight sessions values, or their four pairs), every install still priced on the pricing cells
+    per = CELL_ROWS.get(rows)
+    if per:
+        F = s2_strata(O, v, "fine", minn, tilt, ios)
+        sg = (np.arange(32) & 7) // per
+        ng = int(sg.max()) + 1
+        Xf = [F["nc"][i] * T["vc"][i][T["key32"]][None, None, :] for i in srcs]
+
+    def rows_of(out):
+        return (out.sum(0) if markets == "pooled" else out[list(markets)]).reshape(-1)
 
     def fold(a, sel):
         out = np.zeros((3, nw))
         for kk in np.where(sel)[0]:
             np.add.at(out, (slice(None), wg), a[:, :, kk])
-        return out[list(markets)].reshape(-1)
+        return rows_of(out)
+
+    def fold_cells(a):
+        out = np.zeros((3, nw, ng))
+        for cvv in range(32):
+            np.add.at(out, (slice(None), wg, sg[cvv]), a[:, :, cvv])
+        return rows_of(out)
 
     def fit(sel):
-        y, n = fold(S["pv"], sel), fold(S["pn"], sel)
-        X = np.stack([fold(x, sel) for x in Xc], axis=1)
+        if per:                                                    # a row is a market-week's accounts of one sessions cell
+            y, n = fold_cells(F["pv"]), fold_cells(F["pn"])
+            X = np.stack([fold_cells(x) for x in Xf], axis=1)
+            whole = np.repeat(fold(S["pn"], np.ones(nk, bool)), ng)    # the market-week's accounts, for minpool
+            keep = (n > 0) & (whole > minpool)
+        else:
+            y, n = fold(S["pv"], sel), fold(S["pn"], sel)
+            X = np.stack([fold(x, sel) for x in Xc], axis=1)
+            keep = n > minpool
         w = 1.0 / np.maximum(n, 1.0) if weight in ("n", "fitted") else np.ones(n.size)
-        keep = n > minpool
         y, X, w = y[keep], X[keep], w[keep]
         if common == "paid":                                       # organic at the pinned ratio, one for the networks
             r = float((y - org_pin * X[:, -1]).sum() / X[:, :-1].sum())
@@ -769,6 +831,8 @@ def s2_fit(O, v, cells="fine", minn=20, tilt="cell", ios=True, rows="market-week
         res = yy * sw - Xw @ beta
         bread = np.linalg.inv(Xw.T @ Xw)
         V = bread @ ((Xw * res[:, None]).T @ (Xw * res[:, None])) @ bread     # the fit's own spread, row by row
+        if cov == "classical":                                     # or with one variance for every row
+            V = bread * float(res @ res) / (len(res) - len(cols))
         if shrink:                                                 # the networks' ratios drawn toward their pooled one
             nn = len(cols) - (0 if org_pin is not None else 1)
             b, se2 = beta[:nn], np.diag(V)[:nn]
@@ -783,7 +847,7 @@ def s2_fit(O, v, cells="fine", minn=20, tilt="cell", ios=True, rows="market-week
 
     if cov:                                                        # the plain fit's ratios with their covariance
         out = (srcs,) + tuple(fit(np.ones(nk, bool)))
-    elif rows == "market-week":
+    elif rows == "market-week" or per:
         r = fit(np.ones(nk, bool))
         out = {i: r[j] for j, i in enumerate(srcs)}
     else:
@@ -802,10 +866,11 @@ def s2_fit(O, v, cells="fine", minn=20, tilt="cell", ios=True, rows="market-week
     return out
 
 
-def s2_equal_test(O, v, names):
+def s2_equal_test(O, v, names, cov=True):
     """whether the named sources could share one ratio: the fitted ratios' differences against the fit's own spread
-    (a Wald statistic on len(names) - 1 degrees of freedom) and each ratio with its standard error"""
-    srcs, b, V = s2_fit(O, v, cov=True)
+    (a Wald statistic on len(names) - 1 degrees of freedom) and each ratio with its standard error; cov="classical"
+    takes the spread with one variance for every row in place of the row-by-row one"""
+    srcs, b, V = s2_fit(O, v, cov=cov)
     b = np.array(b)
     idx = [srcs.index(SOURCES.index(nm)) for nm in names]
     R = np.zeros((len(idx) - 1, len(b)))
@@ -958,7 +1023,7 @@ def weekly_quality(O, v, c, how="golden", s2="golden", cells="fine", minn=20, ti
 
 
 def response(O, v, how="golden", months="pooled", quality="golden", weeks_i=(0, WEEKS), s2="golden", cells="fine",
-             minn=20, qpool=False, leave=(), tilt="cell", fit=None):
+             minn=20, qpool=False, leave=(), tilt="cell", fit=None, weeks_v=(0, WEEKS)):
     """installs and value per install against the week's budget (with the platform's delivery beside it), or against
     the week's spend; each channel's own slopes, the month pattern pooled across channels (or each channel's own)"""
     C = len(ORDER)
@@ -972,7 +1037,7 @@ def response(O, v, how="golden", months="pooled", quality="golden", weeks_i=(0, 
             lb, ls = np.log(Bc["budget"]), np.log(Bc["spend"])
             ld = ls - lb
             y = O.agg[c] if nm == "i" else weekly_quality(O, v, c, quality, s2, cells, minn, tilt, fit)
-            lo, hi = weeks_i if nm == "i" else (0, WEEKS)
+            lo, hi = weeks_i if nm == "i" else weeks_v
             for w in range(lo, hi):
                 if (c, w) in leave:
                     continue
@@ -1012,34 +1077,53 @@ def response(O, v, how="golden", months="pooled", quality="golden", weeks_i=(0, 
     return fits
 
 
-def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0):
+def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carry="rescaled"):
     """installs a week and value per install at the plan's 2027 weekly spend and at the stretch column's, the return
-    per euro at each, and what the next euro returns at the plan"""
+    per euro at each, and what the next euro returns on top of each (a constant-elasticity response: the return at
+    that spend times the two budget slopes). carry: the fitted installs at the budget that delivers the plan's spend,
+    rescaled so that the fit adds up to the installs on record ("rescaled"), or the fit's own prediction as it stands
+    with the share of the budget spent put at its ratio of totals ("plain"), its geometric mean ("plain-geo") or its
+    median week ("plain-median"), or with each week's own share put through the delivery term and averaged
+    ("plain-dist"). The share is taken over the weeks dbar_from to dbar_weeks."""
     ci = ORDER.index(c)
     Bc = O.B[c]
     sp = plan_spend(c)
+    plain = carry != "rescaled"
+    dterm = 0.0
     if coef["how"] in ("spend", "iv"):
         x_hist = np.log(Bc["spend"]) - np.log(Bc["spend"]).mean()
         x_plan = np.log(sp) - np.log(Bc["spend"]).mean()
     else:                                                          # the budget that delivers the plan's spend
-        dbar = Bc["spend"][dbar_from:dbar_weeks].sum() / Bc["budget"][dbar_from:dbar_weeks].sum() * dbar_scale
+        sl = slice(dbar_from, dbar_weeks)
+        share = Bc["spend"][sl] / Bc["budget"][sl]
+        dbar = Bc["spend"][sl].sum() / Bc["budget"][sl].sum()
+        if carry == "plain-geo":
+            dbar = float(np.exp(np.log(share).mean()))
+        elif carry == "plain-median":
+            dbar = float(np.median(share))
+        dbar *= dbar_scale
         x_hist = np.log(Bc["budget"]) - np.log(Bc["budget"]).mean()
         x_plan = np.log(sp / dbar) - np.log(Bc["budget"]).mean()
+        if plain:                                                  # the delivery term at the share the plan is put at
+            ld = np.log(Bc["spend"]) - np.log(Bc["budget"])
+            dterm = float(coef["i"]["d"][ci] * (np.log(dbar) - ld.mean()))
+            if carry == "plain-dist":                              # or at each week's own share, averaged
+                dterm = float(np.log(np.exp(coef["i"]["d"][ci] * (np.log(share * dbar_scale) - ld.mean())).mean()))
     si, sv = coef["i"]["s"][ci], coef["v"]["s"][ci]
     mi, mv = coef["i"]["mon"][ci], coef["v"]["mon"][ci]
-    back = O.agg[c].sum() / np.exp(coef["i"]["a"][ci] + si * x_hist + mi[WMONTH - 1]).sum()
+    back = 1.0 if plain else O.agg[c].sum() / np.exp(coef["i"]["a"][ci] + si * x_hist + mi[WMONTH - 1]).sum()
     fm = np.exp(sv * x_hist[:MATURE] + mv[WMONTH[:MATURE] - 1])
     wt = O.agg[c][:MATURE]
     level = v12 / ((fm * wt).sum() / wt.sum())                    # the fitted value over the mature weeks is v12
     out = {}
     for tag, lift in (("", 0.0), ("_s", float(np.log(CH[c]["stretch"])))):
-        n = back * np.exp(coef["i"]["a"][ci] + si * (x_plan + lift) + mi[PLAN_MONTH - 1])
+        n = back * np.exp(coef["i"]["a"][ci] + si * (x_plan + lift) + dterm + mi[PLAN_MONTH - 1])
         vp = level * np.exp(sv * (x_plan + lift) + mv[PLAN_MONTH - 1])
         out["roas" + tag] = (n * vp).sum() / (sp.sum() * np.exp(lift))
         out["revenue" + tag] = (n * vp).sum()
         if not tag:
             out.update(installs_week=n.mean(), vpi=(n * vp).sum() / n.sum())
-    out.update(marginal=out["roas"] * (si + sv), el=si, qs=sv)
+    out.update(marginal=out["roas"] * (si + sv), marginal_s=out["roas_s"] * (si + sv), el=si, qs=sv)
     return out
 
 
@@ -1092,13 +1176,13 @@ def route(O, s1="golden", s2="golden", s3="golden", **kw):
             r = v12[c] * n / O.B[c]["spend"][:MATURE].sum()
             res[c] = dict(v12=v12[c], rec12=r12[c] * N12[c], rev12=v12[c] * N12[c], unrec=1 - r12[c] / v12[c], roas=r,
                           vpi=v12[c], installs_week=n / 52.0,
-                          marginal=r, revenue=r * plan_spend(c).sum(), roas_s=r,
+                          marginal=r, marginal_s=r, revenue=r * plan_spend(c).sum(), roas_s=r,
                           revenue_s=r * plan_spend(c).sum() * CH[c]["stretch"], el=1.0, qs=0.0)
         _CACHE[key] = res
         return res
     coef = response(O, v, how=s3, months=kw.get("months", "pooled"), quality=kw.get("quality", "golden"),
                     weeks_i=kw.get("weeks_i", (0, WEEKS)), s2=s2, cells=cells, minn=minn, qpool=kw.get("qpool", False),
-                    tilt=tilt, fit=fit)
+                    tilt=tilt, fit=fit, weeks_v=kw.get("weeks_v", (0, WEEKS)))
     nud = kw.get("s3_nudge")                                       # ("el" or "qs" or "dbar", a factor): a fitted input moved
     if nud and nud[0] in ("el", "qs"):
         eq = "i" if nud[0] == "el" else "v"
@@ -1107,7 +1191,8 @@ def route(O, s1="golden", s2="golden", s3="golden", **kw):
     for c in ORDER:
         res[c] = dict(v12=v12[c], rec12=r12[c] * N12[c], rev12=v12[c] * N12[c], unrec=1 - r12[c] / v12[c],
                       **at_plan(O, coef, c, v12[c], kw.get("dbar_weeks", WEEKS),
-                                nud[1] if nud and nud[0] == "dbar" else 1.0, kw.get("dbar_from", 0)))
+                                nud[1] if nud and nud[0] == "dbar" else 1.0, kw.get("dbar_from", 0),
+                                kw.get("carry", "rescaled")))
     _CACHE[key] = res
     return res
 
@@ -1134,6 +1219,8 @@ VARIANTS = [
     ("Google iOS, Pinterest iOS and the organic installs sharing one ratio", dict(group="gpo")),
     ("Pinterest iOS and the organic installs sharing one ratio", dict(group="po")),
     ("Google iOS and the organic installs sharing one ratio", dict(group="go")),
+    ("Meta iOS and TikTok iOS sharing one ratio", dict(group="pair")),
+    ("TikTok iOS and Snapchat iOS sharing one ratio", dict(group="pair2")),
     ("every postback dated back three days", dict(align="three")),
     ("every postback dated back four days", dict(align="four")),
     ("each channel's own month pattern", dict(months="own")),
@@ -1146,6 +1233,33 @@ VARIANTS = [
     ("spend instrumented by the budget", dict(s3="iv")),
     ("the budget alone, the delivery left out", dict(s3="budget")),
 ]
+# ways that stand beside the battery: each is run as it is and the ranges take in the edges it leaves, but it is not
+# crossed with the battery's ways. Four families. The second step's fit on a finer grain of rows (each market-week's
+# accounts split by the first-48-hour sessions they carry, in the eight values or their four pairs), under each of
+# the three weightings. The installs equation's own prediction at the plan, not rescaled to the installs on record,
+# with the share of the budget spent taken over the 104 weeks, the mature weeks or the last 52, and put at its ratio
+# of totals or put week by week through the delivery term and averaged (the geometric mean of the weekly shares and
+# the median week's share are not held: over the weeks the share is taken from they leave out 4 per cent or more of
+# some channel's installs, RS.carry_block). The first-48-hour value grouped on one part of it alone (the sessions
+# bits in their eight values or four pairs, the trial and purchase bits, those two bits with the sessions split in
+# two). The value equation fitted on the mature weeks alone
+SHARE_WEEKS = (("the 104 weeks'", {}), ("the mature weeks'", dict(dbar_weeks=MATURE)),
+               ("the last 52 weeks'", dict(dbar_from=MATURE)))
+BESIDE = [("the ratios fitted on each market-week's accounts split by %s%s" % (g, w), dict(rows=r, **kw))
+          for r, g in (("market-week-pair", "pairs of first-48-hour sessions values"),
+                       ("market-week-bucket", "first-48-hour sessions value"))
+          for w, kw in (("", {}), (", unweighted", dict(weight="none")),
+                        (", with weights from the fitted revenue", dict(weight="fitted")))]
+BESIDE += [("the installs equation's own prediction, not rescaled, at %s %s" % (wn, nm), dict(carry=k, **wkw))
+           for wn, wkw in SHARE_WEEKS
+           for k, nm in (("plain", "share of the budgets spent"),
+                         ("plain-dist", "weekly shares, each put through the delivery term and averaged"))]
+BESIDE += [("the first-48-hour values grouped by %s" % nm, dict(cells=k))
+           for k, nm in (("sess8", "their sessions bits alone, in eight values"),
+                         ("sess4", "their sessions bits alone, in four pairs"),
+                         ("tp4", "their trial and purchase bits alone"),
+                         ("tp8", "their trial and purchase bits with the sessions split in two"))]
+BESIDE += [("the value equation fitted on the mature weeks alone", dict(weeks_v=(0, MATURE)))]
 HURRIED = {"S1": dict(s1="prop_month"), "S2": dict(s2="bridge"), "S3": dict(s3="spend")}
 # the most rigorous standard design the pack affords: the stores' true-up month by month, every postback priced by
 # first-48-hour value and corrected with the one labelled check iOS offers (Apple Search Ads' declined installs), the
@@ -1220,11 +1334,12 @@ def s1_web_method(O):
         d = d[d <= END_DAY]
         Mr[j - 1] = np.bincount((d // MONTH_DAYS).astype(int), minlength=O.NM)[:O.NM]
     best = None
+    miss = lambda q: float(((((q ** np.arange(1, K + 1)) @ Mr) - R)[:O.NM - 1] ** 2).sum())
     for q in np.linspace(0.40, 0.99, 296):
-        err = ((((q ** np.arange(1, K + 1)) @ Mr) - R)[:O.NM - 1] ** 2).sum()
+        err = miss(q)
         if best is None or err < best[0]:
             best = (err, q)
-    return float(best[1])
+    return float(refine(miss, best[1], 0.002))
 
 
 def referee_s1(O, c="AppLovin Android"):
@@ -1317,17 +1432,85 @@ def referee_s3(O, v, c="Google Android"):
 OWN = {"S1": "AppLovin Android", "S2": "Meta iOS", "S3": "Google Android"}
 # every figure the answer blocks state, channel by channel: the return per euro at the plan's weekly spend (the
 # member's own figure) and at its stretch spend, the installs a week the plan's spend buys and their value, what the
-# next euro returns, and what the installs of the mature year went on to pay
+# next euro returns on top of the plan's spend and on top of the stretch spend, and what the installs of the mature
+# year went on to pay
 FAMILIES = [("return ", "roas"), ("stretch return ", "roas_s"), ("installs a week ", "installs_week"),
-            ("value at plan ", "vpi"), ("next euro ", "marginal"), ("paid per install ", "v12")]
+            ("value at plan ", "vpi"), ("next euro ", "marginal"), ("stretch next euro ", "marginal_s"),
+            ("paid per install ", "v12")]
 # each stump's own figure, one decisive step's answer: it falls with that stump alone
 COMPONENTS = {"S1": "paid per install AppLovin Android", "S2": "paid per install Meta iOS",
               "S3": "installs a week Google Android"}
 
 
+# the blocks answer each of the prompt's four asks with one line per channel, and the generated rubric makes one
+# criterion of a line, all or nothing (supplemental-stumping Part 1 rule 7): the return at the plan's and the stretch
+# spend, the installs a week and what each will have paid, the next euro at the plan's and the stretch spend, and
+# what the mature year's installs paid
+ASK_OF = {"return ": "returns", "stretch return ": "returns", "installs a week ": "installs and their revenue",
+          "value at plan ": "installs and their revenue", "next euro ": "one more euro",
+          "stretch next euro ": "one more euro", "paid per install ": "the year to November 2025"}
+ON_LINE = "on its line: "         # a component's figure as its ask line states it
+
+
+def stated_id(fid):
+    """the figure a listed criterion figure is"""
+    return fid[len(ON_LINE):] if fid.startswith(ON_LINE) else fid
+
+
+def sentence_of(fid):
+    """the line of the answer blocks a figure is stated on"""
+    kind = max((k for k in ASK_OF if fid.startswith(k)), key=len)
+    return "%s, %s" % (ASK_OF[kind], fid[len(kind):])
+
+
+def as_stated(figures):
+    """the graded figures as the answer blocks state them: every figure carries the line it sits on, and a
+    component's figure is stated on its ask line as well as in the Critical Components"""
+    out = []
+    for f in figures:
+        if f["block"] == "component":
+            out.append(dict(f))
+            out.append(dict(f, id=ON_LINE + f["id"], block="ask", sentence=sentence_of(f["id"])))
+        else:
+            out.append(dict(f, sentence=sentence_of(f["id"])))
+    return out
+
+
 def figure_values(res):
     """every graded figure a route files"""
     return {nm + c: float(res[c][k]) for c in MEMBERS for nm, k in FAMILIES}
+
+
+BAND_PAD = 0.005                 # either side of the battery's span: what two careful rebuilds of one way differ by
+BESIDE_PAD = 0.01                # beyond a way that stands beside the battery
+
+
+def unit(fid):
+    """the decimals a figure is stated at: a return per euro to the thousandth, euros per install to the cent, installs
+    a week to the unit"""
+    if fid.startswith("installs a week "):
+        return 0
+    if fid.startswith(("value at plan ", "paid per install ")):
+        return 2
+    return 3
+
+
+def band_of(fid, g, fam, beside=()):
+    """the range the answer blocks state for a figure: the battery's span with half a per cent of the figure each side
+    (what two careful rebuilds of one variant differ by), reaching one per cent of the figure beyond every way that
+    stands beside the battery and moves the figure (two rebuilds of a fit on finer rows differ by more), stated
+    outward at the figure's precision"""
+    nd = unit(fid)
+    lo, hi = min(min(fam), g), max(max(fam), g)
+    w = BAND_PAD * abs(g)
+    lo, hi = lo - w, hi + w
+    moved = [x for x in beside if abs(x - g) > 1e-6 * abs(g)]      # a way that leaves the figure where it is adds nothing
+    if moved:
+        w2 = BESIDE_PAD * abs(g)
+        lo, hi = min(lo, min(moved) - w2), max(hi, max(moved) + w2)
+    f = 10.0 ** nd
+    a, b = math.floor(lo * f + 1e-9) / f, math.ceil(hi * f - 1e-9) / f
+    return [int(round(a)), int(round(b))] if nd == 0 else [round(a, nd), round(b, nd)]
 
 
 def build_spec(W=None, verbose=False):
@@ -1345,7 +1528,8 @@ def build_spec(W=None, verbose=False):
         if al not in aligned:
             aligned[al] = Obs(W, align=al)
         return route(aligned[al], **kw)
-    fam = [variant(kw) for _nm, kw in VARIANTS]
+    fam = [variant(kw) for _nm, kw in VARIANTS + BESIDE]
+    nbat = len(VARIANTS)                                           # the battery's ways first, then the ways beside it
     keys = [["S1"], ["S2"], ["S3"], ["S1", "S2"], ["S1", "S3"], ["S2", "S3"], ["S1", "S2", "S3"]]
     lat_res = {"+".join(k): lattice_route(O, k) for k in keys}
     direct = route(O, "raw", "direct", "average")
@@ -1374,15 +1558,17 @@ def build_spec(W=None, verbose=False):
     gf, rf = figure_values(g), figure_values(rigorous)
     ff = [figure_values(r) for r in fam]
     lf = {k: figure_values(r) for k, r in lat_res.items()}
+    # each figure priced on the range the blocks will state for it (band_of), as the build prices it on the cut pack
+    rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]], [x[fid] for x in ff[nbat:]])
     figures = []
     for c in MEMBERS:
-        figures.append(dict(id="return " + c, block="ask", weight=1.0, member=c))
+        figures.append(dict(id="return " + c, block="ask", weight=1.0, member=c, band=rng("return " + c)))
     own = set(COMPONENTS.values())
     for kind, _k in FAMILIES[1:]:
         for c in MEMBERS:
             fid = kind + c
             figures.append(dict(id=fid, block="component" if fid in own else "ask", weight=1.0, golden=gf[fid],
-                                family=[x[fid] for x in ff], lattice={k: x[fid] for k, x in lf.items()},
+                                band=rng(fid), family=[x[fid] for x in ff], lattice={k: x[fid] for k, x in lf.items()},
                                 routes=dict(rigorous=rf[fid])))
     v = values(O)
     refs = [referee_s1(O), referee_s2(O, v), referee_s3(O, v)]
@@ -1393,7 +1579,7 @@ def build_spec(W=None, verbose=False):
     weakest = min(refs, key=sep)
     spec = dict(call="lines", members=members, stumps=stumps, lattice=lattice,
                 referee=dict(slice=weakest["slice"], covers_target=False, truth=weakest["truth"],
-                             golden=weakest["golden"], rivals=weakest["rivals"]), figures=figures)
+                             golden=weakest["golden"], rivals=weakest["rivals"]), figures=as_stated(figures))
     if verbose:
         return spec, dict(O=O, W=W, T=T, g=g, fam=fam, lat=lat_res, direct=direct, rigorous=rigorous, refs=refs,
                           sep=[sep(r) for r in refs])
@@ -1502,7 +1688,7 @@ def explore():
             wrong = [short(m) for m, a, b in zip(names, call, gcall) if a != b]
             comp = {k: corelib._earned([f for f in figs if f["id"] == fid][0], vals[fid]) for k, fid in COMPONENTS.items()}
             print("    %s %-58s earns %4.1f  wrong on %-22s components kept %s" % (
-                step, nm, corelib._score(figs, call == gcall, lambda f: vals[f["id"]]), ", ".join(wrong) or "none",
+                step, nm, corelib._score(figs, call == gcall, lambda f: vals[stated_id(f["id"])]), ", ".join(wrong) or "none",
                 " ".join(k for k, ok in comp.items() if ok)))
     print("could networks share a ratio (the fitted ratios' differences against the fit's own spread; the 5 per cent"
           " points are 3.84, 5.99, 7.81 and 9.49 on one to four degrees of freedom):")
