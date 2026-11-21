@@ -4,14 +4,14 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: hourly, monthly, feeder, substations, lateral, raudfjord, svarthaug, kvernholm, drangvik, malmnes, voltage, lindberg, ostervik, missed, golden, hestmark, tverrli, physical, reflex, rigorous, registers, transformer, voltages, independent, modernized
+Stump terms swept: hourly, monthly, feeder, substations, lateral, raudfjord, svarthaug, kvernholm, drangvik, malmnes, voltage, lindberg, ostervik, missed, golden, hestmark, tverrli, standard, physical, reflex, rigorous, registers, transformer, voltages, independent
 
 ## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: carries 3 of 3 distinctive words of the committed call: 'Phase 1 (2027 urgent relief):'
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `grid_tariff_schedule_2026.pdf`: 3 of 25 stump-paragraph terms appear (hourly, monthly, voltage); read whether the document names the move
-- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 14 of 25 stump-paragraph terms appear (feeder, substations, lateral, raudfjord, svarthaug, kvernholm); read whether the document names the move
+- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 15 of 25 stump-paragraph terms appear (feeder, substations, lateral, raudfjord, svarthaug, kvernholm); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)

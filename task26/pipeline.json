@@ -13,7 +13,7 @@
  "loops": 0,
  "call": "Phase 1 (2027): Hestmark (146.1%, 52.88 MVA, 22.11 MVA relief), Raudfjord (110.6%, 39.82 MVA, 9.22 MVA), Kvernholm (108.6%, 40.19 MVA, 8.74 MVA); Phase 2 (2028-2029): Malmnes (95.0%, 36.10 MVA, 3.80 MVA), Drangvik (94.5%, 40.16 MVA, 4.04 MVA), Svarthaug (92.7%, 31.34 MVA, 2.61 MVA); Defer: Tverrli (68.4%, 31.48 MVA, 0.00 MVA); pool total relief 50.51 MVA (C1 229.71 MW, C2 60.72 MVAr, C3 37.69%)",
  "paper_pair": 20.8,
- "prompt_rewritten": false,
+ "prompt_rewritten": true,
  "core_level": 5,
  "forcing": "PASS",
  "effort": {
@@ -53,7 +53,7 @@
   "average": null,
   "counterfactual_average": null
  },
- "resume": "optional author prompt rewrite (run voice-check.py --rewrite and leak.py), upload target.zip, golden.zip, prompt.txt, and submission.md four blocks to platform, then triage once both rollouts are graded",
+ "resume": "upload target.zip, golden.zip, prompt.txt, and submission.md four blocks to platform, then triage once both rollouts are graded",
  "final_cut": {
   "date": "2026-11-21",
   "target_zip_md5": "184f0af372fedebca1f3b11f03bbd8e2",
