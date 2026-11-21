@@ -22,9 +22,13 @@ nothing in-house solves the task, so the idea has to be right before it is built
 
 ## The seventeen tests (every kept trap answers YES to all seventeen)
 
-1. **Off the closed page.** Not one of the client's 34 closed strategies (`guidelines/client/learning-modules/
-   overused-strategies-2026-11-12.md`; same mechanism and the same kind of fix is the same lesson, whatever the
-   domain). A closed lesson can only support: its omission alone leaves the golden call standing.
+1. **Off the closed page.** Not one of the client's 45 closed strategies (`guidelines/client/learning-modules/
+   overused-strategies-2026-11-21.md`; same mechanism and the same kind of fix is the same lesson, whatever the
+   domain). Write the candidate's fix in one clause and read it against each card's "the fix already used": a
+   gross-up by a share from an independent source, a factor from checked cases, a basis restated, a curve fitted and
+   valued at the margin, a knock-on carried period by period, a without-it baseline, a shape learned from units
+   that reached the range and a held-out score are all cards (`open-ground.md` Part 1). A closed lesson can only
+   support: its omission alone leaves the golden call standing.
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
    reporting lags, de-duplicating, a constant-unit panel, re-weighting to the target's mix, the field's textbook
    estimator, hold-outs, back-tests, bootstraps). If that battery executed perfectly lands inside the band, it is not

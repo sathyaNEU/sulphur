@@ -1,0 +1,66 @@
+The arrears relief scheme does not fit its 18.2 Million budget: Corrected for how arrears were recorded, it costs about 25.0 Million
+Economics and Quantitative Social Science
+Survey measurement correction
+hardest
+Survey Research & Official Statistics. The current model averaged 0.31 across 4 runs (0.39, 0.28, 0.28, 0.28); all 4 put the cost under the budget.
+
+What makes this task strong
+Where the weight sits. Measurement. The survey under-records arrears in three separate ways, and each correction needs its own fitted model. Taken at face value the data says the scheme fits (about 12 to 15 million). Only after the corrections does it cost about 25.0 million.
+Three decisive steps, each hard to solve. (1) Deadline recording. Households interviewed close to their own region-quarter return deadline are recorded as behind less often: 0.47 of the usual rate at 0 to 3 days, 0.88 at 15 to 21. The deadlines are in a separate fieldwork calendar, so the gap only shows once every interview is dated against its own deadline. The solver then has to show the drop is in the recording, not in real arrears: within the households that say they are falling behind (KEEPUP 4 to 5), the qualifying share rises from 0.287 to 0.515 across the deadline bands, while those households' share of the sample stays at 0.09 to 0.11. (2) Interview length. Households at the end of a long main interview are also recorded as behind less often, falling to 0.50 of the usual rate over 60 minutes. This effect only appears in a joint fit with the deadline effect and household make-up held. Rushed interviews near a deadline are shorter, and long interviews are larger households that are more often behind, so a one-way comparison hides it. (3) Band anchoring. 409 of the 908 qualifying bills have only a band for the amount, and the first band question pulls answers toward yes. Neither random starting amount is unbiased on its own, so the pull (about 0.62) has to be fitted to both start arms together and the band shares rebuilt. This adds about 3 to 4 million to the cost.
+Why these count as independent. Leave out any one correction and the cost is still 19.6 to 21.4 million, over budget. Leave out any two and it drops to 16.1 to 17.6 million, under budget. So the call rests on at least three of the four corrections, and each one moves the graded household count and cost on its own. The fourth, giving the households that declined the bills module a modeled chance of qualifying, is the shallow step. It is the one every run got.
+Where the runs lost points. All 4 runs put the cost under budget, at 14.2 to 16.1 million, and all 4 handled the module decliners. Every run noticed the deadline pattern and the starting-amount pattern in some form, but none fitted either as a correction, and no run separated interview length. The best run (0.39) kept only interviews more than 14 days before the deadline, which took it to 164,546 households and 16.07 million, still under budget. The other three (0.28 each) reported 149,797 households and kept the signals as sensitivity checks; one called them grounds for "sensitivity analysis, not a uniquely identified correction".
+What it is an example of. A survey-costing task where the work is measurement correction: each recording effect has to be found, separated from a confounded neighbour and fitted, not just flagged. Read it as a difficulty profile, not a template to copy.
+Prompt
+Stakeholder ask
+We're costing a relief scheme that pays 30% of what a household owes on its gas and electricity bill and its water bill when it's two or more months behind on them. If it had run on the arrears households had in 2026, how many households would qualify, how much would they owe on the qualifying bills, and what would it cost? Does it fit in the 18.2 million budget?
+
+I need a spreadsheet with the number of qualifying households, the amount owed on gas and electricity and on water, and the cost, for the whole country and for each region. Show how you got from the data to each figure so someone can follow every step.
+
+I then need a two-page note explaining what you found. All the data is attached.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+arrears_relief_costing_2026.xlsx
+arrears_relief_costing_note.pdf
+Input files
+A 2026 national household survey of bills and arrears in an invented country with 10 regions: the interviewed households (17,840, with region, quarter, interview date, interviewer, household make-up, the KEEPUP self-assessment, main interview length and bills-module status), the bills module (80,215 rows with superseded versions and amounts as text), the amount bands with each bill's random starting amount, the issued addresses, the interviewers, the fieldwork calendar with each region-quarter's return deadline, household estimates and regions (all CSV), energy unit rates and water charges (CSV), plus the survey's technical report, a questionnaire extract and the scheme terms (PDF).
+
+hblc_households_2026.csv
+hblc_bills_module_2026.csv
+hblc_amount_bands_2026.csv
+hblc_issued_addresses_2026.csv
+fieldwork_calendar_2026.csv
+interviewers.csv
+household_estimates_2026.csv
+regions.csv
+energy_unit_rates_2026.csv
+water_charges_2026_27.csv
+hblc_2026_technical_report.pdf
+hblc_2026_questionnaire_extract.pdf
+bill_arrears_relief_terms_for_costing.pdf
+Final recommendation
+No, the scheme does not fit. Run on the 2026 arrears, it costs about 24.99 million CR, 6.79 million (37%) over the 18.2 million budget. About 224,700 households qualify, owing 59.91 million on gas and electricity bills and 23.37 million on water bills.
+
+Step-by-step solution
+Load the household file: 17,840 interviewed households, 15,883 that completed the bills module and 1,957 that declined it. Check that the weights sum to the 2,199,400 households in the household estimates.
+Clean the bills module: keep the latest version of each household and bill (80,215 rows to 79,415) and read the amounts with their thousands commas.
+Flag qualifying bills: gas and electricity or water, behind, and 2 or more months behind ("More than 6" counts). This gives 908 bills in 852 households, 499 with an amount and 409 with only a band.
+Build the two timing variables. Days to deadline is the region-quarter return deadline minus the interview date, banded 0 to 3, 4 to 7, 8 to 14, 15 to 21 and 22 or more (reference). Interview length is banded 36 minutes or less (reference), 37 to 44, 45 to 52, 53 to 60 and over 60.
+Fit the reporting model on the module completers: recorded chance = true chance (logistic in tenure, household type, income quintile, prepayment meter, work, region and KEEPUP) times a deadline share times a length share, fitted together. Deadline shares are 0.466, 0.657, 0.742 and 0.876; length shares are 0.861, 0.634, 0.569 and 0.504.
+Confirm that the deadline drop is in recording: within KEEPUP 4 to 5 the qualifying share rises from 0.287 to 0.515 across the deadline bands, while the KEEPUP 4 to 5 share of households stays at 0.09 to 0.11.
+Give every household its true chance p of qualifying. For one recorded as not qualifying, the chance it was missed is p(1 - s) / (1 - ps), where s is its deadline share times its length share. For the decliners, use p itself: in KEEPUP 5, 31% declined against about 9% in KEEPUP 1, so they can be neither dropped nor treated as debt-free.
+Value missed households and decliners at the mean amounts of qualifying households in the same tenure by income quintile cell.
+Revalue the 409 banded bills. The first band question is answered yes more often than the other random start implies (for gas and electricity, 84% of start-300 bills are below 300 against 60% of start-600 bills). Fit one pull to both start arms together (0.62) and rebuild the band shares.
+Weight and sum, one claim per household: 224,703 qualifying households, 59,913,175 owed on gas and electricity and 23,372,572 on water. The cost is 30% of the total, 24,985,724 CR, which is 6,785,724 over budget.
+Repeat by region (Karadoruk is the largest at 48,586 households and 5.46 million).
+Test the call: leave out each correction in turn (19.6 to 21.4 million, still over), then each pair (16.1 to 17.6 million, under).
+Where the runs went wrong
+Signal noticed, not fitted. Three runs saw that qualifying rates fall near deadlines (one: 4.00% in the final week against 6.30% more than 42 days out) and ran it only as a sensitivity check. They reported 149,797 households and 14.2 to 15.6 million, and the cost stayed under budget.
+A cut-off instead of a model. The best run (0.39) kept only interviews more than 14 days before the deadline and reweighted them. That partly corrects the deadline effect but leaves the 4 to 21 day bands and the length effect in, giving 164,546 households and 16.07 million, under budget.
+Confounded neighbours. Late interviews are also shorter, which one run reported in passing (6.19 minutes shorter) without separating the two effects. Fitted one at a time, the length effect disappears behind the deadline effect and household size.
+Picking a start arm. The runs showed that higher random starts give higher bands (one: 29.4% against 74.7% of energy lower bounds at 300 CR or more) but kept donor means within the reported bands. One concluded that this "establishes a question-start effect, not which arm is unbiased". A joint fit across both arms answers exactly that question.
+Justification
+The survey at face value says the scheme fits, but the files show that it records arrears less often in three measurable situations: close to a return deadline, at the end of a long interview, and when a banded answer starts low. The return deadlines are in the shipped calendar, the start amounts are in the band file and the questionnaire says how the band questions run, so each effect can be estimated from the data. With the corrections in, the cost is 21.4 to 26 million CR under every reasonable valuation. Variants of the method (other day and minute bands, other valuation cells, a separate pull for each bill) give 24.0 to 25.1 million. No reasonable variant gets under 18.2 million without leaving out at least two corrections that the data shows to be real.
+
+Read 2026-11-21 from the example library (pasted by the author with the phase 2 guidelines; labelled hardest).

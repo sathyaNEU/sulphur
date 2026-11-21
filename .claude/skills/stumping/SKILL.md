@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, ninety-three reflexes and ninety-four losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 34 closed strategies (2026-11-12, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (the assumption a run names and waves through made false, a measured response and the marginal unit, a shallow path that passes its own checks, and the open dimensions: conservation, changing structure, non-additive and nonlinear quantities, position on a network, hidden state, the recording algorithm), with the core designed first as stumps of construction against the review's strongest run (Part 1d: an observation-process estimand, the rigorous standard route across the line, a referee slice, a worth of three times the family's spread, written as `## Stump core` with `generator/core.py` and handed to the build as `## Build brief`), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and its guidelines of 11/20 (two or more decisive, independent steps, each with its own answer in a requested deliverable as a critical component) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, ninety-seven reflexes and one hundred and eight losses and waved-through assumptions from our runs and the client's pages), the deciding lesson drawn off the client's 45 closed strategies (read 2026-11-21, Part 1c and references/open-ground.md; closed lessons only as supporting steps, never stacked), built where the runs still lose (an assumption no closed card names, waved through and made false; a shallow path that passes a check of the wrong kind; and the open dimensions: conservation, changing structure, non-additive quantities, position on a network, hidden state, a recording algorithm whose inversion is not a gross-up, recording effects tangled with each other), with the core designed first as stumps of construction against the review's strongest run (Part 1d: an observation-process estimand, the rigorous standard route across the line, a referee slice, a worth of three times the family's spread, written as `## Stump core` with `generator/core.py` and handed to the build as `## Build brief`), forced on both sides, and never a reskin of a client task, an approved build or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -10,10 +10,14 @@ description: Design where a task is hard, to the client's bar of 2026-11-09 (dif
 > once caught, flips the whole answer." (`guidelines/client/deep-reasoning.md`)
 
 This skill decides where a task is hard. Work Part 7 first (the draw), then Parts 1 to 6. Read before designing:
-`guidelines/client/learning-modules/overused-strategies-2026-11-12.md` (the 34 closed strategies) with
+`guidelines/client/guidelines-2026-11-20.md` (the guidelines of 11/20: two or more decisive, independent steps, the
+critical components, the three tests, the `Valid Stump?` field),
+`guidelines/client/learning-modules/overused-strategies-2026-11-21.md` (the 45 closed strategies) with
 `references/open-ground.md` (our record read against them, the four approved builds' anatomy and the open
 dimensions), `guidelines/client/depth-scale-2026-11-09-detail.md` (the client's level 4 and 5 tasks in full, the bar
-to beat and never a skeleton to copy), `references/precedents.json` (where the runs lose and what they do by reflex),
+to beat and never a skeleton to copy), `guidelines/client/examples/1.txt`, `16.txt` and `17.txt` (the three shared as the
+library's hardest, runs averaging 0.26 to 0.31: a difficulty profile, never a template, and by the client's own word "likely
+already overused stumps"), `references/precedents.json` (where the runs lose and what they do by reflex),
 `guidelines/client/project-lead-review-2026-11-09.md` (why tasks that passed every check here came back),
 `guidelines/client/deep-reasoning.md` (the standard, the fourteen areas, the effort test, the shallow hidden
 factor), the strategies for the assigned domain group in `guidelines/client/learning-modules/stumping-strategies.md`
@@ -29,6 +33,10 @@ never reads the prompt.
 
 **The goal.** The two runs average under 60 on the generated rubric and lose their points for analytical reasons,
 in several places; the reviewer reading the design finds no one thing that flips the answer. Build to 50 on paper.
+In the client's words of 11/20: "two or more decisive, independent steps that each need real reasoning", "missing
+one should not sink the others", and the run fails "by doing a reasonable analysis that does not go far enough, not
+by missing one hidden detail". A stump here is one of those decisive steps: it owns a figure the prompt asks for,
+that figure is its critical component, and a run that lost another step still earns it (Part 1d rule 6, Part 3.4).
 
 **The opponent, as measured.** Mark's portal record (37 approvals, about 60 returns read in full) and the Sulfur
 runs agree on what a frontier run does unprompted: it reads every file and every document and executes any sentence
@@ -40,8 +48,9 @@ does in a hurry, by the client's table and our runs: stops at the first account 
 rival explanation, looks at a handful of series where the question needs all of them, estimates a quantity and never
 carries it into the decision, reports pieces that do not add back to the total, and checks robustness only by
 varying nearby choices. **Every result that prices the task lives in that second list**, and only where a run has
-been seen to lose there: `references/precedents.json` holds ninety-three reflexes the runs made unprompted and ninety-four
-places they lost or waved an assumption through, each with its run or client page.
+been seen to lose there: `references/precedents.json` holds ninety-seven reflexes the runs made unprompted and one hundred and
+eight places they lost or waved an assumption through, each with its run or client page (the client's three
+hardest examples are L56 to L67, N40, N41 and R94 to R97).
 
 **Thirty Sulfur rounds, measured.** No Sulfur round has yet come back under 60 with analytical losses spread across
 the results. In most rounds both runs landed every graded figure, and the paper pair estimates were 40 to 60 points
@@ -90,7 +99,9 @@ is an anatomy, not a template (`references/open-ground.md` Part 3):
 Copy the anatomy, never a chain: task14's register, panel, migration and nowcast, task2's volunteers, compelled
 staff, movers and ramp, task6's sampled spans, retention and dated causes and task457's self-reports read to the
 filing day are each one skeleton on file, and the guard refuses a reskin of any of them. task2's deciding lesson
-(transport) is closed by the client's page of 2026-11-12, so a draw like it today is refused (Part 1c).
+(transport) was closed by the client's page of 2026-11-12 and task14's (rises a register sees only by choice, an
+accepted example on the completeness card) by its read of 2026-11-21, so a draw like either today is refused (Part
+1c).
 
 **What changed on 2026-11-09.** The project lead returned the pattern this harness built for fourteen builds: one
 deep step, hidden in a constructed world, with a ladder of rungs below it and asks coupled to it. Those builds passed
@@ -171,13 +182,15 @@ one thing: the call is one graded result among the chain, never the whole price.
 ## Part 1b. The next level: build where frontier runs actually lose
 
 The client's ten level 4 and 5 tasks (`guidelines/client/depth-scale-2026-11-09-detail.md`, each with its prompt,
-inputs, reference solution and review notes), its fifteen examples and our thirty rounds put the runs' losses in six
+inputs, reference solution and review notes), its seventeen examples and our thirty rounds put the runs' losses in six
 recurring places. Each is a kind of judgment to build from this world's own process, never a skeleton to copy: every
 one of those tasks is in `fingerprint/corpus/client_skeletons.json`, and the guard refuses a draw that reskins one
-(`fingerprint` Part 1b). Ids in brackets are `references/precedents.json`. **Places 1, 3 and 5 are closed as deciding
-lessons by the client's page of 2026-11-12** (the transport card; the regression, survivorship and intervention cards;
-the neighbours card): they stay as supporting steps only, and the deciding lesson comes from places 2, 4 and 6 or
-from the open dimensions of Part 1c.
+(`fingerprint` Part 1b). Ids in brackets are `references/precedents.json`. **Places 1, 3 and 5 were closed as
+deciding lessons by the client's page of 2026-11-12** (the transport card; the regression, survivorship and
+intervention cards; the neighbours card) **and place 4 by its read of 2026-11-21** (the margin card), which also
+narrows places 2 and 6. The closed places stay as supporting steps only, and the deciding lesson comes from place 2
+where no card names the assumption, from place 6 where the check is of the wrong kind and not a reuse of the
+choosing data, or from the open dimensions of Part 1c.
 
 1. **The split carried through to the decision** (closed as a deciding lesson; L09 to L12, L24, L25). The client's words on example 7: "runs that
    saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying
@@ -186,7 +199,7 @@ from the open dimensions of Part 1c.
    dropped for volume; the competing-risk curve right and the vintages pooled; one crime trend for a robbery surge and
    an assault fall). Price the later step the split has to reach, where the target's mix differs from the estimation
    sample's; the split on its own is a reflex.
-2. **The assumption the run names and waves through** (N01 to N19, L04, L06, L07, L13, L35; open while the assumption is not a closed card's). Every frontier run writes
+2. **The assumption the run names and waves through** (N01 to N19, L04, L06, L07, L13, L35; open while the assumption is not a closed card's, and the cards now hold proportional scaling and a single slope, a form carried past its range, an intermediate held fixed while the option moves it, old figures used on their old basis and a source taken at face value). Every frontier run writes
    an "Assumptions and judgment calls" list: the contract scales in proportion, history stays informative, the works
    finish on schedule, the network rate applies to the picks, the response is smooth. In our worlds those were true
    (task10 arch 6's triage: "each thing the runs named as an untested assumption ... was true in the world"), so
@@ -196,13 +209,13 @@ from the open dimensions of Part 1c.
    because they still pay, the riskiest shops on the list, segments picked on their peak year, an option opened on the
    busy days: the run prices them at population rates or reads their own history. The correction needs a comparison
    built from the wider record by the same selection rule.
-4. **The response measured, and the marginal unit** (L15, L17; 279e74f2, 35842bf8). A response with its own shape (a
+4. **The response measured, and the marginal unit** (closed as a deciding lesson by the read of 2026-11-21, "a straight line or an average misprices the margin"; L15, L17; 279e74f2, 35842bf8). A response with its own shape (a
    step at an hour, a threshold a queue crosses) decides where added capacity pays; the run assumes a smooth response
    and spends the capacity where the problem looks largest.
 5. **The system's net, not the unit's own** (closed as a deciding lesson; L16; 8ec45b05). An action's gain at one unit is partly undone at the
    units it touches (a wake recovered downwind, incidents displaced next door, a launch's take from its own lines); the
    run prices the unit alone.
-6. **The shallow path passes its own checks** (L26 to L31; every strong client example carries the section). The
+6. **The shallow path passes its own checks** (L26 to L31; every strong client example carries the section; a check that passes because it reuses the data the choice was made on is now the card "scored on the same data used to choose it", so the open form is a check of the wrong kind on honest data). The
    hurried route reproduces an incumbent figure exactly, fits the model the standard prescribes, and its back-test,
    placebo or nearby variants confirm it; only a check of another kind (a like-for-like cohort, a split-half
    replication, a workload calculation, a comparison on units the change could not reach) refutes it. A hurried route
@@ -252,9 +265,11 @@ an assumption (N32). What the approved designs did with it:
 - the call holds across every defensible variant while the figures carry wide bands, the golden's own ranges hold
   every well-fitting rival, and every figure in the memo comes out of a shipped script or workbook.
 Against the closed page: L39 is the settled-level and transport cards (a supporting step only); L40
-(`bounded_outcome_headroom`, near transport) and L41 (`validation_cannot_see_condition`, near the settled level) are
-one judgment among several; L42 (`second_channel_past_plateau`), L43 (`calibrated_proxy_for_lost_attribute`) and L44
-(`level_and_mix_from_two_sources`) are open, the last two next to the instrument-change card.
+(`bounded_outcome_headroom`, near transport) and L41 (`validation_cannot_see_condition`, next to the card for a
+score on the choosing data) are one judgment among several; L42 (`second_channel_past_plateau`) sits next to the
+range card, L43 (`calibrated_proxy_for_lost_attribute`) next to the card for a source calibrated on checked cases
+and L44 (`level_and_mix_from_two_sources`) next to the completeness card. Each is a WARN as the deciding lesson: the
+note says how its mechanism or its fix differs, and where it cannot, the lesson is a supporting step.
 
 **Measured dead in Sulfur** (each landed by both runs, or returned at review, at least twice; `sulfur-record.md`):
 - one more correction re-pointed inside a scaffold the runs already landed (task4 architectures 6 to 10, task10
@@ -280,18 +295,23 @@ date on (`precut.py`; a WARN for builds filed before it):
   into this one, and the elements that carry across unchanged; any skeleton BLOCK is a redraw, and a severity 3 the
   guard only warns on is answered here in one line;
 - `Closed strategies:` (cards registered from `skeleton.CLOSED_FROM`, 2026-11-12) the lesson the call turns on and
-  why the client's closed page does not hold it (the card nearest it, and how the mechanism or the fix differs), and
-  each closed lesson the chain keeps as a supporting step, with the `effort.json` route that applies it alone and the
-  answer that route files (the golden call must stand).
+  why the client's closed page, all 45 cards, does not hold it (the card nearest it, and how the mechanism or the fix
+  differs), and each closed lesson the chain keeps as a supporting step, with the `effort.json` route that applies it
+  alone and the answer that route files (the golden call must stand);
+- `Decisive steps:` (cards registered from `precut.DECISIVE_FROM`, 2026-11-21) for each stump the answer it owns
+  (its critical component, a figure with its unit), the prompt's words that ask for it, the file and field where its
+  evidence sits (so a careful analyst reaches it with "no rule nobody wrote down and no source nothing points to"),
+  and the independence table in one line: the figure and the call with each step left out alone and in pairs.
 
 ## Part 1c. The closed strategies and the open ground
 
-The client's Overused stumping strategies page (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`)
-closes 34 lessons, each already deciding two or more accepted tasks: "if your task's answer only flips because of one
-of these, it will be returned as a repeated lesson, even in a new domain and with new data." The guard holds them as
-lesson keys (`fingerprint/skeleton_vocab.json` `closed_lessons`, twelve neighbours in `closed_near`), and
-`skeleton.py closed` prints them with every card on file read against them. The rules, mechanical in `skeleton.py`
-and `precut.py` for every card registered from 2026-11-12:
+The client's Overused stumping strategies page (`guidelines/client/learning-modules/overused-strategies-2026-11-21.md`)
+closes 45 lessons in six families, each already deciding two or more accepted tasks: "if your task's answer only
+flips because of one of these, it will be returned as a repeated lesson, even in a new domain and with new data."
+The guard holds them as lesson keys (`fingerprint/skeleton_vocab.json` `closed_lessons`, with the lessons next to a
+card in `closed_near`), and `skeleton.py closed` prints them with every card on file read against them. The page was
+read twice (34 cards on 2026-11-12, 11 more on 2026-11-21) and each key carries its closing date. The rules,
+mechanical in `skeleton.py` and `precut.py`:
 
 - **The lesson the call turns on is never closed** (`skeleton.lesson_closed`, BLOCK). Same mechanism and the same
   kind of fix is the same lesson: a new domain, new data or a new way of detecting it does not make it new. A deciding
@@ -300,25 +320,59 @@ and `precut.py` for every card registered from 2026-11-12:
   `effort.json` route per closed lesson, asserted in `checks.py`).
 - **No stack**: a chain whose lessons are all closed is refused (`skeleton.lesson_closed_stack`), and a closed lesson
   counts as taught, so a chain more than half closed or taught is refused (`skeleton.lesson_taught`).
+- **A card registered before a lesson closed meets that lesson as WARN.** The WARN is a return risk at review, never
+  a pass: the announcement of 2026-11-21 says tasks already submitted are reviewed against the same rules.
 - **Never accepted however rare**, from the same page: one planted factor, a stated rule applied, a field read
   correctly, a hindsight replay. And two tasks may not analyse the same records: a public release already used on
   file is used again only on different records.
 
+**The eleven cards of 2026-11-21 and what each takes off the table** (the fix the page calls "already used" is the
+thing a new deciding step may not be):
+
+| Card | The fix already used | What it closes here |
+|---|---|---|
+| Who takes the option depends on the offer | model take-up, price on the takers' own risk | any option priced on the average while the takers self-select |
+| The treatment changes who is left to measure | everyone as assigned, or trimming bounds | `treatment_changes_who_is_observed`; a label the outcome selects is next to it |
+| The outcome runs on a different clock | test which clock the outcome follows, compare on it | `exposure_basis_decoupled` (starts against hours, landings against flight hours); an origin at the announcement or at the last renewal is next to it |
+| The source reads high or low | measure the bias on cases with a checked value, correct every reading, by group | `record_check_reporter_error`, `anchored_second_reading`: any stump whose remedy is one factor from a both-observed sample |
+| Some groups are recorded far less completely | each group's completeness from an independent source, grossed up | `optional_record_unlogged_changes`, `linkage_missing_not_at_random`: any stump whose remedy is a gross-up by a recording share |
+| Old figures are on an old basis | restate every period to the target basis | trending, re-rating, one price date, replacement cost |
+| The projection holds fixed something the change will move | carry the knock-on period by period | a queue, a level, a load or follow-on events that respond to the option; a filed change to the forward window is next to it |
+| A straight line or an average misprices the margin | fit the shape, value each change at its own point | `marginal_not_average`, `scaling_diminishing_returns`; a fixed part plus a per-unit part, a stock sized by lots, a convex function of a path and a measured step response are next to it |
+| Credit only what would not have happened anyway | build the without-it baseline, credit the excess | incrementality of a tool, a push or a rule |
+| Extrapolating past the range the data has seen | learn the shape from units or periods that reached it | `extrapolation_beyond_observed_range` |
+| Scored on the same data used to choose it | score on data the choosing never touched | selection or tuning leakage |
+
 **What is still open** (`references/open-ground.md`, with the evidence):
 - **Kinds of loss the page does not touch**: the assumption a run names and waves through, when it is not a card's
   (N09 today's structure for all history, N10 gaps at the observed rate, N11 a passed test certifying the unit, N13
-  the latest rate as the end state, N14 a second record set aside on a failed link, N01 proportional scaling, N02
-  and N17 a forward window the history does not carry); a response assumed instead of measured (L15) and the
-  marginal unit (L17, supporting only, taught twice); a published formula whose generating process the data
-  contradict (L22); a shallow path whose own checks cannot see the condition (L37, the common-error benchmark).
-- **Dimensions the page's five families never reach** (their keys are untaught on file): conservation and balance
-  (`conservation_residual_attribution`); structure that changes (`time_varying_membership`); aggregation algebra
-  (`non_additive_aggregation`); nonlinear functionals of a path (`nonlinear_functional_of_path`); position on a
-  network (`position_on_network_effect`); hidden state (`stock_flow_accounting`, `latent_structure_estimation`); the
-  recording algorithm (`record_algorithm_inversion`, never decided by one field read); support and units of account
-  (`support_effect`).
+  the latest rate as the end state, N14 a second record set aside on a failed link); a published formula whose
+  generating process the data contradict (L22); a shallow path whose checks are of the wrong kind on honest data
+  (L37, the common-error benchmark); a signal the run measures and keeps as a sensitivity check where it has to be
+  fitted and carried into the total (L01 to L07, and all four runs on the client's hardest survey example).
+- **Estimators that are more than one closed fix.** Several recording effects tangled with each other and with who
+  the units are, separated in one model with a signal the recording cannot move as the proof
+  (`recording_effects_separated_jointly`, taught once); a pull fitted across two randomised arms because neither is
+  unbiased (`starting_point_anchoring`, taught once); a recording algorithm whose inversion is estimation and not a
+  gross-up (`record_algorithm_inversion`, next to the completeness card: the note says what is estimated beyond a
+  share); a delivery or supply process the outcome itself sets (`endogenous_supply_instrument`); what a reader was
+  served against what its source held (`served_state_outlives_source_failure`); an experiment that reaches one of
+  several readers (`experiment_reaches_one_reader`); standards with no common item linked over a network of shared
+  raters (`local_standards_linked_by_shared_raters`).
+- **Dimensions the page's six families never reach**: conservation and balance
+  (`conservation_residual_attribution`, `stock_flow_accounting`, `unmetered_component`); structure that changes
+  (`time_varying_membership`, `term_ended_by_another_units_event`, `terms_reset_at_maturity`); aggregation algebra
+  (`non_additive_aggregation`); position on a network (`position_on_network_effect`); hidden state
+  (`latent_structure_estimation`, `stopped_units_return`, `rival_process_by_state_dependence`); support and units
+  of account (`support_effect`). `skeleton.py open` prints the keys no accepted task teaches.
+- **Next to a card, so a WARN to answer**: a nonlinear functional of a path and a fixed-plus-variable relation (the
+  margin card), a filed change to the forward window and a queue replay (the projection card), a record read as of
+  its date and two sources for level and mix (the completeness card), a calibrated proxy (the calibration card), a
+  second channel past a plateau (the range card), a back-test that cannot see the condition (the card for a score on
+  the choosing data). Each may decide only where the note shows the mechanism or the fix is not the card's.
 - **The approved anatomy** (Part 0): a quantity no record holds, instruments with different blind spots assigned part
-  by part, a target no instrument covers. It is a way of placing new lessons, never a chain to copy.
+  by part, a target no instrument covers. It is a way of placing new lessons, never a chain to copy, and its
+  commonest corrections are now cards (Part 1d).
 
 **The stump screen, at the draw** (`references/stump-screen.md`): three to five candidate traps written on paper and
 each put through seventeen tests (off the closed page, not a reflex, nothing filed, the clean-data test, two records at
@@ -329,10 +383,14 @@ and one sentence not covering the members) before the card is registered and bef
 and the table goes in the note's `## Stump screen` (`precut.py` from 2026-11-13). The platform's runs are the only
 measure of difficulty: no judge, reader or in-house pass solves the task, so the idea has to hold on paper first.
 
-**Our own live builds against the page** (`skeleton.py closed`, 2026-11-12): task1 v3, task5 v4, task8 v19, task12
-v1, task13 v4, task15 v2, task19 v1, task20 v2 and task21 v1 turn on a lesson the page now closes, and task12 and
-task15 are stacks of closed lessons. They were registered before the page and meet the rule as a WARN; each is a
-return risk at review, and a re-root moves its deciding lesson to the open ground.
+**Our own live builds against the page** (`skeleton.py closed`): of the six builds READY in slots 1 to 10, task8 v20
+turns on a lesson the read of 2026-11-21 closed (a second reading anchored on the first, measured on scripts also
+marked cold: the calibration card), task1 v6, task3 v8 and task4 v14 turn on lessons next to a card (the
+completeness card, and the margin card twice), and task5 v5 and task9 v4 read open by key (task5's three stumps are
+recording shares measured against an independent count, which a reviewer may read as the completeness card whatever
+the key says). Among the older builds task12, task15, task19 and task21 turn on a closed lesson and task12 and
+task15 are stacks. Each was registered before its card and meets the rule as a WARN; each is a return risk at
+review, and a re-root moves its deciding lesson to the open ground.
 
 ## Part 1d. The core: the review's own run, and stumps of construction
 
@@ -359,6 +417,46 @@ what the record cannot hold, and the overlap between instruments pins it. **So a
 observation-process judgment.** A mechanism of the world carries supporting results; it opens a member only where
 the record cannot show it and a referee pins it (a stock no record holds, a balance's residual, an algorithm's
 output to invert: Part 1c's hidden-state rows, never its physics-on-a-shipped-network rows).
+
+**The commonest observation-process corrections are now closed** (the read of 2026-11-21, Part 1c): a group's
+recording completeness from an independent source and a gross-up; a source's bias measured on checked cases and
+divided out; old figures restated to the target basis; everyone followed as assigned where the treatment changes
+who is recorded. An observation-process stump whose whole remedy is one of those is a repeated lesson, however new
+the record. What stays open is an observation process whose **estimator is more than the card's fix**: the share or
+the bias has no checked sample and no independent count that hands it over, so it is identified from structure
+(cross-reports that pin shares only up to a level, a balance that must close, a randomised arm that is biased like
+the other); two or more recording effects are tangled with each other and with who the units are, so each appears
+only in a joint fit; the record is an algorithm's output and the inversion needs the unit's own state; the sources
+are assigned part by part and the overlap that would calibrate one of them is itself selected. The note's `Closed
+strategies:` line says, for every observation-process stump, what is estimated beyond the nearest card's fix.
+
+**What the client's three hardest examples add** (`guidelines/client/examples/1.txt`, `16.txt` and `17.txt`; a profile of
+difficulty, never a chain, and two of the three decide on lessons the page holds closed):
+- **Each decisive step needs its own fitted model, and naming it is not solving it.** "Being told 'the newest
+  cohorts return less' is not enough": the cohorts are compared at equal age, a lifetime share is fitted for cohorts
+  with little history and every cohort carried forward on a lag profile. "Once named, it is still hard": a pressure
+  measure is built, fitted with open cases censored, shown to beat the calendar, and the offer's terms argued to
+  remove it. "Knowing that misreporting exists doesn't give the answer; each correction has to be estimated and
+  shown to change the total."
+- **The runs lost by stopping one move short of fitting.** They saw the deadline pattern and kept it as a
+  sensitivity check ("not a uniquely identified correction"); cut at a threshold where a model was needed; showed
+  both start arms and declined to say which was biased where a joint fit answers it; computed older cohorts' hours
+  near the right level and kept the recent ones as central; wrote that a habit was still growing and held the mix
+  flat. So the stump is placed where the pack makes the fitted correction identified and the prompt asks for a
+  committed figure, and the design names the sensitivity-only route as a shortcut with its wrong answer.
+- **A tangled neighbour hides one effect until both are fitted.** Rushed interviews near a deadline are shorter and
+  long interviews are larger households, so a one-way cut shows nothing for length. Where the world's process
+  tangles two effects, the one-way reflex (a group-by, a plot) passes its own check.
+- **Independence is shown as a table and stated in the answer blocks.** Each step left out alone and in pairs, with
+  the figure and the call each time: "leave out any one correction and the cost is still 19.6 to 21.4 million, over
+  budget; leave out any two and it drops to 16.1 to 17.6 million"; "with the decay found and the pooled hours kept,
+  the call is Band 4 ... the call is Band 6". The lattice in `core.py` already holds those figures; the note's
+  `Decisive steps:` line and the Step-by-Step's closing paragraph carry them.
+- **The decisive steps' answers are asked for in the decision's words.** "Tell me how many in-scope housing and
+  insolvency referrals we'll get each year, and the hours a case of each kind will take from start to finish under
+  the new agreement" asks for both steps' answers and names neither method.
+- **The shallower steps are named as shallower** (a cap stated in the schedule, open cases counted, the module's
+  decliners), every run got them, and the rubric's weight sits on the fitted steps.
 
 **What the three sheets share**, each a test in the stump screen (`references/stump-screen.md` tests 9 and 14 to
 17) and a line of the note's `## Stump core`:
@@ -397,7 +495,13 @@ output to invert: Part 1c's hidden-state rows, never its physics-on-a-shipped-ne
    matrix beside the call's: the graded figures against the stumps, dense where the call's is sparse. `corelib.py`
    prices every route of the lattice on the rubric and refuses a core where a run that loses any one stump still
    earns over 50, where the reflex route or the rigorous standard route earns too much (30 and 50), or where a
-   stump has no figure of its own (`supplemental-stumping` Parts 0 and 1).
+   stump has no figure of its own (`supplemental-stumping` Parts 0 and 1). **Each stump's own figure is its
+   critical component** (the client's page of 11/20: the block lists "the two or more decisive, challenging steps
+   and the correct answer to each", and "a model that gets one step wrong should still be able to earn the
+   others"): it falls when that stump is lost alone and is earned when any other is, the prompt asks for it as a
+   quantity of the decision, and a figure that falls with two stumps is an ask. `corelib.py` refuses a core whose
+   component falls with two stumps or with none, or a stump with no component of its own (`critical components
+   independent`).
 
 **How the core is found** (`references/core-method.md`). Level 5 is an exposure matrix: members down the side,
 judgments across the top, and three or more judgments that each flip a different member, so every shortcut files a
@@ -416,7 +520,7 @@ the strongest model at its highest effort; `/draw`, or stages 0 to 2 of `/build`
 `Regimes:`) and `generator/core.py`: the world's observation process on arrays, the truth, the golden estimator,
 every route of rule 2, the lattice of shortcuts, the referee's scores and the variant battery, ending on
 `corelib.run(spec)` (`corelib.py`: it prints the core table and `CORE PASS level 5`, `level 4` or `CORE FAIL`, and
-its selftest holds ten cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
+its selftest holds eighteen cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
 files and documents under the note's `## Build brief` (`World:`, `Frozen:`, `Files:`, `Never filed:`, `Goldens:`,
 `Free:`) and moves no switch, size, margin or estimator in it. When the cut pack breaks a core assertion the build
 stops and the architect is resumed with the failing figure; a margin is never repaired by the builder.
@@ -439,7 +543,10 @@ checked, bounded and broken members on two of our builds is a house shell like a
 One hidden or planted thing that, once caught, flips the answer, in any of its forms (`CLAUDE.md`): rule application
 (would the literal procedure give the answer with no judgment?), data semantics (would one sentence of clarification
 make it routine?), a planted defect or decoy (is the hard part finding something rather than analysing it?), a
-shallow hidden factor, a replay, a single-fact stump, an unpinned ambiguity. Several side by side are still banned.
+shallow hidden factor, a replay, a single-fact stump, an unpinned ambiguity, and, by name on the client's page of
+11/20, **only one decisive step**: "even when the deciding step is real analysis, if it is the only challenging part
+of the task, catching it gives the whole answer and missing it gives none" (its example: one insight that busy weeks
+cluster, after which the answer is a direct count). Several side by side are still banned.
 
 ### 2.2 The hidden factor record
 
@@ -476,12 +583,25 @@ inside a flood-frequency, persistence and return-level task, keep; a treatment t
 present only in the last two treated weeks, send back; competing exits as the one hard step on public loan data,
 keep but thin; survey microdata losing points at three different steps, keep.
 
-### 2.3 The one-fact test, counted
+### 2.3 The client's three tests: one fact, clean data, effort
 
-Name the single most useful sentence a reviewer could give a run ("the meters changed in 2021", "that file is a
-sample", "five of the stores also had a price cut") and count the results it rescues from the careful pass. A third
-or fewer passes; more than half is a redesign. A legitimate method choice that is the hardest step does not fail the
-test (nothing was hidden), but it makes the task thinner: build the results around it.
+**The one-fact test, counted.** Name the single most useful sentence a reviewer could give a run ("the meters
+changed in 2021", "that file is a sample", "five of the stores also had a price cut") and count the results it
+rescues from the careful pass. A third or fewer passes; more than half is a redesign. A legitimate method choice
+that is the hardest step does not fail the test (nothing was hidden), but it makes the task thinner: build the
+results around it. The page of 11/20: "if telling the solver one fact makes the rest routine, the stump is a planted
+thing."
+
+**The clean-data test.** "A solver that cleans the data perfectly and reads every instruction correctly should still
+be able to reach the wrong answer through a reasonable but insufficient analysis." So with every file complete,
+de-duplicated, correctly keyed and every document read, the reflex route (Part 3.3) still files the wrong call and
+the wrong figures, and what separates it from the golden is an estimate, never a repair or a reading. A stump whose
+remedy is a join, a union, a re-key, a filter or one field read correctly fails here whatever it is called
+(`references/open-ground.md`, the record-handling corrections measured dead). The note's `## Effort test` names the
+reflex route's analysis in one line and why a careful analyst would call it reasonable.
+
+**The effort test** is Part 3: "a solver with ten minutes, one with an afternoon and one with two days should each
+score clearly higher than the last".
 
 ### 2.4 Our own record, read against it
 
@@ -552,7 +672,13 @@ or named-assumption id). Then:
 - **Not sufficient.** Each stump, fixed alone on the reflex route, leaves the call wrong and rescues a third of the
   results or fewer. This is the one-fact test, run where the runs actually stand.
 - **The level.** Two such stumps is level 4; three, with the single drops on two or more distinct wrong answers, is
-  level 5. One is a one-trick build and is redesigned, whatever the chain around it looks like.
+  level 5. One is a one-trick build and is redesigned, whatever the chain around it looks like: it is the client's
+  "only one decisive step", sent back by name since 11/20.
+- **Independent, in the client's sense.** The stumps are the page's "two or more decisive, independent steps":
+  each needs its own estimate from its own records, no one sentence names two of them, and each owns a figure a run
+  earns whatever it did with the others (its critical component). The call may fall with any one of them (the
+  factorial's necessity) or only with two (the corrections needed together); either way every single drop and
+  every pair is in the lattice with its figure and its call.
 - **Run evidence overrides the design.** When a platform run makes a priced judgment unprompted, its line goes into
   `precedents.json` as a reflex, the judgment turns reflex, and the factorial is re-run before anything else.
 - **A stump that is a constructed factor, fixed by one routine step once told and visible in one cross-tab** is
@@ -615,10 +741,13 @@ for different reasons.
 
 **And three cautions that came with it:**
 - **Ask for the step, not only the call.** Give each stump a graded intermediate result of its own: the share of stops
-  paying again, the stayers' extra hours, B's resolved false merges, the contact load of each grow-in span. Results the
-  reflex route earns (reproduced counts, procedure-stated steps, assembly) are done and never stated as graded figures,
-  so the reflex route earns 30 of the rubric's 100 at most (`supplemental-stumping` Part 1 rule 4).
-  Every one of the three reviews asked for this first.
+  paying again, the stayers' extra hours, B's resolved false merges, the contact load of each grow-in span. It is
+  that stump's critical component (the page of 11/20): the prompt asks for it as a quantity the decision uses, in
+  the decision's words and never the method's ("the hours a case of each kind will take under the new agreement",
+  never "the hours corrected for the queue"), the block states its answer with its unit and band and no method
+  clause, and it sits in a requested deliverable. Results the reflex route earns (reproduced counts,
+  procedure-stated steps, assembly) are done and never stated as graded figures, so the reflex route earns 30 of the
+  rubric's 100 at most (`supplemental-stumping` Part 1 rule 4). Every one of the three reviews asked for this first.
 - **No clean signature.** A cause or response whose signature is a generator constant (a fixed load band, fixed hours
   and months, a smooth plan-graded fade) is modelled on sight. Give it noise, a rival explanation with an overlapping
   signature, and few or ambiguous reference cases, so the signature has to be estimated from the population.
@@ -728,9 +857,13 @@ type), `answer_shape`, `weight` and `chain_signature` (the areas of the results 
 chain and answer shape repeated anywhere on file, the weight of either of the last two builds and the answer shape
 of the last one, then `register`. Personas from `guard.py names`.
 
-**The closed page first.** `python3 .claude/skills/fingerprint/skeleton.py closed` lists the client's 34 closed
-strategies and every card on file against them: the lesson the call will turn on is chosen off that list, from the
-open ground (Part 1c, `references/open-ground.md` Parts 2 and 4), before anything else is drawn.
+**The closed page first.** `python3 .claude/skills/fingerprint/skeleton.py closed` lists the client's 45 closed
+strategies and every card on file against them, and `skeleton.py open` the lessons no accepted task teaches: the
+lesson the call will turn on is chosen off the closed list, from the open ground (Part 1c,
+`references/open-ground.md` Parts 2 and 4), before anything else is drawn. For every candidate stump, write the fix
+in one clause and read it against the page's "the fix already used" lines: a fix that is one of them (a gross-up by a
+share from an independent source, a factor from checked cases, a restated basis, a fitted curve valued at the
+margin, a without-it baseline, a held-out score) is a supporting step, whatever the record looks like.
 
 **The skeleton before the chain.** `python3 .claude/skills/fingerprint/skeleton.py lessons --min 2` lists every
 lesson already taught twice (by the client's accepted and level 3 tasks and our approved builds,
@@ -796,9 +929,17 @@ measurements.
 
 - [ ] Card registered with analysis type, answer shape, weight and chain signature; `guard.py mechanisms` and `slots`
       read; the abstraction sentence written and not writable against a build on file
-- [ ] The deciding lesson off the client's closed page (`skeleton.py closed`; no `skeleton.lesson_closed` or
-      `lesson_closed_stack`), every closed lesson a supporting step with its own route leaving the call standing,
-      and the Frontier check's `Closed strategies:` line written
+- [ ] The deciding lesson off the client's closed page, all 45 cards (`skeleton.py closed`; no
+      `skeleton.lesson_closed` or `lesson_closed_stack`, every `lesson_closed_near` answered), every closed lesson a
+      supporting step with its own route leaving the call standing, and the Frontier check's `Closed strategies:`
+      line written; no stump whose whole remedy is a card's "fix already used"
+- [ ] Two or more decisive, independent steps (the page of 11/20): each stump owns one figure, that figure is its
+      critical component (the answer, never the method), the prompt asks for it in the decision's words, it sits in
+      a requested deliverable, and it falls with that stump alone (`corelib.py`, `critical components
+      independent`); the Frontier check's `Decisive steps:` line written with each step left out alone and in pairs
+- [ ] The three tests in writing: one fact (a third of the results or fewer), clean data (the reflex route on
+      perfectly cleaned files still files the wrong call by a reasonable analysis), effort (each pass clearly
+      higher than the last); every decisive step reachable from the prompt, the data and the documents
 - [ ] The card's skeleton clear in `skeleton.py check` (no BLOCK: no severity 1 or 2 against anything on file, a
       client task or the slot's lineage, no severity 3 on a thin chain, a thin chain's deciding lesson not taught
       twice, no more than half the chain taught or closed, no house shell); the `## Frontier check` written (precedents

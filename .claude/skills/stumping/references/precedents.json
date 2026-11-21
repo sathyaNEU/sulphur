@@ -1,5 +1,5 @@
 {
- "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md), the example library (guidelines/client/examples/) and the client's review pages of approved tasks outside our dataset (L39 to L44, N32, R57 to R60; those tasks are not filed, so each entry carries the reviewer's record in general terms). A new id is added only from a run or a client page, never from a design.",
+ "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md), the example library (guidelines/client/examples/, with examples 1, 16 and 17 as the pages read on 2026-11-21 as L56 to L67, N40, N41 and R94 to R97) and the client's review pages of approved tasks outside our dataset (L39 to L44, N32, R57 to R60; those tasks are not filed, so each entry carries the reviewer's record in general terms). A new id is added only from a run or a client page, never from a design.",
  "precedents": [
   {
    "id": "L01",
@@ -1496,6 +1496,150 @@
    "move": "headline rates, cohort counts, joined row counts and a calibration sample's totals reproduced exactly; reproduced counts price nothing",
    "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
    "quote": "headline rates ... and notified cohort counts reproduce; 161,384 joined conversations and 20,540 thumbed reproduce"
+  },
+  {
+   "id": "L56",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a recording effect seen in the run's own table (the outcome recorded less often under one condition of how the record was made) kept as a sensitivity check and never fitted as a correction carried into the total, so the face-value figure and the call stood",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "ran it only as a sensitivity check ... \"sensitivity analysis, not a uniquely identified correction\""
+  },
+  {
+   "id": "L57",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a threshold cut on the recording condition (the affected records dropped and the rest reweighted) in place of a fitted model of the effect, which corrects the worst band and leaves the others and any second effect in",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "kept only interviews more than 14 days before the deadline and reweighted them ... 164,546 households and 16.07 million, under budget"
+  },
+  {
+   "id": "L58",
+   "kind": "loss",
+   "class": "narrow look at broad data",
+   "move": "two recording conditions tangled with each other and with who the units are read one at a time, so the second effect vanished behind the first and the units' make-up; no joint fit was run",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "reported in passing (6.19 minutes shorter) without separating the two effects. Fitted one at a time, the length effect disappears behind the deadline effect and household size"
+  },
+  {
+   "id": "N40",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a difference between two randomised arms shown and left unresolved because neither arm is known to be unbiased, where one pull fitted to both arms together answers which way the truth lies",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "\"establishes a question-start effect, not which arm is unbiased\""
+  },
+  {
+   "id": "R94",
+   "kind": "reflex",
+   "class": "missingness-measurement",
+   "move": "units that declined a module given a modelled chance of the outcome from their covariates, never dropped and never set to zero",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "all 4 handled the module decliners ... It is the one every run got"
+  },
+  {
+   "id": "L59",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a stream forecast from its own series (a trend, a bounded curve, a regression on a macro driver, a flat level) where the stream is generated by earlier cohorts of another stream and the cohorts had to be followed forward",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "Thirteen of the 16 runs forecast housing and insolvency referrals from the series itself, by trend, curve or flat level"
+  },
+  {
+   "id": "L60",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "the two streams linked unit by unit, then one conversion hazard by time since entry applied to every cohort, so the older cohorts' rate was carried to the newest ones and the forecast kept rising",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "applied one conversion hazard by months since first referral to every cohort. Because the older cohorts dominate, it still forecast 1,616, 1,762 and 1,825"
+  },
+  {
+   "id": "L61",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "a per-unit level that fell over the history read as the new normal (fewer sessions, a mix change, a settled level) and carried into the option, where the fall follows a state the option removes (a queue rationing time) and the level had to be read at the state the option creates",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "read it as fewer sessions, a mix change or a settled level, never as the waiting list rationing time"
+  },
+  {
+   "id": "L62",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the mature units' figure computed close to the right level and kept as a sensitivity while the recent, depressed figure stayed central",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "computed older, near-mature housing cohorts at 36.40 and 36.27 hours, close to the no-queue 37.57, but kept 31.36 and 29.55 as central and treated the older figure as a sensitivity"
+  },
+  {
+   "id": "L63",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "one decisive step found and fitted, the other input left at today's level, so the call moved to a different wrong answer",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "found the cohort decay (1,090, 760 and 661 referrals) but kept 5.14 and 31.36 hours ... and chose Band 4"
+  },
+  {
+   "id": "R95",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "open cases fitted as censored at the value logged to date where the dictionary says an open case's figure is to date; closed cases alone are not taken as the level",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "The best run's censored gamma on recent openings gave 5.14 ... the dictionary says open-case duration is time to date"
+  },
+  {
+   "id": "R96",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "a recorded total that sits at a contractual cap read as a ceiling and not as demand where the schedule states the cap",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "That billed hours sit at the cap (43,512 against 43,600 in 2025-26) is stated in the schedule and the operations update"
+  },
+  {
+   "id": "L64",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a falling per-order figure explained by the composition a cross-tab shows (basket shape) with no per-unit history rebuilt across the two systems, so the driver that sits in each unit's count of past uses was never measured",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "explained the fall through bracketing without ever building a per-customer use count"
+  },
+  {
+   "id": "L65",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the run wrote that the driver was still growing and that a flat level understates it, then held the latest month's mix flat for the forward year",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "\"trend is +4pp styles/month, so stable understates\" and held the September mix flat anyway"
+  },
+  {
+   "id": "N41",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "the demand an option would lose assumed as a round share and never measured, where units the option never reached give the measured lift",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "sized switch-off on a \"realistic 15% abandon\" rate it never measured"
+  },
+  {
+   "id": "L66",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "every option sized as a fixed per-order saving times current annual volumes, so a habit that keeps deepening unit by unit could not enter the forward year",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "sized options as fixed per-order savings times current annual volumes, so a habit that keeps worsening could not show up"
+  },
+  {
+   "id": "L67",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "the right action reached and the lift measured, with the cause still framed by the shallower story and the mix held flat, so the recovery was sized at a third of the reference",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "still framed the cause as bracketing, measured margin by basket shape rather than use count, and held the order mix flat, so it sized the recovery at EUR 38.6m, about a third of EUR 135.5m"
+  },
+  {
+   "id": "R97",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "rival explanations a dated calendar or a cost card can rule out (a finished sale, a rate change) cleared unprompted, and the latest month's figure seen as overstated by returns still to come",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "correctly found September overstated (EUR 20.02 against the reported 26.37) and cleared the sale and label rates"
   }
  ]
 }

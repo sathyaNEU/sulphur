@@ -40,7 +40,12 @@ lever.
   its work stays in the Step-by-Step.
 - **Read the triage's earned map first**: every criterion the higher-scoring run earned is either instruction-following,
   a figure no stump touches (cut), or a figure a lost stump moved by less than its band (replace).
-- **Critical components from different areas**, most of them results the hurried pass loses.
+- **Critical components are the decisive steps' answers** (the client's guidelines of 11/20): one per stump, each
+  that stump's own figure stated as the answer with no method clause, sitting in a deliverable the prompt asks for,
+  and independent, so a run that loses one stump still earns the others (`corelib.py`, the row `critical components
+  independent`). A figure that falls with two stumps or more is an ask, never a component.
+- **One to four asks, each hard and multi-faceted**: a rebuilt result joins an existing ask as one more facet (a
+  row, a period, a member) before it becomes a new ask; a long list of easy asks is a send-back by name.
 - **No result is won or lost on a surface cause**: no result turns on a field reading, a filed rule, a planted row or
   a built-in factor. Mess stays texture or an assembly result of its own.
 - Change the prompt's wording only where a result must be asked differently, with its unit kept, no rounding instruction added, and

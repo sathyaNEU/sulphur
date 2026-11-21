@@ -94,9 +94,12 @@ out loud leaves one step. Keep the three that sit on different axes and bear on 
 4. the variant battery: twelve or more defensible rebuilds of the golden's conventions, returning every graded
    figure and not only the members' (each figure's band is what its variants span);
 5. the referee: the golden's figure and each rival's on the slice;
-6. the graded figures (`figures`): two to five critical components (each stump's own figure) and the ask figures
-   (every member's figure, and the consequences the prompt will ask for), each on the same lattice keys and on the
-   rigorous standard route;
+6. the graded figures (`figures`): two to five critical components, one per stump and each that stump's own
+   answer (it falls when that stump is lost alone and is earned when any other is: the client's page of 11/20,
+   "a model that gets one step wrong should still be able to earn the others"), and the ask figures (every member's
+   figure, and the consequences the prompt will ask for, which fall with two stumps or more), each on the same
+   lattice keys and on the rigorous standard route; a figure that falls with two stumps is listed as an ask, never
+   as a component;
 7. `sys.exit(corelib.run(spec))`.
 
 **55 to 60 minutes.** Copy the printed tables into the note's `## Stump core` (the rubric table under `Earns:`).
@@ -134,9 +137,10 @@ reflex route that lands; a stump that does not move its own member, is worth und
 or reaches the call when fixed alone; an open member the direct or the rigorous route files right; fewer than two
 distinct wrong answers; no referee, a referee a rival also passes, or one that covers the target; a stump that is
 one step from its figure once named, or that cites a reflex. And on the rubric: no graded figures listed, or fewer
-than two critical components; a band that leaves one of its own variants outside; a run that loses one stump still
-earning over 50; the reflex route earning over 30; the rigorous standard route unpriced or earning over 50; a stump
-whose fix alone earns nothing (no figure of its own) or over a third.
+than two critical components; a critical component that falls with two stumps or with none, or a stump with no
+component of its own (`critical components independent`); a band that leaves one of its own variants outside; a
+run that loses one stump still earning over 50; the reflex route earning over 30; the rigorous standard route
+unpriced or earning over 50; a stump whose fix alone earns nothing (no figure of its own) or over a third.
 
 ## 4. What makes a stump sharp
 

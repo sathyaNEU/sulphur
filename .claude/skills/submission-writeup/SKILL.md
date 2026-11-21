@@ -1,6 +1,6 @@
 ---
 name: submission-writeup
-description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions numbered one per sub-ask, Critical Components 2 to 5 drawn from different areas of the results chain, Step-by-Step walking every result and showing the hurried analysis it rejects, closing on why no other conclusion survives), the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
+description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions as one numbered entry per ask, one to four, Critical Components as the decisive steps' answers, one per stump, each the answer and never the method, independent and in a requested deliverable, Step-by-Step walking every result and showing the hurried analysis it rejects, closing on why no other conclusion survives), the `Valid Stump?` field drafted from the runs at submission, the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
 ---
 
 # Writing the answer blocks
@@ -55,11 +55,12 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 |---|---|---|
 | 0 | `## Tags` (not pasted; for the card and the domain field) | 2 to 3 lines |
 | 1 | `## Final Recommendation` | 1 or 2 sentences, the deciding figure, what it rejects |
-| 2 | `## Supplementary Questions` | numbered, one number per sub-ask, grouped by file |
-| 3 | `## Critical Components` | 2 to 5 one-liners |
+| 2 | `## Supplementary Questions` | one numbered entry per ask (one to four), each entry its figure lines, grouped by file |
+| 3 | `## Critical Components` | 2 to 5 one-liners, one per decisive step: its answer, no method |
 | 4 | `## Step-by-Step` | about 6 to 10 numbered one-liners, then a short closing passage |
 
-Nothing else goes in the file. **Not written:** a format rationale, a justification block, a golden listing, key
+Nothing else goes in the file. The platform's `Valid Stump?` field is filled at submission from the runs, never
+before them (below, "The Valid Stump? field"). **Not written:** a format rationale, a justification block, a golden listing, key
 assumptions, an AI disclaimer, a chat-style introduction, placeholders or TODOs.
 
 **0. Tags.** The Sulfur major domain and subdomain in the client's exact wording (`guidelines/client/domains.txt`),
@@ -77,33 +78,54 @@ the headline result and the action it supports. This block answers the main reco
 > **Send the winter outreach team to Harlow district, not Brenton.** Harlow's excess is 41 cases a week once the
 > lab's testing growth is separated out; Brenton leads on the raw count (63) only because its testing doubled.
 
-**2. Supplementary Questions.** One clearly labelled answer per sub-ask, numbered in the prompt's order, grouped by
-file under `### <file.ext>` (the golden file's own name; the prompt asks for it by type), in the exact unit asked,
-at one precision with its band where reasonable methods differ (the prompt dictates no rounding). Where an ask is a requested file, the answer
+**2. Supplementary Questions.** One numbered entry per ask, in the prompt's order, and the prompt makes one to
+four of them (the client's guidelines of 11/20: "1 to 4 hard, multi-faceted supplementary asks rather than a long
+list of easy ones"). An entry opens on the ask in a few words and then gives its figures, one line per member,
+period or option as `a.`, `b.`, `c.` under the number: each line is still one criterion, and the block no longer
+reads as nineteen small questions. Entries are grouped by file under `### <file.ext>` (the golden file's own name;
+the prompt asks for it by type), in the exact unit asked, at one precision with its band where reasonable methods
+differ (the prompt dictates no rounding). Where an ask is a requested file, the answer
 **describes how that file should look** in one line (its rows and the figures in it), then gives the figures. Every
 described feature of a file or a chart (a column list, an ordering, a colour, where the visual sits) becomes a
 one-point criterion every run earns, so the description is as short as the reader needs.
 Each answer is graded at the main call's bar: it reproduces and is uniquely forced.
 
 > ### district_excess.csv
-> 1. Twelve rows, one per district, sorted by excess cases a week, highest first; columns district, raw weekly
->    cases, testing-adjusted excess (whole cases), 90 per cent interval (whole cases).
-> 2. Harlow 41 (interval 33 to 49); Brenton 9 (interval 2 to 16); ...
+> Twelve rows, one per district, sorted by excess cases a week, highest first; columns district, raw weekly
+> cases, testing-adjusted excess (whole cases), 90 per cent interval (whole cases).
+> 1. Excess cases a week in each district, with its 90 per cent interval:
+>    a. Harlow 41 (interval 33 to 49).
+>    b. Brenton 9 (interval 2 to 16).
+>    c. ...
 
 - **Concise is not summarised.** An ask owing a row-set gets every row as its own point, every column value named,
   in the deliverable's order.
 - **Never a markdown table** (pipes break, wide tables wrap, odd tables are an LLM tell).
 - A figure in two places has the same rounding in both; compute it once in code and carry it.
 
-**3. Critical Components.** 2 to 5 load-bearing results **every valid method must compute**, one line each, the
-figure in bold at its rounding everywhere else, **one per stump where the core has them** (each stump's own figure:
-the estimate it produces, the share or the size the record does not hold, the referee's score), never three
-restatements of one fit and never an assembly figure. These carry the most rubric weight per line, so every one is
-a figure the careful but hurried pass loses. Test: if a defensible method could skip it and still reach the answer,
-cut it; if the hurried pass also gets it right, it is a free criterion and it goes to the Step-by-Step.
+**3. Critical Components.** The decisive steps, and the correct answer to each (the client's guidelines of 11/20,
+section 4: "list the two or more decisive, challenging steps and the correct answer to each. The rubric's heaviest
+criteria are built from them"). 2 to 5 lines, **one per stump** (`generator/core.py`'s components), the figure in
+bold at its rounding everywhere else. Four rules, each the page's own:
 
-> 1. Testing volume in Brenton rose **104 per cent** year on year against **11 per cent** in Harlow.
-> 2. Harlow's testing-adjusted excess is **41 cases a week** (90 per cent interval **33 to 49**).
+- **The answer, not the method.** "The restated 2023 baseline is USD 4.2M", not "restate the baseline". The line
+  states the quantity in the deliverable's words, its figure, its unit and its band, and stops. No clause that says
+  how it was reached or what it corrects ("once the lab's testing growth is separated out", "so the cold marks are
+  the standard", "after the queue is taken out"): the method lives in the Step-by-Step, and a method clause in a
+  component reads as the step and grades the wording.
+- **Gradable.** The figure appears in a deliverable the prompt asks for, under a label that matches the line, and
+  the prompt asks for that quantity (`supplemental-stumping` Part 1 rule 3). A component the prompt never asks for
+  cannot be graded.
+- **Independent.** "A model that gets one step wrong should still be able to earn the others." Each component is
+  one stump's own figure: it falls when that stump is lost alone and is earned when any other is
+  (`corelib.py`, `critical components independent`). A figure that falls with two stumps (a total, the call's own
+  figure, a member's figure two corrections move) is an ask, never a component.
+- **Lost by the hurried pass.** Never an assembly figure, a count or a base, never three restatements of one fit.
+  If the hurried pass also gets it right, it is a free criterion and it goes to the Step-by-Step.
+
+> 1. Brenton's testing-adjusted excess is **9 cases a week** (90 per cent interval **2 to 16**).
+> 2. Harlow's cases with onset in the last three weeks, once every report is in, number **212** (band **198 to
+>    226**).
 
 **4. Step-by-Step.** A short numbered path from the raw files through each result to the recommendation and the
 supplementary answers, one sentence per step: the method, the shipped file it reads, and the figure it produces. At
@@ -116,7 +138,12 @@ the hurried method's figure from `figures.json`, then the data that overturn it.
 >    ascertainment, not incidence.
 
 Then **a short closing passage** (two to four sentences): why no other conclusion survives the prompt, the files and
-standard domain knowledge, naming each rival method and the fact that rules it out.
+standard domain knowledge, naming each rival method and the fact that rules it out. **It carries the independence
+of the decisive steps as figures**, from the core's lattice: the headline figure and the call with each step left
+out alone, and where it matters in pairs ("with the testing correction and without the reporting completion the
+call is Brenton at 63; with the completion and without the testing correction it is Carrow at 48"). The client's
+hardest examples close this way, and it is what a reviewer checks "two or more decisive, independent steps"
+against. Where one margin is thin, the passage says which and by how much.
 
 - Cite where a convention is pinned ("per the surveillance protocol"), never restate it. A convention a competent
   analyst could reverse is an unpinned fork, fixed in a shipped file.
@@ -146,19 +173,45 @@ standard domain knowledge, naming each rival method and the fact that rules it o
   reasoning can be checked end to end"), so careful partial work earns visible credit; inside a requested file, never
   as an extra one.
 
+## The Valid Stump? field
+
+The platform asks for it at submission (the guidelines of 11/20, section 6), so it is written after the runs, from
+`runs/triage.md` (`run-triage` drafts it), and kept in `submission.md` under `## Valid Stump?` once the build is
+routed SUBMIT. One short paragraph per decisive step the runs missed, answering three things:
+
+- **Where it fails:** which step the run got wrong and what it did instead, with the run's own figure.
+- **Why it's fair:** where the evidence sits in the data or the documents (the file and the field), and why a
+  careful analyst would find it.
+- **Why it takes reasoning:** the analysis needed to get it right, and why it stays hard once one knows what to
+  look for (what has to be built, fitted or separated after the step is named).
+
+The client's own example runs four sentences: what both runs did, where the evidence is, what getting it right
+means, and "knowing that misreporting exists doesn't give the answer; each correction has to be estimated". It is
+written in plain words with the runs' figures, names no method the prompt would have had to state, and never
+claims a step the runs made. A decisive step both runs landed is not listed; if that leaves fewer than two, the
+build is not submitted on this field's strength (`build-pipeline` stage 6).
+
 ## Rejection causes
 
 LLM tells (em dashes, odd tables, white space, extra headers, filler such as *leverage, robust, seamless,
 comprehensive*, hedging near the call); a figure that does not recompute; numbers that disagree between the blocks
 and the golden files (the most common defect); padding; a component another valid method skips; an unpinned
-convention; a conditional call; a golden ZIP whose file count differs from the prompt's.
+convention; a conditional call; a golden ZIP whose file count differs from the prompt's; a critical component
+that states a method, that the prompt never asks for, or that falls with another step's miss; a Supplementary
+Questions block that reads as a long list of small asks.
 
 ## Checklist
 
 - [ ] Exactly the four blocks plus tags; none of the banned blocks
 - [ ] Final Recommendation first, one or two sentences, the deciding figure, what it rejects and why
-- [ ] Supplementary Questions numbered one per sub-ask, grouped by file, each file's look described in one line
-- [ ] Critical Components 2 to 5, each a figure the hurried pass loses, one per stump where the core has them
+- [ ] Supplementary Questions as one numbered entry per ask (one to four), each entry's figures one per line,
+      grouped by file, each file's look described in one line
+- [ ] Critical Components 2 to 5, one per stump: the answer with its unit and band and no method clause, in a
+      requested deliverable and asked for by the prompt, each falling with its own stump alone
+- [ ] The closing passage states the figure and the call with each decisive step left out alone (and in pairs
+      where the call needs them together)
+- [ ] After the runs: `## Valid Stump?` with where it fails, why it is fair and why it takes reasoning for each
+      decisive step the runs missed
 - [ ] No figure every route reaches is stated in the Recommendation, the Supplementary Questions or the Critical
       Components (counts, rebuilt totals and bases sit in the Step-by-Step)
 - [ ] Step-by-Step walks every result and shows the hurried analysis it rejects with its figure; closing passage

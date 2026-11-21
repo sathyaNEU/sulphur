@@ -1,5 +1,5 @@
 {
- "_about": "Every task the client has shown us, as a skeleton in skeleton_vocab.json's keys, so guard.py check can refuse a draw that reskins one and can count how often the client's dataset already teaches a lesson. Sources: the Templated Task Examples page (Project Mark task review, five send-backs, each a pair from one fellow; read 2026-11-11), the Sulfur Depth Scale page with its task detail (guidelines/client/depth-scale-2026-11-09.md and depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/1.txt to 15.txt). status: accepted (in the client's dataset, counts as teaching its lessons), judgment_call (depth level 3, kept about half the time, counted), sent_back (returned; never counts as teaching, but a reskin of it is still refused). The first lesson in each list is the one the call turns on. Added 2026-11-14: three review sheets of other fellows' approved tasks (guidelines/client/approved-reviews-2026-11-14.md), ids review:*, each read from the reviewer's record because the packs are not on file.",
+ "_about": "Every task the client has shown us, as a skeleton in skeleton_vocab.json's keys, so guard.py check can refuse a draw that reskins one and can count how often the client's dataset already teaches a lesson. Sources: the Templated Task Examples page (Project Mark task review, five send-backs, each a pair from one fellow; read 2026-11-11), the Sulfur Depth Scale page with its task detail (guidelines/client/depth-scale-2026-11-09.md and depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/1.txt to 17.txt). status: accepted (in the client's dataset, counts as teaching its lessons), judgment_call (depth level 3, kept about half the time, counted), sent_back (returned; never counts as teaching, but a reskin of it is still refused). The first lesson in each list is the one the call turns on. Added 2026-11-14: three review sheets of other fellows' approved tasks (guidelines/client/approved-reviews-2026-11-14.md), ids review:*, each read from the reviewer's record because the packs are not on file. Added 2026-11-21: examples 16 and 17 (guidelines/client/examples/16.txt and 17.txt), two of the three the author pasted with the phase 2 guidelines as the library's hardest; the third is example 1, already on file, whose page was re-read that day and whose skeleton is unchanged. The announcement of that day says of the library \"Do NOT just copy them, they are likely already overused stumps\", and examples 1 and 16 decide on lessons the page of 2026-11-21 holds closed.",
  "entries": [
   {
    "id": "html:grocer-bays",
@@ -1386,6 +1386,96 @@
      "governing_standard",
      "primary_record",
      "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "example:16",
+   "status": "accepted",
+   "source": "guidelines/client/examples/16.txt",
+   "title": "Nominate band 5, not the program manager's band 6 (returning clients decaying by cohort, case hours thinned by the queue)",
+   "skeleton": {
+    "decision_form": "banded_call_on_figure",
+    "answer_pattern": "each_correction_alone_flips",
+    "lessons": [
+     "vintage_or_cohort_drift",
+     "projection_holds_moving_intermediate",
+     "completion_of_young_cohorts",
+     "censored_or_capped_observation"
+    ],
+    "mechanisms": [
+     "returning_clients_decay_by_cohort",
+     "queue_pressure_thins_case_hours",
+     "billed_hours_capped_by_commitment"
+    ],
+    "detection": [
+     "residual_by_subgroup",
+     "naive_depends_on_what_it_should_not",
+     "second_source_at_other_grain",
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "link_records_by_parsed_key",
+     "per_cohort_curves",
+     "complete_cohorts_from_later_rates",
+     "censored_regression",
+     "fit_on_producing_state_read_at_target",
+     "replay_event_by_event",
+     "back_test_select_estimator",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "governing_standard",
+     "quotes_or_costs",
+     "field_legend_or_dictionary",
+     "exogenous_long_record",
+     "notes_file_or_email",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "example:17",
+   "status": "accepted",
+   "source": "guidelines/client/examples/17.txt",
+   "title": "The arrears relief scheme does not fit its 18.2 million budget (three recording effects of a survey, each fitted)",
+   "skeleton": {
+    "decision_form": "certify_figure_against_line",
+    "answer_pattern": "no_single_correction_clears",
+    "lessons": [
+     "recording_effects_separated_jointly",
+     "starting_point_anchoring",
+     "impute_by_resembling_units"
+    ],
+    "mechanisms": [
+     "recorded_less_near_return_deadline",
+     "recorded_less_late_in_long_interview",
+     "band_answers_anchor_on_first_amount",
+     "module_decliners_more_often_behind"
+    ],
+    "detection": [
+     "naive_depends_on_what_it_should_not",
+     "unchanged_signal_diverges",
+     "natural_experiment_in_record",
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "joint_fit_of_recording_effects",
+     "one_pull_fitted_across_start_arms",
+     "impute_by_model_at_own_drivers",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "panel_or_survey_sample",
+     "second_grain_source",
+     "calendar_or_closures",
+     "reference_register",
+     "frame_or_roster",
+     "governing_standard",
+     "field_legend_or_dictionary",
+     "unused_distractor"
     ]
    }
   },

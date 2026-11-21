@@ -1,6 +1,6 @@
 ---
 name: fingerprint
-description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Every card also carries the client's own skeleton (decision form, deciding lessons, detection, resolving moves, file roles, answer pattern), and skeleton.py compares it element by element with every card, every lineage entry and every task the client has shown us (corpus/client_skeletons.json: the Templated Task Examples pairs, the 17 depth-scale tasks, the 15 examples) at the client's three severities (near copy, templated, variant), counts how often each lesson is already taught, and refuses a reskin, a re-pointed scaffold or a lesson taught twice, never cleared by differentiation. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 20 Project Mark cards kept (110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), filed as markNN.json (Mark's taskNN), with their shipped-ledger rows, are the already-submitted baseline every Sulfur draw is checked against.
+description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Every card also carries the client's own skeleton (decision form, deciding lessons, detection, resolving moves, file roles, answer pattern), and skeleton.py compares it element by element with every card, every lineage entry and every task the client has shown us (corpus/client_skeletons.json: the Templated Task Examples pairs, the 17 depth-scale tasks, the 17 examples) at the client's three severities (near copy, templated, variant), counts how often each lesson is already taught, and refuses a reskin, a re-pointed scaffold or a lesson taught twice, never cleared by differentiation. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 20 Project Mark cards kept (110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), filed as markNN.json (Mark's taskNN), with their shipped-ledger rows, are the already-submitted baseline every Sulfur draw is checked against.
 ---
 
 # Fingerprint
@@ -77,7 +77,7 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 |---|---|
 | `decision_form` | what is chosen and how (rank and name one; the k largest over a screen with a runner-up; act only if an interval clears a line; a set over a filed line; a count to a standard ...) |
 | `answer_pattern` | the result's shape (the winner climbs from far down; k of n pass with budget slack; the point says act and the interval says no ...); generic patterns identify nothing |
-| `lessons` | the deciding lessons, **the one the call turns on first** (106 keys, 43 of them closed by the client's page of 2026-11-12, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
+| `lessons` | the deciding lessons, **the one the call turns on first** (139 keys, 61 of them closed by the client's page as read on 2026-11-21 and 39 next to a closed card, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
 | `mechanisms` | the build's own physics as free slugs, so a near copy that keeps the mechanism is told from a templated build that re-points it |
 | `detection` | how the solver notices each |
 | `moves` | the resolving moves |
@@ -86,7 +86,7 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 Lineage entries carry theirs, so a re-root meets its own dead architectures. `skeleton.py` (imported by `guard.py
 check`, so register, heart and `/approve` all run it) compares the draw with every card, every lineage entry and
 everything the client has shown us (`corpus/client_skeletons.json`: the five pairs and their sent-back siblings, the
-17 depth-scale tasks, the 15 examples, the three approved review sheets of 2026-11-14 as `review:*`), with no window
+17 depth-scale tasks, the 17 examples, the three approved review sheets of 2026-11-14 as `review:*`), with no window
 and no differentiation:
 
 - **severity 1** when every deciding lesson, its resolving move, the mechanism, half the specific file roles and a
@@ -108,15 +108,20 @@ and no differentiation:
   accepted, a third reads as a re-set.
 - **The house shell:** a specific decision form with a specific answer pattern already on two live builds BLOCKs (the
   client's "a third task with the ... shell reads as a house template"); a form on four live builds WARNs.
-- **The client's closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`, held as
-  `closed_lessons` in `skeleton_vocab.json`, with twelve neighbours in `closed_near`): 34 lessons that already decide
-  two or more accepted tasks. A card whose deciding lesson is closed BLOCKs (`skeleton.lesson_closed`: "same mechanism
+- **The client's closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-21.md`, held as
+  `closed_lessons` in `skeleton_vocab.json`, with 39 neighbours in `closed_near`): 45 cards in six families, 61
+  lesson keys, each already deciding two or more accepted tasks. A card whose deciding lesson is closed BLOCKs (`skeleton.lesson_closed`: "same mechanism
   and the same kind of fix counts as the same lesson", so a new domain, new data or a new detection never clears it); a
   chain of closed lessons only BLOCKs (`skeleton.lesson_closed_stack`); a closed lesson counts as taught for the
   half-taught rule; a closed lesson as a supporting step WARNs (`skeleton.lesson_closed_support`: its route alone must
   leave the call standing); a deciding lesson next to a closed card WARNs (`skeleton.lesson_closed_near`, answered in
-  the note's `Closed strategies:` line). A card registered before `skeleton.CLOSED_FROM` (2026-11-12) meets these as
-  WARN.
+  the note's `Closed strategies:` line). **Each closed key carries its own closing date**: the 34 cards of the first
+  read close on `skeleton.CLOSED_FROM` (2026-11-12) and the 11 of the second on their `closed_from` (2026-11-21). A
+  card registered before a lesson's closing date meets that lesson's rules as WARN (the client reviews tasks already
+  submitted against the same page, so the WARN is a return risk and a re-root moves the deciding lesson); every
+  later card and every unfiled draft meets them in full. When the page is read again, the new cards are added to
+  `closed_lessons` with that read's `closed_from`, their neighbours to `closed_near`, and the selftest's dated
+  probes are re-run.
 - A card registered before `skeleton.RULE_FROM` meets every skeleton rule as WARN, so no build already past design
   flips; every later card and every unfiled draft meets it in full, and a card with no skeleton BLOCKs.
 
@@ -124,6 +129,7 @@ and no differentiation:
 python3 .claude/skills/fingerprint/skeleton.py check <taskNN or scratch card>   # the element-by-element read
 python3 .claude/skills/fingerprint/skeleton.py lessons --min 2                  # lessons already taught twice
 python3 .claude/skills/fingerprint/skeleton.py closed [taskNN]                  # the client's closed page, cards against it
+python3 .claude/skills/fingerprint/skeleton.py open                             # lessons no accepted task teaches, off every card
 python3 .claude/skills/fingerprint/skeleton.py matrix                           # every pair on file at 1 to 3
 python3 .claude/skills/fingerprint/skeleton.py selftest                         # the calibration below
 ```
@@ -133,8 +139,9 @@ reading; task4 architecture 7 against architecture 6 is flagged (one term added 
 the client approved (task6 v7, task457 shipped as task14 architecture 1, task2 v6 and task14 v3) stay apart pairwise
 and each passes as a new draw on the pair and lesson rules (the closed rule left out, since the page was drawn from
 accepted tasks), while the closed probes hold: a call on a closed lesson and a stack of them are refused, one closed
-supporting step beside a new deciding lesson is not, and task2 v6, whose deciding lesson the page has since closed,
-would be refused as a draw today; every accepted client task at level 4 or 5 and every example passes as a new draw against the rest, except the
+supporting step beside a new deciding lesson is not, a card on a lesson of the later read is refused as a draft
+or when filed after that read and warned when filed between the two reads, and task2 v6 and task14 v3, whose
+deciding lessons the page has since closed, would be refused as draws today; every accepted client task at level 4 or 5 and every example passes as a new draw against the rest, except the
 overlaps the client's corpus itself holds (example 14 is the recipe app's interval-unit lesson in its k-of-n shell;
 three or four accepted tasks already turn on interference, the interval unit and the split carried to the decision,
 so a new draw on one of them is the third copy); and a plain forecast with untaught lessons passes. Change a rule
@@ -281,7 +288,7 @@ BLOCK if any rule blocks, else WARN, else PASS; exit 1 on BLOCK.
 | `skeleton.own_lineage` | BLOCK at 1 and 2, WARN at 3 | the slot's own earlier architectures: a landed scaffold re-pointed |
 | `skeleton.lesson_taught`, `skeleton.lesson_once` | BLOCK, else WARN | the deciding lesson taught twice on a thin chain, or more than half the chain taught; once is a WARN |
 | `skeleton.house_shell` | BLOCK at four live builds, WARN at three | the decision form's use across live builds |
-| `skeleton.lesson_closed`, `skeleton.lesson_closed_stack` | BLOCK (WARN before `skeleton.CLOSED_FROM`) | the deciding lesson is on the client's closed page, or every lesson is |
+| `skeleton.lesson_closed`, `skeleton.lesson_closed_stack` | BLOCK (WARN for a card registered before the lesson's own closing date) | the deciding lesson is on the client's closed page, or every lesson is |
 | `skeleton.lesson_closed_near`, `skeleton.lesson_closed_support`, `skeleton.lesson_closed_half` | WARN | the deciding lesson next to a closed card; closed lessons as supporting steps; a card filed before the page that the closed count would refuse |
 | `skeleton.missing`, `skeleton.vocab` | BLOCK | no skeleton, or a key not in `skeleton_vocab.json` (WARN for a card registered before `skeleton.RULE_FROM`) |
 | `shell.lineage` | BLOCK | a re-root keeps a dead architecture's shell (task118 kept one across four worlds) |

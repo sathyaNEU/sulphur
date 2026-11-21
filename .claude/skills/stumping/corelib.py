@@ -48,10 +48,18 @@ a figure when its value sits inside the figure's band stretched by NEAR_MISS abo
 near miss, which the review gives back). corelib prices every route of the lattice on that rubric and refuses a core
 where a run that loses any one stump still clears ONE_LOST_MAX, where the reflex route clears REFLEX_MAX, or where
 fixing one stump alone on the reflex route earns nothing or more than a third.
+
+The critical components are the decisive steps (the client's guidelines of 11/20, guidelines/client/
+guidelines-2026-11-20.md: "list the two or more decisive, challenging steps and the correct answer to each", "a model
+that gets one step wrong should still be able to earn the others"). So every component figure is one stump's own:
+it is lost when that stump is lost alone and earned when any other stump is lost alone, and every stump has one. A
+figure that falls with two stumps is an ask. A core whose card was registered before INDEPENDENT_FROM meets this as
+WARN.
 """
 import itertools
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -66,6 +74,7 @@ REFLEX_MAX = 30.0    # what the reflex route (every stump lost) may earn; the de
 HINT_MAX = 100.0 / 3  # what fixing one stump alone on the reflex route may add
 BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its width on each side
 NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched by this about the golden
+INDEPENDENT_FROM = "2026-11-21T08:00:00Z"   # the client's guidelines of 11/20: the critical components independent
 
 
 def _key(ids):
@@ -100,6 +109,22 @@ def _precedent_kinds():
         return {r["id"]: r["kind"] for r in rows}
     except Exception:
         return {}
+
+
+def _registered(spec):
+    """When the card of the task this core belongs to was registered ("" for an unfiled draw or a selftest). The
+    task is read from the spec's label, or from the folder of the core.py that is running (taskNN/generator)."""
+    m = re.match(r"\s*(task\d+)\b", str(spec.get("task") or ""))
+    if not m and not spec.get("task"):
+        main = getattr(sys.modules.get("__main__"), "__file__", "") or ""
+        m = re.search(r"(task\d+)[\\/]generator[\\/][^\\/]+$", os.path.abspath(main)) if main else None
+    if not m:
+        return ""
+    try:
+        card = os.path.join(HERE, "..", "fingerprint", "cards", m.group(1) + ".json")
+        return json.load(open(card)).get("registered") or ""
+    except Exception:
+        return ""
 
 
 def _num(x):
@@ -361,6 +386,20 @@ def check(spec):
                 "; ".join("%s fixed alone earns %.0f" % (s, fixed[s]) for s in sids) +
                 (("; no figure of its own: " + ", ".join(flat)) if flat else "") +
                 (("; one sentence rescues over a third: " + ", ".join(rich)) if rich else ""))
+            # The critical components are the decisive steps, kept independent: each falls with one stump alone.
+            falls = {f["id"]: [s for s in sids if not _earned(f, f["values"][_key([s])])] for f in comps}
+            joint = sorted(fid for fid, ss in falls.items() if len(ss) != 1)
+            bare = [s for s in sids if not any(ss == [s] for ss in falls.values())]
+            reg = _registered(spec)
+            row("critical components independent", not joint and not bare,
+                ("each falls with one stump alone: " + ", ".join("%s with %s" % (fid, falls[fid][0]) for fid in sorted(falls)))
+                if not joint and not bare else "; ".join(
+                    (["%s falls with %s" % (fid, "+".join(falls[fid]) or "no stump (a reflex figure)") for fid in joint]) +
+                    (["no component of its own: " + ", ".join(bare)] if bare else []) +
+                    ["a component is one decisive step's answer, earned whatever happens to the other steps; a figure "
+                     "that falls with two stumps is an ask"] +
+                    (["registered before the rule of %s" % INDEPENDENT_FROM[:10]] if reg and reg < INDEPENDENT_FROM else [])),
+                warn=bool(reg) and reg < INDEPENDENT_FROM)
             rs, lacking = _route_score(spec, figs, "rigorous", gcall)
             row("the rigorous standard route on the rubric", rs is not None and rs <= ONE_LOST_MAX + 1e-9,
                 ("it earns %.0f (%.0f or under)" % (rs, ONE_LOST_MAX)) if rs is not None else
@@ -564,6 +603,14 @@ def selftest():
     s = copy.deepcopy(base)                     # a stump with no figure of its own
     s["figures"] = [f for f in s["figures"] if f["id"] != "C2"]
     expect("a stump whose fix alone earns nothing", s, 0, "fixed alone")
+    s = copy.deepcopy(base)                     # a component that falls with two stumps is not one step's answer
+    c1 = fig(s, "C1")
+    c1["lattice"] = {k: (0.25 if ("S1" in k.split("+") or "S2" in k.split("+")) else 0.60) for k in c1["lattice"]}
+    expect("a critical component that falls with two stumps", s, 0, "critical components independent")
+    s = copy.deepcopy(base)                     # a stump whose only figures are joint has no component of its own
+    c3 = fig(s, "C3")
+    c3["lattice"] = {k: (55.0 if "S1" in k.split("+") else 40.0) for k in c3["lattice"]}
+    expect("a stump with no component of its own", s, 0, "critical components independent")
     s = copy.deepcopy(base)                     # the strongest run unpriced
     del fig(s, "X")["routes"]
     expect("a figure with no value on the rigorous route", s, 0, "rigorous standard route on the rubric")

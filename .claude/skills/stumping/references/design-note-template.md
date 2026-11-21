@@ -170,9 +170,14 @@ Forcing: <the line; the golden family's spread and its nearest distance to the l
 Noun swap: <the nearest task on file or in the client's library by skeleton.py check, its nouns swapped into this
   one, and the elements that carry across unchanged (decision form, lessons, detection, moves, file roles, answer
   pattern); severity none>
-Closed strategies: <the lesson the call turns on, the client's closed card nearest it (skeleton.py closed) and how its
-  mechanism or fix differs; each closed lesson the chain keeps as a supporting step, the effort.json route that
-  applies it alone and the answer that route files, the golden call standing>
+Closed strategies: <the lesson the call turns on, the client's closed card nearest it (skeleton.py closed, all 45)
+  and how its mechanism or fix differs; for every stump, what is estimated beyond the nearest card's "fix already
+  used"; each closed lesson the chain keeps as a supporting step, the effort.json route that applies it alone and
+  the answer that route files, the golden call standing>
+Decisive steps: <for each stump: the answer it owns (its critical component, a figure with its unit, never its
+  method), the prompt's words that ask for it and the deliverable it sits in, the file and field where its evidence
+  sits, and what is left to do once it is named; then the independence table in one line: the figure and the call
+  with each step left out alone and in pairs (corelib's lattice)>
 
 ## Semantic fork table
 
@@ -240,7 +245,10 @@ Free: <what the build decides on its own: nouns beyond the people, Layer 1 textu
   precedent id that is unknown or a reflex, or a skeleton BLOCK (severity 1 to 3 against a build on file, a client
   task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught
   or closed; a decision form on four live builds). From `skeleton.CLOSED_FROM` on: a missing `Closed strategies:`
-  line, a deciding lesson on the client's closed page, or a chain of closed lessons only.
+  line, a deciding lesson on the client's closed page, or a chain of closed lessons only (a lesson closed by a later
+  read of the page binds every card registered after that read). From `precut.DECISIVE_FROM` on: a missing
+  `Decisive steps:` line, and in `corelib` a critical component that falls with two stumps or with none, or a stump
+  with no component of its own.
 - For a card registered from `precut.CORE_FROM` on (a WARN before it): a missing `## Stump core` or one of its nine
   labels, a missing `## Build brief` or one of its six labels, or a `generator/core.py` that is missing or does not
   exit 0 on `corelib`'s `CORE PASS level 4` or `5`.

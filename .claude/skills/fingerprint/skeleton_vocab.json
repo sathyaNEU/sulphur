@@ -163,8 +163,19 @@
   "anchored_second_reading": "a check reading made in sight of the first reading moves only part of the way to an independent one, so the differences the check records are a fraction of the true ones; the fraction is measured where the same items were also read independently, and the recorded differences are divided by it",
   "state_reset_at_inspection": "each unit is measured at one point of a recurring cycle and the measurement's own feedback resets the unit, which then moves until the next one, so the periods between measurements are placed from the unit's continuous output by time since its last measurement, within unit and net of period, never at the level its measured period shows",
   "local_standards_linked_by_shared_raters": "measurements made against different local standards share no measured item, so they are put on one basis through the raters common to two standards, each side first taken to its own standard, and the pairwise links adjusted over the network to the reference",
-    "served_state_outlives_source_failure": "a reader is served the last good value for its validity period after the source fails and a fresh one only at the entity's next refresh, so the share of sources failing is not the share of exposures degraded: the served state is replayed entity by entity from the refresh record with its validity and weighted by the exposure each entity carries, and it turns on whether the same entities fail again and again",
-    "experiment_reaches_one_reader": "an experiment withholds an input from one of the services that read it while a failure takes it from all of them, so the experiment prices one reader's use only: each other reader's loss is built from its own record of the exposures it could not serve and its own test, and added"
+  "served_state_outlives_source_failure": "a reader is served the last good value for its validity period after the source fails and a fresh one only at the entity's next refresh, so the share of sources failing is not the share of exposures degraded: the served state is replayed entity by entity from the refresh record with its validity and weighted by the exposure each entity carries, and it turns on whether the same entities fail again and again",
+  "experiment_reaches_one_reader": "an experiment withholds an input from one of the services that read it while a failure takes it from all of them, so the experiment prices one reader's use only: each other reader's loss is built from its own record of the exposures it could not serve and its own test, and added",
+  "adverse_selection_into_option": "an option, product or rule is priced on the average unit, but the units that opt in or out are the ones it favours, so take-up is modelled and the price or forecast set on the takers' own risk, never on the average",
+  "outcome_follows_other_clock": "time is measured from the wrong origin or on the wrong scale (from detection when one group detects earlier, in starts when wear follows running hours, by age when a calendar-wide shift hit every cohort), so which clock the outcome follows is tested and the comparison made on that clock",
+  "source_bias_calibrated_on_checked_cases": "a source (a self-report, a planning model, a forecast, an instrument, a score) reads systematically high or low against the truth and is used at face value, so its bias is measured on the cases that also carry a checked value and every reading corrected with it, by group where the bias varies",
+  "recording_completeness_by_group": "a count is events times the chance an event is recorded, and that chance differs by area, channel, event type or record quality, so each group's recording completeness is estimated from an independent source and grossed up (or the groups compared within one recorder) before they are compared",
+  "old_basis_restated_to_target": "past losses, costs or prices were recorded at old rates, old price levels or a cheaper valuation basis, so every period is restated to the target basis (current rates, one price date, replacement cost, the trended level of the target year) before it is averaged or projected",
+  "projection_holds_moving_intermediate": "the option changes an intermediate quantity (a level, a queue, waiting times, network load, follow-on events) that the forecast holds at today's level, so the knock-on effects are carried through period by period with the intermediate responding",
+  "curved_response_at_the_margin": "the response bends (diminishing returns, a threshold, a power law, a rising cost curve) and one slope or a per-unit average is used to value the extra unit, so the shape is fitted and each change valued at its own point on the curve",
+  "incremental_over_without_baseline": "a tool, push or rule is credited with every outcome it touches though some would have happened without it (an existing rule already catches them, the user was coming back anyway), so the without-it baseline is built and only the excess over it credited",
+  "scored_on_selection_data": "items, pairs, rules or settings were picked or tuned on one set of data and their performance is reported on that data or on data the tuning leaked into, so they are scored on data the choosing never touched (a later period, a split sample, other units)",
+  "recording_effects_separated_jointly": "an outcome is recorded less often under two or more conditions of how the record was made (a deadline near, a long interview) that are tangled with each other and with who the units are, so each recording effect is fitted in one model with the make-up held, shown to be recording against a signal the conditions cannot move, and every unit's missed chance carried into the total",
+  "starting_point_anchoring": "banded or bracketed answers are pulled toward the first amount offered and neither random start is unbiased on its own, so one pull is fitted to both start arms together and the band shares rebuilt"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -258,7 +269,10 @@
   "net_impossible_reverse_flows": "the gross flow netted of the flow that cannot happen, validated against the event's dated item where one exists and bounded where none does",
   "own_history_seasonal_difference": "the treated units' own change over the same months of earlier years, by the state that sizes the season, taken as the counterfactual",
   "network_adjustment_of_pairwise_links": "pairwise differences between units that share a rater, an item or an instrument adjusted by least squares over the network to a reference unit",
-    "add_each_readers_loss_from_its_own_record": "the loss through every other reader of the same input built from that reader's own record of what it could not serve and its own test, per unit it reaches, and added to the first reader's"
+  "add_each_readers_loss_from_its_own_record": "the loss through every other reader of the same input built from that reader's own record of what it could not serve and its own test, per unit it reaches, and added to the first reader's",
+  "joint_fit_of_recording_effects": "the true chance and each recording effect fitted together in one model (recorded chance = true chance x each condition's share), so effects tangled with each other and with the units' make-up are separated and each unit's missed chance follows",
+  "one_pull_fitted_across_start_arms": "one anchoring pull fitted to both random start arms together and the band shares rebuilt from it, since neither arm is unbiased on its own",
+  "fit_on_producing_state_read_at_target": "the outcome fitted against the state it was produced under (a queue's pressure, a load, a backlog) with unfinished cases censored, shown to beat the calendar, and read at the state the option creates"
  },
  "file_roles": {
   "governing_standard": "a standard, policy, rule or terms that file the WHAT",
@@ -286,7 +300,7 @@
   "notes_file_or_email": "a notes file or email"
  },
  "closed_lessons": {
-  "_about": "The client's Overused stumping strategies page (guidelines/client/learning-modules/overused-strategies-2026-11-12.md): 34 lessons that already decide the answer in two or more accepted tasks, all closed. A lesson keyed here may be a supporting step of a new task, never the step that flips its answer; a chain whose lessons are all closed is a stack of repeats; same mechanism and the same kind of fix is the same lesson whatever the domain, data or detection. skeleton.py findings() blocks a card whose deciding lesson (lessons[0]) is closed, or whose chain is closed or taught for more than half its lessons, and counts every closed lesson as taught.",
+  "_about": "The client's Overused stumping strategies page (guidelines/client/learning-modules/overused-strategies-2026-11-21.md; first read 2026-11-12 with 34 cards, read again 2026-11-21 with 45): lessons that already decide the answer in two or more accepted tasks, all closed. A lesson keyed here may be a supporting step of a new task, never the step that flips its answer; a chain whose lessons are all closed is a stack of repeats; same mechanism and the same kind of fix is the same lesson whatever the domain, data or detection. skeleton.py findings() blocks a card whose deciding lesson (lessons[0]) is closed, or whose chain is closed or taught for more than half its lessons, and counts every closed lesson as taught. An entry with `closed_from` was closed on that read (the eleven cards of 2026-11-21); the others on skeleton.CLOSED_FROM. A card registered before a lesson's closing date meets that lesson's rules as WARN.",
   "selection_on_peak_baseline": {
    "card": "Units picked at an extreme fall back anyway (regression to the mean)",
    "family": "who ended up in the data",
@@ -501,14 +515,118 @@
    "card": "Hindsight leaks into the evaluation",
    "family": "how it was measured or recorded",
    "accepted_tasks": 2
+  },
+  "adverse_selection_into_option": {
+   "card": "Who takes the option depends on the offer (adverse selection)",
+   "family": "who ended up in the data",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "treatment_changes_who_is_observed": {
+   "card": "The treatment changes who is left to measure",
+   "family": "who ended up in the data",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "outcome_follows_other_clock": {
+   "card": "The outcome runs on a different clock",
+   "family": "time, follow-up and timing",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "exposure_basis_decoupled": {
+   "card": "The outcome runs on a different clock",
+   "family": "time, follow-up and timing",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "source_bias_calibrated_on_checked_cases": {
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 10,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "record_check_reporter_error": {
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 10,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "anchored_second_reading": {
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 10,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "recording_completeness_by_group": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "optional_record_unlogged_changes": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "linkage_missing_not_at_random": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "old_basis_restated_to_target": {
+   "card": "Old figures are on an old basis (restate before using)",
+   "family": "how it was measured or recorded",
+   "accepted_tasks": 4,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "projection_holds_moving_intermediate": {
+   "card": "The projection holds fixed something the change will move",
+   "family": "model and method choice",
+   "accepted_tasks": 6,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "curved_response_at_the_margin": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "marginal_not_average": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "scaling_diminishing_returns": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice",
+   "accepted_tasks": 5,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "incremental_over_without_baseline": {
+   "card": "Credit only what would not have happened anyway",
+   "family": "model and method choice",
+   "accepted_tasks": 4,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "extrapolation_beyond_observed_range": {
+   "card": "Extrapolating past the range the data has seen",
+   "family": "model and method choice",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
+  },
+  "scored_on_selection_data": {
+   "card": "Scored on the same data used to choose it",
+   "family": "model and method choice",
+   "accepted_tasks": 3,
+   "closed_from": "2026-11-21T08:00:00Z"
   }
  },
  "closed_near": {
-  "_about": "Lessons that share a closed card's mechanism family but differ in mechanism or fix as written here. As the deciding lesson they WARN: the design note's Frontier check answers, in its Closed strategies line, why the mechanism or the fix differs from the card named.",
-  "treatment_changes_who_is_observed": {
-   "card": "Outcomes are hidden by the intervention itself",
-   "family": "who ended up in the data"
-  },
+  "_about": "Lessons that share a closed card's mechanism family but differ in mechanism or fix as written here. As the deciding lesson they WARN: the design note's Frontier check answers, in its Closed strategies line, why the mechanism or the fix differs from the card named (the nearest card; a key sits next to one card here and the note answers every card it touches).",
   "confounded_history_of_use": {
    "card": "Self-selection into exposure: compare a unit with itself",
    "family": "who ended up in the data"
@@ -542,7 +660,7 @@
    "family": "how it was measured or recorded"
   },
   "detection_rate_changes_outcome": {
-   "card": "The instrument changed (drift or step change)",
+   "card": "Some groups are recorded far less completely than others",
    "family": "how it was measured or recorded"
   },
   "seasonal_shift_calibration": {
@@ -550,20 +668,120 @@
    "family": "how it was measured or recorded"
   },
   "fixed_nuisance_component": {
-   "card": "A co-occurring change is tangled with the treatment",
-   "family": "how it was measured or recorded"
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
   },
   "bounded_outcome_headroom": {
    "card": "The pooled effect does not transfer to a target with a different mix",
    "family": "carrying an effect to a new place"
   },
   "calibrated_proxy_for_lost_attribute": {
-   "card": "The instrument changed (drift or step change)",
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
    "family": "how it was measured or recorded"
   },
   "level_and_mix_from_two_sources": {
-   "card": "The instrument changed (drift or step change)",
+   "card": "Some groups are recorded far less completely than others",
    "family": "how it was measured or recorded"
+  },
+  "target_subset_selected_by_score": {
+   "card": "Who takes the option depends on the offer (adverse selection)",
+   "family": "who ended up in the data"
+  },
+  "label_observed_by_outcome": {
+   "card": "The treatment changes who is left to measure",
+   "family": "who ended up in the data"
+  },
+  "calendar_grid_shift": {
+   "card": "The outcome runs on a different clock",
+   "family": "time, follow-up and timing"
+  },
+  "response_before_the_trigger": {
+   "card": "The outcome runs on a different clock",
+   "family": "time, follow-up and timing"
+  },
+  "renewal_resets_hazard": {
+   "card": "The outcome runs on a different clock",
+   "family": "time, follow-up and timing"
+  },
+  "proxy_link_differs_by_arm": {
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
+   "family": "how it was measured or recorded"
+  },
+  "starting_point_anchoring": {
+   "card": "The source reads systematically high or low (calibrate on checked cases)",
+   "family": "how it was measured or recorded"
+  },
+  "record_algorithm_inversion": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded"
+  },
+  "record_as_of_its_date": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded"
+  },
+  "recording_effects_separated_jointly": {
+   "card": "Some groups are recorded far less completely than others",
+   "family": "how it was measured or recorded"
+  },
+  "forward_window_structure_change": {
+   "card": "The projection holds fixed something the change will move",
+   "family": "model and method choice"
+  },
+  "intensive_margin_response": {
+   "card": "The projection holds fixed something the change will move",
+   "family": "model and method choice"
+  },
+  "queue_or_capacity_replay": {
+   "card": "The projection holds fixed something the change will move",
+   "family": "model and method choice"
+  },
+  "staggered_conversion_at_renewal": {
+   "card": "The projection holds fixed something the change will move",
+   "family": "model and method choice"
+  },
+  "behavioural_response_measured": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
+  },
+  "response_at_crossing_point": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
+  },
+  "nonlinear_functional_of_path": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
+  },
+  "degradation_form": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
+  },
+  "lot_size_cycle_stock": {
+   "card": "A straight line or an average misprices the margin",
+   "family": "model and method choice"
+  },
+  "route_pre_emption": {
+   "card": "Credit only what would not have happened anyway",
+   "family": "model and method choice"
+  },
+  "second_channel_past_plateau": {
+   "card": "Extrapolating past the range the data has seen",
+   "family": "model and method choice"
+  },
+  "analog_event_calibration": {
+   "card": "Extrapolating past the range the data has seen",
+   "family": "model and method choice"
+  },
+  "validation_cannot_see_condition": {
+   "card": "Scored on the same data used to choose it",
+   "family": "model and method choice"
+  },
+  "transitions_inflated_by_response_error": {
+   "card": "A noisy explanatory variable flattens the slope",
+   "family": "noise and small numbers"
+  },
+  "state_reset_at_inspection": {
+   "card": "An early spike inflates the average (use the settled level)",
+   "family": "time, follow-up and timing"
   }
  }
 }

@@ -1,8 +1,12 @@
-# Overused stumping strategies (Project Sulfur, task design), read 2026-11-12
+# Overused stumping strategies (Project Sulfur, task design), read 2026-11-21
 
-Kept verbatim as the client's own page, pasted by the author on 2026-11-12. It sits beside `stumping-strategies.md`
-and `../deep-reasoning.md` and governs where it is newer than a skill. The skeleton guard carries its 34 cards as
-closed lessons (`.claude/skills/fingerprint/skeleton_vocab.json`, `closed_lessons`; `skeleton.py closed` lists them).
+Kept verbatim as the client's own page, pasted by the author on 2026-11-21 (the page first read on 2026-11-12 held 34
+cards in five families; this read holds 45 in six). It sits beside `stumping-strategies.md`, `../deep-reasoning.md`
+and `../guidelines-2026-11-20.md` and governs where it is newer than a skill. The skeleton guard carries its 45 cards
+as closed lessons (`.claude/skills/fingerprint/skeleton_vocab.json`, `closed_lessons`; `skeleton.py closed` lists
+them). The eleven cards new on this read are marked `(new 2026-11-21)` in this file only, a house mark and not the
+client's. The paste collapsed the examples of two cards (censoring, competing risks) and stopped at the last card,
+so those two example lists and the three closing notes are carried from the read of 2026-11-12.
 
 ---
 
@@ -23,12 +27,12 @@ step that flips the answer.
 **Stacking two of them is not new.** A task whose answer needs two strategies from this list, and nothing new, is
 still a repeat.
 
-All 34 strategies are closed: none can be the deciding step of a new task.
+All 45 strategies are closed: none can be the deciding step of a new task.
 
 Families: Who ended up in the data; Noise and small numbers; Time, follow-up and timing; Carrying an effect to a new
-place; How it was measured or recorded. Showing 34 of 34 strategies.
+place; How it was measured or recorded; Model and method choice. Showing 45 of 45 strategies.
 
-## Who ended up in the data (5 strategies, 25 accepted tasks)
+## Who ended up in the data (7 strategies, 31 accepted tasks)
 
 **Units picked at an extreme fall back anyway (regression to the mean).** 7 tasks. Closed.
 The trap: Units or periods were chosen because they were unusually bad or unusually good, so they drift back toward
@@ -75,6 +79,23 @@ Accepted examples (3): Intercept surveys of park visits used to estimate a share
 where heavy repeat voters inflate acceptability. Injury notices where workers notified twice get double selection
 chances.
 
+**Who takes the option depends on the offer (adverse selection).** 3 tasks. Closed. (new 2026-11-21)
+The trap: An option, product or rule is priced on the average customer, but the people who opt in or out are the ones
+it favours.
+The fix already used: Model who will take it up and price or forecast on the takers' own risk, not the average.
+Accepted examples (3): A cheaper flood policy that only homes riskier than their segment average would switch to. A
+deductible buy-down taken mostly by policyholders who claim more than their rating says. Weather-index cover where
+buyers leave the intervals a seasonal outlook makes unlikely to pay.
+
+**The treatment changes who is left to measure.** 3 tasks. Closed. (new 2026-11-21)
+The trap: The intervention moves people out of the group where the outcome is recorded (they switch plan, stop
+working, quit before the logged step), so what remains is no longer comparable across arms.
+The fix already used: Measure everyone as assigned, following them wherever they went, or bound the effect for the
+selection (trimming bounds).
+Accepted examples (3): A price notice that moves some subscribers to another plan before churn is counted. A
+job-search offer whose wage effect is read only on claimants who found work. An app test where one arm loses more
+people before the step that writes the log.
+
 ## Noise and small numbers (5 strategies, 24 accepted tasks)
 
 **Small units top the ranking by chance (shrinkage).** 8 tasks. Closed.
@@ -117,7 +138,7 @@ The fix already used: Subtract a placebo baseline built by shifting the events t
 Accepted examples (2): Ride-back offers matched to rides by station and time without a customer key. Foodborne illness
 attributed to a market hall, net of ordinary eating exposure.
 
-## Time, follow-up and timing (10 strategies, 35 accepted tasks)
+## Time, follow-up and timing (11 strategies, 38 accepted tasks)
 
 **Follow-up is still open, so unfinished cases are not failures (censoring).** 8 tasks. Closed.
 The trap: Many units have not had the full window yet. Counting them as non-events, or using their planned end dates,
@@ -164,6 +185,15 @@ carryover, saturation).
 The fix already used: Split the effect by prior exposure and carry the target schedule through it.
 Accepted examples (3): Daily outreach pulses tested one at a time, planned as 91 consecutive contacts. Smart-thermostat
 demand response that fades over consecutive hot event days. Storm-day rating for a season the book has never insured.
+
+**The outcome runs on a different clock.** 3 tasks. Closed. (new 2026-11-21)
+The trap: Time is measured from the wrong origin or on the wrong scale: from detection when one group detects earlier,
+in starts instead of running hours, by age when a calendar-wide shift hit everyone.
+The fix already used: Test which clock the outcome actually follows (a common origin, the usage counter, the calendar
+period) and compare on that clock.
+Accepted examples (3): Two regions' equipment lives, where one region simply finds wear earlier. Turbine part wear
+counted in starts or in fired hours, chosen by which one fits a single life curve. A cohort compared with past
+cohorts at the same age when a calendar-wide rebound lifted every cohort.
 
 **Values at a measurement limit are bounds, not numbers.** 2 tasks. Closed.
 The trap: Readings below a detection limit or timeouts at a time limit are treated as exact values or dropped.
@@ -253,7 +283,16 @@ The fix already used: Rescale the effect to each unit's own base (business stock
 Accepted examples (2): A task force that removes a fixed number of late jobs per branch, rescaled to branch size.
 Advice points whose effect depends on posts relative to the local business stock.
 
-## How it was measured or recorded (7 strategies, 19 accepted tasks)
+## How it was measured or recorded (10 strategies, 38 accepted tasks)
+
+**The source reads systematically high or low (calibrate on checked cases).** 10 tasks. Closed. (new 2026-11-21)
+The trap: Self-reports, a planning model, a forecast or an instrument is biased against the truth, and its values are
+used at face value.
+The fix already used: Measure the bias on cases where both the source and a checked value exist, and correct every
+reading with it (by group where the bias varies).
+Accepted examples (4): Self-reported vaccination corrected with the false-yes rate found on card checks. Interview
+heights restated to the basis measured at home visits. An installer's heat-loss estimates scaled to the evening load
+a pilot actually metered. Classifier scores recalibrated on labelled outcomes before being read as probabilities.
 
 **The instrument changed (drift or step change).** 5 tasks. Closed.
 The trap: A sensor, satellite or test changed partway through, so part of the trend is the measurement.
@@ -261,6 +300,15 @@ The fix already used: Find the break against unaffected series or arms and corre
 Accepted examples (4): Satellite fire counts after the orbit's pass time drifted. A weather station's summer highs
 with an undocumented instrument step. A telescope site's clear-night share across a cloud-sensor break. A bias test
 where an instrument change hit only one randomised arm.
+
+**Some groups are recorded far less completely than others.** 5 tasks. Closed. (new 2026-11-21)
+The trap: A count is events times the chance an event gets recorded, and that chance differs by area, channel, event
+type or record quality, so part of the gap between groups is recording.
+The fix already used: Estimate each group's recording completeness from an independent source and gross it up, or
+compare within the same recorder, before comparing groups.
+Accepted examples (4): A household panel that captures far less online buying than store buying, grossed up by
+channel. One county that records hospital stays much more completely than its neighbours. A rent register that only
+sees a minority of rises within a tenancy. Deaths that never link for records missing a birth date.
 
 **The survey changed, not the world.** 4 tasks. Closed.
 The trap: A redesign, a rotating panel or a recall change moves the headline: different people answered, or they were
@@ -270,6 +318,15 @@ before reading the change.
 Accepted examples (4): Unreported work injuries where recall length and interviewer experience differ between
 periods. A survey rate restated to the legacy instrument after a redesign. A jump in the share working driven by
 re-interviews in a rotating panel. A business index that steps down at every panel re-contact.
+
+**Old figures are on an old basis (restate before using).** 4 tasks. Closed. (new 2026-11-21)
+The trap: Past losses, costs or prices were recorded at old rates, old price levels or a cheaper valuation basis, so
+using them as they stand misprices today.
+The fix already used: Restate every period to the target basis (current rates, one price date, full replacement cost,
+the trended level of the target year) before averaging or projecting.
+Accepted examples (4): Crop insurance loss ratios restated to current premium rates. A household consumption measure
+whose items were priced at different dates, put on one price basis. Recorded storm damage on a depreciated basis,
+stepped up to repair cost. A custody cost priced at the trended level of the year it will be paid.
 
 **Seasons fall in different places (fieldwork timing).** 2 tasks. Closed.
 The trap: Groups were surveyed or exposed in different seasons, so the comparison mixes in seasonality.
@@ -302,6 +359,50 @@ The fix already used: Replay the rule with only what was known at each decision 
 the deciding step.)
 Accepted examples (2): A cost-of-living inflation bias correction judged in hindsight. Battery savings from a dispatch
 plan that knew each month's peak in advance.
+
+## Model and method choice (5 strategies, 21 accepted tasks)
+
+**The projection holds fixed something the change will move.** 6 tasks. Closed. (new 2026-11-21)
+The trap: The option changes an intermediate quantity (a lab value, a queue, waiting times, network load, follow-on
+events), but the forecast keeps it at today's level.
+The fix already used: Carry the knock-on effects through period by period, letting the intermediate respond.
+Accepted examples (4): A dose change whose effect runs through a blood level that moves with it. Published waiting
+times that pull in more referrals as they fall. Missed court dates that trigger warrants, which cause more missed
+dates. A network expansion whose new coverage keeps taking business from existing zones year after year.
+
+**A straight line or an average misprices the margin.** 5 tasks. Closed. (new 2026-11-21)
+The trap: The response bends (diminishing returns, a threshold, a power law, a rising cost curve), but one slope or a
+per-unit average is used to value the extra unit.
+The fix already used: Fit the shape and value each change at its own point on the curve.
+Accepted examples (4): Extra marketing pushes that land on days where response is still steep. Extra court hours that
+only buy the slower kinds of case. A short book whose borrowing cost rises with the size taken. Incidents that grow
+much more slowly than workload, so a flat per-call rate flags the wrong people.
+
+**Credit only what would not have happened anyway.** 4 tasks. Closed. (new 2026-11-21)
+The trap: A new tool, push or rule is credited with every outcome it touches, but some would have happened without it
+(an existing rule already catches them, the user was coming back anyway).
+The fix already used: Build the without-it baseline and credit only the excess over it.
+Accepted examples (4): A fraud screen credited only with accounts an existing rule would not already block. A reminder
+push that fires whether or not the user was about to act. Feedback that counts only for readers who would not have
+returned that week anyway. Relief staffing credited only with work the relief worker would not have done regardless.
+
+**Extrapolating past the range the data has seen.** 3 tasks. Closed. (new 2026-11-21)
+The trap: The decision sits beyond the observed range (heavier load, hotter days, deeper discounts), and a fit from
+inside that range is stretched to it.
+The fix already used: Learn the shape at that range from units or periods that reached it, corrected for what else
+differs there.
+Accepted examples (3): Cable heating at loads these feeders never reached, learned from similar feeders that did. A
+demand-response baseline on the hottest afternoons, where cooling load flattens. Deep-discount demand read from
+clearance weeks rather than stretched from shallow promotions.
+
+**Scored on the same data used to choose it.** 3 tasks. Closed. (new 2026-11-21)
+The trap: Items, pairs or prompts were picked or tuned on one set of data, and their performance is reported on that
+same data or on data the tuning leaked into.
+The fix already used: Score on genuinely held-out data: a later period, a split sample, or units the tuning never
+touched.
+Accepted examples (3): Agency pairs selected on one year's co-movement, then shown to have high power on that year. A
+recommendation slate chosen on exploration days and scored on those same days. Prompt tuning on some contracts from
+the same customers whose other contracts form the test set.
 
 ---
 

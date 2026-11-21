@@ -1,7 +1,8 @@
-# The client's 15 accepted Sulfur tasks
+# The client's 17 accepted Sulfur tasks
 
 The client rebuilt its example library from tasks that stumped the models for reasoning reasons
-(`guidelines/client/examples/1.txt` to `15.txt`, index in `examples.txt`). In each one the runs cleaned the data and
+(`guidelines/client/examples/1.txt` to `17.txt`, index in `examples.txt`; 16 and 17 were read on 2026-11-21 with
+example 1's page as it stood then, the three the author shared as the library's hardest). In each one the runs cleaned the data and
 read the instructions correctly, often noticed the key issue, and then lost on judgment. Read two or three in or near
 the draw's domain before designing, **for the depth, never the template**: two tasks on the same pattern with the same
 data structure are duplicates. How to write the prompt itself is learned from `mark-prompts.md`.
@@ -26,9 +27,22 @@ strategy's label in `../../stumping/references/sulfur-strategies.md`.
 | 13 | Urban, policy impact | 0.44/8 | the cities were diverging before the rule, so a listing-cohort comparison | scaled the aggregate, re-ran on a log scale, found the cohort result then set it aside | WORKS IN FORM |
 | 14 | Education, program evaluation | 0.59/8 | standard errors clustered on the 84 allocated schools | default and robust errors | DOES NOT WORK (the client calls it "closer to a single-insight task"; 0.59 is one point under the bar) |
 | 15 | Education, variance components | 0.50/8 | a cohort-to-cohort variance term beyond sampling noise | read the bad cohorts as data bugs, kept one variance model throughout, accepted 15 schools as credibly below | WORKS |
+| 16 | Business & Operations, demand forecasting and capacity pricing | 0.285 (four runs; sixteen across four configurations) | two decisive steps on different records: returning clients followed cohort by cohort at equal age with a fitted lifetime share, and hours per case fitted against queue pressure with open cases censored and read at the no-queue level the new agreement creates | thirteen of sixteen extrapolated the stream from its own series; today's hours taken as normal; the mature cohorts' hours computed and kept as a sensitivity; the one run that found the decay kept today's hours and chose another wrong band | CLOSED AS A DRAW (young cohorts; a projection holding fixed what the change moves): the difficulty to match, never the lessons |
+| 17 | Survey Research, measurement correction | 0.31 (four runs) | three recording effects each fitted: a deadline effect dated from a separate fieldwork calendar, an interview-length effect that appears only in a joint fit with household make-up held, and a pull fitted across two random start arms; any one left out keeps the call, any two flips it | every run saw the deadline and start patterns and kept them as sensitivity checks; a 14-day cut-off in place of a model; the two effects read one at a time; no run chose between the start arms | WORKS (recording effects separated in one model is taught once; next to the completeness and calibration cards) |
 
-**What the library shows, across all 15.** The first wrong step is always a method shortcut, an unfinished chain,
+**What the library shows, across the first 15.** The first wrong step is always a method shortcut, an unfinished chain,
 dismissed evidence or a self-confirming check; in examples 6, 7 and 13 a run computed the right figure and set it
 aside. Planted-looking defects sit in examples 1, 4, 13 and 14 and decided nothing, because no run got far enough for
 them to matter. The two weakest by the client's own notes (12 and 14) are the two whose deep step is one named method,
 which is Mark's law 1.1b seen from the client's side.
+
+**What the three hardest add** (1, 16 and 17, with runs averaging 0.26, 0.285 and 0.31). Each has two or three
+decisive steps that need their own fitted models on different records, and the page shows their independence with
+figures (each step left out alone and in pairs, with the figure and the call). The prompts ask for the steps'
+answers as quantities the decision uses ("how many in-scope housing and insolvency referrals we'll get each year,
+and the hours a case of each kind will take from start to finish under the new agreement"; the qualifying
+households, the amounts owed and the cost by region, with "show how you got from the data to each figure") and name
+no method. The runs lost one move short of fitting: a signal kept as a sensitivity check, a cut-off in place of a
+model, two tangled effects read one at a time, a stream extrapolated from itself, today's level taken as normal.
+The client's announcement of 2026-11-21 says of the library "Do NOT just copy them, they are likely already overused
+stumps": two of the three decide on lessons its closed page holds (`../../stumping/references/open-ground.md` Part 4).

@@ -7,6 +7,15 @@ Where the client text is newer than a skill, the client text wins and the skill 
 
 ## Files
 
+- `client/guidelines-2026-11-20.md` (the guidelines page of 11/20, read 2026-11-21, the page a task is reviewed
+  against): the bar (two rollouts, average under 60), the basics, what a stump must not be (with "only one decisive
+  step" as a named send-back), what it should be (two or more decisive, independent steps; the one-fact, clean-data
+  and effort tests), the critical components as the decisive steps' answers (the answer and never the method, each
+  in a requested deliverable, independent), what else to keep in mind (no unstated conventions, the prompt must not
+  point the other way, every decisive step reachable) and how to fill in `Valid Stump?`.
+- `client/phase-2-announcement-2026-11-21.md`: the channel announcement that reopened the project: two rollouts,
+  re-runs loosened without spamming, at least two independent and challenging steps, tasks already submitted
+  reviewed against the same rules, and the examples not to be copied.
 - `client/latest_update.txt`: what changed in the current version. The bar (two runs, average under 60, losing for an
   analytical reason), the generated rubric, the banned stumps, deep reasoning and the rebuilt example library.
 - `client/overview.txt`: the welcome, program details, approval criteria, key requirements, the 18 answer shapes,
@@ -27,9 +36,16 @@ Where the client text is newer than a skill, the client text wins and the skill 
 - `client/learning-modules/`: prompt writing, prompt reminders, input files, data messiness, two-layer task design,
   golden output, glossary, and `stumping-strategies.md` (exported 2026-11-09): 77 investigation strategies across
   seven domain groups, each with its analysis type, answer shape, weight, chain of results, public data, scenario,
-  hurried failures and pins, and each group's shallow versions with the client's verdicts.
-- `client/examples/`: the rebuilt example library (15 tasks that stumped the models for reasoning reasons) and its
-  index.
+  hurried failures and pins, and each group's shallow versions with the client's verdicts;
+  `overused-strategies-2026-11-21.md`: the closed strategies, 45 cards in six families as read on 2026-11-21 (34 on
+  the first read of 2026-11-12), each with its trap, the fix already used and its accepted examples.
+- `client/depth-scale-2026-11-09.md` with `depth-scale-2026-11-09-detail.md`: the client's reading of 17 submitted
+  tasks on five depth levels, and each level 4 and 5 task in full.
+- `client/approved-reviews-2026-11-14.md`: three review sheets of other fellows' approved tasks (the review reads
+  its strongest run and audits forks blind).
+- `client/examples/`: the rebuilt example library (17 tasks that stumped the models for reasoning reasons) and its
+  index. `1.txt`, `16.txt` and `17.txt` are the three the author shared as the library's hardest on 2026-11-21 (runs
+  averaging 0.26, 0.285 and 0.31): the difficulty to match, never a template.
 - `client/quality-checks/quality.txt`: the reviewer-side quality checklist.
 - `determinism_judge_system_prompt.md`: the determinism judge's system prompt with Gate H set to the bar of
   2026-11-09 (H1 domain, H2 layers, H3 not one thing with the shallow hidden factor test, H4 difficulty throughout

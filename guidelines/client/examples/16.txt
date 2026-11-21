@@ -1,0 +1,77 @@
+Nominate band 5, Not the program manager's band 6: Rebuilt for returning clients and unrationed case hours, it costs $27.36 Million over three years
+Other
+Demand forecasting and capacity pricing
+hardest
+Business & Operations Analytics. The current model averaged 0.285 across 4 runs (0.22, 0.48, 0.22, 0.22); three runs chose Band 6 and the best run chose Band 4, and three other model configurations averaged 0.20 to 0.23.
+
+What makes this task strong
+Where the weight sits. Forecasting what the term will actually bill. The two inputs that set the band, the housing and insolvency referral stream and the hours a case takes, both look different in the history than they will under the new agreement, and each has to be rebuilt from case and client records. Taken at face value the data points to Band 6 (a stream that nearly doubled) or Band 4 (today's thinner cases). Only with both rebuilt does the term bill 81,617, 89,836 and 91,020 hours, which makes Band 5 cheapest at $27,358,633.
+Decisive steps, each hard to solve. (1) Cohort return decay. 81.0% of 2025-26 housing and insolvency referrals are consumer debt clients coming back, linked only through the client identifier (45.8% in 2022-23). Older cohorts are still returning, which hides a collapse in the newest ones: at equal age, 5.71% of the January to June 2024 cohort came back within twelve months against 1.27% of clients first seen since January 2025, about a quarter of the rate. Being told "the newest cohorts return less" is not enough. The solver has to compare cohorts at equal time since first referral (raw shares are age-biased), fit a lifetime share for cohorts with little history (6.6%, 95% interval 5.2% to 8.1%, from 87 returns among 10,358 clients) and carry every cohort forward on a lag profile to get 1,039, 764 and 729 referrals. (2) Hours thinned by the queue. Consumer debt cases opened in 2019-20 took 6.13 hours and those opened in 2025-26 took 5.02. The fall follows the queue the case was opened under, not the calendar: hours per case drop about 17.5% per unit of queue pressure for consumer debt and 16.9% for housing and insolvency, with hours per session unchanged. The new agreement has no cap and the backlog is released centrally, so no queue forms and term cases run at the no-queue level, 6.22 and 37.57 hours, not the pooled 5.48 and 33.26. Once named, it is still hard: the solver has to build a queue-pressure measure (waiting list at the previous month end per billable hour, by agency), fit it with open cases censored, show it beats the calendar (within-year slope 0.185 against 0.180 between years; calendar term nil once pressure is in), and then argue that the offer's terms remove the pressure.
+Why these count as independent. Each one moves the band on its own. With the decay found and the pooled hours kept, the call is Band 4: the pooled consumer debt hours of 5.48 alone cut billed hours to 76,318, 84,143 and 85,339 and make Band 4 about $0.64 million cheaper than Band 5. With the no-queue hours and the housing and insolvency stream extrapolated from its own history, or the newest cohorts given the July to December 2024 return share, the call is Band 6. The one run that found the decay shows this: it ended at Band 4 because it kept today's hours.
+Where the runs lost points. Across all 16 runs in the four configurations, 1 found the cohort decay and none found the queue effect. The three current-model runs at 0.22 fitted the housing and insolvency series itself (a bounded logistic curve, 2,067, 2,084 and 2,089, twice, and a real-wage regression, 2,145 to 2,288), put a consumer debt case at 5.04 to 5.15 hours and chose Band 6 on billed hours of 102,000 to 115,300. The best run (0.48) linked each housing referral to the client's first consumer debt referral, let progression differ by intake half-year (40.06% for January to June 2023 entrants against 5.14% for those from July 2025) and forecast 1,090, 760 and 661. It then used 5.14 hours for consumer debt and 31.36 for housing from a censored gamma on July 2023 to September 2026 openings, billed 74,256, 79,941 and 78,382 hours and chose Band 4. None of the 4 runs of the strongest other configuration found the decay.
+What it is an example of. A demand-and-pricing task where the history understates one driver and overstates another, and each distortion has to be measured from the records rather than assumed: a cohort comparison at equal age for the referrals, and a censored fit against queue pressure for the hours. Read it as a difficulty profile, not a template to copy.
+Note. Two further steps are shallower. Open cases have to be counted in the hours per case (a third of housing and insolvency cases are open; closed cases alone average 22.18 hours), but the dictionary says open-case duration is time to date, and housing and insolvency hours alone do not move the call (Band 5 holds from 31.87 to 47.48 hours). That billed hours sit at the cap (43,512 against 43,600 in 2025-26) is stated in the schedule and the operations update. The most arguable figure is the no-queue hours, which reads a causal effect forward to a level the recent data does not show. The cases actually opened at low pressure (6.13 and 36.93 hours) give the same band without extrapolation, but the thinnest single margin is housing and insolvency hours at the low end of 32.5 ($0.24 million, 0.9%, to Band 4), and consumer debt hours below about 5.64 flip the call to Band 4.
+Prompt
+Stakeholder ask
+Our financial counselling consortium has lodged its pricing for the agreement running 1 July 2027 to 30 June 2030, and the procurement board wants my recommendation in December. The pricing offers six committed-hours bands, and we nominate one at signing for all three years. Every committed hour is paid for whether we use it or not, and hours above the commitment cost the band rate plus the consortium's loading.
+
+I need the band that costs the program least over the three years on your central forecast. Our program manager wants Band 6, because housing and insolvency referrals have nearly doubled in two years and she expects that to carry on. The Minister has been told the referrals still waiting when the agreement starts will be taken on evenly: a third in each year, spread through the year, on top of new referrals.
+
+Alongside the band, I need what each of the six bands would cost and the hours we'll be billed in each year. Tell me how many in-scope housing and insolvency referrals we'll get each year, and the hours a case of each kind will take from start to finish under the new agreement. For consumer debt, give me your in-scope referral forecast for each year and how far off your method would have been a year ago, using only what was known then, on the twelve months just gone.
+
+Write it up as a board paper in Word, with a chart comparing what every band would cost, and build the workbook behind it for Finance. In the paper, say how you got each of those figures and why. The extract notes list a few known problems with the data, and not every file will be useful.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+fcp_band_board_paper.docx
+fcp_band_workbook.xlsx
+Input files
+A financial counselling program's reporting extract to September 2026 for three member agencies: the referral register with client identifiers, old and new category codes and two date formats (51,687 rows including the February 2024 migration duplicates), case-level casework hours with open cases at hours logged to date and one agency in minutes, the monthly service report, waiting list movements by stream and region, monthly provider claims, the data dictionary with extract notes and the extract manifest. Alongside are the current services agreement schedule, the consortium's pricing offer for the six bands, an October 2026 operations update, the Treasury budget parameters circular and ABS series for prices, wages, labour force, population, household spending, housing lending and area disadvantage, some of which are not useful.
+
+referral_register_2019_2026.csv
+casework_hours_2019_2026.csv
+monthly_service_report.csv
+waiting_list_snapshots.xlsx
+provider_claims_fy2025_fy2027.xlsx
+program_data_dictionary.xlsx
+extract_manifest.json
+services_agreement_schedule_2.pdf
+sfcc_pricing_offer_2027.pdf
+program_operations_update_oct2026.docx
+budget_planning_parameters_circular.pdf
+abs_cpi_adelaide_australia.csv
+abs_wage_price_index_sa.csv
+abs_labour_force_sa.csv
+abs_population_sa_quarterly.csv
+abs_household_spending_sa.csv
+abs_lending_indicators_housing_sa.csv
+abs_seifa2021_postal_areas.csv
+Final recommendation
+Nominate Band 5, 89,000 committed billable hours a year, for all three years. On the central forecast it costs $27,358,633 over the term, $1,790,979 less than the 76,000 hour band (Band 4) and $3,296,447 less than the 102,000 hour band (Band 6) the program manager wants.
+
+Step-by-step solution
+Build the referral record: drop the 189 rows loaded twice in February 2024, read both date formats, map the five old category codes to the two streams and remove screened-out referrals. That leaves 45,803 in scope (39,155 consumer debt, 6,648 housing and insolvency), with the 9,243 withdrawn before allocation kept in as demand.
+Compare billed hours with the committed volume (35,486, 38,490, 39,973 and 43,512 against 35,500, 38,500, 40,000 and 43,600): billed hours are a ceiling, not demand. The waiting list reached 5,264 at September 2026.
+Fit total hours per case as a gamma with each open case counted as taking at least the hours logged so far, after converting one agency's minutes to hours: 33.26 (housing and insolvency) and 5.48 (consumer debt) pooled; closed housing and insolvency cases alone average 22.18.
+Build each agency's queue pressure at the month a case opened (waiting list at the previous month end per billable hour delivered in the month) and relate hours per case to it with open cases censored: about 17.5% fewer hours per unit for consumer debt and 16.9% for housing and insolvency, hours per session unchanged, the same slope within and between years, no calendar effect once pressure is in.
+Read the hours with no queue: 6.22 (consumer debt) and 37.57 (housing and insolvency), against 6.13 and 36.93 from cases opened with almost no queue. The new agreement takes every referral with no cap and the Branch releases the backlog in monthly tranches, so every term case runs at this level.
+Build a delivery profile by month of case age for each level of pressure; laid over the cases actually opened, it reproduces billed hours within -1.7, -1.3 and -1.0% in 2023-24 to 2025-26.
+Link the two streams on the client identifier: 81.0% of 2025-26 housing and insolvency referrals are clients whose first in-scope referral was consumer debt (45.8% in 2022-23).
+Estimate the share of each consumer debt cohort that comes back, giving each cohort only the months it has had: 38.5% (January to June 2023), 22.2% (July to December 2024) and a fitted lifetime share of 6.6% (95% interval 5.2% to 8.1%) for the 10,358 clients since January 2025. At equal age, 5.71% against 1.27% within twelve months.
+Forecast housing and insolvency referrals as returns from every cohort plus new clients at their three-year average of 336 a year: 1,039, 764 and 729.
+Forecast consumer debt referrals per head on the real wage shortfall and annual inflation with the budget circular's parameters: 6,216, 6,093 and 6,088. Backtest to September 2025 with the drivers held at their September 2025 values: 5,882 against 6,838 (14.0% under); 6,535 (4.4% under) with the drivers as they came, shown only as a comparison.
+Run the waiting list forward to 30 June 2027 inside the 2026-27 commitment at the withdrawal rates since October 2025: 5,965 referrals (4,548 consumer debt, 1,417 housing and insolvency). A third is taken on in each year (1,516 and 472 cases), with no withdrawals after 1 July 2027 because the Branch holds the list centrally.
+Lay the delivery profile over the cases open on 1 July 2027, the waiting list share and the new referrals at the no-queue hours: billed hours of 81,617, 89,836 and 91,020, with 64,428 hours of term casework landing after 30 June 2030.
+Price every band (committed hours at the year's rate plus hours above the commitment at the rate plus 75%, unused hours paid for): $38,412,147, $35,302,698, $32,215,625, $29,149,612, $27,358,633 and $30,655,080 for Bands 1 to 6.
+Make the call: Band 5, which holds from 4.97% below to 9.85% above the billed hours, for housing and insolvency hours from 31.87 to 47.48, and for a return share up to 12.6%.
+Where the runs went wrong
+Extrapolating the stream from its own history. Thirteen of the 16 runs forecast housing and insolvency referrals from the series itself, by trend, curve or flat level. Two current-model runs fitted a bounded logistic curve (2,067, 2,084 and 2,089) and one regressed the series on a 48-month real-wage gap (2,145 to 2,288). Trend fits in other runs reached 2,256 to 3,355, and one log-linear trend 3,284 to 6,063, against the golden 1,039, 764 and 729.
+Linking without separating cohorts. One run linked housing referrals to earlier consumer debt clients but applied one conversion hazard by months since first referral to every cohort. Because the older cohorts dominate, it still forecast 1,616, 1,762 and 1,825.
+Today's hours taken as normal. Every run put a consumer debt case at 4.7 to 5.5 hours against the no-queue 6.22. Runs saw closed means fall from 6.13 to about 5.0 and read it as fewer sessions, a mix change or a settled level, never as the waiting list rationing time. The best run's censored gamma on recent openings gave 5.14.
+Counter-evidence seen and set aside. Two current-model runs computed older, near-mature housing cohorts at 36.40 and 36.27 hours, close to the no-queue 37.57, but kept 31.36 and 29.55 as central and treated the older figure as a sensitivity.
+One step right is not enough. The best run found the cohort decay (1,090, 760 and 661 referrals) but kept 5.14 and 31.36 hours, billed 74,256, 79,941 and 78,382 hours and chose Band 4, which costs $1.79 million more than Band 5 on the golden forecast.
+Justification
+The call turns on facts that each come from a different file. The housing and insolvency stream is falling because new consumer debt clients are not coming back at the old rate, and a term case takes the hours it takes with no queue behind it, not the rationed hours of recent years. Billed hours under the current agreement are a ceiling and not demand. With these in, the term bills 81,617, 89,836 and 91,020 hours and Band 5 is cheapest, holding from 4.97% below to 9.85% above that path. Pooled or closed-case hours move the call to Band 4, and housing and insolvency referrals extrapolated from their own history move it to Band 6.
+
+Read 2026-11-21 from the example library (pasted by the author with the phase 2 guidelines; labelled hardest).

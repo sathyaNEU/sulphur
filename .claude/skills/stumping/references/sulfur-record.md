@@ -214,6 +214,19 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   of them), and three of the six places Part 1b names (the split carried, selected units, the system's net) are closed
   as deciding lessons. Moved into `../SKILL.md` Part 1c, `../../fingerprint/skeleton.py` (the closed rule) and
   `open-ground.md` (the open dimensions).
+- **Phase 2 (2026-11-21): the page grew to 45 cards and the guidelines of 11/20 name "only one decisive step" as a
+  send-back.** The eleven new cards close a fourth of Part 1b's six places (the margin) and the commonest
+  observation-process corrections (a completeness gross-up, a bias calibrated on checked cases, a basis restated,
+  the treatment changing who is recorded). Read against them, of the six builds READY in slots 1 to 10: task8 v20
+  turns on a lesson now closed (a second reading anchored on the first, measured on scripts marked cold), task1 v6,
+  task3 v8 and task4 v14 on lessons next to a card, task5 v5's three stumps are recording shares from an independent
+  count (the completeness card by its fix, whatever the key), and task9 v4 is off the page. The critical components
+  were independent on task3, task4, task5 and task8 and joint on task1 (two stumps with no component of their own)
+  and task9 (one component falling with all three). The guidelines' other new rules (the critical components as the
+  decisive steps' answers in a requested deliverable, one to four multi-faceted asks, the clean-data test, the
+  `Valid Stump?` field) moved into `../SKILL.md` Parts 1c, 1d, 2.3 and 3.3, `corelib.py` (`critical components
+  independent`), `precut.py` (`Decisive steps:`), `../../supplemental-stumping/SKILL.md`,
+  `../../submission-writeup/SKILL.md`, `../../guide-to-prompt/SKILL.md` and `../../build-pipeline/SKILL.md`.
 - **The domain fit is read off the prompt's framing** (task2 arch 4, "summing tabulated blocks against stated tiers";
   task14 arch 1, "compliance lookups ... under a stated rule", approved on the same cut once the prompt opened on why
   the docket must rest on estimates). Moved into `../../guide-to-prompt/SKILL.md`.

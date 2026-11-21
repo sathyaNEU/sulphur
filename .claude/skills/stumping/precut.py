@@ -39,8 +39,12 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
                            `Noun swap:` (the nearest task on file or in the client's library, nouns swapped, and the
                            elements that carry across); from skeleton.CLOSED_FROM on, `Closed strategies:` (the
                            deciding lesson and why the client's closed page does not hold it, each closed lesson kept
-                           as a supporting step and the route showing it alone leaves the call standing); and the
-                           card's skeleton screen (fingerprint Part 1b, the closed rule included) clear
+                           as a supporting step and the route showing it alone leaves the call standing); from
+                           DECISIVE_FROM on, `Decisive steps:` (the client's page of 11/20: for each stump the
+                           answer it owns, which is its critical component, the prompt's words that ask for it, where
+                           its evidence sits in the pack, and the figure and the call with each step left out alone
+                           and in pairs); and the card's skeleton screen (fingerprint Part 1b, the closed rule
+                           included) clear
 
   ## Pinning list          every constant the golden's estimator uses that the world also holds (a base temperature, a
                            threshold, an exponent, a share, a draw per unit, a time constant), one row each: Constant |
@@ -95,10 +99,17 @@ DEEP_LABELS = ("Task type", "Domain test", "Swap", "Where the weight sits", "Lay
                "Pinned", "Run forecast", "Strategy label", "Lesson")
 TEMPLATE_LABELS = ("Chain signature", "Question form", "Nearest build")
 FRONTIER_LABELS = ("Precedents", "Shallow path checks", "Assumption made false", "Forcing", "Noun swap")
-# From skeleton.CLOSED_FROM (the client's closed strategies page, 2026-11-12): the deciding lesson and why it is not on
+# From skeleton.CLOSED_FROM (the client's closed strategies page, first read 2026-11-12; 45 cards as read
+# 2026-11-21, each key with its own closing date in skeleton_vocab.json): the deciding lesson and why it is not on
 # the page, and every closed lesson the chain keeps as a supporting step with the route showing it alone does not flip
 # the call.
 CLOSED_LABEL = "Closed strategies"
+# From DECISIVE_FROM (the client's guidelines of 11/20, guidelines/client/guidelines-2026-11-20.md, read 2026-11-21):
+# two or more decisive, independent steps, each with its own answer in a deliverable the prompt asks for. The note's
+# Frontier check carries `Decisive steps:` (each stump's own figure, the prompt's words that ask for it, where its
+# evidence sits, and the figure and the call with each step left out alone and in pairs).
+DECISIVE_FROM = "2026-11-21T08:00:00Z"
+DECISIVE_LABEL = "Decisive steps"
 # From SCREEN_FROM (the author's direction, 2026-11-13): the design note carries `## Stump screen`, three or more
 # candidate traps put through the eleven tests of references/stump-screen.md on paper before any code, three kept.
 SCREEN_FROM = "2026-11-13T00:45:00Z"
@@ -1317,6 +1328,15 @@ def closed_level(task_dir):
     return not reg or reg >= SK.CLOSED_FROM
 
 
+def decisive_level(task_dir):
+    """True when the card was registered from DECISIVE_FROM on, or no card is registered yet."""
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= DECISIVE_FROM
+
+
 def screen_level(task_dir):
     """True when the card was registered from SCREEN_FROM on, or no card is registered yet."""
     try:
@@ -1398,6 +1418,13 @@ def frontier_rows(task_dir, secs):
     rows.append(("frontier check: %s" % CLOSED_LABEL, "PASS" if ok else ("FAIL" if cl else "WARN"),
                  (v or "missing (stumping Part 1c: the deciding lesson off the client's closed list, closed lessons "
                   "only as supporting steps)%s" % ("" if cl else ", registered before the closed strategies"))[:110]))
+    dl = decisive_level(task_dir)
+    v = labelled(fc or "", DECISIVE_LABEL)
+    ok = bool(v) and len(v) >= 20
+    rows.append(("frontier check: %s" % DECISIVE_LABEL, "PASS" if ok else ("FAIL" if dl else "WARN"),
+                 (v or "missing (stumping Part 1d: each stump's own figure as its critical component, the prompt's "
+                  "words that ask for it, where its evidence sits, each step left out alone and in pairs)%s"
+                  % ("" if dl else ", registered before the guidelines of 11/20"))[:150]))
     pv = labelled(fc or "", "Precedents") or ""
     if pv:
         ids = set(re.findall(r"\b([LNR]\d{2})\b", pv))

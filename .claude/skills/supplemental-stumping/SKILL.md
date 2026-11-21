@@ -1,6 +1,6 @@
 ---
 name: supplemental-stumping
-description: Turn the results chain into asks and price the rubric so a run scores as low as the analysis allows (the Stumped gate reads the review's strongest run against 60; a run that loses any one stump stays at 50 or under and the reflex route in the twenties). Every figure the answer blocks state sits downstream of a stump, the weight is spread across the stumps so none carries it alone, each stump keeps one figure of its own, reflex work is done and never stated as a graded figure, and every band comes from the variant battery; corelib.py prices every route at design and effort.py on the cut pack. Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds every ask. Use after stumping fixes the core and the results chain and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
+description: Turn the results chain into asks and price the rubric so a run scores as low as the analysis allows (the Stumped gate reads the review's strongest run against 60; a run that loses any one stump stays at 50 or under and the reflex route in the twenties). Every figure the answer blocks state sits downstream of a stump, the weight is spread across the stumps so none carries it alone, each stump keeps one figure of its own and that figure is its critical component (the client's guidelines of 11/20: the decisive steps' answers, independent, each in a requested deliverable), the asks number one to four and each is multi-faceted, reflex work is done and never stated as a graded figure, and every band comes from the variant battery; corelib.py prices every route at design and effort.py on the cut pack. Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds every ask. Use after stumping fixes the core and the results chain and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
 ---
 
 # The Ask Layer
@@ -44,6 +44,25 @@ Two more keep the client's standard ("more careful work keeps earning more"; no 
 more than a third): a stump fixed alone on the reflex route earns something (it has a figure of its own), and adds a
 third of the rubric at most.
 
+**The critical components are the decisive steps, and they are independent** (the client's guidelines of 11/20,
+`guidelines/client/guidelines-2026-11-20.md` section 4). "List the two or more decisive, challenging steps and the
+correct answer to each. The rubric's heaviest criteria are built from them." "Give the answer, not the method."
+"Each step's answer must appear in one of the deliverables the prompt asks for." "A model that gets one step wrong
+should still be able to earn the others." So on the rubric the two heaviest blocks behave differently, by design:
+
+| Block | Points | What a run that loses one stump of three keeps |
+|---|---|---|
+| Recommendation | 18 | nothing where the call needs every stump; all of it where the call needs the corrections together and one alone leaves it standing (both forms are accepted, and the lattice says which) |
+| Critical components | 20 | the other stumps' components, about two thirds: each component is one stump's own figure, so it falls with that stump and no other |
+| Asks | 53 | the few figures the lost stump leaves inside their bands: most ask figures sit downstream of two stumps or more |
+| Instruction-following | 9 | all of it |
+
+`corelib.py` holds both properties at once: `critical components independent` (every component falls with exactly
+one stump, and every stump has one) and one stump lost at 50 or under. The second is carried by the asks and the
+call, never by tying the components together: a component that falls with two stumps is moved to the asks, and
+where one stump lost comes out over 50 the fix is an ask figure with more stumps on its path, or a silent ask
+figure cut.
+
 **Where the points went, on the record.**
 
 | Build | What the asks were | What the run kept |
@@ -79,7 +98,8 @@ platform's two runs are the only measurement (`/triage-runs`).
    smaller than the margin), *silent* (inside the band: a free criterion on that route). The approved sheets are
    this shape: the raw rates were wrong on all three conditions, the pilot transfer on every share of one arm, the
    wrong counterfactual on all six bridge pieces. A figure downstream of exactly one stump is that judgment
-   restated: each stump gets one of its own (Part 0's ladder) and the rest are compound. A chain where one stump
+   restated: each stump gets one of its own (Part 0's ladder), which is its critical component, and the rest are
+   compound and sit in the asks. A chain where one stump
    is the only analytical input of most figures is one thing under another name (`precut.py` counts it), so the
    overlap is between independent stumps, never one stump read at many cells.
 3. **Ask for what the estimate is used for.** The client's level 5 tasks ask follow-ups only the corrected
@@ -91,6 +111,16 @@ platform's two runs are the only measurement (`/triage-runs`).
    priced on the golden's footing; each member's distance to its line or its break-even; the size of what the
    record does not hold. Never name the intermediate the correction produces: an ask that names it hands over the
    decomposition (`../stumping/references/sulfur-record.md`).
+   **Each stump's own figure is asked for too, in the decision's words.** A critical component has to be gradable
+   in a requested deliverable, so the prompt asks for the quantity that stump settles as something the decision
+   uses and every route would have to produce: "the hours a case of each kind will take from start to finish under
+   the new agreement", "how many in-scope referrals we'll get each year" (example 16 asks for both of its decisive
+   steps' answers this way and names neither method). The test for the wording: a hurried analyst reads the
+   sentence and answers it with the hurried figure, without learning that anything needs correcting. "The hours
+   corrected for the queue", "the recording share by days to the deadline" and "the restated baseline" fail it; so
+   does a quantity that exists only on the golden's route. Where no neutral wording exists, the stump's own figure
+   is the member-level estimate that stump alone moves (a named member's figure, a named period's), asked for
+   inside the ask that covers every member.
 4. **Reflex work is done, never stated as a graded figure.** Counts, joined totals, rebuilt series, cleaned bases
    and reconciliations are needed by every route and reached by every frontier run. The prompt does not ask for
    them, and the Supplementary Questions and the Critical Components do not state them; the Step-by-Step carries
@@ -113,9 +143,13 @@ platform's two runs are the only measurement (`/triage-runs`).
    row or a formatting choice is evidence of a surface stump, and the reviewer reads where each run lost its points.
    Mess sits on the paths as texture that every careful run cleans the same way (Part 4), so a hygiene slip moves no
    graded figure outside its band.
-9. **Hard, not long.** No cap on asks and no target count. A few asks that each resolve to many gradable figures
-   (a figure per member, per period, per option) beat many lookups, and every figure is separately gradable and
-   determinate.
+9. **One to four asks, each hard and multi-faceted** (the guidelines of 11/20: "1 to 4 hard, multi-faceted
+   supplementary asks rather than a long list of easy ones"). An ask is one asking sentence of the prompt that
+   resolves to many gradable figures (a figure per member, per period, per option), every one separately gradable
+   and determinate; five asks or more, or an ask that is one lookup, is a redraw of the ask layer. The
+   Supplementary Questions block carries one numbered entry per ask and each entry's figure sentences are the
+   criteria (rule 7), so the criterion count is unchanged: what changes is that nothing in the list is a small ask
+   standing on its own.
 
 ## Part 2. What Mark measured, which still binds
 
@@ -342,7 +376,8 @@ device at a time, organ and records together; never delete an organ.
 `freeze.py check --mode rubric`): read which criteria the higher-scoring run earned and why. A figure with no stump on its path
 leaves the prompt and the blocks (its work stays in the Step-by-Step); a figure a lost stump moved by less than its
 band is replaced by a consequence that stump moves further (Part 1 rule 3); a critical component the run got right
-is replaced by a lost stump's own figure. A result earned because its difficulty was a reflex (the textbook method,
+though it lost that component's stump is a reflex priced as a stump (a core repair), and one it got right because
+it made that judgment stays (the components are independent, Part 0). A result earned because its difficulty was a reflex (the textbook method,
 a plot, a holdout) is a core repair and goes to the architect. **The runs lost most of their points on one result**: the task is thin, so the fix adds
 results that need their own work rather than hardening that one. Never harden by planting.
 

@@ -1,6 +1,6 @@
 ---
 name: guide-to-prompt
-description: Decide what to ask, then write it. Fit the assigned Sulfur subdomain (one of 21) and a task type in it, the assigned analysis type (one of nine), and an answer that is a structured set of results in one of the client's fourteen answer shapes, with a forward-facing recommendation on top where the decision needs one; then write prompt.txt so it pins only the question, what each result is, the deliverables by type, and never dictates rounding, names the method, the comparison, the adjustment, a step or an attached file, never warns and never says who is asking. Written short and crisp (one plain paragraph under 1,000 characters, question first, no rounding instruction), gated by voice-check.py; the author then rewrites it in their own words (the project lead runs a three-strike policy on LLM-sounding prompts) and the rewrite is re-gated.
+description: Decide what to ask, then write it. Fit the assigned Sulfur subdomain (one of 21) and a task type in it, the assigned analysis type (one of nine), and an answer that is a structured set of results in one of the client's fourteen answer shapes, with a forward-facing recommendation on top where the decision needs one; then write prompt.txt so it pins only the question, what each result is (as one to four hard, multi-faceted asks, with each decisive step's own quantity asked for in the decision's words), the deliverables by type, and never dictates rounding, names the method, the comparison, the adjustment, a step or an attached file, never warns and never says who is asking. Written short and crisp (one plain paragraph under 1,000 characters, question first, no rounding instruction), gated by voice-check.py; the author then rewrites it in their own words (the project lead runs a three-strike policy on LLM-sounding prompts) and the rewrite is re-gated.
 ---
 
 # Choosing what to ask, and writing it
@@ -11,8 +11,11 @@ and no word that tells the solver how to get there. Voice is the author's; leaks
 rewrite comes back through the gate (section 4) before upload.
 
 Read `references/mark-prompts.md` (Mark's best prompts, the model for how to write one) and `references/examples.md`
-(the client's 15 accepted Sulfur tasks, the model for the depth a task needs, with where each run went wrong) before
-drafting; open the two or three nearest the draw in full under `guidelines/client/examples/`.
+(the client's accepted Sulfur tasks, the model for the depth a task needs, with where each run went wrong) before
+drafting; open the two or three nearest the draw in full under `guidelines/client/examples/`, and the prompts of
+`1.txt`, `16.txt` and `17.txt` (the three shared as the library's hardest) for how a prompt asks for each decisive step's answer
+without naming a method. The client's guidelines of 11/20 (`guidelines/client/guidelines-2026-11-20.md`) are the
+page a prompt is reviewed against.
 
 ## 1. The fit
 
@@ -125,8 +128,13 @@ Write it last, against the golden. Context, question, files, in one paragraph. *
    the draft's fall, the manager's plan) may stay as the stakeholder's position when an ask prices it on the same
    footing as the golden (`stumping` Part 1b).
 10. **Run the bar check last:** does the answer ask for several results that each need their own analysis, or does
-    it turn on a stated procedure, a field read correctly, a planted row, a built-in factor or one fact? If the
-    latter, the build is not ready, whatever the prompt says.
+    it turn on a stated procedure, a field read correctly, a planted row, a built-in factor, one fact or one
+    decisive step? If the latter, the build is not ready, whatever the prompt says.
+11. **Read the prompt against the answer** (the guidelines of 11/20: "the prompt must not point the other way. A
+    model that follows your prompt's own words must not be marked wrong"). Take each sentence literally and follow
+    it to a figure: a window, a population, a unit, an "as of", a "for each", a stakeholder's stated belief. If the
+    literal reading lands anywhere but the golden, the sentence is rewritten or the convention is filed in a
+    document, and the judge's Gate A is run on the final wording (`determinism-check`).
 
 **The prompt pins only three things**: the question (with the decision and its threshold where there is one), what
 each result is (its population, outcome, window and unit, in plain words) and the deliverables by type, and no
@@ -218,15 +226,40 @@ question ("judged on the bed-days each hospital's share would free") rather than
 wording to a UK-only spelling ("with every bar showing its value", not "labelled"). Mark's task127 scored four
 of seven. `voice-check.py` counts the signals and fails at two.
 
-**The results and the asks.** Each result of the chain is asked for: one sentence or one clause per result, in the
-deliverable's terms, its unit beside it and no rounding. A recommendation, where the decision
-needs one, is one quotable sentence with its unit and rests on several results. An entity plus an aggregate names its
-grain. An ask a person could act on with no result of the chain behind it is a second decision (`reduce-house-fixes`
-H18). The asks are designed in `supplemental-stumping`.
+**The results and the asks.** The prompt makes **one to four asks, each hard and multi-faceted** (the guidelines of
+11/20: "1 to 4 hard, multi-faceted supplementary asks rather than a long list of easy ones"): one sentence or one
+clause per ask, in the deliverable's terms, its unit beside it and no rounding, each resolving to many figures (a
+figure per member, per period, per option). A recommendation, where the decision needs one, is one quotable
+sentence with its unit and rests on several results. An entity plus an aggregate names its grain. An ask a person
+could act on with no result of the chain behind it is a second decision (`reduce-house-fixes` H18). The asks are
+designed in `supplemental-stumping`.
+
+**Each decisive step's answer is asked for, in the decision's words.** The critical components are the decisive
+steps' answers, and "each step's answer must appear in one of the deliverables the prompt asks for" (the guidelines,
+section 4), so a component the prompt never asks for cannot be graded. Ask for the quantity each stump settles as
+something the decision uses: the client's hardest forecast prompt asks "how many in-scope housing and insolvency
+referrals we'll get each year, and the hours a case of each kind will take from start to finish under the new
+agreement", which are its two decisive steps' answers, and names neither the cohorts nor the queue. The wording
+test: a hurried analyst reads the sentence and answers it with the hurried figure, learning nothing about what
+needs correcting. A quantity that exists only on the golden's route (a recording share, a pull, an adjustment
+factor, a restated base) is never asked for by name; where a step's own figure has no neutral name, it is a named
+member's or a named period's estimate inside the ask that covers every member. A person may also ask to see the
+working, once and plainly ("show how you got from the data to each figure so someone can follow every step", the
+client's hardest survey prompt): it names no method and makes the path part of the deliverable.
+
+**Every decisive step is reachable, and no convention is left unstated** (the guidelines, section 5). "A careful
+analyst should reach the right answer from the prompt, the data and the docs, with no rule nobody wrote down and no
+source nothing points to": each stump's evidence sits in a shipped file a careful analyst opens for the question
+asked, and the note's `Decisive steps:` line says where. "If a graded figure depends on a choice the prompt and
+files do not settle (what 'engagement' or 'active' means, which denominator, which window, how missing values are
+filled), pin the business definition in the prompt or an input document, never the method": the definition is
+filed in the organisation's own document where it can be, and stated in the prompt only where no document would
+carry it.
 
 **The author's rewrite.** The design note's `## Prompt contract` lists, line by line, what a voice rewrite may not
 drop or change: the question, the threshold and hold option where there is one, every result asked for with its
-unit, every deliverable by type, the as-of date; and what it must never add (a rounding instruction, a method, a warning, an
+unit (each decisive step's own quantity among them, marked as such, since a rewrite that drops one leaves a
+critical component ungradable), every deliverable by type, the as-of date; and what it must never add (a rounding instruction, a method, a warning, an
 attached file's name, a role, a count the data hold). Hand it to the author with the draft. When the rewrite comes back, it
 replaces `prompt.txt`, `pipeline.json` gets `"prompt_rewritten": true`, and the gate runs in rewrite mode: every leak
 rule still fails it, the voice rules only warn. Then `leak.py` again, and the four answer blocks are re-read against
@@ -265,6 +298,11 @@ done, and neither is a rewrite that fails.
 - [ ] The answer shape picked (not the last build's), the results placed in its cells, the lost ones in different cells
 - [ ] The prompt pins the question, what each result is and the deliverables by type, with no rounding instruction and nothing
       about the method; no attached file named, no role, no warning
-- [ ] Every ask multi-dimensional with its unit; none presupposes what the data hold
+- [ ] One to four asks, every one multi-faceted with its unit; none presupposes what the data hold
+- [ ] Each decisive step's own quantity asked for in the decision's words (a hurried analyst answers it with the
+      hurried figure); no quantity that exists only on the golden's route named
+- [ ] The prompt read against the answer sentence by sentence (its literal reading lands on the golden); every
+      decisive step reachable from the prompt, the data and the documents; every business definition a graded
+      figure needs pinned in a document or the prompt, never the method
 - [ ] The draft is one paragraph under 1,000 characters, question first; `voice-check.py taskNN` exits 0
 - [ ] `## Prompt contract` written and handed over; the author's own rewrite passes `voice-check.py taskNN --rewrite`

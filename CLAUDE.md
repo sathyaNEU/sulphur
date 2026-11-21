@@ -24,11 +24,13 @@ open, and never derives an answer of its own, prices difficulty or reports on th
 
 ## The client's bar comes first
 
-The client's own text is in `guidelines/client/`: `deep-reasoning.md` (2026-11-09) and
-`learning-modules/stumping-strategies.md` (2026-11-09) are the bar, with the project lead's review of the same day
-verbatim in `project-lead-review-2026-11-09.md` and the closed strategies of 2026-11-12 in
-`learning-modules/overused-strategies-2026-11-12.md`; `latest_update.txt`, `overview.txt`, the learning modules, the
-examples and the quality checks sit beside them. Read the review and the closed page before every draw.
+The client's own text is in `guidelines/client/`: `guidelines-2026-11-20.md` (the guidelines page of 11/20, read
+2026-11-21 with the phase 2 announcement beside it in `phase-2-announcement-2026-11-21.md`), `deep-reasoning.md`
+(2026-11-09) and `learning-modules/stumping-strategies.md` (2026-11-09) are the bar, with the project lead's review
+of 2026-11-09 verbatim in `project-lead-review-2026-11-09.md` and the closed strategies, 45 as read on 2026-11-21, in
+`learning-modules/overused-strategies-2026-11-21.md`; `latest_update.txt`, `overview.txt`, the learning modules, the
+examples (17; `1.txt`, `16.txt` and `17.txt` are the hardest three, as shared on 2026-11-21) and the quality checks sit beside them. Read the page of 11/20,
+the review and the closed page before every draw.
 
 **Why the bar moved.** The project lead reviewed about 500 tasks and returned the pattern this harness used to
 build: "most tasks hinge on one thing. Usually it's a hidden factor built into the data: a subgroup, an event that
@@ -41,7 +43,40 @@ the client rejects tasks that rely on just one thing, and so do we: no build shi
 **The bar.** Two model runs are generated from the prompt and the pack and graded against a rubric generated from
 the prompt and the answer blocks. The task passes when the **average of the two runs is under 60 per cent** (exactly
 60 fails) **and the runs lose for analytical reasons**, and the reviewers read the design as well as the runs.
-**Build to 50 on paper**: `effort.py`'s pair estimate is a model and the platform is the measurement.
+**Build to 50 on paper**: `effort.py`'s pair estimate is a model and the platform is the measurement. The two runs
+are two rollouts of one submission; re-runs are cheap and allowed in moderation, never spammed, and a task already
+submitted is reviewed against the same rules (the announcement of 2026-11-21).
+
+**Two or more decisive, independent steps** (the page of 11/20). "Only one decisive step" is a send-back by name:
+"even when the deciding step is real analysis, if it is the only challenging part of the task, catching it gives the
+whole answer and missing it gives none." A task carries "two or more decisive, independent steps that each need real
+reasoning", "missing one should not sink the others", and a run fails "by doing a reasonable analysis that does not
+go far enough, not by missing one hidden detail". What that fixes in every build:
+- **The Critical Components block is the decisive steps**: two or more, each with its correct answer and never its
+  method ("The restated 2023 baseline is USD 4.2M", not "restate the baseline"); each answer sits in a deliverable
+  the prompt asks for; and they are independent ("a model that gets one step wrong should still be able to earn the
+  others"). So each component is one stump's own figure, asked for by the prompt as a quantity of the decision, and
+  a figure that falls with two stumps is an ask (`corelib.py`, the row `critical components independent`).
+- **One to four hard, multi-faceted supplementary asks**, never a long list of easy ones.
+- **Three tests on every stump**: the one-fact test; the clean-data test ("a solver that cleans the data perfectly
+  and reads every instruction correctly should still be able to reach the wrong answer through a reasonable but
+  insufficient analysis"); the effort test (ten minutes, an afternoon and two days "should each score clearly higher
+  than the last").
+- **Every decisive step is reachable** from the prompt, the data and the documents ("no rule nobody wrote down and
+  no source nothing points to"); **no unstated conventions** (the business definition is pinned in the prompt or a
+  document, never the method); **the prompt must not point the other way** (a run that follows the prompt's own
+  words is never marked wrong).
+- **The `Valid Stump?` field** at submission answers three things for each decisive step the runs missed: where it
+  fails, why it is fair, why it takes reasoning (`run-triage` drafts it from the runs; `build-pipeline` stage 7).
+
+**What the client's hardest examples show** (`guidelines/client/examples/1.txt`, `16.txt` and `17.txt`, runs averaging
+0.26 to 0.31; a difficulty profile and never a template, and by the announcement "likely already overused stumps"): each
+decisive step needs its own fitted model or estimator; the runs saw the signal and kept it as a sensitivity check,
+cut at a threshold instead of fitting, picked one arm instead of fitting both, or computed the counter-evidence and
+set it aside; one effect stayed hidden behind a tangled neighbour until both were fitted together; today's level was
+taken as normal where the option changes what produced it; a stream was extrapolated from its own history where its
+generating cohorts had to be followed; and the independence is shown as a table (each step left out alone, then in
+pairs, with the figure and the call each time).
 
 **The review reads its strongest run, not the average** (`guidelines/client/approved-reviews-2026-11-14.md`, three
 review sheets of other fellows' approved tasks). The Stumped gate rested on a single GPT-6 Astra run on each (rewards
@@ -97,19 +132,28 @@ answer):
 5. **Replay**: re-deriving a published figure, or a stated number that is simply wrong.
 6. **Single-fact surface stump**: one sentence of help makes the task routine.
 7. **Unpinned ambiguity**: two defensible readings or methods give different answers on any result.
+8. **Only one decisive step**: the deciding step is real analysis but it is the only hard part, so the answer is
+   all or nothing on it. Two or more decisive steps, each independently hard, each with its own checkable figure.
 
-**The closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-12.md`): 34 analytical
-lessons that already decide two or more accepted tasks are closed (regression to the mean, survivorship, outcomes
-hidden by the intervention, self-selection, occurrence sampling, shrinkage, clustered intervals, overdispersion,
-attenuation, placebo baselines, censoring, competing risks, late entry, the settled level, reporting lag, repeated
-exposure, limits as bounds, young cohorts, payback, used-up easy cases, transport to a new mix, spillover,
-displacement, assignment odds, composition, closure diversion, fixed-count rescaling, instrument change, survey
-change, fieldwork seasons, billing location, dependent capture, a co-occurring change, hindsight). **None may be the
-step that flips a new build's answer**, whatever the domain, data or detection ("same mechanism and the same kind of
-fix counts as the same lesson"); each may be a supporting step whose omission alone leaves the call standing; two of
-them stacked with nothing new is a repeat. `skeleton.py closed` lists them as the guard holds them, the guard blocks
-a card that turns on one or stacks them, and the note's Frontier check carries a `Closed strategies:` line
-(`stumping` Part 1c; the open ground is `stumping/references/open-ground.md`).
+**The closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-21.md`): 45 analytical
+lessons that already decide two or more accepted tasks are closed, in six families. The 34 of the first read
+(2026-11-12): regression to the mean, survivorship, outcomes hidden by the intervention, self-selection, occurrence
+sampling, shrinkage, clustered intervals, overdispersion, attenuation, placebo baselines, censoring, competing risks,
+late entry, the settled level, reporting lag, repeated exposure, limits as bounds, young cohorts, payback, used-up
+easy cases, transport to a new mix, spillover, displacement, assignment odds, composition, closure diversion,
+fixed-count rescaling, instrument change, survey change, fieldwork seasons, billing location, dependent capture, a
+co-occurring change, hindsight. The 11 added by the read of 2026-11-21: adverse selection into an option, the
+treatment changing who is left to measure, the outcome running on a different clock, a source that reads high or
+low calibrated on checked cases, groups recorded less completely than others (gross up by completeness), old
+figures restated to the target basis, a projection that holds fixed what the change will move, a straight line or
+an average mispricing the margin, credit only for what would not have happened anyway, extrapolation past the
+observed range, and scoring on the data used to choose. **None may be the step that flips a new build's answer**,
+whatever the domain, data or detection ("same mechanism and the same kind of fix counts as the same lesson"); each
+may be a supporting step whose omission alone leaves the call standing; two of them stacked with nothing new is a
+repeat. `skeleton.py closed` lists them as the guard holds them, the guard blocks a card that turns on one or stacks
+them (a card registered before a lesson closed meets it as WARN, a return risk at review), and the note's Frontier
+check carries a `Closed strategies:` line (`stumping` Part 1c; the open ground is
+`stumping/references/open-ground.md`).
 
 **The depth scale** (`guidelines/client/depth-scale-2026-11-09.md`, the client's reading of 17 real submitted tasks):
 levels 1 and 2 are sent back, level 3 (one real method step) is a judgment call kept about half the time, levels 4
@@ -175,10 +219,13 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
 - **The runs lose in six places** (`stumping` Part 1b): the split they see and then drop before the decision; the
   assumption they name and wave through, made false by the world's process and testable from another file; units
   selected by the outcome's own history; a response they assume instead of measuring, and the marginal unit; the
-  system's net against the unit's own; a shallow path that passes its own checks. The first, third and fifth are now
-  closed as deciding lessons (the client's page of 2026-11-12), so the deciding lesson comes from the other three and
-  from the open dimensions (conservation, changing structure, non-additive and nonlinear quantities, position on a
-  network, hidden state, the recording algorithm; `stumping` Part 1c).
+  system's net against the unit's own; a shallow path that passes its own checks. The first, third and fifth were
+  closed as deciding lessons by the client's page of 2026-11-12 and the fourth by its read of 2026-11-21 (a straight
+  line or an average mispricing the margin), which also narrows the second (proportional scaling, a form carried
+  past its range and a projection that holds an intermediate fixed are now cards) and the sixth (a check run on the
+  data used to choose is a card). So the deciding lesson comes from an assumption no card names, from a check of
+  another kind, and from the open dimensions (conservation, changing structure, non-additive quantities, position on
+  a network, hidden state, a recording algorithm whose inversion is not a gross-up; `stumping` Part 1c).
 - **Seven approvals on file decide on the observation process, and our send-backs for difficulty decided on
   mechanisms of the world** (`stumping` Part 1d): our four below and the three approved sheets of 2026-11-14 all turn
   on how the record came to hold what it holds, while task1 v5, task13 v5, task22 v2 and task25's first cut turned on
@@ -188,13 +235,21 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
   nothing); the most rigorous standard design the pack affords lands across the line; a referee slice the target
   does not reach rules between estimators, which is what forces the call while the method stays open; each stump is
   worth three times the honest family's spread; the estimated quantities carry the rubric's weight. The three sheets
-  are on file as skeletons (`review:*`) and are never reskinned.
+  are on file as skeletons (`review:*`) and are never reskinned. The read of 2026-11-21 closes the commonest
+  observation-process corrections as deciding lessons (a completeness gross-up from an independent source, a bias
+  calibrated on checked cases, a basis restated, the treatment changing who is recorded), so an observation-process
+  stump is open only where its estimator is more than one of those: several recording effects tangled with each
+  other and with who the units are, a recording algorithm to invert, a state the record never held, sources assigned
+  part by part with no checked sample that hands over the factor.
 - **The four approved builds** (task6 v7; task457, shipped as task14 architecture 1; task2 v6; task14 v3) share an
   anatomy, never a skeleton: the answer is a quantity the primary record does not hold; several partial instruments
   see it, each with its own blind spot, and the work is assigning each part of the estimand to the one that sees it
   (the runs took the closest-looking or most complete one); the target reaches units or periods no instrument covers;
   every factor across the data, the shortcuts on different wrong answers, the margin held against every variant;
   task457 was approved once its prompt opened on why the answer has to be an estimate. No chain of theirs is copied.
+  Two of the four decide on lessons the page has since closed (task2 v6's transport; task14 v3's rises a register
+  sees only by choice, which the read of 2026-11-21 lists among its accepted examples): approved before the cards,
+  refused as a draw today.
 - **A landed scaffold is never re-pointed** (task4 architectures 6 to 10, task10 architectures 4 to 7, all landed): a
   re-root changes the deciding lessons and the decision form, and the skeleton guard checks the slot's lineage.
 - **The field's whole textbook chain is one reflex when the pack ships its ingredients** (task22 arch 1, task7 arch 12):
@@ -229,7 +284,7 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 |---|---|---|
 | `/draw taskNN <domain> <analysis type>` | the brain alone, in the main thread: the core proved in `generator/core.py`, the card, the note to `precut.py` exit 0 with its Build brief; also re-draws a returned build's core | Fable 5.2, xhigh |
 | `/build taskNN <domain> <analysis type>` | spawns the `stump-architect` for the core unless `/draw` did it, then executes the brief: build, leak reader and judge, ready for the platform; resumes from `pipeline.json` | Opus 5.5, high |
-| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build | medium |
+| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build, drafts the `Valid Stump?` field | medium |
 | `/fix-determinism taskNN <finding>` | closes a fork on a result (a run's defensible alternative or a judge finding) | Opus 5.5, high |
 | `/fix-rubric taskNN` | the losses were analytical but the average is 60 or more: reworks the asks so more results are graded | Opus 5.5, high |
 | `/approve taskNN` | the mechanical sign-off before upload (heart, surface, precut, effort, leak verdict) | medium |
@@ -271,7 +326,8 @@ runs on the model's own initiative; the commands above license the ones they nam
            rewrites the prompt for voice, uploads it and target.zip           COMMIT "READY (taskNN): <call>"
 6 RUNS     /triage-runs records both scores, maps the losses result by result and routes (submit,
            /fix-determinism, /fix-rubric, a surface trigger rebuilt as analysis, or redesign from 2)
-7 SUBMIT   triage SUBMIT, the Reward block filled, submitted                 COMMIT "SUBMITTED (taskNN): ..."
+7 SUBMIT   triage SUBMIT, the Reward block and the Valid Stump? field filled (where each missed decisive step
+           fails, why it is fair, why it takes reasoning), submitted          COMMIT "SUBMITTED (taskNN): ..."
            the review result later: APPROVED or RETURNED                      COMMIT "APPROVED" / "RETURNED"
 ```
 
@@ -292,8 +348,8 @@ Personas come from `guard.py names`, never typed. **Every card carries the clien
 deciding lessons, detection, resolving moves, file roles, answer pattern): `fingerprint/skeleton.py`, run inside
 `guard.py check`, refuses a near copy, a templated build or a variant of anything on file, of the slot's own lineage
 or of any task the client has shown us (`fingerprint/corpus/client_skeletons.json`: the templating page's pairs, the
-17 depth-scale tasks, the 15 examples, the three approved review sheets of 2026-11-14), and a deciding lesson the dataset already teaches twice; the client swaps the
-nouns and counts, so a new setting never clears it.
+17 depth-scale tasks, the 17 examples, the three approved review sheets of 2026-11-14), and a deciding lesson the
+dataset already teaches twice; the client swaps the nouns and counts, so a new setting never clears it.
 
 **Determinism is a construction, not an inspection**: invoke `determinism-check` while the results chain and the
 generator are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the author asks.
@@ -409,20 +465,24 @@ Markdown) is the rare exception, asked for only where the decision's reader coul
 with the reason in the note; the call sits on the workbook's first sheet or the deck's first slide
 (`guide-to-prompt` section 2; `voice-check.py` and `guard.py check` warn on one).
 
-**Asks**: the results, asked for. No cap and no target count; each is hard and multi-dimensional (many rows,
-periods, segments or calculations resolving to gradable answers), its unit inside the asking sentence and no rounding
-instruction (the answer blocks state each figure's precision, with its band where reasonable methods differ). The
-prompt asks for what the estimates are used for (the figure for every member, carried a step further, the rejected
-option on the same footing), never for a count, a total or a table every run rebuilds, so a run that lost a stump
-gets every ask downstream of it wrong (`supplemental-stumping`).
+**Asks**: the results, asked for, as **one to four hard, multi-faceted supplementary asks** (the page of 11/20:
+"rather than a long list of easy ones"); each resolves to several gradable answers (many rows, periods, segments or
+calculations), its unit inside the asking sentence and no rounding instruction (the answer blocks state each
+figure's precision, with its band where reasonable methods differ). The prompt asks for what the estimates are used
+for (the figure for every member, carried a step further, the rejected option on the same footing) and for each
+decisive step's own quantity in the decision's words (the hours a case will take under the new agreement, never
+the adjustment that gives them), so every critical component is gradable in a requested deliverable; it never asks
+for a count, a total or a table every run rebuilds, so a run that lost a stump gets every ask downstream of it
+wrong (`supplemental-stumping`).
 
 **Answer blocks** (`submission-writeup`): Final Recommendation (one or two sentences, first, naming what it
-rejects); Supplementary Questions (a numbered list, one number per sub-ask, each requested file's look in one
-line); Critical Components (2 to 5 load-bearing results, each a figure the hurried pass loses, one per stump where
-the core has them); Step-by-Step (a short numbered path from the raw files through each result, showing where the
-hurried analysis goes wrong, and the only block that carries the counts and bases every route reaches), closing
-on why no other conclusion survives. **The golden ZIP holds exactly the files the prompt requests**, one set of
-numbers everywhere, nothing LLM-looking (`golden-realism`).
+rejects); Supplementary Questions (one numbered entry per ask, one to four, each entry carrying its figures, and
+each requested file's look in one line); Critical Components (the decisive steps, two to five, one per stump: each
+line is that step's answer as a figure with its unit and band and no method clause, the figure sits in a requested
+deliverable, and each falls with its own stump alone); Step-by-Step (a short numbered path from the raw files
+through each result, showing where the hurried analysis goes wrong, and the only block that carries the counts and
+bases every route reaches), closing on why no other conclusion survives. **The golden ZIP holds exactly the files
+the prompt requests**, one set of numbers everywhere, nothing LLM-looking (`golden-realism`).
 
 **Rubric**: generated from the prompt and the answer blocks; recommendation and critical components carry the most
 weight, then the asks, then a small share for instruction-following. Edit a criterion only when it is clearly wrong
