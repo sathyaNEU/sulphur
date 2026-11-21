@@ -109,7 +109,10 @@ If a run file or the scores are missing, stop and say which.
    - **Where and how each model goes wrong**, one paragraph per response: what it files against the golden, then
      each decisive step marked `missed` or `partly` in 5a with what the response did instead, its own figure and
      line beside the golden's, and a short quote where one says it. A step it made is said to be made, and a
-     response that filed nothing is said to have filed nothing, with its working answer.
+     response that filed nothing is said to have filed nothing, with its working answer. Quote the response where
+     it names the choice itself (a judgment call it flags, the right route kept as a sensitivity, counter-evidence
+     computed and set aside), and where it defends a route from a document's words, class that route in 5a as a
+     defensible alternative to be ruled on by a figure before the draft calls it a loss.
    - **Why it is fair:** not a planted defect (each step's problem across every unit, with its footprint outside
      the deciding members from the note's hidden factor record; the response's cleaning counts beside the
      golden's) and not one sentence buried in the files (the two files whose comparison shows the evidence, from

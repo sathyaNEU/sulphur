@@ -196,14 +196,23 @@ and phrase in the saved response, so a rebuild keeps the block and cannot leave 
 `figures_check.py`, `leak.py` and `freeze.py` read the four blocks by name and pass over it, and the determinism
 judge does not read it.
 
-Four short paragraphs, in the question's order:
+Four short paragraphs, in the question's order (the bullets below are what goes into them):
 
 - **Where and how each model goes wrong**, one paragraph per response, labelled as the platform labels them
   (`Response 1`, `Response 2`). Lead with what the response files against the golden (the band, the option, the
   figure), then take the decisive steps one by one: what the response did instead, in its own words where a short
   quote says it, with its own figure beside the golden's and the range, and which wrong member comes from which
-  step. A step the response made is said to be made, with what it still missed; a response that filed nothing is
-  said to have filed nothing, with the working answer it reports and how far it got.
+  step. A step the response made is said to be made, with what it still missed (the fit made, the carry lost), and
+  a member it files right on a wrong figure is given with both figures; a response that filed nothing is said to
+  have filed nothing, with the working answer it reports and how far it got. **Quote the response where it names
+  the choice itself**: a judgment call it flags, the right route kept as a sensitivity, counter-evidence it
+  computed and set aside. That is the client's own picture of an analytical loss, in the model's words.
+- **A route a response defends is ruled on, never waved off.** Where a response argues its route from a
+  document's words, the block says what the document says, what the record shows against the route (a figure),
+  and, where the other response read the same files the golden's way, quotes it. Before the block calls such a
+  route a loss, the route is run in the golden's own estimators: if it moves a member across a line with the
+  other steps right, it is a fork, and its figure and the fact that refuses it go on file (the fork table, a
+  check, the closing passage) through `/fix-determinism` before the build is submitted.
 - **Why it is fair**, answering the two unfair kinds the question names with figures from the pack, never with
   assurances. *Not a planted defect:* each step's problem is how the records come to be and runs through every
   unit, shown by its footprint outside the deciding members (the note's hidden factor record), and where the
@@ -217,7 +226,7 @@ Four short paragraphs, in the question's order:
   or separated). Close on the independence: each step alone moves a different member, and which steps each
   response made and lost.
 
-Written in plain words, every sentence carrying a figure or a quote, about 400 to 650 words for three steps and two
+Written in plain words, every sentence carrying a figure or a quote, about 500 to 750 words for three steps and two
 responses (the client's example for the older field ran four sentences on one step). It names no method the prompt
 would have had to state, never claims a loss the responses' text does not show and never lists a step a response
 made as missed. Every figure on the golden's side comes from `figures.json`, never typed: the blocks' own figures,
