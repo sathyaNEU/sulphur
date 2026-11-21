@@ -96,7 +96,7 @@ def _sheet_schedule(wb, fig):
                 f"{fig['c3_mean_lim_phase_pct']:.2f}% (band {fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%), "
                 f"and total relief capacity needed = {fig['total_relief_mva']:.2f} MVA "
                 f"(band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA). "
-                f"Lindberg and Ostervik were modernized in 2023-2024 and serve as non-target reference validation sites.")
+                f"Fossheim, Lindberg, Ostervik, and Solberg were modernized in 2023-2024 and serve as non-target reference validation sites.")
     ws["A3"].font = Font(size=9, color="333333", name="Calibri")
     ws["A3"].alignment = Alignment(wrap_text=True, vertical="top")
     ws.merge_cells("A3:J3")
@@ -218,10 +218,11 @@ def _sheet_components(wb, fig):
 
 def _sheet_referee(wb, fig):
     ws = wb.create_sheet("Referee_Validation")
-    ws["A1"] = "Validation on Modernized Non-Target Reference Substations (Lindberg & Ostervik)"
+    ws["A1"] = "Validation on Modernized Non-Target Reference Substations (Fossheim, Lindberg, Ostervik & Solberg)"
     ws["A1"].font = Font(bold=True, size=12, name="Calibri", color="1F3B5C")
     rp = fig["ref_params"]
-    ws["A2"] = (f"Calibrated parameters from 70,080 15-min PQ intervals: rho_park = {rp['rho_park']:.4f}, "
+    n_qh_tot = len(fig["refs"]) * 35040
+    ws["A2"] = (f"Calibrated parameters from {n_qh_tot:,} 15-min PQ intervals: rho_park = {rp['rho_park']:.4f}, "
                 f"rho_indep = {rp['rho_indep']:.4f}, k_ord = {rp['k_ord']:.4f}, dQ/dP = {rp['dq_dp']:.4f}; "
                 f"Phase-ID accuracy vs 2025 field phase-tracer audit: {rp['tracer_matched']}/{rp['tracer_total']} (100.0%) "
                 f"vs GIS {rp['gis_tracer_matched']}/{rp['tracer_total']} ({rp['gis_tracer_pct']:.1f}%).")
@@ -231,7 +232,7 @@ def _sheet_referee(wb, fig):
                "Measured Q_peak (MVAr)", "Estimated Q_peak (MVAr)", "Measured w_max (%)", "Estimated w_max (%)",
                "Measured Loading (%)", "Estimated Loading (%)", "Abs Error (pp)"])
     _hdr(ws, 4, 11, 34)
-    for r in fig["refs"]:
+    for r in sorted(fig["refs"]):
         rec = fig["substations"][r]
         ws.append([
             r, rec["firm_n1_mva"], rec["truth_p15_mw"], rec["p15_peak_mw"],
@@ -243,16 +244,19 @@ def _sheet_referee(wb, fig):
             ws.cell(row=ri, column=c).number_format = "0.00"
 
     ws.append([])
-    ws.append(["Estimator / Rival Route", "Mean Abs Loading Error on Lindberg & Ostervik (pp)", "Multiple of Golden MAE"])
+    ws.append(["Estimator / Rival Route", "Mean Abs Loading Error on 4 Reference Sites (pp)", "Multiple of Golden MAE"])
     _hdr(ws, ws.max_row, 3, 30)
     labels = [
         ("golden", "Golden conformed estimator (S1+S2+S3)"),
-        ("s2_raw_dv_no_demean", "S2 shortcut: raw HV/LV voltage drop without PT demeaning"),
+        ("s1_cf_zone", "S1 shortcut: zone-matched register coincidence factor (CF_park / CF_nonpark * sum M15)"),
+        ("s1_cf_pooled", "S1 shortcut: pooled register coincidence factor (CF_pooled * sum M15)"),
+        ("s1_linear_sum", "S1 shortcut: linear sum of feeder 15m/60m ratios at peak hour (rho = 1)"),
         ("s1_flat_ratio", "S1 shortcut: flat reference 15m/60m multiplier"),
         ("s2_net_kvarh", "S2 shortcut: monthly net kVARh power factor"),
-        ("rigorous", "Rigorous standard shortcut (CF_60 * sum M15, class PF, GIS phase)"),
+        ("s2_raw_dv_no_demean", "S2 shortcut: raw HV/LV voltage drop without PT demeaning"),
         ("s3_gis_phase", "S3 shortcut: GIS lateral phase tags"),
         ("s1_scada60", "S1 shortcut: hourly 60-minute SCADA peak"),
+        ("rigorous", "Rigorous standard shortcut (CF_60 * sum M15, class PF, GIS phase)"),
         ("direct", "Direct route (SCADA 60m, net kVARh PF, balanced 33.3% phases)"),
     ]
     for k, lbl in labels:
@@ -262,7 +266,7 @@ def _sheet_referee(wb, fig):
         ri = ws.max_row
         ws.cell(row=ri, column=2).number_format = "0.00"
         ws.cell(row=ri, column=3).number_format = '0.0"x"'
-    _widths(ws, [54, 24, 18, 16, 16, 16, 16, 16, 16, 16, 14])
+    _widths(ws, [72, 26, 18, 16, 16, 16, 16, 16, 16, 16, 14])
 
 
 def _sheet_routes(wb, fig):
@@ -276,7 +280,7 @@ def _sheet_routes(wb, fig):
     ws.append(hdr)
     _hdr(ws, 3, len(hdr), 34)
     order = ["golden", "S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3", "direct", "rigorous",
-             "s1_flat_ratio", "s2_raw_dv_no_demean"]
+             "s1_cf_zone", "s1_cf_pooled", "s1_linear_sum", "s1_flat_ratio", "s2_raw_dv_no_demean"]
     for rname in order:
         r = fig["routes"][rname]
         ws.append([

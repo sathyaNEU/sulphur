@@ -19,8 +19,9 @@ substation's 2026 peak 15-minute limiting-phase equivalent apparent load (MVA):
              and residential vs commercial laterals peak at different hours. Common-mode-rejected lateral-to-bus
              voltage differentials (controlling for local lateral load drop) recover each lateral's physical phase.
 
-Two modernized substations (Lindberg, Ostervik) with continuous 15-minute three-phase revenue PQ metering and a 2025
-field phase-tracer commissioning survey serve as the referee slice and are outside the 2027-2029 capital pool.
+Four modernized substations (Fossheim, Lindberg, Ostervik, Solberg) with continuous 15-minute three-phase revenue PQ
+metering and a 2025 field phase-tracer commissioning survey serve as the referee slice and are outside the 2027-2029
+capital pool.
 
 Run:  python3 task26/generator/core.py            corelib verdict
       python3 task26/generator/core.py --detail   world, routes, referee, and variants
@@ -53,13 +54,13 @@ HEATING_MONTHS = (0, 1, 2, 9, 10, 11)
 HEATING_HOURS = np.isin(HOUR_MONTH, HEATING_MONTHS)
 
 TARGETS = ("Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli")
-REFS = ("Lindberg", "Ostervik")
+REFS = ("Lindberg", "Ostervik", "Fossheim", "Solberg")
 ALL_SUBS = TARGETS + REFS
 
 # Substation physical & network parameters (realistic Norwegian 66/22 kV zone substations)
 SUB_CFG = {
     # S1-opened (diverse spiky): 6 independent spiky feeders -> quadrature lift ~+13%;
-    # Golden ~92% (Phase 2); S1 lost (60m) drops to ~81% (Defer); Rigorous CF60*sum(M15) jumps to ~104% (Phase 1).
+    # Golden ~94.5% (Phase 2); S1 lost (60m) drops to ~83% (Defer); Rigorous CF60*sum(M15) jumps to ~107% (Phase 1).
     "Drangvik": dict(
         firm_mva=42.5, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.34,
         feeders=[
@@ -88,8 +89,7 @@ SUB_CFG = {
     ),
     # S2-opened (fixed bus caps + heavy winter inductive motor/heat-pump load):
     # Monthly net kVARh ~ 0 (net PF ~0.99), class nominal PF ~0.90, true peak PF ~0.71 ->
-    # Golden ~108% (Phase 1); S2 lost (net PF) drops to ~92% (Phase 2); Rigorous drops to ~97% (Phase 2).
-    # S1 lost alone & S3 lost alone keep it > 101%; +/-20% forcing perturbations all HOLD Phase 1!
+    # Golden ~108.6% (Phase 1); S2 lost (net PF) drops to ~92% (Phase 2); Rigorous drops to ~96% (Phase 2).
     "Kvernholm": dict(
         firm_mva=37.0, r_ohm=0.095, x_ohm=1.22, pt_offset_kv=0.38,
         feeders=[
@@ -102,7 +102,7 @@ SUB_CFG = {
         sp_share=0.55, true_ph_w=(0.385, 0.312, 0.303), gis_ph_w=(0.355, 0.325, 0.320),
     ),
     # S2-opened (OPPOSITE direction! modern switched capacitors + VFD commercial):
-    # True peak PF ~0.985 vs class nominal PF ~0.89 -> Golden ~92% (Phase 2);
+    # True peak PF ~0.985 vs class nominal PF ~0.89 -> Golden ~95% (Phase 2);
     # Direct drops <85% (Defer); Rigorous (class PF + CF60*sum(M15)) jumps >105% (Phase 1).
     "Malmnes": dict(
         firm_mva=38.0, r_ohm=0.092, x_ohm=1.18, pt_offset_kv=-0.32,
@@ -118,8 +118,6 @@ SUB_CFG = {
     ),
     # S3-opened (storm-rephased unbalance hidden by balanced GIS!):
     # GIS says 35.2% max phase; true physical phase-ID shows 49.0% single-phase -> overall ~44.5%!
-    # Golden ~108% (Phase 1); S3 lost (GIS) drops to ~85% (Phase 2); Rigorous drops to ~93% (Phase 2).
-    # S1 lost alone & S2 lost alone keep it > 102%; +/-20% forcing perturbations all HOLD Phase 1!
     "Raudfjord": dict(
         firm_mva=36.0, r_ohm=0.102, x_ohm=1.28, pt_offset_kv=0.35,
         feeders=[
@@ -132,8 +130,6 @@ SUB_CFG = {
         sp_share=0.72, true_ph_w=(0.490, 0.262, 0.248), gis_ph_w=(0.352, 0.328, 0.320),
     ),
     # S3-opened (OPPOSITE direction! field crews rebalanced laterals off Phase C, GIS still says 48%):
-    # Golden ~92% (Phase 2); S3 lost (GIS) jumps to ~121% (Phase 1); Direct drops to ~82% (Defer);
-    # Rigorous (GIS!) jumps to ~132% (Phase 1). S1/S2 lost stay inside 85%-100%!
     "Svarthaug": dict(
         firm_mva=33.8, r_ohm=0.098, x_ohm=1.24, pt_offset_kv=-0.34,
         feeders=[
@@ -157,31 +153,60 @@ SUB_CFG = {
         q_alpha=0.56, q_peak_extra=5.2, c_fixed=12.0, c_switched_peak=0.0,
         sp_share=0.64, true_ph_w=(0.420, 0.298, 0.282), gis_ph_w=(0.355, 0.325, 0.320),
     ),
-    # Referee 1: modernized industrial-concentrated substation (full 15m PQ + field phase-tracer audit)
+    # Referee 1: modernized industrial-park-dominant substation (park + high burst -> high CF15 ~0.94)
     "Lindberg": dict(
-        firm_mva=54.0, r_ohm=0.080, x_ohm=1.05, pt_offset_kv=0.62,
+        firm_mva=54.0, r_ohm=0.080, x_ohm=1.05, pt_offset_kv=0.64,
         feeders=[
-            ("industrial_batch", 15.0, 0.29, 4),
-            ("industrial_batch", 13.0, 0.28, 4),
-            ("commercial_mixed",  4.0, 0.10, 0),
-            ("residential_heat",  3.5, 0.08, 0),
+            ("industrial_batch", 15.5, 0.36, 4),
+            ("industrial_batch", 13.5, 0.35, 4),
+            ("commercial_mixed",  3.5, 0.08, 0),
+            ("residential_heat",  3.0, 0.07, 0),
         ],
         q_alpha=0.72, q_peak_extra=9.5, c_fixed=19.2, c_switched_peak=0.0,
         sp_share=0.56, true_ph_w=(0.440, 0.288, 0.272), gis_ph_w=(0.350, 0.328, 0.322),
     ),
-    # Referee 2: modernized diverse urban/maritime substation (full 15m PQ + field phase-tracer audit)
+    # Referee 2: modernized mild urban substation (non-park + mild burst -> high CF15 ~0.88)
     "Ostervik": dict(
-        firm_mva=48.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=-0.62,
+        firm_mva=48.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=-0.64,
         feeders=[
-            ("industrial_batch", 5.6, 0.14, 0),
-            ("maritime_port",    5.6, 0.14, 0),
-            ("maritime_port",    5.4, 0.13, 0),
-            ("commercial_mixed", 5.6, 0.12, 0),
-            ("residential_heat", 5.2, 0.09, 0),
-            ("residential_heat", 4.8, 0.09, 0),
+            ("residential_heat", 8.2, 0.06, 0),
+            ("residential_heat", 7.8, 0.06, 0),
+            ("commercial_mixed", 8.0, 0.06, 0),
+            ("industrial_batch", 7.6, 0.07, 0),
         ],
-        q_alpha=0.68, q_peak_extra=8.8, c_fixed=15.5, c_switched_peak=0.0,
-        sp_share=0.62, true_ph_w=(0.365, 0.325, 0.310), gis_ph_w=(0.445, 0.285, 0.270),
+        q_alpha=0.70, q_peak_extra=10.5, c_fixed=17.5, c_switched_peak=0.0,
+        sp_share=0.62, true_ph_w=(0.365, 0.325, 0.310), gis_ph_w=(0.455, 0.280, 0.265),
+    ),
+    # Referee 3: modernized diverse spiky substation with switched winter cap (non-park + spiky -> low CF15 ~0.77)
+    "Fossheim": dict(
+        firm_mva=50.0, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=-0.66,
+        feeders=[
+            ("industrial_batch", 4.6, 0.35, 0),
+            ("industrial_batch", 4.4, 0.34, 0),
+            ("maritime_port",    4.6, 0.35, 0),
+            ("maritime_port",    4.4, 0.33, 0),
+            ("commercial_mixed", 4.2, 0.31, 0),
+            ("commercial_mixed", 4.0, 0.30, 0),
+            ("residential_heat", 3.8, 0.27, 0),
+            ("residential_heat", 3.6, 0.25, 0),
+        ],
+        q_alpha=0.50, q_peak_extra=3.2, c_fixed=3.5, c_switched_peak=8.5,
+        sp_share=0.58, true_ph_w=(0.435, 0.290, 0.275), gis_ph_w=(0.352, 0.326, 0.322),
+    ),
+    # Referee 4: modernized mixed industrial-park + diverse spiky feeders (park + diverse -> low CF15 ~0.81)
+    "Solberg": dict(
+        firm_mva=44.0, r_ohm=0.086, x_ohm=1.10, pt_offset_kv=0.66,
+        feeders=[
+            ("industrial_batch", 5.2, 0.20, 5),
+            ("industrial_batch", 4.8, 0.19, 5),
+            ("maritime_port",    5.2, 0.34, 0),
+            ("maritime_port",    5.0, 0.33, 0),
+            ("commercial_mixed", 4.8, 0.31, 0),
+            ("commercial_mixed", 4.6, 0.30, 0),
+            ("residential_heat", 4.4, 0.25, 0),
+        ],
+        q_alpha=0.76, q_peak_extra=12.0, c_fixed=20.0, c_switched_peak=0.0,
+        sp_share=0.60, true_ph_w=(0.360, 0.325, 0.315), gis_ph_w=(0.455, 0.280, 0.265),
     ),
 }
 
@@ -427,7 +452,7 @@ def _raw_quad_excess_month(sd, rho_park, rho_indep, m_list, form="mult"):
 
 
 def _fit_ref_params(world, opts):
-    """Estimate sub-hourly correlation, order-stat scaling, and dQ/dP from the two modernized reference substations."""
+    """Estimate sub-hourly correlation, order-stat scaling, and dQ/dP from the four modernized reference substations."""
     win_mask = WINTER_HOURS if opts.get("s1_months", "winter") == "winter" else np.ones(N_HOURS, dtype=bool)
     park_corrs, indep_corrs, dq_dp_list = [], [], []
 
@@ -480,16 +505,38 @@ def _fit_ref_params(world, opts):
     else:
         k_ord = float(sum(obs_list) / sum(raw_list))
     flat_ratio = float(np.mean([sd["sub_p15"].max() / sd["sub_p60"].max() for sd in (world["subs"][r] for r in REFS)]))
-    return dict(rho_park=rho_park, rho_indep=rho_indep, k_ord=k_ord, dq_dp=dq_dp, flat_ratio=flat_ratio)
+    cf_park_l, cf_nonpark_l, cf_all_l = [], [], []
+    for r in REFS:
+        sd = world["subs"][r]
+        pk_m = int(HOUR_MONTH[int(np.argmax(sd["sub_p60"]))])
+        cf_val = float(sd["sub_p15"].max() / sd["feeder_m15"][:, pk_m].sum())
+        has_park = any(fm["park_group"] > 0 for fm in sd["f_meta"])
+        (cf_park_l if has_park else cf_nonpark_l).append(cf_val)
+        cf_all_l.append(cf_val)
+    return dict(
+        rho_park=rho_park, rho_indep=rho_indep, k_ord=k_ord, dq_dp=dq_dp, flat_ratio=flat_ratio,
+        cf_park=float(np.mean(cf_park_l)), cf_nonpark=float(np.mean(cf_nonpark_l)), cf_pooled=float(np.mean(cf_all_l)),
+    )
 
 
 def _estimate_s1(sd, ref_p, opts):
     mode = opts.get("s1_mode", "golden")
     p60_pk = float(sd["sub_p60"].max())
+    pk_h = int(np.argmax(sd["sub_p60"]))
+    pk_m = int(HOUR_MONTH[pk_h])
     if mode == "scada60":
         return p60_pk
     if mode == "flat_ratio":
         return p60_pk * ref_p["flat_ratio"]
+    if mode == "cf_zone":
+        has_park = any(fm["park_group"] > 0 for fm in sd["f_meta"])
+        return (ref_p["cf_park"] if has_park else ref_p["cf_nonpark"]) * float(sd["feeder_m15"][:, pk_m].sum())
+    if mode == "cf_pooled":
+        return ref_p["cf_pooled"] * float(sd["feeder_m15"][:, pk_m].sum())
+    if mode == "linear_sum":
+        hm = HOUR_MONTH == pk_m
+        f_m_max = sd["f_p60"][:, hm].max(axis=1)
+        return float(np.sum(sd["f_p60"][:, pk_h] * (sd["feeder_m15"][:, pk_m] / np.maximum(f_m_max, 0.1))))
     if mode == "rigorous_cf60":
         cf60 = p60_pk / float(sd["f_p60"].max(axis=1).sum())
         return cf60 * float(sd["feeder_m15"].max(axis=1).sum())
@@ -499,8 +546,7 @@ def _estimate_s1(sd, ref_p, opts):
     elif months_opt == "all":
         m_list = list(range(12))
     else:
-        pk_h = int(np.argmax(sd["sub_p60"]))
-        m_list = [int(HOUR_MONTH[pk_h])]
+        m_list = [pk_m]
     raw_q = _raw_quad_excess_month(sd, ref_p["rho_park"], ref_p["rho_indep"], m_list, form=opts.get("s1_form", "mult"))
     return p60_pk + ref_p["k_ord"] * raw_q
 
@@ -723,7 +769,7 @@ def build_spec(world=None):
         return float(np.mean([abs(res[r]["loading_pct"] - world["subs"][r]["truth"]["loading_pct"]) for r in REFS]))
 
     ref_spec = {
-        "slice": "Lindberg and Ostervik (two modernized non-target substations with continuous 15-min 3-phase PQ metering and 2025 field phase-tracer survey): mean absolute loading error (pct points)",
+        "slice": "Lindberg, Ostervik, Fossheim, and Solberg (four modernized non-target substations with continuous 15-min 3-phase PQ metering and 2025 field phase-tracer survey): mean absolute loading error (pct points)",
         "covers_target": False,
         "truth": 0.0,
         "golden": _ref_mae(gold_res),
@@ -735,6 +781,9 @@ def build_spec(world=None):
             "s3_gis_phase": _ref_mae(lat_res["S3"]),
             "s2_raw_dv_no_demean": _ref_mae(evaluate(world, {"s2_mode": "raw_dv_no_demean"})[0]),
             "s1_flat_ratio": _ref_mae(evaluate(world, {"s1_mode": "flat_ratio"})[0]),
+            "s1_cf_zone": _ref_mae(evaluate(world, {"s1_mode": "cf_zone"})[0]),
+            "s1_cf_pooled": _ref_mae(evaluate(world, {"s1_mode": "cf_pooled"})[0]),
+            "s1_linear_sum": _ref_mae(evaluate(world, {"s1_mode": "linear_sum"})[0]),
         },
     }
 
@@ -832,7 +881,7 @@ def main():
         print("\n=== LATTICE CALLS ===")
         for k, res in sorted(lat_res.items()):
             print(f"  {k:10s}: " + ", ".join(f"{s[:4]}={_band_name(res[s]['loading_pct'])[:6]}({res[s]['loading_pct']:.1f})" for s in TARGETS))
-        print("\n=== REFEREE SLICE (Lindberg & Ostervik MAE pct pts) ===")
+        print("\n=== REFEREE SLICE (Fossheim, Lindberg, Ostervik & Solberg MAE pct pts) ===")
         print(f"  golden MAE: {spec['referee']['golden']:.3f}")
         for rk, rv in sorted(spec["referee"]["rivals"].items()):
             print(f"  {rk:22s}: {rv:.3f} ({rv/max(spec['referee']['golden'],1e-9):.1f}x golden)")

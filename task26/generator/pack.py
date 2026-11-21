@@ -37,24 +37,28 @@ ALPHA_SUBS = tuple(sorted(C.ALL_SUBS))
 
 REGIONS = {
     "Drangvik": "Fjord Vest",
+    "Fossheim": "Elvedal",
     "Hestmark": "Indre Dal",
     "Kvernholm": "Kyst Nord",
     "Lindberg": "Industri Vest",
     "Malmnes": "Havneby",
     "Ostervik": "Sentrum Ost",
     "Raudfjord": "Nordfjord",
+    "Solberg": "Solberg Vest",
     "Svarthaug": "Sunnmark",
     "Tverrli": "Fjellbygd",
 }
 
 MUNICIPALITIES = {
     "Drangvik": "Drangvik Kommune",
+    "Fossheim": "Fossheim Kommune",
     "Hestmark": "Hestmark Kommune",
     "Kvernholm": "Kvernholm Kommune",
     "Lindberg": "Lindberg Kommune",
     "Malmnes": "Malmnes Kommune",
     "Ostervik": "Ostervik Kommune",
     "Raudfjord": "Raudfjord Kommune",
+    "Solberg": "Solberg Kommune",
     "Svarthaug": "Svarthaug Kommune",
     "Tverrli": "Tverrli Kommune",
 }
@@ -65,6 +69,7 @@ PARK_ZONE_NAMES = {
     2: "Kvernholm Naeringspark",
     3: "Tverrli Sagbruk Industri",
     4: "Lindberg Verkstedpark",
+    5: "Solberg Naeringsomrade",
 }
 
 FILES = {
@@ -148,7 +153,7 @@ def _write_scada_substation(world, out_dir, ts_utc):
         w = csv.writer(f)
         w.writerow(["substation_id", "timestamp_local", "scada_clock", "p_active_mw", "v_hv_kv", "v_lv_kv",
                     "ltc_tap_step", "extract_batch", "extract_ts"])
-        # Preliminary batch (B20270104_PRELIM, 480 January hours x 8 substations) superseded by B20270112_FINAL
+        # Preliminary batch (B20270104_PRELIM, 480 January hours x 10 non-Raudfjord substations) superseded by B20270112_FINAL
         for s in ALPHA_SUBS:
             if s == "Raudfjord":
                 continue
@@ -160,7 +165,7 @@ def _write_scada_substation(world, out_dir, ts_utc):
                 w.writerow([s, iso_oslo[h], "Europe/Oslo", f"{p_pre:.5f}", f"{vh_pre:.4f}", f"{vl_pre:.4f}",
                             int(sd["tap_step_int"][h]), "B20270104_PRELIM", "2027-01-04T06:15:00Z"])
                 n_rows += 1
-        # Final authoritative 2026 export for all 9 substations x 8,760 hours
+        # Final authoritative 2026 export for all 11 substations x 8,760 hours
         for s in ALPHA_SUBS:
             sd = world["subs"][s]
             is_raud = (s == "Raudfjord")
@@ -239,8 +244,12 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
                 n_bus += 1
 
     rng = np.random.default_rng([C.SEED, 802])
-    lin_dates = _weekdays(2025, 9, 2, 22)
-    ost_dates = _weekdays(2025, 10, 2, 22)
+    ref_dates = {
+        "Fossheim": _weekdays(2025, 8, 4, 18),
+        "Lindberg": _weekdays(2025, 9, 2, 18),
+        "Ostervik": _weekdays(2025, 10, 2, 18),
+        "Solberg": _weekdays(2025, 11, 3, 18),
+    }
     gis_rows = []
     tracer_rows = []
     lat_lookup = []
@@ -249,7 +258,7 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
         sd = world["subs"][s]
         # Deterministic shuffle of lateral display numbering so commercial_mixed isn't periodic 1-in-3
         perm = rng.permutation(C.N_LATERALS)
-        dlist = lin_dates if s == "Lindberg" else ost_dates
+        dlist = ref_dates.get(s, [])
         tr_dates = sorted(rng.choice(dlist, size=C.N_LATERALS, replace=True).tolist()) if s in C.REFS else []
         for disp_i, l_i in enumerate(perm):
             l_i = int(l_i)
@@ -313,22 +322,23 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
 
 
 def _write_ref_pq_15min(world, out_dir):
-    """Write pq_archive_15min_2026.csv for modernized substations Lindberg and Ostervik (70,080 quarter-hours)."""
+    """Write pq_archive_15min_2026.csv for the four modernized substations (140,160 quarter-hours)."""
     path = os.path.join(out_dir, FILES["ref_pq"])
     qh_iso = [(BASE_UTC + dt.timedelta(minutes=15 * k)).strftime("%Y-%m-%dT%H:%M:%SZ") for k in range(C.N_QH)]
+    max_nf = max(len(world["subs"][r]["f_meta"]) for r in C.REFS)
+    f_hdr = [f"f{i + 1:02d}_p15_mw" for i in range(max_nf)]
     n_rows = 0
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["substation_id", "ts_utc", "sub_p15_mw", "sub_q15_mvar",
-                    "f01_p15_mw", "f02_p15_mw", "f03_p15_mw", "f04_p15_mw", "f05_p15_mw", "f06_p15_mw"])
-        for r in C.REFS:
+        w.writerow(["substation_id", "ts_utc", "sub_p15_mw", "sub_q15_mvar"] + f_hdr)
+        for r in sorted(C.REFS):
             sd = world["subs"][r]
             n_f = len(sd["f_meta"])
             sp = sd["sub_p15"].reshape(-1)
             sq = sd["q_15"].reshape(-1)
             fp = sd["f_p15"].reshape(n_f, -1)
             for k in range(C.N_QH):
-                fcols = [f"{fp[i, k]:.5f}" if i < n_f else "" for i in range(6)]
+                fcols = [f"{fp[i, k]:.5f}" if i < n_f else "" for i in range(max_nf)]
                 w.writerow([r, qh_iso[k], f"{sp[k]:.5f}", f"{sq[k]:.5f}"] + fcols)
                 n_rows += 1
     return n_rows

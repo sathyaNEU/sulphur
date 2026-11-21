@@ -11,7 +11,7 @@
   "shape": "06",
   "decision_type": "schedule_or_sequence",
   "answer_unit": "set_of_items",
-  "answer": "Phase 1 (2027): Hestmark (146.1%, 52.88 MVA), Raudfjord (110.6%, 39.82 MVA), Kvernholm (108.6%, 40.19 MVA); Phase 2 (2028-2029): Malmnes (95.0%, 36.10 MVA), Drangvik (94.5%, 40.16 MVA), Svarthaug (92.7%, 31.34 MVA); Defer: Tverrli (68.4%, 31.48 MVA); Total relief needed: 50.51 MVA",
+  "answer": "Phase 1 (2027): Hestmark (146.2%, 52.94 MVA), Raudfjord (110.7%, 39.84 MVA), Kvernholm (108.6%, 40.20 MVA); Phase 2 (2028-2029): Malmnes (95.1%, 36.12 MVA), Drangvik (94.6%, 40.19 MVA), Svarthaug (92.8%, 31.35 MVA); Defer: Tverrli (68.5%, 31.50 MVA); Total relief needed: 50.67 MVA",
   "answer_source": "task26/generator/figures.json",
   "gap": [
     "objective",
@@ -49,7 +49,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "scada_substation_hourly_2026.csv",
-    "rows": 78840,
+    "rows": 96360,
     "entity": "one substation-hour of archived 60-minute SCADA active energy, HV/LV bus voltages, and LTC tap position",
     "grain": "substation x hour",
     "source": "synthetic"
@@ -64,14 +64,16 @@
     "invented_names": [
       "Vesterdal Nett AS",
       "Drangvik",
+      "Fossheim",
       "Hestmark",
       "Kvernholm",
-      "Malmnes",
-      "Raudfjord",
-      "Svarthaug",
-      "Tverrli",
       "Lindberg",
-      "Ostervik"
+      "Malmnes",
+      "Ostervik",
+      "Raudfjord",
+      "Solberg",
+      "Svarthaug",
+      "Tverrli"
     ],
     "people": [
       "Espen Eide",
@@ -89,7 +91,7 @@
   "opening_move": "question-first",
   "question_form": "when",
   "driver": "Each unit's capacity-schedule tier depends on a short-interval, two-component, worst-channel peak that no single operational feed records: the main archive integrates over a coarse window while sub-unit peak registers lack timestamps so short-interval surges must be aggregated by sub-interval correlation rather than coarse coincidence; the second orthogonal component cancels opposite-signed off-peak and on-peak flows in its monthly net register and must be inverted from an impedance drop demeaned against the net total to remove transducer offset; and channel assignments in the master register have drifted from physical reality so each sub-unit's channel must be inferred from common-mode-rejected differential telemetry and summed at the peak hour rather than over annual totals.",
-  "driver_concrete": "Each substation's 2027-2029 relief schedule tier depends on its peak 15-minute limiting-phase apparent load (MVA), reconstructed by (1) aggregating monthly non-coincident feeder 15-minute excesses onto 60-minute SCADA peaks in correlated quadrature calibrated on two modernized reference substations, (2) inverting peak-hour reactive power from HV/LV bus voltage drop across transformer impedance and LTC taps demeaned against monthly net kVARh, and (3) identifying each single-phase lateral's true physical phase from common-mode-rejected AMI-to-substation voltage differentials rather than stale GIS phase tags.",
+  "driver_concrete": "Each substation's 2027-2029 relief schedule tier depends on its peak 15-minute limiting-phase apparent load (MVA), reconstructed by (1) aggregating monthly non-coincident feeder 15-minute excesses onto 60-minute SCADA peaks in correlated quadrature calibrated on four modernized reference substations, (2) inverting peak-hour reactive power from HV/LV bus voltage drop across transformer impedance and LTC taps demeaned against monthly net kVARh, and (3) identifying each single-phase lateral's true physical phase from common-mode-rejected AMI-to-substation voltage differentials rather than stale GIS phase tags.",
   "stump": "A careful solver uses hourly SCADA peaks (or hourly coincidence times feeder 15-min registers), monthly net kVARh (or class nominal) power factors, and GIS phase tags, misplacing five of seven substations across the 2027 urgent, 2028-2029 staged, and defer schedule tiers.",
   "answer_shape": "schedule-capacity",
   "weight": "synthesis",
@@ -101,7 +103,7 @@
     "validation",
     "synthesis"
   ],
-  "results": "R1 conformed multi-system substation, feeder, and lateral extracts; R2 15-minute coincident active demand by substation; R3 peak-hour reactive demand inverted from transformer voltage drop and monthly net kVARh; R4 physical phase identification and peak-hour limiting-phase share by substation; R5 validation on the two modernized reference substations; R6 peak 15-minute limiting-phase MVA, firm loading %, relief capacity needed, and 2027-2029 relief schedule.",
+  "results": "R1 conformed multi-system substation, feeder, and lateral extracts; R2 15-minute coincident active demand by substation; R3 peak-hour reactive demand inverted from transformer voltage drop and monthly net kVARh; R4 physical phase identification and peak-hour limiting-phase share by substation; R5 validation on the four modernized reference substations; R6 peak 15-minute limiting-phase MVA, firm loading %, relief capacity needed, and 2027-2029 relief schedule.",
   "one_fact_test": "Monthly net kVARh cancels nighttime leading capacitor reactive power against winter-peak lagging motor reactive power; rescues R3 alone (1 of 6 results, 16 rubric points).",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",

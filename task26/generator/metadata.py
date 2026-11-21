@@ -72,8 +72,8 @@ def write(path):
                 "source": sim_src,
             },
             F["ref_tracer"]: {
-                "covers": "2025 field phase-tracer commissioning log for Lindberg and Ostervik laterals",
-                "pulled": "2025-10-29",
+                "covers": "2025 field phase-tracer commissioning log for Fossheim, Lindberg, Ostervik, and Solberg laterals",
+                "pulled": "2025-12-05",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },

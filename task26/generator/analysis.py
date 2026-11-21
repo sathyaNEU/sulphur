@@ -239,7 +239,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
         sp_share_obs = float(lat_p_hourly[s][:, pk_h].sum() / (sub_p60[s][pk_h] * 1000.0))
         sub_cfg[s]["sp_share"] = sp_share_obs
 
-    # 11. Modernized substations continuous 15-min PQ archive (Lindberg & Ostervik)
+    # 11. Modernized substations continuous 15-min PQ archive (Fossheim, Lindberg, Ostervik & Solberg)
     ref_p15 = {r: np.zeros((C.N_HOURS, 4)) for r in refs}
     ref_q15 = {r: np.zeros((C.N_HOURS, 4)) for r in refs}
     ref_fp15 = {r: np.zeros((len(f_meta_by_sub[r]), C.N_HOURS, 4)) for r in refs}

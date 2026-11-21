@@ -616,25 +616,25 @@
   },
   {
    "band": [
-    228.4,
-    231.0
+    229.5,
+    231.5
    ],
    "depends": [
     "R1"
    ],
    "figure": "c1_total_p15_mw",
-   "golden": 229.71,
+   "golden": 229.87,
    "graded_as": "Component 1",
    "id": "R2",
    "name": "pool 15-minute coincident active demand (MW)",
    "partly": [
-    226.4,
-    233.0
+    227.5,
+    233.5
    ],
    "passes": {
     "careful": 208.24,
     "quick": 205.79,
-    "thorough": 229.71
+    "thorough": 229.87
    },
    "precedent": [
     "L22",
@@ -709,18 +709,18 @@
     "R4"
    ],
    "figure": "r5_ref_mae_pp",
-   "golden": 2.32,
+   "golden": 2.51,
    "graded_as": "Step-by-Step",
    "id": "R5",
-   "name": "referee validation MAE on Lindberg and Ostervik (pct pts)",
+   "name": "referee validation MAE on Fossheim, Lindberg, Ostervik, and Solberg (pct pts)",
    "partly": [
     3.5,
     5.5
    ],
    "passes": {
-    "careful": 22.96,
-    "quick": 30.85,
-    "thorough": 2.32
+    "careful": 20.16,
+    "quick": 29.1,
+    "thorough": 2.51
    },
    "precedent": [
     "L28",
@@ -732,31 +732,31 @@
    "bands": {
     "Drangvik": [
      93.4,
-     95.7
+     96.0
     ],
     "Hestmark": [
      143.4,
-     147.8
+     148.7
     ],
     "Kvernholm": [
-     107.2,
+     107.3,
      110.9
     ],
     "Malmnes": [
-     94.1,
-     95.8
+     94.3,
+     96.0
     ],
     "Raudfjord": [
      110.0,
-     111.4
+     111.6
     ],
     "Svarthaug": [
      92.2,
-     93.4
+     93.5
     ],
     "Tverrli": [
      67.6,
-     69.1
+     69.3
     ]
    },
    "depends": [
@@ -766,13 +766,13 @@
    ],
    "figure": "r6_loading_pct",
    "golden": {
-    "Drangvik": 94.49,
-    "Hestmark": 146.07,
-    "Kvernholm": 108.61,
-    "Malmnes": 94.99,
-    "Raudfjord": 110.61,
-    "Svarthaug": 92.73,
-    "Tverrli": 68.43
+    "Drangvik": 94.57,
+    "Hestmark": 146.24,
+    "Kvernholm": 108.65,
+    "Malmnes": 95.05,
+    "Raudfjord": 110.65,
+    "Svarthaug": 92.76,
+    "Tverrli": 68.49
    },
    "graded_as": "Asks 1 to 7",
    "id": "R6",
@@ -797,13 +797,13 @@
      "Tverrli": 49.4
     },
     "thorough": {
-     "Drangvik": 94.49,
-     "Hestmark": 146.07,
-     "Kvernholm": 108.61,
-     "Malmnes": 94.99,
-     "Raudfjord": 110.61,
-     "Svarthaug": 92.73,
-     "Tverrli": 68.43
+     "Drangvik": 94.57,
+     "Hestmark": 146.24,
+     "Kvernholm": 108.65,
+     "Malmnes": 95.05,
+     "Raudfjord": 110.65,
+     "Svarthaug": 92.76,
+     "Tverrli": 68.49
     }
    },
    "precedent": [
@@ -815,24 +815,24 @@
   {
    "bands": {
     "MVA_Drangvik": [
-     39.65,
-     40.65
+     39.7,
+     40.8
     ],
     "MVA_Hestmark": [
      51.9,
-     53.5
+     53.85
     ],
     "MVA_Kvernholm": [
-     39.65,
+     39.7,
      41.05
     ],
     "MVA_Malmnes": [
-     35.75,
-     36.4
+     35.85,
+     36.5
     ],
     "MVA_Raudfjord": [
      39.6,
-     40.1
+     40.15
     ],
     "MVA_Svarthaug": [
      31.15,
@@ -840,11 +840,11 @@
     ],
     "MVA_Tverrli": [
      31.1,
-     31.75
+     31.9
     ],
     "Total_Relief_MVA": [
-     48.3,
-     52.1
+     48.4,
+     52.7
     ]
    },
    "depends": [
@@ -854,14 +854,14 @@
    ],
    "figure": "r7_mva_and_relief",
    "golden": {
-    "MVA_Drangvik": 40.16,
-    "MVA_Hestmark": 52.88,
-    "MVA_Kvernholm": 40.19,
-    "MVA_Malmnes": 36.1,
-    "MVA_Raudfjord": 39.82,
-    "MVA_Svarthaug": 31.34,
-    "MVA_Tverrli": 31.48,
-    "Total_Relief_MVA": 50.51
+    "MVA_Drangvik": 40.19,
+    "MVA_Hestmark": 52.94,
+    "MVA_Kvernholm": 40.2,
+    "MVA_Malmnes": 36.12,
+    "MVA_Raudfjord": 39.84,
+    "MVA_Svarthaug": 31.35,
+    "MVA_Tverrli": 31.5,
+    "Total_Relief_MVA": 50.67
    },
    "graded_as": "Asks 8 to 15",
    "id": "R7",
@@ -888,14 +888,14 @@
      "Total_Relief_MVA": 6.61
     },
     "thorough": {
-     "MVA_Drangvik": 40.16,
-     "MVA_Hestmark": 52.88,
-     "MVA_Kvernholm": 40.19,
-     "MVA_Malmnes": 36.1,
-     "MVA_Raudfjord": 39.82,
-     "MVA_Svarthaug": 31.34,
-     "MVA_Tverrli": 31.48,
-     "Total_Relief_MVA": 50.51
+     "MVA_Drangvik": 40.19,
+     "MVA_Hestmark": 52.94,
+     "MVA_Kvernholm": 40.2,
+     "MVA_Malmnes": 36.12,
+     "MVA_Raudfjord": 39.84,
+     "MVA_Svarthaug": 31.35,
+     "MVA_Tverrli": 31.5,
+     "Total_Relief_MVA": 50.67
     }
    },
    "precedent": [

@@ -72,7 +72,7 @@ def run(target_dir):
     r1_p60_by_sub = {s: round(float(pack_world["subs"][s]["sub_p60"].max()), 2) for s in TARGETS}
     r1_p60_sum = round(sum(float(pack_world["subs"][s]["sub_p60"].max()) for s in TARGETS), 2)
 
-    # Verify phase-ID accuracy on the 72 field-traced reference laterals
+    # Verify phase-ID accuracy on the 144 field-traced reference laterals
     ref_tracer_matched = 0
     ref_tracer_total = 0
     gis_tracer_matched = 0
@@ -105,6 +105,9 @@ def run(target_dir):
     # Extra rivals for referee & routes table
     flat_res, _ = C.evaluate(pack_world, {"s1_mode": "flat_ratio"})
     rawdv_res, _ = C.evaluate(pack_world, {"s2_mode": "raw_dv_no_demean"})
+    cf_zone_res, _ = C.evaluate(pack_world, {"s1_mode": "cf_zone"})
+    cf_pooled_res, _ = C.evaluate(pack_world, {"s1_mode": "cf_pooled"})
+    lin_sum_res, _ = C.evaluate(pack_world, {"s1_mode": "linear_sum"})
 
     def _ref_mae(res):
         return float(np.mean([abs(res[r]["loading_pct"] - pack_world["subs"][r]["truth"]["loading_pct"]) for r in REFS]))
@@ -115,6 +118,9 @@ def run(target_dir):
         "rigorous": round(_ref_mae(rig_res), 2),
         "s1_scada60": round(_ref_mae(lat_res["S1"]), 2),
         "s1_flat_ratio": round(_ref_mae(flat_res), 2),
+        "s1_cf_zone": round(_ref_mae(cf_zone_res), 2),
+        "s1_cf_pooled": round(_ref_mae(cf_pooled_res), 2),
+        "s1_linear_sum": round(_ref_mae(lin_sum_res), 2),
         "s2_net_kvarh": round(_ref_mae(lat_res["S2"]), 2),
         "s2_raw_dv_no_demean": round(_ref_mae(rawdv_res), 2),
         "s3_gis_phase": round(_ref_mae(lat_res["S3"]), 2),
@@ -182,6 +188,9 @@ def run(target_dir):
         "direct": dir_res,
         "rigorous": rig_res,
         "s1_flat_ratio": flat_res,
+        "s1_cf_zone": cf_zone_res,
+        "s1_cf_pooled": cf_pooled_res,
+        "s1_linear_sum": lin_sum_res,
         "s2_raw_dv_no_demean": rawdv_res,
     }
     routes_out = {}
@@ -256,6 +265,9 @@ def run(target_dir):
             k_ord=round(ref_p["k_ord"], 4),
             dq_dp=round(ref_p["dq_dp"], 4),
             flat_ratio=round(ref_p["flat_ratio"], 4),
+            cf_park=round(ref_p["cf_park"], 4),
+            cf_nonpark=round(ref_p["cf_nonpark"], 4),
+            cf_pooled=round(ref_p["cf_pooled"], 4),
             tracer_matched=ref_tracer_matched,
             tracer_total=ref_tracer_total,
             gis_tracer_matched=gis_tracer_matched,
@@ -378,7 +390,7 @@ def run(target_dir):
             },
             {
                 "id": "R5",
-                "name": "referee validation MAE on Lindberg and Ostervik (pct pts)",
+                "name": "referee validation MAE on Fossheim, Lindberg, Ostervik, and Solberg (pct pts)",
                 "graded_as": "Step-by-Step",
                 "figure": "r5_ref_mae_pp",
                 "depends": ["R2", "R3", "R4"],

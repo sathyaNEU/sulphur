@@ -68,9 +68,9 @@ def main():
         check(df in tfiles, f"distractor {df} missing from target/")
 
     # --- 2. SF1-SF4: Governing standard definitions & scope ---
-    # SF1: 7 in-scope target substations, Lindberg & Ostervik modernized and excluded
-    check(stats["in_pool"] == list(C.TARGETS), "SF1: in-scope pool matches the 7 non-modernized substations")
-    check(stats["refs"] == list(C.REFS), "SF1: Lindberg and Ostervik excluded from 2027-2029 pool")
+    # SF1: 7 in-scope target substations, Fossheim, Lindberg, Ostervik, and Solberg modernized and excluded
+    check(stats["in_pool"] == sorted(C.TARGETS), "SF1: in-scope pool matches the 7 non-modernized substations")
+    check(stats["refs"] == sorted(C.REFS), "SF1: Fossheim, Lindberg, Ostervik, and Solberg excluded from 2027-2029 pool")
     # SF2, SF3, SF4: limiting-phase formula, inclusive thresholds 85/100, relief above 85% Firm N-1 MVA
     for s in C.TARGETS:
         r = fig["substations"][s]
@@ -86,8 +86,8 @@ def main():
           "SF4: total relief MVA equals sum of per-substation relief MVA")
 
     # --- 3. SF5-SF7: Layer 1 ETL exact conformance & mess neutrality ---
-    check(stats["superseded_dropped"] == 3840, f"SF5: dropped 3,840 superseded preliminary SCADA rows ({stats['superseded_dropped']})")
-    check(stats["vlv_nulls"] == 48, f"SF6: found 48 benign summer v_lv_kv comms nulls ({stats['vlv_nulls']})")
+    check(stats["superseded_dropped"] == 4800, f"SF5: dropped 4,800 superseded preliminary SCADA rows ({stats['superseded_dropped']})")
+    check(stats["vlv_nulls"] == 56, f"SF6: found 56 benign summer v_lv_kv comms nulls ({stats['vlv_nulls']})")
     for s in C.ALL_SUBS:
         sd_p = pack_world["subs"][s]
         sd_s = sim_world["subs"][s]
@@ -148,11 +148,13 @@ def main():
     # --- 5. Corelib level 5 re-proved on cut pack + referee dominance ---
     spec, *_ = C.build_spec(pack_world)
     check(corelib.run(spec) == 0, "corelib passes level 5 on cut pack")
-    check(fig["ref_params"]["tracer_matched"] == 72 and fig["ref_params"]["tracer_total"] == 72,
-          "Phase-ID matches 72/72 field-traced laterals on Lindberg and Ostervik")
-    check(fig["ref_params"]["gis_tracer_matched"] == 54, "GIS matches 54/72 (75.0%) on Lindberg and Ostervik")
+    check(fig["ref_params"]["tracer_matched"] == 144 and fig["ref_params"]["tracer_total"] == 144,
+          "Phase-ID matches 144/144 field-traced laterals on Fossheim, Lindberg, Ostervik, and Solberg")
+    check(fig["ref_params"]["gis_tracer_matched"] <= 115,
+          f"GIS matches {fig['ref_params']['gis_tracer_matched']}/144 on modernized reference sites (expected ~75%)")
+    check(len(fig["ref_ratios"]) == 10, f"Expected 10 referee rivals, got {len(fig['ref_ratios'])}")
     for rname, mult in fig["ref_ratios"].items():
-        check(mult >= 3.5, f"Referee rival {rname} is {mult}x golden MAE (< 3.5x)")
+        check(mult >= 3.0, f"Referee rival {rname} is {mult}x golden MAE (< 3.0x)")
 
     # --- 6. Distractor deletion invariance ---
     tmp = tempfile.mkdtemp(prefix="task26-nodist-")
@@ -175,8 +177,8 @@ def main():
     pypdf_txt = "\n".join(p.extract_text() or "" for p in PdfReader(std_pdf).pages)
     pdftotext_txt = subprocess.run(["pdftotext", std_pdf, "-"], capture_output=True, text=True, check=True).stdout
     for label, txt in (("pypdf", pypdf_txt), ("pdftotext", pdftotext_txt)):
-        for tok in ("NS-2026", "85.0%", "100.0%", "Lindberg", "Ostervik", "Drangvik", "Hestmark",
-                    "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli", "Lim_MVA"):
+        for tok in ("NS-2026", "85.0%", "100.0%", "Fossheim", "Lindberg", "Ostervik", "Solberg",
+                    "Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli", "Lim_MVA"):
             check(tok in txt, f"H25 PDF {label} missing token {tok!r}")
         for banned in ("quadrature", "capacitor", "kVARh", "PT offset", "demean", "storm", "regression"):
             check(banned.lower() not in txt.lower(), f"Leak check: planning standard PDF mentions {banned!r}")

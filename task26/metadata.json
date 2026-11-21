@@ -18,9 +18,9 @@
    "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2617; no external or public data)"
   },
   "commissioning_phase_log_2025.csv": {
-   "covers": "2025 field phase-tracer commissioning log for Lindberg and Ostervik laterals",
+   "covers": "2025 field phase-tracer commissioning log for Fossheim, Lindberg, Ostervik, and Solberg laterals",
    "license": "proprietary, fictional organisation",
-   "pulled": "2025-10-29",
+   "pulled": "2025-12-05",
    "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2617; no external or public data)"
   },
   "engineering_manual_class_pf.csv": {
