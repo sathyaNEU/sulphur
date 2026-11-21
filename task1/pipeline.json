@@ -1,43 +1,46 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-16",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-21",
  "doctrine": "throughout",
- "architecture": 6,
+ "architecture": 7,
  "loops": 0,
- "call": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, generator/figures.json on the cut pack: Pinterest iOS 1.66, Google iOS 1.43; Meta iOS 1.07, Google Android 1.03, AppLovin Android 1.03; Snapchat iOS 0.64, TikTok iOS 0.61)",
- "chain": "R1 the share of each channel's 12-month net revenue the billing records never took in; R2 each iOS network's 12-month net revenue per install; R3 what a budget buys and what the next euro returns; R4 each channel's return per euro and net revenue per install at the plan's weekly spend; R5 the return at the plan's stretch spend; R6 the iOS networks' plan revenue and what the stretch spend adds; R7 each channel's band",
+ "seed": 71126,
+ "call": "scale Google iOS and Pinterest iOS; hold Meta iOS, Google Android and AppLovin Android; cut TikTok iOS and Snapchat iOS (2027 return per euro at the plan's weekly spend, generator/core.py at the draw: Pinterest iOS 1.58, Google iOS 1.45; Meta iOS 1.05, Google Android 1.04, AppLovin Android 0.97; Snapchat iOS 0.62, TikTok iOS 0.55; the cut pack's figures replace these at the build)",
+ "stump": "the reflex route (the billing records trued up to the stores' reports month by month, every install postback priced at the value its network's named installs showed at the same first-48-hour value, installs and value fitted on weekly spend with held-out weeks) files Meta iOS 1.84 (scale), Google Android 0.78 (cut) and AppLovin Android 0.71 (cut) against three holds. S1 (the stores' excess over the records belongs to the subscriptions nobody opens, carried at a continuation of their own fitted to that excess) opens AppLovin Android; S2 (each network's installs that declined tracking sit unnamed among the accounts with no channel and are worth a network-specific fraction of its named ones, one ratio per source fitted together across market-weeks) opens Meta iOS; S3 (a week's spend is the auction's outcome, so what a budget buys is read on the budget with the delivery beside it) opens Google Android",
+ "chain": "R1 what an install on each Android channel went on to pay in twelve months; R2 the same for each iOS network, over every install it bought; R3 the installs a week the plan's spend buys; R4 the twelve-month net revenue per install of those installs; R5 each channel's return per euro at the plan's and at the stretch spend; R6 what one more euro on top of the plan's weekly spend returns; R7 each channel's band",
+ "components": "one per decisive step, each falling with its own step alone: AppLovin Android's twelve-month net revenue per install for the installs of the year to 2 November 2025 (EUR 4.87, with S1), Meta iOS's (EUR 5.78, with S2), the installs a week the plan's spend buys on Google Android (611, with S3)",
  "precut": {
   "exit": 0,
-  "date": "2026-11-16",
-  "checks": "precut.py task1 on the final cut: 114 checks, 0 FAIL, 2 WARN (R1 upstream of the other six by design: every figure is net revenue; nearest chains task6 and task7 answered in the Template check); generator/core.py CORE PASS level 5; prompt gate PASS"
+  "date": "2026-11-21",
+  "checks": "precut.py task1: 115 checks, 0 FAIL, 4 WARN (R1 upstream of five of the other six by design: every install's twelve-month value runs through the charges the records never took in, answered in the Carry-forward line; the nearest chains task4 and task24 share the answer shape and the weight, answered in the Template check; checks.py and effort.json owed at stage 3); generator/core.py CORE PASS level 5 on SEED 71126 (three stumps on the axes what, who and against, three open members opened by different stumps, three independent components, one stump lost 44, 45 and 47, reflex route 16, rigorous standard route 20, one stump fixed alone 25, 28 and 25); the call holds under 32 variants (nearest a line AppLovin Android 0.951 against 0.90) and under 24 perturbations of the fitted inputs; prompt gate PASS"
  },
  "leak": {
-  "leak_py": "REVIEW on the final cut, three lines, each answered in the note's Leak rulings (the policy's own vocabulary, the plan's 2027 week starts, one author on the two budget workbooks); no LEAK",
-  "reader": "two reads (Sonnet, medium): pass 1's two realism notes fixed in the generator; pass 2 on the rebuilt cut: nothing on questions 1, 2, 4 and 6, the conversion-value mapping ruled harmless, every question 5 sentence executes to the golden"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "guard.py heart task1 on the final cut: WARN only (skeleton.house_lesson: record_algorithm_inversion on two other live builds, answered in the Frontier check's Noun swap line); surface PASS",
-  "nearest": "guard.py check task1 on 2026-11-16: WARN only (skeleton.house_lesson: record_algorithm_inversion on task22 v2 and task16 v4); skeleton severity none against every card, the client's corpus and the slot's lineage"
+  "heart": "",
+  "nearest": "guard.py check task1 on 2026-11-21: WARN only (template.chain_near and overuse.weight against task4 and task24, overuse.forum, repeat.deliverables csv+xlsx, repeat.question_form which against task8, skeleton.house_lesson record_algorithm_inversion on task22 v2 and task16 v4; each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage; skeleton.py closed task1: 0 of 3 lessons closed"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW on the blocks only, both passes; pass 2's eight fixes taken in one generator pass with no golden figure moved, so no third pass is owed",
-  "report": "determinism_check_report.md (pass 2, with pass 1's summary): the seven bands held in 306 runs of the listed ways under up to nine carries; fixed: the floor of 20 on a thin first-48-hour value stated, the carry stated term by term, every way run under the three as-fitted carries (195 variants, nearest 0.068 from a line), Apple Search Ads' ratio as one number refuted on its own trial starters, the last 52 weeks' delivery share in the battery, the closing passage's figures emitted from the battery"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 17.8,
+ "paper_pair": 16,
  "effort": {
-  "quick": 9.0,
-  "careful": 17.8,
-  "thorough": 100,
-  "factorial": "corelib CORE PASS level 5: S1 the charges the records never took in (opens AppLovin Android), S2 the installs the export cannot name (opens Meta iOS), S3 what a budget buys (opens Google Android); each necessary alone, none sufficient; seven distinct wrong calls",
-  "rubric": "on the final cut (generator/results.py on corelib, bands from the 195 variants with half a per cent of the figure each side): one stump lost S1 40.5, S2 29.1, S3 39.8; reflex route 10.9; rigorous standard route 10.9; fixed alone S1 19.7, S2 29.1, S3 25.4; effort.py result by result: careful 17.8, a run that loses only S1 keeps 9, S2 16, S3 22",
-  "largest_hint": "the stores' sentence rescues R1 (1 of 7); the consent sentence and the budget sentence rescue no whole result"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "factorial": "corelib CORE PASS level 5 at the draw: S1 the charges the records never took in (opens AppLovin Android), S2 the installs the export cannot name (opens Meta iOS), S3 what a budget buys (opens Google Android); each necessary alone, none sufficient; seven distinct wrong calls across the lattice",
+  "rubric": "generator/core.py on corelib at the draw (32 variants): one stump lost S1 44, S2 45, S3 47; reflex route 16; rigorous standard route 20; fixed alone S1 25, S2 28, S3 25; effort.py on the cut pack is owed at stage 3",
+  "largest_hint": "any one sentence rescues 1 of 7 results at most: the consent sentence adds twelve rubric points (16 to 28) and rescues no result whole; the stores' sentence rescues R1 and the budget sentence R3, nine points each"
  },
  "runs": {
   "run1": null,
@@ -89,18 +92,19 @@
  ],
  "approved": null,
  "submitted": null,
- "portal": {
-  "status": "READY",
-  "date": "2026-11-16",
-  "note": "architecture 6 redrawn and rebuilt; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the CSV and the workbook)"
- },
- "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task1 once both runs are graded",
+ "portal": null,
+ "prompt_rewritten": false,
+ "resume": "/build task1 from 3: the core is proved (python3 task1/generator/core.py, CORE PASS level 5; --explore prints the referees and the perturbation table) and the note carries the Build brief; next is stage 3, the generator around core.py. Architecture 6's generator, pack, goldens and reports are in git at 2af8cff",
  "redraws": [
   {
    "date": "2026-11-16",
    "why": "the cut of 2026-11-13 (READY 145d6ea, never uploaded) graded its asks on inputs of their own and priced its careful pass at 48.2; under the rule of 18a93a7 the core was redrawn in place",
    "what": "five consent-gated iOS networks and two Android channels as the plan's members, Apple Search Ads outside the plan as a referee, the unnamed installs priced to add up to the accounts with no channel, what a budget buys in place of the spend response, every ask downstream of a stump"
+  },
+  {
+   "date": "2026-11-21",
+   "why": "the cut of 2026-11-16 (READY 2af8cff, never uploaded) was read against the client's phase 2 bar (the guidelines of 11/20 and the closed page as read on 2026-11-21): two of its three stumps owned no critical component and two components fell with two or three stumps; its second step's remedy was one ratio from a control total, the completeness card's fix under a lesson key the page closed; its first step sat next to the same card with the web checkout handing its one rate over",
+   "what": "the same organisation, policy and three axes; a declined install's worth now differs by network and the campaigns run market by market in flights, so the second step is one ratio per source fitted together across market-weeks (the single ratio, the fully named channel's ratio and an Android look-alike's are priced shortcuts); the first step separates three continuations and fits the stores' own to their excess; Android's declined installs are named, the second step's referee; one critical component per step, asked for in the decision's words; four asks"
   }
- ],
- "gates": "gates.py task1 --full on the final cut, 2026-11-16: 11 gates, 0 FAIL, 4 WARN (precut, leak REVIEW, containers one author, heart house lesson), checks.py 456 of 456, verify.py 80 of 80, two builds byte-identical (target cf2a85f605ed24ea), audit_containers.py 0 FAIL"
+ ]
 }
