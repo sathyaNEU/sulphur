@@ -31,9 +31,11 @@ The spec:
             the hurried way and everything else golden. Required keys: each stump alone, all together (the reflex
             route), and all but one (each stump fixed alone on the reflex route).
   referee   {"slice": text, "covers_target": false, "truth": x, "golden": x, "rivals": {route: x, ...}}
-  figures   every figure the answer blocks will state, one per rubric criterion (the recommendation is the call
-            itself and is not listed):
+  figures   every figure the answer blocks will state (the recommendation is the call itself and is not listed).
+            Each figure sentence of the blocks is one rubric criterion, all or nothing: figures stated in one
+            sentence share a "sentence" id and are earned together, and a figure with none is its own sentence:
             {"id": "F3", "block": "component" | "ask", "weight": 1.0 (relative inside its block),
+             "sentence": id (optional),
              "member": name}                     the member's own figure: golden, family, lattice and routes are
                                                  read from the member, or
             {"id": ..., "block": ..., "golden": x, "family": [x, ...] (twelve or more), "band": [lo, hi] (optional:
@@ -45,7 +47,9 @@ The spec:
 The rubric (supplemental-stumping Part 0). The generated rubrics on file split 18 to the recommendation, about 20 to
 the critical components, about 53 to the asks and 9 to instruction-following, which every run earns. A route earns
 a figure when its value sits inside the figure's band stretched by NEAR_MISS about the golden (a narrower miss is a
-near miss, which the review gives back). corelib prices every route of the lattice on that rubric and refuses a core
+near miss, which the review gives back), and a criterion when it earns every figure of its sentence (the generated
+rubrics made one criterion of a sentence naming several figures, and it needs them all). corelib prices every route
+of the lattice on that rubric and refuses a core
 where a run that loses any one stump still clears ONE_LOST_MAX, where the reflex route clears REFLEX_MAX, or where
 fixing one stump alone on the reflex route earns nothing or more than a third.
 
@@ -169,8 +173,16 @@ def _figures(spec, lat):
         exact = bool(f.get("exact")) or not _num(golden)
         out.append({"id": fid, "block": block, "weight": float(f.get("weight", 1.0)), "golden": golden,
                     "band": None if exact else band, "family": family, "values": values, "routes": routes,
-                    "member": m, "exact": exact})
+                    "member": m, "exact": exact, "sentence": str(f.get("sentence") or fid)})
     return out, problems
+
+
+def _criteria(fs):
+    """The figures of one block as rubric criteria: the figures of one sentence are one criterion."""
+    crit = {}
+    for f in fs:
+        crit.setdefault(f["sentence"], []).append(f)
+    return list(crit.values())
 
 
 def _earned(f, x):
@@ -187,10 +199,11 @@ def _score(figs, call_right, value_of):
     """What a route earns on the rubric: instruction-following, the recommendation, and each figure it lands."""
     e = BLOCKS["instruction"] + (BLOCKS["recommendation"] if call_right else 0.0)
     for b in ("components", "asks"):
-        fs = [f for f in figs if f["block"] == b]
-        tot = sum(f["weight"] for f in fs)
+        crit = _criteria([f for f in figs if f["block"] == b])
+        tot = sum(max(f["weight"] for f in c) for c in crit)
         if tot > 0:
-            e += BLOCKS[b] * sum(f["weight"] for f in fs if _earned(f, value_of(f))) / tot
+            e += BLOCKS[b] * sum(max(f["weight"] for f in c) for c in crit
+                                 if all(_earned(f, value_of(f)) for f in c)) / tot
     return e
 
 
@@ -353,9 +366,11 @@ def check(spec):
     figs, fprob = _figures(spec, lat)
     comps = [f for f in figs if f["block"] == "components"]
     asks = [f for f in figs if f["block"] == "asks"]
+    nsent = len(_criteria(asks))
     if row("graded figures listed", not fprob and 2 <= len(comps) <= 5 and len(asks) >= 2,
-           "%d critical components (two to five) and %d ask figures (two or more)%s" % (
-               len(comps), len(asks), ("; " + "; ".join(fprob)) if fprob else "")):
+           "%d critical components (two to five) and %d ask figures (two or more)%s%s" % (
+               len(comps), len(asks), (" in %d sentences, each one criterion" % nsent) if nsent != len(asks) else "",
+               ("; " + "; ".join(fprob)) if fprob else "")):
         gaps = [f["id"] for f in figs if any(f["values"].get(k) is None for k in need)]
         loose = []
         for f in figs:
@@ -374,12 +389,16 @@ def check(spec):
             one = {s: earn[_key([s])] for s in sids}
             fixed = {s: earn[_key([t for t in sids if t != s])] for s in sids}
             silent = [f["id"] for f in figs if _earned(f, f["values"][_key(sids)])]
+            whole = [c[0]["sentence"] for c in _criteria(asks)
+                     if len(c) > 1 and all(_earned(f, f["values"][_key(sids)]) for f in c)]
             row("one stump lost, the run stays under the bar", max(one.values()) <= ONE_LOST_MAX + 1e-9,
                 "a run that loses only %s (%.0f or under each; the review reads its strongest run)" % (
                     ", ".join("%s earns %.0f" % (s, one[s]) for s in sids), ONE_LOST_MAX))
             row("the reflex route on the rubric", base <= REFLEX_MAX + 1e-9,
                 "every stump lost earns %.0f (%.0f or under; %.0f of it is instruction-following); figures it "
-                "still lands: %s" % (base, REFLEX_MAX, BLOCKS["instruction"], ", ".join(silent) or "none"))
+                "still lands: %s%s" % (base, REFLEX_MAX, BLOCKS["instruction"], ", ".join(silent) or "none",
+                                       ("; sentences it lands whole: " + (", ".join(whole) or "none"))
+                                       if nsent != len(asks) else ""))
             flat = [s for s in sids if fixed[s] <= base + 1e-9]
             rich = [s for s in sids if fixed[s] - base > HINT_MAX + 1e-9]
             row("one stump fixed alone earns more, a third at most", not flat and not rich,
@@ -592,6 +611,15 @@ def selftest():
     expect("a core with no graded figures", s, 0, "graded figures")
     s = _demo(SPARSE)                           # each stump moves its own member's figure and nothing else
     expect("a run that loses one stump still clears 50 (sparse figures)", s, 0, "one stump lost")
+    s = _demo(SPARSE)                           # the same figures stated in one sentence are one criterion
+    for f in s["figures"]:
+        if f.get("member"):
+            f["sentence"] = "every member's figure"
+    lost = [r for r in check(s)[0] if r[0].startswith("one stump lost")]
+    good = bool(lost) and lost[0][1] == "PASS"
+    ok &= good
+    print("  %s  %-62s %s" % ("PASS" if good else "FAIL", "figures of one sentence earned together or not at all",
+                              lost[0][2][:60] if lost else "no rubric row"))
     s = copy.deepcopy(base)                     # figures no stump touches: counts and totals every run rebuilds
     keys = list(fig(s, "X")["lattice"])
     s["figures"] += [{"id": "N%d" % i, "block": "ask", "golden": 1000 + i, "exact": True,

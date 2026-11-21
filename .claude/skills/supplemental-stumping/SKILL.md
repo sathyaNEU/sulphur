@@ -20,8 +20,9 @@ both came to 100 points the same way: the recommendation one criterion of 18; th
 asks 50 to 55; instruction-following 9, one point per requested file, per described feature of a file or chart and
 per format rule. Each figure sentence of the Critical Components and the Supplementary Questions became one
 criterion (a sentence naming two members' figures became one criterion that needs both), and no criterion came from
-the Step-by-Step. `../stumping/corelib.py` prices on 18, 20, 53 and 9; `effort.py` keeps 38, 55 and 7 so builds
-stay comparable with the ones already priced.
+the Step-by-Step. `../stumping/corelib.py` prices on 18, 20, 53 and 9, the figures of one sentence as one criterion
+(each figure of the core carries its `sentence`); `effort.py` keeps 38, 55 and 7 so builds stay comparable with the
+ones already priced.
 
 **A run's score is what its route lands.** Every run earns the 9, so 9 is the floor. Above it a run earns the
 recommendation when its call is right, and each figure whose value sits inside the band the blocks state. A frontier
@@ -136,7 +137,9 @@ platform's two runs are the only measurement (`/triage-runs`).
 6. **A committed figure for every member.** The prompt asks for the figure on every member, so a run that names the
    problem and declines to estimate is wrong on every row and not only on the call.
 7. **Sentences are criteria.** One figure sentence is one criterion, all or nothing. Each sentence of the blocks is
-   the deliverable's own row or line, and no sentence holds only figures the reflex route lands. Each file's look
+   the deliverable's own row or line, and no sentence holds only figures the reflex route lands. In `generator/core.py`
+   the figures a line states together share one `sentence` id, so `corelib.py` prices the line and never its
+   figures one by one, and a component's figure restated on an ask line is listed there as well. Each file's look
    is described in one line: every described feature (a column list, a chart element, an ordering) is a point every
    run earns.
 8. **No ask is won or lost on a surface cause.** A run that loses an ask to a field reading, a filed rule, a planted

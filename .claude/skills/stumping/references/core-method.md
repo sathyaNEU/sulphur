@@ -99,7 +99,8 @@ out loud leaves one step. Keep the three that sit on different axes and bear on 
    "a model that gets one step wrong should still be able to earn the others"), and the ask figures (every member's
    figure, and the consequences the prompt will ask for, which fall with two stumps or more), each on the same
    lattice keys and on the rigorous standard route; a figure that falls with two stumps is listed as an ask, never
-   as a component;
+   as a component; figures the blocks will state in one sentence share a `sentence` id, because the generated
+   rubric makes one criterion of the sentence and it needs every figure on it;
 7. `sys.exit(corelib.run(spec))`.
 
 **55 to 60 minutes.** Copy the printed tables into the note's `## Stump core` (the rubric table under `Earns:`).
