@@ -142,7 +142,13 @@ def _excel_styles(data):
         if get("i") is not None and get("i").get("val", "1") not in ("0", "false"):
             parts.append("<i/>")
         parts.append('<sz val="%s"/>' % (get("sz").get("val") if get("sz") is not None else "11"))
-        parts.append('<color theme="1"/>')
+        col = get("color")
+        if col is not None and col.get("rgb"):                      # a colour the writer set is the cell's ink: white
+            parts.append('<color rgb="FF%s"/>' % col.get("rgb")[-6:])   # on a dark header, grey on a note
+        elif col is not None and col.get("theme") is not None:
+            parts.append('<color theme="%s"/>' % col.get("theme"))
+        else:
+            parts.append('<color theme="1"/>')
         parts.append('<name val="%s"/>' % (get("name").get("val") if get("name") is not None else "Calibri"))
         parts.append('<family val="2"/><scheme val="minor"/>')
         fonts.append("<font>%s</font>" % "".join(parts))
@@ -158,8 +164,30 @@ def _excel_styles(data):
         else:
             fills.append('<fill><patternFill patternType="%s"/></fill>' % (kind or "none"))
     out.append('<fills count="%d">%s</fills>' % (len(fills), "".join(fills)))
-    out.append('<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'
-               '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>')
+    borders = []
+    for bd in root.findall("m:borders/m:border", ns):
+        sides = []
+        for side in ("left", "right", "top", "bottom", "diagonal"):
+            e = bd.find("m:" + side, ns)
+            style = e.get("style") if e is not None else None
+            if not style:
+                sides.append("<%s/>" % side)
+                continue
+            col = e.find("m:color", ns)
+            if col is not None and col.get("rgb"):
+                colour = '<color rgb="FF%s"/>' % col.get("rgb")[-6:]
+            elif col is not None and col.get("theme") is not None:
+                colour = '<color theme="%s"/>' % col.get("theme")
+            else:
+                colour = '<color indexed="64"/>'
+            sides.append('<%s style="%s">%s</%s>' % (side, style, colour, side))
+        borders.append("<border>%s</border>" % "".join(sides))
+    if not borders:
+        borders = ["<border><left/><right/><top/><bottom/><diagonal/></border>"]
+    # every border the cell formats point at is carried: a format whose borderId the table does not hold is a
+    # file Excel repairs on open and openpyxl cannot read back
+    out.append('<borders count="%d">%s</borders>' % (len(borders), "".join(borders))
+               + '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>')
     cells = []
     for x in xfs:
         num = renum.get(x["num"], x["num"])
@@ -167,6 +195,7 @@ def _excel_styles(data):
         attrs += ' applyNumberFormat="1"' if num else ""
         attrs += ' applyFont="1"' if x["font"] else ""
         attrs += ' applyFill="1"' if x["fill"] else ""
+        attrs += ' applyBorder="1"' if x["border"] else ""
         if x["align"]:
             al = "".join(' %s="%s"' % (k, x["align"][k]) for k in ("horizontal", "vertical", "wrapText") if k in x["align"])
             cells.append('<xf %s applyAlignment="1"><alignment%s/></xf>' % (attrs, al))
