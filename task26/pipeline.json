@@ -1,0 +1,64 @@
+{
+ "task": "task26",
+ "status": "READY",
+ "domain": "energy-systems-utilities",
+ "subdomain": "distribution-losses-energy-balance",
+ "objective": "etl",
+ "stage": 5,
+ "stage_name": "ready",
+ "updated": "2026-11-21",
+ "doctrine": "throughout",
+ "seed": 2617,
+ "architecture": 1,
+ "loops": 0,
+ "call": "Phase 1 (2027): Hestmark (146.1%, 52.88 MVA, 22.11 MVA relief), Raudfjord (110.6%, 39.82 MVA, 9.22 MVA), Kvernholm (108.6%, 40.19 MVA, 8.74 MVA); Phase 2 (2028-2029): Malmnes (95.0%, 36.10 MVA, 3.80 MVA), Drangvik (94.5%, 40.16 MVA, 4.04 MVA), Svarthaug (92.7%, 31.34 MVA, 2.61 MVA); Defer: Tverrli (68.4%, 31.48 MVA, 0.00 MVA); pool total relief 50.51 MVA (C1 229.71 MW, C2 60.72 MVAr, C3 37.69%)",
+ "paper_pair": 20.8,
+ "prompt_rewritten": false,
+ "core_level": 5,
+ "forcing": "PASS",
+ "effort": {
+  "quick": 7.0,
+  "careful": 20.8,
+  "thorough": 100.0,
+  "corelib_one_lost": {
+   "S1": 22,
+   "S2": 29,
+   "S3": 22
+  },
+  "corelib_reflex": 9,
+  "corelib_rigorous": 16
+ },
+ "gates": {
+  "precut": "PASS (0 FAIL, 1 answered WARN)",
+  "effort": "PASS (quick 7.0, careful 20.8, thorough 100.0)",
+  "voice": "PASS (0 FAIL, 0 WARN)",
+  "leak": "REVIEW (0 LEAK, 2 isolated leak-reader passes clean)",
+  "figures": "PASS (300/300 figures matched)",
+  "containers": "PASS (0 FAIL, 0 WARN)",
+  "heart": "WARN only (0 BLOCK, skeleton PASS)",
+  "surface": "PASS",
+  "checks": "PASS",
+  "verify": "PASS (standalone recomputation from target.zip)",
+  "rebuild": "PASS (byte-identical across two full builds)"
+ },
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "summary": "Gates A-E PASS; 0.0000 max 2-dp error across all 4 answer blocks and golden deliverables; 100% schedule invariance across 62 stress tests; all Pass 1 non-blocking polish items fixed and re-verified.",
+  "report": "determinism_check_report.md"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null
+ },
+ "resume": "optional author prompt rewrite (run voice-check.py --rewrite and leak.py), upload target.zip, golden.zip, prompt.txt, and submission.md four blocks to platform, then triage once both rollouts are graded",
+ "final_cut": {
+  "date": "2026-11-21",
+  "target_zip_md5": "184f0af372fedebca1f3b11f03bbd8e2",
+  "golden_zip_md5": "398791e879e03ee7077b37c064cdcb17",
+  "target_digest": "5aced33e9b9f64df",
+  "golden_digest": "cab82e2df99c5601"
+ }
+}
