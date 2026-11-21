@@ -107,8 +107,13 @@ Each answer is graded at the main call's bar: it reproduces and is uniquely forc
 
 **3. Critical Components.** The decisive steps, and the correct answer to each (the client's guidelines of 11/20,
 section 4: "list the two or more decisive, challenging steps and the correct answer to each. The rubric's heaviest
-criteria are built from them"). 2 to 5 lines, **one per stump** (`generator/core.py`'s components), the figure in
-bold at its rounding everywhere else. Four rules, each the page's own:
+criteria are built from them"). The form's field asks for exactly this block
+(`guidelines/client/critical-components-question-2026-11-21.md`: "What are the two or more decisive and challenging
+steps the model must get right to reach your final answer? ... For each step, give the step and its correct answer
+(the figure, set, classification or finding it produces"), so the block is pasted there as it stands: each line names
+its step by the quantity that step produces and gives the answer. 2 to 5 lines, **one per stump**
+(`generator/core.py`'s components), the figure in bold at its rounding everywhere else. Four rules, each the page's
+own:
 
 - **The answer, not the method.** "The restated 2023 baseline is USD 4.2M", not "restate the baseline". The line
   states the quantity in the deliverable's words, its figure, its unit and its band, and stops. No clause that says
