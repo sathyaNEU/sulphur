@@ -37,10 +37,14 @@ return that says the task hinges on one thing, a factor was planted, or the doma
 |---|---|---|---|
 | `stump-architect` (the brain: the core, the card, the note, the brief) | stages 0 to 2 of `/build`; `/draw` in the main thread; design judgments in `/fix-rubric` and `/fix-determinism` | Fable 5.2, xhigh (agent definition; `/draw` frontmatter) | the three or four judgments that stump the review's strongest run decide whether a build is approved; everything after them is execution |
 | The build (the body: generator around `core.py`, pack, goldens, blocks, pack repairs) | `/build` from stage 3, `/fix-determinism`, `/fix-rubric` | Opus 5.5, high (command frontmatter) | it executes an exact brief; it never moves a frozen dial |
-| `determinism-judge` (one thread, determinism only, about 45 tool calls) | stage 4, `/fix-determinism` | Fable 5.2, high (agent definition) | it stands in for the review's audit, whose forks cost a return each (task24, task20, task25); it is a different model from the one that wrote the blocks; one or two short runs a build |
+| `determinism-judge` (one thread, determinism only, about 45 tool calls) | stage 4, `/fix-determinism` | Opus 5.5, high (agent definition) | it stands in for the review's audit, whose forks cost a return each (task24, task20, task25); it is a thread of its own that never sees the generator, the note or the figures file; one or two short runs a build |
 | Leak reader | stage 4, `/leak-check` | Sonnet 5.5, medium (`general-purpose`, on the call) | it reads and answers, it does not reason about method; no leak return on record since it was set |
 | `run-triage` | stage 6, `/triage-runs` | Opus 5.5, medium (agent definition) | reading two runs against a rubric |
 | `/approve` | author sign-off before upload | medium | mechanical |
+
+**Fable 5.2 is the design's model and no other role's.** Only the `stump-architect` and `/draw` run on it; the
+judge, the leak reader and the triage are never spawned on it, by their definition or by a `model` on the `Agent`
+call, and a judge resumed for a second pass is resumed on the model its definition names.
 
 A command's `model` and `effort` hold for the turn it runs in; the session's own model answers the next message. An
 agent's definition holds wherever it is spawned. So the brain's model is pinned by its agent definition, and a build

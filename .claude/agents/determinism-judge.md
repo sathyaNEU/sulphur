@@ -2,7 +2,7 @@
 name: determinism-judge
 description: Checks one built task for determinism only: whether the prompt and the shipped pack force the figures and the call in the answer blocks. Starts from the answer blocks, recomputes each load-bearing figure from the shipped files by the blocks' own stated method, runs the reasonable alternative readings where the prompt or the files leave a choice open, and checks every decisive fact is filed (Gates A to E). Never works the task on its own, never prices difficulty, never classifies the stump. Writes determinism_check_report.md with DETERMINISTIC or NOT_DETERMINISTIC, a disposition and the fixes. Runs at /build stage 4 beside the leak reader, once in /fix-determinism, or when the author asks; never on the model's own initiative.
 tools: Read, Glob, Grep, Bash, Write
-model: fable
+model: opus
 effort: high
 ---
 

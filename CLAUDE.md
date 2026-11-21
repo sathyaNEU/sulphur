@@ -298,9 +298,10 @@ asked of every factor of each member's figure, three stumps kept on different ax
 `stumping/corelib.py`, which grades the core level 5, level 4 or fail, prices every route on the rubric, and which
 `precut.py` runs. The build (Opus
 5.5 at high) executes that brief and moves nothing in it; whatever touches the core goes back to the architect. The
-`determinism-judge` runs on Fable 5.2 at high (it stands in for the review's audit), the leak reader on Sonnet at
-medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. No isolated thread
-runs on the model's own initiative; the commands above license the ones they name.
+`determinism-judge` runs on Opus 5.5 at high (it stands in for the review's audit), the leak reader on Sonnet at
+medium, the run triage on Opus at medium, each set in `.claude/agents/` or on the `Agent` call. Fable 5.2 is the
+design's model and no other role's: no judge, reader or triage thread is spawned on it. No isolated thread runs on
+the model's own initiative; the commands above license the ones they name.
 
 ## The workflow
 
