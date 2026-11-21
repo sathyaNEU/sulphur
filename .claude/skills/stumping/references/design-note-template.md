@@ -185,10 +185,11 @@ Run routes: <the four routes frontier runs take, each implemented in core.py's r
   that observes the target or a stump's quantity, or "none" and why), hedge (every signal noticed and kept as a
   sensitivity, the face value central), cut-off (a filter where a fitted model is needed, or "none" and why); for
   each, the call it files, the member it gets wrong and on which side of the line, and what it earns>
-Validation handles: <every shipped file that lets a run score a stump's own quantity or the target under the
-  members' instruments (a total that closes a loss, a pair that reads a ratio off, a slice that scores the chain), and
-  for each stump why none does; a referee is listed here with the calibrated route's wrong call (stump-screen tests
-  16 and 18)>
+Validation handles: <a matrix, every shipped file against every stump's parameter, each cell answering whether a
+  run that fits every free parameter by likelihood or least squares can fit or score that parameter from that file
+  alone or with one other shipped file (a total beside a tally, two heights or two sensors at one site, a slice that
+  observes the target, a confirming log); any yes on a deciding stump kills that stump; a referee is listed with the
+  calibrated route's wrong call (stump-screen tests 16 and 18)>
 Forward window: <why the window's figure is not the record's own mean or rate restated: the process of the world that
   moves it, the history-mean route's figure against the golden's (stump-screen test 20)>
 

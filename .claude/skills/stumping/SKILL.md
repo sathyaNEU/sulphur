@@ -518,7 +518,10 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    residual into expected counts (R101). Every open member sat 1.1 to 1.5 storms above its line with every priced
    shortcut under it, so their generous corrections filed all seven classes against a paper pair of 26.7. So
    `core.py` implements four routes beside the lattice (`run_routes`), each filing a wrong call and each priced on the
-   rubric at 50 or under: the generous route (every correction the pack suggests at full strength, the uncertainty
+   rubric at 50 or under. Each is an estimator run on the simulated world, never a figure typed into the spec: the
+   generous route fits, by likelihood or least squares, every free parameter that any shipped file identifies,
+   integrates the residual and runs a held-out check (R98 to R101), and a route whose parameter the designer sets is
+   not a run route. The four: the generous route (every correction the pack suggests at full strength, the uncertainty
    integrated), the calibrated route (end to end on any slice that observes the target or a stump's quantity), the
    hedge route (every signal noticed and kept as a sensitivity, the face value central: examples 16 and 17, L53) and
    the cut-off route (a filter where a fitted model is needed: example 17's best run). Across the lattice and these

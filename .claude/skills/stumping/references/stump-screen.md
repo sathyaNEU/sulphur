@@ -132,7 +132,13 @@ nothing in-house solves the task, so the idea has to be right before it is built
    (L53, examples 16 and 17). So the parameter is identified only through a covariate the run must build from
    another file (days to each interview's own deadline, the queue a case opened under, each customer's use count
    across two systems) or through an internal consistency check, and test 16's falsification check is how the
-   golden shows it; a file that measures the parameter for some units is the closed calibration card (test 1).
+   golden shows it; a file that measures the parameter for some units is the closed calibration card (test 1). A
+   stump is live only when (a) a run that fits every free parameter on the pack as shipped cannot recover it without
+   a covariate built from a second file or a joint fit with a tangled neighbour, (b) its default passes the back-test
+   a run does on the history, because the world's process is weaker there, and (c) the process that moves the forward
+   window is not a closed card's fix. No collocated pair ships for any stump's parameter (two heights or two sensors
+   at one site, a total beside a tally): that pairing was R98's and R99's handle. The note's `Validation handles:`
+   line is the matrix of every shipped file against every stump's parameter.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
    full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
