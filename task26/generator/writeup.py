@@ -1,4 +1,11 @@
-"""Emit task26/submission.md strictly from generator/figures.json (four graded answer blocks + Tags, zero em dashes)."""
+"""Emit task26/submission.md strictly from generator/figures.json following submission-writeup/SKILL.md:
+- Tags (2 lines at top)
+- Final Recommendation (2 sentences max: bold call answering both parts of the main ask, plus what it rejects and why)
+- Supplementary Questions (grouped by deliverable file, 3 numbered multi-faceted asks with a/b/c member lines, no tables)
+- Critical Components (3 one-liners: pure answer + unit + band, zero method clauses, strictly independent)
+- Step-by-Step (8 numbered steps + closing unnumbered independence/uniqueness passage)
+Zero em/en dashes; every figure drawn strictly from figures.json.
+"""
 
 
 def write(path, fig):
@@ -8,93 +15,110 @@ def write(path, fig):
     rm = fig["ref_mae"]
     rr = fig["ref_ratios"]
     ps = fig["pack_stats"]
-    rf = fig["routes"]["S1+S2+S3"]
-    rg = fig["routes"]["rigorous"]
-    dr = fig["routes"]["direct"]
+    rt = fig["routes"]
+    rf = rt["S1+S2+S3"]
+    rg = rt["rigorous"]
+
+    def _join_and(items):
+        if len(items) <= 1:
+            return "".join(items)
+        if len(items) == 2:
+            return f"{items[0]} and {items[1]}"
+        return ", ".join(items[:-1]) + f", and {items[-1]}"
 
     ordered = sorted(fig["targets"], key=lambda s: -subs[s]["loading_pct"])
-    p1_str = ", ".join(f"{s} ({subs[s]['loading_pct']:.1f}%, {subs[s]['lim_mva']:.2f} MVA, {subs[s]['relief_mva']:.2f} MVA relief)"
-                       for s in ordered if subs[s]["phase"] == "Phase 1 (2027)")
-    p2_str = ", ".join(f"{s} ({subs[s]['loading_pct']:.1f}%, {subs[s]['lim_mva']:.2f} MVA, {subs[s]['relief_mva']:.2f} MVA relief)"
-                       for s in ordered if subs[s]["phase"] == "Phase 2 (2028-2029)")
-    df_str = ", ".join(f"{s} ({subs[s]['loading_pct']:.1f}%, {subs[s]['lim_mva']:.2f} MVA, {subs[s]['relief_mva']:.2f} MVA relief)"
-                       for s in ordered if subs[s]["phase"] == "Defer")
+    p1_str = _join_and([
+        f"{s} ({subs[s]['loading_pct']:.2f}% Firm N-1, {subs[s]['relief_mva']:.2f} MVA)"
+        if i == 0 else f"{s} ({subs[s]['loading_pct']:.2f}%, {subs[s]['relief_mva']:.2f} MVA)"
+        for i, s in enumerate(s for s in ordered if subs[s]["phase"] == "Phase 1 (2027)")
+    ])
+    p2_str = _join_and([
+        f"{s} ({subs[s]['loading_pct']:.2f}%, {subs[s]['relief_mva']:.2f} MVA)"
+        for s in ordered if subs[s]["phase"] == "Phase 2 (2028-2029)"
+    ])
+    df_str = _join_and([
+        f"{s} ({subs[s]['loading_pct']:.2f}%)"
+        for s in ordered if subs[s]["phase"] == "Defer"
+    ])
 
-    sub_rows = []
-    for s in ordered:
+    letters = "abcdefg"
+    ask1_lines = []
+    ask3_lines = []
+    for ch, s in zip(letters, ordered):
         r = subs[s]
         lb = b["loading_pct"][s]
         mb = b["lim_mva"][s]
         pb = b["p15_mw"][s]
         qb = b["q_peak_mvar"][s]
-        wb_ = b["w_max_pct"][s]
-        sub_rows.append(
-            f"| {s} | {r['firm_n1_mva']:.1f} | {r['p15_peak_mw']:.2f} ({pb[0]:.2f} to {pb[1]:.2f}) | "
-            f"{r['q_peak_h_mvar']:.2f} ({qb[0]:.2f} to {qb[1]:.2f}) | {r['w_max_pct']:.2f}% ({wb_[0]:.2f}% to {wb_[1]:.2f}%) | "
-            f"{r['lim_mva']:.2f} ({mb[0]:.2f} to {mb[1]:.2f}) | {r['loading_pct']:.2f}% ({lb[0]:.1f}% to {lb[1]:.1f}%) | "
-            f"{r['relief_mva']:.2f} | {r['phase']} |"
+        wb = b["w_max_pct"][s]
+        ask1_lines.append(
+            f"   {ch}. {s}: {r['lim_mva']:.2f} MVA ({mb[0]:.2f} to {mb[1]:.2f}), "
+            f"{r['loading_pct']:.2f}% Firm N-1 ({lb[0]:.1f}% to {lb[1]:.1f}%), "
+            f"{r['relief_mva']:.2f} MVA relief, {r['phase']}."
         )
-    sub_table = "\n".join(sub_rows)
+        ask3_lines.append(
+            f"   {ch}. {s}: {r['p15_peak_mw']:.2f} MW ({pb[0]:.2f} to {pb[1]:.2f}), "
+            f"{r['q_peak_h_mvar']:.2f} MVAr ({qb[0]:.2f} to {qb[1]:.2f}), "
+            f"{r['w_max_pct']:.2f}% ({wb[0]:.2f}% to {wb[1]:.2f}%)."
+        )
 
     lb_r = subs["Lindberg"]
     os_r = subs["Ostervik"]
 
     lines = [
-        "# Vesterdal Nett AS 2027-2029 Substation Firm-Capacity Relief Schedule",
-        "",
-        "## Final Recommendation",
-        "",
-        f"Under Network Planning Standard NS-2026 (Phase 1 urgent relief >= {fig['planning_lines']['phase1_pct']:.1f}% Firm N-1 MVA, "
-        f"Phase 2 staged relief >= {fig['planning_lines']['phase2_pct']:.1f}% and < {fig['planning_lines']['phase1_pct']:.1f}%, Defer < {fig['planning_lines']['phase2_pct']:.1f}%, "
-        f"with relief capacity sized above the {fig['planning_lines']['phase2_pct']:.1f}% Firm N-1 planning ceiling), the seven in-scope 66/22 kV substations are scheduled as follows:",
-        "",
-        f"- **Phase 1 (2027 urgent relief):** {p1_str}.",
-        f"- **Phase 2 (2028-2029 staged relief):** {p2_str}.",
-        f"- **Defer (post-2029):** {df_str}.",
-        f"- **Pool Total Relief Capacity Needed:** **{fig['total_relief_mva']:.2f} MVA** (21-variant band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA).",
-        "",
-        f"Lindberg ({lb_r['truth_loading_pct_1dp']:.1f}% measured vs {lb_r['loading_pct']:.1f}% estimated) and Ostervik "
-        f"({os_r['truth_loading_pct_1dp']:.1f}% measured vs {os_r['loading_pct']:.1f}% estimated) were modernized in 2023-2024 and are excluded from the 2027-2029 relief pool per NS-2026 Section 2. "
-        f"Every single one of the {ps['n_variants']} honest modeling variants and all six +/-20% perturbations on fitted inputs file this exact seven-substation schedule. "
-        f"By contrast, the reflex shortcut (60-minute SCADA peak, monthly net kVARh power factor, and GIS phase tags) misplaces five substations and puts total relief at {rf['total_relief_mva']:.2f} MVA, "
-        f"while the rigorous standard shortcut (hourly coincidence times feeder 15-min registers, class nominal power factors, and GIS phase tags) misplaces all five open substations and puts total relief at {rg['total_relief_mva']:.2f} MVA.",
-        "",
-        "## Supplementary Questions",
-        "",
-        "Conformed 2026 peak metrics across all seven in-scope substations (each figure shown with its 21-variant band):",
-        "",
-        "| Substation | Firm N-1 (MVA) | Peak 15-Min Active (MW) | Peak-Hour Reactive (MVAr) | Peak Limiting-Phase Share (%) | Peak 15-Min Lim-Phase (MVA) | Firm N-1 Loading (%) | Relief Needed (MVA) | Assigned Phase |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---|",
-        sub_table,
-        "",
-        f"- **Pool combined 2026 peak 15-minute active demand:** **{fig['c1_total_p15_mw']:.2f} MW** (band {fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f} MW; raw 60-min SCADA peaks sum to {fig['r1_p60_sum_mw']:.2f} MW).",
-        f"- **Pool combined 2026 peak-hour reactive demand:** **{fig['c2_total_qpeak_mvar']:.2f} MVAr** (band {fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f} MVAr; monthly net kVARh implies {rf['c2_total_qpeak_mvar']:.2f} MVAr and class nominal PFs imply {rg['c2_total_qpeak_mvar']:.2f} MVAr).",
-        f"- **Pool average peak limiting-phase share:** **{fig['c3_mean_lim_phase_pct']:.2f}%** (band {fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%; GIS phase tags give {rf['c3_mean_lim_phase_pct']:.2f}%).",
-        f"- **Pool total relief capacity needed:** **{fig['total_relief_mva']:.2f} MVA** (band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA).",
-        "",
-        "Deliverables cut strictly from these conformed figures: `vesterdal_relief_schedule_2027_2029.xlsx` (opening on `Relief_Schedule` with the final schedule, pool totals, and embedded horizontal loading chart, plus supporting sheets) and `vesterdal_substation_conformed_2026.csv` (one conformed row per in-scope substation).",
-        "",
-        "## Critical Components",
-        "",
-        f"1. **Component 1 (15-Minute Coincident Active Peak Conformation):** Pool combined 2026 peak 15-minute active demand is **{fig['c1_total_p15_mw']:.2f} MW** (band {fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f} MW), reconstructed by correlated quadrature aggregation of monthly non-coincident feeder 15-minute excesses calibrated on Lindberg and Ostervik (rho_park = {rp['rho_park']:.4f}, rho_indep = {rp['rho_indep']:.4f}, k_ord = {rp['k_ord']:.4f}). Leaving this step out alone drops combined active demand to {fig['routes']['S1']['c1_total_p15_mw']:.2f} MW and flips Drangvik from Phase 2 ({subs['Drangvik']['loading_pct']:.1f}%) to Defer ({fig['routes']['S1']['loading_pct']['Drangvik']:.1f}%).",
-        f"2. **Component 2 (Peak-Hour Reactive Power Inversion with PT Demeaning):** Pool combined 2026 peak-hour reactive demand is **{fig['c2_total_qpeak_mvar']:.2f} MVAr** (band {fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f} MVAr), inverted from hourly HV/LV bus voltage drop across transformer nameplate resistance and reactance with LTC tap steps ({fig['planning_lines']['tap_step_pct']:.2f}% per step) and demeaned against monthly net kVARh to remove each substation's PT offset. Leaving this step out alone drops combined reactive demand to {fig['routes']['S2']['c2_total_qpeak_mvar']:.2f} MVAr and flips Kvernholm from Phase 1 ({subs['Kvernholm']['loading_pct']:.1f}%) to Phase 2 ({fig['routes']['S2']['loading_pct']['Kvernholm']:.1f}%).",
-        f"3. **Component 3 (Physical Lateral Phase Identification):** Pool average peak limiting-phase share is **{fig['c3_mean_lim_phase_pct']:.2f}%** (band {fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%), recovered by regressing common-mode-rejected hourly AMI lateral voltage differentials on three-phase substation bus voltage differentials controlling for local lateral load drop (matching {rp['tracer_matched']} of {rp['tracer_total']} field-traced laterals on Lindberg and Ostervik vs GIS {rp['gis_tracer_matched']} of {rp['tracer_total']}, {rp['gis_tracer_pct']:.1f}%). Leaving this step out alone drops the pool average to {fig['routes']['S3']['c3_mean_lim_phase_pct']:.2f}%, flips Raudfjord from Phase 1 ({subs['Raudfjord']['loading_pct']:.1f}%) to Phase 2 ({fig['routes']['S3']['loading_pct']['Raudfjord']:.1f}%), and flips Svarthaug from Phase 2 ({subs['Svarthaug']['loading_pct']:.1f}%) to Phase 1 ({fig['routes']['S3']['loading_pct']['Svarthaug']:.1f}%).",
-        "",
-        "## Step-by-Step",
-        "",
-        f"1. **Conform Multi-System Operational Extracts (R1):** Load `scada_substation_hourly_2026.csv` ({ps['raw_scada_rows']:,} raw rows), deduplicate superseded preliminary batches (`extract_ts` latest wins, dropping {ps['superseded_dropped']:,} preliminary rows to obtain {ps['clean_scada_rows']:,} clean substation-hours across 9 substations), align both Europe/Oslo CET/CEST ISO-8601 timestamps and Raudfjord's legacy `DD.MM.YYYY HH:MM` CET standard stamps to the exact 8,760-hour calendar-year 2026 Europe/Oslo grid, and linearly interpolate {ps['vlv_nulls']} benign off-peak summer comms nulls in `v_lv_kv`. Map legacy DMS feeder IDs across `feeder_scada_hourly_2026.csv` (converting kW to MW) and `feeder_demand_registers_monthly_2026.csv` using `feeder_id_crosswalk.csv` ({ps['n_feeders']} feeders total). Load monthly revenue kWh and net kVARh from `revenue_meter_monthly_2026.xlsx`, transformer ratings and impedances from `substation_transformer_register.xlsx`, hourly 3-phase LV bus voltages from `substation_phase_bus_voltages_2026.csv`, GIS tags from `gis_lateral_connectivity_2026.csv` ({ps['n_laterals_total']} laterals), and heating-season hourly AMI voltages and loads from `ami_lateral_telemetry_2026.db`. Exclude unused maintenance, streetlighting, and tariff files. Clean annual 60-minute SCADA peaks across the seven target substations sum to {fig['r1_p60_sum_mw']:.2f} MW.",
-        f"2. **Reconstruct 15-Minute Coincident Active Peaks via Correlated Quadrature (R2):** On modernized substations Lindberg and Ostervik (`pq_archive_15min_2026.csv`), compute intra-hour feeder deviations `dP_15 - P_60` during winter months (Jan, Feb, Nov, Dec) to estimate shared industrial-park feeder correlation `rho_park = {rp['rho_park']:.4f}`, independent feeder correlation `rho_indep = {rp['rho_indep']:.4f}`, and intra-hour reactive slope `dQ/dP = {rp['dq_dp']:.4f}`. Calibrate the order-statistic scaling ratio `k_ord = {rp['k_ord']:.4f}` as the MW-weighted ratio of observed substation 15-minute peak excess to raw correlated quadrature across Lindberg and Ostervik winter monthly and annual peaks. For each target substation, compute each feeder's winter-average relative 15-minute excess `((M15 - P60_m) / P60_m) * P60(h_peak)`, combine feeders in correlated quadrature using `industrial_park_zone` from `substation_transformer_register.xlsx`, and add `k_ord * raw_quad` to the annual 60-minute SCADA peak. Pool total = {fig['c1_total_p15_mw']:.2f} MW (Drangvik {subs['Drangvik']['p15_peak_mw']:.2f}, Hestmark {subs['Hestmark']['p15_peak_mw']:.2f}, Kvernholm {subs['Kvernholm']['p15_peak_mw']:.2f}, Malmnes {subs['Malmnes']['p15_peak_mw']:.2f}, Raudfjord {subs['Raudfjord']['p15_peak_mw']:.2f}, Svarthaug {subs['Svarthaug']['p15_peak_mw']:.2f}, Tverrli {subs['Tverrli']['p15_peak_mw']:.2f} MW).",
-        f"3. **Invert Peak-Hour Reactive Demand from Transformer Voltage Drop and Net kVARh (R3):** For each substation and hour, compute tap-adjusted secondary voltage ratio `tau = (22/66) * (1 + 0.0125 * tap_step)`, voltage drop `dV = V_hv * tau - V_lv`, and uncalibrated hourly reactive power `Q_uncal = (22.0 * dV - R_ohm * P_60) / X_ohm`. Because inductive potential transformers carry individual calibration offsets, demean `Q_uncal` over the substation's peak month against the monthly mean net reactive power `net_kvarh / (1000 * hours_in_month)` from `revenue_meter_monthly_2026.xlsx`, eliminating PT offset algebraically while preserving diurnal reactive swings. Average demeaned `Q_hat` over the substation's top-5 active-load hours to obtain peak-hour reactive demand `Q_h`, and project to the 15-minute peak via `Q_15 = Q_h + dQ/dP * (P_15 - P_60)`. Pool combined `Q_h` = {fig['c2_total_qpeak_mvar']:.2f} MVAr (Kvernholm {subs['Kvernholm']['q_peak_h_mvar']:.2f}, Hestmark {subs['Hestmark']['q_peak_h_mvar']:.2f}, Svarthaug {subs['Svarthaug']['q_peak_h_mvar']:.2f}, Tverrli {subs['Tverrli']['q_peak_h_mvar']:.2f}, Raudfjord {subs['Raudfjord']['q_peak_h_mvar']:.2f}, Drangvik {subs['Drangvik']['q_peak_h_mvar']:.2f}, Malmnes {subs['Malmnes']['q_peak_h_mvar']:.2f} MVAr).",
-        f"4. **Identify Physical Single-Phase Lateral Connectivity and Peak Limiting-Phase Share (R4):** Convert 3-phase LV bus voltages from kV to 230 V phase-to-neutral scale, subtract the hourly 3-phase mean common-mode bus voltage from both bus phases and AMI lateral voltages, and take hourly first differences over winter months. For each lateral, regress differenced common-mode-rejected lateral voltage on each candidate bus phase differential (`A`, `B`, `C`) and differenced lateral active load `dP_kW` (requiring positive bus-voltage slope > 0.1), assigning the physical phase with minimum residual sum of squares. Sum identified single-phase lateral kW by phase plus one-third of balanced three-phase load (`sub_p60 * 1000 - sum(lat_kw)`) over the top-5 peak hours to obtain `w_max`. Pool mean = {fig['c3_mean_lim_phase_pct']:.2f}% (Raudfjord {subs['Raudfjord']['w_max_pct']:.2f}%, Tverrli {subs['Tverrli']['w_max_pct']:.2f}%, Hestmark {subs['Hestmark']['w_max_pct']:.2f}%, Kvernholm {subs['Kvernholm']['w_max_pct']:.2f}%, Drangvik {subs['Drangvik']['w_max_pct']:.2f}%, Malmnes {subs['Malmnes']['w_max_pct']:.2f}%, Svarthaug {subs['Svarthaug']['w_max_pct']:.2f}%).",
-        f"5. **Validate Against Modernized Reference Substations (R5):** Test the end-to-end pipeline blind on Lindberg and Ostervik against their measured 15-minute PQ archives (`pq_archive_15min_2026.csv`) and 2025 field phase-tracer commissioning log (`commissioning_phase_log_2025.csv`). Physical phase-ID matches {rp['tracer_matched']} of {rp['tracer_total']} laterals (100.0%) compared to GIS's {rp['gis_tracer_matched']} of {rp['tracer_total']} ({rp['gis_tracer_pct']:.1f}%). Mean absolute Firm N-1 loading error across Lindberg ({lb_r['loading_pct']:.2f}% vs {lb_r['truth_loading_pct']:.2f}%) and Ostervik ({os_r['loading_pct']:.2f}% vs {os_r['truth_loading_pct']:.2f}%) is **{rm['golden']:.2f} pct pts**, outperforming every shortcut by {min(rr.values()):.1f}x to {max(rr.values()):.1f}x: raw un-demeaned dV {rm['s2_raw_dv_no_demean']:.2f} ({rr['s2_raw_dv_no_demean']:.1f}x), flat 15m/60m ratio {rm['s1_flat_ratio']:.2f} ({rr['s1_flat_ratio']:.1f}x), net kVARh PF {rm['s2_net_kvarh']:.2f} ({rr['s2_net_kvarh']:.1f}x), rigorous standard route {rm['rigorous']:.2f} ({rr['rigorous']:.1f}x), GIS phase tags {rm['s3_gis_phase']:.2f} ({rr['s3_gis_phase']:.1f}x), 60-min SCADA {rm['s1_scada60']:.2f} ({rr['s1_scada60']:.1f}x), and direct route {rm['direct']:.2f} ({rr['direct']:.1f}x).",
-        f"6. **Synthesize Apparent Peak Loading, Relief Capacity, Schedule, and Robustness Battery (R6 to R8):** Compute `S_15m = sqrt(P_15^2 + Q_15^2)`, `Lim_MVA = 3 * w_max * S_15m`, `Loading % = 100 * Lim_MVA / Firm_N1_MVA`, and `Relief_MVA = max(0, Lim_MVA - 0.85 * Firm_N1_MVA)` per NS-2026 Section 3, then assign tiers per Section 4 (`>= 100.0%` Phase 1, `>= 85.0%` Phase 2, `< 85.0%` Defer). Re-run across all {ps['n_variants']} honest modeling variants (all-year/peak-month windows, additive excess scaling, median correlation and `k_ord`, monthly-only `k_ord`, constant `Q_15` / constant PF, winter/annual voltage-drop anchors, measured `V_lv` scaling, single-hour / top-50 regression peak Q, 6-month heating-season / level / soft-posterior / single-hour phase-ID, and multi-stump combinations) plus six +/-20% forcing perturbations: every variant and every perturbation files the identical 7-substation schedule, establishing the bands reported above.",
+        "# task26 answer blocks",
         "",
         "## Tags",
         "",
-        "- Domain: Energy Systems & Utilities (`distribution-losses-energy-balance`)",
-        "- Objective: Data Extraction & Conformation (ETL / Pipeline Build)",
-        "- Answer shape: schedule-capacity (2027-2029 substation firm-capacity relief schedule)",
-        "- Deliverables: `vesterdal_relief_schedule_2027_2029.xlsx`, `vesterdal_substation_conformed_2026.csv`",
+        "**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities (distribution losses and energy balance: 66/22 kV substation 15-minute limiting-phase peak loading conformed from hourly SCADA, monthly feeder demand registers, transformer voltage drop, and lateral AMI voltage logs).",
+        "**Analytical objective:** Data Extraction & Conformation (ETL / Pipeline Build).",
+        "",
+        "## Final Recommendation",
+        "",
+        f"**Schedule Phase 1 (2027) firm-capacity relief at {p1_str}; Phase 2 (2028-2029) relief at {p2_str}; and defer {df_str}, for {fig['total_relief_mva']:.2f} MVA of total relief capacity (band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA).** "
+        f"This rejects the hourly SCADA, monthly net kVARh power factor, and GIS phase-tag reading, which puts total relief at {rf['total_relief_mva']:.2f} MVA and misplaces five substations (sending Svarthaug to Phase 1 at {rf['loading_pct']['Svarthaug']:.2f}% while deferring Drangvik, Kvernholm, Malmnes, and Raudfjord): hourly SCADA smooths 15-minute feeder peaks, monthly net kVARh cancels nighttime leading capacitors against winter-peak lagging load, and GIS phase tags miss unrecorded lateral re-phasing.",
+        "",
+        "## Supplementary Questions",
+        "",
+        "### vesterdal_relief_schedule_2027_2029.xlsx",
+        "",
+        "The workbook opens on `Relief_Schedule` stating the 2027-2029 relief schedule (one row per in-scope substation sorted by Firm N-1 loading percentage with the pool summary totals/average and a horizontal bar chart of each site's Firm N-1 loading percentage), followed by supporting component, reference-validation, routes-comparison, and variant-battery sheets.",
+        "",
+        "1. Estimated 2026 peak 15-minute limiting-phase apparent load (MVA), Firm N-1 loading percentage, relief capacity needed (MVA), and assigned 2027-2029 relief phase for each in-scope substation (21-variant band in parentheses):",
+        *ask1_lines,
+        "2. Pool summary across the seven in-scope substations (21-variant band in parentheses):",
+        f"   a. Combined 2026 peak 15-minute active demand: {fig['c1_total_p15_mw']:.2f} MW ({fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f} MW).",
+        f"   b. Combined 2026 peak-hour reactive demand: {fig['c2_total_qpeak_mvar']:.2f} MVAr ({fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f} MVAr).",
+        f"   c. Unweighted average peak limiting-phase share: {fig['c3_mean_lim_phase_pct']:.2f}% ({fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%).",
+        f"   d. Total relief capacity needed: {fig['total_relief_mva']:.2f} MVA ({fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA).",
+        "",
+        "### vesterdal_substation_conformed_2026.csv",
+        "",
+        "Seven rows, one per in-scope substation sorted by Firm N-1 loading percentage, holding each site's Firm N-1 rating, 60-minute SCADA peak, estimated 2026 appropriation filing figures, and assigned relief phase.",
+        "",
+        "3. Underlying 2026 peak 15-minute active demand (MW), peak-hour reactive demand (MVAr), and peak limiting-phase share (%) driving each in-scope substation's loading (21-variant band in parentheses):",
+        *ask3_lines,
+        "",
+        "## Critical Components",
+        "",
+        f"1. Combined 2026 peak 15-minute active demand across the seven in-scope substations is **{fig['c1_total_p15_mw']:.2f} MW** (band **{fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f} MW**).",
+        f"2. Combined 2026 peak-hour reactive demand across the seven in-scope substations is **{fig['c2_total_qpeak_mvar']:.2f} MVAr** (band **{fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f} MVAr**).",
+        f"3. Unweighted average 2026 peak limiting-phase share across the seven in-scope substations is **{fig['c3_mean_lim_phase_pct']:.2f}%** (band **{fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%**).",
+        "",
+        "## Step-by-Step",
+        "",
+        f"1. Conformed the operational extracts to the 8,760-hour 2026 Europe/Oslo grid (`scada_substation_hourly_2026.csv`: {ps['raw_scada_rows']:,} raw rows, {ps['superseded_dropped']:,} superseded preliminary rows dropped by latest `extract_ts` to {ps['clean_scada_rows']:,} clean substation-hours across nine substations, Raudfjord's legacy `DD.MM.YYYY HH:MM` CET stamps aligned, {ps['vlv_nulls']} benign summer comms nulls in `v_lv_kv` interpolated; legacy DMS IDs in `feeder_scada_hourly_2026.csv` [kW to MW] and `feeder_demand_registers_monthly_2026.csv` mapped via `feeder_id_crosswalk.csv` across {ps['n_feeders']} feeders; joined `revenue_meter_monthly_2026.xlsx`, `substation_transformer_register.xlsx`, `substation_phase_bus_voltages_2026.csv`, `gis_lateral_connectivity_2026.csv` [{ps['n_laterals_total']} laterals], and `ami_lateral_telemetry_2026.db`; excluded streetlighting, oil-DGA, and tariff files). Clean 60-minute SCADA peaks across the seven in-scope substations (Lindberg and Ostervik modernized and excluded per `vesterdal_planning_standard_ns2026.pdf` Section 2) sum to {fig['r1_p60_sum_mw']:.2f} MW.",
+        f"2. The hurried reading stops at those conformed operational tables: taking 60-minute SCADA peaks ({fig['r1_p60_sum_mw']:.2f} MW), monthly net kVARh power factors ({rf['c2_total_qpeak_mvar']:.2f} MVAr combined), and GIS phase tags ({rf['c3_mean_lim_phase_pct']:.2f}% mean) puts total relief at {rf['total_relief_mva']:.2f} MVA and misplaces five substations (Hestmark {rf['loading_pct']['Hestmark']:.2f}%, Svarthaug {rf['loading_pct']['Svarthaug']:.2f}%, Malmnes {rf['loading_pct']['Malmnes']:.2f}%, Kvernholm {rf['loading_pct']['Kvernholm']:.2f}%, Raudfjord {rf['loading_pct']['Raudfjord']:.2f}%, Drangvik {rf['loading_pct']['Drangvik']:.2f}%, Tverrli {rf['loading_pct']['Tverrli']:.2f}%). Three physical effects overturn it (steps 3 to 5).",
+        f"3. Reconstructed 15-minute coincident active peaks from `pq_archive_15min_2026.csv` on Lindberg and Ostervik (winter months Jan, Feb, Nov, Dec): calibrated shared industrial-park feeder intra-hour correlation `rho_park = {rp['rho_park']:.4f}`, independent correlation `rho_indep = {rp['rho_indep']:.4f}`, intra-hour reactive slope `dQ/dP = {rp['dq_dp']:.4f}`, and MW-weighted order-statistic factor `k_ord = {rp['k_ord']:.4f}`, then aggregated each target substation's winter relative feeder excesses `((M15 - P60_m) / P60_m) * P60(h_peak)` in correlated quadrature by `industrial_park_zone` (`substation_transformer_register.xlsx`) onto its 60-minute SCADA peak. Pool total is {fig['c1_total_p15_mw']:.2f} MW (Hestmark {subs['Hestmark']['p15_peak_mw']:.2f}, Drangvik {subs['Drangvik']['p15_peak_mw']:.2f}, Malmnes {subs['Malmnes']['p15_peak_mw']:.2f}, Kvernholm {subs['Kvernholm']['p15_peak_mw']:.2f}, Svarthaug {subs['Svarthaug']['p15_peak_mw']:.2f}, Raudfjord {subs['Raudfjord']['p15_peak_mw']:.2f}, Tverrli {subs['Tverrli']['p15_peak_mw']:.2f} MW); the 60-minute shortcut gives {rt['S1']['c1_total_p15_mw']:.2f} MW and defers Drangvik ({rt['S1']['loading_pct']['Drangvik']:.2f}%), while a flat reference 15m/60m ratio overshoots to {rt['s1_flat_ratio']['c1_total_p15_mw']:.2f} MW ({rt['s1_flat_ratio']['total_relief_mva']:.2f} MVA relief).",
+        f"4. Inverted peak-hour reactive demand from hourly transformer voltage drop `dV = V_hv * (22/66) * (1 + 0.0125 * tap_step) - V_lv` and nameplate impedance `Q_uncal = (22.0 * dV - R_ohm * P_60) / X_ohm`, demeaned over each substation's peak month against monthly mean `net_kvarh / (1000 * hours_in_month)` from `revenue_meter_monthly_2026.xlsx` to eliminate each PT's calibration offset while preserving diurnal reactive swings, averaged over top-5 active-load hours (`Q_h`), and projected to 15-minute peak via `Q_15 = Q_h + dQ/dP * (P_15 - P_60)`. Pool combined `Q_h` is {fig['c2_total_qpeak_mvar']:.2f} MVAr (Kvernholm {subs['Kvernholm']['q_peak_h_mvar']:.2f}, Hestmark {subs['Hestmark']['q_peak_h_mvar']:.2f}, Svarthaug {subs['Svarthaug']['q_peak_h_mvar']:.2f}, Tverrli {subs['Tverrli']['q_peak_h_mvar']:.2f}, Raudfjord {subs['Raudfjord']['q_peak_h_mvar']:.2f}, Drangvik {subs['Drangvik']['q_peak_h_mvar']:.2f}, Malmnes {subs['Malmnes']['q_peak_h_mvar']:.2f} MVAr); monthly net kVARh implies {rt['S2']['c2_total_qpeak_mvar']:.2f} MVAr and drops Kvernholm to Phase 2 ({rt['S2']['loading_pct']['Kvernholm']:.2f}%), raw un-demeaned `dV` gives {rt['s2_raw_dv_no_demean']['c2_total_qpeak_mvar']:.2f} MVAr ({rt['s2_raw_dv_no_demean']['total_relief_mva']:.2f} MVA relief), and class nominal power factors (`engineering_manual_class_pf.csv`) give {rg['c2_total_qpeak_mvar']:.2f} MVAr.",
+        f"5. Identified each single-phase lateral's physical phase by subtracting hourly 3-phase LV bus mean common mode from 230 V-scaled bus phase voltages (`substation_phase_bus_voltages_2026.csv`) and AMI lateral voltages (`ami_lateral_telemetry_2026.db`), regressing winter hourly first differences on each candidate phase differential and differenced lateral `kW` (requiring positive bus-voltage slope > 0.1), and summing identified lateral kW by phase plus one-third of balanced 3-phase load (`sub_p60 * 1000 - sum(lat_kw)`) over top-5 peak hours. Pool mean `w_max` is {fig['c3_mean_lim_phase_pct']:.2f}% (Raudfjord {subs['Raudfjord']['w_max_pct']:.2f}%, Tverrli {subs['Tverrli']['w_max_pct']:.2f}%, Hestmark {subs['Hestmark']['w_max_pct']:.2f}%, Kvernholm {subs['Kvernholm']['w_max_pct']:.2f}%, Drangvik {subs['Drangvik']['w_max_pct']:.2f}%, Malmnes {subs['Malmnes']['w_max_pct']:.2f}%, Svarthaug {subs['Svarthaug']['w_max_pct']:.2f}%); GIS phase tags give {rt['S3']['c3_mean_lim_phase_pct']:.2f}%, demoting Raudfjord to Phase 2 ({rt['S3']['loading_pct']['Raudfjord']:.2f}%) and promoting Svarthaug to Phase 1 ({rt['S3']['loading_pct']['Svarthaug']:.2f}%).",
+        f"6. Validated the full pipeline blind on modernized non-target reference substations Lindberg and Ostervik against `pq_archive_15min_2026.csv` and `commissioning_phase_log_2025.csv`: physical phase-ID matches {rp['tracer_matched']} of {rp['tracer_total']} field-traced laterals (100.0%) against GIS {rp['gis_tracer_matched']} of {rp['tracer_total']} ({rp['gis_tracer_pct']:.1f}%), and mean absolute Firm N-1 loading error across Lindberg ({lb_r['loading_pct']:.2f}% estimated vs {lb_r['truth_loading_pct']:.2f}% measured) and Ostervik ({os_r['loading_pct']:.2f}% vs {os_r['truth_loading_pct']:.2f}%) is {rm['golden']:.2f} percentage points, beating every rival by {min(rr.values()):.1f}x to {max(rr.values()):.1f}x (un-demeaned `dV` {rm['s2_raw_dv_no_demean']:.2f}, flat 15m/60m ratio {rm['s1_flat_ratio']:.2f}, net kVARh PF {rm['s2_net_kvarh']:.2f}, rigorous standard shortcut {rm['rigorous']:.2f}, GIS phase tags {rm['s3_gis_phase']:.2f}, 60-min SCADA {rm['s1_scada60']:.2f}, direct route {rm['direct']:.2f}).",
+        f"7. Applied `vesterdal_planning_standard_ns2026.pdf` Sections 3 and 4 (`S_15m = sqrt(P_15^2 + Q_15^2)`, `Lim_MVA = 3 * w_max * S_15m`, `Loading % = 100 * Lim_MVA / Firm_N1_MVA`, `Relief_MVA = max(0, Lim_MVA - 0.85 * Firm_N1_MVA)`, Phase 1 >= {fig['planning_lines']['phase1_pct']:.1f}%, Phase 2 >= {fig['planning_lines']['phase2_pct']:.1f}%, Defer < {fig['planning_lines']['phase2_pct']:.1f}%): combined limiting-phase peak is {fig['pool_lim_mva_sum']:.2f} MVA and pool total relief capacity needed is {fig['total_relief_mva']:.2f} MVA, placing Hestmark ({subs['Hestmark']['loading_pct']:.2f}%), Raudfjord ({subs['Raudfjord']['loading_pct']:.2f}%), and Kvernholm ({subs['Kvernholm']['loading_pct']:.2f}%) in Phase 1, Malmnes ({subs['Malmnes']['loading_pct']:.2f}%), Drangvik ({subs['Drangvik']['loading_pct']:.2f}%), and Svarthaug ({subs['Svarthaug']['loading_pct']:.2f}%) in Phase 2, and Tverrli ({subs['Tverrli']['loading_pct']:.2f}%) in Defer.",
+        f"8. Rebuilt the pipeline across all {ps['n_variants']} honest modeling variants (all-year and peak-month windows, additive excess scaling, median correlation and `k_ord`, monthly-only `k_ord`, constant `Q_15` and constant PF, winter and full-year voltage-drop anchors, measured `V_lv` scaling, single-hour and top-50 regression peak Q, 6-month heating-season / level / soft-posterior / single-hour phase-ID, and multi-stump combinations) plus six +/-20% perturbations on fitted inputs: every single variant and every perturbation files the identical seven-substation schedule, setting the bands stated above.",
+        "",
+        f"No other schedule survives the files. Leaving any single decisive step out alone breaks the schedule: dropping S1 alone puts total relief at {rt['S1']['total_relief_mva']:.2f} MVA and defers Drangvik ({rt['S1']['loading_pct']['Drangvik']:.2f}%); dropping S2 alone puts total relief at {rt['S2']['total_relief_mva']:.2f} MVA and demotes Kvernholm to Phase 2 ({rt['S2']['loading_pct']['Kvernholm']:.2f}%); dropping S3 alone puts total relief at {rt['S3']['total_relief_mva']:.2f} MVA, demotes Raudfjord to Phase 2 ({rt['S3']['loading_pct']['Raudfjord']:.2f}%), and promotes Svarthaug to Phase 1 ({rt['S3']['loading_pct']['Svarthaug']:.2f}%). "
+        f"Dropping steps in pairs lands on distinct wrong schedules as well (S1+S2 gives {rt['S1+S2']['total_relief_mva']:.2f} MVA and misplaces Drangvik at {rt['S1+S2']['loading_pct']['Drangvik']:.2f}% and Kvernholm at {rt['S1+S2']['loading_pct']['Kvernholm']:.2f}%; S1+S3 gives {rt['S1+S3']['total_relief_mva']:.2f} MVA and misplaces all five open substations; S2+S3 gives {rt['S2+S3']['total_relief_mva']:.2f} MVA and misplaces Kvernholm, Raudfjord, and Svarthaug), dropping all three gives {rf['total_relief_mva']:.2f} MVA with five substations misplaced, and the rigorous standard shortcut (hourly coincidence times feeder 15-minute registers, class nominal power factors, and GIS phase tags) gives {rg['total_relief_mva']:.2f} MVA and misplaces all five open substations (Drangvik {rg['loading_pct']['Drangvik']:.2f}%, Malmnes {rg['loading_pct']['Malmnes']:.2f}%, Svarthaug {rg['loading_pct']['Svarthaug']:.2f}%, Kvernholm {rg['loading_pct']['Kvernholm']:.2f}%, Raudfjord {rg['loading_pct']['Raudfjord']:.2f}%). "
+        f"Every shortcut fails the blind reference check on Lindberg and Ostervik by {min(rr.values()):.1f}x to {max(rr.values()):.1f}x while every honest modeling variant and forcing perturbation preserves the exact seven-substation schedule.",
         "",
     ]
     text = "\n".join(lines)

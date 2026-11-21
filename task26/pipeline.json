@@ -33,7 +33,7 @@
   "effort": "PASS (quick 7.0, careful 20.8, thorough 100.0)",
   "voice": "PASS (0 FAIL, 0 WARN)",
   "leak": "REVIEW (0 LEAK, 2 isolated leak-reader passes clean)",
-  "figures": "PASS (300/300 figures matched)",
+  "figures": "PASS (292/292 figures matched)",
   "containers": "PASS (0 FAIL, 0 WARN)",
   "heart": "WARN only (0 BLOCK, skeleton PASS)",
   "surface": "PASS",

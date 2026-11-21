@@ -1,17 +1,17 @@
 # leak check, task26
 
-**Verdict: REVIEW.** 17 files read, 144 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 17 files read, 120 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: hourly, monthly, feeder, substations, lateral, raudfjord, svarthaug, kvernholm, drangvik, malmnes, voltage, lindberg, ostervik, missed, golden, hestmark, tverrli, standard, physical, reflex, rigorous, registers, transformer, voltages, independent
+Stump terms swept: hourly, monthly, feeder, minute, lateral, raudfjord, svarthaug, kvernholm, drangvik, malmnes, voltage, lindberg, ostervik, missed, golden, hestmark, tverrli, limiting-phase, standard, physical, reflex, rigorous, registers, transformer, voltages
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: carries 3 of 3 distinctive words of the committed call: 'Phase 1 (2027 urgent relief):'
+- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: carries 19 of 20 distinctive words of the committed call: 'Schedule Phase 1 (2027) firm-capacity relief at Hestmark (146.07% Firm N-1, 22.11 MVA), Raudfjord (110.61%, 9.22 MVA), K'
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `grid_tariff_schedule_2026.pdf`: 3 of 25 stump-paragraph terms appear (hourly, monthly, voltage); read whether the document names the move
-- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 15 of 25 stump-paragraph terms appear (feeder, substations, lateral, raudfjord, svarthaug, kvernholm); read whether the document names the move
+- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 15 of 25 stump-paragraph terms appear (feeder, minute, lateral, raudfjord, svarthaug, kvernholm); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -19,6 +19,9 @@ Stump terms swept: hourly, monthly, feeder, substations, lateral, raudfjord, sva
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 17 usable files (10 or more required)
 - **INFO** `-`: 3 file categories: database, document, spreadsheet (2 or more required)
+
+## 13 task metadata (REVIEW 1)
+- **REVIEW** `metadata.json`: files.feeder_demand_registers_monthly_2026.csv.covers shares the design note's stump vocabulary (monthly, feeder, minute): say what the task decides, not how
 
 ## 1 file names (clean)
 
