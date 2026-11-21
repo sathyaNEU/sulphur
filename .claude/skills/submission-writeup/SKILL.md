@@ -219,10 +219,12 @@ Four short paragraphs, in the question's order:
 
 Written in plain words, every sentence carrying a figure or a quote, about 400 to 650 words for three steps and two
 responses (the client's example for the older field ran four sentences on one step). It names no method the prompt
-would have had to state, never claims a loss the responses' text does not show, never lists a step a response made
-as missed, and states no golden figure the blocks and the Step-by-Step do not already carry. A decisive step both
-responses landed is not listed as a stump; if that leaves fewer than two missed between them, the build is not
-submitted on this block's strength (`build-pipeline` stage 6).
+would have had to state, never claims a loss the responses' text does not show and never lists a step a response
+made as missed. Every figure on the golden's side comes from `figures.json`, never typed: the blocks' own figures,
+the closing passage's rivals, and the footprints and counts the fairness paragraph needs (the hidden factor
+record's shares, the cleaning counts). A decisive step both responses landed is not listed as a stump; if that
+leaves fewer than two missed between them, the build is not submitted on this block's strength (`build-pipeline`
+stage 6).
 
 ## Rejection causes
 
