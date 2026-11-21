@@ -1,11 +1,11 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "RUNS",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 6,
+ "stage_name": "runs",
  "updated": "2026-11-21",
  "doctrine": "throughout",
  "architecture": 7,
@@ -53,7 +53,7 @@
    "run2": ""
   },
   "triage": "",
-  "recorded": "",
+  "recorded": "2026-11-21: both responses pasted by the author without scores or the generated rubric, saved as runs/run1.md and runs/run2.md; read in the main thread, not by the triage agent. Response 1 files Meta iOS scale (1.384), AppLovin Android cut (0.739) and Google Android hold (0.943); all three components outside their ranges (3.14, 6.54, 691); 12 of its 49 figures inside the stated ranges, 6 of 28 answer lines whole. It set the stores' reports aside (step 1), valued every network's unnamed installs on the no-channel accounts' curve (step 2), and on step 3 made the fit on the budget moves and lost the carry: it read the plan's billed spend as a budget billed in full (delivery set to 1), flagged it as the judgment call most likely to move the answer and defended it from policy 2.1's words. Response 2 filed nothing after 3h 12m; its working bands lose all three (Meta iOS scale, Google Android and AppLovin Android cut), and it read the plan's spend as billed spend derived from a budget by the delivery ratio, the golden's reading.",
   "history": [
    {
     "cut": "architecture 5 reshipped (9ecc8c8)",
@@ -61,7 +61,8 @@
     "run2": null,
     "note": "one platform run pasted with the holistic audit (runs/arch5_run2.md, score not pasted): Onbeperkt and Gezin through against the golden's Gezin; the crossing with the profile limit and the December leavers made unprompted (R61, R62), no reactivation named and waved through (N33), usage certified on a pooled holdout (L45)"
    }
-  ]
+  ],
+  "open_fork": "Response 1's carry of the plan (budget equal to the billed spend, billed in full). Scratch reading on the cut pack, 2026-11-21, golden estimators with the share put at 1 in the unscaled carry: Meta iOS 1.227 and Google Android 1.237, both scale; AppLovin Android 1.155 hold; installs 13 to 19 per cent over the golden's. Against it in the shipped files: the platforms billed 83 to 87 per cent of a channel's budgets over the 104 weeks, a whole budget was billed in 6 to 18 of a channel's 104 weeks, and the same equation run over the record's own budgets with the share at 1 adds up to 125 to 135 per cent of the installs counted. Not yet a row of the fork table, a check or a sentence of the closing passage: to be ruled on at triage (FIX_DETERMINISM adds the three; no pack file or graded figure moves)."
  },
  "returned": [
   {
@@ -95,7 +96,7 @@
  "submitted": null,
  "portal": null,
  "prompt_rewritten": false,
- "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload of target.zip and golden.zip with the four answer blocks, then /triage-runs task1 once both runs are graded",
+ "resume": "the form's stump question is answered in submission.md, first after the Final Recommendation (emitted by writeup.py from runs/run1.md and runs/run2.md, checked in checks.py); owed: the two scores and the generated rubric (runs/rubric.md), /triage-runs task1, the open fork in runs.open_fork put on file (/fix-determinism) before the build is submitted, then the SUBMITTED commit, which carries the generator's files, figures.json, submission.md, runs/ and this record",
  "redraws": [
   {
    "date": "2026-11-16",

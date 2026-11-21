@@ -28,6 +28,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(REPO, ".claude", "skills", "stumping"))
 import core as C  # noqa: E402
 import analysis as A  # noqa: E402
+import writeup as WU  # noqa: E402
 import build as BD  # noqa: E402
 import deliver  # noqa: E402
 import docs as D  # noqa: E402
@@ -825,10 +826,30 @@ def main():
            [rg.cell(row=5 + i, column=3 + 3 * j + d).value for d in range(3)] == [fig[k][c]] + list(fig[k + "_band"][c])
            for j, k in enumerate(cols)) for i, c in enumerate(order_)))
     sub = open(os.path.join(TASK, "submission.md")).read()
-    ok("blocks: the four blocks and the tags, no em dash, no table",
-       [h for h in re.findall(r"^## (.+)$", sub, re.M)] == ["Tags", "Final Recommendation", "Supplementary Questions",
-                                                           "Critical Components", "Step-by-Step"]
+    runs_in = os.path.exists(os.path.join(WU.RUNS_DIR, WU.RESPONSES[1]["file"]))
+    ok("blocks: the tags and the four blocks, the stump question first after the recommendation once the responses are "
+       "on file, no em dash, no table",
+       [h for h in re.findall(r"^## (.+)$", sub, re.M)] == ["Tags", "Final Recommendation"] + [WU.STUMP] * runs_in + [
+           "Supplementary Questions", "Critical Components", "Step-by-Step"]
        and "\u2014" not in sub and "|" not in sub)
+    if runs_in:
+        stump = sub.split("## " + WU.STUMP)[1].split("## Supplementary Questions")[0]
+        said = {n: open(os.path.join(WU.RUNS_DIR, r["file"])).read() for n, r in WU.RESPONSES.items()}
+        r1 = WU.RESPONSES[1]
+        ok("stump block: every figure and phrase it takes from a response is in that response's own text (%d and %d), "
+           "and the second response never names a store" % (len(WU.quoted(r1)), len(WU.quoted(WU.RESPONSES[2]))),
+           all(q in said[n] for n, r in WU.RESPONSES.items() for q in WU.quoted(r)) and "store" not in said[2].lower())
+        ok("stump block: the first response's figures at the blocks' precision beside the CSV's, and the question's "
+           "three parts in order",
+           all(("%.3f where it is a hold at %.3f" % (float(r1["returns"][c]), fig["return_plan"][c])) in stump
+               for c in ("Meta iOS", "AppLovin Android"))
+           and all(("EUR %.2f each against %.2f" % (float(r1["paid"][c]), fig["paid_per_install"][c])) in stump
+                   for c in r1["paid"])
+           and ("(%.3f against %.3f)" % (float(r1["returns"]["Google Android"]),
+                                         fig["return_plan"]["Google Android"])) in stump
+           and ("(%s to %s against %s to %s)" % tuple("0" + x for x in WU.RESPONSES[2]["factors"])) in stump
+           and stump.index("**Response 1**") < stump.index("**Response 2**") < stump.index("**Why it is fair.**")
+           < stump.index("**Why it takes rigour.**"))
     ok("blocks: every return in the recommendation is the CSV's", all(("%s %.3f" % (c, fig["return_plan"][c])) in sub for c in MEM))
     supp = sub.split("## Supplementary Questions")[1].split("## Critical Components")[0]
     ok("blocks: four numbered entries, one per ask, seven lines each",

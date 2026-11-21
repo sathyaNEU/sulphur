@@ -1,4 +1,7 @@
-"""submission.md: the tags and the four answer blocks, every figure from figures.json."""
+"""submission.md: the tags and the four answer blocks, every figure from figures.json; once the platform's two
+responses are on file under runs/, the answer to the form's stump question as well, first after the recommendation."""
+import os
+
 import deliver
 import docs
 import pack
@@ -12,6 +15,31 @@ ND = {"return ": 3, "stretch return ": 3, "installs a week ": 0, "value at plan 
 WRONG = ("by_period", "one_factor", "seen_rate", "web_rate", "named_by_cell", "search_ads", "android", "one_ratio",
          "organic_pinned", "pool_value", "four_social", "on_spend", "last_year")
 SAME = ("three_social",)
+RUNS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "runs")
+STUMP = "How is each model stumped?"
+# The platform's two responses to this cut (runs/run1.md and runs/run2.md, pasted by the author on 2026-11-21): the
+# figures and the words the stump block takes from them, each exactly as the response writes it. checks.py finds every
+# one of them in the response's own text.
+RESPONSES = {
+    1: dict(file="run1.md",
+            returns={"Meta iOS": "1.3837", "Google Android": "0.9427", "AppLovin Android": "0.7393"},
+            paid={"AppLovin Android": "3.1359", "Meta iOS": "6.5428"},
+            installs={"Meta iOS": "886.7", "TikTok iOS": "857.8", "Snapchat iOS": "724.4", "Google iOS": "718.8",
+                      "Pinterest iOS": "391.9", "Google Android": "690.8", "AppLovin Android": "1,076.1"},
+            counts=("748,034", "297,131", "1,190"),
+            words=("superseded by direct transaction events", "with historical budget-to-bill delivery set to 1",
+                   "Scale Meta iOS, Google iOS and Pinterest iOS; hold Google Android; cut TikTok iOS, Snapchat iOS and "
+                   "AppLovin Android", "did not improve out-of-sample",
+                   "the judgment call most likely to move the answer", "delivery-adjusted sensitivity")),
+    2: dict(file="run2.md", returns={}, paid={}, installs={}, counts=(), factors=(".49", ".74", ".81", ".95"),
+            words=("3h 12m", "the decisive value question", "No deliverable files have been written or validated yet",
+                   "Meta, Google iOS and Pinterest above the Scale threshold at plan, with TikTok, Snapchat, Google "
+                   "Android and AppLovin comfortably below Hold", "ASA-based ATT-status calibration",
+                   "(roughly .49-.51 at CV 9-10, .60 at 11, .67 at 12, .74 at 13-14), very different from stable ASA "
+                   "status ratios (~.81-.95 by CV)",
+                   "plan spend is expected billed spend derived by applying delivery ratio to budget/base factor, "
+                   "rather than a budget itself")),
+}
 
 
 def _list(xs):
@@ -37,6 +65,100 @@ def _moved(f, key):
     """the channels a route files in another band, each with its return"""
     r = f["routes"][key]
     return ["%s %s (%.3f)" % (c, r[c]["band"], r[c]["return_plan"]) for c in deliver.order(f) if r[c]["band"] != f["bands"][c]]
+
+
+def quoted(r):
+    """every string the stump block takes from one response"""
+    return (list(r["returns"].values()) + list(r["paid"].values()) + list(r["installs"].values()) + list(r["counts"])
+            + list(r["words"]) + list(r.get("factors", ())))
+
+
+def _x(t):
+    return float(t.replace(",", ""))
+
+
+def _stumped(f):
+    """The form's stump question, answered from the two responses on file; nothing until they are."""
+    if not os.path.exists(os.path.join(RUNS_DIR, RESPONSES[1]["file"])):
+        return []
+    r1, r2 = RESPONSES[1], RESPONSES[2]
+    rp, s, sc, ch, st, Q, w = (f["return_plan"], f["steps"], f["shortcuts"], f["channels"], f["stores"], f["ratios"],
+                               f["check_web"])
+    fg, fb = f["figure"], f["figure_band"]
+    lo, hi = f["policy"]["lines"]
+    chans = deliver.order(f)
+    got = {c: _x(v) for c, v in r1["returns"].items()}
+    band = lambda x: "scale" if x >= hi else ("hold" if x >= lo else "cut")   # noqa: E731
+    assert [band(got[c]) for c in ("Meta iOS", "Google Android", "AppLovin Android")] == ["scale", "hold", "cut"]
+    assert all(f["bands"][c] == "hold" for c in got)
+    assert tuple(_n(s[k]) for k in ("consumer_accounts", "postbacks_used", "refunded_purchases")) == r1["counts"]
+    over = [100.0 * (_x(r1["installs"][c]) / fg["installs a week " + c] - 1) for c in chans]
+    assert min(over) > 0
+    gb = fb["installs a week Google Android"]
+    assert not gb[0] <= _x(r1["installs"]["Google Android"]) <= gb[1]
+    for c, k in (("AppLovin Android", "paid per install "), ("Meta iOS", "paid per install ")):
+        assert not fb[k + c][0] <= round(_x(r1["paid"][c]), 2) <= fb[k + c][1], c
+    for k in ("by_period", "named_by_cell", "search_ads", "pool_value", "on_spend"):
+        assert sc[k]["channel"] in sc[k]["wrong"], k
+    share = [100.0 * ch[c]["delivery_share"] for c in chans]
+    named = [ch[c]["named_pct"] for c in ch if "named_pct" in ch[c]]
+    gp, ap = st["Google Play"], st["App Store"]
+    p1 = (
+        "**Response 1** files Meta iOS as scale (%.3f where it is a hold at %.3f) and AppLovin Android as cut (%.3f where "
+        "it is a hold at %.3f), each through a different step. On AppLovin Android it took the billing events as they "
+        "stand and set the stores' reports aside as \"%s\", so the channel's installs of the year to 2 November 2025 pay "
+        "EUR %.2f each against %.2f. On Meta iOS it valued every network's unnamed installs alike, at what the accounts "
+        "with no channel paid at the same first-48-hour value (it tried channel-specific values and dropped them), so "
+        "Meta iOS's installs "
+        "of that year pay EUR %.2f each against %.2f. It did fit installs on the "
+        "budget moves the team logged, with the delivery beside them, and it files Google Android in hold as the "
+        "reference does (%.3f against %.3f). But it read the plan's billed spend as a budget billed in full (\"%s\") "
+        "where the platforms billed %.0f to %.0f per cent of the budgets, named this \"%s\" and kept the delivery the "
+        "record shows as a \"%s\"; its installs run %.0f to %.0f per cent high on every channel (Google Android %.0f a "
+        "week against %d, range %d to %d)." % (
+            got["Meta iOS"], rp["Meta iOS"], got["AppLovin Android"], rp["AppLovin Android"], r1["words"][0],
+            _x(r1["paid"]["AppLovin Android"]), fg["paid per install AppLovin Android"],
+            _x(r1["paid"]["Meta iOS"]), fg["paid per install Meta iOS"], got["Google Android"],
+            rp["Google Android"], r1["words"][1], min(share), max(share), r1["words"][4], r1["words"][5], min(over),
+            max(over), _x(r1["installs"]["Google Android"]),
+            fg["installs a week Google Android"], gb[0], gb[1]))
+    p2 = (
+        "**Response 2** worked for %s and filed no bands, no workbook and no CSV. The working bands it reports put Meta "
+        "iOS in scale and Google Android and AppLovin Android in cut, the three channels the steps decide. It valued the "
+        "unnamed installs at Apple Search Ads' ratio, then found in the accounts with no channel that the paid networks' "
+        "ratios sit below it (%s to %s against %s to %s), called that \"%s\" and left it open. Its report does not "
+        "mention the stores' reports." % ((r2["words"][0],) + tuple("0" + x for x in r2["factors"]) + (r2["words"][1],)))
+    p3 = (
+        "**Why it is fair.** Nothing is planted and nothing rests on a sentence in a file. Response 1 cleaned the files "
+        "to the reference's own counts (%s consumer accounts, %s install postbacks, %s refunds) and took the growth "
+        "policy's rates, windows and lines as written; it went wrong afterwards, in estimation. Each of the three "
+        "problems is how the records come to be and runs through every channel, not only the one it decides: the "
+        "stores' unrecorded charges are %.1f to %.1f per cent of a channel's 12-month net revenue, the attribution export "
+        "names %.1f to %.1f per cent of an iOS network's installs, and the platforms billed %.0f to %.0f per cent of a "
+        "channel's budgets over the %d weeks. Each shows when two of the files are set side by side (Google Play reports "
+        "%s renewals against %s in the billing events, the App Store %s against %s), and the responses found part of "
+        "the evidence unprompted: Response 1 the budget moves, Response 2 the networks' differing ratios and, where "
+        "Response 1 took the plan's spend for a budget, that \"%s\"." % (
+            r1["counts"][0], r1["counts"][1], r1["counts"][2], f["unrecorded_pct"]["low"], f["unrecorded_pct"]["high"],
+            min(named), max(named), min(share), max(share), s["weeks"], _n(gp["store_renewals"]),
+            _n(gp["recorded_renewals"]), _n(ap["store_renewals"]), _n(ap["recorded_renewals"]), r2["words"][6]))
+    p4 = (
+        "**Why it takes rigour.** Seeing a problem does not give its figure. With the stores' excess in view, the obvious "
+        "repair raises the recorded charges to the stores' totals period by period, and it still cuts AppLovin Android "
+        "(%.3f): on the channel's web-checkout subscribers, whose every charge is on file, it puts EUR %.2f where %.2f was "
+        "charged after the last open, because the excess belongs to subscribers who stopped opening the app, and placing "
+        "it takes a continuation fitted to the excess period by period and carried account by account. Valuing the "
+        "unnamed installs like the named ones, at Apple Search Ads' ratio or at what the accounts with no channel paid "
+        "all scale Meta iOS (%.3f, %.3f and %.3f); only one ratio per source, fitted together across the %d market-weeks, "
+        "tells Meta (%.3f) from Google (%.3f). A response fitted on weekly spend beats the budget alone on held-out weeks "
+        "and still cuts Google Android (%.3f): it misses the weeks the team moved a budget by %.1f per cent against %.1f. "
+        "The three steps are independent, each alone moving a different channel across a line: Response 1 lost two "
+        "outright and, on the third, made the fit and lost its carry to the plan; Response 2 finished none." % (
+            sc["by_period"]["return_plan"], w["true_up"], w["charged"], sc["named_by_cell"]["return_plan"],
+            sc["search_ads"]["return_plan"], sc["pool_value"]["return_plan"], Q["pool"]["market_weeks"],
+            Q["sources"]["Meta iOS"]["ratio"], Q["sources"]["Google iOS"]["ratio"], sc["on_spend"]["return_plan"],
+            f["check_moves"]["missed_pct"]["spend"], f["check_moves"]["missed_pct"]["golden"]))
+    return ["", "## " + STUMP, "", p1, "", p2, "", p3, "", p4]
 
 
 def _two(t):
@@ -70,6 +192,7 @@ def write(path, f):
             _list(b["scale"]), _list(b["hold"]), _list(b["cut"]), _list("%s %.3f" % (c, rp[c]) for c in chans), lo, hi,
             R["S1+S2+S3"]["Meta iOS"]["return_plan"], R["S1+S2+S3"]["Google Android"]["return_plan"],
             R["S1+S2+S3"]["AppLovin Android"]["return_plan"]))
+    L += _stumped(f)
     L += ["", "## Supplementary Questions", "", "### %s" % deliver.FILES["wb"], ""]
     L.append("First sheet: one row per channel of the plan's growth sheet with its band and the seven figures of entries 1 "
              "to 4 below, and a chart of each channel's return at the plan's and the stretch spend against the %.2f and "
