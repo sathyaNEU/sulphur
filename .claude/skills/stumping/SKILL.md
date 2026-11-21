@@ -11,7 +11,9 @@ description: Design where a task is hard, to the client's bar of 2026-11-09 (dif
 
 This skill decides where a task is hard. Work Part 7 first (the draw), then Parts 1 to 6. Read before designing:
 `guidelines/client/guidelines-2026-11-20.md` (the guidelines of 11/20: two or more decisive, independent steps, the
-critical components, the three tests, the `Valid Stump?` field),
+critical components, the three tests, the `Valid Stump?` field) with the form's stump question beside it
+(`guidelines/client/stump-question-2026-11-21.md`: every stump has to be defended as fair, not a planted defect
+and not one sentence buried in the files, and as needing real rigour),
 `guidelines/client/learning-modules/overused-strategies-2026-11-21.md` (the 45 closed strategies) with
 `references/open-ground.md` (our record read against them, the four approved builds' anatomy and the open
 dimensions), `guidelines/client/depth-scale-2026-11-09-detail.md` (the client's level 4 and 5 tasks in full, the bar

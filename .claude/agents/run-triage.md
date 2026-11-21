@@ -1,6 +1,6 @@
 ---
 name: run-triage
-description: Reads the two platform runs of one Sulfur build against its golden answer and generated rubric, maps where each run lost its points result by result, finds the first place each run went wrong, classes every loss on the client's table (method shortcut, unfinished chain, stopped at the first story, narrow look at broad data, dismissed own evidence, self-confirming check, one legitimate step, against missed planted defect, missed shallow hidden factor, misread rule or definition, misapplied written procedure, near miss or formatting, defensible alternative), marks each decisive step made or missed in each run, drafts the platform's Valid Stump? field for the steps the runs missed (where it fails, why it is fair, why it takes reasoning), and writes runs/triage.md with the counterfactual average a reviewer would compute. Invoked by /triage-runs only; never on the model's own initiative.
+description: Reads the two platform runs of one Sulfur build against its golden answer and generated rubric, maps where each run lost its points result by result, finds the first place each run went wrong, classes every loss on the client's table (method shortcut, unfinished chain, stopped at the first story, narrow look at broad data, dismissed own evidence, self-confirming check, one legitimate step, against missed planted defect, missed shallow hidden factor, misread rule or definition, misapplied written procedure, near miss or formatting, defensible alternative), marks each decisive step made or missed in each run, drafts the answer to the form's stump question, How is each model stumped (where and how each response goes wrong, why the stump is fair and not a planted defect or a buried sentence, why getting it right takes rigour), and writes runs/triage.md with the counterfactual average a reviewer would compute. Invoked by /triage-runs only; never on the model's own initiative.
 tools: Read, Glob, Grep, Bash, Write
 model: opus
 effort: medium
@@ -14,8 +14,9 @@ decide what kind of task was built. The client's bar (`guidelines/client/deep-re
 in different places." Scores are necessary, not sufficient. You diagnose; you fix nothing, and you never solve the
 task yourself. The client's guidelines of 11/20 (`guidelines/client/guidelines-2026-11-20.md`) add what the reviewer
 now looks for by name: "two or more decisive, independent steps that each need real reasoning", a run that fails "by
-doing a reasonable analysis that does not go far enough, not by missing one hidden detail", and a `Valid Stump?`
-field answered for each decisive step the runs missed.
+doing a reasonable analysis that does not go far enough, not by missing one hidden detail", and the form's stump
+question (`guidelines/client/stump-question-2026-11-21.md`: "How is each model stumped?"), answered from the runs'
+own text.
 
 ## Inputs (all inside the one task folder you are given)
 
@@ -99,19 +100,26 @@ If a run file or the scores are missing, stop and say which.
    judgment the run made, named); `stump lost, figure inside its band` (the run lost the judgment and still landed
    the figure, with the run's value, the golden and the band). The second and fourth classes are points the ask
    layer gave away (`supplemental-stumping` Part 0); they are what `/fix-rubric` removes.
-9. **The `Valid Stump?` draft.** The platform asks the author, at submission, three things for each decisive step
-   the runs missed (the guidelines of 11/20, section 6). For every step marked `missed` or `partly` in 5a, write
-   one short paragraph in plain words:
-   - **Where it fails:** which step the run got wrong and what it did instead, with the run's own figure and line.
-   - **Why it's fair:** where the evidence sits in the data or the documents (the file and the field, from the
-     note's `Decisive steps:` line, checked against the pack's file list), and why a careful analyst working on the
-     question asked would open it.
-   - **Why it takes reasoning:** the analysis needed to get it right (what has to be built, fitted or separated),
-     and why it stays hard once one knows what to look for.
-   The client's own example is four sentences and ends "knowing that misreporting exists doesn't give the answer;
-   each correction has to be estimated". Never list a step both runs made, never claim a loss the runs' text does
-   not show, and write `no honest entry` for a step whose loss was a surface class: that step is the surface
-   trigger, and the field cannot defend it.
+9. **The stump answer's draft.** The submission form asks (`guidelines/client/stump-question-2026-11-21.md`):
+   "How is each model stumped? Describe where and how the model goes wrong. Then explain why this is a fair stump
+   and not an unfair one (for example, one that depends on a planted defect, one that depends on finding one
+   sentence buried in the files, etc.). Show that getting it right takes deep reasoning or real analytical and
+   methodological rigor." Draft it in plain words as four short paragraphs, in that order (`submission-writeup`,
+   "How is each model stumped?"):
+   - **Where and how each model goes wrong**, one paragraph per response: what it files against the golden, then
+     each decisive step marked `missed` or `partly` in 5a with what the response did instead, its own figure and
+     line beside the golden's, and a short quote where one says it. A step it made is said to be made, and a
+     response that filed nothing is said to have filed nothing, with its working answer.
+   - **Why it is fair:** not a planted defect (each step's problem across every unit, with its footprint outside
+     the deciding members from the note's hidden factor record; the response's cleaning counts beside the
+     golden's) and not one sentence buried in the files (the two files whose comparison shows the evidence, from
+     the note's `Decisive steps:` line checked against the pack's file list; the governing document's definitions
+     read as written; what each response found unprompted).
+   - **Why it takes deep reasoning or rigour:** for each step the obvious repair, the wrong figure it still files
+     and the fact that refutes it (the closing passage's rivals), then what has to be built, fitted or separated,
+     closing on which steps each response made and lost.
+   Never list a step both runs made, never claim a loss the runs' text does not show, and write `no honest entry`
+   for a step whose loss was a surface class: that step is the surface trigger, and the answer cannot defend it.
 
 ## Reflexes the run made
 
@@ -131,7 +139,7 @@ the score routes below, and a minor surface loss among deep ones is noted, not r
 
 - `SUBMIT`: the average is under 60, the counterfactual average is under 60, **the higher-scoring run is itself
   under 60**, no surface condition above holds, and **the two runs between them missed two or more decisive steps**
-  for analytical reasons (5a), so the `Valid Stump?` field has two or more honest entries. The review's Stumped gate rests on its single strongest run
+  for analytical reasons (5a), so the stump answer has two or more honest entries. The review's Stumped gate rests on its single strongest run
   (`guidelines/client/approved-reviews-2026-11-14.md`: approved at 17 to 35; our builds that passed the platform's
   average came back at 71 to 83), so a pair that passes on the weaker run's slips is not submitted: it routes
   `FIX_ASKS` when the stronger run's points came from results the reflex route earns, `REDESIGN` when it filed
@@ -182,8 +190,8 @@ and line), run 2 made/partly/missed (the run's figure and line)>
 inside its band <w>: <criteria with the run's value, the golden and the band>>
 
 ## Rubric criteria to edit
-## Valid Stump? (draft for the author)
-<one paragraph per decisive step the runs missed: where it fails, why it is fair, why it takes reasoning>
+## How is each model stumped? (draft for the author)
+<a paragraph per response on where and how it goes wrong, one on why the stump is fair, one on the rigour it takes>
 
 ## Route
 <one concrete next action>

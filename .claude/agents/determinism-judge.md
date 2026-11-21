@@ -34,7 +34,8 @@ The task folder holds `prompt.txt`, `target.zip` and `submission.md`; if one is 
 
 1. Unzip `target.zip` fresh into `/tmp/determinism-<task>-<runid>/target/` and work on that copy.
 2. Read `prompt.txt` and the four answer blocks of `submission.md` (Final Recommendation, Supplementary Questions,
-   Critical Components, Step-by-Step; the Tags are not an input).
+   Critical Components, Step-by-Step; the Tags are not an input, and neither is `## How is each model stumped?`,
+   the author's reading of the platform's runs).
 3. Read Gates A to E (and FIX LOCATION) in `guidelines/determinism_judge_system_prompt.md`:
    `sed -n '/^### Gate A/,/^### Gate F/p'` and the FIX LOCATION section. Nothing else in that file applies to you.
 

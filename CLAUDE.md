@@ -66,8 +66,12 @@ go far enough, not by missing one hidden detail". What that fixes in every build
   no source nothing points to"); **no unstated conventions** (the business definition is pinned in the prompt or a
   document, never the method); **the prompt must not point the other way** (a run that follows the prompt's own
   words is never marked wrong).
-- **The `Valid Stump?` field** at submission answers three things for each decisive step the runs missed: where it
-  fails, why it is fair, why it takes reasoning (`run-triage` drafts it from the runs; `build-pipeline` stage 7).
+- **The form's stump question** (`guidelines/client/stump-question-2026-11-21.md`; the page's `Valid Stump?` field,
+  asked model by model): "How is each model stumped?" It is answered from the runs' own text in the question's
+  order (where and how each model goes wrong; why the stump is fair and not a planted defect or one sentence buried
+  in the files; why getting it right takes deep reasoning or real rigour) and kept in `submission.md` directly
+  after the Final Recommendation, the first thing in the paste after the final answer (`run-triage` drafts it;
+  `submission-writeup`; `build-pipeline` stage 7).
 
 **What the client's hardest examples show** (`guidelines/client/examples/1.txt`, `16.txt` and `17.txt`, runs averaging
 0.26 to 0.31; a difficulty profile and never a template, and by the announcement "likely already overused stumps"): each
@@ -298,7 +302,7 @@ Invoke the skill before the work, whatever the request's wording; if two apply, 
 |---|---|---|
 | `/draw taskNN <domain> <analysis type>` | the brain alone, in the main thread: the core proved in `generator/core.py`, the card, the note to `precut.py` exit 0 with its Build brief; also re-draws a returned build's core | Fable 5.2, xhigh |
 | `/build taskNN <domain> <analysis type>` | spawns the `stump-architect` for the core unless `/draw` did it, then executes the brief: build, leak reader and judge, ready for the platform; resumes from `pipeline.json` | Opus 5.5, high |
-| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build, drafts the `Valid Stump?` field | medium |
+| `/triage-runs taskNN` | records both run scores, maps each run's losses result by result, routes the build, drafts the answer to the form's stump question | medium |
 | `/fix-determinism taskNN <finding>` | closes a fork on a result (a run's defensible alternative or a judge finding) | Opus 5.5, high |
 | `/fix-rubric taskNN` | the losses were analytical but the average is 60 or more: reworks the asks so more results are graded | Opus 5.5, high |
 | `/approve taskNN` | the mechanical sign-off before upload (heart, surface, precut, effort, leak verdict) | medium |
@@ -341,8 +345,9 @@ the model's own initiative; the commands above license the ones they name.
            rewrites the prompt for voice, uploads it and target.zip           COMMIT "READY (taskNN): <call>"
 6 RUNS     /triage-runs records both scores, maps the losses result by result and routes (submit,
            /fix-determinism, /fix-rubric, a surface trigger rebuilt as analysis, or redesign from 2)
-7 SUBMIT   triage SUBMIT, the Reward block and the Valid Stump? field filled (where each missed decisive step
-           fails, why it is fair, why it takes reasoning), submitted          COMMIT "SUBMITTED (taskNN): ..."
+7 SUBMIT   triage SUBMIT, the Reward block filled and the stump question answered first after the Final
+           Recommendation (where and how each model goes wrong, why the stump is fair, why it takes rigour),
+           submitted                                                  COMMIT "SUBMITTED (taskNN): ..."
            the review result later: APPROVED or RETURNED                      COMMIT "APPROVED" / "RETURNED"
 ```
 
@@ -491,7 +496,9 @@ for a count, a total or a table every run rebuilds, so a run that lost a stump g
 wrong (`supplemental-stumping`).
 
 **Answer blocks** (`submission-writeup`): Final Recommendation (one or two sentences, first, naming what it
-rejects); Supplementary Questions (one numbered entry per ask, one to four, each entry carrying its figures, and
+rejects); once the runs are back, How is each model stumped? directly after it (the form's stump question, answered
+from the responses' own text: where and how each goes wrong, why the stump is fair, why it takes rigour);
+Supplementary Questions (one numbered entry per ask, one to four, each entry carrying its figures, and
 each requested file's look in one line); Critical Components (the decisive steps, two to five, one per stump: each
 line is that step's answer as a figure with its unit and band and no method clause, the figure sits in a requested
 deliverable, and each falls with its own stump alone); Step-by-Step (a short numbered path from the raw files

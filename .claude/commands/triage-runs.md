@@ -1,5 +1,5 @@
 ---
-description: After the platform has generated and graded the two runs, record both scores and the average, map where each run lost its points result by result and class every loss on the client's failure table, mark each decisive step made or missed, draft the Valid Stump? field, and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
+description: After the platform has generated and graded the two runs, record both scores and the average, map where each run lost its points result by result and class every loss on the client's failure table, mark each decisive step made or missed, draft the answer to the form's stump question (How is each model stumped?), and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
 argument-hint: taskNN [the two scores, or nothing if runs/rubric.md carries them]
 effort: medium
 ---
@@ -27,9 +27,10 @@ Invoke `build-pipeline` (Stage 6) first.
    steps, or the build is one decisive step by the runs' own evidence and is not submitted. Where you disagree
    with the agent, say so in one line each and keep both readings in the report.
 5. **Route** on the verdict:
-   - `SUBMIT`: copy the triage's `Valid Stump?` draft into `submission.md` under `## Valid Stump?` (one paragraph
-     per decisive step the runs missed: where it fails, why it is fair, why it takes reasoning; every figure in it
-     checked against the runs and the pack, `submission-writeup`) and hand it to the author with the Reward block
+   - `SUBMIT`: put the triage's stump draft into `submission.md` as `## How is each model stumped?`, directly after
+     `## Final Recommendation` (where and how each response goes wrong, why the stump is fair, why it takes rigour;
+     emitted by the generator where the blocks are, every figure and quote in it checked against the saved runs
+     and the pack, `submission-writeup`) and hand it to the author with the Reward block
      filled from `pipeline.json`; set `status` `SUBMITTED` once the author confirms submission, commit `SUBMITTED
      (taskNN): <call>, runs <x> and <y>, average <z>`.
    - `FIX_DETERMINISM`: `/fix-determinism taskNN <the run's method and why it is defensible>`.

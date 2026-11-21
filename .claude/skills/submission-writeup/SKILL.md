@@ -1,12 +1,13 @@
 ---
 name: submission-writeup
-description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions as one numbered entry per ask, one to four, Critical Components as the decisive steps' answers, one per stump, each the answer and never the method, independent and in a requested deliverable, Step-by-Step walking every result and showing the hurried analysis it rejects, closing on why no other conclusion survives), the `Valid Stump?` field drafted from the runs at submission, the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
+description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions as one numbered entry per ask, one to four, Critical Components as the decisive steps' answers, one per stump, each the answer and never the method, independent and in a requested deliverable, Step-by-Step walking every result and showing the hurried analysis it rejects, closing on why no other conclusion survives), the answer to the form's stump question, How is each model stumped (where and how each model goes wrong, why the stump is fair, why it takes rigour), written from the runs and kept first after the Final Recommendation, the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
 ---
 
 # Writing the answer blocks
 
 `submission.md` holds the four blocks the author pastes into the platform's Final Recommendation, Supplementary
-Questions, Updated Critical Components and Updated Step-by-Step fields. The rubric is **generated** from them and
+Questions, Updated Critical Components and Updated Step-by-Step fields, and once the runs are back the answer to
+the form's stump question, directly after the Final Recommendation. The rubric is **generated** from the four blocks and
 the prompt (`guidelines/client/overview.txt`, "How the rubric is built"): the recommendation and the critical
 components carry the most weight, each supplementary answer becomes criteria, and instruction-following (files
 present and named, rows and columns, length) takes a small share. So these blocks decide what the runs are graded
@@ -55,12 +56,13 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 |---|---|---|
 | 0 | `## Tags` (not pasted; for the card and the domain field) | 2 to 3 lines |
 | 1 | `## Final Recommendation` | 1 or 2 sentences, the deciding figure, what it rejects |
+| after the runs | `## How is each model stumped?` (the form's stump question), directly after the Final Recommendation | a short paragraph per response, one on why the stump is fair, one on the rigour it takes |
 | 2 | `## Supplementary Questions` | one numbered entry per ask (one to four), each entry its figure lines, grouped by file |
 | 3 | `## Critical Components` | 2 to 5 one-liners, one per decisive step: its answer, no method |
 | 4 | `## Step-by-Step` | about 6 to 10 numbered one-liners, then a short closing passage |
 
-Nothing else goes in the file. The platform's `Valid Stump?` field is filled at submission from the runs, never
-before them (below, "The Valid Stump? field"). **Not written:** a format rationale, a justification block, a golden listing, key
+Nothing else goes in the file. The stump block is written from the runs, never before them, and it is the first
+thing after the Final Recommendation, in the file and in the paste (below, "How is each model stumped?"). **Not written:** a format rationale, a justification block, a golden listing, key
 assumptions, an AI disclaimer, a chat-style introduction, placeholders or TODOs.
 
 **0. Tags.** The Sulfur major domain and subdomain in the client's exact wording (`guidelines/client/domains.txt`),
@@ -173,23 +175,54 @@ against. Where one margin is thin, the passage says which and by how much.
   reasoning can be checked end to end"), so careful partial work earns visible credit; inside a requested file, never
   as an extra one.
 
-## The Valid Stump? field
+## How is each model stumped?
 
-The platform asks for it at submission (the guidelines of 11/20, section 6), so it is written after the runs, from
-`runs/triage.md` (`run-triage` drafts it), and kept in `submission.md` under `## Valid Stump?` once the build is
-routed SUBMIT. One short paragraph per decisive step the runs missed, answering three things:
+The submission form asks it, and the answer is the first thing in the paste after the final answer
+(`guidelines/client/stump-question-2026-11-21.md`, verbatim):
 
-- **Where it fails:** which step the run got wrong and what it did instead, with the run's own figure.
-- **Why it's fair:** where the evidence sits in the data or the documents (the file and the field), and why a
-  careful analyst would find it.
-- **Why it takes reasoning:** the analysis needed to get it right, and why it stays hard once one knows what to
-  look for (what has to be built, fitted or separated after the step is named).
+> How is each model stumped? Describe where and how the model goes wrong. Then explain why this is a fair stump and
+> not an unfair one (for example, one that depends on a planted defect, one that depends on finding one sentence
+> buried in the files, etc.). Show that getting it right takes deep reasoning or real analytical and methodological
+> rigor.
 
-The client's own example runs four sentences: what both runs did, where the evidence is, what getting it right
-means, and "knowing that misreporting exists doesn't give the answer; each correction has to be estimated". It is
-written in plain words with the runs' figures, names no method the prompt would have had to state, and never
-claims a step the runs made. A decisive step both runs landed is not listed; if that leaves fewer than two, the
-build is not submitted on this field's strength (`build-pipeline` stage 6).
+It is the `Valid Stump?` field of the guidelines of 11/20 (section 6: where it fails, why it's fair, why it takes
+reasoning), asked model by model. It is written after the runs, from their own text (both responses are saved under
+`runs/` first; `run-triage` drafts it in `runs/triage.md`), and **kept in `submission.md` under
+`## How is each model stumped?`, directly after `## Final Recommendation` and before `## Supplementary Questions`**.
+Until the runs are back the file holds the tags and the four blocks. A build whose blocks are emitted by its
+generator emits this one as well: the responses' figures and words are held in the generator exactly as the
+responses write them, the golden's come from `figures.json`, and the generator's checks find every quoted figure
+and phrase in the saved response, so a rebuild keeps the block and cannot leave it stale. It is not a graded block:
+`figures_check.py`, `leak.py` and `freeze.py` read the four blocks by name and pass over it, and the determinism
+judge does not read it.
+
+Four short paragraphs, in the question's order:
+
+- **Where and how each model goes wrong**, one paragraph per response, labelled as the platform labels them
+  (`Response 1`, `Response 2`). Lead with what the response files against the golden (the band, the option, the
+  figure), then take the decisive steps one by one: what the response did instead, in its own words where a short
+  quote says it, with its own figure beside the golden's and the range, and which wrong member comes from which
+  step. A step the response made is said to be made, with what it still missed; a response that filed nothing is
+  said to have filed nothing, with the working answer it reports and how far it got.
+- **Why it is fair**, answering the two unfair kinds the question names with figures from the pack, never with
+  assurances. *Not a planted defect:* each step's problem is how the records come to be and runs through every
+  unit, shown by its footprint outside the deciding members (the note's hidden factor record), and where the
+  response's own cleaning counts match the golden's, say so with the counts: the loss came after the cleaning.
+  *Not one sentence buried in the files:* say where the evidence sits (the two files whose comparison shows it,
+  with the figure), that the definitions the steps rest on are the governing document's own and were read as
+  written, and what each response found of the evidence unprompted (a step one response reached is reachable).
+- **Why it takes deep reasoning or rigour**, as numbers and not as a claim: for each step, the obvious repair once
+  the problem is seen, the wrong member and figure that repair still files, and the fact that refutes it (the
+  closing passage's rivals and their refusals), then what the estimate takes instead (what has to be built, fitted
+  or separated). Close on the independence: each step alone moves a different member, and which steps each
+  response made and lost.
+
+Written in plain words, every sentence carrying a figure or a quote, about 400 to 650 words for three steps and two
+responses (the client's example for the older field ran four sentences on one step). It names no method the prompt
+would have had to state, never claims a loss the responses' text does not show, never lists a step a response made
+as missed, and states no golden figure the blocks and the Step-by-Step do not already carry. A decisive step both
+responses landed is not listed as a stump; if that leaves fewer than two missed between them, the build is not
+submitted on this block's strength (`build-pipeline` stage 6).
 
 ## Rejection causes
 
@@ -198,11 +231,12 @@ comprehensive*, hedging near the call); a figure that does not recompute; number
 and the golden files (the most common defect); padding; a component another valid method skips; an unpinned
 convention; a conditional call; a golden ZIP whose file count differs from the prompt's; a critical component
 that states a method, that the prompt never asks for, or that falls with another step's miss; a Supplementary
-Questions block that reads as a long list of small asks.
+Questions block that reads as a long list of small asks; a stump answer that argues the design instead of quoting
+the responses, or that counts a step a response made as missed.
 
 ## Checklist
 
-- [ ] Exactly the four blocks plus tags; none of the banned blocks
+- [ ] Exactly the four blocks plus tags, and once the runs are back the stump block; none of the banned blocks
 - [ ] Final Recommendation first, one or two sentences, the deciding figure, what it rejects and why
 - [ ] Supplementary Questions as one numbered entry per ask (one to four), each entry's figures one per line,
       grouped by file, each file's look described in one line
@@ -210,8 +244,10 @@ Questions block that reads as a long list of small asks.
       requested deliverable and asked for by the prompt, each falling with its own stump alone
 - [ ] The closing passage states the figure and the call with each decisive step left out alone (and in pairs
       where the call needs them together)
-- [ ] After the runs: `## Valid Stump?` with where it fails, why it is fair and why it takes reasoning for each
-      decisive step the runs missed
+- [ ] After the runs: `## How is each model stumped?` directly after the Final Recommendation: where and how each
+      response goes wrong, why the stump is fair (no planted defect, no buried sentence, shown by figures), why it
+      takes rigour (each obvious repair's wrong figure and its refusal); every quote and figure in it found in
+      the saved responses
 - [ ] No figure every route reaches is stated in the Recommendation, the Supplementary Questions or the Critical
       Components (counts, rebuilt totals and bases sit in the Step-by-Step)
 - [ ] Step-by-Step walks every result and shows the hurried analysis it rejects with its figure; closing passage
