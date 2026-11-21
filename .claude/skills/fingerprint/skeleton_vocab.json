@@ -175,7 +175,8 @@
   "incremental_over_without_baseline": "a tool, push or rule is credited with every outcome it touches though some would have happened without it (an existing rule already catches them, the user was coming back anyway), so the without-it baseline is built and only the excess over it credited",
   "scored_on_selection_data": "items, pairs, rules or settings were picked or tuned on one set of data and their performance is reported on that data or on data the tuning leaked into, so they are scored on data the choosing never touched (a later period, a split sample, other units)",
   "recording_effects_separated_jointly": "an outcome is recorded less often under two or more conditions of how the record was made (a deadline near, a long interview) that are tangled with each other and with who the units are, so each recording effect is fitted in one model with the make-up held, shown to be recording against a signal the conditions cannot move, and every unit's missed chance carried into the total",
-  "starting_point_anchoring": "banded or bracketed answers are pulled toward the first amount offered and neither random start is unbiased on its own, so one pull is fitted to both start arms together and the band shares rebuilt"
+  "starting_point_anchoring": "banded or bracketed answers are pulled toward the first amount offered and neither random start is unbiased on its own, so one pull is fitted to both start arms together and the band shares rebuilt",
+  "unlabelled_pool_apportioned_by_varying_mix": "the units no record ties to a source sit in one pool whose outcome is recorded only as a whole, and each source's units in it are worth a different fraction of that source's named units, so one fraction per source is fitted together from how the pool's outcome moves as each source's known count in it moves across places and periods; the named units' own rate, the fraction a fully named look-alike source shows and one fraction for every source each file a different wrong figure"
  },
  "detections": {
   "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -272,7 +273,8 @@
   "add_each_readers_loss_from_its_own_record": "the loss through every other reader of the same input built from that reader's own record of what it could not serve and its own test, per unit it reaches, and added to the first reader's",
   "joint_fit_of_recording_effects": "the true chance and each recording effect fitted together in one model (recorded chance = true chance x each condition's share), so effects tangled with each other and with the units' make-up are separated and each unit's missed chance follows",
   "one_pull_fitted_across_start_arms": "one anchoring pull fitted to both random start arms together and the band shares rebuilt from it, since neither arm is unbiased on its own",
-  "fit_on_producing_state_read_at_target": "the outcome fitted against the state it was produced under (a queue's pressure, a load, a backlog) with unfinished cases censored, shown to beat the calendar, and read at the state the option creates"
+  "fit_on_producing_state_read_at_target": "the outcome fitted against the state it was produced under (a queue's pressure, a load, a backlog) with unfinished cases censored, shown to beat the calendar, and read at the state the option creates",
+  "source_rates_fitted_to_pool_totals": "one rate per source fitted jointly so that, stratum by stratum, the sources' known counts at their named units' rates add up to the pool's recorded outcome, identified by the sources entering and leaving the strata at different times and checked on a platform or period where every unit is named"
  },
  "file_roles": {
   "governing_standard": "a standard, policy, rule or terms that file the WHAT",

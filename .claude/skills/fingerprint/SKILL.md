@@ -77,7 +77,7 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 |---|---|
 | `decision_form` | what is chosen and how (rank and name one; the k largest over a screen with a runner-up; act only if an interval clears a line; a set over a filed line; a count to a standard ...) |
 | `answer_pattern` | the result's shape (the winner climbs from far down; k of n pass with budget slack; the point says act and the interval says no ...); generic patterns identify nothing |
-| `lessons` | the deciding lessons, **the one the call turns on first** (139 keys, 61 of them closed by the client's page as read on 2026-11-21 and 39 next to a closed card, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
+| `lessons` | the deciding lessons, **the one the call turns on first** (140 keys, 61 of them closed by the client's page as read on 2026-11-21 and 39 next to a closed card, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
 | `mechanisms` | the build's own physics as free slugs, so a near copy that keeps the mechanism is told from a templated build that re-points it |
 | `detection` | how the solver notices each |
 | `moves` | the resolving moves |
