@@ -374,7 +374,7 @@ dataset already teaches twice; the client swaps the nouns and counts, so a new s
 **Determinism is a construction, not an inspection**: invoke `determinism-check` while the results chain and the
 generator are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the author asks.
 
-## Git: one branch, commits at status changes only
+## Git: one branch, and everything a session did is pushed
 
 The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No other branch, no pull request.
 
@@ -383,10 +383,16 @@ The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No 
   `SUBMITTED`, `APPROVED`, `RETURNED`, `PAUSED`, `RETIRED` and `SKILLS:` commits to `main`: check out `main`, `git pull
   --rebase origin main`, commit there (or bring the work over with a rebase or cherry-pick), then `git push origin
   main`. Work left only on another branch is not shipped, and no pull request is opened for it.
-- **Commit only at a status change**: `DRAWN (taskNN)`, `READY (taskNN): <call>`, `SUBMITTED (taskNN): <call>, runs
-  <x> and <y>`, `APPROVED (taskNN)`, `RETURNED (taskNN): <why>`, `RESHIPPED (taskNN): <what moved>`, `PAUSED
-  (taskNN)` with the resume step in `pipeline.json` (only when a session ends mid-stage), `RETIRED (taskNN)`. A
-  skill change is its own commit, `SKILLS: <the rule>`.
+- **Whatever a session did is committed and pushed before it hands back** (the author's rule, 2026-11-21: "if you
+  did something always push to git"): nothing a session changed is left only in the working tree, whether or not a
+  status moved. The author looks for the work on GitHub, not in a session's tree.
+- **A status change takes its status commit**: `DRAWN (taskNN)`, `READY (taskNN): <call>`, `SUBMITTED (taskNN):
+  <call>, runs <x> and <y>`, `APPROVED (taskNN)`, `RETURNED (taskNN): <why>`, `RESHIPPED (taskNN): <what moved>`,
+  `PAUSED (taskNN)` with the resume step in `pipeline.json` (when a session ends mid-stage), `RETIRED (taskNN)`.
+  **Work between two statuses is committed under the status the build's `pipeline.json` holds, with what moved**
+  (`RUNS (taskNN): both responses on file, the stump question answered`, `DESIGN (taskNN): ...`, `BUILD (taskNN):
+  ...`). A skill change is its own commit, `SKILLS: <the rule>`. No commit is cut while an agent or a background
+  job is still writing, and another session's uncommitted files in the same tree are never staged.
 - **Each commit carries every artifact that status touches**: the task folder, its card, and from READY on
   `target.zip`, the golden ZIP and `golden/` added with `git add -f`. Stage paths by name; never `git add -A`.
 - **Before every push**: `git pull --rebase origin main`, then push. Never force-push or rewrite history; never

@@ -67,8 +67,10 @@ the idea, the generator and the gates, in that order of value, so:
 - **One review pass.** The leak reader and the determinism judge run together, once. The judge checks determinism
   only and never derives its own answer; difficulty is the build's (`precut.py`, `effort.py`, the skeleton guard) and
   the platform's. A fix that only edits the answer blocks is made and shipped without a second judge.
-- **No checkpoint commits while agents run.** Status commits only at the status changes `CLAUDE.md` names; `PAUSED`
-  only when the session itself ends mid-stage.
+- **No commit while agents or background jobs are still writing, and nothing left unpushed at hand-back.** A status
+  change takes its status commit; work between two statuses is committed under the status `pipeline.json` holds and
+  pushed before the session reports to the author (`CLAUDE.md`, Git); `PAUSED` only when the session itself ends
+  mid-stage.
 
 ## Running the stages
 
@@ -128,11 +130,14 @@ next draw reads first, beside Mark's measured record.
 
 ## Commits
 
-Commit only at a status change: `DRAWN`, `READY`, `SUBMITTED`, `APPROVED`, `RETURNED`, `RESHIPPED`, `PAUSED`,
-`RETIRED` (`CLAUDE.md`, Git). Each commit stages its paths by name: the task folder,
+Every status change takes its commit: `DRAWN`, `READY`, `SUBMITTED`, `APPROVED`, `RETURNED`, `RESHIPPED`, `PAUSED`,
+`RETIRED` (`CLAUDE.md`, Git). Whatever a session did between two statuses is committed as well, under the status
+`pipeline.json` holds with what moved (`RUNS (taskNN): <what moved>`), and pushed before the session hands back: the
+author reads the work on GitHub, so nothing is left only in the working tree. Each commit stages its paths by name
+(never another session's uncommitted files): the task folder,
 `.claude/skills/fingerprint/cards/taskNN.json`, the run record row, and from READY on `git add -f taskNN/target.zip
-taskNN/golden/ taskNN/golden.zip`. Then `git pull --rebase origin main` and push. Nothing is committed between those
-points; a session that stops mid-stage writes `pipeline.json` with a `resume` line and commits `PAUSED`. A blocker is
+taskNN/golden/ taskNN/golden.zip`. Then `git pull --rebase origin main` and push. A session that stops mid-stage
+writes `pipeline.json` with a `resume` line and commits `PAUSED`. A blocker is
 never a reason to stop: the session that meets it removes it (a redraw, a re-root into another task type and dataset,
 a generator fix) and carries the build on.
 
