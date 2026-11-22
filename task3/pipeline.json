@@ -149,7 +149,7 @@
    "commit": ""
   }
  ],
- "resume": "the stump-architect continues architecture 11's screen from its ledger (about sixty families with verdicts and figures, and six leads carried forward) at ~/Documents/sulphur-task3-arch11-screen/ledger.md, with the rules of stump-screen.md at 0feab0b and the note's Tried and rejected. It returns its screen before core.py, then core.py to CORE PASS and precut.py exit 0, then /build task3 from 3. The architect stopped at the Fable usage limit on 2026-11-22, which resets on 2026-11-27 at 08:00 America/Detroit.",
+ "resume": "an Opus 5.5 stump-architect at max effort continues architecture 11's screen (the author's ruling on 2026-11-22, with Fable at its usage limit until 2026-11-27 08:00 America/Detroit). It works from the ledger (about sixty families with verdicts and figures, and six leads carried forward), copied to ~/Documents/sulphur-task3-arch11-screen/ledger.md, with stump-screen.md at 0feab0b and the note's Tried and rejected. It returns its screen before core.py, then core.py to CORE PASS and precut.py exit 0. A Fable architect re-reads the finished core on 2026-11-27, before anything is uploaded. Then /build task3 from 3.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -241,6 +241,10 @@
   {
    "date": "2026-11-22",
    "event": "architecture 11's screen: the coater, effluent and radon worlds dead on paper, every kill on a measured figure (DESIGN_NOTE.md, Tried and rejected); the architect stopped at the Fable usage limit, with the ledger kept outside the scratch space"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "the author ruled that architecture 11's screen continues on Opus 5.5 at max effort while Fable is at its usage limit, with a Fable re-read of the finished core before upload"
   }
  ],
  "architectures": [
