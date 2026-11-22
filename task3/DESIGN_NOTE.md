@@ -1088,3 +1088,26 @@ Architecture 9 (Kestrel Coast's relief ramp crews), at the draw (2026-11-21):
   job is a regression on the first stump's output, solvent in waste is a join or a density, reuse and bypass sit
   inside the first step, and a second calorimeter on a still is the first sentence said twice. The family was kept
   by moving it to spray coating, where the line a regulator draws is a ratio of two quantities no record holds.
+
+- Architecture 11's kept pair, killed at its own checkpoint (2026-11-22): a contract coater's nine spray lines in
+  four plants against a 2027 order on VOC released per litre of coating solids deposited, the VOC each oxidiser
+  destroyed read as the residual of its gas account and the solids deposited as the residual of the booth sludge
+  account, each against the certified test factor. On scratch arithmetic over 200 seeds the full joint regression
+  of each plant account on every line's daily or haul-interval activity, with every control the pack would name,
+  files the golden call on 8.5 lines of 9 (median figure error 3 per cent; the misses are noise on two members
+  within 5 per cent of the line), and the plant total split by gauge readings files all nine on the solids side.
+  So each account is a validation handle for the pool and for the line split (stump-screen test 18), and one
+  sentence about the two accounts rescues the whole call. Nothing else in that world holds a stump, because every
+  quantity the order tests is a conserved mass: the pool splits (reducer, purge, filters, racks) are the same
+  regression, the burner's minimum fire is the limit card with the range card, wear between replacements is the
+  clock and cohort lessons, the 2027 plan's mix is the transport card and the scheduled works are a planning
+  source calibrated on past works. The rule it leaves: a level or a share of a conserved quantity is a reflex
+  wherever a pooled account ships, a calibration wherever a checked case ships, and unidentified where neither
+  does.
+- Reset registers with no account behind them (the same day, one scratch test before any world was drawn): the
+  share of time over a limit recovered from a spot reading and the maximum and minimum since the last reset, by a
+  range-by-interval-length fit. Across eight rooms the direct routes miss as hoped (the share of spot readings
+  over the limit runs at a half of the truth, the share of intervals whose maximum cleared it at ten to twenty
+  times), but the structural estimate lands between a half and five times the truth once the path carries a daily
+  cycle and plant trips the fitted form does not. With no account and no checked slice the answer is the model's,
+  so the stump is an unpinned ambiguity and its worth is inside the family's spread.
