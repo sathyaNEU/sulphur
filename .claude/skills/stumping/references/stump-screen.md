@@ -155,9 +155,11 @@ nothing in-house solves the task, so the idea has to be right before it is built
    joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over
    (the strong strokes every network locates put a station's true count within ten per cent and read the receiver's
    worth off, the warning case beside it). **An unfiled parameter is still a closed card when its trap is a reading biased
-   against the truth**: a shield's solar gain, a gauge's undercatch, a sensor's offset, used at face value and varying
-   by group, is the calibrated-source card however the bias is estimated (task3 arch 10's first screen, a gain read
-   off cloud passages in place of checked cases), and a frame with the history on one sensor basis and the decision
+   against the truth and its fix corrects each reading by the estimated bias**: a shield's solar gain, a gauge's
+   undercatch, a sensor's offset, used at face value and varying by group, is the calibrated-source card however the
+   bias is estimated (task3 arch 10's first screen, a gain read off cloud passages in place of checked cases); a
+   quantity read off as the residual of a conservation account (what a register cannot otherwise explain, task4's
+   lost containers) is another kind of fix, and conservation stays open ground; and a frame with the history on one sensor basis and the decision
    on another hands every run the recognition in the prompt, so two such parameters are never independent.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
