@@ -1,12 +1,12 @@
 {
  "task": "task26",
- "status": "READY",
+ "status": "RUNS",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-21",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-22",
  "doctrine": "throughout",
  "seed": 2635,
  "architecture": 3,
@@ -60,7 +60,7 @@
   "average": null,
   "counterfactual_average": null
  },
- "resume": "upload refreshed v3 target.zip, golden.zip, tightened prompt.txt, and submission.md blocks to platform",
+ "resume": "both v3 responses saved under runs/ and How is each model stumped? emitted in submission.md; awaiting platform rubric/scores for final /triage-runs",
  "final_cut": {
   "date": "2026-11-21",
   "target_zip_md5": "225e66f9b225262c3fb32a44881bedff",
