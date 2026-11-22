@@ -26,7 +26,12 @@ The spec:
                   "opens": member,               the member this judgment brings back
                   "said_out_loud": sentence,     the stump's problem as if the prompt carried it
                   "steps_left": n,               dependent steps still to do once that sentence is known
-                  "precedents": [ids]}}          loss or named_assumption ids in references/precedents.json
+                  "precedents": [ids],           loss or named_assumption ids in references/precedents.json
+                  "sides": {"over": {member: x, ...}}}}   every member's figure with this stump alone pushed past
+                                                 its fitted value to the far end a run might set (the default's
+                                                 mirror: a receiver worth nothing, hours raised in proportion) and
+                                                 everything else golden; it files a wrong call too, so a run that
+                                                 over-corrects the stump does not land the call (task3 arch 9)
   lattice   {"S1": {member: x, ...}, "S1+S2": {...}, ...}   every member's figure with exactly those stumps made
             the hurried way and everything else golden. Required keys: each stump alone, all together (the reflex
             route), and all but one (each stump fixed alone on the reflex route).
@@ -51,7 +56,13 @@ The spec:
             filter, a threshold or a subset instead of a fitted model ("none" when no signal admits one). Across
             the lattice and these routes the misses fall on both sides of a line, so no blanket adjustment lands the
             call; each route is priced on the rubric like the rigorous standard one, its member figures read from
-            its map and every other figure from the figure's "routes".
+            its map and every other figure from the figure's "routes". A route that takes a free setting (the cut
+            of a filter, the slice a calibration is run on, the share a hedge keeps) is implemented against each
+            stump's own mechanism and priced over its whole family: every setting a run could choose is a further
+            key "<route>:<label>" ({member: x}), and every one of them files a wrong call (task3 arch 9: the
+            filter a run puts in place of the replay, the well-covered days cut to the thin stations' storm size,
+            filed the golden's call at every cut from 5 to 12 strokes while the route the core priced was another
+            filter).
   figures   every figure the answer blocks will state (the recommendation is the call itself and is not listed).
             Each figure sentence of the blocks is one rubric criterion, all or nothing: figures stated in one
             sentence share a "sentence" id and are earned together, and a figure with none is its own sentence:
@@ -262,6 +273,22 @@ def _run_maps(spec):
     return maps, absent
 
 
+def _run_family(spec):
+    """{"<route>:<label>": {member: x}} for the further settings of the run routes (every cut, slice or share a run
+    could choose), and [the keys that are malformed]."""
+    names = sorted(spec.get("members") or {})
+    fam, bad = {}, []
+    for k, v in (spec.get("run_routes") or {}).items():
+        if ":" not in str(k):
+            continue
+        if str(k).split(":", 1)[0] in RUN_ROUTES and isinstance(v, dict) and names and all(
+                m in v and _num(v[m]) for m in names):
+            fam[k] = {m: float(v[m]) for m in names}
+        else:
+            bad.append(str(k))
+    return fam, bad
+
+
 def _run_route_score(spec, figs, name, mp, gcall):
     """(score, the figure with no value on the route) for one of the runs' recorded routes: a member's figure from the
     route's map, every other figure from its "routes"."""
@@ -426,14 +453,19 @@ def check(spec):
         "missing or not a figure for every member: %s (stumping Part 1d; task3 arch 8's runs took routes no lattice "
         "key held)%s" % ("; ".join(absent), "; registered before the rule of %s" % RUNS_FROM[:10] if soft else ""),
         warn=soft)
-    right = sorted(n for n, mp in maps.items() if _calls(spec, mp) == gcall)
-    row("run routes land wrong", bool(maps) and not right,
-        ("each files a wrong call: " + "; ".join("%s %s" % (n, _calls(spec, maps[n])) for n in sorted(maps)))
-        if maps and not right else ("files the golden's call: " + ", ".join(right)) if right else "no run route",
+    fam, badfam = _run_family(spec)
+    allmaps = dict(maps, **fam)
+    right = sorted(n for n, mp in allmaps.items() if _calls(spec, mp) == gcall)
+    row("run routes land wrong", bool(maps) and not right and not badfam,
+        ("each files a wrong call: " + "; ".join("%s %s" % (n, _calls(spec, maps[n])) for n in sorted(maps)) +
+         ("; with %d further settings, every one wrong" % len(fam) if fam else ""))
+        if maps and not right and not badfam else
+        ("files the golden's call: " + ", ".join(right)) if right else
+        ("malformed family keys: " + ", ".join(badfam)) if badfam else "no run route",
         warn=soft)
     if spec.get("call", "lines") != "top_k":
         dirs = set()
-        for mp in list(lat.values()) + list(maps.values()):
+        for mp in list(lat.values()) + list(allmaps.values()):
             for m in names:
                 d = _band(mp[m], members[m]["lines"]) - _band(golden[m], members[m]["lines"])
                 if d:
@@ -444,6 +476,19 @@ def check(spec):
             "8: every open member 1.1 to 1.5 above its line, every priced shortcut under it, and the runs' generous "
             "corrections filed every class)" % ("above" if dirs == {1} else "below" if dirs == {-1} else "on neither side of"),
             warn=soft)
+    for st_id in sids:
+        over = (stumps[st_id].get("sides") or {}).get("over")
+        if not (isinstance(over, dict) and all(m in over and _num(over[m]) for m in names)):
+            row("stump %s two-sided" % st_id, False,
+                "no over-corrected side: give sides.over, the golden with this stump alone pushed past its fitted "
+                "value to the far end a run might set, a figure per member (stumping Part 1d rule 7)%s" % (
+                    "; registered before the rule of %s" % RUNS_FROM[:10] if soft else ""), warn=soft)
+            continue
+        oc = _calls(spec, {m: float(over[m]) for m in names})
+        row("stump %s two-sided" % st_id, oc != gcall,
+            ("lost alone and over-corrected alone both file a wrong call (over: %s)" % (oc,)) if oc != gcall else
+            "over-corrected alone it files the golden's call, so a run that errs past the fitted value lands the "
+            "call (task3 arch 9: a legacy receiver worth nothing filed the golden's call)", warn=soft)
 
     # 9. independence and weight
     axes = {stumps[s].get("axis") for s in necessary}
@@ -635,8 +680,10 @@ def _demo(eff=None):
     members = {m: {"lines": [10.0], "truth": g[m] + 0.1, "golden": g[m], "family": fam(g[m]),
                    "routes": {"direct": {"a": 7.0, "b": 13.0, "c": 6.5, "d": 15.5}[m],
                               "rigorous": {"a": 8.5, "b": 11.5, "c": 8.0, "d": 15.2}[m]}} for m in g}
+    over = {"S1": {"a": 15.5, "b": 10.4, "c": 12.5, "d": 15.8}, "S2": {"a": 9.6, "b": 6.0, "c": 13.0, "d": 15.5},
+            "S3": {"a": 12.0, "b": 10.6, "c": 16.0, "d": 16.0}}
     stumps = {s: {"axis": ax, "opens": m, "said_out_loud": "the labelled rows are selected on the outcome",
-                  "steps_left": 4, "precedents": ["L53"]}
+                  "steps_left": 4, "precedents": ["L53"], "sides": {"over": over[s]}}
               for s, ax, m in (("S1", "who", "a"), ("S2", "what", "b"), ("S3", "against", "c"))}
     combos = [c for n in (1, 2, 3) for c in itertools.combinations(sorted(eff), n)]
     lattice = {"+".join(c): {m: g[m] + sum(eff[s].get(m, 0.0) for s in c) for m in g} for c in combos}
@@ -797,6 +844,20 @@ def selftest():
             f["routes"]["calibrated"] = f["golden"]
     s["run_routes"]["calibrated"] = {"a": 9.5, "b": 8.1, "c": 12.4, "d": 15.0}
     expect("a calibrated route that earns over 50", s, 0, "the calibrated route on the rubric")
+    s = copy.deepcopy(base)                     # a stump that over-corrected alone lands the call
+    s["stumps"]["S3"]["sides"]["over"] = {"a": 12.0, "b": 8.0, "c": 16.0, "d": 16.0}
+    expect("a stump whose over-corrected side lands the call", s, 0, "stump S3 two-sided")
+    s = copy.deepcopy(base)                     # a stump with no over-corrected side
+    del s["stumps"]["S2"]["sides"]
+    expect("a stump with no over-corrected side", s, 0, "stump S2 two-sided")
+    s = copy.deepcopy(base)                     # one setting of a run route's family lands the call
+    s["run_routes"]["cutoff:k5"] = {"a": 11.0, "b": 9.0, "c": 11.5, "d": 15.0}
+    s["run_routes"]["cutoff:k20"] = {"a": 9.0, "b": 9.0, "c": 9.5, "d": 15.0}
+    expect("a cut-off family with one setting that lands the call", s, 0, "run routes land wrong")
+    s = copy.deepcopy(base)                     # a family whose every setting files a wrong call
+    s["run_routes"]["cutoff:k5"] = {"a": 11.0, "b": 10.5, "c": 11.5, "d": 15.0}
+    s["run_routes"]["cutoff:k20"] = {"a": 9.0, "b": 9.0, "c": 9.5, "d": 15.0}
+    expect("a cut-off family wrong at every setting", s, 5)
     print("SELFTEST %s" % ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 

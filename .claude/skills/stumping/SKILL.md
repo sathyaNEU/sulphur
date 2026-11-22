@@ -528,7 +528,14 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    hedge route (every signal noticed and kept as a sensitivity, the face value central: examples 16 and 17, L53) and
    the cut-off route (a filter where a fitted model is needed: example 17's best run). Across the lattice and these
    routes the misses fall above and below the golden's classes, so no blanket adjustment lands the call (`both sides
-   of the line`). And no stump has a validation handle (stump-screen test 18): where a shipped file lets a run score
+   of the line`), and each stump is two-sided on its own: pushed past its fitted value to the far end a run might set
+   (a receiver worth nothing, hours raised in proportion), with everything else golden, it files a wrong call too
+   (`sides.over`, `stump S two-sided`). Each route is built against each stump's own mechanism and priced over its
+   whole family: the cut-off route is the filter a run puts in place of that stump's fit, at every cut it could
+   choose (`"cutoff:<label>"` keys), the calibrated route every slice it could match to the target. task3 arch 9's
+   first core priced a cut-off on seasons while the filter that replaces its replay, the well-covered days kept to
+   the thin stations' storm size, filed the golden's call at every cut from 5 to 12 strokes, and its legacy
+   receiver filed the golden's call at any worth from 0 to 0.4. And no stump has a validation handle (stump-screen test 18): where a shipped file lets a run score
    the stump's own quantity, the run fits the correction and checks it there. The stump the runs have been seen to
    lose is a parameter they must set to reach the figure, whose default (a pooled value, today's level, a literature
    constant, the same as another group, independence, a pro-rata split, the face value) the world's process makes
@@ -556,7 +563,7 @@ the strongest model at its highest effort; `/draw`, or stages 0 to 2 of `/build`
 `Regimes:`) and `generator/core.py`: the world's observation process on arrays, the truth, the golden estimator,
 every route of rule 2, the lattice of shortcuts, the referee's scores and the variant battery, ending on
 `corelib.run(spec)` (`corelib.py`: it prints the core table and `CORE PASS level 5`, `level 4` or `CORE FAIL`, and
-its selftest holds twenty-seven cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
+its selftest holds thirty-one cases). Nothing in the note is typed that core.py did not print. The build (`/build` from stage 3) wraps core.py in the organisation's systems,
 files and documents under the note's `## Build brief` (`World:`, `Frozen:`, `Files:`, `Never filed:`, `Goldens:`,
 `Free:`) and moves no switch, size, margin or estimator in it. When the cut pack breaks a core assertion the build
 stops and the architect is resumed with the failing figure; a margin is never repaired by the builder.

@@ -147,7 +147,11 @@ nothing in-house solves the task, so the idea has to be right before it is built
    face value central: L53, examples 16 and 17) and the cut-off route (a filter where a fitted model is needed:
    example 17's best run kept the interviews more than 14 days out). Each files a wrong call, and the misses across
    them and the shortcuts fall on both sides of a line: at least one member where over-correcting crosses it and one
-   where under-correcting does, so no blanket adjustment lands the call. task3 arch 8 sat every open member 1.1 to
+   where under-correcting does, so no blanket adjustment lands the call, and each stump on its own: pushed past its
+   fitted value to the far end a run might set, it files a wrong call too. A route with a free setting is priced at
+   every setting (every cut of the filter that replaces the stump's fit, every slice a calibration could be matched
+   on), because the run picks the setting that matches its target (task3 arch 9's first core: the well-covered days
+   kept to the thin stations' storm size filed the golden's call at cuts from 5 to 12 strokes). task3 arch 8 sat every open member 1.1 to
    1.5 storms above its line with every priced shortcut under it, and the runs' generous corrections filed all seven
    classes. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
    call, earns over 50, or the misses fall on one side only.
