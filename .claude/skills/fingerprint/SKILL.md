@@ -77,7 +77,7 @@ So every card carries `skeleton`, in `skeleton_vocab.json` keys:
 |---|---|
 | `decision_form` | what is chosen and how (rank and name one; the k largest over a screen with a runner-up; act only if an interval clears a line; a set over a filed line; a count to a standard ...) |
 | `answer_pattern` | the result's shape (the winner climbs from far down; k of n pass with budget slack; the point says act and the interval says no ...); generic patterns identify nothing |
-| `lessons` | the deciding lessons, **the one the call turns on first** (140 keys, 61 of them closed by the client's page as read on 2026-11-21 and 39 next to a closed card, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
+| `lessons` | the deciding lessons, **the one the call turns on first** (141 keys, 61 of them closed by the client's page as read on 2026-11-21 and 40 next to a closed card, at the grain the client's pages use: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
 | `mechanisms` | the build's own physics as free slugs, so a near copy that keeps the mechanism is told from a templated build that re-points it |
 | `detection` | how the solver notices each |
 | `moves` | the resolving moves |
@@ -109,7 +109,7 @@ and no differentiation:
 - **The house shell:** a specific decision form with a specific answer pattern already on two live builds BLOCKs (the
   client's "a third task with the ... shell reads as a house template"); a form on four live builds WARNs.
 - **The client's closed strategies** (`guidelines/client/learning-modules/overused-strategies-2026-11-21.md`, held as
-  `closed_lessons` in `skeleton_vocab.json`, with 39 neighbours in `closed_near`): 45 cards in six families, 61
+  `closed_lessons` in `skeleton_vocab.json`, with 40 neighbours in `closed_near`): 45 cards in six families, 61
   lesson keys, each already deciding two or more accepted tasks. A card whose deciding lesson is closed BLOCKs (`skeleton.lesson_closed`: "same mechanism
   and the same kind of fix counts as the same lesson", so a new domain, new data or a new detection never clears it); a
   chain of closed lessons only BLOCKs (`skeleton.lesson_closed_stack`); a closed lesson counts as taught for the
