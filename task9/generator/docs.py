@@ -164,7 +164,11 @@ STANDARD = [
          ["Label revisions", "changes to the labels of rows already in a family's training data (chargebacks, "
                              "disputes and outcomes that arrive late)"]],
         "1.3 A merchant's own change (its business, its customers, its chargebacks as they happen) is not a "
-        "model-side source."]),
+        "model-side source.",
+        "1.4 A warm-started weekly refit starts from the previous week's weights, so the randomness of the refits "
+        "before it carries into it.",
+        "1.5 A feature release reaches a family's scores through the live feature views only: in the weeks a family "
+        "trains and scores on pinned feature views, no feature release moves its scores."]),
     ("2. The assessment year", [
         "2.1 The assessment year's feature releases are the feature platform's roadmap for that year as filed with "
         "the committee, and its labelled training rows are the data planning team's plan for that year as filed."]),
