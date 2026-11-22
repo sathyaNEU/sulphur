@@ -145,7 +145,16 @@ nothing in-house solves the task, so the idea has to be right before it is built
    matched to its own recorded storm sizes, filed the golden's call in 24 of 27 settings, so the golden's unfold
    differed from the run's ratio in precision only). Such a stump is identified from the thin records' own internal
    variation (the same units seen at two recording levels, the record's own timing), never from a slice that sees
-   the process whole.
+   the process whole. **And a filed recording law is itself a handle**: with the law in the pack, a run degrades its
+   own record further through it (thins it to fewer sensors, adds the filed error), fits how the figure moves with
+   the depth of recording, and extrapolates to full sight. task3 arch 9's donor-free rebuilds were determinate across
+   seven and eight storm families and still landed: a log ladder of hours on the share located filed the golden's
+   call at 11 of 12 settings, and with flash structure the ladder scaled by the textbook flash formula at 7 of 16,
+   because the full record is the smooth limit of the record at successive depths. So a live recording stump turns
+   on an unfiled parameter of the recording (what an older receiver adds, which no document states), identified by a
+   joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over
+   (the strong strokes every network locates put a station's true count within ten per cent and read the receiver's
+   worth off, the warning case beside it).
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
    full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
@@ -192,6 +201,7 @@ screen, whatever its domain or nouns.
 | hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | task3 arch 8, both runs (R100) | 18 and 16 (the slice is a calibration set) |
 | a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | task3 arch 8, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
 | stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | task3 arch 9's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
+| stand-down hours with no well-covered day, the storm process fitted to the thin records through the filed detection curve (with and without flash structure) | task3 arch 9's redraws, the screen (a ladder of the record thinned further and extrapolated to full sight filed the golden's call at 11 of 12 and 7 of 16 settings) | 18 (a filed recording law is a handle) |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 
