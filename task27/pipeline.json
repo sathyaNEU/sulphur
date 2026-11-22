@@ -1,0 +1,31 @@
+{
+  "task": "task27",
+  "project": "sulfur",
+  "domain": "supply-chain-logistics",
+  "client_domain": "general-statistics-data-science",
+  "subdomain": "trade-flows",
+  "objective": "root-cause",
+  "doctrine": "throughout",
+  "status": "DESIGN",
+  "stage": 2,
+  "drawn": "2026-11-22",
+  "precut": {
+    "exit": 0,
+    "date": "2026-11-22",
+    "summary": "PASS task27: 118 checks, 0 FAIL, 4 WARN"
+  },
+  "core": {
+    "level": 5,
+    "forcing": "PASS",
+    "variants": 22,
+    "flips": 0,
+    "seed": 2701
+  },
+  "voice_check": {
+    "exit": 0,
+    "fail": 0,
+    "warn": 0
+  },
+  "resume": "/build task27 from 3",
+  "notes": "Stage 2 DESIGN complete for Weserfrucht Import GmbH (North Sea cold-chain root-cause attribution and 2027 Mandatory Remediation plan). Ready for Stage 3 pack and golden execution."
+}

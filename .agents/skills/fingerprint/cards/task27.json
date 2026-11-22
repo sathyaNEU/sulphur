@@ -1,0 +1,157 @@
+{
+  "task": "task27",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-22",
+  "slot_note": "Initial Level 5 draw in supply-chain-logistics (trade-flows) x root-cause: Weserfrucht Import GmbH North Sea port-to-hinterland refrigerated container delay attribution and 2027 Mandatory Remediation designation, proved in task27/generator/core.py at CORE PASS level 5 and FORCING PASS.",
+  "domain": "supply-chain-logistics",
+  "client_domain": "general-statistics-data-science",
+  "subdomain": "trade-flows",
+  "niche": "North Sea port-to-hinterland refrigerated produce container import flows: attributing 2026 excess container-days across eight operational failure modes and designating 2027 Mandatory Remediation causes against a 2,500 container-day threshold when inland thermal-chamber saturation hides inside port-yard hold codes, late border inspection notices lock empty rail flatcars, and unlinked depot portal rejections carry multi-day retry inflation",
+  "objective": "root-cause",
+  "shape": "18",
+  "decision_type": "root_cause_named",
+  "answer_unit": "set_of_items",
+  "answer": "Designate five causes for 2027 Mandatory Remediation (>= 2,500 container-days): vessel_berth (4,514), coldstore_dock (3,392), empty_depot (3,353), reefer_plug (3,176), and drayage_carrier (3,143), totaling 17,579 remediation container-days (EUR 3.79M avoidable exposure); keep phyto_insp (2,025), rail_handoff (1,880), and edi_docs (941) on Routine Monitoring; total 2027 network excess 22,425 container-days (EUR 4.78M; BHV 10,890; HAM 8,871; Q3 9,517). From task27/generator/core.py (seed 2701, CORE PASS level 5, FORCING PASS).",
+  "answer_source": "task27/generator/core.py (seed 2701); submission.md and generator/figures.json once the pack is cut",
+  "gap": [
+    "population",
+    "objective",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G4",
+    "G3",
+    "G2"
+  ],
+  "gate_g": "binding_constraint",
+  "calibration_form": "counterparty_acknowledgement",
+  "stump_strategy": "other",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "close_out_summary",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried analyst cleans every file, reads TMS exception codes and settled carrier dispute close-outs, verifies terminal yard saturation and flat total-warehouse occupancy (69 to 78 percent), moves direct rail CHED inspection siblings to phyto_insp, and sets aside the unlinked depot portal log, filing rail_handoff (2,792 to 2,956) for remediation while leaving coldstore_dock (1,373 to 2,174) and empty_depot (931) on monitoring.",
+  "domain_test": "Every decisive step is a physical port-to-hinterland cold-chain conservation calculation: reconstructing sealed multi-temperature chamber pallet stocks (+2C, +7C, +13C) and matching same-vessel port stack twins, separating post-24h CHED-locked empty rail flatcars via shared-train weighbridge mass balance (-28.5 t per locked slot), and solving shipping-line empty-container stock-flow on inland unload dates against portal retry multiplicity; swapping refrigerated import flows for clinics or ad campaigns destroys every physical conservation law.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:cold-chain-container-delay-attribution-across-chamber-stock-flow-locked-rail-slots-and-depot-portal-retries",
+  "layer1": [
+    "mixed European and ISO date formats across port, rail, and warehouse extracts",
+    "duplicate nightly warehouse EDI pallet movement batches with superseded updates",
+    "UTC vessel and rail timestamps against CET inland cold-store gate logs",
+    "re-keyed inland store and carrier codes with an entity crosswalk",
+    "case-to-pallet unit conversions across SKU thermal catalog lines",
+    "unlabelled distractor files for North Sea bunker fuel indices and German road Maut tariffs"
+  ],
+  "stakeholder_role": "Head of Inbound Logistics and Cold-Chain Procurement at Weserfrucht Import GmbH",
+  "role_family": "procurement_lead",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "container_milestones_2026.csv and warehouse_pallet_movements_2026.csv",
+    "rows": 24000,
+    "entity": "one 40-foot refrigerated import container lifecycle from North Sea vessel discharge to empty depot gate-in",
+    "grain": "container lifecycle paired with daily SKU x DC pallet stock movements, train departures, and shipping-line portal counts",
+    "source": "synthetic (seeded physical process simulation of 24,000 containers across 480 vessel calls, 1,095 rail shuttles, 4 cold-storage DCs, and 4 ocean shipping lines)"
+  },
+  "forum": "customer_or_counterparty",
+  "forcing_event": "period_close",
+  "org_family": "agriculture_or_food_producer",
+  "world": {
+    "geography": "Germany (Northern Germany: Bremerhaven, Hamburg, Wilhelmshaven ports and Hannover, Osnabrueck, Kassel, Magdeburg cold stores)",
+    "currency": "EUR",
+    "org_type": "a fresh-produce and chilled-food importer running port-to-hinterland refrigerated container flows",
+    "invented_names": [
+      "Weserfrucht Import GmbH",
+      "Nordbahn Intermodal AG",
+      "Nordic Reefer Line",
+      "Hanseatic Ocean Alliance",
+      "Atlantic Fruit Carriers",
+      "Baltic Cold Express"
+    ],
+    "people": [
+      "Friedhilde Naser",
+      "Hilma Hofmann",
+      "Vanessa Hörle",
+      "Hans-Peter Briemer",
+      "Carmelo Hermighausen",
+      "Mariechen Reuter",
+      "Meinhard Herrmann",
+      "Pero Kusch"
+    ]
+  },
+  "deliverables": [
+    "weserfrucht_delay_attribution_2027.csv",
+    "weserfrucht_coldchain_remediation_2027.xlsx",
+    "weserfrucht_remediation_review_2027.pptx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "A conserved annual total of multi-stage operational delays is attributed across candidate failure modes and projected onto next year's schedule against an intervention threshold, when three hidden observation processes mis-label delays in clean primary logs: downstream capacity caps in segregated sub-compartments whose opposing seasons flatten the aggregate facility occupancy hold units back at the upstream facility under the upstream congestion code; late inspection notices on multi-unit consignments freeze pre-booked shared-transport slots physically empty and displace cleared standby units under the transport-shortfall code, detectable only by reconciling slot shortfalls against total vehicle gross weight; and counterparty booking quotas reject return attempts in an unlinked portal log inflated by multi-day retries, hiding return-facility blocking inside carrier turnaround times.",
+  "driver_concrete": "Weserfrucht Import GmbH designates 2027 Mandatory Remediation causes at 2,500 or more projected excess container-days under uniform cause-level Annex C rules: reconstructing daily +2C, +7C, and +13C DC chamber stocks and comparing same-vessel port stack twins separates inland chamber pull-back (coldstore_dock 3,392, remediate) from genuine port congestion (reefer_plug 3,176, remediate) despite flat 69 to 78 percent total DC occupancy; matching post-24h CHED border inspection notices against rail shuttle slot shortfalls and shared-train weighbridge tonnage (-29.1 t per locked empty flatcar) moves phantom-slot standby rollovers from rail_handoff (1,880, monitor) to phyto_insp (2,025, monitor); and contrasting same-DC same-unload-day empty returns across open-quota and closed-quota ocean lines solves portal retry multiplicity (4.33x) to separate empty_depot (3,353, remediate) from drayage_carrier (3,143, remediate).",
+  "stump": "A careful but hurried analyst reads TMS exception codes, settled carrier dispute credits, flat aggregate warehouse utilization, and high physical empty-depot gate acceptance, filing rail_handoff (2,792 to 2,956) for remediation while missing coldstore_dock (1,373 to 2,174) and empty_depot (931), whereas over-correcting any one stump without netting baseline peak congestion or retry multiplicity flips reefer_plug, phyto_insp, or drayage_carrier across the 2,500 threshold.",
+  "answer_shape": "ranked-causes",
+  "weight": "attribution",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "investigation-loops",
+    "missingness-measurement",
+    "modeling",
+    "validation",
+    "forecasting",
+    "decomposition-attribution",
+    "synthesis"
+  ],
+  "results": "R1 reconciled 2026 container milestones, SKU pallet flows, CHED manifests, rail shuttles, and empty-depot logs; R2 per-chamber daily stock-flow reconstruction and same-vessel twin port-dwell split (coldstore_dock vs reefer_plug); R3 post-24h CHED locked rail-slot conservation and shared-train weighbridge mass-deficit split (rail_handoff vs phyto_insp); R4 shipping-line empty-return contrast and portal retry-pool conservation (empty_depot vs drayage_carrier); R5 three native-unit cross-file physical conservation falsification checks; R6 2027 Import Schedule projection by cause, corridor (BHV, HAM), and peak quarter (Q3); R7 2027 detention and demurrage EUR exposure and avoidable remediation savings; R8 ranked 2027 Mandatory Remediation designation against the 2,500 container-day threshold and +/-20 percent forcing sweep.",
+  "one_fact_test": "Telling the solver that containers bound for a saturated thermal chamber are held at the port under TERM_YARD_HOLD still requires mapping SKU flows, reconstructing daily chamber stock-flow, matching same-vessel twins, and projecting 2027 chamber expansion; it rescues S1 alone (C1 and A_reefer_plug, 2 of 15 graded figures, lifting the reflex score from 14 to 30, delta +16, while rail_handoff and empty_depot remain wrong).",
+  "strategy_label": "own",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": "task27 v1 (2026-11-22): core.py CORE PASS level 5, FORCING PASS (all 8 +/-20% perturbations hold), 22 variants 0 flips, S1/S2/S3 lost alone 37/37/37, reflex 14, rigorous 14, calibrated/cutoff/generous/hedge 14/19/14/14, 13 extra cutoff settings all wrong, native-unit falsification golden off by 0.02 c-days vs 231 to 3,990 for every rival. Uniform leak-free cause-level Annex C 2027 rules, cont_unload_day S3 timeline, rail-only S2 siblings, exact 2026 calendar quarters. All 5 skeleton lessons are open (0 closed, 0 closed_near); decision_form ranked_causes_bridge has 0 live builds and 0 client library tasks.",
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "skeleton": {
+    "decision_form": "ranked_causes_bridge",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "rival_process_by_state_dependence",
+      "stock_flow_accounting",
+      "capacity_held_for_planned_use",
+      "term_ended_by_another_units_event",
+      "stopped_units_return"
+    ],
+    "mechanisms": [
+      "sealed_thermal_chamber_saturation_hidden_by_opposing_seasonal_chambers",
+      "same_vessel_twin_port_dwell_contrast_separates_plug_from_pullback",
+      "post_24h_ched_inspection_notices_lock_empty_rail_flatcars",
+      "shared_train_weighbridge_deficit_proves_empty_locked_slots",
+      "unlinked_depot_portal_rejections_carry_multiday_retry_multiplicity"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "naive_ignores_what_it_should_depend_on",
+      "conservation_residual_sign",
+      "layout_or_physics"
+    ],
+    "moves": [
+      "weighted_balance_reconciliation",
+      "reference_unit_unaffected",
+      "replay_event_by_event",
+      "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+      "primary_record",
+      "second_grain_source",
+      "reference_register",
+      "schedule_or_plan",
+      "event_timeline",
+      "governing_standard",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-22T18:36:28Z"
+}
