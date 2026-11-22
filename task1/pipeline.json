@@ -96,7 +96,7 @@
  "submitted": null,
  "portal": null,
  "prompt_rewritten": false,
- "resume": "the form's stump question is answered in submission.md, first after the Final Recommendation (emitted by writeup.py from runs/run1.md and runs/run2.md, checked in checks.py); owed: the two scores and the generated rubric (runs/rubric.md), /triage-runs task1, the open fork in runs.open_fork put on file (/fix-determinism) before the build is submitted, then the SUBMITTED commit, which carries the generator's files, figures.json, submission.md, runs/ and this record",
+ "resume": "prompt.txt reworded 2026-11-21 after the author's prompt test flagged the list of asks as spelling out the method: the deliverables sentence now leads and the csv carries the four asks, each word for word as before (the prompt checks, the voice gate and the leak gate pass); the author pastes it on the platform, and if the platform re-runs the responses on the edit, runs/run1.md, runs/run2.md and the stump block are redone from the new ones. The form's stump question is answered in submission.md, first after the Final Recommendation (emitted by writeup.py from the saved responses, checked in checks.py). Owed: the two scores and the generated rubric (runs/rubric.md), /triage-runs task1, the open fork in runs.open_fork put on file (/fix-determinism) before the build is submitted, then the SUBMITTED commit",
  "redraws": [
   {
    "date": "2026-11-16",

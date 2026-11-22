@@ -4760,6 +4760,21 @@
     "the shortcuts and the run routes miss above and below the golden's classes"
    ],
    [
+    "stump S1 two-sided",
+    "WARN",
+    "no over-corrected side: give sides.over, the golden with this stump alone pushed past its fitted value to the far end a run might set, a figure per member (stumping Part 1d rule 7); registered before the rule of 2026-11-21"
+   ],
+   [
+    "stump S2 two-sided",
+    "WARN",
+    "no over-corrected side: give sides.over, the golden with this stump alone pushed past its fitted value to the far end a run might set, a figure per member (stumping Part 1d rule 7); registered before the rule of 2026-11-21"
+   ],
+   [
+    "stump S3 two-sided",
+    "WARN",
+    "no over-corrected side: give sides.over, the golden with this stump alone pushed past its fitted value to the far end a run might set, a figure per member (stumping Part 1d rule 7); registered before the rule of 2026-11-21"
+   ],
+   [
     "stumps on different axes",
     "PASS",
     "axes: against, what, who"
