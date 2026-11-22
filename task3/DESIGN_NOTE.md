@@ -1050,3 +1050,41 @@ Architecture 9 (Kestrel Coast's relief ramp crews), at the draw (2026-11-21):
   forward-process kinds are algebra once their inputs ship and rest on the first step's state when they do not; and
   sources part by part come down to a completeness gross-up. The bud hardiness state was the one candidate off every
   card, and it stood alone. The slot is handed to the author with retirement recommended.
+- Architecture 11's screen (2026-11-22, the whole client domain open, organisational records first) drew and killed
+  these families before a pair was kept. Whisky maturation ethanol by warehouse: casks that lived in one warehouse
+  read each place's rate off (a matched calibration), the joint fit is one regression on the exposure table and a new
+  warehouse is the transport card. A refrigerant estate, drawn twice: top-ups conserve over a year, so demand is a
+  reflex forecast of a recorded stream, recovery calibrates on past recoveries and the logbook against the cylinder
+  ledger is the completeness card. Tailings storage water: the chloride balance, the achieved density and the
+  stage-storage curve are the field's own annual reconciliation, a textbook chain once shipped. Irrigation canal
+  losses: the loss is the headline every run engages, fixed against proportional loss is the margin card and meter
+  under-registration is the calibrated-source card. PCB in a transformer fleet: the tested units are a slice that
+  holds the target and the lesson is an approved sheet's. Trade effluent and sludge metals: the target has a
+  recorded history and the trader split is a pooled regression.
+- The same screen, killed in one clause each: fluorine balances at a fab and a smelter (one balance each, esoteric
+  chemistry); ethylene oxide, pharma solvents, digester methane and oil terminal losses (the residual is a few per
+  cent of input, ill-conditioned); kiln mercury (assays at the detection limit); log fumigation (two sinks split
+  only by a covariate regression); data-centre water and carbon bed life (a metered or sampled target); legal
+  metrology, sensor networks and stack testing fleets (the calibrated-source card); life data (censoring, competing
+  risks, late entry); concrete strength and gauge studies (the variance cards); material unaccounted for (history
+  calibrates the null); blast vibration (censoring); carcass searches and orphan inventories (completeness or
+  dependent capture); lead service lines (an approved sheet's reskin); river loads, snow courses, rating curves and
+  low-flow heat limits (a target with history, on spent hydrology); induced seismicity (instrument change,
+  completeness and the textbook seismogenic index); leak surveys by camera or sniffer (no native scale, so the
+  published correlation is the conversion factor, and onset by interval is the censoring card); methane sites
+  under aerial snapshots (the snapshot mean is unbiased and noisy, its daytime bias the fieldwork card, and the
+  ground beside task23); underground tank inventory reconciliation (the daily variance is one visible series a
+  run regresses on sales, drops and time, and its corrections are basis and bias cards); mine ventilation and
+  bridge live load (forward-process algebra once the inputs ship); contaminated soil tonnage above a cut-off at
+  truck support (change of support is the field's simulation chain and past digs are a calibration set); soil
+  carbon (equal soil mass is a basis restated); wastewater works headroom (one balance, yield and transfer
+  constants from the literature); livestock ammonia by a nitrogen to phosphorus account and acid use (algebra once
+  the manifests ship, the excretion tables a published chain); expanded polystyrene pentane (the retained share has
+  no witness but a weight loss tangled with water); sludge, ash and silt lagoons (layers followed as cohorts, the
+  saturated cohort lesson); cement kiln carbon dioxide (a codified protocol, a reported history).
+- Solvent mass balance at a flexible packaging group (the same screen): one sharp stump and no second. The solvent
+  an oxidiser destroyed is in no record and its gas meter is a calorimeter for it, but released = bought less
+  destroyed less waste is one balance with one deep unknown: on a press nothing misses the web, the pool split by
+  job is a regression on the first stump's output, solvent in waste is a join or a density, reuse and bypass sit
+  inside the first step, and a second calorimeter on a still is the first sentence said twice. The family was kept
+  by moving it to spray coating, where the line a regulator draws is a ratio of two quantities no record holds.
