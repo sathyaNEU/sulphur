@@ -1,0 +1,174 @@
+{
+ "task": "task15",
+ "project": "sulfur",
+ "architecture": "v2",
+ "drawn": "2026-11-11",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "benchmarking-and-ablations",
+ "client_domain": "general-statistics-data-science",
+ "niche": "a regional grocery chain's six-month field trial of a vendor's machine-learning forecast for fresh ordering in hand-picked stores, read against the stores that kept the ERP's own forecast: why the pilot stores' fresh sales grew less and their waste fell much more than the rest, split into causes, then what switching would save a year in each store format and which formats to switch for 2027",
+ "objective": "comparative-explanation",
+ "shape": "11",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep To Go on AutoOrdre: expected saving per store and year Super 40,000, Kvarter 28,000, To Go 2,600 DKK against licences of 27,000, 20,000 and 9,000; the sales gap of -2.1 points is forecast -0.7, format mix -0.7, openings -0.4, -0.3 unexplained; the waste gap of -17.3 is forecast -15.7, format mix -1.0, openings -0.3, -0.3 unexplained",
+ "answer_source": "task15/generator/figures.json",
+ "gap": [
+  "objective",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G6",
+  "G3",
+  "G16"
+ ],
+ "gate_g": "decomposition_attribution",
+ "calibration_form": "pilot_log",
+ "stump_strategy": "decomposition_attribution",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "monitoring_export",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass conforms both daily extracts and the weekly history, reproduces the dashboard's two gaps, reads the discounter openings off the ambient trade and splits both gaps against the formats' own growth, then counts every sale before each sold-out day's last sale as the day's demand (never checking that form on in-stock days) and reads each format's saving off that format's own pilot stores, so it lands the gaps, the openings and both splits and misses the units turned away, the check, what the saving depends on, two of the three format savings, the ranges and the call (Super and To Go).",
+ "domain_test": "Every result is a statistician's object on a field trial with a capped outcome and a hand-picked sample: demand rebuilt from sales capped by stock through each stockout's last-sale time read as an order statistic against an in-stock intraday profile, the estimator's form validated on in-stock days where demand is known, a concurrent shock separated with an outcome the trial cannot touch, two gaps split against the formats' own trends, and a heterogeneous effect carried to the population it would be rolled out to through a moderator rebuilt from each store's own week; swap the nouns for hospital wards or call centres and there is no stock that caps the recorded outcome, no in-stock day to check against, no ambient trade the trial cannot touch and no weekly trading shape for a chain-wide model to misread.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own:capped-outcome-pilot-carried-to-the-rollout-population",
+ "layer1": [
+  "two daily extract layouts across an ERP export change (semicolons, decimal commas and Windows-1252 against a dotted UTF-8 export)",
+  "store-item rows re-sent by the export job in 2025 (exact copies)",
+  "waste scanned the next morning and booked to the following day",
+  "two dairy items renumbered at a supplier change, the register carrying the former numbers",
+  "a weekly business-intelligence history whose category codes were renamed at the 2026 range review",
+  "last-sale time blank on days with no sale"
+ ],
+ "stakeholder_role": "the chain's head of supply chain planning, who takes the 2027 fresh-forecast licence to the board",
+ "role_family": "procurement_lead",
+ "scoring_unit": "per active unit per period",
+ "spine": {
+  "file": "dagssalg_frisk_2025.csv",
+  "rows": 409472,
+  "entity": "one store, fresh item and day",
+  "grain": "store x item x day",
+  "source": "synthetic"
+ },
+ "forum": "board_of_directors",
+ "forcing_event": "purchase_order_or_contract",
+ "org_family": "retailer_or_ecommerce",
+ "world": {
+  "geography": "Denmark (East Jutland: Aarhus, Randers, Horsens, Silkeborg, Skanderborg and Vejle)",
+  "currency": "DKK",
+  "org_type": "a regional grocery chain of 42 stores in three formats (Super, Kvarter neighbourhood stores and To Go at stations, campuses, offices and on pedestrian streets) and a central fresh warehouse",
+  "invented_names": [
+   "Fjordkob",
+   "Fjordkob Super",
+   "Fjordkob To Go",
+   "Kornblomst Analytics"
+  ],
+  "people": [
+   "Jakob Lauritsen",
+   "Elna Johnsen",
+   "Dorthe Bruun",
+   "Ludvig Bertelsen"
+  ]
+ },
+ "deliverables": [
+  "fresh_forecast_rollout_2027.xlsx",
+  "fresh_forecast_board_2027.pptx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "whether",
+ "driver": "A trial of a new decision system in hand-picked units looks better than it is for separate reasons, each estimated from a different record: the outcome each unit records is capped by the system's own choices, so the loss it causes never appears and is rebuilt from when each capped record stopped, in a form checked on the records where the outcome is known; a concurrent shock and a composition difference sit inside the same comparison and are separated with a record the system cannot touch; and the units tried were picked for a property that also governs how much the system helps, so the benefit for the population it would be rolled out to is carried through that property rebuilt from each unit's own history, not read off the trial's units by the label the decision is taken on.",
+ "driver_concrete": "Fjordkob's fresh-forecast pilot shows its 16 pilot stores cutting waste far more than the other 26 while their fresh sales grew less: the vendor's lean forecast empties shelves earlier in the day, so the units turned away are rebuilt from each sold-out day's last-sale time against the in-stock hourly profile counting one sale fewer than made (the in-stock days show counting every sale overstates by 9.8 per cent); two discounter openings near pilot stores and the pilot's light weight of fast-growing To Go stores are separated with the ambient trade and the formats' own growth; and because the chain-wide model reads every store's week like a big weekend store's, the saving follows each store's trading week, so the three high-street To Go pilot stores do not stand for a format of mostly station and office stores, and To Go stays on AutoOrdre while Super and Kvarter switch.",
+ "stump": "A careful but hurried solver reproduces the dashboard, reads the openings off the ambient trade and splits the gaps against the formats' own growth, but counts every sale before the last sale as a sold-out day's demand and reads each format's saving off that format's own pilot stores, so it switches Super and To Go (32,700 and 25,000 a store) and keeps Kvarter (16,800).",
+ "answer_shape": "ranked-causes",
+ "weight": "synthesis",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "self-verification",
+  "causal-reasoning",
+  "decomposition-attribution",
+  "decomposition-attribution",
+  "investigation-loops",
+  "modeling",
+  "uncertainty",
+  "synthesis"
+ ],
+ "results": "R1 the pilot stores' two headline gaps from the reconciled record; R2 the units their empty shelves turned away, pilot weeks and the same weeks of 2025; R3 that estimate checked on the in-stock days; R4 each discounter opening's effect off the ambient trade; R5 the sales gap split; R6 the waste gap split; R7 what the saving depends on in a store (its trading week), with the shadow forecasts' evidence; R8 each format's expected yearly saving per store; R9 its 80 per cent range; R10 the formats to switch",
+ "one_fact_test": "measured by effort.py on the cut pack: the largest single sentence ('the plain turned-away estimate overstates small counts, as the in-stock days show') rescues R2 and R3, 2 of 10; the trading-week sentence rescues R7 and R10, 2 of 10",
+ "strategy_label": "WORKS IN FORM (heterogeneity that pooling hides, carried to the population the decision serves through a property rebuilt from each unit's own history; a capped outcome rebuilt from when each capped record stopped, its form checked where the answer is known; separating two explanations for one gap with a record the treatment cannot touch), own chain",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "task15": "architecture 1 split a quoted index's shortfall under filed heads on a staged breeding record (selection on noisy means, a transported response to season water, lodging) and nominated two lines; architecture 2 is a retail field trial whose recorded outcome is capped by the system on trial, with a concurrent shock, a recapture rate and a moderator carried to the rollout population, decided per store format, in another world, dataset and shell"
+ },
+ "lineage": [
+  {
+   "architecture": "v1",
+   "fate": "spent 2026-11-11 at the author's word before upload: the judge's Gate H read the stump power as moderate (a run giving every line its own response to season water earns the nominations, 59.0 to 70.0 on the paper scale), and the author asked for a re-root with at least three major analytical failure points in new areas",
+   "driver": "Candidates picked each year on a noisy internal score keep underdelivering on an outside yardstick for three separate reasons that each have to be estimated from the whole internal record (the luck that got them picked, which shrinks by how much each was observed; a reference unit that gains more than they do along a condition the outside yardstick sits far up, by an amount that differs from candidate to candidate, a condition the internal record cannot tell from overall level and the outside record can; and a recorded weakness whose cost grows there), so the gap between the two means is split under filed heads until nothing is left of it, and the next candidates are rebuilt from all three and the ones to expect most from put up.",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G14",
+    "G6",
+    "G16"
+   ],
+   "gate_g": "decomposition_attribution",
+   "answer_shape": "bridge",
+   "weight": "attribution",
+   "subdomain": "multiple-testing-selective-inference",
+   "world": "Australia (western Victoria), Banyena Grain Genetics"
+  }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "other",
+   "second-sentence opener": "for",
+   "deliverable set": "docx+png+xlsx"
+  }
+ ],
+ "notes": "Re-rooted on 2026-11-11 at the author's word: architecture 1 (Banyena barley nominations) was READY and not yet run; the author asked for a much stronger stump with at least three major analytical failure points in new areas, never task6's strategy. New world (Denmark, a grocery chain), new dataset (a simulated fresh-ordering field trial) and new shell. The task type moved from multiple-testing-selective-inference to benchmarking-and-ablations (controlled evaluation of a system, isolating its effect from everything else in the comparison); the analysis type stays Comparative Analysis & Explanation. Redrawn on 2026-11-11 after the rebase onto main: task14 architecture 3 registered with decisive pattern G3 and entered this card's window (ban.pattern), so the decisive generator moved to G6 composition shift, the honest first label for the call (the To Go format turns on the pilot's stores not being the format's stores), with G3 record against operation second.",
+ "registered": "2026-11-11T04:47:38Z",
+ "skeleton": {
+  "decision_form": "set_over_threshold",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "censored_or_capped_observation",
+   "concurrent_change_in_comparison",
+   "composition_versus_behaviour",
+   "transport_effect_modifiers"
+  ],
+  "mechanisms": [
+   "lean_forecast_empties_shelves",
+   "discounter_openings_near_pilot",
+   "to_go_light_weight_in_pilot"
+  ],
+  "detection": [
+   "second_source_at_other_grain"
+  ],
+  "moves": [
+   "impute_by_model_at_own_drivers",
+   "refit_comparison_on_unaffected",
+   "stratify_by_mix_and_reweight_to_target",
+   "transport_by_effect_modifiers"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "reference_register",
+   "governing_standard",
+   "quotes_or_costs",
+   "unused_distractor"
+  ]
+ }
+}

@@ -7,6 +7,7 @@ __pycache__/
 # Derived caches. guard.py and the clone fingerprinter rebuild them on demand and seed them from the tracked
 # baselines under fingerprint/corpus/ and fingerprint/clone/, so no build ever commits one.
 .claude/skills/*/.cache/
+.agents/skills/*/.cache/
 
 # Packs and goldens are rebuilt by each task's generator. From READY on a build tracks target.zip, golden.zip
 # and its golden/ files only, added with `git add -f` in the READY commit; nothing else under these paths.

@@ -1,0 +1,1701 @@
+{
+ "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md), the example library (guidelines/client/examples/, with examples 1, 16 and 17 as the pages read on 2026-11-21 as L56 to L67, N40, N41 and R94 to R97) and the client's review pages of approved tasks outside our dataset (L39 to L44, N32, R57 to R60; those tasks are not filed, so each entry carries the reviewer's record in general terms). A new id is added only from a run or a client page, never from a design. A named assumption or loss cited for a stump transfers only with its condition: every one on file was waved through or lost because no shipped file let the run score it, so a citation for a stump whose pack ships a file that scores the stump's own quantity prices nothing (stump-screen test 18; task3 arch 8 cited N21, N26, N01 and N30 for three stumps whose checks it shipped, and both runs made all three, R98 to R101).",
+ "precedents": [
+  {
+   "id": "L01",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "measured the decisive quantity, then set it aside because it did not prove itself alone",
+   "source": "task10/runs/arch5_round1_run2.md (Assumptions and judgment calls) (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "show event-associated increases of 1.271, 0.997 and 1.680 MW at the design temperature. They were excluded as controls. These associations do not prove physical transfers."
+  },
+  {
+   "id": "L02",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "its own output showed the mechanism, then it filed the mixed-body answer",
+   "source": "task11/runs/triage.md (run 2, 54)",
+   "quote": "its own output showed the intake drawing one layer and Fennick's water"
+  },
+  {
+   "id": "L03",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "set aside a second log at another grain as possible leakage and uneven coverage",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Login and reading files were inspected but excluded from forecasting because coverage differs across cohorts and post-start engagement could leak information about subsequent outcomes."
+  },
+  {
+   "id": "L04",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "flagged the caveat and stopped at the recorded outcome",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (b34ffd70)",
+   "quote": "Both runs flagged the caveats and stopped at recorded re-arrest."
+  },
+  {
+   "id": "L05",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "found the anomalous unit and asked only whether it was a data bug",
+   "source": "guidelines/client/examples/15.txt",
+   "quote": "asked only \"is this a data bug?\", and kept the cohort as plain evidence about the school's long-run level"
+  },
+  {
+   "id": "L06",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "did one correction and declined the second, independent one",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (bd4981a5)",
+   "quote": "The run did the weighting and then declined to add the new employers."
+  },
+  {
+   "id": "L07",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "flagged a measurement change as a risk and never tested it",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (41389985)",
+   "quote": "The one run flagged the instrument change as a risk but never tested it and reported the raw 20.8% as a no-go."
+  },
+  {
+   "id": "L08",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "weighted the sample by the unit's own strata, not by the inclusion probability another unit set",
+   "source": "stumping/references/sulfur-record.md (task6 a6, run 1, 73)",
+   "quote": "each service's own spans post-stratified by its own hour, partner-gateway 1.4, four services"
+  },
+  {
+   "id": "L09",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "decided on the pooled figure after seeing the split (heterogeneity not carried to the decision)",
+   "source": "guidelines/client/examples/7.txt",
+   "quote": "runs that saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying heterogeneity through to the decision, not in spotting a fact"
+  },
+  {
+   "id": "L10",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "one pooled trend for a mix whose parts move in opposite directions",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (4e9c0a39)",
+   "quote": "A single pooled crime trend, the shortcut both runs took, turns half renewal into stop."
+  },
+  {
+   "id": "L11",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "built the split for the first step and dropped it for the next",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (5a6e4e0c)",
+   "quote": "Both runs built the buyer split for trial and then dropped it for volume."
+  },
+  {
+   "id": "L12",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "pooled cohorts whose rates drift, the late ages read off the old cohorts",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (b9efebd1)",
+   "quote": "Both runs got the competing-risk estimator right but pooled all five years, read about 6.2% and launched at all sizes, naming vintage drift only as an untested assumption."
+  },
+  {
+   "id": "L13",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "applied population rates to a subset selected by a risk score",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (17adb5ca)",
+   "quote": "Both runs did most of the chain and applied network rates to the high-risk picks as an untested assumption."
+  },
+  {
+   "id": "L14",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "priced selected survivors on population tables",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (a5a5efb1)",
+   "quote": "Both runs priced on population mortality and walked; one built a small comparison group, but most of its claims were the scheduled survivors themselves"
+  },
+  {
+   "id": "L15",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "assumed a behavioural response instead of measuring its shape",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (279e74f2)",
+   "quote": "Both runs assumed a diversion response instead of measuring it and booked October 16 to 29"
+  },
+  {
+   "id": "L16",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "priced the unit alone where the system nets it against the units it affects",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (8ec45b05)",
+   "quote": "Both runs priced turbine 3 alone."
+  },
+  {
+   "id": "L17",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "took the average unit where the decision buys the marginal one",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (35842bf8)",
+   "quote": "The run assumed marginal cases look like the average and said yes."
+  },
+  {
+   "id": "L18",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "took every not-yet-treated unit as untreated",
+   "source": "guidelines/client/examples/4.txt",
+   "quote": "A run that framed the task as a standard difference in differences took every not-yet-live state-month as untreated."
+  },
+  {
+   "id": "L19",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "default standard errors although it had read the allocation unit",
+   "source": "guidelines/client/examples/14.txt",
+   "quote": "used the regression's default standard errors, treating 1,840 pupils as independent even though it had read the allocation register school by school"
+  },
+  {
+   "id": "L20",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a regression on a noisy share with no attenuation correction",
+   "source": "guidelines/client/examples/11.txt",
+   "quote": "Both graded runs took the raw-share slopes and picked the DREAM Act"
+  },
+  {
+   "id": "L21",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "fitted only the answered cases where the unanswered ones are censored",
+   "source": "guidelines/client/examples/10.txt",
+   "quote": "The shallow path fits only the answered questions."
+  },
+  {
+   "id": "L22",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the published formula whose generating assumption the data contradict",
+   "source": "guidelines/client/examples/9.txt",
+   "quote": "The shallow path is the published formula, a reasonable choice that flags 45.6%"
+  },
+  {
+   "id": "L23",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "compared outcomes among the observed when the treatment changed who is observed",
+   "source": "guidelines/client/examples/12.txt",
+   "quote": "the difference in mean wage among working claimants, +$1.92 (95% +$1.37 to +$2.47), which passes the test"
+  },
+  {
+   "id": "L24",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a shared coefficient where units respond in opposite directions; stopped at the first back-test improvement",
+   "source": "guidelines/client/examples/5.txt",
+   "quote": "A run improved its backtest from 276 to 222 hours MAE with a vintage aggregate market adjustment and stopped well short of the 153 that customer-specific responses reach."
+  },
+  {
+   "id": "L25",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "pooled the comparison areas instead of matching by band, reported the trial's own mix",
+   "source": "guidelines/client/examples/6.txt",
+   "quote": "pooled the three usual-practice areas into one rate instead of matching by size band and reported the trial areas' own mix as the Service lift"
+  },
+  {
+   "id": "L26",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "a plausible shallower explanation that passes its own segment checks",
+   "source": "guidelines/client/examples/1.txt",
+   "quote": "The runs chose a plausible but shallower explanation, and the one run with the right action shows that fixing one link does not repair the chain."
+  },
+  {
+   "id": "L27",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "preferred the dramatic aggregate over a like-for-like cohort comparison",
+   "source": "guidelines/client/examples/13.txt",
+   "quote": "The runs understood the question and lost by preferring a dramatic aggregate over a like-for-like comparison."
+  },
+  {
+   "id": "L28",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "certified the estimator with checks that cannot see the problem",
+   "source": "stumping/references/sulfur-record.md (task10 arch 5 round 2, run 2)",
+   "quote": "the same estimator certified by placebo intervals and untreated-primary controls"
+  },
+  {
+   "id": "L29",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "took the small gaps of an incumbent pack as confirmation",
+   "source": "guidelines/client/examples/4.txt",
+   "quote": "A run reproduced the MIS pack's live versus not-live gaps and treated their small size as confirmation"
+  },
+  {
+   "id": "L30",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "spent its checking on presentation and never tested like for like",
+   "source": "guidelines/client/examples/6.txt",
+   "quote": "spent its checking effort on presentation details (patient counts, wording, chart labels) and never tested whether its comparison was like for like"
+  },
+  {
+   "id": "L31",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a band carrying an assumed common factor, a recent fall read as permanent",
+   "source": "stumping/references/sulfur-record.md (task1 arch 2)",
+   "quote": "the run's band carried an assumed 0.25 common factor and read the post-March fall in deal creation as permanent"
+  },
+  {
+   "id": "L32",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "left the residual episode the fitted model under-predicted unattributed",
+   "source": "stumping/references/sulfur-record.md (task11 arch 1, run 1, 78)",
+   "quote": "the 29 and 30 May pulse a fitted transport model under-predicted left unattributed"
+  },
+  {
+   "id": "L33",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "never checked whether units vary more than sampling error allows",
+   "source": "guidelines/client/examples/15.txt",
+   "quote": "A run whose slopes and reliabilities matched the reference never checked whether cohort effects varied more than sampling error allows."
+  },
+  {
+   "id": "L34",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "found the uncovered window and filled it by a same-hour match, not at the level its own load gives; weighted by its own strata",
+   "source": "task6 architecture 7 levelled up, a run pasted by the author on 2026-11-09 (audited the same day; not saved under task6/runs)",
+   "quote": "lost only on R3: own service-hour weights and the dropped 11 days filled by a same-hour-of-day match"
+  },
+  {
+   "id": "L35",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "an independence binomial where units share shocks",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (23bec3ac, 0f7f50e0)",
+   "quote": "The run named the dependence risk and still used the binomial."
+  },
+  {
+   "id": "L36",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a transfer fitted on the pilot's range carried to faster duties (lost by 1 to 3 kWh, a margin too thin to force)",
+   "source": "stumping/references/sulfur-record.md (task4 arch 7, both runs)",
+   "quote": "squared routing-tool speed fitted on the pilot (the year's ratio), V14 at 444.4 against 442"
+  },
+  {
+   "id": "N01",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an enlarged contract or fleet assumed to scale in proportion",
+   "source": "task10/runs/arch6_run1.md, arch6_run2.md, arch5_round2_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "Portfolio scaling: Availability and mean service shape are assumed to scale with contracted capacity"
+  },
+  {
+   "id": "N02",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "history assumed informative of the forward window",
+   "source": "task10/runs/arch4_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "Historical repair response, DSO patterns and reset effectiveness are assumed to remain informative."
+  },
+  {
+   "id": "N03",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "scheduled works and dates assumed to happen as planned",
+   "source": "task10/runs/arch4_run1.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "Renewal execution: approved works are assumed to finish on their scheduled dates."
+  },
+  {
+   "id": "N04",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a model's transfer to a new range named and left untested",
+   "source": "task4/runs/README.md (arch6 run 1)",
+   "quote": "Energy scales linearly with route distance ... so this remains a transfer assumption."
+  },
+  {
+   "id": "N05",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the fitted surface, normal errors and stable calibration assumed for the range",
+   "source": "task16/runs/arch1_run1.md",
+   "quote": "The 80% range is conditional. It assumes the fitted response surface, approximately normal predictive errors and stable benchmark calibration."
+  },
+  {
+   "id": "N06",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "long-run behaviour of a system assumed unchanged over the horizon",
+   "source": "task3/runs/run1.md",
+   "quote": "Long-term aquifer behavior: The model assumes sustained leakage and effective aquifer properties throughout the term."
+  },
+  {
+   "id": "N07",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an ordering or pairing in the record assumed without a crosswalk",
+   "source": "task11/runs/run2.md",
+   "quote": "Storm bottle ordering follows successful sampler positions. Exact carousel-size matches support this assumption, but an explicit bottle-position crosswalk was not supplied."
+  },
+  {
+   "id": "R01",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "duplicates, superseded versions, quality flags, time zones, re-keyed identifiers, unit conversions",
+   "source": "every Sulfur round (task10 arch 5 and 6 runs, task11 runs, task8 triage)",
+   "quote": "Removed 310 older versions from 13,372 records"
+  },
+  {
+   "id": "R02",
+   "kind": "reflex",
+   "class": "breadth",
+   "move": "reads every file and sets the distractors aside with reasons",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "the distractors were inspected and set aside with reasons"
+  },
+  {
+   "id": "R03",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "chronological hold-out, leave-one-out or held-out groups to choose the model family",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1, task3 arch 6) (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "the model family chosen by chronological validation and the tail's coverage checked on held-out days"
+  },
+  {
+   "id": "R04",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "joint, block or circular bootstrap; predictive rather than confidence intervals",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task9 arch 8) (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "The P90 is the predictive percentile of daily maxima, not a confidence limit for mean demand"
+  },
+  {
+   "id": "R05",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a capped availability ceiling, min of the call and what is available",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "Fitted a temperature-dependent available-capacity ceiling, capped by scheduled MW"
+  },
+  {
+   "id": "R06",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "the rebound after a window, the day's maximum over every interval",
+   "source": "task10/runs/arch6_triage.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "Applied the estimated service shape and post-window rebound, then found the maximum across all 48 half-hours"
+  },
+  {
+   "id": "R07",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "competing risks with censoring",
+   "source": "task10/runs/arch7_review_2026-11-10.md; depth-scale detail (b9efebd1) (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "forecast commissioning with competing risks and censoring"
+  },
+  {
+   "id": "R08",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a censored survival fit on time since the clock's own reset",
+   "source": "sulfur-record.md (task10 arch 4)",
+   "quote": "a censored Weibull on time since evidenced reset, validated on 2026"
+  },
+  {
+   "id": "R09",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a declared covariate corrected by its measured error variance",
+   "source": "task4/runs/README.md (arch6)",
+   "quote": "It corrected the declared weights by their measured error variance"
+  },
+  {
+   "id": "R10",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a regime split found from the residual error",
+   "source": "sulfur-record.md (task4 arch 9, run 2)",
+   "quote": "a declaration regime split at 17 August 2026 found from the error"
+  },
+  {
+   "id": "R11",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "one flexible response surface with a fitted breakpoint over a runs-by-covariates table",
+   "source": "sulfur-record.md (task16 arch 1, task10 arch 6, task4 arch 9)",
+   "quote": "a response surface with a fitted breakpoint validated on held-out configurations"
+  },
+  {
+   "id": "R12",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a lottery instrumented on completion and its effect carried to the applications by effect modifiers",
+   "source": "sulfur-record.md (task7 arch 7)",
+   "quote": "the lottery instrumented on completion, each use's saving carried to the applications"
+  },
+  {
+   "id": "R13",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "record linkage by fingerprint and normalised address",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "R2 by household (fingerprint and normalised address)"
+  },
+  {
+   "id": "R14",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a model of any mechanism one plot or one group-by of one file shows",
+   "source": "sulfur-record.md (task2 arch 3, task3 arch 2 and 3, task5 arch 2, task7 arch 4 round 2, task8 arch 17)",
+   "quote": "built the physical mechanism the data showed ... as their first model, then validated it on held-out rows"
+  },
+  {
+   "id": "R15",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "device clock drift read off scheduled self-tests; overwritten months restored by exposure; an inspection-confirmed baseline",
+   "source": "sulfur-record.md (task13 arch 2, judge's first pass)",
+   "quote": "Three data repairs with the field's standard remedies were three reflexes"
+  },
+  {
+   "id": "R16",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a plus or minus 20 per cent stress test on a key fitted rate",
+   "source": "task1/runs/arch3/run1.md at commit 87422aa (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "exit probabilities 20 per cent higher fund 7 lines, 20 per cent lower 15"
+  },
+  {
+   "id": "R17",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a selection-year baseline and displacement next door",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (4e9c0a39)",
+   "quote": "The runs handled the baseline and displacement well and lost on the offence mix."
+  },
+  {
+   "id": "R18",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "the incumbent's figure reproduced exactly from its own stated method",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (bd4981a5, b34ffd70); examples/4.txt",
+   "quote": "The contractor's 3.00% reproduces from its own weights"
+  },
+  {
+   "id": "R19",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "the planted defect or broken extract caught",
+   "source": "guidelines/client/examples/13.txt, 14.txt, 1.txt",
+   "quote": "Every run used Dallas as the comparison and caught the broken March scrape, so the loss is not in setup."
+  },
+  {
+   "id": "R20",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "the textbook instrument or estimator for the question",
+   "source": "guidelines/client/examples/7.txt; depth-scale detail (b9efebd1)",
+   "quote": "every run chose the right instrument (state operating-aid cuts) and still called it wrong"
+  },
+  {
+   "id": "R21",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "the demand an intervention masks rebuilt from the intervals it never touched (the cold evening from the same day's unaffected half-hours)",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md; task10/runs/arch7_review_2026-11-10.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "cold-window demand transferred from unaffected half-hours"
+  },
+  {
+   "id": "R22",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a register's young members matured to their type's established level (build-up curves by type, scaled to each member's own level)",
+   "source": "task10/runs/arch7_run1.md, arch7_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
+   "quote": "customer-type saturation curves (held-out error 0.0415 kW/kVA against 0.1498 for constant utilisation), 8.8 MW registered increment with 7.0 MW from maturation"
+  },
+  {
+   "id": "L37",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a pooled forecast-bias factor certified by a held-out error that cannot see the bias's dependence on the forecast's own planned growth",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Held-out demand WAPE fell from 21.88% for raw budgets to 12.11% after calendar alignment and 10.11% after held-out bias correction."
+  },
+  {
+   "id": "N08",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "one forecaster's error factors assumed to transfer to a new stream with no record of its own",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Kotikaari's forecast-error factors transfer to Huippu. The budget states that they share forecasting governance, but there is no equivalent Huippu year-ahead archive."
+  },
+  {
+   "id": "R23",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a week-numbered profile re-keyed to the date-anchored event after a 53-week year",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Black Friday falls on 26 November 2027, ISO week 47, whereas the supplied budget uses 2025's week-48 phasing. Swapped the relevant budget weeks and daily profiles, preserving total demand."
+  },
+  {
+   "id": "R24",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a congestion term fitted on a logged density with the mix held fixed, at the record's finest grain",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Fitted task minutes using handling-class mix, extra units and a nonlinear logged-picker-density term, allowing for the January 2024 aisle expansion."
+  },
+  {
+   "id": "R25",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a pilot's selected assortment read at the target population's own mix",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "At the forecast peak mix, Huippu averages 1.371 TASK minutes per line, versus Kotikaari's 1.320, a difference of +0.051 minutes per line. Holding zone and density comparable gives +0.129 minutes."
+  },
+  {
+   "id": "R26",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a level per unit fitted as a random effect, with the parameters' uncertainty integrated into each unit's predictive tail",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Fitted a gamma-Poisson model incorporating construction, surroundings, fitted line arresters and persistent zone differences ... Integrated parameter uncertainty when calculating predictive tails and integer referral cutoffs."
+  },
+  {
+   "id": "R27",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "an alarm threshold's false-alarm rate checked by simulating the all-sound population",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "An all-sound simulation produced 0.157 referrals per run, with Monte Carlo standard error 0.006, consistent with the integrated 0.152 expectation."
+  },
+  {
+   "id": "R28",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "each device's clock rebuilt from event pairs it shares with upstream and downstream devices, checked on a whole-visit hold-out",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Corrected offline clocks using upstream lockout/restoration and downstream supply-loss/restoration evidence. ... Whole-visit holdout gave a 1.2693-second 95th-percentile absolute error"
+  },
+  {
+   "id": "R29",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "repeated memory reads removed and trips, recloses and backup operations folded into one initiating episode",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Removed 95,092 repeated download rows, with 0 conflicting payloads. Reconstructed initiating sequences rather than counting trips and recloses separately"
+  },
+  {
+   "id": "R30",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "documented gaps and unread tails excluded from the fit's exposure and carried into the totals at the observed rate",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "These windows were excluded from calibration exposure. Referral tests retained full-period exposure, while planning estimates separately adjusted for missing coverage."
+  },
+  {
+   "id": "R31",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "several windows tried for a forward value and the latest state preferred over the long average",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Using the entire post-inspection average for current benefit: it gives 75.8 avoided faults, versus 104.2 using two seasons and the selected 121.1 using 2026. Longer windows can dilute recent failure."
+  },
+  {
+   "id": "R32",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a sweep of matching windows, exclusions and partial records showing the call holds",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "All 11 referrals survived wider SCADA matching, narrower offline matching, exclusion of partial sequences and exclusion of downstream-coverage warnings."
+  },
+  {
+   "id": "N09",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the current network topology assumed for the whole history",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Historical analysis uses the 2026 routes and topology."
+  },
+  {
+   "id": "N10",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "missing periods assumed to run at the observed rate per unit of exposure",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Missing-period estimates assume the same fault rate per unit of exposure as observed periods. They are not measured counts."
+  },
+  {
+   "id": "N11",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a passed inspection or test assumed to certify the unit sound for the interval",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "A zero-defect cyclic inspection is assumed to certify the preceding reference interval as sound. The files do not establish every intervening protection state."
+  },
+  {
+   "id": "N12",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a rate learned in one season or condition carried to another",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Sound fault rates learned during lightning seasons are transported to dry-season ground-stroke exposure."
+  },
+  {
+   "id": "N13",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the latest observed rate taken as the state at the decision date",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Year-end benefit assumes the observed 2026 rate represents endpoint condition."
+  },
+  {
+   "id": "N14",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a second record set aside once its linkage check failed",
+   "source": "task13/runs/run1.md (platform run on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "No transformer-ID linkage survived contextual validation, so no OMS-only lightning faults were added."
+  },
+  {
+   "id": "N15",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a trial's seasonal pattern assumed to recur for new works, age and calendar named as inseparable and left untested",
+   "source": "task7/runs/arch7/run1.md (platform run on architecture 7, pasted by the author 2026-11-09)",
+   "quote": "Age and calendar effects cannot be separated completely. The lifetime calculation assumes the pilot’s initial seasonal pattern recurs for new works. The uncertainty ranges do not cover this structural assumption."
+  },
+  {
+   "id": "R33",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a range resampled at the unit the draw was filed by (owners), every step refitted",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Ran 5,000 owner-cluster bootstrap resamples, refitting the causal estimates, applicant transport and lifetime decay."
+  },
+  {
+   "id": "R34",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a documented concurrent programme separated from the measure's own ageing",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Check-campaign effects were separated from retrofit ageing, particularly for heating optimisation."
+  },
+  {
+   "id": "R35",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "a round's close projected measure by measure from the pilot's early-to-final ratios, with the late answers' larger sizes",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Used each measure's 2019 early-to-final response ratio rather than uniform calendar extrapolation. ... Grant-value maturation was estimated separately because later applications, especially insulation, requested larger grants."
+  },
+  {
+   "id": "R36",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a persistence profile's form chosen by held-out error",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The constant-profile validation error is 2.8253 percentage points, compared with 0.2385 for exponential decay."
+  },
+  {
+   "id": "R37",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "an effect carried to new applicants along an operating-schedule modifier built from load profiles",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Controls applicants average 57.36 active-equivalent hours/week, versus 102.56 among drawn pilot controls buildings and 96.31 among those not drawn."
+  },
+  {
+   "id": "L38",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a record carrying the effect's modifier set aside as unrelated to the effect",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Solar-cadastre data were inspected but excluded because rooftop photovoltaic potential does not identify these retrofit effects."
+  },
+  {
+   "id": "N16",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a modifier measured after treatment taken as a stable proxy",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The 2025 electricity profiles are treated as proxies for stable operating patterns. They are post-pilot measurements, so this assumption is disclosed."
+  },
+  {
+   "id": "N17",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a planned change of fuel or supply left out of the forward life",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "The statutory lives and carbon factor are used without discounting or speculative building-level fuel-switch dates. The heat plan does not mandate connection dates for individual applications."
+  },
+  {
+   "id": "N18",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a past round's timing and sizes assumed to transfer, withdrawals and completion left unforecast",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Closing-demand forecasts assume the historical timing and late-grant-value patterns transfer to 2026. Further quote revisions, withdrawals and failures to complete are not forecast."
+  },
+  {
+   "id": "N19",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an effect measured on a trial's participants assumed to transport to the new applicants",
+   "source": "task7/runs/arch9/run1.md (platform run on architecture 9, pasted by the author 2026-11-12)",
+   "quote": "Converting the fitted log-IV effects into gas-saving percentages assumes a conditional multiplicative effect model and transportability from pilot compliers to current applicants."
+  },
+  {
+   "id": "R38",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "a switching or operations log replayed on the network (old device names matched by normalised pole tags beyond the supplied crosswalk) so each period's membership is rebuilt, rather than today's structure carried back",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "It replays 124 switch operations rather than applying the current feeder labels to every historical month. Seven legacy operations required exact normalized pole-tag matching beyond the supplied crosswalk."
+  },
+  {
+   "id": "R39",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a sub-meter's missing hours rebuilt from the upstream meter's balance after the losses and own use between them, rather than carried at the sub-meter's own average",
+   "source": "task22/runs/arch1_run2.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "Missing active power was constrained by upstream delivery energy after station losses, station service and other measured feeders. The critical 249-hour CHL-3 gap reconstructed 714.5 MWh."
+  },
+  {
+   "id": "R40",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a physical loss computed interval by interval on the network (resistance times the squared flow of each segment, core and load losses by unit) at current loads and dated layout, the old study's percentage rejected",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "The model uses current loading and dated topology, not a uniform historical loss percentage."
+  },
+  {
+   "id": "R41",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "new connections' demand measured on energized analogs' interval records and validated by site hold-out, the applied or connected load rejected",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "The component model's site-holdout RMSE was 18.611859 kW, compared with 42.628525 kW for a pooled connected-load model."
+  },
+  {
+   "id": "R42",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "unmetered deemed loads recomputed from the asset inventory's input ratings, operating hours and dated conversions instead of the deemed billing quantity",
+   "source": "task22/runs/arch1_run2.md (platform run on architecture 1, pasted by the author 2026-11-12); both runs",
+   "quote": "Used 2,367 lamps, including 1,769 recorded LED conversions, rather than fixed billed lighting allowances."
+  },
+  {
+   "id": "N20",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "consumption between two actual meter reads spread evenly over the days it covers when it is carried to calendar months",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); run 2 the same",
+   "quote": "Calendar allocation is estimated where hourly meters are unavailable. Actual-to-actual consumption is allocated uniformly by day. (run 2: Non-interval consumption is uniformly calendarized between reads.)"
+  },
+  {
+   "id": "N21",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an unmeasured component (load no meter records) placed across the system in proportion to the metered quantities",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12); run 2 names it as a material uncertainty",
+   "quote": "Unknown unmetered demand is allocated with observed service-load shares. (run 2: Unmeasured voltage, phase imbalance and the location of unmetered use remain material uncertainties.)"
+  },
+  {
+   "id": "N22",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "planned additions or works taken to start in full on their scheduled dates, with no slip or ramp",
+   "source": "task22/runs/arch1_run1.md (platform run on architecture 1, pasted by the author 2026-11-12)",
+   "quote": "Connections start immediately on scheduled dates, with no assumed ramp-up, weather uplift, generic growth, or authorized theft recovery."
+  },
+  {
+   "id": "R43",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a plan change at a price rise modelled as its own outcome and the downgrader kept paying on the lower plan, not counted as a lost subscription",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Used jointly normalized outcome odds so cancellation, downgrade, upgrade, payment loss and continuation remain mutually exclusive."
+  },
+  {
+   "id": "R44",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "each subscription valued on its own account-level usage history (leavers, stayers and switchers), not on its plan's average",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Usage follows individual history and destination-plan economics."
+  },
+  {
+   "id": "R45",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a past response carried to a rise of another size by a dose scaling (the log of the price ratio), and the scaling tested in sensitivities",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Scaled price-pulse effects by relative log-price changes: 2.7245 for Flex, 0.9354 for Standaard, 0.9487 for Onbeperkt and 3.1865 for Gezin."
+  },
+  {
+   "id": "N23",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "no consumption response to a price rise: the subscriptions that stay are assumed to listen as before",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "No additional consumption response to price is assumed."
+  },
+  {
+   "id": "N24",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "the response to an announced change taken at the first bill only, with no response between the announcement and the bill",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "The response is a first-bill pulse. There is no separately modeled November announcement effect"
+  },
+  {
+   "id": "N25",
+   "kind": "named_assumption",
+   "class": "narrow look at broad data",
+   "move": "each unit's response read off its own single past event, the events never split by a condition that varies across them",
+   "source": "task1/runs/arch5_run1.md (platform run on architecture 5's first cut, pasted by the author 2026-11-12)",
+   "quote": "Each region-plan has only one historical price event."
+  },
+  {
+   "id": "R46",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "event times rebuilt from the physical device record (SCADA, UTC) and the outage system's civil times reconciled to them, archive replays removed and daylight-saving ambiguities settled on the device clock",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Converted ADMS UTC timestamps to fixed CST and reconciled OMS civil times to SCADA. All 588 lockouts matched OMS records ... Delayed storm entries and the fall-back-hour ambiguity were resolved using physical SCADA evidence rather than trusting the OMS start minute."
+  },
+  {
+   "id": "N26",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "one remote weather station (the airport) taken to stand for the conditions at the equipment, and a low-current measurement carried to the operating condition, both named and left untested",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Airport ambient proxies cabinet temperature, and resistance measured at 5 A is extrapolated to 30 A. These assumptions justify proof testing, especially near the cutoff."
+  },
+  {
+   "id": "N27",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a second record at another grain set aside because it lacks unit identities and fine timing",
+   "source": "task13/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-12)",
+   "quote": "Read the AMI daily aggregates but excluded them from interruption attribution because they lack customer-level identities and minute-level event timing."
+  },
+  {
+   "id": "R47",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a clearing house's margin-rate rule recovered from its rate notices against the settlement prices (look-back quantile, review day, tolerance) and replayed through a stress",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Margin rates respond to observed price risk and notice timing, with correct year, quarter and month cascading."
+  },
+  {
+   "id": "R48",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a trading desk's selling rule recovered from its trade capture with each date's budget vintage (threshold, weekly pace, budget resets) and replayed through a stress instead of freezing the book",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Trading follows the empirically reconstructed Tuesday rule, including budget resets."
+  },
+  {
+   "id": "R49",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a storage-and-release (dispatch) model fitted on the weeks before the stress year and held out on the stress year itself, recursive and one-step errors reported",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Dispatch was fitted on 205 pre-2022 weeks and tested on 52 held-out weeks, with one-step RMSE of 0.041047 GWh/week and recursive RMSE of 0.046759 GWh/week."
+  },
+  {
+   "id": "R50",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a lagged trailing-average transfer price recovered from the invoices against monthly market prices, the spot reading rejected on its pricing error",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "The group transfer price uses monthly system prices from M-13 through M-2, not current spot."
+  },
+  {
+   "id": "R51",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "a fixed-price bilateral supply contract counted in a hedge ratio the policy defines as all fixed-price sales of budgeted output",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "These include fixed-price bilateral sales and use the latest approved generation budgets."
+  },
+  {
+   "id": "R52",
+   "kind": "reflex",
+   "class": "self-verification",
+   "move": "the forward method run on the earlier stress year's opening book and reproduced against that year's cash records to certify it",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "the same-method replay requires EUR 548.417 million on 26 August 2022; actual cash records show EUR 548.457 million on 26 August 2022."
+  },
+  {
+   "id": "N28",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "inputs another process re-sets during the forecast window (budgets, plans, the counterparty's own schedule) held at their latest supplied values",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "Future generation budgets remain at the latest supplied long-range values."
+  },
+  {
+   "id": "N29",
+   "kind": "named_assumption",
+   "class": "stopped at the first story",
+   "move": "the practice the history shows preferred over a correction the written policy requires once the forecast crosses its limit",
+   "source": "task20/runs/arch3_run1.md (platform run on architecture 3, pasted by the author 2026-11-13)",
+   "quote": "The simulation follows observed trading practice, not an invented compliance correction."
+  },
+  {
+   "id": "R53",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "an option's expected seasonal peak simulated night by night over random draws, because the governing rule asks for an expected cost, not the peak of an average night",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Stagger used 20,000 complete-summer simulations, seed 20271101, because EV-4 requires expected seasonal replacement cost rather than the peak of an average profile."
+  },
+  {
+   "id": "R54",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a counterfactual schedule rebuilt for each unit from its own pre-treatment history and validated on held-out sessions",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Historical schedule reconstruction predicted 46,798 of 46,801 held-out control starts within 15 minutes"
+  },
+  {
+   "id": "R55",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a randomised pilot's effect with its interval clustered by the household",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Kept assignment across replacement serials and clustered uncertainty by home."
+  },
+  {
+   "id": "R56",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a filed remedy checked against its own limit and flagged where it still fails",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "PH-7118's prescribed next-size replacement still models at 67.862 kVA, above its 60.000 kVA limit."
+  },
+  {
+   "id": "N30",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "a session's power taken as constant at its energy over its duration",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "Session power is modeled as constant at energy divided by duration"
+  },
+  {
+   "id": "N31",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "sessions a filed rule cannot schedule kept as they were recorded, the rule's gap noted and left",
+   "source": "task7/runs/arch11/run1.md (platform run on architecture 11's reshipped cut, pasted by the author 2026-11-13)",
+   "quote": "279 covered sessions cannot satisfy every stated product timing rule; 16 remain infeasible even with actual unplug deadlines. Both products retain those sessions as actually charged."
+  },
+  {
+   "id": "L39",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "an effect measured as one pooled average held flat across a decision window in which each target unit moves along the state the effect depends on (its service, its time since treatment)",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run held the pooled effect flat for the whole window; within-unit change rejected a flat effect"
+  },
+  {
+   "id": "L40",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "an additive uplift measured where the outcome had room to rise carried as a constant to a unit that sits near the outcome's bound",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run carried the uplift seen at the lower level to the higher one as a constant; untreated units near the target's level left little headroom"
+  },
+  {
+   "id": "L41",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "an event's transient left out because the past units' final values show no trace of it (every past unit was measured after its transient faded), while the target was measured before its own faded",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run never modelled the recent event; the fine log showed the target still off its pre-event path at its last measurement"
+  },
+  {
+   "id": "L42",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a response curve capped where the obvious channel stops changing (a plateau imposed past a threshold), where a second channel keeps the response moving and slices with the first channel held fixed show it",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run held the curve flat past the threshold; slices where the first channel cannot change still moved"
+  },
+  {
+   "id": "L43",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "declined to estimate a period whose attribute the record no longer carries and deferred the decision as not calculable, where the periods that carry it calibrate and validate a rule on a field every period has",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run recommended deferring and reported the target-period figure and the change as not calculable"
+  },
+  {
+   "id": "L44",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the level read off detailed records whose coverage changed between periods instead of off the complete summary source, so a coverage change read as a change in the quantity",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run built its baseline from the incomplete detail records, whose rate rose on coverage alone"
+  },
+  {
+   "id": "N32",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a bound on an uplift computed as a scenario, then set aside as an assumption",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run computed a saturation scenario and set it aside as an assumption"
+  },
+  {
+   "id": "R57",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "an at-date population rebuilt from an event history (later status rows, same-day corrections) and reconciled exactly to a published control total, the already treated taken out",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run rebuilt the at-date population to the published control totals and took out those already treated"
+  },
+  {
+   "id": "R58",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a benefit to neighbours measured through a dated tie list (the first tie), with the saturation from a second tie",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run measured the gain to neighbours whose first tie was treated, and its saturation"
+  },
+  {
+   "id": "R59",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "unit-level problems separated by their interactions (a setting by size, a setting by hardware group), a law fitted across sizes with a curved link to the score, and the units classed by the absolute sum of their problem effects",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run got the fitted law, the harmful setting and the classed units exactly right"
+  },
+  {
+   "id": "R60",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "an event-study estimate around a recurring calendar change, with each record's local timing and the rule in force computed",
+   "source": "the client's review pages of approved tasks outside our dataset, read 2026-11-13 (the tasks are not filed, at the author's direction; the quote is the reviewer's record in general terms)",
+   "quote": "the run passed the base count, the timing pattern and the event-window estimate"
+  },
+  {
+   "id": "R61",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a price response carried to a configuration a unit never ran by a small pooled model of the past events (the rise's size, whether it passed the rival's price, whether the subscription's profiles fit the plan below), chosen by leaving whole events out",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Selected small models using price-change size, crossing a rival's price, and compatibility with the next-lower plan. Leaving entire historical events out, cancellation prediction error was 4.64 per 100 versus 10.64 for a price-change-only model"
+  },
+  {
+   "id": "R62",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "the leaving between a price announcement and the first bill at the new price modelled as its own effect beside the first bill's response",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Included ordinary November attrition, December anticipation and a one-time first-bill response."
+  },
+  {
+   "id": "N33",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "a subscription that stops is gone for the forecast window: no return to the service on the same account is modelled, the fixed cohort carried with cancellation as an end",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "No reactivation, new acquisition or post-cancellation reporting costs are forecast."
+  },
+  {
+   "id": "L45",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a usage forecast from each account's recent history certified by a pooled holdout bias that cannot see the stayers' response in the months after a rise in the rising plan and country, and the call that response decided filed wrong",
+   "source": "task1/runs/arch5_run2.md (platform run on architecture 5's reshipped cut, pasted by the author with the holistic audit 2026-11-13)",
+   "quote": "Forecast account usage used recent history, plan/profile differences and seasonality. ... Usage holdout bias ranged from -0.34% to +2.07%."
+  },
+  {
+   "id": "R63",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "capital a fund's manager has invested on its subscription line and not yet called, rebuilt from the managers' activity against the capital called and the funds' audited borrowings, and called in the first stress quarter once the stressed rate passes the managers' limits",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "The stressed short rate is 5.25%, which causes 239.40 of opening LP-equivalent borrowing to enter first-quarter calls."
+  },
+  {
+   "id": "R64",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "defensive follow-ons into older holdings separated from new deployment and fitted on the exit market with their own lag, checked on a later holdout",
+   "source": "task20/runs/arch4_run2.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Separated initial investment, scheduled follow-ons, delayed support, financing repayment, fees and expenses. ... The two-quarter-lag support model has later holdout R-squared 0.980620."
+  },
+  {
+   "id": "R65",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "pending funds' first closes delayed by a market-conditioned slip estimated from past closes, their calls moved past the managers' expected dates",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "First-close timing is estimated, not assumed certain. ... Market-conditioned delays move their expected calls into 2028."
+  },
+  {
+   "id": "R66",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a structural cash-flow model calibrated to a cutoff and forecast over a held-out later window, scored against a fixed age-curve rival",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Calibrated through 2022Q4 and forecast 2023-2024 for 70 commitments ... Aggregate-quarter weighted absolute percentage error was 6.54%, compared with 8.21% for an internally fitted fixed age curve"
+  },
+  {
+   "id": "N34",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a response fitted inside the record's range carried by its fitted form to a deeper stress than the record holds, the extrapolation named and left untested",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Support during the deepest stress extrapolates beyond the historical range."
+  },
+  {
+   "id": "N35",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "weakly identified unit-level rates pooled across the units, named and kept",
+   "source": "task20/runs/arch4_run1.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "Weakly identified recycling fractions are pooled"
+  },
+  {
+   "id": "L46",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "pending funds closed on their managers' expected first-close dates although the register records how closes slip when the exit market is weak, so their calls start a year early and no budget passes",
+   "source": "task20/runs/arch4_run2.md (platform run on architecture 4, pasted by the author 2026-11-13)",
+   "quote": "2027 H2: first-close-held calls 224.87; yet-to-close calls 92.83; total calls 317.70"
+  },
+  {
+   "id": "R67",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a randomized day on/off trial with partial compliance read on the achieved dose (bus SCADA less regulator output), daily log ratio to same-class untested feeders with weather and day-of-week terms, OLS and IV both run",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "Trial response, using achieved dose (bus SCADA minus regulator output, daily), each trial feeder's daily energy taken as a log ratio to its same-class untested feeders, with HDD/CDD and day-of-week terms: OLS mean 0.705 and IV mean 0.697"
+  },
+  {
+   "id": "R68",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a trial's energy response carried to untested units and to the whole year by each unit's thermostatic share, built from a survey's holdings times load-research draws, with one per-unit coefficient calibrated on the trial units",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "the run 0.435 and 0.405 ... heating from a weather regression or from survey shares times the 2024 load-research draws; water heating at customers times the survey's electric share times 3,200 kWh; one pooled per-unit coefficient or one per class"
+  },
+  {
+   "id": "R69",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a voltage limit applied hour by hour from the far-end meters' minimum readings against the service floor and the cap, the trial's own days handled",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "Volts and loss rises: the run independently lands within about 2% of the author (e.g. HOL-116 2.41 vs 2.43 V"
+  },
+  {
+   "id": "R70",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "line losses fitted as current squared on the head-metered feeders and applied at the lowered voltage, so constant-power load raises losses under a voltage cut",
+   "source": "task7/runs/arch12/holistic_audit.md (the platform's run and audit on architecture 12, pasted by the author 2026-11-13)",
+   "quote": "FRV-116 166 vs 168 MWh"
+  },
+  {
+   "id": "R71",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "the gas temperature at meters that do not compensate fitted on the logger study against the soil and the air, indoor and outdoor apart, chosen by a month-blocked hold-out with the airport-only line rejected on its error, and applied day by day",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Outdoor held-out-month RMSE was 1.058 F, compared with 3.745 F for airport-only regression. Applied the temperature factor daily, retaining negative warm-season corrections."
+  },
+  {
+   "id": "R72",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "cycle reads carried to calendar months on a per-premise base-load plus degree-day shape chosen by a hold-out, each interval's measured total conserved",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Fitted nonnegative base-load plus heating-degree-day shapes and allocated each actual interval across its service days while conserving the measured total. ... A 600-premise holdout supported the HDD60 model"
+  },
+  {
+   "id": "R73",
+   "kind": "reflex",
+   "class": "forecasting",
+   "move": "scheduled works forecast job by job from the past work orders' delay distributions by access type, the unresolved jobs kept in the denominators and the count simulated by bootstrap",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Each scheduled job's probability incorporates its access type, planned date, completion likelihood, and historical delay distribution. ... The uncertainty calculation used 20,000 stratified bootstrap simulations."
+  },
+  {
+   "id": "R74",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a station corrector's failed pressure transducer and stuck temperature transmitter repaired from the valid raw flow, the communication gaps rebuilt by peer reconstruction validated on withheld outage blocks",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "Repair Lakeview's pressure failure and Westgate's stuck temperature channel, adding 1,623.7 Mcf and 241.0 Mcf, respectively. ... Peer-based reconstruction outperformed interpolation on withheld outage blocks"
+  },
+  {
+   "id": "N36",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "fuel switching, absence and changed occupants named as explanations of the winter falls in use and left untested, every fall kept as gas taken without authorization",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Unauthorized use is estimated, not proven. The central balance adopts the screened demand deficits as conditional unauthorized-use estimates. Vacancy, fuel switching, meter faults, and changed occupants remain possible explanations."
+  },
+  {
+   "id": "N37",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a gas temperature model fitted on one winter's loggers carried to the other seasons, the transfer named and left untested although the commercial correctors log the gas temperature every day",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13); task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13)",
+   "quote": "Temperature transport outside winter is unvalidated. There are no May-October gas-temperature observations."
+  },
+  {
+   "id": "N38",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "scheduled works forecast job by job with the crews' shared capacity and the added scope left out",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "The forecast assumes the published dates are feasible and Old Town performance transfers to Downtown and commercial premises. It does not model shared crew disruptions or promise completion of the newly added scope."
+  },
+  {
+   "id": "L47",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the screen split whole-load falls from heating-only ones and listed the strongest signatures, then deducted every fall as gas taken without authorization, new absentees with it, so a district whose loss is leaks fell under the line",
+   "source": "task22/runs/arch2_run2.md (platform run on architecture 2, scored 46, pasted by the author 2026-11-13); task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "The strongest 16 whole-load or heating-only signatures are inspection priorities, not findings of culpability. (and) The evidence identifies 72 unconfirmed premises across 76 account tenures, carrying a 5,995.017 Mcf provisional FY2026 allowance."
+  },
+  {
+   "id": "L48",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "negative monthly balance residuals kept as noise rather than read as a deduction that took more than the district lost",
+   "source": "task22/runs/arch2_run1.md (platform run on architecture 2, scored 49, pasted by the author 2026-11-13)",
+   "quote": "Retained 67 negative monthly residuals, including the minimum -329.309 Mcf, rather than clipping them and inflating annual leakage."
+  },
+  {
+   "id": "R75",
+   "kind": "reflex",
+   "class": "missingness-measurement",
+   "move": "the line balances of managers whose company-level reports stop rolled forward to the test date from the complete capital accounts and audits, not carried at the last audited balance",
+   "source": "task20/runs/arch5_holistic_audit.md (the platform's holistic audit of architecture 5, pasted by the author 2026-11-13; the run's text was not pasted, so the move is read off the audit's loss map)",
+   "quote": "Run losses: calls in H2 2027, H1 2028 and H2 2028, the headroom, and the recommendation. All trace to S5/S6"
+  },
+  {
+   "id": "R76",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a stopped subscription followed back onto its plan by a returns model built unprompted, rather than the stop taken as final",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the past-rise comparison against the other region, the rival-conditioned transfer under guideline 3.8 and a returns model"
+  },
+  {
+   "id": "R77",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "each past response carried to the target conditional on whether its new price passes the rival's at the latest scan, read against the same plan in the other region",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the past-rise comparison against the other region, the rival-conditioned transfer under guideline 3.8"
+  },
+  {
+   "id": "R78",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "the decision's base cohort and a contract's billable usage rebuilt from two usage sources (app progress and licence-server renewals)",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "the same October 2026 base on every plan, the counted hours including licence-server renewal positions"
+  },
+  {
+   "id": "R79",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "candidate options eliminated by a direct count of documented failures in a confirming file (twins in a delivery log, blood-discordant links with different identifiers) against the policy allowance, with no model of the error rate",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "Rule C joins 45 documented twin pairs from the delivery log against an allowance of about 28 ... A solver does not need a careful false-merge model to rule these out."
+  },
+  {
+   "id": "R80",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "each candidate rule's link counts reproduced by applying the matching specification's standardization rules",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "The link counts themselves are mechanical once the standardization rules in the specification are applied"
+  },
+  {
+   "id": "R81",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "events reconciled across two device exports on different clocks and units, the SCADA sequence and the outage system into one register, and repeat locations corrected for a second source's infeed",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the same 436 faults by year ... the same repeat locations including the solar-corrected Line 9 structure 137"
+  },
+  {
+   "id": "R82",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a deposit build-up with rain cleaning carried from each section's last wash to set which sections are due",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the same nine washing sections (Line 2 sections 1 to 5 and 7; Line 3 sections 4, 5 and 7)"
+  },
+  {
+   "id": "R83",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "a cause's signature (load share, hour, season, rain) read off the confirmed reference cases and applied to the whole event population",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "the four hot-load clusters contain 18 rain-free fault hours with elevated loading, supporting clearance/contact investigations"
+  },
+  {
+   "id": "N39",
+   "kind": "named_assumption",
+   "class": "unfinished chain",
+   "move": "the stayers' own consumption response to a price rise assumed away, so the rise's saving on the leavers' costs is counted and the stayers' extra cost is not",
+   "source": "task1/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 83, pasted by the author 2026-11-13)",
+   "quote": "No new acquisition, route changes, further price changes or independent price-induced listening change is assumed"
+  },
+  {
+   "id": "L49",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "an option's residual discordant evidence held as a reserve against approving it instead of resolved (the mismatches were overlays on earlier merge survivors), so the right option was not approved",
+   "source": "task16/runs/review_2026-11-13.md (the reviewer's send-back of architecture 3, reward 78, pasted by the author 2026-11-13)",
+   "quote": "They only stopped short of approving it because of a reserve for \"seven unresolved blood-discordant pairs\""
+  },
+  {
+   "id": "L50",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a cause withheld where the run's own evidence supported it (peak-load, rain-free contacts filed as unknown); the reviewer read it as a labelling choice, not evidence of difficulty",
+   "source": "task13/runs/review_2026-11-13.md (the reviewer's send-back of architecture 5, reward 75, pasted by the author 2026-11-13)",
+   "quote": "high loading does not by itself prove vegetation"
+  },
+  {
+   "id": "R84",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "each step's time taken as the slowest data-parallel rank's load, modelled from the rank-level traces and the loader's packing manifests",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "rank-imbalance modelling"
+  },
+  {
+   "id": "R85",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a packing rule replayed on the length sample to each run's padding fill, the run's own rule and mix",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "best-fit packing replay"
+  },
+  {
+   "id": "R86",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a power meter read as censored at its contract and the excess over contract rebuilt from the scheduler's node states",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "a censored power meter"
+  },
+  {
+   "id": "R87",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "interruptions priced from the stop log: rates by node, run and hall, restart time and lost work per stop, charged to each run",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "interruption pricing"
+  },
+  {
+   "id": "R88",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "provider works' planned hours scaled by the actual-to-planned ratio of the same work type in the work-order history",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "a works overrun"
+  },
+  {
+   "id": "R89",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "a hall's booked blocks checked against its node count, an extended block's rebooking conflict caught and the later run deferred",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "The run caught this and deferred kide-13b-v4 by 3.0 days"
+  },
+  {
+   "id": "R90",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "the benchmark days of every configuration and the 2026 GPU-days held reproduced exactly from the registry, the benchmark file and the configs",
+   "source": "task25/runs/holistic_audit_2026-11-13.md (the reviewer's audit run on architecture 1, pasted by the author 2026-11-13)",
+   "quote": "All 11 benchmark days reproduce from tpbench_results and the configs"
+  },
+  {
+   "id": "L51",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "the most rigorous standard design the pack affords (a triple difference against units not yet treated) built unprompted, on comparison units whose seasonal response differs from the treated units'; its own placebo could not see that difference, and the units' own earlier years, by the state that sizes the season, were the valid counterfactual",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "Astra run +0.625 via triple difference vs AU, NZ, ZA, IN, SG ... has a placebo of its own that does not validate seasonal comparability by tenure and climate"
+  },
+  {
+   "id": "L52",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "an estimate whose own interval straddled the decision line, committed as the call",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "reports its own 95% interval of -0.23 to +1.48 straddling the 0.134 line"
+  },
+  {
+   "id": "L53",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "saw that the outcome label is recorded mostly on the bad outcomes, then declined to estimate the unlabelled majority: every figure not available and the default call for every member, where a labelled calibration sample and signals on every unit supported an estimate per arm",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "identified that thumbed conversations are mostly the bad ones (pilot 22.7 percent good among thumbed vs 75.9 percent among unthumbed), then refused to estimate: all shares and lifts NA, keep for all four categories"
+  },
+  {
+   "id": "L54",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "gross transitions between two reports of a status that cannot reverse committed as the rate of first events; the reverse flow and the event's own dated item, both in the file, never used",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "The run did not compute a netted rate and decline it; it never netted and committed the raw proxies"
+  },
+  {
+   "id": "L55",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the outcome followed only on the units still in their original class, where the treatment itself moved units out of that class (the estimand's basis was pinned by the prompt as everyone treated)",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "the monthly-plan-only reading gives about +0.30 and is the known trap"
+  },
+  {
+   "id": "R91",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "selection of the labelled rows on the outcome noticed unprompted from a calibration sample's own table; noticing it is never the difficulty",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "identified that thumbed conversations are mostly the bad ones"
+  },
+  {
+   "id": "R92",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a difference-in-differences or triple difference with a placebo and an interval built unprompted wherever untreated units ship; the design's machinery is a reflex, its comparison units' validity is not",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "+0.625 via triple difference ... a placebo of its own ... its own 95% interval"
+  },
+  {
+   "id": "R93",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "headline rates, cohort counts, joined row counts and a calibration sample's totals reproduced exactly; reproduced counts price nothing",
+   "source": "the client's review sheets of three approved tasks by other fellows, read 2026-11-14 (guidelines/client/approved-reviews-2026-11-14.md); the run is the reviewer's single usable GPT-6 Astra run and the quote is the reviewer's record of it",
+   "quote": "headline rates ... and notified cohort counts reproduce; 161,384 joined conversations and 20,540 thumbed reproduce"
+  },
+  {
+   "id": "L56",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "a recording effect seen in the run's own table (the outcome recorded less often under one condition of how the record was made) kept as a sensitivity check and never fitted as a correction carried into the total, so the face-value figure and the call stood",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "ran it only as a sensitivity check ... \"sensitivity analysis, not a uniquely identified correction\""
+  },
+  {
+   "id": "L57",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a threshold cut on the recording condition (the affected records dropped and the rest reweighted) in place of a fitted model of the effect, which corrects the worst band and leaves the others and any second effect in",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "kept only interviews more than 14 days before the deadline and reweighted them ... 164,546 households and 16.07 million, under budget"
+  },
+  {
+   "id": "L58",
+   "kind": "loss",
+   "class": "narrow look at broad data",
+   "move": "two recording conditions tangled with each other and with who the units are read one at a time, so the second effect vanished behind the first and the units' make-up; no joint fit was run",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "reported in passing (6.19 minutes shorter) without separating the two effects. Fitted one at a time, the length effect disappears behind the deadline effect and household size"
+  },
+  {
+   "id": "N40",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a difference between two randomised arms shown and left unresolved because neither arm is known to be unbiased, where one pull fitted to both arms together answers which way the truth lies",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "\"establishes a question-start effect, not which arm is unbiased\""
+  },
+  {
+   "id": "R94",
+   "kind": "reflex",
+   "class": "missingness-measurement",
+   "move": "units that declined a module given a modelled chance of the outcome from their covariates, never dropped and never set to zero",
+   "source": "the client's example library, example 17 (guidelines/client/examples/17.txt, a survey measurement correction task labelled hardest, four runs averaging 0.31; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "all 4 handled the module decliners ... It is the one every run got"
+  },
+  {
+   "id": "L59",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a stream forecast from its own series (a trend, a bounded curve, a regression on a macro driver, a flat level) where the stream is generated by earlier cohorts of another stream and the cohorts had to be followed forward",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "Thirteen of the 16 runs forecast housing and insolvency referrals from the series itself, by trend, curve or flat level"
+  },
+  {
+   "id": "L60",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "the two streams linked unit by unit, then one conversion hazard by time since entry applied to every cohort, so the older cohorts' rate was carried to the newest ones and the forecast kept rising",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "applied one conversion hazard by months since first referral to every cohort. Because the older cohorts dominate, it still forecast 1,616, 1,762 and 1,825"
+  },
+  {
+   "id": "L61",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "a per-unit level that fell over the history read as the new normal (fewer sessions, a mix change, a settled level) and carried into the option, where the fall follows a state the option removes (a queue rationing time) and the level had to be read at the state the option creates",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "read it as fewer sessions, a mix change or a settled level, never as the waiting list rationing time"
+  },
+  {
+   "id": "L62",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the mature units' figure computed close to the right level and kept as a sensitivity while the recent, depressed figure stayed central",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "computed older, near-mature housing cohorts at 36.40 and 36.27 hours, close to the no-queue 37.57, but kept 31.36 and 29.55 as central and treated the older figure as a sensitivity"
+  },
+  {
+   "id": "L63",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "one decisive step found and fitted, the other input left at today's level, so the call moved to a different wrong answer",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "found the cohort decay (1,090, 760 and 661 referrals) but kept 5.14 and 31.36 hours ... and chose Band 4"
+  },
+  {
+   "id": "R95",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "open cases fitted as censored at the value logged to date where the dictionary says an open case's figure is to date; closed cases alone are not taken as the level",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "The best run's censored gamma on recent openings gave 5.14 ... the dictionary says open-case duration is time to date"
+  },
+  {
+   "id": "R96",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "a recorded total that sits at a contractual cap read as a ceiling and not as demand where the schedule states the cap",
+   "source": "the client's example library, example 16 (guidelines/client/examples/16.txt, a demand forecast and capacity pricing task labelled hardest, sixteen runs in four configurations, the current model averaging 0.285; read 2026-11-21); the quote is the page's record of the runs",
+   "quote": "That billed hours sit at the cap (43,512 against 43,600 in 2025-26) is stated in the schedule and the operations update"
+  },
+  {
+   "id": "L64",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a falling per-order figure explained by the composition a cross-tab shows (basket shape) with no per-unit history rebuilt across the two systems, so the driver that sits in each unit's count of past uses was never measured",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "explained the fall through bracketing without ever building a per-customer use count"
+  },
+  {
+   "id": "L65",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the run wrote that the driver was still growing and that a flat level understates it, then held the latest month's mix flat for the forward year",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "\"trend is +4pp styles/month, so stable understates\" and held the September mix flat anyway"
+  },
+  {
+   "id": "N41",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "the demand an option would lose assumed as a round share and never measured, where units the option never reached give the measured lift",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "sized switch-off on a \"realistic 15% abandon\" rate it never measured"
+  },
+  {
+   "id": "L66",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "every option sized as a fixed per-order saving times current annual volumes, so a habit that keeps deepening unit by unit could not enter the forward year",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "sized options as fixed per-order savings times current annual volumes, so a habit that keeps worsening could not show up"
+  },
+  {
+   "id": "L67",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "the right action reached and the lift measured, with the cause still framed by the shallower story and the mix held flat, so the recovery was sized at a third of the reference",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "still framed the cause as bracketing, measured margin by basket shape rather than use count, and held the order mix flat, so it sized the recovery at EUR 38.6m, about a third of EUR 135.5m"
+  },
+  {
+   "id": "R97",
+   "kind": "reflex",
+   "class": "investigation loops",
+   "move": "rival explanations a dated calendar or a cost card can rule out (a finished sale, a rate change) cleared unprompted, and the latest month's figure seen as overstated by returns still to come",
+   "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
+   "quote": "correctly found September overstated (EUR 20.02 against the reported 26.37) and cleared the sale and label rates"
+  },
+  {
+   "id": "R98",
+   "kind": "reflex",
+   "class": "missingness-measurement",
+   "move": "a gauge's loss by rate fitted as a time lost at each recorded event through a storage total's visit-interval account, station by station, and put back event by event before any window is taken",
+   "source": "task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "For each tip I used the preceding interval Δt, apparent rate i=d/Δt and corrected increment d(1+τ/Δt). Across 108 totaliser rounds per station, zero-intercept least squares of storage catch minus tipped depth on A=Σi gave apparent τ"
+  },
+  {
+   "id": "R99",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "an ungauged site's ratio to its governing station read storm by storm off a remote sensor's paired pixels (a log-ratio mean and spread per site, an identifier change in the pixel set handled by year), with no area-average normal used as the transfer",
+   "source": "task3/runs/arch8/run1.md (platform run on architecture 8, pasted by the author 2026-11-21); task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "Per-crossing event-cell log-ratio means/spreads (e.g. GC-1620 mu 0.323, sigma_R 0.133; GC-2420 mu -0.053, sigma_R 0.144) (run 2: On warm cells, I fitted per crossing log r=ln(radar source/radar station) = a0+a1 ln S at the station)"
+  },
+  {
+   "id": "R100",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "an instrument's shortfall in one weather regime (hail held in an unheated funnel) found from a coded present-weather record and corrected by a regime multiplier calibrated on a slice of reference gauges",
+   "source": "task3/runs/arch8/run1.md (platform run on architecture 8, pasted by the author 2026-11-21); task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "A pooled log-linear fit over all gauge-events estimated log(true / (M x R_source/R_station)) = 0.070209 + 0.027746 log(I_peak/20) + 0.243811 hail + 0.022965 dE_km + e (run 2: Dropping the calibrated hail intercept is the one specification I found that changes a class)"
+  },
+  {
+   "id": "R101",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "a slice of reference gauges that observes the target quantity used as an end-to-end calibration set for the whole chain (conditioned on the other instruments shipped), with the residual spread integrated into expected counts as a sum of exceedance probabilities, then scored against the slice's own counts and on held-out folds",
+   "source": "task3/runs/arch8/run1.md (platform run on architecture 8, pasted by the author 2026-11-21); task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "Applying the same station/radar/transfer chain and counting registered trigger exceedances over 14 seasons ... the model gives 194.510 triggering site-events versus 190 observed ... A four-fold event-held-out refit ... gave 192.278 expected crossings versus 190 observed (run 1: The expected trigger count is the sum over 18 seasons of each storm's probability of reaching the geotechnical trigger)"
+  },
+  {
+   "id": "N42",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "one instrument model's correction put on a second model because the pack holds no independent check on the second; false in that world (the second bucket lost less), it moved four of run 1's figures out of band at the second model's stations, all high, with every class still right because every miss fell on the side the margins absorbed",
+   "source": "task3/runs/arch8/run1.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "One tip-correction model is applied across TB-1/TB-2 stations. Rio Scuro is TB-1; ... no independent TB-2 truth exists in the package. Station storage ratios differ only modestly and were used as checks, not to build separate corrections."
+  },
+  {
+   "id": "N43",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a remote sensor's behaviour over its own years taken to hold for the record's earlier years and for the forward window, named and left untested for want of a file that shows a change",
+   "source": "task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "Stationarity. Radar cell behaviour from 2013 to 2026 is assumed transferable to 2009 to 2012 and to the 2027 to 2031 program. A changing climatology or storm regime would invalidate rates; no file evidences such a change"
+  },
+  {
+   "id": "N44",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "two error terms of one transfer (the sensor's ratio and the site's residual) taken as independent Gaussians, named and left untested",
+   "source": "task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
+   "quote": "Log radar ratio and residual source-station η are treated as independent Gaussians; ground truth may have correlated or non-Gaussian spatial fields."
+  }
+ ]
+}

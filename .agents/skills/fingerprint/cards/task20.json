@@ -1,0 +1,511 @@
+{
+ "task": "task20",
+ "project": "sulfur",
+ "architecture": "v6",
+ "drawn": "2026-11-13",
+ "slot_note": "architecture 6, rebuilt in the same world on 2026-11-13 after the holistic audit of architecture 5: the audit's pins (the support basis past the record and the six managers' line balances, policy section 8) make architecture 5's stumps reflexes, and the call is rebuilt on the successor funds' first closes and the real-asset loans that fall due in the stress; repaired the same day after the holistic audit of architecture 6 (not forced: the rescue calls' basis, the pacing basis and the first-close slips were open, and program B passed by 34.2): policy section 8 now files those bases, the programs and the minimum reserve are re-sized so program B clears both its lines, and the two deciding judgments are unchanged",
+ "domain": "quantitative-finance",
+ "subdomain": "liquidity-funding-balance-sheet",
+ "niche": "an endowment choosing among its consultant's 2027 private-fund programs under its liquidity policy, from the calls its existing funds will make in a stress the policy sets, with the pace, the first closes and the old funds' calls on bases the policy files",
+ "objective": "forecasting",
+ "shape": "04",
+ "decision_type": "pick_one_of_n",
+ "answer_unit": "named_option",
+ "answer": "Program B (Oakhanger Capital V, Wendlebury Growth VI and Corvane Ventures VI, USD 245 million); A fails",
+ "answer_source": "submission.md, Final Recommendation (figures from generator/figures.json)",
+ "gap": [
+  "time",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G16",
+  "G12",
+  "G13"
+ ],
+ "gate_g": "binding_constraint",
+ "calibration_form": "settled_transaction_ledger",
+ "stump_strategy": "other",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "planning_thread",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass applies every basis policy section 8 files (the pace of new investments, first closes on their managers' dates, buyout, growth and venture funds past their periods on the benchmark's rate, the facility balances in the first quarter) and every reflex, holds every investment period to the end the register records and carries the real-asset loans as they stand, and adopts program A.",
+ "domain_test": "Private-markets liquidity planning (unfunded commitments, the managers' deployment and short-term financing, exits and distributions in a stressed exit market, fundraising timelines) decides how much a long-horizon investor can commit; swap the nouns for a retailer's inventory or a bank's deposits and the subscription lines, recycling, exit-driven distributions and first closes stop making sense.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own: a program choice under a liquidity test whose stressed calls are cut where the managers' next funds close and raised where the real assets' loans fall due at stressed terms, the two found in the register's past successions and the activity file's loan records and pulling in opposite directions",
+ "layer1": [
+  "capital account statements restated for a quarter, with the superseded line kept",
+  "a manager renamed between vintages (Tilsworth Growth Partners to Tilsworth Partners)",
+  "fourth-quarter statements still to arrive for two funds, their cash in the custodian's file",
+  "the managers' activity reports in fund-level amounts while the statements are at the endowment's share",
+  "audited accounts on fiscal years ending in December for most funds and in June for two managers",
+  "final statements at term end that release the commitment not called",
+  "fees that change basis at the end of the investment period"
+ ],
+ "stakeholder_role": "director of private markets at a university endowment preparing the 2027 commitment budget for the trustees' investment committee",
+ "role_family": "portfolio_manager",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "manager_portfolio_activity_2013_2026.csv",
+  "rows": 24866,
+  "entity": "one portfolio company's investment, realization or quarter-end valuation in one fund",
+  "grain": "fund x portfolio company x date",
+  "source": "simulated by task20/generator (a seeded private-markets program, its managers and the exit market); no public data"
+ },
+ "forum": "trustees_or_governors",
+ "forcing_event": "vote_or_meeting",
+ "org_family": "university_or_school",
+ "world": {
+  "geography": "United States (Ohio)",
+  "currency": "USD",
+  "org_type": "a private university's endowment and its investment office (all names fictional)",
+  "invented_names": [
+   "Wexmoor University",
+   "Corrigan Hart"
+  ],
+  "people": [
+   "Daniel Marshall",
+   "Caitlin Hill",
+   "Jonathan Potter",
+   "Donna Turner"
+  ]
+ },
+ "deliverables": [
+  "wexmoor_2027_program_test.xlsx",
+  "commitment_program_2027_memo.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "which",
+ "driver": "The decisive quantity is a forward stream of obligations shaped by two events in other units' processes inside the window: a unit's window ends when a related unit's own event comes first (read off the past cases where it did, dated on that event's own schedule), and contracts carried on old terms reset to the stressed terms at maturity, the holder funding the gap; the two pull the stream in opposite directions, so either alone lands on a wrong answer.",
+ "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the investment periods its managers' next funds end (16 managers' agreements stop new investment at the successor's first close; 7 funds' successors close in 2027, USD 131.6 million less called) and on 23 property and infrastructure loans that fall due in the stress (USD 839.6 million at Wexmoor's share), refinanced at the lenders' limit fitted on the refinancings since mid-2022 on values that fall with the stress, leaving USD 254.9 million to call.",
+ "stump": "A careful pass that applies every filed basis and every reflex, holds every investment period to its registered end and carries the real-asset loans as they stand adopts program A; the golden is B; fixing the successor closes alone gives A and the loans alone C, and dropping either alone from the golden gives C or A.",
+ "answer_shape": "scenarios-flip",
+ "weight": "investigation",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "investigation-loops",
+  "modeling",
+  "forecasting",
+  "forecasting",
+  "synthesis",
+  "synthesis"
+ ],
+ "results": "R1 commitments not yet called at 31 December 2026 by strategy; R2 the successor closes (the funds whose investment periods their managers' next funds' first closes end, and the calls that takes off); R3 the refinancing calls (the property and infrastructure loans that fall due and the shortfalls the funds call); R4 distributions by half at the policy's rates; R5 the stressed calls of the commitments made by the end of 2026 in each half of 2027 and 2028; R6 the headroom above the minimum before any 2027 commitment; R7 the program the policy lets the Committee adopt",
+ "one_fact_test": "the most useful single sentences: 'a fund's investment period ends when its manager's next fund holds its first close, and 7 of the endowment's funds have a successor closing in 2027 or 2028' and '23 of the real-asset funds' loans fall due in 2027 and 2028, and lenders will refinance them on the stressed rate and values'; each rescues 1 of 7 results and leaves the program wrong (effort.json hints)",
+ "strategy_label": "UNTESTED (term_ended_by_another_units_event with terms_reset_at_maturity)",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "mark115": "mark115 prices a planned move's second response where its new level crosses a rival's own level; v4 rebuilds the capital already invested on short credit from two records at two grains and carries it, with a stressed exit response and slipped closes, into a 24-month liquidity test",
+  "task20 v3": "v3 replayed a stress year through five process rules each recovered from its own record (a desk, a clearing house, plants, an affiliate, payment habits); v4 estimates quantities no record holds (deferred calls, a stressed asymmetric exit response, slipped closes) for a private-fund program, with no rule to recover",
+  "task9": "task9 v10's population-and-two-grains puzzle is a yield bridge on a fab's records; v4 is a forecast of an endowment's private-fund cash flows under a liquidity test",
+  "mark111": "mark111 picks which cause of missed appointments still operates once a second provider layer returns for the season; v4 sizes a private-fund commitment budget from capital the managers have already invested on their own credit lines, rebuilt from their activity and audited borrowings and told apart from recycled proceeds",
+  "task10": "task10 v1 reads a paid tier's capacity only in the periods a volunteer tier fell short; v4 reads an investor's coming calls from capital its managers financed on credit, with an asymmetric exit response and slipped closes beside it, for a private-fund commitment budget",
+  "task20 v5": "v5 turned on a response past the record's plateau read off another record's deep episode and a level rebuilt where a detailed file stopped; v6 files both and turns on windows another unit's event ends and loans that reset to stressed terms at maturity, two judgments that pull the headroom in opposite directions"
+ },
+ "notes": "Re-rooted 2026-11-13 from architecture 4, which landed on its first platform round (its three stumps are reflexes R63 to R65). Architecture 5 kept the endowment's world and pack and changed the decision to a pick among the consultant's programs; the platform's holistic audit returned it the same day (its two judgments unforced), and architecture 6 keeps the decision, files architecture 5's two judgments in policy section 8 as the audit asked, and rebuilds the call on the successor funds' first closes and the real-asset loans that fall due in the stress (the world extended with both processes). Stump strategy other (architecture 6): windows ended by another unit's event (the successor funds' first closes, read off the register's past successions) and contract terms reset at maturity (the real-asset loans refinanced at the lenders' stressed limit), two judgments the records force; neither is a forecast-method choice, so architecture 4's and 5's forecast_method_backtest no longer describes the build. Repaired 2026-11-13 after the holistic audit of architecture 6 (runs/arch6_holistic_audit.md): the decision form, lessons, detection, moves, file roles and answer pattern are unchanged; the chain's signature gained the two deciding judgments as results of their own (they are the Critical Components) and the mechanisms list dropped the slipped successor closes and the two-channel rescue read (both now bases the policy files).",
+ "skeleton": {
+  "decision_form": "pick_one_of_few_options",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "term_ended_by_another_units_event",
+   "terms_reset_at_maturity"
+  ],
+  "mechanisms": [
+   "periods_end_at_the_successor_funds_first_close",
+   "real_asset_loans_refinance_at_a_rate_dependent_limit",
+   "refinancing_shortfalls_called_from_investors_within_the_commitment",
+   "real_asset_values_move_with_equities_a_quarter_late_and_with_the_short_rate",
+   "subscription_lines_called_at_the_stress_clean_down",
+   "old_funds_calls_on_a_filed_benchmark_rate",
+   "new_investment_at_a_filed_pace"
+  ],
+  "detection": [
+   "natural_experiment_in_record",
+   "naive_ignores_what_it_should_depend_on",
+   "second_source_at_other_grain"
+  ],
+  "moves": [
+   "measure_response_shape_from_events",
+   "replay_event_by_event",
+   "variant_sweep_holds_call"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "governing_standard",
+   "schedule_or_plan",
+   "shortlist_or_candidates",
+   "exogenous_long_record",
+   "reference_register",
+   "unused_distractor"
+  ]
+ },
+ "client_domain": "quantitative-finance",
+ "lineage_shells": [
+  {
+   "question form": "when",
+   "second-sentence opener": "the",
+   "deliverable set": "xlsx"
+  },
+  {
+   "question form": "other",
+   "second-sentence opener": "give",
+   "deliverable set": "xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "corrigan",
+   "deliverable set": "pdf+xlsx"
+  }
+ ],
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "show",
+  "deliverable set": "docx+xlsx"
+ },
+ "registered": "2026-11-13T11:46:34Z",
+ "lineage": [
+  {
+   "architecture": "v5",
+   "driver": "The decisive quantity is a forward stream of obligations whose response to a stress deeper than the record is capped where the record stops while a second channel keeps it rising, seen only in another record's earlier deep episode at a slice where the first channel cannot move; and part of the stream must be rebuilt from complete summary records because the detailed records covering it stopped, the last summary balance being stale because the process rebuilt it after it.",
+   "driver_concrete": "Which of Corrigan Hart's 2027 programs Wexmoor can adopt turns on the managers' calls on companies they already hold past a 45 per cent exit shortfall the endowment's own funds never reached (defensive follow-ons capped at 30 per cent, then rescue financings 4.5 times as steep, read off the benchmark's funds past their investment period in 2009) and on the line stock of six managers whose company-level files stop after 2024 (USD 139 million rolled from the file's end and re-anchored at the audits, against near nothing in their last audited balances, the lines rebuilt through 2026).",
+   "stump": "A careful pass that makes architecture 4's moves, holds the support curve flat past the plateau and carries the six managers' last audited borrowings adopts program A; the golden is D; fixing the support curve alone gives C and the six managers' bridge alone A, and dropping either alone from the golden gives A or C.",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "second_channel_past_plateau",
+     "level_and_mix_from_two_sources"
+    ],
+    "mechanisms": [
+     "follow_on_reserves_cap_defensive_support_at_a_30_per_cent_shortfall",
+     "rescue_financings_past_a_46_per_cent_shortfall_the_own_record_never_reached",
+     "six_managers_company_level_files_stop_after_2024",
+     "lines_cleaned_down_at_end_2025_and_rebuilt_through_2026",
+     "subscription_lines_called_at_the_stress_clean_down",
+     "investment_periods_extended_in_weak_markets_when_behind",
+     "first_closes_slip_with_the_exit_market"
+    ],
+    "detection": [
+     "naive_ignores_what_it_should_depend_on",
+     "natural_experiment_in_record",
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "measure_response_shape_from_events",
+     "impute_by_model_at_own_drivers",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "governing_standard",
+     "schedule_or_plan",
+     "shortlist_or_candidates",
+     "exogenous_long_record",
+     "reference_register",
+     "unused_distractor"
+    ]
+   },
+   "answer": "Program D (the venture re-up only, USD 45 million); A, B and C fail",
+   "weight": "measurement",
+   "spent": "returned 2026-11-13 by the platform's holistic audit (runs/arch5_holistic_audit.md): its two stumps (the support curve past the record's plateau and the six managers' line stock) each rested on a judgment no file forced; pinned at authority as the audit asked (policy section 8), both became filed reflexes, so architecture 6 rebuilds the call on two judgments the records force"
+  },
+  {
+   "driver": "The decisive quantity is a forward stream of obligations no primary record holds, built from three behaviours the intermediaries' own records show at other grains: outflows already funded on short credit and passed on later, rebuilt as a residual of two ledgers and told apart from a permanent residual with the same signature at the dates a third record pins it, which fall due at once when the credit's cost rises; a defensive outflow into aged holdings that rises as the market for selling them falls, measured apart from the ordinary flow it masks; and new obligations that begin later than their sponsors say when that market is weak.",
+   "driver_concrete": "Wexmoor's 2027 commitment capacity turns on the USD 238 million its managers had invested on subscription lines and not yet called (rebuilt fund by fund from their activity less the investment calls, the recycled proceeds read off the audited borrowings and carried at each manager's rate), called at the clean-down once the stress's rates pass every manager's limit as in 2022-23; on defensive follow-ons into companies held two years or more, which rise two quarters after the exit index falls below 100 while new deals slow; and on first closes that slip with the exit index in the quarter before, so the four pending funds close in 2028.",
+   "stump": "A careful pass that builds calls from the managers' deployment but reads the investment-call gap as recycling, fits one pace to every follow-on and takes the managers' first-close dates files USD 850 million, so the consultant's USD 500 million passes; the golden is USD 250 million (band 175 to 350); each judgment alone lands at USD 400, 500 or 1,050 million and each dropped alone at 700, 600 or 50.",
+   "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "no_single_correction_clears",
+    "lessons": [
+     "conservation_residual_attribution",
+     "behavioural_response_measured",
+     "scheduled_completion_slippage"
+    ],
+    "mechanisms": [
+     "subscription_lines_defer_capital_calls_until_cleaned_down_when_rates_rise",
+     "recycled_proceeds_widen_the_investment_call_gap_permanently",
+     "defensive_follow_ons_into_aged_holdings_rise_two_quarters_after_exits_fall",
+     "new_deal_pace_slows_with_the_deal_market",
+     "first_closes_slip_with_the_exit_market_the_quarter_before",
+     "distributions_replayed_at_the_policy_benchmark_rates"
+    ],
+    "detection": [
+     "second_source_at_other_grain",
+     "conservation_residual_sign",
+     "record_time_against_event_time"
+    ],
+    "moves": [
+     "weighted_balance_reconciliation",
+     "measure_response_shape_from_events",
+     "empirical_completion_from_past_works",
+     "simulate_with_fitted_inputs"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "governing_standard",
+     "schedule_or_plan",
+     "reference_register",
+     "exogenous_long_record",
+     "unused_distractor"
+    ]
+   },
+   "architecture": "v4",
+   "fate": "landed on its first platform round, 2026-11-13 (runs/arch4_run1.md, runs/arch4_run2.md; runs/triage.md): run 1 made the line stock, the defensive follow-ons and the slipped first closes unprompted and filed USD 250 million with every result but one half-year cell inside its band; run 2 made the first two and lost the slips; the three stumps are reflexes R63 to R65",
+   "shell": {
+    "question form": "how-much",
+    "second-sentence opener": "corrigan",
+    "deliverable set": "pdf+xlsx"
+   }
+  },
+  {
+   "architecture": "v3",
+   "driver": "The decisive quantity is the largest cumulative net cash outflow of a hedge book through a replayed stress year, where the book's size, the contracts it sits in, the clearing house's margin rates, the hedged output and the timing of the cash that output brings in each respond to the stress through their own process, so each is rebuilt from its own record and replayed day by day rather than carried from the opening state or scaled from the stress year's own outcome.",
+   "driver_concrete": "Hallingvass Kraft's board risk committee renews the committed margin facility for 2027 at the largest cumulative net cash outflow the hedge program would face in a year whose prices and inflows repeat 2022: the desk steps to the policy maximum once prices run a quarter above budget, counting the smelter's fixed-price contract in its ratio; NEX Clearing's rates are a look-back quantile of two-day moves reviewed weekly; a reservoir opening low meets the licence floor in the dry spring, so committed supply is bought at spot; and the affiliate pays a lagged trailing average of spot.",
+   "stump": "The opening book grown along the minimum ladder on exchange positions, rates scaled with price, output at budget times 2022's shortfall and the affiliate at spot gives a facility near the current one; each of the five processes moves the peak by 10 to 50 per cent, and the shortcuts land on different wrong sizes (from about EUR 90 million to about EUR 270 million against about EUR 190 million).",
+   "skeleton": {
+    "decision_form": "banded_call_on_figure",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "record_algorithm_inversion",
+     "behavioural_response_measured",
+     "unmetered_component",
+     "stock_flow_accounting",
+     "exposure_basis_decoupled"
+    ],
+    "mechanisms": [
+     "margin_rates_from_lookback_quantile_of_two_day_moves_reviewed_weekly_with_band",
+     "desk_steps_to_policy_maximum_when_price_a_quarter_above_budget",
+     "fixed_price_supply_contract_counted_in_hedge_ratio",
+     "low_opening_reservoir_meets_licence_floor_so_dry_spring_output_is_bought_at_spot",
+     "affiliate_pays_lagged_trailing_average_of_spot"
+    ],
+    "detection": [
+     "second_source_at_other_grain",
+     "naive_ignores_what_it_should_depend_on",
+     "conservation_residual_sign"
+    ],
+    "moves": [
+     "replay_event_by_event",
+     "measure_response_shape_from_events",
+     "impute_by_model_at_own_drivers"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "governing_standard",
+     "schedule_or_plan",
+     "exogenous_long_record",
+     "event_timeline",
+     "unused_distractor"
+    ]
+   },
+   "answer_shape": "timeline",
+   "weight": "synthesis",
+   "chain_signature": [
+    "assembly-reconciliation",
+    "investigation-loops",
+    "modeling",
+    "missingness-measurement",
+    "forecasting",
+    "missingness-measurement",
+    "synthesis",
+    "self-verification"
+   ],
+   "shell": {
+    "question form": "other",
+    "second-sentence opener": "give",
+    "deliverable set": "xlsx"
+   },
+   "niche": "a hydro generator's exchange hedge book and the committed facility that funds its margin and delivery settlements, sized on a stress year replayed on the 2027 book",
+   "decision_type": "dial_setting",
+   "gap": [
+    "time",
+    "objective"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G13",
+    "G16",
+    "G3"
+   ],
+   "gate_g": "forecasting",
+   "status": "spent",
+   "date": "2026-11-13",
+   "why": "returned at review on determinism: annex (a) of the liquidity standard read two ways (EUR 208.7 million on each mapped day's one-day 2022 move against 328.9 million on the level copy); the one platform run pasted made every deep step unprompted (the smelter contract in the hedge ratio, the desk's Tuesday rule with budget resets, NEX's look-back rule to 220 notices, dispatch fitted before 2022 and held out on 2022, the M-13 to M-2 tariff, the payment habits) and filed 328.7 under the level reading; in-world hardening prototyped at 0 to 8 per cent (planning re-budgets, price-triggered re-budgets, a post-2022 security-of-supply path), because variation margin on a book the filed ladder pins carries the requirement"
+  },
+  {
+   "architecture": "v1",
+   "status": "spent",
+   "date": "2026-11-11",
+   "why": "the determinism judge's isolated first pass (medium effort, before the answer blocks) replicated the engine, found the extracts' cutoff by reconciling product control's hypothetical P&L and executed the add-on path from the standard; the careful column priced near 95",
+   "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
+   "skeleton": {
+    "decision_form": "per_unit_diagnosis",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "unmetered_component",
+     "record_as_of_its_date",
+     "forward_window_structure_change",
+     "heterogeneity_carried_to_decision"
+    ],
+    "mechanisms": [
+     "proxy_beta_mapping_drops_names_own_risk",
+     "nightly_snapshot_misses_late_booked_allocations",
+     "snapshot_outage_reuses_an_older_book",
+     "booked_pnl_carries_same_day_trading_and_income",
+     "two_year_window_lags_a_volatility_rise",
+     "planned_growth_sits_in_proxied_names",
+     "store_500_day_rule_moves_names_off_proxies"
+    ],
+    "detection": [
+     "second_source_at_other_grain",
+     "residual_by_subgroup",
+     "record_time_against_event_time"
+    ],
+    "moves": [
+     "replay_event_by_event",
+     "bridge_by_contribution",
+     "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "incumbent_figure_or_method",
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "event_timeline",
+     "schedule_or_plan",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "strategy-backtesting-evaluation",
+   "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
+   "objective": "forecasting",
+   "shape": "single-figure",
+   "decision_type": "go_hold_or_stop",
+   "answer_unit": "currency",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G6",
+    "G16",
+    "G17"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "censored_or_lagged_release",
+   "stump_strategy": "forecast_method_backtest",
+   "context_artifact": "close_out_summary",
+   "layer2_family": "forecast_uncertainty",
+   "role_family": "research_desk",
+   "scoring_unit": "per episode",
+   "forum": "other",
+   "forcing_event": "period_close",
+   "org_family": "financial_institution",
+   "world": {
+    "geography": "United States",
+    "currency": "USD",
+    "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
+    "invented_names": [
+     "Brindle & Moss",
+     "Kestrel Spend Panel",
+     "Larkhill Partners"
+    ],
+    "people": [
+     "Audrey Hanson",
+     "Robert Campbell"
+    ]
+   },
+   "deliverables": [
+    "bmh_q4fy25_revenue_nowcast.xlsx",
+    "bmh_q4fy25_nowcast_note.docx"
+   ],
+   "opening_move": "question-first",
+   "question_form": "whether",
+   "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose members can be re-keyed between sources without any note, so a unit present in both periods is not the same unit; the sample measures what is paid while the target books it later and excludes a component paid outside the sample, whose base period held a one-off; and the range is earned on past origins that could not see any of the three at this size.",
+   "answer_shape": "forecast-bands-drivers",
+   "weight": "validation",
+   "chain_signature": [
+    "missingness-measurement",
+    "data-discovery",
+    "modeling",
+    "missingness-measurement",
+    "assembly-reconciliation",
+    "validation",
+    "forecasting",
+    "decomposition-attribution",
+    "synthesis"
+   ],
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "left_truncated_ages",
+     "stock_flow_accounting",
+     "normal_period_correction",
+     "unmetered_component",
+     "validation_cannot_see_condition"
+    ],
+    "mechanisms": [
+     "premium_book_reissued_inside_constant_issuer",
+     "earlier_outside_book_reissued_by_another_issuer",
+     "revenue_recognised_on_delivery",
+     "custom_event_grows_with_new_studios",
+     "contract_lumps_quarterly_only_by_subtraction",
+     "issuer_entry_and_exit_break_panel",
+     "issuer_propensity_differs",
+     "panel_regional_mix_differs_from_company",
+     "posting_lag_leaves_latest_weeks_short",
+     "licensed_and_acquired_descriptors"
+    ],
+    "detection": [
+     "naive_depends_on_what_it_should_not",
+     "second_source_at_other_grain",
+     "back_test_on_held_out_period",
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "exclude_contaminated_comparison",
+     "nowcast_from_same_point_prior_years",
+     "stratify_by_mix_and_reweight_to_target",
+     "back_test_select_estimator",
+     "bridge_by_contribution"
+    ],
+    "file_roles": [
+     "primary_record",
+     "panel_or_survey_sample",
+     "second_grain_source",
+     "reference_register",
+     "calendar_or_closures",
+     "incumbent_figure_or_method",
+     "unused_distractor"
+    ]
+   },
+   "shell": {
+    "question form": "when",
+    "second-sentence opener": "the",
+    "deliverable set": "xlsx"
+   },
+   "architecture": "v2",
+   "status": "spent",
+   "date": "2026-11-13",
+   "why": "spent on the author's word before upload: after the client's overused-strategies page of 2026-11-12, two of its three deciding steps (a premium book re-issued under an issuer present in both quarters, last year's contract lump) sit on or next to closed cards and its regional reweight is closed; the stump strategy blocked at heart against task4 v12; only the deposits step (revenue on delivery against card payments) was open"
+  }
+ ]
+}
