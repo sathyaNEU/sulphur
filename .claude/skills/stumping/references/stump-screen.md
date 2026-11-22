@@ -30,7 +30,14 @@ nothing in-house solves the task, so the idea has to be right before it is built
    gross-up by a share from an independent source, a factor from checked cases, a basis restated, a curve fitted and
    valued at the margin, a knock-on carried period by period, a without-it baseline, a shape learned from units
    that reached the range and a held-out score are all cards (`open-ground.md` Part 1). A closed lesson can only
-   support: its omission alone leaves the golden call standing.
+   support: its omission alone leaves the golden call standing. Every candidate is read first against the
+   calibrated-source card's trap ("an instrument is biased against the truth, and its values are used at face
+   value"): a recording effect whose fix corrects each reading by an estimated loss, gain or offset is that card
+   however the effect is estimated (test 18), so a recording stump is open only where its estimator is something
+   other than a correction applied reading by reading (a conservation residual, a recording algorithm inverted, a
+   state the record never held, the other open kinds of `open-ground.md`). task3 arch 11's effluent candidate,
+   ammonia lost from a sample waiting warm in its bottle and gained from a sample line that stood, each corrected
+   reading by reading, died here.
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
    reporting lags, de-duplicating, a constant-unit panel, re-weighting to the target's mix, the field's textbook
    estimator, hold-outs, back-tests, bootstraps). If that battery executed perfectly lands inside the band, it is not
@@ -121,7 +128,11 @@ nothing in-house solves the task, so the idea has to be right before it is built
    this trap's own correction has a domain of validity the members cross: its identifying assumption is checked on
    some members, cannot be checked on one (decided by a bound and its break-even) and fails its check on another
    (decided on a second basis the same records support). Name which, with the figures. The arrangement is drawn from
-   this world's records and is never the one a build on file used.
+   this world's records and is never the one a build on file used. The family sentence is priced as well: the one
+   sentence that names what the kept stumps share rescues a third of the rubric or less on the reflex route, or the
+   stumps are one lesson however different their records (task3 arch 11's coater pair: "the certificates are
+   test-day figures; the gas meters and the waste manifests show what each line did" rescued about 75 points
+   against a ceiling of 33).
 18. **No validation handle.** No shipped file lets a run score the stump's own quantity, or the target, under the
    members' instruments: a total that closes the loss, a pair that reads the ratio off, a slice that scores the
    chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there
@@ -137,7 +148,20 @@ nothing in-house solves the task, so the idea has to be right before it is built
    a covariate built from a second file or a joint fit with a tangled neighbour, (b) its default passes the back-test
    a run does on the history, because the world's process is weaker there, and (c) the process that moves the forward
    window is not a closed card's fix. No collocated pair ships for any stump's parameter (two heights or two sensors
-   at one site, a total beside a tally): that pairing was R98's and R99's handle. The note's `Validation handles:`
+   at one site, a total beside a tally): that pairing was R98's and R99's handle. **The strongest run's route is priced
+   at full strength on the shipped fields**: every field the pack names and every covariate that one join, group-by,
+   filter or flag of a shipped log gives, fitted jointly (a time since or to an event a shipped log names is one such
+   join wherever any timestamp in the record proxies it), and that route files the wrong call or the stump is a
+   reflex. task3 arch 11's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
+   with fan hours and ambient called 8.5 of 9 lines right, and the booth sludge split the same way, so a conservation
+   account whose every term ships is the runs' (R98, task22 arch 1). The golden needs (a) a covariate built from a
+   second file by a construction that is not a join, union, filter, stratification or re-key (days to each
+   interview's own deadline, the queue a case opened under, each customer's use count across two systems), or (b) a
+   joint fit of two effects that each bias the other when fitted alone, one of them not a named field (a default
+   multiple regression already fits two named ones), and each such loss cites a precedent where a run was seen one
+   move short (L56 to L67). No field a real record of that kind carries is withheld to keep a covariate unbuilt: a
+   laboratory extract carries its received and analysed times, and task3 arch 11's effluent candidate held only with
+   them withheld (any later timestamp recovered the bottle's loss on 19 of 19 members). The note's `Validation handles:`
    line is the matrix of every shipped file against every stump's parameter. **A near-complete slice beside a filed
    recording law is a calibration set** even when no file holds the target: thinned through the law, the slice
    simulates the record, and any calibration matched to each member's own distribution recovers the stump (task3
@@ -176,7 +200,10 @@ nothing in-house solves the task, so the idea has to be right before it is built
    kept to the thin stations' storm size filed the golden's call at cuts from 5 to 12 strokes). task3 arch 8 sat every open member 1.1 to
    1.5 storms above its line with every priced shortcut under it, and the runs' generous corrections filed all seven
    classes. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
-   call, earns over 50, or the misses fall on one side only.
+   call, earns over 50, or the misses fall on one side only. The strongest arrangement of two stumps corrects in
+   opposite directions on shared members, so each fixed alone moves the call to the other wrong side: the run that
+   solves one lands across the line one way and the run that solves neither the other way (L06, L63, one step fitted
+   and the other declined).
 20. **A forward window.** The estimand is never the record's own mean or rate restated: the window's figure differs
    from what the history holds by a process of the world the data measures, and the history-mean route files a
    stated figure against the golden's. task3 arch 8's regulation defined the storms a season as the mean over the
