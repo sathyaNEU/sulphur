@@ -711,7 +711,12 @@ document spells out) or a **stump** (a move a run has been seen to lose or to na
 or named-assumption id). Then:
 
 - **The reflex route** sets every reflex right and every stump hurried. It is the careful but hurried pass: never a
-  route that also gets a reflex wrong. Its answer must miss the call.
+  route that also gets a reflex wrong. Its answer must miss the call. It is the strongest route a run builds on the
+  shipped fields, never the lattice's own weaker version: every field the pack names and every covariate one join,
+  group-by, filter or flag gives, fitted at full strength (`references/stump-screen.md` test 18), and the factorial
+  is run on it. task3 arch 11's valley core passed corelib at level 4 on five seeds with the lattice's reflex route,
+  and failed once the receptor regression a run builds on the stacks' CEMS (each stack's stored night mass at the
+  breakup, fitted monitor by monitor) was the reflex route: one stump fixed alone on it reached the call.
 - **Necessary.** Each stump, dropped alone from the golden (everything else right), moves the call.
 - **Not sufficient.** Each stump, fixed alone on the reflex route, leaves the call wrong and rescues a third of the
   results or fewer. This is the one-fact test, run where the runs actually stand.
