@@ -1,11 +1,11 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "BUILD",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
- "stage": 2,
- "stage_name": "design",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-22",
  "doctrine": "throughout",
  "seed": 9505,
@@ -58,7 +58,7 @@
   "reading": "Response 1 filed the golden list (stock, price, trend and promise on; history, seller and match off) and made all three stumps unprompted: it took the ablation effects over the share of pages built at origin from the edge cache record, replayed each source's validity entity by entity with impression weights, and priced the page components from their own holdouts. Response 2 listed stock, price and promise and lost only trend, by diluting the realised costs with the cache share and declining the replay as not reconstructable from daily aggregates. The author's ruling: not difficult enough to stump a frontier model; the core is redrawn."
  },
  "returned": null,
- "resume": "/build task9 from 3: execute the note's Build brief (the generator around core.py, the pack of about 16 files, the workbook and the deck, effort.json, submission.md), moving nothing in the core. Tight assertions to watch on the cut pack: S3 lost alone earns 42 and the generous route 42 (55 on seed 9508, one other seed); a line through gaps 8 to 26 files optimisation noise at 5.96, 0.27 under Component 2's range (fork SF8); the roadmap's releases eight weeks late would leave feature releases at 5.57, 0.07 over the 5.5 line (the standard files the roadmap as the load); the card's spine rows (4,000,000) to be set to the cut panel's count",
+ "resume": "/build resume task9: stage 3 in progress (the generator around core.py, the pack, the goldens, the blocks)",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -149,6 +149,10 @@
   {
    "date": "2026-11-22",
    "event": "architecture 4 landed on the platform (response 1 the golden list with all three stumps made, response 2 lost trend alone; the author's ruling: not difficult enough); architecture 5 drawn in a new world (Garrane Risk's weekly refreshed merchant scores, what each model-side source alone moves a score between quarter-end snapshots in 2027): three stumps on three axes off the closed page, core.py CORE PASS level 5 (one stump lost 29, 36, 42; reflex 9), card registered at WARN, note to precut exit 0, prompt drafted; architecture 4's build files removed from the folder (in git at 44a3a3a)"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "stage 3 opened: /build task9 from 3 on Opus 5.5; precut exit 0 and core.py CORE PASS level 5 re-checked"
   }
  ],
  "final_cut": null

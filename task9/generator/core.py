@@ -172,8 +172,9 @@ def scale_world(w):
     return w
 
 
-def simulate(w, rng):
-    """Production scores, the instruments' pairs and the quarter-end tiers, merchant by merchant."""
+def simulate(w, rng, keep=None):
+    """Production scores, the instruments' pairs and the quarter-end tiers, merchant by merchant. keep, a dict, is
+    given every draw the instruments made (the pack's pair files are written from it); no draw is added or moved."""
     z = [None] * F
     inst = {"rep": np.zeros(F), "boot": np.zeros(F), "boot_last": np.zeros(F), "boot_n": np.zeros(F),
             "boot_n_last": np.zeros(F), "ret": np.zeros(F), "rel": np.zeros(F), "lab": np.zeros(F)}
@@ -190,6 +191,8 @@ def simulate(w, rng):
                 ret[:, t:] += j[:, None]
                 if t >= Y26:
                     jumps.append(j)
+                    if keep is not None:
+                        keep.setdefault("ret", []).append((f, t, j))
         rel = np.zeros((MS, T))
         steps = []
         for k, t in enumerate(w["rel_weeks"]):
@@ -198,6 +201,8 @@ def simulate(w, rng):
                 rel[:, t:] += j[:, None]
                 if t >= Y26:
                     steps.append(j)
+                    if keep is not None:
+                        keep.setdefault("rel", []).append((f, k, t, j))
         rows = w["rows"][f]
         eps = rng.normal(0, 1, (MS, rows.size)) * np.sqrt(w["row2"][f] * rows)[None, :]   # n_w times the week's noise
         cum = np.cumsum(eps, axis=1)
@@ -215,25 +220,41 @@ def simulate(w, rng):
                 e = rng.normal(0, math.sqrt(w["cold2"][f]), MS)
             opt[:, t] = e
         z[f] = base[:, None] + own + lab + ret + rel + data + opt
+        if keep is not None:
+            keep.setdefault("lab_path", {})[f] = lab
+            keep.setdefault("opt", {})[f] = opt
         left = np.where(rng.random(MS) < 1 - (1 - LEAVE) ** (T / 52.0), rng.integers(8, T, MS), T)
         z[f][np.arange(T)[None, :] >= left[:, None]] = np.nan      # a merchant that left is no longer scored
         # the instruments, all run in 2026 on warm families
         rep_w = rng.choice(np.arange(Y26 + 4, T), 6, replace=False)
-        inst["rep"][f] = np.mean([np.var(rng.normal(0, math.sqrt(w["eta2"][f]), MS) -
-                                         rng.normal(0, math.sqrt(w["eta2"][f]), MS)) for _ in rep_w])
+        rv = []
+        for t in rep_w:
+            a_ = rng.normal(0, math.sqrt(w["eta2"][f]), MS)
+            b_ = rng.normal(0, math.sqrt(w["eta2"][f]), MS)
+            rv.append(np.var(a_ - b_))
+            if keep is not None:
+                keep.setdefault("rep", []).append((f, int(t), a_, b_))
+        inst["rep"][f] = np.mean(rv)
         bw = np.sort(rng.choice(np.arange(Y26 + 4, T), 4, replace=False))
         bv, bn = [], []
         for t in bw:
             n = win_rows(w, f, t, w["window"][f]).sum()
             sd = math.sqrt(w["eta2"][f] + w["row2"][f] / n)
-            bv.append(np.var(rng.normal(0, sd, MS) - rng.normal(0, sd, MS)))
+            a_ = rng.normal(0, sd, MS)
+            b_ = rng.normal(0, sd, MS)
+            bv.append(np.var(a_ - b_))
             bn.append(n)
+            if keep is not None:
+                keep.setdefault("boot", []).append((f, int(t), a_, b_, n))
         inst["boot"][f], inst["boot_n"][f] = np.mean(bv), np.mean(bn)
         inst["boot_last"][f], inst["boot_n_last"][f] = bv[-1], bn[-1]
         inst["ret"][f] = np.mean([np.var(j) for j in jumps])
         inst["rel"][f] = np.mean([np.var(j) for j in steps])
-        inst["lab"][f] = np.mean([np.var(np.diff(lab[:, t - 1:t + 1], axis=1)) for t in
-                                  rng.choice(np.arange(Y26 + 4, T), 8, replace=False)])
+        lw = rng.choice(np.arange(Y26 + 4, T), 8, replace=False)
+        inst["lab"][f] = np.mean([np.var(np.diff(lab[:, t - 1:t + 1], axis=1)) for t in lw])
+        if keep is not None:
+            keep.setdefault("lab", []).extend((f, int(t)) for t in lw)
+            keep.setdefault("left", {})[f] = left
     return z, inst
 
 
@@ -392,7 +413,7 @@ class Pack:
         for f in range(F):
             z0 = self.z[f][:, 116]
             z0 = z0[~np.isnan(z0)]
-            k = np.searchsorted(CUTS, z0)
+            k = np.searchsorted(CUTS, z0, side="right")     # the covenant's tiers: 400 is the second tier
             sd = math.sqrt(max(float(var[f]), 1e-9)) * math.sqrt(2.0)
             stay = 0.5 * (erf((cuts[k + 1] - z0) / sd) - erf((cuts[k] - z0) / sd))
             out[f] = float(np.mean(1.0 - stay))
@@ -406,7 +427,7 @@ class Pack:
                 ok = ~np.isnan(self.z[f][:, b])                 # scored at both snapshots
                 z0 = self.z[f][ok, a]
                 z1 = z0 + k[f] * (self.z[f][ok, b] - z0)
-                fl.append(np.mean(np.searchsorted(CUTS, z1) != np.searchsorted(CUTS, z0)))
+                fl.append(np.mean(np.searchsorted(CUTS, z1, side="right") != np.searchsorted(CUTS, z0, side="right")))
             out[f] = np.mean(fl)
         return out
 
@@ -569,20 +590,40 @@ def weekly_prediction(pk, route):
     return float((wt * pred).sum())
 
 
-def main():
-    detail = "--detail" in sys.argv
+def world(keep=None):
+    """The world and its record: (w, z, inst), every draw in the order the core makes it."""
     w, rng = build_world()
     w = scale_world(w)
-    z, inst = simulate(w, rng)
-    pk = Pack(w, z, inst)
-    wt = w["merch"] / w["merch"].sum()
+    z, inst = simulate(w, rng, keep)
+    return w, z, inst
 
-    # the truth, from the world's own parameters
+
+def truth_of(w):
+    """What each source alone moves a score between snapshots in 2027, from the world's own parameters."""
+    wt = w["merch"] / w["merch"].sum()
     tcov = true_coverage(w, np.random.default_rng(SEED + 1))
     tf27 = np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f]) for a, b in SPANS27]) for f in range(F)])
     tcomp = {"optimisation": 2 * w["eta2"] / (1 - w["phi"] ** 2) * (1 - w["phi"] ** H), "turnover": w["row2"] * tf27,
              "retunes": w["ret2"] * H / 4.0, "releases": w["rel2"] * release_exposure(w, tcov), "labels": w["lab2"] * H}
     tagg = {s: float((wt * v).sum()) for s, v in tcomp.items()}
+    return tcov, tagg
+
+
+def main():
+    detail = "--detail" in sys.argv
+    w, z, inst = world()
+    pk = Pack(w, z, inst)
+    A = analyse(pk, truth_of(w), detail)
+    return corelib.run(A["spec"])
+
+
+def analyse(pk, truth, detail=False):
+    """Every route, the battery, the lattice and corelib's spec, on a Pack (the world's or one loaded from files)."""
+    w, z, inst = pk.w, pk.z, pk.inst
+    wt = w["merch"] / w["merch"].sum()
+    if truth is None:                 # a pack loaded from files carries no world: the golden stands in for the truth
+        truth = (None, evaluate(pk)["agg"])
+    tcov, tagg = truth
     truth = {s: 100.0 * tagg[s] / sum(tagg.values()) for s in SOURCES}
 
     gold = evaluate(pk)
@@ -760,7 +801,8 @@ def main():
                 name, np.mean(obs), np.mean(pred)))
         print("falsification", {k: round(v, 2) for k, v in fals["rivals"].items()}, "golden", round(fals["golden"], 2),
               "record", round(fals["truth"], 2))
-    return corelib.run(spec)
+    return {"spec": spec, "gold": gold, "variants": variants, "fam": fam, "free": free, "lattice": lat_eval,
+            "routes": routes, "extra": extra, "over": over, "fals": fals, "tpoints": tpoints, "truth_share": truth}
 
 
 if __name__ == "__main__":

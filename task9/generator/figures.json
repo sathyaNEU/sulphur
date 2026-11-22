@@ -1,0 +1,1025 @@
+{
+ "call": [
+  "feature releases: a remediation plan",
+  "label revisions: escalation",
+  "optimisation noise: a remediation plan",
+  "retunes: monitor",
+  "training data: a remediation plan"
+ ],
+ "points": {
+  "optimisation noise": 6.888407287694035,
+  "training data": 6.617260960157563,
+  "retunes": 4.471813088112299,
+  "feature releases": 6.6507994101211345,
+  "label revisions": 9.98383122868686
+ },
+ "share": {
+  "optimisation noise": 18.597297709370395,
+  "training data": 17.162032979974743,
+  "retunes": 7.837535008736993,
+  "feature releases": 17.33643946695987,
+  "label revisions": 39.066694834958
+ },
+ "band_of": {
+  "optimisation noise": "a remediation plan",
+  "training data": "a remediation plan",
+  "retunes": "monitor",
+  "feature releases": "a remediation plan",
+  "label revisions": "escalation"
+ },
+ "bands": {
+  "points_optimisation": [
+   6.236495846761445,
+   7.325055121448869
+  ],
+  "points_turnover": [
+   6.356879950494792,
+   7.4361077936611935
+  ],
+  "points_retunes": [
+   4.412022456622747,
+   4.5198209670601415
+  ],
+  "points_releases": [
+   6.340455901316437,
+   6.837523809870893
+  ],
+  "points_labels": [
+   9.925123331443496,
+   10.045226606083903
+  ],
+  "share_optimisation": [
+   15.044616278541456,
+   20.659957605133172
+  ],
+  "share_turnover": [
+   15.936438773686895,
+   21.326234641334015
+  ],
+  "share_retunes": [
+   7.416990754438215,
+   8.263773776031082
+  ],
+  "share_releases": [
+   16.03629051286994,
+   18.310997552775465
+  ],
+  "share_labels": [
+   36.95563967922418,
+   41.26543628048424
+  ],
+  "cc3": [
+   53.60231003908373,
+   58.32501591707531
+  ],
+  "own_share": [
+   41.82025619656588,
+   45.995626394198204
+  ],
+  "fr_sched": [
+   13.644078005819313,
+   14.179096273295702
+  ],
+  "fr_removed": [
+   9.490055823955528,
+   9.933301442483963
+  ],
+  "cc1": [
+   6.356879950494792,
+   7.4361077936611935
+  ],
+  "cc2": [
+   6.236495846761445,
+   7.325055121448869
+  ]
+ },
+ "cc1": 6.617260960157563,
+ "cc2": 6.888407287694035,
+ "cc3": 55.00875988521619,
+ "own_share": 43.89010497084991,
+ "fr_sched": 13.982632391965593,
+ "fr_removed": 9.707337045955859,
+ "fr26": 14.817125986693316,
+ "reflex": {
+  "points": {
+   "optimisation noise": 3.5683180263225505,
+   "training data": 15.7212478164861,
+   "retunes": 4.471813088112299,
+   "feature releases": 3.999177223683898,
+   "label revisions": 9.98383122868686
+  },
+  "share": {
+   "optimisation noise": 3.218970508768329,
+   "training data": 62.4832940788575,
+   "retunes": 5.055419221972761,
+   "feature releases": 4.043255543472675,
+   "label revisions": 25.199060646928736
+  },
+  "cc3": 90.93406593406593,
+  "own_share": 14.193781151471686,
+  "fr_sched": 13.648906400886165,
+  "fr_removed": 6.904554894330317,
+  "call": [
+   "feature releases: monitor",
+   "label revisions: escalation",
+   "optimisation noise: monitor",
+   "retunes: monitor",
+   "training data: escalation"
+  ]
+ },
+ "direct": {
+  "points": {
+   "optimisation noise": 3.5683180263225505,
+   "training data": 16.121120508337732,
+   "retunes": 4.471813088112299,
+   "feature releases": 3.999177223683898,
+   "label revisions": 9.98383122868686
+  },
+  "cc3": 90.93406593406593,
+  "call": [
+   "feature releases: monitor",
+   "label revisions: escalation",
+   "optimisation noise: monitor",
+   "retunes: monitor",
+   "training data: escalation"
+  ]
+ },
+ "rigorous": {
+  "points": {
+   "optimisation noise": 3.5683180263225505,
+   "training data": 15.7212478164861,
+   "retunes": 4.471813088112299,
+   "feature releases": 4.455947755002867,
+   "label revisions": 9.98383122868686
+  },
+  "cc3": 87.08791208791209
+ },
+ "lattice": {
+  "S1": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: escalation"
+   ],
+   "cc3": 55.00875988521619,
+   "own_share": 8.397103270550382
+  },
+  "S2": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ],
+   "cc3": 55.00875988521619,
+   "own_share": 51.52489546810883
+  },
+  "S3": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ],
+   "cc3": 90.93406593406593,
+   "own_share": 46.79629089950174
+  },
+  "S1+S2": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ],
+   "cc3": 55.00875988521619,
+   "own_share": 13.374475921818835
+  },
+  "S1+S3": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: escalation"
+   ],
+   "cc3": 90.93406593406593,
+   "own_share": 8.899175017945117
+  },
+  "S2+S3": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ],
+   "cc3": 90.93406593406593,
+   "own_share": 54.93661950668486
+  },
+  "S1+S2+S3": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ],
+   "cc3": 90.93406593406593,
+   "own_share": 14.193781151471686
+  }
+ },
+ "routes": {
+  "direct": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 16.121120508337732,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "rigorous": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 4.455947755002867,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "generous": {
+   "points": {
+    "optimisation noise": 9.09746162346179,
+    "training data": 3.467158339616062,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.921421573913489,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "calibrated": {
+   "points": {
+    "optimisation noise": 0.4590214804898962,
+    "training data": 1.7982082600758431,
+    "retunes": 4.471813088112299,
+    "feature releases": 4.455947755002867,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "hedge": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "cutoff": {
+   "points": {
+    "optimisation noise": 5.964119119750293,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 7.2623992217752384,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:lags from 1": {
+   "points": {
+    "optimisation noise": 4.446280523151508,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 7.2623992217752384,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:lags from 4": {
+   "points": {
+    "optimisation noise": 5.2144094427690195,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 7.2623992217752384,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:lags from 12": {
+   "points": {
+    "optimisation noise": 6.596066571427469,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 7.2623992217752384,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:lags from 16": {
+   "points": {
+    "optimisation noise": 7.143628575667631,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 7.2623992217752384,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:two components": {
+   "points": {
+    "optimisation noise": 5.964119119750293,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 8.129267405718215,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: escalation",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "cutoff:four components": {
+   "points": {
+    "optimisation noise": 5.964119119750293,
+    "training data": 4.807838617726214,
+    "retunes": 4.471813088112299,
+    "feature releases": 5.96367030536434,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "generous:no pinned views": {
+   "points": {
+    "optimisation noise": 9.09746162346179,
+    "training data": 3.467158339616062,
+    "retunes": 4.471813088112299,
+    "feature releases": 10.26561957590522,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: escalation",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "generous:rows out and rows in doubled": {
+   "points": {
+    "optimisation noise": 9.09746162346179,
+    "training data": 10.261868050947834,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.921421573913489,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "generous:turnover cancels": {
+   "points": {
+    "optimisation noise": 9.09746162346179,
+    "training data": 0.0,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.921421573913489,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "generous:a whole replicate pair a refit": {
+   "points": {
+    "optimisation noise": 12.865753611068419,
+    "training data": 3.467158339616062,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.921421573913489,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "calibrated:plan dates": {
+   "points": {
+    "optimisation noise": 0.4590214804898962,
+    "training data": 1.7982082600758431,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "calibrated:the families' variance on their bootstrap spread": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 11.233915898842946,
+    "retunes": 4.471813088112299,
+    "feature releases": 4.455947755002867,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "hedge:2026's releases carried": {
+   "points": {
+    "optimisation noise": 3.5683180263225505,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 9.671752553204485,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: escalation",
+    "label revisions: escalation",
+    "optimisation noise: monitor",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  }
+ },
+ "over": {
+  "S1": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 0.0,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: monitor"
+   ]
+  },
+  "S2": {
+   "points": {
+    "optimisation noise": 9.09746162346179,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  },
+  "S3": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 10.26561957590522,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: escalation",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  }
+ },
+ "variants": 36,
+ "variants_core": 34,
+ "battery_range": {
+  "optimisation noise": [
+   6.417922392542682,
+   7.143628575667631
+  ],
+  "training data": [
+   6.536751257689192,
+   7.256236486466793
+  ],
+  "retunes": [
+   4.468037902379786,
+   4.471813088112299
+  ],
+  "feature releases": [
+   6.423300552742179,
+   6.754679158445151
+  ],
+  "label revisions": [
+   9.982705398640814,
+   9.986090995732862
+  ]
+ },
+ "battery_cc3": [
+  54.38942768541566,
+  57.53789827074338
+ ],
+ "battery_calls": true,
+ "extra": {
+  "families weighted by the panel at the latest snapshot, times five": {
+   "points": {
+    "optimisation noise": 6.884203237414131,
+    "training data": 6.618239087507042,
+    "retunes": 4.471472721097399,
+    "feature releases": 6.650523938463172,
+    "label revisions": 9.986090995732862
+   },
+   "own_share": 43.906754310765535,
+   "cc3": 55.00875988521619,
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  },
+  "merchants' own change from the 2026 snapshot pairs only": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 43.69357586780602,
+   "cc3": 55.00875988521619,
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  }
+ },
+ "ruled": {
+  "merchants' own change over every thirteen-week gap from July 2024": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 49.247612681509196,
+   "call": [
+    "feature releases: a remediation plan",
+    "label revisions: escalation",
+    "optimisation noise: a remediation plan",
+    "retunes: monitor",
+    "training data: a remediation plan"
+   ]
+  }
+ },
+ "pre_settled": {
+  "d13_before": 618.1538963757512,
+  "d13_settled": 509.15171558609467,
+  "families_higher": 14,
+  "ratio_range": [
+   1.0432080613013797,
+   2.010543532192441
+  ]
+ },
+ "mess": {
+  "first_load": {
+   "points": {
+    "optimisation noise": 6.848490749083423,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 44.02695942930361,
+   "cc3": 55.00875988521619,
+   "fr_sched": 13.982853515504518,
+   "fr_removed": 9.721118617585631,
+   "share": {
+    "optimisation noise": 18.421979542993967,
+    "training data": 17.198995096325607,
+    "retunes": 7.854414820192601,
+    "feature releases": 17.373777205060893,
+    "label revisions": 39.15083333542693
+   }
+  },
+  "no_rekey": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 43.89010497084991,
+   "cc3": 55.00875988521619,
+   "fr_sched": 13.982632391965593,
+   "fr_removed": 9.707337045955859,
+   "share": {
+    "optimisation noise": 18.597297709370395,
+    "training data": 17.162032979974743,
+    "retunes": 7.837535008736993,
+    "feature releases": 17.33643946695987,
+    "label revisions": 39.066694834958
+   }
+  },
+  "keep_dup_runs": {
+   "points": {
+    "optimisation noise": 6.888407287694035,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 43.89010497084991,
+   "cc3": 55.00875988521619,
+   "fr_sched": 13.982632391965593,
+   "fr_removed": 9.707337045955859,
+   "share": {
+    "optimisation noise": 18.597297709370395,
+    "training data": 17.162032979974743,
+    "retunes": 7.837535008736993,
+    "feature releases": 17.33643946695987,
+    "label revisions": 39.066694834958
+   }
+  },
+  "all_loads": {
+   "points": {
+    "optimisation noise": 6.879660686927313,
+    "training data": 6.617260960157563,
+    "retunes": 4.471813088112299,
+    "feature releases": 6.6507994101211345,
+    "label revisions": 9.98383122868686
+   },
+   "own_share": 43.92067604339763,
+   "cc3": 55.00875988521619,
+   "fr_sched": 13.982686071734532,
+   "fr_removed": 9.710427229795247,
+   "share": {
+    "optimisation noise": 18.558859038430427,
+    "training data": 17.170136958341736,
+    "retunes": 7.841235923088776,
+    "feature releases": 17.344625800744733,
+    "label revisions": 39.085142279394326
+   }
+  }
+ },
+ "probe": {
+  "thirteen of 52 weeks for every family": 7.86062390824305,
+  "the rows that entered only": 4.807838617726214,
+  "every family counted once": 9.026722359420353,
+  "2026's release level carried": 9.671752553204485,
+  "each family's worst past lag": 6.921421573913489,
+  "line through gaps 8 to 26": 5.964119119750293,
+  "unanchored fit": 8.767821401469638,
+  "unanchored implied replicate": 17.441264636982595,
+  "a whole replicate pair a refit": 12.865753611068419,
+  "thirteen refits added up": 9.09746162346179
+ },
+ "falsification": {
+  "record": 42.344827659997556,
+  "golden": 42.23151182489764,
+  "rivals": {
+   "replicate variance at any gap": 50.91895677152586,
+   "bootstrap spread at any gap": 270.4299992309596,
+   "both at face value": 279.0644640706357,
+   "thirteen weekly refits added up": 39.16551658354574
+  }
+ },
+ "loo": {
+  "runtime": {
+   "record": 0.5879120879120878,
+   "model": 0.5624610639510632
+  },
+  "warm": {
+   "record": 0.5659340659340659,
+   "model": 0.574837139619749
+  },
+  "amp": {
+   "record": 0.5897435897435898,
+   "model": 0.5612140795899373
+  }
+ },
+ "base": {
+  "panel_merchants": 29580,
+  "panel_merchants_unmapped": 34148,
+  "score_rows": 3360865,
+  "manifest_lines": 2473,
+  "manifest_runs": 2464,
+  "families": 14,
+  "production_runs": 1764,
+  "pairs": 644,
+  "pairs_by_kind": {
+   "release_shadow": 224,
+   "retune_shadow": 168,
+   "label_freeze": 112,
+   "replicate": 84,
+   "bootstrap": 56
+  },
+  "long_window_families": 6,
+  "replicate": 12.732893536978462,
+  "bootstrap_raw": 259.8905264443474,
+  "bootstrap_net": 247.15763290736896,
+  "d13": 509.15171558609467,
+  "d1": 42.344827659997556,
+  "phi_fit": [
+   0.7924999999999938,
+   0.9474999999999905
+  ],
+  "turned_share_2027": [
+   0.09672308127363481,
+   0.2439370731158817
+  ],
+  "slip_mean": 1.2142857142857142,
+  "revert_share": 0.04395604395604396,
+  "past_family_rollouts": 42,
+  "past_lag_median": 14.0,
+  "past_lag_range": [
+   3,
+   31
+  ],
+  "lag_median_custom0": 6.306074974699112,
+  "lag_median_custom_max": 28.763713920354412,
+  "custom_max": 5,
+  "releases_2026": 22,
+  "releases_before": 5,
+  "releases_2027": 24,
+  "cov_plan": 90.93406593406593,
+  "cov_declared": 87.08791208791209
+ },
+ "r2": {
+  "retunes points": 4.472,
+  "retunes share": 7.84,
+  "label revisions points": 9.984,
+  "label revisions share": 39.07
+ },
+ "r5": {
+  "pinned views share": 55.01,
+  "feature releases": 6.651
+ },
+ "r7": {
+  "optimisation noise": 18.6,
+  "training data": 17.16,
+  "retunes": 7.84,
+  "feature releases": 17.34,
+  "label revisions": 39.07,
+  "merchants' own": 43.89
+ },
+ "r9": {
+  "tier changes 2027": 13.98,
+  "with the designated sources removed": 9.71
+ },
+ "rubric": {
+  "verdict": "CORE PASS level 5  task9",
+  "exit": 0,
+  "routes": {
+   "golden": 100,
+   "S1 lost alone": 29,
+   "S2 lost alone": 36,
+   "S3 lost alone": 42,
+   "S1 fixed alone": 22,
+   "S2 fixed alone": 16,
+   "S3 fixed alone": 22,
+   "reflex route (every stump lost)": 9,
+   "rigorous standard route": 9,
+   "calibrated run route": 9,
+   "cutoff run route": 22,
+   "generous run route": 42,
+   "hedge run route": 9
+  }
+ },
+ "stated": {
+  "points_labels": [
+   9.92,
+   10.05
+  ],
+  "share_labels": [
+   36.9,
+   41.3
+  ],
+  "points_optimisation": [
+   6.23,
+   7.33
+  ],
+  "share_optimisation": [
+   15.0,
+   20.7
+  ],
+  "points_releases": [
+   6.34,
+   6.84
+  ],
+  "share_releases": [
+   16.0,
+   18.4
+  ],
+  "points_turnover": [
+   6.35,
+   7.44
+  ],
+  "share_turnover": [
+   15.9,
+   21.4
+  ],
+  "points_retunes": [
+   4.41,
+   4.52
+  ],
+  "share_retunes": [
+   7.4,
+   8.3
+  ],
+  "cc3": [
+   53.6,
+   58.4
+  ],
+  "own_share": [
+   41.8,
+   46.0
+  ],
+  "fr_sched": [
+   13.6,
+   14.2
+  ],
+  "fr_removed": [
+   9.4,
+   10.0
+  ]
+ },
+ "panel_merchants": 29580,
+ "weekly_check": 42.23151182489764,
+ "cap": 12,
+ "windows": [
+  52,
+  104
+ ],
+ "loo_pct": {
+  "runtime": [
+   58.79120879120878,
+   56.246106395106324
+  ],
+  "warm": [
+   56.59340659340659,
+   57.4837139619749
+  ],
+  "amp": [
+   58.97435897435898,
+   56.12140795899373
+  ]
+ },
+ "lines": [
+  5.5,
+  8.0
+ ]
+}
