@@ -1,13 +1,13 @@
 {
  "task": "task3",
- "status": "DRAWING",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
  "stage": 1,
  "stage_name": "draw",
  "updated": "2026-11-21",
- "call": "none: architecture 9 (lightning ramp stand-downs) died on paper; architecture 10 at the screen",
+ "call": "none: architectures 9 and 10 dead on paper; retirement recommended to the author",
  "stump": "architecture 9, dead on paper: the reflex route (the located strokes' hours at face value or raised by the share located, every sensor in the log counted alike) files a crew at Callory Downs alone (38.3 hours; Penrow Sound 12.7, Mornay Inlet 12.2, Weymoor Gap 13.5). S1, what recorded hours stand for when the strokes the network missed shorten stand-downs, split them and erase whole days (opens Penrow Sound, moves Mornay Inlet with it; pushed past its fitted value, the hours raised in proportion, it files a crew everywhere but Yanda Creek); S3, what a legacy receiver adds to detection, fitted at 0.32 of a standard sensor from the located peak currents (opens Weymoor Gap; pushed past its fitted value, a receiver worth nothing, it files a fifth crew at Burrel Bay; the call needs the worth between about 0.15 and 0.46). The response to the shelf index is a supporting step: left out alone it files the golden's call.",
  "architecture": 9,
  "loops": 0,
@@ -149,13 +149,13 @@
    "commit": ""
   }
  ],
- "resume": "stump-architect: architecture 10 screen 2, kinds first and then a world, screen only with a hard stop (two open kinds on different axes, no source biased against the truth, at most one recording filter to invert, the five routes priced on paper); if no pair survives the author decides on retiring task3; nothing is built from the present core.py, note or prompt.txt",
+ "resume": "the author decides: retire task3 (recommended; architecture 10's second screen found no pair in climate-weather-extremes forecasting under the client's closed page, twelve candidates in seven worlds) or move the slot; nothing is built from the present core.py, note or prompt.txt",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "",
   "date": "",
-  "note": "architectures 9 and 10 (screen 1) dead on paper; nothing built or uploaded"
+  "note": "architectures 9 and 10 dead on paper; nothing built or uploaded"
  },
  "history": [
   {
@@ -229,6 +229,10 @@
   {
    "date": "2026-11-21",
    "event": "architecture 10 screen 1 (eight sprayed-seal haul districts, a dual air and pavement trigger on new standard sensors) died on paper at the build's review: the shield's solar gain is the calibrated-source card however it is estimated, only the puck's depth was open, and the frame hands both recognitions over in the prompt; architecture 9 marked spent on the card; architecture 8's built files removed from the tree (in git at 084b8d7); screen 2 sent to the stump-architect, kinds first, hard stop"
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 10 screen 2 (kinds first, hard stop) found no pair: twelve candidates in seven worlds, each killed by a closed card, an end-to-end calibration or a textbook chain (DESIGN_NOTE.md, Tried and rejected, last line); the bud hardiness state alone was off every card and had no partner; PAUSED for the author's decision, retirement recommended"
   }
  ],
  "architectures": [

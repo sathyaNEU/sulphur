@@ -1042,3 +1042,11 @@ Architecture 9 (Kestrel Coast's relief ramp crews), at the draw (2026-11-21):
   weather station's summer highs; only the puck's depth (a conduction filter to invert) was open ground, and a
   frame with the history on one sensor basis and the rule on another hands every run both recognitions in the
   prompt, so the two were never independent.
+- Architecture 10's second screen (kinds chosen before any world, 2026-11-21) found no pair: twelve candidates in
+  seven worlds (vineyard bud kill, city snow disposal, an avalanche corridor, forest windthrow, rime ice on masts, a
+  port gust archive, field camps) each died on a closed card, an end-to-end calibration or a textbook chain. Where the
+  target has a history on file a run calibrates on it end to end; where it has none its scale comes from a
+  conversion factor (the calibrated-source card, with boundary days as checked cases) or a published model; the
+  forward-process kinds are algebra once their inputs ship and rest on the first step's state when they do not; and
+  sources part by part come down to a completeness gross-up. The bud hardiness state was the one candidate off every
+  card, and it stood alone. The slot is handed to the author with retirement recommended.
