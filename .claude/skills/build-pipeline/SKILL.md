@@ -223,7 +223,7 @@ An architecture is **spent** when a determinism fork can only be closed by namin
 or the effort test (re-root before any data is cut). A hardening deepens
 Layer 2 and never plants; if only a plant would hold, the architecture is spent.
 
-**Re-root:** a new draw at stage 1 in the same subdomain and number, `architecture` incremented, `loops` reset, the
+**Re-root:** a new draw at stage 1 in the same client domain and number (the card's `subdomain` is a house task type under that domain, not its boundary: a re-root may take any of the domain's task types, organisations, instruments and data, adding files or withholding them), `architecture` incremented, `loops` reset, the
 old card's lineage saying spent and why, one line in `## Tried and rejected`, committed `DRAWN`. **One architecture
 per world:** once a world's chain is spent the next draw moves to another world, another dataset and another
 shell (Mark: 251, 249 and 269 each spent two architectures in one world where one would have; 118, 305 and 273 kept
@@ -235,7 +235,10 @@ page sends that pattern back at severity 2. The new card's `skeleton` is screene
 (`fingerprint` Part 1b), and a severity 1 or 2 match there BLOCKs. **No same-day serial re-roots without new
 evidence**: a re-root needs the runs, the judge or the leak reader to have killed the version it replaces. A build is
 **retired** only on the author's word: a `## Retired` section in the design note, `status` `RETIRED`, every card kept,
-committed `RETIRED`.
+committed `RETIRED`. A session never proposes retirement because a design space ran dry: it widens the draw (another
+task type in the client domain, another organisation and decision, other instruments, files added or withheld,
+public data) and keeps drawing, and no screen brief carries a stop short of a passing core (task3 was recommended
+for retirement after ten architectures inside one house task type, and the author ruled it out).
 
 ## Throughput
 
