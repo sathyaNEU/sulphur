@@ -1,87 +1,108 @@
 # task9 determinism check (Gates A to E)
 
-Pack: `task9/target/` copied fresh to `/tmp/determinism-task9-1795359697/target/` (29 files). No `target.zip` exists in the
-folder yet, so this check is on the files the zip is to carry. Read: `prompt.txt` and the four answer blocks of
-`submission.md`.
+Read: `prompt.txt`, the four answer blocks of `submission.md`, and `target.zip` unzipped fresh to
+`/tmp/determinism-task9-1795363402/target/` (29 files: 23 CSV, 1 JSONL, 3 XLSX, 2 PDF). Nothing else of the build was opened.
 
-- **Verdict:** DETERMINISTIC. Every source's placement (escalation, three plans, monitor) holds on every route the files
-  do not rule out.
-- **Disposition:** FIX_NOW. This is answer-block work only: four bands widened, three missing convention sentences added,
-  two figures corrected. Nothing solvers see changes and no rerun is needed. There is an optional SEND_BACK lever for
-  fork F1, covered under Fix.
+- **Verdict:** DETERMINISTIC
+- **Disposition:** FIX_NOW. One sentence goes into Step-by-Step step 5: where the 2027 pinned-view lag clock starts. Solvers see nothing new, so no rerun is needed.
 
-## Recomputed figures (the blocks' own method on the shipped files)
+## Why
+
+The call is forced. Each placement holds under every defensible rival I ran, and every rival that crosses a line (5.5 or 8) is ruled out by a figure computed from the shipped files.
+
+- **Label revisions, 9.98:** sits 2 points above the 8 line on every route.
+- **Retunes, 4.47:** sits 1 point under the 5.5 line on every route.
+- **Optimisation noise, 6.89:** the admitted variants run from 6.15 to 7.02.
+- **Feature releases, 6.65:** the consistent clocks run from 6.44 to 6.71.
+- **Training data, 6.62:** the variants run from 6.54 to 6.76.
+
+There is one gap in the blocks. To reproduce 55.0 per cent pinned, I had to choose where the 2027 lag clock starts. The 2027 calendar rows carry no `completed_on`, and the Step-by-Step never says the origin is the planned week plus the past rollouts' mean slip of 1.5 weeks.
+
+A solver who fits the lag from completion dates and then starts it at the bare planned week, with no reverts, gets:
+- 59.8 to 60.4 per cent pinned (band top 60.0);
+- feature releases at 6.25 to 6.29 points (band floor 6.34);
+- a feature-release share of 15.6 to 15.8 per cent (band floor 16.3).
+
+The call does not move (feature releases stay in a plan), and the calendar's own dates refute that route (see the fork list). It is still the "which of two dates starts a clock" case, so the missing sentence is a FIX_NOW.
+
+## Evidence: figures recomputed by the blocks' own method
 
 | Figure | Blocks (band) | Recomputed | Note |
 |---|---|---|---|
-| Assembly: merchants / ids / merchant-weeks / manifests | 29,580 / 34,148 / 3,360,865 / 2,473, 2,464, 1,764 / 644 pairs | same | exact |
-| Retunes | 4.47 (4.41 to 4.52) | 4.47 | 6.156 x 13/4; log cadence is 4 weeks (425 of 425 gaps), projected 2027 pairs average 3.25 |
-| Label revisions | 9.98 (9.92 to 10.05) | 9.99 | 7.672 x 13 |
-| Bootstrap pairs, book weighted | 259.89 (247.16 net) | 260.12 (247.38 net) | 15.72 reproduced |
-| Replicate pairs | 12.73 | 12.74 | 3.57 and 12.87 reproduced |
-| Training data (CC1) | 6.62 (6.35 to 7.44) | 6.62 | exact (row-turnover formula, net of seed part, Sep-2026 book) |
-| Optimisation noise (CC2) | 6.89 (6.23 to 7.33) | 6.31 to 6.89 (plain tied fit 6.63) | not reproduced exactly; persistence by family 0.66 to 0.98 against the blocks' 0.79 to 0.95 |
-| Calendar planned / completed | 90.9 / 87.1 | 90.93 / 87.09 | reproduce only on the 52 refreshes from 28 Dec 2026 to 20 Dec 2027 |
-| Rollout lags | 42; 3 to 31, median 14; 6.3 and 28.8; 4.4% reverted | same | the lag is counted from the completion week's Monday |
-| Pinned views (CC3) | 55.0 (53.6 to 58.4) | 55.10 | integrated log-normal lag on components, mean slip, 4.4% reversion |
-| Leave-one-out referee, recorded | 58.8, 56.6, 59.0 | same | only when the 39 weeks start at the completion week (unstated) |
-| Feature releases | 6.65 (6.34 to 6.84) | 6.65 | 4.00 on planned weeks (4.46 on completed dates); 9.70 with 2026's 22 releases carried |
-| Shares | 39.1 / 18.6 / 17.3 / 17.2 / 7.8 | 39.6 / 17.4 / 17.6 / 17.4 / 7.9 (with my 6.63) | in band |
-| Record, 13-gap mean square | 509.15 | 509.15 | **only with a 26-week burn-in after each family's last rollout** (494.08 without) |
-| Merchants' own share | 43.9 (41.8 to 46.0) | 44.1 | 49.2 from July 2024 reproduced |
-| Weekly check | 42.34 | 42.65 | the ordering against 279.06 and 270.43 holds |
-| Reflex own share / training data share | 14.2 / 62.5 | not reproduced / 62.5 | 14.2 not reached under four combinations (8.3, 22.3, 5.3, 7.0); not graded |
-| Tier changes 2027 / removed | 14.0 (13.6 to 14.2) / 9.7 (9.4 to 10.0) | 13.93 / 9.73 | 2026 pairs 14.82 |
+| Panel merchants / identifiers / merchant-weeks | 29,580 / 34,148 / 3,360,865 | 29,580 / 34,148 / 3,360,865 | Kept the later load; mapped IDs through the Tolka migration file |
+| Manifest lines / runs / production | 2,473 / 2,464 / 1,764 | 2,473 / 2,464 / 1,764 | |
+| Pair register (by kind) | 644 (84/56/168/224/112) | same | |
+| Bootstrap, replicate pair variance | 259.89, 12.73 pt² | 260.12, 12.74 | 0.1% high; I found no rule that closes the gap. Moves nothing |
+| Retunes | 4.47 (4.41 to 4.52) | 4.47 | 13/4 retunes per pair; the log shows 15 per family in 60 weeks |
+| Label revisions | 9.98 (9.92 to 10.05) | 9.987 | Prints as 9.99; inside the band |
+| Training data at face (net of seed) | 15.72 | 15.73 | |
+| **Training data, 2027 (CC1)** | **6.62 (6.35 to 7.44)** | **6.615** | Formula: s²(1/N1 + 1/N2 - 2S/(N1·N2)); s² = (bootstrap - replicate)·N/2; windows from the manifests; rows from the warehouse plus the plan |
+| Replicate at face | 3.57 | 3.57 | |
+| Persistence p by family | 0.79 to 0.95 | 0.7925 to 0.9475 | |
+| **Optimisation noise (CC2)** | **6.89 (6.05 to 7.40)** | **6.890** | Exact reproduction of the stated fit |
+| Free fit / implied replicate | 8.77 / 17.44 | 8.77 / 17.44 | |
+| Line through gaps 8 to 26 / 13 × replicate | 5.96 / 12.87 | 5.96 / 12.87 | |
+| Rollouts: count, lag range, median, reverts | 42; 3 to 31 weeks; median 14; 4.4% | 42; 3 to 31; median 14; 4.40% | Median 14 counts lag in whole refreshes (fractional median 13.4) |
+| Fitted lag at 0 and 5 components | 6.3 and 28.8 weeks | 6.31 and 28.76 | |
+| Pinned share at planned weeks / completed dates | 90.9 / 87.1 | 90.93 / 87.09 | "Completed dates" = planned week + mean slip 1.52 weeks |
+| **Pinned share (CC3)** | **55.0 (53.2 to 60.0)** | **54.5 to 55.1** | Needs the planned week + 1.52-week origin (see Fix) |
+| Feature releases: model / planned / completed | 6.65 / 4.00 / 4.46 | 6.655 / 4.001 / 4.457 | |
+| Record mean-square change: 13 weeks / 1 week | 509.15 / 42.34 | 509.15 / 42.34 | |
+| Step 7 check: this assessment / face value | 42.23 / 279.06 | 42.29 / 281.3 | Face value overshoots the record about 6.6 times |
+| Shares of model-side movement (L/O/F/T/R) | 39.1 / 18.6 / 17.3 / 17.2 / 7.8 | 39.07 / 18.60 / 17.35 / 17.14 / 7.84 | All inside their bands |
+| Merchants' own share | 43.9 (41.9 to 46.7) | 44.3 | 2026's three closed pairs alone: 42.7 (blocks 43.7) |
+| Own share of the record's movement | 39.2 | 39.9 | A refused figure; I did not chase the last 0.7 |
+| 2026 panel tier-change rate | 14.8 | 14.82 | Covenant monitor file and the panel agree |
+| Tier changes 2027 / with plan and escalation sources removed | 14.0 (13.7 to 14.6) / 9.7 (9.4 to 10.3) | 14.05 / 9.80 | |
 
-## Forks run
+The figures agree across all four blocks: every number in the Final Recommendation appears identically in Supplementary Questions 1, CC1 and CC2, and steps 3 to 5.
 
-| # | Choice | Alternative | Result | Ruling |
+## Forks run (Gate C)
+
+| # | Choice | Alternative(s) | Result | Ruling |
 |---|---|---|---|---|
-| F1 | Standard 3.2, "the expected movement over the four snapshot pairs" | the mean of the four pairs' RMS, against the blocks' root of the mean mean-square | Feature releases go from 6.65 to **5.96** on the blocks' route. Neighbours: plug-in 5.84, linear 5.70, by-group 5.71. Pair mean squares are 106, 48, 15 and 7. Training data 6.59; the other sources are unchanged. Feature-release share about 14.4 | **Band fork** (a reading of a filed sentence). The call holds, 0.2 to 0.46 above the 5.5 line. The routes that cross the line are ruled out by filed facts: pooled lag 5.48 (lags run 4 weeks at zero components against 26 at five), no reversion 4.87 to 5.48 (manifests show 4.4% of the 26 weeks after first use reverted) |
-| F2 | "Settled warm weeks": where they start | from each family's last rollout first use, with no burn-in | Record mean square 494.08. Own share **41.2 to 41.6**. Optimisation noise 6.81 to 6.95 | **Band fork plus a missing rule.** Not refuted: the 26 weeks after the last first use run *lower* than the later weeks (ratio 0.91 at gap 13 and 0.905 at gap 1, book weighted) |
-| F3 | Same choice | 2026 weeks only | own share 44.8 to 46.2; optimisation noise 5.96 (20 gaps) to 6.47 (26 gaps) | 46.2 is above the 46.0 top. 5.96 is below the 6.23 floor and still a plan |
-| F4 | "2027's weekly retrains" | calendar 2027 (4 Jan to 27 Dec), against the blocks' 28 Dec 2026 to 20 Dec 2027 | blocks' route 56.9; plug-in median lag 58.8; planned weeks 92.9 | **Band fork plus a missing sentence.** The referee does not rule out the plug-in route: its mean absolute error is 1.0 against the integrated route's 1.6 (57.6, 58.1, 58.7 and 56.1, 56.5, 57.1 against 58.8, 56.6, 59.0) |
-| F5 | Lag model form | log-linear, linear, by group, by family; integrated or plug-in | pinned 55.1 to 58.6 on the pair window; feature releases 6.35 to 6.65 | in band. Pooled lag (57.5 to 59.4; 6.26 to 6.49) is ruled out by the component split |
-| F6 | Slip from planned week to completion | mean, median, by family | pinned 55.1 to 55.5 | in band |
-| F7 | Reversion | applied to all weeks, the first 26 weeks only, or none | pinned 55.1 / 55.6 / 57.6 to 58.0 | in band |
-| F8 | Gap fit | 20, 26 or 30 gaps; unweighted, 1/y or 1/sqrt(k) weights; a quadratic term | 6.31 to 7.15 | in band and a plan. Fits with a free intercept give 6.12, below the floor. I rule them out because the score changes nothing at gap 0 |
-| F9 | The persistence term free of the replicate pairs | free amplitude | 9.81 to 11.91; implied replicate 21.5 to 28.4 against 12.74 measured | ruled out by the replicate pairs (the blocks' own refutation reproduces) |
-| F10 | Bootstrap seed part | gross, not net of the replicate pairs | 6.77 | in band |
-| F11 | Turnover formula | the full three-term form, simple (out+in)/(N1 N2), or a per-pair noise level per row | 6.62 / 6.62 / 6.62 | in band |
-| F12 | Book weights | the planned Dec-2027 book in place of Sep 2026 | 9.99 / 6.62 / 6.64 / 6.54 / 4.47 | in band |
-| F13 | Retunes per pair | 3 per pair, read off the truncated 2026 log | 4.30 | ruled out: the 4-week cadence projects 3.25 a pair (42 pairs with 3, 14 with 4) |
-| F14 | Releases dated on a snapshot Monday (FR-27-18, FR-27-24) | sent to the next pair, or FR-27-24 dropped | 6.63 / 6.63 | in band |
-| F15 | Tier test, the strongest rival | per-merchant Gaussian tier-crossing on the panel's quarter-end scores | 2026: 14.56 to 14.86 (recorded 14.82); 2027: 13.70 to 13.99; removed 9.59 to 9.85 | in band |
-| F16 | Tier aggregation | panel-merchant weights or book weights | 13.93 / 9.73 for both | in band |
-| F17 | Strongest rivals on the call | bootstrap at face value (15.72), replicate at face value (3.57), calendar dates (4.00 / 4.46) | each refuted by a computed figure: the weekly check (the record 42.65 against 279.06 and 270.43, and 50.92 on the replicate route) and the referee | not forks |
+| 1 | Settled-week start for the gap fit | No floor; first warm retrain after the last cold one; the last rollout's first use; floor only; 2026 only | Optimisation noise 6.15 to 7.02 (weighted and flat) | Inside the band |
+| 2 | Gap range | 20 / 26 / 30 gaps | 6.85 / 6.89 / 6.94 | Inside |
+| 3 | Gap weights | Flat in place of inverse square | 7.00 | Inside |
+| 4 | Replicate constraint (strongest rival) | Free A and b | 8.77, escalation | **Ruled out:** the fit implies replicate pairs of 17.44 against 12.74 measured in the pair file |
+| 5 | Persistence p → 1 (random walk) | Noise adds 13 × half a replicate pair | 9.10, escalation (12.87 if double counted) | **Ruled out:** at p = 0.985 the weighted error is 2.7 (GAME) to 90 (TRVL) times the best fit, above it in every family, and D(26)/2D(13) is 0.90 to 0.985, so the record is not linear |
+| 6 | Straight line through late gaps | Intercept of the line from gap 8 to 26 | 5.96 (plan, below the 6.05 floor) | **Ruled out:** the intercept climbs as the start gap moves out (gap 4: 5.21, gap 8: 5.96, gap 12: 6.60, gap 16: 7.14, gap 20: 7.50), so the curve has not reached its ceiling |
+| 7 | Training-data noise per row | Not net of replicate; family average; latest bootstrap week; planned book | 6.76 / 6.62 / 6.60 / 6.54 | Inside |
+| 8 | Bootstrap read as the movement | Face value | 15.72, escalation | **Ruled out:** the manifests' 52- and 104-week windows share all but 13 weeks in and 13 out; the face-value route predicts gap-1 change of 281 against 42.34 in the record |
+| 9 | Pinned-view lag: form and pooling | Log-linear, linear, plug-in median, per-family mean lag (each with slip and reverts) | 54.5 to 57.0 pinned; feature releases 6.47 to 6.71 | Inside |
+| 10 | Pinned-view clock (strongest clean neighbour) | Refit lag from planned week to first use, apply from the 2027 planned week | 55.07 pinned (57.60 without reverts); feature releases 6.655 / 6.44; share 17.35 / 16.43 | Inside, on either revert choice |
+| 11 | Pinned-view clock (mixed) | Lag fitted from completion dates, started at the bare 2027 planned week, no reverts (or per-family median lag) | 59.8 to 60.4 pinned; feature releases 6.25 to 6.29; feature-release share 15.6 to 15.8 | Outside three bands; call holds. **Ruled out by the calendar:** past `completed_on` ran 0 to 3.6 weeks after the planned week (mean 1.52, never earlier), so a completion-based lag cannot start at the planned week. The blocks do not state this clock: FIX_NOW |
+| 12 | Which retrains count as 2027's | Calendar 2027 (4 Jan to 27 Dec 2027) in place of the snapshot-pair refreshes | 56.8 | Inside |
+| 13 | Pinned share weighting | Book-weighted family-weeks | 62.6 to 65.5 | Not a fork: the ask counts retrains (one per family-week), and the blocks say family-weeks |
+| 14 | Tier mapping | Gaussian crossing simulation on panel scores, raw and calibrated to 2026 | 14.07 to 14.09 / 9.86 to 9.87 | Inside |
+| 15 | Tier scaling linear in variance | 14.8 × mean-square ratio | 13.3 | **Ruled out:** the panel simulation in row 14 gives 14.07, so crossings scale with the root |
+| 16 | Merchants' own change basis | Section 5.2's literal 2026 pairs; all 13-week gaps from July 2024 | 42.7 (blocks 43.7) / 49.2 | Pairs inside. July 2024 ruled out: before the settled weeks the manifests show cold 26-week retrains |
+| 17 | Feature-release level | Settled-weeks release rate in place of the roadmap | 9.67 | Ruled out: standard section 2.1 makes the roadmap the year's releases |
+| 18 | Family weights | Panel weights in place of the 21 Sep 2026 book | Optimisation noise 6.89 | Inside; standard section 3.1 pins the book anyway |
 
-Gate B passes. Every distinctive term of the recommendation is in a shipped file. The five sources and the band
-names are in standard 1.2 and 4.1, the cap and the snapshot Mondays are in schedule C2 and C3, the pinned views are in
-calendar PC-26-058, the components are in the registry, and the rollout dates come from the manifests' options. Gates D
-and E pass apart from F1 and F4. Both are one-word or one-clause readings, and both are closed below by bands that
-admit them.
+## Filed facts and asks (Gates B, D and E)
 
-## Fix (location: solution; nothing solvers see changes)
+**Gate B passes.**
+- The standard PDF carries the bands, sources and placements; sections 3.1 and 3.2 define movement, 5.1 the shares, 5.2 merchants' own change, and 6.1 the covenant test.
+- Covenant Schedule C carries the tiers, the 12 per cent cap, the 2027 snapshots and the panel.
+- The roadmap and the row plan (2027 inputs, including the book sheet) and the calendar (PC-26-058 "Pinned feature views") are filed.
+- The windows, warm starts and rollout first-use come from the manifests.
+- Every term in the recommendation (escalate, remediation plan, monitor, label revisions, optimisation noise, feature releases, training data, retunes) appears in the standard.
 
-1. **F1 (feature releases).** Widen the points band from "6.34 to 6.84" to **5.70 to 6.84**. Widen the feature-release
-   share band from "16.0 to 18.4" to **13.4 to 18.4**. Make both edits in Supplementary Questions 1 and wherever
-   step 5 states them. The optional cleaner fix is a SEND_BACK, because it changes the pack and needs a rerun: add
-   one clause to `gms_model_stability_standard_2026.pdf` 3.2 such as "the root of the mean of the four pairs'
-   mean-square changes". That restores the margin to the 5.5 line on every reading.
-2. **F2 and F3 (settled weeks).** Add a sentence to Step-by-Step 6 saying where each family's settled weeks start: 26
-   weeks after the last of the three rollouts first reached it, or whatever rule the build uses. Widen the merchants'
-   own share band from "41.8 to 46.0" to **41.0 to 46.5**. Lower the floor on Critical Component 2 and on
-   Supplementary Questions 1 optimisation noise from "6.23" to **5.90**, which is still clear of the 5.5 line.
-3. **F4 (pinned views).** Add to step 5: "2027's retrains are the 52 weekly refreshes of the four snapshot pairs
-   closing in 2027, 28 December 2026 to 20 December 2027". Raise the top of the band on Critical Component 3 and
-   Supplementary Questions 2 from "58.4" to **59.0**.
-4. **Optimisation-noise fit spec (6.89).** Step 4 states only the persistence term. Add the companion terms, the gap
-   range and the weighting that produce 6.89 and a persistence of 0.79 to 0.95. On a plain linear-plus-persistence fit
-   I get 6.63, with persistence 0.66 to 0.98.
-5. **Figures that do not reproduce.**
-   - In step 7, 42.34 recomputes to **42.65**. Correct it or state how it was computed.
-   - In step 6, the reflex route's 14.2 per cent merchants' own share does not reproduce. Restate how it is computed or
-     correct it.
-   - In step 5, the referee's "first 39 weeks" should say they count from each family's completion week.
-   - In step 5, "4.00 on the calendar's dates" is the planned weeks. The completed dates give 4.46. Pick one wording
-     and keep it the same in the Final Recommendation.
+**Gates D and E pass.** Each ask states its unit and its basis:
+- points between consecutive quarter-end snapshots, book weighted per the standard;
+- per cent of model-side movement, and merchants' own share of all movement;
+- per cent of retrains;
+- per cent of merchants, against the covenant.
+
+No ask splits on how a word is read.
+
+## Fix
+
+- **Where:** the solution (Step-by-Step step 5 only). Nothing else.
+- **What to add**, after "A lag model on custom components carries this to the pinned views:":
+  > "each family's 2027 rollout is placed at its planned week plus the past rollouts' mean slip from planned week to completion (1.5 weeks), lags are counted in weekly refreshes from completion to first use and fitted log-linear on custom components with the spread integrated, and 4.4 per cent of on-weeks are netted for reverts;"
+- **Bands:** no edit needed. Routes 10 and 11 show every consistent clock lands inside the current pinned, feature-release and share bands.
+- **Optional, not blocking:**
+  - Step 3 could state the training-data formula in one clause (the row turnover over twice the window, s²(1/N1 + 1/N2 - 2S/(N1·N2))). I rebuilt it from the prose and got 6.615.
+  - The pair-variance aggregates (259.89, 12.73) and label revisions (9.98) come out 0.1 per cent higher by the literal method (260.12, 12.74, 9.99). Every figure stays inside its band.

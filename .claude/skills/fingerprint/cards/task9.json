@@ -13,8 +13,8 @@
   "shape": "03",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "label revisions to escalation (9.99 points between quarter-end snapshots); optimisation noise (6.88), training-window turnover (6.61) and feature releases (6.65) to a remediation plan; retunes (4.47) on monitor; 55.0 per cent of 2027's weekly retrains on pinned feature views; 13.99 per cent of merchants changing tier between quarter-end snapshots in 2027 and 9.72 with the four designated sources removed (generator/core.py, seed 9505; the cut pack's figures.json once built)",
-  "answer_source": "generator/core.py on the world's arrays (seed 9505); submission.md and generator/figures.json once the pack is cut",
+  "answer": "label revisions to escalation (9.98 points between quarter-end snapshots); optimisation noise (6.89), training data (6.62) and feature releases (6.65) to a remediation plan; retunes (4.47) on monitor; 55.0 per cent of 2027's weekly retrains on pinned feature views; 14.0 per cent of merchants changing tier between quarter-end snapshots in 2027 and 9.7 with the four designated sources removed (the cut pack, generator/figures.json)",
+  "answer_source": "submission.md and generator/figures.json on the cut pack (core.py, seed 9505, for the design)",
   "gap": [
     "objective",
     "time"

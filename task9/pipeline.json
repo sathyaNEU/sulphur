@@ -1,10 +1,10 @@
 {
  "task": "task9",
- "status": "BUILD",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
- "stage": 4,
+ "stage": 5,
  "stage_name": "check",
  "updated": "2026-11-22",
  "doctrine": "throughout",
@@ -58,7 +58,7 @@
   "reading": "Response 1 filed the golden list (stock, price, trend and promise on; history, seller and match off) and made all three stumps unprompted: it took the ablation effects over the share of pages built at origin from the edge cache record, replayed each source's validity entity by entity with impression weights, and priced the page components from their own holdouts. Response 2 listed stock, price and promise and lost only trend, by diluting the realised costs with the cache share and declining the replay as not reconstructable from daily aggregates. The author's ruling: not difficult enough to stump a frontier model; the core is redrawn."
  },
  "returned": null,
- "resume": "/build resume task9: stage 4, the determinism judge re-run once (blind) on the re-pinned standard and the leak reader on the standard PDF only; fix any finding, then stage 5 (full make, zips, audit_containers, READY)",
+ "resume": "the author rewrites prompt.txt in their own words (voice-check.py task9 --rewrite), uploads prompt and target.zip, generates the two runs, then /triage-runs task9",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -161,6 +161,14 @@
   {
    "date": "2026-11-22",
    "event": "stage 4 first pass: judge DETERMINISTIC, FIX_NOW (17 forks; findings on 3.2's aggregation, the settled-week start, the assessment weeks, the fit spec, three figures that did not reproduce); reader clean apart from the standard. One fix pass: standard 3.2 and 5.2 pinned (the year's movement as the root of the mean of the pairs' mean squares; own change carried and reported against the assessment year's movement), steps 4 to 7 state the settled-week start, the fit, the window and the referee's clock, the bands rebuilt from 20 admitted rivals run in the golden's estimators with edges capped short of every refused figure, checks 205, verify 32, gates --full 0 FAIL, corelib on the stated bands level 5 (29, 36, 36; reflex 9)"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "stage 4 second pass: judge DETERMINISTIC, FIX_NOW (18 forks; one finding, the 2027 lag clock unstated in step 5; two optional notes: the turnover formula, pair aggregates 0.1 per cent above the blocks, every figure in band); reader on the standard clean (every literal reading executes to the golden, nothing banned). Fixed in the blocks only (step 5 states the planned week plus the mean slip in weekly refreshes, 1.21, the integrated log-linear lag and the netted reverts; step 3 states the turnover variance); no re-judge, as no graded figure, prompt or pack moved"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "READY: final full make byte-identical (target 95d23eb6bc7214f6, golden 6267e7344675684a), gates.py --full 11 of 11 without FAIL (precut, leak REVIEW and heart WARN, nearest task25), reader's two passes appended, audit_containers last"
   }
  ],
  "final_cut": null

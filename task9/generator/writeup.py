@@ -123,7 +123,9 @@ def write(path, fig):
       "the whole window, while two quarter-end models share every row of their windows except the thirteen weeks "
       "that left and the thirteen that entered: the bootstrap spread gives the noise per training row, and the "
       "manifests' windows (%d families on 104 weeks, the rest on 52) and the warehouse and plan rows give how many "
-      "rows each 2027 snapshot pair turns over. Training data alone is %.2f points, a remediation plan." % (
+      "rows each 2027 snapshot pair turns over, the change in a window fit between two snapshots carrying the "
+      "per-row noise times 1/N1 + 1/N2 - 2S/(N1 N2), with N1 and N2 the rows in the two windows and S the rows they "
+      "share. Training data alone is %.2f points, a remediation plan." % (
           b["bootstrap_raw"], b["bootstrap_net"], rf["points"]["training data"], b["long_window_families"],
           fig["cc1"]))
     sf = fig["settled_floor"]
@@ -149,8 +151,12 @@ def write(path, fig):
       "pinned views, and %.1f per cent on its completed dates. The calendar marks a change complete when the image "
       "is released; the manifests show when each family first trained on the three past changes: %d family "
       "rollouts, first use %d to %d weeks after completion (median %.0f), a median of %.1f weeks with no custom "
-      "training components and %.1f with %d, and %.1f per cent of the following 26 weeks reverted. A lag model on "
-      "custom components carries this to the pinned views: %.1f per cent of 2027's retrains. Leaving each past "
+      "training components and %.1f with %d, and %.1f per cent of the following 26 weeks reverted. A lag model "
+      "carries this to the pinned views: each family's 2027 rollout is placed at its planned week plus the past "
+      "rollouts' mean slip, counted in weekly refreshes from the planned week to the refresh week of the completed "
+      "date (%.2f weeks); the lag from that week to first use is fitted log-linear on custom components with its "
+      "spread integrated, and the reverted share is netted from the weeks on, which puts %.1f per cent of 2027's "
+      "retrains on pinned views. Leaving each past "
       "rollout out in turn, the model puts %.1f, %.1f and %.1f per cent of its first 39 weeks, counted from each "
       "family's completed date, on the change, against %.1f, %.1f and %.1f recorded. A roadmap release moves a family's scores only "
       "in the weeks it is not on pinned views: with the release shadows' variance and the roadmap's %d releases, "
@@ -159,7 +165,7 @@ def write(path, fig):
       "instead of the roadmap)." % (
           aw["refreshes"], aw["first"], aw["last"], b["cov_plan"], b["cov_declared"], b["past_family_rollouts"],
           b["past_lag_range"][0], b["past_lag_range"][1], b["past_lag_median"], b["lag_median_custom0"],
-          b["lag_median_custom_max"], b["custom_max"], 100 * b["revert_share"], fig["cc3"],
+          b["lag_median_custom_max"], b["custom_max"], 100 * b["revert_share"], b["slip_mean"], fig["cc3"],
           100 * fig["loo"]["runtime"]["model"], 100 * fig["loo"]["warm"]["model"], 100 * fig["loo"]["amp"]["model"],
           100 * fig["loo"]["runtime"]["record"], 100 * fig["loo"]["warm"]["record"],
           100 * fig["loo"]["amp"]["record"], b["releases_2027"], P["feature releases"],
