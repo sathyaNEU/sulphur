@@ -53,7 +53,7 @@
   "scoring_unit": "index points",
   "spine": {
     "file": "the weekly score history of the monitoring panel (one row per panel merchant and week), beside the training run manifests by family and week",
-    "rows": 4000000,
+    "rows": 3465865,
     "entity": "one panel merchant's production score in one week",
     "grain": "merchant and week",
     "source": "synthetic, simulated from the vendor's weekly retraining platform (warm starts, sliding training windows, retunes, feature releases, label revisions), its instruments and its rollouts"
@@ -1101,7 +1101,7 @@
     "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 the score panel, manifests, instrument runs, registry, calendar, release log and plans on one family scheme and week calendar; R2 each instrument's figure by family, with retunes' and label revisions' movement; R3 training-window turnover from per-row noise on the rows that leave and enter each 2027 span; R4 optimisation noise from the score-change variance by gap, tied to the replicate pairs; R5 the share of 2027's retrains on pinned feature views and feature releases on the uncovered weeks; R6 each route's model called against the weekly score-change variance on record, the adoption model against a left-out rollout; R7 each source's share of model-side movement and merchants' own share; R8 the bands and the tier changes expected in 2027, with the designated sources removed",
+  "results": "R1 the score panel, manifests, instrument runs, registry, calendar, release log and plans on one family scheme and week calendar; R2 each instrument's figure by family, with retunes' and label revisions' movement; R3 training-window turnover from per-row noise on the rows that leave and enter each 2027 span; R4 optimisation noise from the score-change variance by gap, tied to the replicate pairs; R5 the share of 2027's retrains on pinned feature views and feature releases on the uncovered weeks; R6 each route's model called against the weekly score-change variance on record, the adoption model against a left-out rollout; R7 each source's share of model-side movement and merchants' own share; R8 the bands; R9 the tier changes expected in 2027, with the designated sources removed",
   "skeleton": {
     "decision_form": "banded_call_on_figure",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",

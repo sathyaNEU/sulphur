@@ -75,7 +75,7 @@ def load(target, mess=()):
 
     # the run manifests
     runs, seen = [], set()
-    with open(os.path.join(target, "training_scheduler_run_manifest.jsonl")) as fh:
+    with open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")) as fh:
         for line in fh:
             rec = json.loads(line)
             if rec["run_id"] in seen and "keep_dup_runs" not in mess:

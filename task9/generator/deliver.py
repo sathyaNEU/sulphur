@@ -253,22 +253,50 @@ def deck(path, fig):
         p.space_after = Pt(10)
 
     s = prs.slides.add_slide(blank)
-    _title(s, "Four of five sources sit above the plan line", "Points, 2027, against the standard's lines")
+    _title(s, "Four of five sources sit above the plan line",
+           "Points, 2027; dashed lines at the standard's 5.5 (remediation plan) and 8 (escalation)")
     cd = CategoryChartData()
-    cd.categories = [NAMES[k][0].upper() + NAMES[k][1:] for k in ORDER]
-    cd.add_series("Points, 2027", [round(fig["points"][NAMES[k]], 2) for k in ORDER])
-    cd.add_series("Plan line", [5.5] * 5)
-    cd.add_series("Escalation line", [8.0] * 5)
-    gf = s.shapes.add_chart(XL_CHART_TYPE.BAR_CLUSTERED, Inches(0.7), Inches(1.6), Inches(11.8), Inches(5.4), cd)
+    cats = [NAMES[k][0].upper() + NAMES[k][1:] for k in reversed(ORDER)]
+    vals = [round(fig["points"][NAMES[k]], 2) for k in reversed(ORDER)]
+    cd.categories = cats
+    cd.add_series("Points, 2027", vals)
+    L, Tp, W, H = Inches(0.7), Inches(1.6), Inches(11.8), Inches(5.4)
+    gf = s.shapes.add_chart(XL_CHART_TYPE.BAR_CLUSTERED, L, Tp, W, H, cd)
     ch = gf.chart
-    ch.has_legend = True
-    ch.legend.position = XL_LEGEND_POSITION.BOTTOM
-    ch.legend.include_in_layout = False
-    ch.plots[0].series[0].format.fill.solid()
-    ch.plots[0].series[0].format.fill.fore_color.rgb = RGBColor(0x1F, 0x3A, 0x5F)
-    for i, col in ((1, (0xE0, 0xA4, 0x3A)), (2, (0xB8, 0x3B, 0x3B))):
-        ch.plots[0].series[i].format.fill.solid()
-        ch.plots[0].series[i].format.fill.fore_color.rgb = RGBColor(*col)
+    ch.has_legend = False
+    ch.has_title = False
+    va = ch.value_axis
+    va.minimum_scale, va.maximum_scale, va.major_unit = 0, 12, 2
+    va.has_major_gridlines = False
+    pl = ch.plots[0]
+    pl.gap_width = 60
+    pl.has_data_labels = True
+    pl.data_labels.number_format = "0.00"
+    pl.data_labels.number_format_is_linked = False
+    col = {"monitor": (0x7A, 0x8C, 0x9E), "a remediation plan": (0xE0, 0xA4, 0x3A), "escalation": (0xB8, 0x3B, 0x3B)}
+    for i, k in enumerate(reversed(ORDER)):
+        pt = pl.series[0].points[i]
+        pt.format.fill.solid()
+        pt.format.fill.fore_color.rgb = RGBColor(*col[fig["band_of"][NAMES[k]]])
+    X0, Y0, WF, HF = 0.22, 0.04, 0.74, 0.86          # the plot's inner area, fixed so the lines can be placed
+    pa = ch._chartSpace.chart.plotArea
+    from lxml import etree
+    ns = "http://schemas.openxmlformats.org/drawingml/2006/chart"
+    lay = etree.SubElement(pa, "{%s}layout" % ns)
+    pa.remove(lay)
+    pa.insert(0, lay)
+    ml = etree.SubElement(lay, "{%s}manualLayout" % ns)
+    for tag, val in (("layoutTarget", "inner"), ("xMode", "edge"), ("yMode", "edge"), ("x", X0), ("y", Y0),
+                     ("w", WF), ("h", HF)):
+        etree.SubElement(ml, "{%s}%s" % (ns, tag)).set("val", str(val))
+    from pptx.enum.shapes import MSO_CONNECTOR
+    from pptx.enum.dml import MSO_LINE_DASH_STYLE
+    for v, rgb in ((5.5, (0xE0, 0xA4, 0x3A)), (8.0, (0xB8, 0x3B, 0x3B))):
+        x = L + int(W * (X0 + WF * v / 12.0))
+        ln = s.shapes.add_connector(MSO_CONNECTOR.STRAIGHT, x, Tp + int(H * Y0), x, Tp + int(H * (Y0 + HF)))
+        ln.line.color.rgb = RGBColor(*rgb)
+        ln.line.width = Pt(1.75)
+        ln.line.dash_style = MSO_LINE_DASH_STYLE.DASH
 
     s = prs.slides.add_slide(blank)
     _title(s, "Where the movement between snapshots comes from",
@@ -281,6 +309,7 @@ def deck(path, fig):
     cd.add_series("Share of all movement (%)", [round(p[1], 1) for p in parts])
     gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(0.7), Inches(1.6), Inches(11.8), Inches(5.4), cd)
     gf.chart.has_legend = False
+    gf.chart.has_title = False
     pl = gf.chart.plots[0]
     pl.has_data_labels = True
     pl.data_labels.number_format = "0.0"

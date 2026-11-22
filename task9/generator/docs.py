@@ -25,7 +25,7 @@ ORG = "Garrane Risk"
 IST = dt.timezone(dt.timedelta(hours=1))     # Irish summer time
 GMT = dt.timezone.utc
 FILES = {"calendar": "platform_change_calendar.xlsx", "roadmap": "feature_platform_roadmap_2027.xlsx",
-         "plan": "labelled_row_plan_2027.xlsx", "standard": "gms_model_stability_standard_v2.pdf",
+         "plan": "labelled_row_plan_2027.xlsx", "standard": "gms_model_stability_standard_2026.pdf",
          "covenant": "acquirer_agreement_schedule_c_tier_stability.pdf"}
 CHANGES = (("PC-24-031", "runtime", "Training runtime image garrane-train:4.1.0"),
            ("PC-24-047", "warm", "Weekly refits warm-started from the previous model, with the long training window"),
@@ -85,11 +85,12 @@ def roadmap(w, target):
     ws = wb.active
     ws.title = "2027 roadmap"
     ws.append(["release_ref", "target_refresh", "quarter", "feature_groups", "model_families_touched", "owner"])
+    plan_groups = P.release_groups(w)[1]
     _head(ws, 1)
     for k, t in enumerate(w["plan_weeks"]):
         d = P.monday(t)
         q = "Q%d" % ((d.month - 1) // 3 + 1)
-        g = ";".join(r.choice(P.GROUPS, int(r.integers(1, 4)), replace=False))
+        g = ";".join(plan_groups[k])
         fams = ";".join(P.CODE[f] for f in range(C.F) if w["plan_hits"][k, f])
         ws.append(["FR-27-%02d" % (k + 1), d, q, g, fams, str(r.choice(["Shauneen Miley", "Cassie Gilbride"]))])
         ws.cell(row=ws.max_row, column=2).number_format = "dd/mm/yyyy"
@@ -250,7 +251,7 @@ def documents(target):
           ["For Garrane Risk", "Richard McLeer, director of acquirer partnerships"],
           ["In force", "from the snapshot of 22 December 2025"]],
          COVENANT, "Richard McLeer", "Schedule C, tier stability", "Acquirer services agreement, Schedule C",
-         dt.datetime(2026, 1, 19, 11, 22, tzinfo=GMT), dt.datetime(2026, 1, 19, 11, 22, tzinfo=GMT),
+         dt.datetime(2026, 9, 2, 10, 47, tzinfo=IST), dt.datetime(2026, 9, 2, 10, 51, tzinfo=IST),
          {2: (30, 132), 3: (34, 56, 72)})
 
 

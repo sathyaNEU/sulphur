@@ -124,7 +124,7 @@ def run(target=None, quiet=True):
     raw = L.load(target, mess=("no_rekey",))[0]
     import pandas as pd
     reg = pd.read_csv(os.path.join(target, "mrm_instrument_pair_register_2026.csv"))
-    nruns = sum(1 for _ in open(os.path.join(target, "training_scheduler_run_manifest.jsonl")))
+    nruns = sum(1 for _ in open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl")))
     m = C.coverage_model(pk.w, "loglin")
     loo = {}
     for name in ("runtime", "warm", "amp"):
@@ -198,7 +198,7 @@ def run(target=None, quiet=True):
             "panel_merchants": int(pk.w["ms"].sum()), "panel_merchants_unmapped": int(raw["ms"].sum()),
             "score_rows": int(sum(int(np.sum(~np.isnan(Z))) for Z in pk.z)),
             "manifest_lines": nruns, "manifest_runs": len({json.loads(x)["run_id"] for x in
-                                                           open(os.path.join(target, "training_scheduler_run_manifest.jsonl"))}),
+                                                           open(os.path.join(target, "training_scheduler_runs_2024_2026.jsonl"))}),
             "families": C.F,
             "production_runs": C.F * C.T,
             "pairs": len(reg), "pairs_by_kind": {k: int(v) for k, v in reg["pair_kind"].value_counts().items()},

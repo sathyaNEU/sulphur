@@ -50,7 +50,7 @@ FILES = {
     "roster": "gms_monitoring_panel_roster.csv",
     "xwalk": "tolka_pay_merchant_id_migration.csv",
     "book": "gms_scored_book_by_family.csv",
-    "runs": "training_scheduler_run_manifest.jsonl",
+    "runs": "training_scheduler_runs_2024_2026.jsonl",
     "rows": "warehouse_labelled_rows_weekly.csv",
     "pairs": "mrm_instrument_pair_scores_2026.csv",
     "preg": "mrm_instrument_pair_register_2026.csv",
@@ -324,15 +324,34 @@ def warehouse(w, target):
     return len(df)
 
 
+def release_groups(w):
+    """The feature groups each past release changed and each roadmap release will change, and the groups each family
+    reads (every group a release that touches it changes, and one or two more)."""
+    r = np.random.default_rng(C.SEED + 109)
+    past = [list(r.choice(GROUPS, int(r.integers(1, 4)), replace=False)) for _ in w["rel_weeks"]]
+    plan = [list(r.choice(GROUPS, int(r.integers(1, 4)), replace=False)) for _ in w["plan_weeks"]]
+    reads = []
+    for f in range(C.F):
+        s = set()
+        for gs, hit in zip(past + plan, list(w["rel_hits"][:, f]) + list(w["plan_hits"][:, f])):
+            if hit:
+                s.update(gs)
+        s.update(r.choice(GROUPS, int(r.integers(1, 3)), replace=False))
+        reads.append([g for g in GROUPS if g in s])
+    return past, plan, reads
+
+
 def registry(w, ids, target):
     r = np.random.default_rng(C.SEED + 106)
+    reads = release_groups(w)[2]
     out = []
     for f in range(C.F):
         comps = list(r.choice(COMPONENTS, int(w["custom"][f]), replace=False)) if w["custom"][f] else []
         out.append((CODE[f], FAMILIES[f][1], FAMILIES[f][2], ids.sched[f], ";".join(comps), int(w["epochs"][f]),
-                    str(r.choice(OWNERS, p=(0.3, 0.3, 0.25, 0.15)))))
+                    ";".join(reads[f]), str(r.choice(OWNERS, p=(0.3, 0.3, 0.25, 0.15)))))
     df = pd.DataFrame(out, columns=["model_family", "family_name", "mcc_groups", "scheduler_job_family",
-                                    "custom_training_components", "epochs_per_refresh", "model_owner"])
+                                    "custom_training_components", "epochs_per_refresh", "feature_groups_read",
+                                    "model_owner"])
     _csv(df.sort_values("model_family"), os.path.join(target, FILES["registry"]))
     return len(df)
 
@@ -341,11 +360,12 @@ def release_log(w, target):
     r = np.random.default_rng(C.SEED + 107)
     out = []
     rid = release_ids(w)
+    past = release_groups(w)[0]
     for k, t in enumerate(w["rel_weeks"]):
         d = monday(t)
         rel = monday(t) - dt.timedelta(days=int(r.integers(2, 6)))
         fams = ";".join(CODE[f] for f in range(C.F) if w["rel_hits"][k, f])
-        g = ";".join(r.choice(GROUPS, int(r.integers(1, 4)), replace=False))
+        g = ";".join(past[k])
         out.append((rid[k], rel.isoformat(), d.isoformat(), g, fams))
     df = pd.DataFrame(out, columns=["release_id", "released_on", "first_scored_refresh", "feature_groups_changed",
                                     "model_families_touched"])
@@ -399,8 +419,8 @@ def distractors(w, prod, target):
     for t in range(C.T):
         for g in range(len(GROUPS)):
             v = psi0[g] * math.exp(r.normal(0, 0.45)) + (0.05 * r.random() if r.random() < 0.04 else 0.0)
-            out.append((GROUPS[g], monday(t).isoformat(), round(v, 4), "alert" if v > 0.1 else ""))
-    drift = pd.DataFrame(out, columns=["feature_group", "week_start", "psi_vs_prior_13w", "flag"])
+            out.append((GROUPS[g], monday(t).isoformat(), round(v, 4), "alert" if v > 0.1 else "ok"))
+    drift = pd.DataFrame(out, columns=["feature_group", "week_start", "psi_vs_prior_13w", "monitor_status"])
     _csv(drift, os.path.join(target, FILES["drift"]))
     out = []
     for (f, t), rec in sorted(prod.items(), key=lambda kv: (kv[0][1], kv[0][0])):
