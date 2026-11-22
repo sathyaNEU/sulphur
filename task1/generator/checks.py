@@ -890,8 +890,9 @@ def main():
        nums <= {"2027", "2028", "2026", "2025", "8", "2", "12"})
     ok("prompt: it asks for each step's own quantity in the decision's words",
        "how many installs a week the plan's spend will buy" in prompt
-       and "the 12-month net revenue in euros per install of the installs each channel bought in the year to 2 November 2025" in prompt
-       and "on top of the plan's weekly spend and on top of its stretch spend" in prompt)
+       and "the revenue per install of the installs each channel bought in the year to 2 November 2025" in prompt
+       and "on top of the plan's weekly spend and on top of its stretch spend" in prompt
+       and "with every money figure in euros of 12-month net revenue" in prompt)
     shutil.rmtree(tmp)
     print("\n%d passed, %d failed" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
