@@ -42,7 +42,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
     """Read target_dir and return (pack_world, stats) with every array reconstructed strictly from shipped files."""
     F = PK.FILES
 
-    # 1. Transformer & feeder register (no synthetic industrial_park_zone column)
+    # 1. Transformer & feeder register
     wb_tx = openpyxl.load_workbook(os.path.join(target_dir, F["tx_xlsx"]), data_only=True)
     ws_s = wb_tx["Substations"]
     s_hdr = [c.value for c in ws_s[1]]
@@ -129,7 +129,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
         for rec in csv.DictReader(f):
             class_pf[rec["customer_class"]] = float(rec["nominal_pf"])
 
-    # 4. Hourly substation SCADA (no v_hv_kv column; deduplicate on latest extract_ts)
+    # 4. Hourly substation SCADA (deduplicate on latest extract_ts)
     sub_p60 = {s: np.full(C.N_HOURS, np.nan) for s in sub_cfg}
     v_lv_meas = {s: np.full(C.N_HOURS, np.nan) for s in sub_cfg}
     tap_step = {s: np.zeros(C.N_HOURS, dtype=int) for s in sub_cfg}
@@ -168,7 +168,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
         for s in sub_cfg:
             v_lv_meas[s] = _interp_nans(v_lv_meas[s])
 
-    # 5. Hourly feeder SCADA (kW -> MW, legacy crosswalk)
+    # 5. Hourly feeder SCADA (kW -> MW, legacy crosswalk) & class-level hourly loads p_cls
     f_p60 = {s: np.zeros((len(f_meta_by_sub[s]), C.N_HOURS)) for s in sub_cfg}
     with open(os.path.join(target_dir, F["scada_fdr"]), encoding="utf-8") as f:
         for rec in csv.DictReader(f):
@@ -176,6 +176,13 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
             s, f_i = f_idx_lookup[fid]
             h = _parse_utc_hour(rec["ts_utc"])
             f_p60[s][f_i, h] = float(rec["p_active_kw"]) / 1000.0
+
+    p_cls_by_sub = {}
+    for s in sub_cfg:
+        pc = {c: np.zeros(C.N_HOURS) for c in ("residential_heat", "commercial_mixed", "industrial_batch", "maritime_port")}
+        for f_i, fm in enumerate(f_meta_by_sub[s]):
+            pc[fm["fcls"]] += f_p60[s][f_i]
+        p_cls_by_sub[s] = pc
 
     # 6. Monthly feeder 15-min max registers
     feeder_m15 = {s: np.zeros((len(f_meta_by_sub[s]), 12)) for s in sub_cfg}
@@ -216,13 +223,13 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
             v_bus_ph[s][1, h] = float(rec["vb_kv"])
             v_bus_ph[s][2, h] = float(rec["vc_kv"])
 
-    # 9. GIS lateral connectivity (all 36 laterals/sub, with metering_tier and annual_billed_mwh)
+    # 9. GIS lateral connectivity (all 40 laterals/sub: 20 AMI_SMART + 20 LEGACY_NON_AMI)
     lat_ids_by_sub = {s: [] for s in sub_cfg}
     lat_gis_ph = {s: [] for s in sub_cfg}
     lat_cls = {s: [] for s in sub_cfg}
     lat_is_ami = {s: [] for s in sub_cfg}
     lat_mwh = {s: [] for s in sub_cfg}
-    ami_loc_map = {}   # lateral_id -> (substation_id, local_ami_idx 0..19)
+    ami_loc_map = {}
     ami_cnt = {s: 0 for s in sub_cfg}
     with open(os.path.join(target_dir, F["gis_lat"]), encoding="utf-8") as f:
         for rec in csv.DictReader(f):
@@ -249,36 +256,35 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
             s, a_i = ami_loc_map[rec["lateral_id"]]
             ref_traced_ami[s][a_i] = PH_IDX[rec["traced_phase"]]
 
-    # 10. SQLite AMI lateral hourly voltages & loads (20 AMI_SMART laterals/sub x 4,368 heating hours)
+    # 10. SQLite AMI lateral hourly voltages, active power, and reactive power (20 laterals/sub x 4,368 heating hours)
     lat_v_ami = {s: np.full((ami_cnt[s], C.N_HOURS), np.nan) for s in sub_cfg}
     lat_p_ami = {s: np.full((ami_cnt[s], C.N_HOURS), np.nan) for s in sub_cfg}
+    lat_q_ami = {s: np.full((ami_cnt[s], C.N_HOURS), np.nan) for s in sub_cfg}
     conn = sqlite3.connect(os.path.join(target_dir, F["ami_db"]))
     db_map = {}
     for lidx, lid, _s in conn.execute("SELECT lateral_idx, lateral_id, substation_id FROM laterals"):
         db_map[lidx] = ami_loc_map[lid]
-    for lidx, hidx, vv, pk in conn.execute("SELECT lateral_idx, hour_idx, v_volts, p_kw FROM lateral_hourly"):
+    for lidx, hidx, vv, pk, qk in conn.execute("SELECT lateral_idx, hour_idx, v_volts, p_kw, q_kvar FROM lateral_hourly"):
         s, a_i = db_map[lidx]
         lat_v_ami[s][a_i, hidx] = vv
         lat_p_ami[s][a_i, hidx] = pk
+        lat_q_ami[s][a_i, hidx] = qk
     conn.close()
 
-    # 11. Modernized substations continuous 15-min 3-phase main-bay PQ archive (no feeder columns!)
-    ref_p15 = {r: np.zeros((C.N_HOURS, 4)) for r in refs}
-    ref_q15 = {r: np.zeros((C.N_HOURS, 4)) for r in refs}
-    ref_p15_ph = {r: np.zeros((3, C.N_HOURS, 4)) for r in refs}
+    # 11. Sep-Oct active-only commissioning 15-min log on Fossheim & Lindberg (no Q, no Pa/Pb/Pc, no winter!)
+    comm_h_idx = np.where(C.COMM_HOURS)[0]
+    comm_pos_map = {int(h): pos for pos, h in enumerate(comm_h_idx)}
+    comm_p15 = {r: np.zeros((len(comm_h_idx), 4)) for r in C.PQ_COMM_SITES}
+    comm_rows = 0
     with open(os.path.join(target_dir, F["ref_pq"]), encoding="utf-8") as f:
         for rec in csv.DictReader(f):
+            comm_rows += 1
             r = rec["substation_id"]
             d = dt.datetime.strptime(rec["ts_utc"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
             k = int(round((d - BASE_UTC).total_seconds() / 900.0))
             h, q = divmod(k, 4)
-            ref_p15_ph[r][0, h, q] = float(rec["sub_pa_mw"])
-            ref_p15_ph[r][1, h, q] = float(rec["sub_pb_mw"])
-            ref_p15_ph[r][2, h, q] = float(rec["sub_pc_mw"])
-            ref_p15[r][h, q] = float(rec["sub_p15_mw"])
-            ref_q15[r][h, q] = float(rec["sub_q15_mvar"])
+            comm_p15[r][comm_pos_map[h], q] = float(rec["sub_p15_mw"])
 
-    # Assemble pack_world dict matching core.evaluate() contract
     world = {"subs": {}, "gsp_v": gsp_v, "corridors": corridors, "class_pf": class_pf}
     for s in sorted(sub_cfg):
         cid, gsp_id = sub_corridor[s]
@@ -289,6 +295,7 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
             f_meta=f_meta_by_sub[s],
             f_p60=f_p60[s],
             sub_p60=sub_p60[s],
+            p_cls=p_cls_by_sub[s],
             feeder_m15=feeder_m15[s],
             feeder_p60_m=feeder_p60_m[s],
             sub_kwh_m=sub_kwh_m[s],
@@ -302,46 +309,18 @@ def load_pack(target_dir, include_superseded=False, interpolate_nulls=True):
             lat_mwh=lat_mwh[s],
             lat_v_ami=lat_v_ami[s],
             lat_p_ami=lat_p_ami[s],
+            lat_q_ami=lat_q_ami[s],
+            comm_p15=comm_p15.get(s),
         )
         if s in refs:
-            sp15 = ref_p15[s]
-            sq15 = ref_q15[s]
-            sp15_ph = ref_p15_ph[s]
-            sub_s15 = np.sqrt(sp15 ** 2 + sq15 ** 2)
-            s_flat = int(np.argmax(sub_s15))
-            s_h, s_q = divmod(s_flat, 4)
-            true_s15 = float(sub_s15[s_h, s_q])
-            true_p15 = float(sp15.max())
-            true_qh = float(sq15[s_h, :].mean())
-            true_q15 = float(sq15[s_h, s_q])
-            true_w = float(sp15_ph[:, s_h, s_q].max() / sp15[s_h, s_q])
-            true_lim = float(3.0 * true_w * true_s15)
-            true_load = float(100.0 * true_lim / sub_cfg[s]["firm_mva"])
-            sd.update(dict(
-                sub_p15=sp15,
-                sub_p15_ph=sp15_ph,
-                q_15=sq15,
-                q_hourly=sq15.mean(axis=1),
-                ami_true_ph=ref_traced_ami[s],
-                truth=dict(
-                    p15_peak=true_p15,
-                    p60_peak=float(sub_p60[s].max()),
-                    q_peak_h=true_qh,
-                    q15_at_peak=true_q15,
-                    s15_tot=true_s15,
-                    w_max=true_w,
-                    lim_mva=true_lim,
-                    loading_pct=true_load,
-                    relief_mva=max(0.0, true_lim - 0.85 * sub_cfg[s]["firm_mva"]),
-                    s_peak_h=s_h,
-                ),
-            ))
+            sd["ami_true_ph"] = ref_traced_ami[s]
         world["subs"][s] = sd
 
     stats = dict(
         raw_scada_rows=raw_scada_rows,
         superseded_dropped=superseded_dropped,
         vlv_nulls=vlv_nulls,
+        comm_pq_rows=comm_rows,
         in_pool=sorted(in_pool),
         refs=sorted(refs),
         n_corridors=len(corridors),

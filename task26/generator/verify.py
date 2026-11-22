@@ -1,4 +1,4 @@
-"""Independent standalone verifier for task26 (v2).
+"""Independent standalone verifier for task26 (v3).
 
 Reads ONLY task26/target.zip, recomputes every conformed substation figure and pool aggregate from scratch using
 pandas/numpy/sqlite3/openpyxl (importing ZERO generator modules: no core.py, analysis.py, or results.py),
@@ -30,7 +30,11 @@ BASE_UTC = dt.datetime(2025, 12, 31, 23, 0, tzinfo=UTC)
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 HOUR_MONTH = np.concatenate([np.full(d * 24, m, dtype=int) for m, d in enumerate(MONTH_DAYS)])
 WINTER_MONTHS = (0, 1, 10, 11)
+HEATING_MONTHS = (0, 1, 2, 9, 10, 11)
+COMM_MONTHS = (8, 9)
 WINTER_HOURS = np.isin(HOUR_MONTH, WINTER_MONTHS)
+HEATING_HOURS = np.isin(HOUR_MONTH, HEATING_MONTHS)
+COMM_HOURS = np.isin(HOUR_MONTH, COMM_MONTHS)
 V_NOM_LV = 22.0
 V_NOM_HV = 66.0
 TAP_STEP = 0.0125
@@ -93,7 +97,7 @@ def main():
             v_lv[s] = g["v_lv_kv"].interpolate(method="linear").to_numpy(dtype=float)
             taps[s] = g["ltc_tap_step"].to_numpy(dtype=int)
 
-        # 4. GSP 66 kV voltages & radial 66 kV sub-transmission corridors
+        # 4. GSP 66 kV voltages & radial 66 kV sub-transmission corridors (4 corridors including upstream modernized hubs)
         base_pd = pd.Timestamp("2025-12-31T23:00Z")
         df_gsp = pd.read_csv(os.path.join(tmp, "gsp_66kv_voltages_2026.csv"))
         df_gsp["h"] = ((pd.to_datetime(df_gsp["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 3600).astype(int)
@@ -117,7 +121,7 @@ def main():
                 cur = by_from[cur][1]
             corridors[cid] = {"gsp": root, "segs": ordered}
 
-        # 5. Feeder hourly SCADA (kW -> MW) & monthly 15-min registers
+        # 5. Feeder hourly SCADA (kW -> MW), class hourly aggregates p_cls & monthly 15-min registers
         f_p60 = {s: np.zeros((len(feeders_by_sub[s]), 8760)) for s in all_subs}
         df_fs = pd.read_csv(os.path.join(tmp, "feeder_scada_hourly_2026.csv"))
         df_fs["scada_id"] = df_fs["feeder_code"].map(fmap)
@@ -125,6 +129,13 @@ def main():
         for fid, g in df_fs.groupby("scada_id"):
             s, fi = f_lookup[fid]
             f_p60[s][fi, g["h"].to_numpy()] = g["p_active_kw"].to_numpy(dtype=float) / 1000.0
+
+        p_cls = {}
+        for s in all_subs:
+            pc = {c: np.zeros(8760) for c in ("residential_heat", "commercial_mixed", "industrial_batch", "maritime_port")}
+            for fi, (_fid, fcls) in enumerate(feeders_by_sub[s]):
+                pc[fcls] += f_p60[s][fi]
+            p_cls[s] = pc
 
         f_m15 = {s: np.zeros((len(feeders_by_sub[s]), 12)) for s in all_subs}
         df_m15 = pd.read_csv(os.path.join(tmp, "feeder_demand_registers_monthly_2026.csv"))
@@ -151,27 +162,6 @@ def main():
             np.fill_diagonal(R, 1.0)
             R_mats[s] = np.clip(R, 0.0, 1.0)
 
-        # 7. Modernized sites main-bay 3-phase 15-min PQ archive (no feeder columns!)
-        df_rpq = pd.read_csv(os.path.join(tmp, "pq_archive_15min_2026.csv"))
-        assert "f01_p15_mw" not in df_rpq.columns, "feeder PQ columns must not be shipped!"
-        df_rpq["k"] = ((pd.to_datetime(df_rpq["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 900).astype(int)
-        ref_p15, ref_q15, ref_p15_ph = {}, {}, {}
-        dqdp_l = []
-        for r in refs:
-            g = df_rpq[df_rpq["substation_id"] == r].sort_values("k")
-            sp15 = g["sub_p15_mw"].to_numpy(dtype=float).reshape(8760, 4)
-            sq15 = g["sub_q15_mvar"].to_numpy(dtype=float).reshape(8760, 4)
-            sp_ph = np.stack([
-                g["sub_pa_mw"].to_numpy(dtype=float).reshape(8760, 4),
-                g["sub_pb_mw"].to_numpy(dtype=float).reshape(8760, 4),
-                g["sub_pc_mw"].to_numpy(dtype=float).reshape(8760, 4),
-            ])
-            ref_p15[r], ref_q15[r], ref_p15_ph[r] = sp15, sq15, sp_ph
-            dps = (sp15[WINTER_HOURS, :] - sp15[WINTER_HOURS, :].mean(axis=1, keepdims=True)).ravel()
-            dqs = (sq15[WINTER_HOURS, :] - sq15[WINTER_HOURS, :].mean(axis=1, keepdims=True)).ravel()
-            dqdp_l.append(float(np.dot(dps, dqs) / np.dot(dps, dps)))
-        dq_dp = float(np.mean(dqdp_l))
-
         def raw_quad(s, m_list):
             nf = len(feeders_by_sub[s])
             idx_h = np.where(np.isin(HOUR_MONTH, m_list))[0]
@@ -182,17 +172,22 @@ def main():
                 d[i] = max(0.0, rel) * f_p60[s][i, pk_h]
             return float(np.sqrt(max(0.0, float(d @ R_mats[s] @ d))))
 
-        obs_l, raw_l = [], []
-        for r in refs:
-            for m in WINTER_MONTHS:
-                hm = HOUR_MONTH == m
-                obs_l.append(float(ref_p15[r][hm, :].max() - sub_p60[r][hm].max()))
-                raw_l.append(raw_quad(r, [m]))
-            obs_l.append(float(ref_p15[r].max() - sub_p60[r].max()))
-            raw_l.append(raw_quad(r, list(WINTER_MONTHS)))
-        k_ord = float(sum(obs_l) / sum(raw_l))
+        # 7. Sep-Oct active-only commissioning 15-min log on Fossheim & Lindberg -> calibrate k_ord on within-hour surge
+        assert not os.path.exists(os.path.join(tmp, "pq_archive_15min_2026.csv")), "old full-year PQ file must not exist!"
+        df_cpq = pd.read_csv(os.path.join(tmp, "pq_commissioning_autumn2026.csv"))
+        assert list(df_cpq.columns) == ["substation_id", "ts_utc", "sub_p15_mw"], f"unexpected PQ cols {list(df_cpq.columns)}"
+        assert len(df_cpq) == 11712, f"expected 11,712 Sep-Oct rows, got {len(df_cpq)}"
+        df_cpq["k"] = ((pd.to_datetime(df_cpq["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 900).astype(int)
+        obs_c, raw_c = [], []
+        for r in sorted(df_cpq["substation_id"].unique()):
+            g = df_cpq[df_cpq["substation_id"] == r].sort_values("k")
+            sp15 = g["sub_p15_mw"].to_numpy(dtype=float).reshape(-1, 4)
+            obs_ex = float((sp15.max(axis=1) - sub_p60[r][COMM_HOURS]).max())
+            obs_c.append(obs_ex)
+            raw_c.append(raw_quad(r, list(COMM_MONTHS)))
+        k_ord = float(sum(obs_c) / sum(raw_c))
 
-        # 8. Revenue meter monthly net kVARh & coupled radial 66 kV corridor S2 inversion
+        # 8. S2: coupled 4-corridor 66 kV impedance inversion (including upstream hubs) anchored to peak-month net kVARh
         wb_rev = openpyxl.load_workbook(os.path.join(tmp, "revenue_meter_monthly_2026.xlsx"), data_only=True)
         df_rev = pd.DataFrame(wb_rev["Monthly_Revenue_Meters"].values)
         df_rev.columns = df_rev.iloc[0]
@@ -238,12 +233,28 @@ def main():
             Q_hat = (M_inv @ (y + delta_pt[:, None]).T[:, :, None]).squeeze(-1).T
 
             for i, s in enumerate(subs):
-                pk_h = int(np.argmax(p_sub[i]))
-                top50 = np.argsort(p_sub[i])[-50:]
-                c = np.polyfit(p_sub[i, top50], Q_hat[i, top50], 1)
-                q_h_all[s] = float(c[0] * p_sub[i, pk_h] + c[1])
+                top5 = np.argsort(p_sub[i])[-5:]
+                q_h_all[s] = float(np.mean(Q_hat[i, top5]))
 
-        # 9. S3: 3-phase bus voltages -> calibrate tan_phi_u on 4 modernized refs & invert PT-free bus-sag slope
+        # 9. S3: measure per-class tan_phi directly from SQLite AMI (p_kw, q_kvar) & run multi-class 3-phase bus-sag OLS
+        df_gis = pd.read_csv(os.path.join(tmp, "gis_lateral_connectivity_2026.csv"))
+        assert len(df_gis) == 440, f"expected 440 laterals (40 x 11), got {len(df_gis)}"
+        conn = sqlite3.connect(os.path.join(tmp, "ami_lateral_telemetry_2026.db"))
+        df_ami_lat = pd.read_sql_query(
+            "SELECT l.lateral_id, SUM(h.p_kw * h.q_kvar) AS pq_sum, SUM(h.p_kw * h.p_kw) AS pp_sum "
+            "FROM lateral_hourly h JOIN laterals l ON h.lateral_idx = l.lateral_idx "
+            "GROUP BY l.lateral_id",
+            conn,
+        )
+        n_ami_db = conn.execute("SELECT COUNT(*) FROM laterals").fetchone()[0]
+        conn.close()
+        assert n_ami_db == 220, f"expected 220 AMI laterals in DB, got {n_ami_db}"
+        df_ami_lat = df_ami_lat.merge(df_gis[["lateral_id", "customer_class"]], on="lateral_id", how="left")
+        grp_tp = df_ami_lat.groupby("customer_class")[["pq_sum", "pp_sum"]].sum()
+        tphi_ami = (grp_tp["pq_sum"] / grp_tp["pp_sum"]).to_dict()
+        tp_res = float(tphi_ami["residential_heat"])
+        tp_com = float(tphi_ami["commercial_mixed"])
+
         df_bus = pd.read_csv(os.path.join(tmp, "substation_phase_bus_voltages_2026.csv"))
         df_bus["h"] = ((pd.to_datetime(df_bus["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 3600).astype(int)
         v_bus = {}
@@ -253,39 +264,31 @@ def main():
                                   g["vb_kv"].to_numpy(dtype=float),
                                   g["vc_kv"].to_numpy(dtype=float)])
 
-        num_t, den_t = 0.0, 0.0
-        for r in refs:
-            p_ph = ref_p15_ph[r].mean(axis=2)
-            p_ex = p_ph - p_ph.mean(axis=0, keepdims=True)
-            v_ex = v_bus[r] - v_bus[r].mean(axis=0, keepdims=True)
-            p_dm = p_ex - p_ex.mean(axis=1, keepdims=True)
-            v_dm = v_ex - v_ex.mean(axis=1, keepdims=True)
-            y_adj = -(v_dm + (3.0 * sub_meta[r]["R"] / V_NOM_LV) * p_dm)
-            x_reg = (3.0 * sub_meta[r]["X"] / V_NOM_LV) * p_dm
-            num_t += float(np.sum(x_reg * y_adj))
-            den_t += float(np.sum(x_reg * x_reg))
-        tan_phi_u = num_t / den_t
-
-        # Also verify SQLite AMI DB has 220 smart laterals (20 per sub)
-        conn = sqlite3.connect(os.path.join(tmp, "ami_lateral_telemetry_2026.db"))
-        n_ami_db = conn.execute("SELECT COUNT(*) FROM laterals").fetchone()[0]
-        conn.close()
-        assert n_ami_db == 220, f"expected 220 AMI laterals in DB, got {n_ami_db}"
-
         # 10. Recompute every substation independently
         recomp = {}
         for s in all_subs:
-            p60_pk = float(sub_p60[s].max())
+            p60 = sub_p60[s]
+            pk_h = int(np.argmax(p60))
+            p60_pk = float(p60[pk_h])
             p15 = p60_pk + k_ord * raw_quad(s, list(WINTER_MONTHS))
             q_h = q_h_all[s]
-            q15 = q_h + dq_dp * (p15 - p60_pk)
-            s15 = float(np.sqrt(p15 ** 2 + q15 ** 2))
+            s15 = float(np.sqrt(p15 ** 2 + q_h ** 2))
 
             v_ex = v_bus[s] - v_bus[s].mean(axis=0, keepdims=True)
-            p_dm = sub_p60[s] - sub_p60[s].mean()
-            slopes = (v_ex @ p_dm) / float(np.dot(p_dm, p_dm))
-            coeff = 3.0 * (sub_meta[s]["R"] + sub_meta[s]["X"] * tan_phi_u) / V_NOM_LV
-            w_max = float(((1.0 / 3.0) - slopes / coeff).max())
+            p_res = p_cls[s]["residential_heat"]
+            p_com = p_cls[s]["commercial_mixed"]
+            p_bal = p_cls[s]["industrial_batch"] + p_cls[s]["maritime_port"]
+            X = np.column_stack([np.ones(8760), p_res, p_com, p_bal])
+            B, *_ = np.linalg.lstsq(X, v_ex.T, rcond=None)
+            b_res, b_com = B[1], B[2]
+            c_res = 3.0 * (sub_meta[s]["R"] + sub_meta[s]["X"] * tp_res) / V_NOM_LV
+            c_com = 3.0 * (sub_meta[s]["R"] + sub_meta[s]["X"] * tp_com) / V_NOM_LV
+            dw_res = -b_res / c_res
+            dw_com = -b_com / c_com
+            dw_res -= dw_res.mean()
+            dw_com -= dw_com.mean()
+            w_pk = (1.0 / 3.0) + (dw_res * p_res[pk_h] + dw_com * p_com[pk_h]) / p60[pk_h]
+            w_max = float(w_pk.max())
 
             lim_mva = 3.0 * w_max * s15
             load_pct = 100.0 * lim_mva / sub_meta[s]["firm"]
@@ -322,7 +325,8 @@ def main():
                 assert abs(float(r["firm_n1_loading_pct"]) - recomp[s]["loading_pct"]) <= 0.01
 
         print(f"VERIFY PASS: independent recomputation from target.zip matches figures.json & golden.zip "
-              f"(C1={c1:.2f} MW, C2={c2:.2f} MVAr, C3={c3:.2f}%, TotalRelief={tot_rel:.2f} MVA)")
+              f"(k_ord={k_ord:.4f}, tp_res={tp_res:.4f}, tp_com={tp_com:.4f}, "
+              f"C1={c1:.2f} MW, C2={c2:.2f} MVAr, C3={c3:.2f}%, TotalRelief={tot_rel:.2f} MVA)")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

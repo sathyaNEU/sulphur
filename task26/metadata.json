@@ -12,118 +12,118 @@
  ],
  "files": {
   "ami_lateral_telemetry_2026.db": {
-   "covers": "2026 heating-season single-phase AMI telemetry database",
+   "covers": "2026 heating-season single-phase AMI voltage, active power, and reactive power telemetry database",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-14",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "commissioning_phase_log_2025.csv": {
    "covers": "2025 field phase-tracer commissioning log for AMI-metered laterals on modernized substations",
    "license": "proprietary, fictional organisation",
    "pulled": "2025-12-05",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "engineering_manual_class_pf.csv": {
    "covers": "Engineering manual nominal power factors by customer class",
    "license": "proprietary, fictional organisation",
    "pulled": "2024-04-11",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "feeder_demand_registers_monthly_2026.csv": {
    "covers": "2026 periodic peak demand register resets by 22 kV circuit",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-08",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "feeder_id_crosswalk.csv": {
    "covers": "2024 DMS migration crosswalk between legacy feeder IDs and SCADA feeder IDs",
    "license": "proprietary, fictional organisation",
-   "pulled": "2024-09-16",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "pulled": "2024-11-18",
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "feeder_scada_hourly_2026.csv": {
    "covers": "2026 hourly 22 kV feeder SCADA active load log",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "gis_lateral_connectivity_2026.csv": {
    "covers": "GIS single-phase lateral asset connectivity, metering tier, and annual billed energy table",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-12-18",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "grid_tariff_schedule_2026.pdf": {
    "covers": "2026 published retail and commercial distribution network tariff schedule",
    "license": "proprietary, fictional organisation",
-   "pulled": "2025-12-04",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "pulled": "2025-11-24",
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "gsp_66kv_voltages_2026.csv": {
    "covers": "2026 hourly 66 kV bus voltage recordings at regional 132/66 kV Grid Supply Points",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
-  "pq_archive_15min_2026.csv": {
-   "covers": "2026 continuous 15-minute three-phase main-bay power quality archive for modernized substations",
+  "pq_commissioning_autumn2026.csv": {
+   "covers": "Autumn 2026 main-bay active-power interval metering log for selected modernized substations",
    "license": "proprietary, fictional organisation",
-   "pulled": "2027-01-13",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "pulled": "2026-11-05",
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "revenue_meter_monthly_2026.xlsx": {
    "covers": "2026 monthly settled substation revenue meter active and net reactive energy totals",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-11",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "scada_substation_hourly_2026.csv": {
    "covers": "2026 hourly zone-substation SCADA active power, 22 kV LV bus voltage, and LTC tap step exports",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "streetlighting_inventory_2026.csv": {
    "covers": "2026 municipal streetlighting circuit inventory",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-07",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "substation_annual_energy_summary_2025.xlsx": {
    "covers": "2025 annual energy delivered and customer count summary by substation",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-02-14",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "substation_phase_bus_voltages_2026.csv": {
    "covers": "2026 hourly three-phase 22 kV substation bus voltage measurements",
    "license": "proprietary, fictional organisation",
    "pulled": "2027-01-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "substation_transformer_register.xlsx": {
    "covers": "Substation transformer Firm N-1 MVA ratings, nameplate impedances, tap step settings, and feeder registry",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-11-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "subtransmission_66kv_lines.csv": {
    "covers": "Regional 66 kV radial sub-transmission line topology, segment lengths, and per-kilometer impedances",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-11-12",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "transformer_oil_dga_lab_2026.csv": {
    "covers": "2026 quarterly transformer insulating-oil dissolved gas analysis laboratory results",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-11-27",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   },
   "vesterdal_planning_standard_ns2026.pdf": {
    "covers": "Network Planning Standard NS-2026 governing 66/22 kV substation firm capacity and 2027-2029 relief tiers",
    "license": "proprietary, fictional organisation",
    "pulled": "2026-03-18",
-   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2622; no external or public data)"
+   "source": "generated deterministically by the build's physical 66/22 kV distribution grid simulator (Vesterdal Nett AS, seed 2635; no external or public data)"
   }
  },
  "organisation": "Vesterdal Nett AS (fictional regional electric distribution network operator in western Norway)",

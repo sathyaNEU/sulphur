@@ -66,8 +66,8 @@ def _write_planning_standard(out_dir):
         Paragraph("2. Scope and 2027-2029 Capital Relief Pool", h2),
         Paragraph(
             "2.1 Vesterdal Nett AS operates eleven regional 66/22 kV zone substations. Fossheim, Lindberg, Ostervik, "
-            "and Solberg completed full bay modernization and continuous 15-minute three-phase revenue power-quality "
-            "instrumentation in 2023-2024 and are excluded from the 2027-2029 relief capital pool.", body),
+            "and Solberg completed transformer-bay modernization in 2023-2024 and are excluded from the 2027-2029 "
+            "relief capital pool.", body),
         Paragraph(
             "2.2 The remaining seven regional substations form the in-scope 2027-2029 capital relief pool: "
             "Drangvik, Hestmark, Kvernholm, Malmnes, Raudfjord, Svarthaug, and Tverrli.", body),

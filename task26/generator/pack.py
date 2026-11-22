@@ -1,6 +1,6 @@
-"""Materialize the 19 operational dataset files under target/ from core.simulate() arrays (v2).
+"""Materialize the 19 operational dataset files under target/ from core.simulate() arrays (v3).
 
-Every physical array comes directly from core.simulate() (seed 2622). Layer 1 ETL texture (superseded SCADA
+Every physical array comes directly from core.simulate() (seed 2635). Layer 1 ETL texture (superseded SCADA
 re-export batches, legacy RTU date formatting on Raudfjord, Europe/Oslo CET/CEST vs CET standard alignment,
 legacy DMS feeder IDs bridged by feeder_id_crosswalk.csv, kW/MW and kWh/MWh unit conventions, and benign summer
 comms nulls) resolves deterministically back to the exact clean arrays.
@@ -71,7 +71,7 @@ FILES = {
     "fdr_m15": "feeder_demand_registers_monthly_2026.csv",
     "bus_vph": "substation_phase_bus_voltages_2026.csv",
     "ami_db": "ami_lateral_telemetry_2026.db",
-    "ref_pq": "pq_archive_15min_2026.csv",
+    "ref_pq": "pq_commissioning_autumn2026.csv",
     "ref_tracer": "commissioning_phase_log_2025.csv",
     "rev_xlsx": "revenue_meter_monthly_2026.xlsx",
     "tx_xlsx": "substation_transformer_register.xlsx",
@@ -145,7 +145,6 @@ def _write_scada_substation(world, out_dir, ts_utc):
         w = csv.writer(f)
         w.writerow(["substation_id", "timestamp_local", "scada_clock", "p_active_mw", "v_lv_kv",
                     "ltc_tap_step", "extract_batch", "extract_ts"])
-        # Preliminary batch (B20270104_PRELIM, 480 January hours x 10 non-Raudfjord substations) superseded by B20270112_FINAL
         for s in ALPHA_SUBS:
             if s == "Raudfjord":
                 continue
@@ -156,7 +155,6 @@ def _write_scada_substation(world, out_dir, ts_utc):
                 w.writerow([s, iso_oslo[h], "Europe/Oslo", f"{p_pre:.5f}", f"{vl_pre:.4f}",
                             int(sd["tap_step_int"][h]), "B20270104_PRELIM", "2027-01-04T06:15:00Z"])
                 n_rows += 1
-        # Final authoritative 2026 export for all 11 substations x 8,760 hours
         for s in ALPHA_SUBS:
             sd = world["subs"][s]
             is_raud = (s == "Raudfjord")
@@ -236,7 +234,6 @@ def _write_feeder_files(world, out_dir, ts_utc, xwalk_rows, legacy_map):
 
 
 def _weekdays(year, month, start_day, count):
-    """Return `count` consecutive weekday ISO date strings starting on or after start_day."""
     out = []
     d = dt.date(year, month, start_day)
     while len(out) < count:
@@ -247,9 +244,9 @@ def _weekdays(year, month, start_day, count):
 
 
 def _write_phase_bus_and_ami(world, out_dir, ts_utc):
-    """Write substation_phase_bus_voltages_2026.csv, gis_lateral_connectivity_2026.csv (all 36 laterals/sub),
+    """Write substation_phase_bus_voltages_2026.csv, gis_lateral_connectivity_2026.csv (all 40 laterals/sub),
     commissioning_phase_log_2025.csv (80 AMI laterals on modernized sites), and ami_lateral_telemetry_2026.db
-    (20 AMI_SMART laterals/sub x 4,368 heating hours).
+    (20 AMI_SMART laterals/sub x 4,368 heating hours with v_volts, p_kw, and q_kvar).
     """
     ts_iso = [t.strftime("%Y-%m-%dT%H:%M:%SZ") for t in ts_utc]
     n_bus = 0
@@ -294,7 +291,6 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
                       else max(5, int(round(mwh / float(rng.uniform(60.0, 120.0))))))
             gis_rows.append((lid, s, g_ph, lcls, tier, ver_yr, sp_cnt, f"{mwh:.2f}"))
             if is_ami:
-                # l_i < N_AMI_LAT maps directly into lat_v_ami / lat_p_ami
                 ami_lookup.append((ami_global_idx, lid, s, l_i))
                 if s in C.REFS:
                     t_date = tr_dates[tr_pos]
@@ -324,7 +320,8 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
     conn.execute("CREATE TABLE hours (hour_idx INTEGER PRIMARY KEY, ts_utc TEXT NOT NULL);")
     conn.execute("CREATE TABLE laterals (lateral_idx INTEGER PRIMARY KEY, lateral_id TEXT NOT NULL, substation_id TEXT NOT NULL);")
     conn.execute("CREATE TABLE lateral_hourly (lateral_idx INTEGER NOT NULL, hour_idx INTEGER NOT NULL, "
-                 "v_volts REAL NOT NULL, p_kw REAL NOT NULL, PRIMARY KEY (lateral_idx, hour_idx)) WITHOUT ROWID;")
+                 "v_volts REAL NOT NULL, p_kw REAL NOT NULL, q_kvar REAL NOT NULL, "
+                 "PRIMARY KEY (lateral_idx, hour_idx)) WITHOUT ROWID;")
 
     heat_idx = np.where(C.HEATING_HOURS)[0].tolist()
     conn.executemany("INSERT INTO hours VALUES (?, ?)", [(int(h), ts_iso[h]) for h in heat_idx])
@@ -335,52 +332,51 @@ def _write_phase_bus_and_ami(world, out_dir, ts_utc):
         sd = world["subs"][s]
         lv = sd["lat_v_ami"][ami_i]
         lp = sd["lat_p_ami"][ami_i]
+        lq = sd["lat_q_ami"][ami_i]
         for h in heat_idx:
-            batch.append((g_idx, int(h), round(float(lv[h]), 2), round(float(lp[h]), 2)))
+            batch.append((g_idx, int(h), round(float(lv[h]), 2), round(float(lp[h]), 2), round(float(lq[h]), 2)))
         if len(batch) >= 50000:
-            conn.executemany("INSERT INTO lateral_hourly VALUES (?, ?, ?, ?)", batch)
+            conn.executemany("INSERT INTO lateral_hourly VALUES (?, ?, ?, ?, ?)", batch)
             batch.clear()
     if batch:
-        conn.executemany("INSERT INTO lateral_hourly VALUES (?, ?, ?, ?)", batch)
+        conn.executemany("INSERT INTO lateral_hourly VALUES (?, ?, ?, ?, ?)", batch)
     conn.commit()
     conn.execute("VACUUM;")
     conn.close()
     return n_bus, len(heat_idx) * len(ami_lookup)
 
 
-def _write_ref_pq_15min(world, out_dir):
-    """Write pq_archive_15min_2026.csv for the four modernized substations (substation main-bay 3-phase only)."""
+def _write_comm_pq_15min(world, out_dir):
+    """Write pq_commissioning_autumn2026.csv: Sep-Oct active-only 15-min log on Fossheim & Lindberg (no Q, no 3-phase, no winter)."""
     path = os.path.join(out_dir, FILES["ref_pq"])
-    qh_iso = [(BASE_UTC + dt.timedelta(minutes=15 * k)).strftime("%Y-%m-%dT%H:%M:%SZ") for k in range(C.N_QH)]
+    comm_h_idx = np.where(C.COMM_HOURS)[0]
     n_rows = 0
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["substation_id", "ts_utc", "sub_pa_mw", "sub_pb_mw", "sub_pc_mw", "sub_p15_mw", "sub_q15_mvar"])
-        for r in sorted(C.REFS):
-            sd = world["subs"][r]
-            pa = sd["sub_p15_ph"][0].reshape(-1)
-            pb = sd["sub_p15_ph"][1].reshape(-1)
-            pc = sd["sub_p15_ph"][2].reshape(-1)
-            sp = sd["sub_p15"].reshape(-1)
-            sq = sd["q_15"].reshape(-1)
-            for k in range(C.N_QH):
-                w.writerow([r, qh_iso[k], f"{pa[k]:.5f}", f"{pb[k]:.5f}", f"{pc[k]:.5f}", f"{sp[k]:.5f}", f"{sq[k]:.5f}"])
-                n_rows += 1
+        w.writerow(["substation_id", "ts_utc", "sub_p15_mw"])
+        for r in sorted(C.PQ_COMM_SITES):
+            sp = world["subs"][r]["comm_p15"]  # shape (len(comm_h_idx), 4)
+            for pos, h in enumerate(comm_h_idx):
+                h_int = int(h)
+                for q in range(4):
+                    ts = (BASE_UTC + dt.timedelta(minutes=15 * (4 * h_int + q))).strftime("%Y-%m-%dT%H:%M:%SZ")
+                    w.writerow([r, ts, f"{sp[pos, q]:.5f}"])
+                    n_rows += 1
     return n_rows
 
 
 def _write_workbooks_and_lookups(world, out_dir):
-    """Write revenue_meter_monthly_2026.xlsx, substation_transformer_register.xlsx (no synthetic cluster labels),
+    """Write revenue_meter_monthly_2026.xlsx, substation_transformer_register.xlsx,
     substation_annual_energy_summary_2025.xlsx, and engineering_manual_class_pf.csv.
     """
     with open(os.path.join(out_dir, FILES["class_pf"]), "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["customer_class", "nominal_pf", "manual_section"])
         handbook = [
-            ("industrial_batch", 0.87, "EM-4.2"),
-            ("maritime_port", 0.89, "EM-4.3"),
-            ("commercial_mixed", 0.92, "EM-4.4"),
-            ("residential_heat", 0.95, "EM-4.5"),
+            ("industrial_batch", C.CLASS_NOMINAL_PF["industrial_batch"], "EM-4.2"),
+            ("maritime_port", C.CLASS_NOMINAL_PF["maritime_port"], "EM-4.3"),
+            ("commercial_mixed", C.CLASS_NOMINAL_PF["commercial_mixed"], "EM-4.4"),
+            ("residential_heat", C.CLASS_NOMINAL_PF["residential_heat"], "EM-4.5"),
             ("agricultural_rural", 0.91, "EM-4.6"),
             ("public_lighting", 0.96, "EM-4.7"),
             ("small_hydro_aux", 0.93, "EM-4.8"),
@@ -418,7 +414,7 @@ def _write_workbooks_and_lookups(world, out_dir):
         cfg = world["subs"][s]["cfg"]
         is_ref = s in C.REFS
         ws_s.append([s, REGIONS[s], C.V_NOM_HV, C.V_NOM_LV, cfg["firm_mva"],
-                     cfg["r_ohm"], cfg["x_ohm"], 1.25, -8, 8,
+                     cfg["r_ohm"], cfg["x_ohm"], 1.25, C.TAP_MIN, C.TAP_MAX,
                      "modernized_2023_2024" if is_ref else "standard_transformer_bay"])
         r_idx = ws_s.max_row
         ws_s.cell(row=r_idx, column=5).number_format = "0.0"
@@ -515,7 +511,7 @@ def build(out_dir, world=None):
     n_gsp, n_seg = _write_subtransmission(world, out_dir, ts_utc)
     n_fscada, n_m15 = _write_feeder_files(world, out_dir, ts_utc, xwalk_rows, legacy_map)
     n_bus, n_ami = _write_phase_bus_and_ami(world, out_dir, ts_utc)
-    n_refpq = _write_ref_pq_15min(world, out_dir)
+    n_refpq = _write_comm_pq_15min(world, out_dir)
     _write_workbooks_and_lookups(world, out_dir)
     _write_distractors(world, out_dir)
     return dict(scada_rows=n_scada, gsp_rows=n_gsp, corridor_segments=n_seg,

@@ -1,9 +1,9 @@
-"""Build the two golden deliverables strictly from figures.json (v2):
+"""Build the two golden deliverables strictly from figures.json (v3):
 1. vesterdal_substation_conformed_2026.csv - one row per in-scope substation holding conformed 2026 peak metrics
    and the assigned 2027-2029 relief phase.
 2. vesterdal_relief_schedule_2027_2029.xlsx - opens on Relief_Schedule with the Final Recommendation, live
    formula-driven conformed substation schedule, pool aggregates, and an embedded horizontal bar chart comparing
-   Firm N-1 Loading % across substations, followed by Critical_Components, Referee_Validation, Routes_Comparison,
+   Firm N-1 Loading % across substations, followed by Critical_Components, Physics_Validation, Routes_Comparison,
    and Variant_Battery tabs.
 """
 import csv
@@ -104,7 +104,7 @@ def _sheet_schedule(wb, fig, cache):
                 f"{fig['c3_mean_lim_phase_pct']:.2f}% (band {fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%), "
                 f"and total relief capacity needed = {fig['total_relief_mva']:.2f} MVA "
                 f"(band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f} MVA). "
-                f"Fossheim, Lindberg, Ostervik, and Solberg were modernized in 2023-2024 and serve as non-target reference validation sites.")
+                f"Fossheim, Lindberg, Ostervik, and Solberg completed 2023-2024 bay modernization and are excluded from the 2027-2029 relief pool.")
     ws["A3"].font = Font(size=9, color="333333", name="Calibri")
     ws["A3"].alignment = Alignment(wrap_text=True, vertical="top")
     ws.merge_cells("A3:J3")
@@ -130,7 +130,7 @@ def _sheet_schedule(wb, fig, cache):
             r["p15_peak_mw_raw"],
             r["q_peak_h_mvar_raw"],
             r["w_max_pct_raw"],
-            f"=3*(F{row}/100)*SQRT(D{row}^2+(E{row}+Referee_Validation!$D$3*(D{row}-C{row}))^2)",
+            f"=3*(F{row}/100)*SQRT(D{row}^2+E{row}^2)",
             f"=100*G{row}/B{row}",
             f"=MAX(0,G{row}-0.85*B{row})",
             f'=IF(H{row}>=100,"Phase 1 (2027)",IF(H{row}>=85,"Phase 2 (2028-2029)","Defer"))',
@@ -199,6 +199,55 @@ def _sheet_schedule(wb, fig, cache):
     _widths(ws, [22, 16, 16, 16, 17, 16, 18, 16, 16, 30])
 
 
+ROUTE_LABELS = {
+    "golden": "Conformed Physics Model (Golden)",
+    "S1": "60-Min SCADA Active (No 15-Min Coincidence)",
+    "S2": "Annual Net kVARh PF (No 66 kV Corridor Inversion)",
+    "S3": "AMI-Only Balanced Remainder (No Multi-Class Bus Sag)",
+    "S1+S2": "60-Min SCADA + Net kVARh PF",
+    "S1+S3": "60-Min SCADA + AMI-Only Balanced",
+    "S2+S3": "Net kVARh PF + AMI-Only Balanced",
+    "S1+S2+S3": "Baseline Operational (SCADA 60m + Net kVARh + AMI)",
+    "reflex": "Baseline Operational (SCADA 60m + Net kVARh + AMI)",
+    "direct": "Raw Operational Logs (SCADA 60m + Net kVARh + Balanced)",
+    "rigorous": "Standard Utility Planning (Pooled CF + Winter Q(P) + AMI)",
+    "response1_v2": "Register-Rho + Monthly Q(P) + Scalar Bus-Sag OLS",
+    "run_generous": "Conservative Upper (Linear Sum + Class PF + Evening OLS)",
+    "run_calibrated": "Parametric Proxy (Register-Rho + Winter Q(P) + Manual PF)",
+    "run_hedge": "Uncorrelated Baseline (Indep Quad + Net kVARh + AMI)",
+    "run_cutoff": "Window-Sliced Proxy (1-PC + Winter kVARh + Evening OLS)",
+    "s1_scada60": "S1: 60-Min SCADA Peak (No 15-Min Uplift)",
+    "s1_register_rho": "S1: 12-Month Register Ratio Correlation",
+    "s1_pca1": "S1: 1-Mode Regional Stripping",
+    "s1_pca2": "S1: 2-Mode Regional Stripping",
+    "s1_raw_corr": "S1: Raw Unstripped Hourly Feeder Correlation",
+    "s1_indep_quad": "S1: Independent Feeder Quadrature",
+    "s1_cf_pooled": "S1: Pooled Register Coincidence Factor",
+    "s1_flat_ratio": "S1: Flat Commissioning Peak Ratio",
+    "s1_linear_sum": "S1: Additive Feeder Ratio Sum",
+    "s2_net_kvarh": "S2: Annual Net kVARh Power Factor",
+    "s2_winter_kvarh": "S2: Winter-Only Net kVARh Power Factor",
+    "s2_monthly_qp": "S2: Monthly Linear Q(P) Regression",
+    "s2_monthly_win": "S2: Monthly Q(P + Winter Indicator)",
+    "s2_monthly_quad": "S2: Monthly Quadratic Q(P^2)",
+    "s2_class_pf": "S2: Engineering Manual Class Nominal PFs",
+    "s2_targets_only": "S2: Corridor Inversion Dropping Upstream Hubs",
+    "s2_local_dv": "S2: Local Single-Site GSP Voltage Drop",
+    "s2_rp_only": "S2: 66 kV R*P-Only Drop (No X*Q Coupling)",
+    "s2_raw_dv": "S2: Un-Demeaned Corridor dV (No PT Calibration)",
+    "s3_gis": "S3: Uncorrected GIS Lateral Phase Tags",
+    "s3_ami_only": "S3: Partial 20/40 AMI + Balanced Remainder",
+    "s3_ami_plus_gis": "S3: AMI Phases + GIS on Legacy Laterals",
+    "s3_ami_grossup": "S3: Partial AMI Grossed Up 40/20",
+    "s3_scalar_ols": "S3: Scalar Bus-Sag OLS (dV_ph ~ P_tot)",
+    "s3_evening_cut": "S3: Evening 17-21h Bus-Sag OLS (Mean Z)",
+    "s3_even_zres": "S3: Evening 17-21h Bus-Sag OLS (Res Z)",
+    "s3_handbook_pf": "S3: Multi-Class Bus-Sag OLS (Manual PF)",
+    "s3_sub_pf": "S3: Multi-Class Bus-Sag OLS (Substation PF)",
+    "s3_raw_vbus": "S3: Raw Bus Voltage Difference (No PT Removal)",
+}
+
+
 def _sheet_components(wb, fig, cache):
     ws = wb.create_sheet("Critical_Components")
     sc = cache.setdefault("xl/worksheets/sheet2.xml", {})
@@ -206,7 +255,8 @@ def _sheet_components(wb, fig, cache):
     ws["A1"] = f"Critical Components & Conformed Substation Bands ({n_var}-Variant Battery)"
     ws["A1"].font = Font(bold=True, size=12, name="Calibri", color="1F3B5C")
     ws.append([])
-    ws.append(["Component / Metric", "Golden Value", "Band Low", "Band High", "Reflex Route", "Rigorous Route", "Units"])
+    ws.append(["Component / Metric", "Conformed Value", "Band Low", "Band High",
+               "Operational Baseline", "Standard Utility Proxy", "Units"])
     _hdr(ws, 3, 7, 30)
     rf = fig["routes"]["S1+S2+S3"]
     rg = fig["routes"]["rigorous"]
@@ -252,23 +302,25 @@ def _sheet_components(wb, fig, cache):
     _widths(ws, [44, 22, 22, 22, 22, 22, 20])
 
 
-def _sheet_referee(wb, fig, cache):
-    ws = wb.create_sheet("Referee_Validation")
+def _sheet_physics(wb, fig, cache):
+    ws = wb.create_sheet("Physics_Validation")
     sc = cache.setdefault("xl/worksheets/sheet3.xml", {})
-    ws["A1"] = "Validation on Modernized Non-Target Reference Substations (Fossheim, Lindberg, Ostervik & Solberg)"
+    ws["A1"] = "Internal Physics-Balance Validation (Sep-Oct Commissioning Surge, 66 kV/LV Voltages, kVARh, 3-Ph Bus Sag & AMI)"
     ws["A1"].font = Font(bold=True, size=12, name="Calibri", color="1F3B5C")
     rp = fig["ref_params"]
-    n_qh_tot = len(fig["refs"]) * 35040
-    ws["A2"] = (f"Calibrated from {n_qh_tot:,} 15-min 3-phase main-bay PQ intervals; AMI phase-ID vs 2025 tracer audit: "
-                f"{rp['tracer_matched']}/{rp['tracer_total']} (100.0%) vs GIS "
-                f"{rp['gis_tracer_matched']}/{rp['tracer_total']} ({rp['gis_tracer_pct']:.1f}%).")
+    ws["A2"] = (f"No target-site 15-min PQ, reactive Q, or 3-phase main-bay archive is shipped. Every estimator is checked against "
+                f"Sep-Oct active commissioning surges on Fossheim & Lindberg, 66 kV/22 kV voltage conservation (22 kV bus basis, V), "
+                f"12-month kVARh balance, 3-phase bus-sag RMSE (V), and AMI q_kvar consistency (AMI tracer check: "
+                f"{rp['tracer_matched']}/{rp['tracer_total']} = 100.0% vs GIS {rp['gis_tracer_pct']:.1f}%).")
     ws["A2"].font = Font(italic=True, size=9, color="444444", name="Calibri")
+    ws["A2"].alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells("A2:H2")
+    ws.row_dimensions[2].height = 32
 
-    # Row 3: live numeric calibration strip referenced by Relief_Schedule!G6:G12 ($D$3 = dQ/dP)
     ws.append([
-        "k_ord (cal)", rp["k_ord_raw"], "dQ/dP (winter)", rp["dq_dp_raw"],
-        "tan_phi_u (cal)", rp["tan_phi_u_raw"], "Lindberg R_off", rp["rho_sync_lindberg"],
-        "Fossheim R_off", rp["rho_stag_fossheim"], f"AMI Tracer {rp['tracer_matched']}/{rp['tracer_total']}",
+        "k_ord (Sep-Oct)", rp["k_ord_raw"], "AMI tan_phi_res", rp["tan_phi_res_raw"],
+        "AMI tan_phi_com", rp["tan_phi_com_raw"], "Drangvik R_off (pca4)", rp["rho_sync_drangvik"],
+        "Malmnes R_off (pca4)", rp["rho_stag_malmnes"], f"Reg rho: {rp['reg_rho_drangvik']:.2f} vs {rp['reg_rho_malmnes']:.2f}",
     ])
     for col in range(1, 12):
         c = ws.cell(row=3, column=col)
@@ -279,99 +331,63 @@ def _sheet_referee(wb, fig, cache):
             c.number_format = "0.0000"
 
     ws.append([])
-    ws.append(["Reference Substation", "Firm N-1 (MVA)", "Measured 15m P (MW)", "Estimated P15 (MW)",
-               "Measured Q_peak (MVAr)", "Estimated Q_peak (MVAr)", "Measured w_max (%)", "Estimated w_max (%)",
-               "Measured Loading (%)", "Estimated Loading (%)", "Abs Error (pp)"])
-    _hdr(ws, 5, 11, 34)
-    ref_errs = []
-    for r in sorted(fig["refs"]):
-        rec = fig["substations"][r]
-        ri = ws.max_row + 1
-        err_raw = abs(rec["loading_pct_raw"] - rec["truth_loading_pct_raw"])
-        ref_errs.append(err_raw)
-        ws.append([
-            r, rec["firm_n1_mva"], rec["truth_p15_mw"], rec["p15_peak_mw_raw"],
-            rec["truth_q_peak_mvar"], rec["q_peak_h_mvar_raw"], rec["truth_w_max_pct"], rec["w_max_pct_raw"],
-            rec["truth_loading_pct_raw"], rec["loading_pct_raw"], f"=ABS(J{ri}-I{ri})",
-        ])
-        sc[f"K{ri}"] = err_raw
-        for c in range(2, 12):
-            ws.cell(row=ri, column=c).number_format = "0.00"
-
-    gold_mae_raw = sum(ref_errs) / len(ref_errs)
-    ws.append([])
-    ws.append(["Estimator / Rival Route", "Mean Abs Loading Error on 4 Reference Sites (pp)", "Multiple of Golden MAE"])
-    _hdr(ws, ws.max_row, 3, 30)
-    label_map = {
-        "golden": "Golden conformed estimator (S1+S2+S3)",
-        "s1_raw_corr": "S1 shortcut: raw hourly feeder correlation (unstripped diurnal/weather mode)",
-        "s2_class_pf": "S2 shortcut: engineering manual nominal class power factors",
-        "s1_indep_quad": "S1 shortcut: independent quadrature (ignoring feeder synchronization)",
-        "s1_cf_pooled": "S1 shortcut: pooled register coincidence factor (CF_pooled * sum M15)",
-        "s1_class_ols": "S1 shortcut: 48-month class-share OLS diversity factor",
-        "s2_raw_dv_no_demean": "S2 shortcut: coupled corridor dV without monthly net kVARh PT demeaning",
-        "s1_flat_ratio": "S1 shortcut: flat reference 15m/60m multiplier",
-        "s2_net_kvarh": "S2 shortcut: monthly net kVARh power factor",
-        "s1_linear_sum": "S1 shortcut: linear sum of feeder 15m/60m ratios at peak hour",
-        "s1_rigorous_cf60": "S1 shortcut: hourly coincidence factor times feeder 15m registers",
-        "rigorous": "Rigorous standard shortcut (CF_pooled, class nominal PF, AMI-only balanced)",
-        "s1_scada60": "S1 shortcut: hourly 60-minute SCADA peak",
-        "s3_ami_plus_gis": "S3 shortcut: AMI-identified smart laterals + GIS tags for non-AMI legacy laterals",
-        "s2_rp_only": "S2 shortcut: single-site dV subtracting 66 kV R*P only (ignoring X*Q coupling)",
-        "s3_gis_phase": "S3 shortcut: GIS lateral phase tags",
-        "s3_ami_only_bal": "S3 shortcut: AMI-identified smart laterals (20/36) + balanced remainder",
-        "s3_raw_vbus_no_pt": "S3 shortcut: raw 3-phase bus voltage deviation without PT-offset slope removal",
-        "s2_local_dv": "S2 shortcut: local transformer dV using GSP voltage directly (ignoring 66 kV lines)",
-        "s3_ami_grossup": "S3 shortcut: AMI-identified smart laterals grossed up by 36/20",
-        "direct": "Direct route (SCADA 60m, net kVARh PF, balanced 33.3% phases)",
-        "frontier_combo": "Frontier shortcut combo (class-share OLS + local GSP dV + AMI-only balanced)",
-    }
-    ordered_keys = ["golden"] + sorted([k for k in fig["ref_mae"] if k != "golden"], key=lambda k: fig["ref_mae"][k])
-    gold_row = ws.max_row + 1
+    ws.append(["Estimation Method", "Sep-Oct Surge MAE (MW)", "LV Bus Balance RMSE (V)",
+               "12-Mo kVARh Err (MVAr)", "3-Ph Bus Sag RMSE (V)", "AMI q_kvar RMSE (kVAr)",
+               "Composite Physics Index", "Multiple of Conformed"])
+    _hdr(ws, 5, 8, 34)
+    pd_map = fig["phys_details"]
+    ordered_keys = ["golden"] + sorted([k for k in pd_map if k != "golden"], key=lambda k: pd_map[k]["phys_idx"])
+    gold_row = 6
+    g_d = pd_map["golden"]
+    g_comp = (g_d["s1_comm_mae_mw"] / 0.35) + (g_d["s2_vlv_rmse_v"] / 8.0) + (g_d["s2_kvarh_err_mvar"] / 0.40) + (g_d["s3_bus_rmse_v"] / 2.5) + (g_d["s3_ami_q_rmse_kvar"] / 2.5)
     for k in ordered_keys:
+        d = pd_map[k]
         ri = ws.max_row + 1
-        if k == "golden":
-            ws.append([label_map[k], "=AVERAGE(K6:K9)", f"=B{ri}/$B${gold_row}"])
-            sc[f"B{ri}"] = gold_mae_raw
-            sc[f"C{ri}"] = 1.0
-        else:
-            mae = fig["ref_mae"][k]
-            ws.append([label_map.get(k, k), mae, f"=B{ri}/$B${gold_row}"])
-            sc[f"C{ri}"] = mae / gold_mae_raw
-        ws.cell(row=ri, column=2).number_format = "0.00"
-        ws.cell(row=ri, column=3).number_format = '0.0"x"'
-    _widths(ws, [76, 26, 18, 16, 16, 16, 16, 16, 16, 16, 18])
+        ws.append([
+            ROUTE_LABELS.get(k, k), d["s1_comm_mae_mw"], d["s2_vlv_rmse_v"], d["s2_kvarh_err_mvar"],
+            d["s3_bus_rmse_v"], d["s3_ami_q_rmse_kvar"],
+            f"=(B{ri}/0.35)+(C{ri}/8)+(D{ri}/0.4)+(E{ri}/2.5)+(F{ri}/2.5)",
+            f"=G{ri}/$G${gold_row}",
+        ])
+        comp_val = (d["s1_comm_mae_mw"] / 0.35) + (d["s2_vlv_rmse_v"] / 8.0) + (d["s2_kvarh_err_mvar"] / 0.40) + (d["s3_bus_rmse_v"] / 2.5) + (d["s3_ami_q_rmse_kvar"] / 2.5)
+        sc[f"G{ri}"] = comp_val
+        sc[f"H{ri}"] = comp_val / g_comp
+        for c in (2, 3, 4, 5, 6, 7):
+            ws.cell(row=ri, column=c).number_format = "0.00"
+        ws.cell(row=ri, column=8).number_format = '0.0"x"'
+    _widths(ws, [50, 20, 22, 20, 20, 20, 20, 18, 16, 16, 22])
 
 
 def _sheet_routes(wb, fig):
     ws = wb.create_sheet("Routes_Comparison")
-    ws["A1"] = "Comparison of Golden Conformed Route vs Shortcut Lattice & Rival Routes"
+    ws["A1"] = "Comparison of Conformed Physics Model vs Single-Component Ablations & Alternative Proxies"
     ws["A1"].font = Font(bold=True, size=12, name="Calibri", color="1F3B5C")
     ws.append([])
-    hdr = ["Route", "C1 P15 (MW)", "C2 Q (MVAr)", "C3 w_max (%)", "Total Relief (MVA)", "Ref MAE (pp)"] + [
+    hdr = ["Estimation Method", "Misplaced / 7", "C1 P15 (MW)", "C2 Q (MVAr)", "C3 w_max (%)", "Total Relief (MVA)", "Physics Idx"] + [
         f"{s} Load %" for s in fig["targets"]
     ]
     ws.append(hdr)
     _hdr(ws, 3, len(hdr), 34)
     order = [
         "golden", "S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3",
-        "direct", "rigorous", "frontier_combo",
-        "s1_raw_corr", "s1_indep_quad", "s1_class_ols", "s1_cf_pooled", "s1_flat_ratio", "s1_linear_sum",
-        "s2_class_pf", "s2_raw_dv_no_demean", "s2_rp_only", "s2_local_dv",
-        "s3_ami_plus_gis", "s3_ami_only_bal", "s3_ami_grossup", "s3_raw_vbus_no_pt",
+        "direct", "rigorous", "response1_v2", "run_generous", "run_calibrated", "run_hedge", "run_cutoff",
+        "s1_register_rho", "s1_pca1", "s1_raw_corr", "s1_indep_quad", "s1_cf_pooled", "s1_flat_ratio", "s1_linear_sum",
+        "s2_winter_kvarh", "s2_monthly_qp", "s2_monthly_win", "s2_class_pf", "s2_targets_only", "s2_local_dv", "s2_rp_only", "s2_raw_dv",
+        "s3_gis", "s3_ami_plus_gis", "s3_ami_grossup", "s3_scalar_ols", "s3_evening_cut", "s3_even_zres", "s3_handbook_pf", "s3_sub_pf",
     ]
     for rname in order:
         if rname not in fig["routes"]:
             continue
         r = fig["routes"][rname]
         ws.append([
-            rname, r["c1_total_p15_mw"], r["c2_total_qpeak_mvar"], r["c3_mean_lim_phase_pct"],
-            r["total_relief_mva"], r["ref_mae_pp"],
+            ROUTE_LABELS.get(rname, rname), r["wrong_count"], r["c1_total_p15_mw"], r["c2_total_qpeak_mvar"], r["c3_mean_lim_phase_pct"],
+            r["total_relief_mva"], r["phys_idx"],
         ] + [r["loading_pct"][s] for s in fig["targets"]])
         ri = ws.max_row
-        for c in range(2, len(hdr) + 1):
+        ws.cell(row=ri, column=2).alignment = Alignment(horizontal="center")
+        for c in range(3, len(hdr) + 1):
             ws.cell(row=ri, column=c).number_format = "0.00"
-    _widths(ws, [22, 13, 13, 13, 16, 13] + [13] * len(fig["targets"]))
+    _widths(ws, [50, 12, 13, 13, 13, 16, 13] + [13] * len(fig["targets"]))
 
 
 def _sheet_variants(wb, fig):
@@ -445,7 +461,7 @@ def build(out_dir, fig):
     cache = {}
     _sheet_schedule(wb, fig, cache)
     _sheet_components(wb, fig, cache)
-    _sheet_referee(wb, fig, cache)
+    _sheet_physics(wb, fig, cache)
     _sheet_routes(wb, fig)
     _sheet_variants(wb, fig)
     wb_path = os.path.join(out_dir, FILES["wb"])

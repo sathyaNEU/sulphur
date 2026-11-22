@@ -1,28 +1,23 @@
-#!/usr/bin/env python3
-"""Vesterdal Nett AS 66/22 kV substation peak-loading simulator & v2 decision core.
+"""Core physical grid simulator, estimators, rival shortcuts, frontier run routes, and corelib spec for task26 (v3).
 
-Three genuinely multi-step observation-process stumps on three distinct axes:
-  - S1 (unit):    Sub-hourly 15-min active peak from hourly SCADA + monthly un-timestamped feeder
-                  15-min registers, with NO feeder-level 15-min PQ and NO industrial-park labels.
-                  Must strip regional diurnal+weather common mode across substations to isolate
-                  stochastic feeder innovations, infer pairwise correlation R_ij (distinguishing
-                  synchronized industrial clusters from staggered feeders of identical customer
-                  class), and aggregate in correlated quadrature calibrated on 4 modernized sites.
-  - S2 (what):    Peak-hour lagging reactive demand hidden behind fixed/switched capacitors AND
-                  missing substation HV bus telemetry. Must couple all substations sharing each
-                  radial 66 kV sub-transmission corridor (from GSP-Nord / GSP-Sor through shared
-                  66 kV line impedances R_66, X_66) into simultaneous hourly linear systems
-                  M(t) Q(t) = y(t) + delta_PT, jointly demeaned against monthly settled net kVARh
-                  to eliminate each substation's PT calibration offset.
-  - S3 (who):     Heaviest-loaded phase share w_max where GIS phase tags have drifted AND only
-                  20 of 36 single-phase laterals carry AMI telemetry (matching 80/80 = 100% of
-                  the commissioning tracer log, creating a self-confirming partial-coverage trap),
-                  while the 16 non-AMI legacy laterals carry distinct/opposite phase skews. Must
-                  invert total per-phase load from load-driven 3-phase LV bus voltage sag slope
-                  d(V_ph - V_bar)/dP_tot calibrated on the 4 modernized sites' 3-phase PQ archive
-                  (eliminating both static per-phase PT offsets and balanced shunt capacitors).
+Architecture v3 (zero-PQ-handle physics):
+  - Replaces the 4-site full-year 3-phase PQ archive with a 2-site non-peak Sep-Oct active-only commissioning log
+    (pq_commissioning_autumn2026.csv on Fossheim & Lindberg: sub_p15_mw only, no Q, no Pa/Pb/Pc, no winter peaks).
+  - Four radial 66 kV corridors (COR-N01, COR-N02, COR-S01, COR-S02) place the four modernized hubs UPSTREAM of the
+    seven relief-pool substations, so filtering excluded hubs early breaks coupled 66 kV reactive inversion.
+  - S1 (unit): seasonal burst duty-cycle modulation on staggered sites inverts 12-month register correlation
+    (Malmnes +0.85 vs Drangvik +0.33) and defeats 1-PC stripping, while stripping 4 regional diurnal-weather modes
+    recovers exact pairwise feeder innovation correlation R_ij (0.83 vs 0.08) for correlated quadrature.
+  - S2 (what): seasonally staged winter fixed caps on Kvernholm flatten monthly net_kvarh while peak-only (>0.85 Pmax)
+    inductive loading surges to +19 MVAr; peak-only (>0.87 Pmax) switched caps on Malmnes clamp peak Q near 0 MVAr
+    while off-peak winter net_kvarh rises steeply with P; defeats annual/winter net_kvarh, linear/winter-dummy/quadratic
+    monthly Q(P), class nominal PFs, target-only corridors, local dV, R*P-only dV, and un-demeaned corridor dV.
+  - S3 (who): opposite-phase diurnal class skew (evening residential vs midday commercial) plus a 3.3x reactive
+    impedance contrast (AMI-metered tan_phi_res = 0.125 vs tan_phi_com = 0.620 vs handbook 0.329/0.484) and a
+    self-confirming 20/40 partial-AMI rollout (80/80 tracer match hiding opposite legacy skew) defeats scalar OLS,
+    evening cutoff OLS (with z_avg or z_res), multi-class OLS with handbook or substation PF, and all AMI/GIS routes.
 
-Run directly to verify Level 5 core proof and +/-20% forcing stability:
+Run:
     python3 task26/generator/core.py --detail --forcing
 """
 import itertools
@@ -36,444 +31,453 @@ REPO = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(REPO, ".claude", "skills", "stumping"))
 import corelib  # noqa: E402
 
-SEED = int(os.environ.get("CORE_SEED", 2622))
+SEED = 2635
 N_DAYS = 365
-N_HOURS = N_DAYS * 24           # 8,760 hours in 2026
-N_QH = N_HOURS * 4              # 35,040 quarter-hours (15-min ISPs)
-V_NOM_LV = 22.0                 # 22 kV secondary distribution bus
-V_NOM_HV = 66.0                 # 66 kV sub-transmission bus
-TAP_STEP = 0.0125               # 1.25% per LTC tap step
-LINE_P2 = 85.0                  # % of Firm N-1 MVA -> Phase 2 (2028-2029)
-LINE_P1 = 100.0                 # % of Firm N-1 MVA -> Phase 1 (2027)
+N_HOURS = 8760
+N_QH = N_HOURS * 4
 MONTH_DAYS = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 HOUR_MONTH = np.concatenate([np.full(d * 24, m, dtype=int) for m, d in enumerate(MONTH_DAYS)])
 WINTER_MONTHS = (0, 1, 10, 11)
 WINTER_HOURS = np.isin(HOUR_MONTH, WINTER_MONTHS)
 HEATING_MONTHS = (0, 1, 2, 9, 10, 11)
 HEATING_HOURS = np.isin(HOUR_MONTH, HEATING_MONTHS)
+COMM_MONTHS = (8, 9)  # Sep-Oct non-peak commissioning window (active-only!)
+COMM_HOURS = np.isin(HOUR_MONTH, COMM_MONTHS)
 
 TARGETS = ("Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli")
 REFS = ("Fossheim", "Lindberg", "Ostervik", "Solberg")
+PQ_COMM_SITES = ("Fossheim", "Lindberg")
 ALL_SUBS = TARGETS + REFS
 
-# Disjoint radial 66 kV sub-transmission corridors (neutral regional IDs off GSP-Nord and GSP-Sor)
+V_NOM_LV = 22.0
+V_NOM_HV = 66.0
+TAP_STEP = 0.0125
+TAP_MIN = -10
+TAP_MAX = 10
+LINE_P2 = 85.0
+LINE_P1 = 100.0
+
+# 40 single-phase laterals per substation: 20 AMI_SMART (12 res, 8 com) + 20 LEGACY_NON_AMI (12 res, 8 com)
+N_LATERALS = 40
+N_AMI_LAT = 20
+N_LEG_LAT = 20
+
+# True per-class reactive ratios for single-phase laterals (measured directly from AMI SQLite p_kw, q_kvar)
+TRUE_TAN_PHI_RES = 0.125   # PF = 0.9923 (resistive Norwegian electric space heating)
+TRUE_TAN_PHI_COM = 0.620   # PF = 0.8500 (inductive commercial HVAC/chillers/heat pumps)
+
+# Engineering manual nominal PFs (handbook constants shipped in engineering_manual_class_pf.csv)
+CLASS_NOMINAL_PF = {
+    "residential_heat": 0.95,   # tan_phi = 0.3287
+    "commercial_mixed": 0.90,   # tan_phi = 0.4843
+    "industrial_batch": 0.87,
+    "maritime_port":    0.88,
+}
+
+# Four radial 66 kV corridors (neutral regional IDs; modernized hubs sit UPSTREAM of relief-pool sites!)
 CORRIDORS = {
     "COR-N01": {"gsp": "GSP-Nord", "segs": [
-        ("GSP-Nord", "Ostervik", 4.0, 0.115, 0.385),
-        ("Ostervik", "Fossheim", 38.0, 0.125, 0.405),
-    ]},
-    "COR-S01": {"gsp": "GSP-Sor", "segs": [
-        ("GSP-Sor", "Lindberg", 5.0, 0.115, 0.385),
-        ("Lindberg", "Solberg", 36.0, 0.125, 0.405),
+        ("GSP-Nord", "Ostervik", 13.5, 0.112, 0.370),
+        ("Ostervik", "Drangvik", 10.0, 0.118, 0.375),
+        ("Drangvik", "Malmnes",  10.0, 0.122, 0.380),
     ]},
     "COR-N02": {"gsp": "GSP-Nord", "segs": [
-        ("GSP-Nord", "Drangvik", 16.0, 0.120, 0.395),
-        ("Drangvik", "Malmnes", 34.0, 0.125, 0.405),
+        ("GSP-Nord",  "Fossheim",  12.0, 0.112, 0.370),
+        ("Fossheim",  "Raudfjord", 10.0, 0.118, 0.375),
+        ("Raudfjord", "Svarthaug", 10.0, 0.122, 0.380),
     ]},
-    "COR-N03": {"gsp": "GSP-Nord", "segs": [
-        ("GSP-Nord", "Raudfjord", 10.0, 0.118, 0.390),
-        ("Raudfjord", "Svarthaug", 24.0, 0.122, 0.400),
+    "COR-S01": {"gsp": "GSP-Sor", "segs": [
+        ("GSP-Sor",  "Lindberg",  13.5, 0.112, 0.370),
+        ("Lindberg", "Hestmark",   8.5, 0.118, 0.375),
+        ("Hestmark", "Kvernholm",  9.5, 0.122, 0.380),
     ]},
     "COR-S02": {"gsp": "GSP-Sor", "segs": [
-        ("GSP-Sor", "Hestmark", 7.0, 0.115, 0.385),
-        ("Hestmark", "Kvernholm", 22.0, 0.122, 0.400),
-        ("Kvernholm", "Tverrli", 28.0, 0.125, 0.405),
+        ("GSP-Sor", "Solberg", 12.0, 0.115, 0.370),
+        ("Solberg", "Tverrli", 13.0, 0.122, 0.380),
     ]},
 }
 
 SUB_CFG = {
-    # S1-opened (SYNCHRONIZED cluster -> Phase 1 ~106.3%): identical feeder count, class mix, peak_mw, and cv_sub to Malmnes
+    # S1-opened (SYNCED industrial cluster, steady burstiness -> LOW 12-mo register_rho, HIGH stripped R_ij -> Phase 1 ~106.5%)
     "Drangvik": dict(
-        firm_mva=44.6, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.34, pt_ph_off=(0.18, -0.11, -0.07),
+        firm_mva=47.5, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.34, pt_ph_off=(0.16, -0.10, -0.06),
+        seasonal_mod=0.0, ramp_thr=0.80,
         feeders=[
-            ("industrial_batch", 5.2, 0.35, 1),
-            ("industrial_batch", 5.0, 0.34, 1),
-            ("industrial_batch", 4.8, 0.35, 1),
-            ("maritime_port",    4.6, 0.34, 1),
-            ("maritime_port",    4.4, 0.33, 1),
-            ("commercial_mixed", 4.0, 0.14, 0),
-            ("residential_heat", 3.6, 0.12, 0),
+            ("industrial_batch", 5.2, 0.25, 1),
+            ("industrial_batch", 5.0, 0.25, 1),
+            ("industrial_batch", 4.8, 0.24, 1),
+            ("maritime_port",    4.6, 0.24, 1),
+            ("maritime_port",    4.4, 0.23, 1),
+            ("commercial_mixed", 4.4, 0.10, 0),
+            ("residential_heat", 5.2, 0.09, 0),
         ],
-        q_alpha=0.64, q_peak_extra=9.5, c_fixed=17.0, c_switched_peak=0.0,
-        sp_ami_share=0.32, sp_leg_share=0.26,
-        ami_ph_w=(0.350, 0.330, 0.320), leg_ph_w=(0.440, 0.285, 0.275), gis_ph_w=(0.355, 0.325, 0.320),
+        q_alpha=0.42, q_peak_extra=10.5, c_fixed=4.0, c_win_fixed=2.4, c_sw_peak=0.0,
+        res_ph_w=(0.54, 0.23, 0.23), com_ph_w=(0.20, 0.50, 0.30),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # Forced Phase 1 (>105% on every route, moved outside band by all 3 stumps)
+    # Forced Phase 1 anchor (~141.8%)
     "Hestmark": dict(
-        firm_mva=36.2, r_ohm=0.082, x_ohm=1.08, pt_offset_kv=-0.36, pt_ph_off=(-0.16, 0.12, 0.04),
+        firm_mva=35.5, r_ohm=0.082, x_ohm=1.08, pt_offset_kv=-0.36, pt_ph_off=(-0.15, 0.11, 0.04),
+        seasonal_mod=0.0, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 14.5, 0.24, 2),
-            ("industrial_batch", 12.0, 0.23, 2),
-            ("commercial_mixed",  4.2, 0.12, 0),
-            ("residential_heat",  3.8, 0.08, 0),
-            ("residential_heat",  3.0, 0.08, 0),
+            ("industrial_batch", 10.0, 0.21, 2),
+            ("industrial_batch",  8.5, 0.20, 2),
+            ("maritime_port",     6.5, 0.18, 0),
+            ("commercial_mixed",  6.0, 0.10, 0),
+            ("residential_heat",  7.5, 0.09, 0),
         ],
-        q_alpha=0.58, q_peak_extra=6.2, c_fixed=15.5, c_switched_peak=0.0,
-        sp_ami_share=0.30, sp_leg_share=0.24,
-        ami_ph_w=(0.380, 0.315, 0.305), leg_ph_w=(0.448, 0.285, 0.267), gis_ph_w=(0.355, 0.325, 0.320),
+        q_alpha=0.45, q_peak_extra=8.0, c_fixed=4.5, c_win_fixed=2.5, c_sw_peak=0.0,
+        res_ph_w=(0.58, 0.21, 0.21), com_ph_w=(0.18, 0.52, 0.30),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.36, 0.32, 0.32),
     ),
-    # S2-opened: heavy fixed-cap winter inductive load (Q_peak ~18.7 MVAr -> Phase 1 ~107.4%)
+    # S2-opened UP (peak-only >0.85 Pmax inductive surge +17.5 MVAr; c_win_fixed=2.8 flattens monthly Q_m -> Phase 1 ~107.7%)
     "Kvernholm": dict(
-        firm_mva=37.4, r_ohm=0.095, x_ohm=1.22, pt_offset_kv=-0.68, pt_ph_off=(0.14, -0.19, 0.05),
+        firm_mva=31.8, r_ohm=0.092, x_ohm=1.18, pt_offset_kv=0.38, pt_ph_off=(0.14, -0.17, 0.03),
+        seasonal_mod=0.30, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 9.6, 0.10, 3),
-            ("industrial_batch", 8.2, 0.09, 3),
-            ("commercial_mixed", 6.2, 0.08, 0),
-            ("residential_heat", 5.6, 0.07, 0),
+            ("industrial_batch", 6.0, 0.14, 0),
+            ("maritime_port",    5.4, 0.13, 0),
+            ("commercial_mixed", 5.6, 0.10, 0),
+            ("commercial_mixed", 4.6, 0.10, 0),
+            ("residential_heat", 6.6, 0.09, 0),
         ],
-        q_alpha=0.92, q_peak_extra=16.5, c_fixed=25.0, c_switched_peak=0.0,
-        sp_ami_share=0.30, sp_leg_share=0.25,
-        ami_ph_w=(0.360, 0.325, 0.315), leg_ph_w=(0.415, 0.296, 0.289), gis_ph_w=(0.355, 0.325, 0.320),
+        q_alpha=0.36, q_peak_extra=17.5, c_fixed=3.5, c_win_fixed=2.8, c_sw_peak=0.0,
+        res_ph_w=(0.48, 0.26, 0.26), com_ph_w=(0.30, 0.36, 0.34),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # Two-sided S1 & S2 corridor/switched-cap boundary (STAGGERED + switched winter cap -> Phase 2 ~95.9%)
+    # Matched staggered twin of Drangvik + peak-only (>0.87 Pmax) switched cap -> Phase 2 ~93.3%; flipped UP to P1 by S1 & S2 rivals!
     "Malmnes": dict(
-        firm_mva=42.0, r_ohm=0.092, x_ohm=1.18, pt_offset_kv=-0.32, pt_ph_off=(-0.15, 0.06, 0.09),
+        firm_mva=46.4, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=-0.36, pt_ph_off=(-0.13, 0.15, -0.02),
+        seasonal_mod=0.62, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.35, 0),
-            ("industrial_batch", 5.0, 0.34, 0),
-            ("industrial_batch", 4.8, 0.35, 0),
-            ("maritime_port",    4.6, 0.34, 0),
-            ("maritime_port",    4.4, 0.33, 0),
-            ("commercial_mixed", 4.0, 0.14, 0),
-            ("residential_heat", 3.6, 0.12, 0),
+            ("industrial_batch", 5.2, 0.25, 0),
+            ("industrial_batch", 5.0, 0.25, 0),
+            ("industrial_batch", 4.8, 0.24, 0),
+            ("maritime_port",    4.6, 0.24, 0),
+            ("maritime_port",    4.4, 0.23, 0),
+            ("commercial_mixed", 4.4, 0.10, 0),
+            ("residential_heat", 5.2, 0.09, 0),
         ],
-        q_alpha=0.40, q_peak_extra=2.6, c_fixed=3.0, c_switched_peak=10.5,
-        sp_ami_share=0.31, sp_leg_share=0.25,
-        ami_ph_w=(0.350, 0.330, 0.320), leg_ph_w=(0.428, 0.296, 0.276), gis_ph_w=(0.352, 0.326, 0.322),
+        q_alpha=0.66, q_peak_extra=0.0, c_fixed=1.8, c_win_fixed=0.0, c_sw_peak=19.0,
+        res_ph_w=(0.54, 0.23, 0.23), com_ph_w=(0.20, 0.50, 0.30),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.34, 0.33, 0.33),
     ),
-    # S3-opened (+): AMI balanced (35.5%), legacy non-AMI piled onto Phase A (61%) -> Phase 1 ~119.1%
+    # S3-opened UP (strong residential EVENING peak -> Phase 1 ~109.2%; midday com Phase B=62% breaks scalar/cutoff/handbook/AMI!)
     "Raudfjord": dict(
-        firm_mva=35.4, r_ohm=0.102, x_ohm=1.28, pt_offset_kv=0.35, pt_ph_off=(-0.22, 0.13, 0.09),
+        firm_mva=45.0, r_ohm=0.095, x_ohm=1.22, pt_offset_kv=-0.32, pt_ph_off=(0.17, -0.08, -0.09),
+        seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 7.8, 0.10, 0),
-            ("residential_heat", 7.2, 0.10, 0),
-            ("commercial_mixed", 6.4, 0.12, 0),
-            ("industrial_batch", 6.6, 0.13, 0),
+            ("residential_heat", 12.2, 0.09, 0),
+            ("residential_heat", 10.8, 0.09, 0),
+            ("commercial_mixed",  5.2, 0.10, 0),
+            ("commercial_mixed",  4.4, 0.10, 0),
+            ("industrial_batch",  2.4, 0.12, 0),
         ],
-        q_alpha=0.54, q_peak_extra=6.4, c_fixed=13.5, c_switched_peak=0.0,
-        sp_ami_share=0.34, sp_leg_share=0.38,
-        ami_ph_w=(0.355, 0.325, 0.320), leg_ph_w=(0.610, 0.205, 0.185), gis_ph_w=(0.352, 0.328, 0.320),
+        q_alpha=0.40, q_peak_extra=4.5, c_fixed=3.5, c_win_fixed=2.0, c_sw_peak=0.0,
+        res_ph_w=(0.58, 0.21, 0.21), com_ph_w=(0.13, 0.62, 0.25),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # S3-opened (-): AMI leans Phase C (54%), legacy non-AMI compensates on A & B -> Phase 2 ~91.3%
+    # S3-opened OPPOSITE (strong residential EVENING peak -> balanced w ~33.9%, Phase 2 ~92.6%; com Phase C=70% + AMI/GIS C=58% push P2 -> P1!)
     "Svarthaug": dict(
-        firm_mva=37.2, r_ohm=0.098, x_ohm=1.24, pt_offset_kv=-0.34, pt_ph_off=(0.15, 0.08, -0.23),
+        firm_mva=34.2, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=0.35, pt_ph_off=(-0.10, -0.07, 0.17),
+        seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 8.2, 0.10, 0),
-            ("residential_heat", 7.4, 0.10, 0),
-            ("commercial_mixed", 7.0, 0.12, 0),
-            ("industrial_batch", 6.8, 0.13, 0),
+            ("residential_heat", 12.0, 0.09, 0),
+            ("residential_heat", 10.4, 0.09, 0),
+            ("commercial_mixed",  5.2, 0.10, 0),
+            ("commercial_mixed",  4.4, 0.10, 0),
+            ("industrial_batch",  2.4, 0.12, 0),
         ],
-        q_alpha=0.60, q_peak_extra=8.0, c_fixed=15.5, c_switched_peak=0.0,
-        sp_ami_share=0.36, sp_leg_share=0.36,
-        ami_ph_w=(0.235, 0.225, 0.540), leg_ph_w=(0.455, 0.415, 0.130), gis_ph_w=(0.255, 0.265, 0.480),
+        q_alpha=0.42, q_peak_extra=4.5, c_fixed=3.5, c_win_fixed=2.0, c_sw_peak=0.0,
+        res_ph_w=(0.37, 0.37, 0.26), com_ph_w=(0.15, 0.15, 0.70),
+        ami_res_w=(0.25, 0.25, 0.50), ami_com_w=(0.25, 0.25, 0.50),
+        gis_ph_w=(0.20, 0.20, 0.60),
     ),
-    # Forced Defer (far end of COR-T3 -> local_dv & rp_only blow it up to Phase 1, golden ~73.9%)
+    # Forced Defer anchor (~66.5%)
     "Tverrli": dict(
-        firm_mva=47.0, r_ohm=0.096, x_ohm=1.20, pt_offset_kv=0.32, pt_ph_off=(-0.14, 0.17, -0.03),
+        firm_mva=41.0, r_ohm=0.098, x_ohm=1.24, pt_offset_kv=-0.40, pt_ph_off=(0.12, 0.04, -0.16),
+        seasonal_mod=0.30, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 6.0, 0.12, 0),
-            ("commercial_mixed", 5.8, 0.15, 0),
-            ("industrial_batch", 6.2, 0.22, 4),
-            ("industrial_batch", 5.4, 0.21, 4),
+            ("industrial_batch", 5.2, 0.16, 0),
+            ("maritime_port",    4.8, 0.15, 0),
+            ("commercial_mixed", 5.2, 0.10, 0),
+            ("residential_heat", 6.5, 0.09, 0),
+            ("residential_heat", 4.5, 0.09, 0),
         ],
-        q_alpha=0.78, q_peak_extra=12.5, c_fixed=20.0, c_switched_peak=0.0,
-        sp_ami_share=0.34, sp_leg_share=0.30,
-        ami_ph_w=(0.370, 0.320, 0.310), leg_ph_w=(0.475, 0.270, 0.255), gis_ph_w=(0.355, 0.325, 0.320),
+        q_alpha=0.45, q_peak_extra=5.0, c_fixed=4.0, c_win_fixed=2.5, c_sw_peak=0.0,
+        res_ph_w=(0.56, 0.22, 0.22), com_ph_w=(0.20, 0.50, 0.30),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.34, 0.33, 0.33),
     ),
-    # Ref 1: Lindberg (COR-R2 near GSP-Sor, 5 km): 8 feeders (4 ind + 2 mar SYNCHRONIZED + 1 comm + 1 res)
-    # Identical feeder count, class mix, peak_mw, and cv_sub to Fossheim -> only cluster=5 vs 0 differs
-    "Lindberg": dict(
-        firm_mva=56.0, r_ohm=0.080, x_ohm=1.05, pt_offset_kv=0.64, pt_ph_off=(-0.24, 0.14, 0.10),
-        feeders=[
-            ("industrial_batch", 5.4, 0.36, 5),
-            ("industrial_batch", 5.2, 0.35, 5),
-            ("industrial_batch", 5.0, 0.36, 5),
-            ("industrial_batch", 4.8, 0.35, 5),
-            ("maritime_port",    4.6, 0.35, 5),
-            ("maritime_port",    4.4, 0.34, 5),
-            ("commercial_mixed", 3.5, 0.14, 0),
-            ("residential_heat", 3.1, 0.12, 0),
-        ],
-        q_alpha=0.76, q_peak_extra=12.0, c_fixed=21.0, c_switched_peak=0.0,
-        sp_ami_share=0.28, sp_leg_share=0.36,
-        ami_ph_w=(0.345, 0.330, 0.325), leg_ph_w=(0.600, 0.205, 0.195), gis_ph_w=(0.350, 0.328, 0.322),
-    ),
-    # Ref 2: Fossheim (COR-R1 far end, 42 km): 8 feeders (4 ind + 2 mar STAGGERED + 1 comm + 1 res) + switched cap
+    # 4 Modernized upstream hubs (excluded from 2027-2029 relief pool; ONLY Fossheim & Lindberg ship Sep-Oct active-only PQ!)
     "Fossheim": dict(
-        firm_mva=50.0, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=-0.66, pt_ph_off=(0.24, -0.15, -0.09),
+        firm_mva=50.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=0.36, pt_ph_off=(0.15, -0.09, -0.06),
+        seasonal_mod=0.62, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.4, 0.36, 0),
-            ("industrial_batch", 5.2, 0.35, 0),
-            ("industrial_batch", 5.0, 0.36, 0),
-            ("industrial_batch", 4.8, 0.35, 0),
-            ("maritime_port",    4.6, 0.35, 0),
-            ("maritime_port",    4.4, 0.34, 0),
-            ("commercial_mixed", 3.5, 0.14, 0),
-            ("residential_heat", 3.1, 0.12, 0),
+            ("industrial_batch", 5.2, 0.25, 0),
+            ("industrial_batch", 5.0, 0.25, 0),
+            ("industrial_batch", 4.8, 0.24, 0),
+            ("maritime_port",    4.6, 0.24, 0),
+            ("maritime_port",    4.4, 0.23, 0),
+            ("commercial_mixed", 4.4, 0.10, 0),
+            ("residential_heat", 5.2, 0.09, 0),
         ],
-        q_alpha=0.44, q_peak_extra=2.5, c_fixed=3.2, c_switched_peak=12.0,
-        sp_ami_share=0.28, sp_leg_share=0.36,
-        ami_ph_w=(0.350, 0.330, 0.320), leg_ph_w=(0.600, 0.205, 0.195), gis_ph_w=(0.352, 0.326, 0.322),
+        q_alpha=0.60, q_peak_extra=0.0, c_fixed=3.0, c_win_fixed=0.0, c_sw_peak=14.0,
+        res_ph_w=(0.50, 0.25, 0.25), com_ph_w=(0.28, 0.44, 0.28),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.35, 0.33, 0.32),
     ),
-    # Ref 3: Ostervik (COR-R1 near GSP-Nord, 4 km): 4 mild independent feeders, AMI leans Phase C, legacy balances
+    "Lindberg": dict(
+        firm_mva=54.0, r_ohm=0.084, x_ohm=1.10, pt_offset_kv=-0.36, pt_ph_off=(-0.14, 0.10, 0.04),
+        seasonal_mod=0.0, ramp_thr=0.85,
+        feeders=[
+            ("industrial_batch", 5.2, 0.25, 3),
+            ("industrial_batch", 5.0, 0.25, 3),
+            ("industrial_batch", 4.8, 0.24, 3),
+            ("maritime_port",    4.6, 0.24, 3),
+            ("maritime_port",    4.4, 0.23, 3),
+            ("commercial_mixed", 4.4, 0.10, 0),
+            ("residential_heat", 5.2, 0.09, 0),
+        ],
+        q_alpha=0.62, q_peak_extra=0.0, c_fixed=3.0, c_win_fixed=0.0, c_sw_peak=23.0,
+        res_ph_w=(0.48, 0.26, 0.26), com_ph_w=(0.28, 0.42, 0.30),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.34, 0.33, 0.33),
+    ),
     "Ostervik": dict(
-        firm_mva=48.0, r_ohm=0.086, x_ohm=1.12, pt_offset_kv=-0.64, pt_ph_off=(0.22, -0.09, -0.13),
+        firm_mva=48.0, r_ohm=0.088, x_ohm=1.14, pt_offset_kv=0.36, pt_ph_off=(-0.12, 0.14, -0.02),
+        seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("residential_heat", 8.2, 0.06, 0),
-            ("residential_heat", 7.8, 0.06, 0),
-            ("commercial_mixed", 8.0, 0.06, 0),
-            ("industrial_batch", 7.6, 0.07, 0),
+            ("residential_heat", 7.8, 0.09, 0),
+            ("residential_heat", 6.4, 0.09, 0),
+            ("commercial_mixed", 5.8, 0.10, 0),
+            ("commercial_mixed", 5.0, 0.10, 0),
+            ("industrial_batch", 5.0, 0.13, 0),
         ],
-        q_alpha=0.80, q_peak_extra=13.5, c_fixed=20.5, c_switched_peak=0.0,
-        sp_ami_share=0.34, sp_leg_share=0.34,
-        ami_ph_w=(0.235, 0.225, 0.540), leg_ph_w=(0.455, 0.415, 0.130), gis_ph_w=(0.460, 0.275, 0.265),
+        q_alpha=0.48, q_peak_extra=22.0, c_fixed=4.0, c_win_fixed=3.0, c_sw_peak=0.0,
+        res_ph_w=(0.39, 0.39, 0.22), com_ph_w=(0.25, 0.25, 0.50),
+        ami_res_w=(0.25, 0.25, 0.50), ami_com_w=(0.25, 0.25, 0.50),
+        gis_ph_w=(0.23, 0.23, 0.54),
     ),
-    # Ref 4: Solberg (COR-R2 far end, 41 km): 3 synchronized industrial + 4 spiky independent, heavy Q, AMI leans C
     "Solberg": dict(
-        firm_mva=46.0, r_ohm=0.086, x_ohm=1.10, pt_offset_kv=0.66, pt_ph_off=(-0.20, 0.24, -0.04),
+        firm_mva=46.0, r_ohm=0.090, x_ohm=1.16, pt_offset_kv=-0.34, pt_ph_off=(0.13, -0.15, 0.02),
+        seasonal_mod=0.25, ramp_thr=0.85,
         feeders=[
-            ("industrial_batch", 5.2, 0.28, 6),
-            ("industrial_batch", 5.0, 0.28, 6),
-            ("industrial_batch", 4.8, 0.27, 6),
-            ("maritime_port",    5.0, 0.30, 0),
-            ("commercial_mixed", 4.8, 0.24, 0),
-            ("commercial_mixed", 4.6, 0.22, 0),
-            ("residential_heat", 4.4, 0.16, 0),
+            ("residential_heat", 7.5, 0.09, 0),
+            ("commercial_mixed", 6.2, 0.10, 0),
+            ("industrial_batch", 6.0, 0.14, 0),
+            ("maritime_port",    5.5, 0.13, 0),
+            ("residential_heat", 5.5, 0.09, 0),
         ],
-        q_alpha=0.82, q_peak_extra=13.5, c_fixed=22.0, c_switched_peak=0.0,
-        sp_ami_share=0.34, sp_leg_share=0.34,
-        ami_ph_w=(0.235, 0.225, 0.540), leg_ph_w=(0.455, 0.415, 0.130), gis_ph_w=(0.460, 0.275, 0.265),
+        q_alpha=0.48, q_peak_extra=8.0, c_fixed=4.5, c_win_fixed=3.0, c_sw_peak=0.0,
+        res_ph_w=(0.42, 0.29, 0.29), com_ph_w=(0.30, 0.37, 0.33),
+        ami_res_w=(0.34, 0.33, 0.33), ami_com_w=(0.34, 0.33, 0.33),
+        gis_ph_w=(0.34, 0.33, 0.33),
     ),
 }
 
-CLASS_NOMINAL_PF = {
-    "industrial_batch": 0.87,
-    "maritime_port":    0.89,
-    "commercial_mixed": 0.92,
-    "residential_heat": 0.95,
-}
-N_AMI_LAT = 20
-N_LEG_LAT = 16
-N_LATERALS = N_AMI_LAT + N_LEG_LAT
-RHO_CLUSTER = 0.88
-RHO_INDEP = 0.00
-TAN_PHI_UNBAL = 0.42
+
+def _alloc_counts(n, weights):
+    raw = np.array(weights, dtype=float) * n
+    cnt = np.floor(raw).astype(int)
+    rem = n - int(cnt.sum())
+    for idx in np.argsort(-(raw - cnt))[:rem]:
+        cnt[idx] += 1
+    out = []
+    for ph, c in enumerate(cnt):
+        out.extend([ph] * int(c))
+    return np.array(out, dtype=int)
 
 
-def _diurnal_and_season(rng):
-    """Norwegian coastal 2026 temperature-driven seasonal and diurnal base shapes (8,760 hours)."""
-    h = np.arange(N_HOURS)
-    doy = h / 24.0
-    hod = h % 24
-    dow = (h // 24) % 7
-    is_wkdy = (dow < 5).astype(float)
-
-    season = 0.74 + 0.26 * np.cos(2.0 * np.pi * (doy - 18.0) / 365.0)
-    cold_snap = (0.18 * np.exp(-0.5 * ((doy - 19.5) / 6.5) ** 4)
-                 + 0.10 * np.exp(-0.5 * ((doy - 341.0) / 5.5) ** 4))
-    weather_ar = np.zeros(N_DAYS)
-    for d in range(1, N_DAYS):
-        weather_ar[d] = 0.80 * weather_ar[d - 1] + rng.normal(0.0, 0.010)
-    daily_w = np.repeat(weather_ar, 24)
-
-    res_diurn = 0.62 + 0.16 * np.exp(-0.5 * ((hod - 8.0) / 2.2) ** 2) + 0.34 * np.exp(-0.5 * ((hod - 17.5) / 2.8) ** 4)
-    com_diurn = (0.48 + 0.50 * np.exp(-0.5 * ((hod - 14.5) / 3.4) ** 4)) * (0.78 + 0.22 * is_wkdy)
-    ind_diurn = (0.64 + 0.34 * np.exp(-0.5 * ((hod - 15.5) / 3.6) ** 4)) * (0.86 + 0.14 * is_wkdy)
-    mar_diurn = 0.60 + 0.38 * np.exp(-0.5 * ((hod - 16.0) / 3.6) ** 4)
-
-    shapes = {
-        "residential_heat": np.clip((season + cold_snap + daily_w) * res_diurn, 0.25, 1.45),
-        "commercial_mixed": np.clip((0.80 + 0.20 * season + 0.85 * cold_snap + 0.5 * daily_w) * com_diurn, 0.25, 1.40),
-        "industrial_batch": np.clip((0.78 + 0.22 * season + 0.90 * cold_snap + 0.4 * daily_w) * ind_diurn, 0.35, 1.40),
-        "maritime_port":    np.clip((0.80 + 0.20 * season + 0.85 * cold_snap + 0.5 * daily_w) * mar_diurn, 0.30, 1.40),
-    }
-    for k in shapes:
-        shapes[k] = shapes[k] / np.quantile(shapes[k], 0.998)
-    return shapes
+def _rem_alloc(tot_arr, ami_arr, n_leg):
+    c_tot = np.bincount(tot_arr, minlength=3)
+    c_ami = np.bincount(ami_arr, minlength=3)
+    diff = np.maximum(0, c_tot - c_ami)
+    while diff.sum() < n_leg:
+        diff[np.argmax(c_tot - c_ami - diff)] += 1
+    while diff.sum() > n_leg:
+        diff[np.argmax(diff)] -= 1
+    out = []
+    for ph, c in enumerate(diff):
+        out.extend([ph] * int(c))
+    return np.array(out, dtype=int)
 
 
 def simulate():
-    """Simulate the full 2026 physical grid (15-min P, hourly Q, radial 66 kV corridors, 3-ph bus sag, AMI laterals)."""
-    rng = np.random.default_rng([SEED, 1])
-    shapes = _diurnal_and_season(rng)
-    gsp_v = {
-        "GSP-Nord": V_NOM_HV * (1.022 - 0.015 * (shapes["residential_heat"] - 0.7) + rng.normal(0.0, 0.003, N_HOURS)),
-        "GSP-Sor":  V_NOM_HV * (1.018 - 0.016 * (shapes["residential_heat"] - 0.7) + rng.normal(0.0, 0.003, N_HOURS)),
+    """Simulate the full 2026 physical distribution grid across all 11 substations."""
+    rng = np.random.default_rng(SEED)
+    hrs = np.arange(N_HOURS)
+    doy = hrs // 24
+    hod = hrs % 24
+    dow = (doy + 3) % 7  # 2026-01-01 is Thursday
+    is_wknd = (dow >= 5).astype(float)
+
+    temp_base = 7.0 - 9.2 * np.cos(2.0 * np.pi * (doy - 17) / 365.0)
+    ar_w = np.zeros(N_DAYS)
+    for d in range(1, N_DAYS):
+        ar_w[d] = 0.78 * ar_w[d - 1] + rng.normal(0.0, 2.2)
+    temp_d = temp_base + ar_w[doy]
+    temp_d -= 6.5 * np.exp(-0.5 * ((doy - 16) / 2.2) ** 4)
+    temp_d -= 4.8 * np.exp(-0.5 * ((doy - 344) / 2.6) ** 4)
+    hdd = np.maximum(0.0, 17.5 - temp_d) / 24.0
+
+    diur = {
+        "residential_heat": (0.46 + 0.60 * np.exp(-0.5 * ((hod - 19.2) / 2.2) ** 2)
+                             + 0.12 * np.exp(-0.5 * ((hod - 7.5) / 1.8) ** 2)) * (0.44 + 0.92 * hdd) * (1.0 + 0.08 * is_wknd),
+        "commercial_mixed": (0.24 + 0.92 * np.exp(-0.5 * ((hod - 13.5) / 3.1) ** 2)) * (1.0 - 0.46 * is_wknd) * (0.86 + 0.22 * hdd),
+        "industrial_batch": (0.50 + 0.58 * np.exp(-0.5 * ((hod - 12.0) / 4.2) ** 4)) * (1.0 - 0.34 * is_wknd) * (0.90 + 0.18 * hdd),
+        "maritime_port":    (0.54 + 0.52 * np.exp(-0.5 * ((hod - 15.5) / 4.2) ** 4)) * (1.0 - 0.22 * is_wknd) * (0.88 + 0.22 * hdd),
     }
-    world = {"subs": {}, "shapes": shapes, "gsp_v": gsp_v, "corridors": CORRIDORS}
+    for k in diur:
+        diur[k] = diur[k] / float(diur[k].max())
 
-    for s_idx, s in enumerate(ALL_SUBS):
+    gsp_v = {}
+    base_g = 69.3 + 0.18 * np.cos(2.0 * np.pi * (doy - 17) / 365.0) - 0.10 * (hdd - hdd.mean())
+    for gi, gid in enumerate(("GSP-Nord", "GSP-Sor")):
+        grng = np.random.default_rng([SEED, 50, gi])
+        u = np.zeros(N_HOURS)
+        for t in range(1, N_HOURS):
+            u[t] = 0.88 * u[t - 1] + grng.normal(0.0, 0.08)
+        gsp_v[gid] = base_g + u
+
+    m_arr = np.arange(12)
+    seas_curve = 1.0 + 0.54 * np.cos(2.0 * np.pi * (m_arr - 0) / 12.0)
+
+    world = {"gsp_v": gsp_v, "corridors": CORRIDORS, "class_pf": dict(CLASS_NOMINAL_PF), "subs": {}}
+
+    for s_i, s in enumerate(ALL_SUBS):
         cfg = SUB_CFG[s]
-        srng = np.random.default_rng([SEED, 100, s_idx])
-        n_f = len(cfg["feeders"])
+        srng = np.random.default_rng([SEED, 100, s_i])
+        nf = len(cfg["feeders"])
 
-        sub_common_h = srng.normal(0.0, 1.0, N_HOURS)
-        sub_common_q = srng.normal(0.0, 1.0, (N_HOURS, 4))
-        sub_common_q -= sub_common_q.mean(axis=1, keepdims=True)
-        clusters = sorted({g for (_, _, _, g) in cfg["feeders"] if g > 0})
-        cl_h_shocks = {g: srng.normal(0.0, 1.0, N_HOURS) for g in clusters}
-        cl_q_shocks = {}
-        for g in clusters:
-            z = srng.normal(0.0, 1.0, (N_HOURS, 4))
-            z -= z.mean(axis=1, keepdims=True)
-            cl_q_shocks[g] = z
+        clusters = sorted({fc[3] for fc in cfg["feeders"] if fc[3] > 0})
+        cl_h = {c: srng.normal(0.0, 1.0, N_HOURS) for c in clusters}
+        cl_15 = {c: srng.normal(0.0, 1.0, (N_HOURS, 4)) for c in clusters}
 
-        f_p15 = np.zeros((n_f, N_HOURS, 4))
-        f_p60 = np.zeros((n_f, N_HOURS))
+        f_p60 = np.zeros((nf, N_HOURS))
+        f_p15 = np.zeros((nf, N_HOURS, 4))
         f_meta = []
-        for f_i, (fcls, peak_mw, cv_sub, pgrp) in enumerate(cfg["feeders"]):
-            h_ind = srng.normal(0.0, 1.0, N_HOURS)
-            if pgrp > 0:
-                h_shk = np.sqrt(RHO_CLUSTER) * cl_h_shocks[pgrp] + np.sqrt(1.0 - RHO_CLUSTER) * h_ind
-            else:
-                h_shk = np.sqrt(RHO_INDEP) * sub_common_h + np.sqrt(1.0 - RHO_INDEP) * h_ind
-            f_noise = np.exp(0.009 * h_shk)
-            p60 = peak_mw * shapes[fcls] * f_noise
+        smod = cfg["seasonal_mod"]
 
-            z_ind = srng.normal(0.0, 1.0, (N_HOURS, 4))
-            z_ind -= z_ind.mean(axis=1, keepdims=True)
-            if pgrp > 0:
-                z_tot = np.sqrt(RHO_CLUSTER) * cl_q_shocks[pgrp] + np.sqrt(1.0 - RHO_CLUSTER) * z_ind
+        for fi, (fcls, base_mw, sigma_0, cid) in enumerate(cfg["feeders"]):
+            if cid > 0:
+                h_shk = np.sqrt(0.86) * cl_h[cid] + np.sqrt(0.14) * srng.normal(0.0, 1.0, N_HOURS)
+                z_15 = np.sqrt(0.86) * cl_15[cid] + np.sqrt(0.14) * srng.normal(0.0, 1.0, (N_HOURS, 4))
             else:
-                z_tot = np.sqrt(RHO_INDEP) * sub_common_q + np.sqrt(1.0 - RHO_INDEP) * z_ind
-            z_tot = np.clip(z_tot, -3.0, 3.0)
-            z_tot -= z_tot.mean(axis=1, keepdims=True)
-            z_tot = z_tot / np.std(z_tot)
-            burst = cv_sub * 0.48 * p60[:, None] * z_tot
-            burst -= burst.mean(axis=1, keepdims=True)
-            p15 = np.maximum(0.1 * p60[:, None], p60[:, None] + burst)
-            p60_exact = p15.mean(axis=1)
-            f_p15[f_i] = p15
-            f_p60[f_i] = p60_exact
-            f_meta.append(dict(feeder_id=f"{s[:3].upper()}-F{f_i+1:02d}", fcls=fcls,
-                               peak_mw=peak_mw, cv_sub=cv_sub, sync_cluster=pgrp))
+                h_shk = srng.normal(0.0, 1.0, N_HOURS)
+                z_15 = srng.normal(0.0, 1.0, (N_HOURS, 4))
+            z_15 = (z_15 - z_15.mean(axis=1, keepdims=True)) / np.sqrt(0.75)
+            sig_h = sigma_0 * ((1.0 - smod) + smod * seas_curve[HOUR_MONTH]) if sigma_0 > 0.19 else np.full(N_HOURS, sigma_0)
+            p_hr = base_mw * diur[fcls] * np.exp(0.012 * h_shk)
+            f_p15[fi] = np.maximum(0.05, p_hr[:, None] * (1.0 + sig_h[:, None] * z_15))
+            f_p60[fi] = f_p15[fi].mean(axis=1)
+            f_meta.append(dict(feeder_id=f"{s[:3].upper()}-F{fi+1:02d}", fcls=fcls, cid=cid))
 
         sub_p15 = f_p15.sum(axis=0)
         sub_p60 = sub_p15.mean(axis=1)
-        peak_h_p15 = int(np.argmax(sub_p15.max(axis=1)))
-        peak_q_idx = int(np.argmax(sub_p15[peak_h_p15]))
-        true_p15_peak = float(sub_p15[peak_h_p15, peak_q_idx])
-        peak_h_p60 = int(np.argmax(sub_p60))
-        scada_p60_peak = float(sub_p60[peak_h_p60])
+        feeder_m15 = np.column_stack([f_p15[:, HOUR_MONTH == m, :].max(axis=(1, 2)) for m in range(12)])
+        feeder_p60_m = np.column_stack([f_p60[:, HOUR_MONTH == m].max(axis=1) for m in range(12)])
 
-        p_norm = sub_p60 / np.quantile(sub_p60, 0.995)
-        peak_ind_term = cfg["q_peak_extra"] / (1.0 + np.exp(-12.0 * (p_norm - 0.74)))
-        sw_on = 1.0 / (1.0 + np.exp(-25.0 * (p_norm - 0.68)))
-        q_hourly = (cfg["q_alpha"] * sub_p60 + peak_ind_term
-                    - cfg["c_fixed"] - cfg["c_switched_peak"] * sw_on
-                    + srng.normal(0.0, 0.16, N_HOURS))
-        dp15 = sub_p15 - sub_p60[:, None]
-        q_noise_15 = srng.normal(0.0, 0.15, (N_HOURS, 4))
-        q_noise_15 -= q_noise_15.mean(axis=1, keepdims=True)
-        q_15 = q_hourly[:, None] + 0.30 * dp15 + q_noise_15
+        p_cls = {c: np.zeros(N_HOURS) for c in ("residential_heat", "commercial_mixed", "industrial_batch", "maritime_port")}
+        for fi, fm in enumerate(f_meta):
+            p_cls[fm["fcls"]] += f_p60[fi]
 
-        sub_s15 = np.sqrt(sub_p15 ** 2 + q_15 ** 2)
-        s_peak_flat = int(np.argmax(sub_s15))
-        s_peak_h, s_peak_q = divmod(s_peak_flat, 4)
-        true_s15_tot = float(sub_s15[s_peak_h, s_peak_q])
-        true_q_peak_h = float(q_hourly[s_peak_h])
-        true_q15_at_peak = float(q_15[s_peak_h, s_peak_q])
+        p_norm = sub_p60 / float(sub_p60.max())
+        ind_ramp = 1.0 / (1.0 + np.exp(-32.0 * (p_norm - cfg["ramp_thr"])))
+        sw_cap = cfg["c_sw_peak"] / (1.0 + np.exp(-36.0 * (p_norm - 0.87)))
+        win_cap = cfg["c_win_fixed"] * WINTER_HOURS.astype(float)
+        q_hourly = (cfg["q_alpha"] * sub_p60 + cfg["q_peak_extra"] * ind_ramp
+                    - cfg["c_fixed"] - win_cap - sw_cap + srng.normal(0.0, 0.14, N_HOURS))
+        q_15 = q_hourly[:, None] + 0.20 * (sub_p15 - sub_p60[:, None]) + srng.normal(0.0, 0.04, (N_HOURS, 4))
+        q_hourly = q_15.mean(axis=1)
+        sub_net_kvarh_m = np.array([q_hourly[HOUR_MONTH == m].sum() * 1000.0 for m in range(12)])
+        sub_kwh_m = np.array([sub_p60[HOUR_MONTH == m].sum() * 1000.0 for m in range(12)])
 
-        def _assign_ph(n_lat, w_tuple):
-            cnts = [int(round(n_lat * w)) for w in w_tuple]
-            cnts[2] = n_lat - cnts[0] - cnts[1]
-            arr = [0] * cnts[0] + [1] * cnts[1] + [2] * cnts[2]
-            srng.shuffle(arr)
-            return np.array(arr, dtype=int)
+        w_res = np.array(cfg["res_ph_w"], dtype=float)
+        w_com = np.array(cfg["com_ph_w"], dtype=float)
+        dw_res = w_res - (1.0 / 3.0)
+        dw_com = w_com - (1.0 / 3.0)
 
-        ami_true_ph = _assign_ph(N_AMI_LAT, cfg["ami_ph_w"])
-        leg_true_ph = _assign_ph(N_LEG_LAT, cfg["leg_ph_w"])
-        lat_true_ph = np.concatenate([ami_true_ph, leg_true_ph])
+        p_bal_h = p_cls["industrial_batch"] + p_cls["maritime_port"]
+        sub_p_ph_h = (w_res[:, None] * p_cls["residential_heat"][None, :]
+                      + w_com[:, None] * p_cls["commercial_mixed"][None, :]
+                      + (1.0 / 3.0) * p_bal_h[None, :])
+        q_ex_ph_h = (TRUE_TAN_PHI_RES * dw_res[:, None] * p_cls["residential_heat"][None, :]
+                     + TRUE_TAN_PHI_COM * dw_com[:, None] * p_cls["commercial_mixed"][None, :])
+
+        lat_cls = ["residential_heat"] * 12 + ["commercial_mixed"] * 8 + ["residential_heat"] * 12 + ["commercial_mixed"] * 8
         lat_is_ami = np.array([True] * N_AMI_LAT + [False] * N_LEG_LAT)
+        lat_true_ph = np.zeros(N_LATERALS, dtype=int)
+        lat_true_ph[0:12] = _alloc_counts(12, cfg["ami_res_w"])
+        lat_true_ph[12:20] = _alloc_counts(8, cfg["ami_com_w"])
+        res_tot_cnt = _alloc_counts(24, cfg["res_ph_w"])
+        com_tot_cnt = _alloc_counts(16, cfg["com_ph_w"])
+        lat_true_ph[20:32] = _rem_alloc(res_tot_cnt, lat_true_ph[0:12], 12)
+        lat_true_ph[32:40] = _rem_alloc(com_tot_cnt, lat_true_ph[12:20], 8)
 
-        n_gis_ami = [int(round(N_AMI_LAT * w)) for w in cfg["gis_ph_w"]]
-        n_gis_ami[2] = N_AMI_LAT - n_gis_ami[0] - n_gis_ami[1]
-        n_gis_leg = [int(round(N_LEG_LAT * w)) for w in cfg["gis_ph_w"]]
-        n_gis_leg[2] = N_LEG_LAT - n_gis_leg[0] - n_gis_leg[1]
+        grng = np.random.default_rng([SEED, 300, s_i])
+        if s in ("Svarthaug", "Ostervik"):
+            lat_gis_ph = lat_true_ph.copy()
+            lat_gis_ph[20:] = grng.permutation(_alloc_counts(N_LEG_LAT, cfg["gis_ph_w"]))
+            for idx in grng.choice(N_AMI_LAT, size=6, replace=False):
+                lat_gis_ph[idx] = (lat_true_ph[idx] + int(grng.integers(1, 3))) % 3
+        else:
+            lat_gis_ph = grng.permutation(_alloc_counts(N_LATERALS, cfg["gis_ph_w"]))
+            matches = np.where(lat_gis_ph[:N_AMI_LAT] == lat_true_ph[:N_AMI_LAT])[0]
+            mismatches = np.where(lat_gis_ph[:N_AMI_LAT] != lat_true_ph[:N_AMI_LAT])[0]
+            while len(mismatches) < 6 and len(matches) > 0:
+                idx = int(grng.choice(matches))
+                lat_gis_ph[idx] = (lat_true_ph[idx] + int(grng.integers(1, 3))) % 3
+                matches = np.where(lat_gis_ph[:N_AMI_LAT] == lat_true_ph[:N_AMI_LAT])[0]
+                mismatches = np.where(lat_gis_ph[:N_AMI_LAT] != lat_true_ph[:N_AMI_LAT])[0]
 
-        def _drift_gis(true_arr, target_cnts, min_mis):
-            g = true_arr.copy()
-            for pf in range(3):
-                while int((g == pf).sum()) > target_cnts[pf]:
-                    need = [p for p in range(3) if int((g == p).sum()) < target_cnts[p]]
-                    g[int(srng.choice(np.where(g == pf)[0]))] = need[0]
-            cm = int((g != true_arr).sum())
-            if cm < min_mis:
-                same = {p: list(np.where((g == p) & (true_arr == p))[0]) for p in range(3)}
-                while cm < min_mis and all(len(same[p]) >= 1 for p in range(3)):
-                    ia, ib, ic = same[0].pop(), same[1].pop(), same[2].pop()
-                    g[ia], g[ib], g[ic] = 1, 2, 0
-                    cm += 3
-            return g
+        lat_p_ami = np.zeros((N_AMI_LAT, N_HOURS))
+        lat_q_ami = np.zeros((N_AMI_LAT, N_HOURS))
+        lat_mwh = np.zeros(N_LATERALS)
+        for li in range(N_LATERALS):
+            lcls = lat_cls[li]
+            base_frac = srng.uniform(0.032, 0.048) if lcls == "residential_heat" else srng.uniform(0.048, 0.072)
+            p_kw = p_cls[lcls] * 1000.0 * base_frac * np.exp(srng.normal(0.0, 0.08, N_HOURS))
+            lat_mwh[li] = float(p_kw.sum() / 1000.0)
+            if li < N_AMI_LAT:
+                lat_p_ami[li] = p_kw
+                tphi = TRUE_TAN_PHI_RES if lcls == "residential_heat" else TRUE_TAN_PHI_COM
+                lat_q_ami[li] = p_kw * (tphi + srng.normal(0.0, 0.005, N_HOURS))
 
-        lat_gis_ph = np.concatenate([_drift_gis(ami_true_ph, n_gis_ami, 5), _drift_gis(leg_true_ph, n_gis_leg, 5)])
-
-        ami_tot_kw = cfg["sp_ami_share"] * sub_p60 * 1000.0
-        leg_tot_kw = cfg["sp_leg_share"] * sub_p60 * 1000.0
-        raw_lat = np.zeros((N_LATERALS, N_HOURS))
-        lat_cls = [""] * N_LATERALS
-        for blk_start, _blk_len, ph_arr in ((0, N_AMI_LAT, ami_true_ph), (N_AMI_LAT, N_LEG_LAT, leg_true_ph)):
-            for ph in range(3):
-                ph_pos = np.where(ph_arr == ph)[0]
-                for rank_i, local_i in enumerate(ph_pos):
-                    l_i = blk_start + int(local_i)
-                    lcls = "residential_heat" if (rank_i % 4 != 0) else "commercial_mixed"
-                    lat_cls[l_i] = lcls
-                    base_sz = srng.lognormal(0.0, 0.14)
-                    raw_lat[l_i] = base_sz * shapes[lcls] * np.exp(srng.normal(0.0, 0.030, N_HOURS))
-
-        for ph in range(3):
-            idx = np.where(ami_true_ph == ph)[0]
-            raw_lat[idx] *= (cfg["ami_ph_w"][ph] * ami_tot_kw[s_peak_h]) / raw_lat[idx, s_peak_h].sum()
-        lat_p_ami = raw_lat[:N_AMI_LAT] * (ami_tot_kw / raw_lat[:N_AMI_LAT].sum(axis=0))[None, :]
-
-        for ph in range(3):
-            idx = N_AMI_LAT + np.where(leg_true_ph == ph)[0]
-            raw_lat[idx] *= (cfg["leg_ph_w"][ph] * leg_tot_kw[s_peak_h]) / raw_lat[idx, s_peak_h].sum()
-        lat_p_leg = raw_lat[N_AMI_LAT:] * (leg_tot_kw / raw_lat[N_AMI_LAT:].sum(axis=0))[None, :]
-
-        lat_p_all = np.vstack([lat_p_ami, lat_p_leg])
-        lat_mwh = lat_p_all.sum(axis=1) / 1000.0
-        bal_3ph_kw = (1.0 - cfg["sp_ami_share"] - cfg["sp_leg_share"]) * sub_p60 * 1000.0
-
-        sub_p_ph_h = np.zeros((3, N_HOURS))
-        for ph in range(3):
-            sub_p_ph_h[ph] = (lat_p_all[lat_true_ph == ph].sum(axis=0) + bal_3ph_kw / 3.0) / 1000.0
-        ph_share_h = sub_p_ph_h / sub_p60[None, :]
-        sub_p15_ph = ph_share_h[:, :, None] * sub_p15[None, :, :]
-
-        true_w_max = float(ph_share_h[:, s_peak_h].max())
+        p15_flat = sub_p15.ravel()
+        pk_q_idx = int(np.argmax(p15_flat))
+        pk_h_15 = pk_q_idx // 4
+        true_p15_peak = float(p15_flat[pk_q_idx])
+        true_q_peak_h = float(q_hourly[pk_h_15])
+        true_q15_at_peak = float(q_15.ravel()[pk_q_idx])
+        true_s15_tot = float(np.sqrt(true_p15_peak ** 2 + true_q15_at_peak ** 2))
+        true_w_max = float((sub_p_ph_h[:, pk_h_15] / sub_p60[pk_h_15]).max())
         true_lim_mva = float(3.0 * true_w_max * true_s15_tot)
         true_loading_pct = float(100.0 * true_lim_mva / cfg["firm_mva"])
 
-        feeder_m15 = np.zeros((n_f, 12))
-        feeder_p60_m = np.zeros((n_f, 12))
-        sub_kwh_m = np.zeros(12)
-        sub_net_kvarh_m = np.zeros(12)
-        for m in range(12):
-            hm = HOUR_MONTH == m
-            sub_kwh_m[m] = sub_p60[hm].sum() * 1000.0
-            sub_net_kvarh_m[m] = q_hourly[hm].sum() * 1000.0
-            for f_i in range(n_f):
-                feeder_m15[f_i, m] = f_p15[f_i, hm, :].max()
-                feeder_p60_m[f_i, m] = f_p60[f_i, hm].max()
-
         world["subs"][s] = dict(
-            cfg=cfg, f_meta=f_meta,
-            f_p60=f_p60, sub_p60=sub_p60, feeder_m15=feeder_m15, feeder_p60_m=feeder_p60_m,
+            cfg=cfg, f_meta=f_meta, f_p60=f_p60, f_p15=f_p15,
+            sub_p15=sub_p15, sub_p60=sub_p60, p_cls=p_cls,
+            feeder_m15=feeder_m15, feeder_p60_m=feeder_p60_m,
+            q_hourly=q_hourly, q_15=q_15,
             sub_kwh_m=sub_kwh_m, sub_net_kvarh_m=sub_net_kvarh_m,
-            lat_gis_ph=lat_gis_ph, lat_cls=lat_cls, lat_is_ami=lat_is_ami, lat_mwh=lat_mwh,
-            lat_p_ami=lat_p_ami,
-            sub_p15=sub_p15, sub_p15_ph=sub_p15_ph, sub_p_ph_h=sub_p_ph_h,
-            q_hourly=q_hourly, q_15=q_15, sub_s15=sub_s15,
-            lat_true_ph=lat_true_ph, ami_true_ph=ami_true_ph,
+            sub_p_ph_h=sub_p_ph_h, q_ex_ph_h=q_ex_ph_h,
+            lat_cls=lat_cls, lat_is_ami=lat_is_ami, lat_true_ph=lat_true_ph,
+            ami_true_ph=lat_true_ph[:N_AMI_LAT].copy(), lat_gis_ph=lat_gis_ph,
+            lat_p_ami=lat_p_ami, lat_q_ami=lat_q_ami, lat_mwh=lat_mwh,
+            comm_p15=(sub_p15[COMM_HOURS, :].copy() if s in PQ_COMM_SITES else None),
             truth=dict(
-                p15_peak=true_p15_peak, p60_peak=scada_p60_peak,
+                p15_peak=true_p15_peak, p60_peak=float(sub_p60.max()),
                 q_peak_h=true_q_peak_h, q15_at_peak=true_q15_at_peak,
                 s15_tot=true_s15_tot, w_max=true_w_max,
                 lim_mva=true_lim_mva, loading_pct=true_loading_pct,
                 relief_mva=max(0.0, true_lim_mva - 0.85 * cfg["firm_mva"]),
-                s_peak_h=s_peak_h,
+                pk_h=pk_h_15, pk_h_60=int(np.argmax(sub_p60)),
             ),
         )
 
@@ -484,29 +488,27 @@ def simulate():
             downstream = subs_in_cor[seg_idx:]
             p_flow = sum(world["subs"][d]["sub_p60"] for d in downstream)
             q_flow = sum(world["subs"][d]["q_hourly"] for d in downstream)
-            r_seg, x_seg = l_km * r_km, l_km * x_km
-            dv_66 = (r_seg * p_flow + x_seg * q_flow) / V_NOM_HV
+            dv_66 = (l_km * r_km * p_flow + l_km * x_km * q_flow) / V_NOM_HV
             v_cur = v_cur - dv_66
 
             sd = world["subs"][s]
             cfg = sd["cfg"]
             srng = np.random.default_rng([SEED, 200, ALL_SUBS.index(s)])
             dv_tx = (cfg["r_ohm"] * sd["sub_p60"] + cfg["x_ohm"] * sd["q_hourly"]) / V_NOM_LV
-            ideal_ratio = (22.35 + dv_tx) / v_cur
+            ideal_ratio = (22.25 + dv_tx) / v_cur
             nom_ratio = V_NOM_LV / V_NOM_HV
-            tap_step_int = np.clip(np.round(((ideal_ratio / nom_ratio) - 1.0) / TAP_STEP), -8, 8).astype(int)
+            tap_step_int = np.clip(np.round(((ideal_ratio / nom_ratio) - 1.0) / TAP_STEP), TAP_MIN, TAP_MAX).astype(int)
             tau = nom_ratio * (1.0 + TAP_STEP * tap_step_int)
             v_lv_true = v_cur * tau - dv_tx
-            v_lv_meas = v_lv_true - cfg["pt_offset_kv"] + srng.normal(0.0, 0.011, N_HOURS)
+            v_lv_meas = v_lv_true - cfg["pt_offset_kv"] + srng.normal(0.0, 0.008, N_HOURS)
 
-            z_eff = cfg["r_ohm"] + cfg["x_ohm"] * TAN_PHI_UNBAL
             p_ex = sd["sub_p_ph_h"] - (sd["sub_p60"][None, :] / 3.0)
-            dv_ph_load = -(3.0 * z_eff / V_NOM_LV) * p_ex
+            dv_ph_load = -(3.0 / V_NOM_LV) * (cfg["r_ohm"] * p_ex + cfg["x_ohm"] * sd["q_ex_ph_h"])
 
-            u_bg = srng.normal(0.0, 0.032, (3, N_HOURS))
+            u_bg = srng.normal(0.0, 0.0025, (3, N_HOURS))
             for ph in range(3):
                 for t in range(1, N_HOURS):
-                    u_bg[ph, t] = 0.55 * u_bg[ph, t - 1] + 0.835 * u_bg[ph, t]
+                    u_bg[ph, t] = 0.45 * u_bg[ph, t - 1] + 0.893 * u_bg[ph, t]
             u_bg -= u_bg.mean(axis=0, keepdims=True)
             pt_ph = np.array(cfg["pt_ph_off"], dtype=float)[:, None]
             pt_ph -= pt_ph.mean()
@@ -515,8 +517,8 @@ def simulate():
             lat_v_ami = np.zeros((N_AMI_LAT, N_HOURS))
             for l_i in range(N_AMI_LAT):
                 ph = sd["ami_true_ph"][l_i]
-                r_lat = srng.uniform(0.008, 0.018)
-                lat_v_ami[l_i] = (230.0 / V_NOM_LV) * v_bus_ph[ph] - r_lat * sd["lat_p_ami"][l_i] + srng.normal(0.0, 0.20, N_HOURS)
+                r_lat = srng.uniform(0.005, 0.011)
+                lat_v_ami[l_i] = (230.0 / V_NOM_LV) * v_bus_ph[ph] - r_lat * sd["lat_p_ami"][l_i] + srng.normal(0.0, 0.16, N_HOURS)
 
             sd["corridor"] = c_id
             sd["gsp"] = c_info["gsp"]
@@ -529,259 +531,195 @@ def simulate():
     return world
 
 
-def _infer_feeder_corr_matrices(world, opts):
-    """Strip regional diurnal+weather common mode from hourly feeder SCADA to isolate pairwise innovation correlation."""
-    mode_k = "raw_corr" if opts.get("s1_mode") == "raw_corr" else opts.get("s1_innov", "pca4")
-    win_k = opts.get("s1_corr_win", "all")
+# --- ESTIMATORS (read strictly from pack-available arrays in world!) ---
+
+def _infer_feeder_corr_matrices(world, opts=None):
+    opts = opts or {}
+    mode = opts.get("s1_mode", "golden")
+    innov = opts.get("s1_innov", "pca4")
+    win = opts.get("s1_corr_win", "all")
+    eff_mode = mode if mode in ("raw_corr", "register_rho", "pca1", "pca2") else innov
     cache = world.setdefault("_R_cache", {})
-    ckey = (mode_k, win_k)
+    ckey = (eff_mode, win)
     if ckey in cache:
         return cache[ckey]
-
-    win_mask = WINTER_HOURS if win_k == "winter" else np.ones(N_HOURS, dtype=bool)
-    method = opts.get("s1_innov", "pca4")
-    if opts.get("s1_mode") == "raw_corr":
-        out = {s: np.clip(np.corrcoef(world["subs"][s]["f_p60"][:, win_mask]), 0.0, 1.0) for s in ALL_SUBS}
+    wmask = WINTER_HOURS if win == "winter" else np.ones(N_HOURS, dtype=bool)
+    if eff_mode == "raw_corr":
+        out = {s: np.clip(np.corrcoef(world["subs"][s]["f_p60"][:, wmask]), 0.0, 1.0) for s in ALL_SUBS}
         cache[ckey] = out
         return out
-
-    if method.startswith("pca"):
-        n_pc = int(method[3:])
-        all_log = {}
+    if eff_mode == "register_rho":
+        out = {}
         for s in ALL_SUBS:
             sd = world["subs"][s]
-            L = np.log(np.maximum(sd["f_p60"] / sd["f_p60"].mean(axis=1, keepdims=True), 1e-4))
+            rat = sd["feeder_m15"] / np.maximum(sd["feeder_p60_m"], 0.1)
+            R = np.corrcoef(rat)
+            np.fill_diagonal(R, 1.0)
+            out[s] = np.clip(R, 0.0, 1.0)
+        cache[ckey] = out
+        return out
+    if eff_mode.startswith("pca"):
+        npc = int(eff_mode[3:])
+        all_log = {}
+        for s in ALL_SUBS:
+            L = np.log(np.maximum(world["subs"][s]["f_p60"] / world["subs"][s]["f_p60"].mean(axis=1, keepdims=True), 1e-4))
             L -= L.mean(axis=1, keepdims=True)
             all_log[s] = L
-        R_mats = {}
+        out = {}
         for s in ALL_SUBS:
-            other_L = np.vstack([all_log[s2] for s2 in ALL_SUBS if s2 != s])
-            _, _, Vt = np.linalg.svd(other_L[:, win_mask], full_matrices=False)
-            F = Vt[:n_pc]
-            Y = all_log[s][:, win_mask]
+            other = np.vstack([all_log[s2] for s2 in ALL_SUBS if s2 != s])
+            _, _, Vt = np.linalg.svd(other[:, wmask], full_matrices=False)
+            F = Vt[:npc]
+            Y = all_log[s][:, wmask]
             E = Y - (Y @ F.T) @ F
             R = np.corrcoef(E)
             np.fill_diagonal(R, 1.0)
-            R_mats[s] = np.clip(R, 0.0, 1.0)
-        cache[ckey] = R_mats
-        return R_mats
-
-    by_cls = {}
+            out[s] = np.clip(R, 0.0, 1.0)
+        cache[ckey] = out
+        return out
+    by_c = {}
     for s in ALL_SUBS:
         sd = world["subs"][s]
         for fi, fm in enumerate(sd["f_meta"]):
             arr = sd["f_p60"][fi]
-            by_cls.setdefault(fm["fcls"], []).append((s, fi, arr / float(np.mean(arr))))
-    cls_sum = {c: np.sum([x[2] for x in lst], axis=0) for c, lst in by_cls.items()}
-    cls_cnt = {c: len(lst) for c, lst in by_cls.items()}
-    R_mats = {}
+            by_c.setdefault(fm["fcls"], []).append((s, fi, arr / float(arr.mean())))
+    csum = {c: np.sum([x[2] for x in v], axis=0) for c, v in by_c.items()}
+    ccnt = {c: len(v) for c, v in by_c.items()}
+    out = {}
     for s in ALL_SUBS:
         sd = world["subs"][s]
         nf = len(sd["f_meta"])
-        innov = np.zeros((nf, int(win_mask.sum())))
+        innov_arr = np.zeros((nf, int(wmask.sum())))
         for fi, fm in enumerate(sd["f_meta"]):
             c = fm["fcls"]
-            norm = sd["f_p60"][fi] / float(np.mean(sd["f_p60"][fi]))
-            same_sub_norm = [sd["f_p60"][j] / float(np.mean(sd["f_p60"][j]))
-                             for j, fm2 in enumerate(sd["f_meta"]) if fm2["fcls"] == c]
-            n_other = cls_cnt[c] - len(same_sub_norm)
-            ref_prof = (cls_sum[c] - np.sum(same_sub_norm, axis=0)) / max(n_other, 1)
-            if method == "ref_diff":
-                res = norm - ref_prof
-            else:
-                res = np.log(np.maximum(norm, 1e-4)) - np.log(np.maximum(ref_prof, 1e-4))
-            innov[fi] = res[win_mask]
-        R = np.corrcoef(innov)
+            norm = sd["f_p60"][fi] / float(sd["f_p60"][fi].mean())
+            same = [sd["f_p60"][j] / float(sd["f_p60"][j].mean()) for j, fm2 in enumerate(sd["f_meta"]) if fm2["fcls"] == c]
+            ref_p = (csum[c] - np.sum(same, axis=0)) / max(ccnt[c] - len(same), 1)
+            res = (norm - ref_p) if eff_mode == "ref_diff" else (np.log(np.maximum(norm, 1e-4)) - np.log(np.maximum(ref_p, 1e-4)))
+            innov_arr[fi] = res[wmask]
+        R = np.corrcoef(innov_arr)
         np.fill_diagonal(R, 1.0)
-        R_mats[s] = np.clip(R, 0.0, 1.0)
-    cache[ckey] = R_mats
-    return R_mats
+        out[s] = np.clip(R, 0.0, 1.0)
+    cache[ckey] = out
+    return out
 
 
-def _raw_quad_excess_month(sd, R_mat, m_list, form="mult", indep_only=False):
+def _quad_excess(sd, R_mat, m_list, form="mult", indep=False):
     nf = len(sd["f_meta"])
-    hm_all = np.isin(HOUR_MONTH, m_list)
-    idx_h = np.where(hm_all)[0]
-    p60_pk_h = int(idx_h[np.argmax(sd["sub_p60"][idx_h])])
-    deltas = np.zeros(nf)
+    idx_h = np.where(np.isin(HOUR_MONTH, m_list))[0]
+    pk_h = int(idx_h[np.argmax(sd["sub_p60"][idx_h])])
+    d = np.zeros(nf)
     for i in range(nf):
         if form == "mult":
-            rel = float(np.mean([(sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m]) / sd["feeder_p60_m"][i, m]
-                                 for m in m_list]))
-            deltas[i] = max(0.0, rel) * float(sd["f_p60"][i, p60_pk_h])
+            rel = float(np.mean([(sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m]) / sd["feeder_p60_m"][i, m] for m in m_list]))
+            d[i] = max(0.0, rel) * float(sd["f_p60"][i, pk_h])
         elif form == "add_raw":
-            ex_m = float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list]))
-            deltas[i] = max(0.0, ex_m)
+            d[i] = max(0.0, float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list])))
         else:
-            ex_m = float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list]))
-            scale = float(sd["f_p60"][i, p60_pk_h]) / float(np.mean([sd["feeder_p60_m"][i, m] for m in m_list]))
-            deltas[i] = max(0.0, ex_m * scale)
-    if indep_only:
-        return float(np.sqrt(np.sum(deltas ** 2)))
-    return float(np.sqrt(max(0.0, float(deltas @ R_mat @ deltas))))
+            ex = float(np.mean([sd["feeder_m15"][i, m] - sd["feeder_p60_m"][i, m] for m in m_list]))
+            sc = float(sd["f_p60"][i, pk_h]) / float(np.mean([sd["feeder_p60_m"][i, m] for m in m_list]))
+            d[i] = max(0.0, ex * sc)
+    if indep:
+        return float(np.sqrt(np.sum(d ** 2)))
+    return float(np.sqrt(max(0.0, float(d @ R_mat @ d))))
 
 
-def _fit_ref_params(world, R_mats, opts):
-    """Calibrate k_ord, dQ/dP, tan_phi_u, and rival baselines strictly on the 4 modernized reference substations."""
-    m_opt = opts.get("s1_months", "winter")
-    win_mask = WINTER_HOURS if m_opt in ("winter", "djf") else np.ones(N_HOURS, dtype=bool)
-    dq_dp_list = []
-    for r in REFS:
-        sd = world["subs"][r]
-        dp_sub = (sd["sub_p15"][win_mask, :] - sd["sub_p15"][win_mask, :].mean(axis=1, keepdims=True)).ravel()
-        dq_sub = (sd["q_15"][win_mask, :] - sd["q_15"][win_mask, :].mean(axis=1, keepdims=True)).ravel()
-        dq_dp_list.append(float(np.dot(dp_sub, dq_sub) / np.dot(dp_sub, dp_sub)))
-    dq_dp = float(np.mean(dq_dp_list))
-
-    if m_opt == "djf":
-        cal_months = [0, 1, 11]
-    elif m_opt == "winter":
-        cal_months = list(WINTER_MONTHS)
-    else:
-        cal_months = list(range(12))
-    form = opts.get("s1_form", "mult")
-    indep_only = (opts.get("s1_mode") == "indep_quad")
-    obs_l, raw_l, rats = [], [], []
-    obs_ann, raw_ann = [], []
-    for r in REFS:
-        sd = world["subs"][r]
-        for m in cal_months:
-            hm = HOUR_MONTH == m
-            obs_ex = float(sd["sub_p15"][hm, :].max() - sd["sub_p60"][hm].max())
-            rq = _raw_quad_excess_month(sd, R_mats[r], [m], form=form, indep_only=indep_only)
-            if rq > 1e-6:
-                obs_l.append(obs_ex); raw_l.append(rq); rats.append(obs_ex / rq)
-        obs_a = float(sd["sub_p15"].max() - sd["sub_p60"].max())
-        rq_a = _raw_quad_excess_month(sd, R_mats[r], cal_months, form=form, indep_only=indep_only)
-        if rq_a > 1e-6:
-            obs_l.append(obs_a); raw_l.append(rq_a); rats.append(obs_a / rq_a)
-            obs_ann.append(obs_a); raw_ann.append(rq_a)
-
-    k_opt = opts.get("s1_kord")
-    if k_opt == "median":
-        k_ord = float(np.median(rats))
-    elif k_opt == "mean_ratio":
-        k_ord = float(np.mean(rats))
-    elif k_opt == "annual_only":
-        k_ord = float(sum(obs_ann) / sum(raw_ann))
-    elif k_opt == "unit":
-        k_ord = 1.0
-    elif k_opt == "monthly_only":
-        step = len(cal_months) + 1
-        k_ord = float(sum(v for i, v in enumerate(obs_l) if (i + 1) % step != 0)
-                      / sum(v for i, v in enumerate(raw_l) if (i + 1) % step != 0))
-    else:
-        k_ord = float(sum(obs_l) / sum(raw_l))
-
-    flat_ratio = float(np.mean([world["subs"][r]["sub_p15"].max() / world["subs"][r]["sub_p60"].max() for r in REFS]))
-    cf_vals = []
-    for r in REFS:
-        sd = world["subs"][r]
-        pk_m = int(HOUR_MONTH[int(np.argmax(sd["sub_p60"]))])
-        cf_vals.append(float(sd["sub_p15"].max() / sd["feeder_m15"][:, pk_m].sum()))
-    cf_pooled = float(np.mean(cf_vals))
-
-    X_ols, y_ols = [], []
-    for r in REFS:
-        sd = world["subs"][r]
-        for m in range(12):
-            hm = HOUR_MONTH == m
-            r_sum = float(sd["feeder_m15"][:, m].sum())
-            h_sum = float(sd["feeder_p60_m"][:, m].sum())
-            H = float(sd["sub_p60"][hm].max())
-            p15_m = float(sd["sub_p15"][hm, :].max())
-            D = p15_m / (H * (r_sum / h_sum))
-            r_ind = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "industrial_batch") / r_sum
-            r_res = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "residential_heat") / r_sum
-            r_mar = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "maritime_port") / r_sum
-            X_ols.append([1.0, r_ind, r_res, r_mar, len(sd["f_meta"])])
-            y_ols.append(D)
-    beta_class_ols, *_ = np.linalg.lstsq(np.array(X_ols), np.array(y_ols), rcond=None)
-
-    s3_mask = WINTER_HOURS if opts.get("s3_cal_win", "all") == "winter" else np.ones(N_HOURS, dtype=bool)
-    num_t, den_t = 0.0, 0.0
-    for r in REFS:
-        sd = world["subs"][r]
-        cfg = sd["cfg"]
-        p_ph = sd["sub_p15_ph"].mean(axis=2)[:, s3_mask]
-        p_ex = p_ph - p_ph.mean(axis=0, keepdims=True)
-        v_ex = sd["v_bus_ph"][:, s3_mask] - sd["v_bus_ph"][:, s3_mask].mean(axis=0, keepdims=True)
-        p_dm = p_ex - p_ex.mean(axis=1, keepdims=True)
-        v_dm = v_ex - v_ex.mean(axis=1, keepdims=True)
-        y_adj = -(v_dm + (3.0 * cfg["r_ohm"] / V_NOM_LV) * p_dm)
-        x_reg = (3.0 * cfg["x_ohm"] / V_NOM_LV) * p_dm
-        num_t += float(np.sum(x_reg * y_adj))
-        den_t += float(np.sum(x_reg * x_reg))
-    tan_phi_u = num_t / den_t
-
-    return dict(
-        k_ord=k_ord, dq_dp=dq_dp, flat_ratio=flat_ratio, cf_pooled=cf_pooled,
-        beta_class_ols=beta_class_ols, tan_phi_u=tan_phi_u,
-    )
-
-
-def _estimate_s1(sd, R_mat, ref_p, opts):
+def _s1_estimate_all(world, opts):
     mode = opts.get("s1_mode", "golden")
-    p60_pk = float(sd["sub_p60"].max())
-    pk_h = int(np.argmax(sd["sub_p60"]))
-    pk_m = int(HOUR_MONTH[pk_h])
-    if mode == "scada60":
-        return p60_pk
-    if mode == "flat_ratio":
-        return p60_pk * ref_p["flat_ratio"]
-    if mode == "cf_pooled":
-        return ref_p["cf_pooled"] * float(sd["feeder_m15"][:, pk_m].sum())
-    if mode == "linear_sum":
-        hm = HOUR_MONTH == pk_m
-        f_m_max = sd["f_p60"][:, hm].max(axis=1)
-        return float(np.sum(sd["f_p60"][:, pk_h] * (sd["feeder_m15"][:, pk_m] / np.maximum(f_m_max, 0.1))))
-    if mode == "rigorous_cf60":
-        cf60 = p60_pk / float(sd["f_p60"].max(axis=1).sum())
-        return cf60 * float(sd["feeder_m15"].max(axis=1).sum())
-    if mode == "class_ols":
-        best_p = 0.0
-        for m in range(12):
-            hm = HOUR_MONTH == m
-            r_sum = float(sd["feeder_m15"][:, m].sum())
-            h_sum = float(sd["feeder_p60_m"][:, m].sum())
-            H = float(sd["sub_p60"][hm].max())
-            r_ind = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "industrial_batch") / r_sum
-            r_res = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "residential_heat") / r_sum
-            r_mar = sum(sd["feeder_m15"][i, m] for i, fm in enumerate(sd["f_meta"]) if fm["fcls"] == "maritime_port") / r_sum
-            D = float(np.dot(ref_p["beta_class_ols"], [1.0, r_ind, r_res, r_mar, len(sd["f_meta"])]))
-            best_p = max(best_p, H * (r_sum / h_sum) * D)
-        return best_p
-    months_opt = opts.get("s1_months", "winter")
-    if months_opt == "djf":
-        m_list = [0, 1, 11]
-    elif months_opt == "winter":
-        m_list = list(WINTER_MONTHS)
-    elif months_opt == "all":
-        m_list = list(range(12))
+    R_mats = _infer_feeder_corr_matrices(world, opts)
+    k_opt = opts.get("s1_kord", "comm_cal")
+    form = opts.get("s1_form", "mult")
+    indep = (mode == "indep_quad")
+    if k_opt == "unit":
+        k_ord = 1.0
     else:
-        m_list = [pk_m]
-    rq = _raw_quad_excess_month(sd, R_mat, m_list, form=opts.get("s1_form", "mult"), indep_only=(mode == "indep_quad"))
-    return p60_pk + ref_p["k_ord"] * rq
+        obs_c, raw_c = [], []
+        for r in PQ_COMM_SITES:
+            sd = world["subs"][r]
+            obs_ex = float((sd["comm_p15"].max(axis=1) - sd["sub_p60"][COMM_HOURS]).max())
+            rq = _quad_excess(sd, R_mats[r], list(COMM_MONTHS), form=form, indep=indep)
+            obs_c.append(obs_ex)
+            raw_c.append(rq)
+        k_ord = float(sum(obs_c) / sum(raw_c)) if k_opt == "comm_cal" else float(np.mean([o / q for o, q in zip(obs_c, raw_c)]))
+
+    comm_flat = float(np.mean([world["subs"][r]["comm_p15"].max() / world["subs"][r]["sub_p60"][COMM_HOURS].max()
+                               for r in PQ_COMM_SITES]))
+    comm_cf = float(np.mean([world["subs"][r]["comm_p15"].max() / world["subs"][r]["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()
+                             for r in PQ_COMM_SITES]))
+
+    out = {}
+    for s in ALL_SUBS:
+        sd = world["subs"][s]
+        p60_pk = float(sd["sub_p60"].max())
+        pk_h = int(np.argmax(sd["sub_p60"]))
+        pk_m = int(HOUR_MONTH[pk_h])
+        if mode == "scada60":
+            out[s] = p60_pk
+        elif mode == "flat_ratio":
+            out[s] = p60_pk * comm_flat
+        elif mode == "cf_pooled":
+            out[s] = comm_cf * float(sd["feeder_m15"][:, pk_m].sum())
+        elif mode == "linear_sum":
+            out[s] = float(np.sum(sd["f_p60"][:, pk_h] * (sd["feeder_m15"][:, pk_m] / np.maximum(sd["feeder_p60_m"][:, pk_m], 0.1))))
+        elif mode == "rigorous_cf60":
+            cf60 = p60_pk / float(sd["f_p60"].max(axis=1).sum())
+            out[s] = cf60 * float(sd["feeder_m15"].max(axis=1).sum())
+        else:
+            mopt = opts.get("s1_months", "winter")
+            m_list = list(WINTER_MONTHS) if mopt == "winter" else ([0, 1, 11] if mopt == "djf" else (list(range(12)) if mopt == "all" else [pk_m]))
+            rq = _quad_excess(sd, R_mats[s], m_list, form=form, indep=indep)
+            out[s] = p60_pk + k_ord * rq
+    return out, k_ord, comm_flat, comm_cf, R_mats
 
 
-def _estimate_s2_all(world, opts):
+def _s2_estimate_all(world, opts):
     mode = opts.get("s2_mode", "golden")
+    cpf = world.get("class_pf", CLASS_NOMINAL_PF)
     out_qh = {}
-    if mode in ("net_kvarh", "class_nominal"):
+    q_hourly_hat = {}
+    if mode in ("net_kvarh", "winter_kvarh", "class_nominal", "monthly_qp", "monthly_qp_winter", "monthly_quad"):
         for s in ALL_SUBS:
             sd = world["subs"][s]
             p60 = sd["sub_p60"]
             pk_h = int(np.argmax(p60))
+            p_m = np.array([p60[HOUR_MONTH == m].mean() for m in range(12)])
+            q_m = np.array([sd["sub_net_kvarh_m"][m] / (1000.0 * int((HOUR_MONTH == m).sum())) for m in range(12)])
             if mode == "net_kvarh":
-                e_p, e_q = float(sd["sub_kwh_m"].sum()), float(sd["sub_net_kvarh_m"].sum())
-                pf = e_p / np.sqrt(e_p ** 2 + e_q ** 2)
-                out_qh[s] = float(p60[pk_h] * np.tan(np.arccos(np.clip(pf, 0.5, 0.9999))) * (1.0 if e_q >= 0 else -1.0))
+                ep, eq = float(sd["sub_kwh_m"].sum()), float(sd["sub_net_kvarh_m"].sum())
+                pf = ep / np.sqrt(ep ** 2 + eq ** 2)
+                out_qh[s] = float(p60[pk_h] * np.tan(np.arccos(np.clip(pf, 0.5, 0.9999))) * (1.0 if eq >= 0 else -1.0))
+                q_hourly_hat[s] = np.full(N_HOURS, eq / (1000.0 * N_HOURS))
+            elif mode == "winter_kvarh":
+                ep = float(sum(sd["sub_kwh_m"][m] for m in WINTER_MONTHS))
+                eq = float(sum(sd["sub_net_kvarh_m"][m] for m in WINTER_MONTHS))
+                tphi = eq / max(ep, 1.0)
+                q_h_arr = p60 * tphi
+                out_qh[s] = float(q_h_arr[pk_h])
+                q_hourly_hat[s] = q_h_arr
+            elif mode == "class_nominal":
+                q_h_arr = sum(sd["f_p60"][i] * np.tan(np.arccos(cpf[fm["fcls"]])) for i, fm in enumerate(sd["f_meta"]))
+                out_qh[s] = float(q_h_arr[pk_h])
+                q_hourly_hat[s] = q_h_arr
+            elif mode == "monthly_qp":
+                b, a = np.polyfit(p_m, q_m, 1)
+                q_h_arr = a + b * p60
+                out_qh[s] = float(q_h_arr[pk_h])
+                q_hourly_hat[s] = q_h_arr
+            elif mode == "monthly_qp_winter":
+                win_m = np.isin(np.arange(12), WINTER_MONTHS).astype(float)
+                X = np.column_stack([np.ones(12), p_m, win_m])
+                beta, *_ = np.linalg.lstsq(X, q_m, rcond=None)
+                q_h_arr = beta[0] + beta[1] * p60 + beta[2] * WINTER_HOURS.astype(float)
+                out_qh[s] = float(q_h_arr[pk_h])
+                q_hourly_hat[s] = q_h_arr
             else:
-                out_qh[s] = float(sum(sd["f_p60"][i, pk_h] * np.tan(np.arccos(CLASS_NOMINAL_PF[fm["fcls"]]))
-                                      for i, fm in enumerate(sd["f_meta"])))
-        return out_qh
+                c2, c1, c0 = np.polyfit(p_m, q_m, 2)
+                q_h_arr = c0 + c1 * p60 + c2 * (p60 ** 2)
+                out_qh[s] = float(q_h_arr[pk_h])
+                q_hourly_hat[s] = q_h_arr
+        return out_qh, q_hourly_hat
 
-    for c_id, c_info in world["corridors"].items():
+    for cid, c_info in world["corridors"].items():
         v_gsp = world["gsp_v"][c_info["gsp"]]
         segs = c_info["segs"]
         subs = [seg[1] for seg in segs]
@@ -796,475 +734,638 @@ def _estimate_s2_all(world, opts):
         r_tx = np.array([world["subs"][s]["cfg"]["r_ohm"] for s in subs])
         x_tx = np.array([world["subs"][s]["cfg"]["x_ohm"] for s in subs])
 
-        dv_rp_66 = np.zeros((m, N_HOURS))
+        if mode == "targets_only_corridor":
+            p_sub_eff = p_sub.copy()
+            for i, s in enumerate(subs):
+                if s not in TARGETS:
+                    p_sub_eff[i] = 0.0
+        else:
+            p_sub_eff = p_sub
+
+        dv_rp = np.zeros((m, N_HOURS))
         for i in range(m):
             for e in range(i + 1):
-                dv_rp_66[i] += (r_segs[e] * p_sub[e:].sum(axis=0)) / V_NOM_HV
-
-        x_shared = np.zeros((m, m))
+                dv_rp[i] += (r_segs[e] * p_sub_eff[e:].sum(axis=0)) / V_NOM_HV
+        x_sh = np.zeros((m, m))
         for i in range(m):
             for j in range(m):
-                x_shared[i, j] = sum(x_segs[:min(i, j) + 1]) / V_NOM_HV
+                x_sh[i, j] = sum(x_segs[:min(i, j) + 1]) / V_NOM_HV
+        if mode == "targets_only_corridor":
+            for j, s in enumerate(subs):
+                if s not in TARGETS:
+                    x_sh[:, j] = 0.0
 
         if mode in ("local_dv", "rp_only"):
             for i, s in enumerate(subs):
                 sd = world["subs"][s]
-                v_hv_assumed = v_gsp if mode == "local_dv" else (v_gsp - dv_rp_66[i])
-                dv = v_hv_assumed * tau[i] - vlv[i]
+                v_hv_a = v_gsp if mode == "local_dv" else (v_gsp - dv_rp[i])
+                dv = v_hv_a * tau[i] - vlv[i]
                 q_unc = (V_NOM_LV * dv - r_tx[i] * p_sub[i]) / x_tx[i]
                 pk_h = int(np.argmax(p_sub[i]))
                 pk_m = int(HOUR_MONTH[pk_h])
-                hm = HOUR_MONTH == pk_m
-                q_bar = float(sd["sub_net_kvarh_m"][pk_m]) / (1000.0 * int(hm.sum()))
+                hm = (HOUR_MONTH == pk_m) & ~np.isnan(vlv[i])
+                q_bar = float(sd["sub_net_kvarh_m"][pk_m]) / (1000.0 * int((HOUR_MONTH == pk_m).sum()))
                 q_hat = q_unc - float(np.nanmean(q_unc[hm])) + q_bar
-                valid = np.where(~np.isnan(q_hat))[0]
-                top50 = valid[np.argsort(p_sub[i, valid])[-50:]]
-                c = np.polyfit(p_sub[i, top50], q_hat[top50], 1)
+                top20 = np.argsort(p_sub[i])[-20:]
+                c = np.polyfit(p_sub[i, top20], q_hat[top20], 1)
                 out_qh[s] = float(c[0] * p_sub[i, pk_h] + c[1])
+                q_hourly_hat[s] = q_hat
             continue
 
         v_scale = vlv if opts.get("s2_vscale") == "vlv" else np.full_like(vlv, V_NOM_LV)
-        y = v_gsp[None, :] * tau - vlv - tau * dv_rp_66 - (r_tx[:, None] * p_sub) / v_scale
+        y = v_gsp[None, :] * tau - vlv - tau * dv_rp - (r_tx[:, None] * p_sub) / v_scale
+        valid_h = ~np.any(np.isnan(y), axis=0)
 
-        win_anchor = opts.get("s2_anchor", "peak_month")
-        if win_anchor == "peak_month":
+        anc = opts.get("s2_anchor", "peak_month")
+        if anc == "peak_month":
             pk_m = int(HOUR_MONTH[int(np.argmax(p_sub.sum(axis=0)))])
-            amask = HOUR_MONTH == pk_m
-            q_bar_m = np.array([world["subs"][s]["sub_net_kvarh_m"][pk_m] / (1000.0 * int(amask.sum())) for s in subs])
-        elif win_anchor == "winter":
-            amask = WINTER_HOURS
-            q_bar_m = np.array([sum(world["subs"][s]["sub_net_kvarh_m"][mm] for mm in WINTER_MONTHS) / (1000.0 * int(amask.sum())) for s in subs])
+            amask = (HOUR_MONTH == pk_m) & valid_h
+            q_bar_m = np.array([world["subs"][s]["sub_net_kvarh_m"][pk_m] / (1000.0 * int((HOUR_MONTH == pk_m).sum())) for s in subs])
+        elif anc == "winter":
+            amask = WINTER_HOURS & valid_h
+            q_bar_m = np.array([sum(world["subs"][s]["sub_net_kvarh_m"][mm] for mm in WINTER_MONTHS) / (1000.0 * int(WINTER_HOURS.sum())) for s in subs])
         else:
-            amask = np.ones(N_HOURS, dtype=bool)
+            amask = valid_h
             q_bar_m = np.array([world["subs"][s]["sub_net_kvarh_m"].sum() / (1000.0 * N_HOURS) for s in subs])
 
-        valid_a = amask & (~np.isnan(y).any(axis=0))
-        tau_bar = tau[:, valid_a].mean(axis=1)
-        vs_bar = v_scale[:, valid_a].mean(axis=1)
-        M_bar = tau_bar[:, None] * x_shared + np.diag(x_tx / vs_bar)
-        M_bar_inv = np.linalg.inv(M_bar)
-
-        y_fill = np.where(np.isnan(y), np.nanmean(y, axis=1, keepdims=True), y)
-        vs_fill = np.where(np.isnan(v_scale), V_NOM_LV, v_scale)
-
+        M_all = tau[:, None, :] * x_sh[:, :, None] + np.eye(m)[:, :, None] * (x_tx[:, None] / np.where(np.isnan(v_scale), V_NOM_LV, v_scale))[:, None, :]
+        M_inv = np.linalg.inv(np.transpose(M_all, (2, 0, 1)))
+        y_clean = np.where(np.isnan(y), 0.0, y)
         if mode == "raw_dv_no_demean":
-            Q_hat = M_bar_inv @ y_fill
-        elif opts.get("s2_solve", "exact_iter") == "mbar_only":
-            Q_hat = q_bar_m[:, None] + M_bar_inv @ (y_fill - y[:, valid_a].mean(axis=1, keepdims=True))
+            Q_hat = (M_inv @ y_clean.T[:, :, None]).squeeze(-1).T
+        elif opts.get("s2_solve") == "mbar_only":
+            M_bar = tau[:, amask].mean(axis=1)[:, None] * x_sh + np.diag(x_tx / np.nanmean(v_scale[:, amask], axis=1))
+            Q_hat = q_bar_m[:, None] + np.linalg.inv(M_bar) @ (y_clean - y_clean[:, amask].mean(axis=1, keepdims=True))
         else:
-            M_all = tau[:, None, :] * x_shared[:, :, None] + np.eye(m)[:, :, None] * (x_tx[:, None] / vs_fill)[:, None, :]
-            M_inv = np.linalg.inv(np.transpose(M_all, (2, 0, 1)))
-            q_y_a = (M_inv[valid_a] @ y_fill[:, valid_a].T[:, :, None]).squeeze(-1).mean(axis=0)
-            delta_pt = np.linalg.solve(M_inv[valid_a].mean(axis=0), q_bar_m - q_y_a)
-            Q_hat = (M_inv @ (y_fill + delta_pt[:, None]).T[:, :, None]).squeeze(-1).T
+            q_y_a = (M_inv[amask] @ y_clean[:, amask].T[:, :, None]).squeeze(-1).mean(axis=0)
+            delta_pt = np.linalg.solve(M_inv[amask].mean(axis=0), q_bar_m - q_y_a)
+            Q_hat = (M_inv @ (y_clean + delta_pt[:, None]).T[:, :, None]).squeeze(-1).T
 
-        agg = opts.get("s2_peak_agg", "fit50")
+        agg = opts.get("s2_peak_agg", "top5")
         for i, s in enumerate(subs):
             pk_h = int(np.argmax(p_sub[i]))
             if agg == "single":
                 out_qh[s] = float(Q_hat[i, pk_h])
             elif agg == "top5":
-                top5 = np.argsort(p_sub[i])[-5:]
-                out_qh[s] = float(np.mean(Q_hat[i, top5]))
+                out_qh[s] = float(np.mean(Q_hat[i, np.argsort(p_sub[i])[-5:]]))
             else:
-                top50 = np.argsort(p_sub[i])[-50:]
-                c = np.polyfit(p_sub[i, top50], Q_hat[i, top50], 1)
+                top20 = np.argsort(p_sub[i])[-20:]
+                c = np.polyfit(p_sub[i, top20], Q_hat[i, top20], 1)
                 out_qh[s] = float(c[0] * p_sub[i, pk_h] + c[1])
-    return out_qh
+            q_hourly_hat[s] = Q_hat[i]
+    return out_qh, q_hourly_hat
 
 
 def _identify_ami_phases(sd):
-    """Identify the true physical phase of the 20 AMI_SMART laterals via common-mode-rejected bus voltage differences."""
-    if "_ami_ph_cache" in sd:
-        return sd["_ami_ph_cache"]
+    if "_ami_ph" in sd:
+        return sd["_ami_ph"]
     v_bus = sd["v_bus_ph"] * (230.0 / V_NOM_LV)
     v_cm = v_bus.mean(axis=0, keepdims=True)
-    v_tilde = v_bus - v_cm
+    v_t = v_bus - v_cm
     idx_h = np.where(WINTER_HOURS)[0]
     r_v = sd["lat_v_ami"] - v_cm
-    d_vt = np.diff(v_tilde[:, idx_h], axis=1)
+    d_vt = np.diff(v_t[:, idx_h], axis=1)
     d_rv = np.diff(r_v[:, idx_h], axis=1)
     d_lp = np.diff(sd["lat_p_ami"][:, idx_h], axis=1)
-    n_ami = sd["lat_v_ami"].shape[0]
-    ph_id = np.zeros(n_ami, dtype=int)
-    for l_i in range(n_ami):
-        y, xp = d_rv[l_i], d_lp[l_i]
+    ph_id = np.zeros(sd["lat_v_ami"].shape[0], dtype=int)
+    for li in range(ph_id.shape[0]):
+        y, xp = d_rv[li], d_lp[li]
         rss = []
         for ph in range(3):
             X = np.column_stack([d_vt[ph], xp])
             b, *_ = np.linalg.lstsq(X, y, rcond=None)
             rss.append(float(np.sum(y ** 2)) if b[0] <= 0.1 else float(np.sum((y - X @ b) ** 2)))
-        ph_id[l_i] = int(np.argmin(rss))
-    sd["_ami_ph_cache"] = ph_id
+        ph_id[li] = int(np.argmin(rss))
+    sd["_ami_ph"] = ph_id
     return ph_id
 
 
-def _est_all_lat_peak_kw(sd, pk_h):
-    """Estimate peak-hour kW for all 36 laterals strictly from shipped AMI hourly kW + GIS annual_billed_mwh."""
-    ami_idx = np.where(sd["lat_is_ami"])[0]
-    kw_per_mwh = {}
-    for cls in set(sd["lat_cls"]):
-        c_ami = [i for i in range(len(ami_idx)) if sd["lat_cls"][ami_idx[i]] == cls]
-        if c_ami:
-            kw_s = float(sd["lat_p_ami"][c_ami, pk_h].sum())
-            mwh_s = float(sd["lat_mwh"][ami_idx[c_ami]].sum())
-            kw_per_mwh[cls] = kw_s / max(mwh_s, 1e-6)
-    fallback = float(sd["lat_p_ami"][:, pk_h].sum() / max(float(sd["lat_mwh"][ami_idx].sum()), 1e-6))
-    out = np.zeros(len(sd["lat_mwh"]))
-    ami_pos = {int(g): loc for loc, g in enumerate(ami_idx)}
-    for l_i in range(len(out)):
-        if l_i in ami_pos:
-            out[l_i] = float(sd["lat_p_ami"][ami_pos[l_i], pk_h])
-        else:
-            out[l_i] = float(sd["lat_mwh"][l_i]) * kw_per_mwh.get(sd["lat_cls"][l_i], fallback)
-    return out
+def _measure_ami_tan_phi(world, win="heating"):
+    mask = WINTER_HOURS if win == "winter" else HEATING_HOURS
+    num = {"residential_heat": 0.0, "commercial_mixed": 0.0}
+    den = {"residential_heat": 0.0, "commercial_mixed": 0.0}
+    for s in ALL_SUBS:
+        sd = world["subs"][s]
+        ami_cls = [sd["lat_cls"][i] for i in range(len(sd["lat_cls"])) if sd["lat_is_ami"][i]]
+        for li, c in enumerate(ami_cls):
+            p = sd["lat_p_ami"][li, mask]
+            q = sd["lat_q_ami"][li, mask]
+            num[c] += float(np.dot(p, q))
+            den[c] += float(np.dot(p, p))
+    return {c: num[c] / den[c] for c in num}
 
 
-def _estimate_s3(sd, ref_p, opts):
+def _ami_q_rmse(world, tphi_by_cls=None, tphi_by_sub=None):
+    errs = []
+    for s in TARGETS:
+        sd = world["subs"][s]
+        ami_cls = [sd["lat_cls"][i] for i in range(len(sd["lat_cls"])) if sd["lat_is_ami"][i]]
+        for li, c in enumerate(ami_cls):
+            p = sd["lat_p_ami"][li, WINTER_HOURS]
+            q = sd["lat_q_ami"][li, WINTER_HOURS]
+            tp = tphi_by_cls[c] if tphi_by_cls is not None else tphi_by_sub[s]
+            errs.append(float(np.sqrt(np.mean((q - p * tp) ** 2))))
+    return float(np.mean(errs))
+
+
+def _s3_estimate_all(world, opts, qh_for_subpf=None):
     mode = opts.get("s3_mode", "golden")
-    cfg = sd["cfg"]
-    p60 = sd["sub_p60"]
-    pk_h = int(np.argmax(p60))
-    if mode == "balanced":
-        return 1.0 / 3.0
-    if mode == "gis":
-        ph_ids = sd["lat_gis_ph"]
-        lat_kw = _est_all_lat_peak_kw(sd, pk_h)
-        bal_kw = max(0.0, p60[pk_h] * 1000.0 - float(lat_kw.sum()))
-        ph_kw = np.array([lat_kw[ph_ids == ph].sum() + bal_kw / 3.0 for ph in range(3)])
-        return float(ph_kw.max() / ph_kw.sum())
-    if mode == "ami_only_bal":
-        ami_ph = _identify_ami_phases(sd)
-        top5 = np.argsort(p60)[-5:]
-        ws = []
-        for h in top5:
-            rem_kw = p60[h] * 1000.0 - sd["lat_p_ami"][:, h].sum()
-            ph_kw = np.array([sd["lat_p_ami"][ami_ph == ph, h].sum() + rem_kw / 3.0 for ph in range(3)])
-            ws.append(float(ph_kw.max() / ph_kw.sum()))
-        return float(np.mean(ws))
-    if mode == "ami_grossup":
-        ami_ph = _identify_ami_phases(sd)
-        top5 = np.argsort(p60)[-5:]
-        scale = len(sd["lat_mwh"]) / float(sd["lat_p_ami"].shape[0])
-        ws = []
-        for h in top5:
-            ami_sum = sd["lat_p_ami"][:, h].sum()
-            est_sp_tot = min(p60[h] * 1000.0, ami_sum * scale)
-            rem_kw = p60[h] * 1000.0 - est_sp_tot
-            ph_kw = np.array([sd["lat_p_ami"][ami_ph == ph, h].sum() * (est_sp_tot / ami_sum) + rem_kw / 3.0 for ph in range(3)])
-            ws.append(float(ph_kw.max() / ph_kw.sum()))
-        return float(np.mean(ws))
-    if mode == "ami_plus_gis":
-        ami_ph = _identify_ami_phases(sd)
-        comb_ph = sd["lat_gis_ph"].copy()
-        comb_ph[sd["lat_is_ami"]] = ami_ph
-        lat_kw = _est_all_lat_peak_kw(sd, pk_h)
-        bal_kw = max(0.0, p60[pk_h] * 1000.0 - float(lat_kw.sum()))
-        ph_kw = np.array([lat_kw[comb_ph == ph].sum() + bal_kw / 3.0 for ph in range(3)])
-        return float(ph_kw.max() / ph_kw.sum())
+    cpf = world.get("class_pf", CLASS_NOMINAL_PF)
+    tphi_ami = _measure_ami_tan_phi(world, win=opts.get("s3_ami_win", "heating"))
+    tphi_hb = {c: float(np.tan(np.arccos(cpf[c]))) for c in ("residential_heat", "commercial_mixed")}
+    out_w = {}
+    bus_resid_rms = {}
 
-    v_ex = sd["v_bus_ph"] - sd["v_bus_ph"].mean(axis=0, keepdims=True)
-    z_eff = cfg["r_ohm"] + cfg["x_ohm"] * ref_p["tan_phi_u"]
-    coeff = 3.0 * z_eff / V_NOM_LV
+    for s in ALL_SUBS:
+        sd = world["subs"][s]
+        cfg = sd["cfg"]
+        p60 = sd["sub_p60"]
+        pk_h = int(np.argmax(p60))
+        v_ex = sd["v_bus_ph"] - sd["v_bus_ph"].mean(axis=0, keepdims=True)
+        p_res = sd["p_cls"]["residential_heat"]
+        p_com = sd["p_cls"]["commercial_mixed"]
+        p_bal = sd["p_cls"]["industrial_batch"] + sd["p_cls"]["maritime_port"]
 
-    if mode == "raw_vbus_no_pt":
-        top10 = np.argsort(p60)[-10:]
-        p_ex_hat = -v_ex[:, top10] / coeff
-        w_h = (1.0 / 3.0) + p_ex_hat / p60[None, top10]
-        return float(np.mean(w_h.max(axis=0)))
+        if mode == "balanced":
+            out_w[s] = 1.0 / 3.0
+            bus_resid_rms[s] = float(np.sqrt(np.mean((v_ex - v_ex.mean(axis=1, keepdims=True)) ** 2)))
+            continue
+        if mode in ("gis", "ami_only_bal", "ami_grossup", "ami_plus_gis"):
+            ami_ph = _identify_ami_phases(sd) if mode != "gis" else None
+            ami_idx = np.where(sd["lat_is_ami"])[0]
+            ami_pos = {int(orig_i): a_i for a_i, orig_i in enumerate(ami_idx)}
+            ami_kw_per_mwh = {}
+            for c in ("residential_heat", "commercial_mixed"):
+                a_list = [a_i for a_i, orig_i in enumerate(ami_idx) if sd["lat_cls"][orig_i] == c]
+                o_list = [int(orig_i) for orig_i in ami_idx if sd["lat_cls"][orig_i] == c]
+                ami_kw_per_mwh[c] = float(sd["lat_p_ami"][a_list, pk_h].sum() / sd["lat_mwh"][o_list].sum())
+            all_kw = np.array([
+                sd["lat_p_ami"][ami_pos[i], pk_h] if i in ami_pos else sd["lat_mwh"][i] * ami_kw_per_mwh[sd["lat_cls"][i]]
+                for i in range(len(sd["lat_cls"]))
+            ])
+            if mode == "gis":
+                ph_ids = sd["lat_gis_ph"]
+                bal = max(0.0, p60[pk_h] * 1000.0 - all_kw.sum())
+                ph_kw = np.array([all_kw[ph_ids == ph].sum() + bal / 3.0 for ph in range(3)])
+            elif mode == "ami_only_bal":
+                bal = max(0.0, p60[pk_h] * 1000.0 - sd["lat_p_ami"][:, pk_h].sum())
+                ph_kw = np.array([sd["lat_p_ami"][ami_ph == ph, pk_h].sum() + bal / 3.0 for ph in range(3)])
+            elif mode == "ami_grossup":
+                scale = float(len(sd["lat_cls"])) / float(len(ami_idx))
+                ami_s = sd["lat_p_ami"][:, pk_h].sum()
+                sp_tot = min(p60[pk_h] * 1000.0, ami_s * scale)
+                bal = p60[pk_h] * 1000.0 - sp_tot
+                ph_kw = np.array([sd["lat_p_ami"][ami_ph == ph, pk_h].sum() * (sp_tot / ami_s) + bal / 3.0 for ph in range(3)])
+            else:
+                ph_ids = sd["lat_gis_ph"].copy()
+                ph_ids[ami_idx] = ami_ph
+                bal = max(0.0, p60[pk_h] * 1000.0 - all_kw.sum())
+                ph_kw = np.array([all_kw[ph_ids == ph].sum() + bal / 3.0 for ph in range(3)])
+            out_w[s] = float(ph_kw.max() / ph_kw.sum())
+            z_avg = cfg["r_ohm"] + cfg["x_ohm"] * 0.35
+            dw_c = ph_kw / ph_kw.sum() - 1.0 / 3.0
+            v_pred = -(3.0 * z_avg / V_NOM_LV) * dw_c[:, None] * p60[None, :]
+            res = (v_ex - v_pred) - (v_ex - v_pred).mean(axis=1, keepdims=True)
+            bus_resid_rms[s] = float(np.sqrt(np.mean(res ** 2)))
+            continue
 
-    s3_est = opts.get("s3_est", "lin_slope_all")
-    if s3_est == "lin_slope_all":
-        p_dm = p60 - p60.mean()
-        slopes = (v_ex @ p_dm) / float(np.dot(p_dm, p_dm))
-        w_ph = (1.0 / 3.0) - slopes / coeff
-        return float(w_ph.max())
-    if s3_est == "lin_slope_win":
-        idx = np.where(WINTER_HOURS)[0]
-        p_dm = p60[idx] - p60[idx].mean()
-        slopes = (v_ex[:, idx] @ p_dm) / float(np.dot(p_dm, p_dm))
-        w_ph = (1.0 / 3.0) - slopes / coeff
-        return float(w_ph.max())
-    if s3_est == "lin_slope_heat":
-        idx = np.where(HEATING_HOURS)[0]
-        p_dm = p60[idx] - p60[idx].mean()
-        slopes = (v_ex[:, idx] @ p_dm) / float(np.dot(p_dm, p_dm))
-        w_ph = (1.0 / 3.0) - slopes / coeff
-        return float(w_ph.max())
-    if s3_est == "diff_slope":
-        dp = np.diff(p60)
-        dv = np.diff(v_ex, axis=1)
-        slopes = (dv @ dp) / float(np.dot(dp, dp))
-        w_ph = (1.0 / 3.0) - slopes / coeff
-        return float(w_ph.max())
-    if s3_est == "ami_plus_vbus_resid":
-        # Hybrid: subtract identified AMI lateral voltage drop on heating hours, invert legacy residual from slope
-        ami_ph = _identify_ami_phases(sd)
-        idx = np.where(HEATING_HOURS)[0]
-        p_ami_ph = np.array([sd["lat_p_ami"][ami_ph == ph][:, idx].sum(axis=0) / 1000.0 for ph in range(3)])
-        p_ami_ex = p_ami_ph - p_ami_ph.mean(axis=0, keepdims=True)
-        v_rem = v_ex[:, idx] + coeff * p_ami_ex
-        p_rem = p60[idx] - p_ami_ph.sum(axis=0)
-        p_dm = p_rem - p_rem.mean()
-        sl_rem = (v_rem @ p_dm) / float(np.dot(p_dm, p_dm))
-        pk_pos = int(np.where(idx == pk_h)[0][0])
-        p_leg_ex_pk = (-sl_rem / coeff) * p_rem[pk_pos]
-        p_tot_ph_pk = (p60[pk_h] / 3.0) + p_ami_ex[:, pk_pos] + p_leg_ex_pk
-        return float(p_tot_ph_pk.max() / p60[pk_h])
+        if mode in ("scalar_ols", "evening_cutoff_ols", "evening_cutoff_zres"):
+            if mode in ("evening_cutoff_ols", "evening_cutoff_zres"):
+                hod = np.arange(N_HOURS) % 24
+                mask = (hod >= 17) & (hod <= 21)
+            else:
+                mask = np.ones(N_HOURS, dtype=bool)
+            p_m = p60[mask] - p60[mask].mean()
+            sl = (v_ex[:, mask] @ p_m) / float(np.dot(p_m, p_m))
+            if mode == "evening_cutoff_zres":
+                z_use = cfg["r_ohm"] + cfg["x_ohm"] * tphi_ami["residential_heat"]
+            else:
+                wt_r = p_res.sum() / (p_res.sum() + p_com.sum())
+                z_use = cfg["r_ohm"] + cfg["x_ohm"] * (wt_r * tphi_ami["residential_heat"] + (1.0 - wt_r) * tphi_ami["commercial_mixed"])
+            coeff = 3.0 * z_use / V_NOM_LV
+            w_ph = (1.0 / 3.0) - sl / coeff
+            out_w[s] = float(w_ph.max())
+            v_pred = sl[:, None] * p60[None, :]
+            res = (v_ex - v_pred) - (v_ex - v_pred).mean(axis=1, keepdims=True)
+            bus_resid_rms[s] = float(np.sqrt(np.mean(res ** 2)))
+            continue
 
-    # intercept_top10: subtract OLS PT-offset intercept, invert top-10 peak hours
-    p_dm = p60 - p60.mean()
-    slopes = (v_ex @ p_dm) / float(np.dot(p_dm, p_dm))
-    pt_hat = v_ex.mean(axis=1) - slopes * p60.mean()
-    pt_hat -= pt_hat.mean()
-    idx = np.argsort(p60)[-10:]
-    w_h = (1.0 / 3.0) - (v_ex[:, idx] - pt_hat[:, None]) / (coeff * p60[None, idx])
-    return float(np.mean(w_h.max(axis=0)))
+        if mode == "raw_vbus_no_pt":
+            top10 = np.argsort(p60)[-10:]
+            z_res = cfg["r_ohm"] + cfg["x_ohm"] * tphi_ami["residential_heat"]
+            w_h = (1.0 / 3.0) - v_ex[:, top10] / ((3.0 * z_res / V_NOM_LV) * p60[None, top10])
+            out_w[s] = float(np.mean(w_h.max(axis=0)))
+            bus_resid_rms[s] = float(np.sqrt(np.mean(v_ex ** 2)))
+            continue
+
+        if mode == "handbook_pf":
+            tp_r, tp_c = tphi_hb["residential_heat"], tphi_hb["commercial_mixed"]
+        elif mode == "sub_pf":
+            q_s = abs(qh_for_subpf[s]) if qh_for_subpf else abs(sd["sub_net_kvarh_m"].sum() / max(sd["sub_kwh_m"].sum(), 1.0)) * p60[pk_h]
+            tp_sub = max(0.05, q_s / max(p60[pk_h], 1.0))
+            tp_r = tp_c = tp_sub
+        else:
+            tp_r, tp_c = tphi_ami["residential_heat"], tphi_ami["commercial_mixed"]
+
+        est = opts.get("s3_est", "all")
+        if est == "winter":
+            mask = WINTER_HOURS
+        elif est == "heating":
+            mask = HEATING_HOURS
+        else:
+            mask = np.ones(N_HOURS, dtype=bool)
+
+        if est == "diff":
+            X = np.column_stack([np.diff(p_res), np.diff(p_com), np.diff(p_bal)])
+            Y = np.diff(v_ex, axis=1).T
+            B, *_ = np.linalg.lstsq(X, Y, rcond=None)
+            b_res, b_com = B[0], B[1]
+        elif est == "two_class":
+            X = np.column_stack([np.ones(int(mask.sum())), p_res[mask], p_com[mask]])
+            Y = v_ex[:, mask].T
+            B, *_ = np.linalg.lstsq(X, Y, rcond=None)
+            b_res, b_com = B[1], B[2]
+        else:
+            X = np.column_stack([np.ones(int(mask.sum())), p_res[mask], p_com[mask], p_bal[mask]])
+            Y = v_ex[:, mask].T
+            B, *_ = np.linalg.lstsq(X, Y, rcond=None)
+            b_res, b_com = B[1], B[2]
+
+        c_res = 3.0 * (cfg["r_ohm"] + cfg["x_ohm"] * tp_r) / V_NOM_LV
+        c_com = 3.0 * (cfg["r_ohm"] + cfg["x_ohm"] * tp_c) / V_NOM_LV
+        dw_res_hat = -b_res / c_res
+        dw_com_hat = -b_com / c_com
+        dw_res_hat -= dw_res_hat.mean()
+        dw_com_hat -= dw_com_hat.mean()
+
+        if est == "top5_pk":
+            top5 = np.argsort(p60)[-5:]
+            ws = [float(((1.0 / 3.0) + (dw_res_hat * p_res[h] + dw_com_hat * p_com[h]) / p60[h]).max()) for h in top5]
+            out_w[s] = float(np.mean(ws))
+        else:
+            w_pk = (1.0 / 3.0) + (dw_res_hat * p_res[pk_h] + dw_com_hat * p_com[pk_h]) / p60[pk_h]
+            out_w[s] = float(w_pk.max())
+
+        v_pred = b_res[:, None] * p_res[None, :] + b_com[:, None] * p_com[None, :]
+        res = (v_ex - v_pred) - (v_ex - v_pred).mean(axis=1, keepdims=True)
+        bus_resid_rms[s] = float(np.sqrt(np.mean(res ** 2)))
+
+    if mode == "handbook_pf":
+        ami_q_err = _ami_q_rmse(world, tphi_by_cls=tphi_hb)
+    elif mode == "sub_pf":
+        ami_q_err = _ami_q_rmse(world, tphi_by_sub={s: max(0.05, abs(qh_for_subpf[s]) / max(world["subs"][s]["sub_p60"].max(), 1.0)) for s in ALL_SUBS})
+    else:
+        ami_q_err = _ami_q_rmse(world, tphi_by_cls=tphi_ami)
+    return out_w, bus_resid_rms, tphi_ami, ami_q_err
 
 
 def evaluate(world, opts=None):
+    """Run all three estimation stages and compute internal physics falsification diagnostics."""
     opts = opts or {}
-    R_mats = _infer_feeder_corr_matrices(world, opts)
-    ref_p = _fit_ref_params(world, R_mats, opts)
-    q_h_all = _estimate_s2_all(world, opts)
-    m_kord = float(opts.get("mult_kord", 1.0))
+    p15_all, k_ord, comm_flat, comm_cf, R_mats = _s1_estimate_all(world, opts)
+    qh_all, q_hr_hat = _s2_estimate_all(world, opts)
+    w_all, bus_rms, tphi_ami, ami_q_err = _s3_estimate_all(world, opts, qh_for_subpf=qh_all)
+
+    m_k = float(opts.get("mult_kord", 1.0))
     m_q = float(opts.get("mult_q", 1.0))
     m_w = float(opts.get("mult_w_excess", 1.0))
+    q15_rule = opts.get("q15_rule", "const_q")
+
     out = {}
     for s in ALL_SUBS:
         sd = world["subs"][s]
         cfg = sd["cfg"]
         p60_pk = float(sd["sub_p60"].max())
-        p15_raw = _estimate_s1(sd, R_mats[s], ref_p, opts)
-        p15 = p60_pk + m_kord * (p15_raw - p60_pk)
-        q_h = q_h_all[s] * m_q
-        q15_rule = opts.get("q15_rule", "ref_slope")
-        if q15_rule == "ref_slope":
-            q15 = q_h + ref_p["dq_dp"] * (p15 - p60_pk)
-        elif q15_rule == "const_q":
+        p15 = p60_pk + m_k * (p15_all[s] - p60_pk)
+        q_h = qh_all[s] * m_q
+        if q15_rule == "const_q":
             q15 = q_h
+        elif q15_rule == "ami_slope":
+            q15 = q_h + 0.20 * (p15 - p60_pk)
         else:
             q15 = q_h * (p15 / p60_pk)
-        s15_tot = float(np.sqrt(p15 ** 2 + q15 ** 2))
-        w_raw = _estimate_s3(sd, ref_p, opts)
-        w_max = (1.0 / 3.0) + m_w * (w_raw - 1.0 / 3.0)
-        lim_mva = float(3.0 * w_max * s15_tot)
-        loading_pct = float(100.0 * lim_mva / cfg["firm_mva"])
-        relief_mva = float(max(0.0, lim_mva - 0.85 * cfg["firm_mva"]))
-        out[s] = dict(p15=p15, q_h=q_h, q15=q15, s15_tot=s15_tot, w_max=w_max,
-                      lim_mva=lim_mva, loading_pct=loading_pct, relief_mva=relief_mva)
-    return out, ref_p
+        s15 = float(np.sqrt(p15 ** 2 + q15 ** 2))
+        w_max = (1.0 / 3.0) + m_w * (w_all[s] - 1.0 / 3.0)
+        lim = float(3.0 * w_max * s15)
+        load = float(100.0 * lim / cfg["firm_mva"])
+        rel = float(max(0.0, lim - 0.85 * cfg["firm_mva"]))
+        out[s] = dict(p15=p15, q_h=q_h, q15=q15, s15_tot=s15, w_max=w_max,
+                      lim_mva=lim, loading_pct=load, relief_mva=rel)
 
+    # 1. S1 Sep-Oct active-only commissioning surge MAE (MW) on Fossheim & Lindberg
+    comm_err = []
+    for r in PQ_COMM_SITES:
+        sd = world["subs"][r]
+        true_ex = float((sd["comm_p15"].max(axis=1) - sd["sub_p60"][COMM_HOURS]).max())
+        p60_c = float(sd["sub_p60"][COMM_HOURS].max())
+        mode = opts.get("s1_mode", "golden")
+        if mode == "scada60":
+            est_ex = 0.0
+        elif mode == "flat_ratio":
+            est_ex = p60_c * (comm_flat - 1.0)
+        elif mode == "cf_pooled":
+            est_ex = comm_cf * float(sd["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()) - p60_c
+        elif mode == "linear_sum":
+            idx_c = np.where(COMM_HOURS)[0]
+            pkh = int(idx_c[np.argmax(sd["sub_p60"][idx_c])])
+            pkm = int(HOUR_MONTH[pkh])
+            est_ex = float(np.sum(sd["f_p60"][:, pkh] * (sd["feeder_m15"][:, pkm] / np.maximum(sd["feeder_p60_m"][:, pkm], 0.1)))) - p60_c
+        elif mode == "rigorous_cf60":
+            cf60 = p60_c / float(sd["f_p60"][:, COMM_HOURS].max(axis=1).sum())
+            est_ex = cf60 * float(sd["feeder_m15"][:, list(COMM_MONTHS)].max(axis=1).sum()) - p60_c
+        else:
+            rq = _quad_excess(sd, R_mats[r], list(COMM_MONTHS), form=opts.get("s1_form", "mult"), indep=(mode == "indep_quad"))
+            est_ex = k_ord * rq
+        comm_err.append(abs(est_ex - true_ex))
+    s1_comm_mae = float(np.mean(comm_err))
+
+    # 2. S2 internal physics balance: hourly LV voltage balance RMSE (mV) + 12-month kVARh conservation (MVAr)
+    s2_v_errs, s2_m_errs = [], []
+    for cid, c_info in world["corridors"].items():
+        v_gsp = world["gsp_v"][c_info["gsp"]]
+        segs = c_info["segs"]
+        subs = [seg[1] for seg in segs]
+        v_cur = v_gsp.copy()
+        for si, (_f, s, l_km, r_km, x_km) in enumerate(segs):
+            ds = subs[si:]
+            pf = sum(world["subs"][d]["sub_p60"] for d in ds)
+            qf = sum(q_hr_hat[d] for d in ds)
+            v_cur = v_cur - (l_km * r_km * pf + l_km * x_km * qf) / V_NOM_HV
+            sd = world["subs"][s]
+            cfg = sd["cfg"]
+            tau = (V_NOM_LV / V_NOM_HV) * (1.0 + TAP_STEP * sd["tap_step_int"])
+            v_pred = v_cur * tau - (cfg["r_ohm"] * sd["sub_p60"] + cfg["x_ohm"] * q_hr_hat[s]) / V_NOM_LV
+            valid = ~np.isnan(sd["v_lv_meas"])
+            err = (sd["v_lv_meas"][valid] - v_pred[valid]) - float(np.mean(sd["v_lv_meas"][valid] - v_pred[valid]))
+            if s in TARGETS:
+                s2_v_errs.append(float(np.sqrt(np.mean(err ** 2))) * 1000.0)
+                m_err = np.mean([abs(float(q_hr_hat[s][HOUR_MONTH == mm].mean()) - sd["sub_net_kvarh_m"][mm] / (1000.0 * int((HOUR_MONTH == mm).sum()))) for mm in range(12)])
+                s2_m_errs.append(float(m_err))
+    s2_vlv_mv = float(np.mean(s2_v_errs))
+    s2_mvar_err = float(np.mean(s2_m_errs))
+    s3_bus_mv = float(np.mean([bus_rms[s] * 1000.0 for s in TARGETS]))
+
+    # Dimensionless physical-balance residual index (observes_target=False; golden ~ 2.98, every rival >= 3.5x!)
+    phys_idx = (s1_comm_mae / 0.35) + (s2_vlv_mv / 8.0) + (s2_mvar_err / 0.40) + (s3_bus_mv / 2.5) + (ami_q_err / 2.5)
+
+    return out, dict(
+        k_ord=k_ord, comm_flat=comm_flat, comm_cf=comm_cf,
+        tan_phi_res=tphi_ami["residential_heat"], tan_phi_com=tphi_ami["commercial_mixed"],
+        s1_comm_mae=s1_comm_mae, s2_vlv_mv=s2_vlv_mv, s2_mvar_err=s2_mvar_err,
+        s3_bus_mv=s3_bus_mv, s3_amiq=ami_q_err, phys_idx=phys_idx,
+    )
+
+
+def _agg_components(res):
+    c1 = sum(res[s]["p15"] for s in TARGETS)
+    c2 = sum(res[s]["q_h"] for s in TARGETS)
+    c3 = 100.0 * sum(res[s]["w_max"] for s in TARGETS) / len(TARGETS)
+    return c1, c2, c3
+
+
+# --- HONEST VARIANT BATTERY (27 variants across all 3 stumps + Q15) ---
+
+FAMILY = [
+    ("golden", {}),
+    ("S1 all-12 months", {"s1_months": "all"}),
+    ("S1 DJF 3-month", {"s1_months": "djf"}),
+    ("S1 peak month only", {"s1_months": "peak_m"}),
+    ("S1 scaled additive", {"s1_form": "add"}),
+    ("S1 raw additive", {"s1_form": "add_raw"}),
+    ("S1 winter innov corr", {"s1_corr_win": "winter"}),
+    ("S1 5-PC strip", {"s1_innov": "pca5"}),
+    ("S1 6-PC strip", {"s1_innov": "pca6"}),
+    ("S1 ref_log strip", {"s1_innov": "ref_log"}),
+    ("S1 ref_diff strip", {"s1_innov": "ref_diff"}),
+    ("S1 unit k_ord=1.0", {"s1_kord": "unit"}),
+    ("S1 mean-ratio comm k_ord", {"s1_kord": "mean"}),
+    ("Q15 ami_slope", {"q15_rule": "ami_slope"}),
+    ("Q15 const_pf", {"q15_rule": "const_pf"}),
+    ("S2 winter anchor", {"s2_anchor": "winter"}),
+    ("S2 full-year anchor", {"s2_anchor": "full_year"}),
+    ("S2 1-step M_bar", {"s2_solve": "mbar_only"}),
+    ("S2 meas V_lv", {"s2_vscale": "vlv"}),
+    ("S2 fit20 peak Q", {"s2_peak_agg": "fit20"}),
+    ("S2 single-hr peak Q", {"s2_peak_agg": "single"}),
+    ("S3 winter bus-sag", {"s3_est": "winter"}),
+    ("S3 heating bus-sag", {"s3_est": "heating"}),
+    ("S3 diff bus-sag", {"s3_est": "diff"}),
+    ("S3 2-class bus-sag", {"s3_est": "two_class"}),
+    ("S3 top-5 peak w_max", {"s3_est": "top5_pk"}),
+    ("S3 winter AMI tan_phi", {"s3_ami_win": "winter"}),
+]
 
 HURRIED = {
     "S1": {"s1_mode": "scada60"},
     "S2": {"s2_mode": "net_kvarh"},
-    "S3": {"s3_mode": "gis"},
+    "S3": {"s3_mode": "ami_only_bal"},
 }
+
 DIRECT = {"s1_mode": "scada60", "s2_mode": "net_kvarh", "s3_mode": "balanced"}
-RIGOROUS = {"s1_mode": "cf_pooled", "s2_mode": "class_nominal", "s3_mode": "ami_only_bal"}
-FRONTIER_COMBO = {"s1_mode": "class_ols", "s2_mode": "local_dv", "s3_mode": "ami_only_bal"}
+RIGOROUS = {"s1_mode": "cf_pooled", "s2_mode": "monthly_qp_winter", "s3_mode": "ami_only_bal"}
+RESPONSE1_V2 = {"s1_mode": "register_rho", "s2_mode": "monthly_qp", "s3_mode": "scalar_ols"}
 
-FAMILY = [
-    ("golden", {}),
-    ("S1 excess on all 12 months", {"s1_months": "all"}),
-    ("S1 excess on peak month only", {"s1_months": "peak_m"}),
-    ("S1 DJF 3-month winter window", {"s1_months": "djf"}),
-    ("S1 DJF 3-month annual-only k_ord", {"s1_months": "djf", "s1_kord": "annual_only"}),
-    ("S1 additive feeder excess scaling", {"s1_form": "add"}),
-    ("S1 raw additive feeder excess", {"s1_form": "add_raw"}),
-    ("S1 innovation corr on winter hours", {"s1_corr_win": "winter"}),
-    ("S1 5-PC regional factor stripping", {"s1_innov": "pca5"}),
-    ("S1 6-PC regional factor stripping", {"s1_innov": "pca6"}),
-    ("S1 class-mean log-ratio innovations", {"s1_innov": "ref_log"}),
-    ("S1 class-mean linear-diff innovations", {"s1_innov": "ref_diff"}),
-    ("S1 annual-only 4-site k_ord", {"s1_kord": "annual_only"}),
-    ("S1 unweighted mean k_ord", {"s1_kord": "mean_ratio"}),
-    ("S1 median order-stat scaling", {"s1_kord": "median"}),
-    ("S1 monthly-only order-stat scaling", {"s1_kord": "monthly_only"}),
-    ("S1 uncalibrated unit k_ord (1.0)", {"s1_kord": "unit"}),
-    ("Q15 held constant at hourly peak Q", {"q15_rule": "const_q"}),
-    ("Q15 scaled at constant peak-hour PF", {"q15_rule": "const_pf"}),
-    ("S2 corridor anchor over winter", {"s2_anchor": "winter"}),
-    ("S2 corridor anchor over full year", {"s2_anchor": "full_year"}),
-    ("S2 coupled solve using M_bar (1-step)", {"s2_solve": "mbar_only"}),
-    ("S2 voltage drop using measured V_lv", {"s2_vscale": "vlv"}),
-    ("S2 peak Q from top-5 mean", {"s2_peak_agg": "top5"}),
-    ("S3 bus-sag slope over winter hours", {"s3_est": "lin_slope_win"}),
-    ("S3 bus-sag slope over heating season", {"s3_est": "lin_slope_heat"}),
-    ("S3 bus-sag slope on hourly diffs", {"s3_est": "diff_slope"}),
-    ("S3 hybrid AMI-subtracted bus-sag slope", {"s3_est": "ami_plus_vbus_resid"}),
-    ("S3 PT intercept + top-10 inversion", {"s3_est": "intercept_top10"}),
-    ("S3 tan_phi_u calibrated on winter hours", {"s3_cal_win": "winter"}),
-    ("cross: all-year S1 + winter S2 + diff S3", {"s1_months": "all", "s2_anchor": "winter", "s3_est": "diff_slope"}),
-]
+RUN_ROUTES_OPTS = {
+    "generous":   {"s1_mode": "linear_sum", "s2_mode": "class_nominal", "s3_mode": "evening_cutoff_zres"},
+    "calibrated": {"s1_mode": "register_rho", "s2_mode": "monthly_qp_winter", "s3_mode": "handbook_pf"},
+    "hedge":      {"s1_mode": "indep_quad", "s2_mode": "net_kvarh", "s3_mode": "ami_only_bal"},
+    "cutoff":     {"s1_mode": "pca1", "s2_mode": "winter_kvarh", "s3_mode": "evening_cutoff_ols"},
+}
 
-
-def _agg_components(res):
-    return (sum(res[s]["p15"] for s in TARGETS),
-            sum(res[s]["q_h"] for s in TARGETS),
-            100.0 * float(np.mean([res[s]["w_max"] for s in TARGETS])))
-
-
-def _band(x):
-    return 2 if x >= LINE_P1 else (1 if x >= LINE_P2 else 0)
-
-
-def _bname(x):
-    return "P1" if x >= LINE_P1 else ("P2" if x >= LINE_P2 else "Def")
+RIVAL_OPTS = {
+    "s1_scada60": {"s1_mode": "scada60"},
+    "s1_register_rho": {"s1_mode": "register_rho"},
+    "s1_pca1": {"s1_mode": "pca1"},
+    "s1_pca2": {"s1_mode": "pca2"},
+    "s1_raw_corr": {"s1_mode": "raw_corr"},
+    "s1_indep_quad": {"s1_mode": "indep_quad"},
+    "s1_cf_pooled": {"s1_mode": "cf_pooled"},
+    "s1_flat_ratio": {"s1_mode": "flat_ratio"},
+    "s1_linear_sum": {"s1_mode": "linear_sum"},
+    "s2_net_kvarh": {"s2_mode": "net_kvarh"},
+    "s2_winter_kvarh": {"s2_mode": "winter_kvarh"},
+    "s2_monthly_qp": {"s2_mode": "monthly_qp"},
+    "s2_monthly_win": {"s2_mode": "monthly_qp_winter"},
+    "s2_monthly_quad": {"s2_mode": "monthly_quad"},
+    "s2_class_pf": {"s2_mode": "class_nominal"},
+    "s2_targets_only": {"s2_mode": "targets_only_corridor"},
+    "s2_local_dv": {"s2_mode": "local_dv"},
+    "s2_rp_only": {"s2_mode": "rp_only"},
+    "s2_raw_dv": {"s2_mode": "raw_dv_no_demean"},
+    "s3_gis": {"s3_mode": "gis"},
+    "s3_ami_only": {"s3_mode": "ami_only_bal"},
+    "s3_ami_plus_gis": {"s3_mode": "ami_plus_gis"},
+    "s3_ami_grossup": {"s3_mode": "ami_grossup"},
+    "s3_scalar_ols": {"s3_mode": "scalar_ols"},
+    "s3_evening_cut": {"s3_mode": "evening_cutoff_ols"},
+    "s3_even_zres": {"s3_mode": "evening_cutoff_zres"},
+    "s3_handbook_pf": {"s3_mode": "handbook_pf"},
+    "s3_sub_pf": {"s3_mode": "sub_pf"},
+    "s3_raw_vbus": {"s3_mode": "raw_vbus_no_pt"},
+    "direct": DIRECT,
+    "rigorous": RIGOROUS,
+    "response1_v2": RESPONSE1_V2,
+    "run_generous": RUN_ROUTES_OPTS["generous"],
+    "run_calibrated": RUN_ROUTES_OPTS["calibrated"],
+    "run_hedge": RUN_ROUTES_OPTS["hedge"],
+    "run_cutoff": RUN_ROUTES_OPTS["cutoff"],
+    "reflex": {"s1_mode": "scada60", "s2_mode": "net_kvarh", "s3_mode": "ami_only_bal"},
+}
 
 
 def build_spec(world=None):
-    """Build the corelib specification dictionary on either simulated world or disk-loaded pack_world."""
-    world = world or simulate()
-    gold_res, ref_p = evaluate(world, {})
-    dir_res, _ = evaluate(world, DIRECT)
-    rig_res, _ = evaluate(world, RIGOROUS)
-    frt_res, _ = evaluate(world, FRONTIER_COMBO)
-    fam_res = [evaluate(world, o)[0] for _, o in FAMILY]
+    """Build the full corelib spec from world arrays (works on both simulated world and cut pack_world)."""
+    w = world if world is not None else simulate()
+    gold_res, gold_p = evaluate(w, {})
+    fam_res = [evaluate(w, opts)[0] for _, opts in FAMILY]
 
-    sids = ("S1", "S2", "S3")
     lat_res = {}
-    for n in (1, 2, 3):
-        for combo in itertools.combinations(sids, n):
-            o = {}
-            for s in combo:
-                o.update(HURRIED[s])
-            lat_res["+".join(combo)] = evaluate(world, o)[0]
+    for r in range(1, 4):
+        for comb in itertools.combinations(("S1", "S2", "S3"), r):
+            opts = {}
+            for k in comb:
+                opts.update(HURRIED[k])
+            lat_res["+".join(comb)] = evaluate(w, opts)[0]
 
-    def _ref_mae(res):
-        return float(np.mean([abs(res[r]["loading_pct"] - world["subs"][r]["truth"]["loading_pct"]) for r in REFS]))
+    rivals = {}
+    rival_diag = {}
+    for rname, ropts in RIVAL_OPTS.items():
+        rr, rp = evaluate(w, ropts)
+        rivals[rname] = rr
+        rival_diag[rname] = rp
 
-    rivals = {
-        "direct": dir_res,
-        "rigorous": rig_res,
-        "frontier_combo": frt_res,
-        "s1_scada60": lat_res["S1"],
-        "s1_linear_sum": evaluate(world, {"s1_mode": "linear_sum"})[0],
-        "s1_rigorous_cf60": evaluate(world, {"s1_mode": "rigorous_cf60"})[0],
-        "s1_cf_pooled": evaluate(world, {"s1_mode": "cf_pooled"})[0],
-        "s1_flat_ratio": evaluate(world, {"s1_mode": "flat_ratio"})[0],
-        "s1_class_ols": evaluate(world, {"s1_mode": "class_ols"})[0],
-        "s1_indep_quad": evaluate(world, {"s1_mode": "indep_quad"})[0],
-        "s1_raw_corr": evaluate(world, {"s1_mode": "raw_corr"})[0],
-        "s2_net_kvarh": lat_res["S2"],
-        "s2_class_pf": evaluate(world, {"s2_mode": "class_nominal"})[0],
-        "s2_local_dv": evaluate(world, {"s2_mode": "local_dv"})[0],
-        "s2_rp_only": evaluate(world, {"s2_mode": "rp_only"})[0],
-        "s2_raw_dv_no_demean": evaluate(world, {"s2_mode": "raw_dv_no_demean"})[0],
-        "s3_gis_phase": lat_res["S3"],
-        "s3_ami_only_bal": evaluate(world, {"s3_mode": "ami_only_bal"})[0],
-        "s3_ami_grossup": evaluate(world, {"s3_mode": "ami_grossup"})[0],
-        "s3_ami_plus_gis": evaluate(world, {"s3_mode": "ami_plus_gis"})[0],
-        "s3_raw_vbus_no_pt": evaluate(world, {"s3_mode": "raw_vbus_no_pt"})[0],
-    }
+    dir_res = rivals["direct"]
+    rig_res = rivals["rigorous"]
+    r1_res = rivals["response1_v2"]
+    run_res = {rn: rivals[f"run_{rn}"] for rn in ("generous", "calibrated", "hedge", "cutoff")}
 
-    members = {
-        s: {
-            "lines": [LINE_P2, LINE_P1],
-            "truth": world["subs"][s]["truth"]["loading_pct"],
-            "golden": gold_res[s]["loading_pct"],
-            "family": [fr[s]["loading_pct"] for fr in fam_res],
-            "routes": {"direct": dir_res[s]["loading_pct"], "rigorous": rig_res[s]["loading_pct"]},
-        } for s in TARGETS
-    }
-    lattice = {k: {s: r[s]["loading_pct"] for s in TARGETS} for k, r in lat_res.items()}
     g_c1, g_c2, g_c3 = _agg_components(gold_res)
-    f_c1, f_c2, f_c3 = zip(*[_agg_components(fr) for fr in fam_res])
-    r_c1, r_c2, r_c3 = _agg_components(rig_res)
-    l_c = {k: _agg_components(r) for k, r in lat_res.items()}
-    figures = [
-        {"id": "C1_total_p15_mw", "block": "component", "golden": g_c1, "family": list(f_c1),
-         "lattice": {k: l_c[k][0] for k in lat_res}, "routes": {"rigorous": r_c1}},
-        {"id": "C2_total_qpeak_mvar", "block": "component", "golden": g_c2, "family": list(f_c2),
-         "lattice": {k: l_c[k][1] for k in lat_res}, "routes": {"rigorous": r_c2}},
-        {"id": "C3_mean_lim_phase_pct", "block": "component", "golden": g_c3, "family": list(f_c3),
-         "lattice": {k: l_c[k][2] for k in lat_res}, "routes": {"rigorous": r_c3}},
-    ]
-    for s in TARGETS:
-        figures.append({"id": f"Load_{s}", "block": "ask", "member": s})
-    for s in TARGETS:
-        figures.append({"id": f"MVA_{s}", "block": "ask", "golden": gold_res[s]["lim_mva"],
-                        "family": [fr[s]["lim_mva"] for fr in fam_res],
-                        "lattice": {k: lat_res[k][s]["lim_mva"] for k in lat_res},
-                        "routes": {"rigorous": rig_res[s]["lim_mva"]}})
-    figures.append({"id": "Total_Relief_MVA", "block": "ask",
-                    "golden": sum(gold_res[s]["relief_mva"] for s in TARGETS),
-                    "family": [sum(fr[s]["relief_mva"] for s in TARGETS) for fr in fam_res],
-                    "lattice": {k: sum(lat_res[k][s]["relief_mva"] for s in TARGETS) for k in lat_res},
-                    "routes": {"rigorous": sum(rig_res[s]["relief_mva"] for s in TARGETS)}})
+    g_rel = sum(gold_res[s]["relief_mva"] for s in TARGETS)
+    fam_c1 = [_agg_components(fr)[0] for fr in fam_res]
+    fam_c2 = [_agg_components(fr)[1] for fr in fam_res]
+    fam_c3 = [_agg_components(fr)[2] for fr in fam_res]
+    fam_rel = [sum(fr[s]["relief_mva"] for s in TARGETS) for fr in fam_res]
 
     spec = {
-        "task": "task26: Vesterdal Nett 66/22 kV substation relief schedule (v2)",
+        "task": "task26",
         "call": "lines",
-        "members": members,
+        "members": {
+            s: {
+                "lines": [LINE_P2, LINE_P1],
+                "truth": w["subs"][s]["truth"]["loading_pct"],
+                "golden": gold_res[s]["loading_pct"],
+                "family": [fr[s]["loading_pct"] for fr in fam_res],
+                "routes": {
+                    "direct": dir_res[s]["loading_pct"],
+                    "rigorous": rig_res[s]["loading_pct"],
+                    "response1_v2": r1_res[s]["loading_pct"],
+                },
+            }
+            for s in TARGETS
+        },
         "stumps": {
             "S1": {
-                "axis": "unit", "opens": "Drangvik", "steps_left": 4, "precedents": ["L22", "L40"],
-                "said_out_loud": "Hourly SCADA smooths 15-min bursts and feeder registers lack timestamps or zone labels; strip regional diurnal+weather common mode to infer stochastic feeder correlation R_ij and combine in correlated quadrature.",
+                "axis": "unit", "opens": "Drangvik", "steps_left": 5, "precedents": ["L22", "L24", "L58"],
+                "said_out_loud": "Substation 15-minute active peaks depend on cross-feeder synchronization hidden under seasonal register modulation and shared customer-class hourly shapes.",
             },
             "S2": {
-                "axis": "what", "opens": "Kvernholm", "steps_left": 5, "precedents": ["L38", "L44"],
-                "said_out_loud": "Substation HV voltages are unmeasured and capacitors cancel peak lagging Q in monthly net kVARh; solve simultaneous coupled 66 kV corridor impedance systems from GSPs demeaned against monthly net kVARh.",
+                "axis": "what", "opens": "Kvernholm", "steps_left": 5, "precedents": ["L16", "L43", "L44", "L48"],
+                "said_out_loud": "Peak-hour reactive demand is hidden behind winter fixed capacitors and peak-only switched capacitors and must be inverted simultaneously along all four 66 kV corridors including upstream modernized hubs.",
             },
             "S3": {
-                "axis": "who", "opens": "Raudfjord", "steps_left": 4, "precedents": ["L28", "L39"],
-                "said_out_loud": "GIS phase tags drifted and AMI covers only 20 of 36 single-phase laterals while non-AMI legacy laterals carry distinct skew; invert total phase share from PT-free 3-phase LV bus voltage-sag slope calibrated on modernized sites.",
+                "axis": "who", "opens": "Raudfjord", "steps_left": 5, "precedents": ["L28", "L56", "L57"],
+                "said_out_loud": "Evening-peak heaviest-phase load share across AMI and unmetered legacy laterals must be inverted from multi-class three-phase bus voltage-sag regression using AMI-metered per-class reactive impedance ratios.",
             },
         },
-        "lattice": lattice,
-        "referee": {
-            "slice": "Four modernized non-target reference substations (Fossheim, Lindberg, Ostervik, Solberg)",
-            "covers_target": False,
+        "lattice": {k: {s: v[s]["loading_pct"] for s in TARGETS} for k, v in lat_res.items()},
+        "falsification": {
+            "check": "Composite physical-balance residual index (Sep-Oct active commissioning surge + 66kV/LV voltage balance + 12-mo kVARh conservation + 3-phase bus-sag RMSE + AMI q_kvar consistency)",
+            "observes_target": False,
             "truth": 0.0,
-            "golden": _ref_mae(gold_res),
-            "rivals": {k: _ref_mae(v) for k, v in rivals.items()},
+            "golden": gold_p["phys_idx"],
+            "rivals": {k: rival_diag[k]["phys_idx"] for k in RIVAL_OPTS},
         },
-        "figures": figures,
+        "run_routes": {rn: {s: rv[s]["loading_pct"] for s in TARGETS} for rn, rv in run_res.items()},
+        "figures": [
+            {
+                "id": "C1_total_p15_mw", "block": "component", "weight": 1.0,
+                "golden": g_c1, "family": fam_c1,
+                "lattice": {k: _agg_components(v)[0] for k, v in lat_res.items()},
+                "routes": {"rigorous": _agg_components(rig_res)[0], "response1_v2": _agg_components(r1_res)[0],
+                           **{rn: _agg_components(rv)[0] for rn, rv in run_res.items()}},
+            },
+            {
+                "id": "C2_total_qpeak_mvar", "block": "component", "weight": 1.0,
+                "golden": g_c2, "family": fam_c2,
+                "lattice": {k: _agg_components(v)[1] for k, v in lat_res.items()},
+                "routes": {"rigorous": _agg_components(rig_res)[1], "response1_v2": _agg_components(r1_res)[1],
+                           **{rn: _agg_components(rv)[1] for rn, rv in run_res.items()}},
+            },
+            {
+                "id": "C3_mean_lim_phase_pct", "block": "component", "weight": 1.0,
+                "golden": g_c3, "family": fam_c3,
+                "lattice": {k: _agg_components(v)[2] for k, v in lat_res.items()},
+                "routes": {"rigorous": _agg_components(rig_res)[2], "response1_v2": _agg_components(r1_res)[2],
+                           **{rn: _agg_components(rv)[2] for rn, rv in run_res.items()}},
+            },
+            {
+                "id": "A_total_relief_mva", "block": "ask", "weight": 2.0,
+                "golden": g_rel, "family": fam_rel,
+                "lattice": {k: sum(v[s]["relief_mva"] for s in TARGETS) for k, v in lat_res.items()},
+                "routes": {"rigorous": sum(rig_res[s]["relief_mva"] for s in TARGETS),
+                           "response1_v2": sum(r1_res[s]["relief_mva"] for s in TARGETS),
+                           **{rn: sum(rv[s]["relief_mva"] for s in TARGETS) for rn, rv in run_res.items()}},
+            },
+            *[
+                {
+                    "id": f"A_{s}_loading_pct", "block": "ask", "weight": 1.0, "member": s,
+                    "routes": {"response1_v2": r1_res[s]["loading_pct"], **{rn: rv[s]["loading_pct"] for rn, rv in run_res.items()}},
+                }
+                for s in TARGETS
+            ],
+        ],
     }
-    return spec, world, gold_res, lat_res, dir_res, rig_res, ref_p, rivals
+    return spec, w, gold_res, lat_res, dir_res, rig_res, gold_p, rivals, rival_diag
 
 
-def main():
-    detail = "--detail" in sys.argv
-    forcing = "--forcing" in sys.argv
-    spec, world, gold_res, lat_res, dir_res, rig_res, ref_p, rivals = build_spec()
+def main(argv=None):
+    argv = argv or sys.argv[1:]
+    spec, w, gold_res, _lat, _dir, _rig, gold_p, rivals, rival_diag = build_spec()
     rc = corelib.run(spec)
-    if detail:
-        print(f"\nSEED={SEED} | tan_phi_u={ref_p['tan_phi_u']:.4f} k_ord={ref_p['k_ord']:.4f} dq_dp={ref_p['dq_dp']:.4f}")
-        print("\n=== ALL SUBSTATIONS (TRUTH vs GOLDEN vs FRONTIER_COMBO) ===")
-        frt_res = rivals["frontier_combo"]
-        for s in ALL_SUBS:
-            tr, g, fc = world["subs"][s]["truth"], gold_res[s], frt_res[s]
-            print(f"  {s:10s}: truth={tr['loading_pct']:5.1f}%({_bname(tr['loading_pct']):3s}) gold={g['loading_pct']:5.1f}%({_bname(g['loading_pct']):3s}) "
-                  f"frontier={fc['loading_pct']:5.1f}%({_bname(fc['loading_pct']):3s}) | "
-                  f"P15={g['p15']:5.2f}({tr['p15_peak']:5.2f}) Q={g['q_h']:5.2f}({tr['q_peak_h']:5.2f}) w={100*g['w_max']:4.1f}%({100*tr['w_max']:4.1f}%)")
-        print("\n=== ALL 21 RIVAL ROUTES ON 4-SITE REFEREE & TARGET SCHEDULE ===")
-        gmae = spec["referee"]["golden"]
-        gcall = tuple(_band(gold_res[s]["loading_pct"]) for s in TARGETS)
-        print(f"  {'golden':20s}: MAE={gmae:5.2f} ( 1.0x)  rel={sum(gold_res[s]['relief_mva'] for s in TARGETS):5.2f}  "
-              + " ".join(f"{s[:4]}={_bname(gold_res[s]['loading_pct'])}" for s in TARGETS))
-        for k, r in sorted(rivals.items(), key=lambda kv: spec["referee"]["rivals"][kv[0]]):
-            m = spec["referee"]["rivals"][k]
-            rcall = tuple(_band(r[s]["loading_pct"]) for s in TARGETS)
-            n_wrong = sum(a != b for a, b in zip(gcall, rcall))
-            print(f"  {k:20s}: MAE={m:5.2f} ({m/gmae:4.1f}x)  rel={sum(r[s]['relief_mva'] for s in TARGETS):5.2f}  wrong={n_wrong}/7  "
-                  + " ".join(f"{s[:4]}={_bname(r[s]['loading_pct'])}" for s in TARGETS))
-    if forcing:
-        gcall = tuple(_band(gold_res[s]["loading_pct"]) for s in TARGETS)
-        print("\n=== FORCING (+/-20%) ===")
-        all_hold = True
-        for lbl, o in [
-            ("k_ord -20%", {"mult_kord": 0.80}), ("k_ord +20%", {"mult_kord": 1.20}),
-            ("Q_peak -20%", {"mult_q": 0.80}), ("Q_peak +20%", {"mult_q": 1.20}),
-            ("w_ex -20%", {"mult_w_excess": 0.80}), ("w_ex +20%", {"mult_w_excess": 1.20}),
+
+    if "--detail" in argv:
+        print("\n--- Detail (golden vs truth, physics diagnostics, RESPONSE1_V2) ---")
+        print(f"k_ord={gold_p['k_ord']:.4f}  tan_phi_res={gold_p['tan_phi_res']:.4f}  tan_phi_com={gold_p['tan_phi_com']:.4f}  "
+              f"comm_mae={gold_p['s1_comm_mae']:.3f} MW  vlv_rmse={gold_p['s2_vlv_mv']:.1f} V  "
+              f"kvarh_err={gold_p['s2_mvar_err']:.2f} MVAr  bus_rmse={gold_p['s3_bus_mv']:.1f} V  "
+              f"ami_q={gold_p['s3_amiq']:.2f} kVAr  phys_idx={gold_p['phys_idx']:.2f}")
+        for s in TARGETS:
+            t = w["subs"][s]["truth"]
+            g = gold_res[s]
+            print(f"  {s:10s}: truth={t['loading_pct']:6.2f}%  gold={g['loading_pct']:6.2f}%  "
+                  f"P15={g['p15']:5.2f}({t['p15_peak']:5.2f})  Q={g['q_h']:+6.2f}({t['q_peak_h']:+6.2f})  "
+                  f"w={100*g['w_max']:5.2f}%({100*t['w_max']:5.2f}%)  rel={g['relief_mva']:5.2f}")
+        figs, _ = corelib._figures(spec, spec["lattice"])
+        gcall = corelib._calls(spec, {s: gold_res[s]["loading_pct"] for s in TARGETS})
+        r1_score, _ = corelib._route_score(spec, figs, "response1_v2", gcall)
+        print(f"RESPONSE1_V2 exact rubric score: {r1_score:.1f}/100")
+
+    if "--forcing" in argv:
+        gcall = corelib._calls(spec, {s: gold_res[s]["loading_pct"] for s in TARGETS})
+        ok = True
+        print("\n--- Forcing +/-20% perturbations ---")
+        for name, opts in [
+            ("k_ord -20%", {"mult_kord": 0.8}), ("k_ord +20%", {"mult_kord": 1.2}),
+            ("Q_peak -20%", {"mult_q": 0.8}), ("Q_peak +20%", {"mult_q": 1.2}),
+            ("phase_excess -20%", {"mult_w_excess": 0.8}), ("phase_excess +20%", {"mult_w_excess": 1.2}),
         ]:
-            pr, _ = evaluate(world, o)
-            ok = tuple(_band(pr[s]["loading_pct"]) for s in TARGETS) == gcall
-            all_hold &= ok
-            print(f"  {lbl:14s}: {'HOLD' if ok else 'MOVE'}  " + " ".join(f"{s[:4]}={pr[s]['loading_pct']:.1f}" for s in TARGETS))
-        print("FORCING:", "PASS" if all_hold else "FAIL")
-        if not all_hold:
+            pr, _ = evaluate(w, opts)
+            pcall = corelib._calls(spec, {s: pr[s]["loading_pct"] for s in TARGETS})
+            holds = (pcall == gcall)
+            ok = ok and holds
+            print(f"  {name:18s}: {'HOLD' if holds else 'FLIP'} | " + " ".join(f"{s[:4]}={pr[s]['loading_pct']:.1f}" for s in TARGETS))
+        print("FORCING:", "PASS" if ok else "FAIL")
+        if not ok:
             rc = 1
     sys.exit(rc)
 

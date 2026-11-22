@@ -17,7 +17,7 @@
       "Hestmark: Phase 1 (2027)",
       "Kvernholm: Phase 2 (2028-2029)",
       "Malmnes: Phase 2 (2028-2029)",
-      "Raudfjord: Phase 2 (2028-2029)",
+      "Raudfjord: Defer",
       "Svarthaug: Phase 1 (2027)",
       "Tverrli: Defer"
      ],
@@ -29,9 +29,9 @@
      "answer": [
       "Drangvik: Defer",
       "Hestmark: Phase 1 (2027)",
-      "Kvernholm: Phase 1 (2027)",
+      "Kvernholm: Phase 2 (2028-2029)",
       "Malmnes: Defer",
-      "Raudfjord: Phase 1 (2027)",
+      "Raudfjord: Phase 2 (2028-2029)",
       "Svarthaug: Phase 2 (2028-2029)",
       "Tverrli: Defer"
      ],
@@ -45,11 +45,11 @@
     },
     "id": "S1",
     "kind": "stump",
-    "name": "correlated quadrature of feeder 15-min excesses using regional-stripped hourly innovation correlation R_ij",
+    "name": "4-mode regional-stripped hourly feeder innovation correlation R_ij into correlated quadrature",
     "precedent": [
      "L22",
-     "N01",
-     "L40"
+     "L24",
+     "L58"
     ]
    },
    {
@@ -57,9 +57,9 @@
      "answer": [
       "Drangvik: Defer",
       "Hestmark: Phase 1 (2027)",
-      "Kvernholm: Phase 2 (2028-2029)",
+      "Kvernholm: Phase 1 (2027)",
       "Malmnes: Defer",
-      "Raudfjord: Phase 2 (2028-2029)",
+      "Raudfjord: Defer",
       "Svarthaug: Phase 1 (2027)",
       "Tverrli: Defer"
      ],
@@ -69,7 +69,7 @@
     },
     "dropped": {
      "answer": [
-      "Drangvik: Phase 2 (2028-2029)",
+      "Drangvik: Phase 1 (2027)",
       "Hestmark: Phase 1 (2027)",
       "Kvernholm: Phase 2 (2028-2029)",
       "Malmnes: Phase 2 (2028-2029)",
@@ -87,11 +87,12 @@
     },
     "id": "S2",
     "kind": "stump",
-    "name": "coupled 66 kV radial corridor impedance inversion from GSPs demeaned against monthly net kVARh",
+    "name": "coupled 4-corridor 66 kV radial impedance inversion including upstream modernized hubs anchored against monthly net kVARh",
     "precedent": [
-     "L38",
-     "N27",
-     "L44"
+     "L16",
+     "L43",
+     "L44",
+     "L48"
     ]
    },
    {
@@ -99,10 +100,10 @@
      "answer": [
       "Drangvik: Defer",
       "Hestmark: Phase 1 (2027)",
-      "Kvernholm: Phase 2 (2028-2029)",
+      "Kvernholm: Defer",
       "Malmnes: Defer",
-      "Raudfjord: Phase 1 (2027)",
-      "Svarthaug: Phase 2 (2028-2029)",
+      "Raudfjord: Phase 2 (2028-2029)",
+      "Svarthaug: Defer",
       "Tverrli: Defer"
      ],
      "results_rescued": [
@@ -115,7 +116,7 @@
       "Hestmark: Phase 1 (2027)",
       "Kvernholm: Phase 1 (2027)",
       "Malmnes: Phase 2 (2028-2029)",
-      "Raudfjord: Phase 2 (2028-2029)",
+      "Raudfjord: Defer",
       "Svarthaug: Phase 1 (2027)",
       "Tverrli: Defer"
      ],
@@ -129,11 +130,11 @@
     },
     "id": "S3",
     "kind": "stump",
-    "name": "PT-free 3-phase LV bus voltage-sag slope calibrated on modernized 3-phase PQ archive",
+    "name": "multi-class 3-phase LV bus voltage-sag regression with AMI-metered class reactive impedance ratios",
     "precedent": [
      "L28",
-     "L39",
-     "N09"
+     "L56",
+     "L57"
     ]
    },
    {
@@ -166,10 +167,10 @@
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Defer",
     "Malmnes: Defer",
-    "Raudfjord: Phase 2 (2028-2029)",
-    "Svarthaug: Phase 1 (2027)",
+    "Raudfjord: Defer",
+    "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ]
   }
@@ -207,7 +208,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 excess on all 12 months"
+    "name": "S1 all-12 months"
    },
    {
     "answer": [
@@ -219,7 +220,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 excess on peak month only"
+    "name": "S1 DJF 3-month"
    },
    {
     "answer": [
@@ -231,7 +232,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 DJF 3-month winter window"
+    "name": "S1 peak month only"
    },
    {
     "answer": [
@@ -243,7 +244,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 DJF 3-month annual-only k_ord"
+    "name": "S1 scaled additive"
    },
    {
     "answer": [
@@ -255,7 +256,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 additive feeder excess scaling"
+    "name": "S1 raw additive"
    },
    {
     "answer": [
@@ -267,7 +268,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 raw additive feeder excess"
+    "name": "S1 winter innov corr"
    },
    {
     "answer": [
@@ -279,7 +280,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 innovation corr on winter hours"
+    "name": "S1 5-PC strip"
    },
    {
     "answer": [
@@ -291,7 +292,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 5-PC regional factor stripping"
+    "name": "S1 6-PC strip"
    },
    {
     "answer": [
@@ -303,7 +304,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 6-PC regional factor stripping"
+    "name": "S1 ref_log strip"
    },
    {
     "answer": [
@@ -315,7 +316,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 class-mean log-ratio innovations"
+    "name": "S1 ref_diff strip"
    },
    {
     "answer": [
@@ -327,7 +328,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 class-mean linear-diff innovations"
+    "name": "S1 unit k_ord=1.0"
    },
    {
     "answer": [
@@ -339,7 +340,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 annual-only 4-site k_ord"
+    "name": "S1 mean-ratio comm k_ord"
    },
    {
     "answer": [
@@ -351,7 +352,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 unweighted mean k_ord"
+    "name": "Q15 ami_slope"
    },
    {
     "answer": [
@@ -363,7 +364,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 median order-stat scaling"
+    "name": "Q15 const_pf"
    },
    {
     "answer": [
@@ -375,7 +376,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 monthly-only order-stat scaling"
+    "name": "S2 winter anchor"
    },
    {
     "answer": [
@@ -387,7 +388,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S1 uncalibrated unit k_ord (1.0)"
+    "name": "S2 full-year anchor"
    },
    {
     "answer": [
@@ -399,7 +400,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "Q15 held constant at hourly peak Q"
+    "name": "S2 1-step M_bar"
    },
    {
     "answer": [
@@ -411,7 +412,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "Q15 scaled at constant peak-hour PF"
+    "name": "S2 meas V_lv"
    },
    {
     "answer": [
@@ -423,7 +424,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S2 corridor anchor over winter"
+    "name": "S2 fit20 peak Q"
    },
    {
     "answer": [
@@ -435,7 +436,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S2 corridor anchor over full year"
+    "name": "S2 single-hr peak Q"
    },
    {
     "answer": [
@@ -447,7 +448,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S2 coupled solve using M_bar (1-step)"
+    "name": "S3 winter bus-sag"
    },
    {
     "answer": [
@@ -459,7 +460,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S2 voltage drop using measured V_lv"
+    "name": "S3 heating bus-sag"
    },
    {
     "answer": [
@@ -471,7 +472,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S2 peak Q from top-5 mean"
+    "name": "S3 diff bus-sag"
    },
    {
     "answer": [
@@ -483,7 +484,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S3 bus-sag slope over winter hours"
+    "name": "S3 2-class bus-sag"
    },
    {
     "answer": [
@@ -495,7 +496,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S3 bus-sag slope over heating season"
+    "name": "S3 top-5 peak w_max"
    },
    {
     "answer": [
@@ -507,55 +508,7 @@
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
-    "name": "S3 bus-sag slope on hourly diffs"
-   },
-   {
-    "answer": [
-     "Drangvik: Phase 1 (2027)",
-     "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
-     "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 1 (2027)",
-     "Svarthaug: Phase 2 (2028-2029)",
-     "Tverrli: Defer"
-    ],
-    "name": "S3 hybrid AMI-subtracted bus-sag slope"
-   },
-   {
-    "answer": [
-     "Drangvik: Phase 1 (2027)",
-     "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
-     "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 1 (2027)",
-     "Svarthaug: Phase 2 (2028-2029)",
-     "Tverrli: Defer"
-    ],
-    "name": "S3 PT intercept + top-10 inversion"
-   },
-   {
-    "answer": [
-     "Drangvik: Phase 1 (2027)",
-     "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
-     "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 1 (2027)",
-     "Svarthaug: Phase 2 (2028-2029)",
-     "Tverrli: Defer"
-    ],
-    "name": "S3 tan_phi_u calibrated on winter hours"
-   },
-   {
-    "answer": [
-     "Drangvik: Phase 1 (2027)",
-     "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
-     "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 1 (2027)",
-     "Svarthaug: Phase 2 (2028-2029)",
-     "Tverrli: Defer"
-    ],
-    "name": "cross: all-year S1 + winter S2 + diff S3"
+    "name": "S3 winter AMI tan_phi"
    }
   ],
   "kind": "set",
@@ -638,9 +591,9 @@
     "answer": [
      "Drangvik: Defer",
      "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
+     "Kvernholm: Phase 2 (2028-2029)",
      "Malmnes: Defer",
-     "Raudfjord: Phase 1 (2027)",
+     "Raudfjord: Phase 2 (2028-2029)",
      "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
@@ -648,7 +601,7 @@
    },
    {
     "answer": [
-     "Drangvik: Phase 2 (2028-2029)",
+     "Drangvik: Phase 1 (2027)",
      "Hestmark: Phase 1 (2027)",
      "Kvernholm: Phase 2 (2028-2029)",
      "Malmnes: Phase 2 (2028-2029)",
@@ -664,7 +617,7 @@
      "Hestmark: Phase 1 (2027)",
      "Kvernholm: Phase 1 (2027)",
      "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 2 (2028-2029)",
+     "Raudfjord: Defer",
      "Svarthaug: Phase 1 (2027)",
      "Tverrli: Defer"
     ],
@@ -674,13 +627,25 @@
     "answer": [
      "Drangvik: Defer",
      "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 2 (2028-2029)",
+     "Kvernholm: Defer",
      "Malmnes: Defer",
-     "Raudfjord: Phase 2 (2028-2029)",
-     "Svarthaug: Phase 1 (2027)",
+     "Raudfjord: Defer",
+     "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
     "name": "reflex route"
+   },
+   {
+    "answer": [
+     "Drangvik: Phase 2 (2028-2029)",
+     "Hestmark: Phase 1 (2027)",
+     "Kvernholm: Phase 2 (2028-2029)",
+     "Malmnes: Phase 1 (2027)",
+     "Raudfjord: Defer",
+     "Svarthaug: Phase 1 (2027)",
+     "Tverrli: Defer"
+    ],
+    "name": "rigorous standard route"
    },
    {
     "answer": [
@@ -692,19 +657,55 @@
      "Svarthaug: Phase 1 (2027)",
      "Tverrli: Defer"
     ],
-    "name": "rigorous standard route"
+    "name": "response1_v2"
+   },
+   {
+    "answer": [
+     "Drangvik: Phase 1 (2027)",
+     "Hestmark: Phase 1 (2027)",
+     "Kvernholm: Phase 1 (2027)",
+     "Malmnes: Phase 1 (2027)",
+     "Raudfjord: Phase 1 (2027)",
+     "Svarthaug: Phase 1 (2027)",
+     "Tverrli: Defer"
+    ],
+    "name": "run_generous"
    },
    {
     "answer": [
      "Drangvik: Phase 2 (2028-2029)",
      "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 1 (2027)",
-     "Malmnes: Phase 2 (2028-2029)",
-     "Raudfjord: Phase 1 (2027)",
-     "Svarthaug: Phase 1 (2027)",
-     "Tverrli: Phase 1 (2027)"
+     "Kvernholm: Phase 2 (2028-2029)",
+     "Malmnes: Phase 1 (2027)",
+     "Raudfjord: Defer",
+     "Svarthaug: Phase 2 (2028-2029)",
+     "Tverrli: Defer"
     ],
-    "name": "frontier combo"
+    "name": "run_calibrated"
+   },
+   {
+    "answer": [
+     "Drangvik: Phase 2 (2028-2029)",
+     "Hestmark: Phase 1 (2027)",
+     "Kvernholm: Phase 2 (2028-2029)",
+     "Malmnes: Phase 1 (2027)",
+     "Raudfjord: Defer",
+     "Svarthaug: Phase 1 (2027)",
+     "Tverrli: Defer"
+    ],
+    "name": "run_hedge"
+   },
+   {
+    "answer": [
+     "Drangvik: Phase 2 (2028-2029)",
+     "Hestmark: Phase 1 (2027)",
+     "Kvernholm: Phase 2 (2028-2029)",
+     "Malmnes: Phase 1 (2027)",
+     "Raudfjord: Phase 2 (2028-2029)",
+     "Svarthaug: Phase 2 (2028-2029)",
+     "Tverrli: Defer"
+    ],
+    "name": "run_cutoff"
    }
   ]
  },
@@ -713,182 +714,182 @@
    "rescues": [
     "R2"
    ],
-   "sentence": "Stripping the regional diurnal and weather common mode across substations isolates pairwise feeder innovation correlation R_ij, separating synchronized industrial clusters from staggered feeders of the same class in correlated quadrature."
+   "sentence": "Stripping four regional diurnal-weather SVD modes across other substations removes shared class profiles and reveals true pairwise feeder innovation correlation R_ij (inverted relative to 12-month register correlation), allowing correlated quadrature calibrated on Sep-Oct active commissioning surges."
   },
   {
    "rescues": [
     "R3"
    ],
-   "sentence": "Because zone substations lack local 66 kV bus PTs and shunt capacitors cancel winter lagging reactive power in monthly net kVARh, hourly reactive power must be inverted by solving simultaneous coupled 66 kV corridor impedance systems from GSP-Nord and GSP-Sor demeaned against monthly net kVARh."
+   "sentence": "Because winter fixed capacitors flatten monthly net kVARh on inductive peaks while peak-only switched capacitors clamp peak Q without lowering monthly winter averages, peak reactive demand must be inverted simultaneously along all four 66 kV corridors including upstream modernized hubs and anchored against monthly net kVARh."
   },
   {
    "rescues": [
     "R4"
    ],
-   "sentence": "AMI covers only 20 of 36 single-phase laterals per substation while the 16 non-AMI legacy laterals carry distinct phase skew and drifted GIS tags, so true total limiting-phase share must be inverted from the PT-free load-driven 3-phase LV bus voltage-sag slope calibrated on the modernized reference sites."
+   "sentence": "Because AMI covers only 20 of 40 laterals while opposite-phase diurnal commercial and residential loads have a 3.3x reactive impedance contrast (AMI tan_phi 0.125 residential vs 0.620 commercial), evening-peak heaviest-phase share must be inverted by multi-class three-phase bus-sag regression weighted by AMI-metered class impedance."
   }
  ],
  "results": [
   {
    "band": [
-    213.76,
-    213.86
+    195.38,
+    195.48
    ],
    "depends": [],
    "figure": "r1_p60_sum_mw",
-   "golden": 213.81,
+   "golden": 195.43,
    "graded_as": "Step-by-Step",
    "id": "R1",
    "name": "conformed 2026 SCADA, GSP, corridor, feeder, meter, asset, and AMI extracts",
    "passes": {
-    "careful": 213.81,
-    "quick": 213.0,
-    "thorough": 213.81
+    "careful": 195.43,
+    "quick": 192.91,
+    "thorough": 195.43
    }
   },
   {
    "band": [
-    239.8,
-    246.2
+    240.1,
+    244.3
    ],
    "depends": [
     "R1"
    ],
    "figure": "c1_total_p15_mw",
-   "golden": 243.38,
+   "golden": 242.89,
    "graded_as": "Component 1",
    "id": "R2",
-   "name": "pool 15-minute coincident active demand via stripped innovation correlation (MW)",
+   "name": "pool 15-minute coincident active demand via 4-mode stripped innovation correlation (MW)",
    "partly": [
-    237.8,
-    248.2
+    238.1,
+    246.3
    ],
    "passes": {
-    "careful": 213.81,
-    "quick": 213.0,
-    "thorough": 243.38
+    "careful": 195.43,
+    "quick": 192.91,
+    "thorough": 242.89
    },
    "precedent": [
     "L22",
-    "N01",
-    "L40"
+    "L24",
+    "L58"
    ]
   },
   {
    "band": [
-    73.3,
-    78.5
+    76.4,
+    84.2
    ],
    "depends": [
     "R1"
    ],
    "figure": "c2_total_qpeak_mvar",
-   "golden": 75.41,
+   "golden": 77.74,
    "graded_as": "Component 2",
    "id": "R3",
-   "name": "pool peak-hour reactive demand via coupled 66 kV corridor impedance inversion (MVAr)",
+   "name": "pool peak-hour reactive demand via coupled 4-corridor 66 kV impedance inversion including upstream hubs (MVAr)",
    "partly": [
-    69.3,
-    82.5
+    72.4,
+    88.2
    ],
    "passes": {
-    "careful": -42.84,
-    "quick": -42.62,
-    "thorough": 75.41
+    "careful": 27.17,
+    "quick": 26.77,
+    "thorough": 77.74
    },
    "precedent": [
-    "L38",
-    "N27",
-    "L44"
+    "L16",
+    "L43",
+    "L44",
+    "L48"
    ]
   },
   {
    "band": [
-    37.36,
-    38.14
+    37.17,
+    37.57
    ],
    "depends": [
     "R1"
    ],
    "figure": "c3_mean_lim_phase_pct",
-   "golden": 37.69,
+   "golden": 37.25,
    "graded_as": "Component 3",
    "id": "R4",
-   "name": "pool average peak limiting-phase share via PT-free 3-phase LV bus sag slope (%)",
+   "name": "pool average peak limiting-phase share via multi-class bus-sag regression with AMI class tan_phi (%)",
    "partly": [
-    37.06,
-    38.44
+    36.87,
+    37.87
    ],
    "passes": {
-    "careful": 36.43,
+    "careful": 34.96,
     "quick": 33.33,
-    "thorough": 37.69
+    "thorough": 37.25
    },
    "precedent": [
     "L28",
-    "L39",
-    "N09"
+    "L56",
+    "L57"
    ]
   },
   {
    "band": [
     0.0,
-    2.5
+    4.5
    ],
    "depends": [
     "R2",
     "R3",
     "R4"
    ],
-   "figure": "r5_ref_mae_pp",
-   "golden": 1.01,
+   "figure": "r5_phys_idx",
+   "golden": 2.98,
    "graded_as": "Step-by-Step",
    "id": "R5",
-   "name": "referee validation MAE on Fossheim, Lindberg, Ostervik, and Solberg (pct pts)",
+   "name": "internal physical-balance residual index across commissioning surge, 66 kV/LV voltages, monthly kVARh, 3-ph bus sag, and AMI q_kvar",
    "partly": [
-    2.5,
-    4.5
+    4.5,
+    7.5
    ],
    "passes": {
-    "careful": 24.73,
-    "quick": 32.89,
-    "thorough": 1.01
+    "careful": 85.73,
+    "quick": 86.31,
+    "thorough": 2.98
    },
    "precedent": [
     "L28",
-    "L51",
-    "L03"
+    "L51"
    ]
   },
   {
    "bands": {
     "Drangvik": [
-     102.9,
-     109.3
+     102.7,
+     115.9
     ],
     "Hestmark": [
-     143.9,
-     151.5
+     138.7,
+     148.8
     ],
     "Kvernholm": [
-     105.1,
-     110.8
+     104.5,
+     114.0
     ],
     "Malmnes": [
-     94.1,
-     97.2
+     85.8,
+     96.9
     ],
     "Raudfjord": [
-     116.3,
-     120.2
+     105.1,
+     112.1
     ],
     "Svarthaug": [
-     90.0,
-     94.8
+     90.7,
+     96.5
     ],
     "Tverrli": [
-     72.5,
-     74.9
+     63.5,
+     72.0
     ]
    },
    "depends": [
@@ -898,85 +899,85 @@
    ],
    "figure": "r6_loading_pct",
    "golden": {
-    "Drangvik": 106.3,
-    "Hestmark": 147.41,
-    "Kvernholm": 107.44,
-    "Malmnes": 95.85,
-    "Raudfjord": 119.13,
-    "Svarthaug": 91.33,
-    "Tverrli": 73.85
+    "Drangvik": 106.61,
+    "Hestmark": 141.77,
+    "Kvernholm": 107.68,
+    "Malmnes": 93.29,
+    "Raudfjord": 109.21,
+    "Svarthaug": 92.6,
+    "Tverrli": 66.51
    },
    "graded_as": "Asks 1 to 7",
    "id": "R6",
    "name": "Firm N-1 loading percentage by target substation",
    "passes": {
     "careful": {
-     "Drangvik": 76.44,
-     "Hestmark": 108.48,
-     "Kvernholm": 87.29,
-     "Malmnes": 79.39,
-     "Raudfjord": 87.48,
-     "Svarthaug": 115.57,
-     "Tverrli": 60.18
+     "Drangvik": 67.02,
+     "Hestmark": 100.15,
+     "Kvernholm": 79.78,
+     "Malmnes": 75.75,
+     "Raudfjord": 62.03,
+     "Svarthaug": 95.95,
+     "Tverrli": 50.58
     },
     "quick": {
-     "Drangvik": 72.06,
-     "Hestmark": 104.74,
-     "Kvernholm": 83.67,
-     "Malmnes": 75.95,
-     "Raudfjord": 83.55,
-     "Svarthaug": 83.15,
-     "Tverrli": 56.85
+     "Drangvik": 65.09,
+     "Hestmark": 96.69,
+     "Kvernholm": 75.87,
+     "Malmnes": 72.97,
+     "Raudfjord": 61.3,
+     "Svarthaug": 77.96,
+     "Tverrli": 48.61
     },
     "thorough": {
-     "Drangvik": 106.3,
-     "Hestmark": 147.41,
-     "Kvernholm": 107.44,
-     "Malmnes": 95.85,
-     "Raudfjord": 119.13,
-     "Svarthaug": 91.33,
-     "Tverrli": 73.85
+     "Drangvik": 106.61,
+     "Hestmark": 141.77,
+     "Kvernholm": 107.68,
+     "Malmnes": 93.29,
+     "Raudfjord": 109.21,
+     "Svarthaug": 92.6,
+     "Tverrli": 66.51
     }
    },
    "precedent": [
-    "L38",
-    "N27",
-    "N09"
+    "L22",
+    "L48",
+    "L56"
    ]
   },
   {
    "bands": {
     "MVA_Drangvik": [
-     45.9,
-     48.75
+     48.75,
+     55.05
     ],
     "MVA_Hestmark": [
-     52.1,
-     54.85
+     49.2,
+     52.85
     ],
     "MVA_Kvernholm": [
-     39.3,
-     41.45
+     33.25,
+     36.25
     ],
     "MVA_Malmnes": [
-     39.55,
-     40.85
+     39.8,
+     44.95
     ],
     "MVA_Raudfjord": [
-     41.15,
-     42.55
+     47.3,
+     50.45
     ],
     "MVA_Svarthaug": [
-     33.5,
-     35.3
+     31.0,
+     33.0
     ],
     "MVA_Tverrli": [
-     34.1,
-     35.2
+     26.05,
+     29.5
     ],
     "Total_Relief_MVA": [
-     55.4,
-     64.1
+     50.2,
+     65.0
     ]
    },
    "depends": [
@@ -986,54 +987,54 @@
    ],
    "figure": "r7_mva_and_relief",
    "golden": {
-    "MVA_Drangvik": 47.41,
-    "MVA_Hestmark": 53.36,
-    "MVA_Kvernholm": 40.18,
-    "MVA_Malmnes": 40.26,
-    "MVA_Raudfjord": 42.17,
-    "MVA_Svarthaug": 33.98,
-    "MVA_Tverrli": 34.71,
-    "Total_Relief_MVA": 59.48
+    "MVA_Drangvik": 50.64,
+    "MVA_Hestmark": 50.33,
+    "MVA_Kvernholm": 34.24,
+    "MVA_Malmnes": 43.29,
+    "MVA_Raudfjord": 49.15,
+    "MVA_Svarthaug": 31.67,
+    "MVA_Tverrli": 27.27,
+    "Total_Relief_MVA": 54.97
    },
    "graded_as": "Asks 8 to 15",
    "id": "R7",
    "name": "Limiting-phase peak MVA by substation and total relief capacity (MVA)",
    "passes": {
     "careful": {
-     "MVA_Drangvik": 34.09,
-     "MVA_Hestmark": 39.27,
-     "MVA_Kvernholm": 32.65,
-     "MVA_Malmnes": 33.34,
-     "MVA_Raudfjord": 30.97,
-     "MVA_Svarthaug": 42.99,
-     "MVA_Tverrli": 28.28,
-     "Total_Relief_MVA": 21.6
+     "MVA_Drangvik": 31.83,
+     "MVA_Hestmark": 35.55,
+     "MVA_Kvernholm": 25.37,
+     "MVA_Malmnes": 35.15,
+     "MVA_Raudfjord": 27.91,
+     "MVA_Svarthaug": 32.81,
+     "MVA_Tverrli": 20.74,
+     "Total_Relief_MVA": 9.12
     },
     "quick": {
-     "MVA_Drangvik": 32.14,
-     "MVA_Hestmark": 37.92,
-     "MVA_Kvernholm": 31.29,
-     "MVA_Malmnes": 31.9,
-     "MVA_Raudfjord": 29.58,
-     "MVA_Svarthaug": 30.93,
-     "MVA_Tverrli": 26.72,
-     "Total_Relief_MVA": 7.15
+     "MVA_Drangvik": 30.92,
+     "MVA_Hestmark": 34.33,
+     "MVA_Kvernholm": 24.13,
+     "MVA_Malmnes": 33.86,
+     "MVA_Raudfjord": 27.59,
+     "MVA_Svarthaug": 26.66,
+     "MVA_Tverrli": 19.93,
+     "Total_Relief_MVA": 4.15
     },
     "thorough": {
-     "MVA_Drangvik": 47.41,
-     "MVA_Hestmark": 53.36,
-     "MVA_Kvernholm": 40.18,
-     "MVA_Malmnes": 40.26,
-     "MVA_Raudfjord": 42.17,
-     "MVA_Svarthaug": 33.98,
-     "MVA_Tverrli": 34.71,
-     "Total_Relief_MVA": 59.48
+     "MVA_Drangvik": 50.64,
+     "MVA_Hestmark": 50.33,
+     "MVA_Kvernholm": 34.24,
+     "MVA_Malmnes": 43.29,
+     "MVA_Raudfjord": 49.15,
+     "MVA_Svarthaug": 31.67,
+     "MVA_Tverrli": 27.27,
+     "Total_Relief_MVA": 54.97
     }
    },
    "precedent": [
+    "L16",
     "L32",
-    "L38",
-    "N09"
+    "L56"
    ]
   },
   {
@@ -1058,15 +1059,15 @@
     "careful": [
      "Drangvik: Defer",
      "Hestmark: Phase 1 (2027)",
-     "Kvernholm: Phase 2 (2028-2029)",
+     "Kvernholm: Defer",
      "Malmnes: Defer",
-     "Raudfjord: Phase 2 (2028-2029)",
-     "Svarthaug: Phase 1 (2027)",
+     "Raudfjord: Defer",
+     "Svarthaug: Phase 2 (2028-2029)",
      "Tverrli: Defer"
     ],
     "quick": [
      "Drangvik: Defer",
-     "Hestmark: Phase 1 (2027)",
+     "Hestmark: Phase 2 (2028-2029)",
      "Kvernholm: Defer",
      "Malmnes: Defer",
      "Raudfjord: Defer",
@@ -1085,8 +1086,8 @@
    },
    "precedent": [
     "L22",
-    "L38",
-    "L28"
+    "L48",
+    "L56"
    ]
   }
  ],
@@ -1108,9 +1109,9 @@
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 1 (2027)",
+    "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Defer",
-    "Raudfjord: Phase 1 (2027)",
+    "Raudfjord: Phase 2 (2028-2029)",
     "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
@@ -1118,7 +1119,7 @@
   },
   {
    "answer": [
-    "Drangvik: Phase 2 (2028-2029)",
+    "Drangvik: Phase 1 (2027)",
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Phase 2 (2028-2029)",
@@ -1134,20 +1135,20 @@
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
     "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Defer",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
-   "name": "S3 lost alone (GIS phase tags)"
+   "name": "S3 lost alone (AMI-only balanced)"
   },
   {
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Defer",
     "Malmnes: Defer",
-    "Raudfjord: Phase 1 (2027)",
-    "Svarthaug: Phase 2 (2028-2029)",
+    "Raudfjord: Phase 2 (2028-2029)",
+    "Svarthaug: Defer",
     "Tverrli: Defer"
    ],
    "name": "S1+S2 lost"
@@ -1156,9 +1157,9 @@
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Phase 1 (2027)",
     "Malmnes: Defer",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Defer",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
@@ -1170,7 +1171,7 @@
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Phase 2 (2028-2029)",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Defer",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
@@ -1180,10 +1181,10 @@
    "answer": [
     "Drangvik: Defer",
     "Hestmark: Phase 1 (2027)",
-    "Kvernholm: Phase 2 (2028-2029)",
+    "Kvernholm: Defer",
     "Malmnes: Defer",
-    "Raudfjord: Phase 2 (2028-2029)",
-    "Svarthaug: Phase 1 (2027)",
+    "Raudfjord: Defer",
+    "Svarthaug: Phase 2 (2028-2029)",
     "Tverrli: Defer"
    ],
    "name": "reflex route (S1+S2+S3 lost)"
@@ -1191,7 +1192,7 @@
   {
    "answer": [
     "Drangvik: Defer",
-    "Hestmark: Phase 1 (2027)",
+    "Hestmark: Phase 2 (2028-2029)",
     "Kvernholm: Defer",
     "Malmnes: Defer",
     "Raudfjord: Defer",
@@ -1206,7 +1207,7 @@
     "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 2 (2028-2029)",
     "Malmnes: Phase 1 (2027)",
-    "Raudfjord: Phase 2 (2028-2029)",
+    "Raudfjord: Defer",
     "Svarthaug: Phase 1 (2027)",
     "Tverrli: Defer"
    ],
@@ -1216,13 +1217,61 @@
    "answer": [
     "Drangvik: Phase 2 (2028-2029)",
     "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
+    "Raudfjord: Phase 2 (2028-2029)",
+    "Svarthaug: Phase 1 (2027)",
+    "Tverrli: Defer"
+   ],
+   "name": "response1_v2 (register_rho + monthly_qp + scalar_ols)"
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 1 (2027)",
+    "Hestmark: Phase 1 (2027)",
     "Kvernholm: Phase 1 (2027)",
-    "Malmnes: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
     "Raudfjord: Phase 1 (2027)",
     "Svarthaug: Phase 1 (2027)",
-    "Tverrli: Phase 1 (2027)"
+    "Tverrli: Defer"
    ],
-   "name": "frontier combo (class_ols + local_dv + ami_only)"
+   "name": "run_generous"
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 2 (2028-2029)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
+    "Raudfjord: Defer",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "name": "run_calibrated"
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 2 (2028-2029)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
+    "Raudfjord: Defer",
+    "Svarthaug: Phase 1 (2027)",
+    "Tverrli: Defer"
+   ],
+   "name": "run_hedge"
+  },
+  {
+   "answer": [
+    "Drangvik: Phase 2 (2028-2029)",
+    "Hestmark: Phase 1 (2027)",
+    "Kvernholm: Phase 2 (2028-2029)",
+    "Malmnes: Phase 1 (2027)",
+    "Raudfjord: Phase 2 (2028-2029)",
+    "Svarthaug: Phase 2 (2028-2029)",
+    "Tverrli: Defer"
+   ],
+   "name": "run_cutoff"
   }
  ],
  "weights": {

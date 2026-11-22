@@ -1,11 +1,14 @@
-"""Comprehensive deterministic assertion suite for task26 (v2, 60+ checks).
+"""Comprehensive deterministic assertion suite for task26 (v3, 70+ checks).
 
 Covers:
   - Every Semantic Fork SF1 through SF18 explicitly by token
+  - Zero-PQ-handle pack hygiene (pq_commissioning_autumn2026.csv active-only on Fossheim & Lindberg; no pq_archive_15min_2026.csv)
   - Exact reproduction of simulator arrays after Layer 1 ETL conformance (19 files)
+  - IEC 60038 / EN 50160 physical voltage realism across all 11 substations (66 kV, 22 kV, 230 V AMI)
   - Layer 1 mess neutrality (superseded batch dedup, comms nulls drop vs interp)
   - Corelib level 5 and +/-20% forcing holds on the cut pack
-  - Referee separation (all 21 rivals >= 3.0x golden MAE; 80/80 AMI field phase-tracer match)
+  - Internal physics-balance separation (all 37 rivals >= 3.0x golden index; 80/80 AMI field phase-tracer match)
+  - Frontier score checks (RESPONSE1_V2 <= 45 and >= 4/7 wrong; all 4 run_routes <= 50)
   - Distractor deletion invariance (removing the 3 distractors leaves every figure byte-identical)
   - Container & surface hygiene (no README/dictionary/notes under target/, zero em dashes in prompt/submission)
   - PDF multi-reader text extraction check (H25: pypdf AND pdftotext both extract all governing thresholds)
@@ -53,13 +56,29 @@ def main():
     pack_world, stats = A.load_pack(TARGET)
     sim_world = C.simulate()
 
-    # --- 1. File inventory & hygiene (19 files; no readme/dictionary/manifest under target/) ---
+    # --- 1. File inventory & zero-PQ-handle hygiene (19 files; no readme/dictionary/manifest under target/) ---
     tfiles = sorted(os.listdir(TARGET))
     check(len(tfiles) == 19, f"expected 19 files in target/, found {len(tfiles)}")
     exts = {os.path.splitext(f)[1].lower() for f in tfiles}
     check(exts == {".csv", ".xlsx", ".db", ".pdf"}, f"expected 4 file categories, got {exts}")
     banned_names = re.compile(r"readme|dictionary|data_dict|manifest|field_notes|notes|schema", re.I)
     check(not any(banned_names.search(f) for f in tfiles), "banned helper/dictionary filename in target/")
+    check("pq_archive_15min_2026.csv" not in tfiles, "old full-year 3-phase pq_archive_15min_2026.csv must NOT exist in v3")
+    check("pq_commissioning_autumn2026.csv" in tfiles, "v3 active-only pq_commissioning_autumn2026.csv present")
+    with open(os.path.join(TARGET, "pq_commissioning_autumn2026.csv"), encoding="utf-8") as f:
+        rd = csv.DictReader(f)
+        check(rd.fieldnames == ["substation_id", "ts_utc", "sub_p15_mw"],
+              f"pq_commissioning_autumn2026.csv columns must be active-only, got {rd.fieldnames}")
+        pq_subs = set()
+        pq_months = set()
+        pq_rows = 0
+        for row in rd:
+            pq_rows += 1
+            pq_subs.add(row["substation_id"])
+            pq_months.add(row["ts_utc"][:7])
+    check(pq_subs == set(C.PQ_COMM_SITES), f"commissioning PQ sites {pq_subs} != {set(C.PQ_COMM_SITES)}")
+    check(pq_months == {"2026-08", "2026-09", "2026-10"}, f"commissioning PQ months unexpected: {pq_months}")
+    check(pq_rows == 11712, f"expected 11,712 Sep-Oct 15-min rows (2x61x96), got {pq_rows}")
     check(stats["raw_scada_rows"] >= 20000, f"scada CSV rows {stats['raw_scada_rows']} < 20,000")
     check(os.path.getsize(os.path.join(TARGET, PK.FILES["scada_fdr"])) > 10_000_000, "large feeder CSV > 10 MB")
     check(len(meta["distractor_files"]) == 3, "3 unlabelled distractors declared in metadata.json")
@@ -82,28 +101,42 @@ def main():
     check(abs(sum(fig["substations"][s]["relief_mva"] for s in C.TARGETS) - fig["total_relief_mva"]) <= 0.05,
           "SF4: total relief MVA equals sum of per-substation relief MVA")
 
-    # --- 3. SF5-SF7: Layer 1 ETL exact conformance & mess neutrality ---
+    # --- 3. SF5-SF7: Layer 1 ETL exact conformance, IEC/EN voltage realism & mess neutrality ---
     check(stats["superseded_dropped"] == 4800, f"SF5: dropped 4,800 superseded preliminary SCADA rows ({stats['superseded_dropped']})")
     check(stats["vlv_nulls"] == 56, f"SF6: found 56 benign summer v_lv_kv comms nulls ({stats['vlv_nulls']})")
     for gid in ("GSP-Nord", "GSP-Sor"):
         check(np.allclose(pack_world["gsp_v"][gid], sim_world["gsp_v"][gid], atol=1e-3), f"SF5: {gid} 66 kV voltage matches simulator")
+    hm = C.HEATING_HOURS
     for s in C.ALL_SUBS:
         sd_p = pack_world["subs"][s]
         sd_s = sim_world["subs"][s]
         check(np.allclose(sd_p["sub_p60"], sd_s["sub_p60"], atol=1e-4), f"SF5/SF6: {s} clean SCADA P60 matches simulator")
         check(np.array_equal(sd_p["tap_step_int"], sd_s["tap_step_int"]), f"SF5/SF6: {s} clean tap_step matches simulator")
+        check(int(sd_p["tap_step_int"].min()) >= C.TAP_MIN and int(sd_p["tap_step_int"].max()) <= C.TAP_MAX,
+              f"OLTC tap steps for {s} within [{C.TAP_MIN}, {C.TAP_MAX}]")
         check(np.allclose(sd_p["f_p60"], sd_s["f_p60"], atol=1e-3), f"SF7: {s} crosswalked feeder P60 matches simulator")
         check(np.allclose(sd_p["feeder_m15"], sd_s["feeder_m15"], atol=1e-4), f"SF7: {s} crosswalked feeder M15 matches simulator")
         check(np.allclose(sd_p["sub_net_kvarh_m"], sd_s["sub_net_kvarh_m"], atol=0.1), f"SF5: {s} monthly net kVARh matches")
         check(np.allclose(sd_p["v_bus_ph"], sd_s["v_bus_ph"], atol=1e-4), f"SF6: {s} 3-phase bus voltages match")
         check(int(sd_p["lat_is_ami"].sum()) == C.N_AMI_LAT and len(sd_p["lat_is_ami"]) == C.N_LATERALS,
-              f"SF7: {s} has 20 AMI_SMART and 16 LEGACY_NON_AMI laterals")
+              f"SF7: {s} has {C.N_AMI_LAT} AMI_SMART and {C.N_LEG_LAT} LEGACY_NON_AMI laterals")
         check(np.array_equal(np.sort(sd_p["lat_gis_ph"]), np.sort(sd_s["lat_gis_ph"])), f"SF7: {s} GIS lateral phase counts match")
-        hm = C.HEATING_HOURS
         check(np.allclose(sd_p["lat_v_ami"][:, hm].mean(axis=0), sd_s["lat_v_ami"][:, hm].mean(axis=0), atol=6e-3),
               f"SF6: {s} AMI lateral mean voltage matches across all 4,368 heating hours")
         check(np.allclose(sd_p["lat_p_ami"][:, hm].sum(axis=0), sd_s["lat_p_ami"][:, hm].sum(axis=0), atol=0.25),
               f"SF6: {s} AMI lateral total kW matches across all 4,368 heating hours")
+        check(np.allclose(sd_p["lat_q_ami"][:, hm].sum(axis=0), sd_s["lat_q_ami"][:, hm].sum(axis=0), atol=0.25),
+              f"SF6: {s} AMI lateral total kVAr matches across all 4,368 heating hours")
+        # IEC 60038 / EN 50160 voltage bounds
+        check(59.4 <= float(sd_s["v_hv_true"].min()) and float(sd_s["v_hv_true"].max()) <= 72.5,
+              f"IEC 60038 66 kV bounds on {s}: [{sd_s['v_hv_true'].min():.2f}, {sd_s['v_hv_true'].max():.2f}]")
+        check(20.9 <= float(sd_p["v_lv_meas"].min()) and float(sd_p["v_lv_meas"].max()) <= 23.1,
+              f"IEC 60038 22 kV bounds on {s}: [{sd_p['v_lv_meas'].min():.2f}, {sd_p['v_lv_meas'].max():.2f}]")
+        check(207.0 <= float(sd_p["lat_v_ami"][:, hm].min()) and float(sd_p["lat_v_ami"][:, hm].max()) <= 253.0,
+              f"EN 50160 230 V AMI bounds on {s}: [{sd_p['lat_v_ami'][:, hm].min():.1f}, {sd_p['lat_v_ami'][:, hm].max():.1f}]")
+        if s in C.PQ_COMM_SITES:
+            check(np.allclose(sd_p["comm_p15"], sd_s["comm_p15"], atol=1e-4),
+                  f"SF5: {s} Sep-Oct active-only commissioning 15-min log matches simulator")
 
     # Verify comms nulls drop vs interpolate leaves every peak figure unchanged (winter untouched!)
     noninterp_world, _ = A.load_pack(TARGET, interpolate_nulls=False)
@@ -116,9 +149,10 @@ def main():
         check(abs(g_interp[s]["loading_pct"] - g_drop[s]["loading_pct"]) < 1e-9,
               f"SF6: summer v_lv_kv nulls leave {s} loading identical (drop vs interp)")
 
-    # --- 4. SF8-SF17: All 25 honest variants & forcing perturbations hold the schedule and bands ---
+    # --- 4. SF8-SF18: All 27 honest variants & forcing perturbations hold the schedule and bands ---
     gold_sched = fig["r8_schedule"]
-    check(len(fig["variants"]) == len(C.FAMILY), "SF8, SF9, SF10, SF11, SF12, SF13, SF14, SF15, SF16: 25 variants recorded")
+    check(len(fig["variants"]) == len(C.FAMILY) == 27,
+          f"SF8, SF9, SF10, SF11, SF12, SF13, SF14, SF15, SF16: expected 27 variants, got {len(fig['variants'])}")
     for v in fig["variants"]:
         check(v["holds"] and v["answer"] == gold_sched, f"SF8/SF9/SF10/SF12/SF13/SF14/SF15/SF16: variant '{v['name']}' holds schedule")
         check(fig["c1_band"][0] <= v["c1_total_p15_mw"] <= fig["c1_band"][1], f"SF8/SF9/SF10: C1 in band for {v['name']}")
@@ -132,28 +166,38 @@ def main():
             check(lb[0] <= v["loading_pct"][s] <= lb[1], f"SF18: {s} loading in band for {v['name']}")
             check(mb[0] <= v["lim_mva"][s] <= mb[1], f"SF18: {s} MVA in band for {v['name']}")
 
-    # SF17: single-phase AMI share is partial (~25-40% of substation load), leaving substantial legacy + 3-phase load
+    # SF17: single-phase AMI covers ~48% of single-phase (res+com) load across all sites (8-55% of total peak)
     for s in C.ALL_SUBS:
         sd_p = pack_world["subs"][s]
         pk_h = int(np.argmax(sd_p["sub_p60"]))
         ami_frac = float(sd_p["lat_p_ami"][:, pk_h].sum() / (sd_p["sub_p60"][pk_h] * 1000.0))
-        check(0.24 <= ami_frac <= 0.42, f"SF17: {s} AMI single-phase share {ami_frac:.3f} realistic partial coverage")
+        sp_kw = float((sd_p["p_cls"]["residential_heat"][pk_h] + sd_p["p_cls"]["commercial_mixed"][pk_h]) * 1000.0)
+        ami_sp_frac = float(sd_p["lat_p_ami"][:, pk_h].sum() / sp_kw)
+        check(0.08 <= ami_frac <= 0.55 and 0.38 <= ami_sp_frac <= 0.60,
+              f"SF17: {s} AMI share total={ami_frac:.3f}, single-phase={ami_sp_frac:.3f} realistic partial coverage")
 
     # Forcing +/- 20% perturbations all HOLD
     check(len(fig["forcing"]) == 6, "6 forcing perturbations recorded")
     for p in fig["forcing"]:
         check(p["holds"] and p["answer"] == gold_sched, f"Forcing perturbation {p['input']} holds schedule")
 
-    # --- 5. Corelib level 5 re-proved on cut pack + referee dominance (all 21 rivals >= 3.0x) ---
+    # --- 5. Corelib level 5 re-proved on cut pack + internal physics separation + frontier collapse ---
     spec, *_ = C.build_spec(pack_world)
     check(corelib.run(spec) == 0, "corelib passes level 5 on cut pack")
     check(fig["ref_params"]["tracer_matched"] == 80 and fig["ref_params"]["tracer_total"] == 80,
           "AMI Phase-ID matches 80/80 field-traced AMI laterals on Fossheim, Lindberg, Ostervik, and Solberg")
     check(fig["ref_params"]["gis_tracer_matched"] <= 64,
           f"GIS matches {fig['ref_params']['gis_tracer_matched']}/80 on modernized reference sites (expected <= 80%)")
-    check(len(fig["ref_ratios"]) == 21, f"Expected 21 referee rivals, got {len(fig['ref_ratios'])}")
-    for rname, mult in fig["ref_ratios"].items():
-        check(mult >= 3.0, f"Referee rival {rname} is {mult}x golden MAE (< 3.0x)")
+    check(len(fig["phys_ratios"]) == len(C.RIVAL_OPTS) == 37,
+          f"Expected 37 physics-validation rivals, got {len(fig['phys_ratios'])}")
+    for rname, mult in fig["phys_ratios"].items():
+        check(mult >= 3.0, f"Physics rival {rname} is {mult}x golden index (< 3.0x)")
+    check(fig["routes"]["response1_v2"]["wrong_count"] >= 4,
+          f"RESPONSE1_V2 must miss >= 4/7 sites (got {fig['routes']['response1_v2']['wrong_count']}/7)")
+    check(fig["route_scores"]["response1_v2"] <= 45.0,
+          f"RESPONSE1_V2 score must be <= 45 (got {fig['route_scores']['response1_v2']})")
+    for rn in ("generous", "calibrated", "hedge", "cutoff"):
+        check(fig["route_scores"][rn] <= 50.0, f"Frontier run_route {rn} score {fig['route_scores'][rn]} > 50")
 
     # --- 6. Distractor deletion invariance ---
     tmp = tempfile.mkdtemp(prefix="task26-nodist-")
@@ -180,7 +224,7 @@ def main():
                     "Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli", "Lim_MVA"):
             check(tok in txt, f"H25 PDF {label} missing token {tok!r}")
         for banned in ("quadrature", "capacitor", "kVARh", "PT offset", "demean", "storm", "regression",
-                       "corridor", "SVD", "PCA", "sag", "LEGACY_NON_AMI"):
+                       "corridor", "SVD", "PCA", "sag", "LEGACY_NON_AMI", "tan_phi"):
             check(banned.lower() not in txt.lower(), f"Leak check: planning standard PDF mentions {banned!r}")
 
     # --- 8. Golden deliverables exact tie-out + cell-by-cell style readback + zero em dashes ---
@@ -199,7 +243,7 @@ def main():
     wb_path = os.path.join(GOLDEN, DL.FILES["wb"])
     wb_g = openpyxl.load_workbook(wb_path, data_only=True)
     wb_f = openpyxl.load_workbook(wb_path, data_only=False)
-    check(wb_g.sheetnames == ["Relief_Schedule", "Critical_Components", "Referee_Validation",
+    check(wb_g.sheetnames == ["Relief_Schedule", "Critical_Components", "Physics_Validation",
                               "Routes_Comparison", "Variant_Battery"], f"Golden XLSX tabs: {wb_g.sheetnames}")
     ws0 = wb_g["Relief_Schedule"]
     ws0_f = wb_f["Relief_Schedule"]
@@ -214,11 +258,10 @@ def main():
         1 for sn in wb_f.sheetnames for row_c in wb_f[sn].iter_rows()
         for c in row_c if isinstance(c.value, str) and c.value.startswith("=")
     )
-    check(n_formulas >= 50, f"Golden XLSX carries >= 50 live Excel formulas (found {n_formulas})")
+    check(n_formulas >= 80, f"Golden XLSX carries >= 80 live Excel formulas (found {n_formulas})")
     with zipfile.ZipFile(wb_path) as zxw:
         ch_xml = zxw.read("xl/charts/chart1.xml").decode("utf-8")
-        check("strRef" in ch_xml and "cat><" not in ch_xml.replace("c:strRef", "").replace("strRef", "") or "strRef" in ch_xml,
-              "Golden XLSX chart1.xml uses strRef for category labels")
+        check("strRef" in ch_xml, "Golden XLSX chart1.xml uses strRef for category labels")
     check(all(not cid.startswith(("COR-R", "COR-T")) for cid in pack_world["corridors"]),
           f"Corridor IDs use neutral regional naming (found {sorted(pack_world['corridors'])})")
     ch0 = ws0._charts[0]

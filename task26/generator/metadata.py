@@ -10,7 +10,7 @@ def write(path):
     F = PK.FILES
     DF = docs.FILES
     sim_src = ("generated deterministically by the build's physical 66/22 kV distribution grid simulator "
-               "(Vesterdal Nett AS, seed 2622; no external or public data)")
+               "(Vesterdal Nett AS, seed 2635; no external or public data)")
     meta = {
         "task": "task26",
         "as_of": "2027-01-20",
@@ -72,14 +72,14 @@ def write(path):
                 "source": sim_src,
             },
             F["ami_db"]: {
-                "covers": "2026 heating-season single-phase AMI telemetry database",
+                "covers": "2026 heating-season single-phase AMI voltage, active power, and reactive power telemetry database",
                 "pulled": "2027-01-14",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
             F["ref_pq"]: {
-                "covers": "2026 continuous 15-minute three-phase main-bay power quality archive for modernized substations",
-                "pulled": "2027-01-13",
+                "covers": "Autumn 2026 main-bay active-power interval metering log for selected modernized substations",
+                "pulled": "2026-11-05",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
@@ -109,7 +109,7 @@ def write(path):
             },
             F["xwalk"]: {
                 "covers": "2024 DMS migration crosswalk between legacy feeder IDs and SCADA feeder IDs",
-                "pulled": "2024-09-16",
+                "pulled": "2024-11-18",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
@@ -145,7 +145,7 @@ def write(path):
             },
             DF["tariff"]: {
                 "covers": "2026 published retail and commercial distribution network tariff schedule",
-                "pulled": "2025-12-04",
+                "pulled": "2025-11-24",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
