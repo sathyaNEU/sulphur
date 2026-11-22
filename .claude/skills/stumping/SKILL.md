@@ -532,7 +532,8 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    (a receiver worth nothing, hours raised in proportion), with everything else golden, it files a wrong call too
    (`sides.over`, `stump S two-sided`). Each route is built against each stump's own mechanism and priced over its
    whole family: the cut-off route is the filter a run puts in place of that stump's fit, at every cut it could
-   choose (`"cutoff:<label>"` keys), the calibrated route every slice it could match to the target. task3 arch 9's
+   choose (`"cutoff:<label>"` keys), the calibrated route every slice it could match to the target, chosen per member
+   to match that member's own distribution (a run that sees one global setting fail picks one per member). task3 arch 9's
    first core priced a cut-off on seasons while the filter that replaces its replay, the well-covered days kept to
    the thin stations' storm size, filed the golden's call at every cut from 5 to 12 strokes, and its legacy
    receiver filed the golden's call at any worth from 0 to 0.4. And no stump has a validation handle (stump-screen test 18): where a shipped file lets a run score

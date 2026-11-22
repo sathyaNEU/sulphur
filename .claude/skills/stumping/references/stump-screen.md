@@ -138,7 +138,14 @@ nothing in-house solves the task, so the idea has to be right before it is built
    a run does on the history, because the world's process is weaker there, and (c) the process that moves the forward
    window is not a closed card's fix. No collocated pair ships for any stump's parameter (two heights or two sensors
    at one site, a total beside a tally): that pairing was R98's and R99's handle. The note's `Validation handles:`
-   line is the matrix of every shipped file against every stump's parameter.
+   line is the matrix of every shipped file against every stump's parameter. **A near-complete slice beside a filed
+   recording law is a calibration set** even when no file holds the target: thinned through the law, the slice
+   simulates the record, and any calibration matched to each member's own distribution recovers the stump (task3
+   arch 9's first cores: the well-covered days thinned through the vendor's curve, with one donor cut per station
+   matched to its own recorded storm sizes, filed the golden's call in 24 of 27 settings, so the golden's unfold
+   differed from the run's ratio in precision only). Such a stump is identified from the thin records' own internal
+   variation (the same units seen at two recording levels, the record's own timing), never from a slice that sees
+   the process whole.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
    full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
@@ -184,6 +191,7 @@ screen, whatever its domain or nouns.
 | an ungauged site's ratio to its station read off a radar's pixel pairs storm by storm | task3 arch 8, both runs (R99; run 1's log mean 0.323 is the golden's 1.38) | 18 (the pairs read the ratio off) and 2 |
 | hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | task3 arch 8, both runs (R100) | 18 and 16 (the slice is a calibration set) |
 | a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | task3 arch 8, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
+| stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | task3 arch 9's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 
