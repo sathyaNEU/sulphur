@@ -291,8 +291,11 @@ def main():
     ok("SF22 the standard files that no release moves a family on pinned feature views",
        "in the weeks a family trains and scores on pinned feature views, no feature release moves its scores" in std)
     prompt = " ".join(open(os.path.join(os.path.dirname(T), "prompt.txt")).read().split())
-    ok("SF23 the prompt asks for retrains expected to actually run on pinned feature views",
-       "expected to actually run on pinned feature views" in prompt)
+    import re
+    pin_ask = [x.lower() for x in re.split(r"(?<=[.?!])\s+", prompt) if "pinned feature views" in x.lower()]
+    ok("SF23 the prompt's pinned-views ask reads as actual use, in any wording",
+       len(pin_ask) == 1 and "actual" in pin_ask[0] and
+       not any(x in pin_ask[0] for x in ("will run", "as scheduled", "as planned", "scheduled to")))
     print("verify: %d pass, %d fail" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
 

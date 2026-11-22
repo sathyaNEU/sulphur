@@ -86,14 +86,14 @@
    "by": "runs/holistic_audit_v2_2026-11-22.md",
    "why": "determinism (score 2): feature releases not netted on pinned weeks (10.27), the pinned share not pinned as actual use (92.86), the warm start's carried noise not filed (3.57, 8.77, 12.87)",
    "repair": "determinism",
-   "commit": ""
+   "commit": "1f3398a"
   }
  ],
- "resume": "the author rewrites the changed ask line in their voice (voice-check.py task9 --rewrite), uploads the reshipped target.zip, generates a new pair, then /triage-runs task9",
+ "resume": "the author rewrites the changed ask line in their voice, keeping actual use (voice-check.py task9 --rewrite; checks SF23 holds any wording with 'actual' and no 'will run' or scheduled reading), uploads the reshipped target.zip and generates a new pair; /triage-runs task9 then rewrites writeup.py's _stump_block for two stumps (it still carries the void pair's S3-era paragraphs and fig['over']['S3']) before the new responses are saved as runs/run1.md and runs/run2.md",
  "approved": null,
  "submitted": null,
  "portal": null,
- "prompt_rewritten": true,
+ "prompt_rewritten": false,
  "source": "the author's brief of 2026-11-18 (batch 6 to 10: bring each unapproved task to the expected depth, unique, off the closed strategies, three or four stumps on the main recommendation, the rubric in the low thirties)",
  "slot_history": "the author cleared the slot on 2026-11-11; the quantitative-finance architectures are in git history and the card's lineage; architecture 1 of the cleared slot (Concept 1, drive replacements) was spent at stage 4 on 2026-11-11 (PAUSED commit 1614e25, determinism judge SEND_BACK)",
  "history": [
@@ -231,12 +231,17 @@
   },
   {
    "date": "2026-11-22",
-   "event": "RESHIPPED on determinism (Opus 5.5 on the author's word): standard 1.4 and 1.5 filed, the ask reworded to expected actual use, the pinned share off the Critical Components, S3 a supporting step, core PASS level 4 (one stump lost 26 and 26, reflex 16, every run route 42 or under; effort.py careful 26.7); checks 216 and verify 36 green; the re-judge DETERMINISTIC, FIX_NOW applied in steps 4 and 6; the leak reader CLEAN; every golden figure unchanged; freeze.py reports the moves the author's ruling makes (the rejected-route figures, CC3 off the components, merchants' own band top 46.7 to 47.0) and no golden figure moved"
+   "event": "RESHIPPED on determinism (Opus 5.5 on the author's word): standard 1.4 and 1.5 filed, the ask reworded to expected actual use, the pinned share off the Critical Components, S3 a supporting step, core PASS level 4 (one stump lost 26 and 26, reflex 16, every run route 42 or under; effort.py careful 26.7); checks 216 and verify 36 green; the re-judge DETERMINISTIC, FIX_NOW applied in steps 4 and 6; the leak reader CLEAN; every golden figure unchanged; freeze.py exit 1 at the reship commit, with the stated merchants' own band top moved 46.7 to 47.0"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "after the advisor's review: the readings the pins refuse put back in the band capping, so every stated band is the frozen one again (merchants' own 41.9 to 46.7); freeze.py with the route, lattice and rubric keys allowed fails only on the six items the author's ruling moves (the Final Recommendation's rejected-route figures, the Critical Components without CC3, the stump and chain lines of pipeline.json, the card and the note); every golden figure, stated band and supplementary answer unchanged; SF23 checks made wording-independent for the author's rewrite"
   }
  ],
  "final_cut": {
   "date": "2026-11-22",
   "target.zip": "ad54b1ed8d0757fa",
   "golden.zip": "7b256a4121987980"
- }
+ },
+ "prompt_note": "the author's rewrite of 2026-11-18 carries one line reworded in the main thread after the Holistic Audit v2 ('expected to actually run on pinned feature views'); the author rewrites it in their voice, keeping actual use, since a 'will run' or scheduled reading reopens audit fork 2"
 }

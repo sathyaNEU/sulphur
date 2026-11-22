@@ -20,7 +20,7 @@ The first sheet, 2027 placements, lists the five sources by band with their poin
    c. Feature releases: 6.65 points (band 6.34 to 6.84), 17.3 per cent of model-side movement (band 16.3 to 18.2), a remediation plan.
    d. Training data: 6.62 points (band 6.35 to 7.44), 17.2 per cent of model-side movement (band 16.1 to 21.4), a remediation plan.
    e. Retunes: 4.47 points (band 4.41 to 4.52), 7.8 per cent of model-side movement (band 7.4 to 8.2), monitor.
-   f. Merchants' own change: 43.9 per cent of all movement between quarter-end snapshots (band 41.9 to 47.0).
+   f. Merchants' own change: 43.9 per cent of all movement between quarter-end snapshots (band 41.9 to 46.7).
 2. Pinned feature views: 55.0 per cent of 2027's weekly retrains are expected to actually run on them, family-weeks across the fourteen families (band 53.2 to 60.0).
 3. Tier changes between consecutive quarter-end snapshots in 2027, against the covenant's cap of 12 per cent:
    a. 14.0 per cent of merchants expected (band 13.7 to 14.6).

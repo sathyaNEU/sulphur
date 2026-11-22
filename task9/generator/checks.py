@@ -223,8 +223,11 @@ def main():
        prb["feature releases left whole on pinned views"] >= 8.0 and
        not inside(prb["feature releases left whole on pinned views"], S["points_releases"]))
     prompt_flat = " ".join(open(os.path.join(os.path.dirname(T), "prompt.txt")).read().split())
-    ok("SF23 the prompt asks for the share of 2027's weekly retrains expected to actually run on pinned feature views",
-       "share of 2027's weekly retrains expected to actually run on pinned feature views" in prompt_flat)
+    pin_ask = [x.lower() for x in re.split(r"(?<=[.?!])\s+", prompt_flat) if "pinned feature views" in x.lower()]
+    ok("SF23 the prompt's pinned-views ask reads as actual use, in any wording ('actual' in the sentence, and no 'will "
+       "run', 'as scheduled', 'as planned' or 'scheduled to')",
+       len(pin_ask) == 1 and "actual" in pin_ask[0] and
+       not any(x in pin_ask[0] for x in ("will run", "as scheduled", "as planned", "scheduled to")), pin_ask)
     ok("SF23 every take-up form puts the pinned-views share inside its stated band and keeps the call",
        S["cc3"][0] <= fig["takeup_range"][0] and fig["takeup_range"][1] <= S["cc3"][1])
     ok("SF20 the standard files a year's movement as the root of the mean of the four pairs' mean-square changes",

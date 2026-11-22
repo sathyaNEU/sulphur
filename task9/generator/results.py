@@ -209,6 +209,14 @@ def run(target=None, quiet=True):
         cut8, free, C.evaluate(pk, S2="over"), C.evaluate(pk, S2="over2"), C.evaluate(pk, S3="worst"),
         C.evaluate(pk, S3="y2026"), C.evaluate(pk, S1="flat"), C.evaluate(pk, S1="single"),
         C.evaluate(pk, weights="equal")]
+    # the readings the Holistic Audit v2's pins refuse (the endpoint by standard 1.4, the calendar's dates by the ask's
+    # actual use, releases left whole on pinned weeks by 1.5) left the lattice and the routes with S3; they stay in the
+    # capping set, so no band moves with the pins
+    refused_e += [C.evaluate(pk, **kw) for kw in (
+        dict(S2="hur"), dict(S3="hur"), dict(S1="hur", S2="hur"), dict(S1="hur", S3="hur"), dict(S2="hur", S3="hur"),
+        dict(S1="hur", S2="hur", S3="hur"), dict(S1="raw", S2="hur", S3="hur"), dict(S1="hur", S2="hur", S3="declared"),
+        dict(S1="square", S2="over", S3="over"), dict(S1="regress", S2="hur", S3="declared"),
+        dict(S1="hur", S2="hur", S3="y2026"))]
 
     keys = ["points_" + s for s in C.SOURCES] + ["share_" + s for s in C.SOURCES] + ["cc3", "own_share",
                                                                                    "fr_sched", "fr_removed"]
