@@ -86,16 +86,15 @@ def main():
     for k in ("cc3", "own_share", "fr_sched", "fr_removed"):
         ok("pack golden %s within 0.1 of core's" % k, abs(fig[k] - gw[k]) < 0.1, (fig[k], gw[k]))
     ok("the call on the shipped files is core's", fig["call"] == RS.call_list(gw), fig["call"])
-    ok("corelib on the cut pack: level 5", "CORE PASS level 5" in fig["rubric"]["verdict"], fig["rubric"]["verdict"])
+    ok("corelib on the cut pack: level 4", "CORE PASS level 4" in fig["rubric"]["verdict"], fig["rubric"]["verdict"])
     r = fig["rubric"]["routes"]
-    ok("one stump lost earns 50 or under on the cut pack", max(r["S1 lost alone"], r["S2 lost alone"],
-                                                             r["S3 lost alone"]) <= 50, r)
+    ok("one stump lost earns 50 or under on the cut pack", max(r["S1 lost alone"], r["S2 lost alone"]) <= 50, r)
     ok("the reflex route earns 30 or under on the cut pack", r["reflex route (every stump lost)"] <= 30, r)
     ok("every run route earns 50 or under", all(r[k] <= 50 for k in r if "run route" in k), r)
     rs = fig["rubric_stated"]["routes"]
-    ok("corelib on the stated bands: level 5, one stump lost 50 or under, the reflex 30 or under, every run route 50 "
-       "or under", "CORE PASS level 5" in fig["rubric_stated"]["verdict"] and
-       max(rs["S1 lost alone"], rs["S2 lost alone"], rs["S3 lost alone"]) <= 50 and
+    ok("corelib on the stated bands: level 4, one stump lost 50 or under, the reflex 30 or under, every run route 50 "
+       "or under", "CORE PASS level 4" in fig["rubric_stated"]["verdict"] and
+       max(rs["S1 lost alone"], rs["S2 lost alone"]) <= 50 and
        rs["reflex route (every stump lost)"] <= 30 and all(rs[k] <= 50 for k in rs if "run route" in k), rs)
 
     # ------------------------------------------------------------------ R1 the field's raw material
@@ -113,25 +112,28 @@ def main():
 
     # ------------------------------------------------------------------ R3 each hurried figure outside its band
     rf = fig["reflex"]
-    for s, k in (("turnover", "training data"), ("optimisation", "optimisation noise"), ("releases", "feature releases")):
+    for s, k in (("turnover", "training data"), ("optimisation", "optimisation noise")):
         ok("R3 the reflex route's %s points sit outside the band" % k, not inside(rf["points"][k], B["points_" + s]),
            rf["points"][k])
-    ok("R3 the reflex route's pinned-views share sits outside the band", not inside(rf["cc3"], B["cc3"]), rf["cc3"])
+    prb = fig["probe"]
+    ok("R3 the calendar's planned weeks put feature releases on monitor, outside the band",
+       prb["feature releases on the calendar's planned weeks"] < 5.5 and
+       not inside(prb["feature releases on the calendar's planned weeks"], B["points_releases"]))
+    ok("R3 the calendar's planned weeks put the pinned-views share outside the band", not inside(fig["base"]["cov_plan"], B["cc3"]))
     ok("R3 the reflex route's own share sits outside the band", not inside(rf["own_share"], B["own_share"]))
     ok("R3 the reflex route's tier changes with sources removed sit outside", not inside(rf["fr_removed"], B["fr_removed"]))
     lat = fig["lattice"]
     ok("R3 S1 lost alone puts training data in escalation", lat["S1"]["points"]["training data"] >= 8.0)
-    ok("R3 S2 lost alone puts optimisation noise on monitor", lat["S2"]["points"]["optimisation noise"] < 5.5)
-    ok("R3 S3 lost alone puts feature releases on monitor", lat["S3"]["points"]["feature releases"] < 5.5)
+    ok("R3 S2 lost alone puts optimisation noise in escalation", lat["S2"]["points"]["optimisation noise"] >= 8.0)
 
     # ------------------------------------------------------------------ R4 no one thing, R5 the one-fact test
     fact = E["factorial"]
-    ok("R4 three stumps, each necessary", sum(1 for j in fact["judgments"] if j["kind"] == "stump" and
-                                              j["dropped"]["answer"] != fact["golden_answer"]) == 3)
+    ok("R4 two stumps, each necessary", sum(1 for j in fact["judgments"] if j["kind"] == "stump" and
+                                            j["dropped"]["answer"] != fact["golden_answer"]) == 2)
     ok("R4 no stump sufficient alone", all(j["alone"]["answer"] != fact["golden_answer"] for j in fact["judgments"]
                                            if j["kind"] == "stump"))
-    ok("R4 the single drops land on three distinct wrong answers",
-       len({tuple(j["dropped"]["answer"]) for j in fact["judgments"] if j["kind"] == "stump"}) == 3)
+    ok("R4 the single drops land on two distinct wrong answers",
+       len({tuple(j["dropped"]["answer"]) for j in fact["judgments"] if j["kind"] == "stump"}) == 2)
     ok("R5 the largest hint rescues one result of nine", max(len(h["rescues"]) for h in E["hints"]) <= 3)
 
     # ------------------------------------------------------------------ R6 the rivals inside each band
@@ -189,13 +191,42 @@ def main():
                 refused.append(("route %s, %s" % (k, RS.NAMES[s]), v, "points_" + s))
     for k, v, key in refused:
         ok("F refused figure outside its stated band: %s (%.2f)" % (k, v), not inside(v, S[key]), (v, S[key]))
-    for k, s, key in (("S1", "turnover", "points_turnover"), ("S2", "optimisation", "points_optimisation"),
-                      ("S3", "releases", "points_releases")):
+    for k, s, key in (("S1", "turnover", "points_turnover"), ("S2", "optimisation", "points_optimisation")):
         ok("F %s lost alone: its member's figure and merchants' own share sit outside the stated bands" % k,
            not inside(lat[k]["points"][RS.NAMES[s]], S[key]) and not inside(lat[k]["own_share"], S["own_share"]),
            (lat[k]["points"][RS.NAMES[s]], lat[k]["own_share"]))
-    ok("F S3 lost alone: the pinned-views share sits outside the stated band", not inside(lat["S3"]["cc3"], S["cc3"]))
+    ok("F the calendar's planned and completed weeks: the pinned-views share sits outside the stated band",
+       not inside(fig["base"]["cov_plan"], S["cc3"]) and not inside(fig["base"]["cov_declared"], S["cc3"]))
     std_flat = " ".join(pdf_text(os.path.join(T, "gms_model_stability_standard_2026.pdf")).split())
+    # the Holistic Audit v2 forks (2026-11-22), each closed at authority and asserted on the shipped files
+    ok("SF24 the standard files that a warm-started refit carries the randomness of the refits before it",
+       "starts from the previous week's weights, so the randomness of the refits before it carries into it" in std_flat)
+    ok("SF24 the replicate pair read as the gap's whole noise files optimisation noise outside its band and on monitor",
+       prb["the replicate pair read as the gap's whole noise"] < 5.5 and
+       not inside(prb["the replicate pair read as the gap's whole noise"], S["points_optimisation"]))
+    ok("SF24 the full sums and the free fit file escalation and sit outside the band; the free fit's implied replicate "
+       "pair is at least 1.3 times the measured one",
+       min(prb["thirteen refits added up"], prb["a whole replicate pair a refit"], prb["unanchored fit"]) >= 8.0 and
+       prb["unanchored implied replicate"] >= 1.3 * fig["base"]["replicate"])
+    bd = fig["bend"]
+    ok("SF24 every family's line through gaps 8 to 26 meets gap 0 above zero, so no persistence of 1 fits",
+       bd["intercept8_min"] > 0 and bd["misfit_min"] >= 3.0, (bd["intercept8_min"], bd["misfit_min"]))
+    ok("SF24 a line's start moves with its first gap: from gaps 1 and 8 under the band, from gap 20 over it",
+       bd["line_from_1"] < S["points_optimisation"][0] and bd["line_from_8"] < S["points_optimisation"][0] and
+       bd["line_from_20"] > S["points_optimisation"][1] and
+       abs(bd["line_from_8"] - prb["line through gaps 8 to 26"]) < 1e-9)
+    ok("SF24 the fitted curve put through the line on gaps 8 to 26 reads under its own thirteen-week figure, outside "
+       "the band", bd["fitted_line8"] < S["points_optimisation"][0] < fig["cc2"])
+    ok("SF22 the standard files that no feature release moves a family's scores on pinned views",
+       "in the weeks a family trains and scores on pinned feature views, no feature release moves its scores" in std_flat)
+    ok("SF22 releases left whole on pinned weeks file escalation, outside the band",
+       prb["feature releases left whole on pinned views"] >= 8.0 and
+       not inside(prb["feature releases left whole on pinned views"], S["points_releases"]))
+    prompt_flat = " ".join(open(os.path.join(os.path.dirname(T), "prompt.txt")).read().split())
+    ok("SF23 the prompt asks for the share of 2027's weekly retrains expected to actually run on pinned feature views",
+       "share of 2027's weekly retrains expected to actually run on pinned feature views" in prompt_flat)
+    ok("SF23 every take-up form puts the pinned-views share inside its stated band and keeps the call",
+       S["cc3"][0] <= fig["takeup_range"][0] and fig["takeup_range"][1] <= S["cc3"][1])
     ok("SF20 the standard files a year's movement as the root of the mean of the four pairs' mean-square changes",
        "root of the mean of the source's expected mean-square changes over the four snapshot pairs" in std_flat)
     ok("SF21 the standard files merchants' own share against the assessment year's movement",
@@ -245,7 +276,8 @@ def main():
     ok("SF10 a bootstrap pair's two refits carry different seeds (the manifests)",
        len({(b["iso_week"], b["job_family"], b["seed"]) for b in boots}) == len({(b["run_id"]) for b in boots}))
     ok("SF11 the calendar's dates file feature releases outside the band; each family's worst lag inside it",
-       not inside(rf["points"]["feature releases"], B["points_releases"]) and
+       not inside(fig["probe"]["feature releases on the calendar's planned weeks"], B["points_releases"]) and
+       not inside(fig["rigorous"]["points"]["feature releases"], B["points_releases"]) and
        5.5 <= fig["probe"]["each family's worst past lag"] < 8.0)
     ok("SF12 the roadmap is filed as the assessment year's release load", "roadmap for that year" in std)
     ret = pd.read_csv(os.path.join(T, "gms_retune_log.csv"))
@@ -320,8 +352,11 @@ def main():
     sub = open(os.path.join(TASK, "submission.md")).read()
     ok("the blocks state the call", "escalate label revisions" in sub)
     ok("no em dash in the blocks", "—" not in sub)
-    for k, v in (("cc1", "%.2f" % fig["cc1"]), ("cc2", "%.2f" % fig["cc2"]), ("cc3", "%.1f" % fig["cc3"])):
-        ok("component %s stated at the golden" % k, v in sub.split("## Critical Components")[1].split("## Step")[0])
+    ccb = sub.split("## Critical Components")[1].split("## Step")[0]
+    for k, v in (("cc1", "%.2f" % fig["cc1"]), ("cc2", "%.2f" % fig["cc2"])):
+        ok("component %s stated at the golden" % k, v in ccb)
+    ok("two critical components, the pinned-views share not among them (a supporting step since the audit's pins)",
+       ccb.count("\n1. ") + ccb.count("\n2. ") == 2 and "\n3. " not in ccb and "pinned" not in ccb)
     print("checks: %d pass, %d fail" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
 

@@ -234,7 +234,7 @@ def run(target=None, quiet=True):
         bands["points_" + s] = [min(bands["points_" + s][0], min(sr)), max(bands["points_" + s][1], max(sr))]
     bands["cc1"], bands["cc2"] = bands["points_turnover"], bands["points_optimisation"]
 
-    reflex = lat["S1+S2+S3"]
+    reflex = lat["S1+S2"]
     direct = routes["direct"]
     fals = A["fals"]
 
@@ -268,9 +268,29 @@ def run(target=None, quiet=True):
              "unanchored implied replicate": bw(free["A"] * (1 - free["phi"] ** 2)),
              "a whole replicate pair a refit": C.evaluate(pk, S2="over2")["points"]["optimisation"],
              "thirteen refits added up": C.evaluate(pk, S2="over")["points"]["optimisation"],
+             "the replicate pair read as the gap's whole noise": C.evaluate(pk, S2="hur")["points"]["optimisation"],
+             "feature releases on the calendar's planned weeks": C.evaluate(pk, S3="hur")["points"]["releases"],
+             "feature releases left whole on pinned views": C.evaluate(pk, S3="over")["points"]["releases"],
              "feature releases as the mean of the four pairs' root-mean-square": pair_mean_rms(pk, g),
              "merchants' own change as a share of the record's own movement":
                  100.0 * g["own"] / float((pk.w["merch"] * pk.d13).sum() / pk.w["merch"].sum())}
+
+    # the second determinism pass (2026-11-22): what refuses the full sums and the straight lines, by figure. Kept out
+    # of the band capping, so no band moves.
+    hh = np.arange(1, 27)
+    ic8 = np.array([np.polyfit(np.arange(8, 27), pk.curves[f][7:26], 1)[1] for f in range(C.F)])
+    fitted = [g["slope"][f] * hh + g["A"][f] * (1 - g["phi"][f] ** hh) for f in range(C.F)]
+    fit8 = np.array([max(np.polyfit(np.arange(8, 27), fitted[f][7:26], 1)[1], 0.0) for f in range(C.F)])
+    misfit = []
+    for f in range(C.F):
+        D = pk.curves[f][:26]
+        wg = 1.0 / D ** 2
+        c0 = float(np.sum(wg * hh * D) / np.sum(wg * hh * hh))      # a persistence of 1: a line through the origin
+        misfit.append(float(np.sum(wg * (D - c0 * hh) ** 2)) / float(np.sum(wg * (D - fitted[f]) ** 2)))
+    bend = {"line_from_%d" % k: C.evaluate(pk, S2="cut", cut_lag=k)["points"]["optimisation"] for k in (1, 8, 20)}
+    bend.update({"intercept8_book": bw(ic8), "intercept8_min": float(ic8.min()),
+                 "fitted_line8": math.sqrt(bw(fit8)), "misfit_min": float(min(misfit)),
+                 "misfit_median": float(np.median(misfit)), "misfit_max": float(max(misfit))})
 
     rel26 = pk.inst["rel"] * np.array([pk.events[f][C.H - 1, 1] for f in range(C.F)])
     side26 = (reflex["opt13"] + reflex["tur"] + pk.inst["ret"] * C.H / 4.0 + pk.inst["lab"] * C.H + rel26)
@@ -322,6 +342,9 @@ def run(target=None, quiet=True):
                   "calendar_cc3": cal_cc3, "own_share_mismatched_weeks": mism, "refused_takeup": refused_takeup,
                   "admitted_range": adm_range,
                   "calls_hold": all(call_list(e) == call_list(g) for e in admitted.values())},
+        # every take-up form the Step-by-Step names (the battery's and the refused plug-ins), its pinned-views share
+        "takeup_range": [adm_range["cc3"][0], max([adm_range["cc3"][1]] + [refused_takeup[k]["cc3"] for k in (
+            "take-up pooled as a plug-in median lag", "take-up norevert as a plug-in median lag")])],
         "nearest_line": {"source": near[1], "points": near[2], "line": near[3], "gap": near[0]},
         "settled_floor": {"week": 66, "date": when(66), "weeks": C.T - 66},
         "assessment_weeks": {"first": when(C.Y27), "last": when(181), "refreshes": int(181 - C.Y27 + 1)},
@@ -334,6 +357,7 @@ def run(target=None, quiet=True):
                      "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
                      "share": {NAMES[s]: e["share"][s] for s in C.SOURCES}} for k, e in mess.items()},
         "probe": probe,
+        "bend": bend,
         "falsification": {"record": fals["truth"], "golden": fals["golden"], "rivals": fals["rivals"]},
         "loo": loo,
         "base": {
@@ -406,7 +430,7 @@ def rubric(spec):
 
 
 def effort(fig, g, A, pk, lat, routes, fam, extra, bands):
-    reflex = lat["S1+S2+S3"]
+    reflex = lat["S1+S2"]
     direct = routes["direct"]
     pts = lambda e, s: e["points"][s]
     tbl = lambda e: {NAMES[s]: round(e["share"][s], 2) for s in C.SOURCES}
@@ -445,9 +469,9 @@ def effort(fig, g, A, pk, lat, routes, fam, extra, bands):
          "independent": "the change-by-gap curve and the replicate pairs",
          "golden": g["cc2"], "band": bands["cc2"],
          "passes": {"quick": pts(direct, "optimisation"), "careful": pts(reflex, "optimisation"), "thorough": g["cc2"]},
-         "precedent": ["L39", "N44", "L28"]},
+         "precedent": ["L68", "N45", "L39"]},
         {"id": "R5", "name": "the share of 2027's retrains on pinned views and what feature releases move",
-         "graded_as": "Component 3, Ask 2, Ask 1", "figure": "r5", "depends": ["R1"],
+         "graded_as": "Ask 2, Ask 1", "figure": "r5", "depends": ["R1"],
          "independent": "the manifests' runtime fields for the past rollouts",
          "golden": r5(g), "bands": {"pinned views share": bands["cc3"], "feature releases": bands["points_releases"]},
          "passes": {"quick": r5(direct), "careful": r5(reflex), "thorough": r5(g)},
@@ -477,17 +501,17 @@ def effort(fig, g, A, pk, lat, routes, fam, extra, bands):
     fig["r2"], fig["r5"], fig["r7"], fig["r9"] = r2(g), r5(g), sh(g), r9(g)
     spec = A["spec"]
     hints = [{"sentence": spec["stumps"][k]["said_out_loud"], "rescues": [r]} for k, r in
-             (("S1", "R3"), ("S2", "R4"), ("S3", "R5"))]
-    single = {"S1": lat["S1"], "S2": lat["S2"], "S3": lat["S3"]}
-    alone = {"S1": lat["S2+S3"], "S2": lat["S1+S3"], "S3": lat["S1+S2"]}
+             (("S1", "R3"), ("S2", "R4"))]
+    single = {"S1": lat["S1"], "S2": lat["S2"]}
+    alone = {"S1": lat["S2"], "S2": lat["S1"]}
     moved = lambda e: [r["id"] for r in res[1:] if _moved(r, e, g, bands)]
     fact = {"golden_answer": call_list(g), "reflex_route": {"answer": call_list(reflex)},
             "judgments": [
                 {"id": k, "name": spec["stumps"][k]["said_out_loud"], "kind": "stump",
                  "precedent": spec["stumps"][k]["precedents"],
                  "dropped": {"answer": call_list(single[k]), "results_moved": moved(single[k])},
-                 "alone": {"answer": call_list(alone[k]), "results_rescued": [{"S1": "R3", "S2": "R4", "S3": "R5"}[k]]}}
-                for k in ("S1", "S2", "S3")] + [
+                 "alone": {"answer": call_list(alone[k]), "results_rescued": [{"S1": "R3", "S2": "R4"}[k]]}}
+                for k in ("S1", "S2")] + [
                 {"id": "J4", "name": "each instrument's pair variance by family, book weighted", "kind": "reflex",
                  "precedent": ["R20"]},
                 {"id": "J5", "name": "retunes and label revisions scaled by their counts between two snapshots",

@@ -74,10 +74,10 @@
   ],
   "own_share": [
    41.939096769828254,
-   46.65299015587746
+   46.93238651535383
   ],
   "fr_sched": [
-   13.72292791596465,
+   13.722680622630104,
    14.59505975988997
   ],
   "fr_removed": [
@@ -102,37 +102,37 @@
  "fr26": 14.817125986693316,
  "reflex": {
   "points": {
-   "optimisation noise": 3.5683180263225505,
+   "optimisation noise": 9.09746162346179,
    "training data": 15.7212478164861,
    "retunes": 4.471813088112299,
-   "feature releases": 3.999177223683898,
+   "feature releases": 6.6507994101211345,
    "label revisions": 9.98383122868686
   },
   "share": {
-   "optimisation noise": 3.218970508768329,
-   "training data": 62.4832940788575,
-   "retunes": 5.055419221972761,
-   "feature releases": 4.043255543472675,
-   "label revisions": 25.199060646928736
+   "optimisation noise": 16.7596232143796,
+   "training data": 50.04927760897525,
+   "retunes": 4.0494036654171675,
+   "feature releases": 8.957183788593133,
+   "label revisions": 20.18451172263485
   },
-  "cc3": 90.93406593406593,
-  "own_share": 14.193781151471686,
-  "fr_sched": 13.648906400886165,
-  "fr_removed": 6.904554894330317,
+  "cc3": 55.00875988521619,
+  "own_share": 4.80718982075818,
+  "fr_sched": 14.09729847129566,
+  "fr_removed": 4.064907330588808,
   "call": [
-   "feature releases: monitor",
+   "feature releases: a remediation plan",
    "label revisions: escalation",
-   "optimisation noise: monitor",
+   "optimisation noise: escalation",
    "retunes: monitor",
    "training data: escalation"
   ],
-  "families_floored": 5,
-  "model_side_2026": 473.1073221926803,
-  "own_share_unfloored": 8.351297093797577
+  "families_floored": 10,
+  "model_side_2026": 543.1382366460618,
+  "own_share_unfloored": -7.390911942759499
  },
  "direct": {
   "points": {
-   "optimisation noise": 3.5683180263225505,
+   "optimisation noise": 9.09746162346179,
    "training data": 16.121120508337732,
    "retunes": 4.471813088112299,
    "feature releases": 3.999177223683898,
@@ -142,14 +142,14 @@
   "call": [
    "feature releases: monitor",
    "label revisions: escalation",
-   "optimisation noise: monitor",
+   "optimisation noise: escalation",
    "retunes: monitor",
    "training data: escalation"
   ]
  },
  "rigorous": {
   "points": {
-   "optimisation noise": 3.5683180263225505,
+   "optimisation noise": 9.09746162346179,
    "training data": 15.7212478164861,
    "retunes": 4.471813088112299,
    "feature releases": 4.455947755002867,
@@ -178,7 +178,7 @@
   },
   "S2": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 6.617260960157563,
     "retunes": 4.471813088112299,
     "feature releases": 6.6507994101211345,
@@ -187,34 +187,16 @@
    "call": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: a remediation plan"
    ],
    "cc3": 55.00875988521619,
-   "own_share": 51.52489546810883
-  },
-  "S3": {
-   "points": {
-    "optimisation noise": 6.888407287694035,
-    "training data": 6.617260960157563,
-    "retunes": 4.471813088112299,
-    "feature releases": 3.999177223683898,
-    "label revisions": 9.98383122868686
-   },
-   "call": [
-    "feature releases: monitor",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: a remediation plan"
-   ],
-   "cc3": 90.93406593406593,
-   "own_share": 46.79629089950174
+   "own_share": 36.12415997660851
   },
   "S1+S2": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 15.7212478164861,
     "retunes": 4.471813088112299,
     "feature releases": 6.6507994101211345,
@@ -223,72 +205,18 @@
    "call": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ],
    "cc3": 55.00875988521619,
-   "own_share": 13.374475921818835
-  },
-  "S1+S3": {
-   "points": {
-    "optimisation noise": 6.888407287694035,
-    "training data": 15.7212478164861,
-    "retunes": 4.471813088112299,
-    "feature releases": 3.999177223683898,
-    "label revisions": 9.98383122868686
-   },
-   "call": [
-    "feature releases: monitor",
-    "label revisions: escalation",
-    "optimisation noise: a remediation plan",
-    "retunes: monitor",
-    "training data: escalation"
-   ],
-   "cc3": 90.93406593406593,
-   "own_share": 8.899175017945117
-  },
-  "S2+S3": {
-   "points": {
-    "optimisation noise": 3.5683180263225505,
-    "training data": 6.617260960157563,
-    "retunes": 4.471813088112299,
-    "feature releases": 3.999177223683898,
-    "label revisions": 9.98383122868686
-   },
-   "call": [
-    "feature releases: monitor",
-    "label revisions: escalation",
-    "optimisation noise: monitor",
-    "retunes: monitor",
-    "training data: a remediation plan"
-   ],
-   "cc3": 90.93406593406593,
-   "own_share": 54.93661950668486
-  },
-  "S1+S2+S3": {
-   "points": {
-    "optimisation noise": 3.5683180263225505,
-    "training data": 15.7212478164861,
-    "retunes": 4.471813088112299,
-    "feature releases": 3.999177223683898,
-    "label revisions": 9.98383122868686
-   },
-   "call": [
-    "feature releases: monitor",
-    "label revisions: escalation",
-    "optimisation noise: monitor",
-    "retunes: monitor",
-    "training data: escalation"
-   ],
-   "cc3": 90.93406593406593,
-   "own_share": 14.193781151471686
+   "own_share": 4.80718982075818
   }
  },
  "routes": {
   "direct": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 16.121120508337732,
     "retunes": 4.471813088112299,
     "feature releases": 3.999177223683898,
@@ -297,14 +225,14 @@
    "call": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ]
   },
   "rigorous": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 15.7212478164861,
     "retunes": 4.471813088112299,
     "feature releases": 4.455947755002867,
@@ -313,7 +241,7 @@
    "call": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ]
@@ -352,7 +280,7 @@
   },
   "hedge": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 15.7212478164861,
     "retunes": 4.471813088112299,
     "feature releases": 3.999177223683898,
@@ -361,7 +289,7 @@
    "call": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ]
@@ -478,22 +406,6 @@
     "training data: monitor"
    ]
   },
-  "generous:no pinned views": {
-   "points": {
-    "optimisation noise": 9.09746162346179,
-    "training data": 3.467158339616062,
-    "retunes": 4.471813088112299,
-    "feature releases": 10.26561957590522,
-    "label revisions": 9.98383122868686
-   },
-   "call": [
-    "feature releases: escalation",
-    "label revisions: escalation",
-    "optimisation noise: escalation",
-    "retunes: monitor",
-    "training data: monitor"
-   ]
-  },
   "generous:rows out and rows in doubled": {
    "points": {
     "optimisation noise": 9.09746162346179,
@@ -560,7 +472,7 @@
   },
   "calibrated:the families' variance on their bootstrap spread": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 11.233915898842946,
     "retunes": 4.471813088112299,
     "feature releases": 4.455947755002867,
@@ -569,14 +481,14 @@
    "call": [
     "feature releases: monitor",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ]
   },
   "hedge:2026's releases carried": {
    "points": {
-    "optimisation noise": 3.5683180263225505,
+    "optimisation noise": 9.09746162346179,
     "training data": 15.7212478164861,
     "retunes": 4.471813088112299,
     "feature releases": 9.671752553204485,
@@ -585,7 +497,39 @@
    "call": [
     "feature releases: escalation",
     "label revisions: escalation",
-    "optimisation noise: monitor",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "hedge:a whole replicate pair a refit": {
+   "points": {
+    "optimisation noise": 12.865753611068419,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
+    "retunes: monitor",
+    "training data: escalation"
+   ]
+  },
+  "hedge:the gap curve fitted free": {
+   "points": {
+    "optimisation noise": 8.767821401469638,
+    "training data": 15.7212478164861,
+    "retunes": 4.471813088112299,
+    "feature releases": 3.999177223683898,
+    "label revisions": 9.98383122868686
+   },
+   "call": [
+    "feature releases: monitor",
+    "label revisions: escalation",
+    "optimisation noise: escalation",
     "retunes: monitor",
     "training data: escalation"
    ]
@@ -610,7 +554,7 @@
   },
   "S2": {
    "points": {
-    "optimisation noise": 9.09746162346179,
+    "optimisation noise": 12.865753611068419,
     "training data": 6.617260960157563,
     "retunes": 4.471813088112299,
     "feature releases": 6.6507994101211345,
@@ -1379,6 +1323,10 @@
   },
   "calls_hold": true
  },
+ "takeup_range": [
+  54.38942768541566,
+  59.61538461538461
+ ],
  "nearest_line": {
   "source": "optimisation noise",
   "points": 6.147177419097185,
@@ -1516,8 +1464,22 @@
   "unanchored implied replicate": 17.441264636982595,
   "a whole replicate pair a refit": 12.865753611068419,
   "thirteen refits added up": 9.09746162346179,
+  "the replicate pair read as the gap's whole noise": 3.5683180263225505,
+  "feature releases on the calendar's planned weeks": 3.999177223683898,
+  "feature releases left whole on pinned views": 10.26561957590522,
   "feature releases as the mean of the four pairs' root-mean-square": 5.965841829198447,
   "merchants' own change as a share of the record's own movement": 39.198346131432366
+ },
+ "bend": {
+  "line_from_1": 4.446280523151508,
+  "line_from_8": 5.964119119750293,
+  "line_from_20": 7.495557309911925,
+  "intercept8_book": 35.57071687457101,
+  "intercept8_min": 14.257825029940971,
+  "fitted_line8": 5.504465195272825,
+  "misfit_min": 3.3937409375981082,
+  "misfit_median": 34.19601441950698,
+  "misfit_max": 147.95188406222255
  },
  "falsification": {
   "record": 42.344827659997556,
@@ -1613,20 +1575,16 @@
   "with the designated sources removed": 9.71
  },
  "rubric": {
-  "verdict": "CORE PASS level 5  task9",
+  "verdict": "CORE PASS level 4  task9",
   "exit": 0,
   "routes": {
    "golden": 100,
-   "S1 lost alone": 29,
-   "S2 lost alone": 36,
-   "S3 lost alone": 42,
-   "S1 fixed alone": 22,
-   "S2 fixed alone": 16,
-   "S3 fixed alone": 22,
-   "reflex route (every stump lost)": 9,
+   "S1 lost alone": 26,
+   "S2 lost alone": 26,
+   "reflex route (every stump lost)": 16,
    "rigorous standard route": 9,
    "calibrated run route": 9,
-   "cutoff run route": 22,
+   "cutoff run route": 26,
    "generous run route": 42,
    "hedge run route": 9
   }
@@ -1678,7 +1636,7 @@
   ],
   "own_share": [
    41.9,
-   46.7
+   47.0
   ],
   "fr_sched": [
    13.7,
@@ -1690,20 +1648,16 @@
   ]
  },
  "rubric_stated": {
-  "verdict": "CORE PASS level 5  task9",
+  "verdict": "CORE PASS level 4  task9",
   "exit": 0,
   "routes": {
    "golden": 100,
-   "S1 lost alone": 29,
-   "S2 lost alone": 36,
-   "S3 lost alone": 36,
-   "S1 fixed alone": 22,
-   "S2 fixed alone": 16,
-   "S3 fixed alone": 22,
-   "reflex route (every stump lost)": 9,
+   "S1 lost alone": 26,
+   "S2 lost alone": 26,
+   "reflex route (every stump lost)": 16,
    "rigorous standard route": 9,
    "calibrated run route": 9,
-   "cutoff run route": 22,
+   "cutoff run route": 26,
    "generous run route": 42,
    "hedge run route": 9
   }

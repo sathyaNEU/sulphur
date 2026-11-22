@@ -1,17 +1,17 @@
 # leak check, task9
 
-**Verdict: REVIEW.** 29 files read, 46 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 29 files read, 45 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: family, replicate, missed, bootstrap, calendar, instrument, variance, manifests, training, window, turnover, revisions, snapshot, record, thirteen, releases, optimisation, spread, rollouts, dropped, independent, release, component, retunes, hurried
+Stump terms swept: family, bootstrap, replicate, missed, turnover, calendar, instrument, standard, thirteen, variance, optimisation, manifests, training, window, spread, reflex, revisions, releases, dropped, snapshot, routes, refits, release, record, independent
 
 ## 2 author vocabulary (REVIEW 1)
 - **REVIEW** `gms_model_stability_standard_2026.pdf`: \bthe model\b x6: ...aces version 1 of 3 November 2025 1. Scope 1.1 This standard sets how the model risk committee places each model-side source of movement in the Garra...
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 3 of 25 stump-paragraph terms appear (family, snapshot, thirteen); read whether the document names the move
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: 9 of 25 stump-paragraph terms appear (family, training, revisions, snapshot, record, releases); read whether the document names the move
+- **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 3 of 25 stump-paragraph terms appear (family, thirteen, snapshot); read whether the document names the move
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: 10 of 25 stump-paragraph terms appear (family, standard, optimisation, training, revisions, releases); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
 - **REVIEW** `feature_platform_roadmap_2027.xlsx`: 24 ISO dates after 2026-11-25, e.g. 2026-12-28, 2027-01-04, 2027-01-11, 2027-01-18, 2027-02-08
@@ -123,3 +123,40 @@ Rulings on the three swept lines:
 - Question 5, both passes: every literal reading executes to the golden or to a figure inside its band. 3.1 gives the book at the 21 September 2026 snapshot; the plan's December 2027 book, which the first pass called the evident weight, is a battery variant inside every band. 3.2 gives the root of the mean over the four 2027 pairs (the golden). 5.1 gives the shares (the golden). 5.2 gives own change over the 2026 pairs less the sources over those pairs, carried into 2027 and reported against own change plus the 2027 model side (the golden's estimand; the three 2026 pairs alone give a figure inside the band). 6.1 and C4.1 give the panel merchants scored at both snapshots, with every source in a plan or escalation removed in full (the golden).
 - Question 6, both passes: nothing banned. The instrument pairs the first pass names are the field's raw material and do not settle the 2027 quantities, as it says; the definitions the second pass names (3.1's weighting, 5.2's base) are the estimand, filed in plain words.
 - The three swept lines (the standard's "the model", the roadmap's and the plan's dates after the as-of date): harmless, as the second pass rules. The stump-vocabulary lines are ruled in the design note's Literal reader section.
+
+### Third pass (standard 1.4 and 1.5 and the reworded pinned-views ask, after the Holistic Audit v2, 22 November 2026)
+
+Read the prompt and the standard (pdftotext). Nothing was solved or computed.
+
+#### 1. Do the new sentences or the reworded ask tell a solver HOW to compute something? CLEAN
+
+Both sentences say what a source is and when it acts. Neither gives a method, an amount, a rate, a lag or a take-up rate.
+
+- 1.4: "A warm-started weekly refit starts from the previous week's weights, so the randomness of the refits before it carries into it." This is the nearest to a process statement in the document. It files that earlier randomness is part of the source, which is the WHAT of the optimisation-noise estimand. It gives no fraction carried, no decay or persistence rate, no number of weeks, and no way to estimate any of them. A solver is still free to choose between a fresh-draw noise estimate and an accumulating one; the sentence tells the solver only that the carried part counts.
+- 1.5: "A feature release reaches a family's scores through the live feature views only: in the weeks a family trains and scores on pinned feature views, no feature release moves its scores." This is a gate on when the source acts (live views versus pinned views). It gives no lag, no adoption rate, and no statement that a calendar's completion date differs from the date a family actually uses an image.
+- Prompt ask: "the share of 2027's weekly retrains expected to actually run on pinned feature views." It names the quantity (population: 2027's weekly retrains; outcome: share on pinned views) and no way to get it. The word "actually" gives a faint hint that plan and use can differ. It does not say how, by how much, or from which file. I rate it CLEAN, but it is the one phrase to watch if a reviewer reads for hints. If it is read as a hint, "expected to run on pinned feature views" without "actually" carries the same estimand.
+
+No phrase hands over a method or number. Two phrases to be aware of: "carries into it" (1.4) and "actually" (prompt).
+
+#### 2. Does the standard rank or price the five sources, or state a graded figure? CLEAN
+
+- Section 1.2 lists the five sources with one-line definitions only.
+- The only numbers are the band thresholds in 4.1: "under 5.5 points", "5.5 points or more and under 8 points", "8 points or more". These are the filed placement rule that the prompt's band ask needs, not a figure about any source.
+- 3.1, 3.2 and 5.1 to 5.2 are definitions of movement, share and merchants' own change. 6.1 says to report the tier-change share with and without the movement of the sources placed in a plan or escalation. It gives no value.
+- No sentence orders the sources, says which is largest, or gives a source's movement, a share, a tier-change rate or a pinned-view share. 2.1 points to filed roadmaps and plans for the assessment year (no figures stated).
+
+#### 3. Does the prompt name a file, method, instrument, rounding rule or who is asking? CLEAN
+
+- No file is named. "A workbook" and "a few slides" are deliverable types.
+- None of bootstrap, replicate, warm start, seed, resample, lag, persistence, overlap, adoption or take-up appears. "Weekly retrains" and "pinned feature views" are terms the standard and pack use for the quantity, not instruments. "Quarter-end snapshots" is the standard's own convention.
+- No rounding instruction.
+- Nobody is named as asking. "Our merchant score" and "I need" say only that the asker is inside the company, not their role.
+- The prompt is one plain paragraph, well under 1,000 characters, question first.
+
+#### Verdicts
+
+1. CLEAN
+2. CLEAN
+3. CLEAN
+
+Main thread's ruling on the third pass: the two phrases the reader marks ("carries into it" in 1.4, "actually" in the ask) are the Holistic Audit v2's own requested closures, filed as definitions of the WHAT at the author's ruling of 22 November 2026; neither says how much randomness carries, how it decays, or when a family takes up pinned views, so neither hands over a step.

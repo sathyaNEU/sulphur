@@ -667,9 +667,13 @@ def analyse(pk, truth, detail=False):
             print("forcing %-13s variance down a fifth %.2f, up a fifth %.2f, band held %s" % (
                 s_, lo, hi, sum(1 for l in LINES if lo >= l) == g0["band"][s_] == sum(1 for l in LINES if hi >= l)))
 
-    hur = {"S1": dict(S1="hur"), "S2": dict(S2="hur"), "S3": dict(S3="hur")}
+    # the standard's 1.4 files that a warm-started refit carries the randomness of the refits before it, so the
+    # replicate pair read as the gap's whole noise (S2="hur") is refused; the hurried S2 adds thirteen refits' fresh
+    # draws up in full. Its 1.5 files that no release moves a family on pinned views (S3="over" refused), and the
+    # ask is for retrains expected to actually run on pinned views: the take-up is then a supporting step, not a stump.
+    hur = {"S1": dict(S1="hur"), "S2": dict(S2="over")}
     lattice, lat_eval = {}, {}
-    for key in ("S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3"):
+    for key in ("S1", "S2", "S1+S2"):
         o = {}
         for st in key.split("+"):
             o.update(hur[st])
@@ -677,11 +681,11 @@ def analyse(pk, truth, detail=False):
         lattice[key] = lat_eval[key]["points"]
 
     routes = {
-        "direct": evaluate(pk, S1="raw", S2="hur", S3="hur"),
-        "rigorous": evaluate(pk, S1="hur", S2="hur", S3="declared"),
+        "direct": evaluate(pk, S1="raw", S2="over", S3="hur"),
+        "rigorous": evaluate(pk, S1="hur", S2="over", S3="declared"),
         "generous": evaluate(pk, S1="square", S2="over", S3="worst"),
         "calibrated": evaluate(pk, S1="hur", S2="cal", S3="declared"),
-        "hedge": evaluate(pk, S1="hur", S2="hur", S3="hur"),
+        "hedge": evaluate(pk, S1="hur", S2="over", S3="hur"),
         "cutoff": evaluate(pk, S1="single", S2="cut", S3="threshold"),
     }
     extra = {"cutoff:lags from 1": evaluate(pk, S1="single", S2="cut", cut_lag=1, S3="threshold"),
@@ -690,14 +694,15 @@ def analyse(pk, truth, detail=False):
              "cutoff:lags from 16": evaluate(pk, S1="single", S2="cut", cut_lag=16, S3="threshold"),
              "cutoff:two components": evaluate(pk, S1="single", S2="cut", S3="threshold", cut_custom=2),
              "cutoff:four components": evaluate(pk, S1="single", S2="cut", S3="threshold", cut_custom=4),
-             "generous:no pinned views": evaluate(pk, S1="square", S2="over", S3="over"),
              "generous:rows out and rows in doubled": evaluate(pk, S1="double", S2="over", S3="worst"),
              "generous:turnover cancels": evaluate(pk, S1="over", S2="over", S3="worst"),
              "generous:a whole replicate pair a refit": evaluate(pk, S1="square", S2="over2", S3="worst"),
              "calibrated:plan dates": evaluate(pk, S1="hur", S2="cal", S3="hur"),
-             "calibrated:the families' variance on their bootstrap spread": evaluate(pk, S1="regress", S2="hur", S3="declared"),
-             "hedge:2026's releases carried": evaluate(pk, S1="hur", S2="hur", S3="y2026")}
-    over = {"S1": evaluate(pk, S1="over"), "S2": evaluate(pk, S2="over"), "S3": evaluate(pk, S3="over")}
+             "calibrated:the families' variance on their bootstrap spread": evaluate(pk, S1="regress", S2="over", S3="declared"),
+             "hedge:2026's releases carried": evaluate(pk, S1="hur", S2="over", S3="y2026"),
+             "hedge:a whole replicate pair a refit": evaluate(pk, S1="hur", S2="over2", S3="hur"),
+             "hedge:the gap curve fitted free": evaluate(pk, S1="hur", fit="free26", S3="hur")}
+    over = {"S1": evaluate(pk, S1="over"), "S2": evaluate(pk, S2="over2"), "S3": evaluate(pk, S3="over")}
     tpoints = {s: math.sqrt(tagg[s]) for s in SOURCES}
 
     members = {}
@@ -715,8 +720,7 @@ def analyse(pk, truth, detail=False):
         return d
 
     figures = [{"id": "CC1 turnover alone, points", "block": "component", "member": "turnover"},
-               {"id": "CC2 optimisation noise alone, points", "block": "component", "member": "optimisation"},
-               fig("CC3 share of 2027 retrains on pinned views", "cc3", "component")]
+               {"id": "CC2 optimisation noise alone, points", "block": "component", "member": "optimisation"}]
     # the answer blocks state each source on one line (its points and its share), so the two are one criterion
     for s in SOURCES:
         figures += [fig("%s points, on its line" % s, "points_" + s, "ask", sentence="source " + s),
@@ -744,14 +748,10 @@ def analyse(pk, truth, detail=False):
                                     "models share every week of it but the thirteen that left and the thirteen that "
                                     "entered.",
                    "sides": {"over": over["S1"]["points"]}},
-            "S2": {"axis": "what", "opens": "optimisation", "steps_left": 5, "precedents": ["L39", "N44", "L28"],
-                   "said_out_loud": "Each weekly model starts from last week's weights, so a replicate pair shows "
-                                    "one week's fresh noise and not the gap between two models a quarter apart.",
+            "S2": {"axis": "what", "opens": "optimisation", "steps_left": 4, "precedents": ["L68", "N45", "L39"],
+                   "said_out_loud": "The randomness a warm-started refit carries decays from refit to refit, so "
+                                    "thirteen refits' fresh draws do not add up in full between two snapshots.",
                    "sides": {"over": over["S2"]["points"]}},
-            "S3": {"axis": "when", "opens": "releases", "steps_left": 4, "precedents": ["L46", "N03", "N22"],
-                   "said_out_loud": "The change calendar marks a rollout complete when the image is available, not "
-                                    "when each family trains on it.",
-                   "sides": {"over": over["S3"]["points"]}},
         },
         "lattice": lattice,
         "falsification": fals,

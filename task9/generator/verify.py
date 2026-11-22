@@ -147,13 +147,14 @@ def main():
     tur27 = {c: per_row[c] * np.mean([change_var(c, a, b) for a, b in s27]) for c in fams}
 
     # the gap curve over the settled warm weeks, the saturating term tied to the replicate pairs
-    opt13, slope, phi_, A_, d13, d1 = {}, {}, {}, {}, {}, {}
+    opt13, slope, phi_, A_, d13, d1, ic8 = {}, {}, {}, {}, {}, {}, {}
     for c in fams:
         t0 = max(last_cold[c] + 13, 66)
         X = Z[c]
         D = np.array([np.nanmean((X[:, t0 + h:TT] - X[:, t0:TT - h]) ** 2) for h in range(1, 27)])
         d13[c], d1[c] = D[12], D[0]
         h = np.arange(1, 27)
+        ic8[c] = float(np.polyfit(h[7:], D[7:], 1)[1])      # a straight line through gaps 8 to 26, at gap 0
         rep = inst.loc[c, "replicate"]
         wgt = 1 / D ** 2
 
@@ -277,6 +278,21 @@ def main():
         r = got[k]
         ok("workbook %s: %s points, %s per cent" % (k, r[1], r[2]),
            abs(r[1] - round(fig["points"][k], 2)) < 1e-9 and abs(r[2] - round(fig["share"][k], 1)) < 1e-9)
+    # the second determinism pass (2026-11-22): the full sums need every family's curve through the origin
+    ok("SF24 every family's line through gaps 8 to 26 meets gap 0 above zero, as figures.json states",
+       min(ic8.values()) > 0 and abs(sum(wt[c] * ic8[c] for c in fams) - fig["bend"]["intercept8_book"]) < 0.05,
+       (round(min(ic8.values()), 2), round(sum(wt[c] * ic8[c] for c in fams), 2)))
+    # the Holistic Audit v2 forks (2026-11-22), read off the shipped bundle alone
+    import subprocess
+    std = " ".join(subprocess.run(["pdftotext", "-layout", os.path.join(T, "gms_model_stability_standard_2026.pdf"), "-"],
+                                  capture_output=True, text=True).stdout.split())
+    ok("SF24 the standard files the warm start's carried randomness",
+       "starts from the previous week's weights, so the randomness of the refits before it carries into it" in std)
+    ok("SF22 the standard files that no release moves a family on pinned feature views",
+       "in the weeks a family trains and scores on pinned feature views, no feature release moves its scores" in std)
+    prompt = " ".join(open(os.path.join(os.path.dirname(T), "prompt.txt")).read().split())
+    ok("SF23 the prompt asks for retrains expected to actually run on pinned feature views",
+       "expected to actually run on pinned feature views" in prompt)
     print("verify: %d pass, %d fail" % (N["pass"], N["fail"]))
     return 1 if N["fail"] else 0
 

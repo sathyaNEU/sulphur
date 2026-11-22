@@ -187,8 +187,8 @@ def workbook(path, fig, pk, g):
     s7.append(["Route", "Optimisation noise", "Training data", "Retunes", "Feature releases", "Label revisions",
                "Bands it files"])
     _hdr(s7, 1, 7)
-    show = [("Each instrument as it reads", fig["reflex"]),
-            ("Bootstrap pairs as they stand, calendar planned weeks", fig["direct"])]
+    show = [("Bootstrap pairs as the movement, refits' noise added in full", fig["reflex"]),
+            ("Bootstrap pairs with the seeds left in, refits added in full, calendar planned weeks", fig["direct"])]
     for k, e in show:
         p = e["points"]
         s7.append([k] + [round(p[NAMES[s]], 2) for s in C.SOURCES] +
@@ -274,7 +274,7 @@ def deck(path, fig):
     tf = tb.text_frame
     tf.word_wrap = True
     for i, line in enumerate(("Merchants' own change is %.1f per cent of all movement." % fig["own_share"],
-                              "%.1f per cent of 2027's weekly retrains will run on pinned feature views." % fig["cc3"],
+                              "%.1f per cent of 2027's weekly retrains are expected to actually run on pinned feature views." % fig["cc3"],
                               "Tier changes between snapshots: %.1f per cent expected in 2027, %.1f with the four "
                               "designated sources removed (cap 12)." % (fig["fr_sched"], fig["fr_removed"]))):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()

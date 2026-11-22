@@ -171,10 +171,10 @@ def write(path, fig):
     a("")
     a("For 2027, escalate label revisions (%.2f points between consecutive quarter-end snapshots) and put optimisation "
       "noise (%.2f), feature releases (%.2f) and training data (%.2f) on remediation plans; keep retunes on monitor "
-      "(%.2f). This rejects reading each instrument as it stands, which escalates training data at %.2f points and "
-      "leaves optimisation noise (%.2f) and feature releases (%.2f, on the calendar's planned weeks) on monitor." % (
+      "(%.2f). This rejects reading the bootstrap pairs as the movement and adding the thirteen refits' fresh noise "
+      "up in full, which escalates training data at %.2f points and optimisation noise at %.2f." % (
           P["label revisions"], P["optimisation noise"], P["feature releases"], P["training data"], P["retunes"],
-          rf["points"]["training data"], rf["points"]["optimisation noise"], rf["points"]["feature releases"]))
+          rf["points"]["training data"], rf["points"]["optimisation noise"]))
     a("")
     L.extend(_stump_block(fig))
     a("## Supplementary Questions")
@@ -193,7 +193,7 @@ def write(path, fig):
             "abcde"[i], cap(n), P[n], band(B["points_" + s], 2), S[n], band(B["share_" + s], 1), fig["band_of"][n]))
     a("   f. Merchants' own change: %.1f per cent of all movement between quarter-end snapshots (band %s)." % (
         fig["own_share"], band(B["own_share"], 1)))
-    a("2. Pinned feature views: %.1f per cent of 2027's weekly retrains will run on them, family-weeks across the "
+    a("2. Pinned feature views: %.1f per cent of 2027's weekly retrains are expected to actually run on them, family-weeks across the "
       "fourteen families (band %s)." % (fig["cc3"], band(B["cc3"], 1)))
     a("3. Tier changes between consecutive quarter-end snapshots in 2027, against the covenant's cap of 12 per cent:")
     a("   a. %.1f per cent of merchants expected (band %s)." % (fig["fr_sched"], band(B["fr_sched"], 1)))
@@ -211,8 +211,6 @@ def write(path, fig):
       "(band %s)." % (fig["cc1"], band(B["cc1"], 2)))
     a("2. Optimisation noise alone moves a merchant's score **%.2f points** between consecutive quarter-end snapshots in "
       "2027 (band %s)." % (fig["cc2"], band(B["cc2"], 2)))
-    a("3. **%.1f per cent** of 2027's weekly retrains will run on pinned feature views (band %s)." % (
-        fig["cc3"], band(B["cc3"], 1)))
     a("")
     a("## Step-by-Step")
     a("")
@@ -242,25 +240,36 @@ def write(path, fig):
           fig["cc1"]))
     sf = fig["settled_floor"]
     aw = fig["assessment_weeks"]
-    a("4. Optimisation noise. The replicate pairs differ by %.2f points squared, book weighted, which is %.2f points "
-      "and monitor if a refit's fresh noise is all two snapshot models differ by. But each weekly model starts from "
-      "the previous week's weights, so the noise persists and builds over the thirteen refits between snapshots. "
-      "Each family's settled warm weeks run from thirteen weeks after its last cold-started retrain in the "
+    a("4. Optimisation noise. The replicate pairs differ by %.2f points squared, book weighted, which would be %.2f "
+      "points and monitor if a refit's fresh noise were all two snapshot models differ by; the standard's section "
+      "1.4 rules that out, since a warm-started refit carries the randomness of the refits before it, so the later "
+      "snapshot model holds the noise of the thirteen refits between. Added up in full, each refit's fresh draw "
+      "(half a replicate pair) gives %.2f points and escalation, and a whole replicate pair a refit %.2f; but the "
+      "carried noise decays. Each family's settled warm weeks run from thirteen weeks after its last cold-started retrain in the "
       "manifests, and not before the refresh of %s (the record's last %d weeks). Over them the score history's "
       "mean-square change by gap h bends towards a ceiling: fitted family by family over gaps 1 to 26 as "
       "b h + A(1 - p^h), with A(1 - p^2) set to the family's replicate-pair variance, each gap weighted by the "
       "inverse square of its mean-square change and p searched from %.2f to %.3f in steps of %.4f, it gives a persistence p of %.2f "
-      "to %.2f by family and %.2f points, a remediation plan. Fitted free of the replicate pairs it gives %.2f "
-      "points but implies replicate pairs of %.2f where %.2f is measured; a straight line through gaps 8 to 26 "
-      "starts at %.2f while the curve is still bending; thirteen refits each adding a whole replicate pair's "
-      "variance gives %.2f." % (
-          b["replicate"], rf["points"]["optimisation noise"], sf["date"], sf["weeks"], fig["fit_grid"][0],
-          fig["fit_grid"][1], fig["fit_grid"][2], b["phi_fit"][0], b["phi_fit"][1], fig["cc2"], pr["unanchored fit"],
-          pr["unanchored implied replicate"], b["replicate"], pr["line through gaps 8 to 26"],
-          pr["a whole replicate pair a refit"]))
+      "to %.2f by family and %.2f points, a remediation plan. The full sums are refused by the bend: a persistence "
+      "of 1 puts every source on a straight line through the origin, but every family's line through gaps 8 to 26 "
+      "meets gap 0 above zero (%.1f points squared, book weighted, and at least %.1f in every family), and a line "
+      "through the origin misfits every family's curve, by the same weights, %.1f times or more as badly as the "
+      "fitted curve (%.0f times at the median family). Fitted free of the replicate pairs the curve gives %.2f points "
+      "but implies replicate pairs of %.2f where %.2f is measured, so it is refused by the pairs. A straight line's "
+      "start moves with its first gap (%.2f points from gap 1, %.2f from gap 8, %.2f from gap 20), so the curve is "
+      "still bending, and the fitted curve put through the same line on gaps 8 to 26 returns %.2f against its own "
+      "%.2f: a line's start is not the movement at thirteen weeks." % (
+          b["replicate"], pr["the replicate pair read as the gap's whole noise"], rf["points"]["optimisation noise"],
+          pr["a whole replicate pair a refit"], sf["date"], sf["weeks"], fig["fit_grid"][0],
+          fig["fit_grid"][1], fig["fit_grid"][2], b["phi_fit"][0], b["phi_fit"][1], fig["cc2"],
+          fig["bend"]["intercept8_book"], fig["bend"]["intercept8_min"], fig["bend"]["misfit_min"],
+          fig["bend"]["misfit_median"], pr["unanchored fit"], pr["unanchored implied replicate"], b["replicate"],
+          fig["bend"]["line_from_1"], fig["bend"]["line_from_8"], fig["bend"]["line_from_20"],
+          fig["bend"]["fitted_line8"], fig["cc2"]))
     a("5. Pinned feature views and feature releases. 2027's retrains are the %d weekly refreshes of the four "
-      "snapshot pairs closing in 2027, %s to %s. On the calendar's planned weeks %.1f per cent of them run on "
-      "pinned views, and %.1f per cent on its completed dates. The calendar marks a change complete when the image "
+      "snapshot pairs closing in 2027, %s to %s, and the share asked for is of those expected to actually run on "
+      "pinned views. On the calendar's planned weeks %.1f per cent of them would, and %.1f per cent on its "
+      "completed dates. The calendar marks a change complete when the image "
       "is released; the manifests show when each family first trained on the three past changes: %d family "
       "rollouts, first use %d to %d weeks after completion (median %.0f), a median of %.1f weeks with no custom "
       "training components and %.1f with %d, and %.1f per cent of the following 26 weeks reverted. A lag model "
@@ -268,23 +277,26 @@ def write(path, fig):
       "rollouts' mean slip, counted in weekly refreshes from the planned week to the refresh week of the completed "
       "date (%.2f weeks); the lag from that week to first use is fitted log-linear on custom components with its "
       "spread integrated, and the reverted share is netted from the weeks on, which puts %.1f per cent of 2027's "
-      "retrains on pinned views. Leaving each past "
+      "retrains on pinned views; every take-up form, log-linear or linear, by group, by family or pooled, integrated "
+      "or as a plug-in median lag, with or without reverts, puts it between %.1f and %.1f per cent. Leaving each past "
       "rollout out in turn, the model puts %.1f, %.1f and %.1f per cent of its first 39 weeks, counted from each "
-      "family's completed date, on the change, against %.1f, %.1f and %.1f recorded. A roadmap release moves a family's scores only "
-      "in the weeks it is not on pinned views: with the release shadows' variance and the roadmap's %d releases, "
-      "feature releases alone are %.2f points, a remediation plan (%.2f on the calendar's planned weeks and %.2f "
-      "on its completed dates, monitor either way; %.2f if the release level of the settled weeks is carried "
-      "instead of the roadmap)." % (
+      "family's completed date, on the change, against %.1f, %.1f and %.1f recorded. Under the standard's section "
+      "1.5 no feature release moves a family's scores in the weeks it trains and scores on pinned views: with the "
+      "release shadows' variance and the roadmap's %d releases, feature releases alone are %.2f points, a "
+      "remediation plan (%.2f on the calendar's planned weeks and %.2f on its completed dates, monitor either way; "
+      "%.2f left whole on pinned weeks, which section 1.5 refuses; %.2f if the release level of the settled weeks "
+      "is carried instead of the roadmap, which section 2.1 refuses)." % (
           aw["refreshes"], aw["first"], aw["last"], b["cov_plan"], b["cov_declared"], b["past_family_rollouts"],
           b["past_lag_range"][0], b["past_lag_range"][1], b["past_lag_median"], b["lag_median_custom0"],
           b["lag_median_custom_max"], b["custom_max"], 100 * b["revert_share"], b["slip_mean"], fig["cc3"],
-          100 * fig["loo"]["runtime"]["model"], 100 * fig["loo"]["warm"]["model"], 100 * fig["loo"]["amp"]["model"],
+          fig["takeup_range"][0], fig["takeup_range"][1], 100 * fig["loo"]["runtime"]["model"], 100 * fig["loo"]["warm"]["model"], 100 * fig["loo"]["amp"]["model"],
           100 * fig["loo"]["runtime"]["record"], 100 * fig["loo"]["warm"]["record"],
           100 * fig["loo"]["amp"]["record"], b["releases_2027"], P["feature releases"],
-          rf["points"]["feature releases"], fig["rigorous"]["points"]["feature releases"],
-          pr["2026's release level carried"]))
+          pr["feature releases on the calendar's planned weeks"], fig["rigorous"]["points"]["feature releases"],
+          pr["feature releases left whole on pinned views"], pr["2026's release level carried"]))
     a("6. Shares. Over the same settled weeks the record's mean-square change across thirteen refreshes is %.2f, "
-      "book weighted; less the model-side sources as they stood, feature releases at the count those weeks hold, "
+      "book weighted; less the model-side sources as they stood, retunes at one every fourth week and feature "
+      "releases at the mean count a thirteen-week gap of those weeks holds, "
       "it leaves merchants' own change, carried into 2027 beside the five sources' 2027 movement, at %.1f per cent "
       "of all movement, section 5.2's quantity estimated from every thirteen-week gap of the settled weeks; the three "
       "snapshot pairs closed in 2026 taken alone give %.1f. As a share of the record's own movement it would be %.1f, "
@@ -319,19 +331,19 @@ def write(path, fig):
       "log-linear, linear, by group or by family, integrated or as a plug-in median lag, and pooled or without "
       "reverts; the planned "
       "book, the latest bootstrap week, four tier mappings, and the panel's weights in place of the book's) file "
-      "the same five bands, the nearest a variant comes to a line being %s at %.2f against %s. The three decisive "
+      "the same five bands, the nearest a variant comes to a line being %s at %.2f against %s. The two decisive "
       "steps are independent: with only the training-data step missed, training data goes to escalation (%.2f) and "
-      "nothing else moves; with only the optimisation step missed, optimisation noise drops to monitor (%.2f); with "
-      "only the pinned-views step missed, feature releases drop to monitor (%.2f). Missed in pairs, the two "
-      "sources they open both move (training data %.2f and optimisation noise %.2f; training data %.2f and feature "
-      "releases %.2f; optimisation noise %.2f and feature releases %.2f), and with all three missed the call is the "
-      "hurried one in the Final Recommendation. The thinnest margin is optimisation noise's floor: its band starts "
+      "nothing else moves; with only the optimisation step missed, optimisation noise goes to escalation (%.2f) and "
+      "nothing else moves; with both missed both move (training data %.2f and optimisation noise %.2f), the hurried "
+      "call in the Final Recommendation. The pinned-views take-up supports the call: with the calendar's dates taken "
+      "for first use, feature releases drop to monitor (%.2f on its planned weeks, %.2f on its completed dates). "
+      "The thinnest margin is optimisation noise's floor: its band starts "
       "at %.2f, between the flat fit on settled weeks from thirteen weeks after the last cold retrain with no floor "
       "(%.2f) and the line through gaps 8 to 26 (%.2f)." % (
           fig["variants_all"], nl["source"], nl["points"], ("%g" % nl["line"]), lt("S1", "training data"),
-          lt("S2", "optimisation noise"), lt("S3", "feature releases"), lt("S1+S2", "training data"),
-          lt("S1+S2", "optimisation noise"), lt("S1+S3", "training data"), lt("S1+S3", "feature releases"),
-          lt("S2+S3", "optimisation noise"), lt("S2+S3", "feature releases"), fig["stated"]["points_optimisation"][0],
+          lt("S2", "optimisation noise"), lt("S1+S2", "training data"), lt("S1+S2", "optimisation noise"),
+          pr["feature releases on the calendar's planned weeks"], fig["rigorous"]["points"]["feature releases"],
+          fig["stated"]["points_optimisation"][0],
           fig["forks"]["admitted_range"]["points_optimisation"][0], pr["line through gaps 8 to 26"]))
     a("")
     open(path, "w").write("\n".join(L))
