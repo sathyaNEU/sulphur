@@ -4,14 +4,14 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: family, replicate, missed, bootstrap, calendar, instrument, variance, manifests, training, window, turnover, revisions, snapshot, thirteen, releases, optimisation, spread, rollouts, dropped, independent, release, component, retunes, hurried, section
+Stump terms swept: family, replicate, missed, bootstrap, calendar, instrument, variance, manifests, training, window, turnover, revisions, snapshot, record, thirteen, releases, optimisation, spread, rollouts, dropped, independent, release, component, retunes, hurried
 
 ## 2 author vocabulary (REVIEW 1)
 - **REVIEW** `gms_model_stability_standard_2026.pdf`: \bthe model\b x6: ...aces version 1 of 3 November 2025 1. Scope 1.1 This standard sets how the model risk committee places each model-side source of movement in the Garra...
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 3 of 25 stump-paragraph terms appear (family, snapshot, thirteen); read whether the document names the move
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: 8 of 25 stump-paragraph terms appear (family, training, revisions, snapshot, releases, optimisation); read whether the document names the move
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: 9 of 25 stump-paragraph terms appear (family, training, revisions, snapshot, record, releases); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
 - **REVIEW** `feature_platform_roadmap_2027.xlsx`: 24 ISO dates after 2026-11-25, e.g. 2026-12-28, 2027-01-04, 2027-01-11, 2027-01-18, 2027-02-08
