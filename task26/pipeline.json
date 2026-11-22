@@ -60,7 +60,7 @@
   "average": null,
   "counterfactual_average": null
  },
- "resume": "upload refreshed v3 target.zip, golden.zip, and submission.md blocks (prompt.txt unchanged) to platform",
+ "resume": "upload refreshed v3 target.zip, golden.zip, tightened prompt.txt, and submission.md blocks to platform",
  "final_cut": {
   "date": "2026-11-21",
   "target_zip_md5": "225e66f9b225262c3fb32a44881bedff",

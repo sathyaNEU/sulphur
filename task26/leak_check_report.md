@@ -4,13 +4,14 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: monthly, raudfjord, malmnes, feeder, kvernholm, drangvik, hourly, svarthaug, commissioning, impedance, upstream, missed, minute, corridor, golden, target, reflex, hestmark, tverrli, conservation, voltages, sep-oct, modernized, winter, fossheim
+Stump terms swept: monthly, raudfjord, malmnes, feeder, kvernholm, drangvik, hourly, svarthaug, commissioning, impedance, upstream, missed, substations, minute, corridor, reactive, golden, target, reflex, hestmark, tverrli, conservation, voltages, sep-oct, modernized
 
 ## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: carries 19 of 20 distinctive words of the committed call: 'Schedule Phase 1 (2027) firm-capacity relief at Hestmark (141.77% Firm N-1, 20.16 MVA), Raudfjord (109.21%, 10.90 MVA), '
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 10 of 25 stump-paragraph terms appear (raudfjord, malmnes, feeder, kvernholm, drangvik, svarthaug); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `grid_tariff_schedule_2026.pdf`: 3 of 25 stump-paragraph terms appear (monthly, hourly, reactive); read whether the document names the move
+- **REVIEW** `vesterdal_planning_standard_ns2026.pdf`: 11 of 25 stump-paragraph terms appear (raudfjord, malmnes, feeder, kvernholm, drangvik, svarthaug); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -18,6 +19,9 @@ Stump terms swept: monthly, raudfjord, malmnes, feeder, kvernholm, drangvik, hou
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 19 usable files (10 or more required)
 - **INFO** `-`: 3 file categories: database, document, spreadsheet (2 or more required)
+
+## 13 task metadata (REVIEW 1)
+- **REVIEW** `metadata.json`: files.commissioning_phase_log_2025.csv.covers shares the design note's stump vocabulary (commissioning, substations, modernized): say what the task decides, not how
 
 ## 1 file names (clean)
 
