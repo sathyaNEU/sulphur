@@ -1,35 +1,35 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DRAWING",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-17",
- "call": "class 3 (automatic barrier) at Rio Toval, Rio Ciadin, Rio Marden, Rio Gelt and Rio Bianc; class 2 (seasonal patrol with hand gates) at Rio Sass; class 1 (signs) at Rio Larin (triggering storms a season to expect, generator/figures.json on the cut pack: Rio Toval 12.39, Rio Ciadin 10.50, Rio Marden 4.50, Rio Gelt 4.44, Rio Bianc 4.11; Rio Sass 1.83; Rio Larin 0.50; lines 3.0 and 1.0)",
- "stump": "the reflex route (one factor per station closing the storage gauge account, each station carried to its source area by the rainfall normal's ratio, hail days' tips taken as rain) files Rio Gelt 1.17, Rio Marden 0.50, Rio Bianc 1.94 and Rio Sass 0.50: 2 barriers, 2 patrols and 3 signs; S1 lost alone files Rio Gelt 2.39, S2 lost alone Rio Marden 1.39 and Rio Sass 0.94, S3 lost alone Rio Bianc 2.56; the radar's own depths (matched to the research valley's weighing gauges, or adjusted to the stations by one factor) file 2.07, 1.29, 2.21 and 0.43 at the four open crossings",
- "architecture": 8,
+ "stage": 1,
+ "stage_name": "draw",
+ "updated": "2026-11-21",
+ "call": "none: architecture 9 (lightning ramp stand-downs) died on paper; architecture 10 at the screen",
+ "stump": "architecture 9, dead on paper: the reflex route (the located strokes' hours at face value or raised by the share located, every sensor in the log counted alike) files a crew at Callory Downs alone (38.3 hours; Penrow Sound 12.7, Mornay Inlet 12.2, Weymoor Gap 13.5). S1, what recorded hours stand for when the strokes the network missed shorten stand-downs, split them and erase whole days (opens Penrow Sound, moves Mornay Inlet with it; pushed past its fitted value, the hours raised in proportion, it files a crew everywhere but Yanda Creek); S3, what a legacy receiver adds to detection, fitted at 0.32 of a standard sensor from the located peak currents (opens Weymoor Gap; pushed past its fitted value, a receiver worth nothing, it files a fifth crew at Burrel Bay; the call needs the worth between about 0.15 and 0.46). The response to the shelf index is a supporting step: left out alone it files the golden's call.",
+ "architecture": 9,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-17",
-  "checks": "precut.py task3 on the final cut: 0 FAIL, 1 WARN (nearest chains task17 and task2, answered in the Template check); generator/core.py CORE PASS level 5; prompt gate PASS (one WARN: 'seasonal' is the class's own name)"
+  "exit": null,
+  "date": "2026-11-21",
+  "checks": "architecture 9's precut pass (117 checks, 0 FAIL) is on a dead design and does not stand"
  },
  "leak": {
-  "leak_py": "REVIEW on the final cut, three lines, each answered in the note's Leak rulings (the regulation's own vocabulary, the crossings register listing the seven crossings beside their filed fields, 'seasonal' in the prompt as the class's name); no LEAK",
-  "reader": "two reads (Sonnet, medium): pass 1's question-5 finding on regulation 3.2 fixed in the generator; pass 2 on the rebuilt cut: nothing on questions 1 to 4 and 6, 3.2 executed as the golden does, three reading questions (the clock of 2.1's day, complete seasons under 3.1, a fitted level for 3.2) each measured and asserted with no change to the pack (checks.py SF4, SF5, SF20); realism clean"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "guard.py heart task3 on the final cut: WARN only (template.chain_near task17 and task10 v7, repeat.deliverables task1 v6, skeleton.house_lesson stock_flow_accounting), each answered in the note's Template check; surface PASS",
-  "nearest": "guard.py check task3 on 2026-11-16: WARN only (template.chain_near task17 and task10 v7, repeat.deliverables task1 v6, skeleton.house_lesson stock_flow_accounting, NOTE same_driver_older mark126), each answered in the note's Template check; skeleton severity none"
+  "heart": "",
+  "nearest": "guard.py check task3 on 2026-11-21: WARN only (overuse.weight task8, repeat.deliverables task9, repeat.question_form task1, skeleton.lesson_closed_support and lesson_taught on measurement_basis_break, skeleton.house_lesson latent_structure_estimation, skeleton.house_shell set_over_threshold), each answered in the note; no BLOCK"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "pass 1 NOT_DETERMINISTIC (a narrow send-back on regulation 3.2, with a radar route that reached the classing without a stump): 3.2 pinned and the radar's process repaired in the generator and the core re-proved; pass 2 on the rebuilt cut DETERMINISTIC, FIX_NOW on the answer blocks only, its eight fixes taken in one generator pass with the pack, the prompt and every golden figure unchanged, so no third pass is owed",
-  "report": "determinism_check_report.md (pass 2 in full, the fixes taken, pass 1's summary): the seven classes held in about 300 runs of the blocks' own method; 3.2 executes to all seven depths; both radar routes refused at the stations' own pixels by figures the judge reproduced; fixed: band tops given a storm and a tenth of a millimetre of room and the hail-coded placing crossed with the first-order loss, the tip's stamp and the sliding hour stated (SF26), the account's cut stated in millimetres (SF27), each hail placing, the dry-block share and the rank carry given their rules"
+  "verdict": "",
+  "disposition": "",
+  "report": ""
  },
- "paper_pair": 26.7,
+ "paper_pair": null,
  "runs": {
   "run1": null,
   "run2": null,
@@ -62,6 +62,13 @@
     "run1": "on the golden (every graded figure)",
     "run2": "on the golden (every graded figure)",
     "triage": "REDESIGN (author: both models landed the ground truth; runs/arch6/runs.md)"
+   },
+   {
+    "architecture": 8,
+    "date": "2026-11-21",
+    "run1": "not reported, on the call (all seven classes; 10 of 14 ask figures in band; S1 missed, N42)",
+    "run2": "not reported, on the call (all seven classes; 13 of 14 ask figures in band; S1, S2 and S3 made)",
+    "triage": "REDESIGN (both runs fitted every correction a shipped file let them check, R98 to R101, and every open member sat 1.1 to 1.5 storms above its line; runs/arch8/run1.md and run2.md; no score or rubric pasted, estimated 65 to 80 a run)"
    }
   ]
  },
@@ -132,15 +139,23 @@
    "portal": "architecture 3 platform round: both runs on the golden at every ask (runs/triage.md)",
    "disposition": "re-root at the author's word: architecture 5 drawn in a new world (Ollery Creek's culvert, flood frequency), dataset and shell",
    "commit": ""
+  },
+  {
+   "date": "2026-11-21",
+   "source": "triage",
+   "repair": "design",
+   "portal": "architecture 8 platform round: both runs filed all seven classes (runs/arch8/run1.md, run2.md)",
+   "disposition": "re-root: the gates rebuilt on the runs' recorded routes (SKILLS e225f91 and ca18325); architecture 9 drawn in a new world, dataset and shell by the stump-architect",
+   "commit": ""
   }
  ],
- "resume": "the author's prompt rewrite through voice-check.py --rewrite and leak.py, upload, then /triage-runs task3 once both runs are graded",
+ "resume": "stump-architect: architecture 10 screen 2, kinds first and then a world, screen only with a hard stop (two open kinds on different axes, no source biased against the truth, at most one recording filter to invert, the five routes priced on paper); if no pair survives the author decides on retiring task3; nothing is built from the present core.py, note or prompt.txt",
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "READY",
-  "date": "2026-11-17",
-  "note": "architecture 8 built; the author rewrites the prompt for voice, uploads it with target.zip, pastes the four blocks and uploads golden.zip (the CSV and the workbook)"
+  "status": "",
+  "date": "",
+  "note": "architectures 9 and 10 (screen 1) dead on paper; nothing built or uploaded"
  },
  "history": [
   {
@@ -194,6 +209,26 @@
   {
    "date": "2026-11-17",
    "event": "READY: architecture 8, class 3 at Rio Toval, Rio Ciadin, Rio Marden, Rio Gelt and Rio Bianc, class 2 at Rio Sass, class 1 at Rio Larin; judge DETERMINISTIC after two passes (the radar's process repaired and the core re-proved between them), two leak reads clean"
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 8 landed by both platform runs (all seven classes; runs/arch8/); REDESIGN; the gates rebuilt so the opponent is the runs' recorded routes (SKILLS e225f91, ca18325); architecture 9 to be drawn in a new world"
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 9 drawn by the stump-architect: core.py CORE PASS level 4 (S1 and S3, one stump lost 19, reflex 9), card registered with architecture 8 moved to lineage, note to precut exit 0, prompt drafted; level 5 not reached (no third stump off the closed page in this world); architecture 8's generator/checks.py and generator/effort.json taken out of the working tree so precut reads the new note (in git at HEAD), its other built files left for the DRAWN commit"
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 9's core re-dialled by the stump-architect after the build's review (two core defects): Burrel Bay re-placed as a legacy-heavy station under the line so S3 is two-sided (a receiver worth nothing files it over, the call needs a worth of about 0.15 to 0.46); Mornay Inlet re-placed as a station of very small storm days and Tarrick Tableland nearer the line so every calibration cut from 2 to 30 located strokes files a wrong call (least closure 1.6 hours); the run routes' families, the two over-corrections, the worth sweep, the strong-stroke worth and per-figure prices added to core.py; K1 read by day size. CORE PASS level 4, precut exit 0; one of seeds 3909 to 3913 passes."
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 9's S1 closed after the build's second review (a per-station matched cut on the well-covered days files the golden's call at 24 of 27 settings). The stump-architect measured two rebuilds without any well-covered day: the storm process fitted to the thin records is determinate (0.91 to 1.07 of the true hours, rival families within 6 to 13 per cent) but the records' own thinning ladder on a log scale files the golden's call at 11 of 12 settings; with flash structure added, the ladder scaled by the textbook flash formula files it at 7 of 16. core.py, the note's design sections, the card and the prompt are left as handed over at the re-dial and are superseded; status back to DRAWING for a redraw of the second decisive step."
+  },
+  {
+   "date": "2026-11-21",
+   "event": "architecture 10 screen 1 (eight sprayed-seal haul districts, a dual air and pavement trigger on new standard sensors) died on paper at the build's review: the shield's solar gain is the calibrated-source card however it is estimated, only the puck's depth was open, and the frame hands both recognitions over in the prompt; architecture 9 marked spent on the card; architecture 8's built files removed from the tree (in git at 084b8d7); screen 2 sent to the stump-architect, kinds first, hard stop"
   }
  ],
  "architectures": [
@@ -225,7 +260,12 @@
   {
    "architecture": 8,
    "drawn": "2026-11-16",
-   "fate": null
+   "fate": "landed by both platform runs on 2026-11-21 (runs/arch8/); redesigned: each stump shipped a file that scores it (the storage gauge's account, the radar's pixel pairs, the research valley's weighing gauges used as an end-to-end calibration set), every miss sat on one side of the line, the critical components were never asked for, and the estimand was the record's own 18-season mean"
+  },
+  {
+   "architecture": 9,
+   "drawn": "2026-11-21",
+   "fate": "died on paper on 2026-11-21, its world retired: S3 (what a legacy receiver adds) held, S1 (what recorded hours stand for) was landed by a matched calibration with well-covered days and by the records' own thinning ladder without them; no second system in the lightning world passes; no pack was cut"
   }
  ],
  "migrated_from": {
@@ -235,30 +275,22 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "gates": "gates.py task3 on the final cut, 2026-11-17: 8 gates, 0 FAIL, 4 WARN (precut nearest chains, voice 'seasonal', leak REVIEW, heart three WARNs, each answered in the note); checks.py 129 of 129, verify.py 30 of 30, two builds byte-identical (target cdbf08e67703c82d, target.zip md5 33b5ad2de7bd857a138d2fa42cd1dd75, golden.zip md5 5a38c9da202992c4c9bc0ffb960ff9f6), audit_containers.py 0 FAIL 0 WARN",
+ "gates": "",
  "revision": 0,
- "paper_note": "corelib's rubric table at the draw; the seed sweep passes every corelib check on 14 of 48 seeds, so the build reuses core.build(SEED) and moves no dial",
+ "paper_note": "corelib's rubric table after the re-dial: a run that loses S1 alone earns 19, S3 alone 19, the reflex route 9, the rigorous standard route 9, each of the four run routes 9, the flat calibration with the legacy worth fitted 19, the dearest of the run routes' 55 further settings 42 with the wrong call (a calibration cut at six located strokes, legacy worth fitted). Priced per figure in place of per sentence: S1 lost 34, S3 lost 35, that dearest setting 71. The record's mean route (no state carried) earns 74 with the golden's call at the golden's conventions. The build reuses core.build(SEED 3909) and moves no dial: of seeds 3909 to 3913 only 3909 passes, because a station's 24-season record moves its figure about 2 hours from draw to draw and the cut-off family is closed by stations within about 3 hours of the line (least closure 1.6 hours, at a cut of six).",
  "draw": {
-  "answer_shape": "distribution-cut",
-  "weight": "modeling",
-  "depth_level": 5,
-  "world": "Val d'Ardesa (invented), eastern Alps, Italy: seven gully crossings of the SP 141 classed for the 2027 to 2031 protection programme"
+  "answer_shape": "scenarios-flip",
+  "weight": "measurement",
+  "depth_level": 4,
+  "world": "Kestrel Coast Ground Handling (invented), seven Northern Territory airports: which stations carry a relief ramp crew for the 2026-27 wet season under the ramp lightning standard GS-14"
  },
- "final_cut": {
-  "date": "2026-11-17",
-  "target_digest": "cdbf08e67703c82d",
-  "golden_digest": "1bd58fd307ae163b",
-  "target_zip_md5": "33b5ad2de7bd857a138d2fa42cd1dd75",
-  "golden_zip_md5": "5a38c9da202992c4c9bc0ffb960ff9f6"
- },
+ "final_cut": null,
  "doctrine": "throughout",
- "chain": "R1 each station's tips set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate (the under-read at a true 100 mm an hour); R3 each source area's burst factor against its governing station; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches five times a season; R7 each crossing's class",
+ "chain": "R1 the located strokes set against the sensor log, station-day by station-day; R2 the peak-current law of ground strokes through the filed detection curve and the share located at each sensor count; R3 what a legacy receiver adds, in standard sensors, and the ground strokes an average season brings each station; R4 the hours an average season stands each station down, from the timer replayed on the well-covered days thinned to each sensor count; R5 every correction tested on the well-covered days thinned to two and three sensors; R6 the region's response to the shelf index and this season against an average one; R7 each station's expected stand-down hours this season and the relief crew call; R8 how strong a season, as a per cent of an average one, puts each station at the line",
  "effort": {
   "quick": 9.0,
-  "careful": 26.7,
+  "careful": 19.0,
   "thorough": 100,
-  "factorial": "corelib level 5 on the cut pack: S1 what the bucket loses by rate (opens Rio Gelt), S2 a source area's bursts against its station's (opens Rio Marden, moves Rio Sass with it), S3 a hail storm's water tipped after the storm (opens Rio Bianc); each necessary alone, none sufficient; seven distinct wrong classings across the lattice, three among the single drops; 1,216 variants file one classing, and so do the 512 crosses of the first-order loss and the 432 of the hail-coded placing the bands hold",
-  "rubric": "on the final cut (generator/results.py on corelib, figure by figure): one stump lost S1 45.0, S2 33.7, S3 37.5; reflex route 12.8; rigorous standard route (the radar matched to the weighing gauges) 9.0; fixed alone S1 27.0, S2 15.7, S3 23.2; effort.py result by result: careful 26.7, a run that loses one stump keeps 40",
-  "largest_hint": "the tipping buckets' sentence rescues R2 (1 of 7 results), 27 rubric points with three classes still wrong"
+  "factorial": "corelib level 4 after the re-dial (effort.py on the cut pack owed): S1 what recorded hours stand for (opens Penrow Sound), S3 what a legacy receiver adds (opens Weymoor Gap); each necessary alone, none sufficient, each two-sided on its own; 27 variants file one call"
  }
 }

@@ -1,119 +1,119 @@
 {
   "task": "task3",
   "project": "sulfur",
-  "architecture": 8,
-  "drawn": "2026-11-16",
-  "slot_note": "re-root on 2026-11-16: architecture 7 (a Georgia port's tidal low points) was READY and never uploaded, and was set aside under the open-members and rubric rules that came after it; a new world (a mountain road service's gully crossings), a new dataset (tipping-bucket tips, monthly totaliser reads, a present-weather detector, radar storm maxima, a research valley's weighing gauges) and a new core, proved in task3/generator/core.py at CORE PASS level 5",
+  "architecture": 9,
+  "drawn": "2026-11-21",
+  "slot_note": "re-root on 2026-11-21: architecture 8 (a mountain road service's gully crossings) was landed by both platform runs, which fitted every correction a shipped file let them check and calibrated the chain end to end on a research valley; a new world (a ground handler's ramp stand-downs under a lightning rule), a new dataset (a location network's stroke archive, its sensor log and filed detection table, a seasonal index), new deciding lessons and a new decision form; nothing of rain, floods, tides or hydrology is kept",
   "domain": "physical-environmental-sciences",
   "subdomain": "climate-weather-extremes",
-  "niche": "a provincial road service classing each gully crossing of a mountain road for its 2027 to 2031 protection programme, on the triggering storms a season to expect at the crossing's source area (storms whose rain there reaches the crossing's filed triggering depth in 60 consecutive minutes), a short-duration intensity exceedance frequency that no instrument records (Sulfur task type: extreme-value and environmental-hazard analysis)",
+  "niche": "a ground handler deciding which of its seven northern airports carry a relief ramp crew for the 2026-27 wet season, on each station's expected hours of lightning stand-down under the new ramp standard (a cloud-to-ground stroke within 8 km stops the ramp until 15 minutes after the last one), estimated from a national lightning location network's archive whose chance of locating a stroke rises with its peak current and with the sensors in range and up that day",
   "objective": "forecasting",
-  "shape": "07",
+  "shape": "13",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "class 3 (automatic barrier) at Rio Toval (12.39 triggering storms a season), Rio Ciadin (10.50), Rio Marden (4.50), Rio Gelt (4.44) and Rio Bianc (4.11); class 2 (seasonal patrol and hand gates) at Rio Sass (1.83); class 1 (signs) at Rio Larin (0.50); on the cut pack (generator/figures.json): three stumps on three axes, three open crossings each opened by its own stump, seven distinct wrong classings across the lattice, 1,216 variants on one classing",
-  "answer_source": "task3/generator/figures.json on the cut pack; task3/generator/core.py at the draw",
+  "answer": "Relief ramp crews for the 2026-27 wet season at Callory Downs (52.9 expected stand-down hours), Weymoor Gap (28.6), Penrow Sound (28.3) and Mornay Inlet (28.1); none at Tarrick Tableland (21.9), Burrel Bay (21.6) or Yanda Creek (15.0). An average season: 49.0, 26.5, 26.3, 26.0, 20.3, 20.0 and 13.9 hours; this season 108 per cent of an average one. From generator/core.py at the draw (CORE PASS level 4: two stumps on two axes opening Penrow Sound and Weymoor Gap; each two-sided on its own; either lost alone earns 19 on the rubric, the reflex route 9, every run route 9, the dearest of their 55 further settings 42 with the wrong call)",
+  "answer_source": "task3/generator/core.py at the draw; task3/generator/figures.json once the pack is cut",
   "gap": [
+    "objective",
     "population",
-    "time",
-    "objective"
+    "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
+    "G12",
     "G3",
-    "G2",
     "G16"
   ],
   "gate_g": "method_or_model_selection",
-  "calibration_form": "gold_standard_subsample",
+  "calibration_form": "none",
   "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "monitoring_export",
+  "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst closes each gauge's account against its storage gauge with one factor, carries each gauge to its source areas by the ratio of their yearly rainfall (or counts the radar product's own storm maxima), and takes hail-day tips as rain; that route puts only Rio Ciadin and Rio Toval in class 3, Rio Bianc and Rio Gelt in class 2 and Rio Marden and Rio Sass in class 1, against the golden's five barriers, because each of the three steps passes the check a hurried analyst runs on it (the seasonal totals close, the radar agrees with the gauge on ordinary storms, the hail-day totals are right).",
-  "domain_test": "Each result is a quantity of mountain hydrometeorology (a tipping bucket's loss while it tips, closed against a storage gauge; the contrast between a source area's cloudbursts and its gauge's, seen by a radar only as area averages; hail and graupel held in an unheated funnel and tipped as melt; the frequency with which a 60-minute depth is exceeded at an ungauged place); swap the nouns for another field's and there is no bucket that loses water in proportion to the rate, no ice melting through a funnel, no convective cell a kilometre across and no triggering depth to count against.",
+  "analyst_test": "A careful but hurried analyst joins the strokes to the sensor log, fits the amplitude law, raises the counts by the filed share located and takes the stand-down hours the located strokes give (or raises them by the same share, or puts the missed strokes back between the located ones) with every sensor in the log counted alike, so files a relief crew at Callory Downs alone (38.3 hours there, 12.7, 12.2 and 13.5 at Penrow Sound, Mornay Inlet and Weymoor Gap against 28.3, 28.1 and 28.6), and its hold-out on the located hours passes because both sides of it are the same thinned record.",
+  "domain_test": "Each result is a quantity of lightning climatology put to an operational hazard rule (a location network's detection chance by peak current and by the sensors up, the peak-current law of ground strokes recovered through that truncation, what a legacy receiver adds to detection, the hours a stroke-restarted clearance timer keeps a ramp closed, a season's response to a sea-surface index); with a retailer's nouns (which stores carry a relief shift on expected alarm hours) nothing fixes a chance of recording by an event's size, nothing is a union of timers, and the question stops making sense.",
   "layer2_family": "field_method",
-  "layer2_pattern": "own:short-duration-intensity-exceedance-at-ungauged-sources-from-a-lossy-bucket-a-radar-contrast-and-a-detectors-timing",
+  "layer2_pattern": "own:stand-down-hours-under-a-clearance-timer-from-a-detection-limited-stroke-archive",
   "layer1": [
-    "tip logs with logger restarts, re-sent blocks and the technician's tip tests at each visit",
-    "loggers on UTC+1 all year against a visit book in civil time and a radar product in UTC",
-    "storage gauge visits that slip around the first of the month",
-    "a radar pixel grid in projected metres, renumbered at the agency's re-gridding",
-    "long light rain between storms that fills the account and never nears a triggering depth"
+    "stroke times in UTC against a sensor log kept by local day",
+    "re-sent archive batches and reprocessed solutions carrying a later version stamp",
+    "peak currents signed by polarity, with cloud pulses flagged in the archive's own type field",
+    "sensor identifiers renumbered at the network's 2010 and 2018 upgrades",
+    "station-days on which fewer than two sensors were up and nothing could be located",
+    "strokes located just outside the 8 km ring that a bounding-box extract also returns",
+    "a detection table filed as a scanned vendor sheet with the 50 per cent currents by sensors up"
   ],
-  "stakeholder_role": "the road service's natural hazards office, classing the crossings for the 2027 to 2031 protection programme",
-  "role_family": "field_unit_lead",
+  "stakeholder_role": "the handler's head of ramp operations, setting relief crews for the 2026-27 wet season",
+  "role_family": "operations_director",
   "scoring_unit": "other",
   "spine": {
-    "file": "bucket tip logs, one CSV per station, 2009 to 2026",
-    "rows": 905097,
-    "entity": "one tip of a station's tipping bucket",
-    "grain": "station x tip",
-    "source": "synthetic (seeded simulation of storms, buckets, funnels, a detector and a radar)"
+    "file": "located cloud-to-ground strokes within 8 km of each station, wet seasons 2002-03 to 2025-26",
+    "rows": 26476,
+    "entity": "one located cloud-to-ground stroke",
+    "grain": "station x stroke",
+    "source": "synthetic (seeded simulation of storm days, their strokes, a location network and its sensor outages)"
   },
-  "forum": "council_or_assembly",
-  "forcing_event": "budget_or_appropriation",
-  "org_family": "government_agency",
+  "forum": "committee_or_panel",
+  "forcing_event": "season_or_peak",
+  "org_family": "logistics_or_3pl",
   "world": {
-    "geography": "Italy, eastern Alps (the fictional Val d'Ardesa and the fictional provincial road SP 141)",
-    "currency": "EUR",
-    "org_type": "a provincial road service (a public road agency)",
+    "geography": "Australia, the northern Gulf country (seven fictional regional airports and a fictional handler)",
+    "currency": "AUD",
+    "org_type": "an airport ground handling company",
     "invented_names": [
-      "Val d'Ardesa",
-      "SP 141 dell'Alta Ardesa",
-      "Servizio Strade Alta Ardesa",
-      "Valfosca",
-      "Pradalt",
-      "Costarossa",
-      "Malga Sora",
-      "Forcella",
-      "Rio Scuro",
-      "Rio Gelt",
-      "Rio Marden",
-      "Rio Bianc",
-      "Rio Ciadin",
-      "Rio Toval",
-      "Rio Sass",
-      "Rio Larin"
+      "Kestrel Coast Ground Handling",
+      "Callory Downs",
+      "Penrow Sound",
+      "Mornay Inlet",
+      "Weymoor Gap",
+      "Yanda Creek",
+      "Tarrick Tableland",
+      "Burrel Bay",
+      "Austral Lightning Network",
+      "Northern Shelf Index",
+      "Ramp Lightning Standard GS-14"
     ],
     "people": [
-      "Piero Brancaccio",
-      "Biagio Borroni",
-      "Luca Comboni",
-      "Alfio Cundari",
-      "Bartolomeo Panatta"
+      "Adrian Thompson",
+      "Mario Johnson",
+      "Alexandra Abbott",
+      "Joel Holmes",
+      "Cassidy Mcdonald",
+      "Jaime Fisher"
     ]
   },
   "deliverables": [
-    "crossing_classes_2027.csv",
-    "crossing_classes_2027.xlsx"
+    "relief_crews_2026_27.csv",
+    "relief_crews_2026_27.xlsx"
   ],
   "opening_move": "question-first",
-  "question_form": "where",
-  "driver": "Each unit's class rests on how often a short-window intensity at a place nobody measures reaches the unit's own filed level, a quantity no record holds: the long point record loses in proportion to the intensity and, on one kind of event, holds part of the input back and releases it afterwards; a second instrument sees the place and the point in the same event, but only as area averages on its own scale; a third holds when the input arrived and not how much; each part of the quantity is taken from the instrument that sees it, each correction moves most units' figures and a different unit across a class line, and no correction alone reaches the classing.",
-  "driver_concrete": "The road service classes a gully crossing on the triggering storms a season at its source area (3 or more: automatic barrier; 1 to 3: seasonal patrol; under 1: signs). The governing gauge is an unheated tipping bucket at the road station below: it loses water while it tips, more the harder it rains (a true 100 mm an hour reads 20 per cent low on the smaller bucket), which the monthly storage gauge account measures only when the loss is fitted on the rate; a source's cloudbursts differ from its gauge's by a factor the yearly rainfall does not carry (Rio Marden 1.38 against a rainfall ratio of 1.06), which the radar's pixel pairs measure storm by storm although the radar's own depths undercount; and on hail days the funnel holds the ice and the bucket tips its melt for an hour or two, so the tips miss a quarter of those storms' 60-minute maximum, which the detector's ten-minute record of when precipitation fell puts back.",
-  "stump": "The careful but hurried route (one account-closing factor per gauge, each source scaled by its yearly rainfall, hail-day tips taken as rain) files 2 barriers, 2 patrols and 3 signs (Rio Gelt 1.2, Rio Marden 0.5 and Rio Bianc 1.9 triggering storms a season against 4.4, 4.5 and 4.1); each stump dropped alone moves its own crossing out of class 3 (Gelt 2.4, Marden 1.4, Bianc 2.6) and no stump fixed alone reaches the classing.",
-  "answer_shape": "distribution-cut",
-  "weight": "modeling",
+  "question_form": "which",
+  "driver": "Each unit's call rests on the expected time a rule keeps it stopped in a coming window, where the rule restarts a fixed timer at every event and the only record of past events misses them at a rate that depends on each event's size and on the recording equipment in range that day; the stopped time is the union of the timers, so the missed events shorten spells, split them and erase whole days in a way no proportional raise restores, and one class of equipment counts for a fraction of a standard unit that no document states and that shows only in how weak the events recorded under it are.",
+  "driver_concrete": "Kestrel Coast Ground Handling carries a relief ramp crew at a station whose expected lightning stand-down in the 2026-27 wet season is over 25 hours. The stand-down is the union of the 15 minute intervals opened by every ground stroke within 8 km, and the national network's archive locates a stroke with a chance that rises with its peak current and with the sensors up that day (a filed table); the hours are rebuilt by replaying the timer on the well-covered days thinned to each station's sensor count and reading each recorded day by its size, with a legacy receiver worth 0.32 of a standard sensor (fitted from the amplitudes of the strokes located on its days) and the region's response to the shelf index carried to the bureau's outlook value.",
+  "stump": "The careful but hurried route (the located strokes' hours, or those hours raised by the share of strokes missed, or the missed strokes put back between the located ones; every sensor counted alike) files a relief crew at Callory Downs alone, or on the proportional raise at Callory Downs, Penrow Sound, Mornay Inlet and Tarrick Tableland with Weymoor Gap left out; the hours stump lost alone leaves Callory Downs only and the legacy stump lost alone drops Weymoor Gap (17.2 hours against 28.6); each stump pushed past its fitted value alone files a wrong call too (the hours raised in proportion with the worth fitted: a crew everywhere but Yanda Creek; a legacy receiver worth nothing: a fifth crew at Burrel Bay, 28.9 hours), and a calibration cut at any size of well-covered day files a wrong call.",
+  "answer_shape": "scenarios-flip",
+  "weight": "measurement",
   "chain_signature": [
     "assembly-reconciliation",
     "missingness-measurement",
     "modeling",
-    "investigation-loops",
+    "modeling",
+    "validation",
     "forecasting",
-    "uncertainty",
-    "synthesis"
+    "synthesis",
+    "uncertainty"
   ],
-  "results": "R1 each station's tips on one clock set against its storage gauge, visit interval by visit interval; R2 each bucket model's loss by rate, stated as the under-read at a true 100 mm an hour; R3 each source area's burst factor against its governing gauge; R4 the share of hail storms' 60-minute maximum the tips miss; R5 the triggering storms a season to expect at every crossing; R6 the 60-minute depth each source area reaches five times a season; R7 the protection class of every crossing",
-  "one_fact_test": "the most useful sentence (the tipping buckets lose water while they tip, more the harder it rains) leaves the account to build on rates, the form to choose and the water to put back before any window, rescues R2 alone on the reflex route (1 of 7) and 27 rubric points with three classes still wrong; the burst sentence and the hail sentence rescue R3 and R4 alone",
+  "results": "R1 the located strokes set against the sensor log, station-day by station-day; R2 the peak-current law of ground strokes through the filed detection curve and the share located at each sensor count; R3 what a legacy receiver adds, in standard sensors, and the ground strokes an average season brings each station; R4 the hours an average season stands each station down, from the timer replayed on the well-covered days thinned to each sensor count; R5 every correction tested on the well-covered days thinned to two and three sensors; R6 the region's response to the shelf index and this season against an average one; R7 each station's expected stand-down hours this season and the relief crew call; R8 how strong a season, as a per cent of an average one, puts each station at the line",
+  "one_fact_test": "the most useful sentence (missed strokes shorten stand-downs, split them and erase whole days, so recorded hours do not scale with the share located) leaves the replay to design, the recorded day size to condition on and the days that left no record to estimate; it rescues R4 and R5 on the reflex route (2 of 8) and 19 rubric points with Weymoor Gap still wrong; the legacy receiver sentence rescues R3 alone",
   "strategy_label": "UNTESTED",
   "mechanism_source": "design_note",
   "differentiation": {
-    "mark126": "mark126 split units that a succession link had joined, on a classification held in a second ledger, to restate one median duration; here nothing is joined or split: how often a 60-minute depth is exceeded at ungauged places is estimated from three instruments with their own blind spots (a bucket that loses with the rate, a radar that sees areas, a detector that sees timing and not amounts), and seven classes move on three independent measurement judgments"
+    "task8": "task8's weight is measurement on an awarding body's marks, a rater scale linked across sittings; here the measurement is a lightning network's detection by peak current and sensors up, and the work is what a clearance timer would have run on the strokes it missed",
+    "task1": "task1 asks which on a go or hold figure for one programme; here which names a set of stations over a filed line, the form the decision takes"
   },
   "lineage": [
     {
@@ -496,48 +496,173 @@
       "layer2_pattern": "own:tidal-high-water-exceedance-carried-to-sites-through-short-records",
       "architecture": "v7",
       "fate": "built to READY 2026-11-10 (judge DETERMINISTIC on its third round, paper pair 31.5) and never uploaded; set aside on 2026-11-16 before any platform round, when every unapproved slot was brought to the rules that came after it (open members, 2026-11-13; the rubric priced for the run that loses one stump, 2026-11-15): its two priced results were response-model corrections on mechanisms of the world (a creek's transfer that bends above the marsh, a high water that rides on river flow), the kind the review of 2026-11-13 returned at 75 to 83; its deciding lesson, extrapolation beyond the observed range, sits on four live builds, and its harbor results were asks sited away from the two stumps. One architecture per world, so architecture 8 is a new world."
+    },
+    {
+      "domain": "physical-environmental-sciences",
+      "subdomain": "climate-weather-extremes",
+      "objective": "forecasting",
+      "shape": "07",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "population",
+        "time",
+        "objective"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G3",
+        "G2",
+        "G16"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "Each unit's class rests on how often a short-window intensity at a place nobody measures reaches the unit's own filed level, a quantity no record holds: the long point record loses in proportion to the intensity and, on one kind of event, holds part of the input back and releases it afterwards; a second instrument sees the place and the point in the same event, but only as area averages on its own scale; a third holds when the input arrived and not how much; each part of the quantity is taken from the instrument that sees it, each correction moves most units' figures and a different unit across a class line, and no correction alone reaches the classing.",
+      "stump_strategy": "other",
+      "forum": "council_or_assembly",
+      "forcing_event": "budget_or_appropriation",
+      "org_family": "government_agency",
+      "role_family": "field_unit_lead",
+      "drawn": "2026-11-16",
+      "stump": "The careful but hurried route (one account-closing factor per gauge, each source scaled by its yearly rainfall, hail-day tips taken as rain) files 2 barriers, 2 patrols and 3 signs (Rio Gelt 1.2, Rio Marden 0.5 and Rio Bianc 1.9 triggering storms a season against 4.4, 4.5 and 4.1); each stump dropped alone moves its own crossing out of class 3 (Gelt 2.4, Marden 1.4, Bianc 2.6) and no stump fixed alone reaches the classing.",
+      "layer2_family": "field_method",
+      "layer2_pattern": "own:short-duration-intensity-exceedance-at-ungauged-sources-from-a-lossy-bucket-a-radar-contrast-and-a-detectors-timing",
+      "driver_concrete": "The road service classes a gully crossing on the triggering storms a season at its source area (3 or more: automatic barrier; 1 to 3: seasonal patrol; under 1: signs). The governing gauge is an unheated tipping bucket at the road station below: it loses water while it tips, more the harder it rains (a true 100 mm an hour reads 20 per cent low on the smaller bucket), which the monthly storage gauge account measures only when the loss is fitted on the rate; a source's cloudbursts differ from its gauge's by a factor the yearly rainfall does not carry (Rio Marden 1.38 against a rainfall ratio of 1.06), which the radar's pixel pairs measure storm by storm although the radar's own depths undercount; and on hail days the funnel holds the ice and the bucket tips its melt for an hour or two, so the tips miss a quarter of those storms' 60-minute maximum, which the detector's ten-minute record of when precipitation fell puts back.",
+      "answer": "class 3 (automatic barrier) at Rio Toval (12.39 triggering storms a season), Rio Ciadin (10.50), Rio Marden (4.50), Rio Gelt (4.44) and Rio Bianc (4.11); class 2 (seasonal patrol and hand gates) at Rio Sass (1.83); class 1 (signs) at Rio Larin (0.50); on the cut pack (generator/figures.json): three stumps on three axes, three open crossings each opened by its own stump, seven distinct wrong classings across the lattice, 1,216 variants on one classing",
+      "deliverables": [
+        "crossing_classes_2027.csv",
+        "crossing_classes_2027.xlsx"
+      ],
+      "question_form": "where",
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "they",
+        "deliverable set": "pdf+xlsx"
+      },
+      "world": {
+        "geography": "Italy, eastern Alps (the fictional Val d'Ardesa and the fictional provincial road SP 141)",
+        "currency": "EUR",
+        "org_type": "a provincial road service (a public road agency)",
+        "invented_names": [
+          "Val d'Ardesa",
+          "SP 141 dell'Alta Ardesa",
+          "Servizio Strade Alta Ardesa",
+          "Valfosca",
+          "Pradalt",
+          "Costarossa",
+          "Malga Sora",
+          "Forcella",
+          "Rio Scuro",
+          "Rio Gelt",
+          "Rio Marden",
+          "Rio Bianc",
+          "Rio Ciadin",
+          "Rio Toval",
+          "Rio Sass",
+          "Rio Larin"
+        ],
+        "people": [
+          "Piero Brancaccio",
+          "Biagio Borroni",
+          "Luca Comboni",
+          "Alfio Cundari",
+          "Bartolomeo Panatta"
+        ]
+      },
+      "answer_shape": "distribution-cut",
+      "weight": "modeling",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "missingness-measurement",
+        "modeling",
+        "investigation-loops",
+        "forecasting",
+        "uncertainty",
+        "synthesis"
+      ],
+      "skeleton": {
+        "decision_form": "banded_call_on_figure",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "nonlinear_functional_of_path",
+          "support_effect",
+          "stock_flow_accounting"
+        ],
+        "mechanisms": [
+          "tipping_bucket_loses_water_in_proportion_to_the_rate",
+          "source_cloudbursts_differ_from_the_gauges_and_from_the_yearly_rainfall",
+          "radar_pixel_is_an_area_average_of_a_cell_a_kilometre_across",
+          "unheated_funnel_holds_hail_and_tips_its_melt_after_the_storm"
+        ],
+        "detection": [
+          "control_total_gap",
+          "naive_depends_on_what_it_should_not",
+          "second_source_at_other_grain",
+          "record_time_against_event_time"
+        ],
+        "moves": [
+          "compute_on_joint_path",
+          "weighted_balance_reconciliation",
+          "ratio_benchmark_adjustment",
+          "invert_recording_algorithm",
+          "variant_sweep_holds_call"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "governing_standard",
+          "exogenous_long_record",
+          "unused_distractor"
+        ]
+      },
+      "architecture": "v8",
+      "fate": "built to READY 2026-11-17 (084b8d7; paper pair 26.7) and landed by both platform runs on 2026-11-21 (runs/arch8/): both filed all seven classes. Each stump shipped a file that scored it: the storage gauge's account closed the bucket's loss, the radar's pixel pairs read each source's ratio off, the research valley's weighing gauges calibrated the hail step and then the whole chain end to end; the runs waved stationarity and independence through and lost nothing by it. Spent; the slot moved to a new world on 2026-11-21"
     }
   ],
-  "notes": "architecture 8 drawn 2026-11-16 as a new world after architecture 7 was set aside before any upload. stump_strategy other: the three judgments are each an instrument's own blind spot (a loss that rises with the rate, an area average against a point, a store that delays the record), assigned part by part to the instrument that sees it; no family key names that. skeleton lessons labelled as a reviewer would: nonlinear_functional_of_path (the loss is convex in the rate, so one factor that closes the totals is its mean; the yearly rainfall ratio is a percentage carried from another level), support_effect (the radar's pixel against the point depth the triggering depth is filed in), stock_flow_accounting (the funnel's ice store, read here in reverse: the tips are the rain less what the funnel is holding). READY 2026-11-17 on the cut pack (target cdbf08e67703c82d): the radar's cell error is one factor over a cell's footprint with its own spread at each station and a uniform under-read, so its depths matched to the research valley's weighing gauges (the rigorous standard route) file two barriers and are refused at the stations' own pixels; corelib on the cut pack level 5, one stump lost 45, 34 and 37, the reflex route 13.",
+  "notes": "architecture 9 drawn 2026-11-21 as a new world after architecture 8 was landed by both platform runs. stump_strategy other: the two decisive steps are an estimator for what a rule's output would have been on events the record missed (the rule replayed on thinned well-covered days, read by recorded day size) and an unfiled instrument sensitivity fitted from the truncation of what it recorded; no label in vocab holds either. The response to the seasonal index is a supporting step next to closed cards (a change of instrument, a co-occurring change): its omission alone leaves the call standing (core.py's mean route files the golden's call). Level 4: a third open stump was not found off the closed page in this world. Re-dialled on 2026-11-21 after the build's review of the core (the same world and stumps): Burrel Bay re-placed as a legacy-heavy station under the line so the legacy stump is two-sided, Mornay Inlet as a station of very small storm days and Tarrick Tableland nearer the line so every calibration cut files a wrong call, the replay test read by day size.",
   "skeleton": {
-    "decision_form": "banded_call_on_figure",
+    "decision_form": "set_over_threshold",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "nonlinear_functional_of_path",
-      "support_effect",
-      "stock_flow_accounting"
+      "device_setting_replay",
+      "latent_structure_estimation",
+      "measurement_basis_break"
     ],
     "mechanisms": [
-      "tipping_bucket_loses_water_in_proportion_to_the_rate",
-      "source_cloudbursts_differ_from_the_gauges_and_from_the_yearly_rainfall",
-      "radar_pixel_is_an_area_average_of_a_cell_a_kilometre_across",
-      "unheated_funnel_holds_hail_and_tips_its_melt_after_the_storm"
+      "stroke_restarted_clearance_timer_is_a_union_of_intervals",
+      "detection_chance_by_peak_current_and_sensors_up",
+      "legacy_receiver_counts_for_a_fraction_of_a_sensor",
+      "small_cell_days_leave_no_record_at_thin_stations",
+      "weak_strokes_sit_at_a_cells_edges",
+      "storm_days_answer_to_a_shelf_index"
     ],
     "detection": [
-      "control_total_gap",
-      "naive_depends_on_what_it_should_not",
-      "second_source_at_other_grain",
-      "record_time_against_event_time"
+      "layout_or_physics",
+      "natural_experiment_in_record",
+      "second_source_at_other_grain"
     ],
     "moves": [
-      "compute_on_joint_path",
-      "weighted_balance_reconciliation",
-      "ratio_benchmark_adjustment",
-      "invert_recording_algorithm",
+      "replay_event_by_event",
+      "em_latent_fit",
+      "censored_regression",
+      "rebuild_on_unchanged_signals",
       "variant_sweep_holds_call"
     ],
     "file_roles": [
       "primary_record",
       "second_grain_source",
-      "reference_register",
       "governing_standard",
+      "reference_register",
       "exogenous_long_record",
+      "field_legend_or_dictionary",
       "unused_distractor"
     ]
   },
   "client_domain": "physical-environmental-sciences",
   "client_subdomain": "extreme-value-environmental-hazard",
-  "depth_level": 5,
+  "depth_level": 4,
   "doctrine": "throughout",
   "lineage_shells": [
     {
@@ -576,14 +701,19 @@
       "second-sentence opener": "they",
       "rounding opener": "expected",
       "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "they",
+      "deliverable set": "pdf+xlsx"
     }
   ],
-  "architecture_spent": false,
-  "status": "READY",
-  "registered": "2026-11-17T02:59:53Z",
+  "architecture_spent": true,
+  "status": "DESIGN",
   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "they",
-    "deliverable set": "pdf+xlsx"
-  }
+    "question form": "which",
+    "second-sentence opener": "which",
+    "deliverable set": "csv+xlsx"
+  },
+  "registered": "2026-11-22T00:20:50Z"
 }

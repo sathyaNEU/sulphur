@@ -1,23 +1,30 @@
 #!/usr/bin/env python3
-"""task3 architecture 8, the core: triggering storms at seven gully crossings of a mountain road service.
+"""task3 architecture 9: the core, proved on the world's own arrays before any pack exists.
 
-The decision's quantity is the mean number of storms a season in which the rain at a crossing's source area reaches
-the crossing's triggering depth in 60 consecutive minutes. No record holds it. Each instrument sees a part of it:
+The world. A ground handler works the ramp at seven airports of one region. The ramp stands down whenever a
+cloud-to-ground stroke falls within 8 km and resumes 15 minutes after the last one, so a season's stand-down is the
+length of the union of the 15 minute intervals the strokes open. A station whose expected stand-down in the coming
+summer window (1 December 2026 to 31 March 2027) is over 25 hours carries a relief crew. The only record of past
+strokes is the national location network's archive, and the network locates a stroke with a chance that rises with
+its peak current and with the sensors in range and up that day. Two things a run has to set, each with a default
+the network's own process makes false at every station:
 
-  the governing gauge   an unheated tipping bucket at the road station below the source, tip by tip for 18 seasons
-                        (2009 to 2026).
-                        It loses water while the bucket tips, more the harder it rains (S1), and on hail days the
-                        funnel holds the ice and the bucket tips its melt for an hour or two afterwards (S3).
-  the totaliser         a storage gauge beside each bucket, read at the monthly visit: the true depth of the interval.
-  the detector          the road station's present-weather detector: when precipitation fell and of what kind, every
-                        ten minutes, with an optical intensity good for timing and poor for amounts.
-  the radar             60-minute storm maxima on one-kilometre pixels: it sees the source and the gauge in the same
-                        storm, as area averages on its own scale (S2).
-  the rainfall normal   the mean annual precipitation grid: totals, which is not what a burst is.
+  S1  what a season's hours were, given the strokes the network missed. The default is the hours the located
+      strokes give (or those hours raised in proportion to the strokes missed, or the missed strokes put back
+      around the located ones). Missed strokes shorten a stand-down, split it and erase whole days, the weak ones
+      sit at a cell's edges, and the days that left no record are in no file, so hours answer to detection by the
+      day's size and shape, never in proportion.
+  S3  what a legacy receiver adds to detection. The default is the filed table read at the count of sensors up. A
+      legacy receiver adds about a third of a standard sensor, and the days it is in range show it only in how far
+      the weak strokes are cut.
 
-This file simulates that world, builds the golden estimator and the hurried one at each of the three judgments, the
-direct, the index and the radar routes, a battery of rebuilds of the golden's conventions and the referee slice
-(a research valley with weighing gauges at its sources), and hands the lot to corelib. Nothing here reads a prompt.
+One supporting step, next to a closed card and so never the step the call turns on: the bureau's outlook puts the
+coming window warm, and the region's storm days answer to the shelf index. Leaving it out (the record's mean
+carried forward) moves every figure for the window and leaves the call standing.
+
+Everything a golden constant needs is filed (the timer, the radius, the line, the detection table and its width,
+the outlook value) or measured from the located strokes and the sensor log. Arithmetic on arrays: nothing here
+reads a prompt.
 """
 import math
 import os
@@ -28,680 +35,1287 @@ import numpy as np
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".claude", "skills", "stumping"))
 import corelib  # noqa: E402
 
-SEED = 20270213
-G_SEASONS = 18            # tip record, warm seasons 2009 to 2026
-R_SEASONS = 14            # radar storm maxima, 2013 to 2026
-C_SEASONS = 14            # research valley weighing gauges, 2013 to 2026
-T_SEASONS = 600           # the world's own long run, for the truth
-LINE = 3.0                # triggering storms a season from which a crossing is class 3 (automatic barrier)
-EVEN = 5.0                # regulation 3.2: the warning levels rest on the 60-minute depth a source reaches five times a season
-LOW_LINE = 1.0            # from which it is class 2 (seasonal patrol and hand gates); under it, class 1 (signs)
-M = 300                   # minutes kept per storm
-MONTH_P = np.array([0.08, 0.20, 0.30, 0.26, 0.12, 0.04])   # May to October
+# ------------------------------------------------------------------------------------------------ filed
+T_CLEAR = 15.0                     # minutes the ramp stays stood down after the last ground stroke within the radius
+LINE = 25.0                        # hours of stand-down in the window above which a station carries a relief crew
+X_F = 0.5                          # the bureau's outlook value of the shelf index for the window
+SEASONS = np.arange(2002, 2026)    # the season starting 1 December of each year, 2002-03 to 2025-26
+INDEX = np.array([+0.6, +1.1, +0.4, +1.3, +0.8, +1.2, +0.9, +0.5,
+                  -0.3, +0.2, -0.5, +0.4, -0.1, -0.6, +0.3, +0.0,
+                  -0.4, +0.5, -0.2, +0.1, -0.6, +0.3, -0.1, +0.2])    # the bureau's seasonal shelf index
+ERA = np.array([0] * 8 + [1] * 8 + [2] * 8)                           # network eras: to 2009-10, to 2017-18, since
+NDAY = 121
+TABLE_N = np.arange(2, 9)
+TABLE_I50 = np.array([26.0, 19.0, 13.0, 9.0, 6.5, 4.8, 3.5])          # kA located half the time, by sensors up
+WIDTH = 0.35                                                          # the curve's width in log amplitude
 
-SIG_Z, SIG_E, CORR_KM = 0.46, 0.34, 5.0      # storm to storm, place to place inside a storm, and its reach
-GAMMA, SIG_NU = 0.28, 0.07                   # what a pixel keeps of the local factor; the radar's pixel error
-RAD_LOW = -0.15                              # the radar's depths read low across the valley (log, every cell); a cell's own
-                                             # error is one factor over its footprint, wider where the radar sees the valley worse
-KAPPA = {"A": 0.0014, "B": 0.0024}           # hours per mm: the bucket's loss per unit of rate
-THETA = (55.0, 115.0)                        # the funnel's melt time on a hail day, minutes
-PHI = (0.35, 0.70)                           # the share of a hail storm's burst that falls as ice
-HAIL_Z = (3.5, 5.0)                          # a cell hails from this strength (mm), and always this much above it
-
-DEPOTS = {
-    # name: bucket model, storms a season, median burst (mm), burst length (min), hail share of the larger storms,
-    # and the spread of the radar's error from cell to cell over this ground (log)
-    "Valfosca":   dict(model="B", mu=58, zmed=6.2, tau=(5, 14),  hail=0.10, wet=60, rad=0.12),
-    "Pradalt":    dict(model="A", mu=56, zmed=5.6, tau=(6, 20),  hail=0.34, rad=0.18),
-    "Costarossa": dict(model="A", mu=55, zmed=5.8, tau=(6, 20),  hail=0.86, rad=0.26),
-    "Malga Sora": dict(model="A", mu=60, zmed=6.4, tau=(6, 20),  hail=0.30, rad=0.23),
-    "Forcella":   dict(model="B", mu=60, zmed=6.6, tau=(8, 24),  hail=0.30, rad=0.15),
-    "Rio Scuro":  dict(model="B", mu=58, zmed=6.0, tau=(7, 22),  hail=0.45, rad=0.37),    # the research valley, a narrow side valley
-}
-# crossing: governing gauge, km from the gauge, burst factor against the gauge, rainfall-normal ratio, and the
-# triggering depth the geotechnical survey filed (mm in 60 minutes at the source area)
-CROSSINGS = {
-    "Rio Gelt":   dict(depot="Valfosca",   km=1.8, f=1.12, map=1.03, depth=17.0),
-    "Rio Marden": dict(depot="Pradalt",    km=3.4, f=1.38, map=1.06, depth=19.5),
-    "Rio Bianc":  dict(depot="Costarossa", km=2.2, f=1.10, map=1.045, depth=16.0),
-    "Rio Ciadin": dict(depot="Malga Sora", km=2.9, f=1.06, map=1.40, depth=13.0),
-    "Rio Toval":  dict(depot="Forcella",   km=4.1, f=1.08, map=1.00, depth=12.5),
-    "Rio Sass":   dict(depot="Pradalt",    km=2.0, f=0.98, map=0.90, depth=17.0),
-    "Rio Larin":  dict(depot="Malga Sora", km=4.6, f=0.94, map=1.02, depth=29.0),
-}
-RESEARCH = {
-    "Scuro 1": dict(depot="Rio Scuro", km=0.4, f=0.90, map=1.09, rate=4.0),
-    "Scuro 2": dict(depot="Rio Scuro", km=0.8, f=0.82, map=1.14, rate=4.0),
-    "Scuro 3": dict(depot="Rio Scuro", km=1.2, f=0.88, map=1.19, rate=4.0),
-    "Scuro 4": dict(depot="Rio Scuro", km=1.7, f=0.78, map=1.24, rate=4.0),
-}
-ALL = {**CROSSINGS, **RESEARCH}
-OPENED = {"S1": "Rio Gelt", "S2": "Rio Marden", "S3": "Rio Bianc"}
-
-COUNT_FLOOR, DEPTH_FLOOR, OWN_FLOOR = 0.04, 0.015, 0.03   # what two honest rebuilds of a count, a depth and a stump's own figure differ by
-LOSS_WAYS = ("recip", "scaled")             # the tipping-time form, alone or with a static factor fitted beside it
-POOL_WAYS = ("model", "gauge")
-STEP_WAYS = (1, 2, 3, 5)                     # the rate read on one-, two-, three- or five-minute totals
-SITE_WAYS = ("geo", "median", "sums", "trim", "geo3", "gauge3", "pairs", "upper")
-CRUDE_SITE = ("slope", "top", "q90")         # one-sided selections and unpaired percentiles, each refuted by a figure
-HAIL_WAYS = ("profile", "weighted", "onset", "carried")
-CRUDE_HAIL = ("dry", "even", "optical")      # each refuted by a figure the files hold
-CRUDE_STEP = (10, 15)                        # the rate read on ten- and fifteen-minute totals: the account refuses each
-CRUDE_FORM = ("lin",)                        # the first-order form: the account refuses it on the 0.1 mm buckets
+# ------------------------------------------------------------------------------------------------ the world's own
+SEED = 3909
+KAPPA = 0.30                       # what a legacy receiver adds, in standard sensors
+P_OUT = 0.12                       # chance a sensor is down on a day
+BETA = 0.45                        # storm days' response to the shelf index, log points per index unit
+STRAY = 0.25                       # share of a day's strokes that fall outside its main cell, before or after
+PHASE = (0.30, 0.70)               #              # log amplitude at a cell's mature minutes, and its fall to the edge of the cell
+GAMMA_SD = 0.06                    # season to season spread of the region's storm days beyond the index
+CG_NEG, CG_POS, CG_POS_SHARE = (15.0, 0.70), (22.0, 0.75), 0.10
+# name, storm days in a neutral season, median strokes a storm day, standard sensors in range by era, legacy
+# receivers in range by era
+SITES = [
+    ("A", 27.0, 20.0, (1, 6, 7), (4, 1, 0)),
+    ("Z", 37.0, 3.0, (2, 3, 3), (0, 0, 0)),
+    ("X", 55.0, 1.5, (3, 3, 3), (0, 0, 0)),
+    ("V", 41.0, 3.0, (1, 1, 2), (5, 5, 4)),
+    ("Y", 18.0, 4.0, (2, 7, 8), (3, 0, 0)),
+    ("W", 11.3, 18.0, (1, 3, 3), (3, 0, 0)),
+    ("B", 23.5, 5.0, (1, 1, 2), (5, 5, 4)),
+]
+NAMES = [s[0] for s in SITES]
+NS, NT = len(SITES), len(SEASONS)
+EDGES = np.array([2, 3, 4, 6, 10, 20, 40])
 
 
-class Rates(dict):
-    """Triggering storms a season by crossing, with `.even`: the depth each source reaches LINE times a season."""
+def i50(L):
+    L = np.asarray(L, dtype=float)
+    return np.exp(np.interp(L, TABLE_N, np.log(TABLE_I50))
+                  + np.where(L < 2, (2 - L) * math.log(TABLE_I50[0] / TABLE_I50[1]), 0.0))
 
 
-def slide60(a):
-    """The largest total over 60 consecutive minutes, storm by storm."""
-    cs = np.cumsum(a, axis=1, dtype=np.float64)
-    w = np.concatenate([cs[:, 59:60], cs[:, 60:] - cs[:, :-60]], axis=1)
-    return w.max(axis=1)
+def de(I, L):
+    """The filed chance that a stroke of peak current I is located with L sensors up."""
+    return 1.0 / (1.0 + np.exp(-(np.log(I) - np.log(i50(L))) / WIDTH))
 
 
-def storms(name, seasons, rng, record=True):
-    """One gauge's storms: the true minutes, what the bucket tipped, what the detector saw, the monthly account."""
-    d = DEPOTS[name]
-    kap = KAPPA[d["model"]]
-    n = rng.poisson(d["mu"], seasons)
-    N = int(n.sum())
-    season = np.repeat(np.arange(seasons), n)
-    month = rng.choice(6, N, p=MONTH_P)
-    pts = [s for s, c in ALL.items() if c["depot"] == name]
-    km = np.array([0.0] + [ALL[s]["km"] for s in pts])
-    cov = SIG_E ** 2 * np.exp(-np.abs(km[:, None] - km[None, :]) / CORR_KM)
-    side = np.random.default_rng(int(rng.integers(0, 2 ** 31)))     # the sources' own stream: the gauge's storms do not move with the layout
-    e = np.concatenate([rng.standard_normal((N, 1)), side.standard_normal((N, len(pts)))], axis=1) @ np.linalg.cholesky(cov).T
-    Z = np.exp(rng.normal(math.log(d["zmed"]), SIG_Z, N))
-    D = Z * np.exp(e[:, 0])                                   # the burst at the gauge
-    tau = rng.integers(d["tau"][0], d["tau"][1] + 1, N)
-    idx = np.arange(M)[None, :]
-    t = (idx + 0.5) / tau[:, None]
-    w = np.where(t < 1.0, t * (1.0 - t) ** 2, 0.0) * np.exp(0.35 * rng.standard_normal((N, M)))
-    w /= w.sum(axis=1, keepdims=True)
-    burst = D[:, None] * w
-    has = rng.random(N) < 0.5
-    V = np.minimum(D * rng.uniform(0.1, 0.5, N), 15.0) * has
-    L = rng.integers(60, 181, N)
-    tw = np.where((idx >= tau[:, None]) & (idx < (tau + L)[:, None]), (tau + L)[:, None] - idx, 0.0)
-    trail = V[:, None] * tw / tw.sum(axis=1, keepdims=True)
-    true_min = burst + trail
-    out = dict(name=name, N=N, season=season, month=month, e=e, pts=pts, x_true=slide60(true_min))
-    if not record:
-        return out
-    hail = rng.random(N) < d["hail"] * np.clip((Z - HAIL_Z[0]) / HAIL_Z[1], 0.0, 1.0)     # ice comes with the stronger cells
-    phi = rng.uniform(PHI[0], PHI[1], N) * hail               # the share of the burst that falls as hail
-    theta = rng.uniform(THETA[0], THETA[1], N)                # the funnel's melt time, minutes
-    cen = (burst * idx).sum(axis=1) / D + 3.0
-    lag = np.maximum(idx - cen[:, None], 0.0)
-    melt = np.where(idx >= cen[:, None], np.exp(-lag / theta[:, None]) - np.exp(-(lag + 1.0) / theta[:, None]), 0.0)
-    melt /= np.maximum(melt.sum(axis=1, keepdims=True), 1e-12)
-    inflow = burst * (1.0 - phi[:, None]) + trail + (phi * D)[:, None] * melt
-    rec = inflow / (1.0 + kap * 60.0 * inflow)                # the bucket loses in proportion to the rate
-    b10 = lambda a: a.reshape(N, M // 10, 10).sum(axis=2)
-    rain10, hail10 = b10(burst * (1.0 - phi[:, None]) + trail), b10(burst * phi[:, None])
-    opt = rain10 * np.exp(0.30 * rng.standard_normal(N))[:, None] + hail10 * np.exp(0.40 * rng.standard_normal(N))[:, None]
-    wet = (rain10 + hail10) > 0.02
-    # the monthly account: storms plus the long light rain no storm file holds
-    nint = seasons * 6
-    fh = np.minimum(rng.gamma(1.5, 1.8, (nint, d.get("wet", 40))), 6.0)   # hourly depths of the long rain, never near a triggering depth
-    ivl = season * 6 + month
-    check = (np.bincount(ivl, true_min.sum(axis=1), nint) + fh.sum(axis=1)) * (1.0 + 0.006 * rng.standard_normal(nint))
-    out.update(model=d["model"], rec=rec.astype(np.float64), hail=hail, opt=opt, wet=wet, hail10=hail10 > 0.02,
-               ivl=ivl, nint=nint, front_rec=fh / (1.0 + kap * fh), check=check,
-               base=out["x_true"] * np.exp(-e[:, 0]),
-               rb=np.exp(RAD_LOW + d["rad"] * rng.standard_normal(N)), rnu=SIG_NU * side.standard_normal((N, len(km))))
-    return out
+def day_hours(day, t, ndays):
+    """Hours stood down on each day: the union of [t, t + T_CLEAR] over the day's strokes (sorted by day, t)."""
+    if len(t) == 0:
+        return np.zeros(ndays), np.zeros(ndays, dtype=int)
+    gap = np.full(len(t), T_CLEAR)
+    same = day[1:] == day[:-1]
+    gap[:-1] = np.where(same, np.minimum(t[1:] - t[:-1], T_CLEAR), T_CLEAR)
+    return np.bincount(day, weights=gap, minlength=ndays) / 60.0, np.bincount(day, minlength=ndays)
 
 
-# ---------------------------------------------------------------------------------------------------- estimators
-def put_back(r, k, form, per_hour=60.0):
-    """A recorded depth per step put back at loss k: the tipping-time form, its first-order form, or the tipping-time
-    form with a static calibration factor fitted beside it (k is then the pair (factor, loss))."""
-    if form == "lin":
-        return r * (1.0 + k * per_hour * r)
-    if form == "scaled":
-        return k[0] * r / (1.0 - k[1] * per_hour * r)
-    return r / (1.0 - k * per_hour * r)
+def make_days(rng, K, size_med):
+    """K storm days: each day's strokes, their minute of the day, peak current and polarity."""
+    N = np.maximum(1, np.ceil(rng.lognormal(math.log(size_med), 1.15, K) - 0.5)).astype(int)
+    D = 45.0 * (N / 15.0) ** 0.30 * rng.lognormal(0.0, 0.45, K)
+    s0 = rng.uniform(420.0, 1080.0, K)
+    d = np.repeat(np.arange(K), N)
+    u = rng.beta(1.5, 2.0, len(d))
+    stray = rng.random(len(d)) < STRAY
+    u = np.where(stray, rng.uniform(-0.6, 1.8, len(d)), u)
+    t = s0[d] + D[d] * u
+    pos = rng.random(len(d)) < CG_POS_SHARE
+    I = np.where(pos, rng.lognormal(math.log(CG_POS[0]), CG_POS[1], len(d)),
+                 rng.lognormal(math.log(CG_NEG[0]), CG_NEG[1], len(d)))
+    # a cell's strongest strokes come in its mature minutes; the first and the last ones, and the strays, are weak
+    I = I * np.exp(PHASE[0] - PHASE[1] * np.minimum(np.abs(u - 0.45) / 0.45, 1.5))
+    return N, d, t, I, pos
 
 
-def put_step(rec, k, form="recip", step=1):
-    """The tipped minutes put back with the rate read on `step`-minute totals."""
-    if step == 1:
-        return put_back(rec, k, form)
-    n, m = rec.shape
-    b = rec.reshape(n, m // step, step).sum(axis=2)
-    cb = put_back(b, k, form, 60.0 / step)
-    return rec * np.repeat(np.where(b > 0, cb / np.maximum(b, 1e-12), 1.0), step, axis=1)
-
-
-def account(w, k, form="recip", step=1):
-    """The interval totals the tips give once each step is put back at loss k."""
-    return np.bincount(w["ivl"], put_step(w["rec"], k, form, step).sum(axis=1), w["nint"]) + \
-        put_back(w["front_rec"], k, form, 1.0).sum(axis=1)
-
-
-def fit_kappa(ws, form="recip", step=1):
-    """The bucket's loss per unit of rate, from the account that has to close against the totaliser."""
-    lo, hi = 0.0, 0.0075
-    if form == "scaled":
-        def scale(k):
-            acc = [account(w, (1.0, k), form, step) for w in ws]
-            return sum(float((w["check"] * a).sum()) for w, a in zip(ws, acc)) / sum(float((a * a).sum()) for a in acc)
-        sse = lambda k: sum(float(((w["check"] - account(w, (scale(k), k), form, step)) ** 2).sum()) for w in ws)
-    else:
-        sse = lambda k: sum(float(((w["check"] - account(w, k, form, step)) ** 2).sum()) for w in ws)
-    g = (math.sqrt(5.0) - 1.0) / 2.0
-    a, b = hi - g * (hi - lo), lo + g * (hi - lo)
-    fa, fb = sse(a), sse(b)
-    for _ in range(44):
-        if fa < fb:
-            hi, b, fb = b, a, fa
-            a = hi - g * (hi - lo)
-            fa = sse(a)
-        else:
-            lo, a, fa = a, b, fb
-            b = lo + g * (hi - lo)
-            fb = sse(b)
-    k = 0.5 * (lo + hi)
-    return (scale(k), k) if form == "scaled" else k
-
-
-_KAP = {}
-
-
-def kappas(W, form="recip", pool="model", step=1):
-    if (id(W), form, pool, step) in _KAP:
-        return _KAP[(id(W), form, pool, step)]
-    out = _KAP.setdefault((id(W), form, pool, step), {})
-    for mdl in KAPPA:
-        ws = [w for w in W.values() if w["model"] == mdl]
-        if pool == "gauge":
-            out.update({w["name"]: fit_kappa([w], form, step) for w in ws})
-        else:
-            k = fit_kappa(ws, form, step)
-            out.update({w["name"]: k for w in ws})
-    return out
-
-
-def minutes(w, s1, k=0.0, form="recip", step=1):
-    """The tipped minutes put back: by the rate (golden), by one factor that closes the account, or left raw."""
-    if s1 == "rate":
-        return put_step(w["rec"], k, form, step)
-    if s1 == "factor":
-        return w["rec"] * float(w["check"].sum() / account(w, 0.0).sum())
-    return w["rec"]
-
-
-def band(golden, family, floor):
-    """A figure's band: the battery's range, and never tighter than what two honest rebuilds differ by."""
-    lo, hi = min(family + [golden]), max(family + [golden])
-    return [min(lo, golden * (1.0 - floor)), max(hi, golden * (1.0 + floor))]
-
-
-def storm_max(w, c, s3):
-    """Each storm's 60-minute maximum at the gauge. On hail storms the bucket has the amount and the detector has
-    the timing. 'profile' places the storm's water by the detector's ten-minute profile; 'weighted' first rescales
-    the hail intervals' optical intensity so the hail storms' totals close; 'onset' keeps the tips before the first
-    hail interval and places the rest; 'dry' and 'even' are the crude rivals (move only the water tipped while the
-    detector saw nothing; spread it evenly over the wet intervals); 'tips' takes the tips as rain."""
-    x = slide60(c)
-    if s3 == "tips":
-        return x
-    h, N = w["hail"], w["N"]
-    if s3 == "optical":                      # the detector's own amounts on hail storms, scaled on the rain storms
-        c10 = c.reshape(N, M // 10, 10).sum(axis=2)
-        cr = float(c10[~h].sum() / w["opt"][~h].sum())
-        return np.where(h, slide60(np.repeat(cr * w["opt"] / 10.0, 10, axis=1)), x)
-    if s3 == "carried":                      # one hail-day multiplier, read at the research valley's weighing gauges
-        return np.where(h, x * w["carried"], x)
-    c10 = c.reshape(N, M // 10, 10).sum(axis=2)
-    tot = c10.sum(axis=1, keepdims=True)
-    opt = w["opt"]
-    if s3 == "weighted":
-        dryday = ~h
-        cr = float(c10[dryday].sum() / opt[dryday].sum())
-        wh = float((c10[h].sum() - cr * (opt[h] * ~w["hail10"][h]).sum()) / (cr * (opt[h] * w["hail10"][h]).sum()))
-        opt = opt * np.where(w["hail10"], wh, 1.0)
-    if s3 in ("profile", "weighted"):
-        b = tot * opt / np.maximum(opt.sum(axis=1, keepdims=True), 1e-12)
-    elif s3 == "onset":
-        first = np.where(w["hail10"].any(axis=1), w["hail10"].argmax(axis=1), 0)
-        pre = np.arange(M // 10)[None, :] < first[:, None]
-        rest = opt * ~pre
-        b = c10 * pre + (tot - (c10 * pre).sum(axis=1, keepdims=True)) * rest / np.maximum(rest.sum(axis=1, keepdims=True), 1e-12)
-    elif s3 == "even":
-        b = tot * w["wet"] / np.maximum(w["wet"].sum(axis=1, keepdims=True), 1)
-    else:
-        dry = ~w["wet"]
-        key = opt * w["hail10"]
-        b = c10 * ~dry + (c10 * dry).sum(axis=1, keepdims=True) * key / np.maximum(key.sum(axis=1, keepdims=True), 1e-12)
-    y = slide60(np.repeat(b / 10.0, 10, axis=1))
-    return np.where(h, y, x)
-
-
-def radar(w, j):
-    """The radar's 60-minute storm maximum on the pixel over point j of this gauge's group (0 is the gauge)."""
-    f = 1.0 if j == 0 else ALL[w["pts"][j - 1]]["f"]
-    return f * w["rb"] * w["base"] * np.exp(GAMMA * w["e"][:, j] + w["rnu"][:, j])
-
-
-def site_factor(w, s, how="geo"):
-    """The source's bursts against the gauge's, from the radar's pixel pairs storm by storm."""
-    j = 1 + w["pts"].index(s)
-    era = w["season"] >= G_SEASONS - R_SEASONS
-    a, b = radar(w, j)[era], radar(w, 0)[era]
-    if how == "q90":                         # the two pixels' upper deciles, unpaired
-        return float(np.quantile(a, 0.9) / np.quantile(b, 0.9))
-    if how == "slope":                       # crude: the source pixel regressed on the gauge's through the origin
-        return float((a * b).sum() / (b * b).sum())
-    if how == "top":                         # crude: the gauge pixel's largest quarter of storms
-        m = b >= np.quantile(b, 0.75)
-        return float(a[m].sum() / b[m].sum())
-    if how == "upper":                       # the pairs whose joint size is in the upper quarter
-        g = np.sqrt(a * b)
-        m = g >= np.quantile(g, 0.75)
-        return float(np.exp(np.log(a[m] / b[m]).mean()))
-    ok = (b >= 3.0) if how == "gauge3" else ((a >= 3.0) & (b >= 3.0)) if how == "geo3" else (a >= 1.0) & (b >= 1.0)
-    a, b = a[ok & (a > 0)], b[ok & (a > 0)]
-    lr = np.log(a / b)
-    if how in ("geo", "geo3", "gauge3", "pairs"):
-        return float(np.exp(lr.mean()))
-    if how == "median":
-        return float(np.exp(np.median(lr)))
-    if how == "sums":
-        return float(a.sum() / b.sum())
-    q = np.sort(lr)
-    k = int(0.1 * len(q))
-    return float(np.exp(q[k:len(q) - k].mean()))
-
-
-def build(seed):
-    W = {d: storms(d, G_SEASONS, np.random.default_rng([seed, i])) for i, d in enumerate(DEPOTS)}
-    # the world's long run sets the truth, and the triggering depths the geotechnical survey filed
-    for s, c in ALL.items():
-        lr = storms(c["depot"], T_SEASONS, np.random.default_rng(seed + 7 + sorted(ALL).index(s)), record=False)
-        q = np.sort(lr["x_true"])[::-1]
-        c["T"] = float(c["depth"]) if "depth" in c else round(2.0 * c["f"] * float(q[int(round(c["rate"] * T_SEASONS))])) / 2.0
-        c["truth"] = float((lr["x_true"] >= c["T"] / c["f"]).sum()) / T_SEASONS
+def build(seed=SEED):
+    """The record: every ground stroke within 8 km of a station, whether the network located it, and each
+    station-day's sensors in range and up."""
+    gam = np.random.default_rng([seed, 99]).gamma(1 / GAMMA_SD ** 2, GAMMA_SD ** 2, NT)
+    cols = {k: [] for k in ("day", "t", "I", "pos", "det")}
+    cal_std = np.zeros((NS, NT, NDAY), dtype=int)
+    cal_leg = np.zeros((NS, NT, NDAY), dtype=int)
+    dsite, dseason, dstd, dleg, ddos = [], [], [], [], []
+    base = 0
+    for si, (name, lam, size, std, leg) in enumerate(SITES):
+        rng = np.random.default_rng([seed, si])
+        for ti in range(NT):
+            e = ERA[ti]
+            cal_std[si, ti] = rng.binomial(std[e], 1 - P_OUT, NDAY)
+            cal_leg[si, ti] = rng.binomial(leg[e], 1 - P_OUT, NDAY) if leg[e] else 0
+            K = min(NDAY, rng.poisson(lam * math.exp(BETA * INDEX[ti]) * gam[ti]))
+            which = rng.choice(NDAY, K, replace=False)
+            ns, nl = cal_std[si, ti][which], cal_leg[si, ti][which]
+            N, d, t, I, pos = make_days(rng, K, size)
+            neff = np.maximum(ns + KAPPA * nl, 1.0)[d]
+            det = (rng.random(len(d)) < de(I, neff)) & ((ns + nl)[d] >= 2)
+            for k, v in zip(("day", "t", "I", "pos", "det"), (d + base, t, I, pos, det)):
+                cols[k].append(v)
+            dsite += [si] * K
+            dseason += [ti] * K
+            dstd.append(ns)
+            dleg.append(nl)
+            ddos.append(which)
+            base += K
+    W = {k: np.concatenate(v) for k, v in cols.items()}
+    o = np.lexsort((W["t"], W["day"]))
+    for k in W:
+        W[k] = W[k][o]
+    W.update(d_site=np.array(dsite), d_season=np.array(dseason), d_std=np.concatenate(dstd),
+             d_leg=np.concatenate(dleg), d_dos=np.concatenate(ddos), ndays=base, cal_std=cal_std, cal_leg=cal_leg)
     return W
 
 
-def source_max(w, s):
-    """What a weighing gauge at source s recorded: the storm's true 60-minute maximum there."""
-    j = 1 + w["pts"].index(s)
-    return w["x_true"] * ALL[s]["f"] * np.exp(w["e"][:, j] - w["e"][:, 0])
-
-
-def research_reads(W, kap):
-    """What the research valley's weighing gauges say when they are read as a calibration of the bucket: one ratio of
-    source to bucket over every storm (the carried transfer), and one hail-day multiplier (hail storms' ratio over
-    the rain storms' ratio, on the bucket's rate-corrected maxima)."""
-    w = W["Rio Scuro"]
-    era = w["season"] >= G_SEASONS - C_SEASONS
-    raw, cor = slide60(w["rec"]), slide60(put_back(w["rec"], kap, "recip"))
-    src = sum(source_max(w, s) for s in RESEARCH) / len(RESEARCH)
-    h, r = era & w["hail"], era & ~w["hail"]
-    return float(src[era].sum() / raw[era].sum()), float((src[h].sum() / cor[h].sum()) / (src[r].sum() / cor[r].sum()))
-
-
-_XS = {}
-
-
-def station_maxima(W, s1, s3, form, pool, step):
-    """Each gauge's storm maxima under one choice of loss and hail handling (kept: the site ways reuse them)."""
-    key = (id(W), s1, s3, form, pool, step)
-    if key not in _XS:
-        kap = kappas(W, form, pool, step) if s1 == "rate" else {d: 0.0 for d in W}
-        if s3 == "carried":
-            m = research_reads(W, kappas(W)["Rio Scuro"])[1]
-            for w in W.values():
-                w["carried"] = m
-        _XS[key] = ({d: storm_max(w, minutes(w, s1, kap[d], form, step), s3) for d, w in W.items()}, kap)
-    return _XS[key]
-
-
-def transfer(w, s, x, s2):
-    """A gauge's storm maxima carried to source s. 'pairs' carries each storm by its own pixel pair where the radar
-    saw both, and by the mean factor before the radar's record."""
-    c = ALL[s]
-    if s2 == "map":
-        return c["map"] * x
-    if s2 == "one":
-        return x
-    f = site_factor(w, s, s2)
-    if s2 != "pairs":
-        return f * x
-    j = 1 + w["pts"].index(s)
-    a, b = radar(w, j), radar(w, 0)
-    ok = (w["season"] >= G_SEASONS - R_SEASONS) & (a >= 1.0) & (b >= 1.0)
-    return np.where(ok, x * a / np.maximum(b, 1e-9), x * f)
-
-
-def at_source(W, s, s1="rate", s2="geo", s3="profile", form="recip", pool="model", step=1):
-    """Source s's 60-minute storm maxima, storm by storm, under one choice at each judgment."""
-    xs, _ = station_maxima(W, s1, s3, form, pool, step)
-    return transfer(W[ALL[s]["depot"]], s, xs[ALL[s]["depot"]], s2)
-
-
-def estimate(W, s1="rate", s2="geo", s3="profile", form="recip", pool="model", only=None, seasons=None, step=1):
-    """Every crossing's triggering storms a season under one choice at each judgment."""
-    xs, kap = station_maxima(W, s1, s3, form, pool, step)
-    out, even, upper = Rates(), {}, {}
-    for s, c in ALL.items():
-        if only and s not in only:
-            continue
-        w = W[c["depot"]]
-        est = transfer(w, s, xs[c["depot"]], s2)
-        keep = np.ones(w["N"], bool) if seasons is None else w["season"] >= G_SEASONS - seasons
-        out[s] = float(((est >= c["T"]) & keep).sum()) / (seasons or G_SEASONS)
-        even[s] = at_line(est[keep], seasons or G_SEASONS)
-        upper[s] = upper_mean(est[keep], seasons or G_SEASONS)
-    out.even, out.upper = even, upper
-    return out, kap
-
-
-def at_line(x, seasons):
-    """The 60-minute depth a source reaches EVEN times a season (regulation 3.2)."""
-    return float(np.sort(x)[::-1][int(round(EVEN * seasons)) - 1])
-
-
-def upper_mean(x, seasons, per=5):
-    """The mean 60-minute depth of a source's `per` largest storms a season."""
-    return float(np.sort(x)[::-1][:per * seasons].mean())
-
-
-def radar_route(W, only=None, seasons=R_SEASONS):
-    """The standard radar product: one field bias against the gauges' account-closed maxima, then the source pixel
-    counted against the triggering depth."""
-    num = den = 0.0
-    for d, w in W.items():
-        era = w["season"] >= G_SEASONS - R_SEASONS
-        num += float(slide60(minutes(w, "factor"))[era].sum())
-        den += float(radar(w, 0)[era].sum())
-    bias = num / den
-    out, even, upper = Rates(), {}, {}
-    for s, c in ALL.items():
-        if only and s not in only:
-            continue
-        w = W[c["depot"]]
-        era = w["season"] >= G_SEASONS - seasons
-        j = 1 + w["pts"].index(s)
-        out[s] = float(((bias * radar(w, j) >= c["T"]) & era).sum()) / seasons
-        even[s] = at_line(bias * radar(w, j)[era], seasons)
-        upper[s] = upper_mean(bias * radar(w, j)[era], seasons)
-    out.even, out.upper = even, upper
+def expectation(seed=SEED + 1, K=60000):
+    """The world's own expectation at each station: hours and ground strokes per storm day."""
+    out = {}
+    for si, (name, lam, size, std, leg) in enumerate(SITES):
+        rng = np.random.default_rng([seed, si])
+        N, d, t, I, pos = make_days(rng, K, size)
+        o = np.lexsort((t, d))
+        H, R = day_hours(d[o], t[o], K)
+        out[name] = (H.mean(), N.mean())
     return out
 
 
-def mapped_route(W, only=None, seasons=R_SEASONS):
-    """The most rigorous standard radar product the pack affords: the radar's depths on the four weighing gauges' pixels
-    mapped quantile to quantile onto what the gauges recorded, the map applied to the radar's depths on each source
-    pixel, and the mapped depths counted against the triggering depth. `.fmap` is the map."""
-    wr = W["Rio Scuro"]
-    era = wr["season"] >= G_SEASONS - C_SEASONS
-    r = np.sort(np.concatenate([radar(wr, 1 + wr["pts"].index(s))[era] for s in RESEARCH]))
-    g = np.sort(np.concatenate([source_max(wr, s)[era] for s in RESEARCH]))
-    fmap = lambda x: np.where(x > r[-1], x * g[-1] / r[-1], np.interp(x, r, g))
-    out, even, upper = Rates(), {}, {}
-    for s, c in ALL.items():
-        if only and s not in only:
-            continue
-        w = W[c["depot"]]
-        e2 = w["season"] >= G_SEASONS - seasons
-        x = fmap(radar(w, 1 + w["pts"].index(s)))
-        out[s] = float(((x >= c["T"]) & e2).sum()) / seasons
-        even[s] = at_line(x[e2], seasons)
-        upper[s] = upper_mean(x[e2], seasons)
-    out.even, out.upper, out.fmap = even, upper, fmap
+def records(W):
+    """What the files hold, and nothing else: the located strokes, each on the station-day it fell (a day is a
+    row here only when the network located a stroke on it; a storm day that left none is in no file), that day's
+    place in its season, and the sensor log (the standard sensors and legacy receivers up on every station-day)."""
+    r = W["det"]
+    seen = np.unique(W["day"][r])
+    idx = np.full(W["ndays"], -1)
+    idx[seen] = np.arange(len(seen))
+    d = idx[W["day"][r]]
+    return {"day": d, "t": W["t"][r], "I": W["I"][r], "pos": W["pos"][r], "site": W["d_site"][seen][d],
+            "season": W["d_season"][seen][d], "ndays": len(seen), "d_site": W["d_site"][seen],
+            "d_season": W["d_season"][seen], "d_std": W["d_std"][seen], "d_leg": W["d_leg"][seen],
+            "d_dos": W["d_dos"][seen], "cal_std": W["cal_std"], "cal_leg": W["cal_leg"]}
+
+
+# ------------------------------------------------------------------------------------------------ the golden's parts
+GRID = np.linspace(math.log(0.5), math.log(600.0), 400)
+DG = GRID[1] - GRID[0]
+
+
+def npdf(x, m, s):
+    return np.exp(-0.5 * ((x - m) / s) ** 2) / (s * 2.5066282746310002)
+
+
+def curve(L):
+    return 1.0 / (1.0 + np.exp(-(GRID - math.log(float(i50(L)))) / WIDTH))
+
+
+def amp_loglik(x, lev, mu, sg):
+    """Log likelihood of located log amplitudes under a lognormal law cut by the filed detection curve."""
+    ll = 0.0
+    for v in np.unique(lev):
+        m = lev == v
+        Z = np.sum(npdf(GRID, mu, sg) * curve(v)) * DG
+        xx = x[m]
+        dd = 1.0 / (1.0 + np.exp(-(xx - math.log(float(i50(v)))) / WIDTH))
+        ll += np.sum(np.log(npdf(xx, mu, sg) * dd / Z + 1e-300))
+    return ll
+
+
+def fit_amp_law(R, by_pol=True, min_std=3):
+    """The ground strokes' amplitude law, from the days seen by standard sensors only."""
+    ok = (R["d_leg"][R["day"]] == 0) & (R["d_std"][R["day"]] >= min_std)
+    lev = R["d_std"][R["day"]].astype(float)
+    out = {}
+    for p in ((False, True) if by_pol else (None,)):
+        m = ok if p is None else ok & (R["pos"] == p)
+        x, ne = np.log(R["I"][m]), lev[m]
+        best = (-1e300, 2.7, 0.7)
+        mus, sgs = np.linspace(2.2, 3.6, 15), np.linspace(0.4, 1.1, 15)
+        for _ in range(3):
+            for mu in mus:
+                for sg in sgs:
+                    l = amp_loglik(x, ne, mu, sg)
+                    if l > best[0]:
+                        best = (l, mu, sg)
+            dm, ds = (mus[1] - mus[0]), (sgs[1] - sgs[0])
+            mus = np.linspace(best[1] - dm, best[1] + dm, 9)
+            sgs = np.linspace(max(0.2, best[2] - ds), best[2] + ds, 9)
+        out[p] = (best[1], best[2])
+    if by_pol:                                  # the share of positive strokes among all ground strokes
+        lv, pp = lev[ok], R["pos"][ok]
+        wn = wp = 0.0
+        for v in np.unique(lv):
+            m = lv == v
+            wn += np.sum(~pp[m]) / (np.sum(npdf(GRID, *out[False]) * curve(v)) * DG)
+            wp += np.sum(pp[m]) / (np.sum(npdf(GRID, *out[True]) * curve(v)) * DG)
+        out["share_pos"] = wp / (wp + wn)
     return out
 
 
-def seen(W, s, seasons):
-    """The triggering storms a weighing gauge at source s saw in the last `seasons` seasons."""
-    w = W[ALL[s]["depot"]]
-    return float(((source_max(w, s) >= ALL[s]["T"]) & (w["season"] >= G_SEASONS - seasons)).sum())
+def fit_kappa(R, law, sites=None, step=0.02):
+    """What a legacy receiver adds, in standard sensors: the value under which the located amplitudes on the
+    days one is in range are cut where the filed curve says."""
+    nl = R["d_leg"][R["day"]]
+    m = nl >= 1
+    if sites is not None:
+        m &= np.isin(R["site"], sites)
+    x, st, lg, pos = np.log(R["I"][m]), R["d_std"][R["day"]][m], nl[m], R["pos"][m]
+    best = (-1e300, 1.0)
+    for kap in np.arange(0.0, 1.0 + 1e-9, step):
+        ne = np.round(np.maximum(st + kap * lg, 1.0), 1)
+        l = 0.0
+        for p in ((False, True) if (False in law) else (None,)):
+            mm = np.ones(len(x), bool) if p is None else (pos == p)
+            l += amp_loglik(x[mm], ne[mm], *law[p])
+        if l > best[0]:
+            best = (l, kap)
+    return float(best[1])
 
 
-def carried_route(W):
-    """The research valley read as a calibration: its one ratio of source to bucket carried to every crossing."""
-    c = research_reads(W, 0.0)[0]
-    return {s: float((c * slide60(W[k["depot"]]["rec"]) >= k["T"]).sum()) / G_SEASONS for s, k in CROSSINGS.items()}
+def fit_levels(R, law, kappa, min_strokes=150, step=0.1):
+    """The same fit freed of its one number: every pairing of standard sensors and legacy receivers up that holds
+    enough located strokes gets its own level, the one under which its amplitudes are cut where the filed curve
+    says; a pairing with too few strokes keeps the level the one number gives it."""
+    nl, st = R["d_leg"][R["day"]], R["d_std"][R["day"]]
+    x, pos = np.log(R["I"]), R["pos"]
+    out = {}
+    for a, b in sorted(set(zip(st[nl >= 1].tolist(), nl[nl >= 1].tolist()))):
+        m = (st == a) & (nl == b)
+        if m.sum() < min_strokes:
+            continue
+        best = (-1e300, max(a + kappa * b, 1.0))
+        for L in np.arange(1.0, min(a + b, 8) + 1e-9, step):
+            l = 0.0
+            for p in ((False, True) if (False in law) else (None,)):
+                mm = m if p is None else m & (pos == p)
+                l += amp_loglik(x[mm], np.full(mm.sum(), round(L, 1)), *law[p])
+            if l > best[0]:
+                best = (l, round(float(L), 1))
+        out[(a, b)] = best[1]
+    return out
 
 
-def main(seed=SEED, quiet=False):
-    W = build(seed)
-    names = sorted(CROSSINGS)
-    gold, kap = estimate(W)
-    truth = {s: CROSSINGS[s]["truth"] for s in names}
+def pbar(law, L):
+    """Share of ground strokes located at a sensor level, under an amplitude law."""
+    c = curve(L)
+    if None in law:
+        return float(np.sum(npdf(GRID, *law[None]) * c) * DG)
+    s = law["share_pos"]
+    return float((1 - s) * np.sum(npdf(GRID, *law[False]) * c) * DG + s * np.sum(npdf(GRID, *law[True]) * c) * DG)
 
-    # the battery: every convention of the golden rebuilt the ways the field does it, crossed
-    ways = [(fo, po, st, a, b) for fo in LOSS_WAYS for po in POOL_WAYS for st in STEP_WAYS for a in SITE_WAYS for b in HAIL_WAYS]
-    fam = [estimate(W, "rate", a, b, fo, po, step=st)[0] for fo, po, st, a, b in ways]
-    FAM = len(fam)
 
-    def route(lost):
-        return estimate(W, "factor" if "S1" in lost else "rate", "map" if "S2" in lost else "geo",
-                        "tips" if "S3" in lost else "profile")[0]
-    keys = [("S1",), ("S2",), ("S3",), ("S1", "S2"), ("S1", "S3"), ("S2", "S3"), ("S1", "S2", "S3")]
-    lat_full = {"+".join(k): route(k) for k in keys}
-    direct = estimate(W, "raw", "one", "tips")[0]
-    index = lat_full["S1+S2+S3"]
-    rad = radar_route(W)
-    rig = mapped_route(W)
-    car = carried_route(W)
-    crude_fam = {"hail " + b: estimate(W, s3=b)[0] for b in CRUDE_HAIL}
-    crude_fam.update({"site " + a: estimate(W, s2=a)[0] for a in CRUDE_SITE})
-    crude_fam.update({"loss on %d-minute totals" % st: estimate(W, step=st)[0] for st in CRUDE_STEP})
-    crude_fam.update({"loss in its first-order form": estimate(W, form=fo)[0] for fo in CRUDE_FORM})
+def mean_logamp(law, L):
+    """Mean log amplitude of the strokes located at a sensor level, under an amplitude law."""
+    c = curve(L)
+    if None in law:
+        f = npdf(GRID, *law[None])
+    else:
+        s = law["share_pos"]
+        f = (1 - s) * npdf(GRID, *law[False]) + s * npdf(GRID, *law[True])
+    return float(np.sum(GRID * f * c) / np.sum(f * c))
 
-    members = {s: {"lines": [LOW_LINE, LINE], "truth": truth[s], "golden": gold[s], "family": [v[s] for v in fam],
-                   "routes": {"direct": direct[s], "rigorous": rig[s], "index": index[s], "carried": car[s],
-                              "field bias": rad[s]}} for s in names}
-    lattice = {k: {s: v[s] for s in names} for k, v in lat_full.items()}
 
-    # the stumps' own figures
-    dB, dH = W["Valfosca"], W["Costarossa"]
-    fac = lambda w: float(w["check"].sum() / account(w, 0.0).sum())
+def cls_of(r, edges):
+    return np.searchsorted(edges, r, side="right")
 
-    def under_read(k, form="recip", true_rate=100.0):
-        """What the bucket fails to record at a true rate, in per cent, under a fitted loss."""
-        lo, hi = 0.0, true_rate
-        for _ in range(60):                 # the recorded rate whose put-back is the true rate
-            mid = 0.5 * (lo + hi)
-            lo, hi = (mid, hi) if float(put_back(mid, k, form, 1.0)) < true_rate else (lo, mid)
-        return 100.0 * (1.0 - lo / true_rate)
-    c1 = {"g": under_read(kap["Valfosca"]), "lost": 100.0 * (1.0 - 1.0 / fac(dB)),
-          "fam": [under_read(kappas(W, fo, po, st)["Valfosca"], fo) for fo in LOSS_WAYS for po in POOL_WAYS for st in STEP_WAYS]}
-    c2 = {"g": site_factor(W["Pradalt"], "Rio Marden"), "lost": CROSSINGS["Rio Marden"]["map"],
-          "fam": [site_factor(W["Pradalt"], "Rio Marden", a) for a in SITE_WAYS]}
 
-    def hail_gap(w, k, s3="profile", form="recip"):
-        c = put_back(w["rec"], k, form)
-        a, b = storm_max(w, c, "tips")[w["hail"]], storm_max(w, c, s3)[w["hail"]]
-        return 100.0 * (1.0 - float(a.sum()) / float(b.sum()))
-    c3 = {"g": hail_gap(dH, kap["Costarossa"]), "lost": 0.0,
-          "fam": [hail_gap(dH, kappas(W, fo, po)["Costarossa"], b, fo) for fo in LOSS_WAYS for po in POOL_WAYS for b in HAIL_WAYS]}
-    _XS.clear()
+def response(R, lev_day, donor, rng, reps, edges):
+    """The timer rule replayed on the best-covered days thinned to each lower sensor level with the filed
+    chances: for a day of each true size, the chance of each recorded size (or of leaving no record), and the
+    hours a day of each true size carries."""
+    nd, nc = R["ndays"], len(edges) + 1
+    dn = lev_day[R["day"]]
+    k = donor[R["day"]]
+    day, t, I, n = R["day"][k], R["t"][k], R["I"][k], dn[k]
+    Hd, Rd = day_hours(day, t, nd)
+    have = Rd > 0
+    cd = cls_of(Rd, edges)
+    num, den = np.zeros(nc), np.zeros(nc)       # the donors' own last step, from a second thinning by their chances
+    for _ in range(reps):
+        kk = rng.random(len(I)) < de(I, n)
+        Ht, Rt = day_hours(day[kk], t[kk], nd)
+        s = have & (Rt > 0)
+        num += np.bincount(cls_of(Rt[s], edges), weights=Hd[s], minlength=nc)
+        den += np.bincount(cls_of(Rt[s], edges), weights=Ht[s], minlength=nc)
+    top = np.where(den > 0, num / np.maximum(den, 1e-9), 1.0)
+    Hfull = Hd * top[cd]
+    cnt = np.bincount(cd[have], minlength=nc).astype(float)
+    Hbar = np.bincount(cd[have], weights=Hfull[have], minlength=nc) / np.maximum(cnt, 1)
+    P = {}
+    for L in np.unique(lev_day[~donor]):
+        M = np.zeros((nc, nc + 1))
+        q = np.minimum(1.0, de(I, np.full(len(I), L)) / de(I, n))
+        for _ in range(reps):
+            kk = rng.random(len(I)) < q
+            Ht, Rt = day_hours(day[kk], t[kk], nd)
+            rc = np.where(Rt > 0, cls_of(Rt, edges), nc)
+            np.add.at(M, (cd[have], rc[have]), 1.0)
+        P[L] = M / np.maximum(M.sum(axis=1, keepdims=True), 1e-9)
+    return {"P": P, "Hbar": Hbar, "prior": cnt / cnt.sum(), "top": top}
 
-    def per_key(golden_value, lost_value, sid):
-        return {"+".join(k): (lost_value if sid in k else golden_value) for k in keys}
-    pad = lambda v: (v * (FAM // len(v) + 1))[:max(FAM, 12)]
-    figures = [
-        {"id": "C1 the Valfosca bucket's under-read at 100 mm an hour (per cent)", "block": "component",
-         "golden": c1["g"], "family": pad(c1["fam"]), "lattice": per_key(c1["g"], c1["lost"], "S1"),
-         "routes": {"rigorous": c1["lost"]}},
-        {"id": "C2 burst factor, Rio Marden against Pradalt", "block": "component", "golden": c2["g"],
-         "family": pad(c2["fam"]), "lattice": per_key(c2["g"], c2["lost"], "S2"), "routes": {"rigorous": 1.0}},
-        {"id": "C3 hail storms' 60-minute maximum the tips miss, Costarossa (per cent)", "block": "component",
-         "golden": c3["g"], "family": pad(c3["fam"]), "lattice": per_key(c3["g"], c3["lost"], "S3"),
-         "routes": {"rigorous": 0.0}},
-    ]
-    figures += [{"id": s, "block": "ask", "member": s} for s in names]
-    figures += [{"id": "depth on the line, " + s, "block": "ask", "golden": gold.even[s],
-                 "family": [v.even[s] for v in fam], "lattice": {k: v.even[s] for k, v in lat_full.items()},
-                 "routes": {"rigorous": rig.even[s]}} for s in names]
-    for f in figures:                       # every band holds the battery and the rebuild floor
-        g = members[f["member"]]["golden"] if "member" in f else f["golden"]
-        fm = members[f["member"]]["family"] if "member" in f else f["family"]
-        f["band"] = band(g, fm, COUNT_FLOOR if "member" in f else DEPTH_FLOOR if f["id"].startswith("depth") else OWN_FLOOR)
 
-    # the referee: the research valley's weighing gauges at four sources
-    wr = W["Rio Scuro"]
-    era_c = wr["season"] >= G_SEASONS - C_SEASONS
-    rdepth = lambda v: float(np.mean([v.even[s] for s in RESEARCH]))
-    rtop = lambda v: float(np.mean([v.upper[s] for s in RESEARCH]))
-    rcount = lambda v: float(sum(v[s] for s in RESEARCH)) * C_SEASONS
-    rv = lambda **kw: estimate(W, only=RESEARCH, seasons=C_SEASONS, **kw)[0]
-    rivals = {"bucket put back by one factor": rv(s1="factor"), "source scaled by the rainfall normal": rv(s2="map"),
-              "tips taken as rain on hail days": rv(s3="tips"), "the gauge read raw": rv(s1="raw", s2="one", s3="tips")}
-    others = {"hail water moved only from the dry intervals": rv(s3="dry"), "hail water spread evenly": rv(s3="even"),
-              "the detector's own amounts on hail storms": rv(s3="optical"), "each storm by its own pixel pair": rv(s2="pairs"),
-              "one hail-day multiplier from the valley": rv(s3="carried"), "the rate read on five-minute totals": rv(step=5),
-              "the pixels' upper deciles": rv(s2="q90"), "the source pixel regressed on the gauge's": rv(s2="slope"),
-              "the radar mapped on these same gauges (in sample)": mapped_route(W, only=RESEARCH, seasons=C_SEASONS),
-              "the radar product, one field bias": radar_route(W, only=RESEARCH, seasons=C_SEASONS)}
-    rgold = rv()
-    seen_depth = float(np.mean([at_line(source_max(wr, s)[era_c], C_SEASONS) for s in RESEARCH]))
-    seen_count = sum(seen(W, s, C_SEASONS) for s in RESEARCH)
-    seen_top = float(np.mean([upper_mean(source_max(wr, s)[era_c], C_SEASONS) for s in RESEARCH]))
-    ref = {"slice": "the Rio Scuro research valley: weighing gauges at four sources over %d seasons; the mean 60-minute "
-                    "depth of each source's five largest storms a season, mean of the four (mm)" % C_SEASONS,
-           "covers_target": False, "truth": seen_top, "golden": rtop(rgold),
-           "rivals": {k: rtop(v) for k, v in rivals.items()}}
+def unfold(O, P, prior, nc, iters=400, shared=True):
+    """True storm days by size at one station, from its recorded days by size at each sensor level."""
+    Ls = [L for L in O if O[L].sum() > 0]
+    pi = {L: prior.copy() for L in Ls}
+    T = {L: O[L].sum() / max(1e-9, float(prior @ P[L][:, :nc].sum(axis=1))) for L in Ls}
+    for _ in range(iters):
+        tot = np.zeros(nc)
+        u = {}
+        for L in Ls:
+            pred = T[L] * (pi[L] @ P[L][:, :nc])
+            ratio = np.where(pred > 0, O[L] / np.maximum(pred, 1e-12), 0.0)
+            u[L] = T[L] * pi[L] * (P[L][:, :nc] @ ratio + P[L][:, nc])
+            T[L] = u[L].sum()
+            tot += u[L]
+        for L in Ls:
+            pi[L] = (tot / tot.sum()) if shared else (u[L] / max(u[L].sum(), 1e-12))
+    return T, pi
 
-    stumps = {
-        "S1": {"axis": "what", "opens": OPENED["S1"], "steps_left": 4, "precedents": ["N21", "L28"],
-               "said_out_loud": "The tipping buckets lose water while they tip, more the harder it rains."},
-        "S2": {"axis": "who", "opens": OPENED["S2"], "steps_left": 4, "precedents": ["N26", "N01"],
-               "said_out_loud": "A source's cloudbursts are not its gauge's, and they do not scale with its yearly rainfall."},
-        "S3": {"axis": "when", "opens": OPENED["S3"], "steps_left": 4, "precedents": ["N30", "L26"],
-               "said_out_loud": "On hail days the funnel holds the ice and the bucket tips its melt after the storm has gone."},
+
+def blind_scale(R):
+    """One over the share of each station-season's days on which two or more sensors were up."""
+    ok = (R["cal_std"] + R["cal_leg"]) >= 2
+    return 1.0 / np.maximum(ok.mean(axis=2), 1e-9)
+
+
+def season_sum(R, v):
+    out = np.zeros((NS, NT))
+    np.add.at(out, (R["d_site"], R["d_season"]), v)
+    return out
+
+
+def corrected(R, kappa, law, s1=True, donor_n=6, reps=6, seed=11, shared=True, edges=EDGES, iters=400, levmap=None):
+    """Season tables at each station: stand-down hours and ground strokes as they occurred."""
+    rng = np.random.default_rng(seed)
+    nd, nc = R["ndays"], len(edges) + 1
+    lev = np.round(np.maximum(R["d_std"] + kappa * R["d_leg"], 1.0), 1)
+    if levmap:
+        for (a, b), L in levmap.items():
+            lev[(R["d_std"] == a) & (R["d_leg"] == b)] = L
+    H, C = day_hours(R["day"], R["t"], nd)
+    scale = blind_scale(R)
+    pb = {L: pbar(law, L) for L in np.unique(lev)}
+    St = season_sum(R, C / np.array([pb[L] for L in lev])) * scale
+    if not s1:
+        return {"H": season_sum(R, H) * scale, "S": St, "lev": lev}
+    donor = R["d_std"] >= donor_n               # standard sensors alone give full sight, whatever a legacy adds
+    rs = response(R, lev, donor, rng, reps, edges)
+    cl = cls_of(C, edges)
+    fac = np.where(C > 0, rs["top"][cl], 0.0)
+    for si in range(NS):
+        ds = (R["d_site"] == si) & (C > 0) & ~donor
+        O = {L: np.bincount(cl[ds & (lev == L)], minlength=nc).astype(float) for L in np.unique(lev[ds])}
+        if not O:
+            continue
+        T, pi = unfold(O, rs["P"], rs["prior"], nc, iters=iters, shared=shared)
+        for L in T:
+            m = ds & (lev == L)
+            fac[m] = T[L] * float(pi[L] @ rs["Hbar"]) / max(H[m].sum(), 1e-9)
+    return {"H": season_sum(R, H * fac) * scale, "S": St, "lev": lev}
+
+
+def strong_days(R, thr):
+    """Days with a located stroke at or above thr kA, by station and season: strokes that strong are located
+    whatever the sensors in range."""
+    mx = np.zeros(R["ndays"])
+    np.maximum.at(mx, R["day"], R["I"])
+    return season_sum(R, (mx >= thr).astype(float)) * blind_scale(R)
+
+
+def pooled_slope(y, x):
+    """One response to the index across the stations, each with its own level (Poisson, by Newton)."""
+    b = 0.0
+    for _ in range(80):
+        e = np.exp(b * x)
+        a = y.sum(axis=1) / e.sum()
+        mu = np.outer(a, e)
+        g = np.sum((y - mu) * x)
+        h = np.sum(mu * x * x) - np.sum((mu * x).sum(axis=1) ** 2 / mu.sum(axis=1))
+        st = g / h
+        b += st
+        if abs(st) < 1e-11:
+            break
+    return float(b), float(1.0 / math.sqrt(h))
+
+
+def cell_slope(cells):
+    """One response across cells that each keep their own level and their own seasons (Poisson, by Newton)."""
+    b = 0.0
+    for _ in range(80):
+        g = h = 0.0
+        for y, x in cells:
+            e = np.exp(b * x)
+            mu = y.sum() / e.sum() * e
+            g += np.sum((y - mu) * x)
+            h += np.sum(mu * x * x) - np.sum(mu * x) ** 2 / mu.sum()
+        st = g / h
+        b += st
+        if abs(st) < 1e-11:
+            break
+    return float(b)
+
+
+def station_slopes(y, x):
+    out = []
+    for i in range(len(y)):
+        out.append(pooled_slope(y[i:i + 1], x))
+    return np.array(out)
+
+
+def state(R, T, thr=60.0, form="pooled", series=None):
+    """The region's response to the shelf index, in log points per index unit."""
+    x = INDEX[T]
+    y = (strong_days(R, thr) if series is None else series)[:, T]
+    if form == "pooled":
+        return pooled_slope(y, x)[0]
+    if form == "groups":                        # warm seasons against the rest, two groups
+        w = x >= 0.5
+        return float(np.log(y[:, w].sum() / w.sum() / (y[:, ~w].sum() / (~w).sum())) / (x[w].mean() - x[~w].mean()))
+    if form == "station_mean":                  # each station's own slope, averaged by its precision
+        ss = station_slopes(y, x)
+        return float(np.sum(ss[:, 0] / ss[:, 1] ** 2) / np.sum(1 / ss[:, 1] ** 2))
+    if form == "line":                          # a straight line: each station's series over its own mean, one slope
+        rel, xc = y / y.mean(axis=1, keepdims=True), x - x.mean()
+        return float((rel * xc).sum() / (len(rel) * (xc ** 2).sum()))
+    raise ValueError(form)
+
+
+def figures(B, S, beta, line=False):
+    """The graded figures. An average season is the mean over the seasons on record; this season is that mean
+    carried to the outlook value of the index; the crossing is the season, as a per cent of an average one, at
+    which a station's stand-down meets the line (it needs no form for the response, so it is the same figure
+    under a straight line and under a constant per cent per index unit, and never leaves the record's range).
+    The response is a constant per cent per index unit (the golden), or a straight line in the index (line)."""
+    beta = np.broadcast_to(np.asarray(beta, dtype=float), (NS,)).copy()
+    if line:
+        rel = 1.0 + beta * (X_F - INDEX.mean())
+    else:
+        rel = np.exp(beta * X_F) / np.exp(np.outer(beta, INDEX)).mean(axis=1)
+    cross = 100.0 * LINE / np.maximum(np.asarray(B, dtype=float), 1e-9)
+    return {"F": B * rel, "B": np.asarray(B, dtype=float), "S": np.asarray(S, dtype=float), "pct": 100.0 * rel,
+            "cross": cross, "beta": beta}
+
+
+def estimate(R, s1=True, s2=True, s3=True, by_pol=True, kap_sites=None, donor_n=6, thr=60.0, form="pooled",
+             seasons=None, reps=6, seed=11, shared=True, law=None, kappa=None, hours_state=False, min_std=3,
+             edges=EDGES, iters=400, by_pairing=False, kap_tail=None):
+    """The golden estimator and its lattice: each stump made the golden way (True) or the hurried way (False)."""
+    T = np.arange(NT) if seasons is None else np.asarray(seasons)
+    law = law or fit_amp_law(R, by_pol, min_std)
+    if kap_tail is not None and kappa is None:
+        kappa = tail_worth(R, law, kap_tail, own_share=True)     # the same parameter from one moment of the amplitudes
+    kap = (kappa if kappa is not None else fit_kappa(R, law, kap_sites)) if s3 else 1.0
+    tab = corrected(R, kap, law, s1, donor_n, reps, seed, shared, edges, iters,
+                    fit_levels(R, law, kap) if (by_pairing and s3) else None)
+    beta = state(R, T, thr, form, series=tab["H"] if hours_state else None) if s2 else 0.0
+    out = figures(tab["H"].mean(axis=1), tab["S"].mean(axis=1), beta, line=(form == "line"))
+    out.update(kappa=kap, tab=tab, law=law, how="replay" if s1 else "none")
+    return out
+
+
+# ------------------------------------------------------------------------------------------------ the other routes
+def face_tables(R, cap=1e9):
+    """Recorded hours, and strokes weighted by one over the filed chance at the count of sensors up."""
+    nd = R["ndays"]
+    lev = (R["d_std"] + R["d_leg"]).astype(float)
+    H, C = day_hours(R["day"], R["t"], nd)
+    w = np.minimum(1.0 / de(R["I"], lev[R["day"]]), cap)
+    return H, C, np.bincount(R["day"], weights=w, minlength=nd), lev
+
+
+def ols(y, X):
+    b, *_ = np.linalg.lstsq(X, y, rcond=None)
+    return b, y - X @ b
+
+
+def configs(R):
+    """Each station-season's sensors in range (the most seen up on a day of the season), standard and legacy."""
+    return R["cal_std"].max(axis=2), R["cal_leg"].max(axis=2)
+
+
+def route_direct(R):
+    """The pack's most direct evidence read raw: the located strokes' own hours, averaged over the record."""
+    H, C, Wd, lev = face_tables(R)
+    out = figures(season_sum(R, H).mean(axis=1), season_sum(R, C.astype(float)).mean(axis=1), 0.0)
+    out.update(kappa=1.0, how="none")
+    return out
+
+
+def config_cells(R, Hs):
+    """Each station's seasons under one set of sensors in range, as cells of (season hours, index)."""
+    cs, cl = configs(R)
+    key = cs * 100 + cl
+    cells = []
+    for i in range(NS):
+        for k in np.unique(key[i]):
+            m = key[i] == k
+            if m.sum() >= 3 and Hs[i][m].sum() > 0:
+                cells.append((Hs[i][m], INDEX[m]))
+    return cells, key
+
+
+def route_rigorous(R):
+    """The most rigorous standard design: counts weighted by the filed chances at the sensors up, stand-down hours
+    as the located strokes give them, a level for every station under every documented set of sensors in range,
+    one response to the season's state fitted within those levels across the stations, the level read on the
+    present network."""
+    H, C, Wd, lev = face_tables(R)
+    sc = blind_scale(R)
+    Hs, Ss = season_sum(R, H) * sc, season_sum(R, np.minimum(Wd, 50.0 * C)) * sc
+    cells, key = config_cells(R, Hs)
+    b = cell_slope(cells)
+    mm = np.exp(b * INDEX).mean()
+    B, S = np.zeros(NS), np.zeros(NS)
+    for i in range(NS):
+        now = key[i] == key[i][-1]
+        B[i] = Hs[i][now].sum() / np.exp(b * INDEX[now]).sum() * mm
+        S[i] = Ss[i][now].sum() / np.exp(b * INDEX[now]).sum() * mm
+    out = figures(B, S, b)
+    out.update(kappa=1.0, how="none")
+    return out
+
+
+def route_generous(R, law, kappa=1.0, beta=None):
+    """Every correction the files suggest at full strength: the amplitude law fitted, each day's strokes and its
+    hours raised by one over the share of strokes the filed table locates at the sensors up, the response to the
+    season's state fitted on the raised series across the stations. With kappa below 1 a legacy receiver counts
+    for that much of a standard sensor; with beta given the season's state is the one handed in."""
+    H, C, Wd, lev = face_tables(R)
+    if kappa != 1.0:
+        lev = np.round(np.maximum(R["d_std"] + kappa * R["d_leg"], 1.0), 1)
+    sc = blind_scale(R)
+    pb = {L: pbar(law, L) for L in np.unique(lev)}
+    f = np.array([1.0 / pb[L] for L in lev])
+    Hc, Ss = season_sum(R, H * f) * sc, season_sum(R, C * f) * sc
+    b = pooled_slope(Hc, INDEX)[0] if beta is None else beta
+    out = figures(Hc.mean(axis=1), Ss.mean(axis=1), b)
+    out.update(kappa=kappa, how="prorata", tab_H=Hc)
+    return out
+
+
+def route_imputed(R, law, pad=T_CLEAR, seed=7):
+    """The strokes the filed table says were missed, put back: each day's missing count drawn from its located
+    count and the share located at the sensors up, their minutes drawn between the day's first and last located
+    stroke with the timer's length either side, the timer rule rerun; the response as on the rigorous route."""
+    rng = np.random.default_rng(seed)
+    H, C, Wd, lev = face_tables(R)
+    nd = R["ndays"]
+    sc = blind_scale(R)
+    pb = {L: pbar(law, L) for L in np.unique(lev)}
+    f = np.array([1.0 / pb[L] for L in lev])
+    first, last = np.full(nd, np.inf), np.full(nd, -np.inf)
+    np.minimum.at(first, R["day"], R["t"])
+    np.maximum.at(last, R["day"], R["t"])
+    d2 = np.repeat(np.arange(nd), rng.poisson(C * (f - 1.0)))
+    t2 = rng.uniform(first[d2] - pad, last[d2] + pad)
+    day, t = np.concatenate([R["day"], d2]), np.concatenate([R["t"], t2])
+    o = np.lexsort((t, day))
+    Hi = day_hours(day[o], t[o], nd)[0]
+    Hs, Ss = season_sum(R, Hi) * sc, season_sum(R, C * f) * sc
+    b = cell_slope(config_cells(R, season_sum(R, H) * sc)[0])
+    out = figures(Hs.mean(axis=1), Ss.mean(axis=1), b)
+    out.update(kappa=1.0, how="imputed", tab_H=Hs, day_H=Hi)
+    return out
+
+
+_PB = {}
+
+
+def pbar_face(n):
+    """Share of ground strokes located at a sensor count under the filed table, for a typical amplitude law."""
+    if n not in _PB:
+        _PB[n] = pbar({None: (math.log(15.0), 0.75)}, float(n))
+    return _PB[n]
+
+
+def route_calibrated(R):
+    """End to end on the days a sensor was down: how far recorded hours fall with the filed share of strokes
+    located, fitted within each station and network era across its sensor counts, and carried to every station
+    by its count."""
+    H, C, Wd, lev = face_tables(R)
+    sc = blind_scale(R)
+    face_cal = R["cal_std"] + R["cal_leg"]
+    ys, xs, ws, cells = [], [], [], []
+    for i in range(NS):
+        for e in range(3):
+            T = np.where(ERA == e)[0]
+            dm = (R["d_site"] == i) & np.isin(R["d_season"], T)
+            for n in np.unique(face_cal[i][T]):
+                if n < 2:
+                    continue
+                ex = (face_cal[i][T] == n).sum()
+                h = H[dm & (lev == n)].sum()
+                nrec = (dm & (lev == n) & (C > 0)).sum()
+                if ex >= 20 and nrec >= 5:
+                    ys.append(math.log(h / ex))
+                    xs.append(math.log(pbar_face(int(n))))
+                    ws.append(nrec)
+                    cells.append(i * 3 + e)
+    ys, xs, ws, cells = map(np.array, (ys, xs, ws, cells))
+    for c in np.unique(cells):
+        m = cells == c
+        ys[m] -= np.average(ys[m], weights=ws[m])
+        xs[m] -= np.average(xs[m], weights=ws[m])
+    gamma = float(np.sum(ws * xs * ys) / np.sum(ws * xs * xs))
+    f = np.array([pbar_face(int(min(max(l, 2), 8))) ** (-gamma) for l in lev])
+    Hs, Ss = season_sum(R, H * f) * sc, season_sum(R, C / np.array([pbar_face(int(min(max(l, 2), 8))) for l in lev])) * sc
+    b = pooled_slope(Hs, INDEX)[0]
+    out = figures(Hs.mean(axis=1), Ss.mean(axis=1), b)
+    out.update(kappa=1.0, how="power", gamma=gamma, tab_H=Hs)
+    return out
+
+
+def route_flat(R, law, kappa=1.0, donor_n=6, reps=6, seed=21, max_located=None, donors=None, beta=None):
+    """End to end on the days the full network saw: those days thinned by the filed chances to each lower sensor
+    count, the timer rerun, the share of their hours that is left read off count by count, and every station's
+    recorded hours divided by the share at its count; strokes raised by the filed share located; the response
+    fitted on the corrected hours. With kappa at 1 the sensors are counted as the log lists them. The family a run
+    can choose from: max_located keeps only the well-covered days with at most that many located strokes (a run
+    matching its calibration days to the thin stations' small storms), donors keeps the well-covered days of one
+    station or one era (a boolean per day), and beta hands in a season's state in place of the route's own."""
+    rng = np.random.default_rng(seed)
+    nd = R["ndays"]
+    lev = np.round(np.maximum(R["d_std"] + kappa * R["d_leg"], 1.0), 1)
+    H, C = day_hours(R["day"], R["t"], nd)
+    sc = blind_scale(R)
+    donor = lev >= donor_n
+    use = donor.copy()
+    if max_located is not None:
+        use &= C <= max_located
+    if donors is not None:
+        use &= donors
+    k = use[R["day"]]
+    day, t, I, n = R["day"][k], R["t"][k], R["I"][k], lev[R["day"]][k]
+    Hd = day_hours(day, t, nd)[0].sum()
+    r, fac = {}, np.ones(nd)
+    for L in np.unique(lev[~donor]):
+        q = np.minimum(1.0, de(I, np.full(len(I), L)) / de(I, n))
+        tot = 0.0
+        for _ in range(reps):
+            kk = rng.random(len(I)) < q
+            tot += day_hours(day[kk], t[kk], nd)[0].sum()
+        r[float(L)] = tot / reps / Hd
+        fac[lev == L] = 1.0 / r[float(L)]
+    pb = {L: pbar(law, L) for L in np.unique(lev)}
+    Hs = season_sum(R, H * fac) * sc
+    Ss = season_sum(R, C / np.array([pb[L] for L in lev])) * sc
+    b = pooled_slope(Hs, INDEX)[0] if beta is None else beta
+    out = figures(Hs.mean(axis=1), Ss.mean(axis=1), b)
+    out.update(kappa=kappa, how="flat", tab_H=Hs, r=r, cut=max_located)
+    return out
+
+
+def route_sizemix(R, law, kappa, beta, donor_n=6, reps=6, seed=23):
+    """The calibration matched to each station's recorded size mix: the well-covered days thinned to each sensor
+    count, and for the days left in each size class as recorded after thinning, the hours they carried on the full
+    network over the hours left; every recorded day is raised by the ratio of its own size class at its own
+    count. It is the replay read by recorded size without the days that left no record."""
+    rng = np.random.default_rng(seed)
+    nd, nc = R["ndays"], len(EDGES) + 1
+    lev = np.round(np.maximum(R["d_std"] + kappa * R["d_leg"], 1.0), 1)
+    H, C = day_hours(R["day"], R["t"], nd)
+    sc = blind_scale(R)
+    donor = lev >= donor_n
+    k = donor[R["day"]]
+    day, t, I, n = R["day"][k], R["t"][k], R["I"][k], lev[R["day"]][k]
+    Hd = day_hours(day, t, nd)[0]
+    fac = np.ones(nd)
+    for L in np.unique(lev[~donor]):
+        q = np.minimum(1.0, de(I, np.full(len(I), L)) / de(I, n))
+        num, den = np.zeros(nc), np.zeros(nc)
+        for _ in range(reps):
+            kk = rng.random(len(I)) < q
+            Ht, Rt = day_hours(day[kk], t[kk], nd)
+            s = Rt > 0
+            cl = cls_of(Rt[s], EDGES)
+            num += np.bincount(cl, weights=Hd[s], minlength=nc)
+            den += np.bincount(cl, weights=Ht[s], minlength=nc)
+        ratio = np.where(den > 0, num / np.maximum(den, 1e-9), 1.0)
+        m = (lev == L) & ~donor
+        fac[m] = ratio[cls_of(C[m], EDGES)]
+    pb = {L: pbar(law, L) for L in np.unique(lev)}
+    Hs = season_sum(R, H * fac) * sc
+    Ss = season_sum(R, C / np.array([pb[L] for L in lev])) * sc
+    out = figures(Hs.mean(axis=1), Ss.mean(axis=1), beta)
+    out.update(kappa=kappa, how="sizemix", tab_H=Hs)
+    return out
+
+
+def tail_worth(R, law, thr=60.0, step=0.01, own_share=False):
+    """The legacy receivers' worth a run reads off the strong strokes: on the days a legacy receiver was in range,
+    the located strokes of thr kA and over divided by the fitted law's share above thr stand for the ground strokes,
+    and the worth is the one at which the located strokes over the filed share located give the same count. With
+    own_share the strong strokes are themselves divided by the share of them the filed table locates at the day's
+    level, which is the same fit as the golden's from one moment of the amplitudes."""
+    nd = R["ndays"]
+    C = np.bincount(R["day"], minlength=nd).astype(float)
+    strong = np.bincount(R["day"], weights=(R["I"] >= thr).astype(float), minlength=nd)
+    leg = R["d_leg"] > 0
+    tail = GRID >= math.log(thr)
+    dens = (1 - law["share_pos"]) * npdf(GRID, *law[False]) + law["share_pos"] * npdf(GRID, *law[True])
+    p_tail = float(np.sum(dens * tail) * DG)
+    best = None
+    for w in np.arange(0.0, 1.0 + 1e-9, step):
+        lev = np.round(np.maximum(R["d_std"][leg] + w * R["d_leg"][leg], 1.0), 1)
+        pb = {L: pbar(law, L) for L in np.unique(lev)}
+        tot = float(np.sum(C[leg] / np.array([pb[L] for L in lev])))
+        if own_share:
+            q = {L: float(np.sum(dens * tail * curve(L)) * DG) / p_tail for L in np.unique(lev)}
+            target = float(np.sum(strong[leg] / np.array([q[L] for L in lev]))) / p_tail
+        else:
+            target = strong[leg].sum() / p_tail
+        if best is None or abs(tot - target) < best[0]:
+            best = (abs(tot - target), float(w))
+    return best[1]
+
+
+def route_cutoff(R, since=16, warm=0.3):
+    """A subset where a model is needed: the seasons on the present network only, and among them the warm ones
+    as the window's analogues."""
+    H, C, Wd, lev = face_tables(R)
+    sc = blind_scale(R)
+    Hs, Ss = season_sum(R, H) * sc, season_sum(R, np.minimum(Wd, 50.0 * C)) * sc
+    T = np.arange(since, NT)
+    an = T[INDEX[T] >= warm]
+    B, F = Hs[:, T].mean(axis=1), Hs[:, an].mean(axis=1)
+    out = figures(B, Ss[:, T].mean(axis=1), 0.0)
+    out["F"], out["pct"] = F, 100.0 * F / np.maximum(B, 1e-9)
+    out.update(kappa=1.0, how="none")
+    return out
+
+
+# ------------------------------------------------------------------------------------------------ falsification
+def replay_test(R, law, m, levels=(2.0, 3.0), small=6, reps=8, seed=17, edges=EDGES, size=None):
+    """The stations' own well-covered days as an experiment. The days six or more standard sensors saw are thinned
+    by the filed chances to two and to three sensors, a route's correction is applied to what is left, and the
+    result is set against the hours those days carried on the full network. Read on the days of fewer than six
+    located strokes, the size the thin stations' days run to, in two folds: whatever a route fits, it fits on the
+    days that fall on an even day of their season and is tested on the odd ones, and the other way round. Returns the mean absolute
+    log miss over the two counts. With size=(lo, hi) the test days are the well-covered days that carried lo to hi
+    located strokes on the full network (the test read by day size); a flat route that calibrates on the days of at
+    most m["cut"] located strokes fits on those days of the other fold."""
+    rng = np.random.default_rng(seed)
+    nd, nc = R["ndays"], len(edges) + 1
+    how = m["how"]
+    lev = np.round(np.maximum(R["d_std"] + m["kappa"] * R["d_leg"], 1.0), 1)
+    donor = R["d_std"] >= 6
+    k = donor[R["day"]]
+    day, t, I, n = R["day"][k], R["t"][k], R["I"][k], lev[R["day"]][k]
+    Hd, Cd = day_hours(day, t, nd)
+    pbn = {L: pbar(law, L) for L in np.unique(lev[donor])}
+    pb_day = np.array([pbn.get(L, 1.0) for L in lev])
+    cd = cls_of(Cd, edges)
+    out = []
+    for L in levels:
+        q = np.minimum(1.0, de(I, np.full(len(I), L)) / de(I, n))
+        est, truth = 0.0, 0.0
+        for par in (1, 0):
+            odd = R["d_dos"] % 2 == par             # the day's place in its season, odd or even
+            fit, test = donor & ~odd & (Cd > 0), donor & odd & (Cd > 0) & (Cd < small)
+            if size is not None:
+                test = donor & odd & (Cd >= size[0]) & (Cd <= size[1])
+            fitc = fit & (Cd <= m["cut"]) if m.get("cut") else fit
+            truth += Hd[test].sum()
+            cnt = np.bincount(cd[fit], minlength=nc).astype(float)
+            Hbar = np.bincount(cd[fit], weights=Hd[fit], minlength=nc) / np.maximum(cnt, 1)
+            if how == "replay":                 # the response from the other fold alone
+                M = np.zeros((nc, nc + 1))
+                for _ in range(reps):
+                    kk = rng.random(len(I)) < q
+                    Rt = day_hours(day[kk], t[kk], nd)[1]
+                    rc = np.where(Rt > 0, cls_of(Rt, edges), nc)
+                    np.add.at(M, (cd[fit], rc[fit]), 1.0)
+                P = {L: M / np.maximum(M.sum(axis=1, keepdims=True), 1e-9)}
+            for _ in range(reps):
+                kk = rng.random(len(I)) < q
+                dk, tk = day[kk], t[kk]
+                Ht, Ct = day_hours(dk, tk, nd)
+                if how == "none":
+                    e = Ht[test].sum()
+                elif how == "prorata":
+                    e = (Ht[test] * pb_day[test]).sum() / pbar(law, L)
+                elif how == "power":
+                    e = (Ht[test] * (np.array([pbar_face(int(min(max(x, 2), 8))) for x in lev[test]])
+                                     / pbar_face(int(L))) ** m["gamma"]).sum()
+                elif how == "flat":
+                    e = Ht[test].sum() / (Ht[fitc].sum() / Hd[fitc].sum())
+                elif how == "imputed":
+                    first, last = np.full(nd, np.inf), np.full(nd, -np.inf)
+                    np.minimum.at(first, dk, tk)
+                    np.maximum.at(last, dk, tk)
+                    add = np.where(test & (Ct > 0), Ct * (pb_day / pbar(law, L) - 1.0), 0.0)
+                    d2 = np.repeat(np.arange(nd), rng.poisson(add))
+                    t2 = rng.uniform(first[d2] - T_CLEAR, last[d2] + T_CLEAR)
+                    dd, tt = np.concatenate([dk, d2]), np.concatenate([tk, t2])
+                    o = np.lexsort((tt, dd))
+                    e = day_hours(dd[o], tt[o], nd)[0][test].sum()
+                else:
+                    s_ = test & (Ct > 0)
+                    O = {L: np.bincount(cls_of(Ct[s_], edges), minlength=nc).astype(float)}
+                    T, pi = unfold(O, P, cnt / cnt.sum(), nc, iters=m.get("iters", 400), shared=m.get("shared", True))
+                    e = T[L] * float(pi[L] @ Hbar)
+                est += e / reps
+        out.append(abs(math.log(est / truth)))
+    return float(np.mean(out))
+
+
+def replay_counts(R, law, kappa, levels=(2.0, 3.0), reps=8, seed=19, cap=50.0):
+    """The same experiment for the stroke counts: the well-covered days thinned to two and to three sensors, and
+    the count the full network located recovered two ways, as the count left over the share the fitted amplitude
+    law puts at that sensor count, and as the strokes left weighted by one over their own filed chance (capped).
+    Returns the two ratios to the full network's count, per sensor count."""
+    rng = np.random.default_rng(seed)
+    lev = np.round(np.maximum(R["d_std"] + kappa * R["d_leg"], 1.0), 1)
+    donor = R["d_std"] >= 6
+    k = donor[R["day"]]
+    I, n = R["I"][k], lev[R["day"]][k]
+    pbn = {L: pbar(law, L) for L in np.unique(n)}
+    full = float(np.sum([1.0 / pbn[L] for L in n]))        # the donors' own count, raised by their own share
+    out = []
+    for L in levels:
+        q = de(I, np.full(len(I), L)) / de(I, n)
+        a = b = 0.0
+        for _ in range(reps):
+            kk = rng.random(len(I)) < np.minimum(1.0, q)
+            a += kk.sum() / pbar(law, L)
+            b += np.minimum(1.0 / de(I[kk], np.full(kk.sum(), L)), cap).sum()
+        out.append((a / reps / full, b / reps / full))
+    return out
+
+
+def falsify(R, m, law, reps=8, seed=5):
+    """Three statistics of the stations' own located strokes and sensor log, each the log of what the record
+    shows over what a route's own assumptions predict:
+      K1  the replay test: the well-covered days thinned to two and three sensors, the route's correction
+          applied, against the hours those days carried on the full network (replay_test), read by the day's
+          size on the full network in four classes (SIZES), the largest of the four misses: a correction that
+          is right for days of one size and wrong for another fails it, whichever days it was fitted on;
+      K2  the amplitude of the strokes located on the days a legacy receiver was in range;
+      K3  the response to the index of the strokes of 60 kA and over, which every network in the record locates,
+          against the response the route carries to the window and against the response its own corrected
+          season hours show (the larger miss), in log points of the window's figure.
+    The score is the root mean square of the three misses, in log points. A fourth statistic is printed beside
+    them and kept out of the score for its sampling error: recorded stand-down hours on the days a standard
+    sensor was down against the days all were up, at the thin stations themselves (K4, without and with legacy
+    receivers in range); a few hundred outage days carry a sampling error as large as the routes' differences,
+    so it rules on nothing and no route is scored on it.
+    No file observes a true stroke count, a true hour or a legacy receiver's worth."""
+    rng = np.random.default_rng(seed)
+    nd = R["ndays"]
+    kap, how = m["kappa"], m["how"]
+    H, C = day_hours(R["day"], R["t"], nd)
+    cs, cl = configs(R)
+    obs = {0: 0.0, 1: 0.0}
+    pred = {0: 0.0, 1: 0.0}
+    for i in range(NS):
+        for e in range(3):
+            T = np.where(ERA == e)[0]
+            s0, l0 = int(cs[i][T].max()), int(cl[i][T].max())
+            if s0 > 3 or s0 < 1 or s0 - 1 + l0 < 2:
+                continue
+            dm = (R["d_site"] == i) & np.isin(R["d_season"], T) & (R["d_leg"] == l0)
+            up, dn = dm & (R["d_std"] == s0), dm & (R["d_std"] == s0 - 1)
+            calm = R["cal_leg"][i][T] == l0
+            e_up = (calm & (R["cal_std"][i][T] == s0)).sum()
+            e_dn = (calm & (R["cal_std"][i][T] == s0 - 1)).sum()
+            if not e_up or not e_dn or H[up].sum() <= 0:
+                continue
+            L_up, L_dn = max(s0 + kap * l0, 1.0), max(s0 - 1 + kap * l0, 1.0)
+            k = up[R["day"]]
+            day, t, I = R["day"][k], R["t"][k], R["I"][k]
+            if how == "none":
+                ratio = 1.0
+            elif how == "prorata":
+                ratio = float(np.mean(de(I, L_dn) / de(I, L_up)))
+            elif how == "imputed":
+                ratio = m["day_H"][up].sum() / H[up].sum() * H[dn].sum() / max(m["day_H"][dn].sum(), 1e-9)
+            elif how == "power":
+                ratio = (pbar_face(int(max(s0 - 1 + l0, 2))) / pbar_face(int(min(s0 + l0, 8)))) ** m["gamma"]
+            elif how == "flat":
+                near = lambda x: m["r"][min(m["r"], key=lambda z: abs(z - x))]
+                ratio = near(L_dn) / (near(L_up) if L_up < 6 else 1.0)
+            else:
+                q = np.minimum(1.0, de(I, np.full(len(I), L_dn)) / de(I, np.full(len(I), L_up)))
+                tot = 0.0
+                for _ in range(reps):
+                    kk = rng.random(len(I)) < q
+                    tot += day_hours(day[kk], t[kk], nd)[0].sum()
+                ratio = tot / reps / H[up].sum()
+            g = 1 if l0 > 0 else 0
+            obs[g] += H[dn].sum()
+            pred[g] += e_dn * H[up].sum() / e_up * ratio
+    k4 = (abs(math.log(obs[0] / pred[0])), abs(math.log(obs[1] / pred[1])))
+    k1 = max(replay_test(R, law, m, size=sz) for sz in SIZES)      # read by day size, the largest class miss
+    lg = R["d_leg"][R["day"]] >= 1
+    lev = np.round(np.maximum(R["d_std"] + kap * R["d_leg"], 1.0), 1)[R["day"]][lg]
+    ml = {L: mean_logamp(law, L) for L in np.unique(lev)}
+    k2 = abs(float(np.mean(np.log(R["I"][lg]))) - float(np.mean([ml[L] for L in lev])))
+    bs = pooled_slope(strong_days(R, 60.0), INDEX)[0]
+    k3a = abs(float(np.mean(m["beta"])) - bs) * (X_F - INDEX.mean())
+    k3b = abs(pooled_slope(m["tab_H"], INDEX)[0] - bs) * (X_F - INDEX.mean())
+    k3 = max(k3a, k3b)
+    return {"K1": k1, "K2": k2, "K3": k3, "score": math.sqrt((k1 ** 2 + k2 ** 2 + k3 ** 2) / 3.0),
+            "parts": (k4[0], k4[1], k3a, k3b)}
+
+
+# ------------------------------------------------------------------------------------------------ the core
+BATTERY = [
+    ("as filed", {}),
+    ("one amplitude law for both polarities", {"by_pol": False}),
+    ("amplitude law from days with four or more standard sensors", {"min_std": 4}),
+    ("amplitude law from days with two or more standard sensors", {"min_std": 2}),
+    ("amplitude law from days with six or more standard sensors", {"min_std": 6}),
+    ("legacy worth fitted at V alone", {"kap_sites": [3]}),
+    ("legacy worth fitted without V", {"kap_sites": [0, 4, 5]}),
+    ("a level of its own for every pairing of standard sensors and legacy receivers up", {"by_pairing": True}),
+    ("legacy worth from the count of strokes of 60 kA and over, their own share located allowed for", {"kap_tail": 60.0}),
+    ("replay donors: seven or more standard sensors", {"donor_n": 7}),
+    ("replay seed 12", {"seed": 12}),
+    ("replay seed 13", {"seed": 13}),
+    ("replay with twelve thinnings a level", {"reps": 12}),
+    ("day sizes unfolded level by level", {"shared": False}),
+    ("day sizes taken in one step from the well-covered days' own mix", {"shared": False, "iters": 1}),
+    ("day sizes taken in three steps", {"iters": 3}),
+    ("coarser day-size classes", {"edges": np.array([2, 4, 8, 16, 32])}),
+    ("finer day-size classes", {"edges": np.array([2, 3, 4, 5, 7, 10, 15, 25, 50])}),
+    ("strong strokes from 50 kA", {"thr": 50.0}),
+    ("strong strokes from 75 kA", {"thr": 75.0}),
+    ("state as warm seasons against the rest", {"form": "groups"}),
+    ("state as the stations' own slopes, precision weighted", {"form": "station_mean"}),
+    ("state fitted without the first two seasons", {"seasons": np.arange(2, NT)}),
+    ("state fitted without the last two seasons", {"seasons": np.arange(0, NT - 2)}),
+    ("state fitted on the corrected hours", {"hours_state": True}),
+    ("state as a straight line in the index, on the strong strokes", {"form": "line"}),
+    ("state as a straight line in the index, on the corrected hours", {"form": "line", "hours_state": True}),
+]
+FAMS = ("F", "B", "S", "pct", "cross")
+CUTS = (2, 3, 4, 5, 6, 7, 8, 10, 12, 15, 20, 30)                 # the most located strokes a calibration day may carry
+TAILS = (40.0, 60.0, 80.0)                             # kA: where a run puts the strong strokes' threshold
+SWEEP = (0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 1.0)       # the legacy worth swept on the golden
+SIZES = ((1, 2), (3, 5), (6, 19), (20, 10 ** 9))       # located strokes on the full network: the replay test's classes
+GROUPS = {"g1": ["A", "X", "B"], "g2": ["Z", "V"], "g3": ["Y", "W"]}
+
+
+def main():
+    W = build()
+    R = records(W)
+    ex = expectation()
+    lam = np.array([s[1] for s in SITES])
+    mm = float(np.exp(BETA * INDEX).mean())
+    t_h = np.array([ex[n][0] for n in NAMES])
+    truth = {"F": lam * t_h * math.exp(BETA * X_F), "B": lam * t_h * mm,
+             "S": lam * np.array([ex[n][1] for n in NAMES]) * mm, "pct": np.full(NS, 100 * math.exp(BETA * X_F) / mm)}
+    truth["cross"] = 100.0 * LINE / truth["B"]
+
+    law = fit_amp_law(R)
+    g = estimate(R, law=law)
+    kap = g["kappa"]
+    lat = {}
+    for key, kw in (("S1", dict(s1=False)), ("S3", dict(s3=False)), ("S1+S3", dict(s1=False, s3=False))):
+        lat[key] = estimate(R, law=law, kappa=kap if kw.get("s3", True) else None, **kw)
+    fam = [estimate(R, **kw) for _, kw in BATTERY]
+    routes = {"direct": route_direct(R), "rigorous": route_rigorous(R), "generous": route_generous(R, law),
+              "calibrated": route_flat(R, law, kappa=1.0), "cutoff": route_cutoff(R), "imputed": route_imputed(R, law),
+              # two more a run can build: the hours' fall on the outage days as one elasticity, and the calibration on
+              # the well-covered days with the legacy receivers' worth fitted (S3 made, S1 half made)
+              "outage": route_calibrated(R), "flat": route_flat(R, law, kappa=kap)}
+    # the hedge: every signal noticed and kept as a sensitivity, the located strokes' hours and the record's mean central
+    routes["hedge"] = estimate(R, law=law, s1=False, s2=False, s3=False)
+    # the supporting step left out alone: the golden's corrected record, its mean carried to the window
+    routes["mean"] = estimate(R, law=law, kappa=kap, s2=False)
+
+    gb = g["beta"]
+    crew = lambda F: "".join(n for n, v in zip(NAMES, F) if v > LINE) or "none"
+    # each stump's over-corrected side: the stump alone pushed past its fitted value to the far end a run might
+    # set (hours raised in proportion; a legacy receiver worth nothing), everything else the golden's
+    over = {"S1": route_generous(R, law, kappa=kap, beta=gb), "S3": estimate(R, law=law, kappa=0.0)}
+    # the families a run can choose from, every setting with the season's state made the golden way: the cut on
+    # the calibration days' size at the fitted worth and with the legacy receivers as listed, the calibration days
+    # of one station or one era, the calibration matched to the recorded size mix, the worth read off the strong
+    # strokes
+    family = {}
+    for k in CUTS:
+        family["cutoff:k%d" % k] = route_flat(R, law, kappa=kap, max_located=k, beta=gb)
+        family["cutoff:k%d, legacy as listed" % k] = route_flat(R, law, kappa=1.0, max_located=k, beta=gb)
+        for n_, sd in ((2, 31), (3, 41)):         # the route's own thinning redrawn: the cut is wrong by more than its draw
+            family["cutoff:k%d, thinning draw %d" % (k, n_)] = route_flat(R, law, kappa=kap, max_located=k, beta=gb, seed=sd)
+    for si in range(NS):
+        if ((R["d_std"] >= 6) & (R["d_site"] == si)).sum() >= 30:
+            family["calibrated:donors %s" % NAMES[si]] = route_flat(R, law, kappa=kap, donors=R["d_site"] == si, beta=gb)
+    for e, nm in ((1, "2010-11 to 2017-18"), (2, "since 2018-19")):
+        family["calibrated:donors %s" % nm] = route_flat(R, law, kappa=kap, donors=ERA[R["d_season"]] == e, beta=gb)
+    family["calibrated:size mix"] = route_sizemix(R, law, kap, gb)
+    family["calibrated:size mix, legacy as listed"] = route_sizemix(R, law, 1.0, gb)
+    tw = {thr: tail_worth(R, law, thr) for thr in TAILS}
+    family["generous:tail-worth"] = route_generous(R, law, kappa=tw[60.0], beta=gb)
+    tail_g = {thr: estimate(R, law=law, kappa=w) for thr, w in tw.items()}
+    tw_own = {thr: tail_worth(R, law, thr, own_share=True) for thr in TAILS}
+    tail_own = {thr: estimate(R, law=law, kappa=w) for thr, w in tw_own.items()}
+    sweep = {w: estimate(R, law=law, kappa=w) for w in SWEEP}
+
+    # the falsification check, with each stump left out alone and in pairs
+    def model(o, tab_H=None):
+        return {"kappa": o["kappa"], "how": o["how"], "beta": o["beta"], "gamma": o.get("gamma"), "day_H": o.get("day_H"),
+                "r": o.get("r"), "cut": o.get("cut"), "tab_H": o["tab"]["H"] if tab_H is None else tab_H}
+    fal = {"golden": falsify(R, model(g), law)}
+    for key in lat:
+        fal[key] = falsify(R, model(lat[key]), law)
+    for nm in ("rigorous", "generous", "calibrated", "imputed", "outage", "flat"):
+        o = routes[nm]
+        fal[nm] = falsify(R, model(o, o.get("tab_H", season_sum(R, face_tables(R)[0]) * blind_scale(R))), law)
+    for nm in ("hedge", "mean"):
+        fal[nm] = falsify(R, model(routes[nm]), law)
+    for k in CUTS:                                 # the cut-off family at the fitted worth, scored like any rival
+        o = family["cutoff:k%d" % k]
+        fal["cut k%d" % k] = falsify(R, model(o, o["tab_H"]), law)
+    one = estimate(R, law=law, kappa=kap, shared=False, iters=1)
+    fal_one = falsify(R, dict(model(one), iters=1, shared=False), law)
+
+    np.set_printoptions(linewidth=200, suppress=True)
+    Ht = season_sum(W, day_hours(W["day"], W["t"], W["ndays"])[0]).mean(axis=1)
+    print("realised average-season hours ", "  ".join("%6.1f" % v for v in Ht), " | strokes",
+          " ".join("%5.0f" % v for v in season_sum(W, np.bincount(W["day"], minlength=W["ndays"]).astype(float)).mean(axis=1)))
+    for (nm, kw), f in zip(BATTERY, fam):
+        print("  battery %-58s F %s | pct %5.1f | k %.2f" % (nm, " ".join("%5.1f" % v for v in f["F"]), f["pct"][0], f["kappa"]))
+    print("located %d of %d ground strokes on %d storm days; legacy worth fitted %.2f (world %.2f); response "
+          "fitted %.3f (world %.2f)" % (len(R["t"]), len(W["t"]), W["ndays"], kap, KAPPA, g["beta"][0], BETA))
+    # the record's own counts, for the note and the build (nothing here is an estimate)
+    site_w = W["d_site"][W["day"]]
+    print("storm days %d, %d with a located stroke and %d with none; share of ground strokes located by station %s; located by station %s" % (
+        W["ndays"], R["ndays"], W["ndays"] - R["ndays"], " ".join("%.2f" % W["det"][site_w == i].mean() for i in range(NS)),
+        " ".join("%d" % W["det"][site_w == i].sum() for i in range(NS))))
+    don_ = R["d_std"] >= 6
+    leg_ = (R["d_leg"] > 0)[R["day"]]
+    print("well-covered storm days (six or more standard sensors up) %d, by station %s; located strokes on days a legacy receiver was up %d; located strokes of 60 kA and over %d" % (
+        don_.sum(), " ".join("%d" % (don_ & (R["d_site"] == i)).sum() for i in range(NS)), leg_.sum(), (R["I"] >= 60).sum()))
+    for n_ in ("V", "B"):
+        i_ = NAMES.index(n_)
+        thin_ = ((R["d_site"] == i_) & (R["d_std"] <= 1))[R["day"]]
+        print("%s: %d located strokes, %d of them on days with one standard sensor or none up" % (n_, (R["site"] == i_).sum(), thin_.sum()))
+    hm = lambda x: "%02d:%02d" % (int(x) // 60, int(x) % 60)
+    print("local time of day: every ground stroke between %s and %s, the located ones between %s and %s; %d located strokes fall before 09:30" % (
+        hm(W["t"].min()), hm(W["t"].max()), hm(R["t"].min()), hm(R["t"].max()), (R["t"] < 570).sum()))
+    print("sensors in the register %d; station-days with fewer than two sensors up by station %s of %d" % (
+        sum(max(s_) + max(l_) for _, _, _, s_, l_ in SITES), " ".join("%d" % ((W["cal_std"][i] + W["cal_leg"][i]) < 2).sum() for i in range(NS)), NT * NDAY))
+    Hrec = day_hours(R["day"], R["t"], R["ndays"])[0]
+    cs_, cl_ = configs(R)
+    od = [0.0, 0.0, 0]
+    for i in range(NS):
+        for e_ in range(3):
+            T_ = np.where(ERA == e_)[0]
+            s0, l0 = int(cs_[i][T_].max()), int(cl_[i][T_].max())
+            if l0 > 0 or s0 > 3 or s0 < 1 or s0 - 1 < 2:
+                continue
+            dn_ = (R["d_site"] == i) & np.isin(R["d_season"], T_) & (R["d_leg"] == 0) & (R["d_std"] == s0 - 1)
+            od[0] += Hrec[dn_].sum(); od[1] += (Hrec[dn_] ** 2).sum(); od[2] += int(dn_.sum())
+    print("K4 without legacy receivers rests on %d outage days with a located stroke; the sampling error of their hours is %.2f in log points" % (
+        od[2], math.sqrt(od[1]) / od[0]))
+    print("an average season read as a season at the index's mean value would put this season at %.1f per cent of it (%.1f as filed)" % (
+        100.0 * math.exp(float(g["beta"][0]) * (X_F - INDEX.mean())), g["pct"][0]))
+    print("stations          ", "  ".join("%6s" % n for n in NAMES))
+    for nm, o in [("truth", truth), ("golden", g), ("S1 lost", lat["S1"]), ("S3 lost", lat["S3"]), ("both lost", lat["S1+S3"]),
+                  ("record's mean", routes["mean"])] + [(k, routes[k]) for k in ("direct", "rigorous", "generous", "calibrated", "hedge", "cutoff", "imputed", "outage", "flat")]:
+        print("%-12s F    " % nm, "  ".join("%6.1f" % v for v in o["F"]), " | pct", " ".join("%4.0f" % v for v in o["pct"]))
+        print("%-12s B    " % "", "  ".join("%6.1f" % v for v in o["B"]), " | S", " ".join("%5.0f" % v for v in o["S"]),
+              " | cross", " ".join("%5.0f" % v for v in o["cross"]))
+    print("average-season hours against the golden's:  located strokes at face value %s | raised in proportion %s | "
+          "missed strokes put back %s | one share of hours kept at each sensor count, legacy fitted %s | legacy receivers "
+          "at face value %s | the golden against the world's realised %s" % tuple(
+              " ".join("%.2f" % v for v in x) for x in (lat["S1"]["B"] / g["B"], routes["generous"]["B"] / g["B"],
+                                                       routes["imputed"]["B"] / g["B"], routes["flat"]["B"] / g["B"],
+                                                       lat["S3"]["B"] / g["B"], g["B"] / Ht)))
+    print("\nfalsification (log points; K1 the replay test on the well-covered days read by day size, the largest class miss, K2 amplitudes under legacy receivers, "
+          "K3 the strong strokes' response against the route's carried and corrected ones; K4, beside the score, hours "
+          "on the thin stations' own outage days without and with legacy receivers in range)")
+    for k, v in list(fal.items()) + [("one step", fal_one)]:
+        print("  %-10s K1 %.3f  K2 %.3f  K3 %.3f  score %.3f  (%.1f times the golden's)   K4 %.3f %.3f" % (
+            k, v["K1"], v["K2"], v["K3"], v["score"], v["score"] / fal["golden"]["score"], v["parts"][0], v["parts"][1]))
+
+    print("\neach stump over-corrected alone, everything else the golden's (expected hours, the crews it files)")
+    print("  S1 hours raised in proportion, legacy worth fitted  %s | %s" % (
+        " ".join("%5.1f" % v for v in over["S1"]["F"]), crew(over["S1"]["F"])))
+    print("  S3 a legacy receiver worth nothing                  %s | %s" % (
+        " ".join("%5.1f" % v for v in over["S3"]["F"]), crew(over["S3"]["F"])))
+    print("the legacy worth swept on the golden (worth, expected hours, the crews it files, V's average-season strokes)")
+    for w in SWEEP:
+        print("  worth %.2f  %s | %-6s | S_V %4.0f" % (w, " ".join("%5.1f" % v for v in sweep[w]["F"]), crew(sweep[w]["F"]),
+                                                       sweep[w]["S"][NAMES.index("V")]))
+    print("the worth read off the strong strokes, with the golden's replay (threshold, worth, expected hours, crews, S_V)")
+    for thr in TAILS:
+        o = tail_g[thr]
+        print("  %2.0f kA and over  worth %.2f  %s | %-6s | S_V %4.0f" % (thr, tw[thr], " ".join("%5.1f" % v for v in o["F"]),
+                                                                        crew(o["F"]), o["S"][NAMES.index("V")]))
+    print("the same with the strong strokes divided by their own filed share located at the day's level")
+    for thr in TAILS:
+        o = tail_own[thr]
+        print("  %2.0f kA and over  worth %.2f  %s | %-6s | S_V %4.0f" % (thr, tw_own[thr], " ".join("%5.1f" % v for v in o["F"]),
+                                                                        crew(o["F"]), o["S"][NAMES.index("V")]))
+    print("the run routes' further settings (expected hours, the crews each files; the golden files %s)" % crew(g["F"]))
+    for k_, o in family.items():
+        print("  %-44s %s | %s" % (k_, " ".join("%5.1f" % v for v in o["F"]), crew(o["F"])))
+    lands = [k_ for k_, o in family.items() if crew(o["F"]) == crew(g["F"])]
+    gside = [v > LINE for v in g["F"]]
+    print("the cut-off family at the fitted worth: at each cut, the station furthest on the wrong side of the line (hours past it), least over the three thinning draws")
+    close = []
+    for k in CUTS:
+        worst_k = []
+        for lab in ("cutoff:k%d" % k, "cutoff:k%d, thinning draw 2" % k, "cutoff:k%d, thinning draw 3" % k):
+            F_ = family[lab]["F"]
+            worst_k.append(max((abs(F_[i] - LINE), NAMES[i]) for i in range(NS) if (F_[i] > LINE) != gside[i]) if any(
+                (F_[i] > LINE) != gside[i] for i in range(NS)) else (0.0, "-"))
+        close.append((min(worst_k), k))
+        print("  k %2d  %s by %.1f" % (k, min(worst_k)[1], min(worst_k)[0]))
+    print("the cut family's least closure is %.1f hours, at k %d" % (min(close)[0][0], min(close)[1]))
+    # the replay test read by day size: what rules on a calibration cut at any size (its own days pass by construction)
+    by_size = {}
+    print("the replay test by the day's size on the full network (log points, out of fold; one or two strokes, three to five, six to nineteen, twenty or more; the largest)")
+    for lab, m_ in [("golden", g), ("one share, every well-covered day", routes["flat"])] + [
+            ("cutoff:k%d" % k, family["cutoff:k%d" % k]) for k in CUTS]:
+        v = [replay_test(R, law, m_, size=sz) for sz in SIZES]
+        by_size[lab] = v
+        print("  %-36s %s | %.3f" % (lab, " ".join("%.3f" % x for x in v), max(v)))
+    worst_g = max(by_size["golden"])
+    least_cut = min((max(v), lab) for lab, v in by_size.items() if lab != "golden")
+    print("read by day size the golden's largest miss is %.3f; the least of the one-share routes' largest misses is %.3f (%s), %.1f times it" % (
+        worst_g, least_cut[0], least_cut[1], least_cut[0] / worst_g))
+    print("settings that file the golden's call: %s" % (", ".join(lands) or "none"))
+
+    rc_ = replay_counts(R, law, kap)
+    print("\nground strokes on the well-covered days thinned to two and to three sensors, against those days' own count: "
+          "the count left over the fitted law's share %.2f and %.2f; the strokes left weighted by one over their filed "
+          "chance, capped at 50, %.2f and %.2f" % (rc_[0][0], rc_[1][0], rc_[0][1], rc_[1][1]))
+
+    # the back-test a run does on the record: fit 2002 to 2017, forecast 2018 to 2025, hours as located
+    H, C, Wd, lev = face_tables(R)
+    Hs = season_sum(R, H)
+    tr, te = np.arange(16), np.arange(16, 24)
+    print("\nhold-out on the located hours (fit to 2017-18, forecast the eight seasons since): rmse of the record's "
+          "mean, of a regression on the index")
+    for i, n in enumerate(NAMES):
+        b, _ = ols(np.log(Hs[i][tr] + 0.5), np.column_stack([np.ones(16), INDEX[tr]]))
+        e0 = math.sqrt(np.mean((Hs[i][te] - Hs[i][tr].mean()) ** 2))
+        e1 = math.sqrt(np.mean((Hs[i][te] - (np.exp(b[0] + b[1] * INDEX[te]) - 0.5)) ** 2))
+        bb, _ = ols(np.log(Hs[i] + 0.5), np.column_stack([np.ones(NT), INDEX]))
+        print("  %s  mean %.1f  regression %.1f  | slope on the whole record %.2f | era means %s" % (
+            n, e0, e1, bb[1], " ".join("%.1f" % Hs[i][ERA == k].mean() for k in range(3))))
+    print()
+
+    ix = {n: i for i, n in enumerate(NAMES)}
+    members = {}
+    for n, i in ix.items():
+        members[n] = {"lines": [LINE], "truth": float(truth["F"][i]), "golden": float(g["F"][i]),
+                      "family": [float(f["F"][i]) for f in fam],
+                      "routes": {"direct": float(routes["direct"]["F"][i]), "rigorous": float(routes["rigorous"]["F"][i]),
+                                 "imputed": float(routes["imputed"]["F"][i])}}
+    fmap = lambda k: {n: float(routes[k]["F"][i]) for n, i in ix.items()}
+    mean_map = fmap("mean")
+    lattice = {k: {n: float(v["F"][i]) for n, i in ix.items()} for k, v in lat.items()}
+    run_routes = {k: {n: float(routes[k]["F"][i]) for n, i in ix.items()} for k in ("generous", "calibrated", "hedge", "cutoff")}
+    run_routes.update({k: {n: float(o["F"][i]) for n, i in ix.items()} for k, o in family.items()})
+    side = lambda o: {"over": {n: float(o["F"][i]) for n, i in ix.items()}}
+
+    fkey = {"F_" + n: ("F", n) for n in NAMES}        # each graded figure's table and station, to price any route
+
+    def fig(fid, block, famkey, n, sentence=None):
+        i = ix[n]
+        fkey[fid] = (famkey, n)
+        d = {"id": fid, "block": block, "golden": float(g[famkey][i]), "family": [float(f[famkey][i]) for f in fam],
+             "lattice": {k: float(v[famkey][i]) for k, v in lat.items()},
+             "routes": {k: float(routes[k][famkey][i]) for k in ("rigorous", "generous", "calibrated", "hedge", "cutoff", "imputed", "mean", "outage", "flat")}}
+        if sentence:
+            d["sentence"] = sentence
+        return d
+
+    figs = [fig("C1 average-season hours at Z", "component", "B", "Z"),
+            fig("C2 average-season ground strokes at V", "component", "S", "V")]
+    for gname, ms in GROUPS.items():
+        for n in ms:
+            figs.append({"id": "F_" + n, "block": "ask", "member": n, "sentence": "this season, " + gname})
+        for n in ms:
+            figs.append(fig("B_" + n, "ask", "B", n, "average season, " + gname))
+            figs.append(fig("S_" + n, "ask", "S", n, "average season, " + gname))
+    figs.append(fig("pct", "ask", "pct", "A", "crossing, over the line"))
+    for n in ("A", "Z", "X", "V"):
+        figs.append(fig("cross_" + n, "ask", "cross", n, "crossing, over the line"))
+    for n in ("Y", "W", "B"):
+        figs.append(fig("cross_" + n, "ask", "cross", n, "crossing, under the line"))
+
+    spec = {
+        "task": "task3 architecture 9",
+        "call": "lines",
+        "members": members,
+        "stumps": {
+            "S1": {"axis": "what", "opens": "Z",
+                   "said_out_loud": "The strokes the network missed shorten stand-downs, split them and erase whole "
+                                    "days, so recorded hours do not answer to detection in proportion.",
+                   "steps_left": 5, "precedents": ["L56", "N21", "L57"], "sides": side(over["S1"])},
+            "S3": {"axis": "against", "opens": "V",
+                   "said_out_loud": "A legacy receiver does not add what a standard sensor adds to detection.",
+                   "steps_left": 4, "precedents": ["N42", "L58"], "sides": side(over["S3"])},
+        },
+        "lattice": lattice,
+        "falsification": {
+            "check": "three statistics of the stations' own located strokes and sensor log (the well-covered days "
+                     "thinned to two and three sensors by the filed chances with the route's correction applied, "
+                     "against the hours those days carried on the full network, read by the day's size in four "
+                     "classes, the largest miss; amplitudes on the days a legacy "
+                     "receiver was in range; the strong strokes' response to the index against the response the "
+                     "route carries and the response its corrected hours show), each against what the route's own "
+                     "assumptions predict; the score is the root mean square of the three log misses",
+            "observes_target": False, "truth": 0.0, "golden": fal["golden"]["score"],
+            "rivals": {k: v["score"] for k, v in fal.items() if k not in ("golden", "mean")}},
+        "run_routes": run_routes,
+        "figures": figs,
     }
-    spec = {"task": "task3 architecture 8", "call": "lines", "members": members, "stumps": stumps, "lattice": lattice,
-            "referee": ref, "figures": figures}
-
-    if quiet:
-        return spec
-    if "--quiet" not in sys.argv:
-        p = lambda label, v: print("%-26s" % label + ", ".join("%s %.2f" % (s.replace("Rio ", ""), v[s]) for s in names))
-        print("triggering depths (mm in 60 minutes): " + ", ".join("%s %.1f" % (s, ALL[s]["T"]) for s in ALL))
-        print("loss per unit of rate, fitted: " + ", ".join("%s %.5f (%.5f)" % (d, kap[d], KAPPA[DEPOTS[d]["model"]]) for d in DEPOTS))
-        for fo in LOSS_WAYS:
-            for po in POOL_WAYS:
-                print("   %s/%s: " % (fo, po) + ", ".join("%s %s" % (d[:6], ("%.3f x %.5f" % v) if isinstance(v, tuple) else "%.5f" % v) for d, v in kappas(W, fo, po).items()))
-        for dim, opts in (("loss", [(fo, po, st, "geo", "profile") for fo in LOSS_WAYS for po in POOL_WAYS for st in STEP_WAYS]),
-                          ("site", [("recip", "model", 1, a, "profile") for a in SITE_WAYS]),
-                          ("hail", [("recip", "model", 1, "geo", b) for b in HAIL_WAYS])):
-            vs = [estimate(W, "rate", a, b, fo, po, step=st)[0] for fo, po, st, a, b in opts]
-            print("   spread by %s: " % dim + ", ".join("%s %.2f-%.2f" % (s.replace("Rio ", ""), min(v[s] for v in vs), max(v[s] for v in vs)) for s in names))
-        print("account factor: " + ", ".join("%s %.3f" % (d, fac(W[d])) for d in DEPOTS))
-        print("burst factors, fitted (world): " + ", ".join("%s %.3f (%.2f)" % (s, site_factor(W[ALL[s]["depot"]], s), ALL[s]["f"]) for s in ALL))
-        p("truth", truth)
-        p("golden", gold)
-        print("%-26s" % "family" + ", ".join("%s %.2f-%.2f" % (s.replace("Rio ", ""), min(v[s] for v in fam), max(v[s] for v in fam)) for s in names))
-        for k, v in lat_full.items():
-            p(k + " lost", v)
-        p("direct", direct)
-        p("radar, one field bias", rad)
-        p("radar mapped on the gauges", rig)
-        xs_r = station_maxima(W, "rate", "profile", "recip", "model", 1)[0]
-        for d, w in W.items():               # what refutes the map: it does not carry from the valley it was made in
-            e2 = w["season"] >= G_SEASONS - R_SEASONS
-            ok = e2 & (xs_r[d] >= 3.0)
-            print("   mapped radar on %s's own pixel: %s storms of 12, 15 and 18 mm against the golden's %s; the radar's scatter about the station's depth %.2f (log sd)" % (
-                d, ", ".join("%d" % int((rig.fmap(radar(w, 0))[e2] >= t).sum()) for t in (12.0, 15.0, 18.0)),
-                ", ".join("%d" % int((xs_r[d][e2] >= t).sum()) for t in (12.0, 15.0, 18.0)),
-                float(np.std(np.log(radar(w, 0)[ok] / xs_r[d][ok])))))
-        p("carried", car)
-        print("research valley read as a calibration: source over bucket %.3f, hail-day multiplier %.3f" % research_reads(W, kap["Rio Scuro"]))
-        for b, v in crude_fam.items():
-            p(b, v)
-        pe = lambda label, v: print("%-26s" % label + ", ".join("%s %.1f" % (s.replace("Rio ", ""), v.even[s]) for s in names))
-        pe("depth golden", gold)
-        pe("depth radar mapped", rig)
-        print("%-26s" % "depth family" + ", ".join("%s %.1f-%.1f" % (s.replace("Rio ", ""), min(v.even[s] for v in fam), max(v.even[s] for v in fam)) for s in names))
-        for k, v in lat_full.items():
-            if "+" not in k:
-                pe("depth %s lost" % k, v)
-        print("components: C1 %.2f (lost %.2f; family %.2f to %.2f), C2 %.3f (lost %.2f; family %.3f to %.3f), C3 %.1f (family %.1f to %.1f)" % (
-            c1["g"], c1["lost"], min(c1["fam"]), max(c1["fam"]), c2["g"], c2["lost"], min(c2["fam"]), max(c2["fam"]),
-            c3["g"], min(c3["fam"]), max(c3["fam"])))
-        # what refutes each shortcut, from records the pack will hold
-        for d in ("Valfosca", "Pradalt"):
-            w = W[d]
-            x = np.bincount(w["ivl"], (60.0 * w["rec"] ** 2).sum(axis=1), w["nint"])
-            rf, rg = w["check"] - fac(w) * account(w, 0.0), w["check"] - account(w, kap[d])
-            r = float(np.corrcoef(x, rf)[0, 1])
-            print("account, %s: one factor leaves a monthly residual of %.2f mm rms that follows the month's burst rain (r %.2f, t %.1f); the rate fit leaves %.2f mm" % (
-                d, float(np.sqrt((rf ** 2).mean())), r, r * math.sqrt((w["nint"] - 2) / (1 - r * r)), float(np.sqrt((rg ** 2).mean()))))
-        for mdl in ("B", "A"):               # the account against the rate's time step and the loss's form
-            ws = [w for w in W.values() if w["model"] == mdl]
-            rms = lambda form, st: float(np.sqrt(np.mean(np.concatenate(
-                [w["check"] - account(w, fit_kappa(ws, form, st), form, st) for w in ws]) ** 2)))
-            print("account, model %s buckets, monthly residual (mm rms) with the rate read on 1, 5, 10 and 15 minute totals: %s; first-order form on 1 minute %.2f" % (
-                mdl, ", ".join("%.2f" % rms("recip", st) for st in (1, 5, 10, 15)), rms("lin", 1)))
-        for d in ("Costarossa", "Valfosca"):
-            w = W[d]
-            c10 = w["rec"].reshape(w["N"], M // 10, 10).sum(axis=2)
-            late = lambda m: 100.0 * float((c10[m] * ~w["wet"][m]).sum() / c10[m].sum())
-            print("detector, %s: %.0f per cent of the hail storms' tipped water arrives in intervals the detector logs dry, %.1f per cent of the rain storms'; %d hail storms" % (
-                d, late(w["hail"]), late(~w["hail"]), int(w["hail"].sum())))
-        for d in ("Costarossa", "Rio Scuro"):
-            w = W[d]
-            lr = np.log(w["opt"].sum(axis=1)[~w["hail"]] / w["rec"].sum(axis=1)[~w["hail"]])
-            print("detector, %s: on rain storms its optical storm totals scatter around the tipped totals by a log sd of %.2f (%d storms)" % (d, float(lr.std()), int((~w["hail"]).sum())))
-        halves, sides, tops = [], [], []
-        for s in names:                      # the crude site ways against their own reverse and their own halves
-            w = W[CROSSINGS[s]["depot"]]
-            era = w["season"] >= G_SEASONS - R_SEASONS
-            a, b = radar(w, 1 + w["pts"].index(s)), radar(w, 0)
-            odd, evn = era & (w["season"] % 2 == 1), era & (w["season"] % 2 == 0)
-            q = lambda m: float(np.quantile(a[m], 0.9) / np.quantile(b[m], 0.9))
-            g = lambda m: float(np.exp(np.log(a[m] / b[m]).mean()))
-            halves.append((s, 100.0 * abs(q(odd) / q(evn) - 1.0), 100.0 * abs(g(odd) / g(evn) - 1.0)))
-            sides.append((s, float((a[era] * b[era]).sum() / (b[era] ** 2).sum()), float((a[era] ** 2).sum() / (a[era] * b[era]).sum())))
-            tb, ta = era & (b >= np.quantile(b[era], 0.75)), era & (a >= np.quantile(a[era], 0.75))
-            tops.append((s, float(a[tb].sum() / b[tb].sum()), float(a[ta].sum() / b[ta].sum())))
-        print("site, upper deciles unpaired: odd against even seasons differ by " + ", ".join("%s %.1f" % (s.replace("Rio ", ""), x) for s, x, _ in halves) +
-              " per cent; the paired mean by " + ", ".join("%.1f" % y for _, _, y in halves))
-        print("site, regression through the origin, source on gauge and its reverse: " + ", ".join("%s %.3f and %.3f" % (s.replace("Rio ", ""), x, y) for s, x, y in sides))
-        print("site, the largest quarter chosen on the gauge pixel and on the source pixel: " + ", ".join("%s %.3f and %.3f" % (s.replace("Rio ", ""), x, y) for s, x, y in tops))
-        era = era_c
-        gs = storm_max(wr, minutes(wr, "rate", kap["Rio Scuro"]), "profile")
-        print("research valley, source over station (weighing gauges over the station's golden maxima; radar contrast; rainfall normal): " + ", ".join(
-            "%s %.2f; %.2f; %.2f" % (s, float(source_max(wr, s)[era].sum() / gs[era].sum()), site_factor(wr, s), RESEARCH[s]["map"]) for s in RESEARCH))
-        print("referee (mean of the five largest storms a season, mm; depth reached five times a season, mm; triggering storms seen): "
-              "weighing gauges %.2f, %.2f and %.0f; golden %.2f, %.2f and %.0f" % (seen_top, seen_depth, seen_count, rtop(rgold), rdepth(rgold), rcount(rgold)))
-        for k, v in {**rivals, **others}.items():
-            print("   %-46s %.2f, %.2f and %.0f" % (k, rtop(v), rdepth(v), rcount(v)))
-        # forcing: each fitted input moved by a fifth, the classing read again
-        cls = lambda v: tuple(int(v[s] >= LOW_LINE) + int(v[s] >= LINE) for s in names)
-        cnt = lambda est, s: float((est >= CROSSINGS[s]["T"]).sum()) / G_SEASONS
-        dep = lambda s: CROSSINGS[s]["depot"]
-        moved = {}
-        for fk in (0.8, 1.2):
-            xs = {d: storm_max(w, put_back(w["rec"], fk * kap[d], "recip"), "profile") for d, w in W.items()}
-            moved["the fitted loss times %.1f" % fk] = {s: cnt(transfer(W[dep(s)], s, xs[dep(s)], "geo"), s) for s in names}
-        xs0 = station_maxima(W, "rate", "profile", "recip", "model", 1)[0]
-        for pw in (0.8, 1.2):
-            moved["each burst factor's distance from one times %.1f" % pw] = {
-                s: cnt(site_factor(W[dep(s)], s) ** pw * xs0[dep(s)], s) for s in names}
-        for lam in (0.8, 1.2):
-            xs = {}
-            for d, w in W.items():
-                c = put_back(w["rec"], kap[d], "recip")
-                a, b = storm_max(w, c, "tips"), storm_max(w, c, "profile")
-                xs[d] = a + lam * (b - a)
-            moved["the hail storms' put-back times %.1f" % lam] = {s: cnt(transfer(W[dep(s)], s, xs[dep(s)], "geo"), s) for s in names}
-        for k, v in moved.items():
-            print("forcing, %-46s %s; classing %s" % (k + ":", ", ".join("%s %.2f" % (s.replace("Rio ", ""), v[s]) for s in names),
-                                                       "unchanged" if cls(v) == cls(gold) else "MOVED"))
-        print("storms on the tip record: " + ", ".join("%s %d (%d with hail or graupel)" % (d, w["N"], int(w["hail"].sum())) for d, w in W.items()))
-        print()
-    return corelib.run(spec)
+    rc = corelib.run(spec)
+    e = corelib.earnings(spec)
+    gcall = corelib._calls(spec, {m: spec["members"][m]["golden"] for m in spec["members"]})
+    for k, what in (("imputed", "missed strokes put back, the timer rerun"),
+                    ("outage", "one elasticity of hours to the filed share, from the outage days"),
+                    ("flat", "one share of hours kept at each sensor count from the well-covered days, legacy worth fitted")):
+        print("the %s route (%s) earns %.0f on the rubric; it files %s" % (
+            k, what, corelib._run_route_score(spec, e["figs"], k, fmap(k), gcall)[0],
+            ", ".join(n for n in NAMES if routes[k]["F"][ix[n]] > LINE) or "no station"))
+    # the supporting step is where the response is read (the strong strokes, which every era's network located).
+    # Left out alone, with both stumps made, it is the response read on the route's own corrected hours: a variant
+    # of the battery. The harsher reading, no state carried at all (the record's mean, the filed outlook ignored),
+    # is printed beside it with its room, at the golden's conventions and in the battery's lowest variant.
+    basis = estimate(R, law=law, kappa=kap, hours_state=True)
+    same_b = all((basis["F"][ix[n]] > LINE) == (g["F"][ix[n]] > LINE) for n in NAMES)
+    print("the supporting step left out alone (the response read on the corrected hours in place of the strong strokes): "
+          "this season %.1f per cent of an average one against %.1f; it files %s, %s" % (
+              basis["pct"][0], g["pct"][0], crew(basis["F"]), "the golden's call" if same_b else "NOT the golden's call"))
+    over_ = [n for n in NAMES if g["F"][ix[n]] > LINE]
+    same = all((mean_map[n] > LINE) == (g["F"][ix[n]] > LINE) for n in NAMES)
+    room = min((mean_map[n] / LINE - 1.0, n) for n in over_)
+    worst = min((f["B"][ix[n]] / LINE - 1.0, nm, n) for (nm, _), f in zip(BATTERY, fam) for n in over_)
+    print("no state carried at all (the corrected record's mean, the filed outlook ignored) earns %.0f on the rubric; it "
+          "files %s, %s, with every figure for the window %.0f per cent low; the nearest station it keeps over the line "
+          "is %s, %.1f per cent over; in the battery's lowest variant %s is %.1f per cent %s the line ('%s')" % (
+              corelib._run_route_score(spec, e["figs"], "mean", mean_map, gcall)[0], crew([mean_map[n] for n in NAMES]),
+              "the golden's call" if same else "NOT the golden's call", 100 - 1e4 / g["pct"][0], room[1], 100 * room[0],
+              worst[2], abs(100 * worst[0]), "over" if worst[0] > 0 else "under", worst[1]))
+    # every further setting of a run route priced on the rubric, per sentence and per figure: the review reads its
+    # strongest run, so the dearest setting is the one that counts
+    def price(o, per_fig=False):
+        right = all((o["F"][ix[n]] > LINE) == (g["F"][ix[n]] > LINE) for n in NAMES)
+        val = lambda f: float(o[fkey[f["id"]][0]][ix[fkey[f["id"]][1]]])
+        if not per_fig:
+            return corelib._score(e["figs"], right, val)
+        sc = corelib.BLOCKS["instruction"] + (corelib.BLOCKS["recommendation"] if right else 0.0)
+        for b_ in ("components", "asks"):
+            fs = [f for f in e["figs"] if f["block"] == b_]
+            sc += corelib.BLOCKS[b_] * sum(1 for f in fs if corelib._earned(f, val(f))) / len(fs)
+        return sc
+    priced = sorted(((price(o), price(o, True), k) for k, o in family.items()), reverse=True)
+    print("the run routes' further settings on the rubric (per sentence, per figure), dearest first:")
+    for a_, b_, k in priced[:8]:
+        print("  %-44s %3.0f %3.0f" % (k, a_, b_))
+    print("the dearest further setting earns %.0f per sentence (%s) and %.0f per figure (%s); %d settings priced" % (
+        priced[0][0], priced[0][2], max(p[1] for p in priced), max(priced, key=lambda p: p[1])[2], len(priced)))
+    print("the worth read off the strong strokes with the golden's replay (S3 made by a count of strong strokes): "
+          + "; ".join("%.0f kA worth %.2f earns %.0f, files %s" % (thr, tw[thr], price(tail_g[thr]), crew(tail_g[thr]["F"])) for thr in TAILS))
+    if priced[0][0] > corelib.ONE_LOST_MAX + 1e-9:
+        print("FAIL  a further setting of a run route earns over %.0f" % corelib.ONE_LOST_MAX)
+        rc = rc or 1
+    # one stump lost, priced per figure in place of per sentence (the same blocks, each figure its own criterion)
+    def per_figure(key):
+        sc = corelib.BLOCKS["instruction"] + (corelib.BLOCKS["recommendation"] if corelib._calls(spec, lattice[key]) == gcall else 0.0)
+        for b_ in ("components", "asks"):
+            fs = [f for f in e["figs"] if f["block"] == b_]
+            sc += corelib.BLOCKS[b_] * sum(1 for f in fs if corelib._earned(f, f["values"][corelib._key(key.split("+"))])) / len(fs)
+        return sc
+    print("priced per figure in place of per sentence: S1 lost alone earns %.0f, S3 lost alone %.0f, both lost %.0f" % (
+        per_figure("S1"), per_figure("S3"), per_figure("S1+S3")))
+    if not (same_b and same):
+        # a closed lesson may support, never decide: where the response is read may not move the call, and neither
+        # may the state left out at the golden's own conventions
+        print("FAIL  the supporting step decides        left out alone it moves the call; a closed lesson may never decide")
+        rc = rc or 1
+    return rc
 
 
 if __name__ == "__main__":

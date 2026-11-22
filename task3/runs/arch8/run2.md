@@ -1,5 +1,7 @@
 Response 2
 
+(Pasted verbatim from the platform on 2026-11-21; em dashes normalized to commas under the repo's punctuation rule, nothing else changed.)
+
 Reviewed 331 resources
 · 1h 42m
 1. Recommendation.
@@ -8,18 +10,18 @@ Program recommendation: adopt Class 3 automatic barriers with warning systems on
 This rests on the regulation’s expected-storm boundaries: the five Class 3 crossings exceed 3.0 expected triggering storms per warm season (lowest is GC-3210 at 4.392; largest is GC-2990 at 12.283), GC-1320 is 1.821, inside the 1.0 to under-3.0 Class 2 band, and GC-2420 is 0.393, under the 1.0 Class 1 boundary. Classes are proposed for the five warm seasons of 2027 to 2031.
 
 2. Final answers.
-Automatic barrier crossings, Class 3 — carried in SP141_gully_crossings_2027-2031_protection_program_classing.xlsx, sheet 00 Classing, table rows 12, 14, 15, 17 and 18, class column I and protection column J:
+Automatic barrier crossings, Class 3, carried in SP141_gully_crossings_2027-2031_protection_program_classing.xlsx, sheet 00 Classing, table rows 12, 14, 15, 17 and 18, class column I and protection column J:
 
 GC-0790, Rio Gelt, km 7.9, governing VFO, source SA-21768: 4.627 triggering storms expected per warm season.
 GC-1620, Rio Marden, km 16.2, governing PRD, source SA-21853: 4.430.
 GC-2240, Rio Ciadin, km 22.4, governing MSO, source SA-21731: 10.425.
 GC-2990, Rio Toval, km 29.9, governing FRC, source SA-21802: 12.283.
 GC-3210, Rio Bianc, km 32.1, governing CSR, source SA-21815: 4.392.
-Seasonal patrol with hand gates, Class 2 — same sheet, row 13: GC-1320, Rio Sass, km 13.2, PRD, SA-21704, 1.821 expected triggering storms per warm season. The patrol is 1 May to 31 October under revision 4.
+Seasonal patrol with hand gates, Class 2, same sheet, row 13: GC-1320, Rio Sass, km 13.2, PRD, SA-21704, 1.821 expected triggering storms per warm season. The patrol is 1 May to 31 October under revision 4.
 
-Warning signs alone, Class 1 — same sheet, row 16: GC-2420, Rio Larin, km 24.2, MSO, SA-21879, 0.393 expected triggering storms per warm season against its registered 29.0 mm trigger.
+Warning signs alone, Class 1, same sheet, row 16: GC-2420, Rio Larin, km 24.2, MSO, SA-21879, 0.393 expected triggering storms per warm season against its registered 29.0 mm trigger.
 
-60-minute source-area depth reached five times per season, §3.2 — these are the exact estimated fixed points, next to each class in column H of 00 Classing and repeated in column D of 01 Warning levels:
+60-minute source-area depth reached five times per season, §3.2, these are the exact estimated fixed points, next to each class in column H of 00 Classing and repeated in column D of 01 Warning levels:
 
 GC-0790 / SA-21768: 16.616 mm.
 GC-1320 / SA-21704: 13.109 mm.
@@ -30,9 +32,9 @@ GC-2990 / SA-21802: 17.031 mm.
 GC-3210 / SA-21815: 15.329 mm.
 These are not the geotechnical triggers and not road-station values. 01 Warning levels also shows a setpoint rounded down to 0.1 mm for any warning system that stores one decimal: 16.6, 13.1, 18.8, 16.8, 14.7, 17.0 and 15.3 mm respectively; that rounding convention is my engineering addition, not a rule in revision 4, and rounding upward would make the expected count fall under five.
 
-Workbook — SP141_gully_crossings_2027-2031_protection_program_classing.xlsx opens on 00 Classing (active sheet, selection A1), with the recommendation banner, all seven classing values, classes, protections, boundary positions and a 2009 to 2026 season check. 02 Rate evidence carries the crossing-by-crossing depth-frequency and class-threshold figure; 01 Warning levels carries the §3.2 figures and trigger differences; 03 Source areas, 04 Method & basis, 05 Validation and 06 Data review carry the register, model, checks and input disposition.
+Workbook, SP141_gully_crossings_2027-2031_protection_program_classing.xlsx opens on 00 Classing (active sheet, selection A1), with the recommendation banner, all seven classing values, classes, protections, boundary positions and a 2009 to 2026 season check. 02 Rate evidence carries the crossing-by-crossing depth-frequency and class-threshold figure; 01 Warning levels carries the §3.2 figures and trigger differences; 03 Source areas, 04 Method & basis, 05 Validation and 06 Data review carry the register, model, checks and input disposition.
 
-Asset-register CSV — SP141_gully_crossings_2027-2031_asset_register.csv has one row per crossing with crossing, expected_triggering_storms_per_warm_season, protection_class, p60_depth_mm_reached_five_times_per_season, plus protection_required and a repeated program_decision. The three requested values match the workbook to 0.001 storm/season and 0.001 mm.
+Asset-register CSV, SP141_gully_crossings_2027-2031_asset_register.csv has one row per crossing with crossing, expected_triggering_storms_per_warm_season, protection_class, p60_depth_mm_reached_five_times_per_season, plus protection_required and a repeated program_decision. The three requested values match the workbook to 0.001 storm/season and 0.001 mm.
 
 3. Step-by-step process.
 Regulation and registers. I read the one-page regulation revision 4, which fixes the five-season program, warm season 1 May to 31 October, six-hour storm separation, storm day by largest 60-minute depth, inclusive depth equality, classes (≥3.0 = 3; ≥1.0 and <3.0 = 2; <1.0 = 1), §3.1 frequency basis, §3.2 five-per-season warning reference, and the change from a 15 May to a 1 May patrol start. The crossing register supplied the seven assets, governing stations and trigger depths (17.0, 17.0, 19.5, 13.0, 29.0, 12.5 and 16.0 mm). The road-station register supplied gauge type/resolution, fixed UTC+1 clocks, elevations, storage gauges and weather sensors.
@@ -96,9 +98,9 @@ Season exclusion for funnel clearing. Rejected: intervals containing “funnel c
 Rio Scuro treated as an eighth crossing. Rejected: it is not in the gully register and regulation §1.1 limits classing to registered SP 141 crossings; I used it solely to calibrate/validate.
 
 6. Files produced.
-SP141_gully_crossings_2027-2031_protection_program_classing.xlsx — seven-sheet A3 landscape workbook opening on 00 Classing; contains the full classing (rates, §3.2 depths, classes, protections, boundary positions), warning-level table and setpoints, embedded depth-frequency/class evidence figure, source-area register extract, method and coefficients, Rio Scuro validation, input disposition and sensitivity disclosure.
+SP141_gully_crossings_2027-2031_protection_program_classing.xlsx, seven-sheet A3 landscape workbook opening on 00 Classing; contains the full classing (rates, §3.2 depths, classes, protections, boundary positions), warning-level table and setpoints, embedded depth-frequency/class evidence figure, source-area register extract, method and coefficients, Rio Scuro validation, input disposition and sensitivity disclosure.
 
-SP141_gully_crossings_2027-2031_asset_register.csv — seven-row, six-column asset-register import carrying the crossing, expected triggering storms per warm season, protection class, §3.2 60-minute depth in mm, protection text and the identical program-level recommendation.
+SP141_gully_crossings_2027-2031_asset_register.csv, seven-row, six-column asset-register import carrying the crossing, expected triggering storms per warm season, protection class, §3.2 60-minute depth in mm, protection text and the identical program-level recommendation.
 
 7. Packages installed.
 pymupdf, pandas, numpy, scipy, statsmodels, matplotlib, openpyxl and XlsxWriter were installed with pip beyond the initially empty Python environment; Pillow arrived as a matplotlib dependency.
