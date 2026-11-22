@@ -1,108 +1,106 @@
 {
   "task": "task9",
   "project": "sulfur",
-  "architecture": "v4 of the cleared slot (2026-11-18): Tessel Market's ranking model, what each feature group's degraded service cost search conversion in the third quarter of 2026",
-  "drawn": "2026-11-18",
-  "slot_note": "redraw on 2026-11-18 of v3 (READY 2026-11-13, never uploaded) in the same subdomain and analysis type (General Statistics & Data Science, interpretability; Root-Cause Analysis) with a new world, a new decision form and new deciding lessons: the fab, the wafers and the five physical mechanisms are gone; the core is three judgments on different axes about what a ranking model's ablation tests, its jobs' failure telemetry and its feature store's logs can and cannot hold, proved in task9/generator/core.py at CORE PASS level 5",
+  "architecture": "v5 of the cleared slot (2026-11-22): Garrane Risk's weekly refreshed merchant scores, what each model-side source alone moves a score between quarter-end snapshots in 2027",
+  "drawn": "2026-11-22",
+  "slot_note": "redraw on 2026-11-22 of v4 (landed on the platform: one response filed the golden list, the other lost one group) in the same subdomain and analysis type (General Statistics & Data Science, interpretability; Root-Cause Analysis) with a new world, a new decision form and three new deciding lessons: the marketplace, the feature groups' degraded service and the ablation tests are gone; the core is three judgments on different axes about what a bootstrap of a training window, a replicate of one weekly refit and a change calendar's completion date can and cannot hold, proved in task9/generator/core.py at CORE PASS level 5",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "client_domain": "general-statistics-data-science",
   "client_subdomain": "Interpretability",
-  "niche": "an online marketplace attributing a quarter's fall in search conversion to the degraded service of the seven feature groups its ranking model reads, when no record holds what a group's degraded service cost: the model's ablation tests withhold a group from the ranking model alone and for held users only on result pages built fresh, the jobs' telemetry counts failing sources and not the sessions served a default, and three groups are also read by a service that shows the shopper something",
+  "niche": "a merchant-risk score vendor attributing the quarter-to-quarter movement of its weekly refreshed scores to five model-side sources (optimisation noise, training-window turnover, retunes, feature releases, label revisions) for the year ahead, when production scores carry every source at once and each instrument sees its source at the wrong unit: a bootstrap that resamples the whole training window, a replicate that reruns one weekly refit, a change calendar that dates a rollout by availability",
   "objective": "root-cause",
-  "shape": "other",
-  "decision_type": "root_cause_named",
+  "shape": "03",
+  "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "put the stock, price, trend and promise feature groups on the 2027 tier one list (0.102, 0.167, 0.072 and 0.067 points of third-quarter search conversion); leave the seller, history and match groups off it (0.025, 0.029 and 0.019); the seven cost 0.48 points together and the listed four 0.41 (generator/figures.json on the cut pack)",
-  "answer_source": "submission.md (Final Recommendation) and generator/figures.json on the cut pack",
+  "answer": "label revisions to escalation (9.99 points between quarter-end snapshots); optimisation noise (6.88), training-window turnover (6.61) and feature releases (6.65) to a remediation plan; retunes (4.47) on monitor; 55.0 per cent of 2027's weekly retrains on pinned feature views; 13.99 per cent of merchants changing tier between quarter-end snapshots in 2027 and 9.72 with the four designated sources removed (generator/core.py, seed 9505; the cut pack's figures.json once built)",
+  "answer_source": "generator/core.py on the world's arrays (seed 9505); submission.md and generator/figures.json once the pack is cut",
   "gap": [
-    "time",
-    "population"
+    "objective",
+    "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G14",
-    "G3",
-    "G8"
+    "G17",
+    "G2",
+    "G13",
+    "G3"
   ],
   "gate_g": "decomposition_attribution",
-  "calibration_form": "realised_outcome_roster",
-  "stump_strategy": "causal_design",
+  "calibration_form": "other",
+  "stump_strategy": "grain_or_unit",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "a careful but hurried run pools each group's ablation tests by market and device with intervals, weights each job's failure telemetry by the traffic its sources carry and multiplies the two: it puts the stock, price and seller groups on the list and leaves the trend and promise groups off, where the golden lists stock, price, trend and promise and leaves seller off",
-  "domain_test": "every result is a quantity interpretability work on a deployed model estimates: what a feature group is worth to the model's outcome when it is withheld (an ablation effect, here net of the share of the held slice that was never ablated), how much of the population was actually served the ablated input, what the same input is worth to the other models and components that read it, and the attribution of an outcome change across feature groups; swap the nouns for a clinic or a warehouse and an ablation flag, a shared result cache, a value's validity period and a second reader of a feature stop meaning anything",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:loss-per-feature-group-from-ablations-diluted-by-a-shared-cache-failures-that-outlast-or-undershoot-their-telemetry-and-readers-the-ablation-never-reaches",
+  "analyst_test": "a careful but hurried run reads each source off its own instrument: the bootstrap pairs' spread as training-window turnover (15.7 points, escalation, where it is 6.6 and a remediation plan), the replicate pairs' spread as optimisation noise (3.6 points, monitor, where it is 6.9 and a plan) and the change calendar's completion dates for pinned feature views (feature releases 4.0 points, monitor, where they are 6.6 and a plan)",
+  "domain_test": "every result is a quantity the statistics of model evaluation estimates: a variance component of prediction change at a stated gap, the variance of the difference between two estimators fitted on overlapping samples, the autocovariance of training noise across successive warm-started fits, and the attribution of prediction churn across its sources with the remainder shown; swap the nouns for a warehouse or a clinic and a replicate pair, a bootstrap of a training window, a warm start and a pinned feature view stop meaning anything",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:variance-of-score-change-by-source-at-the-decision-gap-from-instruments-that-each-see-their-source-at-another-unit",
   "layer1": [
-    "feature status rows by shard and hour in the monitoring system's long layout, with late rows, a reloaded week and shard names that changed at a gateway migration",
-    "the seller scoring log with one row per seller and night due, retried runs written twice and a status vocabulary that changed in June",
-    "ablation and component holdout results by day in the experiment platform's database, with a relaunched test whose aborted first run is on file and the mart's own market keys",
-    "feed gap and lag episode logs in wall-clock time with an offset, everything else in UTC; the conversion mart by UTC business day"
+    "weekly score files re-sent after a late label load, the later file superseding the earlier",
+    "merchant ids re-keyed at an acquirer migration, with a crosswalk",
+    "family codes in two schemes between the model registry and the run manifests",
+    "run manifests in the scheduler's JSON lines with a field renamed at the runtime rollout",
+    "weeks stamped by Monday date in one system and by ISO week in another",
+    "merchants that leave the book and stop being scored"
   ],
-  "stakeholder_role": "the product manager for the ranking platform at Tessel Market, who takes the 2027 tier one hardening list to the platform's third-quarter reliability review (not named in the prompt)",
-  "role_family": "product_manager",
-  "scoring_unit": "other",
+  "stakeholder_role": "the head of model risk at Garrane Risk, who takes the 2027 source bands to the model risk committee's December stability review (not named in the prompt)",
+  "role_family": "compliance_or_audit",
+  "scoring_unit": "index points",
   "spine": {
-    "file": "the seller scoring job's log (seller_score_runs_2026.csv, one row per seller and night it was due), beside the hourly feature status record by shard",
-    "rows": 889961,
-    "entity": "one seller's nightly scoring run with its outcome",
-    "grain": "seller and night",
-    "source": "synthetic, simulated from the marketplace's traffic, its feature jobs and stores, its page cache, its experiment platform and its conversion attribution"
+    "file": "the weekly score history of the monitoring panel (one row per panel merchant and week), beside the training run manifests by family and week",
+    "rows": 4000000,
+    "entity": "one panel merchant's production score in one week",
+    "grain": "merchant and week",
+    "source": "synthetic, simulated from the vendor's weekly retraining platform (warm starts, sliding training windows, retunes, feature releases, label revisions), its instruments and its rollouts"
   },
-  "forum": "line_manager_or_team",
-  "forcing_event": "period_close",
-  "org_family": "retailer_or_ecommerce",
+  "forum": "committee_or_panel",
+  "forcing_event": "incident_or_complaint",
+  "org_family": "software_or_platform",
   "world": {
-    "geography": "the Netherlands (Utrecht) and five neighbouring markets: Germany, Sweden, Belgium, Austria and Denmark",
+    "geography": "Ireland (Dublin)",
     "currency": "none in the task",
-    "org_type": "an online marketplace whose search results are ordered by a ranking model fed by seven feature groups, each built by its own job or service",
+    "org_type": "a vendor of merchant risk scores, refreshed weekly across 14 model families and read by acquirers as tiers at quarter-end snapshots under a tier-stability covenant",
     "invented_names": [
-      "Tessel Market"
+      "Garrane Risk",
+      "Garrane Merchant Score"
     ],
     "people": [
-      "Aylin Haack",
-      "Zoey Mahieu",
-      "Milo Veenendaal",
-      "Lorenzo Stoffel",
-      "Jaylinn Smits",
-      "Alicia Boers",
-      "Suus Koster",
-      "Cornelia Hollander",
-      "Maarten Nieuwstraten",
-      "Sem Gerrits",
-      "Boaz Everts",
-      "Amir Keijzer",
-      "Mats Stuivenberg",
-      "Mehmet Miltenburg"
+      "Iona Cairns",
+      "Julie-Anne Inglis",
+      "Peadar Clarke",
+      "Richard McLeer",
+      "Marie O'Reilly",
+      "Shauneen Miley",
+      "Tamara O'Rooney",
+      "Kira O'Bryan",
+      "Dennis MacCurtin",
+      "Clare Graham",
+      "Malachy Renehan",
+      "Cillian Sealy",
+      "Cassie Gilbride",
+      "Ruth Tinney"
     ]
   },
   "deliverables": [
-    "tessel_feature_group_losses_2026q3.csv",
-    "tessel_tier_one_hardening_2027.xlsx"
+    "garrane_score_stability_sources_2027.xlsx",
+    "garrane_stability_review_2027.pptx"
   ],
-  "opening_move": "question-first",
-  "question_form": "how-much",
-  "driver": "A system's outcome fell over a period in which several of its inputs were served degraded, none of them outright, and each input is to be charged with what its degraded service cost. No record holds that. Each input's worth was measured by withholding it from a random slice, but the slice was served from a store shared with everyone, so the input was withheld only on the part of the slice's exposures built fresh, a part the test record does not hold and another record does, differing by cell and over time. How often each input's sources failed is counted, but a value is served for its validity after its source fails and returns only at its entity's next refresh, so the exposures served a default are rebuilt entity by entity and turn on whether the same entities fail again and again. And the tests withhold an input from one of the services that read it, where a failure takes it from all of them, so the other readers' losses come from their own records and their own tests. One past episode in which a random half of the exposures lost one input outright, on every reader, rules between the ways of putting these together.",
-  "driver_concrete": "Tessel Market puts a feature group on its 2027 tier one list where its degraded service cost 0.05 points of third-quarter search conversion or more. Held users got pages built with the group on 40 to 70 per cent of their page views, by device and before or after June's cache change; the seller scoring job failed 23 per cent of the sellers it was due to score while 1.4 per cent of sessions were served a default over the usual level; the delivery promise, price and history groups lose as much again through the badge, label and strip that read them. Core: stock 0.10, promise 0.06, price 0.16, history 0.03, trend 0.07, seller 0.02, match 0.02 points, where the pooled tests on the weighted telemetry give 0.27, 0.03, 0.08, 0.02, 0.04, 0.22 and 0.01.",
-  "stump": "A careful but hurried analyst takes each ablation test's measured effect as the group's worth (the trend group, withheld on under half the held slice's page views, is left off the list at 0.04 when it cost 0.07), takes the share of sources failing as the share of sessions served a default (the seller group, whose job failed a quarter of its runs while almost every seller kept a valid score, is listed at 0.22 when it cost 0.02) and prices each group through the ranking model alone (the delivery promise group, half of whose cost came through the badge that reads it, is left off at 0.03 when it cost 0.06).",
-  "deep_chain": "(1) the feature registry, the status telemetry, the entity logs, the test records, the edge cache log and the readers' logs on one calendar and one market and device scheme; (2) each group's full effect per session from its ablation tests over the share of the held slice's page views built fresh, by device, net of the default served on the tests' own days; (3) the sessions served each group's default, hour by hour, replayed entity by entity from the gap, batch, lag and scoring logs with each value's validity and weighted by the traffic each entity carries, net of its usual level; (4) each page component's loss per eligible session from its own holdout, on its eligible sessions at the group's default share; (5) April's missed price batches in one serving region reproduced from (2) to (4) against the daily conversion record; (6) each group's third-quarter cost; (7) the seven together over the quarter and by month; (8) the groups at or over the charter's line and what they cost together",
-  "judgment": "an ablation effect that is a fraction of the group's worth, at a fraction only the edge cache record holds; a default served that the failure telemetry overstates or misses, held only by each entity's own refresh history; a second reader of the same group that no test of the ranking model reaches",
-  "one_fact_test": "the strongest sentence (a user held out of a feature group still gets result pages from the cache every user shares, so the ablation tests measure only part of what a group is worth) rescues S1 only, 1 of 3 judgments, and only once the fresh share is taken by cell and day from the edge cache record and the tests' own default days are netted: the seller group is still listed and the delivery promise group still left off",
+  "opening_move": "constraint-first",
+  "question_form": "where",
+  "driver": "A system's output moves between two decision dates through several sources at once and each source is placed in a band on what it alone moves the output over that gap, which no record holds: each source has an instrument that reruns one step of the process under a controlled change, but the instrument that redraws the whole input sample measures two unrelated samples where two consecutive decision-date states share all of it but the part that left and the part that entered, the instrument that reruns one step from a common parent measures one step's fresh deviation where every step inherits the last one's, so the quantity at the decision's gap is set by a persistence only the bend of the record's own change-by-gap curve shows, and a scheduled change that removes one source is dated complete when it is available while the record of past changes shows each unit took them up weeks to months later by its own complexity.",
+  "driver_concrete": "Garrane Risk places each of five model-side sources of merchant-score movement in a band for 2027 on the points it alone moves a score between quarter-end snapshots (under 5.5 monitor, 5.5 to under 8 a remediation plan, 8 or more escalation): bootstrap pairs resample a 52 or 104-week training window and put turnover at 15.7 points where two quarter-end models differ only by the thirteen weeks that left and entered (6.6); replicate pairs rerun one weekly refit from the same parent and put optimisation noise at 3.6 points where warm-started models a quarter apart differ by 6.9; the change calendar has 91 per cent of 2027's retrains on pinned feature views where the run manifests of three past rollouts support 55, which leaves feature releases at 6.6 points and not 4.0.",
+  "stump": "A careful but hurried analyst takes the bootstrap pairs' spread as what training-window turnover moves a score between two quarter-end snapshots (15.7 points and escalation, where it is 6.6 and a remediation plan), takes the replicate pairs' spread as what optimisation noise moves it (3.6 points and monitor, where it is 6.9 and a plan) and dates pinned feature views by the change calendar (feature releases 4.0 points and monitor, where they are 6.6 and a plan).",
+  "deep_chain": "(1) the weekly score panel, the run manifests, the instrument runs, the model registry, the change calendar, the release log and roadmap and the 2027 plans on one family scheme and one week calendar; (2) each instrument's figure by family, and retunes' and label revisions' movement from their shadow and freeze pairs; (3) training-window turnover from the per-row noise of the bootstrap pairs and the rows that leave and enter each 2027 span; (4) optimisation noise from the bend of the score-change variance by gap, tied to the replicate pairs; (5) the share of 2027's retrains on pinned feature views from the adoption record of three past rollouts, and feature releases on the roadmap's uncovered weeks; (6) each route's own model asked for the weekly score-change variance the record holds, and the adoption model checked by leaving one rollout out; (7) each source's share of model-side movement and merchants' own share of all movement; (8) the bands and the tier changes expected in 2027, with the designated sources removed",
+  "judgment": "a bootstrap spread that is the noise of two unrelated training windows where quarter-end models share all but thirteen weeks; a replicate spread that is one refit's fresh noise where warm-started models inherit it; a completion date that is an image's availability where families train on it weeks to months later",
+  "one_fact_test": "the strongest sentence (a bootstrap pair resamples the whole training window, while two quarter-end models share every week of it but the thirteen that left and the thirteen that entered) rescues S1 only, 1 of 3 judgments, and only once the per-row noise is taken net of the seeds and carried to each family's rows out and in, span by span: optimisation noise is still left on monitor and feature releases still left on monitor, and the route earns 23 of 100",
   "strategy_label": "own",
   "mechanism_source": "design_note",
-  "differentiation": {
-    "task9": "the slot's v3 ranked five physical causes of a fab's yield loss in a bridge with a forecast; nothing here is a physical mechanism in the rows and nothing is bridged to a fall: the quantities are what an ablation withholds, what a failed source still serves and which readers a test reaches, each group read against a filed line",
-    "task6": "approved task6 reads services' latency indicators from a sampled trace store (design weights, a retention cut, dated onsets, a source against its victims) and charges incidents to services; here nothing is sampled by a keep rate, no window is missing, no onset is dated and no fault propagates: the quantity is a conversion loss no record holds, built from randomised ablations, a cache record and entity refresh logs",
-    "task25": "task25 bridges a throughput benchmark to planned training runs by network position and a measured behavioural response; here no benchmark is carried to new conditions: an experiment's effect is scaled by the share of its slice that received it and joined to a replayed served state",
-    "task8": "task8's first judgment also divides a recorded difference by a fraction measured elsewhere (a moderator anchored on the mark in sight); here the fraction is a share of exposures on which a randomised arm received its assignment, read from an operational cache record by cell and day, and the other two judgments (a served state replayed by entity, a second reader priced from its own test) have no counterpart there",
-    "task24": "task24 values label sources for a retailer's reply model by their noise against a standard; nothing here is a label, a benchmark or a procurement choice"
-  },
+  "differentiation": {},
   "lineage": [
     {
       "domain": "urban-regional-science",
@@ -878,6 +876,125 @@
       },
       "architecture": "v3 of the cleared slot (2026-11-13): Varnholt Halbleiter Fab 2's VR90 ramp yield review",
       "fate": "spent 2026-11-18 before any upload: READY on 2026-11-13 and never run. It was cut before the core, open-members and rubric rules (no generator/core.py, no Stump core, no Build brief, no Stump factorial), its five judgments were mechanisms of the world (an etch polymer, a slurry loop, cancelling edge profiles, a bath's stock, a yield at a new support) that the rows either carry or do not, the kind the 2026-11-13 send-backs were returned on, and its heart stood at BLOCK (ban.calibration against task19)"
+    },
+    {
+      "answer": "put the stock, price, trend and promise feature groups on the 2027 tier one list (0.102, 0.167, 0.072 and 0.067 points of third-quarter search conversion); leave the seller, history and match groups off it (0.025, 0.029 and 0.019); the seven cost 0.48 points together and the listed four 0.41 (generator/figures.json on the cut pack)",
+      "answer_shape": "flagged-set",
+      "answer_unit": "set_of_items",
+      "architecture": "v4 of the cleared slot (2026-11-18): Tessel Market's ranking model, what each feature group's degraded service cost search conversion in the third quarter of 2026",
+      "calibration_form": "realised_outcome_roster",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "causal-reasoning",
+        "investigation-loops",
+        "data-discovery",
+        "validation",
+        "decomposition-attribution",
+        "decomposition-attribution",
+        "synthesis"
+      ],
+      "context_artifact": "monitoring_export",
+      "decision_type": "root_cause_named",
+      "deliverables": [
+        "tessel_feature_group_losses_2026q3.csv",
+        "tessel_tier_one_hardening_2027.xlsx"
+      ],
+      "domain": "general-statistics-data-science",
+      "drawn": "2026-11-18",
+      "driver": "A system's outcome fell over a period in which several of its inputs were served degraded, none of them outright, and each input is to be charged with what its degraded service cost. No record holds that. Each input's worth was measured by withholding it from a random slice, but the slice was served from a store shared with everyone, so the input was withheld only on the part of the slice's exposures built fresh, a part the test record does not hold and another record does, differing by cell and over time. How often each input's sources failed is counted, but a value is served for its validity after its source fails and returns only at its entity's next refresh, so the exposures served a default are rebuilt entity by entity and turn on whether the same entities fail again and again. And the tests withhold an input from one of the services that read it, where a failure takes it from all of them, so the other readers' losses come from their own records and their own tests. One past episode in which a random half of the exposures lost one input outright, on every reader, rules between the ways of putting these together.",
+      "driver_concrete": "Tessel Market puts a feature group on its 2027 tier one list where its degraded service cost 0.05 points of third-quarter search conversion or more. Held users got pages built with the group on 40 to 70 per cent of their page views, by device and before or after June's cache change; the seller scoring job failed 23 per cent of the sellers it was due to score while 1.4 per cent of sessions were served a default over the usual level; the delivery promise, price and history groups lose as much again through the badge, label and strip that read them. Core: stock 0.10, promise 0.06, price 0.16, history 0.03, trend 0.07, seller 0.02, match 0.02 points, where the pooled tests on the weighted telemetry give 0.27, 0.03, 0.08, 0.02, 0.04, 0.22 and 0.01.",
+      "forcing_event": "period_close",
+      "forum": "line_manager_or_team",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "gate_g": "decomposition_attribution",
+      "generators": [
+        "G14",
+        "G3",
+        "G8"
+      ],
+      "layer2_family": "estimand_identification",
+      "layer2_pattern": "own:loss-per-feature-group-from-ablations-diluted-by-a-shared-cache-failures-that-outlast-or-undershoot-their-telemetry-and-readers-the-ablation-never-reaches",
+      "objective": "root-cause",
+      "org_family": "retailer_or_ecommerce",
+      "pattern": [
+        "none"
+      ],
+      "question_form": "how-much",
+      "role_family": "product_manager",
+      "shape": "other",
+      "shell": {
+        "question form": "how-much",
+        "second-sentence opener": "no",
+        "deliverable set": "csv+xlsx"
+      },
+      "skeleton": {
+        "decision_form": "per_unit_diagnosis",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "instrument_noncompliance",
+          "served_state_outlives_source_failure",
+          "experiment_reaches_one_reader"
+        ],
+        "mechanisms": [
+          "held_users_are_served_result_pages_from_the_cache_every_user_shares",
+          "a_value_is_served_for_its_validity_and_returns_at_the_entitys_next_refresh",
+          "the_same_sellers_fail_night_after_night_while_most_keep_a_valid_score",
+          "a_badge_a_label_and_a_strip_read_the_same_feature_groups_as_the_ranking_model",
+          "one_serving_region_missed_price_batches_while_the_other_did_not"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on",
+          "natural_experiment_in_record"
+        ],
+        "moves": [
+          "instrument_on_assignment",
+          "replay_event_by_event",
+          "add_each_readers_loss_from_its_own_record",
+          "variant_sweep_holds_call"
+        ],
+        "file_roles": [
+          "primary_record",
+          "test_or_trial_register",
+          "second_grain_source",
+          "reference_register",
+          "event_timeline",
+          "governing_standard",
+          "unused_distractor"
+        ]
+      },
+      "stump": "A careful but hurried analyst takes each ablation test's measured effect as the group's worth (the trend group, withheld on under half the held slice's page views, is left off the list at 0.04 when it cost 0.07), takes the share of sources failing as the share of sessions served a default (the seller group, whose job failed a quarter of its runs while almost every seller kept a valid score, is listed at 0.22 when it cost 0.02) and prices each group through the ranking model alone (the delivery promise group, half of whose cost came through the badge that reads it, is left off at 0.03 when it cost 0.06).",
+      "stump_strategy": "causal_design",
+      "subdomain": "interpretability",
+      "weight": "attribution",
+      "world": {
+        "geography": "the Netherlands (Utrecht) and five neighbouring markets: Germany, Sweden, Belgium, Austria and Denmark",
+        "currency": "none in the task",
+        "org_type": "an online marketplace whose search results are ordered by a ranking model fed by seven feature groups, each built by its own job or service",
+        "invented_names": [
+          "Tessel Market"
+        ],
+        "people": [
+          "Aylin Haack",
+          "Zoey Mahieu",
+          "Milo Veenendaal",
+          "Lorenzo Stoffel",
+          "Jaylinn Smits",
+          "Alicia Boers",
+          "Suus Koster",
+          "Cornelia Hollander",
+          "Maarten Nieuwstraten",
+          "Sem Gerrits",
+          "Boaz Everts",
+          "Amir Keijzer",
+          "Mats Stuivenberg",
+          "Mehmet Miltenburg"
+        ]
+      },
+      "fate": "landed on the platform on 2026-11-22 (both responses on file under task9/runs/, no scores pasted): Response 1 made all three judgments unprompted and filed the golden list (the ablation effects over the share of pages built at origin, each source's validity replayed entity by entity with impression weights, the page components priced from their own holdouts); Response 2 lost the trend group only. Each judgment had a shipped record that let a run check its correction (the edge cache record, the entity logs, the readers' own holdouts, April's episode), so a frontier run fitted every one; the author ruled it not difficult enough and the core was redrawn in a new world"
     }
   ],
   "lineage_shells": [
@@ -964,52 +1081,58 @@
       "question form": "which",
       "second-sentence opener": "vr",
       "deliverable set": "xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "no",
+      "deliverable set": "csv+xlsx"
     }
   ],
-  "notes": "v4 (2026-11-18): calibration form realised_outcome_roster stands for April's missed price batches in one of two serving regions (a random half of the users lost one group outright on every reader), which the build uses as the referee and never as the answer. The deciding lesson instrument_noncompliance was on file with no card; served_state_outlives_source_failure and experiment_reaches_one_reader are new keys. The nearest closed card (controls were partly treated, spillover or shared resource) is answered in the note's Closed strategies line: the controls are untouched and the held slice is under-treated, the fix is a ratio to a compliance share read from another record, and no comparison unit is dropped or modelled on its neighbourhood.",
-  "answer_shape": "flagged-set",
-  "weight": "attribution",
+  "notes": "v5 (2026-11-22): calibration form other stands for a falsification check on the members' own records (each route's model of how a source's variance grows with the gap is asked for the weekly score-change variance of 2026, which the production record holds) and a leave-one-rollout-out check of the adoption model; no file observes a stump's quantity. One new lesson key and two new move keys, each because no key on file was honest: inherited_noise_persistence (S2; filed next to the closed card on clustered outcomes, since its mechanism family is serial dependence, and answered in the note's Closed strategies line: nothing is an interval at a shared unit, the estimate is a variance component at a gap from a fitted persistence), unit_noise_carried_to_overlap_change (S1's move) and change_by_gap_curve_anchored_on_rerun (S2's move). The lessons are ordered by what each is worth on its own source (S1 9.1 points, S2 3.3, S3 2.7); each flips a different source and none decides alone.",
+  "answer_shape": "bridge",
+  "weight": "modeling",
   "chain_signature": [
     "assembly-reconciliation",
-    "causal-reasoning",
-    "investigation-loops",
-    "data-discovery",
+    "missingness-measurement",
+    "modeling",
+    "modeling",
+    "forecasting",
     "validation",
-    "decomposition-attribution",
     "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 the registry, status record, entity logs, test records, cache record and render record on one calendar and scheme; R2 each group's full effect per session from its ablation tests over the share built at origin; R3 the sessions served each group's default, replayed by entity; R4 each page component's cost from its own holdout and render record; R5 April's missed price batches called against the daily conversion record; R6 each group's third-quarter cost; R7 the seven together over the quarter and by month; R8 the groups on the tier one list and what they cost together",
+  "results": "R1 the score panel, manifests, instrument runs, registry, calendar, release log and plans on one family scheme and week calendar; R2 each instrument's figure by family, with retunes' and label revisions' movement; R3 training-window turnover from per-row noise on the rows that leave and enter each 2027 span; R4 optimisation noise from the score-change variance by gap, tied to the replicate pairs; R5 the share of 2027's retrains on pinned feature views and feature releases on the uncovered weeks; R6 each route's model called against the weekly score-change variance on record, the adoption model against a left-out rollout; R7 each source's share of model-side movement and merchants' own share; R8 the bands and the tier changes expected in 2027, with the designated sources removed",
   "skeleton": {
-    "decision_form": "per_unit_diagnosis",
+    "decision_form": "banded_call_on_figure",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "instrument_noncompliance",
-      "served_state_outlives_source_failure",
-      "experiment_reaches_one_reader"
+      "turnover_not_stock_driver",
+      "inherited_noise_persistence",
+      "scheduled_completion_slippage"
     ],
     "mechanisms": [
-      "held_users_are_served_result_pages_from_the_cache_every_user_shares",
-      "a_value_is_served_for_its_validity_and_returns_at_the_entitys_next_refresh",
-      "the_same_sellers_fail_night_after_night_while_most_keep_a_valid_score",
-      "a_badge_a_label_and_a_strip_read_the_same_feature_groups_as_the_ranking_model",
-      "one_serving_region_missed_price_batches_while_the_other_did_not"
+      "quarter_end_models_share_all_training_weeks_but_thirteen",
+      "a_weekly_model_starts_from_last_weeks_weights_and_inherits_its_deviation",
+      "a_rollout_is_complete_when_its_image_is_available_not_when_families_train_on_it",
+      "a_feature_release_steps_scores_until_a_family_trains_on_pinned_views",
+      "a_retune_steps_scores_every_fourth_week"
     ],
     "detection": [
       "second_source_at_other_grain",
       "naive_ignores_what_it_should_depend_on",
-      "natural_experiment_in_record"
+      "record_time_against_event_time"
     ],
     "moves": [
-      "instrument_on_assignment",
-      "replay_event_by_event",
-      "add_each_readers_loss_from_its_own_record",
+      "unit_noise_carried_to_overlap_change",
+      "change_by_gap_curve_anchored_on_rerun",
+      "empirical_completion_from_past_works",
       "variant_sweep_holds_call"
     ],
     "file_roles": [
       "primary_record",
       "test_or_trial_register",
       "second_grain_source",
+      "schedule_or_plan",
       "reference_register",
       "event_timeline",
       "governing_standard",
@@ -1019,10 +1142,10 @@
   "depth_level": 5,
   "doctrine": "throughout",
   "architecture_spent": false,
+  "registered": "2026-11-22T06:48:03Z",
   "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "no",
-    "deliverable set": "csv+xlsx"
-  },
-  "registered": "2026-11-18T12:59:15Z"
+    "question form": "where",
+    "second-sentence opener": "where",
+    "deliverable set": "pptx+xlsx"
+  }
 }

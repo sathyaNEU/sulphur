@@ -3,11 +3,11 @@
 
 A risk vendor refreshes merchant risk scores every week across 14 model families and supplies the tiers to
 acquirers. The acquirers read the tiers at quarter-end snapshots, and a covenant caps the share of merchants whose
-tier changes between two snapshots. 2026 breached it. The stability policy attributes the 13-week score change to
-its sources by variance and places each model-side source in a band on its share of model-side variance: under 15
-per cent monitor, 15 to under 25 a remediation plan, 25 or more escalation. No record holds a source's 13-week
-contribution: the production scores hold every source at once, and each instrument the platform keeps sees one
-source through its own design.
+tier changes between two snapshots. 2026 breached it. The stability policy places each model-side source of score
+movement in a band on the points it alone moves a merchant's score between two consecutive quarter-end snapshots
+(root mean square over the scored book, 2027 as scheduled): under 5.5 monitor, 5.5 to under 8 a remediation plan,
+8 or more escalation. No record holds what one source alone moves a score between two snapshots: the production
+scores hold every source at once, and each instrument the platform keeps sees one source through its own design.
 
 The sources (members): optimisation noise (replicate pairs), training-window turnover (bootstrap pairs), retunes
 (old-against-new configuration scores), feature releases (shadow deltas), label revisions (label-freeze pairs).
@@ -47,7 +47,8 @@ import corelib  # noqa: E402
 
 SEED = int(os.environ.get("CORE_SEED", 9505))
 F = 14                      # model families
-MS = int(os.environ.get("CORE_MS", 2500))   # merchants simulated per family, the panel the pack ships per family
+FRAC = float(os.environ.get("CORE_FRAC", 0.2))   # the monitoring panel: one merchant in five of every family's book
+LEAVE = 0.09                # a panel merchant's yearly chance of leaving the book (it is not replaced)
 T = 126                     # record weeks: t = 0 is the week of 1 July 2024, t = 125 the week of 23 November 2026
 PRE = 112                   # weeks of training rows held before t = 0
 H = 13                      # the covenant's grain: quarter-end snapshot to quarter-end snapshot
@@ -58,7 +59,7 @@ SPANS26 = ((77, 90), (90, 103), (103, 116))             # quarter-end snapshot p
 SPANS27 = ((129, 142), (142, 155), (155, 168), (168, 181))   # the four pairs that close in 2027
 LINES = (5.5, 8.0)          # the stability policy's bands on the points a source moves a score on its own
 SOURCES = ("optimisation", "turnover", "retunes", "releases", "labels")
-TARGET = {"optimisation": 43.5, "turnover": 40.0, "retunes": 22.0, "releases": 105.0, "labels": 81.0,
+TARGET = {"optimisation": 44.0, "turnover": 44.0, "retunes": 20.0, "releases": 105.0, "labels": 100.0,
           "merchant": 200.0}   # points squared at 13 weeks, book weighted; releases before pinned views
 CUTS = (400.0, 500.0, 600.0)
 
@@ -72,9 +73,10 @@ def build_world(seed=SEED):
     rng = np.random.default_rng(seed)
     w = {}
     w["merch"] = rng.integers(1500, 22000, F).astype(float)
+    w["ms"] = np.rint(FRAC * w["merch"]).astype(int)
     w["custom"] = rng.integers(0, 6, F)                         # custom training components a family carries
     w["epochs"] = rng.choice([2, 3, 4], F, p=[0.3, 0.4, 0.3])
-    w["phi"] = np.array([{2: 0.93, 3: 0.90, 4: 0.86}[e] for e in w["epochs"]]) + rng.uniform(-0.008, 0.008, F)
+    w["phi"] = np.array([{2: 0.90, 3: 0.86, 4: 0.80}[e] for e in w["epochs"]]) + rng.uniform(-0.008, 0.008, F)
     w["window"] = np.where(rng.random(F) < 0.36, 104, 52)       # weeks of rows a warm family trains on
     base_rows = w["merch"] * rng.uniform(9, 16, F)
     growth = rng.uniform(0.02, 0.38, F)
@@ -139,7 +141,7 @@ def win_rows(w, f, t, W):
     return w["rows"][f, i - W + 1:i + 1]
 
 
-def turnover_factor(w, f, t0, t1, W, simple=False):
+def turnover_factor(w, f, t0, t1, W, simple=False, entered=False):
     """Variance of the change in a window fit between t0 and t1, per unit of per-row noise."""
     a, b = win_rows(w, f, t0, W), win_rows(w, f, t1, W)
     h = t1 - t0
@@ -147,6 +149,8 @@ def turnover_factor(w, f, t0, t1, W, simple=False):
     if h >= W:
         return 1 / n0 + 1 / n1
     out_, in_, common = a[:h].sum(), b[-h:].sum(), a[h:].sum()
+    if entered:                       # the rows that entered only
+        return in_ / n1 ** 2
     if simple:
         return (in_ + out_) / (0.5 * (n0 + n1)) ** 2
     return common * (1 / n1 - 1 / n0) ** 2 + in_ / n1 ** 2 + out_ / n0 ** 2
@@ -170,10 +174,11 @@ def scale_world(w):
 
 def simulate(w, rng):
     """Production scores, the instruments' pairs and the quarter-end tiers, merchant by merchant."""
-    z = np.zeros((F, MS, T))
+    z = [None] * F
     inst = {"rep": np.zeros(F), "boot": np.zeros(F), "boot_last": np.zeros(F), "boot_n": np.zeros(F),
             "boot_n_last": np.zeros(F), "ret": np.zeros(F), "rel": np.zeros(F), "lab": np.zeros(F)}
     for f in range(F):
+        MS = int(w["ms"][f])
         base = rng.normal(500, 100, MS)
         own = np.cumsum(rng.normal(0, math.sqrt(w["tau2"][f]), (MS, T)), axis=1)
         lab = np.cumsum(rng.normal(0, math.sqrt(w["lab2"][f]), (MS, T)), axis=1)
@@ -210,6 +215,8 @@ def simulate(w, rng):
                 e = rng.normal(0, math.sqrt(w["cold2"][f]), MS)
             opt[:, t] = e
         z[f] = base[:, None] + own + lab + ret + rel + data + opt
+        left = np.where(rng.random(MS) < 1 - (1 - LEAVE) ** (T / 52.0), rng.integers(8, T, MS), T)
+        z[f][np.arange(T)[None, :] >= left[:, None]] = np.nan      # a merchant that left is no longer scored
         # the instruments, all run in 2026 on warm families
         rep_w = rng.choice(np.arange(Y26 + 4, T), 6, replace=False)
         inst["rep"][f] = np.mean([np.var(rng.normal(0, math.sqrt(w["eta2"][f]), MS) -
@@ -234,7 +241,7 @@ def simulate(w, rng):
 def lag_curve(w, z, f, lags=LAGS, start=None):
     """Mean squared score change at each lag over the family's settled warm weeks."""
     t0 = max(w["last_cold"][f] + 13, 66) if start is None else start
-    return np.array([np.mean((z[f][:, t0 + h:T] - z[f][:, t0:T - h]) ** 2) for h in range(1, lags + 1)]), t0
+    return np.array([np.nanmean((z[f][:, t0 + h:T] - z[f][:, t0:T - h]) ** 2) for h in range(1, lags + 1)]), t0
 
 
 def events_in_span(w, f, t0, lags):
@@ -373,10 +380,35 @@ class Pack:
         self.curves26 = [lag_curve(w, z, f, start=max(self.t0[f], Y26))[0] for f in range(F)]
         self.d13 = np.array([c[H - 1] for c in self.curves])
         self.d1 = np.array([c[0] for c in self.curves])
-        tiers = np.array([[np.searchsorted(CUTS, z[f][:, t]) for t in (77, 90, 103, 116)] for f in range(F)])
-        self.fr26 = np.array([np.mean(tiers[f][1:] != tiers[f][:-1]) for f in range(F)])
+        self.fr26 = self.rescaled_flips(np.ones(F))
         self.models = {k: coverage_model(w, k) for k in ("loglin", "linear", "groups", "own", "pooled")}
         self.models["norevert"] = dict(self.models["loglin"], rev=0.0)
+
+    def normal_flips(self, var):
+        """Tier changes under a normal change of the given variance, on the scores of the last quarter-end snapshot."""
+        out = np.zeros(F)
+        cuts = np.array((-np.inf,) + CUTS + (np.inf,))
+        erf = np.vectorize(math.erf)
+        for f in range(F):
+            z0 = self.z[f][:, 116]
+            z0 = z0[~np.isnan(z0)]
+            k = np.searchsorted(CUTS, z0)
+            sd = math.sqrt(max(float(var[f]), 1e-9)) * math.sqrt(2.0)
+            stay = 0.5 * (erf((cuts[k + 1] - z0) / sd) - erf((cuts[k] - z0) / sd))
+            out[f] = float(np.mean(1.0 - stay))
+        return out
+
+    def rescaled_flips(self, k):
+        out = np.zeros(F)
+        for f in range(F):
+            fl = []
+            for a, b in ((77, 90), (90, 103), (103, 116)):
+                ok = ~np.isnan(self.z[f][:, b])                 # scored at both snapshots
+                z0 = self.z[f][ok, a]
+                z1 = z0 + k[f] * (self.z[f][ok, b] - z0)
+                fl.append(np.mean(np.searchsorted(CUTS, z1) != np.searchsorted(CUTS, z0)))
+            out[f] = np.mean(fl)
+        return out
 
 
 DEFAULT = {"S1": "gold", "S2": "gold", "S3": "gold", "fit": "anch26", "turn": "general", "boot": "mean",
@@ -411,7 +443,9 @@ def evaluate(pk, **opt):
         opt13 = A * (1 - phi ** H)
     elif o["S2"] in ("hur", "cal"):   # a replicate pair is two models: its variance at any gap
         opt13 = rep.copy()
-    elif o["S2"] == "over":           # thirteen weekly refits, each adding a replicate pair's variance
+    elif o["S2"] == "over":           # thirteen weekly refits, each adding one fresh draw (half a replicate pair)
+        opt13 = H * rep / 2.0
+    elif o["S2"] == "over2":          # thirteen weekly refits, each adding a whole replicate pair's variance
         opt13 = H * rep
     elif o["S2"] == "cut":            # the intercept of a straight line through the later lags
         opt13 = np.zeros(F)
@@ -426,8 +460,17 @@ def evaluate(pk, **opt):
     simple = o["turn"] == "simple"
     tf26 = np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f], simple) for a, b in SPANS26]) for f in range(F)])
     tf27 = np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f], simple) for a, b in SPANS27]) for f in range(F)])
-    if o["S1"] == "gold":
+    if o["turn"] == "recent":         # 2027's spans at the rows the 2026 spans turned over
+        tf27 = tf26
+    if o["S1"] == "gold" and o["turn"] == "weeks":   # weeks of the window in place of its rows
+        tur26 = tur27 = face * H / w["window"]
+    elif o["S1"] == "gold":
         tur26, tur27 = row2 * tf26, row2 * tf27
+    elif o["S1"] == "raw":            # the bootstrap pairs as they stand, the seeds' part left in
+        tur26 = tur27 = bv
+    elif o["S1"] == "single":         # the rows that entered, and not the rows that left
+        e27 = np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f], entered=True) for a, b in SPANS27]) for f in range(F)])
+        tur26 = tur27 = row2 * e27
     elif o["S1"] == "hur":
         tur26 = tur27 = face
     elif o["S1"] == "over":
@@ -438,8 +481,6 @@ def evaluate(pk, **opt):
         tur26 = tur27 = face * (H / 52.0)
     elif o["S1"] == "double":         # the rows that left and the rows that entered each counted against the window
         tur26 = tur27 = face * (2.0 * H / w["window"])
-    elif o["S1"] == "cap":            # the spread capped at what the weekly movement leaves after the seeds
-        tur26 = tur27 = np.minimum(face, np.maximum(pk.d1 - (rep if o.get("cap_net", True) else 0.0), 0.0))
     elif o["S1"] == "regress":        # the slope of the families' 13-week variance on their bootstrap spread
         X = np.vstack([np.ones(F), face]).T
         b = np.linalg.lstsq(X, pk.d13, rcond=None)[0][1]
@@ -450,11 +491,13 @@ def evaluate(pk, **opt):
     # pinned feature views
     m = pk.models[o["adopt"]]
     mode = {"gold": "model", "hur": "plan", "over": "none", "declared": "declared", "worst": "worst",
-            "threshold": "threshold"}[o["S3"]]
+            "threshold": "threshold", "y2026": "none"}[o["S3"]]
     if mode == "threshold":
         m = dict(m, cut=o.get("cut_custom", 3))
     cov = coverage_weeks(w, mode, m) if "cov" not in o else o["cov"]
     rel27 = inst["rel"] * release_exposure(w, cov)
+    if o["S3"] == "y2026":            # the record's own 2026 level carried into 2027
+        rel27 = rel26.copy()
     if o["closure"] == "lag13":
         own = pk.d13 - (opt13 + tur26 + ret13 + lab13 + rel26)
     else:
@@ -469,6 +512,8 @@ def evaluate(pk, **opt):
     if o["weights"] == "plan":        # the book the 2027 plan expects in place of the one scored at the last snapshot
         wt = w["merch"] * (1 + w["growth"])
         wt = wt / wt.sum()
+    if o["weights"] == "equal":       # every family counted once (refused by the policy's weighting sentence)
+        wt = np.full(F, 1.0 / F)
     comp = {"optimisation": opt13, "turnover": tur27, "retunes": ret13, "releases": rel27, "labels": lab13}
     agg = {s: float((wt * v).sum()) for s, v in comp.items()}
     model_side = sum(agg.values())
@@ -482,11 +527,18 @@ def evaluate(pk, **opt):
     if o["frmap"] == "family":
         fr_s = float((wt * pk.fr26 * np.sqrt(v27 / v26)).sum())
         fr_r = float((wt * pk.fr26 * np.sqrt(np.maximum(v27 - gone, 0) / v26)).sum())
+    elif o["frmap"] == "rescale":     # each merchant's 2026 quarter-end changes rescaled, the tiers recounted
+        fr_s = float((wt * pk.rescaled_flips(np.sqrt(v27 / v26))).sum())
+        fr_r = float((wt * pk.rescaled_flips(np.sqrt(np.maximum(v27 - gone, 0) / v26))).sum())
+    elif o["frmap"] == "normal":      # a normal change of the estimated variance on the last snapshot's scores
+        fr_s = float((wt * pk.normal_flips(v27)).sum())
+        fr_r = float((wt * pk.normal_flips(np.maximum(v27 - gone, 0))).sum())
     else:
         base = float((wt * pk.fr26).sum())
         fr_s = base * math.sqrt(float((wt * v27).sum()) / float((wt * v26).sum()))
         fr_r = base * math.sqrt(max(float((wt * (v27 - gone)).sum()), 0.0) / float((wt * v26).sum()))
     out = {"share_" + s: share[s] for s in SOURCES}
+    out.update({"points_" + s: points[s] for s in SOURCES})
     return dict(out, **{"share": share, "points": points, "agg": agg, "own": own_a, "band": band,
             "cc1": math.sqrt(agg["turnover"]), "cc2": math.sqrt(agg["optimisation"]),
             "cc3": 100.0 * float(np.mean(cov[:, 1:])), "own_share": 100.0 * own_a / (own_a + model_side),
@@ -510,7 +562,7 @@ def weekly_prediction(pk, route):
             pred = r["face"] + g["A"] * (1 - g["phi"]) + (pk.d13 - g["opt13"] - r["face"]) / H
         elif route.get("S1") == "hur":                              # two constants and a straight line
             pred = r["face"] + inst["rep"] + (pk.d13 - inst["rep"] - r["face"]) / H
-        elif route.get("S2") == "over":                             # every source a straight line
+        elif route.get("S2") in ("over", "over2"):                  # every source a straight line
             pred = pk.d13 / H
         else:                                                       # a constant for the seeds and a straight line
             pred = r["opt13"] + (pk.d13 - r["opt13"]) / H
@@ -540,15 +592,39 @@ def main():
                 dict(fit="anch20", adopt="linear", turn="simple"), dict(fit="events", adopt="groups", boot="last"),
                 dict(fit="anch30", adopt="own", closure="slope"), dict(fit="pooled", weights="plan", turn="simple"),
                 dict(fit="flat"), dict(fit="from2"), dict(fit="y2026"), dict(adopt="norevert"),
-                dict(fit="y2026", adopt="norevert", weights="plan")]
+                dict(fit="y2026", adopt="norevert", weights="plan"), dict(turn="weeks"), dict(turn="recent"),
+                dict(frmap="rescale"), dict(adopt="pooled"), dict(turn="weeks", fit="events", frmap="rescale"),
+                dict(turn="recent", adopt="pooled", fit="flat"), dict(frmap="rescale", adopt="linear", fit="anch30"),
+                dict(frmap="normal"), dict(frmap="normal", fit="events", turn="weeks"),
+                dict(S2="cut", cut_lag=12), dict(S2="cut", cut_lag=16),     # the level a line through the long lags starts from
+                dict(S2="cut", cut_lag=14, turn="weeks", adopt="groups")]
     fam = [evaluate(pk, **v) for v in variants]
     free = evaluate(pk, fit="free26")      # the unanchored fit, ruled on by the replicate pairs (--detail)
     if detail:
         for k in ("free30", "free_events"):
             e = evaluate(pk, fit=k)
             print("probe %-12s optimisation %.2f points, implied fresh noise %.2f" % (k, e["points"]["optimisation"], float((wt * e["A"] * (1 - e["phi"] ** 2)).sum())))
-        e = evaluate(pk, adopt="pooled")
-        print("probe pooled lag  releases %.2f points, coverage %.1f" % (e["points"]["releases"], e["cc3"]))
+        for lab, kw in (("S1 thirteen of 52 weeks for every family", dict(S1="flat")), ("S1 rows that entered only", dict(S1="single")),
+                        ("S3 2026's release level carried", dict(S3="y2026")), ("S3 each family's worst past lag", dict(S3="worst")),
+                        ("S2 intercept from lag 12", dict(S2="cut", cut_lag=12)), ("S2 intercept from lag 16", dict(S2="cut", cut_lag=16)),
+                        ("S2 intercept from lag 8", dict(S2="cut")), ("S2 a whole replicate pair a refit", dict(S2="over2")),
+                        ("every family counted once", dict(weights="equal"))):
+            e = evaluate(pk, **kw)
+            print("probe %-42s" % lab, " ".join("%s %.2f" % (s[:5], e["points"][s]) for s in SOURCES), "cc3 %.1f" % e["cc3"])
+        g0 = evaluate(pk)
+        for sh in (-4, 4, 8):           # the roadmap's releases landing earlier or later than planned
+            w2 = dict(w, plan_weeks=np.clip(w["plan_weeks"] + sh, Y27 - 1, 181))
+            print("probe releases %+d weeks against the roadmap: %.2f points" % (
+                sh, math.sqrt(float((wt * inst["rel"] * release_exposure(w2, g0["cov"])).sum()))))
+        print("probe replicate pair by family", np.round(inst["rep"], 2), "bootstrap net of seeds", np.round(g0["face"], 1))
+        print("probe windows", w["window"], "custom", w["custom"], "epochs", w["epochs"], "panel", w["ms"], "book", w["merch"].astype(int))
+        print("probe pinned views planned weeks", w["fv_planned"], "releases 2026:", int((w["rel_weeks"] >= Y26).sum()), "before:", int((w["rel_weeks"] < Y26).sum()))
+        print("probe warm effective weeks", w["warm"]["eff"], "last cold", w["last_cold"], "curve starts", list(pk.t0))
+        print("probe turnover factor share of window, 2027 against 2026: %s" % np.round(np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f]) for a, b in SPANS27]) for f in range(F)]) / np.array([np.mean([turnover_factor(w, f, a, b, w["window"][f]) for a, b in SPANS26]) for f in range(F)]), 2))
+        for s_ in ("optimisation", "turnover", "releases", "labels", "retunes"):
+            lo, hi = math.sqrt(0.8 * g0["agg"][s_]), math.sqrt(1.2 * g0["agg"][s_])
+            print("forcing %-13s variance down a fifth %.2f, up a fifth %.2f, band held %s" % (
+                s_, lo, hi, sum(1 for l in LINES if lo >= l) == g0["band"][s_] == sum(1 for l in LINES if hi >= l)))
 
     hur = {"S1": dict(S1="hur"), "S2": dict(S2="hur"), "S3": dict(S3="hur")}
     lattice, lat_eval = {}, {}
@@ -560,24 +636,26 @@ def main():
         lattice[key] = lat_eval[key]["points"]
 
     routes = {
-        "direct": evaluate(pk, S1="hur", S2="hur", S3="hur"),
-        "rigorous": evaluate(pk, S1="regress", S2="hur", S3="declared"),
+        "direct": evaluate(pk, S1="raw", S2="hur", S3="hur"),
+        "rigorous": evaluate(pk, S1="hur", S2="hur", S3="declared"),
         "generous": evaluate(pk, S1="square", S2="over", S3="worst"),
         "calibrated": evaluate(pk, S1="hur", S2="cal", S3="declared"),
         "hedge": evaluate(pk, S1="hur", S2="hur", S3="hur"),
-        "cutoff": evaluate(pk, S1="cap", S2="cut", S3="threshold"),
+        "cutoff": evaluate(pk, S1="single", S2="cut", S3="threshold"),
     }
-    extra = {"cutoff:lags from 1": evaluate(pk, S1="cap", S2="cut", cut_lag=1, S3="threshold"),
-             "cutoff:lags from 4": evaluate(pk, S1="cap", S2="cut", cut_lag=4, S3="threshold"),
-             "cutoff:lags from 12": evaluate(pk, S1="cap", S2="cut", cut_lag=12, S3="threshold"),
-             "cutoff:lags from 16": evaluate(pk, S1="cap", S2="cut", cut_lag=16, S3="threshold"),
-             "cutoff:two components": evaluate(pk, S1="cap", S2="cut", S3="threshold", cut_custom=2),
-             "cutoff:four components": evaluate(pk, S1="cap", S2="cut", S3="threshold", cut_custom=4),
-             "cutoff:cap at the weekly movement": evaluate(pk, S1="cap", cap_net=False, S2="cut", S3="threshold"),
+    extra = {"cutoff:lags from 1": evaluate(pk, S1="single", S2="cut", cut_lag=1, S3="threshold"),
+             "cutoff:lags from 4": evaluate(pk, S1="single", S2="cut", cut_lag=4, S3="threshold"),
+             "cutoff:lags from 12": evaluate(pk, S1="single", S2="cut", cut_lag=12, S3="threshold"),
+             "cutoff:lags from 16": evaluate(pk, S1="single", S2="cut", cut_lag=16, S3="threshold"),
+             "cutoff:two components": evaluate(pk, S1="single", S2="cut", S3="threshold", cut_custom=2),
+             "cutoff:four components": evaluate(pk, S1="single", S2="cut", S3="threshold", cut_custom=4),
              "generous:no pinned views": evaluate(pk, S1="square", S2="over", S3="over"),
              "generous:rows out and rows in doubled": evaluate(pk, S1="double", S2="over", S3="worst"),
              "generous:turnover cancels": evaluate(pk, S1="over", S2="over", S3="worst"),
-             "calibrated:plan dates": evaluate(pk, S1="hur", S2="cal", S3="hur")}
+             "generous:a whole replicate pair a refit": evaluate(pk, S1="square", S2="over2", S3="worst"),
+             "calibrated:plan dates": evaluate(pk, S1="hur", S2="cal", S3="hur"),
+             "calibrated:the families' variance on their bootstrap spread": evaluate(pk, S1="regress", S2="hur", S3="declared"),
+             "hedge:2026's releases carried": evaluate(pk, S1="hur", S2="hur", S3="y2026")}
     over = {"S1": evaluate(pk, S1="over"), "S2": evaluate(pk, S2="over"), "S3": evaluate(pk, S3="over")}
     tpoints = {s: math.sqrt(tagg[s]) for s in SOURCES}
 
@@ -598,8 +676,12 @@ def main():
     figures = [{"id": "CC1 turnover alone, points", "block": "component", "member": "turnover"},
                {"id": "CC2 optimisation noise alone, points", "block": "component", "member": "optimisation"},
                fig("CC3 share of 2027 retrains on pinned views", "cc3", "component")]
-    figures += [fig("share %s" % s, "share_" + s, "ask") for s in SOURCES]
-    figures += [fig("merchants' own share of all movement", "own_share", "ask"),
+    # the answer blocks state each source on one line (its points and its share), so the two are one criterion
+    for s in SOURCES:
+        figures += [fig("%s points, on its line" % s, "points_" + s, "ask", sentence="source " + s),
+                    fig("share %s" % s, "share_" + s, "ask", sentence="source " + s)]
+    figures += [fig("pinned views share, on its own ask line", "cc3", "ask", sentence="pinned views"),
+                fig("merchants' own share of all movement", "own_share", "ask"),
                 fig("2027 flip rate as scheduled", "fr_sched", "ask", sentence="flip rates"),
                 fig("2027 flip rate with the designated sources removed", "fr_removed", "ask", sentence="flip rates")]
 

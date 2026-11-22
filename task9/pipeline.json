@@ -1,25 +1,52 @@
 {
  "task": "task9",
- "status": "DRAWING",
+ "status": "DESIGN",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-22",
  "doctrine": "throughout",
  "seed": 9505,
- "call": null,
- "stump": null,
- "chain": null,
+ "call": "for 2027 put label revisions in escalation (9.99 points between quarter-end snapshots), put optimisation noise (6.88), training-window turnover (6.61) and feature releases (6.65) on a remediation plan and leave retunes (4.47) on monitor, against the stability standard's lines of 5.5 and 8 points; 55.0 per cent of 2027's weekly retrains run on pinned feature views; 13.99 per cent of merchants change tier between snapshots, 9.72 with the four designated sources removed (generator/core.py on the world's arrays, seed 9505; the cut pack's figures replace them at stage 3)",
+ "stump": "the reflex route (each source read off its own instrument, the calendar's dates for pinned views) files label revisions and turnover in escalation and the other three on monitor: wrong on turnover, optimisation noise and feature releases. S1 (a bootstrap pair resamples a family's whole training window, while two quarter-end models share all of it but the rows that left and entered: 15.71 points at face value against 6.61) opens turnover; S2 (a replicate pair is one refit's fresh noise, and warm-started models inherit it: 3.57 against 6.88, from the change-by-gap curve tied to the replicate pairs) opens optimisation noise; S3 (a rollout is complete on the calendar when its image is released, and families train on it weeks to months later: 90.9 per cent of 2027's retrains on pinned views against 55.0, releases 4.00 against 6.65) opens feature releases. Each is necessary alone and none sufficient; seven distinct wrong calls across the lattice",
+ "chain": "R1 the score panel, manifests, instrument pairs, registry, calendar, release log, roadmap and plans on one family scheme and week calendar; R2 each instrument's figure by family, with retunes 4.47 and label revisions 9.99 points; R3 training-window turnover 6.61 points (Component 1); R4 optimisation noise 6.88 points (Component 2); R5 55.0 per cent of 2027's retrains on pinned views and feature releases 6.65 points (Component 3); R6 each route's model asked for the weekly score-change variance (42.23 against 42.35 on record) and each past rollout left out; R7 the shares 18.6, 17.1, 7.8, 17.3 and 39.1 per cent and merchants' own 43.9; R8 the bands and the tier changes 13.99 and 9.72 per cent",
  "architecture": 5,
  "loops": 0,
- "precut": null,
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-22",
+  "checks": "precut.py task9 at design: 119 checks, 0 FAIL, 3 WARN (the nearest chains task19, task2, task23 and task25, answered in the Template check; 18 fork rows owe their checks.py assertions and effort.json is owed, both at stage 3); generator/core.py CORE PASS level 5 on 34 variants; guard.py check WARN only (strategy_risk, chain_near task25, overuse.forum, each answered in the Draw); skeleton.py check PASS, severity none; voice-check.py PASS"
+ },
  "leak": null,
  "duplicate_check": null,
  "judge": null,
- "paper_pair": null,
- "effort": null,
+ "paper_pair": 9,
+ "effort": {
+  "quick": null,
+  "careful": 9,
+  "thorough": 100,
+  "corelib_one_lost": {
+   "S1": 29,
+   "S2": 36,
+   "S3": 42
+  },
+  "corelib_fixed_alone": {
+   "S1": 22,
+   "S2": 16,
+   "S3": 22
+  },
+  "corelib_reflex": 9,
+  "corelib_rigorous": 9,
+  "corelib_run_routes": {
+   "generous": 42,
+   "cutoff": 22,
+   "calibrated": 9,
+   "hedge": 9
+  },
+  "note": "corelib's rubric table at design; effort.py on the cut pack is owed at stage 3"
+ },
  "runs": {
   "architecture": 4,
   "date": "2026-11-22",
@@ -31,7 +58,7 @@
   "reading": "Response 1 filed the golden list (stock, price, trend and promise on; history, seller and match off) and made all three stumps unprompted: it took the ablation effects over the share of pages built at origin from the edge cache record, replayed each source's validity entity by entity with impression weights, and priced the page components from their own holdouts. Response 2 listed stock, price and promise and lost only trend, by diluting the realised costs with the cache share and declining the replay as not reconstructable from daily aggregates. The author's ruling: not difficult enough to stump a frontier model; the core is redrawn."
  },
  "returned": null,
- "resume": "/draw task9 in progress: architecture 5 core proved (generator/core.py CORE PASS level 5, seed 9505); the card, the design note to precut exit 0 and prompt.txt are next",
+ "resume": "/build task9 from 3: execute the note's Build brief (the generator around core.py, the pack of about 16 files, the workbook and the deck, effort.json, submission.md), moving nothing in the core. Tight assertions to watch on the cut pack: S3 lost alone earns 42 and the generous route 42 (55 on seed 9508, one other seed); a line through gaps 8 to 26 files optimisation noise at 5.96, 0.27 under Component 2's range (fork SF8); the roadmap's releases eight weeks late would leave feature releases at 5.57, 0.07 over the 5.5 line (the standard files the roadmap as the load); the card's spine rows (4,000,000) to be set to the cut panel's count",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -118,6 +145,10 @@
   {
    "date": "2026-11-22",
    "event": "architecture 5 drawn in a new world (a risk vendor's weekly refreshed merchant tiers, the quarter-end tier-stability covenant): which sources of score movement carry the 2027 instability. generator/core.py CORE PASS level 5 on seed 9505 and on 9506 to 9508; three stumps on three axes (training-window turnover against a whole-window bootstrap, inherited optimisation noise against a replicate pair, fleet adoption of pinned feature views against the change calendar)"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "architecture 4 landed on the platform (response 1 the golden list with all three stumps made, response 2 lost trend alone; the author's ruling: not difficult enough); architecture 5 drawn in a new world (Garrane Risk's weekly refreshed merchant scores, what each model-side source alone moves a score between quarter-end snapshots in 2027): three stumps on three axes off the closed page, core.py CORE PASS level 5 (one stump lost 29, 36, 42; reflex 9), card registered at WARN, note to precut exit 0, prompt drafted; architecture 4's build files removed from the folder (in git at 44a3a3a)"
   }
  ],
  "final_cut": null
