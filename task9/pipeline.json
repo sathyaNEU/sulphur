@@ -71,7 +71,7 @@
   ]
  },
  "returned": null,
- "resume": "the author pastes both scores and the generated rubric; the feature-release netting on pinned views (declined by both responses, stated in no shipped file, 10.27 and escalation in the golden's own estimators) goes to /fix-determinism task9 before any submission, then a new pair and /triage-runs task9",
+ "resume": "the author submits the five fields from submission.md (Final Recommendation, How is each model stumped?, Supplementary Questions, Critical Components, Step-by-Step) with the Reward block (both platform scores); SUBMITTED on the author's word; the feature-release netting on pinned views is held for the holistic audit (the author's ruling of 2026-11-22: no fixes unless the audit asks)",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -198,6 +198,10 @@
   {
    "date": "2026-11-22",
    "event": "both architecture 5 responses pasted by the author and saved verbatim as runs/run1.md and runs/run2.md (scores and rubric not yet pasted); read against the golden: S2 and S3 missed by both, S1 landed by Response 1; the feature-release netting on pinned views is an open fork (both responses declined it in writing, the pack does not file it)"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "How is each model stumped? emitted in submission.md by generator/writeup.py from runs/run1.md and runs/run2.md (every quote and response figure asserted against the saved text, golden figures from figures.json, 805 words); the four graded blocks byte-identical; gates.py task9 0 FAIL, 3 WARN as at READY; the author's ruling: no fixes unless the holistic audit asks"
   }
  ],
  "final_cut": null

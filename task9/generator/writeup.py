@@ -38,6 +38,117 @@ def cap(s):
     return s[0].upper() + s[1:]
 
 
+def _stump_block(fig):
+    """The form's stump question, written from the two saved responses (runs/run1.md, runs/run2.md). Every response
+    figure and phrase is held here exactly as the response writes it and asserted against the saved text; every
+    golden-side figure comes from figures.json. Emitted only once both responses are on file."""
+    import os
+    here = os.path.dirname(os.path.abspath(__file__))
+    r1p, r2p = (os.path.join(os.path.dirname(here), "runs", n) for n in ("run1.md", "run2.md"))
+    if not (os.path.exists(r1p) and os.path.exists(r2p)):
+        return []
+    t1, t2 = open(r1p, encoding="utf-8").read(), open(r2p, encoding="utf-8").read()
+    q1 = {"turnover": "Training-data movement is sliding-window turnover",
+          "accrue": "noise and training are treated as accruing per refresh",
+          "flag": "I flag this as the least directly identified dynamic",
+          "planned": "planned ISO week treated as the first pinned retrain, inclusive",
+          "past": "not pooled into 2026 instrument estimates because pooling would mix regimes",
+          "notnet": "explicitly not netted",
+          "noinst": "no pinned-view instrument exists in the filed 2026 record",
+          "rows": "3,360,865 rows", "map": "4,568 mappings",
+          "td": "6.75", "on": "12.87", "fr": "10.27", "cc3": "92.86%", "own": "14.52%",
+          "pred": "15.24%, 14.43% and 14.82%", "meas": "15.26%, 14.42% and 14.78%"}
+    q2 = {"noplan": "no source lands in Remediation plan",
+          "once": "the pair MS is the endpoint seed-to-seed difference and is carried once per pair",
+          "s32": "not how §3.2’s snapshot metric reads",
+          "est": "Effect = ½ × bootstrap pair MS × (rows added + rows dropped) / training rows",
+          "judg": "The consequential judgment is bootstrap pricing.",
+          "alt": "added-rows-only face-value scaling yields Training data 7.1146 points → Remediation plan",
+          "planned": "each family pinned from its PC-26-058 planned ISO week inclusive through W52",
+          "counted": "Pinned views are counted, not credited with a movement effect.",
+          "delta": "PC-26-058 files a change, not a measured source-movement delta",
+          "keys": "3,360,865 unique merchant/family/week keys", "map": "4,568 panel merchants were affected",
+          "td": "4.7741", "on": "3.5696", "fr": "10.2687", "cc3": "92.8571%"}
+    for q in q1.values():
+        assert q in t1, "Response 1 quote missing from runs/run1.md: %r" % q
+    for q in q2.values():
+        assert q in t2, "Response 2 quote missing from runs/run2.md: %r" % q
+    docs = open(os.path.join(here, "docs.py"), encoding="utf-8").read()
+    std_release, cal_pin = "a change to a feature group a family's model reads", "Pinned feature views for training and scoring"
+    assert std_release in docs and cal_pin in docs, "pack wording quoted in the stump block is not in docs.py"
+
+    P, B, b, rf, pr, lat = (fig[k] for k in ("points", "bands", "base", "reflex", "probe", "lattice"))
+    f2, f1 = (lambda x: "%.2f" % x), (lambda x: "%.1f" % x)
+    over_fr = fig["over"]["S3"]["points"]["feature releases"]
+    mapped = b["panel_merchants_unmapped"] - b["panel_merchants"]
+    # the claims the block makes about the responses, asserted on the golden's own figures
+    assert "{:,}".format(b["score_rows"]) in q1["rows"] and "{:,}".format(b["score_rows"]) in q2["keys"]
+    assert "{:,}".format(mapped) in q1["map"] and "{:,}".format(mapped) in q2["map"]
+    assert q1["on"] == f2(pr["a whole replicate pair a refit"]) and f2(float(q2["on"])) == f2(rf["points"]["optimisation noise"])
+    assert q1["fr"] == f2(over_fr) and f2(float(q2["fr"])) == f2(over_fr)
+    assert B["points_turnover"][0] <= float(q1["td"]) <= B["points_turnover"][1]
+    assert not B["points_turnover"][0] <= float(q2["td"]) <= B["points_turnover"][1]
+    assert B["points_turnover"][0] <= 7.1146 <= B["points_turnover"][1] and abs(float(q2["td"]) - pr["the rows that entered only"]) < 0.05
+    bt, bo, bc, bw = (band(B[k], d) for k, d in (("points_turnover", 2), ("points_optimisation", 2), ("cc3", 1),
+                                                   ("own_share", 1)))
+    p1 = ("**Response 1** escalates optimisation noise, feature releases and label revisions, puts training data on a "
+          "plan and keeps retunes on monitor: three of five placements right. It makes the training-data step "
+          f"(\"{q1['turnover']}\") and files {q1['td']} points, inside the band {bt}. It loses the optimisation-noise "
+          f"step: \"{q1['accrue']}\" adds a whole replicate pair for each of the thirteen refits, {q1['on']} points and "
+          f"escalation against {f2(fig['cc2'])} (band {bo}), and it flags the choice itself: \"{q1['flag']}\". It loses the "
+          f"pinned-views step: \"{q1['planned']}\" gives {q1['cc3']} against {f1(fig['cc3'])} per cent (band {bc}); "
+          f"it read the three earlier platform changes only as regime breaks (\"{q1['past']}\"), never for how late "
+          f"families took them up. With pinning \"{q1['notnet']}\", feature releases stay at {q1['fr']} points and "
+          f"escalation. Its tier back-test on the 2026 pairs ({q1['pred']} against {q1['meas']}) cannot catch this, "
+          "since own change is what the record leaves.")
+    p2 = ("**Response 2** escalates feature releases and label revisions and puts the other three on monitor "
+          f"(\"{q2['noplan']}\"): two of five right. It loses the optimisation-noise step on the other side of the "
+          f"line: \"{q2['once']}\" gives {q2['on']} points and monitor against {f2(fig['cc2'])}, and it rejects "
+          f"accumulation as \"{q2['s32']}\". But the snapshot models section 3.1 compares are warm-started, each "
+          "weekly model in the manifests starting from its parent's weights, so the later one keeps the refits' "
+          f"noise, decayed but not gone (persistence {f2(b['phi_fit'][0])} to {f2(b['phi_fit'][1])} by "
+          f"family). On training data it writes the estimator Response 1 runs (\"{q2['est']}\") yet files "
+          f"{q2['td']} points and monitor against {f2(fig['cc1'])}; it flags the choice (\"{q2['judg']}\") and sets "
+          f"aside its own figure inside the band (\"{q2['alt']}\"). It counts \"{q2['planned']}\", {q2['cc3']}, and "
+          f"\"{q2['counted']}\", so feature releases stay at {q2['fr']} points and escalation.")
+    p3 = ("No step is a planted defect. Both responses clean the record as the golden does "
+          f"({'{:,}'.format(b['score_rows'])} merchant-weeks; {'{:,}'.format(mapped)} Tolka Pay identifiers mapped), "
+          "so every loss comes after the cleaning, and each step runs through every family: every warm-started "
+          f"family's change by gap bends, every window slides ({b['long_window_families']} families on 104 weeks, "
+          f"the rest on 52), and all {b['past_family_rollouts']} past family rollouts were first used "
+          f"{b['past_lag_range'][0]} to {b['past_lag_range'][1]} weeks after the calendar's completed date (median "
+          f"{b['past_lag_median']:.0f}). Nor is any step one buried sentence: each comes from setting two files side "
+          "by side (the replicate pairs against the panel's change by gap, the bootstrap pairs against the "
+          "manifests' windows and rows, the calendar's completed dates against each family's first run on each past "
+          "image), and Response 1 landed the training-data step unprompted. Both responses leave feature releases "
+          f"whole for want of a measured effect (\"{q2['delta']}\"), but the pack's own words settle it: the "
+          f"standard defines a feature release as \"{std_release}\" and the change calendar files PC-26-058 as "
+          f"\"{cal_pin}\", so a "
+          f"release moves a family only in weeks it still reads live views ({f2(P['feature releases'])} points on the "
+          f"take-up, {f2(rf['points']['feature releases'])} on the calendar's weeks, {f2(over_fr)} left whole).")
+    p4 = ("Each step takes an estimate, not a repair. Optimisation noise: a whole replicate pair per refit gives "
+          f"{f2(pr['a whole replicate pair a refit'])} (escalation) and one refit "
+          f"{f2(rf['points']['optimisation noise'])} (monitor); the bend rules out both, and the figure needs each "
+          f"family's curve fitted with its one-step size tied to the replicate pairs ({f2(fig['cc2'])}; fitted free, "
+          f"{f2(pr['unanchored fit'])}, implying replicate pairs of {f2(pr['unanchored implied replicate'])} where "
+          f"{f2(b['replicate'])} is measured). Training data: the bootstrap pairs as they stand give "
+          f"{f2(rf['points']['training data'])} (escalation) and the rows that entered alone "
+          f"{f2(pr['the rows that entered only'])} (monitor, about Response 2's figure); the figure needs the rows that "
+          f"leave, enter and stay counted per family and per 2027 pair ({f2(fig['cc1'])}). Pinned views: the calendar "
+          f"gives {f1(b['cov_plan'])} per cent on its planned weeks and {f1(b['cov_declared'])} on its completed "
+          "dates; the figure needs the past rollouts' lag fitted on custom components "
+          f"({f1(b['lag_median_custom0'])} weeks with none, {f1(b['lag_median_custom_max'])} with {b['custom_max']}) "
+          f"and carried to each family ({f1(fig['cc3'])}). "
+          "Each step alone moves a different source (training data to escalation at "
+          f"{f2(lat['S1']['points']['training data'])}, optimisation noise to monitor at "
+          f"{f2(lat['S2']['points']['optimisation noise'])}, feature releases to monitor at "
+          f"{f2(lat['S3']['points']['feature releases'])}): Response 1 made the training-data step and lost the other "
+          "two, and Response 2 missed all three figures, the training-data one after writing its estimator.")
+    for p in (p1, p2, p3, p4):
+        assert "—" not in p
+    return ["## How is each model stumped?", "", p1, "", p2, "", p3, "", p4, ""]
+
+
 def write(path, fig):
     B = fig["bands"]
     P, S = fig["points"], fig["share"]
@@ -65,6 +176,7 @@ def write(path, fig):
           P["label revisions"], P["optimisation noise"], P["feature releases"], P["training data"], P["retunes"],
           rf["points"]["training data"], rf["points"]["optimisation noise"], rf["points"]["feature releases"]))
     a("")
+    L.extend(_stump_block(fig))
     a("## Supplementary Questions")
     a("")
     a("### garrane_score_stability_sources_2027.xlsx")
