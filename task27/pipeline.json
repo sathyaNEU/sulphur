@@ -55,7 +55,7 @@
     "pass2": "DETERMINISTIC / APPROVE (44 forks + 144 core / 576 wide joint combinations; 0 flips; 0/144 out of band; Fix: none)"
   },
   "md5": {
-    "prompt.txt": "bd05c3bd65fcf66df3baed87a54ed1ed",
+    "prompt.txt": "205ac4abeaf1f96e0137ea7bc4b3b93c",
     "target.zip": "1a74002ae46b2d0fcc1b88ecaab7a3ea",
     "golden.zip": "1a0823c0b611f1a00a76290118977186"
   },

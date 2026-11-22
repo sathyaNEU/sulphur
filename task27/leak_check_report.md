@@ -4,13 +4,13 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: conservation, handoff, physical, coldstore, reefer, reflex, drayage, stock-flow, pallet, rigorous, weighbridge, c-days, import, same-vessel, containers, inland, unload, independent, golden, shared-train, direct, locked, chamber, wagons, shipping-line
+Stump terms swept: conservation, handoff, physical, coldstore, reefer, reflex, drayage, stock-flow, pallet, rigorous, weighbridge, c-days, import, same-vessel, causes, containers, inland, unload, independent, golden, shared-train, direct, locked, chamber, wagons
 
 ## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: carries 29 of 36 distinctive words of the committed call: 'Release 2027 Mandatory Remediation funding under Charter RC-2027 (>= 2,500 container-days) for five causes: vessel_berth'
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: 10 of 25 stump-paragraph terms appear (handoff, physical, coldstore, reefer, drayage, import); read whether the document names the move
+- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: 11 of 25 stump-paragraph terms appear (handoff, physical, coldstore, reefer, drayage, import); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 1)
 - **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: names 3 of 3 answer-set candidates beside numbers; confirm it does not rank them on the decision question

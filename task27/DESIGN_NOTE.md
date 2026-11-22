@@ -234,7 +234,7 @@ A literal reader of `prompt.txt`, `weserfrucht_remediation_charter_rc2027.pdf`, 
 
 ## Prompt contract
 
-`task27/prompt.txt` is 710 characters (105 words), one continuous plain-text paragraph, question-first (`question_form = what`), second-sentence opener `rank`, requesting three deliverables by type (`a CSV`, `a spreadsheet`, `a short slide deck` -> `csv+pptx+xlsx`). It contains zero method names, zero method hints, zero methodology chains, zero data-gap pre-diagnoses, zero parallel factor triplets, zero ZIP filler, zero rounding rules, zero persona/role intros, zero data-count disclosures, zero em/en dashes, and passes `voice-check.py task27` with 26 PASS, 0 FAIL, and 0 WARN.
+`task27/prompt.txt` is 558 characters (81 words), one continuous plain-text paragraph, question-first (`question_form = what`), second-sentence opener `walk`, requesting three deliverables by type in separate audience-anchored sentences (`a short slide deck`, `a spreadsheet`, `a CSV` -> `csv+pptx+xlsx`). It contains zero column-by-column register specs, zero stacked closing document lists, zero method names, zero method hints, zero methodology chains, zero data-gap pre-diagnoses, zero parallel factor triplets, zero ZIP filler, zero rounding rules, zero persona/role intros, zero data-count disclosures, zero em/en dashes, and passes `voice-check.py task27` with 26 PASS, 0 FAIL, and 0 WARN.
 
 ## Tried and rejected
 

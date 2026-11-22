@@ -170,6 +170,16 @@ against the platform's 9-signal templating and AI-writing checker (and mechanica
    appropriation filing figures and assigned phase"`).
 4. **Never add `"in the ZIP"` or `"See the attached ZIP."` filler.** Refer naturally to the records (`"from the 2026
    records"`) or omit attachment mentions entirely.
+5. **Never recite a column-by-column register spec or stack sub-metric cuts of the same quantity.** A sentence like
+   `"Rank every operational cause by projected 2027 excess container-days alongside its 2026 total, total 2027 network
+   and remediation container-days, 2027 cost in euros overall and for designated causes, plus ..."` triggers BOTH
+   *Spells out the methodology* and *Excessively wordy / over-contextualized*. State the core business decision in the
+   opening question, pin the exact column schema and formulas in the organisation's governing charter/standard in
+   `target/`, and name only the two or three headline commercial outputs Controlling or leadership actually needs.
+6. **Never stack two or three deliverables in the closing sentence.** Ending on `"Put A in a CSV, build B in a
+   spreadsheet, and summarize C in a short slide deck"` triggers *Closes on a list of documents*. Give each deliverable
+   its own short sentence anchored to why its specific audience uses it (e.g., deck for the close-out review,
+   spreadsheet for Controlling, CSV to load into the tracker), with at most one deliverable type in the final sentence.
 
 **Measured contrast (task26, platform LLM prompt test):**
 - *BORDERLINE (2 of 9 signals, AI-writing scan: SOME SIGNS):* `"The relief-pool substations lack direct metering for

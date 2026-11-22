@@ -168,8 +168,9 @@ def templating_signals(text):
     if sents:
         last = sents[-1]
         nfiles = len(FILE_TOKEN.findall(last)); ndocs = len(re.findall(DOC_NOUNS, FILE_TOKEN.sub(" ", last), re.I))
+        deliv_types = len({m.group(0).lower() for m in re.finditer(r"\b(?:csv|spreadsheet|workbook|slide\s+deck|slides|deck|memo|report|pdf|docx)\b", last, re.I)})
         words = len(re.findall(r"[A-Za-z]+", FILE_TOKEN.sub(" ", last)))
-        if nfiles >= 2 or (nfiles + ndocs >= 3 and words <= 18):
+        if nfiles >= 2 or deliv_types >= 2 or (nfiles + ndocs >= 3 and words <= 24):
             found.append("a closing list of documents (%r)" % last[:80])
     for pat in DICTATED:
         m = re.search(pat, text, re.I)
