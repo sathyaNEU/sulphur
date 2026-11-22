@@ -6,7 +6,7 @@
  "objective": "forecasting",
  "stage": 1,
  "stage_name": "draw",
- "updated": "2026-11-21",
+ "updated": "2026-11-22",
  "call": "none yet: architecture 11 drawing",
  "stump": "architecture 11 drawing; architectures 9 and 10 died on paper (DESIGN_NOTE.md, Tried and rejected)",
  "architecture": 11,
@@ -149,7 +149,7 @@
    "commit": ""
   }
  ],
- "resume": "the stump-architect draws architecture 11 across the whole of Physical & Environmental Sciences (any house task type, organisation, instrument set or data source; files may be added or withheld), Forecasting kept unless the core needs another type; it returns its screen before core.py, then core.py to CORE PASS and precut.py exit 0; then /build task3 from 3",
+ "resume": "the stump-architect continues architecture 11's screen from its ledger (about sixty families with verdicts and figures, and six leads carried forward) at ~/Documents/sulphur-task3-arch11-screen/ledger.md, with the rules of stump-screen.md at 0feab0b and the note's Tried and rejected. It returns its screen before core.py, then core.py to CORE PASS and precut.py exit 0, then /build task3 from 3. The architect stopped at the Fable usage limit on 2026-11-22, which resets on 2026-11-27 at 08:00 America/Detroit.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -237,6 +237,10 @@
   {
    "date": "2026-11-21",
    "event": "reopened by the author: retirement ruled out; architecture 11 drawn across the whole domain, with the task type, the organisation, the instruments and the files open"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "architecture 11's screen: the coater, effluent and radon worlds dead on paper, every kill on a measured figure (DESIGN_NOTE.md, Tried and rejected); the architect stopped at the Fable usage limit, with the ledger kept outside the scratch space"
   }
  ],
  "architectures": [
