@@ -56,6 +56,7 @@ import corelib  # noqa: E402
 SEED = 2701
 LINE_THRESHOLD = 2500.0
 N_DAYS = 365
+N_PORTAL_DAYS = N_DAYS + 14  # 2026-01-01 through 2027-01-14 (all <= 2027-01-19 as_of; no Dec 31 clamp)
 N_CONTAINERS = 24000
 N_VESSELS = 480
 # Exact 2026 non-leap calendar quarter boundaries (0-indexed day of year):
@@ -143,11 +144,12 @@ def simulate_world(seed=SEED):
         + np.exp(-0.5 * ((days - 350.0) / 28.0) ** 2)
     )
 
+    # Realistic non-identical per-chamber physical pallet capacities (4 DCs x 3 thermal zones)
     dc_caps = np.array([
-        [1400, 1400, 1400],  # HAN
-        [1120, 1120, 1120],  # OSN
-        [1120, 1120, 1120],  # KAS
-        [1020, 1020, 1020],  # MAG
+        [1440, 1380, 1360],  # HAN
+        [1150, 1110, 1090],  # OSN
+        [1140, 1120, 1080],  # KAS
+        [1050, 1010, 980],   # MAG
     ], dtype=float)
 
     chamber_opening = np.zeros((4, 3), dtype=int)
@@ -163,22 +165,21 @@ def simulate_world(seed=SEED):
             cap = dc_caps[d, z]
             shifted = np.roll(zone_waves[z], dc_phase[d])
             eps = np.zeros(N_DAYS)
+            # Organic stationary day-0 draw so openings never repeat identically across DCs
+            eps[0] = rng.normal(0.0, 0.025)
             for t in range(1, N_DAYS):
                 eps[t] = 0.78 * eps[t - 1] + rng.normal(0.0, 0.016)
-            target_u = np.clip(shifted + eps, 0.54, 0.992)
+            peak_add = np.zeros(N_DAYS)
             if z == 0:
-                target_u = np.clip(
-                    target_u + 0.036 * np.exp(-0.5 * ((days - (192 + dc_phase[d])) / 24.0) ** 2),
-                    0.54, 0.992,
-                )
+                peak_add = 0.036 * np.exp(-0.5 * ((days - (192 + dc_phase[d])) / 24.0) ** 2)
             elif z == 1:
-                target_u = np.clip(
-                    target_u + 0.032 * (
-                        np.exp(-0.5 * ((days - 16.0) / 20.0) ** 2)
-                        + np.exp(-0.5 * ((days - 350.0) / 20.0) ** 2)
-                    ),
-                    0.54, 0.992,
+                peak_add = 0.032 * (
+                    np.exp(-0.5 * ((days - 16.0) / 20.0) ** 2)
+                    + np.exp(-0.5 * ((days - 350.0) / 20.0) ** 2)
                 )
+            raw_tu = np.maximum(0.51 + rng.uniform(0.0, 0.025, size=N_DAYS), shifted + eps + peak_add)
+            # Smooth soft compression above 0.965 (never flatlines at a hard cap)
+            target_u = np.where(raw_tu > 0.965, 0.965 + 0.028 * np.tanh((raw_tu - 0.965) / 0.028), raw_tu)
             target_s = np.round(target_u * cap).astype(int)
             chamber_opening[d, z] = int(target_s[0])
             cur = int(target_s[0])
@@ -216,10 +217,13 @@ def simulate_world(seed=SEED):
     port_yard_util = np.zeros((3, N_DAYS))
     for p in range(3):
         noise_p = np.zeros(N_DAYS)
+        noise_p[0] = rng.normal(0.0, 0.022)
         for t in range(1, N_DAYS):
             noise_p[t] = 0.72 * noise_p[t - 1] + rng.normal(0.0, 0.020)
         port_offset = [0.025, 0.010, -0.015][p]
-        port_yard_util[p] = np.clip(port_season + port_offset + noise_p, 0.58, 0.975)
+        raw_u = np.maximum(0.56 + rng.uniform(0.0, 0.025, size=N_DAYS), port_season + port_offset + noise_p)
+        # Smooth soft compression above 0.94 (eliminates hard 97.500 flatline)
+        port_yard_util[p] = np.where(raw_u > 0.94, 0.94 + 0.038 * np.tanh((raw_u - 0.94) / 0.038), raw_u)
 
     # --- 2. Simulate 480 Vessel Calls & 24,000 Import Containers ---
     vessel_port = rng.choice(3, size=N_VESSELS, p=PORT_SHARES)
@@ -257,10 +261,11 @@ def simulate_world(seed=SEED):
 
     # --- 4. STUMP S1: Port Reefer Plug (reefer_plug) vs Inland Chamber Throttling (coldstore_dock) ---
     u_port_c = port_yard_util[cont_port, cont_day]
-    port_rate = np.array([0.235, 0.196, 0.161])[cont_port]
+    port_rate = np.array([0.178, 0.149, 0.123])[cont_port]
+    plug_floor = rng.uniform(0.002, 0.015, size=N_CONTAINERS)
     true_reefer_plug = np.maximum(
-        0.01,
-        port_rate * (0.015 + 0.18 * np.maximum(0.0, u_port_c - 0.72) + 1280.0 * np.maximum(0.0, u_port_c - 0.83) ** 3)
+        plug_floor,
+        port_rate * (0.012 + 0.06 * np.maximum(0.0, u_port_c - 0.72) + 3350.0 * np.maximum(0.0, u_port_c - 0.85) ** 3)
         + rng.normal(0.0, 0.016, size=N_CONTAINERS),
     )
 
@@ -353,14 +358,20 @@ def simulate_world(seed=SEED):
     n_locked_phyto_sh = np.bincount(cont_shuttle[cont_locked_phyto], minlength=n_shuttles)
     n_prelock_phyto_sh = np.bincount(cont_shuttle[cont_prelock_phyto], minlength=n_shuttles)
 
+    # Eligible non-BIP rail boxes per shuttle (exact standby pool for cont_rolled_rail)
+    elig_rail_mask = cont_is_rail & (~lot_bip[cont_ched])
+    n_elig_rail_sh = np.bincount(cont_shuttle[elig_rail_mask], minlength=n_shuttles)
+
+    wf_standby_rolled_phyto_sh = np.minimum(n_locked_phyto_sh, n_elig_rail_sh)
     rail_short_event = rng.random(n_shuttles) < 0.62
     n_rail_short_sh = np.where(rail_short_event, rng.integers(1, 6, size=n_shuttles), 0)
-    n_rail_short_sh = np.minimum(n_rail_short_sh, np.maximum(0, planned_on_shuttle - n_locked_phyto_sh))
+    n_rail_short_sh = np.minimum(n_rail_short_sh, np.maximum(0, n_elig_rail_sh - wf_standby_rolled_phyto_sh))
 
     rollover_days_per_box = 2.25
-    wf_booked_slots_sh = np.maximum(planned_on_shuttle - n_prelock_phyto_sh, n_locked_phyto_sh + n_rail_short_sh)
-    wf_actual_loaded_sh = wf_booked_slots_sh - n_locked_phyto_sh - n_rail_short_sh
-    wf_standby_rolled_phyto_sh = n_locked_phyto_sh
+    wf_booked_slots_sh = np.maximum(
+        planned_on_shuttle - n_prelock_phyto_sh, wf_standby_rolled_phyto_sh + n_rail_short_sh
+    )
+    wf_actual_loaded_sh = wf_booked_slots_sh - wf_standby_rolled_phyto_sh - n_rail_short_sh
     wf_standby_rolled_rail_sh = n_rail_short_sh
     wf_standby_rolled_total_sh = wf_standby_rolled_phyto_sh + wf_standby_rolled_rail_sh
 
@@ -379,23 +390,50 @@ def simulate_world(seed=SEED):
     sh_rail_short_days = wf_standby_rolled_rail_sh * rollover_days_per_box
     true_rail_base_sh = planned_on_shuttle * rng.uniform(0.015, 0.028, size=n_shuttles)
 
+    # Select exact rolled standby rail containers (cont_rolled_rail) and per-container rail excess
+    # directly in simulate_world so pack.py shares identical forward chronology with zero time travel!
+    cont_rolled_rail = np.zeros(N_CONTAINERS, dtype=bool)
+    cont_rail_excess = np.zeros(N_CONTAINERS, dtype=float)
+    elig_by_sh = [[] for _ in range(n_shuttles)]
+    for ci in np.where(elig_rail_mask)[0]:
+        elig_by_sh[cont_shuttle[ci]].append(ci)
+    for s in range(n_shuttles):
+        k_roll = int(wf_standby_rolled_total_sh[s])
+        if k_roll > 0:
+            pool = np.array(elig_by_sh[s], dtype=int)
+            chosen = rng.choice(pool, size=k_roll, replace=False)
+            cont_rolled_rail[chosen] = True
+    base_per_rail_box = np.where(planned_on_shuttle > 0, true_rail_base_sh / np.maximum(1, planned_on_shuttle), 0.0)
+    cont_rail_excess = np.where(
+        cont_is_rail,
+        base_per_rail_box[cont_shuttle] + np.where(cont_rolled_rail, rollover_days_per_box, 0.0),
+        0.0,
+    )
+    assert int(cont_rolled_rail.sum()) == int(wf_standby_rolled_total_sh.sum())
+
     # --- 5b. Physical Inland Unload Day (cont_unload_day) BEFORE Empty-Return Stage (S3) ---
-    # Every container takes 2 days standard transit by direct truck or 3 days by intermodal rail,
-    # plus rounded pre-unload excess delay days (capped at year-end day 364 for 2026 ledger scope).
+    # Includes cont_rail_excess and NEVER clamps at Dec 31 (day 364): late-Dec arrivals finish
+    # unloading in early Jan 2027 (within N_PORTAL_DAYS = 379, i.e., through 2027-01-14 <= as_of).
     base_transit_days = np.where(cont_is_rail, 3, 2)
     pre_unload_excess = np.round(
-        obs_term_yard_hold + obs_dc_dock_wait + true_phyto_direct + true_phyto_sibling_rail + true_edi_docs
+        obs_term_yard_hold
+        + obs_dc_dock_wait
+        + true_phyto_direct
+        + true_phyto_sibling_rail
+        + true_edi_docs
+        + cont_rail_excess
     ).astype(int)
-    cont_unload_day = np.minimum(N_DAYS - 1, cont_day + base_transit_days + pre_unload_excess)
+    cont_unload_day = cont_day + base_transit_days + pre_unload_excess
+    assert int(cont_unload_day.max()) < N_PORTAL_DAYS, f"cont_unload_day max {cont_unload_day.max()} >= {N_PORTAL_DAYS}"
 
     # --- 6. STUMP S3: Empty Depot Portal Quota Blocking (empty_depot) vs Drayage Carrier ---
-    # Indexed strictly on cont_unload_day (physical date container finishes unloading at inland DC
-    # and enters the empty-return pool)!
+    # Indexed strictly on unclamped physical cont_unload_day across 0..N_PORTAL_DAYS-1!
     dc_dray_base = np.array([0.080, 0.071, 0.087, 0.079])[cont_dc]
     dow_mult = np.array([1.14, 0.95, 0.92, 0.96, 1.18, 0.90, 0.95])[cont_unload_day % 7]
     carrier_peak = 0.008 + 13.85 * np.exp(-0.5 * ((cont_unload_day - 193.0) / 14.8) ** 2)
+    dray_floor = rng.uniform(0.002, 0.015, size=N_CONTAINERS)
     true_dray_carrier = np.maximum(
-        0.01,
+        dray_floor,
         dc_dray_base * dow_mult * carrier_peak + rng.normal(0.0, 0.014, size=N_CONTAINERS),
     )
 
@@ -404,7 +442,7 @@ def simulate_world(seed=SEED):
         phys_turnaway_flag, rng.gamma(shape=4.0, scale=0.22, size=N_CONTAINERS), 0.0
     )
 
-    depot_quota_closed = np.zeros((3, 4, N_DAYS), dtype=bool)
+    depot_quota_closed = np.zeros((3, 4, N_PORTAL_DAYS), dtype=bool)
     for p in range(3):
         for l in range(4):
             if l in (0, 1):
@@ -418,9 +456,10 @@ def simulate_world(seed=SEED):
                         state = int(rng.integers(3, 6))
                         depot_quota_closed[p, l, t] = True
             elif l == 2:
-                depot_quota_closed[p, l] = rng.random(N_DAYS) < 0.008
+                depot_quota_closed[p, l, :N_DAYS] = rng.random(N_DAYS) < 0.008
             else:
-                depot_quota_closed[p, l] = False
+                depot_quota_closed[p, l, :N_DAYS] = False
+            # Jan 2027 (days 365..378): quotas remain open (False)
 
     cont_quota_closed = depot_quota_closed[cont_port, cont_line, cont_unload_day]
     true_depot_portal_block = np.where(
@@ -431,22 +470,23 @@ def simulate_world(seed=SEED):
     obs_dray_empty_hold = true_dray_carrier + true_depot_portal_block
     obs_depot_turnaway = true_depot_physical
 
-    # Online Depot Portal Rejection Log (NO container_id! Multi-day retry multiplicity ~4.20x!)
+    # Online Depot Portal Rejection Log (NO container_id! Extended through N_PORTAL_DAYS, NO Dec 31 clamp!)
     RETRY_RATE = 4.20
-    portal_confirmed = np.zeros((3, 4, N_DAYS), dtype=int)
-    portal_rejected = np.zeros((3, 4, N_DAYS), dtype=int)
-    daily_empty_unloads = np.zeros((3, 4, N_DAYS), dtype=int)
-    daily_empty_gateins = np.zeros((3, 4, N_DAYS), dtype=int)
+    portal_confirmed = np.zeros((3, 4, N_PORTAL_DAYS), dtype=int)
+    portal_rejected = np.zeros((3, 4, N_PORTAL_DAYS), dtype=int)
+    daily_empty_unloads = np.zeros((3, 4, N_PORTAL_DAYS), dtype=int)
+    daily_empty_gateins = np.zeros((3, 4, N_PORTAL_DAYS), dtype=int)
     for p in range(3):
         for l in range(4):
             m = (cont_port == p) & (cont_line == l)
             u_days = cont_unload_day[m]
             ret_lag = np.maximum(0, np.round(obs_dray_empty_hold[m] + obs_depot_turnaway[m]).astype(int))
-            g_days = np.minimum(N_DAYS - 1, u_days + ret_lag)
-            daily_empty_unloads[p, l] = np.bincount(u_days, minlength=N_DAYS)
-            daily_empty_gateins[p, l] = np.bincount(g_days, minlength=N_DAYS)
+            g_days = u_days + ret_lag
+            assert int(g_days.max()) < N_PORTAL_DAYS, f"empty gate-in day {g_days.max()} >= {N_PORTAL_DAYS}"
+            daily_empty_unloads[p, l] = np.bincount(u_days, minlength=N_PORTAL_DAYS)
+            daily_empty_gateins[p, l] = np.bincount(g_days, minlength=N_PORTAL_DAYS)
             portal_confirmed[p, l] = daily_empty_gateins[p, l]
-            blocked_pool_t = np.zeros(N_DAYS, dtype=float)
+            blocked_pool_t = np.zeros(N_PORTAL_DAYS, dtype=float)
             b_idx = np.where(m & cont_quota_closed)[0]
             for bi in b_idx:
                 d0 = cont_unload_day[bi]
@@ -454,9 +494,9 @@ def simulate_world(seed=SEED):
                 n_whole = int(np.floor(dur))
                 frac = dur - n_whole
                 for k in range(n_whole):
-                    if d0 + k < N_DAYS:
+                    if d0 + k < N_PORTAL_DAYS:
                         blocked_pool_t[d0 + k] += 1.0
-                if d0 + n_whole < N_DAYS:
+                if d0 + n_whole < N_PORTAL_DAYS:
                     blocked_pool_t[d0 + n_whole] += frac
             lam_rej = np.maximum(0.0, blocked_pool_t * RETRY_RATE)
             raw_p = rng.poisson(lam_rej)
@@ -479,6 +519,7 @@ def simulate_world(seed=SEED):
     }
 
     world = {
+        "N_PORTAL_DAYS": N_PORTAL_DAYS,
         "cont_vessel": cont_vessel,
         "cont_port": cont_port,
         "cont_day": cont_day,
@@ -488,6 +529,8 @@ def simulate_world(seed=SEED):
         "cont_zone": cont_zone,
         "cont_line": cont_line,
         "cont_is_rail": cont_is_rail,
+        "cont_rolled_rail": cont_rolled_rail,
+        "cont_rail_excess": cont_rail_excess,
         "cont_ched": cont_ched,
         "cont_shuttle": cont_shuttle,
         "cont_bip_sampled": cont_bip_sampled,
@@ -720,9 +763,9 @@ def estimate_s1(w, mode="golden", cap_thresh=0.95, stat="mean", min_twins=1):
             np.maximum(0.0, u_p - 0.72) * (w["cont_port"] == 0),
             np.maximum(0.0, u_p - 0.72) * (w["cont_port"] == 1),
             np.maximum(0.0, u_p - 0.72) * (w["cont_port"] == 2),
-            (np.maximum(0.0, u_p - 0.83) ** 3) * (w["cont_port"] == 0),
-            (np.maximum(0.0, u_p - 0.83) ** 3) * (w["cont_port"] == 1),
-            (np.maximum(0.0, u_p - 0.83) ** 3) * (w["cont_port"] == 2),
+            (np.maximum(0.0, u_p - 0.85) ** 3) * (w["cont_port"] == 0),
+            (np.maximum(0.0, u_p - 0.85) ** 3) * (w["cont_port"] == 1),
+            (np.maximum(0.0, u_p - 0.85) ** 3) * (w["cont_port"] == 2),
         ])
         beta, _, _, _ = np.linalg.lstsq(X[uncapped], obs_yard[uncapped], rcond=None)
         base_pred = np.maximum(0.0, X @ beta)
@@ -929,15 +972,19 @@ def estimate_s3(w, mode="golden", rej_cut=1, stat="dc_day"):
     # GOLDEN & VARIANT FAMILY: exact same-DC, same-unload-day open-quota shipping-line contrast!
     closed = rej_c >= rej_cut
     open_q = rej_c == 0
+    n_pdays = rej_grid.shape[2]
+    n_pweeks = (n_pdays + 6) // 7
+    n_pforts = (n_pdays + 13) // 14
+    n_p5 = (n_pdays + 4) // 5
 
     if stat == "dc_fortnight":
-        key = w["cont_dc"] * 27 + (u_day // 14)
-        max_k = 4 * 27
+        key = w["cont_dc"] * n_pforts + (u_day // 14)
+        max_k = 4 * n_pforts
     elif stat == "dc_week":
-        key = w["cont_dc"] * 53 + (u_day // 7)
-        max_k = 4 * 53
+        key = w["cont_dc"] * n_pweeks + (u_day // 7)
+        max_k = 4 * n_pweeks
     elif stat == "ols_line":
-        t_rad = 2.0 * np.pi * u_day / 365.0
+        t_rad = 2.0 * np.pi * (u_day % N_DAYS) / 365.0
         cols = [(w["cont_dc"] == d).astype(float) for d in range(4)]
         cols += [((u_day % 7) == wd).astype(float) for wd in range(1, 7)]
         for h in (1, 2, 3, 4):
@@ -950,17 +997,17 @@ def estimate_s3(w, mode="golden", rej_cut=1, stat="dc_day"):
         retry_mult = float(rej_grid.sum() / max(blk.sum(), 1.0))
         return obs_dray - blk, obs_phys, blk, {"line_gap_h": gap_h, "retry_mult": retry_mult}
     elif stat == "stock_flow":
-        key = w["cont_dc"] * 74 + (u_day // 5)
-        max_k = 4 * 74
+        key = w["cont_dc"] * n_p5 + (u_day // 5)
+        max_k = 4 * n_p5
     else:
-        key = w["cont_dc"] * N_DAYS + u_day
-        max_k = 4 * N_DAYS
+        key = w["cont_dc"] * n_pdays + u_day
+        max_k = 4 * n_pdays
 
     dc_global = np.array([obs_dray[open_q & (w["cont_dc"] == d)].mean() for d in range(4)])
     base_stratum = np.full(max_k, np.nan)
     if stat == "median_dc_week":
-        key = w["cont_dc"] * 53 + (u_day // 7)
-        max_k = 4 * 53
+        key = w["cont_dc"] * n_pweeks + (u_day // 7)
+        max_k = 4 * n_pweeks
         base_stratum = np.full(max_k, np.nan)
         for k in range(max_k):
             vals = obs_dray[open_q & (key == k)]

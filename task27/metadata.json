@@ -1,0 +1,117 @@
+{
+ "as_of": "2027-01-19",
+ "decision": "2026 cold-chain excess container-day attribution and 2027 Mandatory Remediation funding allocation under Charter RC-2027",
+ "deliverables": [
+  "a CSV",
+  "a spreadsheet",
+  "a short slide deck"
+ ],
+ "distractor_files": [
+  "north_sea_bunker_fuel_index_2026.csv",
+  "german_toll_maut_rates_2026_2027.xlsx"
+ ],
+ "files": {
+  "bip_inspection_notices_2026.jsonl": {
+   "covers": "2026 EU TRACES border phytosanitary inspection electronic notices at CHED consignment level",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-12",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "carrier_dispute_closeout_2026.xlsx": {
+   "covers": "2026 counterparty commercial detention and demurrage dispute credit close-out workbook",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-12",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "coldstore_inventory_daily_2026.csv": {
+   "covers": "2026 daily facility-level pallet inventory on hand and capacity across the four inland cold stores",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-13",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "container_milestones_2026.csv": {
+   "covers": "2026 container-level import lifecycle timestamps, stage excess container-days, and TMS exception codes",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-14",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "customs_consignment_bol_2026.csv": {
+   "covers": "2026 customs bill-of-lading register linking containers to vessels, CHED lots, origins, and declared cargo weights",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-12",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "dc_chamber_register_2026.csv": {
+   "covers": "Inland distribution center thermal chamber bay capacities, temperature setpoints, and 2026 opening stocks",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-12-19",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "depot_portal_requests_2026.csv": {
+   "covers": "2026 daily port-by-ocean-line empty-container return portal booking confirmations and rejection counts",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-15",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "depot_turnin_log_2026.csv": {
+   "covers": "2026 physical empty-depot gate arrival and turn-in event log across North Sea port depots",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-14",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "entity_crosswalk_2026.csv": {
+   "covers": "Legacy-to-canonical identifier crosswalk for retail store codes and regional drayage carriers",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-09-18",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "german_toll_maut_rates_2026_2027.xlsx": {
+   "covers": "2026-2027 German federal Autobahn LKW-Maut per-km toll rates and port-to-DC highway distances",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-12-04",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "import_plan_2027.csv": {
+   "covers": "Approved 2027 Import Schedule operating-plan volume, terminal, cold-store, inspection, rail, and carrier factors",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-11-25",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "north_sea_bunker_fuel_index_2026.csv": {
+   "covers": "2026 weekly Rotterdam and Hamburg marine bunker fuel spot indices and EU ETS surcharges",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-08",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "rail_shuttle_departures_2026.csv": {
+   "covers": "2026 daily Nordbahn intermodal rail shuttle departures, booked and loaded slots, rollovers, wagon counts, and weighbridge tonnage",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-12",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "sku_thermal_catalog.csv": {
+   "covers": "Fresh-produce SKU catalog mapping SKUs to produce families, thermal zones, and case-to-pallet conversion factors",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-12-22",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "terminal_yard_daily_2026.csv": {
+   "covers": "2026 daily North Sea port terminal reefer-yard utilization, container lifts, and crane hours",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-11",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "warehouse_pallet_movements_2026.csv": {
+   "covers": "2026 daily SKU-level inbound and outbound warehouse movements across all four inland cold stores",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2027-01-13",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  },
+  "weserfrucht_remediation_charter_rc2027.pdf": {
+   "covers": "Weserfrucht Cold-Chain Detention, Demurrage and Remediation Charter RC-2027 defining scope, causes, tariffs, threshold, and filing schema",
+   "license": "proprietary, fictional organisation",
+   "pulled": "2026-11-18",
+   "source": "generated deterministically by the build's physical North Sea refrigerated import network simulator (Weserfrucht Import GmbH, seed 2701; no external or public data)"
+  }
+ }
+}

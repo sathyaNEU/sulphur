@@ -6,13 +6,15 @@
   "subdomain": "trade-flows",
   "objective": "root-cause",
   "doctrine": "throughout",
-  "status": "DESIGN",
-  "stage": 2,
+  "status": "READY",
+  "stage": 5,
   "drawn": "2026-11-22",
+  "updated": "2026-11-22",
+  "call": "REMEDIATE vessel_berth (4,530), coldstore_dock (3,367), drayage_carrier (3,213), reefer_plug (3,150), empty_depot (3,053) [17,313 c-days, EUR 3.721M avoidable]; MONITOR phyto_insp (2,058), rail_handoff (1,734), edi_docs (957) [22,062 total, EUR 4.693M]",
   "precut": {
     "exit": 0,
     "date": "2026-11-22",
-    "summary": "PASS task27: 118 checks, 0 FAIL, 4 WARN"
+    "summary": "PASS task27: 118 checks, 0 FAIL, 2 WARN"
   },
   "core": {
     "level": 5,
@@ -26,6 +28,37 @@
     "fail": 0,
     "warn": 0
   },
-  "resume": "/build task27 from 3",
-  "notes": "Stage 2 DESIGN complete for Weserfrucht Import GmbH (North Sea cold-chain root-cause attribution and 2027 Mandatory Remediation plan). Ready for Stage 3 pack and golden execution."
+  "effort": {
+    "exit": 0,
+    "quick": 13.9,
+    "careful": 20.8,
+    "single_stump_lost_max": 37,
+    "thorough": 100.0
+  },
+  "leak": {
+    "mechanical": "REVIEW (0 LEAK; 3 harmless Charter REVIEWs)",
+    "reader_pass1": "0 leaks; 5 realism tells fixed in core.py and pack.py",
+    "reader_pass2": "0 leaks, 0 helper-only, 0 Gate G, 0 single-thing shortcuts, all 5 high-severity realism tells resolved"
+  },
+  "duplicate_check": {
+    "heart": "PASS (max driver sim 0.06 vs task26)",
+    "surface": "PASS",
+    "skeleton": "PASS (severity none; 0 closed/closed-near lessons)"
+  },
+  "containers": {
+    "exit": 0,
+    "fail": 0,
+    "warn": 0
+  },
+  "judge": {
+    "pass1": "DETERMINISTIC / FIX_NOW (4 solution-only Step-by-Step completeness polishes applied)",
+    "pass2": "DETERMINISTIC / APPROVE (44 forks + 144 core / 576 wide joint combinations; 0 flips; 0/144 out of band; Fix: none)"
+  },
+  "md5": {
+    "prompt.txt": "bd05c3bd65fcf66df3baed87a54ed1ed",
+    "target.zip": "1a74002ae46b2d0fcc1b88ecaab7a3ea",
+    "golden.zip": "1a0823c0b611f1a00a76290118977186"
+  },
+  "resume": "/triage-runs task27",
+  "notes": "Stage 5 READY complete for Weserfrucht Import GmbH (task27). All 11 free gates, container audit (0 FAIL/0 WARN), byte-identical double rebuild, Stage 4 Pass 2 leak-reader (0 leaks), and determinism-judge Pass 2 (DETERMINISTIC / APPROVE) passed."
 }

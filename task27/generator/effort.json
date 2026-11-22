@@ -1,0 +1,998 @@
+{
+  "factorial": {
+    "golden_answer": [
+      "coldstore_dock",
+      "drayage_carrier",
+      "empty_depot",
+      "reefer_plug",
+      "vessel_berth"
+    ],
+    "judgments": [
+      {
+        "alone": {
+          "answer": [
+            "coldstore_dock",
+            "drayage_carrier",
+            "rail_handoff",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_rescued": [
+            "R2"
+          ]
+        },
+        "dropped": {
+          "answer": [
+            "drayage_carrier",
+            "empty_depot",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_moved": [
+            "R2",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "id": "S1",
+        "kind": "stump",
+        "name": "Per-chamber stock-flow and same-vessel twin port-dwell split",
+        "precedent": [
+          "L26",
+          "L28",
+          "L38",
+          "N36"
+        ]
+      },
+      {
+        "alone": {
+          "answer": [
+            "drayage_carrier",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_rescued": [
+            "R3"
+          ]
+        },
+        "dropped": {
+          "answer": [
+            "coldstore_dock",
+            "drayage_carrier",
+            "empty_depot",
+            "rail_handoff",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_moved": [
+            "R3",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "id": "S2",
+        "kind": "stump",
+        "name": "Post-T-24h CHED locked empty rail-wagon slot and weighbridge mass conservation",
+        "precedent": [
+          "L03",
+          "L07",
+          "L48",
+          "N07"
+        ]
+      },
+      {
+        "alone": {
+          "answer": [
+            "drayage_carrier",
+            "empty_depot",
+            "rail_handoff",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_rescued": [
+            "R4"
+          ]
+        },
+        "dropped": {
+          "answer": [
+            "coldstore_dock",
+            "drayage_carrier",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "results_moved": [
+            "R4",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "id": "S3",
+        "kind": "stump",
+        "name": "Same-DC same-day shipping-line empty-return contrast and retry stock-flow conservation",
+        "precedent": [
+          "N14",
+          "N27",
+          "L56",
+          "L57"
+        ]
+      },
+      {
+        "id": "R_L1",
+        "kind": "reflex",
+        "name": "Layer 1 operational hygiene (dedup, VOID, mixed dates, CASE/PALLET, crosswalks)",
+        "precedent": [
+          "R01",
+          "R02"
+        ]
+      },
+      {
+        "id": "R_sib",
+        "kind": "reflex",
+        "name": "Direct CHED lot-sibling container join",
+        "precedent": [
+          "R13",
+          "R14"
+        ]
+      }
+    ],
+    "reflex_route": {
+      "answer": [
+        "drayage_carrier",
+        "rail_handoff",
+        "reefer_plug",
+        "vessel_berth"
+      ]
+    }
+  },
+  "forcing": {
+    "golden_answer": [
+      "coldstore_dock",
+      "drayage_carrier",
+      "empty_depot",
+      "reefer_plug",
+      "vessel_berth"
+    ],
+    "golden_family": [
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: same-vessel median"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: same-vessel 10% trimmed mean"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: port-day fixed effects"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: port-week fixed effects"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: nonlinear OLS yard curve"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: chamber threshold 94.5%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S1: chamber threshold 95.5%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: fixed 24h lock + slot balance"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: 22h lock + slot balance"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: 26h lock + slot balance"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: empirical lock + weighbridge mass scale"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: empirical lock + slot OLS"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: empirical lock + per-corridor OLS"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S2: empirical lock + Huber robust regression"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: same-DC weekly open-line contrast"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: same-DC fortnight open-line contrast"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: open-line 4-harmonic Fourier OLS"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: 5-day rolling stock-flow window"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: same-DC weekly median"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "S3: portal rejection cutoff >= 2"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "Joint: OLS yard + Huber rail + Fourier line"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "name": "Joint: port-week FE + corridor OLS + DC-week"
+      }
+    ],
+    "kind": "set",
+    "perturbations": [
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S1 pullback -20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S1 pullback +20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S2 locked-slot -20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S2 locked-slot +20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S3 portal-block -20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "S3 portal-block +20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "All baseline -20%"
+      },
+      {
+        "answer": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ],
+        "input": "All baseline +20%"
+      }
+    ]
+  },
+  "hints": [
+    {
+      "rescues": [
+        "R2"
+      ],
+      "sentence": "Containers bound for an inland cold store whose specific thermal chamber is full are held back at the port under TERM_YARD_HOLD rather than delayed by port plugs."
+    },
+    {
+      "rescues": [
+        "R3"
+      ],
+      "sentence": "Rail slots booked for co-loaded CHED lots frozen by late border inspections stay physically empty on departing trains and bump cleared standby boxes."
+    },
+    {
+      "rescues": [
+        "R4"
+      ],
+      "sentence": "Empty reefers sitting in drayage yards are blocked by shipping-line depot portal quotas whose rejection log lacks container IDs and records repeated daily retries."
+    }
+  ],
+  "results": [
+    {
+      "band": [
+        19708,
+        19718
+      ],
+      "depends": [],
+      "figure": "R1_settled_total",
+      "golden": 19713,
+      "graded_as": "Ask 1 (base)",
+      "id": "R1",
+      "independent": "raw 2026 milestones, warehouse pallets, and turn-in logs",
+      "name": "Reconciled 2026 settled excess container-days",
+      "partly": [
+        19363,
+        20063
+      ],
+      "passes": {
+        "careful": 19713,
+        "quick": 19923,
+        "thorough": 19713
+      }
+    },
+    {
+      "band": [
+        3086,
+        3386
+      ],
+      "depends": [
+        "R1"
+      ],
+      "figure": "C1_coldstore_dock",
+      "golden": 3367,
+      "graded_as": "Component 1",
+      "id": "R2",
+      "independent": "daily SKU pallet movements, chamber register, and same-vessel twins",
+      "name": "Cold-store dock 2027 attribution (S1)",
+      "partly": [
+        2600,
+        3800
+      ],
+      "passes": {
+        "careful": 1986,
+        "quick": 1357,
+        "thorough": 3367
+      },
+      "precedent": [
+        "L26",
+        "L28",
+        "L38",
+        "N36"
+      ]
+    },
+    {
+      "band": [
+        1628,
+        1819
+      ],
+      "depends": [
+        "R1"
+      ],
+      "figure": "C2_rail_handoff",
+      "golden": 1734,
+      "graded_as": "Component 2",
+      "id": "R3",
+      "independent": "CHED notices, shuttle slot shortfalls, and shared-train weighbridges",
+      "name": "Intermodal rail handoff 2027 attribution (S2)",
+      "partly": [
+        1500,
+        2350
+      ],
+      "passes": {
+        "careful": 2620,
+        "quick": 2797,
+        "thorough": 1734
+      },
+      "precedent": [
+        "L11",
+        "N25",
+        "L48",
+        "N07"
+      ]
+    },
+    {
+      "band": [
+        3015,
+        3125
+      ],
+      "depends": [
+        "R1"
+      ],
+      "figure": "C3_empty_depot",
+      "golden": 3053,
+      "graded_as": "Component 3",
+      "id": "R4",
+      "independent": "unlinked depot portal rejections and same-DC same-day shipping-line returns",
+      "name": "Empty depot intake 2027 attribution (S3)",
+      "partly": [
+        2600,
+        3800
+      ],
+      "passes": {
+        "careful": 947,
+        "quick": 947,
+        "thorough": 3053
+      },
+      "precedent": [
+        "N14",
+        "N27",
+        "L56",
+        "L57"
+      ]
+    },
+    {
+      "bands": {
+        "F1_twin_gap_h": [
+          19.0,
+          21.5
+        ],
+        "F2_tonnes_per_slot": [
+          -31.5,
+          -26.5
+        ],
+        "F3_line_gap_h": [
+          9.5,
+          11.8
+        ],
+        "F3_retry_mult": [
+          4.0,
+          4.7
+        ],
+        "contrast_cdays_26": [
+          3637.2,
+          3997.2
+        ]
+      },
+      "depends": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "figure": "R5_diagnostics",
+      "golden": {
+        "F1_rigorous_h": 0.52,
+        "F1_twin_gap_h": 20.1,
+        "F2_rigorous_t": 0.0,
+        "F2_tonnes_per_slot": -28.01,
+        "F3_line_gap_h": 10.61,
+        "F3_retry_mult": 4.25,
+        "F3_rigorous_h": 0.0,
+        "contrast_cdays_26": 3817.19,
+        "cs_pb_26": 1616.67,
+        "ed_blk_26": 1242.01,
+        "empiric_lock_h": 24,
+        "mean_rolled_cdays": 2.2717,
+        "mean_unrolled_cdays": 0.0214,
+        "measured_reefer_tonnes": 28.52,
+        "measured_rollover_days": 2.25,
+        "non_bip_sf_vs_booked_t": -3.15,
+        "non_bip_sf_vs_loaded_t": 0.65,
+        "ph_bump_26": 958.5,
+        "phyto_sibling_rail_26": 191.39,
+        "s1_lt95_cdays_26": 1616.34,
+        "s1_twin_cap_pct": 92,
+        "s2_total_26": 1149.89,
+        "s3_rej_per_box": 1.88
+      },
+      "graded_as": "Ask 1 (diagnostics)",
+      "id": "R5",
+      "independent": "",
+      "name": "Native-unit physical conservation diagnostics",
+      "partly_share": 0.6,
+      "passes": {
+        "careful": {
+          "F1_twin_gap_h": 0.52,
+          "F2_tonnes_per_slot": 0.0,
+          "F3_line_gap_h": 0.0,
+          "F3_retry_mult": 0.0,
+          "contrast_cdays_26": 520.59
+        },
+        "quick": {
+          "F1_twin_gap_h": 0.0,
+          "F2_tonnes_per_slot": 0.0,
+          "F3_line_gap_h": 0.0,
+          "F3_retry_mult": 0.0,
+          "contrast_cdays_26": 0.0
+        },
+        "thorough": {
+          "F1_rigorous_h": 0.52,
+          "F1_twin_gap_h": 20.1,
+          "F2_rigorous_t": 0.0,
+          "F2_tonnes_per_slot": -28.01,
+          "F3_line_gap_h": 10.61,
+          "F3_retry_mult": 4.25,
+          "F3_rigorous_h": 0.0,
+          "contrast_cdays_26": 3817.19,
+          "cs_pb_26": 1616.67,
+          "ed_blk_26": 1242.01,
+          "empiric_lock_h": 24,
+          "mean_rolled_cdays": 2.2717,
+          "mean_unrolled_cdays": 0.0214,
+          "measured_reefer_tonnes": 28.52,
+          "measured_rollover_days": 2.25,
+          "non_bip_sf_vs_booked_t": -3.15,
+          "non_bip_sf_vs_loaded_t": 0.65,
+          "ph_bump_26": 958.5,
+          "phyto_sibling_rail_26": 191.39,
+          "s1_lt95_cdays_26": 1616.34,
+          "s1_twin_cap_pct": 92,
+          "s2_total_26": 1149.89,
+          "s3_rej_per_box": 1.88
+        }
+      },
+      "precedent": [
+        "L28",
+        "L48"
+      ]
+    },
+    {
+      "bands": {
+        "bhv_2027": [
+          10599,
+          10704
+        ],
+        "ham_2027": [
+          8187,
+          8252
+        ],
+        "q3_2027": [
+          8547,
+          8686
+        ],
+        "total_2027": [
+          22001,
+          22131
+        ]
+      },
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "figure": "R6_bundle",
+      "golden": {
+        "bhv_2027": 10647,
+        "ham_2027": 8216,
+        "q3_2027": 8580,
+        "total_2027": 22062
+      },
+      "graded_as": "Ask 2",
+      "id": "R6",
+      "independent": "",
+      "name": "2027 network, BHV, HAM, and Q3 projections",
+      "partly_share": 0.5,
+      "passes": {
+        "careful": {
+          "bhv_2027": 9667,
+          "ham_2027": 7710,
+          "q3_2027": 7594,
+          "total_2027": 20250
+        },
+        "quick": {
+          "bhv_2027": 9667,
+          "ham_2027": 7710,
+          "q3_2027": 7594,
+          "total_2027": 20250
+        },
+        "thorough": {
+          "bhv_2027": 10647,
+          "ham_2027": 8216,
+          "q3_2027": 8580,
+          "total_2027": 22062
+        }
+      },
+      "precedent": [
+        "L26",
+        "L57"
+      ]
+    },
+    {
+      "bands": {
+        "avoidable_eur_m": [
+          3.681,
+          3.739
+        ],
+        "cost_eur_m": [
+          4.654,
+          4.725
+        ],
+        "remed_days": [
+          17252,
+          17354
+        ]
+      },
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R6"
+      ],
+      "figure": "R7_bundle",
+      "golden": {
+        "avoidable_eur_m": 3.721,
+        "cost_eur_m": 4.693,
+        "remed_days": 17313
+      },
+      "graded_as": "Ask 3",
+      "id": "R7",
+      "independent": "",
+      "name": "2027 detention and demurrage EUR exposure",
+      "partly_share": 0.5,
+      "passes": {
+        "careful": {
+          "avoidable_eur_m": 3.077,
+          "cost_eur_m": 3.945,
+          "remed_days": 16493
+        },
+        "quick": {
+          "avoidable_eur_m": 3.077,
+          "cost_eur_m": 3.944,
+          "remed_days": 16493
+        },
+        "thorough": {
+          "avoidable_eur_m": 3.721,
+          "cost_eur_m": 4.693,
+          "remed_days": 17313
+        }
+      },
+      "precedent": [
+        "L11",
+        "L63"
+      ]
+    },
+    {
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R6",
+        "R7"
+      ],
+      "figure": "R8_call",
+      "golden": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "empty_depot",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "graded_as": "Recommendation",
+      "id": "R8",
+      "independent": "",
+      "name": "Ranked 2027 Mandatory Remediation slate",
+      "passes": {
+        "careful": {
+          "grade": "missed",
+          "value": [
+            "drayage_carrier",
+            "rail_handoff",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "why": "Reflex route misses coldstore_dock and empty_depot and mis-designates rail_handoff."
+        },
+        "quick": {
+          "grade": "missed",
+          "value": [
+            "drayage_carrier",
+            "rail_handoff",
+            "reefer_plug",
+            "vessel_berth"
+          ],
+          "why": "Direct TMS misses coldstore_dock and empty_depot and mis-designates rail_handoff."
+        },
+        "thorough": [
+          "coldstore_dock",
+          "drayage_carrier",
+          "empty_depot",
+          "reefer_plug",
+          "vessel_berth"
+        ]
+      },
+      "precedent": [
+        "L26",
+        "L57"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "empty_depot",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "golden": true,
+      "name": "the golden"
+    },
+    {
+      "answer": [
+        "drayage_carrier",
+        "rail_handoff",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "direct TMS codes / reflex"
+    },
+    {
+      "answer": [
+        "drayage_carrier",
+        "rail_handoff",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "rigorous standard (total DC + direct CHED siblings)"
+    },
+    {
+      "answer": [
+        "drayage_carrier",
+        "empty_depot",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "S1 dropped alone"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "empty_depot",
+        "rail_handoff",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "S2 dropped alone"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "S3 dropped alone"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "empty_depot",
+        "vessel_berth"
+      ],
+      "name": "S1 over-corrected (unnetted)"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "empty_depot",
+        "phyto_insp",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "S2 over-corrected (all BIP shuttles)"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "empty_depot",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "S3 over-corrected (raw rejections)"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "empty_depot",
+        "phyto_insp",
+        "vessel_berth"
+      ],
+      "name": "generous run route"
+    },
+    {
+      "answer": [
+        "empty_depot",
+        "phyto_insp",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "cutoff run route"
+    },
+    {
+      "answer": [
+        "coldstore_dock",
+        "drayage_carrier",
+        "reefer_plug",
+        "vessel_berth"
+      ],
+      "name": "2026 history unprojected"
+    }
+  ],
+  "weights": {
+    "asks": 55,
+    "components": 24,
+    "instruction": 7,
+    "recommendation": 14
+  }
+}
