@@ -1267,14 +1267,17 @@ def build_spec(world=None):
             "S1": {
                 "axis": "unit", "opens": "Drangvik", "steps_left": 5, "precedents": ["L22", "L24", "L58"],
                 "said_out_loud": "Substation 15-minute active peaks depend on cross-feeder synchronization hidden under seasonal register modulation and shared customer-class hourly shapes.",
+                "sides": {"over": {s: rivals["s1_linear_sum"][s]["loading_pct"] for s in TARGETS}},
             },
             "S2": {
                 "axis": "what", "opens": "Kvernholm", "steps_left": 5, "precedents": ["L16", "L43", "L44", "L48"],
                 "said_out_loud": "Peak-hour reactive demand is hidden behind winter fixed capacitors and peak-only switched capacitors and must be inverted simultaneously along all four 66 kV corridors including upstream modernized hubs.",
+                "sides": {"over": {s: rivals["s2_local_dv"][s]["loading_pct"] for s in TARGETS}},
             },
             "S3": {
                 "axis": "who", "opens": "Raudfjord", "steps_left": 5, "precedents": ["L28", "L56", "L57"],
                 "said_out_loud": "Evening-peak heaviest-phase load share across AMI and unmetered legacy laterals must be inverted from multi-class three-phase bus voltage-sag regression using AMI-metered per-class reactive impedance ratios.",
+                "sides": {"over": {s: rivals["s3_even_zres"][s]["loading_pct"] for s in TARGETS}},
             },
         },
         "lattice": {k: {s: v[s]["loading_pct"] for s in TARGETS} for k, v in lat_res.items()},
