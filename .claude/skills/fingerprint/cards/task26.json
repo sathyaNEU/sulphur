@@ -1,17 +1,17 @@
 {
   "task": "task26",
   "project": "sulfur",
-  "architecture": "v1",
+  "architecture": "v2",
   "drawn": "2026-11-21",
-  "slot_note": "",
+  "slot_note": "v2 multi-step observation-process upgrade after v1 rollouts solved directly-shipped feeder PQ / HV voltage / 100% AMI telemetry",
   "domain": "energy-systems-utilities",
   "subdomain": "distribution-losses-energy-balance",
-  "niche": "conformed substation 15-minute limiting-phase apparent peak loading from hourly SCADA, monthly feeder demand registers, transformer voltage-drop telemetry, and lateral phase-voltage logs",
+  "niche": "conformed substation 15-minute limiting-phase apparent peak loading from regional-stripped hourly feeder innovation correlation, coupled 66 kV sub-transmission corridor impedance inversion, and PT-free three-phase bus voltage-sag slope",
   "objective": "etl",
   "shape": "06",
   "decision_type": "schedule_or_sequence",
   "answer_unit": "set_of_items",
-  "answer": "Phase 1 (2027): Hestmark (146.2%, 52.94 MVA), Raudfjord (110.7%, 39.84 MVA), Kvernholm (108.6%, 40.20 MVA); Phase 2 (2028-2029): Malmnes (95.1%, 36.12 MVA), Drangvik (94.6%, 40.19 MVA), Svarthaug (92.8%, 31.35 MVA); Defer: Tverrli (68.5%, 31.50 MVA); Total relief needed: 50.67 MVA",
+  "answer": "Phase 1 (2027): Hestmark (147.41%, 53.36 MVA), Raudfjord (119.13%, 42.17 MVA), Kvernholm (107.44%, 40.18 MVA), Drangvik (106.30%, 47.41 MVA); Phase 2 (2028-2029): Malmnes (95.85%, 40.26 MVA), Svarthaug (91.33%, 33.98 MVA); Defer: Tverrli (73.85%, 34.71 MVA); Total relief needed: 59.48 MVA",
   "answer_source": "task26/generator/figures.json",
   "gap": [
     "objective",
@@ -33,8 +33,8 @@
   "validated_decoy": false,
   "context_artifact": "capacity_report",
   "stump_class": "analytical",
-  "analyst_test": "After cleaning all extracts and reconciling keys, a careful analyst in a hurry takes the hourly SCADA peak (or applies hourly coincidence to monthly feeder 15-minute registers), converts MW to MVA with monthly net kVARh power factor (or nominal class power factors), and reads phase balance from the GIS asset table, misplacing five of seven substations across the 2027 urgent, 2028-2029 staged, and defer schedule tiers.",
-  "domain_test": "Every decisive quantity is a three-phase electric distribution substation calculation (15-minute coincident active demand aggregated across feeders in correlated quadrature, peak-hour reactive power inverted from transformer impedance voltage drop and LTC tap steps demeaned against monthly net kVARh, and physical limiting-phase loading identified from common-mode-rejected lateral voltage differentials); swapping substations for stores or clinics breaks the physics entirely.",
+  "analyst_test": "After cleaning all extracts and reconciling keys, a careful analyst in a hurry takes 60-minute SCADA peaks (or pooled coincidence / class-share OLS without recovering latent feeder synchronization), uses monthly net kVARh or nominal class power factors (or local single-site transformer dV ignoring upstream 66 kV corridor coupling), and relies on GIS phase tags or partial-coverage 20/36 AMI telemetry (which passes 80/80 on the commissioning tracer check while missing opposite skew on the 16 non-AMI legacy laterals), misplacing three to five of seven substations.",
+  "domain_test": "Every decisive quantity is a three-phase electric distribution engineering calculation: regional-stripped feeder innovation correlation aggregated in correlated quadrature against main-bay 15-minute PQ archives, simultaneous radial 66 kV corridor impedance linear systems coupled from Grid Supply Points through shared line R/X and local LTC taps demeaned against monthly net kVARh, and PT-free three-phase LV bus voltage-sag load-slope inversion canceling balanced shunt capacitors and static PT offsets; swapping substations for warehouses or clinics destroys every physical equation.",
   "layer2_family": "field_method",
   "layer2_pattern": "own:substation_peak_apparent_limiting_phase_conformation",
   "layer1": [
@@ -50,7 +50,7 @@
   "spine": {
     "file": "scada_substation_hourly_2026.csv",
     "rows": 96360,
-    "entity": "one substation-hour of archived 60-minute SCADA active energy, HV/LV bus voltages, and LTC tap position",
+    "entity": "one substation-hour of archived 60-minute SCADA active energy, 22 kV LV bus voltage, and LTC tap position",
     "grain": "substation x hour",
     "source": "synthetic"
   },
@@ -73,7 +73,9 @@
       "Raudfjord",
       "Solberg",
       "Svarthaug",
-      "Tverrli"
+      "Tverrli",
+      "GSP-Nord",
+      "GSP-Sor"
     ],
     "people": [
       "Espen Eide",
@@ -90,9 +92,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "when",
-  "driver": "Each unit's capacity-schedule tier depends on a short-interval, two-component, worst-channel peak that no single operational feed records: the main archive integrates over a coarse window while sub-unit peak registers lack timestamps so short-interval surges must be aggregated by sub-interval correlation rather than coarse coincidence; the second orthogonal component cancels opposite-signed off-peak and on-peak flows in its monthly net register and must be inverted from an impedance drop demeaned against the net total to remove transducer offset; and channel assignments in the master register have drifted from physical reality so each sub-unit's channel must be inferred from common-mode-rejected differential telemetry and summed at the peak hour rather than over annual totals.",
-  "driver_concrete": "Each substation's 2027-2029 relief schedule tier depends on its peak 15-minute limiting-phase apparent load (MVA), reconstructed by (1) aggregating monthly non-coincident feeder 15-minute excesses onto 60-minute SCADA peaks in correlated quadrature calibrated on four modernized reference substations, (2) inverting peak-hour reactive power from HV/LV bus voltage drop across transformer impedance and LTC taps demeaned against monthly net kVARh, and (3) identifying each single-phase lateral's true physical phase from common-mode-rejected AMI-to-substation voltage differentials rather than stale GIS phase tags.",
-  "stump": "A careful solver uses hourly SCADA peaks (or hourly coincidence times feeder 15-min registers), monthly net kVARh (or class nominal) power factors, and GIS phase tags, misplacing five of seven substations across the 2027 urgent, 2028-2029 staged, and defer schedule tiers.",
+  "driver": "Each unit's capacity-schedule tier depends on a short-interval, two-component, worst-channel peak hidden behind three coupled observation processes: sub-unit peak registers lack timestamps and cluster labels so latent cross-feeder synchronization must be recovered from hourly residuals after stripping regional diurnal-weather factors and combined in correlated quadrature; the orthogonal component cancels opposite-signed flows in monthly net registers while upstream supply voltages are metered only at regional supply points so all units sharing a radial corridor must be solved simultaneously through shared line and transformer impedances demeaned against monthly net totals; and partial sub-unit telemetry passes its own commissioning audit at 100% while hiding opposite channel skew in the unmetered legacy pool, requiring total channel share inversion from load-driven differential bus voltage sag.",
+  "driver_concrete": "Each substation's 2027-2029 relief schedule tier depends on its peak 15-minute limiting-phase apparent load (MVA), reconstructed by (1) stripping four regional diurnal-weather SVD modes from hourly feeder SCADA to isolate pairwise feeder innovation correlation R_ij (distinguishing synchronized clusters from staggered feeders of identical class) and combining monthly feeder 15-minute excesses in correlated quadrature calibrated on four modernized reference sites, (2) solving coupled radial 66 kV sub-transmission corridor impedance linear systems from GSP-Nord and GSP-Sor through shared 66 kV line impedances and local LTC taps jointly demeaned against monthly net kVARh, and (3) inverting total heaviest-phase load share from the PT-free load-driven 3-phase LV bus voltage-sag slope calibrated on the four modernized sites' 3-phase main-bay PQ archive rather than drifted GIS tags or partial 20/36 AMI telemetry.",
+  "stump": "Careful solvers use hourly SCADA or pooled/class-OLS diversity factors (missing latent feeder synchronization), net kVARh / class PFs / local single-site GSP voltage drop (missing coupled 66 kV corridor impedance), and GIS tags or self-confirming 20/36 AMI telemetry (missing opposite skew in the 16 non-AMI legacy laterals), misplacing three to five of seven substations and failing the 4-site blind reference check by 5.0x to 38.7x.",
   "answer_shape": "schedule-capacity",
   "weight": "synthesis",
   "chain_signature": [
@@ -103,29 +105,30 @@
     "validation",
     "synthesis"
   ],
-  "results": "R1 conformed multi-system substation, feeder, and lateral extracts; R2 15-minute coincident active demand by substation; R3 peak-hour reactive demand inverted from transformer voltage drop and monthly net kVARh; R4 physical phase identification and peak-hour limiting-phase share by substation; R5 validation on the four modernized reference substations; R6 peak 15-minute limiting-phase MVA, firm loading %, relief capacity needed, and 2027-2029 relief schedule.",
-  "one_fact_test": "Monthly net kVARh cancels nighttime leading capacitor reactive power against winter-peak lagging motor reactive power; rescues R3 alone (1 of 6 results, 16 rubric points).",
+  "results": "R1 conformed multi-system substation, GSP, 66 kV corridor, feeder, meter, asset, and AMI extracts; R2 15-minute coincident active demand via stripped innovation correlation; R3 peak-hour reactive demand via coupled 66 kV corridor impedance inversion; R4 total heaviest-phase share via PT-free 3-phase LV bus sag slope; R5 blind validation on the four modernized reference substations; R6-R8 limiting-phase MVA, firm loading %, relief MVA, and 2027-2029 relief schedule.",
+  "one_fact_test": "Zone substations share radial 66 kV corridors from GSP-Nord and GSP-Sor so local single-site dV fails unless coupled across each corridor and demeaned against monthly net kVARh; rescues R3 alone (1 of 8 results, 16 rubric points).",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {},
   "lineage": [],
-  "notes": "task26 architecture 1 (core.py CORE PASS level 5, FORCING PASS, 21 variants)",
+  "notes": "task26 v2 (core.py CORE PASS level 5, FORCING PASS, 31 variants, 21 rivals all 5.0x-38.7x golden MAE 1.01 pp)",
   "skeleton": {
     "decision_form": "timing_or_schedule_choice",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
       "non_additive_aggregation",
-      "cancellation_of_offsetting_effects",
       "asynchronous_measurement_covariance",
-      "support_effect"
+      "position_on_network_effect",
+      "cancellation_of_offsetting_effects",
+      "unlabelled_pool_apportioned_by_varying_mix"
     ],
     "mechanisms": [
-      "hourly_block_scada_smooths_sub_hourly_peaks",
-      "independent_feeder_15min_surges_aggregate_in_quadrature",
+      "regional_stripped_feeder_innovations_reveal_latent_synchronization_clusters",
+      "correlated_quadrature_aggregates_non_coincident_feeder_15min_registers",
+      "coupled_radial_66kv_corridor_impedance_systems_invert_peak_reactive_power",
       "nighttime_leading_capacitors_cancel_peak_lagging_mvar_in_net_kvarh",
-      "transformer_impedance_voltage_drop_demeaned_recovers_hourly_q",
-      "unrecorded_storm_rephasing_drifts_gis_phase_tags",
-      "common_mode_rejected_lateral_voltage_differentials_identify_phase"
+      "partial_ami_coverage_passes_own_tracer_audit_while_hiding_legacy_phase_skew",
+      "pt_free_three_phase_bus_voltage_sag_slope_inverts_total_phase_share"
     ],
     "detection": [
       "second_source_at_other_grain",

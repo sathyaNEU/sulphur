@@ -1,9 +1,8 @@
 """Compute every owed figure strictly from the cut pack under target/, re-prove corelib.run(spec) on the
-shipped files, and emit figures.json and effort.json.
+shipped files, and emit figures.json and effort.json (v2).
 
     python3 task26/generator/results.py
 """
-import itertools
 import json
 import math
 import os
@@ -47,14 +46,12 @@ def band_of(gold_val, fam_vals, step):
 def run(target_dir):
     pack_world, stats = A.load_pack(target_dir)
 
-    # Also build corelib spec on the cut pack (for target truth verification, compare against pack_world +
-    # simulator truth only inside corelib's 'truth' check; all estimated quantities come 100% from pack_world!)
+    # Target truth attached solely for corelib's golden-vs-truth call check; every estimated quantity comes 100% from pack_world!
     sim_world = C.simulate()
     for s in TARGETS:
         pack_world["subs"][s]["truth"] = sim_world["subs"][s]["truth"]
 
-    # Run corelib on pack_world
-    spec, _w, gold_res, lat_res, dir_res, rig_res, ref_p = C.build_spec(pack_world)
+    spec, _w, gold_res, lat_res, dir_res, rig_res, ref_p, rivals = C.build_spec(pack_world)
     code = corelib.run(spec)
     assert code == 0, "corelib failed on cut pack!"
 
@@ -68,23 +65,29 @@ def run(target_dir):
     quick_res, _ = C.evaluate(raw_world, C.DIRECT)
     quick_p60_sum = round(sum(float(raw_world["subs"][s]["sub_p60"].max()) for s in TARGETS), 2)
 
-    # Clean R1 SCADA 60-min peak sum
     r1_p60_by_sub = {s: round(float(pack_world["subs"][s]["sub_p60"].max()), 2) for s in TARGETS}
     r1_p60_sum = round(sum(float(pack_world["subs"][s]["sub_p60"].max()) for s in TARGETS), 2)
 
-    # Verify phase-ID accuracy on the 144 field-traced reference laterals
+    # Verify AMI phase-ID accuracy on the 80 field-traced AMI laterals (20 x 4 modernized sites)
     ref_tracer_matched = 0
     ref_tracer_total = 0
     gis_tracer_matched = 0
     for r in REFS:
         sd = pack_world["subs"][r]
-        probs = C._identify_phases(sd, {})
-        pred = np.argmax(probs, axis=1)
-        ref_tracer_matched += int((pred == sd["lat_true_ph"]).sum())
-        gis_tracer_matched += int((sd["lat_gis_ph"] == sd["lat_true_ph"]).sum())
-        ref_tracer_total += len(sd["lat_true_ph"])
+        pred = C._identify_ami_phases(sd)
+        ami_gis = sd["lat_gis_ph"][sd["lat_is_ami"]]
+        ref_tracer_matched += int((pred == sd["ami_true_ph"]).sum())
+        gis_tracer_matched += int((ami_gis == sd["ami_true_ph"]).sum())
+        ref_tracer_total += len(sd["ami_true_ph"])
 
-    # Compute exact bands from the 21-variant battery
+    # Inferred innovation correlation summary across Lindberg (synced) vs Fossheim (staggered)
+    R_gold = C._infer_feeder_corr_matrices(pack_world, {})
+    lb_R = R_gold["Lindberg"][:6, :6]
+    fh_R = R_gold["Fossheim"][:6, :6]
+    rho_sync_lb = float(lb_R[~np.eye(6, dtype=bool)].mean())
+    rho_stag_fh = float(fh_R[~np.eye(6, dtype=bool)].mean())
+
+    # Exact bands from the 25-variant battery
     g_c1, g_c2, g_c3 = C._agg_components(gold_res)
     f_c1 = [C._agg_components(fr)[0] for fr in fam_only]
     f_c2 = [C._agg_components(fr)[1] for fr in fam_only]
@@ -102,29 +105,12 @@ def run(target_dir):
     rel_tot_gold = sum(gold_res[s]["relief_mva"] for s in TARGETS)
     rel_tot_band = band_of(rel_tot_gold, [sum(fr[s]["relief_mva"] for s in TARGETS) for fr in fam_only], 0.1)
 
-    # Extra rivals for referee & routes table
-    flat_res, _ = C.evaluate(pack_world, {"s1_mode": "flat_ratio"})
-    rawdv_res, _ = C.evaluate(pack_world, {"s2_mode": "raw_dv_no_demean"})
-    cf_zone_res, _ = C.evaluate(pack_world, {"s1_mode": "cf_zone"})
-    cf_pooled_res, _ = C.evaluate(pack_world, {"s1_mode": "cf_pooled"})
-    lin_sum_res, _ = C.evaluate(pack_world, {"s1_mode": "linear_sum"})
-
     def _ref_mae(res):
         return float(np.mean([abs(res[r]["loading_pct"] - pack_world["subs"][r]["truth"]["loading_pct"]) for r in REFS]))
 
-    ref_mae = {
-        "golden": round(_ref_mae(gold_res), 2),
-        "direct": round(_ref_mae(dir_res), 2),
-        "rigorous": round(_ref_mae(rig_res), 2),
-        "s1_scada60": round(_ref_mae(lat_res["S1"]), 2),
-        "s1_flat_ratio": round(_ref_mae(flat_res), 2),
-        "s1_cf_zone": round(_ref_mae(cf_zone_res), 2),
-        "s1_cf_pooled": round(_ref_mae(cf_pooled_res), 2),
-        "s1_linear_sum": round(_ref_mae(lin_sum_res), 2),
-        "s2_net_kvarh": round(_ref_mae(lat_res["S2"]), 2),
-        "s2_raw_dv_no_demean": round(_ref_mae(rawdv_res), 2),
-        "s3_gis_phase": round(_ref_mae(lat_res["S3"]), 2),
-    }
+    ref_mae = {"golden": round(_ref_mae(gold_res), 2)}
+    for rname, rres in rivals.items():
+        ref_mae[rname] = round(_ref_mae(rres), 2)
 
     # Forcing +/- 20% perturbations on cut pack
     pert_defs = [
@@ -145,7 +131,6 @@ def run(target_dir):
             holds=(schedule_list(pr) == schedule_list(gold_res)),
         ))
 
-    # Build per-substation golden table
     subs_out = {}
     for s in ALL_SUBS:
         sd = pack_world["subs"][s]
@@ -153,6 +138,8 @@ def run(target_dir):
         firm = float(sd["cfg"]["firm_mva"])
         subs_out[s] = dict(
             in_pool=(s in TARGETS),
+            corridor=sd["corridor"],
+            gsp=sd["gsp"],
             firm_n1_mva=round(firm, 1),
             p60_peak_mw=round(float(sd["sub_p60"].max()), 2),
             p15_peak_mw=round(g["p15"], 2),
@@ -163,6 +150,13 @@ def run(target_dir):
             lim_mva=round(g["lim_mva"], 2),
             loading_pct=round(g["loading_pct"], 2),
             relief_mva=round(g["relief_mva"], 2),
+            p60_peak_mw_raw=float(sd["sub_p60"].max()),
+            p15_peak_mw_raw=float(g["p15"]),
+            q_peak_h_mvar_raw=float(g["q_h"]),
+            w_max_pct_raw=float(100.0 * g["w_max"]),
+            lim_mva_raw=float(g["lim_mva"]),
+            loading_pct_raw=float(g["loading_pct"]),
+            relief_mva_raw=float(g["relief_mva"]),
             phase=phase_label(g["loading_pct"]) if s in TARGETS else "Modernized (Excluded)",
         )
         if s in REFS:
@@ -172,10 +166,10 @@ def run(target_dir):
             subs_out[s]["truth_w_max_pct"] = round(100.0 * t["w_max"], 2)
             subs_out[s]["truth_lim_mva"] = round(t["lim_mva"], 2)
             subs_out[s]["truth_loading_pct"] = round(t["loading_pct"], 2)
+            subs_out[s]["truth_loading_pct_raw"] = float(t["loading_pct"])
             subs_out[s]["truth_loading_pct_1dp"] = round(t["loading_pct"], 1)
             subs_out[s]["abs_loading_err_pp"] = round(abs(g["loading_pct"] - t["loading_pct"]), 2)
 
-    # All routes summary
     all_routes = {
         "golden": gold_res,
         "S1": lat_res["S1"],
@@ -185,14 +179,11 @@ def run(target_dir):
         "S1+S3": lat_res["S1+S3"],
         "S2+S3": lat_res["S2+S3"],
         "S1+S2+S3": lat_res["S1+S2+S3"],
-        "direct": dir_res,
-        "rigorous": rig_res,
-        "s1_flat_ratio": flat_res,
-        "s1_cf_zone": cf_zone_res,
-        "s1_cf_pooled": cf_pooled_res,
-        "s1_linear_sum": lin_sum_res,
-        "s2_raw_dv_no_demean": rawdv_res,
     }
+    for rname, rres in rivals.items():
+        if rname not in all_routes:
+            all_routes[rname] = rres
+
     routes_out = {}
     for rname, rres in all_routes.items():
         rc1, rc2, rc3 = C._agg_components(rres)
@@ -207,9 +198,8 @@ def run(target_dir):
             ref_mae_pp=round(_ref_mae(rres), 2),
         )
 
-    # Variants summary
     variants_out = []
-    for vname, vopts, vres in fam_res:
+    for vname, _vopts, vres in fam_res:
         vc1, vc2, vc3 = C._agg_components(vres)
         variants_out.append(dict(
             name=vname,
@@ -223,10 +213,8 @@ def run(target_dir):
             lim_mva={s: round(vres[s]["lim_mva"], 2) for s in TARGETS},
         ))
 
-    # Corelib rubric pricing on cut pack
     rubric = corelib.score_spec(spec) if hasattr(corelib, "score_spec") else {}
 
-    # Top-level figure keys directly tied by effort.json (R1..R8)
     load_table_gold = {s: round(gold_res[s]["loading_pct"], 2) for s in TARGETS}
     mva_relief_gold = {f"MVA_{s}": round(gold_res[s]["lim_mva"], 2) for s in TARGETS}
     mva_relief_gold["Total_Relief_MVA"] = round(rel_tot_gold, 2)
@@ -248,6 +236,7 @@ def run(target_dir):
             isp_minutes=15, hours_per_year=C.N_HOURS, tap_step_frac=C.TAP_STEP,
             v_nom_lv_kv=C.V_NOM_LV, v_nom_hv_kv=C.V_NOM_HV, v_lat_nom_v=230.0,
             kw_per_mw=1000, min_bus_slope=0.1, relief_ceiling_frac=0.85, year=2026,
+            n_ami_per_sub=C.N_AMI_LAT, n_leg_per_sub=C.N_LEG_LAT, n_laterals_per_sub=C.N_LATERALS,
         ),
         pack_stats=dict(
             raw_scada_rows=stats["raw_scada_rows"],
@@ -255,18 +244,25 @@ def run(target_dir):
             superseded_dropped=stats["superseded_dropped"],
             vlv_nulls=stats["vlv_nulls"],
             n_feeders=sum(len(pack_world["subs"][s]["f_meta"]) for s in ALL_SUBS),
+            n_corridors=stats["n_corridors"],
+            n_gsp=stats["n_gsp"],
+            n_ami_per_sub=C.N_AMI_LAT,
+            n_leg_per_sub=C.N_LEG_LAT,
             n_laterals_per_sub=C.N_LATERALS,
             n_laterals_total=C.N_LATERALS * len(ALL_SUBS),
+            n_ami_total=C.N_AMI_LAT * len(ALL_SUBS),
             n_variants=len(C.FAMILY),
         ),
         ref_params=dict(
-            rho_park=round(ref_p["rho_park"], 4),
-            rho_indep=round(ref_p["rho_indep"], 4),
+            rho_sync_lindberg=round(rho_sync_lb, 4),
+            rho_stag_fossheim=round(rho_stag_fh, 4),
             k_ord=round(ref_p["k_ord"], 4),
             dq_dp=round(ref_p["dq_dp"], 4),
+            tan_phi_u=round(ref_p["tan_phi_u"], 4),
+            k_ord_raw=float(ref_p["k_ord"]),
+            dq_dp_raw=float(ref_p["dq_dp"]),
+            tan_phi_u_raw=float(ref_p["tan_phi_u"]),
             flat_ratio=round(ref_p["flat_ratio"], 4),
-            cf_park=round(ref_p["cf_park"], 4),
-            cf_nonpark=round(ref_p["cf_nonpark"], 4),
             cf_pooled=round(ref_p["cf_pooled"], 4),
             tracer_matched=ref_tracer_matched,
             tracer_total=ref_tracer_total,
@@ -275,7 +271,6 @@ def run(target_dir):
         ),
         ref_mae=ref_mae,
         ref_ratios={k: round(v / ref_mae["golden"], 1) for k, v in ref_mae.items() if k != "golden"},
-        # R1..R8 top-level keys tied to effort.json
         r1_p60_sum_mw=r1_p60_sum,
         r1_p60_by_sub=r1_p60_by_sub,
         c1_total_p15_mw=round(g_c1, 2),
@@ -312,7 +307,6 @@ def run(target_dir):
         rubric=rubric,
     )
 
-    # Helper to construct R6/R7 dict values for any route
     def _r6_val(res):
         return {s: round(res[s]["loading_pct"], 2) for s in TARGETS}
 
@@ -322,13 +316,12 @@ def run(target_dir):
         return d
 
     reflex = lat_res["S1+S2+S3"]
-    # Build effort.json (8 results R1..R8 matching DESIGN_NOTE.md and effort.py contract)
     E = {
         "weights": {"recommendation": 14.0, "components": 24.0, "asks": 55.0, "instruction": 7.0},
         "results": [
             {
                 "id": "R1",
-                "name": "conformed 2026 SCADA, feeder, meter, asset, and AMI extracts",
+                "name": "conformed 2026 SCADA, GSP, corridor, feeder, meter, asset, and AMI extracts",
                 "graded_as": "Step-by-Step",
                 "figure": "r1_p60_sum_mw",
                 "depends": [],
@@ -342,11 +335,11 @@ def run(target_dir):
             },
             {
                 "id": "R2",
-                "name": "pool 15-minute coincident active demand (MW)",
+                "name": "pool 15-minute coincident active demand via stripped innovation correlation (MW)",
                 "graded_as": "Component 1",
                 "figure": "c1_total_p15_mw",
                 "depends": ["R1"],
-                "precedent": ["L22", "N01", "L28"],
+                "precedent": ["L22", "N01", "L40"],
                 "golden": round(g_c1, 2),
                 "band": c1_band,
                 "partly": [round(c1_band[0] - 2.0, 2), round(c1_band[1] + 2.0, 2)],
@@ -358,11 +351,11 @@ def run(target_dir):
             },
             {
                 "id": "R3",
-                "name": "pool peak-hour reactive demand inverted from voltage drop (MVAr)",
+                "name": "pool peak-hour reactive demand via coupled 66 kV corridor impedance inversion (MVAr)",
                 "graded_as": "Component 2",
                 "figure": "c2_total_qpeak_mvar",
                 "depends": ["R1"],
-                "precedent": ["L38", "N27", "L22"],
+                "precedent": ["L38", "N27", "L44"],
                 "golden": round(g_c2, 2),
                 "band": c2_band,
                 "partly": [round(c2_band[0] - 4.0, 2), round(c2_band[1] + 4.0, 2)],
@@ -374,11 +367,11 @@ def run(target_dir):
             },
             {
                 "id": "R4",
-                "name": "pool average peak limiting-phase share (%)",
+                "name": "pool average peak limiting-phase share via PT-free 3-phase LV bus sag slope (%)",
                 "graded_as": "Component 3",
                 "figure": "c3_mean_lim_phase_pct",
                 "depends": ["R1"],
-                "precedent": ["N09", "L38", "L28"],
+                "precedent": ["L28", "L39", "N09"],
                 "golden": round(g_c3, 2),
                 "band": c3_band,
                 "partly": [round(c3_band[0] - 0.3, 2), round(c3_band[1] + 0.3, 2)],
@@ -396,8 +389,8 @@ def run(target_dir):
                 "depends": ["R2", "R3", "R4"],
                 "precedent": ["L28", "L51", "L03"],
                 "golden": ref_mae["golden"],
-                "band": [0.0, 3.5],
-                "partly": [3.5, 5.5],
+                "band": [0.0, 2.5],
+                "partly": [2.5, 4.5],
                 "passes": {
                     "quick": round(_ref_mae(quick_res), 2),
                     "careful": round(_ref_mae(reflex), 2),
@@ -440,7 +433,7 @@ def run(target_dir):
                 "graded_as": "Recommendation",
                 "figure": "r8_schedule",
                 "depends": ["R6"],
-                "precedent": ["L22", "L38", "N09"],
+                "precedent": ["L22", "L38", "L28"],
                 "ordered": True,
                 "golden": schedule_list(gold_res),
                 "passes": {
@@ -452,15 +445,15 @@ def run(target_dir):
         ],
         "hints": [
             {
-                "sentence": "Substation SCADA archives 60-minute fixed-clock energy blocks while feeder 15-minute max-demand registers lack timestamps and aggregate in correlated quadrature.",
+                "sentence": "Stripping the regional diurnal and weather common mode across substations isolates pairwise feeder innovation correlation R_ij, separating synchronized industrial clusters from staggered feeders of the same class in correlated quadrature.",
                 "rescues": ["R2"],
             },
             {
-                "sentence": "Monthly net kVARh cancels nighttime leading shunt-capacitor injection against winter-peak lagging reactive power, hiding peak inductive load until inverted from transformer voltage drop demeaned against monthly net kVARh.",
+                "sentence": "Because zone substations lack local 66 kV bus PTs and shunt capacitors cancel winter lagging reactive power in monthly net kVARh, hourly reactive power must be inverted by solving simultaneous coupled 66 kV corridor impedance systems from GSP-Nord and GSP-Sor demeaned against monthly net kVARh.",
                 "rescues": ["R3"],
             },
             {
-                "sentence": "GIS single-phase lateral tags drifted after storm re-phasing, so each lateral's physical phase must be identified from common-mode-rejected AMI-to-bus voltage differentials.",
+                "sentence": "AMI covers only 20 of 36 single-phase laterals per substation while the 16 non-AMI legacy laterals carry distinct phase skew and drifted GIS tags, so true total limiting-phase share must be inverted from the PT-free load-driven 3-phase LV bus voltage-sag slope calibrated on the modernized reference sites.",
                 "rescues": ["R4"],
             },
         ],
@@ -475,6 +468,7 @@ def run(target_dir):
             {"name": "reflex route (S1+S2+S3 lost)", "answer": schedule_list(reflex)},
             {"name": "direct route", "answer": schedule_list(dir_res)},
             {"name": "rigorous standard route", "answer": schedule_list(rig_res)},
+            {"name": "frontier combo (class_ols + local_dv + ami_only)", "answer": schedule_list(rivals["frontier_combo"])},
         ],
         "forcing": {
             "kind": "set",
@@ -486,6 +480,7 @@ def run(target_dir):
                 {"name": "S3 lost alone", "answer": schedule_list(lat_res["S3"])},
                 {"name": "reflex route", "answer": schedule_list(reflex)},
                 {"name": "rigorous standard route", "answer": schedule_list(rig_res)},
+                {"name": "frontier combo", "answer": schedule_list(rivals["frontier_combo"])},
             ],
             "perturbations": [{"input": r["input"], "answer": r["answer"]} for r in forcing_rows],
         },
@@ -495,9 +490,9 @@ def run(target_dir):
             "judgments": [
                 {
                     "id": "S1",
-                    "name": "correlated quadrature of feeder 15-min excesses onto 60-min SCADA peaks",
+                    "name": "correlated quadrature of feeder 15-min excesses using regional-stripped hourly innovation correlation R_ij",
                     "kind": "stump",
-                    "precedent": ["L22", "N01", "L28"],
+                    "precedent": ["L22", "N01", "L40"],
                     "dropped": {
                         "answer": schedule_list(lat_res["S1"]),
                         "results_moved": ["R2", "R5", "R6", "R7", "R8"],
@@ -509,9 +504,9 @@ def run(target_dir):
                 },
                 {
                     "id": "S2",
-                    "name": "hourly reactive power inverted from transformer HV/LV voltage drop demeaned against monthly net kVARh",
+                    "name": "coupled 66 kV radial corridor impedance inversion from GSPs demeaned against monthly net kVARh",
                     "kind": "stump",
-                    "precedent": ["L38", "N27", "L28"],
+                    "precedent": ["L38", "N27", "L44"],
                     "dropped": {
                         "answer": schedule_list(lat_res["S2"]),
                         "results_moved": ["R3", "R5", "R6", "R7", "R8"],
@@ -523,9 +518,9 @@ def run(target_dir):
                 },
                 {
                     "id": "S3",
-                    "name": "physical lateral phase identification from common-mode-rejected AMI-to-bus voltage differentials",
+                    "name": "PT-free 3-phase LV bus voltage-sag slope calibrated on modernized 3-phase PQ archive",
                     "kind": "stump",
-                    "precedent": ["N09", "L38", "L28"],
+                    "precedent": ["L28", "L39", "N09"],
                     "dropped": {
                         "answer": schedule_list(lat_res["S3"]),
                         "results_moved": ["R4", "R5", "R6", "R7", "R8"],

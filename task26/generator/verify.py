@@ -1,4 +1,4 @@
-"""Independent standalone verifier for task26.
+"""Independent standalone verifier for task26 (v2).
 
 Reads ONLY task26/target.zip, recomputes every conformed substation figure and pool aggregate from scratch using
 pandas/numpy/sqlite3/openpyxl (importing ZERO generator modules: no core.py, analysis.py, or results.py),
@@ -43,7 +43,7 @@ def main():
         with zipfile.ZipFile(TARGET_ZIP) as zt:
             zt.extractall(tmp)
 
-        # 1. Transformer & feeder register
+        # 1. Transformer & feeder register (no industrial_park_zone column)
         wb_tx = openpyxl.load_workbook(os.path.join(tmp, "substation_transformer_register.xlsx"), data_only=True)
         df_sub = pd.DataFrame(wb_tx["Substations"].values)
         df_sub.columns = df_sub.iloc[0]
@@ -57,22 +57,13 @@ def main():
         df_fdr = pd.DataFrame(wb_tx["Feeders"].values)
         df_fdr.columns = df_fdr.iloc[0]
         df_fdr = df_fdr.iloc[1:].reset_index(drop=True)
+        assert "industrial_park_zone" not in df_fdr.columns, "industrial_park_zone must not be shipped!"
         feeders_by_sub = {}
         f_lookup = {}
-        zmap, nz = {}, 1
         for _, r in df_fdr.iterrows():
             s = r["substation_id"]
             fid = r["scada_feeder_id"]
-            raw_zn = r["industrial_park_zone"]
-            zn = "" if pd.isna(raw_zn) else str(raw_zn).strip()
-            if zn.lower() in ("none", "", "na", "nan"):
-                pg = 0
-            else:
-                if zn not in zmap:
-                    zmap[zn] = nz
-                    nz += 1
-                pg = zmap[zn]
-            feeders_by_sub.setdefault(s, []).append((fid, pg))
+            feeders_by_sub.setdefault(s, []).append((fid, r["customer_class"]))
             f_lookup[fid] = (s, len(feeders_by_sub[s]) - 1)
 
         # 2. Crosswalk
@@ -81,8 +72,9 @@ def main():
         for fid in xw["scada_feeder_id"]:
             fmap[fid] = fid
 
-        # 3. Substation hourly SCADA (dedup latest extract_ts, parse mixed timestamps, interp summer nulls)
+        # 3. Substation hourly SCADA (no v_hv_kv column; dedup latest extract_ts, parse mixed clocks, interp summer nulls)
         sc = pd.read_csv(os.path.join(tmp, "scada_substation_hourly_2026.csv"))
+        assert "v_hv_kv" not in sc.columns, "v_hv_kv must not be shipped in zone-substation SCADA!"
         h_idx = np.empty(len(sc), dtype=int)
         for i, (ts_s, clk) in enumerate(zip(sc["timestamp_local"], sc["scada_clock"])):
             if clk == "CET_Standard":
@@ -94,16 +86,38 @@ def main():
         sc = sc.sort_values("extract_ts").drop_duplicates(subset=["substation_id", "h"], keep="last")
         sc = sc.sort_values(["substation_id", "h"])
 
-        sub_p60, v_hv, v_lv, taps = {}, {}, {}, {}
+        sub_p60, v_lv, taps = {}, {}, {}
         for s, g in sc.groupby("substation_id"):
             assert len(g) == 8760
             sub_p60[s] = g["p_active_mw"].to_numpy(dtype=float)
-            v_hv[s] = g["v_hv_kv"].to_numpy(dtype=float)
             v_lv[s] = g["v_lv_kv"].interpolate(method="linear").to_numpy(dtype=float)
             taps[s] = g["ltc_tap_step"].to_numpy(dtype=int)
 
-        # 4. Feeder hourly SCADA (kW -> MW) & monthly 15-min registers
+        # 4. GSP 66 kV voltages & radial 66 kV sub-transmission corridors
         base_pd = pd.Timestamp("2025-12-31T23:00Z")
+        df_gsp = pd.read_csv(os.path.join(tmp, "gsp_66kv_voltages_2026.csv"))
+        df_gsp["h"] = ((pd.to_datetime(df_gsp["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 3600).astype(int)
+        gsp_v = {}
+        for gid, g in df_gsp.groupby("gsp_id"):
+            g = g.sort_values("h")
+            gsp_v[gid] = g["v_hv_kv"].to_numpy(dtype=float)
+
+        df_cor = pd.read_csv(os.path.join(tmp, "subtransmission_66kv_lines.csv"))
+        corridors = {}
+        for cid, g in df_cor.groupby("corridor_id"):
+            segs = [(r["from_bus"], r["to_bus"], float(r["length_km"]), float(r["r_ohm_per_km"]), float(r["x_ohm_per_km"]))
+                    for _, r in g.iterrows()]
+            to_set = {x[1] for x in segs}
+            root = [x[0] for x in segs if x[0] not in to_set][0]
+            by_from = {x[0]: x for x in segs}
+            ordered = []
+            cur = root
+            while cur in by_from:
+                ordered.append(by_from[cur])
+                cur = by_from[cur][1]
+            corridors[cid] = {"gsp": root, "segs": ordered}
+
+        # 5. Feeder hourly SCADA (kW -> MW) & monthly 15-min registers
         f_p60 = {s: np.zeros((len(feeders_by_sub[s]), 8760)) for s in all_subs}
         df_fs = pd.read_csv(os.path.join(tmp, "feeder_scada_hourly_2026.csv"))
         df_fs["scada_id"] = df_fs["feeder_code"].map(fmap)
@@ -121,29 +135,41 @@ def main():
             f_m15[s][fi, int(r["m"])] = float(r["max_15min_demand_mw"])
         f_p60_m = {s: np.column_stack([f_p60[s][:, HOUR_MONTH == m].max(axis=1) for m in range(12)]) for s in all_subs}
 
-        # 5. Modernized sites 15-min PQ calibration
+        # 6. S1: strip top-4 regional SVD factors across other substations -> innovation correlation R_mats
+        all_log = {}
+        for s in all_subs:
+            L = np.log(np.maximum(f_p60[s] / f_p60[s].mean(axis=1, keepdims=True), 1e-4))
+            L -= L.mean(axis=1, keepdims=True)
+            all_log[s] = L
+        R_mats = {}
+        for s in all_subs:
+            other_L = np.vstack([all_log[s2] for s2 in all_subs if s2 != s])
+            _, _, Vt = np.linalg.svd(other_L, full_matrices=False)
+            F = Vt[:4]
+            E = all_log[s] - (all_log[s] @ F.T) @ F
+            R = np.corrcoef(E)
+            np.fill_diagonal(R, 1.0)
+            R_mats[s] = np.clip(R, 0.0, 1.0)
+
+        # 7. Modernized sites main-bay 3-phase 15-min PQ archive (no feeder columns!)
         df_rpq = pd.read_csv(os.path.join(tmp, "pq_archive_15min_2026.csv"))
+        assert "f01_p15_mw" not in df_rpq.columns, "feeder PQ columns must not be shipped!"
         df_rpq["k"] = ((pd.to_datetime(df_rpq["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 900).astype(int)
-        park_c, indep_c, dqdp_l = [], [], []
-        ref_p15, ref_q15 = {}, {}
+        ref_p15, ref_q15, ref_p15_ph = {}, {}, {}
+        dqdp_l = []
         for r in refs:
             g = df_rpq[df_rpq["substation_id"] == r].sort_values("k")
-            nf = len(feeders_by_sub[r])
             sp15 = g["sub_p15_mw"].to_numpy(dtype=float).reshape(8760, 4)
             sq15 = g["sub_q15_mvar"].to_numpy(dtype=float).reshape(8760, 4)
-            ref_p15[r], ref_q15[r] = sp15, sq15
-            fp15 = np.stack([g[f"f{i+1:02d}_p15_mw"].to_numpy(dtype=float).reshape(8760, 4) for i in range(nf)])
-            dpf = fp15[:, WINTER_HOURS, :] - f_p60[r][:, WINTER_HOURS, None]
-            cc = np.corrcoef(dpf.reshape(nf, -1))
-            for i in range(nf):
-                for j in range(i + 1, nf):
-                    gi, gj = feeders_by_sub[r][i][1], feeders_by_sub[r][j][1]
-                    (park_c if (gi > 0 and gi == gj) else indep_c).append(float(cc[i, j]))
+            sp_ph = np.stack([
+                g["sub_pa_mw"].to_numpy(dtype=float).reshape(8760, 4),
+                g["sub_pb_mw"].to_numpy(dtype=float).reshape(8760, 4),
+                g["sub_pc_mw"].to_numpy(dtype=float).reshape(8760, 4),
+            ])
+            ref_p15[r], ref_q15[r], ref_p15_ph[r] = sp15, sq15, sp_ph
             dps = (sp15[WINTER_HOURS, :] - sp15[WINTER_HOURS, :].mean(axis=1, keepdims=True)).ravel()
             dqs = (sq15[WINTER_HOURS, :] - sq15[WINTER_HOURS, :].mean(axis=1, keepdims=True)).ravel()
             dqdp_l.append(float(np.dot(dps, dqs) / np.dot(dps, dps)))
-        rho_park = float(np.mean(park_c))
-        rho_indep = float(np.mean(indep_c))
         dq_dp = float(np.mean(dqdp_l))
 
         def raw_quad(s, m_list):
@@ -154,14 +180,7 @@ def main():
             for i in range(nf):
                 rel = np.mean([(f_m15[s][i, m] - f_p60_m[s][i, m]) / f_p60_m[s][i, m] for m in m_list])
                 d[i] = max(0.0, rel) * f_p60[s][i, pk_h]
-            vs = 0.0
-            for i in range(nf):
-                vs += d[i] ** 2
-                for j in range(i + 1, nf):
-                    gi, gj = feeders_by_sub[s][i][1], feeders_by_sub[s][j][1]
-                    rho = rho_park if (gi > 0 and gi == gj) else rho_indep
-                    vs += 2.0 * rho * d[i] * d[j]
-            return float(np.sqrt(max(0.0, vs)))
+            return float(np.sqrt(max(0.0, float(d @ R_mats[s] @ d))))
 
         obs_l, raw_l = [], []
         for r in refs:
@@ -173,7 +192,7 @@ def main():
             raw_l.append(raw_quad(r, list(WINTER_MONTHS)))
         k_ord = float(sum(obs_l) / sum(raw_l))
 
-        # 6. Revenue meter monthly net kVARh
+        # 8. Revenue meter monthly net kVARh & coupled radial 66 kV corridor S2 inversion
         wb_rev = openpyxl.load_workbook(os.path.join(tmp, "revenue_meter_monthly_2026.xlsx"), data_only=True)
         df_rev = pd.DataFrame(wb_rev["Monthly_Revenue_Meters"].values)
         df_rev.columns = df_rev.iloc[0]
@@ -183,7 +202,48 @@ def main():
             m = int(str(r["billing_month"]).split("-")[1]) - 1
             net_kvarh[r["substation_id"]][m] = float(r["net_reactive_energy_kvarh"])
 
-        # 7. 3-phase bus voltages & SQLite AMI lateral telemetry
+        q_h_all = {}
+        for cid, c_info in corridors.items():
+            v_gsp = gsp_v[c_info["gsp"]]
+            segs = c_info["segs"]
+            subs = [seg[1] for seg in segs]
+            m = len(subs)
+            r_segs = [seg[2] * seg[3] for seg in segs]
+            x_segs = [seg[2] * seg[4] for seg in segs]
+
+            p_sub = np.vstack([sub_p60[s] for s in subs])
+            vlv_m = np.vstack([v_lv[s] for s in subs])
+            tp_m = np.vstack([taps[s] for s in subs])
+            tau = (V_NOM_LV / V_NOM_HV) * (1.0 + TAP_STEP * tp_m)
+            r_tx = np.array([sub_meta[s]["R"] for s in subs])
+            x_tx = np.array([sub_meta[s]["X"] for s in subs])
+
+            dv_rp = np.zeros((m, 8760))
+            for i in range(m):
+                for e in range(i + 1):
+                    dv_rp[i] += (r_segs[e] * p_sub[e:].sum(axis=0)) / V_NOM_HV
+            x_sh = np.zeros((m, m))
+            for i in range(m):
+                for j in range(m):
+                    x_sh[i, j] = sum(x_segs[:min(i, j) + 1]) / V_NOM_HV
+
+            y = v_gsp[None, :] * tau - vlv_m - tau * dv_rp - (r_tx[:, None] * p_sub) / V_NOM_LV
+            pk_m = int(HOUR_MONTH[int(np.argmax(p_sub.sum(axis=0)))])
+            amask = HOUR_MONTH == pk_m
+            q_bar_m = np.array([net_kvarh[s][pk_m] / (1000.0 * int(amask.sum())) for s in subs])
+            M_all = tau[:, None, :] * x_sh[:, :, None] + np.eye(m)[:, :, None] * (x_tx[:, None] / V_NOM_LV)[:, None, :]
+            M_inv = np.linalg.inv(np.transpose(M_all, (2, 0, 1)))
+            q_y_a = (M_inv[amask] @ y[:, amask].T[:, :, None]).squeeze(-1).mean(axis=0)
+            delta_pt = np.linalg.solve(M_inv[amask].mean(axis=0), q_bar_m - q_y_a)
+            Q_hat = (M_inv @ (y + delta_pt[:, None]).T[:, :, None]).squeeze(-1).T
+
+            for i, s in enumerate(subs):
+                pk_h = int(np.argmax(p_sub[i]))
+                top50 = np.argsort(p_sub[i])[-50:]
+                c = np.polyfit(p_sub[i, top50], Q_hat[i, top50], 1)
+                q_h_all[s] = float(c[0] * p_sub[i, pk_h] + c[1])
+
+        # 9. S3: 3-phase bus voltages -> calibrate tan_phi_u on 4 modernized refs & invert PT-free bus-sag slope
         df_bus = pd.read_csv(os.path.join(tmp, "substation_phase_bus_voltages_2026.csv"))
         df_bus["h"] = ((pd.to_datetime(df_bus["ts_utc"], utc=True) - base_pd).dt.total_seconds() // 3600).astype(int)
         v_bus = {}
@@ -193,73 +253,47 @@ def main():
                                   g["vb_kv"].to_numpy(dtype=float),
                                   g["vc_kv"].to_numpy(dtype=float)])
 
-        conn = sqlite3.connect(os.path.join(tmp, "ami_lateral_telemetry_2026.db"))
-        lats_df = pd.read_sql_query("SELECT lateral_idx, lateral_id, substation_id FROM laterals ORDER BY lateral_idx", conn)
-        win_idx = np.where(WINTER_HOURS)[0]
-        win_set = set(win_idx.tolist())
-        lat_v = {s: np.full((36, 8760), np.nan) for s in all_subs}
-        lat_p = {s: np.full((36, 8760), np.nan) for s in all_subs}
-        lpos = {}
-        cnt = {s: 0 for s in all_subs}
-        for _, r in lats_df.iterrows():
-            s = r["substation_id"]
-            lpos[int(r["lateral_idx"])] = (s, cnt[s])
-            cnt[s] += 1
-        cur = conn.execute("SELECT lateral_idx, hour_idx, v_volts, p_kw FROM lateral_hourly")
-        for li, hi, vv, pk in cur:
-            if hi in win_set:
-                s, pos = lpos[li]
-                lat_v[s][pos, hi] = vv
-                lat_p[s][pos, hi] = pk
-        conn.close()
+        num_t, den_t = 0.0, 0.0
+        for r in refs:
+            p_ph = ref_p15_ph[r].mean(axis=2)
+            p_ex = p_ph - p_ph.mean(axis=0, keepdims=True)
+            v_ex = v_bus[r] - v_bus[r].mean(axis=0, keepdims=True)
+            p_dm = p_ex - p_ex.mean(axis=1, keepdims=True)
+            v_dm = v_ex - v_ex.mean(axis=1, keepdims=True)
+            y_adj = -(v_dm + (3.0 * sub_meta[r]["R"] / V_NOM_LV) * p_dm)
+            x_reg = (3.0 * sub_meta[r]["X"] / V_NOM_LV) * p_dm
+            num_t += float(np.sum(x_reg * y_adj))
+            den_t += float(np.sum(x_reg * x_reg))
+        tan_phi_u = num_t / den_t
 
-        # 8. Recompute every substation independently
+        # Also verify SQLite AMI DB has 220 smart laterals (20 per sub)
+        conn = sqlite3.connect(os.path.join(tmp, "ami_lateral_telemetry_2026.db"))
+        n_ami_db = conn.execute("SELECT COUNT(*) FROM laterals").fetchone()[0]
+        conn.close()
+        assert n_ami_db == 220, f"expected 220 AMI laterals in DB, got {n_ami_db}"
+
+        # 10. Recompute every substation independently
         recomp = {}
         for s in all_subs:
             p60_pk = float(sub_p60[s].max())
             p15 = p60_pk + k_ord * raw_quad(s, list(WINTER_MONTHS))
-
-            tau = (V_NOM_LV / V_NOM_HV) * (1.0 + TAP_STEP * taps[s])
-            dv = v_hv[s] * tau - v_lv[s]
-            q_unc = (V_NOM_LV * dv - sub_meta[s]["R"] * sub_p60[s]) / sub_meta[s]["X"]
-            pk_h = int(np.argmax(sub_p60[s]))
-            pk_m = int(HOUR_MONTH[pk_h])
-            hm = HOUR_MONTH == pk_m
-            q_hat = q_unc - float(np.mean(q_unc[hm])) + net_kvarh[s][pk_m] / (1000.0 * int(hm.sum()))
-            top5 = np.argsort(sub_p60[s])[-5:]
-            q_h = float(np.mean(q_hat[top5]))
+            q_h = q_h_all[s]
             q15 = q_h + dq_dp * (p15 - p60_pk)
             s15 = float(np.sqrt(p15 ** 2 + q15 ** 2))
 
-            vb = v_bus[s] * (230.0 / V_NOM_LV)
-            vcm = vb.mean(axis=0, keepdims=True)
-            vt = vb - vcm
-            rv = lat_v[s] - vcm
-            d_vt = np.diff(vt[:, win_idx], axis=1)
-            d_rv = np.diff(rv[:, win_idx], axis=1)
-            d_lp = np.diff(lat_p[s][:, win_idx], axis=1)
-            ph_assign = np.zeros(36, dtype=int)
-            for li in range(36):
-                y, xp = d_rv[li], d_lp[li]
-                rss = []
-                for ph in range(3):
-                    X = np.column_stack([d_vt[ph], xp])
-                    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
-                    rss.append(float(np.sum(y ** 2)) if beta[0] <= 0.1 else float(np.sum((y - X @ beta) ** 2)))
-                ph_assign[li] = int(np.argmin(rss))
-            w_list = []
-            for h in top5:
-                bal = sub_p60[s][h] * 1000.0 - lat_p[s][:, h].sum()
-                ph_kw = np.array([lat_p[s][ph_assign == ph, h].sum() + bal / 3.0 for ph in range(3)])
-                w_list.append(float(ph_kw.max() / ph_kw.sum()))
-            w_max = float(np.mean(w_list))
+            v_ex = v_bus[s] - v_bus[s].mean(axis=0, keepdims=True)
+            p_dm = sub_p60[s] - sub_p60[s].mean()
+            slopes = (v_ex @ p_dm) / float(np.dot(p_dm, p_dm))
+            coeff = 3.0 * (sub_meta[s]["R"] + sub_meta[s]["X"] * tan_phi_u) / V_NOM_LV
+            w_max = float(((1.0 / 3.0) - slopes / coeff).max())
+
             lim_mva = 3.0 * w_max * s15
             load_pct = 100.0 * lim_mva / sub_meta[s]["firm"]
             relief = max(0.0, lim_mva - 0.85 * sub_meta[s]["firm"])
             recomp[s] = dict(p15=p15, q_h=q_h, w_max_pct=100.0 * w_max, lim_mva=lim_mva,
                              loading_pct=load_pct, relief=relief)
 
-        # 9. Compare against figures.json AND golden.zip
+        # 11. Compare against figures.json AND golden.zip
         for s in targets:
             rec = fig["substations"][s]
             v = recomp[s]

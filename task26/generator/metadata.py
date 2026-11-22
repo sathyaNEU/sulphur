@@ -10,7 +10,7 @@ def write(path):
     F = PK.FILES
     DF = docs.FILES
     sim_src = ("generated deterministically by the build's physical 66/22 kV distribution grid simulator "
-               "(Vesterdal Nett AS, seed 2617; no external or public data)")
+               "(Vesterdal Nett AS, seed 2622; no external or public data)")
     meta = {
         "task": "task26",
         "as_of": "2027-01-20",
@@ -36,8 +36,20 @@ def write(path):
         ],
         "files": {
             F["scada_sub"]: {
-                "covers": "2026 hourly substation SCADA active power, HV/LV bus voltages, and LTC tap step exports",
+                "covers": "2026 hourly zone-substation SCADA active power, 22 kV LV bus voltage, and LTC tap step exports",
                 "pulled": "2027-01-12",
+                "license": "proprietary, fictional organisation",
+                "source": sim_src,
+            },
+            F["gsp_v"]: {
+                "covers": "2026 hourly 66 kV bus voltage recordings at regional 132/66 kV Grid Supply Points",
+                "pulled": "2027-01-12",
+                "license": "proprietary, fictional organisation",
+                "source": sim_src,
+            },
+            F["cor_lines"]: {
+                "covers": "Regional 66 kV radial sub-transmission line topology, segment lengths, and per-kilometer impedances",
+                "pulled": "2026-11-12",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
@@ -48,7 +60,7 @@ def write(path):
                 "source": sim_src,
             },
             F["fdr_m15"]: {
-                "covers": "2026 monthly feeder maximum 15-minute demand register resets",
+                "covers": "2026 periodic peak demand register resets by 22 kV circuit",
                 "pulled": "2027-01-08",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
@@ -66,13 +78,13 @@ def write(path):
                 "source": sim_src,
             },
             F["ref_pq"]: {
-                "covers": "2026 continuous 15-minute three-phase power quality archive",
+                "covers": "2026 continuous 15-minute three-phase main-bay power quality archive for modernized substations",
                 "pulled": "2027-01-13",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
             },
             F["ref_tracer"]: {
-                "covers": "2025 field phase-tracer commissioning log for Fossheim, Lindberg, Ostervik, and Solberg laterals",
+                "covers": "2025 field phase-tracer commissioning log for AMI-metered laterals on modernized substations",
                 "pulled": "2025-12-05",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,
@@ -90,7 +102,7 @@ def write(path):
                 "source": sim_src,
             },
             F["gis_lat"]: {
-                "covers": "GIS single-phase lateral asset connectivity table",
+                "covers": "GIS single-phase lateral asset connectivity, metering tier, and annual billed energy table",
                 "pulled": "2026-12-18",
                 "license": "proprietary, fictional organisation",
                 "source": sim_src,

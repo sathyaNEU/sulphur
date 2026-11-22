@@ -23,12 +23,14 @@ F = PK.FILES
 
 EXPORTED = {
     F["scada_sub"]:  dt.datetime(2027, 1, 12,  4, 38, 14, tzinfo=UTC),
+    F["gsp_v"]:      dt.datetime(2027, 1, 12,  4, 52, 29, tzinfo=UTC),
+    F["cor_lines"]:  dt.datetime(2026, 11, 12, 10, 41, 15, tzinfo=UTC),
     F["scada_fdr"]:  dt.datetime(2027, 1, 12,  5, 19, 42, tzinfo=UTC),
     F["fdr_m15"]:    dt.datetime(2027, 1,  8, 10, 14, 27, tzinfo=UTC),
     F["bus_vph"]:    dt.datetime(2027, 1, 12,  6,  4, 51, tzinfo=UTC),
     F["ami_db"]:     dt.datetime(2027, 1, 14,  9, 47, 19, tzinfo=UTC),
     F["ref_pq"]:     dt.datetime(2027, 1, 13, 14, 23,  8, tzinfo=UTC),
-    F["ref_tracer"]: dt.datetime(2025, 10, 29, 15, 11, 33, tzinfo=UTC),
+    F["ref_tracer"]: dt.datetime(2025, 12,  5, 15, 11, 33, tzinfo=UTC),
     F["gis_lat"]:    dt.datetime(2026, 12, 18, 11, 42,  6, tzinfo=UTC),
     F["xwalk"]:      dt.datetime(2024,  9, 16,  8, 27, 55, tzinfo=UTC),
     F["class_pf"]:   dt.datetime(2024,  4, 11, 13,  9, 17, tzinfo=UTC),

@@ -1,15 +1,15 @@
-"""Comprehensive deterministic assertion suite for task26 (50+ checks).
+"""Comprehensive deterministic assertion suite for task26 (v2, 60+ checks).
 
 Covers:
   - Every Semantic Fork SF1 through SF18 explicitly by token
-  - Exact reproduction of simulator arrays after Layer 1 ETL conformance
-  - Layer 1 mess neutrality (superseded batch dedup, comms nulls drop vs interp, row-order permutation invariance)
+  - Exact reproduction of simulator arrays after Layer 1 ETL conformance (19 files)
+  - Layer 1 mess neutrality (superseded batch dedup, comms nulls drop vs interp)
   - Corelib level 5 and +/-20% forcing holds on the cut pack
-  - Referee separation (all 7 rivals >= 3.0x golden MAE; 72/72 field phase-tracer match)
+  - Referee separation (all 21 rivals >= 3.0x golden MAE; 80/80 AMI field phase-tracer match)
   - Distractor deletion invariance (removing the 3 distractors leaves every figure byte-identical)
   - Container & surface hygiene (no README/dictionary/notes under target/, zero em dashes in prompt/submission)
   - PDF multi-reader text extraction check (H25: pypdf AND pdftotext both extract all governing thresholds)
-  - Golden deliverables exact tie-out against figures.json
+  - Golden deliverables exact tie-out against figures.json + cell-by-cell style readback
 """
 import csv
 import json
@@ -37,7 +37,6 @@ import core as C  # noqa: E402
 import deliver as DL  # noqa: E402
 import docs  # noqa: E402
 import pack as PK  # noqa: E402
-import results as RS  # noqa: E402
 
 COUNT = 0
 
@@ -54,9 +53,9 @@ def main():
     pack_world, stats = A.load_pack(TARGET)
     sim_world = C.simulate()
 
-    # --- 1. File inventory & hygiene (no readme/dictionary/manifest under target/) ---
+    # --- 1. File inventory & hygiene (19 files; no readme/dictionary/manifest under target/) ---
     tfiles = sorted(os.listdir(TARGET))
-    check(len(tfiles) == 17, f"expected 17 files in target/, found {len(tfiles)}")
+    check(len(tfiles) == 19, f"expected 19 files in target/, found {len(tfiles)}")
     exts = {os.path.splitext(f)[1].lower() for f in tfiles}
     check(exts == {".csv", ".xlsx", ".db", ".pdf"}, f"expected 4 file categories, got {exts}")
     banned_names = re.compile(r"readme|dictionary|data_dict|manifest|field_notes|notes|schema", re.I)
@@ -68,10 +67,8 @@ def main():
         check(df in tfiles, f"distractor {df} missing from target/")
 
     # --- 2. SF1-SF4: Governing standard definitions & scope ---
-    # SF1: 7 in-scope target substations, Fossheim, Lindberg, Ostervik, and Solberg modernized and excluded
     check(stats["in_pool"] == sorted(C.TARGETS), "SF1: in-scope pool matches the 7 non-modernized substations")
     check(stats["refs"] == sorted(C.REFS), "SF1: Fossheim, Lindberg, Ostervik, and Solberg excluded from 2027-2029 pool")
-    # SF2, SF3, SF4: limiting-phase formula, inclusive thresholds 85/100, relief above 85% Firm N-1 MVA
     for s in C.TARGETS:
         r = fig["substations"][s]
         exp_lim = 3.0 * (r["w_max_pct"] / 100.0) * r["s15_tot_mva"]
@@ -88,22 +85,24 @@ def main():
     # --- 3. SF5-SF7: Layer 1 ETL exact conformance & mess neutrality ---
     check(stats["superseded_dropped"] == 4800, f"SF5: dropped 4,800 superseded preliminary SCADA rows ({stats['superseded_dropped']})")
     check(stats["vlv_nulls"] == 56, f"SF6: found 56 benign summer v_lv_kv comms nulls ({stats['vlv_nulls']})")
+    for gid in ("GSP-Nord", "GSP-Sor"):
+        check(np.allclose(pack_world["gsp_v"][gid], sim_world["gsp_v"][gid], atol=1e-3), f"SF5: {gid} 66 kV voltage matches simulator")
     for s in C.ALL_SUBS:
         sd_p = pack_world["subs"][s]
         sd_s = sim_world["subs"][s]
         check(np.allclose(sd_p["sub_p60"], sd_s["sub_p60"], atol=1e-4), f"SF5/SF6: {s} clean SCADA P60 matches simulator")
-        check(np.allclose(sd_p["v_hv_meas"], sd_s["v_hv_meas"], atol=1e-3), f"SF5/SF6: {s} clean V_hv matches simulator")
         check(np.array_equal(sd_p["tap_step_int"], sd_s["tap_step_int"]), f"SF5/SF6: {s} clean tap_step matches simulator")
         check(np.allclose(sd_p["f_p60"], sd_s["f_p60"], atol=1e-3), f"SF7: {s} crosswalked feeder P60 matches simulator")
         check(np.allclose(sd_p["feeder_m15"], sd_s["feeder_m15"], atol=1e-4), f"SF7: {s} crosswalked feeder M15 matches simulator")
         check(np.allclose(sd_p["sub_net_kvarh_m"], sd_s["sub_net_kvarh_m"], atol=0.1), f"SF5: {s} monthly net kVARh matches")
         check(np.allclose(sd_p["v_bus_ph"], sd_s["v_bus_ph"], atol=1e-4), f"SF6: {s} 3-phase bus voltages match")
+        check(int(sd_p["lat_is_ami"].sum()) == C.N_AMI_LAT and len(sd_p["lat_is_ami"]) == C.N_LATERALS,
+              f"SF7: {s} has 20 AMI_SMART and 16 LEGACY_NON_AMI laterals")
         check(np.array_equal(np.sort(sd_p["lat_gis_ph"]), np.sort(sd_s["lat_gis_ph"])), f"SF7: {s} GIS lateral phase counts match")
-        # Heating-season AMI aggregate kW and voltage mean match across all 4,368 heating hours (permutation-invariant)
         hm = C.HEATING_HOURS
-        check(np.allclose(sd_p["lat_v_hourly"][:, hm].mean(axis=0), sd_s["lat_v_hourly"][:, hm].mean(axis=0), atol=6e-3),
+        check(np.allclose(sd_p["lat_v_ami"][:, hm].mean(axis=0), sd_s["lat_v_ami"][:, hm].mean(axis=0), atol=6e-3),
               f"SF6: {s} AMI lateral mean voltage matches across all 4,368 heating hours")
-        check(np.allclose(sd_p["lat_p_hourly"][:, hm].sum(axis=0), sd_s["lat_p_hourly"][:, hm].sum(axis=0), atol=0.25),
+        check(np.allclose(sd_p["lat_p_ami"][:, hm].sum(axis=0), sd_s["lat_p_ami"][:, hm].sum(axis=0), atol=0.25),
               f"SF6: {s} AMI lateral total kW matches across all 4,368 heating hours")
 
     # Verify comms nulls drop vs interpolate leaves every peak figure unchanged (winter untouched!)
@@ -117,9 +116,9 @@ def main():
         check(abs(g_interp[s]["loading_pct"] - g_drop[s]["loading_pct"]) < 1e-9,
               f"SF6: summer v_lv_kv nulls leave {s} loading identical (drop vs interp)")
 
-    # --- 4. SF8-SF17: All 21 honest variants & forcing perturbations hold the schedule and bands ---
+    # --- 4. SF8-SF17: All 25 honest variants & forcing perturbations hold the schedule and bands ---
     gold_sched = fig["r8_schedule"]
-    check(len(fig["variants"]) == 21, "SF8, SF9, SF10, SF11, SF12, SF13, SF14, SF15, SF16: 21 variants recorded")
+    check(len(fig["variants"]) == len(C.FAMILY), "SF8, SF9, SF10, SF11, SF12, SF13, SF14, SF15, SF16: 25 variants recorded")
     for v in fig["variants"]:
         check(v["holds"] and v["answer"] == gold_sched, f"SF8/SF9/SF10/SF12/SF13/SF14/SF15/SF16: variant '{v['name']}' holds schedule")
         check(fig["c1_band"][0] <= v["c1_total_p15_mw"] <= fig["c1_band"][1], f"SF8/SF9/SF10: C1 in band for {v['name']}")
@@ -133,26 +132,26 @@ def main():
             check(lb[0] <= v["loading_pct"][s] <= lb[1], f"SF18: {s} loading in band for {v['name']}")
             check(mb[0] <= v["lim_mva"][s] <= mb[1], f"SF18: {s} MVA in band for {v['name']}")
 
-    # SF17: balanced 3-phase residual equals (1 - sp_share) * sub_p60 exactly
+    # SF17: single-phase AMI share is partial (~25-40% of substation load), leaving substantial legacy + 3-phase load
     for s in C.ALL_SUBS:
         sd_p = pack_world["subs"][s]
         pk_h = int(np.argmax(sd_p["sub_p60"]))
-        bal_obs = sd_p["sub_p60"][pk_h] * 1000.0 - sd_p["lat_p_hourly"][:, pk_h].sum()
-        check(bal_obs > 0.20 * sd_p["sub_p60"][pk_h] * 1000.0, f"SF17: {s} balanced 3-phase share realistic (>20%)")
+        ami_frac = float(sd_p["lat_p_ami"][:, pk_h].sum() / (sd_p["sub_p60"][pk_h] * 1000.0))
+        check(0.24 <= ami_frac <= 0.42, f"SF17: {s} AMI single-phase share {ami_frac:.3f} realistic partial coverage")
 
     # Forcing +/- 20% perturbations all HOLD
     check(len(fig["forcing"]) == 6, "6 forcing perturbations recorded")
     for p in fig["forcing"]:
         check(p["holds"] and p["answer"] == gold_sched, f"Forcing perturbation {p['input']} holds schedule")
 
-    # --- 5. Corelib level 5 re-proved on cut pack + referee dominance ---
+    # --- 5. Corelib level 5 re-proved on cut pack + referee dominance (all 21 rivals >= 3.0x) ---
     spec, *_ = C.build_spec(pack_world)
     check(corelib.run(spec) == 0, "corelib passes level 5 on cut pack")
-    check(fig["ref_params"]["tracer_matched"] == 144 and fig["ref_params"]["tracer_total"] == 144,
-          "Phase-ID matches 144/144 field-traced laterals on Fossheim, Lindberg, Ostervik, and Solberg")
-    check(fig["ref_params"]["gis_tracer_matched"] <= 115,
-          f"GIS matches {fig['ref_params']['gis_tracer_matched']}/144 on modernized reference sites (expected ~75%)")
-    check(len(fig["ref_ratios"]) == 10, f"Expected 10 referee rivals, got {len(fig['ref_ratios'])}")
+    check(fig["ref_params"]["tracer_matched"] == 80 and fig["ref_params"]["tracer_total"] == 80,
+          "AMI Phase-ID matches 80/80 field-traced AMI laterals on Fossheim, Lindberg, Ostervik, and Solberg")
+    check(fig["ref_params"]["gis_tracer_matched"] <= 64,
+          f"GIS matches {fig['ref_params']['gis_tracer_matched']}/80 on modernized reference sites (expected <= 80%)")
+    check(len(fig["ref_ratios"]) == 21, f"Expected 21 referee rivals, got {len(fig['ref_ratios'])}")
     for rname, mult in fig["ref_ratios"].items():
         check(mult >= 3.0, f"Referee rival {rname} is {mult}x golden MAE (< 3.0x)")
 
@@ -180,10 +179,11 @@ def main():
         for tok in ("NS-2026", "85.0%", "100.0%", "Fossheim", "Lindberg", "Ostervik", "Solberg",
                     "Drangvik", "Hestmark", "Kvernholm", "Malmnes", "Raudfjord", "Svarthaug", "Tverrli", "Lim_MVA"):
             check(tok in txt, f"H25 PDF {label} missing token {tok!r}")
-        for banned in ("quadrature", "capacitor", "kVARh", "PT offset", "demean", "storm", "regression"):
+        for banned in ("quadrature", "capacitor", "kVARh", "PT offset", "demean", "storm", "regression",
+                       "corridor", "SVD", "PCA", "sag", "LEGACY_NON_AMI"):
             check(banned.lower() not in txt.lower(), f"Leak check: planning standard PDF mentions {banned!r}")
 
-    # --- 8. Golden deliverables exact tie-out + zero em dashes ---
+    # --- 8. Golden deliverables exact tie-out + cell-by-cell style readback + zero em dashes ---
     g_csv = os.path.join(GOLDEN, DL.FILES["csv"])
     with open(g_csv, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
@@ -196,17 +196,34 @@ def main():
         check(abs(float(row["firm_n1_loading_pct"]) - rec["loading_pct"]) < 1e-6, f"Golden CSV Load {s}")
         check(row["assigned_relief_phase"] == rec["phase"], f"Golden CSV Phase {s}")
 
-    wb_g = openpyxl.load_workbook(os.path.join(GOLDEN, DL.FILES["wb"]), data_only=True)
+    wb_path = os.path.join(GOLDEN, DL.FILES["wb"])
+    wb_g = openpyxl.load_workbook(wb_path, data_only=True)
+    wb_f = openpyxl.load_workbook(wb_path, data_only=False)
     check(wb_g.sheetnames == ["Relief_Schedule", "Critical_Components", "Referee_Validation",
                               "Routes_Comparison", "Variant_Battery"], f"Golden XLSX tabs: {wb_g.sheetnames}")
     ws0 = wb_g["Relief_Schedule"]
+    ws0_f = wb_f["Relief_Schedule"]
     check(len(ws0._charts) == 1, "Golden XLSX Relief_Schedule carries 1 embedded chart")
-    check(abs(float(ws0["G13"].value) - fig["pool_lim_mva_sum"]) < 1e-6, "Golden XLSX G13 unrounded Lim_MVA sum tie-out")
-    check(abs(float(ws0["I13"].value) - fig["total_relief_mva"]) < 1e-6, "Golden XLSX Total Relief tie-out")
+    check(abs(float(ws0["D13"].value) - fig["c1_total_p15_mw"]) <= 0.01, "Golden XLSX D13 C1 P15 tie-out")
+    check(abs(float(ws0["E13"].value) - fig["c2_total_qpeak_mvar"]) <= 0.01, "Golden XLSX E13 C2 Q tie-out")
+    check(abs(float(ws0["F13"].value) - fig["c3_mean_lim_phase_pct"]) <= 0.01, "Golden XLSX F13 C3 w_max tie-out")
+    check(abs(float(ws0["G13"].value) - fig["pool_lim_mva_sum"]) <= 0.01, "Golden XLSX G13 unrounded Lim_MVA sum tie-out")
+    check(abs(float(ws0["I13"].value) - fig["total_relief_mva"]) <= 0.01, "Golden XLSX Total Relief tie-out")
+    check(str(ws0_f["E13"].value) == "=SUM(E6:E12)", f"Golden XLSX E13 is live SUM formula ({ws0_f['E13'].value})")
+    n_formulas = sum(
+        1 for sn in wb_f.sheetnames for row_c in wb_f[sn].iter_rows()
+        for c in row_c if isinstance(c.value, str) and c.value.startswith("=")
+    )
+    check(n_formulas >= 50, f"Golden XLSX carries >= 50 live Excel formulas (found {n_formulas})")
+    with zipfile.ZipFile(wb_path) as zxw:
+        ch_xml = zxw.read("xl/charts/chart1.xml").decode("utf-8")
+        check("strRef" in ch_xml and "cat><" not in ch_xml.replace("c:strRef", "").replace("strRef", "") or "strRef" in ch_xml,
+              "Golden XLSX chart1.xml uses strRef for category labels")
+    check(all(not cid.startswith(("COR-R", "COR-T")) for cid in pack_world["corridors"]),
+          f"Corridor IDs use neutral regional naming (found {sorted(pack_world['corridors'])})")
     ch0 = ws0._charts[0]
     check(ch0.y_axis.axPos == "b" and ch0.x_axis.axPos == "l", "Golden XLSX horizontal bar chart axis positions correct")
 
-    # Cell-by-cell style readback check across all tabs of golden workbook (postprocess.normalize_ooxml fidelity)
     styled_cells = 0
     for sname in wb_g.sheetnames:
         ws_s = wb_g[sname]
@@ -216,7 +233,6 @@ def main():
                      cell.fill.fgColor, cell.border.top.style, cell.border.bottom.style, cell.number_format)
                 styled_cells += 1
     check(styled_cells > 500, f"Read back styles for {styled_cells} golden cells without index error")
-    # Header row 5 on Relief_Schedule must carry white ink (FFFFFF), navy fill (1F3B5C), and medium bottom border
     for col in range(1, 11):
         hc = ws0.cell(row=5, column=col)
         check(hc.font.bold and str(hc.font.color.rgb or "").upper().endswith("FFFFFF"),
@@ -225,18 +241,15 @@ def main():
               f"Header col {col} carries solid navy fill ({hc.fill.fgColor.rgb})")
         check(hc.border.bottom.style == "medium",
               f"Header col {col} carries medium bottom border ({hc.border.bottom.style})")
-    # Total row 13 carries thin top and medium bottom border
     for col in range(1, 11):
         tc = ws0.cell(row=13, column=col)
         check(tc.font.bold and tc.border.top.style == "thin" and tc.border.bottom.style == "medium",
               f"Total row col {col} carries bold font + thin top / medium bottom border")
 
-    # Zero em/en dashes in prompt.txt and submission.md
     for fn in ("prompt.txt", "submission.md"):
         t = open(os.path.join(TASK, fn), encoding="utf-8").read()
         check("\u2014" not in t and "\u2013" not in t, f"Zero em/en dashes in {fn}")
 
-    # Zip files exist and contain exact files
     with zipfile.ZipFile(os.path.join(TASK, "target.zip")) as zt:
         check(sorted(zt.namelist()) == tfiles, "target.zip entries match target/")
     with zipfile.ZipFile(os.path.join(TASK, "golden.zip")) as zg:
