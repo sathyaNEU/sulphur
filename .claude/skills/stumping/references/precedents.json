@@ -1696,6 +1696,30 @@
    "move": "two error terms of one transfer (the sensor's ratio and the site's residual) taken as independent Gaussians, named and left untested",
    "source": "task3/runs/arch8/run2.md (platform run on architecture 8, pasted by the author 2026-11-21)",
    "quote": "Log radar ratio and residual source-station η are treated as independent Gaussians; ground truth may have correlated or non-Gaussian spatial fields."
+  },
+  {
+   "id": "L68",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a carried per-step noise added up in full over every step between two compared states (a random walk), with the decay the record's change-by-gap curve shows never fitted",
+   "source": "task9/runs/arch5_pair1_response_1.md (platform run on architecture 5, pasted by the author 2026-11-22)",
+   "quote": "noise and training are treated as accruing per refresh"
+  },
+  {
+   "id": "N45",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "the accumulation form of a carried noise named as the weakest-identified assumption and kept without testing it against the record's change by gap",
+   "source": "task9/runs/arch5_pair1_response_1.md (platform run on architecture 5, pasted by the author 2026-11-22)",
+   "quote": "I flag this as the least directly identified dynamic"
+  },
+  {
+   "id": "L69",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the run wrote the correct overlap estimator, computed an in-band figure on one form of it, and filed a different out-of-band figure",
+   "source": "task9/runs/arch5_pair1_response_2.md (platform run on architecture 5, pasted by the author 2026-11-22)",
+   "quote": "added-rows-only face-value scaling yields Training data 7.1146 points"
   }
  ]
 }

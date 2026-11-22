@@ -85,6 +85,10 @@ def writeup_figures(text, years=False):
             if v is None:
                 continue
             start, end = m.span()
+            if re.search(r"\b(?:section|sections|clause|clauses|and|or)\s+$", body[max(0, start - 12):start], re.I) and \
+                    re.search(r"\bsections?\s+[\d.]+(?:\s*(?:,|and|or)\s*[\d.]+)*\s*$", body[max(0, start - 40):start] + raw,
+                              re.I | re.S):
+                continue                                                 # a section number is not a figure
             ctx = body[max(0, start - 12):end + 12]
             bare = re.fullmatch(r"[-+]?\d+", raw) is not None
             if bare and 1900 <= abs(v) <= 2100 and not years and not UNIT_NEAR.search(body[end:end + 8]):
