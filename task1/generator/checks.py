@@ -835,19 +835,20 @@ def main():
     if runs_in:
         stump = sub.split("## " + WU.STUMP)[1].split("## Supplementary Questions")[0]
         said = {n: open(os.path.join(WU.RUNS_DIR, r["file"])).read() for n, r in WU.RESPONSES.items()}
-        r1 = WU.RESPONSES[1]
-        ok("stump block: every figure and phrase it takes from a response is in that response's own text (%d and %d), "
-           "and the second response never names a store" % (len(WU.quoted(r1)), len(WU.quoted(WU.RESPONSES[2]))),
-           all(q in said[n] for n, r in WU.RESPONSES.items() for q in WU.quoted(r)) and "store" not in said[2].lower())
-        ok("stump block: the first response's figures at the blocks' precision beside the CSV's, and the question's "
-           "three parts in order",
-           all(("%.3f where it is a hold at %.3f" % (float(r1["returns"][c]), fig["return_plan"][c])) in stump
-               for c in ("Meta iOS", "AppLovin Android"))
-           and all(("EUR %.2f each against %.2f" % (float(r1["paid"][c]), fig["paid_per_install"][c])) in stump
-                   for c in r1["paid"])
-           and ("(%.3f against %.3f)" % (float(r1["returns"]["Google Android"]),
-                                         fig["return_plan"]["Google Android"])) in stump
-           and ("(%s to %s against %s to %s)" % tuple("0" + x for x in WU.RESPONSES[2]["factors"])) in stump
+        r1, r2 = WU.RESPONSES[1], WU.RESPONSES[2]
+        ok("stump block: every figure and phrase it takes from a response is in that response's own text (%d and %d)"
+           % (len(WU.quoted(r1)), len(WU.quoted(r2))),
+           all(q in said[n] for n, r in WU.RESPONSES.items() for q in WU.quoted(r)))
+        ga, aa, ma = "Google Android", "AppLovin Android", "Meta iOS"
+        ok("stump block: each response's figures as it writes them beside the CSV's, and the question's three parts in "
+           "order",
+           ("(%s and %s where they are holds at %.3f and %.3f)" % (
+               r1["returns"][ga], r1["returns"][aa], fig["return_plan"][ga], fig["return_plan"][aa])) in stump
+           and ("(%s where it is a hold at %.3f)" % (r2["returns"][aa], fig["return_plan"][aa])) in stump
+           and all(("EUR %s each against %.2f" % (r["paid"][c], fig["paid_per_install"][c])) in stump
+                   for r, c in ((r1, aa), (r1, ma), (r2, aa)))
+           and ("%s installs a week against %d" % (r1["installs"][ga], fig["installs_week"][ga])) in stump
+           and ("Google Android %s a week against %d" % (r2["installs"][ga], fig["installs_week"][ga])) in stump
            and stump.index("**Response 1**") < stump.index("**Response 2**") < stump.index("**Why it is fair.**")
            < stump.index("**Why it takes rigour.**"))
     ok("blocks: every return in the recommendation is the CSV's", all(("%s %.3f" % (c, fig["return_plan"][c])) in sub for c in MEM))

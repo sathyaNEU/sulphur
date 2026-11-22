@@ -107,7 +107,7 @@
  "submitted": null,
  "portal": null,
  "prompt_rewritten": false,
- "resume": "The two responses to the reworded prompt (94c0f1d) are on file as runs/rerun1.md and runs/rerun2.md and read in runs.rerun. The stump block in submission.md still describes the earlier pair (runs/run1.md, runs/run2.md, generated before the rewording) and is rewritten for the new pair before the build is submitted, with writeup.py's RESPONSES and the two stump-block checks in checks.py. Owed: the two scores and the generated rubric (runs/rubric.md), /triage-runs task1, the open fork in runs.open_fork put on file (/fix-determinism; the new Response 2 takes that reading as a named judgment call and the new Response 1 rejects it from the files), then the SUBMITTED commit",
+ "resume": "The stump block in submission.md is rewritten for the two responses to the reworded prompt (runs/rerun1.md, runs/rerun2.md; emitted by writeup.py from RESPONSES, checked in checks.py, 339 checks pass): Response 1 lost the stores' charges and made the other two steps, Response 2 lost the stores' charges and the carry to the plan. The other four blocks did not move. The pair from before the rewording stays in runs/run1.md and runs/run2.md as record. Owed: the two scores and the generated rubric (runs/rubric.md), /triage-runs task1, the open fork in runs.open_fork put on file (/fix-determinism; the new Response 2 takes that reading as a named judgment call and the new Response 1 rejects it from the files), then the SUBMITTED commit",
  "redraws": [
   {
    "date": "2026-11-16",
