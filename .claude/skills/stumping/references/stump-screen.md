@@ -154,7 +154,11 @@ nothing in-house solves the task, so the idea has to be right before it is built
    on an unfiled parameter of the recording (what an older receiver adds, which no document states), identified by a
    joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over
    (the strong strokes every network locates put a station's true count within ten per cent and read the receiver's
-   worth off, the warning case beside it).
+   worth off, the warning case beside it). **An unfiled parameter is still a closed card when its trap is a reading biased
+   against the truth**: a shield's solar gain, a gauge's undercatch, a sensor's offset, used at face value and varying
+   by group, is the calibrated-source card however the bias is estimated (task3 arch 10's first screen, a gain read
+   off cloud passages in place of checked cases), and a frame with the history on one sensor basis and the decision
+   on another hands every run the recognition in the prompt, so two such parameters are never independent.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
    full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
@@ -202,6 +206,7 @@ screen, whatever its domain or nouns.
 | a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | task3 arch 8, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
 | stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | task3 arch 9's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
 | stand-down hours with no well-covered day, the storm process fitted to the thin records through the filed detection curve (with and without flash structure) | task3 arch 9's redraws, the screen (a ladder of the record thinned further and extrapolated to full sight filed the golden's call at 11 of 12 and 7 of 16 settings) | 18 (a filed recording law is a handle) |
+| a roadside thermometer's shield solar gain and a pavement puck's depth, restated to new standard sensors that the restriction rule runs on | task3 arch 10's first screen (the gain is the calibrated-source card's trap word for word; the prompt names the new basis, so both recognitions come with it) | 18 (a reading biased against the truth is the calibrated-source card, whatever the estimator) |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 
