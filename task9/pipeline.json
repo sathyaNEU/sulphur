@@ -71,7 +71,7 @@
   ]
  },
  "returned": null,
- "resume": "the author submits the five fields from submission.md (Final Recommendation, How is each model stumped?, Supplementary Questions, Critical Components, Step-by-Step) with the Reward block (both platform scores); SUBMITTED on the author's word; the feature-release netting on pinned views is held for the holistic audit (the author's ruling of 2026-11-22: no fixes unless the audit asks)",
+ "resume": "the audit's three pins through /fix-determinism (netting and carry-forward in the standard, the pinned-share ask as actual use), on the author's go-ahead; then the blocks re-emitted, the void pair archived, re-judge once, RESHIPPED, a new pair",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -202,6 +202,10 @@
   {
    "date": "2026-11-22",
    "event": "How is each model stumped? emitted in submission.md by generator/writeup.py from runs/run1.md and runs/run2.md (every quote and response figure asserted against the saved text, golden figures from figures.json, 805 words); the four graded blocks byte-identical; gates.py task9 0 FAIL, 3 WARN as at READY; the author's ruling: no fixes unless the holistic audit asks"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "Holistic Audit v2 failed the build on determinism (score 2; depth accepted at level 4): feature releases and optimisation noise not forced (no filed netting on pinned views, the pinned share not pinned as actual use, the warm start's carried noise not stated); the auditor had no pack and no execution. Saved as runs/holistic_audit_v2_2026-11-22.md. Paper pricing of its three pins with the stated bands: S1 and S2 stay decisive (one lost alone 29 and 29, both lost 22), S3 likely a reflex once actual use is asked (the pooled plug-in median lag files 59.4, inside the 53.2 to 60.0 band)"
   }
  ],
  "final_cut": null
