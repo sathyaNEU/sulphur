@@ -177,6 +177,10 @@
   {
    "date": "2026-11-22",
    "event": "the platform's prompt review (NATURAL, 1 of 9 signals) asked to cut the sentence on why the figures are estimates; cut, re-gated"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "the platform's prompt review on the trimmed prompt: NATURAL, AI-writing scan few or no signs, formatting PASS, nothing to cut (signal 4 a close call, marked absent); ready to upload"
   }
  ],
  "final_cut": null
