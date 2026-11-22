@@ -92,6 +92,11 @@ def main():
                                                              r["S3 lost alone"]) <= 50, r)
     ok("the reflex route earns 30 or under on the cut pack", r["reflex route (every stump lost)"] <= 30, r)
     ok("every run route earns 50 or under", all(r[k] <= 50 for k in r if "run route" in k), r)
+    rs = fig["rubric_stated"]["routes"]
+    ok("corelib on the stated bands: level 5, one stump lost 50 or under, the reflex 30 or under, every run route 50 "
+       "or under", "CORE PASS level 5" in fig["rubric_stated"]["verdict"] and
+       max(rs["S1 lost alone"], rs["S2 lost alone"], rs["S3 lost alone"]) <= 50 and
+       rs["reflex route (every stump lost)"] <= 30 and all(rs[k] <= 50 for k in rs if "run route" in k), rs)
 
     # ------------------------------------------------------------------ R1 the field's raw material
     pr = pd.read_csv(os.path.join(T, "mrm_instrument_pair_register_2026.csv"))
@@ -138,6 +143,67 @@ def main():
     for k, e in fig["extra"].items():
         ok("R6 rival inside its bands: %s" % k, e["call"] == fig["call"] and inside(e["own_share"], B["own_share"])
            and all(inside(e["points"][RS.NAMES[s]], B["points_" + s]) for s in C.SOURCES), e)
+    for k, e in fig["extra"].items():
+        ok("R6 tier changes inside their bands: %s" % k, inside(e["fr_sched"], B["fr_sched"]) and
+           inside(e["fr_removed"], B["fr_removed"]), e)
+    ok("SF19 the pinned-views share on calendar 2027's Mondays sits inside the band",
+       inside(fig["cc3_rivals"]["calendar 2027 weeks"], S["cc3"]), fig["cc3_rivals"])
+
+    # ------------------------------------------------------------------ the audit's forks, run in the golden's estimators
+    fk = fig["forks"]
+    ok("F the audit's admitted rivals all file the golden call", fk["calls_hold"])
+    for k, e in fk["admitted"].items():
+        cells = [inside(e["points"][RS.NAMES[s]], S["points_" + s]) for s in C.SOURCES] + \
+                [inside(e["share"][RS.NAMES[s]], S["share_" + s]) for s in C.SOURCES] + \
+                [inside(e[x], S[x]) for x in ("own_share", "cc3", "fr_sched", "fr_removed")]
+        ok("F admitted rival inside every stated band: %s" % k, all(cells), e)
+    ok("F calendar 2027's Mondays under every admitted take-up form sit inside the pinned-views band",
+       all(inside(v, S["cc3"]) for v in fk["calendar_cc3"].values()), fk["calendar_cc3"])
+    ok("F own change with 2026's release movement taken from a total over other weeks is refused (5.2, over those "
+       "pairs), and its lowest reading sits under the band", min(fk["own_share_mismatched_weeks"].values()) <
+       S["own_share"][0], fk["own_share_mismatched_weeks"])
+    ok("F the pooled and no-revert take-up as plug-ins keep the golden call", all(
+        v["call"] == fig["call"] for v in fk["refused_takeup"].values() if "call" in v), fk["refused_takeup"])
+    place = {"monitor": (0.0, 5.5), "a remediation plan": (5.5, 8.0), "escalation": (8.0, 1e9)}
+    for s in C.SOURCES:
+        a_, b_ = place[fig["band_of"][RS.NAMES[s]]]
+        ok("F the stated %s band lies inside its placement band" % s,
+           a_ <= S["points_" + s][0] and S["points_" + s][1] < b_, S["points_" + s])
+    refused = [("the line through gaps 8 to 26", fig["probe"]["line through gaps 8 to 26"], "points_optimisation"),
+               ("the free fit", fig["probe"]["unanchored fit"], "points_optimisation"),
+               ("thirteen refits added up", fig["probe"]["thirteen refits added up"], "points_optimisation"),
+               ("a whole replicate pair a refit", fig["probe"]["a whole replicate pair a refit"], "points_optimisation"),
+               ("each family's worst past lag", fig["probe"]["each family's worst past lag"], "points_releases"),
+               ("thirteen of 52 weeks for every family", fig["probe"]["thirteen of 52 weeks for every family"],
+                "points_turnover"),
+               ("the rows that entered only", fig["probe"]["the rows that entered only"], "points_turnover"),
+               ("every family counted once", fig["probe"]["every family counted once"], "points_turnover"),
+               ("feature releases as the mean of the four pairs' root-mean-square (3.2)",
+                fig["probe"]["feature releases as the mean of the four pairs' root-mean-square"], "points_releases"),
+               ("merchants' own change as a share of the record's own movement (5.2)",
+                fig["probe"]["merchants' own change as a share of the record's own movement"], "own_share")]
+    for k, e in fig["routes"].items():      # every member a run route places in another band than the golden
+        for s in C.SOURCES:
+            v = e["points"][RS.NAMES[s]]
+            if sum(1 for l in C.LINES if v >= l) != sum(1 for l in C.LINES if fig["points"][RS.NAMES[s]] >= l):
+                refused.append(("route %s, %s" % (k, RS.NAMES[s]), v, "points_" + s))
+    for k, v, key in refused:
+        ok("F refused figure outside its stated band: %s (%.2f)" % (k, v), not inside(v, S[key]), (v, S[key]))
+    for k, s, key in (("S1", "turnover", "points_turnover"), ("S2", "optimisation", "points_optimisation"),
+                      ("S3", "releases", "points_releases")):
+        ok("F %s lost alone: its member's figure and merchants' own share sit outside the stated bands" % k,
+           not inside(lat[k]["points"][RS.NAMES[s]], S[key]) and not inside(lat[k]["own_share"], S["own_share"]),
+           (lat[k]["points"][RS.NAMES[s]], lat[k]["own_share"]))
+    ok("F S3 lost alone: the pinned-views share sits outside the stated band", not inside(lat["S3"]["cc3"], S["cc3"]))
+    std_flat = " ".join(pdf_text(os.path.join(T, "gms_model_stability_standard_2026.pdf")).split())
+    ok("SF20 the standard files a year's movement as the root of the mean of the four pairs' mean-square changes",
+       "root of the mean of the source's expected mean-square changes over the four snapshot pairs" in std_flat)
+    ok("SF21 the standard files merchants' own share against the assessment year's movement",
+       "as a share of all movement in the assessment year" in std_flat and
+       "model-side sources' mean-square movements for that year together" in std_flat)
+    ok("SF6 the standard files own change over the snapshot pairs closed in the assessment's year",
+       "snapshot pairs that have closed in the year the assessment is made" in
+       " ".join(pdf_text(os.path.join(T, "gms_model_stability_standard_2026.pdf")).split()))
     for s in C.SOURCES:
         ok("R6 stated band %s holds the golden and the battery" % s,
            S["points_" + s][0] <= B["points_" + s][0] + 1e-9 and S["points_" + s][1] >= B["points_" + s][1] - 1e-9)
@@ -159,9 +225,11 @@ def main():
        "weighted by its" in std and not inside(fig["probe"]["every family counted once"], B["points_turnover"]),
        fig["probe"]["every family counted once"])
     ok("SF3 the four snapshot pairs that close in the assessment year are filed",
-       "four snapshot pairs" in std)
-    ok("SF4 no battery variant within 0.70 of a line on any source",
-       all(min(abs(x - l) for l in C.LINES for x in fig["battery_range"][RS.NAMES[s]]) > 0.70 for s in C.SOURCES))
+       "four snapshot pairs" in " ".join(std.split()))
+    ok("SF4 no battery variant or admitted rival within 0.60 of a line on any source (nearest: %s at %.2f against "
+       "%g)" % (fig["nearest_line"]["source"], fig["nearest_line"]["points"], fig["nearest_line"]["line"]),
+       fig["nearest_line"]["gap"] > 0.60 and
+       all(min(abs(x - l) for l in C.LINES for x in fig["battery_range"][RS.NAMES[s]]) > 0.60 for s in C.SOURCES))
     ok("SF5 the share is of mean-square movement (filed)", "mean-square movement as a share" in std)
     ok("SF6 merchants' own change readings: the 2026 pairs inside the band, every gap from July 2024 ruled out",
        inside(fig["extra"]["merchants' own change from the 2026 snapshot pairs only"]["own_share"], B["own_share"])
@@ -236,6 +304,17 @@ def main():
        len({int(os.path.getmtime(os.path.join(T, f))) for f in files}) == len(files))
     ok("realism: every family's book is between 1,000 and 25,000 merchants",
        pd.read_csv(os.path.join(T, "gms_scored_book_by_family.csv"))["scored_merchants"].between(800, 25000).all())
+
+    steps = pr["pair_id"].str[5:].astype(int).sort_values().diff().dropna()
+    ok("house H13: pair ids advance in no fixed step", steps.nunique() > 20, steps.nunique())
+    found = [os.path.relpath(x, TASK) for x in glob.glob(os.path.join(TASK, "**", "*"), recursive=True)
+             if os.path.basename(x) in ("submission.md", "prompt.txt", "prompt.md") and "/runs/" not in x]
+    ok("house H11: one submission.md and one prompt.txt in the task tree",
+       sorted(found) == ["prompt.txt", "submission.md"], found)
+    for f in files:
+        if f.endswith(".pdf"):
+            wide = max(len(x) for x in pdf_text(os.path.join(T, f)).splitlines() or [""])
+            ok("house H13: %s reads back inside its margins" % f, wide < 160, wide)
 
     # ------------------------------------------------------------------ the blocks
     sub = open(os.path.join(TASK, "submission.md")).read()

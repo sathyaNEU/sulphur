@@ -188,13 +188,34 @@ def workbook(path, fig, pk, g):
                "Bands it files"])
     _hdr(s7, 1, 7)
     show = [("Each instrument as it reads", fig["reflex"]),
-            ("Bootstrap pairs as they stand, calendar dates", fig["direct"])]
+            ("Bootstrap pairs as they stand, calendar planned weeks", fig["direct"])]
     for k, e in show:
         p = e["points"]
         s7.append([k] + [round(p[NAMES[s]], 2) for s in C.SOURCES] +
                   ["; ".join(e["call"])])
     _box(s7, 1, s7.max_row, 7)
     _cols(s7, (44, 12, 12, 10, 12, 12, 80))
+
+    s8 = wb.create_sheet("Notes")
+    day = lambda t: "%d %s" % (P.monday(t).day, P.monday(t).strftime("%B %Y"))
+    for line in (
+            ["Notes"],
+            ["Records to the refresh of %s; the assessment year is the four snapshot pairs closing on 22 March, "
+             "21 June, 20 September and 20 December 2027 (covenant schedule, C2)." % day(C.T - 1)],
+            ["Points are root-mean-square score points between consecutive quarter-end snapshots, the root of the "
+             "mean of the four pairs' mean-square changes, book weighted by scored merchants at the %s snapshot "
+             "(stability standard, 3.1 and 3.2). Shares are of mean-square movement (5.1)." % day(C.SPANS26[-1][1])],
+            ["Bands: monitor under 5.5 points, remediation plan 5.5 to under 8, escalation 8 or more (4.1)."],
+            ["Panel: where a weekly refresh was re-sent, the later load is used; Tolka Pay merchants re-keyed from "
+             "the refresh of %d %s are joined through the migration map." % (
+                 P.monday(P.MIGRATION_T).day, P.monday(P.MIGRATION_T).strftime("%B %Y"))],
+            ["Feature releases for 2027 are the roadmap as filed; labelled rows for 2027 are the data plan as filed "
+             "(standard, 2.1)."],
+            ["Tier changes count panel merchants scored at both snapshots (covenant schedule, C4.1); the removed "
+             "case takes out label revisions, optimisation noise, feature releases and training data in full (6.1)."]):
+        s8.append(line)
+    s8["A1"].font = Font(bold=True)
+    _cols(s8, (140,))
     wb.save(path)
 
 
@@ -225,6 +246,15 @@ def _table(slide, rows, left, top, width, height, widths=None, size=13):
         for j, wd in enumerate(widths):
             tbl.columns[j].width = Inches(wd)
     return tbl
+
+
+def _strip(slide, n):
+    tb = slide.shapes.add_textbox(Inches(0.5), Inches(7.0), Inches(12.3), Inches(0.35))
+    p = tb.text_frame.paragraphs[0]
+    p.text = ("Source: model risk instrument pairs, training scheduler runs, monitoring panel and change calendar to "
+              "23 November 2026; stability standard 2026; Schedule C.      %d" % n)
+    p.font.size = Pt(9)
+    p.font.color.rgb = RGBColor(0x6B, 0x72, 0x80)
 
 
 def deck(path, fig):
@@ -299,7 +329,8 @@ def deck(path, fig):
         ln.line.dash_style = MSO_LINE_DASH_STYLE.DASH
 
     s = prs.slides.add_slide(blank)
-    _title(s, "Where the movement between snapshots comes from",
+    _title(s, "Merchants' own change is %.1f per cent of all movement; label revisions lead the model side" %
+           fig["own_share"],
            "Mean-square movement, 2027, as a share of all movement (model-side sources and merchants' own change)")
     own = fig["own_share"]
     cd = CategoryChartData()
@@ -322,6 +353,8 @@ def deck(path, fig):
                ["2027, expected", "%.1f" % fig["fr_sched"]],
                ["2027, sources in a plan or escalation removed", "%.1f" % fig["fr_removed"]],
                ["Covenant cap", "12.0"]], Inches(0.8), Inches(2.0), Inches(8.0), Inches(2.6), widths=(6.0, 2.0), size=16)
+    for n, sl in enumerate(prs.slides, 1):
+        _strip(sl, n)
     prs.save(path)
 
 

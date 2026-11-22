@@ -29,8 +29,8 @@
  },
  "bands": {
   "points_optimisation": [
-   6.236495846761445,
-   7.325055121448869
+   6.055648269423739,
+   7.392741364810243
   ],
   "points_turnover": [
    6.356879950494792,
@@ -49,48 +49,48 @@
    10.045226606083903
   ],
   "share_optimisation": [
-   15.044616278541456,
-   20.659957605133172
+   15.392494117032317,
+   19.9805198861377
   ],
   "share_turnover": [
-   15.936438773686895,
+   16.11110834599792,
    21.326234641334015
   ],
   "share_retunes": [
-   7.416990754438215,
-   8.263773776031082
+   7.439568464882022,
+   8.163321471067858
   ],
   "share_releases": [
-   16.03629051286994,
-   18.310997552775465
+   16.30465971717262,
+   18.10092218182964
   ],
   "share_labels": [
-   36.95563967922418,
-   41.26543628048424
+   37.083005128184936,
+   40.69059830601776
   ],
   "cc3": [
-   53.60231003908373,
-   58.32501591707531
+   53.27841605224718,
+   59.94448585125808
   ],
   "own_share": [
-   41.82025619656588,
-   45.995626394198204
+   41.939096769828254,
+   46.65299015587746
   ],
   "fr_sched": [
-   13.644078005819313,
-   14.179096273295702
+   13.72292791596465,
+   14.59505975988997
   ],
   "fr_removed": [
-   9.490055823955528,
-   9.933301442483963
+   9.490251169347024,
+   10.220943123317557
   ],
   "cc1": [
    6.356879950494792,
    7.4361077936611935
   ],
   "cc2": [
-   6.236495846761445,
-   7.325055121448869
+   6.055648269423739,
+   7.392741364810243
   ]
  },
  "cc1": 6.617260960157563,
@@ -125,7 +125,10 @@
    "optimisation noise: monitor",
    "retunes: monitor",
    "training data: escalation"
-  ]
+  ],
+  "families_floored": 5,
+  "model_side_2026": 473.1073221926803,
+  "own_share_unfloored": 8.351297093797577
  },
  "direct": {
   "points": {
@@ -640,6 +643,12 @@
  },
  "variants": 36,
  "variants_core": 34,
+ "variants_all": 56,
+ "fit_grid": [
+  0.5,
+  0.985,
+  0.0025
+ ],
  "battery_range": {
   "optimisation noise": [
    6.417922392542682,
@@ -678,6 +687,8 @@
    },
    "own_share": 43.906754310765535,
    "cc3": 55.00875988521619,
+   "fr_sched": 13.98716841493256,
+   "fr_removed": 9.712405909925787,
    "call": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
@@ -696,6 +707,8 @@
    },
    "own_share": 43.69357586780602,
    "cc3": 55.00875988521619,
+   "fr_sched": 13.982836294182546,
+   "fr_removed": 9.691610267406729,
    "call": [
     "feature releases: a remediation plan",
     "label revisions: escalation",
@@ -704,6 +717,683 @@
     "training data: a remediation plan"
    ]
   }
+ },
+ "cc3_rivals": {
+  "calendar 2027 weeks": 56.82177878809893,
+  "book weighted": 59.895317419885174
+ },
+ "forks": {
+  "admitted": {
+   "settled weeks from the first warm retrain after the last cold one, fit anch26": {
+    "points": {
+     "optimisation noise": 6.722209246356948,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 17.869145368653978,
+     "training data": 17.315548454697005,
+     "retunes": 7.907642257040414,
+     "feature releases": 17.491515018782284,
+     "label revisions": 39.416148900826315
+    },
+    "own_share": 44.78785357521129,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.441418411446033,
+    "fr_removed": 10.13102954337545,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the first warm retrain after the last cold one, fit anch20": {
+    "points": {
+     "optimisation noise": 6.676824763831842,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 17.67116936539022,
+     "training data": 17.35728749531418,
+     "retunes": 7.9267035880872605,
+     "feature releases": 17.533678225898417,
+     "label revisions": 39.51116132530992
+    },
+    "own_share": 44.92062213267211,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.441418411446033,
+    "fr_removed": 10.14074496756826,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the first warm retrain after the last cold one, fit anch30": {
+    "points": {
+     "optimisation noise": 6.752576512103441,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.001827201427478,
+     "training data": 17.287575304840473,
+     "retunes": 7.894867515169156,
+     "feature releases": 17.46325759614746,
+     "label revisions": 39.35247238241543
+    },
+    "own_share": 44.69851440423982,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.441418411446033,
+    "fr_removed": 10.125337668463239,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the first warm retrain after the last cold one, fit flat": {
+    "points": {
+     "optimisation noise": 6.599208206550943,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 17.3335109923339,
+     "training data": 17.428475600515743,
+     "retunes": 7.959213679833032,
+     "feature releases": 17.60558976913077,
+     "label revisions": 39.67320995818655
+    },
+    "own_share": 45.14559858132607,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.441418411446033,
+    "fr_removed": 10.173564679654392,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from thirteen weeks after the last cold retrain, no floor, fit anch26": {
+    "points": {
+     "optimisation noise": 6.865595739703663,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.497074275073548,
+     "training data": 17.183162965053466,
+     "retunes": 7.847184622974527,
+     "feature releases": 17.35778418222073,
+     "label revisions": 39.11479395467773
+    },
+    "own_share": 44.42670757429378,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.291710111140082,
+    "fr_removed": 9.98214655969363,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from thirteen weeks after the last cold retrain, no floor, fit anch20": {
+    "points": {
+     "optimisation noise": 6.809719919053437,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.251950600635542,
+     "training data": 17.234842091992746,
+     "retunes": 7.87078537977765,
+     "feature releases": 17.40998849023794,
+     "label revisions": 39.23243343735613
+    },
+    "own_share": 44.59334555208159,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.291710111140082,
+    "fr_removed": 9.997280232110784,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from thirteen weeks after the last cold retrain, no floor, fit anch30": {
+    "points": {
+     "optimisation noise": 6.922854504794992,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.74880358387235,
+     "training data": 17.13009118023474,
+     "retunes": 7.822947868973513,
+     "feature releases": 17.304173063655288,
+     "label revisions": 38.99398430326411
+    },
+    "own_share": 44.25453255279194,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.291710111140082,
+    "fr_removed": 9.966355718202708,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from thirteen weeks after the last cold retrain, no floor, fit flat": {
+    "points": {
+     "optimisation noise": 6.147177419097185,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 15.393237161525892,
+     "training data": 17.83754117865371,
+     "retunes": 8.146025218609731,
+     "feature releases": 18.018812412490135,
+     "label revisions": 40.604384028720524
+    },
+    "own_share": 46.46543877929511,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.291710111140082,
+    "fr_removed": 10.186294728147763,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the last of the three past rollouts' first use, fit anch26": {
+    "points": {
+     "optimisation noise": 6.765761558307461,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.059488071736375,
+     "training data": 17.27541873349764,
+     "retunes": 7.8893158679023765,
+     "feature releases": 17.450977485541873,
+     "label revisions": 39.32479984132173
+    },
+    "own_share": 44.85384796241379,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.28270061787532,
+    "fr_removed": 10.018073554958276,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the last of the three past rollouts' first use, fit anch20": {
+    "points": {
+     "optimisation noise": 6.715305169568344,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 17.839003513238023,
+     "training data": 17.321903225511363,
+     "retunes": 7.910544345551032,
+     "feature releases": 17.49793436896522,
+     "label revisions": 39.43061454673436
+    },
+    "own_share": 45.001836369380705,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.28270061787532,
+    "fr_removed": 10.033440306699028,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the last of the three past rollouts' first use, fit anch30": {
+    "points": {
+     "optimisation noise": 6.82354016183715,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.31252953437725,
+     "training data": 17.222070308876074,
+     "retunes": 7.864952778394252,
+     "feature releases": 17.397086915864687,
+     "label revisions": 39.20336046248774
+    },
+    "own_share": 44.68302295227372,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.28270061787532,
+    "fr_removed": 10.001698701218308,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from the last of the three past rollouts' first use, fit flat": {
+    "points": {
+     "optimisation noise": 6.17775922191474,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 15.522944638336329,
+     "training data": 17.810195108656885,
+     "retunes": 8.133536850757183,
+     "feature releases": 17.99118844231642,
+     "label revisions": 40.54213495993318
+    },
+    "own_share": 46.50968941225318,
+    "cc3": 55.00875988521619,
+    "fr_sched": 14.28270061787532,
+    "fr_removed": 10.178767273418172,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from 2026 only, fit anch26": {
+    "points": {
+     "optimisation noise": 6.463998342828021,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 16.748243431644063,
+     "training data": 17.551866850388596,
+     "retunes": 8.01556383612155,
+     "feature releases": 17.730234963360925,
+     "label revisions": 39.954090918484866
+    },
+    "own_share": 44.34245477824928,
+    "cc3": 55.00875988521619,
+    "fr_sched": 13.868626206243185,
+    "fr_removed": 9.67964174603541,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from 2026 only, fit anch20": {
+    "points": {
+     "optimisation noise": 6.380338482100235,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 16.388109820090083,
+     "training data": 17.627793382859476,
+     "retunes": 8.050237866699797,
+     "feature releases": 17.806933087391652,
+     "label revisions": 40.12692584295899
+    },
+    "own_share": 44.58218327533034,
+    "cc3": 55.00875988521619,
+    "fr_sched": 13.868626206243182,
+    "fr_removed": 9.704751033171991,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from 2026 only, fit anch30": {
+    "points": {
+     "optimisation noise": 6.50372015647907,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 16.919780140344077,
+     "training data": 17.515701974172625,
+     "retunes": 7.99904810725889,
+     "feature releases": 17.693702567223482,
+     "label revisions": 39.87176721100092
+    },
+    "own_share": 44.227537988936604,
+    "cc3": 55.00875988521619,
+    "fr_sched": 13.868626206243185,
+    "fr_removed": 9.666988657851435,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "settled weeks from 2026 only, fit flat": {
+    "points": {
+     "optimisation noise": 6.520687362872119,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.6507994101211345,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 16.993156007065657,
+     "training data": 17.50023222919888,
+     "retunes": 7.991983404146534,
+     "feature releases": 17.67807561337602,
+     "label revisions": 39.83655274621291
+    },
+    "own_share": 44.17823659952821,
+    "cc3": 55.00875988521619,
+    "fr_sched": 13.868626206243185,
+    "fr_removed": 9.655150639068564,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "take-up loglin as a plug-in median lag": {
+    "points": {
+     "optimisation noise": 6.888407287694035,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.597045127933166,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.649349321157594,
+     "training data": 17.21006745746244,
+     "retunes": 7.859471331745782,
+     "feature releases": 17.105074048765502,
+     "label revisions": 39.17603784086867
+    },
+    "own_share": 43.95894756715543,
+    "cc3": 56.99492814877431,
+    "fr_sched": 13.970701964202837,
+    "fr_removed": 9.707337045955855,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "take-up linear as a plug-in median lag": {
+    "points": {
+     "optimisation noise": 6.888407287694035,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.612768755529357,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.63413737464627,
+     "training data": 17.196029507874453,
+     "retunes": 7.853060499097044,
+     "feature releases": 17.172689983129484,
+     "label revisions": 39.144082635252744
+    },
+    "own_share": 43.93884597646203,
+    "cc3": 55.81300567564303,
+    "fr_sched": 13.976363256168831,
+    "fr_removed": 9.707337045955857,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "take-up groups as a plug-in median lag": {
+    "points": {
+     "optimisation noise": 6.888407287694035,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.656471488618226,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.591797682344392,
+     "training data": 17.15695742294027,
+     "retunes": 7.835217109919705,
+     "feature releases": 17.3608866648325,
+     "label revisions": 39.055141119963125
+    },
+    "own_share": 43.88282084514671,
+    "cc3": 56.469629271827074,
+    "fr_sched": 13.984947198915728,
+    "fr_removed": 9.707337045955857,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "take-up own as a plug-in median lag": {
+    "points": {
+     "optimisation noise": 6.888407287694035,
+     "training data": 6.617260960157563,
+     "retunes": 4.471813088112299,
+     "feature releases": 6.622828983907176,
+     "label revisions": 9.98383122868686
+    },
+    "share": {
+     "optimisation noise": 18.62439857762189,
+     "training data": 17.187042312082372,
+     "retunes": 7.848956238154708,
+     "feature releases": 17.215978188218468,
+     "label revisions": 39.123624683922564
+    },
+    "own_share": 43.925969221141074,
+    "cc3": 56.469629271827074,
+    "fr_sched": 13.978861655395999,
+    "fr_removed": 9.707337045955855,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   }
+  },
+  "calendar_cc3": {
+   "calendar 2027's Mondays, take-up loglin": 56.82177878809893,
+   "calendar 2027's Mondays, take-up loglin as a plug-in": 58.8334742180896,
+   "calendar 2027's Mondays, take-up linear": 56.21970058171929,
+   "calendar 2027's Mondays, take-up linear as a plug-in": 57.65155174495834,
+   "calendar 2027's Mondays, take-up groups": 57.326555778358404,
+   "calendar 2027's Mondays, take-up groups as a plug-in": 58.30817534114237,
+   "calendar 2027's Mondays, take-up own": 56.921134723213626,
+   "calendar 2027's Mondays, take-up own as a plug-in": 58.30817534114237
+  },
+  "own_share_mismatched_weeks": {
+   "the first warm retrain after the last cold one": 39.72470449377237,
+   "thirteen weeks after the last cold retrain, no floor": 40.77177655165399,
+   "the last of the three past rollouts' first use": 41.3620423101519,
+   "the settled weeks": 42.963947174117685
+  },
+  "refused_takeup": {
+   "take-up pooled as a plug-in median lag": {
+    "cc3": 59.35877309503683,
+    "releases": 6.340377888056928,
+    "own_share": 44.282828891988665,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "calendar 2027's Mondays, take-up pooled": {
+    "cc3": 57.14257618338414
+   },
+   "calendar 2027's Mondays, take-up pooled as a plug-in": {
+    "cc3": 61.19731916435212
+   },
+   "take-up norevert as a plug-in median lag": {
+    "cc3": 59.61538461538461,
+    "releases": 6.377834840613031,
+    "own_share": 44.23607094077572,
+    "call": [
+     "feature releases: a remediation plan",
+     "label revisions: escalation",
+     "optimisation noise: a remediation plan",
+     "retunes: monitor",
+     "training data: a remediation plan"
+    ]
+   },
+   "calendar 2027's Mondays, take-up norevert": {
+    "cc3": 59.43427436456326
+   },
+   "calendar 2027's Mondays, take-up norevert as a plug-in": {
+    "cc3": 61.53846153846154
+   }
+  },
+  "admitted_range": {
+   "points_optimisation": [
+    6.147177419097185,
+    7.143628575667631
+   ],
+   "points_turnover": [
+    6.536751257689192,
+    7.256236486466793
+   ],
+   "points_retunes": [
+    4.468037902379786,
+    4.471813088112299
+   ],
+   "points_releases": [
+    6.423300552742179,
+    6.754679158445151
+   ],
+   "points_labels": [
+    9.982705398640814,
+    9.986090995732862
+   ],
+   "share_optimisation": [
+    15.393237161525892,
+    19.72406738403455
+   ],
+   "share_turnover": [
+    16.834738084961415,
+    20.427935330059494
+   ],
+   "share_retunes": [
+    7.558121258037026,
+    8.146025218609731
+   ],
+   "share_releases": [
+    16.415408352854193,
+    18.018812412490135
+   ],
+   "share_labels": [
+    37.67393911276752,
+    40.604384028720524
+   ],
+   "cc3": [
+    54.38942768541566,
+    58.8334742180896
+   ],
+   "own_share": [
+    42.5161512295046,
+    46.50968941225318
+   ],
+   "fr_sched": [
+    13.733247717065378,
+    14.441418411446033
+   ],
+   "fr_removed": [
+    9.563930093710267,
+    10.186294728147763
+   ]
+  },
+  "calls_hold": true
+ },
+ "nearest_line": {
+  "source": "optimisation noise",
+  "points": 6.147177419097185,
+  "line": 5.5,
+  "gap": 0.6471774190971846
+ },
+ "settled_floor": {
+  "week": 66,
+  "date": "6 October 2025",
+  "weeks": 60
+ },
+ "assessment_weeks": {
+  "first": "28 December 2026",
+  "last": "20 December 2027",
+  "refreshes": 52
  },
  "ruled": {
   "merchants' own change over every thirteen-week gap from July 2024": {
@@ -825,7 +1515,9 @@
   "unanchored fit": 8.767821401469638,
   "unanchored implied replicate": 17.441264636982595,
   "a whole replicate pair a refit": 12.865753611068419,
-  "thirteen refits added up": 9.09746162346179
+  "thirteen refits added up": 9.09746162346179,
+  "feature releases as the mean of the four pairs' root-mean-square": 5.965841829198447,
+  "merchants' own change as a share of the record's own movement": 39.198346131432366
  },
  "falsification": {
   "record": 42.344827659997556,
@@ -945,31 +1637,31 @@
    10.05
   ],
   "share_labels": [
-   36.9,
-   41.3
+   37.0,
+   40.7
   ],
   "points_optimisation": [
-   6.23,
-   7.33
+   6.05,
+   7.4
   ],
   "share_optimisation": [
-   15.0,
-   20.7
+   15.3,
+   20.0
   ],
   "points_releases": [
    6.34,
    6.84
   ],
   "share_releases": [
-   16.0,
-   18.4
+   16.3,
+   18.2
   ],
   "points_turnover": [
    6.35,
    7.44
   ],
   "share_turnover": [
-   15.9,
+   16.1,
    21.4
   ],
   "points_retunes": [
@@ -978,24 +1670,43 @@
   ],
   "share_retunes": [
    7.4,
-   8.3
+   8.2
   ],
   "cc3": [
-   53.6,
-   58.4
+   53.2,
+   60.0
   ],
   "own_share": [
-   41.8,
-   46.0
+   41.9,
+   46.7
   ],
   "fr_sched": [
-   13.6,
-   14.2
+   13.7,
+   14.6
   ],
   "fr_removed": [
    9.4,
-   10.0
+   10.3
   ]
+ },
+ "rubric_stated": {
+  "verdict": "CORE PASS level 5  task9",
+  "exit": 0,
+  "routes": {
+   "golden": 100,
+   "S1 lost alone": 29,
+   "S2 lost alone": 36,
+   "S3 lost alone": 36,
+   "S1 fixed alone": 22,
+   "S2 fixed alone": 16,
+   "S3 fixed alone": 22,
+   "reflex route (every stump lost)": 9,
+   "rigorous standard route": 9,
+   "calibrated run route": 9,
+   "cutoff run route": 22,
+   "generous run route": 42,
+   "hedge run route": 9
+  }
  },
  "panel_merchants": 29580,
  "weekly_check": 42.23151182489764,

@@ -4,6 +4,7 @@ loaded record), the rivals the cut pack adds to the core's battery, figures.json
     python3 task9/generator/results.py      prints the golden and the bands
 """
 import copy
+import datetime as dt
 import io
 import contextlib
 import json
@@ -78,6 +79,104 @@ def single_runs(pk, kind):
     return [math.sqrt(float(sum(wt[f] * per[f][i] for f in range(C.F))) * scale) for i in range(k)]
 
 
+def cc3_rivals(pk, g):
+    """The pinned-views share on calendar 2027's Mondays (4 January to 27 December), and weighted by the book (a
+    share of retrains counts each family's weekly retrain once, so the book weighting is not the prompt's)."""
+    m = pk.models["loglin"]
+    wk = np.arange(C.Y27 + 1, C.Y27 + 53)
+    cc = np.array([C.lognormal_cdf(wk - (pk.w["fv_planned"][f] + m["slip"]), m["mu"][f], m["sg"]) * (1 - m["rev"])
+                   for f in range(C.F)])
+    wt = pk.w["merch"] / pk.w["merch"].sum()
+    return {"calendar 2027 weeks": 100.0 * float(cc.mean()),
+            "book weighted": 100.0 * float((wt * g["cov"][:, 1:].mean(1)).sum())}
+
+
+def at_start(pk, start):
+    """The record's gap curves, event counts and thirteen-week change rebuilt from other first weeks: where a family's
+    settled weeks begin is the analyst's choice, and the curve, the closure and the release count move with it."""
+    q = copy.copy(pk)
+    s = [int(x) for x in start]
+    q.curves = [C.lag_curve(pk.w, pk.z, f, start=s[f])[0] for f in range(C.F)]
+    q.t0 = tuple(s)
+    q.events = [C.events_in_span(pk.w, f, s[f], C.LAGS) for f in range(C.F)]
+    q.curves26 = [C.lag_curve(pk.w, pk.z, f, start=max(s[f], C.Y26))[0] for f in range(C.F)]
+    q.d13 = np.array([c[C.H - 1] for c in q.curves])
+    q.d1 = np.array([c[0] for c in q.curves])
+    return q
+
+
+def plug_in(pk, model, weeks):
+    """Pinned views from the planned week plus the mean slip plus the family's median lag, less the reverted share."""
+    w = pk.w
+    return np.array([(weeks >= w["fv_planned"][f] + model["slip"] + math.exp(model["mu"][f])) * (1 - model["rev"])
+                     for f in range(C.F)], float)
+
+
+def integrated(pk, model, weeks):
+    w = pk.w
+    return np.array([C.lognormal_cdf(weeks - (w["fv_planned"][f] + model["slip"]), model["mu"][f], model["sg"]) *
+                     (1 - model["rev"]) for f in range(C.F)])
+
+
+def pair_mean_rms(pk, g):
+    """Feature releases read as the mean of the four 2027 pairs' root-mean-square changes (the reading the standard's
+    section 3.2 closes): each pair's book-weighted mean square from the roadmap releases that land in it."""
+    w = pk.w
+    wt = w["merch"] / w["merch"].sum()
+    out = []
+    for a, b in C.SPANS27:
+        ms = 0.0
+        for f in range(C.F):
+            hit = w["plan_weeks"][w["plan_hits"][:, f]]
+            hit = hit[(hit > a) & (hit <= b)]
+            ms += wt[f] * pk.inst["rel"][f] * float(np.sum(1 - g["cov"][f, hit - (C.Y27 - 1)]))
+        out.append(math.sqrt(ms))
+    return float(np.mean(out))
+
+
+START_RULES = ("the first warm retrain after the last cold one", "thirteen weeks after the last cold retrain, no floor",
+               "the last of the three past rollouts' first use", "2026 only")
+
+
+def forks(pk):
+    """The rivals the determinism audit opened, run in the golden's own estimators: where the settled weeks start
+    (with each fit), the take-up as a plug-in median lag, calendar 2027's Mondays for the pinned-views share; and,
+    refused, own change with 2026's release movement taken from a total measured over other weeks."""
+    w = pk.w
+    last_use = np.array([max(int(w[n]["eff"][f]) for n in ("runtime", "warm", "amp")) for f in range(C.F)])
+    starts = dict(zip(START_RULES, (w["last_cold"] + 1, w["last_cold"] + 13, last_use,
+                                    np.maximum(np.array(pk.t0), C.Y26))))
+    admitted, mism = {}, {}
+    for k, s in starts.items():
+        q = at_start(pk, s)
+        for fit in ("anch26", "anch20", "anch30", "flat"):
+            admitted["settled weeks from %s, fit %s" % (k, fit)] = C.evaluate(q, fit=fit)
+        if k != "2026 only":
+            q.events = [C.events_in_span(w, f, max(int(s[f]), C.Y26), C.LAGS) for f in range(C.F)]
+            mism[k] = C.evaluate(q)["own_share"]
+    q = copy.copy(pk)
+    q.events = [C.events_in_span(w, f, max(pk.t0[f], C.Y26), C.LAGS) for f in range(C.F)]
+    mism["the settled weeks"] = C.evaluate(q)["own_share"]
+    wp, wc = np.arange(C.Y27 - 1, 182), np.arange(C.Y27 + 1, C.Y27 + 53)
+    cal, refused = {}, {}
+    for m in ("loglin", "linear", "groups", "own", "pooled", "norevert"):
+        e = C.evaluate(pk, cov=plug_in(pk, pk.models[m], wp))
+        c1 = 100.0 * float(integrated(pk, pk.models[m], wc).mean())
+        c2 = 100.0 * float(plug_in(pk, pk.models[m], wc).mean())
+        if m in ("pooled", "norevert"):
+            # one lag for every family is refused by the past rollouts' lags by custom components, and no reverts
+            # by the manifests' reverted weeks; the battery's own pooled and no-revert members keep the call
+            refused["take-up %s as a plug-in median lag" % m] = {"cc3": e["cc3"], "releases": e["points"]["releases"],
+                                                                "own_share": e["own_share"], "call": call_list(e)}
+            refused["calendar 2027's Mondays, take-up %s" % m] = {"cc3": c1}
+            refused["calendar 2027's Mondays, take-up %s as a plug-in" % m] = {"cc3": c2}
+            continue
+        admitted["take-up %s as a plug-in median lag" % m] = e
+        cal["calendar 2027's Mondays, take-up %s" % m] = c1
+        cal["calendar 2027's Mondays, take-up %s as a plug-in" % m] = c2
+    return admitted, cal, mism, refused
+
+
 def run(target=None, quiet=True):
     target = target or os.path.join(TASK, "target")
     pk = L.pack(target)
@@ -101,21 +200,40 @@ def run(target=None, quiet=True):
     for m in L.MESS:
         mess[m] = C.evaluate(L.pack(target, mess=(m,)))
     fam = A["fam"] + list(extra.values())
+    admitted, cal_cc3, mism, refused_takeup = forks(pk)
+    lat = A["lattice"]
+    routes = A["routes"]
+    cut8 = C.evaluate(pk, S2="cut", cut_lag=8)
+    free = A["free"]
+    refused_e = list(lat.values()) + list(routes.values()) + list(A["extra"].values()) + [
+        cut8, free, C.evaluate(pk, S2="over"), C.evaluate(pk, S2="over2"), C.evaluate(pk, S3="worst"),
+        C.evaluate(pk, S3="y2026"), C.evaluate(pk, S1="flat"), C.evaluate(pk, S1="single"),
+        C.evaluate(pk, weights="equal")]
 
     keys = ["points_" + s for s in C.SOURCES] + ["share_" + s for s in C.SOURCES] + ["cc3", "own_share",
                                                                                    "fr_sched", "fr_removed"]
-    bands = {}
+    bands, adm_range = {}, {}
     for k in keys:
-        vals = [e[k] for e in fam] + [g[k]]
+        vals = [e[k] for e in fam] + [g[k]] + [e[k] for e in admitted.values()]
+        if k == "cc3":
+            vals += list(cal_cc3.values())
         lo, hi = min(vals), max(vals)
+        adm_range[k] = [lo, hi]
         bands[k] = [lo - 0.25 * (hi - lo), hi + 0.25 * (hi - lo)]
+        # an edge stops halfway to the nearest figure a refused route, a lost stump or a ruled-out probe files
+        ref = [e[k] for e in refused_e]
+        if k == "own_share":
+            ref += list(mism.values())
+        below, above = [v for v in ref if v < lo - 1e-9], [v for v in ref if v > hi + 1e-9]
+        if below:
+            bands[k][0] = max(bands[k][0], 0.5 * (max(below) + lo))
+        if above:
+            bands[k][1] = min(bands[k][1], 0.5 * (min(above) + hi))
     for s, kind in (("retunes", "retune_shadow"), ("labels", "label_freeze")):
         sr = single_runs(pk, kind)
         bands["points_" + s] = [min(bands["points_" + s][0], min(sr)), max(bands["points_" + s][1], max(sr))]
     bands["cc1"], bands["cc2"] = bands["points_turnover"], bands["points_optimisation"]
 
-    lat = A["lattice"]
-    routes = A["routes"]
     reflex = lat["S1+S2+S3"]
     direct = routes["direct"]
     fals = A["fals"]
@@ -140,8 +258,6 @@ def run(target=None, quiet=True):
         loo[name] = {"record": float(np.mean(obs)), "model": float(np.mean(pred))}
     past = C.past_adoption(pk.w)
     lags = np.array([r[5] - r[4] for r in past])
-    free = A["free"]
-    cut8 = C.evaluate(pk, S2="cut", cut_lag=8)
     probe = {"thirteen of 52 weeks for every family": C.evaluate(pk, S1="flat")["points"]["turnover"],
              "the rows that entered only": C.evaluate(pk, S1="single")["points"]["turnover"],
              "every family counted once": C.evaluate(pk, weights="equal")["points"]["turnover"],
@@ -151,8 +267,21 @@ def run(target=None, quiet=True):
              "unanchored fit": free["points"]["optimisation"],
              "unanchored implied replicate": bw(free["A"] * (1 - free["phi"] ** 2)),
              "a whole replicate pair a refit": C.evaluate(pk, S2="over2")["points"]["optimisation"],
-             "thirteen refits added up": C.evaluate(pk, S2="over")["points"]["optimisation"]}
+             "thirteen refits added up": C.evaluate(pk, S2="over")["points"]["optimisation"],
+             "feature releases as the mean of the four pairs' root-mean-square": pair_mean_rms(pk, g),
+             "merchants' own change as a share of the record's own movement":
+                 100.0 * g["own"] / float((pk.w["merch"] * pk.d13).sum() / pk.w["merch"].sum())}
 
+    rel26 = pk.inst["rel"] * np.array([pk.events[f][C.H - 1, 1] for f in range(C.F)])
+    side26 = (reflex["opt13"] + reflex["tur"] + pk.inst["ret"] * C.H / 4.0 + pk.inst["lab"] * C.H + rel26)
+    unfloored = bw(pk.d13 - side26)
+    reflex_floor = {"families_floored": int(np.sum(pk.d13 - side26 < 0)), "model_side_2026": bw(side26),
+                    "own_share_unfloored": 100.0 * unfloored / (unfloored + sum(reflex["agg"].values()))}
+    allv = fam + list(admitted.values())
+    near = min(((abs(e["points"][s] - l), NAMES[s], e["points"][s], l) for e in allv for s in C.SOURCES
+                for l in C.LINES), key=lambda x: x[0])
+    d0 = dt.date(2024, 7, 1)
+    when = lambda t: "%d %s" % ((d0 + dt.timedelta(weeks=int(t))).day, (d0 + dt.timedelta(weeks=int(t))).strftime("%B %Y"))
     fig = {
         "call": call_list(g),
         "points": {NAMES[s]: g["points"][s] for s in C.SOURCES},
@@ -165,7 +294,7 @@ def run(target=None, quiet=True):
         "reflex": {"points": {NAMES[s]: reflex["points"][s] for s in C.SOURCES},
                    "share": {NAMES[s]: reflex["share"][s] for s in C.SOURCES}, "cc3": reflex["cc3"],
                    "own_share": reflex["own_share"], "fr_sched": reflex["fr_sched"], "fr_removed": reflex["fr_removed"],
-                   "call": call_list(reflex)},
+                   "call": call_list(reflex), **reflex_floor},
         "direct": {"points": {NAMES[s]: direct["points"][s] for s in C.SOURCES}, "cc3": direct["cc3"],
                    "call": call_list(direct)},
         "rigorous": {"points": {NAMES[s]: routes["rigorous"]["points"][s] for s in C.SOURCES},
@@ -176,13 +305,26 @@ def run(target=None, quiet=True):
                    for k, e in list(routes.items()) + list(A["extra"].items())},
         "over": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "call": call_list(e)}
                  for k, e in A["over"].items()},
-        "variants": len(fam), "variants_core": len(A["fam"]),
+        "variants": len(fam), "variants_core": len(A["fam"]), "variants_all": len(fam) + len(admitted),
+        "fit_grid": [0.50, 0.985, 0.0025],
         "battery_range": {NAMES[s]: [min(e["points"][s] for e in fam), max(e["points"][s] for e in fam)]
                           for s in C.SOURCES},
         "battery_cc3": [min(e["cc3"] for e in fam), max(e["cc3"] for e in fam)],
         "battery_calls": sorted(set(tuple(call_list(e)) for e in fam)) == [tuple(call_list(g))],
         "extra": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "own_share": e["own_share"],
-                      "cc3": e["cc3"], "call": call_list(e)} for k, e in extra.items()},
+                      "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
+                      "call": call_list(e)} for k, e in extra.items()},
+        "cc3_rivals": cc3_rivals(pk, g),
+        "forks": {"admitted": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES},
+                                   "share": {NAMES[s]: e["share"][s] for s in C.SOURCES}, "own_share": e["own_share"],
+                                   "cc3": e["cc3"], "fr_sched": e["fr_sched"], "fr_removed": e["fr_removed"],
+                                   "call": call_list(e)} for k, e in admitted.items()},
+                  "calendar_cc3": cal_cc3, "own_share_mismatched_weeks": mism, "refused_takeup": refused_takeup,
+                  "admitted_range": adm_range,
+                  "calls_hold": all(call_list(e) == call_list(g) for e in admitted.values())},
+        "nearest_line": {"source": near[1], "points": near[2], "line": near[3], "gap": near[0]},
+        "settled_floor": {"week": 66, "date": when(66), "weeks": C.T - 66},
+        "assessment_weeks": {"first": when(C.Y27), "last": when(181), "refreshes": int(181 - C.Y27 + 1)},
         "ruled": {k: {"points": {NAMES[s]: e["points"][s] for s in C.SOURCES}, "own_share": e["own_share"],
                       "call": call_list(e)} for k, e in ruled.items()},
         "pre_settled": {"d13_before": bw(pre_gap), "d13_settled": bw(pk.d13),
@@ -223,6 +365,7 @@ def run(target=None, quiet=True):
     fig["rubric"] = rubric(A["spec"])
     import writeup
     fig["stated"] = writeup.stated(fig)
+    fig["rubric_stated"] = rubric(stated_spec(A["spec"], fig["stated"]))
     fig["panel_merchants"] = fig["base"]["panel_merchants"]
     fig["weekly_check"] = fig["falsification"]["golden"]
     fig["cap"] = 12
@@ -230,6 +373,21 @@ def run(target=None, quiet=True):
     fig["loo_pct"] = {k: [100 * v["record"], 100 * v["model"]] for k, v in fig["loo"].items()}
     fig["lines"] = list(C.LINES)
     return pk, A, fig, E
+
+
+def stated_spec(spec, S):
+    """The core's pricing spec with every figure's band set to the band the answer blocks state."""
+    spec = copy.deepcopy(spec)
+    key = {"CC1 turnover alone, points": "points_turnover", "CC2 optimisation noise alone, points": "points_optimisation",
+           "CC3 share of 2027 retrains on pinned views": "cc3", "pinned views share, on its own ask line": "cc3",
+           "merchants' own share of all movement": "own_share", "2027 flip rate as scheduled": "fr_sched",
+           "2027 flip rate with the designated sources removed": "fr_removed"}
+    for s in C.SOURCES:
+        key["%s points, on its line" % s] = "points_" + s
+        key["share %s" % s] = "share_" + s
+    for f in spec["figures"]:
+        f["band"] = list(S[key[f["id"]]])
+    return spec
 
 
 def rubric(spec):

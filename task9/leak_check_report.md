@@ -11,7 +11,7 @@ Stump terms swept: family, replicate, missed, bootstrap, calendar, instrument, v
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 3 of 25 stump-paragraph terms appear (family, snapshot, thirteen); read whether the document names the move
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: 9 of 25 stump-paragraph terms appear (family, training, revisions, snapshot, thirteen, releases); read whether the document names the move
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: 8 of 25 stump-paragraph terms appear (family, training, revisions, snapshot, releases, optimisation); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
 - **REVIEW** `feature_platform_roadmap_2027.xlsx`: 24 ISO dates after 2026-11-25, e.g. 2026-12-28, 2027-01-04, 2027-01-11, 2027-01-18, 2027-02-08

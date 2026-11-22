@@ -172,8 +172,9 @@ STANDARD = [
         "3.1 A source's movement is the root-mean-square change in a merchant's score between two consecutive "
         "quarter-end snapshots that the source alone produces, every scored merchant counted once and each model "
         "family weighted by its scored merchants at the latest quarter-end snapshot.",
-        "3.2 For an assessment year it is the expected movement over the four snapshot pairs that close in that year, "
-        "the snapshots being those of the covenant schedule. It is stated in score points."]),
+        "3.2 For an assessment year it is the root of the mean of the source's expected mean-square changes over the "
+        "four snapshot pairs that close in that year, the snapshots being those of the covenant schedule. It is stated "
+        "in score points."]),
     ("4. Bands", [
         "4.1 Each source is placed in one band on its movement for the assessment year:",
         [["Band", "Movement", "What it requires"],
@@ -184,9 +185,11 @@ STANDARD = [
     ("5. Shares", [
         "5.1 A source's share is its mean-square movement as a share of the sum of the model-side sources' "
         "mean-square movements, in per cent.",
-        "5.2 Merchants' own change is the mean-square change in a merchant's score over thirteen weekly refreshes in "
-        "the record, less the model-side sources' mean-square movements as they stood in the record. It is reported "
-        "apart, as a share of all movement (merchants' own change and the model-side sources together)."]),
+        "5.2 Merchants' own change is the mean-square change in a merchant's score between two consecutive "
+        "quarter-end snapshots, over the snapshot pairs that have closed in the year the assessment is made, less the "
+        "model-side sources' mean-square movements over those pairs as they stood then. It is carried into the "
+        "assessment year as it stands and reported apart, as a share of all movement in the assessment year "
+        "(merchants' own change and the model-side sources' mean-square movements for that year together)."]),
     ("6. The covenant test", [
         "6.1 With the placements the committee reports the share of merchants expected to change tier between "
         "consecutive quarter-end snapshots in the assessment year, and the same share with the movement of every "
