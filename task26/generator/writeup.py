@@ -15,53 +15,69 @@ def _stump_block(fig):
     subs = fig["substations"]
     rp = fig["ref_params"]
     pd = fig["phys_details"]
-    pr = fig["phys_ratios"]
     ps = fig["pack_stats"]
     rt = fig["routes"]
 
     r1_quotes = [
-        "15.470 MVA",
-        "Hestmark 101.671%",
-        "Svarthaug 112.930%",
-        "Kvernholm as the highest Defer case at 82.487%",
-        "195.428 MW",
-        "This is a floor, not a true 15-minute measurement",
-        "Drangvik 51.807 MW vs 31.050 MW",
-        "Lindberg 36.579 vs 24.570 MW",
-        "+23.710 signed peak-hour MVAr",
-        "assumes January's net compensation state applies at the peak hour",
-        "Kvernholm -0.023008 -> -0.564",
-        "Malmnes 0.476442 -> +14.566",
-        "no power-flow study in the standard",
-        "36.584%",
-        "matched 80/80 (100.0%)",
-        "75/220 (34.09%)",
-        "~0.620 commercial / ~0.125 residential",
-        "This is the largest judgment call",
-        "Limiting phase C at 47.548%",
-        "Limiting phase C at 34.122%",
-        "dropped all 4,800 preliminary rows",
+        "23.839427 MVA",
+        "103.249279%",
+        "125.117702%",
+        "98.317706%",
+        "80.513828%",
+        "74.179898%",
+        "67.615885%",
+        "51.609703%",
+        "195.428260 MW",
+        "37.084292% to 69.362548%",
+        "Inspected but did not use pq_commissioning_2026.csv",
+        "It cannot observe a pool site's January 16 coincident peak",
+        "This is the largest judgment call and not an observed interval maximum",
+        "+23.562169 MVAr",
+        "do not enter Section 3 capacity",
+        "assumes January monthly PF applies at peak",
+        "-0.563534 MVAr",
+        "+3.995930 MVAr",
+        "+14.574302 MVAr",
+        "80/80 (100.000000%)",
+        "20.000000%-35.000000%",
+        "retained their GIS phase as the only unmetered phase record",
+        "No better defensible legacy source exists in the records",
+        "38.222524%",
+        "51.754793%",
+        "36.349977%",
+        "discarded 4,800 preliminary records",
+        "within 0.000040 MW",
+        "33 pending renames",
     ]
     r2_quotes = [
-        "24.930 MVA",
-        "Svarthaug at 125.580%",
-        "Hestmark at 105.782%",
-        "Kvernholm at 96.554%",
-        "195.428 MW",
-        "schedule uses 1.000",
-        "This is the most consequential assumption",
-        "Fossheim about 1.101",
-        "Lindberg about 1.222",
-        "54.055 MVAr",
-        "Kvernholm 12.160 / 6.608 / 5.552",
-        "Malmnes 16.171 / 0.763 / 15.408",
-        "no angle/current and no NS-2026 relief term",
-        "37.809966%",
-        "correlations/signs vary by site (Kvernholm negative, Raudfjord positive, Svarthaug near zero)",
-        "If GIS is stale for pool sites, limiting-phase identity and relief could change materially",
-        "52.1193%",
-        "35.1999%",
-        "discarded B20270104_PRELIM, 4,800 rows",
+        "39.422017 MVA",
+        "129.468872%",
+        "111.741079%",
+        "100.947053%",
+        "97.834837%",
+        "93.644673%",
+        "70.435262%",
+        "60.028250%",
+        "232.218 MW",
+        "Aggregate MAE 0.573 MW",
+        "MAPE 1.568%",
+        "42.454568 MW",
+        "38.494949 MW",
+        "66 kV lines/GSP voltages (voltage-regulation context, not NS-2026 Sections 3-5 arithmetic)",
+        "monthly revenue energy cannot identify within-month reactive swings",
+        "53.1178353528 MVAr",
+        "5.553290 MVAr",
+        "9.619289 MVAr",
+        "15.414461 MVAr",
+        "80/80 = 100.0%",
+        "28/80 = 35.0%",
+        "75/220 = 34.1%",
+        "I assumed non-AMI laterals share AMI class-specific peak load factors and load-weighted phase shares",
+        "35.586601%",
+        "34.050659%",
+        "41.303702%",
+        "33 of 70 feeder codes were legacy DMS ids",
+        "maximum absolute residual 0.00004 MW",
     ]
 
     task_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -76,96 +92,93 @@ def _stump_block(fig):
             assert q in t2, f"Response 2 quote missing from runs/run2.md: {q!r}"
 
     p1 = (
-        f"**Response 1** files Phase 1 for Hestmark (101.671%, 5.918 MVA) and Svarthaug (112.930%, 9.552 MVA) only, "
-        f"zero Phase 2 sites, and Defer for Kvernholm (82.487%), Malmnes (76.392%), Drangvik (67.786%), Raudfjord "
-        f"(62.766%), and Tverrli (51.767%), sizing relief at 15.470 MVA vs golden {fig['total_relief_mva']:.2f} MVA "
-        f"(band {fig['total_relief_band'][0]:.1f} to {fig['total_relief_band'][1]:.1f}): 5 of 7 sites wrong, Hestmark "
-        f"40.1 points below golden ({subs['Hestmark']['loading_pct']:.2f}%), and 0 of 3 critical components in band. "
-        f"On Step 1, after seeing Drangvik's register sum (51.807 vs 31.050 MW) and Lindberg's autumn PQ surge "
-        f"(36.579 vs 24.570 MW), it writes \"This is a floor, not a true 15-minute measurement\" yet files the 195.428 MW "
-        f"hourly floor vs {fig['c1_total_p15_mw']:.2f} MW (band {fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f}), "
-        f"dropping Drangvik, Kvernholm, Malmnes, and Raudfjord. On Step 2, scaling peak P by January settled net "
-        f"kVARh/kWh (\"assumes January's net compensation state applies at the peak hour\") yields +23.710 MVAr vs "
-        f"{fig['c2_total_qpeak_mvar']:.2f} MVAr (band {fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f}), inverting "
-        f"Kvernholm to -0.564 MVAr (golden {subs['Kvernholm']['q_peak_h_mvar']:.2f}) and Malmnes to +14.566 MVAr "
-        f"(golden {subs['Malmnes']['q_peak_h_mvar']:.2f}) while dismissing 66 kV files (\"no power-flow study in the "
-        f"standard\"). On Step 3, it regressed AMI phases to 80/80 (100.0%) on commissioning traces, rejected GIS at "
-        f"75/220 (34.09%), and measured \"~0.620 commercial / ~0.125 residential\" AMI Q/P, but then grossed up unmetered "
-        f"legacy laterals by AMI shares (\"This is the largest judgment call\"), filing 36.584% mean vs "
-        f"{fig['c3_mean_lim_phase_pct']:.2f}% (band {fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%), flipping "
-        f"Svarthaug to 47.548% (Phase 1) and Raudfjord to 34.122% (Defer)."
+        f"**Response 1** files Phase 1 for Hestmark (103.249279% vs golden {subs['Hestmark']['loading_pct']:.2f}%) "
+        f"and Svarthaug (125.117702%), Phase 2 for Kvernholm (98.317706%), and Defer for Malmnes (80.513828%), "
+        f"Drangvik (74.179898%), Raudfjord (67.615885%), and Tverrli (51.609703%), sizing relief at 23.839427 MVA vs "
+        f"{fig['total_relief_mva']:.2f} MVA (band {fig['total_relief_band'][0]:.1f} to "
+        f"{fig['total_relief_band'][1]:.1f}): 5 of 7 sites wrong, 0 of 7 loadings and 0 of 3 critical components in "
+        f"band. Step 1: noting 37.084292% to 69.362548% register excess, dismissing `pq_commissioning_2026.csv` "
+        f"(\"It cannot observe a pool site's January 16 coincident peak\"), and flagging \"This is the largest judgment "
+        f"call and not an observed interval maximum\", it filed 195.428260 MW vs {fig['c1_total_p15_mw']:.2f} MW "
+        f"({fig['c1_band'][0]:.1f} to {fig['c1_band'][1]:.1f}), dropping Drangvik and Malmnes. Step 2: setting aside "
+        f"66 kV files (\"do not enter Section 3 capacity\") and scaling peak P by January net kVARh/kWh (\"assumes "
+        f"January monthly PF applies at peak\") gave +23.562169 MVAr vs {fig['c2_total_qpeak_mvar']:.2f} MVAr "
+        f"({fig['c2_band'][0]:.1f} to {fig['c2_band'][1]:.1f}), inverting Kvernholm (-0.563534 vs "
+        f"{subs['Kvernholm']['q_peak_h_mvar']:.2f}), Drangvik (+3.995930 vs {subs['Drangvik']['q_peak_h_mvar']:.2f}), "
+        f"and Malmnes (+14.574302 vs {subs['Malmnes']['q_peak_h_mvar']:.2f}). Step 3: matching 80/80 (100.000000%) "
+        f"AMI traces while GIS failed (20.000000%-35.000000%), it \"retained their GIS phase as the only unmetered "
+        f"phase record\" (\"No better defensible legacy source exists in the records\"), filing 38.222524% vs "
+        f"{fig['c3_mean_lim_phase_pct']:.2f}% ({fig['c3_band'][0]:.2f}% to {fig['c3_band'][1]:.2f}%), flipping "
+        f"Svarthaug (51.754793%, Phase 1) and Raudfjord (36.349977%, Defer)."
     )
 
     p2 = (
-        f"**Response 2** files Phase 1 for Hestmark (105.782%, 7.378 MVA) and Svarthaug (125.580%, 13.878 MVA), "
-        f"Phase 2 for Kvernholm (96.554%, 3.674 MVA), and Defer for Malmnes (76.419%), Drangvik (69.437%), Raudfjord "
-        f"(65.644%), and Tverrli (50.335%), sizing relief at 24.930 MVA vs {fig['total_relief_mva']:.2f} MVA: 5 of 7 "
-        f"sites wrong and 0 of 3 critical components, via different shortcuts on Steps 2 and 3. On Step 1, after noting "
-        f"Fossheim (1.101) and Lindberg (1.222) PQ ratios, it declines to estimate coincidence (\"schedule uses 1.000\", "
-        f"\"This is the most consequential assumption\") and files the 195.428 MW hourly floor vs "
-        f"{fig['c1_total_p15_mw']:.2f} MW. On Step 2, subtracting a flat January capacitor from manual class-PF load Q "
-        f"yields 54.055 MVAr vs {fig['c2_total_qpeak_mvar']:.2f} MVAr (Kvernholm 5.552 vs "
-        f"{subs['Kvernholm']['q_peak_h_mvar']:.2f} MVAr, demoting it to Phase 2; Malmnes 15.408 vs "
-        f"{subs['Malmnes']['q_peak_h_mvar']:.2f}) while setting aside 66 kV records (\"no angle/current and no NS-2026 "
-        f"relief term\"). On Step 3, checking `substation_phase_bus_voltages_2026.csv` univariately hit opposite diurnal "
-        f"skews (\"correlations/signs vary by site (Kvernholm negative, Raudfjord positive, Svarthaug near zero)\"); it "
-        f"dropped bus voltages and kept drifted GIS phases (\"If GIS is stale for pool sites, limiting-phase identity and "
-        f"relief could change materially\"), filing 37.810% mean (37.809966%) vs {fig['c3_mean_lim_phase_pct']:.2f}%, "
-        f"with Svarthaug at 52.1193% (Phase 1) and Raudfjord at 35.1999% (Defer)."
+        f"**Response 2** files Phase 1 for Hestmark (129.468872%), Svarthaug (111.741079%), and Malmnes (100.947053%), "
+        f"Phase 2 for Drangvik (97.834837%) and Kvernholm (93.644673%), and Defer for Raudfjord (70.435262%) and "
+        f"Tverrli (60.028250%), sizing relief at 39.422017 MVA vs {fig['total_relief_mva']:.2f} MVA: 5 of 7 sites wrong, "
+        f"0 of 7 loadings in band, 2 of 3 critical components missed. Response 2 solved Step 1 independently: "
+        f"correlated quadrature on residual feeder correlations backtested on `pq_commissioning_2026.csv` "
+        f"(\"Aggregate MAE 0.573 MW\", \"MAPE 1.568%\") landed 232.218 MW inside Component 1's band (Drangvik "
+        f"42.454568 vs {subs['Drangvik']['p15_peak_mw']:.2f}, Malmnes 38.494949 vs {subs['Malmnes']['p15_peak_mw']:.2f}; "
+        f"paired with golden Steps 2-3, its Step 1 lands all 7 sites in the golden schedule inside every loading band "
+        f"at 54.79 MVA). Yet missing Steps 2 and 3 still misplaced 5 of 7 sites. Step 2: setting aside \"66 kV "
+        f"lines/GSP voltages (voltage-regulation context, not NS-2026 Sections 3-5 arithmetic)\" and using manual PF "
+        f"minus flat January cap (\"monthly revenue energy cannot identify within-month reactive swings\") gave "
+        f"53.1178353528 MVAr vs {fig['c2_total_qpeak_mvar']:.2f} MVAr, demoting Kvernholm (5.553290 vs "
+        f"{subs['Kvernholm']['q_peak_h_mvar']:.2f}) and Drangvik (9.619289 vs {subs['Drangvik']['q_peak_h_mvar']:.2f}) "
+        f"to Phase 2 and pushing Malmnes (15.414461 vs {subs['Malmnes']['q_peak_h_mvar']:.2f}) to Phase 1. Step 3: "
+        f"matching 80/80 = 100.0% AMI traces and rejecting GIS (28/80 = 35.0%; 75/220 = 34.1%), it wrote \"I assumed "
+        f"non-AMI laterals share AMI class-specific peak load factors and load-weighted phase shares\", filing "
+        f"35.586601% vs {fig['c3_mean_lim_phase_pct']:.2f}%, flipping Raudfjord (34.050659%, Defer) and Svarthaug "
+        f"(41.303702%, Phase 1)."
     )
 
     p3 = (
-        f"**Why this is a fair stump:** Nothing rests on a planted defect or buried sentence. Every observation gap spans "
-        f"all eleven substations (including the four excluded hubs): all {ps['n_feeders']} feeders carry hourly SCADA and "
-        f"monthly 15-minute registers, all eleven sites share {ps['n_corridors']} radial 66 kV corridors with line/transformer "
-        f"impedances and LTC taps, and all eleven carry {ps['n_ami_per_sub']} AMI plus {ps['n_leg_per_sub']} legacy laterals "
-        f"with system-wide GIS drift (75/220 = 34.09%). Both responses passed 100% of cleaning and rule reading identically "
-        f"to the golden (dropping {ps['superseded_dropped']:,} preliminary rows to {ps['clean_scada_rows']:,} clean hours, "
-        f"aligning Raudfjord CET stamps, mapping 28 crosswalk IDs within 0.000030 MW, excluding all three distractors, and "
-        f"reproducing {fig['r1_p60_sum_mw']:.2f} MW and every `vesterdal_planning_standard_ns2026.pdf` Section 3-5 formula); "
-        f"every loss occurred after cleaning. Every signal sits in standard operational tables both models inspected, and "
-        f"Response 1 found the 80/80 AMI phase verification and 0.620/0.125 AMI reactive contrast unprompted."
+        f"**Why this is a fair stump:** Nothing rests on a planted defect or buried sentence. Every observation gap "
+        f"spans all 11 substations (including the 4 excluded hubs): all {ps['n_feeders']} feeders carry hourly SCADA "
+        f"and monthly registers, all 11 share {ps['n_corridors']} radial 66 kV corridors with impedances and LTC taps, "
+        f"and all 11 have {ps['n_ami_per_sub']} AMI plus {ps['n_leg_per_sub']} legacy laterals with system-wide GIS "
+        f"drift (75/220 = 34.1%). Both runs passed 100% of cleaning and rule reading identically to golden (dropping "
+        f"{ps['superseded_dropped']:,} preliminary rows to {ps['clean_scada_rows']:,} clean hours, aligning Raudfjord "
+        f"CET to UTC+1, resolving all 33 pending-rename DMS IDs within 0.000040 MW, excluding 3 distractors, applying "
+        f"NS-2026 Sections 2-5 verbatim); every loss came after cleaning. NS-2026 defines P_15m, Q_h, and w_max "
+        f"literally, both runs found 80/80 AMI verification unprompted, and Response 2's Step 1 solve (232.22 MW, "
+        f"0.573 MW MAE) directly refutes Response 1's claim that `pq_commissioning_2026.csv` cannot estimate pool peaks."
     )
 
     p4 = (
-        f"**Why it takes deep analytical rigour:** Every shortcut fails direct physical measurements already in the ZIP, "
-        f"with no custom index required. On Step 1, `pq_commissioning_autumn2026.csv` directly measures 15-minute active "
-        f"peaks on Fossheim and Lindberg: the conformed 4-mode SVD plus correlated-quadrature estimator (`k_ord = "
-        f"{rp['k_ord']:.4f}`) matches those measured 15-minute peaks to {pd['golden']['s1_comm_mae_mw']:.2f} MW MAE, "
-        f"whereas the hourly SCADA floor misses by {pd['s1_scada60']['s1_comm_mae_mw']:.2f} MW MAE, linear register sums "
-        f"({rt['s1_linear_sum']['c1_total_p15_mw']:.2f} MW) by {pd['s1_linear_sum']['s1_comm_mae_mw']:.2f} MW, 12-month "
-        f"register correlation ({rt['s1_register_rho']['c1_total_p15_mw']:.2f} MW, inverting Malmnes "
-        f"{rp['reg_rho_malmnes']:.3f} vs Drangvik {rp['reg_rho_drangvik']:.3f}) by "
-        f"{pd['s1_register_rho']['s1_comm_mae_mw']:.2f} MW, flat PQ ratio ({rt['s1_flat_ratio']['c1_total_p15_mw']:.2f} MW) "
-        f"by {pd['s1_flat_ratio']['s1_comm_mae_mw']:.2f} MW, independent quadrature "
-        f"({rt['s1_indep_quad']['c1_total_p15_mw']:.2f} MW) by {pd['s1_indep_quad']['s1_comm_mae_mw']:.2f} MW, and pooled "
-        f"coincidence ({rt['s1_cf_pooled']['c1_total_p15_mw']:.2f} MW) by {pd['s1_cf_pooled']['s1_comm_mae_mw']:.2f} MW. "
-        f"On Step 2, Ohm's law (`dV = (R*P + X*Q)/V`) across `gsp_66kv_voltages_2026.csv`, `subtransmission_66kv_lines.csv`, "
-        f"`substation_transformer_register.xlsx`, and `scada_substation_hourly_2026.csv` directly falsifies both runs and "
-        f"every reactive proxy: coupled 11-site corridor inversion anchored to `revenue_meter_monthly_2026.xlsx` closes "
-        f"hourly 22 kV LV voltages to {pd['golden']['s2_vlv_rmse_v']:.2f} V RMSE (8.1 V against meter noise) and settled "
-        f"kVARh to {pd['golden']['s2_kvarh_err_mvar']:.2f} MVAr, whereas Response 1's January net kVARh ratio misses "
-        f"measured January 22 kV voltages by 333.2 V RMSE (+2,521 V at Kvernholm's peak hour, -529 V at Malmnes), Response "
-        f"2's manual class-PF minus flat January cap misses by 175.0 V RMSE (+1,434 V at Kvernholm peak, -1,016 V at "
-        f"Malmnes), monthly `Q(P)` misses by {pd['s2_monthly_qp']['s2_vlv_rmse_v']:.1f} V, and target-only corridors "
-        f"dropping upstream hubs miss by {pd['s2_targets_only']['s2_vlv_rmse_v']:.1f} V. On Step 3, "
-        f"`commissioning_phase_log_2025.csv` falsifies GIS at {rp['gis_tracer_matched']}/{rp['tracer_total']} "
-        f"({rp['gis_tracer_pct']:.1f}%, random chance across three phases), and `substation_phase_bus_voltages_2026.csv` "
-        f"falsifies GIS ({pd['s3_gis']['s3_bus_rmse_v']:.2f} V bus-sag RMSE), Response 1's AMI gross-up "
+        f"**Why it takes deep analytical rigour:** Direct physical laws in the ZIP falsify every shortcut. Step 1: "
+        f"`pq_commissioning_2026.csv` measures {ps['comm_pq_points_count']} monthly `max(P_15) - max(P_60)` peaks "
+        f"({pd['golden']['s1_comm_mae_mw']:.2f} MW golden MAE; 0.573 MW Response 2) vs Response 1's hourly floor "
+        f"({pd['s1_scada60']['s1_comm_mae_mw']:.2f} MW), linear sums ({pd['s1_linear_sum']['s1_comm_mae_mw']:.2f} MW), "
+        f"twin ratio ({pd['s1_twin_ratio']['s1_comm_mae_mw']:.2f} MW, Drangvik "
+        f"{rt['s1_twin_ratio']['loading_pct']['Drangvik']:.2f}%), register correlation "
+        f"({pd['s1_register_rho']['s1_comm_mae_mw']:.2f} MW), and independent quadrature "
+        f"({pd['s1_indep_quad']['s1_comm_mae_mw']:.2f} MW, Malmnes "
+        f"{rt['s1_indep_quad']['loading_pct']['Malmnes']:.2f}%). Step 2: although both runs set aside 66 kV files as "
+        f"outside NS-2026 arithmetic, Ohm's law (`dV = (R*P + X*Q)/V`) across `gsp_66kv_voltages_2026.csv`, "
+        f"`subtransmission_66kv_lines.csv`, and `scada_substation_hourly_2026.csv` observes hourly Q directly: coupled "
+        f"11-site inversion anchored to `revenue_meter_monthly_2026.xlsx` closes 22 kV voltages to "
+        f"{pd['golden']['s2_vlv_rmse_v']:.2f} V RMSE and kVARh to {pd['golden']['s2_kvarh_err_mvar']:.2f} MVAr, "
+        f"whereas Response 1 misses January voltages by 382.4 V RMSE (+2,517 V Kvernholm peak, +1,486 V Drangvik, "
+        f"-442 V Malmnes), Response 2 by 191.3 V (+1,441 V Kvernholm, +755 V Drangvik, -927 V Malmnes), monthly `Q(P)` "
+        f"by {pd['s2_monthly_qp']['s2_vlv_rmse_v']:.1f} V, and target-only corridors by "
+        f"{pd['s2_targets_only']['s2_vlv_rmse_v']:.1f} V. Step 3: `substation_phase_bus_voltages_2026.csv` falsifies "
+        f"Response 1's AMI+GIS ({pd['s3_ami_plus_gis']['s3_bus_rmse_v']:.2f} V), Response 2's AMI gross-up "
         f"({pd['s3_ami_grossup']['s3_bus_rmse_v']:.2f} V), and scalar OLS ({pd['s3_scalar_ols']['s3_bus_rmse_v']:.2f} V, "
-        f"Svarthaug {rt['s3_scalar_ols']['loading_pct']['Svarthaug']:.2f}%) while `ami_lateral_telemetry_2026.db` falsifies "
-        f"manual-PF OLS ({pd['s3_handbook_pf']['s3_ami_q_rmse_kvar']:.2f} vs {pd['golden']['s3_ami_q_rmse_kvar']:.2f} kVAr "
-        f"RMSE); only joint `(V_ph - V_bar)` regression on `[1, P_res, P_com, P_bal]` with AMI-measured `tan_phi` "
-        f"({rp['tan_phi_res']:.4f} vs {rp['tan_phi_com']:.4f}) matches measured 3-phase bus voltages to "
-        f"{pd['golden']['s3_bus_rmse_v']:.2f} V RMSE. Each step independently flips distinct sites (Step 1: "
-        f"Drangvik/Kvernholm/Malmnes/Raudfjord; Step 2: Kvernholm; Step 3: Raudfjord/Svarthaug), and both responses "
-        f"missed all three."
+        f"Svarthaug {rt['s3_scalar_ols']['loading_pct']['Svarthaug']:.2f}%), while `ami_lateral_telemetry_2026.db` "
+        f"falsifies manual-PF OLS ({pd['s3_handbook_pf']['s3_ami_q_rmse_kvar']:.2f} vs "
+        f"{pd['golden']['s3_ami_q_rmse_kvar']:.2f} kVAr); only joint `(V_ph - V_bar) ~ [1, P_res, P_com, P_bal]` with "
+        f"AMI `tan_phi` ({rp['tan_phi_res']:.4f}/{rp['tan_phi_com']:.4f}) closes sag to "
+        f"{pd['golden']['s3_bus_rmse_v']:.2f} V. Each step independently flips distinct sites (Step 1: Drangvik/Malmnes; "
+        f"Step 2: Drangvik/Kvernholm/Malmnes; Step 3: Raudfjord/Svarthaug): Response 1 missed all three, and Response 2 "
+        f"solved Step 1 yet missed Steps 2 and 3, still misplacing 5 of 7 sites."
     )
 
     return ["## How is each model stumped?", "", p1, "", p2, "", p3, "", p4, ""]
 
 
-def write(path, fig, include_stump_block=False):
+def write(path, fig, include_stump_block=True):
     subs = fig["substations"]
     b = fig["bands"]
     rp = fig["ref_params"]

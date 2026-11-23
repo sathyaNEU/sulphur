@@ -1,12 +1,12 @@
 {
  "task": "task26",
- "status": "READY",
+ "status": "RUNS",
  "domain": "energy-systems-utilities",
  "subdomain": "distribution-losses-energy-balance",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-22",
+ "stage": 6,
+ "stage_name": "runs",
+ "updated": "2026-11-23",
  "doctrine": "throughout",
  "seed": 2635,
  "architecture": 4,
@@ -69,7 +69,7 @@
   "average": null,
   "counterfactual_average": null
  },
- "resume": "v4 READY for platform upload (target.zip + golden.zip) and fresh two-model platform rollouts; omit stale v3 stump block until v4 runs return for /triage-runs",
+ "resume": "v4 runs saved under runs/ (both decisively stumped: 5/7 sites wrong each, R1 missed S1+S2+S3 at 23.84 MVA, R2 independently solved S1 at 232.22 MW proving determinism yet missed S2+S3 at 39.42 MVA) and How is each model stumped? refreshed in submission.md; awaiting platform rubric/scores for final /triage-runs",
  "final_cut": {
   "date": "2026-11-22",
   "target_zip_md5": "ffc7feca782430b716dde5beb0fe27ce",
