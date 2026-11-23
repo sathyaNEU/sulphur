@@ -23,8 +23,8 @@
   "reader": "one read (Sonnet, medium) at stage 4: no sentence that hands over a step, no ranking artifact, no helping file, no answer figure; one realism tell (round whole populations) fixed in the generator as data cells only, no document and no sentence of the prompt, so the reader was not re-run and leak.py was re-run on the final cut"
  },
  "duplicate_check": {
-  "heart": "guard.py heart task5 on the cut: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1 and an earlier build), each answered in the note; surface PASS",
-  "nearest": "guard.py check on 2026-11-17: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1 and an earlier build, skeleton.house_lesson on conservation_residual_attribution and validation_cannot_see_condition, NOTE same_puzzle_older mark120 differentiated), each answered in the note's Draw; skeleton severity none"
+  "heart": "guard.py heart task5 on the cut: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1), each answered in the note; surface PASS",
+  "nearest": "guard.py check on 2026-11-17: WARN only (repeat.decision and repeat.question_form task4, repeat.deliverables task1, skeleton.house_lesson on conservation_residual_attribution and validation_cannot_see_condition, NOTE same_puzzle_older mark120 differentiated), each answered in the note's Draw; skeleton severity none"
  },
  "judge": {
   "verdict": "DETERMINISTIC",

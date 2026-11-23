@@ -58,7 +58,7 @@ answered:
   organisation family can be redrawn cheaply (a listed insurer whose board approves the rate plan); the weight cannot,
   since modeling is where the work sits. The ruling is the author's.
 - Decisive gap, generator and Gate G were redrawn at the probe from (population, G14) to (objective, G9): the first
-  collided with task2 and lineage entries of task10 and an earlier build (test.same_puzzle, test.same_driver), and (objective,
+  collided with task2 and lineage entries of task10 (test.same_puzzle, test.same_driver), and (objective,
   G9) is the honester label: the 2026 loss ratio is read correctly and is not what the decision is scored on, and the
   claims measured are those of the quotes that were kept. The calibration form was redrawn from existing_book_actuals
   (task9 holds it in the window) to realised_outcome_roster.

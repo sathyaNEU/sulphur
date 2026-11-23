@@ -986,7 +986,7 @@ def analyse(pk, truth=None, detail=False):
                    "said_out_loud": "The 52-week and 104-week training windows apply exponential recency weighting "
                                     "whose decay rate is identified from seasonal swings in 2026 bootstrap variances.",
                    "sides": {"over": over["S2"]["points"]}},
-            "S3": {"axis": "unit", "opens": "releases", "steps_left": 4, "precedents": ["N44", "L58", "L28"],
+            "S3": {"axis": "unit", "opens": "releases", "steps_left": 4, "precedents": ["L58", "L28"],
                    "said_out_loud": "Sequential feature releases modifying the same feature group move the same "
                                     "merchants in the same direction, adding positive cross-release covariance.",
                    "sides": {"over": over["S3"]["points"]}},

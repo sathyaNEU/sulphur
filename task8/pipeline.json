@@ -21,7 +21,7 @@
  },
  "duplicate_check": {
   "heart": "guard.py heart task8 on the final cut: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5), each answered in the note's Draw; surface PASS",
-  "nearest": "guard.py check on 2026-11-18: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5, repeat.deliverables csv+xlsx against an earlier build and task5, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
+  "nearest": "guard.py check on 2026-11-18: WARN only (overuse.weight measurement against task1, overuse.objective, repeat.gate_g etl_conformance against task5, repeat.deliverables csv+xlsx against task5, each answered in the note's Draw); skeleton severity none against every card, the client's corpus and the slot's lineage"
  },
  "judge": {
   "verdict": "DETERMINISTIC",

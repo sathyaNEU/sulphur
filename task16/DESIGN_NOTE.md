@@ -299,8 +299,7 @@ Chain signature: assembly-reconciliation, modeling, validation, investigation-lo
 Question form: whether (and under which rule)
 Nearest build: task16 architecture 3 (this slot's lineage): the same decision, data and policy at the reviewer's
   request, with the members' decisions moved from direct counts onto estimation (three open members against one) and
-  two results added (R8, R9); an earlier build shares the answer shape and the weight, its candidates unrecorded sites ranked on
-  forecast exceedances. Abstraction sentence: none writable against an earlier build
+  two results added (R8, R9).
 
 ## Frontier check
 
@@ -498,8 +497,7 @@ a role or reader, or a count the data hold (no four rules).
   uses.
 - Gate findings answered: precut's constructed factors (Hidden factor record) and nearest chain (Template check);
   heart's BLOCK on ban.weight against task24 v2, the author's exception (Draw), and its WARNs: strategy_risk (the call
-  turns on estimating each rule's false merges, never on a field or a stated rule: Open members), chain_near against
-  an earlier build (Template check), overuse.forum (the health system's executive team decides, the house's most used forum; the
+  turns on estimating each rule's false merges, never on a field or a stated rule: Open members), overuse.forum (the health system's executive team decides, the house's most used forum; the
   steering committee would have repeated task25 v1's), and the skeleton's lesson WARNs (Draw). The voice check is clean
   with the PDF note.
 - Containers: audit_containers exit 0 on the pack and the golden, re-run on both zips as the last command before the
