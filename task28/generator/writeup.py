@@ -65,9 +65,9 @@ def build_figures(res):
         "f3_pp": _r3(fal["golden"]["f3_pp"]),
     }
     r6_trains_tbl = {u: _r1(tr[u]["total_2027_h"]) for u in core.TRAINS}
-    r7_fin_tbl = {
-        "A_cost_eur_k": _r1(g["A_cost_eur_k"]),
-        "A_overhaul_eur_k": _r1(g["A_overhaul_eur_k"]),
+    r7_eng_tbl = {
+        "A_energy_mwh": _r1(g["A_cost_eur_k"]),
+        "A_overhaul_mwh": _r1(g["A_overhaul_eur_k"]),
         "A_diag_err_pct": _r1(g["A_diag_err_pct"]),
     }
 
@@ -79,7 +79,7 @@ def build_figures(res):
         "C3_struct_2027": _r1(g["C3_struct_2027"]),
         "R5_falsification": r5_fal_tbl,
         "R6_train_totals_2027": r6_trains_tbl,
-        "R7_cost_and_discrepancy": r7_fin_tbl,
+        "R7_energy_and_discrepancy": r7_eng_tbl,
         "R8_overhaul_slate": golden_slate,
         "monitor_slate": monitor_slate,
         "ordered_trains": ordered,
@@ -87,10 +87,10 @@ def build_figures(res):
         "A_total_2027": _r1(g["A_total_2027"]),
         "A_overhaul_2027": _r1(g["A_overhaul_2027"]),
         "A_q3_2027": _r1(g["A_q3_2027"]),
-        "A_cost_eur_k": _r1(g["A_cost_eur_k"]),
-        "A_overhaul_eur_k": _r1(g["A_overhaul_eur_k"]),
-        "A_cost_eur": _r2(sum(tr[u]["cost_2027_eur"] for u in core.TRAINS)),
-        "A_overhaul_eur": _r2(sum(tr[u]["cost_2027_eur"] for u in golden_slate)),
+        "A_energy_mwh": _r1(g["A_cost_eur_k"]),
+        "A_overhaul_mwh": _r1(g["A_overhaul_eur_k"]),
+        "A_energy_mwh_exact": _r2(sum(tr[u]["energy_2027_mwh"] for u in core.TRAINS)),
+        "A_overhaul_mwh_exact": _r2(sum(tr[u]["energy_2027_mwh"] for u in golden_slate)),
         "A_diag_err_pct": _r1(g["A_diag_err_pct"]),
         # Per-train detailed golden figures
         "trains": {
@@ -104,8 +104,7 @@ def build_figures(res):
                 "struct_2027_h": _r1(tr[u]["struct_2027_h"]),
                 "total_2027_h": _r1(tr[u]["total_2027_h"]),
                 "q3_2027_h": _r1(tr[u]["q3_2027_h"]),
-                "cost_2027_eur": _r2(tr[u]["cost_2027_eur"]),
-                "cost_2027_eur_k": _r1(tr[u]["cost_2027_eur"] / 1000.0),
+                "energy_2027_mwh": _r2(tr[u]["energy_2027_mwh"]),
                 "designation": tr[u]["designation"],
                 "v_nom_m3": tr[u]["v_nom_m3"],
                 "s1_lam_h": _r2(tr[u]["s1_lam_h"]),
@@ -130,8 +129,12 @@ def build_figures(res):
             "inc_struct_2026_h": _r1(sum(tr[u]["inc_struct_2026_h"] for u in core.TRAINS)),
             "inc_total_2026_h": _r1(sum(tr[u]["inc_total_2026_h"] for u in core.TRAINS)),
         },
-        # 20-variant bands
-        "bands": bnds,
+        # 26-variant bands
+        "bands": {
+            **{k: v for k, v in bnds.items() if k not in ("A_cost_eur_k", "A_overhaul_eur_k")},
+            "A_energy_mwh": bnds["A_cost_eur_k"],
+            "A_overhaul_mwh": bnds["A_overhaul_eur_k"],
+        },
         # Cleaning and operational constants from shipped files
         "cleaning": cl,
         "constants": {
@@ -139,9 +142,10 @@ def build_figures(res):
             "boron_limit_mg_l": core.BORON_LIMIT,
             "scaling_x_lim": core.SCALING_X_LIM,
             "scaling_y_lim": core.SCALING_Y_LIM,
-            "tariff_boron": core.TARIFF_BORON,
-            "tariff_scaling": core.TARIFF_SCALING,
-            "tariff_struct": core.TARIFF_STRUCT,
+            "energy_rate_boron_kwh_h": core.TARIFF_BORON,
+            "energy_rate_scaling_kwh_h": core.TARIFF_SCALING,
+            "energy_rate_struct_kwh_h": core.TARIFF_STRUCT,
+            "kwh_per_mwh": 1000,
             "lab_sd_mg_l": 0.004,
             "wls_weight_v4": 3,
             "wls_weight_c8": 0.7,
@@ -191,7 +195,7 @@ def build_figures(res):
                 "C2": _r1(lat["S1+S2+S3"]["C2_scaling_2027"]),
                 "C3": _r1(lat["S1+S2+S3"]["C3_struct_2027"]),
                 "total": _r1(lat["S1+S2+S3"]["A_total_2027"]),
-                "cost_k": _r1(lat["S1+S2+S3"]["A_cost_eur_k"]),
+                "energy_mwh": _r1(lat["S1+S2+S3"]["A_cost_eur_k"]),
                 "members": {u: _r1(lat["S1+S2+S3"]["members"][u]) for u in core.TRAINS},
             },
             "rigorous": {
@@ -199,8 +203,8 @@ def build_figures(res):
                 "C2": _r1(rig["C2_scaling_2027"]),
                 "C3": _r1(rig["C3_struct_2027"]),
                 "total": _r1(rig["A_total_2027"]),
-                "cost_k": _r1(rig["A_cost_eur_k"]),
-                "overhaul_cost_k": _r1(rig["A_overhaul_eur_k"]),
+                "energy_mwh": _r1(rig["A_cost_eur_k"]),
+                "overhaul_energy_mwh": _r1(rig["A_overhaul_eur_k"]),
                 "q3": _r1(rig["A_q3_2027"]),
                 "disc_pct": _r1(rig["A_diag_err_pct"]),
                 "members": {u: _r1(rig["members"][u]) for u in core.TRAINS},
@@ -367,27 +371,27 @@ def build_effort_json(res, figs):
         },
         {
             "id": "R7",
-            "name": "Schedule B EUR exposure & 2026 discrepancy rate",
-            "graded_as": "Ask 3 (Financial & Audit)",
-            "figure": "R7_cost_and_discrepancy",
+            "name": "2027 excess desalination energy burden (MWh) & 2026 monitoring discrepancy rate",
+            "graded_as": "Ask 3 (Energy & Bias)",
+            "figure": "R7_energy_and_discrepancy",
             "depends": ["R2", "R3", "R4", "R6"],
             "independent": "",
-            "golden": figs["R7_cost_and_discrepancy"],
+            "golden": figs["R7_energy_and_discrepancy"],
             "bands": {
-                "A_cost_eur_k": bnds["A_cost_eur_k"],
-                "A_overhaul_eur_k": bnds["A_overhaul_eur_k"],
+                "A_energy_mwh": bnds["A_cost_eur_k"],
+                "A_overhaul_mwh": bnds["A_overhaul_eur_k"],
                 "A_diag_err_pct": bnds["A_diag_err_pct"],
             },
             "precedent": ["L11"],
             "passes": {
-                "quick": {"A_cost_eur_k": _r1(reflex["A_cost_eur_k"]), "A_overhaul_eur_k": _r1(reflex["A_overhaul_eur_k"]), "A_diag_err_pct": _r1(reflex["A_diag_err_pct"])},
-                "careful": {"A_cost_eur_k": _r1(reflex["A_cost_eur_k"]), "A_overhaul_eur_k": _r1(reflex["A_overhaul_eur_k"]), "A_diag_err_pct": _r1(reflex["A_diag_err_pct"])},
-                "thorough": figs["R7_cost_and_discrepancy"],
+                "quick": {"A_energy_mwh": _r1(reflex["A_cost_eur_k"]), "A_overhaul_mwh": _r1(reflex["A_overhaul_eur_k"]), "A_diag_err_pct": _r1(reflex["A_diag_err_pct"])},
+                "careful": {"A_energy_mwh": _r1(reflex["A_cost_eur_k"]), "A_overhaul_mwh": _r1(reflex["A_overhaul_eur_k"]), "A_diag_err_pct": _r1(reflex["A_diag_err_pct"])},
+                "thorough": figs["R7_energy_and_discrepancy"],
             },
         },
         {
             "id": "R8",
-            "name": "Final 2027 mandatory overhaul triage slate",
+            "name": "Final 2027 vessel overhaul reliability classification",
             "graded_as": "Recommendation",
             "figure": "R8_overhaul_slate",
             "depends": ["R2", "R3", "R4", "R6", "R7"],
@@ -415,7 +419,7 @@ def build_effort_json(res, figs):
             {
                 "sentence": (
                     "Intake precursor and RO-feed stress sensors observe moving seawater parcels separated by "
-                    "an unobserved effective DAF/DMF hydraulic holdup volume under time-varying tariff flow."
+                    "an unobserved effective DAF/DMF hydraulic holdup volume under time-varying feed flow."
                 ),
                 "rescues": ["R3"],
             },
@@ -538,14 +542,14 @@ def build_metadata(res):
 
     meta = {
         "as_of": PK.AS_OF,
-        "decision": "2027 mandatory vessel overhaul designation across eight Barlavento SWRO trains under Standard SWRO-Q27",
+        "decision": "2027 membrane-train reliability diagnosis and vessel overhaul selection across eight Barlavento SWRO trains under Engineering Protocol SWRO-Q27",
         "deliverables": ["a spreadsheet", "a CSV"],
         "stated_inputs": ["400", "2026", "2027"],
         "distractor_files": [F["dist_mibel"], F["dist_reservoir"]],
         "field_terms": ["CIP", "boron", "SWRO", "DAF", "DMF", "Algarve"],
         "files": {
             F["standard_pdf"]: _entry(
-                "Standard SWRO-Q27 regulatory integrity standard defining excursion modes, overhaul threshold, Schedule B tariffs, Annex B 2027 plan rules, and Annex C filing schema",
+                "Engineering Protocol SWRO-Q27 defining physical excursion modes, overhaul criterion, excess desalination energy rates, Annex B 2027 forecast rules, and Annex C diagnostics output schema",
                 "2026-09-14",
             ),
             F["lims_qa_pdf"]: _entry(
@@ -632,18 +636,19 @@ def build_submission_md(res, figs):
         "",
         "## Tags",
         "",
-        "**Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (process control and measurement systems: coastal seawater reverse-osmosis membrane-train integrity diagnostics across multi-support composite lab assays, variable-flow Lagrangian pretreatment parcel transport, and CIP-invariant non-destructive shift alarms).",
+        "**Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (process control and measurement systems: coastal seawater reverse-osmosis membrane-train reliability diagnostics across multi-support composite lab assays, variable-flow Lagrangian pretreatment parcel transport, and CIP-invariant non-destructive shift alarms).",
         "**Analytical objective:** Anomaly Detection & Diagnostics.",
         "",
         "## Final Recommendation",
         "",
         (
-            f"**Pull four Barlavento SWRO trains for mandatory 2027 vessel overhaul under Standard SWRO-Q27's 400-hour "
-            f"threshold: {ov_desc}, totaling {g['A_overhaul_2027']:,.1f} overhaul-train hours (band {_bstr('A_overhaul_2027')} h) "
-            f"and EUR {g['A_overhaul_eur_k']:,.1f} thousand Schedule B exposure (band EUR {_bstr('A_overhaul_eur_k')} thousand), while keeping "
-            f"{mo_desc} on routine monitoring (plant-wide 2027 total {g['A_total_2027']:,.1f} h, band {_bstr('A_total_2027')} h; "
-            f"total Schedule B exposure EUR {g['A_cost_eur_k']:,.1f} thousand, band EUR {_bstr('A_cost_eur_k')} thousand).** "
-            f"This rejects the legacy composite-assay, wall-clock, and 2-of-3 shift screening reading, which flags healthy "
+            f"**Schedule four Barlavento SWRO trains for 2027 pressure-vessel overhaul under Engineering Protocol SWRO-Q27's "
+            f"400-hour engineering criterion: {ov_desc}, totaling {g['A_overhaul_2027']:,.1f} overhaul-train hours "
+            f"(uncertainty range {_bstr('A_overhaul_2027')} h) and {g['A_overhaul_eur_k']:,.1f} MWh projected excess desalination "
+            f"energy burden (uncertainty range {_bstr('A_overhaul_eur_k')} MWh), while retaining {mo_desc} on routine monitoring "
+            f"(plant-wide 2027 total {g['A_total_2027']:,.1f} h, uncertainty range {_bstr('A_total_2027')} h; plant-wide excess "
+            f"desalination energy burden {g['A_cost_eur_k']:,.1f} MWh, uncertainty range {_bstr('A_cost_eur_k')} MWh).** "
+            f"This rejects the legacy composite-assay, wall-clock, and 2-of-3 shift monitoring reading, which flags healthy "
             f"bio-fouled TR03 ({rt['direct']['members']['TR03']:,.1f} h) alongside TR06 ({rt['direct']['members']['TR06']:,.1f} h) "
             f"and TR07 ({rt['direct']['members']['TR07']:,.1f} h) while missing short-range boron train TR01 "
             f"({rt['direct']['members']['TR01']:,.1f} h) and short-circuited scaling train TR02 ({rt['direct']['members']['TR02']:,.1f} h): "
@@ -657,56 +662,57 @@ def build_submission_md(res, figs):
         f"### {DEL.GOLDEN_XLSX}",
         "",
         (
-            f"The workbook opens on `Overhaul_Triage_2027` stating the 2027 overhaul slate with a horizontal bar chart "
-            f"comparing each train's projected 2027 anomalous operating hours against the 400-hour threshold, followed by "
-            f"formula-linked mode backups (`S1_Boron_Support`, `S2_Hydraulic_Parcels`, `S3_Structural_LCA`), physical "
-            f"falsification and shortcut-route comparisons (`Falsification_And_Routes`), quarterly 2026-to-2027 projections "
-            f"(`Operating_Plan_2027`), and the 2026 screening discrepancy and {n_var}-variant audit (`Screening_Audit_2026`)."
+            f"The workbook opens on `Overhaul_Triage_2027` stating the 2027 vessel overhaul slate, mode-level forecasts, "
+            f"excess desalination energy burden in MWh, and {n_var}-variant estimation uncertainty ranges alongside a horizontal "
+            f"bar chart comparing each train's projected 2027 anomalous operating hours against the 400-hour criterion, followed by "
+            f"formula-linked physical model backups (`S1_Boron_Support`, `S2_Hydraulic_Parcels`, `S3_Structural_LCA`), physical "
+            f"falsification and route comparisons (`Falsification_And_Routes`), quarterly 2026-to-2027 forecasts "
+            f"(`Operating_Plan_2027`), and the 2026 raw monitoring divergence and {n_var}-variant sensitivity log (`Screening_Audit_2026`)."
         ),
         "",
-        f"1. Projected 2027 anomalous operating hours by train across permeate boron, scaling, and structural faults, Q3 hours, Schedule B exposure, and Section 3 overhaul designation ({n_var}-variant band on total in parentheses):",
+        f"1. Forecasted 2027 anomalous operating hours by train across permeate boron, scaling, and structural faults, Q3 hours, excess desalination energy burden (MWh), and Section 3 overhaul designation ({n_var}-variant estimation uncertainty range on total in parentheses):",
     ]
 
     letters = "abcdefgh"
     for i, u in enumerate(ordered):
         t = tr[u]
         lines.append(
-            f"   {letters[i]}. {u}: {t['total_2027_h']:,.1f} h total (band {_bstr(f'A_{u}')} h) = "
+            f"   {letters[i]}. {u}: {t['total_2027_h']:,.1f} h total (uncertainty range {_bstr(f'A_{u}')} h) = "
             f"{t['boron_2027_h']:,.1f} h boron + {t['scaling_2027_h']:,.1f} h scaling + {t['struct_2027_h']:,.1f} h structural; "
-            f"Q3 {t['q3_2027_h']:,.1f} h; EUR {t['cost_2027_eur']:,.2f}; {t['designation']}."
+            f"Q3 {t['q3_2027_h']:,.1f} h; {t['energy_2027_mwh']:,.2f} MWh; {t['designation']}."
         )
 
     lines.extend(
         [
-            f"2. Plant-wide 2027 anomalous operating hours across modes, overhaul subset, and summer Q3 peak ({n_var}-variant bands in parentheses):",
-            f"   a. Plant-wide 2027 total anomalous operating hours: {g['A_total_2027']:,.1f} h (band {_bstr('A_total_2027')} h).",
-            f"   b. Overhaul-train subtotal (TR07, TR06, TR01, TR02): {g['A_overhaul_2027']:,.1f} h (band {_bstr('A_overhaul_2027')} h).",
-            f"   c. Plant-wide summer Q3 2027 anomalous operating hours: {g['A_q3_2027']:,.1f} h (band {_bstr('A_q3_2027')} h).",
-            f"   d. Plant-wide 2027 mode totals: permeate boron {g['C1_boron_2027']:,.1f} h (band {_bstr('C1_boron_2027')} h), scaling {g['C2_scaling_2027']:,.1f} h (band {_bstr('C2_scaling_2027')} h), and structural faults {g['C3_struct_2027']:,.1f} h (band {_bstr('C3_struct_2027')} h).",
-            f"3. 2027 Schedule B contractual off-spec EUR exposure (420 EUR/h boron, 360 EUR/h scaling, 540 EUR/h structural; {n_var}-variant bands in parentheses):",
-            f"   a. Plant-wide 2027 Schedule B exposure: EUR {g['A_cost_eur_k']:,.1f} thousand, or EUR {figs['A_cost_eur']:,.2f} (band EUR {_bstr('A_cost_eur_k')} thousand).",
-            f"   b. Overhaul-train 2027 Schedule B exposure: EUR {g['A_overhaul_eur_k']:,.1f} thousand, or EUR {figs['A_overhaul_eur']:,.2f} (band EUR {_bstr('A_overhaul_eur_k')} thousand).",
-            f"4. 2026 legacy screening-alarm divergence from estimated true 2026 anomalies under Section 4 ({n_var}-variant band in parentheses):",
-            f"   a. Plant-wide 2026 incumbent screening discrepancy rate: {g['A_diag_err_pct']:.1f}% (band {_bstr('A_diag_err_pct', '%')}), reconciling {p26['inc_total_2026_h']:,.1f} incumbent screening hours against {p26['total_2026_h']:,.1f} estimated true 2026 anomalous hours across all eight trains and three modes.",
+            f"2. Plant-wide 2027 anomalous operating hours across failure modes, overhaul subset, and summer Q3 peak ({n_var}-variant estimation uncertainty ranges in parentheses):",
+            f"   a. Plant-wide 2027 total anomalous operating hours: {g['A_total_2027']:,.1f} h (uncertainty range {_bstr('A_total_2027')} h).",
+            f"   b. Overhaul-train subtotal (TR07, TR06, TR01, TR02): {g['A_overhaul_2027']:,.1f} h (uncertainty range {_bstr('A_overhaul_2027')} h).",
+            f"   c. Plant-wide summer Q3 2027 anomalous operating hours: {g['A_q3_2027']:,.1f} h (uncertainty range {_bstr('A_q3_2027')} h).",
+            f"   d. Plant-wide 2027 failure-mode totals: permeate boron {g['C1_boron_2027']:,.1f} h (uncertainty range {_bstr('C1_boron_2027')} h), scaling {g['C2_scaling_2027']:,.1f} h (uncertainty range {_bstr('C2_scaling_2027')} h), and structural faults {g['C3_struct_2027']:,.1f} h (uncertainty range {_bstr('C3_struct_2027')} h).",
+            f"3. Projected 2027 excess desalination energy burden in MWh under Section 4 (420 kWh/h boron 2nd-pass polishing, 360 kWh/h scaling TMP drag, 540 kWh/h structural bypass recirculation; {n_var}-variant estimation uncertainty ranges in parentheses):",
+            f"   a. Plant-wide 2027 excess desalination energy burden: {g['A_cost_eur_k']:,.1f} MWh, or {figs['A_energy_mwh_exact']:,.2f} MWh exact (uncertainty range {_bstr('A_cost_eur_k')} MWh).",
+            f"   b. Overhaul-train 2027 excess desalination energy burden: {g['A_overhaul_eur_k']:,.1f} MWh, or {figs['A_overhaul_mwh_exact']:,.2f} MWh exact (uncertainty range {_bstr('A_overhaul_eur_k')} MWh).",
+            f"4. 2026 raw monitoring alarm divergence from estimated actual 2026 physical excursions under Section 4 ({n_var}-variant estimation uncertainty range in parentheses):",
+            f"   a. Plant-wide 2026 raw monitoring screening discrepancy rate: {g['A_diag_err_pct']:.1f}% (uncertainty range {_bstr('A_diag_err_pct', '%')}), reconciling {p26['inc_total_2026_h']:,.1f} raw monitoring alarm hours against {p26['total_2026_h']:,.1f} estimated actual 2026 anomalous hours across all eight trains and three modes.",
             "",
             f"### {DEL.GOLDEN_CSV}",
             "",
             (
                 "Eight rows sorted by `total_2027_h` descending (`TR07`, `TR06`, `TR01`, `TR02`, `TR04`, `TR03`, `TR05`, `TR08`) "
-                "carrying the exact Annex C compliance columns (`train_id`, `boron_2027_h`, `scaling_2027_h`, `struct_2027_h`, "
-                "`total_2027_h`, `q3_2027_h`, `cost_2027_eur`, `designation`) matching every train figure in item 1 above."
+                "carrying the exact Annex C plant historian columns (`train_id`, `boron_2027_h`, `scaling_2027_h`, `struct_2027_h`, "
+                "`total_2027_h`, `q3_2027_h`, `energy_2027_mwh`, `designation`) matching every train figure in item 1 above."
             ),
             "",
             "## Critical Components",
             "",
-            f"1. Plant-wide projected 2027 permeate boron excursion hours across all eight SWRO trains are **{g['C1_boron_2027']:,.1f} hours** (band **{_bstr('C1_boron_2027')} hours**).",
-            f"2. Plant-wide projected 2027 pretreatment-to-RO scaling excursion hours across all eight SWRO trains are **{g['C2_scaling_2027']:,.1f} hours** (band **{_bstr('C2_scaling_2027')} hours**).",
-            f"3. Plant-wide projected 2027 persistent structural membrane integrity fault hours across all eight SWRO trains are **{g['C3_struct_2027']:,.1f} hours** (band **{_bstr('C3_struct_2027')} hours**).",
+            f"1. Plant-wide forecasted 2027 permeate boron excursion hours across all eight SWRO trains are **{g['C1_boron_2027']:,.1f} hours** (uncertainty range **{_bstr('C1_boron_2027')} hours**).",
+            f"2. Plant-wide forecasted 2027 pretreatment-to-RO scaling excursion hours across all eight SWRO trains are **{g['C2_scaling_2027']:,.1f} hours** (uncertainty range **{_bstr('C2_scaling_2027')} hours**).",
+            f"3. Plant-wide forecasted 2027 persistent structural membrane integrity fault hours across all eight SWRO trains are **{g['C3_struct_2027']:,.1f} hours** (uncertainty range **{_bstr('C3_struct_2027')} hours**).",
             "",
             "## Step-by-Step",
             "",
             (
-                f"1. Conformed the 2026 operational archive to Standard SWRO-Q27 Section 4: mapped legacy `LINE-A` through "
+                f"1. Conformed the 2026 operational archive to Engineering Protocol SWRO-Q27 Section 4: mapped legacy `LINE-A` through "
                 f"`LINE-H` tags to `TR01` through `TR08` via `train_asset_register.csv`; cleaned `permeate_boron_composites_2026.csv` "
                 f"from {cl['boron_raw_rows']:,} raw rows to {cl['boron_clean_rows']:,} unique bottles by keeping maximum `qa_revision` "
                 f"({cl['boron_superseded_dropped']} superseded preliminary rows dropped), parsing {cl['boron_dmy_rows']:,} Portuguese "
@@ -721,11 +727,11 @@ def build_submission_md(res, figs):
                 f"set aside the two out-of-scope regional files (`mibel_iberian_power_spot_2026.csv`, `algarve_reservoir_levels_2026.xlsx`)."
             ),
             (
-                f"2. Evaluated the legacy screening route on the cleaned 2026 logs under Section 4 (raw composite boron exceedances "
+                f"2. Evaluated the legacy raw monitoring route on the cleaned 2026 logs under Section 4 (raw composite boron exceedances "
                 f"at {p26['inc_boron_2026_h']:,.1f} h, same-timestamp scaling co-exceedances at {p26['inc_scaling_2026_h']:,.1f} h, "
                 f"and 2-of-3 shift majority vote at {p26['inc_struct_2026_h']:,.1f} h, totaling {p26['inc_total_2026_h']:,.1f} h in 2026 "
                 f"and {rt['direct']['total']:,.1f} h in 2027) and the textbook pooled/fixed-lag/2-class Dawid-Skene route "
-                f"({rt['rigorous']['total']:,.1f} h in 2027): direct screening flags TR03 ({rt['direct']['members']['TR03']:,.1f} h), "
+                f"({rt['rigorous']['total']:,.1f} h in 2027): direct monitoring flags TR03 ({rt['direct']['members']['TR03']:,.1f} h), "
                 f"TR06 ({rt['direct']['members']['TR06']:,.1f} h), and TR07 ({rt['direct']['members']['TR07']:,.1f} h) while missing "
                 f"TR01 ({rt['direct']['members']['TR01']:,.1f} h) and TR02 ({rt['direct']['members']['TR02']:,.1f} h), and the rigorous "
                 f"standard route still misses TR01 ({rt['rigorous']['members']['TR01']:,.1f} h) and TR02 ({rt['rigorous']['members']['TR02']:,.1f} h) "
@@ -793,17 +799,17 @@ def build_submission_md(res, figs):
                 f"reject every single-mode and multi-mode shortcut route by large physical margins."
             ),
             (
-                f"7. Carried quarterly 2026 mode hours into 2027 via Standard SWRO-Q27 Annex B and `operating_plan_2027.csv` (boron "
+                f"7. Carried quarterly 2026 mode hours into 2027 via Engineering Protocol SWRO-Q27 Annex B and `operating_plan_2027.csv` (boron "
                 f"thermal multipliers 1.05, 1.14, 1.32, 1.09; scaling recovery multipliers 1.03, 1.12, 1.28, 1.07; per-train quarterly "
                 f"dispatch duty ratios): plant-wide 2027 hours reach {g['A_total_2027']:,.1f} h (overhaul subset {g['A_overhaul_2027']:,.1f} h; "
                 f"summer Q3 {g['A_q3_2027']:,.1f} h), whereas carrying 2026 golden totals flat without Annex B drops TR01 to "
-                f"{rt['history_2026_flat_TR01']:,.1f} h and TR02 to {rt['history_2026_flat_TR02']:,.1f} h. Pricing modes at Schedule B "
-                f"tariffs (420 / 360 / 540 EUR/h) yields EUR {g['A_cost_eur_k']:,.1f} thousand plant-wide and EUR {g['A_overhaul_eur_k']:,.1f} thousand "
-                f"for overhaul trains, and reconciling Section 4 mode gaps against legacy 2026 screening yields a {g['A_diag_err_pct']:.1f}% "
-                f"diagnostic discrepancy rate (versus {rt['rigorous']['disc_pct']:.1f}% on the rigorous standard route)."
+                f"{rt['history_2026_flat_TR01']:,.1f} h and TR02 to {rt['history_2026_flat_TR02']:,.1f} h. Evaluating excess desalination "
+                f"energy penalties under Section 4 (420 / 360 / 540 kWh/h, divided by 1,000 for MWh) yields {g['A_cost_eur_k']:,.1f} MWh "
+                f"plant-wide and {g['A_overhaul_eur_k']:,.1f} MWh for overhaul trains, and reconciling Section 4 mode gaps against raw 2026 "
+                f"monitoring alarms yields a {g['A_diag_err_pct']:.1f}% screening discrepancy rate (versus {rt['rigorous']['disc_pct']:.1f}% on the rigorous standard route)."
             ),
             (
-                f"8. Checked sensitivity across {n_var} defensible estimator variants (continuous OU vs AR(1), OLS/WLS/lag-1-only, 0.5% trimming, "
+                f"8. Propagated model estimation uncertainty across {n_var} defensible estimator variants (continuous OU vs AR(1), OLS/WLS/lag-1-only, 0.5% trimming, "
                 f"lab noise on/off, 4h-only moments; step-right/step-left/linear/midpoint flow integration, L1/L2/Huber/correlation/2%-trimmed profile loss, "
                 f"and linear/OU-kriging/PCHIP/nearest-parcel/cubic-spline parcel TEP lookup; shared vs per-train CIP clearing, tied vs free `D3` floor, "
                 f"96h/120h/144h and inclusive `<=120h` 31-block post-CIP windows; plus three joint cross-stump rebuilds) and six +/-20% independent mode "
@@ -813,20 +819,20 @@ def build_submission_md(res, figs):
             ),
             "",
             (
-                f"No other overhaul designation survives the prompt, Standard SWRO-Q27, and the physical laws in the 2026 logs, and each of "
-                f"the three decisive steps independently moves a different train across the 400-hour threshold while keeping the other two "
+                f"No other overhaul classification survives the prompt, Engineering Protocol SWRO-Q27, and the physical laws in the 2026 logs, and each of "
+                f"the three decisive steps independently moves a different train across the 400-hour criterion while keeping the other two "
                 f"components intact: dropping composite boron deconvolution alone shifts C1 from {g['C1_boron_2027']:,.1f} to "
                 f"{rt['drop_S1']['C1']:,.1f} h (total {rt['drop_S1']['total']:,.1f} h) and drops TR01 to {rt['drop_S1']['members']['TR01']:,.1f} h "
-                f"(filing TR02, TR06, TR07); dropping Lagrangian parcel alignment alone shifts C2 from {g['C2_scaling_2027']:,.1f} to "
+                f"(flagging TR02, TR06, TR07); dropping Lagrangian parcel alignment alone shifts C2 from {g['C2_scaling_2027']:,.1f} to "
                 f"{rt['drop_S2']['C2']:,.1f} h (total {rt['drop_S2']['total']:,.1f} h) and drops TR02 to {rt['drop_S2']['members']['TR02']:,.1f} h "
-                f"(filing TR06, TR07); and dropping 3-state CIP latent-class inversion alone inflates C3 from {g['C3_struct_2027']:,.1f} to "
+                f"(flagging TR06, TR07); and dropping 3-state CIP latent-class inversion alone inflates C3 from {g['C3_struct_2027']:,.1f} to "
                 f"{rt['drop_S3']['C3']:,.1f} h (total {rt['drop_S3']['total']:,.1f} h) and pushes TR03 to {rt['drop_S3']['members']['TR03']:,.1f} h "
-                f"(and TR04 to {rt['drop_S3']['members']['TR04']:,.1f} h, filing TR01, TR02, TR03, TR04, TR06, TR07). In pairs, dropping S1 "
-                f"and S2 files TR06 and TR07 ({rt['drop_S1_S2']['total']:,.1f} h), dropping S1 and S3 files TR02, TR03, TR06, and TR07 "
-                f"({rt['drop_S1_S3']['total']:,.1f} h), dropping S2 and S3 files TR01, TR03, TR05, TR06, and TR07 ({rt['drop_S2_S3']['total']:,.1f} h), "
-                f"and dropping all three files TR03, TR06, and TR07 ({rt['direct']['total']:,.1f} h). The tightest boundary clearances sit on "
-                f"TR02 ({tr['TR02']['total_2027_h']:,.1f} h, band {_bstr('A_TR02')} h, 106.3 h above 400 h) and TR04 "
-                f"({tr['TR04']['total_2027_h']:,.1f} h, band {_bstr('A_TR04')} h, 81.2 h below 400 h)."
+                f"(and TR04 to {rt['drop_S3']['members']['TR04']:,.1f} h, flagging TR01, TR02, TR03, TR04, TR06, TR07). In pairs, dropping S1 "
+                f"and S2 flags TR06 and TR07 ({rt['drop_S1_S2']['total']:,.1f} h), dropping S1 and S3 flags TR02, TR03, TR06, and TR07 "
+                f"({rt['drop_S1_S3']['total']:,.1f} h), dropping S2 and S3 flags TR01, TR03, TR05, TR06, and TR07 ({rt['drop_S2_S3']['total']:,.1f} h), "
+                f"and dropping all three flags TR03, TR06, and TR07 ({rt['direct']['total']:,.1f} h). The tightest boundary clearances sit on "
+                f"TR02 ({tr['TR02']['total_2027_h']:,.1f} h, uncertainty range {_bstr('A_TR02')} h, 106.3 h above 400 h) and TR04 "
+                f"({tr['TR04']['total_2027_h']:,.1f} h, uncertainty range {_bstr('A_TR04')} h, 81.2 h below 400 h)."
             ),
             "",
         ]
@@ -863,4 +869,4 @@ def emit_all(task_dir=None, res=None):
 if __name__ == "__main__":
     figs, eff, meta = emit_all()
     print("Wrote figures.json, effort.json, metadata.json, submission.md")
-    print("Call:", figs["R8_overhaul_slate"], "Total:", figs["A_total_2027"], "Cost EUR k:", figs["A_cost_eur_k"])
+    print("Call:", figs["R8_overhaul_slate"], "Total:", figs["A_total_2027"], "Excess Energy MWh:", figs["A_energy_mwh"])

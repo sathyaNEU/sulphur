@@ -358,6 +358,8 @@ def run_all(target_dir):
             "total_2027_h": htot,
             "q3_2027_h": hq3,
             "cost_2027_eur": cost_eur,
+            "energy_2027_kwh": cost_eur,
+            "energy_2027_mwh": cost_eur / 1000.0,
             "designation": "OVERHAUL" if htot >= core.THRESHOLD else "MONITOR",
             # S1 diagnostics
             "s1_sd1": r1_g[u]["sd1"],
@@ -709,10 +711,10 @@ if __name__ == "__main__":
         tr = res["train_rows"][u]
         print(
             f"  {u}: 2027={tr['total_2027_h']:6.1f} h (B={tr['boron_2027_h']:5.1f} S={tr['scaling_2027_h']:5.1f} "
-            f"St={tr['struct_2027_h']:5.1f} Q3={tr['q3_2027_h']:5.1f} EUR={tr['cost_2027_eur']:9.2f}) -> {tr['designation']}"
+            f"St={tr['struct_2027_h']:5.1f} Q3={tr['q3_2027_h']:5.1f} MWh={tr['energy_2027_mwh']:7.2f}) -> {tr['designation']}"
         )
     print(
         f"Plant 2027: Total={res['gold_asm']['A_total_2027']:.1f} Overhaul={res['gold_asm']['A_overhaul_2027']:.1f} "
-        f"Q3={res['gold_asm']['A_q3_2027']:.1f} Cost=EUR {res['gold_asm']['A_cost_eur_k']:.1f}k "
-        f"OvCost=EUR {res['gold_asm']['A_overhaul_eur_k']:.1f}k Disc={res['gold_asm']['A_diag_err_pct']:.1f}%"
+        f"Q3={res['gold_asm']['A_q3_2027']:.1f} Energy={res['gold_asm']['A_cost_eur_k']:.1f} MWh "
+        f"OvEnergy={res['gold_asm']['A_overhaul_eur_k']:.1f} MWh Disc={res['gold_asm']['A_diag_err_pct']:.1f}%"
     )

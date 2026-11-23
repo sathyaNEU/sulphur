@@ -104,7 +104,7 @@ def write_csv(golden_dir, res):
                 "struct_2027_h",
                 "total_2027_h",
                 "q3_2027_h",
-                "cost_2027_eur",
+                "energy_2027_mwh",
                 "designation",
             ]
         )
@@ -118,7 +118,7 @@ def write_csv(golden_dir, res):
                     f"{tr['struct_2027_h']:.1f}",
                     f"{tr['total_2027_h']:.1f}",
                     f"{tr['q3_2027_h']:.1f}",
-                    f"{tr['cost_2027_eur']:.2f}",
+                    f"{tr['energy_2027_mwh']:.2f}",
                     tr["designation"],
                 ]
             )
@@ -142,9 +142,9 @@ def write_workbook(golden_dir, res, ordered_trains):
     # ==========================================================================
     # TAB 6: Operating_Plan_2027 (built first so Overhaul_Triage_2027 links to it)
     # ==========================================================================
-    ws_plan["A1"] = "Barlavento SWRO 2026-to-2027 Quarterly Anomaly Projection (Standard SWRO-Q27 Annex B)"
+    ws_plan["A1"] = "Barlavento SWRO 2026-to-2027 Quarterly Failure-Mode Forecast (Protocol SWRO-Q27 Annex B)"
     ws_plan["A1"].font = S["title_font"]
-    ws_plan["A2"] = "Uniform Annex B quarterly multipliers from operating_plan_2027.csv applied to estimated 2026 mode hours."
+    ws_plan["A2"] = "Uniform Annex B quarterly multipliers from operating_plan_2027.csv applied to estimated 2026 physical mode hours."
     ws_plan["A2"].font = S["sub_font"]
 
     plan_hdrs = [
@@ -160,7 +160,7 @@ def write_workbook(golden_dir, res, ordered_trains):
         "2027 Scaling (h)",
         "2027 Struct (h)",
         "2027 Total (h)",
-        "2027 Cost (EUR)",
+        "2027 Excess Energy (MWh)",
     ]
     ws_plan.append([])
     ws_plan.append(plan_hdrs)  # row 4
@@ -185,7 +185,7 @@ def write_workbook(golden_dir, res, ordered_trains):
             ws_plan.cell(r, 10, f"=D{r}*H{r}*F{r}")
             ws_plan.cell(r, 11, f"=E{r}*F{r}")
             ws_plan.cell(r, 12, f"=SUM(I{r}:K{r})")
-            ws_plan.cell(r, 13, f"=I{r}*{int(core.TARIFF_BORON)}+J{r}*{int(core.TARIFF_SCALING)}+K{r}*{int(core.TARIFF_STRUCT)}")
+            ws_plan.cell(r, 13, f"=(I{r}*{int(core.TARIFF_BORON)}+J{r}*{int(core.TARIFF_SCALING)}+K{r}*{int(core.TARIFF_STRUCT)})/1000")
             for c in range(1, len(plan_hdrs) + 1):
                 cell = ws_plan.cell(r, c)
                 cell.font = S["body_font"]
@@ -222,16 +222,16 @@ def write_workbook(golden_dir, res, ordered_trains):
         elif c in (3, 4, 5, 9, 10, 11, 12):
             cell.number_format = "#,##0.0"
     ws_plan.freeze_panes = "C5"
-    _set_widths(ws_plan, [11, 12, 14, 15, 14, 12, 15, 15, 14, 15, 14, 14, 16])
+    _set_widths(ws_plan, [11, 12, 14, 15, 14, 12, 15, 15, 14, 15, 14, 14, 18])
     _setup_print(ws_plan, len(plan_hdrs), tot_p, repeat_row=4)
 
     # ==========================================================================
     # TAB 7: Screening_Audit_2026 (built before Exec so Exec can link discrepancy %)
     # ==========================================================================
     n_var = len(res["variants_named"])
-    ws_aud["A1"] = f"2026 Legacy Screening Discrepancy Audit & {n_var}-Variant Forcing Summary"
+    ws_aud["A1"] = f"2026 Raw Monitoring Alarm Divergence & {n_var}-Variant Estimation Uncertainty"
     ws_aud["A1"].font = S["title_font"]
-    ws_aud["A2"] = "Clause 4.4 Discrepancy Rate = 100 * Sum(|Est_2026 - Inc_2026|) / Sum(Est_2026) across 8 trains x 3 modes."
+    ws_aud["A2"] = "Clause 4.4 Discrepancy Rate = 100 * Sum(|Est_2026 - Raw_2026|) / Sum(Est_2026) across 8 trains x 3 modes."
     ws_aud["A2"].font = S["sub_font"]
 
     aud_hdrs = [
@@ -292,7 +292,7 @@ def write_workbook(golden_dir, res, ordered_trains):
         if c >= 2:
             cell.number_format = "#,##0.0"
 
-    ws_aud.cell(15, 1, "2026 Incumbent Screening Discrepancy Rate (%)").font = S["bold_font"]
+    ws_aud.cell(15, 1, "2026 Raw Monitoring Screening Discrepancy Rate (%)").font = S["bold_font"]
     ws_aud.cell(15, 4, "=L13/K13")
     ws_aud.cell(15, 4).font = S["bold_font"]
     ws_aud.cell(15, 4).number_format = "0.0%"
@@ -344,14 +344,14 @@ def write_workbook(golden_dir, res, ordered_trains):
 
     # Cleaning & conventions notes at bottom of Screening_Audit_2026
     nr = vr + 1
-    ws_aud.cell(nr, 1, "Data Conformance & Filing Conventions (2026 Operational Archive)").font = S["sec_font"]
+    ws_aud.cell(nr, 1, "Data Conformance & Modeling Conventions (2026 Operational Archive)").font = S["sec_font"]
     cl = res["cleaning"]
     notes = [
-        f"As-of archive date: {PK.AS_OF}; analysis filed 2027-01-21 under Standard SWRO-Q27 (BDM-REG-Q27-2026).",
+        f"As-of archive date: {PK.AS_OF}; diagnostics finalized 2027-01-21 under Engineering Protocol SWRO-Q27 (BDM-ENG-Q27-2026).",
         f"LIMS permeate boron assays cleaned from {cl['boron_raw_rows']:,} raw rows to {cl['boron_clean_rows']:,} unique bottles ({cl['boron_superseded_dropped']} superseded rev-1 rows removed, {cl['boron_ug_rows']:,} South-bay ug/L rows converted to mg/L, {cl['boron_dmy_rows']:,} DD/MM/YYYY dates parsed, {cl['boron_legacy_rows']} legacy LINE tags mapped).",
         f"15-minute chemistry cleaned from {cl['intake_raw_rows']:,} intake ({cl['intake_dups_dropped']} dup frames removed) and {cl['ro_feed_raw_rows']:,} RO-feed ({cl['ro_feed_dups_dropped']} dup frames removed) to 280,320 exact intervals each; first 32 burn-in intervals excluded per Clause 2.2.",
         f"Hourly SCADA hydraulics cleaned from {cl['hydraulics_raw_rows']:,} to {cl['hydraulics_clean_rows']:,} rows ({cl['hydraulics_dups_dropped']} retry polls removed, {cl['hydraulics_ls_rows']:,} South-bay L/s rows converted to m3/h). Shift diagnostics (17,520 blocks) and {cl['cip_rows']} CIP washes aligned via Europe/Lisbon ISO offsets.",
-        "Out-of-scope regional files (mibel_iberian_power_spot_2026.csv, algarve_reservoir_levels_2026.xlsx) excluded from integrity calculations.",
+        "Out-of-scope regional files (mibel_iberian_power_spot_2026.csv, algarve_reservoir_levels_2026.xlsx) excluded from membrane reliability estimation.",
     ]
     for i, txt in enumerate(notes, 1):
         ws_aud.cell(nr + i, 1, txt).font = S["note_font"]
@@ -363,10 +363,10 @@ def write_workbook(golden_dir, res, ordered_trains):
     # ==========================================================================
     # TAB 1: Overhaul_Triage_2027 (Executive recommendation + live formulas + bar chart)
     # ==========================================================================
-    ws_exec["A1"] = "Barlavento SWRO 2027 Mandatory Overhaul Triage: Pull TR07, TR06, TR01, and TR02 (>= 400 h)"
+    ws_exec["A1"] = "Barlavento SWRO 2027 Vessel Overhaul Diagnostics: Pull TR07, TR06, TR01, and TR02 (>= 400 h)"
     ws_exec["A1"].font = S["title_font"]
     ws_exec["A2"] = (
-        f"Estacao Dessalinizadora de Alvor | Standard SWRO-Q27 Annual Integrity Inspection | "
+        f"Estacao Dessalinizadora de Alvor | Engineering Protocol SWRO-Q27 Membrane Reliability Diagnostics | "
         f"Prepared by {PK.PEOPLE['lead']} | Archive As-Of {PK.AS_OF}"
     )
     ws_exec["A2"].font = S["sub_font"]
@@ -384,10 +384,10 @@ def write_workbook(golden_dir, res, ordered_trains):
     )
     dir_m = res["lattice_asm"]["S1+S2+S3"]["members"]
     ws_exec["A4"] = (
-        f"Recommendation: Pull four SWRO trains for mandatory 2027 vessel overhaul under Standard SWRO-Q27 (>= 400 h): "
+        f"Recommendation: Schedule four SWRO trains for 2027 vessel overhaul under Engineering Protocol SWRO-Q27 (>= 400 h): "
         f"{ov_str}, totaling {res['gold_asm']['A_overhaul_2027']:,.1f} overhaul-train hours and "
-        f"EUR {res['gold_asm']['A_overhaul_eur_k']:,.1f}k Schedule B exposure; keep {mo_str} on routine monitoring. "
-        f"This rejects raw composite, wall-clock, and 2-of-3 shift screening, which flags bio-fouled healthy TR03 "
+        f"{res['gold_asm']['A_overhaul_eur_k']:,.1f} MWh excess desalination energy burden; keep {mo_str} on routine monitoring. "
+        f"This rejects raw composite, wall-clock, and 2-of-3 shift monitoring, which flags bio-fouled healthy TR03 "
         f"({dir_m['TR03']:,.1f} h) while missing short-range boron train TR01 ({dir_m['TR01']:,.1f} h) and "
         f"short-circuited scaling train TR02 ({dir_m['TR02']:,.1f} h)."
     )
@@ -409,8 +409,8 @@ def write_workbook(golden_dir, res, ordered_trains):
         "2027 Struct (h)",
         "2027 Total (h)",
         "2027 Q3 (h)",
-        "2027 Cost (EUR)",
-        "Threshold (h)",
+        "2027 Energy (MWh)",
+        "Criterion (h)",
         "Designation",
     ]
     for c, h in enumerate(t_hdrs, 1):
@@ -431,7 +431,7 @@ def write_workbook(golden_dir, res, ordered_trains):
             7,
             f'=SUMIFS(Operating_Plan_2027!$L$5:$L$36,Operating_Plan_2027!$A$5:$A$36,A{r},Operating_Plan_2027!$B$5:$B$36,"2027-Q3")',
         )
-        ws_exec.cell(r, 8, f"=C{r}*{int(core.TARIFF_BORON)}+D{r}*{int(core.TARIFF_SCALING)}+E{r}*{int(core.TARIFF_STRUCT)}")
+        ws_exec.cell(r, 8, f"=(C{r}*{int(core.TARIFF_BORON)}+D{r}*{int(core.TARIFF_SCALING)}+E{r}*{int(core.TARIFF_STRUCT)})/1000")
         ws_exec.cell(r, 9, int(core.THRESHOLD))
         ws_exec.cell(r, 10, f'=IF(F{r}>=I{r},"OVERHAUL","MONITOR")')
 
@@ -498,8 +498,8 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.alignment = Alignment(horizontal="right")
 
     # KPI & Critical Components block (rows 20..30)
-    ws_exec.cell(20, 1, f"Key Filing Figures & {n_var}-Variant Estimator Bands").font = S["sec_font"]
-    kpi_hdrs = ["Filing Metric", "Golden Value", "Unit", f"{n_var}-Variant Band", "Reference"]
+    ws_exec.cell(20, 1, f"Key Diagnostic Forecasts & {n_var}-Variant Estimation Uncertainty Ranges").font = S["sec_font"]
+    kpi_hdrs = ["Diagnostic Metric", "Point Estimate", "Unit", f"{n_var}-Variant Range", "Protocol Ref"]
     for c, h in enumerate(kpi_hdrs, 1):
         ws_exec.cell(21, c, h)
     _style_header_row(ws_exec, 21, len(kpi_hdrs), S, fill_key="subhdr_fill")
@@ -512,9 +512,9 @@ def write_workbook(golden_dir, res, ordered_trains):
         ("Plant-wide 2027 Total Anomalous Operating Hours", "=F16", "hours", f"{bnds['A_total_2027'][0]:,.1f} to {bnds['A_total_2027'][1]:,.1f}", "Clause 3.1", "#,##0.0"),
         ("Overhaul-Train 2027 Anomalous Hours (TR07, TR06, TR01, TR02)", "=F17", "hours", f"{bnds['A_overhaul_2027'][0]:,.1f} to {bnds['A_overhaul_2027'][1]:,.1f}", "Clause 3.1", "#,##0.0"),
         ("Plant-wide Summer Q3 2027 Anomalous Hours", "=G16", "hours", f"{bnds['A_q3_2027'][0]:,.1f} to {bnds['A_q3_2027'][1]:,.1f}", "Annex B", "#,##0.0"),
-        ("Total 2027 Schedule B Contractual Exposure", "=H16/1000", "EUR thousands", f"{bnds['A_cost_eur_k'][0]:,.1f} to {bnds['A_cost_eur_k'][1]:,.1f}", "Schedule B", "#,##0.0"),
-        ("Overhaul-Train 2027 Schedule B Exposure", "=H17/1000", "EUR thousands", f"{bnds['A_overhaul_eur_k'][0]:,.1f} to {bnds['A_overhaul_eur_k'][1]:,.1f}", "Schedule B", "#,##0.0"),
-        ("2026 Incumbent Screening Discrepancy Rate", "=Screening_Audit_2026!D15", "% of true 2026", f"{bnds['A_diag_err_pct'][0]:.1f}% to {bnds['A_diag_err_pct'][1]:.1f}%", "Clause 4.4", "0.0%"),
+        ("Plant-wide 2027 Excess Desalination Energy Burden", "=H16", "MWh", f"{bnds['A_cost_eur_k'][0]:,.1f} to {bnds['A_cost_eur_k'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
+        ("Overhaul-Train 2027 Excess Desalination Energy Burden", "=H17", "MWh", f"{bnds['A_overhaul_eur_k'][0]:,.1f} to {bnds['A_overhaul_eur_k'][1]:,.1f}", "Clause 4.3", "#,##0.0"),
+        ("2026 Raw Monitoring Screening Discrepancy Rate", "=Screening_Audit_2026!D15", "% of true 2026", f"{bnds['A_diag_err_pct'][0]:.1f}% to {bnds['A_diag_err_pct'][1]:.1f}%", "Clause 4.4", "0.0%"),
     ]
     for i, (lbl, fml, unit, btxt, ref, nfmt) in enumerate(kpis):
         r = 22 + i
@@ -544,7 +544,7 @@ def write_workbook(golden_dir, res, ordered_trains):
     chart.type = "bar"
     chart.style = 10
     chart.grouping = "clustered"
-    chart.title = "Projected 2027 Anomalous Hours vs 400-Hour Overhaul Threshold"
+    chart.title = "Forecasted 2027 Anomalous Hours vs 400-Hour Overhaul Criterion"
     chart.title.tx.rich.p[0].pPr = ParagraphProperties(defRPr=CharacterProperties(sz=1100, b=True))
     chart.x_axis.title = "SWRO Train"
     chart.y_axis.title = "Projected 2027 Operating Hours"
@@ -844,7 +844,7 @@ def write_workbook(golden_dir, res, ordered_trains):
         "F3 Fleet CIP Invariance Err (pp)",
         "Flagged Overhaul Set",
         "Total 2027 (h)",
-        "Total Cost (EUR k)",
+        "Excess Energy (MWh)",
     ]
     ws_fal.append([])
     ws_fal.append(f_hdrs)  # row 4
@@ -852,7 +852,7 @@ def write_workbook(golden_dir, res, ordered_trains):
 
     route_lookup = [
         ("Golden (Per-Train Deconv + Lagrangian V_eff + 3-State CIP LCA)", "golden", res["gold_asm"]),
-        ("Direct / Legacy Screening (Raw Comp + Same-Time + 2-of-3 MV)", "direct", res["lattice_asm"]["S1+S2+S3"]),
+        ("Direct / Raw Monitoring (Raw Comp + Same-Time + 2-of-3 MV)", "direct", res["lattice_asm"]["S1+S2+S3"]),
         ("Rigorous Standard (Pooled AR1 + Fixed CCF Lag + 2-Class DS)", "rigorous", res["rig_asm"]),
         ("Cutoff Filter (4h-Only + Steady-Flow Lag + Post-CIP MV)", "cutoff", res["cut_asm"]),
         ("Generous Upper (i.i.d. sqrt(m) + Comonotonic + 2-Class DS)", "generous", res["gen_asm"]),
@@ -892,7 +892,7 @@ def write_workbook(golden_dir, res, ordered_trains):
                 cell.alignment = Alignment(horizontal="right")
 
     # Table 2: Per-train figures across major routes (rows 19..31)
-    ws_fal.cell(19, 1, "Per-Train 2027 Projected Anomalous Hours Across Routes (Threshold = 400.0 h)").font = S["sec_font"]
+    ws_fal.cell(19, 1, "Per-Train 2027 Forecasted Anomalous Hours Across Routes (Criterion = 400.0 h)").font = S["sec_font"]
     rt_hdrs = ["Method / Route"] + core.TRAINS + ["C1 Boron", "C2 Scaling", "C3 Struct"]
     for c, h in enumerate(rt_hdrs, 1):
         ws_fal.cell(20, c, h)

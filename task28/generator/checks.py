@@ -71,7 +71,7 @@ def main():
     print("=== 2. PINNED CONSTANTS PRESENT IN SHIPPED DOCUMENTS ===")
     std_txt = "\n".join(p.extract_text() or "" for p in PdfReader(os.path.join(target_dir, PK.FILES["standard_pdf"])).pages)
     qa_txt = "\n".join(p.extract_text() or "" for p in PdfReader(os.path.join(target_dir, PK.FILES["lims_qa_pdf"])).pages)
-    for tok in ("400.0", "0.50 mg/L", "exceeding 1.50", "420 EUR/h", "360 EUR/h", "540 EUR/h", "1.32", "1.28", "boron_2027_h"):
+    for tok in ("400.0", "0.50 mg/L", "exceeding 1.50", "420 kWh/h", "360 kWh/h", "540 kWh/h", "1.32", "1.28", "boron_2027_h", "energy_2027_mwh"):
         _assert(tok in std_txt, f"SWRO-Q27 PDF pins {tok!r}")
     _assert("0.004 mg/L" in qa_txt, "LIMS QA certificate pins 0.004 mg/L repeatability SD")
     # Never-filed vocabulary sweep in PDFs
@@ -133,7 +133,7 @@ def main():
     _assert(ex["cutoff:s3_unanimous"]["members"]["TR06"] < 400.0 and ov["S3"]["members"]["TR06"] < 400.0, "SF13: unanimous 3-of-3 and uninverted raw D3 drop damaged TR06 below 400 h")
     _assert(all(sorted(u for u in core.TRAINS if asm["members"][u] >= core.THRESHOLD) == g_slate for _, asm in res["variants_named"][17:23]), "SF14: all 6 S3 EM specification and CIP-window variants converge on golden call")
     _assert(ex["hedge:history_2026_flat"]["members"]["TR01"] < 400.0 and ex["hedge:history_2026_flat"]["members"]["TR02"] < 400.0, "SF15: flat 2026 history without 2027 Operating Plan drops TR01 and TR02 below 400 h")
-    _assert("4.4" in std_txt and "2,160" in std_txt, "SF16: 2026 calendar quarters and Clause 4.4 incumbent discrepancy rate pinned verbatim in SWRO-Q27")
+    _assert("4.4" in std_txt and "2,160" in std_txt, "SF16: 2026 calendar quarters and Clause 4.4 raw monitoring discrepancy rate pinned verbatim in SWRO-Q27")
     for k in ("S1", "S2", "S3", "S1+S2", "S1+S3", "S2+S3", "S1+S2+S3"):
         sl = sorted(u for u in core.TRAINS if lat[k]["members"][u] >= core.THRESHOLD)
         _assert(sl != g_slate, f"lattice drop {k} files wrong slate ({sl})")
@@ -189,8 +189,8 @@ def main():
         _assert(abs(float(ws_e["F16"].value) - figs["A_total_2027"]) < 0.06, f"Exec F16 formula = {ws_e['F16'].value:.2f} matches Total {figs['A_total_2027']}")
         _assert(abs(float(ws_e["F17"].value) - figs["A_overhaul_2027"]) < 0.06, f"Exec F17 formula = {ws_e['F17'].value:.2f} matches Overhaul {figs['A_overhaul_2027']}")
         _assert(abs(float(ws_e["G16"].value) - figs["A_q3_2027"]) < 0.06, f"Exec G16 formula = {ws_e['G16'].value:.2f} matches Q3 {figs['A_q3_2027']}")
-        _assert(abs(float(ws_e["H16"].value) / 1000.0 - figs["A_cost_eur_k"]) < 0.06, f"Exec H16 formula = EUR {ws_e['H16'].value/1000:.2f}k matches Cost {figs['A_cost_eur_k']}")
-        _assert(abs(float(ws_e["H17"].value) / 1000.0 - figs["A_overhaul_eur_k"]) < 0.06, f"Exec H17 formula = EUR {ws_e['H17'].value/1000:.2f}k matches OvCost {figs['A_overhaul_eur_k']}")
+        _assert(abs(float(ws_e["H16"].value) - figs["A_energy_mwh"]) < 0.06, f"Exec H16 formula = {ws_e['H16'].value:.2f} MWh matches Energy {figs['A_energy_mwh']} MWh")
+        _assert(abs(float(ws_e["H17"].value) - figs["A_overhaul_mwh"]) < 0.06, f"Exec H17 formula = {ws_e['H17'].value:.2f} MWh matches OvEnergy {figs['A_overhaul_mwh']} MWh")
         _assert(abs(float(ws_e["B30"].value) * 100.0 - figs["A_diag_err_pct"]) < 0.06, f"Exec B30 formula = {ws_e['B30'].value*100:.2f}% matches Disc {figs['A_diag_err_pct']}%")
     finally:
         shutil.rmtree(work, ignore_errors=True)
@@ -203,7 +203,7 @@ def main():
         u = row["train_id"]
         ft = figs["trains"][u]
         _assert(abs(float(row["total_2027_h"]) - ft["total_2027_h"]) < 0.06, f"CSV {u} total matches figures.json")
-        _assert(abs(float(row["cost_2027_eur"]) - ft["cost_2027_eur"]) < 0.02, f"CSV {u} EUR matches figures.json")
+        _assert(abs(float(row["energy_2027_mwh"]) - ft["energy_2027_mwh"]) < 0.02, f"CSV {u} MWh matches figures.json")
         _assert(row["designation"] == ft["designation"], f"CSV {u} designation matches figures.json")
 
     print("\nALL CHECKS PASSED.")

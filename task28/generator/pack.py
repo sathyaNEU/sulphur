@@ -39,8 +39,8 @@ PEOPLE = {
     "lims": "Filipa Nogueira",         # LIMS Analytical Chemistry Lead
     "hydraulics": "Vasco Figueiredo",  # Hydraulic Operations Engineer
     "maint": "Beatriz Lourenco",       # Membrane Maintenance Planner
-    "compliance": "Tiago Castanheira", # Quality & Regulatory Compliance Officer
-    "inspector": "Mafalda Tavares",    # Algarve Regional Water Inspector
+    "compliance": "Tiago Castanheira", # Membrane Reliability Engineering Lead
+    "inspector": "Mafalda Tavares",    # Chief Desalination Process Engineer
     "analyst": "Goncalo Peixoto",      # Plant Reliability Analyst
 }
 

@@ -264,9 +264,9 @@
     },
     {
       "id": "R7",
-      "name": "Schedule B EUR exposure & 2026 discrepancy rate",
-      "graded_as": "Ask 3 (Financial & Audit)",
-      "figure": "R7_cost_and_discrepancy",
+      "name": "2027 excess desalination energy burden (MWh) & 2026 monitoring discrepancy rate",
+      "graded_as": "Ask 3 (Energy & Bias)",
+      "figure": "R7_energy_and_discrepancy",
       "depends": [
         "R2",
         "R3",
@@ -275,16 +275,16 @@
       ],
       "independent": "",
       "golden": {
-        "A_cost_eur_k": 1750.8,
-        "A_overhaul_eur_k": 1253.5,
+        "A_energy_mwh": 1750.8,
+        "A_overhaul_mwh": 1253.5,
         "A_diag_err_pct": 120.8
       },
       "bands": {
-        "A_cost_eur_k": [
+        "A_energy_mwh": [
           1624.1,
           1841.9
         ],
-        "A_overhaul_eur_k": [
+        "A_overhaul_mwh": [
           1161.3,
           1319.1
         ],
@@ -298,25 +298,25 @@
       ],
       "passes": {
         "quick": {
-          "A_cost_eur_k": 2213.1,
-          "A_overhaul_eur_k": 1686.6,
+          "A_energy_mwh": 2213.1,
+          "A_overhaul_mwh": 1686.6,
           "A_diag_err_pct": 0.0
         },
         "careful": {
-          "A_cost_eur_k": 2213.1,
-          "A_overhaul_eur_k": 1686.6,
+          "A_energy_mwh": 2213.1,
+          "A_overhaul_mwh": 1686.6,
           "A_diag_err_pct": 0.0
         },
         "thorough": {
-          "A_cost_eur_k": 1750.8,
-          "A_overhaul_eur_k": 1253.5,
+          "A_energy_mwh": 1750.8,
+          "A_overhaul_mwh": 1253.5,
           "A_diag_err_pct": 120.8
         }
       }
     },
     {
       "id": "R8",
-      "name": "Final 2027 mandatory overhaul triage slate",
+      "name": "Final 2027 vessel overhaul reliability classification",
       "graded_as": "Recommendation",
       "figure": "R8_overhaul_slate",
       "depends": [
@@ -365,7 +365,7 @@
       ]
     },
     {
-      "sentence": "Intake precursor and RO-feed stress sensors observe moving seawater parcels separated by an unobserved effective DAF/DMF hydraulic holdup volume under time-varying tariff flow.",
+      "sentence": "Intake precursor and RO-feed stress sensors observe moving seawater parcels separated by an unobserved effective DAF/DMF hydraulic holdup volume under time-varying feed flow.",
       "rescues": [
         "R3"
       ]

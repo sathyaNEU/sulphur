@@ -331,8 +331,8 @@ def main():
             hb, hs, ht = sum(b27), sum(s27), sum(t27)
             htot = hb + hs + ht
             hq3 = b27[2] + s27[2] + t27[2]
-            cost = hb * 420.0 + hs * 360.0 + ht * 540.0
-            recomp[u] = dict(b=hb, s=hs, st=ht, tot=htot, q3=hq3, cost=cost, des="OVERHAUL" if htot >= 400.0 else "MONITOR")
+            energy_mwh = (hb * 420.0 + hs * 360.0 + ht * 540.0) / 1000.0
+            recomp[u] = dict(b=hb, s=hs, st=ht, tot=htot, q3=hq3, mwh=energy_mwh, des="OVERHAUL" if htot >= 400.0 else "MONITOR")
             tot26 += sum(b26[u]) + sum(s26[u]) + sum(st26[u])
             miss26 += abs(sum(b26[u]) - inc_b26[u]) + abs(sum(s26[u]) - inc_s26[u]) + abs(sum(st26[u]) - inc_st26[u])
 
@@ -343,8 +343,8 @@ def main():
         tot27 = c1 + c2 + c3
         ov27 = sum(recomp[u]["tot"] for u in trains if recomp[u]["des"] == "OVERHAUL")
         q3_27 = sum(recomp[u]["q3"] for u in trains)
-        cost27 = sum(recomp[u]["cost"] for u in trains)
-        ov_cost27 = sum(recomp[u]["cost"] for u in trains if recomp[u]["des"] == "OVERHAUL")
+        energy27 = sum(recomp[u]["mwh"] for u in trains)
+        ov_energy27 = sum(recomp[u]["mwh"] for u in trains if recomp[u]["des"] == "OVERHAUL")
 
         # Verify golden CSV
         with open(os.path.join(gdir, "barlavento_train_diagnostics_2027.csv"), encoding="utf-8") as f:
@@ -358,7 +358,7 @@ def main():
             assert abs(float(row["struct_2027_h"]) - rc["st"]) < 0.15, f"CSV {u} struct mismatch"
             assert abs(float(row["total_2027_h"]) - rc["tot"]) < 0.15, f"CSV {u} total mismatch"
             assert abs(float(row["q3_2027_h"]) - rc["q3"]) < 0.15, f"CSV {u} q3 mismatch"
-            assert abs(float(row["cost_2027_eur"]) - rc["cost"]) < 5.0, f"CSV {u} cost mismatch"
+            assert abs(float(row["energy_2027_mwh"]) - rc["mwh"]) < 0.05, f"CSV {u} energy MWh mismatch"
             assert row["designation"] == rc["des"], f"CSV {u} designation mismatch"
 
         # Verify golden XLSX via LibreOffice Calc evaluation
@@ -386,8 +386,8 @@ def main():
         assert abs(float(ws["F16"].value) - tot27) < 0.15
         assert abs(float(ws["F17"].value) - ov27) < 0.15
         assert abs(float(ws["G16"].value) - q3_27) < 0.15
-        assert abs(float(ws["H16"].value) - cost27) < 10.0
-        assert abs(float(ws["H17"].value) - ov_cost27) < 10.0
+        assert abs(float(ws["H16"].value) - energy27) < 0.15
+        assert abs(float(ws["H17"].value) - ov_energy27) < 0.15
         assert abs(float(ws["B30"].value) * 100.0 - disc_pct) < 0.15
 
         # Verify submission.md carries exact recomputed headline figures
@@ -399,16 +399,16 @@ def main():
             f"{tot27:,.1f}",
             f"{ov27:,.1f}",
             f"{q3_27:,.1f}",
-            f"{cost27 / 1000.0:,.1f}",
-            f"{ov_cost27 / 1000.0:,.1f}",
+            f"{energy27:,.1f}",
+            f"{ov_energy27:,.1f}",
             f"{disc_pct:.1f}%",
         ):
             assert tok in sub, f"submission.md missing independently recomputed figure {tok}"
 
         print(
             f"VERIFY PASS  task28: C1={c1:.1f} C2={c2:.1f} C3={c3:.1f} Total={tot27:.1f} "
-            f"Overhaul={ov27:.1f} Q3={q3_27:.1f} Cost=EUR {cost27/1000:.1f}k "
-            f"OvCost=EUR {ov_cost27/1000:.1f}k Disc={disc_pct:.1f}%"
+            f"Overhaul={ov27:.1f} Q3={q3_27:.1f} Energy={energy27:.1f} MWh "
+            f"OvEnergy={ov_energy27:.1f} MWh Disc={disc_pct:.1f}%"
         )
     finally:
         shutil.rmtree(work, ignore_errors=True)

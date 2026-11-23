@@ -35,7 +35,7 @@ def main():
 
     print("[4/4] Emitting figures.json, effort.json, metadata.json, submission.md ...")
     figs, eff, meta = WU.emit_all(TASK_DIR, res=res)
-    print(f"      Done. Total cost EUR {figs['A_cost_eur_k']:.1f}k, Discrepancy {figs['A_diag_err_pct']:.1f}%")
+    print(f"      Done. Total excess energy {figs['A_energy_mwh']:.1f} MWh, Discrepancy {figs['A_diag_err_pct']:.1f}%")
 
 
 if __name__ == "__main__":

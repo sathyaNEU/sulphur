@@ -1,10 +1,10 @@
 {
-  "A_cost_eur": 1750781.22,
-  "A_cost_eur_k": 1750.8,
   "A_diag_err_pct": 120.8,
+  "A_energy_mwh": 1750.8,
+  "A_energy_mwh_exact": 1750.78,
   "A_overhaul_2027": 2926.4,
-  "A_overhaul_eur": 1253546.01,
-  "A_overhaul_eur_k": 1253.5,
+  "A_overhaul_mwh": 1253.5,
+  "A_overhaul_mwh_exact": 1253.55,
   "A_q3_2027": 1766.5,
   "A_total_2027": 4088.4,
   "C1_boron_2027": 1328.7,
@@ -33,10 +33,10 @@
     "TR07": 1291.9,
     "TR08": 266.4
   },
-  "R7_cost_and_discrepancy": {
-    "A_cost_eur_k": 1750.8,
+  "R7_energy_and_discrepancy": {
     "A_diag_err_pct": 120.8,
-    "A_overhaul_eur_k": 1253.5
+    "A_energy_mwh": 1750.8,
+    "A_overhaul_mwh": 1253.5
   },
   "R8_overhaul_slate": [
     "TR01",
@@ -77,19 +77,19 @@
       245.9,
       284.6
     ],
-    "A_cost_eur_k": [
-      1624.1,
-      1841.9
-    ],
     "A_diag_err_pct": [
       112.3,
       125.4
+    ],
+    "A_energy_mwh": [
+      1624.1,
+      1841.9
     ],
     "A_overhaul_2027": [
       2707.5,
       3064.2
     ],
-    "A_overhaul_eur_k": [
+    "A_overhaul_mwh": [
       1161.3,
       1319.1
     ],
@@ -147,6 +147,10 @@
     "clearance_TR02_h": 106.3,
     "clearance_TR04_h": 81.2,
     "dt_15m_hours": 0.25,
+    "energy_rate_boron_kwh_h": 420.0,
+    "energy_rate_scaling_kwh_h": 360.0,
+    "energy_rate_struct_kwh_h": 540.0,
+    "kwh_per_mwh": 1000,
     "lab_sd_mg_l": 0.004,
     "lam_grid_points": 220,
     "lam_max_h": 30.0,
@@ -181,9 +185,6 @@
     "scaling_x_lim": 1.5,
     "scaling_y_lim": 1.5,
     "shift_blocks_per_train": 2190,
-    "tariff_boron": 420.0,
-    "tariff_scaling": 360.0,
-    "tariff_struct": 540.0,
     "threshold_h": 400.0,
     "v_grid_step_m3": 2,
     "v_scan_max_m3": 1450,
@@ -296,7 +297,7 @@
       "C1": 285.6,
       "C2": 552.1,
       "C3": 3508.1,
-      "cost_k": 2213.1,
+      "energy_mwh": 2213.1,
       "members": {
         "TR01": 161.5,
         "TR02": 168.6,
@@ -434,8 +435,8 @@
       "C1": 1234.7,
       "C2": 1246.9,
       "C3": 4822.1,
-      "cost_k": 3571.4,
       "disc_pct": 40.2,
+      "energy_mwh": 3571.4,
       "members": {
         "TR01": 379.0,
         "TR02": 387.1,
@@ -446,7 +447,7 @@
         "TR07": 2732.2,
         "TR08": 331.7
       },
-      "overhaul_cost_k": 3090.7,
+      "overhaul_energy_mwh": 3090.7,
       "q3": 2558.5,
       "total": 7303.7
     },
@@ -466,9 +467,8 @@
     "TR01": {
       "boron_2026_h": 205.3,
       "boron_2027_h": 285.2,
-      "cost_2027_eur": 210819.89,
-      "cost_2027_eur_k": 210.8,
       "designation": "OVERHAUL",
+      "energy_2027_mwh": 210.82,
       "q3_2027_h": 242.9,
       "s1_lam_h": 1.15,
       "s1_sd1": 0.0755,
@@ -489,9 +489,8 @@
     "TR02": {
       "boron_2026_h": 41.2,
       "boron_2027_h": 60.7,
-      "cost_2027_eur": 198400.08,
-      "cost_2027_eur_k": 198.4,
       "designation": "OVERHAUL",
+      "energy_2027_mwh": 198.4,
       "q3_2027_h": 233.5,
       "s1_lam_h": 1.5,
       "s1_sd1": 0.0576,
@@ -512,9 +511,8 @@
     "TR03": {
       "boron_2026_h": 42.8,
       "boron_2027_h": 59.2,
-      "cost_2027_eur": 129046.17,
-      "cost_2027_eur_k": 129.0,
       "designation": "MONITOR",
+      "energy_2027_mwh": 129.05,
       "q3_2027_h": 126.4,
       "s1_lam_h": 2.43,
       "s1_sd1": 0.056,
@@ -535,9 +533,8 @@
     "TR04": {
       "boron_2026_h": 87.5,
       "boron_2027_h": 124.3,
-      "cost_2027_eur": 131557.33,
-      "cost_2027_eur_k": 131.6,
       "designation": "MONITOR",
+      "energy_2027_mwh": 131.56,
       "q3_2027_h": 165.9,
       "s1_lam_h": 15.57,
       "s1_sd1": 0.0574,
@@ -558,9 +555,8 @@
     "TR05": {
       "boron_2026_h": 115.7,
       "boron_2027_h": 157.8,
-      "cost_2027_eur": 125104.11,
-      "cost_2027_eur_k": 125.1,
       "designation": "MONITOR",
+      "energy_2027_mwh": 125.1,
       "q3_2027_h": 118.1,
       "s1_lam_h": 1.5,
       "s1_sd1": 0.0676,
@@ -581,9 +577,8 @@
     "TR06": {
       "boron_2026_h": 48.4,
       "boron_2027_h": 68.9,
-      "cost_2027_eur": 301640.37,
-      "cost_2027_eur_k": 301.6,
       "designation": "OVERHAUL",
+      "energy_2027_mwh": 301.64,
       "q3_2027_h": 214.5,
       "s1_lam_h": 2.32,
       "s1_sd1": 0.056,
@@ -604,9 +599,8 @@
     "TR07": {
       "boron_2026_h": 378.1,
       "boron_2027_h": 535.6,
-      "cost_2027_eur": 542685.67,
-      "cost_2027_eur_k": 542.7,
       "designation": "OVERHAUL",
+      "energy_2027_mwh": 542.69,
       "q3_2027_h": 555.6,
       "s1_lam_h": 1.41,
       "s1_sd1": 0.0678,
@@ -627,9 +621,8 @@
     "TR08": {
       "boron_2026_h": 28.0,
       "boron_2027_h": 37.1,
-      "cost_2027_eur": 111527.6,
-      "cost_2027_eur_k": 111.5,
       "designation": "MONITOR",
+      "energy_2027_mwh": 111.53,
       "q3_2027_h": 109.6,
       "s1_lam_h": 1.64,
       "s1_sd1": 0.0605,
