@@ -47,6 +47,11 @@ Provisional SUBMIT on the analytical evidence (both calls wrong, every loss anal
 pending both platform scores under 60 and the strongest run under 60. Author's ruling owed on the CC block
 (training data was made by both).
 
+The stump answer below is in `submission.md` as `## How is each model stumped?`, directly after the Final
+Recommendation, emitted by `generator/writeup.py` `_stump_block` with every response quote and figure asserted
+against `runs/run1.md` and `runs/run2.md` and every golden figure from `figures.json` (`stump_block_check.py task9`
+PASS; the response percentages are written there in per cent words). Status `RUNS`, scores owed.
+
 ## Stump draft (How is each model stumped?)
 
 **Response 1.** Response 1 files optimisation noise in escalation at 9.10 points, where the answer is a remediation plan at 6.89 (band 6.05 to 7.40), and it is right on the other four sources. It read section 1.4 correctly, that a warm-started refit carries the randomness of the refits before it, but then assumed the carried noise never fades: "warm-started sources were treated as permanent 13-week random-walk accumulations rather than decaying effects". Taking half a replicate pair as each refit's fresh draw and adding thirteen of them gives its 9.10. It tested decay only by regressing later panel changes on release effects ("slopes near zero"), a check on another source; it never fitted how the score history's change grows with the gap between snapshots, which is where the decay shows. The overstated noise then runs downstream: merchants' own share comes out at 34.79 per cent against 43.9 (band 41.9 to 46.7), every model-side share sits outside its band (label revisions 34.52 against 39.1), and the tier counterfactual is 8.52 per cent against 9.7. It made the other two hard steps: training data at 6.61 (golden 6.62), by scaling the bootstrap spread to each window's rows, and actual use of pinned views at 58.97 per cent (band 53.2 to 60.0), measured from the three past platform changes, which keeps feature releases on a plan at 6.54.

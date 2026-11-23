@@ -1,6 +1,6 @@
 {
  "task": "task9",
- "status": "READY",
+ "status": "RUNS",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
@@ -57,15 +57,36 @@
  },
  "runs": {
   "architecture": 5,
+  "pair": 2,
   "date": "2026-11-22",
   "files": [
-   "runs/arch5_pair1_response_1.md",
-   "runs/arch5_pair1_response_2.md"
+   "runs/run1.md",
+   "runs/run2.md"
   ],
-  "scores": null,
+  "recorded": "2026-11-22: both responses of the reshipped pack's first pair pasted by the author without the platform scores or the generated rubric; read in the main thread (runs/triage.md)",
+  "run1": null,
+  "run2": null,
+  "average": null,
   "rubric": null,
-  "reading": "Response 1 filed optimisation noise, feature releases and label revisions in escalation, training data on a plan and retunes on monitor (3 of 5 placements): it made S1 (training data 6.75, the bootstrap pairs scaled by the rows that left and entered each window with the seeds' part left in, inside the band 6.36 to 7.44), lost S2 (12.87: thirteen refits each adding a whole replicate pair's variance) and S3 (92.86 per cent on pinned views on the calendar's planned weeks, the three past changes named and set aside), and did not net feature releases on pinned weeks (10.27). Response 2 escalated feature releases and label revisions and put the other three on monitor (2 of 5): it lost S1 (4.77, about what the rows that entered alone give, 4.81, though its stated estimator gives 6.77 on the pack and the alternative it computed and rejected, 7.11, sits in band), S2 (3.57: one refit's noise carried once per pair) and S3 (92.86), and did not net feature releases (10.27). Between them S2 and S3 were missed by both and S1 was reached in method by both and landed by Response 1. Open fork: both responses declined to net feature releases on pinned weeks for want of a filed effect; no shipped file says what pinned views do to a release, and not netting with every other step golden files feature releases at 10.27 (escalation).",
+  "triage": "runs/triage.md",
+  "reading": "Response 1 files optimisation noise in escalation (9.10: half a replicate pair a refit, added up over thirteen refits, never decayed) and the other four placements as the golden; it made the training-data step (6.61) and pinned views' actual use (58.97, inside 53.2 to 60.0, releases 6.54). Response 2 files optimisation noise in escalation (12.870: a whole replicate pair a refit, never decayed) and feature releases on monitor (4.001: the calendar's rollout taken as use, 92.857); it made the training-data step (7.278, inside 6.35 to 7.44). Both lose every model-side share, merchants' own share (34.79 and 17.73 against 43.9) and both tier figures. Between them S2 missed by both and S3 (supporting) by Response 2; S1, a Critical Component, made by both: review risk 'only one decisive step', the author's ruling owed.",
+  "first_wrong_step": {
+   "run1": "unfinished chain: 'warm-started sources were treated as permanent 13-week random-walk accumulations rather than decaying effects'",
+   "run2": "dismissed own evidence: 'Warm-start treated as full carry/random-walk accumulation, with no decay ... the assumption most capable of changing the recommendation'"
+  },
   "history": [
+   {
+    "architecture": 5,
+    "date": "2026-11-22",
+    "files": [
+     "runs/arch5_pair1_response_1.md",
+     "runs/arch5_pair1_response_2.md"
+    ],
+    "scores": null,
+    "rubric": null,
+    "reading": "Response 1 filed optimisation noise, feature releases and label revisions in escalation, training data on a plan and retunes on monitor (3 of 5 placements): it made S1 (training data 6.75, the bootstrap pairs scaled by the rows that left and entered each window with the seeds' part left in, inside the band 6.36 to 7.44), lost S2 (12.87: thirteen refits each adding a whole replicate pair's variance) and S3 (92.86 per cent on pinned views on the calendar's planned weeks, the three past changes named and set aside), and did not net feature releases on pinned weeks (10.27). Response 2 escalated feature releases and label revisions and put the other three on monitor (2 of 5): it lost S1 (4.77, about what the rows that entered alone give, 4.81, though its stated estimator gives 6.77 on the pack and the alternative it computed and rejected, 7.11, sits in band), S2 (3.57: one refit's noise carried once per pair) and S3 (92.86), and did not net feature releases (10.27). Between them S2 and S3 were missed by both and S1 was reached in method by both and landed by Response 1. Open fork: both responses declined to net feature releases on pinned weeks for want of a filed effect; no shipped file says what pinned views do to a release, and not netting with every other step golden files feature releases at 10.27 (escalation).",
+    "void": "the first pair ran on the pre-audit pack and prompt; a new pair is owed on the reshipped pack"
+   },
    {
     "architecture": 4,
     "date": "2026-11-22",
@@ -76,8 +97,7 @@
     "scores": null,
     "reading": "Response 1 filed the golden list (stock, price, trend and promise on; history, seller and match off) and made all three stumps unprompted: it took the ablation effects over the share of pages built at origin from the edge cache record, replayed each source's validity entity by entity with impression weights, and priced the page components from their own holdouts. Response 2 listed stock, price and promise and lost only trend, by diluting the realised costs with the cache share and declining the replay as not reconstructable from daily aggregates. The author's ruling: not difficult enough to stump a frontier model; the core is redrawn."
    }
-  ],
-  "void": "the first pair ran on the pre-audit pack and prompt; a new pair is owed on the reshipped pack"
+  ]
  },
  "returned": [
   {
@@ -89,7 +109,7 @@
    "commit": "1f3398a"
   }
  ],
- "resume": "the author rewrites the changed ask line in their voice, keeping actual use (voice-check.py task9 --rewrite; checks SF23 holds any wording with 'actual' and no 'will run' or scheduled reading), uploads the reshipped target.zip and generates a new pair; /triage-runs task9 then rewrites writeup.py's _stump_block for two stumps (it still carries the void pair's S3-era paragraphs and fig['over']['S3']) before the new responses are saved as runs/run1.md and runs/run2.md",
+ "resume": "the author pastes both platform scores and the generated rubric; /triage-runs records them and checks the average and the higher run under 60; submission.md already carries the stump answer directly after the Final Recommendation (writeup.py _stump_block, checked against runs/run1.md and run2.md); the author rules on the Critical Components (the training-data step was made by both responses), then pastes the blocks in order and submits; mark SUBMITTED only on the author's word",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -236,6 +256,10 @@
   {
    "date": "2026-11-22",
    "event": "after the advisor's review: the readings the pins refuse put back in the band capping, so every stated band is the frozen one again (merchants' own 41.9 to 46.7); freeze.py with the route, lattice and rubric keys allowed fails only on the six items the author's ruling moves (the Final Recommendation's rejected-route figures, the Critical Components without CC3, the stump and chain lines of pipeline.json, the card and the note); every golden figure, stated band and supplementary answer unchanged; SF23 checks made wording-independent for the author's rewrite"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "RUNS: the reshipped pack's first pair saved as runs/run1.md and runs/run2.md (scores and rubric owed), status RUNS; the stump answer emitted into submission.md directly after the Final Recommendation by writeup.py's rewritten _stump_block, every response quote and figure asserted against the saved responses; the void pair moved to runs.history"
   }
  ],
  "final_cut": {
