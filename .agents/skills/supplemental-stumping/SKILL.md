@@ -84,6 +84,17 @@ paper estimate without a run behind it came back 40 to 60 points high, because a
 reflex. The rubric table cannot see that: it says what a lost stump costs, never whether the stump is lost. The
 platform's two runs are the only measurement (`/triage-runs`).
 
+## Part 0b. Real Holistic Audit v4 rubric math (why scores stuck at 55-65 and how to hit 30s-40s)
+
+Holistic Audit v3/v4 revealed two massive gaps between the legacy house pricing (18/20/53/9) and real platform rubrics:
+1. **Error Carried Forward (ECF) on arithmetic rollups:** On `task27` (18 pts: `avoidable EUR`, `network total`, `EUR total`, `BHV`, `HAM`, `Q3`) and `task9 arch 5` (30 pts: shares, own share, tier figures), the platform rubric gave FULL credit for derived totals/shares/currency rollups computed cleanly from a run's own wrong upstream attribution. Legacy `corelib.py` assumed 0 ECF and predicted 37 when reality was 65!
+2. **One check per figure (no multi-figure sentence bundling):** v4 C1 rule 7 splits every entity and figure into its own independent criterion, with `recommend + decisive figures` at 45-55% and `IF` at 5-10%. On a disjoint 8-member scorecard where each stump moves only 2 members, solving 2 of 3 stumps leaves 75% of entities right plus IF + ECF + texture = 65+.
+
+**The v4-hardened rules enforced in `corelib.py` (`v4_hardened: True`) to land platform scores cleanly in the 30s-40s:**
+- **Zero un-stumped texture or cleaned-base figures** in Supplementary Questions or Critical Components (every single graded figure must miss its band on the reflex route: 0 silent figures).
+- **Drop pure arithmetic rollups or mark them `"ecf": True`** so `corelib.py` credits them as EARNED on partial-stump routes (`v4-ECF one stump lost <= 50`, `v4-ECF two stumps lost <= 35`, `v4-ECF reflex <= 25`).
+- **Build a coupled figure matrix (`>= 50%` of non-ECF ask figures downstream of 2+ independent stumps):** Instead of 1 disjoint stump per member, let 2-3 independent modeling judgments compose across every graded entity (for example, joint attribution x dose-response/partial-pooling x stratified projection or budget-constrained ranking under a cap), while each stump still keeps its own single-stump Critical Component.
+
 ## Part 1. The ask doctrine
 
 1. **Every stated figure is downstream of a stump.** A figure the prompt asks for and the blocks state is a

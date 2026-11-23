@@ -105,7 +105,13 @@ REFEREE = 3.0        # each rival's error on the referee slice, over the golden'
 FAMILY_MIN = 12
 STEPS_MIN = 3
 BLOCKS = {"recommendation": 18.0, "components": 20.0, "asks": 53.0, "instruction": 9.0}
+# Holistic Audit v4 realistic rubric model: 1 check per figure (no multi-figure sentence bundling),
+# 48% combined recommend+components (matching v4's 45-55% recommend share), 7% IF, and worst-case
+# Error Carried Forward (ECF) on arithmetic rollups/totals tagged "ecf": true.
+V4_BLOCKS = {"recommendation": 14.0, "components": 34.0, "asks": 45.0, "instruction": 7.0}
 ONE_LOST_MAX = 50.0  # what a run that loses any one stump, and nothing else, may still earn (the bar is 60)
+V4_TWO_LOST_MAX = 35.0  # with 2+ stumps lost under v4-ECF, scores land in the 20s-35s (never borderline 55-65)
+V4_REFLEX_MAX = 25.0    # zero-stump / naive run under v4-ECF (0 free texture/base asks)
 REFLEX_MAX = 30.0    # what the reflex route (every stump lost) may earn; the design aims at the twenties
 HINT_MAX = 100.0 / 3  # what fixing one stump alone on the reflex route may add
 BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its width on each side
@@ -113,6 +119,7 @@ NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched b
 INDEPENDENT_FROM = "2026-11-21T08:00:00Z"   # the client's guidelines of 11/20: the critical components independent
 RUN_ROUTES = ("generous", "calibrated", "hedge", "cutoff")
 RUNS_FROM = "2026-11-21T21:45:00Z"   # task3 arch 8's runs: the gates' opponent is the runs' recorded routes
+V4_HARDENED_FROM = "2026-11-23T21:00:00Z"   # task27/task9/task1 returns: v4-ECF split rubric, coupled matrix, coded one-fact catch check
 
 
 def _key(ids):
@@ -205,10 +212,31 @@ def _figures(spec, lat):
         if block is None:
             problems.append("%s has no block (component or ask)" % fid)
         exact = bool(f.get("exact")) or not _num(golden)
+        if "ecf" in f or "rollup" in f:
+            is_ecf = bool(f.get("ecf") or f.get("rollup"))
+        else:
+            # Auto-detect arithmetic rollups (totals, EUR/USD sums, shares, corridor/quarter sums) on non-member asks
+            # because Holistic Audit v3/v4 routinely applies Error Carried Forward to them (task27: 18 pts, task9: 30 pts).
+            is_ecf = (
+                block == "asks"
+                and m is None
+                and bool(re.search(
+                    r"(?:^|_)(?:total|sum|eur|usd|cost|avoidable|share|pct|remed_days|corridor|quarter|q[1-4]|bhv|ham|whv)(?:$|_|\d)",
+                    fid.lower(),
+                ))
+            )
         out.append({"id": fid, "block": block, "weight": float(f.get("weight", 1.0)), "golden": golden,
                     "band": None if exact else band, "family": family, "values": values, "routes": routes,
-                    "member": m, "exact": exact, "sentence": str(f.get("sentence") or fid)})
+                    "member": m, "exact": exact, "sentence": str(f.get("sentence") or fid),
+                    "ecf": is_ecf})
     return out, problems
+
+
+def _v4_enforced(spec):
+    if spec.get("v4_hardened"):
+        return True
+    reg = _registered(spec)
+    return bool(reg) and reg >= V4_HARDENED_FROM
 
 
 def _criteria(fs):
@@ -238,6 +266,21 @@ def _score(figs, call_right, value_of):
         if tot > 0:
             e += BLOCKS[b] * sum(max(f["weight"] for f in c) for c in crit
                                  if all(_earned(f, value_of(f)) for f in c)) / tot
+    return e
+
+
+def _score_v4(figs, call_right, value_of, apply_ecf=True):
+    """Holistic Audit v4 realistic rubric score: one independent check per figure (C1.7),
+    48% recommend+components (C1.2), 7% IF, and worst-case ECF credit on arithmetic rollups."""
+    e = V4_BLOCKS["instruction"] + (V4_BLOCKS["recommendation"] if call_right else 0.0)
+    for b in ("components", "asks"):
+        fs = [f for f in figs if f["block"] == b]
+        tot = sum(f["weight"] for f in fs)
+        if tot > 0:
+            e += V4_BLOCKS[b] * sum(
+                f["weight"] for f in fs
+                if (apply_ecf and f.get("ecf")) or _earned(f, value_of(f))
+            ) / tot
     return e
 
 
@@ -563,6 +606,65 @@ def check(spec):
                     if sc is not None else "%s has no value on the %s route, so the run's route is unpriced" % (
                         lacking, name), warn=soft)
 
+            # Holistic Audit v4 hardened checks (split 1-check criteria + worst-case ECF + coupled matrix + coded one-fact catch check)
+            v4_strict = _v4_enforced(spec)
+            v4_earn = {k: _score_v4(figs, lcall[k] == gcall, lambda f, k=k: f["values"][k], apply_ecf=True) for k in need}
+            v4_one = {s: v4_earn[_key([s])] for s in sids}
+            v4_base = v4_earn[_key(sids)]
+            v4_two = {s: v4_earn[_key([t for t in sids if t != s])] for s in sids} if len(sids) >= 3 else {}
+            row("v4-ECF one stump lost <= 50", max(v4_one.values()) <= ONE_LOST_MAX + 1e-9,
+                "split 1-check + worst-case ECF: %s (%.0f or under each)" % (
+                    ", ".join("%s=%.0f" % (s, v4_one[s]) for s in sids), ONE_LOST_MAX),
+                warn=not v4_strict)
+            if v4_two:
+                row("v4-ECF two stumps lost <= 35", max(v4_two.values()) <= V4_TWO_LOST_MAX + 1e-9,
+                    "split 1-check + worst-case ECF (1 stump fixed alone): %s (%.0f or under each; targets 30s-40s)" % (
+                        ", ".join("%s_only=%.0f" % (s, v4_two[s]) for s in sids), V4_TWO_LOST_MAX),
+                    warn=not v4_strict)
+            row("v4-ECF reflex route <= 25", v4_base <= V4_REFLEX_MAX + 1e-9 and not silent,
+                "every stump lost earns %.0f (<= %.0f); un-stumped/silent figures: %s" % (
+                    v4_base, V4_REFLEX_MAX, ", ".join(silent) or "none"),
+                warn=not v4_strict)
+            non_ecf_asks = [f for f in asks if not f.get("ecf")]
+            if non_ecf_asks:
+                coupled = [f["id"] for f in non_ecf_asks
+                           if sum(1 for s in sids if not _earned(f, f["values"][_key([s])])) >= 2]
+                c_share = len(coupled) / float(len(non_ecf_asks))
+                row("coupled figure matrix (>=50% multi-stump asks)", c_share >= 0.50 - 1e-9,
+                    "%d of %d non-ECF ask figures (%.0f%%) move under 2+ independent stumps: %s" % (
+                        len(coupled), len(non_ecf_asks), 100.0 * c_share, ", ".join(coupled) or "none"),
+                    warn=not v4_strict)
+            # Coded one-fact catch check: once told a stump's one-sentence mechanism, an obvious 1-step shortcut
+            # must NOT recover both the golden call and the stump's own component band.
+            comp_by_stump = {falls[fid][0]: next(f for f in comps if f["id"] == fid)
+                             for fid in falls if len(falls[fid]) == 1}
+            for s in sids:
+                ofs = stumps[s].get("one_fact_shortcut")
+                if ofs is None:
+                    if v4_strict:
+                        row("stump %s coded one-fact catch check" % s, False,
+                            "missing one_fact_shortcut in core.py (provide the 1-step post-hint shortcut figures to prove %s is not a catch)" % s)
+                    continue
+                if isinstance(ofs, dict) and "members" in ofs:
+                    ofs_m = {m: float(ofs["members"][m]) for m in names}
+                    ofs_c = ofs.get("component")
+                elif isinstance(ofs, dict) and all(m in ofs and _num(ofs[m]) for m in names):
+                    ofs_m = {m: float(ofs[m]) for m in names}
+                    cf = comp_by_stump.get(s)
+                    ofs_c = ofs_m[cf["member"]] if (cf and cf["member"] in ofs_m) else None
+                else:
+                    row("stump %s coded one-fact catch check" % s, False, "malformed one_fact_shortcut on %s" % s)
+                    continue
+                call_landed = _calls(spec, ofs_m) == gcall
+                cf = comp_by_stump.get(s)
+                comp_landed = bool(cf and ofs_c is not None and _earned(cf, ofs_c))
+                not_catch = not (call_landed and (comp_landed or ofs_c is None))
+                row("stump %s coded one-fact catch check" % s, not_catch,
+                    "1-step post-hint shortcut %s the call%s (%s)" % (
+                        "LANDS" if call_landed else "misses",
+                        "" if ofs_c is None else (" and %s component %s" % ("LANDS" if comp_landed else "misses", cf["id"])),
+                        "genuine modeling required" if not_catch else "FAIL: this stump is a catch (Holistic Audit v4 Part D.4)"))
+
     members_opened = [m for m in opened if m in open_members]
     level = 0
     if not any(r[1] == "FAIL" for r in rows) and len(members_opened) >= 2:
@@ -607,8 +709,8 @@ def rubric_table(spec):
     figs, _ = _figures(spec, lat)
     if not figs:
         return ""
-    out = ["| Figure | Block | Golden | Band | %s | Reflex route |" % " | ".join("%s lost" % s for s in sids),
-           "|---|---|---|---|%s---|" % ("---|" * len(sids))]
+    out = ["| Figure | Block | ECF | Golden | Band | %s | Reflex route |" % " | ".join("%s lost" % s for s in sids),
+           "|---|---|---|---|---|%s---|" % ("---|" * len(sids))]
 
     def cell(f, k):
         x = f["values"].get(k)
@@ -622,28 +724,36 @@ def rubric_table(spec):
     for f in figs:
         band = ("%.4g to %.4g" % tuple(f["band"])) if f["band"] else "exact"
         gold = ("%.4g" % f["golden"]) if _num(f["golden"]) else str(f["golden"])
-        out.append("| %s | %s | %s | %s | %s | %s |" % (
-            f["id"], f["block"] or "?", gold, band, " | ".join(cell(f, _key([s])) for s in sids),
+        out.append("| %s | %s | %s | %s | %s | %s | %s |" % (
+            f["id"], f["block"] or "?", "yes" if f.get("ecf") else "no", gold, band,
+            " | ".join(cell(f, _key([s])) for s in sids),
             {"-": "earned"}.get(cell(f, _key(sids)), "lost")))
     keys = [(_key([s]), "%s lost alone" % s) for s in sids]
     keys += [(_key([t for t in sids if t != s]), "%s fixed alone" % s) for s in sids if len(sids) > 2]
     keys += [(_key(sids), "reflex route (every stump lost)")]
-    out += ["", "| Route | Call | Earns on the rubric |", "|---|---|---|", "| golden | right | 100 |"]
+    out += ["", "| Route | Call | House rubric | v4-ECF rubric |", "|---|---|---|---|", "| golden | right | 100 | 100 |"]
     for k, label in keys:
         if k in lat and all(f["values"].get(k) is not None for f in figs):
             right = _calls(spec, lat[k]) == gcall
-            out.append("| %s | %s | %.0f |" % (label, "right" if right else "wrong",
-                                               _score(figs, right, lambda f, k=k: f["values"][k])))
+            out.append("| %s | %s | %.0f | %.0f |" % (
+                label, "right" if right else "wrong",
+                _score(figs, right, lambda f, k=k: f["values"][k]),
+                _score_v4(figs, right, lambda f, k=k: f["values"][k], apply_ecf=True)))
     rs, _ = _route_score(spec, figs, "rigorous", gcall)
     if rs is not None:
-        out.append("| rigorous standard route | %s | %.0f |" % (
-            "right" if _calls(spec, {m: (members[m].get("routes") or {}).get("rigorous", golden[m])
-                                     for m in names}) == gcall else "wrong", rs))
+        mfig = {m: (members[m].get("routes") or {}).get("rigorous", golden[m]) for m in names}
+        rvals = {f["id"]: (f["routes"].get("rigorous") if f["routes"].get("rigorous") is not None else f["golden"]) for f in figs}
+        v4_rs = _score_v4(figs, _calls(spec, mfig) == gcall, lambda f: rvals[f["id"]], apply_ecf=True)
+        out.append("| rigorous standard route | %s | %.0f | %.0f |" % (
+            "right" if _calls(spec, mfig) == gcall else "wrong", rs, v4_rs))
     maps, _ = _run_maps(spec)
     for name in sorted(maps):
         sc, _ = _run_route_score(spec, figs, name, maps[name], gcall)
         if sc is not None:
-            out.append("| %s run route | %s | %.0f |" % (name, "right" if _calls(spec, maps[name]) == gcall else "wrong", sc))
+            rvals = {f["id"]: (maps[name][f["member"]] if f["member"] is not None else f["routes"].get(name)) for f in figs}
+            v4_sc = _score_v4(figs, _calls(spec, maps[name]) == gcall, lambda f: rvals[f["id"]], apply_ecf=True)
+            out.append("| %s run route | %s | %.0f | %.0f |" % (
+                name, "right" if _calls(spec, maps[name]) == gcall else "wrong", sc, v4_sc))
     return "\n".join(out)
 
 
@@ -858,6 +968,20 @@ def selftest():
     s["run_routes"]["cutoff:k5"] = {"a": 11.0, "b": 10.5, "c": 11.5, "d": 15.0}
     s["run_routes"]["cutoff:k20"] = {"a": 9.0, "b": 9.0, "c": 9.5, "d": 15.0}
     expect("a cut-off family wrong at every setting", s, 5)
+    # v4 hardened checks: coded one-fact catch check, v4-ECF split rubric, coupled matrix
+    s = copy.deepcopy(base)
+    s["v4_hardened"] = True
+    for sid, comp_v in (("S1", 0.35), ("S2", 0.45), ("S3", 50.0)):
+        s["stumps"][sid]["one_fact_shortcut"] = {"members": s["lattice"][sid], "component": comp_v}
+    expect("v4 hardened build with coupled asks and coded one-fact checks", s, 5)
+    s2 = copy.deepcopy(s)                       # one-fact shortcut lands both call and component -> catch FAIL
+    s2["stumps"]["S2"]["one_fact_shortcut"] = {"members": {"a": 12.0, "b": 8.0, "c": 12.5, "d": 15.0}, "component": 0.30}
+    expect("a stump whose 1-step post-hint fix lands golden (catch)", s2, 0, "coded one-fact catch check")
+    s3 = copy.deepcopy(s)                       # arithmetic rollups credited via ECF push one-lost > 50
+    for f in s3["figures"]:
+        if f["block"] == "ask" and f["id"] in ("X", "d"):
+            f["ecf"] = True
+    expect("v4-ECF rollup credit pushes one-stump-lost over 50", s3, 0, "v4-ECF one stump lost")
     print("SELFTEST %s" % ("PASS" if ok else "FAIL"))
     return 0 if ok else 1
 

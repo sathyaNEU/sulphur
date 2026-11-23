@@ -52,10 +52,12 @@ def gates(d, full):
         pass
     g = [
         ("precut", [PY, os.path.join(SK, "stumping", "precut.py"), d, "--quiet"]),
+        ("tells", [PY, os.path.join(SK, "stumping", "construction_tells.py"), d]),
         ("voice", [PY, os.path.join(SK, "guide-to-prompt", "references", "voice-check.py"), t]
          + (["--rewrite"] if rewrite else [])),
         ("leak", [PY, os.path.join(SK, "leak-check", "leak.py"), t, "--quiet"] + asof),
         ("figures", [PY, os.path.join(SK, "determinism-check", "figures_check.py"), t]),
+        ("stump", [PY, os.path.join(SK, "submission-writeup", "stump_block_check.py"), t]),
         ("containers", [PY, os.path.join(SK, "reduce-house-fixes", "scripts", "audit_containers.py"), t]),
         ("heart", [PY, os.path.join(SK, "fingerprint", "guard.py"), "heart", t]),
         ("surface", [PY, os.path.join(SK, "fingerprint", "guard.py"), "surface", t]),

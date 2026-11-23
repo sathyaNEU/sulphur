@@ -208,6 +208,18 @@ nothing in-house solves the task, so the idea has to be right before it is built
    from what the history holds by a process of the world the data measures, and the history-mean route files a
    stated figure against the golden's. task3 arch 8's regulation defined the storms a season as the mean over the
    record's warm seasons, so the 2027 to 2031 programme did no work and the task reduced to correcting the record.
+21. **Zero construction tells (Holistic Audit v4 Part D.3).** Generated data must never contain empty bands / dead zones
+   carved around a threshold (task27 arch 1: 0 BIP notices between 23.23 h and 25.62 h), exact zero-variance duration/lag
+   constants (task27 arch 1: exact 2.250000 rollover c-days), deterministic 100% count inequalities (rolled >= locked on
+   139/139 shuttles), near-noiseless regressions (R^2 >= 0.99), or high-SNR binary step cliffs (jump > 15x baseline
+   noise std). Every mechanism uses realistic operational noise (SNR ~ 2 to 5) and overlapping competing variation,
+   verified mechanically by `construction_tells.py`.
+22. **Open-book modeling and coded one-fact catch check (Holistic Audit v4 Part D.4).** Prefer stating domain rules and
+   operational constraints plainly rather than hiding unmentioned cutoffs. For every kept stump, implement its obvious
+   1-step post-hint shortcut (`one_fact_shortcut` in `core.py`: filter + subtraction / average / single multiplication
+   once told the mechanism in one sentence). That shortcut MUST still fail the call or miss the stump's own component
+   band; if every reasonable sizing lands the same answer once noticed, the step is a catch, not a decisive step, and
+   is killed at the screen.
 
 ## Measured dead: never draw these again
 
@@ -216,6 +228,7 @@ screen, whatever its domain or nouns.
 
 | Mechanism | Where it died | Test failed |
 |---|---|---|
+| a hidden unmentioned operational cutoff (e.g. 24h lock with dead zone, zero-noise constant penalty, 100% deterministic rolled >= locked) alongside high-SNR step cliffs in disjoint cause scorecards | task27 arch 1 (Holistic Audit v3 warned catch + 100% loss concentration on Run 1 = 0.65; human review returned as shallow hidden factor) | 21 and 22 (constructed catch + ECF disjoint scorecard) |
 | a voltage or demand trial carried to every unit and hour by each unit's makeup (survey holdings times a published draw), with thermostatic give-back, far-end headroom and current-squared losses | task7 arch 12, the platform's run (R67 to R70) | 2 (the field's textbook chain, shipped with its ingredients) |
 | a trial's noncompliance read as the forecast of operation (equipment availability inherited from a shared communications network) | task7 arch 12 retrofit screen | 3 (the estimand needs it filed, then it is applied) and 1 (carried per unit by a modifier: the transport card) |
 | equipment step size or deadband (regulator taps, discrete setpoints) | task7 arch 12 retrofit screen | 2 and 8 (one value count of the device log shows it; one sentence fixes it) |

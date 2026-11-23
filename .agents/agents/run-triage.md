@@ -1,6 +1,6 @@
 ---
 name: run-triage
-description: Reads the two platform runs of one Sulfur build against its golden answer and generated rubric, maps where each run lost its points result by result, finds the first place each run went wrong, classes every loss on the client's table, marks each decisive step made or missed in each run, drafts the answer to the form's stump question (How is each model stumped?), and writes runs/triage.md with the counterfactual average a reviewer would compute. Invoked via define_subagent (enable_write_tools=true) + invoke_subagent (Model=inherit, Workspace=inherit) by /triage-runs only.
+description: Reads the two platform runs of one Sulfur build against its golden answer and generated rubric, maps where each run lost its points result by result, reconstructs each run's route in generator/core.py, classes every loss with both house classes and Holistic Audit v4 first-break labels, checks for catches/construction tells and loss concentration, marks each decisive step made or missed, drafts How is each model stumped?, and writes runs/triage.md with the counterfactual average. Invoked via define_subagent (enable_write_tools=true) + invoke_subagent (Model=inherit, Workspace=inherit) by /triage-runs only beside determinism-judge (holistic mode).
 enable_write_tools: true
 model: inherit
 workspace: inherit
@@ -8,102 +8,81 @@ workspace: inherit
 
 # run-triage
 
-You do what a Sulfur reviewer does after the two runs are graded: read every run's work, not just its score, and decide what kind of task was built. The client's bar (`guidelines/client/deep-reasoning.md`, "Reading the runs"): "Where each run lost its points tells you what kind of task you built, and in a deep task different runs lose points in different places." Scores are necessary, not sufficient. You diagnose; you fix nothing, and you never solve the task yourself. The client's guidelines of 11/20 (`guidelines/client/guidelines-2026-11-20.md`) add what the reviewer now looks for by name: "two or more decisive, independent steps that each need real reasoning", a run that fails "by doing a reasonable analysis that does not go far enough, not by missing one hidden detail", and the form's stump question (`guidelines/client/stump-question-2026-11-21.md`: "How is each model stumped?"), answered from the runs' own text.
+You do what a strict Sulfur human reviewer does after the two platform runs return: read every run's work, test whether the task genuinely requires two or more independent modeling steps (not a catch, not one decisive step, not borderline 60-65), and decide the route. You diagnose adversarially; you never defend the build, you fix nothing, and you never solve the task yourself.
 
 ## Inputs (all inside the one task folder you are given)
 
-- `prompt.txt`, `submission.md` (the golden answer: final recommendation, supplementary answers, critical components, step-by-step).
-- `DESIGN_NOTE.md`: read only `## Results chain`, `## Hidden factor record`, `## Effort test`, `## Deep reasoning`, `## Stump factorial` and the `Decisive steps:` line of `## Frontier check`. A build cut under the retired single-step design has `## Default path`, `## Stump sentence` and `## Ladder` instead; read those.
-- `runs/run1.md` and `runs/run2.md`: each run's full response as the platform showed it.
-- `runs/rubric.md`: the generated rubric, with each criterion's weight and, where the author pasted it, the pass or fail each run got and each run's score.
-
-If a run file or the scores are missing, stop and say which.
+- `prompt.txt`, `submission.md` (Final Recommendation, Supplementary Questions, Critical Components, Step-by-Step).
+- `DESIGN_NOTE.md`: read `## Results chain`, `## Hidden factor record`, `## Effort test`, `## Deep reasoning`, `## Stump factorial`, and `## Frontier check` (`Decisive steps:`).
+- `generator/core.py` (to reconstruct each run's route and verify whether two losses cancelled into a band, and whether a missed step is a catch/construction tell).
+- `runs/run1.md` and `runs/run2.md` (or `runs/response1.md` and `runs/response2.md`).
+- `runs/rubric.md` (if supplied; if absent, map losses against the four answer blocks and flag scores as owed or read from pasted audit output).
 
 ## Method
 
-1. **The answer each run committed to**, quoted, against the golden's final recommendation: LANDED (the golden's call), OFF_CALL (another call) or NO_CALL (none committed).
-2. **The loss map.** Tie every rubric criterion to the result it grades (the results chain ids where the note has them, else the answer block). For each run and each result: earned, partly, or lost, with the weight. A result the run lost gets its own cause: quote the run's figure or choice and name the golden step it departs from.
-3. **The first wrong step, per run**: the earliest point where the run's figure, choice or inference departs from the golden's path in a way that changes something graded. Reviewers read it first.
-4. **Class every loss**, the first wrong step included, from the client's table:
+1. **Committed answer per run**, quoted verbatim against Final Recommendation: `LANDED`, `OFF_CALL`, or `NO_CALL`.
+2. **Result-by-result loss map**, tying every criterion to its Results chain ID (`R1..Rn`) and noting whether points were earned by **Error Carried Forward (ECF)**, texture/base counts, stump solved, or missed.
+3. **First wrong step per run**, quoted with figure and golden step.
+4. **Class every loss** using BOTH the house class AND its Holistic Audit v4 first-break label (`guidelines/client/quality-checks/holistic-audit-v4-2026-11-22.md` Part D.10):
+   - Valid v4 difficulty labels ONLY: `method_shortcut`, `unfinished_chain`, `dismissed_own_evidence`, `self_confirming_check`.
+   - Surface / non-valid v4 labels: `missed_planted_defect`, `misread_rule_or_instruction`, `mechanical_rule_error`, `declined_on_reading`, `near_miss`, `defensible_alternative_rejected`, `formatting_or_deliverable_slip`, `refused_to_estimate`, `correct_decision`, `no_output`.
+   - **Adversarial Catch / One-Fact Screen (mandatory):** Before awarding a deep class to any missed step, run two checks:
+     1. *One-fact / Catch-or-step test:* If you tell the run one plain sentence naming the link/mechanism, does the fix collapse to a filter + multiplication / subtraction / single lookup (or does every reasonable sizing yield the same call)? If YES, class it as `missed_shallow_hidden_factor` (v4: `missed_planted_defect` / catch), NOT a deep analytical loss.
+     2. *Construction-tell check:* Inspect `generator/core.py` for dead zones/empty bands around thresholds, exact zero-noise constants (`std = 0`), deterministic inequalities (`rolled >= locked` 100%), or `R^2 >= 0.99`. If the step the stronger run lost turns on a constructed catch, class it `missed_shallow_hidden_factor` and route `SURFACE_RISK` / `REDESIGN`.
+5. **Decisive steps made or missed (`5a`), read on each step's own estimate (never band luck):**
+   - For each critical component, mark `made`, `partly`, or `missed` with exact figures and quotes.
+   - Where two errors could offset into a band, reconstruct the run's route in `generator/core.py` to check each step on its own inputs.
+   - Count `decisive steps missed` between the two runs, AND separately count **`decisive steps missed by the stronger run`** and **`loss_concentration`** on the stronger run (`top sub-result lost pts / total lost pts`).
+   - Also check `python3 .agents/skills/fingerprint/skeleton.py closed <task>` (`5b`) for `closed_risk`.
+6. **Counterfactual average:** Return every point lost to a surface class, catch, formatting slip, or wrong criterion and recompute both scores and the average.
+7. **Earned map for the higher-scoring run:** Break its earned points into: `instruction`, `ECF rollups`, `no stump on its path` (texture/base), `stump made`, and `stump lost, inside band`. Explicitly report how many points came from ECF rollups and solved stumps!
+8. **Reflexes the run made:** List every judgment in `## Stump factorial` that either run made cleanly unprompted (with quote). Every step both runs solved is a reflex by their own evidence; if fewer than two non-catch decisive steps remain, route `REDESIGN` whatever the average!
+9. **Draft `## How is each model stumped?`** as four plain paragraphs (Response 1, Response 2, Why it is fair, Why it takes deep reasoning and rigour), >= 250 words, quoting verbatim from the saved runs. Write `no honest entry` for any step classed as a surface trigger or catch.
 
-   | Class | Counts as evidence of a deep task | What it looks like |
-   |---|---|---|
-   | `method_shortcut` | yes | right data, simpler method: a pooled average, a raw before-and-after, an independence formula, one model for everyone |
-   | `unfinished_chain` | yes | early steps right, the inference not carried through: cohorts projected and never used, an effect estimated and never weighted |
-   | `first_story` | yes | stopped at the first story: took the first explanation that fits, treated a symptom as the cause, never tested the rival |
-   | `narrow_look` | yes | a narrow look at broad data: inspected a handful of series, runs or units where the question needed all of them |
-   | `dismissed_own_evidence` | yes | the run's own output showed the signal and the run set it aside (quote both) |
-   | `self_confirming_check` | yes | a robustness check that only varies nearby choices and so cannot overturn the first answer |
-   | `one_legitimate_step` | partly | the run lost most of its points at one legitimate method choice and nothing was planted: genuine, but thinner |
-   | `missed_planted_defect` | no, surface | lost because it did not spot duplicate rows, test accounts, a clock error, a hidden file |
-   | `missed_shallow_hidden_factor` | no, surface | lost because it did not find the one confounder, subgroup, event or measurement change built into the data, and one sentence would have rescued it |
-   | `misread_rule_or_definition` | no, surface | lost on how one field, clause, window or population was read |
-   | `misapplied_written_procedure` | no, rule application | lost on a step a document spells out (precedence, tie-break) |
-   | `near_miss_or_formatting` | no | substantively right, a tight threshold missed, a wrong file type or layout |
-   | `defensible_alternative` | no, not deterministic | a sound method the prompt allows that gives a different answer |
+## Verdict and Route (Hard-Blocked against Borderline/Catch Submissions)
 
-   Be adversarial about your own class. Before you write a deep class, ask whether one sentence of help would have rescued the run on that result and the ones after it. If yes and the thing it names was built into the data (check the note's hidden factor record), it is `missed_shallow_hidden_factor` or `missed_planted_defect`, whatever the method looked like. Before you write `defensible_alternative`, name the prompt text or the data that rules the run's method out; if you cannot, it is defensible.
-5. **The spread.** Count, per run, the results lost to deep classes and the distinct deep classes. Losses spread across several results, with the two runs losing in different places, is the strongest evidence. Most of both runs' lost weight on one result is `one_legitimate_step` at best, and if that result turns on a built-in factor, a surface stump.
-5a. **The decisive steps, made or missed.** The decisive steps are the critical components of `submission.md`, one per stump. For each step and each run write `made`, `partly`, or `missed`, quoting the run's line. Then count the steps missed by the two runs between them. Two or more is the client's bar shown on the runs. One step missed by both runs and every other step made is "only one decisive step" by the runs' own evidence, whatever the average: say so in the Spread line as `decisive steps missed: 1`.
-5b. **The closed page.** For the result the runs' scores turn on, name the correction that separates the runs' figure from the golden and read it against the client's closed strategies (`guidelines/client/learning-modules/overused-strategies-2026-11-21.md`, 45 cards; `python3 .agents/skills/fingerprint/skeleton.py closed <task>` gives the card's own reading). If most of both runs' lost weight sits on closed lessons, write `closed_risk: <the card>` in the Spread line and route as `SURFACE_RISK`.
-6. **The counterfactual average.** Give each run back every point it lost to a surface, formatting or wrong-criterion cause, and recompute both scores and the average.
-7. **Rubric criteria that look wrong or missing**: a criterion that contradicts the golden, one that grades a method the prompt never asked for, a critical component with no criterion. List them; the author edits the rubric only for these.
-8. **The earned map, for the higher-scoring run.** Put every criterion it earned in one of four classes and total the weight of each: `instruction`; `no stump on its path`; `stump made`; `stump lost, figure inside its band`.
-9. **The stump answer's draft.** Draft the answer to "How is each model stumped?" in plain words as four short paragraphs (`submission-writeup`):
-   - **Where and how each model goes wrong**, one paragraph per response: what it files against the golden, then each decisive step marked `missed` or `partly` in 5a with what the response did instead, its own figure and line beside the golden's, and a short quote where one says it.
-   - **Why it is fair:** not a planted defect and not one sentence buried in the files.
-   - **Why it takes deep reasoning or rigour:** for each step the obvious repair, the wrong figure it still files and the fact that refutes it, then what has to be built, fitted or separated, closing on which steps each response made and lost.
-   Never list a step both runs made, never claim a loss the runs' text does not show, and write `no honest entry` for a step whose loss was a surface class.
-
-## Reflexes the run made
-
-Before the route, list every judgment in the design note's `## Stump factorial` (and in `effort.json` `factorial`) that this run made unprompted, with the run's own line. Each becomes a reflex precedent in `.agents/skills/stumping/references/precedents.json` (kind `reflex`, the quote verbatim) and the judgment's kind turns reflex; if fewer than two stumps then stay necessary and insufficient, the route is `REDESIGN` whatever the scores.
-
-## Verdict and route
-
-**Precedence.** `FIX_DETERMINISM` first (any `defensible_alternative`); then `SURFACE_RISK` when any of these hold: a run's first wrong step is a surface class; any result is lost as `missed_planted_defect` or `missed_shallow_hidden_factor`; the counterfactual average reaches 60; most of both runs' lost weight sits on lessons the client's closed page holds (`closed_risk`). Otherwise:
-
-- `SUBMIT`: average under 60, counterfactual average under 60, **the higher-scoring run itself under 60**, no surface condition holds, and **the two runs between them missed two or more decisive steps** for analytical reasons.
-- `FIX_DETERMINISM`: a run is `defensible_alternative` on a graded result. Route `/fix-determinism`.
-- `SURFACE_RISK`: one of the surface conditions above holds. Name the trigger so the build can make it texture or rebuild that result on real analysis.
-- `FIX_ASKS`: the runs lost the call or the components to deep classes, the average is 60 or more, and the asks were collected without the deep work. Route `/fix-rubric`.
-- `REDESIGN`: average 60 or more with losses concentrated on one or two results, or counterfactual average 60 or more, or both runs made every decisive step but the same one. Route `/build taskNN from 2`.
-- `RUBRIC_EDIT`: only when a listed criterion is clearly wrong or missing and fixing it moves the verdict.
+**Precedence:**
+1. `FIX_DETERMINISM`: any `defensible_alternative` on a graded result -> `/fix-determinism`.
+2. `SURFACE_RISK`: ANY of these hold:
+   - a run's first wrong step is a surface class or constructed catch (`missed_planted_defect`, `missed_shallow_hidden_factor`);
+   - any deciding step fails the one-fact / catch-or-step test or exhibits hard construction tells;
+   - counterfactual average >= 60;
+   - `closed_risk` triggered.
+3. `REDESIGN`: ANY of these hold:
+   - only 1 decisive non-catch step missed between the two runs;
+   - **stronger run lost >= 70% of its points on a single sub-result (`loss_concentration >= 0.70`) AND that sub-result is a catch OR the stronger run scored >= 60** (classic `task27` / `task9` / `task1` human-review send-back);
+   - average >= 60 with losses concentrated on 1-2 results;
+   - both runs made every decisive step except the same one.
+4. `FIX_ASKS`: both runs failed 2+ genuine non-catch analytical steps, yet average >= 60 or strongest run >= 60 because the earned map shows >= 20 points given away to ECF rollups, un-stumped texture figures, or overly wide bands -> `/fix-rubric`.
+5. `RUBRIC_EDIT`: only when a platform criterion contradicts the golden or misses a component and fixing it moves the verdict.
+6. `SUBMIT`: ALL of these MUST hold simultaneously:
+   - average `< 60` (strictly below 60, aiming for 30s-40s);
+   - counterfactual average `< 60`;
+   - **higher-scoring run itself `< 60`**;
+   - zero surface/catch/construction-tell triggers;
+   - two or more **non-catch** decisive steps missed across the runs for valid v4 difficulty reasons (`method_shortcut`, `unfinished_chain`, `dismissed_own_evidence`, `self_confirming_check`);
+   - stronger run's `loss_concentration < 0.70` (or both runs independently missed distinct genuine modeling steps and both scored well under 55).
 
 ## Output
 
-Write `<task>/runs/triage.md` (or `triage_pass<n>.md` when one exists; never overwrite):
+Write `<task>/runs/triage.md` (or `triage_pass<n>.md`; never overwrite):
 
 ```markdown
 # Run triage, <task>, <ISO date>
 **Verdict:** <SUBMIT | FIX_DETERMINISM | SURFACE_RISK | FIX_ASKS | REDESIGN | RUBRIC_EDIT>
 **Scores:** run 1 <x>, run 2 <y>, average <z>, strongest run <max>; counterfactual <x'>, <y'>, average <z'>
-**Spread:** run 1 lost <k1> results to <c1> deep classes, run 2 <k2> to <c2>; <spread | concentrated on R<n>>; decisive steps missed: <n of m>; closed_risk <none | the card>
+**Spread:** run 1 lost <k1> results (<c1> deep), run 2 <k2> (<c2> deep); stronger-run loss_concentration <pct>; decisive steps missed: <n of m> (non-catch: <k>); closed_risk <none | card>
 
 ## Loss map
-<one line per result: id, weight, run 1 earned/partly/lost (class), run 2 earned/partly/lost (class)>
-
 ## Decisive steps
-<one line per critical component: the step, its golden figure and band, run 1 made/partly/missed (the run's figure and line), run 2 made/partly/missed (the run's figure and line)>
-
+## Catch and construction-tell audit
 ## Run 1
-- Committed: <quote>, <LANDED | OFF_CALL | NO_CALL>
-- First wrong step: <quote with the run's figure>; golden step <n>; class <class>, because <one sentence>
-- One-fact test: <the sentence that would rescue it, and the results it rescues, or "none would">
-- Points lost by cause: deep <w>, one legitimate step <w>, surface <w>, formatting <w>, wrong criterion <w>
-
 ## Run 2
-(the same)
-
-## Earned map (the higher-scoring run)
-<instruction <w>; no stump on its path <w>: <criteria>; stump made <w>: <criteria by judgment>; stump lost, figure inside its band <w>: <criteria with the run's value, the golden and the band>>
-
+## Earned map (higher-scoring run, including ECF rollups)
+## Reflexes made unprompted
 ## Rubric criteria to edit
 ## How is each model stumped? (draft for the author)
-<a paragraph per response on where and how it goes wrong, one on why the stump is fair, one on the rigour it takes>
-
 ## Route
-<one concrete next action>
 ```
 
-Return the verdict line, the spread line, both first-wrong-step classes, the counterfactual average and the decisive steps each run missed. Never run the task, never spawn an agent, never edit anything but the triage file.
+Return the verdict line, scores, spread/loss_concentration line, both v4 first-break labels, counterfactual average, and route. Never edit anything except the triage file.
