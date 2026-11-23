@@ -1720,6 +1720,62 @@
    "move": "the run wrote the correct overlap estimator, computed an in-band figure on one form of it, and filed a different out-of-band figure",
    "source": "task9/runs/arch5_pair1_response_2.md (platform run on architecture 5, pasted by the author 2026-11-22)",
    "quote": "added-rows-only face-value scaling yields Training data 7.1146 points"
+  },
+  {
+   "id": "R102",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "each network's installs that a consent gate leaves unnamed valued source by source: the unlabelled pool deconvolved over week by sessions (or week by store by early-value) cells against each source's independent install count less its named installs, the organic remainder as a component of its own and a value gap fitted per source (a mixture or a regularised deconvolution), the one common gap refused on the labelled sources' own evidence",
+   "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
+   "quote": "fit a mixture model for nonauthorized conversion; Revenue means were deconvolved over weekly x store x conversion-value cells against all non-attributed installs, with organic as a separate component"
+  },
+  {
+   "id": "R103",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "installs fitted on the weekly budget with the delivery ratio (billed spend over budget) beside it and week-of-year effects, chosen over the fit on billed spend by its residuals because the delivery moves spend and installs together; the textbook spend response refused unprompted",
+   "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
+   "quote": "The retained model is I_week = mu_week * B^e * r^k; delivery-adjusted log-log relationships using budget, log delivery ratio and a year term"
+  },
+  {
+   "id": "R104",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "value per install modelled as falling with the budget (a quality elasticity fitted on campaign-weeks or channel-weeks) and the marginal return at a spend taken as the two elasticities' sum times the period's average return",
+   "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
+   "quote": "Quality was modelled from CV/trial/revenue rather than assumed constant; Marginal return under 2.6 proportional scaling is (beta + eta) x average return"
+  },
+  {
+   "id": "L70",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "the account-level revenue record taken as the whole of the revenue and the processors' own daily reports opened and set aside as aggregates, their totals never set beside the record's, where the record misses every charge made after the customer's last session and the policy counts every charge the processor made",
+   "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
+   "quote": "transaction-level billing is the policy source for net revenue; aggregate store reports, not account charges; billing events are policy truth"
+  },
+  {
+   "id": "N46",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a plan's spend priced at full delivery (a delivery ratio of 1.00) in a response the run itself fitted with the delivery beside it, named a judgment call and kept, with the delivery the record shows (83 to 87 per cent of budgets billed) carried only as a sensitivity",
+   "source": "task1/runs/rerun2.md (platform run on architecture 7, the pair submitted, pasted by the author 2026-11-21; returned 2026-11-22, task1/runs/review_2026-11-22.md)",
+   "quote": "at delivery ratio 1.00 ... This is a judgment call, not a fact in the data"
+  },
+  {
+   "id": "N47",
+   "kind": "named_assumption",
+   "class": "method shortcut",
+   "move": "one quality elasticity of value per install to the budget pooled across every channel because the channel-by-channel fits looked unstable, and kept for the forecast",
+   "source": "task1/runs/rerun1.md (platform run on architecture 7, the pair submitted, pasted by the author 2026-11-21; returned 2026-11-22, task1/runs/review_2026-11-22.md)",
+   "quote": "A common -0.20 budget quality elasticity is assumed"
+  },
+  {
+   "id": "N48",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the record's week-of-year level carried to the plan year with no drift in demand, auction or install quality beyond what the budget and the delivery move",
+   "source": "task1/runs/rerun1.md (platform run on architecture 7, the pair submitted, pasted by the author 2026-11-21; returned 2026-11-22, task1/runs/review_2026-11-22.md)",
+   "quote": "ISO-week mu is assumed transferable to 2027; no secular demand/quality drift beyond budget/delivery is modelled"
   }
  ]
 }
