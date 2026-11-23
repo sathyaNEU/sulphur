@@ -33,6 +33,7 @@ PRICE_M, PRICE_A = 9.99, 59.99
 LINES = (0.90, 1.20)             # the growth policy: cut under 0.90, hold from 0.90, scale from 1.20
 WEB_SHARE = 0.15                 # subscribers who pay on the web checkout (the backend takes every charge itself)
 EXP_DROP = 0.75                  # wider inventory's users are this much less engaged
+WIDE0 = 0.25                     # the share of a channel's installs from its wider inventory at the reference budget
 lg = lambda x: 1.0 / (1.0 + np.exp(-x))
 
 # the people: e is how much a person uses the app in the first days; u is how reachable they let an app be
@@ -55,6 +56,13 @@ CHURN_SILENT_WEB = dict(a=-1.80, e=-0.10)                      # the web checkou
 GAP = {"Meta iOS": 1.05, "TikTok iOS": 0.80, "Snapchat iOS": 0.52, "Google iOS": 0.03, "Pinterest iOS": 0.28,
        "Apple Search Ads": 0.0, "Google Android": 0.18, "AppLovin Android": 0.50}
 MARKETS = ("ES", "IT", "PT")
+# Apple's crowd anonymity: a network's postback carries the install's first-48-hour value only where the placement it
+# came from sends enough installs of the campaign. An install bought on a network's wider inventory comes from one of
+# thousands of small third-party apps, each far under the line, and its postback comes back with the value withheld
+# this often; an install from the network's own apps and its large placements always carries its value. The rule is
+# Apple's and the same on every network; how many postbacks it empties follows how far each week's budget reached into
+# the wider inventory.
+TIER0 = 0.0
 # the ad platforms' delivery: a campaign spends its weekly budget only as far as the week's auction lets it
 KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
 
@@ -196,7 +204,7 @@ def draw_week(rng, p, month, xb=None, m=0.0):
         wide = np.zeros(n, bool)
     else:
         n = rng.poisson(p["n"] * SCALE * SEASON_N[month] * xb ** p["el"] * np.exp(LAMBDA * m))
-        wide = rng.random(n) < np.clip(0.25 + p["xs"] * np.log(xb), 0.02, 0.90)
+        wide = rng.random(n) < np.clip(WIDE0 + p["xs"] * np.log(xb), 0.02, 0.90)
     z = rng.normal(0, 1, n)
     e = p["mu"] + SEASON_MU[month] + z - EXP_DROP * wide
     u = p["nu"] + RHO * z + np.sqrt(1 - RHO ** 2) * rng.normal(0, 1, n)
@@ -299,6 +307,9 @@ def simulate(seed=SEED, bseed=BUDGET_SEED):
         L["ios"] = ios
         L["consent"] = consent
         L["pb_lag"] = rng.integers(3, 5, e.size)                 # days from install to the network's postback
+        # the postback's value withheld under the crowd threshold (its own stream, so no other draw moves)
+        gated = c in CH and bool(p["ios"]) and not CH[c]["complete"]
+        L["null"] = L["wide"] & gated & (np.random.default_rng([seed, 7, si]).random(e.size) < TIER0)
         parts.append(L)
     W = {k: np.concatenate([q[k] for q in parts]) for k in parts[0]}
     W["B"] = B
@@ -415,22 +426,50 @@ class Obs:
         # the records with no account identities: an iOS network's postbacks, one per install with its
         # first-48-hour value and its campaign (a campaign runs in one market), dated three or four days after the
         # install
-        self.agg, self.agg_cv, self.agg_cvm = {}, {}, {}
+        # a postback whose value the crowd threshold withheld keeps its campaign, so its market and its week
+        self.agg, self.agg_cv, self.agg_cvm, self.agg_null = {}, {}, {}, {}
+        self.raw_cvm = {}
+        self._fills = {}
+        self.W_null = W["null"]                                    # read only by the oracle fill, for the checks
+        self.W_src = W["src"]
         for ci, c in enumerate(ORDER):
             mk = W["src"] == ci
             if not CH[c]["complete"]:
                 pb = W["day"][mk] + W["pb_lag"][mk]                 # the day the postback arrived
-                t = np.zeros((WEEKS, 3, 32))
+                nl = W["null"][mk]
+                t = np.zeros((WEEKS, 3, 32)); tn = np.zeros((WEEKS, 3))
                 if align == "true":
-                    np.add.at(t, (self.week[mk], W["country"][mk], self.cv[mk]), 1)
+                    wk = [(self.week[mk], 1.0)]
                 else:                                              # dated back three days, four, or half and half
-                    for back, wt in {"three": ((3, 1.0),), "four": ((4, 1.0),), "split": ((3, 0.5), (4, 0.5))}[align]:
-                        np.add.at(t, (np.clip((pb - back) // 7, 0, WEEKS - 1), W["country"][mk], self.cv[mk]), wt)
-                self.agg_cvm[c] = t
+                    wk = [(np.clip((pb - back) // 7, 0, WEEKS - 1), wt) for back, wt in
+                          {"three": ((3, 1.0),), "four": ((4, 1.0),), "split": ((3, 0.5), (4, 0.5))}[align]]
+                for w_, wt in wk:
+                    np.add.at(t, (w_[~nl], W["country"][mk][~nl], self.cv[mk][~nl]), wt)
+                    np.add.at(tn, (w_[nl], W["country"][mk][nl]), wt)
+                self.raw_cvm[c] = t
+                self.agg_null[c] = tn
+                self.agg_cvm[c] = t                                # until a route fills the withheld values
                 self.agg_cv[c] = t.sum(1)
-                self.agg[c] = t.sum((1, 2))
+                self.agg[c] = t.sum((1, 2)) + tn.sum(1)            # every postback is an install
             else:
                 self.agg[c] = np.bincount(self.week[mk], minlength=WEEKS).astype(float)
+        self._align = align
+        self._W = W
+
+    def filled(self, how):
+        """the pack read with each withheld postback value put where a route puts it (S4)"""
+        if how not in self._fills:
+            import copy
+            F = copy.copy(self)
+            F._fills = {}
+            F.agg_cvm = s4_fill(self, how)
+            F.agg_cv = {c: t.sum(1) for c, t in F.agg_cvm.items()}
+            F.agg = dict(self.agg)
+            if how == "drop":                                      # the postbacks with no value left out as installs too
+                for c, t in F.agg_cvm.items():
+                    F.agg[c] = t.sum((1, 2))
+            self._fills[how] = F
+        return self._fills[how]
 
 
 # --------------------------------------------------------------------------------------------------------------
@@ -562,12 +601,17 @@ def s1_trial_rel(O, pl):
     return rate / max(1e-9, bought[known].sum() / max(1, known.sum()))
 
 
-def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_DAYS, fits=None, cshare="level"):
+def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_DAYS, fits=None, cshare="level",
+              unit="eur"):
     """(each account's twelve-month net revenue, its chance of having bought) as recorded, trued up to the stores in
-    proportion, or with the silent charges put on the subscriptions that were set to take them"""
+    proportion, or with the silent charges put on the subscriptions that were set to take them; unit="months" counts
+    the monthly payments in place of the euros (an annual plan's payment is not one). how="keep:k" is the threshold a
+    run puts in place of the fit: every subscription last seen set to renew pays k more months and then stops (the
+    trial-end candidates charged at the stores' share); how="keepall:k" charges every trial-end candidate too"""
+    netm, neta = (O.netm, O.neta) if unit == "eur" else (np.ones(O.n), np.zeros(O.n))
     win = O.rdays < (O.day + 365)[:, None]
-    rec_m = (O.rec & win).sum(1) * O.netm
-    rec_a = (O.rec_a0 & (O.conv_day < O.day + 365)) * O.neta
+    rec_m = (O.rec & win).sum(1) * netm
+    rec_a = (O.rec_a0 & (O.conv_day < O.day + 365)) * neta
     rec = rec_m + rec_a
     bought = (O.rec[:, 0] | O.rec_a0).astype(float)
     if how == "raw":
@@ -585,7 +629,7 @@ def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_
                 rc = _monthly_counts(O, mk, "first") + _monthly_counts(O, mk, "ren")
                 f = np.where(rc > 0, st / np.maximum(rc, 1), 1.0)
                 fm = f[np.minimum(O.mon[mk], O.NM - 1)]
-                out[mk] = ((O.rec[mk] & win[mk]) * fm).sum(1) * O.netm[mk]
+                out[mk] = ((O.rec[mk] & win[mk]) * fm).sum(1) * netm[mk]
                 ra = np.bincount((O.conv_day[mk & O.rec_a0] // MONTH_DAYS).astype(int), minlength=O.NM)[:O.NM]
                 fa = np.where(ra > 0, O.store[pl]["ann"] / np.maximum(ra, 1), 1.0)
                 out[mk] += rec_a[mk] * fa[np.minimum((O.conv_day[mk] // MONTH_DAYS).astype(int), O.NM - 1)]
@@ -593,6 +637,10 @@ def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_
             b[mk] = bought[mk] * fb
         return out, b
     fits = fits or s1_fit(O, split=split, trim=trim, form=form, cadence=cadence)
+    keep = int(how.split(":")[1]) if how.startswith(("keep:", "keepall:")) else None
+    if how.startswith("keepall:"):                                 # and every trial-end candidate charged
+        fits = {pl: dict(f, c_m=1.0, c_a=1.0) for pl, f in fits.items()}
+        cshare = "flat"
     if how == "awake":                                             # the cancellations the app saw, per charge on file
         fits = {pl: dict(f, q=s1_seen_rate(O, pl), q1=s1_seen_rate(O, pl)) for pl, f in fits.items()}
     ren, fst = s1_candidates(O)
@@ -601,11 +649,13 @@ def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_
     for pl in (0, 1):
         f = fits[pl]
         wt = (lambda j, f=f: f["q"] ** j) if form == "geo" else (lambda j, f=f: f["q1"] * f["q"] ** (j - 1))
+        if keep is not None:
+            wt = lambda j: float(j <= keep)
         idx = np.where(ren & (O.ios == bool(pl)))[0]
         last = O.rdays[idx, O.n_rec[idx] - 1]
         for j in range(1, K):
             d = last + np.round(cadence * j).astype(int)
-            add[idx] += wt(j) * O.netm[idx] * ((d < wend[idx]) & (d <= END_DAY))
+            add[idx] += wt(j) * netm[idx] * ((d < wend[idx]) & (d <= END_DAY))
         fi = np.where(fst & (O.ios == bool(pl)))[0]
         te = O.day[fi] + 7
         mon = O.plan_seen[fi] == 1
@@ -618,11 +668,11 @@ def s1_values(O, how="golden", split="store", trim=0, form="geo", cadence=MONTH_
                 if sel.any():
                     rel[sel] = rel[sel] / rel[sel].mean()
         cm, ca = f["c_m"] * rel, f["c_a"] * rel
-        add[fi] += np.where(mon, cm * O.netm[fi], ca * O.neta[fi])
+        add[fi] += np.where(mon, cm * netm[fi], ca * neta[fi])
         bought[fi] += np.where(mon, cm, ca)
         for j in range(1, K):
             d = te + np.round(cadence * j).astype(int)
-            add[fi] += mon * cm * wt(j) * O.netm[fi] * ((d < wend[fi]) & (d <= END_DAY))
+            add[fi] += mon * cm * wt(j) * netm[fi] * ((d < wend[fi]) & (d <= END_DAY))
     return rec + add, bought
 
 
@@ -944,6 +994,8 @@ def ios_price(O, v, c, how="golden", cells="fine", minn=20, tilt="cell", rcells=
         vn = vc * s2_fit(O, v, cells, minn, tilt, common=True)[ci]
     elif how == "paid":                                            # organic at Apple Search Ads' ratio, one for the networks
         vn = vc * s2_fit(O, v, cells, minn, tilt, common="paid", org_pin=asa_one(O, v))[ci]
+    elif how == "r1":                                              # Response 1: a payers' gap, a revenue shift carried
+        vn = vc * r1_ratio(O, v, ci, cells, minn, tilt)
     else:                                                          # at the network's own fitted ratio
         fit = dict(fit)
         if "org_pin" in fit:
@@ -951,6 +1003,47 @@ def ios_price(O, v, c, how="golden", cells="fine", minn=20, tilt="cell", rcells=
         vn = vc * s2_fit(O, v, cells, minn, tilt, **fit)[ci]
     tot = n + nc
     return T["key32"], np.where(tot > 0, (n * vc + nc * vn) / np.maximum(tot, 1e-9), vc), tot
+
+
+def r1_ratio(O, v, ci, cells="fine", minn=20, tilt="cell"):
+    """Response 1's value of a declined install over a named one of the same first two days: the declined installs'
+    chance of paying fitted source by source so that the unattributed accounts' payers add up market-week by
+    market-week (the second step's fit run on who paid), turned into a gap on the log-odds, and the declined payers'
+    revenue shifted from the named payers' by the share of that gap the fully named channels show (Response 1 read
+    0.24 to 0.27 on Android and Apple Search Ads, and used 0.25)"""
+    k = (id(O), id(v), "r1", ci, cells, minn, tilt)
+    if k in _S2:
+        return _S2[k]
+    b = _payers(O, v)
+    rp = s2_fit(O, b, cells, minn, tilt)[ci]
+    lab = (O.label == ci) & O.mature
+    p = float(np.clip(b[lab].mean(), 1e-3, 0.999))
+    lgt = lambda x: np.log(x / (1 - x))
+    gap = float(lgt(np.clip(p * rp, 1e-3, 0.999)) - lgt(p))
+    num = den = 0.0
+    for c in ("Google Android", "AppLovin Android", "Apple Search Ads"):      # the channels whose every install is named
+        j = ORDER.index(c)
+        lj = (O.label == j) & O.mature
+        pn = float(b[lj & O.consent].mean()); pd = float(b[lj & ~O.consent].mean())
+        g = float(lgt(pd) - lgt(pn))
+        s = float(np.log((v[lj & ~O.consent].sum() / max(b[lj & ~O.consent].sum(), 1))
+                         / (v[lj & O.consent].sum() / max(b[lj & O.consent].sum(), 1))))
+        num += s * g; den += g * g
+    beta = num / max(den, 1e-12)
+    out = float(rp * np.exp(beta * gap))
+    _S2[k] = out
+    return out
+
+
+_PAY = {}
+
+
+def _payers(O, v):
+    """who paid anything in the twelve months, as a route's values hold it (one array per values array)"""
+    k = id(v)
+    if k not in _PAY:
+        _PAY[k] = (v > 1e-9).astype(float)
+    return _PAY[k]
 
 
 def channel_values(O, v, how="golden", cells="fine", minn=20, tilt="cell", rcells="tier2", **fit):
@@ -993,6 +1086,216 @@ def true_ratios(O, v, W, ios=True):
         cnt = np.bincount(O.cv[lab], minlength=32)
         out[i] = float(v[lab].sum() / max((cnt * T["vc"][i]).sum(), 1e-9))
     return out
+
+
+# --------------------------------------------------------------------------------------------------------------
+# S4: the postbacks that came back with no value
+# --------------------------------------------------------------------------------------------------------------
+
+def nnls(A, b):
+    """non-negative least squares (Lawson and Hanson), numpy only"""
+    m, n = A.shape
+    x = np.zeros(n)
+    P = np.zeros(n, bool)
+    w = A.T @ (b - A @ x)
+    tol = 1e-10 * max(1.0, float(np.abs(A).max()))
+    for _ in range(3 * n):
+        if P.all() or not (w[~P] > tol).any():
+            break
+        P[int(np.argmax(np.where(~P, w, -np.inf)))] = True
+        while True:
+            z = np.zeros(n)
+            z[P] = np.linalg.lstsq(A[:, P], b, rcond=None)[0]
+            if (z[P] > tol).all():
+                x = z
+                break
+            neg = P & (z <= tol)
+            alpha = float(np.min(x[neg] / np.maximum(x[neg] - z[neg], 1e-300)))
+            x = x + alpha * (z - x)
+            P = P & (x > tol)
+            x[~P] = 0.0
+        w = A.T @ (b - A @ x)
+    return x
+
+
+S4_CELLS = {"fine": lambda x: np.asarray(x), "tier8": lambda x: tier(x, 8), "tier4": lambda x: tier(x, 4),
+            "sess4tp": lambda x: ALONE["sess4"](np.asarray(x)) + 4 * ALONE["tp4"](np.asarray(x))}
+NETWORKS = [c for c in GATED]
+ORG_IOS = len(ORDER)                                              # the organic iOS source's index
+
+
+def _mwk(O, mask, weeks):
+    lo, hi = weeks
+    t = np.zeros((3, hi - lo, 32))
+    m = mask & (O.week >= lo) & (O.week < hi)
+    np.add.at(t, (O.market[m], O.week[m] - lo, O.cv[m]), 1)
+    return t
+
+
+def s4_fit(O, cells="fine", organic="tot", lam=1e4, weeks=(0, WEEKS), weight="poisson"):
+    """each network's postbacks that came back with no value, by first-48-hour value: market by market and week by
+    week, the iOS accounts with no channel less every network's postbacks that carried a value (net of its named
+    installs) are the withheld postbacks of every network and the organic installs that declined. One mix per network
+    is fitted to every market-week together, each summing to one, beside the organic ones following the organic
+    installs that allowed tracking (cell by cell, or as one count); within a coarse cell a network's withheld
+    postbacks are split as its postbacks with a value are"""
+    k = (id(O), "s4fit", cells, organic, lam, weeks, weight)
+    if k in _S2:
+        return _S2[k]
+    lo, hi = weeks
+    ios = O.ios
+    Y = _mwk(O, ios & O.pool, weeks)
+    for ci, c in enumerate(ORDER):
+        if c in NETWORKS:
+            Y -= O.raw_cvm[c][lo:hi].transpose(1, 0, 2) - _mwk(O, ios & (O.label == ci), weeks)
+    OC = _mwk(O, ios & (O.label == ORG_IOS), weeks)
+    g = S4_CELLS[cells](np.arange(32))
+    G = int(g.max()) + 1
+    Yg = np.zeros(Y.shape[:2] + (G,)); OCg = np.zeros_like(Yg)
+    for kk in range(32):
+        Yg[:, :, g[kk]] += Y[:, :, kk]; OCg[:, :, g[kk]] += OC[:, :, kk]
+    nets = NETWORKS
+    Nm = np.stack([O.agg_null[c][lo:hi].T for c in nets], -1)
+    nn, R = len(nets), Yg.shape[0] * Yg.shape[1]
+    rows, ys = [], []
+    for kk in range(G):
+        X = np.zeros((R, nn * G + G))
+        for j in range(nn):
+            X[:, j * G + kk] = Nm[:, :, j].reshape(-1)
+        X[:, nn * G + kk] = (OCg.sum(2) if organic == "tot" else OCg[:, :, kk]).reshape(-1)
+        yk = Yg[:, :, kk].reshape(-1)
+        w = 1.0 / np.sqrt(np.maximum(yk + 5.0, 5.0)) if weight == "poisson" else np.ones(R)
+        rows.append(X * w[:, None]); ys.append(yk * w)
+    for j in range(nn):                                            # every withheld postback has one value
+        x = np.zeros(nn * G + G)
+        x[j * G:(j + 1) * G] = lam
+        rows.append(x[None]); ys.append(np.array([lam]))
+    sol = nnls(np.vstack(rows), np.concatenate(ys))
+    out = {}
+    for j, c in enumerate(nets):
+        pg = sol[j * G:(j + 1) * G]
+        nonnull = O.raw_cvm[c][lo:hi].sum((0, 1))
+        p32 = np.zeros(32)
+        for kk in range(32):
+            tot = nonnull[g == g[kk]].sum()
+            p32[kk] = pg[g[kk]] * (nonnull[kk] / tot if tot > 0 else 1.0 / (g == g[kk]).sum())
+        out[c] = p32 / max(p32.sum(), 1e-12)
+    _S2[k] = out
+    return out
+
+
+# the fits a careful analyst could run in place of the golden's (the battery's S4 ways): the cells, the organic
+# installs' form, the weeks, the weighting
+S4_FORMS = {"golden": dict(cells="fine"), "tier8": dict(cells="tier8"), "tier4": dict(cells="tier4"),
+            "sess4tp": dict(cells="sess4tp"), "org-cell": dict(cells="fine", organic="cell"),
+            "tier8-cell": dict(cells="tier8", organic="cell"), "mature": dict(cells="fine", weeks=(0, MATURE)),
+            "flat-w": dict(cells="fine", weight="none"), "lam1e3": dict(cells="fine", lam=1e3)}
+
+
+def s4_nudged(O, f):
+    """the golden's fitted mix with its share in the trial and purchase cells moved by a factor"""
+    out = {}
+    for c, p in s4_fit(O, **S4_FORMS["golden"]).items():
+        q = p.copy()
+        q[8:] *= f
+        out[c] = q / q.sum()
+    return out
+
+
+def s4_fill(O, how):
+    """each network's postbacks by week, market and first-48-hour value with the withheld ones put back: by the fit
+    (golden and its forms), in proportion to the same network-market-week's postbacks with a value ("mar"), at the mix
+    the network's named installs show over the mature weeks ("named"), left out ("drop"), at the lowest value
+    ("zero"), or at the values they really had ("true", the world's own, for the checks only)"""
+    out = {}
+    if how in S4_FORMS or how.startswith("nudge:"):
+        pis = s4_nudged(O, float(how.split(":")[1])) if how.startswith("nudge:") else s4_fit(O, **S4_FORMS[how])
+    for ci, c in enumerate(ORDER):
+        if c not in NETWORKS:
+            continue
+        P, N = O.raw_cvm[c], O.agg_null[c]
+        if how in S4_FORMS or how.startswith("nudge:"):
+            out[c] = P + N[:, :, None] * pis[c][None, None, :]
+        elif how == "mar":
+            tot = P.sum(2, keepdims=True)
+            mix = np.where(tot > 0, P / np.maximum(tot, 1e-12), (P.sum((0, 1)) / P.sum())[None, None, :])
+            out[c] = P + N[:, :, None] * mix
+        elif how == "named":
+            lab = (O.label == ci) & O.mature
+            mixA = np.bincount(O.cv[lab], minlength=32) / max(lab.sum(), 1)
+            tot = P[:MATURE].sum() + N[:MATURE].sum()
+            add = np.maximum(mixA * tot - P[:MATURE].sum((0, 1)), 0.0)
+            out[c] = P + N[:, :, None] * (add / max(add.sum(), 1e-12))[None, None, :]
+        elif how in ("pooled", "pooled-mature"):
+            out[c] = P + N[:, :, None] * s4_pooled(O, how)[None, None, :]
+        elif how == "drop":
+            out[c] = P.copy()
+        elif how == "zero":
+            out[c] = P.copy()
+            out[c][:, :, 0] += N
+        elif how == "true":
+            W = O._W
+            mk = (W["src"] == ci) & W["null"]
+            pb = W["day"][mk] + W["pb_lag"][mk]
+            t = P.copy()
+            for back, wt in {"three": ((3, 1.0),), "four": ((4, 1.0),), "split": ((3, 0.5), (4, 0.5))}.get(
+                    O._align, ((0, 1.0),)):
+                wk = np.clip((pb - back) // 7, 0, WEEKS - 1) if O._align != "true" else W["week"][mk]
+                np.add.at(t, (wk, W["country"][mk], W["cv"][mk]), wt)
+            out[c] = t
+        else:
+            raise ValueError(how)
+    return out
+
+
+def s4_pooled(O, how="pooled"):
+    """one mix for every network's withheld postbacks, by one subtraction: the iOS accounts with no channel less every
+    network's postbacks that carried a value (net of its named installs) less the organic installs that declined (the
+    accounts left once every network's postbacks are counted) at the organic installs that allowed tracking's mix"""
+    k = (id(O), "s4pooled", how)
+    if k in _S2:
+        return _S2[k]
+    weeks = (0, MATURE) if how == "pooled-mature" else (0, WEEKS)
+    lo, hi = weeks
+    Y = _mwk(O, O.ios & O.pool, weeks).sum((0, 1))
+    nul = 0.0
+    for ci, c in enumerate(ORDER):
+        if c in NETWORKS:
+            Y = Y - (O.raw_cvm[c][lo:hi].sum((0, 1)) - _mwk(O, O.ios & (O.label == ci), weeks).sum((0, 1)))
+            nul += float(O.agg_null[c][lo:hi].sum())
+    OC = _mwk(O, O.ios & (O.label == ORG_IOS), weeks).sum((0, 1))
+    org = max(float(Y.sum()) - nul, 0.0)
+    p = np.maximum(Y - org * OC / max(OC.sum(), 1e-12), 0.0)
+    out = p / max(p.sum(), 1e-12)
+    _S2[k] = out
+    return out
+
+
+def trial_share(O, c):
+    """of an iOS network's installs of the mature weeks, how many per hundred started a trial or a subscription in
+    their first two days, as a route's postbacks (with their withheld values put back) hold them"""
+    t = O.agg_cvm[c][:MATURE].sum((0, 1))
+    return 100.0 * float(t[8:].sum() / max(t.sum(), 1e-12))
+
+
+def falsification_s4(O, how):
+    """the organic installs that declined, as a route leaves them (the iOS accounts with no channel less every
+    network's declined installs as its postbacks place them, market-week by market-week over the mature weeks): the
+    share of them that started a trial or a subscription in their first two days, in the third of market-weeks where
+    the networks' withheld postbacks ran highest against the accounts with no channel, less the share in the third
+    where they ran lowest"""
+    F = O.filled(how)
+    Y = _mwk(O, O.ios & O.pool, (0, MATURE))
+    nul = np.zeros(Y.shape[:2])
+    for ci, c in enumerate(ORDER):
+        if c in NETWORKS:
+            Y -= F.agg_cvm[c][:MATURE].transpose(1, 0, 2) - _mwk(O, O.ios & (O.label == ci), (0, MATURE))
+            nul += O.agg_null[c][:MATURE].T
+    share = (nul / np.maximum(_mwk(O, O.ios & O.pool, (0, MATURE)).sum(2), 1)).reshape(-1)
+    Yf = Y.reshape(-1, 32)
+    lo_, hi_ = np.quantile(share, [1 / 3, 2 / 3])
+    tp = lambda sel: float(Yf[sel][:, 8:].sum() / max(Yf[sel].sum(), 1e-9))
+    return 100.0 * (tp(share >= hi_) - tp(share <= lo_))
 
 
 # --------------------------------------------------------------------------------------------------------------
@@ -1077,7 +1380,7 @@ def response(O, v, how="golden", months="pooled", quality="golden", weeks_i=(0, 
     return fits
 
 
-def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carry="rescaled"):
+def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carry="rescaled", dbar_set=None):
     """installs a week and value per install at the plan's 2027 weekly spend and at the stretch column's, the return
     per euro at each, and what the next euro returns on top of each (a constant-elasticity response: the return at
     that spend times the two budget slopes). carry: the fitted installs at the budget that delivers the plan's spend,
@@ -1102,6 +1405,8 @@ def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carr
         elif carry == "plain-median":
             dbar = float(np.median(share))
         dbar *= dbar_scale
+        if dbar_set is not None:                                   # the share the plan is read at, set outright
+            dbar = float(dbar_set)
         x_hist = np.log(Bc["budget"]) - np.log(Bc["budget"]).mean()
         x_plan = np.log(sp / dbar) - np.log(Bc["budget"]).mean()
         if plain:                                                  # the delivery term at the share the plan is put at
@@ -1134,8 +1439,9 @@ def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carr
 _CACHE = {}
 
 
-def values(O, s1="golden", **kw):
-    k1 = (id(O), "v", s1) + tuple(kw.get(k) for k in ("split", "trim", "form", "cadence", "webq", "cshare", "s1_nudge"))
+def values(O, s1="golden", unit="eur", **kw):
+    k1 = (id(O), "v", s1, unit) + tuple(kw.get(k) for k in ("split", "trim", "form", "cadence", "webq", "cshare",
+                                                              "s1_nudge"))
     if k1 not in _CACHE:
         fits = None
         if kw.get("webq") and s1 == "golden":
@@ -1153,21 +1459,26 @@ def values(O, s1="golden", **kw):
                     f["q"] = f["q1"] = 1.0 - (1.0 - f["q"]) * fac
         _CACHE[k1] = s1_values(O, s1, split=kw.get("split", "store"), trim=kw.get("trim", 0),
                                form=kw.get("form", "geo"), cadence=kw.get("cadence", MONTH_DAYS), fits=fits,
-                               cshare=kw.get("cshare", "level"))[0]
+                               cshare=kw.get("cshare", "level"), unit=unit)[0]
     return _CACHE[k1]
 
 
-def route(O, s1="golden", s2="golden", s3="golden", **kw):
-    """every channel's figures under one route: s1 in raw, prop, prop_month, golden; s2 in direct, consenters,
-    bridge, ratio, golden; s3 in average, spend, budget, iv, golden; kw carries a variant's conventions"""
-    key = (id(O), s1, s2, s3, tuple(sorted(kw.items())))
+def route(O, s1="golden", s2="golden", s3="golden", s4="golden", **kw):
+    """every channel's figures under one route: s1 in raw, prop, prop_month, golden, keep:k; s2 in direct,
+    consenters, bridge, ratio, r1, golden; s3 in average, spend, budget, iv, golden; s4 (the withheld postback values)
+    in golden and its forms, mar, named, drop, zero, true; kw carries a variant's conventions"""
+    key = (id(O), s1, s2, s3, s4, tuple(sorted(kw.items())))
     if key in _CACHE:
         return _CACHE[key]
-    v = values(O, s1, **kw)
+    base = O
+    v = values(base, s1, **kw)
+    vm = values(base, s1, unit="months", **kw)
+    O = base.filled(s4)
     cells, minn, tilt = kw.get("cells", "fine"), kw.get("minn", 20), kw.get("tilt", "cell")
     fit = {k: kw[k] for k in FITKEYS if k in kw}
     v12 = channel_values(O, v, s2, cells, minn, tilt, **fit)
-    r12 = channel_values(O, values(O, "raw"), s2, cells, minn, tilt, **fit)
+    m12 = channel_values(O, vm, "golden" if s2 == "r1" else s2, cells, minn, tilt, **fit)
+    r12 = channel_values(O, values(base, "raw"), s2, cells, minn, tilt, **fit)
     N12 = {c: float(O.agg[c][:MATURE].sum()) for c in ORDER}
     res = {}
     if s3 == "average":                                            # the mature year's return per euro carried over
@@ -1177,7 +1488,8 @@ def route(O, s1="golden", s2="golden", s3="golden", **kw):
             res[c] = dict(v12=v12[c], rec12=r12[c] * N12[c], rev12=v12[c] * N12[c], unrec=1 - r12[c] / v12[c], roas=r,
                           vpi=v12[c], installs_week=n / 52.0,
                           marginal=r, marginal_s=r, revenue=r * plan_spend(c).sum(), roas_s=r,
-                          revenue_s=r * plan_spend(c).sum() * CH[c]["stretch"], el=1.0, qs=0.0)
+                          revenue_s=r * plan_spend(c).sum() * CH[c]["stretch"], el=1.0, qs=0.0,
+                          pay100=100.0 * m12[c], trial100=trial_share(O, c) if c in NETWORKS else float("nan"))
         _CACHE[key] = res
         return res
     coef = response(O, v, how=s3, months=kw.get("months", "pooled"), quality=kw.get("quality", "golden"),
@@ -1190,9 +1502,10 @@ def route(O, s1="golden", s2="golden", s3="golden", **kw):
         coef[eq] = dict(coef[eq], s=coef[eq]["s"] * nud[1])
     for c in ORDER:
         res[c] = dict(v12=v12[c], rec12=r12[c] * N12[c], rev12=v12[c] * N12[c], unrec=1 - r12[c] / v12[c],
+                      pay100=100.0 * m12[c], trial100=trial_share(O, c) if c in NETWORKS else float("nan"),
                       **at_plan(O, coef, c, v12[c], kw.get("dbar_weeks", WEEKS),
                                 nud[1] if nud and nud[0] == "dbar" else 1.0, kw.get("dbar_from", 0),
-                                kw.get("carry", "rescaled")))
+                                kw.get("carry", "rescaled"), kw.get("dbar_set")))
     _CACHE[key] = res
     return res
 
@@ -1232,7 +1545,11 @@ VARIANTS = [
     ("installs response on the last 78 weeks", dict(weeks_i=(26, WEEKS))),
     ("spend instrumented by the budget", dict(s3="iv")),
     ("the budget alone, the delivery left out", dict(s3="budget")),
-]
+] + [("the withheld values fitted %s" % nm, dict(s4=k)) for k, nm in (
+    ("tier8", "on eight groups of first-48-hour values"), ("tier4", "on four groups of first-48-hour values"),
+    ("sess4tp", "on the sessions pairs by trial and purchase"), ("org-cell", "with the organic installs cell by cell"),
+    ("tier8-cell", "on eight groups with the organic installs cell by cell"), ("mature", "on the mature weeks alone"),
+    ("flat-w", "unweighted"), ("lam1e3", "with a looser sum to one"))]
 # ways that stand beside the battery: each is run as it is and the ranges take in the edges it leaves, but it is not
 # crossed with the battery's ways. Four families. The second step's fit on a finer grain of rows (each market-week's
 # accounts split by the first-48-hour sessions they carry, in the eight values or their four pairs), under each of
@@ -1245,11 +1562,7 @@ VARIANTS = [
 # two). The value equation fitted on the mature weeks alone
 SHARE_WEEKS = (("the 104 weeks'", {}), ("the mature weeks'", dict(dbar_weeks=MATURE)),
                ("the last 52 weeks'", dict(dbar_from=MATURE)))
-BESIDE = [("the ratios fitted on each market-week's accounts split by %s%s" % (g, w), dict(rows=r, **kw))
-          for r, g in (("market-week-pair", "pairs of first-48-hour sessions values"),
-                       ("market-week-bucket", "first-48-hour sessions value"))
-          for w, kw in (("", {}), (", unweighted", dict(weight="none")),
-                        (", with weights from the fitted revenue", dict(weight="fitted")))]
+BESIDE = []
 BESIDE += [("the installs equation's own prediction, not rescaled, at %s %s" % (wn, nm), dict(carry=k, **wkw))
            for wn, wkw in SHARE_WEEKS
            for k, nm in (("plain", "share of the budgets spent"),
@@ -1260,11 +1573,12 @@ BESIDE += [("the first-48-hour values grouped by %s" % nm, dict(cells=k))
                          ("tp4", "their trial and purchase bits alone"),
                          ("tp8", "their trial and purchase bits with the sessions split in two"))]
 BESIDE += [("the value equation fitted on the mature weeks alone", dict(weeks_v=(0, MATURE)))]
-HURRIED = {"S1": dict(s1="prop_month"), "S2": dict(s2="bridge"), "S3": dict(s3="spend")}
-# the most rigorous standard design the pack affords: the stores' true-up month by month, every postback priced by
-# first-48-hour value and corrected with the one labelled check iOS offers (Apple Search Ads' declined installs), the
-# response fitted on spend with its hold-out
-RIGOROUS = dict(s1="prop_month", s2="ratio", s3="spend")
+HURRIED = {"S1": dict(s1="raw"), "S4": dict(s4="mar")}
+# the most rigorous standard design the pack affords: the stores' true-up month by month, the declined installs valued
+# source by source against the accounts with no channel (the runs' deconvolution), the budget response with the
+# delivery beside it, and each postback with no value filled in from the same network, market and week's postbacks
+# with one (the attribution industry's way with a withheld value)
+RIGOROUS = dict(s1="prop_month", s4="mar")
 
 
 def lattice_route(O, lost):
@@ -1305,11 +1619,13 @@ def forcing(O):
               for f in (1.0 - dq, 1.0 + dq)]
     moves += [("the delivery share of the last 26 weeks", dict(dbar_from=78)),
               ("the delivery share of the last 13 weeks", dict(dbar_from=91))]
+    moves += [("the withheld postbacks' share in the trial and purchase cells", dict(s4="nudge:%g" % f))
+              for f in (0.8, 1.2)]
     out = []
     for nm, kw in moves:
         r = route(O, **kw)
         fac = list(kw.values())[0]
-        fac = fac[1] if isinstance(fac, tuple) else 1.0
+        fac = fac[1] if isinstance(fac, tuple) else (float(fac.split(":")[1]) if str(fac).startswith("nudge:") else 1.0)
         out.append((nm, fac, {c: float(r[c]["roas"]) for c in MEMBERS},
                     all(band(r[c]["roas"]) == band(g[c]["roas"]) for c in MEMBERS)))
     return out
@@ -1372,7 +1688,8 @@ def referee_s1(O, c="AppLovin Android"):
     seen = O.true_charge[idx] & (O.rdays[idx] <= O.last_open[idx][:, None]) & (O.rdays[idx] < wend[:, None])
     prop = ((seen * (fac[np.minimum(O.mon[idx], O.NM - 1)] - 1)).sum(1) * O.netm[idx]).sum() / idx.size
     return dict(slice="the web checkout's %s subscribers: net revenue charged after the last open, per subscriber" % c,
-                n=int(idx.size), truth=float(truth), golden=put(qw), rivals={"proportional true-up": float(prop)},
+                n=int(idx.size), truth=float(truth), golden=put(qw),
+                rivals={"proportional true-up": float(prop), "the records as they stand": 0.0},
                 other={"the stores' fitted continuation carried over": put(qs), "continuation fitted on the web": qw,
                        "continuation fitted on the store": float(qs)})
 
@@ -1429,26 +1746,21 @@ def referee_s3(O, v, c="Google Android"):
 # the spec corelib checks
 # --------------------------------------------------------------------------------------------------------------
 
-OWN = {"S1": "AppLovin Android", "S2": "Meta iOS", "S3": "Google Android"}
+OWN = {"S1": "AppLovin Android", "S4": "Meta iOS"}
 # every figure the answer blocks state, channel by channel: the return per euro at the plan's weekly spend (the
-# member's own figure) and at its stretch spend, the installs a week the plan's spend buys and their value, what the
-# next euro returns on top of the plan's spend and on top of the stretch spend, and what the installs of the mature
-# year went on to pay
-FAMILIES = [("return ", "roas"), ("stretch return ", "roas_s"), ("installs a week ", "installs_week"),
-            ("value at plan ", "vpi"), ("next euro ", "marginal"), ("stretch next euro ", "marginal_s"),
-            ("paid per install ", "v12")]
+# member's own figure), and of the installs each channel bought in the year to 2 November 2025 what they went on to
+# pay in twelve months per install, how many monthly payments they made per hundred installs, and (each iOS network's)
+# how many per hundred started a trial or a subscription in their first two days
+FAMILIES = [("return ", "roas"), ("paid per install ", "v12"), ("payments per 100 ", "pay100"),
+            ("trials per 100 ", "trial100")]
 # each stump's own figure, one decisive step's answer: it falls with that stump alone
-COMPONENTS = {"S1": "paid per install AppLovin Android", "S2": "paid per install Meta iOS",
-              "S3": "installs a week Google Android"}
+COMPONENTS = {"S1": "payments per 100 AppLovin Android", "S4": "trials per 100 Meta iOS"}
 
 
 # the blocks answer each of the prompt's four asks with one line per channel, and the generated rubric makes one
-# criterion of a line, all or nothing (supplemental-stumping Part 1 rule 7): the return at the plan's and the stretch
-# spend, the installs a week and what each will have paid, the next euro at the plan's and the stretch spend, and
-# what the mature year's installs paid
-ASK_OF = {"return ": "returns", "stretch return ": "returns", "installs a week ": "installs and their revenue",
-          "value at plan ": "installs and their revenue", "next euro ": "one more euro",
-          "stretch next euro ": "one more euro", "paid per install ": "the year to November 2025"}
+# criterion of a line, all or nothing (supplemental-stumping Part 1 rule 7)
+ASK_OF = {"return ": "returns", "paid per install ": "what the year to November 2025 paid",
+          "payments per 100 ": "monthly payments", "trials per 100 ": "the first two days"}
 ON_LINE = "on its line: "         # a component's figure as its ask line states it
 
 
@@ -1477,8 +1789,8 @@ def as_stated(figures):
 
 
 def figure_values(res):
-    """every graded figure a route files"""
-    return {nm + c: float(res[c][k]) for c in MEMBERS for nm, k in FAMILIES}
+    """every graded figure a route files (the first two days' figure for the iOS networks alone)"""
+    return {nm + c: float(res[c][k]) for c in MEMBERS for nm, k in FAMILIES if k != "trial100" or c in NETWORKS}
 
 
 BAND_PAD = 0.005                 # either side of the battery's span: what two careful rebuilds of one way differ by
@@ -1486,11 +1798,11 @@ BESIDE_PAD = 0.01                # beyond a way that stands beside the battery
 
 
 def unit(fid):
-    """the decimals a figure is stated at: a return per euro to the thousandth, euros per install to the cent, installs
-    a week to the unit"""
-    if fid.startswith("installs a week "):
-        return 0
-    if fid.startswith(("value at plan ", "paid per install ")):
+    """the decimals a figure is stated at: a return per euro to the thousandth, euros per install to the cent, the
+    counts per hundred installs to a tenth"""
+    if fid.startswith(("payments per 100 ", "trials per 100 ")):
+        return 1
+    if fid.startswith("paid per install "):
         return 2
     return 3
 
@@ -1513,6 +1825,50 @@ def band_of(fid, g, fam, beside=()):
     return [int(round(a)), int(round(b))] if nd == 0 else [round(a, nd), round(b, nd)]
 
 
+# the routes the platform's runs took on architecture 7 (runs/rerun1.md, runs/rerun2.md), each built on the arrays as
+# a strong run would: Response 1 (generous) took the billing records as they stand, valued the declined installs by a
+# payers' gap per source with their revenue shifted by a quarter of it, carried the plan through the budget fit at the
+# delivery shares of the record, and pooled the value slope across channels; Response 2 (hedge) took the records as
+# they stand and valued the declined installs source by source against the unattributed accounts, and read the plan
+# at full delivery, the reading the record rules out (no channel's quarter came within 6 per cent of it), which it
+# kept as its one named sensitivity. Neither run met a postback with no value (architecture 7's postbacks all carried
+# one), so each fills them the way the attribution industry does, from the same network-market-week's postbacks.
+RUNS = {
+    "generous": dict(s1="raw", s4="mar", s2="r1", carry="plain-dist", qpool=True),
+    "hedge": dict(s1="raw", s4="mar"),
+    "hedge:as-recorded": dict(s1="raw", s4="mar", carry="plain", dbar_set=1.0),
+    "generous:spend-at-full-delivery": dict(s1="raw", s4="mar", s2="r1", carry="plain", dbar_set=1.0, qpool=True),
+    # calibrated: the silent subscriptions' continuation read on the web checkout's subscribers, whose every charge
+    # the backend holds, and each network's installs taken to follow its named installs' first two days
+    "calibrated": dict(webq=True, s4="named"),
+    "calibrated:records-as-they-stand": dict(s1="raw", s4="named"),
+    # cutoff: a subscription still set to renew counted as paying for a set number of months after its last open,
+    # and the postbacks with no value left out
+    "cutoff": dict(s1="keep:3", s4="drop"),
+    "cutoff:keep-1": dict(s1="keep:1", s4="drop"),
+    "cutoff:keep-2": dict(s1="keep:2", s4="drop"),
+    "cutoff:keep-6": dict(s1="keep:6", s4="drop"),
+    "cutoff:keep-9": dict(s1="keep:9", s4="drop"),
+    "cutoff:keep-12": dict(s1="keep:12", s4="drop"),
+    "cutoff:keep-3-lowest": dict(s1="keep:3", s4="zero"),
+    "cutoff:raw-drop": dict(s1="raw", s4="drop"),
+}
+# each stump pushed past its fitted value to the far end a run might set: every subscription last seen set to renew
+# paying out its twelve months; every postback with no value an install that did nothing
+OVER = {"S1": dict(s1="keepall:26"), "S4": dict(s4="zero")}
+STUMPS = {
+    "S1": dict(axis="what", steps_left=4, precedents=["L70", "N21", "L44"],
+               said_out_loud="A store charge reaches the app's billing records only when the subscriber next opens "
+                             "the app, so the stores' monthly reports hold charges the records never took in, and "
+                             "they belong to the subscriptions last seen still set to renew."),
+    "S4": dict(axis="who", steps_left=4, precedents=["L57", "N10", "L56", "L58"],
+               said_out_loud="Apple withholds a postback's first-48-hour value when the placement the install came "
+                             "from sends too few installs, and a network's installs from its wider inventory come "
+                             "from such placements, so the postbacks with no value are not like the ones with a "
+                             "value."),
+}
+
+
 def build_spec(W=None, verbose=False):
     W = W or simulate()
     O = Obs(W)
@@ -1530,35 +1886,24 @@ def build_spec(W=None, verbose=False):
         return route(aligned[al], **kw)
     fam = [variant(kw) for _nm, kw in VARIANTS + BESIDE]
     nbat = len(VARIANTS)                                           # the battery's ways first, then the ways beside it
-    keys = [["S1"], ["S2"], ["S3"], ["S1", "S2"], ["S1", "S3"], ["S2", "S3"], ["S1", "S2", "S3"]]
+    keys = [["S1"], ["S4"], ["S1", "S4"]]
     lat_res = {"+".join(k): lattice_route(O, k) for k in keys}
-    direct = route(O, "raw", "direct", "average")
+    direct = route(O, "raw", "direct", "average", "drop")
     rigorous = route(O, **RIGOROUS)
+    runs = {k: route(O, **kw) for k, kw in RUNS.items()}
+    over = {s: route(O, **kw) for s, kw in OVER.items()}
     members = {}
     for c in MEMBERS:
         members[c] = dict(lines=list(LINES), truth=float(T[c]["roas"]), golden=float(g[c]["roas"]),
                           family=[float(r[c]["roas"]) for r in fam],
                           routes=dict(direct=float(direct[c]["roas"]), rigorous=float(rigorous[c]["roas"])))
-    stumps = {
-        "S1": dict(axis="what", opens=OWN["S1"], steps_left=4, precedents=["N21", "L44"],
-                   said_out_loud="A store charge reaches the app's billing records only when the subscriber next opens "
-                                 "the app, so the stores' excess over the records belongs to subscriptions last seen "
-                                 "still set to renew, not to every account in proportion."),
-        "S2": dict(axis="who", opens=OWN["S2"], steps_left=5, precedents=["L53", "N27", "L58"],
-                   said_out_loud="On iOS the attribution export names an install's channel only where the user allowed "
-                                 "tracking; each network's other installs sit unnamed among the accounts with no "
-                                 "channel, and how much less they are worth than its named ones differs from network "
-                                 "to network."),
-        "S3": dict(axis="against", opens=OWN["S3"], steps_left=3, precedents=["L51", "L37", "L28"],
-                   said_out_loud="A week's spend is what the platform chose to deliver of the week's budget given that "
-                                 "week's auction, so weeks of high and low spend are not weeks of high and low "
-                                 "budgets; what a budget buys shows in the weeks the team moved it."),
-    }
+    stumps = {s: dict(st, opens=OWN[s], sides=dict(over={c: float(over[s][c]["roas"]) for c in MEMBERS}))
+              for s, st in STUMPS.items()}
     lattice = {k: {c: float(r[c]["roas"]) for c in MEMBERS} for k, r in lat_res.items()}
     gf, rf = figure_values(g), figure_values(rigorous)
     ff = [figure_values(r) for r in fam]
     lf = {k: figure_values(r) for k, r in lat_res.items()}
-    # each figure priced on the range the blocks will state for it (band_of), as the build prices it on the cut pack
+    runf = {k: figure_values(r) for k, r in runs.items()}
     rng = lambda fid: band_of(fid, gf[fid], [x[fid] for x in ff[:nbat]], [x[fid] for x in ff[nbat:]])
     figures = []
     for c in MEMBERS:
@@ -1567,159 +1912,64 @@ def build_spec(W=None, verbose=False):
     for kind, _k in FAMILIES[1:]:
         for c in MEMBERS:
             fid = kind + c
+            if fid not in gf:
+                continue
             figures.append(dict(id=fid, block="component" if fid in own else "ask", weight=1.0, golden=gf[fid],
                                 band=rng(fid), family=[x[fid] for x in ff], lattice={k: x[fid] for k, x in lf.items()},
-                                routes=dict(rigorous=rf[fid])))
+                                routes=dict(rigorous=rf[fid], **{k: x[fid] for k, x in runf.items()})))
+    run_routes = {k: {c: float(r[c]["roas"]) for c in MEMBERS} for k, r in runs.items()}
     v = values(O)
-    refs = [referee_s1(O), referee_s2(O, v), referee_s3(O, v)]
-
-    def sep(r):
-        ge = abs(r["golden"] - r["truth"])
-        return min(abs(x - r["truth"]) for x in r["rivals"].values()) / max(ge, 1e-12)
-    weakest = min(refs, key=sep)
-    spec = dict(call="lines", members=members, stumps=stumps, lattice=lattice,
-                referee=dict(slice=weakest["slice"], covers_target=False, truth=weakest["truth"],
-                             golden=weakest["golden"], rivals=weakest["rivals"]), figures=as_stated(figures))
+    ref = referee_s1(O)
+    fal = dict(check="the organic installs that declined, as each route leaves them: the share that started a trial "
+                     "or a subscription in their first two days, in the third of market-weeks with the most postbacks "
+                     "with no value against the third with the fewest (per hundred)",
+               observes_target=False, truth=falsification_s4(O, "true"), golden=falsification_s4(O, "golden"),
+               rivals={k: falsification_s4(O, k) for k in ("mar", "named", "drop")})
+    spec = dict(call="lines", members=members, stumps=stumps, lattice=lattice, run_routes=run_routes,
+                referee=dict(slice=ref["slice"], covers_target=False, truth=ref["truth"], golden=ref["golden"],
+                             rivals=ref["rivals"]),
+                falsification=fal, figures=as_stated(figures))
     if verbose:
-        return spec, dict(O=O, W=W, T=T, g=g, fam=fam, lat=lat_res, direct=direct, rigorous=rigorous, refs=refs,
-                          sep=[sep(r) for r in refs])
+        return spec, dict(O=O, W=W, T=T, g=g, fam=fam, lat=lat_res, direct=direct, rigorous=rigorous, ref=ref,
+                          runs=runs, over=over, v=v)
     return spec
 
 
 def explore():
     spec, X = build_spec(verbose=True)
     O, W, T, g = X["O"], X["W"], X["T"], X["g"]
-    tv = value12(W)
-    rec = values(O, "raw")
-    v = values(O)
-    short = lambda c: c.replace(" Android", " A").replace("Apple Search Ads", "ASA").replace("Snapchat", "Snap")[:9]
+    short = lambda c: c.replace(" Android", " A").replace("Snapchat", "Snap").replace("Pinterest", "Pint")[:9]
     print("accounts %d" % O.n)
-    tr = dict(true_ratios(O, v, W, True)); tr.update(true_ratios(O, v, W, False))
-    fi = dict(s2_fit(O, v)); fa = s2_fit(O, v, ios=False)
-    for ci, c in enumerate(SOURCES):
+    for ci, c in enumerate(ORDER):
         mk = (W["src"] == ci) & O.mature
-        est = fi.get(ci, fa.get(ci, float("nan")))
-        print("  %-18s n %6d consent %.2f value %6.2f unrecorded %.2f  buyers %.3f  declined/named at the same first "
-              "two days: true %.3f fitted %.3f" % (
-                  c, mk.sum(), W["consent"][mk].mean(), tv[mk].mean(), 1 - rec[mk].sum() / tv[mk].sum(),
-                  (W["charge"][mk, 0] | W["a0"][mk]).mean(), tr[ci], est))
-    print("  Apple Search Ads' labelled ratio %.3f; one ratio for every iOS source %.3f; Android %.3f" % (
-        asa_one(O, v), s2_fit(O, v, common=True)[0], s2_fit(O, v, ios=False, common=True)[ORDER.index("Google Android")]))
-    for pl in (1, 0):
-        mk = (O.ios == bool(pl)) & O.mature
-        print("  platform ios=%d unrecorded %.3f" % (pl, 1 - rec[mk].sum() / tv[mk].sum()))
-    print("fits", {k: {a: round(float(x), 3) for a, x in f.items()} for k, f in s1_fit(O).items()},
-          "web continuation read %.3f, fitted from the months %.3f" % (s1_web_fit(O), s1_web_method(O)))
-    routes = [(("golden", "golden", "golden"), {}), (("prop_month", "golden", "golden"), {}),
-              (("prop", "golden", "golden"), {}), (("raw", "golden", "golden"), {}),
-              (("golden", "golden", "golden"), dict(webq=True)), (("awake", "golden", "golden"), {}),
-              (("golden", "bridge", "golden"), {}), (("golden", "consenters", "golden"), {}),
-              (("golden", "ratio", "golden"), {}), (("golden", "analogue", "golden"), {}),
-              (("golden", "common", "golden"), {}),
-              (("golden", "paid", "golden"), {}), (("golden", "golden", "golden"), dict(markets=(1, 2))),
-              (("golden", "golden", "golden"), dict(markets=(0,))),
-              (("golden", "flat", "golden"), {}), (("golden", "golden", "spend"), {}),
-              (("golden", "golden", "budget"), {}), (("golden", "golden", "iv"), {}),
-              (("golden", "golden", "average"), {}), (("prop_month", "bridge", "spend"), {}),
-              (("prop_month", "ratio", "spend"), {}), (("raw", "direct", "average"), {})]
-    print("%-46s" % "route" + "".join("%10s" % short(c) for c in ORDER))
-    print("%-46s" % "truth at plan" + "".join("%10.3f" % T[c]["roas"] for c in ORDER))
-    for r, kw in routes:
-        res = route(O, *r, **kw)
-        nm = "/".join(r) + ((" web-read" if kw.get("webq") else " " + str(kw)) if kw else "")
-        print("%-46s" % nm + "".join("%10.3f" % res[c]["roas"] for c in ORDER))
-        if (r, kw) != routes[0]:
-            print("%-46s" % "   over golden" + "".join("%+10.3f" % (res[c]["roas"] / g[c]["roas"] - 1) for c in ORDER))
-            print("%-46s" % "   paid per install over golden" + "".join("%+10.3f" % (res[c]["v12"] / g[c]["v12"] - 1) for c in ORDER))
-    print("variants, return per euro over golden")
-    spread = {c: 0.0 for c in ORDER}; spm = {c: 0.0 for c in ORDER}; spv = {c: 0.0 for c in ORDER}
-    for (nm, kw), res in zip(VARIANTS, X["fam"]):
-        print("%-46s" % ("  " + nm)[:46] + "".join("%+10.3f" % (res[c]["roas"] / g[c]["roas"] - 1) for c in ORDER))
-        for c in ORDER:
-            spread[c] = max(spread[c], abs(res[c]["roas"] / g[c]["roas"] - 1))
-            spm[c] = max(spm[c], abs(res[c]["marginal"] / g[c]["marginal"] - 1))
-            spv[c] = max(spv[c], abs(res[c]["v12"] / g[c]["v12"] - 1))
-    print("%-46s" % "family spread, return" + "".join("%10.3f" % spread[c] for c in ORDER))
-    print("%-46s" % "family spread, paid per install" + "".join("%10.3f" % spv[c] for c in ORDER))
-    print("%-46s" % "family spread, next euro" + "".join("%10.3f" % spm[c] for c in ORDER))
-    for nm, f in (("v12", lambda c, ci: tv[(W["src"] == ci) & O.mature].mean()),
-                  ("unrec", lambda c, ci: 1 - rec[(W["src"] == ci) & O.mature].sum() / tv[(W["src"] == ci) & O.mature].sum()),
-                  ("installs_week", lambda c, ci: T[c]["installs_week"]), ("vpi", lambda c, ci: T[c]["vpi"]),
-                  ("marginal", lambda c, ci: T[c]["marginal"]), ("el", lambda c, ci: T[c]["el"]),
-                  ("qs", lambda c, ci: T[c]["qs"])):
-        print("%-46s" % ("truth " + nm) + "".join("%10.3f" % f(c, ci) for ci, c in enumerate(ORDER)))
-        print("%-46s" % ("golden " + nm) + "".join("%10.3f" % g[c][nm] for c in ORDER))
-    print("adding up (the unattributed accounts' revenue as priced over as paid): bridge %.3f, Apple Search Ads' "
-          "ratio %.3f, fitted %.3f" % (adding_up(O, v, "bridge"), adding_up(O, v, "ratio"), adding_up(O, v)))
-    for r, s_ in zip(X["refs"], X["sep"]):
-        print("referee: %s%s\n    truth %.4g golden %.4g rivals %s  (weakest rival's error over golden's: %.1f)" % (
-            r["slice"], (" (n %d)" % r["n"]) if "n" in r else "", r["truth"], r["golden"],
-            {k: round(x, 4) for k, x in r["rivals"].items()}, s_))
-        if r.get("other"):
-            print("    also:", {k: round(x, 4) for k, x in r["other"].items()})
-    import corelib
-    lat = {corelib._key(k.split("+")): x for k, x in spec["lattice"].items()}
-    figs, _p = corelib._figures(spec, lat)
-    gcall = corelib._calls(spec, {m: spec["members"][m]["golden"] for m in spec["members"]})
-    names = sorted(spec["members"])
-    print("every shortcut on the rubric, the other two steps golden (the checker prices the first of each step):")
-    for step, alts in (("S1", [("the stores' true-up month by month", ("prop_month", "golden", "golden"), {}),
-                               ("one true-up factor per store", ("prop", "golden", "golden"), {}),
-                               ("the records as they stand", ("raw", "golden", "golden"), {}),
-                               ("candidates carried at the cancellations the app saw", ("awake", "golden", "golden"), {}),
-                               ("candidates carried at the web checkout's continuation", ("golden", "golden", "golden"), dict(webq=True))]),
-                       ("S2", [("every postback at the named installs' value", ("golden", "bridge", "golden"), {}),
-                               ("the named installs alone", ("golden", "consenters", "golden"), {}),
-                               ("Apple Search Ads' ratio", ("golden", "ratio", "golden"), {}),
-                               ("the ratio its kind of network shows on Android", ("golden", "analogue", "golden"), {}),
-                               ("one ratio for every source", ("golden", "common", "golden"), {}),
-                               ("organic at Apple Search Ads' ratio, one for the networks", ("golden", "paid", "golden"), {}),
-                               ("the unattributed accounts' own value", ("golden", "flat", "golden"), {}),
-                               ("fitted, the four social networks sharing one ratio", ("golden", "golden", "golden"), dict(group="kind")),
-                               ("fitted, Meta, TikTok and Snapchat sharing one ratio", ("golden", "golden", "golden"), dict(group="social")),
-                               ("fitted, Meta and TikTok sharing one ratio", ("golden", "golden", "golden"), dict(group="pair")),
-                               ("fitted, TikTok and Snapchat sharing one ratio", ("golden", "golden", "golden"), dict(group="pair2"))]),
-                       ("S3", [("the response fitted on spend", ("golden", "golden", "spend"), {}),
-                               ("the two years' average return", ("golden", "golden", "average"), {})])):
-        for nm, r, kw in alts:
-            res = route(O, *r, **kw)
-            vals = figure_values(res)
-            call = corelib._calls(spec, {m: res[m]["roas"] for m in names})
-            wrong = [short(m) for m, a, b in zip(names, call, gcall) if a != b]
-            comp = {k: corelib._earned([f for f in figs if f["id"] == fid][0], vals[fid]) for k, fid in COMPONENTS.items()}
-            print("    %s %-58s earns %4.1f  wrong on %-22s components kept %s" % (
-                step, nm, corelib._score(figs, call == gcall, lambda f: vals[stated_id(f["id"])]), ", ".join(wrong) or "none",
-                " ".join(k for k, ok in comp.items() if ok)))
-    print("could networks share a ratio (the fitted ratios' differences against the fit's own spread; the 5 per cent"
-          " points are 3.84, 5.99, 7.81 and 9.49 on one to four degrees of freedom):")
-    for nms in (("Meta iOS", "TikTok iOS"), ("TikTok iOS", "Snapchat iOS"), ("Meta iOS", "TikTok iOS", "Snapchat iOS"),
-                ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Pinterest iOS"),
-                ("Meta iOS", "TikTok iOS", "Snapchat iOS", "Google iOS", "Pinterest iOS"),
-                ("Google iOS", "Pinterest iOS"), ("Google iOS", "Pinterest iOS", "organic iOS"),
-                ("Pinterest iOS", "organic iOS"), ("Google iOS", "organic iOS"), ("Snapchat iOS", "Pinterest iOS")):
-        st, d = s2_equal_test(O, v, nms)
-        print("    %-58s %6.1f on %d   %s" % (", ".join(short(x) for x in nms), st, len(nms) - 1,
-                                             "  ".join("%s %.3f (%.3f)" % (short(k), a, b) for k, (a, b) in d.items())))
-    print("each call with its own fitted ratio moved a fifth either way (the return at the plan's spend):")
-    for c in GATED:
-        ci = ORDER.index(c)
-        S, T2 = s2_strata(O, v), s2_cells(O, v)
-        r0 = s2_fit(O, v)[ci]
-        n, nc, vc = T2["n"][ci], np.maximum(S["nc"][ci].sum((0, 1)), 0), T2["vc"][ci]
-        base = float((n * vc + nc * vc * r0).sum())
-        lo, hi = [float((n * vc + nc * vc * r0 * f).sum()) / base * g[c]["roas"] for f in (0.8, 1.2)]
-        print("    %-18s fitted %.3f   %.3f  %.3f  %.3f" % (c, r0, lo, g[c]["roas"], hi))
-    print("forcing: each fitted input moved a fifth either way (the delivery share by its widest quarter, %.3f); the "
-          "return at the plan's spend:" % quarter_departure(O))
-    print("%-62s" % "" + "".join("%9s" % short(c) for c in MEMBERS))
+        print("  %-18s n %6d consent %.2f wide %.3f withheld %.3f value %6.2f" % (
+            c, mk.sum(), W["consent"][mk].mean(), W["wide"][mk].mean(), W["null"][mk].mean(),
+            value12(W)[mk].mean()))
+    print("%-34s" % "" + "".join("%10s" % short(c) for c in MEMBERS))
+    tf = route(O, s4="true")
+    rows = [("truth at plan", {c: T[c]["roas"] for c in MEMBERS}), ("golden", {c: g[c]["roas"] for c in MEMBERS}),
+            ("golden, withheld values as they were", {c: tf[c]["roas"] for c in MEMBERS})]
+    rows += [("lattice " + k, {c: r[c]["roas"] for c in MEMBERS}) for k, r in X["lat"].items()]
+    rows += [("route " + k, {c: r[c]["roas"] for c in MEMBERS}) for k, r in X["runs"].items()]
+    rows += [("over " + k, {c: r[c]["roas"] for c in MEMBERS}) for k, r in X["over"].items()]
+    rows += [("direct", {c: X["direct"][c]["roas"] for c in MEMBERS}), ("rigorous", {c: X["rigorous"][c]["roas"] for c in MEMBERS})]
+    for nm, d in rows:
+        print("%-34s" % nm[:34] + "".join("%10.3f" % d[c] for c in MEMBERS) + "  " + " ".join(band(d[c])[0] for c in MEMBERS))
+    fam = X["fam"]
+    for k in ("roas", "v12", "pay100", "trial100"):
+        print("%-34s" % ("family spread " + k) + "".join(
+            "%10.3f" % max(abs(r[c][k] / g[c][k] - 1) for r in fam) if not np.isnan(g[c][k]) else "%10s" % "-" for c in MEMBERS))
+        print("%-34s" % ("golden " + k) + "".join("%10.3f" % g[c][k] for c in MEMBERS))
+        print("%-34s" % ("withheld as they were " + k) + "".join("%10.3f" % tf[c][k] for c in MEMBERS))
+    worst = {c: max(fam, key=lambda r: abs(r[c]["roas"] - g[c]["roas"]))[c]["roas"] for c in MEMBERS}
+    print("%-34s" % "family's farthest return" + "".join("%10.3f" % worst[c] for c in MEMBERS))
+    r = X["ref"]
+    print("referee:", r["slice"], "truth %.4g golden %.4g" % (r["truth"], r["golden"]), r["rivals"], r.get("other"))
+    f = spec["falsification"]
+    print("falsification: truth %.3f golden %.3f" % (f["truth"], f["golden"]), {k: round(x, 3) for k, x in f["rivals"].items()})
+    print("forcing (delivery share moved by its widest quarter, %.3f):" % quarter_departure(O))
     for nm, fac, vals, ok in forcing(O):
         print("    %-52s x%.3f" % (nm[:52], fac) + "".join("%9.3f" % vals[c] for c in MEMBERS) + ("  holds" if ok else "  MOVES"))
-    print("two stumps lost, the call and what is left:")
-    for k in ("S1+S2", "S1+S3", "S2+S3"):
-        print("   ", k, " ".join("%s %.3f" % (short(c), X["lat"][k][c]["roas"]) for c in ORDER))
-    live = np.array([[CH[c]["live"][m].mean() for m in range(3)] for c in ORDER])
-    print("share of weeks live by market (ES, IT, PT):", " | ".join("%s %s" % (short(c), " ".join("%.2f" % x for x in live[i]))
-                                                                  for i, c in enumerate(ORDER)))
 
 
 def seeds(n=4):

@@ -1,14 +1,14 @@
 {
  "task": "task1",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 7,
- "stage_name": "submit",
- "updated": "2026-11-22",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-23",
  "doctrine": "throughout",
- "architecture": 7,
+ "architecture": 8,
  "loops": 0,
  "seed": 71126,
  "call": "scale Google iOS and Pinterest iOS, hold Meta iOS, Google Android and AppLovin Android and cut TikTok iOS and Snapchat iOS for 2027 (return per euro at the plan's weekly spend against the lines 0.90 and 1.20, generator/figures.json on the cut pack: Pinterest iOS 1.578, Google iOS 1.450, Meta iOS 1.050, Google Android 1.039, AppLovin Android 0.969, Snapchat iOS 0.621, TikTok iOS 0.549)",
@@ -134,7 +134,7 @@
   "note": "version 30 of platform task 955a716f-052f-42cd-bd6f-3fb23ac0fb7a; determinism and solution passed, stumped failed; runs/review_2026-11-22.md"
  },
  "prompt_rewritten": false,
- "resume": "RETURNED 2026-11-22 on difficulty (runs/review_2026-11-22.md). Route REDESIGN from stage 2 with the stump architect: keep the organisation, the policy, the data package and S1 (the stores' charges the billing records never took in, lost by every strong run on file); S2 (the per-source value of the unnamed iOS installs) and S3 (the budget response with the delivery beside it) are reflexes on the runs' evidence (R102, R103), so the core needs at least one new decisive step the two recorded routes lose (core.py run_routes implementing Response 1 and Response 2 of runs/rerun1.md and rerun2.md); the reviewer's three must-fix items answered (more bands within reach of the lines, the first step reported as a result checkable on its own in the decision's words without naming the gap, the asks that follow mechanically from the curves replaced); the open fork (the plan's spend read as a budget billed in full, runs.open_fork) closed in the same pass",
+ "resume": "/draw task1 (architecture 8 in design: core.py, card, note, prompt)",
  "redraws": [
   {
    "date": "2026-11-16",
@@ -145,6 +145,12 @@
    "date": "2026-11-21",
    "why": "the cut of 2026-11-16 (READY 2af8cff, never uploaded) was read against the client's phase 2 bar (the guidelines of 11/20 and the closed page as read on 2026-11-21): two of its three stumps owned no critical component and two components fell with two or three stumps; its second step's remedy was one ratio from a control total, the completeness card's fix under a lesson key the page closed; its first step sat next to the same card with the web checkout handing its one rate over",
    "what": "the same organisation, policy and three axes; a declined install's worth now differs by network and the campaigns run market by market in flights, so the second step is one ratio per source fitted together across market-weeks (the single ratio, the fully named channel's ratio and an Android look-alike's are priced shortcuts); the first step separates three continuations and fits the stores' own to their excess; Android's declined installs are named, the second step's referee; one critical component per step, asked for in the decision's words; four asks"
+  },
+  {
+   "date": "2026-11-23",
+   "why": "architecture 7 returned at review on 2026-11-22 (reward 64, Stumped failed): one decisive step on the runs' own evidence; the second and third steps were reflexes for runs of this strength, four bands were forced wide, and the asks followed mechanically from the curves",
+   "what": "architecture 8, redrawn in the same world: the first step priced lost the way both runs lost it (the billing records as they stand); a new decisive step on the iOS postbacks that carry no first-48-hour value; the declined-install ratios and the budget response kept as modelling; asks re-sited on each step's own figure",
+   "model": "designed on Opus 5.5 by the author's ruling of 2026-11-22, Fable out until 27 November"
   }
  ],
  "final_cut": {
