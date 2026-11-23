@@ -1,6 +1,6 @@
 {
  "task": "task1",
- "status": "SUBMITTED",
+ "status": "RETURNED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
@@ -111,18 +111,30 @@
    "why": "not difficult enough: Flex forced by its crossing in both regions, Gezin's margin (+5.4) too wide, Standaard positive under any transfer; only Onbeperkt open, and only through the stayers' listening",
    "repair": "design",
    "commit": ""
+  },
+  {
+   "date": "2026-11-22",
+   "source": "review",
+   "by": "the reviewer's sheet of November 22, version 30 (pasted by the author; runs/review_2026-11-22.md)",
+   "reward": 64,
+   "stumped": "failed",
+   "determinism": "passed (main and supp)",
+   "why": "not difficult enough: one decisive step on the runs' own evidence. The strong test responses counted the iOS installs from the postbacks, valued the unnamed installs source by source and fitted the install response on the budget, so S2 and S3 were made; they lost S1 alone, setting the stores' reports aside ('transaction-level billing is the policy source for net revenue', 'billing events are policy truth'), which cuts AppLovin Android and in one response Google Android. Four bands forced by wide margins (Pinterest iOS and Google iOS 1.45 to 1.58, Snapchat iOS and TikTok iOS 0.55 to 0.62), Meta iOS in hold on every reading the responses used (1.02 to 1.07); S1 buried in revenue per install instead of reported on its own; the plan and stretch returns and the marginal returns follow mechanically from the curves",
+   "repair": "design",
+   "route": "REDESIGN (build-pipeline stage 6: both runs made every decisive step but the same one): S2's per-source valuation and S3's budget fit go to precedents.json as reflexes (R102, R103, R104; the runs' loss L70 and named assumptions N46 to N48 beside them); the stump architect redraws the core in the same world, keeping S1 and the data package, with every member priced on the two responses' recorded routes",
+   "commit": ""
   }
  ],
  "approved": null,
  "submitted": "2026-11-22",
  "portal": {
-  "status": "submitted, pending review",
+  "status": "returned for fixes (Stumped failed, reward 64)",
   "date": "2026-11-22",
-  "source": "the author's report of 2026-11-22 (submitted; to be marked approved on the author's word)",
-  "note": "on file at submission: the READY cut cdc9b31 (target.zip 67235679, golden.zip d585af55, pack digest 4811ca4627b3e1d3), the prompt as reworded in 94c0f1d, the answer blocks of d9cbb40 with the stump question answered for the two responses in runs/rerun1.md and runs/rerun2.md. No platform score, generated rubric or review sheet has been pasted"
+  "source": "the reviewer's sheet pasted by the author on 2026-11-22",
+  "note": "version 30 of platform task 955a716f-052f-42cd-bd6f-3fb23ac0fb7a; determinism and solution passed, stumped failed; runs/review_2026-11-22.md"
  },
  "prompt_rewritten": false,
- "resume": "SUBMITTED by the author on 2026-11-22, review pending; nothing is owed until the author reports the result. On APPROVED (the author's word): status APPROVED, stage_name approved, approved and portal dated, the Review cell of the task1 arch 7 round 2 row in stumping/references/sulfur-record.md, a row in fingerprint/corpus/approved.json so its lessons count as taught, the two responses' lines into stumping/references/precedents.json, commit APPROVED (task1). On RETURNED: the reviewer's sheet saved under runs/, a returned[] entry with the reason, the same Review cell, commit RETURNED (task1): <why>, then the route the reason names (determinism: the fork in runs.open_fork first; difficulty: the stronger response lost one step only, S1, and made S2 and S3). Never recorded: the two platform scores and the generated rubric (not pasted), so /triage-runs never ran and the stump answer is the main thread's own reading",
+ "resume": "RETURNED 2026-11-22 on difficulty (runs/review_2026-11-22.md). Route REDESIGN from stage 2 with the stump architect: keep the organisation, the policy, the data package and S1 (the stores' charges the billing records never took in, lost by every strong run on file); S2 (the per-source value of the unnamed iOS installs) and S3 (the budget response with the delivery beside it) are reflexes on the runs' evidence (R102, R103), so the core needs at least one new decisive step the two recorded routes lose (core.py run_routes implementing Response 1 and Response 2 of runs/rerun1.md and rerun2.md); the reviewer's three must-fix items answered (more bands within reach of the lines, the first step reported as a result checkable on its own in the decision's words without naming the gap, the asks that follow mechanically from the curves replaced); the open fork (the plan's spend read as a budget billed in full, runs.open_fork) closed in the same pass",
  "redraws": [
   {
    "date": "2026-11-16",
