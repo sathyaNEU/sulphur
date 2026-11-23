@@ -111,7 +111,7 @@ CLOSED_LABEL = "Closed strategies"
 # evidence sits, and the figure and the call with each step left out alone and in pairs).
 DECISIVE_FROM = "2026-11-21T08:00:00Z"
 DECISIVE_LABEL = "Decisive steps"
-# From RUNS_FROM (task3 arch 8's two platform runs, 2026-11-21: both filed every class against a paper pair of 26.7,
+# From RUNS_FROM (an earlier build's two platform runs, 2026-11-21: both filed every class against a paper pair of 26.7,
 # on routes no lattice key held): the note's Frontier check carries `Run routes:` (the generous, calibrated, hedge and
 # cut-off routes, each implemented in core.py's run_routes with the call it files and what it earns), `Validation
 # handles:` (stump-screen test 18: every shipped file that lets a run score a stump's own quantity or the target, and

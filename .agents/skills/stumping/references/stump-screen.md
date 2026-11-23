@@ -35,7 +35,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    value"): a recording effect whose fix corrects each reading by an estimated loss, gain or offset is that card
    however the effect is estimated (test 18), so a recording stump is open only where its estimator is something
    other than a correction applied reading by reading (a conservation residual, a recording algorithm inverted, a
-   state the record never held, the other open kinds of `open-ground.md`). task3 arch 11's effluent candidate,
+   state the record never held, the other open kinds of `open-ground.md`). An earlier build's effluent candidate,
    ammonia lost from a sample waiting warm in its bottle and gained from a sample line that stood, each corrected
    reading by reading, died here.
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
@@ -64,7 +64,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    where the bridge has to be built; N42 one instrument model's correction put on another for want of a check). The
    world's process makes it false for the target and weaker in the history, so the run's own back-test still passes.
    **A precedent transfers only with its condition**: every named assumption on file was waved through because no
-   shipped file let the run score it. task3 arch 8 cited N21, N26, N01 and N30 for three stumps whose checks it
+   shipped file let the run score it. An earlier build cited N21, N26, N01 and N30 for three stumps whose checks it
    shipped (the storage gauge's account, the radar's pixel pairs, the research valley's gauges), and both runs made
    all three (R98 to R100). A precedent cited for a stump with a validation handle (test 18) prices nothing.
 7. **A plausible shallower story.** The data offers a wrong explanation that passes its own checks (L26), so a run
@@ -117,7 +117,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    statistic of the members' own records that the golden's model reproduces and each rival's misses, with no file
    observing the target (example 17's qualifying share within the households that say they are falling behind,
    rising across the deadline bands while their share of the sample stays flat; the leave-one-out and leave-two-out
-   table beside it). **A referee is a calibration set first**: task3 arch 8's runs never read the research valley's
+   table beside it). **A referee is a calibration set first**: an earlier build's runs never read the research valley's
    gauges raw; they calibrated the whole chain on them end to end, conditioned on the radar's ratios, integrated the
    residual and filed every class (R101). So a slice that observes the target, or a stump's own quantity, under the
    members' instruments is shipped only where the calibrated run route on it files the wrong call (test 19), and
@@ -130,13 +130,13 @@ nothing in-house solves the task, so the idea has to be right before it is built
    (decided on a second basis the same records support). Name which, with the figures. The arrangement is drawn from
    this world's records and is never the one a build on file used. The family sentence is priced as well: the one
    sentence that names what the kept stumps share rescues a third of the rubric or less on the reflex route, or the
-   stumps are one lesson however different their records (task3 arch 11's coater pair: "the certificates are
+   stumps are one lesson however different their records (an earlier build's coater pair: "the certificates are
    test-day figures; the gas meters and the waste manifests show what each line did" rescued about 75 points
    against a ceiling of 33).
 18. **No validation handle.** No shipped file lets a run score the stump's own quantity, or the target, under the
    members' instruments: a total that closes the loss, a pair that reads the ratio off, a slice that scores the
    chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there
-   (task3 arch 8: the tipping time fitted through the storage gauge's account, R98; each source's ratio read off the
+   (an earlier build: the tipping time fitted through the storage gauge's account, R98; each source's ratio read off the
    radar's pixel pairs, R99; hail calibrated on the research valley's weighing gauges, R100). The approved runs and
    the client's hardest examples lost where nothing scores the correction: they saw the signal and kept it as a
    sensitivity ("not a uniquely identified correction"), cut at a threshold, picked one arm, or declined to estimate
@@ -152,7 +152,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    at full strength on the shipped fields**: every field the pack names and every covariate that one join, group-by,
    filter or flag of a shipped log gives, fitted jointly (a time since or to an event a shipped log names is one such
    join wherever any timestamp in the record proxies it), and that route files the wrong call or the stump is a
-   reflex. task3 arch 11's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
+   reflex. An earlier build's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
    with fan hours and ambient called 8.5 of 9 lines right, and the booth sludge split the same way, so a conservation
    account whose every term ships is the runs' (R98, task22 arch 1). The golden needs (a) a covariate built from a
    second file by a construction that is not a join, union, filter, stratification or re-key (days to each
@@ -160,18 +160,18 @@ nothing in-house solves the task, so the idea has to be right before it is built
    joint fit of two effects that each bias the other when fitted alone, one of them not a named field (a default
    multiple regression already fits two named ones), and each such loss cites a precedent where a run was seen one
    move short (L56 to L67). No field a real record of that kind carries is withheld to keep a covariate unbuilt: a
-   laboratory extract carries its received and analysed times, and task3 arch 11's effluent candidate held only with
+   laboratory extract carries its received and analysed times, and an earlier build's effluent candidate held only with
    them withheld (any later timestamp recovered the bottle's loss on 19 of 19 members). The note's `Validation handles:`
    line is the matrix of every shipped file against every stump's parameter. **A near-complete slice beside a filed
    recording law is a calibration set** even when no file holds the target: thinned through the law, the slice
-   simulates the record, and any calibration matched to each member's own distribution recovers the stump (task3
-   arch 9's first cores: the well-covered days thinned through the vendor's curve, with one donor cut per station
+   simulates the record, and any calibration matched to each member's own distribution recovers the stump (an earlier
+   build's first cores: the well-covered days thinned through the vendor's curve, with one donor cut per station
    matched to its own recorded storm sizes, filed the golden's call in 24 of 27 settings, so the golden's unfold
    differed from the run's ratio in precision only). Such a stump is identified from the thin records' own internal
    variation (the same units seen at two recording levels, the record's own timing), never from a slice that sees
    the process whole. **And a filed recording law is itself a handle**: with the law in the pack, a run degrades its
    own record further through it (thins it to fewer sensors, adds the filed error), fits how the figure moves with
-   the depth of recording, and extrapolates to full sight. task3 arch 9's donor-free rebuilds were determinate across
+   the depth of recording, and extrapolates to full sight. An earlier build's donor-free rebuilds were determinate across
    seven and eight storm families and still landed: a log ladder of hours on the share located filed the golden's
    call at 11 of 12 settings, and with flash structure the ladder scaled by the textbook flash formula at 7 of 16,
    because the full record is the smooth limit of the record at successive depths. So a live recording stump turns
@@ -181,13 +181,13 @@ nothing in-house solves the task, so the idea has to be right before it is built
    worth off, the warning case beside it). **An unfiled parameter is still a closed card when its trap is a reading biased
    against the truth and its fix corrects each reading by the estimated bias**: a shield's solar gain, a gauge's
    undercatch, a sensor's offset, used at face value and varying by group, is the calibrated-source card however the
-   bias is estimated (task3 arch 10's first screen, a gain read off cloud passages in place of checked cases); a
+   bias is estimated (an earlier build's first screen, a gain read off cloud passages in place of checked cases); a
    quantity read off as the residual of a conservation account (what a register cannot otherwise explain, task4's
    lost containers) is another kind of fix, and conservation stays open ground; and a frame with the history on one sensor basis and the decision
    on another hands every run the recognition in the prompt, so two such parameters are never independent.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
-   full strength, the estimate's uncertainty integrated: task3 arch 8's runs summed exceedance probabilities over a
+   full strength, the estimate's uncertainty integrated: an earlier build's runs summed exceedance probabilities over a
    fitted spread, which lifts a tail count above a point plug), the calibrated route (end to end on any slice that
    observes the target or a stump's quantity), the hedge route (every signal noticed, reported as a sensitivity, the
    face value central: L53, examples 16 and 17) and the cut-off route (a filter where a fitted model is needed:
@@ -196,8 +196,8 @@ nothing in-house solves the task, so the idea has to be right before it is built
    where under-correcting does, so no blanket adjustment lands the call, and each stump on its own: pushed past its
    fitted value to the far end a run might set, it files a wrong call too. A route with a free setting is priced at
    every setting (every cut of the filter that replaces the stump's fit, every slice a calibration could be matched
-   on), because the run picks the setting that matches its target (task3 arch 9's first core: the well-covered days
-   kept to the thin stations' storm size filed the golden's call at cuts from 5 to 12 strokes). task3 arch 8 sat every open member 1.1 to
+   on), because the run picks the setting that matches its target (an earlier build's first core: the well-covered days
+   kept to the thin stations' storm size filed the golden's call at cuts from 5 to 12 strokes). An earlier build sat every open member 1.1 to
    1.5 storms above its line with every priced shortcut under it, and the runs' generous corrections filed all seven
    classes. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
    call, earns over 50, or the misses fall on one side only. The strongest arrangement of two stumps corrects in
@@ -206,7 +206,7 @@ nothing in-house solves the task, so the idea has to be right before it is built
    and the other declined).
 20. **A forward window.** The estimand is never the record's own mean or rate restated: the window's figure differs
    from what the history holds by a process of the world the data measures, and the history-mean route files a
-   stated figure against the golden's. task3 arch 8's regulation defined the storms a season as the mean over the
+   stated figure against the golden's. An earlier build's regulation defined the storms a season as the mean over the
    record's warm seasons, so the 2027 to 2031 programme did no work and the task reduced to correcting the record.
 21. **Zero construction tells (Holistic Audit v4 Part D.3).** Generated data must never contain empty bands / dead zones
    carved around a threshold (task27 arch 1: 0 BIP notices between 23.23 h and 25.62 h), exact zero-variance duration/lag
@@ -242,13 +242,13 @@ screen, whatever its domain or nouns.
 | dated works, commissioning or closes carried at the organisation's own record of past slips | task20 arch 4 (R65, one run of two), task10 arch 7 (commissioning by class with censoring, R07); lost once (L46) | 2 (a reflex with occasional misses, never a stump on its own) |
 | a contracted intervention's delivered amount measured from the record's own events, the counterfactual rebuilt outside the window | task10 arch 7's runs (the come-back replayed at the events' megawatts, the cold end read from the hours before the window) | 2 |
 | net against gross load rebuilt from a shipped distributed-generation register and a metered production sample (the peak hour moving later) | the task26 screen against test 2's ingredients rule | 2 |
-| a tipping bucket's loss by rain rate, fitted through a storage gauge's visit-interval account | task3 arch 8, run 2 (R98, a tipping time per station, about 20 per cent at 100 mm an hour against the golden's 20.2) | 18 (the account scores the loss) |
-| an ungauged site's ratio to its station read off a radar's pixel pairs storm by storm | task3 arch 8, both runs (R99; run 1's log mean 0.323 is the golden's 1.38) | 18 (the pairs read the ratio off) and 2 |
-| hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | task3 arch 8, both runs (R100) | 18 and 16 (the slice is a calibration set) |
-| a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | task3 arch 8, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
-| stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | task3 arch 9's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
-| stand-down hours with no well-covered day, the storm process fitted to the thin records through the filed detection curve (with and without flash structure) | task3 arch 9's redraws, the screen (a ladder of the record thinned further and extrapolated to full sight filed the golden's call at 11 of 12 and 7 of 16 settings) | 18 (a filed recording law is a handle) |
-| a roadside thermometer's shield solar gain and a pavement puck's depth, restated to new standard sensors that the restriction rule runs on | task3 arch 10's first screen (the gain is the calibrated-source card's trap word for word; the prompt names the new basis, so both recognitions come with it) | 18 (a reading biased against the truth is the calibrated-source card, whatever the estimator) |
+| a tipping bucket's loss by rain rate, fitted through a storage gauge's visit-interval account | an earlier build, run 2 (R98, a tipping time per station, about 20 per cent at 100 mm an hour against the golden's 20.2) | 18 (the account scores the loss) |
+| an ungauged site's ratio to its station read off a radar's pixel pairs storm by storm | an earlier build, both runs (R99; run 1's log mean 0.323 is the golden's 1.38) | 18 (the pairs read the ratio off) and 2 |
+| hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | an earlier build, both runs (R100) | 18 and 16 (the slice is a calibration set) |
+| a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | an earlier build, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
+| stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | an earlier build's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
+| stand-down hours with no well-covered day, the storm process fitted to the thin records through the filed detection curve (with and without flash structure) | an earlier build's redraws, the screen (a ladder of the record thinned further and extrapolated to full sight filed the golden's call at 11 of 12 and 7 of 16 settings) | 18 (a filed recording law is a handle) |
+| a roadside thermometer's shield solar gain and a pavement puck's depth, restated to new standard sensors that the restriction rule runs on | an earlier build's first screen (the gain is the calibrated-source card's trap word for word; the prompt names the new basis, so both recognitions come with it) | 18 (a reading biased against the truth is the calibrated-source card, whatever the estimator) |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 

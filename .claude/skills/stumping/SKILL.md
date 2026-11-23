@@ -388,7 +388,7 @@ measure of difficulty: no judge, reader or in-house pass solves the task, so the
 
 **Our own live builds against the page** (`skeleton.py closed`): of the six builds READY in slots 1 to 10, task8 v20
 turns on a lesson the read of 2026-11-21 closed (a second reading anchored on the first, measured on scripts also
-marked cold: the calibration card), task1 v6, task3 v8 and task4 v14 turn on lessons next to a card (the
+marked cold: the calibration card), task1 v6, an earlier build and task4 v14 turn on lessons next to a card (the
 completeness card, and the margin card twice), and task5 v5 and task9 v4 read open by key (task5's three stumps are
 recording shares measured against an independent count, which a reviewer may read as the completeness card whatever
 the key says). Among the older builds task12, task15, task19 and task21 turn on a closed lesson and task12 and
@@ -480,7 +480,7 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    on shipped evidence that rules between estimators: a random labelled pilot in one arm, a dated item on two of
    three conditions, earlier years the treatment never reached. The golden reproduces the slice, each rival misses it
    by a figure ("pinned out by the pilot", "rebutted by shipped evidence", "fails its own test"), and the slice does
-   not cover the target. **A referee is a calibration set first**: task3 arch 8's runs never read the research
+   not cover the target. **A referee is a calibration set first**: an earlier build's runs never read the research
    valley's weighing gauges raw; they calibrated the whole chain on them end to end, conditioned on the radar's
    ratios, integrated the residual and filed every class (R101). So a slice that observes the target, or a stump's
    own quantity, under the members' instruments is shipped only where the calibrated run route on it (rule 7) files
@@ -514,7 +514,7 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    component falls with two stumps or with none, or a stump with no component of its own (`critical components
    independent`).
 7. **The runs' recorded routes are the opponent, and the misses fall on both sides of a line.** The careful column is
-   not our hurried route. task3 arch 8 priced one factor per station, the rainfall normal's ratio and hail read as
+   not our hurried route. An earlier build priced one factor per station, the rainfall normal's ratio and hail read as
    rain; both runs took none of them. They fitted a tipping time through the storage gauge's account (R98), read each
    source's ratio off the radar's pixel pairs (R99), calibrated hail on the research valley (R100) and integrated the
    residual into expected counts (R101). Every open member sat 1.1 to 1.5 storms above its line with every priced
@@ -533,7 +533,7 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    (`sides.over`, `stump S two-sided`). Each route is built against each stump's own mechanism and priced over its
    whole family: the cut-off route is the filter a run puts in place of that stump's fit, at every cut it could
    choose (`"cutoff:<label>"` keys), the calibrated route every slice it could match to the target, chosen per member
-   to match that member's own distribution (a run that sees one global setting fail picks one per member). task3 arch 9's
+   to match that member's own distribution (a run that sees one global setting fail picks one per member). An earlier build's
    first core priced a cut-off on seasons while the filter that replaces its replay, the well-covered days kept to
    the thin stations' storm size, filed the golden's call at every cut from 5 to 12 strokes, and its legacy
    receiver filed the golden's call at any worth from 0 to 0.4. And no stump has a validation handle (stump-screen test 18): where a shipped file lets a run score
@@ -543,7 +543,7 @@ difficulty, never a chain, and two of the three decide on lessons the page holds
    false across every unit, identified only through a covariate the run builds from another file or an internal
    consistency check, with no file that hands it over (N42: one bucket model's correction put on the other "for want
    of an independent check", which cost run 1 four figures at the 0.2 mm stations; L53; examples 16 and 17). The
-   estimand is a forward window (test 20): task3 arch 8's regulation made the answer the record's own 18-season mean,
+   estimand is a forward window (test 20): an earlier build's regulation made the answer the record's own 18-season mean,
    so the programme window did no work. The note's Frontier check carries `Run routes:`, `Validation handles:` and
    `Forward window:` (`precut.py`, from `RUNS_FROM`).
 
@@ -715,7 +715,7 @@ or named-assumption id). Then:
   shipped fields, never the lattice's own weaker version: every field the pack names and every covariate one join,
   group-by, filter or flag gives, fitted at full strength wherever a shipped file checks the correction and on every
   mechanism of the world the rows carry, while an observation-process correction nothing shipped checks is priced on
-  the run routes (`references/stump-screen.md` tests 18 and 19), and the factorial is run on it. task3 arch 11's valley core passed corelib at level 4 on five seeds with the lattice's reflex route,
+  the run routes (`references/stump-screen.md` tests 18 and 19), and the factorial is run on it. An earlier build's valley core passed corelib at level 4 on five seeds with the lattice's reflex route,
   and failed once the receptor regression a run builds on the stacks' CEMS (each stack's stored night mass at the
   breakup, fitted monitor by monitor) was the reflex route: one stump fixed alone on it reached the call.
 - **Necessary.** Each stump, dropped alone from the golden (everything else right), moves the call.
