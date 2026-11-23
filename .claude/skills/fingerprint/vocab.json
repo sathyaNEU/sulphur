@@ -294,6 +294,12 @@
    "sensor-calibration-measurement",
    "hydrology-flood-frequency",
    "emissions-inventory",
+   "geostatistical-spatial-estimation",
+   "inverse-problems-data-assimilation",
+   "design-of-experiments",
+   "process-control-measurement-systems",
+   "reliability-life-data",
+   "geophysical-retrieval-remote-sensing",
    "other"
   ],
   "energy-systems-utilities": [
@@ -1234,6 +1240,67 @@
      "etl",
      "descriptive-distribution",
      "comparative-explanation"
+    ],
+    "geostatistical-spatial-estimation": [
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
+    ],
+    "inverse-problems-data-assimilation": [
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
+    ],
+    "design-of-experiments": [
+     "experiment-causal",
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
+    ],
+    "process-control-measurement-systems": [
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
+    ],
+    "reliability-life-data": [
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
+    ],
+    "geophysical-retrieval-remote-sensing": [
+     "descriptive-distribution",
+     "comparative-explanation",
+     "anomaly-detection",
+     "root-cause",
+     "forecasting",
+     "opportunity-sizing-decision",
+     "etl",
+     "data-quality-monitoring"
     ]
    }
   },

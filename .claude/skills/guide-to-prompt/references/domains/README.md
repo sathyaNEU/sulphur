@@ -3,7 +3,7 @@
 The client's Sulfur domains are the same seven groups and 21 domains as Mark's; the Sulfur lines for each (task
 types, what makes it deep, domain fit) are at the end of this file and are read first. The task-type keys below are
 the ones `fingerprint/vocab.json` enforces; where Sulfur's task-type list differs (Quantitative Finance's eleven
-finer types, Physical & Environmental Sciences' eleven, Energy's dispatch and adequacy types, Human Factors' four),
+finer types, Energy's dispatch and adequacy types, Human Factors' four),
 the card takes the nearest vocab key and names the Sulfur task type in its `niche`.
 
 Seven groups, twenty-one client domains, each with its task types; every task type serves one or two of the eight
@@ -204,6 +204,17 @@ themselves; `economics` to `economics-econometrics`; `policy-education` to `poli
 - `sensor-calibration-measurement`: DQ
 - `hydrology-flood-frequency`: F
 - `emissions-inventory`: ETL, DD
+- `geostatistical-spatial-estimation`: DD, F, OS, RC, AD, ETL, DQ (the client's Geostatistical & spatial-field estimation)
+- `inverse-problems-data-assimilation`: F, RC, DD, OS, AD, ETL, DQ (Inverse problems; Physical-model calibration & data
+  assimilation)
+- `design-of-experiments`: EC, OS, RC, F, DD, AD, ETL, DQ (Design of experiments: factorial designs, response-surface
+  optimization)
+- `process-control-measurement-systems`: DQ, AD, RC, DD, F, OS, ETL (Statistical process control: control charts,
+  capability and measurement system analysis)
+- `reliability-life-data`: F, OS, RC, DD, AD, ETL, DQ (Reliability analysis: life-data analysis, accelerated testing,
+  failure modeling)
+- `geophysical-retrieval-remote-sensing`: ETL, DD, DQ, AD, F, RC, OS (Geophysical retrieval from remote-sensing or
+  instrument data)
 
 ### Energy Systems & Utilities (`energy-systems-utilities`)
 
