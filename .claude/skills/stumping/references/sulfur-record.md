@@ -66,19 +66,10 @@ chain row also notes the spread (results lost to deep classes per run) from `/tr
 
 ## Lessons
 
-- **A stump with a validation handle is made, and a one-sided call lands on generous routes** (an earlier build, task22
-  arch 1, task13 arch 2; moved into `../SKILL.md` Part 1d rule 7, `stump-screen.md` tests 16 and 18 to 20,
-  `corelib.py` `run_routes` and `both sides of the line`, `precut.py` from `RUNS_FROM`). An earlier build shipped a check
-  beside each stump: the storage gauge's account scored the bucket's loss, the radar's pixel pairs read each source's
-  ratio off, and a research valley of weighing gauges scored the whole chain. Both runs fitted every correction they
-  could check (R98 to R100), calibrated the chain end to end on the valley with the residual integrated (R101) and
-  filed all seven classes against a paper pair of 26.7. task22 arch 1's runs replayed the switching log on the GIS
+- **A stump with a validation handle is made, and a one-sided call lands on generous routes** (task22 arch 1, task13 arch 2; moved into `../SKILL.md` Part 1d rule 7, `stump-screen.md` tests 16 and 18 to 20,
+  `corelib.py` `run_routes` and `both sides of the line`, `precut.py` from `RUNS_FROM`). task22 arch 1's runs replayed the switching log on the GIS
   and computed the losses hour by hour because both shipped (R38 to R42); task13 arch 2's pass read each
-  controller's drift off self-tests stamped at true time. The precedents the designs cited (N21, N26, N01, N30) were
-  waved through by runs that had no file to check them against, so they never transferred. The one place a run lost
-  figures was a default it set for want of a check (N42: one bucket model's correction on the other), and it still
-  filed every class because every open member sat 1.1 to 1.5 above its line with every priced shortcut under it:
-  over-correcting was never punished. The live ground is a parameter the run must set, whose default the world
+  controller's drift off self-tests stamped at true time. The live ground is a parameter the run must set, whose default the world
   makes false across every unit, identified only through a covariate built from another file or an internal
   consistency check, with the misses on both sides of the line and the four run routes implemented in `core.py`.
 
@@ -122,13 +113,9 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
 A lesson is written here only when two or more rows show it, with the rows named. A lesson that changes how a build
 is designed is moved into the skill it governs in a `SKILLS:` commit, and its line here then points at the skill.
 
-- **A mechanism the rows visibly carry is modelled on sight** (task2 arch 3, an earlier build, task5 arch 2, task7 arch 4 round 2,
+- **A mechanism the rows visibly carry is modelled on sight** (task2 arch 3, task5 arch 2, task7 arch 4 round 2,
   task8 arch 17; moved into `../SKILL.md` Part 0 and Part 3: the careful column earns any result whose only
-  difficulty is a pattern one plot or one group-by shows, and `precut.py` refuses a hurried failure the runs do not make). Both runs of the first three builds
-  spent 19 to 48 minutes, cleaned every Layer 1 item, and built the physical mechanism the data showed (dose volume
-  falling with the litres a set had pumped; dewatering bounded by the receiving plant's hourly headroom) as their
-  first model, then validated it on held-out rows of the same stream; an earlier build's runs also took the field's default control (remote
-  same-aquifer wells beyond the cone) without being led to it. A deep step whose content is "model the
+  difficulty is a pattern one plot or one group-by shows, and `precut.py` refuses a hurried failure the runs do not make). Both runs of task2 arch 3 cleaned every Layer 1 item and built the physical mechanism the data showed as their first model, then validated it on held-out rows of the same stream. A deep step whose content is "model the
   structure the rows show" is a reflex for these runs; the live ground is a structure the rows in view hide or
   mimic (two effects offsetting inside the observed window, a support or sampling property the observed values do
   not share with the decision unit), with the deciding evidence in a second file at another grain or scale.
@@ -210,8 +197,7 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   arch 1, 46.5 against about 95; the judges' first passes on task16 arch 2 and task13 arch 2, 46.7 and 16.2 against
   about 70 and 73). Moved into `../effort.py` and `../SKILL.md` Part 3.2: a careful-column loss cites `precedents.json`
   or is graded Right, and the cited pair estimate is held to 50.
-- **What the runs name as an untested assumption was true in our worlds** (task10 arch 6, task4 arch 6, task16 arch 1,
-  an earlier build: the contract's scaling, the distance transfer, the surface's calibration, the aquifer's persistence).
+- **What the runs name as an untested assumption was true in our worlds** (task10 arch 6, task4 arch 6, task16 arch 1: the contract's scaling, the distance transfer, the surface's calibration).
   In the client's level 4 and 5 tasks the named assumption is false and testable from another file (vintage drift,
   network rates on risk-selected picks, an instrument change flagged and never tested). Moved into `../SKILL.md` Part
   1b, lever 2.
@@ -232,11 +218,10 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
 - **Phase 2 (2026-11-21): the page grew to 45 cards and the guidelines of 11/20 name "only one decisive step" as a
   send-back.** The eleven new cards close a fourth of Part 1b's six places (the margin) and the commonest
   observation-process corrections (a completeness gross-up, a bias calibrated on checked cases, a basis restated,
-  the treatment changing who is recorded). Read against them, of the six builds READY in slots 1 to 10: task8 v20
-  turns on a lesson now closed (a second reading anchored on the first, measured on scripts marked cold), task1 v6,
-  an earlier build and task4 v14 on lessons next to a card, task5 v5's three stumps are recording shares from an independent
+  the treatment changing who is recorded). Read against them, of the builds READY in slots 1 to 10: task8 v20
+  turns on a lesson now closed (a second reading anchored on the first, measured on scripts marked cold), task1 v6 and task4 v14 on lessons next to a card, task5 v5's three stumps are recording shares from an independent
   count (the completeness card by its fix, whatever the key), and task9 v4 is off the page. The critical components
-  were independent on an earlier build, task4, task5 and task8 and joint on task1 (two stumps with no component of their own)
+  were independent on task4, task5 and task8 and joint on task1 (two stumps with no component of their own)
   and task9 (one component falling with all three). The guidelines' other new rules (the critical components as the
   decisive steps' answers in a requested deliverable, one to four multi-faceted asks, the clean-data test, the
   `Valid Stump?` field) moved into `../SKILL.md` Parts 1c, 1d, 2.3 and 3.3, `corelib.py` (`critical components

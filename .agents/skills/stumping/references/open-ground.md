@@ -102,7 +102,7 @@ credit card).
 outcome's bound, transport), L42 (a response capped where the obvious channel stops, the range card), L43 (a lost
 attribute rebuilt by a calibrated rule, the calibration card), L44 (level and mix from two sources, the
 completeness card), L41, L45 and L37 (a held-out error or a back-test that cannot see the condition, the card for a
-score on the choosing data), N02, N06, N17 and N38 (a planned change or a shared capacity left out of the forward
+score on the choosing data), N02, N17 and N38 (a planned change or a shared capacity left out of the forward
 window, the projection card), L56 to L58 and N40 (recording effects kept as a sensitivity, cut at a threshold, read
 one at a time, or left unresolved between two arms: the completeness and calibration cards).
 

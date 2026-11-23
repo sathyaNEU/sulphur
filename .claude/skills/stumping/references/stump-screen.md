@@ -47,12 +47,7 @@ holds:
 A region-wide or network-wide total may ship, but only as the falsification check (test 16). The world passes only
 where each instrument sees a different part of the estimand and none closes the whole: the approved builds' anatomy
 (`CLAUDE.md`, the four approved builds), stated as a gate. Where it fails, the strongest route calibrates end to end
-and every trap dies at test 15 or 18 however good it is. Every world an earlier build priced in arithmetic died
-that way: the coater's solvent account (b), the effluent works' scheduled grabs, the radon zones' monitors, the
-valley SO2 monitors, the construction-erosion storm gauges, the river reaches' ammonia sondes, and the rail yard's
-six monitors, asked for an annual mean and again for hours over an action level (all (a), the last two with (c)). A
-first wording, whether any record observes the estimand itself, let the river and rail worlds through, because no
-record observes a 2027 counterfactual; the wording above kills all seven on its literal text.
+and every trap dies at test 15 or 18 however good it is.
 
 ## The twenty tests (every kept trap answers YES to all twenty)
 
@@ -72,10 +67,7 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    that bias each other's estimate when each is fitted alone, with no checked sample, separated by one joint fit and
    proved on a signal the recording conditions cannot move, are open (`open-ground.md`, recording effects tangled
    together; the client's example 17, L56 to L58), and so is a recording stump whose estimator is a conservation
-   residual, a recording algorithm inverted or a state the record never held. An earlier build's effluent candidate
-   (ammonia lost from a sample waiting warm in its bottle, gained from a sample line that stood) is the single-effect
-   case: each effect fitted alone on its own logged condition landed every member (weff4.py to weff9.py), so such a
-   world lives only where nothing shipped checks either correction.
+   residual, a recording algorithm inverted or a state the record never held. Where each effect can be fitted alone on its own logged condition, the runs land every member, so such a world lives only where nothing shipped checks either correction.
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
    reporting lags, de-duplicating, a constant-unit panel, re-weighting to the target's mix, the field's textbook
    estimator, hold-outs, back-tests, bootstraps). If that battery executed perfectly lands inside the band, it is not
@@ -99,12 +91,10 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    informative of the forward window; N13 the latest rate taken as the end state; N01 an enlarged load assumed to
    scale in proportion; L07 a measurement change flagged and never tested; L37 a check that cannot see the
    condition; L40 to L42 a fitted form or effect held constant past the data's support; L43 and L44 a deferral
-   where the bridge has to be built; N42 one instrument model's correction put on another for want of a check). The
+   where the bridge has to be built). The
    world's process makes it false for the target and weaker in the history, so the run's own back-test still passes.
    **A precedent transfers only with its condition**: every named assumption on file was waved through because no
-   shipped file let the run score it. An earlier build cited N21, N26, N01 and N30 for three stumps whose checks it
-   shipped (the storage gauge's account, the radar's pixel pairs, the research valley's gauges), and both runs made
-   all three (R98 to R100). A precedent cited for a stump with a validation handle (test 18) prices nothing.
+   shipped file let the run score it. A precedent cited for a stump with a validation handle (test 18) prices nothing.
 7. **A plausible shallower story.** The data offers a wrong explanation that passes its own checks (L26), so a run
    that notices the pattern still files the wrong number.
 8. **Across the data.** The process runs through the history at different sizes, never only in the deciding units,
@@ -155,9 +145,7 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    statistic of the members' own records that the golden's model reproduces and each rival's misses, with no file
    observing the target (example 17's qualifying share within the households that say they are falling behind,
    rising across the deadline bands while their share of the sample stays flat; the leave-one-out and leave-two-out
-   table beside it). **A referee is a calibration set first**: an earlier build's runs never read the research valley's
-   gauges raw; they calibrated the whole chain on them end to end, conditioned on the radar's ratios, integrated the
-   residual and filed every class (R101). So a slice that observes the target, or a stump's own quantity, under the
+   table beside it). **A referee is a calibration set first**: runs never read it raw; they calibrate the whole chain on it end to end, conditioned on the other instruments shipped, and carry it to the members. So a slice that observes the target, or a stump's own quantity, under the
    members' instruments is shipped only where the calibrated run route on it files the wrong call (test 19), and
    otherwise the falsification check forces the call. In the prototype the golden reproduces the slice or the
    statistic and each rival misses it by a stated figure. A fork a referee or a falsification check closes is still
@@ -168,9 +156,7 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    (decided on a second basis the same records support). Name which, with the figures. The arrangement is drawn from
    this world's records and is never the one a build on file used. The family sentence is priced as well: the one
    sentence that names what the kept stumps share rescues a third of the rubric or less on the reflex route, or the
-   stumps are one lesson however different their records (an earlier build's coater pair: "the certificates are
-   test-day figures; the gas meters and the waste manifests show what each line did" rescued about 75 points
-   against a ceiling of 33). Two recording effects on one instrument are two traps when each has its own recording
+   stumps are one lesson however different their records. Two recording effects on one instrument are two traps when each has its own recording
    condition (its own covariate), its own fitted figure and its own member, no checked sample ships, and the sentence
    that names their joint fit, handed to the reflex route at full strength, rescues a third of the rubric or less: a
    sentence that names a method the data force while each effect's construction is still the run's to build does not
@@ -178,9 +164,7 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    recording and interview length on one survey as two decisive steps).
 18. **No validation handle.** No shipped file lets a run score the stump's own quantity, or the target, under the
    members' instruments: a total that closes the loss, a pair that reads the ratio off, a slice that scores the
-   chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there
-   (an earlier build: the tipping time fitted through the storage gauge's account, R98; each source's ratio read off the
-   radar's pixel pairs, R99; hail calibrated on the research valley's weighing gauges, R100). The approved runs and
+   chain, a confirming log that counts the cases. Where one exists the run fits the correction and checks it there. The approved runs and
    the client's hardest examples lost where nothing scores the correction: they saw the signal and kept it as a
    sensitivity ("not a uniquely identified correction"), cut at a threshold, picked one arm, or declined to estimate
    (L53, examples 16 and 17). So the parameter is identified only through a covariate the run must build from
@@ -191,53 +175,40 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    a covariate built from a second file or a joint fit with a tangled neighbour, (b) its default passes the back-test
    a run does on the history, because the world's process is weaker there, and (c) the process that moves the forward
    window is not a closed card's fix. No collocated pair ships for any stump's parameter (two heights or two sensors
-   at one site, a total beside a tally): that pairing was R98's and R99's handle. **The strongest run's route is priced
+   at one site, a total beside a tally). **The strongest run's route is priced
    at full strength on the shipped fields wherever a shipped file lets a run check the correction** (a validation
    handle, a calibration slice, a target or an account observed at the members: test 0) **and on every mechanism of
    the world the rows carry**: every field the pack names and every covariate that one join, group-by, filter or flag
    of a shipped log gives, fitted jointly, and that route files the wrong call or the stump is a reflex. Every
-   correction on file that a run made unprompted had such a check (R09, R15, R41, R57, R66, R68, R74, R98, R100,
-   R101). An observation-process correction that nothing shipped checks is priced on test 19's run routes instead
+   correction on file that a run made unprompted had such a check (R09, R15, R41, R57, R66, R68, R74). An observation-process correction that nothing shipped checks is priced on test 19's run routes instead
    (kept as a sensitivity, cut at a threshold, declined, applied generously), because that is where the runs on
    record lost it (L56, L57, L53; `CLAUDE.md`: they "lose where nothing checks the correction"), so a time to or
    since a logged event (days to each interview's own deadline) prices at full strength only where a shipped file
-   checks the correction it carries. An earlier build's coater pair died on it: the oxidiser's daily gas regressed on each line's sprayed solvent
-   with fan hours and ambient called 8.5 of 9 lines right, and the booth sludge split the same way, so a conservation
-   account whose every term ships is the runs' (R98, task22 arch 1). The golden needs (a) a covariate built from a
+   checks the correction it carries. A conservation account whose every term ships is the runs' (task22 arch 1). The golden needs (a) a covariate built from a
    second file by a construction that is not a join, union, filter, stratification or re-key (days to each
    interview's own deadline, the queue a case opened under, each customer's use count across two systems), or (b) a
    joint fit of two effects that each bias the other when fitted alone, one of them not a named field (a default
    multiple regression already fits two named ones), and each such loss cites a precedent where a run was seen one
    move short (L56 to L67). No field a real record of that kind carries is withheld to keep a covariate unbuilt: a
-   laboratory extract carries its received and analysed times, and an earlier build's effluent candidate held only with
-   them withheld (any later timestamp recovered the bottle's loss on 19 of 19 members). The note's `Validation handles:`
+   laboratory extract carries its received and analysed times. The note's `Validation handles:`
    line is the matrix of every shipped file against every stump's parameter. **A near-complete slice beside a filed
    recording law is a calibration set** even when no file holds the target: thinned through the law, the slice
-   simulates the record, and any calibration matched to each member's own distribution recovers the stump (an earlier
-   build's first cores: the well-covered days thinned through the vendor's curve, with one donor cut per station
-   matched to its own recorded storm sizes, filed the golden's call in 24 of 27 settings, so the golden's unfold
-   differed from the run's ratio in precision only). Such a stump is identified from the thin records' own internal
+   simulates the record, and any calibration matched to each member's own distribution recovers the stump. Such a stump is identified from the thin records' own internal
    variation (the same units seen at two recording levels, the record's own timing), never from a slice that sees
    the process whole. **And a filed recording law is itself a handle**: with the law in the pack, a run degrades its
    own record further through it (thins it to fewer sensors, adds the filed error), fits how the figure moves with
-   the depth of recording, and extrapolates to full sight. An earlier build's donor-free rebuilds were determinate across
-   seven and eight storm families and still landed: a log ladder of hours on the share located filed the golden's
-   call at 11 of 12 settings, and with flash structure the ladder scaled by the textbook flash formula at 7 of 16,
-   because the full record is the smooth limit of the record at successive depths. So a live recording stump turns
-   on an unfiled parameter of the recording (what an older receiver adds, which no document states), identified by a
-   joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over
-   (the strong strokes every network locates put a station's true count within ten per cent and read the receiver's
-   worth off, the warning case beside it). **An unfiled parameter is still a closed card when its fix is the card's**: a
+   the depth of recording, and extrapolates to full sight, because the full record is the smooth limit of the record at successive depths. So a live recording stump turns
+   on an unfiled parameter of the recording, identified by a
+   joint fit or by a covariate built from another file, and no near-complete subsample hands that parameter over. **An unfiled parameter is still a closed card when its fix is the card's**: a
    bias sized on cases where the source and a checked value both exist, by group or not, is the calibrated-source
    card (test 1), and a shield's solar gain, a gauge's undercatch or a sensor's offset sized that way is that card
-   whatever else the record carries (an earlier build's first screen also handed the recognition over in its frame); a
+   whatever else the record carries; a
    quantity read off as the residual of a conservation account (what a register cannot otherwise explain, task4's
    lost containers) is another kind of fix, and conservation stays open ground; and a frame with the history on one sensor basis and the decision
    on another hands every run the recognition in the prompt, so two such parameters are never independent.
 19. **The runs' routes land wrong, on both sides of a line.** Beside the hurried, direct and rigorous routes, write
    the four routes frontier runs take and what each files: the generous route (every correction the pack suggests at
-   full strength, the estimate's uncertainty integrated: an earlier build's runs summed exceedance probabilities over a
-   fitted spread, which lifts a tail count above a point plug), the calibrated route (end to end on any slice that
+   full strength, the estimate's uncertainty integrated, so a tail count is an expected count over a fitted spread rather than a point plug), the calibrated route (end to end on any slice that
    observes the target or a stump's quantity), the hedge route (every signal noticed, reported as a sensitivity, the
    face value central: L53, examples 16 and 17) and the cut-off route (a filter where a fitted model is needed:
    example 17's best run kept the interviews more than 14 days out). Each files a wrong call, and the misses across
@@ -245,18 +216,14 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    where under-correcting does, so no blanket adjustment lands the call, and each stump on its own: pushed past its
    fitted value to the far end a run might set, it files a wrong call too. A route with a free setting is priced at
    every setting (every cut of the filter that replaces the stump's fit, every slice a calibration could be matched
-   on), because the run picks the setting that matches its target (an earlier build's first core: the well-covered days
-   kept to the thin stations' storm size filed the golden's call at cuts from 5 to 12 strokes). An earlier build sat every open member 1.1 to
-   1.5 storms above its line with every priced shortcut under it, and the runs' generous corrections filed all seven
-   classes. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
+   on), because the run picks the setting that matches its target. `core.py` implements the four (`run_routes`) and `corelib.py` refuses a core where one files the right
    call, earns over 50, or the misses fall on one side only. The strongest arrangement of two stumps corrects in
    opposite directions on shared members, so each fixed alone moves the call to the other wrong side: the run that
    solves one lands across the line one way and the run that solves neither the other way (L06, L63, one step fitted
    and the other declined).
 20. **A forward window.** The estimand is never the record's own mean or rate restated: the window's figure differs
    from what the history holds by a process of the world the data measures, and the history-mean route files a
-   stated figure against the golden's. An earlier build's regulation defined the storms a season as the mean over the
-   record's warm seasons, so the 2027 to 2031 programme did no work and the task reduced to correcting the record.
+   stated figure against the golden's.
 
 ## Measured dead: never draw these again
 
@@ -278,13 +245,6 @@ screen, whatever its domain or nouns.
 | dated works, commissioning or closes carried at the organisation's own record of past slips | task20 arch 4 (R65, one run of two), task10 arch 7 (commissioning by class with censoring, R07); lost once (L46) | 2 (a reflex with occasional misses, never a stump on its own) |
 | a contracted intervention's delivered amount measured from the record's own events, the counterfactual rebuilt outside the window | task10 arch 7's runs (the come-back replayed at the events' megawatts, the cold end read from the hours before the window) | 2 |
 | net against gross load rebuilt from a shipped distributed-generation register and a metered production sample (the peak hour moving later) | the task26 screen against test 2's ingredients rule | 2 |
-| a tipping bucket's loss by rain rate, fitted through a storage gauge's visit-interval account | an earlier build, run 2 (R98, a tipping time per station, about 20 per cent at 100 mm an hour against the golden's 20.2) | 18 (the account scores the loss) |
-| an ungauged site's ratio to its station read off a radar's pixel pairs storm by storm | an earlier build, both runs (R99; run 1's log mean 0.323 is the golden's 1.38) | 18 (the pairs read the ratio off) and 2 |
-| hail held in an unheated funnel and tipped late, corrected by a hail multiplier on a weighing-gauge slice | an earlier build, both runs (R100) | 18 and 16 (the slice is a calibration set) |
-| a research valley of weighing gauges above a station with the members' instruments, shipped as a referee | an earlier build, both runs (R101: the whole chain calibrated on it end to end, the residual integrated, every class filed) | 16 and 19 (the calibrated route lands the call) |
-| stand-down hours from a stroke network's well-covered days, thinned through the filed detection curve and unfolded by storm size | an earlier build's first cores, the screen (a per-station matched donor cut filed the golden's call in 24 of 27 settings) | 18 (a near-complete slice beside a filed law is a calibration set) and 19 |
-| stand-down hours with no well-covered day, the storm process fitted to the thin records through the filed detection curve (with and without flash structure) | an earlier build's redraws, the screen (a ladder of the record thinned further and extrapolated to full sight filed the golden's call at 11 of 12 and 7 of 16 settings) | 18 (a filed recording law is a handle) |
-| a roadside thermometer's shield solar gain and a pavement puck's depth, restated to new standard sensors that the restriction rule runs on | an earlier build's first screen (the gain is the calibrated-source card's trap word for word; the prompt names the new basis, so both recognitions come with it) | 18 (a reading biased against the truth is the calibrated-source card, whatever the estimator) |
 
 ## The evidence behind the tests (task20, the card-panel nowcast, two blind judge passes)
 
