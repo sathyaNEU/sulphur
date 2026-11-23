@@ -85,6 +85,14 @@ of the lattice on that rubric and refuses a core
 where a run that loses any one stump still clears ONE_LOST_MAX, where the reflex route clears REFLEX_MAX, or where
 fixing one stump alone on the reflex route earns nothing or more than a third.
 
+The pricing grades a figure against the golden's band only. The platform's Holistic Audit grades a figure computed
+from an earlier one on the response's own earlier figure (error carried forward, holistic-audit-v4 C1 rule 5) and
+caps every criterion at 20, so under the audit a run that misses only one step keeps about 0.60 whatever the asks
+(task9, 2026-11-22: corelib priced one stump lost at 26, the audit measured 72). Where the author has ruled on that,
+spec["waivers"] ({row name: the ruling, with its date}, read by core.py from pipeline.json `rulings`) turns the two
+rubric rows ("one stump lost, the run stays under the bar", "the reflex route on the rubric") from FAIL to WARN with
+the ruling printed. No other row can be waived.
+
 The critical components are the decisive steps (the client's guidelines of 11/20, guidelines/client/
 guidelines-2026-11-20.md: "list the two or more decisive, challenging steps and the correct answer to each", "a model
 that gets one step wrong should still be able to earn the others"). So every component figure is one stump's own:
@@ -108,6 +116,7 @@ BLOCKS = {"recommendation": 18.0, "components": 20.0, "asks": 53.0, "instruction
 ONE_LOST_MAX = 50.0  # what a run that loses any one stump, and nothing else, may still earn (the bar is 60)
 REFLEX_MAX = 30.0    # what the reflex route (every stump lost) may earn; the design aims at the twenties
 HINT_MAX = 100.0 / 3  # what fixing one stump alone on the reflex route may add
+WAIVABLE = ("one stump lost, the run stays under the bar", "the reflex route on the rubric")
 BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its width on each side
 NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched by this about the golden
 INDEPENDENT_FROM = "2026-11-21T08:00:00Z"   # the client's guidelines of 11/20: the critical components independent
@@ -317,8 +326,11 @@ def earnings(spec):
 def check(spec):
     """Returns (rows, level). rows are (name, PASS | FAIL | WARN, detail)."""
     rows = []
+    waivers = {k: v for k, v in (spec.get("waivers") or {}).items() if k in WAIVABLE}
 
     def row(name, ok, detail, warn=False):
+        if not ok and not warn and name in waivers:
+            warn, detail = True, "%s; waived by the author's ruling: %s" % (detail, waivers[name])
         rows.append((name, "PASS" if ok else ("WARN" if warn else "FAIL"), detail))
         return ok
 
