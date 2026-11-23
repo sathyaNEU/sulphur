@@ -1,12 +1,12 @@
 {
  "task": "task9",
- "status": "READY",
+ "status": "RUNS",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-22",
+ "updated": "2026-11-23",
  "doctrine": "throughout",
  "seed": 9505,
  "call": "for 2027 put label revisions in escalation (9.98 points between quarter-end snapshots), put optimisation noise (6.89), feature releases (6.65) and training data (6.62) on remediation plans and leave retunes (4.47) on monitor, against the stability standard's lines of 5.5 and 8 points; 55.0 per cent of 2027's weekly retrains expected to actually run on pinned feature views (an ask, no longer a critical component); 14.0 per cent of merchants change tier between snapshots, 9.7 with the four designated sources removed (the cut pack, generator/results.py)",
@@ -58,7 +58,10 @@
  "runs": {
   "architecture": 5,
   "pair": 3,
-  "files": [],
+  "files": [
+   "runs/run1.md",
+   "runs/run2.md"
+  ],
   "run1": null,
   "run2": null,
   "average": null,
@@ -119,7 +122,33 @@
     "scores": null,
     "reading": "Response 1 filed the golden list (stock, price, trend and promise on; history, seller and match off) and made all three stumps unprompted: it took the ablation effects over the share of pages built at origin from the edge cache record, replayed each source's validity entity by entity with impression weights, and priced the page components from their own holdouts. Response 2 listed stock, price and promise and lost only trend, by diluting the realised costs with the cache share and declining the replay as not reconstructable from daily aggregates. The author's ruling: not difficult enough to stump a frontier model; the core is redrawn."
    }
-  ]
+  ],
+  "date": "2026-11-23",
+  "recorded": "2026-11-23: both responses of the trimmed prompt's first pair pasted by the author without the platform scores or the generated rubric; read in the main thread (runs/triage.md)",
+  "triage": "runs/triage.md",
+  "reading": "Both responses file the same wrong call, optimisation noise escalated (9.10: half a replicate pair a refit summed over thirteen; 12.8698: a whole pair a refit), the other four placements the golden's. Both made the training-data step (6.57, 6.7516) and refused the calendar for pinned views (releases on a plan at 6.41 and 6.3016, the second under the 6.34 floor). Pinned shares 61.17 (calendar 2027 Mondays) and 63.0495 / 61.1264 against 55.0 (53.2 to 60.0): rebuilt in core.py they rest on no reverts netted, with the calendar window admitted; the Step-by-Step's 'with or without reverts' sentence admits the first, a not_pinned risk. One decisive step missed by both (S2); S1 made by 4 of 4 responses across pairs 2 and 3.",
+  "first_wrong_step": {
+   "run1": "method_shortcut: full carry named and waved through ('13 refits accumulate linearly'); its weekly OLS with family fixed effects cannot see the noise level",
+   "run2": "dismissed_own_evidence: 'I examined panel time-series behavior but did not impose an unstated decaying-persistence model'; its own-change residual check is self-confirming"
+  },
+  "decisive_steps": {
+   "S1 training data": "made by both",
+   "S2 optimisation noise": "missed by both",
+   "S3 pinned views (supporting)": "deciding part made by both; shares outside the band"
+  },
+  "estimate": {
+   "strict_bands": {
+    "run1": 54,
+    "run2": 45,
+    "average": 50
+   },
+   "pinned_given_back": {
+    "run1": 63,
+    "run2": 63,
+    "average": 63
+   }
+  },
+  "verdict": "one decisive step by the runs' evidence: build-pipeline routes it REDESIGN; the author's ruling owed"
  },
  "returned": [
   {
@@ -139,7 +168,7 @@
    "moved": "prompt asks trimmed to each source's points and band and the pinned-views share; the workbook's first sheet, the deck (three slides, the shares chart and the tier slide replaced by the pinned-views readings) and the Supplementary Questions follow; the pack byte-identical (target 94505725c5171990), every frozen figure unchanged (freeze.py PASS); corelib one stump lost 26 to 63 and the reflex 16 to 44 on its band-only pricing, WARN by the author's ruling (rulings.rubric_rows)"
   }
  ],
- "resume": "the author re-voices prompt.txt (two asks now: each source's points and band, and the pinned-views share as actual use; voice-check.py task9 --rewrite and leak.py), updates the prompt on the platform (target.zip is unchanged), pastes the new answer blocks, generates a new pair and runs /triage-runs task9; the stump block is written from that pair",
+ "resume": "pair 3 saved and triaged (runs/triage.md), the stump answer in submission.md after the Final Recommendation; the author rules: submit (paste in order, the platform's scores and its holistic audit then recorded), hold for the platform's scores and audit, or redesign (one decisive step by the runs: S1 made by 4 of 4, S2 missed by 4 of 4); risks flagged, not fixed: the pinned-share band edge and the Step-by-Step's 'with or without reverts' sentence",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -294,6 +323,10 @@
   {
    "date": "2026-11-22",
    "event": "RESHIPPED: rubric repair, asks trimmed after the Holistic Audit v3 (0.62); the pair void, status READY"
+  },
+  {
+   "date": "2026-11-23",
+   "event": "RUNS: pair 3 saved, triaged in the main thread, the stump answer written; one decisive step missed by both"
   }
  ],
  "final_cut": {

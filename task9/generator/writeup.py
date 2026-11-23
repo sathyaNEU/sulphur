@@ -39,16 +39,140 @@ def cap(s):
 
 
 def _stump_block(fig):
-    """The form's stump question (How is each model stumped?), mandatory directly after the Final Recommendation once
-    both responses are saved as runs/run1.md and runs/run2.md. The reshipped pack's first pair (archived as
-    runs/arch5_pair2_response_*.md, its block in git at f0d7ea0) ran on the asks the trim of 2026-11-22 removed, so it
-    is void; /triage-runs writes the new pair's block here, every response figure and phrase held exactly as the
-    response writes it and asserted against the saved text, every golden figure from figures.json."""
+    """The form's stump question (How is each model stumped?), written from the two saved responses of the trimmed
+    prompt's first pair (pair 3: runs/run1.md and runs/run2.md; the earlier pairs are archived as
+    runs/arch5_pair1_* and runs/arch5_pair2_*). Every response figure and phrase is held here exactly as the
+    response writes it and asserted against the saved text; every golden-side figure comes from figures.json. It is
+    mandatory once both responses are on file and sits directly after the Final Recommendation."""
+    import csv
     import os
     here = os.path.dirname(os.path.abspath(__file__))
-    if any(os.path.exists(os.path.join(os.path.dirname(here), "runs", n)) for n in ("run1.md", "run2.md")):
-        raise SystemExit("writeup: a new pair is on file; write its stump block in _stump_block before rebuilding")
-    return []
+    task = os.path.dirname(here)
+    r1p, r2p = (os.path.join(task, "runs", n) for n in ("run1.md", "run2.md"))
+    if not (os.path.exists(r1p) and os.path.exists(r2p)):
+        return []
+    t1, t2 = open(r1p, encoding="utf-8").read(), open(r2p, encoding="utf-8").read()
+    rec1 = ("escalate Label revisions (9.99 points) and Optimisation noise (9.10 points); place Training data (6.57 "
+            "points) and Feature releases (6.41 points) on remediation plans; keep Retunes (4.47 points) on monitor")
+    rec2 = ("Escalate optimisation noise and label revisions; put training data and feature releases on remediation "
+            "plans; monitor retunes")
+    q1 = {"inc": "A next refit carries one increment, so per-refit variance is half the pair MS; 13 refits "
+                 "accumulate linearly",
+          "add": "Weekly increments and sources accumulate linearly in MS; source effects persist once landed",
+          "alt": "giving noise 12.87; still Escalation and does not change the call",
+          "ols": "OLS with family fixed effects",
+          "turn": "turnover = (entering + leaving)/(2N)",
+          "obs": "I used planned Monday to first production refit week, not environment release",
+          "on": "9.10", "td": "6.57", "fr": "6.41", "cc3": "61.17%", "ms": "82.8161", "own": "159.1608",
+          "rows": "3,360,865 rows", "runs": "2,464 unique runs", "map": "4,568 IDs", "pairs": "644 pairs"}
+    q2 = {"s14": "§1.4 gives no decay/rho parameter",
+          "unstated": "I did not fit an unstated decay to panel time series and then present it as the standard",
+          "exam": "I examined panel time-series behavior but did not impose an unstated decaying-persistence model "
+                  "on the placement arithmetic",
+          "stable": "own-change residuals under full accumulation were stable across the three closed pairs",
+          "tier": "the tier model reproduced monitor rates",
+          "raw": "Raw bootstrap MSE would overstate training movement by roughly two orders of magnitude",
+          "lags": "scheduler history systematically lags planned weeks",
+          "monitor": "reproduced all 42 counts and changes exactly",
+          "on": "12.8698", "td": "6.7516", "fr": "6.3016", "iso": "63.0495%", "py": "61.1264%",
+          "ms": "165.6321", "own": "74.128653", "map": "4,568 old",
+          "pairs": "644 pairs; 224 release-shadow, 168 retune-shadow, 112 label-freeze, 84 replicate, 56 bootstrap"}
+    for q in list(q1.values()) + [rec1]:
+        assert q in t1, "Response 1 quote missing from runs/run1.md: %r" % q
+    for q in list(q2.values()) + [rec2]:
+        assert q in t2, "Response 2 quote missing from runs/run2.md: %r" % q
+
+    P, B, st, b, pr, lat, bd = (fig[k] for k in ("points", "bands", "stated", "base", "probe", "lattice", "bend"))
+    f2, f1 = (lambda x: "%.2f" % x), (lambda x: "%.1f" % x)
+    pc = lambda q: q[:-1] if q.endswith("%") else q
+    inside = lambda x, k: st[k][0] <= x <= st[k][1]
+    mapped = b["panel_merchants_unmapped"] - b["panel_merchants"]
+    # both responses file the call the lattice gives for the noise step missed alone
+    c = {"optimisation noise: escalation", "label revisions: escalation", "training data: a remediation plan",
+         "feature releases: a remediation plan", "retunes: monitor"}
+    assert c == set(lat["S2"]["call"]), "the responses' call is not the lattice's noise step missed alone"
+    assert set(lat["S1"]["call"]) == (set(fig["call"]) - {"training data: a remediation plan"}) | {
+        "training data: escalation"}, "the training-data step missed alone moves more than training data"
+    assert pr["feature releases on the calendar's planned weeks"] < 5.5
+    # the noise figures are the two full sums, outside the band; the steps called made sit inside their bands
+    assert q1["on"] == f2(pr["thirteen refits added up"]) == f2(lat["S2"]["points"]["optimisation noise"])
+    assert f2(float(q2["on"])) == f2(pr["a whole replicate pair a refit"])
+    assert all(float(q["on"]) >= 8 and not inside(float(q["on"]), "points_optimisation") for q in (q1, q2))
+    assert inside(float(q1["td"]), "points_turnover") and inside(float(q2["td"]), "points_turnover")
+    assert inside(float(q1["fr"]), "points_releases") and 5.5 <= float(q2["fr"]) < 8.0
+    assert all(float(x[:-1]) > st["cc3"][1] for x in (q1["cc3"], q2["iso"], q2["py"]))
+    # the cleaning counts each response reports are the golden's
+    assert "{:,}".format(b["score_rows"]) in q1["rows"] and "{:,}".format(b["manifest_runs"]) in q1["runs"]
+    assert "{:,}".format(mapped) in q1["map"] and "{:,}".format(mapped) in q2["map"]
+    assert str(b["pairs"]) in q1["pairs"] and str(b["pairs"]) in q2["pairs"]
+    assert all("%d %s" % (n, k.replace("_", "-")) in q2["pairs"] for k, n in b["pairs_by_kind"].items())
+    with open(os.path.join(task, "target", "covenant_tier_change_monitor_2026.csv"), newline="") as fh:
+        assert sum(1 for _ in csv.DictReader(fh)) == 42
+    # merchants' own change, the record less the sources, takes up the noise model's difference one for one
+    d_ms, d_own = float(q2["ms"]) - float(q1["ms"]), float(q1["own"]) - float(q2["own"])
+    assert d_ms > 50 and abs(d_ms - d_own) < 0.05 * d_ms, (d_ms, d_own)
+    assert bd["intercept8_min"] > 0
+
+    bo, bt, bf, bc = (band(B[k], d) for k, d in (("points_optimisation", 2), ("points_turnover", 2),
+                                                   ("points_releases", 2), ("cc3", 1)))
+    p1 = (f"**Response 1** files optimisation noise in escalation at {q1['on']} points, where the answer is a "
+          f"remediation plan at {f2(fig['cc2'])} (band {bo}); its other four placements are the answer's, so it "
+          "escalates two sources where the answer escalates one. It saw that a warm-started refit carries the noise "
+          f"of the refits before it, and assumed that noise never fades: \"{q1['inc']}\", and among its "
+          f"assumptions, \"{q1['add']}\". The one alternative it weighed was another full sum, a whole replicate "
+          f"pair a refit (\"{q1['alt']}\"). Its validation could not catch the choice: the weekly regression it ran "
+          f"on the panel (\"{q1['ols']}\") gives every family its own constant, and that constant takes up whatever "
+          "the noise adds week to week, so the fit tested releases, retunes and training rows and never the noise. "
+          f"It made the training-data step, {q1['td']} points against {f2(fig['cc1'])} (band {bt}), by scaling the "
+          f"bootstrap spread to each window's turnover (\"{q1['turn']}\"), and the pinned-views step's deciding "
+          f"move, \"{q1['obs']}\", which keeps feature releases on a plan at {q1['fr']} against "
+          f"{f2(P['feature releases'])} (band {bf}). Its pinned share is {pc(q1['cc3'])} per cent against "
+          f"{f1(fig['cc3'])} (band {bc}).")
+    p2 = (f"**Response 2** files the same call, with optimisation noise at {q2['on']} points: a whole replicate pair "
+          "counted for each of the thirteen refits between two snapshots. It ruled the decay out on the standard's "
+          f"silence (\"{q2['s14']}\"; \"{q2['unstated']}\") and set aside the evidence it had looked at: "
+          f"\"{q2['exam']}\". The check it offers for the full carry cannot fail: its 2026 \"{q2['stable']}\" and "
+          f"\"{q2['tier']}\". Merchants' own change is what the record leaves once the sources are taken out, so it "
+          f"takes up whatever the noise model puts in: Response 2's noise mean-square ({q2['ms']}) is {d_ms:.2f} "
+          f"above Response 1's ({q1['ms']}), and its own change ({q2['own']}) is {d_own:.2f} below Response 1's "
+          f"({q1['own']}), and both responses' tier checks fit 2026 whatever the split, since they see only the "
+          f"sum. It made the training-data step, {q2['td']} points inside the band, by scaling the bootstrap pairs "
+          f"to each week's turnover (\"{q2['raw']}\"), and it refused the calendar for actual use (\"{q2['lags']}\"), "
+          f"keeping feature releases on a plan at {q2['fr']}. Its pinned share is {pc(q2['iso'])} per cent over "
+          f"calendar 2027's Mondays and {pc(q2['py'])} over the four pairs' refreshes, against {f1(fig['cc3'])}.")
+    p3 = ("**Why this is a fair stump.** No planted row and no buried sentence decides it. Both responses cleaned the "
+          f"record to the answer's own counts before they went wrong: Response 1 reports "
+          f"{'{:,}'.format(b['score_rows'])} scored merchant-weeks, {'{:,}'.format(b['manifest_runs'])} distinct "
+          f"runs, {'{:,}'.format(mapped)} Tolka Pay identifiers mapped and {b['pairs']} instrument pairs, and "
+          f"Response 2 the same {b['pairs']} pairs by kind and the 2026 covenant monitor \"{q2['monitor']}\". The "
+          "standard says a warm-started refit's randomness carries (section 1.4, which Response 2 cites) and nowhere "
+          "says it carries in full. How far it carries is in the shape of whole files: in every family's panel "
+          "history the mean-square change between two scores bends towards a ceiling as the gap between them grows, "
+          f"and a straight line through gaps 8 to 26 meets gap 0 at {f1(bd['intercept8_book'])} points squared, book "
+          f"weighted, and at {f1(bd['intercept8_min'])} or more in every family, where a carry that never fades "
+          "runs through the origin. The carry is how the scheduler warm-starts all fourteen families, not a "
+          "property of the units that decide the call, and both responses had the files open (Response 1 regressed "
+          "on the weekly panel; Response 2 says it examined its time-series behaviour). The two steps both responses "
+          "made from the same pack, training data and pinned views' actual use, show the evidence is reachable.")
+    p4 = ("**Why it takes rigour.** The noise has three ready readings and each files the wrong band: the replicate "
+          f"pairs at face value give {f2(pr['the replicate pair read as the gap' + chr(39) + 's whole noise'])} "
+          f"points (monitor); each refit's fresh draw added in full gives {f2(pr['thirteen refits added up'])}, "
+          f"Response 1's figure, and a whole replicate pair a refit {f2(pr['a whole replicate pair a refit'])}, "
+          "Response 2's (escalation both); and the bend fitted free of the replicate pairs gives "
+          f"{f2(pr['unanchored fit'])} but implies replicate pairs of {f2(pr['unanchored implied replicate'])} where "
+          f"{f2(b['replicate'])} is measured. The answer needs each family's curve fitted on its settled warm weeks "
+          f"with its start tied to the measured replicate variance, which gives a persistence of "
+          f"{f2(b['phi_fit'][0])} to {f2(b['phi_fit'][1])} and {f2(fig['cc2'])} points, a remediation plan. The "
+          "steps are independent and each moves its own source: with only the noise step missed, optimisation noise "
+          f"goes to escalation at {f2(lat['S2']['points']['optimisation noise'])} and nothing else moves, the call "
+          "both responses file; with only the training-data step missed, training data goes to escalation at "
+          f"{f2(lat['S1']['points']['training data'])} and nothing else moves; with the calendar taken for actual "
+          "use, feature releases drop to monitor at "
+          f"{f2(pr['feature releases on the calendar' + chr(39) + 's planned weeks'])}. Both responses made the "
+          "training-data step and refused the calendar, and both missed the noise step.")
+    for p in (p1, p2, p3, p4):
+        assert "—" not in p and "–" not in p
+    return ["## How is each model stumped?", "", p1, "", p2, "", p3, "", p4, ""]
 
 
 def write(path, fig):
