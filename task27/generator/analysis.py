@@ -846,14 +846,45 @@ def run_all(target_dir=None):
     open_keys = set(dc_day_key[open_m].tolist())
     s3_unpaired = int(sum(1 for k in dc_day_key[closed_m].tolist() if k not in open_keys))
 
+    # Network-wide S1 and S2 footprint sub-counts (for fairness proof in writeup.py)
+    hot_m = u_ch_c >= 0.95
+    locked_m = is_rail_c & w["lot_bip"][cont_ched_c] & (w["lot_lead_hours"][cont_ched_c] <= 24.0)
+    whv_gap_num = 0.0
+    whv_gap_den = 0
+    for v_i in np.unique(v_c[p_c == 2]):
+        mh = (v_c == v_i) & hot_m
+        mc = (v_c == v_i) & (u_ch_c < 0.92)
+        if np.any(mh) and np.any(mc):
+            whv_gap_num += 24.0 * float((y_c[mh] - y_c[mc].mean()).sum())
+            whv_gap_den += int(mh.sum())
+    whv_twin_gap_h = round(whv_gap_num / max(whv_gap_den, 1), 2)
+    total_rolled_sh = int(w["wf_standby_rolled_total_sh"].sum())
+    locked_total = int(locked_m.sum())
+
     ch_stats = {
         "total_dc_util_min_pct": round(100.0 * float(w["dc_total_util"].min()), 1),
         "total_dc_util_max_pct": round(100.0 * float(w["dc_total_util"].max()), 1),
         "z02_util_max_pct": round(100.0 * float(ch_u[:, 0, :].max()), 1),
         "z07_util_max_pct": round(100.0 * float(ch_u[:, 1, :].max()), 1),
         "z13_util_max_pct": round(100.0 * float(ch_u[:, 2, :].max()), 1),
-        "capped_boxes_count": int((u_ch_c >= 0.95).sum()),
-        "locked_phyto_slots": int((is_rail_c & w["lot_bip"][cont_ched_c] & (w["lot_lead_hours"][cont_ched_c] <= 24.0)).sum()),
+        "capped_boxes_count": int(hot_m.sum()),
+        "hot_z02": int((hot_m & (w["cont_zone"] == 0)).sum()),
+        "hot_z07": int((hot_m & (w["cont_zone"] == 1)).sum()),
+        "hot_bhv": int((hot_m & (p_c == 0)).sum()),
+        "hot_ham": int((hot_m & (p_c == 1)).sum()),
+        "hot_whv": int((hot_m & (p_c == 2)).sum()),
+        "hot_dc_count": int(sum(1 for d_i in range(4) if np.any(hot_m & (w["cont_dc"] == d_i)))),
+        "whv_yard_max_pct": round(100.0 * float(w["port_yard_util"][2].max()), 2),
+        "whv_twin_gap_h": whv_twin_gap_h,
+        "locked_phyto_slots": locked_total,
+        "locked_bhv": int((locked_m & (p_c == 0)).sum()),
+        "locked_ham": int((locked_m & (p_c == 1)).sum()),
+        "locked_whv": int((locked_m & (p_c == 2)).sum()),
+        "locked_shuttles_count": int((n_locked_sh_v > 0).sum()),
+        "rolled_shuttles_count": int((w["wf_standby_rolled_total_sh"] > 0).sum()),
+        "total_rolled_sh": total_rolled_sh,
+        "non_bip_rolled_sh": total_rolled_sh - locked_total,
+        "rail_bip_siblings_count": int((is_rail_c & w["lot_bip"][cont_ched_c] & (~w["cont_bip_sampled"])).sum()),
         "closed_quota_boxes": int(closed_m.sum()),
         "portal_rejected_total": int(w["portal_rejected"].sum()),
         "s3_unpaired_boxes": s3_unpaired,

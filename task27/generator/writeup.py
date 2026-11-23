@@ -3,11 +3,12 @@
 Carries exact platform blocks in order:
   0. ## Tags
   1. ## Final Recommendation
+  1b. ## How is each model stumped? (verified verbatim against task27/runs/response1.md and response2.md)
   2. ## Supplementary Questions (4 multi-faceted asks grouped by file)
   3. ## Critical Components (3 independent one-liners: answer + unit + band ONLY, zero method clauses)
   4. ## Step-by-Step (numbered path + closing passage naming every rival and lattice independence)
 
-Zero em/en dashes, zero typed numbers outside figures.json, zero custom composite indices.
+Zero em/en dashes, zero typed golden numbers outside figures.json, zero custom composite indices.
 """
 import json
 import os
@@ -15,6 +16,56 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TASK_DIR = os.path.dirname(HERE)
+
+# Verbatim quotes and figures from saved platform runs (asserted by checks.py against task27/runs/response{1,2}.md)
+R1_QUOTES = {
+    "rail_2027": "2,620.18",
+    "phyto_2027": "755.40",
+    "total_2027": "21,637.58",
+    "remed_days": "19,924.70",
+    "cost_eur": "EUR 4,507,159.79",
+    "avoid_eur": "EUR 4,176,708.91",
+    "bhv_2027": "10,442.79",
+    "ham_2027": "8,060.23",
+    "q3_2027": "8,452.08",
+    "settled_2026": "19,712.53",
+    "coldstore_2027": "3,364.78",
+    "plug_2027": "3,148.94",
+    "depot_2027": "3,040.73",
+    "dray_2027": "3,219.81",
+    "sib_days": "191.50",
+    "sib_count": "517",
+    "shuttle_q1": "1,110 planned != departed container shuttles",
+    "shuttle_q2": "1,110 standby-rolled slots",
+    "shuttle_skip": "The file was not needed to re-time individual stages because milestone planned / departed IDs and timestamps already encode the roll.",
+    "rail_tight": "rail is the tightest qualifier at 2,620.18 (+120.18)",
+    "s1_inc_h": "20.1032199565 hours",
+    "s1_days": "1,616.63 days",
+    "s1_over_plug": "2,474.36",
+}
+
+R2_QUOTES = {
+    "coldstore_2027": "1,357.389",
+    "plug_2027": "4,754.185",
+    "rail_2027": "2,797.241",
+    "phyto_2027": "495.135",
+    "total_2027": "21,154.323888",
+    "cost_eur": "EUR 4,236,078.68",
+    "avoid_eur": "EUR 3,586,440.01",
+    "bhv_2027": "10,105.589687",
+    "ham_2027": "7,971.959473",
+    "q3_2027": "8,115.658544",
+    "settled_2026": "19,712.530391",
+    "depot_2027": "3,044.605",
+    "dray_2027": "3,218.021",
+    "depot_2026_blk": "1,236.807436",
+    "yard_waves": "January 821.806, June-July 2,483.822, December 1,139.806",
+    "wh_skip": "not a lifecycle timer and not used for dwell attribution",
+    "ctx_only": "were context only",
+    "charter_q": "regardless of which lifecycle stage timer was running",
+    "bip_yard_q": "sampled boxes show no incremental yard dwell (within port-date cells, +0.009 days)",
+    "bol_skip": "one-to-one consignment context, not dwell",
+}
 
 
 def render(fig=None):
@@ -68,6 +119,83 @@ def render(fig=None):
         f"which omit coldstore_dock ({rt['direct']['members']['coldstore_dock']:,.0f} to {rt['rigorous']['members']['coldstore_dock']:,.0f}) "
         f"and empty_depot ({rt['direct']['members']['empty_depot']:,.0f}) by missing sealed thermal-chamber pull-backs, "
         f"post-T-24h CHED-locked empty rail wagons, and ocean-line empty-depot portal closures."
+    )
+    lines.append("")
+
+    # 1b. How is each model stumped? (4 paragraphs in question order; skipped by figures_check.py)
+    r1 = R1_QUOTES
+    r2 = R2_QUOTES
+    lines.append("## How is each model stumped?")
+    lines.append("")
+    lines.append(
+        f"**Response 1** files a wrong six-cause slate adding `rail_handoff` at {r1['rail_2027']} c-days (golden {rh['cdays_2027_int']:,}, "
+        f"band {mb['rail_handoff'][0]:,} to {mb['rail_handoff'][1]:,}, MONITOR) and `phyto_insp` at {r1['phyto_2027']} (golden "
+        f"{ph['cdays_2027_int']:,}), missing every downstream ask (network {r1['total_2027']} vs {fig['A_total_2027']:,}; remediation "
+        f"{r1['remed_days']} vs {fig['A_remed_days']:,}; {r1['cost_eur']} vs EUR {fig['A_cost_eur_m']:.3f}M; avoidable {r1['avoid_eur']} vs "
+        f"EUR {fig['A_avoidable_eur_m']:.3f}M; BHV {r1['bhv_2027']}, HAM {r1['ham_2027']}, Q3 {r1['q3_2027']}). It cleaned the "
+        f"{cl['milestones_settled_containers']:,} containers ({r1['settled_2026']} c-days) and solved both the chamber split "
+        f"(`coldstore_dock` {r1['coldstore_2027']} vs {cs_d['cdays_2027_int']:,}; `reefer_plug` {r1['plug_2027']} vs {rp['cdays_2027_int']:,}) "
+        f"and empty-depot split (`empty_depot` {r1['depot_2027']} vs {ed['cdays_2027_int']:,}; `drayage_carrier` {r1['dray_2027']} vs "
+        f"{dr['cdays_2027_int']:,}). It failed rail-border slot conservation: moving only {r1['sib_days']} c-days of rail lot-mates "
+        f"({r1['sib_count']} boxes; golden {d['phyto_sibling_rail_26']:,.2f}), it matched \"{r1['shuttle_q1']}\" to \"{r1['shuttle_q2']}\" "
+        f"in `rail_shuttle_departures_2026.csv` and stopped, writing \"{r1['shuttle_skip']}\" Never testing `exam_notice_ts_utc` against "
+        f"departures ({cs['locked_phyto_slots']} boxes locked within {d['empiric_lock_h']} h) or `train_total_gross_tonnes` "
+        f"({d['F2_tonnes_per_slot']:.2f} t/slot vs {d['measured_reefer_tonnes']:.2f} t BoL mean), it left {d['ph_bump_26']:,.2f} rollover "
+        f"c-days on `rail_handoff` while noting \"{r1['rail_tight']}\"."
+    )
+    lines.append("")
+    lines.append(
+        f"**Response 2** files a wrong five-cause slate omitting `coldstore_dock` at {r2['coldstore_2027']} (MONITOR vs golden "
+        f"{cs_d['cdays_2027_int']:,}, band {mb['coldstore_dock'][0]:,} to {mb['coldstore_dock'][1]:,}, REMEDIATE), inflating `reefer_plug` "
+        f"to {r2['plug_2027']} (vs {rp['cdays_2027_int']:,}), funding `rail_handoff` at {r2['rail_2027']} (vs {rh['cdays_2027_int']:,}, "
+        f"MONITOR) with `phyto_insp` at {r2['phyto_2027']} (vs {ph['cdays_2027_int']:,}), and missing every downstream ask ({r2['total_2027']} "
+        f"network; {r2['cost_eur']} total; {r2['avoid_eur']} avoidable; BHV {r2['bhv_2027']}, HAM {r2['ham_2027']}, Q3 {r2['q3_2027']}). "
+        f"It cleaned the base ({r2['settled_2026']} c-days) and solved `empty_depot` ({r2['depot_2027']} vs {ed['cdays_2027_int']:,}; "
+        f"`drayage_carrier` {r2['dray_2027']} vs {dr['cdays_2027_int']:,}; {r2['depot_2026_blk']} 2026 days), but missed both chamber and "
+        f"rail-border splits. Seeing >90% port waves ({r2['yard_waves']}), it called `warehouse_pallet_movements_2026.csv` \"{r2['wh_skip']}\" "
+        f"and ruled SKU, inventory, and chamber files \"{r2['ctx_only']}\". That contradicts Charter Clause 2.2 (quoted by Response 2 as "
+        f"\"{r2['charter_q']}\" for `empty_depot`) and fails the data: Wilhelmshaven peaks at {cs['whv_yard_max_pct']:.2f}% (zero days >=95%), "
+        f"yet {cs['hot_whv']} WHV boxes into >=95% chambers jump +{cs['whv_twin_gap_h']:.2f} h over same-vessel peers, matching Response 1 "
+        f"({r1['s1_inc_h']}, {r1['s1_days']}). On rail-border, it checked only that \"{r2['bip_yard_q']}\" and called "
+        f"`customs_consignment_bol_2026.csv` \"{r2['bol_skip']}\", missing {d['phyto_sibling_rail_26']:,.2f} sibling and "
+        f"{d['ph_bump_26']:,.2f} locked-wagon c-days."
+    )
+    lines.append("")
+    lines.append(
+        f"**Why this is a fair stump:** Neither miss is a planted defect. Both runs matched all Layer 1 counts before diverging "
+        f"({cl['milestones_settled_containers']:,} containers, {fig['total_2026_cdays']:,.2f} c-days, {cl['milestones_superseded_dropped']} "
+        f"superseded and {cl['milestones_void_dropped']} VOID milestones, {cl['pallets_superseded_dropped']:,} warehouse and "
+        f"{cl['turnin_superseded_dropped']} depot revisions, {cl['bip_notices_count']} BIP notices). Both effects span the whole network: "
+        f"chamber pull-backs hit {cs['capped_boxes_count']:,} boxes across Z02 ({cs['hot_z02']:,}) and Z07 ({cs['hot_z07']:,}), all "
+        f"{cs['hot_dc_count']} DCs, and all 3 ports ({cs['hot_bhv']} BHV, {cs['hot_ham']} HAM, {cs['hot_whv']} WHV); post-24h rail locks "
+        f"hit {cs['locked_phyto_slots']} boxes across {cs['locked_shuttles_count']} of {cs['rolled_shuttles_count']} rolled shuttles "
+        f"({cs['locked_bhv']} BHV, {cs['locked_ham']} HAM, {cs['locked_whv']} WHV) beside {cs['non_bip_rolled_sh']} Nordbahn shortfalls "
+        f"({cs['total_rolled_sh']:,} rollovers). Neither hinges on a buried sentence: both runs read Charter Clause 2.2 verbatim (Response 2 "
+        f"quotes \"{r2['charter_q']}\"), and both signals sit in primary log comparisons (`warehouse_pallet_movements_2026.csv` vs "
+        f"`container_milestones_2026.csv`, +{d['F1_twin_gap_h']:.2f} h; `bip_inspection_notices_2026.jsonl` vs `rail_shuttle_departures_2026.csv`, "
+        f"{d['F2_tonnes_per_slot']:.2f} t/slot). Reachability is shown directly: Response 1 solved chambers within 0.07% "
+        f"({r1['coldstore_2027']} vs {cs_d['cdays_2027_int']:,}), and both solved `empty_depot` ({r1['depot_2027']}, {r2['depot_2027']} vs "
+        f"{ed['cdays_2027_int']:,}, credited and not counted as a stump)."
+    )
+    lines.append("")
+    lines.append(
+        f"**Why it takes deep reasoning and rigor:** Every one-step repair fails across the {fig['threshold_cdays']:,}-day line. Aggregate "
+        f"`coldstore_inventory_daily_2026.csv` stays flat ({cs['total_dc_util_min_pct']:.1f}% to {cs['total_dc_util_max_pct']:.1f}%) as Z02 "
+        f"and Z07 waves cancel, so total-DC regression yields +{d['F1_rigorous_h']:.2f} h and leaves `coldstore_dock` at "
+        f"{rt['rigorous']['members']['coldstore_dock']:,.0f} (MONITOR); conversely, assigning 100% of hot-box yard dwell without netting port "
+        f"congestion drops `reefer_plug` to {rt['S1_over']['members']['reefer_plug']:,.0f} MONITOR (Response 1 tested that rule and got "
+        f"{r1['s1_over_plug']} MONITOR). Solving it takes 12-chamber stock-flow ({cl['stock_flow_max_diff_pallets']}-pallet error over "
+        f"{cl['dc_days_total']:,} DC-days), 95% threshold discovery, and same-vessel twin netting (+{d['F1_twin_gap_h']:.2f} h). On rail-border, "
+        f"Response 1's direct CHED join moves only {d['phyto_sibling_rail_26']:,.2f} c-days, leaving `rail_handoff` REMEDIATE at "
+        f"{rt['rigorous']['members']['rail_handoff']:,.0f}, while shifting all rollovers on BIP shuttles pushes `phyto_insp` to "
+        f"{rt['S2_over']['members']['phyto_insp']:,.0f} REMEDIATE (`rail_handoff` {rt['S2_over']['members']['rail_handoff']:,.0f}), refuted "
+        f"by non-BIP shortfall mass ({d['non_bip_sf_vs_booked_t']:.2f} t vs booked, +{d['non_bip_sf_vs_loaded_t']:.2f} t vs loaded across "
+        f"{cs['non_bip_rolled_sh']} slots). Solving it takes isolating the {d['empiric_lock_h']}-hour lock ({cs['locked_phyto_slots']} boxes), "
+        f"proving empty-wagon mass loss ({d['F2_tonnes_per_slot']:.2f} t/slot vs {d['measured_reefer_tonnes']:.2f} t BoL mean), and conserving "
+        f"{d['measured_rollover_days']:.2f} c-days/roll through Annex C. Both steps are independent: dropping chambers alone flips only "
+        f"`coldstore_dock` ({lat['S1']['members']['coldstore_dock']:,.0f} MONITOR) and dropping rail-border alone flips only `rail_handoff` "
+        f"({lat['S2']['members']['rail_handoff']:,.0f} REMEDIATE), matching the runs (Response 1 made chambers and depot, missed rail-border; "
+        f"Response 2 made depot, missed both)."
     )
     lines.append("")
 

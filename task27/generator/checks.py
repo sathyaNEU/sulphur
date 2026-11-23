@@ -219,6 +219,32 @@ def check_semantic_forks(fig, target_dir):
     assert abs(sum(fig["by_quarter_2027"].values()) - fig["routes"]["golden"]["total_2027"]) < 0.1, "SF10 quarter failed"
 
 
+def check_stump_block(sub_path):
+    import writeup as WU  # noqa: E402
+
+    sub_txt = open(sub_path, encoding="utf-8").read()
+    p_rec = sub_txt.find("## Final Recommendation")
+    p_stump = sub_txt.find("## How is each model stumped?")
+    p_supp = sub_txt.find("## Supplementary Questions")
+    assert 0 <= p_rec < p_stump < p_supp, "Stump block must sit directly after Final Recommendation and before Supplementary Questions"
+
+    stump_body = sub_txt[p_stump + len("## How is each model stumped?"):p_supp].strip()
+    paras = [p.strip() for p in stump_body.split("\n\n") if p.strip()]
+    assert len(paras) == 4, f"Expected 4 paragraphs in stump block, found {len(paras)}"
+    words = len(stump_body.split())
+    assert 500 <= words <= 750, f"Stump block word count {words} outside 500-750"
+
+    r1_txt = open(os.path.join(TASK_DIR, "runs", "response1.md"), encoding="utf-8").read()
+    r2_txt = open(os.path.join(TASK_DIR, "runs", "response2.md"), encoding="utf-8").read()
+    for k, val in WU.R1_QUOTES.items():
+        assert val in r1_txt, f"R1_QUOTES[{k!r}] = {val!r} not found verbatim in runs/response1.md"
+        assert val in stump_body, f"R1_QUOTES[{k!r}] = {val!r} missing from submission.md stump block"
+    for k, val in WU.R2_QUOTES.items():
+        assert val in r2_txt, f"R2_QUOTES[{k!r}] = {val!r} not found verbatim in runs/response2.md"
+        assert val in stump_body, f"R2_QUOTES[{k!r}] = {val!r} missing from submission.md stump block"
+    return len(WU.R1_QUOTES) + len(WU.R2_QUOTES), words
+
+
 def main():
     fig = json.load(open(os.path.join(HERE, "figures.json"), encoding="utf-8"))
     target_dir = os.path.join(TASK_DIR, "target")
@@ -231,11 +257,13 @@ def main():
     check_golden_zip_and_csv(fig)
     check_bar_and_footprints(fig)
     check_semantic_forks(fig, target_dir)
+    n_quotes, stump_words = check_stump_block(sub_path)
 
     print(
         f"PASS  checks.py task27: {n_files} files, {len(big_csvs)} CSVs >=20k rows, "
         f"{n_fml} live formulas (LibreOffice recalc max_diff={max_diff:.2e}), "
-        f"SF1-SF10 asserted, 22/22 variants + 8/8 forcing HOLD, 17/17 shortcuts FAIL"
+        f"SF1-SF10 asserted, 22/22 variants + 8/8 forcing HOLD, 17/17 shortcuts FAIL, "
+        f"stump block {stump_words} words ({n_quotes}/{n_quotes} verbatim run quotes verified)"
     )
     return 0
 
