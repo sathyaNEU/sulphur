@@ -20,8 +20,10 @@ fields and both responses with the files each run produced. The audit is the cli
    runs are needed: this is the pre-platform pass.
 2. **Check the inputs before spending the pass.** `python3 .claude/skills/determinism-check/holistic.py taskNN
    --check` (add `--mode determinism` for the pre-platform pass). A non-zero exit stops here with its line: a missing
-   answer block would fail the audit's Step 0, and a missing pair means the runs are not saved yet. The judge builds
-   its own workspace.
+   answer block would fail the audit's Step 0, and a missing pair means the runs are not saved yet. A WARN that
+   `pipeline.json` does not record the prompt's rewrite goes into the report: the audit reads `prompt.txt`, so if
+   the uploaded prompt differs, the author says so and the pass runs again on it. The judge builds its own
+   workspace.
 3. **Spawn one `determinism-judge`** (its definition sets Opus 5.5 at high) with the absolute task folder and the
    mode, `holistic` or `determinism`. Nothing else is in the brief: the judge reads only what `holistic.py` hands
    it.

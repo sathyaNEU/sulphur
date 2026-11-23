@@ -44,8 +44,9 @@ Invoke `build-pipeline` (Stage 6) first.
    level and must_fix list to `pipeline.json` `holistic` (`/holistic-check` step 4 gives the entry). Where the
    audit and the triage disagree (a first break classed on a valid label by one and a surface label by the other, a
    decisive step made in one reading and missed in the other, a fork one calls defensible), say so in one line
-   each. The audit uses the platform's labels, so where the stump answer names a run's first break, it uses the
-   label the audit gave (`run-triage`, the v4 vocabulary). A failed in-house audit does not change the route below
+   each. The stump answer (step 5) never waits for the audit: where it names a run's first break it uses the v4
+   label `run-triage` wrote beside its class, and a different label from the audit is reported to the author as a
+   disagreement, never a reason to rebuild the block. A failed in-house audit does not change the route below
    and fixes nothing: it is named on top of the hand-over with its must_fix list and `Routes:` line, and the author
    decides before the paste goes in (fixes wait for the platform's audit or the author's word).
 5. **Write the stump answer into `submission.md` now. It is mandatory, before the scores and whatever the

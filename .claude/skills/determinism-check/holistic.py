@@ -196,6 +196,14 @@ def main(argv):
             die("%s has no saved pair under runs/ (run1.md and run2.md, or response1.md and response2.md); the "
                 "holistic pass needs both responses, and the pre-platform pass is --mode determinism" % t)
 
+    # the audit replays the platform's only if prompt.txt is the prompt the author uploaded (their rewrite)
+    try:
+        rewritten = json.load(open(os.path.join(d, "pipeline.json"))).get("prompt_rewritten")
+    except Exception:
+        rewritten = None
+    warn = ("WARN        pipeline.json does not record prompt_rewritten: check that prompt.txt is the prompt the "
+            "author uploaded, or the audit reads the draft") if a.mode == "holistic" and not rewritten else ""
+
     if a.check:
         with zipfile.ZipFile(os.path.join(d, "target.zip")) as z:
             bad = z.testzip()
@@ -205,6 +213,8 @@ def main(argv):
         print("CHECK PASS  %s, %s mode: %d files in target.zip; answer fields %s; left out: %s%s" % (
             t, a.mode, n, ", ".join(used), ", ".join(left_out) or "nothing",
             ("; pair from %s" % where) if pair else ""))
+        if warn:
+            print(warn)
         return 0
 
     if a.out:
@@ -222,7 +232,7 @@ def main(argv):
     fill["input_files"] = "\n".join("- %s (%s)" % (p, human(n)) for p, n in rows) or "- (target.zip is empty)"
 
     manifest = {
-        "task": t, "mode": a.mode, "created": time.strftime("%Y-%m-%dT%H:%M:%S"),
+        "task": t, "mode": a.mode, "created": time.strftime("%Y-%m-%dT%H:%M:%S"), "prompt_rewritten": rewritten,
         "client_text": os.path.relpath(CLIENT, REPO),
         "md5": {"prompt.txt": md5(os.path.join(d, "prompt.txt")), "target.zip": md5(os.path.join(d, "target.zip")),
                 "submission.md": md5(os.path.join(d, "submission.md"))},
@@ -268,6 +278,8 @@ def main(argv):
     print("audit       %s (%s mode, %d characters)" % (os.path.join(ws, "audit_prompt.md"), a.mode, len(filled)))
     print("inputs      %d files under inputs/" % len(rows))
     print("answer      %s; left out: %s" % (", ".join(used), ", ".join(left_out) or "nothing"))
+    if warn:
+        print(warn)
     if a.mode == "holistic":
         print("runs        %s; files: run 1 %d, run 2 %d%s" % (
             where, manifest["run1"]["files"], manifest["run2"]["files"],
