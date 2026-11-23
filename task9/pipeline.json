@@ -148,7 +148,7 @@
     "average": 63
    }
   },
-  "verdict": "one decisive step by the runs' evidence: build-pipeline routes it REDESIGN; the author's ruling owed"
+  "verdict": "one decisive step by the runs' evidence (build-pipeline: REDESIGN); the author's ruling 2026-11-23: paste, the platform's scores and audit decide"
  },
  "returned": [
   {
@@ -168,7 +168,7 @@
    "moved": "prompt asks trimmed to each source's points and band and the pinned-views share; the workbook's first sheet, the deck (three slides, the shares chart and the tier slide replaced by the pinned-views readings) and the Supplementary Questions follow; the pack byte-identical (target 94505725c5171990), every frozen figure unchanged (freeze.py PASS); corelib one stump lost 26 to 63 and the reflex 16 to 44 on its band-only pricing, WARN by the author's ruling (rulings.rubric_rows)"
   }
  ],
- "resume": "pair 3 saved and triaged (runs/triage.md), the stump answer in submission.md after the Final Recommendation; the author rules: submit (paste in order, the platform's scores and its holistic audit then recorded), hold for the platform's scores and audit, or redesign (one decisive step by the runs: S1 made by 4 of 4, S2 missed by 4 of 4); risks flagged, not fixed: the pinned-share band edge and the Step-by-Step's 'with or without reverts' sentence",
+ "resume": "the author pastes the five blocks in order (Final Recommendation, How is each model stumped?, Supplementary Questions, Critical Components, Step-by-Step); when the platform's two scores, the generated rubric and its holistic audit come back: save them under runs/ (rubric.md, the audit), record run1, run2 and the average in runs, add the sulfur-record.md rows for pairs 2 and 3, and route (SUBMITTED only on the author's word; REDESIGN if the audit or the scores send it back)",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -327,6 +327,10 @@
   {
    "date": "2026-11-23",
    "event": "RUNS: pair 3 saved, triaged in the main thread, the stump answer written; one decisive step missed by both"
+  },
+  {
+   "date": "2026-11-23",
+   "event": "RUNS: the author ruled to paste the blocks as they stand and let the platform's scores and audit decide"
   }
  ],
  "final_cut": {
@@ -340,6 +344,11 @@
    "date": "2026-11-22",
    "by": "author",
    "text": "2026-11-22, the author: trim the asks to each source's points and band and the pinned-views share after the Holistic Audit v3 (0.62: 30 points of error-carried-forward credit on the shares, merchants' own share and both tier figures); under the audit's rules a run that misses one step keeps about 0.60, so the two rubric rows are recorded as WARN for task9"
+  },
+  "route_pair3": {
+   "date": "2026-11-23",
+   "by": "author",
+   "text": "paste the five blocks in order as they stand and let the platform's two scores and its holistic audit decide; the house REDESIGN route (one decisive step by the runs) waits on them; no fix before the audit asks (the pinned-share band edge and the Step-by-Step's 'with or without reverts' sentence kept)"
   }
  }
 }

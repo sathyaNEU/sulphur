@@ -81,3 +81,12 @@ The stump answer is in submission.md directly after the Final Recommendation (wr
 quote and figure asserted against the saved responses and figures.json); it lists the noise step as the stump for
 both, training data and the calendar's refusal as made by both, and each response's pinned share against the band
 without classing it.
+
+## The author's ruling (2026-11-23)
+
+Paste the five blocks in order as they stand (Final Recommendation, How is each model stumped?, Supplementary
+Questions, Critical Components, Step-by-Step) and let the platform's two scores and its holistic audit decide; the
+house's REDESIGN route waits on them, and nothing is fixed before the audit asks (the pinned-share band edge and the
+Step-by-Step's "with or without reverts" sentence stay as shipped). When the scores, the generated rubric and the
+audit come back they are saved under runs/, the scores recorded in pipeline.json `runs`, the sulfur-record.md rows
+for pairs 2 and 3 added, and the build routed; SUBMITTED only on the author's word.
