@@ -1,0 +1,111 @@
+{
+  "as_of": "2027-01-18",
+  "decision": "2027 mandatory vessel overhaul designation across eight Barlavento SWRO trains under Standard SWRO-Q27 (400-hour threshold)",
+  "deliverables": [
+    "a spreadsheet",
+    "a CSV"
+  ],
+  "distractor_files": [
+    "mibel_iberian_power_spot_2026.csv",
+    "algarve_reservoir_levels_2026.xlsx"
+  ],
+  "field_terms": [
+    "CIP",
+    "boron",
+    "SWRO",
+    "DAF",
+    "DMF",
+    "Algarve"
+  ],
+  "files": {
+    "algarve_reservoir_levels_2026.xlsx": {
+      "covers": "2026 weekly western Algarve surface reservoir storage percentage bulletin",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-07",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "autosampler_schedule_2026.csv": {
+      "covers": "2026 daily permeate boron autosampler carousel schedule by train",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-05",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "cip_wash_log_2026.csv": {
+      "covers": "2026 routine Clean-in-Place chemical wash completion log by train",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-12",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "intake_chemistry_15m_2026.csv": {
+      "covers": "2026 15-minute coastal intake seawater conductivity and standardized algal-TEP precursor index telemetry",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-11",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "lims_qa_certificate_2026.pdf": {
+      "covers": "2026 ISO/IEC 17025 accredited LIMS ICP-OES permeate boron analytical quality assurance certificate",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-08",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "mibel_iberian_power_spot_2026.csv": {
+      "covers": "2026 hourly Iberian MIBEL Portugal day-ahead electricity spot prices (EUR/MWh)",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-06",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "operating_plan_2027.csv": {
+      "covers": "2027 quarterly operating plan potable dispatch duty ratios and seasonal temperature and recovery multipliers",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2026-12-04",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "permeate_boron_composites_2026.csv": {
+      "covers": "2026 LIMS flow-proportional composite permeate boron laboratory assays across all eight trains",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-09",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "ro_feed_header_15m_2026.csv": {
+      "covers": "2026 15-minute RO-feed header conductivity and supersaturation-oxidant stress telemetry",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-11",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "scada_bay_config_2026.json": {
+      "covers": "2026 plant SCADA historian and bay instrumentation hardware configuration",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2026-10-21",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "shift_diagnostics_2026.csv": {
+      "covers": "2026 four-hour shift inline non-destructive membrane integrity alarm logs",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-12",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "swro_integrity_standard_q27.pdf": {
+      "covers": "Standard SWRO-Q27 regulatory integrity standard defining excursion modes, 400-hour threshold, Schedule B tariffs, Annex B 2027 plan rules, and Annex C filing schema",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2026-09-14",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "train_asset_register.csv": {
+      "covers": "Barlavento SWRO train asset register with legacy tag crosswalk, bay assignments, and nominal DAF/DMF pretreatment basin volumes",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2026-11-18",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    },
+    "train_hydraulics_hourly_2026.csv": {
+      "covers": "2026 hourly SCADA feed flow and feed pressure telemetry by train",
+      "license": "proprietary, municipal desalination authority simulation",
+      "pulled": "2027-01-11",
+      "source": "generated deterministically by the build's coastal SWRO desalination physical process simulator (Barlavento Dessalinizacao Municipal, E.M., Algarve, Portugal; no external or public data)"
+    }
+  },
+  "stated_inputs": [
+    "400",
+    "2026",
+    "2027"
+  ]
+}

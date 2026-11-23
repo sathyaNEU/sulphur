@@ -1,0 +1,1016 @@
+{
+  "results": [
+    {
+      "id": "R1",
+      "name": "Reconciled 2026 multi-grain SWRO logs",
+      "graded_as": "Ask 0 (Assembly)",
+      "figure": "R1_clean_totals",
+      "depends": [],
+      "independent": "raw operational files",
+      "golden": {
+        "boron_clean_rows": 15024,
+        "intake_clean_rows": 280320,
+        "ro_feed_clean_rows": 280320,
+        "hydraulics_clean_rows": 70080,
+        "shift_rows": 17520,
+        "cip_rows": 178
+      },
+      "passes": {
+        "quick": {
+          "boron_clean_rows": 15449,
+          "intake_clean_rows": 281095,
+          "ro_feed_clean_rows": 280320,
+          "hydraulics_clean_rows": 70258,
+          "shift_rows": 17520,
+          "cip_rows": 178
+        },
+        "careful": {
+          "boron_clean_rows": 15024,
+          "intake_clean_rows": 280320,
+          "ro_feed_clean_rows": 280320,
+          "hydraulics_clean_rows": 70080,
+          "shift_rows": 17520,
+          "cip_rows": 178
+        },
+        "thorough": {
+          "boron_clean_rows": 15024,
+          "intake_clean_rows": 280320,
+          "ro_feed_clean_rows": 280320,
+          "hydraulics_clean_rows": 70080,
+          "shift_rows": 17520,
+          "cip_rows": 178
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "name": "Multi-support composite boron deconvolution (C1)",
+      "graded_as": "Component 1",
+      "figure": "C1_boron_2027",
+      "depends": [
+        "R1"
+      ],
+      "independent": "permeate_boron_composites_2026.csv and autosampler_schedule_2026.csv",
+      "golden": 1328.7,
+      "band": [
+        1053.9,
+        1390.7
+      ],
+      "precedent": [
+        "L22",
+        "L56",
+        "L57"
+      ],
+      "passes": {
+        "quick": 285.6,
+        "careful": 285.6,
+        "thorough": 1328.7
+      }
+    },
+    {
+      "id": "R3",
+      "name": "Lagrangian cumulative-flow parcel alignment & V_eff (C2)",
+      "graded_as": "Component 2",
+      "figure": "C2_scaling_2027",
+      "depends": [
+        "R1"
+      ],
+      "independent": "intake_chemistry_15m_2026.csv, ro_feed_header_15m_2026.csv, train_hydraulics_hourly_2026.csv",
+      "golden": 1652.7,
+      "band": [
+        1539.4,
+        1836.6
+      ],
+      "precedent": [
+        "L26",
+        "L28",
+        "N07",
+        "N30"
+      ],
+      "passes": {
+        "quick": 552.1,
+        "careful": 552.1,
+        "thorough": 1652.7
+      }
+    },
+    {
+      "id": "R4",
+      "name": "3-state CIP-invariant latent-class structural faults (C3)",
+      "graded_as": "Component 3",
+      "figure": "C3_struct_2027",
+      "depends": [
+        "R1"
+      ],
+      "independent": "shift_diagnostics_2026.csv and cip_wash_log_2026.csv",
+      "golden": 1106.9,
+      "band": [
+        1042.6,
+        1251.1
+      ],
+      "precedent": [
+        "L03",
+        "L38",
+        "L54",
+        "N36"
+      ],
+      "passes": {
+        "quick": 3508.1,
+        "careful": 3508.1,
+        "thorough": 1106.9
+      }
+    },
+    {
+      "id": "R5",
+      "name": "Native-unit physical falsification checks F1-F3",
+      "graded_as": "Ask 1 (Validation)",
+      "figure": "R5_falsification",
+      "depends": [
+        "R2",
+        "R3",
+        "R4"
+      ],
+      "independent": "",
+      "golden": {
+        "f1": 0.0479,
+        "f2_ms_cm": 0.523,
+        "f3_pp": 0.455
+      },
+      "bands": {
+        "f1": [
+          0.0,
+          0.09
+        ],
+        "f2_ms_cm": [
+          0.48,
+          0.58
+        ],
+        "f3_pp": [
+          0.0,
+          0.7
+        ]
+      },
+      "precedent": [
+        "L28"
+      ],
+      "passes": {
+        "quick": {
+          "f1": 1.0045,
+          "f2_ms_cm": 2.473,
+          "f3_pp": 2.741
+        },
+        "careful": {
+          "f1": 1.0045,
+          "f2_ms_cm": 2.473,
+          "f3_pp": 2.741
+        },
+        "thorough": {
+          "f1": 0.0479,
+          "f2_ms_cm": 0.523,
+          "f3_pp": 0.455
+        }
+      }
+    },
+    {
+      "id": "R6",
+      "name": "2027 Operating Plan train projections",
+      "graded_as": "Ask 2 (Projections)",
+      "figure": "R6_train_totals_2027",
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "independent": "",
+      "golden": {
+        "TR01": 514.8,
+        "TR02": 506.3,
+        "TR03": 305.7,
+        "TR04": 318.8,
+        "TR05": 271.0,
+        "TR06": 613.4,
+        "TR07": 1291.9,
+        "TR08": 266.4
+      },
+      "bands": {
+        "TR01": [
+          448.7,
+          536.2
+        ],
+        "TR02": [
+          480.6,
+          544.3
+        ],
+        "TR03": [
+          287.0,
+          336.1
+        ],
+        "TR04": [
+          306.2,
+          341.9
+        ],
+        "TR05": [
+          230.3,
+          285.5
+        ],
+        "TR06": [
+          589.8,
+          661.0
+        ],
+        "TR07": [
+          1187.9,
+          1343.6
+        ],
+        "TR08": [
+          245.9,
+          284.6
+        ]
+      },
+      "precedent": [
+        "L11"
+      ],
+      "passes": {
+        "quick": {
+          "TR01": 161.5,
+          "TR02": 168.6,
+          "TR03": 949.7,
+          "TR04": 247.8,
+          "TR05": 329.2,
+          "TR06": 493.4,
+          "TR07": 1795.9,
+          "TR08": 199.6
+        },
+        "careful": {
+          "TR01": 161.5,
+          "TR02": 168.6,
+          "TR03": 949.7,
+          "TR04": 247.8,
+          "TR05": 329.2,
+          "TR06": 493.4,
+          "TR07": 1795.9,
+          "TR08": 199.6
+        },
+        "thorough": {
+          "TR01": 514.8,
+          "TR02": 506.3,
+          "TR03": 305.7,
+          "TR04": 318.8,
+          "TR05": 271.0,
+          "TR06": 613.4,
+          "TR07": 1291.9,
+          "TR08": 266.4
+        }
+      }
+    },
+    {
+      "id": "R7",
+      "name": "Schedule B EUR exposure & 2026 discrepancy rate",
+      "graded_as": "Ask 3 (Financial & Audit)",
+      "figure": "R7_cost_and_discrepancy",
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R6"
+      ],
+      "independent": "",
+      "golden": {
+        "A_cost_eur_k": 1750.8,
+        "A_overhaul_eur_k": 1253.5,
+        "A_diag_err_pct": 120.8
+      },
+      "bands": {
+        "A_cost_eur_k": [
+          1624.1,
+          1841.9
+        ],
+        "A_overhaul_eur_k": [
+          1161.3,
+          1319.1
+        ],
+        "A_diag_err_pct": [
+          112.3,
+          125.4
+        ]
+      },
+      "precedent": [
+        "L11"
+      ],
+      "passes": {
+        "quick": {
+          "A_cost_eur_k": 2213.1,
+          "A_overhaul_eur_k": 1686.6,
+          "A_diag_err_pct": 0.0
+        },
+        "careful": {
+          "A_cost_eur_k": 2213.1,
+          "A_overhaul_eur_k": 1686.6,
+          "A_diag_err_pct": 0.0
+        },
+        "thorough": {
+          "A_cost_eur_k": 1750.8,
+          "A_overhaul_eur_k": 1253.5,
+          "A_diag_err_pct": 120.8
+        }
+      }
+    },
+    {
+      "id": "R8",
+      "name": "Final 2027 mandatory overhaul triage slate",
+      "graded_as": "Recommendation",
+      "figure": "R8_overhaul_slate",
+      "depends": [
+        "R2",
+        "R3",
+        "R4",
+        "R6",
+        "R7"
+      ],
+      "independent": "",
+      "golden": [
+        "TR01",
+        "TR02",
+        "TR06",
+        "TR07"
+      ],
+      "precedent": [
+        "L26",
+        "L22"
+      ],
+      "passes": {
+        "quick": [
+          "TR03",
+          "TR06",
+          "TR07"
+        ],
+        "careful": [
+          "TR03",
+          "TR06",
+          "TR07"
+        ],
+        "thorough": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      }
+    }
+  ],
+  "hints": [
+    {
+      "sentence": "Lab boron assays are 4-hour (Thu-Mon) and 8-hour (Tue-Wed) flow-proportional composites whose averaging collapses 1-hour variance by each train's own correlation scale.",
+      "rescues": [
+        "R2"
+      ]
+    },
+    {
+      "sentence": "Intake precursor and RO-feed stress sensors observe moving seawater parcels separated by an unobserved effective DAF/DMF hydraulic holdup volume under time-varying tariff flow.",
+      "rescues": [
+        "R3"
+      ]
+    },
+    {
+      "sentence": "Two inline shift alarms co-fire on conditionally-dependent reversible bio-fouling that partially clears after CIP washes while true structural faults persist across CIP.",
+      "rescues": [
+        "R4"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "name": "golden (per-train deconv + Lagrangian V_eff + 3-state CIP LCA)",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR06",
+        "TR07"
+      ],
+      "golden": true
+    },
+    {
+      "name": "direct / reflex (raw composites + same-timestamp + 2-of-3 MV)",
+      "answer": [
+        "TR03",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "rigorous standard (pooled AR1 + fixed CCF lag + 2-class DS)",
+      "answer": [
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "drop S1 alone",
+      "answer": [
+        "TR02",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "drop S2 alone",
+      "answer": [
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "drop S3 alone",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "cutoff filter (4h-only + steady-flow + post-CIP MV)",
+      "answer": [
+        "TR03",
+        "TR06",
+        "TR07"
+      ]
+    },
+    {
+      "name": "generous upper (i.i.d. sqrt(m) + comonotonic + 2-class DS)",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "over-correct S1 (i.i.d. sqrt(m))",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "over-correct S2 (comonotonic bound)",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR03",
+        "TR04",
+        "TR05",
+        "TR06",
+        "TR07",
+        "TR08"
+      ]
+    },
+    {
+      "name": "over-correct S3 (raw uninverted D3)",
+      "answer": [
+        "TR01",
+        "TR02",
+        "TR07"
+      ]
+    }
+  ],
+  "forcing": {
+    "kind": "set",
+    "golden_answer": [
+      "TR01",
+      "TR02",
+      "TR06",
+      "TR07"
+    ],
+    "golden_family": [
+      {
+        "name": "S1: continuous OU kernel (WLS)",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S1: discrete AR(1) OLS moments",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S1: discrete AR(1) lag-1 r1(4) only",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S1: AR(1) WLS with 0.5% trimming",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S1: AR(1) WLS without lab-noise subtraction",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S1: AR(1) WLS on 4h moments only",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: piecewise-constant step flow integration",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: piecewise-constant step flow (left endpoint)",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: midpoint flow integration",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: L1 conductivity profile loss",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: Huber conductivity profile loss",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: Pearson correlation profile objective",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: 2% trimmed L2 conductivity loss",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: Gaussian OU kriging parcel TEP lookup",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: PCHIP interpolation parcel TEP lookup",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: nearest 15-minute parcel TEP lookup",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S2: cubic spline parcel TEP lookup",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: shared fleet CIP clearing efficiency",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: free D3 bio-fouling floor (per-train CIP)",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: free D3 floor + shared CIP clearing",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: 96-hour (24-block) post-CIP window",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: 144-hour (36-block) post-CIP window",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "S3: shared CIP + inclusive <=120h (31-block) window",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "Joint A: OU + L1 + shared CIP",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "Joint B: OLS + Huber + 96h post-CIP",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "Joint C: no-lab-noise + corr + 144h post-CIP",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      }
+    ],
+    "shortcuts": [
+      {
+        "name": "direct / reflex",
+        "answer": [
+          "TR03",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "rigorous standard",
+        "answer": [
+          "TR03",
+          "TR04",
+          "TR05",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "cutoff",
+        "answer": [
+          "TR03",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "generous",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR03",
+          "TR04",
+          "TR05",
+          "TR06",
+          "TR07",
+          "TR08"
+        ]
+      },
+      {
+        "name": "hedge",
+        "answer": [
+          "TR03",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "drop S1",
+        "answer": [
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "drop S2",
+        "answer": [
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "name": "drop S3",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR03",
+          "TR04",
+          "TR06",
+          "TR07"
+        ]
+      }
+    ],
+    "perturbations": [
+      {
+        "input": "S1 boron -20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "input": "S1 boron +20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "input": "S2 scaling -20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "input": "S2 scaling +20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "input": "S3 structural -20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      },
+      {
+        "input": "S3 structural +20%",
+        "answer": [
+          "TR01",
+          "TR02",
+          "TR06",
+          "TR07"
+        ]
+      }
+    ]
+  },
+  "factorial": {
+    "golden_answer": [
+      "TR01",
+      "TR02",
+      "TR06",
+      "TR07"
+    ],
+    "reflex_route": {
+      "answer": [
+        "TR03",
+        "TR06",
+        "TR07"
+      ]
+    },
+    "judgments": [
+      {
+        "id": "S1",
+        "name": "Per-train multi-support composite boron dispersion-autocovariance deconvolution",
+        "kind": "stump",
+        "precedent": [
+          "L22",
+          "L56",
+          "L57"
+        ],
+        "dropped": {
+          "answer": [
+            "TR02",
+            "TR06",
+            "TR07"
+          ],
+          "results_moved": [
+            "R2",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "alone": {
+          "answer": [
+            "TR01",
+            "TR03",
+            "TR05",
+            "TR06",
+            "TR07"
+          ],
+          "results_rescued": [
+            "R2"
+          ]
+        }
+      },
+      {
+        "id": "S2",
+        "name": "Cumulative-flow Lagrangian parcel alignment with unobserved V_eff recovery",
+        "kind": "stump",
+        "precedent": [
+          "L26",
+          "L28",
+          "N07",
+          "N30"
+        ],
+        "dropped": {
+          "answer": [
+            "TR06",
+            "TR07"
+          ],
+          "results_moved": [
+            "R3",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "alone": {
+          "answer": [
+            "TR02",
+            "TR03",
+            "TR06",
+            "TR07"
+          ],
+          "results_rescued": [
+            "R3"
+          ]
+        }
+      },
+      {
+        "id": "S3",
+        "name": "3-state CIP-invariant conditionally-dependent latent-class structural fault separation",
+        "kind": "stump",
+        "precedent": [
+          "L03",
+          "L38",
+          "L54",
+          "N36"
+        ],
+        "dropped": {
+          "answer": [
+            "TR01",
+            "TR02",
+            "TR03",
+            "TR04",
+            "TR06",
+            "TR07"
+          ],
+          "results_moved": [
+            "R4",
+            "R5",
+            "R6",
+            "R7",
+            "R8"
+          ]
+        },
+        "alone": {
+          "answer": [
+            "TR06",
+            "TR07"
+          ],
+          "results_rescued": [
+            "R4"
+          ]
+        }
+      },
+      {
+        "id": "R_L1",
+        "name": "Layer 1 multi-system cleaning (dates, UTC/Lisbon clocks, QA revisions, units, legacy tags)",
+        "kind": "reflex",
+        "precedent": [
+          "R01",
+          "R02"
+        ]
+      },
+      {
+        "id": "R_plan",
+        "name": "Uniform 2027 Operating Plan Annex B quarterly scaling",
+        "kind": "reflex",
+        "precedent": [
+          "R01",
+          "R93"
+        ]
+      }
+    ]
+  },
+  "weights": {
+    "recommendation": 14,
+    "components": 24,
+    "asks": 55,
+    "instruction": 7
+  }
+}
