@@ -1,9 +1,8 @@
-"""Completely standalone independent verifier for task27.
+"""Completely standalone independent verifier for task27 (Arch 2, v4-hardened).
 
 Unzips task27/target.zip and task27/golden.zip into a fresh temporary directory and recomputes
-every headline figure, Critical Component (C1, C2, C3), 2027 corridor/Q3/EUR ask, and native-unit
-physical conservation diagnostic directly from raw shipped files WITHOUT importing core.py or
-analysis.py, asserting exact agreement with figures.json and golden deliverables.
+C1, C2, C3, all 6 corridor 2027 BCRs, avoidable EUR, funded slate, and CSV/XLSX tie-outs
+directly from the raw shipped files WITHOUT importing core.py or analysis.py.
 """
 import csv
 import datetime as dt
@@ -25,16 +24,17 @@ UTC = dt.timezone.utc
 BERLIN = ZoneInfo("Europe/Berlin")
 BASE_DATE = dt.date(2026, 1, 1)
 
-TARIFF_EUR = {
-    "vessel_berth": 195.0,
-    "edi_docs": 140.0,
-    "reefer_plug": 210.0,
-    "coldstore_dock": 285.0,
-    "rail_handoff": 175.0,
-    "phyto_insp": 260.0,
-    "drayage_carrier": 160.0,
-    "empty_depot": 230.0,
-}
+PORTS = ("BHV", "HAM", "WHV")
+DCS = ("HAN", "OSN", "KAS", "MAG")
+ZONES = ("Z02", "Z07", "Z13")
+LINES = ("LINE_A", "LINE_B", "LINE_C", "LINE_D")
+CORRIDORS = ("BHV-HAN", "BHV-KAS", "BHV-OSN", "HAM-HAN", "HAM-MAG", "WHV-OSN")
+PORT_IDX = {p: i for i, p in enumerate(PORTS)}
+DC_IDX = {d: i for i, d in enumerate(DCS)}
+ZONE_IDX = {z: i for i, z in enumerate(ZONES)}
+LINE_IDX = {l: i for i, l in enumerate(LINES)}
+CORR_IDX = {c: i for i, c in enumerate(CORRIDORS)}
+BUDGET_CAP_EUR = 1_750_000.0
 
 
 def _d(s):
@@ -50,14 +50,18 @@ def _ts(s):
     return dt.datetime.fromisoformat(s[:-1] + "+00:00" if s.endswith("Z") else s)
 
 
-def _q(day_idx):
-    if day_idx < 90:
-        return 0
-    if day_idx < 181:
-        return 1
-    if day_idx < 273:
-        return 2
-    return 3
+def _sigmoid(x):
+    return 1.0 / (1.0 + np.exp(-np.clip(x, -30.0, 30.0)))
+
+
+def _demean(arr, grp, n_grp):
+    cnt = np.maximum(1.0, np.bincount(grp, minlength=n_grp).astype(float))
+    if arr.ndim == 1:
+        return arr - (np.bincount(grp, weights=arr, minlength=n_grp) / cnt)[grp]
+    out = np.empty_like(arr, dtype=float)
+    for j in range(arr.shape[1]):
+        out[:, j] = arr[:, j] - (np.bincount(grp, weights=arr[:, j], minlength=n_grp) / cnt)[grp]
+    return out
 
 
 def verify():
@@ -72,361 +76,302 @@ def verify():
         with zipfile.ZipFile(os.path.join(TASK_DIR, "golden.zip")) as z:
             z.extractall(gdir)
 
-        # 1. Load plan, catalog, chamber register, aggregate DC stock
-        plan = defaultdict(dict)
-        with open(os.path.join(tdir, "import_plan_2027.csv"), encoding="utf-8") as f:
+        # 1. Budgets & plan
+        plan = {}
+        with open(os.path.join(tdir, "remediation_program_budgets_2027.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                plan[r["metric_code"]][r["entity_id"]] = (float(r["value_2026"]), float(r["value_2027"]))
+                plan[r["corridor_id"]] = {
+                    "port": r["port_id"],
+                    "dc": r["dc_id"],
+                    "budget": float(r["remediation_budget_eur"]),
+                    "cap": float(r["capture_rate_2027"]),
+                    "vg": float(r["vol_growth_2027"]),
+                    "pf": float(r["plug_capacity_factor_2027"]),
+                    "rf": float(r["rail_fleet_factor_2027"]),
+                    "df": float(r["dray_contract_factor_2027"]),
+                    "t_plug": float(r["tariff_reefer_plug_eur"]),
+                    "t_rail": float(r["tariff_rail_handoff_eur"]),
+                    "t_dray": float(r["tariff_drayage_carrier_eur"]),
+                }
 
+        # 2. SKU catalog, chamber register, aggregate DC stock, warehouse pallet movements
         sku_z, sku_cpp = {}, {}
         with open(os.path.join(tdir, "sku_thermal_catalog.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                sku_z[r["sku_id"]] = r["thermal_zone"]
+                sku_z[r["sku_id"]] = ZONE_IDX[r["thermal_zone"]]
                 sku_cpp[r["sku_id"]] = int(r["cases_per_pallet"])
 
-        ch_cap, ch_open = {}, {}
+        ch_cap = np.zeros((4, 3), dtype=float)
+        ch_open = np.zeros((4, 3), dtype=int)
         with open(os.path.join(tdir, "dc_chamber_register_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                k = (r["dc_id"], r["thermal_zone"])
-                ch_cap[k] = float(r["pallet_bay_capacity"])
-                ch_open[k] = int(r["opening_pallets_2026_01_01"])
+                ch_cap[DC_IDX[r["dc_id"]], ZONE_IDX[r["thermal_zone"]]] = float(r["pallet_bay_capacity"])
+                ch_open[DC_IDX[r["dc_id"]], ZONE_IDX[r["thermal_zone"]]] = int(r["opening_pallets_2026_01_01"])
 
-        dc_tot = {}
+        dc_tot = np.zeros((4, 365), dtype=int)
         with open(os.path.join(tdir, "coldstore_inventory_daily_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                dc_tot[(r["dc_id"], (_d(r["date_iso"]) - BASE_DATE).days)] = int(r["total_pallets_on_hand"])
+                dc_tot[DC_IDX[r["dc_id"]], (_d(r["date_iso"]) - BASE_DATE).days] = int(r["total_pallets_on_hand"])
 
-        # 2. Reconstruct per-chamber daily utilization from warehouse_pallet_movements_2026.csv
-        mv_latest = {}
+        mv_lat = {}
         with open(os.path.join(tdir, "warehouse_pallet_movements_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                mid = r["movement_id"]
-                v = int(r["extract_version"])
-                if mid not in mv_latest or v > mv_latest[mid][0]:
-                    mv_latest[mid] = (v, r)
+                mid, v = r["movement_id"], int(r["extract_version"])
+                if mid not in mv_lat or v > mv_lat[mid][0]:
+                    mv_lat[mid] = (v, r)
 
-        net_flow = defaultdict(int)
-        for _, r in mv_latest.values():
+        p_in = np.zeros((4, 3, 365), dtype=int)
+        p_out = np.zeros((4, 3, 365), dtype=int)
+        for _, r in mv_lat.values():
             t = (_d(r["move_date"]) - BASE_DATE).days
-            z = sku_z[r["sku_id"]]
-            qty = int(r["quantity"])
-            p = qty // sku_cpp[r["sku_id"]] if r["unit"] == "CASE" else qty
-            net_flow[(r["dc_id"], z, t)] += p if r["direction"] == "IN" else -p
+            d, z = DC_IDX[r["dc_id"]], sku_z[r["sku_id"]]
+            q = int(r["quantity"])
+            pal = q // sku_cpp[r["sku_id"]] if r["unit"] == "CASE" else q
+            if r["direction"] == "IN":
+                p_in[d, z, t] += pal
+            else:
+                p_out[d, z, t] += pal
 
-        ch_util = {}
-        for dc in ("HAN", "OSN", "KAS", "MAG"):
-            for z in ("Z02", "Z07", "Z13"):
-                cur = ch_open[(dc, z)]
-                cap = ch_cap[(dc, z)]
-                for t in range(365):
-                    cur += net_flow[(dc, z, t)]
-                    ch_util[(dc, z, t)] = cur / cap
-            for t in range(365):
-                rec_tot = sum(round(ch_util[(dc, z, t)] * ch_cap[(dc, z)]) for z in ("Z02", "Z07", "Z13"))
-                assert rec_tot == dc_tot[(dc, t)], f"Stock mismatch at {dc} day {t}"
+        ch_nf = (p_in - p_out).astype(float)
+        ch_st = np.zeros((4, 3, 365), dtype=float)
+        for d in range(4):
+            for z in range(3):
+                ch_st[d, z] = ch_open[d, z] + np.cumsum(ch_nf[d, z])
+        assert np.allclose(ch_st.sum(axis=1), dc_tot, atol=1e-9), "Chamber conservation failed!"
+        ch_u = ch_st / ch_cap[:, :, None]
 
-        # 3. Load rail shuttles, consignments, BIP notices
-        sh_dep, sh_booked, sh_loaded, sh_rolled, sh_wag, sh_ton, sh_port, sh_day = {}, {}, {}, {}, {}, {}, {}, {}
+        # 3. Shuttles, consignments, BIP notices
+        sh_rows = []
+        sh_idx = {}
         with open(os.path.join(tdir, "rail_shuttle_departures_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
-                sid = r["shuttle_id"]
-                sh_dep[sid] = _ts(r["departure_ts_utc"])
-                sh_booked[sid] = int(r["booked_wf_slots"])
-                sh_loaded[sid] = int(r["loaded_wf_slots"])
-                sh_rolled[sid] = int(r["wf_standby_rolled"])
-                sh_wag[sid] = int(r["train_wagon_count"])
-                sh_ton[sid] = float(r["train_total_gross_tonnes"])
-                sh_port[sid] = r["port_id"]
-                d_s = sid.split("-")[-1]
-                sh_day[sid] = (dt.date(int(d_s[:4]), int(d_s[4:6]), int(d_s[6:8])) - BASE_DATE).days
+                sh_idx[r["shuttle_id"]] = len(sh_rows)
+                sh_rows.append(r)
+        n_sh = len(sh_rows)
+        n_slots = n_sh // 6
+        sh_corr = np.array([CORR_IDX[r["corridor_id"]] for r in sh_rows], dtype=int)
+        sh_port = np.array([PORT_IDX[r["port_id"]] for r in sh_rows], dtype=int)
+        sh_dep = [_ts(r["scheduled_departure_ts_utc"]) for r in sh_rows]
+        sh_planned = np.array([int(r["planned_wf_slots"]) for r in sh_rows], dtype=int)
+        sh_rolled = np.array([int(r["wf_standby_rolled"]) for r in sh_rows], dtype=float)
+        sh_cs = np.array([int(r["consist_wagons_short"]) for r in sh_rows], dtype=float)
+        sh_ld = np.array([int(r["loco_derate_events"]) for r in sh_rows], dtype=float)
+        port_slot_dep = {(int(sh_port[s]), s % n_slots): sh_dep[s] for s in range(n_sh)}
 
         c_ched = {}
         with open(os.path.join(tdir, "customs_consignment_bol_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 c_ched[r["container_id"]] = r["ched_lot_id"]
 
-        bip_notice_ts = {}
+        bip_ts = {}
         with open(os.path.join(tdir, "bip_inspection_notices_2026.jsonl"), encoding="utf-8") as f:
             for line in f:
                 if line.strip():
                     rec = json.loads(line)
-                    bip_notice_ts[rec["ched_lot_id"]] = _ts(rec["exam_notice_ts_utc"])
+                    bip_ts[rec["ched_lot_id"]] = _ts(rec["exam_notice_ts_utc"])
 
-        # 4. Load depot portal rejections
-        portal_rej = {}
-        with open(os.path.join(tdir, "depot_portal_requests_2026.csv"), encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                t = (_d(r["date_iso"]) - BASE_DATE).days
-                portal_rej[(r["depot_port_id"], r["shipping_line_id"], t)] = int(r["quota_closed_rejections"])
-
-        # 5. Load & clean container_milestones_2026.csv
-        ms_latest = {}
+        # 4. Milestones
+        ms_lat = {}
         with open(os.path.join(tdir, "container_milestones_2026.csv"), encoding="utf-8") as f:
             for r in csv.DictReader(f):
                 if r["record_status"] == "VOID":
                     continue
-                cid = r["container_id"]
-                v = int(r["extract_version"])
-                if cid not in ms_latest or v > ms_latest[cid][0]:
-                    ms_latest[cid] = (v, r)
-        rows = [v[1] for v in ms_latest.values()]
-        assert len(rows) == 24000
+                cid, v = r["container_id"], int(r["extract_version"])
+                if cid not in ms_lat or v > ms_lat[cid][0]:
+                    ms_lat[cid] = (v, r)
+        cids = sorted(ms_lat.keys())
+        n = len(cids)
+        assert n == 24000
 
-        # S1: same-vessel unsaturated twin contrast
-        uncap_by_v = defaultdict(list)
-        uncap_by_p = defaultdict(list)
-        for r in rows:
-            t = (_ts(r["discharge_ts_utc"]).astimezone(UTC).date() - BASE_DATE).days
-            u = ch_util[(r["dc_id"], r["thermal_zone"], t)]
-            y = float(r["excess_port_yard_cdays"])
-            if u < 0.92:
-                uncap_by_v[r["vessel_id"]].append(y)
-                uncap_by_p[r["port_id"]].append(y)
-        v_mean = {k: float(np.mean(v)) for k, v in uncap_by_v.items()}
-        p_mean = {k: float(np.mean(v)) for k, v in uncap_by_p.items()}
+        v_sorted = sorted({ms_lat[c][1]["vessel_id"] for c in cids})
+        v_map = {v: i for i, v in enumerate(v_sorted)}
+        n_v = len(v_sorted)
 
-        # S3: same-DC same-unload-day open-quota shipping-line contrast
-        open_by_dc_day = defaultdict(list)
-        open_by_dc = defaultdict(list)
-        for r in rows:
-            ut = (_ts(r["unload_complete_ts_cet"]).astimezone(BERLIN).date() - BASE_DATE).days
-            rej = portal_rej[(r["port_id"], r["shipping_line_id"], ut)]
-            dr = float(r["excess_dray_empty_cdays"])
-            if rej == 0:
-                open_by_dc_day[(r["dc_id"], ut)].append(dr)
-                open_by_dc[r["dc_id"]].append(dr)
-        dd_mean = {k: float(np.mean(v)) for k, v in open_by_dc_day.items()}
-        dc_mean = {k: float(np.mean(v)) for k, v in open_by_dc.items()}
+        cont_v = np.zeros(n, dtype=int)
+        cont_c = np.zeros(n, dtype=int)
+        cont_p = np.zeros(n, dtype=int)
+        cont_dc = np.zeros(n, dtype=int)
+        cont_z = np.zeros(n, dtype=int)
+        cont_l = np.zeros(n, dtype=int)
+        cont_d = np.zeros(n, dtype=int)
+        cont_ud = np.zeros(n, dtype=int)
+        cont_rail = np.zeros(n, dtype=bool)
+        cont_roll = np.zeros(n, dtype=bool)
+        cont_sh = np.zeros(n, dtype=int)
+        cont_bip = np.zeros(n, dtype=bool)
+        cont_samp = np.zeros(n, dtype=bool)
+        cont_lead = np.full(n, 999.0, dtype=float)
+        y_yard = np.zeros(n, dtype=float)
+        y_rail = np.zeros(n, dtype=float)
+        y_dray = np.zeros(n, dtype=float)
 
-        # S2: empirical lock cutoff + locked wagon count + weighbridge regression
-        sids = sorted(sh_dep.keys())
-        sid_to_i = {s: i for i, s in enumerate(sids)}
-        shortfall = np.array([sh_booked[s] - sh_loaded[s] for s in sids], dtype=float)
-        # Collect rail boxes & notice lead hours
-        rail_boxes = []
-        clean_rail_by_sh = defaultdict(list)
-        all_rail_nonbip_by_sh = defaultdict(list)
-        for r in rows:
-            if r["mode"] != "RAIL":
-                continue
-            sid = r["planned_shuttle_id"]
-            ched = c_ched[r["container_id"]]
-            is_bip = ched in bip_notice_ts
-            lead_h = (sh_dep[sid] - bip_notice_ts[ched]).total_seconds() / 3600.0 if is_bip else 999.0
-            rolled = (r["departed_shuttle_id"] != sid)
-            ex_r = float(r["excess_rail_cdays"])
-            rail_boxes.append((r, sid, is_bip, lead_h, rolled, ex_r))
-            if not is_bip:
-                all_rail_nonbip_by_sh[sid].append(ex_r)
-                if not rolled:
-                    clean_rail_by_sh[sid].append(ex_r)
-
-        best_c, best_r2 = 24.0, -1.0
-        for cand in (12.0, 18.0, 24.0, 30.0, 36.0):
-            cnt = np.zeros(len(sids))
-            for _, sid, is_bip, lead_h, _, _ in rail_boxes:
-                if is_bip and lead_h <= cand:
-                    cnt[sid_to_i[sid]] += 1.0
-            r2 = float(np.corrcoef(cnt, shortfall)[0, 1] ** 2)
-            if r2 > best_r2:
-                best_r2, best_c = r2, cand
-        assert best_c == 24.0, f"Unexpected empirical lock cutoff: {best_c}"
-
-        n_locked_sh = np.zeros(len(sids))
-        for _, sid, is_bip, lead_h, _, _ in rail_boxes:
-            if is_bip and lead_h <= best_c:
-                n_locked_sh[sid_to_i[sid]] += 1.0
-        non_phyto_short = np.maximum(0.0, shortfall - n_locked_sh)
-        Xw = np.column_stack([
-            np.ones(len(sids)),
-            [sh_wag[s] for s in sids],
-            [sh_booked[s] for s in sids],
-            n_locked_sh,
-            non_phyto_short,
-        ])
-        bw, _, _, _ = np.linalg.lstsq(Xw, np.array([sh_ton[s] for s in sids]), rcond=None)
-        f2_tonnes = float(bw[3])
-
-        # Compute exact container-level and shuttle-level 2026 & 2027 attributions
-        c26 = defaultdict(float)
-        c27 = defaultdict(float)
-        p27 = defaultdict(float)
-        q27 = defaultdict(float)
-        f1_gaps, f3_gaps = [], []
-
-        for r in rows:
-            p = r["port_id"]
-            z = r["thermal_zone"]
-            l = r["shipping_line_id"]
-            t = (_ts(r["discharge_ts_utc"]).astimezone(UTC).date() - BASE_DATE).days
-            ut = (_ts(r["unload_complete_ts_cet"]).astimezone(BERLIN).date() - BASE_DATE).days
-            q = _q(t)
-
-            vg = plan["vol_growth_port"][p][1]
-            pf = plan["plug_capacity_factor_2027"][p][1]
-            zf = plan["dc_zone_load_factor_2027"][z][1]
-            bf = plan["bip_sampling_factor_2027"][p][1]
-            df = plan["dray_contract_factor_2027"]["NETWORK"][1]
-            s26, s27 = plan["line_volume_share"][l]
-            dl = plan["depot_load_factor_2027"][l][1]
-
-            vb = float(r["excess_berth_cdays"])
-            ed = float(r["excess_edi_cdays"])
-            c26["vessel_berth"] += vb
-            c27["vessel_berth"] += vb * vg
-            c26["edi_docs"] += ed
-            c27["edi_docs"] += ed * vg
-
-            # S1 split
-            y = float(r["excess_port_yard_cdays"])
-            dc_w = float(r["excess_dc_dock_cdays"])
-            u = ch_util[(r["dc_id"], z, t)]
-            if u >= 0.95:
-                base_y = v_mean.get(r["vessel_id"], p_mean[p])
-                pb = max(0.0, y - base_y)
-                f1_gaps.append((y - base_y) * 24.0)
+        for i, cid in enumerate(cids):
+            r = ms_lat[cid][1]
+            cont_v[i] = v_map[r["vessel_id"]]
+            cont_c[i] = CORR_IDX[r["corridor_id"]]
+            cont_p[i] = PORT_IDX[r["port_id"]]
+            cont_dc[i] = DC_IDX[r["dc_id"]]
+            cont_z[i] = ZONE_IDX[r["thermal_zone"]]
+            cont_l[i] = LINE_IDX[r["shipping_line_id"]]
+            cont_d[i] = (_ts(r["discharge_ts_utc"]).astimezone(UTC).date() - BASE_DATE).days
+            cont_ud[i] = (_ts(r["unload_complete_ts_cet"]).astimezone(BERLIN).date() - BASE_DATE).days
+            ir = r["mode"] == "RAIL"
+            cont_rail[i] = ir
+            if ir:
+                cont_sh[i] = sh_idx[r["planned_shuttle_id"]]
+                cont_roll[i] = r["departed_shuttle_id"] != r["planned_shuttle_id"]
             else:
-                pb = 0.0
-            rp = y - pb
-            cs_tot = dc_w + pb
-            c26["reefer_plug"] += rp
-            c27["reefer_plug"] += rp * vg * pf
-            c26["coldstore_dock"] += cs_tot
-            c27["coldstore_dock"] += cs_tot * zf
+                cont_sh[i] = cont_c[i] * n_slots + (cont_d[i] // 3)
+            ch_id = c_ched[cid]
+            if ch_id in bip_ts:
+                cont_bip[i] = True
+                dep_t = port_slot_dep[(cont_p[i], cont_d[i] // 3)]
+                cont_lead[i] = (dep_t - bip_ts[ch_id]).total_seconds() / 3600.0
+            cont_samp[i] = int(r["bip_sampled_ind"]) == 1
+            y_yard[i] = float(r["excess_port_yard_cdays"])
+            y_rail[i] = float(r["excess_rail_cdays"])
+            y_dray[i] = float(r["excess_dray_empty_cdays"])
 
-            # Direct phyto
-            ph_d = float(r["excess_phyto_cdays"])
-            c26["phyto_insp"] += ph_d
-            c27["phyto_insp"] += ph_d * vg * bf
+        # 5. S1: Asymmetric convex filling-vs-draining chamber pull-back
+        u_c = ch_u[cont_dc, cont_z, cont_d]
+        nf_c = ch_nf[cont_dc, cont_z, cont_d]
+        ex = np.maximum(0.0, u_c - 0.78)
+        f_ind, d_ind = (nf_c > 0).astype(float), (nf_c <= 0).astype(float)
+        X1 = np.column_stack([ex * f_ind, (ex ** 2) * f_ind, ex * d_ind, (ex ** 2) * d_ind])
+        c_dum = np.column_stack([(cont_c == k).astype(float) for k in range(1, 6)])
+        X1f = np.column_stack([X1, c_dum])
+        b1, _, _, _ = np.linalg.lstsq(_demean(X1f, cont_v, n_v), _demean(y_yard, cont_v, n_v), rcond=None)
+        pred_pb = np.maximum(0.0, X1 @ np.maximum(0.0, b1[:4]))
+        rem1 = y_yard - X1f @ b1
+        fe1 = (np.bincount(cont_v, weights=rem1, minlength=n_v) / np.maximum(1.0, np.bincount(cont_v, minlength=n_v)))[cont_v]
+        pred_b1 = np.maximum(0.02, fe1 + X1f[:, 4:] @ b1[4:])
+        pb = np.where(pred_pb > 0.0, y_yard * (pred_pb / (pred_pb + pred_b1)), 0.0)
+        plug = y_yard - pb
+        C1 = float(pb.sum())
 
-            # S3 split
-            dr = float(r["excess_dray_empty_cdays"])
-            dep_g = float(r["excess_depot_gate_cdays"])
-            rej = portal_rej[(p, l, ut)]
-            if rej >= 1:
-                base_d = dd_mean.get((r["dc_id"], ut), dc_mean[r["dc_id"]])
-                blk = max(0.0, dr - base_d)
-                f3_gaps.append((dr - base_d) * 24.0)
-            else:
-                blk = 0.0
-            dr_true = dr - blk
-            edep_tot = dep_g + blk
-            c26["drayage_carrier"] += dr_true
-            c27["drayage_carrier"] += dr_true * vg * df
-            c26["empty_depot"] += edep_tot
-            c27["empty_depot"] += edep_tot * vg * (s27 / s26) * dl
+        # 6. S2: Joint terminal-varying BIP lock vs Nordbahn short-consist & loco cuts
+        unr_clean = cont_rail & (~cont_bip) & (~cont_roll)
+        mu_base = float(y_rail[unr_clean].mean())
+        sib_r = np.where(cont_rail & cont_bip & (~cont_samp), np.maximum(0.0, y_rail - mu_base), 0.0)
+        roll_d = np.where(cont_rail & cont_roll, np.maximum(0.0, y_rail - mu_base), 0.0)
+        base_r = np.where(cont_rail, np.where(cont_roll | (cont_bip & (~cont_samp)), np.minimum(y_rail, mu_base), y_rail), 0.0)
+        sh_roll_d = np.bincount(cont_sh, weights=roll_d, minlength=n_sh)
+        sh_base_d = np.bincount(cont_sh, weights=base_r, minlength=n_sh)
 
-            box_27 = (
-                vb * vg + ed * vg + rp * vg * pf + cs_tot * zf
-                + ph_d * vg * bf + dr_true * vg * df + edep_tot * vg * (s27 / s26) * dl
-            )
-            p27[p] += box_27
-            q27[q] += box_27
+        act = sh_planned > 0
+        cuts = []
+        for p in range(3):
+            mp = act & (sh_port == p)
+            bc, brss = 20.0, 1e18
+            for cand in (10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0, 26.0, 28.0, 30.0, 32.0):
+                lp = _sigmoid((cand - cont_lead) / 1.8)
+                lk = np.bincount(cont_sh, weights=np.where(cont_rail & cont_bip, lp, 0.0), minlength=n_sh)
+                Xp = np.column_stack([np.ones(mp.sum()), lk[mp], sh_cs[mp], sh_ld[mp]])
+                bp, _, _, _ = np.linalg.lstsq(Xp, sh_rolled[mp], rcond=None)
+                rss = float(np.sum((sh_rolled[mp] - Xp @ bp) ** 2))
+                if rss < brss:
+                    brss, bc = rss, cand
+            cuts.append(bc)
+        lp = _sigmoid((np.array(cuts)[cont_p] - cont_lead) / 1.8)
+        n_lk = np.bincount(cont_sh, weights=np.where(cont_rail & cont_bip, lp, 0.0), minlength=n_sh)
+        X2 = np.column_stack([n_lk * (sh_port == p) for p in range(3)] + [np.ones(n_sh), sh_cs, sh_ld])
+        b2, _, _, _ = np.linalg.lstsq(X2[act], sh_rolled[act], rcond=None)
+        bip_h = X2[:, :3] @ np.maximum(0.0, b2[:3])
+        rail_h = np.maximum(0.02, X2[:, 3:] @ b2[3:])
+        b_share = np.where((sh_rolled > 0) & (bip_h > 0), bip_h / np.maximum(bip_h + rail_h, 1e-9), 0.0)
+        bip_d = sh_roll_d * b_share
+        rail_d = sh_roll_d - bip_d + sh_base_d
+        C2 = float(bip_d.sum())
 
-        # Rail siblings + shuttle rollover split (S2)
-        rolled_ex = [ex for _, _, is_bip, _, rolled, ex in rail_boxes if (not is_bip) and rolled]
-        unrolled_ex = [ex for _, _, is_bip, _, rolled, ex in rail_boxes if (not is_bip) and (not rolled)]
-        roll_dur = float(np.mean(rolled_ex) - np.mean(unrolled_ex))
+        # 7. S3: Exact stock-flow shipping-line empty-depot backlog queue
+        p_rows = []
+        max_pt = 0
+        with open(os.path.join(tdir, "depot_portal_requests_2026.csv"), encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                t = (_d(r["date_iso"]) - BASE_DATE).days
+                max_pt = max(max_pt, t)
+                p_rows.append((t, PORT_IDX[r["depot_port_id"]], LINE_IDX[r["shipping_line_id"]], int(r["confirmed_bookings"])))
+        nq = max_pt + 1
+        p_conf = np.zeros((3, 4, nq), dtype=int)
+        for t, p, l, cf in p_rows:
+            p_conf[p, l, t] = cf
+        q_days = np.zeros((3, 4, nq), dtype=float)
+        for p in range(3):
+            for l in range(4):
+                un = np.bincount(cont_ud[(cont_p == p) & (cont_l == l)], minlength=nq)
+                bal = np.maximum(0.0, np.cumsum(un - p_conf[p, l]).astype(float))
+                q_days[p, l] = bal / max(1.0, float(un[:365].mean()))
+        q_c = q_days[cont_p, cont_l, cont_ud]
+        X3 = np.column_stack([q_c * (cont_c == k) for k in range(6)])
+        dow_d = np.column_stack([((cont_ud % 7) == wd).astype(float) for wd in range(1, 7)])
+        X3f = np.column_stack([X3, c_dum, dow_d])
+        grp3 = cont_dc * 56 + (cont_ud // 7)
+        n_g3 = 4 * 56
+        b3, _, _, _ = np.linalg.lstsq(_demean(X3f, grp3, n_g3), _demean(y_dray, grp3, n_g3), rcond=None)
+        pred_blk = np.maximum(0.0, X3 @ np.maximum(0.0, b3[:6]))
+        rem3 = y_dray - X3f @ b3
+        fe3 = (np.bincount(grp3, weights=rem3, minlength=n_g3) / np.maximum(1.0, np.bincount(grp3, minlength=n_g3)))[grp3]
+        pred_b3 = np.maximum(0.02, fe3 + X3f[:, 6:] @ b3[6:])
+        blk = np.where(pred_blk > 0.0, y_dray * (pred_blk / (pred_blk + pred_b3)), 0.0)
+        dray = y_dray - blk
+        C3 = float(blk.sum())
 
-        sh_base_box = {}
-        for s in sids:
-            if clean_rail_by_sh[s]:
-                sh_base_box[s] = float(np.mean(clean_rail_by_sh[s]))
-            elif all_rail_nonbip_by_sh[s]:
-                sh_base_box[s] = max(0.0, float(np.mean(all_rail_nonbip_by_sh[s]) - roll_dur))
-            else:
-                sh_base_box[s] = 0.0
+        # 8. Corridor 2027 BCRs & Funding Slate
+        bcrs = {}
+        avoids = {}
+        for ci, cn in enumerate(CORRIDORS):
+            pl = plan[cn]
+            mc = cont_c == ci
+            ms = sh_corr == ci
+            p27 = float(plug[mc].sum()) * pl["vg"] * pl["pf"]
+            r27 = float(rail_d[ms].sum()) * pl["vg"] * pl["rf"]
+            d27 = float(dray[mc].sum()) * pl["vg"] * pl["df"]
+            av = (p27 * pl["t_plug"] + r27 * pl["t_rail"] + d27 * pl["t_dray"]) * pl["cap"]
+            avoids[cn] = av
+            bcrs[cn] = av / pl["budget"]
 
-        sh_roll_days = defaultdict(float)
-        sh_all_rail_minus_sib = defaultdict(float)
-        for r, sid, is_bip, _, rolled, ex_r in rail_boxes:
-            p = r["port_id"]
-            t = (_ts(r["discharge_ts_utc"]).astimezone(UTC).date() - BASE_DATE).days
-            q = _q(t)
-            vg = plan["vol_growth_port"][p][1]
-            bf = plan["bip_sampling_factor_2027"][p][1]
-            is_sib = is_bip and (r["bip_sampled_ind"] == "0")
-            if is_sib:
-                sib_d = max(0.0, ex_r - sh_base_box[sid])
-                c26["phyto_insp"] += sib_d
-                c27["phyto_insp"] += sib_d * vg * bf
-                p27[p] += sib_d * vg * bf
-                q27[q] += sib_d * vg * bf
-                sh_all_rail_minus_sib[sid] += ex_r - sib_d
-            else:
-                sh_all_rail_minus_sib[sid] += ex_r
-                if rolled:
-                    sh_roll_days[sid] += max(0.0, ex_r - sh_base_box[sid])
+        ranked = sorted(CORRIDORS, key=lambda c: (-bcrs[c], c))
+        funded, sp = [], 0.0
+        for c in ranked:
+            if sp + plan[c]["budget"] <= BUDGET_CAP_EUR + 1e-9:
+                funded.append(c)
+                sp += plan[c]["budget"]
+        funded = sorted(funded)
 
-        rf = plan["rail_fleet_factor_2027"]["NETWORK"][1]
-        for i, s in enumerate(sids):
-            p = sh_port[s]
-            q = _q(sh_day[s])
-            vg = plan["vol_growth_port"][p][1]
-            bf = plan["bip_sampling_factor_2027"][p][1]
-            rolled_tot = float(sh_rolled[s])
-            base_s = sh_all_rail_minus_sib[s] - sh_roll_days[s]
-            locked_b = min(rolled_tot, float(n_locked_sh[i]))
-            if rolled_tot > 0:
-                ph_b = sh_roll_days[s] * (locked_b / rolled_tot)
-                rh_b = sh_roll_days[s] - ph_b
-            else:
-                ph_b = 0.0
-                rh_b = 0.0
-            c26["phyto_insp"] += ph_b
-            c27["phyto_insp"] += ph_b * vg * bf
-            c26["rail_handoff"] += rh_b + base_s
-            c27["rail_handoff"] += (rh_b + base_s) * vg * rf
-            p27[p] += ph_b * vg * bf + (rh_b + base_s) * vg * rf
-            q27[q] += ph_b * vg * bf + (rh_b + base_s) * vg * rf
-
-        # Compare against figures.json and golden deliverables
+        # 9. Tie out against figures.json and golden.zip CSV + XLSX
         fig = json.load(open(os.path.join(HERE, "figures.json"), encoding="utf-8"))
-        for row in fig["causes"]:
-            m = row["cause_id"]
-            assert abs(c26[m] - row["cdays_2026"]) < 0.05, f"2026 {m}: {c26[m]} vs {row['cdays_2026']}"
-            assert abs(c27[m] - row["cdays_2027"]) < 0.05, f"2027 {m}: {c27[m]} vs {row['cdays_2027']}"
+        assert funded == fig["funded_slate"], f"Slate mismatch: {funded} vs {fig['funded_slate']}"
+        assert abs(C1 - fig["C1_coldstore_pullback_2026"]) < 0.15
+        assert abs(C2 - fig["C2_phyto_rail_roll_2026"]) < 0.15
+        assert abs(C3 - fig["C3_depot_backlog_2026"]) < 0.15
+        for cn in CORRIDORS:
+            fk = "BCR_" + cn.replace("-", "_")
+            assert abs(bcrs[cn] - fig[fk]) < 0.001, f"BCR mismatch on {cn}: {bcrs[cn]:.4f} vs {fig[fk]:.4f}"
 
-        tot_27 = sum(c27.values())
-        remed_set = sorted(m for m in c27 if c27[m] >= 2500.0)
-        remed_days = sum(c27[m] for m in remed_set)
-        cost_m = sum(c27[m] * TARIFF_EUR[m] for m in c27) / 1e6
-        avoid_m = sum(c27[m] * TARIFF_EUR[m] for m in remed_set) / 1e6
+        with open(os.path.join(gdir, "weserfrucht_corridor_allocation_2027.csv"), encoding="utf-8") as f:
+            csv_rows = list(csv.DictReader(f))
+        assert [r["corridor_id"] for r in csv_rows] == ranked
+        for r in csv_rows:
+            cn = r["corridor_id"]
+            assert abs(float(r["bcr_2027"]) - bcrs[cn]) < 0.001
+            assert abs(float(r["avoidable_eur_2027"]) - avoids[cn]) < 0.50
 
-        assert remed_set == fig["remediate_set"]
-        assert abs(tot_27 - fig["routes"]["golden"]["total_2027"]) < 0.1
-        assert abs(remed_days - fig["routes"]["golden"]["remed_days"]) < 0.1
-        assert abs(cost_m - fig["A_cost_eur_m"]) < 0.002
-        assert abs(avoid_m - fig["A_avoidable_eur_m"]) < 0.002
-        assert abs(p27["BHV"] - fig["by_port_2027"]["BHV"]) < 0.1
-        assert abs(p27["HAM"] - fig["by_port_2027"]["HAM"]) < 0.1
-        assert abs(q27[2] - fig["by_quarter_2027"]["Q3"]) < 0.1
-        assert abs(float(np.mean(f1_gaps)) - fig["R5_diagnostics"]["F1_twin_gap_h"]) < 0.05
-        assert abs(f2_tonnes - fig["R5_diagnostics"]["F2_tonnes_per_slot"]) < 0.05
-        assert abs(float(np.mean(f3_gaps)) - fig["R5_diagnostics"]["F3_line_gap_h"]) < 0.05
-
-        # Also check unzipped golden CSV & XLSX match recomputed values
-        with open(os.path.join(gdir, "weserfrucht_delay_attribution_2027.csv"), encoding="utf-8") as f:
-            g_rows = list(csv.DictReader(f))
-        for gr in g_rows:
-            m = gr["cause_id"]
-            assert abs(float(gr["cdays_2027"]) - c27[m]) < 0.05
-
-        wb = load_workbook(os.path.join(gdir, "weserfrucht_coldchain_remediation_2027.xlsx"), data_only=True)
-        ws1 = wb["Remediation_Summary"]
-        assert abs(float(ws1["E14"].value) - tot_27) < 0.1
-        assert abs(float(ws1["E15"].value) - remed_days) < 0.1
+        wb = load_workbook(os.path.join(gdir, "weserfrucht_corridor_capital_model_2027.xlsx"), data_only=True)
+        ws1 = wb["Executive_Allocation"]
+        assert abs(float(ws1["C16"].value) - sp) < 0.05
+        assert abs(float(ws1["C18"].value) - sum(avoids[c] for c in funded)) < 0.50
+        assert abs(float(ws1["G15"].value) - C1) < 0.15
+        assert abs(float(ws1["G16"].value) - C2) < 0.15
+        assert abs(float(ws1["G17"].value) - C3) < 0.15
 
         print(
-            f"PASS  verify.py task27 (standalone from target.zip): "
-            f"2026={sum(c26.values()):,.2f}, 2027={tot_27:,.2f}, remed={remed_days:,.2f}, "
-            f"EUR {cost_m:.3f}M (avoidable {avoid_m:.3f}M), "
-            f"F1=+{np.mean(f1_gaps):.2f}h, F2={f2_tonnes:.2f}t, F3=+{np.mean(f3_gaps):.2f}h"
+            f"VERIFY PASS task27 (standalone from target.zip & golden.zip) | "
+            f"funded={funded} | C1={C1:.1f} C2={C2:.1f} C3={C3:.1f} | "
+            f"BCRs={ {c: round(bcrs[c], 3) for c in ranked} }"
         )
-        return 0
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
 if __name__ == "__main__":
-    sys.exit(verify())
+    verify()

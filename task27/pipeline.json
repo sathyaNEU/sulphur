@@ -1,6 +1,8 @@
 {
   "task": "task27",
   "project": "sulfur",
+  "architecture": 2,
+  "v4_hardened": true,
   "domain": "supply-chain-logistics",
   "client_domain": "general-statistics-data-science",
   "subdomain": "trade-flows",
@@ -8,57 +10,80 @@
   "doctrine": "throughout",
   "status": "READY",
   "stage": 5,
-  "drawn": "2026-11-22",
-  "updated": "2026-11-22",
-  "call": "REMEDIATE vessel_berth (4,530), coldstore_dock (3,367), drayage_carrier (3,213), reefer_plug (3,150), empty_depot (3,053) [17,313 c-days, EUR 3.721M avoidable]; MONITOR phyto_insp (2,058), rail_handoff (1,734), edi_docs (957) [22,062 total, EUR 4.693M]",
-  "precut": {
-    "exit": 0,
-    "date": "2026-11-22",
-    "summary": "PASS task27: 118 checks, 0 FAIL, 2 WARN"
+  "drawn": "2026-11-23",
+  "updated": "2026-11-23",
+  "call": "FUND WHV-OSN (BCR 1.139, EUR 560k), BHV-OSN (BCR 1.100, EUR 560k), HAM-HAN (BCR 1.086, EUR 585k) [EUR 1,705,000 of EUR 1,750,000 cap, EUR 1,889,111.37 avoidable, portfolio BCR 1.108]; DEFER HAM-MAG (0.988), BHV-HAN (0.949), BHV-KAS (0.901); C1=7,436.9, C2=4,304.4, C3=7,171.5 c-days",
+  "md5": {
+    "prompt.txt": "87d87a3a4f60b8c80dd1ca85e4a4f09b",
+    "target.zip": "af46269ad25af6a97feac06037864f68",
+    "golden.zip": "74bc4ddaa05b44a528d08718fca309e7",
+    "submission.md": "0ee70e42d00b4d66be31fa8bbcc4ae38"
   },
   "core": {
     "level": 5,
     "forcing": "PASS",
-    "variants": 22,
+    "variants": 21,
     "flips": 0,
-    "seed": 2701
+    "seed": 2701,
+    "v4_ecf_single_stump_max": 37,
+    "v4_ecf_reflex": 7,
+    "coupled_asks": "6/6 (100%)"
+  },
+  "gates": {
+    "runner": "gates.py task27 --full",
+    "passed": 13,
+    "failed": 0,
+    "precut": "PASS",
+    "effort": "PASS",
+    "tells": "PASS (0 FAIL, 0 WARN)",
+    "voice": "PASS (0 FAIL, 0 WARN)",
+    "leak_mechanical": "REVIEW (0 LEAK; 3 Charter governance REVIEWs cleared CLEAN by leak-reader)",
+    "figures": "PASS",
+    "stump": "PASS",
+    "containers": "PASS (0 FAIL, 0 WARN)",
+    "heart": "PASS (0 BLOCK, 0 WARN; max driver sim 0.03 vs task28)",
+    "surface": "PASS",
+    "checks": "PASS",
+    "verify": "PASS",
+    "rebuild": "PASS (2 byte-identical rebuilds)"
   },
   "voice_check": {
     "exit": 0,
     "fail": 0,
     "warn": 0
   },
-  "effort": {
-    "exit": 0,
-    "quick": 13.9,
-    "careful": 20.8,
-    "single_stump_lost_max": 37,
-    "thorough": 100.0
-  },
-  "leak": {
-    "mechanical": "REVIEW (0 LEAK; 3 harmless Charter REVIEWs)",
-    "reader_pass1": "0 leaks; 5 realism tells fixed in core.py and pack.py",
-    "reader_pass2": "0 leaks, 0 helper-only, 0 Gate G, 0 single-thing shortcuts, all 5 high-severity realism tells resolved"
-  },
   "duplicate_check": {
-    "heart": "PASS (max driver sim 0.06 vs task26)",
-    "surface": "PASS",
-    "skeleton": "PASS (severity none; 0 closed/closed-near lessons)"
+    "heart": "PASS (0 BLOCK, 0 WARN; max driver sim 0.03 vs task28)",
+    "skeleton": "PASS (severity none; 0 of 4 lessons closed)"
   },
-  "containers": {
-    "exit": 0,
-    "fail": 0,
-    "warn": 0
+  "stage4_audits": {
+    "leak_reader": {
+      "pass": 2,
+      "verdict": "CLEAN",
+      "report": "task27/leak_check_report.md"
+    },
+    "determinism_judge_v4": {
+      "pass": 2,
+      "mode": "determinism",
+      "verdict": "DETERMINISTIC",
+      "disposition": "APPROVE",
+      "correctness": "correct",
+      "figures_checked": 37,
+      "mismatches": 0,
+      "honest_forks_tested": 38,
+      "fork_flips": 0,
+      "stress_tests_passed": "14/14",
+      "gates_a_to_e": "ALL PASS",
+      "report": "task27/determinism_check_report_pass2.md"
+    }
   },
-  "judge": {
-    "pass1": "DETERMINISTIC / FIX_NOW (4 solution-only Step-by-Step completeness polishes applied)",
-    "pass2": "DETERMINISTIC / APPROVE (44 forks + 144 core / 576 wide joint combinations; 0 flips; 0/144 out of band; Fix: none)"
-  },
-  "md5": {
-    "prompt.txt": "205ac4abeaf1f96e0137ea7bc4b3b93c",
-    "target.zip": "1a74002ae46b2d0fcc1b88ecaab7a3ea",
-    "golden.zip": "1a0823c0b611f1a00a76290118977186"
-  },
+  "returned": [
+    {
+      "architecture": 1,
+      "date": "2026-11-23",
+      "reason": "Human reviewer return: S2 24h rail lock dead zone + zero-noise 2.25 rollover constant (construction catch), disjoint 8-cause scorecard ECF rollups let Run 1 score 65% despite missing S1 and S3. Archived arch1_response1.md and arch1_response2.md."
+    }
+  ],
   "resume": "/triage-runs task27",
-  "notes": "Stage 5 READY complete for Weserfrucht Import GmbH (task27). All 11 free gates, container audit (0 FAIL/0 WARN), byte-identical double rebuild, Stage 4 Pass 2 leak-reader (0 leaks), and determinism-judge Pass 2 (DETERMINISTIC / APPROVE) passed."
+  "notes": "Architecture 2 (v4-hardened) READY for platform upload and two-run rollout. Upload task27/prompt.txt, task27/target.zip, task27/golden.zip, and task27/submission.md blocks."
 }

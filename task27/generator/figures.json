@@ -1,1616 +1,1626 @@
 {
-  "A_avoidable_eur_exact": 3720662.51,
-  "A_avoidable_eur_m": 3.721,
-  "A_bhv_2027": 10647,
-  "A_cost_eur_exact": 4693157.95,
-  "A_cost_eur_m": 4.693,
-  "A_drayage_carrier": 3213,
-  "A_edi_docs": 957,
-  "A_ham_2027": 8216,
-  "A_phyto_insp": 2058,
-  "A_q3_2027": 8580,
-  "A_reefer_plug": 3150,
-  "A_remed_days": 17313,
-  "A_total_2027": 22062,
-  "A_vessel_berth": 4530,
-  "A_whv_2027": 3199,
-  "C1_coldstore_dock": 3367,
-  "C2_rail_handoff": 1734,
-  "C3_empty_depot": 3053,
-  "R1_settled_total": 19713,
-  "R5_diagnostics": {
-    "F1_rigorous_h": 0.52,
-    "F1_twin_gap_h": 20.1,
-    "F2_rigorous_t": 0.0,
-    "F2_tonnes_per_slot": -28.01,
-    "F3_line_gap_h": 10.61,
-    "F3_retry_mult": 4.25,
-    "F3_rigorous_h": 0.0,
-    "contrast_cdays_26": 3817.19,
-    "cs_pb_26": 1616.67,
-    "ed_blk_26": 1242.01,
-    "empiric_lock_h": 24,
-    "mean_rolled_cdays": 2.2717,
-    "mean_unrolled_cdays": 0.0214,
-    "measured_reefer_tonnes": 28.52,
-    "measured_rollover_days": 2.25,
-    "non_bip_sf_vs_booked_t": -3.15,
-    "non_bip_sf_vs_loaded_t": 0.65,
-    "ph_bump_26": 958.5,
-    "phyto_sibling_rail_26": 191.39,
-    "s1_lt95_cdays_26": 1616.34,
-    "s1_twin_cap_pct": 92,
-    "s2_total_26": 1149.89,
-    "s3_rej_per_box": 1.88
-  },
-  "R6_bundle": {
-    "bhv_2027": 10647,
-    "ham_2027": 8216,
-    "q3_2027": 8580,
-    "total_2027": 22062
-  },
-  "R7_bundle": {
-    "avoidable_eur_m": 3.721,
-    "cost_eur_m": 4.693,
-    "remed_days": 17313
-  },
-  "R8_call": [
-    "coldstore_dock",
-    "drayage_carrier",
-    "empty_depot",
-    "reefer_plug",
-    "vessel_berth"
-  ],
-  "agg_bands": {
-    "avoidable_eur_m": [
-      3.681,
-      3.739
+  "BCR_BHV_HAN": 0.949,
+  "BCR_BHV_KAS": 0.901,
+  "BCR_BHV_OSN": 1.1,
+  "BCR_HAM_HAN": 1.086,
+  "BCR_HAM_MAG": 0.988,
+  "BCR_WHV_OSN": 1.139,
+  "C1_coldstore_pullback_2026": 7436.9,
+  "C2_phyto_rail_roll_2026": 4304.4,
+  "C3_depot_backlog_2026": 7171.5,
+  "R1_reconciled_containers": 24000,
+  "all6_avoidable_eur_2027": 3506513.15,
+  "all6_carrier_ctrl_cdays_2026": 21561.1,
+  "all6_carrier_ctrl_cdays_2027": 23995.1,
+  "architecture": 2,
+  "bands": {
+    "BCR_BHV_HAN": [
+      0.9197,
+      1.0614
     ],
-    "bhv_2027": [
-      10599,
-      10704
+    "BCR_BHV_KAS": [
+      0.8855,
+      0.9198
     ],
-    "cost_eur_m": [
-      4.654,
-      4.725
+    "BCR_BHV_OSN": [
+      1.0844,
+      1.1234
     ],
-    "ham_2027": [
-      8187,
-      8252
+    "BCR_HAM_HAN": [
+      1.0724,
+      1.1141
     ],
-    "q3_2027": [
-      8547,
-      8686
+    "BCR_HAM_MAG": [
+      0.9744,
+      1.0196
     ],
-    "remed_days": [
-      17252,
-      17354
+    "BCR_WHV_OSN": [
+      1.1087,
+      1.1592
     ],
-    "total_2027": [
-      22001,
-      22131
+    "C1_coldstore_pullback_2026": [
+      7172.8,
+      7643.9
+    ],
+    "C2_phyto_rail_roll_2026": [
+      4086.4,
+      4436.0
+    ],
+    "C3_depot_backlog_2026": [
+      6741.5,
+      7279.7
     ]
   },
-  "as_of": "2027-01-19",
-  "by_port_2027": {
-    "BHV": 10647.32,
-    "HAM": 8215.91,
-    "WHV": 3198.81
-  },
-  "by_quarter_2027": {
-    "Q1": 3826.22,
-    "Q2": 5012.65,
-    "Q3": 8579.53,
-    "Q4": 4643.64
-  },
-  "causes": [
-    {
-      "band_2027": [
-        4530,
-        4530
-      ],
-      "cause_id": "vessel_berth",
-      "cause_name": "Vessel Berth & Arrival Slippage",
-      "cdays_2026": 4107.34,
-      "cdays_2026_int": 4107,
-      "cdays_2027": 4530.26,
-      "cdays_2027_int": 4530,
-      "designation": "REMEDIATE",
-      "direct_2027_int": 4530,
-      "eur_2027": 883401.57,
-      "eur_2027_m": 0.883,
-      "rigorous_2027_int": 4530,
-      "share_2027_pct": 20.53,
-      "tariff_eur": 195
-    },
-    {
-      "band_2027": [
-        3086,
-        3386
-      ],
-      "cause_id": "coldstore_dock",
-      "cause_name": "Inland Cold-Store Dock & Receiving",
-      "cdays_2026": 2732.06,
-      "cdays_2026_int": 2732,
-      "cdays_2027": 3366.62,
-      "cdays_2027_int": 3367,
-      "designation": "REMEDIATE",
-      "direct_2027_int": 1357,
-      "eur_2027": 959487.92,
-      "eur_2027_m": 0.959,
-      "rigorous_2027_int": 1986,
-      "share_2027_pct": 15.26,
-      "tariff_eur": 285
-    },
-    {
-      "band_2027": [
-        3167,
-        3240
-      ],
-      "cause_id": "drayage_carrier",
-      "cause_name": "Inland Drayage Carrier Turnaround",
-      "cdays_2026": 3324.42,
-      "cdays_2026_int": 3324,
-      "cdays_2027": 3212.97,
-      "cdays_2027_int": 3213,
-      "designation": "REMEDIATE",
-      "direct_2027_int": 4411,
-      "eur_2027": 514074.47,
-      "eur_2027_m": 0.514,
-      "rigorous_2027_int": 4411,
-      "share_2027_pct": 14.56,
-      "tariff_eur": 160
-    },
-    {
-      "band_2027": [
-        3135,
-        3385
-      ],
-      "cause_id": "reefer_plug",
-      "cause_name": "Port Terminal Reefer Plug & Yard",
-      "cdays_2026": 3283.79,
-      "cdays_2026_int": 3284,
-      "cdays_2027": 3149.51,
-      "cdays_2027_int": 3150,
-      "designation": "REMEDIATE",
-      "direct_2027_int": 4754,
-      "eur_2027": 661396.51,
-      "eur_2027_m": 0.661,
-      "rigorous_2027_int": 4242,
-      "share_2027_pct": 14.28,
-      "tariff_eur": 210
-    },
-    {
-      "band_2027": [
-        3015,
-        3125
-      ],
-      "cause_id": "empty_depot",
-      "cause_name": "Ocean-Line Empty Depot Intake",
-      "cdays_2026": 2006.05,
-      "cdays_2026_int": 2006,
-      "cdays_2027": 3053.49,
-      "cdays_2027_int": 3053,
-      "designation": "REMEDIATE",
-      "direct_2027_int": 947,
-      "eur_2027": 702302.05,
-      "eur_2027_m": 0.702,
-      "rigorous_2027_int": 947,
-      "share_2027_pct": 13.84,
-      "tariff_eur": 230
-    },
-    {
-      "band_2027": [
-        1940,
-        2208
-      ],
-      "cause_id": "phyto_insp",
-      "cause_name": "EU BIP Phytosanitary Inspection",
-      "cdays_2026": 1513.84,
-      "cdays_2026_int": 1514,
-      "cdays_2027": 2057.65,
-      "cdays_2027_int": 2058,
-      "designation": "MONITOR",
-      "direct_2027_int": 495,
-      "eur_2027": 534987.95,
-      "eur_2027_m": 0.535,
-      "rigorous_2027_int": 755,
-      "share_2027_pct": 9.33,
-      "tariff_eur": 260
-    },
-    {
-      "band_2027": [
-        1628,
-        1819
-      ],
-      "cause_id": "rail_handoff",
-      "cause_name": "Intermodal Rail Shuttle Handoff",
-      "cdays_2026": 1875.46,
-      "cdays_2026_int": 1875,
-      "cdays_2027": 1734.06,
-      "cdays_2027_int": 1734,
-      "designation": "MONITOR",
-      "direct_2027_int": 2797,
-      "eur_2027": 303459.71,
-      "eur_2027_m": 0.303,
-      "rigorous_2027_int": 2620,
-      "share_2027_pct": 7.86,
-      "tariff_eur": 175
-    },
-    {
-      "band_2027": [
-        957,
-        957
-      ],
-      "cause_id": "edi_docs",
-      "cause_name": "Customs & EDI Documentation Hold",
-      "cdays_2026": 869.56,
-      "cdays_2026_int": 870,
-      "cdays_2027": 957.48,
-      "cdays_2027_int": 957,
-      "designation": "MONITOR",
-      "direct_2027_int": 957,
-      "eur_2027": 134047.78,
-      "eur_2027_m": 0.134,
-      "rigorous_2027_int": 957,
-      "share_2027_pct": 4.34,
-      "tariff_eur": 140
-    }
-  ],
-  "chamber_stats": {
-    "capped_boxes_count": 1930,
-    "closed_quota_boxes": 2809,
-    "hot_bhv": 861,
-    "hot_dc_count": 4,
-    "hot_ham": 742,
-    "hot_whv": 327,
-    "hot_z02": 835,
-    "hot_z07": 1095,
-    "locked_bhv": 198,
-    "locked_ham": 157,
-    "locked_phyto_slots": 426,
-    "locked_shuttles_count": 139,
-    "locked_whv": 71,
-    "non_bip_rolled_sh": 684,
-    "portal_rejected_total": 5273,
-    "rail_bip_siblings_count": 517,
-    "rolled_shuttles_count": 285,
-    "s3_unpaired_boxes": 25,
-    "total_dc_util_max_pct": 79.0,
-    "total_dc_util_min_pct": 69.0,
-    "total_rolled_sh": 1110,
-    "whv_twin_gap_h": 20.08,
-    "whv_yard_max_pct": 94.56,
-    "z02_util_max_pct": 99.3,
-    "z07_util_max_pct": 99.2,
-    "z13_util_max_pct": 94.6
-  },
+  "budget_cap_eur": 1750000.0,
   "cleaning": {
-    "bip_notices_count": 309,
+    "bip_notice_lots": 1250,
     "crosswalk_carrier_mappings": 4,
     "crosswalk_store_mappings": 27,
-    "dc_days_total": 1460,
-    "max_timestamp_excess_err_cdays": 1.2e-05,
-    "milestones_raw_rows": 24495,
+    "milestones_raw_rows": 24525,
     "milestones_settled_containers": 24000,
-    "milestones_superseded_dropped": 305,
-    "milestones_void_dropped": 190,
-    "pallets_case_unit_rows": 61598,
-    "pallets_de_date_rows": 66670,
-    "pallets_dedup_rows": 175284,
-    "pallets_legacy_store_rows": 21622,
-    "pallets_raw_rows": 179544,
-    "pallets_superseded_dropped": 4260,
-    "stock_flow_max_diff_pallets": 0,
-    "turnin_dedup_rows": 24869,
-    "turnin_legacy_carrier_rows": 5590,
-    "turnin_physical_acceptance_pct": 96.51,
-    "turnin_raw_rows": 25302,
-    "turnin_superseded_dropped": 433,
-    "turnin_turnaway_events": 869
+    "milestones_superseded_removed": 335,
+    "milestones_void_removed": 190,
+    "pallets_case_converted_rows": 62067,
+    "pallets_de_date_rows": 66421,
+    "pallets_dedup_rows": 175207,
+    "pallets_legacy_store_mapped": 21523,
+    "pallets_raw_rows": 179359,
+    "pallets_superseded_removed": 4152,
+    "turnin_legacy_carrier_mapped": 5530,
+    "turnin_raw_rows": 25252,
+    "turnin_superseded_removed": 445
   },
-  "forcing_max_monitor": 2318,
-  "forcing_min_remed": 2520,
-  "lattice": {
-    "S1": {
-      "avoidable_eur_m": 3.0982,
-      "bhv_2027": 10349.83,
-      "cost_eur_m": 4.4575,
-      "diag": {
-        "contrast_cdays_26": 2200.515,
-        "cs_pb_26": 0.0,
-        "ed_blk_26": 1242.015,
-        "line_gap_h": 10.612,
-        "ph_bump_26": 958.5,
-        "retry_mult": 4.246,
-        "tonnes_per_slot": -28.009,
-        "twin_gap_h": 0.0
-      },
-      "ham_2027": 8157.78,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 8259.7,
-      "remed_days": 15550.9,
-      "remediate_set": [
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 21657.48
+  "corridor_bcrs": {
+    "BHV-HAN": 0.949,
+    "BHV-KAS": 0.901,
+    "BHV-OSN": 1.1,
+    "HAM-HAN": 1.086,
+    "HAM-MAG": 0.988,
+    "WHV-OSN": 1.139
+  },
+  "corridors": [
+    {
+      "avoidable_eur_2027": 637950.34,
+      "bcr_2027": 1.139197,
+      "budget_eur": 560000.0,
+      "c1_coldstore_pullback_2026": 897.257,
+      "c2_phyto_rail_roll_2026": 82.5249,
+      "c3_depot_backlog_2026": 1038.7551,
+      "capture_rate_2027": 0.82,
+      "carrier_ctrl_cdays_2026": 4095.1893,
+      "carrier_ctrl_cdays_2027": 4583.5149,
+      "containers_2026": 2887,
+      "corridor_id": "WHV-OSN",
+      "dc_id": "OSN",
+      "decision": "FUND",
+      "dray_factor_2027": 0.96,
+      "drayage_carrier_2026": 3171.8407,
+      "drayage_carrier_2027": 3532.1618,
+      "gross_eur_2027": 777988.22,
+      "haul_distance_km": 165,
+      "phyto_sibling_rail_2026": 49.4924,
+      "plug_factor_2027": 1.0,
+      "port_id": "WHV",
+      "rail_containers_2026": 2023,
+      "rail_factor_2027": 0.92,
+      "rail_handoff_2026": 212.6212,
+      "rail_handoff_2027": 226.9094,
+      "rank": 1,
+      "raw_dray_empty_2026": 4210.5958,
+      "raw_port_yard_2026": 1607.9844,
+      "raw_rail_tms_2026": 344.6385,
+      "reefer_plug_2026": 710.7274,
+      "reefer_plug_2027": 824.4438,
+      "vol_growth_2027": 1.16
     },
-    "S1+S2": {
-      "avoidable_eur_m": 3.5877,
-      "bhv_2027": 10108.32,
-      "cost_eur_m": 4.2373,
-      "diag": {
-        "contrast_cdays_26": 1242.015,
-        "cs_pb_26": 0.0,
-        "ed_blk_26": 1242.015,
-        "line_gap_h": 10.612,
-        "ph_bump_26": 0.0,
-        "retry_mult": 4.246,
-        "tonnes_per_slot": 0.0,
-        "twin_gap_h": 0.0
-      },
-      "ham_2027": 7972.9,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 8118.01,
-      "remed_days": 18348.14,
-      "remediate_set": [
-        "drayage_carrier",
-        "empty_depot",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 21158.15
+    {
+      "avoidable_eur_2027": 615997.26,
+      "bcr_2027": 1.099995,
+      "budget_eur": 560000.0,
+      "c1_coldstore_pullback_2026": 1437.205,
+      "c2_phyto_rail_roll_2026": 159.8727,
+      "c3_depot_backlog_2026": 515.4573,
+      "capture_rate_2027": 0.8,
+      "carrier_ctrl_cdays_2026": 3578.0326,
+      "carrier_ctrl_cdays_2027": 3917.1571,
+      "containers_2026": 3796,
+      "corridor_id": "BHV-OSN",
+      "dc_id": "OSN",
+      "decision": "FUND",
+      "dray_factor_2027": 0.95,
+      "drayage_carrier_2026": 652.0045,
+      "drayage_carrier_2027": 730.8971,
+      "gross_eur_2027": 769996.58,
+      "haul_distance_km": 175,
+      "phyto_sibling_rail_2026": 58.2542,
+      "plug_factor_2027": 0.92,
+      "port_id": "BHV",
+      "rail_containers_2026": 2628,
+      "rail_factor_2027": 0.94,
+      "rail_handoff_2026": 413.7229,
+      "rail_handoff_2027": 458.9014,
+      "rank": 2,
+      "raw_dray_empty_2026": 1167.4618,
+      "raw_port_yard_2026": 3949.5103,
+      "raw_rail_tms_2026": 631.8497,
+      "reefer_plug_2026": 2512.3053,
+      "reefer_plug_2027": 2727.3586,
+      "vol_growth_2027": 1.18
     },
-    "S1+S2+S3": {
-      "avoidable_eur_m": 3.0771,
-      "bhv_2027": 9667.37,
-      "cost_eur_m": 3.9445,
-      "diag": {
-        "contrast_cdays_26": 0.0,
-        "cs_pb_26": 0.0,
-        "ed_blk_26": 0.0,
-        "line_gap_h": 0.0,
-        "ph_bump_26": 0.0,
-        "retry_mult": 0.0,
-        "tonnes_per_slot": 0.0,
-        "twin_gap_h": 0.0
-      },
-      "ham_2027": 7709.74,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 7594.36,
-      "remed_days": 16492.97,
-      "remediate_set": [
-        "drayage_carrier",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 20249.7
+    {
+      "avoidable_eur_2027": 635163.77,
+      "bcr_2027": 1.08575,
+      "budget_eur": 585000.0,
+      "c1_coldstore_pullback_2026": 586.1291,
+      "c2_phyto_rail_roll_2026": 1223.112,
+      "c3_depot_backlog_2026": 464.5355,
+      "capture_rate_2027": 0.8,
+      "carrier_ctrl_cdays_2026": 3677.8791,
+      "carrier_ctrl_cdays_2027": 4408.9381,
+      "containers_2026": 4168,
+      "corridor_id": "HAM-HAN",
+      "dc_id": "HAN",
+      "decision": "FUND",
+      "dray_factor_2027": 0.98,
+      "drayage_carrier_2026": 681.6756,
+      "drayage_carrier_2027": 815.0113,
+      "gross_eur_2027": 793954.71,
+      "haul_distance_km": 150,
+      "phyto_sibling_rail_2026": 259.8429,
+      "plug_factor_2027": 1.05,
+      "port_id": "HAM",
+      "rail_containers_2026": 3523,
+      "rail_factor_2027": 0.96,
+      "rail_handoff_2026": 2224.1343,
+      "rail_handoff_2027": 2604.9061,
+      "rank": 3,
+      "raw_dray_empty_2026": 1146.2111,
+      "raw_port_yard_2026": 1358.1983,
+      "raw_rail_tms_2026": 3707.0891,
+      "reefer_plug_2026": 772.0692,
+      "reefer_plug_2027": 989.0207,
+      "vol_growth_2027": 1.22
     },
-    "S1+S3": {
-      "avoidable_eur_m": 2.5876,
-      "bhv_2027": 9908.88,
-      "cost_eur_m": 4.1647,
-      "diag": {
-        "contrast_cdays_26": 958.5,
-        "cs_pb_26": 0.0,
-        "ed_blk_26": 0.0,
-        "line_gap_h": 0.0,
-        "ph_bump_26": 958.5,
-        "retry_mult": 0.0,
-        "tonnes_per_slot": -28.009,
-        "twin_gap_h": 0.0
-      },
-      "ham_2027": 7894.61,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 7736.05,
-      "remed_days": 13695.73,
-      "remediate_set": [
-        "drayage_carrier",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 20749.02
+    {
+      "avoidable_eur_2027": 558284.17,
+      "bcr_2027": 0.988114,
+      "budget_eur": 565000.0,
+      "c1_coldstore_pullback_2026": 598.273,
+      "c2_phyto_rail_roll_2026": 2399.7157,
+      "c3_depot_backlog_2026": 845.3444,
+      "capture_rate_2027": 0.78,
+      "carrier_ctrl_cdays_2026": 3367.8335,
+      "carrier_ctrl_cdays_2027": 3843.7369,
+      "containers_2026": 3996,
+      "corridor_id": "HAM-MAG",
+      "dc_id": "MAG",
+      "decision": "DEFER",
+      "dray_factor_2027": 0.98,
+      "drayage_carrier_2026": 821.4472,
+      "drayage_carrier_2027": 917.7209,
+      "gross_eur_2027": 715748.93,
+      "haul_distance_km": 255,
+      "phyto_sibling_rail_2026": 368.8098,
+      "plug_factor_2027": 1.05,
+      "port_id": "HAM",
+      "rail_containers_2026": 3641,
+      "rail_factor_2027": 0.96,
+      "rail_handoff_2026": 1189.165,
+      "rail_handoff_2027": 1301.4221,
+      "rank": 4,
+      "raw_dray_empty_2026": 1666.7917,
+      "raw_port_yard_2026": 1955.4944,
+      "raw_rail_tms_2026": 3957.6905,
+      "reefer_plug_2026": 1357.2213,
+      "reefer_plug_2027": 1624.5939,
+      "vol_growth_2027": 1.14
     },
-    "S2": {
-      "avoidable_eur_m": 4.2102,
-      "bhv_2027": 10405.8,
-      "cost_eur_m": 4.473,
-      "diag": {
-        "contrast_cdays_26": 2858.688,
-        "cs_pb_26": 1616.673,
-        "ed_blk_26": 1242.015,
-        "line_gap_h": 10.612,
-        "ph_bump_26": 0.0,
-        "retry_mult": 4.246,
-        "tonnes_per_slot": 0.0,
-        "twin_gap_h": 20.104
-      },
-      "ham_2027": 8031.03,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 8437.84,
-      "remed_days": 20110.09,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 21562.71
+    {
+      "avoidable_eur_2027": 545525.14,
+      "bcr_2027": 0.948739,
+      "budget_eur": 575000.0,
+      "c1_coldstore_pullback_2026": 813.0803,
+      "c2_phyto_rail_roll_2026": 225.0085,
+      "c3_depot_backlog_2026": 3231.2336,
+      "capture_rate_2027": 0.78,
+      "carrier_ctrl_cdays_2026": 3583.8979,
+      "carrier_ctrl_cdays_2027": 3747.4856,
+      "containers_2026": 4584,
+      "corridor_id": "BHV-HAN",
+      "dc_id": "HAN",
+      "decision": "DEFER",
+      "dray_factor_2027": 0.95,
+      "drayage_carrier_2026": 1108.7947,
+      "drayage_carrier_2027": 1179.7575,
+      "gross_eur_2027": 699391.21,
+      "haul_distance_km": 155,
+      "phyto_sibling_rail_2026": 86.8816,
+      "plug_factor_2027": 0.92,
+      "port_id": "BHV",
+      "rail_containers_2026": 3396,
+      "rail_factor_2027": 0.94,
+      "rail_handoff_2026": 775.9687,
+      "rail_handoff_2027": 816.9399,
+      "rank": 5,
+      "raw_dray_empty_2026": 4340.0282,
+      "raw_port_yard_2026": 2512.2148,
+      "raw_rail_tms_2026": 1087.8588,
+      "reefer_plug_2026": 1699.1346,
+      "reefer_plug_2027": 1750.7883,
+      "vol_growth_2027": 1.12
     },
-    "S2+S3": {
-      "avoidable_eur_m": 3.6996,
-      "bhv_2027": 9964.86,
-      "cost_eur_m": 4.1801,
-      "diag": {
-        "contrast_cdays_26": 1616.673,
-        "cs_pb_26": 1616.673,
-        "ed_blk_26": 0.0,
-        "line_gap_h": 0.0,
-        "ph_bump_26": 0.0,
-        "retry_mult": 0.0,
-        "tonnes_per_slot": 0.0,
-        "twin_gap_h": 20.104
-      },
-      "ham_2027": 7767.87,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 7914.18,
-      "remed_days": 18254.91,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 20654.26
-    },
-    "S3": {
-      "avoidable_eur_m": 3.2101,
-      "bhv_2027": 10206.37,
-      "cost_eur_m": 4.4003,
-      "diag": {
-        "contrast_cdays_26": 2575.173,
-        "cs_pb_26": 1616.673,
-        "ed_blk_26": 0.0,
-        "line_gap_h": 0.0,
-        "ph_bump_26": 958.5,
-        "retry_mult": 0.0,
-        "tonnes_per_slot": -28.009,
-        "twin_gap_h": 20.104
-      },
-      "ham_2027": 7952.74,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
-      },
-      "q3_2027": 8055.88,
-      "remed_days": 15457.67,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 21153.58
+    {
+      "avoidable_eur_2027": 513592.47,
+      "bcr_2027": 0.901039,
+      "budget_eur": 570000.0,
+      "c1_coldstore_pullback_2026": 3104.9125,
+      "c2_phyto_rail_roll_2026": 214.1435,
+      "c3_depot_backlog_2026": 1076.1502,
+      "capture_rate_2027": 0.78,
+      "carrier_ctrl_cdays_2026": 3258.2677,
+      "carrier_ctrl_cdays_2027": 3494.2971,
+      "containers_2026": 4569,
+      "corridor_id": "BHV-KAS",
+      "dc_id": "KAS",
+      "decision": "DEFER",
+      "dray_factor_2027": 0.95,
+      "drayage_carrier_2026": 961.9563,
+      "drayage_carrier_2027": 1050.9372,
+      "gross_eur_2027": 658451.89,
+      "haul_distance_km": 295,
+      "phyto_sibling_rail_2026": 71.7863,
+      "plug_factor_2027": 0.92,
+      "port_id": "BHV",
+      "rail_containers_2026": 3289,
+      "rail_factor_2027": 0.94,
+      "rail_handoff_2026": 602.7129,
+      "rail_handoff_2027": 651.5327,
+      "rank": 6,
+      "raw_dray_empty_2026": 2038.1064,
+      "raw_port_yard_2026": 4798.511,
+      "raw_rail_tms_2026": 888.6428,
+      "reefer_plug_2026": 1693.5985,
+      "reefer_plug_2027": 1791.8272,
+      "vol_growth_2027": 1.15
     }
-  },
-  "member_bands": {
-    "coldstore_dock": [
-      3086,
-      3386
-    ],
-    "drayage_carrier": [
-      3167,
-      3240
-    ],
-    "edi_docs": [
-      957,
-      957
-    ],
-    "empty_depot": [
-      3015,
-      3125
-    ],
-    "phyto_insp": [
-      1940,
-      2208
-    ],
-    "rail_handoff": [
-      1628,
-      1819
-    ],
-    "reefer_plug": [
-      3135,
-      3385
-    ],
-    "vessel_berth": [
-      4530,
-      4530
-    ]
-  },
-  "monitor_set": [
-    "edi_docs",
-    "phyto_insp",
-    "rail_handoff"
   ],
-  "n_containers": 24000,
-  "n_shuttles": 1095,
-  "n_vessels": 480,
-  "org": "Weserfrucht Import GmbH",
+  "deferred_slate": [
+    "BHV-HAN",
+    "BHV-KAS",
+    "HAM-MAG"
+  ],
+  "diagnostics": {
+    "cutoff_fal_err": 1725.35,
+    "direct_fal_err": 1683.51,
+    "generous_fal_err": 919.38,
+    "golden_fal_err": 36.3,
+    "knapsack_matches_greedy": true,
+    "rigorous_fal_err": 1557.96,
+    "s1_dc_total_util_max_pct": 77.6,
+    "s1_dc_total_util_min_pct": 70.7,
+    "s1_one_fact_fal_err": 300.92,
+    "s1_raw_asym_gap_h": 27.73,
+    "s1_resid_asym_gap_h": 0.08,
+    "s2_bip_slope": 0.687,
+    "s2_emp_port_cuts_h": {
+      "BHV": 14.0,
+      "HAM": 26.0,
+      "WHV": 10.0
+    },
+    "s2_one_fact_fal_err": 554.46,
+    "s3_one_fact_fal_err": 802.74,
+    "s3_open_day_backlog_share_pct": 45.4,
+    "s3_raw_open_drain_gap_h": 53.69,
+    "s3_resid_open_drain_gap_h": 0.28
+  },
+  "dispute_settled_eur": {
+    "coldstore_dock": 336201.98,
+    "drayage_carrier": 2237828.36,
+    "edi_docs": 108126.93,
+    "empty_depot": 153459.96,
+    "phyto_insp": 311800.79,
+    "rail_handoff": 1746623.07,
+    "reefer_plug": 3296255.7,
+    "vessel_berth": 782358.1
+  },
+  "funded_avoidable_eur_2027": 1889111.37,
+  "funded_budget_eur": 1705000.0,
+  "funded_portfolio_bcr": 1.108,
+  "funded_slate": [
+    "BHV-OSN",
+    "HAM-HAN",
+    "WHV-OSN"
+  ],
+  "golden_fal_err": 36.3,
+  "n_variants": 21,
   "perturbations": [
     {
       "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "input": "S1 pullback -20%",
-      "max_monitor": 2057.6,
-      "min_remediate": 2964.8
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "S1 pullback +20%",
-      "max_monitor": 2057.6,
-      "min_remediate": 3053.5
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "S2 locked-slot -20%",
-      "max_monitor": 1797.2,
-      "min_remediate": 3053.5
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "S2 locked-slot +20%",
-      "max_monitor": 2318.1,
-      "min_remediate": 3053.5
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "S3 portal-block -20%",
-      "max_monitor": 2057.6,
-      "min_remediate": 2632.1
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "S3 portal-block +20%",
-      "max_monitor": 2057.6,
-      "min_remediate": 3149.5
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "All baseline -20%",
-      "max_monitor": 1906.6,
-      "min_remediate": 2519.6
-    },
-    {
-      "answer": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "input": "All baseline +20%",
-      "max_monitor": 2208.7,
-      "min_remediate": 3242.8
-    }
-  ],
-  "plan_2027": {
-    "bip_sampling_factor_2027": {
-      "BHV": 1.25,
-      "HAM": 1.23,
-      "WHV": 1.2
-    },
-    "dc_zone_load_factor_2027": {
-      "Z02": 1.48,
-      "Z07": 1.06,
-      "Z13": 1.08
-    },
-    "depot_load_factor_2027": {
-      "LINE_A": 1.22,
-      "LINE_B": 1.2,
-      "LINE_C": 1.0,
-      "LINE_D": 1.0
-    },
-    "dray_contract_factor_2027": 0.88,
-    "line_share_2026": {
-      "LINE_A": 0.26,
-      "LINE_B": 0.25,
-      "LINE_C": 0.26,
-      "LINE_D": 0.23
-    },
-    "line_share_2027": {
-      "LINE_A": 0.34,
-      "LINE_B": 0.32,
-      "LINE_C": 0.2,
-      "LINE_D": 0.14
-    },
-    "plug_capacity_factor_2027": {
-      "BHV": 0.78,
-      "HAM": 1.0,
-      "WHV": 1.0
-    },
-    "rail_fleet_factor_2027": 0.84,
-    "vol_growth_port": {
-      "BHV": 1.1,
-      "HAM": 1.12,
-      "WHV": 1.06
-    },
-    "vol_growth_zone": {
-      "Z02": 1.38,
-      "Z07": 1.04,
-      "Z13": 1.06
-    }
-  },
-  "ranked_order": [
-    "vessel_berth",
-    "coldstore_dock",
-    "drayage_carrier",
-    "reefer_plug",
-    "empty_depot",
-    "phyto_insp",
-    "rail_handoff",
-    "edi_docs"
-  ],
-  "remediate_set": [
-    "coldstore_dock",
-    "drayage_carrier",
-    "empty_depot",
-    "reefer_plug",
-    "vessel_berth"
-  ],
-  "routes": {
-    "S1_over": {
-      "cost_eur_m": 4.918,
-      "members": {
-        "coldstore_dock": 5081.07,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 1894.88,
-        "vessel_berth": 4530.26
+      "bcrs": {
+        "BHV-HAN": 0.9845,
+        "BHV-KAS": 1.0426,
+        "BHV-OSN": 1.1702,
+        "HAM-HAN": 1.1181,
+        "HAM-MAG": 1.0193,
+        "WHV-OSN": 1.1872
       },
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "vessel_berth"
+      "input": "S1 -15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22521.86
+      "bcrs": {
+        "BHV-HAN": 0.9153,
+        "BHV-KAS": 0.7905,
+        "BHV-OSN": 1.0303,
+        "HAM-HAN": 1.0582,
+        "HAM-MAG": 0.958,
+        "WHV-OSN": 1.1023
+      },
+      "input": "S1 +15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 0.9572,
+        "BHV-KAS": 0.9094,
+        "BHV-OSN": 1.1066,
+        "HAM-HAN": 1.1372,
+        "HAM-MAG": 1.0833,
+        "WHV-OSN": 1.1426
+      },
+      "input": "S2 -15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 0.9403,
+        "BHV-KAS": 0.8927,
+        "BHV-OSN": 1.0933,
+        "HAM-HAN": 1.0343,
+        "HAM-MAG": 0.8945,
+        "WHV-OSN": 1.1358
+      },
+      "input": "S2 +15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 1.0607,
+        "BHV-KAS": 0.9397,
+        "BHV-OSN": 1.1198,
+        "HAM-HAN": 1.104,
+        "HAM-MAG": 1.0194,
+        "WHV-OSN": 1.1798
+      },
+      "input": "S3 -15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 0.8741,
+        "BHV-KAS": 0.8798,
+        "BHV-OSN": 1.0905,
+        "HAM-HAN": 1.0788,
+        "HAM-MAG": 0.975,
+        "WHV-OSN": 1.1017
+      },
+      "input": "S3 +15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 0.8064,
+        "BHV-KAS": 0.7659,
+        "BHV-OSN": 0.935,
+        "HAM-HAN": 0.9229,
+        "HAM-MAG": 0.8399,
+        "WHV-OSN": 0.9683
+      },
+      "input": "base -15%"
+    },
+    {
+      "answer": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "bcrs": {
+        "BHV-HAN": 1.0911,
+        "BHV-KAS": 1.0362,
+        "BHV-OSN": 1.265,
+        "HAM-HAN": 1.2486,
+        "HAM-MAG": 1.1363,
+        "WHV-OSN": 1.3101
+      },
+      "input": "base +15%"
+    }
+  ],
+  "phyto_sibling_rail_2026": 895.1,
+  "ranked_corridors": [
+    "WHV-OSN",
+    "BHV-OSN",
+    "HAM-HAN",
+    "HAM-MAG",
+    "BHV-HAN",
+    "BHV-KAS"
+  ],
+  "reference": {
+    "min_4corridor_budget_eur": 2255000.0,
+    "n_portal_days": 383,
+    "n_shuttles": 732,
+    "n_vessels": 480,
+    "plan_year": 2027,
+    "s1_band_hi_pct": 94,
+    "s1_band_lo_pct": 84,
+    "s1_hinge_pct": 78,
+    "s1_shortcut_cut_pct": 92,
+    "s2_lead_max_h": 72,
+    "s2_lead_min_h": 1.5,
+    "s3_clean_queue_thresh": 0.15,
+    "s3_high_queue_thresh": 0.8,
+    "tariffs_eur": {
+      "drayage_carrier": 160.0,
+      "rail_handoff": 175.0,
+      "reefer_plug": 210.0
+    },
+    "whv_osn_unconstrained_line_pct": 72.3
+  },
+  "routes": {
+    "S1_S2_drop": {
+      "C1_coldstore_pullback_2026": 0.0,
+      "C2_phyto_rail_roll_2026": 0.0,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 727577.3,
+        "BHV-KAS": 1093865.85,
+        "BHV-OSN": 911988.34,
+        "HAM-HAN": 1004460.57,
+        "HAM-MAG": 1089164.57,
+        "WHV-OSN": 837396.76
+      },
+      "bcrs": {
+        "BHV-HAN": 1.2654,
+        "BHV-KAS": 1.9191,
+        "BHV-OSN": 1.6286,
+        "HAM-HAN": 1.717,
+        "HAM-MAG": 1.9277,
+        "WHV-OSN": 1.4954
+      },
+      "fal_err": 1003.63,
+      "funded_slate": [
+        "BHV-KAS",
+        "HAM-HAN",
+        "HAM-MAG"
+      ],
+      "ranking": [
+        "HAM-MAG",
+        "BHV-KAS",
+        "HAM-HAN",
+        "BHV-OSN",
+        "WHV-OSN",
+        "BHV-HAN"
+      ]
+    },
+    "S1_S3_drop": {
+      "C1_coldstore_pullback_2026": 0.0,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 0.0,
+      "avoid_eur": {
+        "BHV-HAN": 1111822.9,
+        "BHV-KAS": 1198401.67,
+        "BHV-OSN": 952077.79,
+        "HAM-HAN": 832394.46,
+        "HAM-MAG": 793450.19,
+        "WHV-OSN": 968945.82
+      },
+      "bcrs": {
+        "BHV-HAN": 1.9336,
+        "BHV-KAS": 2.1025,
+        "BHV-OSN": 1.7001,
+        "HAM-HAN": 1.4229,
+        "HAM-MAG": 1.4043,
+        "WHV-OSN": 1.7303
+      },
+      "fal_err": 993.76,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-KAS",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "BHV-KAS",
+        "BHV-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG"
+      ]
+    },
+    "S1_drop": {
+      "C1_coldstore_pullback_2026": 0.0,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 682756.44,
+        "BHV-KAS": 1051675.05,
+        "BHV-OSN": 878115.86,
+        "HAM-HAN": 761303.43,
+        "HAM-MAG": 675586.72,
+        "WHV-OSN": 817179.21
+      },
+      "bcrs": {
+        "BHV-HAN": 1.1874,
+        "BHV-KAS": 1.845,
+        "BHV-OSN": 1.5681,
+        "HAM-HAN": 1.3014,
+        "HAM-MAG": 1.1957,
+        "WHV-OSN": 1.4592
+      },
+      "fal_err": 313.88,
+      "funded_slate": [
+        "BHV-KAS",
+        "BHV-OSN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "BHV-KAS",
+        "BHV-OSN",
+        "WHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-HAN"
+      ]
+    },
+    "S1_one_fact": {
+      "C1_coldstore_pullback_2026": 4460.0,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 645783.94,
+        "BHV-KAS": 695457.12,
+        "BHV-OSN": 623770.26,
+        "HAM-HAN": 754693.77,
+        "HAM-MAG": 658350.96,
+        "WHV-OSN": 682904.8
+      },
+      "bcrs": {
+        "BHV-HAN": 1.1231,
+        "BHV-KAS": 1.2201,
+        "BHV-OSN": 1.1139,
+        "HAM-HAN": 1.2901,
+        "HAM-MAG": 1.1652,
+        "WHV-OSN": 1.2195
+      },
+      "fal_err": 300.92,
+      "funded_slate": [
+        "BHV-KAS",
+        "HAM-HAN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "HAM-HAN",
+        "BHV-KAS",
+        "WHV-OSN",
+        "HAM-MAG",
+        "BHV-HAN",
+        "BHV-OSN"
+      ]
+    },
+    "S1_over": {
+      "C1_coldstore_pullback_2026": 11180.6,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 443227.82,
+        "BHV-KAS": 350676.35,
+        "BHV-OSN": 413750.36,
+        "HAM-HAN": 576470.54,
+        "HAM-MAG": 461336.36,
+        "WHV-OSN": 573743.88
+      },
+      "bcrs": {
+        "BHV-HAN": 0.7708,
+        "BHV-KAS": 0.6152,
+        "BHV-OSN": 0.7388,
+        "HAM-HAN": 0.9854,
+        "HAM-MAG": 0.8165,
+        "WHV-OSN": 1.0245
+      },
+      "fal_err": 267.04,
+      "funded_slate": [
+        "HAM-HAN",
+        "HAM-MAG",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "WHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-HAN",
+        "BHV-OSN",
+        "BHV-KAS"
+      ]
+    },
+    "S1_sym_lin": {
+      "C1_coldstore_pullback_2026": 6243.6,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 544369.61,
+        "BHV-KAS": 693732.67,
+        "BHV-OSN": 623452.58,
+        "HAM-HAN": 637011.56,
+        "HAM-MAG": 544515.37,
+        "WHV-OSN": 674178.06
+      },
+      "bcrs": {
+        "BHV-HAN": 0.9467,
+        "BHV-KAS": 1.2171,
+        "BHV-OSN": 1.1133,
+        "HAM-HAN": 1.0889,
+        "HAM-MAG": 0.9637,
+        "WHV-OSN": 1.2039
+      },
+      "fal_err": 279.93,
+      "funded_slate": [
+        "BHV-KAS",
+        "BHV-OSN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "BHV-KAS",
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-HAN"
+      ]
+    },
+    "S2_S3_drop": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 0.0,
+      "C3_depot_backlog_2026": 0.0,
+      "avoid_eur": {
+        "BHV-HAN": 1019412.46,
+        "BHV-KAS": 702509.9,
+        "BHV-OSN": 723831.68,
+        "HAM-HAN": 949411.94,
+        "HAM-MAG": 1089725.48,
+        "WHV-OSN": 809934.5
+      },
+      "bcrs": {
+        "BHV-HAN": 1.7729,
+        "BHV-KAS": 1.2325,
+        "BHV-OSN": 1.2926,
+        "HAM-HAN": 1.6229,
+        "HAM-MAG": 1.9287,
+        "WHV-OSN": 1.4463
+      },
+      "fal_err": 1405.93,
+      "funded_slate": [
+        "BHV-HAN",
+        "HAM-HAN",
+        "HAM-MAG"
+      ],
+      "ranking": [
+        "HAM-MAG",
+        "BHV-HAN",
+        "HAM-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "BHV-KAS"
+      ]
+    },
+    "S2_drop": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 0.0,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 590346.0,
+        "BHV-KAS": 555783.28,
+        "BHV-OSN": 649869.75,
+        "HAM-HAN": 878320.91,
+        "HAM-MAG": 971862.01,
+        "WHV-OSN": 658167.89
+      },
+      "bcrs": {
+        "BHV-HAN": 1.0267,
+        "BHV-KAS": 0.9751,
+        "BHV-OSN": 1.1605,
+        "HAM-HAN": 1.5014,
+        "HAM-MAG": 1.7201,
+        "WHV-OSN": 1.1753
+      },
+      "fal_err": 726.05,
+      "funded_slate": [
+        "HAM-HAN",
+        "HAM-MAG",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "HAM-MAG",
+        "HAM-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "BHV-HAN",
+        "BHV-KAS"
+      ]
+    },
+    "S2_one_fact": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 6861.5,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 506191.85,
+        "BHV-KAS": 486729.57,
+        "BHV-OSN": 602699.83,
+        "HAM-HAN": 419025.1,
+        "HAM-MAG": 463919.76,
+        "WHV-OSN": 627865.68
+      },
+      "bcrs": {
+        "BHV-HAN": 0.8803,
+        "BHV-KAS": 0.8539,
+        "BHV-OSN": 1.0762,
+        "HAM-HAN": 0.7163,
+        "HAM-MAG": 0.8211,
+        "WHV-OSN": 1.1212
+      },
+      "fal_err": 554.46,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-OSN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "WHV-OSN",
+        "BHV-OSN",
+        "BHV-HAN",
+        "BHV-KAS",
+        "HAM-MAG",
+        "HAM-HAN"
+      ]
     },
     "S2_over": {
-      "cost_eur_m": 4.852,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 3186.48,
-        "rail_handoff": 964.86,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 9116.5,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 456253.45,
+        "BHV-KAS": 441632.29,
+        "BHV-OSN": 566368.3,
+        "HAM-HAN": 285693.0,
+        "HAM-MAG": 394382.47,
+        "WHV-OSN": 614186.06
       },
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "phyto_insp",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 0.7935,
+        "BHV-KAS": 0.7748,
+        "BHV-OSN": 1.0114,
+        "HAM-HAN": 0.4884,
+        "HAM-MAG": 0.698,
+        "WHV-OSN": 1.0968
+      },
+      "fal_err": 636.08,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-OSN",
+        "WHV-OSN"
       ],
-      "total_2027": 22421.68
+      "ranking": [
+        "WHV-OSN",
+        "BHV-OSN",
+        "BHV-HAN",
+        "BHV-KAS",
+        "HAM-MAG",
+        "HAM-HAN"
+      ]
+    },
+    "S3_drop": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 0.0,
+      "avoid_eur": {
+        "BHV-HAN": 974591.6,
+        "BHV-KAS": 660319.09,
+        "BHV-OSN": 689959.19,
+        "HAM-HAN": 706254.8,
+        "HAM-MAG": 676147.64,
+        "WHV-OSN": 789716.95
+      },
+      "bcrs": {
+        "BHV-HAN": 1.6949,
+        "BHV-KAS": 1.1585,
+        "BHV-OSN": 1.2321,
+        "HAM-HAN": 1.2073,
+        "HAM-MAG": 1.1967,
+        "WHV-OSN": 1.4102
+      },
+      "fal_err": 716.18,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-OSN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "BHV-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-KAS"
+      ]
+    },
+    "S3_one_fact": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 3722.8,
+      "avoid_eur": {
+        "BHV-HAN": 769066.08,
+        "BHV-KAS": 583814.75,
+        "BHV-OSN": 658162.96,
+        "HAM-HAN": 670350.46,
+        "HAM-MAG": 611910.0,
+        "WHV-OSN": 687887.49
+      },
+      "bcrs": {
+        "BHV-HAN": 1.3375,
+        "BHV-KAS": 1.0242,
+        "BHV-OSN": 1.1753,
+        "HAM-HAN": 1.1459,
+        "HAM-MAG": 1.083,
+        "WHV-OSN": 1.2284
+      },
+      "fal_err": 802.74,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-OSN",
+        "WHV-OSN"
+      ],
+      "ranking": [
+        "BHV-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-KAS"
+      ]
     },
     "S3_over": {
-      "cost_eur_m": 4.994,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 1915.86,
-        "edi_docs": 957.48,
-        "empty_depot": 5265.34,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 11463.7,
+      "avoid_eur": {
+        "BHV-HAN": 461988.78,
+        "BHV-KAS": 437728.52,
+        "BHV-OSN": 562623.19,
+        "HAM-HAN": 589452.51,
+        "HAM-MAG": 508962.42,
+        "WHV-OSN": 333713.96
       },
-      "remediate_set": [
-        "coldstore_dock",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 0.8035,
+        "BHV-KAS": 0.7679,
+        "BHV-OSN": 1.0047,
+        "HAM-HAN": 1.0076,
+        "HAM-MAG": 0.9008,
+        "WHV-OSN": 0.5959
+      },
+      "fal_err": 90.01,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG"
       ],
-      "total_2027": 22976.78
+      "ranking": [
+        "HAM-HAN",
+        "BHV-OSN",
+        "HAM-MAG",
+        "BHV-HAN",
+        "BHV-KAS",
+        "WHV-OSN"
+      ]
     },
-    "calibrated": {
-      "cost_eur_m": 3.944,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
+    "S3_port_raw": {
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 11351.6,
+      "avoid_eur": {
+        "BHV-HAN": 466086.01,
+        "BHV-KAS": 441361.36,
+        "BHV-OSN": 564881.84,
+        "HAM-HAN": 592814.67,
+        "HAM-MAG": 511328.25,
+        "WHV-OSN": 333713.96
       },
-      "remediate_set": [
-        "drayage_carrier",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 0.8106,
+        "BHV-KAS": 0.7743,
+        "BHV-OSN": 1.0087,
+        "HAM-HAN": 1.0134,
+        "HAM-MAG": 0.905,
+        "WHV-OSN": 0.5959
+      },
+      "fal_err": 79.62,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG"
       ],
-      "total_2027": 20249.7
+      "ranking": [
+        "HAM-HAN",
+        "BHV-OSN",
+        "HAM-MAG",
+        "BHV-HAN",
+        "BHV-KAS",
+        "WHV-OSN"
+      ]
     },
     "cutoff": {
-      "cost_eur_m": 4.868,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 2206.97,
-        "edi_docs": 957.48,
-        "empty_depot": 4848.29,
-        "phyto_insp": 3186.48,
-        "rail_handoff": 964.86,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 3131.8,
+      "C2_phyto_rail_roll_2026": 9040.9,
+      "C3_depot_backlog_2026": 3722.8,
+      "avoid_eur": {
+        "BHV-HAN": 814915.9,
+        "BHV-KAS": 839307.91,
+        "BHV-OSN": 657635.59,
+        "HAM-HAN": 449129.27,
+        "HAM-MAG": 551588.91,
+        "WHV-OSN": 720896.23
       },
-      "remediate_set": [
-        "empty_depot",
-        "phyto_insp",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 1.4172,
+        "BHV-KAS": 1.4725,
+        "BHV-OSN": 1.1743,
+        "HAM-HAN": 0.7677,
+        "HAM-MAG": 0.9763,
+        "WHV-OSN": 1.2873
+      },
+      "fal_err": 1725.35,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-KAS",
+        "WHV-OSN"
       ],
-      "total_2027": 22805.93
+      "ranking": [
+        "BHV-KAS",
+        "BHV-HAN",
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-MAG",
+        "HAM-HAN"
+      ]
     },
     "direct": {
-      "avoidable_eur_m": 3.077,
-      "bhv_2027": 9667.37,
-      "cost_eur_m": 3.944,
-      "ham_2027": 7709.74,
-      "members": {
-        "coldstore_dock": 1357.39,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 495.14,
-        "rail_handoff": 2797.24,
-        "reefer_plug": 4754.18,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 0.0,
+      "C2_phyto_rail_roll_2026": 0.0,
+      "C3_depot_backlog_2026": 0.0,
+      "avoid_eur": {
+        "BHV-HAN": 1156643.76,
+        "BHV-KAS": 1240592.47,
+        "BHV-OSN": 985950.27,
+        "HAM-HAN": 1075551.6,
+        "HAM-MAG": 1207028.04,
+        "WHV-OSN": 989163.37
       },
-      "q3_2027": 7594.36,
-      "remed_days": 16492.97,
-      "remediate_set": [
-        "drayage_carrier",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 2.0116,
+        "BHV-KAS": 2.1765,
+        "BHV-OSN": 1.7606,
+        "HAM-HAN": 1.8385,
+        "HAM-MAG": 2.1363,
+        "WHV-OSN": 1.7664
+      },
+      "fal_err": 1683.51,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-KAS",
+        "HAM-MAG"
       ],
-      "total_2027": 20249.7
+      "ranking": [
+        "BHV-KAS",
+        "HAM-MAG",
+        "BHV-HAN",
+        "HAM-HAN",
+        "WHV-OSN",
+        "BHV-OSN"
+      ]
     },
     "generous": {
-      "cost_eur_m": 5.383,
-      "members": {
-        "coldstore_dock": 5020.85,
-        "drayage_carrier": 2084.39,
-        "edi_docs": 957.48,
-        "empty_depot": 4965.36,
-        "phyto_insp": 3571.15,
-        "rail_handoff": 703.42,
-        "reefer_plug": 1941.01,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 10798.1,
+      "C2_phyto_rail_roll_2026": 9053.1,
+      "C3_depot_backlog_2026": 11402.8,
+      "avoid_eur": {
+        "BHV-HAN": 294657.74,
+        "BHV-KAS": 215031.55,
+        "BHV-OSN": 321205.17,
+        "HAM-HAN": 200142.76,
+        "HAM-MAG": 267682.37,
+        "WHV-OSN": 250633.26
       },
-      "remediate_set": [
-        "coldstore_dock",
-        "empty_depot",
-        "phyto_insp",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 0.5124,
+        "BHV-KAS": 0.3772,
+        "BHV-OSN": 0.5736,
+        "HAM-HAN": 0.3421,
+        "HAM-MAG": 0.4738,
+        "WHV-OSN": 0.4476
+      },
+      "fal_err": 919.38,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-OSN",
+        "HAM-MAG"
       ],
-      "total_2027": 23773.94
+      "ranking": [
+        "BHV-OSN",
+        "BHV-HAN",
+        "HAM-MAG",
+        "WHV-OSN",
+        "BHV-KAS",
+        "HAM-HAN"
+      ]
     },
     "golden": {
-      "avoidable_eur_m": 3.721,
-      "bhv_2027": 10647.32,
-      "cost_eur_m": 4.693,
-      "ham_2027": 8215.91,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.9,
+      "C2_phyto_rail_roll_2026": 4304.4,
+      "C3_depot_backlog_2026": 7171.5,
+      "avoid_eur": {
+        "BHV-HAN": 545525.14,
+        "BHV-KAS": 513592.47,
+        "BHV-OSN": 615997.26,
+        "HAM-HAN": 635163.77,
+        "HAM-MAG": 558284.17,
+        "WHV-OSN": 637950.34
       },
-      "q3_2027": 8579.53,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 0.9487,
+        "BHV-KAS": 0.901,
+        "BHV-OSN": 1.1,
+        "HAM-HAN": 1.0858,
+        "HAM-MAG": 0.9881,
+        "WHV-OSN": 1.1392
+      },
+      "fal_err": 36.3,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22062.03
+      "ranking": [
+        "WHV-OSN",
+        "BHV-OSN",
+        "HAM-HAN",
+        "HAM-MAG",
+        "BHV-HAN",
+        "BHV-KAS"
+      ]
     },
     "hedge": {
-      "cost_eur_m": 4.196,
-      "members": {
-        "coldstore_dock": 2080.02,
-        "drayage_carrier": 3881.92,
-        "edi_docs": 957.48,
-        "empty_depot": 1698.45,
-        "phyto_insp": 1043.09,
-        "rail_handoff": 2424.34,
-        "reefer_plug": 4183.68,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 2265.5,
+      "C2_phyto_rail_roll_2026": 1296.3,
+      "C3_depot_backlog_2026": 2039.7,
+      "avoid_eur": {
+        "BHV-HAN": 985694.44,
+        "BHV-KAS": 1059498.22,
+        "BHV-OSN": 841545.96,
+        "HAM-HAN": 890368.51,
+        "HAM-MAG": 992586.46,
+        "WHV-OSN": 845234.55
       },
-      "remediate_set": [
-        "drayage_carrier",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 1.7143,
+        "BHV-KAS": 1.8588,
+        "BHV-OSN": 1.5028,
+        "HAM-HAN": 1.522,
+        "HAM-MAG": 1.7568,
+        "WHV-OSN": 1.5093
+      },
+      "fal_err": 1421.53,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-KAS",
+        "HAM-MAG"
       ],
-      "total_2027": 20799.26
-    },
-    "history_2026_unprojected": {
-      "members": {
-        "coldstore_dock": 2732.06,
-        "drayage_carrier": 3324.42,
-        "edi_docs": 869.56,
-        "empty_depot": 2006.05,
-        "phyto_insp": 1513.84,
-        "rail_handoff": 1875.46,
-        "reefer_plug": 3283.79,
-        "vessel_berth": 4107.34
-      },
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "reefer_plug",
-        "vessel_berth"
+      "ranking": [
+        "BHV-KAS",
+        "HAM-MAG",
+        "BHV-HAN",
+        "HAM-HAN",
+        "WHV-OSN",
+        "BHV-OSN"
       ]
     },
     "rigorous": {
-      "avoidable_eur_m": 2.939,
-      "bhv_2027": 9799.66,
-      "cost_eur_m": 4.053,
-      "ham_2027": 7757.01,
-      "members": {
-        "coldstore_dock": 1986.01,
-        "drayage_carrier": 4411.28,
-        "edi_docs": 957.48,
-        "empty_depot": 946.72,
-        "phyto_insp": 755.24,
-        "rail_handoff": 2620.28,
-        "reefer_plug": 4241.72,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 0.0,
+      "C2_phyto_rail_roll_2026": 0.0,
+      "C3_depot_backlog_2026": 0.0,
+      "avoid_eur": {
+        "BHV-HAN": 1144158.25,
+        "BHV-KAS": 1229999.94,
+        "BHV-OSN": 976904.1,
+        "HAM-HAN": 1032945.68,
+        "HAM-MAG": 1151933.16,
+        "WHV-OSN": 981583.95
       },
-      "q3_2027": 7661.91,
-      "remed_days": 15803.54,
-      "remediate_set": [
-        "drayage_carrier",
-        "rail_handoff",
-        "reefer_plug",
-        "vessel_berth"
+      "bcrs": {
+        "BHV-HAN": 1.9898,
+        "BHV-KAS": 2.1579,
+        "BHV-OSN": 1.7445,
+        "HAM-HAN": 1.7657,
+        "HAM-MAG": 2.0388,
+        "WHV-OSN": 1.7528
+      },
+      "fal_err": 1557.96,
+      "funded_slate": [
+        "BHV-HAN",
+        "BHV-KAS",
+        "HAM-MAG"
       ],
-      "total_2027": 20449.01
+      "ranking": [
+        "BHV-KAS",
+        "HAM-MAG",
+        "BHV-HAN",
+        "HAM-HAN",
+        "WHV-OSN",
+        "BHV-OSN"
+      ]
     }
   },
-  "tariffs_eur": {
-    "coldstore_dock": 285.0,
-    "drayage_carrier": 160.0,
-    "edi_docs": 140.0,
-    "empty_depot": 230.0,
-    "phyto_insp": 260.0,
-    "rail_handoff": 175.0,
-    "reefer_plug": 210.0,
-    "vessel_berth": 195.0
-  },
+  "seed": 2702,
   "task": "task27",
-  "threshold_cdays": 2500,
-  "total_2026_cdays": 19712.53,
-  "total_2026_cdays_int": 19713,
+  "total_2026_all8_cdays": 49447.77,
+  "total_non_carrier_removed_2026": 18912.7,
+  "unspent_budget_eur": 45000.0,
+  "v4_hardened": true,
   "variants": [
     {
-      "avoidable_eur_m": 3.7206,
-      "bhv_2027": 10647.39,
-      "cost_eur_m": 4.6931,
-      "ham_2027": 8215.73,
-      "members": {
-        "coldstore_dock": 3366.53,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.54,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7357.84,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9464,
+        "BHV-KAS": 0.9,
+        "BHV-OSN": 1.1169,
+        "HAM-HAN": 1.0885,
+        "HAM-MAG": 0.9875,
+        "WHV-OSN": 1.1508
       },
-      "name": "S1: same-vessel median",
-      "q3_2027": 8579.56,
-      "remed_days": 17312.79,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 30.47,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22061.97
+      "name": "S1: binned non-param"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10647.28,
-      "cost_eur_m": 4.6932,
-      "ham_2027": 8215.89,
-      "members": {
-        "coldstore_dock": 3366.77,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.31,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7441.16,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9471,
+        "BHV-KAS": 0.8992,
+        "BHV-OSN": 1.1032,
+        "HAM-HAN": 1.0846,
+        "HAM-MAG": 0.9867,
+        "WHV-OSN": 1.1408
       },
-      "name": "S1: same-vessel 10% trimmed mean",
-      "q3_2027": 8579.49,
-      "remed_days": 17312.8,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 33.5,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22061.99
+      "name": "S1: piecewise spline"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10647.3,
-      "cost_eur_m": 4.6932,
-      "ham_2027": 8215.9,
-      "members": {
-        "coldstore_dock": 3366.59,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.53,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7417.02,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9524,
+        "BHV-KAS": 0.907,
+        "BHV-OSN": 1.0946,
+        "HAM-HAN": 1.0878,
+        "HAM-MAG": 0.9872,
+        "WHV-OSN": 1.1396
       },
-      "name": "S1: port-day fixed effects",
-      "q3_2027": 8579.5,
-      "remed_days": 17312.83,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 38.01,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22062.02
+      "name": "S1: Huber robust FE"
     },
     {
-      "avoidable_eur_m": 3.7226,
-      "bhv_2027": 10654.33,
-      "cost_eur_m": 4.695,
-      "ham_2027": 8213.19,
-      "members": {
-        "coldstore_dock": 3373.8,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3148.78,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7442.09,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.949,
+        "BHV-KAS": 0.9003,
+        "BHV-OSN": 1.0994,
+        "HAM-HAN": 1.0856,
+        "HAM-MAG": 0.988,
+        "WHV-OSN": 1.1389
       },
-      "name": "S1: port-week fixed effects",
-      "q3_2027": 8582.05,
-      "remed_days": 17319.3,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 36.5,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22068.48
+      "name": "S1: port-day FE"
     },
     {
-      "avoidable_eur_m": 3.7206,
-      "bhv_2027": 10647.33,
-      "cost_eur_m": 4.6931,
-      "ham_2027": 8216.0,
-      "members": {
-        "coldstore_dock": 3364.96,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3151.32,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7370.5,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9487,
+        "BHV-KAS": 0.9103,
+        "BHV-OSN": 1.1079,
+        "HAM-HAN": 1.0834,
+        "HAM-MAG": 0.9886,
+        "WHV-OSN": 1.1453
       },
-      "name": "S1: nonlinear OLS yard curve",
-      "q3_2027": 8579.67,
-      "remed_days": 17313.0,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 47.19,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22062.19
+      "name": "S1: corr-week FE"
     },
     {
-      "avoidable_eur_m": 3.7208,
-      "bhv_2027": 10647.47,
-      "cost_eur_m": 4.6933,
-      "ham_2027": 8215.88,
-      "members": {
-        "coldstore_dock": 3368.3,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3147.97,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7565.37,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9433,
+        "BHV-KAS": 0.8912,
+        "BHV-OSN": 1.0909,
+        "HAM-HAN": 1.0794,
+        "HAM-MAG": 0.9833,
+        "WHV-OSN": 1.1327
       },
-      "name": "S1: chamber threshold 94.5%",
-      "q3_2027": 8579.65,
-      "remed_days": 17312.99,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 43.25,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22062.17
+      "name": "S1: hinge 0.76"
     },
     {
-      "avoidable_eur_m": 3.691,
-      "bhv_2027": 10614.17,
-      "cost_eur_m": 4.6635,
-      "ham_2027": 8210.17,
-      "members": {
-        "coldstore_dock": 3098.63,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3372.18,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7251.35,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9588,
+        "BHV-KAS": 0.9141,
+        "BHV-OSN": 1.1093,
+        "HAM-HAN": 1.0959,
+        "HAM-MAG": 0.9979,
+        "WHV-OSN": 1.1477
       },
-      "name": "S1: chamber threshold 95.5%",
-      "q3_2027": 8562.38,
-      "remed_days": 17267.53,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 36.91,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22016.71
+      "name": "S1: hinge 0.80"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10647.32,
-      "cost_eur_m": 4.6932,
-      "ham_2027": 8215.91,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4144.69,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9506,
+        "BHV-KAS": 0.9021,
+        "BHV-OSN": 1.0985,
+        "HAM-HAN": 1.1072,
+        "HAM-MAG": 1.0068,
+        "WHV-OSN": 1.141
       },
-      "name": "S2: fixed 24h lock + slot balance",
-      "q3_2027": 8579.53,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 29.02,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22062.03
+      "name": "S2: Poisson IRLS"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10639.2,
-      "cost_eur_m": 4.6784,
-      "ham_2027": 8202.15,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 1952.3,
-        "rail_handoff": 1806.37,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4377.7,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9471,
+        "BHV-KAS": 0.8993,
+        "BHV-OSN": 1.0979,
+        "HAM-HAN": 1.0799,
+        "HAM-MAG": 0.9819,
+        "WHV-OSN": 1.1369
       },
-      "name": "S2: 22h lock + slot balance",
-      "q3_2027": 8575.5,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 37.02,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22029.0
+      "name": "S2: Huber robust"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10648.33,
-      "cost_eur_m": 4.6971,
-      "ham_2027": 8223.77,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2085.54,
-        "rail_handoff": 1715.04,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4310.98,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9466,
+        "BHV-KAS": 0.8991,
+        "BHV-OSN": 1.0979,
+        "HAM-HAN": 1.0888,
+        "HAM-MAG": 0.9885,
+        "WHV-OSN": 1.1405
       },
-      "name": "S2: 26h lock + slot balance",
-      "q3_2027": 8579.53,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 47.7,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22070.91
+      "name": "S2: binned lead (no cut)"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10643.85,
-      "cost_eur_m": 4.69,
-      "ham_2027": 8213.25,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2035.2,
-        "rail_handoff": 1749.33,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4269.76,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9494,
+        "BHV-KAS": 0.9042,
+        "BHV-OSN": 1.1024,
+        "HAM-HAN": 1.0822,
+        "HAM-MAG": 0.9898,
+        "WHV-OSN": 1.1438
       },
-      "name": "S2: empirical lock + weighbridge mass scale",
-      "q3_2027": 8577.44,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 83.63,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22054.86
+      "name": "S2: hard step cut"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10668.57,
-      "cost_eur_m": 4.7126,
-      "ham_2027": 8232.42,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2195.57,
-        "rail_handoff": 1640.21,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4201.57,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9495,
+        "BHV-KAS": 0.901,
+        "BHV-OSN": 1.0987,
+        "HAM-HAN": 1.093,
+        "HAM-MAG": 1.0121,
+        "WHV-OSN": 1.136
       },
-      "name": "S2: empirical lock + slot OLS",
-      "q3_2027": 8594.0,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 21.85,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22106.11
+      "name": "S2: month+corr FE"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10668.57,
-      "cost_eur_m": 4.7126,
-      "ham_2027": 8232.42,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2195.57,
-        "rail_handoff": 1640.21,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4289.32,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.9497,
+        "BHV-KAS": 0.902,
+        "BHV-OSN": 1.1007,
+        "HAM-HAN": 1.086,
+        "HAM-MAG": 0.9887,
+        "WHV-OSN": 1.1397
       },
-      "name": "S2: empirical lock + per-corridor OLS",
-      "q3_2027": 8594.0,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 37.26,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22106.11
+      "name": "S2: pooled slope"
     },
     {
-      "avoidable_eur_m": 3.7207,
-      "bhv_2027": 10668.57,
-      "cost_eur_m": 4.7126,
-      "ham_2027": 8232.42,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3212.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3053.49,
-        "phyto_insp": 2195.57,
-        "rail_handoff": 1640.21,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4160.15,
+      "C3_depot_backlog_2026": 7171.48,
+      "bcrs": {
+        "BHV-HAN": 0.953,
+        "BHV-KAS": 0.9049,
+        "BHV-OSN": 1.1025,
+        "HAM-HAN": 1.0968,
+        "HAM-MAG": 1.0027,
+        "WHV-OSN": 1.1415
       },
-      "name": "S2: empirical lock + Huber robust regression",
-      "q3_2027": 8594.0,
-      "remed_days": 17312.85,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 29.97,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22106.11
+      "name": "S2: booked-slot ctrl"
     },
     {
-      "avoidable_eur_m": 3.7194,
-      "bhv_2027": 10639.32,
-      "cost_eur_m": 4.6919,
-      "ham_2027": 8217.59,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3218.29,
-        "edi_docs": 957.48,
-        "empty_depot": 3044.3,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7159.37,
+      "bcrs": {
+        "BHV-HAN": 0.9498,
+        "BHV-KAS": 0.9025,
+        "BHV-OSN": 1.0979,
+        "HAM-HAN": 1.086,
+        "HAM-MAG": 0.99,
+        "WHV-OSN": 1.1394
       },
-      "name": "S3: same-DC weekly open-line contrast",
-      "q3_2027": 8582.22,
-      "remed_days": 17308.99,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 35.11,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22058.18
+      "name": "S3: dc-day FE"
     },
     {
-      "avoidable_eur_m": 3.7278,
-      "bhv_2027": 10666.32,
-      "cost_eur_m": 4.7003,
-      "ham_2027": 8210.2,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3184.76,
-        "edi_docs": 957.48,
-        "empty_depot": 3104.02,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7172.09,
+      "bcrs": {
+        "BHV-HAN": 0.948,
+        "BHV-KAS": 0.9014,
+        "BHV-OSN": 1.0992,
+        "HAM-HAN": 1.0858,
+        "HAM-MAG": 0.9893,
+        "WHV-OSN": 1.1391
       },
-      "name": "S3: same-DC fortnight open-line contrast",
-      "q3_2027": 8607.62,
-      "remed_days": 17335.18,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 35.34,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22084.37
+      "name": "S3: port-day FE"
     },
     {
-      "avoidable_eur_m": 3.7236,
-      "bhv_2027": 10667.72,
-      "cost_eur_m": 4.6961,
-      "ham_2027": 8220.1,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3202.77,
-        "edi_docs": 957.48,
-        "empty_depot": 3073.25,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7186.06,
+      "bcrs": {
+        "BHV-HAN": 0.9476,
+        "BHV-KAS": 0.9011,
+        "BHV-OSN": 1.0988,
+        "HAM-HAN": 1.0858,
+        "HAM-MAG": 0.9881,
+        "WHV-OSN": 1.1378
       },
-      "name": "S3: open-line 4-harmonic Fourier OLS",
-      "q3_2027": 8655.64,
-      "remed_days": 17322.41,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 34.35,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22071.6
+      "name": "S3: corr-week FE"
     },
     {
-      "avoidable_eur_m": 3.7182,
-      "bhv_2027": 10641.32,
-      "cost_eur_m": 4.6907,
-      "ham_2027": 8215.39,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3222.97,
-        "edi_docs": 957.48,
-        "empty_depot": 3035.92,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7153.35,
+      "bcrs": {
+        "BHV-HAN": 0.9539,
+        "BHV-KAS": 0.9008,
+        "BHV-OSN": 1.0989,
+        "HAM-HAN": 1.0847,
+        "HAM-MAG": 0.9865,
+        "WHV-OSN": 1.1423
       },
-      "name": "S3: 5-day rolling stock-flow window",
-      "q3_2027": 8576.58,
-      "remed_days": 17305.29,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 35.79,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22054.47
+      "name": "S3: harmonic OLS"
     },
     {
-      "avoidable_eur_m": 3.729,
-      "bhv_2027": 10654.95,
-      "cost_eur_m": 4.7015,
-      "ham_2027": 8227.41,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3179.89,
-        "edi_docs": 957.48,
-        "empty_depot": 3112.61,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 7189.98,
+      "bcrs": {
+        "BHV-HAN": 0.9506,
+        "BHV-KAS": 0.9012,
+        "BHV-OSN": 1.1027,
+        "HAM-HAN": 1.086,
+        "HAM-MAG": 0.988,
+        "WHV-OSN": 1.1291
       },
-      "name": "S3: same-DC weekly median",
-      "q3_2027": 8601.84,
-      "remed_days": 17338.9,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 33.97,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22088.09
+      "name": "S3: Huber robust FE"
     },
     {
-      "avoidable_eur_m": 3.7172,
-      "bhv_2027": 10646.72,
-      "cost_eur_m": 4.6897,
-      "ham_2027": 8211.86,
-      "members": {
-        "coldstore_dock": 3366.62,
-        "drayage_carrier": 3227.88,
-        "edi_docs": 957.48,
-        "empty_depot": 3027.89,
-        "phyto_insp": 2057.65,
-        "rail_handoff": 1734.06,
-        "reefer_plug": 3149.51,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7436.86,
+      "C2_phyto_rail_roll_2026": 4304.38,
+      "C3_depot_backlog_2026": 6831.2,
+      "bcrs": {
+        "BHV-HAN": 1.0378,
+        "BHV-KAS": 0.9022,
+        "BHV-OSN": 1.1038,
+        "HAM-HAN": 1.0898,
+        "HAM-MAG": 0.9891,
+        "WHV-OSN": 1.1171
       },
-      "name": "S3: portal rejection cutoff >= 2",
-      "q3_2027": 8572.6,
-      "remed_days": 17302.17,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 49.52,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22051.36
+      "name": "S3: distance param"
     },
     {
-      "avoidable_eur_m": 3.7235,
-      "bhv_2027": 10688.99,
-      "cost_eur_m": 4.7154,
-      "ham_2027": 8236.71,
-      "members": {
-        "coldstore_dock": 3364.96,
-        "drayage_carrier": 3202.77,
-        "edi_docs": 957.48,
-        "empty_depot": 3073.25,
-        "phyto_insp": 2195.57,
-        "rail_handoff": 1640.21,
-        "reefer_plug": 3151.32,
-        "vessel_berth": 4530.26
+      "C1_coldstore_pullback_2026": 7441.16,
+      "C2_phyto_rail_roll_2026": 4144.69,
+      "C3_depot_backlog_2026": 7159.37,
+      "bcrs": {
+        "BHV-HAN": 0.9499,
+        "BHV-KAS": 0.9018,
+        "BHV-OSN": 1.0996,
+        "HAM-HAN": 1.1064,
+        "HAM-MAG": 1.0073,
+        "WHV-OSN": 1.1429
       },
-      "name": "Joint: OLS yard + Huber rail + Fourier line",
-      "q3_2027": 8670.27,
-      "remed_days": 17322.57,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
+      "fal_err": 25.03,
+      "funded_slate": [
+        "BHV-OSN",
+        "HAM-HAN",
+        "WHV-OSN"
       ],
-      "total_2027": 22115.83
-    },
-    {
-      "avoidable_eur_m": 3.7213,
-      "bhv_2027": 10667.59,
-      "cost_eur_m": 4.7132,
-      "ham_2027": 8231.39,
-      "members": {
-        "coldstore_dock": 3373.8,
-        "drayage_carrier": 3218.29,
-        "edi_docs": 957.48,
-        "empty_depot": 3044.3,
-        "phyto_insp": 2195.57,
-        "rail_handoff": 1640.21,
-        "reefer_plug": 3148.78,
-        "vessel_berth": 4530.26
-      },
-      "name": "Joint: port-week FE + corridor OLS + DC-week",
-      "q3_2027": 8599.22,
-      "remed_days": 17315.44,
-      "remediate_set": [
-        "coldstore_dock",
-        "drayage_carrier",
-        "empty_depot",
-        "reefer_plug",
-        "vessel_berth"
-      ],
-      "total_2027": 22108.7
+      "name": "Joint: spline+poisson+dcday"
     }
   ]
 }

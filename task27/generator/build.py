@@ -34,8 +34,8 @@ EXPORTED = {
     F["consignments"]: dt.datetime(2027, 1, 12,  9, 44,  5, tzinfo=UTC),
     F["bip_notices"]:  dt.datetime(2027, 1, 12, 11, 23, 51, tzinfo=UTC),
     F["shuttles"]:     dt.datetime(2027, 1, 12, 16,  8, 13, tzinfo=UTC),
-    F["portal"]:       dt.datetime(2027, 1, 15,  7, 52, 28, tzinfo=UTC),
-    F["plan_2027"]:    dt.datetime(2026, 11, 25, 13, 36, 44, tzinfo=UTC),
+    F["portal"]:       dt.datetime(2027, 1, 19,  6, 42, 18, tzinfo=UTC),
+    F["budgets_2027"]: dt.datetime(2026, 11, 25, 13, 36, 44, tzinfo=UTC),
     F["crosswalk"]:    dt.datetime(2026,  9, 18, 11,  5, 17, tzinfo=UTC),
     F["dist_bunker"]:  dt.datetime(2027, 1,  8, 15, 19,  3, tzinfo=UTC),
 }

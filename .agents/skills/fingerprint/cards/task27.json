@@ -1,18 +1,18 @@
 {
   "task": "task27",
   "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-22",
-  "slot_note": "Initial Level 5 draw in supply-chain-logistics (trade-flows) x root-cause: Weserfrucht Import GmbH North Sea port-to-hinterland refrigerated container delay attribution and 2027 Mandatory Remediation designation, proved in task27/generator/core.py at CORE PASS level 5 and FORCING PASS.",
+  "architecture": "v2",
+  "drawn": "2026-11-23",
+  "slot_note": "Architecture 2 Level 5 v4-hardened redesign in supply-chain-logistics (trade-flows) x root-cause: Weserfrucht Import GmbH EUR 1.75M 2027 carrier-remediation capital allocation across six North Sea port-to-DC refrigerated import corridors, proved in task27/generator/core.py at CORE PASS level 5 (33/33) and FORCING PASS.",
   "domain": "supply-chain-logistics",
   "client_domain": "general-statistics-data-science",
   "subdomain": "trade-flows",
-  "niche": "North Sea port-to-hinterland refrigerated produce container import flows: attributing 2026 excess container-days across eight operational failure modes and designating 2027 Mandatory Remediation causes against a 2,500 container-day threshold when inland thermal-chamber saturation hides inside port-yard hold codes, late border inspection notices lock empty rail flatcars, and unlinked depot portal rejections carry multi-day retry inflation",
+  "niche": "North Sea port-to-DC refrigerated produce import corridors: allocating a fixed EUR 1.75M 2027 carrier-remediation capital budget across six corridors ranked by projected Benefit-Cost Ratio (avoidable carrier-controllable D&D EUR per EUR capex) after open-book econometric separation of asymmetric filling-vs-draining DC chamber pull-backs, terminal-varying stochastic BIP rail booking locks overlapping Nordbahn short-consist cuts, and multi-day ocean-line empty-depot return backlogs scaled by inland corridor distance",
   "objective": "root-cause",
   "shape": "18",
-  "decision_type": "root_cause_named",
+  "decision_type": "ranked_slate_under_cap",
   "answer_unit": "set_of_items",
-  "answer": "Designate five causes for 2027 Mandatory Remediation (>= 2,500 container-days): vessel_berth (4,530), coldstore_dock (3,367), drayage_carrier (3,213), reefer_plug (3,150), and empty_depot (3,053), totaling 17,313 remediation container-days (EUR 3.72M avoidable exposure); keep phyto_insp (2,058), rail_handoff (1,734), and edi_docs (958) on Routine Monitoring; total 2027 network excess 22,062 container-days (EUR 4.69M; BHV 10,647; HAM 8,216; Q3 8,580). From task27/generator/core.py (seed 2701, CORE PASS level 5, FORCING PASS).",
+  "answer": "Fund three corridors under the EUR 1,750,000 cap: WHV-OSN (BCR 1.139, EUR 637,935 avoidable / EUR 560,000 budget), BHV-OSN (BCR 1.100, EUR 616,072 / EUR 560,000), and HAM-HAN (BCR 1.086, EUR 635,229 / EUR 585,000), deploying EUR 1,705,000 (EUR 45,000 unspent) for EUR 1,889,237 total avoidable 2027 carrier D&D (portfolio BCR 1.108). Defer HAM-MAG (BCR 0.988, EUR 558,310 / EUR 565,000), BHV-HAN (BCR 0.949, EUR 545,520 / EUR 575,000), and BHV-KAS (BCR 0.901, EUR 513,616 / EUR 570,000). 2026 non-carrier attributions: coldstore chamber pull-back 7,436.9 c-days (C1), BIP rail rollover bump 4,304.1 c-days (C2), and empty-depot backlog delay 7,171.5 c-days (C3). From task27/generator/core.py (seed 2701, CORE PASS level 5, FORCING PASS).",
   "answer_source": "task27/submission.md and task27/generator/figures.json (verified against task27/target.zip via verify.py)",
   "gap": [
     "population",
@@ -23,22 +23,21 @@
     "none"
   ],
   "generators": [
-    "G4",
-    "G3",
-    "G2"
+    "G11",
+    "G19"
   ],
   "gate_g": "binding_constraint",
-  "calibration_form": "counterparty_acknowledgement",
+  "calibration_form": "none",
   "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "close_out_summary",
   "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst cleans every file, reads TMS exception codes and settled carrier dispute close-outs, verifies terminal yard saturation and flat total-warehouse occupancy (69 to 79 percent), moves direct rail CHED inspection siblings to phyto_insp, and sets aside the unlinked depot portal log, filing rail_handoff (2,620 to 2,797) for remediation while leaving coldstore_dock (1,357 to 1,986) and empty_depot (947) on monitoring.",
-  "domain_test": "Every decisive step is a physical port-to-hinterland cold-chain conservation calculation: reconstructing sealed multi-temperature chamber pallet stocks (+2C, +7C, +13C) and matching same-vessel port stack twins, separating post-24h CHED-locked empty rail wagons via shared-train weighbridge mass balance (-28.5 t per locked slot), and solving shipping-line empty-container stock-flow on inland unload dates against portal retry multiplicity; swapping refrigerated import flows for clinics or ad campaigns destroys every physical conservation law.",
+  "analyst_test": "A careful but hurried analyst cleans every file, reconciles 24,000 container lifecycles, checks flat aggregate DC utilization (69 to 78 percent), moves direct CHED sibling holds to phyto_insp, and scores corridors on TMS stage codes (or applies naive binary cutoffs like chamber >=92%, fixed 24h BIP count without consist controls, or binary unload-day portal rejections), ranking BHV-KAS (2.176), HAM-MAG (2.136), and BHV-HAN (2.012) ahead of WHV-OSN (1.766), BHV-OSN (1.761), and HAM-HAN (1.839) and funding the exact wrong three corridors.",
+  "domain_test": "Every decisive step is a physical North Sea cold-chain import modeling problem: reconstructing sealed multi-temperature chamber pallet stocks (+2C, +7C, +13C) and estimating asymmetric convex filling-vs-draining yard pull-back hysteresis across same-vessel containers; jointly estimating terminal-specific BIP rail booking lock cutoffs (BHV ~16h, HAM ~28h, WHV ~12h) and stochastic pass-through (~0.66) alongside overlapping Nordbahn short-consist and locomotive derate cuts on every-3-day block trains; and conserving shipping-line empty-container queue stock from daily inland unloads minus depot gate-ins across multi-day open-portal drain tails scaled by inland haul distance.",
   "layer2_family": "field_method",
-  "layer2_pattern": "own:cold-chain-container-delay-attribution-across-chamber-stock-flow-locked-rail-slots-and-depot-portal-retries",
+  "layer2_pattern": "own:open-book-corridor-bcr-capital-allocation-via-asymmetric-chamber-hysteresis-joint-bip-consist-separation-and-depot-queue-persistence",
   "layer1": [
     "mixed European and ISO date formats across port, rail, and warehouse extracts",
     "duplicate nightly warehouse EDI pallet movement batches with superseded updates",
@@ -53,9 +52,9 @@
   "spine": {
     "file": "container_milestones_2026.csv and warehouse_pallet_movements_2026.csv",
     "rows": 24000,
-    "entity": "one 40-foot refrigerated import container lifecycle from North Sea vessel discharge to empty depot gate-in",
-    "grain": "container lifecycle paired with daily SKU x DC pallet stock movements, train departures, and shipping-line portal counts",
-    "source": "synthetic (seeded physical process simulation of 24,000 containers across 480 vessel calls, 1,095 rail shuttles, 4 cold-storage DCs, and 4 ocean shipping lines)"
+    "entity": "one 40-foot refrigerated import container lifecycle from North Sea vessel discharge to empty depot gate-in across six port-to-DC corridors",
+    "grain": "container lifecycle paired with daily SKU x DC pallet stock movements, every-3-day corridor block-train departures, and daily port x shipping-line empty-depot gate-ins",
+    "source": "synthetic (seeded physical process simulation of 24,000 containers across 480 vessel calls, 732 rail block-train shuttles, 4 cold-storage DCs, and 4 ocean shipping lines)"
   },
   "forum": "customer_or_counterparty",
   "forcing_event": "period_close",
@@ -84,62 +83,105 @@
     ]
   },
   "deliverables": [
-    "weserfrucht_delay_attribution_2027.csv",
-    "weserfrucht_coldchain_remediation_2027.xlsx",
-    "weserfrucht_remediation_review_2027.pptx"
+    "weserfrucht_corridor_allocation_2027.csv",
+    "weserfrucht_corridor_capital_model_2027.xlsx",
+    "weserfrucht_remediation_allocation_2027.pptx"
   ],
   "opening_move": "question-first",
   "question_form": "what",
-  "driver": "A conserved annual total of multi-stage operational delays is attributed across candidate failure modes and projected onto next year's schedule against an intervention threshold, when three hidden observation processes mis-label delays in clean primary logs: downstream capacity caps in segregated sub-compartments whose opposing seasons flatten the aggregate facility occupancy hold units back at the upstream facility under the upstream congestion code; late inspection notices on multi-unit consignments freeze pre-booked shared-transport slots physically empty and displace cleared standby units under the transport-shortfall code, detectable only by reconciling slot shortfalls against total vehicle gross weight; and counterparty booking quotas reject return attempts in an unlinked portal log inflated by multi-day retries, hiding return-facility blocking inside carrier turnaround times.",
-  "driver_concrete": "Weserfrucht Import GmbH designates 2027 Mandatory Remediation causes at 2,500 or more projected excess container-days under uniform cause-level Annex C rules: reconstructing daily +2C, +7C, and +13C DC chamber stocks and comparing same-vessel port stack twins separates inland chamber pull-back (coldstore_dock 3,367, remediate) from genuine port congestion (reefer_plug 3,150, remediate) despite flat 69 to 79 percent total DC occupancy; matching post-24h CHED border inspection notices against rail shuttle slot shortfalls and shared-train weighbridge tonnage (-28.0 t per locked empty wagon) moves phantom-slot standby rollovers from rail_handoff (1,734, monitor) to phyto_insp (2,058, monitor); and contrasting same-DC same-unload-day empty returns across open-quota and closed-quota ocean lines solves portal retry multiplicity (4.25x) to separate empty_depot (3,053, remediate) from drayage_carrier (3,213, remediate).",
-  "stump": "A careful but hurried analyst reads TMS exception codes, settled carrier dispute credits, flat aggregate warehouse utilization, and high physical empty-depot gate acceptance, filing rail_handoff (2,620 to 2,797) for remediation while missing coldstore_dock (1,357 to 1,986) and empty_depot (947), whereas over-correcting any one stump without netting baseline peak congestion or retry multiplicity flips reefer_plug, phyto_insp, or drayage_carrier across the 2,500 threshold.",
-  "answer_shape": "ranked-causes",
-  "weight": "attribution",
+  "driver": "Six regional import corridors compete for a fixed annual capital remediation budget ranked by projected avoidable carrier-controllable cost per euro invested, where all three operational mechanisms are disclosed openly in the governance charter without specifying functional forms: an asymmetric convex upstream pull-back response where filling segregated cold-storage chambers throttles port yards far more steeply than draining chambers at the same occupancy while opposing produce seasons hold aggregate warehouse occupancy flat; a joint multivariate block-train model separating terminal-varying regulatory inspection booking lock cutoffs with stochastic pass-through from overlapping peak-day traction and consist cuts; and a conserved shipping-line empty-return queue stock that builds during episodic portal closures and persists across multi-day open drain tails scaled by inland haul distance.",
+  "driver_concrete": "Weserfrucht Import GmbH allocates a fixed EUR 1,750,000 2027 carrier-remediation capital budget across six North Sea port-to-DC refrigerated import corridors (BHV-HAN, BHV-KAS, BHV-OSN, HAM-HAN, HAM-MAG, WHV-OSN) by Benefit-Cost Ratio (avoidable 2027 carrier-controllable EUR per EUR capex): reconstructing sealed +2C/+7C/+13C DC chamber stocks and estimating asymmetric convex filling-vs-draining hysteresis removes 7,436.9 c-days of DC pull-back (dropping BHV-KAS from naive #1 at 2.176 to #6 at 0.901); jointly modeling terminal-varying BIP lock cutoffs (BHV ~16h, HAM ~28h, WHV ~12h) alongside Nordbahn short-consist and loco-derate cuts removes 4,304.1 c-days of BIP rail bump (dropping HAM-MAG from naive #2 at 2.136 to #4 at 0.988); and conserving (port, shipping_line) empty-depot queue stock across open drain days removes 7,171.5 c-days of depot backlog (dropping BHV-HAN from naive #3 at 2.012 to #5 at 0.949), funding WHV-OSN (1.139), BHV-OSN (1.100), and HAM-HAN (1.086).",
+  "stump": "Every mechanism is openly disclosed in Charter RC-2027 Rev 3 without catches, dead zones, or zero-variance constants, yet every shortcut fails both sides of the ranking: raw TMS codes, flat aggregate DC occupancy checks, symmetric linear or binary chamber cuts, fixed-24h bivariate BIP counts omitting short-consist confounders, and binary unload-day portal rejection or port-aggregated queue cutoffs each misrank at least one corridor across the top-3 budget cap (all 7 lattice drops, generous, hedge, cutoff, and all 5 extra partial cutoffs file wrong calls; single-stump v4-ECF scores sit at 30/37/30 and reflex at 7).",
+  "answer_shape": "ranked-list-cap",
+  "weight": "allocation",
   "chain_signature": [
     "assembly-reconciliation",
-    "investigation-loops",
-    "missingness-measurement",
     "modeling",
+    "causal-reasoning",
+    "investigation-loops",
     "validation",
     "forecasting",
-    "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 reconciled 2026 container milestones, SKU pallet flows, CHED manifests, rail shuttles, and empty-depot logs; R2 per-chamber daily stock-flow reconstruction and same-vessel twin port-dwell split (coldstore_dock vs reefer_plug); R3 post-24h CHED locked rail-slot conservation and shared-train weighbridge mass-deficit split (rail_handoff vs phyto_insp); R4 shipping-line empty-return contrast and portal retry-pool conservation (empty_depot vs drayage_carrier); R5 three native-unit cross-file physical conservation falsification checks; R6 2027 Import Schedule projection by cause, corridor (BHV, HAM), and peak quarter (Q3); R7 2027 detention and demurrage EUR exposure and avoidable remediation savings; R8 ranked 2027 Mandatory Remediation designation against the 2,500 container-day threshold and +/-20 percent forcing sweep.",
-  "one_fact_test": "Telling the solver that containers bound for a saturated thermal chamber are held at the port under TERM_YARD_HOLD still requires mapping SKU flows, reconstructing daily chamber stock-flow, matching same-vessel twins, and projecting 2027 chamber expansion; it rescues S1 alone (C1 and A_reefer_plug, 2 of 15 graded figures, lifting the reflex score from 14 to 30, delta +16, while rail_handoff and empty_depot remain wrong).",
+  "results": "R1 reconciled 2026 container lifecycles, SKU thermal pallet flows, CHED notices, every-3-day rail block trains, and daily depot portal flows; R2 asymmetric convex filling-vs-draining chamber pull-back model (C1 = 7,436.9 c-days, opening BHV-KAS); R3 joint multivariate terminal-varying BIP lock vs Nordbahn short-consist/loco rail rollover model (C2 = 4,304.1 c-days, opening HAM-MAG); R4 exact stock-flow shipping-line empty-depot queue backlog model across open drain tails (C3 = 7,171.5 c-days, opening BHV-HAN); R5 two-sided observable residual orthogonality and preservation falsification checks (golden 36.2 vs rivals 301 to 1,730); R6 coupled 2027 corridor carrier-controllable projection and Benefit-Cost Ratios across all six corridors (6/6 multi-stump coupled, 0 ECF rollups); R7 EUR 1,750,000 capital allocation slate (fund WHV-OSN, BHV-OSN, HAM-HAN; defer HAM-MAG, BHV-HAN, BHV-KAS), 21-variant robustness battery, and +/-15 percent forcing sweep.",
+  "one_fact_test": "Every mechanism is already disclosed in Charter RC-2027 Rev 3; even giving an analyst an explicit one-sentence shortcut hint for any one mechanism (binary chamber >=92%, bivariate fixed-24h BIP count, or binary unload-day portal rejection) misses both the funding slate and that mechanism's own critical component, while fixing any one mechanism completely from the reflex baseline lifts the v4-ECF score from 7 to only 18 (+11 points, well under a third of results).",
   "strategy_label": "own",
   "mechanism_source": "design_note",
   "differentiation": {},
-  "lineage": [],
-  "notes": "task27 v1 (2026-11-22): core.py CORE PASS level 5, FORCING PASS (all 8 +/-20% perturbations hold), 22 variants 0 flips, S1/S2/S3 lost alone 37/37/37, reflex 14, rigorous 14, calibrated/cutoff/generous/hedge 14/19/14/14, 13 extra cutoff settings all wrong, native-unit falsification golden off by 6.45 c-days vs 262 to 3,810 for every rival. Forward-chronological unclamped cont_unload_day through N_PORTAL_DAYS=379, soft-compressed port/chamber utils, jittered positive floors, non-identical dc_caps, uniform leak-free Annex C 2027 rules, rail-only S2 siblings, exact 2026 calendar quarters. All 5 skeleton lessons are open (0 closed, 0 closed_near); decision_form ranked_causes_bridge has 0 live builds and 0 client library tasks.",
+  "lineage": [
+    {
+      "version": 1,
+      "status": "spent",
+      "reason": "Returned 2026-11-23: S2 24h rail lock had a 2.39h dead zone and zero-noise 2.25 rollover duration (construction catch), and disjoint 8-cause scorecard ECF rollups allowed Run 1 to score 65% despite missing S1 and S3",
+      "skeleton": {
+        "decision_form": "ranked_causes_bridge",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "rival_process_by_state_dependence",
+          "stock_flow_accounting",
+          "capacity_held_for_planned_use",
+          "term_ended_by_another_units_event",
+          "stopped_units_return"
+        ],
+        "mechanisms": [
+          "sealed_thermal_chamber_saturation_hidden_by_opposing_seasonal_chambers",
+          "same_vessel_twin_port_dwell_contrast_separates_plug_from_pullback",
+          "post_24h_ched_inspection_notices_lock_empty_rail_flatcars",
+          "shared_train_weighbridge_deficit_proves_empty_locked_slots",
+          "unlinked_depot_portal_rejections_carry_multiday_retry_multiplicity"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on",
+          "conservation_residual_sign",
+          "layout_or_physics"
+        ],
+        "moves": [
+          "weighted_balance_reconciliation",
+          "reference_unit_unaffected",
+          "replay_event_by_event",
+          "variant_sweep_holds_call"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "schedule_or_plan",
+          "event_timeline",
+          "governing_standard",
+          "unused_distractor"
+        ]
+      },
+      "driver": "A conserved annual total of multi-stage operational delays is attributed across candidate failure modes and projected onto next year's schedule against an intervention threshold, when three hidden observation processes mis-label delays in clean primary logs: downstream capacity caps in segregated sub-compartments whose opposing seasons flatten the aggregate facility occupancy hold units back at the upstream facility under the upstream congestion code; late inspection notices on multi-unit consignments freeze pre-booked shared-transport slots physically empty and displace cleared standby units under the transport-shortfall code, detectable only by reconciling slot shortfalls against total vehicle gross weight; and counterparty booking quotas reject return attempts in an unlinked portal log inflated by multi-day retries, hiding return-facility blocking inside carrier turnaround times."
+    }
+  ],
+  "notes": "task27 v2 (2026-11-23, v4-hardened): core.py CORE PASS level 5 (33/33 checks), FORCING PASS (all 8 +/-15% perturbations hold, greedy Top-3 == exact knapsack), 21 variants 0 flips, v4-ECF S1/S2/S3 lost alone 30/37/30, two stumps lost 18/18/18, reflex 7, rigorous 7, cutoff 14, generous 7, hedge 7, 100% coupled ask matrix (6/6 corridor BCRs move under 2+ stumps, 0 ECF rollups), all 3 coded one-fact catch checks PASS, 0 construction tells, observable falsification golden 36.2 vs rivals 301 to 1,730. Open-book Charter Rev 3 discloses all 3 mechanisms without prescribing estimation formulas.",
   "depth_level": 5,
   "doctrine": "throughout",
   "skeleton": {
-    "decision_form": "ranked_causes_bridge",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "decision_form": "allocation_under_budget",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
     "lessons": [
-      "rival_process_by_state_dependence",
-      "stock_flow_accounting",
-      "capacity_held_for_planned_use",
-      "term_ended_by_another_units_event",
-      "stopped_units_return"
+      "asymmetric_response",
+      "shared_group_event_covariance",
+      "turnover_not_stock_driver",
+      "served_state_outlives_source_failure"
     ],
     "mechanisms": [
-      "sealed_thermal_chamber_saturation_hidden_by_opposing_seasonal_chambers",
-      "same_vessel_twin_port_dwell_contrast_separates_plug_from_pullback",
-      "post_24h_ched_inspection_notices_lock_empty_rail_flatcars",
-      "shared_train_weighbridge_deficit_proves_empty_locked_slots",
-      "unlinked_depot_portal_rejections_carry_multiday_retry_multiplicity"
+      "asymmetric_convex_filling_vs_draining_chamber_hysteresis_pullback",
+      "joint_multivariate_terminal_bip_locks_overlapping_short_consist_cuts",
+      "conserved_shipping_line_empty_depot_queue_outliving_portal_closures",
+      "coupled_corridor_bcr_capital_allocation_under_fixed_cap"
     ],
     "detection": [
-      "second_source_at_other_grain",
       "naive_ignores_what_it_should_depend_on",
+      "second_source_at_other_grain",
       "conservation_residual_sign",
       "layout_or_physics"
     ],
     "moves": [
-      "weighted_balance_reconciliation",
-      "reference_unit_unaffected",
+      "fixed_plus_covariate_fit",
+      "measure_response_shape_from_events",
       "replay_event_by_event",
       "variant_sweep_holds_call"
     ],
@@ -148,10 +190,10 @@
       "second_grain_source",
       "reference_register",
       "schedule_or_plan",
-      "event_timeline",
+      "quotes_or_costs",
       "governing_standard",
       "unused_distractor"
     ]
   },
-  "registered": "2026-11-22T18:36:28Z"
+  "registered": "2026-11-23T22:30:00Z"
 }

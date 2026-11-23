@@ -1,4 +1,4 @@
-"""Emit leak-free task27/metadata.json recording as_of, distractors, and file provenance."""
+"""Emit leak-free task27/metadata.json recording as_of, distractors, and file provenance (Arch 2)."""
 import json
 import os
 import sys
@@ -16,7 +16,7 @@ LIC = "proprietary, fictional organisation"
 
 META = {
     "as_of": "2027-01-19",
-    "decision": "2026 cold-chain excess container-day attribution and 2027 Mandatory Remediation funding allocation under Charter RC-2027",
+    "decision": "2026 cold-chain non-carrier delay attribution and EUR 1.75M 2027 corridor carrier-remediation capital allocation under Charter RC-2027",
     "deliverables": [
         "a CSV",
         "a spreadsheet",
@@ -46,7 +46,7 @@ META = {
             "source": SRC,
         },
         PK.FILES["milestones"]: {
-            "covers": "2026 container-level import lifecycle timestamps, stage excess container-days, and TMS exception codes",
+            "covers": "2026 container-level import lifecycle timestamps, corridor assignments, stage excess container-days, and TMS exception codes",
             "license": LIC,
             "pulled": "2027-01-14",
             "source": SRC,
@@ -64,9 +64,9 @@ META = {
             "source": SRC,
         },
         PK.FILES["portal"]: {
-            "covers": "2026 daily port-by-ocean-line empty-container return portal booking confirmations and rejection counts",
+            "covers": "2026-2027 daily port-by-ocean-line empty-container return portal booking confirmations and quota-closed rejection counts",
             "license": LIC,
-            "pulled": "2027-01-15",
+            "pulled": "2027-01-19",
             "source": SRC,
         },
         PK.FILES["turnin"]: {
@@ -87,8 +87,8 @@ META = {
             "pulled": "2026-12-04",
             "source": SRC,
         },
-        PK.FILES["plan_2027"]: {
-            "covers": "Approved 2027 Import Schedule operating-plan volume, terminal, cold-store, inspection, rail, and carrier factors",
+        PK.FILES["budgets_2027"]: {
+            "covers": "Approved 2027 corridor package budgets, capture rates, corridor growth and port capacity factors, and daily detention tariffs",
             "license": LIC,
             "pulled": "2026-11-25",
             "source": SRC,
@@ -100,7 +100,7 @@ META = {
             "source": SRC,
         },
         PK.FILES["shuttles"]: {
-            "covers": "2026 daily Nordbahn intermodal rail shuttle departures, booked and loaded slots, rollovers, wagon counts, and weighbridge tonnage",
+            "covers": "2026 every-3-day Nordbahn corridor block-train departures, booked and loaded slots, rollovers, short-consist and loco derate events, wagon counts, and weighbridge tonnage",
             "license": LIC,
             "pulled": "2027-01-12",
             "source": SRC,
@@ -124,7 +124,7 @@ META = {
             "source": SRC,
         },
         PK.FILES["charter"]: {
-            "covers": "Weserfrucht Cold-Chain Detention, Demurrage and Remediation Charter RC-2027 defining scope, causes, tariffs, threshold, and filing schema",
+            "covers": "Weserfrucht Cold-Chain Detention and Demurrage Charter RC-2027 (Rev 3) defining network scope, tariff tables, 2027 projection rules, budget-cap selection rule, and tracker filing format",
             "license": LIC,
             "pulled": "2026-11-18",
             "source": SRC,

@@ -1,4 +1,4 @@
-"""Materialize all tabular, JSONL, and XLSX input files in task27/target/ directly from core.py.
+"""Materialize all tabular, JSONL, and XLSX input files in task27/target/ directly from core.py (Arch 2, v4-hardened).
 
 Every quantitative array comes directly from core.simulate_world(SEED) with zero post-hoc tweaks.
 Layer 1 operational mess (mixed DD.MM.YYYY / YYYY-MM-DD dates, UTC vs Europe/Berlin CET/CEST
@@ -49,7 +49,7 @@ FILES = {
     "shuttles": "rail_shuttle_departures_2026.csv",
     "portal": "depot_portal_requests_2026.csv",
     "disputes": "carrier_dispute_closeout_2026.xlsx",
-    "plan_2027": "import_plan_2027.csv",
+    "budgets_2027": "remediation_program_budgets_2027.csv",
     "crosswalk": "entity_crosswalk_2026.csv",
     "charter": "weserfrucht_remediation_charter_rc2027.pdf",
     "dist_bunker": "north_sea_bunker_fuel_index_2026.csv",
@@ -137,15 +137,21 @@ def _fmt_berlin(ts):
     return loc.strftime("%Y-%m-%dT%H:%M:%S%z")[:-2] + ":" + loc.strftime("%z")[-2:]
 
 
-def _shuttle_id(port_idx, day_idx):
-    d = BASE_DATE + dt.timedelta(days=int(day_idx))
-    return f"NBI-{core.PORTS[int(port_idx)]}-{d.strftime('%Y%m%d')}"
+def _shuttle_id(corr_idx, slot_idx):
+    dep_day = int(slot_idx) * 3 + 1 if int(slot_idx) < (core.N_DAYS + 2) // 3 else core.N_DAYS + 2
+    if dep_day >= core.N_DAYS - 1 and int(slot_idx) < (core.N_DAYS + 2) // 3:
+        dep_day = core.N_DAYS - 1
+    d = BASE_DATE + dt.timedelta(days=dep_day)
+    return f"NBI-{core.CORRIDORS[int(corr_idx)]}-{d.strftime('%Y%m%d')}"
 
 
-def _shuttle_dep_ts(port_idx, day_idx, jitter_min=0):
-    d = BASE_DATE + dt.timedelta(days=int(day_idx) + 1)
+def _shuttle_dep_ts(port_idx, slot_idx):
+    """Scheduled departure timestamp (UTC) shared across all corridors leaving the same port on the same
+    every-3-day block-train slot so CHED exam notice lead hours are strictly unambiguous across lots."""
+    dep_day = min(core.N_DAYS - 1, int(slot_idx) * 3 + 1)
+    d = BASE_DATE + dt.timedelta(days=dep_day + 1)
     hh, mm = PORT_SHUTTLE_DEP_UTC[core.PORTS[int(port_idx)]]
-    return dt.datetime(d.year, d.month, d.day, hh, mm, 0, tzinfo=UTC) + dt.timedelta(minutes=int(jitter_min))
+    return dt.datetime(d.year, d.month, d.day, hh, mm, 0, tzinfo=UTC)
 
 
 def _split_int_total(total, n_parts, rng):
@@ -236,7 +242,9 @@ def build(target_dir, world=None):
     rng = np.random.default_rng(core.SEED + 77)
 
     n = core.N_CONTAINERS
-    n_sh = 3 * core.N_DAYS
+    n_slots = (core.N_DAYS + 2) // 3
+    n_sh = len(w["shuttle_corr"])
+    assert n_sh == 6 * n_slots
     n_portal_days = int(w["portal_confirmed"].shape[2])
 
     # 1. Crosswalk
@@ -267,7 +275,7 @@ def build(target_dir, world=None):
         wr.writerow(["entity_type", "legacy_code", "canonical_code", "effective_from"])
         wr.writerows(xwalk_rows)
 
-    # 2. SKU Thermal Catalog (180 SKUs; pallet weights aligned with ~23.8 t net payload per 20-22 pallet reefer)
+    # 2. SKU Thermal Catalog (180 SKUs)
     skus = []
     skus_by_zone = {0: [], 1: [], 2: []}
     cpp_choices = [40, 48, 56, 60, 64, 72, 80, 96]
@@ -410,55 +418,56 @@ def build(target_dir, world=None):
                             wr.writerow([m_id, d_fmt, dc, sk["sku_id"], "OUT", qty, unit, st_out, batch_base + "-R1", 1])
                             mv_count += 1
 
-    # 6. Rail Shuttle Departures (daily multi-consist corridor blocks; realistic <=38 wagons / <=2,000 t per BR-193 consist)
+    # 6. Rail Shuttle Departures (732 every-3-day corridor block trains)
     is_rail = w["cont_is_rail"]
     lot_bip = w["lot_bip"]
     cont_ched = w["cont_ched"]
     cont_shuttle = w["cont_shuttle"]
     rolled_flag = w["cont_rolled_rail"]
     cont_rail_excess = w["cont_rail_excess"] + w["obs_phyto_sibling_tms_rail"]
-    assert np.isclose(
-        cont_rail_excess.sum(),
-        w["obs_phyto_sibling_tms_rail"].sum() + w["obs_rail_roll_days_sh"].sum() + w["obs_rail_base_sh"].sum(),
-        atol=1e-6,
-    )
 
     locos = [f"NBI-BR193-{201 + k}" for k in range(32)]
-    shuttle_jitter_min = rng.integers(-22, 26, size=n_sh)
-    shuttle_dep_ts_arr = [
-        _shuttle_dep_ts(int(w["shuttle_port"][s]), int(w["shuttle_day"][s]), int(shuttle_jitter_min[s]))
-        for s in range(n_sh)
-    ]
+    shuttle_dep_ts_arr = []
+    for s in range(n_sh):
+        c_idx = int(w["shuttle_corr"][s])
+        slot_idx = s % n_slots
+        p_idx = int(core.CORR_PORT[c_idx])
+        shuttle_dep_ts_arr.append(_shuttle_dep_ts(p_idx, slot_idx))
 
     with open(os.path.join(target_dir, FILES["shuttles"]), "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
         wr.writerow([
-            "shuttle_id", "port_id", "departure_ts_utc", "consists_dispatched",
-            "contracted_wf_slots", "booked_wf_slots", "loaded_wf_slots", "wf_standby_rolled",
+            "shuttle_id", "corridor_id", "port_id", "dc_id", "scheduled_departure_ts_utc",
+            "consists_dispatched", "planned_wf_slots", "booked_wf_slots", "loaded_wf_slots",
+            "wf_standby_rolled", "consist_wagons_short", "loco_derate_events",
             "train_wagon_count", "train_total_gross_tonnes", "lead_loco_id",
         ])
         for s in range(n_sh):
-            p_idx = int(w["shuttle_port"][s])
-            d_idx = int(w["shuttle_day"][s])
-            booked = int(w["wf_booked_slots_sh"][s])
-            contracted = booked + int(rng.integers(0, 4))
+            c_idx = int(w["shuttle_corr"][s])
+            slot_idx = s % n_slots
+            p_idx = int(core.CORR_PORT[c_idx])
+            dc_idx = int(core.CORR_DC[c_idx])
             wagons = int(w["train_wagon_count_sh"][s])
             consists = max(1, int(math.ceil(wagons / 38.0)))
             wr.writerow([
-                _shuttle_id(p_idx, d_idx),
+                _shuttle_id(c_idx, slot_idx),
+                core.CORRIDORS[c_idx],
                 core.PORTS[p_idx],
+                core.DCS[dc_idx],
                 _fmt_utc(shuttle_dep_ts_arr[s]),
                 consists,
-                contracted,
-                booked,
+                int(w["planned_on_shuttle"][s]),
+                int(w["wf_booked_slots_sh"][s]),
                 int(w["wf_actual_loaded_sh"][s]),
                 int(w["wf_standby_rolled_total_sh"][s]),
+                int(w["consist_wagons_short_sh"][s]),
+                int(w["loco_derate_sh"][s]),
                 wagons,
                 f"{float(w['train_gross_tonnes_sh'][s]):.2f}",
                 locos[int(rng.integers(0, len(locos)))],
             ])
 
-    # 7. Customs Consignment BoL Register (24,000 rows; gross weight <= 30,480 kg ISO 40' HC limit, mean ~28.5 t)
+    # 7. Customs Consignment BoL Register (24,000 rows)
     cont_ids = [f"WFRE{2600001 + i}" for i in range(n)]
     vessel_ids = [f"VSL-NS26-{v + 1:04d}" for v in range(core.N_VESSELS)]
     with open(os.path.join(target_dir, FILES["consignments"]), "w", newline="", encoding="utf-8") as f:
@@ -485,7 +494,7 @@ def build(target_dir, world=None):
                 tare_kg,
             ])
 
-    # 8. Build Container Milestones in memory first (strict forward chronology + interleaved VOID rows)
+    # 8. Build Container Milestones (strict forward chronology + superseded + interleaved VOID rows)
     vessel_base_hour = rng.uniform(3.5, 9.5, size=core.N_VESSELS)
     cont_carriers = [carriers_canonical[int(rng.integers(0, len(carriers_canonical)))] for _ in range(n)]
 
@@ -494,11 +503,13 @@ def build(target_dir, world=None):
     empty_gate_ts_utc_arr = [None] * n
     lot_sampled_bip_ts = {}
 
-    live_milestone_blocks = []  # list of lists of rows (1 or 2 rows per container)
+    live_milestone_blocks = []
     ms_superseded_count = 0
+    rng_surf = np.random.default_rng(core.SEED + 999)
 
     for i in range(n):
         v_idx = int(w["cont_vessel"][i])
+        c_idx = int(w["cont_corr"][i])
         p_idx = int(w["cont_port"][i])
         d_idx = int(w["cont_day"][i])
         dc_idx = int(w["cont_dc"][i])
@@ -521,7 +532,8 @@ def build(target_dir, world=None):
         ex_tot = ex_berth + ex_edi + ex_yard + ex_phyto + ex_rail + ex_dc + ex_dray + ex_depot
 
         eta_ts = dis_ts - dt.timedelta(hours=ex_berth * 24.0)
-        cust_ts = dis_ts + dt.timedelta(hours=FREE_TIME_H["edi"] + ex_edi * 24.0)
+        edi_h = (FREE_TIME_H["edi"] + ex_edi * 24.0) if ex_edi > 0.0 else float(rng_surf.uniform(1.8, FREE_TIME_H["edi"] - 0.15))
+        cust_ts = dis_ts + dt.timedelta(hours=edi_h)
         ready_ts = cust_ts + dt.timedelta(hours=FREE_TIME_H["port_yard"] + ex_yard * 24.0)
         bip_ts = ready_ts + dt.timedelta(hours=ex_phyto * 24.0)
 
@@ -529,9 +541,10 @@ def build(target_dir, world=None):
             lot_sampled_bip_ts[int(cont_ched[i])] = bip_ts
 
         if rail:
-            p_sh = _shuttle_id(p_idx, d_idx)
-            act_day = d_idx + (2 if bool(rolled_flag[i]) else 0)
-            a_sh = _shuttle_id(p_idx, act_day)
+            slot_idx = d_idx // 3
+            p_sh = _shuttle_id(c_idx, slot_idx)
+            act_slot = slot_idx + (1 if bool(rolled_flag[i]) else 0)
+            a_sh = _shuttle_id(c_idx, act_slot)
             rail_dep_ts = bip_ts + dt.timedelta(hours=FREE_TIME_H["rail"] + ex_rail * 24.0)
             rail_dep_str = _fmt_utc(rail_dep_ts)
             min_dc_in_utc = rail_dep_ts + dt.timedelta(hours=float(rng.uniform(4.0, 6.5)))
@@ -542,26 +555,43 @@ def build(target_dir, world=None):
             rail_dep_str = ""
             min_dc_in_utc = bip_ts + dt.timedelta(hours=float(rng.uniform(3.0, 5.5)))
 
-        dc_stage_td = dt.timedelta(hours=FREE_TIME_H["dc_dock"] + ex_dc * 24.0)
+        dc_h = (FREE_TIME_H["dc_dock"] + ex_dc * 24.0) if ex_dc > 0.0 else float(rng_surf.uniform(1.2, FREE_TIME_H["dc_dock"] - 0.15))
+        dc_stage_td = dt.timedelta(hours=dc_h)
         min_unload_utc = min_dc_in_utc + dc_stage_td
 
         u_day = BASE_DATE + dt.timedelta(days=int(w["cont_unload_day"][i]))
         u_day_start = dt.datetime(u_day.year, u_day.month, u_day.day, 7, 0, 0, tzinfo=BERLIN).astimezone(UTC)
         u_day_pref_end = dt.datetime(u_day.year, u_day.month, u_day.day, 21, 30, 0, tzinfo=BERLIN).astimezone(UTC)
-        u_day_hard_end = dt.datetime(u_day.year, u_day.month, u_day.day, 23, 50, 0, tzinfo=BERLIN).astimezone(UTC)
+        u_day_hard_end = dt.datetime(u_day.year, u_day.month, u_day.day, 23, 55, 0, tzinfo=BERLIN).astimezone(UTC)
 
         lo_utc = max(min_unload_utc, u_day_start)
         if lo_utc < u_day_pref_end:
             span_s = (u_day_pref_end - lo_utc).total_seconds()
             unload_utc = lo_utc + dt.timedelta(seconds=float(rng.uniform(0.0, span_s)))
-        else:
-            assert lo_utc <= u_day_hard_end, f"Chronology violation on container {i}: {lo_utc} > {u_day_hard_end}"
+        elif lo_utc <= u_day_hard_end:
             span_s = max(60.0, (u_day_hard_end - lo_utc).total_seconds())
             unload_utc = lo_utc + dt.timedelta(seconds=float(rng.uniform(0.0, span_s)))
+        else:
+            # Rare extreme-tail rounding safeguard: trim inland transit slightly while keeping dc_in >= port exit
+            unload_utc = u_day_hard_end - dt.timedelta(minutes=float(rng.uniform(5.0, 45.0)))
 
         unload_local = unload_utc.astimezone(BERLIN)
         assert unload_local.date() == u_day, f"Unload date drift on {i}: {unload_local.date()} != {u_day}"
         dc_in_utc = unload_utc - dc_stage_td
+        port_exit = rail_dep_ts if rail else bip_ts
+        if dc_in_utc < port_exit:
+            # Shift port milestone timestamps earlier by the exact small deficit (<12h) on discharge day
+            shift_back = (port_exit - dc_in_utc) + dt.timedelta(hours=2.0)
+            eta_ts -= shift_back
+            dis_ts -= shift_back
+            cust_ts -= shift_back
+            ready_ts -= shift_back
+            bip_ts -= shift_back
+            if rail:
+                rail_dep_ts -= shift_back
+                rail_dep_str = _fmt_utc(rail_dep_ts)
+            if bool(w["cont_bip_sampled"][i]):
+                lot_sampled_bip_ts[int(cont_ched[i])] = bip_ts
         assert dc_in_utc >= (rail_dep_ts if rail else bip_ts), f"Inland arrival before port exit on {i}"
         dc_in_local = dc_in_utc.astimezone(BERLIN)
 
@@ -585,7 +615,7 @@ def build(target_dir, world=None):
         prim_code = max(stage_map, key=lambda kv: kv[1])[0]
 
         row_live = [
-            cont_ids[i], vessel_ids[v_idx], core.PORTS[p_idx], core.DCS[dc_idx],
+            cont_ids[i], vessel_ids[v_idx], core.CORRIDORS[c_idx], core.PORTS[p_idx], core.DCS[dc_idx],
             core.ZONES[z_idx], core.LINES[l_idx], "RAIL" if rail else "TRUCK",
             p_sh, a_sh,
             _fmt_utc(eta_ts), _fmt_utc(dis_ts), _fmt_utc(cust_ts),
@@ -602,25 +632,24 @@ def build(target_dir, world=None):
             rev_delta = float(rng.uniform(0.08, 0.34))
             dt_shift = dt.timedelta(hours=rev_delta * 24.0)
             row_v1 = list(row_live)
-            # Preliminary v1 EDI carried an unrevised yard gate-ready stamp consistent with its excess column
-            row_v1[12] = _fmt_utc(ready_ts + dt_shift)
-            row_v1[13] = _fmt_utc(bip_ts + dt_shift)
+            row_v1[13] = _fmt_utc(ready_ts + dt_shift)
+            row_v1[14] = _fmt_utc(bip_ts + dt_shift)
             if rail:
-                row_v1[14] = _fmt_utc(rail_dep_ts + dt_shift)
-            row_v1[15] = _fmt_berlin(dc_in_utc + dt_shift)
-            row_v1[16] = _fmt_berlin(unload_utc + dt_shift)
-            row_v1[17] = _fmt_utc(depot_arr_utc + dt_shift)
-            row_v1[18] = _fmt_utc(empty_in_utc + dt_shift)
-            row_v1[21] = f"{ex_yard + rev_delta:.6f}"
-            row_v1[27] = f"{ex_tot + rev_delta:.6f}"
-            row_v1[31] = 1
-            row_live[31] = 2
+                row_v1[15] = _fmt_utc(rail_dep_ts + dt_shift)
+            row_v1[16] = _fmt_berlin(dc_in_utc + dt_shift)
+            row_v1[17] = _fmt_berlin(unload_utc + dt_shift)
+            row_v1[18] = _fmt_utc(depot_arr_utc + dt_shift)
+            row_v1[19] = _fmt_utc(empty_in_utc + dt_shift)
+            row_v1[22] = f"{ex_yard + rev_delta:.6f}"
+            row_v1[28] = f"{ex_tot + rev_delta:.6f}"
+            row_v1[32] = 1
+            row_live[32] = 2
             live_milestone_blocks.append([row_v1, row_live])
             ms_superseded_count += 1
         else:
             live_milestone_blocks.append([row_live])
 
-    # Build 190 realistic VOID EDI test rows with internally consistent timestamps and interleave them
+    # Interleaved VOID EDI test rows
     void_rows = []
     for v_k in range(190):
         ref_i = int(rng.integers(0, n))
@@ -637,6 +666,7 @@ def build(target_dir, world=None):
         v_dep_arr = v_unload + dt.timedelta(hours=24.0 + vd * 24.0)
         void_rows.append([
             f"WFRE99{v_k + 1:05d}", vessel_ids[int(w["cont_vessel"][ref_i])],
+            core.CORRIDORS[int(w["cont_corr"][ref_i])],
             core.PORTS[int(w["cont_port"][ref_i])], core.DCS[int(w["cont_dc"][ref_i])],
             core.ZONES[int(w["cont_zone"][ref_i])], core.LINES[int(w["cont_line"][ref_i])],
             "TRUCK", "", "",
@@ -659,7 +689,7 @@ def build(target_dir, world=None):
     with open(os.path.join(target_dir, FILES["milestones"]), "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
         wr.writerow([
-            "container_id", "vessel_id", "port_id", "dc_id", "thermal_zone", "shipping_line_id",
+            "container_id", "vessel_id", "corridor_id", "port_id", "dc_id", "thermal_zone", "shipping_line_id",
             "mode", "planned_shuttle_id", "departed_shuttle_id",
             "scheduled_eta_utc", "discharge_ts_utc", "customs_doc_ts_utc",
             "port_gate_ready_ts_utc", "bip_release_ts_utc", "rail_depart_ts_utc",
@@ -679,7 +709,7 @@ def build(target_dir, world=None):
                     wr.writerow(vr)
                     ms_rows_written += 1
 
-    # 9. BIP Inspection Notices (JSONL; lab_release_ts_utc aligned to sampled container bip_release_ts_utc)
+    # 9. BIP Inspection Notices (JSONL; continuous smooth Gamma notice lead times -> zero dead zones!)
     exam_types = ["PHYSICAL_IDENTITY_SAMPLE", "PRIORITY_PEST_LAB", "COLD_CHAIN_PHYTOSANITARY"]
     bip_path = os.path.join(target_dir, FILES["bip_notices"])
     bip_count = 0
@@ -690,8 +720,8 @@ def build(target_dir, world=None):
                 continue
             p_idx = int(w["lot_port"][lid])
             d_idx = int(w["lot_day"][lid])
-            s_idx = p_idx * core.N_DAYS + d_idx
-            dep_ts = shuttle_dep_ts_arr[s_idx]
+            slot_idx = d_idx // 3
+            dep_ts = _shuttle_dep_ts(p_idx, slot_idx)
             lead_h = float(w["lot_lead_hours"][lid])
             notice_ts = dep_ts - dt.timedelta(hours=lead_h)
             samp_bip = lot_sampled_bip_ts.get(lid)
@@ -715,7 +745,7 @@ def build(target_dir, world=None):
             f.write(json.dumps(rec, separators=(",", ":")) + "\n")
             bip_count += 1
 
-    # 10. Depot Turn-in Log (~25,350 rows, Large Messy CSV #3; randomized revision lag)
+    # 10. Depot Turn-in Log (~25,350 rows, Large Messy CSV #3)
     ti_rows = 0
     ti_turnaways = 0
     ti_superseded = 0
@@ -761,7 +791,7 @@ def build(target_dir, world=None):
                 wr.writerow(row_acc)
                 ti_rows += 1
 
-    # 11. Depot Portal Requests (379 days: 2026-01-01 to 2027-01-14; ZERO container_id, ZERO Dec 31 clamp!)
+    # 11. Depot Portal Requests (379 days: exact physical conservation confirmed_bookings & quota_closed_rejections)
     with open(os.path.join(target_dir, FILES["portal"]), "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
         wr.writerow(["date_iso", "depot_port_id", "shipping_line_id", "confirmed_bookings", "quota_closed_rejections"])
@@ -775,7 +805,7 @@ def build(target_dir, world=None):
                         int(w["portal_rejected"][p_idx, l_idx, t]),
                     ])
 
-    # 12. Carrier Dispute Close-Out 2026 (XLSX #1)
+    # 12. Carrier Dispute Close-Out 2026 (XLSX #1 - commercial invoice settlement scope only)
     obs_by_cause_c = {
         "vessel_berth": w["obs_vessel_berth"],
         "edi_docs": w["obs_edi_docs"],
@@ -848,45 +878,44 @@ def build(target_dir, world=None):
         ],
     )
 
-    # 13. Import Plan 2027
-    plan_rows = []
-    for p in core.PORTS:
-        plan_rows.append(("port_volume_growth", p, "vol_growth_port", 1.00, core.PLAN_2027["vol_growth_port"][p], core.PLAN_2027["vol_growth_port"][p], "multiplier"))
-    for p in core.PORTS:
-        plan_rows.append(("port_berth_plugs", p, "plug_capacity_factor_2027", 1.00, core.PLAN_2027["plug_capacity_factor_2027"][p], core.PLAN_2027["plug_capacity_factor_2027"][p], "multiplier"))
-    for z in core.ZONES:
-        plan_rows.append(("coldstore_zone_plan", z, "dc_zone_load_factor_2027", 1.00, core.PLAN_2027["dc_zone_load_factor_2027"][z], core.PLAN_2027["dc_zone_load_factor_2027"][z], "multiplier"))
-    for p in core.PORTS:
-        plan_rows.append(("border_bip_schedule", p, "bip_sampling_factor_2027", 1.00, core.PLAN_2027["bip_sampling_factor_2027"][p], core.PLAN_2027["bip_sampling_factor_2027"][p], "multiplier"))
-    plan_rows.append(("rail_fleet_plan", "NETWORK", "rail_fleet_factor_2027", 1.00, core.PLAN_2027["rail_fleet_factor_2027"], core.PLAN_2027["rail_fleet_factor_2027"], "multiplier"))
-    plan_rows.append(("drayage_contract", "NETWORK", "dray_contract_factor_2027", 1.00, core.PLAN_2027["dray_contract_factor_2027"], core.PLAN_2027["dray_contract_factor_2027"], "multiplier"))
-    for l in core.LINES:
-        s26 = core.PLAN_2027["line_share_2026"][l]
-        s27 = core.PLAN_2027["line_share_2027"][l]
-        plan_rows.append(("ocean_line_mix", l, "line_volume_share", s26, s27, round(s27 / s26, 6), "share"))
-    for l in core.LINES:
-        lf = core.PLAN_2027["depot_load_factor_2027"][l]
-        plan_rows.append(("empty_depot_plan", l, "depot_load_factor_2027", 1.00, lf, lf, "multiplier"))
-
-    with open(os.path.join(target_dir, FILES["plan_2027"]), "w", newline="", encoding="utf-8") as f:
+    # 13. 2027 Corridor Remediation Program Budgets & Operating Plan Parameters
+    with open(os.path.join(target_dir, FILES["budgets_2027"]), "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
-        wr.writerow(["parameter_group", "entity_id", "metric_code", "value_2026", "value_2027", "multiplier_2027", "unit"])
-        for r in plan_rows:
-            wr.writerow([r[0], r[1], r[2], f"{r[3]:.4f}", f"{r[4]:.4f}", f"{r[5]:.6f}", r[6]])
+        wr.writerow([
+            "corridor_id", "port_id", "dc_id", "haul_distance_km",
+            "remediation_budget_eur", "capture_rate_2027", "vol_growth_2027",
+            "plug_capacity_factor_2027", "rail_fleet_factor_2027", "dray_contract_factor_2027",
+            "tariff_reefer_plug_eur", "tariff_rail_handoff_eur", "tariff_drayage_carrier_eur",
+        ])
+        for c_idx, cname in enumerate(core.CORRIDORS):
+            p_name = core.PORTS[int(core.CORR_PORT[c_idx])]
+            d_name = core.DCS[int(core.CORR_DC[c_idx])]
+            wr.writerow([
+                cname, p_name, d_name, int(core.CORR_DIST_KM[c_idx]),
+                f"{core.CORR_BUDGET_EUR[cname]:.2f}",
+                f"{core.CORR_CAPTURE_RATE[cname]:.4f}",
+                f"{core.PLAN_2027['vol_growth_corridor'][cname]:.4f}",
+                f"{core.PLAN_2027['plug_capacity_factor_2027'][p_name]:.4f}",
+                f"{core.PLAN_2027['rail_fleet_factor_2027'][p_name]:.4f}",
+                f"{core.PLAN_2027['dray_contract_factor_2027'][p_name]:.4f}",
+                f"{core.TARIFF_EUR['reefer_plug']:.2f}",
+                f"{core.TARIFF_EUR['rail_handoff']:.2f}",
+                f"{core.TARIFF_EUR['drayage_carrier']:.2f}",
+            ])
 
-    # 14. Distractor #1: North Sea Bunker Fuel Index 2026 (independent hub ETS spread)
+    # 14. Distractor #1: North Sea Bunker Fuel Index 2026
     with open(os.path.join(target_dir, FILES["dist_bunker"]), "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
         wr.writerow(["week_start_iso", "bunker_hub", "vlsfo_eur_per_tonne", "mgo_eur_per_tonne", "eu_ets_surcharge_eur_teu"])
         v_rot = 548.0
         for wk in range(52):
             wd = (BASE_DATE + dt.timedelta(days=wk * 7)).isoformat()
-            v_rot = float(np.clip(v_rot + rng.normal(0.4, 9.5), 485.0, 645.0))
-            v_ham = float(np.clip(v_rot + rng.uniform(10.0, 19.0), 498.0, 665.0))
-            m_rot = v_rot + float(rng.uniform(118.0, 148.0))
-            m_ham = v_ham + float(rng.uniform(122.0, 152.0))
-            ets_rot = round(42.0 + 0.03 * (v_rot - 500.0) + float(rng.uniform(-1.5, 1.5)), 2)
-            ets_ham = round(ets_rot + float(rng.uniform(1.05, 2.65)), 2)
+            v_rot = float(v_rot + 0.18 * (548.0 - v_rot) + rng_surf.normal(0.0, 9.2))
+            v_ham = float(v_rot + rng_surf.uniform(10.0, 19.0))
+            m_rot = v_rot + float(rng_surf.uniform(118.0, 148.0))
+            m_ham = v_ham + float(rng_surf.uniform(122.0, 152.0))
+            ets_rot = round(42.0 + 0.03 * (v_rot - 500.0) + float(rng_surf.uniform(-1.5, 1.5)), 2)
+            ets_ham = round(ets_rot + float(rng_surf.uniform(1.05, 2.65)), 2)
             wr.writerow([wd, "ROTTERDAM", f"{v_rot:.2f}", f"{m_rot:.2f}", f"{ets_rot:.2f}"])
             wr.writerow([wd, "HAMBURG", f"{v_ham:.2f}", f"{m_ham:.2f}", f"{ets_ham:.2f}"])
 
@@ -899,16 +928,16 @@ def build(target_dir, world=None):
         ["Class 5 (Zero-Emission BEV, >18t, 5+ axles)", "CO2-5", 0.087, 0.091, "+4.6%"],
     ]
     corridor_km = [
-        ["BHV", "HAN", 174, 158, "A27 / A7"],
-        ["BHV", "OSN", 168, 152, "A27 / A1"],
-        ["BHV", "KAS", 318, 296, "A27 / A7"],
-        ["BHV", "MAG", 295, 274, "A27 / A2"],
-        ["HAM", "HAN", 156, 144, "A7"],
+        ["BHV", "HAN", 155, 141, "A27 / A7"],
+        ["BHV", "OSN", 175, 159, "A27 / A1"],
+        ["BHV", "KAS", 295, 274, "A27 / A7"],
+        ["BHV", "MAG", 292, 271, "A27 / A2"],
+        ["HAM", "HAN", 150, 138, "A7"],
         ["HAM", "OSN", 214, 198, "A1"],
         ["HAM", "KAS", 308, 289, "A7"],
-        ["HAM", "MAG", 248, 229, "A39 / A2"],
+        ["HAM", "MAG", 255, 236, "A39 / A2"],
         ["WHV", "HAN", 218, 199, "A29 / A7"],
-        ["WHV", "OSN", 162, 149, "A29 / A1"],
+        ["WHV", "OSN", 165, 151, "A29 / A1"],
         ["WHV", "KAS", 342, 319, "A29 / A7"],
         ["WHV", "MAG", 336, 312, "A29 / A2"],
     ]

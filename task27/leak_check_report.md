@@ -1,19 +1,19 @@
 # leak check, task27
 
-**Verdict: REVIEW.** 17 files read, 68 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 17 files read, 64 golden figures and 5 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: conservation, handoff, physical, coldstore, reefer, reflex, drayage, stock-flow, pallet, rigorous, weighbridge, c-days, import, same-vessel, causes, containers, inland, unload, independent, golden, shared-train, direct, locked, chamber, wagons
+Stump terms swept: missed, c-days, ham-han, bhv-kas, ham-mag, bhv-han, whv-osn, bhv-osn, carrier-controllable, chamber, reflex, capital, avoidable, asymmetric, shortcut, aggregate, binary, remediation, schedule, residual, drayage, mechanisms, component, occupancy, linear
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: carries 29 of 36 distinctive words of the committed call: 'Release 2027 Mandatory Remediation funding under Charter RC-2027 (>= 2,500 container-days) for five causes: vessel_berth'
+- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: carries 28 of 30 distinctive words of the committed call: "Fund three North Sea import corridors under Charter RC-2027's EUR 1,750,000 2027 carrier-remediation capital budget: WHV"
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: 11 of 25 stump-paragraph terms appear (handoff, physical, coldstore, reefer, drayage, import); read whether the document names the move
+- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: 18 of 25 stump-paragraph terms appear (missed, c-days, ham-han, bhv-kas, ham-mag, bhv-han); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 1)
-- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: names 3 of 3 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `weserfrucht_remediation_charter_rc2027.pdf`: names 3 of 5 answer-set candidates beside numbers; confirm it does not rank them on the decision question
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -36,27 +36,30 @@ Stump terms swept: conservation, handoff, physical, coldstore, reefer, reflex, d
 
 ## 11 prompt gate (clean)
 
-
 ## Solver's-eye read
 
-(Pass 2 cold isolated read of `/tmp/leak-task27/`, 2026-11-22)
+Isolated cold read performed by `leak-reader` on `/tmp/leak-task27/` (`prompt.txt` md5 `87d87a3a4f60b8c80dd1ca85e4a4f09b`, fresh unzip of `target.zip` md5 `af46269ad25af6a97feac06037864f68`, 17 files; never solved the task and never opened `DESIGN_NOTE.md`, `submission.md`, `generator/`, `golden/`, `metadata.json`, or `leak_check_report.md`).
 
-### Questions 1-6
+### 1. Answer Leakage
+None. Nothing in `prompt.txt` or any of the 17 files in `target/` states, implies, or hands away the 2027 corridor funding slate (`FUND`/`DEFER`) or any computed answer figure (C1, C2, C3 totals, attributed carrier-controllable container-days, 2027 avoidable EUR, or corridor BCRs).
 
-1. **Method or step announcement:** `prompt.txt`: none (states only the business question, the 2,500 container-day threshold reference, requested quantities, and deliverable types; names no attached files, rounding rules, or analytical steps). `weserfrucht_remediation_charter_rc2027.pdf` pins only corporate WHAT governance rules (Section 2.1 settled scope, revision supersession, UTC vs Europe/Berlin zones, entity crosswalk; Section 2.2 exhaustive 8-cause originating-bottleneck estimand without naming which stages hold misattributed dwell or how to untangle them; Section 3 2,500 cutoff on 2027 Annex C projections excluding 2026 documentary dispute settlements; Section 4.1 Schedule B EUR tariffs excluding bunker fuel and LKW-Maut; Section 4.2 calendar quarters and full-network BHV/HAM/Q3 scope; Annex C uniform cause-level 2027 projection formulas; Section 5 CSV schema). All other 16 files: none.
-2. **Pre-ranked candidates (Gate G):** none. (`carrier_dispute_closeout_2026.xlsx` tabulates unprojected 2026 documentary TMS-stage commercial claims in unsorted lifecycle order; Charter RC-2027 lists tariffs and symbolic equations in lifecycle order without scoring causes.)
-3. **Helper-only artifact:** none. Every shipped file serves an authentic operational, commercial, regulatory, or planning role.
-4. **Answer leak:** none. No file contains attributed 2026 root-cause totals, projected 2027 container-days, 2027 EUR figures, or committed remediation designations.
-5. **Literal-rule execution:** Every literal Charter RC-2027 clause (Section 2.1 `SETTLED` + max `extract_version` + excess hours / 24; Section 2.2 exhaustive 8-cause partition; Section 3 `>= 2,500.0` cutoff on 2027 Annex C; Section 4.1 Schedule B EUR tariffs; Section 4.2 non-leap quarters & full-network BHV/HAM/Q3; Annex C single uniform cause-level equation; Section 5 eight-row CSV schema) executes cleanly to the golden.
-6. **Single-thing / banned-stump check & realism tells:** No single-thing shortcut. Attributing 2026 excess container-days turns on genuine multi-source operational diagnosis across independent systems (per-chamber WMS stock-flow vs aggregate DC occupancy and port yard dwell; consignment-level CHED BIP notices vs rail shuttle departures and weighbridges; unlinked empty-depot portal rejections vs physical gate logs and drayage turnaround).
+### 2. Method / Trap Signaling
+None. No file name, column header, spreadsheet note, or document passage announces a hidden trap, prescribes a statistical estimator/equation or numeric cutoff for C1/C2/C3, or reads like a benchmark design note. Pass 1 review items in `weserfrucht_remediation_charter_rc2027.pdf` (Section 2.3 heading, Overlaps A-C prose, Annex D recovery range) were rewritten into authentic Weserfrucht corporate logistics/controlling language and confirmed clean on Pass 2.
 
-### Realism & Date Consistency
+### 3. Pre-Ranking Check
+None. No document or spreadsheet in `target/` ranks, scores, or hints at an ordering of the six corridors on the 2027 funding decision (`Table 1`, `Table 7`, `Annex B.1`, and `remediation_program_budgets_2027.csv` are strictly alphabetical; `carrier_dispute_closeout_2026.xlsx` has no corridor split).
 
-- **Setting date boundary (`<= 2027-01-19`):** Clean across all 17 files; zero dates after `2027-01-19`, zero template leftovers, zero artificial answer-order sorting.
-- **Chronology, DST & physical plausibility:** Exact Europe/Berlin `+01:00`/`+02:00` DST transitions reconciled to UTC; zero container chronology inversions; DC capacities and opening stocks tie to 0 pallets; reefer weights, pallet counts, multi-consist Vectron BR-193 rail blocks, Autobahn distances, and Maut tariffs are physically and commercially plausible. Minor cohort-boundary notes (Jan 5-14 empty tail in `depot_portal_requests_2026.csv`, planned-shuttle keying of `rail_shuttle_departures_2026.csv`) are benign simulation boundaries.
+### 4. Surface Realism & Timeline Check
+- Dates relative to setting (`2027-01-19`): Clean across all 17 files (all historical logs and workbook mtimes on or before `2027-01-18`; Charter signed `18 November 2026`; Table 6 lists forward-looking 2027-2028 target governance milestones).
+- Hidden sheets & template/toolchain clues: Clean (`state=visible` on all XLSX sheets, realistic corporate creators, clean PDF layout).
+- Pass 1 surface-realism fixes confirmed: zero-excess EDI/DC durations vary naturally below free time, North Sea bunker VLSFO varies smoothly from `528.39` to `568.84` with zero flat clipping, and LKW-Maut highway distances match `remediation_program_budgets_2027.csv` on all six active corridors.
 
-### REVIEW Item Verdicts
+### 5. Practitioner Prompt Check
+Clean. `prompt.txt` (95 words, 664 characters, one plain paragraph, question first) reads naturally as an internal Weserfrucht practitioner brief without dictating methods, adjustments, rounding rules, or naming attached files.
 
-- **Sweep 3 (`weserfrucht_remediation_charter_rc2027.pdf`, decision vocabulary overlap):** `harmless` - Governance definitions (`REMEDIATE`, `MONITOR`, `2,500 container-days`, eight canonical `cause_id` tokens) only; zero answer leak.
-- **Sweep 4 (`weserfrucht_remediation_charter_rc2027.pdf`, design-note vocabulary; ruled by main thread):** `harmless` - Appearing terms (`handoff`, `physical`, `coldstore`, `reefer`, `drayage`, `import`, `containers`, `inland`, `unload`, `direct`) are ordinary supply-chain operational nouns required by Charter stage definitions; Charter never mentions any stump mechanism (`chamber saturation`, `pull-back`, `same-vessel`, `24-hour lock`, `empty wagon`, `weighbridge`, `portal quota`, `retry multiplicity`).
-- **Sweep 6 (`weserfrucht_remediation_charter_rc2027.pdf`, candidate causes beside numbers):** `harmless` - Numbers beside causes are strictly Schedule B tariffs, Table 1 free-time hours, and Annex C parameters in lifecycle order; zero ranking or scoring.
+### 6. Focused Review of Mechanical REVIEW Items (`weserfrucht_remediation_charter_rc2027.pdf`)
+- Sweep 3 (decision vocabulary): Confirmed clean; Charter defines the EUR 1.75 million budget cap and governance rules only and never reveals or hints at funded/deferred corridors.
+- Sweep 4 (design-note vocabulary): Confirmed clean; Section 2.3 and Annex C stay strictly at authentic open-book operational and controlling governance level without prescribing an analytical move, equation, or numeric cutoff.
+- Sweep 6 (ranking artifacts): Confirmed clean; all corridor listings are strictly alphabetical and unranked.
+
+**Solver's-eye verdict: CLEAN**
