@@ -76,7 +76,7 @@
     },
     {
       "date": "2026-11-23",
-      "event": "Prompt de-templating pass: tightened prompt.txt from 95 words (619 chars) to 61 words (368 chars) removing sub-metric enumeration, sequenced deliverables, closing document list, and formulaic terms while pinning all filing figures via SWRO-Q27 Annex C; voice-check.py PASS (0 FAIL, 0 WARN), precut.py PASS (117 checks, 0 FAIL), leak.py 0 LEAK."
+      "event": "Prompt de-templating pass 2: balanced natural 86-word (534-char) prompt.txt preserving every ask explicitly (2027 overhaul call, contractual euro exposure, per-train 2027 hours by failure mode, plant-wide & summer Q3 totals, 2026-to-2027 backup & 2026 screening gap, train comparison chart, spreadsheet + matching train-level CSV) while dropping regulation/threshold/tariff labels (SWRO-Q27, 400-hour, Schedule B), formulaic triplets, and closing document lists; voice-check.py PASS (0 FAIL, 0 WARN), precut.py PASS (0 FAIL), leak.py 0 LEAK."
     }
   ]
 }

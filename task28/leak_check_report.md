@@ -4,11 +4,11 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: reflex, physical, standard, scaling, composite, triage, membrane, support, process, measurement, operating, structural, cutoff, diagnostics, independent, anomalous, client, builds, lagrangian, alignment, cip-invariant, distinct, parcel, inversion, monitor
+Stump terms swept: reflex, physical, standard, scaling, composite, triage, membrane, support, process, measurement, operating, structural, swro-q, cutoff, diagnostics, independent, anomalous, client, builds, lagrangian, alignment, cip-invariant, distinct, parcel, inversion
 
 ## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 420 appears: ...eate Boron (> 0.50 mg/L, 1-hour basis) Clause 2.1 420 EUR/h Pretreatment-to-RO Scaling (parcel > 1.50 &...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 360 appears: ...Scaling (parcel > 1.50 & > 1.50 index) Clause 2.2 360 EUR/h Persistent Structural Membrane Fault Clause...
+- **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 420 appears: ...eate Boron (> 0.50 mg/L, 1-hour basis) Clause 2.1 420 EUR/h Pretreatment-to-RO Scaling (parcel > 1.50 &...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: golden figure 540 appears: ...h Persistent Structural Membrane Fault Clause 2.3 540 EUR/h Total 2027 Schedule B exposure sums across...
 - **REVIEW** `swro_integrity_standard_q27.pdf`: carries 24 of 35 distinctive words of the committed call: "Pull four Barlavento SWRO trains for mandatory 2027 vessel overhaul under Standard SWRO-Q27's 400-hour threshold: TR07 ("
 

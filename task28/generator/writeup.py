@@ -538,14 +538,14 @@ def build_metadata(res):
 
     meta = {
         "as_of": PK.AS_OF,
-        "decision": "2027 mandatory vessel overhaul designation across eight Barlavento SWRO trains under Standard SWRO-Q27 (400-hour threshold)",
+        "decision": "2027 mandatory vessel overhaul designation across eight Barlavento SWRO trains under Standard SWRO-Q27",
         "deliverables": ["a spreadsheet", "a CSV"],
         "stated_inputs": ["400", "2026", "2027"],
         "distractor_files": [F["dist_mibel"], F["dist_reservoir"]],
         "field_terms": ["CIP", "boron", "SWRO", "DAF", "DMF", "Algarve"],
         "files": {
             F["standard_pdf"]: _entry(
-                "Standard SWRO-Q27 regulatory integrity standard defining excursion modes, 400-hour threshold, Schedule B tariffs, Annex B 2027 plan rules, and Annex C filing schema",
+                "Standard SWRO-Q27 regulatory integrity standard defining excursion modes, overhaul threshold, Schedule B tariffs, Annex B 2027 plan rules, and Annex C filing schema",
                 "2026-09-14",
             ),
             F["lims_qa_pdf"]: _entry(
