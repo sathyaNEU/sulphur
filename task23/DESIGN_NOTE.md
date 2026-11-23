@@ -511,7 +511,7 @@ attached file's name, a role, or a count the data hold.
   subdomain serves it, and multicomponent adsorption could not be pinned to bands.
 - 2026-11-13, draw: groundwater forensics with isotopes and capture zones: transport forecasts too sensitive to pin.
 - 2026-11-13, draw: estuary salinity at a drinking water intake: a second tidal forecasting task in this subdomain
-  after task3's tide valves.
+  after an earlier build's tide valves.
 - 2026-11-13, draw: the deliverables as a workbook and a Word memo (docx and xlsx repeats task9) or a PDF staff report
   (pdf and xlsx repeats task20); drawn as a workbook and the council briefing deck.
 - 2026-11-13, draw: gap objective with G2 first (test.same_puzzle against task7 v11, test.same_driver against task8

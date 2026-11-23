@@ -20,7 +20,7 @@
  },
  "duplicate_check": {
   "heart": "WARN on the remote view (template.chain_near, overuse.weight, repeat.gate_g, repeat.deliverables, repeat.question_form, answered in the note's Template check)",
-  "nearest": "task17 (chain and shape), task3 v7 and task14 v2 (gate_g)"
+  "nearest": "task17 (chain and shape), an earlier build and task14 v2 (gate_g)"
  },
  "judge": {
   "verdict": "DETERMINISTIC",

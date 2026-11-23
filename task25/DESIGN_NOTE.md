@@ -317,7 +317,7 @@ Chain signature: assembly-reconciliation, decomposition-attribution, modeling, m
   decomposition-attribution
 Question form: which (which runs will not finish inside their windows), with how much (each run's days against the
   benchmark's)
-Nearest build: (guard WARN on chains shared in shape or weight with task19, task2, task3, task4 and task9: none of
+Nearest build: (guard WARN on chains shared in shape or weight with task19, task2, an earlier build, task4 and task9: none of
   them bridges a measurement to production at conditions never run, and the weight here is modeling against their
   assembly, measurement and synthesis) task24 (General Statistics, modeling weight, a set over a per-unit line on distinct wrong answers):
   its lessons are a QA any-miss product over objects, a pay floor's hinge and video track turnover in an

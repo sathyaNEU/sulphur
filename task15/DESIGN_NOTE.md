@@ -34,7 +34,7 @@ People: Jakob Lauritsen (head of supply chain planning), Elna Johnsen (business 
 - **Card:** `.claude/skills/fingerprint/cards/task15.json`, architecture v2, registered 2026-11-11 with architecture 1
   in `lineage`. `guard.py check`: WARN only after two structural axes were redrawn on the draft. The first draft
   (gap population, decisive generator G6 composition shift, decision a designation set) BLOCKed `test.same_puzzle`
-  against task7 v7 and `test.same_driver` against task3 v5, and a second (gap objective, G3, designation set) BLOCKed
+  against task7 v7 and `test.same_driver` against an earlier build, and a second (gap objective, G3, designation set) BLOCKed
   `test.same_puzzle` against task5 v2. The honest labels are the ones now filed: the decisive gap is objective (the
   dashboard's waste and at-close availability are correct and are not what the board's saving is scored on), with
   population second (the pilot's stores are not the stores the rollout reaches). After the rebase onto main the same
