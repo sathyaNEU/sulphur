@@ -31,7 +31,7 @@ The spec:
                                                  its fitted value to the far end a run might set (the default's
                                                  mirror: a receiver worth nothing, hours raised in proportion) and
                                                  everything else golden; it files a wrong call too, so a run that
-                                                 over-corrects the stump does not land the call (task3 arch 9)
+                                                 over-corrects the stump does not land the call (an earlier build)
   lattice   {"S1": {member: x, ...}, "S1+S2": {...}, ...}   every member's figure with exactly those stumps made
             the hurried way and everything else golden. Required keys: each stump alone, all together (the reflex
             route), and all but one (each stump fixed alone on the reflex route).
@@ -41,12 +41,12 @@ The spec:
             falsification check is a statistic of the members' own records that the golden's model reproduces and
             each rival's misses (example 17's within-group share across the deadline bands), with no file observing
             the target or a stump's quantity. One of the two is required. A referee is a calibration set first: a
-            pack that ships one prices the calibrated run route on it (task3 arch 8's two runs calibrated the whole
+            pack that ships one prices the calibrated run route on it (an earlier build's two runs calibrated the whole
             chain on the research valley's gauges and landed every class).
   run_routes {"generous": {member: x, ...}, "calibrated": {member: x, ...} | {"none": why},
               "hedge": {member: x, ...}, "cutoff": {member: x, ...} | {"none": why}}
             the routes frontier runs were seen to take, each implemented on the world's arrays and each filing a
-            wrong call (task3 arch 8, both runs on every class against a paper pair of 26.7; the approved sheets of
+            wrong call (an earlier build, both runs on every class against a paper pair of 26.7; the approved sheets of
             2026-11-14; examples 16 and 17). generous: every correction the pack suggests applied in full, at the
             strength the data allows, with the estimate's uncertainty integrated into the figure (expected counts
             over a fitted spread, not a point plug). calibrated: the whole chain calibrated end to end on any slice
@@ -59,7 +59,7 @@ The spec:
             its map and every other figure from the figure's "routes". A route that takes a free setting (the cut
             of a filter, the slice a calibration is run on, the share a hedge keeps) is implemented against each
             stump's own mechanism and priced over its whole family: every setting a run could choose is a further
-            key "<route>:<label>" ({member: x}), and every one of them files a wrong call (task3 arch 9: the
+            key "<route>:<label>" ({member: x}), and every one of them files a wrong call (an earlier build: the
             filter a run puts in place of the replay, the well-covered days cut to the thin stations' storm size,
             filed the golden's call at every cut from 5 to 12 strokes while the route the core priced was another
             filter).
@@ -121,7 +121,7 @@ BAND_ROOM = 0.25     # a default band: the family's range and a quarter of its w
 NEAR_MISS = 1.5      # a figure counts as lost only outside its band stretched by this about the golden
 INDEPENDENT_FROM = "2026-11-21T08:00:00Z"   # the client's guidelines of 11/20: the critical components independent
 RUN_ROUTES = ("generous", "calibrated", "hedge", "cutoff")
-RUNS_FROM = "2026-11-21T21:45:00Z"   # task3 arch 8's runs: the gates' opponent is the runs' recorded routes
+RUNS_FROM = "2026-11-21T21:45:00Z"   # an earlier build's runs: the gates' opponent is the runs' recorded routes
 
 
 def _key(ids):
@@ -462,7 +462,7 @@ def check(spec):
                       "the route that calibrates the whole chain on it and carries it to the members)")
     row("run routes listed", not absent,
         "the four routes the runs take are implemented: %s" % ", ".join(sorted(maps)) if not absent else
-        "missing or not a figure for every member: %s (stumping Part 1d; task3 arch 8's runs took routes no lattice "
+        "missing or not a figure for every member: %s (stumping Part 1d; an earlier build's runs took routes no lattice "
         "key held)%s" % ("; ".join(absent), "; registered before the rule of %s" % RUNS_FROM[:10] if soft else ""),
         warn=soft)
     fam, badfam = _run_family(spec)
@@ -484,8 +484,8 @@ def check(spec):
                     dirs.add(1 if d > 0 else -1)
         row("both sides of the line", dirs == {1, -1},
             "the shortcuts and the run routes miss above and below the golden's classes" if dirs == {1, -1} else
-            "every miss falls %s the golden's class, so a route that errs the other way lands the call (task3 arch "
-            "8: every open member 1.1 to 1.5 above its line, every priced shortcut under it, and the runs' generous "
+            "every miss falls %s the golden's class, so a route that errs the other way lands the call (an earlier build: "
+            "every open member 1.1 to 1.5 above its line, every priced shortcut under it, and the runs' generous "
             "corrections filed every class)" % ("above" if dirs == {1} else "below" if dirs == {-1} else "on neither side of"),
             warn=soft)
     for st_id in sids:
@@ -500,7 +500,7 @@ def check(spec):
         row("stump %s two-sided" % st_id, oc != gcall,
             ("lost alone and over-corrected alone both file a wrong call (over: %s)" % (oc,)) if oc != gcall else
             "over-corrected alone it files the golden's call, so a run that errs past the fitted value lands the "
-            "call (task3 arch 9: a legacy receiver worth nothing filed the golden's call)", warn=soft)
+            "call (an earlier build: a legacy receiver worth nothing filed the golden's call)", warn=soft)
 
     # 9. independence and weight
     axes = {stumps[s].get("axis") for s in necessary}
@@ -822,7 +822,7 @@ def selftest():
         if "routes" in f:
             f["routes"]["rigorous"] = f["golden"]
     expect("a rigorous route that earns over 50", s, 0, "rigorous standard route on the rubric")
-    # the runs' recorded routes (task3 arch 8)
+    # the runs' recorded routes (an earlier build)
     s = copy.deepcopy(base)                     # no run routes at all
     del s["run_routes"]
     expect("a core with none of the runs' routes", s, 0, "run routes listed")
