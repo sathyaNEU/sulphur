@@ -230,8 +230,7 @@ evidence**: a re-root needs the runs, the judge or the leak reader to have kille
 **retired** only on the author's word: a `## Retired` section in the design note, `status` `RETIRED`, every card kept,
 committed `RETIRED`. A session never proposes retirement because a design space ran dry: it widens the draw (another
 task type in the client domain, another organisation and decision, other instruments, files added or withheld,
-public data) and keeps drawing, and no screen brief carries a stop short of a passing core (task3 was recommended
-for retirement after ten architectures inside one house task type, and the author ruled it out).
+public data) and keeps drawing, and no screen brief carries a stop short of a passing core.
 
 ## Throughput
 

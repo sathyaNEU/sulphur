@@ -1,5 +1,5 @@
 {
- "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md), the example library (guidelines/client/examples/, with examples 1, 16 and 17 as the pages read on 2026-11-21 as L56 to L67, N40, N41 and R94 to R97) and the client's review pages of approved tasks outside our dataset (L39 to L44, N32, R57 to R60; those tasks are not filed, so each entry carries the reviewer's record in general terms). A new id is added only from a run or a client page, never from a design. A named assumption or loss cited for a stump transfers only with its condition: every one on file was waved through or lost because no shipped file let the run score it, so a citation for a stump whose pack ships a file that scores the stump's own quantity prices nothing (stump-screen test 18; an earlier build cited N21, N26, N01 and N30 for three stumps whose checks it shipped, and both runs made all three, R98 to R101).",
+ "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md), the example library (guidelines/client/examples/, with examples 1, 16 and 17 as the pages read on 2026-11-21 as L56 to L67, N40, N41 and R94 to R97) and the client's review pages of approved tasks outside our dataset (L39 to L44, N32, R57 to R60; those tasks are not filed, so each entry carries the reviewer's record in general terms). A new id is added only from a run or a client page, never from a design. A named assumption or loss cited for a stump transfers only with its condition: every one on file was waved through or lost because no shipped file let the run score it, so a citation for a stump whose pack ships a file that scores the stump's own quantity prices nothing (stump-screen test 18).",
  "precedents": [
   {
    "id": "L01",
@@ -330,14 +330,6 @@
    "quote": "The 80% range is conditional. It assumes the fitted response surface, approximately normal predictive errors and stable benchmark calibration."
   },
   {
-   "id": "N06",
-   "kind": "named_assumption",
-   "class": "dismissed own evidence",
-   "move": "long-run behaviour of a system assumed unchanged over the horizon",
-   "source": "an earlier build's platform run (since deleted)",
-   "quote": "Long-term aquifer behavior: The model assumes sustained leakage and effective aquifer properties throughout the term."
-  },
-  {
    "id": "N07",
    "kind": "named_assumption",
    "class": "dismissed own evidence",
@@ -366,7 +358,7 @@
    "kind": "reflex",
    "class": "validation",
    "move": "chronological hold-out, leave-one-out or held-out groups to choose the model family",
-   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1, an earlier build) (task10 removed from the tree; in git at 3d6b8ec)",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1) (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "the model family chosen by chronological validation and the tail's coverage checked on held-out days"
   },
   {
@@ -454,7 +446,7 @@
    "kind": "reflex",
    "class": "modeling",
    "move": "a model of any mechanism one plot or one group-by of one file shows",
-   "source": "sulfur-record.md (task2 arch 3, an earlier build, task5 arch 2, task7 arch 4 round 2, task8 arch 17)",
+   "source": "sulfur-record.md (task2 arch 3, task5 arch 2, task7 arch 4 round 2, task8 arch 17)",
    "quote": "built the physical mechanism the data showed ... as their first model, then validated it on held-out rows"
   },
   {
@@ -1640,62 +1632,6 @@
    "move": "rival explanations a dated calendar or a cost card can rule out (a finished sale, a rate change) cleared unprompted, and the latest month's figure seen as overstated by returns still to come",
    "source": "the client's example library, example 1 (guidelines/client/examples/1.txt, a root-cause and sizing task labelled hardest, eight frontier runs averaging 0.26; the page as read 2026-11-21); the quote is the page's record of the run",
    "quote": "correctly found September overstated (EUR 20.02 against the reported 26.37) and cleared the sale and label rates"
-  },
-  {
-   "id": "R98",
-   "kind": "reflex",
-   "class": "missingness-measurement",
-   "move": "a gauge's loss by rate fitted as a time lost at each recorded event through a storage total's visit-interval account, station by station, and put back event by event before any window is taken",
-   "source": "an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "For each tip I used the preceding interval Δt, apparent rate i=d/Δt and corrected increment d(1+τ/Δt). Across 108 totaliser rounds per station, zero-intercept least squares of storage catch minus tipped depth on A=Σi gave apparent τ"
-  },
-  {
-   "id": "R99",
-   "kind": "reflex",
-   "class": "modeling",
-   "move": "an ungauged site's ratio to its governing station read storm by storm off a remote sensor's paired pixels (a log-ratio mean and spread per site, an identifier change in the pixel set handled by year), with no area-average normal used as the transfer",
-   "source": "an earlier build's platform run 1 (since deleted; pasted by the author 2026-11-21); an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "Per-crossing event-cell log-ratio means/spreads (e.g. GC-1620 mu 0.323, sigma_R 0.133; GC-2420 mu -0.053, sigma_R 0.144) (run 2: On warm cells, I fitted per crossing log r=ln(radar source/radar station) = a0+a1 ln S at the station)"
-  },
-  {
-   "id": "R100",
-   "kind": "reflex",
-   "class": "modeling",
-   "move": "an instrument's shortfall in one weather regime (hail held in an unheated funnel) found from a coded present-weather record and corrected by a regime multiplier calibrated on a slice of reference gauges",
-   "source": "an earlier build's platform run 1 (since deleted; pasted by the author 2026-11-21); an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "A pooled log-linear fit over all gauge-events estimated log(true / (M x R_source/R_station)) = 0.070209 + 0.027746 log(I_peak/20) + 0.243811 hail + 0.022965 dE_km + e (run 2: Dropping the calibrated hail intercept is the one specification I found that changes a class)"
-  },
-  {
-   "id": "R101",
-   "kind": "reflex",
-   "class": "validation",
-   "move": "a slice of reference gauges that observes the target quantity used as an end-to-end calibration set for the whole chain (conditioned on the other instruments shipped), with the residual spread integrated into expected counts as a sum of exceedance probabilities, then scored against the slice's own counts and on held-out folds",
-   "source": "an earlier build's platform run 1 (since deleted; pasted by the author 2026-11-21); an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "Applying the same station/radar/transfer chain and counting registered trigger exceedances over 14 seasons ... the model gives 194.510 triggering site-events versus 190 observed ... A four-fold event-held-out refit ... gave 192.278 expected crossings versus 190 observed (run 1: The expected trigger count is the sum over 18 seasons of each storm's probability of reaching the geotechnical trigger)"
-  },
-  {
-   "id": "N42",
-   "kind": "named_assumption",
-   "class": "dismissed own evidence",
-   "move": "one instrument model's correction put on a second model because the pack holds no independent check on the second; false in that world (the second bucket lost less), it moved four of run 1's figures out of band at the second model's stations, all high, with every class still right because every miss fell on the side the margins absorbed",
-   "source": "an earlier build's platform run 1 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "One tip-correction model is applied across TB-1/TB-2 stations. Rio Scuro is TB-1; ... no independent TB-2 truth exists in the package. Station storage ratios differ only modestly and were used as checks, not to build separate corrections."
-  },
-  {
-   "id": "N43",
-   "kind": "named_assumption",
-   "class": "dismissed own evidence",
-   "move": "a remote sensor's behaviour over its own years taken to hold for the record's earlier years and for the forward window, named and left untested for want of a file that shows a change",
-   "source": "an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "Stationarity. Radar cell behaviour from 2013 to 2026 is assumed transferable to 2009 to 2012 and to the 2027 to 2031 program. A changing climatology or storm regime would invalidate rates; no file evidences such a change"
-  },
-  {
-   "id": "N44",
-   "kind": "named_assumption",
-   "class": "method shortcut",
-   "move": "two error terms of one transfer (the sensor's ratio and the site's residual) taken as independent Gaussians, named and left untested",
-   "source": "an earlier build's platform run 2 (since deleted; pasted by the author 2026-11-21)",
-   "quote": "Log radar ratio and residual source-station η are treated as independent Gaussians; ground truth may have correlated or non-Gaussian spatial fields."
   },
   {
    "id": "L68",

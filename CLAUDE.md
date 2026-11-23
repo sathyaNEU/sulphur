@@ -282,10 +282,7 @@ Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
   (`stumping/references/stump-screen.md` tests 2, 10 and 11, its measured-dead table, `determinism-check` §1).
 - **Forcing has two sides** (six returns on determinism or forcing): every defensible rival on the golden's side, the
   shortcuts across the line, and the call holding when each fitted input moves by its spread (`effort.json` forcing).
-- **The opponent is the runs' recorded routes, never our hurried one** (task3 arch 8, 2026-11-21: both runs filed all
-  seven classes against a paper pair of 26.7, on routes no lattice key held). The runs fit any correction a shipped
-  file lets them check (a storage account closing a bucket loss, radar pixel pairs reading a ratio off, a slice of
-  gauges scoring the whole chain), apply every correction at full strength with the uncertainty integrated, and
+- **The opponent is the runs' recorded routes, never our hurried one.** The runs fit any correction a shipped file lets them check, apply every correction at full strength with the uncertainty integrated, and
   calibrate end to end on any slice that observes the target; they lose where nothing checks the correction and they
   keep the signal as a sensitivity, cut at a threshold or decline (the approved sheets, examples 16 and 17). So
   `core.py` implements four run routes (generous, calibrated, hedge, cut-off), each filing a wrong call and priced at

@@ -22,7 +22,7 @@
   "reader": "two isolated reads at medium effort, 2026-11-13: cut b787faf9 and the final cut 4c1045ec (the executive team deciding, the PDF note), both NO LEAK, no ranking file, no helper file, no one thing"
  },
  "duplicate_check": {
-  "heart": "BLOCK ban.weight against task24 v2 (registered 2026-11-13T20:36:55Z, before this card's 23:00:59Z; another subdomain, nothing shared): the author's exception of 2026-11-13, recorded in the note's Draw; WARNs strategy_risk, chain_near task3, overuse.forum and the skeleton's lessons answered in the note",
+  "heart": "BLOCK ban.weight against task24 v2 (registered 2026-11-13T20:36:55Z, before this card's 23:00:59Z; another subdomain, nothing shared): the author's exception of 2026-11-13, recorded in the note's Draw; WARNs strategy_risk, overuse.forum and the skeleton's lessons answered in the note",
   "nearest": "skeleton clear (2 WARN); nearest drivers task16 v3 (lineage) 0.13, mark179 0.06, mark258 0.05; the client's seven templating signals clear",
   "read": "2026-11-13, after the pull to 40e1603"
  },
