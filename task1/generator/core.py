@@ -1472,7 +1472,8 @@ def response(O, v, how="golden", months="pooled", quality="golden", weeks_i=(0, 
     return fits
 
 
-def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carry="rescaled", dbar_set=None):
+def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carry="rescaled", dbar_set=None,
+            qfix=None):
     """installs a week and value per install at the plan's 2027 weekly spend and at the stretch column's, the return
     per euro at each, and what the next euro returns on top of each (a constant-elasticity response: the return at
     that spend times the two budget slopes). carry: the fitted installs at the budget that delivers the plan's spend,
@@ -1508,6 +1509,8 @@ def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carr
                 dterm = float(np.log(np.exp(coef["i"]["d"][ci] * (np.log(share * dbar_scale) - ld.mean())).mean()))
     si, sv = coef["i"]["s"][ci], coef["v"]["s"][ci]
     mi, mv = coef["i"]["mon"][ci], coef["v"]["mon"][ci]
+    if carry == "fixed-spend":                                     # Response 1's carry: the plan's billed spend held
+        return fixed_spend(O, coef, c, v12, si, sv if qfix is None else qfix, mi, mv if qfix is None else 0 * mv)
     back = 1.0 if plain else O.agg[c].sum() / np.exp(coef["i"]["a"][ci] + si * x_hist + mi[WMONTH - 1]).sum()
     fm = np.exp(sv * x_hist[:MATURE] + mv[WMONTH[:MATURE] - 1])
     wt = O.agg[c][:MATURE]
@@ -1521,6 +1524,36 @@ def at_plan(O, coef, c, v12, dbar_weeks=WEEKS, dbar_scale=1.0, dbar_from=0, carr
         if not tag:
             out.update(installs_week=n.mean(), vpi=(n * vp).sum() / n.sum())
     out.update(marginal=out["roas"] * (si + sv), marginal_s=out["roas_s"] * (si + sv), el=si, qs=sv)
+    return out
+
+
+def fixed_spend(O, coef, c, v12, si, sv, mi, mv):
+    """Response 1's carry (runs/rerun1.md): at a billed spend S the budget is S over the week's delivery share, so the
+    installs are mu S^e r^(k-e) and the revenue carries r^(k-e-q) too; both taken in expectation over the 104 weeks'
+    own shares, the value's level set so that the mature weeks' installs, at their own budgets, average the mature
+    year's value per install"""
+    ci = ORDER.index(c)
+    Bc = O.B[c]
+    sp = plan_spend(c)
+    lb = np.log(Bc["budget"]); ld = np.log(Bc["spend"]) - lb
+    d = coef["i"]["d"][ci]
+    x_hist = lb - lb.mean()
+    x_plan = np.log(sp) - lb.mean()
+    mom_i = float(np.exp((d - si) * ld).mean()) * np.exp(-d * ld.mean())
+    mom_v = float(np.exp((d - si - sv) * ld).mean()) * np.exp(-d * ld.mean())
+    fm = np.exp(sv * x_hist[:MATURE] + mv[WMONTH[:MATURE] - 1])
+    wt = O.agg[c][:MATURE]
+    level = v12 / ((fm * wt).sum() / wt.sum())
+    out = {}
+    for tag, lift in (("", 0.0), ("_s", float(np.log(CH[c]["stretch"])))):
+        base = np.exp(coef["i"]["a"][ci] + si * (x_plan + lift) + mi[PLAN_MONTH - 1])
+        n = base * mom_i
+        rev = base * level * np.exp(sv * (x_plan + lift) + mv[PLAN_MONTH - 1]) * mom_v
+        out["roas" + tag] = rev.sum() / (sp.sum() * np.exp(lift))
+        out["revenue" + tag] = rev.sum()
+        if not tag:
+            out.update(installs_week=n.mean(), vpi=rev.sum() / n.sum(), moment=float(np.exp((d - si) * ld).mean()))
+    out.update(marginal=out["roas"] * (si + sv), marginal_s=out["roas_s"] * (si + sv), el=si, qs=sv, k=d)
     return out
 
 
@@ -1569,6 +1602,8 @@ def route(O, s1="golden", s2="golden", s3="golden", s4="golden", **kw):
     cells, minn, tilt = kw.get("cells", "fine"), kw.get("minn", 20), kw.get("tilt", "cell")
     fit = {k: kw[k] for k in FITKEYS if k in kw}
     v12 = channel_values(O, v, s2, cells, minn, tilt, **fit)
+    if kw.get("v12_set"):                                          # a run's own mature-year values, as it filed them
+        v12 = dict(v12, **dict(kw["v12_set"]))
     m12 = channel_values(O, vm, "golden" if s2 == "r1" else s2, cells, minn, tilt, **fit)
     r12 = channel_values(O, values(base, "raw"), s2, cells, minn, tilt, **fit)
     N12 = {c: float(O.agg[c][:MATURE].sum()) for c in ORDER}
@@ -1597,7 +1632,7 @@ def route(O, s1="golden", s2="golden", s3="golden", s4="golden", **kw):
                       pay100=100.0 * m12[c], trial100=trial_share(O, c) if c in NETWORKS else float("nan"),
                       **at_plan(O, coef, c, v12[c], kw.get("dbar_weeks", WEEKS),
                                 nud[1] if nud and nud[0] == "dbar" else 1.0, kw.get("dbar_from", 0),
-                                kw.get("carry", "rescaled"), kw.get("dbar_set")))
+                                kw.get("carry", "rescaled"), kw.get("dbar_set"), kw.get("qfix")))
     _CACHE[key] = res
     return res
 
@@ -1925,8 +1960,21 @@ def band_of(fid, g, fam, beside=()):
 # at full delivery, the reading the record rules out (no channel's quarter came within 6 per cent of it), which it
 # kept as its one named sensitivity. Neither run met a postback with no value (architecture 7's postbacks all carried
 # one), so each fills them the way the attribution industry does, from the same network-market-week's postbacks.
+# Response 1's twelve-month values as it filed them (runs/rerun1.md): its mixture is not rebuilt from its text (the
+# fitted gaps land elsewhere on a surface it called weakly identified, and its Android gaps match no one definition),
+# but every account array is the same on any world that moves only the budgets, the plan and the delivery, so the
+# filed values stand there and its carry is run on the arrays. The unrounded-gap setting rescales each network's
+# value by the ratio of the returns it filed for the two settings.
+R1_FILED = (("Meta iOS", 5.65), ("TikTok iOS", 3.83), ("Snapchat iOS", 4.93), ("Google iOS", 8.56),
+            ("Pinterest iOS", 7.46), ("Google Android", 6.61), ("AppLovin Android", 3.13))
+R1_UNROUNDED = tuple((c, x * {"Meta iOS": 1.0421 / 1.0160, "TikTok iOS": 0.4311 / 0.4187, "Snapchat iOS": 0.5100 / 0.4963,
+                              "Google iOS": 1.2683 / 1.3071, "Pinterest iOS": 1.2916 / 1.2565}.get(c, 1.0))
+                     for c, x in R1_FILED)
+R1_CARRY = dict(carry="fixed-spend", qfix=-0.20, months="own")
 RUNS = {
-    "generous": dict(s1="raw", s4="mar", s2="r1", carry="plain-dist", qpool=True),
+    "generous": dict(s1="raw", v12_set=R1_FILED, **R1_CARRY),
+    "generous:unrounded-gaps": dict(s1="raw", v12_set=R1_UNROUNDED, **R1_CARRY),
+    "generous:coded-ratio": dict(s1="raw", s4="mar", s2="r1", carry="plain-dist", qpool=True),
     "hedge": dict(s1="raw", s4="mar"),
     "hedge:as-recorded": dict(s1="raw", s4="mar", carry="plain", dbar_set=1.0),
     "generous:spend-at-full-delivery": dict(s1="raw", s4="mar", s2="r1", carry="plain", dbar_set=1.0, qpool=True),
