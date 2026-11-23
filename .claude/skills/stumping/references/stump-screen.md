@@ -35,7 +35,8 @@ holds:
   function of it, or a quantity the field's reference method turns into it with no judgment left (a reservoir's
   temperature chains through the energy budget, land surface temperature through the station calibration), at a
   deciding member over the history window, continuously or on a schedule (an instrument that sees only a part of the
-  member, or only the units that chose or were chosen to be recorded, does not count);
+  member, only the units that chose or were chosen to be recorded, or whose recording depends on conditions of how
+  the record is made that no shipped check calibrates, is a partial instrument and does not count);
 - (b) an account, a mass balance, or a simple sum or difference of shipped records closes on a deciding member's
   total or on the part of it the decision moves;
 - (c) the option's lever is a shipped series and the outcome is observed at the deciding members. A forward or
@@ -62,13 +63,17 @@ record observes a 2027 counterfactual; the wording above kills all seven on its 
    valued at the margin, a knock-on carried period by period, a without-it baseline, a shape learned from units
    that reached the range and a held-out score are all cards (`open-ground.md` Part 1). A closed lesson can only
    support: its omission alone leaves the golden call standing. Every candidate is read first against the
-   calibrated-source card's trap ("an instrument is biased against the truth, and its values are used at face
-   value"): a recording effect whose fix corrects each reading by an estimated loss, gain or offset is that card
-   however the effect is estimated (test 18), so a recording stump is open only where its estimator is something
-   other than a correction applied reading by reading (a conservation residual, a recording algorithm inverted, a
-   state the record never held, the other open kinds of `open-ground.md`). task3 arch 11's effluent candidate,
-   ammonia lost from a sample waiting warm in its bottle and gained from a sample line that stood, each corrected
-   reading by reading, died here.
+   calibrated-source card by its fix ("measure the bias on cases where both the source and a checked value exist,
+   and correct every reading with it (by group where the bias varies)"; same mechanism and the same kind of fix):
+   a bias or recording effect sized on cases where the source and a checked value both exist is that card, by group
+   or not, however the factor is then applied; a single recording effect fitted on one named field or one-join
+   covariate (a time since sampling, a logged condition) is test 18's strongest route; two or more recording effects
+   that bias each other's estimate when each is fitted alone, with no checked sample, separated by one joint fit and
+   proved on a signal the recording conditions cannot move, are open (`open-ground.md`, recording effects tangled
+   together; the client's example 17, L56 to L58), and so is a recording stump whose estimator is a conservation
+   residual, a recording algorithm inverted or a state the record never held. task3 arch 11's effluent candidate,
+   ammonia lost from a sample waiting warm in its bottle and gained from a sample line that stood, died here: each
+   effect fitted alone on its own logged condition landed every member (weff4.py to weff9.py).
 2. **Not a reflex.** No move a careful run makes unprompted settles it (`precedents.json` reflexes: completing
    reporting lags, de-duplicating, a constant-unit panel, re-weighting to the target's mix, the field's textbook
    estimator, hold-outs, back-tests, bootstraps). If that battery executed perfectly lands inside the band, it is not
