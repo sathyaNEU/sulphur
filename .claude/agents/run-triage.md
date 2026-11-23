@@ -84,10 +84,15 @@ If a run file or the scores are missing, stop and say which.
    a surface stump.
 5a. **The decisive steps, made or missed.** The decisive steps are the critical components of `submission.md`, one
    per stump (the note's `Decisive steps:` line, or its `## Stump factorial` rows of kind stump). For each step
-   and each run write `made` (the run's figure for that component sits in its band and the run's text shows the
-   judgment), `partly` (the judgment named or measured and not carried into the figure) or `missed` (what the run
+   and each run write `made` (the run's figure for that component sits in its band on the run's own inputs and
+   the run's text shows the judgment), `partly` (the judgment named or measured and not carried into the figure) or `missed` (what the run
    did instead, with its figure), quoting the run's line. Then count the steps missed by the two runs between
-   them. Two or more is the client's bar shown on the runs. One step missed by both runs and every other step made
+   them. Read each step on its own estimate, never on a band. Rebuild the run's route in `generator/core.py` until
+   it reproduces the run's filed figures (a return within about 0.02, a value within about 3 per cent), then
+   complete the run's other lost steps on that route and read whether this step's figure still lands. Two lost steps
+   can offset into a right band: task1 arch 7's Response 1 lost the store charges low and valued Meta iOS's unnamed
+   installs 16 per cent high, and its component landed inside its range. A component whose figure another step's
+   loss also moves is reported as such. Two or more is the client's bar shown on the runs. One step missed by both runs and every other step made
    is "only one decisive step" by the runs' own evidence, whatever the average: say so in the Spread line as
    `decisive steps missed: 1`.
 5b. **The closed page.** For the result the runs' scores turn on (the call and the largest lost weight), name the

@@ -126,7 +126,10 @@ by result, against the design note's results chain and effort test:
 - losses spread across several results, the two runs losing in different places: the design held; submit;
 - each decisive step, made or missed in each run (the triage's table): two or more missed between the runs is the
   client's "two or more decisive, independent steps" shown on the runs, and the stump answer has an entry for
-  each; one missed by both and the rest made is one decisive step, whatever the average;
+  each; one missed by both and the rest made is one decisive step, whatever the average; a step is read on its own
+  figure on the run's own inputs (the run's route rebuilt in `core.py` to its filed figures, the run's other lost
+  steps then completed on it), never on a band, because two lost steps offset into a right band (task1 arch 7,
+  where both responses lost two steps each and the review read one);
 - both runs earned a result the note priced as lost: its difficulty was a reflex the careful column should have
   scored Right; rebuild that result around a move beyond it, or replace it with a result from another area;
 - most of both runs' lost weight on one result: thinner; add results that need their own work rather than hardening
