@@ -1725,7 +1725,7 @@
    "id": "R102",
    "kind": "reflex",
    "class": "modeling",
-   "move": "each network's installs that a consent gate leaves unnamed valued source by source: the unlabelled pool deconvolved over week by sessions (or week by store by early-value) cells against each source's independent install count less its named installs, the organic remainder as a component of its own and a value gap fitted per source (a mixture or a regularised deconvolution), the one common gap refused on the labelled sources' own evidence",
+   "move": "each network's installs that a consent gate leaves unnamed valued source by source: the unlabelled pool deconvolved over week by sessions (or week by store by early-value) cells against each source's independent install count less its named installs, the organic remainder as a component of its own and a value gap fitted per source (a mixture or a regularised deconvolution), the one common gap refused on the labelled sources' own evidence; the per-source structure is the reflex and its precision is not: one run fitted the gap on who paid and borrowed the payers' revenue shift from the labelled channels and was 16 per cent high on one network (L71), the other landed within 5 per cent",
    "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
    "quote": "fit a mixture model for nonauthorized conversion; Revenue means were deconvolved over weekly x store x conversion-value cells against all non-attributed installs, with organic as a separate component"
   },
@@ -1733,7 +1733,7 @@
    "id": "R103",
    "kind": "reflex",
    "class": "causal",
-   "move": "installs fitted on the weekly budget with the delivery ratio (billed spend over budget) beside it and week-of-year effects, chosen over the fit on billed spend by its residuals because the delivery moves spend and installs together; the textbook spend response refused unprompted",
+   "move": "installs fitted on the weekly budget with the delivery ratio (billed spend over budget) beside it and week-of-year effects, chosen over the fit on billed spend by its residuals because the delivery moves spend and installs together; the textbook spend response refused unprompted; the fit is the reflex and its carry to a plan is not: one of two runs priced the plan at full delivery (N46)",
    "source": "task1/runs/rerun1.md and rerun2.md (platform runs on architecture 7, the pair submitted, pasted by the author 2026-11-21) and the reviewer's test responses (task1/runs/review_2026-11-22.md)",
    "quote": "The retained model is I_week = mu_week * B^e * r^k; delivery-adjusted log-log relationships using budget, log delivery ratio and a year term"
   },
@@ -1776,6 +1776,14 @@
    "move": "the record's week-of-year level carried to the plan year with no drift in demand, auction or install quality beyond what the budget and the delivery move",
    "source": "task1/runs/rerun1.md (platform run on architecture 7, the pair submitted, pasted by the author 2026-11-21; returned 2026-11-22, task1/runs/review_2026-11-22.md)",
    "quote": "ISO-week mu is assumed transferable to 2027; no secular demand/quality drift beyond budget/delivery is modelled"
+  },
+  {
+   "id": "L71",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the unnamed installs' chance of paying fitted network by network against the unattributed pool, then their revenue per payer carried at a shift borrowed from the fully labelled channels (a quarter of the conversion gap) and the gaps rounded, so on its own revenue base the network whose declined payers pay least came out 16 per cent high and the one whose declined payers pay most 11 per cent low; the error cancelled the run's missing revenue on that network, so its band came out right",
+   "source": "task1/runs/rerun1.md (platform run on architecture 7, the pair submitted, pasted by the author 2026-11-21); read against generator/core.py on the shipped world, 2026-11-23 (Meta iOS EUR 5.65 filed against 4.85 for the golden's per-source fit on the same billing records, Pinterest iOS 7.46 against 8.40)",
+   "quote": "Nonauthorized paying-user revenue was shifted by 0.25 times the gap (Android/ASA evidence around 0.24-0.27; null-cohort profiling around 0.236)"
   }
  ]
 }
