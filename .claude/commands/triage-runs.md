@@ -1,5 +1,5 @@
 ---
-description: After the platform has generated and graded the two runs, record both scores and the average, map where each run lost its points result by result and class every loss on the client's failure table, mark each decisive step made or missed, draft the answer to the form's stump question (How is each model stumped?), and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
+description: After the platform has generated the two runs, save both responses, set the build to RUNS, map where each run lost its points result by result and class every loss on the client's failure table, mark each decisive step made or missed, write the answer to the form's stump question (How is each model stumped?) into submission.md directly after the Final Recommendation (mandatory, before the scores and whatever the route), record both scores and the average, and route the build (submit, fix determinism, fix the asks, rebuild a surface trigger as analysis, or redesign).
 argument-hint: taskNN [the two scores, or nothing if runs/rubric.md carries them]
 effort: medium
 ---
@@ -11,12 +11,17 @@ Invoke `build-pipeline` (Stage 6) first.
 
 1. **Collect the evidence into the task folder.** The author pastes each run's full response and the generated
    rubric (criteria, weights, and each run's pass or fail where the platform shows it). Save them verbatim as
-   `taskNN/runs/run1.md`, `taskNN/runs/run2.md` and `taskNN/runs/rubric.md`. If anything is missing, ask once
-   for it and stop. Never paraphrase a run.
-2. **Record the scores** in `pipeline.json` `runs` (`run1`, `run2`, `average`, `recorded` with the ISO date) and
-   set `status` `RUNS`. The two runs are the two rollouts of the submission; the bar is their average under 60, and
-   exactly 60 fails. A pair re-run on an unchanged submission is recorded in `runs.history` with its reason (a
-   rollout that failed or stopped before the analysis), never run to draw a lower average.
+   `taskNN/runs/run1.md`, `taskNN/runs/run2.md` and `taskNN/runs/rubric.md`; a pair already on file from an
+   earlier cut is first archived under another name (`archN_pairK_response_1.md`) and moved to `runs.history`.
+   If a response is missing, ask once for it and stop. If only the scores or the rubric are missing, ask for them
+   once and carry on: the loss map and the stump answer are written from the responses alone, and the scores are
+   recorded when they come. Never paraphrase a run.
+2. **Record the pair, then the scores,** in `pipeline.json` `runs` (`files`, `recorded` with the ISO date, then
+   `run1`, `run2` and `average` when the platform gives them) and set `status` `RUNS` the moment both responses
+   are saved, scores or no scores (the `stump` gate binds from `RUNS`). The two runs are the two rollouts of the
+   submission; the bar is their average under 60, and exactly 60 fails. A pair re-run on an unchanged submission is
+   recorded in `runs.history` with its reason (a rollout that failed or stopped before the analysis), never run to
+   draw a lower average.
 3. **Spawn one `run-triage` agent** (its definition sets model and effort) with the absolute task folder. This
    command licenses it. It writes `runs/triage.md`.
 4. **Check its loss map against the design note yourself.** A run that lost the results the `## Effort test`
@@ -26,13 +31,20 @@ Invoke `build-pipeline` (Stage 6) first.
    `## Decisive steps` table against the critical components: the runs between them missed two or more decisive
    steps, or the build is one decisive step by the runs' own evidence and is not submitted. Where you disagree
    with the agent, say so in one line each and keep both readings in the report.
-5. **Route** on the verdict:
-   - `SUBMIT`: put the triage's stump draft into `submission.md` as `## How is each model stumped?`, directly after
-     `## Final Recommendation` (where and how each response goes wrong, why the stump is fair, why it takes rigour;
-     emitted by the generator where the blocks are, every figure and quote in it checked against the saved runs
-     and the pack, `submission-writeup`) and hand it to the author with the Reward block
-     filled from `pipeline.json`; set `status` `SUBMITTED` once the author confirms submission, commit `SUBMITTED
-     (taskNN): <call>, runs <x> and <y>, average <z>`.
+5. **Write the stump answer into `submission.md` now. It is mandatory, before the scores and whatever the
+   route.** The form's question "How is each model stumped?" goes in as `## How is each model stumped?`, the very
+   next block after `## Final Recommendation` and before `## Supplementary Questions`, from the triage's draft:
+   where and how each response goes wrong, why the stump is fair, why it takes rigour (`submission-writeup`). It is
+   emitted by the generator where the blocks are, every figure and quote in it asserted against the saved runs and
+   `figures.json`, then rebuilt with the blocks-only pass (the pack and the goldens stay byte-identical).
+   `python3 .claude/skills/submission-writeup/stump_block_check.py taskNN` (gates.py's `stump` gate) exits 0
+   before anything is handed over. The paste handed to the author always carries the block in that place, whatever
+   the verdict below. A step both runs made is never listed as missed; where the runs between them missed only one
+   decisive step, or lost on a surface class, the block still says what the runs show, and the verdict says so.
+6. **Route** on the verdict:
+   - `SUBMIT`: hand the author the paste in order (Final Recommendation, the stump answer, Supplementary Questions,
+     Critical Components, Step-by-Step) with the Reward block filled from `pipeline.json`; set `status` `SUBMITTED`
+     once the author confirms submission, commit `SUBMITTED (taskNN): <call>, runs <x> and <y>, average <z>`.
    - `FIX_DETERMINISM`: `/fix-determinism taskNN <the run's method and why it is defensible>`.
    - `SURFACE_RISK`: the named trigger is rebuilt as analysis or becomes texture in the generator (unmissable, or no
      longer on any graded path), the free gates re-run, the pack is re-cut and the author regenerates the runs; the
@@ -41,12 +53,12 @@ Invoke `build-pipeline` (Stage 6) first.
    - `REDESIGN`: one line in `## Tried and rejected` (what both runs did), `status` `DESIGN`, `/build taskNN from 2`.
    - `RUBRIC_EDIT`: give the author the criterion and its corrected text; they edit it on the platform and re-run
      the evaluation, then this command runs again with the new scores.
-6. **Record the lesson.** Append the spread, the classes, the scores and the route to `pipeline.json`
+7. **Record the lesson.** Append the spread, the classes, the scores and the route to `pipeline.json`
    `runs.history`, and one row to `stumping/references/sulfur-record.md` (the Sulfur run record: task, domain,
    analysis type, the weight and chain signature, both first-wrong-step classes, the spread, both scores, verdict).
    This record is what the next draw reads first.
 
-Report: both scores and the average, the counterfactual average, the loss map (which results each run lost and
-why), each run's first wrong step quoted with its class, each decisive step made or missed in each run, the `Valid
-Stump?` draft, the verdict and the route. No solver runs here: the
-platform's two runs are the only evidence.
+Report: both scores and the average (or that they are owed), the counterfactual average, the loss map (which
+results each run lost and why), each run's first wrong step quoted with its class, each decisive step made or
+missed in each run, the stump answer as it now stands in `submission.md` with the `stump` gate's verdict, the
+verdict and the route. No solver runs here: the platform's two runs are the only evidence.

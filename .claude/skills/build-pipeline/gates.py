@@ -56,6 +56,8 @@ def gates(d, full):
          + (["--rewrite"] if rewrite else [])),
         ("leak", [PY, os.path.join(SK, "leak-check", "leak.py"), t, "--quiet"] + asof),
         ("figures", [PY, os.path.join(SK, "determinism-check", "figures_check.py"), t]),
+        # the form's stump question, mandatory directly after the Final Recommendation once both runs are on file
+        ("stump", [PY, os.path.join(SK, "submission-writeup", "stump_block_check.py"), t]),
         ("containers", [PY, os.path.join(SK, "reduce-house-fixes", "scripts", "audit_containers.py"), t]),
         ("heart", [PY, os.path.join(SK, "fingerprint", "guard.py"), "heart", t]),
         ("surface", [PY, os.path.join(SK, "fingerprint", "guard.py"), "surface", t]),

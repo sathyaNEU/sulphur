@@ -6,8 +6,8 @@ description: Draft or revise submission.md, the Sulfur answer blocks the author 
 # Writing the answer blocks
 
 `submission.md` holds the four blocks the author pastes into the platform's Final Recommendation, Supplementary
-Questions, Updated Critical Components and Updated Step-by-Step fields, and once the runs are back the answer to
-the form's stump question, directly after the Final Recommendation. The rubric is **generated** from the four blocks and
+Questions, Updated Critical Components and Updated Step-by-Step fields, and, mandatory from the moment both responses
+are saved, the answer to the form's stump question, directly after the Final Recommendation. The rubric is **generated** from the four blocks and
 the prompt (`guidelines/client/overview.txt`, "How the rubric is built"): the recommendation and the critical
 components carry the most weight, each supplementary answer becomes criteria, and instruction-following (files
 present and named, rows and columns, length) takes a small share. So these blocks decide what the runs are graded
@@ -56,13 +56,14 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 |---|---|---|
 | 0 | `## Tags` (not pasted; for the card and the domain field) | 2 to 3 lines |
 | 1 | `## Final Recommendation` | 1 or 2 sentences, the deciding figure, what it rejects |
-| after the runs | `## How is each model stumped?` (the form's stump question), directly after the Final Recommendation | a short paragraph per response, one on why the stump is fair, one on the rigour it takes |
+| 1b, mandatory once both responses are saved | `## How is each model stumped?` (the form's stump question), the very next block after the Final Recommendation | a short paragraph per response, one on why the stump is fair, one on the rigour it takes |
 | 2 | `## Supplementary Questions` | one numbered entry per ask (one to four), each entry its figure lines, grouped by file |
 | 3 | `## Critical Components` | 2 to 5 one-liners, one per decisive step: its answer, no method |
 | 4 | `## Step-by-Step` | about 6 to 10 numbered one-liners, then a short closing passage |
 
-Nothing else goes in the file. The stump block is written from the runs, never before them, and it is the first
-thing after the Final Recommendation, in the file and in the paste (below, "How is each model stumped?"). **Not written:** a format rationale, a justification block, a golden listing, key
+Nothing else goes in the file. The stump block is written from the runs, never before them, and never left out
+after them: it is the first thing after the Final Recommendation, in the file and in the paste, from the moment both
+responses are saved (below, "How is each model stumped?"). **Not written:** a format rationale, a justification block, a golden listing, key
 assumptions, an AI disclaimer, a chat-style introduction, placeholders or TODOs.
 
 **0. Tags.** The Sulfur major domain and subdomain in the client's exact wording (`guidelines/client/domains.txt`),
@@ -194,7 +195,26 @@ It is the `Valid Stump?` field of the guidelines of 11/20 (section 6: where it f
 reasoning), asked model by model. It is written after the runs, from their own text (both responses are saved under
 `runs/` first; `run-triage` drafts it in `runs/triage.md`), and **kept in `submission.md` under
 `## How is each model stumped?`, directly after `## Final Recommendation` and before `## Supplementary Questions`**.
-Until the runs are back the file holds the tags and the four blocks. A build whose blocks are emitted by its
+Until the runs are back the file holds the tags and the four blocks.
+
+**It is mandatory, and it goes in the moment the pair is saved.** It does not wait for the scores, the rubric or
+the verdict, and no route skips it: `/triage-runs` saves both responses, sets `status` `RUNS` and writes this block
+into `submission.md` in the same pass, so every paste handed to the author carries it, in order, between the Final
+Recommendation and the Supplementary Questions. A pair that cannot be defended (one step missed between both
+responses, a surface loss) still gets its honest block, and the triage verdict says what that means. The gate:
+
+```
+python3 .claude/skills/submission-writeup/stump_block_check.py taskNN
+```
+
+It is `gates.py`'s `stump` gate. From `RUNS` on it fails a `submission.md` with both responses on file that lacks
+the block, repeats it, places it anywhere but directly after the Final Recommendation, leaves out a response by
+name, runs under 250 words, or quotes a phrase that is in neither saved response, the prompt nor the generator (a
+block left over from an earlier pair). A pair on file at an earlier status is a WARN: either the status and the
+block are owed now, or the pair belongs to an earlier cut and is archived under another name or recorded in
+`runs.void`. `--all` lists every build.
+
+A build whose blocks are emitted by its
 generator emits this one as well: the responses' figures and words are held in the generator exactly as the
 responses write them, the golden's come from `figures.json`, and the generator's checks find every quoted figure
 and phrase in the saved response, so a rebuild keeps the block and cannot leave it stale. It is not a graded block:
@@ -260,7 +280,8 @@ the responses, or that counts a step a response made as missed.
       requested deliverable and asked for by the prompt, each falling with its own stump alone
 - [ ] The closing passage states the figure and the call with each decisive step left out alone (and in pairs
       where the call needs them together)
-- [ ] After the runs: `## How is each model stumped?` directly after the Final Recommendation: where and how each
+- [ ] Mandatory once both responses are saved, before the scores and whatever the route (`stump_block_check.py`
+      exit 0): `## How is each model stumped?` directly after the Final Recommendation: where and how each
       response goes wrong, why the stump is fair (no planted defect, no buried sentence, shown by figures), why it
       takes rigour (each obvious repair's wrong figure and its refusal); every quote and figure in it found in
       the saved responses

@@ -123,6 +123,10 @@ If a run file or the scores are missing, stop and say which.
      closing on which steps each response made and lost.
    Never list a step both runs made, never claim a loss the runs' text does not show, and write `no honest entry`
    for a step whose loss was a surface class: that step is the surface trigger, and the answer cannot defend it.
+   The draft is written whatever the verdict and whether or not the scores are in: `/triage-runs` puts it into
+   `submission.md` directly after the Final Recommendation as soon as you return, because the block is mandatory
+   in every paste once both responses are saved. So it stands on its own as the paste, with every figure and
+   quote one the command can check against the saved runs and `figures.json`.
 
 ## Reflexes the run made
 

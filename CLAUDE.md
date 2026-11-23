@@ -70,8 +70,11 @@ go far enough, not by missing one hidden detail". What that fixes in every build
   asked model by model): "How is each model stumped?" It is answered from the runs' own text in the question's
   order (where and how each model goes wrong; why the stump is fair and not a planted defect or one sentence buried
   in the files; why getting it right takes deep reasoning or real rigour) and kept in `submission.md` directly
-  after the Final Recommendation, the first thing in the paste after the final answer (`run-triage` drafts it;
-  `submission-writeup`; `build-pipeline` stage 7).
+  after the Final Recommendation, the first thing in the paste after the final answer. **It is mandatory and is
+  written the moment both responses are saved**, before the scores and whatever the route, so no paste is ever
+  handed over without it; `stump_block_check.py` (gates.py's `stump` gate) fails a build at `RUNS` or later that
+  lacks it or puts it anywhere else (`run-triage` drafts it; `/triage-runs` step 5 writes it; `submission-writeup`;
+  `build-pipeline` stage 6).
 
 **What the client's hardest examples show** (`guidelines/client/examples/1.txt`, `16.txt` and `17.txt`, runs averaging
 0.26 to 0.31; a difficulty profile and never a template, and by the announcement "likely already overused stumps"): each
@@ -343,11 +346,13 @@ the model's own initiative; the commands above license the ones they name.
            the prompt or the pack
 5 READY    every gate re-run on the final cut; target.zip and the golden ZIP from the final rebuild; the author
            rewrites the prompt for voice, uploads it and target.zip           COMMIT "READY (taskNN): <call>"
-6 RUNS     /triage-runs records both scores, maps the losses result by result and routes (submit,
-           /fix-determinism, /fix-rubric, a surface trigger rebuilt as analysis, or redesign from 2)
-7 SUBMIT   triage SUBMIT, the Reward block filled and the stump question answered first after the Final
-           Recommendation (where and how each model goes wrong, why the stump is fair, why it takes rigour),
-           submitted                                                  COMMIT "SUBMITTED (taskNN): ..."
+6 RUNS     /triage-runs saves both responses (status RUNS), maps the losses result by result, writes the stump
+           answer into submission.md directly after the Final Recommendation (mandatory, before the scores,
+           the stump gate), records both scores and routes (submit, /fix-determinism, /fix-rubric, a surface
+           trigger rebuilt as analysis, or redesign from 2)
+7 SUBMIT   triage SUBMIT, the Reward block filled, the paste in order (Final Recommendation, the stump answer
+           stage 6 wrote, the supplementary answers, the components, the steps), submitted
+                                                                      COMMIT "SUBMITTED (taskNN): ..."
            the review result later: APPROVED or RETURNED                      COMMIT "APPROVED" / "RETURNED"
 ```
 
@@ -502,7 +507,7 @@ for a count, a total or a table every run rebuilds, so a run that lost a stump g
 wrong (`supplemental-stumping`).
 
 **Answer blocks** (`submission-writeup`): Final Recommendation (one or two sentences, first, naming what it
-rejects); once the runs are back, How is each model stumped? directly after it (the form's stump question, answered
+rejects); once the runs are back, and mandatory from then, How is each model stumped? directly after it (the form's stump question, answered
 from the responses' own text: where and how each goes wrong, why the stump is fair, why it takes rigour);
 Supplementary Questions (one numbered entry per ask, one to four, each entry carrying its figures, and
 each requested file's look in one line); Critical Components (the decisive steps, two to five, one per stump: each
