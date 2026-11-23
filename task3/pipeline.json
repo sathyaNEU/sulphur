@@ -2,8 +2,8 @@
  "task": "task3",
  "status": "DRAWING",
  "domain": "physical-environmental-sciences",
- "subdomain": "climate-weather-extremes",
- "objective": "forecasting",
+ "subdomain": "environmental-monitoring-exceedance",
+ "objective": "anomaly-detection",
  "stage": 1,
  "stage_name": "draw",
  "updated": "2026-11-23",
@@ -149,7 +149,7 @@
    "commit": ""
   }
  ],
- "resume": "a tenth Opus 5.5 stump-architect at max effort (the author's ruling of 2026-11-22; Fable at its usage limit until 2026-11-27 08:00 America/Detroit) triages the client's six Physical & Environmental Sciences task types the house had no key for (884a7ee: geostatistical-spatial-estimation, inverse-problems-data-assimilation, design-of-experiments, process-control-measurement-systems, reliability-life-data, geophysical-retrieval-remote-sensing), one or two worlds each, through real practice, the field's published method, the closed card by its fix, test 0 and the two-factor gate, pricing nothing before all five clear; a world that clears is priced in full, with a checkpoint before core.py. Then core.py to CORE PASS, the card under the new key, precut.py exit 0, prompt.txt and DESIGN at stage 2; a Fable re-read on or after 2026-11-27 before anything is uploaded; then /build task3 from 3. Ledger: ~/Documents/sulphur-task3-arch11-screen/ledger.md.",
+ "resume": "the author fixed the objective on 2026-11-23: Anomaly Detection & Diagnostics in Physical & Environmental Sciences (the subdomain is provisional; the card takes any key that serves anomaly-detection, environmental-monitoring-exceedance or one of 884a7ee's six). The tenth Opus 5.5 architect at max effort works a time-boxed round: at most three anomaly-detection worlds on paper (a closed card by its fix, test 0, the field's published method, realism), commits to the strongest, then measures everything else in core.py on corelib, re-dialing the world on a failing row; checkpoint at CORE PASS level 4 or 5 or after its fourth failing core iteration. Then the card, precut.py exit 0, prompt.txt and DESIGN at stage 2; a Fable re-read on or after 2026-11-27 before anything is uploaded; then /build task3 from 3. Ledger: ~/Documents/sulphur-task3-arch11-screen/ledger.md.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -281,6 +281,10 @@
   {
    "date": "2026-11-23",
    "event": "the ninth architect's re-read under the narrowed test 18 reopened nothing (87a9352); the screen had never left the house's six monitoring task-type keys, about five of the client's eleven task types for the domain, so the vocabulary took the other six (884a7ee) and a tenth architect triages them"
+  },
+  {
+   "date": "2026-11-23",
+   "event": "the author fixed the objective to anomaly detection and asked for efficiency after a day of screening; the tenth architect was redirected to a time-boxed round (three worlds on paper, one committed, everything else measured in core.py, a checkpoint at CORE PASS or the fourth failing iteration)"
   }
  ],
  "architectures": [
