@@ -1,17 +1,17 @@
 # leak check, task9
 
-**Verdict: REVIEW.** 29 files read, 45 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 29 files read, 21 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: family, bootstrap, replicate, missed, turnover, calendar, instrument, standard, thirteen, variance, optimisation, manifests, training, window, spread, reflex, revisions, releases, dropped, snapshot, routes, refits, release, record, independent
+Stump terms swept: family, bootstrap, replicate, missed, change, turnover, calendar, instrument, standard, thirteen, variance, optimisation, manifests, merchants, training, window, spread, reflex, revisions, releases, sources, dropped, snapshot, routes, refits
 
 ## 2 author vocabulary (REVIEW 1)
 - **REVIEW** `gms_model_stability_standard_2026.pdf`: \bthe model\b x6: ...aces version 1 of 3 November 2025 1. Scope 1.1 This standard sets how the model risk committee places each model-side source of movement in the Garra...
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 3 of 25 stump-paragraph terms appear (family, thirteen, snapshot); read whether the document names the move
-- **REVIEW** `gms_model_stability_standard_2026.pdf`: 10 of 25 stump-paragraph terms appear (family, standard, optimisation, training, revisions, releases); read whether the document names the move
+- **REVIEW** `acquirer_agreement_schedule_c_tier_stability.pdf`: 5 of 25 stump-paragraph terms appear (family, change, thirteen, merchants, snapshot); read whether the document names the move
+- **REVIEW** `gms_model_stability_standard_2026.pdf`: 11 of 25 stump-paragraph terms appear (family, change, standard, optimisation, merchants, training); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
 - **REVIEW** `feature_platform_roadmap_2027.xlsx`: 24 ISO dates after 2026-11-25, e.g. 2026-12-28, 2027-01-04, 2027-01-11, 2027-01-18, 2027-02-08
@@ -23,6 +23,9 @@ Stump terms swept: family, bootstrap, replicate, missed, turnover, calendar, ins
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 29 usable files (10 or more required)
 - **INFO** `-`: 3 file categories: document, spreadsheet, structured (2 or more required)
+
+## 13 task metadata (REVIEW 1)
+- **REVIEW** `metadata.json`: files.gms_scored_book_by_family.csv.covers shares the design note's stump vocabulary (family, merchants, snapshot): say what the task decides, not how
 
 ## 1 file names (clean)
 

@@ -1,6 +1,6 @@
 {
  "task": "task9",
- "status": "RUNS",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "interpretability",
  "objective": "root-cause",
@@ -57,24 +57,46 @@
  },
  "runs": {
   "architecture": 5,
-  "pair": 2,
-  "date": "2026-11-22",
-  "files": [
-   "runs/run1.md",
-   "runs/run2.md"
-  ],
-  "recorded": "2026-11-22: both responses of the reshipped pack's first pair pasted by the author without the platform scores or the generated rubric; read in the main thread (runs/triage.md)",
+  "pair": 3,
+  "files": [],
   "run1": null,
   "run2": null,
   "average": null,
   "rubric": null,
-  "triage": "runs/triage.md",
-  "reading": "Response 1 files optimisation noise in escalation (9.10: half a replicate pair a refit, added up over thirteen refits, never decayed) and the other four placements as the golden; it made the training-data step (6.61) and pinned views' actual use (58.97, inside 53.2 to 60.0, releases 6.54). Response 2 files optimisation noise in escalation (12.870: a whole replicate pair a refit, never decayed) and feature releases on monitor (4.001: the calendar's rollout taken as use, 92.857); it made the training-data step (7.278, inside 6.35 to 7.44). Both lose every model-side share, merchants' own share (34.79 and 17.73 against 43.9) and both tier figures. Between them S2 missed by both and S3 (supporting) by Response 2; S1, a Critical Component, made by both: review risk 'only one decisive step', the author's ruling owed.",
-  "first_wrong_step": {
-   "run1": "unfinished chain: 'warm-started sources were treated as permanent 13-week random-walk accumulations rather than decaying effects'",
-   "run2": "dismissed own evidence: 'Warm-start treated as full carry/random-walk accumulation, with no decay ... the assumption most capable of changing the recommendation'"
-  },
   "history": [
+   {
+    "architecture": 5,
+    "pair": 2,
+    "date": "2026-11-22",
+    "files": [
+     "runs/arch5_pair2_response_1.md",
+     "runs/arch5_pair2_response_2.md"
+    ],
+    "recorded": "2026-11-22: both responses of the reshipped pack's first pair pasted by the author without the platform scores or the generated rubric; read in the main thread (runs/triage.md)",
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "rubric": null,
+    "triage": "runs/arch5_pair2_triage.md",
+    "reading": "Response 1 files optimisation noise in escalation (9.10: half a replicate pair a refit, added up over thirteen refits, never decayed) and the other four placements as the golden; it made the training-data step (6.61) and pinned views' actual use (58.97, inside 53.2 to 60.0, releases 6.54). Response 2 files optimisation noise in escalation (12.870: a whole replicate pair a refit, never decayed) and feature releases on monitor (4.001: the calendar's rollout taken as use, 92.857); it made the training-data step (7.278, inside 6.35 to 7.44). Both lose every model-side share, merchants' own share (34.79 and 17.73 against 43.9) and both tier figures. Between them S2 missed by both and S3 (supporting) by Response 2; S1, a Critical Component, made by both: review risk 'only one decisive step', the author's ruling owed.",
+    "first_wrong_step": {
+     "run1": "unfinished chain: 'warm-started sources were treated as permanent 13-week random-walk accumulations rather than decaying effects'",
+     "run2": "dismissed own evidence: 'Warm-start treated as full carry/random-walk accumulation, with no decay ... the assumption most capable of changing the recommendation'"
+    },
+    "audit": {
+     "file": "runs/holistic_audit_v3_2026-11-22.md",
+     "verdict": "passed (borderline gate)",
+     "rubric": {
+      "run1": 0.72,
+      "run2": 0.52,
+      "mean": 0.62
+     },
+     "determinism": "pinned",
+     "depth": 4,
+     "flag": "concentrated (Run 1 lost 28 of 28 on the noise step)"
+    },
+    "void": "2026-11-22: the author trimmed the asks (/fix-rubric) after the Holistic Audit v3's 0.62; this pair ran on the removed asks (each source's share, merchants' own share, both tier figures), its stump block is in git at f0d7ea0"
+   },
    {
     "architecture": 5,
     "date": "2026-11-22",
@@ -107,9 +129,17 @@
    "why": "determinism (score 2): feature releases not netted on pinned weeks (10.27), the pinned share not pinned as actual use (92.86), the warm start's carried noise not filed (3.57, 8.77, 12.87)",
    "repair": "determinism",
    "commit": "1f3398a"
+  },
+  {
+   "date": "2026-11-22",
+   "source": "Holistic Audit v3",
+   "by": "runs/holistic_audit_v3_2026-11-22.md",
+   "why": "rubric mean 0.62 borderline (Run 1 0.72, Run 2 0.52): 30 points of error-carried-forward credit on each source's share, merchants' own share, the tier share and its counterfactual, earned by both runs",
+   "repair": "rubric",
+   "moved": "prompt asks trimmed to each source's points and band and the pinned-views share; the workbook's first sheet, the deck (three slides, the shares chart and the tier slide replaced by the pinned-views readings) and the Supplementary Questions follow; the pack byte-identical (target 94505725c5171990), every frozen figure unchanged (freeze.py PASS); corelib one stump lost 26 to 63 and the reflex 16 to 44 on its band-only pricing, WARN by the author's ruling (rulings.rubric_rows)"
   }
  ],
- "resume": "the author pastes both platform scores and the generated rubric; /triage-runs records them and checks the average and the higher run under 60; submission.md already carries the stump answer directly after the Final Recommendation (writeup.py _stump_block, checked against runs/run1.md and run2.md); the author rules on the Critical Components (the training-data step was made by both responses), then pastes the blocks in order and submits; mark SUBMITTED only on the author's word",
+ "resume": "the author re-voices prompt.txt (two asks now: each source's points and band, and the pinned-views share as actual use; voice-check.py task9 --rewrite and leak.py), updates the prompt on the platform (target.zip is unchanged), pastes the new answer blocks, generates a new pair and runs /triage-runs task9; the stump block is written from that pair",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -260,6 +290,10 @@
   {
    "date": "2026-11-22",
    "event": "RUNS: the reshipped pack's first pair saved as runs/run1.md and runs/run2.md (scores and rubric owed), status RUNS; the stump answer emitted into submission.md directly after the Final Recommendation by writeup.py's rewritten _stump_block, every response quote and figure asserted against the saved responses; the void pair moved to runs.history"
+  },
+  {
+   "date": "2026-11-22",
+   "event": "RESHIPPED: rubric repair, asks trimmed after the Holistic Audit v3 (0.62); the pair void, status READY"
   }
  ],
  "final_cut": {
@@ -267,5 +301,12 @@
   "target.zip": "ad54b1ed8d0757fa",
   "golden.zip": "7b256a4121987980"
  },
- "prompt_note": "the author's rewrite of 2026-11-18 carries one line reworded in the main thread after the Holistic Audit v2 ('expected to actually run on pinned feature views'); the author rewrites it in their voice, keeping actual use, since a 'will run' or scheduled reading reopens audit fork 2"
+ "prompt_note": "the author's rewrite of 2026-11-18 carries one line reworded in the main thread after the Holistic Audit v2 ('expected to actually run on pinned feature views'); the author rewrites it in their voice, keeping actual use, since a 'will run' or scheduled reading reopens audit fork 2",
+ "rulings": {
+  "rubric_rows": {
+   "date": "2026-11-22",
+   "by": "author",
+   "text": "2026-11-22, the author: trim the asks to each source's points and band and the pinned-views share after the Holistic Audit v3 (0.62: 30 points of error-carried-forward credit on the shares, merchants' own share and both tier figures); under the audit's rules a run that misses one step keeps about 0.60, so the two rubric rows are recorded as WARN for task9"
+  }
+ }
 }

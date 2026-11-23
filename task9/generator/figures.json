@@ -1579,14 +1579,14 @@
   "exit": 0,
   "routes": {
    "golden": 100,
-   "S1 lost alone": 26,
-   "S2 lost alone": 26,
-   "reflex route (every stump lost)": 16,
-   "rigorous standard route": 9,
-   "calibrated run route": 9,
-   "cutoff run route": 26,
-   "generous run route": 42,
-   "hedge run route": 9
+   "S1 lost alone": 63,
+   "S2 lost alone": 63,
+   "reflex route (every stump lost)": 44,
+   "rigorous standard route": 27,
+   "calibrated run route": 27,
+   "cutoff run route": 46,
+   "generous run route": 36,
+   "hedge run route": 27
   }
  },
  "stated": {
@@ -1652,14 +1652,14 @@
   "exit": 0,
   "routes": {
    "golden": 100,
-   "S1 lost alone": 26,
-   "S2 lost alone": 26,
-   "reflex route (every stump lost)": 16,
-   "rigorous standard route": 9,
-   "calibrated run route": 9,
-   "cutoff run route": 26,
-   "generous run route": 42,
-   "hedge run route": 9
+   "S1 lost alone": 63,
+   "S2 lost alone": 63,
+   "reflex route (every stump lost)": 44,
+   "rigorous standard route": 27,
+   "calibrated run route": 27,
+   "cutoff run route": 46,
+   "generous run route": 36,
+   "hedge run route": 27
   }
  },
  "panel_merchants": 29580,

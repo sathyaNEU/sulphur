@@ -42,6 +42,18 @@ import sys
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+def waivers():
+    """The author's ruling on corelib's two rubric rows, read from pipeline.json `rulings.rubric_rows` (corelib
+    prints it and turns those rows to WARN; no other row can be waived)."""
+    import json
+    try:
+        r = json.load(open(os.path.join(os.path.dirname(HERE), "pipeline.json"), encoding="utf-8"))["rulings"]
+        t = r["rubric_rows"]["text"]
+    except (OSError, KeyError, ValueError):
+        return {}
+    return {"one stump lost, the run stays under the bar": t, "the reflex route on the rubric": t}
 sys.path.insert(0, os.path.join(HERE, "..", "..", ".claude", "skills", "stumping"))
 import corelib  # noqa: E402
 
@@ -721,14 +733,14 @@ def analyse(pk, truth, detail=False):
 
     figures = [{"id": "CC1 turnover alone, points", "block": "component", "member": "turnover"},
                {"id": "CC2 optimisation noise alone, points", "block": "component", "member": "optimisation"}]
-    # the answer blocks state each source on one line (its points and its share), so the two are one criterion
+    # the asks are each source's points and band and the pinned-views share. Each source's share of model-side
+    # movement, merchants' own share and the two tier figures left the prompt on the author's ruling after the
+    # Holistic Audit v3 (2026-11-22): the audit grades a figure computed from an earlier one on the response's own
+    # earlier figure, so all four were earned by both runs whatever their movements (30 of 100 points); they are
+    # still computed and checked, and stated in no graded block
     for s in SOURCES:
-        figures += [fig("%s points, on its line" % s, "points_" + s, "ask", sentence="source " + s),
-                    fig("share %s" % s, "share_" + s, "ask", sentence="source " + s)]
-    figures += [fig("pinned views share, on its own ask line", "cc3", "ask", sentence="pinned views"),
-                fig("merchants' own share of all movement", "own_share", "ask"),
-                fig("2027 flip rate as scheduled", "fr_sched", "ask", sentence="flip rates"),
-                fig("2027 flip rate with the designated sources removed", "fr_removed", "ask", sentence="flip rates")]
+        figures += [fig("%s points, on its line" % s, "points_" + s, "ask", sentence="source " + s)]
+    figures += [fig("pinned views share, on its own ask line", "cc3", "ask", sentence="pinned views")]
 
     d1_truth = float((wt * pk.d1).sum())
     fals = {"check": "the weekly score-change variance of the settled warm families in 2026, book weighted, which "
@@ -758,6 +770,7 @@ def analyse(pk, truth, detail=False):
         "run_routes": dict({r: routes[r]["points"] for r in ("generous", "calibrated", "hedge", "cutoff")},
                            **{k: v["points"] for k, v in extra.items()}),
         "figures": figures,
+        "waivers": waivers(),
     }
 
     if detail:

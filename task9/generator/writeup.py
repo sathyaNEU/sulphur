@@ -39,139 +39,16 @@ def cap(s):
 
 
 def _stump_block(fig):
-    """The form's stump question (How is each model stumped?), written from the two saved responses of the reshipped
-    pack's first pair (runs/run1.md, runs/run2.md). Every response figure and phrase is held here exactly as the
-    response writes it and asserted against the saved text; every golden-side figure comes from figures.json. It is
-    mandatory once both responses are on file and sits directly after the Final Recommendation."""
+    """The form's stump question (How is each model stumped?), mandatory directly after the Final Recommendation once
+    both responses are saved as runs/run1.md and runs/run2.md. The reshipped pack's first pair (archived as
+    runs/arch5_pair2_response_*.md, its block in git at f0d7ea0) ran on the asks the trim of 2026-11-22 removed, so it
+    is void; /triage-runs writes the new pair's block here, every response figure and phrase held exactly as the
+    response writes it and asserted against the saved text, every golden figure from figures.json."""
     import os
     here = os.path.dirname(os.path.abspath(__file__))
-    r1p, r2p = (os.path.join(os.path.dirname(here), "runs", n) for n in ("run1.md", "run2.md"))
-    if not (os.path.exists(r1p) and os.path.exists(r2p)):
-        return []
-    t1, t2 = open(r1p, encoding="utf-8").read(), open(r2p, encoding="utf-8").read()
-    q1 = {"rec": "Escalate optimisation noise and label revisions to the board risk committee; place training data and "
-                 "feature releases in remediation plans; monitor retunes",
-          "perm": "warm-started sources were treated as permanent 13-week random-walk accumulations rather than "
-                  "decaying effects",
-          "half": "one weekly refit's noise shock is half the replicate pair mean-square",
-          "slopes": "slopes near zero",
-          "adopt": "It is actual adoption measured from prior platform changes, not the planned schedule",
-          "on": "9.10", "td": "6.61", "fr": "6.54", "cc3": "58.97%", "own": "34.79%", "frr": "8.52%",
-          "rows": "3,360,865", "map": "4,568 Tolka Pay identifier pairs", "pairs": "644 instruments"}
-    sh1 = {"label revisions": "34.52%", "optimisation noise": "28.66%", "feature releases": "14.79%",
-           "training data": "15.10%", "retunes": "6.92%"}
-    q2 = {"rec": "Place optimisation noise and label revisions in escalation, training data in a remediation plan, and "
-                 "feature releases and retunes in monitor for 2027",
-          "s14": "Standard 1.4 says a warm-started refit starts from prior weights, so earlier refit randomness carries "
-                 "into later refits",
-          "carry": "Warm-start treated as full carry/random-walk accumulation, with no decay",
-          "flag": "this is the assumption most capable of changing the recommendation, and I flag rather than hide it",
-          "cal": "every family pinned by Monday 22 February 2027",
-          "sched": "Pinned weeks taken on schedule", "cond": "the Monitor placement is conditional",
-          "on": "12.870", "td": "7.278", "fr": "4.001", "cc3": "92.857%", "own": "17.73%", "frr": "6.63%",
-          "rows": "3,360,865", "map": "4,568 Tolka Pay old merchant IDs", "pairs": "644 pairs"}
-    flat2 = ("75.610", "78.493", "75.005")
-    sh2 = {"label revisions": "28.15%", "optimisation noise": "46.74%", "feature releases": "4.52%",
-           "training data": "14.95%", "retunes": "5.64%"}
-    for q in list(q1.values()) + list(sh1.values()):
-        assert q in t1, "Response 1 quote missing from runs/run1.md: %r" % q
-    for q in list(q2.values()) + list(sh2.values()) + list(flat2):
-        assert q in t2, "Response 2 quote missing from runs/run2.md: %r" % q
-
-    P, S, B, st, b, pr, lat, bd = (fig[k] for k in ("points", "share", "bands", "stated", "base", "probe", "lattice",
-                                                     "bend"))
-    f2, f1 = (lambda x: "%.2f" % x), (lambda x: "%.1f" % x)
-    pc = lambda q: q[:-1] if q.endswith("%") else q
-    key = {NAMES[s]: s for s in ORDER}
-    inside = lambda x, k: st[k][0] <= x <= st[k][1]
-    mapped = b["panel_merchants_unmapped"] - b["panel_merchants"]
-    # the calls the block gives each response, against the core's lattice
-    c1 = {"optimisation noise: escalation", "label revisions: escalation", "training data: a remediation plan",
-          "feature releases: a remediation plan", "retunes: monitor"}
-    c2 = (c1 - {"feature releases: a remediation plan"}) | {"feature releases: monitor"}
-    assert c1 == set(lat["S2"]["call"]), "Response 1's call is not the lattice's noise step missed alone"
-    assert set(lat["S1"]["call"]) == (set(fig["call"]) - {"training data: a remediation plan"}) | {
-        "training data: escalation"}, "the training-data step missed alone moves more than training data"
-    assert pr["feature releases on the calendar's planned weeks"] < 5.5 and fig["rigorous"]["points"][
-        "feature releases"] < 5.5, "the calendar's routes no longer put feature releases on monitor"
-    assert c2 - c1 == {"feature releases: monitor"}
-    # each response figure the block calls lost sits outside its stated band, each one it calls made inside
-    assert float(q1["on"]) >= 8 and float(q2["on"]) >= 8 and not inside(float(q1["on"]), "points_optimisation")
-    assert q1["on"] == f2(pr["thirteen refits added up"]) == f2(lat["S2"]["points"]["optimisation noise"])
-    assert f2(float(q2["on"])) == f2(pr["a whole replicate pair a refit"])
-    assert inside(float(q1["td"]), "points_turnover") and inside(float(q2["td"]), "points_turnover")
-    assert inside(float(q1["fr"]), "points_releases") and float(q2["fr"]) < 5.5
-    assert inside(float(q1["cc3"][:-1]), "cc3") and not inside(float(q2["cc3"][:-1]), "cc3")
-    for q in (q1, q2):
-        assert not inside(float(q["own"][:-1]), "own_share") and not inside(float(q["frr"][:-1]), "fr_removed")
-        assert "{:,}".format(b["score_rows"]) in q["rows"] and "{:,}".format(mapped) in q["map"]
-        assert str(b["pairs"]) in q["pairs"]
-    for sh in (sh1, sh2):
-        assert all(not inside(float(v[:-1]), "share_" + key[n]) for n, v in sh.items()), sh
-    assert bd["intercept8_min"] > 0 and b["past_lag_range"][0] > 0
-
-    bo, bt, bc, bw = (band(B[k], d) for k, d in (("points_optimisation", 2), ("points_turnover", 2), ("cc3", 1),
-                                                   ("own_share", 1)))
-    p1 = (f"**Response 1** files optimisation noise in escalation at {q1['on']} points, where the answer is a "
-          f"remediation plan at {f2(fig['cc2'])} (band {bo}), and it is right on the other four sources. It saw that "
-          "a warm start carries noise from one refit into the next, but assumed the carried noise never fades: "
-          f"\"{q1['perm']}\". Taking \"{q1['half']}\" and adding thirteen of them gives its {q1['on']}. It tested "
-          f"the decay only on releases, regressing later panel changes on release effects (\"{q1['slopes']}\"), and "
-          "never fitted how the score history's change grows with the gap between snapshots, which is where the "
-          f"decay shows. The overstated noise runs downstream: merchants' own share comes out at {pc(q1['own'])} per cent "
-          f"against {f1(fig['own_share'])} (band {bw}), every model-side share sits outside its band (label "
-          f"revisions {pc(sh1['label revisions'])} against {f1(S['label revisions'])}), and tier changes with the plan "
-          f"and escalation sources removed come to {pc(q1['frr'])} per cent against {f1(fig['fr_removed'])}. It made the other "
-          f"two hard steps: training data at {q1['td']} points against {f2(fig['cc1'])}, by scaling the bootstrap "
-          f"spread to each window's rows, and actual use of pinned views at {pc(q1['cc3'])} per cent (band {bc}), measured from "
-          f"the three past platform changes, which keeps feature releases on a plan at {q1['fr']}.")
-    p2 = (f"**Response 2** files optimisation noise in escalation at {q2['on']} points and feature releases on "
-          f"monitor at {q2['fr']}, where the answer is a plan for both ({f2(fig['cc2'])} and "
-          f"{f2(P['feature releases'])}). It read section 1.4 (\"{q2['s14']}\") as a carry that never fades and "
-          f"counted a whole replicate pair for each refit, and it named the choice itself: \"{q2['carry']} ... "
-          f"{q2['flag']}\". The check it ran on that choice was that the 2026 residual stayed flat across three "
-          f"quarters ({flat2[0]}, {flat2[1]} and {flat2[2]}), which cannot tell a full carry from a decayed one, "
-          "since both hold the model side steady from quarter to quarter. It then took the platform calendar's "
-          f"rollout as the pinned views' actual use, \"{q2['cal']}\", which gives {pc(q2['cc3'])} per cent "
-          f"against {f1(fig['cc3'])} and drops releases to monitor; its own words show the risk seen and set aside: "
-          f"\"{q2['sched']} ... {q2['cond']}\". Downstream, merchants' own share is {pc(q2['own'])} per cent against "
-          f"{f1(fig['own_share'])} and tier changes with the plan and escalation sources removed {pc(q2['frr'])} per cent against "
-          f"{f1(fig['fr_removed'])}. It made the training-data step, {q2['td']} points inside the band {bt}, by a "
-          "turnover estimator of its own.")
-    p3 = ("**Why this is a fair stump.** Neither step turns on a planted defect or a buried sentence. Both responses "
-          f"cleaned the record to the golden's own counts ({'{:,}'.format(b['score_rows'])} scored merchant-weeks, "
-          f"{'{:,}'.format(mapped)} Tolka Pay identifiers mapped, {b['pairs']} instrument pairs), so the losses came "
-          "after the cleaning. The definitions are the standard's own and the responses cite them: Response 2 quotes "
-          "section 1.4 on the carried noise, and Response 1 reads the ask as actual use "
-          f"(\"{q1['adopt']}\"). The evidence is the shape of whole files, not one line in one: the decay is in "
-          "the gap curve of the ten panel files in every family, where a straight line through gaps 8 to 26 meets "
-          f"gap 0 at {f1(bd['intercept8_book'])} points squared, book weighted, and above zero in every family "
-          f"({f1(bd['intercept8_min'])} or more), which a carry that never fades cannot produce; actual use is in "
-          f"the scheduler manifests set against the change calendar, where all {b['past_family_rollouts']} past "
-          f"family rollouts first trained {b['past_lag_range'][0]} to {b['past_lag_range'][1]} weeks after the "
-          "calendar marked them complete. Response 1 reached the pinned-views step unprompted from the same files, "
-          "so it is reachable.")
-    p4 = ("**Why it takes rigour.** Each step has an obvious repair that still files the wrong band. For the noise, "
-          f"the replicate pairs read at face value give {f2(pr['the replicate pair read as the gap' + chr(39) + 's whole noise'])} "
-          f"points (monitor), each refit's draw added in full gives {f2(pr['thirteen refits added up'])} or "
-          f"{f2(pr['a whole replicate pair a refit'])} (escalation), and the gap curve fitted free of the replicate "
-          f"pairs gives {f2(pr['unanchored fit'])} but implies replicate pairs of "
-          f"{f2(pr['unanchored implied replicate'])} where {f2(b['replicate'])} is measured. The answer needs the "
-          "curve fitted family by family on the settled warm weeks, its start tied to the measured replicate "
-          f"variance, which gives a persistence of {f2(b['phi_fit'][0])} to {f2(b['phi_fit'][1])} and "
-          f"{f2(fig['cc2'])} points. For pinned views, the calendar's planned weeks give {f1(b['cov_plan'])} per cent "
-          f"and releases at {f2(pr['feature releases on the calendar' + chr(39) + 's planned weeks'])}, its completed "
-          f"dates {f1(b['cov_declared'])} per cent and {f2(fig['rigorous']['points']['feature releases'])}, monitor "
-          "either way; the answer needs the take-up lag modelled from the past rollouts, with its spread and the "
-          f"reverted weeks, which gives {f1(fig['cc3'])} per cent and releases at {f2(P['feature releases'])}. The "
-          "steps are independent: missing only the noise step moves optimisation noise to escalation "
-          f"({f2(lat['S2']['points']['optimisation noise'])}) and nothing else, which is Response 1's call; taking "
-          "the calendar for use as well drops feature releases to monitor, which is Response 2's call; and the "
-          "training-data step, which both responses made, moves only training data when missed (to escalation at "
-          f"{f2(lat['S1']['points']['training data'])}).")
-    for p in (p1, p2, p3, p4):
-        assert "\u2014" not in p and "\u2013" not in p
-    return ["## How is each model stumped?", "", p1, "", p2, "", p3, "", p4, ""]
+    if any(os.path.exists(os.path.join(os.path.dirname(here), "runs", n)) for n in ("run1.md", "run2.md")):
+        raise SystemExit("writeup: a new pair is on file; write its stump block in _stump_block before rebuilding")
+    return []
 
 
 def write(path, fig):
@@ -205,30 +82,23 @@ def write(path, fig):
     a("## Supplementary Questions")
     a("")
     a("### garrane_score_stability_sources_2027.xlsx")
-    a("The first sheet, 2027 placements, lists the five sources by band with their points, share and band, and the "
-      "four measures beneath; then sheets for the instruments by family, training data, gap curves, pinned feature "
-      "views, the weekly check, other routes and notes.")
+    a("The first sheet, 2027 placements, lists the five sources by band with their points and band, and the share of "
+      "2027's retrains expected on pinned feature views beneath; then sheets for the instruments by family, training "
+      "data, gap curves, pinned feature views, the weekly check, other routes and notes.")
     a("")
     a("1. Each model-side source in 2027: the points it alone moves a merchant's score between consecutive "
-      "quarter-end snapshots (book weighted), its share of model-side movement and its band, with merchants' own "
-      "share of all movement.")
+      "quarter-end snapshots (book weighted) and its band.")
     for i, s in enumerate(ORDER):
         n = NAMES[s]
-        a("   %s. %s: %.2f points (band %s), %.1f per cent of model-side movement (band %s), %s." % (
-            "abcde"[i], cap(n), P[n], band(B["points_" + s], 2), S[n], band(B["share_" + s], 1), fig["band_of"][n]))
-    a("   f. Merchants' own change: %.1f per cent of all movement between quarter-end snapshots (band %s)." % (
-        fig["own_share"], band(B["own_share"], 1)))
+        a("   %s. %s: %.2f points (band %s), %s." % ("abcde"[i], cap(n), P[n], band(B["points_" + s], 2),
+                                                    fig["band_of"][n]))
     a("2. Pinned feature views: %.1f per cent of 2027's weekly retrains are expected to actually run on them, family-weeks across the "
       "fourteen families (band %s)." % (fig["cc3"], band(B["cc3"], 1)))
-    a("3. Tier changes between consecutive quarter-end snapshots in 2027, against the covenant's cap of 12 per cent:")
-    a("   a. %.1f per cent of merchants expected (band %s)." % (fig["fr_sched"], band(B["fr_sched"], 1)))
-    a("   b. %.1f per cent with label revisions, optimisation noise, feature releases and training data removed "
-      "(band %s)." % (fig["fr_removed"], band(B["fr_removed"], 1)))
     a("")
     a("### garrane_stability_review_2027.pptx")
-    a("Four slides: the call with each source's points, share and band; a bar chart of each source's points against "
-      "dashed lines at 5.5 and 8; a column chart of each part's share of all movement; the tier changes against the "
-      "cap.")
+    a("Three slides: the call with each source's points and band; a bar chart of each source's points against "
+      "dashed lines at 5.5 and 8; the share of 2027's retrains expected on pinned views against the calendar's two "
+      "readings, with feature releases' points under each.")
     a("")
     a("## Critical Components")
     a("")
@@ -319,34 +189,12 @@ def write(path, fig):
           100 * fig["loo"]["amp"]["record"], b["releases_2027"], P["feature releases"],
           pr["feature releases on the calendar's planned weeks"], fig["rigorous"]["points"]["feature releases"],
           pr["feature releases left whole on pinned views"], pr["2026's release level carried"]))
-    a("6. Shares. Over the same settled weeks the record's mean-square change across thirteen refreshes is %.2f, "
-      "book weighted; less the model-side sources as they stood, retunes at one every fourth week and feature "
-      "releases at the mean count a thirteen-week gap of those weeks holds, "
-      "it leaves merchants' own change, carried into 2027 beside the five sources' 2027 movement, at %.1f per cent "
-      "of all movement, section 5.2's quantity estimated from every thirteen-week gap of the settled weeks; the three "
-      "snapshot pairs closed in 2026 taken alone give %.1f. As a share of the record's own movement it would be %.1f, "
-      "which is not the share section 5.2 reports. Each source's share of model-side movement is in answer 1. Reading "
-      "each instrument as it stands puts merchants' own change at %.1f per cent, with %d families' instruments "
-      "adding to more than the record's change and their own change floored at zero, and training data at %.1f "
-      "per cent of model-side movement; across the book the thirteen-week total still closes (%.2f of the "
-      "record's %.2f), so the closing total does not catch it. Taking every thirteen-week gap from July 2024 puts "
-      "merchants' own share at %.1f, but before each family's settled weeks the manifests show cold retrains on a "
-      "26-week window and the calendar's three rollouts, so the record's change there runs %.2f to %.2f times the "
-      "settled weeks' and is not the 2026 sources' movement." % (
-          b["d13"], fig["own_share"], fig["extra"]["merchants' own change from the 2026 snapshot pairs only"]["own_share"],
-          pr["merchants' own change as a share of the record's own movement"], rf["own_share"], rf["families_floored"], rf["share"]["training data"], rf["model_side_2026"], b["d13"],
-          fig["ruled"]["merchants' own change over every thirteen-week gap from July 2024"]["own_share"],
-          fig["pre_settled"]["ratio_range"][0], fig["pre_settled"]["ratio_range"][1]))
-    a("7. The check. Each route's own model of how a source's variance grows with the gap is asked for the "
+    a("6. The check. Each route's own model of how a source's variance grows with the gap is asked for the "
       "mean-square change between consecutive weekly refreshes over the same settled weeks, which the record holds "
       "at %.2f, book weighted: this assessment gives %.2f; both the bootstrap and the replicate pairs read at face "
       "value give %.2f; the bootstrap spread at any gap %.2f; the replicate pairs at any gap %.2f." % (
           fa["record"], fa["golden"], fa["rivals"]["both at face value"], fa["rivals"]["bootstrap spread at any gap"],
           fa["rivals"]["replicate variance at any gap"]))
-    a("8. Tier changes. The 2026 snapshot pairs ran at %.1f per cent on the monitoring panel. Each family's rate "
-      "scaled by the root of its 2027 movement against 2026's gives %.1f per cent for 2027, and %.1f per cent with "
-      "the four sources in a plan or escalation removed; the reflex route's placements give %.1f and %.1f." % (
-          fig["fr26"], fig["fr_sched"], fig["fr_removed"], rf["fr_sched"], rf["fr_removed"]))
     lt = lambda k, n: lat[k]["points"][n]
     a("")
     nl = fig["nearest_line"]

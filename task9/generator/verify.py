@@ -274,10 +274,11 @@ def main():
     ws = load_workbook(os.path.join(G, "garrane_score_stability_sources_2027.xlsx"), read_only=True,
                        data_only=True)["2027 placements"]
     got = {r[0].lower(): r for r in ws.iter_rows(min_row=5, max_row=9, values_only=True)}
+    RS_BAND = {"monitor": "Monitor", "a remediation plan": "Remediation plan", "escalation": "Escalation"}
     for k in pts:
         r = got[k]
-        ok("workbook %s: %s points, %s per cent" % (k, r[1], r[2]),
-           abs(r[1] - round(fig["points"][k], 2)) < 1e-9 and abs(r[2] - round(fig["share"][k], 1)) < 1e-9)
+        ok("workbook %s: %s points, %s" % (k, r[1], r[2]),
+           abs(r[1] - round(fig["points"][k], 2)) < 1e-9 and r[2] == RS_BAND[fig["band_of"][k]])
     # the second determinism pass (2026-11-22): the full sums need every family's curve through the origin
     ok("SF24 every family's line through gaps 8 to 26 meets gap 0 above zero, as figures.json states",
        min(ic8.values()) > 0 and abs(sum(wt[c] * ic8[c] for c in fams) - fig["bend"]["intercept8_book"]) < 0.05,

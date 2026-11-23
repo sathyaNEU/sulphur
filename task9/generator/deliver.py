@@ -61,36 +61,29 @@ def workbook(path, fig, pk, g):
     ws["A2"] = ("Points a source alone moves a merchant's score between consecutive quarter-end snapshots in 2027, "
                 "book weighted, against the standard's lines of 5.5 and 8 points. Records to the refresh of 23 November 2026.")
     ws["A2"].alignment = Alignment(wrap_text=True)
-    ws.merge_cells("A2:E2")
+    ws.merge_cells("A2:D2")
     ws.row_dimensions[2].height = 30
     ws.append([])
-    ws.append(["Source", "Points, 2027", "Share of model-side movement (%)", "Band", "What it requires"])
-    _hdr(ws, 4, 5)
+    ws.append(["Source", "Points, 2027", "Band", "What it requires"])
+    _hdr(ws, 4, 4)
     req = {"monitor": "quarterly reporting", "a remediation plan": "plan filed by 31 January 2027",
            "escalation": "board risk committee, plan filed by 31 January 2027"}
     for s in ORDER:
         n = NAMES[s]
-        ws.append([n[0].upper() + n[1:], round(fig["points"][n], 2), round(fig["share"][n], 1),
-                   BANDNAME[fig["band_of"][n]], req[fig["band_of"][n]]])
+        ws.append([n[0].upper() + n[1:], round(fig["points"][n], 2), BANDNAME[fig["band_of"][n]],
+                   req[fig["band_of"][n]]])
         _fmt(ws, ws.max_row, 2, "0.00")
-        _fmt(ws, ws.max_row, 3, "0.0")
-    _box(ws, 4, ws.max_row, 5)
+    _box(ws, 4, ws.max_row, 4)
     ws.append([])
     r0 = ws.max_row + 1
-    ws.append(["Measure", "2027", "", "", "Note"])
-    _hdr(ws, r0, 5)
-    ws.append(["Merchants' own share of all movement (%)", round(fig["own_share"], 1), "", "",
-               "the record's movement between snapshots less the model-side sources"])
-    ws.append(["Share of 2027's weekly retrains on pinned feature views (%)", round(fig["cc3"], 1), "", "",
+    ws.append(["Measure", "2027", "", "Note"])
+    _hdr(ws, r0, 4)
+    ws.append(["Share of 2027's weekly retrains expected to run on pinned feature views (%)", round(fig["cc3"], 1), "",
                "family-weeks, 28 December 2026 to 20 December 2027"])
-    ws.append(["Merchants expected to change tier between quarter-end snapshots (%)", round(fig["fr_sched"], 1), "", "",
-               "monitoring panel; covenant cap 12 per cent; 2026 pairs ran at %.1f" % fig["fr26"]])
-    ws.append(["The same with every source in a plan or escalation removed (%)", round(fig["fr_removed"], 1), "", "",
-               "label revisions, optimisation noise, feature releases and training data taken out in full"])
     for r in range(r0 + 1, ws.max_row + 1):
         _fmt(ws, r, 2, "0.0")
-    _box(ws, r0, ws.max_row, 5)
-    _cols(ws, (58, 14, 18, 18, 62))
+    _box(ws, r0, ws.max_row, 4)
+    _cols(ws, (58, 14, 18, 62))
     ws.freeze_panes = "A5"
 
     # instruments by family
@@ -204,15 +197,13 @@ def workbook(path, fig, pk, g):
              "21 June, 20 September and 20 December 2027 (covenant schedule, C2)." % day(C.T - 1)],
             ["Points are root-mean-square score points between consecutive quarter-end snapshots, the root of the "
              "mean of the four pairs' mean-square changes, book weighted by scored merchants at the %s snapshot "
-             "(stability standard, 3.1 and 3.2). Shares are of mean-square movement (5.1)." % day(C.SPANS26[-1][1])],
+             "(stability standard, 3.1 and 3.2)." % day(C.SPANS26[-1][1])],
             ["Bands: monitor under 5.5 points, remediation plan 5.5 to under 8, escalation 8 or more (4.1)."],
             ["Panel: where a weekly refresh was re-sent, the later load is used; Tolka Pay merchants re-keyed from "
              "the refresh of %d %s are joined through the migration map." % (
                  P.monday(P.MIGRATION_T).day, P.monday(P.MIGRATION_T).strftime("%B %Y"))],
             ["Feature releases for 2027 are the roadmap as filed; labelled rows for 2027 are the data plan as filed "
-             "(standard, 2.1)."],
-            ["Tier changes count panel merchants scored at both snapshots (covenant schedule, C4.1); the removed "
-             "case takes out label revisions, optimisation noise, feature releases and training data in full (6.1)."]):
+             "(standard, 2.1)."]):
         s8.append(line)
     s8["A1"].font = Font(bold=True)
     _cols(s8, (140,))
@@ -265,18 +256,17 @@ def deck(path, fig):
     _title(s, "2027: label revisions to escalation; optimisation noise, feature releases and training data to "
               "remediation plans; retunes stay on monitor",
            "Points a source alone moves a merchant's score between quarter-end snapshots in 2027 (lines 5.5 and 8)")
-    rows = [["Source", "Points", "Share (%)", "Band"]]
+    rows = [["Source", "Points", "Band"]]
     for k in ORDER:
         n = NAMES[k]
-        rows.append([n[0].upper() + n[1:], "%.2f" % fig["points"][n], "%.1f" % fig["share"][n], BANDNAME[fig["band_of"][n]]])
-    _table(s, rows, Inches(0.6), Inches(1.9), Inches(8.2), Inches(2.9), widths=(3.2, 1.4, 1.4, 2.2), size=15)
+        rows.append([n[0].upper() + n[1:], "%.2f" % fig["points"][n], BANDNAME[fig["band_of"][n]]])
+    _table(s, rows, Inches(0.6), Inches(1.9), Inches(8.2), Inches(2.9), widths=(3.8, 1.8, 2.6), size=15)
     tb = s.shapes.add_textbox(Inches(9.2), Inches(1.9), Inches(3.7), Inches(4.5))
     tf = tb.text_frame
     tf.word_wrap = True
-    for i, line in enumerate(("Merchants' own change is %.1f per cent of all movement." % fig["own_share"],
-                              "%.1f per cent of 2027's weekly retrains are expected to actually run on pinned feature views." % fig["cc3"],
-                              "Tier changes between snapshots: %.1f per cent expected in 2027, %.1f with the four "
-                              "designated sources removed (cap 12)." % (fig["fr_sched"], fig["fr_removed"]))):
+    for i, line in enumerate(("%.1f per cent of 2027's weekly retrains are expected to actually run on pinned feature views." % fig["cc3"],
+                              "Feature releases move scores only in the weeks a family still reads live views, "
+                              "so they stay on a plan at %.2f points." % fig["points"]["feature releases"])):
         p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
         p.text = line
         p.font.size = Pt(15)
@@ -329,30 +319,18 @@ def deck(path, fig):
         ln.line.dash_style = MSO_LINE_DASH_STYLE.DASH
 
     s = prs.slides.add_slide(blank)
-    _title(s, "Merchants' own change is %.1f per cent of all movement; label revisions lead the model side" %
-           fig["own_share"],
-           "Mean-square movement, 2027, as a share of all movement (model-side sources and merchants' own change)")
-    own = fig["own_share"]
-    cd = CategoryChartData()
-    parts = [(NAMES[k][0].upper() + NAMES[k][1:], fig["share"][NAMES[k]] * (100 - own) / 100.0) for k in ORDER]
-    parts.append(("Merchants' own change", own))
-    cd.categories = [p[0] for p in parts]
-    cd.add_series("Share of all movement (%)", [round(p[1], 1) for p in parts])
-    gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Inches(0.7), Inches(1.6), Inches(11.8), Inches(5.4), cd)
-    gf.chart.has_legend = False
-    gf.chart.has_title = False
-    pl = gf.chart.plots[0]
-    pl.has_data_labels = True
-    pl.data_labels.number_format = "0.0"
-    pl.data_labels.number_format_is_linked = False
-
-    s = prs.slides.add_slide(blank)
-    _title(s, "Tier changes stay over the cap unless the designated sources come out",
-           "Share of monitoring-panel merchants changing tier between consecutive quarter-end snapshots")
-    _table(s, [["", "Per cent"], ["2026 pairs, measured", "%.1f" % fig["fr26"]],
-               ["2027, expected", "%.1f" % fig["fr_sched"]],
-               ["2027, sources in a plan or escalation removed", "%.1f" % fig["fr_removed"]],
-               ["Covenant cap", "12.0"]], Inches(0.8), Inches(2.0), Inches(8.0), Inches(2.6), widths=(6.0, 2.0), size=16)
+    b, pr = fig["base"], fig["probe"]
+    _title(s, "%.1f per cent of 2027's retrains are expected to run on pinned views, not the calendar's %.1f" % (
+               fig["cc3"], b["cov_plan"]),
+           "Weekly refreshes of the four snapshot pairs closing in 2027, family-weeks across the fourteen families")
+    _table(s, [["Reading", "On pinned views (%)", "Feature releases, points"],
+               ["The change calendar's planned weeks", "%.1f" % b["cov_plan"],
+                "%.2f" % pr["feature releases on the calendar's planned weeks"]],
+               ["The change calendar's completed dates", "%.1f" % b["cov_declared"],
+                "%.2f" % fig["rigorous"]["points"]["feature releases"]],
+               ["Expected actual use, from the three past rollouts", "%.1f" % fig["cc3"],
+                "%.2f" % fig["points"]["feature releases"]]],
+           Inches(0.8), Inches(2.0), Inches(11.6), Inches(2.6), widths=(6.4, 2.6, 2.6), size=16)
     for n, sl in enumerate(prs.slides, 1):
         _strip(sl, n)
     prs.save(path)

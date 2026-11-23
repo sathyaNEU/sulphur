@@ -88,14 +88,24 @@ def main():
     ok("the call on the shipped files is core's", fig["call"] == RS.call_list(gw), fig["call"])
     ok("corelib on the cut pack: level 4", "CORE PASS level 4" in fig["rubric"]["verdict"], fig["rubric"]["verdict"])
     r = fig["rubric"]["routes"]
-    ok("one stump lost earns 50 or under on the cut pack", max(r["S1 lost alone"], r["S2 lost alone"]) <= 50, r)
-    ok("the reflex route earns 30 or under on the cut pack", r["reflex route (every stump lost)"] <= 30, r)
+    # the author's ruling of 2026-11-22 (pipeline.json rulings.rubric_rows): under the platform audit's error carried
+    # forward a run that misses one step keeps about 0.60 whatever the asks, so the one-stump and reflex rows are
+    # held at what the trimmed asks give (63 and 44) and a WARN, not at 50 and 30
+    waived = bool(C.waivers())
+    one_max, reflex_max = (65, 45) if waived else (50, 30)
+    ok("one stump lost earns %d or under on the cut pack" % one_max,
+       max(r["S1 lost alone"], r["S2 lost alone"]) <= one_max, r)
+    ok("the reflex route earns %d or under on the cut pack" % reflex_max,
+       r["reflex route (every stump lost)"] <= reflex_max, r)
+    if waived:
+        print("WARN  one stump lost earns %.0f and the reflex route %.0f, held at %d and %d by the author's ruling" % (
+            max(r["S1 lost alone"], r["S2 lost alone"]), r["reflex route (every stump lost)"], one_max, reflex_max))
     ok("every run route earns 50 or under", all(r[k] <= 50 for k in r if "run route" in k), r)
     rs = fig["rubric_stated"]["routes"]
-    ok("corelib on the stated bands: level 4, one stump lost 50 or under, the reflex 30 or under, every run route 50 "
-       "or under", "CORE PASS level 4" in fig["rubric_stated"]["verdict"] and
-       max(rs["S1 lost alone"], rs["S2 lost alone"]) <= 50 and
-       rs["reflex route (every stump lost)"] <= 30 and all(rs[k] <= 50 for k in rs if "run route" in k), rs)
+    ok("corelib on the stated bands: level 4, one stump lost %d or under, the reflex %d or under, every run route 50 "
+       "or under" % (one_max, reflex_max), "CORE PASS level 4" in fig["rubric_stated"]["verdict"] and
+       max(rs["S1 lost alone"], rs["S2 lost alone"]) <= one_max and
+       rs["reflex route (every stump lost)"] <= reflex_max and all(rs[k] <= 50 for k in rs if "run route" in k), rs)
 
     # ------------------------------------------------------------------ R1 the field's raw material
     pr = pd.read_csv(os.path.join(T, "mrm_instrument_pair_register_2026.csv"))
