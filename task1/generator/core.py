@@ -725,6 +725,11 @@ def _cells(cv, cells):
 
 
 _S2 = {}
+# Response 1's mixture as filed (gaps rounded to a tenth, revenue shifted by a quarter of the gap) and the settings
+# it named beside it: the fitted gaps unrounded, the shift at the ends of the 0.24 to 0.27 it read off Android
+R1MIX = {"r1mix": dict(), "r1mix:unrounded": dict(rounded=False), "r1mix:shift-0.24": dict(shift=0.24),
+         "r1mix:shift-0.27": dict(shift=0.27), "r1mix:pooled-curve": dict(curve="pooled"),
+         "r1mix:pooled-payers": dict(rpp="pooled")}
 
 
 def platform_sources(ios):
@@ -1035,6 +1040,91 @@ def r1_ratio(O, v, ci, cells="fine", minn=20, tilt="cell"):
     return out
 
 
+def r1_mix(O, v, rounded=True, shift=0.25, curve="source", rpp="source", gaps=None):
+    """Response 1's value of the declined installs (runs/rerun1.md): cohorts of install week by first-48-hour sessions
+    over the mature weeks; each network's declined installs its postbacks less its named installs, the organic ones
+    the accounts with no channel left over; who paid among the accounts with no channel fitted as a mixture, each
+    source's declined installs paying at its named installs' rate for the sessions value shifted by one gap on the
+    log-odds (Fisher scoring on the cohorts' binomial counts), the gaps rounded to a tenth; a declined payer's revenue
+    the named payers' times exp(shift x gap). Returns {network: twelve-month net revenue per install over every
+    install it bought in the mature weeks}, with the fitted gaps under "_gaps"."""
+    k = (id(O), id(v), "r1mix", rounded, shift, curve, rpp, tuple(sorted(gaps.items())) if gaps else None)
+    if k in _S2:
+        return _S2[k]
+    nets = [c for c in ORDER if c in GATED]
+    mat = O.mature & O.ios
+    ses = O.cv & 7
+    def cohorts(mask, w=None):
+        t = np.zeros((MATURE, 8))
+        np.add.at(t, (O.week[mask], ses[mask]), 1.0 if w is None else w[mask])
+        return t
+    pay = (v > 1e-9).astype(float)
+    pool = mat & O.pool
+    n, y = cohorts(pool), cohorts(pool, pay)
+    N, base, rv = [], [], []
+    allnamed = mat & O.consent & (O.label >= 0) & ~np.isin(O.label, [ORDER.index("Apple Search Ads")])
+    pc = np.clip(cohorts(allnamed, pay).sum(0) / np.maximum(cohorts(allnamed).sum(0), 1), 1e-3, 0.999)
+    for c in nets + ["organic"]:
+        ci = ORG_IOS if c == "organic" else ORDER.index(c)
+        nm = mat & (O.label == ci)
+        if c == "organic":
+            Nc = np.maximum(n - sum(N), 0.0)
+        else:
+            pb = O.agg_cvm[c][:MATURE].sum(1)                     # postbacks by week and value
+            pbs = np.zeros((MATURE, 8))
+            for cv in range(32):
+                pbs[:, cv & 7] += pb[:, cv]
+            Nc = np.maximum(pbs - cohorts(nm), 0.0)
+        N.append(Nc)
+        own = np.clip(cohorts(nm, pay).sum(0) / np.maximum(cohorts(nm).sum(0), 1), 1e-3, 0.999)
+        base.append(own if curve == "source" else pc)
+        payers = nm & (pay > 0)
+        if rpp == "cell":                                          # the named payers' revenue by sessions value
+            cnt = np.bincount(ses[payers], minlength=8); tot = np.bincount(ses[payers], weights=v[payers], minlength=8)
+            rv.append(np.where(cnt >= 20, tot / np.maximum(cnt, 1), float(v[payers].mean())))
+        else:
+            rv.append(float(v[payers].mean()) if rpp == "source" else float(v[allnamed & (pay > 0)].mean()))
+    N = np.stack(N); L0 = np.log(np.stack(base) / (1 - np.stack(base)))[:, None, :]
+    g = np.zeros(len(N)) if gaps is None else np.array([gaps.get(c, 0.0) for c in nets + ["organic"]])
+    keep = n > 0
+    wts = N / np.maximum(n, 1e-9)
+
+    def ll(g):
+        q = 1.0 / (1.0 + np.exp(-np.clip(L0 + g[:, None, None], -30, 30)))
+        pi = np.clip((wts * q).sum(0), 1e-9, 1 - 1e-9)
+        return float(((y * np.log(pi) + (n - y) * np.log(1 - pi)) * keep).sum()), q, pi
+    cur, q, pi = ll(g)
+    for _ in range(0 if gaps is not None else 200):
+        dpi = wts * q * (1 - q)
+        r = (y / pi - (n - y) / (1 - pi)) * keep
+        grad = (dpi * r).reshape(len(N), -1).sum(1)
+        info = np.einsum("aij,bij->ab", dpi * (n / (pi * (1 - pi)) * keep), dpi)
+        step = np.linalg.solve(info + 1e-6 * np.eye(len(N)), grad)
+        step = step * min(1.0, 0.5 / max(np.abs(step).max(), 1e-12))
+        t = 1.0
+        while t > 1e-4:
+            new, q2, pi2 = ll(g + t * step)
+            if new >= cur - 1e-9:
+                break
+            t /= 2
+        g = g + t * step
+        cur, q, pi = new, q2, pi2
+        if np.abs(t * step).max() < 1e-8:
+            break
+    gf = g.copy()
+    if rounded and gaps is None:
+        g = np.round(g, 1)
+    out = {"_gaps": dict(zip(nets + ["organic"], gf.tolist()))}
+    q = 1.0 / (1.0 + np.exp(-(L0 + g[:, None, None])))
+    for j, c in enumerate(nets):
+        ci = ORDER.index(c)
+        nm = mat & (O.label == ci)
+        dec = float((N[j] * q[j] * rv[j]).sum()) * np.exp(shift * g[j])
+        out[c] = (float(v[nm].sum()) + dec) / (float(nm.sum()) + float(N[j].sum()))
+    _S2[k] = out
+    return out
+
+
 _PAY = {}
 
 
@@ -1053,6 +1143,8 @@ def channel_values(O, v, how="golden", cells="fine", minn=20, tilt="cell", rcell
         lab = (O.label == ci) & O.mature
         if CH[c]["complete"] or how == "consenters":
             out[c] = float(v[lab].mean())
+        elif how.startswith("r1mix"):                              # Response 1's mixture, with its settings
+            out[c] = r1_mix(O, v, **R1MIX[how])[c]
         elif how == "direct":
             out[c] = float(v[lab].sum() / O.agg[c][:MATURE].sum())
         else:
