@@ -32,8 +32,10 @@ Then read the outcome as it stands before any option or forward change is applie
 holds:
 
 - (a) a shipped monitor, gauge, meter, register or routine sampling programme observes that outcome, or a monotone
-  function of it, at a deciding member over the history window, continuously or on a schedule (an instrument that
-  sees only a part of the member, or only the units that chose or were chosen to be recorded, does not count);
+  function of it, or a quantity the field's reference method turns into it with no judgment left (a reservoir's
+  temperature chains through the energy budget, land surface temperature through the station calibration), at a
+  deciding member over the history window, continuously or on a schedule (an instrument that sees only a part of the
+  member, or only the units that chose or were chosen to be recorded, does not count);
 - (b) an account, a mass balance, or a simple sum or difference of shipped records closes on a deciding member's
   total or on the part of it the decision moves;
 - (c) the option's lever is a shipped series and the outcome is observed at the deciding members. A forward or
