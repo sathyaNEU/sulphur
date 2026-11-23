@@ -66,10 +66,10 @@ KAPPA, LAMBDA, SIG_M, RHO_M, DBAR = 0.55, 1.00, 0.26, 0.25, 0.86
 SCALE = 2.0
 CH = {
     "Meta iOS":         dict(ios=1, complete=0, mu=0.05,  nu=0.10, phi=-5.00, n=330, b0=1960, el=0.78, xs=0.35, plan=1.20, stretch=1.30),
-    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.00,  n=300, b0=1710, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
-    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1340, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
+    "TikTok iOS":       dict(ios=1, complete=0, mu=-0.30, nu=0.05, phi=1.00,  n=300, b0=1690, el=0.80, xs=0.35, plan=1.30, stretch=1.15),
+    "Snapchat iOS":     dict(ios=1, complete=0, mu=-0.15, nu=0.08, phi=0.80,  n=250, b0=1315, el=0.76, xs=0.35, plan=1.30, stretch=1.15),
     "Google iOS":       dict(ios=1, complete=0, mu=0.10,  nu=0.10, phi=-2.60, n=260, b0=2260, el=0.70, xs=0.30, plan=1.25, stretch=1.35),
-    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=-0.60, n=200, b0=1630, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
+    "Pinterest iOS":    dict(ios=1, complete=0, mu=0.15,  nu=0.12, phi=0.40,  n=200, b0=1590, el=0.74, xs=0.30, plan=0.75, stretch=1.75),
     "Apple Search Ads": dict(ios=1, complete=1, mu=0.60,  nu=0.15, phi=-0.80, n=140, b0=1390, el=0.62, xs=0.30, plan=1.40, stretch=1.00),
     "Google Android":   dict(ios=0, complete=1, mu=0.00,  nu=0.10, phi=0.30,  n=420, b0=5300, el=0.66, xs=0.30, plan=0.60, stretch=1.25),
     "AppLovin Android": dict(ios=0, complete=1, mu=-0.55, nu=0.05, phi=1.10,  n=500, b0=3040, el=0.82, xs=0.30, plan=0.88, stretch=1.45),
@@ -1688,10 +1688,13 @@ OWN = {"S1": "AppLovin Android", "S2": "Meta iOS", "S3": "Google iOS"}
 # member's own figure) and, of the installs it bought in the year to 2 November 2025, what they paid in their first
 # twelve months per install and how many monthly payments they made per hundred installs, the three on one line; and
 # for the whole plan, the installs it buys in 2027 and what they pay in their first twelve months, on one line
-FAMILIES = [("return ", "roas"), ("paid per install ", "v12"), ("payments per 100 ", "pay100")]
+# the graded families (the author's addendum of 2026-11-23: figures that shadow the call): each channel's return at the
+# plan's spend, and the monthly payments per 100 installs of the installs of the year to 2 November 2025; the twelve-
+# month value per install is computed on every route and carried, never graded (it is free to a run that loses S3)
+FAMILIES = [("return ", "roas"), ("payments per 100 ", "pay100")]
 PLAN_FIGURES = (("installs the plan buys", 0), ("revenue the plan's installs bring", 1))
 # each stump's own figure, one decisive step's answer: it falls with that stump alone
-COMPONENTS = {"S1": "payments per 100 AppLovin Android", "S2": "paid per install Meta iOS",
+COMPONENTS = {"S1": "payments per 100 AppLovin Android", "S2": "payments per 100 Meta iOS",
               "S3": "installs the plan buys"}
 ON_LINE = "on its line: "         # a component's figure as its ask line states it
 
@@ -1702,7 +1705,7 @@ def stated_id(fid):
 
 
 def sentence_of(fid):
-    """the line of the answer blocks a figure is stated on: one line per channel carries its three figures, and one
+    """the line of the answer blocks a figure is stated on: one line per channel carries its two figures, and one
     line carries the plan's two (the generated rubric makes one criterion of a line, all or nothing,
     supplemental-stumping Part 1 rule 7)"""
     fid = stated_id(fid)
